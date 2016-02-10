@@ -52,30 +52,30 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="test.gwi">
+    <None Include="sample\test.gwi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="BD.wav">
+    <Content Include="sample\BD.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="HC.wav">
+    <Content Include="sample\HC.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="HO.wav">
+    <Content Include="sample\HO.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="SD.wav">
+    <Content Include="sample\SD.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="TH.wav">
+    <Content Include="sample\TH.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="TL.wav">
+    <Content Include="sample\TL.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="TM.wav">
+    <Content Include="sample\TM.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="xpmck\amsdoshd.exe">
