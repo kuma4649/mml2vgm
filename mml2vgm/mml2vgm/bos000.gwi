@@ -1,0 +1,101 @@
+﻿'{
+
+	TrackName            =TITLE MENU
+	GameName             =BOSCONIAN
+	SystemName           =Sega Mega Drive
+	OriginalTrackAuthor  =永田 英哉
+	ReleaseDate          =2015/11/09
+	Converted            =WING☆GHOST(re.conv kuma)
+	Notes                =Test
+
+	以下はデフォルト値を再設定しています。(つまりデフォルトを使用するだけなら再設定の必要はありません)
+	PartYM2612    =F1-6
+	PartYM2612Ch3 =F3,F7-9
+	PartYM2612Ch6 =F6
+	PartSN76489   =S1-3
+	ClockCount    =192
+    F-Num         =289,2af,2d8,303,331,362,395,3cc,405,443,484,4c8,512
+
+}
+
+
+
+BASS(from WING☆GHOST @2)
+'@ M 002
+   AR  DR  SR  RR  SL  TL  KS  ML  DT  AM  SSG-EG
+'@ 031,015,028,005,002,028,003,015,006,000,000
+'@ 031,011,015,004,004,041,003,004,006,000,000
+'@ 031,008,003,005,001,022,002,000,006,000,000
+'@ 031,002,002,005,015,000,002,000,006,000,000
+'@ 000,004
+
+COWBELL(from WING☆GHOST @30)
+'@ F 030
+   AR  DR  SR  RR  SL  TL  KS  ML  DT
+'@ 031,021,019,006,002,000,000,015,002
+'@ 031,021,012,006,002,035,000,008,002
+'@ 031,021,013,006,003,032,000,007,003
+'@ 031,029,016,009,002,000,000,002,003
+'@ 003,007
+
+
+
+'@ P 0,"BD.wav",8000,100
+'@ P 1,"SD.wav",8000,100
+'@ P 2,"HC.wav",8000, 50
+'@ P 3,"HO.wav",8000, 50
+'@ P 4,"TL.wav",8000,100
+'@ P 5,"TM.wav",8000,100
+'@ P 6,"TH.wav",8000,100
+
+
+
+'%BD @0 o4 c
+'%SD @1 o4 c
+'%HC @2 o4 c
+'%HO @3 o4 c
+'%TH @4 o4 c
+'%TM @5 o4 c
+'%TL @6 o4 c
+
+
+
+'F1 T70
+
+'F1 D0     @2  p2 o3 v110           l32 q0 r4
+'F2 D6     @2  p1 o3 v110           l32 q0 r4
+'F3 D12    @2  p3 o3 v110 EOFEX1234 l32 q0 r4
+'F4 D0     @30 p2 o4 v120           l16 q0 r4
+'F5 D5     @30 p1 o4 v120           l16 q0 r32 r4
+'F6 D0  m1 @1  p3 o4                l16 q0 c8c8
+
+'% a1 a16a16 >a16<aa ra>a<a> g<a>f+<a
+'F123 %a1 %a1 r1
+'F123 %a1 %a1 r1
+'F123 a16>a16<aa>g<a>f+16<a16>f+g16.<aa>a16<aa>g<a>f+16<a>f+16<a>g16<
+'F123 aa>a16<a>g16f+16.<a16>f+ga16>c<babagarr2
+
+'F45 r1aa32aa32aaaa32a. aa32aa32aa32a32aaa32a32
+'F45 r1aa32aa32aaaa32a. aa32aa32aa32a32aaa32a32
+'F45 r1r2.aa32aa32aaar8
+
+'F6 %BD%HC%SD.%HC32 %HO32 %BD32%BD32 r32 %SD.%HC32 %BD %HC %SD. %HC32 %BD %HO %SD32%SD.
+'F6 %BD%HC%SD.%HC32 %HO32 %BD32%BD32 r32 %SD.%HC32 %BD %HC %SD. %HC32 %BD %SD %SD32%SD.
+'F6 %BD%HC%SD.%HC32 %HO32 %BD32%BD32 r32 %SD.%HC32 %BD %HC %SD. %HC32 %BD %HO %SD32%SD.
+'F6 %BD%HC%SD.%HC32 %HO32 %BD32%BD32 r32 %SD.%HC32 %BD %HC %SD. %HC32 %BD %SD %SD32%SD.
+'F6 %BD32%HC32 %SD %BD32 %SD %HO32 %SD8 %TH32%TM32%TL
+'F6 %BD32%HC32 %SD %BD32 %SD %HO32 %SD8 %TH64%TH64%TH32%TM32%TL32 %SD%BD32%HC32%SD%BD32%HC32%BD
+'F6 %SD16%BD32 %SD16.%SD32 %BD32 %HC32%SD32%BD32%HC32%SD8%HO
+'F6 %HC32%HC32%HO
+'F6 %HC32%HC32%HO
+'F6 %SD32%SD16.
+
+
+
+% a2 a(12a)12aa(12a)12a a(12a)12a(12a)12a(12a)12aa(12a)12r
+% a3 a(12a)12aa(12a)12a a(12a)12aaa(12a)12a(12a)12aa
+F4 D0     @30 p3 o4 v120 l32 r4
+F4 r1%a2%a3
+F4 r1%a2%a3
+F4 r1.r4a(12a)12aa(12a)12aa(12a)12a(12a)12a(12a)12r8
+
