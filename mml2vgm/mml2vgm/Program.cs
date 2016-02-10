@@ -34,6 +34,12 @@ namespace mml2vgm
                 {
                     Console.WriteLine(string.Format("Error : {0}", mes));
                 }
+
+#if DEBUG
+                Console.WriteLine("DEBUG実行が終了しました。何かキーを押してください。");
+                Console.ReadKey();
+#endif
+
             }
 
         }
