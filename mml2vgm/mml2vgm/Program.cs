@@ -22,7 +22,7 @@ namespace mml2vgm
 
                 msgBox.clear();
 
-                mml2vgm mv = new mml2vgm(arg, Path.ChangeExtension(args[0], ".vgm"));
+                mml2vgm mv = new mml2vgm(arg, Path.ChangeExtension(args[0], Properties.Resources.ExtensionVGM));
                 mv.Start();
 
                 foreach (string mes in msgBox.getWrn())
