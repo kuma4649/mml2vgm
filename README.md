@@ -11,35 +11,35 @@
  ・PSG(DCSG)音源は4ch(この内1chはノイズチャンネル)使用可能です。  
  ・MMLの仕様はFMP7(開発:Guu氏)に似せています。  
   
-[必要な環境]
- ・PCMデータの加工にXPCMKを必須とします。
- ・MMLデータ作成に気合と根性を必要とします。
+[必要な環境]  
+ ・PCMデータの加工にXPCMKを必須とします。  
+ ・MMLデータ作成に気合と根性を必要とします。  
+  
+[SpecialThanks]  
+ 本ツールは以下の方々にお世話になっております。また以下のソフトウェア、ウェブページを参考、使用しています。  
+ 本当にありがとうございます。  
+  
+ ・ラエル さん  
+ ・WING☆ さん  
+ ・とぼけがお さん  
+ ・wani さん  
+ ・mucom さん  
+ ・ume3fmp さん  
+  
+ ・XPCMK  
+ ・FMP7  
+ ・Music LALF  
+ ・Visual Studio Community 2015  
+ ・SGDK  
+ ・VGM Player  
+ ・Git  
+ ・SourceTree  
+ ・さくらエディター  
 
-[SpecialThanks]
- 本ツールは以下の方々にお世話になっております。また以下のソフトウェア、ウェブページを参考、使用しています。
- 本当にありがとうございます。
-
- ・ラエル さん
- ・WING☆ さん
- ・とぼけがお さん
- ・wani さん
- ・mucom さん
- ・ume3fmp さん
-
- ・XPCMK
- ・FMP7
- ・Music LALF
- ・Visual Studio Community 2015
- ・SGDK
- ・VGM Player
- ・Git
- ・SourceTree
- ・さくらエディター
-
- ・SGDKとは - nendo
- ・FutureDriver
- ・SMS Power!
- ・DOBON.NET
- ・Wikipedia
- ・retroPC.net
- 
+ ・SGDKとは - nendo  
+ ・FutureDriver  
+ ・SMS Power!  
+ ・DOBON.NET  
+ ・Wikipedia  
+ ・retroPC.net  
+  
