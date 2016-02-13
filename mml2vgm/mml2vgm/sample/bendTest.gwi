@@ -1,0 +1,50 @@
+﻿'{
+
+	TrackName            =LFO
+	GameName             =
+	SystemName           =
+	OriginalTrackAuthor  =
+	ReleaseDate          =2016/02/13
+	Converted            =kuma
+	Notes                =
+
+	以下はデフォルト値を再設定しています。(つまりデフォルトを使用するだけなら再設定の必要はありません)
+	PartYM2612    =F1-6
+	PartYM2612Ch3 =F3,F7-9
+	PartYM2612Ch6 =F6
+	PartSN76489   =S1-4
+	ClockCount    =192
+	FmF-Num       =289,2af,2d8,303,331,362,395,3cc,405,443,484,4c8
+	PsgF-Num1     =357,327,2fa,2cf,2a7,281,25d,23b,21b,1fc,1e0,1c5
+	PsgF-Num2     =1ac,194,17d,168,153,140,12e,11d,10d,0fe,0f0,0e3
+	PsgF-Num3     =0d6,0ca,0be,0b4,0aa,0a0,097,08f,087,07f,078,071
+	PsgF-Num4     =06b,065,05f,05a,055,050,04c,047,043,040,03c,039
+	PsgF-Num5     =035,032,030,02d,02a,028,026,024,022,020,01e,01c
+	PsgF-Num6     =01b,019,018,016,015,014,013,012,011,010,00f,00e
+	PsgF-Num7     =00d,00d,00c,00b,00b,00a,009,008,007,006,005,004
+
+}
+
+(from WING☆GHOST @8)
+'@ F 008
+   AR  DR  SR  RR  SL  TL  KS  ML  DT
+'@  31,  2,  1,  1,  1, 23,  0,  1,  0
+'@  31,  3,  2,  1,  2, 24,  0,  1,  0
+'@  31,  3,  2,  1,  2, 25,  0,  1,  5
+'@  25,  2,  1,  7,  1,  3,  0,  1,  0
+'@   3,  5
+
+'F2 T120
+
+F2 !
+
+
+
+'F2 @8D0K0p3v113o4l1q0
+
+Up
+'F2 c1_>>>cr1
+
+Down
+'F2 c1_<<<cr1
+

@@ -1548,7 +1548,7 @@ namespace mml2vgm
                                     else if ((b & 0xfff) == fmFNumTbl[0])
                                     {
                                         ob += Math.Sign(oa - ob);
-                                        b = (b & 0xfff) * 2 + ob * 0x1000;
+                                        b = (b & 0xfff) * ((delta > 0) ? 2 : 1) + ob * 0x1000;
                                     }
                                 }
                             }
@@ -2727,7 +2727,7 @@ namespace mml2vgm
             }
             else
             {
-                o += n / 12 - 1;
+                o += n / 12 - ((n % 12 == 0) ? 0 : 1);
                 o = checkRange(o, 1, 8);
                 n %= 12;
                 if (n < 0) { n += 12; }

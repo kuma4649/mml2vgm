@@ -57,8 +57,13 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="sample\bos000.gwi" />
+    <None Include="sample\bendTest.gwi">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="sample\effectModeTest.gwi" />
+    <None Include="sample\lfoTest.gwi">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="sample\psgSample.gwi" />
     <None Include="sample\test.gwi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
