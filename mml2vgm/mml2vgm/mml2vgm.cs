@@ -51,6 +51,7 @@ namespace mml2vgm
 
                 // ファイルの読み込み
                 string[] srcBuf = File.ReadAllLines(srcFn);
+                string path = Path.GetDirectoryName(Path.GetFullPath(srcFn));
 
                 desVGM = new clsVgm();
 
@@ -72,15 +73,26 @@ namespace mml2vgm
                     long p = 0L;
                     foreach (KeyValuePair<int, Tuple<string, int, int, long, long>> v in desVGM.instPCM)
                     {
-                        //XPMCK向けファイルの生成
-                        makeXPMCKFile(v.Value);
-                        //XPMCK起動
-                        execXPMCK();
-                        //コンパイルに成功したらPCMデータをゲット
-                        long size = 0L;
-                        byte[] buf = getVGMPCMData(ref size);
+                        ////XPMCK向けファイルの生成
+                        //makeXPMCKFile(v.Value);
+                        ////XPMCK起動
+                        //execXPMCK();
+                        ////コンパイルに成功したらPCMデータをゲット
+                        //long size = 0L;
+                        //byte[] buf = getVGMPCMData(ref size);
+
+                        byte[] buf = getPCMData(path , v.Value);
+                        if (buf == null)
+                        {
+                            msgBox.setErrMsg(string.Format("PCMファイルの読み込みに失敗しました。(filename:{0})", v.Value.Item1));
+                            continue;
+                        }
+
+                        long size = buf.Length;
+
                         newDic.Add(v.Key, new Tuple<string, int, int, long, long>(v.Value.Item1, v.Value.Item2, v.Value.Item3, p, size));
                         p += size;
+
 
                         byte[] newBuf = new byte[tbuf.Length + buf.Length];
                         Array.Copy(tbuf, newBuf, tbuf.Length);
@@ -118,69 +130,130 @@ namespace mml2vgm
             }
         }
 
-        /// <summary>
-        /// PCMデータを採取するためにXPMCK向けのファイルを生成する
-        /// </summary>
-        /// <param name="instPCM">PCM生成情報</param>
-        private void makeXPMCKFile(Tuple<string, int, int, long, long> instPCM)
+        private byte[] getPCMData(string path , Tuple<string, int, int, long, long> instPCM)
         {
+            string fnPcm = Path.Combine(path, instPCM.Item1);
 
-            using (StreamWriter sw = new StreamWriter(Properties.Resources.fnTempMml, false, Encoding.GetEncoding("shift_jis")))
+            if (!File.Exists(fnPcm))
             {
-                //PCMの定義
-                sw.WriteLine(Properties.Resources.cntXPMCKMML1, 0, instPCM.Item1, instPCM.Item2, instPCM.Item3);
-                //PCMを使用
-                sw.WriteLine(Properties.Resources.cntXPMCKMML2);
-
+                msgBox.setErrMsg(string.Format("PCMファイルの読み込みに失敗しました。(filename:{0})", instPCM.Item1));
+                return null;
             }
 
-        }
-
-        /// <summary>
-        /// XPMCKキッカー
-        /// </summary>
-        private void execXPMCK()
-        {
-            ProcessStartInfo psi = new ProcessStartInfo();
-            psi.FileName = Properties.Resources.fnXPMCK;
-            psi.WindowStyle = ProcessWindowStyle.Hidden;
-            psi.Arguments = string.Format(Properties.Resources.argXPMCK, Properties.Resources.fnTempMml, Properties.Resources.fnTempVgm);
-            Process p = Process.Start(psi);
-            p.WaitForExit();
-        }
-
-        /// <summary>
-        /// XPMCKが生成したVGMファイルからPCMデータを採取する
-        /// </summary>
-        /// <param name="size">データサイズ(byte)</param>
-        /// <returns>PCMデータ</returns>
-        private byte[] getVGMPCMData(ref long size)
-        {
             // ファイルの読み込み
-            byte[] buf = File.ReadAllBytes(Properties.Resources.fnTempVgm);
+            byte[] buf = File.ReadAllBytes(fnPcm);
 
-            // 読み込んだらファイルは不要になるので削除
-            File.Delete(Properties.Resources.fnTempVgm);
-            File.Delete(Properties.Resources.fnTempMml);
-
-            byte[] des;
-            size = 0L;
-
-            // ヘッダーのチェック
-            if (buf[0x40] != 0x67 || buf[0x41] != 0x66 || buf[0x42] != 0x00)
+            if (buf.Length < 4)
             {
+                msgBox.setErrMsg("PCMファイル：不正なRIFFヘッダです。");
+                return null;
+            }
+            if(buf[0] != 'R' || buf[1] != 'I' || buf[2] != 'F' || buf[3] != 'F')
+            {
+                msgBox.setErrMsg("PCMファイル：不正なRIFFヘッダです。");
                 return null;
             }
 
             // サイズ取得
-            size = buf[0x43] + buf[0x44] * 0x100 + buf[0x45] * 0x10000 + buf[0x46] * 0x1000000;
-            // データ取得
-            des = new byte[size];
-            Array.Copy(buf, 0x40 + 7, des, 0x00, size);
+            int fSize = buf[0x4] + buf[0x5] * 0x100 + buf[0x6] * 0x10000 + buf[0x7] * 0x1000000;
 
-            return des;
+            if (buf[0x8] != 'W' || buf[0x9] != 'A' || buf[0xa] != 'V' || buf[0xb] != 'E')
+            {
+                msgBox.setErrMsg("PCMファイル：不正なRIFFヘッダです。");
+                return null;
+            }
 
+            try
+            {
+                int p = 12;
+                byte[] des = null;
+
+                while (p < fSize + 8)
+                {
+                    if (buf[p + 0] == 'f' && buf[p + 1] == 'm' && buf[p + 2] == 't' && buf[p + 3] == ' ')
+                    {
+                        p += 4;
+                        int size = buf[p + 0] + buf[p + 1] * 0x100 + buf[p + 2] * 0x10000 + buf[p + 3] * 0x1000000;
+                        p += 4;
+                        int format = buf[p + 0] + buf[p + 1] * 0x100;
+                        if (format != 1)
+                        {
+                            msgBox.setErrMsg(string.Format("PCMファイル：無効なフォーマットです。({0})",format));
+                            return null;
+                        }
+
+                        int channels = buf[p + 2] + buf[p + 3] * 0x100;
+                        if (channels != 1)
+                        {
+                            msgBox.setErrMsg(string.Format("PCMファイル：無効なチャネル数です。({0})", channels));
+                            return null;
+                        }
+
+                        int samplerate = buf[p + 4] + buf[p + 5] * 0x100 + buf[p + 6] * 0x10000 + buf[p + 7] * 0x1000000;
+                        if (samplerate != 8000)
+                        {
+                            msgBox.setErrMsg(string.Format("PCMファイル：無効なサンプリングレートです。({0})", samplerate));
+                            return null;
+                        }
+
+                        int bytepersec = buf[p + 8] + buf[p + 9] * 0x100 + buf[p + 10] * 0x10000 + buf[p + 11] * 0x1000000;
+                        if (bytepersec != 8000)
+                        {
+                            msgBox.setErrMsg(string.Format("PCMファイル：無効な平均データ割合です。({0})", bytepersec));
+                            return null;
+                        }
+
+                        int blockalign = buf[p + 12] + buf[p + 13] * 0x100;
+                        if (blockalign != 1)
+                        {
+                            msgBox.setErrMsg(string.Format("PCMファイル：無効なデータのブロックサイズです。({0})", blockalign));
+                            return null;
+                        }
+
+                        int bitswidth = buf[p + 14] + buf[p + 15] * 0x100;
+                        if (bitswidth != 8)
+                        {
+                            msgBox.setErrMsg(string.Format("PCMファイル：無効な1サンプルあたりのビット数です。({0})", bitswidth));
+                            return null;
+                        }
+
+
+                        p += size;
+                    }
+                    else if (buf[p + 0] == 'd' && buf[p + 1] == 'a' && buf[p + 2] == 't' && buf[p + 3] == 'a')
+                    {
+                        p += 4;
+                        int size = buf[p + 0] + buf[p + 1] * 0x100 + buf[p + 2] * 0x10000 + buf[p + 3] * 0x1000000;
+                        p += 4;
+
+                        des = new byte[size];
+                        Array.Copy(buf, p, des, 0x00, size);
+                        p += size;
+                    }
+                    else
+                    {
+                        p += 4;
+                        int size = buf[p + 0] + buf[p + 1] * 0x100 + buf[p + 2] * 0x10000 + buf[p + 3] * 0x1000000;
+                        p += 4;
+
+                        p += size;
+                    }
+                }
+
+                for (int i = 0; i < des.Length; i++)
+                {
+                    double b = (double)des[i] * (double)instPCM.Item3 * 0.01;
+                    b = (b > 255) ? 255.0 : b;
+                    des[i] = (byte)b;
+                }
+
+                return des;
+            }
+            catch
+            {
+                msgBox.setErrMsg("PCMファイル：不正或いは未知のチャンクを持つファイルです。");
+                return null;
+            }
         }
-
     }
 }

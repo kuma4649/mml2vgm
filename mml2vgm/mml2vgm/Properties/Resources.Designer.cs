@@ -61,65 +61,11 @@ namespace mml2vgm.Properties {
         }
         
         /// <summary>
-        ///   -gen -v {0} {1} に類似しているローカライズされた文字列を検索します。
-        /// </summary>
-        internal static string argXPMCK {
-            get {
-                return ResourceManager.GetString("argXPMCK", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   @XPCM{0} = {{&quot;{1}&quot; {2} {3}}} に類似しているローカライズされた文字列を検索します。
-        /// </summary>
-        internal static string cntXPMCKMML1 {
-            get {
-                return ResourceManager.GetString("cntXPMCKMML1", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   J o0 M2 l16 c に類似しているローカライズされた文字列を検索します。
-        /// </summary>
-        internal static string cntXPMCKMML2 {
-            get {
-                return ResourceManager.GetString("cntXPMCKMML2", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   .vgm に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string ExtensionVGM {
             get {
                 return ResourceManager.GetString("ExtensionVGM", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   .\temp.mml に類似しているローカライズされた文字列を検索します。
-        /// </summary>
-        internal static string fnTempMml {
-            get {
-                return ResourceManager.GetString("fnTempMml", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   .\temp.vgm に類似しているローカライズされた文字列を検索します。
-        /// </summary>
-        internal static string fnTempVgm {
-            get {
-                return ResourceManager.GetString("fnTempVgm", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   .\xpmck\xpmc.exe に類似しているローカライズされた文字列を検索します。
-        /// </summary>
-        internal static string fnXPMCK {
-            get {
-                return ResourceManager.GetString("fnXPMCK", resourceCulture);
             }
         }
     }

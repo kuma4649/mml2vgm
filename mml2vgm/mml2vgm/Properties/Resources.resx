@@ -117,25 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="argXPMCK" xml:space="preserve">
-    <value>-gen -v {0} {1}</value>
-  </data>
-  <data name="cntXPMCKMML1" xml:space="preserve">
-    <value>@XPCM{0} = {{"{1}" {2} {3}}}</value>
-  </data>
-  <data name="cntXPMCKMML2" xml:space="preserve">
-    <value>J o0 M2 l16 c</value>
-  </data>
   <data name="ExtensionVGM" xml:space="preserve">
     <value>.vgm</value>
-  </data>
-  <data name="fnTempMml" xml:space="preserve">
-    <value>.\temp.mml</value>
-  </data>
-  <data name="fnTempVgm" xml:space="preserve">
-    <value>.\temp.vgm</value>
-  </data>
-  <data name="fnXPMCK" xml:space="preserve">
-    <value>.\xpmck\xpmc.exe</value>
   </data>
 </root>
