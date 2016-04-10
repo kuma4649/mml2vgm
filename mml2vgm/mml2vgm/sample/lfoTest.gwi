@@ -1,12 +1,16 @@
 ﻿'{
 
-	TrackName            =LFO
-	GameName             =
-	SystemName           =
-	OriginalTrackAuthor  =
-	ReleaseDate          =2015/12/26
-	Converted            =kuma
-	Notes                =
+	TitleName   =LFO
+	TitleNameJ  =LFO
+	GameName    =
+	GameNameJ   =
+	SystemName  =
+	SystemNameJ =
+	Composer    =
+	ComposerJ   =
+	ReleaseDate =2015/12/26
+	Converted   =kuma
+	Notes       =
 
 	以下はデフォルト値を再設定しています。(つまりデフォルトを使用するだけなら再設定の必要はありません)
 	PartYM2612    =F1-6

@@ -18,10 +18,14 @@ namespace mml2vgm
         public List<string> monoPart = null;
 
 
-        public string TrackName = "";
+        public string TitleName = "";
+        public string TitleNameJ = "";
         public string GameName = "";
+        public string GameNameJ = "";
         public string SystemName = "";
-        public string OriginalTrackAuthor = "";
+        public string SystemNameJ = "";
+        public string Composer = "";
+        public string ComposerJ = "";
         public string ReleaseDate = "";
         public string Converted = "";
         public string Notes = "";
@@ -129,10 +133,14 @@ namespace mml2vgm
 
 
 
-        private const string TRACKNAME = "TRACKNAME";
+        private const string TITLENAME = "TITLENAME";
+        private const string TITLENAMEJ = "TITLENAMEJ";
         private const string GAMENAME = "GAMENAME";
+        private const string GAMENAMEJ = "GAMENAMEJ";
         private const string SYSTEMNAME = "SYSTEMNAME";
-        private const string ORIGINALTRACKAUTHOR = "ORIGINALTRACKAUTHOR";
+        private const string SYSTEMNAMEJ = "SYSTEMNAMEJ";
+        private const string COMPOSER = "COMPOSER";
+        private const string COMPOSERJ = "COMPOSERJ";
         private const string RELEASEDATE = "RELEASEDATE";
         private const string CONVERTED = "CONVERTED";
         private const string NOTES = "NOTES";
@@ -298,10 +306,14 @@ namespace mml2vgm
                     string wrd = s.Substring(0, p).Trim().ToUpper();
                     string val = s.Substring(p + 1).Trim();
 
-                    if (wrd == TRACKNAME) TrackName = val;
+                    if (wrd == TITLENAME) TitleName = val;
+                    if (wrd == TITLENAMEJ) TitleNameJ = val;
                     if (wrd == GAMENAME) GameName = val;
+                    if (wrd == GAMENAMEJ) GameNameJ = val;
                     if (wrd == SYSTEMNAME) SystemName = val;
-                    if (wrd == ORIGINALTRACKAUTHOR) OriginalTrackAuthor = val;
+                    if (wrd == SYSTEMNAMEJ) SystemNameJ = val;
+                    if (wrd == COMPOSER) Composer = val;
+                    if (wrd == COMPOSERJ) ComposerJ = val;
                     if (wrd == RELEASEDATE) ReleaseDate = val;
                     if (wrd == CONVERTED) Converted = val;
                     if (wrd == NOTES) Notes = val;
@@ -2469,10 +2481,6 @@ namespace mml2vgm
             //end of data
             dat.Add(0x66);
 
-            //EoF offset
-            v = divInt2ByteAry(dat.Count - 0x4);
-            dat[0x4] = v[0]; dat[0x5] = v[1]; dat[0x6] = v[2]; dat[0x7] = v[3];
-
             //GD3 offset
             v = divInt2ByteAry(dat.Count - 0x14);
             dat[0x14] = v[0]; dat[0x15] = v[1]; dat[0x16] = v[2]; dat[0x17] = v[3];
@@ -2504,20 +2512,28 @@ namespace mml2vgm
             int p = dat.Count;
 
             //TrackName
-            dat.AddRange(Encoding.Unicode.GetBytes(TrackName));
-            dat.Add(0x00); dat.Add(0x00); dat.Add(0x00); dat.Add(0x00);
+            dat.AddRange(Encoding.Unicode.GetBytes(TitleName));
+            dat.Add(0x00); dat.Add(0x00);
+            dat.AddRange(Encoding.Unicode.GetBytes(TitleNameJ));
+            dat.Add(0x00); dat.Add(0x00);
 
             //GameName
             dat.AddRange(Encoding.Unicode.GetBytes(GameName));
-            dat.Add(0x00); dat.Add(0x00); dat.Add(0x00); dat.Add(0x00);
+            dat.Add(0x00); dat.Add(0x00);
+            dat.AddRange(Encoding.Unicode.GetBytes(GameNameJ));
+            dat.Add(0x00); dat.Add(0x00);
 
             //SystemName
             dat.AddRange(Encoding.Unicode.GetBytes(SystemName));
-            dat.Add(0x00); dat.Add(0x00); dat.Add(0x00); dat.Add(0x00);
+            dat.Add(0x00); dat.Add(0x00);
+            dat.AddRange(Encoding.Unicode.GetBytes(SystemNameJ));
+            dat.Add(0x00); dat.Add(0x00);
 
-            //OriginalTrackAuthor
-            dat.AddRange(Encoding.Unicode.GetBytes(OriginalTrackAuthor));
-            dat.Add(0x00); dat.Add(0x00); dat.Add(0x00); dat.Add(0x00);
+            //Composer
+            dat.AddRange(Encoding.Unicode.GetBytes(Composer));
+            dat.Add(0x00); dat.Add(0x00);
+            dat.AddRange(Encoding.Unicode.GetBytes(ComposerJ));
+            dat.Add(0x00); dat.Add(0x00);
 
             //ReleaseDate
             dat.AddRange(Encoding.Unicode.GetBytes(ReleaseDate));
@@ -2530,6 +2546,10 @@ namespace mml2vgm
             //Notes
             dat.AddRange(Encoding.Unicode.GetBytes(Notes));
             dat.Add(0x00); dat.Add(0x00);
+
+            //EoF offset
+            v = divInt2ByteAry(dat.Count - 0x4);
+            dat[0x4] = v[0]; dat[0x5] = v[1]; dat[0x6] = v[2]; dat[0x7] = v[3];
 
             int q = dat.Count - p;
 

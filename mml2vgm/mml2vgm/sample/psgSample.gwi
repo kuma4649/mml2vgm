@@ -1,12 +1,16 @@
 ﻿'{
 
-	TrackName            =PSGSample
-	GameName             =none
-	SystemName           =Sega Mega Drive
-	OriginalTrackAuthor  =kuma
-	ReleaseDate          =2015/11/22
-	Converted            =none
-	Notes                =Sample
+	TitleName   =PSG sample
+	TitleNameJ  =PSGサンプル
+	GameName    =none
+	GameNameJ   =none
+	SystemName  =Sega Genesis
+	SystemNameJ =Sega MegaDrive
+	Composer    =kuma
+	ComposerJ   =kuma
+	ReleaseDate =2015/11/22
+	Converted   =
+	Notes       =
 
 	以下はデフォルト値を再設定しています。(つまりデフォルトを使用するだけなら再設定の必要はありません)
 	PartYM2612    =F1-6
