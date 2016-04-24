@@ -82,6 +82,7 @@
     <Content Include="sample\SD.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="sample\str.wav" />
     <Content Include="sample\TH.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

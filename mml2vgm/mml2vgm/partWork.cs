@@ -101,6 +101,11 @@ namespace mml2vgm
         public int instrument = -1;
 
         /// <summary>
+        /// 使用中のエンベロープ定義番号
+        /// </summary>
+        public int envInstrument = -1;
+
+        /// <summary>
         /// エンベロープの進捗位置
         /// </summary>
         public int envIndex = -1;
@@ -118,7 +123,7 @@ namespace mml2vgm
         /// <summary>
         /// 使用中のエンベロープの定義
         /// </summary>
-        public int[] envelope = new int[8] { 0, 0, 0, 0, 0, 0, 0, 0 };
+        public int[] envelope = new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, -1 };
 
         /// <summary>
         /// エンベロープスイッチ
@@ -144,6 +149,7 @@ namespace mml2vgm
         /// PCMの音程
         /// </summary>
         public int pcmNote = 0;
+        public int pcmOctave = 0;
 
         /// <summary>
         /// mコマンドで設定されているpcmモード(true:PCM false:FM)
@@ -240,7 +246,11 @@ namespace mml2vgm
         /// </summary>
         public int keyShift = 0;
 
-
+        public int rf5c164AddressIncrement = -1;
+        public int rf5c164SampleStartAddress = -1;
+        public int rf5c164LoopAddress = -1;
+        public int rf5c164Envelope = -1;
+        public int rf5c164Pan = -1;
 
         /// <summary>
         /// パート情報をリセットする
@@ -589,7 +599,7 @@ namespace mml2vgm
 
     public enum ePartType
     {
-        YM2612, YM2612extend, SegaPSG
+        YM2612, YM2612extend, SegaPSG, Rf5c164
     }
 
     public enum eLfoType
@@ -673,6 +683,30 @@ namespace mml2vgm
         /// </summary>
         public int direction = 0;
 
+    }
+
+    public class clsPcm
+    {
+        public int chip = 0;
+        public int num = 0;
+        public string fileName = "";
+        public int freq = 0;
+        public int vol = 0;
+        public long stAdr = 0;
+        public long size = 0;
+        public long loopAdr = -1;
+
+        public clsPcm(int num,int chip,string fileName, int freq, int vol , long stAdr, long size,long loopAdr)
+        {
+            this.num = num;
+            this.chip = chip;
+            this.fileName = fileName;
+            this.freq = freq;
+            this.vol = vol;
+            this.stAdr = stAdr;
+            this.size = size;
+            this.loopAdr = loopAdr;
+        }
     }
 
 }

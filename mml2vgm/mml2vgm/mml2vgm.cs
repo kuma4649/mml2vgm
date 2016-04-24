@@ -67,44 +67,111 @@ namespace mml2vgm
                 // PCM定義あり?
                 if (desVGM.instPCM.Count > 0)
                 {
-                    //PCMデータをXPMCKに生成してもらい、そのデータを取得する
-                    byte[] tbuf = new byte[7] { 0x67, 0x66, 0x00, 0x00, 0x00, 0x00, 0x00 };
-                    Dictionary<int, Tuple<string, int, int, long, long>> newDic = new Dictionary<int, Tuple<string, int, int, long, long>>();
-                    long p = 0L;
-                    foreach (KeyValuePair<int, Tuple<string, int, int, long, long>> v in desVGM.instPCM)
+                    byte[] tbufYM2612 = new byte[7] { 0x67, 0x66, 0x00, 0x00, 0x00, 0x00, 0x00 };
+                    long pYM2612 = 0L;
+                    bool uYM2612 = false;
+                    byte[] tbufRf5c164 = new byte[12] { 0xb1, 0x07, 0x00, 0x67, 0x66, 0xc1, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+                    long pRf5c164 = 0L;
+                    bool uRf5c164 = false;
+                    Dictionary<int, clsPcm> newDic = new Dictionary<int, clsPcm>();
+                    foreach (KeyValuePair<int, clsPcm> v in desVGM.instPCM)
                     {
-                        ////XPMCK向けファイルの生成
-                        //makeXPMCKFile(v.Value);
-                        ////XPMCK起動
-                        //execXPMCK();
-                        ////コンパイルに成功したらPCMデータをゲット
-                        //long size = 0L;
-                        //byte[] buf = getVGMPCMData(ref size);
 
                         byte[] buf = getPCMData(path , v.Value);
                         if (buf == null)
                         {
-                            msgBox.setErrMsg(string.Format("PCMファイルの読み込みに失敗しました。(filename:{0})", v.Value.Item1));
+                            msgBox.setErrMsg(string.Format("PCMファイルの読み込みに失敗しました。(filename:{0})", v.Value.fileName));
                             continue;
                         }
 
                         long size = buf.Length;
 
-                        newDic.Add(v.Key, new Tuple<string, int, int, long, long>(v.Value.Item1, v.Value.Item2, v.Value.Item3, p, size));
-                        p += size;
+                        if (v.Value.chip == 0)
+                        {
+                            newDic.Add(v.Key, new clsPcm(v.Value.num, v.Value.chip, v.Value.fileName, v.Value.freq, v.Value.vol, pYM2612, size, -1));
+                            pYM2612 += size;
 
+                            byte[] newBuf = new byte[tbufYM2612.Length + buf.Length];
+                            Array.Copy(tbufYM2612, newBuf, tbufYM2612.Length);
+                            Array.Copy(buf, 0, newBuf, tbufYM2612.Length, buf.Length);
 
-                        byte[] newBuf = new byte[tbuf.Length + buf.Length];
-                        Array.Copy(tbuf, newBuf, tbuf.Length);
-                        Array.Copy(buf, 0, newBuf, tbuf.Length, buf.Length);
+                            tbufYM2612 = newBuf;
+                            uYM2612 = true;
+                        }
+                        else if (v.Value.chip == 2)
+                        {
+                            byte[] newBuf;
 
-                        tbuf = newBuf;
+                            newBuf = new byte[size + 1];
+                            Array.Copy(buf, newBuf, size);
+                            newBuf[size] = 0xff;
+                            buf = newBuf;
+                            long tSize = size;
+                            size = buf.Length;
+
+                            //Padding
+                            if (size % 0x100 != 0)
+                            {
+                                newBuf = new byte[size + (0x100 - (size % 0x100))];
+                                for (int i = (int)size; i < newBuf.Length; i++) newBuf[i] = 0x80;
+                                Array.Copy(buf, newBuf, size);
+                                buf = newBuf;
+                                size = buf.Length;
+                            }
+
+                            if (v.Value.loopAdr == -1)
+                            {
+                                newDic.Add(v.Key, new clsPcm(v.Value.num, v.Value.chip, v.Value.fileName, v.Value.freq, v.Value.vol, pRf5c164, size, pRf5c164 + tSize));
+                            }
+                            else
+                            {
+                                newDic.Add(v.Key, new clsPcm(v.Value.num, v.Value.chip, v.Value.fileName, v.Value.freq, v.Value.vol, pRf5c164, size, pRf5c164 + v.Value.loopAdr));
+                            }
+                            pRf5c164 += size;
+
+                            for (int i = 0; i < tSize; i++)
+                            {
+                                if (buf[i] != 0xff)
+                                {
+                                    if (buf[i] >= 0x80)
+                                    {
+                                        //buf[i] = (byte)(0xff - buf[i]);
+                                        buf[i] = buf[i];
+                                    }
+                                    else
+                                    {
+                                        //buf[i] = (byte)(0x0 + buf[i]);
+                                        buf[i] = (byte)(0x80 - buf[i]);
+                                    }
+                                }
+
+                                if (buf[i] == 0xff)
+                                {
+                                    buf[i] = 0xfe;
+                                }
+
+                            }
+                            newBuf = new byte[tbufRf5c164.Length + buf.Length];
+                            Array.Copy(tbufRf5c164, newBuf, tbufRf5c164.Length);
+                            Array.Copy(buf, 0, newBuf, tbufRf5c164.Length, buf.Length);
+
+                            tbufRf5c164 = newBuf;
+                            uRf5c164 = true;
+                        }
                     }
-                    tbuf[3] = (byte)((tbuf.Length - 7) & 0xff);
-                    tbuf[4] = (byte)(((tbuf.Length - 7) & 0xff00) / 0x100);
-                    tbuf[5] = (byte)(((tbuf.Length - 7) & 0xff0000) / 0x10000);
-                    tbuf[6] = (byte)(((tbuf.Length - 7) & 0xff000000) / 0x1000000);
-                    desVGM.pcmData = tbuf;
+
+                    tbufYM2612[3] = (byte)((tbufYM2612.Length - 7) & 0xff);
+                    tbufYM2612[4] = (byte)(((tbufYM2612.Length - 7) & 0xff00) / 0x100);
+                    tbufYM2612[5] = (byte)(((tbufYM2612.Length - 7) & 0xff0000) / 0x10000);
+                    tbufYM2612[6] = (byte)(((tbufYM2612.Length - 7) & 0xff000000) / 0x1000000);
+                    desVGM.pcmDataYM2612 = uYM2612 ? tbufYM2612 : null;
+
+                    tbufRf5c164[6] = (byte)((tbufRf5c164.Length - 12) & 0xff);
+                    tbufRf5c164[7] = (byte)(((tbufRf5c164.Length - 12) & 0xff00) / 0x100);
+                    tbufRf5c164[8] = (byte)(((tbufRf5c164.Length - 12) & 0xff0000) / 0x10000);
+                    tbufRf5c164[9] = (byte)(((tbufRf5c164.Length - 12) & 0xff000000) / 0x1000000);
+                    desVGM.pcmDataRf5c164 = uRf5c164 ? tbufRf5c164 : null;
+
                     desVGM.instPCM = newDic;
                 }
 
@@ -130,13 +197,13 @@ namespace mml2vgm
             }
         }
 
-        private byte[] getPCMData(string path , Tuple<string, int, int, long, long> instPCM)
+        private byte[] getPCMData(string path , clsPcm instPCM)
         {
-            string fnPcm = Path.Combine(path, instPCM.Item1);
+            string fnPcm = Path.Combine(path, instPCM.fileName);
 
             if (!File.Exists(fnPcm))
             {
-                msgBox.setErrMsg(string.Format("PCMファイルの読み込みに失敗しました。(filename:{0})", instPCM.Item1));
+                msgBox.setErrMsg(string.Format("PCMファイルの読み込みに失敗しました。(filename:{0})", instPCM.fileName));
                 return null;
             }
 
@@ -242,7 +309,7 @@ namespace mml2vgm
 
                 for (int i = 0; i < des.Length; i++)
                 {
-                    double b = (double)des[i] * (double)instPCM.Item3 * 0.01;
+                    double b = (double)des[i] * (double)instPCM.vol * 0.01;
                     b = (b > 255) ? 255.0 : b;
                     des[i] = (byte)b;
                 }
