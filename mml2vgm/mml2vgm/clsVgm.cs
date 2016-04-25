@@ -1801,6 +1801,16 @@ namespace mml2vgm
                                     }
                                 }
                             }
+                            else if (ch < 13)
+                            {
+                                a = getPsgFNum(pw[ch].octave, cmd, shift + (i + 0) * Math.Sign(delta));
+                                b = getPsgFNum(pw[ch].octave, cmd, shift + (i + 1) * Math.Sign(delta));
+                            }
+                            else
+                            {
+                                a = getRf5c164PcmNote(pw[ch].octave, cmd, shift + (i + 0) * Math.Sign(delta));
+                                b = getRf5c164PcmNote(pw[ch].octave, cmd, shift + (i + 1) * Math.Sign(delta));
+                            }
                             //System.Console.Write("[{0:x} <= n < {1:x}]", a, b);
                             //System.Console.Write("[{0}:{1}]", tl, bf);
                             if (Math.Abs(bf) >= 1.0f)
@@ -2734,6 +2744,10 @@ namespace mml2vgm
             {
                 outPsgPort(dat);
             }
+            else
+            {
+                outRf5c164Port(adr, dat);
+            }
         }
 
         private void cmdNoise(int ch)
@@ -3114,6 +3128,34 @@ namespace mml2vgm
             return (f & 0xfff) + (o & 0xf) * 0x1000;
         }
 
+        private int getRf5c164PcmNote(int octave,char noteCmd,int shift)
+        {
+            //int shift = pw.shift + pw.keyShift;
+            //int o = pw.octave;
+            //int n = note.IndexOf(pw.noteCmd) + shift;
+            int o = octave;
+            int n = note.IndexOf(noteCmd) + shift;
+            if (n >= 0)
+            {
+                o += n / 12;
+                o = checkRange(o, 1, 8);
+                n %= 12;
+            }
+            else
+            {
+                o += n / 12 - 1;
+                o = checkRange(o, 1, 8);
+                n %= 12;
+                if (n < 0) { n += 12; }
+            }
+
+            //pw.pcmOctave = o;
+            //pw.pcmNote = n;
+
+            //return (int)(0x0400 * pcmMTbl[pw.pcmNote] * Math.Pow(2, (pw.pcmOctave - 4)));
+            return (int)(0x0400 * pcmMTbl[n] * Math.Pow(2, (o - 4)));
+        }
+
         private void getPcmNote(partWork pw)
         {
             int shift = pw.shift + pw.keyShift;
@@ -3304,8 +3346,7 @@ namespace mml2vgm
 
         private void setRf5c164FNum(int ch)
         {
-            getPcmNote(pw[ch]);
-            int f = (int)(0x0400 * pcmMTbl[pw[ch].pcmNote] * Math.Pow(2, (pw[ch].pcmOctave - 4)));
+            int f = getRf5c164PcmNote(pw[ch].octave, pw[ch].noteCmd, pw[ch].keyShift + pw[ch].shift);
             
             if (pw[ch].bendWaitCounter != -1)
             {
