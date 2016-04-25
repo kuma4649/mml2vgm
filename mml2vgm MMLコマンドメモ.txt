@@ -1,124 +1,131 @@
-mml2vgm MMLƒRƒ}ƒ“ƒhƒƒ‚
-Œ³ƒlƒ^: MUSIC LALF MMLƒRƒ}ƒ“ƒhƒƒ‚
+ï»¿mml2vgm MMLã‚³ãƒžãƒ³ãƒ‰ãƒ¡ãƒ¢
+å…ƒãƒã‚¿: MUSIC LALF MMLã‚³ãƒžãƒ³ãƒ‰ãƒ¡ãƒ¢
 
 
-¡ .vgmƒtƒ@ƒCƒ‹ì¬•û–@
+â–  .vgmãƒ•ã‚¡ã‚¤ãƒ«ä½œæˆæ‰‹é †
 
- 1. Œ³‚É‚È‚éMMLƒtƒ@ƒCƒ‹‚ðì¬‚·‚éB(mml2vgm‚Å‚ÍŠg’£Žq‚ð•Ö‹Xã.gwi‚Æ‚µ‚Ä‚¢‚Ü‚·)
+ 1. å…ƒã«ãªã‚‹MMLãƒ•ã‚¡ã‚¤ãƒ«ã‚’ä½œæˆã™ã‚‹ã€‚
+   (1) mml2vgmã§ã¯æ‹¡å¼µå­ã‚’ä¾¿å®œä¸Š.gwiã¨ã—ã¦ã„ã¾ã™
+   (2) UTF-8 BOMä»˜ã(æ”¹è¡Œã¯CRLF)
  
- 2. ƒGƒNƒXƒvƒ[ƒ‰‚È‚Ç‚ÅAmml2vgm.exe‚ÌƒAƒCƒRƒ“‚Ìã‚É1‚Åì¬‚µ‚½ƒtƒ@ƒCƒ‹‚ðD&D‚·‚éB
- –”‚ÍAƒRƒ}ƒ“ƒhƒ‰ƒCƒ“‚©‚çAumml2vgm.exe ƒtƒ@ƒCƒ‹–¼v‚Æ‘Å‚¿ž‚ÞB
+ 2. ã‚¨ã‚¯ã‚¹ãƒ—ãƒ­ãƒ¼ãƒ©ãªã©ã§ã€mml2vgm.exeã®ã‚¢ã‚¤ã‚³ãƒ³ã®ä¸Šã«1ã§ä½œæˆã—ãŸãƒ•ã‚¡ã‚¤ãƒ«ã‚’D&Dã™ã‚‹ã€‚
+ åˆã¯ã€ã‚³ãƒžãƒ³ãƒ‰ãƒ©ã‚¤ãƒ³ã‹ã‚‰ã€ã€Œmml2vgm.exe ãƒ•ã‚¡ã‚¤ãƒ«åã€ã¨æ‰“ã¡è¾¼ã‚€ã€‚
  
- 3. ƒRƒ“ƒpƒCƒ‹‚ªŽÀs‚³‚êAƒGƒ‰[‚âƒ[ƒjƒ“ƒO‚ª•\Ž¦‚³‚ê‚éB
- –”‚ÍAƒGƒ‰[–³‚­–³Ž–‚É.vgmƒtƒ@ƒCƒ‹‚ª.gwi‚Æ“¯‚¶ƒtƒHƒ‹ƒ_[‚É¶¬‚³‚ê‚éB
+ 3. ã‚³ãƒ³ãƒ‘ã‚¤ãƒ«ãŒå®Ÿè¡Œã•ã‚Œã€ã‚¨ãƒ©ãƒ¼ã‚„ãƒ¯ãƒ¼ãƒ‹ãƒ³ã‚°ã€ä¾‹å¤–ãŒè¡¨ç¤ºã•ã‚Œã‚‹ã€‚
+ åˆã¯ã€ã‚¨ãƒ©ãƒ¼ç„¡ãç„¡äº‹ã«.vgmãƒ•ã‚¡ã‚¤ãƒ«ãŒ.gwiã¨åŒã˜ãƒ•ã‚©ãƒ«ãƒ€ãƒ¼ã«ç”Ÿæˆã•ã‚Œã‚‹ã€‚
  
- 4. Žè ‚ÈvgmƒvƒŒƒCƒ„[‚ÅŽŽ’®‚·‚éB•K—v‚Å‚ ‚ê‚ÎC³‚·‚é‚½‚ß‚É1‚©‚çŒJ‚è•Ô‚·B
+ 4. æ‰‹é ƒãªvgmãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã§è©¦è´ã™ã‚‹ã€‚ä¿®æ­£ãŒå¿…è¦ã§ã‚ã‚Œã°1ã‹ã‚‰ç¹°ã‚Šè¿”ã™ã€‚
  
- 5. Š®¬I‰x‚É“ü‚éB
+ 5. å®Œæˆï¼æ‚¦ã«å…¥ã‚‹ã€‚
  
 
 
-¡ ƒp[ƒgŠ„‚è(‰Šú’l)
-@F1     YM2612(FM‰¹Œ¹)   1Ch
-@F2     YM2612(FM‰¹Œ¹)   2Ch
-@F3     YM2612(FM‰¹Œ¹)   3Ch/3ChEx0
-@F4     YM2612(FM‰¹Œ¹)   4Ch
-@F5     YM2612(FM‰¹Œ¹)   5Ch
-@F6     YM2612(FM‰¹Œ¹)   6Ch(PCM)
-@F7     YM2612(FM‰¹Œ¹)   3ChEx1
-@F8     YM2612(FM‰¹Œ¹)   3ChEx2
-@F9     YM2612(FM‰¹Œ¹)   3ChEx3
-@S1     SN76489(SSG‰¹Œ¹) 1Ch
-@S2     SN76489(SSG‰¹Œ¹) 2Ch
-@S3     SN76489(SSG‰¹Œ¹) 3Ch
-@S4     SN76489(SSG‰¹Œ¹) 4Ch(ƒmƒCƒY)
-@R1     RF5C164(PCM‰¹Œ¹) 1Ch
-@R2     RF5C164(PCM‰¹Œ¹) 2Ch
-@R3     RF5C164(PCM‰¹Œ¹) 3Ch
-@R4     RF5C164(PCM‰¹Œ¹) 4Ch
-@R5     RF5C164(PCM‰¹Œ¹) 5Ch
-@R6     RF5C164(PCM‰¹Œ¹) 6Ch
-@R7     RF5C164(PCM‰¹Œ¹) 7Ch
-@R8     RF5C164(PCM‰¹Œ¹) 8Ch
+â–  ãƒ‘ãƒ¼ãƒˆå‰²ã‚Š(åˆæœŸå€¤)
+ã€€F1     YM2612(FMéŸ³æº)   1Ch
+ã€€F2     YM2612(FMéŸ³æº)   2Ch
+ã€€F3     YM2612(FMéŸ³æº)   3Ch/3ChEx0
+ã€€F4     YM2612(FMéŸ³æº)   4Ch
+ã€€F5     YM2612(FMéŸ³æº)   5Ch
+ã€€F6     YM2612(FMéŸ³æº)   6Ch(PCM)
+ã€€F7     YM2612(FMéŸ³æº)   3ChEx1
+ã€€F8     YM2612(FMéŸ³æº)   3ChEx2
+ã€€F9     YM2612(FMéŸ³æº)   3ChEx3
+ã€€S1     SN76489(SSGéŸ³æº) 1Ch
+ã€€S2     SN76489(SSGéŸ³æº) 2Ch
+ã€€S3     SN76489(SSGéŸ³æº) 3Ch
+ã€€S4     SN76489(SSGéŸ³æº) 4Ch(ãƒŽã‚¤ã‚º)
+ã€€R1     RF5C164(PCMéŸ³æº) 1Ch
+ã€€R2     RF5C164(PCMéŸ³æº) 2Ch
+ã€€R3     RF5C164(PCMéŸ³æº) 3Ch
+ã€€R4     RF5C164(PCMéŸ³æº) 4Ch
+ã€€R5     RF5C164(PCMéŸ³æº) 5Ch
+ã€€R6     RF5C164(PCMéŸ³æº) 6Ch
+ã€€R7     RF5C164(PCMéŸ³æº) 7Ch
+ã€€R8     RF5C164(PCMéŸ³æº) 8Ch
 
 
-¡ MML“à•”
+â–  MMLå†…éƒ¨
 
- Y YM2612
- E YM2612(3ChEx)
- S SN76489
- R RF5C164
- 
- o ‘Î‰ž
- - ”ñ‘Î‰ž
- * –¢ŽÀ‘•
- 
-ƒRƒ}ƒ“ƒh		YESR		“à—e
-------------------------------------------------
-ln				oooo		ƒfƒtƒHƒ‹ƒg‰¹’·Žw’è
-on				oooo		ƒIƒNƒ^[ƒuâ‘ÎŽw’è(o1 - o8)
-Dn				oooo		ƒfƒBƒ`ƒ…[ƒ“ (”ÍˆÍ–¢ƒ`ƒFƒbƒN)â‘ÎŽw’è‚Ì‚Ý
-vn				oooo		‰¹—Êâ‘ÎŽw’è(Y/E:0-127 S:0-15 R:0-255)
-@n				oo-o		‰¹F”Ô†Žw’è(F/E/R)
-@n				--o-		ƒGƒ“ƒxƒ[ƒv”Ô†Žw’è
-@En				---o		ƒGƒ“ƒxƒ[ƒv”Ô†Žw’è
->				oooo		ƒIƒNƒ^[ƒu‘Š‘ÎŽw’è(ã‚°)
-<				oooo		ƒIƒNƒ^[ƒu‘Š‘ÎŽw’è(‰º‚°)
-)n				oooo		‰¹—Ê‘Š‘ÎŽw’è(ã‚°) 16’iŠK
-(n				oooo		‰¹—Ê‘Š‘ÎŽw’è(‰º‚°) 16’iŠK
-&				oooo		ƒ^ƒC(’A‚µA‰¹•„‚Ì‘•üˆµ‚¢‚È‚Ì‚Å‰¹•„‚Ì’¼Œã‚ÉŽw’è‚·‚é•K—v‚ ‚è)
-yn,n			ooo*		ƒŒƒWƒXƒ^’¼Ú‘‚«ž‚Ý(yn1,n2) n1=ƒŒƒWƒXƒ^”Ô† n2=ƒf[ƒ^
-Mx1x2n,...		ooo*		ƒ\ƒtƒgƒEƒFƒALFO(x1:P/Q/R/S x2:T/V/H n...:ƒpƒ‰ƒ[ƒ^[)Šî–{“I‚É‚ÍFMP‚Æ“¯‚¶
-Sx1n			ooo*		ƒ\ƒtƒgƒEƒFƒALFOƒXƒCƒbƒ`(x1:P/Q/R/S n:0(OFF)/1(ON))
-rn				oooo		‹x•„
-[				oooo		ƒ‹[ƒvŠJŽnˆÊ’u
-]n				oooo		ƒ‹[ƒvI—¹ˆÊ’u
-/				oooo		ƒ‹[ƒv’EoˆÊ’uŽw’è
-EON				--oo		ƒGƒ“ƒxƒ[ƒv‚ÌŠJŽn
-EOF				--oo		ƒGƒ“ƒxƒ[ƒv‚Ì’âŽ~
-EON				oo--		Œø‰Ê‰¹ƒ‚[ƒh‚ÌŠJŽn
-EOF				oo--		Œø‰Ê‰¹ƒ‚[ƒh‚Ì’âŽ~
-EXn				oo--		Œø‰Ê‰¹ƒ‚[ƒh‚ÌƒXƒƒbƒgŠ„‚è“–‚Ä
-En,n,n,n		oo--		Œø‰Ê‰¹ƒ‚[ƒh‚ÌƒXƒƒbƒgƒfƒBƒ`ƒ…[ƒ“n1`n4‚Í‚»‚ê‚¼‚êOP1`OP4‚Ü‚Å‚ÌƒfƒBƒ`ƒ…[ƒ“’l
-Ln				oooo		‹È‘S‘Ì‚Ìƒ‹[ƒvˆÊ’uŽw’è
-qn				oooo		ƒQ[ƒgƒ^ƒCƒ€Žw’è(ƒNƒƒbƒN”‚ÅŽw’è)
-Qn				oooo		ƒQ[ƒgƒ^ƒCƒ€Žw’èŠ„‡(1-8‚ÅŽw’è)
-wn				--o-		ƒmƒCƒYƒ‚[ƒhŽw’è(0`7)
-mn				o---		YM2612PCMƒ‚[ƒhŽw’è(0:’âŽ~ 1:ŠJŽn)
-Tn				oooo		ƒeƒ“ƒ|(1-255)
-!				oooo		‚±‚Ìƒp[ƒg‚Ì‚±‚êˆÈ~‚ðƒRƒ“ƒpƒCƒ‹‚µ‚È‚¢(”­‰¹‚µ‚È‚¢)
-Kn				oooo		ˆÚ’²â‘ÎŽw’è (-12`+12)
-#n				oooo		‰¹’·‚ðƒNƒƒbƒN’l‚ÅŽw’è
-pn				o---		ƒpƒ“ (0=”­‰¹‚µ‚È‚¢, 1=‰E, 2=¶, 3=’†‰›)
-pn1,n2			---o		ƒpƒ“ (0-15)n1:¶@n2:‰E
-%xxx			oooo		ƒGƒCƒŠƒAƒX“WŠJ
+ å‡¡ä¾‹
+  Y YM2612
+  E YM2612(3ChEx)
+  P YM2612(6ChPCMmode)
+  S SN76489
+  R RF5C164
+  
+  o å¯¾å¿œ
+  - éžå¯¾å¿œ
+  * æœªå®Ÿè£…
 
-c				oooo		‰¹•„ƒh
-d				oooo		‰¹•„ƒŒ
-e				oooo		‰¹•„ƒ~
-f				oooo		‰¹•„ƒtƒ@
-g				oooo		‰¹•„ƒ\
-a				oooo		‰¹•„ƒ‰
-b				oooo		‰¹•„ƒV
-	+/-			oooo		”¼‰¹ã‚°‚é/‰º‚°‚é
-	n			oooo		‰¹’·
-	.			oooo		•„“_
-	_			ooo*		ƒxƒ“ƒh
-		‰¹•„	ooo*		‰¹•„(c-b)
-		o		ooo*		ƒIƒNƒ^[ƒu
-		>		ooo*		ƒIƒNƒ^[ƒu‘Š‘ÎŽw’è(ã‚°)
-		<		ooo*		ƒIƒNƒ^[ƒu‘Š‘ÎŽw’è(‰º‚°)
-	&			oooo		ƒ^ƒC
-	~			oooo		ƒ^ƒC‚Ì‹t
+ã‚³ãƒžãƒ³ãƒ‰		YEPSR		å†…å®¹
+-------------------------------------------------
+ln				ooooo		ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆéŸ³é•·æŒ‡å®š
+on				ooooo		ã‚ªã‚¯ã‚¿ãƒ¼ãƒ–çµ¶å¯¾æŒ‡å®š(1 - 8)(YM2612PCMã®ã¿3 - 5)
+Dn				ooooo		ãƒ‡ã‚£ãƒãƒ¥ãƒ¼ãƒ³ (ç¯„å›²æœªãƒã‚§ãƒƒã‚¯)çµ¶å¯¾æŒ‡å®šã®ã¿
+vn				oo-oo		éŸ³é‡çµ¶å¯¾æŒ‡å®š(Y/E:0-127 S:0-15 R:0-255)
+@n				ooo-o		éŸ³è‰²ç•ªå·æŒ‡å®š(F/E/R)
+@n				---o-		ã‚¨ãƒ³ãƒ™ãƒ­ãƒ¼ãƒ—ç•ªå·æŒ‡å®š
+@En				----o		ã‚¨ãƒ³ãƒ™ãƒ­ãƒ¼ãƒ—ç•ªå·æŒ‡å®š
+>				ooooo		ã‚ªã‚¯ã‚¿ãƒ¼ãƒ–ç›¸å¯¾æŒ‡å®š(ä¸Šã’)
+<				ooooo		ã‚ªã‚¯ã‚¿ãƒ¼ãƒ–ç›¸å¯¾æŒ‡å®š(ä¸‹ã’)
+)n				ooooo		éŸ³é‡ç›¸å¯¾æŒ‡å®š(ä¸Šã’) 16æ®µéšŽ
+(n				ooooo		éŸ³é‡ç›¸å¯¾æŒ‡å®š(ä¸‹ã’) 16æ®µéšŽ
+&				ooooo		ã‚¿ã‚¤(ä½†ã—ã€éŸ³ç¬¦ã®è£…é£¾æ‰±ã„ãªã®ã§éŸ³ç¬¦ã®ç›´å¾Œã«æŒ‡å®šã™ã‚‹å¿…è¦ã‚ã‚Š)
+yn,n			oooo*		ãƒ¬ã‚¸ã‚¹ã‚¿ç›´æŽ¥æ›¸ãè¾¼ã¿(yn1,n2) n1=ãƒ¬ã‚¸ã‚¹ã‚¿ç•ªå· n2=ãƒ‡ãƒ¼ã‚¿
+Mx1x2n,...		oo-oo		ã‚½ãƒ•ãƒˆã‚¦ã‚§ã‚¢LFO(
+							x1:P/Q/R/S		è­˜åˆ¥å­(1ãƒãƒ£ãƒ³ãƒãƒ«å½“ãŸã‚Š4ç¨®é¡žå®šç¾©ã€ä½¿ç”¨ã§ãã‚‹)
+							x2:T/V/H		T:éŸ³é‡ V:éŸ³ç¨‹ H:ãƒãƒ¼ãƒ‰ã‚¦ã‚§ã‚¢LFO(YM2612ã®ã¿)
+							n...:ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ãƒ¼)åŸºæœ¬çš„ã«ã¯FMPã¨åŒã˜
+Sx1n			oo-oo		ã‚½ãƒ•ãƒˆã‚¦ã‚§ã‚¢LFOã‚¹ã‚¤ãƒƒãƒ(x1:P/Q/R/S n:0(OFF)/1(ON))
+rn				ooooo		ä¼‘ç¬¦
+[				ooooo		ãƒ«ãƒ¼ãƒ—é–‹å§‹ä½ç½®
+]n				ooooo		ãƒ«ãƒ¼ãƒ—çµ‚äº†ä½ç½®
+/				ooooo		ãƒ«ãƒ¼ãƒ—è„±å‡ºä½ç½®æŒ‡å®š
+EON				---oo		ã‚¨ãƒ³ãƒ™ãƒ­ãƒ¼ãƒ—ã®é–‹å§‹
+EOF				---oo		ã‚¨ãƒ³ãƒ™ãƒ­ãƒ¼ãƒ—ã®åœæ­¢
+EON				oo---		åŠ¹æžœéŸ³ãƒ¢ãƒ¼ãƒ‰ã®é–‹å§‹
+EOF				oo---		åŠ¹æžœéŸ³ãƒ¢ãƒ¼ãƒ‰ã®åœæ­¢
+EXn				oo---		åŠ¹æžœéŸ³ãƒ¢ãƒ¼ãƒ‰ã®ã‚¹ãƒ­ãƒƒãƒˆå‰²ã‚Šå½“ã¦
+En1,n2,n3,n4	oo---		åŠ¹æžœéŸ³ãƒ¢ãƒ¼ãƒ‰ã®ã‚¹ãƒ­ãƒƒãƒˆãƒ‡ã‚£ãƒãƒ¥ãƒ¼ãƒ³n1ï½žn4ã¯ãã‚Œãžã‚ŒOP1ï½žOP4ã¾ã§ã®ãƒ‡ã‚£ãƒãƒ¥ãƒ¼ãƒ³å€¤
+Ln				ooooo		æ›²å…¨ä½“ã®ãƒ«ãƒ¼ãƒ—ä½ç½®æŒ‡å®š
+qn				ooooo		ã‚²ãƒ¼ãƒˆã‚¿ã‚¤ãƒ æŒ‡å®š(ã‚¯ãƒ­ãƒƒã‚¯æ•°ã§æŒ‡å®š)
+Qn				ooooo		ã‚²ãƒ¼ãƒˆã‚¿ã‚¤ãƒ æŒ‡å®šå‰²åˆ(1-8ã§æŒ‡å®š)
+wn				---o-		ãƒŽã‚¤ã‚ºãƒ¢ãƒ¼ãƒ‰æŒ‡å®š(0ï½ž7)
+mn				ooo--		YM2612PCMãƒ¢ãƒ¼ãƒ‰æŒ‡å®š(0:åœæ­¢ 1:é–‹å§‹)
+Tn				ooooo		ãƒ†ãƒ³ãƒ(1-255)
+!				ooooo		ã“ã®ãƒ‘ãƒ¼ãƒˆã®ã“ã‚Œä»¥é™ã‚’ã‚³ãƒ³ãƒ‘ã‚¤ãƒ«ã—ãªã„(ç™ºéŸ³ã—ãªã„)
+Kn				ooooo		ç§»èª¿çµ¶å¯¾æŒ‡å®š (-12ï½ž+12)
+#n				ooooo		éŸ³é•·ã‚’ã‚¯ãƒ­ãƒƒã‚¯å€¤ã§æŒ‡å®š
+pn				o-o--		ãƒ‘ãƒ³ (0=ç™ºéŸ³ã—ãªã„, 1=å³, 2=å·¦, 3=ä¸­å¤®)
+pn1,n2			----o		ãƒ‘ãƒ³ (0-15)n1:å·¦ã€€n2:å³
+%xxx			ooooo		ã‚¨ã‚¤ãƒªã‚¢ã‚¹å±•é–‹
+
+c				ooooo		éŸ³ç¬¦ãƒ‰
+d				ooooo		éŸ³ç¬¦ãƒ¬
+e				ooooo		éŸ³ç¬¦ãƒŸ
+f				ooooo		éŸ³ç¬¦ãƒ•ã‚¡
+g				ooooo		éŸ³ç¬¦ã‚½
+a				ooooo		éŸ³ç¬¦ãƒ©
+b				ooooo		éŸ³ç¬¦ã‚·
+	+/-			ooooo		åŠéŸ³ä¸Šã’ã‚‹/ä¸‹ã’ã‚‹
+	n			ooooo		éŸ³é•·
+	.			ooooo		ç¬¦ç‚¹
+	_			oo-oo		ãƒ™ãƒ³ãƒ‰
+		éŸ³ç¬¦	oo-oo		éŸ³ç¬¦(c-b)
+		o		oo-oo		ã‚ªã‚¯ã‚¿ãƒ¼ãƒ–
+		>		oo-oo		ã‚ªã‚¯ã‚¿ãƒ¼ãƒ–ç›¸å¯¾æŒ‡å®š(ä¸Šã’)
+		<		oo-oo		ã‚ªã‚¯ã‚¿ãƒ¼ãƒ–ç›¸å¯¾æŒ‡å®š(ä¸‹ã’)
+	&			ooooo		ã‚¿ã‚¤
+	~			ooooo		ã‚¿ã‚¤ã®é€†
 
 
-¡ ‰¹F’è‹`
+â–  éŸ³è‰²å®šç¾©
 
-¦ƒpƒ‰ƒ[ƒ^‚Ì‹æØ‚è‚ÍŠî–{A','‚¾‚ª”Žš‚Å‚È‚¯‚ê‚Î‚È‚ñ‚Å‚à‚æ‚¢
-¦ƒpƒ‰ƒ[ƒ^‚Í$‚ð•t‚¯‚é‚±‚Æ‚Å16i”‚ÅŽw’è‰Â
+â€»ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã®åŒºåˆ‡ã‚Šã¯åŸºæœ¬ã€','ã ãŒæ•°å­—ã§ãªã‘ã‚Œã°ãªã‚“ã§ã‚‚ã‚ˆã„
+â€»ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã¯$ã‚’ä»˜ã‘ã‚‹ã“ã¨ã§16é€²æ•°ã§æŒ‡å®šå¯
 
 
-FM‰¹Œ¹‰¹F’è‹`1
+FMéŸ³æºéŸ³è‰²å®šç¾©1
 
 '@ F No
 '@ AR DR SR RR SL TL KS ML DT
@@ -128,7 +135,7 @@ FM‰¹Œ¹‰¹F’è‹`1
 '@ AL FB
 
 
-FM‰¹Œ¹‰¹F’è‹`2
+FMéŸ³æºéŸ³è‰²å®šç¾©2
 
 '@ M No
 '@ AR DR SR RR SL TL KS ML DT AM SSGEG
@@ -138,63 +145,63 @@ FM‰¹Œ¹‰¹F’è‹`2
 '@ AL FB
 
 
-PCM‰¹Œ¹‰¹F’è‹`
+PCMéŸ³æºéŸ³è‰²å®šç¾©
 
 '@ P No , "FileName" , Freq , Volume ( , ChipName , LoopPoint )
-	No			’è‹`”Ô†(0-255)
-	FileName	ƒtƒ@ƒCƒ‹–¼(“¯‚¶ƒpƒX)
-	Freq		Žü”g”(–¢Žg—p)
-	Volume		‰¹—Ê(0- )Œ³‚Ì‰¹—Ê‚É’l(%)‚ðŠ|‚¯‚éB100ˆÈã‚àŽw’è‚Å‚«‚é‚ª‰¹‚ªŠ„‚ê‚é‚Ì‚Å‚¨Š©‚ß‚Å‚«‚È‚¢
-	ChipName	YM2612 | RF5C164 –¢ŽwŽž‚ÍYM2612‚Æ‚µ‚Ä’è‹`‚³‚ê‚é
-	LoopPoint	RF5C164‚Ìê‡‚ÌAƒ‹[ƒvÄ¶ˆÊ’u‚ðƒTƒ“ƒvƒ‹”‚ÅŽw’èB
+	No			å®šç¾©ç•ªå·(0-255)
+	FileName	ãƒ•ã‚¡ã‚¤ãƒ«å(åŒã˜ãƒ‘ã‚¹)
+	Freq		å‘¨æ³¢æ•°(æœªä½¿ç”¨)
+	Volume		éŸ³é‡(0- )å…ƒã®éŸ³é‡ã«å€¤(%)ã‚’æŽ›ã‘ã‚‹ã€‚100ä»¥ä¸Šã‚‚æŒ‡å®šã§ãã‚‹ãŒéŸ³ãŒå‰²ã‚Œã‚‹ã®ã§ãŠå‹§ã‚ã§ããªã„
+	ChipName	YM2612 | RF5C164 çœç•¥æ™‚ã¯YM2612ã¨ã—ã¦å®šç¾©ã•ã‚Œã‚‹
+	LoopPoint	RF5C164ã®å ´åˆã®ã€ãƒ«ãƒ¼ãƒ—å†ç”Ÿä½ç½®ã‚’ã‚µãƒ³ãƒ—ãƒ«æ•°ã§æŒ‡å®šã€‚
 
 
-ƒGƒ“ƒxƒ[ƒv’è‹`
+ã‚¨ãƒ³ãƒ™ãƒ­ãƒ¼ãƒ—å®šç¾©
 
 '@ E No , SV , AR , DR , SL , SR , RR , ST , ChipName
-	No			’è‹`”Ô†(0-255)
-	SV			ƒL[ƒIƒ“Žž‚Ìƒ{ƒŠƒ…[ƒ€(0 - 15 | 0 - 255 ‚Ü‚Å)
-	AR			ŽŸ‚Éƒ{ƒŠƒ…[ƒ€‚ð+ST‚·‚é‚Ü‚Å‚ÌƒNƒƒbƒN”B
-				(Å‘åƒ{ƒŠƒ…[ƒ€(15 | 255)‚É‚È‚é‚Ü‚Å”­‰¹ƒ{ƒŠƒ…[ƒ€‚ð+ST‚·‚éˆ—‚ðŒJ‚è•Ô‚·B)
-	DR			ŽŸ‚Éƒ{ƒŠƒ…[ƒ€‚ð-ST‚·‚é‚Ü‚Å‚ÌƒNƒƒbƒN”B(SL‚É‚È‚é‚Ü‚Å”­‰¹ƒ{ƒŠƒ…[ƒ€‚ð-ST‚·‚éˆ—‚ðŒJ‚è•Ô‚·B)
-	SL			Å‘åƒ{ƒŠƒ…[ƒ€Œã‚ÌŒ¸Šƒ{ƒŠƒ…[ƒ€(0 - 15 | 0 - 255 ‚Ü‚Å)
-	SR			ŽŸ‚Éƒ{ƒŠƒ…[ƒ€‚ð-ST‚·‚é‚Ü‚Å‚ÌƒNƒƒbƒN”B
-				(ƒ{ƒŠƒ…[ƒ€‚ªSL‚É“ž’BŒãA0‚É‚È‚é‚Ü‚Å”­‰¹ƒ{ƒŠƒ…[ƒ€‚ð-ST‚·‚éˆ—‚ðŒJ‚è•Ô‚·B)
-	RR			ƒL[ƒIƒtŒãAŽŸ‚Éƒ{ƒŠƒ…[ƒ€‚ð-ST‚·‚é‚Ü‚Å‚ÌƒNƒƒbƒN”B
-				(0‚É‚È‚é‚Ü‚Å”­‰¹ƒ{ƒŠƒ…[ƒ€‚ð-ST‚·‚éˆ—‚ðŒJ‚è•Ô‚·B)
-	ST			ƒ{ƒŠƒ…[ƒ€‚Ì•Ï‰»—Ê
-	ChipName	SN76489 | RF5C164 –¢Žw’èŽž‚ÍSN76489‚Æ‚µ‚Ä’è‹`‚³‚ê‚é
+	No			å®šç¾©ç•ªå·(0-255)
+	SV			ã‚­ãƒ¼ã‚ªãƒ³æ™‚ã®ãƒœãƒªãƒ¥ãƒ¼ãƒ (0 - 15 | 0 - 255 ã¾ã§)
+	AR			æ¬¡ã«ãƒœãƒªãƒ¥ãƒ¼ãƒ ã‚’+STã™ã‚‹ã¾ã§ã®ã‚¯ãƒ­ãƒƒã‚¯æ•°ã€‚
+				(æœ€å¤§ãƒœãƒªãƒ¥ãƒ¼ãƒ (15 | 255)ã«ãªã‚‹ã¾ã§ç™ºéŸ³ãƒœãƒªãƒ¥ãƒ¼ãƒ ã‚’+STã™ã‚‹å‡¦ç†ã‚’ç¹°ã‚Šè¿”ã™ã€‚)
+	DR			æ¬¡ã«ãƒœãƒªãƒ¥ãƒ¼ãƒ ã‚’-STã™ã‚‹ã¾ã§ã®ã‚¯ãƒ­ãƒƒã‚¯æ•°ã€‚(SLã«ãªã‚‹ã¾ã§ç™ºéŸ³ãƒœãƒªãƒ¥ãƒ¼ãƒ ã‚’-STã™ã‚‹å‡¦ç†ã‚’ç¹°ã‚Šè¿”ã™ã€‚)
+	SL			æœ€å¤§ãƒœãƒªãƒ¥ãƒ¼ãƒ å¾Œã®æ¸›è¡°ãƒœãƒªãƒ¥ãƒ¼ãƒ (0 - 15 | 0 - 255 ã¾ã§)
+	SR			æ¬¡ã«ãƒœãƒªãƒ¥ãƒ¼ãƒ ã‚’-STã™ã‚‹ã¾ã§ã®ã‚¯ãƒ­ãƒƒã‚¯æ•°ã€‚
+				(ãƒœãƒªãƒ¥ãƒ¼ãƒ ãŒSLã«åˆ°é”å¾Œã€0ã«ãªã‚‹ã¾ã§ç™ºéŸ³ãƒœãƒªãƒ¥ãƒ¼ãƒ ã‚’-STã™ã‚‹å‡¦ç†ã‚’ç¹°ã‚Šè¿”ã™ã€‚)
+	RR			ã‚­ãƒ¼ã‚ªãƒ•å¾Œã€æ¬¡ã«ãƒœãƒªãƒ¥ãƒ¼ãƒ ã‚’-STã™ã‚‹ã¾ã§ã®ã‚¯ãƒ­ãƒƒã‚¯æ•°ã€‚
+				(0ã«ãªã‚‹ã¾ã§ç™ºéŸ³ãƒœãƒªãƒ¥ãƒ¼ãƒ ã‚’-STã™ã‚‹å‡¦ç†ã‚’ç¹°ã‚Šè¿”ã™ã€‚)
+	ST			ãƒœãƒªãƒ¥ãƒ¼ãƒ ã®å¤‰åŒ–é‡
+	ChipName	SN76489 | RF5C164 çœç•¥æ™‚ã¯SN76489ã¨ã—ã¦å®šç¾©ã•ã‚Œã‚‹
 
 
-¡ ƒGƒCƒŠƒAƒX’è‹`
+â–  ã‚¨ã‚¤ãƒªã‚¢ã‚¹å®šç¾©
 
 '%xxx yyyyyy
-	xxx			ƒGƒCƒŠƒAƒX–¼
-	yyyyyy		’Êí‚ÌMML(–³ŒÀÄ‹A‚É‚È‚ç‚È‚¢‚æ‚¤‚É’ˆÓ‚µ‚Ä‚­‚¾‚³‚¢)
+	xxx			ã‚¨ã‚¤ãƒªã‚¢ã‚¹å
+	yyyyyy		é€šå¸¸ã®MML(ç„¡é™å†å¸°ã«ãªã‚‰ãªã„ã‚ˆã†ã«æ³¨æ„ã—ã¦ãã ã•ã„)
 
 
-¡ ‹Èî•ñ’è‹`
+â–  æ›²æƒ…å ±å®šç¾©
 
-	TitleName		ƒ^ƒCƒgƒ‹
-	TitleNameJ		ƒ^ƒCƒgƒ‹(“ú–{–¼)
-	GameName		ƒQ[ƒ€–¼
-	GameNameJ		ƒQ[ƒ€–¼(“ú–{–¼)
-	SystemName		ƒVƒXƒeƒ€–¼
-	SystemNameJ		ƒVƒXƒeƒ€–¼(“ú–{–¼)
-	Composer		ì‹ÈŽÒ
-	ComposerJ		ì‹ÈŽÒ(“ú–{–¼)
-	ReleaseDate		ƒŠƒŠ[ƒX“ú
-	Converted		ƒRƒ“ƒo[ƒ^[
-	Notes			ƒƒ‚
+	TitleName				ã‚¿ã‚¤ãƒˆãƒ«
+	TitleNameJ				ã‚¿ã‚¤ãƒˆãƒ«(æ—¥æœ¬å)
+	GameName				ã‚²ãƒ¼ãƒ å
+	GameNameJ				ã‚²ãƒ¼ãƒ å(æ—¥æœ¬å)
+	SystemName				ã‚·ã‚¹ãƒ†ãƒ å
+	SystemNameJ				ã‚·ã‚¹ãƒ†ãƒ å(æ—¥æœ¬å)
+	Composer				ä½œæ›²è€…
+	ComposerJ				ä½œæ›²è€…(æ—¥æœ¬å)
+	ReleaseDate				ãƒªãƒªãƒ¼ã‚¹æ—¥
+	Converted				ã‚³ãƒ³ãƒãƒ¼ã‚¿ãƒ¼
+	Notes					ãƒ¡ãƒ¢
 
-	PartYM2612		YM2612‚Ìƒp[ƒg–¼
-	PartYM2612Ch3	YM2612(Ch3|Ch3Ex)‚Ìƒp[ƒg–¼
-	PartYM2612Ch6	YM2612(Ch6)‚Ìƒp[ƒg–¼
-	ForcedMonoPartYM2612	Žw’è‚µ‚½ƒp[ƒg‚Ì’èˆÊ‚ð‹­§“I‚É’†‰›‚Ì‚Ý‚É‚·‚éB
-	PartSN76489		SN76489‚Ìƒp[ƒg–¼
-	PartRf5c164		RF5C164‚Ìƒp[ƒg–¼
-	ClockCount		ƒNƒƒbƒNƒJƒEƒ“ƒg’l
-    FmF-Num			FM‰¹Œ¹‚ÌF-Num’lÄ’è‹`
-    PsgF-Num		PSG‰¹Œ¹‚ÌF-Num’lÄ’è‹`
+	PartYM2612				YM2612ã®ãƒ‘ãƒ¼ãƒˆå
+	PartYM2612Ch3			YM2612(Ch3|Ch3Ex)ã®ãƒ‘ãƒ¼ãƒˆå
+	PartYM2612Ch6			YM2612(Ch6)ã®ãƒ‘ãƒ¼ãƒˆå
+	ForcedMonoPartYM2612	æŒ‡å®šã—ãŸãƒ‘ãƒ¼ãƒˆã®å®šä½ã‚’å¼·åˆ¶çš„ã«ä¸­å¤®ã®ã¿ã«ã™ã‚‹ã€‚
+	PartSN76489				SN76489ã®ãƒ‘ãƒ¼ãƒˆå
+	PartRf5c164				RF5C164ã®ãƒ‘ãƒ¼ãƒˆå
+	ClockCount				ã‚¯ãƒ­ãƒƒã‚¯ã‚«ã‚¦ãƒ³ãƒˆå€¤
+    FmF-Num					FMéŸ³æºã®F-Numå€¤å†å®šç¾©
+    PsgF-Num				PSGéŸ³æºã®F-Numå€¤å†å®šç¾©
 
 
