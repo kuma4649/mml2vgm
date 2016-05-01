@@ -302,7 +302,7 @@ namespace mml2vgm
             {
                 if(!fCh.Contains(p) && !sCh.Contains(p) && !rCh.Contains(p))
                 {
-                    msgBox.setWrnMsg("未定義のパート({0})のデータは無視されます。");
+                    msgBox.setWrnMsg(string.Format("未定義のパート({0})のデータは無視されます。", p));
                 }
             }
 
@@ -877,7 +877,7 @@ namespace mml2vgm
 
         private List<byte> dat = null;
 
-        private const long vgmSamplesPerSecond = 44100L;
+        public const long vgmSamplesPerSecond = 44100L;
         private const long defaultTempo = 120L;
         private const long defaultClockCount = 192L;
         private const long defaultSamplesPerClock = vgmSamplesPerSecond * 60 * 4 / (defaultTempo * defaultClockCount);
@@ -888,15 +888,15 @@ namespace mml2vgm
         private long tempo = defaultTempo;
         private long clockCount = defaultClockCount;
         private double samplesPerClock = defaultSamplesPerClock;
-        private long lSample = 0L;
-        private long lClock = 0L;
+        public long lSample = 0L;
+        public long lClock = 0L;
         private long loopOffset = -1L;
         private long loopSamples = -1L;
         private float pcmBaseFreqPerFreq = 0.0f;
         private float pcmFreqCountBuffer = 0.0f;
         private long waitKeyOnPcmCounter = 0L;
         private long pcmSizeCounter = 0L;
-        private partWork[] pw = null;
+        public partWork[] pw = null;
         private Random rnd = new Random();
 
 
@@ -1352,15 +1352,6 @@ namespace mml2vgm
 
 
             makeFooter();
-
-
-            for (int ch = 0; ch < pw.Length; ch++)
-            {
-                Console.WriteLine(" {0} : {1} Channel : {2} Part : {3}", pw[ch].type.ToString(), ch + 1, pw[ch].partName, pw[ch].clockCounter);
-            }
-            Console.WriteLine("");
-            Console.WriteLine("Total Clocks  : {0}", lClock);
-            Console.WriteLine("Total Samples : {0}({1}s)", lSample,lSample/ vgmSamplesPerSecond);
 
 
             return dat.ToArray();
@@ -2211,9 +2202,9 @@ namespace mml2vgm
         private void cmdMode(int ch)
         {
             int n;
+            pw[ch].incPos();
             if (ch == 5)
             {
-                pw[ch].incPos();
                 if (!pw[ch].getNum(out n))
                 {
                     msgBox.setErrMsg("不正なPCMモード指定'm'が指定されています。", lineNumber);
@@ -2483,9 +2474,16 @@ namespace mml2vgm
                     }
                     else
                     {
-                        if (instPCM[n].chip != 0)
+                        if (!instPCM.ContainsKey(n))
                         {
-                            msgBox.setErrMsg(string.Format("指定された音色番号({0})はYM2612向けPCMデータではありません。", n), lineNumber);
+                            msgBox.setErrMsg(string.Format("PCM定義に指定された音色番号({0})が存在しません。", n), lineNumber);
+                        }
+                        else
+                        {
+                            if (instPCM[n].chip != 0)
+                            {
+                                msgBox.setErrMsg(string.Format("指定された音色番号({0})はYM2612向けPCMデータではありません。", n), lineNumber);
+                            }
                         }
                     }
                 }
@@ -2498,14 +2496,21 @@ namespace mml2vgm
                     n = 0;
                 }
                 n = checkRange(n, 0, 255);
-                if (pw[ch].envInstrument != n)
+                if (!instENV.ContainsKey(n))
                 {
-                    pw[ch].envInstrument = n;
-                    pw[ch].envIndex = -1;
-                    pw[ch].envCounter = -1;
-                    for (int i = 0; i < instENV[n].Length; i++)
+                    msgBox.setErrMsg(string.Format("エンベロープ定義に指定された音色番号({0})が存在しません。", n), lineNumber);
+                }
+                else
+                {
+                    if (pw[ch].envInstrument != n)
                     {
-                        pw[ch].envelope[i] = instENV[n][i];
+                        pw[ch].envInstrument = n;
+                        pw[ch].envIndex = -1;
+                        pw[ch].envCounter = -1;
+                        for (int i = 0; i < instENV[n].Length; i++)
+                        {
+                            pw[ch].envelope[i] = instENV[n][i];
+                        }
                     }
                 }
             }
@@ -2519,13 +2524,20 @@ namespace mml2vgm
                         n = 0;
                     }
                     n = checkRange(n, 0, 255);
-                    if (instPCM[n].chip != 2)
+                    if (!instPCM.ContainsKey(n))
                     {
-                        msgBox.setErrMsg(string.Format("指定された音色番号({0})はRF5C164向けPCMデータではありません。", n), lineNumber);
+                        msgBox.setErrMsg(string.Format("PCM定義に指定された音色番号({0})が存在しません。", n), lineNumber);
                     }
-                    setRf5c164CurrentChannel((byte)ch);
-                    setRf5c164SampleStartAddress((byte)ch, (int)instPCM[n].stAdr);
-                    setRf5c164LoopAddress((byte)ch, (int)(instPCM[n].loopAdr));
+                    else
+                    {
+                        if (instPCM[n].chip != 2)
+                        {
+                            msgBox.setErrMsg(string.Format("指定された音色番号({0})はRF5C164向けPCMデータではありません。", n), lineNumber);
+                        }
+                        setRf5c164CurrentChannel((byte)ch);
+                        setRf5c164SampleStartAddress((byte)ch, (int)instPCM[n].stAdr);
+                        setRf5c164LoopAddress((byte)ch, (int)(instPCM[n].loopAdr));
+                    }
                 }
                 else
                 {
@@ -2536,14 +2548,21 @@ namespace mml2vgm
                         n = 0;
                     }
                     n = checkRange(n, 0, 255);
-                    if (pw[ch].envInstrument != n)
+                    if (!instENV.ContainsKey(n))
                     {
-                        pw[ch].envInstrument = n;
-                        pw[ch].envIndex = -1;
-                        pw[ch].envCounter = -1;
-                        for (int i = 0; i < instENV[n].Length; i++)
+                        msgBox.setErrMsg(string.Format("エンベロープ定義に指定された音色番号({0})が存在しません。", n), lineNumber);
+                    }
+                    else
+                    {
+                        if (pw[ch].envInstrument != n)
                         {
-                            pw[ch].envelope[i] = instENV[n][i];
+                            pw[ch].envInstrument = n;
+                            pw[ch].envIndex = -1;
+                            pw[ch].envCounter = -1;
+                            for (int i = 0; i < instENV[n].Length; i++)
+                            {
+                                pw[ch].envelope[i] = instENV[n][i];
+                            }
                         }
                     }
                 }
@@ -2924,6 +2943,30 @@ namespace mml2vgm
             //GD3 Length
             v = divInt2ByteAry(q);
             dat[p - 4] = v[0]; dat[p - 3] = v[1]; dat[p - 2] = v[2]; dat[p - 1] = v[3];
+
+            long useYM2612 = 0;
+            long useSN76489 = 0;
+            long useRf5c164 = 0;
+            for (int i = 0; i < pw.Length; i++)
+            {
+                switch (pw[i].type)
+                {
+                    case ePartType.YM2612:
+                    case ePartType.YM2612extend:
+                        useYM2612 += pw[i].clockCounter;
+                        break;
+                    case ePartType.SegaPSG:
+                        useSN76489 += pw[i].clockCounter;
+                        break;
+                    case ePartType.Rf5c164:
+                        useRf5c164 += pw[i].clockCounter;
+                        break;
+                }
+            }
+
+            if (useYM2612 == 0) { dat[0x2c] = 0; dat[0x2d] = 0; dat[0x2e] = 0; dat[0x2f] = 0; }
+            if (useSN76489 == 0) { dat[0x0c] = 0; dat[0x0d] = 0; dat[0x0e] = 0; dat[0x0f] = 0; }
+            if (useRf5c164 == 0) { dat[0x6c] = 0; dat[0x6d] = 0; dat[0x6e] = 0; dat[0x6f] = 0; }
 
         }
 

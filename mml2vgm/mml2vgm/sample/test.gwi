@@ -1,7 +1,7 @@
 ﻿'{
 
-	TitleName   =PSG
-	TitleNameJ  =
+	TitleName   =
+	TitleNameJ  =色々テスト
 	GameName    =
 	GameNameJ   =
 	SystemName  =Sega Genesis
@@ -90,12 +90,12 @@ R5 @4o3v255p15,15l4[@4c4@1c4]4
      No, SV, AR, DR, SL, SR, RR, ST, Chip
 '@ E  1,100,  1,  0,255,  5,  3,  4, Rf5c164
 
-R1 @5o2v255p15, 8l1     @E1EOF
-R2 @5o2v255p 8,15l1     @E1EON
-R3 @5o2v205p13,10l1D2r16@E1EOF
-R4 @5o2v205p10,13l1D2r16@E1EON
-R13 c4d4e4f4g4a4b1&b1
-R24 r4r4r4r4r4r4r4c4d4e4f4g4a4b1&b1
+'R1 @5o2v255p15, 8l1     @E1EOF
+'R2 @5o2v255p 8,15l1     @E1EON
+'R3 @5o2v205p13,10l1D2r16@E1EOF
+'R4 @5o2v205p10,13l1D2r16@E1EON
+'R13 c4d4e4f4g4a4b1&b1
+'R24 r4r4r4r4r4r4r4c4d4e4f4g4a4b1&b1
 'R5 @4o3v255p15,15l4[@4c4@1c4]4
 
 

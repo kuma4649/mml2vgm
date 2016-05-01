@@ -16,6 +16,7 @@ namespace mml2vgm
 
         private string srcFn;
         private string desFn;
+        public clsVgm desVGM = null;
 
         /// <summary>
         /// コンストラクタ
@@ -37,7 +38,7 @@ namespace mml2vgm
         public int Start()
         {
 
-            clsVgm desVGM = null;
+            desVGM = null;
 
             try
             {
