@@ -81,6 +81,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="res\icon1.png" />
+    <Content Include="res\icon2.png" />
+    <Content Include="res\icon3.png" />
+    <Content Include="res\icon4.png" />
     <Content Include="sample\BD.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
