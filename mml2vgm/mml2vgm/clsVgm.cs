@@ -3125,6 +3125,7 @@ namespace mml2vgm
                 }
                 f += pw[ch].lfo[lfo].value + pw[ch].lfo[lfo].param[6];
             }
+//            f = checkRange(f, 0, 0x7ff);
             while (f < fmFNumTbl[0])
             {
                 if (o == 0)

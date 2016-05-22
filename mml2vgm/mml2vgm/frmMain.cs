@@ -145,7 +145,12 @@ namespace mml2vgm
 
                 msgBox.clear();
 
-                mv = new mml2vgm(arg, Path.ChangeExtension(arg, Properties.Resources.ExtensionVGM));
+                string desfn = Path.ChangeExtension(arg, Properties.Resources.ExtensionVGM);
+                if (tsbToVGZ.Checked)
+                {
+                    desfn = Path.ChangeExtension(arg, Properties.Resources.ExtensionVGZ);
+                }
+                mv = new mml2vgm(arg, desfn);
                 mv.Start();
             }
 

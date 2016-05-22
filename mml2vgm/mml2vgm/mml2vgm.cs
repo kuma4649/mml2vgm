@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Diagnostics;
+using System.IO.Compression;
 
 namespace mml2vgm
 {
@@ -185,8 +186,30 @@ namespace mml2vgm
                     return -1;
                 }
 
-                // ファイル出力
-                File.WriteAllBytes(desFn, desBuf);
+                if (Path.GetExtension(desFn).ToLower() != ".vgz")
+                {
+                    // ファイル出力
+                    File.WriteAllBytes(desFn, desBuf);
+                }
+                else
+                {
+                    int num;
+                    byte[] buf = new byte[1024];
+
+                    MemoryStream inStream = new MemoryStream(desBuf);
+                    FileStream outStream = new FileStream(desFn, FileMode.Create);
+                    GZipStream compStream = new GZipStream(outStream, CompressionMode.Compress);
+
+                    using (inStream)
+                    using (outStream)
+                    using (compStream)
+                    {
+                        while ((num = inStream.Read(buf, 0, buf.Length)) > 0)
+                        {
+                            compStream.Write(buf, 0, num);
+                        }
+                    }
+                }
 
                 // 終了
                 return 0;

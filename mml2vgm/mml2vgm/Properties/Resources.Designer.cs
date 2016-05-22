@@ -70,6 +70,15 @@ namespace mml2vgm.Properties {
         }
         
         /// <summary>
+        ///   .vgz に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string ExtensionVGZ {
+            get {
+                return ResourceManager.GetString("ExtensionVGZ", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
         /// </summary>
         internal static System.Drawing.Bitmap icon1 {
@@ -105,6 +114,16 @@ namespace mml2vgm.Properties {
         internal static System.Drawing.Bitmap icon4 {
             get {
                 object obj = ResourceManager.GetObject("icon4", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
+        /// </summary>
+        internal static System.Drawing.Bitmap icon5 {
+            get {
+                object obj = ResourceManager.GetObject("icon5", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
