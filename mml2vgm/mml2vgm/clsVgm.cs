@@ -1942,6 +1942,7 @@ namespace mml2vgm
                     {
                         setEnvelopeAtKeyOn(ch);
                         setLfoAtKeyOn(ch);
+                        setRf5c164Envelope((byte)ch, pw[ch].volume);
                         outRf5c164KeyOn((byte)ch);
                     }
                 }
@@ -2048,6 +2049,12 @@ namespace mml2vgm
             pw[ch].incPos();
             loopOffset = (long)dat.Count;
             loopSamples = lSample;
+
+            foreach (partWork p in pw)
+            {
+                //rf5c164の設定済み周波数値を初期化(ループ時に直前の周波数を引き継いでしまうケースがあるため)
+                p.rf5c164AddressIncrement = -1;
+            }
         }
 
         private void cmdEnvelope(int ch)
@@ -3429,6 +3436,7 @@ namespace mml2vgm
         {
             if (pw[ch].rf5c164Envelope != volume)
             {
+                setRf5c164CurrentChannel(ch);
                 byte data = (byte)(volume & 0xff);
                 outRf5c164Port(0x0, data);
                 pw[ch].rf5c164Envelope = volume;
@@ -3439,6 +3447,7 @@ namespace mml2vgm
         {
             if (pw[ch].rf5c164Pan != pan)
             {
+                setRf5c164CurrentChannel(ch);
                 byte data = (byte)(pan & 0xff);
                 outRf5c164Port(0x1, data);
                 pw[ch].rf5c164Pan = pan;
