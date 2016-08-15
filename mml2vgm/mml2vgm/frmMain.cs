@@ -124,7 +124,17 @@ namespace mml2vgm
             this.toolStrip1.Enabled = true;
             this.tsslMessage.Text = "Done.";
 
-            if (args.Length == 2 && tsbOnPlay.Checked) Process.Start(Path.ChangeExtension(args[1], Properties.Resources.ExtensionVGM));
+            if (args.Length == 2 && tsbOnPlay.Checked)
+            {
+                try
+                {
+                    Process.Start(Path.ChangeExtension(args[1], Properties.Resources.ExtensionVGM));
+                }
+                catch
+                {
+                    MessageBox.Show("プレイヤーの起動に失敗しました。", "mml2vgm", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
 
         }
 
