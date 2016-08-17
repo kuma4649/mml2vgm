@@ -1612,7 +1612,8 @@ namespace mml2vgm
                 if (pw[ch].getChar() == '_')
                 {
                     pw[ch].incPos();
-                    pw[ch].bendOctave = pw[ch].octave;
+                    pw[ch].octaveNow = pw[ch].octaveNew;
+                    pw[ch].bendOctave = pw[ch].octaveNow;
                     pw[ch].bendNote = 'r';
                     pw[ch].bendWaitCounter = -1;
                     bool loop = true;
@@ -1750,7 +1751,7 @@ namespace mml2vgm
                     //音符の変化量
                     int ed = note.IndexOf(pw[ch].bendNote) + 1 + (pw[ch].bendOctave - 1) * 12 + pw[ch].bendShift;
                     ed = checkRange(ed, 0, 8 * 12 - 1);
-                    int st = note.IndexOf(cmd) + 1 + (pw[ch].octave - 1) * 12 + shift;
+                    int st = note.IndexOf(cmd) + 1 + (pw[ch].octaveNow - 1) * 12 + shift;//
                     st = checkRange(st, 0, 8 * 12 - 1);
 
                     int delta = ed - st;
@@ -1770,12 +1771,12 @@ namespace mml2vgm
                         {
                             bf += wait;
                             tl += wait;
-                            int a = getPsgFNum(pw[ch].octave, cmd, shift + (i + 0) * Math.Sign(delta));
-                            int b = getPsgFNum(pw[ch].octave, cmd, shift + (i + 1) * Math.Sign(delta));
+                            int a = getPsgFNum(pw[ch].octaveNow, cmd, shift + (i + 0) * Math.Sign(delta));//
+                            int b = getPsgFNum(pw[ch].octaveNow, cmd, shift + (i + 1) * Math.Sign(delta));//
                             if (ch < 9)
                             {
-                                a = getFmFNum(pw[ch].octave, cmd, shift + (i + 0) * Math.Sign(delta));
-                                b = getFmFNum(pw[ch].octave, cmd, shift + (i + 1) * Math.Sign(delta));
+                                a = getFmFNum(pw[ch].octaveNow, cmd, shift + (i + 0) * Math.Sign(delta));//
+                                b = getFmFNum(pw[ch].octaveNow, cmd, shift + (i + 1) * Math.Sign(delta));//
                                 int oa = (a & 0xf000) / 0x1000;
                                 int ob = (b & 0xf000) / 0x1000;
                                 if (oa != ob)
@@ -1794,13 +1795,13 @@ namespace mml2vgm
                             }
                             else if (ch < 13)
                             {
-                                a = getPsgFNum(pw[ch].octave, cmd, shift + (i + 0) * Math.Sign(delta));
-                                b = getPsgFNum(pw[ch].octave, cmd, shift + (i + 1) * Math.Sign(delta));
+                                a = getPsgFNum(pw[ch].octaveNow, cmd, shift + (i + 0) * Math.Sign(delta));//
+                                b = getPsgFNum(pw[ch].octaveNow, cmd, shift + (i + 1) * Math.Sign(delta));//
                             }
                             else
                             {
-                                a = getRf5c164PcmNote(pw[ch].octave, cmd, shift + (i + 0) * Math.Sign(delta));
-                                b = getRf5c164PcmNote(pw[ch].octave, cmd, shift + (i + 1) * Math.Sign(delta));
+                                a = getRf5c164PcmNote(pw[ch].octaveNow, cmd, shift + (i + 0) * Math.Sign(delta));//
+                                b = getRf5c164PcmNote(pw[ch].octaveNow, cmd, shift + (i + 1) * Math.Sign(delta));//
                             }
                             //System.Console.Write("[{0:x} <= n < {1:x}]", a, b);
                             //System.Console.Write("[{0}:{1}]", tl, bf);
@@ -1882,12 +1883,14 @@ namespace mml2vgm
                 //発音周波数
                 if (pw[ch].bendWaitCounter == -1)
                 {
+                    pw[ch].octaveNow = pw[ch].octaveNew;
                     pw[ch].noteCmd = cmd;
                     pw[ch].shift = shift;
                 }
                 else
                 {
-                    pw[ch].octave = pw[ch].bendOctave;
+                    pw[ch].octaveNew = pw[ch].bendOctave;//
+                    pw[ch].octaveNow = pw[ch].bendOctave;//
                     pw[ch].noteCmd = pw[ch].bendNote;
                     pw[ch].shift = pw[ch].bendShift;
                 }
@@ -2386,15 +2389,15 @@ namespace mml2vgm
         private void cmdOctaveDown(int ch)
         {
             pw[ch].incPos();
-            pw[ch].octave--;
-            pw[ch].octave = checkRange(pw[ch].octave, 1, 8);
+            pw[ch].octaveNew--;
+            pw[ch].octaveNew = checkRange(pw[ch].octaveNew, 1, 8);
         }
 
         private void cmdOctaveUp(int ch)
         {
             pw[ch].incPos();
-            pw[ch].octave++;
-            pw[ch].octave = checkRange(pw[ch].octave, 1, 8);
+            pw[ch].octaveNew++;
+            pw[ch].octaveNew = checkRange(pw[ch].octaveNew, 1, 8);
         }
 
         private void cmdOctave(int ch)
@@ -2407,7 +2410,7 @@ namespace mml2vgm
                 n = 110;
             }
             n = checkRange(n, 1, 8);
-            pw[ch].octave = n;
+            pw[ch].octaveNew = n;
         }
 
         private void cmdTempo(int ch)
@@ -3111,7 +3114,7 @@ namespace mml2vgm
 
         private void setFmFNum(int ch)
         {
-            int f = getFmFNum(pw[ch].octave, pw[ch].noteCmd, pw[ch].shift + pw[ch].keyShift);
+            int f = getFmFNum(pw[ch].octaveNow, pw[ch].noteCmd, pw[ch].shift + pw[ch].keyShift);//
             if (pw[ch].bendWaitCounter !=-1)
             {
                 f = pw[ch].bendFnum;
@@ -3210,7 +3213,7 @@ namespace mml2vgm
         private void getPcmNote(partWork pw)
         {
             int shift = pw.shift + pw.keyShift;
-            int o = pw.octave;
+            int o = pw.octaveNow;//
             int n = note.IndexOf(pw.noteCmd) + shift;
             if (n >= 0)
             {
@@ -3297,7 +3300,7 @@ namespace mml2vgm
         {
             if (ch!=12)
             {
-                int f = getPsgFNum(pw[ch].octave, pw[ch].noteCmd, pw[ch].shift + pw[ch].keyShift);
+                int f = getPsgFNum(pw[ch].octaveNow, pw[ch].noteCmd, pw[ch].shift + pw[ch].keyShift);//
                 if (pw[ch].bendWaitCounter != -1)
                 {
                     f = pw[ch].bendFnum;
@@ -3397,7 +3400,7 @@ namespace mml2vgm
 
         private void setRf5c164FNum(int ch)
         {
-            int f = getRf5c164PcmNote(pw[ch].octave, pw[ch].noteCmd, pw[ch].keyShift + pw[ch].shift);
+            int f = getRf5c164PcmNote(pw[ch].octaveNow, pw[ch].noteCmd, pw[ch].keyShift + pw[ch].shift);//
             
             if (pw[ch].bendWaitCounter != -1)
             {

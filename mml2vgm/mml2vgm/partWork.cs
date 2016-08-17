@@ -83,7 +83,9 @@ namespace mml2vgm
         /// <summary>
         /// oコマンドで設定されているオクターブ数
         /// </summary>
-        public int octave = 4;
+        public int octaveNow = 4;
+
+        public int octaveNew = 4;
 
         /// <summary>
         /// vコマンドで設定されている音量
