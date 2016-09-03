@@ -30,6 +30,7 @@ namespace mml2vgm
         public string ReleaseDate = "";
         public string Converted = "";
         public string Notes = "";
+        public float Version = 1.60f;
 
 
         public int[] fmFNumTbl = new int[] {
@@ -139,6 +140,7 @@ namespace mml2vgm
         private const string FMF_NUM = "FMF-NUM";
         private const string PSGF_NUM = "PSGF-NUM";
         private const string FORCEDMONOPARTYM2612 = "FORCEDMONOPARTYM2612";
+        private const string VERSION = "VERSION";
 
         //header
         private byte[] hDat = new byte[] {
@@ -216,6 +218,8 @@ namespace mml2vgm
         private int instrumentCounter = -1;
         private byte[] instrumentBufCache = new byte[instrumentSize];
 
+        private bool ym2612SetupStream = false;
+        private long ym2612StreamFreq = 0;
 
         public int analyze(string[] buf)
         {
@@ -335,6 +339,13 @@ namespace mml2vgm
                     if (wrd == RELEASEDATE) ReleaseDate = val;
                     if (wrd == CONVERTED) Converted = val;
                     if (wrd == NOTES) Notes = val;
+                    if (wrd == VERSION)
+                    {
+                        float v = 1.60f;
+                        float.TryParse(val, out v);
+                        if (v != 1.51f && v != 1.60f) v = 1.60f;
+                        Version = v;
+                    }
 
                     if (wrd == PARTYM2612) setPartToF_Ch(0, val);
                     if (wrd == PARTYM2612CH3) setPartToF_Ch(2, val);
@@ -1964,7 +1975,11 @@ namespace mml2vgm
                 //PCM専用のWaitClockの決定
                 if (pw[ch].pcm)
                 {
-                    waitKeyOnPcmCounter = pw[ch].waitKeyOnCounter;
+                    waitKeyOnPcmCounter = -1;
+                    if (Version != 1.60f)
+                    {
+                        waitKeyOnPcmCounter = pw[ch].waitKeyOnCounter;
+                    }
                     pcmSizeCounter = instPCM[pw[ch].instrument].size;
                 }
             }
@@ -2978,6 +2993,17 @@ namespace mml2vgm
             if (useSN76489 == 0) { dat[0x0c] = 0; dat[0x0d] = 0; dat[0x0e] = 0; dat[0x0f] = 0; }
             if (useRf5c164 == 0) { dat[0x6c] = 0; dat[0x6d] = 0; dat[0x6e] = 0; dat[0x6f] = 0; }
 
+            if (Version == 1.51f)
+            {
+                dat[0x08] = 0x51;
+                dat[0x09] = 0x01;
+            }
+            else if (Version == 1.60f)
+            {
+                dat[0x08] = 0x60;
+                dat[0x09] = 0x01;
+            }
+
         }
 
         private void setEnvelopeAtKeyOn(int ch)
@@ -3564,12 +3590,79 @@ namespace mml2vgm
             pcmBaseFreqPerFreq = vgmSamplesPerSecond / ((float)instPCM[pw[ch].instrument].freq * m);
             pcmFreqCountBuffer = 0.0f;
             long p = instPCM[pw[ch].instrument].stAdr;
-            dat.Add(0xe0);
-            dat.Add((byte)(p & 0xff));
-            dat.Add((byte)((p & 0xff00) / 0x100));
-            dat.Add((byte)((p & 0xff0000) / 0x10000));
-            dat.Add((byte)((p & 0xff000000) / 0x10000));
+            if (Version == 1.51f)
+            {
+                dat.Add(0xe0);
+                dat.Add((byte)(p & 0xff));
+                dat.Add((byte)((p & 0xff00) / 0x100));
+                dat.Add((byte)((p & 0xff0000) / 0x10000));
+                dat.Add((byte)((p & 0xff000000) / 0x10000));
+            }
+            else
+            {
+                long s = instPCM[pw[ch].instrument].size;
+                long f = instPCM[pw[ch].instrument].freq;
+                long w = 0;
+                if (pw[ch].gatetimePmode)
+                {
+                    w = pw[ch].waitCounter * pw[ch].gatetime / 8L;
+                }
+                else
+                {
+                    w = pw[ch].waitCounter - pw[ch].gatetime;
+                }
+                if (w < 1) w = 1;
+                s = Math.Min(s, w * (long)samplesPerClock * f / 44100);
 
+                if (!ym2612SetupStream)
+                {
+                    // setup stream control
+                    dat.Add(0x90);
+                    dat.Add(0x00);
+                    dat.Add(0x02);
+                    dat.Add(0x00);
+                    dat.Add(0x2a);
+
+                    // set stream data
+                    dat.Add(0x91);
+                    dat.Add(0x00);
+                    dat.Add(0x00);
+                    dat.Add(0x01);
+                    dat.Add(0x00);
+
+                    ym2612SetupStream = true;
+                }
+
+                if (ym2612StreamFreq != f)
+                {
+                    //Set Stream Frequency
+                    dat.Add(0x92);
+                    dat.Add(0x00);
+
+                    dat.Add((byte)(f & 0xff));
+                    dat.Add((byte)((f & 0xff00) / 0x100));
+                    dat.Add((byte)((f & 0xff0000) / 0x10000));
+                    dat.Add((byte)((f & 0xff000000) / 0x10000));
+
+                    ym2612StreamFreq = f;
+                }
+
+                //Start Stream
+                dat.Add(0x93);
+                dat.Add(0x00);
+
+                dat.Add((byte)(p & 0xff));
+                dat.Add((byte)((p & 0xff00) / 0x100));
+                dat.Add((byte)((p & 0xff0000) / 0x10000));
+                dat.Add((byte)((p & 0xff000000) / 0x10000));
+
+                dat.Add(0x01);
+
+                dat.Add((byte)(s & 0xff));
+                dat.Add((byte)((s & 0xff00) / 0x100));
+                dat.Add((byte)((s & 0xff0000) / 0x10000));
+                dat.Add((byte)((s & 0xff000000) / 0x10000));
+            }
         }
 
         private void outFmKeyOff(byte ch)
