@@ -168,10 +168,10 @@ namespace mml2vgm
                     tbufYM2612[6] = (byte)(((tbufYM2612.Length - 7) & 0xff000000) / 0x1000000);
                     desVGM.pcmDataYM2612 = uYM2612 ? tbufYM2612 : null;
 
-                    tbufRf5c164[6] = (byte)((tbufRf5c164.Length - 12) & 0xff);
-                    tbufRf5c164[7] = (byte)(((tbufRf5c164.Length - 12) & 0xff00) / 0x100);
-                    tbufRf5c164[8] = (byte)(((tbufRf5c164.Length - 12) & 0xff0000) / 0x10000);
-                    tbufRf5c164[9] = (byte)(((tbufRf5c164.Length - 12) & 0xff000000) / 0x1000000);
+                    tbufRf5c164[6] = (byte)((tbufRf5c164.Length - 10) & 0xff);
+                    tbufRf5c164[7] = (byte)(((tbufRf5c164.Length - 10) & 0xff00) / 0x100);
+                    tbufRf5c164[8] = (byte)(((tbufRf5c164.Length - 10) & 0xff0000) / 0x10000);
+                    tbufRf5c164[9] = (byte)(((tbufRf5c164.Length - 10) & 0xff000000) / 0x1000000);
                     desVGM.pcmDataRf5c164 = uRf5c164 ? tbufRf5c164 : null;
 
                     desVGM.instPCM = newDic;
@@ -283,15 +283,15 @@ namespace mml2vgm
                         int samplerate = buf[p + 4] + buf[p + 5] * 0x100 + buf[p + 6] * 0x10000 + buf[p + 7] * 0x1000000;
                         if (samplerate != 8000)
                         {
-                            msgBox.setErrMsg(string.Format("PCMファイル：無効なサンプリングレートです。({0})", samplerate));
-                            return null;
+                            msgBox.setWrnMsg(string.Format("PCMファイル：仕様とは異なるサンプリングレートです。({0})", samplerate));
+                            //return null;
                         }
 
                         int bytepersec = buf[p + 8] + buf[p + 9] * 0x100 + buf[p + 10] * 0x10000 + buf[p + 11] * 0x1000000;
                         if (bytepersec != 8000)
                         {
-                            msgBox.setErrMsg(string.Format("PCMファイル：無効な平均データ割合です。({0})", bytepersec));
-                            return null;
+                            msgBox.setWrnMsg(string.Format("PCMファイル：仕様とは異なる平均データ割合です。({0})", bytepersec));
+                            //return null;
                         }
 
                         int blockalign = buf[p + 12] + buf[p + 13] * 0x100;

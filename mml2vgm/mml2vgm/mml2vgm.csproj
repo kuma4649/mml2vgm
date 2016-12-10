@@ -48,6 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="clsChip.cs" />
     <Compile Include="clsVgm.cs" />
     <Compile Include="frmMain.cs">
       <SubType>Form</SubType>

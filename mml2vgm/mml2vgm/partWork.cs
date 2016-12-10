@@ -42,17 +42,17 @@ namespace mml2vgm
         /// <summary>
         /// パートごとの音源の種類
         /// </summary>
-        public ePartType type = ePartType.YM2612;
+        public clsChip chip = null;
 
+        /// <summary>
+        /// Secondary Chipか
+        /// </summary>
+        public bool isSecondary = false;
+        
         /// <summary>
         /// 割り当てられた音源のチャンネル番号
         /// </summary>
         public int ch = 0;
-
-        /// <summary>
-        /// 割り当てられたパート名
-        /// </summary>
-        public string partName = "";
 
         /// <summary>
         /// 未加工のf-num
@@ -247,6 +247,8 @@ namespace mml2vgm
         /// キーシフト
         /// </summary>
         public int keyShift = 0;
+
+        public string PartName="";
 
         public int rf5c164AddressIncrement = -1;
         public int rf5c164SampleStartAddress = -1;

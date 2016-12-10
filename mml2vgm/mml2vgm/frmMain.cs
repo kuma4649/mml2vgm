@@ -42,6 +42,8 @@ namespace mml2vgm
             this.tsslMessage.Text = "Compile";
             dgvResult.Rows.Clear();
 
+            textBox1.AppendText("\r\n------------------\r\n");
+            textBox1.AppendText("Start.\r\n");
             Thread trdStartCompile = new Thread(new ThreadStart(startCompile));
             trdStartCompile.Start();
 
@@ -92,35 +94,40 @@ namespace mml2vgm
 
         private void finishedCompile()
         {
-            partWork[] pw = mv.desVGM.pw;
-            for (int i = 0; i < pw.Length; i++)
+            List<partWork> pw = mv.desVGM.lstPartWork;
+            for (int i = 0; i < pw.Count; i++)
             {
                 DataGridViewRow row = new DataGridViewRow();
                 row.Cells.Add(new DataGridViewTextBoxCell());
-                row.Cells[0].Value = pw[i].partName;
+                row.Cells[0].Value = pw[i].PartName.Substring(0, 2).Replace(" ", "") + int.Parse(pw[i].PartName.Substring(2, 2)).ToString();
                 row.Cells.Add(new DataGridViewTextBoxCell());
-                row.Cells[1].Value = pw[i].type.ToString().ToUpper();
+                row.Cells[1].Value = pw[i].chip.Name.ToUpper();
                 row.Cells.Add(new DataGridViewTextBoxCell());
                 row.Cells[2].Value = pw[i].clockCounter;
                 dgvResult.Rows.Add(row);
             }
 
+
             foreach (string mes in msgBox.getWrn())
             {
-                textBox1.AppendText(string.Format("Warning : {0}\r\n", mes));
+                textBox1.AppendText(string.Format(" Warning : {0}\r\n", mes));
             }
 
             foreach (string mes in msgBox.getErr())
             {
-                textBox1.AppendText(string.Format("Error : {0}\r\n", mes));
+                textBox1.AppendText(string.Format(" Error : {0}\r\n", mes));
             }
 
-            textBox1.AppendText(string.Format("Errors:{0} Warnings:{1}\r\n", msgBox.getErr().Length, msgBox.getWrn().Length));
-            textBox1.AppendText(string.Format("Total Clocks  : {0}\r\n", mv.desVGM.lClock));
-            textBox1.AppendText(string.Format("Total Samples : {0}({1}s)\r\n", mv.desVGM.lSample, mv.desVGM.lSample / 44100L));
+            textBox1.AppendText("\r\nResult\r\n");
+
+            textBox1.AppendText(string.Format(" Errors : {0}\r\n Warnings : {1}\r\n", msgBox.getErr().Length, msgBox.getWrn().Length));
+            textBox1.AppendText(string.Format(" Total Clocks  : {0}\r\n", mv.desVGM.lClock));
+            textBox1.AppendText(string.Format(" Total Samples : {0}({1}s)\r\n", mv.desVGM.lSample, mv.desVGM.lSample / 44100L));
+            if (mv.desVGM.pcmDataYM2612 != null) textBox1.AppendText(string.Format(" PCM Data size(YM2612)  : {0} byte\r\n", mv.desVGM.pcmDataYM2612.Length));
+            if (mv.desVGM.pcmDataRf5c164 != null) textBox1.AppendText(string.Format(" PCM Data size(RF5C164) : {0} byte\r\n", mv.desVGM.pcmDataRf5c164.Length));
 
 
-            textBox1.AppendText("Finished.\r\n\r\n");
+            textBox1.AppendText("\r\nFinished.\r\n\r\n");
             this.toolStrip1.Enabled = true;
             this.tsslMessage.Text = "Done.";
 
