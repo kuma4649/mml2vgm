@@ -1,0 +1,173 @@
+﻿'{
+
+	TitleName   =
+	TitleNameJ  =色々テスト
+	GameName    =
+	GameNameJ   =
+	SystemName  =Sega Genesis
+	SystemNameJ =Sega MegaDrive
+	Composer    =
+	ComposerJ   =
+	ReleaseDate =2015/11/15
+	Converted   =
+	Notes       =
+
+	以下はデフォルト値を再設定しています。(つまりデフォルトを使用するだけなら再設定の必要はありません)
+	PartYM2612           =F
+	PartSN76489          =S
+	PartRf5c164          =R
+	PartYM2612Secondary  =Fs
+	PartSN76489Secondary =Ss
+	PartRf5c164Secondary =Rs
+
+	ForcedMonoPartYM2612 =6
+	ClockCount           =192
+
+}
+
+No  = 定義番号
+SV  = キーオン時のボリューム(0 - 15 | 0 - 255 まで)
+AR  = 次にボリュームを+STするまでのクロック数。(最大ボリューム(15 | 255)になるまで発音ボリュームを+STする処理を繰り返す。)
+DR  = 次にボリュームを-STするまでのクロック数。(SLになるまで発音ボリュームを-STする処理を繰り返す。)
+SL  = 最大ボリューム後の減衰ボリューム(0 - 15 | 0 - 255 まで)
+SR  = 次にボリュームを-STするまでのクロック数。(ボリュームがSLに到達後、0になるまで発音ボリュームを-STする処理を繰り返す。)
+RR  = キーオフ後、次にボリュームを-STするまでのクロック数。(0になるまで発音ボリュームを-STする処理を繰り返す。)
+ST  = ボリュームの変化量
+Chip= チップの種類。省略時はSN76489として定義される(SN76489/RF5C164)
+
+     No,SV,AR,DR,SL,SR,RR,ST,Chip
+@ E  0,15, 0, 0,15, 1, 1, 4
+
+
+'@ M 110
+   AR  DR  SR  RR  SL  TL  KS  ML  DT  AM  SSG-EG
+'@ 031,000,000,000,000,033,000,004,007,001,000
+'@ 018,015,009,007,003,009,000,004,007,001,000
+'@ 031,000,000,000,000,024,000,002,003,001,000
+'@ 031,015,009,007,003,000,000,002,003,001,000
+'@ 004,007
+
+(from WING☆GHOST @8)
+'@ F 008
+   AR  DR  SR  RR  SL  TL  KS  ML  DT
+'@  31,  2,  1,  1,  1, 23,  0,  1,  0
+'@  31,  3,  2,  1,  2, 24,  0,  1,  0
+'@  31,  3,  2,  1,  2, 25,  0,  1,  5
+'@  25,  2,  1,  7,  1,  3,  0,  1,  0
+'@   3,  5
+
+@ P 0,"BD.wav",8000, 90
+@ P 1,"SD.wav",8000,100
+@ P 2,"SD.wav",8000, 20
+@ P 3,"HO.wav",8000,100
+@ P 4,"TH.wav",8000,110
+@ P 5,"TM.wav",8000,100
+@ P 6,"TL.wav",8000,120
+
+@ P 1,"SD.wav",8000,100,Rf5c164
+@ P 3,"TM.wav",8000,100
+@ P 4,"TM.wav",8000,100,Rf5c164
+@ P 5,"str.wav",8000,100,Rf5c164,1400
+
+'F1-6,Fs1-6 @8v105q0l8o4
+'F1 T160 L
+
+'F1  [ crrr> rrrr> rrrr> crrr> r<rrr r<rrr c<rrr r<rrr < rr>rr ar>rr rr>rr rr>rr arr<r rrr<r rrr<r arr<r > ]
+'F2  [ rdrr> rrrr> rrrr> rdrr> r<rrr r<rrr r<grr r<rrr < rr>rr rb>rr rr>rr rr>rr rer<r rrr<r rrr<r rer<r > ]
+'F3  [ rrer> rrrr> rrrr> rrer> r<rrr r<rrr r<rer r<rrr < rr>rr rr>cr rr>rr rr>rr rrc<r rrr<r rrr<r rrc<r > ]
+'F4  [ rrrg> rrrr> rrrr> rrrg> r<rrr r<rrr r<rrd r<rrr < rr>rr rr>re rr>rr rr>rr rrr<b rrr<r rrr<r rrr<b > ]
+'F5  [ rrrr> crrr> rrrr> rrrr> c<rrr r<rrr r<rrr c<rrr < rr>rr rr>rr ar>rr rr>rr rrr<r arr<r rrr<r rrr<r > ]
+'F6  [ rrrr> rdrr> rrrr> rrrr> r<grr r<rrr r<rrr r<grr < rr>rr rr>rr rb>rr rr>rr rrr<r rer<r rrr<r rrr<r > ]
+'Fs1 [ rrrr> rrer> rrrr> rrrr> r<rer r<rrr r<rrr r<rer < rr>rr rr>rr rr>cr rr>rr rrr<r rrc<r rrr<r rrr<r > ]
+'Fs2 [ rrrr> rrrg> rrrr> rrrr> r<rrd r<rrr r<rrr r<rrd < rr>rr rr>rr rr>re rr>rr rrr<r rrr<b rrr<r rrr<r > ]
+'Fs3 [ rrrr> rrrr> crrr> rrrr> r<rrr c<rrr r<rrr r<rrr < ar>rr rr>rr rr>rr ar>rr rrr<r rrr<r arr<r rrr<r > ]
+'Fs4 [ rrrr> rrrr> rdrr> rrrr> r<rrr r<grr r<rrr r<rrr < rb>rr rr>rr rr>rr rb>rr rrr<r rrr<r rer<r rrr<r > ]
+'Fs5 [ rrrr> rrrr> rrer> rrrr> r<rrr r<rer r<rrr r<rrr < rr>cr rr>rr rr>rr rr>cr rrr<r rrr<r rrc<r rrr<r > ]
+'Fs6 [ rrrr> rrrr> rrrg> rrrr> r<rrr r<rrd r<rrr r<rrr < rr>re rr>rr rr>rr rr>re rrr<r rrr<r rrr<b rrr<r > ]
+
+'F1   < fr>rr rrr>r rrr>r frr>r rr<rr rr<rr fr<rr r<rrr  rrr>r gr>rr rr>rr rrr>r grr<r rr<rr <rrr<r gr<rr > 
+'F2   < rg>rr rrr>r rrr>r rgr>r rr<rr rr<rr rc<rr r<rrr  rrr>r ra>rr rr>rr rrr>r rdr<r rr<rr <rrr<r rd<rr > 
+'F3   < rra>r rrr>r rrr>r rra>r rr<rr rr<rr rr<ar r<rrr  rrr>r rrb>r rr>rr rrr>r rr<br rr<rr <rrr<r rr<br > 
+'F4   < rrr>c rrr>r rrr>r rrr>c rr<rr rr<rr rr<rg r<rrr  rrr>r rrr>d rr>rr rrr>r rr<rg rr<rr <rrr<r rr<rg > 
+'F5   < rrr>r frr>r rrr>r rrrr> fr<rr rr<rr rr<rr fr<rr  rrr>r rrr>r gr>rr rrr>r rr<rr dr<rr <rrr<r rr<rr > 
+'F6   < rrr>r rgr>r rrr>r rrrr> rc<rr rr<rr rr<rr rc<rr  rrr>r rrr>r ra>rr rrr>r rr<rr r<brr <rrr<r rr<rr > 
+'Fs1  < rrr>r rra>r rrr>r rrrr> rr<ar rr<rr rr<rr rr<ar  rrr>r rrr>r rrb>r rrr>r rr<rr rr<gr <rrr<r rr<rr > 
+'Fs2  < rrr>r rrr>c rrr>r rrrr> rr<rg rr<rr rr<rr rr<rg  rrr>r rrr>r rrr>d rrr>r rr<rr rr<rd <rrr<r rr<rr > 
+'Fs3  < rrr>r rrr>r frr>r rrrr> rr<rr fr<rr rr<rr r<rrr  grr>r rrr>r rrr>r grr>r rr<rr rr<rr <brr<r rr<rr > 
+'Fs4  < rrr>r rrr>r rgr>r rrrr> rr<rr rc<rr rr<rr r<rrr  rar>r rrr>r rrr>r rar>r rr<rr rr<rr <rgr<r rr<rr > 
+'Fs5  < rrr>r rrr>r rra>r rrrr> rr<rr rr<ar rr<rr r<rrr  rrb>r rrr>r rrr>r rrb>r rr<rr rr<rr <rrd<r rr<rr > 
+'Fs6  < rrr>r rrr>r rrr>c rrrr> rr<rr rr<rg rr<rr r<rrr  rrr>d rrr>r rrr>r rrr>d rr<rr rr<rr <rrr<b rr<rr > 
+
+'F1  g+r>rr rr>rr  rr>rr  g+r>rr rr<rr  rr<rr  crr<r  <rr<rr
+'F2  ra+>rr rr>rr  rr>rr  ra+>rr rr<rr  rr<rr  r<g+rr <rr<rr
+'F3  rr>cr  rr>rr  rr>rr  rr>cr  rr<rr  rr<rr  r<rd+r <rr<rr
+'F4  rr>rd+ rr>rr  rr>rr  rr>rd+ rr<rr  rr<rr  r<rrc  <rr<rr
+'F5  rr>rr  g+r>rr rr>rr  rr>rr  g+r<rr rr<rr  r<rrr  <g+r<rr
+'F6  rr>rr  ra+>rr rr>rr  rr>rr  rd+<rr rr<rr  r<rrr  <rd+<rr
+'Fs1 rr>rr  rr>cr  rr>rr  rr>rr  rrc<r  rr<rr  r<rrr  <rrc<r
+'Fs2 rr>rr  rr>rd+ rr>rr  rr>rr  rrr<g+ rr<rr  r<rrr  <rrr<g+
+'Fs3 rr>rr  rr>rr  g+r>rr rr>rr  rrr<r  d+r<rr r<rrr  <rrr<r
+'Fs4 rr>rr  rr>rr  ra+>rr rr>rr  rrr<r  rc<rr  r<rrr  <rrr<r
+'Fs5 rr>rr  rr>rr  rr>cr  rr>rr  rrr<r  rr<g+r r<rrr  <rrr<r
+'Fs6 rr>rr  rr>rr  rr>rd+ rr>rr  rrr<r  rr<rd+ r<rrr  <rrr<r
+
+'F1  a+>rrr r>rrr  rr>rr  a+r>rr rr<rr  rr<rr  d<rrr  <rrr<r
+'F2  r>crr  r>rrr  rr>rr  r>crr  rr<rr  rr<rr  r<a+rr <rrr<r
+'F3  r>rdr  r>rrr  rr>rr  r>rdr  rr<rr  rr<rr  r<rfr  <rrr<r
+'F4  r>rrf  r>rrr  rr>rr  r>rrf  rr<rr  rr<rr  r<rrd  <rrr<r
+'F5  r>rrr  a+>rrr rr>rr  rr>rr  a+r<rr rr<rr  r<rrr  T150<a+rr<r
+'F6  r>rrr  r>crr  rr>rr  rr>rr  rf<rr  rr<rr  r<rrr  <rT140f<rr
+'Fs1 r>rrr  r>rdr  rr>rr  rr>rr  rrd<r  rr<rr  r<rrr  <rrT130d<r
+'Fs2 r>rrr  r>rrf  rr>rr  rr>rr  rrr<a+ rr<rr  r<rrr  <rrr<T120a+
+'Fs3 r>rrr  r>rrr  a+r>rr rr>rr  rrr<r  fr<rr  r<rrr  <rrr<r
+'Fs4 r>rrr  r>rrr  r>crr  rr>rr  rrr<r  rd<rr  r<rrr  <rrr<r
+'Fs5 r>rrr  r>rrr  r>rdr  rr>rr  rrr<r  rr<a+r r<rrr  <rrr<r
+'Fs6 r>rrr  r>rrr  r>rrf  rr>rr  rrr<r  rr<rf  r<rrr  <rrr<r
+
+F6 m1l8@1[crc4]4
+
+F56 @110v120q0l8o7p1T$80SS0
+F5 c
+F6 m1l8[@0cr@1cr@0cc@2c@3c]4
+
+F1 @110v120q0l8o7T$80[[cd]/[ef]][ga]
+F6 D0p$03o4l16q0m1l24@5c@6d[@4c@6a]@6[a-dc]6@1c
+F6 D0p3o4l16q0m1@3c1&1&1l4o3cdefgab>cdefgab>cdefgab
+
+S1 D0v10q1l8
+S1         o4c2_br2c2_d
+S1 EON@0  o4cdefgab>cc2_<c cdefgab_gr2
+
+S3 o4v0 c2_>>>c
+S4 v15w7c2
+S4 v15EON@0w4ccrcw5crcrw6crcrw7cccc
+
+R1 T60q0p15,15o4r4<@4c4r4c4v10c4v50c4v100c4v150c4v200c4v255c4  p15,8c4p8,15c4p15,15c4>
+R1 <v255[c16(32]8v255l16 D0c D20c D40c D60c D80c D100c D0 Q8c4Q4c4Q1c4q0
+R1 @1o3[cdefgab>]5[bagfedc<]8o3l32v255c&v10c&v255c4  D0c&D40c&D80c4D0c4
+F6 m1r4r4@3c4c4
+
+R1 @5o3v255p15, 8l32    [c&(4]64
+R2 @5o3v255p 8,15l32    [e&(4]64
+R6 @5o3v255p15,15l32    [g&(4]64
+R3 @5o3v235p15,15l32D2rr[c&(4]64
+R4 @5o3v235p15,15l32D2rr[e&(4]64
+R5 @4o3v255p15,15l4[@4c4@1c4]4
+
+     No, SV, AR, DR, SL, SR, RR, ST, Chip
+@ E  1,100,  1,  0,255,  5,  3,  4, Rf5c164
+
+R1 @5o2v255p15, 8l1     @E1EOF
+R2 @5o2v255p 8,15l1     @E1EON
+R3 @5o2v205p13,10l1D2r16@E1EOF
+R4 @5o2v205p10,13l1D2r16@E1EON
+R13 c4d4e4f4g4a4b1&b1
+R24 r4r4r4r4r4r4r4c4d4e4f4g4a4b1&b1
+R5 @4o3v255p15,15l4[@4c4@1c4]4
+
+
+R2 @5o2v255p15,15l1@E1EONc_>>c&c_<c
+R2 @5o2v255p15,15l1@E1EON MSV48,2,12,24,0SS1c1&c1
+R2 @5o2v255p15,15l1@E1EON MST48,2,12,24,0SS1c1&c1
+
+R1 v255@5o4c1v100c1@E1EONc1

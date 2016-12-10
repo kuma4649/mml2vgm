@@ -78,37 +78,102 @@ ebass3(from MUSIC LALF @70)
   (5) MML定義部
     ・書式
     「'パート名 MML」
-      パート名にはパート割りの項で示す「F1」や「S1」などが入る。
+      パート名(T.B.D.)
+        「パート識別子(A-Zz)チャンネル番号(1-9/01-99)」
+        パート識別子
+          パート識別子は1文字或いは2文字の半角英字で構成される。
+          但し一文字目は大文字の半角英字、二文字目は無し又は小文字の半角英字である。
+          一文字目(26文字)
+            A B C D E F G H I J K L M N O P Q R S T U V W X Y Z
+          二文字目(27文字)
+            (無) a b c d e f g h i j k l m n o p q r s t u v w x y z
+          26 x 27 = 702種類指定可能
+          例
+            「A」、「B」、「Ac」、「Bz」等々
+        
+        チャンネル番号(T.B.D.)
+          チャンネル番号は1文字或いは2文字の半角数字で構成される。
+          1文字か2文字かは設定した音源の使用可能なチャンネル数(後述)に依存し、
+          10チャンネル未満の音源は1文字、それ以上持つ音源の場合は2文字で指定することが必須である。
+          また、チャンネルは1から開始される。(0チャンネルの指定はできない)
+          99チャンネル分指定可能
+          例
+            「1」、「2」、「01」、「03」、「15」、「99」等々
+        
         「,」でパート名を列挙することも可能。
-        「F12」などと指定すると「F1」と「F2」を指定したことになる。
+          例
+            「F1,A2,Aa4,C24」
+        10チャンネル未満の音源で「F12」などと指定すると「F1」と「F2」を指定することができる。
+        10チャンネル以上の音源で「F12」とすると「F12」を指定することを意味する。
+        (1チャンネルと2チャンネルを指定したい場合は「F0102」と指定する。)
         「FS1」などと指定することはできない。この場合は「F1,S1」とする。
         「F1-3」などと指定すると「F1」と「F2」更に「F3」を指定したことになる。
-      MMLはMML内部の項を参照。
+        
+      MML
+        MML内部の項を参照。
     ・複数行の場合は上から順番に解釈される。
 
 
-■ パート割り(初期値)
-  F1     YM2612(FM音源)   1Ch
-  F2     YM2612(FM音源)   2Ch
-  F3     YM2612(FM音源)   3Ch/3ChEx0
-  F4     YM2612(FM音源)   4Ch
-  F5     YM2612(FM音源)   5Ch
-  F6     YM2612(FM音源)   6Ch(PCM)
-  F7     YM2612(FM音源)   3ChEx1
-  F8     YM2612(FM音源)   3ChEx2
-  F9     YM2612(FM音源)   3ChEx3
-  S1     SN76489(SSG音源) 1Ch
-  S2     SN76489(SSG音源) 2Ch
-  S3     SN76489(SSG音源) 3Ch
-  S4     SN76489(SSG音源) 4Ch(ノイズ)
-  R1     RF5C164(PCM音源) 1Ch
-  R2     RF5C164(PCM音源) 2Ch
-  R3     RF5C164(PCM音源) 3Ch
-  R4     RF5C164(PCM音源) 4Ch
-  R5     RF5C164(PCM音源) 5Ch
-  R6     RF5C164(PCM音源) 6Ch
-  R7     RF5C164(PCM音源) 7Ch
-  R8     RF5C164(PCM音源) 8Ch
+■ 使用可能な音源(T.B.D.)
+  名称      略称   初期周波数(Hz)  使用可能チャンネル数
+  YM2203    OPN           3000000   9Ch(FM   : 3Ch  SSG : 3Ch  FMex: 3Ch)
+  YM2612    OPN2          7670454   9Ch(FM   : 6Ch  FMex: 3Ch)
+  YM2608    OPNA          8000000  19Ch(FM   : 6Ch  SSG : 3Ch  FMex: 3Ch  Rhythm : 6Ch  ADPCM  : 1Ch)
+  YM2610B   OPNB          8000000  19Ch(FM   : 6Ch  SSG : 3Ch  FMex: 3Ch  ADPCM-A: 6Ch  ADPCM-B: 1Ch)
+  YM2151    OPM           3579545   8Ch(FM   : 8Ch)
+  SN76489   DCSG          3579545   4Ch(PSG  : 4Ch)
+  RF5C164   RF5C         12500000   8Ch(PCM  : 8Ch)
+  PWM       PWM          23011361   2Ch(PCM  : 2Ch)
+  OKIM6258  OKI5          4000000   1Ch(ADPCM: 1Ch)
+  OKIM6295  OKI9          8000000   4Ch(ADPCM: 4Ch)
+  C140      C140          8000000  24Ch(PCM  :24Ch)
+  SegaPCM   SPCM          4000000  16Ch(PCM  :16Ch)
+
+
+■ パート割り(初期値)(T.B.D.)
+  F1     YM2612(FM音源)(Primary)     1Ch
+  F2     YM2612(FM音源)(Primary)     2Ch
+  F3     YM2612(FM音源)(Primary)     3Ch/3ChEx0
+  F4     YM2612(FM音源)(Primary)     4Ch
+  F5     YM2612(FM音源)(Primary)     5Ch
+  F6     YM2612(FM音源)(Primary)     6Ch(PCM)
+  F7     YM2612(FM音源)(Primary)     3ChEx1
+  F8     YM2612(FM音源)(Primary)     3ChEx2
+  F9     YM2612(FM音源)(Primary)     3ChEx3
+  S1     SN76489(SSG音源)(Primary)   1Ch
+  S2     SN76489(SSG音源)(Primary)   2Ch
+  S3     SN76489(SSG音源)(Primary)   3Ch
+  S4     SN76489(SSG音源)(Primary)   4Ch(ノイズ)
+  R1     RF5C164(PCM音源)(Primary)   1Ch
+  R2     RF5C164(PCM音源)(Primary)   2Ch
+  R3     RF5C164(PCM音源)(Primary)   3Ch
+  R4     RF5C164(PCM音源)(Primary)   4Ch
+  R5     RF5C164(PCM音源)(Primary)   5Ch
+  R6     RF5C164(PCM音源)(Primary)   6Ch
+  R7     RF5C164(PCM音源)(Primary)   7Ch
+  R8     RF5C164(PCM音源)(Primary)   8Ch
+
+  Fs1    YM2612(FM音源)(Secondary)   1Ch
+  Fs2    YM2612(FM音源)(Secondary)   2Ch
+  Fs3    YM2612(FM音源)(Secondary)   3Ch/3ChEx0
+  Fs4    YM2612(FM音源)(Secondary)   4Ch
+  Fs5    YM2612(FM音源)(Secondary)   5Ch
+  Fs6    YM2612(FM音源)(Secondary)   6Ch(PCM)
+  Fs7    YM2612(FM音源)(Secondary)   3ChEx1
+  Fs8    YM2612(FM音源)(Secondary)   3ChEx2
+  Fs9    YM2612(FM音源)(Secondary)   3ChEx3
+  Ss1    SN76489(SSG音源)(Secondary) 1Ch
+  Ss2    SN76489(SSG音源)(Secondary) 2Ch
+  Ss3    SN76489(SSG音源)(Secondary) 3Ch
+  Ss4    SN76489(SSG音源)(Secondary) 4Ch(ノイズ)
+  Rs1    RF5C164(PCM音源)(Secondary) 1Ch
+  Rs2    RF5C164(PCM音源)(Secondary) 2Ch
+  Rs3    RF5C164(PCM音源)(Secondary) 3Ch
+  Rs4    RF5C164(PCM音源)(Secondary) 4Ch
+  Rs5    RF5C164(PCM音源)(Secondary) 5Ch
+  Rs6    RF5C164(PCM音源)(Secondary) 6Ch
+  Rs7    RF5C164(PCM音源)(Secondary) 7Ch
+  Rs8    RF5C164(PCM音源)(Secondary) 8Ch
 
 
 ■ MML内部
@@ -236,8 +301,8 @@ b               ooooo       音符シ
     FileName    ファイル名(.gwiファイルと同じPathを探す)
     Freq        周波数(未使用)
     Volume      音量(0- )元の音量に値(%)を掛ける。100以上も指定できるが音が割れるのでお勧めできない
-    ChipName    YM2612 | RF5C164 省略時はYM2612として定義される
-    LoopPoint   RF5C164の場合の、ループ再生位置をサンプル数で指定。
+    ChipName    音源名称又は略称を指定。省略時はYM2612として定義される(T.B.D.)
+    LoopPoint   ループポイントに対応している音源の場合の、ループ再生位置をサンプル数で指定。(T.B.D.)
 
 
 ■ エンベロープ定義
@@ -254,7 +319,7 @@ b               ooooo       音符シ
     RR          キーオフ後、次にボリュームを-STするまでのクロック数。
                 (0になるまで発音ボリュームを-STする処理を繰り返す。)
     ST          ボリュームの変化量
-    ChipName    SN76489 | RF5C164 省略時はSN76489として定義される
+    ChipName    音源名称又は略称を指定。省略時はSN76489として定義される(T.B.D.)
 
 
 ■ エイリアス定義
@@ -266,27 +331,62 @@ b               ooooo       音符シ
 
 ■ 曲情報定義
 
-    TitleName               タイトル
-    TitleNameJ              タイトル(日本名)
-    GameName                ゲーム名
-    GameNameJ               ゲーム名(日本名)
-    SystemName              システム名
-    SystemNameJ             システム名(日本名)
-    Composer                作曲者
-    ComposerJ               作曲者(日本名)
-    ReleaseDate             リリース日
-    Converted               コンバーター
-    Notes                   メモ
+    タイトル(英)
+      TitleName    タイトル
+    
+    タイトル(日)
+      TitleNameJ   タイトル(日本名)
+    
+    ゲーム名(英)
+      GameName     ゲーム名
+    
+    ゲーム名(日)
+      GameNameJ    ゲーム名(日本名)
+    
+    システム名(英)
+      SystemName   システム名
+    
+    システム名(日)
+      SystemNameJ  システム名(日本名)
+    
+    作曲者(英)
+      Composer     作曲者
+    
+    作曲者(日)
+      ComposerJ    作曲者(日本名)
+    
+    リリース日
+      ReleaseDate  リリース日
+    
+    コンバーター
+      Converted    コンバーター
+    
+    メモ
+      Notes        メモ
+    
+    パート名定義(T.B.D.)
+      Part(音源の名称|略称)[Primary|Secondary]   (A - Zz まで)  [周波数]
+        音源は名称或いは略称を必ず指定する。
+        Primaryは省略可能。Secondaryを指定する場合は省略不可能。
+        周波数は省略可能。その場合初期値が使用される。Primaryの値が優先で使用される。
+        
+        定義済み
+          PartYM2612              F
+          PartSN76489             S
+          PartRF5C164             R
+          PartYM2612Secondary     Fs
+          PartSN76489Secondary    Ss
+          PartRF5C164Secondary    Rs
+    
 
-    PartYM2612              YM2612のパート名再定義
-    PartYM2612Ch3           YM2612(Ch3|Ch3Ex)のパート名再定義
-    PartYM2612Ch6           YM2612(Ch6)のパート名再定義
-    PartSN76489             SN76489のパート名再定義
-    PartRf5c164             RF5C164のパート名再定義
-
-    ForcedMonoPartYM2612    指定したパートの定位を強制的に中央のみにする。
-    ClockCount              クロックカウント値
-    FmF-Num                 FM音源のF-Num値再定義
-    PsgF-Num                PSG音源のF-Num値再定義
+    特殊用途
+      ForcedMonoPartYM2612    指定したパートの定位を強制的に中央のみにする。
+    
+    分解能指定
+      ClockCount              クロックカウント値
+    
+    F-Num値再定義(T.B.D.)
+      FmF-Num                 FM音源のF-Num値再定義
+      PsgF-Num                PSG音源のF-Num値再定義
 
 
