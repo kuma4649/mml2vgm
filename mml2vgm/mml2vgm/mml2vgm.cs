@@ -73,6 +73,7 @@ namespace mml2vgm
                     long pYM2612 = 0L;
                     bool uYM2612 = false;
                     byte[] tbufRf5c164 = new byte[12] { 0xb1, 0x07, 0x00, 0x67, 0x66, 0xc1, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+                    //byte[] tbufRf5c164 = new byte[12] { 0x68, 0x66, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
                     long pRf5c164 = 0L;
                     bool uRf5c164 = false;
                     Dictionary<int, clsPcm> newDic = new Dictionary<int, clsPcm>();
@@ -88,9 +89,9 @@ namespace mml2vgm
 
                         long size = buf.Length;
 
-                        if (v.Value.chip == 0)
+                        if (v.Value.chip ==  enmChipType.YM2612)
                         {
-                            newDic.Add(v.Key, new clsPcm(v.Value.num, v.Value.chip, v.Value.fileName, v.Value.freq, v.Value.vol, pYM2612, size, -1));
+                            newDic.Add(v.Key, new clsPcm(v.Value.num, v.Value.chip, false, v.Value.fileName, v.Value.freq, v.Value.vol, pYM2612, size, -1));
                             pYM2612 += size;
 
                             byte[] newBuf = new byte[tbufYM2612.Length + buf.Length];
@@ -100,7 +101,7 @@ namespace mml2vgm
                             tbufYM2612 = newBuf;
                             uYM2612 = true;
                         }
-                        else if (v.Value.chip == 2)
+                        else if (v.Value.chip == enmChipType.RF5C164)
                         {
                             byte[] newBuf;
 
@@ -123,11 +124,11 @@ namespace mml2vgm
 
                             if (v.Value.loopAdr == -1)
                             {
-                                newDic.Add(v.Key, new clsPcm(v.Value.num, v.Value.chip, v.Value.fileName, v.Value.freq, v.Value.vol, pRf5c164, size, pRf5c164 + tSize));
+                                newDic.Add(v.Key, new clsPcm(v.Value.num, v.Value.chip, false, v.Value.fileName, v.Value.freq, v.Value.vol, pRf5c164, size, pRf5c164 + tSize));
                             }
                             else
                             {
-                                newDic.Add(v.Key, new clsPcm(v.Value.num, v.Value.chip, v.Value.fileName, v.Value.freq, v.Value.vol, pRf5c164, size, pRf5c164 + v.Value.loopAdr));
+                                newDic.Add(v.Key, new clsPcm(v.Value.num, v.Value.chip, false, v.Value.fileName, v.Value.freq, v.Value.vol, pRf5c164, size, pRf5c164 + v.Value.loopAdr));
                             }
                             pRf5c164 += size;
 
@@ -172,6 +173,9 @@ namespace mml2vgm
                     tbufRf5c164[7] = (byte)(((tbufRf5c164.Length - 10) & 0xff00) / 0x100);
                     tbufRf5c164[8] = (byte)(((tbufRf5c164.Length - 10) & 0xff0000) / 0x10000);
                     tbufRf5c164[9] = (byte)(((tbufRf5c164.Length - 10) & 0xff000000) / 0x1000000);
+                    //tbufRf5c164[9] = (byte)(((tbufRf5c164.Length - 12) & 0xff) / 0x1);
+                    //tbufRf5c164[10] = (byte)(((tbufRf5c164.Length - 12) & 0xff00) / 0x100);
+                    //tbufRf5c164[11] = (byte)(((tbufRf5c164.Length - 12) & 0xff0000) / 0x10000);
                     desVGM.pcmDataRf5c164 = uRf5c164 ? tbufRf5c164 : null;
 
                     desVGM.instPCM = newDic;

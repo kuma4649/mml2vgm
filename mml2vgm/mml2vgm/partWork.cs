@@ -158,6 +158,16 @@ namespace mml2vgm
         /// </summary>
         public bool pcm = false;
 
+        public float pcmBaseFreqPerFreq = 0.0f;
+        public float pcmFreqCountBuffer = 0.0f;
+        public long pcmWaitKeyOnCounter = 0L;
+        public long pcmSizeCounter = 0L;
+
+        public bool streamSetup = false;
+        public int streamID = -1;
+        public long streamFreq = 0;
+
+
         /// <summary>
         /// q/Qコマンドで設定されているゲートタイム(clock/%)
         /// </summary>
@@ -691,7 +701,8 @@ namespace mml2vgm
 
     public class clsPcm
     {
-        public int chip = 0;
+        public enmChipType chip = enmChipType.YM2612;
+        public bool isSecondary = false;
         public int num = 0;
         public string fileName = "";
         public int freq = 0;
@@ -700,10 +711,11 @@ namespace mml2vgm
         public long size = 0;
         public long loopAdr = -1;
 
-        public clsPcm(int num,int chip,string fileName, int freq, int vol , long stAdr, long size,long loopAdr)
+        public clsPcm(int num, enmChipType chip,bool isSecondary,string fileName, int freq, int vol , long stAdr, long size,long loopAdr)
         {
             this.num = num;
             this.chip = chip;
+            this.isSecondary = isSecondary;
             this.fileName = fileName;
             this.freq = freq;
             this.vol = vol;

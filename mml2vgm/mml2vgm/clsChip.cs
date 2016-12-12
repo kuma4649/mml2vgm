@@ -51,14 +51,15 @@ namespace mml2vgm
         DCSGNOISE
     }
 
-    public enum enmChipType
+    public enum enmChipType : int
     {
-        YM2151,
-        YM2203,
-        YM2608,
-        YM2610B,
-        YM2612,
-        SN76489,
-        RF5C164
+        None = -1,
+        YM2151 = 0,
+        YM2203 = 1,
+        YM2608 = 2,
+        YM2610B = 3,
+        YM2612 = 4,
+        SN76489 = 5,
+        RF5C164 = 6
     }
 }

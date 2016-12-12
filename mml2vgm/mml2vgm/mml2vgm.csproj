@@ -35,6 +35,9 @@
   <PropertyGroup>
     <StartupObject />
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>フェーリ48.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -87,6 +90,8 @@
     <Content Include="res\icon3.png" />
     <Content Include="res\icon4.png" />
     <Content Include="res\icon5.png" />
+    <Content Include="res\フェーリ48.ico" />
+    <Content Include="res\フェーリ48.png" />
     <Content Include="sample\BD.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -109,6 +114,7 @@
     <Content Include="sample\TM.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="フェーリ48.ico" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="frmMain.resx">
