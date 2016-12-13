@@ -124,7 +124,8 @@ namespace mml2vgm
             textBox1.AppendText(string.Format(" Total Clocks  : {0}\r\n", mv.desVGM.lClock));
             textBox1.AppendText(string.Format(" Total Samples : {0}({1}s)\r\n", mv.desVGM.lSample, mv.desVGM.lSample / 44100L));
             if (mv.desVGM.pcmDataYM2612 != null) textBox1.AppendText(string.Format(" PCM Data size(YM2612)  : {0} byte\r\n", mv.desVGM.pcmDataYM2612.Length));
-            if (mv.desVGM.pcmDataRf5c164 != null) textBox1.AppendText(string.Format(" PCM Data size(RF5C164) : {0} byte\r\n", mv.desVGM.pcmDataRf5c164.Length));
+            if (mv.desVGM.pcmDataRf5c164P != null) textBox1.AppendText(string.Format(" PCM Data size(RF5C164) : {0} byte\r\n", mv.desVGM.pcmDataRf5c164P.Length));
+            if (mv.desVGM.pcmDataRf5c164S != null) textBox1.AppendText(string.Format(" PCM Data size(RF5C164Secondary) : {0} byte\r\n", mv.desVGM.pcmDataRf5c164S.Length));
 
 
             textBox1.AppendText("\r\nFinished.\r\n\r\n");

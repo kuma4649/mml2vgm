@@ -15,7 +15,8 @@ namespace mml2vgm
         public Dictionary<string, List<Tuple<int, string>>> partData = new Dictionary<string, List<Tuple<int, string>>>();
         public Dictionary<string, Tuple<int, string>> aliesData = new Dictionary<string, Tuple<int, string>>();
         public byte[] pcmDataYM2612 = null;
-        public byte[] pcmDataRf5c164 = null;
+        public byte[] pcmDataRf5c164P = null;
+        public byte[] pcmDataRf5c164S = null;
         public List<string> monoPart = null;
 
 
@@ -103,8 +104,10 @@ namespace mml2vgm
         private const int instrumentOperaterSize = 9;
         private const int instrumentMOperaterSize = 11;
 
-        private byte rf5c164KeyOn = 0x0;
-        private byte rf5c164CurrentChannel = 0xff;
+        private byte rf5c164KeyOnP = 0x0;
+        private byte rf5c164KeyOnS = 0x0;
+        private byte rf5c164CurrentChannelP = 0xff;
+        private byte rf5c164CurrentChannelS = 0xff;
 
 
 
@@ -128,6 +131,9 @@ namespace mml2vgm
         private const string PSGF_NUM = "PSGF-NUM";
         private const string FORCEDMONOPARTYM2612 = "FORCEDMONOPARTYM2612";
         private const string VERSION = "VERSION";
+
+        private const string PRIMARY = "PRIMARY";
+        private const string SECONDARY = "SECONDARY";
 
         //header
         private byte[] hDat = new byte[] {
@@ -554,9 +560,20 @@ namespace mml2vgm
                         int fq = int.Parse(vs[2]);
                         int vol = int.Parse(vs[3]);
                         int lp = -1;
+                        bool isSecondary=false;
                         if (vs.Length > 4)
                         {
                             string chipName = vs[4].Trim().ToUpper();
+                            isSecondary = false;
+                            if (chipName.IndexOf(PRIMARY) >= 0)
+                            {
+                                isSecondary = false;
+                                chipName = chipName.Replace(PRIMARY, "");
+                            }else if (chipName.IndexOf(SECONDARY) >= 0)
+                            {
+                                isSecondary = true;
+                                chipName = chipName.Replace(SECONDARY, "");
+                            }
                             chip = getChipNumber(chipName);
                             if (!canUsePCM(chip))
                             {
@@ -572,7 +589,7 @@ namespace mml2vgm
                         {
                             instPCM.Remove(num);
                         }
-                        instPCM.Add(num, new clsPcm(num, chip, false, fn, fq, vol, 0, 0, lp));
+                        instPCM.Add(num, new clsPcm(num, chip, isSecondary, fn, fq, vol, 0, 0, lp));
                     }
                     catch
                     {
@@ -1145,26 +1162,13 @@ namespace mml2vgm
                             cpw.pcmWaitKeyOnCounter -= cnt;
                         }
 
-                    }
-
-                    for (int ch = 0; ch < sn76489.ChMax * 2; ch++)
-                    {
-                        partWork cpw = lstPartWork[sn76489.partStartCh[0] + ch];
-
-                        if (!cpw.envelopeMode) continue;
-                        if (cpw.envIndex == -1) continue;
-
-                        cpw.envCounter -= (int)cnt;
-                    }
-
-                    for (int ch = 0; ch < rf5c164.ChMax * 2; ch++)
-                    {
-                        partWork cpw = lstPartWork[rf5c164.partStartCh[0] + ch];
-
-                        if (!cpw.envelopeMode) continue;
-                        if (cpw.envIndex == -1) continue;
-
-                        cpw.envCounter -= (int)cnt;
+                        if (cpw.chip.Type == enmChipType.SN76489 || cpw.chip.Type==enmChipType.RF5C164)
+                        {
+                            if (cpw.envelopeMode && cpw.envIndex != -1)
+                            {
+                                cpw.envCounter -= (int)cnt;
+                            }
+                        }
                     }
 
                     // wait発行
@@ -2868,7 +2872,7 @@ namespace mml2vgm
             }
             else
             {
-                outRf5c164Port(adr, dat);
+                outRf5c164Port((ch - rf5c164.partStartCh[0]) >= rf5c164.ChMax, adr, dat);
             }
         }
 
@@ -2930,9 +2934,17 @@ namespace mml2vgm
             }
 
             //PCM Data block
-            if ((rf5c164.use[0] || rf5c164.use[1]) && pcmDataRf5c164 != null && pcmDataRf5c164.Length > 0)
+            if (rf5c164.use[0] && pcmDataRf5c164P != null && pcmDataRf5c164P.Length > 0)
             {
-                foreach (byte b in pcmDataRf5c164)
+                foreach (byte b in pcmDataRf5c164P)
+                {
+                    dat.Add(b);
+                }
+            }
+
+            if (rf5c164.use[1] && pcmDataRf5c164S != null && pcmDataRf5c164S.Length > 0)
+            {
+                foreach (byte b in pcmDataRf5c164S)
                 {
                     dat.Add(b);
                 }
@@ -2997,6 +3009,22 @@ namespace mml2vgm
                     setRf5c164Pan(i, 0xff);
                     setRf5c164Envelope(i, 0xff);
                 }
+            }
+
+            if (rf5c164.use[1])
+            {
+                for (int ch = 0; ch < rf5c164.ChMax; ch++)
+                {
+                    byte i = (byte)(rf5c164.partStartCh[1] + ch);
+
+                    setRf5c164CurrentChannel(i);
+                    setRf5c164SampleStartAddress(i, 0);
+                    setRf5c164LoopAddress(i, 0);
+                    setRf5c164AddressIncrement(i, 0x400);
+                    setRf5c164Pan(i, 0xff);
+                    setRf5c164Envelope(i, 0xff);
+                }
+                dat[0x6f] |= 0x40;
             }
 
         }
@@ -3323,34 +3351,6 @@ namespace mml2vgm
             return (f & 0xfff) + (o & 0xf) * 0x1000;
         }
 
-        private int getRf5c164PcmNote(int octave,char noteCmd,int shift)
-        {
-            //int shift = pw.shift + pw.keyShift;
-            //int o = pw.octave;
-            //int n = note.IndexOf(pw.noteCmd) + shift;
-            int o = octave;
-            int n = note.IndexOf(noteCmd) + shift;
-            if (n >= 0)
-            {
-                o += n / 12;
-                o = checkRange(o, 1, 8);
-                n %= 12;
-            }
-            else
-            {
-                o += n / 12 - 1;
-                o = checkRange(o, 1, 8);
-                n %= 12;
-                if (n < 0) { n += 12; }
-            }
-
-            //pw.pcmOctave = o;
-            //pw.pcmNote = n;
-
-            //return (int)(0x0400 * pcmMTbl[pw.pcmNote] * Math.Pow(2, (pw.pcmOctave - 4)));
-            return (int)(0x0400 * pcmMTbl[n] * Math.Pow(2, (o - 4)));
-        }
-
         private void getPcmNote(partWork pw)
         {
             int shift = pw.shift + pw.keyShift;
@@ -3398,41 +3398,6 @@ namespace mml2vgm
                     outFmSetVolume((byte)ch, vol, lstPartWork[ch].instrument);
                     lstPartWork[ch].beforeVolume = vol;
                 }
-            }
-        }
-
-        private void setRf5c164Volume(int ch)
-        {
-            int vol = lstPartWork[ch].volume;
-
-            if (lstPartWork[ch].envelopeMode)
-            {
-                vol = 0;
-                if (lstPartWork[ch].envIndex != -1)
-                {
-                    vol = lstPartWork[ch].envVolume - (255 - lstPartWork[ch].volume);
-                }
-            }
-
-            for (int lfo = 0; lfo < 4; lfo++)
-            {
-                if (!lstPartWork[ch].lfo[lfo].sw)
-                {
-                    continue;
-                }
-                if (lstPartWork[ch].lfo[lfo].type != eLfoType.Tremolo)
-                {
-                    continue;
-                }
-                vol += lstPartWork[ch].lfo[lfo].value + lstPartWork[ch].lfo[lfo].param[6];
-            }
-
-            vol = checkRange(vol, 0, 255);
-
-            if (lstPartWork[ch].beforeVolume != vol)
-            {
-                    setRf5c164Envelope((byte)ch, vol);
-                    lstPartWork[ch].beforeVolume = vol;
             }
         }
 
@@ -3537,6 +3502,69 @@ namespace mml2vgm
         }
 
 
+        private int getRf5c164PcmNote(int octave, char noteCmd, int shift)
+        {
+            //int shift = pw.shift + pw.keyShift;
+            //int o = pw.octave;
+            //int n = note.IndexOf(pw.noteCmd) + shift;
+            int o = octave;
+            int n = note.IndexOf(noteCmd) + shift;
+            if (n >= 0)
+            {
+                o += n / 12;
+                o = checkRange(o, 1, 8);
+                n %= 12;
+            }
+            else
+            {
+                o += n / 12 - 1;
+                o = checkRange(o, 1, 8);
+                n %= 12;
+                if (n < 0) { n += 12; }
+            }
+
+            //pw.pcmOctave = o;
+            //pw.pcmNote = n;
+
+            //return (int)(0x0400 * pcmMTbl[pw.pcmNote] * Math.Pow(2, (pw.pcmOctave - 4)));
+            return (int)(0x0400 * pcmMTbl[n] * Math.Pow(2, (o - 4)));
+        }
+
+        private void setRf5c164Volume(int ch)
+        {
+            int vol = lstPartWork[ch].volume;
+
+            if (lstPartWork[ch].envelopeMode)
+            {
+                vol = 0;
+                if (lstPartWork[ch].envIndex != -1)
+                {
+                    vol = lstPartWork[ch].envVolume - (255 - lstPartWork[ch].volume);
+                }
+            }
+
+            for (int lfo = 0; lfo < 4; lfo++)
+            {
+                if (!lstPartWork[ch].lfo[lfo].sw)
+                {
+                    continue;
+                }
+                if (lstPartWork[ch].lfo[lfo].type != eLfoType.Tremolo)
+                {
+                    continue;
+                }
+                vol += lstPartWork[ch].lfo[lfo].value + lstPartWork[ch].lfo[lfo].param[6];
+            }
+
+            vol = checkRange(vol, 0, 255);
+
+            if (lstPartWork[ch].beforeVolume != vol)
+            {
+                setRf5c164Envelope((byte)ch, vol);
+                lstPartWork[ch].beforeVolume = vol;
+            }
+        }
+
         private void setRf5c164FNum(int ch)
         {
             int f = getRf5c164PcmNote(lstPartWork[ch].octaveNow, lstPartWork[ch].noteCmd, lstPartWork[ch].keyShift + lstPartWork[ch].shift);//
@@ -3562,7 +3590,7 @@ namespace mml2vgm
             f = checkRange(f, 0, 0xffff);
             lstPartWork[ch].freq = f;
 
-            byte pch = (byte)((ch - 13*2) & 7);
+            //byte pch = (byte)((ch - 13*2) & 7);
 
             setRf5c164CurrentChannel((byte)ch);
 
@@ -3576,34 +3604,52 @@ namespace mml2vgm
 
         private void setRf5c164Envelope(byte ch, int volume)
         {
+            bool isSecondary = (ch - rf5c164.partStartCh[0]) >= rf5c164.ChMax;
+
             if (lstPartWork[ch].rf5c164Envelope != volume)
             {
                 setRf5c164CurrentChannel(ch);
                 byte data = (byte)(volume & 0xff);
-                outRf5c164Port(0x0, data);
+                outRf5c164Port(isSecondary, 0x0, data);
                 lstPartWork[ch].rf5c164Envelope = volume;
             }
         }
 
         private void setRf5c164Pan(byte ch, int pan)
         {
+            bool isSecondary = (ch - rf5c164.partStartCh[0]) >= rf5c164.ChMax;
+
             if (lstPartWork[ch].rf5c164Pan != pan)
             {
                 setRf5c164CurrentChannel(ch);
                 byte data = (byte)(pan & 0xff);
-                outRf5c164Port(0x1, data);
+                outRf5c164Port(isSecondary, 0x1, data);
                 lstPartWork[ch].rf5c164Pan = pan;
             }
         }
 
         private void setRf5c164CurrentChannel(byte ch)
         {
-            byte pch = (byte)((ch - 13*2) & 0x7);
-            if (rf5c164CurrentChannel != pch)
+            byte pch = (byte)((ch - rf5c164.partStartCh[0]) & 0x7);
+            bool isSecondary = (ch - rf5c164.partStartCh[0]) >= rf5c164.ChMax;
+
+            if (!isSecondary)
             {
-                byte data = (byte)(0xc0 + pch);
-                outRf5c164Port(0x7, data);
-                rf5c164CurrentChannel = pch;
+                if (rf5c164CurrentChannelP != pch)
+                {
+                    byte data = (byte)(0xc0 + pch);
+                    outRf5c164Port(isSecondary, 0x7, data);
+                    rf5c164CurrentChannelP = pch;
+                }
+            }
+            else
+            {
+                if (rf5c164CurrentChannelS != pch)
+                {
+                    byte data = (byte)(0xc0 + pch);
+                    outRf5c164Port(isSecondary, 0x7, data);
+                    rf5c164CurrentChannelS = pch;
+                }
             }
         }
 
@@ -3611,10 +3657,12 @@ namespace mml2vgm
         {
             if (lstPartWork[ch].rf5c164AddressIncrement != f)
             {
+                bool isSecondary = (ch - rf5c164.partStartCh[0]) >= rf5c164.ChMax;
+
                 byte data = (byte)(f & 0xff);
-                outRf5c164Port(0x2, data);
+                outRf5c164Port(isSecondary, 0x2, data);
                 data = (byte)((f >> 8) & 0xff);
-                outRf5c164Port(0x3, data);
+                outRf5c164Port(isSecondary, 0x3, data);
                 lstPartWork[ch].rf5c164AddressIncrement = f;
             }
         }
@@ -3623,8 +3671,10 @@ namespace mml2vgm
         {
             if (lstPartWork[ch].rf5c164SampleStartAddress != adr)
             {
+                bool isSecondary = (ch - rf5c164.partStartCh[0]) >= rf5c164.ChMax;
+
                 byte data = (byte)((adr >> 8) & 0xff);
-                outRf5c164Port(0x6, data);
+                outRf5c164Port(isSecondary, 0x6, data);
                 lstPartWork[ch].rf5c164SampleStartAddress = adr;
             }
         }
@@ -3633,29 +3683,60 @@ namespace mml2vgm
         {
             if (lstPartWork[ch].rf5c164LoopAddress != adr)
             {
+                bool isSecondary = (ch - rf5c164.partStartCh[0]) >= rf5c164.ChMax;
+
                 byte data = (byte)((adr >> 8) & 0xff);
-                outRf5c164Port(0x5, data);
+                outRf5c164Port(isSecondary, 0x5, data);
                 data = (byte)(adr & 0xff);
-                outRf5c164Port(0x4, data);
+                outRf5c164Port(isSecondary, 0x4, data);
                 lstPartWork[ch].rf5c164LoopAddress = adr;
             }
         }
 
         private void outRf5c164KeyOn(byte ch)
         {
-            byte pch = (byte)((ch - 13*2) & 0x7);
-            rf5c164KeyOn |= (byte)(1 << pch);
-            byte data = (byte)(~rf5c164KeyOn);
-            outRf5c164Port(0x8, data);
+            byte pch = (byte)((ch - rf5c164.partStartCh[0]) & 0x7);
+            bool isSecondary = (ch - rf5c164.partStartCh[0]) >= rf5c164.ChMax;
+            if (!isSecondary)
+            {
+                rf5c164KeyOnP |= (byte)(1 << pch);
+                byte data = (byte)(~rf5c164KeyOnP);
+                outRf5c164Port(false, 0x8, data);
+            }
+            else
+            {
+                rf5c164KeyOnS |= (byte)(1 << pch);
+                byte data = (byte)(~rf5c164KeyOnS);
+                outRf5c164Port(true, 0x8, data);
+            }
         }
 
         private void outRf5c164KeyOff(byte ch)
         {
-            byte pch = (byte)((ch - 13*2) & 0x7);
-            rf5c164KeyOn &= (byte)(~(1 << pch));
-            byte data = (byte)(~rf5c164KeyOn);
-            outRf5c164Port(0x8, data);
+            byte pch = (byte)((ch - rf5c164.partStartCh[0]) & 0x7);
+            bool isSecondary = (ch - rf5c164.partStartCh[0]) >= rf5c164.ChMax;
+
+            if (!isSecondary)
+            {
+                rf5c164KeyOnP &= (byte)(~(1 << pch));
+                byte data = (byte)(~rf5c164KeyOnP);
+                outRf5c164Port(false, 0x8, data);
+            }
+            else
+            {
+                rf5c164KeyOnS &= (byte)(~(1 << pch));
+                byte data = (byte)(~rf5c164KeyOnS);
+                outRf5c164Port(true, 0x8, data);
+            }
         }
+
+        private void outRf5c164Port(bool isSecondary,byte adr, byte data)
+        {
+            dat.Add(0xb1);
+            dat.Add((byte)((adr & 0x7f) | (isSecondary ? 0x80 : 0x00)));
+            dat.Add(data);
+        }
+
 
 
 
@@ -4281,13 +4362,6 @@ namespace mml2vgm
 
         }
 
-
-        private void outRf5c164Port(byte adr, byte data)
-        {
-            dat.Add(0xb1);
-            dat.Add(adr);
-            dat.Add(data);
-        }
 
 
         private void outWaitNSamples(long n)

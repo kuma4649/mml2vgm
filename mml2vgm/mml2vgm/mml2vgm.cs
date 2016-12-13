@@ -72,10 +72,13 @@ namespace mml2vgm
                     byte[] tbufYM2612 = new byte[7] { 0x67, 0x66, 0x00, 0x00, 0x00, 0x00, 0x00 };
                     long pYM2612 = 0L;
                     bool uYM2612 = false;
-                    byte[] tbufRf5c164 = new byte[12] { 0xb1, 0x07, 0x00, 0x67, 0x66, 0xc1, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+                    byte[] tbufRf5c164P = new byte[12] { 0xb1, 0x07, 0x00, 0x67, 0x66, 0xc1, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+                    byte[] tbufRf5c164S = new byte[12] { 0xb1, 0x87, 0x00, 0x67, 0x66, 0xc1, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
                     //byte[] tbufRf5c164 = new byte[12] { 0x68, 0x66, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
-                    long pRf5c164 = 0L;
-                    bool uRf5c164 = false;
+                    long pRf5c164P = 0L;
+                    long pRf5c164S = 0L;
+                    bool uRf5c164P = false;
+                    bool uRf5c164S = false;
                     Dictionary<int, clsPcm> newDic = new Dictionary<int, clsPcm>();
                     foreach (KeyValuePair<int, clsPcm> v in desVGM.instPCM)
                     {
@@ -122,15 +125,21 @@ namespace mml2vgm
                                 size = buf.Length;
                             }
 
-                            if (v.Value.loopAdr == -1)
-                            {
-                                newDic.Add(v.Key, new clsPcm(v.Value.num, v.Value.chip, false, v.Value.fileName, v.Value.freq, v.Value.vol, pRf5c164, size, pRf5c164 + tSize));
-                            }
-                            else
-                            {
-                                newDic.Add(v.Key, new clsPcm(v.Value.num, v.Value.chip, false, v.Value.fileName, v.Value.freq, v.Value.vol, pRf5c164, size, pRf5c164 + v.Value.loopAdr));
-                            }
-                            pRf5c164 += size;
+                            newDic.Add(
+                                v.Key
+                                , new clsPcm(
+                                    v.Value.num, v.Value.chip
+                                    , v.Value.isSecondary
+                                    , v.Value.fileName
+                                    , v.Value.freq
+                                    , v.Value.vol
+                                    , v.Value.isSecondary ? pRf5c164S : pRf5c164P
+                                    , size
+                                    , (v.Value.isSecondary ? pRf5c164S : pRf5c164P) + (v.Value.loopAdr == -1 ? tSize : v.Value.loopAdr))
+                                );
+
+                            if (v.Value.isSecondary) pRf5c164S += size;
+                            else pRf5c164P += size;
 
                             for (int i = 0; i < tSize; i++)
                             {
@@ -138,12 +147,10 @@ namespace mml2vgm
                                 {
                                     if (buf[i] >= 0x80)
                                     {
-                                        //buf[i] = (byte)(0xff - buf[i]);
                                         buf[i] = buf[i];
                                     }
                                     else
                                     {
-                                        //buf[i] = (byte)(0x0 + buf[i]);
                                         buf[i] = (byte)(0x80 - buf[i]);
                                     }
                                 }
@@ -154,12 +161,24 @@ namespace mml2vgm
                                 }
 
                             }
-                            newBuf = new byte[tbufRf5c164.Length + buf.Length];
-                            Array.Copy(tbufRf5c164, newBuf, tbufRf5c164.Length);
-                            Array.Copy(buf, 0, newBuf, tbufRf5c164.Length, buf.Length);
+                            if (!v.Value.isSecondary)
+                            {
+                                newBuf = new byte[tbufRf5c164P.Length + buf.Length];
+                                Array.Copy(tbufRf5c164P, newBuf, tbufRf5c164P.Length);
+                                Array.Copy(buf, 0, newBuf, tbufRf5c164P.Length, buf.Length);
 
-                            tbufRf5c164 = newBuf;
-                            uRf5c164 = true;
+                                tbufRf5c164P = newBuf;
+                                uRf5c164P = true;
+                            }
+                            else
+                            {
+                                newBuf = new byte[tbufRf5c164S.Length + buf.Length];
+                                Array.Copy(tbufRf5c164S, newBuf, tbufRf5c164S.Length);
+                                Array.Copy(buf, 0, newBuf, tbufRf5c164S.Length, buf.Length);
+
+                                tbufRf5c164S = newBuf;
+                                uRf5c164S = true;
+                            }
                         }
                     }
 
@@ -169,14 +188,21 @@ namespace mml2vgm
                     tbufYM2612[6] = (byte)(((tbufYM2612.Length - 7) & 0xff000000) / 0x1000000);
                     desVGM.pcmDataYM2612 = uYM2612 ? tbufYM2612 : null;
 
-                    tbufRf5c164[6] = (byte)((tbufRf5c164.Length - 10) & 0xff);
-                    tbufRf5c164[7] = (byte)(((tbufRf5c164.Length - 10) & 0xff00) / 0x100);
-                    tbufRf5c164[8] = (byte)(((tbufRf5c164.Length - 10) & 0xff0000) / 0x10000);
-                    tbufRf5c164[9] = (byte)(((tbufRf5c164.Length - 10) & 0xff000000) / 0x1000000);
+                    tbufRf5c164P[6] = (byte)((tbufRf5c164P.Length - 10) & 0xff);
+                    tbufRf5c164P[7] = (byte)(((tbufRf5c164P.Length - 10) & 0xff00) / 0x100);
+                    tbufRf5c164P[8] = (byte)(((tbufRf5c164P.Length - 10) & 0xff0000) / 0x10000);
+                    tbufRf5c164P[9] = (byte)(((tbufRf5c164P.Length - 10) & 0xff000000) / 0x1000000);
                     //tbufRf5c164[9] = (byte)(((tbufRf5c164.Length - 12) & 0xff) / 0x1);
                     //tbufRf5c164[10] = (byte)(((tbufRf5c164.Length - 12) & 0xff00) / 0x100);
                     //tbufRf5c164[11] = (byte)(((tbufRf5c164.Length - 12) & 0xff0000) / 0x10000);
-                    desVGM.pcmDataRf5c164 = uRf5c164 ? tbufRf5c164 : null;
+                    desVGM.pcmDataRf5c164P = uRf5c164P ? tbufRf5c164P : null;
+
+                    tbufRf5c164S[6] = (byte)((tbufRf5c164S.Length - 10) & 0xff);
+                    tbufRf5c164S[7] = (byte)(((tbufRf5c164S.Length - 10) & 0xff00) / 0x100);
+                    tbufRf5c164S[8] = (byte)(((tbufRf5c164S.Length - 10) & 0xff0000) / 0x10000);
+                    tbufRf5c164S[9] = (byte)(((tbufRf5c164S.Length - 10) & 0xff000000) / 0x1000000);
+                    tbufRf5c164S[9] |= 0x80;
+                    desVGM.pcmDataRf5c164S = uRf5c164S ? tbufRf5c164S : null;
 
                     desVGM.instPCM = newDic;
                 }
