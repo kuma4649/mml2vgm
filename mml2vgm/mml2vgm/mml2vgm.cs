@@ -186,7 +186,7 @@ namespace mml2vgm
                     tbufYM2612[4] = (byte)(((tbufYM2612.Length - 7) & 0xff00) / 0x100);
                     tbufYM2612[5] = (byte)(((tbufYM2612.Length - 7) & 0xff0000) / 0x10000);
                     tbufYM2612[6] = (byte)(((tbufYM2612.Length - 7) & 0xff000000) / 0x1000000);
-                    desVGM.pcmDataYM2612 = uYM2612 ? tbufYM2612 : null;
+                    desVGM.ym2612[0].pcmData = uYM2612 ? tbufYM2612 : null;
 
                     tbufRf5c164P[6] = (byte)((tbufRf5c164P.Length - 10) & 0xff);
                     tbufRf5c164P[7] = (byte)(((tbufRf5c164P.Length - 10) & 0xff00) / 0x100);
@@ -195,14 +195,14 @@ namespace mml2vgm
                     //tbufRf5c164[9] = (byte)(((tbufRf5c164.Length - 12) & 0xff) / 0x1);
                     //tbufRf5c164[10] = (byte)(((tbufRf5c164.Length - 12) & 0xff00) / 0x100);
                     //tbufRf5c164[11] = (byte)(((tbufRf5c164.Length - 12) & 0xff0000) / 0x10000);
-                    desVGM.pcmDataRf5c164P = uRf5c164P ? tbufRf5c164P : null;
+                    desVGM.rf5c164[0].pcmData = uRf5c164P ? tbufRf5c164P : null;
 
                     tbufRf5c164S[6] = (byte)((tbufRf5c164S.Length - 10) & 0xff);
                     tbufRf5c164S[7] = (byte)(((tbufRf5c164S.Length - 10) & 0xff00) / 0x100);
                     tbufRf5c164S[8] = (byte)(((tbufRf5c164S.Length - 10) & 0xff0000) / 0x10000);
                     tbufRf5c164S[9] = (byte)(((tbufRf5c164S.Length - 10) & 0xff000000) / 0x1000000);
                     tbufRf5c164S[9] |= 0x80;
-                    desVGM.pcmDataRf5c164S = uRf5c164S ? tbufRf5c164S : null;
+                    desVGM.rf5c164[1].pcmData = uRf5c164S ? tbufRf5c164S : null;
 
                     desVGM.instPCM = newDic;
                 }

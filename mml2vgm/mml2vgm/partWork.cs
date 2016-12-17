@@ -266,6 +266,8 @@ namespace mml2vgm
         public int rf5c164Envelope = -1;
         public int rf5c164Pan = -1;
 
+        public enmChannelType Type;
+
         /// <summary>
         /// パート情報をリセットする
         /// </summary>

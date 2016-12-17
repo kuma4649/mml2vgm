@@ -51,7 +51,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="clsChip.cs" />
+    <Compile Include="chips\clsChip.cs" />
+    <Compile Include="chips\RF5C164.cs" />
+    <Compile Include="chips\SN76489.cs" />
+    <Compile Include="chips\YM2612.cs" />
     <Compile Include="clsVgm.cs" />
     <Compile Include="frmMain.cs">
       <SubType>Form</SubType>

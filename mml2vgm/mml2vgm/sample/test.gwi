@@ -20,14 +20,32 @@
 	PartSN76489Secondary =Ss
 	PartRf5c164Secondary =Rs
 
+	ForcedMonoPartYM2612 =6
 	ClockCount           =192
 
 }
 
+No  = 定義番号
+SV  = キーオン時のボリューム(0 - 15 | 0 - 255 まで)
+AR  = 次にボリュームを+STするまでのクロック数。(最大ボリューム(15 | 255)になるまで発音ボリュームを+STする処理を繰り返す。)
+DR  = 次にボリュームを-STするまでのクロック数。(SLになるまで発音ボリュームを-STする処理を繰り返す。)
+SL  = 最大ボリューム後の減衰ボリューム(0 - 15 | 0 - 255 まで)
+SR  = 次にボリュームを-STするまでのクロック数。(ボリュームがSLに到達後、0になるまで発音ボリュームを-STする処理を繰り返す。)
+RR  = キーオフ後、次にボリュームを-STするまでのクロック数。(0になるまで発音ボリュームを-STする処理を繰り返す。)
+ST  = ボリュームの変化量
+Chip= チップの種類。省略時はSN76489として定義される(SN76489/RF5C164)
 
-'@ P 0,"BD.wav",8000, 90,Rf5c164Secondary
-'@ P 1,"SD.wav",8000,100,Rf5c164Secondary
-'@ P 2,"HO.wav",8000,100,Rf5c164
+     No,SV,AR,DR,SL,SR,RR,ST,Chip
+'@ E  0,15, 0, 0,15, 1, 1, 4
 
-'Rs1 v205o3[@0c4@1c4]8
-'R1  v205o3[@2c4  c4]8
+
+'Ss1 T160 
+'S1-3,Ss1-3 v15EON@0l4
+
+'S1  [ crrrrrb>r  ]
+'S2  [ rdrrrrr>c  ]
+'S3  [ rrerrrr>r  ]
+'Ss1 [ rrrfrrr>r  ]
+'Ss2 [ rrrrgrr>r  ]
+'Ss3 [ rrrrrar>r  ]
+
