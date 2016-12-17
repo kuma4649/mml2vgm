@@ -78,7 +78,7 @@ ebass3(from MUSIC LALF @70)
   (5) MML定義部
     ・書式
     「'パート名 MML」
-      パート名(T.B.D.)
+      パート名
         「パート識別子(A-Zz)チャンネル番号(1-9/01-99)」
         パート識別子
           パート識別子は1文字或いは2文字の半角英字で構成される。
@@ -91,7 +91,7 @@ ebass3(from MUSIC LALF @70)
           例
             「A」、「B」、「Ac」、「Bz」等々
         
-        チャンネル番号(T.B.D.)
+        チャンネル番号
           チャンネル番号は1文字或いは2文字の半角数字で構成される。
           1文字か2文字かは設定した音源の使用可能なチャンネル数(後述)に依存し、
           10チャンネル未満の音源は1文字、それ以上持つ音源の場合は2文字で指定することが必須である。
@@ -114,23 +114,23 @@ ebass3(from MUSIC LALF @70)
     ・複数行の場合は上から順番に解釈される。
 
 
-■ 使用可能な音源(T.B.D.)
+■ 使用可能な音源
   名称      略称   初期周波数(Hz)  使用可能チャンネル数
-  YM2203    OPN           3000000   9Ch(FM   : 3Ch  SSG : 3Ch  FMex: 3Ch)
   YM2612    OPN2          7670454   9Ch(FM   : 6Ch  FMex: 3Ch)
-  YM2608    OPNA          8000000  19Ch(FM   : 6Ch  SSG : 3Ch  FMex: 3Ch  Rhythm : 6Ch  ADPCM  : 1Ch)
-  YM2610B   OPNB          8000000  19Ch(FM   : 6Ch  SSG : 3Ch  FMex: 3Ch  ADPCM-A: 6Ch  ADPCM-B: 1Ch)
-  YM2151    OPM           3579545   8Ch(FM   : 8Ch)
   SN76489   DCSG          3579545   4Ch(PSG  : 4Ch)
   RF5C164   RF5C         12500000   8Ch(PCM  : 8Ch)
-  PWM       PWM          23011361   2Ch(PCM  : 2Ch)
-  OKIM6258  OKI5          4000000   1Ch(ADPCM: 1Ch)
-  OKIM6295  OKI9          8000000   4Ch(ADPCM: 4Ch)
-  C140      C140          8000000  24Ch(PCM  :24Ch)
-  SegaPCM   SPCM          4000000  16Ch(PCM  :16Ch)
+  YM2203    OPN           3000000   9Ch(FM   : 3Ch  SSG : 3Ch  FMex: 3Ch)(T.B.D.)
+  YM2608    OPNA          8000000  19Ch(FM   : 6Ch  SSG : 3Ch  FMex: 3Ch  Rhythm : 6Ch  ADPCM  : 1Ch)(T.B.D.)
+  YM2610B   OPNB          8000000  19Ch(FM   : 6Ch  SSG : 3Ch  FMex: 3Ch  ADPCM-A: 6Ch  ADPCM-B: 1Ch)(T.B.D.)
+  YM2151    OPM           3579545   8Ch(FM   : 8Ch)(T.B.D.)
+  PWM       PWM          23011361   2Ch(PCM  : 2Ch)(T.B.D.)
+  OKIM6258  OKI5          4000000   1Ch(ADPCM: 1Ch)(T.B.D.)
+  OKIM6295  OKI9          8000000   4Ch(ADPCM: 4Ch)(T.B.D.)
+  C140      C140          8000000  24Ch(PCM  :24Ch)(T.B.D.)
+  SegaPCM   SPCM          4000000  16Ch(PCM  :16Ch)(T.B.D.)
 
 
-■ パート割り(初期値)(T.B.D.)
+■ パート割り(初期値)
   F1     YM2612(FM音源)(Primary)     1Ch
   F2     YM2612(FM音源)(Primary)     2Ch
   F3     YM2612(FM音源)(Primary)     3Ch/3ChEx0
@@ -166,14 +166,17 @@ ebass3(from MUSIC LALF @70)
   Ss2    SN76489(SSG音源)(Secondary) 2Ch
   Ss3    SN76489(SSG音源)(Secondary) 3Ch
   Ss4    SN76489(SSG音源)(Secondary) 4Ch(ノイズ)
-  Rs1    RF5C164(PCM音源)(Secondary) 1Ch
-  Rs2    RF5C164(PCM音源)(Secondary) 2Ch
-  Rs3    RF5C164(PCM音源)(Secondary) 3Ch
-  Rs4    RF5C164(PCM音源)(Secondary) 4Ch
-  Rs5    RF5C164(PCM音源)(Secondary) 5Ch
-  Rs6    RF5C164(PCM音源)(Secondary) 6Ch
-  Rs7    RF5C164(PCM音源)(Secondary) 7Ch
-  Rs8    RF5C164(PCM音源)(Secondary) 8Ch
+  Rs1    RF5C164(PCM音源)(Secondary) 1Ch(MDPlayerのみ再生可能)
+  Rs2    RF5C164(PCM音源)(Secondary) 2Ch(MDPlayerのみ再生可能)
+  Rs3    RF5C164(PCM音源)(Secondary) 3Ch(MDPlayerのみ再生可能)
+  Rs4    RF5C164(PCM音源)(Secondary) 4Ch(MDPlayerのみ再生可能)
+  Rs5    RF5C164(PCM音源)(Secondary) 5Ch(MDPlayerのみ再生可能)
+  Rs6    RF5C164(PCM音源)(Secondary) 6Ch(MDPlayerのみ再生可能)
+  Rs7    RF5C164(PCM音源)(Secondary) 7Ch(MDPlayerのみ再生可能)
+  Rs8    RF5C164(PCM音源)(Secondary) 8Ch(MDPlayerのみ再生可能)
+
+  -----------
+  計 42Ch
 
 
 ■ MML内部
@@ -364,11 +367,11 @@ b               ooooo       音符シ
     メモ
       Notes        メモ
     
-    パート名定義(T.B.D.)
+    パート名定義
       Part(音源の名称|略称)[Primary|Secondary]   (A - Zz まで)  [周波数]
         音源は名称或いは略称を必ず指定する。
         Primaryは省略可能。Secondaryを指定する場合は省略不可能。
-        周波数は省略可能。その場合初期値が使用される。Primaryの値が優先で使用される。
+        周波数は省略可能。その場合初期値が使用される。Primaryの値が優先で使用される。(T.B.D.)
         
         定義済み
           PartYM2612              F
@@ -377,9 +380,26 @@ b               ooooo       音符シ
           PartYM2612Secondary     Fs
           PartSN76489Secondary    Ss
           PartRF5C164Secondary    Rs
-    
+          (T.B.D.)PartYM2203              N
+          (T.B.D.)PartYM2608              P
+          (T.B.D.)PartYM2610B             T
+          (T.B.D.)PartYM2151              X
+          (T.B.D.)PartPWM                 G
+          (T.B.D.)PartOKIM6258            O
+          (T.B.D.)PartOKIM6295            M
+          (T.B.D.)PartC140                Y
+          (T.B.D.)PartSegaPCM             Z
+          (T.B.D.)PartYM2203Secondary     Ns
+          (T.B.D.)PartYM2608Secondary     Ps
+          (T.B.D.)PartYM2610BSecondary    Ts
+          (T.B.D.)PartYM2151Secondary     Xs
+          (T.B.D.)PartPWMSecondary        Gs
+          (T.B.D.)PartOKIM6258Secondary   Os
+          (T.B.D.)PartOKIM6295Secondary   Ms
+          (T.B.D.)PartC140Secondary       Ys
+          (T.B.D.)PartSegaPCMSecondary    Zs
 
-    特殊用途
+    特殊用途(T.B.D.)
       ForcedMonoPartYM2612    指定したパートの定位を強制的に中央のみにする。
     
     分解能指定
