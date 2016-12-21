@@ -10,6 +10,7 @@
   
   2. エクスプローラなどで、mml2vgm.exeのアイコンの上に1で作成したファイルをD&Dする。
   又は、コマンドラインから、「mml2vgm.exe ファイル名」と打ち込む。
+  GUIでも実行できる。ファイル監視と自動起動、Vgz変換が可能。
   
   3. コンパイルが実行され、エラーやワーニング、例外が表示される。
   又は、エラー無く無事に.vgmファイルが.gwiと同じフォルダーに生成される。
@@ -61,11 +62,25 @@ ebass3(from MUSIC LALF @70)
 '@ 000,007
 
     ・PCM音源の音色定義は次のような制約がある。
-      A PCMは8KHz,8bit,mono,圧縮なし,unsignedのwavファイルであること。
-        ・RF5C164はsignedのデータを要求するが、mml2vgmが内部でそれに変換する
+      A 使用できるフォーマットについて。
+         YM2610B ADPCM-A
+           ・PCMは18.5KHz,16bit,mono,圧縮なし,unsignedのwavファイルであること。
+               mml2vgmは内部で18.5KHz,12bit,monoのADPCMに変換する。
+           ・8bitも読み込めるが16bitに変換される。(がうまくいかないTBD)
+           ・16KHz,8KHzも読み込めるが18.5KHzとして再生される。
+         YM2612
+           ・PCMは8KHz,8bit,mono,圧縮なし,unsignedのwavファイルであること。
+           ・16KHz,18.5KHzも読み込めるが8KHzとして再生される。
+           ・16bitも読み込めるが8bitとして再生される。(雑音になるTBD)
+         RF5C164
+           ・PCMは8KHz,8bit,mono,圧縮なし,unsignedのwavファイルであること。
+               RF5C164は本来、signedのデータを要求するが、mml2vgmが内部でそれに変換する
+           ・16KHz,18.5KHzも読み込めるが8KHzとして再生される。
+           ・16bitも読み込めるが8bitとして再生される。(雑音になるTBD)
       B RF5C164は再生位置にFFのデータを検出すると再生位置がループポイントへ移動するが、
         mml2vgmはファイル中で見つけたFFはFEに置換し、ファイルの終わりにFFを追加する。
-      C RF5C164は合計64Kbyteまでしか定義できない。
+        256byte毎にPaddingされる。
+      C RF5C164は合計64Kbyteまで定義可能。
   
   (3) エンベロープ定義部
     ・PSG音源、PCM音源にて音量の変化を定義する
@@ -119,9 +134,9 @@ ebass3(from MUSIC LALF @70)
   YM2612    OPN2          7670454   9Ch(FM   : 6Ch  FMex: 3Ch)
   SN76489   DCSG          3579545   4Ch(PSG  : 4Ch)
   RF5C164   RF5C         12500000   8Ch(PCM  : 8Ch)
-  YM2203    OPN           3000000   9Ch(FM   : 3Ch  SSG : 3Ch  FMex: 3Ch)(T.B.D.)
-  YM2608    OPNA          8000000  19Ch(FM   : 6Ch  SSG : 3Ch  FMex: 3Ch  Rhythm : 6Ch  ADPCM  : 1Ch)(T.B.D.)
-  YM2610B   OPNB          8000000  19Ch(FM   : 6Ch  SSG : 3Ch  FMex: 3Ch  ADPCM-A: 6Ch  ADPCM-B: 1Ch)(T.B.D.)
+  YM2203    OPN           3000000   9Ch(FM   : 3Ch  FMex: 3Ch  SSG : 3Ch)(T.B.D.)
+  YM2608    OPNA          8000000  19Ch(FM   : 6Ch  FMex: 3Ch  SSG : 3Ch  Rhythm : 6Ch  ADPCM  : 1Ch)(T.B.D.)
+  YM2610B   OPNB          8000000  19Ch(FM   : 6Ch  FMex: 3Ch  SSG : 3Ch  ADPCM-A: 6Ch  ADPCM-B: 1Ch)(T.B.D.)
   YM2151    OPM           3579545   8Ch(FM   : 8Ch)(T.B.D.)
   PWM       PWM          23011361   2Ch(PCM  : 2Ch)(T.B.D.)
   OKIM6258  OKI5          4000000   1Ch(ADPCM: 1Ch)(T.B.D.)
@@ -131,52 +146,90 @@ ebass3(from MUSIC LALF @70)
 
 
 ■ パート割り(初期値)
-  F1     YM2612(FM音源)(Primary)     1Ch
-  F2     YM2612(FM音源)(Primary)     2Ch
-  F3     YM2612(FM音源)(Primary)     3Ch/3ChEx0
-  F4     YM2612(FM音源)(Primary)     4Ch
-  F5     YM2612(FM音源)(Primary)     5Ch
-  F6     YM2612(FM音源)(Primary)     6Ch(PCM)
-  F7     YM2612(FM音源)(Primary)     3ChEx1
-  F8     YM2612(FM音源)(Primary)     3ChEx2
-  F9     YM2612(FM音源)(Primary)     3ChEx3
-  S1     SN76489(SSG音源)(Primary)   1Ch
-  S2     SN76489(SSG音源)(Primary)   2Ch
-  S3     SN76489(SSG音源)(Primary)   3Ch
-  S4     SN76489(SSG音源)(Primary)   4Ch(ノイズ)
-  R1     RF5C164(PCM音源)(Primary)   1Ch
-  R2     RF5C164(PCM音源)(Primary)   2Ch
-  R3     RF5C164(PCM音源)(Primary)   3Ch
-  R4     RF5C164(PCM音源)(Primary)   4Ch
-  R5     RF5C164(PCM音源)(Primary)   5Ch
-  R6     RF5C164(PCM音源)(Primary)   6Ch
-  R7     RF5C164(PCM音源)(Primary)   7Ch
-  R8     RF5C164(PCM音源)(Primary)   8Ch
+  F1     YM2612(FM音源)(Primary)         1Ch
+  F2     YM2612(FM音源)(Primary)         2Ch
+  F3     YM2612(FM音源)(Primary)         3Ch/3ChEx0
+  F4     YM2612(FM音源)(Primary)         4Ch
+  F5     YM2612(FM音源)(Primary)         5Ch
+  F6     YM2612(FM音源)(Primary)         6Ch(PCM)
+  F7     YM2612(FM音源)(Primary)         3ChEx1
+  F8     YM2612(FM音源)(Primary)         3ChEx2
+  F9     YM2612(FM音源)(Primary)         3ChEx3
+  S1     SN76489(SSG音源)(Primary)       1Ch
+  S2     SN76489(SSG音源)(Primary)       2Ch
+  S3     SN76489(SSG音源)(Primary)       3Ch
+  S4     SN76489(SSG音源)(Primary)       4Ch(ノイズ)
+  R1     RF5C164(PCM音源)(Primary)       1Ch
+  R2     RF5C164(PCM音源)(Primary)       2Ch
+  R3     RF5C164(PCM音源)(Primary)       3Ch
+  R4     RF5C164(PCM音源)(Primary)       4Ch
+  R5     RF5C164(PCM音源)(Primary)       5Ch
+  R6     RF5C164(PCM音源)(Primary)       6Ch
+  R7     RF5C164(PCM音源)(Primary)       7Ch
+  R8     RF5C164(PCM音源)(Primary)       8Ch
+  T01    YM2610B(FM音源)(Primary)        1Ch
+  T02    YM2610B(FM音源)(Primary)        2Ch
+  T03    YM2610B(FM音源)(Primary)        3Ch/3ChEx0
+  T04    YM2610B(FM音源)(Primary)        4Ch
+  T05    YM2610B(FM音源)(Primary)        5Ch
+  T06    YM2610B(FM音源)(Primary)        6Ch(PCM)
+  T07    YM2610B(FM音源)(Primary)        3ChEx1
+  T08    YM2610B(FM音源)(Primary)        3ChEx2
+  T09    YM2610B(FM音源)(Primary)        3ChEx3
+  T10    YM2610B(SSG音源)(Primary)       1Ch
+  T11    YM2610B(SSG音源)(Primary)       2Ch
+  T12    YM2610B(SSG音源)(Primary)       3Ch
+  T13    YM2610B(ADPCM-A音源)(Primary)   1Ch
+  T14    YM2610B(ADPCM-A音源)(Primary)   2Ch
+  T15    YM2610B(ADPCM-A音源)(Primary)   3Ch
+  T16    YM2610B(ADPCM-A音源)(Primary)   4Ch
+  T17    YM2610B(ADPCM-A音源)(Primary)   5Ch
+  T18    YM2610B(ADPCM-A音源)(Primary)   6Ch
+  T19    YM2610B(ADPCM-B音源)(Primary)   1Ch
 
-  Fs1    YM2612(FM音源)(Secondary)   1Ch
-  Fs2    YM2612(FM音源)(Secondary)   2Ch
-  Fs3    YM2612(FM音源)(Secondary)   3Ch/3ChEx0
-  Fs4    YM2612(FM音源)(Secondary)   4Ch
-  Fs5    YM2612(FM音源)(Secondary)   5Ch
-  Fs6    YM2612(FM音源)(Secondary)   6Ch(PCM)
-  Fs7    YM2612(FM音源)(Secondary)   3ChEx1
-  Fs8    YM2612(FM音源)(Secondary)   3ChEx2
-  Fs9    YM2612(FM音源)(Secondary)   3ChEx3
-  Ss1    SN76489(SSG音源)(Secondary) 1Ch
-  Ss2    SN76489(SSG音源)(Secondary) 2Ch
-  Ss3    SN76489(SSG音源)(Secondary) 3Ch
-  Ss4    SN76489(SSG音源)(Secondary) 4Ch(ノイズ)
-  Rs1    RF5C164(PCM音源)(Secondary) 1Ch(MDPlayerのみ再生可能)
-  Rs2    RF5C164(PCM音源)(Secondary) 2Ch(MDPlayerのみ再生可能)
-  Rs3    RF5C164(PCM音源)(Secondary) 3Ch(MDPlayerのみ再生可能)
-  Rs4    RF5C164(PCM音源)(Secondary) 4Ch(MDPlayerのみ再生可能)
-  Rs5    RF5C164(PCM音源)(Secondary) 5Ch(MDPlayerのみ再生可能)
-  Rs6    RF5C164(PCM音源)(Secondary) 6Ch(MDPlayerのみ再生可能)
-  Rs7    RF5C164(PCM音源)(Secondary) 7Ch(MDPlayerのみ再生可能)
-  Rs8    RF5C164(PCM音源)(Secondary) 8Ch(MDPlayerのみ再生可能)
+  Fs1    YM2612(FM音源)(Secondary)       1Ch
+  Fs2    YM2612(FM音源)(Secondary)       2Ch
+  Fs3    YM2612(FM音源)(Secondary)       3Ch/3ChEx0
+  Fs4    YM2612(FM音源)(Secondary)       4Ch
+  Fs5    YM2612(FM音源)(Secondary)       5Ch
+  Fs6    YM2612(FM音源)(Secondary)       6Ch(PCM)
+  Fs7    YM2612(FM音源)(Secondary)       3ChEx1
+  Fs8    YM2612(FM音源)(Secondary)       3ChEx2
+  Fs9    YM2612(FM音源)(Secondary)       3ChEx3
+  Ss1    SN76489(SSG音源)(Secondary)     1Ch
+  Ss2    SN76489(SSG音源)(Secondary)     2Ch
+  Ss3    SN76489(SSG音源)(Secondary)     3Ch
+  Ss4    SN76489(SSG音源)(Secondary)     4Ch(ノイズ)
+  Rs1    RF5C164(PCM音源)(Secondary)     1Ch(MDPlayerのみ再生可能)
+  Rs2    RF5C164(PCM音源)(Secondary)     2Ch(MDPlayerのみ再生可能)
+  Rs3    RF5C164(PCM音源)(Secondary)     3Ch(MDPlayerのみ再生可能)
+  Rs4    RF5C164(PCM音源)(Secondary)     4Ch(MDPlayerのみ再生可能)
+  Rs5    RF5C164(PCM音源)(Secondary)     5Ch(MDPlayerのみ再生可能)
+  Rs6    RF5C164(PCM音源)(Secondary)     6Ch(MDPlayerのみ再生可能)
+  Rs7    RF5C164(PCM音源)(Secondary)     7Ch(MDPlayerのみ再生可能)
+  Rs8    RF5C164(PCM音源)(Secondary)     8Ch(MDPlayerのみ再生可能)
+  Ts01   YM2610B(FM音源)(Secondary)      1Ch
+  Ts02   YM2610B(FM音源)(Secondary)      2Ch
+  Ts03   YM2610B(FM音源)(Secondary)      3Ch/3ChEx0
+  Ts04   YM2610B(FM音源)(Secondary)      4Ch
+  Ts05   YM2610B(FM音源)(Secondary)      5Ch
+  Ts06   YM2610B(FM音源)(Secondary)      6Ch(PCM)
+  Ts07   YM2610B(FM音源)(Secondary)      3ChEx1
+  Ts08   YM2610B(FM音源)(Secondary)      3ChEx2
+  Ts09   YM2610B(FM音源)(Secondary)      3ChEx3
+  Ts10   YM2610B(SSG音源)(Secondary)     1Ch
+  Ts11   YM2610B(SSG音源)(Secondary)     2Ch
+  Ts12   YM2610B(SSG音源)(Secondary)     3Ch
+  Ts13   YM2610B(ADPCM-A音源)(Secondary) 1Ch
+  Ts14   YM2610B(ADPCM-A音源)(Secondary) 2Ch
+  Ts15   YM2610B(ADPCM-A音源)(Secondary) 3Ch
+  Ts16   YM2610B(ADPCM-A音源)(Secondary) 4Ch
+  Ts17   YM2610B(ADPCM-A音源)(Secondary) 5Ch
+  Ts18   YM2610B(ADPCM-A音源)(Secondary) 6Ch
+  Ts19   YM2610B(ADPCM-B音源)(Secondary) 1Ch
 
   -----------
-  計 42Ch
+  計 80Ch(Poly)
 
 
 ■ MML内部
@@ -191,8 +244,8 @@ ebass3(from MUSIC LALF @70)
 
 
  凡例
-  Y YM2612
-  E YM2612(3ChEx)
+  Y YM2612 / YM2610B(FM)
+  E YM2612(3ChEx) / YM2610B(FM)
   P YM2612(6ChPCMmode)
   S SN76489
   R RF5C164
@@ -382,7 +435,7 @@ b               ooooo       音符シ
           PartRF5C164Secondary    Rs
           (T.B.D.)PartYM2203              N
           (T.B.D.)PartYM2608              P
-          (T.B.D.)PartYM2610B             T
+          PartYM2610B             T
           (T.B.D.)PartYM2151              X
           (T.B.D.)PartPWM                 G
           (T.B.D.)PartOKIM6258            O
@@ -391,7 +444,7 @@ b               ooooo       音符シ
           (T.B.D.)PartSegaPCM             Z
           (T.B.D.)PartYM2203Secondary     Ns
           (T.B.D.)PartYM2608Secondary     Ps
-          (T.B.D.)PartYM2610BSecondary    Ts
+          PartYM2610BSecondary    Ts
           (T.B.D.)PartYM2151Secondary     Xs
           (T.B.D.)PartPWMSecondary        Gs
           (T.B.D.)PartOKIM6258Secondary   Os

@@ -1,0 +1,36 @@
+﻿'{
+
+	TitleName   =
+	TitleNameJ  =色々テスト
+	GameName    =
+	GameNameJ   =
+	SystemName  =
+	SystemNameJ =
+	Composer    =
+	ComposerJ   =
+	ReleaseDate =2016/12/18
+	Converted   =
+	Notes       =
+
+	ClockCount  =192
+
+}
+
+     No,SV,AR,DR,SL,SR,RR,ST
+'@ E  0, 0, 0, 1, 8,10, 2, 1
+
+T10 v15q0l8o4D-1cdefgab
+T11 v15Q4l8o3cdefgab
+T12 v15q0l8o4D1cdefgab
+
+T10 v5q0l4[c4_br4)1]10
+
+T10 MSV0,1,-10,100,0v15D2
+T11 MSV0,1,-10,100,0v15D-2
+T11 r8(4
+T10-11,T12 a1&a1 
+
+T10-12 MSV0,1,-2,4,0
+T10-12 a1&a1 
+
+'T10 EON@0l1q0 o4cdeP2cdeP3cde P2w0c4w8c4w16c4w24c4w31c4 P3w0c4w8c4w16c4w24c4w31c4
