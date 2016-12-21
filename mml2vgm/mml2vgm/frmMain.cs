@@ -44,6 +44,8 @@ namespace mml2vgm
 
             textBox1.AppendText("\r\n------------------\r\n");
             textBox1.AppendText("Start.\r\n");
+
+            isSuccess = true;
             Thread trdStartCompile = new Thread(new ThreadStart(startCompile));
             trdStartCompile.Start();
 
@@ -94,21 +96,24 @@ namespace mml2vgm
 
         private void finishedCompile()
         {
-            foreach (clsChip chip in mv.desVGM.chips)
+            if (isSuccess)
             {
-                List<partWork> pw = chip.lstPartWork;
-                for (int i = 0; i < pw.Count; i++)
+                foreach (clsChip chip in mv.desVGM.chips)
                 {
-                    if (pw[i].clockCounter == 0) continue;
+                    List<partWork> pw = chip.lstPartWork;
+                    for (int i = 0; i < pw.Count; i++)
+                    {
+                        if (pw[i].clockCounter == 0) continue;
 
-                    DataGridViewRow row = new DataGridViewRow();
-                    row.Cells.Add(new DataGridViewTextBoxCell());
-                    row.Cells[0].Value = pw[i].PartName.Substring(0, 2).Replace(" ", "") + int.Parse(pw[i].PartName.Substring(2, 2)).ToString();
-                    row.Cells.Add(new DataGridViewTextBoxCell());
-                    row.Cells[1].Value = pw[i].chip.Name.ToUpper();
-                    row.Cells.Add(new DataGridViewTextBoxCell());
-                    row.Cells[2].Value = pw[i].clockCounter;
-                    dgvResult.Rows.Add(row);
+                        DataGridViewRow row = new DataGridViewRow();
+                        row.Cells.Add(new DataGridViewTextBoxCell());
+                        row.Cells[0].Value = pw[i].PartName.Substring(0, 2).Replace(" ", "") + int.Parse(pw[i].PartName.Substring(2, 2)).ToString();
+                        row.Cells.Add(new DataGridViewTextBoxCell());
+                        row.Cells[1].Value = pw[i].chip.Name.ToUpper();
+                        row.Cells.Add(new DataGridViewTextBoxCell());
+                        row.Cells[2].Value = pw[i].clockCounter;
+                        dgvResult.Rows.Add(row);
+                    }
                 }
             }
 
@@ -127,28 +132,34 @@ namespace mml2vgm
             textBox1.AppendText(string.Format(" Errors : {0}\r\n Warnings : {1}\r\n", msgBox.getErr().Length, msgBox.getWrn().Length));
             textBox1.AppendText(string.Format(" Total Clocks  : {0}\r\n", mv.desVGM.lClock));
             textBox1.AppendText(string.Format(" Total Samples : {0}({1}s)\r\n", mv.desVGM.lSample, mv.desVGM.lSample / 44100L));
+            if (mv.desVGM.ym2610b[0].pcmDataA != null) textBox1.AppendText(string.Format(" ADPCM-A Data size(YM2610B)  : {0} byte\r\n", mv.desVGM.ym2610b[0].pcmDataA.Length-15));
+            if (mv.desVGM.ym2610b[0].pcmDataB != null) textBox1.AppendText(string.Format(" ADPCM-B Data size(YM2610B)  : {0} byte\r\n", mv.desVGM.ym2610b[0].pcmDataB.Length-15));
             if (mv.desVGM.ym2612[0].pcmData != null) textBox1.AppendText(string.Format(" PCM Data size(YM2612)  : {0} byte\r\n", mv.desVGM.ym2612[0].pcmData.Length));
-            if (mv.desVGM.rf5c164[0].pcmData != null) textBox1.AppendText(string.Format(" PCM Data size(RF5C164) : {0} byte\r\n", mv.desVGM.rf5c164[0].pcmData.Length));
-            if (mv.desVGM.rf5c164[1].pcmData != null) textBox1.AppendText(string.Format(" PCM Data size(RF5C164Secondary) : {0} byte\r\n", mv.desVGM.rf5c164[1].pcmData.Length));
+            if (mv.desVGM.rf5c164[0].pcmData != null) textBox1.AppendText(string.Format(" PCM Data size(RF5C164) : {0} byte\r\n", mv.desVGM.rf5c164[0].pcmData.Length-12));
+            if (mv.desVGM.rf5c164[1].pcmData != null) textBox1.AppendText(string.Format(" PCM Data size(RF5C164Secondary) : {0} byte\r\n", mv.desVGM.rf5c164[1].pcmData.Length-12));
 
 
             textBox1.AppendText("\r\nFinished.\r\n\r\n");
             this.toolStrip1.Enabled = true;
             this.tsslMessage.Text = "Done.";
 
-            if (args.Length == 2 && tsbOnPlay.Checked)
+            if (isSuccess)
             {
-                try
+                if (args.Length == 2 && tsbOnPlay.Checked)
                 {
-                    Process.Start(Path.ChangeExtension(args[1], Properties.Resources.ExtensionVGM));
-                }
-                catch
-                {
-                    MessageBox.Show("プレイヤーの起動に失敗しました。", "mml2vgm", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    try
+                    {
+                        Process.Start(Path.ChangeExtension(args[1], Properties.Resources.ExtensionVGM));
+                    }
+                    catch
+                    {
+                        MessageBox.Show("プレイヤーの起動に失敗しました。", "mml2vgm", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
             }
-
         }
+
+        bool isSuccess = true;
 
         private void startCompile()
         {
@@ -173,7 +184,11 @@ namespace mml2vgm
                     desfn = Path.ChangeExtension(arg, Properties.Resources.ExtensionVGZ);
                 }
                 mv = new mml2vgm(arg, desfn);
-                mv.Start();
+                if (mv.Start() != 0)
+                {
+                    isSuccess = false;
+                    break;
+                }
             }
 
             dmy = finishedCompile;

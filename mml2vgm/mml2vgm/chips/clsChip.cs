@@ -64,7 +64,7 @@ namespace mml2vgm
             return false;
         }
 
-        protected void setPartToCh(clsChannel[] Ch, string val)
+        public void setPartToCh(clsChannel[] Ch, string val)
         {
             if (val == null || (val.Length != 1 && val.Length != 2)) return;
 
@@ -101,7 +101,10 @@ namespace mml2vgm
         ADPCM,
         RHYTHM,
         FMPCM,
-        DCSGNOISE
+        DCSGNOISE,
+        SSG,
+        ADPCMA,
+        ADPCMB
     }
 
     public enum enmChipType : int

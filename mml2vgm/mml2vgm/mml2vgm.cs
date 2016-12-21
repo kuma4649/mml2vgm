@@ -69,146 +69,13 @@ namespace mml2vgm
                 // PCM定義あり?
                 if (desVGM.instPCM.Count > 0)
                 {
-                    byte[] tbufYM2612 = new byte[7] { 0x67, 0x66, 0x00, 0x00, 0x00, 0x00, 0x00 };
-                    long pYM2612 = 0L;
-                    bool uYM2612 = false;
-                    byte[] tbufRf5c164P = new byte[12] { 0xb1, 0x07, 0x00, 0x67, 0x66, 0xc1, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
-                    byte[] tbufRf5c164S = new byte[12] { 0xb1, 0x87, 0x00, 0x67, 0x66, 0xc1, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
-                    //byte[] tbufRf5c164 = new byte[12] { 0x68, 0x66, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
-                    long pRf5c164P = 0L;
-                    long pRf5c164S = 0L;
-                    bool uRf5c164P = false;
-                    bool uRf5c164S = false;
-                    Dictionary<int, clsPcm> newDic = new Dictionary<int, clsPcm>();
-                    foreach (KeyValuePair<int, clsPcm> v in desVGM.instPCM)
-                    {
-
-                        byte[] buf = getPCMData(path , v.Value);
-                        if (buf == null)
-                        {
-                            msgBox.setErrMsg(string.Format("PCMファイルの読み込みに失敗しました。(filename:{0})", v.Value.fileName));
-                            continue;
-                        }
-
-                        long size = buf.Length;
-
-                        if (v.Value.chip ==  enmChipType.YM2612)
-                        {
-                            newDic.Add(v.Key, new clsPcm(v.Value.num, v.Value.chip, false, v.Value.fileName, v.Value.freq, v.Value.vol, pYM2612, size, -1));
-                            pYM2612 += size;
-
-                            byte[] newBuf = new byte[tbufYM2612.Length + buf.Length];
-                            Array.Copy(tbufYM2612, newBuf, tbufYM2612.Length);
-                            Array.Copy(buf, 0, newBuf, tbufYM2612.Length, buf.Length);
-
-                            tbufYM2612 = newBuf;
-                            uYM2612 = true;
-                        }
-                        else if (v.Value.chip == enmChipType.RF5C164)
-                        {
-                            byte[] newBuf;
-
-                            newBuf = new byte[size + 1];
-                            Array.Copy(buf, newBuf, size);
-                            newBuf[size] = 0xff;
-                            buf = newBuf;
-                            long tSize = size;
-                            size = buf.Length;
-
-                            //Padding
-                            if (size % 0x100 != 0)
-                            {
-                                newBuf = new byte[size + (0x100 - (size % 0x100))];
-                                for (int i = (int)size; i < newBuf.Length; i++) newBuf[i] = 0x80;
-                                Array.Copy(buf, newBuf, size);
-                                buf = newBuf;
-                                size = buf.Length;
-                            }
-
-                            newDic.Add(
-                                v.Key
-                                , new clsPcm(
-                                    v.Value.num, v.Value.chip
-                                    , v.Value.isSecondary
-                                    , v.Value.fileName
-                                    , v.Value.freq
-                                    , v.Value.vol
-                                    , v.Value.isSecondary ? pRf5c164S : pRf5c164P
-                                    , size
-                                    , (v.Value.isSecondary ? pRf5c164S : pRf5c164P) + (v.Value.loopAdr == -1 ? tSize : v.Value.loopAdr))
-                                );
-
-                            if (v.Value.isSecondary) pRf5c164S += size;
-                            else pRf5c164P += size;
-
-                            for (int i = 0; i < tSize; i++)
-                            {
-                                if (buf[i] != 0xff)
-                                {
-                                    if (buf[i] >= 0x80)
-                                    {
-                                        buf[i] = buf[i];
-                                    }
-                                    else
-                                    {
-                                        buf[i] = (byte)(0x80 - buf[i]);
-                                    }
-                                }
-
-                                if (buf[i] == 0xff)
-                                {
-                                    buf[i] = 0xfe;
-                                }
-
-                            }
-                            if (!v.Value.isSecondary)
-                            {
-                                newBuf = new byte[tbufRf5c164P.Length + buf.Length];
-                                Array.Copy(tbufRf5c164P, newBuf, tbufRf5c164P.Length);
-                                Array.Copy(buf, 0, newBuf, tbufRf5c164P.Length, buf.Length);
-
-                                tbufRf5c164P = newBuf;
-                                uRf5c164P = true;
-                            }
-                            else
-                            {
-                                newBuf = new byte[tbufRf5c164S.Length + buf.Length];
-                                Array.Copy(tbufRf5c164S, newBuf, tbufRf5c164S.Length);
-                                Array.Copy(buf, 0, newBuf, tbufRf5c164S.Length, buf.Length);
-
-                                tbufRf5c164S = newBuf;
-                                uRf5c164S = true;
-                            }
-                        }
-                    }
-
-                    tbufYM2612[3] = (byte)((tbufYM2612.Length - 7) & 0xff);
-                    tbufYM2612[4] = (byte)(((tbufYM2612.Length - 7) & 0xff00) / 0x100);
-                    tbufYM2612[5] = (byte)(((tbufYM2612.Length - 7) & 0xff0000) / 0x10000);
-                    tbufYM2612[6] = (byte)(((tbufYM2612.Length - 7) & 0xff000000) / 0x1000000);
-                    desVGM.ym2612[0].pcmData = uYM2612 ? tbufYM2612 : null;
-
-                    tbufRf5c164P[6] = (byte)((tbufRf5c164P.Length - 10) & 0xff);
-                    tbufRf5c164P[7] = (byte)(((tbufRf5c164P.Length - 10) & 0xff00) / 0x100);
-                    tbufRf5c164P[8] = (byte)(((tbufRf5c164P.Length - 10) & 0xff0000) / 0x10000);
-                    tbufRf5c164P[9] = (byte)(((tbufRf5c164P.Length - 10) & 0xff000000) / 0x1000000);
-                    //tbufRf5c164[9] = (byte)(((tbufRf5c164.Length - 12) & 0xff) / 0x1);
-                    //tbufRf5c164[10] = (byte)(((tbufRf5c164.Length - 12) & 0xff00) / 0x100);
-                    //tbufRf5c164[11] = (byte)(((tbufRf5c164.Length - 12) & 0xff0000) / 0x10000);
-                    desVGM.rf5c164[0].pcmData = uRf5c164P ? tbufRf5c164P : null;
-
-                    tbufRf5c164S[6] = (byte)((tbufRf5c164S.Length - 10) & 0xff);
-                    tbufRf5c164S[7] = (byte)(((tbufRf5c164S.Length - 10) & 0xff00) / 0x100);
-                    tbufRf5c164S[8] = (byte)(((tbufRf5c164S.Length - 10) & 0xff0000) / 0x10000);
-                    tbufRf5c164S[9] = (byte)(((tbufRf5c164S.Length - 10) & 0xff000000) / 0x1000000);
-                    tbufRf5c164S[9] |= 0x80;
-                    desVGM.rf5c164[1].pcmData = uRf5c164S ? tbufRf5c164S : null;
-
-                    desVGM.instPCM = newDic;
+                    getPCMData(path);
                 }
+
 
                 // 解析した情報をもとにVGMファイル作成
                 byte[] desBuf = desVGM.getByteData();
+
 
                 if (desBuf == null)
                 {
@@ -251,9 +118,243 @@ namespace mml2vgm
             }
         }
 
-        private byte[] getPCMData(string path , clsPcm instPCM)
+        private void getPCMData(string path)
+        {
+            byte[] tbufYM2612 = new byte[7] { 0x67, 0x66, 0x00, 0x00, 0x00, 0x00, 0x00 };
+            long pYM2612 = 0L;
+            bool uYM2612 = false;
+
+            byte[] tbufRf5c164P = new byte[12] { 0xb1, 0x07, 0x00, 0x67, 0x66, 0xc1, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+            byte[] tbufRf5c164S = new byte[12] { 0xb1, 0x87, 0x00, 0x67, 0x66, 0xc1, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+            long pRf5c164P = 0L;
+            long pRf5c164S = 0L;
+            bool uRf5c164P = false;
+            bool uRf5c164S = false;
+
+            //
+            byte[] tbufYm2610P = new byte[15] { 0x67, 0x66, 0x82, 0x00, 0x00, 0x00, 0x00,   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+            byte[] tbufYm2610S = new byte[15] { 0x67, 0x66, 0x82, 0x00, 0x00, 0x00, 0x00,   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+            long pYm2610P = 0L;
+            long pYm2610S = 0L;
+            bool uYm2610P = false;
+            bool uYm2610S = false;
+
+            Dictionary<int, clsPcm> newDic = new Dictionary<int, clsPcm>();
+            foreach (KeyValuePair<int, clsPcm> v in desVGM.instPCM)
+            {
+
+                bool is16bit;
+                byte[] buf = getPCMDataFromFile(path, v.Value,out is16bit);
+                if (buf == null)
+                {
+                    msgBox.setErrMsg(string.Format("PCMファイルの読み込みに失敗しました。(filename:{0})", v.Value.fileName));
+                    continue;
+                }
+
+                long size = buf.Length;
+
+                if (v.Value.chip == enmChipType.YM2610B)
+                {
+                    EncAdpcmA ea = new EncAdpcmA();
+                    buf = ea.YM_encode(buf, is16bit);
+                    size = buf.Length;
+
+                    byte[] newBuf;
+
+                    newBuf = new byte[size];
+                    Array.Copy(buf, newBuf, size);
+                    buf = newBuf;
+                    long tSize = size;
+                    size = buf.Length;
+
+                    //Padding
+                    //if (size % 0x100 != 0)
+                    //{
+                    //    newBuf = pcmPadding(ref buf, ref size, 0x80);
+                    //}
+
+                    newDic.Add(
+                        v.Key
+                        , new clsPcm(
+                            v.Value.num, v.Value.chip
+                            , v.Value.isSecondary
+                            , v.Value.fileName
+                            , v.Value.freq
+                            , v.Value.vol
+                            , v.Value.isSecondary ? pYm2610S : pYm2610P
+                            , (v.Value.isSecondary ? pYm2610S : pYm2610P) + size
+                            , size
+                            , 0) //(v.Value.isSecondary ? pYm2610S : pYm2610P) + (v.Value.loopAdr == -1 ? tSize : v.Value.loopAdr))
+                        );
+
+                    if (!v.Value.isSecondary)
+                    {
+                        pYm2610P += size;
+                        newBuf = new byte[tbufYm2610P.Length + buf.Length];
+                        Array.Copy(tbufYm2610P, newBuf, tbufYm2610P.Length);
+                        Array.Copy(buf, 0, newBuf, tbufYm2610P.Length, buf.Length);
+
+                        tbufYm2610P = newBuf;
+                        uYm2610P = true;
+                    }
+                    else
+                    {
+                        pYm2610S += size;
+                        newBuf = new byte[tbufYm2610S.Length + buf.Length];
+                        Array.Copy(tbufYm2610S, newBuf, tbufYm2610S.Length);
+                        Array.Copy(buf, 0, newBuf, tbufYm2610S.Length, buf.Length);
+
+                        tbufYm2610S = newBuf;
+                        uYm2610S = true;
+                    }
+
+                }
+                else if (v.Value.chip == enmChipType.YM2612)
+                {
+                    newDic.Add(v.Key, new clsPcm(v.Value.num, v.Value.chip, false, v.Value.fileName, v.Value.freq, v.Value.vol, pYM2612, pYM2612 + size , size, -1));
+                    pYM2612 += size;
+
+                    byte[] newBuf = new byte[tbufYM2612.Length + buf.Length];
+                    Array.Copy(tbufYM2612, newBuf, tbufYM2612.Length);
+                    Array.Copy(buf, 0, newBuf, tbufYM2612.Length, buf.Length);
+
+                    tbufYM2612 = newBuf;
+                    uYM2612 = true;
+                }
+                else if (v.Value.chip == enmChipType.RF5C164)
+                {
+                    byte[] newBuf;
+
+                    newBuf = new byte[size + 1];
+                    Array.Copy(buf, newBuf, size);
+                    newBuf[size] = 0xff;
+                    buf = newBuf;
+                    long tSize = size;
+                    size = buf.Length;
+
+                    //Padding
+                    if (size % 0x100 != 0)
+                    {
+                        newBuf = pcmPadding(ref buf, ref size, 0x80);
+                    }
+
+                    newDic.Add(
+                        v.Key
+                        , new clsPcm(
+                            v.Value.num, v.Value.chip
+                            , v.Value.isSecondary
+                            , v.Value.fileName
+                            , v.Value.freq
+                            , v.Value.vol
+                            , v.Value.isSecondary ? pRf5c164S : pRf5c164P
+                            , (v.Value.isSecondary ? pRf5c164S : pRf5c164P) + size
+                            , size
+                            , (v.Value.isSecondary ? pRf5c164S : pRf5c164P) + (v.Value.loopAdr == -1 ? tSize : v.Value.loopAdr))
+                        );
+
+                    if (v.Value.isSecondary) pRf5c164S += size;
+                    else pRf5c164P += size;
+
+                    for (int i = 0; i < tSize; i++)
+                    {
+                        if (buf[i] != 0xff)
+                        {
+                            if (buf[i] >= 0x80)
+                            {
+                                buf[i] = buf[i];
+                            }
+                            else
+                            {
+                                buf[i] = (byte)(0x80 - buf[i]);
+                            }
+                        }
+
+                        if (buf[i] == 0xff)
+                        {
+                            buf[i] = 0xfe;
+                        }
+
+                    }
+                    if (!v.Value.isSecondary)
+                    {
+                        newBuf = new byte[tbufRf5c164P.Length + buf.Length];
+                        Array.Copy(tbufRf5c164P, newBuf, tbufRf5c164P.Length);
+                        Array.Copy(buf, 0, newBuf, tbufRf5c164P.Length, buf.Length);
+
+                        tbufRf5c164P = newBuf;
+                        uRf5c164P = true;
+                    }
+                    else
+                    {
+                        newBuf = new byte[tbufRf5c164S.Length + buf.Length];
+                        Array.Copy(tbufRf5c164S, newBuf, tbufRf5c164S.Length);
+                        Array.Copy(buf, 0, newBuf, tbufRf5c164S.Length, buf.Length);
+
+                        tbufRf5c164S = newBuf;
+                        uRf5c164S = true;
+                    }
+                }
+            }
+
+            tbufYm2610P[3] = (byte)((tbufYm2610P.Length - 15) & 0xff);
+            tbufYm2610P[4] = (byte)(((tbufYm2610P.Length - 15) & 0xff00) / 0x100);
+            tbufYm2610P[5] = (byte)(((tbufYm2610P.Length - 15) & 0xff0000) / 0x10000);
+            tbufYm2610P[6] = (byte)(((tbufYm2610P.Length - 15) & 0x7f000000) / 0x1000000);
+
+            tbufYm2610P[7] = (byte)((tbufYm2610P.Length - 15) & 0xff);
+            tbufYm2610P[8] = (byte)(((tbufYm2610P.Length - 15) & 0xff00) / 0x100);
+            tbufYm2610P[9] = (byte)(((tbufYm2610P.Length - 15) & 0xff0000) / 0x10000);
+            tbufYm2610P[10] = (byte)(((tbufYm2610P.Length - 15) & 0x7f000000) / 0x1000000);
+            desVGM.ym2610b[0].pcmDataA = uYm2610P ? tbufYm2610P : null;
+
+            tbufYm2610S[3] = (byte)((tbufYm2610S.Length - 15) & 0xff);
+            tbufYm2610S[4] = (byte)(((tbufYm2610S.Length - 15) & 0xff00) / 0x100);
+            tbufYm2610S[5] = (byte)(((tbufYm2610S.Length - 15) & 0xff0000) / 0x10000);
+            tbufYm2610S[6] = (byte)(((tbufYm2610S.Length - 15) & 0x7f000000) / 0x1000000);
+            tbufYm2610S[6] |= 0x80;
+
+            tbufYm2610S[7] = (byte)((tbufYm2610P.Length - 15) & 0xff);
+            tbufYm2610S[8] = (byte)(((tbufYm2610P.Length - 15) & 0xff00) / 0x100);
+            tbufYm2610S[9] = (byte)(((tbufYm2610P.Length - 15) & 0xff0000) / 0x10000);
+            tbufYm2610S[10] = (byte)(((tbufYm2610P.Length - 15) & 0x7f000000) / 0x1000000);
+            desVGM.ym2610b[1].pcmDataA = uYm2610S ? tbufYm2610S : null;
+
+            tbufYM2612[3] = (byte)((tbufYM2612.Length - 7) & 0xff);
+            tbufYM2612[4] = (byte)(((tbufYM2612.Length - 7) & 0xff00) / 0x100);
+            tbufYM2612[5] = (byte)(((tbufYM2612.Length - 7) & 0xff0000) / 0x10000);
+            tbufYM2612[6] = (byte)(((tbufYM2612.Length - 7) & 0x7f000000) / 0x1000000);
+            desVGM.ym2612[0].pcmData = uYM2612 ? tbufYM2612 : null;
+
+            tbufRf5c164P[6] = (byte)((tbufRf5c164P.Length - 10) & 0xff);
+            tbufRf5c164P[7] = (byte)(((tbufRf5c164P.Length - 10) & 0xff00) / 0x100);
+            tbufRf5c164P[8] = (byte)(((tbufRf5c164P.Length - 10) & 0xff0000) / 0x10000);
+            tbufRf5c164P[9] = (byte)(((tbufRf5c164P.Length - 10) & 0x7f000000) / 0x1000000);
+            desVGM.rf5c164[0].pcmData = uRf5c164P ? tbufRf5c164P : null;
+
+            tbufRf5c164S[6] = (byte)((tbufRf5c164S.Length - 10) & 0xff);
+            tbufRf5c164S[7] = (byte)(((tbufRf5c164S.Length - 10) & 0xff00) / 0x100);
+            tbufRf5c164S[8] = (byte)(((tbufRf5c164S.Length - 10) & 0xff0000) / 0x10000);
+            tbufRf5c164S[9] = (byte)(((tbufRf5c164S.Length - 10) & 0x7f000000) / 0x1000000);
+            tbufRf5c164S[9] |= 0x80;
+            desVGM.rf5c164[1].pcmData = uRf5c164S ? tbufRf5c164S : null;
+
+            desVGM.instPCM = newDic;
+        }
+
+        private static byte[] pcmPadding(ref byte[] buf, ref long size,byte paddingData)
+        {
+            byte[] newBuf = new byte[size + (0x100 - (size % 0x100))];
+            for (int i = (int)size; i < newBuf.Length; i++) newBuf[i] = paddingData;
+            Array.Copy(buf, newBuf, size);
+            buf = newBuf;
+            size = buf.Length;
+            return newBuf;
+        }
+
+        private byte[] getPCMDataFromFile(string path , clsPcm instPCM,out bool is16bit)
         {
             string fnPcm = Path.Combine(path, instPCM.fileName);
+            is16bit = false;
 
             if (!File.Exists(fnPcm))
             {
@@ -306,35 +407,37 @@ namespace mml2vgm
                         int channels = buf[p + 2] + buf[p + 3] * 0x100;
                         if (channels != 1)
                         {
-                            msgBox.setErrMsg(string.Format("PCMファイル：無効なチャネル数です。({0})", channels));
+                            msgBox.setErrMsg(string.Format("PCMファイル：仕様(mono)とは異なるチャネル数です。({0})", channels));
                             return null;
                         }
 
                         int samplerate = buf[p + 4] + buf[p + 5] * 0x100 + buf[p + 6] * 0x10000 + buf[p + 7] * 0x1000000;
-                        if (samplerate != 8000)
+                        if (samplerate != 8000 && samplerate != 16000 && samplerate != 18500)
                         {
-                            msgBox.setWrnMsg(string.Format("PCMファイル：仕様とは異なるサンプリングレートです。({0})", samplerate));
+                            msgBox.setWrnMsg(string.Format("PCMファイル：仕様(8KHz/16KHz/18.5KHz)とは異なるサンプリングレートです。({0})", samplerate));
                             //return null;
                         }
 
-                        int bytepersec = buf[p + 8] + buf[p + 9] * 0x100 + buf[p + 10] * 0x10000 + buf[p + 11] * 0x1000000;
-                        if (bytepersec != 8000)
-                        {
-                            msgBox.setWrnMsg(string.Format("PCMファイル：仕様とは異なる平均データ割合です。({0})", bytepersec));
-                            //return null;
-                        }
+                        //int bytepersec = buf[p + 8] + buf[p + 9] * 0x100 + buf[p + 10] * 0x10000 + buf[p + 11] * 0x1000000;
+                        //if (bytepersec != 8000)
+                        //{
+                        //    msgBox.setWrnMsg(string.Format("PCMファイル：仕様とは異なる平均データ割合です。({0})", bytepersec));
+                        //    //return null;
+                        //}
 
-                        int blockalign = buf[p + 12] + buf[p + 13] * 0x100;
-                        if (blockalign != 1)
+                        int bitswidth = buf[p + 14] + buf[p + 15] * 0x100;
+                        if (bitswidth != 8 && bitswidth != 16)
                         {
-                            msgBox.setErrMsg(string.Format("PCMファイル：無効なデータのブロックサイズです。({0})", blockalign));
+                            msgBox.setErrMsg(string.Format("PCMファイル：仕様(8bit/16bit)とは異なる1サンプルあたりのビット数です。({0})", bitswidth));
                             return null;
                         }
 
-                        int bitswidth = buf[p + 14] + buf[p + 15] * 0x100;
-                        if (bitswidth != 8)
+                        is16bit = bitswidth == 16;
+
+                        int blockalign = buf[p + 12] + buf[p + 13] * 0x100;
+                        if (blockalign != (is16bit ? 2 : 1))
                         {
-                            msgBox.setErrMsg(string.Format("PCMファイル：無効な1サンプルあたりのビット数です。({0})", bitswidth));
+                            msgBox.setErrMsg(string.Format("PCMファイル：無効なデータのブロックサイズです。({0})", blockalign));
                             return null;
                         }
 

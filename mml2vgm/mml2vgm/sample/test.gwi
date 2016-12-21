@@ -4,48 +4,23 @@
 	TitleNameJ  =色々テスト
 	GameName    =
 	GameNameJ   =
-	SystemName  =Sega Genesis
-	SystemNameJ =Sega MegaDrive
+	SystemName  =
+	SystemNameJ =
 	Composer    =
 	ComposerJ   =
-	ReleaseDate =2015/11/15
+	ReleaseDate =2016/12/18
 	Converted   =
 	Notes       =
 
-	以下はデフォルト値を再設定しています。(つまりデフォルトを使用するだけなら再設定の必要はありません)
-	PartYM2612           =F
-	PartSN76489          =S
-	PartRf5c164          =R
-	PartYM2612Secondary  =Fs
-	PartSN76489Secondary =Ss
-	PartRf5c164Secondary =Rs
-
-	ForcedMonoPartYM2612 =6
-	ClockCount           =192
+	ClockCount  =192
 
 }
 
-No  = 定義番号
-SV  = キーオン時のボリューム(0 - 15 | 0 - 255 まで)
-AR  = 次にボリュームを+STするまでのクロック数。(最大ボリューム(15 | 255)になるまで発音ボリュームを+STする処理を繰り返す。)
-DR  = 次にボリュームを-STするまでのクロック数。(SLになるまで発音ボリュームを-STする処理を繰り返す。)
-SL  = 最大ボリューム後の減衰ボリューム(0 - 15 | 0 - 255 まで)
-SR  = 次にボリュームを-STするまでのクロック数。(ボリュームがSLに到達後、0になるまで発音ボリュームを-STする処理を繰り返す。)
-RR  = キーオフ後、次にボリュームを-STするまでのクロック数。(0になるまで発音ボリュームを-STする処理を繰り返す。)
-ST  = ボリュームの変化量
-Chip= チップの種類。省略時はSN76489として定義される(SN76489/RF5C164)
 
-     No,SV,AR,DR,SL,SR,RR,ST,Chip
-'@ E  0,15, 0, 0,15, 1, 1, 4
+'@ P 0,"SD_16bit18500.wav",8000,100,YM2610B,0
+'@ P 1,"BD_16bit16000.wav",8000,100,YM2610B,0
 
+'T13 T160
+'T13 @1q0p3v0[@1c4)5@0c4)5@1c8c8)5@0c4]2
 
-'Ss1 T160 
-'S1-3,Ss1-3 v15EON@0l4
-
-'S1  [ crrrrrb>r  ]
-'S2  [ rdrrrrr>c  ]
-'S3  [ rrerrrr>r  ]
-'Ss1 [ rrrfrrr>r  ]
-'Ss2 [ rrrrgrr>r  ]
-'Ss3 [ rrrrrar>r  ]
 

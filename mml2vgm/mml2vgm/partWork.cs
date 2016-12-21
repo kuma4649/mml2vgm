@@ -96,6 +96,7 @@ namespace mml2vgm
         /// pコマンドで設定されている音の定位(1:R 2:L 3:C)
         /// </summary>
         public int pan = 3;
+        public int beforePan = -1;
 
         /// <summary>
         /// @コマンドで設定されている音色
@@ -193,6 +194,9 @@ namespace mml2vgm
         /// </summary>
         public bool beforeTie = false;
 
+        public bool keyOn = false;
+        public bool keyOff = false;
+
         /// <summary>
         /// 前回発音時の音量
         /// </summary>
@@ -254,6 +258,11 @@ namespace mml2vgm
         public int noise = 0;
 
         /// <summary>
+        /// SSG Noise or Tone mixer 0:Silent 1:Tone 2:Noise 3:Tone&Noise
+        /// </summary>
+        public int mixer = 1;
+
+        /// <summary>
         /// キーシフト
         /// </summary>
         public int keyShift = 0;
@@ -261,12 +270,21 @@ namespace mml2vgm
         public string PartName="";
 
         public int rf5c164AddressIncrement = -1;
-        public int rf5c164SampleStartAddress = -1;
-        public int rf5c164LoopAddress = -1;
         public int rf5c164Envelope = -1;
         public int rf5c164Pan = -1;
 
+        public int pcmStartAddress = -1;
+        public int pcmLoopAddress = -1;
+        public int pcmEndAddress = -1;
+
         public enmChannelType Type;
+        public int MaxVolume = 0;
+        public byte port0 = 0;
+        public byte port1 = 0;
+        public int ams = 0;
+        public int fms = 0;
+        public bool hardLfoSw = false;
+        public int hardLfoNum = 0;
 
         /// <summary>
         /// パート情報をリセットする
@@ -710,10 +728,11 @@ namespace mml2vgm
         public int freq = 0;
         public int vol = 0;
         public long stAdr = 0;
+        public long edAdr = 0;
         public long size = 0;
         public long loopAdr = -1;
 
-        public clsPcm(int num, enmChipType chip,bool isSecondary,string fileName, int freq, int vol , long stAdr, long size,long loopAdr)
+        public clsPcm(int num, enmChipType chip,bool isSecondary,string fileName, int freq, int vol , long stAdr, long edAdr, long size,long loopAdr)
         {
             this.num = num;
             this.chip = chip;
@@ -722,6 +741,7 @@ namespace mml2vgm
             this.freq = freq;
             this.vol = vol;
             this.stAdr = stAdr;
+            this.edAdr = edAdr;
             this.size = size;
             this.loopAdr = loopAdr;
         }

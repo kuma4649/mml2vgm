@@ -10,23 +10,18 @@ namespace mml2vgm
     {
         public float Version = 1.60f;
 
-        public int[] fmFNumTbl = new int[] {
-             0x289 // c
-            ,0x2af // c+
-            ,0x2d8 // d
-            ,0x303 // d+
-            ,0x331 // e
-            ,0x362 // f
-            ,0x395 // f+
-            ,0x3cc // g
-            ,0x405 // g+
-            ,0x443 // a
-            ,0x484 // a+
-            ,0x4c8 // b
-            ,0x289*2 // >c
+        public int[] OPN_FNumTbl_7670454 = new int[] {
+            //   c    c+     d    d+     e     f    f+     g    g+     a    a+     b    >c
+             0x289,0x2af,0x2d8,0x303,0x331,0x362,0x395,0x3cc,0x405,0x443,0x484,0x4c8,0x289*2
+        };
+
+        public int[] OPN_FNumTbl_8000000 = new int[] {
+            //   c    c+     d    d+     e     f    f+     g    g+     a    a+     b    >c
+             0x269,0x28e,0x2b4,0x2de,0x309,0x337,0x368,0x39c,0x3d3,0x40e,0x44c,0x48d,0x4d2
         };
 
         public int[] psgFNumTbl = new int[] {
+            //   c    c+     d    d+     e     f    f+     g    g+     a    a+     b
              0x6ae,0x64e,0x5f4,0x59e,0x54e,0x502,0x4ba,0x476,0x436,0x3f8,0x3c0,0x38a//1 0x3ff over note is silent 
             ,0x357,0x327,0x2fa,0x2cf,0x2a7,0x281,0x25d,0x23b,0x21b,0x1fc,0x1e0,0x1c5//2
             ,0x1ac,0x194,0x17d,0x168,0x153,0x140,0x12e,0x11d,0x10d,0x0fe,0x0f0,0x0e3//3
@@ -35,6 +30,19 @@ namespace mml2vgm
             ,0x035,0x032,0x030,0x02d,0x02a,0x028,0x026,0x024,0x022,0x020,0x01e,0x01c//6
             ,0x01b,0x019,0x018,0x016,0x015,0x014,0x013,0x012,0x011,0x010,0x00f,0x00e//7
             ,0x00d,0x00d,0x00c,0x00b,0x00b,0x00a,0x009,0x008,0x007,0x006,0x005,0x004//8
+        };
+
+        // TP = M / (ftone * 64)
+        public int[] ssgFNumTbl_8000000 = new int[] {
+            //   c    c+     d    d+     e     f    f+     g    g+     a    a+     b
+             0xEEE,0xE18,0xD4D,0xC8E,0xBDA,0xB30,0xA8F,0x9F7,0x968,0x8E1,0x861,0x7E9
+            ,0x777,0x70C,0x6A7,0x647,0x5ED,0x598,0x547,0x4FC,0x4B4,0x470,0x431,0x3F4
+            ,0x3BC,0x386,0x353,0x324,0x2F6,0x2CC,0x2A4,0x27E,0x25A,0x238,0x218,0x1FA
+            ,0x1DE,0x1C3,0x1AA,0x192,0x17B,0x166,0x152,0x13F,0x12D,0x11C,0x10C,0x0FD
+            ,0x0EF,0x0E1,0x0D5,0x0C9,0x0BE,0x0B3,0x0A9,0x09F,0x096,0x08E,0x086,0x07F
+            ,0x077,0x071,0x06A,0x064,0x05F,0x059,0x054,0x050,0x04B,0x047,0x043,0x03F
+            ,0x03C,0x038,0x035,0x032,0x02F,0x02D,0x02A,0x028,0x026,0x024,0x022,0x020
+            ,0x01E,0x01C,0x01B,0x019,0x018,0x016,0x015,0x014,0x013,0x012,0x011,0x010
         };
 
         /*
@@ -122,15 +130,15 @@ namespace mml2vgm
                 0x10,
                 //SN76489 Flags(0x00 version 1.51 and later)
                 0x00,
-                //YM2612 clock(0x750ab5)
+                //0x2c YM2612 clock(0x750ab5)
                 0xb5,0x0a,0x75,0x00,
-                //YM2151 clock(no use)
+                //0x30 YM2151 clock(no use)
                 0x00,0x00,0x00,0x00,
-                //VGM data offset(1.50 only)
+                //0x34 VGM data offset(1.50 only)
                 0x0c+16*4,0x00,0x00,0x00,
-                //Sega PCM clock(no use)
+                //0x38 Sega PCM clock(no use)
                 0x00,0x00,0x00,0x00,
-                //Sega PCM interface register(no use)
+                //0x3c Sega PCM interface register(no use)
                 0x00,0x00,0x00,0x00
                 //0x40 RF5C68 clock(no use)
                 ,0x00,0x00,0x00,0x00,
@@ -138,8 +146,8 @@ namespace mml2vgm
                 0x00,0x00,0x00,0x00,
                 //0x48
                 0x00,0x00,0x00,0x00,
-                //0x4c
-                0x00,0x00,0x00,0x00,
+                //0x4c YM2610/B clock(0x7a1200)
+                0x00,0x12,0x7a,0x00,
                 //0x50
                 0x00,0x00,0x00,0x00,
                 //0x54
@@ -170,6 +178,7 @@ namespace mml2vgm
         public YM2612[] ym2612 = null;
         public SN76489[] sn76489 = null;
         public RF5C164[] rf5c164 = null;
+        public YM2610B[] ym2610b = null;
         public List<clsChip> chips = new List<clsChip>();
 
         public int lineNumber = 0;
@@ -205,6 +214,7 @@ namespace mml2vgm
             ym2612 = new YM2612[] { new YM2612(0,"F"), new YM2612(1, "Fs") };
             sn76489 = new SN76489[] { new SN76489(0, "S"), new SN76489(1, "Ss") };
             rf5c164 = new RF5C164[] { new RF5C164(0, "R"), new RF5C164(1, "Rs") };
+            ym2610b = new YM2610B[] { new YM2610B(0, "T"), new YM2610B(1, "Ts") };
 
             chips.Add(ym2612[0]);
             chips.Add(ym2612[1]);
@@ -212,6 +222,8 @@ namespace mml2vgm
             chips.Add(sn76489[1]);
             chips.Add(rf5c164[0]);
             chips.Add(rf5c164[1]);
+            chips.Add(ym2610b[0]);
+            chips.Add(ym2610b[1]);
 
         }
 
@@ -351,21 +363,16 @@ namespace mml2vgm
                         Version = v;
                     }
 
-                    for (int i = 0; i < 2; i++)
+                    foreach (clsChip chip in chips)
                     {
-                        if (wrd == PARTNAME + ym2612[i].Name + IDName[i]) setPartToCh(ym2612[i].Ch, val);
-                        if (wrd == PARTNAME + ym2612[i].ShortName + IDName[i]) setPartToCh(ym2612[i].Ch, val);
-                        if (wrd == PARTNAME + sn76489[i].Name + IDName[i]) setPartToCh(sn76489[i].Ch, val);
-                        if (wrd == PARTNAME + sn76489[i].ShortName + IDName[i]) setPartToCh(sn76489[i].Ch, val);
-                        if (wrd == PARTNAME + rf5c164[i].Name + IDName[i]) setPartToCh(rf5c164[i].Ch, val);
-                        if (wrd == PARTNAME + rf5c164[i].ShortName + IDName[i]) setPartToCh(rf5c164[i].Ch, val);
+                        if (wrd == PARTNAME + chip.Name + IDName[chip.ChipID]) chip.setPartToCh(chip.Ch, val);
+                        if (wrd == PARTNAME + chip.ShortName + IDName[chip.ChipID]) chip.setPartToCh(chip.Ch, val);
+                        if (chip.ChipID == 0)
+                        {
+                            if (wrd == PARTNAME + chip.Name) chip.setPartToCh(chip.Ch, val);
+                            if (wrd == PARTNAME + chip.ShortName) chip.setPartToCh(chip.Ch, val);
+                        }
                     }
-                    if (wrd == PARTNAME + ym2612[0].Name) setPartToCh(ym2612[0].Ch, val);
-                    if (wrd == PARTNAME + ym2612[0].ShortName) setPartToCh(ym2612[0].Ch, val);
-                    if (wrd == PARTNAME + sn76489[0].Name) setPartToCh(sn76489[0].Ch, val);
-                    if (wrd == PARTNAME + sn76489[0].ShortName) setPartToCh(sn76489[0].Ch, val);
-                    if (wrd == PARTNAME + rf5c164[0].Name) setPartToCh(rf5c164[0].Ch, val);
-                    if (wrd == PARTNAME + rf5c164[0].ShortName) setPartToCh(rf5c164[0].Ch, val);
 
                     if (wrd == CLOCKCOUNT) clockCount = int.Parse(val);
                     if (wrd == FMF_NUM) setFmF_NumTbl(val);
@@ -391,9 +398,9 @@ namespace mml2vgm
             string[] s = val.Split(new string[] { ",", " ", "\t" }, StringSplitOptions.RemoveEmptyEntries);
             for (int i = 0; i < s.Length; i++)
             {
-                fmFNumTbl[i]= int.Parse(s[i], System.Globalization.NumberStyles.HexNumber);
+                OPN_FNumTbl_7670454[i]= int.Parse(s[i], System.Globalization.NumberStyles.HexNumber);
             }
-            fmFNumTbl[12] = fmFNumTbl[0] * 2;
+            OPN_FNumTbl_7670454[12] = OPN_FNumTbl_7670454[0] * 2;
         }
 
         private void setPsgF_NumTbl(string val,int oct)
@@ -411,40 +418,9 @@ namespace mml2vgm
             }
         }
 
-        private void setPartToCh(clsChannel[] Ch, string val)
-        {
-            if (val == null || (val.Length != 1 && val.Length != 2)) return;
-
-            string f = val[0].ToString();
-            string r = (val.Length == 2) ? val[1].ToString() : " ";
-
-            for (int i = 0; i < Ch.Length; i++)
-            {
-                if (Ch[i] == null) Ch[i] = new clsChannel();
-                Ch[i].Name = string.Format("{0}{1}{2:00}", f, r, i + 1);
-            }
-
-        }
-
         private void setMonoPart(string val)
         {
             monoPart = divParts(val);
-        }
-
-        private void checkDuplication(string[] s)
-        {
-            foreach(string a in s)
-            {
-                int c = 0;
-                foreach(string b in s)
-                {
-                    if (a == b) c++;
-                }
-                if (c > 1)
-                {
-                    throw new ArgumentOutOfRangeException();
-                }
-            }
         }
 
         private int addInstrument(string buf, int lineNumber)
@@ -518,7 +494,7 @@ namespace mml2vgm
                         {
                             instPCM.Remove(num);
                         }
-                        instPCM.Add(num, new clsPcm(num, chip, isSecondary, fn, fq, vol, 0, 0, lp));
+                        instPCM.Add(num, new clsPcm(num, chip, isSecondary, fn, fq, vol, 0, 0, 0, lp));
                     }
                     catch
                     {
@@ -546,49 +522,25 @@ namespace mml2vgm
                         for(int i=0;i<env.Length-1;i++) {
                             if (env[8] == (int)enmChipType.SN76489)
                             {
-                                if (i == 1 || i == 4 || i == 7)
-                                {
-                                    if (env[i] > 15)
-                                    {
-                                        env[i] = 15;
-                                        msgBox.setWrnMsg("Envelope音量が15を超えています。", lineNumber);
-                                    }
-                                    if (env[i] < 0)
-                                    {
-                                        env[i] = 0;
-                                        msgBox.setWrnMsg("Envelope音量が0未満です。", lineNumber);
-                                    }
-                                    if (env[i] == 0 && i == 7)
-                                    {
-                                        env[7] = 1;
-                                    }
-                                }
+                                checkEnvelopeVolumeRange(lineNumber, env, i, 15, 0);
+                                if (env[7] == 0) env[7] = 1;
                             }
                             else if (env[8] == (int)enmChipType.RF5C164)
                             {
-                                if (i == 1 || i == 4 || i == 7)
-                                {
-                                    if (env[i] > 255)
-                                    {
-                                        env[i] = 255;
-                                        msgBox.setWrnMsg("Envelope音量が255を超えています。", lineNumber);
-                                    }
-                                    if (env[i] < 0)
-                                    {
-                                        env[i] = 0;
-                                        msgBox.setWrnMsg("Envelope音量が0未満です。", lineNumber);
-                                    }
-                                    if (env[i] == 0 && i == 7)
-                                    {
-                                        env[7] = 1;
-                                    }
-                                }
+                                checkEnvelopeVolumeRange(lineNumber, env, i, 255, 0);
+                                if (env[7] == 0) env[7] = 1;
+                            }
+                            else if (env[8] == (int)enmChipType.YM2610B)
+                            {
+                                checkEnvelopeVolumeRange(lineNumber, env, i, 255, 0);
+                                if (env[7] == 0) env[7] = 1;
                             }
                             else
                             {
                                 msgBox.setWrnMsg("エンベロープを使用できない音源が選択されています。", lineNumber);
                             }
                         }
+
                         if (instENV.ContainsKey(num))
                         {
                             instENV.Remove(num);
@@ -605,6 +557,23 @@ namespace mml2vgm
             return 0;
         }
 
+        private static void checkEnvelopeVolumeRange(int lineNumber, int[] env, int i,int max,int min)
+        {
+            if (i == 1 || i == 4 || i == 7)
+            {
+                if (env[i] > max)
+                {
+                    env[i] = max;
+                    msgBox.setWrnMsg(string.Format("Envelope音量が{0}を超えています。", max), lineNumber);
+                }
+                if (env[i] < min)
+                {
+                    env[i] = min;
+                    msgBox.setWrnMsg(string.Format("Envelope音量が{0}未満です。", min), lineNumber);
+                }
+            }
+        }
+
         private static enmChipType getChipNumber(string chipN)
         {
             enmChipType chip;
@@ -618,6 +587,10 @@ namespace mml2vgm
                     break;
                 case "RF5C164":
                     chip = enmChipType.RF5C164;
+                    break;
+                case "YM2610":
+                case "YM2610B":
+                    chip = enmChipType.YM2610B;
                     break;
                 default:
                     chip = enmChipType.None;
@@ -633,15 +606,12 @@ namespace mml2vgm
 
             switch (chipNumber)
             {
+                case enmChipType.YM2610B:
                 case enmChipType.YM2612:
-                    use = true;
-                    break;
-                case enmChipType.SN76489:
-                    use = false;
-                    break;
                 case enmChipType.RF5C164:
                     use = true;
                     break;
+                case enmChipType.SN76489:
                 default:
                     use = false;
                     break;
@@ -728,14 +698,15 @@ namespace mml2vgm
         {
             List<string> ret = new List<string>();
             string a = "";
+            int k = 1;
             int m = 0;
+            string n0 = "";
 
             for (int i = 0; i < parts.Length; i++)
             {
                 if (m == 0 && parts[i] >= 'A' && parts[i] <= 'Z')
                 {
                     a = parts[i].ToString();
-                    m = 1;
                     if (i + 1 < parts.Length && parts[i + 1] >= 'a' && parts[i + 1] <= 'z')
                     {
                         a += parts[i + 1].ToString();
@@ -745,70 +716,56 @@ namespace mml2vgm
                     {
                         a += " ";
                     }
+
+                    k = getChMax(a) > 9 ? 2 : 1;
+                    n0 = "";
+
                 }
-                else if (parts[i] == ',')
+                else if (m == 0 && parts[i] == ',')
                 {
-                    m = 0;
+                    n0 = "";
                 }
-                else if (m == 1 && parts[i] >= '0' && parts[i] <= '9')
+                else if (m == 0 && parts[i] == '-')
                 {
-                    string n0 = parts[i].ToString();
-                    int k = 1;// (getChMax(a) > 9) ? 2 : 1;
+                    m = 1;
+                }
+                else if (parts[i] >= '0' && parts[i] <= '9')
+                {
+                    string n = parts.Substring(i, k);
                     if (k == 2 && i + 1 < parts.Length)
                     {
-                        n0 += parts[i + 1].ToString();
                         i++;
                     }
 
-                    if (i < parts.Length - 2 && parts[i + 1] == '-')
+                    if (m == 0)
                     {
-                        string n1 = parts[i + 2].ToString();
-                        if (k == 2 && i + 3 < parts.Length)
-                        {
-                            n1 += parts[i + 3].ToString();
-                            i++;
-                        }
+                        n0 = n;
+
+                        int s;
+                        if (!int.TryParse(n0, out s)) return null;
+                        string p = string.Format("{0}{1:00}", a, s);
+                        ret.Add(p);
+                    }
+                    else
+                    {
+                        string n1 = n;
 
                         int s, e;
                         if (!int.TryParse(n0, out s)) return null;
                         if (!int.TryParse(n1, out e)) return null;
+                        if (s >= e) return null;
 
-                        if (s > e)
-                        {
-                            return null;
-                        }
                         do
                         {
-                            string p = string.Format("{0}{1:00}", a, s);
-                            if (ret.Contains(p))
-                            {
-                                return null;
-                            }
-                            ret.Add(p);
                             s++;
-                        } while (s <= e);
-
-                        i += 2;
-                        m = 0;
-                    }
-                    else
-                    {
-                        do
-                        {
-                            n0 = parts[i].ToString();
-                            if (k == 2 && i + 1 < parts.Length)
-                            {
-                                n0 += parts[i + 1].ToString();
-                                i++;
-                            }
-
-                            int s;
-                            if (!int.TryParse(n0, out s)) return null;
                             string p = string.Format("{0}{1:00}", a, s);
+                            if (ret.Contains(p)) return null;
                             ret.Add(p);
-                            i++;
-                        } while (i < parts.Length && parts[i] >= '0' && parts[i] <= '9');
+                        } while (s < e);
+
+                        i++;
                         m = 0;
+                        n0 = "";
                     }
                 }
                 else
@@ -818,6 +775,19 @@ namespace mml2vgm
             }
 
             return ret;
+        }
+
+        private int getChMax(string a)
+        {
+            foreach (clsChip chip in chips)
+            {
+                if (chip.Ch[0].Name.Substring(0, 2) == a)
+                {
+                    return chip.ChMax;
+                }
+            }
+
+            return 0;
         }
 
         private int setInstrument(string vals, int lineNumber)
@@ -910,9 +880,6 @@ namespace mml2vgm
         private const long defaultTempo = 120L;
         private const long defaultClockCount = 192L;
         private const long defaultSamplesPerClock = vgmSamplesPerSecond * 60 * 4 / (defaultTempo * defaultClockCount);
-        private const int fmMaxVolume = 127;
-        private const int psgMaxVolume = 15;
-        private const int rf5c164MaxVolume = 255;
 
         private long tempo = defaultTempo;
         private long clockCount = defaultClockCount;
@@ -936,12 +903,20 @@ namespace mml2vgm
 
             int endChannel = 0;
             newStreamID = -1;
+            int totalChannel = 0;
+            foreach (clsChip chip in chips) totalChannel += chip.ChMax;
 
             do
             {
 
                 foreach (clsChip chip in chips)
                 {
+                    if (chip is YM2610B)
+                    {
+                        ((YM2610B)chip).adpcmA_KeyOn = 0;
+                        ((YM2610B)chip).adpcmA_KeyOff = 0;
+                    }
+
                     foreach (partWork pw in chip.lstPartWork)
                     {
                         //未使用のパートの場合は処理を行わない
@@ -992,7 +967,65 @@ namespace mml2vgm
 
                             commander(pw, cmd);
                         }
+
                     }
+
+                    foreach (partWork pw in chip.lstPartWork)
+                    {
+                        //コマンドを跨ぐデータ向け処理
+                        if (chip is YM2610B)
+                        {
+                            if (pw.Type == enmChannelType.ADPCMA)
+                            {
+                                //Adpcm-A TotalVolume処理
+                                if (pw.beforeVolume != pw.volume || pw.beforePan != pw.pan)
+                                {
+                                    outFmAdrPort(pw.port1, (byte)(0x08 + (pw.ch - 12)), (byte)((byte)((pw.pan & 0x3) << 6) | (byte)(pw.volume & 0x1f)));
+                                    pw.beforeVolume = pw.volume;
+                                    pw.beforePan = pw.pan;
+                                }
+
+                                ((YM2610B)chip).adpcmA_KeyOn |= (byte)(pw.keyOn ? (1 << (pw.ch - 12)) : 0);
+                                pw.keyOn = false;
+                                ((YM2610B)chip).adpcmA_KeyOff |= (byte)(pw.keyOff ? (1 << (pw.ch - 12)) : 0);
+                                pw.keyOff = false;
+                            }
+                        }
+                    }
+
+                    //channelを跨ぐコマンド向け処理
+                    if (chip is YM2610B)
+                    {
+                        YM2610B y = (YM2610B)chip;
+
+                        //Adpcm-A KeyOff処理
+                        //if (y.adpcmA_beforeKeyOff != y.adpcmA_KeyOff)
+                            if (0 != y.adpcmA_KeyOff)
+                            {
+                                byte data = (byte)(0x80 + y.adpcmA_KeyOff);
+                            outFmAdrPort(y.lstPartWork[0].port1, 0x00, data);
+                            y.adpcmA_beforeKeyOff = 0;
+                            y.adpcmA_KeyOff = 0;
+                        }
+
+                        //Adpcm-A TotalVolume処理
+                        if (y.adpcmA_beforeTotalVolume != y.adpcmA_TotalVolume)
+                        {
+                            outFmAdrPort(y.lstPartWork[0].port1, 0x01, (byte)(y.adpcmA_TotalVolume & 0x3f));
+                            y.adpcmA_beforeTotalVolume = y.adpcmA_TotalVolume;
+                        }
+
+                        //Adpcm-A KeyOn処理
+                        //if (y.adpcmA_beforeKeyOn != y.adpcmA_KeyOn)
+                            if (0 != y.adpcmA_KeyOn)
+                            {
+                                byte data = (byte)(0x00 + y.adpcmA_KeyOn);
+                            outFmAdrPort(y.lstPartWork[0].port1, 0x00, data);
+                            y.adpcmA_beforeKeyOn = y.adpcmA_KeyOn;
+                        }
+
+                    }
+
                 }
 
 
@@ -1036,7 +1069,7 @@ namespace mml2vgm
                             }
 
                             //envelope
-                            if (cpw.chip is SN76489 || cpw.chip is RF5C164)
+                            if ((cpw.chip is YM2610B && cpw.Type == enmChannelType.SSG) || cpw.chip is SN76489 || cpw.chip is RF5C164)
                             {
                                 if (cpw.envelopeMode && cpw.envIndex != -1)
                                 {
@@ -1052,6 +1085,7 @@ namespace mml2vgm
                         }
 
                     }
+
                 }
 
                 if (cnt != long.MaxValue)
@@ -1087,7 +1121,7 @@ namespace mml2vgm
                                 pw.pcmWaitKeyOnCounter -= cnt;
                             }
 
-                            if (chip is SN76489 || chip is RF5C164)
+                            if ((pw.chip is YM2610B && pw.Type == enmChannelType.SSG) || pw.chip is SN76489 || pw.chip is RF5C164)
                             {
                                 if (pw.envelopeMode && pw.envIndex != -1)
                                 {
@@ -1123,7 +1157,7 @@ namespace mml2vgm
                     }
                 }
 
-            } while (endChannel < (ym2612[0].ChMax + sn76489[0].ChMax + rf5c164[0].ChMax+ ym2612[1].ChMax + sn76489[1].ChMax + rf5c164[1].ChMax) );
+            } while (endChannel < totalChannel);
 
 
             makeFooter();
@@ -1132,33 +1166,42 @@ namespace mml2vgm
             return dat.ToArray();
         }
 
-        private void procEnvelope(partWork cpw)
+        private void procEnvelope(partWork pw)
         {
             //Envelope処理(PSGとRf5c164)
-            if (cpw.chip is SN76489 || cpw.chip is RF5C164)
+            if (
+                (pw.chip is YM2610B && pw.Type== enmChannelType.SSG)
+                || pw.chip is SN76489
+                || pw.chip is RF5C164
+                )
             {
-                envelope(cpw);
+                envelope(pw);
             }
 
-            if (cpw.chip is YM2612)
+            if ((pw.chip is YM2610B && pw.ch < 6) || (pw.chip is YM2612))
             {
-                setFmFNum(cpw);
-                setFmVolume(cpw);
+                setFmFNum(pw);
+                setFmVolume(pw);
             }
-            else if (cpw.chip is SN76489)
+            else if (pw.chip is YM2610B && pw.Type== enmChannelType.SSG)
             {
-                if (cpw.waitKeyOnCounter > 0 || cpw.envIndex != -1)
+                setSsgFNum(pw);
+                outSsgVolume(pw);
+            }
+            else if (pw.chip is SN76489)
+            {
+                if (pw.waitKeyOnCounter > 0 || pw.envIndex != -1)
                 {
-                    setPsgFNum(cpw);
-                    setPsgVolume(cpw);
+                    setPsgFNum(pw);
+                    setPsgVolume(pw);
                 }
             }
-            else
+            else if(pw.chip is RF5C164)
             {
-                if (cpw.waitKeyOnCounter > 0 || cpw.envIndex != -1)
+                if (pw.waitKeyOnCounter > 0 || pw.envIndex != -1)
                 {
-                    setRf5c164FNum(cpw);
-                    setRf5c164Volume(cpw);
+                    setRf5c164FNum(pw);
+                    setRf5c164Volume(pw);
                 }
             }
         }
@@ -1183,8 +1226,12 @@ namespace mml2vgm
                 {
                     if (cpw.chip is YM2612)
                     {
-                        outFmSetPanAMSFMS(cpw, cpw.pan, pl.param[3], pl.param[2]);
-                        outFmSetHardLfo(cpw.isSecondary, true, pl.param[1]);
+                        cpw.ams = pl.param[3];
+                        cpw.fms = pl.param[2];
+                        outOPNSetPanAMSFMS(cpw, cpw.pan, cpw.ams, cpw.fms);
+                        cpw.chip.lstPartWork[0].hardLfoSw = true;
+                        cpw.chip.lstPartWork[0].hardLfoNum = pl.param[1];
+                        outOPNSetHardLfo(cpw, cpw.hardLfoSw, cpw.hardLfoNum);
                         pl.waitCounter = -1;
                     }
                     continue;
@@ -1253,9 +1300,40 @@ namespace mml2vgm
         {
             if (pw.waitKeyOnCounter == 0)
             {
-                if (pw.chip is YM2612)
+                if (pw.chip is YM2610B)
                 {
-                    if (!pw.tie) outFmKeyOff(pw);
+                    if (!pw.tie)
+                    {
+                        if (pw.ch < 9) outFmKeyOff(pw);
+                        else if (pw.Type == enmChannelType.SSG)
+                        {
+                            if (!pw.envelopeMode)
+                            {
+                                outSsgKeyOff(pw);
+                            }
+                            else
+                            {
+                                if (pw.envIndex != -1)
+                                {
+                                    pw.envIndex = 3;//RR phase
+                                    pw.envCounter = 0;
+                                }
+                            }
+                        }
+                        else if (pw.Type == enmChannelType.ADPCMA)
+                        {
+                            pw.keyOn = false;
+                            pw.keyOff = true;
+                            //((YM2610B)pw.chip).adpcmA_KeyOff |= (byte)(1 << (pw.ch - 12));
+                        }
+                    }
+                }
+                else if (pw.chip is YM2612)
+                {
+                    if (!pw.tie)
+                    {
+                        outFmKeyOff(pw);
+                    }
                 }
                 else if (pw.chip is SN76489)
                 {
@@ -1309,7 +1387,6 @@ namespace mml2vgm
             foreach (clsChip chip in chips)
             {
 
-                //chip.partStartCh = 0;
                 chip.use = false;
                 chip.lstPartWork = new List<partWork>();
 
@@ -1326,16 +1403,54 @@ namespace mml2vgm
                     pw.aData = aliesData;
                     pw.setPos(0);
                     pw.Type = chip.Ch[i].Type;
+                    pw.slots = 0;
+                    pw.volume = 32767;
 
                     if (chip is YM2612)
                     {
-                        pw.slots = (byte)(i < 6 ? 0xf : 0x0);
+                        pw.slots = (byte)(((pw.Type == enmChannelType.FMOPN || pw.Type == enmChannelType.FMPCM) || i == 2) ? 0xf : 0x0);
                         pw.volume = 127;
+                        pw.MaxVolume = 127;
+                        pw.port0 = (byte)(0x2 | (pw.isSecondary ? 0xa0 : 0x50));
+                        pw.port1 = (byte)(0x3 | (pw.isSecondary ? 0xa0 : 0x50));
                     }
-                    else
+                    else if (chip is SN76489)
                     {
-                        pw.slots = 0;
-                        pw.volume = 32767;
+                        pw.MaxVolume = 15;
+                        pw.volume = pw.MaxVolume;
+                        pw.port0 = 0x50;
+                    }
+                    else if (chip is RF5C164)
+                    {
+                        pw.MaxVolume = 255;
+                        pw.volume = pw.MaxVolume;
+                        pw.port0 = 0xb1;
+                    }
+                    else if (chip is YM2610B)
+                    {
+                        pw.slots = (byte)((pw.Type == enmChannelType.FMOPN || i == 2) ? 0xf : 0x0);
+                        pw.volume = 127;
+                        pw.MaxVolume = 127;
+                        if (pw.Type == enmChannelType.SSG)
+                        {
+                            //pw.volume = 32767;
+                            pw.MaxVolume = 15;
+                            pw.volume = pw.MaxVolume;
+                        }
+                        else if (pw.Type == enmChannelType.ADPCMA)
+                        {
+                            //pw.volume = 32767;
+                            pw.MaxVolume = 31;//5bit
+                            pw.volume = pw.MaxVolume;
+                        }
+                        else if (pw.Type == enmChannelType.ADPCMB)
+                        {
+                            //pw.volume = 32767;
+                            pw.MaxVolume = 255;
+                            pw.volume = pw.MaxVolume;
+                        }
+                        pw.port0 = (byte)(0x8 | (pw.isSecondary ? 0xa0 : 0x50));
+                        pw.port1 = (byte)(0x9 | (pw.isSecondary ? 0xa0 : 0x50));
                     }
 
                     pw.PartName = chip.Ch[i].Name;
@@ -1372,7 +1487,7 @@ namespace mml2vgm
                 return;
             }
 
-            int maxValue = (pw.envelope[8] == (int)enmChipType.RF5C164) ? 255 : 15;
+            int maxValue = pw.MaxVolume;
 
             while (pw.envCounter == 0 && pw.envIndex != -1)
             {
@@ -1427,11 +1542,15 @@ namespace mml2vgm
 
             if (pw.envIndex == -1)
             {
-                if (pw.envelope[8] == (int)enmChipType.SN76489)
+                if (pw.chip is SN76489)
                 {
                     outPsgKeyOff(pw);
                 }
-                else
+                else if (pw.chip is YM2610B && pw.Type== enmChannelType.SSG)
+                {
+                    outSsgKeyOff(pw);
+                }
+                else if (pw.chip is RF5C164)
                 {
                     outRf5c164KeyOff(pw);
                 }
@@ -1460,6 +1579,9 @@ namespace mml2vgm
                     break;
                 case 'v': // volume
                     cmdVolume(pw);
+                    break;
+                case 'V': // totalVolume(Adpcm-A / Rhythm)
+                    cmdTotalVolume(pw);
                     break;
                 case 'o': // octave
                     cmdOctave(pw);
@@ -1523,6 +1645,9 @@ namespace mml2vgm
                     break;
                 case 'w': // noise
                     cmdNoise(pw);
+                    break;
+                case 'P': // noise or tone mixer
+                    cmdMixer(pw);
                     break;
                 case 'K': // key shift
                     cmdKeyShift(pw);
@@ -1776,36 +1901,46 @@ namespace mml2vgm
                             tl += wait;
                             int a = getPsgFNum(pw.octaveNow, cmd, shift + (i + 0) * Math.Sign(delta));//
                             int b = getPsgFNum(pw.octaveNow, cmd, shift + (i + 1) * Math.Sign(delta));//
-                            if (pw.chip is YM2612)
+                            if (
+                                (pw.chip is YM2610B && pw.ch < 9)
+                                || (pw.chip is YM2612))
                             {
-                                a = getFmFNum(pw.octaveNow, cmd, shift + (i + 0) * Math.Sign(delta));//
-                                b = getFmFNum(pw.octaveNow, cmd, shift + (i + 1) * Math.Sign(delta));//
+                                int[] ftbl = (pw.chip is YM2612) ? OPN_FNumTbl_7670454 : OPN_FNumTbl_8000000;
+
+                                a = getFmFNum(ftbl, pw.octaveNow, cmd, shift + (i + 0) * Math.Sign(delta));//
+                                b = getFmFNum(ftbl, pw.octaveNow, cmd, shift + (i + 1) * Math.Sign(delta));//
                                 int oa = (a & 0xf000) / 0x1000;
                                 int ob = (b & 0xf000) / 0x1000;
                                 if (oa != ob)
                                 {
-                                    if ((a & 0xfff) == fmFNumTbl[0])
+                                    if ((a & 0xfff) == ftbl[0])
                                     {
                                         oa += Math.Sign(ob - oa);
                                         a = (a & 0xfff) * 2 + oa * 0x1000;
                                     }
-                                    else if ((b & 0xfff) == fmFNumTbl[0])
+                                    else if ((b & 0xfff) == ftbl[0])
                                     {
                                         ob += Math.Sign(oa - ob);
                                         b = (b & 0xfff) * ((delta > 0) ? 2 : 1) + ob * 0x1000;
                                     }
                                 }
                             }
+                            else if (pw.chip is YM2610B && pw.Type== enmChannelType.SSG)
+                            {
+                                a = getSsgFNum(pw.octaveNow, cmd, shift + (i + 0) * Math.Sign(delta));//
+                                b = getSsgFNum(pw.octaveNow, cmd, shift + (i + 1) * Math.Sign(delta));//
+                            }
                             else if (pw.chip is SN76489)
                             {
                                 a = getPsgFNum(pw.octaveNow, cmd, shift + (i + 0) * Math.Sign(delta));//
                                 b = getPsgFNum(pw.octaveNow, cmd, shift + (i + 1) * Math.Sign(delta));//
                             }
-                            else
+                            else if (pw.chip is RF5C164)
                             {
                                 a = getRf5c164PcmNote(pw.octaveNow, cmd, shift + (i + 0) * Math.Sign(delta));//
                                 b = getRf5c164PcmNote(pw.octaveNow, cmd, shift + (i + 1) * Math.Sign(delta));//
                             }
+
                             if (Math.Abs(bf) >= 1.0f)
                             {
                                 for (int j = 0; j < (int)Math.Abs(bf); j++)
@@ -1816,6 +1951,7 @@ namespace mml2vgm
                                 }
                                 bf -= (int)bf;
                             }
+
                         }
                         Stack<Tuple<int, int>> lb = new Stack<Tuple<int, int>>();
                         int of = -1;
@@ -1892,7 +2028,52 @@ namespace mml2vgm
                 }
 
                 //発音周波数の決定とキーオン
-                if (pw.chip is YM2612)
+                if (pw.chip is YM2610B)
+                {
+
+                    //YM2610B
+
+                    if (pw.Type == enmChannelType.FMOPN || pw.Type == enmChannelType.FMOPNex)
+                    {
+                        setFmFNum(pw);
+
+                        //タイ指定では無い場合はキーオンする
+                        if (!pw.beforeTie)
+                        {
+                            setLfoAtKeyOn(pw);
+                            setFmVolume(pw);
+                            outFmKeyOn(pw);
+                        }
+                    }
+                    else if (pw.Type == enmChannelType.SSG)
+                    {
+                        setSsgFNum(pw);
+
+                        //タイ指定では無い場合はキーオンする
+                        if (!pw.beforeTie)
+                        {
+                            setEnvelopeAtKeyOn(pw);
+                            setLfoAtKeyOn(pw);
+                            outSsgKeyOn(pw);
+                        }
+                    }
+                    else if (pw.Type == enmChannelType.ADPCMA)
+                    {
+                        if (!pw.beforeTie)
+                        {
+
+                            pw.keyOn = true;
+                            //if ((((YM2610B)pw.chip).adpcmA_KeyOn & (1 << (pw.ch - 12))) != 0)
+                            //{
+                            //    ((YM2610B)pw.chip).adpcmA_KeyOff |= (byte)(1 << (pw.ch - 12));
+                            //    ((YM2610B)pw.chip).adpcmA_beforeKeyOn &= (byte)~(1 << (pw.ch - 12));
+                            //}
+                            //((YM2610B)pw.chip).adpcmA_KeyOn |= (byte)(1 << (pw.ch - 12));
+
+                        }
+                    }
+                }
+                else if (pw.chip is YM2612)
                 {
 
                     //YM2612
@@ -1928,7 +2109,7 @@ namespace mml2vgm
                         outPsgKeyOn(pw);
                     }
                 }
-                else
+                else if(pw.chip is RF5C164)
                 {
 
                     // RF5C164
@@ -2062,8 +2243,8 @@ namespace mml2vgm
                         //rf5c164の設定済み周波数値を初期化(ループ時に直前の周波数を引き継いでしまうケースがあるため)
                         p.rf5c164AddressIncrement = -1;
                         int n = p.instrument;
-                        p.rf5c164SampleStartAddress = -1;
-                        p.rf5c164LoopAddress = -1;
+                        p.pcmStartAddress = -1;
+                        p.pcmLoopAddress = -1;
                         if (n != -1)
                         {
                             setRf5c164CurrentChannel(p);
@@ -2078,26 +2259,34 @@ namespace mml2vgm
         private void cmdEnvelope(partWork pw)
         {
             int n = -1;
-            if (((pw.chip is YM2612) && (pw.Type== enmChannelType.FMPCM || (pw.Type== enmChannelType.FMOPNex))) || (pw.chip is SN76489) || (pw.chip is RF5C164))
+            if (
+                ((pw.chip is YM2610B) && (pw.Type == enmChannelType.SSG || pw.Type == enmChannelType.FMOPNex))
+                || ((pw.chip is YM2612) && (pw.Type == enmChannelType.FMPCM || (pw.Type == enmChannelType.FMOPNex)))
+                || (pw.chip is SN76489) 
+                || (pw.chip is RF5C164)
+                )
             {
                 pw.incPos();
                 switch (pw.getChar())
                 {
                     case 'O':
                         pw.incPos();
-                        if (pw.chip is YM2612)
+                        if (
+                            ((pw.chip is YM2610B) && pw.Type == enmChannelType.FMOPNex)
+                            || pw.chip is YM2612
+                            )
                         {
                             switch (pw.getChar())
                             {
                                 case 'N':
                                     pw.incPos();
                                     pw.Ch3SpecialMode = true;
-                                    outFmSetCh3SpecialMode(pw.isSecondary,true);
+                                    outOPNSetCh3SpecialMode(pw, true);
                                     break;
                                 case 'F':
                                     pw.incPos();
                                     pw.Ch3SpecialMode = false;
-                                    outFmSetCh3SpecialMode(pw.isSecondary, false);
+                                    outOPNSetCh3SpecialMode(pw, false);
                                     break;
                                 default:
                                     msgBox.setErrMsg(string.Format("未知のコマンド(EO{0})が指定されました。", pw.getChar()), lineNumber);
@@ -2126,7 +2315,10 @@ namespace mml2vgm
                         break;
                     case 'X':
                         char c = pw.getChar();
-                        if (pw.chip is YM2612)
+                        if (
+                            ((pw.chip is YM2610B) && pw.Type == enmChannelType.FMOPNex)
+                            || pw.chip is YM2612
+                            )
                         {
                             pw.incPos();
                             if (!pw.getNum(out n))
@@ -2238,7 +2430,7 @@ namespace mml2vgm
                 n = checkRange(n, 0, 1);
                 pw.pcm = (n == 1);
                 pw.freq = -1;//freqをリセット
-                outFmSetCh6PCMMode(pw.isSecondary, pw.pcm);
+                outYM2612SetCh6PCMMode(pw, pw.pcm);
             }
             else
             {
@@ -2267,7 +2459,42 @@ namespace mml2vgm
             int vch = pw.ch;
 
             pw.incPos();
-            if (pw.chip is YM2612)
+            if (pw.chip is YM2610B)
+            {
+                if (pw.Type == enmChannelType.FMOPN || pw.Type == enmChannelType.FMOPNex)
+                {
+                    //効果音モードのチャンネル番号を指定している場合は3chへ変更する
+                    if (pw.ch >= 6 && pw.ch <= 8)
+                    {
+                        vch = 2;
+                    }
+
+                    if (!pw.getNum(out n))
+                    {
+                        msgBox.setErrMsg("不正なパン'p'が指定されています。", lineNumber);
+                        n = 3;
+                    }
+                    //強制的にモノラルにする
+                    if (monoPart != null && monoPart.Contains(ym2612[0].Ch[5].Name))
+                    {
+                        n = 3;
+                    }
+                    n = checkRange(n, 1, 3);
+                    pw.pan = n;
+                    outOPNSetPanAMSFMS(pw, n, pw.ams, pw.fms);
+                }
+                else if (pw.Type == enmChannelType.ADPCMA)
+                {
+                    if (!pw.getNum(out n))
+                    {
+                        msgBox.setErrMsg("不正なパン'p'が指定されています。", lineNumber);
+                        n = 3;
+                    }
+                    n = checkRange(n, 0, 3);
+                    pw.pan = n;
+                }
+            }
+            else if (pw.chip is YM2612)
             {
                 //効果音モードのチャンネル番号を指定している場合は3chへ変更する
                 if (pw.ch >= 6 && pw.ch <= 8)
@@ -2287,14 +2514,14 @@ namespace mml2vgm
                 }
                 n = checkRange(n, 1, 3);
                 pw.pan = n;
-                outFmSetPanAMSFMS(pw, n, 0, 0);
+                outOPNSetPanAMSFMS(pw, n, pw.ams, pw.fms);
             }
             else if (pw.chip is SN76489)
             {
                 pw.getNum(out n);
                 msgBox.setWrnMsg("PSGパートでは、pコマンドは無視されます。", lineNumber);
             }
-            else
+            else if(pw.chip is RF5C164)
             {
                 int l;
                 int r;
@@ -2359,20 +2586,9 @@ namespace mml2vgm
                 msgBox.setErrMsg("不正な音量'('が指定されています。", lineNumber);
                 n = 10;
             }
-            n = checkRange(n, 1, (pw.chip is YM2612) ? fmMaxVolume : ((pw.chip is SN76489) ? psgMaxVolume : rf5c164MaxVolume));
+            n = checkRange(n, 1, pw.MaxVolume);
             pw.volume -= n;
-            if (pw.chip is YM2612)
-            {
-                pw.volume = checkRange(pw.volume, 0, fmMaxVolume);
-            }
-            else if (pw.chip is SN76489)
-            {
-                pw.volume = checkRange(pw.volume, 0, psgMaxVolume);
-            }
-            else
-            {
-                pw.volume = checkRange(pw.volume, 0, rf5c164MaxVolume);
-            }
+            pw.volume = checkRange(pw.volume, 0, pw.MaxVolume);
 
         }
 
@@ -2385,20 +2601,9 @@ namespace mml2vgm
                 msgBox.setErrMsg("不正な音量')'が指定されています。", lineNumber);
                 n = 10;
             }
-            n = checkRange(n, 1, (pw.chip is YM2612) ? fmMaxVolume : ((pw.chip is SN76489) ? psgMaxVolume : rf5c164MaxVolume));
+            n = checkRange(n, 1, pw.MaxVolume);
             pw.volume += n;
-            if (pw.chip is YM2612)
-            {
-                pw.volume = checkRange(pw.volume, 0, fmMaxVolume);
-            }
-            else if (pw.chip is SN76489)
-            {
-                pw.volume = checkRange(pw.volume, 0, psgMaxVolume);
-            }
-            else
-            {
-                pw.volume = checkRange(pw.volume, 0, rf5c164MaxVolume);
-            }
+            n = checkRange(n, 0, pw.MaxVolume);
 
         }
 
@@ -2452,31 +2657,108 @@ namespace mml2vgm
                 msgBox.setErrMsg("不正な音量が指定されています。", lineNumber);
                 n = 110;
             }
-            if (pw.chip is YM2612)
+
+            pw.volume = checkRange(n, 0, pw.MaxVolume);
+        }
+
+        private void cmdTotalVolume(partWork pw)
+        {
+            int n;
+            pw.incPos();
+            if (!pw.getNum(out n))
             {
-                n = checkRange(n, 0, fmMaxVolume);
-                if (pw.volume != n)
-                {
-                    pw.volume = n;
-                }
+                msgBox.setErrMsg("不正な音量が指定されています。", lineNumber);
+                n = 63;
             }
-            else if (pw.chip is SN76489)
+            if (pw.chip is YM2610B)
             {
-                n = checkRange(n, 0, psgMaxVolume);
-                pw.volume = n;
+                ((YM2610B)pw.chip).adpcmA_TotalVolume = checkRange(n, 0, ((YM2610B)pw.chip).adpcmA_MAXTotalVolume);
             }
-            else
-            {
-                n = checkRange(n, 0, rf5c164MaxVolume);
-                pw.volume = n;
-            }
+
         }
 
         private void cmdInstrument(partWork pw)
         {
             int n;
             pw.incPos();
-            if (pw.chip is YM2612)
+            if (pw.chip is YM2610B)
+            {
+                if (!pw.getNum(out n))
+                {
+                    msgBox.setErrMsg("不正な音色番号が指定されています。", lineNumber);
+                    n = 0;
+                }
+                n = checkRange(n, 0, 255);
+                if (pw.ch < 9)
+                {
+                    if (pw.instrument != n)
+                    {
+                        pw.instrument = n;
+                        if (pw.Type == enmChannelType.FMOPNex)
+                        {
+                            ym2610b[pw.chip.ChipID].lstPartWork[2].instrument = n;
+                            ym2610b[pw.chip.ChipID].lstPartWork[6].instrument = n;
+                            ym2610b[pw.chip.ChipID].lstPartWork[7].instrument = n;
+                            ym2610b[pw.chip.ChipID].lstPartWork[8].instrument = n;
+                        }
+                        if (!pw.pcm)
+                        {
+                            outFmSetInstrument(pw, n, pw.volume);
+                        }
+                        else
+                        {
+                            if (!instPCM.ContainsKey(n))
+                            {
+                                msgBox.setErrMsg(string.Format("PCM定義に指定された音色番号({0})が存在しません。", n), lineNumber);
+                            }
+                            else
+                            {
+                                if (instPCM[n].chip != enmChipType.YM2610B)
+                                {
+                                    msgBox.setErrMsg(string.Format("指定された音色番号({0})はYM2610B向けPCMデータではありません。", n), lineNumber);
+                                }
+                            }
+                        }
+                    }
+                }
+                else if (pw.Type == enmChannelType.SSG)
+                {
+                    if (!instENV.ContainsKey(n))
+                    {
+                        msgBox.setErrMsg(string.Format("エンベロープ定義に指定された音色番号({0})が存在しません。", n), lineNumber);
+                    }
+                    else
+                    {
+                        if (pw.envInstrument != n)
+                        {
+                            pw.envInstrument = n;
+                            pw.envIndex = -1;
+                            pw.envCounter = -1;
+                            for (int i = 0; i < instENV[n].Length; i++)
+                            {
+                                pw.envelope[i] = instENV[n][i];
+                            }
+                        }
+                    }
+                }
+                else if (pw.Type == enmChannelType.ADPCMA)
+                {
+                    if (!instPCM.ContainsKey(n))
+                    {
+                        msgBox.setErrMsg(string.Format("PCM定義に指定された音色番号({0})が存在しません。", n), lineNumber);
+                    }
+                    else
+                    {
+                        if (instPCM[n].chip != enmChipType.YM2610B)
+                        {
+                            msgBox.setErrMsg(string.Format("指定された音色番号({0})はYM2610B向けPCMデータではありません。", n), lineNumber);
+                        }
+                        pw.instrument = n;
+                        setYM2610BADPCMAAddress(pw, (int)instPCM[n].stAdr, (int)instPCM[n].edAdr);
+                    }
+                }
+            }
+            else if (pw.chip is YM2612)
             {
                 if (!pw.getNum(out n))
                 {
@@ -2487,7 +2769,7 @@ namespace mml2vgm
                 if (pw.instrument != n)
                 {
                     pw.instrument = n;
-                    if (pw.Type== enmChannelType.FMOPNex)
+                    if (pw.Type == enmChannelType.FMOPNex)
                     {
                         ym2612[pw.chip.ChipID].lstPartWork[2].instrument = n;
                         ym2612[pw.chip.ChipID].lstPartWork[6].instrument = n;
@@ -2540,7 +2822,7 @@ namespace mml2vgm
                     }
                 }
             }
-            else
+            else if(pw.chip is RF5C164)
             {
                 if (pw.getChar() != 'E')
                 {
@@ -2747,11 +3029,11 @@ namespace mml2vgm
                 {
                     if (pw.lfo[c].param[4] == 0)
                     {
-                        outFmSetHardLfo(pw.isSecondary, (n == 0) ? false : true, pw.lfo[c].param[1]);
+                        outOPNSetHardLfo(pw, (n == 0) ? false : true, pw.lfo[c].param[1]);
                     }
                     else
                     {
-                        outFmSetHardLfo(pw.isSecondary, false, pw.lfo[c].param[1]);
+                        outOPNSetHardLfo(pw, false, pw.lfo[c].param[1]);
                     }
                 }
             }
@@ -2774,15 +3056,15 @@ namespace mml2vgm
                 dat = (byte)(n & 0xff);
             }
 
-            if (pw.chip is YM2612)
+            if ((pw.chip is YM2610B) || (pw.chip is YM2612))
             {
-                outFmAdrPort(pw.isSecondary, (pw.ch > 3 && pw.ch < 6), adr, dat);
+                outFmAdrPort((pw.ch > 3 && pw.ch < 6) ? pw.port1 : pw.port0, adr, dat);
             }
             else if (pw.chip is SN76489)
             {
                 outPsgPort(pw.isSecondary, dat);
             }
-            else
+            else if (pw.chip is RF5C164)
             {
                 outRf5c164Port(pw.isSecondary, adr, dat);
             }
@@ -2792,21 +3074,59 @@ namespace mml2vgm
         {
             int n = -1;
             pw.incPos();
-            if (pw.ch != 3)
+
+            if (pw.Type == enmChannelType.DCSGNOISE || pw.Type == enmChannelType.SSG)
+            {
+                if (pw.getNum(out n))
+                {
+                    n = checkRange(n, 0, pw.Type == enmChannelType.DCSGNOISE ? 7 : 31);
+                    if (pw.Type == enmChannelType.DCSGNOISE)
+                    {
+                        pw.noise = n; // DCSGの場合は4Chに保存
+                    }
+                    else
+                    {
+                        pw.chip.lstPartWork[0].noise = n;//その他SSGの場合は、そのChipの1Chに保存
+                        outSsgNoise(pw, n);
+                    }
+                }
+                else
+                {
+                    msgBox.setErrMsg("wコマンドに指定された値が不正です。", lineNumber);
+                    return;
+
+                }
+            }
+            else
             {
                 msgBox.setErrMsg("このチャンネルではwコマンドは使用できません。", lineNumber);
                 return;
             }
+        }
 
-            if (pw.getNum(out n))
+        private void cmdMixer(partWork pw)
+        {
+            int n = -1;
+            pw.incPos();
+
+            if (pw.Type == enmChannelType.SSG)
             {
-                pw.noise = checkRange(n, 0, 7);
+                if (pw.getNum(out n))
+                {
+                    n = checkRange(n, 0, 3);
+                    pw.mixer = n;
+                }
+                else
+                {
+                    msgBox.setErrMsg("wコマンドに指定された値が不正です。", lineNumber);
+                    return;
+
+                }
             }
             else
             {
-                msgBox.setErrMsg("wコマンドに指定された値が不正です。", lineNumber);
+                msgBox.setErrMsg("このチャンネルではPコマンドは使用できません。", lineNumber);
                 return;
-
             }
         }
 
@@ -2845,12 +3165,30 @@ namespace mml2vgm
                 }
             }
 
-            //PCM Data block
             for (int i = 0; i < 2; i++)
             {
+                //PCM Data block
                 if (rf5c164[i].use && rf5c164[i].pcmData != null && rf5c164[i].pcmData.Length > 0)
                 {
                     foreach (byte b in rf5c164[i].pcmData)
+                    {
+                        dat.Add(b);
+                    }
+                }
+
+                //ADPCM-A Data block
+                if (ym2610b[i].use && ym2610b[i].pcmDataA != null && ym2610b[i].pcmDataA.Length > 0)
+                {
+                    foreach (byte b in ym2610b[i].pcmDataA)
+                    {
+                        dat.Add(b);
+                    }
+                }
+
+                //ADPCM-B Data block
+                if (ym2610b[i].use && ym2610b[i].pcmDataB != null && ym2610b[i].pcmDataB.Length > 0)
+                {
+                    foreach (byte b in ym2610b[i].pcmDataB)
                     {
                         dat.Add(b);
                     }
@@ -2861,35 +3199,38 @@ namespace mml2vgm
             {
                 if (ym2612[i].use)
                 {
-                    outFmSetHardLfo(i > 0, false, 0);
-                    outFmSetCh3SpecialMode(i > 0, false);
-                    outFmSetCh6PCMMode(i > 0, false);
+                    outOPNSetHardLfo(ym2612[i].lstPartWork[0], false, 0);
+                    outOPNSetCh3SpecialMode(ym2612[i].lstPartWork[0], false);
+                    outYM2612SetCh6PCMMode(ym2612[i].lstPartWork[0], false);
 
-                    outFmAllKeyOff(i > 0);
+                    outFmAllKeyOff(ym2612[i]);
 
-                    for (int ch = 0; ch < ym2612[i].ChMax; ch++)
+                    foreach (partWork pw in ym2612[i].lstPartWork)
                     {
-                        if (ym2612[i].Ch[ch].Type == enmChannelType.FMOPN || ym2612[i].Ch[ch].Type == enmChannelType.FMPCM)
+                        if (pw.ch == 0)
                         {
-                            if (!ym2612[i].lstPartWork[ch].dataEnd) outFmSetPanAMSFMS(ym2612[i].lstPartWork[ch], 3, 0, 0);
+                            pw.hardLfoSw = false;
+                            pw.hardLfoNum = 0;
+                            outOPNSetHardLfo(pw, pw.hardLfoSw, pw.hardLfoNum);
+                        }
+
+                        if (pw.ch < 6)
+                        {
+                            pw.pan = 3;
+                            pw.ams = 0;
+                            pw.fms = 0;
+                            if (!pw.dataEnd) outOPNSetPanAMSFMS(pw, 3, 0, 0);
                         }
                     }
 
                     if (i != 0) dat[0x2f] |= 0x40;
                 }
-            }
 
-            if (sn76489[0].use)
-            {
-            }
+                if (sn76489[i].use)
+                {
+                    if (i != 0) dat[0x0f] |= 0x40;
+                }
 
-            if (sn76489[1].use)
-            {
-                dat[0x0f] |= 0x40;
-            }
-
-            for (int i = 0; i < 2; i++)
-            {
                 if (rf5c164[i].use)
                 {
                     for (int ch = 0; ch < rf5c164[i].ChMax; ch++)
@@ -2905,8 +3246,41 @@ namespace mml2vgm
                     }
 
                     if (i != 0) dat[0x6f] |= 0x40;
-
                 }
+
+                if (ym2610b[i].use)
+                {
+                    //initialize shared param
+                    outOPNSetHardLfo(ym2610b[i].lstPartWork[0], false, 0);
+                    outOPNSetCh3SpecialMode(ym2610b[i].lstPartWork[0], false);
+
+                    outFmAllKeyOff(ym2610b[i]);
+
+                    //ADPCM-A/B Reset
+                    outFmAdrPort(ym2610b[i].lstPartWork[0].port0, 0x1c, 0x3f);
+                    outFmAdrPort(ym2610b[i].lstPartWork[0].port0, 0x1c, 0x00);
+
+                    foreach (partWork pw in ym2610b[i].lstPartWork)
+                    {
+                        if (pw.ch == 0)
+                        {
+                            pw.hardLfoSw = false;
+                            pw.hardLfoNum = 0;
+                            outOPNSetHardLfo(pw, pw.hardLfoSw, pw.hardLfoNum);
+                        }
+
+                        if (pw.ch < 6)
+                        {
+                            pw.pan = 3;
+                            pw.ams = 0;
+                            pw.fms = 0;
+                            if (!pw.dataEnd) outOPNSetPanAMSFMS(pw, 3, 0, 0);
+                        }
+                    }
+
+                    if (i != 0) dat[0x4f] |= 0x40;
+                }
+
             }
 
         }
@@ -2995,12 +3369,17 @@ namespace mml2vgm
             v = divInt2ByteAry(q);
             dat[p - 4] = v[0]; dat[p - 3] = v[1]; dat[p - 2] = v[2]; dat[p - 1] = v[3];
 
+            long useYM2610B = 0;
             long useYM2612 = 0;
             long useSN76489 = 0;
             long useRf5c164 = 0;
 
             for (int i = 0; i < 2; i++)
             {
+                foreach (partWork pw in ym2610b[i].lstPartWork)
+                {
+                    useYM2610B += pw.clockCounter;
+                }
                 foreach (partWork pw in ym2612[i].lstPartWork)
                 {
                     useYM2612 += pw.clockCounter;
@@ -3015,6 +3394,7 @@ namespace mml2vgm
                 }
             }
 
+            if (useYM2610B == 0) { dat[0x4c] = 0; dat[0x4d] = 0; dat[0x4e] = 0; dat[0x4f] = 0; }
             if (useYM2612 == 0) { dat[0x2c] = 0; dat[0x2d] = 0; dat[0x2e] = 0; dat[0x2f] = 0; }
             if (useSN76489 == 0) { dat[0x0c] = 0; dat[0x0d] = 0; dat[0x0e] = 0; dat[0x0f] = 0; }
             if (useRf5c164 == 0) { dat[0x6c] = 0; dat[0x6d] = 0; dat[0x6e] = 0; dat[0x6f] = 0; }
@@ -3104,7 +3484,7 @@ namespace mml2vgm
                     {
                         if (pl.param[4] == 1)
                         {
-                            outFmSetHardLfo(pw.isSecondary, false, pl.param[1]);
+                            outOPNSetHardLfo(pw, false, pl.param[1]);
                             pl.waitCounter = pl.param[0];
                         }
                     }
@@ -3121,14 +3501,14 @@ namespace mml2vgm
                 pl.direction = pl.param[2] < 0 ? -1 : 1;
                 if (pl.type == eLfoType.Vibrato)
                 {
-                    if (pw.chip is YM2612)
+                    if ((pw.chip is YM2610B) || (pw.chip is YM2612))
                     {
                         setFmFNum(pw);
                     }
                 }
                 if (pl.type == eLfoType.Tremolo)
                 {
-                    if (pw.chip is YM2612)
+                    if ((pw.chip is YM2610B) || (pw.chip is YM2612))
                     {
                         pw.beforeVolume = -1;
                         setFmVolume(pw);
@@ -3166,7 +3546,9 @@ namespace mml2vgm
 
         private void setFmFNum(partWork pw)
         {
-            int f = getFmFNum(pw.octaveNow, pw.noteCmd, pw.shift + pw.keyShift);//
+            int[] ftbl = (pw.chip is YM2612) ? OPN_FNumTbl_7670454 : OPN_FNumTbl_8000000;
+
+            int f = getFmFNum(ftbl, pw.octaveNow, pw.noteCmd, pw.shift + pw.keyShift);//
             if (pw.bendWaitCounter !=-1)
             {
                 f = pw.bendFnum;
@@ -3187,30 +3569,30 @@ namespace mml2vgm
                 }
                 f += pw.lfo[lfo].value + pw.lfo[lfo].param[6];
             }
-            while (f < fmFNumTbl[0])
+            while (f < ftbl[0])
             {
                 if (o == 1)
                 {
                     break;
                 }
                 o--;
-                f = fmFNumTbl[0] * 2 - (fmFNumTbl[0] - f);
+                f = ftbl[0] * 2 - (ftbl[0] - f);
             }
-            while (f >= fmFNumTbl[0] * 2)
+            while (f >= ftbl[0] * 2)
             {
                 if (o == 8)
                 {
                     break;
                 }
                 o++;
-                f = f - fmFNumTbl[0] * 2 + fmFNumTbl[0];
+                f = f - ftbl[0] * 2 + ftbl[0];
             }
             f = checkRange(f, 0, 0x7ff);
 
             outFmSetFnum(pw, o, f);
         }
 
-        private int getFmFNum(int octave, char noteCmd, int shift)
+        private int getFmFNum(int[] ftbl,int octave, char noteCmd, int shift)
         {
             int o = octave;
             int n = note.IndexOf(noteCmd) + shift;
@@ -3228,7 +3610,7 @@ namespace mml2vgm
                 if (n < 0) { n += 12; }
             }
 
-            int f = fmFNumTbl[n];
+            int f = ftbl[n];
 
             return (f & 0xfff) + (o & 0xf) * 0x1000;
         }
@@ -3281,6 +3663,57 @@ namespace mml2vgm
                     pw.beforeVolume = vol;
                 }
             }
+        }
+
+
+        private void setSsgFNum(partWork pw)
+        {
+            int f = getSsgFNum(pw.octaveNow, pw.noteCmd, pw.shift + pw.keyShift);//
+            if (pw.bendWaitCounter != -1)
+            {
+                f = pw.bendFnum;
+            }
+            f = f + pw.detune;
+            for (int lfo = 0; lfo < 4; lfo++)
+            {
+                if (!pw.lfo[lfo].sw)
+                {
+                    continue;
+                }
+                if (pw.lfo[lfo].type != eLfoType.Vibrato)
+                {
+                    continue;
+                }
+                f += pw.lfo[lfo].value + pw.lfo[lfo].param[6];
+            }
+
+            f = checkRange(f, 0, 0xfff);
+            if (pw.freq == f) return;
+
+            pw.freq = f;
+
+            byte data = 0;
+
+            data = (byte)(f & 0xff);
+            outFmAdrPort(pw.port0, (byte)(0 + (pw.ch - 9) * 2), data);
+
+            data = (byte)((f & 0xf00) >> 8);
+            outFmAdrPort(pw.port0, (byte)(1 + (pw.ch - 9) * 2), data);
+        }
+
+        private int getSsgFNum(int octave, char noteCmd, int shift)
+        {
+            int o = octave - 1;
+            int n = note.IndexOf(noteCmd) + shift;
+            o += n / 12;
+            o = checkRange(o, 0, 7);
+            n %= 12;
+
+            int f = o * 12 + n;
+            if (f < 0) f = 0;
+            if (f >= ssgFNumTbl_8000000.Length) f = ssgFNumTbl_8000000.Length - 1;
+
+            return ssgFNumTbl_8000000[f];
         }
 
 
@@ -3516,23 +3949,23 @@ namespace mml2vgm
 
         private void setRf5c164SampleStartAddress(partWork pw, int adr)
         {
-            if (pw.rf5c164SampleStartAddress != adr)
+            if (pw.pcmStartAddress != adr)
             {
                 byte data = (byte)((adr >> 8) & 0xff);
                 outRf5c164Port(pw.isSecondary, 0x6, data);
-                pw.rf5c164SampleStartAddress = adr;
+                pw.pcmStartAddress = adr;
             }
         }
 
         private void setRf5c164LoopAddress(partWork pw, int adr)
         {
-            if (pw.rf5c164LoopAddress != adr)
+            if (pw.pcmLoopAddress != adr)
             {
                 byte data = (byte)((adr >> 8) & 0xff);
                 outRf5c164Port(pw.isSecondary, 0x5, data);
                 data = (byte)(adr & 0xff);
                 outRf5c164Port(pw.isSecondary, 0x4, data);
-                pw.rf5c164LoopAddress = adr;
+                pw.pcmLoopAddress = adr;
             }
         }
 
@@ -3558,16 +3991,32 @@ namespace mml2vgm
         }
 
 
-
-
-        private void outFmAdrPort(bool isSecondary, bool isPort2, byte address, byte data)
+        private void setYM2610BADPCMAAddress(partWork pw, int startAdr ,int endAdr)
         {
-            outFmAdrPort(isSecondary,(byte)(isPort2 ? 0x53 : 0x52), address, data);
+            if (pw.pcmStartAddress != startAdr)
+            {
+                outFmAdrPort(pw.port1, (byte)(0x10 + (pw.ch - 12)), (byte)((startAdr >> 8) & 0xff));
+                outFmAdrPort(pw.port1, (byte)(0x18 + (pw.ch - 12)), (byte)((startAdr >> 16) & 0xff));
+                pw.pcmStartAddress = startAdr;
+            }
+
+            if (pw.pcmEndAddress != endAdr)
+            {
+                outFmAdrPort(pw.port1, (byte)(0x20 + (pw.ch - 12)), (byte)(((endAdr-0x100) >> 8) & 0xff));
+                outFmAdrPort(pw.port1, (byte)(0x28 + (pw.ch - 12)), (byte)(((endAdr-0x100) >> 16) & 0xff));
+                pw.pcmEndAddress = endAdr;
+            }
+
+            //outFmAdrPort(pw.port1, 0x01, 0x3f);
+            //outFmAdrPort(pw.port1, 0x08, 0xdf);
+            //outFmAdrPort(pw.port1, 0x00, 0x01);
         }
 
-        private void outFmAdrPort(bool isSecondary,byte port, byte address, byte data)
+
+
+        private void outFmAdrPort(byte port, byte address, byte data)
         {
-            dat.Add((byte)((port & 0xf) + (isSecondary ? 0xa0 : 0x50)));
+            dat.Add(port);
             dat.Add(address);
             dat.Add(data);
         }
@@ -3576,16 +4025,16 @@ namespace mml2vgm
         {
             if (!pw.pcm)
             {
-                if (ym2612[pw.chip.ChipID].lstPartWork[2].Ch3SpecialMode && pw.Type== enmChannelType.FMOPNex)
+                if (pw.chip.lstPartWork[2].Ch3SpecialMode && pw.Type== enmChannelType.FMOPNex)
                 {
                     pw.Ch3SpecialModeKeyOn = true;
 
-                    int slot = (ym2612[pw.chip.ChipID].lstPartWork[2].Ch3SpecialModeKeyOn ? ym2612[pw.chip.ChipID].lstPartWork[2].slots : 0x0)
-                        | (ym2612[pw.chip.ChipID].lstPartWork[6].Ch3SpecialModeKeyOn ? ym2612[pw.chip.ChipID].lstPartWork[6].slots : 0x0)
-                        | (ym2612[pw.chip.ChipID].lstPartWork[7].Ch3SpecialModeKeyOn ? ym2612[pw.chip.ChipID].lstPartWork[7].slots : 0x0)
-                        | (ym2612[pw.chip.ChipID].lstPartWork[8].Ch3SpecialModeKeyOn ? ym2612[pw.chip.ChipID].lstPartWork[8].slots : 0x0);
+                    int slot = (pw.chip.lstPartWork[2].Ch3SpecialModeKeyOn ? pw.chip.lstPartWork[2].slots : 0x0)
+                        | (pw.chip.lstPartWork[6].Ch3SpecialModeKeyOn ? pw.chip.lstPartWork[6].slots : 0x0)
+                        | (pw.chip.lstPartWork[7].Ch3SpecialModeKeyOn ? pw.chip.lstPartWork[7].slots : 0x0)
+                        | (pw.chip.lstPartWork[8].Ch3SpecialModeKeyOn ? pw.chip.lstPartWork[8].slots : 0x0);
 
-                    outFmAdrPort(pw.isSecondary, 0x52, 0x28, (byte)((slot << 4) + 2));
+                    outFmAdrPort(pw.port0, 0x28, (byte)((slot << 4) + 2));
                 }
                 else
                 {
@@ -3593,7 +4042,7 @@ namespace mml2vgm
                     {
                         byte vch = (byte)((pw.ch > 2) ? pw.ch + 1 : pw.ch);
                         //key on
-                        outFmAdrPort(pw.isSecondary, 0x52, 0x28, (byte)((pw.slots << 4) + (vch & 7)));
+                        outFmAdrPort(pw.port0, 0x28, (byte)((pw.slots << 4) + (vch & 7)));
                     }
                 }
 
@@ -3685,16 +4134,16 @@ namespace mml2vgm
         {
             if (!pw.pcm)
             {
-                if (ym2612[pw.chip.ChipID].lstPartWork[2].Ch3SpecialMode && pw.Type== enmChannelType.FMOPNex)
+                if (pw.chip.lstPartWork[2].Ch3SpecialMode && pw.Type== enmChannelType.FMOPNex)
                 {
                     pw.Ch3SpecialModeKeyOn = false;
 
-                    int slot = (ym2612[pw.chip.ChipID].lstPartWork[2].Ch3SpecialModeKeyOn ? ym2612[pw.chip.ChipID].lstPartWork[2].slots : 0x0)
-                        | (ym2612[pw.chip.ChipID].lstPartWork[6].Ch3SpecialModeKeyOn ? ym2612[pw.chip.ChipID].lstPartWork[6].slots : 0x0)
-                        | (ym2612[pw.chip.ChipID].lstPartWork[7].Ch3SpecialModeKeyOn ? ym2612[pw.chip.ChipID].lstPartWork[7].slots : 0x0)
-                        | (ym2612[pw.chip.ChipID].lstPartWork[8].Ch3SpecialModeKeyOn ? ym2612[pw.chip.ChipID].lstPartWork[8].slots : 0x0);
+                    int slot = (pw.chip.lstPartWork[2].Ch3SpecialModeKeyOn ? pw.chip.lstPartWork[2].slots : 0x0)
+                        | (pw.chip.lstPartWork[6].Ch3SpecialModeKeyOn ? pw.chip.lstPartWork[6].slots : 0x0)
+                        | (pw.chip.lstPartWork[7].Ch3SpecialModeKeyOn ? pw.chip.lstPartWork[7].slots : 0x0)
+                        | (pw.chip.lstPartWork[8].Ch3SpecialModeKeyOn ? pw.chip.lstPartWork[8].slots : 0x0);
 
-                    outFmAdrPort(pw.isSecondary,0x52, 0x28, (byte)((slot << 4) + 2));
+                    outFmAdrPort(pw.port0, 0x28, (byte)((slot << 4) + 2));
                 }
                 else
                 {
@@ -3702,7 +4151,7 @@ namespace mml2vgm
                     {
                         byte vch = (byte)((pw.ch > 2) ? pw.ch + 1 : pw.ch);
                         //key off
-                        outFmAdrPort(pw.isSecondary,0x52, 0x28, (byte)(0x00 + (vch & 7)));
+                        outFmAdrPort(pw.port0, 0x28, (byte)(0x00 + (vch & 7)));
                     }
                 }
 
@@ -3712,25 +4161,21 @@ namespace mml2vgm
             pw.pcmWaitKeyOnCounter = -1;
         }
 
-        private void outFmAllKeyOff(bool isSecondary)
+        private void outFmAllKeyOff(clsChip chip)
         {
-            int chipID = isSecondary ? 1 : 0;
 
-            for (int ch = 0; ch < ym2612[chipID].ChMax; ch++)
+            foreach (partWork pw in chip.lstPartWork)
             {
-                partWork pw = ym2612[chipID].lstPartWork[ch];
-                if (ch < 6)
-                {
-                    if (!ym2612[chipID].lstPartWork[ch].dataEnd)
-                    {
-                        outFmKeyOff(pw);
-                        outFmSetTl(pw, 0, 127);
-                        outFmSetTl(pw, 1, 127);
-                        outFmSetTl(pw, 2, 127);
-                        outFmSetTl(pw, 3, 127);
-                    }
-                }
+                if (pw.dataEnd) continue;
+                if (pw.ch > 5) continue;
+
+                outFmKeyOff(pw);
+                outFmSetTl(pw, 0, 127);
+                outFmSetTl(pw, 1, 127);
+                outFmSetTl(pw, 2, 127);
+                outFmSetTl(pw, 3, 127);
             }
+
         }
 
         private void outFmSetFnum(partWork pw, int octave, int num)
@@ -3743,33 +4188,31 @@ namespace mml2vgm
 
             pw.freq = freq;
 
-            if (ym2612[pw.chip.ChipID].lstPartWork[2].Ch3SpecialMode && pw.Type == enmChannelType.FMOPNex)
+            if (pw.chip.lstPartWork[2].Ch3SpecialMode && pw.Type == enmChannelType.FMOPNex)
             {
-                byte port = (byte)0x52;
-
                 if ((pw.slots & 8) != 0)
                 {
                     int f = pw.freq + pw.slotDetune[3];
-                    outFmAdrPort(pw.isSecondary, port, (byte)0xa6, (byte)((f & 0xff00) >> 8));
-                    outFmAdrPort(pw.isSecondary, port, (byte)0xa2, (byte)(f & 0xff));
+                    outFmAdrPort(pw.port0, (byte)0xa6, (byte)((f & 0xff00) >> 8));
+                    outFmAdrPort(pw.port0, (byte)0xa2, (byte)(f & 0xff));
                 }
                 if ((pw.slots & 4) != 0)
                 {
                     int f = pw.freq + pw.slotDetune[2];
-                    outFmAdrPort(pw.isSecondary, port, (byte)0xac, (byte)((f & 0xff00) >> 8));
-                    outFmAdrPort(pw.isSecondary, port, (byte)0xa8, (byte)(f & 0xff));
+                    outFmAdrPort(pw.port0, (byte)0xac, (byte)((f & 0xff00) >> 8));
+                    outFmAdrPort(pw.port0, (byte)0xa8, (byte)(f & 0xff));
                 }
                 if ((pw.slots & 1) != 0)
                 {
                     int f = pw.freq + pw.slotDetune[0];
-                    outFmAdrPort(pw.isSecondary, port, (byte)0xad, (byte)((f & 0xff00) >> 8));
-                    outFmAdrPort(pw.isSecondary, port, (byte)0xa9, (byte)(f & 0xff));
+                    outFmAdrPort(pw.port0, (byte)0xad, (byte)((f & 0xff00) >> 8));
+                    outFmAdrPort(pw.port0, (byte)0xa9, (byte)(f & 0xff));
                 }
                 if ((pw.slots & 2) != 0)
                 {
                     int f = pw.freq + pw.slotDetune[1];
-                    outFmAdrPort(pw.isSecondary, port, (byte)0xae, (byte)((f & 0xff00) >> 8));
-                    outFmAdrPort(pw.isSecondary, port, (byte)0xaa, (byte)(f & 0xff));
+                    outFmAdrPort(pw.port0, (byte)0xae, (byte)((f & 0xff00) >> 8));
+                    outFmAdrPort(pw.port0, (byte)0xaa, (byte)(f & 0xff));
                 }
             }
             else
@@ -3780,28 +4223,27 @@ namespace mml2vgm
                 }
                 if (pw.ch < 6)
                 {
-                    byte port = (byte)(0x52 + (pw.ch > 2 ? 1 : 0));
+                    byte port = pw.ch > 2 ? pw.port1 : pw.port0;
                     byte vch = (byte)(pw.ch > 2 ? pw.ch - 3 : pw.ch);
 
-                    outFmAdrPort(pw.isSecondary, port, (byte)(0xa4 + vch), (byte)((pw.freq & 0xff00) >> 8));
-                    outFmAdrPort(pw.isSecondary, port, (byte)(0xa0 + vch), (byte)(pw.freq & 0xff));
+                    outFmAdrPort(port, (byte)(0xa4 + vch), (byte)((pw.freq & 0xff00) >> 8));
+                    outFmAdrPort(port, (byte)(0xa0 + vch), (byte)(pw.freq & 0xff));
                 }
             }
         }
 
-        private void outFmCh3SpecialModeSetFnum(bool isSecondary, byte ope, int octave, int num)
+        private void outFmCh3SpecialModeSetFnum(partWork pw, byte ope, int octave, int num)
         {
-            byte port = (byte)0x52;
             ope &= 3;
             if (ope == 0)
             {
-                outFmAdrPort(isSecondary, port, (byte)(0xa6), (byte)(((num & 0x700) >> 8) + (((octave - 1) & 0x7) << 3)));
-                outFmAdrPort(isSecondary, port, (byte)(0xa2), (byte)(num & 0xff));
+                outFmAdrPort(pw.port0, 0xa6, (byte)(((num & 0x700) >> 8) + (((octave - 1) & 0x7) << 3)));
+                outFmAdrPort(pw.port0, 0xa2, (byte)(num & 0xff));
             }
             else
             {
-                outFmAdrPort(isSecondary, port, (byte)(0xac + ope), (byte)(((num & 0x700) >> 8) + (((octave - 1) & 0x7) << 3)));
-                outFmAdrPort(isSecondary, port, (byte)(0xa8 + ope), (byte)(num & 0xff));
+                outFmAdrPort(pw.port0, (byte)(0xac + ope), (byte)(((num & 0x700) >> 8) + (((octave - 1) & 0x7) << 3)));
+                outFmAdrPort(pw.port0, (byte)(0xa8 + ope), (byte)(num & 0xff));
             }
         }
 
@@ -3912,147 +4354,188 @@ namespace mml2vgm
         private void outFmSetDtMl(partWork pw, int ope, int dt, int ml)
         {
             int vch = pw.ch;
-            byte port = (byte)(0x52 + (vch > 2 ? 1 : 0));
+            byte port = vch > 2 ? pw.port1 : pw.port0;
             vch = (byte)(vch > 2 ? vch - 3 : vch);
 
             ope = (ope == 1) ? 2 : ((ope == 2) ? 1 : ope);
             dt &= 7;
             ml &= 15;
 
-            outFmAdrPort(pw.isSecondary, port, (byte)(0x30 + vch + ope * 4), (byte)((dt << 4) + ml));
+            outFmAdrPort(port, (byte)(0x30 + vch + ope * 4), (byte)((dt << 4) + ml));
         }
 
         private void outFmSetTl(partWork pw, int ope, int tl)
         {
-            byte port = (byte)(0x52 + (pw.ch > 2 ? 1 : 0));
+            byte port = (pw.ch > 2 ? pw.port1 : pw.port0);
             int vch = (byte)(pw.ch > 2 ? pw.ch - 3 : pw.ch);
 
             ope = (ope == 1) ? 2 : ((ope == 2) ? 1 : ope);
             tl &= 0x7f;
 
-            outFmAdrPort(pw.isSecondary, port,(byte)(0x40 + vch + ope * 4),(byte)tl);
+            outFmAdrPort(port,(byte)(0x40 + vch + ope * 4),(byte)tl);
         }
 
         private void outFmSetKsAr(partWork pw, int ope, int ks, int ar)
         {
             int vch = pw.ch;
-            byte port = (byte)(0x52 + (vch > 2 ? 1 : 0));
+            byte port = (pw.ch > 2 ? pw.port1 : pw.port0);
             vch = (byte)(vch > 2 ? vch - 3 : vch);
 
             ope = (ope == 1) ? 2 : ((ope == 2) ? 1 : ope);
             ks &= 3;
             ar &= 31;
 
-            outFmAdrPort(pw.isSecondary, port, (byte)(0x50 + vch + ope * 4), (byte)((ks << 6) + ar));
+            outFmAdrPort(port, (byte)(0x50 + vch + ope * 4), (byte)((ks << 6) + ar));
         }
 
         private void outFmSetAmDr(partWork pw, int ope, int am,int dr)
         {
             int vch = pw.ch;
-            byte port = (byte)(0x52 + (vch > 2 ? 1 : 0));
+            byte port = (pw.ch > 2 ? pw.port1 : pw.port0);
             vch = (byte)(vch > 2 ? vch - 3 : vch);
 
             ope = (ope == 1) ? 2 : ((ope == 2) ? 1 : ope);
             am &= 1;
             dr &= 31;
 
-            outFmAdrPort(pw.isSecondary,port, (byte)(0x60 + vch + ope * 4), (byte)((am << 7) + dr));
+            outFmAdrPort(port, (byte)(0x60 + vch + ope * 4), (byte)((am << 7) + dr));
         }
 
         private void outFmSetSr(partWork pw, int ope, int sr)
         {
             int vch = pw.ch;
-            byte port = (byte)(0x52 + (vch > 2 ? 1 : 0));
+            byte port = pw.ch > 2 ? pw.port1 : pw.port0;
             vch = (byte)(vch > 2 ? vch - 3 : vch);
 
             ope = (ope == 1) ? 2 : ((ope == 2) ? 1 : ope);
             sr &= 31;
 
-            dat.Add((byte)((port & 0xf) + (pw.isSecondary ? 0xA0 : 0x50)));
-            dat.Add((byte)(0x70 + vch + ope * 4));
-            dat.Add((byte)sr);
+            outFmAdrPort(port, (byte)(0x70 + vch + ope * 4), (byte)(sr));
         }
 
         private void outFmSetSlRr(partWork pw, int ope, int sl, int rr)
         {
             int vch = pw.ch;
-            byte port = (byte)(0x52 + (vch > 2 ? 1 : 0));
+            byte port = pw.ch > 2 ? pw.port1 : pw.port0;
             vch = (byte)(vch > 2 ? vch - 3 : vch);
 
             ope = (ope == 1) ? 2 : ((ope == 2) ? 1 : ope);
             sl &= 15;
             rr &= 15;
 
-            dat.Add((byte)((port & 0xf) + (pw.isSecondary ? 0xA0 : 0x50)));
-            dat.Add((byte)(0x80 + vch + ope * 4));
-            dat.Add((byte)((sl << 4) + rr));
+            outFmAdrPort(port, (byte)(0x80 + vch + ope * 4), (byte)((sl << 4) + rr));
         }
 
         private void outFmSetSSGEG(partWork pw, int ope, int n)
         {
             int vch = pw.ch;
-            byte port = (byte)(0x52 + (vch > 2 ? 1 : 0));
+            byte port = pw.ch > 2 ? pw.port1 : pw.port0;
             vch = (byte)(vch > 2 ? vch - 3 : vch);
 
             ope = (ope == 1) ? 2 : ((ope == 2) ? 1 : ope);
             n &= 15;
 
-            dat.Add((byte)((port & 0xf) + (pw.isSecondary ? 0xA0 : 0x50)));
-            dat.Add((byte)(0x90 + vch + ope * 4));
-            dat.Add((byte)n);
+            outFmAdrPort(port, (byte)(0x90 + vch + ope * 4), (byte)n);
         }
 
         private void outFmSetFeedbackAlgorithm(partWork pw, int fb, int alg)
         {
             int vch = pw.ch;
-            byte port = (byte)(0x52 + (vch > 2 ? 1 : 0));
+            byte port = pw.ch > 2 ? pw.port1 : pw.port0;
             vch = (byte)(vch > 2 ? vch - 3 : vch);
 
             fb &= 7;
             alg &= 7;
 
-            dat.Add((byte)((port & 0xf) + (pw.isSecondary ? 0xA0 : 0x50)));
-            dat.Add((byte)(0xb0 + vch));
-            dat.Add((byte)((fb << 3) + alg));
+            outFmAdrPort(port, (byte)(0xb0 + vch), (byte)((fb << 3) + alg));
         }
 
-        private void outFmSetPanAMSFMS(partWork pw, int pan, int ams, int fms)
+        private void outOPNSetPanAMSFMS(partWork pw, int pan, int ams, int fms)
         {
             int vch = pw.ch;
-            byte port = (byte)(0x52 + (vch > 2 ? 1 : 0));
+            byte port = pw.ch > 2 ? pw.port1 : pw.port0;
             vch = (byte)(vch > 2 ? vch - 3 : vch);
 
             pan = pan & 3;
             ams = ams & 3;
             fms = fms & 3;
 
-            dat.Add((byte)((port & 0xf) + (pw.isSecondary ? 0xA0 : 0x50)));
-            dat.Add((byte)(0xb4 + vch));
-            dat.Add((byte)((pan << 6) + (ams << 4) + fms));
+            outFmAdrPort(port, (byte)(0xb4 + vch), (byte)((pan << 6) + (ams << 4) + fms));
         }
 
-        private void outFmSetHardLfo(bool isSecondary,bool sw,int lfoNum)
+        private void outOPNSetHardLfo(partWork pw, bool sw, int lfoNum)
         {
-            dat.Add((byte)(0x2 + (isSecondary ? 0xA0 : 0x50)));
+            dat.Add(pw.port0);
             dat.Add(0x22);
             dat.Add((byte)((lfoNum & 7) + (sw ? 8 : 0)));
         }
 
-        private void outFmSetCh3SpecialMode(bool isSecondary, bool sw)
+        private void outOPNSetCh3SpecialMode(partWork pw, bool sw)
         {
             // ignore Timer ^^;
-            dat.Add((byte)(0x2 + (isSecondary ? 0xA0 : 0x50)));
+            dat.Add(pw.port0);
             dat.Add(0x27);
             dat.Add((byte)((sw ? 0x40 : 0)));
         }
 
-        private void outFmSetCh6PCMMode(bool isSecondary, bool sw)
+        private void outYM2612SetCh6PCMMode(partWork pw, bool sw)
         {
-            dat.Add((byte)(0x2 + (isSecondary ? 0xA0 : 0x50)));
+            dat.Add(pw.port0);
             dat.Add(0x2b);
             dat.Add((byte)((sw ? 0x80 : 0)));
         }
 
+
+        private void outSsgKeyOn(partWork pw)
+        {
+            byte pch = (byte)(pw.ch - 9);
+            int n = (pw.mixer & 0x1) + ((pw.mixer & 0x2) << 2);
+            byte data = (byte)(((YM2610B)pw.chip).SSGKeyOn | (5 << pch));
+            data &= (byte)(~(n << pch));
+            ((YM2610B)pw.chip).SSGKeyOn = data;
+
+            outSsgVolume(pw);
+            outFmAdrPort(pw.port0, 0x07, data);
+
+        }
+
+        private void outSsgKeyOff(partWork pw)
+        {
+            byte pch = (byte)(pw.ch - 9);
+            int n = 5;
+            byte data = (byte)(((YM2610B)pw.chip).SSGKeyOn | (n << pch));
+            ((YM2610B)pw.chip).SSGKeyOn = data;
+
+            outFmAdrPort(pw.port0, 0x07, data);
+
+        }
+
+        private void outSsgVolume(partWork pw)
+        {
+            byte pch = (byte)(pw.ch - 9);
+
+            int vol = pw.volume;
+            if (pw.envelopeMode)
+            {
+                vol = 0;
+                if (pw.envIndex != -1)
+                {
+                    vol = pw.volume - (15 - pw.envVolume);
+                }
+            }
+            vol = checkRange(vol, 0, 15);
+
+            if (pw.beforeVolume != vol)
+            {
+                outFmAdrPort(pw.port0, (byte)(0x08 + pch), (byte)vol);
+                pw.beforeVolume = pw.volume;
+            }
+        }
+
+        private void outSsgNoise(partWork pw, int n)
+        {
+            outFmAdrPort(pw.port0, 0x06, (byte)(n & 0x1f));
+        }
 
 
         private void outPsgPort(bool isSecondary, byte data)
@@ -4061,10 +4544,10 @@ namespace mml2vgm
             dat.Add(data);
         }
 
-        private void _outPsgSetFnum(partWork pw, int freq)
-        {
-            pw.freq=freq;
-        }
+        //private void _outPsgSetFnum(partWork pw, int freq)
+        //{
+            //pw.freq=freq;
+        //}
 
         private void outPsgKeyOn(partWork pw)
         {
