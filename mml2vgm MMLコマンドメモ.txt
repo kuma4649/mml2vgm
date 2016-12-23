@@ -10,7 +10,7 @@
   
   2. エクスプローラなどで、mml2vgm.exeのアイコンの上に1で作成したファイルをD&Dする。
   又は、コマンドラインから、「mml2vgm.exe ファイル名」と打ち込む。
-  GUIでも実行できる。ファイル監視と自動起動、Vgz変換が可能。
+  GUIでも実行できる。ファイル監視と自動起動、vgz変換が可能。
   
   3. コンパイルが実行され、エラーやワーニング、例外が表示される。
   又は、エラー無く無事に.vgmファイルが.gwiと同じフォルダーに生成される。
@@ -64,24 +64,34 @@ ebass3(from MUSIC LALF @70)
     ・PCM音源の音色定義は次のような制約がある。
       A 使用できるフォーマットについて。
          YM2610B ADPCM-A
-           ・PCMは18.5KHz,16bit,mono,圧縮なし,unsignedのwavファイルであること。
-               mml2vgmは内部で18.5KHz,12bit,monoのADPCMに変換する。
-           ・8bitも読み込めるが16bitに変換される。(がうまくいかないTBD)
-           ・16KHz,8KHzも読み込めるが18.5KHzとして再生される。
+           ・PCMは18.5KHz,16bit,mono,圧縮なし,signedのwavファイルであること。
+               mml2vgmは内部でADPCMに変換する。
+           ・8bitも読み込めるが16bitに変換される。
+           ・18.5KHz固定で再生される。
+           ・256byte毎にPaddingされる。
+           ・合計16Mbyteまで定義可能。(ADPCM-Bとは別)
+         YM2610B ADPCM-B
+           ・PCMは16bit,mono,圧縮なし,signedのwavファイルであること。
+               mml2vgmは内部でADPCMに変換する。
+           ・8bitも読み込めるが16bitに変換される。
+           ・8KHzがo4c(オクターブ4のドの音)として再生される。
+           ・256byte毎にPaddingされる。
+           ・合計16Mbyteまで定義可能。(ADPCM-Aとは別)
          YM2612
            ・PCMは8KHz,8bit,mono,圧縮なし,unsignedのwavファイルであること。
-           ・16KHz,18.5KHzも読み込めるが8KHzとして再生される。
-           ・16bitも読み込めるが8bitとして再生される。(雑音になるTBD)
+           ・16bit,signedも読み込めるが8bit,unsignedに変換される。(TBD)
+           ・8KHzで再生される。
          RF5C164
            ・PCMは8KHz,8bit,mono,圧縮なし,unsignedのwavファイルであること。
-               RF5C164は本来、signedのデータを要求するが、mml2vgmが内部でそれに変換する
-           ・16KHz,18.5KHzも読み込めるが8KHzとして再生される。
-           ・16bitも読み込めるが8bitとして再生される。(雑音になるTBD)
-      B RF5C164は再生位置にFFのデータを検出すると再生位置がループポイントへ移動するが、
-        mml2vgmはファイル中で見つけたFFはFEに置換し、ファイルの終わりにFFを追加する。
-        256byte毎にPaddingされる。
-      C RF5C164は合計64Kbyteまで定義可能。
-  
+               RF5C164は本来、8bit,signedのデータを要求するが、mml2vgmが内部でそれに変換する
+           ・16bit,signedも読み込めるが8bit,unsignedに変換される。(TBD)
+           ・8KHzがo3c(オクターブ3のドの音)として再生される。
+           ・256byte毎にPaddingされる。
+           ・合計64Kbyteまで定義可能。
+           ・RF5C164は再生位置にFFのデータを検出すると再生位置がループポイントへ移動する。
+             その為、mml2vgmはファイル中で見つけたFFはFEに置換し、ファイルの終わりにFFを追加し、
+             データの最後でループポイントに戻るよう調整する。
+
   (3) エンベロープ定義部
     ・PSG音源、PCM音源にて音量の変化を定義する
 
@@ -136,7 +146,7 @@ ebass3(from MUSIC LALF @70)
   RF5C164   RF5C         12500000   8Ch(PCM  : 8Ch)
   YM2203    OPN           3000000   9Ch(FM   : 3Ch  FMex: 3Ch  SSG : 3Ch)(T.B.D.)
   YM2608    OPNA          8000000  19Ch(FM   : 6Ch  FMex: 3Ch  SSG : 3Ch  Rhythm : 6Ch  ADPCM  : 1Ch)(T.B.D.)
-  YM2610B   OPNB          8000000  19Ch(FM   : 6Ch  FMex: 3Ch  SSG : 3Ch  ADPCM-A: 6Ch  ADPCM-B: 1Ch)(T.B.D.)
+  YM2610B   OPNB          8000000  19Ch(FM   : 6Ch  FMex: 3Ch  SSG : 3Ch  ADPCM-A: 6Ch  ADPCM-B: 1Ch)
   YM2151    OPM           3579545   8Ch(FM   : 8Ch)(T.B.D.)
   PWM       PWM          23011361   2Ch(PCM  : 2Ch)(T.B.D.)
   OKIM6258  OKI5          4000000   1Ch(ADPCM: 1Ch)(T.B.D.)
@@ -244,77 +254,85 @@ ebass3(from MUSIC LALF @70)
 
 
  凡例
-  Y YM2612 / YM2610B(FM)
-  E YM2612(3ChEx) / YM2610B(FM)
-  P YM2612(6ChPCMmode)
-  S SN76489
-  R RF5C164
+  Y  YM2612
+  E  YM2612(3ChEx)
+  P  YM2612(6ChPCMmode)
+  S  SN76489
+  R  RF5C164
+  Tf YM2610B(FM)
+  Te YM2610B(FM3ChEx)
+  Ts YM2610B(SSG)
+  Ta YM2610B(ADPCM-A)
+  Tb YM2610B(ADPCM-B)
   
   o 対応
   - 非対応
   * 未実装
 
-コマンド        YEPSR       内容
+コマンド        YEPSRTTTTT  内容
+                     fesab      
 -------------------------------------------------
-ln              ooooo       デフォルト音長指定
-on              ooooo       オクターブ絶対指定(1 - 8)(YM2612PCMのみ3 - 5)
-Dn              ooooo       ディチューン (範囲未チェック)絶対指定のみ
-vn              oo-oo       音量絶対指定(Y/E: 0 - 127  S: 0 - 15  R: 0 - 255)
-@n              ooo-o       音色番号指定(0 - 255)
-@n              ---o-       エンベロープ番号指定(0 - 255)
-@En             ----o       エンベロープ番号指定(0 - 255)
->               ooooo       オクターブ相対指定(上げ)
-<               ooooo       オクターブ相対指定(下げ)
-)n              ooooo       音量相対指定(上げ)(Y/E: 0 - 127  S: 0 - 15  R: 0 - 255)
-(n              ooooo       音量相対指定(下げ)(Y/E: 0 - 127  S: 0 - 15  R: 0 - 255)
-&               ooooo       タイ(但し、音符の装飾扱いなので音符の直後に指定する必要あり)
-yn1,n2          ooooo       レジスタ直接書き込み(n1=レジスタ番号 n2=データ)
-Mx1x2n,...      oo-oo       LFO(
+ln              oooooooooo  デフォルト音長指定
+on              oooooooooo  オクターブ絶対指定(1 - 8)(YM2612PCMのみ3 - 5)(実際に発音される音は可能な音域のみ)
+Dn              oooooooo-o  ディチューン (範囲未チェック)絶対指定のみ
+vn              oo-ooooooo  音量絶対指定(Y/E/Tf/Te: 0 - 127  S/Ts: 0 - 15  R/Tb: 0 - 255  Ta: 0-31)
+Vn              --------o-  ADPCM-A全体の音量絶対指定(0-63)
+@n              ooo-ooo-oo  音色番号指定(0 - 255)
+@n              ---o---o--  エンベロープ番号指定(0 - 255)
+@En             ----o---oo  エンベロープ番号指定(0 - 255)
+>               oooooooo-o  オクターブ相対指定(上げ)
+<               oooooooo-o  オクターブ相対指定(下げ)
+)n              oooooooooo  音量相対指定(上げ)(Y/E/Tf/Te: 0 - 127  S/Ts: 0 - 15  R/Tb: 0 - 255  Ta: 0-31)
+(n              oooooooooo  音量相対指定(下げ)(Y/E/Tf/Te: 0 - 127  S/Ts: 0 - 15  R/Tb: 0 - 255  Ta: 0-31)
+&               oooooooooo  タイ(但し、音符の装飾扱いなので音符の直後に指定する必要あり)
+yn1,n2          oooooooooo  レジスタ直接書き込み(n1=レジスタ番号 n2=データ)
+Mx1x2n,...      oo-ooooooo  LFO(
                               x1:P/Q/R/S          識別子(1パート当たり4種類定義、使用できる)
-                              x2:T/V/H            T:音量 V:音程 H:ハードウェアLFO(YM2612のみ)
+                              x2:T/V/H            T:音量 V:音程(Ta不可) H:ハードウェアLFO(YM2612のみ)
                               n...:パラメーター   
                             )基本的にはFMPと同じ
-Sx1n            oo-oo       LFOスイッチ(x1: P/Q/R/S  n: 0(OFF)/1(ON))
-rn              ooooo       休符
-[               ooooo       ループ開始位置
-]n              ooooo       ループ終了位置
-/               ooooo       ループ脱出位置指定
-EON             ---oo       エンベロープの開始
-EOF             ---oo       エンベロープの停止
-EON             oo---       効果音モードの開始
-EOF             oo---       効果音モードの停止
-EXn             oo---       効果音モードのスロット割り当て(必ず4桁指定すること。0: 未使用  1: 使用)
-En1,n2,n3,n4    oo---       効果音モードのスロットディチューン。n1～n4はそれぞれOP1～OP4までのディチューン値
-L               ooooo       曲全体のループ位置指定(曲者です)
-qn              ooooo       ゲートタイム指定(クロック数で指定。音長分のクロック数からn引いた分が発音する長さになる。)
-Qn              ooooo       ゲートタイム割合指定(1 - 8)
-wn              ---o-       ノイズモード指定(0 - 7)
-mn              ooo--       YM2612PCMモード指定(0: 停止  1: 開始)
-Tn              ooooo       テンポ(1 - 255)
-!               ooooo       このパートのこれ以降をコンパイルしない(発音しない)
-Kn              ooooo       移調絶対指定 ( -12 - +12 )
-#n              ooooo       音長をクロック値で指定
-pn              o-o--       パン (0: 発音しない  1: 右  2: 左  3: 中央)
-pn1,n2          ----o       パン (n1: 左 0 - 15  n2: 右 0 - 15)
-%xxx            ooooo       エイリアス展開
+Sx1n            oo-ooooooo  LFOスイッチ(x1: P/Q/R/S  n: 0(OFF)/1(ON))
+rn              oooooooooo  休符
+[               oooooooooo  ループ開始位置
+]n              oooooooooo  ループ終了位置
+/               oooooooooo  ループ脱出位置指定
+EON             ---oo--ooo  エンベロープの開始
+EOF             ---oo--ooo  エンベロープの停止
+EON             oo---oo---  効果音モードの開始
+EOF             oo---oo---  効果音モードの停止
+EXn             oo---oo---  効果音モードのスロット割り当て(必ず4桁指定すること。0: 未使用  1: 使用)
+En1,n2,n3,n4    oo---oo---  効果音モードのスロットディチューン。n1～n4はそれぞれOP1～OP4までのディチューン値
+L               oooooooooo  曲全体のループ位置指定(曲者です)
+qn              oooooooooo  ゲートタイム指定(クロック数で指定。音長分のクロック数からn引いた分が発音する長さになる。)
+Qn              oooooooooo  ゲートタイム割合指定(1 - 8)
+wn              ---o---o--  S:ノイズモード指定(0 - 7) Ts:ノイズ周波数
+Pn              -------o--  1:トーン 2:ノイズ 3:トーン＆ノイズ
+mn              ooo-------  YM2612PCMモード指定(0: 停止  1: 開始)
+Tn              oooooooooo  テンポ(1 - 255)
+!               oooooooooo  このパートのこれ以降をコンパイルしない(発音しない)
+Kn              oooooooo-o  移調絶対指定 ( -12 - +12 )
+#n              oooooooooo  音長をクロック値で指定
+pn              o-o--o--oo  パン (0: 発音しない  1: 右  2: 左  3: 中央)
+pn1,n2          ----o-----  パン (n1: 左 0 - 15  n2: 右 0 - 15)
+%xxx            oooooooooo  エイリアス展開
 
-c               ooooo       音符ド
-d               ooooo       音符レ
-e               ooooo       音符ミ
-f               ooooo       音符ファ
-g               ooooo       音符ソ
-a               ooooo       音符ラ
-b               ooooo       音符シ
-    +/-         ooooo       半音上げる/下げる
-    n           ooooo       音長
-    .           ooooo       符点
-    _           oo-oo       ベンド
-        音符    oo-oo       音符(c-b)
-        o       oo-oo       オクターブ
-        >       oo-oo       オクターブ相対指定(上げ)
-        <       oo-oo       オクターブ相対指定(下げ)
-    &n          ooooo       タイ(n: 音長 音長分だけ発音を追加する。 音長を指定しない場合はキーオフせずに次の音符とつなげる)
-    ~n          ooooo       タイの逆(n: 音長 音長分だけ発音を削る。)
+c               oooooooooo  音符ド
+d               oooooooooo  音符レ
+e               oooooooooo  音符ミ
+f               oooooooooo  音符ファ
+g               oooooooooo  音符ソ
+a               oooooooooo  音符ラ
+b               oooooooooo  音符シ
+    +/-         oooooooooo  半音上げる/下げる
+    n           oooooooooo  音長
+    .           oooooooooo  符点
+    _           oo-ooooo-o  ベンド
+        音符    oo-ooooo-o  音符(c-b)
+        o       oo-ooooo-o  オクターブ
+        >       oo-ooooo-o  オクターブ相対指定(上げ)
+        <       oo-ooooo-o  オクターブ相対指定(下げ)
+    &n          oooooooo-o  タイ(n: 音長 音長分だけ発音を追加する。 音長を指定しない場合はキーオフせずに次の音符とつなげる)
+    ~n          oooooooo-o  タイの逆(n: 音長 音長分だけ発音を削る。)
 
 
 ■ 音色定義
@@ -352,13 +370,19 @@ b               ooooo       音符シ
 
 (2) PCM音源音色定義
 
-'@ P No , "FileName" , Freq , Volume ( , ChipName , LoopPoint )
+'@ P No , "FileName" , Freq , Volume ( , ChipName , Option )
     No          定義番号(0-255)
     FileName    ファイル名(.gwiファイルと同じPathを探す)
     Freq        周波数(未使用)
     Volume      音量(0- )元の音量に値(%)を掛ける。100以上も指定できるが音が割れるのでお勧めできない
-    ChipName    音源名称又は略称を指定。省略時はYM2612として定義される(T.B.D.)
-    LoopPoint   ループポイントに対応している音源の場合の、ループ再生位置をサンプル数で指定。(T.B.D.)
+    ChipName    音源名称又は略称を指定。省略時はYM2612として定義される。
+                "YM2612"(Secondayも共有する)
+                "RF5C164"
+                "RF5C164Secondary"
+                "YM2610B"
+                "YM2610BSecondary"
+    Option      YM2610B : 0の場合ADPCM-A 1の場合ADPCM-Bとして定義される。
+                RF5C164 : ループポイント。ループ再生位置をサンプル数で指定。
 
 
 ■ エンベロープ定義
@@ -375,7 +399,7 @@ b               ooooo       音符シ
     RR          キーオフ後、次にボリュームを-STするまでのクロック数。
                 (0になるまで発音ボリュームを-STする処理を繰り返す。)
     ST          ボリュームの変化量
-    ChipName    音源名称又は略称を指定。省略時はSN76489として定義される(T.B.D.)
+    ChipName    音源名称又は略称を指定。省略時はSN76489として定義される
 
 
 ■ エイリアス定義
@@ -427,15 +451,16 @@ b               ooooo       音符シ
         周波数は省略可能。その場合初期値が使用される。Primaryの値が優先で使用される。(T.B.D.)
         
         定義済み
-          PartYM2612              F
-          PartSN76489             S
-          PartRF5C164             R
-          PartYM2612Secondary     Fs
-          PartSN76489Secondary    Ss
-          PartRF5C164Secondary    Rs
+          PartYM2612                      F
+          PartSN76489                     S
+          PartRF5C164                     R
+          PartYM2610B                     T
+          PartYM2612Secondary             Fs
+          PartSN76489Secondary            Ss
+          PartRF5C164Secondary            Rs
+          PartYM2610BSecondary            Ts
           (T.B.D.)PartYM2203              N
           (T.B.D.)PartYM2608              P
-          PartYM2610B             T
           (T.B.D.)PartYM2151              X
           (T.B.D.)PartPWM                 G
           (T.B.D.)PartOKIM6258            O
@@ -444,7 +469,6 @@ b               ooooo       音符シ
           (T.B.D.)PartSegaPCM             Z
           (T.B.D.)PartYM2203Secondary     Ns
           (T.B.D.)PartYM2608Secondary     Ps
-          PartYM2610BSecondary    Ts
           (T.B.D.)PartYM2151Secondary     Xs
           (T.B.D.)PartPWMSecondary        Gs
           (T.B.D.)PartOKIM6258Secondary   Os
