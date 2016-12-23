@@ -118,7 +118,7 @@ namespace mml2vgm
 
         //our main sub, init buffers and runs the encode process
         //enter this with your sound file loaded into buffer
-        public byte[] YM_encode(byte[] buffer,bool is16bit)  //input buffer, load your sound file into this
+        public byte[] YM_ADPCM_A_Encode(byte[] buffer,bool is16bit)  //input buffer, load your sound file into this
         {
             int i;
 
@@ -156,7 +156,7 @@ namespace mml2vgm
 
                 for (i = 0; i < buffer.Length; i ++)
                 {
-                    inBuffer[i] = (short)(buffer[i]);
+                    inBuffer[i] = (short)(buffer[i] - 128);
                     inBuffer[i] <<= 4;
                 }
             }
@@ -177,6 +177,79 @@ namespace mml2vgm
             }
 
             return outBuffer;
+        }
+
+
+
+
+        static long[] stepsizeTable = { 57, 57, 57, 57, 77, 102, 128, 153, 57, 57, 57, 57, 77, 102, 128, 153 };
+        //private byte[] buffer;  //our input buffer, load your sample file into this before encoding
+        //private byte[] outBuffer; //our output buffer, this is your PCM file, save it after encoding. Its size has to be allocated to buffer.length / 4 (16 bits per sample to 4 bits per sample)
+        //private int outBufferIndex = 0; //reset to 0 before each encoding
+
+        public byte[] YM_ADPCM_B_Encode(byte[] buffer,bool is16bit)
+        {
+            int lpc, flag;
+            long i, dn, xn, stepSize;
+            byte adpcm;
+            byte adpcmPack = 0;
+            short src;
+            List<byte> outBuffer = new List<byte>();
+
+            xn = 0;
+            stepSize = 127;
+            flag = 0;
+            int size = (buffer.Length / (is16bit ? 2 : 1));
+            size = (((size / 2) % 0x100) == 0) ? size : (size / 2 / 0x100 + 1) * 0x100 * 2;
+            for (lpc = 0; lpc < size; lpc++)
+            {
+                if (is16bit)
+                {
+                    if (buffer.Length > lpc * 2 + 1)
+                        src = (short)((buffer[lpc * 2]) | (buffer[lpc * 2 + 1] << 8)); //16 bit samples, + fixing byte order
+                    else src = 0;
+                }
+                else
+                {
+                    if (buffer.Length > lpc)
+                        src = (short)((buffer[lpc] - 128) << 8);
+                    else src = 0;
+                }
+
+                dn = src - xn;
+                i = (Math.Abs(dn) << 16) / (stepSize << 14);
+                if (i > 7) i = 7;
+                adpcm = (byte)i;
+                i = (adpcm * 2 + 1) * stepSize / 8;
+                if (dn < 0)
+                {
+                    adpcm |= 0x8;
+                    xn -= i;
+                }
+                else
+                {
+                    xn += i;
+                }
+                stepSize = (stepsizeTable[adpcm] * stepSize) / 64;
+                if (stepSize < 127)
+                    stepSize = 127;
+                else if (stepSize > 24576)
+                    stepSize = 24576;
+                if (flag == 0)
+                {
+                    adpcmPack = (byte)(adpcm << 4);
+                    flag = 1;
+                }
+                else
+                {
+                    adpcmPack |= adpcm;
+                    //outBuffer[outBufferIndex++] = adpcmPack;
+                    outBuffer.Add(adpcmPack);
+                    flag = 0;
+                }
+            }
+
+            return outBuffer.ToArray();
         }
     }
 }

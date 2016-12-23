@@ -17,9 +17,7 @@ namespace mml2vgm
         public int adpcmA_beforeTotalVolume = -1;
         public int adpcmA_MAXTotalVolume = 63;
         public byte adpcmA_KeyOn = 0;
-        public byte adpcmA_beforeKeyOn = 0;
         public byte adpcmA_KeyOff = 0;
-        public byte adpcmA_beforeKeyOff = 0;
 
         public YM2610B(int chipID, string initialPartName) : base(chipID, initialPartName)
         {
