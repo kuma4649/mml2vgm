@@ -2337,6 +2337,10 @@ namespace mml2vgm
                                 case 'F':
                                     pw.incPos();
                                     pw.envelopeMode = false;
+                                    if (pw.Type == enmChannelType.SSG)
+                                    {
+                                        pw.beforeVolume = -1;
+                                    }
                                     break;
                                 default:
                                     msgBox.setErrMsg(string.Format("未知のコマンド(EO{0})が指定されました。", pw.getChar()), lineNumber);
@@ -2481,7 +2485,19 @@ namespace mml2vgm
                 msgBox.setErrMsg("不正なディチューン'D'が指定されています。", lineNumber);
                 n = 0;
             }
-            n = checkRange(n, -127, 127);
+
+            if (pw.Type == enmChannelType.FMOPM
+                || pw.Type == enmChannelType.FMOPN
+                || pw.Type == enmChannelType.FMOPNex
+                || pw.Type == enmChannelType.Multi
+                || pw.Type == enmChannelType.DCSG
+                || pw.Type == enmChannelType.DCSGNOISE
+                || pw.Type == enmChannelType.SSG
+                )
+            {
+                n = checkRange(n, -127, 127);
+            }
+
             pw.detune = n;
         }
 
@@ -3176,7 +3192,7 @@ namespace mml2vgm
                 }
                 else
                 {
-                    msgBox.setErrMsg("wコマンドに指定された値が不正です。", lineNumber);
+                    msgBox.setErrMsg("Pコマンドに指定された値が不正です。", lineNumber);
                     return;
 
                 }
@@ -4636,7 +4652,7 @@ namespace mml2vgm
         {
             byte pch = (byte)(pw.ch - 9);
             int n = (pw.mixer & 0x1) + ((pw.mixer & 0x2) << 2);
-            byte data = (byte)(((YM2610B)pw.chip).SSGKeyOn | (5 << pch));
+            byte data = (byte)(((YM2610B)pw.chip).SSGKeyOn | (9 << pch));
             data &= (byte)(~(n << pch));
             ((YM2610B)pw.chip).SSGKeyOn = data;
 
@@ -4648,11 +4664,12 @@ namespace mml2vgm
         private void outSsgKeyOff(partWork pw)
         {
             byte pch = (byte)(pw.ch - 9);
-            int n = 5;
+            int n = 9;
             byte data = (byte)(((YM2610B)pw.chip).SSGKeyOn | (n << pch));
             ((YM2610B)pw.chip).SSGKeyOn = data;
 
             outFmAdrPort(pw.port0, (byte)(0x08 + pch), 0);
+            pw.beforeVolume = -1;
             outFmAdrPort(pw.port0, 0x07, data);
 
         }
