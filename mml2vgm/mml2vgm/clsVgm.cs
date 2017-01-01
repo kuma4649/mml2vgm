@@ -968,7 +968,7 @@ namespace mml2vgm
                     }
 
                     //channelを跨ぐコマンド向け処理
-                    if (chip is YM2610B)
+                    if (chip is YM2610B && chip.use)
                     {
                         YM2610B y = (YM2610B)chip;
 

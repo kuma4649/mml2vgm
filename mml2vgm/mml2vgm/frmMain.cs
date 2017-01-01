@@ -134,6 +134,8 @@ namespace mml2vgm
             textBox1.AppendText(string.Format(" Total Samples : {0}({1}s)\r\n", mv.desVGM.lSample, mv.desVGM.lSample / 44100L));
             if (mv.desVGM.ym2610b[0].pcmDataA != null) textBox1.AppendText(string.Format(" ADPCM-A Data size(YM2610B)  : {0} byte\r\n", mv.desVGM.ym2610b[0].pcmDataA.Length-15));
             if (mv.desVGM.ym2610b[0].pcmDataB != null) textBox1.AppendText(string.Format(" ADPCM-B Data size(YM2610B)  : {0} byte\r\n", mv.desVGM.ym2610b[0].pcmDataB.Length-15));
+            if (mv.desVGM.ym2610b[1].pcmDataA != null) textBox1.AppendText(string.Format(" ADPCM-A Data size(YM2610BSecondary)  : {0} byte\r\n", mv.desVGM.ym2610b[1].pcmDataA.Length - 15));
+            if (mv.desVGM.ym2610b[1].pcmDataB != null) textBox1.AppendText(string.Format(" ADPCM-B Data size(YM2610BSecondary)  : {0} byte\r\n", mv.desVGM.ym2610b[1].pcmDataB.Length - 15));
             if (mv.desVGM.ym2612[0].pcmData != null) textBox1.AppendText(string.Format(" PCM Data size(YM2612)  : {0} byte\r\n", mv.desVGM.ym2612[0].pcmData.Length));
             if (mv.desVGM.rf5c164[0].pcmData != null) textBox1.AppendText(string.Format(" PCM Data size(RF5C164) : {0} byte\r\n", mv.desVGM.rf5c164[0].pcmData.Length-12));
             if (mv.desVGM.rf5c164[1].pcmData != null) textBox1.AppendText(string.Format(" PCM Data size(RF5C164Secondary) : {0} byte\r\n", mv.desVGM.rf5c164[1].pcmData.Length-12));

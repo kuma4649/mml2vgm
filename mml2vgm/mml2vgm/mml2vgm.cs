@@ -351,50 +351,50 @@ namespace mml2vgm
                 }
             }
 
-            tbufYm2610AdpcmAP[3] = (byte)((tbufYm2610AdpcmAP.Length - 15) & 0xff);
-            tbufYm2610AdpcmAP[4] = (byte)(((tbufYm2610AdpcmAP.Length - 15) & 0xff00) / 0x100);
-            tbufYm2610AdpcmAP[5] = (byte)(((tbufYm2610AdpcmAP.Length - 15) & 0xff0000) / 0x10000);
-            tbufYm2610AdpcmAP[6] = (byte)(((tbufYm2610AdpcmAP.Length - 15) & 0x7f000000) / 0x1000000);
+            tbufYm2610AdpcmAP[3] = (byte)((tbufYm2610AdpcmAP.Length - 15+8) & 0xff);
+            tbufYm2610AdpcmAP[4] = (byte)(((tbufYm2610AdpcmAP.Length - 15 + 8) & 0xff00) / 0x100);
+            tbufYm2610AdpcmAP[5] = (byte)(((tbufYm2610AdpcmAP.Length - 15 + 8) & 0xff0000) / 0x10000);
+            tbufYm2610AdpcmAP[6] = (byte)(((tbufYm2610AdpcmAP.Length - 15 + 8) & 0x7f000000) / 0x1000000);
 
-            tbufYm2610AdpcmAP[7] = (byte)((tbufYm2610AdpcmAP.Length - 15) & 0xff);
-            tbufYm2610AdpcmAP[8] = (byte)(((tbufYm2610AdpcmAP.Length - 15) & 0xff00) / 0x100);
-            tbufYm2610AdpcmAP[9] = (byte)(((tbufYm2610AdpcmAP.Length - 15) & 0xff0000) / 0x10000);
-            tbufYm2610AdpcmAP[10] = (byte)(((tbufYm2610AdpcmAP.Length - 15) & 0x7f000000) / 0x1000000);
+            tbufYm2610AdpcmAP[7] = (byte)((tbufYm2610AdpcmAP.Length - 15 + 8) & 0xff);
+            tbufYm2610AdpcmAP[8] = (byte)(((tbufYm2610AdpcmAP.Length - 15 + 8) & 0xff00) / 0x100);
+            tbufYm2610AdpcmAP[9] = (byte)(((tbufYm2610AdpcmAP.Length - 15 + 8) & 0xff0000) / 0x10000);
+            tbufYm2610AdpcmAP[10] = (byte)(((tbufYm2610AdpcmAP.Length - 15 + 8) & 0x7f000000) / 0x1000000);
             desVGM.ym2610b[0].pcmDataA = uYm2610AdpcmAP ? tbufYm2610AdpcmAP : null;
 
-            tbufYm2610AdpcmAS[3] = (byte)((tbufYm2610AdpcmAS.Length - 15) & 0xff);
-            tbufYm2610AdpcmAS[4] = (byte)(((tbufYm2610AdpcmAS.Length - 15) & 0xff00) / 0x100);
-            tbufYm2610AdpcmAS[5] = (byte)(((tbufYm2610AdpcmAS.Length - 15) & 0xff0000) / 0x10000);
-            tbufYm2610AdpcmAS[6] = (byte)(((tbufYm2610AdpcmAS.Length - 15) & 0x7f000000) / 0x1000000);
+            tbufYm2610AdpcmAS[3] = (byte)((tbufYm2610AdpcmAS.Length - 15 + 8) & 0xff);
+            tbufYm2610AdpcmAS[4] = (byte)(((tbufYm2610AdpcmAS.Length - 15 + 8) & 0xff00) / 0x100);
+            tbufYm2610AdpcmAS[5] = (byte)(((tbufYm2610AdpcmAS.Length - 15 + 8) & 0xff0000) / 0x10000);
+            tbufYm2610AdpcmAS[6] = (byte)(((tbufYm2610AdpcmAS.Length - 15 + 8) & 0x7f000000) / 0x1000000);
             tbufYm2610AdpcmAS[6] |= 0x80;
 
-            tbufYm2610AdpcmAS[7] = (byte)((tbufYm2610AdpcmAP.Length - 15) & 0xff);
-            tbufYm2610AdpcmAS[8] = (byte)(((tbufYm2610AdpcmAP.Length - 15) & 0xff00) / 0x100);
-            tbufYm2610AdpcmAS[9] = (byte)(((tbufYm2610AdpcmAP.Length - 15) & 0xff0000) / 0x10000);
-            tbufYm2610AdpcmAS[10] = (byte)(((tbufYm2610AdpcmAP.Length - 15) & 0x7f000000) / 0x1000000);
+            tbufYm2610AdpcmAS[7] = (byte)((tbufYm2610AdpcmAP.Length - 15 + 8) & 0xff);
+            tbufYm2610AdpcmAS[8] = (byte)(((tbufYm2610AdpcmAP.Length - 15 + 8) & 0xff00) / 0x100);
+            tbufYm2610AdpcmAS[9] = (byte)(((tbufYm2610AdpcmAP.Length - 15 + 8) & 0xff0000) / 0x10000);
+            tbufYm2610AdpcmAS[10] = (byte)(((tbufYm2610AdpcmAP.Length - 15 + 8) & 0x7f000000) / 0x1000000);
             desVGM.ym2610b[1].pcmDataA = uYm2610AdpcmAS ? tbufYm2610AdpcmAS : null;
 
-            tbufYm2610AdpcmBP[3] = (byte)((tbufYm2610AdpcmBP.Length - 15) & 0xff);
-            tbufYm2610AdpcmBP[4] = (byte)(((tbufYm2610AdpcmBP.Length - 15) & 0xff00) / 0x100);
-            tbufYm2610AdpcmBP[5] = (byte)(((tbufYm2610AdpcmBP.Length - 15) & 0xff0000) / 0x10000);
-            tbufYm2610AdpcmBP[6] = (byte)(((tbufYm2610AdpcmBP.Length - 15) & 0x7f000000) / 0x1000000);
+            tbufYm2610AdpcmBP[3] = (byte)((tbufYm2610AdpcmBP.Length - 15 + 8) & 0xff);
+            tbufYm2610AdpcmBP[4] = (byte)(((tbufYm2610AdpcmBP.Length - 15 + 8) & 0xff00) / 0x100);
+            tbufYm2610AdpcmBP[5] = (byte)(((tbufYm2610AdpcmBP.Length - 15 + 8) & 0xff0000) / 0x10000);
+            tbufYm2610AdpcmBP[6] = (byte)(((tbufYm2610AdpcmBP.Length - 15 + 8) & 0x7f000000) / 0x1000000);
 
-            tbufYm2610AdpcmBP[7] = (byte)((tbufYm2610AdpcmBP.Length - 15) & 0xff);
-            tbufYm2610AdpcmBP[8] = (byte)(((tbufYm2610AdpcmBP.Length - 15) & 0xff00) / 0x100);
-            tbufYm2610AdpcmBP[9] = (byte)(((tbufYm2610AdpcmBP.Length - 15) & 0xff0000) / 0x10000);
-            tbufYm2610AdpcmBP[10] = (byte)(((tbufYm2610AdpcmBP.Length - 15) & 0x7f000000) / 0x1000000);
+            tbufYm2610AdpcmBP[7] = (byte)((tbufYm2610AdpcmBP.Length - 15 + 8) & 0xff);
+            tbufYm2610AdpcmBP[8] = (byte)(((tbufYm2610AdpcmBP.Length - 15 + 8) & 0xff00) / 0x100);
+            tbufYm2610AdpcmBP[9] = (byte)(((tbufYm2610AdpcmBP.Length - 15 + 8) & 0xff0000) / 0x10000);
+            tbufYm2610AdpcmBP[10] = (byte)(((tbufYm2610AdpcmBP.Length - 15 + 8) & 0x7f000000) / 0x1000000);
             desVGM.ym2610b[0].pcmDataB = uYm2610AdpcmBP ? tbufYm2610AdpcmBP : null;
 
-            tbufYm2610AdpcmBS[3] = (byte)((tbufYm2610AdpcmBS.Length - 15) & 0xff);
-            tbufYm2610AdpcmBS[4] = (byte)(((tbufYm2610AdpcmBS.Length - 15) & 0xff00) / 0x100);
-            tbufYm2610AdpcmBS[5] = (byte)(((tbufYm2610AdpcmBS.Length - 15) & 0xff0000) / 0x10000);
-            tbufYm2610AdpcmBS[6] = (byte)(((tbufYm2610AdpcmBS.Length - 15) & 0x7f000000) / 0x1000000);
+            tbufYm2610AdpcmBS[3] = (byte)((tbufYm2610AdpcmBS.Length - 15 + 8) & 0xff);
+            tbufYm2610AdpcmBS[4] = (byte)(((tbufYm2610AdpcmBS.Length - 15 + 8) & 0xff00) / 0x100);
+            tbufYm2610AdpcmBS[5] = (byte)(((tbufYm2610AdpcmBS.Length - 15 + 8) & 0xff0000) / 0x10000);
+            tbufYm2610AdpcmBS[6] = (byte)(((tbufYm2610AdpcmBS.Length - 15 + 8) & 0x7f000000) / 0x1000000);
             tbufYm2610AdpcmBS[6] |= 0x80;
 
-            tbufYm2610AdpcmBS[7] = (byte)((tbufYm2610AdpcmBP.Length - 15) & 0xff);
-            tbufYm2610AdpcmBS[8] = (byte)(((tbufYm2610AdpcmBP.Length - 15) & 0xff00) / 0x100);
-            tbufYm2610AdpcmBS[9] = (byte)(((tbufYm2610AdpcmBP.Length - 15) & 0xff0000) / 0x10000);
-            tbufYm2610AdpcmBS[10] = (byte)(((tbufYm2610AdpcmBP.Length - 15) & 0x7f000000) / 0x1000000);
+            tbufYm2610AdpcmBS[7] = (byte)((tbufYm2610AdpcmBP.Length - 15 + 8) & 0xff);
+            tbufYm2610AdpcmBS[8] = (byte)(((tbufYm2610AdpcmBP.Length - 15 + 8) & 0xff00) / 0x100);
+            tbufYm2610AdpcmBS[9] = (byte)(((tbufYm2610AdpcmBP.Length - 15 + 8) & 0xff0000) / 0x10000);
+            tbufYm2610AdpcmBS[10] = (byte)(((tbufYm2610AdpcmBP.Length - 15 + 8) & 0x7f000000) / 0x1000000);
             desVGM.ym2610b[1].pcmDataB = uYm2610AdpcmBS ? tbufYm2610AdpcmBS : null;
 
             tbufYM2612[3] = (byte)((tbufYM2612.Length - 7) & 0xff);
