@@ -14,6 +14,7 @@ namespace mml2vgm
             _Name = "SN76489";
             _ShortName = "DCSG";
             _ChMax = 4;
+            _canUsePcm = false;
 
             Frequency = 3579545;
             Ch = new clsChannel[ChMax];

@@ -132,6 +132,14 @@ namespace mml2vgm
             bool uRf5c164S = false;
 
             //
+            byte[] tbufYm2608AdpcmP = new byte[15] { 0x67, 0x66, 0x81, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+            byte[] tbufYm2608AdpcmS = new byte[15] { 0x67, 0x66, 0x81, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+            long pYm2608AdpcmP = 0L;
+            long pYm2608AdpcmS = 0L;
+            bool uYm2608AdpcmP = false;
+            bool uYm2608AdpcmS = false;
+
+            //
             byte[] tbufYm2610AdpcmAP = new byte[15] { 0x67, 0x66, 0x82, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
             byte[] tbufYm2610AdpcmAS = new byte[15] { 0x67, 0x66, 0x82, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
             long pYm2610AdpcmAP = 0L;
@@ -161,7 +169,57 @@ namespace mml2vgm
 
                 long size = buf.Length;
 
-                if (v.Value.chip == enmChipType.YM2610B)
+                if (v.Value.chip == enmChipType.YM2608)
+                {
+                    EncAdpcmA ea = new EncAdpcmA();
+                    buf = ea.YM_ADPCM_B_Encode(buf, is16bit,false);
+                    size = buf.Length;
+
+                    byte[] newBuf;
+
+                    newBuf = new byte[size];
+                    Array.Copy(buf, newBuf, size);
+                    buf = newBuf;
+                    long tSize = size;
+                    size = buf.Length;
+
+                    newDic.Add(
+                        v.Key
+                        , new clsPcm(
+                            v.Value.num
+                            , v.Value.chip
+                            , v.Value.isSecondary
+                            , v.Value.fileName
+                            , v.Value.freq
+                            , v.Value.vol
+                            , v.Value.isSecondary ? pYm2608AdpcmS : pYm2608AdpcmP
+                            , (v.Value.isSecondary ? pYm2608AdpcmS : pYm2608AdpcmP) + size
+                            , size
+                            , 1)
+                        );
+
+                    if (!v.Value.isSecondary)
+                    {
+                        pYm2608AdpcmP += size;
+                        newBuf = new byte[tbufYm2608AdpcmP.Length + buf.Length];
+                        Array.Copy(tbufYm2608AdpcmP, newBuf, tbufYm2608AdpcmP.Length);
+                        Array.Copy(buf, 0, newBuf, tbufYm2608AdpcmP.Length, buf.Length);
+
+                        tbufYm2608AdpcmP = newBuf;
+                        uYm2608AdpcmP = true;
+                    }
+                    else
+                    {
+                        pYm2608AdpcmS += size;
+                        newBuf = new byte[tbufYm2608AdpcmS.Length + buf.Length];
+                        Array.Copy(tbufYm2608AdpcmS, newBuf, tbufYm2608AdpcmS.Length);
+                        Array.Copy(buf, 0, newBuf, tbufYm2608AdpcmS.Length, buf.Length);
+
+                        tbufYm2608AdpcmS = newBuf;
+                        uYm2608AdpcmS = true;
+                    }
+                }
+                else if (v.Value.chip == enmChipType.YM2610B)
                 {
                     if (v.Value.loopAdr == 0)
                     {
@@ -216,7 +274,7 @@ namespace mml2vgm
                     else
                     {
                         EncAdpcmA ea = new EncAdpcmA();
-                        buf = ea.YM_ADPCM_B_Encode(buf, is16bit);
+                        buf = ea.YM_ADPCM_B_Encode(buf, is16bit,true);
                         size = buf.Length;
 
                         byte[] newBuf;
@@ -266,7 +324,7 @@ namespace mml2vgm
                 }
                 else if (v.Value.chip == enmChipType.YM2612)
                 {
-                    newDic.Add(v.Key, new clsPcm(v.Value.num, v.Value.chip, false, v.Value.fileName, v.Value.freq, v.Value.vol, pYM2612, pYM2612 + size , size, -1));
+                    newDic.Add(v.Key, new clsPcm(v.Value.num, v.Value.chip, false, v.Value.fileName, v.Value.freq, v.Value.vol, pYM2612, pYM2612 + size, size, -1));
                     pYM2612 += size;
 
                     byte[] newBuf = new byte[tbufYM2612.Length + buf.Length];
@@ -350,6 +408,31 @@ namespace mml2vgm
                     }
                 }
             }
+
+
+            tbufYm2608AdpcmP[3] = (byte)((tbufYm2608AdpcmP.Length - 15 + 8) & 0xff);
+            tbufYm2608AdpcmP[4] = (byte)(((tbufYm2608AdpcmP.Length - 15 + 8) & 0xff00) / 0x100);
+            tbufYm2608AdpcmP[5] = (byte)(((tbufYm2608AdpcmP.Length - 15 + 8) & 0xff0000) / 0x10000);
+            tbufYm2608AdpcmP[6] = (byte)(((tbufYm2608AdpcmP.Length - 15 + 8) & 0x7f000000) / 0x1000000);
+
+            tbufYm2608AdpcmP[7] = (byte)((tbufYm2608AdpcmP.Length - 15 + 8) & 0xff);
+            tbufYm2608AdpcmP[8] = (byte)(((tbufYm2608AdpcmP.Length - 15 + 8) & 0xff00) / 0x100);
+            tbufYm2608AdpcmP[9] = (byte)(((tbufYm2608AdpcmP.Length - 15 + 8) & 0xff0000) / 0x10000);
+            tbufYm2608AdpcmP[10] = (byte)(((tbufYm2608AdpcmP.Length - 15 + 8) & 0x7f000000) / 0x1000000);
+            desVGM.ym2608[0].pcmData = uYm2608AdpcmP ? tbufYm2608AdpcmP : null;
+
+            tbufYm2608AdpcmS[3] = (byte)((tbufYm2608AdpcmS.Length - 15 + 8) & 0xff);
+            tbufYm2608AdpcmS[4] = (byte)(((tbufYm2608AdpcmS.Length - 15 + 8) & 0xff00) / 0x100);
+            tbufYm2608AdpcmS[5] = (byte)(((tbufYm2608AdpcmS.Length - 15 + 8) & 0xff0000) / 0x10000);
+            tbufYm2608AdpcmS[6] = (byte)(((tbufYm2608AdpcmS.Length - 15 + 8) & 0x7f000000) / 0x1000000);
+            tbufYm2608AdpcmS[6] |= 0x80;
+
+            tbufYm2608AdpcmS[7] = (byte)((tbufYm2608AdpcmP.Length - 15 + 8) & 0xff);
+            tbufYm2608AdpcmS[8] = (byte)(((tbufYm2608AdpcmP.Length - 15 + 8) & 0xff00) / 0x100);
+            tbufYm2608AdpcmS[9] = (byte)(((tbufYm2608AdpcmP.Length - 15 + 8) & 0xff0000) / 0x10000);
+            tbufYm2608AdpcmS[10] = (byte)(((tbufYm2608AdpcmP.Length - 15 + 8) & 0x7f000000) / 0x1000000);
+            desVGM.ym2608[1].pcmData = uYm2608AdpcmS ? tbufYm2608AdpcmS : null;
+
 
             tbufYm2610AdpcmAP[3] = (byte)((tbufYm2610AdpcmAP.Length - 15+8) & 0xff);
             tbufYm2610AdpcmAP[4] = (byte)(((tbufYm2610AdpcmAP.Length - 15 + 8) & 0xff00) / 0x100);

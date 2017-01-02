@@ -8,7 +8,7 @@
 	SystemNameJ =
 	Composer    =
 	ComposerJ   =
-	ReleaseDate =2016/12/18
+	ReleaseDate =2017/01/02
 	Converted   =
 	Notes       =
 
@@ -16,19 +16,29 @@
 
 }
 
-
-@ P 0,"SD_16bit18500Hz.wav",8000,100,YM2610B,0
-@ P 1,"BD_16bit16000.wav",8000,100,YM2610B,0
-@ P 2,"Guitar.wav",8000,100,YM2610B,1
-
-'T13 T160
-T13 @1q0p3V63v31[@1c4@0c4@1c8c8@0c4]2
-
-T19 @2o4l4p3q0v155cdefgab>c
+'@ M 110
+   AR  DR  SR  RR  SL  TL  KS  ML  DT  AM  SSG-EG
+'@ 031,000,000,000,000,033,000,004,007,001,000
+'@ 018,015,009,007,003,009,000,004,007,001,000
+'@ 031,000,000,000,000,024,000,002,003,001,000
+'@ 031,015,009,007,003,000,000,002,003,001,000
+'@ 004,007
 
 
+'@ P 2,"Guitar.wav",8000,100,YM2608
+'@ P 3,"SD_16bit16000Hz.wav",8000,100,YM2608
 
-   E No, SV, AR, DR, SL, SR, RR, ST, ChipName
-'@ E  1, 14,  1,  1, 10, 10,  2,  1
-'T10 EON@1     v12 q2l8o5D0
-'T10 d+g+f+g+ d+g+f+    v12 EOFQ4 a+g+a+f+ d+f+a+g+ a+g+a+f+
+'P01 T160
+'P01 @110v127p3o4l8[cdefgab>c<rrrrrrrr]
+'P10     v15   o4l8[rrrrrrrrcdefgab>c<]
+'P13 p3V50l4v31[ccc8c8c ]
+'P14 p1   l4v31[rcr   c ]
+'P15 p2   l4v31[ccc   c ]
+'P16 p2   l8v31[cccccccc]
+'P17 p1   l8v31[rrrrrrrc]
+'P18 p3   l8v31[rcrcrcrc]
+
+'P19 o4l4p3q0v155@2cdefgab>c<@3cdefgab>c
+
+
+

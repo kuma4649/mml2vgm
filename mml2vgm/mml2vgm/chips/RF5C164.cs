@@ -18,6 +18,7 @@ namespace mml2vgm
             _Name = "RF5C164";
             _ShortName = "RF5C";
             _ChMax = 8;
+            _canUsePcm = true;
 
             Frequency = 12500000;
             Ch = new clsChannel[ChMax];

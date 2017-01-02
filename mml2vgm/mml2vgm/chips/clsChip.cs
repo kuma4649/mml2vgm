@@ -42,17 +42,52 @@ namespace mml2vgm
                 return _ChipID;
             }
         }
+
+        public bool CanUsePcm
+        {
+            get
+            {
+                return _canUsePcm;
+            }
+
+            set
+            {
+                _canUsePcm = value;
+            }
+        }
+        protected bool _canUsePcm=false;
+
         protected int _ChipID = -1;
 
         public clsChannel[] Ch;
-        public int Frequency;
+        public int Frequency = 7670454;
         public bool use;
         public List<partWork> lstPartWork;
+
+        public double[] noteTbl = new double[] {
+            //   c       c+        d       d+        e        f       f+        g       g+        a       a+        b
+            261.62 , 277.18 , 293.66 , 311.12 , 329.62 , 349.22 , 369.99 , 391.99 , 415.30 , 440.00 , 466.16 , 493.88
+        };
+
+        public int[] OPN_FNumTbl = new int[13] {
+            //   c    c+     d    d+     e     f    f+     g    g+     a    a+     b    >c
+             0x289,0x2af,0x2d8,0x303,0x331,0x362,0x395,0x3cc,0x405,0x443,0x484,0x4c8,0x289*2
+        };
 
 
         public clsChip(int chipID, string initialPartName)
         {
             this._ChipID = chipID;
+            makeFNumTbl();
+        }
+
+        protected void makeFNumTbl()
+        {
+            for (int i = 0; i < noteTbl.Length; i++)
+            {
+                OPN_FNumTbl[i] = (int)(Math.Round(((144.0 * noteTbl[i] * Math.Pow(2.0, 20) / Frequency) / Math.Pow(2.0, (4 - 1))), MidpointRounding.AwayFromZero));
+            }
+            OPN_FNumTbl[12] = OPN_FNumTbl[0] * 2;
         }
 
         public bool ChannelNameContains(string name)

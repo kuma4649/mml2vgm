@@ -17,6 +17,7 @@ namespace mml2vgm
             _Name = "YM2612";
             _ShortName = "OPN2";
             _ChMax = 9;
+            _canUsePcm = true;
 
             Frequency = 7670454;
             Ch = new clsChannel[ChMax];

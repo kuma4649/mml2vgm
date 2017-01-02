@@ -187,7 +187,7 @@ namespace mml2vgm
         //private byte[] outBuffer; //our output buffer, this is your PCM file, save it after encoding. Its size has to be allocated to buffer.length / 4 (16 bits per sample to 4 bits per sample)
         //private int outBufferIndex = 0; //reset to 0 before each encoding
 
-        public byte[] YM_ADPCM_B_Encode(byte[] buffer,bool is16bit)
+        public byte[] YM_ADPCM_B_Encode(byte[] buffer,bool is16bit,bool isYM2610B)
         {
             int lpc, flag;
             long i, dn, xn, stepSize;
@@ -199,8 +199,9 @@ namespace mml2vgm
             xn = 0;
             stepSize = 127;
             flag = 0;
+            int pad = isYM2610B ? 0x100 : 0x4;
             int size = (buffer.Length / (is16bit ? 2 : 1));
-            size = (((size / 2) % 0x100) == 0) ? size : (size / 2 / 0x100 + 1) * 0x100 * 2;
+            size = (((size / 2) % pad) == 0) ? size : (size / 2 / pad + 1) * pad * 2;
             for (lpc = 0; lpc < size; lpc++)
             {
                 if (is16bit)
