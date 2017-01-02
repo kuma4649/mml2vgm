@@ -54,6 +54,7 @@
     <Compile Include="chips\clsChip.cs" />
     <Compile Include="chips\RF5C164.cs" />
     <Compile Include="chips\SN76489.cs" />
+    <Compile Include="chips\YM2203.cs" />
     <Compile Include="chips\YM2608.cs" />
     <Compile Include="chips\YM2610B.cs" />
     <Compile Include="chips\YM2612.cs" />
@@ -98,12 +99,16 @@
     <None Include="sample\testFMSecondary.gwi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="sample\testYM2608.gwi" />
+    <None Include="sample\testYM2610BADPCM.gwi" />
     <None Include="sample\testYM2610BFM.gwi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="sample\testYM2610BSSG.gwi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="sample\test_.gwi" />
+    <None Include="sample\test__.gwi" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="res\icon1.png" />
@@ -131,6 +136,8 @@
     <Content Include="sample\SD.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="sample\SD_16bit.wav" />
+    <Content Include="sample\SD_16bit18500.wav" />
     <Content Include="sample\SD_16bit18500Hz.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
