@@ -62,7 +62,7 @@ ebass3(from MUSIC LALF @70)
 '@ 000,007
 
     ・PCM音源の音色定義は次のような制約がある。
-      A 使用できるフォーマットについて。
+       使用できるフォーマットについて。
          YM2608B ADPCM
            ・PCMは16bit,mono,圧縮なし,signedのwavファイルであること。
                mml2vgmは内部でADPCMに変換する。
@@ -151,9 +151,9 @@ ebass3(from MUSIC LALF @70)
   YM2612    OPN2          7670454   9Ch(FM   : 6Ch  FMex: 3Ch)
   SN76489   DCSG          3579545   4Ch(PSG  : 4Ch)
   RF5C164   RF5C         12500000   8Ch(PCM  : 8Ch)
+  YM2203    OPN           3993600   9Ch(FM   : 3Ch  FMex: 3Ch  SSG : 3Ch)
   YM2608    OPNA          7987200  19Ch(FM   : 6Ch  FMex: 3Ch  SSG : 3Ch  Rhythm : 6Ch  ADPCM  : 1Ch)
   YM2610B   OPNB          8000000  19Ch(FM   : 6Ch  FMex: 3Ch  SSG : 3Ch  ADPCM-A: 6Ch  ADPCM-B: 1Ch)
-  YM2203    OPN           3000000   9Ch(FM   : 3Ch  FMex: 3Ch  SSG : 3Ch)(T.B.D.)
   YM2151    OPM           3579545   8Ch(FM   : 8Ch)(T.B.D.)
   PWM       PWM          23011361   2Ch(PCM  : 2Ch)(T.B.D.)
   OKIM6258  OKI5          4000000   1Ch(ADPCM: 1Ch)(T.B.D.)
@@ -222,6 +222,15 @@ ebass3(from MUSIC LALF @70)
   P17    YM2608(RHYTHM音源)(Primary)     5Ch
   P18    YM2608(RHYTHM音源)(Primary)     6Ch
   P19    YM2608(ADPCM音源)(Primary)      1Ch
+  N1     YM2203(FM音源)(Primary)         1Ch
+  N2     YM2203(FM音源)(Primary)         2Ch
+  N3     YM2203(FM音源)(Primary)         3Ch/3ChEx0
+  N4     YM2203(FM音源)(Primary)         3ChEx1
+  N5     YM2203(FM音源)(Primary)         3ChEx2
+  N6     YM2203(FM音源)(Primary)         3ChEx3
+  N7     YM2203(SSG音源)(Primary)        1Ch
+  N8     YM2203(SSG音源)(Primary)        2Ch
+  N9     YM2203(SSG音源)(Primary)        3Ch
 
   Fs1    YM2612(FM音源)(Secondary)       1Ch
   Fs2    YM2612(FM音源)(Secondary)       2Ch
@@ -249,7 +258,7 @@ ebass3(from MUSIC LALF @70)
   Ts03   YM2610B(FM音源)(Secondary)      3Ch/3ChEx0
   Ts04   YM2610B(FM音源)(Secondary)      4Ch
   Ts05   YM2610B(FM音源)(Secondary)      5Ch
-  Ts06   YM2610B(FM音源)(Secondary)      6Ch(PCM)
+  Ts06   YM2610B(FM音源)(Secondary)      6Ch
   Ts07   YM2610B(FM音源)(Secondary)      3ChEx1
   Ts08   YM2610B(FM音源)(Secondary)      3ChEx2
   Ts09   YM2610B(FM音源)(Secondary)      3ChEx3
@@ -282,9 +291,18 @@ ebass3(from MUSIC LALF @70)
   Ps17   YM2608(RHYTHM音源)(Secondary)   5Ch
   Ps18   YM2608(RHYTHM音源)(Secondary)   6Ch
   Ps19   YM2608(ADPCM音源)(Secondary)    1Ch
+  Ns1    YM2203(FM音源)(Secondary)       1Ch
+  Ns2    YM2203(FM音源)(Secondary)       2Ch
+  Ns3    YM2203(FM音源)(Secondary)       3Ch/3ChEx0
+  Ns4    YM2203(FM音源)(Secondary)       3ChEx1
+  Ns5    YM2203(FM音源)(Secondary)       3ChEx2
+  Ns6    YM2203(FM音源)(Secondary)       3ChEx3
+  Ns7    YM2203(SSG音源)(Secondary)      1Ch
+  Ns8    YM2203(SSG音源)(Secondary)      2Ch
+  Ns9    YM2203(SSG音源)(Secondary)      3Ch
 
   -----------
-  計 118Ch(Poly)
+  計 136Ch(Poly)
 
 
 ■ MML内部
@@ -309,80 +327,83 @@ ebass3(from MUSIC LALF @70)
   Ts YM2610B(SSG)
   Ta YM2610B(ADPCM-A)
   Tb YM2610B(ADPCM-B)
-  Pf YM2610B(FM)
-  Pe YM2610B(FM3ChEx)
-  Ps YM2610B(SSG)
-  Pr YM2610B(RHYTHM)
-  Pp YM2610B(ADPCM)
+  Pf YM2608(FM)
+  Pe YM2608(FM3ChEx)
+  Ps YM2608(SSG)
+  Pr YM2608(RHYTHM)
+  Pp YM2608(ADPCM)
+  Nf YM2203(FM)
+  Ne YM2203(FM3ChEx)
+  Ns YM2203(SSG)
   
   o 対応
   - 非対応
   * 未実装
 
-コマンド        YEPSRTTTTTPPPPP  内容
-                     fesabfesrp      
+コマンド        YEPSRTTTTTPPPPPNNN  内容
+                     fesabfesrpfes      
 -------------------------------------------------
-ln              ooooooooooooooo  デフォルト音長指定
-on              oooooooo-oooo-o  オクターブ絶対指定(1 - 8)(YM2612PCMのみ3 - 5)(実際に発音される音は可能な音域のみ)
-Dn              oooooooo-oooo-o  ディチューン (範囲未チェック)絶対指定のみ
-vn              oo-oooooooooooo  音量絶対指定(Y/E/Tf/Te/Pf/Pe: 0 - 127  S/Ts/Ps: 0 - 15  R/Tb/Pp: 0 - 255  Ta/Pr: 0-31)
-Vn              --------o----o-  ADPCM-A/RHYTHM全体の音量絶対指定(0-63)
-@n              ooo-ooo-oooo--o  音色番号指定(0 - 255)
-@n              ---o---o----oo-  エンベロープ番号指定(0 - 255)
-@En             ----o---oo---oo  エンベロープ番号指定(0 - 255)
->               oooooooo-oooo-o  オクターブ相対指定(上げ)
-<               oooooooo-oooo-o  オクターブ相対指定(下げ)
-)n              ooooooooooooooo  音量相対指定(上げ)(Y/E/Tf/Te: 0 - 127  S/Ts: 0 - 15  R/Tb: 0 - 255  Ta: 0-31)
-(n              ooooooooooooooo  音量相対指定(下げ)(Y/E/Tf/Te: 0 - 127  S/Ts: 0 - 15  R/Tb: 0 - 255  Ta: 0-31)
-&               ooooooooooooooo  タイ(但し、音符の装飾扱いなので音符の直後に指定する必要あり)
-yn1,n2          ooooooooooooooo  レジスタ直接書き込み(n1=レジスタ番号 n2=データ)ポートはそのChによる。
-Mx1x2n,...      oo-oooooooooooo  LFO(
-                                   x1:P/Q/R/S          識別子(1パート当たり4種類定義、使用できる)
-                                   x2:T/V/H            T:音量 V:音程(Ta/Pr不可) H:ハードウェアLFO(YM2612のみ)
-                                   n...:パラメーター   
-                                 )基本的にはFMPと同じ
-Sx1n            oo-oooooooooooo  LFOスイッチ(x1: P/Q/R/S  n: 0(OFF)/1(ON))
-rn              ooooooooooooooo  休符
-[               ooooooooooooooo  ループ開始位置
-]n              ooooooooooooooo  ループ終了位置
-/               ooooooooooooooo  ループ脱出位置指定
-EON             ---oo--ooo--ooo  エンベロープの開始
-EOF             ---oo--ooo--ooo  エンベロープの停止
-EON             oo---oo---oo---  効果音モードの開始
-EOF             oo---oo---oo---  効果音モードの停止
-EXn             oo---oo---oo---  効果音モードのスロット割り当て(必ず4桁指定すること。0: 未使用  1: 使用)
-En1,n2,n3,n4    oo---oo---oo---  効果音モードのスロットディチューン。n1～n4はそれぞれOP1～OP4までのディチューン値
-L               ooooooooooooooo  曲全体のループ位置指定(曲者です)
-qn              ooooooooooooooo  ゲートタイム指定(クロック数で指定。音長分のクロック数からn引いた分が発音する長さになる。)
-Qn              ooooooooooooooo  ゲートタイム割合指定(1 - 8)
-wn              ---o---o----o--  S:ノイズモード指定(0 - 7) Ts/Ps:ノイズ周波数
-Pn              -------o----o--  1:トーン 2:ノイズ 3:トーン＆ノイズ
-mn              ooo------------  YM2612PCMモード指定(0: 停止  1: 開始)
-Tn              ooooooooooooooo  テンポ(1 - 255)
-!               ooooooooooooooo  このパートのこれ以降をコンパイルしない(発音しない)
-Kn              oooooooo-oooo-o  移調絶対指定 ( -12 - +12 )
-#n              ooooooooooooooo  音長をクロック値で指定
-pn              o-o--o--ooo--oo  パン (0: 発音しない  1: 右  2: 左  3: 中央)
-pn1,n2          ----o----------  パン (n1: 左 0 - 15  n2: 右 0 - 15)
-%xxx            ooooooooooooooo  エイリアス展開
+ln              oooooooooooooooooo  デフォルト音長指定
+on              oooooooo-oooo-oooo  オクターブ絶対指定(1 - 8)(YM2612PCMのみ3 - 5)(実際に発音される音は可能な音域のみ)
+Dn              oooooooo-oooo-oooo  ディチューン (範囲未チェック)絶対指定のみ
+vn              oo-ooooooooooooooo  音量絶対指定(Y/E/Tf/Te/Pf/Pe/Nf/Ne: 0 - 127  S/Ts/Ps/Ns: 0 - 15  R/Tb/Pp: 0 - 255  Ta/Pr: 0-31)
+Vn              --------o----o----  ADPCM-A/RHYTHM全体の音量絶対指定(0-63)
+@n              ooo-ooo-oooo--ooo-  音色番号指定(0 - 255)
+@n              ---o---o----oo---o  エンベロープ番号指定(0 - 255)
+@En             ----o---oo---oo---  エンベロープ番号指定(0 - 255)
+>               oooooooo-oooo-oooo  オクターブ相対指定(上げ)
+<               oooooooo-oooo-oooo  オクターブ相対指定(下げ)
+)n              oooooooooooooooooo  音量相対指定(上げ)(Y/E/Tf/Te/Nf/Ne: 0 - 127  S/Ts/Ns: 0 - 15  R/Tb: 0 - 255  Ta: 0-31)
+(n              oooooooooooooooooo  音量相対指定(下げ)(Y/E/Tf/Te/Nf/Ne: 0 - 127  S/Ts/Ns: 0 - 15  R/Tb: 0 - 255  Ta: 0-31)
+&               oooooooooooooooooo  タイ(但し、音符の装飾扱いなので音符の直後に指定する必要あり)
+yn1,n2          oooooooooooooooooo  レジスタ直接書き込み(n1=レジスタ番号 n2=データ)ポートはそのChによる。
+Mx1x2n,...      oo-ooooooooooooooo  LFO(
+                                      x1:P/Q/R/S          識別子(1パート当たり4種類定義、使用できる)
+                                      x2:T/V/H            T:音量 V:音程(Ta/Pr不可) H:ハードウェアLFO(YM2612のみ)
+                                      n...:パラメーター   
+                                    )基本的にはFMPと同じ
+Sx1n            oo-ooooooooooooooo  LFOスイッチ(x1: P/Q/R/S  n: 0(OFF)/1(ON))
+rn              oooooooooooooooooo  休符
+[               oooooooooooooooooo  ループ開始位置
+]n              oooooooooooooooooo  ループ終了位置
+/               oooooooooooooooooo  ループ脱出位置指定
+EON             ---oo--ooo--ooo--o  エンベロープの開始
+EOF             ---oo--ooo--ooo--o  エンベロープの停止
+EON             oo---oo---oo---oo-  効果音モードの開始
+EOF             oo---oo---oo---oo-  効果音モードの停止
+EXn             oo---oo---oo---oo-  効果音モードのスロット割り当て(必ず4桁指定すること。0: 未使用  1: 使用)
+En1,n2,n3,n4    oo---oo---oo---oo-  効果音モードのスロットディチューン。n1～n4はそれぞれOP1～OP4までのディチューン値
+L               oooooooooooooooooo  曲全体のループ位置指定(曲者です)
+qn              oooooooooooooooooo  ゲートタイム指定(クロック数で指定。音長分のクロック数からn引いた分が発音する長さになる。)
+Qn              oooooooooooooooooo  ゲートタイム割合指定(1 - 8)
+wn              ---o---o----o----o  S:ノイズモード指定(0 - 7) Ts/Ps/Ns:ノイズ周波数
+Pn              -------o----o----o  1:トーン 2:ノイズ 3:トーン＆ノイズ
+mn              ooo---------------  YM2612PCMモード指定(0: 停止  1: 開始)
+Tn              oooooooooooooooooo  テンポ(1 - 255)
+!               oooooooooooooooooo  このパートのこれ以降をコンパイルしない(発音しない)
+Kn              oooooooo-oooo-oooo  移調絶対指定 ( -12 - +12 )
+#n              oooooooooooooooooo  音長をクロック値で指定
+pn              o-o--o--ooo--ooo--  パン (0: 発音しない  1: 右  2: 左  3: 中央)
+pn1,n2          ----o-------------  パン (n1: 左 0 - 15  n2: 右 0 - 15)
+%xxx            oooooooooooooooooo  エイリアス展開
 
-c               ooooooooooooooo  音符ド
-d               ooooooooooooooo  音符レ
-e               ooooooooooooooo  音符ミ
-f               ooooooooooooooo  音符ファ
-g               ooooooooooooooo  音符ソ
-a               ooooooooooooooo  音符ラ
-b               ooooooooooooooo  音符シ
-    +/-         ooooooooooooooo  半音上げる/下げる
-    n           ooooooooooooooo  音長
-    .           ooooooooooooooo  符点
-    _           oo-ooooo-oooo-o  ベンド
-        音符    oo-ooooo-oooo-o  音符(c-b)
-        o       oo-ooooo-oooo-o  オクターブ
-        >       oo-ooooo-oooo-o  オクターブ相対指定(上げ)
-        <       oo-ooooo-oooo-o  オクターブ相対指定(下げ)
-    &n          ooooooooooooooo  タイ(n: 音長 音長分だけ発音を追加する。 音長を指定しない場合はキーオフせずに次の音符とつなげる)
-    ~n          ooooooooooooooo  タイの逆(n: 音長 音長分だけ発音を削る。)
+c               oooooooooooooooooo  音符ド
+d               oooooooooooooooooo  音符レ
+e               oooooooooooooooooo  音符ミ
+f               oooooooooooooooooo  音符ファ
+g               oooooooooooooooooo  音符ソ
+a               oooooooooooooooooo  音符ラ
+b               oooooooooooooooooo  音符シ
+    +/-         oooooooooooooooooo  半音上げる/下げる
+    n           oooooooooooooooooo  音長
+    .           oooooooooooooooooo  符点
+    _           oo-ooooo-oooo-oooo  ベンド
+        音符    oo-ooooo-oooo-oooo  音符(c-b)
+        o       oo-ooooo-oooo-oooo  オクターブ
+        >       oo-ooooo-oooo-oooo  オクターブ相対指定(上げ)
+        <       oo-ooooo-oooo-oooo  オクターブ相対指定(下げ)
+    &n          oooooooooooooooooo  タイ(n: 音長 音長分だけ発音を追加する。 音長を指定しない場合はキーオフせずに次の音符とつなげる)
+    ~n          oooooooooooooooooo  タイの逆(n: 音長 音長分だけ発音を削る。)
 
 
 ■ 音色定義
@@ -506,22 +527,22 @@ b               ooooooooooooooo  音符シ
           PartYM2612                      F
           PartSN76489                     S
           PartRF5C164                     R
+          PartYM2203                      N
           PartYM2608                      P
           PartYM2610B                     T
           PartYM2612Secondary             Fs
           PartSN76489Secondary            Ss
           PartRF5C164Secondary            Rs
+          PartYM2203Secondary             Ns
           PartYM2608Secondary             Ps
           PartYM2610BSecondary            Ts
           
-          (T.B.D.)PartYM2203              N
           (T.B.D.)PartYM2151              X
           (T.B.D.)PartPWM                 G
           (T.B.D.)PartOKIM6258            O
           (T.B.D.)PartOKIM6295            M
           (T.B.D.)PartC140                Y
           (T.B.D.)PartSegaPCM             Z
-          (T.B.D.)PartYM2203Secondary     Ns
           (T.B.D.)PartYM2151Secondary     Xs
           (T.B.D.)PartPWMSecondary        Gs
           (T.B.D.)PartOKIM6258Secondary   Os
