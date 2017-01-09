@@ -127,8 +127,8 @@ namespace mml2vgm
                 0x00,
                 //0x2c YM2612 clock(0x750ab5)
                 0xb5,0x0a,0x75,0x00,
-                //0x30 YM2151 clock(no use)
-                0x00,0x00,0x00,0x00,
+                //0x30 YM2151 clock(3579545 0x369e99)
+                0x99,0x9e,0x36,0x00,
                 //0x34 VGM data offset(1.50 only)
                 0x0c+16*4,0x00,0x00,0x00,
                 //0x38 Sega PCM clock(no use)
@@ -170,12 +170,14 @@ namespace mml2vgm
             };
 
 
+        public YM2151[] ym2151 = null;
         public YM2203[] ym2203 = null;
         public YM2608[] ym2608 = null;
         public YM2610B[] ym2610b = null;
         public YM2612[] ym2612 = null;
         public SN76489[] sn76489 = null;
         public RF5C164[] rf5c164 = null;
+
         public List<clsChip> chips = new List<clsChip>();
 
         public int lineNumber = 0;
@@ -208,6 +210,7 @@ namespace mml2vgm
         {
             chips = new List<clsChip>();
 
+            ym2151 = new YM2151[] { new YM2151(0, "X"), new YM2151(1, "Xs") };
             ym2203 = new YM2203[] { new YM2203(0, "N"), new YM2203(1, "Ns") };
             ym2608 = new YM2608[] { new YM2608(0, "P"), new YM2608(1, "Ps") };
             ym2610b = new YM2610B[] { new YM2610B(0, "T"), new YM2610B(1, "Ts") };
@@ -227,6 +230,8 @@ namespace mml2vgm
             chips.Add(ym2608[1]);
             chips.Add(ym2203[0]);
             chips.Add(ym2203[1]);
+            chips.Add(ym2151[0]);
+            chips.Add(ym2151[1]);
 
         }
 
@@ -596,6 +601,9 @@ namespace mml2vgm
             enmChipType chip;
             switch (chipN.ToUpper().Trim())
             {
+                case "YM2151":
+                    chip = enmChipType.YM2151;
+                    break;
                 case "YM2612":
                     chip = enmChipType.YM2612;
                     break;
@@ -1250,7 +1258,12 @@ namespace mml2vgm
                 envelope(pw);
             }
 
-            if ((pw.chip is YM2203 && pw.ch < 3)
+            if (pw.chip is YM2151)
+            {
+                setOPMFNum(pw);
+                setOPMVolume(pw);
+            }
+            else if ((pw.chip is YM2203 && pw.ch < 3)
                 || (pw.chip is YM2608 && pw.ch < 6)
                 || (pw.chip is YM2610B && pw.ch < 6)
                 || (pw.chip is YM2612))
@@ -1385,7 +1398,14 @@ namespace mml2vgm
         {
             if (pw.waitKeyOnCounter == 0)
             {
-                if ((pw.chip is YM2203) || (pw.chip is YM2608) || (pw.chip is YM2610B))
+                if (pw.chip is YM2151)
+                {
+                    if (!pw.tie)
+                    {
+                        outOPMKeyOff(pw);
+                    }
+                }
+                else if ((pw.chip is YM2203) || (pw.chip is YM2608) || (pw.chip is YM2610B))
                 {
                     int m = (pw.chip is YM2203) ? 0 : 3;
 
@@ -1523,7 +1543,17 @@ namespace mml2vgm
                     pw.slots = 0;
                     pw.volume = 32767;
 
-                    if (chip is YM2612)
+                    if (chip is YM2151)
+                    {
+                        pw.slots = 0xf;
+                        pw.volume = 127;
+                        pw.MaxVolume = 127;
+                        pw.port0 = (byte)(0x4 | (pw.isSecondary ? 0xa0 : 0x50));
+                        pw.port1 = 0xff;
+                        pw.mixer = 0;
+                        pw.noise = 0;
+                    }
+                    else if (chip is YM2612)
                     {
                         pw.slots = (byte)(((pw.Type == enmChannelType.FMOPN || pw.Type == enmChannelType.FMPCM) || i == 2) ? 0xf : 0x0);
                         pw.volume = 127;
@@ -2083,7 +2113,12 @@ namespace mml2vgm
                             tl += wait;
                             int a = getPsgFNum(pw.octaveNow, cmd, shift + (i + 0) * Math.Sign(delta));//
                             int b = getPsgFNum(pw.octaveNow, cmd, shift + (i + 1) * Math.Sign(delta));//
-                            if (
+                            if (pw.chip is YM2151)
+                            {
+                                a = getOPMFNum(pw.octaveNow, cmd, shift + (i + 0) * Math.Sign(delta));//
+                                b = getOPMFNum(pw.octaveNow, cmd, shift + (i + 1) * Math.Sign(delta));//
+                            }
+                            else if (
                                 (pw.chip is YM2608 && (pw.Type == enmChannelType.FMOPN || pw.Type == enmChannelType.FMOPNex))
                                 || (pw.chip is YM2610B && (pw.Type == enmChannelType.FMOPN || pw.Type == enmChannelType.FMOPNex))
                                 || (pw.chip is YM2612))
@@ -2214,7 +2249,20 @@ namespace mml2vgm
                 }
 
                 //発音周波数の決定とキーオン
-                if (pw.chip is YM2203)
+                if (pw.chip is YM2151)
+                {
+
+                    setOPMFNum(pw);
+
+                    //タイ指定では無い場合はキーオンする
+                    if (!pw.beforeTie)
+                    {
+                        setLfoAtKeyOn(pw);
+                        setOPMVolume(pw);
+                        outOPMKeyOn(pw);
+                    }
+                }
+                else if (pw.chip is YM2203)
                 {
 
                     //YM2203
@@ -2723,7 +2771,7 @@ namespace mml2vgm
             else
             {
                 pw.getNum(out n);
-                msgBox.setWrnMsg("このパートは6chではないため、mコマンドは無視されます。", lineNumber);
+                msgBox.setWrnMsg("このパートはYM2612の6chではないため、mコマンドは無視されます。", lineNumber);
             }
 
         }
@@ -2759,7 +2807,23 @@ namespace mml2vgm
             int vch = pw.ch;
 
             pw.incPos();
-            if (pw.chip is YM2203)
+            if (pw.chip is YM2151)
+            {
+                if (!pw.getNum(out n))
+                {
+                    msgBox.setErrMsg("不正なパン'p'が指定されています。", lineNumber);
+                    n = 3;
+                }
+                //強制的にモノラルにする
+                if (monoPart != null && monoPart.Contains(ym2612[0].Ch[5].Name))
+                {
+                    n = 3;
+                }
+                n = checkRange(n, 1, 3);
+                pw.pan = (n == 1) ? 2 : (n == 2 ? 1 : n);
+                outOPMSetPanFeedbackAlgorithm(pw, pw.pan, instFM[pw.instrument][46], instFM[pw.instrument][45]);
+            }
+            else if (pw.chip is YM2203)
             {
                 msgBox.setErrMsg("YM2203はパン'p'に未対応です。", lineNumber);
             }
@@ -3045,7 +3109,21 @@ namespace mml2vgm
             int n;
             pw.incPos();
 
-            if (pw.chip is YM2203)
+            if (pw.chip is YM2151)
+            {
+                if (!pw.getNum(out n))
+                {
+                    msgBox.setErrMsg("不正な音色番号が指定されています。", lineNumber);
+                    n = 0;
+                }
+                n = checkRange(n, 0, 255);
+                if (pw.instrument != n)
+                {
+                    pw.instrument = n;
+                    outOPMSetInstrument(pw, n, pw.volume);
+                }
+            }
+            else if (pw.chip is YM2203)
             {
                 if (pw.ch < 6)
                 {
@@ -3533,7 +3611,7 @@ namespace mml2vgm
                 dat = (byte)(n & 0xff);
             }
 
-            if (pw.chip is YM2203)
+            if ((pw.chip is YM2151) || (pw.chip is YM2203))
             {
                 outFmAdrPort(pw.port0, adr, dat);
             }
@@ -3600,6 +3678,23 @@ namespace mml2vgm
 
                 }
             }
+            else if (pw.chip is YM2151)
+            {
+                if (pw.getNum(out n))
+                {
+                    n = checkRange(n, 0, 31);
+                    if (pw.noise != n)
+                    {
+                        pw.noise = n;
+                    }
+                }
+                else
+                {
+                    msgBox.setErrMsg("wコマンドに指定された値が不正です。", lineNumber);
+                    return;
+
+                }
+            }
             else
             {
                 msgBox.setErrMsg("このチャンネルではwコマンドは使用できません。", lineNumber);
@@ -3612,12 +3707,33 @@ namespace mml2vgm
             int n = -1;
             pw.incPos();
 
-            if (pw.Type == enmChannelType.SSG)
+            if (pw.Type == enmChannelType.SSG && (
+                (pw.chip is YM2203)
+                || (pw.chip is YM2608)
+                || (pw.chip is YM2610B)
+                ))
             {
                 if (pw.getNum(out n))
                 {
                     n = checkRange(n, 0, 3);
                     pw.mixer = n;
+                }
+                else
+                {
+                    msgBox.setErrMsg("Pコマンドに指定された値が不正です。", lineNumber);
+                    return;
+
+                }
+            }
+            else if (pw.chip is YM2151)
+            {
+                if (pw.getNum(out n))
+                {
+                    n = checkRange(n, 0, 1);
+                    if (pw.mixer != n)
+                    {
+                        pw.mixer = n;
+                    }
                 }
                 else
                 {
@@ -3758,6 +3874,36 @@ namespace mml2vgm
                     }
 
                     if (i != 0) dat[0x6f] |= 0x40;
+                }
+
+                if (ym2151[i].use)
+                {
+                    //initialize shared param
+
+                    //FM Off
+                    outOPMAllKeyOff(ym2151[i]);
+
+                    foreach (partWork pw in ym2151[i].lstPartWork)
+                    {
+                        if (pw.ch == 0)
+                        {
+                            pw.hardLfoFreq = 0;
+                            pw.hardLfoPMD = 0;
+                            pw.hardLfoAMD = 0;
+
+                            //Reset Hard LFO
+                            outOPMSetHardLfoFreq(pw, pw.hardLfoFreq);
+                            outOPMSetHardLfoDepth(pw, false, pw.hardLfoAMD);
+                            outOPMSetHardLfoDepth(pw, true, pw.hardLfoPMD);
+                        }
+
+                        pw.ams = 0;
+                        pw.pms = 0;
+                        if (!pw.dataEnd) outOPMSetPMSAMS(pw, 0, 0);
+
+                    }
+
+                    if (i != 0) dat[0x33] |= 0x40;//use Secondary
                 }
 
                 if (ym2203[i].use)
@@ -3966,6 +4112,7 @@ namespace mml2vgm
             v = divInt2ByteAry(q);
             dat[p - 4] = v[0]; dat[p - 3] = v[1]; dat[p - 2] = v[2]; dat[p - 1] = v[3];
 
+            long useYM2151 = 0;
             long useYM2203 = 0;
             long useYM2608 = 0;
             long useYM2610B = 0;
@@ -3975,6 +4122,10 @@ namespace mml2vgm
 
             for (int i = 0; i < 2; i++)
             {
+                foreach (partWork pw in ym2151[i].lstPartWork)
+                {
+                    useYM2151 += pw.clockCounter;
+                }
                 foreach (partWork pw in ym2203[i].lstPartWork)
                 {
                     useYM2203 += pw.clockCounter;
@@ -4001,6 +4152,7 @@ namespace mml2vgm
                 }
             }
 
+            if (useYM2151 == 0) { dat[0x30] = 0; dat[0x31] = 0; dat[0x32] = 0; dat[0x33] = 0; }
             if (useYM2203 == 0) { dat[0x44] = 0; dat[0x45] = 0; dat[0x46] = 0; dat[0x47] = 0; }
             if (useYM2608 == 0) { dat[0x48] = 0; dat[0x49] = 0; dat[0x4a] = 0; dat[0x4b] = 0; }
             if (useYM2610B == 0) { dat[0x4c] = 0; dat[0x4d] = 0; dat[0x4e] = 0; dat[0x4f] = 0; }
@@ -4110,14 +4262,22 @@ namespace mml2vgm
                 pl.direction = pl.param[2] < 0 ? -1 : 1;
                 if (pl.type == eLfoType.Vibrato)
                 {
-                    if ((pw.chip is YM2203) || (pw.chip is YM2608) || (pw.chip is YM2610B) || (pw.chip is YM2612))
+                    if (pw.chip is YM2151)
+                    {
+                        throw new NotImplementedException();
+                    }
+                    else if ((pw.chip is YM2203) || (pw.chip is YM2608) || (pw.chip is YM2610B) || (pw.chip is YM2612))
                     {
                         setFmFNum(pw);
                     }
                 }
                 if (pl.type == eLfoType.Tremolo)
                 {
-                    if ((pw.chip is YM2203) || (pw.chip is YM2608) || (pw.chip is YM2610B) || (pw.chip is YM2612))
+                    if (pw.chip is YM2151)
+                    {
+                        throw new NotImplementedException();
+                    }
+                    else if ((pw.chip is YM2203) || (pw.chip is YM2608) || (pw.chip is YM2610B) || (pw.chip is YM2612))
                     {
                         pw.beforeVolume = -1;
                         setFmVolume(pw);
@@ -4224,6 +4384,78 @@ namespace mml2vgm
             return (f & 0xfff) + (o & 0xf) * 0x1000;
         }
 
+        private void setOPMFNum(partWork pw)
+        {
+
+            int f = getOPMFNum(pw.octaveNow, pw.noteCmd, pw.shift + pw.keyShift);//
+
+            if (pw.bendWaitCounter != -1)
+            {
+                f = pw.bendFnum;
+            }
+
+            f = f + pw.detune;
+            for (int lfo = 0; lfo < 4; lfo++)
+            {
+                if (!pw.lfo[lfo].sw)
+                {
+                    continue;
+                }
+                if (pw.lfo[lfo].type != eLfoType.Vibrato)
+                {
+                    continue;
+                }
+                f += pw.lfo[lfo].value + pw.lfo[lfo].param[6];
+            }
+
+            f = checkRange(f, 0, 9 * 12 * 64 - 1);
+            int oct = f / (12 * 64);
+            int note = (f - oct * 12 * 64) / 64;
+            int kf = f - oct * 12 * 64 - note * 64;
+
+            outOPMSetFnum(pw, oct, note, kf);
+        }
+
+        private int getOPMFNum(int octave, char noteCmd, int shift)
+        {
+            int o = octave;
+            int n = note.IndexOf(noteCmd) + shift-1;
+
+            if (n >= 0)
+            {
+                o += n / 12;
+                o = checkRange(o, 1, 8);
+                n %= 12;
+            }
+            else
+            {
+                o += n / 12 - ((n % 12 == 0) ? 0 : 1);
+                if (o == 0 && n < 0)
+                {
+                    o = 1;
+                    n = 0;
+                }
+                else
+                {
+                    o = checkRange(o, 1, 8);
+                    n %= 12;
+                    if (n < 0) { n += 12; }
+                }
+            }
+            o--;
+
+            return n * 64 + o * 12 * 64;
+        }
+
+        private void outOPMSetFnum(partWork pw, int octave, int note, int kf)
+        {
+            octave &= 0x7;
+            note &= 0xf;
+            note = note < 3 ? note : (note < 6 ? (note + 1) : (note < 9 ? (note + 2) : (note + 3)));
+            outFmAdrPort(pw.port0, (byte)(0x28 + pw.ch), (byte)((octave << 4) | note));
+            outFmAdrPort(pw.port0, (byte)(0x30 + pw.ch), (byte)(kf << 2));
+        }
+
         private void getPcmNote(partWork pw)
         {
             int shift = pw.shift + pw.keyShift;
@@ -4269,6 +4501,33 @@ namespace mml2vgm
                 if (instFM.ContainsKey(pw.instrument))
                 {
                     outFmSetVolume(pw, vol, pw.instrument);
+                    pw.beforeVolume = vol;
+                }
+            }
+        }
+
+        private void setOPMVolume(partWork pw)
+        {
+            int vol = pw.volume;
+
+            for (int lfo = 0; lfo < 4; lfo++)
+            {
+                if (!pw.lfo[lfo].sw)
+                {
+                    continue;
+                }
+                if (pw.lfo[lfo].type != eLfoType.Tremolo)
+                {
+                    continue;
+                }
+                vol += pw.lfo[lfo].value + pw.lfo[lfo].param[6];
+            }
+
+            if (pw.beforeVolume != vol)
+            {
+                if (instFM.ContainsKey(pw.instrument))
+                {
+                    outOPMSetVolume(pw, vol, pw.instrument);
                     pw.beforeVolume = vol;
                 }
             }
@@ -4904,6 +5163,45 @@ namespace mml2vgm
             pw.pcmWaitKeyOnCounter = -1;
         }
 
+        private void outOPMKeyOn(partWork pw)
+        {
+
+            if (pw.ch == 7 && pw.mixer == 1)
+            {
+                outFmAdrPort(pw.port0, 0x0f, (byte)((pw.mixer << 7) | (pw.noise & 0x1f)));
+            }
+            //key on
+            outFmAdrPort(pw.port0, 0x08, (byte)((pw.slots << 3) + pw.ch));
+        }
+
+        private void outOPMKeyOff(partWork pw)
+        {
+
+            //key off
+            outFmAdrPort(pw.port0, 0x08, (byte)(0x00 + (pw.ch & 7)));
+            if (pw.ch == 7 && pw.mixer == 1)
+            {
+                outFmAdrPort(pw.port0, 0x0f, 0x00);
+            }
+
+        }
+
+        private void outOPMAllKeyOff(clsChip chip)
+        {
+
+            foreach (partWork pw in chip.lstPartWork)
+            {
+                if (pw.dataEnd) continue;
+
+                outOPMKeyOff(pw);
+                outOPMSetTl(pw, 0, 127);
+                outOPMSetTl(pw, 1, 127);
+                outOPMSetTl(pw, 2, 127);
+                outOPMSetTl(pw, 3, 127);
+            }
+
+        }
+
         private void outYM2203AllKeyOff(clsChip chip)
         {
 
@@ -5040,6 +5338,31 @@ namespace mml2vgm
             outFmSetFeedbackAlgorithm(pw, instFM[n][46], instFM[n][45]);
 
             outFmSetVolume(pw, vol, n);
+
+        }
+
+        private void outOPMSetInstrument(partWork pw, int n, int vol)
+        {
+
+            if (!instFM.ContainsKey(n))
+            {
+                msgBox.setWrnMsg(string.Format("未定義の音色(@{0})を指定しています。", n), lineNumber);
+                return;
+            }
+
+            for (int ope = 0; ope < 4; ope++)
+            {
+
+                outOPMSetDtMl(pw, ope, instFM[n][ope * instrumentMOperaterSize + 9], instFM[n][ope * instrumentMOperaterSize + 8]);
+                outOPMSetKsAr(pw, ope, instFM[n][ope * instrumentMOperaterSize + 7], instFM[n][ope * instrumentMOperaterSize + 1]);
+                outOPMSetAmDr(pw, ope, instFM[n][ope * instrumentMOperaterSize + 11], instFM[n][ope * instrumentMOperaterSize + 2]);
+                outOPMSetDt2Sr(pw, ope, instFM[n][ope * instrumentMOperaterSize + 10], instFM[n][ope * instrumentMOperaterSize + 3]);
+                outOPMSetSlRr(pw, ope, instFM[n][ope * instrumentMOperaterSize + 5], instFM[n][ope * instrumentMOperaterSize + 4]);
+
+            }
+
+            outOPMSetPanFeedbackAlgorithm(pw, pw.pan, instFM[n][46], instFM[n][45]);
+            outOPMSetVolume(pw, vol, n);
 
         }
 
@@ -5226,6 +5549,150 @@ namespace mml2vgm
 
             outFmAdrPort(port, (byte)(0xb4 + vch), (byte)((pan << 6) + (ams << 4) + fms));
         }
+
+        private void outOPMSetHardLfoFreq(partWork pw, int freq)
+        {
+            dat.Add(pw.port0);
+            dat.Add(0x18);
+            dat.Add((byte)(freq & 0xff));
+        }
+
+        private void outOPMSetHardLfoDepth(partWork pw, bool isPMD, int depth)
+        {
+            dat.Add(pw.port0);
+            dat.Add(0x19);
+            dat.Add((byte)((isPMD ? 0x80 : 0x00) | (depth & 0x7f)));
+        }
+
+        private void outOPMSetPMSAMS(partWork pw, int PMS, int AMS)
+        {
+            dat.Add(pw.port0);
+            dat.Add((byte)(0x38 + pw.ch));
+            dat.Add((byte)(((PMS & 0x7)<<4) | (AMS & 0x3)));
+        }
+
+        private void outOPMSetPanFeedbackAlgorithm(partWork pw,int pan, int fb, int alg)
+        {
+            pan &= 3;
+            fb &= 7;
+            alg &= 7;
+
+            outFmAdrPort(pw.port0, (byte)(0x20 + pw.ch), (byte)((pan << 6) | (fb << 3) | alg));
+        }
+
+        private void outOPMSetVolume(partWork pw, int vol, int n)
+        {
+            if (!instFM.ContainsKey(n))
+            {
+                msgBox.setWrnMsg(string.Format("未定義の音色(@{0})を指定している場合ボリュームの変更はできません。", n), lineNumber);
+                return;
+            }
+
+            int alg = instFM[n][45] & 0x7;
+            int[] ope = new int[4] {
+                instFM[n][0*instrumentMOperaterSize + 6]
+                , instFM[n][1 * instrumentMOperaterSize + 6]
+                , instFM[n][2 * instrumentMOperaterSize + 6]
+                , instFM[n][3 * instrumentMOperaterSize + 6]
+            };
+            int[][] algs = new int[8][]
+            {
+                new int[4] { 0,0,0,1}
+                ,new int[4] { 0,0,0,1}
+                ,new int[4] { 0,0,0,1}
+                ,new int[4] { 0,0,0,1}
+                ,new int[4] { 0,1,0,1}
+                ,new int[4] { 0,1,1,1}
+                ,new int[4] { 0,1,1,1}
+                ,new int[4] { 1,1,1,1}
+            };
+
+            int minV = 127;
+            for (int i = 0; i < 4; i++)
+            {
+                if (algs[alg][i] == 1)
+                {
+                    minV = Math.Min(minV, ope[i]);
+                }
+            }
+
+            for (int i = 0; i < 4; i++)
+            {
+                if (algs[alg][i] == 0)
+                {
+                    continue;
+                }
+                ope[i] = ope[i] - minV + (127 - vol);
+                if (ope[i] < 0)
+                {
+                    ope[i] = 0;
+                }
+                if (ope[i] > 127)
+                {
+                    ope[i] = 127;
+                }
+            }
+
+            if ((pw.slots & 1) != 0) outOPMSetTl(pw, 0, ope[0]);
+            if ((pw.slots & 2) != 0) outOPMSetTl(pw, 1, ope[1]);
+            if ((pw.slots & 4) != 0) outOPMSetTl(pw, 2, ope[2]);
+            if ((pw.slots & 8) != 0) outOPMSetTl(pw, 3, ope[3]);
+        }
+
+        private void outOPMSetTl(partWork pw, int ope, int tl)
+        {
+            ope = (ope == 1) ? 2 : ((ope == 2) ? 1 : ope);
+            tl &= 0x7f;
+
+            outFmAdrPort(pw.port0, (byte)(0x60 + pw.ch + ope * 8), (byte)tl);
+        }
+
+        private void outOPMSetDtMl(partWork pw, int ope, int dt, int ml)
+        {
+            ope = (ope == 1) ? 2 : ((ope == 2) ? 1 : ope);
+            dt &= 7;
+            ml &= 15;
+
+            outFmAdrPort(pw.port0, (byte)(0x40 + pw.ch + ope * 8), (byte)((dt << 4) | ml));
+        }
+
+        private void outOPMSetKsAr(partWork pw, int ope, int ks, int ar)
+        {
+            ope = (ope == 1) ? 2 : ((ope == 2) ? 1 : ope);
+            ks &= 3;
+            ar &= 31;
+
+            outFmAdrPort(pw.port0, (byte)(0x80 + pw.ch + ope * 8), (byte)((ks << 6) | ar));
+        }
+
+        private void outOPMSetAmDr(partWork pw, int ope, int am, int dr)
+        {
+            ope = (ope == 1) ? 2 : ((ope == 2) ? 1 : ope);
+            am &= 1;
+            dr &= 31;
+
+            outFmAdrPort(pw.port0, (byte)(0xa0 + pw.ch + ope * 8), (byte)((am << 7) | dr));
+        }
+
+        private void outOPMSetDt2Sr(partWork pw, int ope, int dt2, int sr)
+        {
+            ope = (ope == 1) ? 2 : ((ope == 2) ? 1 : ope);
+            dt2 &= 3;
+            sr &= 31;
+
+            outFmAdrPort(pw.port0, (byte)(0xc0 + pw.ch + ope * 8), (byte)((dt2 << 6) | sr));
+        }
+
+        private void outOPMSetSlRr(partWork pw, int ope, int sl, int rr)
+        {
+            ope = (ope == 1) ? 2 : ((ope == 2) ? 1 : ope);
+            sl &= 15;
+            rr &= 15;
+
+            outFmAdrPort(pw.port0, (byte)(0xe0 + pw.ch + ope * 8), (byte)((sl << 4) | rr));
+        }
+
+
 
         private void outOPNSetHardLfo(partWork pw, bool sw, int lfoNum)
         {

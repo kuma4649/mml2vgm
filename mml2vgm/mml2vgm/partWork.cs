@@ -259,6 +259,7 @@ namespace mml2vgm
 
         /// <summary>
         /// SSG Noise or Tone mixer 0:Silent 1:Tone 2:Noise 3:Tone&Noise
+        /// OPM Noise 0:Disable 1:Enable
         /// </summary>
         public int mixer = 1;
 
@@ -283,8 +284,13 @@ namespace mml2vgm
         public byte port1 = 0;
         public int ams = 0;
         public int fms = 0;
+        public int pms = 0;
         public bool hardLfoSw = false;
         public int hardLfoNum = 0;
+
+        public int hardLfoFreq = 0;
+        public int hardLfoPMD = 0;
+        public int hardLfoAMD = 0;
 
         /// <summary>
         /// パート情報をリセットする

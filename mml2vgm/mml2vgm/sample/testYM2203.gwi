@@ -1,0 +1,29 @@
+﻿'{
+
+	TitleName   =
+	TitleNameJ  =色々テスト
+	GameName    =
+	GameNameJ   =
+	SystemName  =
+	SystemNameJ =
+	Composer    =
+	ComposerJ   =
+	ReleaseDate =2017/01/02
+	Converted   =
+	Notes       =
+
+	ClockCount  =192
+
+}
+
+'@ M 110
+   AR  DR  SR  RR  SL  TL  KS  ML  DT  AM  SSG-EG
+'@ 031,000,000,000,000,033,000,004,007,001,000
+'@ 018,015,009,007,003,009,000,004,007,001,000
+'@ 031,000,000,000,000,024,000,002,003,001,000
+'@ 031,015,009,007,003,000,000,002,003,001,000
+'@ 004,007
+
+
+'N9 T160
+'N9 v15o4l8[cdefgab>c<]

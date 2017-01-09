@@ -54,6 +54,7 @@
     <Compile Include="chips\clsChip.cs" />
     <Compile Include="chips\RF5C164.cs" />
     <Compile Include="chips\SN76489.cs" />
+    <Compile Include="chips\YM2151.cs" />
     <Compile Include="chips\YM2203.cs" />
     <Compile Include="chips\YM2608.cs" />
     <Compile Include="chips\YM2610B.cs" />
