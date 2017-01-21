@@ -32,10 +32,13 @@
  ・mucom さん  
  ・ume3fmp さん  
  ・おやぢぴぴ さん  
+ ・なると さん  
+ ・hex125 さん  
   
  ・XPCMK  
  ・FMP7  
  ・Music LALF  
+ ・NRTDRV  
  ・Visual Studio Community 2015  
  ・SGDK  
  ・VGM Player  
