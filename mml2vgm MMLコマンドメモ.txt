@@ -360,14 +360,15 @@ ebass3(from MUSIC LALF @70)
 コマンド        YEPSRTTTTTPPPPPNNNX  内容
                      fesabfesrpfes       
 -------------------------------------------------
+@n              ooo-ooo-oooo--ooo-o  音色番号指定(0 - 255)
+@n              ---o---o----oo---o-  エンベロープ番号指定(0 - 255)
+@En             ----o---oo---oo----  エンベロープ番号指定(0 - 255)
+@Tn             oo---oo---oo---oo-o  Tone Doubler番号指定(0 - 255)
 ln              ooooooooooooooooooo  デフォルト音長指定
 on              oooooooo-oooo-ooooo  オクターブ絶対指定(1 - 8)(YM2612PCMのみ3 - 5)(実際に発音される音は可能な音域のみ)
 Dn              oooooooo-oooo-ooooo  ディチューン (範囲未チェック)絶対指定のみ
 vn              oo-oooooooooooooooo  音量絶対指定(Y/E/Tf/Te/Pf/Pe/Nf/Ne: 0 - 127  S/Ts/Ps/Ns: 0 - 15  R/Tb/Pp: 0 - 255  Ta/Pr: 0-31)
 Vn              --------o----o-----  ADPCM-A/RHYTHM全体の音量絶対指定(0-63)
-@n              ooo-ooo-oooo--ooo-o  音色番号指定(0 - 255)
-@n              ---o---o----oo---o-  エンベロープ番号指定(0 - 255)
-@En             ----o---oo---oo----  エンベロープ番号指定(0 - 255)
 >               oooooooo-oooo-ooooo  オクターブ相対指定(上げ)
 <               oooooooo-oooo-ooooo  オクターブ相対指定(下げ)
 )n              ooooooooooooooooooo  音量相対指定(上げ)(Y/E/Tf/Te/Nf/Ne: 0 - 127  S/Ts/Ns: 0 - 15  R/Tb: 0 - 255  Ta: 0-31)
@@ -379,6 +380,10 @@ Mx1x2n,...      oo-oooooooooooooooo  LFO(
                                        x2:T/V/H            T:音量 V:音程(Ta/Pr不可) H:ハードウェアLFO(YM2612のみ)
                                        n...:パラメーター   
                                      )基本的にはFMPと同じ
+MAMSn           oo---oo---oo---oo--  AMS値 音量LFO感度(0-7)
+MAMSn           ------------------o  AMS値 音量LFO感度(0-3)
+MPMSn           oo---oo---oo---oo--  PMS値 音程LFO感度(0-3)
+MPMSn           ------------------o  PMS値 音程LFO感度(0-7)
 Sx1n            oo-oooooooooooooooo  LFOスイッチ(x1: P/Q/R/S  n: 0(OFF)/1(ON))
 rn              ooooooooooooooooooo  休符
 [               ooooooooooooooooooo  ループ開始位置
@@ -414,7 +419,7 @@ g               ooooooooooooooooooo  音符ソ
 a               ooooooooooooooooooo  音符ラ
 b               ooooooooooooooooooo  音符シ
     +/-         ooooooooooooooooooo  半音上げる/下げる
-    n           ooooooooooooooooooo  音長
+    n           ooooooooooooooooooo  音長(0を指定するとToneDoublerモードになる)
     .           ooooooooooooooooooo  符点
     _           oo-ooooo-oooo-ooooo  ベンド
         音符    oo-ooooo-oooo-ooooo  音符(c-b)
@@ -423,6 +428,17 @@ b               ooooooooooooooooooo  音符シ
         <       oo-ooooo-oooo-ooooo  オクターブ相対指定(下げ)
     &n          ooooooooooooooooooo  タイ(n: 音長 音長分だけ発音を追加する。 音長を指定しない場合はキーオフせずに次の音符とつなげる)
     ~n          ooooooooooooooooooo  タイの逆(n: 音長 音長分だけ発音を削る。)
+    ,           oo---oo---oo---oo-o  Tone Doublerモード
+                                       音符指定の後に0或いは,を指定するとTone Doublerモードになる。この時指定した音符をAとする。
+                                       もう一度音符を指定するとTone Doublerが発動する。この時指定した音符をBとする。
+                                       Tone Doublerが発動するとAとBの音程差が計算され、
+                                       それに対応するMLとDT2が各オペレーター(スロット)にセットされる。
+                                       MLとDT2は@Tコマンドで指定されたTone Doublerの定義値が参照される。
+                                       キーオフするとTone Doublerモードは解除される。この時本来のMLとDT2に戻る。
+                                       音程差が定義行数を超える場合は、定義行数に収まるまで音程差を-12する。
+                                       音程差がマイナスの場合は0とする。
+                                       Tone Doubler時のベンドは音符Bを起点とする。
+                                       OPN系ではDT2は無視される。
 
 
 ■ 音色定義
@@ -485,6 +501,79 @@ b               ooooooooooooooooooo  音符シ
                 "YM2610BSecondary"
     Option      YM2610B : 0の場合ADPCM-A 1の場合ADPCM-Bとして定義される。
                 RF5C164 : ループポイント。ループ再生位置をサンプル数で指定。
+
+
+(3) Tone Doubler定義
+ (Tone DoublerとはMLとDT2を任意に切り替えることにより、
+FM1Chで指定の音程2音を同時に出力することを主な目的とした、hex125さんの開発された技術およびマクロです。
+また、mml2vgmでのTone Doublerの書式はNRTDRV(なるとさん作MMLドライバ)の同機能の書式をもとにしています。)
+
+
+'@ TD No
+'@ OP1ML OP2ML OP3ML OP4ML OP1DT2 OP2DT2 OP3DT2 OP4DT2 KeyShift
+'@ OP1ML OP2ML OP3ML OP4ML OP1DT2 OP2DT2 OP3DT2 OP4DT2 KeyShift
+'@ OP1ML OP2ML OP3ML OP4ML OP1DT2 OP2DT2 OP3DT2 OP4DT2 KeyShift
+'@ OP1ML OP2ML OP3ML OP4ML OP1DT2 OP2DT2 OP3DT2 OP4DT2 KeyShift
+'@ OP1ML OP2ML OP3ML OP4ML OP1DT2 OP2DT2 OP3DT2 OP4DT2 KeyShift
+'@ OP1ML OP2ML OP3ML OP4ML OP1DT2 OP2DT2 OP3DT2 OP4DT2 KeyShift
+'@ OP1ML OP2ML OP3ML OP4ML OP1DT2 OP2DT2 OP3DT2 OP4DT2 KeyShift
+'@ OP1ML OP2ML OP3ML OP4ML OP1DT2 OP2DT2 OP3DT2 OP4DT2 KeyShift
+'@ OP1ML OP2ML OP3ML OP4ML OP1DT2 OP2DT2 OP3DT2 OP4DT2 KeyShift
+'@ OP1ML OP2ML OP3ML OP4ML OP1DT2 OP2DT2 OP3DT2 OP4DT2 KeyShift
+'@ OP1ML OP2ML OP3ML OP4ML OP1DT2 OP2DT2 OP3DT2 OP4DT2 KeyShift
+'@ OP1ML OP2ML OP3ML OP4ML OP1DT2 OP2DT2 OP3DT2 OP4DT2 KeyShift
+'@ OP1ML OP2ML OP3ML OP4ML OP1DT2 OP2DT2 OP3DT2 OP4DT2 KeyShift
+'@ OP1ML OP2ML OP3ML OP4ML OP1DT2 OP2DT2 OP3DT2 OP4DT2 KeyShift
+'@ OP1ML OP2ML OP3ML OP4ML OP1DT2 OP2DT2 OP3DT2 OP4DT2 KeyShift
+'@ OP1ML OP2ML OP3ML OP4ML OP1DT2 OP2DT2 OP3DT2 OP4DT2 KeyShift
+'@ OP1ML OP2ML OP3ML OP4ML OP1DT2 OP2DT2 OP3DT2 OP4DT2 KeyShift
+'@ OP1ML OP2ML OP3ML OP4ML OP1DT2 OP2DT2 OP3DT2 OP4DT2 KeyShift
+'@ OP1ML OP2ML OP3ML OP4ML OP1DT2 OP2DT2 OP3DT2 OP4DT2 KeyShift
+'@ OP1ML OP2ML OP3ML OP4ML OP1DT2 OP2DT2 OP3DT2 OP4DT2 KeyShift
+'@ OP1ML OP2ML OP3ML OP4ML OP1DT2 OP2DT2 OP3DT2 OP4DT2 KeyShift
+'@ OP1ML OP2ML OP3ML OP4ML OP1DT2 OP2DT2 OP3DT2 OP4DT2 KeyShift
+'@ OP1ML OP2ML OP3ML OP4ML OP1DT2 OP2DT2 OP3DT2 OP4DT2 KeyShift
+'@ OP1ML OP2ML OP3ML OP4ML OP1DT2 OP2DT2 OP3DT2 OP4DT2 KeyShift
+'@ OP1ML OP2ML OP3ML OP4ML OP1DT2 OP2DT2 OP3DT2 OP4DT2 KeyShift
+    No          定義番号(0-255)
+    OP1ML       オペレーター1(スロット1)のML(マルチプル)値(0-15)
+    OP2ML       オペレーター2(スロット2)のML(マルチプル)値(0-15)
+    OP3ML       オペレーター3(スロット3)のML(マルチプル)値(0-15)
+    OP4ML       オペレーター4(スロット4)のML(マルチプル)値(0-15)
+    OP1DT2      オペレーター1(スロット1)のDT2(ディチューン2)値(0-3)
+    OP2DT2      オペレーター2(スロット2)のDT2(ディチューン2)値(0-3)
+    OP3DT2      オペレーター3(スロット3)のDT2(ディチューン2)値(0-3)
+    OP4DT2      オペレーター4(スロット4)のDT2(ディチューン2)値(0-3)
+    KeyShift    キーシフト(+-12)
+    
+    
+    ＊ML、DT2とKeyShiftは最小で1行、最大25行定義する。
+    　(上から順に音程差0～24までの定義となる。)
+    　初期値として予め以下が定義されている。No0に定義されているが再定義することで変更可能。
+
+'@ TD 0
+   (Multiple)       (Detune2)
+   OP1 OP2 OP3 OP4  OP1 OP2 OP3 OP4 (KeyShift)
+'@   4   4   4   4    0   0   0   0     0
+'@   3   3   4   4    1   1   0   0     0
+'@   4   4   5   5    1   1   0   0    -4
+'@   3   3   4   4    2   2   0   0     0
+'@   5   5   4   4    0   0   0   0     0
+'@   4   4   3   3    0   0   0   0     5
+'@   4   4   4   4    1   1   0   0     0
+'@   6   6   4   4    0   0   0   0     0
+'@   4   4   4   4    2   2   0   0     0
+'@   6   6   5   5    1   1   0   0    -4
+'@   5   5   4   4    1   1   0   0     0
+'@   6   6   5   5    2   2   0   0    -4
+'@   8   8   4   4    0   0   0   0     0
+'@   6   6   4   4    1   1   0   0     0
+'@   8   8   5   5    1   1   0   0    -4
+'@   6   6   4   4    2   2   0   0     0
+'@  10  10   4   4    0   0   0   0     0
+'@   8   8   3   3    0   0   0   0     5
+'@   8   8   4   4    1   1   0   0     0
+'@  12  12   4   4    0   0   0   0     0
 
 
 ■ エンベロープ定義
