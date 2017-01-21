@@ -1,44 +1,40 @@
 ﻿'{
 
-	TitleName   =
-	TitleNameJ  =色々テスト
-	GameName    =
-	GameNameJ   =
-	SystemName  =
-	SystemNameJ =
-	Composer    =
-	ComposerJ   =
-	ReleaseDate =2017/01/02
+	TitleName   =PSG sample
+	TitleNameJ  =PSGサンプル
+	GameName    =none
+	GameNameJ   =none
+	SystemName  =Sega Genesis
+	SystemNameJ =Sega MegaDrive
+	Composer    =kuma
+	ComposerJ   =kuma
+	ReleaseDate =2015/11/22
 	Converted   =
 	Notes       =
 
-	ClockCount  =192
+	ClockCount    =192
 
 }
 
-'@ M 110
-   AR  DR  SR  RR  SL  TL  KS  ML  DT1 DT2 AME
-'@ 031,000,000,000,000,033,000,004,007,000,001
-'@ 018,015,009,007,003,009,000,004,007,000,001
-'@ 031,000,000,000,000,024,000,002,003,000,001
-'@ 031,015,009,007,003,000,000,002,003,000,001
-'@ 004,007
+No = 定義番号
+SV = キーオン時のボリューム(0 - 15まで)
+AR = 次にボリュームを+STするまでのクロック数。(最大ボリューム(15)になるまで発音ボリュームを+STする処理を繰り返す。)
+DR = 次にボリュームを-STするまでのクロック数。(SLになるまで発音ボリュームを-STする処理を繰り返す。)
+SL = 最大ボリューム後の減衰ボリューム(0 - 15まで)
+SR = 次にボリュームを-STするまでのクロック数。(ボリュームがSLに到達後、0になるまで発音ボリュームを-STする処理を繰り返す。)
+RR = キーオフ後、次にボリュームを-STするまでのクロック数。(0になるまで発音ボリュームを-STする処理を繰り返す。)
+ST = ボリュームの変化量
 
-'@ M 111
-   AR  DR  SR  RR  SL  TL  KS  ML  DT1 DT2 AME
-'@ 031,004,000,015,015,022,000,012,000,000,001
-'@ 031,010,000,015,015,000,000,000,000,000,001
-'@ 031,002,000,015,015,022,000,004,000,001,001
-'@ 031,002,000,015,015,000,000,001,000,000,001
-   ALG FB
-'@ 004,000
+     No,SV,AR,DR,SL,SR,RR,ST
+'@ E  0, 0, 0, 5, 8, 5, 1, 1
 
+'S1 T90
 
-'X8 T160@111y$3f,$73v125
-'X8 o3d4d4d4d4
+S1 D0 v15 o4 l8 q0 v1cv2dv3ev4fv5ev6dv7crv8ev9fv10gv11av12gv13fv14e
+S2 D1 v15 o4 l8 q0 v1cv2dv3ev4fv5ev6dv7crv8ev9fv10gv11av12gv13fv14e
 
-OPM NOISE TEST
-'X8 T160@110
-'X8 Q4c4P1w31c4w10c4c4c4P0c4
+'S1 D0
+'S2 D1
+'S1 [cd/e]3f
 
-
+S12 v15 EON @0 o4 l8 Q7 v15cdefedcrefgagferv2crv6crv10crv14crv15l16ccddeeffl8edcr EOF cdefedcr

@@ -151,7 +151,8 @@ namespace mml2vgm
         YM2610B = 3,
         YM2612 = 4,
         SN76489 = 5,
-        RF5C164 = 6
+        RF5C164 = 6,
+        SEGAPCM = 7
     }
 
 }

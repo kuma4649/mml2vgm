@@ -53,6 +53,7 @@
   <ItemGroup>
     <Compile Include="chips\clsChip.cs" />
     <Compile Include="chips\RF5C164.cs" />
+    <Compile Include="chips\segaPcm.cs" />
     <Compile Include="chips\SN76489.cs" />
     <Compile Include="chips\YM2151.cs" />
     <Compile Include="chips\YM2203.cs" />
@@ -83,33 +84,55 @@
     <None Include="sample\bendTest.gwi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="sample\bendTest.vgm" />
     <None Include="sample\effectModeTest.gwi" />
+    <None Include="sample\effectModeTest.vgm" />
     <None Include="sample\lfoTest.gwi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="sample\lfoTest.vgm" />
     <None Include="sample\psgSample.gwi" />
     <None Include="sample\test.gwi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="sample\test.vgm" />
+    <None Include="sample\test.vgz" />
+    <None Include="sample\test2.gwi" />
+    <None Include="sample\test2.vgm" />
     <None Include="sample\testDCSGSecondary.gwi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="sample\testDCSGSecondary.vgm" />
     <None Include="sample\testFMPCMSecondary.gwi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="sample\testFMPCMSecondary.vgm" />
     <None Include="sample\testFMSecondary.gwi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="sample\testFMSecondary.vgm" />
+    <None Include="sample\testToneDoubler.gwi" />
+    <None Include="sample\testToneDoubler.vgm" />
+    <None Include="sample\testYM2151.gwi" />
+    <None Include="sample\testYM2151.vgm" />
+    <None Include="sample\testYM2203.gwi" />
+    <None Include="sample\testYM2203.vgm" />
     <None Include="sample\testYM2608.gwi" />
+    <None Include="sample\testYM2608.vgm" />
     <None Include="sample\testYM2610BADPCM.gwi" />
+    <None Include="sample\testYM2610BADPCM.vgm" />
     <None Include="sample\testYM2610BFM.gwi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="sample\testYM2610BFM.vgm" />
     <None Include="sample\testYM2610BSSG.gwi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="sample\testYM2610BSSG.vgm" />
     <None Include="sample\test_.gwi" />
+    <None Include="sample\test_.vgm" />
     <None Include="sample\test__.gwi" />
+    <None Include="sample\test__.vgm" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="res\icon1.png" />
@@ -122,6 +145,7 @@
     <Content Include="sample\BD.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="sample\BD_16000.wav" />
     <Content Include="sample\BD_16bit16000.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -138,6 +162,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="sample\SD_16bit.wav" />
+    <Content Include="sample\SD_16bit16000Hz.wav" />
     <Content Include="sample\SD_16bit18500.wav" />
     <Content Include="sample\SD_16bit18500Hz.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

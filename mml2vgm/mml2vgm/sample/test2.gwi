@@ -1,0 +1,105 @@
+﻿'{
+
+	TitleName   =PSG
+	TitleNameJ  =
+	GameName    =
+	GameNameJ   =
+	SystemName  =Sega Genesis
+	SystemNameJ =Sega MegaDrive
+	Composer    =
+	ComposerJ   =
+	ReleaseDate =2015/11/15
+	Converted   =
+	Notes       =
+
+	以下はデフォルト値を再設定しています。(つまりデフォルトを使用するだけなら再設定の必要はありません)
+	PartYM2612    =F1-6
+	PartYM2612Ch3 =F3,F7-9
+	PartYM2612Ch6 =F6
+	ForcedMonoPartYM2612 =F6
+	PartSN76489   =S1-4
+	PartRf5c164   =R1-9
+	ClockCount    =192
+    FmF-Num       =289,2af,2d8,303,331,362,395,3cc,405,443,484,4c8
+
+}
+
+No  = 定義番号
+SV  = キーオン時のボリューム(0 - 15 | 0 - 255 まで)
+AR  = 次にボリュームを+STするまでのクロック数。(最大ボリューム(15 | 255)になるまで発音ボリュームを+STする処理を繰り返す。)
+DR  = 次にボリュームを-STするまでのクロック数。(SLになるまで発音ボリュームを-STする処理を繰り返す。)
+SL  = 最大ボリューム後の減衰ボリューム(0 - 15 | 0 - 255 まで)
+SR  = 次にボリュームを-STするまでのクロック数。(ボリュームがSLに到達後、0になるまで発音ボリュームを-STする処理を繰り返す。)
+RR  = キーオフ後、次にボリュームを-STするまでのクロック数。(0になるまで発音ボリュームを-STする処理を繰り返す。)
+ST  = ボリュームの変化量
+Chip= チップの種類。省略時はSN76489として定義される(SN76489/RF5C164)
+
+     No,SV,AR,DR,SL,SR,RR,ST,Chip
+@ E  0,15, 0, 0,15, 1, 1, 4
+
+
+'@ M 110
+   AR  DR  SR  RR  SL  TL  KS  ML  DT  AM  SSG-EG
+'@ 031,000,000,000,000,033,000,004,007,001,000
+'@ 018,015,009,007,003,009,000,004,007,001,000
+'@ 031,000,000,000,000,024,000,002,003,001,000
+'@ 031,015,009,007,003,000,000,002,003,001,000
+'@ 004,007
+
+@ P 0,"BD.wav",8000, 90
+@ P 1,"SD.wav",8000,100
+@ P 2,"SD.wav",8000, 20
+@ P 3,"HO.wav",8000,100
+@ P 4,"TH.wav",8000,110
+@ P 5,"TM.wav",8000,100
+@ P 6,"TL.wav",8000,120
+
+'@ P 1,"SD.wav",8000,100,Rf5c164
+'@ P 3,"TM.wav",8000,100
+'@ P 4,"TM.wav",8000,100,Rf5c164
+'@ P 5,"str.wav",8000,100,Rf5c164,1400
+
+F56 @110v120q0l8o7p1T$80SS0
+F5 c
+F6 m1l8[@0cr@1cr@0cc@2c@3c]4
+
+F1 @110v120q0l8o7T$80[[cd]/[ef]][ga]
+F6 D0p$03o4l16q0m1l24@5c@6d[@4c@6a]@6[a-dc]6@1c
+F6 D0p3o4l16q0m1@3c1&1&1l4o3cdefgab>cdefgab>cdefgab
+
+S1 D0v10q1l8
+S1         o4c2_br2c2_d
+S1 EON@0  o4cdefgab>cc2_<c cdefgab_gr2
+
+S3 o4v0 c2_>>>c
+S4 v15w7c2
+S4 v15EON@0w4ccrcw5crcrw6crcrw7cccc
+
+R1 T60q0p15,15o4r4<@4c4r4c4v10c4v50c4v100c4v150c4v200c4v255c4  p15,8c4p8,15c4p15,15c4>
+R1 <v255[c16(32]8v255l16 D0c D20c D40c D60c D80c D100c D0 Q8c4Q4c4Q1c4q0
+R1 @1o3[cdefgab>]5[bagfedc<]8o3l32v255c&v10c&v255c4  D0c&D40c&D80c4D0c4
+F6 m1r4r4@3c4c4
+
+R1 @5o3v255p15, 8l32    [c&(4]64
+R2 @5o3v255p 8,15l32    [e&(4]64
+R6 @5o3v255p15,15l32    [g&(4]64
+R3 @5o3v235p15,15l32D2rr[c&(4]64
+R4 @5o3v235p15,15l32D2rr[e&(4]64
+R5 @4o3v255p15,15l4[@4c4@1c4]4
+
+     No, SV, AR, DR, SL, SR, RR, ST, Chip
+'@ E  1,100,  1,  0,255,  5,  3,  4, Rf5c164
+
+R1 @5o2v255p15, 8l1     @E1EOF
+R2 @5o2v255p 8,15l1     @E1EON
+R3 @5o2v205p13,10l1D2r16@E1EOF
+R4 @5o2v205p10,13l1D2r16@E1EON
+R13 c4d4e4f4g4a4b1&b1
+R24 r4r4r4r4r4r4r4c4d4e4f4g4a4b1&b1
+'R5 @0o3v255p15,15l4[@4c4@1c4]4
+
+
+'R2 @5o2v255p15,15l1@E1EONc_>>c&c_<c
+'R2 @5o2v255p15,15l1@E1EON MSV48,2,12,24,0SS1c1&c1
+'R2 @5o2v255p15,15l1@E1EON MST48,2,12,24,0SS1c1&c1
+

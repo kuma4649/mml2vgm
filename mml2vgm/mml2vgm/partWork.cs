@@ -87,6 +87,18 @@ namespace mml2vgm
 
         public int octaveNew = 4;
 
+        public int TdA = -1;
+        public int op1ml = -1;
+        public int op2ml = -1;
+        public int op3ml = -1;
+        public int op4ml = -1;
+        public int op1dt2 = -1;
+        public int op2dt2 = -1;
+        public int op3dt2 = -1;
+        public int op4dt2 = -1;
+        public int toneDoubler = 0;
+        public int toneDoublerKeyShift = 0;
+
         /// <summary>
         /// vコマンドで設定されている音量
         /// </summary>
@@ -277,6 +289,7 @@ namespace mml2vgm
         public int pcmStartAddress = -1;
         public int pcmLoopAddress = -1;
         public int pcmEndAddress = -1;
+        public int pcmBank = 0;
 
         public enmChannelType Type;
         public int MaxVolume = 0;
@@ -750,6 +763,44 @@ namespace mml2vgm
             this.edAdr = edAdr;
             this.size = size;
             this.loopAdr = loopAdr;
+        }
+    }
+
+    public class clsToneDoubler
+    {
+        public int num = 0;
+        public List<clsTD> lstTD = null;
+
+        public clsToneDoubler(int num, List<clsTD> lstTD)
+        {
+            this.num = num;
+            this.lstTD = lstTD;
+        }
+    }
+
+    public class clsTD
+    {
+        public int OP1ML = 0;
+        public int OP2ML = 0;
+        public int OP3ML = 0;
+        public int OP4ML = 0;
+        public int OP1DT2 = 0;
+        public int OP2DT2 = 0;
+        public int OP3DT2 = 0;
+        public int OP4DT2 = 0;
+        public int KeyShift = 0;
+
+        public clsTD(int op1ml, int op2ml, int op3ml, int op4ml, int op1dt2, int op2dt2, int op3dt2, int op4dt2, int keyshift)
+        {
+            OP1ML = op1ml;
+            OP2ML = op2ml;
+            OP3ML = op3ml;
+            OP4ML = op4ml;
+            OP1DT2 = op1dt2;
+            OP2DT2 = op2dt2;
+            OP3DT2 = op3dt2;
+            OP4DT2 = op4dt2;
+            KeyShift = keyshift;
         }
     }
 
