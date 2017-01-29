@@ -357,78 +357,90 @@ ebass3(from MUSIC LALF @70)
   - 非対応
   * 未実装
 
-コマンド        YEPSRTTTTTPPPPPNNNX  内容
+コマンド        YEPSRTTTTTPPPPPNNNXZ  内容
                      fesabfesrpfes       
 -------------------------------------------------
-@n              ooo-ooo-oooo--ooo-o  音色番号指定(0 - 255)
-@n              ---o---o----oo---o-  エンベロープ番号指定(0 - 255)
-@En             ----o---oo---oo----  エンベロープ番号指定(0 - 255)
-@Tn             oo---oo---oo---oo-o  Tone Doubler番号指定(0 - 255)
-ln              ooooooooooooooooooo  デフォルト音長指定
-on              oooooooo-oooo-ooooo  オクターブ絶対指定(1 - 8)(YM2612PCMのみ3 - 5)(実際に発音される音は可能な音域のみ)
-Dn              oooooooo-oooo-ooooo  ディチューン (範囲未チェック)絶対指定のみ
-vn              oo-oooooooooooooooo  音量絶対指定(Y/E/Tf/Te/Pf/Pe/Nf/Ne: 0 - 127  S/Ts/Ps/Ns: 0 - 15  R/Tb/Pp: 0 - 255  Ta/Pr: 0-31)
-Vn              --------o----o-----  ADPCM-A/RHYTHM全体の音量絶対指定(0-63)
->               oooooooo-oooo-ooooo  オクターブ相対指定(上げ)
-<               oooooooo-oooo-ooooo  オクターブ相対指定(下げ)
-)n              ooooooooooooooooooo  音量相対指定(上げ)(Y/E/Tf/Te/Nf/Ne: 0 - 127  S/Ts/Ns: 0 - 15  R/Tb: 0 - 255  Ta: 0-31)
-(n              ooooooooooooooooooo  音量相対指定(下げ)(Y/E/Tf/Te/Nf/Ne: 0 - 127  S/Ts/Ns: 0 - 15  R/Tb: 0 - 255  Ta: 0-31)
-&               ooooooooooooooooooo  タイ(但し、音符の装飾扱いなので音符の直後に指定する必要あり)
-yn1,n2          ooooooooooooooooooo  レジスタ直接書き込み(n1=レジスタ番号 n2=データ)ポートはそのChによる。
-Mx1x2n,...      oo-oooooooooooooooo  LFO(
+@n              ooo-ooo-oooo--ooo-oo  音色番号指定(0 - 255)
+@n              ---o---o----oo---o--  エンベロープ番号指定(0 - 255)
+@En             ----o---oo---oo----o  エンベロープ番号指定(0 - 255)
+@Tn             oo---oo---oo---oo-o-  Tone Doubler番号指定(0 - 255)
+ln              oooooooooooooooooooo  デフォルト音長指定
+on              oooooooo-oooo-ooooo-  オクターブ絶対指定(1 - 8)(実際に発音される音は可能な音域のみ)
+on              --o-----------------  オクターブ絶対指定(3 - 5)(実際に発音される音は可能な音域のみ)
+on              -------------------o  オクターブ絶対指定(2 - 5)(実際に発音される音は可能な音域のみ)
+Dn              oooooooo-oooo-oooooo  ディチューン (範囲未チェック)絶対指定のみ
+vn              oo---oo---oo---oo-oo  音量絶対指定(Y/E/Tf/Te/Pf/Pe/Nf/Ne/Z: 0 - 127)
+vn              ---o---o----o----o--  音量絶対指定(S/Ts/Ps/Ns: 0 - 15)
+vn              ----o----o----o-----  音量絶対指定(R/Tb/Pp: 0 - 255)
+vn              --------o----o------  音量絶対指定(Ta/Pr: 0-31)
+Vn              --------o----o------  ADPCM-A/RHYTHM全体の音量絶対指定(0-63)
+>               oooooooo-oooo-oooooo  オクターブ相対指定(上げ)
+<               oooooooo-oooo-oooooo  オクターブ相対指定(下げ)
+)n              oo---oo---oo---oo-oo  音量相対指定(上げ)(Y/E/Tf/Te/Pf/Pe/Nf/Ne/Z: 0 - 127)
+)n              ---o---o----o----o--  音量相対指定(上げ)(S/Ts/Ps/Ns: 0 - 15)
+)n              ----o----o----o-----  音量相対指定(上げ)(R/Tb/Pp: 0 - 255)
+)n              --------o----o------  音量相対指定(上げ)(Ta/Pr: 0-31)
+(n              oo---oo---oo---oo-oo  音量相対指定(下げ)(Y/E/Tf/Te/Pf/Pe/Nf/Ne/Z: 0 - 127)
+(n              ---o---o----o----o--  音量相対指定(下げ)(S/Ts/Ps/Ns: 0 - 15)
+(n              ----o----o----o-----  音量相対指定(下げ)(R/Tb/Pp: 0 - 255)
+(n              --------o----o------  音量相対指定(下げ)(Ta/Pr: 0-31)
+&               oooooooooooooooooooo  タイ(但し、音符の装飾扱いなので音符の直後に指定する必要あり)
+yn1,n2          oooooooooooooooooooo  レジスタ直接書き込み(n1=レジスタ番号 n2=データ)ポートはそのChによる。
+Mx1x2n,...      oo-ooooooooooooooooo  LFO(
                                        x1:P/Q/R/S          識別子(1パート当たり4種類定義、使用できる)
                                        x2:T/V/H            T:音量 V:音程(Ta/Pr不可) H:ハードウェアLFO(YM2612のみ)
                                        n...:パラメーター   
                                      )基本的にはFMPと同じ
-MAMSn           oo---oo---oo---oo--  AMS値 音量LFO感度(0-7)
-MAMSn           ------------------o  AMS値 音量LFO感度(0-3)
-MPMSn           oo---oo---oo---oo--  PMS値 音程LFO感度(0-3)
-MPMSn           ------------------o  PMS値 音程LFO感度(0-7)
-Sx1n            oo-oooooooooooooooo  LFOスイッチ(x1: P/Q/R/S  n: 0(OFF)/1(ON))
-rn              ooooooooooooooooooo  休符
-[               ooooooooooooooooooo  ループ開始位置
-]n              ooooooooooooooooooo  ループ終了位置
-/               ooooooooooooooooooo  ループ脱出位置指定
-EON             ---oo--ooo--ooo--o-  エンベロープの開始
-EOF             ---oo--ooo--ooo--o-  エンベロープの停止
-EON             oo---oo---oo---oo--  効果音モードの開始
-EOF             oo---oo---oo---oo--  効果音モードの停止
-EXn             oo---oo---oo---oo--  効果音モードのスロット割り当て(必ず4桁指定すること。0: 未使用  1: 使用)
-En1,n2,n3,n4    oo---oo---oo---oo--  効果音モードのスロットディチューン。n1～n4はそれぞれOP1～OP4までのディチューン値
-L               ooooooooooooooooooo  曲全体のループ位置指定(曲者です)
-qn              ooooooooooooooooooo  ゲートタイム指定(クロック数で指定。音長分のクロック数からn引いた分が発音する長さになる。)
-Qn              ooooooooooooooooooo  ゲートタイム割合指定(1 - 8)
-wn              ---o---------------  ノイズモード指定(0 - 7)
-wn              -------o----o----oo  ノイズ周波数
-Pn              -------o----o----o-  1:トーン 2:ノイズ 3:トーン＆ノイズ
-Pn              ------------------o  0:OFF 1:ON
-mn              ooo----------------  YM2612PCMモード指定(0: 停止  1: 開始)
-Tn              ooooooooooooooooooo  テンポ(1 - 255)
-!               ooooooooooooooooooo  このパートのこれ以降をコンパイルしない(発音しない)
-Kn              oooooooo-oooo-ooooo  移調絶対指定 ( -12 - +12 )
-#n              ooooooooooooooooooo  音長をクロック値で指定
-pn              o-o--o--ooo--ooo--o  パン (0: 発音しない  1: 右  2: 左  3: 中央)
-pn1,n2          ----o--------------  パン (n1: 左 0 - 15  n2: 右 0 - 15)
-%xxx            ooooooooooooooooooo  エイリアス展開
+MAMSn           oo---oo---oo---oo---  AMS値 音量LFO感度(0-7)
+MAMSn           ------------------o-  AMS値 音量LFO感度(0-3)
+MPMSn           oo---oo---oo---oo---  PMS値 音程LFO感度(0-3)
+MPMSn           ------------------o-  PMS値 音程LFO感度(0-7)
+Sx1n            oo-ooooooooooooooooo  LFOスイッチ(x1: P/Q/R/S  n: 0(OFF)/1(ON))
+rn              oooooooooooooooooooo  休符
+[               oooooooooooooooooooo  ループ開始位置
+]n              oooooooooooooooooooo  ループ終了位置
+/               oooooooooooooooooooo  ループ脱出位置指定
+EON             ---oo--ooo--ooo--o-*  エンベロープの開始
+EOF             ---oo--ooo--ooo--o-*  エンベロープの停止
+EON             oo---oo---oo---oo---  効果音モードの開始
+EOF             oo---oo---oo---oo---  効果音モードの停止
+EXn             oo---oo---oo---oo---  効果音モードのスロット割り当て(必ず4桁指定すること。0: 未使用  1: 使用)
+En1,n2,n3,n4    oo---oo---oo---oo---  効果音モードのスロットディチューン。n1～n4はそれぞれOP1～OP4までのディチューン値
+L               oooooooooooooooooooo  曲全体のループ位置指定(曲者です)
+qn              oooooooooooooooooooo  ゲートタイム指定(クロック数で指定。音長分のクロック数からn引いた分が発音する長さになる。)
+Qn              oooooooooooooooooooo  ゲートタイム割合指定(1 - 8)
+wn              ---o----------------  ノイズモード指定(0 - 7)
+wn              -------o----o----oo-  ノイズ周波数
+Pn              -------o----o----o--  1:トーン 2:ノイズ 3:トーン＆ノイズ
+Pn              ------------------o-  0:OFF 1:ON
+mn              ooo-----------------  YM2612PCMモード指定(0: 停止  1: 開始)
+Tn              ooooooooooooooooooo-  テンポ(1 - 255)
+!               ooooooooooooooooooo-  このパートのこれ以降をコンパイルしない(発音しない)
+Kn              oooooooo-oooo-ooooo-  移調絶対指定 ( -12 - +12 )
+#n              ooooooooooooooooooo-  音長をクロック値で指定
+pn              o-o--o--ooo--ooo--o-  パン (0: 発音しない  1: 右  2: 左  3: 中央)
+pn1,n2          ----o---------------  パン (n1: 左 0 - 15  n2: 右 0 - 15 )
+pn1,n2          -------------------o  パン (n1: 左 0 - 127 n2: 右 0 - 127)
+%xxx            oooooooooooooooooooo  エイリアス展開
 
-c               ooooooooooooooooooo  音符ド
-d               ooooooooooooooooooo  音符レ
-e               ooooooooooooooooooo  音符ミ
-f               ooooooooooooooooooo  音符ファ
-g               ooooooooooooooooooo  音符ソ
-a               ooooooooooooooooooo  音符ラ
-b               ooooooooooooooooooo  音符シ
-    +/-         ooooooooooooooooooo  半音上げる/下げる
-    n           ooooooooooooooooooo  音長(0を指定するとToneDoublerモードになる)
-    .           ooooooooooooooooooo  符点
-    _           oo-ooooo-oooo-ooooo  ベンド
-        音符    oo-ooooo-oooo-ooooo  音符(c-b)
-        o       oo-ooooo-oooo-ooooo  オクターブ
-        >       oo-ooooo-oooo-ooooo  オクターブ相対指定(上げ)
-        <       oo-ooooo-oooo-ooooo  オクターブ相対指定(下げ)
-    &n          ooooooooooooooooooo  タイ(n: 音長 音長分だけ発音を追加する。 音長を指定しない場合はキーオフせずに次の音符とつなげる)
-    ~n          ooooooooooooooooooo  タイの逆(n: 音長 音長分だけ発音を削る。)
-    ,           oo---oo---oo---oo-o  Tone Doublerモード
+c               oooooooooooooooooooo  音符ド
+d               oooooooooooooooooooo  音符レ
+e               oooooooooooooooooooo  音符ミ
+f               oooooooooooooooooooo  音符ファ
+g               oooooooooooooooooooo  音符ソ
+a               oooooooooooooooooooo  音符ラ
+b               oooooooooooooooooooo  音符シ
+    +/-         oooooooooooooooooooo  半音上げる/下げる
+    n           oooooooooooooooooooo  音長(FMのみ0を指定するとToneDoublerモードになる)
+    .           oooooooooooooooooooo  符点
+    _           oo-ooooo-oooo-oooooo  ベンド
+        音符    oo-ooooo-oooo-oooooo  音符(c-b)
+        o       oo-ooooo-oooo-oooooo  オクターブ
+        >       oo-ooooo-oooo-oooooo  オクターブ相対指定(上げ)
+        <       oo-ooooo-oooo-oooooo  オクターブ相対指定(下げ)
+    &n          oooooooooooooooooooo  タイ(n: 音長 音長分だけ発音を追加する。 音長を指定しない場合はキーオフせずに次の音符とつなげる)
+    ~n          oooooooooooooooooooo  タイの逆(n: 音長 音長分だけ発音を削る。)
+    ,           oo---oo---oo---oo-o-  Tone Doublerモード
                                        音符指定の後に0或いは,を指定するとTone Doublerモードになる。この時指定した音符をAとする。
                                        もう一度音符を指定するとTone Doublerが発動する。この時指定した音符をBとする。
                                        Tone Doublerが発動するとAとBの音程差が計算され、
