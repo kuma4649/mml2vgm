@@ -400,8 +400,8 @@ rn              oooooooooooooooooooo  休符
 [               oooooooooooooooooooo  ループ開始位置
 ]n              oooooooooooooooooooo  ループ終了位置
 /               oooooooooooooooooooo  ループ脱出位置指定
-EON             ---oo--ooo--ooo--o-*  エンベロープの開始
-EOF             ---oo--ooo--ooo--o-*  エンベロープの停止
+EON             ---oo--ooo--ooo--o-o  エンベロープの開始
+EOF             ---oo--ooo--ooo--o-o  エンベロープの停止
 EON             oo---oo---oo---oo---  効果音モードの開始
 EOF             oo---oo---oo---oo---  効果音モードの停止
 EXn             oo---oo---oo---oo---  効果音モードのスロット割り当て(必ず4桁指定すること。0: 未使用  1: 使用)
