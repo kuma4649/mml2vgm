@@ -59,6 +59,10 @@ namespace mml2vgm
         /// </summary>
         public int freq = 0;
 
+        public int beforeFNum = -1;
+        public int FNum = -1;
+
+
         /// <summary>
         /// いままで演奏した総クロック数
         /// </summary>
@@ -109,6 +113,38 @@ namespace mml2vgm
         /// </summary>
         public int pan = 3;
         public int beforePan = -1;
+
+        /// <summary>
+        /// 拡張パン(Left)
+        /// </summary>
+        /// <remarks>
+        /// ボリュームが左右別管理の音源向け
+        /// </remarks>
+        public int panL = -1;
+
+        /// <summary>
+        /// 拡張パン(Right)
+        /// </summary>
+        /// <remarks>
+        /// ボリュームが左右別管理の音源向け
+        /// </remarks>
+        public int panR = -1;
+
+        /// <summary>
+        /// 拡張ボリューム(Left)before
+        /// </summary>
+        /// <remarks>
+        /// ボリュームが左右別管理の音源向け
+        /// </remarks>
+        public int beforeLVolume = -1;
+
+        /// <summary>
+        /// 拡張ボリューム(Right)before
+        /// </summary>
+        /// <remarks>
+        /// ボリュームが左右別管理の音源向け
+        /// </remarks>
+        public int beforeRVolume = -1;
 
         /// <summary>
         /// @コマンドで設定されている音色
@@ -288,7 +324,9 @@ namespace mml2vgm
 
         public int pcmStartAddress = -1;
         public int pcmLoopAddress = -1;
+        public int beforepcmLoopAddress = -1;
         public int pcmEndAddress = -1;
+        public int beforepcmEndAddress = -1;
         public int pcmBank = 0;
 
         public enmChannelType Type;

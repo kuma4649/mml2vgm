@@ -1,40 +1,41 @@
 ﻿'{
 
-	TitleName   =PSG sample
-	TitleNameJ  =PSGサンプル
-	GameName    =none
-	GameNameJ   =none
-	SystemName  =Sega Genesis
-	SystemNameJ =Sega MegaDrive
-	Composer    =kuma
-	ComposerJ   =kuma
-	ReleaseDate =2015/11/22
+	TitleName   =
+	TitleNameJ  =色々テスト
+	GameName    =
+	GameNameJ   =
+	SystemName  =
+	SystemNameJ =
+	Composer    =
+	ComposerJ   =
+	ReleaseDate =2017/01/02
 	Converted   =
 	Notes       =
 
-	ClockCount    =192
+	ClockCount  =192
 
 }
 
-No = 定義番号
-SV = キーオン時のボリューム(0 - 15まで)
-AR = 次にボリュームを+STするまでのクロック数。(最大ボリューム(15)になるまで発音ボリュームを+STする処理を繰り返す。)
-DR = 次にボリュームを-STするまでのクロック数。(SLになるまで発音ボリュームを-STする処理を繰り返す。)
-SL = 最大ボリューム後の減衰ボリューム(0 - 15まで)
-SR = 次にボリュームを-STするまでのクロック数。(ボリュームがSLに到達後、0になるまで発音ボリュームを-STする処理を繰り返す。)
-RR = キーオフ後、次にボリュームを-STするまでのクロック数。(0になるまで発音ボリュームを-STする処理を繰り返す。)
-ST = ボリュームの変化量
+@ P 1,"SD.wav",8000,100,segapcm
+@ P 2,"Guitar.wav",8000,100,segapcm
+@ P 3,"Guitar.wav",8000,100,segapcm
+@ P 4,"Guitar.wav",8000,100,segapcm
+@ P 5,"Guitar.wav",8000,100,segapcm
+@ P 6,"str.wav",8000,100,segapcm
+Z01 T160@1
+Z02 @2l4o4q0v20cv40dv60ev80fv100ev120dv127p127,0crp127,20ep127,40fp127,60gp127,80ap127,100gp127,127fercrcrcrcr
+Z01 @2l4[c&dcd]c1_b
+Z01 MST0,1,10,100,0c1
 
      No,SV,AR,DR,SL,SR,RR,ST
-'@ E  0, 0, 0, 5, 8, 5, 1, 1
+@ E  0,127, 0, 1, 8, 5, 1, 1,SEGAPCM
 
-'S1 T90
+Z01 @2@E0 EON c2d2e2 EOF c2d2e2
 
-S1 D0 v15 o4 l8 q0 v1cv2dv3ev4fv5ev6dv7crv8ev9fv10gv11av12gv13fv14e
-S2 D1 v15 o4 l8 q0 v1cv2dv3ev4fv5ev6dv7crv8ev9fv10gv11av12gv13fv14e
+'@ P 1,"Guitar.wav",8000,100,rf5c164
+'@ P 2,"Guitar.wav",8000,100,ym2610B,1
+'@ P 3,"Guitar.wav",8000,100,segapcm
 
-'S1 D0
-'S2 D1
-'S1 [cd/e]3f
-
-S12 v15 EON @0 o4 l8 Q7 v15cdefedcrefgagferv2crv6crv10crv14crv15l16ccddeeffl8edcr EOF cdefedcr
+'R1 @1o3c4d4e4f4r1r1c4d4e4f4
+'T19 @2o4r1c4d4e4f4r1c4d4e4f4
+'Z01 @3o4r1r1c4d4e4f4c4d4e4f4gab>c

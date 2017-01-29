@@ -418,6 +418,39 @@ namespace mml2vgm
                 newBuf = pcmPadding(ref buf, ref size, 0x80, 0x100);
             }
 
+            //65536 バイトを超える場合はそれ以降をカット
+            if (size > 0x10000)
+            {
+                List<byte> n = newBuf.ToList();
+                n.RemoveRange(0x10000, (int)(size - 0x10000));
+                newBuf = n.ToArray();
+                size = 0x10000;
+            }
+
+            //パディング(空きが足りない場合はバンクをひとつ進める(0x10000)為、空きを全て埋める)
+            if (!v.Value.isSecondary)
+            {
+                int fs = (tbufSegaPCMP.Length - 15) % 0x10000;
+                if (size > 0x10000 - fs)
+                {
+                    List<byte> n = tbufSegaPCMP.ToList();
+                    for (int i = 0; i < 0x10000 - fs; i++) n.Add(0x80);
+                    tbufSegaPCMP = n.ToArray();
+                    pSegaPCMP += 0x10000 - fs;
+                }
+            }
+            else
+            {
+                int fs = (tbufSegaPCMS.Length - 15) % 0x10000;
+                if (size > 0x10000 - fs)
+                {
+                    List<byte> n = tbufSegaPCMS.ToList();
+                    for (int i = 0; i < 0x10000 - fs; i++) n.Add(0x80);
+                    tbufSegaPCMS = n.ToArray();
+                    pSegaPCMS += 0x10000 - fs;
+                }
+            }
+
             newDic.Add(
                 v.Key
                 , new clsPcm(

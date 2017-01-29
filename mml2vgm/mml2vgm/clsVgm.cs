@@ -612,6 +612,11 @@ namespace mml2vgm
                                 checkEnvelopeVolumeRange(lineNumber, env, i, 255, 0);
                                 if (env[7] == 0) env[7] = 1;
                             }
+                            else if (env[8] == (int)enmChipType.SEGAPCM)
+                            {
+                                checkEnvelopeVolumeRange(lineNumber, env, i, 127, 0);
+                                if (env[7] == 0) env[7] = 1;
+                            }
                             else
                             {
                                 msgBox.setWrnMsg("エンベロープを使用できない音源が選択されています。", lineNumber);
@@ -1459,6 +1464,7 @@ namespace mml2vgm
                 || (pw.chip is YM2610B && (pw.Type == enmChannelType.SSG || pw.Type == enmChannelType.ADPCMA || pw.Type == enmChannelType.ADPCMB))
                 || pw.chip is SN76489
                 || pw.chip is RF5C164
+                || pw.chip is segaPcm
                 )
             {
                 envelope(pw);
@@ -1504,6 +1510,8 @@ namespace mml2vgm
             {
                 if (pw.waitKeyOnCounter > 0 || pw.envIndex != -1)
                 {
+                    setSegaPcmFNum(pw);
+                    outSegaPcmVolume(pw);
                 }
             }
             else if (pw.chip is RF5C164)
@@ -2437,6 +2445,11 @@ namespace mml2vgm
                                 a = getRf5c164PcmNote(pw.octaveNow, cmd, shift + (i + 0) * Math.Sign(delta));//
                                 b = getRf5c164PcmNote(pw.octaveNow, cmd, shift + (i + 1) * Math.Sign(delta));//
                             }
+                            else if (pw.chip is segaPcm)
+                            {
+                                a = getSegaPcmFNum(pw.octaveNow, cmd, shift + (i + 0) * Math.Sign(delta));//
+                                b = getSegaPcmFNum(pw.octaveNow, cmd, shift + (i + 1) * Math.Sign(delta));//
+                            }
 
                             if (Math.Abs(bf) >= 1.0f)
                             {
@@ -2738,7 +2751,14 @@ namespace mml2vgm
                 }
                 else if (pw.chip is segaPcm)
                 {
-                    outSegaPcmKeyOn(pw);
+                    setSegaPcmFNum(pw);
+
+                    if (!pw.beforeTie)
+                    {
+                        setEnvelopeAtKeyOn(pw);
+                        setLfoAtKeyOn(pw);
+                        outSegaPcmKeyOn(pw);
+                    }
                 }
 
                 //gateTimeの決定
@@ -2882,6 +2902,7 @@ namespace mml2vgm
                 || ((pw.chip is YM2612) && (pw.Type == enmChannelType.FMPCM || (pw.Type == enmChannelType.FMOPNex)))
                 || (pw.chip is SN76489)
                 || (pw.chip is RF5C164)
+                || (pw.chip is segaPcm)
                 )
             {
                 pw.incPos();
@@ -3260,6 +3281,32 @@ namespace mml2vgm
                 pw.pan = (r << 4) | l;
                 setRf5c164CurrentChannel(pw);
                 setRf5c164Pan(pw, pw.pan);
+            }
+            else if (pw.chip is segaPcm)
+            {
+                int l;
+                int r;
+                if (!pw.getNum(out l))
+                {
+                    msgBox.setErrMsg("不正なパン'p'が指定されています。", lineNumber);
+                    l = 127;
+                }
+                if (pw.getChar() != ',')
+                {
+                    msgBox.setErrMsg("不正なパン'p'が指定されています。", lineNumber);
+                    l = 127;
+                    r = 127;
+                }
+                pw.incPos();
+                if (!pw.getNum(out r))
+                {
+                    msgBox.setErrMsg("不正なパン'p'が指定されています。", lineNumber);
+                    r = 127;
+                }
+                l = checkRange(l, 0, 127);
+                r = checkRange(r, 0, 127);
+                pw.panL = l;
+                pw.panR = r;
             }
 
         }
@@ -3734,6 +3781,7 @@ namespace mml2vgm
                         pw.pcmStartAddress = (int)instPCM[n].stAdr;
                         pw.pcmEndAddress = (int)instPCM[n].edAdr;
                         pw.pcmLoopAddress = instPCM[n].loopAdr == 0 ? -1 : (int)instPCM[n].loopAdr;
+                        pw.pcmBank = (int)((instPCM[n].stAdr >> 16) << 1);
                     }
                 }
                 else
@@ -4023,6 +4071,10 @@ namespace mml2vgm
             {
                 outRf5c164Port(pw.isSecondary, adr, dat);
             }
+            else if (pw.chip is segaPcm)
+            {
+                outSegaPcmPort(pw, adr, dat);
+            }
         }
 
         private void cmdNoise(partWork pw)
@@ -4265,7 +4317,10 @@ namespace mml2vgm
                     for (int ch = 0; ch < segapcm[i].ChMax; ch++)
                     {
                         partWork pw = segapcm[i].lstPartWork[ch];
-
+                        pw.MaxVolume = segapcm[i].Ch[ch].MaxVolume;
+                        pw.panL = 127;
+                        pw.panR = 127;
+                        pw.volume = pw.MaxVolume;
                     }
 
                     if (i != 0) dat[0x3b] |= 0x40;
@@ -5334,6 +5389,66 @@ namespace mml2vgm
             return dcsgFNumTbl[f];
         }
 
+        private void setSegaPcmFNum(partWork pw)
+        {
+            int f = getSegaPcmFNum(pw.octaveNow, pw.noteCmd, pw.shift + pw.keyShift);//
+            if (pw.bendWaitCounter != -1)
+            {
+                f = pw.bendFnum;
+            }
+            f = f + pw.detune;
+            for (int lfo = 0; lfo < 4; lfo++)
+            {
+                if (!pw.lfo[lfo].sw)
+                {
+                    continue;
+                }
+                if (pw.lfo[lfo].type != eLfoType.Vibrato)
+                {
+                    continue;
+                }
+                f += pw.lfo[lfo].value + pw.lfo[lfo].param[6];
+            }
+
+            f = checkRange(f, 0, 0xff);
+            if (pw.freq == f) return;
+
+            pw.freq = f;
+
+
+            //Delta
+            byte data = (byte)(f & 0xff);
+            int adr = pw.ch * 8 + 0x07;
+            if (pw.beforeFNum != data)
+            {
+                outSegaPcmPort(pw, adr, data);
+                pw.beforeFNum = data;
+            }
+
+        }
+
+        private int getSegaPcmFNum(int octave, char noteCmd, int shift)
+        {
+            int o = octave - 1;
+            int n = note.IndexOf(noteCmd) + shift;
+            if (n >= 0)
+            {
+                o += n / 12;
+                o = checkRange(o, 1, 8);
+                n %= 12;
+            }
+            else
+            {
+                o += n / 12 - 1;
+                o = checkRange(o, 1, 8);
+                n %= 12;
+                if (n < 0) { n += 12; }
+            }
+
+            return ((int)(64 * pcmMTbl[n] * Math.Pow(2, (o - 3))) +1);
+        }
+
+
         private void setPsgVolume(partWork pw)
         {
             byte data = 0;
@@ -5547,6 +5662,53 @@ namespace mml2vgm
             dat.Add(data);
         }
 
+        private void outSegaPcmVolume(partWork pw)
+        {
+            int vol = pw.volume;
+
+            if (pw.envelopeMode)
+            {
+                vol = 0;
+                if (pw.envIndex != -1)
+                {
+                    vol = pw.envVolume - (pw.MaxVolume - pw.volume);
+                }
+            }
+
+            for (int lfo = 0; lfo < 4; lfo++)
+            {
+                if (!pw.lfo[lfo].sw)
+                {
+                    continue;
+                }
+                if (pw.lfo[lfo].type != eLfoType.Tremolo)
+                {
+                    continue;
+                }
+                vol += pw.lfo[lfo].value + pw.lfo[lfo].param[6];
+            }
+
+            int vl = vol * pw.panL / pw.MaxVolume;
+            int vr = vol * pw.panR / pw.MaxVolume;
+            vl = checkRange(vl, 0, pw.MaxVolume);
+            vr = checkRange(vr, 0, pw.MaxVolume);
+
+            if (pw.beforeLVolume != vl)
+            {
+                //Volume(Left)
+                int adr = pw.ch * 8 + 0x02;
+                outSegaPcmPort(pw, adr, (byte)vl);
+                pw.beforeLVolume = vl;
+            }
+
+            if (pw.beforeRVolume != vr)
+            {
+                //Volume(Right)
+                int adr = pw.ch * 8 + 0x03;
+                outSegaPcmPort(pw, adr, (byte)vr);
+                pw.beforeRVolume = vr;
+            }
+        }
 
         private void outSegaPcmKeyOff(partWork pw)
         {
@@ -5561,20 +5723,11 @@ namespace mml2vgm
             int adr = 0;
             byte d = 0;
 
-            //Volume
-            adr = pw.ch * 8 + 0x02;
-            d = 127;
-            outSegaPcmPort(pw, adr, d);
+            //KeyOff
+            outSegaPcmKeyOff(pw);
 
             //Volume
-            adr = pw.ch * 8 + 0x03;
-            d = 127;
-            outSegaPcmPort(pw, adr, d);
-
-            //Delta
-            adr = pw.ch * 8 + 0x07;
-            d = 63;
-            outSegaPcmPort(pw, adr, d);
+            outSegaPcmVolume(pw);
 
             //StartAdr
             adr = pw.ch * 8 + 0x85;
@@ -5588,22 +5741,31 @@ namespace mml2vgm
 
             if (pw.pcmLoopAddress != -1)
             {
-                //LoopAdr
-                adr = pw.ch * 8 + 0x05;
-                d = (byte)((pw.pcmLoopAddress & 0xff00) >> 8);
-                outSegaPcmPort(pw, adr, d);
+                if (pw.beforepcmLoopAddress != pw.pcmLoopAddress)
+                {
+                    //LoopAdr
+                    adr = pw.ch * 8 + 0x05;
+                    d = (byte)((pw.pcmLoopAddress & 0xff00) >> 8);
+                    outSegaPcmPort(pw, adr, d);
 
-                //LoopAdr
-                adr = pw.ch * 8 + 0x04;
-                d = (byte)((pw.pcmLoopAddress & 0x00ff) >> 0);
-                outSegaPcmPort(pw, adr, d);
+                    //LoopAdr
+                    adr = pw.ch * 8 + 0x04;
+                    d = (byte)((pw.pcmLoopAddress & 0x00ff) >> 0);
+                    outSegaPcmPort(pw, adr, d);
+
+                    pw.beforepcmLoopAddress = pw.pcmLoopAddress;
+                }
             }
 
-            //EndAdr
-            adr = pw.ch * 8 + 0x06;
-            d = (byte)((pw.pcmEndAddress & 0xff00) >> 8);
-            d = (byte)((d != 0) ? (d - 1) : 0);
-            outSegaPcmPort(pw, adr, d);
+            if (pw.beforepcmEndAddress != pw.pcmEndAddress)
+            {
+                //EndAdr
+                adr = pw.ch * 8 + 0x06;
+                d = (byte)((pw.pcmEndAddress & 0xff00) >> 8);
+                d = (byte)((d != 0) ? (d - 1) : 0);
+                outSegaPcmPort(pw, adr, d);
+                pw.beforepcmEndAddress = pw.pcmEndAddress;
+            }
 
             adr = pw.ch * 8 + 0x86;
             d = (byte)(((pw.pcmBank & 0x3f) << 2) | (pw.pcmLoopAddress != -1 ? 0 : 2) | 0);

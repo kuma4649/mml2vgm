@@ -21,14 +21,17 @@ namespace mml2vgm
 
             Frequency = 4026987;
             Interface = 0x00f8000d;
+
             Ch = new clsChannel[ChMax];
             setPartToCh(Ch, initialPartName);
             foreach (clsChannel ch in Ch)
             {
                 ch.Type = enmChannelType.PCM;
                 ch.isSecondary = chipID == 1;
+                ch.MaxVolume = 127;
             }
 
         }
+
     }
 }

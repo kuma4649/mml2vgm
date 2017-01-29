@@ -123,6 +123,7 @@ namespace mml2vgm
         public string Name;
         public enmChannelType Type;
         public bool isSecondary;
+        public int MaxVolume;
     }
 
     public enum enmChannelType
