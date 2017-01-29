@@ -98,6 +98,12 @@ ebass3(from MUSIC LALF @70)
            ・RF5C164は再生位置にFFのデータを検出すると再生位置がループポイントへ移動する。
              その為、mml2vgmはファイル中で見つけたFFはFEに置換し、ファイルの終わりにFFを追加し、
              データの最後でループポイントに戻るよう調整する。
+         SegaPCM
+           ・PCMは8KHz,8bit,mono,圧縮なし,unsignedのwavファイルであること。
+           ・8KHzがo4c(オクターブ4のドの音)として再生される。
+           ・256byte毎にPaddingされる。
+           ・一つのサンプルは最大65536byteまで。それ以上はカットされる。
+           ・バンクに収まらない場合は次のバンクに格納し、収まらなかったバンクの方はPaddingされる。
 
   (3) エンベロープ定義部
     ・PSG音源、PCM音源にて音量の変化を定義する
@@ -155,11 +161,11 @@ ebass3(from MUSIC LALF @70)
   YM2608    OPNA          7987200  19Ch(FM   : 6Ch  FMex: 3Ch  SSG : 3Ch  Rhythm : 6Ch  ADPCM  : 1Ch)
   YM2610B   OPNB          8000000  19Ch(FM   : 6Ch  FMex: 3Ch  SSG : 3Ch  ADPCM-A: 6Ch  ADPCM-B: 1Ch)
   YM2151    OPM           3579545   8Ch(FM   : 8Ch)
+  SegaPCM   SPCM          4000000  16Ch(PCM  :16Ch)
   PWM       PWM          23011361   2Ch(PCM  : 2Ch)(T.B.D.)
   OKIM6258  OKI5          4000000   1Ch(ADPCM: 1Ch)(T.B.D.)
   OKIM6295  OKI9          8000000   4Ch(ADPCM: 4Ch)(T.B.D.)
   C140      C140          8000000  24Ch(PCM  :24Ch)(T.B.D.)
-  SegaPCM   SPCM          4000000  16Ch(PCM  :16Ch)(T.B.D.)
 
 
 ■ パート割り(初期値)
@@ -239,6 +245,22 @@ ebass3(from MUSIC LALF @70)
   X6     YM2151(FM音源)(Primary)         6Ch
   X7     YM2151(FM音源)(Primary)         7Ch
   X8     YM2151(FM音源)(Primary)         8Ch
+  Z01    SegaPCM(PCM音源)(Primary)       1Ch
+  Z02    SegaPCM(PCM音源)(Primary)       2Ch
+  Z03    SegaPCM(PCM音源)(Primary)       3Ch
+  Z04    SegaPCM(PCM音源)(Primary)       4Ch
+  Z05    SegaPCM(PCM音源)(Primary)       5Ch
+  Z06    SegaPCM(PCM音源)(Primary)       6Ch
+  Z07    SegaPCM(PCM音源)(Primary)       7Ch
+  Z08    SegaPCM(PCM音源)(Primary)       8Ch
+  Z09    SegaPCM(PCM音源)(Primary)       9Ch
+  Z10    SegaPCM(PCM音源)(Primary)       10Ch
+  Z11    SegaPCM(PCM音源)(Primary)       11Ch
+  Z12    SegaPCM(PCM音源)(Primary)       12Ch
+  Z13    SegaPCM(PCM音源)(Primary)       13Ch
+  Z14    SegaPCM(PCM音源)(Primary)       14Ch
+  Z15    SegaPCM(PCM音源)(Primary)       15Ch
+  Z16    SegaPCM(PCM音源)(Primary)       16Ch
 
   Fs1    YM2612(FM音源)(Secondary)       1Ch
   Fs2    YM2612(FM音源)(Secondary)       2Ch
@@ -316,9 +338,25 @@ ebass3(from MUSIC LALF @70)
   Xs6    YM2151(FM音源)(Secondary)       6Ch
   Xs7    YM2151(FM音源)(Secondary)       7Ch
   Xs8    YM2151(FM音源)(Secondary)       8Ch
+  Zs01   SegaPCM(PCM音源)(Secondary)     1Ch
+  Zs02   SegaPCM(PCM音源)(Secondary)     2Ch
+  Zs03   SegaPCM(PCM音源)(Secondary)     3Ch
+  Zs04   SegaPCM(PCM音源)(Secondary)     4Ch
+  Zs05   SegaPCM(PCM音源)(Secondary)     5Ch
+  Zs06   SegaPCM(PCM音源)(Secondary)     6Ch
+  Zs07   SegaPCM(PCM音源)(Secondary)     7Ch
+  Zs08   SegaPCM(PCM音源)(Secondary)     8Ch
+  Zs09   SegaPCM(PCM音源)(Secondary)     9Ch
+  Zs10   SegaPCM(PCM音源)(Secondary)     10Ch
+  Zs11   SegaPCM(PCM音源)(Secondary)     11Ch
+  Zs12   SegaPCM(PCM音源)(Secondary)     12Ch
+  Zs13   SegaPCM(PCM音源)(Secondary)     13Ch
+  Zs14   SegaPCM(PCM音源)(Secondary)     14Ch
+  Zs15   SegaPCM(PCM音源)(Secondary)     15Ch
+  Zs16   SegaPCM(PCM音源)(Secondary)     16Ch
 
   -----------
-  計 152Ch(Poly)
+  計 184Ch
 
 
 ■ MML内部
@@ -661,6 +699,7 @@ FM1Chで指定の音程2音を同時に出力することを主な目的とし�
           PartYM2608                      P
           PartYM2610B                     T
           PartYM2151                      X
+          PartSegaPCM                     Z
           PartYM2612Secondary             Fs
           PartSN76489Secondary            Ss
           PartRF5C164Secondary            Rs
@@ -668,17 +707,16 @@ FM1Chで指定の音程2音を同時に出力することを主な目的とし�
           PartYM2608Secondary             Ps
           PartYM2610BSecondary            Ts
           PartYM2151Secondary             Xs
+          PartSegaPCMSecondary            Zs
           
           (T.B.D.)PartPWM                 G
           (T.B.D.)PartOKIM6258            O
           (T.B.D.)PartOKIM6295            M
           (T.B.D.)PartC140                Y
-          (T.B.D.)PartSegaPCM             Z
           (T.B.D.)PartPWMSecondary        Gs
           (T.B.D.)PartOKIM6258Secondary   Os
           (T.B.D.)PartOKIM6295Secondary   Ms
           (T.B.D.)PartC140Secondary       Ys
-          (T.B.D.)PartSegaPCMSecondary    Zs
 
     特殊用途(T.B.D.)
       ForcedMonoPartYM2612    指定したパートの定位を強制的に中央のみにする。
