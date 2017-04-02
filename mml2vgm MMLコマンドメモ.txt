@@ -389,7 +389,8 @@ ebass3(from MUSIC LALF @70)
   Nf YM2203(FM)
   Ne YM2203(FM3ChEx)
   Ns YM2203(SSG)
-  X  YM2151(FM)
+  X  YM2151
+  Z  SEGAPCM
   
   o 対応
   - 非対応
@@ -426,9 +427,20 @@ Vn              --------o----o------  ADPCM-A/RHYTHM全体の音量絶対指定(
 yn1,n2          oooooooooooooooooooo  レジスタ直接書き込み(n1=レジスタ番号 n2=データ)ポートはそのChによる。
 Mx1x2n,...      oo-ooooooooooooooooo  LFO(
                                        x1:P/Q/R/S          識別子(1パート当たり4種類定義、使用できる)
-                                       x2:T/V/H            T:音量 V:音程(Ta/Pr不可) H:ハードウェアLFO(YM2612のみ)
+                                       x2:T/V/H            T:音量
+                                                           V:音程(Ta/Pr不可)
+                                                           H:ハードウェアLFO
                                        n...:パラメーター   
                                      )基本的にはFMPと同じ
+                                      ハードウェアLFO
+                                        OPN系 : Mx1Hn1
+                                                    n1:Freq(0 - 7)
+                                        OPM   : Mx1Hn1,n2,n3,n4,n5
+                                                    n1:LFO波形(0 - 3)
+                                                    n2:LFRQ(0 - 255)
+                                                    n3:PMD(0 - 127)
+                                                    n4:AMD(0 - 127)
+                                                    n5:LFO RESET(SYNC)(0 - 1)
 MAMSn           oo---oo---oo---oo---  AMS値 音量LFO感度(0-7)
 MAMSn           ------------------o-  AMS値 音量LFO感度(0-3)
 MPMSn           oo---oo---oo---oo---  PMS値 音程LFO感度(0-3)
@@ -452,10 +464,10 @@ wn              -------o----o----oo-  ノイズ周波数
 Pn              -------o----o----o--  1:トーン 2:ノイズ 3:トーン＆ノイズ
 Pn              ------------------o-  0:OFF 1:ON
 mn              ooo-----------------  YM2612PCMモード指定(0: 停止  1: 開始)
-Tn              ooooooooooooooooooo-  テンポ(1 - 255)
-!               ooooooooooooooooooo-  このパートのこれ以降をコンパイルしない(発音しない)
-Kn              oooooooo-oooo-ooooo-  移調絶対指定 ( -12 - +12 )
-#n              ooooooooooooooooooo-  音長をクロック値で指定
+Tn              oooooooooooooooooooo  テンポ(1 - 255)
+!               oooooooooooooooooooo  このパートのこれ以降をコンパイルしない(発音しない)
+Kn              oooooooo-oooo-oooooo  移調絶対指定 ( -12 - +12 )
+#n              oooooooooooooooooooo  音長をクロック値で指定
 pn              o-o--o--ooo--ooo--o-  パン (0: 発音しない  1: 右  2: 左  3: 中央)
 pn1,n2          ----o---------------  パン (n1: 左 0 - 15  n2: 右 0 - 15 )
 pn1,n2          -------------------o  パン (n1: 左 0 - 127 n2: 右 0 - 127)
@@ -514,9 +526,9 @@ b               oooooooooooooooooooo  音符シ
 
 
   定義パターン2
-    "M"を指定するとパラメータSSGEGまで音色を定義する。
+    "N"を指定するとパラメータSSGEGまで音色を定義する。
 
-'@ M No
+'@ N No
 '@ AR DR SR RR SL TL KS ML DT AM SSGEG
 '@ AR DR SR RR SL TL KS ML DT AM SSGEG
 '@ AR DR SR RR SL TL KS ML DT AM SSGEG
