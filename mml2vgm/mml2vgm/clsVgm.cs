@@ -3827,6 +3827,26 @@ namespace mml2vgm
 
             pw.incPos();
             char c = pw.getChar();
+
+            if (c == 'A')
+            {
+                pw.incPos();
+                char d = pw.getChar();
+                if (d == 'M')
+                {
+                    pw.incPos();
+                    d = pw.getChar();
+                    if (d == 'S')
+                    {
+                        //MAMS
+                        cmdMAMS(pw);
+                        return;
+                    }
+                }
+                msgBox.setErrMsg("MAMSの文法が違います。", lineNumber);
+                return;
+            }
+
             if (c < 'P' && c > 'S')
             {
                 msgBox.setErrMsg("指定できるLFOのチャネルはP,Q,R,Sの4種類です。", lineNumber);
@@ -3836,6 +3856,21 @@ namespace mml2vgm
 
             pw.incPos();
             char t = pw.getChar();
+
+            if (c == 0 && t == 'M')
+            {
+                pw.incPos();
+                char d = pw.getChar();
+                if (d == 'S')
+                {
+                    //MPMS
+                    cmdMPMS(pw);
+                    return;
+                }
+                msgBox.setErrMsg("MPMSの文法が違います。", lineNumber);
+                return;
+            }
+
             if (t != 'T' && t != 'V' && t != 'H')
             {
                 msgBox.setErrMsg("指定できるLFOの種類はT,V,Hの3種類です。", lineNumber);
@@ -3937,10 +3972,10 @@ namespace mml2vgm
                 }
                 else
                 {
-                    pw.lfo[c].param[0] = checkRange(pw.lfo[c].param[0], 0, (int)clockCount);
-                    pw.lfo[c].param[1] = checkRange(pw.lfo[c].param[1], 0, 7);
-                    pw.lfo[c].param[2] = checkRange(pw.lfo[c].param[2], 0, 7);
-                    pw.lfo[c].param[3] = checkRange(pw.lfo[c].param[3], 0, 3);
+                    pw.lfo[c].param[0] = checkRange(pw.lfo[c].param[0], 0, (int)clockCount);//Delay
+                    pw.lfo[c].param[1] = checkRange(pw.lfo[c].param[1], 0, 7);//Freq
+                    pw.lfo[c].param[2] = checkRange(pw.lfo[c].param[2], 0, 7);//PMS
+                    pw.lfo[c].param[3] = checkRange(pw.lfo[c].param[3], 0, 3);//AMS
                     if (pw.lfo[c].param.Count == 5)
                     {
                         pw.lfo[c].param[4] = checkRange(pw.lfo[c].param[4], 0, 1);
@@ -4015,6 +4050,50 @@ namespace mml2vgm
                 }
             }
 
+        }
+
+        private void cmdMAMS(partWork pw)
+        {
+            int n = -1;
+            pw.incPos();
+            if (!pw.getNum(out n))
+            {
+                msgBox.setErrMsg("MAMSの設定値に不正な値が指定されました。", lineNumber);
+                return;
+            }
+            if (pw.Type == enmChannelType.FMOPM)
+            {
+                n = checkRange(n, 0, 3);
+                outOPMSetPMSAMS(pw, pw.pms, n);
+            }
+            else
+            {
+                n = checkRange(n, 0, 7);
+                outOPNSetPanAMSFMS(pw, pw.pan, n, pw.pms);
+            }
+            pw.ams = n;
+        }
+
+        private void cmdMPMS(partWork pw)
+        {
+            int n = -1;
+            pw.incPos();
+            if (!pw.getNum(out n))
+            {
+                msgBox.setErrMsg("MPMSの設定値に不正な値が指定されました。", lineNumber);
+                return;
+            }
+            if (pw.Type == enmChannelType.FMOPM)
+            {
+                n = checkRange(n, 0, 7);
+                outOPMSetPMSAMS(pw, n, pw.ams);
+            }
+            else
+            {
+                n = checkRange(n, 0, 3);
+                outOPNSetPanAMSFMS(pw, pw.pan, pw.ams, n);
+            }
+            pw.pms = n;
         }
 
         private void cmdY(partWork pw)
@@ -4720,12 +4799,22 @@ namespace mml2vgm
                 {
                     if (pw.chip is YM2151)
                     {
-                        //throw new NotImplementedException();
                         setOPMFNum(pw);
                     }
                     else if ((pw.chip is YM2203) || (pw.chip is YM2608) || (pw.chip is YM2610B) || (pw.chip is YM2612))
                     {
-                        setFmFNum(pw);
+                        if (pw.Type == enmChannelType.FMOPN || pw.Type == enmChannelType.FMOPNex)
+                        {
+                            setFmFNum(pw);
+                        }
+                        else if (pw.Type == enmChannelType.SSG)
+                        {
+                            setSsgFNum(pw);
+                        }
+                    }
+                    else if (pw.chip is SN76489)
+                    {
+                        setPsgFNum(pw);
                     }
                 }
                 if (pl.type == eLfoType.Tremolo)
@@ -6658,7 +6747,7 @@ namespace mml2vgm
         private void setSsgVolume(partWork pw)
         {
             int m = (pw.chip is YM2203) ? 0 : 3;
-            byte pch = (byte)(pw.ch - (m+6));
+            byte pch = (byte)(pw.ch - (m + 6));
 
             int vol = pw.volume;
             if (pw.envelopeMode)
@@ -6669,6 +6758,15 @@ namespace mml2vgm
                     vol = pw.volume - (15 - pw.envVolume);
                 }
             }
+
+            for (int lfo = 0; lfo < 4; lfo++)
+            {
+                if (!pw.lfo[lfo].sw) continue;
+                if (pw.lfo[lfo].type != eLfoType.Tremolo) continue;
+
+                vol += pw.lfo[lfo].value + pw.lfo[lfo].param[6];
+            }
+
             vol = checkRange(vol, 0, 15);
 
             if (pw.beforeVolume != vol)

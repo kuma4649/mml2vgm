@@ -16,26 +16,11 @@
 
 }
 
-@ P 1,"SD.wav",8000,100,segapcm
-@ P 2,"Guitar.wav",8000,100,segapcm
-@ P 3,"Guitar.wav",8000,100,segapcm
-@ P 4,"Guitar.wav",8000,100,segapcm
-@ P 5,"Guitar.wav",8000,100,segapcm
-@ P 6,"str.wav",8000,100,segapcm
-Z01 T160@1
-Z02 @2l4o4q0v20cv40dv60ev80fv100ev120dv127p127,0crp127,20ep127,40fp127,60gp127,80ap127,100gp127,127fercrcrcrcr
-Z01 @2l4[c&dcd]c1_b
-Z01 MST0,1,10,100,0c1
 
-     No,SV,AR,DR,SL,SR,RR,ST
-@ E  0,127, 0, 1, 8, 5, 1, 1,SEGAPCM
+'S1 MSV6,1,4,6000,3 SS1q0
+'S1 [r1]1
+'S1  rd+d+d+ d+8d+d+8 d+d+8 d+e f8 v13D0
+S1  d+1&d+1
 
-Z01 @2@E0 EON c2d2e2 EOF c2d2e2
 
-'@ P 1,"Guitar.wav",8000,100,rf5c164
-'@ P 2,"Guitar.wav",8000,100,ym2610B,1
-'@ P 3,"Guitar.wav",8000,100,segapcm
 
-'R1 @1o3c4d4e4f4r1r1c4d4e4f4
-'T19 @2o4r1c4d4e4f4r1c4d4e4f4
-'Z01 @3o4r1r1c4d4e4f4c4d4e4f4gab>c

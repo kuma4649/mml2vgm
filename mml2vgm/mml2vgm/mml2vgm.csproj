@@ -115,6 +115,7 @@
     <None Include="sample\testToneDoubler.vgm" />
     <None Include="sample\testYM2151.gwi" />
     <None Include="sample\testYM2151.vgm" />
+    <None Include="sample\testYM2151HardLFO.gwi" />
     <None Include="sample\testYM2203.gwi" />
     <None Include="sample\testYM2203.vgm" />
     <None Include="sample\testYM2608.gwi" />
