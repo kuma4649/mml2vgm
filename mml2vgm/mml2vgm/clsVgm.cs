@@ -199,8 +199,8 @@ namespace mml2vgm
         public Dictionary<int, int[]> instENV = new Dictionary<int, int[]>();
         public Dictionary<int, clsPcm> instPCM = new Dictionary<int, clsPcm>();
         public Dictionary<int, clsToneDoubler> instToneDoubler = new Dictionary<int, clsToneDoubler>();
-        public Dictionary<string, List<Tuple<int, string>>> partData = new Dictionary<string, List<Tuple<int, string>>>();
-        public Dictionary<string, Tuple<int, string>> aliesData = new Dictionary<string, Tuple<int, string>>();
+        public Dictionary<string, List<Line>> partData = new Dictionary<string, List<Line>>();
+        public Dictionary<string, Line> aliesData = new Dictionary<string, Line>();
         public List<string> monoPart = null;
 
         private int instrumentCounter = -1;
@@ -266,17 +266,19 @@ namespace mml2vgm
 
         }
 
-        public int analyze(string[] buf)
+        public int analyze(List<Line> src)
         {
             lineNumber = 0;
 
             bool multiLine = false;
             string s2 = "";
 
-            foreach (string s in buf)
+            foreach (Line line in src)
             {
 
-                lineNumber++;
+                string s = line.Txt;
+                int lineNumber = line.Num;
+                string fn = line.Fn;
 
                 if (multiLine)
                 {
@@ -292,7 +294,7 @@ namespace mml2vgm
                     multiLine = false;
                     s2 = s2.Substring(0, s2.IndexOf("}"));
                     // Information
-                    addInformation(s2, lineNumber);
+                    addInformation(s2, lineNumber,fn);
                     continue;
                 }
 
@@ -319,26 +321,26 @@ namespace mml2vgm
                         multiLine = false;
                         s2 = s2.Substring(0, s2.IndexOf("}")).Trim();
                         // Information
-                        addInformation(s2, lineNumber);
+                        addInformation(s2, lineNumber,fn);
                     }
                     continue;
                 }
                 else if (s2.IndexOf("@") == 0)
                 {
                     // Instrument
-                    addInstrument(s2, lineNumber);
+                    addInstrument(s2, fn, lineNumber);
                     continue;
                 }
                 else if (s2.IndexOf("%") == 0)
                 {
                     // Alies
-                    addAlies(s2, lineNumber);
+                    addAlies(s2,fn, lineNumber);
                     continue;
                 }
                 else
                 {
                     // Part
-                    addPart(s2, lineNumber);
+                    addPart(s2,fn, lineNumber);
                     continue;
                 }
 
@@ -375,7 +377,7 @@ namespace mml2vgm
 
         }
 
-        private int addInformation(string buf, int lineNumber)
+        private int addInformation(string buf, int lineNumber,string fn)
         {
             string[] settings = buf.Split(new string[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
 
@@ -430,7 +432,7 @@ namespace mml2vgm
                 }
                 catch
                 {
-                    msgBox.setWrnMsg(string.Format("不正な定義です。({0})", s), lineNumber);
+                    msgBox.setWrnMsg(string.Format("不正な定義です。({0})", s), fn, lineNumber);
                 }
             }
             return 0;
@@ -468,11 +470,11 @@ namespace mml2vgm
             monoPart = divParts(val);
         }
 
-        private int addInstrument(string buf, int lineNumber)
+        private int addInstrument(string buf,string srcFn, int lineNumber)
         {
             if (buf == null || buf.Length < 2)
             {
-                msgBox.setWrnMsg("空の音色定義文を受け取りました。", lineNumber);
+                msgBox.setWrnMsg("空の音色定義文を受け取りました。", srcFn, lineNumber);
                 return -1;
             }
 
@@ -482,7 +484,7 @@ namespace mml2vgm
             if (instrumentCounter != -1)
             {
 
-                return setInstrument(s, lineNumber);
+                return setInstrument(s,srcFn, lineNumber);
 
             }
 
@@ -501,19 +503,19 @@ namespace mml2vgm
                 case 'F':
                     instrumentBufCache = new byte[instrumentSize - 8];
                     instrumentCounter = 0;
-                    setInstrument(s.Substring(1).TrimStart(), lineNumber);
+                    setInstrument(s.Substring(1).TrimStart(), srcFn, lineNumber);
                     return 0;
 
                 case 'N':
                     instrumentBufCache = new byte[instrumentSize];
                     instrumentCounter = 0;
-                    setInstrument(s.Substring(1).TrimStart(), lineNumber);
+                    setInstrument(s.Substring(1).TrimStart(), srcFn, lineNumber);
                     return 0;
 
                 case 'M':
                     instrumentBufCache = new byte[instrumentSize];
                     instrumentCounter = 0;
-                    setInstrument(s.Substring(1).TrimStart(), lineNumber);
+                    setInstrument(s.Substring(1).TrimStart(), srcFn, lineNumber);
                     return 0;
 
                 case 'P':
@@ -545,7 +547,7 @@ namespace mml2vgm
                             
                             if (!getChip(chipName).CanUsePcm)
                             {
-                                msgBox.setWrnMsg("未定義のChipName又はPCMを使用できないChipが指定されています。", lineNumber);
+                                msgBox.setWrnMsg("未定義のChipName又はPCMを使用できないChipが指定されています。", srcFn, lineNumber);
                                 break;
                             }
 
@@ -563,7 +565,7 @@ namespace mml2vgm
                     }
                     catch
                     {
-                        msgBox.setWrnMsg("不正なPCM音色定義文です。", lineNumber);
+                        msgBox.setWrnMsg("不正なPCM音色定義文です。", srcFn, lineNumber);
                     }
                     return 0;
                 case 'E':
@@ -589,37 +591,37 @@ namespace mml2vgm
                         {
                             if (env[8] == (int)enmChipType.SN76489)
                             {
-                                checkEnvelopeVolumeRange(lineNumber, env, i, 15, 0);
+                                checkEnvelopeVolumeRange(srcFn, lineNumber, env, i, 15, 0);
                                 if (env[7] == 0) env[7] = 1;
                             }
                             else if (env[8] == (int)enmChipType.RF5C164)
                             {
-                                checkEnvelopeVolumeRange(lineNumber, env, i, 255, 0);
+                                checkEnvelopeVolumeRange(srcFn, lineNumber, env, i, 255, 0);
                                 if (env[7] == 0) env[7] = 1;
                             }
                             else if (env[8] == (int)enmChipType.YM2203)
                             {
-                                checkEnvelopeVolumeRange(lineNumber, env, i, 255, 0);
+                                checkEnvelopeVolumeRange(srcFn, lineNumber, env, i, 255, 0);
                                 if (env[7] == 0) env[7] = 1;
                             }
                             else if (env[8] == (int)enmChipType.YM2608)
                             {
-                                checkEnvelopeVolumeRange(lineNumber, env, i, 255, 0);
+                                checkEnvelopeVolumeRange(srcFn, lineNumber, env, i, 255, 0);
                                 if (env[7] == 0) env[7] = 1;
                             }
                             else if (env[8] == (int)enmChipType.YM2610B)
                             {
-                                checkEnvelopeVolumeRange(lineNumber, env, i, 255, 0);
+                                checkEnvelopeVolumeRange(srcFn, lineNumber, env, i, 255, 0);
                                 if (env[7] == 0) env[7] = 1;
                             }
                             else if (env[8] == (int)enmChipType.SEGAPCM)
                             {
-                                checkEnvelopeVolumeRange(lineNumber, env, i, 127, 0);
+                                checkEnvelopeVolumeRange(srcFn, lineNumber, env, i, 127, 0);
                                 if (env[7] == 0) env[7] = 1;
                             }
                             else
                             {
-                                msgBox.setWrnMsg("エンベロープを使用できない音源が選択されています。", lineNumber);
+                                msgBox.setWrnMsg("エンベロープを使用できない音源が選択されています。",srcFn, lineNumber);
                             }
                         }
 
@@ -631,7 +633,7 @@ namespace mml2vgm
                     }
                     catch
                     {
-                        msgBox.setWrnMsg("不正なエンベロープ定義文です。", lineNumber);
+                        msgBox.setWrnMsg("不正なエンベロープ定義文です。", srcFn, lineNumber);
                     }
                     return 0;
                 case 'T':
@@ -642,11 +644,11 @@ namespace mml2vgm
                         if (s.ToUpper()[1] != 'D') return 0;
 
                         toneDoublerBufCache.Clear();
-                        storeToneDoublerBuffer(s.ToUpper().Substring(2).TrimStart(), lineNumber);
+                        storeToneDoublerBuffer(s.ToUpper().Substring(2).TrimStart(), srcFn, lineNumber);
                     }
                     catch
                     {
-                        msgBox.setWrnMsg("不正なTone Doubler定義文です。", lineNumber);
+                        msgBox.setWrnMsg("不正なTone Doubler定義文です。", srcFn, lineNumber);
                     }
                     return 0;
             }
@@ -654,25 +656,25 @@ namespace mml2vgm
             // ToneDoublerを定義中の場合
             if (toneDoublerCounter != -1)
             {
-                return storeToneDoublerBuffer(s.ToUpper(), lineNumber);
+                return storeToneDoublerBuffer(s.ToUpper(), srcFn, lineNumber);
             }
 
             return 0;
         }
 
-        private static void checkEnvelopeVolumeRange(int lineNumber, int[] env, int i, int max, int min)
+        private static void checkEnvelopeVolumeRange(string srcFn,int lineNumber, int[] env, int i, int max, int min)
         {
             if (i == 1 || i == 4 || i == 7)
             {
                 if (env[i] > max)
                 {
                     env[i] = max;
-                    msgBox.setWrnMsg(string.Format("Envelope音量が{0}を超えています。", max), lineNumber);
+                    msgBox.setWrnMsg(string.Format("Envelope音量が{0}を超えています。", max), srcFn, lineNumber);
                 }
                 if (env[i] < min)
                 {
                     env[i] = min;
-                    msgBox.setWrnMsg(string.Format("Envelope音量が{0}未満です。", min), lineNumber);
+                    msgBox.setWrnMsg(string.Format("Envelope音量が{0}未満です。", min), srcFn, lineNumber);
                 }
             }
         }
@@ -728,7 +730,7 @@ namespace mml2vgm
             return null;
         }
 
-        private int addAlies(string buf, int lineNumber)
+        private int addAlies(string buf,string srcFn, int lineNumber)
         {
             string name = "";
             string data = "";
@@ -745,25 +747,25 @@ namespace mml2vgm
             if (name == "")
             {
                 //エイリアス指定がない場合は警告とする
-                msgBox.setWrnMsg("不正なエイリアス指定です。", lineNumber);
+                msgBox.setWrnMsg("不正なエイリアス指定です。", srcFn, lineNumber);
                 return -1;
             }
             if (data == "")
             {
                 //データがない場合は警告する
-                msgBox.setWrnMsg("エイリアスにデータがありません。", lineNumber);
+                msgBox.setWrnMsg("エイリアスにデータがありません。", srcFn, lineNumber);
             }
 
             if (aliesData.ContainsKey(name))
             {
                 aliesData.Remove(name);
             }
-            aliesData.Add(name, new Tuple<int, string>(lineNumber, data));
+            aliesData.Add(name, new Line("", lineNumber, data));
 
             return 0;
         }
 
-        private int addPart(string buf, int lineNumber)
+        private int addPart(string buf,string srcFn, int lineNumber)
         {
             List<string> part = new List<string>();
             string data = "";
@@ -780,7 +782,7 @@ namespace mml2vgm
             if (part == null)
             {
                 //パート指定がない場合は警告とする
-                msgBox.setWrnMsg("不正なパート指定です。", lineNumber);
+                msgBox.setWrnMsg("不正なパート指定です。", srcFn, lineNumber);
                 return -1;
             }
             if (data == "")
@@ -793,9 +795,9 @@ namespace mml2vgm
             {
                 if (!partData.ContainsKey(p))
                 {
-                    partData.Add(p, new List<Tuple<int, string>>());
+                    partData.Add(p, new List<Line>());
                 }
-                partData[p].Add(new Tuple<int, string>(lineNumber, data));
+                partData[p].Add(new Line(srcFn,lineNumber, data));
             }
 
             return 0;
@@ -897,7 +899,7 @@ namespace mml2vgm
             return 0;
         }
 
-        private int setInstrument(string vals, int lineNumber)
+        private int setInstrument(string vals,string srcFn, int lineNumber)
         {
             string n = "";
             string h = "";
@@ -975,13 +977,13 @@ namespace mml2vgm
             }
             catch
             {
-                msgBox.setErrMsg("音色の定義が不正です。", lineNumber);
+                msgBox.setErrMsg("音色の定義が不正です。", srcFn, lineNumber);
             }
 
             return 0;
         }
 
-        private int storeToneDoublerBuffer(string vals, int lineNumber)
+        private int storeToneDoublerBuffer(string vals,string srcFn, int lineNumber)
         {
             string n = "";
             string h = "";
@@ -1040,7 +1042,7 @@ namespace mml2vgm
             }
             catch
             {
-                msgBox.setErrMsg("Tone Doublerの定義が不正です。", lineNumber);
+                msgBox.setErrMsg("Tone Doublerの定義が不正です。", srcFn, lineNumber);
             }
 
             return 0;
@@ -2123,7 +2125,7 @@ namespace mml2vgm
                     cmdNote(pw, cmd);
                     break;
                 default:
-                    msgBox.setErrMsg(string.Format("未知のコマンド{0}を検出しました。", cmd), pw.getLineNumber());
+                    msgBox.setErrMsg(string.Format("未知のコマンド{0}を検出しました。", cmd), pw.getSrcFn(), pw.getLineNumber());
                     pw.incPos();
                     break;
             }
@@ -2142,7 +2144,7 @@ namespace mml2vgm
             }
             if (cmd == 'r' && shift != 0)
             {
-                msgBox.setWrnMsg("休符での+、-の指定は無視されます。", lineNumber);
+                msgBox.setWrnMsg("休符での+、-の指定は無視されます。", pw.getSrcFn(), pw.getLineNumber());
             }
 
             int ml = 0;
@@ -2173,7 +2175,7 @@ namespace mml2vgm
                             && pw.Type != enmChannelType.FMOPNex
                             )
                         {
-                            msgBox.setErrMsg("Tone Doublerが使用できるのはFM音源のみです。", lineNumber);
+                            msgBox.setErrMsg("Tone Doublerが使用できるのはFM音源のみです。", pw.getSrcFn(), pw.getLineNumber());
                             return;
                         }
                         pw.TdA = pw.octaveNew * 12 + note.IndexOf(cmd) + shift + pw.keyShift;
@@ -2184,7 +2186,7 @@ namespace mml2vgm
 
                     if ((int)clockCount % n != 0)
                     {
-                        msgBox.setWrnMsg(string.Format("割り切れない音長({0})の指定があります。音長は不定になります。", n), lineNumber);
+                        msgBox.setWrnMsg(string.Format("割り切れない音長({0})の指定があります。音長は不定になります。", n), pw.getSrcFn(), pw.getLineNumber());
                     }
                     n = (int)clockCount / n;
                 }
@@ -2197,7 +2199,7 @@ namespace mml2vgm
                         && pw.Type != enmChannelType.FMOPNex
                         )
                     {
-                        msgBox.setErrMsg("Tone Doublerが使用できるのはFM音源のみです。", lineNumber);
+                        msgBox.setErrMsg("Tone Doublerが使用できるのはFM音源のみです。", pw.getSrcFn(), pw.getLineNumber());
                         return;
                     }
                     pw.TdA = pw.octaveNew * 12 + note.IndexOf(cmd) + shift + pw.keyShift;
@@ -2216,7 +2218,7 @@ namespace mml2vgm
                     {
                         if (n % 2 != 0)
                         {
-                            msgBox.setWrnMsg("割り切れない.の指定があります。音長は不定です。", lineNumber);
+                            msgBox.setWrnMsg("割り切れない.の指定があります。音長は不定です。", pw.getSrcFn(), pw.getLineNumber());
                         }
                         n = n / 2;
                         m += n;
@@ -2288,7 +2290,7 @@ namespace mml2vgm
                                     {
                                         if ((int)clockCount % n != 0)
                                         {
-                                            msgBox.setWrnMsg(string.Format("割り切れない音長({0})の指定があります。音長は不定になります。", n), lineNumber);
+                                            msgBox.setWrnMsg(string.Format("割り切れない音長({0})の指定があります。音長は不定になります。", n), pw.getSrcFn(), pw.getLineNumber());
                                         }
                                         n = (int)clockCount / n;
                                     }
@@ -2302,7 +2304,7 @@ namespace mml2vgm
                                         {
                                             if (n % 2 != 0)
                                             {
-                                                msgBox.setWrnMsg("割り切れない.の指定があります。音長は不定です。", lineNumber);
+                                                msgBox.setWrnMsg("割り切れない.の指定があります。音長は不定です。", pw.getSrcFn(), pw.getLineNumber());
                                             }
                                             n = n / 2;
                                             m += n;
@@ -2340,7 +2342,7 @@ namespace mml2vgm
                                 }
                                 else
                                 {
-                                    msgBox.setErrMsg("休符にベンドの指定はできません。", lineNumber);
+                                    msgBox.setErrMsg("休符にベンドの指定はできません。", pw.getSrcFn(), pw.getLineNumber());
                                 }
 
                                 break;
@@ -2348,7 +2350,7 @@ namespace mml2vgm
                                 pw.incPos();
                                 if (!pw.getNum(out n))
                                 {
-                                    msgBox.setErrMsg("不正なオクターブが指定されています。", lineNumber);
+                                    msgBox.setErrMsg("不正なオクターブが指定されています。", pw.getSrcFn(), pw.getLineNumber());
                                     n = 110;
                                 }
                                 n = checkRange(n, 1, 8);
@@ -2508,7 +2510,7 @@ namespace mml2vgm
 
             if (ml < 1)
             {
-                msgBox.setErrMsg("負の音長が指定されました。", lineNumber);
+                msgBox.setErrMsg("負の音長が指定されました。", pw.getSrcFn(), pw.getLineNumber());
                 ml = (int)pw.length;
             }
 
@@ -2849,7 +2851,7 @@ namespace mml2vgm
             }
             catch
             {
-                msgBox.setWrnMsg("[と]の数があいません。", lineNumber);
+                msgBox.setWrnMsg("[と]の数があいません。", pw.getSrcFn(), pw.getLineNumber());
             }
         }
 
@@ -2930,7 +2932,7 @@ namespace mml2vgm
                                     outOPNSetCh3SpecialMode(pw, false);
                                     break;
                                 default:
-                                    msgBox.setErrMsg(string.Format("未知のコマンド(EO{0})が指定されました。", pw.getChar()), lineNumber);
+                                    msgBox.setErrMsg(string.Format("未知のコマンド(EO{0})が指定されました。", pw.getChar()), pw.getSrcFn(), pw.getLineNumber());
                                     pw.incPos();
                                     break;
                             }
@@ -2952,7 +2954,7 @@ namespace mml2vgm
                                     }
                                     break;
                                 default:
-                                    msgBox.setErrMsg(string.Format("未知のコマンド(EO{0})が指定されました。", pw.getChar()), lineNumber);
+                                    msgBox.setErrMsg(string.Format("未知のコマンド(EO{0})が指定されました。", pw.getChar()), pw.getSrcFn(), pw.getLineNumber());
                                     pw.incPos();
                                     break;
                             }
@@ -2970,7 +2972,7 @@ namespace mml2vgm
                             pw.incPos();
                             if (!pw.getNum(out n))
                             {
-                                msgBox.setErrMsg("不正なスロット指定'EX'が指定されています。", lineNumber);
+                                msgBox.setErrMsg("不正なスロット指定'EX'が指定されています。", pw.getSrcFn(), pw.getLineNumber());
                                 n = 0;
                             }
                             byte res = 0;
@@ -2982,7 +2984,7 @@ namespace mml2vgm
                                 }
                                 else
                                 {
-                                    msgBox.setErrMsg(string.Format("未知のコマンド(EX{0})が指定されました。", n), lineNumber);
+                                    msgBox.setErrMsg(string.Format("未知のコマンド(EX{0})が指定されました。", n), pw.getSrcFn(), pw.getLineNumber());
                                     break;
                                 }
                                 n /= 10;
@@ -2994,7 +2996,7 @@ namespace mml2vgm
                         }
                         else
                         {
-                            msgBox.setErrMsg("未知のコマンド(EX)が指定されました。", lineNumber);
+                            msgBox.setErrMsg("未知のコマンド(EX)が指定されました。", pw.getSrcFn(), pw.getLineNumber());
                         }
                         break;
                     default:
@@ -3010,7 +3012,7 @@ namespace mml2vgm
                                 }
                                 else
                                 {
-                                    msgBox.setErrMsg("Eコマンドの解析に失敗しました。", lineNumber);
+                                    msgBox.setErrMsg("Eコマンドの解析に失敗しました。", pw.getSrcFn(), pw.getLineNumber());
                                     break;
                                 }
                                 if (i == 3) break;
@@ -3021,7 +3023,7 @@ namespace mml2vgm
                         }
                         else
                         {
-                            msgBox.setErrMsg(string.Format("未知のコマンド(E{0})が指定されました。", pw.getChar()), lineNumber);
+                            msgBox.setErrMsg(string.Format("未知のコマンド(E{0})が指定されました。", pw.getChar()), pw.getSrcFn(), pw.getLineNumber());
                             pw.incPos();
                         }
                         break;
@@ -3029,7 +3031,7 @@ namespace mml2vgm
             }
             else
             {
-                msgBox.setWrnMsg("このパートは効果音モードに対応したチャンネルが指定されていないため、Eコマンドは無視されます。", lineNumber);
+                msgBox.setWrnMsg("このパートは効果音モードに対応したチャンネルが指定されていないため、Eコマンドは無視されます。", pw.getSrcFn(), pw.getLineNumber());
                 pw.incPos();
             }
 
@@ -3041,7 +3043,7 @@ namespace mml2vgm
             pw.incPos();
             if (!pw.getNum(out n))
             {
-                msgBox.setErrMsg("不正なゲートタイム指定'Q'が指定されています。", lineNumber);
+                msgBox.setErrMsg("不正なゲートタイム指定'Q'が指定されています。", pw.getSrcFn(), pw.getLineNumber());
                 n = 1;
             }
             n = checkRange(n, 1, 8);
@@ -3055,7 +3057,7 @@ namespace mml2vgm
             pw.incPos();
             if (!pw.getNum(out n))
             {
-                msgBox.setErrMsg("不正なゲートタイム指定'q'が指定されています。", lineNumber);
+                msgBox.setErrMsg("不正なゲートタイム指定'q'が指定されています。", pw.getSrcFn(), pw.getLineNumber());
                 n = 0;
             }
             n = checkRange(n, 0, 255);
@@ -3071,7 +3073,7 @@ namespace mml2vgm
             {
                 if (!pw.getNum(out n))
                 {
-                    msgBox.setErrMsg("不正なPCMモード指定'm'が指定されています。", lineNumber);
+                    msgBox.setErrMsg("不正なPCMモード指定'm'が指定されています。", pw.getSrcFn(), pw.getLineNumber());
                     n = 0;
                 }
                 n = checkRange(n, 0, 1);
@@ -3082,7 +3084,7 @@ namespace mml2vgm
             else
             {
                 pw.getNum(out n);
-                msgBox.setWrnMsg("このパートはYM2612の6chではないため、mコマンドは無視されます。", lineNumber);
+                msgBox.setWrnMsg("このパートはYM2612の6chではないため、mコマンドは無視されます。", pw.getSrcFn(), pw.getLineNumber());
             }
 
         }
@@ -3093,7 +3095,7 @@ namespace mml2vgm
             pw.incPos();
             if (!pw.getNum(out n))
             {
-                msgBox.setErrMsg("不正なディチューン'D'が指定されています。", lineNumber);
+                msgBox.setErrMsg("不正なディチューン'D'が指定されています。", pw.getSrcFn(), pw.getLineNumber());
                 n = 0;
             }
 
@@ -3122,7 +3124,7 @@ namespace mml2vgm
             {
                 if (!pw.getNum(out n))
                 {
-                    msgBox.setErrMsg("不正なパン'p'が指定されています。", lineNumber);
+                    msgBox.setErrMsg("不正なパン'p'が指定されています。", pw.getSrcFn(), pw.getLineNumber());
                     n = 3;
                 }
                 //強制的にモノラルにする
@@ -3136,7 +3138,7 @@ namespace mml2vgm
             }
             else if (pw.chip is YM2203)
             {
-                msgBox.setErrMsg("YM2203はパン'p'に未対応です。", lineNumber);
+                msgBox.setErrMsg("YM2203はパン'p'に未対応です。", pw.getSrcFn(), pw.getLineNumber());
             }
             else if (pw.chip is YM2608)
             {
@@ -3150,7 +3152,7 @@ namespace mml2vgm
 
                     if (!pw.getNum(out n))
                     {
-                        msgBox.setErrMsg("不正なパン'p'が指定されています。", lineNumber);
+                        msgBox.setErrMsg("不正なパン'p'が指定されています。", pw.getSrcFn(), pw.getLineNumber());
                         n = 3;
                     }
                     //強制的にモノラルにする
@@ -3166,7 +3168,7 @@ namespace mml2vgm
                 {
                     if (!pw.getNum(out n))
                     {
-                        msgBox.setErrMsg("不正なパン'p'が指定されています。", lineNumber);
+                        msgBox.setErrMsg("不正なパン'p'が指定されています。", pw.getSrcFn(), pw.getLineNumber());
                         n = 3;
                     }
                     n = checkRange(n, 0, 3);
@@ -3176,7 +3178,7 @@ namespace mml2vgm
                 {
                     if (!pw.getNum(out n))
                     {
-                        msgBox.setErrMsg("不正なパン'p'が指定されています。", lineNumber);
+                        msgBox.setErrMsg("不正なパン'p'が指定されています。", pw.getSrcFn(), pw.getLineNumber());
                         n = 3;
                     }
                     n = checkRange(n, 0, 3);
@@ -3195,7 +3197,7 @@ namespace mml2vgm
 
                     if (!pw.getNum(out n))
                     {
-                        msgBox.setErrMsg("不正なパン'p'が指定されています。", lineNumber);
+                        msgBox.setErrMsg("不正なパン'p'が指定されています。", pw.getSrcFn(), pw.getLineNumber());
                         n = 3;
                     }
                     //強制的にモノラルにする
@@ -3211,7 +3213,7 @@ namespace mml2vgm
                 {
                     if (!pw.getNum(out n))
                     {
-                        msgBox.setErrMsg("不正なパン'p'が指定されています。", lineNumber);
+                        msgBox.setErrMsg("不正なパン'p'が指定されています。", pw.getSrcFn(), pw.getLineNumber());
                         n = 3;
                     }
                     n = checkRange(n, 0, 3);
@@ -3221,7 +3223,7 @@ namespace mml2vgm
                 {
                     if (!pw.getNum(out n))
                     {
-                        msgBox.setErrMsg("不正なパン'p'が指定されています。", lineNumber);
+                        msgBox.setErrMsg("不正なパン'p'が指定されています。", pw.getSrcFn(), pw.getLineNumber());
                         n = 3;
                     }
                     n = checkRange(n, 0, 3);
@@ -3238,7 +3240,7 @@ namespace mml2vgm
 
                 if (!pw.getNum(out n))
                 {
-                    msgBox.setErrMsg("不正なパン'p'が指定されています。", lineNumber);
+                    msgBox.setErrMsg("不正なパン'p'が指定されています。", pw.getSrcFn(), pw.getLineNumber());
                     n = 10;
                 }
                 //強制的にモノラルにする
@@ -3253,7 +3255,7 @@ namespace mml2vgm
             else if (pw.chip is SN76489)
             {
                 pw.getNum(out n);
-                msgBox.setWrnMsg("PSGパートでは、pコマンドは無視されます。", lineNumber);
+                msgBox.setWrnMsg("PSGパートでは、pコマンドは無視されます。", pw.getSrcFn(), pw.getLineNumber());
             }
             else if (pw.chip is RF5C164)
             {
@@ -3261,19 +3263,19 @@ namespace mml2vgm
                 int r;
                 if (!pw.getNum(out l))
                 {
-                    msgBox.setErrMsg("不正なパン'p'が指定されています。", lineNumber);
+                    msgBox.setErrMsg("不正なパン'p'が指定されています。", pw.getSrcFn(), pw.getLineNumber());
                     l = 15;
                 }
                 if (pw.getChar() != ',')
                 {
-                    msgBox.setErrMsg("不正なパン'p'が指定されています。", lineNumber);
+                    msgBox.setErrMsg("不正なパン'p'が指定されています。", pw.getSrcFn(), pw.getLineNumber());
                     l = 15;
                     r = 15;
                 }
                 pw.incPos();
                 if (!pw.getNum(out r))
                 {
-                    msgBox.setErrMsg("不正なパン'p'が指定されています。", lineNumber);
+                    msgBox.setErrMsg("不正なパン'p'が指定されています。", pw.getSrcFn(), pw.getLineNumber());
                     r = 15;
                 }
                 l = checkRange(l, 0, 15);
@@ -3288,19 +3290,19 @@ namespace mml2vgm
                 int r;
                 if (!pw.getNum(out l))
                 {
-                    msgBox.setErrMsg("不正なパン'p'が指定されています。", lineNumber);
+                    msgBox.setErrMsg("不正なパン'p'が指定されています。", pw.getSrcFn(), pw.getLineNumber());
                     l = 127;
                 }
                 if (pw.getChar() != ',')
                 {
-                    msgBox.setErrMsg("不正なパン'p'が指定されています。", lineNumber);
+                    msgBox.setErrMsg("不正なパン'p'が指定されています。", pw.getSrcFn(), pw.getLineNumber());
                     l = 127;
                     r = 127;
                 }
                 pw.incPos();
                 if (!pw.getNum(out r))
                 {
-                    msgBox.setErrMsg("不正なパン'p'が指定されています。", lineNumber);
+                    msgBox.setErrMsg("不正なパン'p'が指定されています。", pw.getSrcFn(), pw.getLineNumber());
                     r = 127;
                 }
                 l = checkRange(l, 0, 127);
@@ -3317,7 +3319,7 @@ namespace mml2vgm
             pw.incPos();
             if (!pw.getNum(out n))
             {
-                msgBox.setErrMsg("不正な音長が指定されています。", lineNumber);
+                msgBox.setErrMsg("不正な音長が指定されています。", pw.getSrcFn(), pw.getLineNumber());
                 n = 10;
             }
             n = checkRange(n, 1, 128);
@@ -3330,7 +3332,7 @@ namespace mml2vgm
             pw.incPos();
             if (!pw.getNum(out n))
             {
-                msgBox.setErrMsg("不正な音長が指定されています。", lineNumber);
+                msgBox.setErrMsg("不正な音長が指定されています。", pw.getSrcFn(), pw.getLineNumber());
                 n = 10;
             }
             n = checkRange(n, 1, 65535);
@@ -3343,7 +3345,7 @@ namespace mml2vgm
             pw.incPos();
             if (!pw.getNum(out n))
             {
-                msgBox.setErrMsg("不正な音量'('が指定されています。", lineNumber);
+                msgBox.setErrMsg("不正な音量'('が指定されています。", pw.getSrcFn(), pw.getLineNumber());
                 n = 10;
             }
             n = checkRange(n, 1, pw.MaxVolume);
@@ -3358,7 +3360,7 @@ namespace mml2vgm
             pw.incPos();
             if (!pw.getNum(out n))
             {
-                msgBox.setErrMsg("不正な音量')'が指定されています。", lineNumber);
+                msgBox.setErrMsg("不正な音量')'が指定されています。", pw.getSrcFn(), pw.getLineNumber());
                 n = 10;
             }
             n = checkRange(n, 1, pw.MaxVolume);
@@ -3387,7 +3389,7 @@ namespace mml2vgm
             pw.incPos();
             if (!pw.getNum(out n))
             {
-                msgBox.setErrMsg("不正なオクターブが指定されています。", lineNumber);
+                msgBox.setErrMsg("不正なオクターブが指定されています。", pw.getSrcFn(), pw.getLineNumber());
                 n = 110;
             }
             n = checkRange(n, 1, 8);
@@ -3400,7 +3402,7 @@ namespace mml2vgm
             pw.incPos();
             if (!pw.getNum(out n))
             {
-                msgBox.setErrMsg("不正なテンポが指定されています。", lineNumber);
+                msgBox.setErrMsg("不正なテンポが指定されています。", pw.getSrcFn(), pw.getLineNumber());
                 n = 120;
             }
             n = checkRange(n, 1, 255);
@@ -3414,7 +3416,7 @@ namespace mml2vgm
             pw.incPos();
             if (!pw.getNum(out n))
             {
-                msgBox.setErrMsg("不正な音量が指定されています。", lineNumber);
+                msgBox.setErrMsg("不正な音量が指定されています。", pw.getSrcFn(), pw.getLineNumber());
                 n = 110;
             }
 
@@ -3427,7 +3429,7 @@ namespace mml2vgm
             pw.incPos();
             if (!pw.getNum(out n))
             {
-                msgBox.setErrMsg("不正な音量が指定されています。", lineNumber);
+                msgBox.setErrMsg("不正な音量が指定されています。", pw.getSrcFn(), pw.getLineNumber());
                 n = 63;
             }
             if ((pw.chip is YM2608) && pw.Type == enmChannelType.RHYTHM)
@@ -3450,14 +3452,14 @@ namespace mml2vgm
             {
                 if (pw.Type != enmChannelType.FMOPM && pw.Type != enmChannelType.FMOPN && pw.Type != enmChannelType.FMOPNex)
                 {
-                    msgBox.setErrMsg("Tone DoublerはFM音源以外では使用できません。", lineNumber);
+                    msgBox.setErrMsg("Tone DoublerはFM音源以外では使用できません。", pw.getSrcFn(), pw.getLineNumber());
                     pw.incPos();
                     return;
                 }
                 pw.incPos();
                 if (!pw.getNum(out n))
                 {
-                    msgBox.setErrMsg("不正な音色番号が指定されています。", lineNumber);
+                    msgBox.setErrMsg("不正な音色番号が指定されています。", pw.getSrcFn(), pw.getLineNumber());
                     n = 0;
                 }
                 n = checkRange(n, 0, 255);
@@ -3469,7 +3471,7 @@ namespace mml2vgm
             {
                 if (!pw.getNum(out n))
                 {
-                    msgBox.setErrMsg("不正な音色番号が指定されています。", lineNumber);
+                    msgBox.setErrMsg("不正な音色番号が指定されています。", pw.getSrcFn(), pw.getLineNumber());
                     n = 0;
                 }
                 n = checkRange(n, 0, 255);
@@ -3485,7 +3487,7 @@ namespace mml2vgm
                 {
                     if (!pw.getNum(out n))
                     {
-                        msgBox.setErrMsg("不正な音色番号が指定されています。", lineNumber);
+                        msgBox.setErrMsg("不正な音色番号が指定されています。", pw.getSrcFn(), pw.getLineNumber());
                         n = 0;
                     }
                     n = checkRange(n, 0, 255);
@@ -3513,7 +3515,7 @@ namespace mml2vgm
                 {
                     if (!pw.getNum(out n))
                     {
-                        msgBox.setErrMsg("不正な音色番号が指定されています。", lineNumber);
+                        msgBox.setErrMsg("不正な音色番号が指定されています。", pw.getSrcFn(), pw.getLineNumber());
                         n = 0;
                     }
                     n = checkRange(n, 0, 255);
@@ -3552,19 +3554,19 @@ namespace mml2vgm
                     {
                         if (!pw.getNum(out n))
                         {
-                            msgBox.setErrMsg("不正な音色番号が指定されています。", lineNumber);
+                            msgBox.setErrMsg("不正な音色番号が指定されています。", pw.getSrcFn(), pw.getLineNumber());
                             n = 0;
                         }
                         n = checkRange(n, 0, 255);
                         if (!instPCM.ContainsKey(n))
                         {
-                            msgBox.setErrMsg(string.Format("PCM定義に指定された音色番号({0})が存在しません。", n), lineNumber);
+                            msgBox.setErrMsg(string.Format("PCM定義に指定された音色番号({0})が存在しません。", n), pw.getSrcFn(), pw.getLineNumber());
                         }
                         else
                         {
                             if (instPCM[n].chip != enmChipType.YM2608 || instPCM[n].loopAdr != 1)
                             {
-                                msgBox.setErrMsg(string.Format("指定された音色番号({0})はYM2608向けPCMデータではありません。", n), lineNumber);
+                                msgBox.setErrMsg(string.Format("指定された音色番号({0})はYM2608向けPCMデータではありません。", n), pw.getSrcFn(), pw.getLineNumber());
                             }
                             pw.instrument = n;
                             setYM2608ADPCMAddress(pw, (int)instPCM[n].stAdr, (int)instPCM[n].edAdr);
@@ -3583,7 +3585,7 @@ namespace mml2vgm
                 {
                     if (!pw.getNum(out n))
                     {
-                        msgBox.setErrMsg("不正な音色番号が指定されています。", lineNumber);
+                        msgBox.setErrMsg("不正な音色番号が指定されています。", pw.getSrcFn(), pw.getLineNumber());
                         n = 0;
                     }
                     n = checkRange(n, 0, 255);
@@ -3605,13 +3607,13 @@ namespace mml2vgm
                         {
                             if (!instPCM.ContainsKey(n))
                             {
-                                msgBox.setErrMsg(string.Format("PCM定義に指定された音色番号({0})が存在しません。", n), lineNumber);
+                                msgBox.setErrMsg(string.Format("PCM定義に指定された音色番号({0})が存在しません。", n), pw.getSrcFn(), pw.getLineNumber());
                             }
                             else
                             {
                                 if (instPCM[n].chip != enmChipType.YM2610B)
                                 {
-                                    msgBox.setErrMsg(string.Format("指定された音色番号({0})はYM2610B向けPCMデータではありません。", n), lineNumber);
+                                    msgBox.setErrMsg(string.Format("指定された音色番号({0})はYM2610B向けPCMデータではありません。", n), pw.getSrcFn(), pw.getLineNumber());
                                 }
                             }
                         }
@@ -3627,19 +3629,19 @@ namespace mml2vgm
                     {
                         if (!pw.getNum(out n))
                         {
-                            msgBox.setErrMsg("不正な音色番号が指定されています。", lineNumber);
+                            msgBox.setErrMsg("不正な音色番号が指定されています。", pw.getSrcFn(), pw.getLineNumber());
                             n = 0;
                         }
                         n = checkRange(n, 0, 255);
                         if (!instPCM.ContainsKey(n))
                         {
-                            msgBox.setErrMsg(string.Format("PCM定義に指定された音色番号({0})が存在しません。", n), lineNumber);
+                            msgBox.setErrMsg(string.Format("PCM定義に指定された音色番号({0})が存在しません。", n), pw.getSrcFn(), pw.getLineNumber());
                         }
                         else
                         {
                             if (instPCM[n].chip != enmChipType.YM2610B || instPCM[n].loopAdr != 0)
                             {
-                                msgBox.setErrMsg(string.Format("指定された音色番号({0})はYM2610B向けPCMデータではありません。", n), lineNumber);
+                                msgBox.setErrMsg(string.Format("指定された音色番号({0})はYM2610B向けPCMデータではありません。", n), pw.getSrcFn(), pw.getLineNumber());
                             }
                             pw.instrument = n;
                             setYM2610BADPCMAAddress(pw, (int)instPCM[n].stAdr, (int)instPCM[n].edAdr);
@@ -3657,19 +3659,19 @@ namespace mml2vgm
                     {
                         if (!pw.getNum(out n))
                         {
-                            msgBox.setErrMsg("不正な音色番号が指定されています。", lineNumber);
+                            msgBox.setErrMsg("不正な音色番号が指定されています。", pw.getSrcFn(), pw.getLineNumber());
                             n = 0;
                         }
                         n = checkRange(n, 0, 255);
                         if (!instPCM.ContainsKey(n))
                         {
-                            msgBox.setErrMsg(string.Format("PCM定義に指定された音色番号({0})が存在しません。", n), lineNumber);
+                            msgBox.setErrMsg(string.Format("PCM定義に指定された音色番号({0})が存在しません。", n), pw.getSrcFn(), pw.getLineNumber());
                         }
                         else
                         {
                             if (instPCM[n].chip != enmChipType.YM2610B || instPCM[n].loopAdr != 1)
                             {
-                                msgBox.setErrMsg(string.Format("指定された音色番号({0})はYM2610B向けPCMデータではありません。", n), lineNumber);
+                                msgBox.setErrMsg(string.Format("指定された音色番号({0})はYM2610B向けPCMデータではありません。", n), pw.getSrcFn(), pw.getLineNumber());
                             }
                             pw.instrument = n;
                             setYM2610BADPCMBAddress(pw, (int)instPCM[n].stAdr, (int)instPCM[n].edAdr);
@@ -3686,7 +3688,7 @@ namespace mml2vgm
             {
                 if (!pw.getNum(out n))
                 {
-                    msgBox.setErrMsg("不正な音色番号が指定されています。", lineNumber);
+                    msgBox.setErrMsg("不正な音色番号が指定されています。", pw.getSrcFn(), pw.getLineNumber());
                     n = 0;
                 }
                 n = checkRange(n, 0, 255);
@@ -3708,13 +3710,13 @@ namespace mml2vgm
                     {
                         if (!instPCM.ContainsKey(n))
                         {
-                            msgBox.setErrMsg(string.Format("PCM定義に指定された音色番号({0})が存在しません。", n), lineNumber);
+                            msgBox.setErrMsg(string.Format("PCM定義に指定された音色番号({0})が存在しません。", n), pw.getSrcFn(), pw.getLineNumber());
                         }
                         else
                         {
                             if (instPCM[n].chip != enmChipType.YM2612)
                             {
-                                msgBox.setErrMsg(string.Format("指定された音色番号({0})はYM2612向けPCMデータではありません。", n), lineNumber);
+                                msgBox.setErrMsg(string.Format("指定された音色番号({0})はYM2612向けPCMデータではありません。", n), pw.getSrcFn(), pw.getLineNumber());
                             }
                         }
                     }
@@ -3731,19 +3733,19 @@ namespace mml2vgm
                 {
                     if (!pw.getNum(out n))
                     {
-                        msgBox.setErrMsg("不正な音色番号が指定されています。", lineNumber);
+                        msgBox.setErrMsg("不正な音色番号が指定されています。", pw.getSrcFn(), pw.getLineNumber());
                         n = 0;
                     }
                     n = checkRange(n, 0, 255);
                     if (!instPCM.ContainsKey(n))
                     {
-                        msgBox.setErrMsg(string.Format("PCM定義に指定された音色番号({0})が存在しません。", n), lineNumber);
+                        msgBox.setErrMsg(string.Format("PCM定義に指定された音色番号({0})が存在しません。", n), pw.getSrcFn(), pw.getLineNumber());
                     }
                     else
                     {
                         if (instPCM[n].chip != enmChipType.RF5C164)
                         {
-                            msgBox.setErrMsg(string.Format("指定された音色番号({0})はRF5C164向けPCMデータではありません。", n), lineNumber);
+                            msgBox.setErrMsg(string.Format("指定された音色番号({0})はRF5C164向けPCMデータではありません。", n), pw.getSrcFn(), pw.getLineNumber());
                         }
                         pw.instrument = n;
                         setRf5c164CurrentChannel(pw);
@@ -3763,19 +3765,19 @@ namespace mml2vgm
                 {
                     if (!pw.getNum(out n))
                     {
-                        msgBox.setErrMsg("不正な音色番号が指定されています。", lineNumber);
+                        msgBox.setErrMsg("不正な音色番号が指定されています。", pw.getSrcFn(), pw.getLineNumber());
                         n = 0;
                     }
                     n = checkRange(n, 0, 255);
                     if (!instPCM.ContainsKey(n))
                     {
-                        msgBox.setErrMsg(string.Format("PCM定義に指定された音色番号({0})が存在しません。", n), lineNumber);
+                        msgBox.setErrMsg(string.Format("PCM定義に指定された音色番号({0})が存在しません。", n), pw.getSrcFn(), pw.getLineNumber());
                     }
                     else
                     {
                         if (instPCM[n].chip != enmChipType.SEGAPCM)
                         {
-                            msgBox.setErrMsg(string.Format("指定された音色番号({0})はSEGAPCM向けPCMデータではありません。", n), lineNumber);
+                            msgBox.setErrMsg(string.Format("指定された音色番号({0})はSEGAPCM向けPCMデータではありません。", n), pw.getSrcFn(), pw.getLineNumber());
                         }
                         pw.instrument = n;
                         pw.pcmStartAddress = (int)instPCM[n].stAdr;
@@ -3797,13 +3799,13 @@ namespace mml2vgm
             int n;
             if (!pw.getNum(out n))
             {
-                msgBox.setErrMsg("不正なエンベロープ番号が指定されています。", lineNumber);
+                msgBox.setErrMsg("不正なエンベロープ番号が指定されています。", pw.getSrcFn(), pw.getLineNumber());
                 n = 0;
             }
             n = checkRange(n, 0, 255);
             if (!instENV.ContainsKey(n))
             {
-                msgBox.setErrMsg(string.Format("エンベロープ定義に指定された音色番号({0})が存在しません。", n), lineNumber);
+                msgBox.setErrMsg(string.Format("エンベロープ定義に指定された音色番号({0})が存在しません。", n), pw.getSrcFn(), pw.getLineNumber());
             }
             else
             {
@@ -3843,13 +3845,13 @@ namespace mml2vgm
                         return;
                     }
                 }
-                msgBox.setErrMsg("MAMSの文法が違います。", lineNumber);
+                msgBox.setErrMsg("MAMSの文法が違います。", pw.getSrcFn(), pw.getLineNumber());
                 return;
             }
 
             if (c < 'P' && c > 'S')
             {
-                msgBox.setErrMsg("指定できるLFOのチャネルはP,Q,R,Sの4種類です。", lineNumber);
+                msgBox.setErrMsg("指定できるLFOのチャネルはP,Q,R,Sの4種類です。", pw.getSrcFn(), pw.getLineNumber());
                 return;
             }
             c -= 'P';
@@ -3867,13 +3869,13 @@ namespace mml2vgm
                     cmdMPMS(pw);
                     return;
                 }
-                msgBox.setErrMsg("MPMSの文法が違います。", lineNumber);
+                msgBox.setErrMsg("MPMSの文法が違います。", pw.getSrcFn(), pw.getLineNumber());
                 return;
             }
 
             if (t != 'T' && t != 'V' && t != 'H')
             {
-                msgBox.setErrMsg("指定できるLFOの種類はT,V,Hの3種類です。", lineNumber);
+                msgBox.setErrMsg("指定できるLFOの種類はT,V,Hの3種類です。", pw.getSrcFn(), pw.getLineNumber());
                 return;
             }
             pw.lfo[c].type = (t == 'T') ? eLfoType.Tremolo : ((t == 'V') ? eLfoType.Vibrato : eLfoType.Hardware);
@@ -3892,7 +3894,7 @@ namespace mml2vgm
                 }
                 else
                 {
-                    msgBox.setErrMsg("LFOの設定値に不正な値が指定されました。", lineNumber);
+                    msgBox.setErrMsg("LFOの設定値に不正な値が指定されました。", pw.getSrcFn(), pw.getLineNumber());
                     return;
                 }
 
@@ -3903,12 +3905,12 @@ namespace mml2vgm
             {
                 if (pw.lfo[c].param.Count < 4)
                 {
-                    msgBox.setErrMsg("LFOの設定に必要なパラメータが足りません。", lineNumber);
+                    msgBox.setErrMsg("LFOの設定に必要なパラメータが足りません。", pw.getSrcFn(), pw.getLineNumber());
                     return;
                 }
                 if (pw.lfo[c].param.Count > 7)
                 {
-                    msgBox.setErrMsg("LFOの設定に可能なパラメータ数を超えて指定されました。", lineNumber);
+                    msgBox.setErrMsg("LFOの設定に可能なパラメータ数を超えて指定されました。", pw.getSrcFn(), pw.getLineNumber());
                     return;
                 }
 
@@ -3946,12 +3948,12 @@ namespace mml2vgm
             {
                 if (pw.lfo[c].param.Count < 4)
                 {
-                    msgBox.setErrMsg("LFOの設定に必要なパラメータが足りません。", lineNumber);
+                    msgBox.setErrMsg("LFOの設定に必要なパラメータが足りません。", pw.getSrcFn(), pw.getLineNumber());
                     return;
                 }
                 if (pw.lfo[c].param.Count > 5)
                 {
-                    msgBox.setErrMsg("LFOの設定に可能なパラメータ数を超えて指定されました。", lineNumber);
+                    msgBox.setErrMsg("LFOの設定に可能なパラメータ数を超えて指定されました。", pw.getSrcFn(), pw.getLineNumber());
                     return;
                 }
 
@@ -4013,7 +4015,7 @@ namespace mml2vgm
             char c = pw.getChar();
             if (c < 'P' || c > 'S')
             {
-                msgBox.setErrMsg("指定できるLFOのチャネルはP,Q,R,Sの4種類です。", lineNumber);
+                msgBox.setErrMsg("指定できるLFOのチャネルはP,Q,R,Sの4種類です。", pw.getSrcFn(), pw.getLineNumber());
                 pw.incPos();
                 return;
             }
@@ -4023,7 +4025,7 @@ namespace mml2vgm
             pw.incPos();
             if (!pw.getNum(out n))
             {
-                msgBox.setErrMsg("LFOの設定値に不正な値が指定されました。", lineNumber);
+                msgBox.setErrMsg("LFOの設定値に不正な値が指定されました。", pw.getSrcFn(), pw.getLineNumber());
                 return;
             }
             n = checkRange(n, 0, 2);
@@ -4058,7 +4060,7 @@ namespace mml2vgm
             pw.incPos();
             if (!pw.getNum(out n))
             {
-                msgBox.setErrMsg("MAMSの設定値に不正な値が指定されました。", lineNumber);
+                msgBox.setErrMsg("MAMSの設定値に不正な値が指定されました。", pw.getSrcFn(), pw.getLineNumber());
                 return;
             }
             if (pw.Type == enmChannelType.FMOPM)
@@ -4080,7 +4082,7 @@ namespace mml2vgm
             pw.incPos();
             if (!pw.getNum(out n))
             {
-                msgBox.setErrMsg("MPMSの設定値に不正な値が指定されました。", lineNumber);
+                msgBox.setErrMsg("MPMSの設定値に不正な値が指定されました。", pw.getSrcFn(), pw.getLineNumber());
                 return;
             }
             if (pw.Type == enmChannelType.FMOPM)
@@ -4178,7 +4180,7 @@ namespace mml2vgm
                 }
                 else
                 {
-                    msgBox.setErrMsg("wコマンドに指定された値が不正です。", lineNumber);
+                    msgBox.setErrMsg("wコマンドに指定された値が不正です。", pw.getSrcFn(), pw.getLineNumber());
                     return;
 
                 }
@@ -4195,14 +4197,14 @@ namespace mml2vgm
                 }
                 else
                 {
-                    msgBox.setErrMsg("wコマンドに指定された値が不正です。", lineNumber);
+                    msgBox.setErrMsg("wコマンドに指定された値が不正です。", pw.getSrcFn(), pw.getLineNumber());
                     return;
 
                 }
             }
             else
             {
-                msgBox.setErrMsg("このチャンネルではwコマンドは使用できません。", lineNumber);
+                msgBox.setErrMsg("このチャンネルではwコマンドは使用できません。", pw.getSrcFn(), pw.getLineNumber());
                 return;
             }
         }
@@ -4225,7 +4227,7 @@ namespace mml2vgm
                 }
                 else
                 {
-                    msgBox.setErrMsg("Pコマンドに指定された値が不正です。", lineNumber);
+                    msgBox.setErrMsg("Pコマンドに指定された値が不正です。", pw.getSrcFn(), pw.getLineNumber());
                     return;
 
                 }
@@ -4242,14 +4244,14 @@ namespace mml2vgm
                 }
                 else
                 {
-                    msgBox.setErrMsg("Pコマンドに指定された値が不正です。", lineNumber);
+                    msgBox.setErrMsg("Pコマンドに指定された値が不正です。", pw.getSrcFn(), pw.getLineNumber());
                     return;
 
                 }
             }
             else
             {
-                msgBox.setErrMsg("このチャンネルではPコマンドは使用できません。", lineNumber);
+                msgBox.setErrMsg("このチャンネルではPコマンドは使用できません。", pw.getSrcFn(), pw.getLineNumber());
                 return;
             }
         }
@@ -4265,7 +4267,7 @@ namespace mml2vgm
             }
             else
             {
-                msgBox.setErrMsg("Kコマンドに指定された値が不正です。", lineNumber);
+                msgBox.setErrMsg("Kコマンドに指定された値が不正です。", pw.getSrcFn(), pw.getLineNumber());
                 return;
 
             }
@@ -6228,7 +6230,7 @@ namespace mml2vgm
 
             if (!instFM.ContainsKey(n))
             {
-                msgBox.setWrnMsg(string.Format("未定義の音色(@{0})を指定しています。", n), lineNumber);
+                msgBox.setWrnMsg(string.Format("未定義の音色(@{0})を指定しています。", n), pw.getSrcFn(), pw.getLineNumber());
                 return;
             }
 
@@ -6236,7 +6238,7 @@ namespace mml2vgm
 
             if (pw.ch >= m + 3 && pw.ch < m + 6)
             {
-                msgBox.setWrnMsg("拡張チャンネルでは音色指定はできません。", lineNumber);
+                msgBox.setWrnMsg("拡張チャンネルでは音色指定はできません。", pw.getSrcFn(), pw.getLineNumber());
                 return;
             }
 
@@ -6271,7 +6273,7 @@ namespace mml2vgm
 
             if (!instFM.ContainsKey(n))
             {
-                msgBox.setWrnMsg(string.Format("未定義の音色(@{0})を指定しています。", n), lineNumber);
+                msgBox.setWrnMsg(string.Format("未定義の音色(@{0})を指定しています。", n), pw.getSrcFn(), pw.getLineNumber());
                 return;
             }
 
@@ -6309,7 +6311,7 @@ namespace mml2vgm
         {
             if (!instFM.ContainsKey(n))
             {
-                msgBox.setWrnMsg(string.Format("未定義の音色(@{0})を指定している場合ボリュームの変更はできません。", n), lineNumber);
+                msgBox.setWrnMsg(string.Format("未定義の音色(@{0})を指定している場合ボリュームの変更はできません。", n), pw.getSrcFn(), pw.getLineNumber());
                 return;
             }
 
@@ -6517,7 +6519,7 @@ namespace mml2vgm
         {
             if (!instFM.ContainsKey(n))
             {
-                msgBox.setWrnMsg(string.Format("未定義の音色(@{0})を指定している場合ボリュームの変更はできません。", n), lineNumber);
+                msgBox.setWrnMsg(string.Format("未定義の音色(@{0})を指定している場合ボリュームの変更はできません。", n), pw.getSrcFn(), pw.getLineNumber());
                 return;
             }
 

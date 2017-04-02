@@ -22,9 +22,9 @@ namespace mml2vgm
             errBox.Add(msg);
         }
 
-        public static void setErrMsg(string msg, int lineNumber)
+        public static void setErrMsg(string msg, string fn, int lineNumber)
         {
-            errBox.Add(string.Format("{0} : {1}", lineNumber, msg));
+            errBox.Add(string.Format("(F : {0}  L : {1}) : {2}",System.IO.Path.GetFileName(fn), lineNumber, msg));
         }
 
         public static void setWrnMsg(string msg)
@@ -32,9 +32,9 @@ namespace mml2vgm
             wrnBox.Add(msg);
         }
 
-        public static void setWrnMsg(string msg,int lineNumber)
+        public static void setWrnMsg(string msg,string fn,int lineNumber)
         {
-            wrnBox.Add(string.Format("{0} : {1}", lineNumber, msg));
+            wrnBox.Add(string.Format("(F : {0}  L : {1}) : {2}", System.IO.Path.GetFileName(fn), lineNumber, msg));
         }
 
         public static string[] getErr()

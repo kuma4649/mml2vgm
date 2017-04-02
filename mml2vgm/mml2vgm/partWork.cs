@@ -12,12 +12,12 @@ namespace mml2vgm
         /// <summary>
         /// パートデータ
         /// </summary>
-        public List<Tuple<int, string>> pData = null;
+        public List<Line> pData = null;
 
         /// <summary>
         /// エイリアスデータ
         /// </summary>
-        public Dictionary<string, Tuple<int, string>> aData = null;
+        public Dictionary<string, Line> aData = null;
 
         /// <summary>
         /// データが最後まで演奏されたかどうかを示す(注意:trueでも演奏が終わったとは限らない)
@@ -369,9 +369,22 @@ namespace mml2vgm
         {
             if (pos.alies == "")
             {
-                return pData[pos.row].Item1;
+                return pData[pos.row].Num;
             }
-            return aData[pos.alies].Item1;
+            return aData[pos.alies].Num;
+        }
+
+        /// <summary>
+        /// 解析位置に対するソースファイル名を得る
+        /// </summary>
+        /// <returns></returns>
+        public string getSrcFn()
+        {
+            if (pos.alies == "")
+            {
+                return pData[pos.row].Fn;
+            }
+            return aData[pos.alies].Fn;
         }
 
         /// <summary>
@@ -383,11 +396,11 @@ namespace mml2vgm
             char ch;
             if (pos.alies == "")
             {
-                ch = pData[pos.row].Item2[pos.col];
+                ch = pData[pos.row].Txt[pos.col];
             }
             else
             {
-                ch = aData[pos.alies].Item2[pos.col];
+                ch = aData[pos.alies].Txt[pos.col];
             }
             //Console.Write(ch);
             return ch;
@@ -460,11 +473,11 @@ namespace mml2vgm
                         dataEnd = true;
                         return;
                     }
-                    data = pData[row].Item2;
+                    data = pData[row].Txt;
                 }
                 else
                 {
-                    data = aData[aliesName].Item2;
+                    data = aData[aliesName].Txt;
                 }
 
                 while (data.Length == col)
@@ -479,7 +492,7 @@ namespace mml2vgm
                         }
                         else
                         {
-                            data = pData[row].Item2;
+                            data = pData[row].Txt;
                             col = 0;
                             break;
                         }
@@ -492,11 +505,11 @@ namespace mml2vgm
                         row = p.row;
                         if (aliesName == "")
                         {
-                            data = pData[row].Item2;
+                            data = pData[row].Txt;
                         }
                         else
                         {
-                            data = aData[aliesName].Item2;
+                            data = aData[aliesName].Txt;
                         }
                     }
                 }
@@ -513,7 +526,7 @@ namespace mml2vgm
                         p.row = row;
                         stackPos.Push(p);
 
-                        data = aData[a].Item2;
+                        data = aData[a].Txt;
                         col = 0;
                         aliesName = a;
                         row = 0;
@@ -521,7 +534,8 @@ namespace mml2vgm
                     else
                     {
                         msgBox.setWrnMsg("指定されたエイリアス名は定義されていません。"
-                            , (aliesName == "") ? pData[row].Item1 : aData[aliesName].Item1
+                            , (aliesName == "") ? pData[row].Fn : aData[aliesName].Fn
+                            , (aliesName == "") ? pData[row].Num : aData[aliesName].Num
                             );
                         col++;
                     }
@@ -550,7 +564,7 @@ namespace mml2vgm
                         }
                         else
                         {
-                            data = pData[row].Item2;
+                            data = pData[row].Txt;
                             col = 0;
                             break;
                         }
@@ -563,11 +577,11 @@ namespace mml2vgm
                         row = p.row;
                         if (aliesName == "")
                         {
-                            data = pData[row].Item2;
+                            data = pData[row].Txt;
                         }
                         else
                         {
-                            data = aData[aliesName].Item2;
+                            data = aData[aliesName].Txt;
                         }
                     }
                 }

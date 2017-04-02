@@ -57,8 +57,42 @@ namespace mml2vgm
 
                 desVGM = new clsVgm();
 
+                List<Line> src = new List<Line>();
+                int ln = 1;
+                foreach (string s in srcBuf)
+                {
+                    if (!string.IsNullOrEmpty(s) && s.TrimStart().Length > 2 && s.TrimStart().Substring(0, 2) == "'+")
+                    {
+                        string includeFn = s.Substring(2).Trim().Trim('"');
+                        if (!File.Exists(includeFn))
+                        {
+                            includeFn = Path.Combine(path, includeFn);
+                            if (!File.Exists(includeFn))
+                            {
+                                msgBox.setErrMsg(string.Format("インクルードファイル({0})が見つかりません。",includeFn));
+                                return -1;
+                            }
+                        }
+                        string[] incBuf = File.ReadAllLines(includeFn);
+                        int iln = 1;
+                        foreach (string i in incBuf)
+                        {
+                            Line iline = new Line(includeFn, iln, i);
+                            src.Add(iline);
+                            iln++;
+                        }
+
+                        ln++;
+                        continue;
+                    }
+
+                    Line line = new Line(srcFn, ln, s);
+                    src.Add(line);
+                    ln++;
+                }
+
                 // 解析
-                int ret = desVGM.analyze(srcBuf);
+                int ret = desVGM.analyze(src);
 
                 if (ret != 0)
                 {

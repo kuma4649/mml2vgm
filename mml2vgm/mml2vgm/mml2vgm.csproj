@@ -68,6 +68,7 @@
     <Compile Include="frmMain.Designer.cs">
       <DependentUpon>frmMain.cs</DependentUpon>
     </Compile>
+    <Compile Include="Line.cs" />
     <Compile Include="mml2vgm.cs" />
     <Compile Include="msgBox.cs" />
     <Compile Include="partWork.cs" />
