@@ -8,7 +8,7 @@ namespace mml2vgm
 {
     public class clsVgm
     {
-        public float Version = 1.60f;
+        public float Version = 1.61f;
 
         public int[] OPN_FNumTbl_7670454 = new int[] {
             //   c    c+     d    d+     e     f    f+     g    g+     a    a+     b    >c
@@ -75,6 +75,7 @@ namespace mml2vgm
         private const int instrumentSize = 39 + 8;
         private const int instrumentOperaterSize = 9;
         private const int instrumentMOperaterSize = 11;
+        private const int wfInstrumentSize = 33;
 
         private const string TITLENAME = "TITLENAME";
         private const string TITLENAMEJ = "TITLENAMEJ";
@@ -104,7 +105,7 @@ namespace mml2vgm
                 //Eof offset(see below)
                 0x00,0x00,0x00,0x00,
                 //Version number(v1.51(0x0000151))
-                0x51,0x01,0x00,0x00,
+                0x61,0x01,0x00,0x00,
                 //SN76489(0x369e99)
                 0x99,0x9e,0x36,0x00,
                 //YM2413 clock(no use)
@@ -130,7 +131,7 @@ namespace mml2vgm
                 //0x30 YM2151 clock(3579545 0x369e99)
                 0x99,0x9e,0x36,0x00,
                 //0x34 VGM data offset(1.50 only)
-                0x0c+16*4,0x00,0x00,0x00,
+                0x0c+16*7,0x00,0x00,0x00,
                 //0x38 Sega PCM clock(no use)
                 0x6b,0x72,0x3d,0x00,
                 //0x3c Sega PCM interface register(no use)
@@ -143,14 +144,8 @@ namespace mml2vgm
                 0x00,0xe0,0x79,0x00,
                 //0x4c YM2610/B clock(0x7a1200)
                 0x00,0x12,0x7a,0x00,
-                //0x50
-                0x00,0x00,0x00,0x00,
-                //0x54
-                0x00,0x00,0x00,0x00,
-                //0x58
-                0x00,0x00,0x00,0x00,
-                //0x5c
-                0x00,0x00,0x00,0x00,
+                //0x50               0x54                 0x58                 0x5c
+                0x00,0x00,0x00,0x00, 0x00,0x00,0x00,0x00, 0x00,0x00,0x00,0x00, 0x00,0x00,0x00,0x00,
                 //0x60
                 0x00,0x00,0x00,0x00,
                 //0x64
@@ -159,14 +154,14 @@ namespace mml2vgm
                 0x00,0x00,0x00,0x00,
                 //0x6c RF5C164 clock(0xbebc20)
                 0x20,0xbc,0xbe,0x00,
-                //0x70
-                0x00,0x00,0x00,0x00,
-                //0x74
-                0x00,0x00,0x00,0x00,
-                //0x78
-                0x00,0x00,0x00,0x00,
-                //0x7c
-                0x00,0x00,0x00,0x00
+                //0x70               0x74                 0x78                 0x7c
+                0x00,0x00,0x00,0x00, 0x00,0x00,0x00,0x00, 0x00,0x00,0x00,0x00, 0x00,0x00,0x00,0x00,
+                //0x80               0x84                 0x88                 0x8c
+                0x00,0x00,0x00,0x00, 0x00,0x00,0x00,0x00, 0x00,0x00,0x00,0x00, 0x00,0x00,0x00,0x00,
+                //0x90               0x94                 0x98                 0x9c
+                0x00,0x00,0x00,0x00, 0x00,0x00,0x00,0x00, 0x00,0x00,0x00,0x00, 0x00,0x00,0x00,0x00,
+                //0xa0               0xa4 HuC6280         0xa8                 0xac
+                0x00,0x00,0x00,0x00, 0x99,0x9e,0x36,0x00, 0x00,0x00,0x00,0x00, 0x00,0x00,0x00,0x00
             };
 
 
@@ -178,6 +173,7 @@ namespace mml2vgm
         public SN76489[] sn76489 = null;
         public RF5C164[] rf5c164 = null;
         public segaPcm[] segapcm = null;
+        public HuC6280[] huc6280 = null;
 
         public List<clsChip> chips = new List<clsChip>();
 
@@ -199,6 +195,8 @@ namespace mml2vgm
         public Dictionary<int, int[]> instENV = new Dictionary<int, int[]>();
         public Dictionary<int, clsPcm> instPCM = new Dictionary<int, clsPcm>();
         public Dictionary<int, clsToneDoubler> instToneDoubler = new Dictionary<int, clsToneDoubler>();
+        public Dictionary<int, byte[]> instWF = new Dictionary<int, byte[]>();
+
         public Dictionary<string, List<Line>> partData = new Dictionary<string, List<Line>>();
         public Dictionary<string, Line> aliesData = new Dictionary<string, Line>();
         public List<string> monoPart = null;
@@ -207,6 +205,9 @@ namespace mml2vgm
         private byte[] instrumentBufCache = new byte[instrumentSize];
         private int toneDoublerCounter = -1;
         private List<int> toneDoublerBufCache = new List<int>();
+        private int wfInstrumentCounter = -1;
+        private byte[] wfInstrumentBufCache = null;
+
         private int newStreamID = -1;
 
 
@@ -222,6 +223,7 @@ namespace mml2vgm
             sn76489 = new SN76489[] { new SN76489(0, "S"), new SN76489(1, "Ss") };
             rf5c164 = new RF5C164[] { new RF5C164(0, "R"), new RF5C164(1, "Rs") };
             segapcm = new segaPcm[] { new segaPcm(0, "Z"), new segaPcm(1, "Zs") };
+            huc6280 = new HuC6280[] { new HuC6280(0, "H"), new HuC6280(1, "Hs") };
 
             chips.Add(ym2612[0]);
             chips.Add(ym2612[1]);
@@ -239,6 +241,8 @@ namespace mml2vgm
             chips.Add(ym2151[1]);
             chips.Add(segapcm[0]);
             chips.Add(segapcm[1]);
+            chips.Add(huc6280[0]);
+            chips.Add(huc6280[1]);
 
             List<clsTD> lstTD = new List<clsTD>();
             lstTD.Add(new clsTD(4, 4, 4, 4, 0, 0, 0, 0, 0));
@@ -294,7 +298,7 @@ namespace mml2vgm
                     multiLine = false;
                     s2 = s2.Substring(0, s2.IndexOf("}"));
                     // Information
-                    addInformation(s2, lineNumber,fn);
+                    addInformation(s2, lineNumber, fn);
                     continue;
                 }
 
@@ -321,7 +325,7 @@ namespace mml2vgm
                         multiLine = false;
                         s2 = s2.Substring(0, s2.IndexOf("}")).Trim();
                         // Information
-                        addInformation(s2, lineNumber,fn);
+                        addInformation(s2, lineNumber, fn);
                     }
                     continue;
                 }
@@ -334,13 +338,13 @@ namespace mml2vgm
                 else if (s2.IndexOf("%") == 0)
                 {
                     // Alies
-                    addAlies(s2,fn, lineNumber);
+                    addAlies(s2, fn, lineNumber);
                     continue;
                 }
                 else
                 {
                     // Part
-                    addPart(s2,fn, lineNumber);
+                    addPart(s2, fn, lineNumber);
                     continue;
                 }
 
@@ -377,7 +381,7 @@ namespace mml2vgm
 
         }
 
-        private int addInformation(string buf, int lineNumber,string fn)
+        private int addInformation(string buf, int lineNumber, string fn)
         {
             string[] settings = buf.Split(new string[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
 
@@ -470,7 +474,7 @@ namespace mml2vgm
             monoPart = divParts(val);
         }
 
-        private int addInstrument(string buf,string srcFn, int lineNumber)
+        private int addInstrument(string buf, string srcFn, int lineNumber)
         {
             if (buf == null || buf.Length < 2)
             {
@@ -484,14 +488,22 @@ namespace mml2vgm
             if (instrumentCounter != -1)
             {
 
-                return setInstrument(s,srcFn, lineNumber);
+                return setInstrument(s, srcFn, lineNumber);
+
+            }
+
+            // WaveFormの音色を定義中の場合
+            if (wfInstrumentCounter != -1)
+            {
+
+                return setWfInstrument(s, srcFn, lineNumber);
 
             }
 
             char t = s.ToUpper()[0];
             if (toneDoublerCounter != -1)
             {
-                if (t == 'F' || t == 'N' || t == 'M' || t == 'P' || t == 'E' || t == 'T')
+                if (t == 'F' || t == 'N' || t == 'M' || t == 'P' || t == 'E' || t == 'T' || t == 'H')
                 {
                     toneDoublerCounter = -1;
                     setInstToneDoubler();
@@ -544,7 +556,7 @@ namespace mml2vgm
                                 isSecondary = true;
                                 chipName = chipName.Replace(SECONDARY, "");
                             }
-                            
+
                             if (!getChip(chipName).CanUsePcm)
                             {
                                 msgBox.setWrnMsg("未定義のChipName又はPCMを使用できないChipが指定されています。", srcFn, lineNumber);
@@ -621,7 +633,7 @@ namespace mml2vgm
                             }
                             else
                             {
-                                msgBox.setWrnMsg("エンベロープを使用できない音源が選択されています。",srcFn, lineNumber);
+                                msgBox.setWrnMsg("エンベロープを使用できない音源が選択されています。", srcFn, lineNumber);
                             }
                         }
 
@@ -651,6 +663,12 @@ namespace mml2vgm
                         msgBox.setWrnMsg("不正なTone Doubler定義文です。", srcFn, lineNumber);
                     }
                     return 0;
+                case 'H':
+                    wfInstrumentBufCache = new byte[wfInstrumentSize];
+                    wfInstrumentCounter = 0;
+                    setWfInstrument(s.Substring(1).TrimStart(), srcFn, lineNumber);
+                    return 0;
+
             }
 
             // ToneDoublerを定義中の場合
@@ -662,7 +680,7 @@ namespace mml2vgm
             return 0;
         }
 
-        private static void checkEnvelopeVolumeRange(string srcFn,int lineNumber, int[] env, int i, int max, int min)
+        private static void checkEnvelopeVolumeRange(string srcFn, int lineNumber, int[] env, int i, int max, int min)
         {
             if (i == 1 || i == 4 || i == 7)
             {
@@ -709,6 +727,9 @@ namespace mml2vgm
                 case "SEGAPCM":
                     chip = enmChipType.SEGAPCM;
                     break;
+                case "HUC6280":
+                    chip = enmChipType.HuC6280;
+                    break;
                 default:
                     chip = enmChipType.None;
                     break;
@@ -730,7 +751,7 @@ namespace mml2vgm
             return null;
         }
 
-        private int addAlies(string buf,string srcFn, int lineNumber)
+        private int addAlies(string buf, string srcFn, int lineNumber)
         {
             string name = "";
             string data = "";
@@ -765,7 +786,7 @@ namespace mml2vgm
             return 0;
         }
 
-        private int addPart(string buf,string srcFn, int lineNumber)
+        private int addPart(string buf, string srcFn, int lineNumber)
         {
             List<string> part = new List<string>();
             string data = "";
@@ -797,7 +818,7 @@ namespace mml2vgm
                 {
                     partData.Add(p, new List<Line>());
                 }
-                partData[p].Add(new Line(srcFn,lineNumber, data));
+                partData[p].Add(new Line(srcFn, lineNumber, data));
             }
 
             return 0;
@@ -899,61 +920,12 @@ namespace mml2vgm
             return 0;
         }
 
-        private int setInstrument(string vals,string srcFn, int lineNumber)
+        private int setInstrument(string vals, string srcFn, int lineNumber)
         {
-            string n = "";
-            string h = "";
-            int hc = -1;
-            int i=0;
 
             try
             {
-                foreach (char c in vals)
-                {
-                    if (c == '$')
-                    {
-                        hc = 0;
-                        continue;
-                    }
-
-                    if (hc > -1 && ((c >= '0' && c <= '9') || (c >= 'A' && c <= 'F')))
-                    {
-                        h += c;
-                        hc++;
-                        if (hc == 2)
-                        {
-                            i = int.Parse(h, System.Globalization.NumberStyles.HexNumber);
-                            instrumentBufCache[instrumentCounter] = (byte)(i & 0xff);
-                            instrumentCounter++;
-                            h = "";
-                            hc = -1;
-                        }
-                        continue;
-                    }
-
-                    if ((c >= '0' && c <= '9') || c == '-')
-                    {
-                        n = n + c.ToString();
-                        continue;
-                    }
-
-                    if (int.TryParse(n, out i))
-                    {
-                        instrumentBufCache[instrumentCounter] = (byte)(i & 0xff);
-                        instrumentCounter++;
-                        n = "";
-                    }
-                }
-
-                if (!string.IsNullOrEmpty(n))
-                {
-                    if (int.TryParse(n, out i))
-                    {
-                        instrumentBufCache[instrumentCounter] = (byte)(i & 0xff);
-                        instrumentCounter++;
-                        n = "";
-                    }
-                }
+                instrumentCounter= getNums(instrumentBufCache, instrumentCounter, vals);
 
                 if (instrumentCounter == instrumentBufCache.Length)
                 {
@@ -983,7 +955,90 @@ namespace mml2vgm
             return 0;
         }
 
-        private int storeToneDoublerBuffer(string vals,string srcFn, int lineNumber)
+        private int setWfInstrument(string vals, string srcFn, int lineNumber)
+        {
+
+            try
+            {
+                wfInstrumentCounter= getNums(wfInstrumentBufCache, wfInstrumentCounter, vals);
+
+                if (wfInstrumentCounter == wfInstrumentBufCache.Length)
+                {
+                    if (instWF.ContainsKey(wfInstrumentBufCache[0]))
+                    {
+                        instWF.Remove(wfInstrumentBufCache[0]);
+                    }
+                    instWF.Add(wfInstrumentBufCache[0], wfInstrumentBufCache);
+
+                    wfInstrumentCounter = -1;
+                }
+            }
+            catch
+            {
+                msgBox.setErrMsg("WaveForm音色の定義が不正です。", srcFn, lineNumber);
+            }
+
+            return 0;
+        }
+
+        private int getNums(byte[] aryBuf,int aryIndex, string vals)
+        {
+            string n = "";
+            string h = "";
+            int hc = -1;
+            int i = 0;
+
+            foreach (char c in vals)
+            {
+                if (c == '$')
+                {
+                    hc = 0;
+                    continue;
+                }
+
+                if (hc > -1 && ((c >= '0' && c <= '9') || (c >= 'A' && c <= 'F')))
+                {
+                    h += c;
+                    hc++;
+                    if (hc == 2)
+                    {
+                        i = int.Parse(h, System.Globalization.NumberStyles.HexNumber);
+                        aryBuf[aryIndex] = (byte)(i & 0xff);
+                        aryIndex++;
+                        h = "";
+                        hc = -1;
+                    }
+                    continue;
+                }
+
+                if ((c >= '0' && c <= '9') || c == '-')
+                {
+                    n = n + c.ToString();
+                    continue;
+                }
+
+                if (int.TryParse(n, out i))
+                {
+                    aryBuf[aryIndex] = (byte)(i & 0xff);
+                    aryIndex++;
+                    n = "";
+                }
+            }
+
+            if (!string.IsNullOrEmpty(n))
+            {
+                if (int.TryParse(n, out i))
+                {
+                    aryBuf[aryIndex] = (byte)(i & 0xff);
+                    aryIndex++;
+                    n = "";
+                }
+            }
+
+            return aryIndex;
+        }
+
+        private int storeToneDoublerBuffer(string vals, string srcFn, int lineNumber)
         {
             string n = "";
             string h = "";
@@ -1000,7 +1055,7 @@ namespace mml2vgm
                         continue;
                     }
 
-                    if (hc > -1 && ((c >= '0' && c <= '9') || (c >= 'A' && c<='F')))
+                    if (hc > -1 && ((c >= '0' && c <= '9') || (c >= 'A' && c <= 'F')))
                     {
                         h += c;
                         hc++;
@@ -1262,7 +1317,9 @@ namespace mml2vgm
                                 || (cpw.chip is YM2610B && (cpw.Type == enmChannelType.SSG || cpw.Type == enmChannelType.ADPCMA || cpw.Type == enmChannelType.ADPCMB))
                                 || cpw.chip is SN76489
                                 || cpw.chip is segaPcm
-                                || cpw.chip is RF5C164)
+                                || cpw.chip is RF5C164
+                                || cpw.chip is HuC6280
+                                )
                             {
                                 if (cpw.envelopeMode && cpw.envIndex != -1)
                                 {
@@ -1320,7 +1377,9 @@ namespace mml2vgm
                                 || (pw.chip is YM2610B && (pw.Type == enmChannelType.SSG || pw.Type == enmChannelType.ADPCMA || pw.Type == enmChannelType.ADPCMB))
                                 || pw.chip is SN76489
                                 || pw.chip is segaPcm
-                                || pw.chip is RF5C164)
+                                || pw.chip is RF5C164
+                                || pw.chip is HuC6280
+                                )
                             {
                                 if (pw.envelopeMode && pw.envIndex != -1)
                                 {
@@ -1467,6 +1526,7 @@ namespace mml2vgm
                 || pw.chip is SN76489
                 || pw.chip is RF5C164
                 || pw.chip is segaPcm
+                || pw.chip is HuC6280
                 )
             {
                 envelope(pw);
@@ -1522,6 +1582,14 @@ namespace mml2vgm
                 {
                     setRf5c164FNum(pw);
                     setRf5c164Volume(pw);
+                }
+            }
+            else if (pw.chip is HuC6280)
+            {
+                if (pw.waitKeyOnCounter > 0 || pw.envIndex != -1)
+                {
+                    setHuC6280FNum(pw);
+                    setHuC6280Volume(pw);
                 }
             }
         }
@@ -1748,6 +1816,24 @@ namespace mml2vgm
                         }
                     }
                 }
+                else if (pw.chip is HuC6280)
+                {
+                    if (!pw.envelopeMode)
+                    {
+                        if (!pw.tie) outHuC6280KeyOff(pw);
+                    }
+                    else
+                    {
+                        if (pw.envIndex != -1)
+                        {
+                            if (!pw.tie)
+                            {
+                                pw.envIndex = 3;//RR phase
+                                pw.envCounter = 0;
+                            }
+                        }
+                    }
+                }
 
 
                 //次回に引き継ぎリセット
@@ -1885,6 +1971,11 @@ namespace mml2vgm
                         pw.port0 = (byte)(0x8 | (pw.isSecondary ? 0xa0 : 0x50));
                         pw.port1 = (byte)(0x9 | (pw.isSecondary ? 0xa0 : 0x50));
                     }
+                    else if (chip is HuC6280)
+                    {
+                        pw.MaxVolume = 31;
+                        pw.volume = pw.MaxVolume;
+                    }
 
                     pw.PartName = chip.Ch[i].Name;
                     pw.waitKeyOnCounter = -1;
@@ -2015,6 +2106,10 @@ namespace mml2vgm
                 else if (pw.chip is segaPcm)
                 {
                     outSegaPcmKeyOff(pw);
+                }
+                else if (pw.chip is HuC6280)
+                {
+                    pw.keyOn = false;
                 }
             }
         }
@@ -2452,6 +2547,11 @@ namespace mml2vgm
                                 a = getSegaPcmFNum(pw.octaveNow, cmd, shift + (i + 0) * Math.Sign(delta));//
                                 b = getSegaPcmFNum(pw.octaveNow, cmd, shift + (i + 1) * Math.Sign(delta));//
                             }
+                            else if (pw.chip is HuC6280)
+                            {
+                                a = getHuC6280Freq(pw.octaveNow, cmd, shift + (i + 0) * Math.Sign(delta));//
+                                b = getHuC6280Freq(pw.octaveNow, cmd, shift + (i + 1) * Math.Sign(delta));//
+                            }
 
                             if (Math.Abs(bf) >= 1.0f)
                             {
@@ -2762,6 +2862,23 @@ namespace mml2vgm
                         outSegaPcmKeyOn(pw);
                     }
                 }
+                else if (pw.chip is HuC6280)
+                {
+
+                    // HuC6280
+
+                    setHuC6280FNum(pw);
+
+                    //タイ指定では無い場合はキーオンする
+                    if (!pw.beforeTie)
+                    {
+                        setEnvelopeAtKeyOn(pw);
+                        setLfoAtKeyOn(pw);
+                        setHuC6280Envelope(pw, pw.volume);
+                        outHuC6280KeyOn(pw);
+                        pw.keyOn = true;
+                    }
+                }
 
                 //gateTimeの決定
                 if (pw.gatetimePmode)
@@ -2778,7 +2895,7 @@ namespace mml2vgm
                 if (pw.pcm)
                 {
                     pw.pcmWaitKeyOnCounter = -1;
-                    if (Version != 1.60f)
+                    if (Version == 1.51f)
                     {
                         pw.pcmWaitKeyOnCounter = pw.waitKeyOnCounter;
                     }
@@ -3310,6 +3427,33 @@ namespace mml2vgm
                 pw.panL = l;
                 pw.panR = r;
             }
+            else if (pw.chip is HuC6280)
+            {
+                int l;
+                int r;
+                if (!pw.getNum(out l))
+                {
+                    msgBox.setErrMsg("不正なパン'p'が指定されています。", pw.getSrcFn(), pw.getLineNumber());
+                    l = 15;
+                }
+                if (pw.getChar() != ',')
+                {
+                    msgBox.setErrMsg("不正なパン'p'が指定されています。", pw.getSrcFn(), pw.getLineNumber());
+                    l = 15;
+                    r = 15;
+                }
+                pw.incPos();
+                if (!pw.getNum(out r))
+                {
+                    msgBox.setErrMsg("不正なパン'p'が指定されています。", pw.getSrcFn(), pw.getLineNumber());
+                    r = 15;
+                }
+                l = checkRange(l, 0, 15);
+                r = checkRange(r, 0, 15);
+                pw.pan = (l << 4) | r;
+                setHuC6280CurrentChannel(pw);
+                setHuC6280Pan(pw, pw.pan);
+            }
 
         }
 
@@ -3417,7 +3561,7 @@ namespace mml2vgm
             if (!pw.getNum(out n))
             {
                 msgBox.setErrMsg("不正な音量が指定されています。", pw.getSrcFn(), pw.getLineNumber());
-                n = 110;
+                n = (int)(pw.MaxVolume * 0.9);
             }
 
             pw.volume = checkRange(n, 0, pw.MaxVolume);
@@ -3427,18 +3571,48 @@ namespace mml2vgm
         {
             int n;
             pw.incPos();
-            if (!pw.getNum(out n))
+            if (!(pw.chip is HuC6280))
             {
-                msgBox.setErrMsg("不正な音量が指定されています。", pw.getSrcFn(), pw.getLineNumber());
-                n = 63;
+                if (!pw.getNum(out n))
+                {
+                    msgBox.setErrMsg("不正な音量が指定されています。", pw.getSrcFn(), pw.getLineNumber());
+                    n = 63;
+                }
+                if ((pw.chip is YM2608) && pw.Type == enmChannelType.RHYTHM)
+                {
+                    ((YM2608)pw.chip).rhythm_TotalVolume = checkRange(n, 0, ((YM2608)pw.chip).rhythm_MAXTotalVolume);
+                }
+                else if ((pw.chip is YM2610B) && pw.Type == enmChannelType.ADPCMA)
+                {
+                    ((YM2610B)pw.chip).adpcmA_TotalVolume = checkRange(n, 0, ((YM2610B)pw.chip).adpcmA_MAXTotalVolume);
+                }
             }
-            if ((pw.chip is YM2608) && pw.Type == enmChannelType.RHYTHM)
+            else 
             {
-                ((YM2608)pw.chip).rhythm_TotalVolume = checkRange(n, 0, ((YM2608)pw.chip).rhythm_MAXTotalVolume);
-            }
-            else if ((pw.chip is YM2610B) && pw.Type == enmChannelType.ADPCMA)
-            {
-                ((YM2610B)pw.chip).adpcmA_TotalVolume = checkRange(n, 0, ((YM2610B)pw.chip).adpcmA_MAXTotalVolume);
+                int l;
+                int r;
+                if (!pw.getNum(out l))
+                {
+                    msgBox.setErrMsg("不正なトータルボリューム'V'が指定されています。", pw.getSrcFn(), pw.getLineNumber());
+                    l = 15;
+                }
+                if (pw.getChar() != ',')
+                {
+                    msgBox.setErrMsg("不正なトータルボリューム'V'が指定されています。", pw.getSrcFn(), pw.getLineNumber());
+                    l = 15;
+                    r = 15;
+                }
+                pw.incPos();
+                if (!pw.getNum(out r))
+                {
+                    msgBox.setErrMsg("不正なトータルボリューム'V'が指定されています。", pw.getSrcFn(), pw.getLineNumber());
+                    r = 15;
+                }
+                l = checkRange(l, 0, ((HuC6280)pw.chip).MAXTotalVolume);
+                r = checkRange(r, 0, ((HuC6280)pw.chip).MAXTotalVolume);
+                ((HuC6280)pw.chip).TotalVolume = (r << 4) | l;
+
+                outHuC6280Port(pw.isSecondary, 1, (byte)((HuC6280)pw.chip).TotalVolume);
             }
 
         }
@@ -3790,6 +3964,20 @@ namespace mml2vgm
                 {
                     pw.incPos();
                     n = setEnvelopParamFromInstrument(pw);
+                }
+            }
+            else if (pw.chip is HuC6280)
+            {
+                if (!pw.getNum(out n))
+                {
+                    msgBox.setErrMsg("不正な音色番号が指定されています。", pw.getSrcFn(), pw.getLineNumber());
+                    n = 0;
+                }
+                n = checkRange(n, 0, 255);
+                if (pw.instrument != n)
+                {
+                    pw.instrument = n;
+                    outHuC6280SetInstrument(pw, n);
                 }
             }
         }
@@ -4651,6 +4839,7 @@ namespace mml2vgm
             long useSN76489 = 0;
             long useRf5c164 = 0;
             long useSegaPcm = 0;
+            long useHuC6280 = 0;
 
             for (int i = 0; i < 2; i++)
             {
@@ -4686,6 +4875,10 @@ namespace mml2vgm
                 {
                     useSegaPcm += pw.clockCounter;
                 }
+                foreach (partWork pw in huc6280[i].lstPartWork)
+                {
+                    useHuC6280 += pw.clockCounter;
+                }
             }
 
             if (useYM2151 == 0) { dat[0x30] = 0; dat[0x31] = 0; dat[0x32] = 0; dat[0x33] = 0; }
@@ -4696,6 +4889,7 @@ namespace mml2vgm
             if (useSN76489 == 0) { dat[0x0c] = 0; dat[0x0d] = 0; dat[0x0e] = 0; dat[0x0f] = 0; }
             if (useRf5c164 == 0) { dat[0x6c] = 0; dat[0x6d] = 0; dat[0x6e] = 0; dat[0x6f] = 0; }
             if (useSegaPcm == 0) { dat[0x38] = 0; dat[0x39] = 0; dat[0x3a] = 0; dat[0x3b] = 0; dat[0x3c] = 0; dat[0x3d] = 0; dat[0x3e] = 0; dat[0x3f] = 0; }
+            if (useHuC6280 == 0) { dat[0xa4] = 0; dat[0xa5] = 0; dat[0xa6] = 0; dat[0xa7] = 0; }
 
             if (Version == 1.51f)
             {
@@ -4705,6 +4899,11 @@ namespace mml2vgm
             else if (Version == 1.60f)
             {
                 dat[0x08] = 0x60;
+                dat[0x09] = 0x01;
+            }
+            else
+            {
+                dat[0x08] = 0x61;
                 dat[0x09] = 0x01;
             }
 
@@ -4835,7 +5034,7 @@ namespace mml2vgm
             }
         }
 
-        private int getToneDoublerShift(partWork pw,int octave,char noteCmd,int shift)
+        private int getToneDoublerShift(partWork pw, int octave, char noteCmd, int shift)
         {
             if (pw.Type != enmChannelType.FMOPM && pw.Type != enmChannelType.FMOPN && pw.Type != enmChannelType.FMOPNex)
             {
@@ -5160,7 +5359,7 @@ namespace mml2vgm
         private int getOPMFNum(int octave, char noteCmd, int shift)
         {
             int o = octave;
-            int n = note.IndexOf(noteCmd) + shift-1;
+            int n = note.IndexOf(noteCmd) + shift - 1;
 
             if (n >= 0)
             {
@@ -5536,7 +5735,7 @@ namespace mml2vgm
                 if (n < 0) { n += 12; }
             }
 
-            return ((int)(64 * pcmMTbl[n] * Math.Pow(2, (o - 3))) +1);
+            return ((int)(64 * pcmMTbl[n] * Math.Pow(2, (o - 3))) + 1);
         }
 
 
@@ -5863,7 +6062,7 @@ namespace mml2vgm
             outSegaPcmPort(pw, adr, d);
         }
 
-        private void outSegaPcmPort( partWork pw, int adr, byte data)
+        private void outSegaPcmPort(partWork pw, int adr, byte data)
         {
             dat.Add(pw.port0);
             dat.Add((byte)adr); //ll
@@ -6291,7 +6490,7 @@ namespace mml2vgm
             pw.op2ml = instFM[n][1 * instrumentMOperaterSize + 8];
             pw.op3ml = instFM[n][2 * instrumentMOperaterSize + 8];
             pw.op4ml = instFM[n][3 * instrumentMOperaterSize + 8];
-            pw.op1dt2= instFM[n][0 * instrumentMOperaterSize + 10];
+            pw.op1dt2 = instFM[n][0 * instrumentMOperaterSize + 10];
             pw.op2dt2 = instFM[n][1 * instrumentMOperaterSize + 10];
             pw.op3dt2 = instFM[n][2 * instrumentMOperaterSize + 10];
             pw.op4dt2 = instFM[n][3 * instrumentMOperaterSize + 10];
@@ -6503,10 +6702,10 @@ namespace mml2vgm
         {
             dat.Add(pw.port0);
             dat.Add((byte)(0x38 + pw.ch));
-            dat.Add((byte)(((PMS & 0x7)<<4) | (AMS & 0x3)));
+            dat.Add((byte)(((PMS & 0x7) << 4) | (AMS & 0x3)));
         }
 
-        private void outOPMSetPanFeedbackAlgorithm(partWork pw,int pan, int fb, int alg)
+        private void outOPMSetPanFeedbackAlgorithm(partWork pw, int pan, int fb, int alg)
         {
             pan &= 3;
             fb &= 7;
@@ -6992,6 +7191,163 @@ namespace mml2vgm
                 }
                 i += f;
             }
+        }
+
+
+        private void setHuC6280FNum(partWork pw)
+        {
+            int f = getHuC6280Freq(pw.octaveNow, pw.noteCmd, pw.keyShift + pw.shift);//
+
+            if (pw.bendWaitCounter != -1)
+            {
+                f = pw.bendFnum;
+            }
+            f = f + pw.detune;
+            for (int lfo = 0; lfo < 4; lfo++)
+            {
+                if (!pw.lfo[lfo].sw)
+                {
+                    continue;
+                }
+                if (pw.lfo[lfo].type != eLfoType.Vibrato)
+                {
+                    continue;
+                }
+                f += pw.lfo[lfo].value + pw.lfo[lfo].param[6];
+            }
+
+            f = checkRange(f, 0, 0x0fff);
+
+            setHuC6280CurrentChannel(pw);
+            outHuC6280Port(pw.isSecondary, 2, (byte)(f & 0xff));
+            outHuC6280Port(pw.isSecondary, 3, (byte)((f & 0xf00) >> 8));
+
+            pw.freq = f;
+
+        }
+
+        private int getHuC6280Freq(int octave, char noteCmd, int shift)
+        {
+            int o = octave;
+            int n = note.IndexOf(noteCmd) + shift;
+            if (n >= 0)
+            {
+                o += n / 12;
+                o = checkRange(o, 1, 8);
+                n %= 12;
+            }
+            else
+            {
+                o += n / 12 - 1;
+                o = checkRange(o, 1, 8);
+                n %= 12;
+                if (n < 0) { n += 12; }
+            }
+            return (int)(huc6280[0].Frequency / 32.0f / 261.62f / (pcmMTbl[n] * (float)Math.Pow(2, (o - 4))));
+        }
+
+        private void setHuC6280Volume(partWork pw)
+        {
+            int vol = pw.volume;
+
+            if (pw.envelopeMode)
+            {
+                vol = 0;
+                if (pw.envIndex != -1)
+                {
+                    vol = pw.envVolume - (31 - pw.volume);
+                }
+            }
+
+            for (int lfo = 0; lfo < 4; lfo++)
+            {
+                if (!pw.lfo[lfo].sw)
+                {
+                    continue;
+                }
+                if (pw.lfo[lfo].type != eLfoType.Tremolo)
+                {
+                    continue;
+                }
+                vol += pw.lfo[lfo].value + pw.lfo[lfo].param[6];
+            }
+
+            pw.volume = checkRange(vol, 0, 31);
+        }
+
+        private void setHuC6280Envelope(partWork pw, int volume)
+        {
+            if (pw.huc6280Envelope != volume)
+            {
+                setHuC6280CurrentChannel(pw);
+                byte data = (byte)(volume & 0x1f);
+                pw.huc6280Envelope = volume;
+            }
+        }
+
+        private void setHuC6280CurrentChannel(partWork pw)
+        {
+            byte pch = (byte)pw.ch;
+            bool isSecondary = pw.isSecondary;
+            int chipID = pw.chip.ChipID;
+
+            if (huc6280[chipID].CurrentChannel != pch)
+            {
+                byte data = (byte)(pch & 0x7);
+                outHuC6280Port(isSecondary, 0x0, data);
+                huc6280[chipID].CurrentChannel = pch;
+            }
+        }
+
+        private void setHuC6280Pan(partWork pw, int pan)
+        {
+            if (pw.huc6280Pan != pan)
+            {
+                setHuC6280CurrentChannel(pw);
+                byte data = (byte)(pan & 0xff);
+                outHuC6280Port(pw.isSecondary, 0x5, data);
+                pw.huc6280Pan = pan;
+            }
+        }
+
+        private void outHuC6280Port(bool isSecondary,byte adr, byte data)
+        {
+            dat.Add(0xb9);
+            dat.Add((byte)((isSecondary ? 0x80 : 0x00) + adr));
+            dat.Add(data);
+        }
+
+        private void outHuC6280SetInstrument(partWork pw, int n)
+        {
+
+            if (!instWF.ContainsKey(n))
+            {
+                msgBox.setWrnMsg(string.Format("未定義の音色(@{0})を指定しています。", n), pw.getSrcFn(), pw.getLineNumber());
+                return;
+            }
+
+            setHuC6280CurrentChannel(pw);
+            outHuC6280Port(pw.isSecondary, 4, (byte)(0x40 + pw.volume)); //WaveIndexReset(=0x40)
+
+            for (int i = 1; i < instWF[n].Length; i++) // 0 は音色番号が入っている為1からスタート
+            {
+                outHuC6280Port(pw.isSecondary, 6, (byte)(instWF[n][i] & 0x1f));
+            }
+
+        }
+
+        private void outHuC6280KeyOn(partWork pw)
+        {
+            setHuC6280CurrentChannel(pw);
+            byte data = (byte)(0x80+pw.volume);
+            outHuC6280Port(pw.isSecondary, 0x4, data);
+        }
+
+        private void outHuC6280KeyOff(partWork pw)
+        {
+            setHuC6280CurrentChannel(pw);
+
+            outHuC6280Port(pw.isSecondary, 0x4, 0);
         }
 
 

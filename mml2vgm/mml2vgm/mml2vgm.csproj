@@ -52,6 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="chips\clsChip.cs" />
+    <Compile Include="chips\HuC6280.cs" />
     <Compile Include="chips\RF5C164.cs" />
     <Compile Include="chips\segaPcm.cs" />
     <Compile Include="chips\SN76489.cs" />

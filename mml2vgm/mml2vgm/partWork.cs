@@ -322,6 +322,9 @@ namespace mml2vgm
         public int rf5c164Envelope = -1;
         public int rf5c164Pan = -1;
 
+        public int huc6280Envelope = -1;
+        public int huc6280Pan = -1;
+
         public int pcmStartAddress = -1;
         public int pcmLoopAddress = -1;
         public int beforepcmLoopAddress = -1;

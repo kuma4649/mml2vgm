@@ -1,14 +1,14 @@
 ﻿'{
 
-	TitleName   =
-	TitleNameJ  =色々テスト
+	TitleName   =HuC6280 Test
+	TitleNameJ  =HuC6280 Test
 	GameName    =
 	GameNameJ   =
 	SystemName  =
 	SystemNameJ =
 	Composer    =
 	ComposerJ   =
-	ReleaseDate =2017/01/02
+	ReleaseDate =2017/04/09
 	Converted   =
 	Notes       =
 
@@ -16,12 +16,28 @@
 
 }
 
-'+ "TONES.txt"
+     No,
+'@ H  0,
+   +0 +1 +2 +3 +4 +5 +6 +7
+'@ 00,15,23,27,29,30,30,31
+'@ 31,30,28,24,18,10,00,00
+'@ 31,31,31,31,31,31,31,31
+'@ 00,00,00,00,00,00,00,00
 
-'S1 MSV6,1,4,6000,3 SS1q0
-'S1 [r1]1
-'S1  rd+d+d+ d+8d+d+8 d+d+8 d+e f8 v13D0
-S1  d+1&d+1
+     No,
+'@ H  1,
+   +0 +1 +2 +3 +4 +5 +6 +7
+'@ 16,17,18,19,20,25,30,31
+'@ 31,31,31,31,31,31,31,31
+'@ 31,31,31,31,31,31,31,31
+'@ 31,31,31,31,16,08,00,08
 
+TotalVolume
+'H1  V15,15
+
+'H1  D0v31
+'H2  D1v24r16
+
+'H12 @0p15,15o4Q7[c4d4e4f4g4a4b4@1]r1
 
 

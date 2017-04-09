@@ -140,7 +140,8 @@ namespace mml2vgm
         DCSGNOISE,
         SSG,
         ADPCMA,
-        ADPCMB
+        ADPCMB,
+        WaveForm
     }
 
     public enum enmChipType : int
@@ -153,7 +154,8 @@ namespace mml2vgm
         YM2612 = 4,
         SN76489 = 5,
         RF5C164 = 6,
-        SEGAPCM = 7
+        SEGAPCM = 7,
+        HuC6280 = 8
     }
 
 }
