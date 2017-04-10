@@ -437,7 +437,7 @@ ebass3(from MUSIC LALF @70)
 -------------------------------------------------
 @n              ooo-ooo-oooo--ooo-ooo  音色番号指定(0 - 255)
 @n              ---o---o----oo---o---  エンベロープ番号指定(0 - 255)
-@En             ----o---oo---oo----o*  エンベロープ番号指定(0 - 255)
+@En             ----o---oo---oo----oo  エンベロープ番号指定(0 - 255)
 @Tn             oo---oo---oo---oo-o--  Tone Doubler番号指定(0 - 255)
 ln              ooooooooooooooooooooo  デフォルト音長指定
 on              oooooooo-oooo-ooooo-o  オクターブ絶対指定(1 - 8)(実際に発音される音は可能な音域のみ)
@@ -487,8 +487,8 @@ rn              ooooooooooooooooooooo  休符
 [               ooooooooooooooooooooo  ループ開始位置
 ]n              ooooooooooooooooooooo  ループ終了位置
 /               ooooooooooooooooooooo  ループ脱出位置指定
-EON             ---oo--ooo--ooo--o-o*  エンベロープの開始
-EOF             ---oo--ooo--ooo--o-o*  エンベロープの停止
+EON             ---oo--ooo--ooo--o-oo  エンベロープの開始
+EOF             ---oo--ooo--ooo--o-oo  エンベロープの停止
 EON             oo---oo---oo---oo----  効果音モードの開始
 EOF             oo---oo---oo---oo----  効果音モードの停止
 EXn             oo---oo---oo---oo----  効果音モードのスロット割り当て(必ず4桁指定すること。0: 未使用  1: 使用)
