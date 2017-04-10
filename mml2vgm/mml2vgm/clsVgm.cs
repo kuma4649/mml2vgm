@@ -631,6 +631,11 @@ namespace mml2vgm
                                 checkEnvelopeVolumeRange(srcFn, lineNumber, env, i, 127, 0);
                                 if (env[7] == 0) env[7] = 1;
                             }
+                            else if (env[8] == (int)enmChipType.HuC6280)
+                            {
+                                checkEnvelopeVolumeRange(srcFn, lineNumber, env, i, 31, 0);
+                                if (env[7] == 0) env[7] = 1;
+                            }
                             else
                             {
                                 msgBox.setWrnMsg("エンベロープを使用できない音源が選択されています。", srcFn, lineNumber);
@@ -2109,7 +2114,7 @@ namespace mml2vgm
                 }
                 else if (pw.chip is HuC6280)
                 {
-                    pw.keyOn = false;
+                    outHuC6280KeyOff(pw);
                 }
             }
         }
@@ -2876,7 +2881,6 @@ namespace mml2vgm
                         setLfoAtKeyOn(pw);
                         setHuC6280Envelope(pw, pw.volume);
                         outHuC6280KeyOn(pw);
-                        pw.keyOn = true;
                     }
                 }
 
@@ -3022,6 +3026,7 @@ namespace mml2vgm
                 || (pw.chip is SN76489)
                 || (pw.chip is RF5C164)
                 || (pw.chip is segaPcm)
+                || (pw.chip is HuC6280)
                 )
             {
                 pw.incPos();
@@ -3968,16 +3973,24 @@ namespace mml2vgm
             }
             else if (pw.chip is HuC6280)
             {
-                if (!pw.getNum(out n))
+                if (pw.getChar() != 'E')
                 {
-                    msgBox.setErrMsg("不正な音色番号が指定されています。", pw.getSrcFn(), pw.getLineNumber());
-                    n = 0;
+                    if (!pw.getNum(out n))
+                    {
+                        msgBox.setErrMsg("不正な音色番号が指定されています。", pw.getSrcFn(), pw.getLineNumber());
+                        n = 0;
+                    }
+                    n = checkRange(n, 0, 255);
+                    if (pw.instrument != n)
+                    {
+                        pw.instrument = n;
+                        outHuC6280SetInstrument(pw, n);
+                    }
                 }
-                n = checkRange(n, 0, 255);
-                if (pw.instrument != n)
+                else
                 {
-                    pw.instrument = n;
-                    outHuC6280SetInstrument(pw, n);
+                    pw.incPos();
+                    n = setEnvelopParamFromInstrument(pw);
                 }
             }
         }
@@ -4743,6 +4756,44 @@ namespace mml2vgm
                     dat[0x4f] |= 0x80;//YM2610B
                     if (i != 0) dat[0x4f] |= 0x40;//use Secondary
                 }
+
+                if (huc6280[i].use)
+                {
+                    //MasterVolume(Max volume)
+                    huc6280[i].TotalVolume = 0xff;
+                    outHuC6280Port(i == 1, 1, 0xff);
+                    //LFO freq 0
+                    outHuC6280Port(i == 1, 8, 0);
+                    //LFO ctrl 0
+                    outHuC6280Port(i == 1, 9, 0);
+
+                    foreach (partWork pw in huc6280[i].lstPartWork)
+                    {
+                        setHuC6280CurrentChannel(pw);
+
+                        //freq( 0 )
+                        pw.freq = 0;
+                        outHuC6280Port(i == 1, 2, 0);
+                        outHuC6280Port(i == 1, 3, 0);
+
+                        pw.pcm = false;
+                        outHuC6280Port(i == 1, 4, 0);
+
+                        pw.panL = 15;
+                        pw.panR = 15;
+                        outHuC6280Port(i == 1, 5, 0xff);
+
+                        for (int j = 0; j < 32; j++)
+                        {
+                            outHuC6280Port(i == 1, 6, 0);
+                        }
+
+                        //noise(Ch5,6 only)
+                        pw.noise = 0x1f;
+                        outHuC6280Port(i == 1, 7, 0x1f);
+                    }
+                }
+
             }
 
         }
@@ -7219,8 +7270,8 @@ namespace mml2vgm
             f = checkRange(f, 0, 0x0fff);
 
             setHuC6280CurrentChannel(pw);
-            outHuC6280Port(pw.isSecondary, 2, (byte)(f & 0xff));
-            outHuC6280Port(pw.isSecondary, 3, (byte)((f & 0xf00) >> 8));
+            if ((pw.freq & 0x0ff) != (f & 0x0ff)) outHuC6280Port(pw.isSecondary, 2, (byte)(f & 0xff));
+            if ((pw.freq & 0xf00) != (f & 0xf00)) outHuC6280Port(pw.isSecondary, 3, (byte)((f & 0xf00) >> 8));
 
             pw.freq = f;
 
@@ -7272,7 +7323,12 @@ namespace mml2vgm
                 vol += pw.lfo[lfo].value + pw.lfo[lfo].param[6];
             }
 
-            pw.volume = checkRange(vol, 0, 31);
+            vol = checkRange(vol, 0, 31);
+            if (pw.beforeVolume != vol)
+            {
+                setHuC6280Envelope(pw, vol);
+                pw.beforeVolume = vol;
+            }
         }
 
         private void setHuC6280Envelope(partWork pw, int volume)
@@ -7280,7 +7336,8 @@ namespace mml2vgm
             if (pw.huc6280Envelope != volume)
             {
                 setHuC6280CurrentChannel(pw);
-                byte data = (byte)(volume & 0x1f);
+                byte data = (byte)(0x80+(volume & 0x1f));
+                outHuC6280Port(pw.isSecondary, 4, data);
                 pw.huc6280Envelope = volume;
             }
         }
@@ -7339,8 +7396,20 @@ namespace mml2vgm
         private void outHuC6280KeyOn(partWork pw)
         {
             setHuC6280CurrentChannel(pw);
-            byte data = (byte)(0x80+pw.volume);
+            int vol = pw.volume;
+            if (pw.envelopeMode)
+            {
+                vol = 0;
+                if (pw.envIndex != -1)
+                {
+                    vol = pw.envVolume - (31 - pw.volume);
+                }
+            }
+            if (vol > 31) vol = 31;
+            if (vol < 0) vol = 0;
+            byte data = (byte)(0x80 + pw.volume);
             outHuC6280Port(pw.isSecondary, 0x4, data);
+            outHuC6280Port(pw.isSecondary, 0x5, (byte)pw.huc6280Pan);
         }
 
         private void outHuC6280KeyOff(partWork pw)
@@ -7348,6 +7417,7 @@ namespace mml2vgm
             setHuC6280CurrentChannel(pw);
 
             outHuC6280Port(pw.isSecondary, 0x4, 0);
+            outHuC6280Port(pw.isSecondary, 0x5, 0);
         }
 
 
