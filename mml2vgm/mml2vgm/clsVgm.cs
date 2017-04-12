@@ -1980,6 +1980,8 @@ namespace mml2vgm
                     {
                         pw.MaxVolume = 31;
                         pw.volume = pw.MaxVolume;
+                        pw.mixer = 0;
+                        pw.noise = 0;
                     }
 
                     pw.PartName = chip.Ch[i].Name;
@@ -4403,6 +4405,25 @@ namespace mml2vgm
 
                 }
             }
+            else if (pw.chip is HuC6280 && pw.ch>3)
+            {
+                if (pw.getNum(out n))
+                {
+                    n = checkRange(n, 0, 31);
+                    if (pw.noise != n)
+                    {
+                        pw.noise = n;
+                        setHuC6280CurrentChannel(pw);
+                        outHuC6280Port(pw.isSecondary, 7, (byte)((pw.mixer != 0 ? 0x80 : 0x00) + (pw.noise & 0x1f)));
+                    }
+                }
+                else
+                {
+                    msgBox.setErrMsg("wコマンドに指定された値が不正です。", pw.getSrcFn(), pw.getLineNumber());
+                    return;
+
+                }
+            }
             else
             {
                 msgBox.setErrMsg("このチャンネルではwコマンドは使用できません。", pw.getSrcFn(), pw.getLineNumber());
@@ -4441,6 +4462,25 @@ namespace mml2vgm
                     if (pw.mixer != n)
                     {
                         pw.mixer = n;
+                    }
+                }
+                else
+                {
+                    msgBox.setErrMsg("Pコマンドに指定された値が不正です。", pw.getSrcFn(), pw.getLineNumber());
+                    return;
+
+                }
+            }
+            else if (pw.chip is HuC6280 && pw.ch>3)
+            {
+                if (pw.getNum(out n))
+                {
+                    n = checkRange(n, 0, 1);
+                    if (pw.mixer != n)
+                    {
+                        pw.mixer = n;
+                        setHuC6280CurrentChannel(pw);
+                        outHuC6280Port(pw.isSecondary, 7, (byte)((pw.mixer != 0 ? 0x80 : 0x00) + (pw.noise & 0x1f)));
                     }
                 }
                 else
