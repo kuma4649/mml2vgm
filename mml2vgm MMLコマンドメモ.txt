@@ -498,8 +498,8 @@ qn              ooooooooooooooooooooo  ゲートタイム指定(クロック数�
 Qn              ooooooooooooooooooooo  ゲートタイム割合指定(1 - 8)
 wn              ---o----------------*  ノイズモード指定(0 - 7)
 wn              -------o----o----oo-*  ノイズ周波数
-Pn              -------o----o----o--*  1:トーン 2:ノイズ 3:トーン＆ノイズ
-Pn              ------------------o--  0:OFF 1:ON
+Pn              -------o----o----o---  1:トーン 2:ノイズ 3:トーン＆ノイズ
+Pn              ------------------o-o  ノイズ 0:OFF 1:ON
 mn              ooo------------------  YM2612PCMモード指定(0: 停止  1: 開始)
 Tn              ooooooooooooooooooooo  テンポ(1 - 255)
 !               ooooooooooooooooooooo  このパートのこれ以降をコンパイルしない(発音しない)
