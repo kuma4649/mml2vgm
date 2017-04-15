@@ -749,8 +749,8 @@ namespace mml2vgm
 
             foreach (clsChip c in chips)
             {
-                if (n == c.Name) return c;
-                if (n == c.ShortName) return c;
+                if (n == c.Name.ToUpper()) return c;
+                if (n == c.ShortName.ToUpper()) return c;
             }
 
             return null;
@@ -2905,7 +2905,16 @@ namespace mml2vgm
                     {
                         pw.pcmWaitKeyOnCounter = pw.waitKeyOnCounter;
                     }
-                    pw.pcmSizeCounter = instPCM[pw.instrument].size;
+
+                    if (instPCM == null || instPCM.Count - 1 < pw.instrument)
+                    {
+                        pw.pcmSizeCounter = 0;
+                    }
+                    else
+                    {
+                        pw.pcmSizeCounter = instPCM[pw.instrument].size;
+                    }
+
                 }
             }
 
@@ -3203,12 +3212,25 @@ namespace mml2vgm
                 n = checkRange(n, 0, 1);
                 pw.pcm = (n == 1);
                 pw.freq = -1;//freqをリセット
+                pw.instrument = -1;
                 outYM2612SetCh6PCMMode(pw, pw.pcm);
+            }
+            else if (pw.chip is HuC6280)
+            {
+                if (!pw.getNum(out n))
+                {
+                    msgBox.setErrMsg("不正なPCMモード指定'm'が指定されています。", pw.getSrcFn(), pw.getLineNumber());
+                    n = 0;
+                }
+                n = checkRange(n, 0, 1);
+                pw.pcm = (n == 1);
+                pw.freq = -1;//freqをリセット
+                pw.instrument = -1;
             }
             else
             {
                 pw.getNum(out n);
-                msgBox.setWrnMsg("このパートはYM2612の6chではないため、mコマンドは無視されます。", pw.getSrcFn(), pw.getLineNumber());
+                msgBox.setWrnMsg("このパートではmコマンドは無視されます。", pw.getSrcFn(), pw.getLineNumber());
             }
 
         }
@@ -3986,7 +4008,24 @@ namespace mml2vgm
                     if (pw.instrument != n)
                     {
                         pw.instrument = n;
-                        outHuC6280SetInstrument(pw, n);
+                        if (!pw.pcm)
+                        {
+                            outHuC6280SetInstrument(pw, n);
+                        }
+                        else
+                        {
+                            if (!instPCM.ContainsKey(n))
+                            {
+                                msgBox.setErrMsg(string.Format("PCM定義に指定された音色番号({0})が存在しません。", n), pw.getSrcFn(), pw.getLineNumber());
+                            }
+                            else
+                            {
+                                if (instPCM[n].chip != enmChipType.HuC6280)
+                                {
+                                    msgBox.setErrMsg(string.Format("指定された音色番号({0})はHuC6280向けPCMデータではありません。", n), pw.getSrcFn(), pw.getLineNumber());
+                                }
+                            }
+                        }
                     }
                 }
                 else
@@ -4574,6 +4613,15 @@ namespace mml2vgm
                 if (segapcm[i].use && segapcm[i].pcmData != null && segapcm[i].pcmData.Length > 0)
                 {
                     foreach (byte b in segapcm[i].pcmData)
+                    {
+                        dat.Add(b);
+                    }
+                }
+
+                //PCM Data block
+                if (huc6280[i].use && huc6280[i].pcmData != null && huc6280[i].pcmData.Length > 0)
+                {
+                    foreach (byte b in huc6280[i].pcmData)
                     {
                         dat.Add(b);
                     }
@@ -7447,9 +7495,93 @@ namespace mml2vgm
             }
             if (vol > 31) vol = 31;
             if (vol < 0) vol = 0;
-            byte data = (byte)(0x80 + pw.volume);
+            byte data = (byte)(0x80 + vol);
+
+            if (!pw.pcm)
+            {
+                outHuC6280Port(pw.isSecondary, 0x4, data);
+                outHuC6280Port(pw.isSecondary, 0x5, (byte)pw.huc6280Pan);
+                return;
+            }
+
+            if (Version == 1.51f)
+            {
+                return;
+            }
+
+            data |= 0x40;
             outHuC6280Port(pw.isSecondary, 0x4, data);
             outHuC6280Port(pw.isSecondary, 0x5, (byte)pw.huc6280Pan);
+
+            float m = pcmMTbl[pw.pcmNote] * (float)Math.Pow(2, (pw.pcmOctave - 4));
+            pw.pcmBaseFreqPerFreq = vgmSamplesPerSecond / ((float)instPCM[pw.instrument].freq * m);
+            pw.pcmFreqCountBuffer = 0.0f;
+            long p = instPCM[pw.instrument].stAdr;
+
+            long s = instPCM[pw.instrument].size;
+            long f = instPCM[pw.instrument].freq;
+            long w = 0;
+            if (pw.gatetimePmode)
+            {
+                w = pw.waitCounter * pw.gatetime / 8L;
+            }
+            else
+            {
+                w = pw.waitCounter - pw.gatetime;
+            }
+            if (w < 1) w = 1;
+            s = Math.Min(s, w * (long)samplesPerClock * f / 44100);
+
+            if (!pw.streamSetup)
+            {
+                newStreamID++;
+                pw.streamID = newStreamID;
+                // setup stream control
+                dat.Add(0x90);
+                dat.Add((byte)pw.streamID);
+                dat.Add((byte)(0x1b + (pw.isSecondary ? 0x80 : 0x00))); //0x1b HuC6280
+                dat.Add((byte)pw.ch);
+                dat.Add((byte)(0x00 + 0x06));// 0x00 Select Channel 
+
+                // set stream data
+                dat.Add(0x91);
+                dat.Add((byte)pw.streamID);
+                dat.Add(0x05); // Data BankID(0x05 HuC6280)
+                dat.Add(0x01);
+                dat.Add(0x00);
+
+                pw.streamSetup = true;
+            }
+
+            if (pw.streamFreq != f)
+            {
+                //Set Stream Frequency
+                dat.Add(0x92);
+                dat.Add((byte)pw.streamID);
+
+                dat.Add((byte)(f & 0xff));
+                dat.Add((byte)((f & 0xff00) / 0x100));
+                dat.Add((byte)((f & 0xff0000) / 0x10000));
+                dat.Add((byte)((f & 0xff000000) / 0x10000));
+
+                pw.streamFreq = f;
+            }
+
+            //Start Stream
+            dat.Add(0x93);
+            dat.Add((byte)pw.streamID);
+
+            dat.Add((byte)(p & 0xff));
+            dat.Add((byte)((p & 0xff00) / 0x100));
+            dat.Add((byte)((p & 0xff0000) / 0x10000));
+            dat.Add((byte)((p & 0xff000000) / 0x10000));
+
+            dat.Add(0x01);
+
+            dat.Add((byte)(s & 0xff));
+            dat.Add((byte)((s & 0xff00) / 0x100));
+            dat.Add((byte)((s & 0xff0000) / 0x10000));
+            dat.Add((byte)((s & 0xff000000) / 0x10000));
         }
 
         private void outHuC6280KeyOff(partWork pw)

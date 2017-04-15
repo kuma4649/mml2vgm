@@ -197,6 +197,12 @@ namespace mml2vgm
             bool uSegaPCMP = false;
             bool uSegaPCMS = false;
 
+            byte[] tbufHuC6280P = new byte[7] { 0x67, 0x66, 0x05, 0x00, 0x00, 0x00, 0x00 };
+            byte[] tbufHuC6280S = new byte[7] { 0x67, 0x66, 0x05, 0x00, 0x00, 0x00, 0x00 };
+            long pHuC6280P = 0L;
+            long pHuC6280S = 0L;
+            bool uHuC6280P = false;
+            bool uHuC6280S = false;
 
             Dictionary<int, clsPcm> newDic = new Dictionary<int, clsPcm>();
             foreach (KeyValuePair<int, clsPcm> v in desVGM.instPCM)
@@ -231,6 +237,17 @@ namespace mml2vgm
                 else if (v.Value.chip == enmChipType.RF5C164)
                 {
                     storePcmRF5C164(ref tbufRf5c164P, ref tbufRf5c164S, ref pRf5c164P, ref pRf5c164S, ref uRf5c164P, ref uRf5c164S, newDic, v, ref buf, ref size);
+                }
+                else if (v.Value.chip == enmChipType.HuC6280)
+                {
+                    if (!v.Value.isSecondary)
+                    {
+                        uHuC6280P = storePcmHuC6280(ref tbufHuC6280P, ref pHuC6280P, newDic, v, buf, size);
+                    }
+                    else
+                    {
+                        uHuC6280S = storePcmHuC6280(ref tbufHuC6280S, ref pHuC6280S, newDic, v, buf, size);
+                    }
                 }
             }
 
@@ -349,6 +366,18 @@ namespace mml2vgm
             tbufRf5c164S[9] |= 0x80;
             desVGM.rf5c164[1].pcmData = uRf5c164S ? tbufRf5c164S : null;
 
+            tbufHuC6280P[3] = (byte)((tbufHuC6280P.Length - 7) & 0xff);
+            tbufHuC6280P[4] = (byte)(((tbufHuC6280P.Length - 7) & 0xff00) / 0x100);
+            tbufHuC6280P[5] = (byte)(((tbufHuC6280P.Length - 7) & 0xff0000) / 0x10000);
+            tbufHuC6280P[6] = (byte)(((tbufHuC6280P.Length - 7) & 0x7f000000) / 0x1000000);
+            desVGM.huc6280[0].pcmData = uHuC6280P ? tbufHuC6280P : null;
+
+            tbufHuC6280S[3] = (byte)((tbufHuC6280S.Length - 7) & 0xff);
+            tbufHuC6280S[4] = (byte)(((tbufHuC6280S.Length - 7) & 0xff00) / 0x100);
+            tbufHuC6280S[5] = (byte)(((tbufHuC6280S.Length - 7) & 0xff0000) / 0x10000);
+            tbufHuC6280S[6] = (byte)(((tbufHuC6280S.Length - 7) & 0x7f000000) / 0x1000000);
+            desVGM.huc6280[1].pcmData = uHuC6280S ? tbufHuC6280S : null;
+
             desVGM.instPCM = newDic;
         }
 
@@ -437,6 +466,31 @@ namespace mml2vgm
             tbufYM2612 = newBuf;
             uYM2612 = true;
             return uYM2612;
+        }
+
+        private static bool storePcmHuC6280(ref byte[] tbufHuC6280, ref long pHuC6280, Dictionary<int, clsPcm> newDic, KeyValuePair<int, clsPcm> v, byte[] buf, long size)
+        {
+            bool uHuC6280;
+
+            for (int i = 0; i < size; i++)
+            {
+                buf[i] >>= 3;//5bit化
+            }
+
+            if (newDic.ContainsKey(v.Key))
+            {
+                newDic.Remove(v.Key);
+            }
+            newDic.Add(v.Key, new clsPcm(v.Value.num, v.Value.chip, false, v.Value.fileName, v.Value.freq, v.Value.vol, pHuC6280, pHuC6280 + size, size, -1));
+            pHuC6280 += size;
+
+            byte[] newBuf = new byte[tbufHuC6280.Length + buf.Length];
+            Array.Copy(tbufHuC6280, newBuf, tbufHuC6280.Length);
+            Array.Copy(buf, 0, newBuf, tbufHuC6280.Length, buf.Length);
+
+            tbufHuC6280 = newBuf;
+            uHuC6280 = true;
+            return uHuC6280;
         }
 
         private static void storePcmSegaPCM(ref byte[] tbufSegaPCMP, ref byte[] tbufSegaPCMS, ref long pSegaPCMP, ref long pSegaPCMS, ref bool uSegaPCMP, ref bool uSegaPCMS, Dictionary<int, clsPcm> newDic, KeyValuePair<int, clsPcm> v, ref byte[] buf, ref long size)
@@ -835,5 +889,6 @@ namespace mml2vgm
                 return null;
             }
         }
+
     }
 }

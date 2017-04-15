@@ -143,6 +143,8 @@ namespace mml2vgm
             if (mv.desVGM.ym2612[0].pcmData != null) textBox1.AppendText(string.Format(" PCM Data size(YM2612)  : {0} byte\r\n", mv.desVGM.ym2612[0].pcmData.Length));
             if (mv.desVGM.rf5c164[0].pcmData != null) textBox1.AppendText(string.Format(" PCM Data size(RF5C164) : ({0}/65535) byte\r\n", mv.desVGM.rf5c164[0].pcmData.Length-12));
             if (mv.desVGM.rf5c164[1].pcmData != null) textBox1.AppendText(string.Format(" PCM Data size(RF5C164Secondary) : ({0}/65535) byte\r\n", mv.desVGM.rf5c164[1].pcmData.Length-12));
+            if (mv.desVGM.huc6280[0].pcmData != null) textBox1.AppendText(string.Format(" PCM Data size(HuC6280)  : {0} byte\r\n", mv.desVGM.huc6280[0].pcmData.Length));
+            if (mv.desVGM.huc6280[1].pcmData != null) textBox1.AppendText(string.Format(" PCM Data size(HuC6280Secondary)  : {0} byte\r\n", mv.desVGM.huc6280[1].pcmData.Length));
 
 
             textBox1.AppendText("\r\nFinished.\r\n\r\n");
