@@ -4398,6 +4398,10 @@ namespace mml2vgm
             {
                 outSegaPcmPort(pw, adr, dat);
             }
+            else if (pw.chip is HuC6280)
+            {
+                outHuC6280Port(pw.isSecondary, adr, dat);
+            }
         }
 
         private void cmdNoise(partWork pw)
