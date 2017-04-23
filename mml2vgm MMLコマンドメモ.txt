@@ -105,6 +105,11 @@ ebass3(from MUSIC LALF @70)
            ・256byte毎にPaddingされる。
            ・一つのサンプルは最大65536byteまで。それ以上はカットされる。
            ・バンクに収まらない場合は次のバンクに格納し、収まらなかったバンクの方はPaddingされる。
+         HuC6280
+           ・PCMは8KHz,8bit,mono,圧縮なし,unsignedのwavファイルであること。
+               mml2vgmは内部で5bitPCMに変換する。
+           ・16bit,signedも読み込めるが5bit,unsignedに変換される。(TBD)
+           ・8KHzで再生される。(TBD)
            
     ・波形メモリ音源の音色定義について
          HuC6280は例外的に定義行が複数行の定義も可能。(1行も可能)
@@ -500,7 +505,8 @@ wn              ---o-----------------  ノイズモード指定(0 - 7)
 wn              -------o----o----oo-o  ノイズ周波数
 Pn              -------o----o----o---  1:トーン 2:ノイズ 3:トーン＆ノイズ
 Pn              ------------------o-o  ノイズ 0:OFF 1:ON
-mn              ooo------------------  YM2612PCMモード指定(0: 停止  1: 開始)
+mn              ooo------------------  YM2612PCMモード指定(0: 停止  1: 開始) 6Ch only
+mn              --------------------o  HuC6280PCMモード指定(0: 停止  1: 開始)チャンネルごとに指定
 Tn              ooooooooooooooooooooo  テンポ(1 - 255)
 !               ooooooooooooooooooooo  このパートのこれ以降をコンパイルしない(発音しない)
 Kn              oooooooo-oooo-ooooooo  移調絶対指定 ( -12 - +12 )
@@ -517,7 +523,8 @@ f               ooooooooooooooooooooo  音符ファ
 g               ooooooooooooooooooooo  音符ソ
 a               ooooooooooooooooooooo  音符ラ
 b               ooooooooooooooooooooo  音符シ
-    +/-         ooooooooooooooooooooo  半音上げる/下げる
+    +           ooooooooooooooooooooo  半音上げる
+    -           ooooooooooooooooooooo  半音下げる
     n           ooooooooooooooooooooo  音長(FMのみ0を指定するとToneDoublerモードになる)
     .           ooooooooooooooooooooo  符点
     _           oo-ooooo-oooo-ooooooo  ベンド
