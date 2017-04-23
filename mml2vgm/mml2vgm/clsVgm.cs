@@ -3022,6 +3022,14 @@ namespace mml2vgm
                             setRf5c164LoopAddress(p, (int)(instPCM[n].loopAdr));
                         }
                     }
+                    if (p.chip is HuC6280 && huc6280[p.isSecondary ? 1 : 0].use)
+                    {
+                        huc6280[p.isSecondary ? 1 : 0].CurrentChannel = 255;
+                        //setHuC6280CurrentChannel(pw);
+                        p.beforeFNum = -1;
+                        p.huc6280Envelope = -1;
+                        p.huc6280Pan = -1;
+                    }
                 }
             }
         }
