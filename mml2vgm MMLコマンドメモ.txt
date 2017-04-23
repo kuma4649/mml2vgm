@@ -466,8 +466,8 @@ Vn1,n2          --------------------o  マスターボリュームの音量絶�
 (n              ----o----o----o------  音量相対指定(下げ)(R/Tb/Pp: 0 - 255)
 (n              --------o----o-------  音量相対指定(下げ)(Ta/Pr: 0-31)
 &               ooooooooooooooooooooo  タイ(但し、音符の装飾扱いなので音符の直後に指定する必要あり)
-yn1,n2          oooooooooooooooooooo*  レジスタ直接書き込み(n1=レジスタ番号 n2=データ)ポートはそのChによる。
-Mx1x2n,...      oo-ooooooooooooooooo*  LFO(
+yn1,n2          ooooooooooooooooooooo  レジスタ直接書き込み(n1=レジスタ番号 n2=データ)ポートはそのChによる。
+Mx1x2n,...      oo-oooooooooooooooooo  LFO(
                                         x1:P/Q/R/S          識別子(1パート当たり4種類定義、使用できる)
                                         x2:T/V/H            T:音量
                                                             V:音程(Ta/Pr不可)
@@ -487,7 +487,7 @@ MAMSn           oo---oo---oo---oo----  AMS値 音量LFO感度(0-7)
 MAMSn           ------------------o--  AMS値 音量LFO感度(0-3)
 MPMSn           oo---oo---oo---oo----  PMS値 音程LFO感度(0-3)
 MPMSn           ------------------o--  PMS値 音程LFO感度(0-7)
-Sx1n            oo-ooooooooooooooooo*  LFOスイッチ(x1: P/Q/R/S  n: 0(OFF)/1(ON))
+Sx1n            oo-oooooooooooooooooo  LFOスイッチ(x1: P/Q/R/S  n: 0(OFF)/1(ON))
 rn              ooooooooooooooooooooo  休符
 [               ooooooooooooooooooooo  ループ開始位置
 ]n              ooooooooooooooooooooo  ループ終了位置
