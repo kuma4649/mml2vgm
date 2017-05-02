@@ -129,7 +129,8 @@ ebass3(from MUSIC LALF @70)
 
   (4) エイリアス定義部
     ・MMLを呼び出し可能なエイリアスとして定義する。要はBASICのサブルーチンのようなもの。
-    但し、いくらエイリアスを多用して無駄を省いても生成されるvgmファイルは全てを展開した状態になり、ファイルサイズの節約にはならない。アセンブラのマクロ展開のほうが近い。
+    但し、いくらエイリアスを多用して無駄を省いても生成されるvgmファイルは全てを展開した状態になり、
+    ファイルサイズの節約にはならない。アセンブラのマクロ展開のほうが近い。
     ・エイリアスからエイリアスを呼び出すことも可能。(無限にループするとメモリエラーになります)
 
   (5) MML定義部
@@ -473,16 +474,27 @@ Mx1x2n,...      oo-oooooooooooooooooo  LFO(
                                                             V:音程(Ta/Pr不可)
                                                             H:ハードウェアLFO
                                         n...:パラメーター   
-                                      )基本的にはFMPと同じ
+                                       )基本的にはFMPと同じ
                                        ハードウェアLFO
-                                         OPN系 : Mx1Hn1
-                                                     n1:Freq(0 - 7)
-                                         OPM   : Mx1Hn1,n2,n3,n4,n5
+                                         ハードウェアLFOはSコマンドによる制御必須。
+                                         (Sコマンドによってパラメータが送信されるため)
+                                         OPN系(YM2203除く)
+                                                 : Mx1Hn1,n2,n3,n4
+                                                     n1:Delay(無視されます)TBD
+                                                     n2:Freq(0 - 7)
+                                                     n3:PMS(0 - 7)
+                                                     n4:AMS(0 - 3)
+                                                     n5:Switch(0必須)TBD
+                                         OPM     : Mx1Hn1,n2,n3,n4,n5
                                                      n1:LFO波形(0 - 3)
                                                      n2:LFRQ(0 - 255)
                                                      n3:PMD(0 - 127)
                                                      n4:AMD(0 - 127)
                                                      n5:LFO RESET(SYNC)(0 - 1)
+                                         HuC6280 : Mx1Hn1,n2,n3
+                                                     n1:Control(n= 0(Disable),1-3(Ch2波形加算))
+                                                     n2:Freq(n= 0-255)
+                                                     n3:Ch2Freq(n= 0-4095)
 MAMSn           oo---oo---oo---oo----  AMS値 音量LFO感度(0-7)
 MAMSn           ------------------o--  AMS値 音量LFO感度(0-3)
 MPMSn           oo---oo---oo---oo----  PMS値 音程LFO感度(0-3)
@@ -499,7 +511,8 @@ EOF             oo---oo---oo---oo----  効果音モードの停止
 EXn             oo---oo---oo---oo----  効果音モードのスロット割り当て(必ず4桁指定すること。0: 未使用  1: 使用)
 En1,n2,n3,n4    oo---oo---oo---oo----  効果音モードのスロットディチューン。n1～n4はそれぞれOP1～OP4までのディチューン値
 L               ooooooooooooooooooooo  曲全体のループ位置指定(曲者です)
-qn              ooooooooooooooooooooo  ゲートタイム指定(クロック数で指定。音長分のクロック数からn引いた分が発音する長さになる。)
+qn              ooooooooooooooooooooo  ゲートタイム指定(クロック数で指定。音長分のクロック数からn引いた分が
+                                       発音する長さになる。)
 Qn              ooooooooooooooooooooo  ゲートタイム割合指定(1 - 8)
 wn              ---o-----------------  ノイズモード指定(0 - 7)
 wn              -------o----o----oo-o  ノイズ周波数
@@ -532,15 +545,19 @@ b               ooooooooooooooooooooo  音符シ
         o       oo-ooooo-oooo-ooooooo  オクターブ
         >       oo-ooooo-oooo-ooooooo  オクターブ相対指定(上げ)
         <       oo-ooooo-oooo-ooooooo  オクターブ相対指定(下げ)
-    &n          ooooooooooooooooooooo  タイ(n: 音長 音長分だけ発音を追加する。 音長を指定しない場合はキーオフせずに次の音符とつなげる)
+    &n          ooooooooooooooooooooo  タイ(n: 音長 音長分だけ発音を追加する。
+                                       音長を指定しない場合はキーオフせずに次の音符とつなげる)
     ~n          ooooooooooooooooooooo  タイの逆(n: 音長 音長分だけ発音を削る。)
     ,           oo---oo---oo---oo-o--  Tone Doublerモード
-                                       音符指定の後に0或いは,を指定するとTone Doublerモードになる。この時指定した音符をAとする。
-                                       もう一度音符を指定するとTone Doublerが発動する。この時指定した音符をBとする。
+                                       音符指定の後に0或いは,を指定するとTone Doublerモードになる。
+                                       この時指定した音符をAとする。
+                                       もう一度音符を指定するとTone Doublerが発動する。
+                                       この時指定した音符をBとする。
                                        Tone Doublerが発動するとAとBの音程差が計算され、
                                        それに対応するMLとDT2が各オペレーター(スロット)にセットされる。
                                        MLとDT2は@Tコマンドで指定されたTone Doublerの定義値が参照される。
-                                       キーオフするとTone Doublerモードは解除される。この時本来のMLとDT2に戻る。
+                                       キーオフするとTone Doublerモードは解除される。
+                                       この時本来のMLとDT2に戻る。
                                        音程差が定義行数を超える場合は、定義行数に収まるまで音程差を-12する。
                                        音程差がマイナスの場合は0とする。
                                        Tone Doubler時のベンドは音符Bを起点とする。
