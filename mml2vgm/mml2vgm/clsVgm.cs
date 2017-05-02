@@ -1621,7 +1621,7 @@ namespace mml2vgm
                     {
                         cpw.ams = pl.param[3];
                         cpw.fms = pl.param[2];
-                        outOPNSetPanAMSFMS(cpw, cpw.pan, cpw.ams, cpw.fms);
+                        outOPNSetPanAMSPMS(cpw, cpw.pan, cpw.ams, cpw.fms);
                         cpw.chip.lstPartWork[0].hardLfoSw = true;
                         cpw.chip.lstPartWork[0].hardLfoNum = pl.param[1];
                         outOPNSetHardLfo(cpw, cpw.hardLfoSw, cpw.hardLfoNum);
@@ -3316,7 +3316,7 @@ namespace mml2vgm
                     }
                     n = checkRange(n, 1, 3);
                     pw.pan = n;
-                    outOPNSetPanAMSFMS(pw, n, pw.ams, pw.fms);
+                    outOPNSetPanAMSPMS(pw, n, pw.ams, pw.fms);
                 }
                 else if (pw.Type == enmChannelType.RHYTHM)
                 {
@@ -3361,7 +3361,7 @@ namespace mml2vgm
                     }
                     n = checkRange(n, 1, 3);
                     pw.pan = n;
-                    outOPNSetPanAMSFMS(pw, n, pw.ams, pw.fms);
+                    outOPNSetPanAMSPMS(pw, n, pw.ams, pw.fms);
                 }
                 else if (pw.Type == enmChannelType.ADPCMA)
                 {
@@ -3404,7 +3404,7 @@ namespace mml2vgm
                 }
                 n = checkRange(n, 1, 3);
                 pw.pan = n;
-                outOPNSetPanAMSFMS(pw, n, pw.ams, pw.fms);
+                outOPNSetPanAMSPMS(pw, n, pw.ams, pw.fms);
             }
             else if (pw.chip is SN76489)
             {
@@ -4196,19 +4196,20 @@ namespace mml2vgm
             }
             else
             {
-                if (pw.lfo[c].param.Count < 4)
+                //Hard LFO
+                if (pw.Type == enmChannelType.FMOPM)
                 {
-                    msgBox.setErrMsg("LFOの設定に必要なパラメータが足りません。", pw.getSrcFn(), pw.getLineNumber());
-                    return;
-                }
-                if (pw.lfo[c].param.Count > 5)
-                {
-                    msgBox.setErrMsg("LFOの設定に可能なパラメータ数を超えて指定されました。", pw.getSrcFn(), pw.getLineNumber());
-                    return;
-                }
+                    if (pw.lfo[c].param.Count < 4)
+                    {
+                        msgBox.setErrMsg("LFOの設定に必要なパラメータが足りません。", pw.getSrcFn(), pw.getLineNumber());
+                        return;
+                    }
+                    if (pw.lfo[c].param.Count > 5)
+                    {
+                        msgBox.setErrMsg("LFOの設定に可能なパラメータ数を超えて指定されました。", pw.getSrcFn(), pw.getLineNumber());
+                        return;
+                    }
 
-                if (pw.chip is YM2151)
-                {
                     pw.lfo[c].param[0] = checkRange(pw.lfo[c].param[0], 0, 3); //Type
                     pw.lfo[c].param[1] = checkRange(pw.lfo[c].param[1], 0, 255); //LFRQ
                     pw.lfo[c].param[2] = checkRange(pw.lfo[c].param[2], 0, 127); //PMD
@@ -4222,21 +4223,51 @@ namespace mml2vgm
                         pw.lfo[c].param.Add(0);
                     }
                 }
-                else
+                else if (!(pw.chip is YM2203) && pw.Type == enmChannelType.FMOPN)
                 {
-                    pw.lfo[c].param[0] = checkRange(pw.lfo[c].param[0], 0, (int)clockCount);//Delay
+                    if (pw.lfo[c].param.Count < 4)
+                    {
+                        msgBox.setErrMsg("LFOの設定に必要なパラメータが足りません。", pw.getSrcFn(), pw.getLineNumber());
+                        return;
+                    }
+                    if (pw.lfo[c].param.Count > 5)
+                    {
+                        msgBox.setErrMsg("LFOの設定に可能なパラメータ数を超えて指定されました。", pw.getSrcFn(), pw.getLineNumber());
+                        return;
+                    }
+
+                    pw.lfo[c].param[0] = checkRange(pw.lfo[c].param[0], 0, (int)clockCount);//Delay(無視)
                     pw.lfo[c].param[1] = checkRange(pw.lfo[c].param[1], 0, 7);//Freq
                     pw.lfo[c].param[2] = checkRange(pw.lfo[c].param[2], 0, 7);//PMS
                     pw.lfo[c].param[3] = checkRange(pw.lfo[c].param[3], 0, 3);//AMS
                     if (pw.lfo[c].param.Count == 5)
                     {
-                        pw.lfo[c].param[4] = checkRange(pw.lfo[c].param[4], 0, 1);
+                        pw.lfo[c].param[4] = checkRange(pw.lfo[c].param[4], 0, 1); //Switch
                     }
                     else
                     {
                         pw.lfo[c].param.Add(1);
                     }
                 }
+                else if (pw.chip is HuC6280)
+                {
+                    if (pw.lfo[c].param.Count < 3)
+                    {
+                        msgBox.setErrMsg("LFOの設定に必要なパラメータが足りません。", pw.getSrcFn(), pw.getLineNumber());
+                        return;
+                    }
+                    if (pw.lfo[c].param.Count > 3)
+                    {
+                        msgBox.setErrMsg("LFOの設定に可能なパラメータ数を超えて指定されました。", pw.getSrcFn(), pw.getLineNumber());
+                        return;
+                    }
+
+                    pw.lfo[c].param[0] = checkRange(pw.lfo[c].param[0], 0, 3);//Control(n= 0(Disable),1-3(Ch2波形加算))
+                    pw.lfo[c].param[1] = checkRange(pw.lfo[c].param[1], 0, 255);//Freq(n= 0-255)
+                    pw.lfo[c].param[2] = checkRange(pw.lfo[c].param[2], 0, 4095);//Ch2Freq(n= 0-4095)
+
+                }
+
             }
             //解析　ここまで
 
@@ -4283,13 +4314,15 @@ namespace mml2vgm
             //解析　ここまで
 
             pw.lfo[c].sw = (n == 0) ? false : true;
+
+            //即時有効になるタイプのHardLFOの処理
             if (pw.lfo[c].type == eLfoType.Hardware && pw.lfo[c].param != null)
             {
                 if (pw.chip is YM2151)
                 {
                     outOPMSetHardLfo(pw, (n == 0) ? false : true, pw.lfo[c].param);
                 }
-                else if (pw.chip is YM2612)
+                else if (pw.chip is YM2612 || pw.chip is YM2608 || pw.chip is YM2610B)
                 {
                     if (pw.lfo[c].param[4] == 0)
                     {
@@ -4300,12 +4333,41 @@ namespace mml2vgm
                         outOPNSetHardLfo(pw, false, pw.lfo[c].param[1]);
                     }
                 }
+                else if (pw.chip is HuC6280)
+                {
+                    if (n == 0)
+                    {
+                        outHuC6280Port(pw.isSecondary, 9, 0); //disable
+                    }
+                    else
+                    {
+                        outHuC6280Port(pw.isSecondary, 9, (byte)pw.lfo[c].param[0]);
+                        outHuC6280Port(pw.isSecondary, 8, (byte)pw.lfo[c].param[1]);
+                        outHuC6280Port(pw.isSecondary, 0, 1);//CurrentChannel 2
+                        ((HuC6280)pw.chip).CurrentChannel = 1;
+                        outHuC6280Port(pw.isSecondary, 2, (byte)(pw.lfo[c].param[2] & 0xff));
+                        outHuC6280Port(pw.isSecondary, 3, (byte)((pw.lfo[c].param[2] & 0xf00) >> 8));
+                        ((HuC6280)pw.chip).lstPartWork[1].freq = pw.lfo[c].param[2];
+                    }
+                }
             }
 
         }
 
         private void cmdMAMS(partWork pw)
         {
+            if (!( (pw.chip is YM2151) || (pw.chip is YM2608) || (pw.chip is YM2610B) || (pw.chip is YM2612) ))
+            {
+                msgBox.setWrnMsg("このチャンネルのMAMSは無視されます。", pw.getSrcFn(), pw.getLineNumber());
+                return;
+            }
+
+            if (!((pw.Type== enmChannelType.FMOPM) || (pw.Type== enmChannelType.FMOPN)))
+            {
+                msgBox.setWrnMsg("FMチャンネル以外のMAMSは無視されます。", pw.getSrcFn(), pw.getLineNumber());
+                return;
+            }
+
             int n = -1;
             pw.incPos();
             if (!pw.getNum(out n))
@@ -4321,13 +4383,25 @@ namespace mml2vgm
             else
             {
                 n = checkRange(n, 0, 7);
-                outOPNSetPanAMSFMS(pw, pw.pan, n, pw.pms);
+                outOPNSetPanAMSPMS(pw, pw.pan, n, pw.pms);
             }
             pw.ams = n;
         }
 
         private void cmdMPMS(partWork pw)
         {
+            if (!((pw.chip is YM2151) || (pw.chip is YM2608) || (pw.chip is YM2610B) || (pw.chip is YM2612)))
+            {
+                msgBox.setWrnMsg("このチャンネルのMPMSは無視されます。", pw.getSrcFn(), pw.getLineNumber());
+                return;
+            }
+
+            if (!((pw.Type == enmChannelType.FMOPM) || (pw.Type == enmChannelType.FMOPN)))
+            {
+                msgBox.setWrnMsg("FMチャンネル以外のMPMSは無視されます。", pw.getSrcFn(), pw.getLineNumber());
+                return;
+            }
+
             int n = -1;
             pw.incPos();
             if (!pw.getNum(out n))
@@ -4343,7 +4417,7 @@ namespace mml2vgm
             else
             {
                 n = checkRange(n, 0, 3);
-                outOPNSetPanAMSFMS(pw, pw.pan, pw.ams, n);
+                outOPNSetPanAMSPMS(pw, pw.pan, pw.ams, n);
             }
             pw.pms = n;
         }
@@ -4665,7 +4739,7 @@ namespace mml2vgm
                             pw.pan = 3;
                             pw.ams = 0;
                             pw.fms = 0;
-                            if (!pw.dataEnd) outOPNSetPanAMSFMS(pw, 3, 0, 0);
+                            if (!pw.dataEnd) outOPNSetPanAMSPMS(pw, 3, 0, 0);
                         }
                     }
 
@@ -4804,7 +4878,7 @@ namespace mml2vgm
                             pw.pan = 3;
                             pw.ams = 0;
                             pw.fms = 0;
-                            if (!pw.dataEnd) outOPNSetPanAMSFMS(pw, 3, 0, 0);
+                            if (!pw.dataEnd) outOPNSetPanAMSPMS(pw, 3, 0, 0);
                         }
                     }
 
@@ -4849,7 +4923,7 @@ namespace mml2vgm
                             pw.pan = 3;
                             pw.ams = 0;
                             pw.fms = 0;
-                            if (!pw.dataEnd) outOPNSetPanAMSFMS(pw, 3, 0, 0);
+                            if (!pw.dataEnd) outOPNSetPanAMSPMS(pw, 3, 0, 0);
                         }
                     }
 
@@ -6822,17 +6896,17 @@ namespace mml2vgm
             outFmAdrPort(port, (byte)(0xb0 + vch), (byte)((fb << 3) + alg));
         }
 
-        private void outOPNSetPanAMSFMS(partWork pw, int pan, int ams, int fms)
+        private void outOPNSetPanAMSPMS(partWork pw, int pan, int ams, int pms)
         {
             int vch = pw.ch;
             byte port = pw.ch > 2 ? pw.port1 : pw.port0;
             vch = (byte)(vch > 2 ? vch - 3 : vch);
 
             pan = pan & 3;
-            ams = ams & 3;
-            fms = fms & 3;
+            ams = ams & 7;
+            pms = pms & 3;
 
-            outFmAdrPort(port, (byte)(0xb4 + vch), (byte)((pan << 6) + (ams << 4) + fms));
+            outFmAdrPort(port, (byte)(0xb4 + vch), (byte)((pan << 6) + (ams << 3) + pms));
         }
 
         private void outOPMSetHardLfoFreq(partWork pw, int freq)
@@ -7368,6 +7442,8 @@ namespace mml2vgm
             }
 
             f = checkRange(f, 0, 0x0fff);
+
+            if (pw.freq == f) return;
 
             setHuC6280CurrentChannel(pw);
             if ((pw.freq & 0x0ff) != (f & 0x0ff)) outHuC6280Port(pw.isSecondary, 2, (byte)(f & 0xff));
