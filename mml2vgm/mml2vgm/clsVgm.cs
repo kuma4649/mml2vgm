@@ -96,6 +96,7 @@ namespace mml2vgm
         private const string VERSION = "VERSION";
         private const string PRIMARY = "PRIMARY";
         private const string SECONDARY = "SECONDARY";
+        private const string FORMAT = "FORMAT";
         readonly private string[] IDName = new string[] { PRIMARY, SECONDARY };
 
         //header
@@ -164,6 +165,37 @@ namespace mml2vgm
                 0x00,0x00,0x00,0x00, 0x99,0x9e,0x36,0x00, 0x00,0x00,0x00,0x00, 0x00,0x00,0x00,0x00
             };
 
+        private byte[] xhDat = new byte[] {
+                //$0000 'XGM '
+                0x58,0x47,0x4d,0x20,
+                //$0004 Sample id table(63samples)
+                0xff,0xff,0x00,0x00, 0xff,0xff,0x00,0x00, 0xff,0xff,0x00,0x00, 0xff,0xff,0x00,0x00,
+                0xff,0xff,0x00,0x00, 0xff,0xff,0x00,0x00, 0xff,0xff,0x00,0x00, 0xff,0xff,0x00,0x00,
+                0xff,0xff,0x00,0x00, 0xff,0xff,0x00,0x00, 0xff,0xff,0x00,0x00, 0xff,0xff,0x00,0x00,
+                0xff,0xff,0x00,0x00, 0xff,0xff,0x00,0x00, 0xff,0xff,0x00,0x00, 0xff,0xff,0x00,0x00,
+                0xff,0xff,0x00,0x00, 0xff,0xff,0x00,0x00, 0xff,0xff,0x00,0x00, 0xff,0xff,0x00,0x00,
+                0xff,0xff,0x00,0x00, 0xff,0xff,0x00,0x00, 0xff,0xff,0x00,0x00, 0xff,0xff,0x00,0x00,
+                0xff,0xff,0x00,0x00, 0xff,0xff,0x00,0x00, 0xff,0xff,0x00,0x00, 0xff,0xff,0x00,0x00,
+                0xff,0xff,0x00,0x00, 0xff,0xff,0x00,0x00, 0xff,0xff,0x00,0x00, 0xff,0xff,0x00,0x00,
+                0xff,0xff,0x00,0x00, 0xff,0xff,0x00,0x00, 0xff,0xff,0x00,0x00, 0xff,0xff,0x00,0x00,
+                0xff,0xff,0x00,0x00, 0xff,0xff,0x00,0x00, 0xff,0xff,0x00,0x00, 0xff,0xff,0x00,0x00,
+                0xff,0xff,0x00,0x00, 0xff,0xff,0x00,0x00, 0xff,0xff,0x00,0x00, 0xff,0xff,0x00,0x00,
+                0xff,0xff,0x00,0x00, 0xff,0xff,0x00,0x00, 0xff,0xff,0x00,0x00, 0xff,0xff,0x00,0x00,
+                0xff,0xff,0x00,0x00, 0xff,0xff,0x00,0x00, 0xff,0xff,0x00,0x00, 0xff,0xff,0x00,0x00,
+                0xff,0xff,0x00,0x00, 0xff,0xff,0x00,0x00, 0xff,0xff,0x00,0x00, 0xff,0xff,0x00,0x00,
+                0xff,0xff,0x00,0x00, 0xff,0xff,0x00,0x00, 0xff,0xff,0x00,0x00, 0xff,0xff,0x00,0x00,
+                0xff,0xff,0x00,0x00, 0xff,0xff,0x00,0x00, 0xff,0xff,0x00,0x00, 
+                //$0100 Sample data bloc size / 256
+                0x00,0x00,
+                //$0102 Version information (0x01 currently)
+                0x01,
+                //$0103 bit #0: NTSC / PAL information
+                //      bit #1: GD3 tags
+                //      bit #2: Multi track file
+                0x02
+                //以下、可変長
+        };
+
 
         public YM2151[] ym2151 = null;
         public YM2203[] ym2203 = null;
@@ -174,6 +206,7 @@ namespace mml2vgm
         public RF5C164[] rf5c164 = null;
         public segaPcm[] segapcm = null;
         public HuC6280[] huc6280 = null;
+        public YM2612X[] ym2612x = null;
 
         public List<clsChip> chips = new List<clsChip>();
 
@@ -200,6 +233,12 @@ namespace mml2vgm
         public Dictionary<string, List<Line>> partData = new Dictionary<string, List<Line>>();
         public Dictionary<string, Line> aliesData = new Dictionary<string, Line>();
         public List<string> monoPart = null;
+        public enum enmFormat
+        {
+            VGM,
+            XGM
+        }
+        public enmFormat format = enmFormat.VGM;
 
         private int instrumentCounter = -1;
         private byte[] instrumentBufCache = new byte[instrumentSize];
@@ -224,6 +263,7 @@ namespace mml2vgm
             rf5c164 = new RF5C164[] { new RF5C164(0, "R"), new RF5C164(1, "Rs") };
             segapcm = new segaPcm[] { new segaPcm(0, "Z"), new segaPcm(1, "Zs") };
             huc6280 = new HuC6280[] { new HuC6280(0, "H"), new HuC6280(1, "Hs") };
+            ym2612x = new YM2612X[] { new YM2612X(0, "E") };
 
             chips.Add(ym2612[0]);
             chips.Add(ym2612[1]);
@@ -243,6 +283,7 @@ namespace mml2vgm
             chips.Add(segapcm[1]);
             chips.Add(huc6280[0]);
             chips.Add(huc6280[1]);
+            chips.Add(ym2612x[0]);
 
             List<clsTD> lstTD = new List<clsTD>();
             lstTD.Add(new clsTD(4, 4, 4, 4, 0, 0, 0, 0, 0));
@@ -425,9 +466,10 @@ namespace mml2vgm
                         }
                     }
 
-                    if (wrd == CLOCKCOUNT) clockCount = int.Parse(val);
+                    if (wrd == CLOCKCOUNT) userClockCount = int.Parse(val);
                     if (wrd == FMF_NUM) setYM2612F_NumTbl(val);
                     if (wrd == FORCEDMONOPARTYM2612) setMonoPart(val);
+                    if (wrd == FORMAT) setFormat(val);
 
                     for (int i = 0; i < 8; i++)
                     {
@@ -472,6 +514,25 @@ namespace mml2vgm
         private void setMonoPart(string val)
         {
             monoPart = divParts(val);
+        }
+
+        private void setFormat(string val)
+        {
+            switch (val.ToUpper()) {
+                case "VGM":
+                default:
+                    format = enmFormat.VGM;
+                    tempo = defaultTempo;
+                    clockCount = defaultClockCount;
+                    samplesPerClock = defaultSamplesPerClock;
+                    break;
+                case "XGM":
+                    format = enmFormat.XGM;
+                    tempo = defaultTempo;
+                    clockCount = xgmDefaultClockCount;
+                    samplesPerClock = xgmDefaultSamplesPerClock;
+                    break;
+            }
         }
 
         private int addInstrument(string buf, string srcFn, int lineNumber)
@@ -708,32 +769,45 @@ namespace mml2vgm
             switch (chipN.ToUpper().Trim())
             {
                 case "YM2151":
+                case "OPM":
                     chip = enmChipType.YM2151;
                     break;
                 case "YM2612":
+                case "OPN2":
                     chip = enmChipType.YM2612;
                     break;
                 case "SN76489":
+                case "DCSG":
                     chip = enmChipType.SN76489;
                     break;
                 case "RF5C164":
+                case "RF5C":
                     chip = enmChipType.RF5C164;
                     break;
                 case "YM2203":
+                case "OPN":
                     chip = enmChipType.YM2203;
                     break;
                 case "YM2608":
+                case "OPNA":
                     chip = enmChipType.YM2608;
                     break;
                 case "YM2610":
                 case "YM2610B":
+                case "OPNB":
                     chip = enmChipType.YM2610B;
                     break;
                 case "SEGAPCM":
+                case "SPCM":
                     chip = enmChipType.SEGAPCM;
                     break;
                 case "HUC6280":
+                case "HUC8":
                     chip = enmChipType.HuC6280;
+                    break;
+                case "YM2612X":
+                case "OPN2X":
+                    chip = enmChipType.YM2612X;
                     break;
                 default:
                     chip = enmChipType.None;
@@ -1169,15 +1243,22 @@ namespace mml2vgm
 
 
         private List<byte> dat = null;
+        //xgm music data
+        private List<byte> xdat = null;
 
         public const long vgmSamplesPerSecond = 44100L;
         private const long defaultTempo = 120L;
         private const long defaultClockCount = 192L;
         private const long defaultSamplesPerClock = vgmSamplesPerSecond * 60 * 4 / (defaultTempo * defaultClockCount);
 
+        public const long xgmSamplesPerSecond = 60L;
+        private const long xgmDefaultClockCount = 120L;
+        private const long xgmDefaultSamplesPerClock = xgmSamplesPerSecond * 60 * 4 / (defaultTempo * xgmDefaultClockCount);
+
         private long tempo = defaultTempo;
         private long clockCount = defaultClockCount;
         private double samplesPerClock = defaultSamplesPerClock;
+        private long userClockCount = 0;
         public long lSample = 0L;
         public long lClock = 0L;
         private long loopOffset = -1L;
@@ -1188,6 +1269,7 @@ namespace mml2vgm
 
         public byte[] getByteData()
         {
+            if (userClockCount != 0) clockCount = userClockCount;
 
             partInit();
 
@@ -1429,6 +1511,260 @@ namespace mml2vgm
             return dat.ToArray();
         }
 
+
+        public byte[] xgm_getByteData()
+        {
+            if (userClockCount != 0) clockCount = userClockCount;
+
+            partInit();
+
+            dat = new List<byte>();
+            xdat = new List<byte>();
+
+            xgm_makeHeader();
+
+            int endChannel = 0;
+            //使用するチャンネル数を計算
+            int totalChannel = 0;
+            foreach (clsChip chip in chips)
+            {
+                if (chip.ShortName != "OPN2X" && chip.ShortName != "DCSG")
+                {
+                    foreach (partWork pw in chip.lstPartWork) pw.chip.use = false;
+                }
+                totalChannel += chip.ChMax;
+            }
+
+            do
+            {
+
+                foreach (clsChip chip in chips)
+                {
+                    //未使用のchipの場合は処理を行わない
+                    if (!chip.use) continue;
+
+                    //chip毎の処理
+                    xgm_procChip(chip);
+                }
+
+                //一番小さいwait値を調べる
+                long waitCounter = xgm_procCheckMinimumWaitCounter();
+
+                if (waitCounter != long.MaxValue)
+                {
+                    //wait処理
+                    xgm_procWait(waitCounter);
+                }
+
+                //演奏完了したチャンネル数をカウント
+                endChannel = 0;
+                foreach (clsChip chip in chips)
+                {
+                    foreach (partWork pw in chip.lstPartWork)
+                    {
+                        if (!pw.chip.use) endChannel++;
+                        else if (pw.dataEnd && pw.waitCounter < 1) endChannel++;
+                        else if (loopOffset != -1 && pw.dataEnd && pw.envIndex == 3) endChannel++;
+                    }
+                }
+
+            } while (endChannel < totalChannel);//全てのチャンネルが終了していない場合はループする
+
+            dat = ConvertVGMtoXGM(dat);
+
+            xgm_makeFooter();
+
+            return dat.ToArray();
+        }
+
+        private void xgm_procChip(clsChip chip)
+        {
+            foreach (partWork pw in chip.lstPartWork)
+            {
+                //KeyOff
+                procKeyOff(pw);
+                //Bend
+                procBend(pw);
+                //Lfo
+                procLfo(pw);
+                //Envelope
+                procEnvelope(pw);
+
+                //wait消化待ち
+                if (pw.waitCounter > 0) continue;
+
+                //データは最後まで実施されたか
+                if (pw.dataEnd) continue;
+
+                //パートのデータがない場合は何もしないで次へ
+                if (!partData.ContainsKey(pw.PartName) || partData[pw.PartName] == null || partData[pw.PartName].Count < 1)
+                {
+                    pw.dataEnd = true;
+                    continue;
+                }
+
+                //コマンド毎の処理を実施
+                while (pw.waitCounter == 0 && !pw.dataEnd)
+                {
+                    char cmd = pw.getChar();
+                    lineNumber = pw.getLineNumber();
+
+                    commander(pw, cmd);
+                }
+            }
+        }
+
+        private long xgm_procCheckMinimumWaitCounter()
+        {
+            long cnt = long.MaxValue;
+
+            foreach (clsChip chip in chips)
+            {
+                if (!chip.use) continue;
+
+                foreach (partWork pw in chip.lstPartWork)
+                {
+                    //note
+                    if (pw.waitKeyOnCounter > 0) cnt = Math.Min(cnt, pw.waitKeyOnCounter);
+                    else if (pw.waitCounter > 0) cnt = Math.Min(cnt, pw.waitCounter);
+
+                    //bend
+                    if (pw.bendWaitCounter != -1) cnt = Math.Min(cnt, pw.bendWaitCounter);
+
+                    //lfoとenvelopeは音長によるウエイトカウントが存在する場合のみ対象にする。(さもないと、曲のループ直前の効果を出せない)
+                    if (cnt < 1) continue;
+
+                    //lfo
+                    for (int lfo = 0; lfo < 4; lfo++)
+                    {
+                        if (!pw.lfo[lfo].sw) continue;
+                        if (pw.lfo[lfo].waitCounter == -1) continue;
+
+                        cnt = Math.Min(cnt, pw.lfo[lfo].waitCounter);
+                    }
+
+                    //envelope
+                    if (!(pw.chip is SN76489)) continue;
+                    if (pw.envelopeMode && pw.envIndex != -1) cnt = Math.Min(cnt, pw.envCounter);
+                }
+            }
+
+            return cnt;
+        }
+
+        private void xgm_procWait(long cnt)
+        {
+            foreach (clsChip chip in chips)
+            {
+                if (!chip.use) continue;
+
+                foreach (partWork pw in chip.lstPartWork)
+                {
+                    if (pw.waitKeyOnCounter > 0) pw.waitKeyOnCounter -= cnt;
+                    if (pw.waitCounter > 0) pw.waitCounter -= cnt;
+                    if (pw.bendWaitCounter > 0) pw.bendWaitCounter -= cnt;
+
+                    for (int lfo = 0; lfo < 4; lfo++)
+                    {
+                        if (!pw.lfo[lfo].sw) continue;
+                        if (pw.lfo[lfo].waitCounter == -1) continue;
+
+                        if (pw.lfo[lfo].waitCounter > 0)
+                        {
+                            pw.lfo[lfo].waitCounter -= cnt;
+                            if (pw.lfo[lfo].waitCounter < 0) pw.lfo[lfo].waitCounter = 0;
+                        }
+                    }
+
+                    if (!(pw.chip is SN76489)) continue;
+                    if (pw.envelopeMode && pw.envIndex != -1) pw.envCounter -= (int)cnt;
+                }
+            }
+
+            // wait発行
+            lClock += cnt;
+            lSample += (long)samplesPerClock * cnt;
+            outWaitNSamples((long)samplesPerClock * cnt);
+        }
+
+        private List<byte> ConvertVGMtoXGM(List<byte> src)
+        {
+            if (src == null || src.Count < 1) return null;
+
+            List<byte> des = new List<byte>();
+
+            for (int ptr = 0; ptr < src.Count; ptr++)
+            {
+
+                byte cmd = src[ptr];
+                int p;
+                int c;
+
+                switch (cmd)
+                {
+                    case 0x61:
+                        int cnt = src[ptr + 1] + src[ptr + 2] * 0x100;
+                        for (int j = 0; j < cnt; j++)
+                        {
+                            //wait
+                            des.Add(0x00);
+                        }
+                        ptr += 2;
+                        break;
+                    case 0x50:
+                        p = des.Count;
+                        c = 0;
+                        des.Add(0x10);
+                        do
+                        {
+                            des.Add(src[ptr + 1]);
+                            c++;
+                            ptr += 2;
+                        } while (c < 16 && ptr < src.Count - 1 && src[ptr] == 0x50);
+                        c--;
+                        ptr--;
+                        des[p] |= (byte)c;
+                        break;
+                    case 0x52:
+                        p = des.Count;
+                        c = 0;
+                        des.Add(0x20);
+                        do
+                        {
+                            des.Add(src[ptr + 1]);
+                            des.Add(src[ptr + 2]);
+                            c++;
+                            ptr += 3;
+                        } while (c < 16 && ptr < src.Count - 1 && src[ptr] == 0x52);
+                        c--;
+                        ptr--;
+                        des[p] |= (byte)c;
+                        break;
+                    case 0x53:
+                        p = des.Count;
+                        c = 0;
+                        des.Add(0x30);
+                        do
+                        {
+                            des.Add(src[ptr + 1]);
+                            des.Add(src[ptr + 2]);
+                            c++;
+                            ptr += 3;
+                        } while (c < 16 && ptr < src.Count - 1 && src[ptr] == 0x53);
+                        c--;
+                        ptr--;
+                        des[p] |= (byte)c;
+                        break;
+                    default:
+                        return null;
+                }
+            }
+
+            des.Add(0x7f);
+            
+            return des;
+        }
+
         private void ym2608MultiChannelCommand(YM2608 y)
         {
             //コマンドを跨ぐデータ向け処理
@@ -1545,7 +1881,9 @@ namespace mml2vgm
             else if ((pw.chip is YM2203 && pw.ch < 3)
                 || (pw.chip is YM2608 && pw.ch < 6)
                 || (pw.chip is YM2610B && pw.ch < 6)
-                || (pw.chip is YM2612))
+                || (pw.chip is YM2612)
+                || (pw.chip is YM2612X)
+                )
             {
                 setFmFNum(pw);
                 setFmVolume(pw);
@@ -1617,7 +1955,7 @@ namespace mml2vgm
 
                 if (pl.type == eLfoType.Hardware)
                 {
-                    if (cpw.chip is YM2612)
+                    if ((cpw.chip is YM2612)|| (cpw.chip is YM2612X))
                     {
                         cpw.ams = pl.param[3];
                         cpw.fms = pl.param[2];
@@ -1767,6 +2105,13 @@ namespace mml2vgm
                         outFmKeyOff(pw);
                     }
                 }
+                else if (pw.chip is YM2612X)
+                {
+                    if (!pw.tie)
+                    {
+                        outFmKeyOff(pw);
+                    }
+                }
                 else if (pw.chip is SN76489)
                 {
                     if (!pw.envelopeMode)
@@ -1891,6 +2236,14 @@ namespace mml2vgm
                         pw.MaxVolume = 127;
                         pw.port0 = (byte)(0x2 | (pw.isSecondary ? 0xa0 : 0x50));
                         pw.port1 = (byte)(0x3 | (pw.isSecondary ? 0xa0 : 0x50));
+                    }
+                    else if (chip is YM2612X)
+                    {
+                        pw.slots = (byte)((pw.Type == enmChannelType.FMOPN || i == 2 || i == 5) ? 0xf : 0x0);
+                        pw.volume = 127;
+                        pw.MaxVolume = 127;
+                        pw.port0 = (byte)(pw.isSecondary ? 0xa2 : 0x52);
+                        pw.port1 = (byte)(pw.isSecondary ? 0xa3 : 0x53);
                     }
                     else if (chip is SN76489)
                     {
@@ -2509,9 +2862,11 @@ namespace mml2vgm
                             else if (
                                 (pw.chip is YM2608 && (pw.Type == enmChannelType.FMOPN || pw.Type == enmChannelType.FMOPNex))
                                 || (pw.chip is YM2610B && (pw.Type == enmChannelType.FMOPN || pw.Type == enmChannelType.FMOPNex))
-                                || (pw.chip is YM2612))
+                                || (pw.chip is YM2612)
+                                || (pw.chip is YM2612X)
+                                )
                             {
-                                int[] ftbl = (pw.chip is YM2612) ? OPN_FNumTbl_7670454 : pw.chip.OPN_FNumTbl;
+                                int[] ftbl = ((pw.chip is YM2612) || (pw.chip is YM2612X)) ? OPN_FNumTbl_7670454 : pw.chip.OPN_FNumTbl;
 
                                 a = getFmFNum(ftbl, pw.octaveNow, cmd, shift + (i + 0) * Math.Sign(delta) + toneDoublerShift);//
                                 b = getFmFNum(ftbl, pw.octaveNow, cmd, shift + (i + 1) * Math.Sign(delta) + toneDoublerShift);//
@@ -2810,6 +3165,27 @@ namespace mml2vgm
                 {
 
                     //YM2612
+
+                    if (!pw.pcm)
+                    {
+                        setFmFNum(pw);
+                    }
+                    else
+                    {
+                        getPcmNote(pw);
+                    }
+                    //タイ指定では無い場合はキーオンする
+                    if (!pw.beforeTie)
+                    {
+                        setLfoAtKeyOn(pw);
+                        setFmVolume(pw);
+                        outFmKeyOn(pw);
+                    }
+                }
+                else if (pw.chip is YM2612X)
+                {
+
+                    //YM2612X
 
                     if (!pw.pcm)
                     {
@@ -3406,6 +3782,28 @@ namespace mml2vgm
                 pw.pan = n;
                 outOPNSetPanAMSPMS(pw, n, pw.ams, pw.fms);
             }
+            else if (pw.chip is YM2612X)
+            {
+                //効果音モードのチャンネル番号を指定している場合は3chへ変更する
+                if (pw.ch >= 6 && pw.ch <= 8)
+                {
+                    vch = 2;
+                }
+
+                if (!pw.getNum(out n))
+                {
+                    msgBox.setErrMsg("不正なパン'p'が指定されています。", pw.getSrcFn(), pw.getLineNumber());
+                    n = 10;
+                }
+                //強制的にモノラルにする
+                if (monoPart != null && monoPart.Contains(ym2612x[0].Ch[5].Name))
+                {
+                    n = 3;
+                }
+                n = checkRange(n, 1, 3);
+                pw.pan = n;
+                outOPNSetPanAMSPMS(pw, n, pw.ams, pw.fms);
+            }
             else if (pw.chip is SN76489)
             {
                 pw.getNum(out n);
@@ -3588,7 +3986,14 @@ namespace mml2vgm
             }
             n = checkRange(n, 1, 255);
             tempo = n;
-            samplesPerClock = vgmSamplesPerSecond * 60 * 4 / (tempo * clockCount);
+            if (format == enmFormat.VGM)
+            {
+                samplesPerClock = vgmSamplesPerSecond * 60 * 4 / (tempo * clockCount);
+            }
+            else
+            {
+                samplesPerClock = Math.Max(xgmSamplesPerSecond * 60 * 4 / (tempo * clockCount), 1);
+            }
         }
 
         private void cmdVolume(partWork pw)
@@ -3928,6 +4333,44 @@ namespace mml2vgm
                             if (instPCM[n].chip != enmChipType.YM2612)
                             {
                                 msgBox.setErrMsg(string.Format("指定された音色番号({0})はYM2612向けPCMデータではありません。", n), pw.getSrcFn(), pw.getLineNumber());
+                            }
+                        }
+                    }
+                }
+            }
+            else if (pw.chip is YM2612X)
+            {
+                if (!pw.getNum(out n))
+                {
+                    msgBox.setErrMsg("不正な音色番号が指定されています。", pw.getSrcFn(), pw.getLineNumber());
+                    n = 0;
+                }
+                n = checkRange(n, 0, 255);
+                if (pw.instrument != n)
+                {
+                    pw.instrument = n;
+                    if (pw.Type == enmChannelType.FMOPNex)
+                    {
+                        ym2612x[pw.chip.ChipID].lstPartWork[2].instrument = n;
+                        ym2612x[pw.chip.ChipID].lstPartWork[6].instrument = n;
+                        ym2612x[pw.chip.ChipID].lstPartWork[7].instrument = n;
+                        ym2612x[pw.chip.ChipID].lstPartWork[8].instrument = n;
+                    }
+                    if (!pw.pcm)
+                    {
+                        outFmSetInstrument(pw, n, pw.volume);
+                    }
+                    else
+                    {
+                        if (!instPCM.ContainsKey(n))
+                        {
+                            msgBox.setErrMsg(string.Format("PCM定義に指定された音色番号({0})が存在しません。", n), pw.getSrcFn(), pw.getLineNumber());
+                        }
+                        else
+                        {
+                            if (instPCM[n].chip != enmChipType.YM2612X)
+                            {
+                                msgBox.setErrMsg(string.Format("指定された音色番号({0})はYM2612(XGM)向けPCMデータではありません。", n), pw.getSrcFn(), pw.getLineNumber());
                             }
                         }
                     }
@@ -4322,7 +4765,7 @@ namespace mml2vgm
                 {
                     outOPMSetHardLfo(pw, (n == 0) ? false : true, pw.lfo[c].param);
                 }
-                else if (pw.chip is YM2612 || pw.chip is YM2608 || pw.chip is YM2610B)
+                else if (pw.chip is YM2612 || pw.chip is YM2612X || pw.chip is YM2608 || pw.chip is YM2610B)
                 {
                     if (pw.lfo[c].param[4] == 0)
                     {
@@ -4356,7 +4799,7 @@ namespace mml2vgm
 
         private void cmdMAMS(partWork pw)
         {
-            if (!( (pw.chip is YM2151) || (pw.chip is YM2608) || (pw.chip is YM2610B) || (pw.chip is YM2612) ))
+            if (!( (pw.chip is YM2151) || (pw.chip is YM2608) || (pw.chip is YM2610B) || (pw.chip is YM2612) || (pw.chip is YM2612X)))
             {
                 msgBox.setWrnMsg("このチャンネルのMAMSは無視されます。", pw.getSrcFn(), pw.getLineNumber());
                 return;
@@ -4390,7 +4833,7 @@ namespace mml2vgm
 
         private void cmdMPMS(partWork pw)
         {
-            if (!((pw.chip is YM2151) || (pw.chip is YM2608) || (pw.chip is YM2610B) || (pw.chip is YM2612)))
+            if (!((pw.chip is YM2151) || (pw.chip is YM2608) || (pw.chip is YM2610B) || (pw.chip is YM2612) || (pw.chip is YM2612X)))
             {
                 msgBox.setWrnMsg("このチャンネルのMPMSは無視されます。", pw.getSrcFn(), pw.getLineNumber());
                 return;
@@ -4465,6 +4908,10 @@ namespace mml2vgm
                     outFmAdrPort(pw.port0, adr, dat);
             }
             else if (pw.chip is YM2612)
+            {
+                outFmAdrPort((pw.ch > 3 && pw.ch < 6) ? pw.port1 : pw.port0, adr, dat);
+            }
+            else if (pw.chip is YM2612X)
             {
                 outFmAdrPort((pw.ch > 3 && pw.ch < 6) ? pw.port1 : pw.port0, adr, dat);
             }
@@ -4999,52 +5446,9 @@ namespace mml2vgm
                 dat[0x20] = v[0]; dat[0x21] = v[1]; dat[0x22] = v[2]; dat[0x23] = v[3];
             }
 
-            //'Gd3 '
-            dat.Add(0x47); dat.Add(0x64); dat.Add(0x33); dat.Add(0x20);
+            int p = dat.Count + 12;
 
-            //GD3 Version
-            dat.Add(0x00); dat.Add(0x01); dat.Add(0x00); dat.Add(0x00);
-
-            //GD3 Length(dummy)
-            dat.Add(0x00); dat.Add(0x00); dat.Add(0x00); dat.Add(0x00);
-
-            int p = dat.Count;
-
-            //TrackName
-            dat.AddRange(Encoding.Unicode.GetBytes(TitleName));
-            dat.Add(0x00); dat.Add(0x00);
-            dat.AddRange(Encoding.Unicode.GetBytes(TitleNameJ));
-            dat.Add(0x00); dat.Add(0x00);
-
-            //GameName
-            dat.AddRange(Encoding.Unicode.GetBytes(GameName));
-            dat.Add(0x00); dat.Add(0x00);
-            dat.AddRange(Encoding.Unicode.GetBytes(GameNameJ));
-            dat.Add(0x00); dat.Add(0x00);
-
-            //SystemName
-            dat.AddRange(Encoding.Unicode.GetBytes(SystemName));
-            dat.Add(0x00); dat.Add(0x00);
-            dat.AddRange(Encoding.Unicode.GetBytes(SystemNameJ));
-            dat.Add(0x00); dat.Add(0x00);
-
-            //Composer
-            dat.AddRange(Encoding.Unicode.GetBytes(Composer));
-            dat.Add(0x00); dat.Add(0x00);
-            dat.AddRange(Encoding.Unicode.GetBytes(ComposerJ));
-            dat.Add(0x00); dat.Add(0x00);
-
-            //ReleaseDate
-            dat.AddRange(Encoding.Unicode.GetBytes(ReleaseDate));
-            dat.Add(0x00); dat.Add(0x00);
-
-            //Converted
-            dat.AddRange(Encoding.Unicode.GetBytes(Converted));
-            dat.Add(0x00); dat.Add(0x00);
-
-            //Notes
-            dat.AddRange(Encoding.Unicode.GetBytes(Notes));
-            dat.Add(0x00); dat.Add(0x00);
+            makeGD3(dat);
 
             //EoF offset
             v = divInt2ByteAry(dat.Count - 0x4);
@@ -5132,6 +5536,140 @@ namespace mml2vgm
                 dat[0x09] = 0x01;
             }
 
+        }
+
+        private void makeGD3(List<byte> dat)
+        {
+            //'Gd3 '
+            dat.Add(0x47); dat.Add(0x64); dat.Add(0x33); dat.Add(0x20);
+
+            //GD3 Version
+            dat.Add(0x00); dat.Add(0x01); dat.Add(0x00); dat.Add(0x00);
+
+            //GD3 Length(dummy)
+            dat.Add(0x00); dat.Add(0x00); dat.Add(0x00); dat.Add(0x00);
+
+            //TrackName
+            dat.AddRange(Encoding.Unicode.GetBytes(TitleName));
+            dat.Add(0x00); dat.Add(0x00);
+            dat.AddRange(Encoding.Unicode.GetBytes(TitleNameJ));
+            dat.Add(0x00); dat.Add(0x00);
+
+            //GameName
+            dat.AddRange(Encoding.Unicode.GetBytes(GameName));
+            dat.Add(0x00); dat.Add(0x00);
+            dat.AddRange(Encoding.Unicode.GetBytes(GameNameJ));
+            dat.Add(0x00); dat.Add(0x00);
+
+            //SystemName
+            dat.AddRange(Encoding.Unicode.GetBytes(SystemName));
+            dat.Add(0x00); dat.Add(0x00);
+            dat.AddRange(Encoding.Unicode.GetBytes(SystemNameJ));
+            dat.Add(0x00); dat.Add(0x00);
+
+            //Composer
+            dat.AddRange(Encoding.Unicode.GetBytes(Composer));
+            dat.Add(0x00); dat.Add(0x00);
+            dat.AddRange(Encoding.Unicode.GetBytes(ComposerJ));
+            dat.Add(0x00); dat.Add(0x00);
+
+            //ReleaseDate
+            dat.AddRange(Encoding.Unicode.GetBytes(ReleaseDate));
+            dat.Add(0x00); dat.Add(0x00);
+
+            //Converted
+            dat.AddRange(Encoding.Unicode.GetBytes(Converted));
+            dat.Add(0x00); dat.Add(0x00);
+
+            //Notes
+            dat.AddRange(Encoding.Unicode.GetBytes(Notes));
+            dat.Add(0x00); dat.Add(0x00);
+        }
+
+        private void xgm_makeHeader()
+        {
+
+            //Header
+            foreach (byte b in xhDat)
+            {
+                xdat.Add(b);
+            }
+
+            //$0004               Sample id table
+            ushort ptr = 0;
+            int n = 4;
+            foreach (clsPcm p in instPCM.Values)
+            {
+                if (p.chip != enmChipType.YM2612X) continue;
+
+                ushort stAdr = ptr;
+                ushort size = (ushort)p.size;
+
+                xdat[n + 0] = (byte)((stAdr / 256) & 0xff);
+                xdat[n + 1] = (byte)(((stAdr / 256) & 0xff00) >> 8);
+                xdat[n + 2] = (byte)((size / 256) & 0xff);
+                xdat[n + 3] = (byte)(((size / 256) & 0xff00) >> 8); 
+
+                ptr += size;
+                n+=4;
+            }
+
+            //$0100               Sample data bloc size / 256
+            xdat[0x100] = (byte)((ym2612x[0].pcmData.Length / 256) & 0xff);
+            xdat[0x101] = (byte)(((ym2612x[0].pcmData.Length / 256) & 0xff00) >> 8);
+
+            //$0104               Sample data block
+            foreach (byte b in ym2612x[0].pcmData)
+            {
+                xdat.Add(b);
+            }
+
+
+            //FM音源を初期化
+
+            outOPNSetHardLfo(ym2612x[0].lstPartWork[0], false, 0);
+            outOPNSetCh3SpecialMode(ym2612x[0].lstPartWork[0], false);
+            outYM2612SetCh6PCMMode(ym2612x[0].lstPartWork[0], false);
+            outFmAllKeyOff(ym2612x[0]);
+
+            foreach (partWork pw in ym2612x[0].lstPartWork)
+            {
+                if (pw.ch == 0)
+                {
+                    pw.hardLfoSw = false;
+                    pw.hardLfoNum = 0;
+                    outOPNSetHardLfo(pw, pw.hardLfoSw, pw.hardLfoNum);
+                }
+
+                if (pw.ch < 6)
+                {
+                    pw.pan = 3;
+                    pw.ams = 0;
+                    pw.fms = 0;
+                    if (!pw.dataEnd) outOPNSetPanAMSPMS(pw, 3, 0, 0);
+                }
+            }
+
+        }
+
+        private void xgm_makeFooter()
+        {
+            //$0104 + SLEN        Music data bloc size.
+            xdat.Add((byte)((dat.Count & 0xff) >> 0));
+            xdat.Add((byte)((dat.Count & 0xff00) >> 8));
+            xdat.Add((byte)((dat.Count & 0xff0000) >> 16));
+            xdat.Add((byte)((dat.Count & 0xff000000) >> 24));
+
+            //$0108 + SLEN        Music data bloc
+            foreach (byte b in dat)
+            {
+                xdat.Add(b);
+            }
+
+            //$0108 + SLEN + MLEN GD3 tags
+            makeGD3(xdat);
+
+            dat = xdat;
         }
 
         private void setEnvelopeAtKeyOn(partWork pw)
@@ -5292,76 +5830,81 @@ namespace mml2vgm
             }
 
             int i = pw.instrument;
+            if (i < 0) return;
+
             pw.toneDoublerKeyShift = 0;
             if (pw.TdA == -1)
             {
-                //resetToneDoubler
-                if (pw.Type != enmChannelType.FMOPM)
+                if (instFM != null && instFM.Count > i)
                 {
-                    if (pw.op1ml != instFM[i][0 * instrumentMOperaterSize + 8])
+                    //resetToneDoubler
+                    if (pw.Type != enmChannelType.FMOPM)
                     {
-                        outFmSetDtMl(pw, 0, instFM[i][0 * instrumentMOperaterSize + 9], instFM[i][0 * instrumentMOperaterSize + 8]);
-                        pw.op1ml = instFM[i][0 * instrumentMOperaterSize + 8];
+                        if (pw.op1ml != instFM[i][0 * instrumentMOperaterSize + 8])
+                        {
+                            outFmSetDtMl(pw, 0, instFM[i][0 * instrumentMOperaterSize + 9], instFM[i][0 * instrumentMOperaterSize + 8]);
+                            pw.op1ml = instFM[i][0 * instrumentMOperaterSize + 8];
+                        }
+                        if (pw.op2ml != instFM[i][1 * instrumentMOperaterSize + 8])
+                        {
+                            outFmSetDtMl(pw, 1, instFM[i][1 * instrumentMOperaterSize + 9], instFM[i][1 * instrumentMOperaterSize + 8]);
+                            pw.op2ml = instFM[i][1 * instrumentMOperaterSize + 8];
+                        }
+                        if (pw.op3ml != instFM[i][2 * instrumentMOperaterSize + 8])
+                        {
+                            outFmSetDtMl(pw, 2, instFM[i][2 * instrumentMOperaterSize + 9], instFM[i][2 * instrumentMOperaterSize + 8]);
+                            pw.op3ml = instFM[i][2 * instrumentMOperaterSize + 8];
+                        }
+                        if (pw.op4ml != instFM[i][3 * instrumentMOperaterSize + 8])
+                        {
+                            outFmSetDtMl(pw, 3, instFM[i][3 * instrumentMOperaterSize + 9], instFM[i][3 * instrumentMOperaterSize + 8]);
+                            pw.op4ml = instFM[i][3 * instrumentMOperaterSize + 8];
+                        }
                     }
-                    if (pw.op2ml != instFM[i][1 * instrumentMOperaterSize + 8])
+                    else
                     {
-                        outFmSetDtMl(pw, 1, instFM[i][1 * instrumentMOperaterSize + 9], instFM[i][1 * instrumentMOperaterSize + 8]);
-                        pw.op2ml = instFM[i][1 * instrumentMOperaterSize + 8];
-                    }
-                    if (pw.op3ml != instFM[i][2 * instrumentMOperaterSize + 8])
-                    {
-                        outFmSetDtMl(pw, 2, instFM[i][2 * instrumentMOperaterSize + 9], instFM[i][2 * instrumentMOperaterSize + 8]);
-                        pw.op3ml = instFM[i][2 * instrumentMOperaterSize + 8];
-                    }
-                    if (pw.op4ml != instFM[i][3 * instrumentMOperaterSize + 8])
-                    {
-                        outFmSetDtMl(pw, 3, instFM[i][3 * instrumentMOperaterSize + 9], instFM[i][3 * instrumentMOperaterSize + 8]);
-                        pw.op4ml = instFM[i][3 * instrumentMOperaterSize + 8];
-                    }
-                }
-                else
-                {
-                    //ML
-                    if (pw.op1ml != instFM[i][0 * instrumentMOperaterSize + 8])
-                    {
-                        outOPMSetDtMl(pw, 0, instFM[i][0 * instrumentMOperaterSize + 9], instFM[i][0 * instrumentMOperaterSize + 8]);
-                        pw.op1ml = instFM[i][0 * instrumentMOperaterSize + 8];
-                    }
-                    if (pw.op2ml != instFM[i][1 * instrumentMOperaterSize + 8])
-                    {
-                        outOPMSetDtMl(pw, 1, instFM[i][1 * instrumentMOperaterSize + 9], instFM[i][1 * instrumentMOperaterSize + 8]);
-                        pw.op2ml = instFM[i][1 * instrumentMOperaterSize + 8];
-                    }
-                    if (pw.op3ml != instFM[i][2 * instrumentMOperaterSize + 8])
-                    {
-                        outOPMSetDtMl(pw, 2, instFM[i][2 * instrumentMOperaterSize + 9], instFM[i][2 * instrumentMOperaterSize + 8]);
-                        pw.op3ml = instFM[i][2 * instrumentMOperaterSize + 8];
-                    }
-                    if (pw.op4ml != instFM[i][3 * instrumentMOperaterSize + 8])
-                    {
-                        outOPMSetDtMl(pw, 3, instFM[i][3 * instrumentMOperaterSize + 9], instFM[i][3 * instrumentMOperaterSize + 8]);
-                        pw.op4ml = instFM[i][3 * instrumentMOperaterSize + 8];
-                    }
-                    //DT2
-                    if (pw.op1dt2 != instFM[i][0 * instrumentMOperaterSize + 10])
-                    {
-                        outOPMSetDt2Sr(pw, 0, instFM[i][0 * instrumentMOperaterSize + 10], instFM[i][0 * instrumentMOperaterSize + 3]);
-                        pw.op1dt2 = instFM[i][0 * instrumentMOperaterSize + 10];
-                    }
-                    if (pw.op2dt2 != instFM[i][1 * instrumentMOperaterSize + 10])
-                    {
-                        outOPMSetDt2Sr(pw, 1, instFM[i][1 * instrumentMOperaterSize + 10], instFM[i][1 * instrumentMOperaterSize + 3]);
-                        pw.op2dt2 = instFM[i][1 * instrumentMOperaterSize + 10];
-                    }
-                    if (pw.op3dt2 != instFM[i][2 * instrumentMOperaterSize + 10])
-                    {
-                        outOPMSetDt2Sr(pw, 2, instFM[i][2 * instrumentMOperaterSize + 10], instFM[i][2 * instrumentMOperaterSize + 3]);
-                        pw.op3dt2 = instFM[i][2 * instrumentMOperaterSize + 10];
-                    }
-                    if (pw.op4dt2 != instFM[i][3 * instrumentMOperaterSize + 10])
-                    {
-                        outOPMSetDt2Sr(pw, 3, instFM[i][3 * instrumentMOperaterSize + 10], instFM[i][3 * instrumentMOperaterSize + 3]);
-                        pw.op4dt2 = instFM[i][3 * instrumentMOperaterSize + 10];
+                        //ML
+                        if (pw.op1ml != instFM[i][0 * instrumentMOperaterSize + 8])
+                        {
+                            outOPMSetDtMl(pw, 0, instFM[i][0 * instrumentMOperaterSize + 9], instFM[i][0 * instrumentMOperaterSize + 8]);
+                            pw.op1ml = instFM[i][0 * instrumentMOperaterSize + 8];
+                        }
+                        if (pw.op2ml != instFM[i][1 * instrumentMOperaterSize + 8])
+                        {
+                            outOPMSetDtMl(pw, 1, instFM[i][1 * instrumentMOperaterSize + 9], instFM[i][1 * instrumentMOperaterSize + 8]);
+                            pw.op2ml = instFM[i][1 * instrumentMOperaterSize + 8];
+                        }
+                        if (pw.op3ml != instFM[i][2 * instrumentMOperaterSize + 8])
+                        {
+                            outOPMSetDtMl(pw, 2, instFM[i][2 * instrumentMOperaterSize + 9], instFM[i][2 * instrumentMOperaterSize + 8]);
+                            pw.op3ml = instFM[i][2 * instrumentMOperaterSize + 8];
+                        }
+                        if (pw.op4ml != instFM[i][3 * instrumentMOperaterSize + 8])
+                        {
+                            outOPMSetDtMl(pw, 3, instFM[i][3 * instrumentMOperaterSize + 9], instFM[i][3 * instrumentMOperaterSize + 8]);
+                            pw.op4ml = instFM[i][3 * instrumentMOperaterSize + 8];
+                        }
+                        //DT2
+                        if (pw.op1dt2 != instFM[i][0 * instrumentMOperaterSize + 10])
+                        {
+                            outOPMSetDt2Sr(pw, 0, instFM[i][0 * instrumentMOperaterSize + 10], instFM[i][0 * instrumentMOperaterSize + 3]);
+                            pw.op1dt2 = instFM[i][0 * instrumentMOperaterSize + 10];
+                        }
+                        if (pw.op2dt2 != instFM[i][1 * instrumentMOperaterSize + 10])
+                        {
+                            outOPMSetDt2Sr(pw, 1, instFM[i][1 * instrumentMOperaterSize + 10], instFM[i][1 * instrumentMOperaterSize + 3]);
+                            pw.op2dt2 = instFM[i][1 * instrumentMOperaterSize + 10];
+                        }
+                        if (pw.op3dt2 != instFM[i][2 * instrumentMOperaterSize + 10])
+                        {
+                            outOPMSetDt2Sr(pw, 2, instFM[i][2 * instrumentMOperaterSize + 10], instFM[i][2 * instrumentMOperaterSize + 3]);
+                            pw.op3dt2 = instFM[i][2 * instrumentMOperaterSize + 10];
+                        }
+                        if (pw.op4dt2 != instFM[i][3 * instrumentMOperaterSize + 10])
+                        {
+                            outOPMSetDt2Sr(pw, 3, instFM[i][3 * instrumentMOperaterSize + 10], instFM[i][3 * instrumentMOperaterSize + 3]);
+                            pw.op4dt2 = instFM[i][3 * instrumentMOperaterSize + 10];
+                        }
                     }
                 }
             }
@@ -5379,72 +5922,75 @@ namespace mml2vgm
 
                 pw.toneDoublerKeyShift = ((s < 0) ? s : 0) + instToneDoubler[n].lstTD[us].KeyShift;
 
-                if (pw.Type != enmChannelType.FMOPM)
+                if (instFM != null && instFM.Count > i)
                 {
-                    if (pw.op1ml != instToneDoubler[n].lstTD[us].OP1ML)
+                    if (pw.Type != enmChannelType.FMOPM)
                     {
-                        outFmSetDtMl(pw, 0, instFM[i][0 * instrumentMOperaterSize + 9], instToneDoubler[n].lstTD[us].OP1ML);
-                        pw.op1ml = instToneDoubler[n].lstTD[us].OP1ML;
+                        if (pw.op1ml != instToneDoubler[n].lstTD[us].OP1ML)
+                        {
+                            outFmSetDtMl(pw, 0, instFM[i][0 * instrumentMOperaterSize + 9], instToneDoubler[n].lstTD[us].OP1ML);
+                            pw.op1ml = instToneDoubler[n].lstTD[us].OP1ML;
+                        }
+                        if (pw.op2ml != instToneDoubler[n].lstTD[us].OP2ML)
+                        {
+                            outFmSetDtMl(pw, 1, instFM[i][1 * instrumentMOperaterSize + 9], instToneDoubler[n].lstTD[us].OP2ML);
+                            pw.op2ml = instToneDoubler[n].lstTD[us].OP2ML;
+                        }
+                        if (pw.op3ml != instToneDoubler[n].lstTD[us].OP3ML)
+                        {
+                            outFmSetDtMl(pw, 2, instFM[i][2 * instrumentMOperaterSize + 9], instToneDoubler[n].lstTD[us].OP3ML);
+                            pw.op3ml = instToneDoubler[n].lstTD[us].OP3ML;
+                        }
+                        if (pw.op4ml != instToneDoubler[n].lstTD[us].OP4ML)
+                        {
+                            outFmSetDtMl(pw, 3, instFM[i][3 * instrumentMOperaterSize + 9], instToneDoubler[n].lstTD[us].OP4ML);
+                            pw.op4ml = instToneDoubler[n].lstTD[us].OP4ML;
+                        }
                     }
-                    if (pw.op2ml != instToneDoubler[n].lstTD[us].OP2ML)
+                    else
                     {
-                        outFmSetDtMl(pw, 1, instFM[i][1 * instrumentMOperaterSize + 9], instToneDoubler[n].lstTD[us].OP2ML);
-                        pw.op2ml = instToneDoubler[n].lstTD[us].OP2ML;
-                    }
-                    if (pw.op3ml != instToneDoubler[n].lstTD[us].OP3ML)
-                    {
-                        outFmSetDtMl(pw, 2, instFM[i][2 * instrumentMOperaterSize + 9], instToneDoubler[n].lstTD[us].OP3ML);
-                        pw.op3ml = instToneDoubler[n].lstTD[us].OP3ML;
-                    }
-                    if (pw.op4ml != instToneDoubler[n].lstTD[us].OP4ML)
-                    {
-                        outFmSetDtMl(pw, 3, instFM[i][3 * instrumentMOperaterSize + 9], instToneDoubler[n].lstTD[us].OP4ML);
-                        pw.op4ml = instToneDoubler[n].lstTD[us].OP4ML;
-                    }
-                }
-                else
-                {
-                    //ML
-                    if (pw.op1ml != instToneDoubler[n].lstTD[us].OP1ML)
-                    {
-                        outOPMSetDtMl(pw, 0, instFM[i][0 * instrumentMOperaterSize + 9], instToneDoubler[n].lstTD[us].OP1ML);
-                        pw.op1ml = instToneDoubler[n].lstTD[us].OP1ML;
-                    }
-                    if (pw.op2ml != instToneDoubler[n].lstTD[us].OP2ML)
-                    {
-                        outOPMSetDtMl(pw, 1, instFM[i][1 * instrumentMOperaterSize + 9], instToneDoubler[n].lstTD[us].OP2ML);
-                        pw.op2ml = instToneDoubler[n].lstTD[us].OP2ML;
-                    }
-                    if (pw.op3ml != instToneDoubler[n].lstTD[us].OP3ML)
-                    {
-                        outOPMSetDtMl(pw, 2, instFM[i][2 * instrumentMOperaterSize + 9], instToneDoubler[n].lstTD[us].OP3ML);
-                        pw.op3ml = instToneDoubler[n].lstTD[us].OP3ML;
-                    }
-                    if (pw.op4ml != instToneDoubler[n].lstTD[us].OP4ML)
-                    {
-                        outOPMSetDtMl(pw, 3, instFM[i][3 * instrumentMOperaterSize + 9], instToneDoubler[n].lstTD[us].OP4ML);
-                        pw.op4ml = instToneDoubler[n].lstTD[us].OP4ML;
-                    }
-                    //DT2
-                    if (pw.op1dt2 != instToneDoubler[n].lstTD[us].OP1DT2)
-                    {
-                        outOPMSetDt2Sr(pw, 0, instToneDoubler[n].lstTD[us].OP1DT2, instFM[i][0 * instrumentMOperaterSize + 3]);
-                        pw.op1dt2 = instToneDoubler[n].lstTD[us].OP1DT2;
-                    }
-                    if (pw.op2dt2 != instToneDoubler[n].lstTD[us].OP2DT2)
-                    {
-                        outOPMSetDt2Sr(pw, 1, instToneDoubler[n].lstTD[us].OP2DT2, instFM[i][1 * instrumentMOperaterSize + 3]);
-                        pw.op2dt2 = instToneDoubler[n].lstTD[us].OP2DT2;
-                    }
-                    if (pw.op3dt2 != instToneDoubler[n].lstTD[us].OP3DT2)
-                    {
-                        outOPMSetDt2Sr(pw, 2, instToneDoubler[n].lstTD[us].OP3DT2, instFM[i][2 * instrumentMOperaterSize + 3]);
-                        pw.op3dt2 = instToneDoubler[n].lstTD[us].OP3DT2;
-                    }
-                    if (pw.op4dt2 != instToneDoubler[n].lstTD[us].OP4DT2)
-                    {
-                        outOPMSetDt2Sr(pw, 3, instToneDoubler[n].lstTD[us].OP4DT2, instFM[i][3 * instrumentMOperaterSize + 3]);
-                        pw.op4dt2 = instToneDoubler[n].lstTD[us].OP4DT2;
+                        //ML
+                        if (pw.op1ml != instToneDoubler[n].lstTD[us].OP1ML)
+                        {
+                            outOPMSetDtMl(pw, 0, instFM[i][0 * instrumentMOperaterSize + 9], instToneDoubler[n].lstTD[us].OP1ML);
+                            pw.op1ml = instToneDoubler[n].lstTD[us].OP1ML;
+                        }
+                        if (pw.op2ml != instToneDoubler[n].lstTD[us].OP2ML)
+                        {
+                            outOPMSetDtMl(pw, 1, instFM[i][1 * instrumentMOperaterSize + 9], instToneDoubler[n].lstTD[us].OP2ML);
+                            pw.op2ml = instToneDoubler[n].lstTD[us].OP2ML;
+                        }
+                        if (pw.op3ml != instToneDoubler[n].lstTD[us].OP3ML)
+                        {
+                            outOPMSetDtMl(pw, 2, instFM[i][2 * instrumentMOperaterSize + 9], instToneDoubler[n].lstTD[us].OP3ML);
+                            pw.op3ml = instToneDoubler[n].lstTD[us].OP3ML;
+                        }
+                        if (pw.op4ml != instToneDoubler[n].lstTD[us].OP4ML)
+                        {
+                            outOPMSetDtMl(pw, 3, instFM[i][3 * instrumentMOperaterSize + 9], instToneDoubler[n].lstTD[us].OP4ML);
+                            pw.op4ml = instToneDoubler[n].lstTD[us].OP4ML;
+                        }
+                        //DT2
+                        if (pw.op1dt2 != instToneDoubler[n].lstTD[us].OP1DT2)
+                        {
+                            outOPMSetDt2Sr(pw, 0, instToneDoubler[n].lstTD[us].OP1DT2, instFM[i][0 * instrumentMOperaterSize + 3]);
+                            pw.op1dt2 = instToneDoubler[n].lstTD[us].OP1DT2;
+                        }
+                        if (pw.op2dt2 != instToneDoubler[n].lstTD[us].OP2DT2)
+                        {
+                            outOPMSetDt2Sr(pw, 1, instToneDoubler[n].lstTD[us].OP2DT2, instFM[i][1 * instrumentMOperaterSize + 3]);
+                            pw.op2dt2 = instToneDoubler[n].lstTD[us].OP2DT2;
+                        }
+                        if (pw.op3dt2 != instToneDoubler[n].lstTD[us].OP3DT2)
+                        {
+                            outOPMSetDt2Sr(pw, 2, instToneDoubler[n].lstTD[us].OP3DT2, instFM[i][2 * instrumentMOperaterSize + 3]);
+                            pw.op3dt2 = instToneDoubler[n].lstTD[us].OP3DT2;
+                        }
+                        if (pw.op4dt2 != instToneDoubler[n].lstTD[us].OP4DT2)
+                        {
+                            outOPMSetDt2Sr(pw, 3, instToneDoubler[n].lstTD[us].OP4DT2, instFM[i][3 * instrumentMOperaterSize + 3]);
+                            pw.op4dt2 = instToneDoubler[n].lstTD[us].OP4DT2;
+                        }
                     }
                 }
                 pw.TdA = -1;
@@ -5480,7 +6026,7 @@ namespace mml2vgm
 
         private void setFmFNum(partWork pw)
         {
-            int[] ftbl = (pw.chip is YM2612) ? OPN_FNumTbl_7670454 : pw.chip.OPN_FNumTbl;
+            int[] ftbl = ((pw.chip is YM2612) || (pw.chip is YM2612X)) ? OPN_FNumTbl_7670454 : pw.chip.OPN_FNumTbl;
 
             int f = getFmFNum(ftbl, pw.octaveNow, pw.noteCmd, pw.shift + pw.keyShift + pw.toneDoublerKeyShift);//
             if (pw.bendWaitCounter != -1)

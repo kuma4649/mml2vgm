@@ -92,7 +92,8 @@ namespace mml2vgm
                 }
 
                 // 解析
-                int ret = desVGM.analyze(src);
+                int ret;
+                ret= desVGM.analyze(src);
 
                 if (ret != 0)
                 {
@@ -108,8 +109,16 @@ namespace mml2vgm
 
 
                 // 解析した情報をもとにVGMファイル作成
-                byte[] desBuf = desVGM.getByteData();
-
+                byte[] desBuf;
+                if (desVGM.format == clsVgm.enmFormat.VGM)
+                {
+                    desBuf = desVGM.getByteData();
+                }
+                else
+                {
+                    desBuf = desVGM.xgm_getByteData();
+                }
+                
 
                 if (desBuf == null)
                 {
@@ -117,10 +126,20 @@ namespace mml2vgm
                     return -1;
                 }
 
+
                 if (Path.GetExtension(desFn).ToLower() != ".vgz")
                 {
-                    // ファイル出力
-                    File.WriteAllBytes(desFn, desBuf);
+                    if (desVGM.format == clsVgm.enmFormat.VGM)
+                    {
+                        // ファイル出力
+                        File.WriteAllBytes(desFn, desBuf);
+                    }
+                    else
+                    {
+                        //XGM
+                        // ファイル出力
+                        File.WriteAllBytes(Path.Combine(Path.GetDirectoryName(desFn), Path.GetFileNameWithoutExtension(desFn) + ".xgm"), desBuf);
+                    }
                 }
                 else
                 {
@@ -157,6 +176,10 @@ namespace mml2vgm
             byte[] tbufYM2612 = new byte[7] { 0x67, 0x66, 0x00, 0x00, 0x00, 0x00, 0x00 };
             long pYM2612 = 0L;
             bool uYM2612 = false;
+
+            byte[] tbufYM2612X = new byte[0];
+            long pYM2612X = 0L;
+            bool uYM2612X = false;
 
             byte[] tbufRf5c164P = new byte[12] { 0xb1, 0x07, 0x00, 0x67, 0x66, 0xc1, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
             byte[] tbufRf5c164S = new byte[12] { 0xb1, 0x87, 0x00, 0x67, 0x66, 0xc1, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
@@ -248,6 +271,10 @@ namespace mml2vgm
                     {
                         uHuC6280S = storePcmHuC6280(ref tbufHuC6280S, ref pHuC6280S, newDic, v, buf, size);
                     }
+                }
+                else if (v.Value.chip == enmChipType.YM2612X)
+                {
+                    uYM2612X = storePcmYM2612X(ref tbufYM2612X, ref pYM2612X, newDic, v, buf, size);
                 }
             }
 
@@ -378,6 +405,8 @@ namespace mml2vgm
             tbufHuC6280S[6] = (byte)(((tbufHuC6280S.Length - 7) & 0x7f000000) / 0x1000000);
             desVGM.huc6280[1].pcmData = uHuC6280S ? tbufHuC6280S : null;
 
+            desVGM.ym2612x[0].pcmData = uYM2612X ? tbufYM2612X : null;
+
             desVGM.instPCM = newDic;
         }
 
@@ -456,6 +485,11 @@ namespace mml2vgm
         private static bool storePcmYM2612(ref byte[] tbufYM2612, ref long pYM2612, Dictionary<int, clsPcm> newDic, KeyValuePair<int, clsPcm> v, byte[] buf, long size)
         {
             bool uYM2612;
+
+            if (newDic.ContainsKey(v.Key))
+            {
+                newDic.Remove(v.Key);
+            }
             newDic.Add(v.Key, new clsPcm(v.Value.num, v.Value.chip, false, v.Value.fileName, v.Value.freq, v.Value.vol, pYM2612, pYM2612 + size, size, -1));
             pYM2612 += size;
 
@@ -466,6 +500,39 @@ namespace mml2vgm
             tbufYM2612 = newBuf;
             uYM2612 = true;
             return uYM2612;
+        }
+
+        private static bool storePcmYM2612X(ref byte[] tbufYM2612X, ref long pYM2612X, Dictionary<int, clsPcm> newDic, KeyValuePair<int, clsPcm> v, byte[] buf, long size)
+        {
+            bool uYM2612X;
+            byte[] newBuf;
+
+            for (int i = 0; i < size; i++)
+            {
+                buf[i] -= 0x80;//符号化
+            }
+
+            //Padding
+            if (size % 0x100 != 0)
+            {
+                newBuf = pcmPadding(ref buf, ref size, 0x80, 0x100);
+                buf = newBuf;
+            }
+
+            if (newDic.ContainsKey(v.Key))
+            {
+                newDic.Remove(v.Key);
+            }
+            newDic.Add(v.Key, new clsPcm(v.Value.num, v.Value.chip, false, v.Value.fileName, v.Value.freq, v.Value.vol, pYM2612X, pYM2612X + size, size, -1));
+            pYM2612X += size;
+
+            newBuf = new byte[tbufYM2612X.Length + buf.Length];
+            Array.Copy(tbufYM2612X, newBuf, tbufYM2612X.Length);
+            Array.Copy(buf, 0, newBuf, tbufYM2612X.Length, buf.Length);
+
+            tbufYM2612X = newBuf;
+            uYM2612X = true;
+            return uYM2612X;
         }
 
         private static bool storePcmHuC6280(ref byte[] tbufHuC6280, ref long pHuC6280, Dictionary<int, clsPcm> newDic, KeyValuePair<int, clsPcm> v, byte[] buf, long size)

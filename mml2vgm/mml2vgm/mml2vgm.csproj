@@ -61,6 +61,7 @@
     <Compile Include="chips\YM2608.cs" />
     <Compile Include="chips\YM2610B.cs" />
     <Compile Include="chips\YM2612.cs" />
+    <Compile Include="chips\YM2612X.cs" />
     <Compile Include="clsVgm.cs" />
     <Compile Include="EncAdpcmA.cs" />
     <Compile Include="frmMain.cs">
@@ -113,6 +114,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="sample\testFMSecondary.vgm" />
+    <None Include="sample\testHuC6280.gwi" />
     <None Include="sample\testToneDoubler.gwi" />
     <None Include="sample\testToneDoubler.vgm" />
     <None Include="sample\testYM2151.gwi" />
