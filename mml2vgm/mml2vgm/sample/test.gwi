@@ -1,19 +1,20 @@
 ﻿'{
 
-	FORMAT      =XGM
-	TitleName   =XGM Test
-	TitleNameJ  =XGM Test
-	GameName    =
-	GameNameJ   =
-	SystemName  =
-	SystemNameJ =
-	Composer    =
-	ComposerJ   =
-	ReleaseDate =2017/04/09
-	Converted   =
-	Notes       =
+	TitleName    =XGM Test
+	TitleNameJ   =XGM テスト
+	GameName     =
+	GameNameJ    =
+	SystemName   =
+	SystemNameJ  =
+	Composer     =
+	ComposerJ    =
+	ReleaseDate  =2017/04/09
+	Converted    =
+	Notes        =
 
-	ClockCount  =48
+	Format       =XGM
+	XGMBaseFrame =NTSC
+	ClockCount   =128
 
 }
 
@@ -32,10 +33,40 @@
      No,SV,AR,DR,SL,SR,RR,ST,Chip
 '@ E  0,15, 0, 0,15, 8, 1, 4
 
-'E01-03 T90@110D0v120p3o4l8
-'E02    (9 rD-3p3
-'E03    (18r4D3p1
-'E01-03 g4b4>d4c<ba4gf+d2e4g4f+4gf+e2ea>ce<r2#1f+g#10a&a4
+E01-03 T100@110D0v120p3o4l8
+E02    (9 rD-3p3
+E03    (18r4D3p1
+E01-03 g4b4>d4c<ba4gf+d2e4g4f+4gf+e2ea>ce<r2f+32g32a2~16
 
-S1    T120v15D0 EON@0o4l4  [c_edefgab>c<]
+S1    T60v15D0 EON@0o4l4  [c_edefgab>c<]
 S2        v13D-1EON@0o4l4r8[c_edefgab>c<]
+
+
+'@ M 000
+   AR  DR  SR  RR  SL  TL  KS  ML  DT  AM  SSG-EG
+'@ 031,012,012,015,015,020,000,001,000,000,000
+'@ 031,012,012,015,015,020,000,001,000,000,000
+'@ 031,012,012,015,015,020,000,001,000,000,000
+'@ 031,012,012,015,015,020,000,001,000,000,000
+'@ 007,000
+
+'@ F 110
+   AR  DR  SR  RR  SL  TL  KS  ML  DT
+'@ 031,000,000,000,000,033,000,004,007
+'@ 018,015,009,007,003,009,000,004,007
+'@ 031,000,000,000,000,024,000,002,003
+'@ 031,015,009,007,003,000,000,002,003
+'@ 004,007
+
+
+E03 EON EX1 @0 D0 v100 p3 o5 l8 q0 cdefedcrefgagfercrcrcrcrl16ccddeeffl8edcrrrrrrrrrrrrrrrrrrrrrrg>cr
+E07     EX2    D0 v100    o5 l8 q0 rrrrrrrrcdefedcrefgagfercrcrcrcrl16ccddeeffl8edcrrrrrrrrrrrrrrrrr
+E08     EX3    D0 v100    o5 l8 q0 rrrrrrrrrrrrrrrrcdefedcrefgagfercrcrcrcrl16ccddeeffl8edcrrrrrrrrr
+E09     EX4    D0 v100    o5 l8 q0 rrrrrrrrrrrrrrrrrrrrrrrrcdefedcrefgagfercrcrcrcrl16ccddeeffl8edcr
+
+'E03 EON @110 EX12 D0 v120 p3 o4 l8 q0 cdefedcrefgagfercrcrcrcrl16ccddeeffl8edcrrrrrrrrr
+'E07          EX34 D0 v120    o4 l8 q0 rrrrrrrrcdefedcrefgagfercrcrcrcrl16ccddeeffl8edcr
+
+E03 EON EX1 @0 D0 v110 p3 o5 l8 q0 cdefedcrefgagfercrcrcrcrl16ccddeeffl8edcr
+E07     EX2    D2 v090    o5 l8 q0 r16cdefedcrefgagfercrcrcrcrl16ccddeeffl8edcr
+E08     EX3    D4 v080    o5 l8 q0 r  cdefedcrefgagfercrcrcrcrl16ccddeeffl8edcr

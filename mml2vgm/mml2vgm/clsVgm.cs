@@ -97,6 +97,7 @@ namespace mml2vgm
         private const string PRIMARY = "PRIMARY";
         private const string SECONDARY = "SECONDARY";
         private const string FORMAT = "FORMAT";
+        private const string XGMBASEFRAME = "XGMBASEFRAME";
         readonly private string[] IDName = new string[] { PRIMARY, SECONDARY };
 
         //header
@@ -470,6 +471,7 @@ namespace mml2vgm
                     if (wrd == FMF_NUM) setYM2612F_NumTbl(val);
                     if (wrd == FORCEDMONOPARTYM2612) setMonoPart(val);
                     if (wrd == FORMAT) setFormat(val);
+                    if (wrd == XGMBASEFRAME) setXgmBaseFrame(val);
 
                     for (int i = 0; i < 8; i++)
                     {
@@ -531,6 +533,20 @@ namespace mml2vgm
                     tempo = defaultTempo;
                     clockCount = xgmDefaultClockCount;
                     samplesPerClock = xgmDefaultSamplesPerClock;
+                    break;
+            }
+        }
+
+        private void setXgmBaseFrame(string val)
+        {
+            switch (val.ToUpper())
+            {
+                case "NTSC":
+                default:
+                    xgmSamplesPerSecond = 60;
+                    break;
+                case "PAL":
+                    xgmSamplesPerSecond = 50;
                     break;
             }
         }
@@ -1251,9 +1267,9 @@ namespace mml2vgm
         private const long defaultClockCount = 192L;
         private const long defaultSamplesPerClock = vgmSamplesPerSecond * 60 * 4 / (defaultTempo * defaultClockCount);
 
-        public const long xgmSamplesPerSecond = 60L;
+        public long xgmSamplesPerSecond = 60L;
         private const long xgmDefaultClockCount = 120L;
-        private const long xgmDefaultSamplesPerClock = xgmSamplesPerSecond * 60 * 4 / (defaultTempo * xgmDefaultClockCount);
+        private const long xgmDefaultSamplesPerClock = 60 * 60 * 4 / (defaultTempo * xgmDefaultClockCount);
 
         private long tempo = defaultTempo;
         private long clockCount = defaultClockCount;
@@ -1479,11 +1495,11 @@ namespace mml2vgm
                     // wait発行
 
                     lClock += cnt;
-                    lSample += (long)samplesPerClock * cnt;
+                    lSample += (long)(samplesPerClock * cnt);
 
                     if (ym2612[0].lstPartWork[5].pcmWaitKeyOnCounter <= 0)//== -1)
                     {
-                        outWaitNSamples((long)samplesPerClock * cnt);
+                        outWaitNSamples((long)(samplesPerClock * cnt));
                     }
                     else
                     {
@@ -1683,8 +1699,8 @@ namespace mml2vgm
 
             // wait発行
             lClock += cnt;
-            lSample += (long)samplesPerClock * cnt;
-            outWaitNSamples((long)samplesPerClock * cnt);
+            lSample += (long)(samplesPerClock * cnt);
+            outWaitNSamples((long)(samplesPerClock * cnt));
         }
 
         private List<byte> ConvertVGMtoXGM(List<byte> src)
@@ -3010,6 +3026,8 @@ namespace mml2vgm
                     pw.shift = pw.bendShift;
                 }
 
+                //強制設定
+                pw.freq = -1;
 
                 //発音周波数の決定とキーオン
                 if (pw.chip is YM2151)
@@ -3417,7 +3435,8 @@ namespace mml2vgm
                 ((pw.chip is YM2203) && (pw.Type == enmChannelType.SSG || pw.Type == enmChannelType.FMOPNex))
                 || ((pw.chip is YM2608) && (pw.Type == enmChannelType.SSG || pw.Type == enmChannelType.FMOPNex))
                 || ((pw.chip is YM2610B) && (pw.Type == enmChannelType.SSG || pw.Type == enmChannelType.FMOPNex))
-                || ((pw.chip is YM2612) && (pw.Type == enmChannelType.FMPCM || (pw.Type == enmChannelType.FMOPNex)))
+                || ((pw.chip is YM2612) && (pw.Type == enmChannelType.FMPCM || pw.Type == enmChannelType.FMOPNex))
+                || ((pw.chip is YM2612X) && (pw.Type == enmChannelType.FMPCM || pw.Type == enmChannelType.FMOPNex))
                 || (pw.chip is SN76489)
                 || (pw.chip is RF5C164)
                 || (pw.chip is segaPcm)
@@ -3434,6 +3453,7 @@ namespace mml2vgm
                             || ((pw.chip is YM2608) && pw.Type == enmChannelType.FMOPNex)
                             || ((pw.chip is YM2610B) && pw.Type == enmChannelType.FMOPNex)
                             || pw.chip is YM2612
+                            || pw.chip is YM2612X
                             )
                         {
                             switch (pw.getChar())
@@ -3484,6 +3504,7 @@ namespace mml2vgm
                             || ((pw.chip is YM2608) && pw.Type == enmChannelType.FMOPNex)
                             || ((pw.chip is YM2610B) && pw.Type == enmChannelType.FMOPNex)
                             || pw.chip is YM2612
+                            || pw.chip is YM2612X
                             )
                         {
                             pw.incPos();
@@ -3988,11 +4009,11 @@ namespace mml2vgm
             tempo = n;
             if (format == enmFormat.VGM)
             {
-                samplesPerClock = vgmSamplesPerSecond * 60 * 4 / (tempo * clockCount);
+                samplesPerClock = vgmSamplesPerSecond * 60.0 * 4.0 / (tempo * clockCount);
             }
             else
             {
-                samplesPerClock = Math.Max(xgmSamplesPerSecond * 60 * 4 / (tempo * clockCount), 1);
+                samplesPerClock = xgmSamplesPerSecond * 60.0 * 4.0 / (tempo * clockCount);
             }
         }
 
@@ -5618,6 +5639,9 @@ namespace mml2vgm
             xdat[0x100] = (byte)((ym2612x[0].pcmData.Length / 256) & 0xff);
             xdat[0x101] = (byte)(((ym2612x[0].pcmData.Length / 256) & 0xff00) >> 8);
 
+            //$0103 bit #0: NTSC / PAL information
+            xdat[0x103] |= (byte)(xgmSamplesPerSecond == 50 ? 1 : 0);
+
             //$0104               Sample data block
             foreach (byte b in ym2612x[0].pcmData)
             {
@@ -6964,7 +6988,7 @@ namespace mml2vgm
                     w = pw.waitCounter - pw.gatetime;
                 }
                 if (w < 1) w = 1;
-                s = Math.Min(s, w * (long)samplesPerClock * f / 44100);
+                s = Math.Min(s, (long)(w * samplesPerClock * f / 44100.0));
 
                 if (!pw.streamSetup)
                 {
@@ -8164,7 +8188,7 @@ namespace mml2vgm
                 w = pw.waitCounter - pw.gatetime;
             }
             if (w < 1) w = 1;
-            s = Math.Min(s, w * (long)samplesPerClock * f / 44100);
+            s = Math.Min(s, (long)(w * samplesPerClock * f / 44100.0));
 
             if (!pw.streamSetup)
             {
