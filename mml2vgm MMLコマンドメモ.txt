@@ -2,7 +2,7 @@
 元ネタ: MUSIC LALF MMLコマンドメモ
 
 
-■ .vgmファイル作成手順
+■ .vgm/.xgmファイル作成手順
 
   1. 元になるMMLファイルを作成する。
    (1) mml2vgmでは拡張子を便宜上.gwiとする。(以下MMLファイルのことを.gwiと略す。)
@@ -10,12 +10,13 @@
   
   2. エクスプローラなどで、mml2vgm.exeのアイコンの上に1で作成したファイルをD&Dする。
   又は、コマンドラインから、「mml2vgm.exe ファイル名」と打ち込む。
-  GUIでも実行できる。ファイル監視と自動起動、vgz変換が可能。
+  GUIでも実行できる。ファイル監視と自動起動、vgz変換が可能。(vgmのみ)
   
   3. コンパイルが実行され、エラーやワーニング、例外が表示される。
   又は、エラー無く無事に.vgmファイルが.gwiと同じフォルダーに生成される。
+  (曲情報定義でxgmを指定すれば.xgmファイルが生成される。)
   
-  4. 手頃なvgmプレイヤーで試聴する。修正が必要であれば1から繰り返す。
+  4. 手頃なvgm/xgmプレイヤーで試聴する。修正が必要であれば1から繰り返す。
   
   5. 完成！悦に入る。
   
@@ -89,6 +90,10 @@ ebass3(from MUSIC LALF @70)
            ・PCMは8KHz,8bit,mono,圧縮なし,unsignedのwavファイルであること。
            ・16bit,signedも読み込めるが8bit,unsignedに変換される。(TBD)
            ・8KHzで再生される。
+         YM2612(XGM)
+           ・PCMは14KHz,8bit,mono,圧縮なし,unsignedのwavファイルであること。
+           ・16bit,signedも読み込めるが8bit,signedに変換される。(TBD)
+           ・14KHzで再生される。
          RF5C164
            ・PCMは8KHz,8bit,mono,圧縮なし,unsignedのwavファイルであること。
                RF5C164は本来、8bit,signedのデータを要求するが、mml2vgmが内部でそれに変換する
@@ -129,7 +134,7 @@ ebass3(from MUSIC LALF @70)
 
   (4) エイリアス定義部
     ・MMLを呼び出し可能なエイリアスとして定義する。要はBASICのサブルーチンのようなもの。
-    但し、いくらエイリアスを多用して無駄を省いても生成されるvgmファイルは全てを展開した状態になり、
+    但し、いくらエイリアスを多用して無駄を省いても生成されるvgm/xgmファイルは全てを展開した状態になり、
     ファイルサイズの節約にはならない。アセンブラのマクロ展開のほうが近い。
     ・エイリアスからエイリアスを呼び出すことも可能。(無限にループするとメモリエラーになります)
 
@@ -182,7 +187,8 @@ ebass3(from MUSIC LALF @70)
 
 ■ 使用可能な音源
   名称      略称   初期周波数(Hz)  使用可能チャンネル数
-  YM2612    OPN2          7670454   9Ch(FM   : 6Ch  FMex: 3Ch)
+  YM2612    OPN2          7670454   9Ch(FM   : 6Ch  FMex: 3Ch  |  FM:5Ch FMex:3Ch PCM:1Ch)
+  YM2612X   OPN2X         7670454  12Ch(FM   : 6Ch  FMex: 3Ch  |  FM:5Ch FMex:3Ch PCM:4Ch)
   SN76489   DCSG          3579545   4Ch(PSG  : 4Ch)
   RF5C164   RF5C         12500000   8Ch(PCM  : 8Ch)
   YM2203    OPN           3993600   9Ch(FM   : 3Ch  FMex: 3Ch  SSG : 3Ch)
@@ -207,6 +213,18 @@ ebass3(from MUSIC LALF @70)
   F7     YM2612(FM音源)(Primary)         3ChEx1
   F8     YM2612(FM音源)(Primary)         3ChEx2
   F9     YM2612(FM音源)(Primary)         3ChEx3
+  E01    YM2612(FM音源)(Primary Only)    1Ch
+  E02    YM2612(FM音源)(Primary Only)    2Ch
+  E03    YM2612(FM音源)(Primary Only)    3Ch/3ChEx0
+  E04    YM2612(FM音源)(Primary Only)    4Ch
+  E05    YM2612(FM音源)(Primary Only)    5Ch
+  E06    YM2612(FM音源)(Primary Only)    6Ch(PCM0)
+  E07    YM2612(FM音源)(Primary Only)    3ChEx1
+  E08    YM2612(FM音源)(Primary Only)    3ChEx2
+  E09    YM2612(FM音源)(Primary Only)    3ChEx3
+  E10    YM2612(FM音源)(Primary Only)    6Ch(PCM1)
+  E11    YM2612(FM音源)(Primary Only)    6Ch(PCM2)
+  E12    YM2612(FM音源)(Primary Only)    6Ch(PCM3)
   S1     SN76489(SSG音源)(Primary)       1Ch
   S2     SN76489(SSG音源)(Primary)       2Ch
   S3     SN76489(SSG音源)(Primary)       3Ch
@@ -397,7 +415,7 @@ ebass3(from MUSIC LALF @70)
   Hs6    HuC6280(WF音源)(Secondary)      6Ch
 
   -----------
-  計 196Ch
+  計 208Ch
 
 
 ■ MML内部
@@ -412,9 +430,9 @@ ebass3(from MUSIC LALF @70)
 
 
  凡例
-  Y  YM2612
-  E  YM2612(3ChEx)
-  P  YM2612(6ChPCMmode)
+  Ff YM2612
+  Fe YM2612(3ChEx)
+  Fp YM2612(6ChPCMmode)
   S  SN76489
   R  RF5C164
   Tf YM2610B(FM)
@@ -438,8 +456,8 @@ ebass3(from MUSIC LALF @70)
   - 非対応
   * 未実装
 
-コマンド        YEPSRTTTTTPPPPPNNNXZH  内容
-                     fesabfesrpfes        
+コマンド        FFFSRTTTTTPPPPPNNNXZH  内容
+                fep  fesabfesrpfes        
 -------------------------------------------------
 @n              ooo-ooo-oooo--ooo-ooo  音色番号指定(0 - 255)
 @n              ---o---o----oo---o---  エンベロープ番号指定(0 - 255)
@@ -616,6 +634,7 @@ b               ooooooooooooooooooooo  音符シ
     Volume      音量(0- )元の音量に値(%)を掛ける。100以上も指定できるが音が割れるのでお勧めできない
     ChipName    音源名称又は略称を指定。省略時はYM2612として定義される。
                 "YM2612"(Secondayも共有する)
+                "YM2612X"(XGM)
                 "RF5C164"
                 "RF5C164Secondary"
                 "YM2608"
@@ -781,6 +800,7 @@ FM1Chで指定の音程2音を同時に出力することを主な目的とし�
           PartYM2151                      X
           PartSegaPCM                     Z
           PartHuC6280                     H
+          PartYM2612X                     E(XGM専用)
           PartYM2612Secondary             Fs
           PartSN76489Secondary            Ss
           PartRF5C164Secondary            Rs
@@ -800,11 +820,26 @@ FM1Chで指定の音程2音を同時に出力することを主な目的とし�
           (T.B.D.)PartOKIM6295Secondary   Ms
           (T.B.D.)PartC140Secondary       Ys
 
-    特殊用途(T.B.D.)
-      ForcedMonoPartYM2612    指定したパートの定位を強制的に中央のみにする。
+    ファイル形式指定
+      Format                  VGM|XGM
+        出力するファイル形式を指定する。
+        VGM  デフォルト。VGM形式。多彩な音源を扱えるフォーマット
+        XGM  XGM形式。MegaDrive(Genesis)向けフォーマット。ソフトウェアによる4chPCM再生が強力。
     
     分解能指定
       ClockCount              クロックカウント値
+    
+    1秒当たりのフレーム数指定
+      XGMBaseFrame            NTSC|PAL
+        ファイル形式がXGMときのみ有効。テンポ、分解能指定と密接な関係にある。
+        ※参考
+          1クロック当たりに割り当てるフレーム数 = XGMBaseFrame * (60 * 4) / ClockCount / tempo
+        VGMに比べて非常に値が小さい。(ちなみにVGM形式の場合は44100Hz固定。)
+        NTSC  60Hz。デフォルト。
+        PAL   50Hz。
+    
+    特殊用途(T.B.D.)
+      ForcedMonoPartYM2612    指定したパートの定位を強制的に中央のみにする。
     
     F-Num値再定義(T.B.D.)
       FmF-Num                 FM音源のF-Num値再定義
