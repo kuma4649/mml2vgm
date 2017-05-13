@@ -249,7 +249,7 @@ namespace mml2vgm
         private byte[] wfInstrumentBufCache = null;
 
         private int newStreamID = -1;
-
+        private int pcmDataSeqNum=0;
 
         public clsVgm()
         {
@@ -650,7 +650,7 @@ namespace mml2vgm
                         {
                             instPCM.Remove(num);
                         }
-                        instPCM.Add(num, new clsPcm(num, enmChip, isSecondary, fn, fq, vol, 0, 0, 0, lp));
+                        instPCM.Add(num, new clsPcm(num, pcmDataSeqNum++, enmChip, isSecondary, fn, fq, vol, 0, 0, 0, lp));
                     }
                     catch
                     {
@@ -5663,14 +5663,14 @@ namespace mml2vgm
             }
 
             //$0004               Sample id table
-            ushort ptr = 0;
+            uint ptr = 0;
             int n = 4;
             foreach (clsPcm p in instPCM.Values)
             {
                 if (p.chip != enmChipType.YM2612X) continue;
 
-                ushort stAdr = ptr;
-                ushort size = (ushort)p.size;
+                uint stAdr = ptr;
+                uint size = (uint)p.size;
 
                 xdat[n + 0] = (byte)((stAdr / 256) & 0xff);
                 xdat[n + 1] = (byte)(((stAdr / 256) & 0xff00) >> 8);
@@ -7104,7 +7104,7 @@ namespace mml2vgm
         {
             if (pw.instrument >= 63) return;
 
-            int id = pw.instrument+1;
+            int id = instPCM[pw.instrument].seqNum + 1;
             int ch = Math.Max(0, pw.ch - 8);
             int priority = 0;
 

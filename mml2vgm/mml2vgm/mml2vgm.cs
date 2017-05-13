@@ -428,7 +428,7 @@ namespace mml2vgm
             newDic.Add(
                 v.Key
                 , new clsPcm(
-                    v.Value.num, v.Value.chip
+                    v.Value.num,v.Value.seqNum, v.Value.chip
                     , v.Value.isSecondary
                     , v.Value.fileName
                     , v.Value.freq
@@ -490,7 +490,7 @@ namespace mml2vgm
             {
                 newDic.Remove(v.Key);
             }
-            newDic.Add(v.Key, new clsPcm(v.Value.num, v.Value.chip, false, v.Value.fileName, v.Value.freq, v.Value.vol, pYM2612, pYM2612 + size, size, -1));
+            newDic.Add(v.Key, new clsPcm(v.Value.num, v.Value.seqNum, v.Value.chip, false, v.Value.fileName, v.Value.freq, v.Value.vol, pYM2612, pYM2612 + size, size, -1));
             pYM2612 += size;
 
             byte[] newBuf = new byte[tbufYM2612.Length + buf.Length];
@@ -523,7 +523,7 @@ namespace mml2vgm
             {
                 newDic.Remove(v.Key);
             }
-            newDic.Add(v.Key, new clsPcm(v.Value.num, v.Value.chip, false, v.Value.fileName, v.Value.freq, v.Value.vol, pYM2612X, pYM2612X + size, size, -1));
+            newDic.Add(v.Key, new clsPcm(v.Value.num, v.Value.seqNum, v.Value.chip, false, v.Value.fileName, v.Value.freq, v.Value.vol, pYM2612X, pYM2612X + size, size, -1));
             pYM2612X += size;
 
             newBuf = new byte[tbufYM2612X.Length + buf.Length];
@@ -548,7 +548,7 @@ namespace mml2vgm
             {
                 newDic.Remove(v.Key);
             }
-            newDic.Add(v.Key, new clsPcm(v.Value.num, v.Value.chip, false, v.Value.fileName, v.Value.freq, v.Value.vol, pHuC6280, pHuC6280 + size, size, -1));
+            newDic.Add(v.Key, new clsPcm(v.Value.num, v.Value.seqNum, v.Value.chip, false, v.Value.fileName, v.Value.freq, v.Value.vol, pHuC6280, pHuC6280 + size, size, -1));
             pHuC6280 += size;
 
             byte[] newBuf = new byte[tbufHuC6280.Length + buf.Length];
@@ -610,7 +610,7 @@ namespace mml2vgm
                 v.Key
                 , new clsPcm(
                     v.Value.num
-                    , v.Value.chip
+                    , v.Value.seqNum, v.Value.chip
                     , v.Value.isSecondary
                     , v.Value.fileName
                     , v.Value.freq
@@ -664,7 +664,7 @@ namespace mml2vgm
                     v.Key
                     , new clsPcm(
                         v.Value.num
-                        , v.Value.chip
+                        , v.Value.seqNum, v.Value.chip
                         , v.Value.isSecondary
                         , v.Value.fileName
                         , v.Value.freq
@@ -714,7 +714,7 @@ namespace mml2vgm
                     v.Key
                     , new clsPcm(
                         v.Value.num
-                        , v.Value.chip
+                        , v.Value.seqNum, v.Value.chip
                         , v.Value.isSecondary
                         , v.Value.fileName
                         , v.Value.freq
@@ -769,7 +769,7 @@ namespace mml2vgm
                 v.Key
                 , new clsPcm(
                     v.Value.num
-                    , v.Value.chip
+                    , v.Value.seqNum, v.Value.chip
                     , v.Value.isSecondary
                     , v.Value.fileName
                     , v.Value.freq

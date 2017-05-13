@@ -798,6 +798,7 @@ namespace mml2vgm
         public enmChipType chip = enmChipType.YM2612;
         public bool isSecondary = false;
         public int num = 0;
+        public int seqNum = 0;
         public string fileName = "";
         public int freq = 0;
         public int vol = 0;
@@ -806,9 +807,10 @@ namespace mml2vgm
         public long size = 0;
         public long loopAdr = -1;
 
-        public clsPcm(int num, enmChipType chip,bool isSecondary,string fileName, int freq, int vol , long stAdr, long edAdr, long size,long loopAdr)
+        public clsPcm(int num,int seqNum, enmChipType chip,bool isSecondary,string fileName, int freq, int vol , long stAdr, long edAdr, long size,long loopAdr)
         {
             this.num = num;
+            this.seqNum = seqNum;
             this.chip = chip;
             this.isSecondary = isSecondary;
             this.fileName = fileName;
