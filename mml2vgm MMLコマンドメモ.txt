@@ -89,11 +89,11 @@ ebass3(from MUSIC LALF @70)
          YM2612
            ・PCMは8KHz,8bit,mono,圧縮なし,unsignedのwavファイルであること。
            ・16bit,signedも読み込めるが8bit,unsignedに変換される。(TBD)
-           ・8KHzで再生される。
+           ・8KHz固定で再生される。
          YM2612(XGM)
            ・PCMは14KHz,8bit,mono,圧縮なし,unsignedのwavファイルであること。
            ・16bit,signedも読み込めるが8bit,signedに変換される。(TBD)
-           ・14KHzで再生される。
+           ・14KHz固定で再生される。
          RF5C164
            ・PCMは8KHz,8bit,mono,圧縮なし,unsignedのwavファイルであること。
                RF5C164は本来、8bit,signedのデータを要求するが、mml2vgmが内部でそれに変換する
