@@ -139,4 +139,7 @@
   <data name="ExtensionVGZ" xml:space="preserve">
     <value>.vgz</value>
   </data>
+  <data name="ExtensionXGM" xml:space="preserve">
+    <value>.xgm</value>
+  </data>
 </root>

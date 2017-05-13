@@ -1275,8 +1275,10 @@ namespace mml2vgm
         private long clockCount = defaultClockCount;
         private double samplesPerClock = defaultSamplesPerClock;
         private long userClockCount = 0;
-        public long lSample = 0L;
+        public double dSample = 0.0;
         public long lClock = 0L;
+        private double sampleB = 0.0;
+
         private long loopOffset = -1L;
         private long loopSamples = -1L;
 
@@ -1495,7 +1497,7 @@ namespace mml2vgm
                     // wait発行
 
                     lClock += cnt;
-                    lSample += (long)(samplesPerClock * cnt);
+                    dSample += samplesPerClock * cnt;
 
                     if (ym2612[0].lstPartWork[5].pcmWaitKeyOnCounter <= 0)//== -1)
                     {
@@ -1699,8 +1701,11 @@ namespace mml2vgm
 
             // wait発行
             lClock += cnt;
-            lSample += (long)(samplesPerClock * cnt);
-            outWaitNSamples((long)(samplesPerClock * cnt));
+            dSample += samplesPerClock * cnt;
+
+            sampleB += samplesPerClock * cnt;
+            outWaitNSamples((long)(sampleB));
+            sampleB -= (long)sampleB;
         }
 
         private List<byte> ConvertVGMtoXGM(List<byte> src)
@@ -1708,6 +1713,7 @@ namespace mml2vgm
             if (src == null || src.Count < 1) return null;
 
             List<byte> des = new List<byte>();
+            loopOffset = -1;
 
             for (int ptr = 0; ptr < src.Count; ptr++)
             {
@@ -1776,13 +1782,26 @@ namespace mml2vgm
                         des.Add(src[ptr + 2]);
                         ptr += 2;
                         break;
+                    case 0x7e:
+                        loopOffset = des.Count;
+                        break;
                     default:
                         return null;
                 }
             }
 
-            des.Add(0x7f);
-            
+            if (loopOffset == -1 || loopOffset == des.Count)
+            {
+                des.Add(0x7f);
+            }
+            else
+            {
+                des.Add(0x7e);
+                des.Add((byte)(loopOffset & 0xff));
+                des.Add((byte)((loopOffset & 0xff00) >> 8));
+                des.Add((byte)((loopOffset & 0xff0000) >> 16));
+            }
+
             return des;
         }
 
@@ -3400,7 +3419,12 @@ namespace mml2vgm
         {
             pw.incPos();
             loopOffset = (long)dat.Count;
-            loopSamples = lSample;
+            loopSamples = (long)dSample;
+
+            if (format == enmFormat.XGM)
+            {
+                dat.Add(0x7e);
+            }
 
             foreach (clsChip chip in chips)
             {
@@ -5475,7 +5499,7 @@ namespace mml2vgm
             dat[0x14] = v[0]; dat[0x15] = v[1]; dat[0x16] = v[2]; dat[0x17] = v[3];
 
             //Total # samples
-            v = divInt2ByteAry((int)lSample);
+            v = divInt2ByteAry((int)dSample);
             dat[0x18] = v[0]; dat[0x19] = v[1]; dat[0x1a] = v[2]; dat[0x1b] = v[3];
 
             if (loopOffset != -1)
@@ -5485,7 +5509,7 @@ namespace mml2vgm
                 dat[0x1c] = v[0]; dat[0x1d] = v[1]; dat[0x1e] = v[2]; dat[0x1f] = v[3];
 
                 //Loop # samples
-                v = divInt2ByteAry((int)(lSample - loopSamples));
+                v = divInt2ByteAry((int)(dSample - loopSamples));
                 dat[0x20] = v[0]; dat[0x21] = v[1]; dat[0x22] = v[2]; dat[0x23] = v[3];
             }
 
