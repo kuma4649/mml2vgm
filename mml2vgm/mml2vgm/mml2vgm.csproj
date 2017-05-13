@@ -154,6 +154,9 @@
     <Content Include="sample\BD_16bit16000.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="sample\BD_8bit14000.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="sample\Guitar.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -170,6 +173,9 @@
     <Content Include="sample\SD_16bit16000Hz.wav" />
     <Content Include="sample\SD_16bit18500.wav" />
     <Content Include="sample\SD_16bit18500Hz.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="sample\SD_8bit14000Hz.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="sample\str.wav" />

@@ -1771,6 +1771,11 @@ namespace mml2vgm
                         ptr--;
                         des[p] |= (byte)c;
                         break;
+                    case 0x54:
+                        des.Add(src[ptr + 1]);
+                        des.Add(src[ptr + 2]);
+                        ptr += 2;
+                        break;
                     default:
                         return null;
                 }
@@ -2260,6 +2265,7 @@ namespace mml2vgm
                         pw.MaxVolume = 127;
                         pw.port0 = (byte)(pw.isSecondary ? 0xa2 : 0x52);
                         pw.port1 = (byte)(pw.isSecondary ? 0xa3 : 0x53);
+                        pw.pcm = pw.ch > 9;
                     }
                     else if (chip is SN76489)
                     {
@@ -3619,6 +3625,22 @@ namespace mml2vgm
                 pw.freq = -1;//freqをリセット
                 pw.instrument = -1;
                 outYM2612SetCh6PCMMode(pw, pw.pcm);
+            }
+            else if (pw.chip is YM2612X && pw.Type == enmChannelType.FMPCMex)
+            {
+                if (!pw.getNum(out n))
+                {
+                    msgBox.setErrMsg("不正なPCMモード指定'm'が指定されています。", pw.getSrcFn(), pw.getLineNumber());
+                    n = 0;
+                }
+                n = checkRange(n, 0, 1);
+                pw.chip.lstPartWork[5].pcm = (n == 1);
+                pw.chip.lstPartWork[9].pcm = (n == 1);
+                pw.chip.lstPartWork[10].pcm = (n == 1);
+                pw.chip.lstPartWork[11].pcm = (n == 1);
+                pw.freq = -1;//freqをリセット
+                pw.instrument = -1;
+                outYM2612SetCh6PCMMode(pw.chip.lstPartWork[5], pw.chip.lstPartWork[5].pcm);
             }
             else if (pw.chip is HuC6280)
             {
@@ -5636,18 +5658,23 @@ namespace mml2vgm
             }
 
             //$0100               Sample data bloc size / 256
-            xdat[0x100] = (byte)((ym2612x[0].pcmData.Length / 256) & 0xff);
-            xdat[0x101] = (byte)(((ym2612x[0].pcmData.Length / 256) & 0xff00) >> 8);
+            if (ym2612x[0].pcmData != null)
+            {
+                xdat[0x100] = (byte)((ym2612x[0].pcmData.Length / 256) & 0xff);
+                xdat[0x101] = (byte)(((ym2612x[0].pcmData.Length / 256) & 0xff00) >> 8);
+            }
 
             //$0103 bit #0: NTSC / PAL information
             xdat[0x103] |= (byte)(xgmSamplesPerSecond == 50 ? 1 : 0);
 
             //$0104               Sample data block
-            foreach (byte b in ym2612x[0].pcmData)
+            if (ym2612x[0].pcmData != null)
             {
-                xdat.Add(b);
+                foreach (byte b in ym2612x[0].pcmData)
+                {
+                    xdat.Add(b);
+                }
             }
-
 
             //FM音源を初期化
 
@@ -6936,6 +6963,12 @@ namespace mml2vgm
         {
             int n = (pw.chip is YM2203) ? 0 : 3;
 
+            if (pw.chip is YM2612X && (pw.ch > 8 || (pw.ch == 5 && pw.pcm)))
+            {
+                outYM2612XPcmKeyON(pw);
+                return;
+            }
+
             if (!pw.pcm)
             {
                 if (pw.chip.lstPartWork[2].Ch3SpecialMode && pw.Type == enmChannelType.FMOPNex)
@@ -7041,6 +7074,19 @@ namespace mml2vgm
                 dat.Add((byte)((s & 0xff0000) / 0x10000));
                 dat.Add((byte)((s & 0xff000000) / 0x10000));
             }
+        }
+
+        private void outYM2612XPcmKeyON(partWork pw)
+        {
+            if (pw.instrument >= 63) return;
+
+            int id = pw.instrument+1;
+            int ch = Math.Max(0, pw.ch - 8);
+            int priority = 0;
+
+            dat.Add(0x54); // original vgm command : YM2151
+            dat.Add((byte)(0x50 + ((priority & 0x3) << 2) + (ch & 0x3)));
+            dat.Add((byte)id);
         }
 
         private void outFmKeyOff(partWork pw)
@@ -7193,8 +7239,14 @@ namespace mml2vgm
                 {
                     return;
                 }
+                if ((pw.chip is YM2612X) && pw.ch >= 9 && pw.ch <= 11)
+                {
+                    return;
+                }
                 if (pw.ch < n + 3)
                 {
+                    if (pw.pcm) return;
+
                     byte port = pw.ch > 2 ? pw.port1 : pw.port0;
                     byte vch = (byte)(pw.ch > 2 ? pw.ch - 3 : pw.ch);
 

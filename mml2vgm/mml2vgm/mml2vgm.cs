@@ -515,7 +515,7 @@ namespace mml2vgm
             //Padding
             if (size % 0x100 != 0)
             {
-                newBuf = pcmPadding(ref buf, ref size, 0x80, 0x100);
+                newBuf = pcmPadding(ref buf, ref size, 0x00, 0x100);
                 buf = newBuf;
             }
 
@@ -875,9 +875,9 @@ namespace mml2vgm
                         }
 
                         int samplerate = buf[p + 4] + buf[p + 5] * 0x100 + buf[p + 6] * 0x10000 + buf[p + 7] * 0x1000000;
-                        if (samplerate != 8000 && samplerate != 16000 && samplerate != 18500)
+                        if (samplerate != 8000 && samplerate != 16000 && samplerate != 18500 && samplerate != 14000)
                         {
-                            msgBox.setWrnMsg(string.Format("PCMファイル：仕様(8KHz/16KHz/18.5KHz)とは異なるサンプリングレートです。({0})", samplerate));
+                            msgBox.setWrnMsg(string.Format("PCMファイル：仕様(8KHz/14KHz/16KHz/18.5KHz)とは異なるサンプリングレートです。({0})", samplerate));
                             //return null;
                         }
 
@@ -932,6 +932,7 @@ namespace mml2vgm
                 {
                     for (int i = 0; i < des.Length; i += 2)
                     {
+                        //16bitのwavファイルはsignedのデータのためそのままボリューム変更可能
                         int b = (int)((short)(des[i] | (des[i + 1] << 8)) * instPCM.vol * 0.01);
                         b = (b > 0xffff) ? 0xffff : b;
                         des[i] = (byte)(b & 0xff);
@@ -942,9 +943,18 @@ namespace mml2vgm
                 {
                     for (int i = 0; i < des.Length; i++)
                     {
-                        int b = (int)(des[i] * instPCM.vol * 0.01);
-                        b = (b > 0xff) ? 0xff : b;
-                        des[i] = (byte)b;
+                        //8bitのwavファイルはunsignedのデータのためsignedのデータに変更してからボリューム変更する
+                        int d = des[i];
+                        //signed化
+                        d -= 0x80;
+                        d = (int)(d * instPCM.vol * 0.01);
+                        //clip
+                        d = (d > 127) ? 127 : d;
+                        d = (d < -128) ? -128 : d;
+                        //unsigned化
+                        d += 0x80;
+
+                        des[i] = (byte)d;
                     }
                 }
 

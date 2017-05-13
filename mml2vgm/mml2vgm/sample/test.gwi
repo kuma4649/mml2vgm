@@ -28,7 +28,15 @@
 '@ 031,015,009,007,003,000,000,002,003,001,000
 '@ 004,007
 
-'@ P 0,"BD.wav",8000,100,OPN2X
+@ P 0,"BD.wav",8000,100,OPN2X
+@ P 1,"SD.wav",8000,100,OPN2X
+@ P 2,"HC.wav",8000,100,OPN2X
+@ P 3,"HO.wav",8000,100,OPN2X
+
+'@ P 0,"BD_8bit14000.wav",8000,80,OPN2X
+'@ P 1,"SD_8bit14000Hz.wav",8000,80,OPN2X
+'@ P 2,"HC.wav",8000,10,OPN2X
+'@ P 3,"HO.wav",8000,10,OPN2X
 
      No,SV,AR,DR,SL,SR,RR,ST,Chip
 '@ E  0,15, 0, 0,15, 8, 1, 4
@@ -64,9 +72,14 @@ E07     EX2    D0 v100    o5 l8 q0 rrrrrrrrcdefedcrefgagfercrcrcrcrl16ccddeeffl8
 E08     EX3    D0 v100    o5 l8 q0 rrrrrrrrrrrrrrrrcdefedcrefgagfercrcrcrcrl16ccddeeffl8edcrrrrrrrrr
 E09     EX4    D0 v100    o5 l8 q0 rrrrrrrrrrrrrrrrrrrrrrrrcdefedcrefgagfercrcrcrcrl16ccddeeffl8edcr
 
-'E03 EON @110 EX12 D0 v120 p3 o4 l8 q0 cdefedcrefgagfercrcrcrcrl16ccddeeffl8edcrrrrrrrrr
-'E07          EX34 D0 v120    o4 l8 q0 rrrrrrrrcdefedcrefgagfercrcrcrcrl16ccddeeffl8edcr
+E03 EON @110 EX12 D0 v120 p3 o4 l8 q0 cdefedcrefgagfercrcrcrcrl16ccddeeffl8edcrrrrrrrrr
+E07          EX34 D0 v120    o4 l8 q0 rrrrrrrrcdefedcrefgagfercrcrcrcrl16ccddeeffl8edcr
 
 E03 EON EX1 @0 D0 v110 p3 o5 l8 q0 cdefedcrefgagfercrcrcrcrl16ccddeeffl8edcr
 E07     EX2    D2 v090    o5 l8 q0 r16cdefedcrefgagfercrcrcrcrl16ccddeeffl8edcr
 E08     EX3    D4 v080    o5 l8 q0 r  cdefedcrefgagfercrcrcrcrl16ccddeeffl8edcr
+
+'E06 m1@0c4c4c4c4
+'E10 m1@1r4c4r4c4
+'E11 @2c8c8c8c8c8c8
+'E12 @3r8c8r8c8r8c8
