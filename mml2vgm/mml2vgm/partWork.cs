@@ -799,6 +799,7 @@ namespace mml2vgm
         public bool isSecondary = false;
         public int num = 0;
         public int seqNum = 0;
+        public double xgmMaxSampleCount = 0;
         public string fileName = "";
         public int freq = 0;
         public int vol = 0;

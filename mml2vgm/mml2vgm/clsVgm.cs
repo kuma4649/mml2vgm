@@ -1748,19 +1748,39 @@ namespace mml2vgm
                         des[p] |= (byte)c;
                         break;
                     case 0x52:
-                        p = des.Count;
-                        c = 0;
-                        des.Add(0x20);
-                        do
+                        bool isKeyOn = src[ptr + 1]==0x28;
+                        if (!isKeyOn)
                         {
-                            des.Add(src[ptr + 1]);
-                            des.Add(src[ptr + 2]);
-                            c++;
-                            ptr += 3;
-                        } while (c < 16 && ptr < src.Count - 1 && src[ptr] == 0x52);
-                        c--;
-                        ptr--;
-                        des[p] |= (byte)c;
+                            p = des.Count;
+                            c = 0;
+                            des.Add(0x20);
+                            do
+                            {
+                                des.Add(src[ptr + 1]);
+                                des.Add(src[ptr + 2]);
+                                c++;
+                                ptr += 3;
+                            } while (c < 16 && ptr < src.Count - 1 && src[ptr] == 0x52);
+                            c--;
+                            ptr--;
+                            des[p] |= (byte)c;
+                        }
+                        else
+                        {
+                            p = des.Count;
+                            c = 0;
+                            des.Add(0x40);
+                            do
+                            {
+                                //des.Add(src[ptr + 1]);
+                                des.Add(src[ptr + 2]);
+                                c++;
+                                ptr += 3;
+                            } while (c < 16 && ptr < src.Count - 1 && src[ptr] == 0x52 && src[ptr + 1] == 0x28);
+                            c--;
+                            ptr--;
+                            des[p] |= (byte)c;
+                        }
                         break;
                     case 0x53:
                         p = des.Count;
@@ -5662,44 +5682,6 @@ namespace mml2vgm
                 xdat.Add(b);
             }
 
-            //$0004               Sample id table
-            uint ptr = 0;
-            int n = 4;
-            foreach (clsPcm p in instPCM.Values)
-            {
-                if (p.chip != enmChipType.YM2612X) continue;
-
-                uint stAdr = ptr;
-                uint size = (uint)p.size;
-
-                xdat[n + 0] = (byte)((stAdr / 256) & 0xff);
-                xdat[n + 1] = (byte)(((stAdr / 256) & 0xff00) >> 8);
-                xdat[n + 2] = (byte)((size / 256) & 0xff);
-                xdat[n + 3] = (byte)(((size / 256) & 0xff00) >> 8); 
-
-                ptr += size;
-                n+=4;
-            }
-
-            //$0100               Sample data bloc size / 256
-            if (ym2612x[0].pcmData != null)
-            {
-                xdat[0x100] = (byte)((ym2612x[0].pcmData.Length / 256) & 0xff);
-                xdat[0x101] = (byte)(((ym2612x[0].pcmData.Length / 256) & 0xff00) >> 8);
-            }
-
-            //$0103 bit #0: NTSC / PAL information
-            xdat[0x103] |= (byte)(xgmSamplesPerSecond == 50 ? 1 : 0);
-
-            //$0104               Sample data block
-            if (ym2612x[0].pcmData != null)
-            {
-                foreach (byte b in ym2612x[0].pcmData)
-                {
-                    xdat.Add(b);
-                }
-            }
-
             //FM音源を初期化
 
             outOPNSetHardLfo(ym2612x[0].lstPartWork[0], false, 0);
@@ -5729,6 +5711,64 @@ namespace mml2vgm
 
         private void xgm_makeFooter()
         {
+
+            //$0004               Sample id table
+            uint ptr = 0;
+            int n = 4;
+            foreach (clsPcm p in instPCM.Values)
+            {
+                if (p.chip != enmChipType.YM2612X) continue;
+
+                uint stAdr = ptr;
+                uint size = (uint)p.size;
+                if (size > (uint)p.xgmMaxSampleCount + 1)
+                {
+                    size = (uint)p.xgmMaxSampleCount + 1;
+                    size = (uint)((size & 0xffff00) + (size % 0x100 != 0 ? 0x100 : 0x0));
+                }
+                p.size = size;
+
+                xdat[n + 0] = (byte)((stAdr / 256) & 0xff);
+                xdat[n + 1] = (byte)(((stAdr / 256) & 0xff00) >> 8);
+                xdat[n + 2] = (byte)((size / 256) & 0xff);
+                xdat[n + 3] = (byte)(((size / 256) & 0xff00) >> 8);
+
+                ptr += size;
+                n += 4;
+            }
+
+            //$0100               Sample data bloc size / 256
+            if (ym2612x[0].pcmData != null)
+            {
+                //xdat[0x100] = (byte)((ym2612x[0].pcmData.Length / 256) & 0xff);
+                //xdat[0x101] = (byte)(((ym2612x[0].pcmData.Length / 256) & 0xff00) >> 8);
+                xdat[0x100] = (byte)((ptr / 256) & 0xff);
+                xdat[0x101] = (byte)(((ptr / 256) & 0xff00) >> 8);
+            }
+
+            //$0103 bit #0: NTSC / PAL information
+            xdat[0x103] |= (byte)(xgmSamplesPerSecond == 50 ? 1 : 0);
+
+            //$0104               Sample data block
+            if (ym2612x[0].pcmData != null)
+            {
+                foreach (clsPcm p in instPCM.Values)
+                {
+                    if (p.chip != enmChipType.YM2612X) continue;
+
+                    for (uint cnt = 0; cnt < p.size; cnt++)
+                    {
+                        xdat.Add(ym2612x[0].pcmData[p.stAdr + cnt]);
+                    }
+
+                }
+
+                //foreach (byte b in ym2612x[0].pcmData)
+                //{
+                //    xdat.Add(b);
+                //}
+            }
+
             //$0104 + SLEN        Music data bloc size.
             xdat.Add((byte)((dat.Count & 0xff) >> 0));
             xdat.Add((byte)((dat.Count & 0xff00) >> 8));
@@ -7111,6 +7151,13 @@ namespace mml2vgm
             dat.Add(0x54); // original vgm command : YM2151
             dat.Add((byte)(0x50 + ((priority & 0x3) << 2) + (ch & 0x3)));
             dat.Add((byte)id);
+
+            samplesPerClock = xgmSamplesPerSecond * 60.0 * 4.0 / (tempo * clockCount);
+
+            //必要なサンプル数を算出し、保持しているサンプル数より大きい場合は更新
+            double m = pw.waitCounter * 60.0 * 4.0 / (tempo * clockCount) * 14000.0;//14000(Hz) = xgm sampling Rate
+            instPCM[pw.instrument].xgmMaxSampleCount = Math.Max(instPCM[pw.instrument].xgmMaxSampleCount, m);
+
         }
 
         private void outFmKeyOff(partWork pw)

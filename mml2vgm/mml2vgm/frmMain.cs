@@ -131,8 +131,8 @@ namespace mml2vgm
 
             textBox1.AppendText(string.Format(" Errors : {0}\r\n Warnings : {1}\r\n", msgBox.getErr().Length, msgBox.getWrn().Length));
             textBox1.AppendText(string.Format(" Total Clocks  : {0}\r\n", mv.desVGM.lClock));
-            if(mv.desVGM.format== clsVgm.enmFormat.VGM)            textBox1.AppendText(string.Format(" Total Samples : {0}({1}s)\r\n", mv.desVGM.dSample, mv.desVGM.dSample / 44100L));
-            else textBox1.AppendText(string.Format(" Total Samples : {0}({1}s)\r\n", mv.desVGM.dSample, mv.desVGM.dSample / (mv.desVGM.xgmSamplesPerSecond)));
+            if(mv.desVGM.format== clsVgm.enmFormat.VGM)            textBox1.AppendText(string.Format(" Total Samples : {0:0.00}({1:0.00}s)\r\n", mv.desVGM.dSample, mv.desVGM.dSample / 44100L));
+            else textBox1.AppendText(string.Format(" Total Samples : {0:0.00}({1:0.00}s)\r\n", mv.desVGM.dSample, mv.desVGM.dSample / (mv.desVGM.xgmSamplesPerSecond)));
             if (mv.desVGM.ym2608[0].pcmData != null) textBox1.AppendText(string.Format(" ADPCM Data size(YM2608)  : ({0}/262143) byte\r\n", mv.desVGM.ym2608[0].pcmData.Length - 15));
             if (mv.desVGM.ym2608[1].pcmData != null) textBox1.AppendText(string.Format(" ADPCM Data size(YM2608Secondary)  : ({0}/262143) byte\r\n", mv.desVGM.ym2608[1].pcmData.Length - 15));
             if (mv.desVGM.ym2610b[0].pcmDataA != null) textBox1.AppendText(string.Format(" ADPCM-A Data size(YM2610B)  : ({0}/16777215) byte\r\n", mv.desVGM.ym2610b[0].pcmDataA.Length-15));
