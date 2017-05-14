@@ -1261,6 +1261,8 @@ namespace mml2vgm
         private List<byte> dat = null;
         //xgm music data
         private List<byte> xdat = null;
+        //xgm keyOnDataList
+        private List<byte> xgmKeyOnData = null;
 
         public const long vgmSamplesPerSecond = 44100L;
         private const long defaultTempo = 120L;
@@ -1555,6 +1557,8 @@ namespace mml2vgm
 
             do
             {
+                //KeyOnリストをクリア
+                xgmKeyOnData = new List<byte>();
 
                 foreach (clsChip chip in chips)
                 {
@@ -1567,6 +1571,9 @@ namespace mml2vgm
 
                 //一番小さいwait値を調べる
                 long waitCounter = xgm_procCheckMinimumWaitCounter();
+
+                //KeyOn情報をかき出し
+                foreach (byte dat in xgmKeyOnData) outFmAdrPort(0x52, 0x28, dat);
 
                 if (waitCounter != long.MaxValue)
                 {
@@ -1715,6 +1722,9 @@ namespace mml2vgm
             List<byte> des = new List<byte>();
             loopOffset = -1;
 
+            int[][] opn2reg = new int[2][] { new int[0x100], new int[0x100] };
+            for (int i = 0; i < 512; i++) opn2reg[i / 0x100][i % 0x100] = -1;
+
             for (int ptr = 0; ptr < src.Count; ptr++)
             {
 
@@ -1724,7 +1734,7 @@ namespace mml2vgm
 
                 switch (cmd)
                 {
-                    case 0x61:
+                    case 0x61: //Wait
                         int cnt = src[ptr + 1] + src[ptr + 2] * 0x100;
                         for (int j = 0; j < cnt; j++)
                         {
@@ -1733,7 +1743,7 @@ namespace mml2vgm
                         }
                         ptr += 2;
                         break;
-                    case 0x50:
+                    case 0x50: //DCSG
                         p = des.Count;
                         c = 0;
                         des.Add(0x10);
@@ -1747,63 +1757,88 @@ namespace mml2vgm
                         ptr--;
                         des[p] |= (byte)c;
                         break;
-                    case 0x52:
-                        bool isKeyOn = src[ptr + 1]==0x28;
-                        if (!isKeyOn)
+                    case 0x52: //YM2612 Port0
+                        if (opn2reg[0][src[ptr + 1]] != src[ptr + 2] || src[ptr + 1] == 0x28)
                         {
+
+                            bool isKeyOn = src[ptr + 1] == 0x28;
+                            if (!isKeyOn)
+                            {
+                                p = des.Count;
+                                c = 0;
+                                des.Add(0x20);
+                                do
+                                {
+                                    if (opn2reg[0][src[ptr + 1]] != src[ptr + 2])
+                                    {
+                                        opn2reg[0][src[ptr + 1]] = src[ptr + 2];
+                                        des.Add(src[ptr + 1]);
+                                        des.Add(src[ptr + 2]);
+                                        c++;
+                                    }
+                                    ptr += 3;
+                                } while (c < 16 && ptr < src.Count - 1 && src[ptr] == 0x52 && src[ptr + 1] != 0x28);
+                                c--;
+                                ptr--;
+                                des[p] |= (byte)c;
+                            }
+                            else
+                            {
+                                p = des.Count;
+                                c = 0;
+                                des.Add(0x40);
+                                do
+                                {
+                                    //des.Add(src[ptr + 1]);
+                                    des.Add(src[ptr + 2]);
+                                    c++;
+                                    ptr += 3;
+                                } while (c < 16 && ptr < src.Count - 1 && src[ptr] == 0x52 && src[ptr + 1] == 0x28);
+                                c--;
+                                ptr--;
+                                des[p] |= (byte)c;
+                            }
+                        }
+                        else
+                        {
+                            ptr += 2;
+                        }
+                        break;
+                    case 0x53: //YM2612 Port1
+                        if (opn2reg[1][src[ptr + 1]] != src[ptr + 2])
+                        {
+
                             p = des.Count;
                             c = 0;
-                            des.Add(0x20);
+                            des.Add(0x30);
                             do
                             {
-                                des.Add(src[ptr + 1]);
-                                des.Add(src[ptr + 2]);
-                                c++;
+                                if (opn2reg[1][src[ptr + 1]] != src[ptr + 2])
+                                {
+                                    opn2reg[1][src[ptr + 1]] = src[ptr + 2];
+                                    des.Add(src[ptr + 1]);
+                                    des.Add(src[ptr + 2]);
+                                    c++;
+                                }
                                 ptr += 3;
-                            } while (c < 16 && ptr < src.Count - 1 && src[ptr] == 0x52);
+                            } while (c < 16 && ptr < src.Count - 1 && src[ptr] == 0x53);
                             c--;
                             ptr--;
                             des[p] |= (byte)c;
                         }
                         else
                         {
-                            p = des.Count;
-                            c = 0;
-                            des.Add(0x40);
-                            do
-                            {
-                                //des.Add(src[ptr + 1]);
-                                des.Add(src[ptr + 2]);
-                                c++;
-                                ptr += 3;
-                            } while (c < 16 && ptr < src.Count - 1 && src[ptr] == 0x52 && src[ptr + 1] == 0x28);
-                            c--;
-                            ptr--;
-                            des[p] |= (byte)c;
+                            ptr += 2;
                         }
                         break;
-                    case 0x53:
-                        p = des.Count;
-                        c = 0;
-                        des.Add(0x30);
-                        do
-                        {
-                            des.Add(src[ptr + 1]);
-                            des.Add(src[ptr + 2]);
-                            c++;
-                            ptr += 3;
-                        } while (c < 16 && ptr < src.Count - 1 && src[ptr] == 0x53);
-                        c--;
-                        ptr--;
-                        des[p] |= (byte)c;
-                        break;
-                    case 0x54:
+                    case 0x54: //PCM KeyON (YM2151)
                         des.Add(src[ptr + 1]);
                         des.Add(src[ptr + 2]);
                         ptr += 2;
                         break;
-                    case 0x7e:
+                    case 0x7e: //LOOP Point
                         loopOffset = des.Count;
+                        for (int i = 0; i < 512; i++) opn2reg[i / 0x100][i % 0x100] = -1;
                         break;
                     default:
                         return null;
@@ -5740,10 +5775,13 @@ namespace mml2vgm
             //$0100               Sample data bloc size / 256
             if (ym2612x[0].pcmData != null)
             {
-                //xdat[0x100] = (byte)((ym2612x[0].pcmData.Length / 256) & 0xff);
-                //xdat[0x101] = (byte)(((ym2612x[0].pcmData.Length / 256) & 0xff00) >> 8);
                 xdat[0x100] = (byte)((ptr / 256) & 0xff);
                 xdat[0x101] = (byte)(((ptr / 256) & 0xff00) >> 8);
+            }
+            else
+            {
+                xdat[0x100] = 0;
+                xdat[0x101] = 0;
             }
 
             //$0103 bit #0: NTSC / PAL information
@@ -5769,16 +5807,26 @@ namespace mml2vgm
                 //}
             }
 
-            //$0104 + SLEN        Music data bloc size.
-            xdat.Add((byte)((dat.Count & 0xff) >> 0));
-            xdat.Add((byte)((dat.Count & 0xff00) >> 8));
-            xdat.Add((byte)((dat.Count & 0xff0000) >> 16));
-            xdat.Add((byte)((dat.Count & 0xff000000) >> 24));
-
-            //$0108 + SLEN        Music data bloc
-            foreach (byte b in dat)
+            if (dat != null)
             {
-                xdat.Add(b);
+                //$0104 + SLEN        Music data bloc size.
+                xdat.Add((byte)((dat.Count & 0xff) >> 0));
+                xdat.Add((byte)((dat.Count & 0xff00) >> 8));
+                xdat.Add((byte)((dat.Count & 0xff0000) >> 16));
+                xdat.Add((byte)((dat.Count & 0xff000000) >> 24));
+
+                //$0108 + SLEN        Music data bloc
+                foreach (byte b in dat)
+                {
+                    xdat.Add(b);
+                }
+            }
+            else
+            {
+                xdat.Add(0);
+                xdat.Add(0);
+                xdat.Add(0);
+                xdat.Add(0);
             }
 
             //$0108 + SLEN + MLEN GD3 tags
@@ -7044,15 +7092,29 @@ namespace mml2vgm
                         | (pw.chip.lstPartWork[n + 4].Ch3SpecialModeKeyOn ? pw.chip.lstPartWork[n + 4].slots : 0x0)
                         | (pw.chip.lstPartWork[n + 5].Ch3SpecialModeKeyOn ? pw.chip.lstPartWork[n + 5].slots : 0x0);
 
-                    outFmAdrPort(pw.port0, 0x28, (byte)((slot << 4) + 2));
+                    if (pw.chip is YM2612X)
+                    {
+                        xgmKeyOnData.Add((byte)((slot << 4) + 2));
+                    }
+                    else
+                    {
+                        outFmAdrPort(pw.port0, 0x28, (byte)((slot << 4) + 2));
+                    }
                 }
                 else
                 {
                     if (pw.ch >= 0 && pw.ch < n + 3)
                     {
                         byte vch = (byte)((pw.ch > 2) ? pw.ch + 1 : pw.ch);
-                        //key on
-                        outFmAdrPort(pw.port0, 0x28, (byte)((pw.slots << 4) + (vch & 7)));
+                        if (pw.chip is YM2612X)
+                        {
+                            xgmKeyOnData.Add((byte)((pw.slots << 4) + (vch & 7)));
+                        }
+                        else
+                        {
+                            //key on
+                            outFmAdrPort(pw.port0, 0x28, (byte)((pw.slots << 4) + (vch & 7)));
+                        }
                     }
                 }
 
