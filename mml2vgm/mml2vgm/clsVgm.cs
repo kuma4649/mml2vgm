@@ -7513,30 +7513,24 @@ namespace mml2vgm
                 ,new int[4] { 1,1,1,1}
             };
 
-            int minV = 127;
-            for (int i = 0; i < 4; i++)
-            {
-                if (algs[alg][i] == 1)
-                {
-                    minV = Math.Min(minV, ope[i]);
-                }
-            }
+            //int minV = 127;
+            //for (int i = 0; i < 4; i++)
+            //{
+            //    if (algs[alg][i] == 1 && (pw.slots & (1 << i)) != 0)
+            //    {
+            //        minV = Math.Min(minV, ope[i]);
+            //    }
+            //}
 
             for (int i = 0; i < 4; i++)
             {
-                if (algs[alg][i] == 0)
+                if (algs[alg][i] == 0 || (pw.slots & (1 << i)) == 0)
                 {
                     continue;
                 }
-                ope[i] = ope[i] - minV + (127 - vol);
-                if (ope[i] < 0)
-                {
-                    ope[i] = 0;
-                }
-                if (ope[i] > 127)
-                {
-                    ope[i] = 127;
-                }
+                //ope[i] = ope[i] - minV + (127 - vol);
+                ope[i] = ope[i] + (127 - vol);
+                ope[i] = checkRange(ope[i], 0, 127);
             }
 
             partWork vpw = pw;
@@ -7721,22 +7715,23 @@ namespace mml2vgm
                 ,new int[4] { 1,1,1,1}
             };
 
-            int minV = 127;
-            for (int i = 0; i < 4; i++)
-            {
-                if (algs[alg][i] == 1)
-                {
-                    minV = Math.Min(minV, ope[i]);
-                }
-            }
+            //int minV = 127;
+            //for (int i = 0; i < 4; i++)
+            //{
+            //    if (algs[alg][i] == 1 && (pw.slots & (1 << i)) != 0)
+            //    {
+            //        minV = Math.Min(minV, ope[i]);
+            //    }
+            //}
 
             for (int i = 0; i < 4; i++)
             {
-                if (algs[alg][i] == 0)
+                if (algs[alg][i] == 0 || (pw.slots & (1 << i)) == 0)
                 {
                     continue;
                 }
-                ope[i] = ope[i] - minV + (127 - vol);
+                //ope[i] = ope[i] - minV + (127 - vol);
+                ope[i] = ope[i] + (127 - vol);
                 if (ope[i] < 0)
                 {
                     ope[i] = 0;
