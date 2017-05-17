@@ -1771,7 +1771,9 @@ namespace mml2vgm
                                 {
                                     if (opn2reg[0][src[ptr + 1]] != src[ptr + 2])
                                     {
-                                        opn2reg[0][src[ptr + 1]] = src[ptr + 2];
+                                        //F-numの場合は圧縮対象外
+                                        if(src[ptr+1]<0xa0 || src[ptr+1]>=0xb0) opn2reg[0][src[ptr + 1]] = src[ptr + 2];
+
                                         des.Add(src[ptr + 1]);
                                         des.Add(src[ptr + 2]);
                                         c++;
@@ -1815,7 +1817,8 @@ namespace mml2vgm
                             {
                                 if (opn2reg[1][src[ptr + 1]] != src[ptr + 2])
                                 {
-                                    opn2reg[1][src[ptr + 1]] = src[ptr + 2];
+                                    //F-numの場合は圧縮対象外
+                                    if (src[ptr + 1] < 0xa0 || src[ptr + 1] >= 0xb0) opn2reg[1][src[ptr + 1]] = src[ptr + 2];
                                     des.Add(src[ptr + 1]);
                                     des.Add(src[ptr + 2]);
                                     c++;
