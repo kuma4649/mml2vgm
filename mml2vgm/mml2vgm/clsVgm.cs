@@ -1724,6 +1724,12 @@ namespace mml2vgm
 
             int[][] opn2reg = new int[2][] { new int[0x100], new int[0x100] };
             for (int i = 0; i < 512; i++) opn2reg[i / 0x100][i % 0x100] = -1;
+            int[] psgreg = new int[16];
+            int psgch = -1;
+            int psgtp = -1;
+            for (int i = 0; i < 16; i++) psgreg[i] = -1;
+            int framePtr = 0;
+            int frameCnt = 0;
 
             for (int ptr = 0; ptr < src.Count; ptr++)
             {
@@ -1735,27 +1741,69 @@ namespace mml2vgm
                 switch (cmd)
                 {
                     case 0x61: //Wait
+
+                        if (psgtp != -1)
+                        {
+                            p = des.Count;
+                            c = 0;
+                            des.Add(0x10);
+                            for (int j = 0; j < 16; j++)
+                            {
+                                if (psgreg[j] == -1) continue;
+                                int latch = (j & 1) == 0 ? 0x80 : 0;
+                                int ch = (j & 0x0c) << 3;
+                                int tp = (j & 2) << 3;
+                                des.Add((byte)(latch | (latch != 0 ? (ch | tp) : 0) | psgreg[j]));
+                                c++;
+                            }
+                            c--;
+                            des[p] |= (byte)c;
+
+                            psgch = -1;
+                            psgtp = -1;
+                            for (int i = 0; i < 16; i++) psgreg[i] = -1;
+                        }
+
+                        if (des.Count - framePtr > 256)
+                        {
+                            msgBox.setWrnMsg(string.Format("1Frameに収められる限界バイト数(256byte)を超えています。データを分散させてください。 Frame {0} : {1}byte", frameCnt, des.Count - framePtr));
+                        }
+                        framePtr = des.Count;
+
                         int cnt = src[ptr + 1] + src[ptr + 2] * 0x100;
                         for (int j = 0; j < cnt; j++)
                         {
                             //wait
                             des.Add(0x00);
+                            frameCnt++;
                         }
                         ptr += 2;
                         break;
                     case 0x50: //DCSG
-                        p = des.Count;
-                        c = 0;
-                        des.Add(0x10);
                         do
                         {
-                            des.Add(src[ptr + 1]);
-                            c++;
+                            bool latch = (src[ptr + 1] & 0x80) != 0;
+                            int ch = (src[ptr + 1] & 0x60) >> 5;
+                            int tp = (src[ptr + 1] & 0x10) >> 3;
+                            int d1 = (src[ptr + 1] & 0xf);
+                            int d2 = (src[ptr + 1] & 0x3f);
+                            if (latch)
+                            {
+                                psgch = ch;
+                                psgtp = tp;
+                                psgreg[ch * 4 + 0 + tp] = d1;
+                            }
+                            else
+                            {
+                                if (psgch != -1)
+                                {
+                                    psgreg[psgch * 4 + 1 + psgtp] = d2;
+                                }
+                                psgch = -1;
+                            }
                             ptr += 2;
-                        } while (c < 16 && ptr < src.Count - 1 && src[ptr] == 0x50);
-                        c--;
+                        }while(ptr < src.Count - 1 && src[ptr] == 0x50);
                         ptr--;
-                        des[p] |= (byte)c;
                         break;
                     case 0x52: //YM2612 Port0
                         if (opn2reg[0][src[ptr + 1]] != src[ptr + 2] || src[ptr + 1] == 0x28)
