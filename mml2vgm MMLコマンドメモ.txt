@@ -540,7 +540,7 @@ Pn              --------o----o----o---  1:トーン 2:ノイズ 3:トーン＆�
 Pn              -------------------o-o  ノイズ 0:OFF 1:ON
 mn              ooo-------------------  YM2612PCMモード指定(0: 停止  1: 開始) 6Ch only
 mn              ---------------------o  HuC6280PCMモード指定(0: 停止  1: 開始)チャンネルごとに指定
-Tn              ooo-oooooooooooooooooo  テンポ(1 - 255)
+Tn              ooo-oooooooooooooooooo  テンポ(1 - 1200)
 !               ooo-oooooooooooooooooo  このパートのこれ以降をコンパイルしない(発音しない)
 Kn              ooo-ooooo-oooo-ooooooo  移調絶対指定 ( -12 - +12 )
 #n              ooo-oooooooooooooooooo  音長をクロック値で指定
