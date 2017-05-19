@@ -4157,7 +4157,7 @@ namespace mml2vgm
                 msgBox.setErrMsg("不正なテンポが指定されています。", pw.getSrcFn(), pw.getLineNumber());
                 n = 120;
             }
-            n = checkRange(n, 1, 255);
+            n = checkRange(n, 1, 1200);
             tempo = n;
             if (format == enmFormat.VGM)
             {
