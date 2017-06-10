@@ -96,25 +96,33 @@ namespace mml2vgm
 
         private void finishedCompile()
         {
+            if (mv == null)
+            {
+                textBox1.AppendText("\r\nFinished.\r\n\r\n");
+                this.toolStrip1.Enabled = true;
+                this.tsslMessage.Text = "Done.";
+                return;
+            }
+
             if (isSuccess)
             {
-                foreach (clsChip chip in mv.desVGM.chips)
-                {
-                    List<partWork> pw = chip.lstPartWork;
-                    for (int i = 0; i < pw.Count; i++)
+                    foreach (clsChip chip in mv.desVGM.chips)
                     {
-                        if (pw[i].clockCounter == 0) continue;
+                        List<partWork> pw = chip.lstPartWork;
+                        for (int i = 0; i < pw.Count; i++)
+                        {
+                            if (pw[i].clockCounter == 0) continue;
 
-                        DataGridViewRow row = new DataGridViewRow();
-                        row.Cells.Add(new DataGridViewTextBoxCell());
-                        row.Cells[0].Value = pw[i].PartName.Substring(0, 2).Replace(" ", "") + int.Parse(pw[i].PartName.Substring(2, 2)).ToString();
-                        row.Cells.Add(new DataGridViewTextBoxCell());
-                        row.Cells[1].Value = pw[i].chip.Name.ToUpper();
-                        row.Cells.Add(new DataGridViewTextBoxCell());
-                        row.Cells[2].Value = pw[i].clockCounter;
-                        dgvResult.Rows.Add(row);
+                            DataGridViewRow row = new DataGridViewRow();
+                            row.Cells.Add(new DataGridViewTextBoxCell());
+                            row.Cells[0].Value = pw[i].PartName.Substring(0, 2).Replace(" ", "") + int.Parse(pw[i].PartName.Substring(2, 2)).ToString();
+                            row.Cells.Add(new DataGridViewTextBoxCell());
+                            row.Cells[1].Value = pw[i].chip.Name.ToUpper();
+                            row.Cells.Add(new DataGridViewTextBoxCell());
+                            row.Cells[2].Value = pw[i].clockCounter;
+                            dgvResult.Rows.Add(row);
+                        }
                     }
-                }
             }
 
             foreach (string mes in msgBox.getWrn())

@@ -3537,6 +3537,11 @@ namespace mml2vgm
                 foreach (partWork p in chip.lstPartWork)
                 {
                     p.freq = -1;
+                    p.beforeLVolume = -1;
+                    p.beforeRVolume = -1;
+                    p.beforeVolume = -1;
+                    p.beforePan = -1;
+                    p.beforeTie = false;
 
                     if (p.chip is RF5C164 && rf5c164[p.isSecondary ? 1 : 0].use)
                     {
@@ -3560,6 +3565,7 @@ namespace mml2vgm
                         p.huc6280Envelope = -1;
                         p.huc6280Pan = -1;
                     }
+
                 }
             }
         }
@@ -5043,7 +5049,119 @@ namespace mml2vgm
             int n = -1;
             byte adr = 0;
             byte dat = 0;
+            byte op = 0;
             pw.incPos();
+
+            char c = pw.getChar();
+            if (c >= 'A' && c <= 'Z')
+            {
+                string toneparamName = "" + c;
+                pw.incPos();
+                toneparamName += pw.getChar();
+                pw.incPos();
+                if (toneparamName != "TL" && toneparamName != "SR")
+                {
+                    toneparamName += pw.getChar();
+                    pw.incPos();
+                    if (toneparamName != "SSG")
+                    {
+                        toneparamName += pw.getChar();
+                        pw.incPos();
+                    }
+                }
+
+                if (toneparamName == "DT1M" || toneparamName == "DT2S" || toneparamName == "PMSA")
+                {
+                    toneparamName += pw.getChar();
+                    pw.incPos();
+                    if (toneparamName == "PMSAM")
+                    {
+                        toneparamName += pw.getChar();
+                        pw.incPos();
+                    }
+                }
+
+                pw.incPos();
+
+                if (toneparamName != "FBAL" && toneparamName != "PMSAMS")
+                {
+                    if (pw.getNum(out n))
+                    {
+                        op = (byte)(checkRange(n & 0xff, 1, 4) - 1);
+                    }
+                    pw.incPos();
+                }
+
+                if (pw.getNum(out n))
+                {
+                    dat = (byte)(n & 0xff);
+                }
+
+                if (pw.Type == enmChannelType.FMOPN || pw.Type == enmChannelType.FMOPNex || (pw.chip is YM2612 && pw.ch == 5) || (pw.chip is YM2612X && pw.ch == 5))
+                {
+                    switch (toneparamName)
+                    {
+                        case "DTML":
+                            cmdY_ToneParamOPN(0x30, pw, op, dat);
+                            break;
+                        case "TL":
+                            cmdY_ToneParamOPN(0x40, pw, op, dat);
+                            break;
+                        case "KSAR":
+                            cmdY_ToneParamOPN(0x50, pw, op, dat);
+                            break;
+                        case "AMDR":
+                            cmdY_ToneParamOPN(0x60, pw, op, dat);
+                            break;
+                        case "SR":
+                            cmdY_ToneParamOPN(0x70, pw, op, dat);
+                            break;
+                        case "SLRR":
+                            cmdY_ToneParamOPN(0x80, pw, op, dat);
+                            break;
+                        case "SSG":
+                            cmdY_ToneParamOPN(0x90, pw, op, dat);
+                            break;
+                        case "FBAL":
+                            cmdY_ToneParamOPN_FBAL(pw, dat);
+                            break;
+                    }
+                }
+                else if (pw.Type == enmChannelType.FMOPM)
+                {
+                    switch (toneparamName)
+                    {
+                        case "FBAL":
+                            cmdY_ToneParamOPM_FBAL(pw, dat);
+                            break;
+                        case "PMSAMS":
+                            cmdY_ToneParamOPM_PMSAMS(pw, dat);
+                            break;
+                        case "DTML":
+                        case "DT1ML":
+                            cmdY_ToneParamOPM(0x40, pw, op, dat);
+                            break;
+                        case "TL":
+                            cmdY_ToneParamOPM(0x60, pw, op, dat);
+                            break;
+                        case "KSAR":
+                            cmdY_ToneParamOPM(0x80, pw, op, dat);
+                            break;
+                        case "AMDR":
+                            cmdY_ToneParamOPM(0xa0, pw, op, dat);
+                            break;
+                        case "DT2SR":
+                            cmdY_ToneParamOPM(0xc0, pw, op, dat);
+                            break;
+                        case "SLRR":
+                            cmdY_ToneParamOPM(0xe0, pw, op, dat);
+                            break;
+                    }
+                }
+
+                return;
+            }
+
             if (pw.getNum(out n))
             {
                 adr = (byte)(n & 0xff);
@@ -5061,7 +5179,7 @@ namespace mml2vgm
             else if (pw.chip is YM2608)
             {
                 if (pw.Type == enmChannelType.FMOPN || pw.Type == enmChannelType.FMOPNex)
-                    outFmAdrPort((pw.ch > 3 && pw.ch < 6) ? pw.port1 : pw.port0, adr, dat);
+                    outFmAdrPort((pw.ch > 2 && pw.ch < 6) ? pw.port1 : pw.port0, adr, dat);
                 else if (pw.Type == enmChannelType.SSG)
                     outFmAdrPort(pw.port0, adr, dat);
                 else if (pw.Type == enmChannelType.RHYTHM)
@@ -5072,7 +5190,7 @@ namespace mml2vgm
             else if (pw.chip is YM2610B)
             {
                 if (pw.Type == enmChannelType.FMOPN || pw.Type == enmChannelType.FMOPNex)
-                    outFmAdrPort((pw.ch > 3 && pw.ch < 6) ? pw.port1 : pw.port0, adr, dat);
+                    outFmAdrPort((pw.ch > 2 && pw.ch < 6) ? pw.port1 : pw.port0, adr, dat);
                 else if (pw.Type == enmChannelType.SSG)
                     outFmAdrPort(pw.port0, adr, dat);
                 else if (pw.Type == enmChannelType.ADPCMA)
@@ -5082,11 +5200,11 @@ namespace mml2vgm
             }
             else if (pw.chip is YM2612)
             {
-                outFmAdrPort((pw.ch > 3 && pw.ch < 6) ? pw.port1 : pw.port0, adr, dat);
+                outFmAdrPort((pw.ch > 2 && pw.ch < 6) ? pw.port1 : pw.port0, adr, dat);
             }
             else if (pw.chip is YM2612X)
             {
-                outFmAdrPort((pw.ch > 3 && pw.ch < 6) ? pw.port1 : pw.port0, adr, dat);
+                outFmAdrPort((pw.ch > 2 && pw.ch < 6) ? pw.port1 : pw.port0, adr, dat);
             }
             else if (pw.chip is SN76489)
             {
@@ -5105,6 +5223,52 @@ namespace mml2vgm
                 outHuC6280Port(pw.isSecondary, adr, dat);
             }
         }
+
+        private void cmdY_ToneParamOPN(byte adr, partWork pw, byte op, byte dat)
+        {
+            int ch = pw.Type == enmChannelType.FMOPNex ? 2 : pw.ch;
+            byte port = (ch > 2 ? pw.port1 : pw.port0);
+            int vch = ch;
+            vch = (byte)(vch > 2 ? vch - 3 : vch);
+
+            op = (byte)(op == 1 ? 2 : (op == 2 ? 1 : op));
+
+            adr += (byte)(vch + (op << 2));
+
+            outFmAdrPort(port, adr, dat);
+        }
+
+        private void cmdY_ToneParamOPN_FBAL(partWork pw, byte dat)
+        {
+            int ch = pw.Type == enmChannelType.FMOPNex ? 2 : pw.ch;
+            byte port = (ch > 2 ? pw.port1 : pw.port0);
+            int vch = ch;
+            vch = (byte)(vch > 2 ? vch - 3 : vch);
+
+            byte adr = (byte)(0xb0 + vch);
+
+            outFmAdrPort(port, adr, dat);
+        }
+
+        private void cmdY_ToneParamOPM(byte adr, partWork pw, byte op, byte dat)
+        {
+            op = (byte)(op == 1 ? 2 : (op == 2 ? 1 : op));
+
+            adr += (byte)(pw.ch + (op << 3));
+
+            outFmAdrPort(pw.port0, adr, dat);
+        }
+
+        private void cmdY_ToneParamOPM_FBAL(partWork pw, byte dat)
+        {
+            outFmAdrPort(pw.port0, (byte)(0x20 + pw.ch), (byte)((dat & 0x3f) + (pw.pan << 6)));
+        }
+
+        private void cmdY_ToneParamOPM_PMSAMS(partWork pw, byte dat)
+        {
+            outFmAdrPort(pw.port0, (byte)(0x38 + pw.ch), (byte)(dat & 0x73));
+        }
+
 
         private void cmdNoise(partWork pw)
         {
