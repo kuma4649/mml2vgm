@@ -3132,6 +3132,12 @@ namespace mml2vgm
 
             if (cmd != 'r')
             {
+                if (pw.reqFreqReset)
+                {
+                    pw.freq = -1;
+                    pw.reqFreqReset = false;
+                }
+
                 //発音周波数
                 if (pw.bendWaitCounter == -1)
                 {
@@ -3442,6 +3448,17 @@ namespace mml2vgm
 
                 }
             }
+            else
+            {
+                if (pw.reqKeyOffReset)
+                {
+                    if (pw.chip is SN76489)
+                    {
+                        outPsgKeyOff(pw);
+                        pw.reqKeyOffReset = false;
+                    }
+                }
+            }
 
             pw.clockCounter += pw.waitCounter;
         }
@@ -3536,12 +3553,17 @@ namespace mml2vgm
             {
                 foreach (partWork p in chip.lstPartWork)
                 {
-                    p.freq = -1;
+                    p.reqFreqReset = true;
                     p.beforeLVolume = -1;
                     p.beforeRVolume = -1;
                     p.beforeVolume = -1;
                     p.beforePan = -1;
                     p.beforeTie = false;
+
+                    if (p.chip is SN76489 && sn76489[p.isSecondary ? 1 : 0].use)
+                    {
+                        p.reqKeyOffReset = true;
+                    }
 
                     if (p.chip is RF5C164 && rf5c164[p.isSecondary ? 1 : 0].use)
                     {
@@ -3557,6 +3579,7 @@ namespace mml2vgm
                             setRf5c164LoopAddress(p, (int)(instPCM[n].loopAdr));
                         }
                     }
+
                     if (p.chip is HuC6280 && huc6280[p.isSecondary ? 1 : 0].use)
                     {
                         huc6280[p.isSecondary ? 1 : 0].CurrentChannel = 255;
@@ -8308,7 +8331,8 @@ namespace mml2vgm
             int val = 15;
 
             byte data = (byte)(0x80 + (pch << 5) + 0x10 + (val & 0xf));
-            outPsgPort((pw.ch - 9 * 2) > 3, data);
+            //outPsgPort((pw.ch - 9 * 2) > 3, data); //bug? 2017/06/17
+            outPsgPort(pw.isSecondary, data);
 
         }
 

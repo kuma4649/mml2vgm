@@ -346,6 +346,9 @@ namespace mml2vgm
         public int hardLfoPMD = 0;
         public int hardLfoAMD = 0;
 
+        public bool reqFreqReset = false;
+        public bool reqKeyOffReset = false;
+
         /// <summary>
         /// パート情報をリセットする
         /// </summary>
