@@ -2752,6 +2752,7 @@ namespace mml2vgm
             int ml = 0;
             int n = -1;
             bool isMinus = false;
+            bool isTieType2 = false;
             bool isSecond = false;
             do
             {
@@ -2764,8 +2765,15 @@ namespace mml2vgm
                         n = (int)pw.length;
                     else if (!isMinus)
                     {
-                        //タイとして'&'が使用されている
-                        pw.tie = true;
+                        if (!isTieType2)
+                        {
+                            //タイとして'&'が使用されている
+                            pw.tie = true;
+                        }
+                        else
+                        {
+                            n = (int)pw.length;
+                        }
                     }
                 }
                 else
@@ -2811,7 +2819,7 @@ namespace mml2vgm
                     return;
                 }
 
-                if (!pw.tie)
+                if (!pw.tie || isTieType2)
                 {
                     m += n;
 
@@ -2831,6 +2839,8 @@ namespace mml2vgm
                     if (isMinus) ml -= m;
                     else ml += m;
                 }
+
+                isTieType2 = false;
 
                 //ベンドの解析
                 int bendDelayCounter = 0;
@@ -2868,6 +2878,7 @@ namespace mml2vgm
                                 bendDelayCounter = 0;
                                 n = -1;
                                 isMinus = false;
+                                isTieType2 = false;
                                 isSecond = false;
                                 do
                                 {
@@ -2883,8 +2894,15 @@ namespace mml2vgm
                                         }
                                         else if (!isMinus)
                                         {
-                                            //タイとして'&'が使用されている
-                                            pw.tie = true;
+                                            if (!isTieType2)
+                                            {
+                                                //タイとして'&'が使用されている
+                                                pw.tie = true;
+                                            }
+                                            else
+                                            {
+                                                n = (int)pw.length;
+                                            }
                                             break;
                                         }
                                     }
@@ -2897,7 +2915,7 @@ namespace mml2vgm
                                         n = (int)clockCount / n;
                                     }
 
-                                    if (!pw.tie)
+                                    if (!pw.tie || isTieType2)
                                     {
                                         bendDelayCounter += n;
 
@@ -2918,9 +2936,17 @@ namespace mml2vgm
                                         else bendDelayCounter += m;
                                     }
 
+                                    isTieType2 = false;
+
                                     if (pw.getChar() == '&')
                                     {
                                         isMinus = false;
+                                        isTieType2 = false;
+                                    }
+                                    else if (pw.getChar() == '^')
+                                    {
+                                        isMinus = false;
+                                        isTieType2 = true;
                                     }
                                     else if (pw.getChar() == '~')
                                     {
@@ -3102,6 +3128,12 @@ namespace mml2vgm
                 if (pw.getChar() == '&')
                 {
                     isMinus = false;
+                    isTieType2 = false;
+                }
+                else if (pw.getChar() == '^')
+                {
+                    isMinus = false;
+                    isTieType2 = true;
                 }
                 else if (pw.getChar() == '~')
                 {
