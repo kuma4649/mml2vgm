@@ -15,7 +15,7 @@
 	Format       =XGM
 	XGMBaseFrame =NTSC
 	ClockCount   =128
-
+	Octave-Rev   =TRUE
 }
 
 (frame/clock) = 60Hz * (60 * 4) / ClockCount / tempo
@@ -84,4 +84,5 @@ E10 m1@1r4c4r4c4
 E11 @2c8c8c8c8c8c8
 E12 @3r8c8r8c8r8c8
 
-'E03 @0l4c^8.
+E03 @0l4c^^
+'E01 @110cdefgab>c

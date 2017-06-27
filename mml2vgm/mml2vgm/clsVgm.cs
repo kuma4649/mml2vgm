@@ -98,6 +98,7 @@ namespace mml2vgm
         private const string SECONDARY = "SECONDARY";
         private const string FORMAT = "FORMAT";
         private const string XGMBASEFRAME = "XGMBASEFRAME";
+        private const string OCTAVEREV = "OCTAVE-REV";
         readonly private string[] IDName = new string[] { PRIMARY, SECONDARY };
 
         //header
@@ -472,6 +473,7 @@ namespace mml2vgm
                     if (wrd == FORCEDMONOPARTYM2612) setMonoPart(val);
                     if (wrd == FORMAT) setFormat(val);
                     if (wrd == XGMBASEFRAME) setXgmBaseFrame(val);
+                    if (wrd == OCTAVEREV) setOctaveRev(val);
 
                     for (int i = 0; i < 8; i++)
                     {
@@ -547,6 +549,26 @@ namespace mml2vgm
                     break;
                 case "PAL":
                     xgmSamplesPerSecond = 50;
+                    break;
+            }
+        }
+
+        private void setOctaveRev(string val)
+        {
+            switch (val.ToUpper())
+            {
+                case "TRUE":
+                case "1":
+                case "YES":
+                case "Y":
+                    octaveRev = true;
+                    break;
+                case "FALSE":
+                case "0":
+                case "NO":
+                case "N":
+                default:
+                    octaveRev = false;
                     break;
             }
         }
@@ -1273,6 +1295,7 @@ namespace mml2vgm
         private const long xgmDefaultClockCount = 120L;
         private const long xgmDefaultSamplesPerClock = 60 * 60 * 4 / (defaultTempo * xgmDefaultClockCount);
 
+        public bool octaveRev = false;
         private long tempo = defaultTempo;
         private long clockCount = defaultClockCount;
         private double samplesPerClock = defaultSamplesPerClock;
@@ -2986,12 +3009,12 @@ namespace mml2vgm
                                 break;
                             case '>':
                                 pw.incPos();
-                                pw.bendOctave++;
+                                pw.bendOctave += octaveRev ? -1 : 1;
                                 pw.bendOctave = checkRange(pw.bendOctave, 1, 8);
                                 break;
                             case '<':
                                 pw.incPos();
-                                pw.bendOctave--;
+                                pw.bendOctave += octaveRev ? 1 : -1;
                                 pw.bendOctave = checkRange(pw.bendOctave, 1, 8);
                                 break;
                             default:
@@ -4185,14 +4208,14 @@ namespace mml2vgm
         private void cmdOctaveDown(partWork pw)
         {
             pw.incPos();
-            pw.octaveNew--;
+            pw.octaveNew += octaveRev ? 1 : -1;
             pw.octaveNew = checkRange(pw.octaveNew, 1, 8);
         }
 
         private void cmdOctaveUp(partWork pw)
         {
             pw.incPos();
-            pw.octaveNew++;
+            pw.octaveNew += octaveRev ? -1 : 1;
             pw.octaveNew = checkRange(pw.octaveNew, 1, 8);
         }
 
