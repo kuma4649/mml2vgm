@@ -10,36 +10,6 @@ namespace mml2vgm
     {
         public float Version = 1.61f;
 
-        public int[] OPN_FNumTbl_7670454 = new int[] {
-            //   c    c+     d    d+     e     f    f+     g    g+     a    a+     b    >c
-             0x289,0x2af,0x2d8,0x303,0x331,0x362,0x395,0x3cc,0x405,0x443,0x484,0x4c8,0x289*2
-        };
-
-        public int[] dcsgFNumTbl = new int[] {
-            //   c    c+     d    d+     e     f    f+     g    g+     a    a+     b
-             0x6ae,0x64e,0x5f4,0x59e,0x54e,0x502,0x4ba,0x476,0x436,0x3f8,0x3c0,0x38a//1 0x3ff over note is silent 
-            ,0x357,0x327,0x2fa,0x2cf,0x2a7,0x281,0x25d,0x23b,0x21b,0x1fc,0x1e0,0x1c5//2
-            ,0x1ac,0x194,0x17d,0x168,0x153,0x140,0x12e,0x11d,0x10d,0x0fe,0x0f0,0x0e3//3
-            ,0x0d6,0x0ca,0x0be,0x0b4,0x0aa,0x0a0,0x097,0x08f,0x087,0x07f,0x078,0x071//4
-            ,0x06b,0x065,0x05f,0x05a,0x055,0x050,0x04c,0x047,0x043,0x040,0x03c,0x039//5
-            ,0x035,0x032,0x030,0x02d,0x02a,0x028,0x026,0x024,0x022,0x020,0x01e,0x01c//6
-            ,0x01b,0x019,0x018,0x016,0x015,0x014,0x013,0x012,0x011,0x010,0x00f,0x00e//7
-            ,0x00d,0x00d,0x00c,0x00b,0x00b,0x00a,0x009,0x008,0x007,0x006,0x005,0x004//8
-        };
-
-        // TP = M / (ftone * 64)
-        public int[] ssgFNumTbl_8000000 = new int[] {
-            //   c    c+     d    d+     e     f    f+     g    g+     a    a+     b
-             0xEEE,0xE18,0xD4D,0xC8E,0xBDA,0xB30,0xA8F,0x9F7,0x968,0x8E1,0x861,0x7E9
-            ,0x777,0x70C,0x6A7,0x647,0x5ED,0x598,0x547,0x4FC,0x4B4,0x470,0x431,0x3F4
-            ,0x3BC,0x386,0x353,0x324,0x2F6,0x2CC,0x2A4,0x27E,0x25A,0x238,0x218,0x1FA
-            ,0x1DE,0x1C3,0x1AA,0x192,0x17B,0x166,0x152,0x13F,0x12D,0x11C,0x10C,0x0FD
-            ,0x0EF,0x0E1,0x0D5,0x0C9,0x0BE,0x0B3,0x0A9,0x09F,0x096,0x08E,0x086,0x07F
-            ,0x077,0x071,0x06A,0x064,0x05F,0x059,0x054,0x050,0x04B,0x047,0x043,0x03F
-            ,0x03C,0x038,0x035,0x032,0x02F,0x02D,0x02A,0x028,0x026,0x024,0x022,0x020
-            ,0x01E,0x01C,0x01B,0x019,0x018,0x016,0x015,0x014,0x013,0x012,0x011,0x010
-        };
-
         /*
         C   ド	    261.62
         C#	ド#	    277.18 1.05947557526183
@@ -495,9 +465,11 @@ namespace mml2vgm
             string[] s = val.Split(new string[] { ",", " ", "\t" }, StringSplitOptions.RemoveEmptyEntries);
             for (int i = 0; i < s.Length; i++)
             {
-                OPN_FNumTbl_7670454[i] = int.Parse(s[i], System.Globalization.NumberStyles.HexNumber);
+                ym2612[0].FNumTbl[0][i] = int.Parse(s[i], System.Globalization.NumberStyles.HexNumber);
+                ym2612x[0].FNumTbl[0][i] = int.Parse(s[i], System.Globalization.NumberStyles.HexNumber);
             }
-            OPN_FNumTbl_7670454[12] = OPN_FNumTbl_7670454[0] * 2;
+            ym2612[0].FNumTbl[0][12] = ym2612[0].FNumTbl[0][0] * 2;
+            ym2612x[0].FNumTbl[0][12] = ym2612x[0].FNumTbl[0][0] * 2;
         }
 
         private void setDcsgF_NumTbl(string val, int oct)
@@ -507,11 +479,11 @@ namespace mml2vgm
             string[] s = val.Split(new string[] { ",", " ", "\t" }, StringSplitOptions.RemoveEmptyEntries);
             for (int i = 0; i < s.Length; i++)
             {
-                if (i + oct * 12 >= dcsgFNumTbl.Length)
+                if (i + oct * 12 >= sn76489[0].FNumTbl[0].Length)
                 {
                     break;
                 }
-                dcsgFNumTbl[i + oct * 12] = int.Parse(s[i], System.Globalization.NumberStyles.HexNumber);
+                sn76489[0].FNumTbl[0][i + oct * 12] = int.Parse(s[i], System.Globalization.NumberStyles.HexNumber);
             }
         }
 
@@ -1398,6 +1370,11 @@ namespace mml2vgm
                         ym2610bMultiChannelCommand(y);
                     }
 
+                    //PCMをストリームの機能を使用し再生するため、1Frame毎にカレントチャンネル情報が破壊される。よって次のフレームでリセットできるようにする。
+                    if (chip is HuC6280 && chip.use)
+                    {
+                        ((HuC6280)chip).CurrentChannel = 255;
+                    }
                 }
 
 
@@ -1532,6 +1509,7 @@ namespace mml2vgm
                     {
                         outWaitNSamplesWithPCMSending(ym2612[0].lstPartWork[5], cnt);
                     }
+
                 }
 
                 endChannel = 0;
@@ -2076,7 +2054,7 @@ namespace mml2vgm
             {
                 if (pw.waitKeyOnCounter > 0 || pw.envIndex != -1)
                 {
-                    setPsgFNum(pw);
+                    setDcsgFNum(pw);
                     setPsgVolume(pw);
                 }
             }
@@ -3048,8 +3026,8 @@ namespace mml2vgm
                         {
                             bf += wait;
                             tl += wait;
-                            int a = getPsgFNum(pw.octaveNow, cmd, shift + (i + 0) * Math.Sign(delta));//
-                            int b = getPsgFNum(pw.octaveNow, cmd, shift + (i + 1) * Math.Sign(delta));//
+                            int a = getDcsgFNum(pw.octaveNow, cmd, shift + (i + 0) * Math.Sign(delta));//
+                            int b = getDcsgFNum(pw.octaveNow, cmd, shift + (i + 1) * Math.Sign(delta));//
                             if (pw.chip is YM2151)
                             {
                                 a = getOPMFNum(pw.octaveNow, cmd, shift + (i + 0) * Math.Sign(delta) + toneDoublerShift);//
@@ -3062,7 +3040,8 @@ namespace mml2vgm
                                 || (pw.chip is YM2612X)
                                 )
                             {
-                                int[] ftbl = ((pw.chip is YM2612) || (pw.chip is YM2612X)) ? OPN_FNumTbl_7670454 : pw.chip.OPN_FNumTbl;
+                                //int[] ftbl = ((pw.chip is YM2612) || (pw.chip is YM2612X)) ? OPN_FNumTbl_7670454 : pw.chip.FNumTbl[0];
+                                int[] ftbl = pw.chip.FNumTbl[0];
 
                                 a = getFmFNum(ftbl, pw.octaveNow, cmd, shift + (i + 0) * Math.Sign(delta) + toneDoublerShift);//
                                 b = getFmFNum(ftbl, pw.octaveNow, cmd, shift + (i + 1) * Math.Sign(delta) + toneDoublerShift);//
@@ -3087,13 +3066,13 @@ namespace mml2vgm
                                 || (pw.chip is YM2610B && pw.Type == enmChannelType.SSG)
                                 )
                             {
-                                a = getSsgFNum(pw.octaveNow, cmd, shift + (i + 0) * Math.Sign(delta));//
-                                b = getSsgFNum(pw.octaveNow, cmd, shift + (i + 1) * Math.Sign(delta));//
+                                a = getSsgFNum(pw, pw.octaveNow, cmd, shift + (i + 0) * Math.Sign(delta));//
+                                b = getSsgFNum(pw, pw.octaveNow, cmd, shift + (i + 1) * Math.Sign(delta));//
                             }
                             else if (pw.chip is SN76489)
                             {
-                                a = getPsgFNum(pw.octaveNow, cmd, shift + (i + 0) * Math.Sign(delta));//
-                                b = getPsgFNum(pw.octaveNow, cmd, shift + (i + 1) * Math.Sign(delta));//
+                                a = getDcsgFNum(pw.octaveNow, cmd, shift + (i + 0) * Math.Sign(delta));//
+                                b = getDcsgFNum(pw.octaveNow, cmd, shift + (i + 1) * Math.Sign(delta));//
                             }
                             else if (pw.chip is RF5C164)
                             {
@@ -3418,7 +3397,7 @@ namespace mml2vgm
 
                     // SN76489
 
-                    setPsgFNum(pw);
+                    setDcsgFNum(pw);
 
                     //タイ指定では無い場合はキーオンする
                     if (!pw.beforeTie)
@@ -6234,7 +6213,7 @@ namespace mml2vgm
                     }
                     else if (pw.chip is SN76489)
                     {
-                        setPsgFNum(pw);
+                        setDcsgFNum(pw);
                     }
                 }
                 if (pl.type == eLfoType.Tremolo)
@@ -6482,7 +6461,8 @@ namespace mml2vgm
 
         private void setFmFNum(partWork pw)
         {
-            int[] ftbl = ((pw.chip is YM2612) || (pw.chip is YM2612X)) ? OPN_FNumTbl_7670454 : pw.chip.OPN_FNumTbl;
+            //int[] ftbl = ((pw.chip is YM2612) || (pw.chip is YM2612X)) ? OPN_FNumTbl_7670454 : pw.chip.FNumTbl[0];
+            int[] ftbl = pw.chip.FNumTbl[0];
 
             int f = getFmFNum(ftbl, pw.octaveNow, pw.noteCmd, pw.shift + pw.keyShift + pw.toneDoublerKeyShift);//
             if (pw.bendWaitCounter != -1)
@@ -6703,7 +6683,7 @@ namespace mml2vgm
 
         private void setSsgFNum(partWork pw)
         {
-            int f = getSsgFNum(pw.octaveNow, pw.noteCmd, pw.shift + pw.keyShift);//
+            int f = getSsgFNum(pw,pw.octaveNow, pw.noteCmd, pw.shift + pw.keyShift);//
             if (pw.bendWaitCounter != -1)
             {
                 f = pw.bendFnum;
@@ -6738,7 +6718,7 @@ namespace mml2vgm
             outFmAdrPort(pw.port0, (byte)(1 + (pw.ch - n) * 2), data);
         }
 
-        private int getSsgFNum(int octave, char noteCmd, int shift)
+        private int getSsgFNum(partWork pw,int octave, char noteCmd, int shift)
         {
             int o = octave - 1;
             int n = note.IndexOf(noteCmd) + shift;
@@ -6748,9 +6728,9 @@ namespace mml2vgm
 
             int f = o * 12 + n;
             if (f < 0) f = 0;
-            if (f >= ssgFNumTbl_8000000.Length) f = ssgFNumTbl_8000000.Length - 1;
+            if (f >= pw.chip.FNumTbl[1].Length) f = pw.chip.FNumTbl[1].Length - 1;
 
-            return ssgFNumTbl_8000000[f];
+            return pw.chip.FNumTbl[1][f];
         }
 
 
@@ -6846,11 +6826,11 @@ namespace mml2vgm
         }
 
 
-        private void setPsgFNum(partWork pw)
+        private void setDcsgFNum(partWork pw)
         {
             if (pw.Type != enmChannelType.DCSGNOISE)
             {
-                int f = getPsgFNum(pw.octaveNow, pw.noteCmd, pw.shift + pw.keyShift);//
+                int f = getDcsgFNum(pw.octaveNow, pw.noteCmd, pw.shift + pw.keyShift);//
                 if (pw.bendWaitCounter != -1)
                 {
                     f = pw.bendFnum;
@@ -6891,7 +6871,7 @@ namespace mml2vgm
 
         }
 
-        private int getPsgFNum(int octave, char noteCmd, int shift)
+        private int getDcsgFNum(int octave, char noteCmd, int shift)
         {
             int o = octave - 1;
             int n = note.IndexOf(noteCmd) + shift;
@@ -6901,9 +6881,9 @@ namespace mml2vgm
 
             int f = o * 12 + n;
             if (f < 0) f = 0;
-            if (f >= dcsgFNumTbl.Length) f = dcsgFNumTbl.Length - 1;
+            if (f >=sn76489[0].FNumTbl[0].Length) f = sn76489[0].FNumTbl[0].Length - 1;
 
-            return dcsgFNumTbl[f];
+            return sn76489[0].FNumTbl[0][f];
         }
 
         private void setSegaPcmFNum(partWork pw)
@@ -8490,8 +8470,10 @@ namespace mml2vgm
             if (pw.freq == f) return;
 
             setHuC6280CurrentChannel(pw);
-            if ((pw.freq & 0x0ff) != (f & 0x0ff)) outHuC6280Port(pw.isSecondary, 2, (byte)(f & 0xff));
-            if ((pw.freq & 0xf00) != (f & 0xf00)) outHuC6280Port(pw.isSecondary, 3, (byte)((f & 0xf00) >> 8));
+            //if ((pw.freq & 0x0ff) != (f & 0x0ff)) outHuC6280Port(pw.isSecondary, 2, (byte)(f & 0xff));
+            //if ((pw.freq & 0xf00) != (f & 0xf00)) outHuC6280Port(pw.isSecondary, 3, (byte)((f & 0xf00) >> 8));
+            outHuC6280Port(pw.isSecondary, 2, (byte)(f & 0xff));
+            outHuC6280Port(pw.isSecondary, 3, (byte)((f & 0xf00) >> 8));
 
             pw.freq = f;
 
