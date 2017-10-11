@@ -9,10 +9,7 @@ namespace mml2vgm
     public class YM2612X : clsChip
     {
         protected int[][] _FNumTbl = new int[1][] {
-            new int[] {
-            //   c    c+     d    d+     e     f    f+     g    g+     a    a+     b    >c
-             0x289,0x2af,0x2d8,0x303,0x331,0x362,0x395,0x3cc,0x405,0x443,0x484,0x4c8,0x289*2
-            }
+            new int[13]
         };
 
         public byte[] pcmData = null;
@@ -27,6 +24,19 @@ namespace mml2vgm
             FNumTbl = _FNumTbl;
 
             Frequency = 7670454;
+
+            Dictionary<string, List<double>> dic = makeFNumTbl();
+            if (dic != null)
+            {
+                int c = 0;
+                foreach (double v in dic["FNUM_00"])
+                {
+                    FNumTbl[0][c++] = (int)v;
+                    if (c == FNumTbl[0].Length) break;
+                }
+                FNumTbl[0][FNumTbl[0].Length - 1] = FNumTbl[0][0] * 2;
+            }
+
             Ch = new clsChannel[ChMax];
             setPartToCh(Ch, initialPartName);
             foreach (clsChannel ch in Ch)

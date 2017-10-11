@@ -140,6 +140,12 @@
     <None Include="sample\test__.vgm" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Resources\FNUM_YM2612.txt" />
+    <EmbeddedResource Include="Resources\FNUM_YM2612X.txt" />
+    <EmbeddedResource Include="Resources\FNUM_SN76489.txt" />
+    <EmbeddedResource Include="Resources\FNUM_YM2610B.txt" />
+    <EmbeddedResource Include="Resources\FNUM_YM2608.txt" />
+    <EmbeddedResource Include="Resources\FNUM_YM2203.txt" />
     <Content Include="res\icon1.png" />
     <Content Include="res\icon2.png" />
     <Content Include="res\icon3.png" />

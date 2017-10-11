@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace mml2vgm
@@ -82,16 +83,90 @@ namespace mml2vgm
         public clsChip(int chipID, string initialPartName)
         {
             this._ChipID = chipID;
-            //makeFNumTbl();
+            makeFNumTbl();
         }
 
-        protected void makeFNumTbl()
+        protected Dictionary<string, List<double>> makeFNumTbl()
         {
             //for (int i = 0; i < noteTbl.Length; i++)
             //{
             //    FNumTbl[0][i] = (int)(Math.Round(((144.0 * noteTbl[i] * Math.Pow(2.0, 20) / Frequency) / Math.Pow(2.0, (4 - 1))), MidpointRounding.AwayFromZero));
             //}
             //FNumTbl[0][12] = FNumTbl[0][0] * 2;
+
+            string fn = string.Format("FNUM_{0}.txt",Name);
+            Stream stream = null;
+            Dictionary<string, List<double>> dic = new Dictionary<string, List<double>>();
+
+            if (File.Exists(Path.Combine(System.Windows.Forms.Application.StartupPath, fn)))
+            {
+                stream = new FileStream(fn, FileMode.Open, FileAccess.Read, FileShare.Read);
+            }
+            else
+            {
+                System.Reflection.Assembly asm = System.Reflection.Assembly.GetExecutingAssembly();
+                string[] resources = asm.GetManifestResourceNames();
+                foreach (string resource in resources)
+                {
+                    if (resource.IndexOf(fn) >= 0)
+                    {
+                        fn = resource;
+                    }
+                }
+                stream = asm.GetManifestResourceStream(fn);
+            }
+
+            try
+            {
+                if (stream != null)
+                {
+                    using (System.IO.StreamReader sr = new System.IO.StreamReader(stream, Encoding.Unicode))
+                    {
+                        while (!sr.EndOfStream)
+                        {
+                            //内容を読み込む
+                            string[] s = sr.ReadLine().Split(new string[] { "=" }, StringSplitOptions.None);
+                            if (s == null || s.Length != 2) continue;
+                            if (s[0].Trim() == "" || s[0].Trim().Length < 1 || s[0].Trim()[0] == '\'') continue;
+                            string[] val = s[1].Split(new string[] { "," }, StringSplitOptions.None);
+                            s[0] = s[0].ToUpper().Trim();
+
+                            if (!dic.ContainsKey(s[0]))
+                            {
+                                List<double> value = new List<double>();
+                                dic.Add(s[0], value);
+                            }
+
+                            foreach (string v in val)
+                            {
+                                string vv = v.Trim();
+
+                                if (vv[0] == '$' && vv.Length > 1)
+                                {
+                                    int num16 = Convert.ToInt32(vv.Substring(1), 16);
+                                    dic[s[0]].Add(num16);
+                                }
+                                else
+                                {
+                                    double o;
+                                    if (double.TryParse(vv, out o))
+                                    {
+                                        dic[s[0]].Add(o);
+                                    }
+                                }
+                            }
+
+                        }
+                    }
+                }
+            }
+            catch
+            {
+                if(stream!=null) stream.Dispose();
+                dic = null;
+            }
+
+            return dic;
         }
 
         public bool ChannelNameContains(string name)
