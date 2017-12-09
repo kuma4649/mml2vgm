@@ -1,6 +1,6 @@
 ﻿'OPN(FM) : TP = (144 * ftone * (2^20) / M) / (2^(B-1))       32:Divider
 '       c    c+   d    d+   e    f    f+   g    g+   a    a+   b
-FNUM_00=$289,$2af,$2d8,$303,$331,$362,$395,$3cc,$405,$443,$484,$4c8
+FNUM_00=$264,$289,$2af,$2d8,$303,$331,$362,$395,$3cc,$405,$443,$484
 
 'OPN(SSG) : TP = M / (ftone * 32 )       32:Divider 
 '       c    c+   d    d+   e    f    f+   g    g+   a    a+   b

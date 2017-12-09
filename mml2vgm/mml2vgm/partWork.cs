@@ -682,6 +682,26 @@ namespace mml2vgm
             return true;
         }
 
+        public bool getNumNoteLength(out int num, out bool flg) {
+
+            flg = false;
+
+            //タブと空白は読み飛ばす
+            while (getChar() == ' ' || getChar() == '\t')
+            {
+                incPos();
+            }
+
+            //クロック直接指定
+            if (getChar() == '#')
+            {
+                flg = true;
+                incPos();
+            }
+
+            return getNum(out num);
+        }
+
         /// <summary>
         /// エイリアス名を取得する
         /// </summary>

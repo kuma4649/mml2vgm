@@ -2732,7 +2732,7 @@ namespace mml2vgm
                     pw.incPos();
                     break;
             }
-        }
+        } 
 
         private void cmdNote(partWork pw, char cmd)
         {
@@ -2752,6 +2752,7 @@ namespace mml2vgm
 
             int ml = 0;
             int n = -1;
+            bool directFlg = false;
             bool isMinus = false;
             bool isTieType2 = false;
             bool isSecond = false;
@@ -2760,7 +2761,8 @@ namespace mml2vgm
                 int m = 0;
 
                 //数値の解析
-                if (!pw.getNum(out n))
+                //if (!pw.getNum(out n))
+                if (!pw.getNumNoteLength(out n, out directFlg))
                 {
                     if (!isSecond)
                         n = (int)pw.length;
@@ -2795,11 +2797,18 @@ namespace mml2vgm
                         return;
                     }
 
-                    if ((int)clockCount % n != 0)
+                    if (!directFlg)
                     {
-                        msgBox.setWrnMsg(string.Format("割り切れない音長({0})の指定があります。音長は不定になります。", n), pw.getSrcFn(), pw.getLineNumber());
+                        if ((int)clockCount % n != 0)
+                        {
+                            msgBox.setWrnMsg(string.Format("割り切れない音長({0})の指定があります。音長は不定になります。", n), pw.getSrcFn(), pw.getLineNumber());
+                        }
+                        n = (int)clockCount / n;
                     }
-                    n = (int)clockCount / n;
+                    else
+                    {
+                        n = checkRange(n, 1, 65535);
+                    }
                 }
 
                 //Tone Doubler
@@ -2886,7 +2895,8 @@ namespace mml2vgm
                                     m = 0;
 
                                     //数値の解析
-                                    if (!pw.getNum(out n))
+                                    //if (!pw.getNum(out n))
+                                    if (!pw.getNumNoteLength(out n, out directFlg))
                                     {
                                         if (!isSecond)
                                         {
@@ -2909,11 +2919,18 @@ namespace mml2vgm
                                     }
                                     else
                                     {
-                                        if ((int)clockCount % n != 0)
+                                        if (!directFlg)
                                         {
-                                            msgBox.setWrnMsg(string.Format("割り切れない音長({0})の指定があります。音長は不定になります。", n), pw.getSrcFn(), pw.getLineNumber());
+                                            if ((int)clockCount % n != 0)
+                                            {
+                                                msgBox.setWrnMsg(string.Format("割り切れない音長({0})の指定があります。音長は不定になります。", n), pw.getSrcFn(), pw.getLineNumber());
+                                            }
+                                            n = (int)clockCount / n;
                                         }
-                                        n = (int)clockCount / n;
+                                        else
+                                        {
+                                            n = checkRange(n, 1, 65535);
+                                        }
                                     }
 
                                     if (!pw.tie || isTieType2)
@@ -4131,14 +4148,23 @@ namespace mml2vgm
         private void cmdLength(partWork pw)
         {
             int n;
+            bool flg;
             pw.incPos();
-            if (!pw.getNum(out n))
+            if (!pw.getNumNoteLength(out n,out flg))
             {
                 msgBox.setErrMsg("不正な音長が指定されています。", pw.getSrcFn(), pw.getLineNumber());
                 n = 10;
             }
-            n = checkRange(n, 1, 128);
-            pw.length = clockCount / n;
+            if (!flg)
+            {
+                n = checkRange(n, 1, 128);
+                pw.length = clockCount / n;
+            }
+            else
+            {
+                n = checkRange(n, 1, 65535);
+                pw.length = n;
+            }
         }
 
         private void cmdClockLength(partWork pw)
@@ -5704,6 +5730,7 @@ namespace mml2vgm
                     outFmAdrPort(ym2608[i].lstPartWork[0].port1, 0x10, 0x80);
                     outFmAdrPort(ym2608[i].lstPartWork[0].port1, 0x00, 0x80);
                     outFmAdrPort(ym2608[i].lstPartWork[0].port1, 0x01, 0xc0);
+                    outFmAdrPort(ym2608[i].lstPartWork[0].port1, 0x00, 0x01);
 
                     foreach (partWork pw in ym2608[i].lstPartWork)
                     {
