@@ -349,6 +349,9 @@ namespace mml2vgm
         public bool reqFreqReset = false;
         public bool reqKeyOffReset = false;
 
+        public bool renpuFlg = false;
+        public List<int> lstRenpuLength = null;
+
         /// <summary>
         /// パート情報をリセットする
         /// </summary>

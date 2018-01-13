@@ -2696,6 +2696,12 @@ namespace mml2vgm
                 case ']': // repeat
                     cmdRepeatEnd(pw);
                     break;
+                case '{': // renpu
+                    cmdRenpuStart(pw);
+                    break;
+                case '}': // renpu
+                    cmdRenpuEnd(pw);
+                    break;
                 case '/': // repeat
                     cmdRepeatExit(pw);
                     break;
@@ -2740,11 +2746,8 @@ namespace mml2vgm
 
             //+ -の解析
             int shift = 0;
-            while (pw.getChar() == '+' || pw.getChar() == '-')
-            {
-                shift += pw.getChar() == '+' ? 1 : -1;
-                pw.incPos();
-            }
+            shift = anaSharp(pw, ref shift);
+
             if (cmd == 'r' && shift != 0)
             {
                 msgBox.setWrnMsg("休符での+、-の指定は無視されます。", pw.getSrcFn(), pw.getLineNumber());
@@ -2879,11 +2882,7 @@ namespace mml2vgm
                                 pw.incPos();
                                 //+ -の解析
                                 bendShift = 0;
-                                while (pw.getChar() == '+' || pw.getChar() == '-')
-                                {
-                                    bendShift += pw.getChar() == '+' ? 1 : -1;
-                                    pw.incPos();
-                                }
+                                bendShift = anaSharp(pw, ref bendShift);
                                 pw.bendShift = bendShift;
                                 bendDelayCounter = 0;
                                 n = -1;
@@ -3175,7 +3174,18 @@ namespace mml2vgm
             }
 
 
+            if (pw.renpuFlg)
+            {
+                if (pw.lstRenpuLength!=null && pw.lstRenpuLength.Count > 0)
+                {
+                    ml = pw.lstRenpuLength[0];
+                    pw.lstRenpuLength.RemoveAt(0);
+                }
+            }
+
+
             //装飾の解析完了
+
 
 
             //WaitClockの決定
@@ -3514,6 +3524,17 @@ namespace mml2vgm
             pw.clockCounter += pw.waitCounter;
         }
 
+        private static int anaSharp(partWork pw, ref int shift)
+        {
+            while (pw.getChar() == '+' || pw.getChar() == '-')
+            {
+                shift += pw.getChar() == '+' ? 1 : -1;
+                pw.incPos();
+            }
+
+            return shift;
+        }
+
         private void cmdRepeatExit(partWork pw)
         {
             int n = -1;
@@ -3587,6 +3608,367 @@ namespace mml2vgm
             rs.pos = pw.getPos();
             rs.repeatCount = -1;//初期値
             pw.stackRepeat.Push(rs);
+        }
+
+
+        private void cmdRenpuStart(partWork pw)
+        {
+            if (!pw.renpuFlg)
+            {
+                //MML解析
+                List<Tuple<int, string>> lstRenpu = new List<Tuple<int, string>>();
+                List<int> lstRenpuLength = new List<int>();
+                int nest = 0;
+                int pos = 0;
+                pw.incPos();
+                pos = pw.getPos();
+                decStep1Renpu(pw, lstRenpu, nest);
+                if (lstRenpu.Count < 1)
+                {
+                    msgBox.setErrMsg(
+                        "連符コマンドの解析に失敗しました。動作は不定となります。"
+                        , pw.getSrcFn(), pw.getLineNumber());
+                    return;
+                }
+                decStep2Renpu(lstRenpu, lstRenpuLength, 1, 0);
+
+                pw.setPos(pos);
+                pw.renpuFlg = true;
+                pw.lstRenpuLength = lstRenpuLength;
+            }
+            else
+            {
+                pw.incPos();
+            }
+        }
+
+        private void cmdRenpuEnd(partWork pw)
+        {
+            if(pw.renpuFlg && pw.lstRenpuLength.Count == 0)
+            {
+                pw.renpuFlg = false;
+                pw.lstRenpuLength = null;
+            }
+            pw.incPos();
+
+            //数値指定のスキップ
+            int n;
+            bool directFlg;
+            pw.getNumNoteLength(out n, out directFlg);
+
+        }
+
+        private bool skipCommander(partWork pw,char ch)
+        {
+            int n;
+
+            //true カウント
+            //false 無視
+            switch (ch)
+            {
+                case ' ':
+                case '\t':
+                case '!': // CompileSkip
+                case '>': // octave Up
+                case '<': // octave Down
+                case 'L': // loop point
+                    pw.incPos();
+                    break;
+                case 'T': // tempo
+                case 'v': // volume
+                case 'o': // octave
+                case ')': // volume Up
+                case '(': // volume Down
+                case 'l': // length
+                case '#': // length(clock)
+                case 'D': // Detune
+                case 'q': // gatetime
+                case 'Q': // gatetime
+                case 'K': // key shift
+                    pw.incPos();
+                    pw.getNum(out n);
+                    break;
+                //case '@': // instrument
+                //case 'V': // totalVolume(Adpcm-A / Rhythm)
+                //case 'p': // pan
+                //case 'm': // pcm mode
+                //case 'E': // envelope
+                //case '[': // repeat
+                //case ']': // repeat
+                //case '/': // repeat
+                //case 'M': // lfo
+                //case 'S': // lfo switch
+                //case 'y': // y
+                //case 'w': // noise
+                //case 'P': // noise or tone mixer
+                case 'c':
+                case 'd':
+                case 'e':
+                case 'f':
+                case 'g':
+                case 'a':
+                case 'b':
+                case 'r':
+                    skipCmdNote(pw, ch);
+                    return true;
+                default:
+                    msgBox.setErrMsg(
+                        string.Format("連符コマンドの中で未対応のコマンド({0})が使用されています。動作は不定となります。", ch)
+                        , pw.getSrcFn(), pw.getLineNumber());
+                    pw.incPos();
+                    break;
+            }
+
+            return false;
+        }
+
+        private void skipCmdNote(partWork pw, char cmd)
+        {
+            pw.incPos();
+
+            //+ -の解析
+            int shift = 0;
+            shift = anaSharp(pw, ref shift);
+
+            int n = -1;
+            bool directFlg = false;
+            bool isMinus = false;
+            bool isTieType2 = false;
+            bool isSecond = false;
+            bool pwTie = false;
+            do
+            {
+                //数値の解析
+                if (!pw.getNumNoteLength(out n, out directFlg))
+                {
+                    if (!isSecond)
+                        n = (int)pw.length;
+                    else if (!isMinus)
+                    {
+                        if (!isTieType2)
+                        {
+                            //タイとして'&'が使用されている
+                            pwTie = true;
+                        }
+                        else
+                        {
+                            n = (int)pw.length;
+                        }
+                    }
+                }
+                else
+                {
+                    if (n == 0) return;
+                }
+
+                //Tone Doubler
+                if (pw.getChar() == ',')
+                {
+                    pw.incPos();
+                    return;
+                }
+
+                if (!pwTie || isTieType2)
+                {
+                    //符点の解析
+                    while (pw.getChar() == '.') pw.incPos();
+                }
+
+                isTieType2 = false;
+
+                //ベンドの解析
+                if (pw.getChar() == '_')
+                {
+                    pw.incPos();
+                    bool loop = true;
+                    while (loop)
+                    {
+                        char bCmd = pw.getChar();
+                        switch (bCmd)
+                        {
+                            case 'c':
+                            case 'd':
+                            case 'e':
+                            case 'f':
+                            case 'g':
+                            case 'a':
+                            case 'b':
+                                loop = false;
+                                pw.incPos();
+                                //+ -の解析
+                                anaSharp(pw, ref shift);
+                                isMinus = false;
+                                isTieType2 = false;
+                                isSecond = false;
+                                do
+                                {
+                                    //数値の解析
+                                    if (!pw.getNumNoteLength(out n, out directFlg))
+                                    {
+                                        if (!isSecond)
+                                        {
+                                            break;
+                                        }
+                                        else if (!isMinus)
+                                        {
+                                            if (!isTieType2)
+                                            {
+                                                //タイとして'&'が使用されている
+                                                pwTie = true;
+                                            }
+                                            break;
+                                        }
+                                    }
+
+                                    if (!pw.tie || isTieType2)
+                                    {
+                                        //符点の解析
+                                        while (pw.getChar() == '.') pw.incPos();
+                                    }
+
+                                    isTieType2 = false;
+
+                                    if (pw.getChar() == '&')
+                                    {
+                                        isMinus = false;
+                                        isTieType2 = false;
+                                    }
+                                    else if (pw.getChar() == '^')
+                                    {
+                                        isMinus = false;
+                                        isTieType2 = true;
+                                    }
+                                    else if (pw.getChar() == '~')
+                                    {
+                                        isMinus = true;
+                                    }
+                                    else
+                                    {
+                                        break;
+                                    }
+
+                                    isSecond = true;
+                                    pw.incPos();
+
+                                } while (true);
+
+                                break;
+                            case 'o':
+                                pw.incPos();
+                                break;
+                            case '>':
+                                pw.incPos();
+                                break;
+                            case '<':
+                                pw.incPos();
+                                break;
+                            default:
+                                loop = false;
+                                break;
+                        }
+                    }
+
+                }
+
+                if (pw.getChar() == '&')
+                {
+                    isMinus = false;
+                    isTieType2 = false;
+                }
+                else if (pw.getChar() == '^')
+                {
+                    isMinus = false;
+                    isTieType2 = true;
+                }
+                else if (pw.getChar() == '~')
+                {
+                    isMinus = true;
+                }
+                else
+                {
+                    break;
+                }
+
+                isSecond = true;
+                pw.incPos();
+
+            } while (true);
+
+
+            //装飾の解析完了
+
+
+        }
+
+
+
+        private void decStep1Renpu(partWork pw, List<Tuple<int, string>> lstRenpu, int nest)
+        {
+            nest++;
+            int count = 0;
+            string str = "";
+            char ch;
+            while ((ch = pw.getChar()) != '}')
+            {
+                if (pw.dataEnd) { return; }
+                if (ch == '{')
+                {
+                    pw.incPos();
+                    decStep1Renpu(pw,  lstRenpu, nest);
+                    ch = '*';
+                    str += ch;
+                    count++;
+                }
+                else
+                {
+                    if (skipCommander(pw,ch))
+                    {
+                        str += ch;
+                        count++;
+                    }
+                }
+            }
+            pw.incPos();
+
+            //数値解析(ネスト中は単なるスキップ
+            int n;
+            bool directFlg;
+            if (!pw.getNumNoteLength(out n, out directFlg))
+            {
+                n = (int)pw.length;
+            }
+            else
+            {
+                if (!directFlg)
+                {
+                    if ((int)clockCount % n != 0)
+                    {
+                        msgBox.setWrnMsg(string.Format("割り切れない音長({0})の指定があります。音長は不定になります。", n), pw.getSrcFn(), pw.getLineNumber());
+                    }
+                    n = (int)clockCount / n;
+                }
+                else
+                {
+                    n = checkRange(n, 1, 65535);
+                }
+            }
+            if (nest > 1) n = -1;
+
+            lstRenpu.Add(new Tuple<int, string>(n, str));
+            nest--;
+        }
+
+        private void decStep2Renpu(List<Tuple<int, string>> lstRenpu,List<int> lstRenpuLength, int nest,int len)
+        {
+            Tuple<int, string> t = lstRenpu[lstRenpu.Count - nest];
+            if (t.Item1 != -1) len = t.Item1;
+
+            for (int p = 0; p < t.Item2.Length; p++)
+            {
+                int le = len / t.Item2.Length + ((len % t.Item2.Length) == 0 ? 0 : ((len % t.Item2.Length) > p ? 1 : 0));
+                if (t.Item2[p] != '*') lstRenpuLength.Add(le);
+                else decStep2Renpu(lstRenpu,lstRenpuLength, nest + 1, le);
+            }
         }
 
         private void cmdLoop(partWork pw)

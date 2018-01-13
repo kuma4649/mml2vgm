@@ -140,12 +140,24 @@
     <None Include="sample\test__.vgm" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\FNUM_YM2612.txt" />
-    <EmbeddedResource Include="Resources\FNUM_YM2612X.txt" />
-    <EmbeddedResource Include="Resources\FNUM_SN76489.txt" />
-    <EmbeddedResource Include="Resources\FNUM_YM2610B.txt" />
-    <EmbeddedResource Include="Resources\FNUM_YM2608.txt" />
-    <EmbeddedResource Include="Resources\FNUM_YM2203.txt" />
+    <EmbeddedResource Include="FNUM_YM2612.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FNUM_YM2612X.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FNUM_SN76489.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FNUM_YM2610B.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FNUM_YM2608.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FNUM_YM2203.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
     <Content Include="res\icon1.png" />
     <Content Include="res\icon2.png" />
     <Content Include="res\icon3.png" />
@@ -204,6 +216,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Resources\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
