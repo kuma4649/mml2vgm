@@ -539,6 +539,8 @@ Sx1n            oo--oooooooooooooooooo  LFOスイッチ(x1: P/Q/R/S  n: 0(OFF)/1
 rn              oooooooooooooooooooooo  休符
 [               oooooooooooooooooooooo  ループ開始位置
 ]n              oooooooooooooooooooooo  ループ終了位置
+{               oooooooooooooooooooooo  連符開始位置
+}               oooooooooooooooooooooo  連符終了位置
 /               oooooooooooooooooooooo  ループ脱出位置指定
 EON             ----oo--ooo--ooo--o-oo  エンベロープの開始
 EOF             ----oo--ooo--ooo--o-oo  エンベロープの停止
@@ -576,6 +578,7 @@ b               oooooooooooooooooooooo  音符シ
     +           oooooooooooooooooooooo  半音上げる
     -           oooooooooooooooooooooo  半音下げる
     n           oooooooooooooooooooooo  音長(FMのみ0を指定するとToneDoublerモードになる)
+    #n          oooooooooooooooooooooo  クロック指定音長(FMのみ0を指定するとToneDoublerモードになる)
     .           oooooooooooooooooooooo  符点
     _           oo--ooooo-oooo-ooooooo  ベンド
         音符    oo--ooooo-oooo-ooooooo  音符(c-b)
@@ -584,7 +587,10 @@ b               oooooooooooooooooooooo  音符シ
         <       oo--ooooo-oooo-ooooooo  オクターブ相対指定(下げ)
     &n          oooooooooooooooooooooo  タイ(n: 音長 音長分だけ発音を追加する。
                                         音長を指定しない場合はキーオフせずに次の音符とつなげる)
+    &#n         oooooooooooooooooooooo  タイ(#n:  クロック指定音長 音長分だけ発音を追加する。
+                                        音長を指定しない場合はキーオフせずに次の音符とつなげる)
     ~n          oooooooooooooooooooooo  タイの逆(n: 音長 音長分だけ発音を削る。)
+    ~#n         oooooooooooooooooooooo  タイの逆(#n:  クロック指定音長 音長分だけ発音を削る。)
     ,           oo----oo---oo---oo-o--  Tone Doublerモード
                                         音符指定の後に0或いは,を指定するとTone Doublerモードになる。
                                         この時指定した音符をAとする。
