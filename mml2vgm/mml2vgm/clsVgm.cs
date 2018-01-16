@@ -3688,19 +3688,39 @@ namespace mml2vgm
                     pw.incPos();
                     pw.getNum(out n);
                     break;
-                //case '@': // instrument
-                //case 'V': // totalVolume(Adpcm-A / Rhythm)
-                //case 'p': // pan
-                //case 'm': // pcm mode
-                //case 'E': // envelope
+                case '@': // instrument
+                    skipCmdInstrument(pw,ch);
+                    break;
+                case 'V': // totalVolume(Adpcm-A / Rhythm)
+                    skipCmdTotalVolume(pw);
+                    break;
+                case 'p': // pan
+                    skipCmdPan(pw);
+                    break;
+                case 'm': // pcm mode
+                    skipCmdMode(pw);
+                    break;
+                case 'E': // envelope
+                    skipCmdEnvelope(pw);
+                    break;
                 //case '[': // repeat
                 //case ']': // repeat
                 //case '/': // repeat
-                //case 'M': // lfo
-                //case 'S': // lfo switch
-                //case 'y': // y
-                //case 'w': // noise
-                //case 'P': // noise or tone mixer
+                case 'M': // lfo
+                    skipCmdLfo(pw);
+                    break;
+                case 'S': // lfo switch
+                    skipCmdLfoSwitch(pw);
+                    break;
+                case 'y': // y 
+                    skipCmdY(pw);
+                    break;
+                case 'w': // noise
+                    skipCmdNoise(pw);
+                    break;
+                case 'P': // noise or tone mixer
+                    skipCmdMixer(pw);
+                    break;
                 case 'c':
                 case 'd':
                 case 'e':
@@ -3720,6 +3740,236 @@ namespace mml2vgm
             }
 
             return false;
+        }
+
+        private void skipCmdNoise(partWork pw)
+        {
+            int n = -1;
+            pw.incPos();
+
+            if (pw.Type == enmChannelType.DCSGNOISE 
+                || pw.Type == enmChannelType.SSG 
+                || (pw.chip is YM2151) 
+                || (pw.chip is HuC6280 && pw.ch > 3))
+            {
+                pw.getNum(out n);
+            }
+        }
+
+        private void skipCmdMixer(partWork pw)
+        {
+            int n = -1;
+            pw.incPos();
+
+            if ((pw.Type == enmChannelType.SSG && (
+                (pw.chip is YM2203) || (pw.chip is YM2608) || (pw.chip is YM2610B)
+                ))
+                || (pw.chip is YM2151)
+                || (pw.chip is HuC6280 && pw.ch > 3)
+                )
+            {
+                pw.getNum(out n);
+            }
+        }
+
+        private void skipCmdY(partWork pw)
+        {
+            int n = -1;
+            pw.incPos();
+
+            char c = pw.getChar();
+            if (c >= 'A' && c <= 'Z')
+            {
+                string toneparamName = "" + c;
+                pw.incPos();
+                toneparamName += pw.getChar();
+                pw.incPos();
+                if (toneparamName != "TL" && toneparamName != "SR")
+                {
+                    toneparamName += pw.getChar();
+                    pw.incPos();
+                    if (toneparamName != "SSG")
+                    {
+                        toneparamName += pw.getChar();
+                        pw.incPos();
+                    }
+                }
+
+                if (toneparamName == "DT1M" || toneparamName == "DT2S" || toneparamName == "PMSA")
+                {
+                    toneparamName += pw.getChar();
+                    pw.incPos();
+                    if (toneparamName == "PMSAM")
+                    {
+                        toneparamName += pw.getChar();
+                        pw.incPos();
+                    }
+                }
+
+                pw.incPos();
+
+                if (toneparamName != "FBAL" && toneparamName != "PMSAMS")
+                {
+                    pw.getNum(out n);
+                    pw.incPos();
+                }
+
+                pw.getNum(out n);
+
+                return;
+            }
+
+            pw.getNum(out n);
+            pw.incPos();
+            pw.getNum(out n);
+
+        }
+
+        private void skipCmdLfo(partWork pw)
+        {
+            pw.incPos();
+            char c = pw.getChar();
+            if (c == 'A')
+            {
+                pw.incPos();
+                if (pw.getChar() == 'M')
+                {
+                    pw.incPos();
+                    if (pw.getChar() == 'S') skipCmdMAMS_PMS(pw);
+                }
+                return;
+            }
+            if (c < 'P' && c > 'S') return;
+            pw.incPos();
+            char t = pw.getChar();
+            if (c == 'P' && t == 'M')
+            {
+                pw.incPos();
+                if (pw.getChar() == 'S') skipCmdMAMS_PMS(pw);
+                return;
+            }
+            if (t != 'T' && t != 'V' && t != 'H') return;
+            int n = -1;
+            do
+            {
+                pw.incPos();
+                if (!pw.getNum(out n)) return;
+                while (pw.getChar() == '\t' || pw.getChar() == ' ') pw.incPos(); 
+            } while (pw.getChar() == ',');
+        }
+
+        private void skipCmdLfoSwitch(partWork pw)
+        {
+            pw.incPos();
+            if (pw.getChar() < 'P' || pw.getChar() > 'S')
+            {
+                pw.incPos();
+                return;
+            }
+            int n = -1;
+            pw.incPos();
+            if (!pw.getNum(out n)) return;
+        }
+
+        private void skipCmdMAMS_PMS(partWork pw)
+        {
+            if (!((pw.chip is YM2151) || (pw.chip is YM2608) || (pw.chip is YM2610B) || (pw.chip is YM2612) || (pw.chip is YM2612X)
+                || (pw.Type == enmChannelType.FMOPM) || (pw.Type == enmChannelType.FMOPN)))
+                return;
+
+            int n = -1;
+            pw.incPos();
+            pw.getNum(out n);
+        }
+
+        private void skipCmdTotalVolume(partWork pw)
+        {
+            int n;
+            pw.incPos();
+            pw.getNum(out n);
+            if (pw.chip is HuC6280)
+            {
+                pw.incPos();
+                pw.getNum(out n);
+            }
+        }
+
+        private void skipCmdInstrument(partWork pw, char cmd)
+        {
+            int n;
+            pw.incPos();
+
+            if (pw.getChar() == 'T')
+            {
+                if (pw.Type != enmChannelType.FMOPM && pw.Type != enmChannelType.FMOPN && pw.Type != enmChannelType.FMOPNex)
+                {
+                    pw.incPos();
+                    return;
+                }
+                pw.incPos();
+                pw.getNum(out n);
+                return;
+            }
+
+            if ((pw.chip is YM2151) || (pw.chip is YM2203))
+            {
+                pw.getNum(out n);
+            }
+            else if (pw.chip is YM2608)
+            {
+                if ((pw.ch < 9) || (pw.Type == enmChannelType.SSG))
+                {
+                    pw.getNum(out n);
+                }
+                else if ((pw.Type == enmChannelType.RHYTHM) || (pw.Type == enmChannelType.ADPCM))
+                {
+                    if (pw.getChar() != 'E')
+                    {
+                        pw.getNum(out n);
+                    }
+                    else
+                    {
+                        pw.incPos();
+                        pw.getNum(out n);
+                    }
+                }
+            }
+            else if (pw.chip is YM2610B)
+            {
+                if ((pw.ch < 9) || (pw.Type == enmChannelType.SSG))
+                {
+                    pw.getNum(out n);
+                }
+                else if ((pw.Type == enmChannelType.ADPCMA) || (pw.Type == enmChannelType.ADPCMB))
+                {
+                    if (pw.getChar() != 'E')
+                    {
+                        pw.getNum(out n);
+                    }
+                    else
+                    {
+                        pw.incPos();
+                        pw.getNum(out n);
+                    }
+                }
+            }
+            else if ((pw.chip is YM2612) || (pw.chip is YM2612X) || (pw.chip is SN76489))
+            {
+                pw.getNum(out n);
+            }
+            else if ((pw.chip is RF5C164) || (pw.chip is segaPcm) || (pw.chip is HuC6280))
+            {
+                if (pw.getChar() != 'E')
+                {
+                    pw.getNum(out n);
+                }
+                else
+                {
+                    pw.incPos();
+                    pw.getNum(out n);
+                }
+            }
+
         }
 
         private void skipCmdNote(partWork pw, char cmd)
@@ -3897,6 +4147,94 @@ namespace mml2vgm
 
             //装飾の解析完了
 
+
+        }
+
+        private void skipCmdPan(partWork pw)
+        {
+            int n;
+
+            pw.incPos();
+
+            if ((pw.chip is YM2151) || (pw.chip is YM2608) || (pw.chip is YM2610B)
+                || (pw.chip is YM2612) || (pw.chip is YM2612X) || (pw.chip is SN76489))
+            {
+                pw.getNum(out n);
+            }
+            else if ((pw.chip is RF5C164) || (pw.chip is segaPcm) || (pw.chip is HuC6280))
+            {
+                pw.getNum(out n);
+                pw.incPos();
+                pw.getNum(out n);
+            }
+
+        }
+
+        private void skipCmdMode(partWork pw)
+        {
+            int n;
+            pw.incPos();
+            pw.getNum(out n);
+
+        }
+
+        private void skipCmdEnvelope(partWork pw)
+        {
+            int n = -1;
+            if (
+                ((pw.chip is YM2203) && (pw.Type == enmChannelType.SSG || pw.Type == enmChannelType.FMOPNex))
+                || ((pw.chip is YM2608) && (pw.Type == enmChannelType.SSG || pw.Type == enmChannelType.FMOPNex))
+                || ((pw.chip is YM2610B) && (pw.Type == enmChannelType.SSG || pw.Type == enmChannelType.FMOPNex))
+                || ((pw.chip is YM2612) && (pw.Type == enmChannelType.FMPCM || pw.Type == enmChannelType.FMOPNex))
+                || ((pw.chip is YM2612X) && (pw.Type == enmChannelType.FMPCM || pw.Type == enmChannelType.FMOPNex))
+                || (pw.chip is SN76489)
+                || (pw.chip is RF5C164)
+                || (pw.chip is segaPcm)
+                || (pw.chip is HuC6280)
+                )
+            {
+                pw.incPos();
+                switch (pw.getChar())
+                {
+                    case 'O':
+                        pw.incPos();
+                        pw.incPos();
+                        break;
+                    case 'X':
+                        if (
+                            ((pw.chip is YM2203) && pw.Type == enmChannelType.FMOPNex)
+                            || ((pw.chip is YM2608) && pw.Type == enmChannelType.FMOPNex)
+                            || ((pw.chip is YM2610B) && pw.Type == enmChannelType.FMOPNex)
+                            || pw.chip is YM2612
+                            || pw.chip is YM2612X
+                            )
+                        {
+                            pw.incPos();
+                            pw.getNum(out n);
+                        }
+                        break;
+                    default:
+                        if (pw.Type == enmChannelType.FMOPNex)
+                        {
+                            for (int i = 0; i < 4; i++)
+                            {
+                                pw.getNum(out n);
+                                if (i == 3) break;
+                                pw.incPos();
+                            }
+                            break;
+                        }
+                        else
+                        {
+                            pw.incPos();
+                        }
+                        break;
+                }
+            }
+            else
+            {
+                pw.incPos();
+            }
 
         }
 
