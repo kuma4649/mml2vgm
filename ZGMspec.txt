@@ -1,0 +1,142 @@
+はじめに。
+
+　このテキストはZGMのファイル仕様を示したものである。
+　ZGMはVGMの仕様を真似し、一部拡張したものである。
+　このテキストに記されていない仕様についてはVGMと同じである。
+　ZGMで使用されるバイトオーダーの基本はLittleEndianである。
+
+
+Header division.
+　この区分には、ZGMの基本情報を記録する。
+
+      00   01   02   03   04   05   06   07   08   09   0A   0B   0C   0D   0E   0F
+0x00 ["ZGM " ident      ][EoF offset        ][Version           ][Total # samples   ]
+0x10 [Loop # samples    ][Loop offset       ][GD3 offset        ][Define offset     ]
+0x20 [Track 1 offset    ][Def Cnt ][Trk Cnt ][Extra Hdr ofs     ] ***  ***  ***  *** 
+0x30  ***  ***  ***  ***  ***  ***  ***  ***  ***  ***  ***  ***  ***  ***  ***  *** 
+
+
+Define division.
+　この区分には、演奏時に使用する音源の情報を記録する。
+　使用する音源の数だけ定義する。
+
+ ["Def"][Length][Chip Identify number][Chip Command number][Clock][Option] 
+ x Define Count
+
+  Def					3byte				区別するための文字
+  Length				1byte				この定義の大きさ。通常(Optionの定義が不要な場合)は14byteになる。
+  Chip Identify number	4byte				後述。音源Chip毎に割り当てられた数値を記録する。
+  Chip Command number	2byte				コマンドに割り当てる0x80～0xFFFFまでの値を記録する。
+  											複数のポートを使用する音源の場合は連続で割り当てられる。
+  											例
+  											　YM2608のChip Command Numberに0x188を設定すると
+  											　実際は0x188と0x189が割り当てられる。
+  											同じChip Identify number、同じChip Command numberを複数回定義可能。
+  											(これによって複数個のChipを使用した演奏や異なるChipに同じコマンドを送信できる。)
+  Clock					4byte				チップのクロックを設定する。VGMと同じ。
+  Option				0～(Length-10)byte	省略可能。Optionが必要な音源の場合に設定する。
+
+
+Track division.
+　この区分には、演奏時に音源に送信するデータや制御系コマンドを設定する。
+　使用するトラックの数だけ定義する。※現バージョンでは1トラックのみの対応。
+
+ ["Trk"(3 byte)][Length(4 byte)][Data(Length byte)]
+ x Track Count
+
+  Trk					3byte				区別するための文字。
+  Length				4byte				この定義の大きさ。
+  Data					Length byte			音源に送信するデータや制御系コマンドを設定する。
+
+
+Chip Identify number
+　Define divisionで使用する音源の識別番号のリスト。
+
+   番号       音源名                       ポート数  コマンド長(byte)  オプション
+ 0x00000000 - 0x000000FF VGM Chips
+   0x0000000C SN76489                             1                 1  Option [SN FB ][SNW][SF]
+   0x00000010 YM2413                              1                 2  
+   0x0000002C YM2612                              2                 2  
+   0x00000030 YM2151                              1                 2  
+   0x00000038 Sega PCM                            1                 3  Option [SPCM Interface ]
+   0x00000040 RF5C68                              1                 3  
+   0x00000044 YM2203                              1                 2  
+   0x00000048 YM2608                              2                 2  
+   0x0000004C YM2610/YM2610B                      2                 2  
+   0x00000050 YM3812                              1                 2  
+   0x00000054 YM3526                              1                 2  
+   0x00000058 Y8950                               1                 2  
+   0x0000005C YMF262                              2                 2  
+   0x00000060 YMF278B                             1                 3  
+   0x00000064 YMF271                              1                 3  
+   0x00000068 YMZ280B                             1                 2  
+   0x0000006C RF5C164                             1                 2  
+   0x00000070 PWM                                 1                 2  
+   0x00000074 AY8910                              1                 2  Option [AYT][AY Flags  ]
+   0x00000080 GameBoy DMG                         1                 2  
+   0x00000084 NES APU                             1                 2  
+   0x00000088 MultiPCM                            1                 2  
+   0x0000008C uPD7759                             1                 2  
+   0x00000090 OKIM6258                            1                 2  Option [OF]
+   0x00000098 OKIM6295                            1                 2  
+   0x0000009C K051649                             ?                 ?  
+   0x000000A0 K054539                             1                 3  Option [KF]
+   0x000000A4 HuC6280                             1                 2  
+   0x000000A8 C140                                1                 3  Option [CF]
+   0x000000AC K053260                             1                 2  
+   0x000000B0 Pokey                               1                 2  
+   0x000000B4 QSound                              1                 3  
+   0x000000B8 SCSP                                1                 3  
+   0x000000C0 WonderSwan                          1                 3  
+   0x000000C4 Virtual Boy VSU                     1                 3  
+   0x000000C8 SAA1099                             1                 2  
+   0x000000CC ES5503                              1                 3  Option [EC]
+   0x000000D0 ES5505/ES5506                       1                 3  Option [EC]
+   0x000000D8 X1-010                              1                 3  
+   0x000000DC C352                                1                 4  Option [CD]
+   0x000000E0 GA20                                1                 2  
+ 
+ 0x00010000 - 0x0001FFFF Chips
+   0x00000000 AY8910B                             1                 2  
+   0x00000001 YM2609                              4                 2  
+
+ 0x00020000 - 0x0002FFFF XG
+
+ 0x00030000 - 0x0003FFFF GS
+
+ 0x00040000 - 0x0004FFFF GM
+
+ 0x00050000 - 0x0005FFFF VSTi
+
+ 0x00060000 - 0x0006FFFF Wave
+
+
+
+*Track DivisionのDataに音源群に送信するコマンド又は制御系のコマンドを記録する。
+
+
+*コマンドは1byteまたは2byteで記録する。
+  DefineDivisionの全ての定義で0x100未満のコマンドを定義している場合は1byte。
+  DefineDivisionの一つ以上の定義で0x100以上のコマンドを定義すると2byte。(Little endian)
+
+
+*制御系コマンドは0x00～0x7Fまでを予約する。
+  よって1byteで使用できる音源群のコマンドは0x80～0xFFになる。
+  2byteで使用できる音源群のコマンドは0x0080～0xFFFFになる。
+
+
+制御系コマンド
+  0x01 nn nn 	: Wait n samples.(VGM 0x61と同等)
+  0x02       	: wait 735 samples.(VGM 0x62と同等)
+  0x03       	: wait 882 samples.(VGM 0x63と同等)
+  0x04 cc nn nn	: override length of 0x02/0x03(VGM 0x64と同等)
+  0x06       	: end of sound data(VGM 0x66と同等)
+  0x07 ...   	: data block(VGM 0x67と同等)
+  0x08 ...   	: PCM RAM write(VGM 0x68と同等)
+  0x1n       	: wait n+1 samples(VGM 0x7nと同等)
+  0x2n			: YM2612 port 0 address 2A write from the data bank.(VGM 0x8nと同等)
+  0x30-0x35		: DAC Stream Control Write(VGM 0x90-0x95と同等)
+  0x40 dddddddd	: seek to offset dddddddd(VGM 0xE0と同等)
+
+
+
