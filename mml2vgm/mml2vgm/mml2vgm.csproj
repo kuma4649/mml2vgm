@@ -36,7 +36,7 @@
     <StartupObject />
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>フェーリ48.ico</ApplicationIcon>
+    <ApplicationIcon>Resources\フェーリ48.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -51,29 +51,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="chips\clsChip.cs" />
-    <Compile Include="chips\HuC6280.cs" />
-    <Compile Include="chips\RF5C164.cs" />
-    <Compile Include="chips\segaPcm.cs" />
-    <Compile Include="chips\SN76489.cs" />
-    <Compile Include="chips\YM2151.cs" />
-    <Compile Include="chips\YM2203.cs" />
-    <Compile Include="chips\YM2608.cs" />
-    <Compile Include="chips\YM2610B.cs" />
-    <Compile Include="chips\YM2612.cs" />
-    <Compile Include="chips\YM2612X.cs" />
-    <Compile Include="clsVgm.cs" />
-    <Compile Include="EncAdpcmA.cs" />
     <Compile Include="frmMain.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="frmMain.Designer.cs">
       <DependentUpon>frmMain.cs</DependentUpon>
     </Compile>
-    <Compile Include="Line.cs" />
-    <Compile Include="mml2vgm.cs" />
-    <Compile Include="msgBox.cs" />
-    <Compile Include="partWork.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -206,7 +189,7 @@
     <Content Include="sample\TM.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="フェーリ48.ico" />
+    <Content Include="Resources\フェーリ48.ico" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="frmMain.resx">
@@ -217,8 +200,13 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="Resources\" />
+    <ProjectReference Include="..\Core\Core.csproj">
+      <Project>{f2a97e95-2dbf-4975-9898-c45bb2bc2010}</Project>
+      <Name>Core</Name>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

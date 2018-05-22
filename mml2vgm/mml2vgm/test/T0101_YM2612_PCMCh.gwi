@@ -1,0 +1,48 @@
+﻿'{
+
+	TitleName   =YM2612 OPNB PCM Channel Test
+	TitleNameJ  =YM2612 OPNB PCMチャンネルテスト
+	GameName    =Game Name
+	GameNameJ   =ゲームタイトル
+	SystemName  =Sega Genesis
+	SystemNameJ =Sega Mega Drive
+	Composer    =kuma
+	ComposerJ   =くま
+	ReleaseDate =2018/02/01
+	Converted   =Converted
+	Notes       =ノート
+
+    Format        =VGM
+    ClockCount    =192
+    Octave-Rev   =FALSE
+    ForcedMonoPartYM2612
+
+}
+
+
+
+'@ M 000
+   AR  DR  SR  RR  SL  TL  KS  ML  DT  AM  SSG-EG
+'@ 031,012,012,015,015,020,000,001,000,000,000
+'@ 031,012,012,015,015,020,000,001,000,000,000
+'@ 031,012,012,015,015,020,000,001,000,000,000
+'@ 031,012,012,015,015,020,000,001,000,000,000
+'@ 007,000
+
+'@ F 110
+   AR  DR  SR  RR  SL  TL  KS  ML  DT
+'@ 031,000,000,000,000,033,000,004,007
+'@ 018,015,009,007,003,009,000,004,007
+'@ 031,000,000,000,000,024,000,002,003
+'@ 031,015,009,007,003,000,000,002,003
+'@ 004,007
+
+
+'@ P 0,"BD.wav",8000, 90
+'@ P 1,"SD.wav",8000,100
+
+
+'F1 T120
+
+'F6 Q8@0v100l4o4 cdefgab m1[@0c@1d@0{ccc}@1/d]2@1d6d12 m0cdefgab
+

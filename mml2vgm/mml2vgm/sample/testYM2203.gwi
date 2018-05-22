@@ -1,7 +1,7 @@
 ﻿'{
 
-	TitleName   =
-	TitleNameJ  =色々テスト
+	TitleName   =YM2203(OPN) Test
+	TitleNameJ  =YM2203(OPN)テスト
 	GameName    =
 	GameNameJ   =
 	SystemName  =
@@ -25,5 +25,7 @@
 '@ 004,007
 
 
-'N9 T160
-'N9 v15o4l8[cdefgab>c<]
+'N1 T160
+'N1 @110v125o4l8D0[cdefgab>c<]
+
+'Ns1 @110v116o4l8rD2[cdefgab>c<]
