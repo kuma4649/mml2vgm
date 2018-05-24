@@ -1,30 +1,342 @@
 ﻿'{
 
-	TitleName    =OPLL Test
-	TitleNameJ   =OPLL テスト
-	GameName     =
-	GameNameJ    =
-	SystemName   =
-	SystemNameJ  =
-	Composer     =
-	ComposerJ    =
-	ReleaseDate  =2018/01/23
-	Converted    =
-	Notes        =
+	TitleName   =
+	TitleNameJ  =だって、ギュってして。
+	GameName    =
+	GameNameJ   =anime「くまみこ」OP TV Size
+	SystemName  =
+	SystemNameJ =Sega MegaDrive
+	Composer    =
+	ComposerJ   =ボンジュール鈴木
+	ReleaseDate =2016/05/21
+	Converted   =Kuma
+	Notes       =
 
-	Format       =VGM
-	ClockCount   =192
+	ClockCount  =192
+
 }
 
-(frame/clock) = 60Hz * (60 * 4) / ClockCount / tempo
+
+base (from Ordyne)
+'@ M 003
+   AR  DR  SR  RR  SL  TL  KS  ML  DT  AM  SSG-EG
+'@ 027,014,000,007,003,062,000,012,000,000,000
+'@ 031,019,000,007,006,017,000,000,000,000,000
+'@ 031,030,007,005,003,015,000,000,000,000,000
+'@ 031,006,000,008,014,000,000,000,000,000,000
+'@ 003,007
+
+xylophone (from DragonSpirit)
+'@ M 004
+   AR  DR  SR  RR  SL  TL  KS  ML  DT  AM  SSG-EG
+'@ 027,024,021,015,005,023,000,001,000,000,000
+'@ 031,013,000,008,015,000,000,001,000,000,000
+'@ 031,031,000,015,003,022,000,001,000,000,000
+'@ 031,016,000,006,015,000,001,001,000,000,000
+'@ 004,007
+
+bell (from DragonSpirit)
+'@ M 005
+   AR  DR  SR  RR  SL  TL  KS  ML  DT  AM  SSG-EG
+'@ 027,004,000,006,015,025,002,003,003,000,000
+'@ 031,007,000,007,015,000,001,001,000,000,000
+'@ 031,007,000,004,014,039,000,014,007,000,000
+'@ 031,008,000,007,015,011,000,004,007,000,000
+'@ 004,006
+
+bell (from Sonic The Hedgehog)
+'@ M 007
+   AR  DR  SR  RR  SL  TL  KS  ML  DT  AM  SSG-EG
+'@ 027,004,000,015,015,035,001,003,003,000,000
+'@ 031,007,000,015,015,000,002,001,004,000,000
+'@ 031,007,000,015,014,041,001,014,007,000,000
+'@ 031,008,000,015,015,007,000,004,007,000,000
+   ALG FB
+'@ 004,006
+
+Brass2op (from Gauntlet IV + Arrange)
+'@ M 008
+   AR  DR  SR  RR  SL  TL  KS  ML  DT  AM  SSG-EG
+'@ 031,016,001,005,003,016,000,004,007,000,000
+'@ 031,000,003,007,000,000,000,008,007,000,000
+'@ 031,016,001,006,002,014,000,004,003,000,000
+'@ 031,011,003,007,000,006,000,008,003,000,000
+   ALG FB
+'@ 004,007
+
+Chord2op (from SCHEME + Arrange)
+'@ M 009
+   AR  DR  SR  RR  SL  TL  KS  ML  DT  AM  SSG-EG
+'@ 027,005,006,000,001,036,000,004,000,000,000
+'@ 018,006,001,007,003,000,000,004,003,000,000
+'@ 027,005,006,000,001,036,000,004,000,000,000
+'@ 018,006,001,007,003,000,000,004,003,000,000
+   ALG FB
+'@ 004,005
+
+BD (from Gauntlet IV)
+'@ M 010
+   AR  DR  SR  RR  SL  TL  KS  ML  DT  AM  SSG-EG
+'@ 031,028,004,001,015,000,000,007,000,000,000
+'@ 028,023,017,008,000,000,000,001,006,000,000
+'@ 028,024,019,008,007,014,000,003,007,000,000
+'@ 031,005,013,008,001,000,000,000,002,000,000
+   ALG FB
+'@ 000,002
+
+CHORD (from 魔導物語I)
+'@ M 011
+   AR  DR  SR  RR  SL  TL  KS  ML  DT  AM  SSG-EG
+'@ 031,000,000,000,000,020,000,002,000,000,000
+'@ 015,010,000,006,015,005,000,002,001,000,000
+'@ 031,000,000,000,000,035,000,001,007,000,000
+'@ 020,000,000,006,000,000,000,001,000,000,000
+   ALG FB
+'@ 004,006
 
 
-'@ L 110
-   AR DR SL RR KL MT AM VB EG KR DT
-'@ 15,00,15,08,00,03,00,01,01,00,01
-'@ 15,03,15,07,00,02,00,01,01,00,00
-   TL FB
-'@ 21,07
+     No, SV, AR, DR, SL, SR, RR, ST
+'@ E  0, 13,  1,  5, 11, 34, 24,  1
+'@ E  1, 13,  1,  5, 11, 10,  8,  1
+'@ E  2, 13,  3,  5, 11, 40, 48,  1
+'@ E  3, 14,  2,  5, 11, 80,  2,  1
+'@ E  4, 14,  1,  5, 11, 80,  0,  1
+
+'@ E 10, 15,  0,  1, 10,  4,  1,  3
+'@ E 11, 15,  0,  5, 13,  3,  1,  3
+'@ E 12, 15,  0,  1, 10,  2,  1,  4
+'@ E 13, 15,  0, 12,  9,  6,  1,  1
 
 
-'L01 @110o4v13l4cdefgab
+'%HC @12 c
+'%CL @11 c
+
+
+
+'F1 T138
+
+
+
+F1-6 !
+S1-4 !
+
+
+
+'F12 @7o6l8v113p1q0D0
+'F2  v103p3D4
+'F1  beaeg+eab4rr2.(3
+'F2  beaeg+eab4&br2.(3
+'F2  r16p2
+'F12 [beaeg+eab&  bed+ebed+e
+'F12  beaeg+e/ag+&g+af+4>c4<b4]
+'F1  ag+r  v110D4 Q6@5ba+ag+(2gQ5(3f+4
+'F2  ag+r16v110D-4Q6@5ba+ag+(2gQ5(3f+4
+'F12 @7o6l8v100p3q0D0
+'F2  v95D2<
+'F12 g+2rg+4g+& g+4.e16g+16>d+4c+4<
+'F12 g+2rg+4f+& f+2g4f+4
+'F12 g+2rr4g+&  g+4.g+4.>d+4c+2<b2
+'F12 r4.)5g4>de4 g.f+.d<)1b.)1f+.)2d
+'F12 @4p1l8<(3
+'F2  p3
+'F12 gb>df+ r2 rc+ea r2 r<f+a>c+ r2 e.e.d+ r2
+'F12 <brrb>c+rrc+ drrf+&f+<b>df+ err2. r1
+'F12 @7o6l8v107p1q0D0
+'F2  v97p2D4r16
+'F12 [beaeg+eaebed+ebed+e beaeg+eae/beaef+eae]beaeg+ef+e
+'F12 [beaeg+eaebed+ebed+e beaeg+eae beaef+eae]
+'F12 [beaeg+eab&  bed+ebed+e
+'F12  beaeg+e/ag+&g+af+4>c4<b4]
+'F1  ag+r  v110D4 Q6@5ba+ag+1r1
+'F2  ag+r16v110D-4Q6@5ba+ag+1r1
+
+
+'F3 @8EONEX12 l8v107p3Q6o4SS0
+'F3 r1r1
+'F3 [d+e(6e)6d+e(6e)6d+e (6e)6d+e(6e)6f+4e4 d+e(6e)6d+e(6e)6d+e / (6e)6d+e(6e)6g4f+4]r1
+'F3 d+rr4rd+rc+ r1
+'F3 d+rr4rd+rd+ r1
+'F3 d+rr4rd+rc+ r4.<b4>d+4.
+'F3 c+2<b2> c1&[c4&)3]3c4(6
+'F3 q0@9MSV24,4,6,12,0SS1
+'F3 f+1 a2a4g4 f+2a2 b.b.b4 rf+4
+'F3 grrg arra b4.g4.b4 a4a4a4a4 aaaa )3bbbb(3
+'F3 [ g+2.a4 g+1 g+2.a4 f+2a2 g+1 / g+2f+2 e2.f+4 a2g+ab4 ] g+2.g+a& a1 g+2f+2
+'F3 @8EONEX12 l8v110p3Q6o4SS0
+'F3 [d+e(6e)6d+e(6e)6d+e (6e)6d+e(6e)6 r2 d+e(6e)6d+e(6e)6d+e / (6e)6d+e(6e)6 r2 ]r1r1
+
+
+'F7   EONEX34 l8v107  Q6o3SS0
+'F7 r1r1
+'F7 [bb(6b)6bb(6b)6bb (6b)6bb(6b)6b4b4 bb(6b)6bb(6b)6bb / (6b)6bb(6b)6b4b4]r1)3
+'F7 g+rr4rg+rg+ r1
+'F7 g+rr4rg+rb  r1
+'F7 g+rr4rg+rg+ r4.g+4b4.
+'F7 f+2g+2 a1&[a4&)3]3a4(9
+'F7 q0>MSV24,4,6,12,0SS1
+'F7 a1 >c+2c+4<b4 a2>c+2 e.e.d+4 r<b4
+'F7 drrderre d4.f+&f+<b>df+ e1 e2)3f+2(9(3
+'F7 [ e2.f+4 e1 e2.f+4 d+2f+2 e1 / e2d+2 c+2.d+4 f+2ef+g+4 ] e2.ee& e1 e2d+2
+'F7   EONEX34 l8v110  Q6o3SS0
+'F7 [bb(6b)6bb(6b)6bb (6b)6bb(6b)6 r2 bb(6b)6bb(6b)6bb / (6b)6bb(6b)6 r2 ]r1r1
+
+
+'F4 @7o6l8v100p2q0D-2SS0
+'F4 beaeg+eab4rr2.
+'F4 @11v115l8p2q0D0o6SS0
+'F4 [d+e(6e)6d+e(6e)6d+e (6e)6d+e(6e)6f+4e4 d+e(6e)6d+e(6e)6d+e / (6e)6d+e(6e)6g4f+4] r1
+'F4 (15
+'F4 d+rr4rd+rc+ r4.p3)3e16g+16>d+4c+4<(3p2
+'F4 d+rr4rd+rd+ r2p3)3g4f+4(3p2
+'F4 d+rr4rd+rc+ r4.<b4>d+4.
+'F4 c+2<b2> c1&[c4&)3]3c4
+'F4 q0MSV48,2,5,20,0SS1p3(15<
+'F4 f+1 a2a4g4 f+2a2 b.b.b4 rf+4
+'F4 grrg arra b4.g4.b4 a4a4a4a4 p2>)15e4d+4f+4d+4
+'F4 g+1c+2.d+4e2.a4g+2f+2e1c+2.f+4e2.f+4a2g+ab4
+'F4 g+2g+arb&b2.r>e& ed+<b2.b4a4g+4f+4 e1d+2e4f+4 e2f+2a2f+2
+'F4 e1&e2>e4d+4<b1&b2>c4<a4 g+1&g+1e2.d+er1r1
+
+
+'F5 @7o6l8v90p3q0D-4
+'F5 rbeaeg+eab4rr2.~8
+'F5 @3o3l8v114p3q0D0
+'F5 [q0e>Q3e<]4q0c+>Q3c+<q0e>Q3e<q0f+>Q3f+<q0g+>Q3g+<
+'F5 [q0a>Q3a<]4[q0b>Q3b<]> q0c>Q3c< < q0b>Q3b<
+'F5 [q0e>Q3e<]4[q0c+>Q3c+<]4[q0a>Q3a<][q0b>Q3b<]r1
+'F5 q0err4rerc+ r1 arr4rarb r4.r16.a64a+64b4b4
+'F5 errq0c+16d+16 d+16_e&e16Q3d+dq0c+ r4r4>c+4<g+4 
+'F5 f+4f+4g+g+4g+ a.>e.g32a4~32e<a>ea.>e.d<a.e.<a
+'F5 Q5gggg gggg16g16 [gggg] [f+f+f+f+] bf+16bf+16b rr>q0a16b16f+16g16<
+'F5 Q6erre f+rrf+ q0g.>d.g4d<g4 a4a.e16a16r16aa16e16a aaaabb>>b4_<<b
+'F5 [
+'F5 Q7e Q2e16 Q8e. b16>d+16Q5e <b e&e
+'F5 Q7c+Q2c+16Q8c+.b16>c16 Q5c+r16<g+.c+
+'F5 Q7a Q2a16 Q8a.>f+16g+16Q5ar16e.<a
+'F5 Q7b4b.f+16 >cc<f+>c
+'F5 c+.<g+r16c+& c+c+ g+>c+< q0a+.>f+.a32a+.~32f+.<a+<a+>
+'F5 / f+4f+4g+4rg+ a.>e.<brb_>>b&b4_<<b
+'F5 ]Q7f+Q2f+16Q8f+.>c+ f+.c+.<f+ b2br>>b4_<<b
+'F5 [q0e>Q3e<]4q0c+>Q3c+<q0e>Q3e<q0f+>Q3f+<q0g+>Q3g+<
+'F5 [q0a>Q3a<]4[q0b>Q3b<]> q0c>Q3c< < q0b>Q3b<
+'F5 [q0e>Q3e<]4[q0c+>Q3c+<]4[q0a>Q3a<][q0b>Q3b<]
+'F5 rv100 D0p2o6Q6@7ba+ag+1r1
+
+
+    delay  speed  step   max  type(3 = one shot)
+MSV     4,     1,  -94, 1600,    3
+
+'F6 m0l8@10v118MSV4,1,-94,1600, 3SS1MRT4,2,-1,127,3SR1q1
+'F6 r1r2)2c8.c8.c8(2
+'F6 [c4c4]13c4cc4.rccc4.
+'F6 l8
+'F6 c4r4rc4c4r2c4c
+'F6 c4r4rc4c4r4.c4c4
+'F6 c4r4rc4c4r4c4c4r
+'F6 c4rcc4rc c.c.c4crrc.c.cc.c.c
+'F6 [c4]12c.c.c.c.cc c4rc c4rc c.c.c4c4c c4c4c4c4cccccccc
+'F6 [[c4]28/c.c.c4cc4][c4]4
+'F6 [c4c4]13c4cc4.r2.
+
+
+'S12 D0v14o4l8q0MSV24,8, 1, 1,0SS1EON@0
+'S2  D-1v13r
+'S12 r1r1
+'S12 @0r4e4e4f+4g+re4d+4e&e @1br rb rr bbr1
+'S12 @0r4e4e4f+4g+re4d+4e&e @1br rb rr b>er<(3b>er<(2b>er4<
+'S12 r1r1r1r1@2<MSV24,8, 2, 1,0)3
+'S12 b1>f+2e2 c+2<b2a1&a1
+'S12 D0v15o4l8q1MSV24,4, 1, 1,0SS1EON@3
+'S2  D-1v12l8
+'S12 g_a&agf+4gg_a&aagf+ga.(3a16)3d4
+'S12 rc+c+d e.a.e e.e.d+ rf+gg_a& a2 rf+ga&a2 rf+gg_a&a1&a1
+'S12 bra32_b&b4.~32brb4.ree_f+ed+r brb4.brb4.ref+ed+r
+'S12 b4a.a16g+abe4ee32f+~32er c+d+erc+d+e4c+d+e g32_a&a.~32g+.e4ef+4
+'S12 [brb4./brb4.ree_f+ed+r]b(3b)3b4.ra4g+g+_a&a
+'S12 g+1(1@0>d+2.d+e&e1<)1@3
+'S12 q0  a&g+Q4(2e)2q0a&g+Q4(2e)2q1(1d+  e)1r1
+'S12 q0  a&g+Q4  e  q0a&g+Q2(2e)2q1(1d+  e)1r1
+'S12 q0  a4  Q4  e  q0a&g+Q4  e  q1(1d+q0e)1r1
+'S12 q0(1a&g+Q4(2e)2q0a&g+Q4(2e)2q1(1d+  e)2r1
+
+
+'S3 D0v14o4l8q0MSV24,8, 1, 1,0SS1EON@0
+'S3 r1r1
+'S3 @0r4g+4g+4a4brg+4f+4g+&g+ @1g+r rg+ rr g+g+r1
+'S3 @0r4g+4g+4a4brg+4f+4g+&g+ @1g+r rg+ rr g+g+r1
+'S3 v14EONSS0@4l8
+今日も私、ちょっとPanic!
+'S3 q0g+(1g+16)1g16 d_c+r Q7g+16r16r16(3g+16 q0)3b16(1b_a+16)1r16
+Ah～寝過ごしちゃった。
+'S3 q0e_d+&d+ e16>c16d16d16 Q4c<q0a_f+ rr
+「おしゃれには、手を抜けないわ」
+'S3 Q6c+16q0d+16d+16d+16_dq2c_<b> q0a16Q6a16_gq0b16>c16c16<g16q2g+_>c<r
+ダメダメ、どうしよう！
+'S3 f+16gr16f+16gr16b._>d <b16 a+._fr16
+Cuteをキャッチ、キュンっと Magic!
+'S3 q0a+e16d+16q4g_a+r >Q4c+<q0g+16a+16g+_br
+このワンピ似合うでしょ？
+'S3 f+16g+16a16&f+16Q4f+16 q0f+16g+16a_>c+16<g+16a_>c+16<rr
+急がなくっちゃ！もうこんな時間
+'S3 d16g16b16b16_a+Q4ed+ q0b16_>c&c16<g+16g+16g+16a16a_b16
+はーい！いってきます！
+'S3 )1q0g+4._bQ4aq0a+16b16b16_>c&c.&c
+'S3 r1
+'S3 D0v14o4l8q1MSV24,4, 1, 1,0SS1EON@3
+'S3 D1(3g_a&agf+4gg_a&aagf+ga.(3a16)3d4
+'S3 rc+c+d e.a.e e.e.d+ rf+gg_a& a2 rf+ga&a2 rf+gg_a&a1&a1D0)3
+'S3 [g+rg+4.g+rg+4.r2.]
+'S3 D1(3b4a.a16g+abe4ee32f+~32er c+d+erc+d+e4c+d+e g32_a&a.~32g+.e4ef+4D0)3
+'S3 [g+rg+4.g+rg+4./r2.]rf+4ef+4
+'S3 e2.(1@0g+>c+ <g+2.g+a&a1)1
+'S3 @3D1(1
+'S3 q0  a&g+Q4(2e)2q0a&g+Q4(2e)2q1(1d+  e)1[(1d+e]4)4
+'S3 q0  a&g+Q4  e  q0a&g+Q2(2e)2q1(1d+  e)1[(1d+e]4)4
+'S3 q0  a4  Q4  e  q0a&g+Q4  e  q1(1d+q0e)1[(1d+e]4)4
+'S3 q0(1a&g+Q4(2e)2q0a&g+Q4(2e)2q1(1d+  e)2[(1d+e]4)4
+
+
+'S4 D0v15o4l16q0SS0EONw4
+'S4 r1r1
+'S4 [v15%HCv6%HC / v15%HC%HC v15%CLv6%HCv15%HCv6%HC]7 v15%CL %HC %CL8%CL%CLr%CL%CL8%CL8%CL%CL
+'S4 [v15%HCv6%HC v15%HC%HC / v15%CLv6%HCv15%HCv6%HC]6 v15%CLv6%HCv15%CLv6%HC
+'S4  v15%HCv6%HCv15%CLv15%HC v15%CLv6%HCv15%HCv6%HC v15%CLv15%HC%HC%HC v15%CLv6%HCv15%HCv6%HC
+'S4 l8
+'S4 v15%CLv10%HC16%HC16        v15%HCv10%HC16%HC16 v15%HC16v10%HC16v15%HC16v10%HC16 v15%HC%HC
+'S4 v15%HCv10%HC16%HC16        v15%HCv10%HC16%HC16 v10%HCv15%HC                     v10%HCv15%HC
+'S4 v15%HCv10%HC16%HC16        v15%HCv10%HC16%HC16 v15%HC16v10%HC16v15%HC16v10%HC16 v15%HC%HC
+'S4 v15%HCv10%HC16%HC16        v15%HCv10%HC16%HC16 v10%HC16v15%HC16%HC16%HC16       v15%HCv10%HC
+'S4 v15%HCv10%HC16%HC16        v15%HCv10%HC16%HC16 v15%HC16v10%HC16v15%HC16v10%HC16 v15%HC%HC
+'S4 v10%HC16v15%HC16%HC16%HC16 v15%HC%HC16v10%HC16 v10%HC16v15%HC16%HC16%HC16       v15%HC%HC32v10[%HC32]3
+'S4 v15%HCv10%HC16%HC16        v15%HCv10%HC16%HC16 v10%HC16v15%HC16%HC              v10%HCv15%HC
+'S4 v15%HC16v10%HC16%HC        [v15%HC16v10%HC16]  v10%HC16v15%HC16%HC              v15%HC%HC
+'S4 v10%HC16v15%HC16%HC        v15%HC%HC           v10%HC16v15%HC16%HC              v15%HC%HC
+'S4 v15%CLv10%HC16%HC16        v15%HCv10%HC16%HC16 v15%HC16v10%HC16v15%HC16v10%HC16 v15%HC%HC
+'S4 v15%HCv10%HC16%HC16        v15%HCv10%HC16%HC16 v15%HC16v10%HC16v15%HC16v10%HC16 v15%HC%HC
+'S4 v15%HCv10%HC16%HC16        v15%HCv10%HC16%HC16 v10%HC16%CL16%CL16%CL16          v15%CLv10%CL
+'S4 v15%HCv10%HC16%HC16        v15%HCv10%HC16%HC16 v15%HC16v10%HC16v15%HC16v10%HC16 v15%HC%HC
+'S4 v15%HCv10%HC16%HC16        v15%CLv10%HC16%HC16 v15%HC16v10%HC16v15%HC16v10%HC16 v15%CL%HC
+'S4 v15%HCv10%HC16%HC16        v15%CLv10%HC16%HC16 v15%HC16v10%HC16v15%HC16v10%HC16 v15%CL%HC
+'S4 v15%HCv10%HC16%HC16        v15%CLv10%HC16%HC16 v15%HC16v10%HC16v15%HC16v10%HC16 v15%CL%HC
+'S4 v15%HCv10%HC16%HC16        v15%CLv10%CL16%CL16 v15%HC16v10%CL16v15%CL16v10%CL16 v15%CL%CL16%CL16
+'S4 v15%CLv10%HC16%HC16        v15%CLv10%HC16%HC16 v10%HC16v15%HC16%HC16%HC16       v15%CL%HC
+'S4 v10%HC16v15%HC16%HC16%HC16 v15%CL%HC           v10%HC16v15%HC16%HC16%HC16       v15%CL%HC
+'S4 v15%HCv10%HC16%HC16        v15%CLv10%HC16%HC16 v10%HC16v15%HC16%HC16%HC16       v15%CL%HC
+'S4 v15%HC16v10%HC16%HC16%HC16 v15%CL%HC           v10%HC16v15%HC16%HC16v10%HC16    v15%CL16%HC%HC16
+'S4 v15%HCv10%HC16%HC16        v15%CLv10%HC16%HC16 v10%HC16v15%HC16%HC16%HC16       v15%CL%HC
+'S4 v10%HC16v15%HC16%HC16%HC16 v15%CL%HC           v10%HC16v15%HC16%HC16%HC16       v15%CL%HC
+'S4 v15%HCv10%HC16%HC16        v15%CLv10%HC16%HC16 v10%HC16v15%HC16%HC16%HC16       v15%CL%HC
+'S4 v15%HC16v10%HC16v15%CL     %CL%HC              v10%HC16v15%CL16%HC16v10%HC16    v15%CL16%HC16%CL16%CL16
+'S4 v15%CLv10%HC16%HC16        v15%CLv10%HC16%HC16 v10%HC16v15%HC16%HC16%HC16       v15%CL%HC
+'S4 v10%HC16v15%HC16%HC16%HC16 v15%CL%HC           v10%HC16v15%CL16%HC16%HC16       v15%CL%HC
+'S4 v15%HCv10%HC16%HC16        v15%CLv10%HC16%HC16 v10%HC16v15%HC16%HC16%HC16       v15%CL%HC
+'S4 v10%HC16v15%HC16%CL16%HC16 v15%CL%CL16%CL16    v10%HC16v15%CL16%HC16%HC16       v15%CL%HC16%CL16
+'S4 v15%HCv10%HC16%HC16        v15%CLv10%HC16%HC16 v10%HC16v15%HC16%HC16%HC16       v15%CL%HC
+'S4 v15%HCv10%HC16%HC16        v15%CLv10%HC16%HC16 v10%HC16v15%HC16%HC16%HC16       v15%CL%HC
+'S4 v15%HCv10%HC16%HC16        v15%CLv10%HC16%HC16 v10%HC16v15%HC16%HC16%HC16       v15%CL%HC
+'S4 v10%HC16v15%HC16%CL16%HC16 v15%CL%CL           v10%HC16v15%CL16%CL16%CL16       v15%CL16%CL16%CL16%HC16
+'S4 l16
+'S4 [v15%HCv6%HC / v15%HC%HC v15%CLv6%HCv15%HCv6%HC]7 v15%CL %HC %CL8%CL%CLr%CL%CL8%CL8%CL%CL
+'S4 [v15%HCv6%HC v15%HC%HC / v15%CLv6%HCv15%HCv6%HC]6 v15%CLv6%HCv15%CLv6%HC
+
+

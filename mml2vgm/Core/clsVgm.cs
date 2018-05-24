@@ -868,11 +868,14 @@ namespace Core
 
                 if (instrumentCounter == instrumentBufCache.Length)
                 {
+                    //すでに定義済みの場合はいったん削除する(後に定義されたものが優先)
                     if (instFM.ContainsKey(instrumentBufCache[0]))
                     {
                         instFM.Remove(instrumentBufCache[0]);
                     }
-                    else if(instrumentBufCache.Length == Const.INSTRUMENT_SIZE)
+
+
+                    if(instrumentBufCache.Length == Const.INSTRUMENT_SIZE)
                     {
                         //M
                         instFM.Add(instrumentBufCache[0], instrumentBufCache);
@@ -1204,9 +1207,15 @@ namespace Core
                         while (pw.waitCounter == 0 && !pw.dataEnd)
                         {
                             char cmd = pw.getChar();
-                            lineNumber = pw.getLineNumber();
-
-                            Commander(pw, cmd);
+                            if (cmd == 0)
+                            {
+                                pw.dataEnd = true;
+                            }
+                            else
+                            {
+                                lineNumber = pw.getLineNumber();
+                                Commander(pw, cmd);
+                            }
                         }
 
                     }
@@ -1485,9 +1494,15 @@ namespace Core
                 while (pw.waitCounter == 0 && !pw.dataEnd)
                 {
                     char cmd = pw.getChar();
-                    lineNumber = pw.getLineNumber();
-
-                    Commander(pw, cmd);
+                    if (cmd == 0)
+                    {
+                        pw.dataEnd = true;
+                    }
+                    else
+                    {
+                        lineNumber = pw.getLineNumber();
+                        Commander(pw, cmd);
+                    }
                 }
             }
         }

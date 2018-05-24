@@ -1,0 +1,30 @@
+﻿'{
+
+	TitleName    =OPLL Test
+	TitleNameJ   =OPLL テスト
+	GameName     =
+	GameNameJ    =
+	SystemName   =
+	SystemNameJ  =
+	Composer     =
+	ComposerJ    =
+	ReleaseDate  =2018/01/23
+	Converted    =
+	Notes        =
+
+	Format       =VGM
+	ClockCount   =192
+}
+
+(frame/clock) = 60Hz * (60 * 4) / ClockCount / tempo
+
+
+'@ L 110
+   AR DR SL RR KL MT AM VB EG KR DT
+'@ 15,00,15,08,00,03,00,01,01,00,01
+'@ 15,03,15,07,00,02,00,01,01,00,00
+   TL FB
+'@ 21,07
+
+
+'L01 @110o4v13l4cdefgab

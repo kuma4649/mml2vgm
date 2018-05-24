@@ -403,13 +403,22 @@ namespace Core
         /// <returns></returns>
         public char getChar()
         {
+            //if (dataEnd) return (char)0;
+
             char ch;
             if (pos.alies == "")
             {
+                if (pData[pos.row].Txt.Length <= pos.col) {
+                    return (char)0;
+                }
                 ch = pData[pos.row].Txt[pos.col];
             }
             else
             {
+                if (aData[pos.alies].Txt.Length <= pos.col)
+                {
+                    return (char)0;
+                }
                 ch = aData[pos.alies].Txt[pos.col];
             }
             //Console.Write(ch);
@@ -459,6 +468,24 @@ namespace Core
             {
                 return;
             }
+
+            if (LstPos == null) MakeLstPos();
+
+            int i = 0;
+            while (i != LstPos.Count && tCol >= LstPos[i].tCol)
+            {
+                i++;
+            }
+
+            pos.tCol = tCol;
+            pos.alies = LstPos[i - 1].alies;
+            pos.col = LstPos[i - 1].col + tCol - LstPos[i - 1].tCol;
+            pos.row = LstPos[i - 1].row;
+            //if (pos.alies == "" && pos.col >= pData[pos.row].Txt.Length - 1 && pos.row >= pData.Count - 1)
+            //{
+            //    dataEnd = true;
+            //}
+            return;
 
             dataEnd = false;
 
@@ -593,6 +620,177 @@ namespace Core
                         {
                             data = aData[aliesName].Txt;
                         }
+                    }
+                }
+
+            }
+
+        }
+
+        private List<clsPos> LstPos = null;
+
+        public void MakeLstPos()
+        {
+            if (pData == null)
+            {
+                return;
+            }
+
+            int tCol = 0;
+            int row = 0;
+            int col = 0;
+            string aliesName = "";
+
+            LstPos = new List<clsPos>();
+            LstPos.Add(new clsPos());
+            resetPos();
+
+            while (true)
+            {
+                string data;
+                char ch;
+
+                //読みだすデータの頭出し
+                if (aliesName == "")
+                {
+                    if (pData.Count == row)
+                    {
+                        return;
+                    }
+                    data = pData[row].Txt;
+                }
+                else
+                {
+                    data = aData[aliesName].Txt;
+                }
+
+                //解析行の解析位置が終端に達したときの処理
+                while (data.Length == col)
+                {
+                    if (aliesName == "")
+                    {
+                        row++;
+                        if (pData.Count == row)
+                        {
+                            break;
+                        }
+                        else
+                        {
+                            data = pData[row].Txt;
+                            col = 0;
+
+                            clsPos p = new clsPos();
+                            p.tCol = tCol;
+                            p.alies = "";
+                            p.col = 0;
+                            p.row = row;
+                            LstPos.Add(p);
+
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        clsPos p = stackPos.Pop();
+                        aliesName = p.alies;
+                        col = p.col;
+                        row = p.row;
+                        if (aliesName == "")
+                        {
+                            data = pData[row].Txt;
+                        }
+                        else
+                        {
+                            data = aData[aliesName].Txt;
+                        }
+
+                        p.tCol = tCol;
+                        LstPos.Add(p);
+                    }
+                }
+
+                ch = data[col];
+
+                //解析位置でエイリアス指定されている場合
+                while (ch == '%')
+                {
+                    string a = getAliesName(data, col);
+                    if (a != "")
+                    {
+                        clsPos p = new clsPos();
+                        p.alies = aliesName;
+                        p.col = col + a.Length + 1;
+                        p.row = row;
+                        stackPos.Push(p);
+
+                        data = aData[a].Txt;
+                        col = 0;
+                        aliesName = a;
+                        row = 0;
+
+                        p = new clsPos();
+                        p.tCol = tCol;
+                        p.alies = a;
+                        p.col = 0;
+                        p.row = 0;
+                        LstPos.Add(p);
+                    }
+                    else
+                    {
+                        msgBox.setWrnMsg("指定されたエイリアス名は定義されていません。"
+                            , (aliesName == "") ? pData[row].Fn : aData[aliesName].Fn
+                            , (aliesName == "") ? pData[row].Num : aData[aliesName].Num
+                            );
+                        col++;
+                    }
+
+                    ch = data[col];
+                }
+
+                tCol++;
+                col++;
+                //解析行の解析位置が終端に達したときの処理
+                while (data.Length == col)
+                {
+                    if (aliesName == "")
+                    {
+                        row++;
+                        if (pData.Count == row)
+                        {
+                            break;
+                        }
+                        else
+                        {
+                            data = pData[row].Txt;
+                            col = 0;
+
+                            clsPos p = new clsPos();
+                            p.tCol = tCol;
+                            p.alies = "";
+                            p.col = 0;
+                            p.row = row;
+                            LstPos.Add(p);
+
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        clsPos p = stackPos.Pop();
+                        aliesName = p.alies;
+                        col = p.col;
+                        row = p.row;
+                        if (aliesName == "")
+                        {
+                            data = pData[row].Txt;
+                        }
+                        else
+                        {
+                            data = aData[aliesName].Txt;
+                        }
+
+                        p.tCol = tCol;
+                        LstPos.Add(p);
                     }
                 }
 

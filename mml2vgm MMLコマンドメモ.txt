@@ -568,7 +568,7 @@ mn              ---------------------o  HuC6280PCMモード指定(0: 停止  1: 
 Tn              oooooooooooooooooooooo  テンポ(1 - 1200)
 !               oooooooooooooooooooooo  このパートのこれ以降をコンパイルしない(発音しない)
 Kn              ooo-ooooo-oooo-ooooooo  移調絶対指定 ( -12 - +12 )
-#n              oooooooooooooooooooooo  音長をクロック値で指定
+#n(廃止)        oooooooooooooooooooooo  音長をクロック値で指定(lコマンドの後に#でクロック指定してください)
 pn              o-oo--o--ooo--ooo--o--  パン (0: 発音しない  1: 右  2: 左  3: 中央)
 pn1,n2          -----o---------------o  パン (n1: 左 0 - 15  n2: 右 0 - 15 )
 pn1,n2          --------------------o-  パン (n1: 左 0 - 127 n2: 右 0 - 127)
