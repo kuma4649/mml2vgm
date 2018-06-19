@@ -210,215 +210,215 @@ ebass3(from MUSIC LALF @70)
 
 
 ■ パート割り(初期値)
-  F1     YM2612(FM音源)(Primary)         1Ch
-  F2     YM2612(FM音源)(Primary)         2Ch
-  F3     YM2612(FM音源)(Primary)         3Ch/3ChEx0
-  F4     YM2612(FM音源)(Primary)         4Ch
-  F5     YM2612(FM音源)(Primary)         5Ch
-  F6     YM2612(FM音源)(Primary)         6Ch/6ChPCM
-  F7     YM2612(FM音源)(Primary)         3ChEx1
-  F8     YM2612(FM音源)(Primary)         3ChEx2
-  F9     YM2612(FM音源)(Primary)         3ChEx3
-  E01    YM2612(FM音源)(XGM Only)        1Ch
-  E02    YM2612(FM音源)(XGM Only)        2Ch
-  E03    YM2612(FM音源)(XGM Only)        3Ch/3ChEx0
-  E04    YM2612(FM音源)(XGM Only)        4Ch
-  E05    YM2612(FM音源)(XGM Only)        5Ch
-  E06    YM2612(FM音源)(XGM Only)        6Ch/6ChPCM0
-  E07    YM2612(FM音源)(XGM Only)        3ChEx1
-  E08    YM2612(FM音源)(XGM Only)        3ChEx2
-  E09    YM2612(FM音源)(XGM Only)        3ChEx3
-  E10    YM2612(FM音源)(XGM Only)        6ChPCM1
-  E11    YM2612(FM音源)(XGM Only)        6ChPCM2
-  E12    YM2612(FM音源)(XGM Only)        6ChPCM3
-  S1     SN76489(SSG音源)(Primary/XGM)   1Ch
-  S2     SN76489(SSG音源)(Primary/XGM)   2Ch
-  S3     SN76489(SSG音源)(Primary/XGM)   3Ch
-  S4     SN76489(SSG音源)(Primary/XGM)   4Ch(ノイズ)
-  R1     RF5C164(PCM音源)(Primary)       1Ch
-  R2     RF5C164(PCM音源)(Primary)       2Ch
-  R3     RF5C164(PCM音源)(Primary)       3Ch
-  R4     RF5C164(PCM音源)(Primary)       4Ch
-  R5     RF5C164(PCM音源)(Primary)       5Ch
-  R6     RF5C164(PCM音源)(Primary)       6Ch
-  R7     RF5C164(PCM音源)(Primary)       7Ch
-  R8     RF5C164(PCM音源)(Primary)       8Ch
-  T01    YM2610B(FM音源)(Primary)        1Ch
-  T02    YM2610B(FM音源)(Primary)        2Ch
-  T03    YM2610B(FM音源)(Primary)        3Ch/3ChEx0
-  T04    YM2610B(FM音源)(Primary)        4Ch
-  T05    YM2610B(FM音源)(Primary)        5Ch
-  T06    YM2610B(FM音源)(Primary)        6Ch
-  T07    YM2610B(FM音源)(Primary)        3ChEx1
-  T08    YM2610B(FM音源)(Primary)        3ChEx2
-  T09    YM2610B(FM音源)(Primary)        3ChEx3
-  T10    YM2610B(SSG音源)(Primary)       1Ch
-  T11    YM2610B(SSG音源)(Primary)       2Ch
-  T12    YM2610B(SSG音源)(Primary)       3Ch
-  T13    YM2610B(ADPCM-A音源)(Primary)   1Ch
-  T14    YM2610B(ADPCM-A音源)(Primary)   2Ch
-  T15    YM2610B(ADPCM-A音源)(Primary)   3Ch
-  T16    YM2610B(ADPCM-A音源)(Primary)   4Ch
-  T17    YM2610B(ADPCM-A音源)(Primary)   5Ch
-  T18    YM2610B(ADPCM-A音源)(Primary)   6Ch
-  T19    YM2610B(ADPCM-B音源)(Primary)   1Ch
-  P01    YM2608(FM音源)(Primary)         1Ch
-  P02    YM2608(FM音源)(Primary)         2Ch
-  P03    YM2608(FM音源)(Primary)         3Ch/3ChEx0
-  P04    YM2608(FM音源)(Primary)         4Ch
-  P05    YM2608(FM音源)(Primary)         5Ch
-  P06    YM2608(FM音源)(Primary)         6Ch
-  P07    YM2608(FM音源)(Primary)         3ChEx1
-  P08    YM2608(FM音源)(Primary)         3ChEx2
-  P09    YM2608(FM音源)(Primary)         3ChEx3
-  P10    YM2608(SSG音源)(Primary)        1Ch
-  P11    YM2608(SSG音源)(Primary)        2Ch
-  P12    YM2608(SSG音源)(Primary)        3Ch
-  P13    YM2608(RHYTHM音源)(Primary)     1Ch
-  P14    YM2608(RHYTHM音源)(Primary)     2Ch
-  P15    YM2608(RHYTHM音源)(Primary)     3Ch
-  P16    YM2608(RHYTHM音源)(Primary)     4Ch
-  P17    YM2608(RHYTHM音源)(Primary)     5Ch
-  P18    YM2608(RHYTHM音源)(Primary)     6Ch
-  P19    YM2608(ADPCM音源)(Primary)      1Ch
-  N1     YM2203(FM音源)(Primary)         1Ch
-  N2     YM2203(FM音源)(Primary)         2Ch
-  N3     YM2203(FM音源)(Primary)         3Ch/3ChEx0
-  N4     YM2203(FM音源)(Primary)         3ChEx1
-  N5     YM2203(FM音源)(Primary)         3ChEx2
-  N6     YM2203(FM音源)(Primary)         3ChEx3
-  N7     YM2203(SSG音源)(Primary)        1Ch
-  N8     YM2203(SSG音源)(Primary)        2Ch
-  N9     YM2203(SSG音源)(Primary)        3Ch
-  X1     YM2151(FM音源)(Primary)         1Ch
-  X2     YM2151(FM音源)(Primary)         2Ch
-  X3     YM2151(FM音源)(Primary)         3Ch
-  X4     YM2151(FM音源)(Primary)         4Ch
-  X5     YM2151(FM音源)(Primary)         5Ch
-  X6     YM2151(FM音源)(Primary)         6Ch
-  X7     YM2151(FM音源)(Primary)         7Ch
-  X8     YM2151(FM音源)(Primary)         8Ch
-  Z01    SegaPCM(PCM音源)(Primary)       1Ch
-  Z02    SegaPCM(PCM音源)(Primary)       2Ch
-  Z03    SegaPCM(PCM音源)(Primary)       3Ch
-  Z04    SegaPCM(PCM音源)(Primary)       4Ch
-  Z05    SegaPCM(PCM音源)(Primary)       5Ch
-  Z06    SegaPCM(PCM音源)(Primary)       6Ch
-  Z07    SegaPCM(PCM音源)(Primary)       7Ch
-  Z08    SegaPCM(PCM音源)(Primary)       8Ch
-  Z09    SegaPCM(PCM音源)(Primary)       9Ch
-  Z10    SegaPCM(PCM音源)(Primary)       10Ch
-  Z11    SegaPCM(PCM音源)(Primary)       11Ch
-  Z12    SegaPCM(PCM音源)(Primary)       12Ch
-  Z13    SegaPCM(PCM音源)(Primary)       13Ch
-  Z14    SegaPCM(PCM音源)(Primary)       14Ch
-  Z15    SegaPCM(PCM音源)(Primary)       15Ch
-  Z16    SegaPCM(PCM音源)(Primary)       16Ch
-  H1     HuC6280(WF音源)(Primary)        1Ch
-  H2     HuC6280(WF音源)(Primary)        2Ch
-  H3     HuC6280(WF音源)(Primary)        3Ch
-  H4     HuC6280(WF音源)(Primary)        4Ch
-  H5     HuC6280(WF音源)(Primary)        5Ch
-  H6     HuC6280(WF音源)(Primary)        6Ch
+  F1     YM2612(FM音源)(Primary)         CH1
+  F2     YM2612(FM音源)(Primary)         CH2
+  F3     YM2612(FM音源)(Primary)         CH3/CH3Ex0
+  F4     YM2612(FM音源)(Primary)         CH4
+  F5     YM2612(FM音源)(Primary)         CH5
+  F6     YM2612(FM音源)(Primary)         CH6/CH6PCM
+  F7     YM2612(FM音源)(Primary)         CH3Ex1
+  F8     YM2612(FM音源)(Primary)         CH3Ex2
+  F9     YM2612(FM音源)(Primary)         CH3Ex3
+  E01    YM2612(FM音源)(XGM Only)        CH1
+  E02    YM2612(FM音源)(XGM Only)        CH2
+  E03    YM2612(FM音源)(XGM Only)        CH3/CH3Ex0
+  E04    YM2612(FM音源)(XGM Only)        CH4
+  E05    YM2612(FM音源)(XGM Only)        CH5
+  E06    YM2612(FM音源)(XGM Only)        CH6/CH6PCM0
+  E07    YM2612(FM音源)(XGM Only)        CH3Ex1
+  E08    YM2612(FM音源)(XGM Only)        CH3Ex2
+  E09    YM2612(FM音源)(XGM Only)        CH3Ex3
+  E10    YM2612(FM音源)(XGM Only)        CH6PCM1
+  E11    YM2612(FM音源)(XGM Only)        CH6PCM2
+  E12    YM2612(FM音源)(XGM Only)        CH6PCM3
+  S1     SN76489(SSG音源)(Primary/XGM)   CH1
+  S2     SN76489(SSG音源)(Primary/XGM)   CH2
+  S3     SN76489(SSG音源)(Primary/XGM)   CH3
+  S4     SN76489(SSG音源)(Primary/XGM)   CH4(ノイズ)
+  R1     RF5C164(PCM音源)(Primary)       CH1
+  R2     RF5C164(PCM音源)(Primary)       CH2
+  R3     RF5C164(PCM音源)(Primary)       CH3
+  R4     RF5C164(PCM音源)(Primary)       CH4
+  R5     RF5C164(PCM音源)(Primary)       CH5
+  R6     RF5C164(PCM音源)(Primary)       CH6
+  R7     RF5C164(PCM音源)(Primary)       CH7
+  R8     RF5C164(PCM音源)(Primary)       CH8
+  T01    YM2610B(FM音源)(Primary)        CH1
+  T02    YM2610B(FM音源)(Primary)        CH2
+  T03    YM2610B(FM音源)(Primary)        CH3/CH3Ex0
+  T04    YM2610B(FM音源)(Primary)        CH4
+  T05    YM2610B(FM音源)(Primary)        CH5
+  T06    YM2610B(FM音源)(Primary)        CH6
+  T07    YM2610B(FM音源)(Primary)        CH3Ex1
+  T08    YM2610B(FM音源)(Primary)        CH3Ex2
+  T09    YM2610B(FM音源)(Primary)        CH3Ex3
+  T10    YM2610B(SSG音源)(Primary)       CH1
+  T11    YM2610B(SSG音源)(Primary)       CH2
+  T12    YM2610B(SSG音源)(Primary)       CH3
+  T13    YM2610B(ADPCM-A音源)(Primary)   CH1
+  T14    YM2610B(ADPCM-A音源)(Primary)   CH2
+  T15    YM2610B(ADPCM-A音源)(Primary)   CH3
+  T16    YM2610B(ADPCM-A音源)(Primary)   CH4
+  T17    YM2610B(ADPCM-A音源)(Primary)   CH5
+  T18    YM2610B(ADPCM-A音源)(Primary)   CH6
+  T19    YM2610B(ADPCM-B音源)(Primary)   CH1
+  P01    YM2608(FM音源)(Primary)         CH1
+  P02    YM2608(FM音源)(Primary)         CH2
+  P03    YM2608(FM音源)(Primary)         CH3/CH3Ex0
+  P04    YM2608(FM音源)(Primary)         CH4
+  P05    YM2608(FM音源)(Primary)         CH5
+  P06    YM2608(FM音源)(Primary)         CH6
+  P07    YM2608(FM音源)(Primary)         CH3Ex1
+  P08    YM2608(FM音源)(Primary)         CH3Ex2
+  P09    YM2608(FM音源)(Primary)         CH3Ex3
+  P10    YM2608(SSG音源)(Primary)        CH1
+  P11    YM2608(SSG音源)(Primary)        CH2
+  P12    YM2608(SSG音源)(Primary)        CH3
+  P13    YM2608(RHYTHM音源)(Primary)     CH1
+  P14    YM2608(RHYTHM音源)(Primary)     CH2
+  P15    YM2608(RHYTHM音源)(Primary)     CH3
+  P16    YM2608(RHYTHM音源)(Primary)     CH4
+  P17    YM2608(RHYTHM音源)(Primary)     CH5
+  P18    YM2608(RHYTHM音源)(Primary)     CH6
+  P19    YM2608(ADPCM音源)(Primary)      CH1
+  N1     YM2203(FM音源)(Primary)         CH1
+  N2     YM2203(FM音源)(Primary)         CH2
+  N3     YM2203(FM音源)(Primary)         CH3/CH3Ex0
+  N4     YM2203(FM音源)(Primary)         CH3Ex1
+  N5     YM2203(FM音源)(Primary)         CH3Ex2
+  N6     YM2203(FM音源)(Primary)         CH3Ex3
+  N7     YM2203(SSG音源)(Primary)        CH1
+  N8     YM2203(SSG音源)(Primary)        CH2
+  N9     YM2203(SSG音源)(Primary)        CH3
+  X1     YM2151(FM音源)(Primary)         CH1
+  X2     YM2151(FM音源)(Primary)         CH2
+  X3     YM2151(FM音源)(Primary)         CH3
+  X4     YM2151(FM音源)(Primary)         CH4
+  X5     YM2151(FM音源)(Primary)         CH5
+  X6     YM2151(FM音源)(Primary)         CH6
+  X7     YM2151(FM音源)(Primary)         CH7
+  X8     YM2151(FM音源)(Primary)         CH8
+  Z01    SegaPCM(PCM音源)(Primary)       CH1
+  Z02    SegaPCM(PCM音源)(Primary)       CH2
+  Z03    SegaPCM(PCM音源)(Primary)       CH3
+  Z04    SegaPCM(PCM音源)(Primary)       CH4
+  Z05    SegaPCM(PCM音源)(Primary)       CH5
+  Z06    SegaPCM(PCM音源)(Primary)       CH6
+  Z07    SegaPCM(PCM音源)(Primary)       CH7
+  Z08    SegaPCM(PCM音源)(Primary)       CH8
+  Z09    SegaPCM(PCM音源)(Primary)       CH9
+  Z10    SegaPCM(PCM音源)(Primary)       CH10
+  Z11    SegaPCM(PCM音源)(Primary)       CH11
+  Z12    SegaPCM(PCM音源)(Primary)       CH12
+  Z13    SegaPCM(PCM音源)(Primary)       CH13
+  Z14    SegaPCM(PCM音源)(Primary)       CH14
+  Z15    SegaPCM(PCM音源)(Primary)       CH15
+  Z16    SegaPCM(PCM音源)(Primary)       CH16
+  H1     HuC6280(WF音源)(Primary)        CH1
+  H2     HuC6280(WF音源)(Primary)        CH2
+  H3     HuC6280(WF音源)(Primary)        CH3
+  H4     HuC6280(WF音源)(Primary)        CH4
+  H5     HuC6280(WF音源)(Primary)        CH5
+  H6     HuC6280(WF音源)(Primary)        CH6
 
-  Fs1    YM2612(FM音源)(Secondary)       1Ch
-  Fs2    YM2612(FM音源)(Secondary)       2Ch
-  Fs3    YM2612(FM音源)(Secondary)       3Ch/3ChEx0
-  Fs4    YM2612(FM音源)(Secondary)       4Ch
-  Fs5    YM2612(FM音源)(Secondary)       5Ch
-  Fs6    YM2612(FM音源)(Secondary)       6Ch(PCM)
-  Fs7    YM2612(FM音源)(Secondary)       3ChEx1
-  Fs8    YM2612(FM音源)(Secondary)       3ChEx2
-  Fs9    YM2612(FM音源)(Secondary)       3ChEx3
-  Ss1    SN76489(SSG音源)(Secondary)     1Ch
-  Ss2    SN76489(SSG音源)(Secondary)     2Ch
-  Ss3    SN76489(SSG音源)(Secondary)     3Ch
-  Ss4    SN76489(SSG音源)(Secondary)     4Ch(ノイズ)
-  Rs1    RF5C164(PCM音源)(Secondary)     1Ch(MDPlayerのみ再生可能)
-  Rs2    RF5C164(PCM音源)(Secondary)     2Ch(MDPlayerのみ再生可能)
-  Rs3    RF5C164(PCM音源)(Secondary)     3Ch(MDPlayerのみ再生可能)
-  Rs4    RF5C164(PCM音源)(Secondary)     4Ch(MDPlayerのみ再生可能)
-  Rs5    RF5C164(PCM音源)(Secondary)     5Ch(MDPlayerのみ再生可能)
-  Rs6    RF5C164(PCM音源)(Secondary)     6Ch(MDPlayerのみ再生可能)
-  Rs7    RF5C164(PCM音源)(Secondary)     7Ch(MDPlayerのみ再生可能)
-  Rs8    RF5C164(PCM音源)(Secondary)     8Ch(MDPlayerのみ再生可能)
-  Ts01   YM2610B(FM音源)(Secondary)      1Ch
-  Ts02   YM2610B(FM音源)(Secondary)      2Ch
-  Ts03   YM2610B(FM音源)(Secondary)      3Ch/3ChEx0
-  Ts04   YM2610B(FM音源)(Secondary)      4Ch
-  Ts05   YM2610B(FM音源)(Secondary)      5Ch
-  Ts06   YM2610B(FM音源)(Secondary)      6Ch
-  Ts07   YM2610B(FM音源)(Secondary)      3ChEx1
-  Ts08   YM2610B(FM音源)(Secondary)      3ChEx2
-  Ts09   YM2610B(FM音源)(Secondary)      3ChEx3
-  Ts10   YM2610B(SSG音源)(Secondary)     1Ch
-  Ts11   YM2610B(SSG音源)(Secondary)     2Ch
-  Ts12   YM2610B(SSG音源)(Secondary)     3Ch
-  Ts13   YM2610B(ADPCM-A音源)(Secondary) 1Ch
-  Ts14   YM2610B(ADPCM-A音源)(Secondary) 2Ch
-  Ts15   YM2610B(ADPCM-A音源)(Secondary) 3Ch
-  Ts16   YM2610B(ADPCM-A音源)(Secondary) 4Ch
-  Ts17   YM2610B(ADPCM-A音源)(Secondary) 5Ch
-  Ts18   YM2610B(ADPCM-A音源)(Secondary) 6Ch
-  Ts19   YM2610B(ADPCM-B音源)(Secondary) 1Ch
-  Ps01   YM2608(FM音源)(Secondary)       1Ch
-  Ps02   YM2608(FM音源)(Secondary)       2Ch
-  Ps03   YM2608(FM音源)(Secondary)       3Ch/3ChEx0
-  Ps04   YM2608(FM音源)(Secondary)       4Ch
-  Ps05   YM2608(FM音源)(Secondary)       5Ch
-  Ps06   YM2608(FM音源)(Secondary)       6Ch
-  Ps07   YM2608(FM音源)(Secondary)       3ChEx1
-  Ps08   YM2608(FM音源)(Secondary)       3ChEx2
-  Ps09   YM2608(FM音源)(Secondary)       3ChEx3
-  Ps10   YM2608(SSG音源)(Secondary)      1Ch
-  Ps11   YM2608(SSG音源)(Secondary)      2Ch
-  Ps12   YM2608(SSG音源)(Secondary)      3Ch
-  Ps13   YM2608(RHYTHM音源)(Secondary)   1Ch
-  Ps14   YM2608(RHYTHM音源)(Secondary)   2Ch
-  Ps15   YM2608(RHYTHM音源)(Secondary)   3Ch
-  Ps16   YM2608(RHYTHM音源)(Secondary)   4Ch
-  Ps17   YM2608(RHYTHM音源)(Secondary)   5Ch
-  Ps18   YM2608(RHYTHM音源)(Secondary)   6Ch
-  Ps19   YM2608(ADPCM音源)(Secondary)    1Ch
-  Ns1    YM2203(FM音源)(Secondary)       1Ch
-  Ns2    YM2203(FM音源)(Secondary)       2Ch
-  Ns3    YM2203(FM音源)(Secondary)       3Ch/3ChEx0
-  Ns4    YM2203(FM音源)(Secondary)       3ChEx1
-  Ns5    YM2203(FM音源)(Secondary)       3ChEx2
-  Ns6    YM2203(FM音源)(Secondary)       3ChEx3
-  Ns7    YM2203(SSG音源)(Secondary)      1Ch
-  Ns8    YM2203(SSG音源)(Secondary)      2Ch
-  Ns9    YM2203(SSG音源)(Secondary)      3Ch
-  Xs1    YM2151(FM音源)(Secondary)       1Ch
-  Xs2    YM2151(FM音源)(Secondary)       2Ch
-  Xs3    YM2151(FM音源)(Secondary)       3Ch
-  Xs4    YM2151(FM音源)(Secondary)       4Ch
-  Xs5    YM2151(FM音源)(Secondary)       5Ch
-  Xs6    YM2151(FM音源)(Secondary)       6Ch
-  Xs7    YM2151(FM音源)(Secondary)       7Ch
-  Xs8    YM2151(FM音源)(Secondary)       8Ch
-  Zs01   SegaPCM(PCM音源)(Secondary)     1Ch
-  Zs02   SegaPCM(PCM音源)(Secondary)     2Ch
-  Zs03   SegaPCM(PCM音源)(Secondary)     3Ch
-  Zs04   SegaPCM(PCM音源)(Secondary)     4Ch
-  Zs05   SegaPCM(PCM音源)(Secondary)     5Ch
-  Zs06   SegaPCM(PCM音源)(Secondary)     6Ch
-  Zs07   SegaPCM(PCM音源)(Secondary)     7Ch
-  Zs08   SegaPCM(PCM音源)(Secondary)     8Ch
-  Zs09   SegaPCM(PCM音源)(Secondary)     9Ch
-  Zs10   SegaPCM(PCM音源)(Secondary)     10Ch
-  Zs11   SegaPCM(PCM音源)(Secondary)     11Ch
-  Zs12   SegaPCM(PCM音源)(Secondary)     12Ch
-  Zs13   SegaPCM(PCM音源)(Secondary)     13Ch
-  Zs14   SegaPCM(PCM音源)(Secondary)     14Ch
-  Zs15   SegaPCM(PCM音源)(Secondary)     15Ch
-  Zs16   SegaPCM(PCM音源)(Secondary)     16Ch
-  Hs1    HuC6280(WF音源)(Secondary)      1Ch
-  Hs2    HuC6280(WF音源)(Secondary)      2Ch
-  Hs3    HuC6280(WF音源)(Secondary)      3Ch
-  Hs4    HuC6280(WF音源)(Secondary)      4Ch
-  Hs5    HuC6280(WF音源)(Secondary)      5Ch
-  Hs6    HuC6280(WF音源)(Secondary)      6Ch
+  Fs1    YM2612(FM音源)(Secondary)       CH1
+  Fs2    YM2612(FM音源)(Secondary)       CH2
+  Fs3    YM2612(FM音源)(Secondary)       CH3/CH3Ex0
+  Fs4    YM2612(FM音源)(Secondary)       CH4
+  Fs5    YM2612(FM音源)(Secondary)       CH5
+  Fs6    YM2612(FM音源)(Secondary)       CH6(PCM)
+  Fs7    YM2612(FM音源)(Secondary)       CH3Ex1
+  Fs8    YM2612(FM音源)(Secondary)       CH3Ex2
+  Fs9    YM2612(FM音源)(Secondary)       CH3Ex3
+  Ss1    SN76489(SSG音源)(Secondary)     CH1
+  Ss2    SN76489(SSG音源)(Secondary)     CH2
+  Ss3    SN76489(SSG音源)(Secondary)     CH3
+  Ss4    SN76489(SSG音源)(Secondary)     CH4(ノイズ)
+  Rs1    RF5C164(PCM音源)(Secondary)     CH1(MDPlayerのみ再生可能)
+  Rs2    RF5C164(PCM音源)(Secondary)     CH2(MDPlayerのみ再生可能)
+  Rs3    RF5C164(PCM音源)(Secondary)     CH3(MDPlayerのみ再生可能)
+  Rs4    RF5C164(PCM音源)(Secondary)     CH4(MDPlayerのみ再生可能)
+  Rs5    RF5C164(PCM音源)(Secondary)     CH5(MDPlayerのみ再生可能)
+  Rs6    RF5C164(PCM音源)(Secondary)     CH6(MDPlayerのみ再生可能)
+  Rs7    RF5C164(PCM音源)(Secondary)     CH7(MDPlayerのみ再生可能)
+  Rs8    RF5C164(PCM音源)(Secondary)     CH8(MDPlayerのみ再生可能)
+  Ts01   YM2610B(FM音源)(Secondary)      CH1
+  Ts02   YM2610B(FM音源)(Secondary)      CH2
+  Ts03   YM2610B(FM音源)(Secondary)      CH3/CH3Ex0
+  Ts04   YM2610B(FM音源)(Secondary)      CH4
+  Ts05   YM2610B(FM音源)(Secondary)      CH5
+  Ts06   YM2610B(FM音源)(Secondary)      CH6
+  Ts07   YM2610B(FM音源)(Secondary)      CH3Ex1
+  Ts08   YM2610B(FM音源)(Secondary)      CH3Ex2
+  Ts09   YM2610B(FM音源)(Secondary)      CH3Ex3
+  Ts10   YM2610B(SSG音源)(Secondary)     CH1
+  Ts11   YM2610B(SSG音源)(Secondary)     CH2
+  Ts12   YM2610B(SSG音源)(Secondary)     CH3
+  Ts13   YM2610B(ADPCM-A音源)(Secondary) CH1
+  Ts14   YM2610B(ADPCM-A音源)(Secondary) CH2
+  Ts15   YM2610B(ADPCM-A音源)(Secondary) CH3
+  Ts16   YM2610B(ADPCM-A音源)(Secondary) CH4
+  Ts17   YM2610B(ADPCM-A音源)(Secondary) CH5
+  Ts18   YM2610B(ADPCM-A音源)(Secondary) CH6
+  Ts19   YM2610B(ADPCM-B音源)(Secondary) CH1
+  Ps01   YM2608(FM音源)(Secondary)       CH1
+  Ps02   YM2608(FM音源)(Secondary)       CH2
+  Ps03   YM2608(FM音源)(Secondary)       CH3/CH3Ex0
+  Ps04   YM2608(FM音源)(Secondary)       CH4
+  Ps05   YM2608(FM音源)(Secondary)       CH5
+  Ps06   YM2608(FM音源)(Secondary)       CH6
+  Ps07   YM2608(FM音源)(Secondary)       CH3Ex1
+  Ps08   YM2608(FM音源)(Secondary)       CH3Ex2
+  Ps09   YM2608(FM音源)(Secondary)       CH3Ex3
+  Ps10   YM2608(SSG音源)(Secondary)      CH1
+  Ps11   YM2608(SSG音源)(Secondary)      CH2
+  Ps12   YM2608(SSG音源)(Secondary)      CH3
+  Ps13   YM2608(RHYTHM音源)(Secondary)   CH1
+  Ps14   YM2608(RHYTHM音源)(Secondary)   CH2
+  Ps15   YM2608(RHYTHM音源)(Secondary)   CH3
+  Ps16   YM2608(RHYTHM音源)(Secondary)   CH4
+  Ps17   YM2608(RHYTHM音源)(Secondary)   CH5
+  Ps18   YM2608(RHYTHM音源)(Secondary)   CH6
+  Ps19   YM2608(ADPCM音源)(Secondary)    CH1
+  Ns1    YM2203(FM音源)(Secondary)       CH1
+  Ns2    YM2203(FM音源)(Secondary)       CH2
+  Ns3    YM2203(FM音源)(Secondary)       CH3/CH3Ex0
+  Ns4    YM2203(FM音源)(Secondary)       CH3Ex1
+  Ns5    YM2203(FM音源)(Secondary)       CH3Ex2
+  Ns6    YM2203(FM音源)(Secondary)       CH3Ex3
+  Ns7    YM2203(SSG音源)(Secondary)      CH1
+  Ns8    YM2203(SSG音源)(Secondary)      CH2
+  Ns9    YM2203(SSG音源)(Secondary)      CH3
+  Xs1    YM2151(FM音源)(Secondary)       CH1
+  Xs2    YM2151(FM音源)(Secondary)       CH2
+  Xs3    YM2151(FM音源)(Secondary)       CH3
+  Xs4    YM2151(FM音源)(Secondary)       CH4
+  Xs5    YM2151(FM音源)(Secondary)       CH5
+  Xs6    YM2151(FM音源)(Secondary)       CH6
+  Xs7    YM2151(FM音源)(Secondary)       CH7
+  Xs8    YM2151(FM音源)(Secondary)       CH8
+  Zs01   SegaPCM(PCM音源)(Secondary)     CH1
+  Zs02   SegaPCM(PCM音源)(Secondary)     CH2
+  Zs03   SegaPCM(PCM音源)(Secondary)     CH3
+  Zs04   SegaPCM(PCM音源)(Secondary)     CH4
+  Zs05   SegaPCM(PCM音源)(Secondary)     CH5
+  Zs06   SegaPCM(PCM音源)(Secondary)     CH6
+  Zs07   SegaPCM(PCM音源)(Secondary)     CH7
+  Zs08   SegaPCM(PCM音源)(Secondary)     CH8
+  Zs09   SegaPCM(PCM音源)(Secondary)     CH9
+  Zs10   SegaPCM(PCM音源)(Secondary)     CH10
+  Zs11   SegaPCM(PCM音源)(Secondary)     CH11
+  Zs12   SegaPCM(PCM音源)(Secondary)     CH12
+  Zs13   SegaPCM(PCM音源)(Secondary)     CH13
+  Zs14   SegaPCM(PCM音源)(Secondary)     CH14
+  Zs15   SegaPCM(PCM音源)(Secondary)     CH15
+  Zs16   SegaPCM(PCM音源)(Secondary)     CH16
+  Hs1    HuC6280(WF音源)(Secondary)      CH1
+  Hs2    HuC6280(WF音源)(Secondary)      CH2
+  Hs3    HuC6280(WF音源)(Secondary)      CH3
+  Hs4    HuC6280(WF音源)(Secondary)      CH4
+  Hs5    HuC6280(WF音源)(Secondary)      CH5
+  Hs6    HuC6280(WF音源)(Secondary)      CH6
 
   -----------
   計 208Ch
@@ -884,3 +884,44 @@ FM1Chで指定の音程2音を同時に出力することを主な目的とし�
         FALSEはそのまま。デフォルトはFALSEです。
 
 
+■ OPN系音源に存在するEXチャンネルについて
+    OPN,OPN2,OPNA,OPNBは、効果音モードを利用してCH3を最大4分割して演奏することが可能です。
+    
+    OPN系は1CH当たり4オペレータのFM音源です。
+    通常のCHは周波数を1CH毎にしか設定できないのですが、
+    CH3だけは効果音モードを使用するとオペレータ毎に周波数を設定することができます。
+    （因みにキーオンはCHに関係なくオペレータ毎に指定可能です。）
+    
+    この機能を利用する場合にEXチャンネルを使用します。
+    
+    何分割するかは、通常(あえて変わった使い方をしない限り)、
+    CH3に設定したアルゴリズムで決まります。
+    
+    例えば
+      アルゴリズムが0から3は、オペレータ4のみの発音なので分割して使用することはあまりありません。
+      アルゴリズム4は、オペレータ2と4が発音しますので2分割して使用できます。
+      アルゴリズム6は、オペレータ2,3,4が発音しますので3分割して使用できます。
+      (アルゴリズム5も、オペレータ2,3,4が発音するのですが1が2,3,4に関わるのでクセがあるかも)
+      アルゴリズム7は、オペレータ1,2,3,4の全てが発音しますので4分割して使用できます。
+      お勧めはアルゴリズム4です。2オペレータずつ分かれますのでOPL系風味に使用することが可能です。
+    
+    使用例
+    
+    先ずはEONコマンドで効果音モードを有効にします。
+    次にEXコマンドを使用しEXチャンネルにオペレータを割り当てます。
+    例えば
+    CH3Ex0にオペレータ1と2を割り当て、
+    CH3Ex1にオペレータ3と4を割り当てるには以下のようにします。
+    
+    'F3 EON EX1100 @123 c4d4e4
+    'F7 EON EX0011      gabgab
+    
+    後はアルゴリズム4の音色を指定しノートを書くだけです。
+    
+    
+    
+■ 効果音モードを利用したスロットディチューン
+    スロットディチューンはチャンネル自体は通常の使用方法だが、
+    音色の幅を出したいときに使用します。
+    要は、この機能を利用することでOPMのDT2と同じような効果を得られます。
+    
