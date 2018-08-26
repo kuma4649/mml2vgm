@@ -42,7 +42,7 @@ namespace mvc
                 desFn = System.IO.Path.GetFileNameWithoutExtension(srcFn) + ".vgm";
             }
 
-            Core.log.debug = true;
+            Core.log.debug = false;
             Core.log.Open();
             Core.log.Write("start compile thread");
 
