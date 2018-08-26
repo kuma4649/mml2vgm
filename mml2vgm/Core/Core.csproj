@@ -60,6 +60,7 @@
     <Compile Include="EncAdpcmA.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="Line.cs" />
+    <Compile Include="log.cs" />
     <Compile Include="mml2vgm.cs" />
     <Compile Include="msgBox.cs" />
     <Compile Include="partWork.cs" />

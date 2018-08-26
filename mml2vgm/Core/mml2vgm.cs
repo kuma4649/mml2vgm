@@ -45,7 +45,10 @@ namespace Core
             try
             {
 
+                log.Write("start mml2vgm core");
+
                 // ファイル存在チェック
+                log.Write("ファイル存在チェック");
                 if (!File.Exists(srcFn))
                 {
                     msgBox.setErrMsg("ファイルが見つかりません。");
@@ -53,11 +56,14 @@ namespace Core
                 }
 
                 // ファイルの読み込み
+                log.Write("ファイルの読み込み");
                 string[] srcBuf = File.ReadAllLines(srcFn);
                 string path = Path.GetDirectoryName(Path.GetFullPath(srcFn));
 
+                log.Write("clsVgmインスタンス作成");
                 desVGM = new ClsVgm(stPath);
 
+                log.Write("mmlファイルの整形");
                 List<Line> src = new List<Line>();
                 int ln = 1;
                 foreach (string s in srcBuf)
@@ -93,8 +99,11 @@ namespace Core
                 }
 
                 // 解析
+                log.Write("テキスト解析開始(start clsVGM)");
                 int ret;
                 ret= desVGM.Analyze(src);
+
+                log.Write("テキスト解析完了(end clsVGM)");
 
                 if (ret != 0)
                 {
@@ -103,14 +112,18 @@ namespace Core
                 }
 
                 // PCM定義あり?
+                log.Write("PCM定義あり?");
                 if (desVGM.instPCM.Count > 0)
                 {
+                    log.Write("PCM取得");
                     GetPCMData(path);
+                    log.Write("PCM取得完了");
                 }
 
 
                 // 解析した情報をもとにVGMファイル作成
                 byte[] desBuf;
+                log.Write("MML解析開始(start GetByteData)");
                 if (desVGM.format == enmFormat.VGM)
                 {
                     desBuf = desVGM.GetByteData();
@@ -119,7 +132,8 @@ namespace Core
                 {
                     desBuf = desVGM.Xgm_getByteData();
                 }
-                
+                log.Write("MML解析完了(start GetByteData)");
+
 
                 if (desBuf == null)
                 {
@@ -132,11 +146,13 @@ namespace Core
                 {
                     if (desVGM.format == enmFormat.VGM)
                     {
+                        log.Write("VGMファイル出力");
                         // ファイル出力
                         File.WriteAllBytes(desFn, desBuf);
                     }
                     else
                     {
+                        log.Write("XGMファイル出力");
                         //XGM
                         // ファイル出力
                         File.WriteAllBytes(Path.Combine(Path.GetDirectoryName(desFn), Path.GetFileNameWithoutExtension(desFn) + ".xgm"), desBuf);
@@ -144,6 +160,7 @@ namespace Core
                 }
                 else
                 {
+                    log.Write("VGZファイル出力");
                     int num;
                     byte[] buf = new byte[1024];
 
@@ -185,6 +202,10 @@ namespace Core
             {
                 msgBox.setErrMsg(string.Format("想定外のエラー　line:{0} \r\nメッセージ:\r\n{1}\r\nスタックトレース:\r\n{2}\r\n", desVGM.lineNumber, ex.Message, ex.StackTrace));
                 return -1;
+            }
+            finally
+            {
+                log.Write("end mml2vgm core");
             }
         }
 

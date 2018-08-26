@@ -127,6 +127,7 @@ namespace Core
 
         public int Analyze(List<Line> src)
         {
+            log.Write("テキスト解析開始");
             lineNumber = 0;
 
             bool multiLine = false;
@@ -232,6 +233,7 @@ namespace Core
                 }
             }
 
+            log.Write("テキスト解析完了");
             return 0;
 
         }
@@ -1144,10 +1146,12 @@ namespace Core
         {
             if (userClockCount != 0) clockCount = userClockCount;
 
+            log.Write("パート情報の初期化");
             PartInit();
 
             dat = new List<byte>();
 
+            log.Write("ヘッダー情報作成");
             MakeHeader();
 
             int endChannel = 0;
@@ -1155,16 +1159,20 @@ namespace Core
             int totalChannel = 0;
             foreach (ClsChip chip in chips) totalChannel += chip.ChMax;
 
+            log.Write("MML解析開始");
             do
             {
-
                 foreach (ClsChip chip in chips)
                 {
+
+                    log.Write(string.Format("Chip [{0}]", chip.Name));
 
                     foreach (partWork pw in chip.lstPartWork)
                     {
                         //未使用のパートの場合は処理を行わない
                         if (!pw.chip.use) continue;
+
+                        log.Write("pcm sound off");
 
                         //pcm sound off
                         if (pw.pcmWaitKeyOnCounter == 0)
@@ -1172,38 +1180,38 @@ namespace Core
                             pw.pcmWaitKeyOnCounter = -1;
                         }
 
-                        //KeyOff
+                        log.Write("KeyOff");
                         ProcKeyOff(pw);
 
-                        //Bend
+                        log.Write("Bend");
                         ProcBend(pw);
 
-                        //Lfo
+                        log.Write("Lfo");
                         ProcLfo(pw);
 
-                        //Envelope
+                        log.Write("Envelope");
                         ProcEnvelope(pw);
 
-                        //wait消化待ち
+                        log.Write("wait消化待ち");
                         if (pw.waitCounter > 0)
                         {
                             continue;
                         }
 
-                        //データは最後まで実施されたか
+                        log.Write("データは最後まで実施されたか");
                         if (pw.dataEnd)
                         {
                             continue;
                         }
 
-                        //パートのデータがない場合は何もしないで次へ
+                        log.Write("パートのデータがない場合は何もしないで次へ");
                         if (!partData.ContainsKey(pw.PartName) || partData[pw.PartName] == null || partData[pw.PartName].Count < 1)
                         {
                             pw.dataEnd = true;
                             continue;
                         }
 
-                        //コマンド毎の処理を実施
+                        log.Write("コマンド毎の処理を実施");
                         while (pw.waitCounter == 0 && !pw.dataEnd)
                         {
                             char cmd = pw.getChar();
@@ -1220,8 +1228,7 @@ namespace Core
 
                     }
 
-                    //channelを跨ぐコマンド向け処理
-
+                    log.Write("channelを跨ぐコマンド向け処理");
                     if (chip is YM2608 && chip.use)
                     {
                         ((YM2608)chip).MultiChannelCommand();
@@ -1240,7 +1247,7 @@ namespace Core
                 }
 
 
-                // 全パートのうち次のコマンドまで一番近い値を求める
+                log.Write("全パートのうち次のコマンドまで一番近い値を求める");
                 long cnt = long.MaxValue;
                 foreach (ClsChip chip in chips)
                 {
@@ -1307,6 +1314,7 @@ namespace Core
 
                 }
 
+                log.Write("全パートのwaitcounterを減らす");
                 if (cnt != long.MaxValue)
                 {
 
@@ -1374,6 +1382,7 @@ namespace Core
 
                 }
 
+                log.Write("終了パートのカウント");
                 endChannel = 0;
                 foreach (ClsChip chip in chips)
                 {
@@ -1388,6 +1397,7 @@ namespace Core
             } while (endChannel < totalChannel);
 
 
+            log.Write("フッター情報の作成");
             MakeFooter();
 
 
@@ -2293,94 +2303,124 @@ namespace Core
                     pw.incPos();
                     break;
                 case '!': // CompileSkip
+                    log.Write("CompileSkip");
                     pw.dataEnd = true;
                     pw.waitCounter = -1;
                     break;
                 case 'T': // tempo
+                    log.Write(" tempo");
                     CmdTempo(pw);
                     break;
                 case '@': // instrument
+                    log.Write("instrument");
                     CmdInstrument(pw);
                     break;
                 case 'v': // volume
+                    log.Write("volume");
                     CmdVolume(pw);
                     break;
                 case 'V': // totalVolume(Adpcm-A / Rhythm)
+                    log.Write("totalVolume(Adpcm-A / Rhythm)");
                     CmdTotalVolume(pw);
                     break;
                 case 'o': // octave
+                    log.Write("octave");
                     CmdOctave(pw);
                     break;
                 case '>': // octave Up
+                    log.Write("octave Up");
                     CmdOctaveUp(pw);
                     break;
                 case '<': // octave Down
+                    log.Write("octave Down");
                     CmdOctaveDown(pw);
                     break;
                 case ')': // volume Up
+                    log.Write(" volume Up");
                     CmdVolumeUp(pw);
                     break;
                 case '(': // volume Down
+                    log.Write("volume Down");
                     CmdVolumeDown(pw);
                     break;
                 case 'l': // length
+                    log.Write("length");
                     CmdLength(pw);
                     break;
                 case '#': // length(clock)
+                    log.Write("length(clock)");
                     CmdClockLength(pw);
                     break;
                 case 'p': // pan
+                    log.Write(" pan");
                     CmdPan(pw);
                     break;
                 case 'D': // Detune
+                    log.Write("Detune");
                     CmdDetune(pw);
                     break;
                 case 'm': // pcm mode
+                    log.Write("pcm mode");
                     CmdMode(pw);
                     break;
                 case 'q': // gatetime
+                    log.Write(" gatetime q");
                     CmdGatetime(pw);
                     break;
                 case 'Q': // gatetime
+                    log.Write("gatetime Q");
                     CmdGatetime2(pw);
                     break;
                 case 'E': // envelope
+                    log.Write("envelope");
                     CmdEnvelope(pw);
                     break;
                 case 'L': // loop point
+                    log.Write(" loop point");
                     CmdLoop(pw);
                     break;
                 case '[': // repeat
+                    log.Write("repeat [");
                     CmdRepeatStart(pw);
                     break;
                 case ']': // repeat
+                    log.Write("repeat ]");
                     CmdRepeatEnd(pw);
                     break;
                 case '{': // renpu
+                    log.Write("renpu {");
                     CmdRenpuStart(pw);
                     break;
                 case '}': // renpu
+                    log.Write("renpu }");
                     CmdRenpuEnd(pw);
                     break;
                 case '/': // repeat
+                    log.Write("repeat /");
                     CmdRepeatExit(pw);
                     break;
                 case 'M': // lfo
+                    log.Write("lfo");
                     CmdLfo(pw);
                     break;
                 case 'S': // lfo switch
+                    log.Write(" lfo switch");
                     CmdLfoSwitch(pw);
                     break;
                 case 'y': // y
+                    log.Write(" y");
                     CmdY(pw);
                     break;
                 case 'w': // noise
+                    log.Write("noise");
                     CmdNoise(pw);
                     break;
                 case 'P': // noise or tone mixer
+                    log.Write("noise or tone mixer");
                     CmdMixer(pw);
                     break;
                 case 'K': // key shift
+                    log.Write("key shift");
                     CmdKeyShift(pw);
                     break;
                 case 'c':
@@ -2391,6 +2431,7 @@ namespace Core
                 case 'a':
                 case 'b':
                 case 'r':
+                    log.Write(string.Format("note {0}", cmd));
                     CmdNote(pw, cmd);
                     break;
                 default:
@@ -4280,14 +4321,16 @@ namespace Core
                     msgBox.setErrMsg("不正なパン'p'が指定されています。", pw.getSrcFn(), pw.getLineNumber());
                     n = 3;
                 }
-                //強制的にモノラルにする
-                if (monoPart != null && monoPart.Contains(ym2612[0].Ch[5].Name))
-                {
-                    n = 3;
-                }
                 n = Common.CheckRange(n, 1, 3);
                 pw.pan.val = (n == 1) ? 2 : (n == 2 ? 1 : n);
-                ((YM2151)pw.chip).OutSetPanFeedbackAlgorithm(pw, (int)pw.pan.val, instFM[pw.instrument][46], instFM[pw.instrument][45]);
+                if (pw.instrument < 0)
+                {
+                    msgBox.setErrMsg("音色指定前にパンは指定できません。", pw.getSrcFn(), pw.getLineNumber());
+                }
+                else
+                {
+                    ((YM2151)pw.chip).OutSetPanFeedbackAlgorithm(pw, (int)pw.pan.val, instFM[pw.instrument][46], instFM[pw.instrument][45]);
+                }
             }
             else if (pw.chip is YM2203)
             {
@@ -4306,11 +4349,6 @@ namespace Core
                     if (!pw.getNum(out n))
                     {
                         msgBox.setErrMsg("不正なパン'p'が指定されています。", pw.getSrcFn(), pw.getLineNumber());
-                        n = 3;
-                    }
-                    //強制的にモノラルにする
-                    if (monoPart != null && monoPart.Contains(ym2612[0].Ch[5].Name))
-                    {
                         n = 3;
                     }
                     n = Common.CheckRange(n, 1, 3);
@@ -4351,11 +4389,6 @@ namespace Core
                     if (!pw.getNum(out n))
                     {
                         msgBox.setErrMsg("不正なパン'p'が指定されています。", pw.getSrcFn(), pw.getLineNumber());
-                        n = 3;
-                    }
-                    //強制的にモノラルにする
-                    if (monoPart != null && monoPart.Contains(ym2612[0].Ch[5].Name))
-                    {
                         n = 3;
                     }
                     n = Common.CheckRange(n, 1, 3);
@@ -5261,7 +5294,7 @@ namespace Core
                 pw.lfo[c].param[0] = Common.CheckRange(pw.lfo[c].param[0], 0, (int)clockCount);
                 pw.lfo[c].param[1] = Common.CheckRange(pw.lfo[c].param[1], 1, 255);
                 pw.lfo[c].param[2] = Common.CheckRange(pw.lfo[c].param[2], -32768, 32787);
-                pw.lfo[c].param[3] = Math.Abs(Common.CheckRange(pw.lfo[c].param[3], -32768, 32787));
+                pw.lfo[c].param[3] = Math.Abs(Common.CheckRange(pw.lfo[c].param[3], 0, 32787));
                 if (pw.lfo[c].param.Count > 4)
                 {
                     pw.lfo[c].param[4] = Common.CheckRange(pw.lfo[c].param[4], 0, 4);
@@ -5281,10 +5314,11 @@ namespace Core
                 if (pw.lfo[c].param.Count > 6)
                 {
                     pw.lfo[c].param[6] = Common.CheckRange(pw.lfo[c].param[6], -32768, 32787);
+                    if (pw.lfo[c].param[6] == 0) pw.lfo[c].param[6] = 1;
                 }
                 else
                 {
-                    pw.lfo[c].param.Add(0);
+                    pw.lfo[c].param.Add(1);
                 }
 
             }
@@ -5407,6 +5441,12 @@ namespace Core
 
             //解析　ここまで
 
+            //LFOの設定値をチェック
+            if (n != 0 && !CheckLFOParam(pw, (int)c))
+            {
+                return;
+            }
+
             pw.lfo[c].sw = (n == 0) ? false : true;
 
             //即時有効になるタイプのHardLFOの処理
@@ -5446,6 +5486,17 @@ namespace Core
                 }
             }
 
+        }
+
+        private bool CheckLFOParam(partWork pw, int c)
+        {
+            if (pw.lfo[c].param == null)
+            {
+                msgBox.setErrMsg("指定されたLFOのパラメータが未指定です。", pw.getSrcFn(), pw.getLineNumber());
+                return false;
+            }
+
+            return false;
         }
 
         private void CmdMAMS(partWork pw)

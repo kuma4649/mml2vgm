@@ -20,6 +20,7 @@ namespace mml2vgm
         public frmMain()
         {
             InitializeComponent();
+            Core.log.debug = false;
         }
 
         private void frmMain_Shown(object sender, EventArgs e)
@@ -181,6 +182,9 @@ namespace mml2vgm
 
         private void startCompile()
         {
+            Core.log.Open();
+            Core.log.Write("start compile thread");
+
             Action dmy = updateTitle;
             string stPath = System.Windows.Forms.Application.StartupPath;
 
@@ -192,8 +196,11 @@ namespace mml2vgm
                     continue;
                 }
 
+
                 title = Path.GetFileName( arg);
                 this.Invoke(dmy);
+
+                Core.log.Write(string.Format("  compile at [{0}]", args[i]));
 
                 msgBox.clear();
 
@@ -202,17 +209,26 @@ namespace mml2vgm
                 {
                     desfn = Path.ChangeExtension(arg, Properties.Resources.ExtensionVGZ);
                 }
+
+                Core.log.Write("Call mml2vgm core");
+
                 mv = new Mml2vgm(arg, desfn, stPath);
                 if (mv.Start() != 0)
                 {
                     isSuccess = false;
                     break;
                 }
+
+                Core.log.Write("Return mml2vgm core");
             }
+
+            Core.log.Write("Disp Result");
 
             dmy = finishedCompile;
             this.Invoke(dmy);
 
+            Core.log.Write("end compile thread");
+            Core.log.Close();
         }
 
         private void startWatch()

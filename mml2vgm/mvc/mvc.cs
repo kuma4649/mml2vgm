@@ -42,6 +42,10 @@ namespace mvc
                 desFn = System.IO.Path.GetFileNameWithoutExtension(srcFn) + ".vgm";
             }
 
+            Core.log.debug = true;
+            Core.log.Open();
+            Core.log.Write("start compile thread");
+
             Assembly myAssembly = Assembly.GetEntryAssembly();
             string path = System.IO.Path.GetDirectoryName(myAssembly.Location);
             Mml2vgm mv = new Mml2vgm(srcFn, desFn, path);
@@ -102,6 +106,9 @@ namespace mvc
             }
 
             Console.WriteLine("\r\nFinished.\r\n");
+
+            Core.log.Write("end compile thread");
+            Core.log.Close();
 
 
             Environment.Exit(ret);
