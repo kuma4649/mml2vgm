@@ -6008,7 +6008,7 @@ namespace Core
 
                     if (i != 0) dat[0x6f] |= 0x40;
                 }
-
+                
                 if (segapcm[i].use)
                 {
                     for (int ch = 0; ch < segapcm[i].ChMax; ch++)
@@ -6071,6 +6071,9 @@ namespace Core
                         ym2608[i].lstPartWork[ch].volume = 0;
                     }
 
+                    //Use OPNA mode
+                    OutData(ym2608[i].lstPartWork[0].port0, 0x29, 0x82);
+                    OutData(ym2608[i].lstPartWork[0].port1, 0x29, 0x82);
                     //ADPCM Reset
                     OutData(ym2608[i].lstPartWork[0].port1, 0x10, 0x17);
                     OutData(ym2608[i].lstPartWork[0].port1, 0x10, 0x80);
