@@ -22,10 +22,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
+    <DebugType>none</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>
+    </DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -40,7 +41,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="chips\C140.cs" />
     <Compile Include="chips\clsChip.cs" />
+    <Compile Include="chips\clsOPN.cs" />
     <Compile Include="chips\HuC6280.cs" />
     <Compile Include="chips\RF5C164.cs" />
     <Compile Include="chips\segaPcm.cs" />
@@ -57,12 +60,16 @@
     <Compile Include="Const.cs" />
     <Compile Include="Core.cs" />
     <Compile Include="dv.cs" />
-    <Compile Include="EncAdpcmA.cs" />
+    <Compile Include="chips\EncAdpcmA.cs" />
     <Compile Include="Enums.cs" />
+    <Compile Include="Information.cs" />
     <Compile Include="Line.cs" />
     <Compile Include="log.cs" />
+    <Compile Include="MML.cs" />
     <Compile Include="mml2vgm.cs" />
+    <Compile Include="MMLAnalyze.cs" />
     <Compile Include="msgBox.cs" />
+    <Compile Include="Note.cs" />
     <Compile Include="partWork.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

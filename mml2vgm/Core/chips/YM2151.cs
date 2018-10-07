@@ -8,7 +8,7 @@ namespace Core
 {
     public class YM2151 : ClsChip
     {
-        public YM2151(ClsVgm parent, int chipID, string initialPartName, string stPath) : base(parent, chipID, initialPartName, stPath)
+        public YM2151(ClsVgm parent, int chipID, string initialPartName, string stPath, bool isSecondary) : base(parent, chipID, initialPartName, stPath, isSecondary)
         {
 
             _Name = "YM2151";
@@ -29,6 +29,38 @@ namespace Core
 
         }
 
+        public override void InitChip()
+        {
+            if (!use) return;
+
+            //initialize shared param
+
+            //FM Off
+            OutAllKeyOff();
+
+            foreach (partWork pw in lstPartWork)
+            {
+                if (pw.ch == 0)
+                {
+                    pw.hardLfoFreq = 0;
+                    pw.hardLfoPMD = 0;
+                    pw.hardLfoAMD = 0;
+
+                    //Reset Hard LFO
+                    OutSetHardLfoFreq(pw, pw.hardLfoFreq);
+                    OutSetHardLfoDepth(pw, false, pw.hardLfoAMD);
+                    OutSetHardLfoDepth(pw, true, pw.hardLfoPMD);
+                }
+
+                pw.ams = 0;
+                pw.pms = 0;
+                if (!pw.dataEnd) OutSetPMSAMS(pw, 0, 0);
+
+            }
+
+            if (IsSecondary) parent.dat[0x33] |= 0x40;//use Secondary
+        }
+
         public override void InitPart(ref partWork pw)
         {
             pw.slots = 0xf;
@@ -38,33 +70,6 @@ namespace Core
             pw.port1 = 0xff;
             pw.mixer = 0;
             pw.noise = 0;
-        }
-
-        public void SetVolume(partWork pw)
-        {
-            int vol = pw.volume;
-
-            for (int lfo = 0; lfo < 4; lfo++)
-            {
-                if (!pw.lfo[lfo].sw)
-                {
-                    continue;
-                }
-                if (pw.lfo[lfo].type != eLfoType.Tremolo)
-                {
-                    continue;
-                }
-                vol += pw.lfo[lfo].value + pw.lfo[lfo].param[6];
-            }
-
-            if (pw.beforeVolume != vol)
-            {
-                if (parent.instFM.ContainsKey(pw.instrument))
-                {
-                    OutSetVolume(pw, vol, pw.instrument);
-                    pw.beforeVolume = vol;
-                }
-            }
         }
 
         public void OutSetFnum(partWork pw, int octave, int note, int kf)
@@ -141,28 +146,38 @@ namespace Core
             ope = (ope == 1) ? 2 : ((ope == 2) ? 1 : ope);
             tl &= 0x7f;
 
-            parent.OutData(pw.port0, (byte)(0x60 + pw.ch + ope * 8), (byte)tl);
+            parent.OutData(
+                pw.port0
+                , (byte)(0x60 + pw.ch + ope * 8)
+                , (byte)tl
+                );
         }
 
         public void OutSetHardLfoFreq(partWork pw, int freq)
         {
-            parent.dat.Add(pw.port0);
-            parent.dat.Add(0x18);
-            parent.dat.Add((byte)(freq & 0xff));
+            parent.OutData(
+                pw.port0
+                , 0x18
+                , (byte)(freq & 0xff)
+                );
         }
 
         public void OutSetHardLfoDepth(partWork pw, bool isPMD, int depth)
         {
-            parent.dat.Add(pw.port0);
-            parent.dat.Add(0x19);
-            parent.dat.Add((byte)((isPMD ? 0x80 : 0x00) | (depth & 0x7f)));
+            parent.OutData(
+                pw.port0
+                , 0x19
+                , (byte)((isPMD ? 0x80 : 0x00) | (depth & 0x7f))
+                );
         }
 
         public void OutSetPMSAMS(partWork pw, int PMS, int AMS)
         {
-            parent.dat.Add(pw.port0);
-            parent.dat.Add((byte)(0x38 + pw.ch));
-            parent.dat.Add((byte)(((PMS & 0x7) << 4) | (AMS & 0x3)));
+            parent.OutData(
+                pw.port0
+                , (byte)(0x38 + pw.ch)
+                , (byte)(((PMS & 0x7) << 4) | (AMS & 0x3))
+                );
         }
 
         public void OutSetPanFeedbackAlgorithm(partWork pw, int pan, int fb, int alg)
@@ -309,10 +324,10 @@ namespace Core
 
         }
 
-        public void SetFNum(partWork pw)
+        public override void SetFNum(partWork pw)
         {
 
-            int f = GetFNum(pw.octaveNow, pw.noteCmd, pw.shift + pw.keyShift + pw.toneDoublerKeyShift);//
+            int f = GetFNum(pw,pw.octaveNow, pw.noteCmd, pw.shift + pw.keyShift + pw.toneDoublerKeyShift);//
 
             if (pw.bendWaitCounter != -1)
             {
@@ -341,7 +356,7 @@ namespace Core
             OutSetFnum(pw, oct, note, kf);
         }
 
-        public int GetFNum(int octave, char noteCmd, int shift)
+        public override int GetFNum(partWork pw,int octave, char noteCmd, int shift)
         {
             int o = octave;
             int n = Const.NOTE.IndexOf(noteCmd) + shift - 1;
@@ -372,6 +387,199 @@ namespace Core
             return n * 64 + o * 12 * 64;
         }
 
+        public override void SetVolume(partWork pw)
+        {
+            int vol = pw.volume;
+
+            for (int lfo = 0; lfo < 4; lfo++)
+            {
+                if (!pw.lfo[lfo].sw)
+                {
+                    continue;
+                }
+                if (pw.lfo[lfo].type != eLfoType.Tremolo)
+                {
+                    continue;
+                }
+                vol += pw.lfo[lfo].value + pw.lfo[lfo].param[6];
+            }
+
+            if (pw.beforeVolume != vol)
+            {
+                if (parent.instFM.ContainsKey(pw.instrument))
+                {
+                    OutSetVolume(pw, vol, pw.instrument);
+                    pw.beforeVolume = vol;
+                }
+            }
+        }
+
+        public override void SetKeyOff(partWork pw)
+        {
+            OutKeyOff(pw);
+        }
+        
+        public override void CmdNoiseToneMixer(partWork pw, MML mml)
+        {
+            int n = (int)mml.args[0];
+            n = Common.CheckRange(n, 0, 1);
+            pw.mixer = n;
+        }
+
+        public override void CmdNoise(partWork pw, MML mml)
+        {
+            int n = (int)mml.args[0];
+            n = Common.CheckRange(n, 0, 31);
+            if (pw.noise != n)
+            {
+                pw.noise = n;
+            }
+        }
+
+        public override void CmdMPMS(partWork pw, MML mml)
+        {
+            int n = (int)mml.args[1];
+            n = Common.CheckRange(n, 0, 7);
+            pw.pms = n;
+            ((YM2151)pw.chip).OutSetPMSAMS(pw, pw.pms, pw.ams);
+        }
+
+        public override void CmdMAMS(partWork pw, MML mml)
+        {
+            int n = (int)mml.args[1];
+            n = Common.CheckRange(n, 0, 3);
+            pw.ams = n;
+            ((YM2151)pw.chip).OutSetPMSAMS(pw, pw.pms, pw.ams);
+        }
+
+        public override void CmdLfo(partWork pw, MML mml)
+        {
+            base.CmdLfo(pw, mml);
+
+            int c = (char)mml.args[0] - 'P';
+            if (pw.lfo[c].type == eLfoType.Hardware)
+            {
+                if (pw.lfo[c].param.Count < 4)
+                {
+                    msgBox.setErrMsg("LFOの設定に必要なパラメータが足りません。", pw.getSrcFn(), pw.getLineNumber());
+                    return;
+                }
+                if (pw.lfo[c].param.Count > 5)
+                {
+                    msgBox.setErrMsg("LFOの設定に可能なパラメータ数を超えて指定されました。", pw.getSrcFn(), pw.getLineNumber());
+                    return;
+                }
+
+                pw.lfo[c].param[0] = Common.CheckRange(pw.lfo[c].param[0], 0, 3); //Type
+                pw.lfo[c].param[1] = Common.CheckRange(pw.lfo[c].param[1], 0, 255); //LFRQ
+                pw.lfo[c].param[2] = Common.CheckRange(pw.lfo[c].param[2], 0, 127); //PMD
+                pw.lfo[c].param[3] = Common.CheckRange(pw.lfo[c].param[3], 0, 127); //AMD
+                if (pw.lfo[c].param.Count == 5)
+                {
+                    pw.lfo[c].param[4] = Common.CheckRange(pw.lfo[c].param[4], 0, 1);
+                }
+                else
+                {
+                    pw.lfo[c].param.Add(0);
+                }
+            }
+        }
+
+        public override void CmdLfoSwitch(partWork pw, MML mml)
+        {
+            base.CmdLfo(pw, mml);
+
+            int c = (char)mml.args[0] - 'P';
+            int n = (int)mml.args[1];
+            if (pw.lfo[c].type == eLfoType.Hardware)
+            {
+                ((YM2151)pw.chip).OutSetHardLfo(pw, (n == 0) ? false : true, pw.lfo[c].param);
+            }
+        }
+
+        public override void CmdPan(partWork pw, MML mml)
+        {
+            int n = (int)mml.args[0];
+            n = Common.CheckRange(n, 1, 3);
+            pw.pan.val = (n == 1) ? 2 : (n == 2 ? 1 : n);
+            if (pw.instrument < 0)
+            {
+                msgBox.setErrMsg("音色指定前にパンは指定できません。"
+                    , pw.getSrcFn(), pw.getLineNumber());
+            }
+            else
+            {
+                ((YM2151)pw.chip).OutSetPanFeedbackAlgorithm(
+                    pw
+                    , (int)pw.pan.val
+                    , parent.instFM[pw.instrument][46]
+                    , parent.instFM[pw.instrument][45]
+                    );
+            }
+        }
+
+        public override void CmdInstrument(partWork pw, MML mml)
+        {
+            char type = (char)mml.args[0];
+            int n = (int)mml.args[1];
+
+            if (type == 'I')
+            {
+                msgBox.setErrMsg("この音源はInstrumentを持っていません。", pw.getSrcFn(), pw.getLineNumber());
+                return;
+            }
+
+            if (type == 'T')
+            {
+                n = Common.CheckRange(n, 0, 255);
+                pw.toneDoubler = n;
+                return;
+            }
+
+            if (type == 'E')
+            {
+                SetEnvelopParamFromInstrument(pw, n,mml);
+                return;
+            }
+
+            n = Common.CheckRange(n, 0, 255);
+            if (pw.instrument == n) return;
+
+            pw.instrument = n;
+            ((YM2151)pw.chip).OutSetInstrument(pw, n, pw.volume);
+        }
+
+        public override void SetLfoAtKeyOn(partWork pw)
+        {
+            for (int lfo = 0; lfo < 4; lfo++)
+            {
+                clsLfo pl = pw.lfo[lfo];
+
+                if (!pl.sw)
+                    continue;
+                if (pl.type == eLfoType.Hardware)
+                    continue;
+                if (pl.param[5] != 1)
+                    continue;
+
+                pl.isEnd = false;
+                pl.value = (pl.param[0] == 0) ? pl.param[6] : 0;//ディレイ中は振幅補正は適用されない
+                pl.waitCounter = pl.param[0];
+                pl.direction = pl.param[2] < 0 ? -1 : 1;
+
+                if (pl.type == eLfoType.Vibrato)
+                    SetFNum(pw);
+
+                if (pl.type == eLfoType.Tremolo)
+                    SetVolume(pw);
+
+            }
+        }
+
+        public override void SetPCMDataBlock()
+        {
+            //実装不要
+        }
 
     }
 }

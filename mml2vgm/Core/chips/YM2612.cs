@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Core
 {
-    public class YM2612 : ClsChip
+    public class YM2612 : ClsOPN
     {
         protected int[][] _FNumTbl = new int[1][] {
             new int[13]
@@ -15,18 +15,20 @@ namespace Core
             // 0x289,0x2af,0x2d8,0x303,0x331,0x362,0x395,0x3cc,0x405,0x443,0x484,0x4c8,0x289*2
             //}
         };
-
+        public const string FMF_NUM = "FMF-NUM";
 
         public byte[] pcmData = null;
 
-        public YM2612(ClsVgm parent, int chipID, string initialPartName, string stPath) : base(parent, chipID, initialPartName, stPath)
-        {
 
+        public YM2612(ClsVgm parent, int chipID, string initialPartName, string stPath, bool isSecondary) : base(parent, chipID, initialPartName, stPath, isSecondary)
+        {
+            _chipType = enmChipType.YM2612;
             _Name = "YM2612";
             _ShortName = "OPN2";
             _ChMax = 9;
             _canUsePcm = true;
             FNumTbl = _FNumTbl;
+            IsSecondary = isSecondary;
 
             Frequency = 7670454;
 
@@ -56,7 +58,20 @@ namespace Core
             Ch[7].Type = enmChannelType.FMOPNex;
             Ch[8].Type = enmChannelType.FMOPNex;
 
+            if (!isSecondary)
+            {
+                pcmDataInfo = new clsPcmDataInfo[] { new clsPcmDataInfo() };
+                pcmDataInfo[0].totalBuf = new byte[7] { 0x67, 0x66, 0x00, 0x00, 0x00, 0x00, 0x00 };
+                pcmDataInfo[0].totalBufPtr = 0L;
+                pcmDataInfo[0].use = false;
+            }
+            else
+            {
+                pcmDataInfo = null;
+            }
+
         }
+
 
         public override void InitPart(ref partWork pw)
         {
@@ -69,46 +84,39 @@ namespace Core
 
         public override void InitChip()
         {
-            if (use)
+            if (!use) return;
+
+            OutOPNSetHardLfo(lstPartWork[0], false, 0);
+            OutOPNSetCh3SpecialMode(lstPartWork[0], false);
+            OutSetCh6PCMMode(lstPartWork[0], false);
+
+            OutFmAllKeyOff();
+
+            foreach (partWork pw in lstPartWork)
             {
-                parent.OutOPNSetHardLfo(lstPartWork[0], false, 0);
-                parent.OutOPNSetCh3SpecialMode(lstPartWork[0], false);
-                OutSetCh6PCMMode(lstPartWork[0], false);
-
-                parent.OutFmAllKeyOff(this);
-
-                foreach (partWork pw in lstPartWork)
+                if (pw.ch == 0)
                 {
-                    if (pw.ch == 0)
-                    {
-                        pw.hardLfoSw = false;
-                        pw.hardLfoNum = 0;
-                        parent.OutOPNSetHardLfo(pw, pw.hardLfoSw, pw.hardLfoNum);
-                    }
-
-                    if (pw.ch < 6)
-                    {
-                        pw.pan.val = 3;
-                        pw.ams = 0;
-                        pw.fms = 0;
-                        if (!pw.dataEnd) parent.OutOPNSetPanAMSPMS(pw, 3, 0, 0);
-                    }
+                    pw.hardLfoSw = false;
+                    pw.hardLfoNum = 0;
                 }
 
-                if (ChipID != 0) parent.dat[0x2f] |= 0x40;
+                if (pw.ch < 6)
+                {
+                    pw.pan.val = 3;
+                    pw.ams = 0;
+                    pw.fms = 0;
+                    if (!pw.dataEnd) OutOPNSetPanAMSPMS(pw, 3, 0, 0);
+                }
             }
 
+            if (ChipID != 0) parent.dat[0x2f] |= 0x40;
+
         }
 
-        public void OutSetCh6PCMMode(partWork pw, bool sw)
+        public override void SetF_NumTbl(string wrd, string val)
         {
-            parent.dat.Add(pw.port0);
-            parent.dat.Add(0x2b);
-            parent.dat.Add((byte)((sw ? 0x80 : 0)));
-        }
+            if (wrd != FMF_NUM) return;
 
-        public void SetF_NumTbl(string val)
-        {
             //厳密なチェックを行っていないので設定値によってはバグる危険有り
 
             string[] s = val.Split(new string[] { ",", " ", "\t" }, StringSplitOptions.RemoveEmptyEntries);
@@ -117,6 +125,286 @@ namespace Core
                 FNumTbl[0][i] = int.Parse(s[i], System.Globalization.NumberStyles.HexNumber);
             }
             FNumTbl[0][12] = FNumTbl[0][0] * 2;
+        }
+
+        public override void StorePcm(Dictionary<int, clsPcm> newDic, KeyValuePair<int, clsPcm> v, byte[] buf, params object[] option)
+        {
+            clsPcmDataInfo pi = pcmDataInfo[0];
+
+            try
+            {
+                long size = buf.Length;
+                if (newDic.ContainsKey(v.Key))
+                {
+                    newDic.Remove(v.Key);
+                }
+                newDic.Add(v.Key, new clsPcm(v.Value.num, v.Value.seqNum, v.Value.chip, false, v.Value.fileName, v.Value.freq, v.Value.vol, pi.totalBufPtr, pi.totalBufPtr + size, size, -1));
+                pi.totalBufPtr += size;
+
+                byte[] newBuf = new byte[pi.totalBuf.Length + buf.Length];
+                Array.Copy(pi.totalBuf, newBuf, pi.totalBuf.Length);
+                Array.Copy(buf, 0, newBuf, pi.totalBuf.Length, buf.Length);
+
+                pi.totalBuf = newBuf;
+                Common.SetUInt32bit31(pi.totalBuf, 3, (UInt32)(pi.totalBuf.Length - 7), IsSecondary);
+                pi.use = true;
+                pcmData = pi.use ? pi.totalBuf : null;
+            }
+            catch
+            {
+                pi.use = false;
+            }
+
+        }
+
+        public void OutSetCh6PCMMode(partWork pw, bool sw)
+        {
+            parent.OutData(
+                pw.port0
+                , 0x2b
+                , (byte)((sw ? 0x80 : 0))
+                );
+        }
+
+        public void GetPcmNote(partWork pw)
+        {
+            int shift = pw.shift + pw.keyShift;
+            int o = pw.octaveNow;//
+            int n = Const.NOTE.IndexOf(pw.noteCmd) + shift;
+            if (n >= 0)
+            {
+                o += n / 12;
+                o = Common.CheckRange(o, 1, 8);
+                n %= 12;
+            }
+            else
+            {
+                o += n / 12 - 1;
+                o = Common.CheckRange(o, 1, 8);
+                n %= 12;
+                if (n < 0) { n += 12; }
+            }
+
+            pw.pcmOctave = o;
+            pw.pcmNote = n;
+        }
+
+        public override void SetFNum(partWork pw)
+        {
+            SetFmFNum(pw);
+        }
+
+        public override void SetKeyOn(partWork pw)
+        {
+            OutFmKeyOn(pw);
+        }
+
+        public override void SetKeyOff(partWork pw)
+        {
+            OutFmKeyOff(pw);
+        }
+
+
+
+        public override void CmdY(partWork pw, MML mml)
+        {
+            base.CmdY(pw, mml);
+
+            if (mml.args[0] is string) return;
+
+            byte adr = (byte)mml.args[0];
+            byte dat = (byte)mml.args[1];
+            parent.OutData((pw.ch > 2 && pw.ch < 6) ? pw.port1 : pw.port0, adr, dat);
+        }
+
+        public override void CmdMPMS(partWork pw, MML mml)
+        {
+
+            int n = (int)mml.args[1];
+            n = Common.CheckRange(n, 0, 3);
+            pw.pms = n;
+            ((ClsOPN)pw.chip).OutOPNSetPanAMSPMS(
+                pw
+                , (int)pw.pan.val
+                , pw.ams
+                , pw.pms);
+        }
+
+        public override void CmdMAMS(partWork pw, MML mml)
+        {
+
+            int n = (int)mml.args[1];
+            n = Common.CheckRange(n, 0, 7);
+            pw.ams = n;
+            ((ClsOPN)pw.chip).OutOPNSetPanAMSPMS(
+                pw
+                , (int)pw.pan.val
+                , pw.ams
+                , pw.pms);
+        }
+
+        public override void CmdLfo(partWork pw, MML mml)
+        {
+            base.CmdLfo(pw, mml);
+
+            int c = (char)mml.args[0] - 'P';
+            if (pw.lfo[c].type == eLfoType.Hardware)
+            {
+                if (pw.lfo[c].param.Count < 4)
+                {
+                    msgBox.setErrMsg("LFOの設定に必要なパラメータが足りません。", pw.getSrcFn(), pw.getLineNumber());
+                    return;
+                }
+                if (pw.lfo[c].param.Count > 5)
+                {
+                    msgBox.setErrMsg("LFOの設定に可能なパラメータ数を超えて指定されました。", pw.getSrcFn(), pw.getLineNumber());
+                    return;
+                }
+
+                pw.lfo[c].param[0] = Common.CheckRange(pw.lfo[c].param[0], 0, (int)parent.info.clockCount);//Delay(無視)
+                pw.lfo[c].param[1] = Common.CheckRange(pw.lfo[c].param[1], 0, 7);//Freq
+                pw.lfo[c].param[2] = Common.CheckRange(pw.lfo[c].param[2], 0, 7);//PMS
+                pw.lfo[c].param[3] = Common.CheckRange(pw.lfo[c].param[3], 0, 3);//AMS
+                if (pw.lfo[c].param.Count == 5)
+                {
+                    pw.lfo[c].param[4] = Common.CheckRange(pw.lfo[c].param[4], 0, 1); //Switch
+                }
+                else
+                {
+                    pw.lfo[c].param.Add(1);
+                }
+            }
+        }
+
+        public override void CmdLfoSwitch(partWork pw, MML mml)
+        {
+            base.CmdLfoSwitch(pw, mml);
+
+            int c = (char)mml.args[0] - 'P';
+            int n = (int)mml.args[1];
+            if (pw.lfo[c].type == eLfoType.Hardware)
+            {
+                if (pw.lfo[c].param[4] == 0)
+                {
+                    ((ClsOPN)pw.chip).OutOPNSetHardLfo(pw, (n == 0) ? false : true, pw.lfo[c].param[1]);
+                }
+                else
+                {
+                    ((ClsOPN)pw.chip).OutOPNSetHardLfo(pw, false, pw.lfo[c].param[1]);
+                }
+            }
+        }
+
+        public override void CmdPan(partWork pw, MML mml)
+        {
+            int n = (int)mml.args[0];
+
+            //強制的にモノラルにする
+            if (parent.info.monoPart != null 
+                && parent.info.monoPart.Contains(Ch[5].Name))
+            {
+                n = 3;
+            }
+
+            n = Common.CheckRange(n, 1, 3);
+            pw.pan.val = n;
+            ((ClsOPN)pw.chip).OutOPNSetPanAMSPMS(pw, n, pw.ams, pw.fms);
+        }
+
+        public override void CmdMode(partWork pw, MML mml)
+        {
+            int n = (int)mml.args[0];
+            if (pw.Type == enmChannelType.FMPCM)
+            {
+                n = Common.CheckRange(n, 0, 1);
+                pw.pcm = (n == 1);
+                pw.freq = -1;//freqをリセット
+                pw.instrument = -1;
+                ((YM2612)(pw.chip)).OutSetCh6PCMMode(pw, pw.pcm);
+
+                return;
+            }
+
+            base.CmdMode(pw, mml);
+
+        }
+
+        public override void CmdInstrument(partWork pw, MML mml)
+        {
+            char type = (char)mml.args[0];
+            int n = (int)mml.args[1];
+
+            if (type == 'N')
+            {
+                if (pw.Type == enmChannelType.FMOPNex)
+                {
+                    pw.instrument = n;
+                    lstPartWork[2].instrument = n;
+                    lstPartWork[6].instrument = n;
+                    lstPartWork[7].instrument = n;
+                    lstPartWork[8].instrument = n;
+                    OutFmSetInstrument(pw, n, pw.volume);
+                    return;
+                }
+
+                if (pw.pcm)
+                {
+                    pw.instrument = n;
+                    if (!parent.instPCM.ContainsKey(n))
+                    {
+                        msgBox.setErrMsg(string.Format("PCM定義に指定された音色番号({0})が存在しません。", n), pw.getSrcFn(), pw.getLineNumber());
+                    }
+                    else
+                    {
+                        if (parent.instPCM[n].chip != enmChipType.YM2612)
+                        {
+                            msgBox.setErrMsg(string.Format("指定された音色番号({0})はYM2612向けPCMデータではありません。", n), pw.getSrcFn(), pw.getLineNumber());
+                        }
+                    }
+                    return;
+                }
+
+            }
+
+            base.CmdInstrument(pw, mml);
+        }
+
+        public override void SetPCMDataBlock()
+        {
+            if (use && pcmData != null && pcmData.Length > 0 && !IsSecondary)
+                parent.OutData(pcmData);
+        }
+
+        public override void SetLfoAtKeyOn(partWork pw)
+        {
+            for (int lfo = 0; lfo < 4; lfo++)
+            {
+                clsLfo pl = pw.lfo[lfo];
+                if (!pl.sw)
+                    continue;
+
+                if (pl.param[5] != 1)
+                    continue;
+
+                pl.isEnd = false;
+                pl.value = (pl.param[0] == 0) ? pl.param[6] : 0;//ディレイ中は振幅補正は適用されない
+                pl.waitCounter = pl.param[0];
+                pl.direction = pl.param[2] < 0 ? -1 : 1;
+
+                if (pl.type == eLfoType.Vibrato)
+                {
+                    SetFmFNum(pw);
+
+                }
+
+                if (pl.type == eLfoType.Tremolo)
+                {
+                    pw.beforeVolume = -1;
+                    SetFmVolume(pw);
+
+                }
+
+            }
         }
 
     }

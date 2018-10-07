@@ -20,6 +20,13 @@ namespace Core
         public Dictionary<string, Line> aData = null;
 
         /// <summary>
+        /// mmlデータ
+        /// </summary>
+        public List<MML> mmlData = null;
+
+        public int mmlPos = 0;
+
+        /// <summary>
         /// データが最後まで演奏されたかどうかを示す(注意:trueでも演奏が終わったとは限らない)
         /// </summary>
         public bool dataEnd = false;
@@ -38,6 +45,11 @@ namespace Core
         /// リピート位置情報のスタック
         /// </summary>
         public Stack<clsRepeat> stackRepeat = new Stack<clsRepeat>();
+
+        /// <summary>
+        /// 連符位置情報のスタック
+        /// </summary>
+        public Stack<clsRenpu> stackRenpu = new Stack<clsRenpu>();
 
         /// <summary>
         /// パートごとの音源の種類
@@ -371,6 +383,15 @@ namespace Core
             return pos.tCol;
         }
 
+        public Line getLine()
+        {
+            if (pos.alies == "")
+            {
+                return pData[pos.row];
+            }
+            return aData[pos.alies];
+        }
+
         /// <summary>
         /// 解析位置に対するソースファイル上の行数を得る
         /// </summary>
@@ -461,7 +482,6 @@ namespace Core
         /// 解析位置を指定する
         /// </summary>
         /// <param name="tCol">解析位置</param>
-        /// <remarks>エイリアスを毎回展開しながら位置を算出するためとても効率が悪い</remarks>
         public void setPos(int tCol)
         {
             if (pData == null)
@@ -487,143 +507,143 @@ namespace Core
             //}
             return;
 
-            dataEnd = false;
+            //dataEnd = false;
 
-            int row = 0;
-            int col = 0;
-            int n = 0;
-            string aliesName = "";
-            resetPos();
+            //int row = 0;
+            //int col = 0;
+            //int n = 0;
+            //string aliesName = "";
+            //resetPos();
 
-            pos.tCol = tCol;
+            //pos.tCol = tCol;
 
-            while (true)
-            {
-                string data;
-                char ch;
+            //while (true)
+            //{
+            //    string data;
+            //    char ch;
 
-                //読みだすデータの頭出し
-                if (aliesName == "")
-                {
-                    if (pData.Count == row)
-                    {
-                        dataEnd = true;
-                        return;
-                    }
-                    data = pData[row].Txt;
-                }
-                else
-                {
-                    data = aData[aliesName].Txt;
-                }
+            //    //読みだすデータの頭出し
+            //    if (aliesName == "")
+            //    {
+            //        if (pData.Count == row)
+            //        {
+            //            dataEnd = true;
+            //            return;
+            //        }
+            //        data = pData[row].Txt;
+            //    }
+            //    else
+            //    {
+            //        data = aData[aliesName].Txt;
+            //    }
 
-                while (data.Length == col)
-                {
-                    if (aliesName == "")
-                    {
-                        row++;
-                        if (pData.Count == row)
-                        {
-                            dataEnd = true;
-                            break;
-                        }
-                        else
-                        {
-                            data = pData[row].Txt;
-                            col = 0;
-                            break;
-                        }
-                    }
-                    else
-                    {
-                        clsPos p = stackPos.Pop();
-                        aliesName = p.alies;
-                        col = p.col;
-                        row = p.row;
-                        if (aliesName == "")
-                        {
-                            data = pData[row].Txt;
-                        }
-                        else
-                        {
-                            data = aData[aliesName].Txt;
-                        }
-                    }
-                }
-                ch = data[col];
+            //    while (data.Length == col)
+            //    {
+            //        if (aliesName == "")
+            //        {
+            //            row++;
+            //            if (pData.Count == row)
+            //            {
+            //                dataEnd = true;
+            //                break;
+            //            }
+            //            else
+            //            {
+            //                data = pData[row].Txt;
+            //                col = 0;
+            //                break;
+            //            }
+            //        }
+            //        else
+            //        {
+            //            clsPos p = stackPos.Pop();
+            //            aliesName = p.alies;
+            //            col = p.col;
+            //            row = p.row;
+            //            if (aliesName == "")
+            //            {
+            //                data = pData[row].Txt;
+            //            }
+            //            else
+            //            {
+            //                data = aData[aliesName].Txt;
+            //            }
+            //        }
+            //    }
+            //    ch = data[col];
 
-                while (ch == '%')
-                {
-                    string a = getAliesName(data, col);
-                    if (a != "")
-                    {
-                        clsPos p = new clsPos();
-                        p.alies = aliesName;
-                        p.col = col + a.Length + 1;
-                        p.row = row;
-                        stackPos.Push(p);
+            //    while (ch == '%')
+            //    {
+            //        string a = getAliesName(data, col);
+            //        if (a != "")
+            //        {
+            //            clsPos p = new clsPos();
+            //            p.alies = aliesName;
+            //            p.col = col + a.Length + 1;
+            //            p.row = row;
+            //            stackPos.Push(p);
 
-                        data = aData[a].Txt;
-                        col = 0;
-                        aliesName = a;
-                        row = 0;
-                    }
-                    else
-                    {
-                        msgBox.setWrnMsg("指定されたエイリアス名は定義されていません。"
-                            , (aliesName == "") ? pData[row].Fn : aData[aliesName].Fn
-                            , (aliesName == "") ? pData[row].Num : aData[aliesName].Num
-                            );
-                        col++;
-                    }
-                    ch = data[col];
-                }
+            //            data = aData[a].Txt;
+            //            col = 0;
+            //            aliesName = a;
+            //            row = 0;
+            //        }
+            //        else
+            //        {
+            //            msgBox.setWrnMsg("指定されたエイリアス名は定義されていません。"
+            //                , (aliesName == "") ? pData[row].Fn : aData[aliesName].Fn
+            //                , (aliesName == "") ? pData[row].Num : aData[aliesName].Num
+            //                );
+            //            col++;
+            //        }
+            //        ch = data[col];
+            //    }
 
-                if (n == tCol)
-                {
-                    pos.row = row;
-                    pos.col = col;
-                    pos.alies = aliesName;
-                    break;
-                }
+            //    if (n == tCol)
+            //    {
+            //        pos.row = row;
+            //        pos.col = col;
+            //        pos.alies = aliesName;
+            //        break;
+            //    }
 
-                n++;
-                col++;
-                while (data.Length == col)
-                {
-                    if (aliesName == "")
-                    {
-                        row++;
-                        if (pData.Count == row)
-                        {
-                            dataEnd = true;
-                            break;
-                        }
-                        else
-                        {
-                            data = pData[row].Txt;
-                            col = 0;
-                            break;
-                        }
-                    }
-                    else
-                    {
-                        clsPos p = stackPos.Pop();
-                        aliesName = p.alies;
-                        col = p.col;
-                        row = p.row;
-                        if (aliesName == "")
-                        {
-                            data = pData[row].Txt;
-                        }
-                        else
-                        {
-                            data = aData[aliesName].Txt;
-                        }
-                    }
-                }
+            //    n++;
+            //    col++;
+            //    while (data.Length == col)
+            //    {
+            //        if (aliesName == "")
+            //        {
+            //            row++;
+            //            if (pData.Count == row)
+            //            {
+            //                dataEnd = true;
+            //                break;
+            //            }
+            //            else
+            //            {
+            //                data = pData[row].Txt;
+            //                col = 0;
+            //                break;
+            //            }
+            //        }
+            //        else
+            //        {
+            //            clsPos p = stackPos.Pop();
+            //            aliesName = p.alies;
+            //            col = p.col;
+            //            row = p.row;
+            //            if (aliesName == "")
+            //            {
+            //                data = pData[row].Txt;
+            //            }
+            //            else
+            //            {
+            //                data = aData[aliesName].Txt;
+            //            }
+            //        }
+            //    }
 
-            }
+            //}
 
         }
 
@@ -968,13 +988,35 @@ namespace Core
 
     }
 
+    public class clsRenpu
+    {
+        /// <summary>
+        /// 位置
+        /// </summary>
+        public int pos = 0;
+
+        /// <summary>
+        /// リピートのスタック数
+        /// </summary>
+        public int repeatStackCount = 0;
+
+        /// <summary>
+        /// ノートの数
+        /// </summary>
+        public int noteCount = 0;
+
+        public MML mml;
+
+        public List<int> lstRenpuLength;
+    }
+
     public class clsLfo
     {
 
         /// <summary>
         /// Lfoの種類
         /// </summary>
-        public eLfoType type = eLfoType.Hardware;
+        public eLfoType type = eLfoType.unknown;
 
         /// <summary>
         /// Lfoの設定値
@@ -1022,8 +1064,9 @@ namespace Core
         public long edAdr = 0;
         public long size = 0;
         public long loopAdr = -1;
+        public object[] option = null;
 
-        public clsPcm(int num,int seqNum, enmChipType chip,bool isSecondary,string fileName, int freq, int vol , long stAdr, long edAdr, long size,long loopAdr)
+        public clsPcm(int num,int seqNum, enmChipType chip,bool isSecondary,string fileName, int freq, int vol , long stAdr, long edAdr, long size,long loopAdr,params object[] option)
         {
             this.num = num;
             this.seqNum = seqNum;
@@ -1036,6 +1079,7 @@ namespace Core
             this.edAdr = edAdr;
             this.size = size;
             this.loopAdr = loopAdr;
+            this.option = option;
         }
     }
 

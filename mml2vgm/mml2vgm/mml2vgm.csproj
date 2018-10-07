@@ -25,10 +25,11 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
+    <DebugType>none</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>
+    </DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -98,6 +99,8 @@
     </None>
     <None Include="sample\testFMSecondary.vgm" />
     <None Include="sample\testHuC6280.gwi" />
+    <None Include="sample\testOPLL.gwi" />
+    <None Include="sample\testSEGAPCM.gwi" />
     <None Include="sample\testToneDoubler.gwi" />
     <None Include="sample\testToneDoubler.vgm" />
     <None Include="sample\testYM2151.gwi" />

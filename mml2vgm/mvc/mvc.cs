@@ -55,18 +55,21 @@ namespace mvc
             {
                 Console.WriteLine("\r\nPart  Chip    Count");
                 Console.WriteLine("--------------------");
-                foreach (ClsChip chip in mv.desVGM.chips)
+                foreach (KeyValuePair<enmChipType, ClsChip[]> kvp in mv.desVGM.chips)
                 {
-                    List<partWork> pw = chip.lstPartWork;
-                    for (int i = 0; i < pw.Count; i++)
+                    foreach (ClsChip chip in kvp.Value)
                     {
-                        if (pw[i].clockCounter == 0) continue;
+                        List<partWork> pw = chip.lstPartWork;
+                        for (int i = 0; i < pw.Count; i++)
+                        {
+                            if (pw[i].clockCounter == 0) continue;
 
-                        Console.WriteLine(string.Format(" {0}   {1}   {2}"
-                            , pw[i].PartName.Substring(0, 2).Replace(" ", "") + int.Parse(pw[i].PartName.Substring(2, 2)).ToString()
-                            , pw[i].chip.Name.ToUpper()
-                            , pw[i].clockCounter
-                        ));
+                            Console.WriteLine(string.Format(" {0}   {1}   {2}"
+                                , pw[i].PartName.Substring(0, 2).Replace(" ", "") + int.Parse(pw[i].PartName.Substring(2, 2)).ToString()
+                                , pw[i].chip.Name.ToUpper()
+                                , pw[i].clockCounter
+                            ));
+                        }
                     }
                 }
             }
@@ -88,8 +91,8 @@ namespace mvc
             if (mv.desVGM != null)
             {
                 Console.WriteLine(string.Format(" Total Clocks  : {0}", mv.desVGM.lClock));
-                if (mv.desVGM.format == enmFormat.VGM) Console.WriteLine(string.Format(" Total Samples : {0:0.00}({1:0.00}s)", mv.desVGM.dSample, mv.desVGM.dSample / 44100L));
-                else Console.WriteLine(string.Format(" Total Samples : {0:0.00}({1:0.00}s)", mv.desVGM.dSample, mv.desVGM.dSample / (mv.desVGM.xgmSamplesPerSecond)));
+                if (mv.desVGM.info.format == enmFormat.VGM) Console.WriteLine(string.Format(" Total Samples : {0:0.00}({1:0.00}s)", mv.desVGM.dSample, mv.desVGM.dSample / 44100L));
+                else Console.WriteLine(string.Format(" Total Samples : {0:0.00}({1:0.00}s)", mv.desVGM.dSample, mv.desVGM.dSample / (mv.desVGM.info.xgmSamplesPerSecond)));
                 if (mv.desVGM.ym2608[0].pcmData != null) Console.WriteLine(string.Format(" ADPCM Data size(YM2608)  : ({0}/262143) byte", mv.desVGM.ym2608[0].pcmData.Length - 15));
                 if (mv.desVGM.ym2608[1].pcmData != null) Console.WriteLine(string.Format(" ADPCM Data size(YM2608Secondary)  : ({0}/262143) byte", mv.desVGM.ym2608[1].pcmData.Length - 15));
                 if (mv.desVGM.ym2610b[0].pcmDataA != null) Console.WriteLine(string.Format(" ADPCM-A Data size(YM2610B)  : ({0}/16777215) byte", mv.desVGM.ym2610b[0].pcmDataA.Length - 15));

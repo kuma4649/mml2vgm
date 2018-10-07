@@ -46,7 +46,8 @@ namespace Core
         SEGAPCM = 7,
         HuC6280 = 8,
         YM2612X = 9,
-        YM2413 = 10
+        YM2413 = 10,
+        C140 = 11
     }
 
     public enum ePartType
@@ -56,7 +57,10 @@ namespace Core
 
     public enum eLfoType
     {
-        Tremolo, Vibrato, Hardware
+        unknown,
+        Tremolo,
+        Vibrato,
+        Hardware
     }
 
 }

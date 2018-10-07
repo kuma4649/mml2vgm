@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Core
 {
-    public class YM2610B : ClsChip
+    public class YM2610B : ClsOPN
     {
         protected int[][] _FNumTbl = new int[2][] {
             new int[13]
@@ -30,8 +30,6 @@ namespace Core
             //}
         };
 
-        public byte SSGKeyOn = 0x3f;
-
         public byte[] pcmDataA = null;
         public byte[] pcmDataB = null;
 
@@ -41,14 +39,15 @@ namespace Core
         public byte adpcmA_KeyOn = 0;
         public byte adpcmA_KeyOff = 0;
 
-        public YM2610B(ClsVgm parent, int chipID, string initialPartName, string stPath) : base(parent, chipID, initialPartName, stPath)
+        public YM2610B(ClsVgm parent, int chipID, string initialPartName, string stPath, bool isSecondary) : base(parent, chipID, initialPartName, stPath, isSecondary)
         {
-
+            _chipType = enmChipType.YM2610B;
             _Name = "YM2610B";
             _ShortName = "OPNB";
             _ChMax = 19;
             _canUsePcm = true;
             FNumTbl = _FNumTbl;
+            IsSecondary = isSecondary;
 
             Frequency = 8000000;
 
@@ -97,6 +96,74 @@ namespace Core
 
             Ch[18].Type = enmChannelType.ADPCMB;
 
+            pcmDataInfo = new clsPcmDataInfo[2] { new clsPcmDataInfo(), new clsPcmDataInfo() };
+            pcmDataInfo[0].totalBufPtr = 0L;
+            pcmDataInfo[0].use = false;
+            pcmDataInfo[1].totalBufPtr = 0L;
+            pcmDataInfo[1].use = false;
+            if (!isSecondary)
+            {
+                pcmDataInfo[0].totalBuf = new byte[15] { 0x67, 0x66, 0x82, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+                pcmDataInfo[1].totalBuf = new byte[15] { 0x67, 0x66, 0x83, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+            }
+            else
+            {
+                pcmDataInfo[0].totalBuf = new byte[15] { 0x67, 0x66, 0x82, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+                pcmDataInfo[1].totalBuf = new byte[15] { 0x67, 0x66, 0x83, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+            }
+
+            Envelope = new Function();
+            Envelope.Max = 255;
+            Envelope.Min = 0;
+
+        }
+
+        public override void InitChip()
+        {
+            if (!use) return;
+
+            //initialize shared param
+            OutOPNSetHardLfo(lstPartWork[0], false, 0);
+            OutOPNSetCh3SpecialMode(lstPartWork[0], false);
+
+            //FM Off
+            OutFmAllKeyOff();
+
+            //SSG Off
+            for (int ch = 9; ch < 12; ch++)
+            {
+                OutSsgKeyOff(lstPartWork[ch]);
+                lstPartWork[ch].volume = 0;
+                //setSsgVolume(ym2610b[i].lstPartWork[ch]);
+                //ym2610b[i].lstPartWork[ch].volume = 15;
+            }
+
+            //ADPCM-A/B Reset
+            parent.OutData(lstPartWork[0].port0, 0x1c, 0xbf);
+            parent.OutData(lstPartWork[0].port0, 0x1c, 0x00);
+            parent.OutData(lstPartWork[0].port0, 0x10, 0x00);
+            parent.OutData(lstPartWork[0].port0, 0x11, 0xc0);
+
+            foreach (partWork pw in lstPartWork)
+            {
+                if (pw.ch == 0)
+                {
+                    pw.hardLfoSw = false;
+                    pw.hardLfoNum = 0;
+                    OutOPNSetHardLfo(pw, pw.hardLfoSw, pw.hardLfoNum);
+                }
+
+                if (pw.ch < 6)
+                {
+                    pw.pan.val = 3;
+                    pw.ams = 0;
+                    pw.fms = 0;
+                    if (!pw.dataEnd) OutOPNSetPanAMSPMS(pw, 3, 0, 0);
+                }
+            }
+
+            parent.dat[0x4f] |= 0x80;//YM2610B
+            if (IsSecondary) parent.dat[0x4f] |= 0x40;//use Secondary
         }
 
         public override void InitPart(ref partWork pw)
@@ -126,8 +193,61 @@ namespace Core
             pw.port1 = (byte)(0x9 | (pw.isSecondary ? 0xa0 : 0x50));
         }
 
-        public void MultiChannelCommand()
+        public override void StorePcm(Dictionary<int, clsPcm> newDic, KeyValuePair<int, clsPcm> v, byte[] buf, params object[] option)
         {
+            bool is16bit = (bool)option[0];
+            clsPcmDataInfo pi = pcmDataInfo[v.Value.loopAdr == 0 ? 0 : 1];
+
+            try
+            {
+                EncAdpcmA ea = new EncAdpcmA();
+                buf = v.Value.loopAdr == 0
+                    ? ea.YM_ADPCM_A_Encode(buf, is16bit)
+                    : ea.YM_ADPCM_B_Encode(buf, is16bit, true);
+                long size = buf.Length;
+                byte[] newBuf = new byte[size];
+                Array.Copy(buf, newBuf, size);
+                buf = newBuf;
+                long tSize = size;
+                size = buf.Length;
+
+                newDic.Add(
+                    v.Key
+                    , new clsPcm(
+                        v.Value.num
+                        , v.Value.seqNum, v.Value.chip
+                        , v.Value.isSecondary
+                        , v.Value.fileName
+                        , v.Value.freq
+                        , v.Value.vol
+                        , pi.totalBufPtr
+                        , pi.totalBufPtr + size
+                        , size
+                        , v.Value.loopAdr == 0 ? 0 : 1)
+                    );
+
+                pi.totalBufPtr += size;
+                newBuf = new byte[pi.totalBuf.Length + buf.Length];
+                Array.Copy(pi.totalBuf, newBuf, pi.totalBuf.Length);
+                Array.Copy(buf, 0, newBuf, pi.totalBuf.Length, buf.Length);
+
+                pi.totalBuf = newBuf;
+                Common.SetUInt32bit31(pi.totalBuf, 3, (UInt32)(pi.totalBuf.Length - 7), IsSecondary);
+                Common.SetUInt32bit31(pi.totalBuf, 7, (UInt32)(pi.totalBuf.Length - 7));
+                pi.use = true;
+                pcmDataA = pi.use ? pcmDataInfo[0].totalBuf : null;
+                pcmDataB = pi.use ? pcmDataInfo[1].totalBuf : null;
+            }
+            catch
+            {
+                pi.use = false;
+            }
+
+        }
+
+        public override void MultiChannelCommand()
+        {
+            if (!use) return;
             //コマンドを跨ぐデータ向け処理
             foreach (partWork pw in lstPartWork)
             {
@@ -312,6 +432,339 @@ namespace Core
 
         }
 
+        public override void SetFNum(partWork pw)
+        {
+            if (pw.ch < 9)
+                SetFmFNum(pw);
+            else if (pw.Type == enmChannelType.SSG)
+            {
+                SetSsgFNum(pw);
+            }
+            else if (pw.Type == enmChannelType.ADPCMA)
+            {
+            }
+            else if (pw.Type == enmChannelType.ADPCMB)
+            {
+                SetAdpcmBFNum(pw);
+            }
+        }
+
+        public override void SetKeyOn(partWork pw)
+        {
+            if(pw.ch<9)
+            OutFmKeyOn(pw);
+            else if (pw.Type == enmChannelType.SSG)
+            {
+                OutSsgKeyOn(pw);
+            }
+            else if (pw.Type == enmChannelType.ADPCMA)
+            {
+                pw.keyOn = true;
+                pw.keyOff = false;
+            }
+            else if (pw.Type == enmChannelType.ADPCMB)
+            {
+                OutAdpcmBKeyOn(pw);
+            }
+        }
+
+        public override void SetKeyOff(partWork pw)
+        {
+            if (pw.ch < 9)
+                OutFmKeyOff(pw);
+            else if (pw.Type == enmChannelType.SSG)
+            {
+                OutSsgKeyOff(pw);
+            }
+            else if (pw.Type == enmChannelType.ADPCMA)
+            {
+                pw.keyOn = false;
+                pw.keyOff = true;
+            }
+            else if (pw.Type == enmChannelType.ADPCMB)
+            {
+                OutAdpcmBKeyOff(pw);
+            }
+        }
+
+        public override void SetVolume(partWork pw)
+        {
+            base.SetVolume(pw);
+
+            if (pw.Type == enmChannelType.ADPCMA)
+            {
+            }
+            else if (pw.Type == enmChannelType.ADPCMB)
+            {
+                SetAdpcmBVolume(pw);
+            }
+        }
+
+
+        public override void CmdY(partWork pw, MML mml)
+        {
+            base.CmdY(pw, mml);
+
+            if (mml.args[0] is string) return;
+
+            byte adr = (byte)mml.args[0];
+            byte dat = (byte)mml.args[1];
+
+            if (pw.Type == enmChannelType.FMOPN || pw.Type == enmChannelType.FMOPNex)
+                parent.OutData((pw.ch > 2 && pw.ch < 6) ? pw.port1 : pw.port0, adr, dat);
+            else if (pw.Type == enmChannelType.SSG)
+                parent.OutData(pw.port0, adr, dat);
+            else if (pw.Type == enmChannelType.ADPCMA)
+                parent.OutData(pw.port1, adr, dat);
+            else if (pw.Type == enmChannelType.ADPCMB)
+                parent.OutData(pw.port0, adr, dat);
+        }
+
+        public override void CmdMPMS(partWork pw, MML mml)
+        {
+            if (pw.Type != enmChannelType.FMOPN)
+            {
+                msgBox.setWrnMsg("FMチャンネル以外のMPMSは無視されます。", pw.getSrcFn(), pw.getLineNumber());
+                return;
+            }
+
+            int n = (int)mml.args[1];
+            n = Common.CheckRange(n, 0, 3);
+            pw.pms = n;
+            ((ClsOPN)pw.chip).OutOPNSetPanAMSPMS(
+                pw
+                , (int)pw.pan.val
+                , pw.ams
+                , pw.pms);
+        }
+
+        public override void CmdMAMS(partWork pw, MML mml)
+        {
+            if (pw.Type != enmChannelType.FMOPN)
+            {
+                msgBox.setWrnMsg("FMチャンネル以外のMAMSは無視されます。", pw.getSrcFn(), pw.getLineNumber());
+                return;
+            }
+
+            int n = (int)mml.args[1];
+            n = Common.CheckRange(n, 0, 7);
+            pw.ams = n;
+            ((ClsOPN)pw.chip).OutOPNSetPanAMSPMS(
+                pw
+                , (int)pw.pan.val
+                , pw.ams
+                , pw.pms);
+        }
+
+        public override void CmdLfo(partWork pw, MML mml)
+        {
+            base.CmdLfo(pw, mml);
+
+            int c = (char)mml.args[0] - 'P';
+            if (pw.lfo[c].type == eLfoType.Hardware)
+            {
+                if (pw.Type == enmChannelType.FMOPN)
+                {
+                    if (pw.lfo[c].param.Count < 4)
+                    {
+                        msgBox.setErrMsg("LFOの設定に必要なパラメータが足りません。", pw.getSrcFn(), pw.getLineNumber());
+                        return;
+                    }
+                    if (pw.lfo[c].param.Count > 5)
+                    {
+                        msgBox.setErrMsg("LFOの設定に可能なパラメータ数を超えて指定されました。", pw.getSrcFn(), pw.getLineNumber());
+                        return;
+                    }
+
+                    pw.lfo[c].param[0] = Common.CheckRange(pw.lfo[c].param[0], 0, (int)parent.info.clockCount);//Delay(無視)
+                    pw.lfo[c].param[1] = Common.CheckRange(pw.lfo[c].param[1], 0, 7);//Freq
+                    pw.lfo[c].param[2] = Common.CheckRange(pw.lfo[c].param[2], 0, 7);//PMS
+                    pw.lfo[c].param[3] = Common.CheckRange(pw.lfo[c].param[3], 0, 3);//AMS
+                    if (pw.lfo[c].param.Count == 5)
+                    {
+                        pw.lfo[c].param[4] = Common.CheckRange(pw.lfo[c].param[4], 0, 1); //Switch
+                    }
+                    else
+                    {
+                        pw.lfo[c].param.Add(1);
+                    }
+                }
+            }
+        }
+
+        public override void CmdLfoSwitch(partWork pw, MML mml)
+        {
+            base.CmdLfoSwitch(pw, mml);
+
+            int c = (char)mml.args[0] - 'P';
+            int n = (int)mml.args[1];
+            if (pw.lfo[c].type == eLfoType.Hardware)
+            {
+                if (pw.Type == enmChannelType.FMOPN)
+                {
+                    if (pw.lfo[c].param[4] == 0)
+                    {
+                        ((ClsOPN)pw.chip).OutOPNSetHardLfo(pw, (n == 0) ? false : true, pw.lfo[c].param[1]);
+                    }
+                    else
+                    {
+                        ((ClsOPN)pw.chip).OutOPNSetHardLfo(pw, false, pw.lfo[c].param[1]);
+                    }
+                }
+            }
+        }
+
+        public override void CmdTotalVolume(partWork pw, MML mml)
+        {
+            int n = (int)mml.args[0];
+            ((YM2610B)pw.chip).adpcmA_TotalVolume 
+                = Common.CheckRange(n, 0, ((YM2610B)pw.chip).adpcmA_MAXTotalVolume);
+        }
+
+        public override void CmdPan(partWork pw, MML mml)
+        {
+            int n = (int)mml.args[0];
+            if (pw.Type == enmChannelType.FMOPN || pw.Type == enmChannelType.FMOPNex)
+            {
+                n = Common.CheckRange(n, 1, 3);
+                pw.pan.val = n;
+                ((ClsOPN)pw.chip).OutOPNSetPanAMSPMS(pw, n, pw.ams, pw.fms);
+            }
+            else if (pw.Type == enmChannelType.ADPCMA)
+            {
+                n = Common.CheckRange(n, 0, 3);
+                pw.pan.val = n;
+            }
+            else if (pw.Type == enmChannelType.ADPCMB)
+            {
+                n = Common.CheckRange(n, 0, 3);
+                ((YM2610B)pw.chip).SetAdpcmBPan(pw, n);
+            }
+        }
+
+        public override void CmdInstrument(partWork pw, MML mml)
+        {
+            char type = (char)mml.args[0];
+            int n = (int)mml.args[1];
+
+            if (type == 'N')
+            {
+                if (pw.Type == enmChannelType.FMOPNex)
+                {
+                    pw.instrument = n;
+                    lstPartWork[2].instrument = n;
+                    lstPartWork[6].instrument = n;
+                    lstPartWork[7].instrument = n;
+                    lstPartWork[8].instrument = n;
+                    OutFmSetInstrument(pw, n, pw.volume);
+                    return;
+                }
+
+                if (pw.Type == enmChannelType.ADPCMA)
+                {
+                    n = Common.CheckRange(n, 0, 255);
+                    if (!parent.instPCM.ContainsKey(n))
+                    {
+                        msgBox.setErrMsg(string.Format("PCM定義に指定された音色番号({0})が存在しません。", n), pw.getSrcFn(), pw.getLineNumber());
+                    }
+                    else
+                    {
+                        if (parent.instPCM[n].chip != enmChipType.YM2610B 
+                            || parent.instPCM[n].loopAdr != 0)
+                        {
+                            msgBox.setErrMsg(string.Format("指定された音色番号({0})はYM2610B向けPCMデータではありません。", n), pw.getSrcFn(), pw.getLineNumber());
+                        }
+                        pw.instrument = n;
+                        SetADPCMAAddress(
+                            pw
+                            , (int)parent.instPCM[n].stAdr
+                            , (int)parent.instPCM[n].edAdr);
+
+                    }
+                    return;
+                }
+
+                if (pw.Type == enmChannelType.ADPCMB)
+                {
+                    n = Common.CheckRange(n, 0, 255);
+                    if (!parent.instPCM.ContainsKey(n))
+                    {
+                        msgBox.setErrMsg(string.Format("PCM定義に指定された音色番号({0})が存在しません。", n), pw.getSrcFn(), pw.getLineNumber());
+                    }
+                    else
+                    {
+                        if (parent.instPCM[n].chip != enmChipType.YM2610B 
+                            || parent.instPCM[n].loopAdr != 1)
+                        {
+                            msgBox.setErrMsg(string.Format("指定された音色番号({0})はYM2610B向けPCMデータではありません。", n), pw.getSrcFn(), pw.getLineNumber());
+                        }
+                        pw.instrument = n;
+                        SetADPCMBAddress(
+                            pw
+                            , (int)parent.instPCM[n].stAdr
+                            , (int)parent.instPCM[n].edAdr);
+                    }
+                    return;
+                }
+
+                if(pw.Type== enmChannelType.SSG)
+                {
+                    SetEnvelopParamFromInstrument(pw, n,mml);
+                    return;
+                }
+            }
+
+            base.CmdInstrument(pw, mml);
+        }
+
+        public override void SetPCMDataBlock()
+        {
+            if (use && pcmDataA != null && pcmDataA.Length > 0)
+                parent.OutData(pcmDataA);
+
+            if (use && pcmDataB != null && pcmDataB.Length > 0)
+                parent.OutData(pcmDataB);
+        }
+
+        public override void SetLfoAtKeyOn(partWork pw)
+        {
+            base.SetLfoAtKeyOn(pw);
+
+            for (int lfo = 0; lfo < 4; lfo++)
+            {
+                clsLfo pl = pw.lfo[lfo];
+                if (!pl.sw)
+                    continue;
+
+                if (pl.param[5] != 1)
+                    continue;
+
+                pl.isEnd = false;
+                pl.value = (pl.param[0] == 0) ? pl.param[6] : 0;//ディレイ中は振幅補正は適用されない
+                pl.waitCounter = pl.param[0];
+                pl.direction = pl.param[2] < 0 ? -1 : 1;
+
+                if (pl.type == eLfoType.Vibrato)
+                {
+                    if (pw.Type == enmChannelType.ADPCM)
+                        SetAdpcmBFNum(pw);
+
+                }
+
+                if (pl.type == eLfoType.Tremolo)
+                {
+                    pw.beforeVolume = -1;
+
+                    //if (pw.Type == enmChannelType.ADPCMA)
+                        //SetAdpcmAVolume(pw);
+                    if (pw.Type == enmChannelType.ADPCMB)
+                        SetAdpcmBVolume(pw);
+
+                }
+
+            }
+        }
 
     }
 }
+

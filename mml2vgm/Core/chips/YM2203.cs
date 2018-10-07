@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Core
 {
-    public class YM2203 : ClsChip
+    public class YM2203 : ClsOPN
     {
         protected int[][] _FNumTbl = new int[2][] {
             new int[13]
@@ -30,9 +30,7 @@ namespace Core
             //}
         };
 
-        public byte SSGKeyOn = 0x3f;
-
-        public YM2203(ClsVgm parent,int chipID, string initialPartName, string stPath) : base(parent, chipID, initialPartName, stPath)
+        public YM2203(ClsVgm parent,int chipID, string initialPartName, string stPath, bool isSecondary) : base(parent, chipID, initialPartName, stPath, isSecondary)
         {
 
             _Name = "YM2203";
@@ -79,6 +77,10 @@ namespace Core
             Ch[7].Type = enmChannelType.SSG;
             Ch[8].Type = enmChannelType.SSG;
 
+            Envelope = new Function();
+            Envelope.Max = 255;
+            Envelope.Min = 0;
+
         }
 
         public override void InitPart(ref partWork pw)
@@ -102,8 +104,8 @@ namespace Core
             if (!use) return;
 
             //initialize shared param
-            parent.OutOPNSetHardLfo(lstPartWork[0], false, 0);
-            parent.OutOPNSetCh3SpecialMode(lstPartWork[0], false);
+            OutOPNSetHardLfo(lstPartWork[0], false, 0);
+            OutOPNSetCh3SpecialMode(lstPartWork[0], false);
 
             //FM Off
             outYM2203AllKeyOff(this);
@@ -121,7 +123,7 @@ namespace Core
                 {
                     pw.hardLfoSw = false;
                     pw.hardLfoNum = 0;
-                    parent.OutOPNSetHardLfo(pw, pw.hardLfoSw, pw.hardLfoNum);
+                    OutOPNSetHardLfo(pw, pw.hardLfoSw, pw.hardLfoNum);
                 }
 
             }
@@ -138,11 +140,11 @@ namespace Core
                 if (pw.dataEnd) continue;
                 if (pw.ch > 2) continue;
 
-                parent.OutFmKeyOff(pw);
-                parent.OutFmSetTl(pw, 0, 127);
-                parent.OutFmSetTl(pw, 1, 127);
-                parent.OutFmSetTl(pw, 2, 127);
-                parent.OutFmSetTl(pw, 3, 127);
+                OutFmKeyOff(pw);
+                OutFmSetTl(pw, 0, 127);
+                OutFmSetTl(pw, 1, 127);
+                OutFmSetTl(pw, 2, 127);
+                OutFmSetTl(pw, 3, 127);
             }
 
         }
@@ -161,6 +163,72 @@ namespace Core
             parent.OutData(pw.port0, 0x07, data);
         }
 
+        public override void SetFNum(partWork pw)
+        {
+            if (pw.Type != enmChannelType.SSG)
+                SetFmFNum(pw);
+            else if (pw.Type == enmChannelType.SSG)
+            {
+                SetSsgFNum(pw);
+            }
+        }
+
+        public override void SetKeyOn(partWork pw)
+        {
+            if (pw.Type != enmChannelType.SSG)
+                OutFmKeyOn(pw);
+            else if (pw.Type == enmChannelType.SSG)
+            {
+                OutSsgKeyOn(pw);
+            }
+        }
+
+        public override void SetKeyOff(partWork pw)
+        {
+            if (pw.Type != enmChannelType.SSG)
+                OutFmKeyOff(pw);
+            else
+                OutSsgKeyOff(pw);
+        }
+
+
+        public override void CmdY(partWork pw, MML mml)
+        {
+            base.CmdY(pw, mml);
+
+            if (mml.args[0] is string) return;
+
+            byte adr = (byte)mml.args[0];
+            byte dat = (byte)mml.args[1];
+
+            parent.OutData(pw.port0, adr, dat);
+        }
+
+        public override void CmdInstrument(partWork pw, MML mml)
+        {
+            char type = (char)mml.args[0];
+            int n = (int)mml.args[1];
+
+            if (type == 'N')
+            {
+                if (pw.Type == enmChannelType.FMOPNex)
+                {
+                    lstPartWork[2].instrument = n;
+                    lstPartWork[6].instrument = n;
+                    lstPartWork[7].instrument = n;
+                    lstPartWork[8].instrument = n;
+                    OutFmSetInstrument(pw, n, pw.volume);
+                    return;
+                }
+            }
+
+            base.CmdInstrument(pw, mml);
+        }
+
+        public override void SetPCMDataBlock()
+        {
+            //実装不要
+        }
 
     }
 }

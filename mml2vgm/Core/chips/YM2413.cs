@@ -17,7 +17,7 @@ namespace Core
             //}
         };
 
-        public YM2413(ClsVgm parent, int chipID, string initialPartName, string stPath) : base(parent, chipID, initialPartName, stPath)
+        public YM2413(ClsVgm parent, int chipID, string initialPartName, string stPath, bool isSecondary) : base(parent, chipID, initialPartName, stPath, isSecondary)
         {
 
             _Name = "YM2413";
@@ -138,5 +138,54 @@ namespace Core
                 , (byte)((pw.envInstrument << 4) | (15 - pw.volume))
                 );
         }
+
+
+
+        public override void CmdInstrument(partWork pw, MML mml)
+        {
+            char type = (char)mml.args[0];
+            int n = (int)mml.args[1];
+
+            if (type == 'T')
+            {
+                msgBox.setErrMsg("Tone DoublerはOPN,OPM音源以外では使用できません。", pw.getSrcFn(), pw.getLineNumber());
+                return;
+            }
+
+            if (pw.getChar() == 'E')
+            {
+                n = SetEnvelopParamFromInstrument(pw, n,mml);
+                return;
+            }
+
+            if (pw.getChar() == 'I')
+            {
+                n = Common.CheckRange(n, 0, 15);
+                if (pw.envInstrument != n)
+                {
+                    ((YM2413)pw.chip).outYM2413SetInstVol(pw, n, pw.volume); //INSTをnにセット
+                }
+                return;
+            }
+
+            n = Common.CheckRange(n, 0, 255);
+            if (pw.instrument == n) return;
+
+            ((YM2413)pw.chip).outYM2413SetInstrument(pw, n); //音色のセット
+            ((YM2413)pw.chip).outYM2413SetInstVol(pw, 0, pw.volume); //INSTを0にセット
+            parent.OutData(pw.port0, 0x20, 0x19);
+
+        }
+
+        public override void SetPCMDataBlock()
+        {
+            //実装不要
+        }
+
+        public override void SetToneDoubler(partWork pw)
+        {
+            //実装不要
+        }
+
     }
 }

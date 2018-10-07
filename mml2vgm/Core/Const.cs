@@ -15,32 +15,8 @@ namespace Core
         public const int INSTRUMENT_M_OPERATOR_SIZE = 11;
         public const int WF_INSTRUMENT_SIZE = 33;
 
-        public const string TITLENAME = "TITLENAME";
-        public const string TITLENAMEJ = "TITLENAMEJ";
-        public const string GAMENAME = "GAMENAME";
-        public const string GAMENAMEJ = "GAMENAMEJ";
-        public const string SYSTEMNAME = "SYSTEMNAME";
-        public const string SYSTEMNAMEJ = "SYSTEMNAMEJ";
-        public const string COMPOSER = "COMPOSER";
-        public const string COMPOSERJ = "COMPOSERJ";
-        public const string RELEASEDATE = "RELEASEDATE";
-        public const string CONVERTED = "CONVERTED";
-        public const string NOTES = "NOTES";
-        public const string PARTNAME = "PART";
-        public const string CLOCKCOUNT = "CLOCKCOUNT";
-        public const string FMF_NUM = "FMF-NUM";
-        public const string PSGF_NUM = "PSGF-NUM";
-        public const string FORCEDMONOPARTYM2612 = "FORCEDMONOPARTYM2612";
-        public const string VERSION = "VERSION";
-        public const string PRIMARY = "PRIMARY";
-        public const string SECONDARY = "SECONDARY";
-        public const string FORMAT = "FORMAT";
-        public const string XGMBASEFRAME = "XGMBASEFRAME";
-        public const string OCTAVEREV = "OCTAVE-REV";
-
         public const string NOTE = "c_d_ef_g_a_b";
 
-        readonly public static string[] IDName = new string[] { Const.PRIMARY, Const.SECONDARY };
 
         /*
 C   ド	    261.62
@@ -134,8 +110,8 @@ B   シ	    493.88 1.887776163901842
                 0x00,0x00,0x00,0x00, 0x00,0x00,0x00,0x00, 0x00,0x00,0x00,0x00, 0x00,0x00,0x00,0x00,
                 //0x90               0x94                 0x98                 0x9c
                 0x00,0x00,0x00,0x00, 0x00,0x00,0x00,0x00, 0x00,0x00,0x00,0x00, 0x00,0x00,0x00,0x00,
-                //0xa0               0xa4 HuC6280         0xa8                 0xac
-                0x00,0x00,0x00,0x00, 0x99,0x9e,0x36,0x00, 0x00,0x00,0x00,0x00, 0x00,0x00,0x00,0x00
+                //0xa0               0xa4 HuC6280         0xa8 C140            0xac
+                0x00,0x00,0x00,0x00, 0x99,0x9e,0x36,0x00, 0x00,0x12,0x7a,0x00, 0x00,0x00,0x00,0x00
             };
 
         readonly public static byte[] xhDat = new byte[] {

@@ -19,4 +19,5 @@ namespace Core
             Txt = txt;
         }
     }
+
 }

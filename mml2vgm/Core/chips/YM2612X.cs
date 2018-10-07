@@ -6,22 +6,18 @@ using System.Threading.Tasks;
 
 namespace Core
 {
-    public class YM2612X : ClsChip
+    public class YM2612X : YM2612
     {
-        protected int[][] _FNumTbl = new int[1][] {
-            new int[13]
-        };
 
-        public byte[] pcmData = null;
-
-        public YM2612X(ClsVgm parent, int chipID, string initialPartName, string stPath) : base(parent, chipID, initialPartName, stPath)
+        public YM2612X(ClsVgm parent, int chipID, string initialPartName, string stPath, bool isSecondary) : base(parent, chipID, initialPartName, stPath, isSecondary)
         {
-
+            _chipType = enmChipType.YM2612X;
             _Name = "YM2612X";
             _ShortName = "OPN2X";
             _ChMax = 12;
             _canUsePcm = true;
             FNumTbl = _FNumTbl;
+            IsSecondary = isSecondary;
 
             Frequency = 7670454;
 
@@ -54,6 +50,11 @@ namespace Core
             Ch[10].Type = enmChannelType.FMPCMex;
             Ch[11].Type = enmChannelType.FMPCMex;
 
+            pcmDataInfo = new clsPcmDataInfo[] { new clsPcmDataInfo() };
+            pcmDataInfo[0].totalBuf = new byte[0];
+            pcmDataInfo[0].totalBufPtr = 0L;
+            pcmDataInfo[0].use = false;
+
         }
 
         public override void InitPart(ref partWork pw)
@@ -66,11 +67,46 @@ namespace Core
             pw.pcm = pw.ch > 9;
         }
 
-        public void OutSetCh6PCMMode(partWork pw, bool sw)
+        public override void StorePcm(Dictionary<int, clsPcm> newDic, KeyValuePair<int, clsPcm> v, byte[] buf, params object[] option)
         {
-            parent.dat.Add(pw.port0);
-            parent.dat.Add(0x2b);
-            parent.dat.Add((byte)((sw ? 0x80 : 0)));
+            clsPcmDataInfo pi = pcmDataInfo[0];
+
+            try
+            {
+                byte[] newBuf;
+                long size = buf.Length;
+
+                for (int i = 0; i < size; i++)
+                {
+                    buf[i] -= 0x80;//符号化
+                }
+
+                //Padding
+                if (size % 0x100 != 0)
+                {
+                    newBuf = Common.PcmPadding(ref buf, ref size, 0x00, 0x100);
+                    buf = newBuf;
+                }
+
+                if (newDic.ContainsKey(v.Key))
+                {
+                    newDic.Remove(v.Key);
+                }
+                newDic.Add(v.Key, new clsPcm(v.Value.num, v.Value.seqNum, v.Value.chip, false, v.Value.fileName, v.Value.freq, v.Value.vol, pi.totalBufPtr, pi.totalBufPtr + size, size, -1));
+                pi.totalBufPtr += size;
+
+                newBuf = new byte[pi.totalBuf.Length + buf.Length];
+                Array.Copy(pi.totalBuf, newBuf, pi.totalBuf.Length);
+                Array.Copy(buf, 0, newBuf, pi.totalBuf.Length, buf.Length);
+
+                pi.totalBuf = newBuf;
+                pi.use = true;
+                pcmData = pi.use ? pi.totalBuf : null;
+            }
+            catch
+            {
+                pi.use = false;
+            }
         }
 
         public void SetF_NumTbl(string val)
@@ -84,6 +120,95 @@ namespace Core
             }
             FNumTbl[0][12] = FNumTbl[0][0] * 2;
         }
+
+        public void OutYM2612XPcmKeyON(partWork pw)
+        {
+            if (pw.instrument >= 63) return;
+
+            int id = parent.instPCM[pw.instrument].seqNum + 1;
+            int ch = Math.Max(0, pw.ch - 8);
+            int priority = 0;
+
+            parent.OutData(
+                0x54 // original vgm command : YM2151
+                , (byte)(0x50 + ((priority & 0x3) << 2) + (ch & 0x3))
+                , (byte)id
+                );
+
+            parent.info.samplesPerClock = parent.info.xgmSamplesPerSecond * 60.0 * 4.0 / (parent.info.tempo * parent.info.clockCount);
+
+            //必要なサンプル数を算出し、保持しているサンプル数より大きい場合は更新
+            double m = pw.waitCounter * 60.0 * 4.0 / (parent.info.tempo * parent.info.clockCount) * 14000.0;//14000(Hz) = xgm sampling Rate
+            parent.instPCM[pw.instrument].xgmMaxSampleCount = Math.Max(parent.instPCM[pw.instrument].xgmMaxSampleCount, m);
+
+        }
+
+
+
+        public override void CmdMode(partWork pw, MML mml)
+        {
+            int n = (int)mml.args[0];
+            if (pw.Type == enmChannelType.FMPCMex)
+            {
+                n = Common.CheckRange(n, 0, 1);
+                pw.chip.lstPartWork[5].pcm = (n == 1);
+                pw.chip.lstPartWork[9].pcm = (n == 1);
+                pw.chip.lstPartWork[10].pcm = (n == 1);
+                pw.chip.lstPartWork[11].pcm = (n == 1);
+                pw.freq = -1;//freqをリセット
+                pw.instrument = -1;
+                ((YM2612X)(pw.chip)).OutSetCh6PCMMode(
+                    pw.chip.lstPartWork[5]
+                    , pw.chip.lstPartWork[5].pcm
+                    );
+
+                return;
+            }
+
+            base.CmdMode(pw, mml);
+
+        }
+
+        public override void CmdInstrument(partWork pw, MML mml)
+        {
+            char type = (char)mml.args[0];
+            int n = (int)mml.args[1];
+
+            if (type == 'N')
+            {
+                if (pw.Type == enmChannelType.FMOPNex)
+                {
+                    pw.instrument = n;
+                    lstPartWork[2].instrument = n;
+                    lstPartWork[6].instrument = n;
+                    lstPartWork[7].instrument = n;
+                    lstPartWork[8].instrument = n;
+                    OutFmSetInstrument(pw, n, pw.volume);
+                    return;
+                }
+
+                if (pw.pcm)
+                {
+                    pw.instrument = n;
+                    if (!parent.instPCM.ContainsKey(n))
+                    {
+                        msgBox.setErrMsg(string.Format("PCM定義に指定された音色番号({0})が存在しません。", n), pw.getSrcFn(), pw.getLineNumber());
+                    }
+                    else
+                    {
+                        if (parent.instPCM[n].chip != enmChipType.YM2612X)
+                        {
+                            msgBox.setErrMsg(string.Format("指定された音色番号({0})はYM2612(XGM)向けPCMデータではありません。", n), pw.getSrcFn(), pw.getLineNumber());
+                        }
+                    }
+                    return;
+                }
+
+            }
+
+            base.CmdInstrument(pw, mml);
+        }
+
 
     }
 }

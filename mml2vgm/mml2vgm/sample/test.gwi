@@ -1,43 +1,178 @@
 ﻿'{
 
-	TitleName   =
-	TitleNameJ  =
-	GameName    =
-	GameNameJ   =
-	SystemName  =
-	SystemNameJ =Sega MegaDrive
-	Composer    =
-	ComposerJ   =
-	ReleaseDate =
-	Converted   =
-	Notes       =
+	TitleName            =Visual 3
+	TitleNameJ           =Mika Quest
+	GameName             =CYBER BLOCK METAL ORANGE
+	GameNameJ            =CYBER BLOCK メタルオレンジ
+	SystemName           =Sega Genesis
+	SystemNameJ          =Sega MegaDrive
+	Composer             =CYBER TECH CUSTOM
+	ComposerJ            =CYBER TECH CUSTOM
+	ReleaseDate          =2017/04/01
+	Converted            =kuma
+	Notes                =
 
-	ClockCount  =192
+	Format       =XGM
+	XGMBaseFrame =NTSC
+	ClockCount   =192
 
 }
 
 
-base (from Ordyne)
-'@ M 003
+
+'@ N 014
    AR  DR  SR  RR  SL  TL  KS  ML  DT  AM  SSG-EG
-'@ 027,014,000,007,003,062,000,012,000,000,000
-'@ 031,019,000,007,006,017,000,000,000,000,000
-'@ 031,030,007,005,003,015,000,000,000,000,000
-'@ 031,006,000,008,014,000,000,000,000,000,000
-'@ 003,007
+'@ 013,014,000,003,001,023,002,001,003,001,000
+'@ 013,014,000,010,015,040,002,007,003,001,000
+'@ 014,014,000,003,001,038,002,001,003,001,000
+'@ 019,003,000,010,000,000,001,001,003,001,000
+   ALG FB
+'@ 002,007
+
+'@ N 026
+   AR  DR  SR  RR  SL  TL  KS  ML  DT  AM  SSG-EG
+'@ 017,020,020,015,000,000,000,003,005,000,000
+'@ 031,017,012,015,003,000,000,000,005,000,000
+'@ 015,023,000,015,005,000,000,000,001,000,000
+'@ 031,017,012,015,003,000,000,004,006,000,000
+   ALG FB
+'@ 004,007
+
+'@ N 027
+   AR  DR  SR  RR  SL  TL  KS  ML  DT  AM  SSG-EG
+'@ 024,014,003,010,003,025,000,004,003,000,000
+'@ 031,012,004,010,001,003,001,004,003,000,000
+'@ 031,012,004,010,001,000,001,002,003,000,000
+'@ 031,012,004,010,001,003,001,004,005,000,000
+   ALG FB
+'@ 005,007
+
+'@ N 028
+   AR  DR  SR  RR  SL  TL  KS  ML  DT  AM  SSG-EG
+'@ 031,000,000,000,000,022,000,002,007,001,000
+'@ 018,010,000,006,001,000,000,008,007,001,000
+'@ 031,000,000,000,000,023,000,004,003,001,000
+'@ 018,010,000,006,001,000,000,004,003,001,000
+   ALG FB
+'@ 004,005
+
+'@ N 029
+   AR  DR  SR  RR  SL  TL  KS  ML  DT  AM  SSG-EG
+'@ 031,010,014,009,015,033,002,001,000,001,000
+'@ 013,012,011,012,015,000,003,015,000,001,000
+'@ 013,010,010,009,005,000,002,002,007,001,000
+'@ 013,012,010,009,005,000,000,001,003,001,000
+   ALG FB
+'@ 005,007
 
      No, SV, AR, DR, SL, SR, RR, ST
-'@ E  0, 13,  1,  5, 11, 34, 24,  1
+'@ E  1, 15,  0,120,  7,100,  4,  1
+'@ E  2, 15,  0, 40,  7,100,  4,  2
+'@ E  3, 15,  0,  3, 13,  7,  1,  2
+'@ E  4, 15,  0,  2, 14,  1,  1,  2
+'@ E  5, 15,  0,  5, 13,  3,  1,  3
+'@ E  6, 15,  0,  8, 13,  5,  1,  3
 
 
-'F1 T138
+'@ P 0,"BD2_14K.wav"   , 0, 70,OPN2X
+'@ P 1,"SD2_14K.wav"   , 0, 90,OPN2X
+'@ P 2,"SD3_14K.wav"   , 0, 90,OPN2X
+'@ P 3,"HiQ_14K.wav"   , 0, 90,OPN2X
+'@ P 6,"TH_14K.wav"    , 0,100,OPN2X
+'@ P 7,"SD2.wav"       , 0, 50,OPN2X
+'@ P 8,"TL_14K.wav"    , 0,100,OPN2X
+'@ P 9,"Crash1_14K.wav", 0,100,OPN2X
+
+
+'%BD @0 o4 c
+'%SD @1 o4 c
+'%S2 @2 o4 c
+'%S3 @7 o4 c
+'%HQ @3 o4 c
+'%TH @6 o4 c
+'%TL @8 o4 c
 
 
 
-F1-6 !
-S1-4 !
+
+'E01 T126
+
+E06 !
+
+'E01 D0         @14 p1 o6 v117 l8  q0 MSV48,2,12,48,0 SS1
+'E02 D0         @14 p2 o5 v113 l8  q0 MSV48,2,12,48,0 SS1
+'E03 D2         @14 p3 o5 v113 l8  q0 MSV48,2,12,48,0 SS1
+'E04 D0         @27 p3 o1 v120 l8  q0 SS0
+'E05 D0         @26 p3 o3 v113 l16 q0 SS0
+'E06 D0 m1          p3 o4      l16 q0 SS0
+'E10 D0 m1          p3 o4      l16 q0 SS0
+'E11 D0 m1          p3 o4      l16 q0 SS0 @9
+'E12 D0 m1          p3 o4      l16 q0 SS0 @7
+'S1  D0 EON     @6     o4 v13  l16 q0 SS0
+'S2  D0 EON     @6     o4 v13  l16 q0 SS0
+'S3  D0 EON     @6     o4 v13  l16 q0 SS0
+'S4  D0 EON     @4  D0 o4 v15  l16 q2 SS0 w4
 
 
 
-'F12 @3o6l8v113p1q0D0
-'F2  v103p3D4cedfegfagba>c<b>dc1
+Intro.
+
+
+'E01-03 [r1]8
+'E04    [ccd+ff+16gf+fd+16]7r1
+'E05    [c(6c)6c(6c)6]28 )10 [ c(6c)6c(6c)6 ] 2 < b(6a)6g(6f)6 e(6d)6c(6c)6 (10 >
+'E06    [r4]12r%SD%SD%SD %SD8%SD%SD r%SD%SD8 p1[%TH32]4p2[%TL32]4p3
+'E10    [%BD4]15 r4
+'E11    [r1]4
+'E12    [r1]4
+'E06    [ [r4]3 / %S24 ]4 p1[%TH32]4p2[%TL32]4p3
+'E10    [ [%BD4]3 / %BD4 ]4 r4
+'E11    [r1]4
+'E12    [ crcr rcrc rcrr crrr  crcr rcrc ccrr crcc ]2
+'S1-3   MSV6,1,4,200,3 SS1q0
+'S1-3   [r1]3
+'S1     rd+d+d+ d+8d+d+8 d+d+8 d+e f8 v13D0
+'S2     rf f f  f8 f f8  f f8  f f+g8 v11D1
+'S3     ra+a+a+ a+8a+a+8 a+a+8 a+b>c8
+'S2     r8
+'S12    @5SS0 [ cd+ff+ gf+fd+ ]6r2.r8
+'S1     r8
+'S3     SS0 [ [ c32&c16._<c> (5 c32&c16._<c>  )5 ] (1]6r1v14
+'S4     [r1]4 [ @5v15[c64r32.]2@6v11c8 ]16
+
+
+'E01    L
+
+
+Main
+
+
+'E0102  l16 c1 d+8.c r4 <a+ra+r a+>c r8 g1 f+2f4 d+8.c
+'E01    @29(10Q4 [ cc8crcrc cc8cr4 ]4 @14q0)10
+'E02    r1r1r1r1
+'E0102  f1 g+8.f r4  d+rd+r d+f  r8>c1<b2 a+4g+8.f  r1 r1 r1 r1
+'E03    l16 c1 d+8.c r4 <a+ra+r a+>c r8 d+1d2 c+4c8.<g> @29(13Q4 [ gg8grgrg gg8gr4 ]4 @14q0)13
+'E03    f1 g+8.f r4  d+rd+r d+f  r8 g1 f+2f4 d+8.c  @28o1(3l8Q4[ ff16g+a+b16 b16>c<ba+g+16 ]4)3@14
+'E04    [ cc16d+ff+16 f+16gf+fd+16  ]8
+'E04    [ ff16g+a+b16 b16>c<ba+g+16 ]8
+'E05    [c(6c)6c(6c)6]32
+'E05    [c(6c)6c(6c)6]32
+'E06    [ [r8%HQ%HQ]3 %S28.%HQ ]7 [r8%HQ%HQ]3 %S2%S28%S2
+'E10    [%BD4]32
+'E11    c1[r1]7
+'E12    [ crcr rcrc rcrr crrr  crcr rcrc ccrr crcc ]4
+'E06    [ [r8%HQ%HQ]3 %S28.%HQ ]7 [r8%HQ%HQ]3 %S2%S28%S2
+'E10    [%BD4]32
+'E11    c1[r1]7
+'E12    [ crcr rcrc rcrr crrr  crcr rcrc ccrr crcc ]4
+'S2     r8
+'S12    @4l64 [ >c<c32. >d+<d+32. >f<f32.   >f+<f+32. >g<g32.  >f+<f+32. >f<f32.   >d+<d+32. ]16
+'S12          [ >f<f32. >g+<g+32. >a+<a+32. >b<b32. > >c<c32.< >b<b32.   / >a+<a+32. >g+<g+32. ]16
+'S1     >a+<a+32. >g+<g+32.
+'S2     
+'S3     [r2.r8 e32&e16._<e>]7 r2. c32&c16._<c> e32&e16._<e>
+'S3     [r2.r8 e32&e16._<e>]7 r2. c32&c16._<c> e32&e16._<e>
+'S4     [ @5v15[c64r32.]2@6v11c8 ]32
+'S4     [ @5v15[c64r32.]2@6v11c8 ]32
+
+

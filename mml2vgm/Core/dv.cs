@@ -48,6 +48,12 @@ namespace Core
 
         public int? val;
         private int? s;
+
+        public static implicit operator dint(int v)
+        {
+            throw new NotImplementedException();
+        }
+
     }
 
     public class dlong : dv

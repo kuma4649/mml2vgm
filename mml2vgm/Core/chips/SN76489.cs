@@ -1,20 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Core
 {
     public class SN76489 : ClsChip
     {
 
+        public const string PSGF_NUM = "PSGF-NUM";
         protected int[][] _FNumTbl = new int[1][] {
-            new int[96] 
+            new int[96]
         };
+        private int beforePanData = -1;
 
-
-        public SN76489(ClsVgm parent, int chipID, string initialPartName, string stPath) : base(parent, chipID, initialPartName, stPath)
+        public SN76489(ClsVgm parent, int chipID, string initialPartName, string stPath, bool isSecondary) : base(parent, chipID, initialPartName, stPath, isSecondary)
         {
             _Name = "SN76489";
             _ShortName = "DCSG";
@@ -43,6 +41,19 @@ namespace Core
                 ch.isSecondary = chipID == 1;
             }
             Ch[3].Type = enmChannelType.DCSGNOISE;
+
+            Envelope = new Function();
+            Envelope.Max = 15;
+            Envelope.Min = 0;
+
+        }
+
+        public override void InitChip()
+        {
+            if (!use) return;
+            if (IsSecondary) parent.dat[0x0f] |= 0x40;
+
+            OutAllKeyOff();
         }
 
         public override void InitPart(ref partWork pw)
@@ -50,9 +61,318 @@ namespace Core
             pw.MaxVolume = 15;
             pw.volume = pw.MaxVolume;
             pw.port0 = 0x50;
+            pw.keyOn = false;
+            pw.panL = 3;
+        }
+
+        public override void SetF_NumTbl(string wrd, string val)
+        {
+            //厳密なチェックを行っていないので設定値によってはバグる危険有り
+
+            for (int octave = 0; octave < 8; octave++)
+            {
+                if (wrd != string.Format("{0}{1}", PSGF_NUM, octave + 1)) continue;
+
+                string[] s = val.Split(new string[] { ",", " ", "\t" }, StringSplitOptions.RemoveEmptyEntries);
+                for (int i = 0; i < s.Length; i++)
+                {
+                    if (i + octave * 12 >= FNumTbl[0].Length)
+                    {
+                        break;
+                    }
+                    FNumTbl[0][i + octave * 12] = int.Parse(s[i], System.Globalization.NumberStyles.HexNumber);
+                }
+
+            }
+
         }
 
 
+        public int GetDcsgFNum(int octave, char noteCmd, int shift)
+        {
+            int o = octave - 1;
+            int n = Const.NOTE.IndexOf(noteCmd) + shift;
+            o += n / 12;
+            o = Common.CheckRange(o, 0, 7);
+            n %= 12;
+
+            int f = o * 12 + n;
+            if (f < 0) f = 0;
+            if (f >= FNumTbl[0].Length) f = FNumTbl[0].Length - 1;
+
+            return FNumTbl[0][f];
+        }
+
+        public void OutGGPsgStereoPort(bool isSecondary, byte data)
+        {
+            parent.OutData(
+                (byte)(isSecondary ? 0x3f : 0x4f)
+                , data
+                );
+        }
+
+        public void OutPsgPort(bool isSecondary, byte data)
+        {
+            parent.OutData(
+                (byte)(isSecondary ? 0x30 : 0x50)
+                , data
+                );
+        }
+
+        public void OutPsgKeyOn(partWork pw)
+        {
+
+            pw.keyOn = true;
+            SetFNum(pw);
+            SetVolume(pw);
+
+        }
+
+        public void OutPsgKeyOff(partWork pw)
+        {
+
+            if (!pw.envelopeMode) pw.keyOn = false;
+            SetVolume(pw);
+
+        }
+
+        public void OutAllKeyOff()
+        {
+
+            foreach (partWork pw in lstPartWork)
+            {
+                pw.beforeFNum = -1;
+                pw.beforeVolume = -1;
+
+                pw.keyOn = false;
+                OutPsgKeyOff(pw);
+            }
+
+        }
+
+
+        public override void SetFNum(partWork pw)
+        {
+            if (pw.Type != enmChannelType.DCSGNOISE)
+            {
+                int f = GetDcsgFNum(pw.octaveNow, pw.noteCmd, pw.shift + pw.keyShift);//
+                if (pw.bendWaitCounter != -1)
+                {
+                    f = pw.bendFnum;
+                }
+                f = f + pw.detune;
+                for (int lfo = 0; lfo < 4; lfo++)
+                {
+                    if (!pw.lfo[lfo].sw)
+                    {
+                        continue;
+                    }
+                    if (pw.lfo[lfo].type != eLfoType.Vibrato)
+                    {
+                        continue;
+                    }
+                    f += pw.lfo[lfo].value + pw.lfo[lfo].param[6];
+                }
+
+                f = Common.CheckRange(f, 0, 0x3ff);
+
+                if (pw.freq == f) return;
+                pw.freq = f;
+
+                byte data = (byte)(0x80 + (pw.ch << 5) + (f & 0xf));
+                OutPsgPort(pw.isSecondary, data);
+
+                data = (byte)((f & 0x3f0) >> 4);
+                OutPsgPort(pw.isSecondary, data);
+            }
+            else
+            {
+                int f = 0xe0 + (pw.noise & 7);
+                if (pw.freq == f) return;
+                pw.freq = f;
+                byte data = (byte)f;
+                OutPsgPort(pw.isSecondary, data);
+            }
+
+        }
+
+        public override int GetFNum(partWork pw, int octave, char cmd, int shift)
+        {
+            return GetDcsgFNum(octave, cmd, shift);
+        }
+
+        public override void SetVolume(partWork pw)
+        {
+            byte data = 0;
+            int vol = pw.volume;
+
+            if (pw.keyOn)
+            {
+                if (pw.envelopeMode)
+                {
+                    vol = 0;
+                    if (pw.envIndex != -1)
+                    {
+                        vol = pw.envVolume - (15 - pw.volume);
+                    }
+                    else
+                    {
+                        pw.keyOn = false;
+                    }
+                }
+
+                for (int lfo = 0; lfo < 4; lfo++)
+                {
+                    if (!pw.lfo[lfo].sw) continue;
+                    if (pw.lfo[lfo].type != eLfoType.Tremolo) continue;
+
+                    vol += pw.lfo[lfo].value + pw.lfo[lfo].param[6];
+                }
+            }
+            else
+            {
+                vol = 0;
+            }
+
+            vol = Common.CheckRange(vol, 0, 15);
+
+            if (pw.beforeVolume != vol)
+            {
+                data = (byte)(0x80 + (pw.ch << 5) + 0x10 + (15 - vol));
+                OutPsgPort(pw.isSecondary, data);
+                pw.beforeVolume = vol;
+            }
+        }
+
+        public override void SetKeyOn(partWork pw)
+        {
+            OutPsgKeyOn(pw);
+        }
+
+        public override void SetKeyOff(partWork pw)
+        {
+            OutPsgKeyOff(pw);
+        }
+
+
+        public override void CmdY(partWork pw, MML mml)
+        {
+            if (mml.args[0] is string) return;
+
+            byte adr = (byte)mml.args[0];
+            byte dat = (byte)mml.args[1];
+
+            OutPsgPort(pw.isSecondary, dat);
+        }
+
+        public override void CmdNoise(partWork pw, MML mml)
+        {
+            int n = (int)mml.args[0];
+            n = Common.CheckRange(n, 0, 7);
+            pw.noise = n;
+        }
+
+        public override void CmdLoopExtProc(partWork pw, MML mml)
+        {
+        }
+
+        public override void CmdRest(partWork pw, MML mml)
+        {
+            base.CmdRest(pw, mml);
+
+            if (pw.envelopeMode)
+            {
+                if (pw.envIndex != -1)
+                {
+                    pw.envIndex = 3;
+                }
+            }
+            else
+            {
+                SetKeyOff(pw);
+            }
+
+        }
+
+        public override void CmdInstrument(partWork pw, MML mml)
+        {
+            char type = (char)mml.args[0];
+            int n = (int)mml.args[1];
+
+            if (type == 'I')
+            {
+                msgBox.setErrMsg("この音源はInstrumentを持っていません。", pw.getSrcFn(), pw.getLineNumber());
+                return;
+            }
+
+            if (type == 'T')
+            {
+                msgBox.setErrMsg("Tone DoublerはOPN,OPM音源以外では使用できません。", pw.getSrcFn(), pw.getLineNumber());
+                return;
+            }
+
+            n = SetEnvelopParamFromInstrument(pw, n,mml);
+
+        }
+
+        public override void CmdPan(partWork pw, MML mml)
+        {
+            int l = (int)mml.args[0];
+
+            l = Common.CheckRange(l, 0, 3);
+            pw.panL = l;
+        }
+
+        public override void SetLfoAtKeyOn(partWork pw)
+        {
+            for (int lfo = 0; lfo < 4; lfo++)
+            {
+                clsLfo pl = pw.lfo[lfo];
+                if (!pl.sw)
+                    continue;
+
+                if (pl.param[5] != 1)
+                    continue;
+
+                pl.isEnd = false;
+                pl.value = (pl.param[0] == 0) ? pl.param[6] : 0;//ディレイ中は振幅補正は適用されない
+                pl.waitCounter = pl.param[0];
+                pl.direction = pl.param[2] < 0 ? -1 : 1;
+
+            }
+        }
+
+        public override void SetPCMDataBlock()
+        {
+            //実装不要
+        }
+
+        public override void SetToneDoubler(partWork pw)
+        {
+            //実装不要
+        }
+
+        public override int GetToneDoublerShift(partWork pw, int octave, char noteCmd, int shift)
+        {
+            return 0;
+        }
+
+        public override void MultiChannelCommand()
+        {
+            if (!use) return;
+            int dat = 0;
+
+            foreach (partWork pw in lstPartWork)
+            {
+                int p = pw.panL;
+                dat |= (((p & 2) == 0 ? 0x00 : 0x10) | ((p & 1) == 0 ? 0x00 : 0x01)) << pw.ch;
+            }
+
+            if (beforePanData == dat) return;
+            OutGGPsgStereoPort(IsSecondary, (byte)dat);
+            beforePanData = dat;
+
+        }
 
     }
 }
