@@ -57,6 +57,7 @@ MML2VGM,MVCはMITライセンスに準ずる物とします。LICENSE.txtを参照。
  ・おやぢぴぴ さん  
  ・なると さん  
  ・hex125 さん  
+ ・くろま さん  
   
  ・XPCMK  
  ・FMP7  
