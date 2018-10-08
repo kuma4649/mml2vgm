@@ -21,6 +21,7 @@ namespace Core
         public YM2612X[] ym2612x = null;
         public YM2413[] ym2413 = null;
         public C140[] c140 = null;
+        public AY8910[] ay8910 = null;
 
         public Dictionary<enmChipType, ClsChip[]> chips;
 
@@ -64,6 +65,7 @@ namespace Core
             ym2612x = new YM2612X[] { new YM2612X(this, 0, "E", stPath, false) };
             ym2413 = new YM2413[] { new YM2413(this, 0, "L", stPath, false), new YM2413(this, 1, "Ls", stPath, true) };
             c140 = new C140[] { new C140(this, 0, "Y", stPath, false), new C140(this, 1, "Ys", stPath, true) };
+            ay8910 = new AY8910[] { new AY8910(this, 0, "A", stPath, false), new AY8910(this, 1, "As", stPath, true) };
 
             chips.Add(enmChipType.YM2612, ym2612);
             chips.Add(enmChipType.SN76489, sn76489);
@@ -77,6 +79,7 @@ namespace Core
             chips.Add(enmChipType.YM2612X, ym2612x);
             chips.Add(enmChipType.YM2413, ym2413);
             chips.Add(enmChipType.C140, c140);
+            chips.Add(enmChipType.AY8910, ay8910);
 
             List<clsTD> lstTD = new List<clsTD>
             {
@@ -1153,6 +1156,7 @@ namespace Core
             long useSegaPcm = 0;
             long useHuC6280 = 0;
             long useC140 = 0;
+            long useAY8910 = 0;
 
             for (int i = 0; i < 2; i++)
             {
@@ -1176,6 +1180,8 @@ namespace Core
                 { useHuC6280 += pw.clockCounter; }
                 foreach (partWork pw in c140[i].lstPartWork)
                 { useC140 += pw.clockCounter; }
+                foreach (partWork pw in ay8910[i].lstPartWork)
+                { useAY8910 += pw.clockCounter; }
             }
 
             if (useSN76489 == 0)
@@ -1198,6 +1204,8 @@ namespace Core
             { dat[0xa4] = 0; dat[0xa5] = 0; dat[0xa6] = 0; dat[0xa7] = 0; }
             if (useC140 == 0)
             { dat[0xa8] = 0; dat[0xa9] = 0; dat[0xaa] = 0; dat[0xab] = 0; dat[0x96] = 0; }
+            if (useAY8910 == 0)
+            { dat[0x74] = 0; dat[0x75] = 0; dat[0x76] = 0; dat[0x77] = 0; dat[0x78] = 0; dat[0x79] = 0; dat[0x7a] = 0; dat[0x7b] = 0; }
 
             if (info.Version == 1.51f)
             { dat[0x08] = 0x51; dat[0x09] = 0x01; }
@@ -2094,6 +2102,11 @@ namespace Core
                 case enmMMLType.Envelope:
                     log.Write("Envelope");
                     pw.chip.CmdEnvelope(pw, mml);
+                    pw.mmlPos++;
+                    break;
+                case enmMMLType.HardEnvelope:
+                    log.Write("HardEnvelope");
+                    pw.chip.CmdHardEnvelope(pw, mml);
                     pw.mmlPos++;
                     break;
                 case enmMMLType.ExtendChannel:

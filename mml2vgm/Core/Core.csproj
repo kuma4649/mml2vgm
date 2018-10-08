@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="chips\AY8910.cs" />
     <Compile Include="chips\C140.cs" />
     <Compile Include="chips\clsChip.cs" />
     <Compile Include="chips\clsOPN.cs" />

@@ -47,13 +47,14 @@ namespace Core
         HuC6280 = 8,
         YM2612X = 9,
         YM2413 = 10,
-        C140 = 11
+        C140 = 11,
+        AY8910 = 12
     }
 
-    public enum ePartType
-    {
-        YM2612, YM2612extend, SegaPSG, Rf5c164
-    }
+    //public enum ePartType
+    //{
+    //    YM2612, YM2612extend, SegaPSG, Rf5c164
+    //}
 
     public enum eLfoType
     {

@@ -28,6 +28,10 @@ namespace Core
             ((ClsOPN)pw.chip).SSGKeyOn = data;
 
             SetSsgVolume(pw);
+            if (pw.HardEnvelopeSw)
+            {
+                parent.OutData(pw.port0, 0x0d, (byte)(pw.HardEnvelopeType & 0xf));
+            }
             parent.OutData(pw.port0, 0x07, data);
         }
 
@@ -70,7 +74,7 @@ namespace Core
                 vol += pw.lfo[lfo].value + pw.lfo[lfo].param[6];
             }
 
-            vol = Common.CheckRange(vol, 0, 15);
+            vol = Common.CheckRange(vol, 0, 15) + (pw.HardEnvelopeSw ? 0x10 : 0x00);
 
             if (pw.beforeVolume != vol)
             {
@@ -1052,5 +1056,41 @@ namespace Core
         public override void CmdLoopExtProc(partWork pw, MML mml)
         {
         }
+
+        public override void CmdHardEnvelope(partWork pw, MML mml)
+        {
+            if (pw.Type != enmChannelType.SSG) return;
+
+            string cmd = (string)mml.args[0];
+            int n = 0;
+
+            switch (cmd)
+            {
+                case "EH":
+                    n = (int)mml.args[1];
+                    if (pw.HardEnvelopeSpeed != n)
+                    {
+                        parent.OutData(pw.port0, 0x0b, (byte)(n & 0xff));
+                        parent.OutData(pw.port0, 0x0c, (byte)((n >> 8) & 0xff));
+                        pw.HardEnvelopeSpeed = n;
+                    }
+                    break;
+                case "EHON":
+                    pw.HardEnvelopeSw = true;
+                    break;
+                case "EHOF":
+                    pw.HardEnvelopeSw = false;
+                    break;
+                case "EHT":
+                    n = (int)mml.args[1];
+                    if (pw.HardEnvelopeType != n)
+                    {
+                        parent.OutData(pw.port0, 0x0d, (byte)(n & 0xf));
+                        pw.HardEnvelopeType = n;
+                    }
+                    break;
+            }
+        }
+
     }
 }

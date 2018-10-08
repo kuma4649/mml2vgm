@@ -273,6 +273,10 @@ namespace Core
         /// </summary>
         public bool Ch3SpecialModeKeyOn = false;
 
+        public bool HardEnvelopeSw = false;
+        public int HardEnvelopeType = -1;
+        public int HardEnvelopeSpeed = -1;
+
         /// <summary>
         /// Lfo(4つ)
         /// </summary>

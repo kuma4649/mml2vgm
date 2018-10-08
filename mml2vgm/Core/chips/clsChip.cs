@@ -842,6 +842,14 @@ namespace Core
             return;
         }
 
+        public virtual void CmdHardEnvelope(partWork pw, MML mml)
+        {
+            msgBox.setWrnMsg("このパートではEHコマンドは使用できません。"
+                    , mml.line.Fn
+                    , mml.line.Num
+                    );
+        }
+
         public virtual void CmdExtendChannel(partWork pw, MML mml)
         {
             msgBox.setWrnMsg("このパートは効果音モードに対応したチャンネルが指定されていないため、Eコマンドは無視されます。"
@@ -1088,7 +1096,7 @@ namespace Core
 
         public virtual void CmdNoiseToneMixer(partWork pw, MML mml)
         {
-            msgBox.setErrMsg("このチャンネルではPコマンドは使用できません。"
+            msgBox.setErrMsg("このパートではPコマンドは使用できません。"
                 , mml.line.Fn
                 , mml.line.Num);
         }

@@ -37,6 +37,7 @@ namespace Core
         GatetimeDiv,    // Q
         Envelope,       // E
         ExtendChannel,  // EX
+        HardEnvelope,   // EH
         LoopPoint,      // L
         Repeat,         // [
         RepeatEnd,      // ]

@@ -577,6 +577,65 @@ namespace Core
                             break;
                     }
                     break;
+                case 'H':
+                    pw.incPos();
+                    n = -1;
+                    if (pw.getChar() == 'O')
+                    {
+                        pw.incPos();
+                        switch (pw.getChar())
+                        {
+                            case 'N':
+                                pw.incPos();
+                                mml.type = enmMMLType.HardEnvelope;
+                                mml.args = new List<object>();
+                                mml.args.Add("EHON");
+                                break;
+                            case 'F':
+                                pw.incPos();
+                                mml.type = enmMMLType.HardEnvelope;
+                                mml.args = new List<object>();
+                                mml.args.Add("EHOF");
+                                break;
+                            default:
+                                msgBox.setErrMsg(string.Format("未知のコマンド(EHO{0})が指定されました。"
+                                    , pw.getChar())
+                                    , pw.getSrcFn()
+                                    , pw.getLineNumber());
+                                break;
+                        }
+                    }
+                    else if (pw.getChar() == 'T')
+                    {
+                        pw.incPos();
+                        mml.type = enmMMLType.HardEnvelope;
+                        mml.args = new List<object>();
+                        mml.args.Add("EHT");
+                        if (!pw.getNum(out n))
+                        {
+                            msgBox.setErrMsg("EHTコマンドの解析に失敗しました。"
+                                , pw.getSrcFn()
+                                , pw.getLineNumber());
+                            break;
+                        }
+                        mml.args.Add(n);
+                        break;
+                    }
+                    else if (!pw.getNum(out n))
+                    {
+                        msgBox.setErrMsg("EHTコマンドの解析に失敗しました。"
+                            , pw.getSrcFn()
+                            , pw.getLineNumber());
+                        n = 0;
+                    }
+                    if (n != -1)
+                    {
+                        mml.type = enmMMLType.HardEnvelope;
+                        mml.args = new List<object>();
+                        mml.args.Add("EH");
+                        mml.args.Add(n);
+                    }
+                    break;
                 case 'X':
                     pw.incPos();
                     n = -1;
