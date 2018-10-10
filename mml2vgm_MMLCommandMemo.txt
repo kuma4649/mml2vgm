@@ -211,7 +211,7 @@ ebass3(from MUSIC LALF @70)
   YM2151    OPM           3579545   8Ch(FM   : 8Ch)
   SegaPCM   SPCM          4000000  16Ch(PCM  :16Ch)
   HuC6280   HuC8          3579545   6Ch(WF   : 6Ch)
-  C140      C140          8000000  24Ch(PCM  :24Ch)
+  C140      C140            21390  24Ch(PCM  :24Ch)
   AY8910    AY10          1789750   3Ch(PSG  : 3Ch)
   PWM       PWM          23011361   2Ch(PCM  : 2Ch)(T.B.D.)
   OKIM6258  OKI5          4000000   1Ch(ADPCM: 1Ch)(T.B.D.)
@@ -741,6 +741,7 @@ b               oooooooooooooooooooooooo  音符シ
                 "YM2608Secondary"
                 "YM2610B"
                 "YM2610BSecondary"
+                "C140"
     Option      YM2610B : 0の場合ADPCM-A 1の場合ADPCM-Bとして定義される。
                 RF5C164 : ループポイント。ループ再生位置をサンプル数で指定。
                 C140    : ループポイント。ループ再生位置をサンプル数で指定。
