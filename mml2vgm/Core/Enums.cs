@@ -51,6 +51,13 @@ namespace Core
         AY8910 = 12
     }
 
+    public enum enmPCMSTATUS
+    {
+        NONE,
+        USED,
+        ERROR
+    }
+
     //public enum ePartType
     //{
     //    YM2612, YM2612extend, SegaPSG, Rf5c164

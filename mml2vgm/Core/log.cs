@@ -81,6 +81,8 @@ namespace Core
                 return;
             }
 
+            if (writer == null) return;
+
             try
             {
                 if (path == "")
@@ -110,21 +112,28 @@ namespace Core
 
         public static void Open()
         {
-            if (path == "")
+            try
             {
-                string fullPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-                fullPath = Path.Combine(fullPath, "KumaApp", AssemblyTitle);
-                if (!Directory.Exists(fullPath)) Directory.CreateDirectory(fullPath);
-                path = Path.Combine(fullPath, "log.txt");
-                if (File.Exists(path)) File.Delete(path);
+                if (path == "")
+                {
+                    string fullPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+                    fullPath = Path.Combine(fullPath, "KumaApp", AssemblyTitle);
+                    if (!Directory.Exists(fullPath)) Directory.CreateDirectory(fullPath);
+                    path = Path.Combine(fullPath, "log.txt");
+                    if (File.Exists(path)) File.Delete(path);
+                }
+                Encoding sjisEnc = Encoding.GetEncoding("Shift_JIS");
+                writer = new StreamWriter(path, true, sjisEnc);
             }
-            Encoding sjisEnc = Encoding.GetEncoding("Shift_JIS");
-            writer = new StreamWriter(path, true, sjisEnc);
+            catch
+            {
+                writer = null;
+            }
         }
 
         public static void Close()
         {
-            writer.Close();
+            if (writer != null) writer.Close();
         }
 
         public static string AssemblyTitle

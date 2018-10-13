@@ -67,7 +67,7 @@ namespace Core
             pw.pcm = pw.ch > 9;
         }
 
-        public override void StorePcm(Dictionary<int, clsPcm> newDic, KeyValuePair<int, clsPcm> v, byte[] buf, params object[] option)
+        public override void StorePcm(Dictionary<int, clsPcm> newDic, KeyValuePair<int, clsPcm> v, byte[] buf,bool is16bit,int samplerate, params object[] option)
         {
             clsPcmDataInfo pi = pcmDataInfo[0];
 
@@ -92,7 +92,20 @@ namespace Core
                 {
                     newDic.Remove(v.Key);
                 }
-                newDic.Add(v.Key, new clsPcm(v.Value.num, v.Value.seqNum, v.Value.chip, false, v.Value.fileName, v.Value.freq, v.Value.vol, pi.totalBufPtr, pi.totalBufPtr + size, size, -1));
+                newDic.Add(v.Key, new clsPcm(
+                    v.Value.num
+                    , v.Value.seqNum
+                    , v.Value.chip
+                    , false
+                    , v.Value.fileName
+                    , v.Value.freq
+                    , v.Value.vol
+                    , pi.totalBufPtr
+                    , pi.totalBufPtr + size
+                    , size
+                    , -1
+                    , is16bit
+                    , samplerate));
                 pi.totalBufPtr += size;
 
                 newBuf = new byte[pi.totalBuf.Length + buf.Length];
@@ -107,18 +120,6 @@ namespace Core
             {
                 pi.use = false;
             }
-        }
-
-        public void SetF_NumTbl(string val)
-        {
-            //厳密なチェックを行っていないので設定値によってはバグる危険有り
-
-            string[] s = val.Split(new string[] { ",", " ", "\t" }, StringSplitOptions.RemoveEmptyEntries);
-            for (int i = 0; i < s.Length; i++)
-            {
-                FNumTbl[0][i] = int.Parse(s[i], System.Globalization.NumberStyles.HexNumber);
-            }
-            FNumTbl[0][12] = FNumTbl[0][0] * 2;
         }
 
         public void OutYM2612XPcmKeyON(partWork pw)
@@ -157,7 +158,7 @@ namespace Core
                 pw.chip.lstPartWork[11].pcm = (n == 1);
                 pw.freq = -1;//freqをリセット
                 pw.instrument = -1;
-                ((YM2612X)(pw.chip)).OutSetCh6PCMMode(
+                OutSetCh6PCMMode(
                     pw.chip.lstPartWork[5]
                     , pw.chip.lstPartWork[5].pcm
                     );

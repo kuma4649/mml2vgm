@@ -65,28 +65,6 @@ namespace Core
             pw.panL = 3;
         }
 
-        public override void SetF_NumTbl(string wrd, string val)
-        {
-            //厳密なチェックを行っていないので設定値によってはバグる危険有り
-
-            for (int octave = 0; octave < 8; octave++)
-            {
-                if (wrd != string.Format("{0}{1}", PSGF_NUM, octave + 1)) continue;
-
-                string[] s = val.Split(new string[] { ",", " ", "\t" }, StringSplitOptions.RemoveEmptyEntries);
-                for (int i = 0; i < s.Length; i++)
-                {
-                    if (i + octave * 12 >= FNumTbl[0].Length)
-                    {
-                        break;
-                    }
-                    FNumTbl[0][i + octave * 12] = int.Parse(s[i], System.Globalization.NumberStyles.HexNumber);
-                }
-
-            }
-
-        }
-
 
         public int GetDcsgFNum(int octave, char noteCmd, int shift)
         {

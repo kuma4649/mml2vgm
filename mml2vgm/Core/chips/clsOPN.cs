@@ -774,7 +774,7 @@ namespace Core
             {
                 if (parent.instFM.ContainsKey(pw.instrument))
                 {
-                    ((ClsOPN)pw.chip).OutFmSetVolume(pw, vol, pw.instrument);
+                    OutFmSetVolume(pw, vol, pw.instrument);
                     pw.beforeVolume = vol;
                 }
             }
@@ -1034,8 +1034,11 @@ namespace Core
 
         public override void SetVolume(partWork pw)
         {
-            if(pw.Type== enmChannelType.FMOPN || pw.Type== enmChannelType.FMOPNex
-                || (pw.Type== enmChannelType.FMPCM && !pw.pcm))
+            if(pw.Type== enmChannelType.FMOPN 
+                || pw.Type== enmChannelType.FMOPNex //効果音モード対応チャンネル
+                || (pw.Type== enmChannelType.FMPCM && !pw.pcm) //OPN2PCMチャンネル
+                || (pw.Type == enmChannelType.FMPCMex && !pw.pcm) //OPN2XPCMチャンネル
+                )
             {
                 SetFmVolume(pw);
             }else if(pw.Type== enmChannelType.SSG)

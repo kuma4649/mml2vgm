@@ -111,8 +111,6 @@ namespace Core
                                     if (wrd == PARTNAME + chip.Name) chip.SetPartToCh(chip.Ch, val);
                                     if (wrd == PARTNAME + chip.ShortName) chip.SetPartToCh(chip.Ch, val);
                                 }
-
-                                chip.SetF_NumTbl(wrd, val);
                             }
                         }
                     }

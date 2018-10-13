@@ -15,17 +15,19 @@ namespace Core
         private string desFn;
         private string stPath;
         public ClsVgm desVGM = null;
+        private Action<string> Disp = null;
 
         /// <summary>
         /// コンストラクタ
         /// </summary>
         /// <param name="srcFn">ソースファイル</param>
         /// <param name="desFn">出力ファイル</param>
-        public Mml2vgm(string srcFn, string desFn, string stPath)
+        public Mml2vgm(string srcFn, string desFn, string stPath,Action<string> disp)
         {
             this.srcFn = srcFn;
             this.desFn = desFn;
             this.stPath = stPath;
+            this.Disp = disp;
         }
 
         /// <summary>
@@ -36,16 +38,17 @@ namespace Core
         {
             try
             {
-                log.Write("start mml2vgm core");
+                Disp("Start mml2vgm core");
+                Disp("");
 
-                log.Write("ファイル存在チェック");
+                Disp(" ファイル存在チェック");
                 if (!File.Exists(srcFn))
                 {
                     msgBox.setErrMsg("ファイルが見つかりません。");
                     return -1;
                 }
 
-                log.Write("ソースファイルの取得");
+                Disp(" ソースファイルの取得");
                 string path = Path.GetDirectoryName(Path.GetFullPath(srcFn));
                 List<Line> src = GetSrc(File.ReadAllLines(srcFn), path);
                 if (src == null)
@@ -54,7 +57,7 @@ namespace Core
                     return -1;
                 }
 
-                log.Write("テキスト解析");
+                Disp(" テキスト解析");
                 desVGM = new ClsVgm(stPath);
                 if (desVGM.Analyze(src) != 0)
                 {
@@ -64,10 +67,10 @@ namespace Core
                     return -1;
                 }
 
-                log.Write("PCM定義&取得");
+                Disp(" PCM定義&取得");
                 if (desVGM.instPCM.Count > 0) GetPCMData(path);
 
-                log.Write("MML文法解析");
+                Disp(" MML文法解析");
                 MMLAnalyze mmlAnalyze = new MMLAnalyze(desVGM);
                 if (mmlAnalyze.Start() != 0)
                 {
@@ -81,12 +84,14 @@ namespace Core
                 switch (desVGM.info.format)
                 {
                     case enmFormat.VGM:
-                        log.Write("MML解析開始(start VGM_GetByteData)");
+                        Disp(" Start VGM_GetByteData");
                         desBuf = desVGM.Vgm_getByteData(mmlAnalyze.mmlData);
+                        Disp(" End   VGM_GetByteData");
                         break;
                     case enmFormat.XGM:
-                        log.Write("MML解析開始(start XGM_GetByteData)");
+                        Disp(" Start XGM_GetByteData");
                         desBuf = desVGM.Xgm_getByteData(mmlAnalyze.mmlData);
+                        Disp(" End   XGM_GetByteData");
                         break;
                     default:
                         break;
@@ -100,8 +105,11 @@ namespace Core
                     return -1;
                 }
 
-                log.Write("ファイル出力");
+                Disp(" ファイル出力");
                 outFile(desBuf);
+
+
+                Result();
 
                 return 0;
             }
@@ -118,7 +126,8 @@ namespace Core
             }
             finally
             {
-                log.Write("end mml2vgm core");
+                Disp("End mml2vgm core");
+                Disp("");
             }
         }
 
@@ -221,7 +230,7 @@ namespace Core
             foreach (KeyValuePair<int, clsPcm> v in desVGM.instPCM)
             {
 
-                byte[] buf = Common.GetPCMDataFromFile(path, v.Value, out bool is16bit);
+                byte[] buf = Common.GetPCMDataFromFile(path, v.Value, out bool is16bit, out int samplerate);
                 if (buf == null)
                 {
                     msgBox.setErrMsg(string.Format(
@@ -231,12 +240,80 @@ namespace Core
                 }
 
                 desVGM.chips[v.Value.chip][v.Value.isSecondary ? 1 : 0]
-                    .StorePcm(newDic, v, buf, is16bit);
+                    .StorePcm(newDic, v, buf, is16bit, samplerate);
             }
 
             desVGM.instPCM = newDic;
 
         }
 
+        private void Result()
+        {
+            Disp("");
+
+            string res = "";
+            res += DispPCMRegion(desVGM.segapcm[0]);
+            res += DispPCMRegion(desVGM.segapcm[1]);
+            res += DispPCMRegion(desVGM.c140[0]);
+            res += DispPCMRegion(desVGM.c140[1]);
+
+            if (res != "")
+            {
+                Disp("MODE:");
+                //Disp(" YM2608:  None");
+                //Disp(" YM2610B: 0=A 1=B");
+                //Disp(" RF5C164: None");
+                Disp(" SegaPCM: None");
+                Disp(" C140:    0=8bit 1=13bit(Compressed 8bit)");
+                Disp("");
+                Disp("STATUS:");
+                Disp(" USED: USED in song");
+                Disp(" NONE: Not Used in song");
+                Disp(" Error: Invalid Parameter...???");
+                Disp("");
+                Disp("");
+                if (desVGM.c140[0].pcmData != null)
+                    Disp(string.Format("C140 PRI : SYSTEM2{0}", ((C140)desVGM.c140[0]).isSystem2 ? "" : "1"));
+                if (desVGM.c140[1].pcmData != null)
+                    Disp(string.Format("C140 SEC : SYSTEM2{0}", ((C140)desVGM.c140[1]).isSystem2 ? "" : "1"));
+                Disp("");
+
+                Disp("-- SAMPLE LIST --");
+                Disp("CHIP       PRI/SEC SMPID BANK START(H) END(H)   LOOP(H)  LENGTH   MODE STATUS");
+                Disp(res);
+            }
+
+        }
+
+        private string DispPCMRegion(ClsChip c)
+        {
+            if (c.pcmData == null) return "";
+
+            string region = "";
+
+            for (int i = 0; i < 256; i++)
+            {
+                if (!desVGM.instPCM.ContainsKey(i)) continue;
+                if (desVGM.instPCM[i].chip != c.chipType) continue;
+
+                region+=string.Format("{0,-10} {1,-7} {2,-5:D3} {3,-4:D2} {4,-8:X4} {5,-8:X4} {6,-8:X4} {7,8} {8,4} {9}\r\n"
+                    , c.Name
+                    , c.IsSecondary ? "SEC" : "PRI"
+                    , i
+                    , desVGM.instPCM[i].stAdr >> 16
+                    , desVGM.instPCM[i].stAdr & 0xffff
+                    , desVGM.instPCM[i].edAdr & 0xffff
+                    , (desVGM.instPCM[i].loopAdr == -1) ? "N/A" : string.Format("{0:X4}", (desVGM.instPCM[i].loopAdr & 0xffff))
+                    , desVGM.instPCM[i].size
+                    , desVGM.instPCM[i].is16bit ? 1 : 0
+                    , desVGM.instPCM[i].status.ToString()
+                    );
+            }
+
+            region+=(string.Format(" Total Length : {0} byte\r\n", c.pcmData.Length - 15));
+            region+="\r\n";
+
+            return region;
+        }
     }
 }

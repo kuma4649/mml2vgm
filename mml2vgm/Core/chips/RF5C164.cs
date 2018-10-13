@@ -11,7 +11,6 @@ namespace Core
          
         public byte KeyOn = 0x0;
         public byte CurrentChannel = 0xff;
-        public byte[] pcmData = null;
 
         public RF5C164(ClsVgm parent, int chipID, string initialPartName, string stPath, bool isSecondary) : base(parent, chipID, initialPartName, stPath, isSecondary)
         {
@@ -73,7 +72,8 @@ namespace Core
             pw.port0 = 0xb1;
         }
 
-        public override void StorePcm(Dictionary<int, clsPcm> newDic, KeyValuePair<int, clsPcm> v, byte[] buf, params object[] option)
+
+        public override void StorePcm(Dictionary<int, clsPcm> newDic, KeyValuePair<int, clsPcm> v, byte[] buf,bool is16bit,int samplerate, params object[] option)
         {
             clsPcmDataInfo pi = pcmDataInfo[0];
 
@@ -104,7 +104,10 @@ namespace Core
                         , pi.totalBufPtr
                         , pi.totalBufPtr + size
                         , size
-                        , pi.totalBufPtr + (v.Value.loopAdr == -1 ? tSize : v.Value.loopAdr))
+                        , pi.totalBufPtr + (v.Value.loopAdr == -1 ? tSize : v.Value.loopAdr)
+                        , is16bit
+                        , samplerate
+                        )
                     );
 
                 pi.totalBufPtr += size;

@@ -8,13 +8,13 @@ namespace Core
 {
     public class YM2413 : ClsChip
     {
-        protected int[][] _FNumTbl = new int[1][] {
-            new int[13]
-            //new int[] {
-            //// OPLL(FM) : Fnum = 9 * 2^(22-B) * ftone / M       ftone:Hz M:MasterClock B:Block
-            ////   c    c+     d    d+     e     f    f+     g    g+     a    a+     b    >c
-            // 0x289,0x2af,0x2d8,0x303,0x331,0x362,0x395,0x3cc,0x405,0x443,0x484,0x4c8,0x289*2
-            //}
+        public int[][] FNumTbl = new int[1][] {
+            //new int[13]
+            new int[] {
+            // OPLL(FM) : Fnum = 9 * 2^(22-B) * ftone / M       ftone:Hz M:MasterClock B:Block
+            //   c    c+     d    d+     e     f    f+     g    g+     a    a+     b    >c
+             0x0ac,0x0b5,0x0c0,0x0cc,0x0d8,0x0e5,0x0f2,0x101,0x110,0x120,0x131,0x143,0x0ac*2
+            }
         };
 
         public YM2413(ClsVgm parent, int chipID, string initialPartName, string stPath, bool isSecondary) : base(parent, chipID, initialPartName, stPath, isSecondary)
@@ -30,19 +30,23 @@ namespace Core
             MakeFNumTbl();
             Ch = new ClsChannel[ChMax];
             SetPartToCh(Ch, initialPartName);
+            int i = 0;
             foreach (ClsChannel ch in Ch)
             {
-                ch.Type = enmChannelType.FMOPL;
+                ch.Type = i < 9 ? enmChannelType.FMOPL : enmChannelType.RHYTHM;
                 ch.isSecondary = chipID == 1;
+                i++;
             }
 
         }
 
         public override void InitPart(ref partWork pw)
         {
-            pw.slots = 0x3;
-            pw.volume = 127;
-            pw.MaxVolume = 127;
+            pw.beforeVolume = 15;
+            pw.volume = 15;
+            pw.MaxVolume = 15;
+            pw.beforeEnvInstrument = 0;
+            pw.envInstrument = 0;
             pw.port0 = (byte)(0x1 | (pw.isSecondary ? 0xa0 : 0x50));
             pw.port1 = 0xff;
             pw.mixer = 0;
@@ -61,7 +65,8 @@ namespace Core
 
         }
 
-        public void outYM2413SetAdr00_01(partWork pw,byte adr, bool AM,bool VIB,bool EG,bool KS, int mul)
+
+        public void outYM2413SetAdr00_01(partWork pw, byte adr, bool AM, bool VIB, bool EG, bool KS, int mul)
         {
             parent.OutData(
                 pw.port0
@@ -128,18 +133,151 @@ namespace Core
 
         }
 
-        public void outYM2413SetInstVol(partWork pw,int inst,int vol)
-        {
-            pw.envInstrument = inst & 0xf;
-            pw.volume = vol & 0xf;
+        //public void outYM2413SetInstVol(partWork pw, int inst, int vol)
+        //{
+        //    pw.envInstrument = inst & 0xf;
+        //    pw.volume = vol & 0xf;
 
-            parent.OutData(pw.port0
-                , (byte)(0x30 + pw.ch)
-                , (byte)((pw.envInstrument << 4) | (15 - pw.volume))
-                );
+        //    parent.OutData(pw.port0
+        //        , (byte)(0x30 + pw.ch)
+        //        , (byte)((pw.envInstrument << 4) | (15 - pw.volume))
+        //        );
+        //}
+
+        public void OutFmSetFnum(partWork pw, int octave, int num)
+        {
+            int freq;
+            freq = (int)((num & 0x1ff) | (((octave - 1) & 0x7) << 9));
+            pw.freq = freq;
         }
 
+        public void SetFmFNum(partWork pw)
+        {
+            if (pw.noteCmd == (char)0)
+            {
+                return;
+            }
 
+            int[] ftbl = FNumTbl[0];
+
+            int f = GetFmFNum(ftbl, pw.octaveNow, pw.noteCmd, pw.shift + pw.keyShift + pw.toneDoublerKeyShift);//
+            if (pw.bendWaitCounter != -1)
+            {
+                f = pw.bendFnum;
+            }
+            int o = (f & 0xf000) / 0x1000;
+            f &= 0xfff;
+
+            f = f + pw.detune;
+            for (int lfo = 0; lfo < 4; lfo++)
+            {
+                if (!pw.lfo[lfo].sw)
+                {
+                    continue;
+                }
+                if (pw.lfo[lfo].type != eLfoType.Vibrato)
+                {
+                    continue;
+                }
+                f += pw.lfo[lfo].value + pw.lfo[lfo].param[6];
+            }
+            while (f < ftbl[0])
+            {
+                if (o == 1)
+                {
+                    break;
+                }
+                o--;
+                f = ftbl[0] * 2 - (ftbl[0] - f);
+            }
+            while (f >= ftbl[0] * 2)
+            {
+                if (o == 8)
+                {
+                    break;
+                }
+                o++;
+                f = f - ftbl[0] * 2 + ftbl[0];
+            }
+            f = Common.CheckRange(f, 0, 0x7ff);
+            OutFmSetFnum(pw, o, f);
+        }
+
+        public int GetFmFNum(int[] ftbl, int octave, char noteCmd, int shift)
+        {
+            int o = octave;
+            int n = Const.NOTE.IndexOf(noteCmd) + shift;
+            if (n >= 0)
+            {
+                o += n / 12;
+                o = Common.CheckRange(o, 1, 8);
+                n %= 12;
+            }
+            else
+            {
+                o += n / 12 - ((n % 12 == 0) ? 0 : 1);
+                o = Common.CheckRange(o, 1, 8);
+                n %= 12;
+                if (n < 0) { n += 12; }
+            }
+
+            int f = ftbl[n];
+
+            return (f & 0xfff) + (o & 0xf) * 0x1000;
+        }
+
+        public void SetFmVolume(partWork pw)
+        {
+            int vol = pw.volume;
+
+            for (int lfo = 0; lfo < 4; lfo++)
+            {
+                if (!pw.lfo[lfo].sw)
+                {
+                    continue;
+                }
+                if (pw.lfo[lfo].type != eLfoType.Tremolo)
+                {
+                    continue;
+                }
+                vol += pw.lfo[lfo].value + pw.lfo[lfo].param[6];
+            }
+
+            //if (pw.beforeVolume != vol)
+            //{
+                //if (parent.instFM.ContainsKey(pw.instrument))
+                //{
+                    pw.volume = vol;
+                    //outYM2413SetInstVol(pw, pw.envInstrument, vol);
+                    //pw.beforeVolume = vol;
+                //}
+            //}
+        }
+
+        public override void SetFNum(partWork pw)
+        {
+            SetFmFNum(pw);
+        }
+
+        public override void SetVolume(partWork pw)
+        {
+            SetFmVolume(pw);
+        }
+
+        public override void SetKeyOn(partWork pw)
+        {
+            pw.keyOn = true;
+        }
+
+        public override void SetKeyOff(partWork pw)
+        {
+            pw.keyOn = false;
+            pw.keyOff = true;
+        }
+
+        public override void SetLfoAtKeyOn(partWork pw)
+        {
+        }
 
         public override void CmdInstrument(partWork pw, MML mml)
         {
@@ -152,18 +290,19 @@ namespace Core
                 return;
             }
 
-            if (pw.getChar() == 'E')
+            if (type == 'E')
             {
-                n = SetEnvelopParamFromInstrument(pw, n,mml);
+                n = SetEnvelopParamFromInstrument(pw, n, mml);
                 return;
             }
 
-            if (pw.getChar() == 'I')
+            if (type == 'I')
             {
-                n = Common.CheckRange(n, 0, 15);
+                n = Common.CheckRange(n, 1, 15);
                 if (pw.envInstrument != n)
                 {
-                    ((YM2413)pw.chip).outYM2413SetInstVol(pw, n, pw.volume); //INSTをnにセット
+                    pw.envInstrument = n;
+                    //outYM2413SetInstVol(pw, n, pw.volume); //INSTをnにセット
                 }
                 return;
             }
@@ -171,9 +310,9 @@ namespace Core
             n = Common.CheckRange(n, 0, 255);
             if (pw.instrument == n) return;
 
-            ((YM2413)pw.chip).outYM2413SetInstrument(pw, n); //音色のセット
-            ((YM2413)pw.chip).outYM2413SetInstVol(pw, 0, pw.volume); //INSTを0にセット
-            parent.OutData(pw.port0, 0x20, 0x19);
+            outYM2413SetInstrument(pw, n); //音色のセット
+            pw.envInstrument = 0;
+            //outYM2413SetInstVol(pw, 0, pw.volume); //INSTを0にセット
 
         }
 
@@ -185,6 +324,51 @@ namespace Core
         public override void SetToneDoubler(partWork pw)
         {
             //実装不要
+        }
+
+        public override void MultiChannelCommand()
+        {
+            foreach (partWork pw in lstPartWork)
+            {
+                if (pw.Type != enmChannelType.FMOPL) continue;
+
+                if (pw.beforeEnvInstrument != pw.envInstrument || pw.beforeVolume != pw.volume)
+                {
+                    pw.beforeEnvInstrument = pw.envInstrument;
+                    pw.beforeVolume = pw.volume;
+
+                    parent.OutData(pw.port0
+                        , (byte)(0x30 + pw.ch)
+                        , (byte)(((pw.envInstrument << 4) & 0xf0) | ((15 - pw.volume) & 0xf))
+                        );
+                }
+
+
+                if (pw.keyOff)
+                {
+                    pw.keyOff = false;
+                    parent.OutData(pw.port0
+                        , (byte)(0x20 + pw.ch)
+                        , (byte)(
+                            ((pw.freq >> 8) & 0xf)
+                          )
+                        );
+                }
+
+                if (pw.beforeFNum != (pw.freq | (pw.keyOn ? 0x1000 : 0x0000)))
+                {
+                    pw.beforeFNum = pw.freq | (pw.keyOn ? 0x1000 : 0x0000);
+
+                    parent.OutData(pw.port0, (byte)(0x10 + pw.ch), (byte)pw.freq);
+                    parent.OutData(pw.port0
+                        , (byte)(0x20 + pw.ch)
+                        , (byte)(
+                            ((pw.freq >> 8) & 0xf)
+                            | (pw.keyOn ? 0x10 : 0x00)
+                          )
+                        );
+                }
+            }
         }
 
     }

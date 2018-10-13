@@ -72,6 +72,7 @@ namespace Core
             pw.noise = 0;
         }
 
+
         public void OutSetFnum(partWork pw, int octave, int note, int kf)
         {
             octave &= 0x7;

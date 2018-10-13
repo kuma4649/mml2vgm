@@ -1,14 +1,14 @@
 ﻿'{
 
-	TitleName            =
-	TitleNameJ           =
+	TitleName            =C140 Test
+	TitleNameJ           =C140 テスト
 	GameName             =
 	GameNameJ            =
 	SystemName           =
 	SystemNameJ          =
 	Composer             =
 	ComposerJ            =
-	ReleaseDate          =
+	ReleaseDate          =2018/10/10
 	Converted            =
 	Notes                =
 
@@ -25,30 +25,14 @@
 '@ E  5, 15,  0,  5, 13,  3,  1,  3
 '@ E  6, 15,  0,  8, 13,  5,  1,  3
 
+'@ P 0,"muteGuitar.wav"    , 4000 , 100 , C140
+'@ P 1,"Guitar.wav"        , 8000 , 100 , C140 , 14000
+'@ P 2,"BD_16bit16000.wav" ,      , 100 , C140
 
-'A1 T126
+'Y01 T126
 
-A1-3 !
+Y01-03 !
 
-'A1 D0o4v15cdefgab>c
-'A1 D20o4v15cv14dv13ev12fv11gv10av9b>v8c
-'A1 D0o3v15Q1[c8c16c16>][l8dl16dd]
-'A1 D0o3v15q1[c8c16c16>][l8dl16dd]
-'A1 l4@5EONcdefgabEOF
-'A1 MSV0,1,10,100,0a1r1
-'A1 MST0,1, 1, 10,0a1r1
-'A1 @2EON
-'A1 MSV0,1,10,100,1a1r1
-'A1 MST0,1, 1, 10,1a1r1
-'A1 EOFSS0
-'A1 P2w0o4v15cdefgab>c
-'A1 o4w0cw5dw10ew15fw20gw25aw30b
-'A1 P3w0o4v15cdefgab>c
-'A1 o4l1P1q0v15 EHON EH900
-'A1 EHT0EH9000cd
-'A1 EHT1EH9000cd
-'A1 EHT2EH9000cd
-'A1 EHT3EH9000cd
-'A1 EHOF
-'A1 o4v15cdefg
-N7 o4v15rrrrrcdefg
+Y01 D0o4l4v125@0cdefgab>c1^1^1
+'Y01 D0o4l4q0v125@1cdefgab>>>c2_<<c&c2_<c^1^1
+Y01 D0o4l4v125@2cdefgab>c1^1^1

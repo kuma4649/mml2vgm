@@ -8,7 +8,6 @@ namespace Core
 {
     public class segaPcm : ClsChip
     {
-        public byte[] pcmData = null;
         public int Interface = 0;
 
         public segaPcm(ClsVgm parent, int chipID, string initialPartName, string stPath, bool isSecondary) : base(parent, chipID, initialPartName, stPath, isSecondary)
@@ -73,13 +72,14 @@ namespace Core
             if (IsSecondary) parent.dat[0x3b] |= 0x40;
         }
 
+
         public override void SetPCMDataBlock()
         {
             if (use && pcmData != null && pcmData.Length > 0)
                 parent.OutData(pcmData);
         }
 
-        public override void StorePcm(Dictionary<int, clsPcm> newDic, KeyValuePair<int, clsPcm> v, byte[] buf, params object[] option)
+        public override void StorePcm(Dictionary<int, clsPcm> newDic, KeyValuePair<int, clsPcm> v, byte[] buf,bool is16bit,int samplerate, params object[] option)
         {
             clsPcmDataInfo pi = pcmDataInfo[0];
 
@@ -127,7 +127,9 @@ namespace Core
                         , pi.totalBufPtr
                         , pi.totalBufPtr + size
                         , size
-                        , 0)
+                        , 0
+                        , is16bit
+                        , samplerate)
                     );
 
                 pi.totalBufPtr += size;
@@ -144,6 +146,7 @@ namespace Core
             catch
             {
                 pi.use= false;
+                newDic[v.Key].status = enmPCMSTATUS.ERROR;
             }
 
         }
@@ -315,6 +318,11 @@ namespace Core
             adr = pw.ch * 8 + 0x86;
             d = (byte)(((pw.pcmBank & 0x3f) << 2) | (pw.pcmLoopAddress != -1 ? 0 : 2) | 0);
             OutSegaPcmPort(pw, adr, d);
+
+            if (parent.instPCM[pw.instrument].status != enmPCMSTATUS.ERROR)
+            {
+                parent.instPCM[pw.instrument].status = enmPCMSTATUS.USED;
+            }
         }
 
         public void OutSegaPcmPort(partWork pw, int adr, byte data)
@@ -454,6 +462,7 @@ namespace Core
         {
             return 0;
         }
+
 
     }
 }

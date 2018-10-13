@@ -193,9 +193,8 @@ namespace Core
             pw.port1 = (byte)(0x9 | (pw.isSecondary ? 0xa0 : 0x50));
         }
 
-        public override void StorePcm(Dictionary<int, clsPcm> newDic, KeyValuePair<int, clsPcm> v, byte[] buf, params object[] option)
+        public override void StorePcm(Dictionary<int, clsPcm> newDic, KeyValuePair<int, clsPcm> v, byte[] buf, bool is16bit, int samplerate, params object[] option)
         {
-            bool is16bit = (bool)option[0];
             clsPcmDataInfo pi = pcmDataInfo[v.Value.loopAdr == 0 ? 0 : 1];
 
             try
@@ -223,7 +222,9 @@ namespace Core
                         , pi.totalBufPtr
                         , pi.totalBufPtr + size
                         , size
-                        , v.Value.loopAdr == 0 ? 0 : 1)
+                        , v.Value.loopAdr == 0 ? 0 : 1
+                        , is16bit
+                        , samplerate)
                     );
 
                 pi.totalBufPtr += size;

@@ -304,7 +304,10 @@ namespace Core
                         string[] vs = s.Substring(1).Trim().Split(new string[] { "," }, StringSplitOptions.None);
                         int num = int.Parse(vs[0]);
                         string fn = vs[1].Trim().Trim('"');
-                        int fq = int.Parse(vs[2]);
+                        if (!int.TryParse(vs[2], out int fq))
+                        {
+                            fq = -1;
+                        }
                         int vol = int.Parse(vs[3]);
                         int lp = -1;
                         bool isSecondary = false;
@@ -339,7 +342,7 @@ namespace Core
                         {
                             instPCM.Remove(num);
                         }
-                        instPCM.Add(num, new clsPcm(num, pcmDataSeqNum++, enmChip, isSecondary, fn, fq, vol, 0, 0, 0, lp));
+                        instPCM.Add(num, new clsPcm(num, pcmDataSeqNum++, enmChip, isSecondary, fn, fq, vol, 0, 0, 0, lp, false, 8000));
                     }
                     catch
                     {
@@ -824,6 +827,7 @@ namespace Core
         private double sampleB = 0.0;
 
         public long loopOffset = -1L;
+        public long loopClock = -1L;
         public long loopSamples = -1L;
 
         private Random rnd = new Random();
@@ -850,6 +854,7 @@ namespace Core
             }
 
             log.Write("MML解析開始");
+            long waitCounter = 0;
             do
             {
                 foreach (KeyValuePair<enmChipType, ClsChip[]> kvp in chips)
@@ -876,7 +881,7 @@ namespace Core
                 }
 
                 log.Write("全パートのうち次のコマンドまで一番近い値を求める");
-                long cnt = long.MaxValue;
+                waitCounter = long.MaxValue;
                 foreach (KeyValuePair<enmChipType, ClsChip[]> kvp in chips)
                 {
                     foreach (ClsChip chip in kvp.Value)
@@ -891,21 +896,21 @@ namespace Core
                             //note
                             if (cpw.waitKeyOnCounter > 0)
                             {
-                                cnt = Math.Min(cnt, cpw.waitKeyOnCounter);
+                                waitCounter = Math.Min(waitCounter, cpw.waitKeyOnCounter);
                             }
                             else if (cpw.waitCounter > 0)
                             {
-                                cnt = Math.Min(cnt, cpw.waitCounter);
+                                waitCounter = Math.Min(waitCounter, cpw.waitCounter);
                             }
 
                             //bend
                             if (cpw.bendWaitCounter != -1)
                             {
-                                cnt = Math.Min(cnt, cpw.bendWaitCounter);
+                                waitCounter = Math.Min(waitCounter, cpw.bendWaitCounter);
                             }
 
                             //lfoとenvelopeは音長によるウエイトカウントが存在する場合のみ対象にする。(さもないと、曲のループ直前の効果を出せない)
-                            if (cnt > 0)
+                            if (waitCounter > 0)
                             {
                                 //lfo
                                 for (int lfo = 0; lfo < 4; lfo++)
@@ -913,20 +918,20 @@ namespace Core
                                     if (!cpw.lfo[lfo].sw) continue;
                                     if (cpw.lfo[lfo].waitCounter == -1) continue;
 
-                                    cnt = Math.Min(cnt, cpw.lfo[lfo].waitCounter);
+                                    waitCounter = Math.Min(waitCounter, cpw.lfo[lfo].waitCounter);
                                 }
 
                                 //envelope
                                 if (cpw.envelopeMode && cpw.envIndex != -1)
                                 {
-                                    cnt = Math.Min(cnt, cpw.envCounter);
+                                    waitCounter = Math.Min(waitCounter, cpw.envCounter);
                                 }
                             }
 
                             //pcm
                             if (cpw.pcmWaitKeyOnCounter > 0)
                             {
-                                cnt = Math.Min(cnt, cpw.pcmWaitKeyOnCounter);
+                                waitCounter = Math.Min(waitCounter, cpw.pcmWaitKeyOnCounter);
                             }
 
                         }
@@ -935,7 +940,7 @@ namespace Core
                 }
 
                 log.Write("全パートのwaitcounterを減らす");
-                if (cnt != long.MaxValue)
+                if (waitCounter != long.MaxValue)
                 {
 
                     // waitcounterを減らす
@@ -947,11 +952,11 @@ namespace Core
                             foreach (partWork pw in chip.lstPartWork)
                             {
 
-                                if (pw.waitKeyOnCounter > 0) pw.waitKeyOnCounter -= cnt;
+                                if (pw.waitKeyOnCounter > 0) pw.waitKeyOnCounter -= waitCounter;
 
-                                if (pw.waitCounter > 0) pw.waitCounter -= cnt;
+                                if (pw.waitCounter > 0) pw.waitCounter -= waitCounter;
 
-                                if (pw.bendWaitCounter > 0) pw.bendWaitCounter -= cnt;
+                                if (pw.bendWaitCounter > 0) pw.bendWaitCounter -= waitCounter;
 
                                 for (int lfo = 0; lfo < 4; lfo++)
                                 {
@@ -960,19 +965,19 @@ namespace Core
 
                                     if (pw.lfo[lfo].waitCounter > 0)
                                     {
-                                        pw.lfo[lfo].waitCounter -= cnt;
+                                        pw.lfo[lfo].waitCounter -= waitCounter;
                                         if (pw.lfo[lfo].waitCounter < 0) pw.lfo[lfo].waitCounter = 0;
                                     }
                                 }
 
                                 if (pw.pcmWaitKeyOnCounter > 0)
                                 {
-                                    pw.pcmWaitKeyOnCounter -= cnt;
+                                    pw.pcmWaitKeyOnCounter -= waitCounter;
                                 }
 
                                 if (pw.envelopeMode && pw.envIndex != -1)
                                 {
-                                    pw.envCounter -= (int)cnt;
+                                    pw.envCounter -= (int)waitCounter;
                                 }
                             }
                         }
@@ -980,16 +985,16 @@ namespace Core
 
                     // wait発行
 
-                    lClock += cnt;
-                    dSample += info.samplesPerClock * cnt;
+                    lClock += waitCounter;
+                    dSample += (long)(info.samplesPerClock * waitCounter);
 
                     if (ym2612[0].lstPartWork[5].pcmWaitKeyOnCounter <= 0)//== -1)
                     {
-                        OutWaitNSamples((long)(info.samplesPerClock * cnt));
+                        OutWaitNSamples((long)(info.samplesPerClock * waitCounter));
                     }
                     else
                     {
-                        OutWaitNSamplesWithPCMSending(ym2612[0].lstPartWork[5], cnt);
+                        OutWaitNSamplesWithPCMSending(ym2612[0].lstPartWork[5], waitCounter);
                     }
 
                 }
@@ -1010,6 +1015,11 @@ namespace Core
                 }
 
             } while (endChannel < totalChannel);
+            if (loopClock != -1 && waitCounter > 0)
+            {
+                lClock -= waitCounter;
+                dSample -= (long)(info.samplesPerClock * waitCounter);
+            }
 
             log.Write("フッター情報の作成");
             MakeFooter();
@@ -1157,6 +1167,7 @@ namespace Core
             long useHuC6280 = 0;
             long useC140 = 0;
             long useAY8910 = 0;
+            long useYM2413 = 0;
 
             for (int i = 0; i < 2; i++)
             {
@@ -1182,6 +1193,8 @@ namespace Core
                 { useC140 += pw.clockCounter; }
                 foreach (partWork pw in ay8910[i].lstPartWork)
                 { useAY8910 += pw.clockCounter; }
+                foreach (partWork pw in ym2413[i].lstPartWork)
+                { useYM2413 += pw.clockCounter; }
             }
 
             if (useSN76489 == 0)
@@ -1203,9 +1216,18 @@ namespace Core
             if (useHuC6280 == 0)
             { dat[0xa4] = 0; dat[0xa5] = 0; dat[0xa6] = 0; dat[0xa7] = 0; }
             if (useC140 == 0)
-            { dat[0xa8] = 0; dat[0xa9] = 0; dat[0xaa] = 0; dat[0xab] = 0; dat[0x96] = 0; }
+            {
+                dat[0xa8] = 0; dat[0xa9] = 0; dat[0xaa] = 0; dat[0xab] = 0;
+                dat[0x96] = 0;
+            }
+            else
+            {
+                dat[0x96] = (byte)((!c140[0].isSystem2 || !c140[1].isSystem2) ? 1 : 0);
+            }
             if (useAY8910 == 0)
             { dat[0x74] = 0; dat[0x75] = 0; dat[0x76] = 0; dat[0x77] = 0; dat[0x78] = 0; dat[0x79] = 0; dat[0x7a] = 0; dat[0x7b] = 0; }
+            if (useYM2413 == 0)
+            { dat[0x10] = 0; dat[0x11] = 0; dat[0x12] = 0; dat[0x13] = 0; }
 
             if (info.Version == 1.51f)
             { dat[0x08] = 0x51; dat[0x09] = 0x01; }
@@ -1291,6 +1313,7 @@ namespace Core
             }
 
             log.Write("MML解析開始(XGM)");
+            long waitCounter;
             do
             {
                 //KeyOnリストをクリア
@@ -1311,7 +1334,7 @@ namespace Core
                 }
 
                 log.Write("全パートのうち次のコマンドまで一番近い値を求める");
-                long waitCounter = Xgm_procCheckMinimumWaitCounter();
+                waitCounter = Xgm_procCheckMinimumWaitCounter();
 
                 log.Write("KeyOn情報をかき出し");
                 foreach (byte dat in xgmKeyOnData) OutData(0x52, 0x28, dat);
@@ -1339,6 +1362,11 @@ namespace Core
                 }
 
             } while (endChannel < totalChannel);//全てのチャンネルが終了していない場合はループする
+            if (loopClock != -1 && waitCounter > 0)
+            {
+                lClock -= waitCounter;
+                dSample -= (long)(info.samplesPerClock * waitCounter);
+            }
 
             log.Write("VGMデータをXGMへコンバート");
             dat = ConvertVGMtoXGM(dat);
@@ -1596,7 +1624,8 @@ namespace Core
 
             // wait発行
             lClock += cnt;
-            dSample += info.samplesPerClock * cnt;
+            dSample += (long)(info.samplesPerClock * cnt);
+            //Console.WriteLine("pw.ch{0} lclock{1}", ym2612x[0].lstPartWork[0].clockCounter, lClock);
 
             sampleB += info.samplesPerClock * cnt;
             OutWaitNSamples((long)(sampleB));

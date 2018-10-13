@@ -8,7 +8,6 @@ namespace Core
 {
     public class HuC6280 : ClsChip
     {
-        public byte[] pcmData = null;
         public byte CurrentChannel = 0xff;
         public int TotalVolume = 15;
         public int MAXTotalVolume = 15;
@@ -108,7 +107,8 @@ namespace Core
             pw.noise = 0;
         }
 
-        public override void StorePcm(Dictionary<int, clsPcm> newDic, KeyValuePair<int, clsPcm> v, byte[] buf, params object[] option)
+
+        public override void StorePcm(Dictionary<int, clsPcm> newDic, KeyValuePair<int, clsPcm> v, byte[] buf,bool is16bit,int samplerate, params object[] option)
         {
             clsPcmDataInfo pi = pcmDataInfo[0];
 
@@ -140,6 +140,8 @@ namespace Core
                         , pi.totalBufPtr + size
                         , size
                         , -1
+                        , is16bit
+                        , samplerate
                         )
                     );
 
@@ -463,11 +465,6 @@ namespace Core
                 SetHuC6280Envelope(pw, vol);
                 pw.beforeVolume = vol;
             }
-        }
-
-        public override void SetF_NumTbl(string wrd, string val)
-        {
-            //不要
         }
 
         public override void CmdY(partWork pw, MML mml)

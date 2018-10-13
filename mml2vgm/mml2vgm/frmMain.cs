@@ -130,6 +130,8 @@ namespace mml2vgm
                 }
             }
 
+            textBox1.AppendText("\r\nResult\r\n");
+
             foreach (string mes in msgBox.getWrn())
             {
                 textBox1.AppendText(string.Format(" Warning : {0}\r\n", mes));
@@ -140,20 +142,40 @@ namespace mml2vgm
                 textBox1.AppendText(string.Format(" Error : {0}\r\n", mes));
             }
 
-            textBox1.AppendText("\r\nResult\r\n");
-
+            textBox1.AppendText("\r\n");
             textBox1.AppendText(string.Format(" Errors : {0}\r\n Warnings : {1}\r\n", msgBox.getErr().Length, msgBox.getWrn().Length));
+
+            if (mv.desVGM.loopSamples != -1)
+            {
+                textBox1.AppendText(string.Format(" Loop Clocks  : {0}\r\n", mv.desVGM.loopClock));
+                if (mv.desVGM.info.format == enmFormat.VGM)
+                    textBox1.AppendText(string.Format(" Loop Samples : {0:0.00}({1:0.00}s)\r\n"
+                        , mv.desVGM.loopSamples
+                        , mv.desVGM.loopSamples / 44100L));
+                else
+                    textBox1.AppendText(string.Format(" Loop Samples : {0:0.00}({1:0.00}s)\r\n"
+                        , mv.desVGM.loopSamples
+                        , mv.desVGM.loopSamples / (mv.desVGM.info.xgmSamplesPerSecond)));
+            }
+
             textBox1.AppendText(string.Format(" Total Clocks  : {0}\r\n", mv.desVGM.lClock));
-            if(mv.desVGM.info.format== enmFormat.VGM)            textBox1.AppendText(string.Format(" Total Samples : {0:0.00}({1:0.00}s)\r\n", mv.desVGM.dSample, mv.desVGM.dSample / 44100L));
-            else textBox1.AppendText(string.Format(" Total Samples : {0:0.00}({1:0.00}s)\r\n", mv.desVGM.dSample, mv.desVGM.dSample / (mv.desVGM.info.xgmSamplesPerSecond)));
+            if (mv.desVGM.info.format == enmFormat.VGM)
+                textBox1.AppendText(string.Format(" Total Samples : {0:0.00}({1:0.00}s)\r\n"
+                    , mv.desVGM.dSample
+                    , mv.desVGM.dSample / 44100L));
+            else
+                textBox1.AppendText(string.Format(" Total Samples : {0:0.00}({1:0.00}s)\r\n"
+                    , mv.desVGM.dSample
+                    , mv.desVGM.dSample / (mv.desVGM.info.xgmSamplesPerSecond)));
+
             if (mv.desVGM.ym2608[0].pcmData != null) textBox1.AppendText(string.Format(" ADPCM Data size(YM2608)  : ({0}/262143) byte\r\n", mv.desVGM.ym2608[0].pcmData.Length - 15));
             if (mv.desVGM.ym2608[1].pcmData != null) textBox1.AppendText(string.Format(" ADPCM Data size(YM2608Secondary)  : ({0}/262143) byte\r\n", mv.desVGM.ym2608[1].pcmData.Length - 15));
             if (mv.desVGM.ym2610b[0].pcmDataA != null) textBox1.AppendText(string.Format(" ADPCM-A Data size(YM2610B)  : ({0}/16777215) byte\r\n", mv.desVGM.ym2610b[0].pcmDataA.Length-15));
             if (mv.desVGM.ym2610b[0].pcmDataB != null) textBox1.AppendText(string.Format(" ADPCM-B Data size(YM2610B)  : ({0}/16777215) byte\r\n", mv.desVGM.ym2610b[0].pcmDataB.Length-15));
             if (mv.desVGM.ym2610b[1].pcmDataA != null) textBox1.AppendText(string.Format(" ADPCM-A Data size(YM2610BSecondary)  : ({0}/16777215) byte\r\n", mv.desVGM.ym2610b[1].pcmDataA.Length - 15));
             if (mv.desVGM.ym2610b[1].pcmDataB != null) textBox1.AppendText(string.Format(" ADPCM-B Data size(YM2610BSecondary)  : ({0}/16777215) byte\r\n", mv.desVGM.ym2610b[1].pcmDataB.Length - 15));
-            if (mv.desVGM.segapcm[0].pcmData != null) textBox1.AppendText(string.Format(" PCM Data size(SEGAPCM)  : {0} byte\r\n", mv.desVGM.segapcm[0].pcmData.Length - 15));
-            if (mv.desVGM.segapcm[1].pcmData != null) textBox1.AppendText(string.Format(" PCM Data size(SEGAPCMSecondary)  : {0} byte\r\n", mv.desVGM.segapcm[1].pcmData.Length - 15));
+            //if (mv.desVGM.segapcm[0].pcmData != null) textBox1.AppendText(string.Format(" PCM Data size(SEGAPCM)  : {0} byte\r\n", mv.desVGM.segapcm[0].pcmData.Length - 15));
+            //if (mv.desVGM.segapcm[1].pcmData != null) textBox1.AppendText(string.Format(" PCM Data size(SEGAPCMSecondary)  : {0} byte\r\n", mv.desVGM.segapcm[1].pcmData.Length - 15));
             if (mv.desVGM.ym2612[0].pcmData != null) textBox1.AppendText(string.Format(" PCM Data size(YM2612)  : {0} byte\r\n", mv.desVGM.ym2612[0].pcmData.Length));
             if (mv.desVGM.rf5c164[0].pcmData != null) textBox1.AppendText(string.Format(" PCM Data size(RF5C164) : ({0}/65535) byte\r\n", mv.desVGM.rf5c164[0].pcmData.Length-12));
             if (mv.desVGM.rf5c164[1].pcmData != null) textBox1.AppendText(string.Format(" PCM Data size(RF5C164Secondary) : ({0}/65535) byte\r\n", mv.desVGM.rf5c164[1].pcmData.Length-12));
@@ -215,7 +237,7 @@ namespace mml2vgm
 
                 Core.log.Write("Call mml2vgm core");
 
-                mv = new Mml2vgm(arg, desfn, stPath);
+                mv = new Mml2vgm(arg, desfn, stPath, Disp);
                 if (mv.Start() != 0)
                 {
                     isSuccess = false;
@@ -232,6 +254,18 @@ namespace mml2vgm
 
             Core.log.Write("end compile thread");
             Core.log.Close();
+        }
+
+        private void Disp(string msg)
+        {
+            Action<string> msgDisp=MsgDisp;
+            this.Invoke(msgDisp,msg);
+            Core.log.Write(msg);
+        }
+
+        private void MsgDisp(string msg)
+        {
+            textBox1.AppendText(msg+"\r\n");
         }
 
         private void startWatch()

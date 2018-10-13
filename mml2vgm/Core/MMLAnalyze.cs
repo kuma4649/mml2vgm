@@ -309,6 +309,13 @@ namespace Core
                 mml.args.Add('E');
                 pw.incPos();
             }
+            //@In
+            else if (pw.getChar() == 'I')
+            {
+                //Instrument(プリセット音色)
+                mml.args.Add('I');
+                pw.incPos();
+            }
             else
             {
                 //normal

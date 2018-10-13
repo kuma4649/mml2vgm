@@ -30,8 +30,6 @@ namespace Core
             //}
         };
 
-        public byte[] pcmData = null;
-
         public int rhythm_TotalVolume = 63;
         public int rhythm_beforeTotalVolume = -1;
         public int rhythm_MAXTotalVolume = 63;
@@ -189,9 +187,8 @@ namespace Core
             pw.port1 = (byte)(0x7 | (pw.isSecondary ? 0xa0 : 0x50));
         }
 
-        public override void StorePcm(Dictionary<int, clsPcm> newDic, KeyValuePair<int, clsPcm> v, byte[] buf, params object[] option)
+        public override void StorePcm(Dictionary<int, clsPcm> newDic, KeyValuePair<int, clsPcm> v, byte[] buf,bool is16bit,int samplerate, params object[] option)
         {
-            bool is16bit = (bool)option[0];
             clsPcmDataInfo pi = pcmDataInfo[0];
 
             try
@@ -220,7 +217,9 @@ namespace Core
                         , pi.totalBufPtr
                         , pi.totalBufPtr + size
                         , size
-                        , 1)
+                        , 1
+                        , is16bit
+                        , samplerate)
                     );
 
                 pi.totalBufPtr += size;

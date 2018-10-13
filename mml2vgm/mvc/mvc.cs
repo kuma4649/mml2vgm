@@ -48,7 +48,7 @@ namespace mvc
 
             Assembly myAssembly = Assembly.GetEntryAssembly();
             string path = System.IO.Path.GetDirectoryName(myAssembly.Location);
-            Mml2vgm mv = new Mml2vgm(srcFn, desFn, path);
+            Mml2vgm mv = new Mml2vgm(srcFn, desFn, path,Disp);
             int ret = mv.Start();
 
             if (ret == 0)
@@ -86,21 +86,42 @@ namespace mvc
                 Console.WriteLine(string.Format(" Error : {0}", mes));
             }
 
+            Console.WriteLine("");
             Console.WriteLine(string.Format(" Errors : {0}\r\n Warnings : {1}", msgBox.getErr().Length, msgBox.getWrn().Length));
 
             if (mv.desVGM != null)
             {
+                if (mv.desVGM.loopSamples != -1)
+                {
+                    Console.WriteLine(string.Format(" Loop Clocks  : {0}", mv.desVGM.loopClock));
+                    if (mv.desVGM.info.format == enmFormat.VGM)
+                        Console.WriteLine(string.Format(" Loop Samples : {0:0.00}({1:0.00}s)"
+                            , mv.desVGM.loopSamples
+                            , mv.desVGM.loopSamples / 44100L));
+                    else
+                        Console.WriteLine(string.Format(" Loop Samples : {0:0.00}({1:0.00}s)"
+                            , mv.desVGM.loopSamples
+                            , mv.desVGM.loopSamples / (mv.desVGM.info.xgmSamplesPerSecond)));
+                }
+
                 Console.WriteLine(string.Format(" Total Clocks  : {0}", mv.desVGM.lClock));
-                if (mv.desVGM.info.format == enmFormat.VGM) Console.WriteLine(string.Format(" Total Samples : {0:0.00}({1:0.00}s)", mv.desVGM.dSample, mv.desVGM.dSample / 44100L));
-                else Console.WriteLine(string.Format(" Total Samples : {0:0.00}({1:0.00}s)", mv.desVGM.dSample, mv.desVGM.dSample / (mv.desVGM.info.xgmSamplesPerSecond)));
+                if (mv.desVGM.info.format == enmFormat.VGM)
+                    Console.WriteLine(string.Format(" Total Samples : {0:0.00}({1:0.00}s)"
+                        , mv.desVGM.dSample
+                        , mv.desVGM.dSample / 44100L));
+                else
+                    Console.WriteLine(string.Format(" Total Samples : {0:0.00}({1:0.00}s)"
+                        , mv.desVGM.dSample
+                        , mv.desVGM.dSample / (mv.desVGM.info.xgmSamplesPerSecond)));
+
                 if (mv.desVGM.ym2608[0].pcmData != null) Console.WriteLine(string.Format(" ADPCM Data size(YM2608)  : ({0}/262143) byte", mv.desVGM.ym2608[0].pcmData.Length - 15));
                 if (mv.desVGM.ym2608[1].pcmData != null) Console.WriteLine(string.Format(" ADPCM Data size(YM2608Secondary)  : ({0}/262143) byte", mv.desVGM.ym2608[1].pcmData.Length - 15));
                 if (mv.desVGM.ym2610b[0].pcmDataA != null) Console.WriteLine(string.Format(" ADPCM-A Data size(YM2610B)  : ({0}/16777215) byte", mv.desVGM.ym2610b[0].pcmDataA.Length - 15));
                 if (mv.desVGM.ym2610b[0].pcmDataB != null) Console.WriteLine(string.Format(" ADPCM-B Data size(YM2610B)  : ({0}/16777215) byte", mv.desVGM.ym2610b[0].pcmDataB.Length - 15));
                 if (mv.desVGM.ym2610b[1].pcmDataA != null) Console.WriteLine(string.Format(" ADPCM-A Data size(YM2610BSecondary)  : ({0}/16777215) byte", mv.desVGM.ym2610b[1].pcmDataA.Length - 15));
                 if (mv.desVGM.ym2610b[1].pcmDataB != null) Console.WriteLine(string.Format(" ADPCM-B Data size(YM2610BSecondary)  : ({0}/16777215) byte", mv.desVGM.ym2610b[1].pcmDataB.Length - 15));
-                if (mv.desVGM.segapcm[0].pcmData != null) Console.WriteLine(string.Format(" PCM Data size(SEGAPCM)  : {0} byte", mv.desVGM.segapcm[0].pcmData.Length - 15));
-                if (mv.desVGM.segapcm[1].pcmData != null) Console.WriteLine(string.Format(" PCM Data size(SEGAPCMSecondary)  : {0} byte", mv.desVGM.segapcm[1].pcmData.Length - 15));
+                //if (mv.desVGM.segapcm[0].pcmData != null) Console.WriteLine(string.Format(" PCM Data size(SEGAPCM)  : {0} byte", mv.desVGM.segapcm[0].pcmData.Length - 15));
+                //if (mv.desVGM.segapcm[1].pcmData != null) Console.WriteLine(string.Format(" PCM Data size(SEGAPCMSecondary)  : {0} byte", mv.desVGM.segapcm[1].pcmData.Length - 15));
                 if (mv.desVGM.ym2612[0].pcmData != null) Console.WriteLine(string.Format(" PCM Data size(YM2612)  : {0} byte", mv.desVGM.ym2612[0].pcmData.Length));
                 if (mv.desVGM.rf5c164[0].pcmData != null) Console.WriteLine(string.Format(" PCM Data size(RF5C164) : ({0}/65535) byte", mv.desVGM.rf5c164[0].pcmData.Length - 12));
                 if (mv.desVGM.rf5c164[1].pcmData != null) Console.WriteLine(string.Format(" PCM Data size(RF5C164Secondary) : ({0}/65535) byte", mv.desVGM.rf5c164[1].pcmData.Length - 12));
@@ -116,5 +137,12 @@ namespace mvc
 
             Environment.Exit(ret);
         }
+
+        private void Disp(string msg)
+        {
+            Console.WriteLine(msg);
+            Core.log.Write(msg);
+        }
+
     }
 }

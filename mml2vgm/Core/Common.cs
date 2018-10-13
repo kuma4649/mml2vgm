@@ -25,10 +25,11 @@ namespace Core
             return r;
         }
 
-        public static byte[] GetPCMDataFromFile(string path, clsPcm instPCM, out bool is16bit)
+        public static byte[] GetPCMDataFromFile(string path, clsPcm instPCM, out bool is16bit, out int samplerate)
         {
             string fnPcm = Path.Combine(path, instPCM.fileName);
             is16bit = false;
+            samplerate = 8000;
 
             if (!File.Exists(fnPcm))
             {
@@ -85,7 +86,7 @@ namespace Core
                             return null;
                         }
 
-                        int samplerate = buf[p + 4] + buf[p + 5] * 0x100 + buf[p + 6] * 0x10000 + buf[p + 7] * 0x1000000;
+                        samplerate = buf[p + 4] + buf[p + 5] * 0x100 + buf[p + 6] * 0x10000 + buf[p + 7] * 0x1000000;
                         if (samplerate != 8000 && samplerate != 16000 && samplerate != 18500 && samplerate != 14000)
                         {
                             msgBox.setWrnMsg(string.Format("PCMファイル：仕様(8KHz/14KHz/16KHz/18.5KHz)とは異なるサンプリングレートです。({0})", samplerate));
@@ -145,7 +146,8 @@ namespace Core
                     {
                         //16bitのwavファイルはsignedのデータのためそのままボリューム変更可能
                         int b = (int)((short)(des[i] | (des[i + 1] << 8)) * instPCM.vol * 0.01);
-                        b = (b > 0xffff) ? 0xffff : b;
+                        b = (b > 0x7fff) ? 0x7fff : b;
+                        b = (b < -0x8000) ? -0x8000 : b;
                         des[i] = (byte)(b & 0xff);
                         des[i + 1] = (byte)((b & 0xff00) >> 8);
                     }

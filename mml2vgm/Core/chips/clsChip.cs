@@ -100,6 +100,7 @@ namespace Core
         public int[][] FNumTbl;
         private string stPath = "";
         public clsPcmDataInfo[] pcmDataInfo;
+        public byte[] pcmData = null;
 
 
 
@@ -392,14 +393,9 @@ namespace Core
             throw new NotImplementedException("継承先で要実装");
         }
 
-        public virtual void StorePcm(Dictionary<int, clsPcm> newDic, KeyValuePair<int, clsPcm> v, byte[] buf, params object[] option)
+        public virtual void StorePcm(Dictionary<int, clsPcm> newDic, KeyValuePair<int, clsPcm> v, byte[] buf, bool is16bit, int samplerate, params object[] option)
         {
             pcmDataInfo = null;
-        }
-
-        public virtual void SetF_NumTbl(string wrd, string val)
-        {
-            throw new NotImplementedException("継承先で要実装");
         }
 
         public virtual int GetToneDoublerShift(partWork pw, int octave, char noteCmd, int shift)
@@ -777,6 +773,7 @@ namespace Core
         {
             pw.incPos();
             parent.loopOffset = (long)parent.dat.Count;
+            parent.loopClock = (long)parent.lClock;
             parent.loopSamples = (long)parent.dSample;
 
             if (parent.info.format == enmFormat.XGM)

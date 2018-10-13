@@ -17,8 +17,6 @@ namespace Core
         };
         public const string FMF_NUM = "FMF-NUM";
 
-        public byte[] pcmData = null;
-
 
         public YM2612(ClsVgm parent, int chipID, string initialPartName, string stPath, bool isSecondary) : base(parent, chipID, initialPartName, stPath, isSecondary)
         {
@@ -113,21 +111,8 @@ namespace Core
 
         }
 
-        public override void SetF_NumTbl(string wrd, string val)
-        {
-            if (wrd != FMF_NUM) return;
 
-            //厳密なチェックを行っていないので設定値によってはバグる危険有り
-
-            string[] s = val.Split(new string[] { ",", " ", "\t" }, StringSplitOptions.RemoveEmptyEntries);
-            for (int i = 0; i < s.Length; i++)
-            {
-                FNumTbl[0][i] = int.Parse(s[i], System.Globalization.NumberStyles.HexNumber);
-            }
-            FNumTbl[0][12] = FNumTbl[0][0] * 2;
-        }
-
-        public override void StorePcm(Dictionary<int, clsPcm> newDic, KeyValuePair<int, clsPcm> v, byte[] buf, params object[] option)
+        public override void StorePcm(Dictionary<int, clsPcm> newDic, KeyValuePair<int, clsPcm> v, byte[] buf,bool is16bit,int samplerate, params object[] option)
         {
             clsPcmDataInfo pi = pcmDataInfo[0];
 
@@ -138,7 +123,22 @@ namespace Core
                 {
                     newDic.Remove(v.Key);
                 }
-                newDic.Add(v.Key, new clsPcm(v.Value.num, v.Value.seqNum, v.Value.chip, false, v.Value.fileName, v.Value.freq, v.Value.vol, pi.totalBufPtr, pi.totalBufPtr + size, size, -1));
+                newDic.Add(
+                    v.Key
+                    , new clsPcm(
+                        v.Value.num
+                        , v.Value.seqNum
+                        , v.Value.chip
+                        , false
+                        , v.Value.fileName
+                        , v.Value.freq
+                        , v.Value.vol
+                        , pi.totalBufPtr
+                        , pi.totalBufPtr + size
+                        , size
+                        , -1
+                        ,is16bit
+                        ,samplerate));
                 pi.totalBufPtr += size;
 
                 byte[] newBuf = new byte[pi.totalBuf.Length + buf.Length];

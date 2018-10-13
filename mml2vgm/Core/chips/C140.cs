@@ -8,8 +8,9 @@ namespace Core
 {
     public class C140 : ClsChip
     {
-        public byte[] pcmData = null;
         public int Interface = 0;
+        public bool isSystem2 = true;
+        public List<long> memoryMap = null;
 
         public C140(ClsVgm parent, int chipID, string initialPartName, string stPath, bool isSecondary) : base(parent, chipID, initialPartName, stPath, isSecondary)
         {
@@ -37,9 +38,9 @@ namespace Core
             pcmDataInfo[0].use = false;
             pcmDataInfo[0].totalBuf = new byte[15] {
                 0x67, 0x66, 0x8D
-                , 0x00, 0x00, 0x00, 0x00
-                , 0x00, 0x00, 0x00, 0x00
-                , 0x00, 0x00, 0x00, 0x00
+                , 0x00, 0x00, 0x00, 0x00 //size of data
+                , 0x00, 0x00, 0x00, 0x00 //size of the entire ROM
+                , 0x00, 0x00, 0x00, 0x00 //start address of data
             };
 
             Envelope = new Function();
@@ -47,6 +48,7 @@ namespace Core
             Envelope.Min = 0;
 
             makePcmTbl();
+            memoryMap = new List<long>();
         }
 
         public override void InitPart(ref partWork pw)
@@ -72,6 +74,7 @@ namespace Core
             if (IsSecondary) parent.dat[0xab] |= 0x40;
         }
 
+
         public override void SetPCMDataBlock()
         {
             if (use && pcmData != null && pcmData.Length > 0)
@@ -86,9 +89,8 @@ namespace Core
         /// <param name="v"></param>
         /// <param name="buf"></param>
         /// <param name="option"></param>
-        public override void StorePcm(Dictionary<int, clsPcm> newDic, KeyValuePair<int, clsPcm> v, byte[] buf, params object[] option)
+        public override void StorePcm(Dictionary<int, clsPcm> newDic, KeyValuePair<int, clsPcm> v, byte[] buf,bool is16bit,int samplerate, params object[] option)
         {
-            bool is16bit = (bool)option[0];
             clsPcmDataInfo pi = pcmDataInfo[0];
 
             try
@@ -112,12 +114,6 @@ namespace Core
                 Array.Copy(buf, newBuf, size);
                 buf = newBuf;
 
-                //Padding
-                if (size % 0x100 != 0)
-                {
-                    newBuf = Common.PcmPadding(ref buf, ref size, 0x80, 0x100);
-                }
-
                 //65536 バイトを超える場合はそれ以降をカット
                 if (size > 0x10000)
                 {
@@ -127,14 +123,41 @@ namespace Core
                     size = 0x10000;
                 }
 
-                //パディング(空きが足りない場合はバンクをひとつ進める(0x10000)為、空きを全て埋める)
-                int fs = (pi.totalBuf.Length - 15) % 0x10000;
-                if (size > 0x10000 - fs)
+                //空いているBankを探す
+                int freeBank = 0;
+                int freeAdr = 0;
+                do
                 {
+                    if (memoryMap.Count < freeBank + 1)
+                    {
+                        memoryMap.Add(0);
+                        freeAdr = 0 + freeBank * 0x10000;
+                        memoryMap[freeBank] += size;
+                        break;
+                    }
+
+                    if (size < 0x10000 - memoryMap[freeBank])
+                    {
+                        freeAdr = (int)(memoryMap[freeBank] + freeBank * 0x10000);
+                        memoryMap[freeBank] += size;
+                        break;
+                    }
+
+                    freeBank++;
+
+                } while (true);
+
+                //パディング(空きが足りない場合はバンクをひとつ進める(0x10000)為、空きを全て埋める)
+                while (freeAdr > pi.totalBuf.Length - 15)
+                {
+                    int fs = (pi.totalBuf.Length - 15) % 0x10000;
+                    //if (size > 0x10000 - fs)
+                    //{
                     List<byte> n = pi.totalBuf.ToList();
                     for (int i = 0; i < 0x10000 - fs; i++) n.Add(0x80);
                     pi.totalBuf = n.ToArray();
                     pi.totalBufPtr += 0x10000 - fs;
+                    //}
                 }
 
                 newDic.Add(
@@ -146,19 +169,39 @@ namespace Core
                         , v.Value.fileName
                         , v.Value.freq
                         , v.Value.vol
-                        , pi.totalBufPtr
-                        , pi.totalBufPtr + size
+                        , freeAdr
+                        , freeAdr + size 
                         , size
                         , v.Value.loopAdr
-                        , is16bit)
+                        , is16bit
+                        , samplerate)
                     );
 
-                pi.totalBufPtr += size;
-                newBuf = new byte[pi.totalBuf.Length + buf.Length];
-                Array.Copy(pi.totalBuf, newBuf, pi.totalBuf.Length);
-                Array.Copy(buf, 0, newBuf, pi.totalBuf.Length, buf.Length);
+                if (newDic[v.Key].loopAdr != -1 && (newDic[v.Key].loopAdr < 0 || newDic[v.Key].loopAdr >= size))
+                {
+                    msgBox.setErrMsg(string.Format("PCMデータのサイズを超えたloopアドレス[{0}]を指定しています。0～{1}で指定してください。"
+                        , newDic[v.Key].loopAdr
+                        , size - 1));
+                    newDic[v.Key].loopAdr = -1;
+                    newDic[v.Key].status = enmPCMSTATUS.ERROR;
+                }
 
-                pi.totalBuf = newBuf;
+                if (freeAdr == pi.totalBufPtr)
+                {
+                    pi.totalBufPtr += size;
+
+                    if (pi.totalBufPtr > 0xf_ffff) isSystem2 = false;
+
+                    newBuf = new byte[pi.totalBuf.Length + buf.Length];
+                    Array.Copy(pi.totalBuf, newBuf, pi.totalBuf.Length);
+                    Array.Copy(buf, 0, newBuf, pi.totalBuf.Length, buf.Length);
+                    pi.totalBuf = newBuf;
+                }
+                else
+                {
+                    Array.Copy(buf, 0, pi.totalBuf, freeAdr, buf.Length);
+                }
+
                 Common.SetUInt32bit31(pi.totalBuf, 3, (UInt32)(pi.totalBuf.Length - 7), IsSecondary);
                 Common.SetUInt32bit31(pi.totalBuf, 7, (UInt32)(pi.totalBuf.Length - 7));
                 pi.use = true;
@@ -167,6 +210,7 @@ namespace Core
             catch
             {
                 pi.use = false;
+                newDic[v.Key].status = enmPCMSTATUS.ERROR;
             }
 
         }
@@ -346,30 +390,57 @@ namespace Core
         }
         //Encoder code ここまで
 
-        public int GetC140FNum(int octave, char noteCmd, int shift)
+        public int GetC140FNum(partWork pw, int octave, char noteCmd, int shift)
         {
-            int o = octave - 1;
-            int n = Const.NOTE.IndexOf(noteCmd) + shift;
-            if (n >= 0)
+            try
             {
-                o += n / 12;
-                o = Common.CheckRange(o, 1, 8);
-                n %= 12;
-            }
-            else
-            {
-                o += n / 12 - 1;
-                o = Common.CheckRange(o, 1, 8);
-                n %= 12;
-                if (n < 0) { n += 12; }
-            }
+                int o = octave - 1;
+                int n = Const.NOTE.IndexOf(noteCmd) + shift;
+                if (n >= 0)
+                {
+                    o += n / 12;
+                    o = Common.CheckRange(o, 0, 7);
+                    n %= 12;
+                }
+                else
+                {
+                    o += n / 12 - 1;
+                    o = Common.CheckRange(o, 0, 7);
+                    n %= 12;
+                    if (n < 0) { n += 12; }
+                }
 
-            return ((int)(
-                1.531931 
-                * 8000.0 
-                * Const.pcmMTbl[n]
-                * Math.Pow(2, (o - 3))
-                ));
+                if (pw.instrument < 0 || !parent.instPCM.ContainsKey(pw.instrument))
+                {
+                    return 0;
+                }
+
+                if (parent.instPCM[pw.instrument].freq == -1)
+                {
+                    return ((int)(
+                        1.531931
+                        * 8000.0
+                        * Const.pcmMTbl[n]
+                        * Math.Pow(2, (o - 3))
+                        * ((double)parent.instPCM[pw.instrument].samplerate/8000.0)
+                        ));
+                }
+                else
+                {
+                    return ((int)(
+                        1.531931
+                        * 8000.0
+                        * Const.pcmMTbl[n]
+                        * Math.Pow(2, (o - 3))
+                        * ((double)parent.instPCM[pw.instrument].freq/8000.0)
+                        ));
+                }
+
+            }
+            catch
+            {
+                return 0;
+            }
         }
 
         public void OutC140Port(partWork pw, byte port, byte adr, byte data)
@@ -399,26 +470,51 @@ namespace Core
             byte data = 0;
 
             //KeyOff
-            OutC140KeyOff(pw);
+            //OutC140KeyOff(pw);
 
             //Volume
             SetVolume(pw);
 
-            //StartAdr H
-            adr = pw.ch * 16 + 0x06;
-            data = (byte)((pw.pcmStartAddress & 0xff00) >> 8);
-            OutC140Port(pw
-                , (byte)(adr >> 8)
-                , (byte)adr
-                , data);
+            if (pw.beforepcmStartAddress != pw.pcmStartAddress)
+            {
+                //StartAdr H
+                adr = pw.ch * 16 + 0x06;
+                data = (byte)((pw.pcmStartAddress & 0xff00) >> 8);
+                OutC140Port(pw
+                    , (byte)(adr >> 8)
+                    , (byte)adr
+                    , data);
 
-            //StartAdr L
-            adr = pw.ch * 16 + 0x07;
-            data = (byte)((pw.pcmStartAddress & 0x00ff) >> 0);
-            OutC140Port(pw
-                , (byte)(adr >> 8)
-                , (byte)adr
-                , data);
+                //StartAdr L
+                adr = pw.ch * 16 + 0x07;
+                data = (byte)((pw.pcmStartAddress & 0x00ff) >> 0);
+                OutC140Port(pw
+                    , (byte)(adr >> 8)
+                    , (byte)adr
+                    , data);
+
+                pw.beforepcmStartAddress = pw.pcmStartAddress;
+            }
+
+            if (pw.beforepcmEndAddress != pw.pcmEndAddress)
+            {
+                //EndAdr H
+                adr = pw.ch * 16 + 0x08;
+                data = (byte)((pw.pcmEndAddress & 0xff00) >> 8);
+                OutC140Port(pw
+                    , (byte)(adr >> 8)
+                    , (byte)adr
+                    , data);
+                //EndAdr L
+                adr = pw.ch * 16 + 0x09;
+                data = (byte)((pw.pcmEndAddress & 0x00ff) >> 0);
+                OutC140Port(pw
+                    , (byte)(adr >> 8)
+                    , (byte)adr
+                    , data);
+
+                pw.beforepcmEndAddress = pw.pcmEndAddress;
+            }
 
             if (pw.beforepcmLoopAddress != pw.pcmLoopAddress)
             {
@@ -444,37 +540,34 @@ namespace Core
                 }
             }
 
-            if (pw.beforepcmEndAddress != pw.pcmEndAddress)
+            if (pw.beforepcmBank != pw.pcmBank)
             {
-                //EndAdr H
-                adr = pw.ch * 16 + 0x08;
-                data = (byte)((pw.pcmEndAddress & 0xff00) >> 8);
-                OutC140Port(pw
-                    , (byte)(adr >> 8)
-                    , (byte)adr
-                    , data);
-                //EndAdr L
-                adr = pw.ch * 16 + 0x09;
-                data = (byte)((pw.pcmEndAddress & 0x00ff) >> 0);
+                adr = pw.ch * 16 + 0x04;
+                data = (byte)((pw.pcmBank & 7) | (isSystem2 ? ((pw.pcmBank & 0x8) << 2) : ((pw.pcmBank & 0x18) << 1)));
                 OutC140Port(pw
                     , (byte)(adr >> 8)
                     , (byte)adr
                     , data);
 
-                pw.beforepcmEndAddress = pw.pcmEndAddress;
+                pw.beforepcmBank = pw.pcmBank;
             }
 
-            adr = pw.ch * 16 + 0x04;
-            data = (byte)pw.pcmBank;
-            OutC140Port(pw
-                , (byte)(adr >> 8)
-                , (byte)adr
-                , data);
-
             adr = pw.ch * 16 + 0x05;
+
+            bool is16bit = false;
+            if (pw.instrument >= 0 && parent.instPCM.ContainsKey(pw.instrument))
+            {
+                is16bit = (bool)parent.instPCM[pw.instrument].is16bit;
+            }
+
+            if (parent.instPCM[pw.instrument].status != enmPCMSTATUS.ERROR)
+            {
+                parent.instPCM[pw.instrument].status = enmPCMSTATUS.USED;
+            }
+
             data = (byte)(
                   0x80 //KeyOn
-                | ((bool)parent.instPCM[pw.instrument].option[0] ? 0x08 : 0x00) //CompPCM
+                | (is16bit ? 0x08 : 0x00) //CompPCM
                 | ((pw.pcmLoopAddress != -1) ? 0x10 : 0x00) //Loop
                 );
             OutC140Port(pw
@@ -486,7 +579,7 @@ namespace Core
 
         public override void SetFNum(partWork pw)
         {
-            int f = GetC140FNum(pw.octaveNow, pw.noteCmd, pw.shift + pw.keyShift);//
+            int f = GetC140FNum(pw, pw.octaveNow, pw.noteCmd, pw.shift + pw.keyShift);//
             if (pw.bendWaitCounter != -1)
             {
                 f = pw.bendFnum;
@@ -532,7 +625,7 @@ namespace Core
 
         public override int GetFNum(partWork pw, int octave, char cmd, int shift)
         {
-            return GetC140FNum(octave, cmd, shift);
+            return GetC140FNum(pw, octave, cmd, shift);
         }
 
         public override void SetKeyOn(partWork pw)
@@ -670,7 +763,7 @@ namespace Core
             pw.pcmStartAddress = (int)parent.instPCM[n].stAdr;
             pw.pcmEndAddress = (int)parent.instPCM[n].edAdr;
             pw.pcmLoopAddress = (int)parent.instPCM[n].loopAdr;
-            pw.pcmBank = (int)((parent.instPCM[n].stAdr >> 16) << 1);
+            pw.pcmBank = (int)((parent.instPCM[n].stAdr >> 16));
 
         }
 

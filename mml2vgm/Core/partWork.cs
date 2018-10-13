@@ -168,6 +168,7 @@ namespace Core
         /// 使用中のエンベロープ定義番号
         /// </summary>
         public int envInstrument = -1;
+        public int beforeEnvInstrument = 0;
 
         /// <summary>
         /// エンベロープの進捗位置
@@ -343,11 +344,13 @@ namespace Core
         public int huc6280Pan = -1;
 
         public int pcmStartAddress = -1;
+        public int beforepcmStartAddress = -1;
         public int pcmLoopAddress = -1;
         public int beforepcmLoopAddress = -1;
         public int pcmEndAddress = -1;
         public int beforepcmEndAddress = -1;
         public int pcmBank = 0;
+        public int beforepcmBank = -1;
 
         public enmChannelType Type;
         public int MaxVolume = 0;
@@ -1068,9 +1071,25 @@ namespace Core
         public long edAdr = 0;
         public long size = 0;
         public long loopAdr = -1;
+        public bool is16bit = false;
+        public int samplerate = 8000;
         public object[] option = null;
+        public enmPCMSTATUS status = enmPCMSTATUS.NONE;
 
-        public clsPcm(int num,int seqNum, enmChipType chip,bool isSecondary,string fileName, int freq, int vol , long stAdr, long edAdr, long size,long loopAdr,params object[] option)
+        public clsPcm(int num
+            ,int seqNum
+            ,enmChipType chip
+            ,bool isSecondary
+            ,string fileName
+            ,int freq
+            ,int vol 
+            ,long stAdr
+            ,long edAdr
+            ,long size
+            ,long loopAdr
+            ,bool is16bit
+            ,int samplerate
+            ,params object[] option)
         {
             this.num = num;
             this.seqNum = seqNum;
@@ -1083,7 +1102,10 @@ namespace Core
             this.edAdr = edAdr;
             this.size = size;
             this.loopAdr = loopAdr;
+            this.is16bit = is16bit;
+            this.samplerate = samplerate;
             this.option = option;
+            this.status = enmPCMSTATUS.NONE;
         }
     }
 
