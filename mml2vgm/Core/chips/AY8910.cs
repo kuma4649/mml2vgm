@@ -358,5 +358,9 @@ namespace Core
             parent.OutData(pw.port0, (byte)adr, (byte)dat);
         }
 
+        public override void CmdLoopExtProc(partWork pw, MML mml)
+        {
+        }
+
     }
 }

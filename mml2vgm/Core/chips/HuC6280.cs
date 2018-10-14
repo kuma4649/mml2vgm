@@ -467,15 +467,45 @@ namespace Core
             }
         }
 
-        public override void CmdY(partWork pw, MML mml)
+        public override void SetPCMDataBlock()
         {
-            if (mml.args[0] is string) return;
-
-            byte adr = (byte)mml.args[0];
-            byte dat = (byte)mml.args[1];
-
-            OutHuC6280Port(pw.isSecondary, adr, dat);
+            if (use && pcmData != null && pcmData.Length > 0)
+                parent.OutData(pcmData);
         }
+
+        public override void SetLfoAtKeyOn(partWork pw)
+        {
+            for (int lfo = 0; lfo < 4; lfo++)
+            {
+                clsLfo pl = pw.lfo[lfo];
+                if (!pl.sw)
+                    continue;
+
+                if (pl.param[5] != 1)
+                    continue;
+
+                pl.isEnd = false;
+                pl.value = (pl.param[0] == 0) ? pl.param[6] : 0;//ディレイ中は振幅補正は適用されない
+                pl.waitCounter = pl.param[0];
+                pl.direction = pl.param[2] < 0 ? -1 : 1;
+
+                if (pl.type == eLfoType.Vibrato)
+                {
+                    SetFNum(pw);
+                }
+                if (pl.type == eLfoType.Tremolo)
+                {
+                    pw.beforeVolume = -1;
+                    SetVolume(pw);
+                }
+            }
+        }
+
+        public override void SetToneDoubler(partWork pw)
+        {
+            //実装不要
+        }
+
 
         public override void CmdNoise(partWork pw, MML mml)
         {
@@ -582,6 +612,16 @@ namespace Core
             //}
         }
 
+        public override void CmdY(partWork pw, MML mml)
+        {
+            if (mml.args[0] is string) return;
+
+            byte adr = (byte)mml.args[0];
+            byte dat = (byte)mml.args[1];
+
+            OutHuC6280Port(pw.isSecondary, adr, dat);
+        }
+
         public override void CmdLoopExtProc(partWork p, MML mml)
         {
             if (p.chip is HuC6280 && parent.huc6280[p.isSecondary ? 1 : 0].use)
@@ -656,45 +696,6 @@ namespace Core
                 SetHuC6280CurrentChannel(pw);
                 OutHuC6280Port(pw.isSecondary, 7, (byte)((pw.mixer != 0 ? 0x80 : 0x00) + (pw.noise & 0x1f)));
             }
-        }
-
-        public override void SetPCMDataBlock()
-        {
-            if (use && pcmData != null && pcmData.Length > 0)
-                parent.OutData(pcmData);
-        }
-
-        public override void SetLfoAtKeyOn(partWork pw)
-        {
-            for (int lfo = 0; lfo < 4; lfo++)
-            {
-                clsLfo pl = pw.lfo[lfo];
-                if (!pl.sw)
-                    continue;
-
-                if (pl.param[5] != 1)
-                    continue;
-
-                pl.isEnd = false;
-                pl.value = (pl.param[0] == 0) ? pl.param[6] : 0;//ディレイ中は振幅補正は適用されない
-                pl.waitCounter = pl.param[0];
-                pl.direction = pl.param[2] < 0 ? -1 : 1;
-
-                if (pl.type == eLfoType.Vibrato)
-                {
-                    SetFNum(pw);
-                }
-                if (pl.type == eLfoType.Tremolo)
-                {
-                    pw.beforeVolume = -1;
-                    SetVolume(pw);
-                }
-            }
-        }
-
-        public override void SetToneDoubler(partWork pw)
-        {
-            //実装不要
         }
 
     }

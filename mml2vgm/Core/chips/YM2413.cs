@@ -42,7 +42,7 @@ namespace Core
 
         public override void InitPart(ref partWork pw)
         {
-            pw.beforeVolume = 15;
+            pw.beforeVolume = (pw.Type == enmChannelType.FMOPL) ? 15:-1;
             pw.volume = 15;
             pw.MaxVolume = 15;
             pw.beforeEnvInstrument = 0;
@@ -259,6 +259,12 @@ namespace Core
             SetFmFNum(pw);
         }
 
+        public override int GetFNum(partWork pw, int octave, char cmd, int shift)
+        {
+            int[] ftbl = FNumTbl[0];
+            return GetFmFNum(ftbl, octave, cmd, shift);
+        }
+
         public override void SetVolume(partWork pw)
         {
             SetFmVolume(pw);
@@ -278,6 +284,22 @@ namespace Core
         public override void SetLfoAtKeyOn(partWork pw)
         {
         }
+
+        public override void SetPCMDataBlock()
+        {
+            //実装不要
+        }
+
+        public override void SetToneDoubler(partWork pw)
+        {
+            //実装不要
+        }
+
+        public override int GetToneDoublerShift(partWork pw, int octave, char noteCmd, int shift)
+        {
+            return 0;
+        }
+
 
         public override void CmdInstrument(partWork pw, MML mml)
         {
@@ -316,59 +338,209 @@ namespace Core
 
         }
 
-        public override void SetPCMDataBlock()
+        public override void CmdMode(partWork pw, MML mml)
         {
-            //実装不要
+            int n = (int)mml.args[0];
+            pw.chip.lstPartWork[9].rhythmMode = (n != 0);
+            pw.chip.lstPartWork[10].rhythmMode = (n != 0);
+            pw.chip.lstPartWork[11].rhythmMode = (n != 0);
+            pw.chip.lstPartWork[12].rhythmMode = (n != 0);
+            pw.chip.lstPartWork[13].rhythmMode = (n != 0);
+
         }
 
-        public override void SetToneDoubler(partWork pw)
+        public override void CmdY(partWork pw, MML mml)
         {
-            //実装不要
+            byte adr = (byte)mml.args[0];
+            byte dat = (byte)mml.args[1];
+            parent.OutData(pw.port0, adr, dat);
+        }
+
+        public override void CmdLoopExtProc(partWork pw, MML mml)
+        {
         }
 
         public override void MultiChannelCommand()
         {
             foreach (partWork pw in lstPartWork)
             {
-                if (pw.Type != enmChannelType.FMOPL) continue;
-
-                if (pw.beforeEnvInstrument != pw.envInstrument || pw.beforeVolume != pw.volume)
+                if (pw.Type == enmChannelType.FMOPL)
                 {
-                    pw.beforeEnvInstrument = pw.envInstrument;
-                    pw.beforeVolume = pw.volume;
+                    if (pw.beforeEnvInstrument != pw.envInstrument || pw.beforeVolume != pw.volume)
+                    {
+                        pw.beforeEnvInstrument = pw.envInstrument;
+                        pw.beforeVolume = pw.volume;
 
-                    parent.OutData(pw.port0
-                        , (byte)(0x30 + pw.ch)
-                        , (byte)(((pw.envInstrument << 4) & 0xf0) | ((15 - pw.volume) & 0xf))
-                        );
+                        parent.OutData(pw.port0
+                            , (byte)(0x30 + pw.ch)
+                            , (byte)(((pw.envInstrument << 4) & 0xf0) | ((15 - pw.volume) & 0xf))
+                            );
+                    }
+
+                    if (pw.keyOff)
+                    {
+                        pw.keyOff = false;
+                        parent.OutData(pw.port0
+                            , (byte)(0x20 + pw.ch)
+                            , (byte)(
+                                ((pw.freq >> 8) & 0xf)
+                              )
+                            );
+                    }
+
+                    if (pw.beforeFNum != (pw.freq | (pw.keyOn ? 0x1000 : 0x0000)))
+                    {
+                        pw.beforeFNum = pw.freq | (pw.keyOn ? 0x1000 : 0x0000);
+
+                        parent.OutData(pw.port0, (byte)(0x10 + pw.ch), (byte)pw.freq);
+                        parent.OutData(pw.port0
+                            , (byte)(0x20 + pw.ch)
+                            , (byte)(
+                                ((pw.freq >> 8) & 0xf)
+                                | (pw.keyOn ? 0x10 : 0x00)
+                              )
+                            );
+                    }
                 }
 
+            }
 
-                if (pw.keyOff)
+            if (!lstPartWork[9].rhythmMode) return;
+
+            partWork p0, p1;
+            byte dat;
+
+
+            //Rhythm Volume
+            p0 = lstPartWork[9];
+            if (p0.beforeVolume != p0.volume)
+            {
+                p0.beforeVolume = p0.volume;
+                parent.OutData(p0.port0, 0x36, (byte)(15 - (p0.volume & 0xf)));
+            }
+            p0 = lstPartWork[10];
+            p1 = lstPartWork[13];
+            if (p0.beforeVolume != p0.volume || p1.beforeVolume != p1.volume)
+            {
+                p0.beforeVolume = p0.volume;
+                p1.beforeVolume = p1.volume;
+                parent.OutData(p0.port0, 0x37, (byte)((15 - (p0.volume & 0xf)) | ((15 - (p1.volume & 0xf)) << 4)));
+            }
+            p0 = lstPartWork[12];
+            p1 = lstPartWork[11];
+            if (p0.beforeVolume != p0.volume || p1.beforeVolume != p1.volume)
+            {
+                p0.beforeVolume = p0.volume;
+                p1.beforeVolume = p1.volume;
+                parent.OutData(p0.port0, 0x38, (byte)((15 - (p0.volume & 0xf)) | ((15 - (p1.volume & 0xf)) << 4)));
+            }
+
+
+            //Key Off
+            if (lstPartWork[9].keyOff
+                || lstPartWork[10].keyOff
+                || lstPartWork[11].keyOff
+                || lstPartWork[12].keyOff
+                || lstPartWork[13].keyOff)
+            {
+                dat = (byte)(0x20
+                    | (lstPartWork[9].keyOn ? (lstPartWork[9].keyOff ? 0 : 0x10) : 0)
+                    | (lstPartWork[10].keyOn ? (lstPartWork[10].keyOff ? 0 : 0x08) : 0)
+                    | (lstPartWork[11].keyOn ? (lstPartWork[11].keyOff ? 0 : 0x04) : 0)
+                    | (lstPartWork[12].keyOn ? (lstPartWork[12].keyOff ? 0 : 0x02) : 0)
+                    | (lstPartWork[13].keyOn ? (lstPartWork[13].keyOff ? 0 : 0x01) : 0)
+                    );
+                lstPartWork[9].rhythmKeyOnData = dat;
+                parent.OutData(p0.port0, 0x0e, dat);
+
+                lstPartWork[9].keyOff = false;
+                lstPartWork[10].keyOff = false;
+                lstPartWork[11].keyOff = false;
+                lstPartWork[12].keyOff = false;
+                lstPartWork[13].keyOff = false;
+            }
+
+
+            //Key On
+            dat = (byte)(0x20
+                | (lstPartWork[9].keyOn ? 0x10 : 0)
+                | (lstPartWork[10].keyOn ? 0x08 : 0)
+                | (lstPartWork[11].keyOn ? 0x04 : 0)
+                | (lstPartWork[12].keyOn ? 0x02 : 0)
+                | (lstPartWork[13].keyOn ? 0x01 : 0)
+                );
+            if (lstPartWork[9].rhythmKeyOnData != dat)
+            {
+                lstPartWork[9].rhythmKeyOnData = dat;
+                parent.OutData(p0.port0, 0x0e, dat);
+            }
+
+
+            //Freq
+            p0 = lstPartWork[9];
+            if (p0.freq != -1 && p0.beforeFNum != p0.freq)
+            {
+                p0.beforeFNum = p0.freq;
+
+                parent.OutData(p0.port0, (byte)0x16, (byte)p0.freq);
+                parent.OutData(p0.port0
+                    , (byte)0x26
+                    , (byte)((p0.freq >> 8) & 0xf)
+                    );
+            }
+
+            p0 = lstPartWork[10];
+            p1 = lstPartWork[13];
+            if ((p0.freq != -1 && p0.beforeFNum != p0.freq)
+                || (p1.freq != -1 && p1.beforeFNum != p1.freq))
+            {
+                if (p1.freq != -1 && p1.beforeFNum != p1.freq)
                 {
-                    pw.keyOff = false;
-                    parent.OutData(pw.port0
-                        , (byte)(0x20 + pw.ch)
-                        , (byte)(
-                            ((pw.freq >> 8) & 0xf)
-                          )
-                        );
+                    p0.beforeFNum = p1.freq;
+                    p1.beforeFNum = p1.freq;
+                }
+                else if(p0.freq != -1 && p0.beforeFNum != p0.freq)
+                {
+                    p0.beforeFNum = p0.freq;
+                    p1.beforeFNum = p0.freq;
                 }
 
-                if (pw.beforeFNum != (pw.freq | (pw.keyOn ? 0x1000 : 0x0000)))
+                if (p0.beforeFNum != -1)
                 {
-                    pw.beforeFNum = pw.freq | (pw.keyOn ? 0x1000 : 0x0000);
-
-                    parent.OutData(pw.port0, (byte)(0x10 + pw.ch), (byte)pw.freq);
-                    parent.OutData(pw.port0
-                        , (byte)(0x20 + pw.ch)
-                        , (byte)(
-                            ((pw.freq >> 8) & 0xf)
-                            | (pw.keyOn ? 0x10 : 0x00)
-                          )
+                    parent.OutData(p0.port0, (byte)0x17, (byte)p0.beforeFNum);
+                    parent.OutData(p0.port0
+                        , (byte)0x27
+                        , (byte)((p0.beforeFNum >> 8) & 0xf)
                         );
                 }
             }
+
+            p0 = lstPartWork[12];
+            p1 = lstPartWork[11];
+            if ((p0.freq != -1 && p0.beforeFNum != p0.freq)
+                || (p1.freq != -1 && p1.beforeFNum != p1.freq))
+            {
+                if (p1.freq != -1 && p1.beforeFNum != p1.freq)
+                {
+                    p0.beforeFNum = p1.freq;
+                    p1.beforeFNum = p1.freq;
+                }
+                else if (p0.freq != -1 && p0.beforeFNum != p0.freq)
+                {
+                    p0.beforeFNum = p0.freq;
+                    p1.beforeFNum = p0.freq;
+                }
+
+                if (p0.beforeFNum != -1)
+                {
+                    parent.OutData(p0.port0, (byte)0x18, (byte)p0.beforeFNum);
+                    parent.OutData(p0.port0
+                        , (byte)0x28
+                        , (byte)((p0.beforeFNum >> 8) & 0xf)
+                        );
+                }
+            }
+
         }
 
     }

@@ -325,6 +325,7 @@ namespace Core
 
         }
 
+
         public override void SetFNum(partWork pw)
         {
 
@@ -419,7 +420,40 @@ namespace Core
         {
             OutKeyOff(pw);
         }
-        
+
+        public override void SetLfoAtKeyOn(partWork pw)
+        {
+            for (int lfo = 0; lfo < 4; lfo++)
+            {
+                clsLfo pl = pw.lfo[lfo];
+
+                if (!pl.sw)
+                    continue;
+                if (pl.type == eLfoType.Hardware)
+                    continue;
+                if (pl.param[5] != 1)
+                    continue;
+
+                pl.isEnd = false;
+                pl.value = (pl.param[0] == 0) ? pl.param[6] : 0;//ディレイ中は振幅補正は適用されない
+                pl.waitCounter = pl.param[0];
+                pl.direction = pl.param[2] < 0 ? -1 : 1;
+
+                if (pl.type == eLfoType.Vibrato)
+                    SetFNum(pw);
+
+                if (pl.type == eLfoType.Tremolo)
+                    SetVolume(pw);
+
+            }
+        }
+
+        public override void SetPCMDataBlock()
+        {
+            //実装不要
+        }
+
+
         public override void CmdNoiseToneMixer(partWork pw, MML mml)
         {
             int n = (int)mml.args[0];
@@ -547,39 +581,62 @@ namespace Core
             if (pw.instrument == n) return;
 
             pw.instrument = n;
-            ((YM2151)pw.chip).OutSetInstrument(pw, n, pw.volume);
+            OutSetInstrument(pw, n, pw.volume);
         }
 
-        public override void SetLfoAtKeyOn(partWork pw)
+        public override void CmdY(partWork pw, MML mml)
         {
-            for (int lfo = 0; lfo < 4; lfo++)
+            if (mml.args[0] is string toneparamName)
             {
-                clsLfo pl = pw.lfo[lfo];
+                byte op = (byte)mml.args[1];
+                op = (byte)(op == 1 ? 2 : (op == 2 ? 1 : op));
+                byte dat = (byte)mml.args[2];
 
-                if (!pl.sw)
-                    continue;
-                if (pl.type == eLfoType.Hardware)
-                    continue;
-                if (pl.param[5] != 1)
-                    continue;
-
-                pl.isEnd = false;
-                pl.value = (pl.param[0] == 0) ? pl.param[6] : 0;//ディレイ中は振幅補正は適用されない
-                pl.waitCounter = pl.param[0];
-                pl.direction = pl.param[2] < 0 ? -1 : 1;
-
-                if (pl.type == eLfoType.Vibrato)
-                    SetFNum(pw);
-
-                if (pl.type == eLfoType.Tremolo)
-                    SetVolume(pw);
-
+                switch (toneparamName)
+                {
+                    case "PANFBAL":
+                    case "PANFLCON":
+                        parent.OutData(pw.port0, (byte)(0x20 + pw.ch), dat);
+                        break;
+                    case "PMSAMS":
+                        parent.OutData(pw.port0, (byte)(0x38 + pw.ch), dat);
+                        break;
+                    case "DTML":
+                    case "DTMUL":
+                    case "DT1ML":
+                    case "DT1MUL":
+                        parent.OutData(pw.port0, (byte)(0x40 + pw.ch + op * 8), dat);
+                        break;
+                    case "TL":
+                        parent.OutData(pw.port0, (byte)(0x60 + pw.ch + op * 8), dat);
+                        break;
+                    case "KSAR":
+                        parent.OutData(pw.port0, (byte)(0x80 + pw.ch + op * 8), dat);
+                        break;
+                    case "AMDR":
+                    case "AMED1R":
+                        parent.OutData(pw.port0, (byte)(0xa0 + pw.ch + op * 8), dat);
+                        break;
+                    case "DT2SR":
+                    case "DT2D2R":
+                        parent.OutData(pw.port0, (byte)(0xc0 + pw.ch + op * 8), dat);
+                        break;
+                    case "SLRR":
+                    case "D1LRR":
+                        parent.OutData(pw.port0, (byte)(0xe0 + pw.ch + op * 8), dat);
+                        break;
+                }
+            }
+            else
+            {
+                byte adr = (byte)mml.args[0];
+                byte dat = (byte)mml.args[1];
+                parent.OutData(pw.port0, adr, dat);
             }
         }
 
-        public override void SetPCMDataBlock()
+        public override void CmdLoopExtProc(partWork pw, MML mml)
         {
-            //実装不要
         }
 
     }

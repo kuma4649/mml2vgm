@@ -783,42 +783,70 @@ namespace Core
         public override void SetKeyOff(partWork pw)
         { }
 
-        public override void CmdY(partWork pw, MML mml)
+        public override void SetVolume(partWork pw)
         {
-            if (mml.args[0] is string toneparamName)
+            if (pw.Type == enmChannelType.FMOPN
+                || pw.Type == enmChannelType.FMOPNex //効果音モード対応チャンネル
+                || (pw.Type == enmChannelType.FMPCM && !pw.pcm) //OPN2PCMチャンネル
+                || (pw.Type == enmChannelType.FMPCMex && !pw.pcm) //OPN2XPCMチャンネル
+                )
             {
-                byte op = (byte)mml.args[1];
-                byte dat = (byte)mml.args[2];
-
-                switch (toneparamName)
-                {
-                    case "DTML":
-                        CmdY_ToneParamOPN(0x30, pw, op, dat);
-                        break;
-                    case "TL":
-                        CmdY_ToneParamOPN(0x40, pw, op, dat);
-                        break;
-                    case "KSAR":
-                        CmdY_ToneParamOPN(0x50, pw, op, dat);
-                        break;
-                    case "AMDR":
-                        CmdY_ToneParamOPN(0x60, pw, op, dat);
-                        break;
-                    case "SR":
-                        CmdY_ToneParamOPN(0x70, pw, op, dat);
-                        break;
-                    case "SLRR":
-                        CmdY_ToneParamOPN(0x80, pw, op, dat);
-                        break;
-                    case "SSG":
-                        CmdY_ToneParamOPN(0x90, pw, op, dat);
-                        break;
-                    case "FBAL":
-                        CmdY_ToneParamOPN_FBAL(pw, dat);
-                        break;
-                }
+                SetFmVolume(pw);
+            }
+            else if (pw.Type == enmChannelType.SSG)
+            {
+                SetSsgVolume(pw);
             }
         }
+
+        public override void SetLfoAtKeyOn(partWork pw)
+        {
+            for (int lfo = 0; lfo < 4; lfo++)
+            {
+                clsLfo pl = pw.lfo[lfo];
+                if (!pl.sw)
+                    continue;
+
+                if (pl.param[5] != 1)
+                    continue;
+
+                pl.isEnd = false;
+                pl.value = (pl.param[0] == 0) ? pl.param[6] : 0;//ディレイ中は振幅補正は適用されない
+                pl.waitCounter = pl.param[0];
+                pl.direction = pl.param[2] < 0 ? -1 : 1;
+
+                if (pl.type == eLfoType.Vibrato)
+                {
+                    if (pw.Type == enmChannelType.FMOPN
+                        || pw.Type == enmChannelType.FMOPNex)
+                        SetFmFNum(pw);
+                    else if (pw.Type == enmChannelType.SSG)
+                        SetSsgFNum(pw);
+
+                }
+
+                if (pl.type == eLfoType.Tremolo)
+                {
+                    pw.beforeVolume = -1;
+                    if (pw.Type == enmChannelType.FMOPN
+                        || pw.Type == enmChannelType.FMOPNex)
+                        SetFmVolume(pw);
+                    else if (pw.Type == enmChannelType.SSG)
+                        SetSsgVolume(pw);
+                }
+
+            }
+        }
+
+        public override void SetToneDoubler(partWork pw)
+        {
+        }
+
+        public override int GetToneDoublerShift(partWork pw, int octave, char noteCmd, int shift)
+        {
+            return 0;
+        }
+
 
         private void CmdY_ToneParamOPN(byte adr, partWork pw, byte op, byte dat)
         {
@@ -853,6 +881,7 @@ namespace Core
 
             parent.OutData(port, adr, dat);
         }
+
 
         public override void CmdNoiseToneMixer(partWork pw, MML mml)
         {
@@ -980,45 +1009,6 @@ namespace Core
             }
         }
 
-        public override void SetLfoAtKeyOn(partWork pw)
-        {
-            for (int lfo = 0; lfo < 4; lfo++)
-            {
-                clsLfo pl = pw.lfo[lfo];
-                if (!pl.sw)
-                    continue;
-
-                if (pl.param[5] != 1)
-                    continue;
-
-                pl.isEnd = false;
-                pl.value = (pl.param[0] == 0) ? pl.param[6] : 0;//ディレイ中は振幅補正は適用されない
-                pl.waitCounter = pl.param[0];
-                pl.direction = pl.param[2] < 0 ? -1 : 1;
-
-                if (pl.type == eLfoType.Vibrato)
-                {
-                    if (pw.Type == enmChannelType.FMOPN 
-                        || pw.Type == enmChannelType.FMOPNex)
-                        SetFmFNum(pw);
-                    else if (pw.Type == enmChannelType.SSG)
-                        SetSsgFNum(pw);
-
-                }
-
-                if (pl.type == eLfoType.Tremolo)
-                {
-                    pw.beforeVolume = -1;
-                    if (pw.Type == enmChannelType.FMOPN
-                        || pw.Type == enmChannelType.FMOPNex)
-                        SetFmVolume(pw);
-                    else if (pw.Type == enmChannelType.SSG)
-                        SetSsgVolume(pw);
-                }
-
-            }
-        }
-
         public override void CmdVolume(partWork pw, MML mml)
         {
             base.CmdVolume(pw, mml);
@@ -1032,28 +1022,41 @@ namespace Core
             //}
         }
 
-        public override void SetVolume(partWork pw)
+        public override void CmdY(partWork pw, MML mml)
         {
-            if(pw.Type== enmChannelType.FMOPN 
-                || pw.Type== enmChannelType.FMOPNex //効果音モード対応チャンネル
-                || (pw.Type== enmChannelType.FMPCM && !pw.pcm) //OPN2PCMチャンネル
-                || (pw.Type == enmChannelType.FMPCMex && !pw.pcm) //OPN2XPCMチャンネル
-                )
+            if (mml.args[0] is string toneparamName)
             {
-                SetFmVolume(pw);
-            }else if(pw.Type== enmChannelType.SSG)
-            {
-                SetSsgVolume(pw);
+                byte op = (byte)mml.args[1];
+                byte dat = (byte)mml.args[2];
+
+                switch (toneparamName)
+                {
+                    case "DTML":
+                        CmdY_ToneParamOPN(0x30, pw, op, dat);
+                        break;
+                    case "TL":
+                        CmdY_ToneParamOPN(0x40, pw, op, dat);
+                        break;
+                    case "KSAR":
+                        CmdY_ToneParamOPN(0x50, pw, op, dat);
+                        break;
+                    case "AMDR":
+                        CmdY_ToneParamOPN(0x60, pw, op, dat);
+                        break;
+                    case "SR":
+                        CmdY_ToneParamOPN(0x70, pw, op, dat);
+                        break;
+                    case "SLRR":
+                        CmdY_ToneParamOPN(0x80, pw, op, dat);
+                        break;
+                    case "SSG":
+                        CmdY_ToneParamOPN(0x90, pw, op, dat);
+                        break;
+                    case "FBAL":
+                        CmdY_ToneParamOPN_FBAL(pw, dat);
+                        break;
+                }
             }
-        }
-
-        public override void SetToneDoubler(partWork pw)
-        {
-        }
-
-        public override int GetToneDoublerShift(partWork pw, int octave, char noteCmd, int shift)
-        {
-            return 0;
         }
 
         public override void CmdLoopExtProc(partWork pw, MML mml)

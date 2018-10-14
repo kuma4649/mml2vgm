@@ -232,6 +232,40 @@ namespace Core
             OutPsgKeyOff(pw);
         }
 
+        public override void SetLfoAtKeyOn(partWork pw)
+        {
+            for (int lfo = 0; lfo < 4; lfo++)
+            {
+                clsLfo pl = pw.lfo[lfo];
+                if (!pl.sw)
+                    continue;
+
+                if (pl.param[5] != 1)
+                    continue;
+
+                pl.isEnd = false;
+                pl.value = (pl.param[0] == 0) ? pl.param[6] : 0;//ディレイ中は振幅補正は適用されない
+                pl.waitCounter = pl.param[0];
+                pl.direction = pl.param[2] < 0 ? -1 : 1;
+
+            }
+        }
+
+        public override void SetPCMDataBlock()
+        {
+            //実装不要
+        }
+
+        public override void SetToneDoubler(partWork pw)
+        {
+            //実装不要
+        }
+
+        public override int GetToneDoublerShift(partWork pw, int octave, char noteCmd, int shift)
+        {
+            return 0;
+        }
+
 
         public override void CmdY(partWork pw, MML mml)
         {
@@ -299,40 +333,6 @@ namespace Core
 
             l = Common.CheckRange(l, 0, 3);
             pw.panL = l;
-        }
-
-        public override void SetLfoAtKeyOn(partWork pw)
-        {
-            for (int lfo = 0; lfo < 4; lfo++)
-            {
-                clsLfo pl = pw.lfo[lfo];
-                if (!pl.sw)
-                    continue;
-
-                if (pl.param[5] != 1)
-                    continue;
-
-                pl.isEnd = false;
-                pl.value = (pl.param[0] == 0) ? pl.param[6] : 0;//ディレイ中は振幅補正は適用されない
-                pl.waitCounter = pl.param[0];
-                pl.direction = pl.param[2] < 0 ? -1 : 1;
-
-            }
-        }
-
-        public override void SetPCMDataBlock()
-        {
-            //実装不要
-        }
-
-        public override void SetToneDoubler(partWork pw)
-        {
-            //実装不要
-        }
-
-        public override int GetToneDoublerShift(partWork pw, int octave, char noteCmd, int shift)
-        {
-            return 0;
         }
 
         public override void MultiChannelCommand()

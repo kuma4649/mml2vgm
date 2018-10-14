@@ -196,6 +196,11 @@ namespace Core
         public bool envelopeMode = false;
 
         /// <summary>
+        /// リズムモードスイッチ
+        /// </summary>
+        public bool rhythmMode = false;
+
+        /// <summary>
         /// Dコマンドで設定されているデチューン
         /// </summary>
         public int detune = 0;
@@ -258,6 +263,7 @@ namespace Core
 
         public bool keyOn = false;
         public bool keyOff = false;
+        public int rhythmKeyOnData = -1;
 
         /// <summary>
         /// 前回発音時の音量

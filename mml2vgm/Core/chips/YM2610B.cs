@@ -193,105 +193,6 @@ namespace Core
             pw.port1 = (byte)(0x9 | (pw.isSecondary ? 0xa0 : 0x50));
         }
 
-        public override void StorePcm(Dictionary<int, clsPcm> newDic, KeyValuePair<int, clsPcm> v, byte[] buf, bool is16bit, int samplerate, params object[] option)
-        {
-            clsPcmDataInfo pi = pcmDataInfo[v.Value.loopAdr == 0 ? 0 : 1];
-
-            try
-            {
-                EncAdpcmA ea = new EncAdpcmA();
-                buf = v.Value.loopAdr == 0
-                    ? ea.YM_ADPCM_A_Encode(buf, is16bit)
-                    : ea.YM_ADPCM_B_Encode(buf, is16bit, true);
-                long size = buf.Length;
-                byte[] newBuf = new byte[size];
-                Array.Copy(buf, newBuf, size);
-                buf = newBuf;
-                long tSize = size;
-                size = buf.Length;
-
-                newDic.Add(
-                    v.Key
-                    , new clsPcm(
-                        v.Value.num
-                        , v.Value.seqNum, v.Value.chip
-                        , v.Value.isSecondary
-                        , v.Value.fileName
-                        , v.Value.freq
-                        , v.Value.vol
-                        , pi.totalBufPtr
-                        , pi.totalBufPtr + size
-                        , size
-                        , v.Value.loopAdr == 0 ? 0 : 1
-                        , is16bit
-                        , samplerate)
-                    );
-
-                pi.totalBufPtr += size;
-                newBuf = new byte[pi.totalBuf.Length + buf.Length];
-                Array.Copy(pi.totalBuf, newBuf, pi.totalBuf.Length);
-                Array.Copy(buf, 0, newBuf, pi.totalBuf.Length, buf.Length);
-
-                pi.totalBuf = newBuf;
-                Common.SetUInt32bit31(pi.totalBuf, 3, (UInt32)(pi.totalBuf.Length - 7), IsSecondary);
-                Common.SetUInt32bit31(pi.totalBuf, 7, (UInt32)(pi.totalBuf.Length - 7));
-                pi.use = true;
-                pcmDataA = pi.use ? pcmDataInfo[0].totalBuf : null;
-                pcmDataB = pi.use ? pcmDataInfo[1].totalBuf : null;
-            }
-            catch
-            {
-                pi.use = false;
-            }
-
-        }
-
-        public override void MultiChannelCommand()
-        {
-            if (!use) return;
-            //コマンドを跨ぐデータ向け処理
-            foreach (partWork pw in lstPartWork)
-            {
-                if (pw.Type == enmChannelType.ADPCMA)
-                {
-                    //Adpcm-A TotalVolume処理
-                    if (pw.beforeVolume != pw.volume || !pw.pan.eq())
-                    {
-                        parent.OutData(pw.port1, (byte)(0x08 + (pw.ch - 12)), (byte)((byte)((pw.pan.val & 0x3) << 6) | (byte)(pw.volume & 0x1f)));
-                        pw.beforeVolume = pw.volume;
-                        pw.pan.rst();
-                    }
-
-                    adpcmA_KeyOn |= (byte)(pw.keyOn ? (1 << (pw.ch - 12)) : 0);
-                    pw.keyOn = false;
-                    adpcmA_KeyOff |= (byte)(pw.keyOff ? (1 << (pw.ch - 12)) : 0);
-                    pw.keyOff = false;
-                }
-            }
-
-            //Adpcm-A KeyOff処理
-            if (0 != adpcmA_KeyOff)
-            {
-                byte data = (byte)(0x80 + adpcmA_KeyOff);
-                parent.OutData(lstPartWork[0].port1, 0x00, data);
-                adpcmA_KeyOff = 0;
-            }
-
-            //Adpcm-A TotalVolume処理
-            if (adpcmA_beforeTotalVolume != adpcmA_TotalVolume)
-            {
-                parent.OutData(lstPartWork[0].port1, 0x01, (byte)(adpcmA_TotalVolume & 0x3f));
-                adpcmA_beforeTotalVolume = adpcmA_TotalVolume;
-            }
-
-            //Adpcm-A KeyOn処理
-            if (0 != adpcmA_KeyOn)
-            {
-                byte data = (byte)(0x00 + adpcmA_KeyOn);
-                parent.OutData(lstPartWork[0].port1, 0x00, data);
-                adpcmA_KeyOn = 0;
-            }
-        }
 
         public void SetADPCMAAddress(partWork pw, int startAdr, int endAdr)
         {
@@ -433,6 +334,7 @@ namespace Core
 
         }
 
+
         public override void SetFNum(partWork pw)
         {
             if (pw.ch < 9)
@@ -499,6 +401,107 @@ namespace Core
             {
                 SetAdpcmBVolume(pw);
             }
+        }
+
+        public override void SetPCMDataBlock()
+        {
+            if (use && pcmDataA != null && pcmDataA.Length > 0)
+                parent.OutData(pcmDataA);
+
+            if (use && pcmDataB != null && pcmDataB.Length > 0)
+                parent.OutData(pcmDataB);
+        }
+
+        public override void SetLfoAtKeyOn(partWork pw)
+        {
+            base.SetLfoAtKeyOn(pw);
+
+            for (int lfo = 0; lfo < 4; lfo++)
+            {
+                clsLfo pl = pw.lfo[lfo];
+                if (!pl.sw)
+                    continue;
+
+                if (pl.param[5] != 1)
+                    continue;
+
+                pl.isEnd = false;
+                pl.value = (pl.param[0] == 0) ? pl.param[6] : 0;//ディレイ中は振幅補正は適用されない
+                pl.waitCounter = pl.param[0];
+                pl.direction = pl.param[2] < 0 ? -1 : 1;
+
+                if (pl.type == eLfoType.Vibrato)
+                {
+                    if (pw.Type == enmChannelType.ADPCM)
+                        SetAdpcmBFNum(pw);
+
+                }
+
+                if (pl.type == eLfoType.Tremolo)
+                {
+                    pw.beforeVolume = -1;
+
+                    //if (pw.Type == enmChannelType.ADPCMA)
+                    //SetAdpcmAVolume(pw);
+                    if (pw.Type == enmChannelType.ADPCMB)
+                        SetAdpcmBVolume(pw);
+
+                }
+
+            }
+        }
+
+        public override void StorePcm(Dictionary<int, clsPcm> newDic, KeyValuePair<int, clsPcm> v, byte[] buf, bool is16bit, int samplerate, params object[] option)
+        {
+            clsPcmDataInfo pi = pcmDataInfo[v.Value.loopAdr == 0 ? 0 : 1];
+
+            try
+            {
+                EncAdpcmA ea = new EncAdpcmA();
+                buf = v.Value.loopAdr == 0
+                    ? ea.YM_ADPCM_A_Encode(buf, is16bit)
+                    : ea.YM_ADPCM_B_Encode(buf, is16bit, true);
+                long size = buf.Length;
+                byte[] newBuf = new byte[size];
+                Array.Copy(buf, newBuf, size);
+                buf = newBuf;
+                long tSize = size;
+                size = buf.Length;
+
+                newDic.Add(
+                    v.Key
+                    , new clsPcm(
+                        v.Value.num
+                        , v.Value.seqNum, v.Value.chip
+                        , v.Value.isSecondary
+                        , v.Value.fileName
+                        , v.Value.freq
+                        , v.Value.vol
+                        , pi.totalBufPtr
+                        , pi.totalBufPtr + size
+                        , size
+                        , v.Value.loopAdr == 0 ? 0 : 1
+                        , is16bit
+                        , samplerate)
+                    );
+
+                pi.totalBufPtr += size;
+                newBuf = new byte[pi.totalBuf.Length + buf.Length];
+                Array.Copy(pi.totalBuf, newBuf, pi.totalBuf.Length);
+                Array.Copy(buf, 0, newBuf, pi.totalBuf.Length, buf.Length);
+
+                pi.totalBuf = newBuf;
+                Common.SetUInt32bit31(pi.totalBuf, 3, (UInt32)(pi.totalBuf.Length - 7), IsSecondary);
+                Common.SetUInt32bit31(pi.totalBuf, 7, (UInt32)(pi.totalBuf.Length - 7));
+                pi.use = true;
+                pcmDataA = pi.use ? pcmDataInfo[0].totalBuf : null;
+                pcmDataB = pi.use ? pcmDataInfo[1].totalBuf : null;
+            }
+            catch
+            {
+                pi.use = false;
+            }
+
         }
 
 
@@ -718,51 +721,50 @@ namespace Core
             base.CmdInstrument(pw, mml);
         }
 
-        public override void SetPCMDataBlock()
+        public override void MultiChannelCommand()
         {
-            if (use && pcmDataA != null && pcmDataA.Length > 0)
-                parent.OutData(pcmDataA);
-
-            if (use && pcmDataB != null && pcmDataB.Length > 0)
-                parent.OutData(pcmDataB);
-        }
-
-        public override void SetLfoAtKeyOn(partWork pw)
-        {
-            base.SetLfoAtKeyOn(pw);
-
-            for (int lfo = 0; lfo < 4; lfo++)
+            if (!use) return;
+            //コマンドを跨ぐデータ向け処理
+            foreach (partWork pw in lstPartWork)
             {
-                clsLfo pl = pw.lfo[lfo];
-                if (!pl.sw)
-                    continue;
-
-                if (pl.param[5] != 1)
-                    continue;
-
-                pl.isEnd = false;
-                pl.value = (pl.param[0] == 0) ? pl.param[6] : 0;//ディレイ中は振幅補正は適用されない
-                pl.waitCounter = pl.param[0];
-                pl.direction = pl.param[2] < 0 ? -1 : 1;
-
-                if (pl.type == eLfoType.Vibrato)
+                if (pw.Type == enmChannelType.ADPCMA)
                 {
-                    if (pw.Type == enmChannelType.ADPCM)
-                        SetAdpcmBFNum(pw);
+                    //Adpcm-A TotalVolume処理
+                    if (pw.beforeVolume != pw.volume || !pw.pan.eq())
+                    {
+                        parent.OutData(pw.port1, (byte)(0x08 + (pw.ch - 12)), (byte)((byte)((pw.pan.val & 0x3) << 6) | (byte)(pw.volume & 0x1f)));
+                        pw.beforeVolume = pw.volume;
+                        pw.pan.rst();
+                    }
 
+                    adpcmA_KeyOn |= (byte)(pw.keyOn ? (1 << (pw.ch - 12)) : 0);
+                    pw.keyOn = false;
+                    adpcmA_KeyOff |= (byte)(pw.keyOff ? (1 << (pw.ch - 12)) : 0);
+                    pw.keyOff = false;
                 }
+            }
 
-                if (pl.type == eLfoType.Tremolo)
-                {
-                    pw.beforeVolume = -1;
+            //Adpcm-A KeyOff処理
+            if (0 != adpcmA_KeyOff)
+            {
+                byte data = (byte)(0x80 + adpcmA_KeyOff);
+                parent.OutData(lstPartWork[0].port1, 0x00, data);
+                adpcmA_KeyOff = 0;
+            }
 
-                    //if (pw.Type == enmChannelType.ADPCMA)
-                        //SetAdpcmAVolume(pw);
-                    if (pw.Type == enmChannelType.ADPCMB)
-                        SetAdpcmBVolume(pw);
+            //Adpcm-A TotalVolume処理
+            if (adpcmA_beforeTotalVolume != adpcmA_TotalVolume)
+            {
+                parent.OutData(lstPartWork[0].port1, 0x01, (byte)(adpcmA_TotalVolume & 0x3f));
+                adpcmA_beforeTotalVolume = adpcmA_TotalVolume;
+            }
 
-                }
-
+            //Adpcm-A KeyOn処理
+            if (0 != adpcmA_KeyOn)
+            {
+                byte data = (byte)(0x00 + adpcmA_KeyOn);
+                parent.OutData(lstPartWork[0].port1, 0x00, data);
+                adpcmA_KeyOn = 0;
             }
         }
 

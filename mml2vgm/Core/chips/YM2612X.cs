@@ -67,7 +67,31 @@ namespace Core
             pw.pcm = pw.ch > 9;
         }
 
-        public override void StorePcm(Dictionary<int, clsPcm> newDic, KeyValuePair<int, clsPcm> v, byte[] buf,bool is16bit,int samplerate, params object[] option)
+
+        public void OutYM2612XPcmKeyON(partWork pw)
+        {
+            if (pw.instrument >= 63) return;
+
+            int id = parent.instPCM[pw.instrument].seqNum + 1;
+            int ch = Math.Max(0, pw.ch - 8);
+            int priority = 0;
+
+            parent.OutData(
+                0x54 // original vgm command : YM2151
+                , (byte)(0x50 + ((priority & 0x3) << 2) + (ch & 0x3))
+                , (byte)id
+                );
+
+            parent.info.samplesPerClock = parent.info.xgmSamplesPerSecond * 60.0 * 4.0 / (parent.info.tempo * parent.info.clockCount);
+
+            //必要なサンプル数を算出し、保持しているサンプル数より大きい場合は更新
+            double m = pw.waitCounter * 60.0 * 4.0 / (parent.info.tempo * parent.info.clockCount) * 14000.0;//14000(Hz) = xgm sampling Rate
+            parent.instPCM[pw.instrument].xgmMaxSampleCount = Math.Max(parent.instPCM[pw.instrument].xgmMaxSampleCount, m);
+
+        }
+
+
+        public override void StorePcm(Dictionary<int, clsPcm> newDic, KeyValuePair<int, clsPcm> v, byte[] buf, bool is16bit, int samplerate, params object[] option)
         {
             clsPcmDataInfo pi = pcmDataInfo[0];
 
@@ -121,29 +145,6 @@ namespace Core
                 pi.use = false;
             }
         }
-
-        public void OutYM2612XPcmKeyON(partWork pw)
-        {
-            if (pw.instrument >= 63) return;
-
-            int id = parent.instPCM[pw.instrument].seqNum + 1;
-            int ch = Math.Max(0, pw.ch - 8);
-            int priority = 0;
-
-            parent.OutData(
-                0x54 // original vgm command : YM2151
-                , (byte)(0x50 + ((priority & 0x3) << 2) + (ch & 0x3))
-                , (byte)id
-                );
-
-            parent.info.samplesPerClock = parent.info.xgmSamplesPerSecond * 60.0 * 4.0 / (parent.info.tempo * parent.info.clockCount);
-
-            //必要なサンプル数を算出し、保持しているサンプル数より大きい場合は更新
-            double m = pw.waitCounter * 60.0 * 4.0 / (parent.info.tempo * parent.info.clockCount) * 14000.0;//14000(Hz) = xgm sampling Rate
-            parent.instPCM[pw.instrument].xgmMaxSampleCount = Math.Max(parent.instPCM[pw.instrument].xgmMaxSampleCount, m);
-
-        }
-
 
 
         public override void CmdMode(partWork pw, MML mml)

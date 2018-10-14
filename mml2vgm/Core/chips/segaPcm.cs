@@ -73,6 +73,105 @@ namespace Core
         }
 
 
+        public int GetSegaPcmFNum(int octave, char noteCmd, int shift)
+        {
+            int o = octave - 1;
+            int n = Const.NOTE.IndexOf(noteCmd) + shift;
+            if (n >= 0)
+            {
+                o += n / 12;
+                o = Common.CheckRange(o, 1, 8);
+                n %= 12;
+            }
+            else
+            {
+                o += n / 12 - 1;
+                o = Common.CheckRange(o, 1, 8);
+                n %= 12;
+                if (n < 0) { n += 12; }
+            }
+
+            return ((int)(64 * Const.pcmMTbl[n] * Math.Pow(2, (o - 3))) + 1);
+        }
+
+        public void OutSegaPcmKeyOff(partWork pw)
+        {
+            int adr = pw.ch * 8 + 0x86;
+            byte d = (byte)(((pw.pcmBank & 0x3f) << 2) | (pw.pcmLoopAddress != -1 ? 0 : 2) | 1);
+
+            OutSegaPcmPort(pw, adr, d);
+        }
+
+        public void OutSegaPcmKeyOn(partWork pw)
+        {
+            int adr = 0;
+            byte d = 0;
+
+            //KeyOff
+            OutSegaPcmKeyOff(pw);
+
+            //Volume
+            SetVolume(pw);
+
+            //StartAdr
+            adr = pw.ch * 8 + 0x85;
+            d = (byte)((pw.pcmStartAddress & 0xff00) >> 8);
+            OutSegaPcmPort(pw, adr, d);
+
+            //StartAdr
+            adr = pw.ch * 8 + 0x84;
+            d = (byte)((pw.pcmStartAddress & 0x00ff) >> 0);
+            OutSegaPcmPort(pw, adr, d);
+
+            if (pw.pcmLoopAddress != -1)
+            {
+                if (pw.beforepcmLoopAddress != pw.pcmLoopAddress)
+                {
+                    //LoopAdr
+                    adr = pw.ch * 8 + 0x05;
+                    d = (byte)((pw.pcmLoopAddress & 0xff00) >> 8);
+                    OutSegaPcmPort(pw, adr, d);
+
+                    //LoopAdr
+                    adr = pw.ch * 8 + 0x04;
+                    d = (byte)((pw.pcmLoopAddress & 0x00ff) >> 0);
+                    OutSegaPcmPort(pw, adr, d);
+
+                    pw.beforepcmLoopAddress = pw.pcmLoopAddress;
+                }
+            }
+
+            if (pw.beforepcmEndAddress != pw.pcmEndAddress)
+            {
+                //EndAdr
+                adr = pw.ch * 8 + 0x06;
+                d = (byte)((pw.pcmEndAddress & 0xff00) >> 8);
+                d = (byte)((d != 0) ? (d - 1) : 0);
+                OutSegaPcmPort(pw, adr, d);
+                pw.beforepcmEndAddress = pw.pcmEndAddress;
+            }
+
+            adr = pw.ch * 8 + 0x86;
+            d = (byte)(((pw.pcmBank & 0x3f) << 2) | (pw.pcmLoopAddress != -1 ? 0 : 2) | 0);
+            OutSegaPcmPort(pw, adr, d);
+
+            if (parent.instPCM[pw.instrument].status != enmPCMSTATUS.ERROR)
+            {
+                parent.instPCM[pw.instrument].status = enmPCMSTATUS.USED;
+            }
+        }
+
+        public void OutSegaPcmPort(partWork pw, int adr, byte data)
+        {
+            parent.OutData(
+                pw.port0
+                , (byte)adr //ll
+                , (byte)(((adr & 0x7f00) >> 8) | (pw.isSecondary ? 0x80 : 0)) //hh
+                , data //dd
+                );
+        }
+
+
         public override void SetPCMDataBlock()
         {
             if (use && pcmData != null && pcmData.Length > 0)
@@ -189,27 +288,6 @@ namespace Core
 
         }
 
-        public int GetSegaPcmFNum(int octave, char noteCmd, int shift)
-        {
-            int o = octave - 1;
-            int n = Const.NOTE.IndexOf(noteCmd) + shift;
-            if (n >= 0)
-            {
-                o += n / 12;
-                o = Common.CheckRange(o, 1, 8);
-                n %= 12;
-            }
-            else
-            {
-                o += n / 12 - 1;
-                o = Common.CheckRange(o, 1, 8);
-                n %= 12;
-                if (n < 0) { n += 12; }
-            }
-
-            return ((int)(64 * Const.pcmMTbl[n] * Math.Pow(2, (o - 3))) + 1);
-        }
-
         public override void SetVolume(partWork pw)
         {
             int vol = pw.volume;
@@ -258,83 +336,6 @@ namespace Core
             }
         }
 
-        public void OutSegaPcmKeyOff(partWork pw)
-        {
-            int adr = pw.ch * 8 + 0x86;
-            byte d = (byte)(((pw.pcmBank & 0x3f) << 2) | (pw.pcmLoopAddress != -1 ? 0 : 2) | 1);
-
-            OutSegaPcmPort(pw, adr, d);
-        }
-
-        public void OutSegaPcmKeyOn(partWork pw)
-        {
-            int adr = 0;
-            byte d = 0;
-
-            //KeyOff
-            OutSegaPcmKeyOff(pw);
-
-            //Volume
-            SetVolume(pw);
-
-            //StartAdr
-            adr = pw.ch * 8 + 0x85;
-            d = (byte)((pw.pcmStartAddress & 0xff00) >> 8);
-            OutSegaPcmPort(pw, adr, d);
-
-            //StartAdr
-            adr = pw.ch * 8 + 0x84;
-            d = (byte)((pw.pcmStartAddress & 0x00ff) >> 0);
-            OutSegaPcmPort(pw, adr, d);
-
-            if (pw.pcmLoopAddress != -1)
-            {
-                if (pw.beforepcmLoopAddress != pw.pcmLoopAddress)
-                {
-                    //LoopAdr
-                    adr = pw.ch * 8 + 0x05;
-                    d = (byte)((pw.pcmLoopAddress & 0xff00) >> 8);
-                    OutSegaPcmPort(pw, adr, d);
-
-                    //LoopAdr
-                    adr = pw.ch * 8 + 0x04;
-                    d = (byte)((pw.pcmLoopAddress & 0x00ff) >> 0);
-                    OutSegaPcmPort(pw, adr, d);
-
-                    pw.beforepcmLoopAddress = pw.pcmLoopAddress;
-                }
-            }
-
-            if (pw.beforepcmEndAddress != pw.pcmEndAddress)
-            {
-                //EndAdr
-                adr = pw.ch * 8 + 0x06;
-                d = (byte)((pw.pcmEndAddress & 0xff00) >> 8);
-                d = (byte)((d != 0) ? (d - 1) : 0);
-                OutSegaPcmPort(pw, adr, d);
-                pw.beforepcmEndAddress = pw.pcmEndAddress;
-            }
-
-            adr = pw.ch * 8 + 0x86;
-            d = (byte)(((pw.pcmBank & 0x3f) << 2) | (pw.pcmLoopAddress != -1 ? 0 : 2) | 0);
-            OutSegaPcmPort(pw, adr, d);
-
-            if (parent.instPCM[pw.instrument].status != enmPCMSTATUS.ERROR)
-            {
-                parent.instPCM[pw.instrument].status = enmPCMSTATUS.USED;
-            }
-        }
-
-        public void OutSegaPcmPort(partWork pw, int adr, byte data)
-        {
-            parent.OutData(
-                pw.port0
-                , (byte)adr //ll
-                , (byte)(((adr & 0x7f00) >> 8) | (pw.isSecondary ? 0x80 : 0)) //hh
-                , data //dd
-                );
-        }
-
         public override int GetFNum(partWork pw, int octave, char cmd, int shift)
         {
             return GetSegaPcmFNum(octave, cmd, shift);
@@ -348,6 +349,44 @@ namespace Core
         public override void SetKeyOff(partWork pw)
         {
             OutSegaPcmKeyOff(pw);
+        }
+
+        public override void SetLfoAtKeyOn(partWork pw)
+        {
+            for (int lfo = 0; lfo < 4; lfo++)
+            {
+                clsLfo pl = pw.lfo[lfo];
+                if (!pl.sw)
+                    continue;
+
+                if (pl.param[5] != 1)
+                    continue;
+
+                pl.isEnd = false;
+                pl.value = (pl.param[0] == 0) ? pl.param[6] : 0;//ディレイ中は振幅補正は適用されない
+                pl.waitCounter = pl.param[0];
+                pl.direction = pl.param[2] < 0 ? -1 : 1;
+
+                if (pl.type == eLfoType.Vibrato)
+                {
+                    SetFNum(pw);
+                }
+                if (pl.type == eLfoType.Tremolo)
+                {
+                    pw.beforeVolume = -1;
+                    SetVolume(pw);
+                }
+            }
+        }
+
+        public override void SetToneDoubler(partWork pw)
+        {
+            //実装不要
+        }
+
+        public override int GetToneDoublerShift(partWork pw, int octave, char noteCmd, int shift)
+        {
+            return 0;
         }
 
 
@@ -425,42 +464,8 @@ namespace Core
 
         }
 
-        public override void SetLfoAtKeyOn(partWork pw)
+        public override void CmdLoopExtProc(partWork pw, MML mml)
         {
-            for (int lfo = 0; lfo < 4; lfo++)
-            {
-                clsLfo pl = pw.lfo[lfo];
-                if (!pl.sw)
-                    continue;
-
-                if (pl.param[5] != 1)
-                    continue;
-
-                pl.isEnd = false;
-                pl.value = (pl.param[0] == 0) ? pl.param[6] : 0;//ディレイ中は振幅補正は適用されない
-                pl.waitCounter = pl.param[0];
-                pl.direction = pl.param[2] < 0 ? -1 : 1;
-
-                if (pl.type == eLfoType.Vibrato)
-                {
-                    SetFNum(pw);
-                }
-                if (pl.type == eLfoType.Tremolo)
-                {
-                    pw.beforeVolume = -1;
-                    SetVolume(pw);
-                }
-            }
-        }
-
-        public override void SetToneDoubler(partWork pw)
-        {
-            //実装不要
-        }
-
-        public override int GetToneDoublerShift(partWork pw, int octave, char noteCmd, int shift)
-        {
-            return 0;
         }
 
 

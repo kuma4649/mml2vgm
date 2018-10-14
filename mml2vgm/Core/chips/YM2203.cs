@@ -132,6 +132,7 @@ namespace Core
 
         }
 
+
         public void outYM2203AllKeyOff(ClsChip chip)
         {
 
@@ -162,6 +163,7 @@ namespace Core
             pw.beforeVolume = -1;
             parent.OutData(pw.port0, 0x07, data);
         }
+
 
         public override void SetFNum(partWork pw)
         {

@@ -70,7 +70,6 @@ namespace Core
 
         }
 
-
         public override void InitPart(ref partWork pw)
         {
             pw.slots = (byte)(((pw.Type == enmChannelType.FMOPN || pw.Type == enmChannelType.FMPCM) || pw.ch == 2) ? 0xf : 0x0);
@@ -112,51 +111,6 @@ namespace Core
         }
 
 
-        public override void StorePcm(Dictionary<int, clsPcm> newDic, KeyValuePair<int, clsPcm> v, byte[] buf,bool is16bit,int samplerate, params object[] option)
-        {
-            clsPcmDataInfo pi = pcmDataInfo[0];
-
-            try
-            {
-                long size = buf.Length;
-                if (newDic.ContainsKey(v.Key))
-                {
-                    newDic.Remove(v.Key);
-                }
-                newDic.Add(
-                    v.Key
-                    , new clsPcm(
-                        v.Value.num
-                        , v.Value.seqNum
-                        , v.Value.chip
-                        , false
-                        , v.Value.fileName
-                        , v.Value.freq
-                        , v.Value.vol
-                        , pi.totalBufPtr
-                        , pi.totalBufPtr + size
-                        , size
-                        , -1
-                        ,is16bit
-                        ,samplerate));
-                pi.totalBufPtr += size;
-
-                byte[] newBuf = new byte[pi.totalBuf.Length + buf.Length];
-                Array.Copy(pi.totalBuf, newBuf, pi.totalBuf.Length);
-                Array.Copy(buf, 0, newBuf, pi.totalBuf.Length, buf.Length);
-
-                pi.totalBuf = newBuf;
-                Common.SetUInt32bit31(pi.totalBuf, 3, (UInt32)(pi.totalBuf.Length - 7), IsSecondary);
-                pi.use = true;
-                pcmData = pi.use ? pi.totalBuf : null;
-            }
-            catch
-            {
-                pi.use = false;
-            }
-
-        }
-
         public void OutSetCh6PCMMode(partWork pw, bool sw)
         {
             parent.OutData(
@@ -189,6 +143,7 @@ namespace Core
             pw.pcmNote = n;
         }
 
+
         public override void SetFNum(partWork pw)
         {
             SetFmFNum(pw);
@@ -202,6 +157,51 @@ namespace Core
         public override void SetKeyOff(partWork pw)
         {
             OutFmKeyOff(pw);
+        }
+
+        public override void StorePcm(Dictionary<int, clsPcm> newDic, KeyValuePair<int, clsPcm> v, byte[] buf, bool is16bit, int samplerate, params object[] option)
+        {
+            clsPcmDataInfo pi = pcmDataInfo[0];
+
+            try
+            {
+                long size = buf.Length;
+                if (newDic.ContainsKey(v.Key))
+                {
+                    newDic.Remove(v.Key);
+                }
+                newDic.Add(
+                    v.Key
+                    , new clsPcm(
+                        v.Value.num
+                        , v.Value.seqNum
+                        , v.Value.chip
+                        , false
+                        , v.Value.fileName
+                        , v.Value.freq
+                        , v.Value.vol
+                        , pi.totalBufPtr
+                        , pi.totalBufPtr + size
+                        , size
+                        , -1
+                        , is16bit
+                        , samplerate));
+                pi.totalBufPtr += size;
+
+                byte[] newBuf = new byte[pi.totalBuf.Length + buf.Length];
+                Array.Copy(pi.totalBuf, newBuf, pi.totalBuf.Length);
+                Array.Copy(buf, 0, newBuf, pi.totalBuf.Length, buf.Length);
+
+                pi.totalBuf = newBuf;
+                Common.SetUInt32bit31(pi.totalBuf, 3, (UInt32)(pi.totalBuf.Length - 7), IsSecondary);
+                pi.use = true;
+                pcmData = pi.use ? pi.totalBuf : null;
+            }
+            catch
+            {
+                pi.use = false;
+            }
+
         }
 
 

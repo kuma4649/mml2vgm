@@ -73,81 +73,6 @@ namespace Core
         }
 
 
-        public override void StorePcm(Dictionary<int, clsPcm> newDic, KeyValuePair<int, clsPcm> v, byte[] buf,bool is16bit,int samplerate, params object[] option)
-        {
-            clsPcmDataInfo pi = pcmDataInfo[0];
-
-            try
-            {
-                long size = buf.Length;
-                byte[] newBuf = new byte[size + 1];
-                Array.Copy(buf, newBuf, size);
-                newBuf[size] = 0xff;
-                buf = newBuf;
-                long tSize = size;
-                size = buf.Length;
-
-                //Padding
-                if (size % 0x100 != 0)
-                {
-                    newBuf = Common.PcmPadding(ref buf, ref size, 0x80, 0x100);
-                }
-
-                newDic.Add(
-                    v.Key
-                    , new clsPcm(
-                        v.Value.num, v.Value.seqNum, v.Value.chip
-                        , v.Value.isSecondary
-                        , v.Value.fileName
-                        , v.Value.freq
-                        , v.Value.vol
-                        , pi.totalBufPtr
-                        , pi.totalBufPtr + size
-                        , size
-                        , pi.totalBufPtr + (v.Value.loopAdr == -1 ? tSize : v.Value.loopAdr)
-                        , is16bit
-                        , samplerate
-                        )
-                    );
-
-                pi.totalBufPtr += size;
-
-                for (int i = 0; i < tSize; i++)
-                {
-                    if (buf[i] != 0xff)
-                    {
-                        if (buf[i] >= 0x80)
-                        {
-                            buf[i] = buf[i];
-                        }
-                        else
-                        {
-                            buf[i] = (byte)(0x80 - buf[i]);
-                        }
-                    }
-
-                    if (buf[i] == 0xff)
-                    {
-                        buf[i] = 0xfe;
-                    }
-
-                }
-                newBuf = new byte[pi.totalBuf.Length + buf.Length];
-                Array.Copy(pi.totalBuf, newBuf, pi.totalBuf.Length);
-                Array.Copy(buf, 0, newBuf, pi.totalBuf.Length, buf.Length);
-
-                pi.totalBuf = newBuf;
-                Common.SetUInt32bit31(pi.totalBuf, 6, (UInt32)(pi.totalBuf.Length - 10), IsSecondary);
-                pi.use = true;
-                pcmData = pi.use ? pi.totalBuf : null;
-            }
-            catch
-            {
-                pi.use = false;
-            }
-
-        }
-
         public int GetRf5c164PcmNote(int octave, char noteCmd, int shift)
         {
             int o = octave;
@@ -167,76 +92,6 @@ namespace Core
             }
 
             return (int)(0x0400 * Const.pcmMTbl[n] * Math.Pow(2, (o - 4)));
-        }
-
-        public override void SetVolume(partWork pw)
-        {
-            int vol = pw.volume;
-
-            if (pw.envelopeMode)
-            {
-                vol = 0;
-                if (pw.envIndex != -1)
-                {
-                    vol = pw.envVolume - (255 - pw.volume);
-                }
-            }
-
-            for (int lfo = 0; lfo < 4; lfo++)
-            {
-                if (!pw.lfo[lfo].sw)
-                {
-                    continue;
-                }
-                if (pw.lfo[lfo].type != eLfoType.Tremolo)
-                {
-                    continue;
-                }
-                vol += pw.lfo[lfo].value + pw.lfo[lfo].param[6];
-            }
-
-            vol = Common.CheckRange(vol, 0, 255);
-
-            if (pw.beforeVolume != vol)
-            {
-                SetRf5c164Envelope(pw, vol);
-                pw.beforeVolume = vol;
-            }
-        }
-
-        public override int GetFNum(partWork pw, int octave, char cmd, int shift)
-        {
-            return GetRf5c164PcmNote(octave, cmd, shift);
-        }
-
-        public override void SetFNum(partWork pw)
-        {
-            int f = GetFNum(pw, pw.octaveNow, pw.noteCmd, pw.keyShift + pw.shift);//
-
-            if (pw.bendWaitCounter != -1)
-            {
-                f = pw.bendFnum;
-            }
-            f = f + pw.detune;
-            for (int lfo = 0; lfo < 4; lfo++)
-            {
-                if (!pw.lfo[lfo].sw)
-                {
-                    continue;
-                }
-                if (pw.lfo[lfo].type != eLfoType.Vibrato)
-                {
-                    continue;
-                }
-                f += pw.lfo[lfo].value + pw.lfo[lfo].param[6];
-            }
-
-            f = Common.CheckRange(f, 0, 0xffff);
-            pw.freq = f;
-
-            //Address increment 再生スピードをセット
-            SetRf5c164AddressIncrement(pw, f);
-
         }
 
         public void SetRf5c164Envelope(partWork pw, int volume)
@@ -336,6 +191,152 @@ namespace Core
                 );
         }
 
+
+        public override void StorePcm(Dictionary<int, clsPcm> newDic, KeyValuePair<int, clsPcm> v, byte[] buf, bool is16bit, int samplerate, params object[] option)
+        {
+            clsPcmDataInfo pi = pcmDataInfo[0];
+
+            try
+            {
+                long size = buf.Length;
+                byte[] newBuf = new byte[size + 1];
+                Array.Copy(buf, newBuf, size);
+                newBuf[size] = 0xff;
+                buf = newBuf;
+                long tSize = size;
+                size = buf.Length;
+
+                //Padding
+                if (size % 0x100 != 0)
+                {
+                    newBuf = Common.PcmPadding(ref buf, ref size, 0x80, 0x100);
+                }
+
+                newDic.Add(
+                    v.Key
+                    , new clsPcm(
+                        v.Value.num, v.Value.seqNum, v.Value.chip
+                        , v.Value.isSecondary
+                        , v.Value.fileName
+                        , v.Value.freq
+                        , v.Value.vol
+                        , pi.totalBufPtr
+                        , pi.totalBufPtr + size
+                        , size
+                        , pi.totalBufPtr + (v.Value.loopAdr == -1 ? tSize : v.Value.loopAdr)
+                        , is16bit
+                        , samplerate
+                        )
+                    );
+
+                pi.totalBufPtr += size;
+
+                for (int i = 0; i < tSize; i++)
+                {
+                    if (buf[i] != 0xff)
+                    {
+                        if (buf[i] >= 0x80)
+                        {
+                            buf[i] = buf[i];
+                        }
+                        else
+                        {
+                            buf[i] = (byte)(0x80 - buf[i]);
+                        }
+                    }
+
+                    if (buf[i] == 0xff)
+                    {
+                        buf[i] = 0xfe;
+                    }
+
+                }
+                newBuf = new byte[pi.totalBuf.Length + buf.Length];
+                Array.Copy(pi.totalBuf, newBuf, pi.totalBuf.Length);
+                Array.Copy(buf, 0, newBuf, pi.totalBuf.Length, buf.Length);
+
+                pi.totalBuf = newBuf;
+                Common.SetUInt32bit31(pi.totalBuf, 6, (UInt32)(pi.totalBuf.Length - 10), IsSecondary);
+                pi.use = true;
+                pcmData = pi.use ? pi.totalBuf : null;
+            }
+            catch
+            {
+                pi.use = false;
+            }
+
+        }
+
+        public override void SetVolume(partWork pw)
+        {
+            int vol = pw.volume;
+
+            if (pw.envelopeMode)
+            {
+                vol = 0;
+                if (pw.envIndex != -1)
+                {
+                    vol = pw.envVolume - (255 - pw.volume);
+                }
+            }
+
+            for (int lfo = 0; lfo < 4; lfo++)
+            {
+                if (!pw.lfo[lfo].sw)
+                {
+                    continue;
+                }
+                if (pw.lfo[lfo].type != eLfoType.Tremolo)
+                {
+                    continue;
+                }
+                vol += pw.lfo[lfo].value + pw.lfo[lfo].param[6];
+            }
+
+            vol = Common.CheckRange(vol, 0, 255);
+
+            if (pw.beforeVolume != vol)
+            {
+                SetRf5c164Envelope(pw, vol);
+                pw.beforeVolume = vol;
+            }
+        }
+
+        public override int GetFNum(partWork pw, int octave, char cmd, int shift)
+        {
+            return GetRf5c164PcmNote(octave, cmd, shift);
+        }
+
+        public override void SetFNum(partWork pw)
+        {
+            int f = GetFNum(pw, pw.octaveNow, pw.noteCmd, pw.keyShift + pw.shift);//
+
+            if (pw.bendWaitCounter != -1)
+            {
+                f = pw.bendFnum;
+            }
+            f = f + pw.detune;
+            for (int lfo = 0; lfo < 4; lfo++)
+            {
+                if (!pw.lfo[lfo].sw)
+                {
+                    continue;
+                }
+                if (pw.lfo[lfo].type != eLfoType.Vibrato)
+                {
+                    continue;
+                }
+                f += pw.lfo[lfo].value + pw.lfo[lfo].param[6];
+            }
+
+            f = Common.CheckRange(f, 0, 0xffff);
+            pw.freq = f;
+
+            //Address increment 再生スピードをセット
+            SetRf5c164AddressIncrement(pw, f);
+
+        }
+
         public override void SetKeyOff(partWork pw)
         {
             OutRf5c164KeyOff(pw);
@@ -345,6 +346,51 @@ namespace Core
         {
             OutRf5c164KeyOn(pw);
         }
+
+        public override void SetPCMDataBlock()
+        {
+            if (use && pcmData != null && pcmData.Length > 0)
+                parent.OutData(pcmData);
+        }
+
+        public override void SetLfoAtKeyOn(partWork pw)
+        {
+            for (int lfo = 0; lfo < 4; lfo++)
+            {
+                clsLfo pl = pw.lfo[lfo];
+                if (!pl.sw)
+                    continue;
+
+                if (pl.param[5] != 1)
+                    continue;
+
+                pl.isEnd = false;
+                pl.value = (pl.param[0] == 0) ? pl.param[6] : 0;//ディレイ中は振幅補正は適用されない
+                pl.waitCounter = pl.param[0];
+                pl.direction = pl.param[2] < 0 ? -1 : 1;
+
+                if (pl.type == eLfoType.Vibrato)
+                {
+                    SetFNum(pw);
+                }
+                if (pl.type == eLfoType.Tremolo)
+                {
+                    pw.beforeVolume = -1;
+                    SetVolume(pw);
+                }
+            }
+        }
+
+        public override void SetToneDoubler(partWork pw)
+        {
+            //実装不要
+        }
+
+        public override int GetToneDoublerShift(partWork pw, int octave, char noteCmd, int shift)
+        {
+            return 0;
+        }
+
 
         public override void CmdY(partWork pw, MML mml)
         {
@@ -430,50 +476,6 @@ namespace Core
             SetRf5c164SampleStartAddress(pw, (int)parent.instPCM[n].stAdr);
             SetRf5c164LoopAddress(pw, (int)(parent.instPCM[n].loopAdr));
 
-        }
-
-        public override void SetPCMDataBlock()
-        {
-            if (use && pcmData != null && pcmData.Length > 0)
-                parent.OutData(pcmData);
-        }
-
-        public override void SetLfoAtKeyOn(partWork pw)
-        {
-            for (int lfo = 0; lfo < 4; lfo++)
-            {
-                clsLfo pl = pw.lfo[lfo];
-                if (!pl.sw)
-                    continue;
-
-                if (pl.param[5] != 1)
-                    continue;
-
-                pl.isEnd = false;
-                pl.value = (pl.param[0] == 0) ? pl.param[6] : 0;//ディレイ中は振幅補正は適用されない
-                pl.waitCounter = pl.param[0];
-                pl.direction = pl.param[2] < 0 ? -1 : 1;
-
-                if (pl.type == eLfoType.Vibrato)
-                {
-                    SetFNum(pw);
-                }
-                if (pl.type == eLfoType.Tremolo)
-                {
-                    pw.beforeVolume = -1;
-                    SetVolume(pw);
-                }
-            }
-        }
-
-        public override void SetToneDoubler(partWork pw)
-        {
-            //実装不要
-        }
-
-        public override int GetToneDoublerShift(partWork pw, int octave, char noteCmd, int shift)
-        {
-            return 0;
         }
 
         public override void MultiChannelCommand()

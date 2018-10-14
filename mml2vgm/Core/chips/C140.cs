@@ -693,15 +693,44 @@ namespace Core
             }
         }
 
-        public override void CmdY(partWork pw, MML mml)
+        public override void SetLfoAtKeyOn(partWork pw)
         {
-            if (mml.args[0] is string) return;
+            for (int lfo = 0; lfo < 4; lfo++)
+            {
+                clsLfo pl = pw.lfo[lfo];
+                if (!pl.sw)
+                    continue;
 
-            int adr = (int)mml.args[0];
-            byte dat = (byte)mml.args[1];
+                if (pl.param[5] != 1)
+                    continue;
 
-            OutC140Port(pw, (byte)(adr >> 8), (byte)adr, dat);
+                pl.isEnd = false;
+                pl.value = (pl.param[0] == 0) ? pl.param[6] : 0;//ディレイ中は振幅補正は適用されない
+                pl.waitCounter = pl.param[0];
+                pl.direction = pl.param[2] < 0 ? -1 : 1;
+
+                if (pl.type == eLfoType.Vibrato)
+                {
+                    SetFNum(pw);
+                }
+                if (pl.type == eLfoType.Tremolo)
+                {
+                    pw.beforeVolume = -1;
+                    SetVolume(pw);
+                }
+            }
         }
+
+        public override void SetToneDoubler(partWork pw)
+        {
+            //実装不要
+        }
+
+        public override int GetToneDoublerShift(partWork pw, int octave, char noteCmd, int shift)
+        {
+            return 0;
+        }
+
 
         public override void CmdPan(partWork pw, MML mml)
         {
@@ -767,42 +796,18 @@ namespace Core
 
         }
 
-        public override void SetLfoAtKeyOn(partWork pw)
+        public override void CmdY(partWork pw, MML mml)
         {
-            for (int lfo = 0; lfo < 4; lfo++)
-            {
-                clsLfo pl = pw.lfo[lfo];
-                if (!pl.sw)
-                    continue;
+            if (mml.args[0] is string) return;
 
-                if (pl.param[5] != 1)
-                    continue;
+            int adr = (int)mml.args[0];
+            byte dat = (byte)mml.args[1];
 
-                pl.isEnd = false;
-                pl.value = (pl.param[0] == 0) ? pl.param[6] : 0;//ディレイ中は振幅補正は適用されない
-                pl.waitCounter = pl.param[0];
-                pl.direction = pl.param[2] < 0 ? -1 : 1;
-
-                if (pl.type == eLfoType.Vibrato)
-                {
-                    SetFNum(pw);
-                }
-                if (pl.type == eLfoType.Tremolo)
-                {
-                    pw.beforeVolume = -1;
-                    SetVolume(pw);
-                }
-            }
+            OutC140Port(pw, (byte)(adr >> 8), (byte)adr, dat);
         }
 
-        public override void SetToneDoubler(partWork pw)
+        public override void CmdLoopExtProc(partWork pw, MML mml)
         {
-            //実装不要
-        }
-
-        public override int GetToneDoublerShift(partWork pw, int octave, char noteCmd, int shift)
-        {
-            return 0;
         }
 
     }
