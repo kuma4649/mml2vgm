@@ -409,32 +409,7 @@ namespace Core
 
             partWork p0, p1;
             byte dat;
-
-
-            //Rhythm Volume
             p0 = lstPartWork[9];
-            if (p0.beforeVolume != p0.volume)
-            {
-                p0.beforeVolume = p0.volume;
-                parent.OutData(p0.port0, 0x36, (byte)(15 - (p0.volume & 0xf)));
-            }
-            p0 = lstPartWork[10];
-            p1 = lstPartWork[13];
-            if (p0.beforeVolume != p0.volume || p1.beforeVolume != p1.volume)
-            {
-                p0.beforeVolume = p0.volume;
-                p1.beforeVolume = p1.volume;
-                parent.OutData(p0.port0, 0x37, (byte)((15 - (p0.volume & 0xf)) | ((15 - (p1.volume & 0xf)) << 4)));
-            }
-            p0 = lstPartWork[12];
-            p1 = lstPartWork[11];
-            if (p0.beforeVolume != p0.volume || p1.beforeVolume != p1.volume)
-            {
-                p0.beforeVolume = p0.volume;
-                p1.beforeVolume = p1.volume;
-                parent.OutData(p0.port0, 0x38, (byte)((15 - (p0.volume & 0xf)) | ((15 - (p1.volume & 0xf)) << 4)));
-            }
-
 
             //Key Off
             if (lstPartWork[9].keyOff
@@ -540,6 +515,32 @@ namespace Core
                         );
                 }
             }
+
+
+            //Rhythm Volume
+            p0 = lstPartWork[9];
+            if (p0.beforeVolume != p0.volume)
+            {
+                p0.beforeVolume = p0.volume;
+                parent.OutData(p0.port0, 0x36, (byte)(15 - (p0.volume & 0xf)));
+            }
+            p0 = lstPartWork[10];
+            p1 = lstPartWork[13];
+            if (p0.beforeVolume != p0.volume || p1.beforeVolume != p1.volume)
+            {
+                p0.beforeVolume = p0.volume;
+                p1.beforeVolume = p1.volume;
+                parent.OutData(p0.port0, 0x37, (byte)((15 - (p0.volume & 0xf)) | ((15 - (p1.volume & 0xf)) << 4)));
+            }
+            p0 = lstPartWork[12];
+            p1 = lstPartWork[11];
+            if (p0.beforeVolume != p0.volume || p1.beforeVolume != p1.volume)
+            {
+                p0.beforeVolume = p0.volume;
+                p1.beforeVolume = p1.volume;
+                parent.OutData(p0.port0, 0x38, (byte)((15 - (p0.volume & 0xf)) | ((15 - (p1.volume & 0xf)) << 4)));
+            }
+
 
         }
 
