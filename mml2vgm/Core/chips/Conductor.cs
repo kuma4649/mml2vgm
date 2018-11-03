@@ -49,11 +49,59 @@ namespace Core
 
         }
 
+        public override void StorePcmRawData(clsPcmDatSeq pds, byte[] buf, bool isRaw, bool is16bit, int samplerate, params object[] option)
+        {
+        }
+
+        public override bool StorePcmCheck()
+        {
+            return false;
+        }
+
+        public override int GetToneDoublerShift(partWork pw, int octave, char noteCmd, int shift)
+        {
+            return 0;
+        }
+
+        public override void SetToneDoubler(partWork pw)
+        {
+        }
+
+        public override int GetFNum(partWork pw, int octave, char cmd, int shift)
+        {
+            return 0;
+        }
+
+
         public override void SetFNum(partWork pw)
         {
         }
 
+        public override void SetKeyOn(partWork pw)
+        {
+        }
+
+        public override void SetKeyOff(partWork pw)
+        {
+        }
+
         public override void SetVolume(partWork pw)
+        {
+        }
+
+        public override void SetLfoAtKeyOn(partWork pw)
+        {
+        }
+
+        public override void CmdY(partWork pw, MML mml)
+        {
+        }
+
+        public override void CmdLoopExtProc(partWork p, MML mml)
+        {
+        }
+
+        public override void CmdInstrument(partWork pw, MML mml)
         {
         }
 
