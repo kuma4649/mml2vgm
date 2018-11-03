@@ -48,7 +48,24 @@ namespace Core
         YM2612X = 9,
         YM2413 = 10,
         C140 = 11,
-        AY8910 = 12
+        AY8910 = 12,
+        CONDUCTOR = 13
+    }
+
+    public enum enmPcmDefineType
+    {
+        /// <summary>
+        /// 自動定義
+        /// </summary>
+        Easy,
+        /// <summary>
+        /// データのみ定義
+        /// </summary>
+        RawData,
+        /// <summary>
+        /// 音色情報のみ定義
+        /// </summary>
+        Set
     }
 
     public enum enmPCMSTATUS

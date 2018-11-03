@@ -93,7 +93,7 @@ namespace Core
 
             if (!parent.instFM.ContainsKey(n))
             {
-                msgBox.setWrnMsg(string.Format("未定義の音色(@{0})を指定しています。", n), pw.getSrcFn(), pw.getLineNumber());
+                msgBox.setWrnMsg(string.Format(msg.get("E17000"), n), pw.getSrcFn(), pw.getLineNumber());
                 return;
             }
 
@@ -285,11 +285,6 @@ namespace Core
         {
         }
 
-        public override void SetPCMDataBlock()
-        {
-            //実装不要
-        }
-
         public override void SetToneDoubler(partWork pw)
         {
             //実装不要
@@ -308,7 +303,7 @@ namespace Core
 
             if (type == 'T')
             {
-                msgBox.setErrMsg("Tone DoublerはOPN,OPM音源以外では使用できません。", pw.getSrcFn(), pw.getLineNumber());
+                msgBox.setErrMsg(msg.get("E17001"), pw.getSrcFn(), pw.getLineNumber());
                 return;
             }
 

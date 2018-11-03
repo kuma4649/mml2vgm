@@ -19,7 +19,9 @@ namespace Core
             _ShortName = "RF5C";
             _ChMax = 8;
             _canUsePcm = true;
+            _canUsePI = true;
             IsSecondary = isSecondary;
+            dataType = 0xc1;
 
             Frequency = 12500000;
             Ch = new ClsChannel[ChMax];
@@ -149,7 +151,7 @@ namespace Core
             if (pw.pcmStartAddress != adr)
             {
                 SetRf5c164CurrentChannel(pw);
-                byte data = (byte)((adr >> 8) & 0xff);
+                byte data = (byte)(adr >> 8);
                 OutRf5c164Port(pw.isSecondary, 0x6, data);
                 pw.pcmStartAddress = adr;
             }
@@ -160,9 +162,9 @@ namespace Core
             if (pw.pcmLoopAddress != adr)
             {
                 SetRf5c164CurrentChannel(pw);
-                byte data = (byte)((adr >> 8) & 0xff);
+                byte data = (byte)(adr >> 8);
                 OutRf5c164Port(pw.isSecondary, 0x5, data);
-                data = (byte)(adr & 0xff);
+                data = (byte)adr;
                 OutRf5c164Port(pw.isSecondary, 0x4, data);
                 pw.pcmLoopAddress = adr;
             }
@@ -173,6 +175,10 @@ namespace Core
             KeyOn |= (byte)(1 << pw.ch);
             byte data = (byte)(~KeyOn);
             OutRf5c164Port(pw.isSecondary, 0x8, data);
+            if (parent.instPCM[pw.instrument].status != enmPCMSTATUS.ERROR)
+            {
+                parent.instPCM[pw.instrument].status = enmPCMSTATUS.USED;
+            }
         }
 
         public void OutRf5c164KeyOff(partWork pw)
@@ -200,17 +206,14 @@ namespace Core
             {
                 long size = buf.Length;
                 byte[] newBuf = new byte[size + 1];
-                Array.Copy(buf, newBuf, size);
-                newBuf[size] = 0xff;
-                buf = newBuf;
+                //Array.Copy(buf, newBuf, size);
+                //newBuf[size] = 0xff;
+                //buf = newBuf;
                 long tSize = size;
-                size = buf.Length;
+                //size = buf.Length;
 
-                //Padding
-                if (size % 0x100 != 0)
-                {
-                    newBuf = Common.PcmPadding(ref buf, ref size, 0x80, 0x100);
-                }
+                buf = Encode(buf, false);
+                size = buf.Length;
 
                 newDic.Add(
                     v.Key
@@ -221,7 +224,7 @@ namespace Core
                         , v.Value.freq
                         , v.Value.vol
                         , pi.totalBufPtr
-                        , pi.totalBufPtr + size
+                        , pi.totalBufPtr + size - 1
                         , size
                         , pi.totalBufPtr + (v.Value.loopAdr == -1 ? tSize : v.Value.loopAdr)
                         , is16bit
@@ -231,26 +234,6 @@ namespace Core
 
                 pi.totalBufPtr += size;
 
-                for (int i = 0; i < tSize; i++)
-                {
-                    if (buf[i] != 0xff)
-                    {
-                        if (buf[i] >= 0x80)
-                        {
-                            buf[i] = buf[i];
-                        }
-                        else
-                        {
-                            buf[i] = (byte)(0x80 - buf[i]);
-                        }
-                    }
-
-                    if (buf[i] == 0xff)
-                    {
-                        buf[i] = 0xfe;
-                    }
-
-                }
                 newBuf = new byte[pi.totalBuf.Length + buf.Length];
                 Array.Copy(pi.totalBuf, newBuf, pi.totalBuf.Length);
                 Array.Copy(buf, 0, newBuf, pi.totalBuf.Length, buf.Length);
@@ -258,7 +241,7 @@ namespace Core
                 pi.totalBuf = newBuf;
                 Common.SetUInt32bit31(pi.totalBuf, 6, (UInt32)(pi.totalBuf.Length - 10), IsSecondary);
                 pi.use = true;
-                pcmData = pi.use ? pi.totalBuf : null;
+                pcmDataEasy = pi.use ? pi.totalBuf : null;
             }
             catch
             {
@@ -266,6 +249,85 @@ namespace Core
             }
 
         }
+
+        private byte[] Encode(byte[] buf,bool is16bit)
+        {
+            long size = buf.Length;
+            long tSize = buf.Length;
+            byte[] newBuf;
+            //Padding
+            if (size % 0x100 != 0)
+            {
+                size++;
+                tSize = size;
+                newBuf = new byte[size];
+                Array.Copy(buf, newBuf, size-1);
+                buf = newBuf;
+                newBuf = Common.PcmPadding(ref buf, ref size, 0x00, 0x100);
+            }
+            else
+            {
+                newBuf = new byte[size];
+                Array.Copy(buf, newBuf, size);
+            }
+            buf = newBuf;
+
+            for (int i = 0; i < tSize; i++)
+            {
+                if (buf[i] != 0xff)
+                {
+                    if (buf[i] >= 0x80)
+                    {
+                        buf[i] = buf[i];
+                    }
+                    else
+                    {
+                        buf[i] = (byte)(0x80 - buf[i]);
+                    }
+                }
+
+                if (buf[i] == 0xff)
+                {
+                    buf[i] = 0xfe;
+                }
+            }
+            buf[tSize - 1] = 0xff;
+
+            return buf;
+        }
+
+        public override void StorePcmRawData(clsPcmDatSeq pds, byte[] buf, bool isRaw, bool is16bit, int samplerate, params object[] option)
+        {
+            if (!isRaw)
+            {
+                //Rawファイルは何もしない
+                //Wavファイルはエンコ
+                buf = Encode(buf, false);
+            }
+
+            pcmDataDirect.Add(Common.MakePCMDataBlockType2(dataType, pds, buf));
+
+        }
+
+        public override void SetPCMDataBlock()
+        {
+            if (!CanUsePcm) return;
+            if (!use) return;
+
+            if (pcmDataEasy != null && pcmDataEasy.Length > 0)
+                parent.OutData(pcmDataEasy);
+
+            if (pcmDataDirect.Count < 1) return;
+
+            foreach (byte[] dat in pcmDataDirect)
+            {
+                if (dat != null && dat.Length > 0)
+                    parent.OutData(dat);
+            }
+        }
+
+
+
 
         public override void SetVolume(partWork pw)
         {
@@ -347,12 +409,6 @@ namespace Core
             OutRf5c164KeyOn(pw);
         }
 
-        public override void SetPCMDataBlock()
-        {
-            if (use && pcmData != null && pcmData.Length > 0)
-                parent.OutData(pcmData);
-        }
-
         public override void SetLfoAtKeyOn(partWork pw)
         {
             for (int lfo = 0; lfo < 4; lfo++)
@@ -422,9 +478,11 @@ namespace Core
                 int n = p.instrument;
                 p.pcmStartAddress = -1;
                 p.pcmLoopAddress = -1;
+                p.freq = -1;
                 if (n != -1)
                 {
                     SetRf5c164CurrentChannel(p);
+                    SetFNum(p);
                     SetRf5c164SampleStartAddress(
                         p
                         , (int)parent.instPCM[n].stAdr);
@@ -442,13 +500,13 @@ namespace Core
 
             if (type == 'I')
             {
-                msgBox.setErrMsg("この音源はInstrumentを持っていません。", pw.getSrcFn(), pw.getLineNumber());
+                msgBox.setErrMsg(msg.get("E13001"), pw.getSrcFn(), pw.getLineNumber());
                 return;
             }
 
             if (type == 'T')
             {
-                msgBox.setErrMsg("Tone DoublerはOPN,OPM音源以外では使用できません。", pw.getSrcFn(), pw.getLineNumber());
+                msgBox.setErrMsg(msg.get("E13002"), pw.getSrcFn(), pw.getLineNumber());
                 return;
             }
 
@@ -462,13 +520,13 @@ namespace Core
 
             if (!parent.instPCM.ContainsKey(n))
             {
-                msgBox.setErrMsg(string.Format("PCM定義に指定された音色番号({0})が存在しません。", n), pw.getSrcFn(), pw.getLineNumber());
+                msgBox.setErrMsg(string.Format(msg.get("E13003"), n), pw.getSrcFn(), pw.getLineNumber());
                 return;
             }
 
             if (parent.instPCM[n].chip != enmChipType.RF5C164)
             {
-                msgBox.setErrMsg(string.Format("指定された音色番号({0})はRF5C164向けPCMデータではありません。", n), pw.getSrcFn(), pw.getLineNumber());
+                msgBox.setErrMsg(string.Format(msg.get("E13004"), n), pw.getSrcFn(), pw.getLineNumber());
                 return;
             }
 

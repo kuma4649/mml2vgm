@@ -43,9 +43,10 @@ namespace Core
             _ShortName = "OPNA";
             _ChMax = 19;
             _canUsePcm = true;
+            _canUsePI = true;
             FNumTbl = _FNumTbl;
             IsSecondary = isSecondary;
-
+            dataType = 0x81;
             Frequency = 7987200;
 
             Dictionary<string, List<double>> dic = MakeFNumTbl();
@@ -316,10 +317,10 @@ namespace Core
             {
                 SetSsgFNum(pw);
             }
-            else if (pw.Type == enmChannelType.ADPCMA)
+            else if (pw.Type == enmChannelType.RHYTHM)
             {
             }
-            else if (pw.Type == enmChannelType.ADPCMB)
+            else if (pw.Type == enmChannelType.ADPCM)
             {
                 SetAdpcmFNum(pw);
             }
@@ -376,12 +377,6 @@ namespace Core
             }
         }
 
-        public override void SetPCMDataBlock()
-        {
-            if (use && pcmData != null && pcmData.Length > 0)
-                parent.OutData(pcmData);
-        }
-
         public override void SetLfoAtKeyOn(partWork pw)
         {
             base.SetLfoAtKeyOn(pw);
@@ -432,7 +427,6 @@ namespace Core
                 long size = buf.Length;
 
                 byte[] newBuf;
-
                 newBuf = new byte[size];
                 Array.Copy(buf, newBuf, size);
                 buf = newBuf;
@@ -451,7 +445,7 @@ namespace Core
                         , pi.totalBufPtr
                         , pi.totalBufPtr + size
                         , size
-                        , 1
+                        , -1
                         , is16bit
                         , samplerate)
                     );
@@ -465,13 +459,27 @@ namespace Core
                 pi.use = true;
                 Common.SetUInt32bit31(pi.totalBuf, 3, (UInt32)(pi.totalBuf.Length - 7), IsSecondary);
                 Common.SetUInt32bit31(pi.totalBuf, 7, (UInt32)(pi.totalBuf.Length - 7));
-                pcmData = pi.use ? pi.totalBuf : null;
+                pcmDataEasy = pi.use ? pi.totalBuf : null;
 
             }
             catch
             {
                 pi.use = false;
             }
+
+        }
+
+        public override void StorePcmRawData(clsPcmDatSeq pds, byte[] buf, bool isRaw, bool is16bit, int samplerate, params object[] option)
+        {
+            if (!isRaw)
+            {
+                //Rawファイルは何もしない
+                //Wavファイルはエンコ
+                EncAdpcmA ea = new EncAdpcmA();
+                buf = ea.YM_ADPCM_B_Encode(buf, is16bit, true);
+            }
+
+            pcmDataDirect.Add(Common.MakePCMDataBlock((byte)dataType, pds, buf));
 
         }
 
@@ -499,7 +507,7 @@ namespace Core
         {
             if (pw.Type != enmChannelType.FMOPN)
             {
-                msgBox.setWrnMsg("FMチャンネル以外のMPMSは無視されます。", pw.getSrcFn(), pw.getLineNumber());
+                msgBox.setWrnMsg(msg.get("E18000"), pw.getSrcFn(), pw.getLineNumber());
                 return;
             }
 
@@ -517,7 +525,7 @@ namespace Core
         {
             if (pw.Type != enmChannelType.FMOPN)
             {
-                msgBox.setWrnMsg("FMチャンネル以外のMAMSは無視されます。", pw.getSrcFn(), pw.getLineNumber());
+                msgBox.setWrnMsg(msg.get("E18001"), pw.getSrcFn(), pw.getLineNumber());
                 return;
             }
 
@@ -542,12 +550,12 @@ namespace Core
                 {
                     if (pw.lfo[c].param.Count < 4)
                     {
-                        msgBox.setErrMsg("LFOの設定に必要なパラメータが足りません。", pw.getSrcFn(), pw.getLineNumber());
+                        msgBox.setErrMsg(msg.get("E18002"), pw.getSrcFn(), pw.getLineNumber());
                         return;
                     }
                     if (pw.lfo[c].param.Count > 5)
                     {
-                        msgBox.setErrMsg("LFOの設定に可能なパラメータ数を超えて指定されました。", pw.getSrcFn(), pw.getLineNumber());
+                        msgBox.setErrMsg(msg.get("E18003"), pw.getSrcFn(), pw.getLineNumber());
                         return;
                     }
 
@@ -640,14 +648,13 @@ namespace Core
                     n = Common.CheckRange(n, 0, 255);
                     if (!parent.instPCM.ContainsKey(n))
                     {
-                        msgBox.setErrMsg(string.Format("PCM定義に指定された音色番号({0})が存在しません。", n), pw.getSrcFn(), pw.getLineNumber());
+                        msgBox.setErrMsg(string.Format(msg.get("E18004"), n), pw.getSrcFn(), pw.getLineNumber());
                     }
                     else
                     {
-                        if (parent.instPCM[n].chip != enmChipType.YM2608
-                            || parent.instPCM[n].loopAdr != 1)
+                        if (parent.instPCM[n].chip != enmChipType.YM2608)
                         {
-                            msgBox.setErrMsg(string.Format("指定された音色番号({0})はYM2608向けPCMデータではありません。", n), pw.getSrcFn(), pw.getLineNumber());
+                            msgBox.setErrMsg(string.Format(msg.get("E18005"), n), pw.getSrcFn(), pw.getLineNumber());
                         }
                         pw.instrument = n;
                         SetADPCMAddress(
@@ -655,6 +662,12 @@ namespace Core
                             , (int)parent.instPCM[n].stAdr
                             , (int)parent.instPCM[n].edAdr);
                     }
+                    return;
+                }
+
+                if (pw.Type == enmChannelType.SSG)
+                {
+                    SetEnvelopParamFromInstrument(pw, n, mml);
                     return;
                 }
             }

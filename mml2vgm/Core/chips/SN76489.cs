@@ -18,6 +18,7 @@ namespace Core
             _ShortName = "DCSG";
             _ChMax = 4;
             _canUsePcm = false;
+            _canUsePI = false;
             FNumTbl = _FNumTbl;
 
             Frequency = 3579545;
@@ -251,11 +252,6 @@ namespace Core
             }
         }
 
-        public override void SetPCMDataBlock()
-        {
-            //実装不要
-        }
-
         public override void SetToneDoubler(partWork pw)
         {
             //実装不要
@@ -313,13 +309,13 @@ namespace Core
 
             if (type == 'I')
             {
-                msgBox.setErrMsg("この音源はInstrumentを持っていません。", pw.getSrcFn(), pw.getLineNumber());
+                msgBox.setErrMsg(msg.get("E15001"), pw.getSrcFn(), pw.getLineNumber());
                 return;
             }
 
             if (type == 'T')
             {
-                msgBox.setErrMsg("Tone DoublerはOPN,OPM音源以外では使用できません。", pw.getSrcFn(), pw.getLineNumber());
+                msgBox.setErrMsg(msg.get("E15002"), pw.getSrcFn(), pw.getLineNumber());
                 return;
             }
 

@@ -16,6 +16,7 @@ namespace Core
         private string stPath;
         public ClsVgm desVGM = null;
         private Action<string> Disp = null;
+        private int pcmDataSeqNum = 0;
 
         /// <summary>
         /// コンストラクタ
@@ -38,44 +39,44 @@ namespace Core
         {
             try
             {
-                Disp("Start mml2vgm core");
+                Disp(string.Format(msg.get("I04000"), "mml2vgm"));
                 Disp("");
 
-                Disp(" ファイル存在チェック");
+                Disp(msg.get("I04001"));
                 if (!File.Exists(srcFn))
                 {
-                    msgBox.setErrMsg("ファイルが見つかりません。");
+                    msgBox.setErrMsg(msg.get("E04000"));
                     return -1;
                 }
 
-                Disp(" ソースファイルの取得");
+                Disp(msg.get("I04002"));
                 string path = Path.GetDirectoryName(Path.GetFullPath(srcFn));
                 List<Line> src = GetSrc(File.ReadAllLines(srcFn), path);
                 if (src == null)
                 {
-                    msgBox.setErrMsg("想定外のエラー　ソースファイルの取得に失敗");
+                    msgBox.setErrMsg(msg.get("E04001"));
                     return -1;
                 }
 
-                Disp(" テキスト解析");
+                Disp(msg.get("I04003"));
                 desVGM = new ClsVgm(stPath);
                 if (desVGM.Analyze(src) != 0)
                 {
                     msgBox.setErrMsg(string.Format(
-                        "想定外のエラー　ソース解析に失敗?(analyze)(line:{0})"
+                        msg.get("E04002")
                         , desVGM.lineNumber));
                     return -1;
                 }
 
-                Disp(" PCM定義&取得");
-                if (desVGM.instPCM.Count > 0) GetPCMData(path);
+                Disp(msg.get("I04004"));
+                if (desVGM.instPCMDatSeq.Count > 0) GetPCMData(path);
 
-                Disp(" MML文法解析");
+                Disp(msg.get("I04005"));
                 MMLAnalyze mmlAnalyze = new MMLAnalyze(desVGM);
                 if (mmlAnalyze.Start() != 0)
                 {
                     msgBox.setErrMsg(string.Format(
-                        "想定外のエラー　MML解析に失敗?(MMLAnalyze)(line:{0})"
+                        msg.get("E04003")
                         , mmlAnalyze.lineNumber));
                     return -1;
                 }
@@ -84,14 +85,14 @@ namespace Core
                 switch (desVGM.info.format)
                 {
                     case enmFormat.VGM:
-                        Disp(" Start VGM_GetByteData");
+                        Disp(msg.get("I04006"));
                         desBuf = desVGM.Vgm_getByteData(mmlAnalyze.mmlData);
-                        Disp(" End   VGM_GetByteData");
+                        Disp(msg.get("I04007"));
                         break;
                     case enmFormat.XGM:
-                        Disp(" Start XGM_GetByteData");
+                        Disp(msg.get("I04008"));
                         desBuf = desVGM.Xgm_getByteData(mmlAnalyze.mmlData);
-                        Disp(" End   XGM_GetByteData");
+                        Disp(msg.get("I04009"));
                         break;
                     default:
                         break;
@@ -100,12 +101,12 @@ namespace Core
                 if (desBuf == null)
                 {
                     msgBox.setErrMsg(string.Format(
-                        "想定外のエラー　ソース解析に失敗?(getByteData)(line:{0})"
+                        msg.get("E04004")
                         , desVGM.lineNumber));
                     return -1;
                 }
 
-                Disp(" ファイル出力");
+                Disp(msg.get("I04010"));
                 outFile(desBuf);
 
 
@@ -115,18 +116,15 @@ namespace Core
             }
             catch (Exception ex)
             {
-                msgBox.setErrMsg(string.Format(
-@"想定外のエラー　line:{0}
-メッセージ:
-{1}
-スタックトレース:
-{2}
-", desVGM.lineNumber, ex.Message, ex.StackTrace));
+                msgBox.setErrMsg(string.Format(msg.get("E04005")
+                    , desVGM.lineNumber
+                    , ex.Message
+                    , ex.StackTrace));
                 return -1;
             }
             finally
             {
-                Disp("End mml2vgm core");
+                Disp(msg.get("I04011"));
                 Disp("");
             }
         }
@@ -197,7 +195,7 @@ namespace Core
                         if (!File.Exists(includeFn))
                         {
                             msgBox.setErrMsg(string.Format(
-                                "インクルードファイル({0})が見つかりません。"
+                                msg.get("E04006")
                                 , includeFn));
                             return null;
                         }
@@ -225,22 +223,133 @@ namespace Core
 
         private void GetPCMData(string path)
         {
-
             Dictionary<int, clsPcm> newDic = new Dictionary<int, clsPcm>();
-            foreach (KeyValuePair<int, clsPcm> v in desVGM.instPCM)
+            foreach (clsPcmDatSeq pds in desVGM.instPCMDatSeq)
             {
+                byte[] buf;
+                clsPcm v;
+                bool isRaw;
+                bool is16bit;
+                int samplerate;
 
-                byte[] buf = Common.GetPCMDataFromFile(path, v.Value, out bool is16bit, out int samplerate);
-                if (buf == null)
+                if (pds.chip == enmChipType.None) continue;
+
+                switch (pds.type)
                 {
-                    msgBox.setErrMsg(string.Format(
-                        "PCMファイルの読み込みに失敗しました。(filename:{0})"
-                        , v.Value.fileName));
-                    continue;
-                }
+                    case enmPcmDefineType.Easy:
+                        if (desVGM.instPCM.ContainsKey(pds.No))
+                        {
+                            desVGM.instPCM.Remove(pds.No);
+                        }
+                        v = new clsPcm(
+                            pds.No
+                            , pcmDataSeqNum++
+                            , pds.chip
+                            , pds.isSecondary
+                            , pds.FileName
+                            , pds.BaseFreq
+                            , pds.Volume
+                            , 0
+                            , 0
+                            , 0
+                            , pds.DatLoopAdr
+                            , false
+                            , 8000);
+                        desVGM.instPCM.Add(pds.No, v);
 
-                desVGM.chips[v.Value.chip][v.Value.isSecondary ? 1 : 0]
-                    .StorePcm(newDic, v, buf, is16bit, samplerate);
+                        //ファイルの読み込み
+                        buf = Common.GetPCMDataFromFile(path, v, out isRaw, out is16bit, out samplerate);
+                        if (buf == null)
+                        {
+                            msgBox.setErrMsg(string.Format(
+                                msg.get("E04007")
+                                , v.fileName));
+                            continue;
+                        }
+
+                        if (desVGM.info.format == enmFormat.XGM && v.isSecondary)
+                        {
+                            msgBox.setErrMsg(string.Format(
+                                msg.get("E01017")
+                                , v.fileName));
+                            continue;
+                        }
+
+                        desVGM.chips[v.chip][v.isSecondary ? 1 : 0]
+                            .StorePcm(
+                            newDic
+                            , new KeyValuePair<int, clsPcm>(pds.No, v)
+                            , buf
+                            , is16bit
+                            , samplerate);
+
+                        if (v.chip != enmChipType.YM2610B)
+                        {
+                            pds.DatEndAdr = (int)desVGM.chips[v.chip][v.isSecondary ? 1 : 0].pcmDataEasy.Length - 16;
+                        }
+                        else
+                        {
+                            if (pds.DatLoopAdr == 0)
+                            {
+                                //ADPCM-A
+                                pds.DatEndAdr = (int)((YM2610B)desVGM.chips[v.chip][v.isSecondary ? 1 : 0]).pcmDataEasyA.Length - 16;
+                            }
+                            else
+                            {
+                                //ADPCM-B
+                                pds.DatEndAdr = (int)((YM2610B)desVGM.chips[v.chip][v.isSecondary ? 1 : 0]).pcmDataEasyB.Length - 16;
+                            }
+
+                        }
+                        break;
+                    case enmPcmDefineType.RawData:
+                        //ファイルの読み込み
+                        buf = Common.GetPCMDataFromFile(path, pds.FileName, 100, out isRaw, out is16bit, out samplerate);
+                        if (buf == null)
+                        {
+                            msgBox.setErrMsg(string.Format(
+                                msg.get("E04007")
+                                , pds.FileName));
+                            continue;
+                        }
+                        desVGM.chips[pds.chip][pds.isSecondary ? 1 : 0]
+                            .StorePcmRawData(
+                            pds
+                            , buf
+                            , isRaw
+                            , is16bit
+                            , samplerate);
+                        break;
+                    case enmPcmDefineType.Set:
+                        //if(!desVGM.chips[pds.chip][pds.isSecondary ? 1 : 0].StorePcmCheck())
+                        //{
+                        //    return;
+                        //}
+                        if (desVGM.instPCM.ContainsKey(pds.No))
+                        {
+                            desVGM.instPCM.Remove(pds.No);
+                        }
+                        v = new clsPcm(
+                            pds.No
+                            , pcmDataSeqNum++
+                            , pds.chip
+                            , pds.isSecondary
+                            , ""
+                            , pds.BaseFreq
+                            , 100
+                            , pds.DatStartAdr
+                            , pds.DatEndAdr
+                            , pds.chip!= enmChipType.RF5C164 
+                                ? (pds.DatEndAdr - pds.DatStartAdr + 1)
+                                : (pds.DatLoopAdr - pds.DatStartAdr + 1 )
+                            , pds.DatLoopAdr 
+                            , false
+                            , 8000
+                            , pds.Option);
+                        newDic.Add(pds.No, v);
+
+                        break;
+                }
             }
 
             desVGM.instPCM = newDic;
@@ -252,42 +361,71 @@ namespace Core
             Disp("");
 
             string res = "";
-            res += DispPCMRegion(desVGM.segapcm[0]);
-            res += DispPCMRegion(desVGM.segapcm[1]);
-            res += DispPCMRegion(desVGM.c140[0]);
-            res += DispPCMRegion(desVGM.c140[1]);
+            foreach (ClsChip[] chips in desVGM.chips.Values)
+            {
+                foreach (ClsChip chip in chips)
+                {
+                    res += DispPCMRegion(chip);
+                }
+            }
 
             if (res != "")
             {
-                Disp("MODE:");
+                Disp(msg.get("I04012"));
                 //Disp(" YM2608:  None");
                 //Disp(" YM2610B: 0=A 1=B");
                 //Disp(" RF5C164: None");
-                Disp(" SegaPCM: None");
-                Disp(" C140:    0=8bit 1=13bit(Compressed 8bit)");
                 Disp("");
-                Disp("STATUS:");
-                Disp(" USED: USED in song");
-                Disp(" NONE: Not Used in song");
-                Disp(" Error: Invalid Parameter...???");
+                Disp(msg.get("I04013"));
                 Disp("");
                 Disp("");
-                if (desVGM.c140[0].pcmData != null)
-                    Disp(string.Format("C140 PRI : SYSTEM2{0}", ((C140)desVGM.c140[0]).isSystem2 ? "" : "1"));
-                if (desVGM.c140[1].pcmData != null)
-                    Disp(string.Format("C140 SEC : SYSTEM2{0}", ((C140)desVGM.c140[1]).isSystem2 ? "" : "1"));
+                if (desVGM.c140[0].pcmDataEasy != null)
+                    Disp(string.Format(msg.get("I04014")
+                        , ((C140)desVGM.c140[0]).isSystem2 ? "" : "1"));
+                if (desVGM.c140[1].pcmDataEasy != null)
+                    Disp(string.Format(msg.get("I04015")
+                        , ((C140)desVGM.c140[1]).isSystem2 ? "" : "1"));
                 Disp("");
 
-                Disp("-- SAMPLE LIST --");
-                Disp("CHIP       PRI/SEC SMPID BANK START(H) END(H)   LOOP(H)  LENGTH   MODE STATUS");
+                Disp(msg.get("I04016"));
+                Disp(msg.get("I04017"));
                 Disp(res);
             }
 
+
+
+            res = "";
+            foreach (ClsChip[] chips in desVGM.chips.Values)
+            {
+                foreach (ClsChip chip in chips)
+                {
+                    res += DispPCMRegionDataBlock(chip);
+                }
+            }
+
+            if (res != "")
+            {
+                Disp(msg.get("I04019"));
+                Disp(msg.get("I04020"));
+                Disp(res);
+            }
         }
 
         private string DispPCMRegion(ClsChip c)
         {
-            if (c.pcmData == null) return "";
+            if (c.chipType != enmChipType.YM2610B)
+            {
+                if (c.pcmDataEasy == null && c.pcmDataDirect.Count == 0) return "";
+            }
+            else
+            {
+                YM2610B opnb = (YM2610B)c;
+                if (opnb.pcmDataEasyA == null 
+                    && opnb.pcmDataEasyB == null
+                    && opnb.pcmDataDirectA.Count == 0
+                    && opnb.pcmDataDirectB.Count == 0
+                    ) return "";
+            }
 
             string region = "";
 
@@ -295,25 +433,125 @@ namespace Core
             {
                 if (!desVGM.instPCM.ContainsKey(i)) continue;
                 if (desVGM.instPCM[i].chip != c.chipType) continue;
+                if (desVGM.instPCM[i].isSecondary != c.IsSecondary) continue;
 
-                region+=string.Format("{0,-10} {1,-7} {2,-5:D3} {3,-4:D2} {4,-8:X4} {5,-8:X4} {6,-8:X4} {7,8} {8,4} {9}\r\n"
-                    , c.Name
-                    , c.IsSecondary ? "SEC" : "PRI"
+                region += string.Format("{0,-10} {1,-7} {2,-5:D3} {3,-4:D2} {4,-8:X4} {5} {6,-8:X4} {7,8} {8,4} {9}\r\n"
+                    , c.Name + (c.chipType != enmChipType.YM2610B ? "" : ("_" + (desVGM.instPCM[i].loopAdr == 0 ? "A" : "B")))
+                    , desVGM.instPCM[i].isSecondary ? "SEC" : "PRI"
                     , i
                     , desVGM.instPCM[i].stAdr >> 16
                     , desVGM.instPCM[i].stAdr & 0xffff
-                    , desVGM.instPCM[i].edAdr & 0xffff
-                    , (desVGM.instPCM[i].loopAdr == -1) ? "N/A" : string.Format("{0:X4}", (desVGM.instPCM[i].loopAdr & 0xffff))
+                    , c.chipType != enmChipType.RF5C164 ? string.Format("{0,-8:X4}", (desVGM.instPCM[i].edAdr & 0xffff)) : "N/A     "
+                    , (desVGM.instPCM[i].loopAdr == -1 || c.chipType == enmChipType.YM2610B) ? "N/A" : string.Format("{0:X4}", (desVGM.instPCM[i].loopAdr & 0xffff))
                     , desVGM.instPCM[i].size
                     , desVGM.instPCM[i].is16bit ? 1 : 0
                     , desVGM.instPCM[i].status.ToString()
                     );
             }
 
-            region+=(string.Format(" Total Length : {0} byte\r\n", c.pcmData.Length - 15));
+            long tl = 0;
+            foreach (int i in desVGM.instPCM.Keys)
+            {
+                tl += desVGM.instPCM[i].size;
+            }
+            region +=(string.Format(msg.get("I04018"), tl));
             region+="\r\n";
 
             return region;
         }
+
+        private string DispPCMRegionDataBlock(ClsChip c)
+        {
+            YM2610B opnb;
+            string region = "";
+            long tl = 0;
+
+            if (c.chipType != enmChipType.YM2610B)
+            {
+                if (c.pcmDataEasy == null && c.pcmDataDirect.Count == 0) return "";
+
+                if (c.pcmDataEasy != null)
+                {
+                    region += string.Format("{0,-10} {1,-7} {2,-8:X6} {3,-8:X6} {4,8} {5}\r\n"
+                        , c.Name
+                        , c.IsSecondary ? "SEC" : "PRI"
+                        , 0
+                        , c.pcmDataEasy.Length - 1
+                        , c.pcmDataEasy.Length
+                        , "AUTO"
+                        );
+                    tl += c.pcmDataEasy.Length;
+                }
+            }
+            else
+            {
+                opnb = (YM2610B)c;
+                if (opnb.pcmDataEasyA == null
+                    && opnb.pcmDataEasyB == null
+                    && opnb.pcmDataDirectA.Count == 0
+                    && opnb.pcmDataDirectB.Count == 0
+                    ) return "";
+
+                if (opnb.pcmDataEasyA != null)
+                {
+                    region += string.Format("{0,-10} {1,-7} {2,-8:X6} {3,-8:X6} {4,8} {5}\r\n"
+                        , opnb.Name+"_A"
+                        , opnb.IsSecondary ? "SEC" : "PRI"
+                        , 0
+                        , opnb.pcmDataEasyA.Length - 1
+                        , opnb.pcmDataEasyA.Length
+                        , "AUTO"
+                        );
+                    tl += opnb.pcmDataEasyA.Length;
+                }
+                if (opnb.pcmDataEasyB != null)
+                {
+                    region += string.Format("{0,-10} {1,-7} {2,-8:X6} {3,-8:X6} {4,8} {5}\r\n"
+                        , opnb.Name+"_B"
+                        , opnb.IsSecondary ? "SEC" : "PRI"
+                        , 0
+                        , opnb.pcmDataEasyB.Length - 1
+                        , opnb.pcmDataEasyB.Length
+                        , "AUTO"
+                        );
+                    tl += opnb.pcmDataEasyB.Length;
+                }
+
+            }
+
+
+            if (c.pcmDataDirect.Count > 0)
+            {
+                foreach (clsPcmDatSeq pds in desVGM.instPCMDatSeq)
+                {
+                    if (pds.type == enmPcmDefineType.Set) continue;
+                    if (pds.type == enmPcmDefineType.Easy) continue;
+                    if (pds.chip != c.chipType) continue;
+                    if (pds.isSecondary != c.IsSecondary) continue;
+                    if (!desVGM.chips[pds.chip][0].CanUsePICommand()) continue;
+
+                    region += string.Format("{0,-10} {1,-7} {2,-8:X6} {3,-8:X6} {4,8} {5}\r\n"
+                        , c.Name
+                        , pds.isSecondary ? "SEC" : "PRI"
+                        , pds.DatStartAdr
+                        , pds.DatEndAdr
+                        , pds.DatEndAdr - pds.DatStartAdr + 1
+                        , pds.type == enmPcmDefineType.Easy ? "AUTO" : "MANUAL"
+                        );
+                    tl += pds.DatEndAdr - pds.DatStartAdr + 1;
+                }
+            }
+
+            if (region != "")
+            {
+                region += (string.Format(msg.get("I04018"), tl));
+                region += "\r\n";
+            }
+
+            return region;
+        }
+
+
+
     }
 }

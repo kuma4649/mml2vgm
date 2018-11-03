@@ -30,8 +30,10 @@ namespace Core
             //}
         };
 
-        public byte[] pcmDataA = null;
-        public byte[] pcmDataB = null;
+        public byte[] pcmDataEasyA = null;
+        public byte[] pcmDataEasyB = null;
+        public List<byte[]> pcmDataDirectA = new List<byte[]>();
+        public List<byte[]> pcmDataDirectB = new List<byte[]>();
 
         public int adpcmA_TotalVolume = 63;
         public int adpcmA_beforeTotalVolume = -1;
@@ -46,9 +48,10 @@ namespace Core
             _ShortName = "OPNB";
             _ChMax = 19;
             _canUsePcm = true;
+            _canUsePI = true;
             FNumTbl = _FNumTbl;
             IsSecondary = isSecondary;
-
+            dataType = 0x82;
             Frequency = 8000000;
 
             Dictionary<string, List<double>> dic = MakeFNumTbl();
@@ -364,10 +367,18 @@ namespace Core
             {
                 pw.keyOn = true;
                 pw.keyOff = false;
+                if (parent.instPCM[pw.instrument].status != enmPCMSTATUS.ERROR)
+                {
+                    parent.instPCM[pw.instrument].status = enmPCMSTATUS.USED;
+                }
             }
             else if (pw.Type == enmChannelType.ADPCMB)
             {
                 OutAdpcmBKeyOn(pw);
+                if (parent.instPCM[pw.instrument].status != enmPCMSTATUS.ERROR)
+                {
+                    parent.instPCM[pw.instrument].status = enmPCMSTATUS.USED;
+                }
             }
         }
 
@@ -405,11 +416,70 @@ namespace Core
 
         public override void SetPCMDataBlock()
         {
-            if (use && pcmDataA != null && pcmDataA.Length > 0)
-                parent.OutData(pcmDataA);
+            //if (!CanUsePcm) return;
+            if (!use) return;
 
-            if (use && pcmDataB != null && pcmDataB.Length > 0)
-                parent.OutData(pcmDataB);
+            SetPCMDataBlock_AB(pcmDataEasyA, pcmDataDirectA);
+            SetPCMDataBlock_AB(pcmDataEasyB, pcmDataDirectB);
+        }
+
+        private void SetPCMDataBlock_AB(byte[] pcmDataEasy,List<byte[]> pcmDataDirect)
+        {
+            int maxSize = 0;
+            if (pcmDataEasy != null && pcmDataEasy.Length > 0)
+            {
+                maxSize =
+                    pcmDataEasy[7]
+                    + (pcmDataEasy[8] << 8)
+                    + (pcmDataEasy[9] << 16)
+                    + (pcmDataEasy[10] << 24);
+            }
+            if (pcmDataDirect.Count > 0)
+            {
+                foreach (byte[] dat in pcmDataDirect)
+                {
+                    if (dat != null && dat.Length > 0)
+                    {
+                        int size =
+                            dat[7]
+                            + (dat[8] << 8)
+                            + (dat[9] << 16)
+                            + (dat[10] << 24);
+                        if (maxSize < size) maxSize = size;
+                    }
+                }
+            }
+            if (pcmDataEasy != null && pcmDataEasy.Length > 0)
+            {
+                pcmDataEasy[7] = (byte)maxSize;
+                pcmDataEasy[8] = (byte)(maxSize >> 8);
+                pcmDataEasy[9] = (byte)(maxSize >> 16);
+                pcmDataEasy[10] = (byte)(maxSize >> 24);
+            }
+            if (pcmDataDirect.Count > 0)
+            {
+                foreach (byte[] dat in pcmDataDirect)
+                {
+                    if (dat != null && dat.Length > 0)
+                    {
+                        dat[7] = (byte)maxSize;
+                        dat[8] = (byte)(maxSize >> 8);
+                        dat[9] = (byte)(maxSize >> 16);
+                        dat[10] = (byte)(maxSize >> 24);
+                    }
+                }
+            }
+
+            if (pcmDataEasy != null && pcmDataEasy.Length > 15)
+                parent.OutData(pcmDataEasy);
+
+            if (pcmDataDirect.Count < 1) return;
+
+            foreach (byte[] dat in pcmDataDirect)
+            {
+                if (dat != null && dat.Length > 0)
+                    parent.OutData(dat);
+            }
         }
 
         public override void SetLfoAtKeyOn(partWork pw)
@@ -432,7 +502,7 @@ namespace Core
 
                 if (pl.type == eLfoType.Vibrato)
                 {
-                    if (pw.Type == enmChannelType.ADPCM)
+                    if (pw.Type == enmChannelType.ADPCMB)
                         SetAdpcmBFNum(pw);
 
                 }
@@ -492,14 +562,37 @@ namespace Core
 
                 pi.totalBuf = newBuf;
                 Common.SetUInt32bit31(pi.totalBuf, 3, (UInt32)(pi.totalBuf.Length - 7), IsSecondary);
-                Common.SetUInt32bit31(pi.totalBuf, 7, (UInt32)(pi.totalBuf.Length - 7));
+                Common.SetUInt32bit31(pi.totalBuf, 7, (UInt32)(pi.totalBuf.Length - 0xf));
                 pi.use = true;
-                pcmDataA = pi.use ? pcmDataInfo[0].totalBuf : null;
-                pcmDataB = pi.use ? pcmDataInfo[1].totalBuf : null;
+                pcmDataEasyA = pi.use ? pcmDataInfo[0].totalBuf : null;
+                pcmDataEasyB = pi.use ? pcmDataInfo[1].totalBuf : null;
             }
             catch
             {
                 pi.use = false;
+            }
+
+        }
+
+        public override void StorePcmRawData(clsPcmDatSeq pds, byte[] buf, bool isRaw, bool is16bit, int samplerate, params object[] option)
+        {
+            if (!isRaw)
+            {
+                //Rawファイルは何もしない
+                //Wavファイルはエンコ
+                EncAdpcmA ea = new EncAdpcmA();
+                buf = pds.DatLoopAdr == 0
+                    ? ea.YM_ADPCM_A_Encode(buf, is16bit)
+                    : ea.YM_ADPCM_B_Encode(buf, is16bit, true);
+            }
+
+            if (pds.DatLoopAdr == 0)
+            {
+                pcmDataDirectA.Add(Common.MakePCMDataBlock(dataType, pds, buf));
+            }
+            else
+            {
+                pcmDataDirectB.Add(Common.MakePCMDataBlock((byte)(dataType + 1), pds, buf));
             }
 
         }
@@ -528,7 +621,7 @@ namespace Core
         {
             if (pw.Type != enmChannelType.FMOPN)
             {
-                msgBox.setWrnMsg("FMチャンネル以外のMPMSは無視されます。", pw.getSrcFn(), pw.getLineNumber());
+                msgBox.setWrnMsg(msg.get("E19000"), pw.getSrcFn(), pw.getLineNumber());
                 return;
             }
 
@@ -546,7 +639,7 @@ namespace Core
         {
             if (pw.Type != enmChannelType.FMOPN)
             {
-                msgBox.setWrnMsg("FMチャンネル以外のMAMSは無視されます。", pw.getSrcFn(), pw.getLineNumber());
+                msgBox.setWrnMsg(msg.get("E19001"), pw.getSrcFn(), pw.getLineNumber());
                 return;
             }
 
@@ -571,12 +664,12 @@ namespace Core
                 {
                     if (pw.lfo[c].param.Count < 4)
                     {
-                        msgBox.setErrMsg("LFOの設定に必要なパラメータが足りません。", pw.getSrcFn(), pw.getLineNumber());
+                        msgBox.setErrMsg(msg.get("E19002"), pw.getSrcFn(), pw.getLineNumber());
                         return;
                     }
                     if (pw.lfo[c].param.Count > 5)
                     {
-                        msgBox.setErrMsg("LFOの設定に可能なパラメータ数を超えて指定されました。", pw.getSrcFn(), pw.getLineNumber());
+                        msgBox.setErrMsg(msg.get("E19003"), pw.getSrcFn(), pw.getLineNumber());
                         return;
                     }
 
@@ -669,14 +762,14 @@ namespace Core
                     n = Common.CheckRange(n, 0, 255);
                     if (!parent.instPCM.ContainsKey(n))
                     {
-                        msgBox.setErrMsg(string.Format("PCM定義に指定された音色番号({0})が存在しません。", n), pw.getSrcFn(), pw.getLineNumber());
+                        msgBox.setErrMsg(string.Format(msg.get("E19004"), n), pw.getSrcFn(), pw.getLineNumber());
                     }
                     else
                     {
                         if (parent.instPCM[n].chip != enmChipType.YM2610B 
                             || parent.instPCM[n].loopAdr != 0)
                         {
-                            msgBox.setErrMsg(string.Format("指定された音色番号({0})はYM2610B向けPCMデータではありません。", n), pw.getSrcFn(), pw.getLineNumber());
+                            msgBox.setErrMsg(string.Format(msg.get("E19005"), n), pw.getSrcFn(), pw.getLineNumber());
                         }
                         pw.instrument = n;
                         SetADPCMAAddress(
@@ -693,14 +786,14 @@ namespace Core
                     n = Common.CheckRange(n, 0, 255);
                     if (!parent.instPCM.ContainsKey(n))
                     {
-                        msgBox.setErrMsg(string.Format("PCM定義に指定された音色番号({0})が存在しません。", n), pw.getSrcFn(), pw.getLineNumber());
+                        msgBox.setErrMsg(string.Format(msg.get("E19004"), n), pw.getSrcFn(), pw.getLineNumber());
                     }
                     else
                     {
                         if (parent.instPCM[n].chip != enmChipType.YM2610B 
                             || parent.instPCM[n].loopAdr != 1)
                         {
-                            msgBox.setErrMsg(string.Format("指定された音色番号({0})はYM2610B向けPCMデータではありません。", n), pw.getSrcFn(), pw.getLineNumber());
+                            msgBox.setErrMsg(string.Format(msg.get("E19005"), n), pw.getSrcFn(), pw.getLineNumber());
                         }
                         pw.instrument = n;
                         SetADPCMBAddress(

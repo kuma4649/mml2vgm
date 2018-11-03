@@ -19,6 +19,7 @@ namespace Core
             _ShortName = "HuC8";
             _ChMax = 6;
             _canUsePcm = true;
+            _canUsePI = false;
             IsSecondary = isSecondary;
 
             Frequency = 3579545;
@@ -134,7 +135,7 @@ namespace Core
                         , v.Value.chip
                         , false
                         , v.Value.fileName
-                        , v.Value.freq
+                        , v.Value.freq != -1 ? v.Value.freq : samplerate
                         , v.Value.vol
                         , pi.totalBufPtr
                         , pi.totalBufPtr + size
@@ -155,7 +156,7 @@ namespace Core
 
                 pi.use = true;
                 Common.SetUInt32bit31(pi.totalBuf, 3, (UInt32)(pi.totalBuf.Length - 7), IsSecondary);
-                pcmData = pi.use ? pi.totalBuf : null;
+                pcmDataEasy = pi.use ? pi.totalBuf : null;
 
             }
             catch
@@ -164,6 +165,11 @@ namespace Core
                 return;
             }
 
+        }
+
+        public override void StorePcmRawData(clsPcmDatSeq pds, byte[] buf, bool isRaw, bool is16bit, int samplerate, params object[] option)
+        {
+            msgBox.setWrnMsg(msg.get("E12007"));
         }
 
         public override void MultiChannelCommand()
@@ -242,7 +248,7 @@ namespace Core
 
             if (!parent.instWF.ContainsKey(n))
             {
-                msgBox.setWrnMsg(string.Format("未定義の音色(@{0})を指定しています。", n), pw.getSrcFn(), pw.getLineNumber());
+                msgBox.setWrnMsg(string.Format(msg.get("E12000"), n), pw.getSrcFn(), pw.getLineNumber());
                 return;
             }
 
@@ -363,6 +369,11 @@ namespace Core
                 ,(byte)((s & 0xff0000) / 0x10000)
                 ,(byte)((s & 0xff000000) / 0x10000)
                 );
+
+            if (parent.instPCM[pw.instrument].status != enmPCMSTATUS.ERROR)
+            {
+                parent.instPCM[pw.instrument].status = enmPCMSTATUS.USED;
+            }
         }
 
         public void OutHuC6280KeyOff(partWork pw)
@@ -467,12 +478,6 @@ namespace Core
             }
         }
 
-        public override void SetPCMDataBlock()
-        {
-            if (use && pcmData != null && pcmData.Length > 0)
-                parent.OutData(pcmData);
-        }
-
         public override void SetLfoAtKeyOn(partWork pw)
         {
             for (int lfo = 0; lfo < 4; lfo++)
@@ -528,12 +533,12 @@ namespace Core
             {
                 if (pw.lfo[c].param.Count < 3)
                 {
-                    msgBox.setErrMsg("LFOの設定に必要なパラメータが足りません。", pw.getSrcFn(), pw.getLineNumber());
+                    msgBox.setErrMsg(msg.get("E12001"), pw.getSrcFn(), pw.getLineNumber());
                     return;
                 }
                 if (pw.lfo[c].param.Count > 3)
                 {
-                    msgBox.setErrMsg("LFOの設定に可能なパラメータ数を超えて指定されました。", pw.getSrcFn(), pw.getLineNumber());
+                    msgBox.setErrMsg(msg.get("E12002"), pw.getSrcFn(), pw.getLineNumber());
                     return;
                 }
 
@@ -641,13 +646,13 @@ namespace Core
 
             if (type == 'I')
             {
-                msgBox.setErrMsg("この音源はInstrumentを持っていません。", pw.getSrcFn(), pw.getLineNumber());
+                msgBox.setErrMsg(msg.get("E12003"), pw.getSrcFn(), pw.getLineNumber());
                 return;
             }
 
             if (type == 'T')
             {
-                msgBox.setErrMsg("Tone DoublerはOPN,OPM音源以外では使用できません。", pw.getSrcFn(), pw.getLineNumber());
+                msgBox.setErrMsg(msg.get("E12004"), pw.getSrcFn(), pw.getLineNumber());
                 return;
             }
 
@@ -672,13 +677,13 @@ namespace Core
 
             if (!parent.instPCM.ContainsKey(n))
             {
-                msgBox.setErrMsg(string.Format("PCM定義に指定された音色番号({0})が存在しません。", n), pw.getSrcFn(), pw.getLineNumber());
+                msgBox.setErrMsg(string.Format(msg.get("E12005"), n), pw.getSrcFn(), pw.getLineNumber());
                 return;
             }
 
             if (parent.instPCM[n].chip != enmChipType.HuC6280)
             {
-                msgBox.setErrMsg(string.Format("指定された音色番号({0})はHuC6280向けPCMデータではありません。", n), pw.getSrcFn(), pw.getLineNumber());
+                msgBox.setErrMsg(string.Format(msg.get("E12006"), n), pw.getSrcFn(), pw.getLineNumber());
             }
 
             pw.instrument = n;

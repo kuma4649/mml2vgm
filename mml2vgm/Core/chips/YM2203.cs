@@ -37,6 +37,7 @@ namespace Core
             _ShortName = "OPN";
             _ChMax = 9;
             _canUsePcm = false;
+            _canUsePI = false;
             FNumTbl = _FNumTbl;
 
             Frequency = 3993600;// 7987200/2;
@@ -225,11 +226,6 @@ namespace Core
             }
 
             base.CmdInstrument(pw, mml);
-        }
-
-        public override void SetPCMDataBlock()
-        {
-            //実装不要
         }
 
     }

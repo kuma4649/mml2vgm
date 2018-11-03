@@ -45,6 +45,7 @@
     <Compile Include="chips\C140.cs" />
     <Compile Include="chips\clsChip.cs" />
     <Compile Include="chips\clsOPN.cs" />
+    <Compile Include="chips\Conductor.cs" />
     <Compile Include="chips\HuC6280.cs" />
     <Compile Include="chips\RF5C164.cs" />
     <Compile Include="chips\segaPcm.cs" />
@@ -66,6 +67,7 @@
     <Compile Include="Information.cs" />
     <Compile Include="Line.cs" />
     <Compile Include="log.cs" />
+    <Compile Include="message.cs" />
     <Compile Include="MML.cs" />
     <Compile Include="mml2vgm.cs" />
     <Compile Include="MMLAnalyze.cs" />
@@ -73,6 +75,14 @@
     <Compile Include="Note.cs" />
     <Compile Include="partWork.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="lang\message.ja-JP.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="lang\message.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -25,29 +25,41 @@ namespace Core
             return r;
         }
 
-        public static byte[] GetPCMDataFromFile(string path, clsPcm instPCM, out bool is16bit, out int samplerate)
+        public static byte[] GetPCMDataFromFile(string path, clsPcm instPCM, out bool isRaw, out bool is16bit, out int samplerate)
         {
-            string fnPcm = Path.Combine(path, instPCM.fileName);
+            return GetPCMDataFromFile(path, instPCM.fileName, instPCM.vol, out isRaw, out is16bit, out samplerate);
+        }
+
+        public static byte[] GetPCMDataFromFile(string path, string fileName,int vol,out bool isRaw, out bool is16bit, out int samplerate)
+        {
+            string fnPcm = Path.Combine(path, fileName);
+            isRaw = false;
             is16bit = false;
             samplerate = 8000;
 
             if (!File.Exists(fnPcm))
             {
-                msgBox.setErrMsg(string.Format("PCMファイルの読み込みに失敗しました。(filename:{0})", instPCM.fileName));
+                msgBox.setErrMsg(string.Format(msg.get("E02000"), fileName));
                 return null;
             }
 
             // ファイルの読み込み
             byte[] buf = File.ReadAllBytes(fnPcm);
 
+            if (Path.GetExtension(fileName).ToUpper().Trim() != ".WAV")
+            {
+                isRaw = true;
+                return buf;
+            }
+
             if (buf.Length < 4)
             {
-                msgBox.setErrMsg("PCMファイル：不正なRIFFヘッダです。");
+                msgBox.setErrMsg(msg.get("E02001"));
                 return null;
             }
             if (buf[0] != 'R' || buf[1] != 'I' || buf[2] != 'F' || buf[3] != 'F')
             {
-                msgBox.setErrMsg("PCMファイル：不正なRIFFヘッダです。");
+                msgBox.setErrMsg(msg.get("E02002"));
                 return null;
             }
 
@@ -56,7 +68,7 @@ namespace Core
 
             if (buf[0x8] != 'W' || buf[0x9] != 'A' || buf[0xa] != 'V' || buf[0xb] != 'E')
             {
-                msgBox.setErrMsg("PCMファイル：不正なRIFFヘッダです。");
+                msgBox.setErrMsg(msg.get("E02003"));
                 return null;
             }
 
@@ -75,21 +87,21 @@ namespace Core
                         int format = buf[p + 0] + buf[p + 1] * 0x100;
                         if (format != 1)
                         {
-                            msgBox.setErrMsg(string.Format("PCMファイル：無効なフォーマットです。({0})", format));
+                            msgBox.setErrMsg(string.Format(msg.get("E02004"), format));
                             return null;
                         }
 
                         int channels = buf[p + 2] + buf[p + 3] * 0x100;
                         if (channels != 1)
                         {
-                            msgBox.setErrMsg(string.Format("PCMファイル：仕様(mono)とは異なるチャネル数です。({0})", channels));
+                            msgBox.setErrMsg(string.Format(msg.get("E02005"), channels));
                             return null;
                         }
 
                         samplerate = buf[p + 4] + buf[p + 5] * 0x100 + buf[p + 6] * 0x10000 + buf[p + 7] * 0x1000000;
                         if (samplerate != 8000 && samplerate != 16000 && samplerate != 18500 && samplerate != 14000)
                         {
-                            msgBox.setWrnMsg(string.Format("PCMファイル：仕様(8KHz/14KHz/16KHz/18.5KHz)とは異なるサンプリングレートです。({0})", samplerate));
+                            msgBox.setWrnMsg(string.Format(msg.get("E02006"), samplerate));
                             //return null;
                         }
 
@@ -103,7 +115,7 @@ namespace Core
                         int bitswidth = buf[p + 14] + buf[p + 15] * 0x100;
                         if (bitswidth != 8 && bitswidth != 16)
                         {
-                            msgBox.setErrMsg(string.Format("PCMファイル：仕様(8bit/16bit)とは異なる1サンプルあたりのビット数です。({0})", bitswidth));
+                            msgBox.setErrMsg(string.Format(msg.get("E02007"), bitswidth));
                             return null;
                         }
 
@@ -112,7 +124,7 @@ namespace Core
                         int blockalign = buf[p + 12] + buf[p + 13] * 0x100;
                         if (blockalign != (is16bit ? 2 : 1))
                         {
-                            msgBox.setErrMsg(string.Format("PCMファイル：無効なデータのブロックサイズです。({0})", blockalign));
+                            msgBox.setErrMsg(string.Format(msg.get("E02008"), blockalign));
                             return null;
                         }
 
@@ -145,7 +157,7 @@ namespace Core
                     for (int i = 0; i < des.Length; i += 2)
                     {
                         //16bitのwavファイルはsignedのデータのためそのままボリューム変更可能
-                        int b = (int)((short)(des[i] | (des[i + 1] << 8)) * instPCM.vol * 0.01);
+                        int b = (int)((short)(des[i] | (des[i + 1] << 8)) * vol * 0.01);
                         b = (b > 0x7fff) ? 0x7fff : b;
                         b = (b < -0x8000) ? -0x8000 : b;
                         des[i] = (byte)(b & 0xff);
@@ -160,7 +172,7 @@ namespace Core
                         int d = des[i];
                         //signed化
                         d -= 0x80;
-                        d = (int)(d * instPCM.vol * 0.01);
+                        d = (int)(d * vol * 0.01);
                         //clip
                         d = (d > 127) ? 127 : d;
                         d = (d < -128) ? -128 : d;
@@ -175,7 +187,7 @@ namespace Core
             }
             catch
             {
-                msgBox.setErrMsg("PCMファイル：不正或いは未知のチャンクを持つファイルです。");
+                msgBox.setErrMsg(msg.get("E02009"));
                 return null;
             }
         }
@@ -282,10 +294,24 @@ namespace Core
             catch
             {
                 //パート解析に失敗 
-                msgBox.setErrMsg(string.Format("不正なパート定義です。({0})", parts), "", 0);
+                msgBox.setErrMsg(string.Format(msg.get("E02010"), parts), "", 0);
             }
 
             return ret;
+        }
+
+        internal static void Add32bits(List<byte> desDat, uint v)
+        {
+            desDat.Add((byte)v);
+            desDat.Add((byte)(v >> 8));
+            desDat.Add((byte)(v >> 16));
+            desDat.Add((byte)(v >> 24));
+        }
+
+        internal static void Add16bits(List<byte> desDat, uint v)
+        {
+            desDat.Add((byte)v);
+            desDat.Add((byte)(v >> 8));
         }
 
         private static int GetChMax(string a, Dictionary<enmChipType,ClsChip[]> chips)
@@ -304,5 +330,77 @@ namespace Core
             return 0;
         }
 
+        public static int ParseNumber(string s)
+        {
+            if (s.Trim().ToUpper().IndexOf("0x") == 0)
+            {
+                return Convert.ToInt32(s.Substring(2), 16);
+            }
+            else if (s.Trim().IndexOf("$") == 0)
+            {
+                return Convert.ToInt32(s.Substring(1), 16);
+            }
+
+            return int.Parse(s);
+        }
+
+        public static byte[] MakePCMDataBlock(byte dataType, clsPcmDatSeq pds, byte[] data)
+        {
+            List<byte> desDat = new List<byte>();
+
+            desDat.Add(0x67); //Data block command
+            desDat.Add(0x66); //compatibility command
+
+            desDat.Add(dataType); //data type
+
+            int length = pds.SrcLength == -1 ? data.Length : pds.SrcLength;
+
+            if (data.Length < pds.SrcStartAdr + length)
+            {
+                length = data.Length - pds.SrcStartAdr;
+            }
+            byte[] dmy = new byte[length];
+            Array.Copy(data, pds.SrcStartAdr, dmy, 0, length);
+
+            Common.Add32bits(desDat, (uint)(length + 8) | (pds.isSecondary ? 0x8000_0000 : 0x0000_0000));//size of data, in bytes
+            Common.Add32bits(desDat, (uint)(pds.DesStartAdr + length));//size of the entire ROM
+            Common.Add32bits(desDat, (uint)pds.DesStartAdr);//start address of data
+
+            desDat.AddRange(dmy);
+
+            pds.DatStartAdr = pds.DesStartAdr;
+            pds.DatEndAdr = pds.DatStartAdr + length - 1;
+
+            return desDat.ToArray();
+        }
+
+        public static byte[] MakePCMDataBlockType2(byte dataType, clsPcmDatSeq pds, byte[] data)
+        {
+            List<byte> desDat = new List<byte>();
+
+            desDat.Add(0x67); //Data block command
+            desDat.Add(0x66); //compatibility command
+
+            desDat.Add(dataType); //data type
+
+            int length = pds.SrcLength == -1 ? data.Length : pds.SrcLength;
+
+            if (data.Length < pds.SrcStartAdr + length)
+            {
+                length = data.Length - pds.SrcStartAdr;
+            }
+            byte[] dmy = new byte[length];
+            Array.Copy(data, pds.SrcStartAdr, dmy, 0, length);
+
+            Common.Add32bits(desDat, (uint)(length + 2) | (pds.isSecondary ? 0x8000_0000 : 0x0000_0000));//size of data, in bytes
+            Common.Add16bits(desDat, (uint)pds.DesStartAdr);//start address of data
+
+            desDat.AddRange(dmy);
+
+            pds.DatStartAdr = pds.DesStartAdr;
+            pds.DatEndAdr = pds.DatStartAdr + length - 1;
+
+            return desDat.ToArray();
+        }
     }
 }

@@ -57,6 +57,7 @@ namespace Core
         Tie,            // &
         TiePC,          // ^
         TieMC,          // ~
-        ToneDoubler     // , 0
+        ToneDoubler,    // , 0
+        Lyric           // "
     }
 }

@@ -67,6 +67,20 @@ namespace Core
         }
         protected bool _canUsePcm = false;
 
+        public bool CanUsePI
+        {
+            get
+            {
+                return _canUsePI;
+            }
+
+            set
+            {
+                _canUsePI = value;
+            }
+        }
+        protected bool _canUsePI = false;
+
         public bool IsSecondary
         {
             get
@@ -89,6 +103,7 @@ namespace Core
 
         protected int _ChipID = -1;
         protected ClsVgm parent;
+        protected byte dataType;
         public ClsChannel[] Ch;
         public int Frequency = 7670454;
         public bool use;
@@ -100,8 +115,8 @@ namespace Core
         public int[][] FNumTbl;
         private string stPath = "";
         public clsPcmDataInfo[] pcmDataInfo;
-        public byte[] pcmData = null;
-
+        public byte[] pcmDataEasy = null;
+        public List<byte[]> pcmDataDirect = new List<byte[]>();
 
 
 
@@ -233,7 +248,7 @@ namespace Core
         {
             if (!parent.instENV.ContainsKey(n))
             {
-                msgBox.setErrMsg(string.Format("エンベロープ定義に指定された音色番号({0})が存在しません。", n)
+                msgBox.setErrMsg(string.Format(msg.get("E10000"), n)
                     , mml.line.Fn
                     , mml.line.Num);
             }
@@ -371,7 +386,7 @@ namespace Core
         {
             if (pw.lfo[c].param == null)
             {
-                msgBox.setErrMsg("指定されたLFOのパラメータが未指定です。"
+                msgBox.setErrMsg(msg.get("E10001")
                     , mml.line.Fn
                     , mml.line.Num);
                 return false;
@@ -396,6 +411,16 @@ namespace Core
         public virtual void StorePcm(Dictionary<int, clsPcm> newDic, KeyValuePair<int, clsPcm> v, byte[] buf, bool is16bit, int samplerate, params object[] option)
         {
             pcmDataInfo = null;
+        }
+
+        public virtual void StorePcmRawData(clsPcmDatSeq pds, byte[] buf, bool isRaw, bool is16bit, int samplerate, params object[] option)
+        {
+            throw new NotImplementedException("継承先で要実装");
+        }
+
+        public virtual bool StorePcmCheck()
+        {
+            throw new NotImplementedException("継承先で要実装");
         }
 
         public virtual int GetToneDoublerShift(partWork pw, int octave, char noteCmd, int shift)
@@ -444,7 +469,64 @@ namespace Core
 
         public virtual void SetPCMDataBlock()
         {
-            throw new NotImplementedException("継承先で要実装");
+            if (!CanUsePcm) return;
+            if (!use) return;
+
+            int maxSize = 0;
+            if (pcmDataEasy != null && pcmDataEasy.Length > 0)
+            {
+                maxSize =
+                    pcmDataEasy[7]
+                    + (pcmDataEasy[8] << 8)
+                    + (pcmDataEasy[9] << 16)
+                    + (pcmDataEasy[10] << 24);
+            }
+            if (pcmDataDirect.Count > 0)
+            {
+                foreach (byte[] dat in pcmDataDirect)
+                {
+                    if (dat != null && dat.Length > 0)
+                    {
+                        int size =
+                            dat[7]
+                            + (dat[8] << 8)
+                            + (dat[9] << 16)
+                            + (dat[10] << 24);
+                        if (maxSize < size) maxSize = size;
+                    }
+                }
+            }
+            if (pcmDataEasy != null && pcmDataEasy.Length > 0)
+            {
+                pcmDataEasy[7] = (byte)maxSize;
+                pcmDataEasy[8] = (byte)(maxSize >> 8);
+                pcmDataEasy[9] = (byte)(maxSize >> 16);
+                pcmDataEasy[10] = (byte)(maxSize >> 24);
+            }
+            if (pcmDataDirect.Count > 0)
+            {
+                foreach (byte[] dat in pcmDataDirect)
+                {
+                    if (dat != null && dat.Length > 0)
+                    {
+                        dat[7] = (byte)maxSize;
+                        dat[8] = (byte)(maxSize >> 8);
+                        dat[9] = (byte)(maxSize >> 16);
+                        dat[10] = (byte)(maxSize >> 24);
+                    }
+                }
+            }
+
+            if (pcmDataEasy != null && pcmDataEasy.Length > 0)
+                parent.OutData(pcmDataEasy);
+
+            if (pcmDataDirect.Count < 1) return;
+
+            foreach (byte[] dat in pcmDataDirect)
+            {
+                if (dat != null && dat.Length > 0)
+                    parent.OutData(dat);
+            }
         }
 
         public virtual void SetLfoAtKeyOn(partWork pw)
@@ -529,6 +611,11 @@ namespace Core
             }
         }
 
+        public bool CanUsePICommand()
+        {
+            return CanUsePI;
+        }
+
         public virtual void CmdKeyShift(partWork pw, MML mml)
         {
             int n = (int)mml.args[0];
@@ -537,7 +624,7 @@ namespace Core
 
         public virtual void CmdNoise(partWork pw, MML mml)
         {
-            msgBox.setErrMsg("このチャンネルではwコマンドは使用できません。"
+            msgBox.setErrMsg(msg.get("E10002")
                     , mml.line.Fn
                     , mml.line.Num
                     );
@@ -545,7 +632,7 @@ namespace Core
 
         public virtual void CmdMPMS(partWork pw, MML mml)
         {
-            msgBox.setErrMsg("このチャンネルではMPMSコマンドは使用できません。"
+            msgBox.setErrMsg(msg.get("E10003")
                     , mml.line.Fn
                     , mml.line.Num
                     );
@@ -553,7 +640,7 @@ namespace Core
 
         public virtual void CmdMAMS(partWork pw, MML mml)
         {
-            msgBox.setErrMsg("このチャンネルではMAMSコマンドは使用できません。"
+            msgBox.setErrMsg(msg.get("E10004")
                     , mml.line.Fn
                     , mml.line.Num
                     );
@@ -589,7 +676,7 @@ namespace Core
             {
                 if (pw.lfo[c].param.Count < 4)
                 {
-                    msgBox.setErrMsg("LFOの設定に必要なパラメータが足りません。"
+                    msgBox.setErrMsg(msg.get("E10005")
                     , mml.line.Fn
                     , mml.line.Num
                     );
@@ -597,7 +684,7 @@ namespace Core
                 }
                 if (pw.lfo[c].param.Count > 7)
                 {
-                    msgBox.setErrMsg("LFOの設定に可能なパラメータ数を超えて指定されました。"
+                    msgBox.setErrMsg(msg.get("E10006")
                     , mml.line.Fn
                     , mml.line.Num
                     );
@@ -710,7 +797,7 @@ namespace Core
 
         public virtual void CmdTotalVolume(partWork pw, MML mml)
         {
-            msgBox.setErrMsg("このチャンネルではMPMSコマンドは使用できません。"
+            msgBox.setErrMsg(msg.get("E10007")
                     , mml.line.Fn
                     , mml.line.Num
                     );
@@ -732,7 +819,7 @@ namespace Core
 
         public virtual void CmdPan(partWork pw, MML mml)
         {
-            msgBox.setErrMsg("このチャンネルではpコマンドは使用できません。"
+            msgBox.setErrMsg(msg.get("E10008")
                     , mml.line.Fn
                     , mml.line.Num
                     );
@@ -763,7 +850,7 @@ namespace Core
 
         public virtual void CmdMode(partWork pw, MML mml)
         {
-            msgBox.setErrMsg("このチャンネルではmコマンドは使用できません。"
+            msgBox.setErrMsg(msg.get("E10009")
                     , mml.line.Fn
                     , mml.line.Num
                     );
@@ -793,8 +880,8 @@ namespace Core
                         p.beforeVolume = -1;
                         p.pan = new dint(3);
                         p.beforeTie = false;
-
-                        CmdLoopExtProc(p,mml);
+                        
+                        chip.CmdLoopExtProc(p,mml);
                     }
                 }
             }
@@ -814,7 +901,7 @@ namespace Core
         {
             if (!(mml.args[0] is string))
             {
-                msgBox.setErrMsg("Envelopeの解析に失敗しました。"
+                msgBox.setErrMsg(msg.get("E10010")
                     , mml.line.Fn
                     , mml.line.Num);
 
@@ -841,7 +928,7 @@ namespace Core
 
         public virtual void CmdHardEnvelope(partWork pw, MML mml)
         {
-            msgBox.setWrnMsg("このパートではEHコマンドは使用できません。"
+            msgBox.setWrnMsg(msg.get("E10011")
                     , mml.line.Fn
                     , mml.line.Num
                     );
@@ -849,7 +936,7 @@ namespace Core
 
         public virtual void CmdExtendChannel(partWork pw, MML mml)
         {
-            msgBox.setWrnMsg("このパートは効果音モードに対応したチャンネルが指定されていないため、Eコマンドは無視されます。"
+            msgBox.setWrnMsg(msg.get("E10012")
                     , mml.line.Fn
                     , mml.line.Num
                     );
@@ -986,7 +1073,7 @@ namespace Core
 
             if (note.length < 1)
             {
-                msgBox.setErrMsg("負の音長が指定されました。"
+                msgBox.setErrMsg(msg.get("E10013")
                     , mml.line.Fn
                     , mml.line.Num
                     );
@@ -1068,7 +1155,7 @@ namespace Core
 
             if (rest.length < 1)
             {
-                msgBox.setErrMsg("負の音長が指定されました。"
+                msgBox.setErrMsg(msg.get("E10013")
                     , mml.line.Fn
                     , mml.line.Num
                     );
@@ -1086,6 +1173,29 @@ namespace Core
             pw.clockCounter += pw.waitCounter;
         }
 
+        public virtual void CmdLyric(partWork pw, MML mml)
+        {
+            string str = (string)mml.args[0];
+            int ml = (int)mml.args[1];
+
+            if (ml < 1)
+            {
+                msgBox.setErrMsg(msg.get("E10013")
+                    , mml.line.Fn
+                    , mml.line.Num
+                    );
+                ml = (int)pw.length;
+            }
+
+            str = string.Format("[{0}]{1}\0", parent.dSample.ToString(), str);
+            parent.lyric += str;
+            //WaitClockの決定
+            pw.waitCounter = ml;
+            pw.tie = false;
+
+            pw.clockCounter += pw.waitCounter;
+        }
+
         public virtual void CmdBend(partWork pw,MML mml)
         {
             //何もする必要なし
@@ -1093,7 +1203,7 @@ namespace Core
 
         public virtual void CmdNoiseToneMixer(partWork pw, MML mml)
         {
-            msgBox.setErrMsg("このパートではPコマンドは使用できません。"
+            msgBox.setErrMsg(msg.get("E10014")
                 , mml.line.Fn
                 , mml.line.Num);
         }

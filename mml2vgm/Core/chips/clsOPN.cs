@@ -283,7 +283,7 @@ namespace Core
         {
             if (!parent.instFM.ContainsKey(n))
             {
-                msgBox.setWrnMsg(string.Format("未定義の音色(@{0})を指定している場合ボリュームの変更はできません。", n), pw.getSrcFn(), pw.getLineNumber());
+                msgBox.setWrnMsg(string.Format(msg.get("E11000"), n), pw.getSrcFn(), pw.getLineNumber());
                 return;
             }
 
@@ -349,7 +349,7 @@ namespace Core
 
             if (!parent.instFM.ContainsKey(n))
             {
-                msgBox.setWrnMsg(string.Format("未定義の音色(@{0})を指定しています。", n), pw.getSrcFn(), pw.getLineNumber());
+                msgBox.setWrnMsg(string.Format(msg.get("E11001"), n), pw.getSrcFn(), pw.getLineNumber());
                 return;
             }
 
@@ -357,7 +357,7 @@ namespace Core
 
             if (pw.ch >= m + 3 && pw.ch < m + 6)
             {
-                msgBox.setWrnMsg("拡張チャンネルでは音色指定はできません。", pw.getSrcFn(), pw.getLineNumber());
+                msgBox.setWrnMsg(msg.get("E11002"), pw.getSrcFn(), pw.getLineNumber());
                 return;
             }
 
@@ -636,6 +636,12 @@ namespace Core
                     , (byte)((s & 0xff000000) / 0x10000)
                     );
             }
+
+            if (parent.instPCM[pw.instrument].status != enmPCMSTATUS.ERROR)
+            {
+                parent.instPCM[pw.instrument].status = enmPCMSTATUS.USED;
+            }
+
         }
 
 
@@ -908,7 +914,7 @@ namespace Core
 
             if (type == 'I')
             {
-                msgBox.setErrMsg("この音源はInstrumentを持っていません。", pw.getSrcFn(), pw.getLineNumber());
+                msgBox.setErrMsg(msg.get("E11003"), pw.getSrcFn(), pw.getLineNumber());
                 return;
             }
 
@@ -945,7 +951,7 @@ namespace Core
 
             if (!(mml.args[0] is string))
             {
-                msgBox.setErrMsg("Envelopeの解析に失敗しました。"
+                msgBox.setErrMsg(msg.get("E11004")
                     ,mml.line.Fn
                     ,mml.line.Num);
 
@@ -982,7 +988,7 @@ namespace Core
                         }
                         else
                         {
-                            msgBox.setErrMsg(string.Format("未知のコマンド(EX{0})が指定されました。", n), pw.getSrcFn(), pw.getLineNumber());
+                            msgBox.setErrMsg(string.Format(msg.get("E11005"), n), pw.getSrcFn(), pw.getLineNumber());
                             break;
                         }
                         n /= 10;

@@ -514,149 +514,7 @@ namespace Core
             pos.alies = LstPos[i - 1].alies;
             pos.col = LstPos[i - 1].col + tCol - LstPos[i - 1].tCol;
             pos.row = LstPos[i - 1].row;
-            //if (pos.alies == "" && pos.col >= pData[pos.row].Txt.Length - 1 && pos.row >= pData.Count - 1)
-            //{
-            //    dataEnd = true;
-            //}
             return;
-
-            //dataEnd = false;
-
-            //int row = 0;
-            //int col = 0;
-            //int n = 0;
-            //string aliesName = "";
-            //resetPos();
-
-            //pos.tCol = tCol;
-
-            //while (true)
-            //{
-            //    string data;
-            //    char ch;
-
-            //    //読みだすデータの頭出し
-            //    if (aliesName == "")
-            //    {
-            //        if (pData.Count == row)
-            //        {
-            //            dataEnd = true;
-            //            return;
-            //        }
-            //        data = pData[row].Txt;
-            //    }
-            //    else
-            //    {
-            //        data = aData[aliesName].Txt;
-            //    }
-
-            //    while (data.Length == col)
-            //    {
-            //        if (aliesName == "")
-            //        {
-            //            row++;
-            //            if (pData.Count == row)
-            //            {
-            //                dataEnd = true;
-            //                break;
-            //            }
-            //            else
-            //            {
-            //                data = pData[row].Txt;
-            //                col = 0;
-            //                break;
-            //            }
-            //        }
-            //        else
-            //        {
-            //            clsPos p = stackPos.Pop();
-            //            aliesName = p.alies;
-            //            col = p.col;
-            //            row = p.row;
-            //            if (aliesName == "")
-            //            {
-            //                data = pData[row].Txt;
-            //            }
-            //            else
-            //            {
-            //                data = aData[aliesName].Txt;
-            //            }
-            //        }
-            //    }
-            //    ch = data[col];
-
-            //    while (ch == '%')
-            //    {
-            //        string a = getAliesName(data, col);
-            //        if (a != "")
-            //        {
-            //            clsPos p = new clsPos();
-            //            p.alies = aliesName;
-            //            p.col = col + a.Length + 1;
-            //            p.row = row;
-            //            stackPos.Push(p);
-
-            //            data = aData[a].Txt;
-            //            col = 0;
-            //            aliesName = a;
-            //            row = 0;
-            //        }
-            //        else
-            //        {
-            //            msgBox.setWrnMsg("指定されたエイリアス名は定義されていません。"
-            //                , (aliesName == "") ? pData[row].Fn : aData[aliesName].Fn
-            //                , (aliesName == "") ? pData[row].Num : aData[aliesName].Num
-            //                );
-            //            col++;
-            //        }
-            //        ch = data[col];
-            //    }
-
-            //    if (n == tCol)
-            //    {
-            //        pos.row = row;
-            //        pos.col = col;
-            //        pos.alies = aliesName;
-            //        break;
-            //    }
-
-            //    n++;
-            //    col++;
-            //    while (data.Length == col)
-            //    {
-            //        if (aliesName == "")
-            //        {
-            //            row++;
-            //            if (pData.Count == row)
-            //            {
-            //                dataEnd = true;
-            //                break;
-            //            }
-            //            else
-            //            {
-            //                data = pData[row].Txt;
-            //                col = 0;
-            //                break;
-            //            }
-            //        }
-            //        else
-            //        {
-            //            clsPos p = stackPos.Pop();
-            //            aliesName = p.alies;
-            //            col = p.col;
-            //            row = p.row;
-            //            if (aliesName == "")
-            //            {
-            //                data = pData[row].Txt;
-            //            }
-            //            else
-            //            {
-            //                data = aData[aliesName].Txt;
-            //            }
-            //        }
-            //    }
-
-            //}
 
         }
 
@@ -770,7 +628,7 @@ namespace Core
                     }
                     else
                     {
-                        msgBox.setWrnMsg("指定されたエイリアス名は定義されていません。"
+                        msgBox.setWrnMsg(msg.get("E06000")
                             , (aliesName == "") ? pData[row].Fn : aData[aliesName].Fn
                             , (aliesName == "") ? pData[row].Num : aData[aliesName].Num
                             );
@@ -1112,6 +970,98 @@ namespace Core
             this.samplerate = samplerate;
             this.option = option;
             this.status = enmPCMSTATUS.NONE;
+        }
+    }
+
+    public class clsPcmDatSeq
+    {
+        public enmPcmDefineType type;
+        public int No = -1;
+        public string FileName = "";
+        public int BaseFreq = 8000;
+        public int Volume = 100;
+        public enmChipType chip = enmChipType.YM2612;
+        public bool isSecondary = false;
+        public object[] Option = null;
+        public int SrcStartAdr = 0;
+        public int DesStartAdr = 0;
+        public int SrcLength = 0;
+        public int DatStartAdr = 0;
+        public int DatEndAdr = 0;
+        public int DatLoopAdr = 0;
+
+        public clsPcmDatSeq(
+            enmPcmDefineType type
+            , int No
+            , string FileName
+            , int BaseFreq
+            , int Volume
+            , enmChipType chip
+            , bool isSecondary
+            , int LoopAdr)
+        {
+            this.type = type;
+            this.No = No;
+            this.FileName = FileName;
+            this.BaseFreq = BaseFreq;
+            this.Volume = Volume;
+            this.chip = chip;
+            this.isSecondary = isSecondary;
+            this.DatLoopAdr = LoopAdr;
+        }
+
+        public clsPcmDatSeq(
+            enmPcmDefineType type
+            , string FileName
+            , enmChipType chip
+            , bool isSecondary
+            , int SrcStartAdr
+            , int DesStartAdr
+            , int Length
+            , object[] Option)
+        {
+            this.type = type;
+            this.FileName = FileName;
+            this.chip = chip;
+            this.isSecondary = isSecondary;
+            this.SrcStartAdr = SrcStartAdr;
+            this.DesStartAdr = DesStartAdr;
+            this.SrcLength = Length;
+            this.Option = Option;
+            if(chip== enmChipType.YM2610B)
+            {
+                if (Option != null)
+                {
+                    this.DatLoopAdr = Option.ToString() == "0" ? 0 : 1;
+                }
+                else
+                {
+                    this.DatLoopAdr = 0;
+                }
+                ;
+            }
+        }
+
+        public clsPcmDatSeq(
+            enmPcmDefineType type
+            , int No
+            , enmChipType chip
+            , bool isSecondary
+            , int BaseFreq
+            , int DatStartAdr
+            , int DatEndAdr
+            , int DatLoopAdr
+            , object[] Option)
+        {
+            this.type = type;
+            this.No = No;
+            this.chip = chip;
+            this.isSecondary = isSecondary;
+            this.BaseFreq = BaseFreq;
+            this.DatStartAdr = DatStartAdr;
+            this.DatEndAdr = DatEndAdr;
+            this.DatLoopAdr = DatLoopAdr;
+            this.Option = Option;
         }
     }
 

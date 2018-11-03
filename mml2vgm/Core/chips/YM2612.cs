@@ -25,6 +25,7 @@ namespace Core
             _ShortName = "OPN2";
             _ChMax = 9;
             _canUsePcm = true;
+            _canUsePI = false;
             FNumTbl = _FNumTbl;
             IsSecondary = isSecondary;
 
@@ -56,17 +57,10 @@ namespace Core
             Ch[7].Type = enmChannelType.FMOPNex;
             Ch[8].Type = enmChannelType.FMOPNex;
 
-            if (!isSecondary)
-            {
-                pcmDataInfo = new clsPcmDataInfo[] { new clsPcmDataInfo() };
-                pcmDataInfo[0].totalBuf = new byte[7] { 0x67, 0x66, 0x00, 0x00, 0x00, 0x00, 0x00 };
-                pcmDataInfo[0].totalBufPtr = 0L;
-                pcmDataInfo[0].use = false;
-            }
-            else
-            {
-                pcmDataInfo = null;
-            }
+            pcmDataInfo = new clsPcmDataInfo[] { new clsPcmDataInfo() };
+            pcmDataInfo[0].totalBuf = new byte[7] { 0x67, 0x66, 0x00, 0x00, 0x00, 0x00, 0x00 };
+            pcmDataInfo[0].totalBufPtr = 0L;
+            pcmDataInfo[0].use = false;
 
         }
 
@@ -178,7 +172,7 @@ namespace Core
                         , v.Value.chip
                         , false
                         , v.Value.fileName
-                        , v.Value.freq
+                        , v.Value.freq != -1 ? v.Value.freq : samplerate
                         , v.Value.vol
                         , pi.totalBufPtr
                         , pi.totalBufPtr + size
@@ -195,7 +189,7 @@ namespace Core
                 pi.totalBuf = newBuf;
                 Common.SetUInt32bit31(pi.totalBuf, 3, (UInt32)(pi.totalBuf.Length - 7), IsSecondary);
                 pi.use = true;
-                pcmData = pi.use ? pi.totalBuf : null;
+                pcmDataEasy = pi.use ? pi.totalBuf : null;
             }
             catch
             {
@@ -204,6 +198,10 @@ namespace Core
 
         }
 
+        public override void StorePcmRawData(clsPcmDatSeq pds, byte[] buf, bool isRaw, bool is16bit, int samplerate, params object[] option)
+        {
+            msgBox.setWrnMsg(msg.get("E20004"));
+        }
 
 
         public override void CmdY(partWork pw, MML mml)
@@ -252,12 +250,12 @@ namespace Core
             {
                 if (pw.lfo[c].param.Count < 4)
                 {
-                    msgBox.setErrMsg("LFOの設定に必要なパラメータが足りません。", pw.getSrcFn(), pw.getLineNumber());
+                    msgBox.setErrMsg(msg.get("E20000"), pw.getSrcFn(), pw.getLineNumber());
                     return;
                 }
                 if (pw.lfo[c].param.Count > 5)
                 {
-                    msgBox.setErrMsg("LFOの設定に可能なパラメータ数を超えて指定されました。", pw.getSrcFn(), pw.getLineNumber());
+                    msgBox.setErrMsg(msg.get("E20001"), pw.getSrcFn(), pw.getLineNumber());
                     return;
                 }
 
@@ -352,13 +350,13 @@ namespace Core
                     pw.instrument = n;
                     if (!parent.instPCM.ContainsKey(n))
                     {
-                        msgBox.setErrMsg(string.Format("PCM定義に指定された音色番号({0})が存在しません。", n), pw.getSrcFn(), pw.getLineNumber());
+                        msgBox.setErrMsg(string.Format(msg.get("E20002"), n), pw.getSrcFn(), pw.getLineNumber());
                     }
                     else
                     {
                         if (parent.instPCM[n].chip != enmChipType.YM2612)
                         {
-                            msgBox.setErrMsg(string.Format("指定された音色番号({0})はYM2612向けPCMデータではありません。", n), pw.getSrcFn(), pw.getLineNumber());
+                            msgBox.setErrMsg(string.Format(msg.get("E20003"), n), pw.getSrcFn(), pw.getLineNumber());
                         }
                     }
                     return;
@@ -367,12 +365,6 @@ namespace Core
             }
 
             base.CmdInstrument(pw, mml);
-        }
-
-        public override void SetPCMDataBlock()
-        {
-            if (use && pcmData != null && pcmData.Length > 0 && !IsSecondary)
-                parent.OutData(pcmData);
         }
 
         public override void SetLfoAtKeyOn(partWork pw)

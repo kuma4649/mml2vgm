@@ -117,7 +117,7 @@ namespace Core
                 }
                 catch
                 {
-                    msgBox.setWrnMsg(string.Format("不正な定義です。({0})", s), fn, lineNumber);
+                    msgBox.setWrnMsg(string.Format(msg.get("E03000"), s), fn, lineNumber);
                 }
             }
             return 0;

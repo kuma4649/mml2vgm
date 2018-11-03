@@ -227,6 +227,10 @@ namespace Core
                     log.Write("restNoWork");
                     CmdRestNoWork(pw, mml);
                     break;
+                case '"':
+                    log.Write("lylic");
+                    CmdLyric(pw, mml);
+                    break;
                 case '_':
                     log.Write("bend");
                     CmdBend(pw, mml);
@@ -244,7 +248,7 @@ namespace Core
                     CmdTieMC(pw, mml);
                     break;
                 default:
-                    msgBox.setErrMsg(string.Format("未知のコマンド{0}を検出しました。", cmd), pw.getSrcFn(), pw.getLineNumber());
+                    msgBox.setErrMsg(string.Format(msg.get("E05000"), cmd), pw.getSrcFn(), pw.getLineNumber());
                     pw.incPos();
                     break;
             }
@@ -277,7 +281,7 @@ namespace Core
             pw.incPos();
             if (!pw.getNum(out int n))
             {
-                msgBox.setErrMsg("不正なテンポが指定されています。", pw.getSrcFn(), pw.getLineNumber());
+                msgBox.setErrMsg(msg.get("E05001"), pw.getSrcFn(), pw.getLineNumber());
                 n = 120;
             }
             n = Common.CheckRange(n, 1, 1200);
@@ -326,7 +330,7 @@ namespace Core
 
             if (!pw.getNum(out n))
             {
-                msgBox.setErrMsg("不正な音色番号が指定されています。", pw.getSrcFn(), pw.getLineNumber());
+                msgBox.setErrMsg(msg.get("E05002"), pw.getSrcFn(), pw.getLineNumber());
                 n = 0;
             }
             n = Common.CheckRange(n, 0, 255);
@@ -343,7 +347,7 @@ namespace Core
 
             if (!pw.getNum(out n))
             {
-                msgBox.setErrMsg("不正な音量が指定されています。", pw.getSrcFn(), pw.getLineNumber());
+                msgBox.setErrMsg(msg.get("E05003"), pw.getSrcFn(), pw.getLineNumber());
                 n = (int)(pw.MaxVolume * 0.9);
             }
             n = Common.CheckRange(n, 0, pw.MaxVolume);
@@ -359,7 +363,7 @@ namespace Core
 
             if (!pw.getNum(out n))
             {
-                msgBox.setErrMsg("不正な音量が指定されています。", pw.getSrcFn(), pw.getLineNumber());
+                msgBox.setErrMsg(msg.get("E05004"), pw.getSrcFn(), pw.getLineNumber());
                 n = 0;
             }
             mml.args.Add(n);
@@ -369,7 +373,7 @@ namespace Core
                 pw.incPos();
                 if (!pw.getNum(out n))
                 {
-                    msgBox.setErrMsg("不正な音量が指定されています。", pw.getSrcFn(), pw.getLineNumber());
+                    msgBox.setErrMsg(msg.get("E05004"), pw.getSrcFn(), pw.getLineNumber());
                     n = 0;
                 }
                 mml.args.Add(n);
@@ -382,7 +386,7 @@ namespace Core
             pw.incPos();
             if (!pw.getNum(out int n))
             {
-                msgBox.setErrMsg("不正なオクターブが指定されています。", pw.getSrcFn(), pw.getLineNumber());
+                msgBox.setErrMsg(msg.get("E05005"), pw.getSrcFn(), pw.getLineNumber());
                 n = 110;
             }
             n = Common.CheckRange(n, 1, 8);
@@ -412,7 +416,7 @@ namespace Core
             pw.incPos();
             if (!pw.getNum(out n))
             {
-                msgBox.setErrMsg("不正な音量')'が指定されています。", pw.getSrcFn(), pw.getLineNumber());
+                msgBox.setErrMsg(msg.get("E05006"), pw.getSrcFn(), pw.getLineNumber());
                 return;
             }
             mml.type = enmMMLType.VolumeUp;
@@ -426,7 +430,7 @@ namespace Core
             pw.incPos();
             if (!pw.getNum(out int n))
             {
-                msgBox.setErrMsg("不正な音量'('が指定されています。", pw.getSrcFn(), pw.getLineNumber());
+                msgBox.setErrMsg(msg.get("E05007"), pw.getSrcFn(), pw.getLineNumber());
                 n = 10;
             }
             n = Common.CheckRange(n, 1, pw.MaxVolume);
@@ -445,7 +449,7 @@ namespace Core
                 {
                     if ((int)info.clockCount % n != 0)
                     {
-                        msgBox.setWrnMsg(string.Format("割り切れない音長({0})の指定があります。音長は不定になります。", n), pw.getSrcFn(), pw.getLineNumber());
+                        msgBox.setWrnMsg(string.Format(msg.get("E05008"), n), pw.getSrcFn(), pw.getLineNumber());
                     }
                     n = (int)info.clockCount / n;
                 }
@@ -466,7 +470,7 @@ namespace Core
             pw.incPos();
             if (!pw.getNum(out int n))
             {
-                msgBox.setErrMsg("不正な音長が指定されています。", pw.getSrcFn(), pw.getLineNumber());
+                msgBox.setErrMsg(msg.get("E05009"), pw.getSrcFn(), pw.getLineNumber());
                 n = 10;
             }
             n = Common.CheckRange(n, 1, 65535);
@@ -482,7 +486,7 @@ namespace Core
             pw.incPos();
             if (!pw.getNum(out n))
             {
-                msgBox.setErrMsg("不正なパン'p'が指定されています。", pw.getSrcFn(), pw.getLineNumber());
+                msgBox.setErrMsg(msg.get("E05010"), pw.getSrcFn(), pw.getLineNumber());
             }
             mml.type = enmMMLType.Pan;
             mml.args = new List<object>();
@@ -493,7 +497,7 @@ namespace Core
                 pw.incPos();
                 if (!pw.getNum(out n))
                 {
-                    msgBox.setErrMsg("不正なパン'p'が指定されています。", pw.getSrcFn(), pw.getLineNumber());
+                    msgBox.setErrMsg(msg.get("E05010"), pw.getSrcFn(), pw.getLineNumber());
                 }
                 mml.args.Add(n);
             }
@@ -505,7 +509,7 @@ namespace Core
             pw.incPos();
             if (!pw.getNum(out n))
             {
-                msgBox.setErrMsg("不正なディチューン'D'が指定されています。", pw.getSrcFn(), pw.getLineNumber());
+                msgBox.setErrMsg(msg.get("E05011"), pw.getSrcFn(), pw.getLineNumber());
                 n = 0;
             }
             mml.type = enmMMLType.Detune;
@@ -519,7 +523,7 @@ namespace Core
             pw.incPos();
             if (!pw.getNum(out n))
             {
-                msgBox.setErrMsg("不正なPCMモード指定'm'が指定されています。", pw.getSrcFn(), pw.getLineNumber());
+                msgBox.setErrMsg(msg.get("E05012"), pw.getSrcFn(), pw.getLineNumber());
                 n = 0;
             }
             mml.type = enmMMLType.PcmMode;
@@ -533,7 +537,7 @@ namespace Core
             pw.incPos();
             if (!pw.getNum(out n))
             {
-                msgBox.setErrMsg("不正なゲートタイム指定'q'が指定されています。", pw.getSrcFn(), pw.getLineNumber());
+                msgBox.setErrMsg(msg.get("E05013"), pw.getSrcFn(), pw.getLineNumber());
                 n = 0;
             }
             n = Common.CheckRange(n, 0, 255);
@@ -548,7 +552,7 @@ namespace Core
             pw.incPos();
             if (!pw.getNum(out n))
             {
-                msgBox.setErrMsg("不正なゲートタイム指定'Q'が指定されています。", pw.getSrcFn(), pw.getLineNumber());
+                msgBox.setErrMsg(msg.get("E05014"), pw.getSrcFn(), pw.getLineNumber());
                 n = 1;
             }
             n = Common.CheckRange(n, 1, 8);
@@ -580,7 +584,10 @@ namespace Core
                             mml.args.Add("EOF");
                             break;
                         default:
-                            msgBox.setErrMsg(string.Format("未知のコマンド(EO{0})が指定されました。", pw.getChar()), pw.getSrcFn(), pw.getLineNumber());
+                            msgBox.setErrMsg(string.Format(msg.get("E05015")
+                                , pw.getChar())
+                                , pw.getSrcFn()
+                                , pw.getLineNumber());
                             break;
                     }
                     break;
@@ -605,7 +612,7 @@ namespace Core
                                 mml.args.Add("EHOF");
                                 break;
                             default:
-                                msgBox.setErrMsg(string.Format("未知のコマンド(EHO{0})が指定されました。"
+                                msgBox.setErrMsg(string.Format(msg.get("E05016")
                                     , pw.getChar())
                                     , pw.getSrcFn()
                                     , pw.getLineNumber());
@@ -620,7 +627,7 @@ namespace Core
                         mml.args.Add("EHT");
                         if (!pw.getNum(out n))
                         {
-                            msgBox.setErrMsg("EHTコマンドの解析に失敗しました。"
+                            msgBox.setErrMsg(msg.get("E05017")
                                 , pw.getSrcFn()
                                 , pw.getLineNumber());
                             break;
@@ -630,7 +637,7 @@ namespace Core
                     }
                     else if (!pw.getNum(out n))
                     {
-                        msgBox.setErrMsg("EHTコマンドの解析に失敗しました。"
+                        msgBox.setErrMsg(msg.get("E05018")
                             , pw.getSrcFn()
                             , pw.getLineNumber());
                         n = 0;
@@ -664,7 +671,7 @@ namespace Core
                                 mml.args.Add("EXOF");
                                 break;
                             default:
-                                msgBox.setErrMsg(string.Format("未知のコマンド(EXO{0})が指定されました。", pw.getChar()), pw.getSrcFn(), pw.getLineNumber());
+                                msgBox.setErrMsg(string.Format(msg.get("E05019"), pw.getChar()), pw.getSrcFn(), pw.getLineNumber());
                                 break;
                         }
                     }
@@ -678,7 +685,7 @@ namespace Core
                         {
                             if (!pw.getNum(out n))
                             {
-                                msgBox.setErrMsg("EXDコマンドの解析に失敗しました。", pw.getSrcFn(), pw.getLineNumber());
+                                msgBox.setErrMsg(msg.get("E05020"), pw.getSrcFn(), pw.getLineNumber());
                                 break;
                             }
                             mml.args.Add(n);
@@ -689,7 +696,7 @@ namespace Core
                     }
                     else if (!pw.getNum(out n))
                     {
-                        msgBox.setErrMsg("不正なスロット指定'EX'が指定されています。", pw.getSrcFn(), pw.getLineNumber());
+                        msgBox.setErrMsg(msg.get("E05021"), pw.getSrcFn(), pw.getLineNumber());
                         n = 0;
                     }
                     if (n != -1)
@@ -711,7 +718,7 @@ namespace Core
                         }
                         else
                         {
-                            msgBox.setErrMsg("Eコマンドの解析に失敗しました。", pw.getSrcFn(), pw.getLineNumber());
+                            msgBox.setErrMsg(msg.get("E05022"), pw.getSrcFn(), pw.getLineNumber());
                             break;
                         }
                         if (i == 3) break;
@@ -767,7 +774,7 @@ namespace Core
                 {
                     if ((int)info.clockCount % n != 0)
                     {
-                        msgBox.setWrnMsg(string.Format("割り切れない音長({0})の指定があります。音長は不定になります。", n), pw.getSrcFn(), pw.getLineNumber());
+                        msgBox.setWrnMsg(string.Format(msg.get("E05023"), n), pw.getSrcFn(), pw.getLineNumber());
                     }
                     n = (int)info.clockCount / n;
                 }
@@ -807,7 +814,7 @@ namespace Core
                         pw.incPos();
                         if (!pw.getNum(out n))
                         {
-                            msgBox.setErrMsg("MAMSの設定値に不正な値が指定されました。", pw.getSrcFn(), pw.getLineNumber());
+                            msgBox.setErrMsg(msg.get("E05024"), pw.getSrcFn(), pw.getLineNumber());
                             return;
                         }
                         mml.type = enmMMLType.Lfo;
@@ -817,13 +824,13 @@ namespace Core
                         return;
                     }
                 }
-                msgBox.setErrMsg("MAMSの文法が違います。", pw.getSrcFn(), pw.getLineNumber());
+                msgBox.setErrMsg(msg.get("E05025"), pw.getSrcFn(), pw.getLineNumber());
                 return;
             }
 
             if (c < 'P' && c > 'S')
             {
-                msgBox.setErrMsg("指定できるLFOのチャネルはP,Q,R,Sの4種類です。", pw.getSrcFn(), pw.getLineNumber());
+                msgBox.setErrMsg(msg.get("E05026"), pw.getSrcFn(), pw.getLineNumber());
                 return;
             }
 
@@ -839,7 +846,7 @@ namespace Core
                     pw.incPos();
                     if (!pw.getNum(out n))
                     {
-                        msgBox.setErrMsg("MPMSの設定値に不正な値が指定されました。", pw.getSrcFn(), pw.getLineNumber());
+                        msgBox.setErrMsg(msg.get("E05027"), pw.getSrcFn(), pw.getLineNumber());
                         return;
                     }
                     mml.type = enmMMLType.Lfo;
@@ -848,13 +855,13 @@ namespace Core
                     mml.args.Add(n);
                     return;
                 }
-                msgBox.setErrMsg("MPMSの文法が違います。", pw.getSrcFn(), pw.getLineNumber());
+                msgBox.setErrMsg(msg.get("E05028"), pw.getSrcFn(), pw.getLineNumber());
                 return;
             }
 
             if (t != 'T' && t != 'V' && t != 'H')
             {
-                msgBox.setErrMsg("指定できるLFOの種類はT,V,Hの3種類です。", pw.getSrcFn(), pw.getLineNumber());
+                msgBox.setErrMsg(msg.get("E05029"), pw.getSrcFn(), pw.getLineNumber());
                 return;
             }
 
@@ -873,7 +880,7 @@ namespace Core
                 }
                 else
                 {
-                    msgBox.setErrMsg("LFOの設定値に不正な値が指定されました。", pw.getSrcFn(), pw.getLineNumber());
+                    msgBox.setErrMsg(msg.get("E05030"), pw.getSrcFn(), pw.getLineNumber());
                     return;
                 }
 
@@ -890,7 +897,7 @@ namespace Core
             char c = pw.getChar();
             if (c < 'P' || c > 'S')
             {
-                msgBox.setErrMsg("指定できるLFOのチャネルはP,Q,R,Sの4種類です。", pw.getSrcFn(), pw.getLineNumber());
+                msgBox.setErrMsg(msg.get("E05031"), pw.getSrcFn(), pw.getLineNumber());
                 pw.incPos();
                 return;
             }
@@ -899,7 +906,7 @@ namespace Core
             pw.incPos();
             if (!pw.getNum(out n))
             {
-                msgBox.setErrMsg("LFOの設定値に不正な値が指定されました。", pw.getSrcFn(), pw.getLineNumber());
+                msgBox.setErrMsg(msg.get("E05032"), pw.getSrcFn(), pw.getLineNumber());
                 return;
             }
             n = Common.CheckRange(n, 0, 2);
@@ -994,7 +1001,7 @@ namespace Core
 
             if (!pw.getNum(out n))
             {
-                msgBox.setErrMsg("wコマンドに指定された値が不正です。", pw.getSrcFn(), pw.getLineNumber());
+                msgBox.setErrMsg(msg.get("E05033"), pw.getSrcFn(), pw.getLineNumber());
                 return;
 
             }
@@ -1010,7 +1017,7 @@ namespace Core
 
             if (!pw.getNum(out n))
             {
-                msgBox.setErrMsg("Pコマンドに指定された値が不正です。", pw.getSrcFn(), pw.getLineNumber());
+                msgBox.setErrMsg(msg.get("E05034"), pw.getSrcFn(), pw.getLineNumber());
                 return;
 
             }
@@ -1027,7 +1034,7 @@ namespace Core
 
             if (!pw.getNum(out n))
             {
-                msgBox.setErrMsg("Kコマンドに指定された値が不正です。", pw.getSrcFn(), pw.getLineNumber());
+                msgBox.setErrMsg(msg.get("E05035"), pw.getSrcFn(), pw.getLineNumber());
                 return;
 
             }
@@ -1067,7 +1074,7 @@ namespace Core
                 {
                     if ((int)info.clockCount % n != 0)
                     {
-                        msgBox.setWrnMsg(string.Format("割り切れない音長({0})の指定があります。音長は不定になります。", n), pw.getSrcFn(), pw.getLineNumber());
+                        msgBox.setWrnMsg(string.Format(msg.get("E05023"), n), pw.getSrcFn(), pw.getLineNumber());
                     }
                     n = (int)info.clockCount / n;
                 }
@@ -1105,7 +1112,7 @@ namespace Core
             {
                 if (fn % 2 != 0)
                 {
-                    msgBox.setWrnMsg("割り切れない.の指定があります。音長は不定です。"
+                    msgBox.setWrnMsg(msg.get("E05036")
                         , mml.line.Fn
                         , mml.line.Num);
                 }
@@ -1137,7 +1144,7 @@ namespace Core
                 {
                     if ((int)info.clockCount % n != 0)
                     {
-                        msgBox.setWrnMsg(string.Format("割り切れない音長({0})の指定があります。音長は不定になります。", n), pw.getSrcFn(), pw.getLineNumber());
+                        msgBox.setWrnMsg(string.Format(msg.get("E05023"), n), pw.getSrcFn(), pw.getLineNumber());
                     }
                     n = (int)info.clockCount / n;
                 }
@@ -1161,7 +1168,7 @@ namespace Core
             {
                 if (fn % 2 != 0)
                 {
-                    msgBox.setWrnMsg("割り切れない.の指定があります。音長は不定です。"
+                    msgBox.setWrnMsg(msg.get("E05036")
                         , mml.line.Fn
                         , mml.line.Num);
                 }
@@ -1193,7 +1200,10 @@ namespace Core
                 {
                     if ((int)info.clockCount % n != 0)
                     {
-                        msgBox.setWrnMsg(string.Format("割り切れない音長({0})の指定があります。音長は不定になります。", n), pw.getSrcFn(), pw.getLineNumber());
+                        msgBox.setWrnMsg(string.Format(msg.get("E05023")
+                            , n)
+                            , pw.getSrcFn()
+                            , pw.getLineNumber());
                     }
                     n = (int)info.clockCount / n;
                 }
@@ -1217,7 +1227,7 @@ namespace Core
             {
                 if (fn % 2 != 0)
                 {
-                    msgBox.setWrnMsg("割り切れない.の指定があります。音長は不定です。"
+                    msgBox.setWrnMsg(msg.get("E05036")
                         , mml.line.Fn
                         , mml.line.Num);
                 }
@@ -1227,6 +1237,75 @@ namespace Core
             }
             rest.length += futen;
 
+        }
+
+        private void CmdLyric(partWork pw, MML mml)
+        {
+            pw.incPos();
+            mml.type = enmMMLType.Lyric;
+            mml.args = new List<object>();
+            string str = "";
+            while (true)
+            {
+                char ch = pw.getChar();
+                if (ch == '"')
+                {
+                    pw.incPos();
+                    ch = pw.getChar();
+                    if (ch != '"') break;
+                }
+                if (ch == '\0') break;
+
+                str += ch;
+                pw.incPos();
+            }
+            mml.args.Add(str);
+
+            int n = -1;
+            bool directFlg = false;
+            int length = 0;
+
+            //数値の解析
+            if (pw.getNumNoteLength(out n, out directFlg))
+            {
+                if (!directFlg)
+                {
+                    if ((int)info.clockCount % n != 0)
+                    {
+                        msgBox.setWrnMsg(string.Format(msg.get("E05023"), n), pw.getSrcFn(), pw.getLineNumber());
+                    }
+                    n = (int)info.clockCount / n;
+                }
+                else
+                {
+                    n = Common.CheckRange(n, 1, 65535);
+                }
+
+                length = n;
+
+            }
+            else
+            {
+                length = (int)pw.length;
+            }
+
+            //.の解析
+            int futen = 0;
+            int fn = length;
+            while (pw.getChar() == '.')
+            {
+                if (fn % 2 != 0)
+                {
+                    msgBox.setWrnMsg(msg.get("E05036")
+                        , mml.line.Fn
+                        , mml.line.Num);
+                }
+                fn = fn / 2;
+                futen += fn;
+                pw.incPos();
+            }
+            length += futen;
+            mml.args.Add(length);
         }
 
         private void CmdBend(partWork pw, MML mml)
@@ -1255,7 +1334,9 @@ namespace Core
             {
                 if ((int)info.clockCount % n != 0)
                 {
-                    msgBox.setWrnMsg(string.Format("割り切れない音長({0})の指定があります。音長は不定になります。", n), pw.getSrcFn(), pw.getLineNumber());
+                    msgBox.setWrnMsg(string.Format(
+                        msg.get("E05023")
+                        , n), pw.getSrcFn(), pw.getLineNumber());
                 }
                 n = (int)info.clockCount / n;
             }
@@ -1271,7 +1352,7 @@ namespace Core
             {
                 if (fn % 2 != 0)
                 {
-                    msgBox.setWrnMsg("割り切れない.の指定があります。音長は不定です。"
+                    msgBox.setWrnMsg(msg.get("E05036")
                         , mml.line.Fn
                         , mml.line.Num);
                 }
@@ -1299,7 +1380,8 @@ namespace Core
                 {
                     if ((int)info.clockCount % n != 0)
                     {
-                        msgBox.setWrnMsg(string.Format("割り切れない音長({0})の指定があります。音長は不定になります。", n), pw.getSrcFn(), pw.getLineNumber());
+                        msgBox.setWrnMsg(string.Format(msg.get("E05023")
+                            , n), pw.getSrcFn(), pw.getLineNumber());
                     }
                     n = (int)info.clockCount / n;
                 }
@@ -1321,7 +1403,7 @@ namespace Core
             {
                 if (fn % 2 != 0)
                 {
-                    msgBox.setWrnMsg("割り切れない.の指定があります。音長は不定です。"
+                    msgBox.setWrnMsg(msg.get("E05036")
                         , mml.line.Fn
                         , mml.line.Num);
                 }
@@ -1349,7 +1431,8 @@ namespace Core
                 {
                     if ((int)info.clockCount % n != 0)
                     {
-                        msgBox.setWrnMsg(string.Format("割り切れない音長({0})の指定があります。音長は不定になります。", n), pw.getSrcFn(), pw.getLineNumber());
+                        msgBox.setWrnMsg(string.Format(msg.get("E05023")
+                            , n), pw.getSrcFn(), pw.getLineNumber());
                     }
                     n = (int)info.clockCount / n;
                 }
@@ -1371,7 +1454,7 @@ namespace Core
             {
                 if (fn % 2 != 0)
                 {
-                    msgBox.setWrnMsg("割り切れない.の指定があります。音長は不定です。"
+                    msgBox.setWrnMsg(msg.get("E05036")
                         , mml.line.Fn
                         , mml.line.Num);
                 }
@@ -1438,7 +1521,7 @@ namespace Core
         {
             if (pos < 1 || pw.mmlData[pos - 1].type != enmMMLType.Note)
             {
-                msgBox.setErrMsg(", 0コマンドの直前は音符コマンドである必要があります。"
+                msgBox.setErrMsg(msg.get("E05037")
                 , pw.mmlData[pos].line.Fn
                 , pw.mmlData[pos].line.Num);
                 return;
@@ -1469,7 +1552,7 @@ namespace Core
                         i--;
                         break;
                     default:
-                        msgBox.setErrMsg(", 0コマンドの後に置く事のできないコマンドがあります。"
+                        msgBox.setErrMsg(msg.get("E05038")
                         , pw.mmlData[i].line.Fn
                         , pw.mmlData[i].line.Num);
                         return;
@@ -1503,7 +1586,7 @@ namespace Core
                     )
                 ))
             {
-                msgBox.setErrMsg("_コマンドの直前は音符コマンド又はToneDoublerコマンドである必要があります。"
+                msgBox.setErrMsg(msg.get("E05039")
                 , pw.mmlData[pos].line.Fn
                 , pw.mmlData[pos].line.Num);
                 return;
@@ -1534,7 +1617,7 @@ namespace Core
                         i--;
                         break;
                     default:
-                        msgBox.setErrMsg("_コマンドの後に置く事のできないコマンドがあります。"
+                        msgBox.setErrMsg(msg.get("E05040")
                         , pw.mmlData[i].line.Fn
                         , pw.mmlData[i].line.Num);
                         return;
@@ -1572,14 +1655,14 @@ namespace Core
                         nPos = i;
                         goto loop_exit;
                     default:
-                        msgBox.setErrMsg("^コマンドの直前は音符コマンド又はToneDoublerコマンドである必要があります。"
+                        msgBox.setErrMsg(msg.get("E05041")
                         , pw.mmlData[pos].line.Fn
                         , pw.mmlData[pos].line.Num);
                         return;
                 }
             }
 
-            msgBox.setErrMsg("^コマンドの直前に音符、休符コマンドが見つかりません。"
+            msgBox.setErrMsg(msg.get("E05042")
             , pw.mmlData[pos].line.Fn
             , pw.mmlData[pos].line.Num);
             return;
@@ -1607,14 +1690,14 @@ namespace Core
                         nPos = i;
                         goto loop_exit;
                     default:
-                        msgBox.setErrMsg("~コマンドの直前は音符コマンド又はToneDoublerコマンドである必要があります。"
+                        msgBox.setErrMsg(msg.get("E05043")
                         , pw.mmlData[pos].line.Fn
                         , pw.mmlData[pos].line.Num);
                         return;
                 }
             }
 
-            msgBox.setErrMsg("^コマンドの直前に音符、休符コマンドが見つかりません。"
+            msgBox.setErrMsg(msg.get("E05044")
             , pw.mmlData[pos].line.Fn
             , pw.mmlData[pos].line.Num);
             return;
@@ -1640,14 +1723,14 @@ namespace Core
                         nPos = i;
                         goto loop_exit;
                     default:
-                        msgBox.setErrMsg("&コマンドの直前は音符コマンド又はToneDoublerコマンドである必要があります。"
+                        msgBox.setErrMsg(msg.get("E05045")
                         , pw.mmlData[pos].line.Fn
                         , pw.mmlData[pos].line.Num);
                         return;
                 }
             }
 
-            msgBox.setErrMsg("&コマンドの直前に音符コマンドが見つかりません。"
+            msgBox.setErrMsg(msg.get("E05046")
             , pw.mmlData[pos].line.Fn
             , pw.mmlData[pos].line.Num);
             return;
@@ -1720,7 +1803,7 @@ namespace Core
                 nst--;
             }
 
-            msgBox.setWrnMsg("/の脱出先となる]が見つかりません。"
+            msgBox.setWrnMsg(msg.get("E05047")
                 , pw.mmlData[pos].line.Fn 
                 , pw.mmlData[pos].line.Num);
 
@@ -1735,7 +1818,7 @@ namespace Core
             }
             catch
             {
-                msgBox.setWrnMsg("[と]の数があいません。"
+                msgBox.setWrnMsg(msg.get("E05048")
                 , pw.mmlData[pos].line.Fn
                 , pw.mmlData[pos].line.Num);
             }
@@ -1775,7 +1858,7 @@ namespace Core
 
                 if (r.repeatStackCount != pw.stackRepeat.Count)
                 {
-                    msgBox.setWrnMsg("連符とリピートコマンドは互いを跨ぐ事はできません。"
+                    msgBox.setWrnMsg(msg.get("E05049")
                     , pw.mmlData[pos].line.Fn
                     , pw.mmlData[pos].line.Num);
                 }
@@ -1790,7 +1873,7 @@ namespace Core
             }
             catch
             {
-                msgBox.setWrnMsg("{と}の数があいません。"
+                msgBox.setWrnMsg(msg.get("E05050")
                 , pw.mmlData[pos].line.Fn
                 , pw.mmlData[pos].line.Num);
             }

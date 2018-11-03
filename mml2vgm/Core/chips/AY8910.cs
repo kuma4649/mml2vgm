@@ -30,6 +30,7 @@ namespace Core
             _ShortName = "AY10";
             _ChMax = 3;
             _canUsePcm = false;
+            _canUsePI = false;
             IsSecondary = isSecondary;
 
             Frequency = 1789750;
@@ -236,10 +237,6 @@ namespace Core
             return 0;
         }
 
-        public override void SetPCMDataBlock()
-        {
-        }
-
         public override void SetLfoAtKeyOn(partWork pw)
         {
             for (int lfo = 0; lfo < 4; lfo++)
@@ -276,7 +273,7 @@ namespace Core
 
             if (type == 'I')
             {
-                msgBox.setErrMsg("この音源はInstrumentを持っていません。"
+                msgBox.setErrMsg(msg.get("E08000")
                     , mml.line.Fn
                     , mml.line.Num);
                 return;
@@ -284,7 +281,7 @@ namespace Core
 
             if (type == 'T')
             {
-                msgBox.setErrMsg("Tone DoublerはOPN,OPM音源以外では使用できません。"
+                msgBox.setErrMsg(msg.get("E08001")
                     , mml.line.Fn
                     , mml.line.Num);
                 return;

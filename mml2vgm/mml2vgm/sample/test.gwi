@@ -1,14 +1,14 @@
 ﻿'{
 
-	TitleName    =OPLL Test
-	TitleNameJ   =OPLL テスト
+	TitleName    =Conductor Test
+	TitleNameJ   =
 	GameName     =
 	GameNameJ    =
 	SystemName   =
 	SystemNameJ  =
 	Composer     =
 	ComposerJ    =
-	ReleaseDate  =2018/01/23
+	ReleaseDate  =2018/11/02
 	Converted    =
 	Notes        =
 
@@ -16,51 +16,5 @@
 	ClockCount   =192
 }
 
-(frame/clock) = 60Hz * (60 * 4) / ClockCount / tempo
-
-
-
-     No, SV, AR, DR, SL, SR, RR, ST
-'@ E  1, 15,  0,120,  7,100,  4,  1
-'@ E  2, 15,  0, 40,  7,100,  4,  2
-'@ E  3, 15,  0,  3, 13,  7,  1,  2
-'@ E  4, 15,  0,  2, 14,  1,  1,  2
-'@ E  5, 15,  0,  5, 13,  3,  1,  3
-'@ E  6, 15,  0,  8, 13,  5,  1,  3
-
-'@ L 110
-   AR DR SL RR KL MT AM VB EG KR DT
-'@ 15,00,15,08,00,03,00,01,01,00,01
-'@ 15,03,15,07,00,02,00,01,01,00,00
-   TL FB
-'@ 21,07
-
-
-'L01 T126
-
-L01-03 !
-
-作成音色
-'L01 D0o4v15@110cdefgab>c
-プリセット音色
-'L01 D0o4v15@I2cdefgab>c
-'L01 D20o4v15cv14dv13ev12fv11gv10av9b>v8c
-'L01 D0o3v15Q1[c8c16c16>][l8dl16dd]
-'L01 D0o3v15q1[c8c16c16>][l8dl16dd]
-'L01 MSV0,1,10,100,0a1r1
-'L01 MST0,1,1, 1,0a1r1
-'L01 SS0y0,0
-
-L01 o4v15@I2cdefg
-N7 o4v15rrrrrcdefg
-A1 o4v15rrrrrrrrrrcdefg
-S1 o3v15rrrrrrrrrrrrrrrcdefg
-
-L10 m1v15l4q0o3[c8c16c16]4
-L11 m1v15l4q0o3[rc]2
-L14 m1v10l4q0o3[cc]2
-L11 m1o3q0v0[c4)1]15
-L12 m1o5  v0[c4)1]15
-L13 m1o5q0v0[c4)1]15
-L14 m1o3q0v0[c4)1]15
-
+'Co1 T190
+'Co1 "ABC"4"ABCD"

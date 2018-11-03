@@ -19,10 +19,13 @@ namespace Core
             _ShortName = "C140";
             _ChMax = 24;
             _canUsePcm = true;
+            _canUsePI = true;
             IsSecondary = isSecondary;
 
             Frequency = 8000000;
             Interface = 0x0;//System2
+
+            dataType = 0x8d;
 
             Ch = new ClsChannel[ChMax];
             SetPartToCh(Ch, initialPartName);
@@ -74,12 +77,6 @@ namespace Core
             if (IsSecondary) parent.dat[0xab] |= 0x40;
         }
 
-
-        public override void SetPCMDataBlock()
-        {
-            if (use && pcmData != null && pcmData.Length > 0)
-                parent.OutData(pcmData);
-        }
 
         /// <summary>
         ///  8bit unsigned Wave ->  8bit signed LinnerPCM
@@ -170,16 +167,16 @@ namespace Core
                         , v.Value.freq
                         , v.Value.vol
                         , freeAdr
-                        , freeAdr + size 
+                        , freeAdr + size -1
                         , size
                         , v.Value.loopAdr
                         , is16bit
                         , samplerate)
                     );
-
+                
                 if (newDic[v.Key].loopAdr != -1 && (newDic[v.Key].loopAdr < 0 || newDic[v.Key].loopAdr >= size))
                 {
-                    msgBox.setErrMsg(string.Format("PCMデータのサイズを超えたloopアドレス[{0}]を指定しています。0～{1}で指定してください。"
+                    msgBox.setErrMsg(string.Format(msg.get("E09000")
                         , newDic[v.Key].loopAdr
                         , size - 1));
                     newDic[v.Key].loopAdr = -1;
@@ -203,9 +200,9 @@ namespace Core
                 }
 
                 Common.SetUInt32bit31(pi.totalBuf, 3, (UInt32)(pi.totalBuf.Length - 7), IsSecondary);
-                Common.SetUInt32bit31(pi.totalBuf, 7, (UInt32)(pi.totalBuf.Length - 7));
+                Common.SetUInt32bit31(pi.totalBuf, 7, (UInt32)(pi.totalBuf.Length - 0xf));
                 pi.use = true;
-                pcmData = pi.use ? pi.totalBuf : null;
+                pcmDataEasy = pi.use ? pi.totalBuf : null;
             }
             catch
             {
@@ -215,6 +212,43 @@ namespace Core
 
         }
 
+        public override void StorePcmRawData(clsPcmDatSeq pds, byte[] buf, bool isRaw, bool is16bit, int samplerate, params object[] option)
+        {
+            bool isCPCM = false;
+
+            //Optionをチェック が0以外の場合、bufに対し13bitCompPCM向け圧縮処理を行う
+            if (pds.Option != null && pds.Option.Length > 0)
+            {
+                isCPCM = pds.Option[0].ToString() != "0";
+            }
+
+            List<byte> dBuf = new List<byte>();
+            if (isRaw)
+            {
+                //Rawファイル
+
+                //圧縮指定がある時　圧縮処理を実施
+                //それ以外は そのまま
+                if (isCPCM) EncC140CompressedPCM(dBuf, buf, true, true);
+                else dBuf.AddRange(buf);
+            }
+            else
+            {
+                //Wavファイル
+
+                //16bitWavの時　圧縮処理を実施
+                //それ以外は8bitLiner処理を実施
+                if (is16bit) EncC140CompressedPCM(dBuf, buf, true, true);
+                else EncC140LinerSigned8bitPCM(dBuf, buf, false, false);
+            }
+            buf = dBuf.ToArray();
+
+            pcmDataDirect.Add(Common.MakePCMDataBlock(dataType, pds, buf));
+        }
+
+
+        
+        
         //Encoder code ここから
         //vgmplay/mame c140 code ここから
         private int[] pcmtbl;
@@ -468,6 +502,12 @@ namespace Core
         {
             int adr = 0;
             byte data = 0;
+
+            if(pw.instrument==-1)
+            {
+                msgBox.setErrMsg(msg.get("E09005"));
+                return;
+            }
 
             //KeyOff
             //OutC140KeyOff(pw);
@@ -750,7 +790,7 @@ namespace Core
 
             if (type == 'I')
             {
-                msgBox.setErrMsg("この音源はInstrumentを持っていません。"
+                msgBox.setErrMsg(msg.get("E09001")
                     , mml.line.Fn
                     , mml.line.Num);
                 return;
@@ -758,7 +798,7 @@ namespace Core
 
             if (type == 'T')
             {
-                msgBox.setErrMsg("Tone DoublerはOPN,OPM音源以外では使用できません。"
+                msgBox.setErrMsg(msg.get("E09002")
                     , mml.line.Fn
                     , mml.line.Num);
                 return;
@@ -774,7 +814,7 @@ namespace Core
 
             if (!parent.instPCM.ContainsKey(n))
             {
-                msgBox.setErrMsg(string.Format("PCM定義に指定された音色番号({0})が存在しません。", n)
+                msgBox.setErrMsg(string.Format(msg.get("E09003"), n)
                     , mml.line.Fn
                     , mml.line.Num);
                 return;
@@ -782,7 +822,7 @@ namespace Core
 
             if (parent.instPCM[n].chip != enmChipType.C140)
             {
-                msgBox.setErrMsg(string.Format("指定された音色番号({0})はC140向けPCMデータではありません。", n)
+                msgBox.setErrMsg(string.Format(msg.get("E09004"), n)
                     , mml.line.Fn
                     , mml.line.Num);
                 return;

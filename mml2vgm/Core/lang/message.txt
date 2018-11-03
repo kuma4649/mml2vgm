@@ -1,0 +1,335 @@
+﻿;English text define table.
+;I Infomational Message
+;E Error Message
+;Translation by Chromaryu. (aka くろま)
+
+;mvc.cs 0000
+I0000=\r\nPart  Chip    Count
+I0001=--------------------
+I0002= {0}   {1}   {2}
+I0003=\r\nResult
+I0004= Warning : {0}
+I0005= Error : {0}
+I0006= Errors : {0}\r\n Warnings : {1}
+I0007= Loop Clocks  : {0}
+I0008= Loop Samples : {0:0.00}({1:0.00}s)
+I0009= Total Clocks  : {0}
+I0010= Total Samples : {0:0.00}({1:0.00}s)
+I0020= ADPCM Data size(YM2608)  : ({0}/262143) bytes
+I0021= ADPCM Data size(YM2608Secondary)  : ({0}/262143) bytes
+I0022= ADPCM-A Data size(YM2610B)  : ({0}/16777215) bytes
+I0023= ADPCM-B Data size(YM2610B)  : ({0}/16777215) bytes
+I0024= ADPCM-A Data size(YM2610BSecondary)  : ({0}/16777215) bytes
+I0025= ADPCM-B Data size(YM2610BSecondary)  : ({0}/16777215) bytes
+I0026= PCM Data size(YM2612)  : {0} bytes
+I0027= PCM Data size(RF5C164) : ({0}/65535) bytes
+I0028= PCM Data size(RF5C164Secondary) : ({0}/65535) bytes
+I0029= PCM Data size(HuC6280)  : {0} bytes
+I0030= PCM Data size(HuC6280Secondary)  : {0} bytes
+I0050=\r\nFinished.\r\n
+
+
+
+;frmMain 0100
+I0100=Compile
+I0101=\r\n------------------\r\n
+I0102=Start.\r\n
+I0103=.gwi File(*.gwi)|*.gwi|All Files.(*.*)|*.*
+I0104=Select .gwi file.
+I0105=\r\nFinished.\r\n\r\n
+I0106=Done.
+I0107=\r\nResult\r\n
+I0108= Warning : {0}\r\n
+I0109= Error : {0}\r\n
+I0110= Errors : {0}\r\n Warnings : {1}\r\n
+I0111= Loop  Clocks  : {0}\r\n
+I0112= Loop  Samples : {0:0.00}({1:0.00}s)\r\n
+I0113= Total Clocks  : {0}\r\n
+I0114= Total Samples : {0:0.00}({1:0.00}s)\r\n
+I0115= ADPCM Data size(YM2608)              : ({0}/262143) bytes\r\n
+I0116= ADPCM Data size(YM2608Secondary)     : ({0}/262143) bytes\r\n
+I0117= ADPCM-A Data size(YM2610B)           : ({0}/16777215) bytes\r\n
+I0118= ADPCM-B Data size(YM2610B)           : ({0}/16777215) bytes\r\n
+I0119= ADPCM-A Data size(YM2610BSecondary)  : ({0}/16777215) bytes\r\n
+I0120= ADPCM-B Data size(YM2610BSecondary)  : ({0}/16777215) bytes\r\n
+I0121= PCM Data size(YM2612)                : {0} bytes\r\n
+I0122= PCM Data size(RF5C164)               : ({0}/65535) bytes\r\n
+I0123= PCM Data size(RF5C164Secondary)      : ({0}/65535) bytes\r\n
+I0124= PCM Data size(HuC6280)               : {0} bytes\r\n
+I0125= PCM Data size(HuC6280Secondary)      : {0} bytes\r\n
+I0126=\r\nFinished.\r\n\r\n
+
+E0100=Failed to launch player.
+
+
+;clsVgm.cs 01000
+E01000=Ignoring data on undefined part ({0}).
+E01001=Recieved empty sound patch definition.
+E01002=Selected undefined ChipName or chip({0}) can't use PCM.
+E01003=Illegal PCM sound patch definition line.
+E01004=Selected chip can't use envelopes.
+E01005=Illegal Envelope definition line.
+E01006=Illegal ToneDoubler definition.
+E01007=Envelope volume is exceeding {0}.
+E01008=Envelope volume is below {0}.
+E01009=Illegal alias definition.
+E01010=Data not found in alias. 
+E01011=Illegal part defined.
+E01012=Found illegal note patch defintion.
+E01013=Illegal WaveForm Sound patch definition.
+E01014=ToneDoubler definition illegal.
+E01015=Exceeding byte limit (256bytes) per one frame. Please spread datas. Frame {0} : {1}bytes
+E01016=Found unknown command {0}.
+E01017=Can't define PCM other than YM2612X(OPN2X) on XGM format.
+
+
+
+;Common.cs 02000
+E02000=Failed to load PCM file. (filename:{0})
+E02001=PCM File: Illegal RIFF header. (File size below 4B)
+E02002=PCM File: Illegal RIFF header. (RIFF)
+E02003=PCM File: Illegal RIFF header. (WAVE)
+E02004=PCM File: Invalid format ({0})
+E02005=PCM File: Channel number ({0}) is different from spec(mono/1ch). 
+E02006=PCM File: Sampling rate ({0}) is different from spec(8000/14000/16000/18500).
+E02007=PCM File: Bit number per 1 sample ({0}) is different from spec(8bit/16bit).
+E02008=PCM File: Invalid data block size. ({0})
+E02009=PCM File: File have Invalid or Unknown chunks. ({0})
+E02010=Invalid part definition. ({0})
+
+
+
+;Information.cs 03000
+E03000=Invalid definition. ({0})
+
+
+;mml2vgm.cs 04000
+I04000=Start {0} core
+I04001= File existence check
+I04002= Get source file
+I04003= Parse text
+I04004= check PCM definition and get
+I04005= MML syntax parsing
+I04006= Start VGM_GetByteData
+I04007= End   VGM_GetByteData
+I04008= Start XGM_GetByteData
+I04009= End   XGM_GetByteData
+I04010= File Output
+I04011=End mml2vgm core
+I04012=MODE:\r\n SegaPCM: None\r\n C140:    0=8bit 1=13bit(Compressed 8bit)\r\n
+I04013=STATUS:\r\n USED: USED in song\r\n NONE: Not Used in song\r\n Error: Invalid Parameter?\r\n
+I04014=C140 PRI : SYSTEM2{0}
+I04015=C140 SEC : SYSTEM2{0}
+I04016=-- SAMPLE LIST --
+I04017=CHIP       PRI/SEC SMPID BANK START(H) END(H)   LOOP(H)  LENGTH   MODE STATUS
+I04018= Total Length : {0} byte\r\n
+I04019=-- DATA BLOCK LIST --
+I04020=CHIP       PRI/SEC START(H) END(H)   LENGTH   STATUS
+
+E04000=File not found.
+E04001=Unexpected Error: Failed to get source file.
+E04002=Unexpected Error: Failed to parse source(analyze)(line:{0})
+E04003=Unexpected Error: MML Parse failed?(MMLAnalyze)(line:{0})
+E04004=Unexpected Error: Source analysis failed?(getByteData)(line:{0})
+E04005=Unexpected Error: line:{0}\r\nMessage:\r\n{1}\r\nStack Trace:\r\n{2}\r\n
+E04006=Include file({0}) not found.
+E04007=Failed to load PCM file. (filename:{0})
+
+
+
+;MMLAnalyze.cs 05000
+E05000=Found unknown command {0}.
+E05001=Wrong tempo defined.
+E05002=Invalid sound patch number defined.
+E05003=Invalid volume defined.
+E05004=Invalid volume defined.
+E05005=Invalid octave defined.
+E05006=Invalid volume ')' defined.
+E05007=Invalud volume '(' defined.
+E05008=Found note length({0}) that isn't dividable. Length will be unstable.
+E05009=Invalid note length defined.
+E05010=Invalid pan 'p' defined.
+E05011=Invalid Detune 'D' defined.
+E05012=Invalid PCM Mode selection 'm' selected.
+E05013=Invalid gate time selection 'q' selected.
+E05014=Invalid gate time selection 'Q' selected.
+E05015=Unknown command ('EO{0}') defined.
+E05016=Unknown command ('EHO{0}') defined.
+E05017=Failed to parse 'EHT' command.
+E05018=Failed to parse 'EHT' command.
+E05019=Unknown command ('EXO{0}') defined.
+E05020=Failed to parse 'EXD' command.
+E05021=Invalid slot definition 'EX' defined.
+E05022=Failed to parse 'E' command.
+E05023=Found note length({0}) that isn't dividable, Length will be unstable.
+E05024=Illegal number defined in 'MAMS' command.
+E05025=Syntax Error on 'MAMS'.
+E05026=LFO channel definable is 'P','Q','R','S'; 4 types only.
+E05027=Illegal number defined as 'MPMS' configuration.
+E05028='MPMS' Syntax Error.
+E05029=LFO channel definable is 'T','V','H'; 3 types only.
+E05030=Invalid number defined as LFO configuration.
+E05031=LFO channel definable is 'P','Q','R','S'; 4 types only.
+E05032=Invalid number defined as LFO configuration.
+E05033=Invalid number defined as 'w' command.
+E05034=Invalid number defined as 'P' command.
+E05035=Invalid number defined as 'K' command.
+E05036=Found undiviable '.' definition; Note length is unstable.
+E05037=before ',','0' commands (ToneDoubler) must be note command.
+E05038=Found command unplaceable before ',','0' command (ToneDoubler).
+E05039=before '_' command must be note command or ToneDoubler command.
+E05040=Found unplaceable command after '_'.
+E05041=command must be note or ToneDoubler command before '^'.
+E05042=Note or rest command is not found before '^'.
+E05043=Must be note or ToneDoubler command before '~'.
+E05044=Note or rest command is not found before '~'.
+E05045=Must be note or ToneDoubler command before '&'.
+E05046=Note command not found before '&'.
+E05047=']' not found as escape point from '/'.
+E05048=Loop left open. '[' or ']' missing in loop defintion.
+E05049=Tuplet and repeat command can't straddle each other.
+E05050='{' or '}' missing in sound or meta definiton.
+
+
+
+;partWork.cs 06000
+E06000=Selected alias is not defined.
+
+
+;usage 07000
+I07000=mml2vgm Commandline Version\r\n                                   By kuma\r\n\r\nUsage:\r\n    mvc gwi[.gwi] [vgm[.vgm|.vgz|.xgm]]\r\n\r\nParameters\r\n   gwi        Please select gwi file.        \r\n               .gwi is autocollected if not specified.\r\n    vgm        can select vgm,vgz,xgm file.              \r\n               You need to define when you're using vgz.      \r\n
+
+
+;AY8910.cs 08000
+E08000=This sound chip doesn't have instruments.
+E08001=ToneDoubler cannot be used if chip is not OPN or OPM.
+
+;C140.cs 09000
+E09000=defined loop address [{0}] is exceeding PCM data size. select between 0~{1}.
+E09001=This sound chip doesn't have instruments.
+E09002=ToneDoubler cannot be used if chip is not OPN or OPM.
+E09003=Tone number({0}) does not exist for PCM definition.
+E09004=Selected Tone number({0}) is not for C140 PCM data.
+E09005=Sound patch isn't selected.
+
+
+;clsChip.cs 10000
+E10000=Sound patch selected as envelope definition does not exist.
+E10001=Defined LFO parameter is not defined.
+E10002=This cannel can't use w command.
+E10003=This channel can't use MPMS command.
+E10004=This channel can't use MAMS command.
+E10005=Parameters missing or not enough to setup LFO.
+E10006=Parameters number exceeded to setup LFO.
+E10007=This channel can't use MPMS command.
+E10008=This channel can't use p command.
+E10009=This channel can't use m command.
+E10010=Envelope analysis failed.
+E10011=This channel can't use MH command.
+E10012=This part is not eligible for SFX part. ignoring E command.
+E10013=Negative note length selected.
+E10014=This channel can't use P command.
+E10015=This chip can't use P command.
+E10016=This chip can't use PD command.
+E10017=This chip can't use PI command.
+E10018={0} can't use PI command.
+
+
+
+
+;clsOPN.cs 11000
+E11000=Can't change volume if defined note patch ({0}) is undefined.
+E11001=Selected undefined note patch ({0}).
+E11002=Can't change sound patch in extended channels.
+E11003=This soundchip doesn't have instruments.
+E11004=Envelope analysis failed.
+E11005=Unknown command defined. (EX{0})
+
+
+;HuC6280.cs 12000
+E12000=Selecting undefined sound patch ({0}).
+E12001=Parameters missing or not enough to setup LFO.
+E12002=Parameters number exceeded to setup LFO.
+E12003=This soundchip doesn't have instruments.
+E12004=ToneDoubler cannot be used if chip is not OPN or OPM.
+E12005=Sound patch does not exist as PCM definition({0}).
+E12006=Selected Tone number({0}) is not for HuC6280 PCM data.
+E12007=HuC6280 can't use PD command.
+
+
+
+;RF5C164.cs 13000
+E13001=This soundchip doesn't have instruments.
+E13002=ToneDoubler cannot be used if chip is not OPN or OPM.
+E13003=Sound patch does not exist as PCM definition({0}).
+E13004=Selected Tone number({0}) is not for RF5C164 PCM data.
+
+
+
+;segaPcm.cs 14000
+E14001=This soundchip doesn't have instruments.
+E14002=ToneDoubler cannot be used if chip is not OPN or OPM.
+E14003=Sound patch does not exist as PCM definition({0}).
+E14004=Selected Tone number({0}) is not for SEGAPCM PCM data.
+
+
+
+;SN76489.cs 15000
+E15001=This soundchip doesn't have instruments.
+E15002=ToneDoubler cannot be used if chip is not OPN or OPM.
+
+
+
+;YM2151.cs 16000
+E16000=Can't change volume if defined note patch ({0}) is undefined.
+E16001=Selected undefined note patch ({0}).
+E16002=Parameters missing or not enough to setup LFO.
+E16003=Parameters number exceeded to setup LFO.
+E16004=Can't select panning before sound patch definition.
+E16005=This soundchip doesn't have instruments.
+
+
+
+;YM2413.cs 17000
+E17000=Selected undefined note patch ({0}).
+E17001=ToneDoubler cannot be used if chip is not OPN or OPM.
+
+
+
+;YM2608.cs 18000
+E18000=MPMS command in Non-FM channel will be ignored.
+E18001=MAMS command in Non-FM channel will be ignored.
+E18002=Parameters missing or not enough to setup LFO.
+E18003=Parameters number exceeded to setup LFO.
+E18004=Sound patch does not exist as PCM definition({0}).
+E18005=Selected Tone number({0}) is not for YM2608 PCM data.
+
+
+
+;YM2610B.cs 19000
+E19000=MPMS command in Non-FM channel will be ignored.
+E19001=MAMS command in Non-FM channel will be ignored.
+E19002=Parameters missing or not enough to setup LFO.
+E19003=Parameters number exceeded to setup LFO.
+E19004=Sound patch does not exist as PCM definition({0}).
+E19005=Selected Tone number({0}) is not for YM2610B PCM data.
+
+
+
+;YM2612.cs 20000
+E20000=Parameters missing or not enough to setup LFO.
+E20001=Parameters number exceeded to setup LFO.
+E20002=Sound patch does not exist as PCM definition({0}).
+E20003=Selected Tone number({0}) is not for YM2612 PCM data.
+E20004=YM2612 can't use PD command.
+
+
+
+;YM2612X.cs 21000
+E21000=Sound patch does not exist as PCM definition({0}).
+E21001=Selected Tone number({0}) is not for YM2612-XGM PCM data.
+
+
+
+
+

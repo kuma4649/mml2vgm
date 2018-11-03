@@ -17,8 +17,9 @@ namespace Core
             _ShortName = "SPCM";
             _ChMax = 16;
             _canUsePcm = true;
+            _canUsePI = true;
             IsSecondary = isSecondary;
-
+            dataType = 0x80;
             Frequency = 4026987;
             Interface = 0x00f8000d;
 
@@ -172,12 +173,6 @@ namespace Core
         }
 
 
-        public override void SetPCMDataBlock()
-        {
-            if (use && pcmData != null && pcmData.Length > 0)
-                parent.OutData(pcmData);
-        }
-
         public override void StorePcm(Dictionary<int, clsPcm> newDic, KeyValuePair<int, clsPcm> v, byte[] buf,bool is16bit,int samplerate, params object[] option)
         {
             clsPcmDataInfo pi = pcmDataInfo[0];
@@ -226,7 +221,7 @@ namespace Core
                         , pi.totalBufPtr
                         , pi.totalBufPtr + size
                         , size
-                        , 0
+                        , pi.totalBufPtr + v.Value.loopAdr
                         , is16bit
                         , samplerate)
                     );
@@ -240,7 +235,7 @@ namespace Core
                 Common.SetUInt32bit31(pi.totalBuf, 3, (UInt32)(pi.totalBuf.Length - 7), IsSecondary);
                 Common.SetUInt32bit31(pi.totalBuf, 7, (UInt32)(pi.totalBuf.Length - 7));
                 pi.use = true;
-                pcmData = pi.use ? pi.totalBuf : null;
+                pcmDataEasy = pi.use ? pi.totalBuf : null;
             }
             catch
             {
@@ -248,6 +243,66 @@ namespace Core
                 newDic[v.Key].status = enmPCMSTATUS.ERROR;
             }
 
+        }
+
+        public override void StorePcmRawData(clsPcmDatSeq pds, byte[] buf, bool isRaw, bool is16bit, int samplerate, params object[] option)
+        {
+            if (!isRaw)
+            {
+                //Rawファイルは何もしない
+                //Wavファイルはエンコ
+                buf = Encode(buf, false);
+            }
+
+            pcmDataDirect.Add(Common.MakePCMDataBlock((byte)dataType, pds, buf));
+
+        }
+
+        private byte[] Encode(byte[] buf, bool is16bit)
+        {
+            long size = buf.Length;
+            long tSize = buf.Length;
+            byte[] newBuf;
+            clsPcmDataInfo pi = pcmDataInfo[0];
+
+            //Padding
+            if (size % 0x100 != 0)
+            {
+                size++;
+                tSize = size;
+                newBuf = new byte[size];
+                Array.Copy(buf, newBuf, size - 1);
+                buf = newBuf;
+                newBuf = Common.PcmPadding(ref buf, ref size, 0x80, 0x100);
+            }
+            else
+            {
+                newBuf = new byte[size];
+                Array.Copy(buf, newBuf, size);
+            }
+
+            //65536 バイトを超える場合はそれ以降をカット
+            if (size > 0x10000)
+            {
+                List<byte> n = newBuf.ToList();
+                n.RemoveRange(0x10000, (int)(size - 0x10000));
+                newBuf = n.ToArray();
+                size = 0x10000;
+            }
+
+            //パディング(空きが足りない場合はバンクをひとつ進める(0x10000)為、空きを全て埋める)
+            int fs = (pi.totalBuf.Length - 15) % 0x10000;
+            if (size > 0x10000 - fs)
+            {
+                List<byte> n = pi.totalBuf.ToList();
+                for (int i = 0; i < 0x10000 - fs; i++) n.Add(0x80);
+                pi.totalBuf = n.ToArray();
+                pi.totalBufPtr += 0x10000 - fs;
+            }
+
+            buf = newBuf;
+
+            return buf;
         }
 
         public override void SetFNum(partWork pw)
@@ -418,7 +473,7 @@ namespace Core
 
             if (type == 'I')
             {
-                msgBox.setErrMsg("この音源はInstrumentを持っていません。"
+                msgBox.setErrMsg(msg.get("E14001")
                     , mml.line.Fn
                     , mml.line.Num);
                 return;
@@ -426,7 +481,7 @@ namespace Core
 
             if (type == 'T')
             {
-                msgBox.setErrMsg("Tone DoublerはOPN,OPM音源以外では使用できません。"
+                msgBox.setErrMsg(msg.get("E14002")
                     , mml.line.Fn
                     , mml.line.Num);
                 return;
@@ -442,7 +497,7 @@ namespace Core
 
             if (!parent.instPCM.ContainsKey(n))
             {
-                msgBox.setErrMsg(string.Format("PCM定義に指定された音色番号({0})が存在しません。", n)
+                msgBox.setErrMsg(string.Format(msg.get("E14003"), n)
                     , mml.line.Fn
                     , mml.line.Num);
                 return;
@@ -450,7 +505,7 @@ namespace Core
 
             if (parent.instPCM[n].chip != enmChipType.SEGAPCM)
             {
-                msgBox.setErrMsg(string.Format("指定された音色番号({0})はSEGAPCM向けPCMデータではありません。", n)
+                msgBox.setErrMsg(string.Format(msg.get("E14004"), n)
                     , mml.line.Fn
                     , mml.line.Num);
                 return;

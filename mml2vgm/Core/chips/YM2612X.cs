@@ -16,6 +16,7 @@ namespace Core
             _ShortName = "OPN2X";
             _ChMax = 12;
             _canUsePcm = true;
+            _canUsePI = false;
             FNumTbl = _FNumTbl;
             IsSecondary = isSecondary;
 
@@ -88,6 +89,11 @@ namespace Core
             double m = pw.waitCounter * 60.0 * 4.0 / (parent.info.tempo * parent.info.clockCount) * 14000.0;//14000(Hz) = xgm sampling Rate
             parent.instPCM[pw.instrument].xgmMaxSampleCount = Math.Max(parent.instPCM[pw.instrument].xgmMaxSampleCount, m);
 
+            if (parent.instPCM[pw.instrument].status != enmPCMSTATUS.ERROR)
+            {
+                parent.instPCM[pw.instrument].status = enmPCMSTATUS.USED;
+            }
+
         }
 
 
@@ -122,7 +128,7 @@ namespace Core
                     , v.Value.chip
                     , false
                     , v.Value.fileName
-                    , v.Value.freq
+                    , v.Value.freq != -1 ? v.Value.freq : samplerate
                     , v.Value.vol
                     , pi.totalBufPtr
                     , pi.totalBufPtr + size
@@ -138,7 +144,7 @@ namespace Core
 
                 pi.totalBuf = newBuf;
                 pi.use = true;
-                pcmData = pi.use ? pi.totalBuf : null;
+                pcmDataEasy = pi.use ? pi.totalBuf : null;
             }
             catch
             {
@@ -194,13 +200,13 @@ namespace Core
                     pw.instrument = n;
                     if (!parent.instPCM.ContainsKey(n))
                     {
-                        msgBox.setErrMsg(string.Format("PCM定義に指定された音色番号({0})が存在しません。", n), pw.getSrcFn(), pw.getLineNumber());
+                        msgBox.setErrMsg(string.Format(msg.get("E21000"), n), pw.getSrcFn(), pw.getLineNumber());
                     }
                     else
                     {
                         if (parent.instPCM[n].chip != enmChipType.YM2612X)
                         {
-                            msgBox.setErrMsg(string.Format("指定された音色番号({0})はYM2612(XGM)向けPCMデータではありません。", n), pw.getSrcFn(), pw.getLineNumber());
+                            msgBox.setErrMsg(string.Format(msg.get("E21001"), n), pw.getSrcFn(), pw.getLineNumber());
                         }
                     }
                     return;

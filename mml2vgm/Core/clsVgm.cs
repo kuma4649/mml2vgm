@@ -9,6 +9,7 @@ namespace Core
     public class ClsVgm
     {
 
+        public Conductor[] conductor = null;
         public YM2151[] ym2151 = null;
         public YM2203[] ym2203 = null;
         public YM2608[] ym2608 = null;
@@ -30,6 +31,7 @@ namespace Core
         public Dictionary<int, byte[]> instFM = new Dictionary<int, byte[]>();
         public Dictionary<int, int[]> instENV = new Dictionary<int, int[]>();
         public Dictionary<int, clsPcm> instPCM = new Dictionary<int, clsPcm>();
+        public List<clsPcmDatSeq> instPCMDatSeq = new List<clsPcmDatSeq>();
         public Dictionary<int, clsToneDoubler> instToneDoubler = new Dictionary<int, clsToneDoubler>();
         public Dictionary<int, byte[]> instWF = new Dictionary<int, byte[]>();
 
@@ -44,7 +46,6 @@ namespace Core
         private byte[] wfInstrumentBufCache = null;
 
         public int newStreamID = -1;
-        private int pcmDataSeqNum=0;
 
         public Information info = null;
 
@@ -53,6 +54,7 @@ namespace Core
             chips = new Dictionary<enmChipType, ClsChip[]>();
             info = new Information();
 
+            conductor = new Conductor[] { new Conductor(this, 0, "Co", stPath, false) };
             ym2151 = new YM2151[] { new YM2151(this, 0, "X", stPath,false), new YM2151(this, 1, "Xs", stPath,true) };
             ym2203 = new YM2203[] { new YM2203(this, 0, "N", stPath, false), new YM2203(this, 1, "Ns", stPath, true) };
             ym2608 = new YM2608[] { new YM2608(this, 0, "P", stPath, false), new YM2608(this, 1, "Ps", stPath, true) };
@@ -67,6 +69,7 @@ namespace Core
             c140 = new C140[] { new C140(this, 0, "Y", stPath, false), new C140(this, 1, "Ys", stPath, true) };
             ay8910 = new AY8910[] { new AY8910(this, 0, "A", stPath, false), new AY8910(this, 1, "As", stPath, true) };
 
+            chips.Add(enmChipType.CONDUCTOR, conductor);
             chips.Add(enmChipType.YM2612, ym2612);
             chips.Add(enmChipType.SN76489, sn76489);
             chips.Add(enmChipType.RF5C164, rf5c164);
@@ -222,7 +225,9 @@ namespace Core
                 }
                 if (!flg)
                 {
-                    msgBox.setWrnMsg(string.Format("未定義のパート({0})のデータは無視されます。", p.Substring(0, 2).Trim() + int.Parse(p.Substring(2, 2)).ToString()));
+                    msgBox.setWrnMsg(string.Format(
+                        msg.get("E01000")
+                        , p.Substring(0, 2).Trim() + int.Parse(p.Substring(2, 2)).ToString()));
                     flg = false;
                 }
             }
@@ -238,7 +243,7 @@ namespace Core
         {
             if (buf == null || buf.Length < 2)
             {
-                msgBox.setWrnMsg("空の音色定義文を受け取りました。", srcFn, lineNumber);
+                msgBox.setWrnMsg(msg.get("E01001"), srcFn, lineNumber);
                 return -1;
             }
 
@@ -297,57 +302,7 @@ namespace Core
                     return 0;
 
                 case 'P':
-                    try
-                    {
-                        instrumentCounter = -1;
-                        enmChipType enmChip = enmChipType.YM2612;
-                        string[] vs = s.Substring(1).Trim().Split(new string[] { "," }, StringSplitOptions.None);
-                        int num = int.Parse(vs[0]);
-                        string fn = vs[1].Trim().Trim('"');
-                        if (!int.TryParse(vs[2], out int fq))
-                        {
-                            fq = -1;
-                        }
-                        int vol = int.Parse(vs[3]);
-                        int lp = -1;
-                        bool isSecondary = false;
-                        if (vs.Length > 4)
-                        {
-                            string chipName = vs[4].Trim().ToUpper();
-                            isSecondary = false;
-                            if (chipName.IndexOf(Information.PRIMARY) >= 0)
-                            {
-                                isSecondary = false;
-                                chipName = chipName.Replace(Information.PRIMARY, "");
-                            }
-                            else if (chipName.IndexOf(Information.SECONDARY) >= 0)
-                            {
-                                isSecondary = true;
-                                chipName = chipName.Replace(Information.SECONDARY, "");
-                            }
-
-                            if (!GetChip(chipName).CanUsePcm)
-                            {
-                                msgBox.setWrnMsg("未定義のChipName又はPCMを使用できないChipが指定されています。", srcFn, lineNumber);
-                                break;
-                            }
-
-                            enmChip = GetChipType(chipName);
-                        }
-                        if (vs.Length > 5)
-                        {
-                            lp = int.Parse(vs[5]);
-                        }
-                        if (instPCM.ContainsKey(num))
-                        {
-                            instPCM.Remove(num);
-                        }
-                        instPCM.Add(num, new clsPcm(num, pcmDataSeqNum++, enmChip, isSecondary, fn, fq, vol, 0, 0, 0, lp, false, 8000));
-                    }
-                    catch
-                    {
-                        msgBox.setWrnMsg("不正なPCM音色定義文です。", srcFn, lineNumber);
-                    }
+                    definePCMInstrument(srcFn, s, lineNumber);
                     return 0;
 
                 case 'E':
@@ -377,7 +332,7 @@ namespace Core
                         }
                         else
                         {
-                            msgBox.setWrnMsg("エンベロープを使用できない音源が選択されています。", srcFn, lineNumber);
+                            msgBox.setWrnMsg(msg.get("E01004"), srcFn, lineNumber);
                         }
 
                         if (instENV.ContainsKey(num))
@@ -388,7 +343,7 @@ namespace Core
                     }
                     catch
                     {
-                        msgBox.setWrnMsg("不正なエンベロープ定義文です。", srcFn, lineNumber);
+                        msgBox.setWrnMsg(msg.get("E01005"), srcFn, lineNumber);
                     }
                     return 0;
 
@@ -404,7 +359,7 @@ namespace Core
                     }
                     catch
                     {
-                        msgBox.setWrnMsg("不正なTone Doubler定義文です。", srcFn, lineNumber);
+                        msgBox.setWrnMsg(msg.get("E01006"), srcFn, lineNumber);
                     }
                     return 0;
 
@@ -425,6 +380,277 @@ namespace Core
             return 0;
         }
 
+        private void definePCMInstrument(string srcFn, string s, int lineNumber)
+        {
+            try
+            {
+                string[] vs = s.Substring(1).Trim().Split(new string[] { "," }, StringSplitOptions.None);
+                if (vs.Length < 1) throw new ArgumentOutOfRangeException();
+                for (int i = 0; i < vs.Length; i++) vs[i] = vs[i].Trim();
+
+                switch (vs[0][0])
+                {
+                    case 'D':
+                        definePCMInstrumentRawData(srcFn, lineNumber, vs);
+                        break;
+                    case 'I':
+                        definePCMInstrumentSet(srcFn, lineNumber, vs);
+                        break;
+                    default:
+                        definePCMInstrumentEasy(srcFn, lineNumber, vs);
+                        break;
+                }
+
+                return;
+            }
+            catch
+            {
+                msgBox.setWrnMsg(msg.get("E01003"), srcFn, lineNumber);
+            }
+        }
+
+        /// <summary>
+        /// '@ P No , "FileName" , [BaseFreq] , Volume ( , [ChipName] , [Option] )
+        /// </summary>
+        private void definePCMInstrumentEasy(string srcFn, int lineNumber, string[] vs)
+        {
+            instrumentCounter = -1;
+            enmChipType enmChip = enmChipType.YM2612;
+
+            int num = Common.ParseNumber(vs[0]);
+
+            string fn = vs[1].Trim().Trim('"');
+
+            int fq;
+            try
+            {
+                fq = Common.ParseNumber(vs[2]);
+            }
+            catch
+            {
+                fq = -1;
+            }
+
+            int vol;
+            try
+            {
+                vol = Common.ParseNumber(vs[3]);
+            }
+            catch
+            {
+                vol = 100;
+            }
+
+            bool isSecondary = false;
+
+            if (vs.Length > 4)
+            {
+                enmChip = GetChipTypeForPCM(srcFn, lineNumber, vs[4], out isSecondary);
+                if (enmChip == enmChipType.None) return;
+            }
+
+            if (info.format == enmFormat.XGM)
+            {
+                if(enmChip!= enmChipType.YM2612X)
+                {
+                    msgBox.setErrMsg(msg.get("E01017"));
+                    return;
+                }
+            }
+
+            int lp = -1;
+
+            if (vs.Length > 5)
+            {
+                try
+                {
+                    lp = Common.ParseNumber(vs[5]);
+                }
+                catch
+                {
+                    lp = -1;
+                }
+            }
+
+            if (lp == -1 && enmChip == enmChipType.YM2610B)
+            {
+                lp = 0;
+            }
+
+            instPCMDatSeq.Add(new clsPcmDatSeq(
+                enmPcmDefineType.Easy
+                , num
+                , fn
+                , fq
+                , vol
+                , enmChip
+                , isSecondary
+                , lp
+                ));
+
+            //if (instPCM.ContainsKey(num))
+            //{
+            //    instPCM.Remove(num);
+            //}
+            //instPCM.Add(num, new clsPcm(num, pcmDataSeqNum++, enmChip, isSecondary, fn, fq, vol, 0, 0, 0, lp, false, 8000));
+        }
+
+        /// <summary>
+        /// '@ PD "FileName" , ChipName , [SrcStartAdr] , [DesStartAdr] , [Length] , [Option]
+        /// </summary>
+        private void definePCMInstrumentRawData(string srcFn, int lineNumber, string[] vs)
+        {
+
+            string FileName = vs[0].Substring(1).Trim().Trim('"');
+            enmChipType ChipName = GetChipTypeForPCM(srcFn, lineNumber, vs[1], out bool isSecondary);
+
+            if (info.format == enmFormat.XGM)
+            {
+                if (ChipName != enmChipType.YM2612X)
+                {
+                    msgBox.setErrMsg(msg.get("E01017"));
+                    return;
+                }
+            }
+
+            int SrcStartAdr = 0;
+            if (vs.Length > 2 && !string.IsNullOrEmpty(vs[2].Trim()))
+            {
+                SrcStartAdr = Common.ParseNumber(vs[2]);
+            }
+            int DesStartAdr = 0;
+            if (vs.Length > 3 && !string.IsNullOrEmpty(vs[3].Trim()))
+            {
+                DesStartAdr = Common.ParseNumber(vs[3]);
+            }
+            int Length = -1;
+            if (vs.Length > 4 && !string.IsNullOrEmpty(vs[4].Trim()))
+            {
+                Length = Common.ParseNumber(vs[4]);
+            }
+            string[] Option = null;
+            if (vs.Length > 5)
+            {
+                Option = new string[vs.Length - 5];
+                Array.Copy(vs, 5, Option, 0, vs.Length - 5);
+            }
+
+            instPCMDatSeq.Add(new clsPcmDatSeq(
+                enmPcmDefineType.RawData
+                , FileName
+                , ChipName
+                , isSecondary
+                , SrcStartAdr
+                , DesStartAdr
+                , Length
+                , Option
+                ));
+
+        }
+
+        /// <summary>
+        /// '@ PI No , ChipName , [BaseFreq] , StartAdr , EndAdr , [LoopAdr] , [Option]
+        /// </summary>
+        private void definePCMInstrumentSet(string srcFn,int lineNumber, string[] vs)
+        {
+            int num = Common.ParseNumber(vs[0].Substring(1));
+            enmChipType ChipName = GetChipTypeForPCM(srcFn, lineNumber, vs[1], out bool isSecondary);
+            if (ChipName == enmChipType.None) return;
+
+            if (info.format == enmFormat.XGM)
+            {
+                if (ChipName != enmChipType.YM2612X)
+                {
+                    msgBox.setErrMsg(msg.get("E01017"));
+                    return;
+                }
+            }
+
+            if (!chips[ChipName][0].CanUsePICommand())
+            {
+                msgBox.setWrnMsg(string.Format(msg.get("E10018"), chips[ChipName][0].Name));
+                return;
+            }
+
+            int BaseFreq;
+            //if (vs.Length > 2 && !string.IsNullOrEmpty(vs[2].Trim()))
+            //{
+            try
+            {
+                BaseFreq = Common.ParseNumber(vs[2]);
+            }
+            catch
+            {
+                BaseFreq = 8000;
+            }
+
+            //StartAdr省略不可
+            int StartAdr = 0;
+            StartAdr = Common.ParseNumber(vs[3]);
+
+            //EndAdr省略不可(RF5C164は設定不可)
+            int EndAdr = 0;
+            if (ChipName != enmChipType.RF5C164)
+            {
+                EndAdr = Common.ParseNumber(vs[4]);
+            }
+            else
+            {
+                if (!string.IsNullOrEmpty(vs[4].ToString()))
+                    throw new ArgumentOutOfRangeException();
+            }
+
+            //LoopAdr(RF5C164は省略不可)
+            int LoopAdr;
+            if (ChipName != enmChipType.RF5C164)
+            {
+                LoopAdr = (ChipName != enmChipType.YM2610B) ? -1 : 0;
+                if (vs.Length > 5 && !string.IsNullOrEmpty(vs[5].Trim()))
+                {
+                    LoopAdr = Common.ParseNumber(vs[5]);
+                }
+            }
+            else
+            {
+                LoopAdr = Common.ParseNumber(vs[5]);
+            }
+
+            string[] Option = null;
+            if (vs.Length > 6)
+            {
+                Option = new string[vs.Length - 6];
+                Array.Copy(vs, 6, Option, 0, vs.Length - 6);
+            }
+            if(ChipName== enmChipType.YM2610B)
+            {
+                if (Option == null || Option.Length < 1)
+                {
+                    LoopAdr = 0;
+                }
+                else
+                {
+                    LoopAdr = 1;
+                    if (Option[0].Trim() != "1")
+                    {
+                        LoopAdr = 0;
+                    }
+                }
+            }
+
+            instPCMDatSeq.Add(new clsPcmDatSeq(
+                enmPcmDefineType.Set
+                , num
+                , ChipName
+                , isSecondary
+                , BaseFreq
+                , StartAdr
+                , EndAdr
+                , LoopAdr
+                , Option
+                ));
+
+        }
+
         private static void CheckEnvelopeVolumeRange(string srcFn, int lineNumber, int[] env, int max, int min)
         {
             for (int i = 0; i < env.Length - 1; i++)
@@ -434,14 +660,43 @@ namespace Core
                 if (env[i] > max)
                 {
                     env[i] = max;
-                    msgBox.setWrnMsg(string.Format("Envelope音量が{0}を超えています。", max), srcFn, lineNumber);
+                    msgBox.setWrnMsg(string.Format(msg.get("E01007"), max), srcFn, lineNumber);
                 }
                 if (env[i] < min)
                 {
                     env[i] = min;
-                    msgBox.setWrnMsg(string.Format("Envelope音量が{0}未満です。", min), srcFn, lineNumber);
+                    msgBox.setWrnMsg(string.Format(msg.get("E01008"), min), srcFn, lineNumber);
                 }
             }
+        }
+
+
+        private enmChipType GetChipTypeForPCM(string srcFn, int lineNumber, string strChip, out bool isSecondary)
+        {
+            enmChipType enmChip = enmChipType.YM2612;
+            string chipName = strChip.Trim().ToUpper();
+            isSecondary = false;
+            if (chipName == "") return enmChipType.YM2612;
+
+            if (chipName.IndexOf(Information.PRIMARY) >= 0)
+            {
+                isSecondary = false;
+                chipName = chipName.Replace(Information.PRIMARY, "");
+            }
+            else if (chipName.IndexOf(Information.SECONDARY) >= 0)
+            {
+                isSecondary = true;
+                chipName = chipName.Replace(Information.SECONDARY, "");
+            }
+
+            if (!GetChip(chipName).CanUsePcm)
+            {
+                msgBox.setWrnMsg(string.Format(msg.get("E01002"), chipName), srcFn, lineNumber);
+                return enmChipType.None;
+            }
+            enmChip = GetChipType(chipName);
+
+            return enmChip;
         }
 
         private enmChipType GetChipType(string chipN)
@@ -473,6 +728,7 @@ namespace Core
 
             return enmChipType.None;
         }
+
 
         private ClsChip GetChip(string chipN)
         {
@@ -507,13 +763,13 @@ namespace Core
             if (name == "")
             {
                 //エイリアス指定がない場合は警告とする
-                msgBox.setWrnMsg("不正なエイリアス指定です。", srcFn, lineNumber);
+                msgBox.setWrnMsg(msg.get("E01009"), srcFn, lineNumber);
                 return -1;
             }
             if (data == "")
             {
                 //データがない場合は警告する
-                msgBox.setWrnMsg("エイリアスにデータがありません。", srcFn, lineNumber);
+                msgBox.setWrnMsg(msg.get("E01010"), srcFn, lineNumber);
             }
 
             if (aliesData.ContainsKey(name))
@@ -542,7 +798,7 @@ namespace Core
             if (part == null)
             {
                 //パート指定がない場合は警告とする
-                msgBox.setWrnMsg("不正なパート指定です。", srcFn, lineNumber);
+                msgBox.setWrnMsg(msg.get("E01011"), srcFn, lineNumber);
                 return -1;
             }
             if (data == "")
@@ -600,7 +856,7 @@ namespace Core
             }
             catch
             {
-                msgBox.setErrMsg("音色の定義が不正です。", srcFn, lineNumber);
+                msgBox.setErrMsg(msg.get("E01012"), srcFn, lineNumber);
             }
 
             return 0;
@@ -626,7 +882,7 @@ namespace Core
             }
             catch
             {
-                msgBox.setErrMsg("WaveForm音色の定義が不正です。", srcFn, lineNumber);
+                msgBox.setErrMsg(msg.get("E01013"), srcFn, lineNumber);
             }
 
             return 0;
@@ -748,7 +1004,7 @@ namespace Core
             }
             catch
             {
-                msgBox.setErrMsg("Tone Doublerの定義が不正です。", srcFn, lineNumber);
+                msgBox.setErrMsg(msg.get("E01014"), srcFn, lineNumber);
             }
 
             return 0;
@@ -825,6 +1081,7 @@ namespace Core
         public double dSample = 0.0;
         public long lClock = 0L;
         private double sampleB = 0.0;
+        public string lyric = "";
 
         public long loopOffset = -1L;
         public long loopClock = -1L;
@@ -1284,6 +1541,13 @@ namespace Core
             //Notes
             dat.AddRange(Encoding.Unicode.GetBytes(info.Notes));
             dat.Add(0x00); dat.Add(0x00);
+
+            //歌詞
+            if (lyric != "")
+            {
+                dat.AddRange(Encoding.Unicode.GetBytes(lyric));
+                dat.Add(0x00); dat.Add(0x00);
+            }
         }
 
 
@@ -1442,7 +1706,7 @@ namespace Core
             }
 
             //$0100               Sample data bloc size / 256
-            if (ym2612x[0].pcmData != null)
+            if (ym2612x[0].pcmDataEasy != null)
             {
                 xdat[0x100] = (byte)((ptr / 256) & 0xff);
                 xdat[0x101] = (byte)(((ptr / 256) & 0xff00) >> 8);
@@ -1457,7 +1721,7 @@ namespace Core
             xdat[0x103] |= (byte)(info.xgmSamplesPerSecond == 50 ? 1 : 0);
 
             //$0104               Sample data block
-            if (ym2612x[0].pcmData != null)
+            if (ym2612x[0].pcmDataEasy != null)
             {
                 foreach (clsPcm p in instPCM.Values)
                 {
@@ -1465,7 +1729,7 @@ namespace Core
 
                     for (uint cnt = 0; cnt < p.size; cnt++)
                     {
-                        xdat.Add(ym2612x[0].pcmData[p.stAdr + cnt]);
+                        xdat.Add(ym2612x[0].pcmDataEasy[p.stAdr + cnt]);
                     }
 
                 }
@@ -1683,7 +1947,7 @@ namespace Core
 
                         if (des.Count - framePtr > 256)
                         {
-                            msgBox.setWrnMsg(string.Format("1Frameに収められる限界バイト数(256byte)を超えています。データを分散させてください。 Frame {0} : {1}byte", frameCnt, des.Count - framePtr));
+                            msgBox.setWrnMsg(string.Format(msg.get("E01015"), frameCnt, des.Count - framePtr));
                         }
                         framePtr = des.Count;
 
@@ -2128,6 +2392,11 @@ namespace Core
                     pw.chip.CmdRest(pw, mml);
                     pw.mmlPos++;
                     break;
+                case enmMMLType.Lyric:
+                    log.Write("Lyric");
+                    pw.chip.CmdLyric(pw, mml);
+                    pw.mmlPos++;
+                    break;
                 case enmMMLType.Envelope:
                     log.Write("Envelope");
                     pw.chip.CmdEnvelope(pw, mml);
@@ -2190,7 +2459,7 @@ namespace Core
                     break;
 
                 default:
-                    msgBox.setErrMsg(string.Format("未知のコマンド{0}を検出しました。"
+                    msgBox.setErrMsg(string.Format(msg.get("E01016")
                         , mml.type)
                         , mml.line.Fn
                         , mml.line.Num);
@@ -2277,2533 +2546,6 @@ namespace Core
                 }
             }
         }
-
-        //private void CmdNote(partWork pw, char cmd)
-        //{
-        //    pw.incPos();
-
-        //    //+ -の解析
-        //    int shift = 0;
-        //    shift = AnaSharp(pw, ref shift);
-
-        //    if (cmd == 'r' && shift != 0)
-        //    {
-        //        msgBox.setWrnMsg("休符での+、-の指定は無視されます。", pw.getSrcFn(), pw.getLineNumber());
-        //    }
-
-        //    int ml = 0;
-        //    int n = -1;
-        //    bool directFlg = false;
-        //    bool isMinus = false;
-        //    bool isTieType2 = false;
-        //    bool isSecond = false;
-        //    do
-        //    {
-        //        int m = 0;
-
-        //        //数値の解析
-        //        //if (!pw.getNum(out n))
-        //        if (!pw.getNumNoteLength(out n, out directFlg))
-        //        {
-        //            if (!isSecond)
-        //                n = (int)pw.length;
-        //            else if (!isMinus)
-        //            {
-        //                if (!isTieType2)
-        //                {
-        //                    //タイとして'&'が使用されている
-        //                    pw.tie = true;
-        //                }
-        //                else
-        //                {
-        //                    n = (int)pw.length;
-        //                }
-        //            }
-        //        }
-        //        else
-        //        {
-        //            if (n == 0)
-        //            {
-        //                if (pw.Type != enmChannelType.FMOPM
-        //                    && pw.Type != enmChannelType.FMOPN
-        //                    && pw.Type != enmChannelType.FMOPNex
-        //                    )
-        //                {
-        //                    msgBox.setErrMsg("Tone Doublerが使用できるのはFM音源のみです。", pw.getSrcFn(), pw.getLineNumber());
-        //                    return;
-        //                }
-        //                pw.TdA = pw.octaveNew * 12 + Const.NOTE.IndexOf(cmd) + shift + pw.keyShift;
-        //                pw.octaveNow = pw.octaveNew;
-
-        //                return;
-        //            }
-
-        //            if (!directFlg)
-        //            {
-        //                if ((int)info.clockCount % n != 0)
-        //                {
-        //                    msgBox.setWrnMsg(string.Format("割り切れない音長({0})の指定があります。音長は不定になります。", n), pw.getSrcFn(), pw.getLineNumber());
-        //                }
-        //                n = (int)info.clockCount / n;
-        //            }
-        //            else
-        //            {
-        //                n = Common.CheckRange(n, 1, 65535);
-        //            }
-        //        }
-
-        //        //Tone Doubler
-        //        if (pw.getChar() == ',')
-        //        {
-        //            if (pw.Type != enmChannelType.FMOPM
-        //                && pw.Type != enmChannelType.FMOPN
-        //                && pw.Type != enmChannelType.FMOPNex
-        //                )
-        //            {
-        //                msgBox.setErrMsg("Tone Doublerが使用できるのはFM音源のみです。", pw.getSrcFn(), pw.getLineNumber());
-        //                return;
-        //            }
-        //            pw.TdA = pw.octaveNew * 12 + Const.NOTE.IndexOf(cmd) + shift + pw.keyShift;
-        //            pw.octaveNow = pw.octaveNew;
-        //            pw.incPos();
-
-        //            return;
-        //        }
-
-        //        if (!pw.tie || isTieType2)
-        //        {
-        //            m += n;
-
-        //            //符点の解析
-        //            while (pw.getChar() == '.')
-        //            {
-        //                if (n % 2 != 0)
-        //                {
-        //                    msgBox.setWrnMsg("割り切れない.の指定があります。音長は不定です。", pw.getSrcFn(), pw.getLineNumber());
-        //                }
-        //                n = n / 2;
-        //                m += n;
-        //                pw.incPos();
-        //            }
-
-
-        //            if (isMinus) ml -= m;
-        //            else ml += m;
-        //        }
-
-        //        isTieType2 = false;
-
-        //        //ベンドの解析
-        //        int bendDelayCounter = 0;
-        //        int bendShift = 0;
-        //        if (pw.getChar() == '_')
-        //        {
-        //            pw.incPos();
-        //            pw.octaveNow = pw.octaveNew;
-        //            pw.bendOctave = pw.octaveNow;
-        //            pw.bendNote = 'r';
-        //            pw.bendWaitCounter = -1;
-        //            bool loop = true;
-        //            while (loop)
-        //            {
-        //                char bCmd = pw.getChar();
-        //                switch (bCmd)
-        //                {
-        //                    case 'c':
-        //                    case 'd':
-        //                    case 'e':
-        //                    case 'f':
-        //                    case 'g':
-        //                    case 'a':
-        //                    case 'b':
-        //                        loop = false;
-        //                        pw.incPos();
-        //                        //+ -の解析
-        //                        bendShift = 0;
-        //                        bendShift = AnaSharp(pw, ref bendShift);
-        //                        pw.bendShift = bendShift;
-        //                        bendDelayCounter = 0;
-        //                        n = -1;
-        //                        isMinus = false;
-        //                        isTieType2 = false;
-        //                        isSecond = false;
-        //                        do
-        //                        {
-        //                            m = 0;
-
-        //                            //数値の解析
-        //                            //if (!pw.getNum(out n))
-        //                            if (!pw.getNumNoteLength(out n, out directFlg))
-        //                            {
-        //                                if (!isSecond)
-        //                                {
-        //                                    n = 0;
-        //                                    break;
-        //                                }
-        //                                else if (!isMinus)
-        //                                {
-        //                                    if (!isTieType2)
-        //                                    {
-        //                                        //タイとして'&'が使用されている
-        //                                        pw.tie = true;
-        //                                    }
-        //                                    else
-        //                                    {
-        //                                        n = (int)pw.length;
-        //                                    }
-        //                                    break;
-        //                                }
-        //                            }
-        //                            else
-        //                            {
-        //                                if (!directFlg)
-        //                                {
-        //                                    if ((int)info.clockCount % n != 0)
-        //                                    {
-        //                                        msgBox.setWrnMsg(string.Format("割り切れない音長({0})の指定があります。音長は不定になります。", n), pw.getSrcFn(), pw.getLineNumber());
-        //                                    }
-        //                                    n = (int)info.clockCount / n;
-        //                                }
-        //                                else
-        //                                {
-        //                                    n = Common.CheckRange(n, 1, 65535);
-        //                                }
-        //                            }
-
-        //                            if (!pw.tie || isTieType2)
-        //                            {
-        //                                bendDelayCounter += n;
-
-        //                                //符点の解析
-        //                                while (pw.getChar() == '.')
-        //                                {
-        //                                    if (n % 2 != 0)
-        //                                    {
-        //                                        msgBox.setWrnMsg("割り切れない.の指定があります。音長は不定です。", pw.getSrcFn(), pw.getLineNumber());
-        //                                    }
-        //                                    n = n / 2;
-        //                                    m += n;
-        //                                    pw.incPos();
-        //                                }
-
-
-        //                                if (isMinus) bendDelayCounter -= m;
-        //                                else bendDelayCounter += m;
-        //                            }
-
-        //                            isTieType2 = false;
-
-        //                            if (pw.getChar() == '&')
-        //                            {
-        //                                isMinus = false;
-        //                                isTieType2 = false;
-        //                            }
-        //                            else if (pw.getChar() == '^')
-        //                            {
-        //                                isMinus = false;
-        //                                isTieType2 = true;
-        //                            }
-        //                            else if (pw.getChar() == '~')
-        //                            {
-        //                                isMinus = true;
-        //                            }
-        //                            else
-        //                            {
-        //                                break;
-        //                            }
-
-        //                            isSecond = true;
-        //                            pw.incPos();
-
-        //                        } while (true);
-
-        //                        if (cmd != 'r')
-        //                        {
-        //                            pw.bendNote = bCmd;
-        //                            bendDelayCounter = Common.CheckRange(bendDelayCounter, 0, ml);
-        //                            pw.bendWaitCounter = bendDelayCounter;
-        //                        }
-        //                        else
-        //                        {
-        //                            msgBox.setErrMsg("休符にベンドの指定はできません。", pw.getSrcFn(), pw.getLineNumber());
-        //                        }
-
-        //                        break;
-        //                    case 'o':
-        //                        pw.incPos();
-        //                        if (!pw.getNum(out n))
-        //                        {
-        //                            msgBox.setErrMsg("不正なオクターブが指定されています。", pw.getSrcFn(), pw.getLineNumber());
-        //                            n = 110;
-        //                        }
-        //                        n = Common.CheckRange(n, 1, 8);
-        //                        pw.bendOctave = n;
-        //                        break;
-        //                    case '>':
-        //                        pw.incPos();
-        //                        pw.bendOctave += info.octaveRev ? -1 : 1;
-        //                        pw.bendOctave = Common.CheckRange(pw.bendOctave, 1, 8);
-        //                        break;
-        //                    case '<':
-        //                        pw.incPos();
-        //                        pw.bendOctave += info.octaveRev ? 1 : -1;
-        //                        pw.bendOctave = Common.CheckRange(pw.bendOctave, 1, 8);
-        //                        break;
-        //                    default:
-        //                        loop = false;
-        //                        break;
-        //                }
-        //            }
-
-        //            //音符の変化量
-        //            int ed = Const.NOTE.IndexOf(pw.bendNote) + 1 + (pw.bendOctave - 1) * 12 + pw.bendShift;
-        //            ed = Common.CheckRange(ed, 0, 8 * 12 - 1);
-        //            int st = Const.NOTE.IndexOf(cmd) + 1 + (pw.octaveNow - 1) * 12 + shift;//
-        //            st = Common.CheckRange(st, 0, 8 * 12 - 1);
-
-        //            int delta = ed - st;
-        //            if (delta == 0 || bendDelayCounter == ml)
-        //            {
-        //                pw.bendNote = 'r';
-        //                pw.bendWaitCounter = -1;
-        //            }
-        //            else
-        //            {
-
-        //                //１音符当たりのウエイト
-        //                float wait = (ml - bendDelayCounter - 1) / (float)delta;
-        //                float tl = 0;
-        //                float bf = Math.Sign(wait);
-        //                List<int> lstBend = new List<int>();
-        //                int toneDoublerShift = GetToneDoublerShift(pw, pw.octaveNow, cmd, shift);
-        //                for (int i = 0; i < Math.Abs(delta); i++)
-        //                {
-        //                    bf += wait;
-        //                    tl += wait;
-        //                    int a = ((SN76489)pw.chip).GetDcsgFNum(pw.octaveNow, cmd, shift + (i + 0) * Math.Sign(delta));//
-        //                    int b = ((SN76489)pw.chip).GetDcsgFNum(pw.octaveNow, cmd, shift + (i + 1) * Math.Sign(delta));//
-        //                    if (pw.chip is YM2151)
-        //                    {
-        //                        a = ((YM2151)pw.chip).GetFNum(pw.octaveNow, cmd, shift + (i + 0) * Math.Sign(delta) + toneDoublerShift);//
-        //                        b = ((YM2151)pw.chip).GetFNum(pw.octaveNow, cmd, shift + (i + 1) * Math.Sign(delta) + toneDoublerShift);//
-        //                    }
-        //                    else if (
-        //                        (pw.chip is YM2608 && (pw.Type == enmChannelType.FMOPN || pw.Type == enmChannelType.FMOPNex))
-        //                        || (pw.chip is YM2610B && (pw.Type == enmChannelType.FMOPN || pw.Type == enmChannelType.FMOPNex))
-        //                        || (pw.chip is YM2612)
-        //                        || (pw.chip is YM2612X)
-        //                        )
-        //                    {
-        //                        //int[] ftbl = ((pw.chip is YM2612) || (pw.chip is YM2612X)) ? OPN_FNumTbl_7670454 : pw.chip.FNumTbl[0];
-        //                        int[] ftbl = pw.chip.FNumTbl[0];
-
-        //                        a = ((ClsOPN)pw.chip).GetFmFNum(ftbl, pw.octaveNow, cmd, shift + (i + 0) * Math.Sign(delta) + toneDoublerShift);//
-        //                        b = ((ClsOPN)pw.chip).GetFmFNum(ftbl, pw.octaveNow, cmd, shift + (i + 1) * Math.Sign(delta) + toneDoublerShift);//
-        //                        int oa = (a & 0xf000) / 0x1000;
-        //                        int ob = (b & 0xf000) / 0x1000;
-        //                        if (oa != ob)
-        //                        {
-        //                            if ((a & 0xfff) == ftbl[0])
-        //                            {
-        //                                oa += Math.Sign(ob - oa);
-        //                                a = (a & 0xfff) * 2 + oa * 0x1000;
-        //                            }
-        //                            else if ((b & 0xfff) == ftbl[0])
-        //                            {
-        //                                ob += Math.Sign(oa - ob);
-        //                                b = (b & 0xfff) * ((delta > 0) ? 2 : 1) + ob * 0x1000;
-        //                            }
-        //                        }
-        //                    }
-        //                    else if (
-        //                        (pw.chip is YM2608 && pw.Type == enmChannelType.SSG)
-        //                        || (pw.chip is YM2610B && pw.Type == enmChannelType.SSG)
-        //                        )
-        //                    {
-        //                        a = ((ClsOPN)pw.chip).GetSsgFNum(pw, pw.octaveNow, cmd, shift + (i + 0) * Math.Sign(delta));//
-        //                        b = ((ClsOPN)pw.chip).GetSsgFNum(pw, pw.octaveNow, cmd, shift + (i + 1) * Math.Sign(delta));//
-        //                    }
-        //                    else if (pw.chip is SN76489)
-        //                    {
-        //                        a = ((SN76489)pw.chip).GetDcsgFNum(pw.octaveNow, cmd, shift + (i + 0) * Math.Sign(delta));//
-        //                        b = ((SN76489)pw.chip).GetDcsgFNum(pw.octaveNow, cmd, shift + (i + 1) * Math.Sign(delta));//
-        //                    }
-        //                    else if (pw.chip is RF5C164)
-        //                    {
-        //                        a = ((RF5C164)pw.chip).GetRf5c164PcmNote(pw.octaveNow, cmd, shift + (i + 0) * Math.Sign(delta));//
-        //                        b = ((RF5C164)pw.chip).GetRf5c164PcmNote(pw.octaveNow, cmd, shift + (i + 1) * Math.Sign(delta));//
-        //                    }
-        //                    else if (pw.chip is segaPcm)
-        //                    {
-        //                        a = ((segaPcm)pw.chip).GetSegaPcmFNum(pw.octaveNow, cmd, shift + (i + 0) * Math.Sign(delta));//
-        //                        b = ((segaPcm)pw.chip).GetSegaPcmFNum(pw.octaveNow, cmd, shift + (i + 1) * Math.Sign(delta));//
-        //                    }
-        //                    else if (pw.chip is HuC6280)
-        //                    {
-        //                        a = ((HuC6280)pw.chip).GetHuC6280Freq(pw.octaveNow, cmd, shift + (i + 0) * Math.Sign(delta));//
-        //                        b = ((HuC6280)pw.chip).GetHuC6280Freq(pw.octaveNow, cmd, shift + (i + 1) * Math.Sign(delta));//
-        //                    }
-
-        //                    if (Math.Abs(bf) >= 1.0f)
-        //                    {
-        //                        for (int j = 0; j < (int)Math.Abs(bf); j++)
-        //                        {
-        //                            int c = b - a;
-        //                            int d = (int)Math.Abs(bf);
-        //                            lstBend.Add((int)(a + ((float)c / (float)d) * (float)j));
-        //                        }
-        //                        bf -= (int)bf;
-        //                    }
-
-        //                }
-        //                Stack<Tuple<int, int>> lb = new Stack<Tuple<int, int>>();
-        //                int of = -1;
-        //                int cnt = 1;
-        //                foreach (int f in lstBend)
-        //                {
-        //                    if (of == f)
-        //                    {
-        //                        cnt++;
-        //                        continue;
-        //                    }
-        //                    lb.Push(new Tuple<int, int>(f, cnt));
-        //                    of = f;
-        //                    cnt = 1;
-        //                }
-        //                pw.bendList = new Stack<Tuple<int, int>>();
-        //                foreach (Tuple<int, int> lbt in lb)
-        //                {
-        //                    pw.bendList.Push(lbt);
-        //                }
-        //                Tuple<int, int> t = pw.bendList.Pop();
-        //                pw.bendFnum = t.Item1;
-        //                pw.bendWaitCounter = t.Item2;
-        //            }
-        //        }
-
-        //        if (pw.getChar() == '&')
-        //        {
-        //            isMinus = false;
-        //            isTieType2 = false;
-        //        }
-        //        else if (pw.getChar() == '^')
-        //        {
-        //            isMinus = false;
-        //            isTieType2 = true;
-        //        }
-        //        else if (pw.getChar() == '~')
-        //        {
-        //            isMinus = true;
-        //        }
-        //        else
-        //        {
-        //            break;
-        //        }
-
-        //        isSecond = true;
-        //        pw.incPos();
-
-        //    } while (true);
-
-        //    if (ml < 1)
-        //    {
-        //        msgBox.setErrMsg("負の音長が指定されました。", pw.getSrcFn(), pw.getLineNumber());
-        //        ml = (int)pw.length;
-        //    }
-
-
-        //    if (pw.renpuFlg)
-        //    {
-        //        if (pw.lstRenpuLength!=null && pw.lstRenpuLength.Count > 0)
-        //        {
-        //            ml = pw.lstRenpuLength[0];
-        //            pw.lstRenpuLength.RemoveAt(0);
-        //        }
-        //    }
-
-
-        //    //装飾の解析完了
-
-
-
-        //    //WaitClockの決定
-        //    pw.waitCounter = ml;
-
-        //    if (cmd != 'r')
-        //    {
-        //        if (pw.reqFreqReset)
-        //        {
-        //            pw.freq = -1;
-        //            pw.reqFreqReset = false;
-        //        }
-
-        //        //発音周波数
-        //        if (pw.bendWaitCounter == -1)
-        //        {
-        //            pw.octaveNow = pw.octaveNew;
-        //            pw.noteCmd = cmd;
-        //            pw.shift = shift;
-
-        //            //Tone Doubler
-        //            SetToneDoubler(pw);
-        //        }
-        //        else
-        //        {
-        //            pw.octaveNow = pw.octaveNew;
-        //            pw.noteCmd = cmd;
-        //            pw.shift = shift;
-
-        //            //Tone Doubler
-        //            SetToneDoubler(pw);
-
-        //            pw.octaveNew = pw.bendOctave;//
-        //            pw.octaveNow = pw.bendOctave;//
-        //            pw.noteCmd = pw.bendNote;
-        //            pw.shift = pw.bendShift;
-        //        }
-
-        //        //強制設定
-        //        pw.freq = -1;
-
-        //        //発音周波数の決定とキーオン
-        //        if (pw.chip is YM2151)
-        //        {
-
-        //            ((YM2151)pw.chip).SetFNum(pw);
-
-        //            //タイ指定では無い場合はキーオンする
-        //            if (!pw.beforeTie)
-        //            {
-        //                SetLfoAtKeyOn(pw);
-        //                ((YM2151)pw.chip).SetVolume(pw);
-        //                ((YM2151)pw.chip).OutKeyOn(pw);
-        //            }
-        //        }
-        //        else if (pw.chip is YM2203)
-        //        {
-
-        //            //YM2203
-
-        //            if (pw.Type == enmChannelType.FMOPN || pw.Type == enmChannelType.FMOPNex)
-        //            {
-        //                ((ClsOPN)pw.chip).SetFmFNum(pw);
-
-        //                //タイ指定では無い場合はキーオンする
-        //                if (!pw.beforeTie)
-        //                {
-        //                    SetLfoAtKeyOn(pw);
-        //                    ((ClsOPN)pw.chip).SetFmVolume(pw);
-        //                    ((ClsOPN)pw.chip).OutFmKeyOn(pw);
-        //                }
-        //            }
-        //            else if (pw.Type == enmChannelType.SSG)
-        //            {
-        //                ((ClsOPN)pw.chip).SetSsgFNum(pw);
-
-        //                //タイ指定では無い場合はキーオンする
-        //                if (!pw.beforeTie)
-        //                {
-        //                    SetEnvelopeAtKeyOn(pw);
-        //                    SetLfoAtKeyOn(pw);
-        //                    ((ClsOPN)pw.chip).OutSsgKeyOn(pw);
-        //                }
-        //            }
-        //        }
-        //        else if (pw.chip is YM2608)
-        //        {
-
-        //            //YM2608
-
-        //            if (pw.Type == enmChannelType.FMOPN || pw.Type == enmChannelType.FMOPNex)
-        //            {
-        //                ((ClsOPN)pw.chip).SetFmFNum(pw);
-
-        //                //タイ指定では無い場合はキーオンする
-        //                if (!pw.beforeTie)
-        //                {
-        //                    SetLfoAtKeyOn(pw);
-        //                    ((ClsOPN)pw.chip).SetFmVolume(pw);
-        //                    ((ClsOPN)pw.chip).OutFmKeyOn(pw);
-        //                }
-        //            }
-        //            else if (pw.Type == enmChannelType.SSG)
-        //            {
-        //                ((ClsOPN)pw.chip).SetSsgFNum(pw);
-
-        //                //タイ指定では無い場合はキーオンする
-        //                if (!pw.beforeTie)
-        //                {
-        //                    SetEnvelopeAtKeyOn(pw);
-        //                    SetLfoAtKeyOn(pw);
-        //                    ((ClsOPN)pw.chip).OutSsgKeyOn(pw);
-        //                }
-        //            }
-        //            else if (pw.Type == enmChannelType.RHYTHM)
-        //            {
-        //                if (!pw.beforeTie)
-        //                {
-        //                    pw.keyOn = true;
-        //                }
-        //            }
-        //            else if (pw.Type == enmChannelType.ADPCM)
-        //            {
-        //                ((YM2608)pw.chip).SetAdpcmFNum(pw);
-
-        //                //タイ指定では無い場合はキーオンする
-        //                if (!pw.beforeTie)
-        //                {
-        //                    SetEnvelopeAtKeyOn(pw);
-        //                    SetLfoAtKeyOn(pw);
-        //                    ((YM2608)pw.chip).OutAdpcmKeyOn(pw);
-        //                }
-        //            }
-        //        }
-        //        else if (pw.chip is YM2610B)
-        //        {
-
-        //            //YM2610B
-
-        //            if (pw.Type == enmChannelType.FMOPN || pw.Type == enmChannelType.FMOPNex)
-        //            {
-        //                ((ClsOPN)pw.chip).SetFmFNum(pw);
-
-        //                //タイ指定では無い場合はキーオンする
-        //                if (!pw.beforeTie)
-        //                {
-        //                    SetLfoAtKeyOn(pw);
-        //                    ((ClsOPN)pw.chip).SetFmVolume(pw);
-        //                    ((ClsOPN)pw.chip).OutFmKeyOn(pw);
-        //                }
-        //            }
-        //            else if (pw.Type == enmChannelType.SSG)
-        //            {
-        //                ((ClsOPN)pw.chip).SetSsgFNum(pw);
-
-        //                //タイ指定では無い場合はキーオンする
-        //                if (!pw.beforeTie)
-        //                {
-        //                    SetEnvelopeAtKeyOn(pw);
-        //                    SetLfoAtKeyOn(pw);
-        //                    ((ClsOPN)pw.chip).OutSsgKeyOn(pw);
-        //                }
-        //            }
-        //            else if (pw.Type == enmChannelType.ADPCMA)
-        //            {
-        //                if (!pw.beforeTie)
-        //                {
-
-        //                    pw.keyOn = true;
-        //                    //if ((((YM2610B)pw.chip).adpcmA_KeyOn & (1 << (pw.ch - 12))) != 0)
-        //                    //{
-        //                    //    ((YM2610B)pw.chip).adpcmA_KeyOff |= (byte)(1 << (pw.ch - 12));
-        //                    //    ((YM2610B)pw.chip).adpcmA_beforeKeyOn &= (byte)~(1 << (pw.ch - 12));
-        //                    //}
-        //                    //((YM2610B)pw.chip).adpcmA_KeyOn |= (byte)(1 << (pw.ch - 12));
-
-        //                }
-        //            }
-        //            else if (pw.Type == enmChannelType.ADPCMB)
-        //            {
-        //                ((YM2610B)pw.chip).SetAdpcmBFNum(pw);
-
-        //                //タイ指定では無い場合はキーオンする
-        //                if (!pw.beforeTie)
-        //                {
-        //                    SetEnvelopeAtKeyOn(pw);
-        //                    SetLfoAtKeyOn(pw);
-        //                    ((YM2610B)pw.chip).OutAdpcmBKeyOn(pw);
-        //                }
-        //            }
-        //        }
-        //        else if (pw.chip is YM2612)
-        //        {
-
-        //            //YM2612
-
-        //            if (!pw.pcm)
-        //            {
-        //                ((ClsOPN)pw.chip).SetFmFNum(pw);
-        //            }
-        //            else
-        //            {
-        //                ((YM2612)pw.chip).GetPcmNote(pw);
-        //            }
-        //            //タイ指定では無い場合はキーオンする
-        //            if (!pw.beforeTie)
-        //            {
-        //                SetLfoAtKeyOn(pw);
-        //                ((ClsOPN)pw.chip).SetFmVolume(pw);
-        //                ((ClsOPN)pw.chip).OutFmKeyOn(pw);
-        //            }
-        //        }
-        //        else if (pw.chip is YM2612X)
-        //        {
-
-        //            //YM2612X
-
-        //            if (!pw.pcm)
-        //            {
-        //                ((ClsOPN)pw.chip).SetFmFNum(pw);
-        //            }
-        //            else
-        //            {
-        //                ((YM2612X)pw.chip).GetPcmNote(pw);
-        //            }
-        //            //タイ指定では無い場合はキーオンする
-        //            if (!pw.beforeTie)
-        //            {
-        //                SetLfoAtKeyOn(pw);
-        //                ((ClsOPN)pw.chip).SetFmVolume(pw);
-        //                ((ClsOPN)pw.chip).OutFmKeyOn(pw);
-        //            }
-        //        }
-        //        else if (pw.chip is SN76489)
-        //        {
-
-        //            // SN76489
-
-        //            ((SN76489)pw.chip).SetDcsgFNum(pw);
-
-        //            //タイ指定では無い場合はキーオンする
-        //            if (!pw.beforeTie)
-        //            {
-        //                SetEnvelopeAtKeyOn(pw);
-        //                SetLfoAtKeyOn(pw);
-        //                ((SN76489)pw.chip).OutPsgKeyOn(pw);
-        //            }
-        //        }
-        //        else if (pw.chip is RF5C164)
-        //        {
-
-        //            // RF5C164
-
-        //            ((RF5C164)pw.chip).SetRf5c164FNum(pw);
-
-        //            //タイ指定では無い場合はキーオンする
-        //            if (!pw.beforeTie)
-        //            {
-        //                SetEnvelopeAtKeyOn(pw);
-        //                SetLfoAtKeyOn(pw);
-        //                ((RF5C164)pw.chip).SetRf5c164Envelope(pw, pw.volume);
-        //                ((RF5C164)pw.chip).OutRf5c164KeyOn(pw);
-        //            }
-        //        }
-        //        else if (pw.chip is segaPcm)
-        //        {
-        //            ((segaPcm)pw.chip).SetSegaPcmFNum(pw);
-
-        //            if (!pw.beforeTie)
-        //            {
-        //                SetEnvelopeAtKeyOn(pw);
-        //                SetLfoAtKeyOn(pw);
-        //                ((segaPcm)pw.chip).OutSegaPcmKeyOn(pw);
-        //            }
-        //        }
-        //        else if (pw.chip is HuC6280)
-        //        {
-
-        //            // HuC6280
-
-        //            ((HuC6280)pw.chip).SetHuC6280FNum(pw);
-
-        //            //タイ指定では無い場合はキーオンする
-        //            if (!pw.beforeTie)
-        //            {
-        //                SetEnvelopeAtKeyOn(pw);
-        //                SetLfoAtKeyOn(pw);
-        //                ((HuC6280)pw.chip).SetHuC6280Envelope(pw, pw.volume);
-        //                ((HuC6280)pw.chip).OutHuC6280KeyOn(pw);
-        //            }
-        //        }
-
-        //        //gateTimeの決定
-        //        if (pw.gatetimePmode)
-        //        {
-        //            pw.waitKeyOnCounter = pw.waitCounter * pw.gatetime / 8L;
-        //        }
-        //        else
-        //        {
-        //            pw.waitKeyOnCounter = pw.waitCounter - pw.gatetime;
-        //        }
-        //        if (pw.waitKeyOnCounter < 1) pw.waitKeyOnCounter = 1;
-
-        //        //PCM専用のWaitClockの決定
-        //        if (pw.pcm)
-        //        {
-        //            pw.pcmWaitKeyOnCounter = -1;
-        //            if (info.Version == 1.51f)
-        //            {
-        //                pw.pcmWaitKeyOnCounter = pw.waitKeyOnCounter;
-        //            }
-
-        //            if (instPCM == null || instPCM.Count - 1 < pw.instrument)
-        //            {
-        //                pw.pcmSizeCounter = 0;
-        //            }
-        //            else
-        //            {
-        //                pw.pcmSizeCounter = instPCM[pw.instrument].size;
-        //            }
-
-        //        }
-        //    }
-        //    else
-        //    {
-        //        if (pw.reqKeyOffReset)
-        //        {
-        //            if (pw.chip is SN76489)
-        //            {
-        //                ((SN76489)pw.chip).OutPsgKeyOff(pw);
-        //                pw.reqKeyOffReset = false;
-        //            }
-        //        }
-        //    }
-
-        //    pw.clockCounter += pw.waitCounter;
-        //}
-
-        //private static int AnaSharp(partWork pw, ref int shift)
-        //{
-        //    while (pw.getChar() == '+' || pw.getChar() == '-')
-        //    {
-        //        shift += pw.getChar() == '+' ? 1 : -1;
-        //        pw.incPos();
-        //    }
-
-        //    return shift;
-        //}
-
-        //private void CmdRepeatExit(partWork pw)
-        //{
-        //    int n = -1;
-        //    pw.incPos();
-        //    clsRepeat rx = pw.stackRepeat.Pop();
-        //    if (rx.repeatCount == 1)
-        //    {
-        //        int i = 0;
-        //        while (true)
-        //        {
-        //            char c = pw.getChar();
-        //            if (c == ']')
-        //            {
-        //                if (i == 0)
-        //                {
-        //                    break;
-        //                }
-        //                else
-        //                    i--;
-        //            }
-        //            else if (c == '[')
-        //            {
-        //                i++;
-        //            }
-        //            pw.incPos();
-        //        }
-        //        pw.incPos();
-        //        pw.getNum(out n);
-        //    }
-        //    else
-        //    {
-        //        pw.stackRepeat.Push(rx);
-        //    }
-
-        //}
-
-        //private void CmdRepeatEnd(partWork pw)
-        //{
-        //    pw.incPos();
-        //    if (!pw.getNum(out int n))
-        //    {
-        //        n = 2;
-        //    }
-        //    n = Common.CheckRange(n, 1, 255);
-        //    try
-        //    {
-        //        clsRepeat re = pw.stackRepeat.Pop();
-        //        if (re.repeatCount == -1)
-        //        {
-        //            //初回
-        //            re.repeatCount = n;
-        //        }
-        //        re.repeatCount--;
-        //        if (re.repeatCount > 0)
-        //        {
-        //            pw.stackRepeat.Push(re);
-        //            pw.setPos(re.pos);
-        //        }
-        //    }
-        //    catch
-        //    {
-        //        msgBox.setWrnMsg("[と]の数があいません。", pw.getSrcFn(), pw.getLineNumber());
-        //    }
-        //}
-
-        //private void CmdRepeatStart(partWork pw)
-        //{
-        //    pw.incPos();
-        //    clsRepeat rs = new clsRepeat()
-        //    {
-        //        pos = pw.getPos(),
-        //        repeatCount = -1//初期値
-        //    };
-        //    pw.stackRepeat.Push(rs);
-        //}
-
-        //private void CmdRenpuStart(partWork pw)
-        //{
-        //    if (!pw.renpuFlg)
-        //    {
-        //        //MML解析
-        //        List<Tuple<int, string>> lstRenpu = new List<Tuple<int, string>>();
-        //        List<int> lstRenpuLength = new List<int>();
-        //        int nest = 0;
-        //        int pos = 0;
-        //        pw.incPos();
-        //        pos = pw.getPos();
-        //        DecStep1Renpu(pw, lstRenpu, nest);
-        //        if (lstRenpu.Count < 1)
-        //        {
-        //            msgBox.setErrMsg(
-        //                "連符コマンドの解析に失敗しました。動作は不定となります。"
-        //                , pw.getSrcFn(), pw.getLineNumber());
-        //            return;
-        //        }
-        //        DecStep2Renpu(lstRenpu, lstRenpuLength, 1, 0);
-
-        //        pw.setPos(pos);
-        //        pw.renpuFlg = true;
-        //        pw.lstRenpuLength = lstRenpuLength;
-        //    }
-        //    else
-        //    {
-        //        pw.incPos();
-        //    }
-        //}
-
-        //private void CmdRenpuEnd(partWork pw)
-        //{
-        //    if(pw.renpuFlg && pw.lstRenpuLength.Count == 0)
-        //    {
-        //        pw.renpuFlg = false;
-        //        pw.lstRenpuLength = null;
-        //    }
-        //    pw.incPos();
-
-        //    //数値指定のスキップ
-        //    pw.getNumNoteLength(out int n, out bool directFlg);
-
-        //}
-
-
-        //private bool SkipCommander(partWork pw,char ch)
-        //{
-
-        //    //true カウント
-        //    //false 無視
-        //    switch (ch)
-        //    {
-        //        case ' ':
-        //        case '\t':
-        //        case '!': // CompileSkip
-        //        case '>': // octave Up
-        //        case '<': // octave Down
-        //        case 'L': // loop point
-        //            pw.incPos();
-        //            break;
-        //        case 'T': // tempo
-        //        case 'v': // volume
-        //        case 'o': // octave
-        //        case ')': // volume Up
-        //        case '(': // volume Down
-        //        case 'l': // length
-        //        case '#': // length(clock)
-        //        case 'D': // Detune
-        //        case 'q': // gatetime
-        //        case 'Q': // gatetime
-        //        case 'K': // key shift
-        //            pw.incPos();
-        //            pw.getNum(out int n);
-        //            break;
-        //        case '@': // instrument
-        //            SkipCmdInstrument(pw, ch);
-        //            break;
-        //        case 'V': // totalVolume(Adpcm-A / Rhythm)
-        //            SkipCmdTotalVolume(pw);
-        //            break;
-        //        case 'p': // pan
-        //            SkipCmdPan(pw);
-        //            break;
-        //        case 'm': // pcm mode
-        //            SkipCmdMode(pw);
-        //            break;
-        //        case 'E': // envelope
-        //            SkipCmdEnvelope(pw);
-        //            break;
-        //        //case '[': // repeat
-        //        //case ']': // repeat
-        //        //case '/': // repeat
-        //        case 'M': // lfo
-        //            SkipCmdLfo(pw);
-        //            break;
-        //        case 'S': // lfo switch
-        //            SkipCmdLfoSwitch(pw);
-        //            break;
-        //        case 'y': // y 
-        //            SkipCmdY(pw);
-        //            break;
-        //        case 'w': // noise
-        //            SkipCmdNoise(pw);
-        //            break;
-        //        case 'P': // noise or tone mixer
-        //            SkipCmdMixer(pw);
-        //            break;
-        //        case 'c':
-        //        case 'd':
-        //        case 'e':
-        //        case 'f':
-        //        case 'g':
-        //        case 'a':
-        //        case 'b':
-        //        case 'r':
-        //            SkipCmdNote(pw, ch);
-        //            return true;
-        //        default:
-        //            msgBox.setErrMsg(
-        //                string.Format("連符コマンドの中で未対応のコマンド({0})が使用されています。動作は不定となります。", ch)
-        //                , pw.getSrcFn(), pw.getLineNumber());
-        //            pw.incPos();
-        //            break;
-        //    }
-
-        //    return false;
-        //}
-
-        //private void SkipCmdNoise(partWork pw)
-        //{
-        //    int n = -1;
-        //    pw.incPos();
-
-        //    if (pw.Type == enmChannelType.DCSGNOISE 
-        //        || pw.Type == enmChannelType.SSG 
-        //        || (pw.chip is YM2151) 
-        //        || (pw.chip is HuC6280 && pw.ch > 3))
-        //    {
-        //        pw.getNum(out n);
-        //    }
-        //}
-
-        //private void SkipCmdMixer(partWork pw)
-        //{
-        //    int n = -1;
-        //    pw.incPos();
-
-        //    if ((pw.Type == enmChannelType.SSG && (
-        //        (pw.chip is YM2203) || (pw.chip is YM2608) || (pw.chip is YM2610B)
-        //        ))
-        //        || (pw.chip is YM2151)
-        //        || (pw.chip is HuC6280 && pw.ch > 3)
-        //        )
-        //    {
-        //        pw.getNum(out n);
-        //    }
-        //}
-
-        //private void SkipCmdY(partWork pw)
-        //{
-        //    int n = -1;
-        //    pw.incPos();
-
-        //    char c = pw.getChar();
-        //    if (c >= 'A' && c <= 'Z')
-        //    {
-        //        string toneparamName = "" + c;
-        //        pw.incPos();
-        //        toneparamName += pw.getChar();
-        //        pw.incPos();
-        //        if (toneparamName != "TL" && toneparamName != "SR")
-        //        {
-        //            toneparamName += pw.getChar();
-        //            pw.incPos();
-        //            if (toneparamName != "SSG")
-        //            {
-        //                toneparamName += pw.getChar();
-        //                pw.incPos();
-        //            }
-        //        }
-
-        //        if (toneparamName == "DT1M" || toneparamName == "DT2S" || toneparamName == "PMSA")
-        //        {
-        //            toneparamName += pw.getChar();
-        //            pw.incPos();
-        //            if (toneparamName == "PMSAM")
-        //            {
-        //                toneparamName += pw.getChar();
-        //                pw.incPos();
-        //            }
-        //        }
-
-        //        pw.incPos();
-
-        //        if (toneparamName != "FBAL" && toneparamName != "PMSAMS")
-        //        {
-        //            pw.getNum(out n);
-        //            pw.incPos();
-        //        }
-
-        //        pw.getNum(out n);
-
-        //        return;
-        //    }
-
-        //    pw.getNum(out n);
-        //    pw.incPos();
-        //    pw.getNum(out n);
-
-        //}
-
-        //private void SkipCmdLfo(partWork pw)
-        //{
-        //    pw.incPos();
-        //    char c = pw.getChar();
-        //    if (c == 'A')
-        //    {
-        //        pw.incPos();
-        //        if (pw.getChar() == 'M')
-        //        {
-        //            pw.incPos();
-        //            if (pw.getChar() == 'S') SkipCmdMAMS_PMS(pw);
-        //        }
-        //        return;
-        //    }
-        //    if (c < 'P' && c > 'S') return;
-        //    pw.incPos();
-        //    char t = pw.getChar();
-        //    if (c == 'P' && t == 'M')
-        //    {
-        //        pw.incPos();
-        //        if (pw.getChar() == 'S') SkipCmdMAMS_PMS(pw);
-        //        return;
-        //    }
-        //    if (t != 'T' && t != 'V' && t != 'H') return;
-        //    int n = -1;
-        //    do
-        //    {
-        //        pw.incPos();
-        //        if (!pw.getNum(out n)) return;
-        //        while (pw.getChar() == '\t' || pw.getChar() == ' ') pw.incPos(); 
-        //    } while (pw.getChar() == ',');
-        //}
-
-        //private void SkipCmdLfoSwitch(partWork pw)
-        //{
-        //    pw.incPos();
-        //    if (pw.getChar() < 'P' || pw.getChar() > 'S')
-        //    {
-        //        pw.incPos();
-        //        return;
-        //    }
-        //    int n = -1;
-        //    pw.incPos();
-        //    if (!pw.getNum(out n)) return;
-        //}
-
-        //private void SkipCmdMAMS_PMS(partWork pw)
-        //{
-        //    if (!((pw.chip is YM2151) || (pw.chip is YM2608) || (pw.chip is YM2610B) || (pw.chip is YM2612) || (pw.chip is YM2612X)
-        //        || (pw.Type == enmChannelType.FMOPM) || (pw.Type == enmChannelType.FMOPN)))
-        //        return;
-
-        //    int n = -1;
-        //    pw.incPos();
-        //    pw.getNum(out n);
-        //}
-
-        //private void SkipCmdTotalVolume(partWork pw)
-        //{
-        //    pw.incPos();
-        //    pw.getNum(out int n);
-        //    if (pw.chip is HuC6280)
-        //    {
-        //        pw.incPos();
-        //        pw.getNum(out n);
-        //    }
-        //}
-
-        //private void SkipCmdInstrument(partWork pw, char cmd)
-        //{
-        //    int n;
-        //    pw.incPos();
-
-        //    if (pw.getChar() == 'T')
-        //    {
-        //        if (pw.Type != enmChannelType.FMOPM && pw.Type != enmChannelType.FMOPN && pw.Type != enmChannelType.FMOPNex)
-        //        {
-        //            pw.incPos();
-        //            return;
-        //        }
-        //        pw.incPos();
-        //        pw.getNum(out n);
-        //        return;
-        //    }
-
-        //    if ((pw.chip is YM2151) || (pw.chip is YM2203))
-        //    {
-        //        pw.getNum(out n);
-        //    }
-        //    else if (pw.chip is YM2608)
-        //    {
-        //        if ((pw.ch < 9) || (pw.Type == enmChannelType.SSG))
-        //        {
-        //            pw.getNum(out n);
-        //        }
-        //        else if ((pw.Type == enmChannelType.RHYTHM) || (pw.Type == enmChannelType.ADPCM))
-        //        {
-        //            if (pw.getChar() != 'E')
-        //            {
-        //                pw.getNum(out n);
-        //            }
-        //            else
-        //            {
-        //                pw.incPos();
-        //                pw.getNum(out n);
-        //            }
-        //        }
-        //    }
-        //    else if (pw.chip is YM2610B)
-        //    {
-        //        if ((pw.ch < 9) || (pw.Type == enmChannelType.SSG))
-        //        {
-        //            pw.getNum(out n);
-        //        }
-        //        else if ((pw.Type == enmChannelType.ADPCMA) || (pw.Type == enmChannelType.ADPCMB))
-        //        {
-        //            if (pw.getChar() != 'E')
-        //            {
-        //                pw.getNum(out n);
-        //            }
-        //            else
-        //            {
-        //                pw.incPos();
-        //                pw.getNum(out n);
-        //            }
-        //        }
-        //    }
-        //    else if ((pw.chip is YM2612) || (pw.chip is YM2612X) || (pw.chip is SN76489))
-        //    {
-        //        pw.getNum(out n);
-        //    }
-        //    else if ((pw.chip is RF5C164) || (pw.chip is segaPcm) || (pw.chip is HuC6280))
-        //    {
-        //        if (pw.getChar() != 'E')
-        //        {
-        //            pw.getNum(out n);
-        //        }
-        //        else
-        //        {
-        //            pw.incPos();
-        //            pw.getNum(out n);
-        //        }
-        //    }
-
-        //}
-
-        //private void SkipCmdNote(partWork pw, char cmd)
-        //{
-        //    pw.incPos();
-
-        //    //+ -の解析
-        //    int shift = 0;
-        //    shift = AnaSharp(pw, ref shift);
-
-        //    int n = -1;
-        //    bool directFlg = false;
-        //    bool isMinus = false;
-        //    bool isTieType2 = false;
-        //    bool isSecond = false;
-        //    bool pwTie = false;
-        //    do
-        //    {
-        //        //数値の解析
-        //        if (!pw.getNumNoteLength(out n, out directFlg))
-        //        {
-        //            if (!isSecond)
-        //                n = (int)pw.length;
-        //            else if (!isMinus)
-        //            {
-        //                if (!isTieType2)
-        //                {
-        //                    //タイとして'&'が使用されている
-        //                    pwTie = true;
-        //                }
-        //                else
-        //                {
-        //                    n = (int)pw.length;
-        //                }
-        //            }
-        //        }
-        //        else
-        //        {
-        //            if (n == 0) return;
-        //        }
-
-        //        //Tone Doubler
-        //        if (pw.getChar() == ',')
-        //        {
-        //            pw.incPos();
-        //            return;
-        //        }
-
-        //        if (!pwTie || isTieType2)
-        //        {
-        //            //符点の解析
-        //            while (pw.getChar() == '.') pw.incPos();
-        //        }
-
-        //        isTieType2 = false;
-
-        //        //ベンドの解析
-        //        if (pw.getChar() == '_')
-        //        {
-        //            pw.incPos();
-        //            bool loop = true;
-        //            while (loop)
-        //            {
-        //                char bCmd = pw.getChar();
-        //                switch (bCmd)
-        //                {
-        //                    case 'c':
-        //                    case 'd':
-        //                    case 'e':
-        //                    case 'f':
-        //                    case 'g':
-        //                    case 'a':
-        //                    case 'b':
-        //                        loop = false;
-        //                        pw.incPos();
-        //                        //+ -の解析
-        //                        AnaSharp(pw, ref shift);
-        //                        isMinus = false;
-        //                        isTieType2 = false;
-        //                        isSecond = false;
-        //                        do
-        //                        {
-        //                            //数値の解析
-        //                            if (!pw.getNumNoteLength(out n, out directFlg))
-        //                            {
-        //                                if (!isSecond)
-        //                                {
-        //                                    break;
-        //                                }
-        //                                else if (!isMinus)
-        //                                {
-        //                                    if (!isTieType2)
-        //                                    {
-        //                                        //タイとして'&'が使用されている
-        //                                        pwTie = true;
-        //                                    }
-        //                                    break;
-        //                                }
-        //                            }
-
-        //                            if (!pw.tie || isTieType2)
-        //                            {
-        //                                //符点の解析
-        //                                while (pw.getChar() == '.') pw.incPos();
-        //                            }
-
-        //                            isTieType2 = false;
-
-        //                            if (pw.getChar() == '&')
-        //                            {
-        //                                isMinus = false;
-        //                                isTieType2 = false;
-        //                            }
-        //                            else if (pw.getChar() == '^')
-        //                            {
-        //                                isMinus = false;
-        //                                isTieType2 = true;
-        //                            }
-        //                            else if (pw.getChar() == '~')
-        //                            {
-        //                                isMinus = true;
-        //                            }
-        //                            else
-        //                            {
-        //                                break;
-        //                            }
-
-        //                            isSecond = true;
-        //                            pw.incPos();
-
-        //                        } while (true);
-
-        //                        break;
-        //                    case 'o':
-        //                        pw.incPos();
-        //                        break;
-        //                    case '>':
-        //                        pw.incPos();
-        //                        break;
-        //                    case '<':
-        //                        pw.incPos();
-        //                        break;
-        //                    default:
-        //                        loop = false;
-        //                        break;
-        //                }
-        //            }
-
-        //        }
-
-        //        if (pw.getChar() == '&')
-        //        {
-        //            isMinus = false;
-        //            isTieType2 = false;
-        //        }
-        //        else if (pw.getChar() == '^')
-        //        {
-        //            isMinus = false;
-        //            isTieType2 = true;
-        //        }
-        //        else if (pw.getChar() == '~')
-        //        {
-        //            isMinus = true;
-        //        }
-        //        else
-        //        {
-        //            break;
-        //        }
-
-        //        isSecond = true;
-        //        pw.incPos();
-
-        //    } while (true);
-
-
-        //    //装飾の解析完了
-
-
-        //}
-
-        //private void SkipCmdPan(partWork pw)
-        //{
-        //    int n;
-
-        //    pw.incPos();
-
-        //    if ((pw.chip is YM2151) || (pw.chip is YM2608) || (pw.chip is YM2610B)
-        //        || (pw.chip is YM2612) || (pw.chip is YM2612X) || (pw.chip is SN76489))
-        //    {
-        //        pw.getNum(out n);
-        //    }
-        //    else if ((pw.chip is RF5C164) || (pw.chip is segaPcm) || (pw.chip is HuC6280))
-        //    {
-        //        pw.getNum(out n);
-        //        pw.incPos();
-        //        pw.getNum(out n);
-        //    }
-
-        //}
-
-        //private void SkipCmdMode(partWork pw)
-        //{
-        //    pw.incPos();
-        //    pw.getNum(out int n);
-
-        //}
-
-        //private void SkipCmdEnvelope(partWork pw)
-        //{
-        //    int n = -1;
-        //    if (
-        //        ((pw.chip is YM2203) && (pw.Type == enmChannelType.SSG || pw.Type == enmChannelType.FMOPNex))
-        //        || ((pw.chip is YM2608) && (pw.Type == enmChannelType.SSG || pw.Type == enmChannelType.FMOPNex))
-        //        || ((pw.chip is YM2610B) && (pw.Type == enmChannelType.SSG || pw.Type == enmChannelType.FMOPNex))
-        //        || ((pw.chip is YM2612) && (pw.Type == enmChannelType.FMPCM || pw.Type == enmChannelType.FMOPNex))
-        //        || ((pw.chip is YM2612X) && (pw.Type == enmChannelType.FMPCM || pw.Type == enmChannelType.FMOPNex))
-        //        || (pw.chip is SN76489)
-        //        || (pw.chip is RF5C164)
-        //        || (pw.chip is segaPcm)
-        //        || (pw.chip is HuC6280)
-        //        )
-        //    {
-        //        pw.incPos();
-        //        switch (pw.getChar())
-        //        {
-        //            case 'O':
-        //                pw.incPos();
-        //                pw.incPos();
-        //                break;
-        //            case 'X':
-        //                if (
-        //                    ((pw.chip is YM2203) && pw.Type == enmChannelType.FMOPNex)
-        //                    || ((pw.chip is YM2608) && pw.Type == enmChannelType.FMOPNex)
-        //                    || ((pw.chip is YM2610B) && pw.Type == enmChannelType.FMOPNex)
-        //                    || pw.chip is YM2612
-        //                    || pw.chip is YM2612X
-        //                    )
-        //                {
-        //                    pw.incPos();
-        //                    pw.getNum(out n);
-        //                }
-        //                break;
-        //            default:
-        //                if (pw.Type == enmChannelType.FMOPNex)
-        //                {
-        //                    for (int i = 0; i < 4; i++)
-        //                    {
-        //                        pw.getNum(out n);
-        //                        if (i == 3) break;
-        //                        pw.incPos();
-        //                    }
-        //                    break;
-        //                }
-        //                else
-        //                {
-        //                    pw.incPos();
-        //                }
-        //                break;
-        //        }
-        //    }
-        //    else
-        //    {
-        //        pw.incPos();
-        //    }
-
-        //}
-
-
-        //private void DecStep1Renpu(partWork pw, List<Tuple<int, string>> lstRenpu, int nest)
-        //{
-        //    nest++;
-        //    int count = 0;
-        //    string str = "";
-        //    char ch;
-        //    while ((ch = pw.getChar()) != '}')
-        //    {
-        //        if (pw.dataEnd) { return; }
-        //        if (ch == '{')
-        //        {
-        //            pw.incPos();
-        //            DecStep1Renpu(pw,  lstRenpu, nest);
-        //            ch = '*';
-        //            str += ch;
-        //            count++;
-        //        }
-        //        else
-        //        {
-        //            if (SkipCommander(pw,ch))
-        //            {
-        //                str += ch;
-        //                count++;
-        //            }
-        //        }
-        //    }
-        //    pw.incPos();
-
-        //    //数値解析(ネスト中は単なるスキップ
-        //    if (!pw.getNumNoteLength(out int n, out bool directFlg))
-        //    {
-        //        n = (int)pw.length;
-        //    }
-        //    else
-        //    {
-        //        if (!directFlg)
-        //        {
-        //            if ((int)info.clockCount % n != 0)
-        //            {
-        //                msgBox.setWrnMsg(string.Format("割り切れない音長({0})の指定があります。音長は不定になります。", n), pw.getSrcFn(), pw.getLineNumber());
-        //            }
-        //            n = (int)info.clockCount / n;
-        //        }
-        //        else
-        //        {
-        //            n = Common.CheckRange(n, 1, 65535);
-        //        }
-        //    }
-        //    if (nest > 1) n = -1;
-
-        //    lstRenpu.Add(new Tuple<int, string>(n, str));
-        //    nest--;
-        //}
-
-        //private void DecStep2Renpu(List<Tuple<int, string>> lstRenpu,List<int> lstRenpuLength, int nest,int len)
-        //{
-        //    Tuple<int, string> t = lstRenpu[lstRenpu.Count - nest];
-        //    if (t.Item1 != -1) len = t.Item1;
-
-        //    for (int p = 0; p < t.Item2.Length; p++)
-        //    {
-        //        int le = len / t.Item2.Length + ((len % t.Item2.Length) == 0 ? 0 : ((len % t.Item2.Length) > p ? 1 : 0));
-        //        if (t.Item2[p] != '*') lstRenpuLength.Add(le);
-        //        else DecStep2Renpu(lstRenpu,lstRenpuLength, nest + 1, le);
-        //    }
-        //}
-
-        //private void CmdEnvelope(partWork pw)
-        //{
-        //    int n = -1;
-        //    if (
-        //        ((pw.chip is YM2203) && (pw.Type == enmChannelType.SSG || pw.Type == enmChannelType.FMOPNex))
-        //        || ((pw.chip is YM2608) && (pw.Type == enmChannelType.SSG || pw.Type == enmChannelType.FMOPNex))
-        //        || ((pw.chip is YM2610B) && (pw.Type == enmChannelType.SSG || pw.Type == enmChannelType.FMOPNex))
-        //        || ((pw.chip is YM2612) && (pw.Type == enmChannelType.FMPCM || pw.Type == enmChannelType.FMOPNex))
-        //        || ((pw.chip is YM2612X) && (pw.Type == enmChannelType.FMPCM || pw.Type == enmChannelType.FMOPNex))
-        //        || (pw.chip is SN76489)
-        //        || (pw.chip is RF5C164)
-        //        || (pw.chip is segaPcm)
-        //        || (pw.chip is HuC6280)
-        //        )
-        //    {
-        //        pw.incPos();
-        //        switch (pw.getChar())
-        //        {
-        //            case 'O':
-        //                pw.incPos();
-        //                if (
-        //                    ((pw.chip is YM2203) && pw.Type == enmChannelType.FMOPNex)
-        //                    || ((pw.chip is YM2608) && pw.Type == enmChannelType.FMOPNex)
-        //                    || ((pw.chip is YM2610B) && pw.Type == enmChannelType.FMOPNex)
-        //                    || pw.chip is YM2612
-        //                    || pw.chip is YM2612X
-        //                    )
-        //                {
-        //                    switch (pw.getChar())
-        //                    {
-        //                        case 'N':
-        //                            pw.incPos();
-        //                            pw.Ch3SpecialMode = true;
-        //                            ((ClsOPN)pw.chip).OutOPNSetCh3SpecialMode(pw, true);
-        //                            break;
-        //                        case 'F':
-        //                            pw.incPos();
-        //                            pw.Ch3SpecialMode = false;
-        //                            ((ClsOPN)pw.chip).OutOPNSetCh3SpecialMode(pw, false);
-        //                            break;
-        //                        default:
-        //                            msgBox.setErrMsg(string.Format("未知のコマンド(EO{0})が指定されました。", pw.getChar()), pw.getSrcFn(), pw.getLineNumber());
-        //                            pw.incPos();
-        //                            break;
-        //                    }
-        //                }
-        //                else
-        //                {
-        //                    switch (pw.getChar())
-        //                    {
-        //                        case 'N':
-        //                            pw.incPos();
-        //                            pw.envelopeMode = true;
-        //                            break;
-        //                        case 'F':
-        //                            pw.incPos();
-        //                            pw.envelopeMode = false;
-        //                            if (pw.Type == enmChannelType.SSG)
-        //                            {
-        //                                pw.beforeVolume = -1;
-        //                            }
-        //                            break;
-        //                        default:
-        //                            msgBox.setErrMsg(string.Format("未知のコマンド(EO{0})が指定されました。", pw.getChar()), pw.getSrcFn(), pw.getLineNumber());
-        //                            pw.incPos();
-        //                            break;
-        //                    }
-        //                }
-        //                break;
-        //            case 'X':
-        //                char c = pw.getChar();
-        //                if (
-        //                    ((pw.chip is YM2203) && pw.Type == enmChannelType.FMOPNex)
-        //                    || ((pw.chip is YM2608) && pw.Type == enmChannelType.FMOPNex)
-        //                    || ((pw.chip is YM2610B) && pw.Type == enmChannelType.FMOPNex)
-        //                    || pw.chip is YM2612
-        //                    || pw.chip is YM2612X
-        //                    )
-        //                {
-        //                    pw.incPos();
-        //                    if (!pw.getNum(out n))
-        //                    {
-        //                        msgBox.setErrMsg("不正なスロット指定'EX'が指定されています。", pw.getSrcFn(), pw.getLineNumber());
-        //                        n = 0;
-        //                    }
-        //                    byte res = 0;
-        //                    while (n % 10 != 0)
-        //                    {
-        //                        if (n % 10 > 0 && n % 10 < 5)
-        //                        {
-        //                            res += (byte)(1 << (n % 10 - 1));
-        //                        }
-        //                        else
-        //                        {
-        //                            msgBox.setErrMsg(string.Format("未知のコマンド(EX{0})が指定されました。", n), pw.getSrcFn(), pw.getLineNumber());
-        //                            break;
-        //                        }
-        //                        n /= 10;
-        //                    }
-        //                    if (res != 0)
-        //                    {
-        //                        pw.slots = res;
-        //                    }
-        //                }
-        //                else
-        //                {
-        //                    msgBox.setErrMsg("未知のコマンド(EX)が指定されました。", pw.getSrcFn(), pw.getLineNumber());
-        //                }
-        //                break;
-        //            default:
-        //                if (pw.Type == enmChannelType.FMOPNex)
-        //                {
-        //                    int[] s = new int[] { 0, 0, 0, 0 };
-
-        //                    for (int i = 0; i < 4; i++)
-        //                    {
-        //                        if (pw.getNum(out n))
-        //                        {
-        //                            s[i] = n;
-        //                        }
-        //                        else
-        //                        {
-        //                            msgBox.setErrMsg("Eコマンドの解析に失敗しました。", pw.getSrcFn(), pw.getLineNumber());
-        //                            break;
-        //                        }
-        //                        if (i == 3) break;
-        //                        pw.incPos();
-        //                    }
-        //                    pw.slotDetune = s;
-        //                    break;
-        //                }
-        //                else
-        //                {
-        //                    msgBox.setErrMsg(string.Format("未知のコマンド(E{0})が指定されました。", pw.getChar()), pw.getSrcFn(), pw.getLineNumber());
-        //                    pw.incPos();
-        //                }
-        //                break;
-        //        }
-        //    }
-        //    else
-        //    {
-        //        msgBox.setWrnMsg("このパートは効果音モードに対応したチャンネルが指定されていないため、Eコマンドは無視されます。", pw.getSrcFn(), pw.getLineNumber());
-        //        pw.incPos();
-        //    }
-
-        //}
-
-        //private void CmdInstrument(partWork pw)
-        //{
-        //    int n;
-        //    pw.incPos();
-
-        //    if (pw.getChar() == 'T')
-        //    {
-        //        if (pw.Type != enmChannelType.FMOPM && pw.Type != enmChannelType.FMOPN && pw.Type != enmChannelType.FMOPNex)
-        //        {
-        //            msgBox.setErrMsg("Tone DoublerはFM音源以外では使用できません。", pw.getSrcFn(), pw.getLineNumber());
-        //            pw.incPos();
-        //            return;
-        //        }
-        //        pw.incPos();
-        //        if (!pw.getNum(out n))
-        //        {
-        //            msgBox.setErrMsg("不正な音色番号が指定されています。", pw.getSrcFn(), pw.getLineNumber());
-        //            n = 0;
-        //        }
-        //        n = Common.CheckRange(n, 0, 255);
-        //        pw.toneDoubler = n;
-        //        return;
-        //    }
-
-        //    if (pw.chip is YM2151)
-        //    {
-        //        if (!pw.getNum(out n))
-        //        {
-        //            msgBox.setErrMsg("不正な音色番号が指定されています。", pw.getSrcFn(), pw.getLineNumber());
-        //            n = 0;
-        //        }
-        //        n = Common.CheckRange(n, 0, 255);
-        //        if (pw.instrument != n)
-        //        {
-        //            pw.instrument = n;
-        //            ((YM2151)pw.chip).OutSetInstrument(pw, n, pw.volume);
-        //        }
-        //    }
-        //    else if (pw.chip is YM2203)
-        //    {
-        //        if (pw.ch < 6)
-        //        {
-        //            if (!pw.getNum(out n))
-        //            {
-        //                msgBox.setErrMsg("不正な音色番号が指定されています。", pw.getSrcFn(), pw.getLineNumber());
-        //                n = 0;
-        //            }
-        //            n = Common.CheckRange(n, 0, 255);
-        //            if (pw.instrument != n)
-        //            {
-        //                pw.instrument = n;
-        //                if (pw.Type == enmChannelType.FMOPNex)
-        //                {
-        //                    ym2203[pw.chip.ChipID].lstPartWork[2].instrument = n;
-        //                    ym2203[pw.chip.ChipID].lstPartWork[3].instrument = n;
-        //                    ym2203[pw.chip.ChipID].lstPartWork[4].instrument = n;
-        //                    ym2203[pw.chip.ChipID].lstPartWork[5].instrument = n;
-        //                }
-        //                ym2203[pw.chip.ChipID].OutFmSetInstrument(pw, n, pw.volume);
-        //            }
-        //        }
-        //        else if (pw.Type == enmChannelType.SSG)
-        //        {
-        //            n = SetEnvelopParamFromInstrument(pw);
-        //        }
-        //    }
-        //    else if (pw.chip is YM2608)
-        //    {
-        //        if (pw.ch < 9)
-        //        {
-        //            if (!pw.getNum(out n))
-        //            {
-        //                msgBox.setErrMsg("不正な音色番号が指定されています。", pw.getSrcFn(), pw.getLineNumber());
-        //                n = 0;
-        //            }
-        //            n = Common.CheckRange(n, 0, 255);
-        //            if (pw.instrument != n)
-        //            {
-        //                pw.instrument = n;
-        //                if (pw.Type == enmChannelType.FMOPNex)
-        //                {
-        //                    ym2608[pw.chip.ChipID].lstPartWork[2].instrument = n;
-        //                    ym2608[pw.chip.ChipID].lstPartWork[6].instrument = n;
-        //                    ym2608[pw.chip.ChipID].lstPartWork[7].instrument = n;
-        //                    ym2608[pw.chip.ChipID].lstPartWork[8].instrument = n;
-        //                }
-        //                ym2608[pw.chip.ChipID].OutFmSetInstrument(pw, n, pw.volume);
-        //            }
-        //        }
-        //        else if (pw.Type == enmChannelType.SSG)
-        //        {
-        //            n = SetEnvelopParamFromInstrument(pw);
-        //        }
-        //        else if (pw.Type == enmChannelType.RHYTHM)
-        //        {
-        //            if (pw.getChar() != 'E')
-        //            {
-        //                n = SetEnvelopParamFromInstrument(pw);
-        //            }
-        //            else
-        //            {
-        //                pw.incPos();
-        //                n = SetEnvelopParamFromInstrument(pw);
-        //            }
-        //        }
-        //        else if (pw.Type == enmChannelType.ADPCM)
-        //        {
-        //            if (pw.getChar() != 'E')
-        //            {
-        //                if (!pw.getNum(out n))
-        //                {
-        //                    msgBox.setErrMsg("不正な音色番号が指定されています。", pw.getSrcFn(), pw.getLineNumber());
-        //                    n = 0;
-        //                }
-        //                n = Common.CheckRange(n, 0, 255);
-        //                if (!instPCM.ContainsKey(n))
-        //                {
-        //                    msgBox.setErrMsg(string.Format("PCM定義に指定された音色番号({0})が存在しません。", n), pw.getSrcFn(), pw.getLineNumber());
-        //                }
-        //                else
-        //                {
-        //                    if (instPCM[n].chip != enmChipType.YM2608 || instPCM[n].loopAdr != 1)
-        //                    {
-        //                        msgBox.setErrMsg(string.Format("指定された音色番号({0})はYM2608向けPCMデータではありません。", n), pw.getSrcFn(), pw.getLineNumber());
-        //                    }
-        //                    pw.instrument = n;
-        //                    ym2608[pw.chip.ChipID].SetADPCMAddress(pw, (int)instPCM[n].stAdr, (int)instPCM[n].edAdr);
-        //                }
-        //            }
-        //            else
-        //            {
-        //                pw.incPos();
-        //                n = SetEnvelopParamFromInstrument(pw);
-        //            }
-        //        }
-        //    }
-        //    else if (pw.chip is YM2610B)
-        //    {
-        //        if (pw.ch < 9)
-        //        {
-        //            if (!pw.getNum(out n))
-        //            {
-        //                msgBox.setErrMsg("不正な音色番号が指定されています。", pw.getSrcFn(), pw.getLineNumber());
-        //                n = 0;
-        //            }
-        //            n = Common.CheckRange(n, 0, 255);
-        //            if (pw.instrument != n)
-        //            {
-        //                pw.instrument = n;
-        //                if (pw.Type == enmChannelType.FMOPNex)
-        //                {
-        //                    ym2610b[pw.chip.ChipID].lstPartWork[2].instrument = n;
-        //                    ym2610b[pw.chip.ChipID].lstPartWork[6].instrument = n;
-        //                    ym2610b[pw.chip.ChipID].lstPartWork[7].instrument = n;
-        //                    ym2610b[pw.chip.ChipID].lstPartWork[8].instrument = n;
-        //                }
-        //                if (!pw.pcm)
-        //                {
-        //                    ym2610b[pw.chip.ChipID].OutFmSetInstrument(pw, n, pw.volume);
-        //                }
-        //                else
-        //                {
-        //                    if (!instPCM.ContainsKey(n))
-        //                    {
-        //                        msgBox.setErrMsg(string.Format("PCM定義に指定された音色番号({0})が存在しません。", n), pw.getSrcFn(), pw.getLineNumber());
-        //                    }
-        //                    else
-        //                    {
-        //                        if (instPCM[n].chip != enmChipType.YM2610B)
-        //                        {
-        //                            msgBox.setErrMsg(string.Format("指定された音色番号({0})はYM2610B向けPCMデータではありません。", n), pw.getSrcFn(), pw.getLineNumber());
-        //                        }
-        //                    }
-        //                }
-        //            }
-        //        }
-        //        else if (pw.Type == enmChannelType.SSG)
-        //        {
-        //            n = SetEnvelopParamFromInstrument(pw);
-        //        }
-        //        else if (pw.Type == enmChannelType.ADPCMA)
-        //        {
-        //            if (pw.getChar() != 'E')
-        //            {
-        //                if (!pw.getNum(out n))
-        //                {
-        //                    msgBox.setErrMsg("不正な音色番号が指定されています。", pw.getSrcFn(), pw.getLineNumber());
-        //                    n = 0;
-        //                }
-        //                n = Common.CheckRange(n, 0, 255);
-        //                if (!instPCM.ContainsKey(n))
-        //                {
-        //                    msgBox.setErrMsg(string.Format("PCM定義に指定された音色番号({0})が存在しません。", n), pw.getSrcFn(), pw.getLineNumber());
-        //                }
-        //                else
-        //                {
-        //                    if (instPCM[n].chip != enmChipType.YM2610B || instPCM[n].loopAdr != 0)
-        //                    {
-        //                        msgBox.setErrMsg(string.Format("指定された音色番号({0})はYM2610B向けPCMデータではありません。", n), pw.getSrcFn(), pw.getLineNumber());
-        //                    }
-        //                    pw.instrument = n;
-        //                    ym2610b[pw.chip.ChipID].SetADPCMAAddress(pw, (int)instPCM[n].stAdr, (int)instPCM[n].edAdr);
-        //                }
-        //            }
-        //            else
-        //            {
-        //                pw.incPos();
-        //                n = SetEnvelopParamFromInstrument(pw);
-        //            }
-        //        }
-        //        else if (pw.Type == enmChannelType.ADPCMB)
-        //        {
-        //            if (pw.getChar() != 'E')
-        //            {
-        //                if (!pw.getNum(out n))
-        //                {
-        //                    msgBox.setErrMsg("不正な音色番号が指定されています。", pw.getSrcFn(), pw.getLineNumber());
-        //                    n = 0;
-        //                }
-        //                n = Common.CheckRange(n, 0, 255);
-        //                if (!instPCM.ContainsKey(n))
-        //                {
-        //                    msgBox.setErrMsg(string.Format("PCM定義に指定された音色番号({0})が存在しません。", n), pw.getSrcFn(), pw.getLineNumber());
-        //                }
-        //                else
-        //                {
-        //                    if (instPCM[n].chip != enmChipType.YM2610B || instPCM[n].loopAdr != 1)
-        //                    {
-        //                        msgBox.setErrMsg(string.Format("指定された音色番号({0})はYM2610B向けPCMデータではありません。", n), pw.getSrcFn(), pw.getLineNumber());
-        //                    }
-        //                    pw.instrument = n;
-        //                    ym2610b[pw.chip.ChipID].SetADPCMBAddress(pw, (int)instPCM[n].stAdr, (int)instPCM[n].edAdr);
-        //                }
-        //            }
-        //            else
-        //            {
-        //                pw.incPos();
-        //                n = SetEnvelopParamFromInstrument(pw);
-        //            }
-        //        }
-        //    }
-        //    else if (pw.chip is YM2612)
-        //    {
-        //        if (!pw.getNum(out n))
-        //        {
-        //            msgBox.setErrMsg("不正な音色番号が指定されています。", pw.getSrcFn(), pw.getLineNumber());
-        //            n = 0;
-        //        }
-        //        n = Common.CheckRange(n, 0, 255);
-        //        if (pw.instrument != n)
-        //        {
-        //            pw.instrument = n;
-        //            if (pw.Type == enmChannelType.FMOPNex)
-        //            {
-        //                ym2612[pw.chip.ChipID].lstPartWork[2].instrument = n;
-        //                ym2612[pw.chip.ChipID].lstPartWork[6].instrument = n;
-        //                ym2612[pw.chip.ChipID].lstPartWork[7].instrument = n;
-        //                ym2612[pw.chip.ChipID].lstPartWork[8].instrument = n;
-        //            }
-        //            if (!pw.pcm)
-        //            {
-        //                ym2612[pw.chip.ChipID].OutFmSetInstrument(pw, n, pw.volume);
-        //            }
-        //            else
-        //            {
-        //                if (!instPCM.ContainsKey(n))
-        //                {
-        //                    msgBox.setErrMsg(string.Format("PCM定義に指定された音色番号({0})が存在しません。", n), pw.getSrcFn(), pw.getLineNumber());
-        //                }
-        //                else
-        //                {
-        //                    if (instPCM[n].chip != enmChipType.YM2612)
-        //                    {
-        //                        msgBox.setErrMsg(string.Format("指定された音色番号({0})はYM2612向けPCMデータではありません。", n), pw.getSrcFn(), pw.getLineNumber());
-        //                    }
-        //                }
-        //            }
-        //        }
-        //    }
-        //    else if (pw.chip is YM2612X)
-        //    {
-        //        if (!pw.getNum(out n))
-        //        {
-        //            msgBox.setErrMsg("不正な音色番号が指定されています。", pw.getSrcFn(), pw.getLineNumber());
-        //            n = 0;
-        //        }
-        //        n = Common.CheckRange(n, 0, 255);
-        //        if (pw.instrument != n)
-        //        {
-        //            pw.instrument = n;
-        //            if (pw.Type == enmChannelType.FMOPNex)
-        //            {
-        //                ym2612x[pw.chip.ChipID].lstPartWork[2].instrument = n;
-        //                ym2612x[pw.chip.ChipID].lstPartWork[6].instrument = n;
-        //                ym2612x[pw.chip.ChipID].lstPartWork[7].instrument = n;
-        //                ym2612x[pw.chip.ChipID].lstPartWork[8].instrument = n;
-        //            }
-        //            if (!pw.pcm)
-        //            {
-        //                ym2612x[pw.chip.ChipID].OutFmSetInstrument(pw, n, pw.volume);
-        //            }
-        //            else
-        //            {
-        //                if (!instPCM.ContainsKey(n))
-        //                {
-        //                    msgBox.setErrMsg(string.Format("PCM定義に指定された音色番号({0})が存在しません。", n), pw.getSrcFn(), pw.getLineNumber());
-        //                }
-        //                else
-        //                {
-        //                    if (instPCM[n].chip != enmChipType.YM2612X)
-        //                    {
-        //                        msgBox.setErrMsg(string.Format("指定された音色番号({0})はYM2612(XGM)向けPCMデータではありません。", n), pw.getSrcFn(), pw.getLineNumber());
-        //                    }
-        //                }
-        //            }
-        //        }
-        //    }
-        //    else if (pw.chip is SN76489)
-        //    {
-        //        //pw.incPos();
-        //        n = SetEnvelopParamFromInstrument(pw);
-        //    }
-        //    else if (pw.chip is RF5C164)
-        //    {
-        //        if (pw.getChar() != 'E')
-        //        {
-        //            if (!pw.getNum(out n))
-        //            {
-        //                msgBox.setErrMsg("不正な音色番号が指定されています。", pw.getSrcFn(), pw.getLineNumber());
-        //                n = 0;
-        //            }
-        //            n = Common.CheckRange(n, 0, 255);
-        //            if (!instPCM.ContainsKey(n))
-        //            {
-        //                msgBox.setErrMsg(string.Format("PCM定義に指定された音色番号({0})が存在しません。", n), pw.getSrcFn(), pw.getLineNumber());
-        //            }
-        //            else
-        //            {
-        //                if (instPCM[n].chip != enmChipType.RF5C164)
-        //                {
-        //                    msgBox.setErrMsg(string.Format("指定された音色番号({0})はRF5C164向けPCMデータではありません。", n), pw.getSrcFn(), pw.getLineNumber());
-        //                }
-        //                pw.instrument = n;
-        //                ((RF5C164)pw.chip).SetRf5c164CurrentChannel(pw);
-        //                ((RF5C164)pw.chip).SetRf5c164SampleStartAddress(pw, (int)instPCM[n].stAdr);
-        //                ((RF5C164)pw.chip).SetRf5c164LoopAddress(pw, (int)(instPCM[n].loopAdr));
-        //            }
-        //        }
-        //        else
-        //        {
-        //            pw.incPos();
-        //            n = SetEnvelopParamFromInstrument(pw);
-        //        }
-        //    }
-        //    else if (pw.chip is segaPcm)
-        //    {
-        //        if (pw.getChar() != 'E')
-        //        {
-        //            if (!pw.getNum(out n))
-        //            {
-        //                msgBox.setErrMsg("不正な音色番号が指定されています。", pw.getSrcFn(), pw.getLineNumber());
-        //                n = 0;
-        //            }
-        //            n = Common.CheckRange(n, 0, 255);
-        //            if (!instPCM.ContainsKey(n))
-        //            {
-        //                msgBox.setErrMsg(string.Format("PCM定義に指定された音色番号({0})が存在しません。", n), pw.getSrcFn(), pw.getLineNumber());
-        //            }
-        //            else
-        //            {
-        //                if (instPCM[n].chip != enmChipType.SEGAPCM)
-        //                {
-        //                    msgBox.setErrMsg(string.Format("指定された音色番号({0})はSEGAPCM向けPCMデータではありません。", n), pw.getSrcFn(), pw.getLineNumber());
-        //                }
-        //                pw.instrument = n;
-        //                pw.pcmStartAddress = (int)instPCM[n].stAdr;
-        //                pw.pcmEndAddress = (int)instPCM[n].edAdr;
-        //                pw.pcmLoopAddress = instPCM[n].loopAdr == 0 ? -1 : (int)instPCM[n].loopAdr;
-        //                pw.pcmBank = (int)((instPCM[n].stAdr >> 16) << 1);
-        //            }
-        //        }
-        //        else
-        //        {
-        //            pw.incPos();
-        //            n = SetEnvelopParamFromInstrument(pw);
-        //        }
-        //    }
-        //    else if (pw.chip is HuC6280)
-        //    {
-        //        if (pw.getChar() != 'E')
-        //        {
-        //            if (!pw.getNum(out n))
-        //            {
-        //                msgBox.setErrMsg("不正な音色番号が指定されています。", pw.getSrcFn(), pw.getLineNumber());
-        //                n = 0;
-        //            }
-        //            n = Common.CheckRange(n, 0, 255);
-        //            if (pw.instrument != n)
-        //            {
-        //                pw.instrument = n;
-        //                if (!pw.pcm)
-        //                {
-        //                    ((HuC6280)pw.chip).OutHuC6280SetInstrument(pw, n);
-        //                }
-        //                else
-        //                {
-        //                    if (!instPCM.ContainsKey(n))
-        //                    {
-        //                        msgBox.setErrMsg(string.Format("PCM定義に指定された音色番号({0})が存在しません。", n), pw.getSrcFn(), pw.getLineNumber());
-        //                    }
-        //                    else
-        //                    {
-        //                        if (instPCM[n].chip != enmChipType.HuC6280)
-        //                        {
-        //                            msgBox.setErrMsg(string.Format("指定された音色番号({0})はHuC6280向けPCMデータではありません。", n), pw.getSrcFn(), pw.getLineNumber());
-        //                        }
-        //                    }
-        //                }
-        //            }
-        //        }
-        //        else
-        //        {
-        //            pw.incPos();
-        //            n = SetEnvelopParamFromInstrument(pw);
-        //        }
-        //    }
-        //    else if (pw.chip is YM2413)
-        //    {
-        //        if (pw.getChar() == 'E')
-        //        {
-        //            pw.incPos();
-        //            if (!pw.getNum(out n))
-        //            {
-        //                msgBox.setErrMsg("不正な音色(INST)番号が指定されています。", pw.getSrcFn(), pw.getLineNumber());
-        //                n = 0;
-        //            }
-        //            n = Common.CheckRange(n, 0, 15);
-        //            if (pw.envInstrument != n)
-        //            {
-        //                ((YM2413)pw.chip).outYM2413SetInstVol(pw, n, pw.volume); //INSTを0にセット
-        //            }
-        //        }
-        //        else
-        //        {
-        //            if (!pw.getNum(out n))
-        //            {
-        //                msgBox.setErrMsg("不正な音色番号が指定されています。", pw.getSrcFn(), pw.getLineNumber());
-        //                n = 0;
-        //            }
-        //            n = Common.CheckRange(n, 0, 255);
-        //            if (pw.instrument != n)
-        //            {
-        //                ((YM2413)pw.chip).outYM2413SetInstrument(pw, n); //音色のセット
-        //                ((YM2413)pw.chip).outYM2413SetInstVol(pw, 0, pw.volume); //INSTを0にセット
-        //                OutData(pw.port0, 0x20, 0x19);
-        //            }
-        //        }
-        //    }
-
-        //}
-
-        //private int SetEnvelopParamFromInstrument(partWork pw)
-        //{
-        //    if (!pw.getNum(out int n))
-        //    {
-        //        msgBox.setErrMsg("不正なエンベロープ番号が指定されています。", pw.getSrcFn(), pw.getLineNumber());
-        //        n = 0;
-        //    }
-        //    n = Common.CheckRange(n, 0, 255);
-        //    if (!instENV.ContainsKey(n))
-        //    {
-        //        msgBox.setErrMsg(string.Format("エンベロープ定義に指定された音色番号({0})が存在しません。", n), pw.getSrcFn(), pw.getLineNumber());
-        //    }
-        //    else
-        //    {
-        //        if (pw.envInstrument != n)
-        //        {
-        //            pw.envInstrument = n;
-        //            pw.envIndex = -1;
-        //            pw.envCounter = -1;
-        //            for (int i = 0; i < instENV[n].Length; i++)
-        //            {
-        //                pw.envelope[i] = instENV[n][i];
-        //            }
-        //        }
-        //    }
-
-        //    return n;
-        //}
-
-        //private void SetEnvelopeAtKeyOn(partWork pw)
-        //{
-        //    if (!pw.envelopeMode)
-        //    {
-        //        pw.envVolume = 0;
-        //        pw.envIndex = -1;
-        //        return;
-        //    }
-
-        //    pw.envIndex = 0;
-        //    pw.envCounter = 0;
-        //    int maxValue = pw.MaxVolume;// (pw.envelope[8] == (int)enmChipType.RF5C164) ? 255 : 15;
-
-        //    while (pw.envCounter == 0 && pw.envIndex != -1)
-        //    {
-        //        switch (pw.envIndex)
-        //        {
-        //            case 0: // AR phase
-        //                pw.envCounter = pw.envelope[2];
-        //                if (pw.envelope[2] > 0 && pw.envelope[1] < maxValue)
-        //                {
-        //                    pw.envVolume = pw.envelope[1];
-        //                }
-        //                else
-        //                {
-        //                    pw.envVolume = maxValue;
-        //                    pw.envIndex++;
-        //                }
-        //                break;
-        //            case 1: // DR phase
-        //                pw.envCounter = pw.envelope[3];
-        //                if (pw.envelope[3] > 0 && pw.envelope[4] < maxValue)
-        //                {
-        //                    pw.envVolume = maxValue;
-        //                }
-        //                else
-        //                {
-        //                    pw.envVolume = pw.envelope[4];
-        //                    pw.envIndex++;
-        //                }
-        //                break;
-        //            case 2: // SR phase
-        //                pw.envCounter = pw.envelope[5];
-        //                if (pw.envelope[5] > 0 && pw.envelope[4] != 0)
-        //                {
-        //                    pw.envVolume = pw.envelope[4];
-        //                }
-        //                else
-        //                {
-        //                    pw.envVolume = 0;
-        //                    pw.envIndex = -1;
-        //                }
-        //                break;
-        //        }
-        //    }
-        //}
-
-        //private void SetLfoAtKeyOn(partWork pw)
-        //{
-        //    for (int lfo = 0; lfo < 4; lfo++)
-        //    {
-        //        clsLfo pl = pw.lfo[lfo];
-        //        if (!pl.sw)
-        //        {
-        //            continue;
-        //        }
-        //        if (pl.type == eLfoType.Hardware)
-        //        {
-        //            if (pw.chip is YM2612)
-        //            {
-        //                if (pl.param[4] == 1)
-        //                {
-        //                    ((ClsOPN)pw.chip).OutOPNSetHardLfo(pw, false, pl.param[1]);
-        //                    pl.waitCounter = pl.param[0];
-        //                }
-        //            }
-        //            continue;
-        //        }
-        //        if (pl.param[5] != 1)
-        //        {
-        //            continue;
-        //        }
-
-        //        pl.isEnd = false;
-        //        pl.value = (pl.param[0] == 0) ? pl.param[6] : 0;//ディレイ中は振幅補正は適用されない
-        //        pl.waitCounter = pl.param[0];
-        //        pl.direction = pl.param[2] < 0 ? -1 : 1;
-        //        if (pl.type == eLfoType.Vibrato)
-        //        {
-        //            if (pw.chip is YM2151)
-        //            {
-        //                ((YM2151)pw.chip).SetFNum(pw);
-        //            }
-        //            else if ((pw.chip is YM2203) || (pw.chip is YM2608) || (pw.chip is YM2610B) || (pw.chip is YM2612))
-        //            {
-        //                if (pw.Type == enmChannelType.FMOPN || pw.Type == enmChannelType.FMOPNex)
-        //                {
-        //                    ((ClsOPN)pw.chip).SetFmFNum(pw);
-        //                }
-        //                else if (pw.Type == enmChannelType.SSG)
-        //                {
-        //                    ((ClsOPN)pw.chip).SetSsgFNum(pw);
-        //                }
-        //            }
-        //            else if (pw.chip is SN76489)
-        //            {
-        //                ((SN76489)pw.chip).SetDcsgFNum(pw);
-        //            }
-        //        }
-        //        if (pl.type == eLfoType.Tremolo)
-        //        {
-        //            if (pw.chip is YM2151)
-        //            {
-        //                ((YM2151)pw.chip).SetVolume(pw);
-        //            }
-        //            else if ((pw.chip is YM2203) || (pw.chip is YM2608) || (pw.chip is YM2610B) || (pw.chip is YM2612))
-        //            {
-        //                pw.beforeVolume = -1;
-        //                ((ClsOPN)pw.chip).SetFmVolume(pw);
-        //            }
-        //        }
-        //    }
-        //}
-
-        //private int GetToneDoublerShift(partWork pw, int octave, char noteCmd, int shift)
-        //{
-        //    if (pw.Type != enmChannelType.FMOPM && pw.Type != enmChannelType.FMOPN && pw.Type != enmChannelType.FMOPNex)
-        //    {
-        //        return 0;
-        //    }
-
-        //    int i = pw.instrument;
-        //    if (pw.TdA == -1)
-        //    {
-        //        return 0;
-        //    }
-
-        //    int TdB = octave * 12 + Const.NOTE.IndexOf(noteCmd) + shift;
-        //    int s = pw.TdA - TdB;
-        //    int us = Math.Abs(s);
-        //    int n = pw.toneDoubler;
-        //    if (us >= instToneDoubler[n].lstTD.Count)
-        //    {
-        //        return 0;
-        //    }
-
-        //    return ((s < 0) ? s : 0) + instToneDoubler[n].lstTD[us].KeyShift;
-        //}
-
-        //private void SetToneDoubler(partWork pw)
-        //{
-        //    if (pw.Type != enmChannelType.FMOPM && pw.Type != enmChannelType.FMOPN && (pw.Type != enmChannelType.FMOPNex || (pw.Type != enmChannelType.FMOPNex || pw.ch != 2)))
-        //    {
-        //        return;
-        //    }
-        //    //if (pw.Type != enmChannelType.FMOPM && pw.Type != enmChannelType.FMOPN && pw.Type != enmChannelType.FMOPNex)
-        //    //{
-        //      //  return;
-        //    //}
-
-        //    int i = pw.instrument;
-        //    if (i < 0) return;
-
-        //    pw.toneDoublerKeyShift = 0;
-        //    if (pw.TdA == -1)
-        //    {
-        //        if (instFM != null && instFM.Count > i)
-        //        {
-        //            //resetToneDoubler
-        //            if (pw.Type != enmChannelType.FMOPM)
-        //            {
-        //                if (pw.op1ml != instFM[i][0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8])
-        //                {
-        //                    ((ClsOPN)pw.chip).OutFmSetDtMl(pw, 0, instFM[i][0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 9], instFM[i][0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8]);
-        //                    pw.op1ml = instFM[i][0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
-        //                }
-        //                if (pw.op2ml != instFM[i][1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8])
-        //                {
-        //                    ((ClsOPN)pw.chip).OutFmSetDtMl(pw, 1, instFM[i][1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 9], instFM[i][1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8]);
-        //                    pw.op2ml = instFM[i][1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
-        //                }
-        //                if (pw.op3ml != instFM[i][2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8])
-        //                {
-        //                    ((ClsOPN)pw.chip).OutFmSetDtMl(pw, 2, instFM[i][2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 9], instFM[i][2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8]);
-        //                    pw.op3ml = instFM[i][2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
-        //                }
-        //                if (pw.op4ml != instFM[i][3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8])
-        //                {
-        //                    ((ClsOPN)pw.chip).OutFmSetDtMl(pw, 3, instFM[i][3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 9], instFM[i][3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8]);
-        //                    pw.op4ml = instFM[i][3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
-        //                }
-        //            }
-        //            else
-        //            {
-        //                //ML
-        //                if (pw.op1ml != instFM[i][0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8])
-        //                {
-        //                    ((YM2151)pw.chip).OutSetDtMl(pw, 0, instFM[i][0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 9], instFM[i][0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8]);
-        //                    pw.op1ml = instFM[i][0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
-        //                }
-        //                if (pw.op2ml != instFM[i][1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8])
-        //                {
-        //                    ((YM2151)pw.chip).OutSetDtMl(pw, 1, instFM[i][1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 9], instFM[i][1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8]);
-        //                    pw.op2ml = instFM[i][1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
-        //                }
-        //                if (pw.op3ml != instFM[i][2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8])
-        //                {
-        //                    ((YM2151)pw.chip).OutSetDtMl(pw, 2, instFM[i][2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 9], instFM[i][2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8]);
-        //                    pw.op3ml = instFM[i][2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
-        //                }
-        //                if (pw.op4ml != instFM[i][3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8])
-        //                {
-        //                    ((YM2151)pw.chip).OutSetDtMl(pw, 3, instFM[i][3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 9], instFM[i][3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8]);
-        //                    pw.op4ml = instFM[i][3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
-        //                }
-        //                //DT2
-        //                if (pw.op1dt2 != instFM[i][0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 10])
-        //                {
-        //                    ((YM2151)pw.chip).OutSetDt2Sr(pw, 0, instFM[i][0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 10], instFM[i][0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 3]);
-        //                    pw.op1dt2 = instFM[i][0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 10];
-        //                }
-        //                if (pw.op2dt2 != instFM[i][1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 10])
-        //                {
-        //                    ((YM2151)pw.chip).OutSetDt2Sr(pw, 1, instFM[i][1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 10], instFM[i][1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 3]);
-        //                    pw.op2dt2 = instFM[i][1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 10];
-        //                }
-        //                if (pw.op3dt2 != instFM[i][2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 10])
-        //                {
-        //                    ((YM2151)pw.chip).OutSetDt2Sr(pw, 2, instFM[i][2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 10], instFM[i][2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 3]);
-        //                    pw.op3dt2 = instFM[i][2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 10];
-        //                }
-        //                if (pw.op4dt2 != instFM[i][3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 10])
-        //                {
-        //                    ((YM2151)pw.chip).OutSetDt2Sr(pw, 3, instFM[i][3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 10], instFM[i][3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 3]);
-        //                    pw.op4dt2 = instFM[i][3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 10];
-        //                }
-        //            }
-        //        }
-        //    }
-        //    else
-        //    {
-        //        //setToneDoubler
-        //        int TdB = pw.octaveNow * 12 + Const.NOTE.IndexOf(pw.noteCmd) + pw.shift + pw.keyShift;
-        //        int s = pw.TdA - TdB;
-        //        int us = Math.Abs(s);
-        //        int n = pw.toneDoubler;
-        //        if (us >= instToneDoubler[n].lstTD.Count)
-        //        {
-        //            return;
-        //        }
-
-        //        pw.toneDoublerKeyShift = ((s < 0) ? s : 0) + instToneDoubler[n].lstTD[us].KeyShift;
-
-        //        if (instFM != null && instFM.Count > i)
-        //        {
-        //            if (pw.Type != enmChannelType.FMOPM)
-        //            {
-        //                if (pw.op1ml != instToneDoubler[n].lstTD[us].OP1ML)
-        //                {
-        //                    ((ClsOPN)pw.chip).OutFmSetDtMl(pw, 0, instFM[i][0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 9], instToneDoubler[n].lstTD[us].OP1ML);
-        //                    pw.op1ml = instToneDoubler[n].lstTD[us].OP1ML;
-        //                }
-        //                if (pw.op2ml != instToneDoubler[n].lstTD[us].OP2ML)
-        //                {
-        //                    ((ClsOPN)pw.chip).OutFmSetDtMl(pw, 1, instFM[i][1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 9], instToneDoubler[n].lstTD[us].OP2ML);
-        //                    pw.op2ml = instToneDoubler[n].lstTD[us].OP2ML;
-        //                }
-        //                if (pw.op3ml != instToneDoubler[n].lstTD[us].OP3ML)
-        //                {
-        //                    ((ClsOPN)pw.chip).OutFmSetDtMl(pw, 2, instFM[i][2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 9], instToneDoubler[n].lstTD[us].OP3ML);
-        //                    pw.op3ml = instToneDoubler[n].lstTD[us].OP3ML;
-        //                }
-        //                if (pw.op4ml != instToneDoubler[n].lstTD[us].OP4ML)
-        //                {
-        //                    ((ClsOPN)pw.chip).OutFmSetDtMl(pw, 3, instFM[i][3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 9], instToneDoubler[n].lstTD[us].OP4ML);
-        //                    pw.op4ml = instToneDoubler[n].lstTD[us].OP4ML;
-        //                }
-        //            }
-        //            else
-        //            {
-        //                //ML
-        //                if (pw.op1ml != instToneDoubler[n].lstTD[us].OP1ML)
-        //                {
-        //                    ((YM2151)pw.chip).OutSetDtMl(pw, 0, instFM[i][0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 9], instToneDoubler[n].lstTD[us].OP1ML);
-        //                    pw.op1ml = instToneDoubler[n].lstTD[us].OP1ML;
-        //                }
-        //                if (pw.op2ml != instToneDoubler[n].lstTD[us].OP2ML)
-        //                {
-        //                    ((YM2151)pw.chip).OutSetDtMl(pw, 1, instFM[i][1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 9], instToneDoubler[n].lstTD[us].OP2ML);
-        //                    pw.op2ml = instToneDoubler[n].lstTD[us].OP2ML;
-        //                }
-        //                if (pw.op3ml != instToneDoubler[n].lstTD[us].OP3ML)
-        //                {
-        //                    ((YM2151)pw.chip).OutSetDtMl(pw, 2, instFM[i][2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 9], instToneDoubler[n].lstTD[us].OP3ML);
-        //                    pw.op3ml = instToneDoubler[n].lstTD[us].OP3ML;
-        //                }
-        //                if (pw.op4ml != instToneDoubler[n].lstTD[us].OP4ML)
-        //                {
-        //                    ((YM2151)pw.chip).OutSetDtMl(pw, 3, instFM[i][3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 9], instToneDoubler[n].lstTD[us].OP4ML);
-        //                    pw.op4ml = instToneDoubler[n].lstTD[us].OP4ML;
-        //                }
-        //                //DT2
-        //                if (pw.op1dt2 != instToneDoubler[n].lstTD[us].OP1DT2)
-        //                {
-        //                    ((YM2151)pw.chip).OutSetDt2Sr(pw, 0, instToneDoubler[n].lstTD[us].OP1DT2, instFM[i][0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 3]);
-        //                    pw.op1dt2 = instToneDoubler[n].lstTD[us].OP1DT2;
-        //                }
-        //                if (pw.op2dt2 != instToneDoubler[n].lstTD[us].OP2DT2)
-        //                {
-        //                    ((YM2151)pw.chip).OutSetDt2Sr(pw, 1, instToneDoubler[n].lstTD[us].OP2DT2, instFM[i][1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 3]);
-        //                    pw.op2dt2 = instToneDoubler[n].lstTD[us].OP2DT2;
-        //                }
-        //                if (pw.op3dt2 != instToneDoubler[n].lstTD[us].OP3DT2)
-        //                {
-        //                    ((YM2151)pw.chip).OutSetDt2Sr(pw, 2, instToneDoubler[n].lstTD[us].OP3DT2, instFM[i][2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 3]);
-        //                    pw.op3dt2 = instToneDoubler[n].lstTD[us].OP3DT2;
-        //                }
-        //                if (pw.op4dt2 != instToneDoubler[n].lstTD[us].OP4DT2)
-        //                {
-        //                    ((YM2151)pw.chip).OutSetDt2Sr(pw, 3, instToneDoubler[n].lstTD[us].OP4DT2, instFM[i][3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 3]);
-        //                    pw.op4dt2 = instToneDoubler[n].lstTD[us].OP4DT2;
-        //                }
-        //            }
-        //        }
-        //        pw.TdA = -1;
-        //    }
-        //}
 
         private byte[] DivInt2ByteAry(int n)
         {

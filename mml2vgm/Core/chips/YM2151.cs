@@ -86,7 +86,7 @@ namespace Core
         {
             if (!parent.instFM.ContainsKey(n))
             {
-                msgBox.setWrnMsg(string.Format("未定義の音色(@{0})を指定している場合ボリュームの変更はできません。", n), pw.getSrcFn(), pw.getLineNumber());
+                msgBox.setWrnMsg(string.Format(msg.get("E16000"), n), pw.getSrcFn(), pw.getLineNumber());
                 return;
             }
 
@@ -258,7 +258,7 @@ namespace Core
 
             if (!parent.instFM.ContainsKey(n))
             {
-                msgBox.setWrnMsg(string.Format("未定義の音色(@{0})を指定しています。", n), pw.getSrcFn(), pw.getLineNumber());
+                msgBox.setWrnMsg(string.Format(msg.get("E16001"), n), pw.getSrcFn(), pw.getLineNumber());
                 return;
             }
 
@@ -416,6 +416,11 @@ namespace Core
             }
         }
 
+        public override void SetKeyOn(partWork pw)
+        {
+            OutKeyOn(pw);
+        }
+
         public override void SetKeyOff(partWork pw)
         {
             OutKeyOff(pw);
@@ -448,9 +453,8 @@ namespace Core
             }
         }
 
-        public override void SetPCMDataBlock()
+        public override void SetToneDoubler(partWork pw)
         {
-            //実装不要
         }
 
 
@@ -496,12 +500,12 @@ namespace Core
             {
                 if (pw.lfo[c].param.Count < 4)
                 {
-                    msgBox.setErrMsg("LFOの設定に必要なパラメータが足りません。", pw.getSrcFn(), pw.getLineNumber());
+                    msgBox.setErrMsg(msg.get("E16002"), pw.getSrcFn(), pw.getLineNumber());
                     return;
                 }
                 if (pw.lfo[c].param.Count > 5)
                 {
-                    msgBox.setErrMsg("LFOの設定に可能なパラメータ数を超えて指定されました。", pw.getSrcFn(), pw.getLineNumber());
+                    msgBox.setErrMsg(msg.get("E16003"), pw.getSrcFn(), pw.getLineNumber());
                     return;
                 }
 
@@ -522,7 +526,7 @@ namespace Core
 
         public override void CmdLfoSwitch(partWork pw, MML mml)
         {
-            base.CmdLfo(pw, mml);
+            base.CmdLfoSwitch(pw, mml);
 
             int c = (char)mml.args[0] - 'P';
             int n = (int)mml.args[1];
@@ -539,7 +543,7 @@ namespace Core
             pw.pan.val = (n == 1) ? 2 : (n == 2 ? 1 : n);
             if (pw.instrument < 0)
             {
-                msgBox.setErrMsg("音色指定前にパンは指定できません。"
+                msgBox.setErrMsg(msg.get("E16004")
                     , pw.getSrcFn(), pw.getLineNumber());
             }
             else
@@ -560,7 +564,7 @@ namespace Core
 
             if (type == 'I')
             {
-                msgBox.setErrMsg("この音源はInstrumentを持っていません。", pw.getSrcFn(), pw.getLineNumber());
+                msgBox.setErrMsg(msg.get("E16005"), pw.getSrcFn(), pw.getLineNumber());
                 return;
             }
 

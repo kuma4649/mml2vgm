@@ -41,11 +41,11 @@ namespace mml2vgm
             }
 
             this.toolStrip1.Enabled = false;
-            this.tsslMessage.Text = "Compile";
+            this.tsslMessage.Text = msg.get("I0100");
             dgvResult.Rows.Clear();
 
-            textBox1.AppendText("\r\n------------------\r\n");
-            textBox1.AppendText("Start.\r\n");
+            textBox1.AppendText(msg.get("I0101"));
+            textBox1.AppendText(msg.get("I0102"));
 
             isSuccess = true;
             Thread trdStartCompile = new Thread(new ThreadStart(startCompile));
@@ -57,8 +57,8 @@ namespace mml2vgm
         {
             OpenFileDialog ofd = new OpenFileDialog();
             ofd.Multiselect = true;
-            ofd.Filter = ".gwiファイル(*.gwi)|*.gwi|すべてのファイル(*.*)|*.*";
-            ofd.Title = ".gwiファイルを選択してください";
+            ofd.Filter = msg.get("I0103");
+            ofd.Title = msg.get("I0104");
             if (ofd.ShowDialog() != DialogResult.OK)
             {
                 return;
@@ -100,9 +100,9 @@ namespace mml2vgm
         {
             if (mv == null)
             {
-                textBox1.AppendText("\r\nFinished.\r\n\r\n");
+                textBox1.AppendText(msg.get("I0105"));
                 this.toolStrip1.Enabled = true;
-                this.tsslMessage.Text = "Done.";
+                this.tsslMessage.Text = msg.get("I0106");
                 return;
             }
 
@@ -130,62 +130,62 @@ namespace mml2vgm
                 }
             }
 
-            textBox1.AppendText("\r\nResult\r\n");
+            textBox1.AppendText(msg.get("I0107"));
 
             foreach (string mes in msgBox.getWrn())
             {
-                textBox1.AppendText(string.Format(" Warning : {0}\r\n", mes));
+                textBox1.AppendText(string.Format(msg.get("I0108"), mes));
             }
 
             foreach (string mes in msgBox.getErr())
             {
-                textBox1.AppendText(string.Format(" Error : {0}\r\n", mes));
+                textBox1.AppendText(string.Format(msg.get("I0109"), mes));
             }
 
             textBox1.AppendText("\r\n");
-            textBox1.AppendText(string.Format(" Errors : {0}\r\n Warnings : {1}\r\n", msgBox.getErr().Length, msgBox.getWrn().Length));
+            textBox1.AppendText(string.Format(msg.get("I0110"), msgBox.getErr().Length, msgBox.getWrn().Length));
 
             if (mv.desVGM.loopSamples != -1)
             {
-                textBox1.AppendText(string.Format(" Loop Clocks  : {0}\r\n", mv.desVGM.loopClock));
+                textBox1.AppendText(string.Format(msg.get("I0111"), mv.desVGM.loopClock));
                 if (mv.desVGM.info.format == enmFormat.VGM)
-                    textBox1.AppendText(string.Format(" Loop Samples : {0:0.00}({1:0.00}s)\r\n"
+                    textBox1.AppendText(string.Format(msg.get("I0112")
                         , mv.desVGM.loopSamples
                         , mv.desVGM.loopSamples / 44100L));
                 else
-                    textBox1.AppendText(string.Format(" Loop Samples : {0:0.00}({1:0.00}s)\r\n"
+                    textBox1.AppendText(string.Format(msg.get("I0112")
                         , mv.desVGM.loopSamples
                         , mv.desVGM.loopSamples / (mv.desVGM.info.xgmSamplesPerSecond)));
             }
 
-            textBox1.AppendText(string.Format(" Total Clocks  : {0}\r\n", mv.desVGM.lClock));
+            textBox1.AppendText(string.Format(msg.get("I0113"), mv.desVGM.lClock));
             if (mv.desVGM.info.format == enmFormat.VGM)
-                textBox1.AppendText(string.Format(" Total Samples : {0:0.00}({1:0.00}s)\r\n"
+                textBox1.AppendText(string.Format(msg.get("I0114")
                     , mv.desVGM.dSample
                     , mv.desVGM.dSample / 44100L));
             else
-                textBox1.AppendText(string.Format(" Total Samples : {0:0.00}({1:0.00}s)\r\n"
+                textBox1.AppendText(string.Format(msg.get("I0114")
                     , mv.desVGM.dSample
                     , mv.desVGM.dSample / (mv.desVGM.info.xgmSamplesPerSecond)));
 
-            if (mv.desVGM.ym2608[0].pcmData != null) textBox1.AppendText(string.Format(" ADPCM Data size(YM2608)  : ({0}/262143) byte\r\n", mv.desVGM.ym2608[0].pcmData.Length - 15));
-            if (mv.desVGM.ym2608[1].pcmData != null) textBox1.AppendText(string.Format(" ADPCM Data size(YM2608Secondary)  : ({0}/262143) byte\r\n", mv.desVGM.ym2608[1].pcmData.Length - 15));
-            if (mv.desVGM.ym2610b[0].pcmDataA != null) textBox1.AppendText(string.Format(" ADPCM-A Data size(YM2610B)  : ({0}/16777215) byte\r\n", mv.desVGM.ym2610b[0].pcmDataA.Length-15));
-            if (mv.desVGM.ym2610b[0].pcmDataB != null) textBox1.AppendText(string.Format(" ADPCM-B Data size(YM2610B)  : ({0}/16777215) byte\r\n", mv.desVGM.ym2610b[0].pcmDataB.Length-15));
-            if (mv.desVGM.ym2610b[1].pcmDataA != null) textBox1.AppendText(string.Format(" ADPCM-A Data size(YM2610BSecondary)  : ({0}/16777215) byte\r\n", mv.desVGM.ym2610b[1].pcmDataA.Length - 15));
-            if (mv.desVGM.ym2610b[1].pcmDataB != null) textBox1.AppendText(string.Format(" ADPCM-B Data size(YM2610BSecondary)  : ({0}/16777215) byte\r\n", mv.desVGM.ym2610b[1].pcmDataB.Length - 15));
+            if (mv.desVGM.ym2608[0].pcmDataEasy != null) textBox1.AppendText(string.Format(msg.get("I0115"), mv.desVGM.ym2608[0].pcmDataEasy.Length - 15));
+            if (mv.desVGM.ym2608[1].pcmDataEasy != null) textBox1.AppendText(string.Format(msg.get("I0116"), mv.desVGM.ym2608[1].pcmDataEasy.Length - 15));
+            if (mv.desVGM.ym2610b[0].pcmDataEasyA != null) textBox1.AppendText(string.Format(msg.get("I0117"), mv.desVGM.ym2610b[0].pcmDataEasyA.Length-15));
+            if (mv.desVGM.ym2610b[0].pcmDataEasyB != null) textBox1.AppendText(string.Format(msg.get("I0118"), mv.desVGM.ym2610b[0].pcmDataEasyB.Length-15));
+            if (mv.desVGM.ym2610b[1].pcmDataEasyA != null) textBox1.AppendText(string.Format(msg.get("I0119"), mv.desVGM.ym2610b[1].pcmDataEasyA.Length - 15));
+            if (mv.desVGM.ym2610b[1].pcmDataEasyB != null) textBox1.AppendText(string.Format(msg.get("I0120"), mv.desVGM.ym2610b[1].pcmDataEasyB.Length - 15));
             //if (mv.desVGM.segapcm[0].pcmData != null) textBox1.AppendText(string.Format(" PCM Data size(SEGAPCM)  : {0} byte\r\n", mv.desVGM.segapcm[0].pcmData.Length - 15));
             //if (mv.desVGM.segapcm[1].pcmData != null) textBox1.AppendText(string.Format(" PCM Data size(SEGAPCMSecondary)  : {0} byte\r\n", mv.desVGM.segapcm[1].pcmData.Length - 15));
-            if (mv.desVGM.ym2612[0].pcmData != null) textBox1.AppendText(string.Format(" PCM Data size(YM2612)  : {0} byte\r\n", mv.desVGM.ym2612[0].pcmData.Length));
-            if (mv.desVGM.rf5c164[0].pcmData != null) textBox1.AppendText(string.Format(" PCM Data size(RF5C164) : ({0}/65535) byte\r\n", mv.desVGM.rf5c164[0].pcmData.Length-12));
-            if (mv.desVGM.rf5c164[1].pcmData != null) textBox1.AppendText(string.Format(" PCM Data size(RF5C164Secondary) : ({0}/65535) byte\r\n", mv.desVGM.rf5c164[1].pcmData.Length-12));
-            if (mv.desVGM.huc6280[0].pcmData != null) textBox1.AppendText(string.Format(" PCM Data size(HuC6280)  : {0} byte\r\n", mv.desVGM.huc6280[0].pcmData.Length));
-            if (mv.desVGM.huc6280[1].pcmData != null) textBox1.AppendText(string.Format(" PCM Data size(HuC6280Secondary)  : {0} byte\r\n", mv.desVGM.huc6280[1].pcmData.Length));
+            if (mv.desVGM.ym2612[0].pcmDataEasy != null) textBox1.AppendText(string.Format(msg.get("I0121"), mv.desVGM.ym2612[0].pcmDataEasy.Length));
+            if (mv.desVGM.rf5c164[0].pcmDataEasy != null) textBox1.AppendText(string.Format(msg.get("I0122"), mv.desVGM.rf5c164[0].pcmDataEasy.Length-12));
+            if (mv.desVGM.rf5c164[1].pcmDataEasy != null) textBox1.AppendText(string.Format(msg.get("I0123"), mv.desVGM.rf5c164[1].pcmDataEasy.Length-12));
+            if (mv.desVGM.huc6280[0].pcmDataEasy != null) textBox1.AppendText(string.Format(msg.get("I0124"), mv.desVGM.huc6280[0].pcmDataEasy.Length));
+            if (mv.desVGM.huc6280[1].pcmDataEasy != null) textBox1.AppendText(string.Format(msg.get("I0125"), mv.desVGM.huc6280[1].pcmDataEasy.Length));
 
 
-            textBox1.AppendText("\r\nFinished.\r\n\r\n");
+            textBox1.AppendText(msg.get("I0126"));
             this.toolStrip1.Enabled = true;
-            this.tsslMessage.Text = "Done.";
+            this.tsslMessage.Text = msg.get("I0106");
 
             if (isSuccess)
             {
@@ -197,7 +197,7 @@ namespace mml2vgm
                     }
                     catch(Exception )
                     {
-                        MessageBox.Show("プレイヤーの起動に失敗しました。", "mml2vgm", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show(msg.get("E0100"), "mml2vgm", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
             }
