@@ -792,6 +792,7 @@ b               -oooooooooooooooooooooooooo  音符シ
     Option      YM2610B : 0の場合ADPCM-A 1の場合ADPCM-Bとして定義される。
                 RF5C164 : ループポイント。ループ再生位置をサンプル数で指定。
                 C140    : ループポイント。ループ再生位置をサンプル数で指定。
+                SegaPCM : ループポイント。ループ再生位置をサンプル数で指定。
     P を使用すると、mml2vgmはPCMデータを音量などを加工した後、メモリに順番に配置する。
     Bankの機能が存在するChipの場合は、パディングなどを行いその制約に沿った配置を行う。
     また、音色定義も合わせて行われ、加工後のデータを基準にStartAdr、EndAdrが設定される。
@@ -851,8 +852,8 @@ b               -oooooooooooooooooooooooooo  音符シ
   YM2610BSecondary OPNBSecondary ADPCM-A ooo 不可     不可       
   YM2610B          OPNB          ADPCM-B ooo 可       不可       
   YM2610BSecondary OPNBSecondary ADPCM-B ooo 可       不可       
-  SegaPCM          SPCM                  ooo 可       不可       本来はループ可能な音源の筈だが...
-  SegaPCMSecondary SPCMSecondary         ooo 可       不可       本来はループ可能な音源の筈だが...
+  SegaPCM          SPCM                  ooo 可       可         
+  SegaPCMSecondary SPCMSecondary         ooo 可       可         
   HuC6280          HuC8                  o-- 不可     不可       
   HuC6280Secondary HuC8Secondary         o-- 不可     不可       
   C140             C140                  ooo 可       可         
