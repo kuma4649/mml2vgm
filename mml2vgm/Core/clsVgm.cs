@@ -54,7 +54,7 @@ namespace Core
             chips = new Dictionary<enmChipType, ClsChip[]>();
             info = new Information();
 
-            conductor = new Conductor[] { new Conductor(this, 0, "Co", stPath, false) };
+            conductor = new Conductor[] { new Conductor(this, 0, "Cn", stPath, false) };
             ym2151 = new YM2151[] { new YM2151(this, 0, "X", stPath,false), new YM2151(this, 1, "Xs", stPath,true) };
             ym2203 = new YM2203[] { new YM2203(this, 0, "N", stPath, false), new YM2203(this, 1, "Ns", stPath, true) };
             ym2608 = new YM2608[] { new YM2608(this, 0, "P", stPath, false), new YM2608(this, 1, "Ps", stPath, true) };
@@ -1272,7 +1272,9 @@ namespace Core
                 }
 
             } while (endChannel < totalChannel);
-            if (loopClock != -1 && waitCounter > 0)
+
+            //残カット
+            if (loopClock != -1 && waitCounter > 0 && waitCounter != long.MaxValue)
             {
                 lClock -= waitCounter;
                 dSample -= (long)(info.samplesPerClock * waitCounter);

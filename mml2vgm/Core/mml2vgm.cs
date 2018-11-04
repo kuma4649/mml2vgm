@@ -435,18 +435,8 @@ namespace Core
                 if (desVGM.instPCM[i].chip != c.chipType) continue;
                 if (desVGM.instPCM[i].isSecondary != c.IsSecondary) continue;
 
-                region += string.Format("{0,-10} {1,-7} {2,-5:D3} {3,-4:D2} {4,-8:X4} {5} {6,-8:X4} {7,8} {8,4} {9}\r\n"
-                    , c.Name + (c.chipType != enmChipType.YM2610B ? "" : ("_" + (desVGM.instPCM[i].loopAdr == 0 ? "A" : "B")))
-                    , desVGM.instPCM[i].isSecondary ? "SEC" : "PRI"
-                    , i
-                    , desVGM.instPCM[i].stAdr >> 16
-                    , desVGM.instPCM[i].stAdr & 0xffff
-                    , c.chipType != enmChipType.RF5C164 ? string.Format("{0,-8:X4}", (desVGM.instPCM[i].edAdr & 0xffff)) : "N/A     "
-                    , (desVGM.instPCM[i].loopAdr == -1 || c.chipType == enmChipType.YM2610B) ? "N/A" : string.Format("{0:X4}", (desVGM.instPCM[i].loopAdr & 0xffff))
-                    , desVGM.instPCM[i].size
-                    , desVGM.instPCM[i].is16bit ? 1 : 0
-                    , desVGM.instPCM[i].status.ToString()
-                    );
+                region += c.DispRegion(desVGM.instPCM[i]);
+
             }
 
             long tl = 0;
@@ -472,7 +462,7 @@ namespace Core
 
                 if (c.pcmDataEasy != null)
                 {
-                    region += string.Format("{0,-10} {1,-7} {2,-8:X6} {3,-8:X6} {4,8} {5}\r\n"
+                    region += string.Format("{0,-10} {1,-7} ${2,-7:X6} ${3,-7:X6} ${4,-7:X6}  {5}\r\n"
                         , c.Name
                         , c.IsSecondary ? "SEC" : "PRI"
                         , 0
@@ -494,7 +484,7 @@ namespace Core
 
                 if (opnb.pcmDataEasyA != null)
                 {
-                    region += string.Format("{0,-10} {1,-7} {2,-8:X6} {3,-8:X6} {4,8} {5}\r\n"
+                    region += string.Format("{0,-10} {1,-7} ${2,-7:X6} ${3,-7:X6} ${4,-7:X6}  {5}\r\n"
                         , opnb.Name+"_A"
                         , opnb.IsSecondary ? "SEC" : "PRI"
                         , 0
@@ -506,7 +496,7 @@ namespace Core
                 }
                 if (opnb.pcmDataEasyB != null)
                 {
-                    region += string.Format("{0,-10} {1,-7} {2,-8:X6} {3,-8:X6} {4,8} {5}\r\n"
+                    region += string.Format("{0,-10} {1,-7} ${2,-7:X6} ${3,-7:X6} ${4,-7:X6}  {5}\r\n"
                         , opnb.Name+"_B"
                         , opnb.IsSecondary ? "SEC" : "PRI"
                         , 0
@@ -530,7 +520,7 @@ namespace Core
                     if (pds.isSecondary != c.IsSecondary) continue;
                     if (!desVGM.chips[pds.chip][0].CanUsePICommand()) continue;
 
-                    region += string.Format("{0,-10} {1,-7} {2,-8:X6} {3,-8:X6} {4,8} {5}\r\n"
+                    region += string.Format("{0,-10} {1,-7} ${2,-7:X6} ${3,-7:X6} ${4,-7:X6}  {5}\r\n"
                         , c.Name
                         , pds.isSecondary ? "SEC" : "PRI"
                         , pds.DatStartAdr

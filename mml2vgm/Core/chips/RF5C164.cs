@@ -540,5 +540,19 @@ namespace Core
         {
         }
 
+
+        public override string DispRegion(clsPcm pcm)
+        {
+            return string.Format("{0,-10} {1,-7} {2,-5:D3} {3,-4:D2} ${4,-7:X4} N/A      ${5,-7:X4} ${6,-7:X4}  NONE {7}\r\n"
+                , Name //0
+                , pcm.isSecondary ? "SEC" : "PRI" //1
+                , pcm.num //2
+                , pcm.stAdr >> 16 //3
+                , pcm.stAdr & 0xffff //4
+                , pcm.loopAdr & 0xffff //5
+                , pcm.size //6
+                , pcm.status.ToString() //7
+                );
+        }
     }
 }

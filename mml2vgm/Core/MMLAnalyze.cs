@@ -1251,8 +1251,12 @@ namespace Core
                 if (ch == '"')
                 {
                     pw.incPos();
+                    break;
+                }
+                if (ch == '\\')
+                {
+                    pw.incPos();
                     ch = pw.getChar();
-                    if (ch != '"') break;
                 }
                 if (ch == '\0') break;
 

@@ -138,7 +138,7 @@ namespace Core
                         , v.Value.freq != -1 ? v.Value.freq : samplerate
                         , v.Value.vol
                         , pi.totalBufPtr
-                        , pi.totalBufPtr + size
+                        , pi.totalBufPtr + size - 1
                         , size
                         , -1
                         , is16bit
@@ -701,6 +701,19 @@ namespace Core
                 SetHuC6280CurrentChannel(pw);
                 OutHuC6280Port(pw.isSecondary, 7, (byte)((pw.mixer != 0 ? 0x80 : 0x00) + (pw.noise & 0x1f)));
             }
+        }
+
+        public override string DispRegion(clsPcm pcm)
+        {
+            return string.Format("{0,-10} {1,-7} {2,-5:D3} N/A  ${3,-7:X6} ${4,-7:X6} N/A      ${5,-7:X6}  NONE {6}\r\n"
+                , Name
+                , pcm.isSecondary ? "SEC" : "PRI"
+                , pcm.num
+                , pcm.stAdr & 0xffffff
+                , pcm.edAdr & 0xffffff
+                , pcm.size
+                , pcm.status.ToString()
+                );
         }
 
     }

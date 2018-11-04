@@ -129,6 +129,7 @@ namespace Core
             MakeFNumTbl();
         }
 
+
         protected Dictionary<string, List<double>> MakeFNumTbl()
         {
             //for (int i = 0; i < noteTbl.Length; i++)
@@ -397,7 +398,6 @@ namespace Core
 
 
 
-
         public virtual void InitChip()
         {
             throw new NotImplementedException("継承先で要実装");
@@ -406,6 +406,12 @@ namespace Core
         public virtual void InitPart(ref partWork pw)
         {
             throw new NotImplementedException("継承先で要実装");
+        }
+
+
+        public bool CanUsePICommand()
+        {
+            return CanUsePI;
         }
 
         public virtual void StorePcm(Dictionary<int, clsPcm> newDic, KeyValuePair<int, clsPcm> v, byte[] buf, bool is16bit, int samplerate, params object[] option)
@@ -419,50 +425,6 @@ namespace Core
         }
 
         public virtual bool StorePcmCheck()
-        {
-            throw new NotImplementedException("継承先で要実装");
-        }
-
-        public virtual int GetToneDoublerShift(partWork pw, int octave, char noteCmd, int shift)
-        {
-            throw new NotImplementedException("継承先で要実装");
-        }
-
-        public virtual void SetToneDoubler(partWork pw)
-        {
-            throw new NotImplementedException("継承先で要実装");
-        }
-
-        public virtual int GetFNum(partWork pw, int octave, char cmd, int shift)
-        {
-            throw new NotImplementedException("継承先で要実装");
-        }
-
-        public virtual void GetFNumAtoB(partWork pw
-            , out int a, int aOctaveNow, char aCmd, int aShift
-            , out int b, int bOctaveNow, char bCmd, int bShift
-            , int dir)
-        {
-            a = GetFNum(pw, aOctaveNow, aCmd, aShift);
-            b = GetFNum(pw, bOctaveNow, bCmd, bShift);
-        }
-
-        public virtual void SetFNum(partWork pw)
-        {
-            throw new NotImplementedException("継承先で要実装");
-        }
-
-        public virtual void SetKeyOn(partWork pw)
-        {
-            throw new NotImplementedException("継承先で要実装");
-        }
-
-        public virtual void SetKeyOff(partWork pw)
-        {
-            throw new NotImplementedException("継承先で要実装");
-        }
-
-        public virtual void SetVolume(partWork pw)
         {
             throw new NotImplementedException("継承先で要実装");
         }
@@ -527,6 +489,53 @@ namespace Core
                 if (dat != null && dat.Length > 0)
                     parent.OutData(dat);
             }
+        }
+
+
+        public virtual int GetToneDoublerShift(partWork pw, int octave, char noteCmd, int shift)
+        {
+            throw new NotImplementedException("継承先で要実装");
+        }
+
+        public virtual void SetToneDoubler(partWork pw)
+        {
+            throw new NotImplementedException("継承先で要実装");
+        }
+
+
+        public virtual int GetFNum(partWork pw, int octave, char cmd, int shift)
+        {
+            throw new NotImplementedException("継承先で要実装");
+        }
+
+        public virtual void GetFNumAtoB(partWork pw
+            , out int a, int aOctaveNow, char aCmd, int aShift
+            , out int b, int bOctaveNow, char bCmd, int bShift
+            , int dir)
+        {
+            a = GetFNum(pw, aOctaveNow, aCmd, aShift);
+            b = GetFNum(pw, bOctaveNow, bCmd, bShift);
+        }
+
+        public virtual void SetFNum(partWork pw)
+        {
+            throw new NotImplementedException("継承先で要実装");
+        }
+
+
+        public virtual void SetKeyOn(partWork pw)
+        {
+            throw new NotImplementedException("継承先で要実装");
+        }
+
+        public virtual void SetKeyOff(partWork pw)
+        {
+            throw new NotImplementedException("継承先で要実装");
+        }
+
+        public virtual void SetVolume(partWork pw)
+        {
+            throw new NotImplementedException("継承先で要実装");
         }
 
         public virtual void SetLfoAtKeyOn(partWork pw)
@@ -611,11 +620,6 @@ namespace Core
             }
         }
 
-        public bool CanUsePICommand()
-        {
-            return CanUsePI;
-        }
-
         public virtual void CmdKeyShift(partWork pw, MML mml)
         {
             int n = (int)mml.args[0];
@@ -629,6 +633,7 @@ namespace Core
                     , mml.line.Num
                     );
         }
+
 
         public virtual void CmdMPMS(partWork pw, MML mml)
         {
@@ -752,150 +757,6 @@ namespace Core
 
         }
 
-        public virtual void CmdOctaveDown(partWork pw, MML mml)
-        {
-            pw.octaveNew += parent.info.octaveRev ? 1 : -1;
-            pw.octaveNew = Common.CheckRange(pw.octaveNew, 1, 8);
-        }
-
-        public virtual void CmdOctaveUp(partWork pw, MML mml)
-        {
-            pw.octaveNew += parent.info.octaveRev ? -1 : 1;
-            pw.octaveNew = Common.CheckRange(pw.octaveNew, 1, 8);
-        }
-
-        public virtual void CmdOctave(partWork pw, MML mml)
-        {
-            int n = (int)mml.args[0];
-            n = Common.CheckRange(n, 1, 8);
-            pw.octaveNew = n;
-        }
-
-        public virtual void CmdVolumeDown(partWork pw, MML mml)
-        {
-            int n = (int)mml.args[0];
-            n = Common.CheckRange(n, 1, pw.MaxVolume);
-            pw.volume -= n;
-            pw.volume = Common.CheckRange(pw.volume, 0, pw.MaxVolume);
-
-        }
-
-        public virtual void CmdVolumeUp(partWork pw, MML mml)
-        {
-            int n = (int)mml.args[0];
-            n = Common.CheckRange(n, 1, pw.MaxVolume);
-            pw.volume += n;
-            n = Common.CheckRange(n, 0, pw.MaxVolume);
-
-        }
-
-        public virtual void CmdVolume(partWork pw, MML mml)
-        {
-            int n = (int)mml.args[0];
-            pw.volume = Common.CheckRange(n, 0, pw.MaxVolume);
-        }
-
-        public virtual void CmdTotalVolume(partWork pw, MML mml)
-        {
-            msgBox.setErrMsg(msg.get("E10007")
-                    , mml.line.Fn
-                    , mml.line.Num
-                    );
-        }
-
-        public virtual void CmdLength(partWork pw, MML mml)
-        {
-            int n = (int)mml.args[0];
-            n = Common.CheckRange(n, 1, 65535);
-            pw.length = n;
-        }
-
-        public virtual void CmdClockLength(partWork pw, MML mml)
-        {
-            int n = (int)mml.args[0];
-            n = Common.CheckRange(n, 1, 65535);
-            pw.length = n;
-        }
-
-        public virtual void CmdPan(partWork pw, MML mml)
-        {
-            msgBox.setErrMsg(msg.get("E10008")
-                    , mml.line.Fn
-                    , mml.line.Num
-                    );
-        }
-
-        public virtual void CmdDetune(partWork pw, MML mml)
-        {
-            int n = (int)mml.args[0];
-            n = Common.CheckRange(n, -127, 127);
-            pw.detune = n;
-        }
-
-        public virtual void CmdGatetime2(partWork pw, MML mml)
-        {
-            int n = (int)mml.args[0];
-            n = Common.CheckRange(n, 1, 8);
-            pw.gatetime = n;
-            pw.gatetimePmode = true;
-        }
-
-        public virtual void CmdGatetime(partWork pw, MML mml)
-        {
-            int n = (int)mml.args[0];
-            n = Common.CheckRange(n, 0, 255);
-            pw.gatetime = n;
-            pw.gatetimePmode = false;
-        }
-
-        public virtual void CmdMode(partWork pw, MML mml)
-        {
-            msgBox.setErrMsg(msg.get("E10009")
-                    , mml.line.Fn
-                    , mml.line.Num
-                    );
-        }
-
-        public void CmdLoop(partWork pw, MML mml)
-        {
-            pw.incPos();
-            parent.loopOffset = (long)parent.dat.Count;
-            parent.loopClock = (long)parent.lClock;
-            parent.loopSamples = (long)parent.dSample;
-
-            if (parent.info.format == enmFormat.XGM)
-            {
-                parent.OutData(0x7e);
-            }
-
-            foreach (KeyValuePair<enmChipType, ClsChip[]> kvp in parent.chips)
-            {
-                foreach (ClsChip chip in kvp.Value)
-                {
-                    foreach (partWork p in chip.lstPartWork)
-                    {
-                        p.reqFreqReset = true;
-                        p.beforeLVolume = -1;
-                        p.beforeRVolume = -1;
-                        p.beforeVolume = -1;
-                        p.pan = new dint(3);
-                        p.beforeTie = false;
-                        
-                        chip.CmdLoopExtProc(p,mml);
-                    }
-                }
-            }
-        }
-
-        public virtual void CmdLoopExtProc(partWork pw, MML mml)
-        {
-            throw new NotImplementedException("継承先で要実装");
-        }
-
-        public virtual void CmdInstrument(partWork pw, MML mml)
-        {
-            throw new NotImplementedException("継承先で要実装");
-        }
 
         public virtual void CmdEnvelope(partWork pw, MML mml)
         {
@@ -934,6 +795,169 @@ namespace Core
                     );
         }
 
+
+        public virtual void CmdTotalVolume(partWork pw, MML mml)
+        {
+            msgBox.setErrMsg(msg.get("E10007")
+                    , mml.line.Fn
+                    , mml.line.Num
+                    );
+        }
+
+        public virtual void CmdVolume(partWork pw, MML mml)
+        {
+            int n = (int)mml.args[0];
+            pw.volume = Common.CheckRange(n, 0, pw.MaxVolume);
+        }
+
+        public virtual void CmdVolumeUp(partWork pw, MML mml)
+        {
+            int n = (int)mml.args[0];
+            n = Common.CheckRange(n, 1, pw.MaxVolume);
+            pw.volume += n;
+            n = Common.CheckRange(n, 0, pw.MaxVolume);
+
+        }
+
+        public virtual void CmdVolumeDown(partWork pw, MML mml)
+        {
+            int n = (int)mml.args[0];
+            n = Common.CheckRange(n, 1, pw.MaxVolume);
+            pw.volume -= n;
+            pw.volume = Common.CheckRange(pw.volume, 0, pw.MaxVolume);
+
+        }
+
+
+        public virtual void CmdOctave(partWork pw, MML mml)
+        {
+            int n = (int)mml.args[0];
+            n = Common.CheckRange(n, 1, 8);
+            pw.octaveNew = n;
+        }
+
+        public virtual void CmdOctaveUp(partWork pw, MML mml)
+        {
+            pw.octaveNew += parent.info.octaveRev ? -1 : 1;
+            pw.octaveNew = Common.CheckRange(pw.octaveNew, 1, 8);
+        }
+
+        public virtual void CmdOctaveDown(partWork pw, MML mml)
+        {
+            pw.octaveNew += parent.info.octaveRev ? 1 : -1;
+            pw.octaveNew = Common.CheckRange(pw.octaveNew, 1, 8);
+        }
+
+
+        public virtual void CmdLength(partWork pw, MML mml)
+        {
+            int n = (int)mml.args[0];
+            n = Common.CheckRange(n, 1, 65535);
+            pw.length = n;
+        }
+
+        public virtual void CmdClockLength(partWork pw, MML mml)
+        {
+            int n = (int)mml.args[0];
+            n = Common.CheckRange(n, 1, 65535);
+            pw.length = n;
+        }
+
+
+        public virtual void CmdPan(partWork pw, MML mml)
+        {
+            msgBox.setErrMsg(msg.get("E10008")
+                    , mml.line.Fn
+                    , mml.line.Num
+                    );
+        }
+
+
+        public virtual void CmdDetune(partWork pw, MML mml)
+        {
+            int n = (int)mml.args[0];
+            n = Common.CheckRange(n, -127, 127);
+            pw.detune = n;
+        }
+
+
+        public virtual void CmdGatetime(partWork pw, MML mml)
+        {
+            int n = (int)mml.args[0];
+            n = Common.CheckRange(n, 0, 255);
+            pw.gatetime = n;
+            pw.gatetimePmode = false;
+        }
+
+        public virtual void CmdGatetime2(partWork pw, MML mml)
+        {
+            int n = (int)mml.args[0];
+            n = Common.CheckRange(n, 1, 8);
+            pw.gatetime = n;
+            pw.gatetimePmode = true;
+        }
+
+
+        public virtual void CmdMode(partWork pw, MML mml)
+        {
+            msgBox.setErrMsg(msg.get("E10009")
+                    , mml.line.Fn
+                    , mml.line.Num
+                    );
+        }
+
+        public virtual void CmdNoiseToneMixer(partWork pw, MML mml)
+        {
+            msgBox.setErrMsg(msg.get("E10014")
+                , mml.line.Fn
+                , mml.line.Num);
+        }
+
+
+        public void CmdLoop(partWork pw, MML mml)
+        {
+            pw.incPos();
+            parent.loopOffset = (long)parent.dat.Count;
+            parent.loopClock = (long)parent.lClock;
+            parent.loopSamples = (long)parent.dSample;
+
+            if (parent.info.format == enmFormat.XGM)
+            {
+                parent.OutData(0x7e);
+            }
+
+            foreach (KeyValuePair<enmChipType, ClsChip[]> kvp in parent.chips)
+            {
+                foreach (ClsChip chip in kvp.Value)
+                {
+                    foreach (partWork p in chip.lstPartWork)
+                    {
+                        p.reqFreqReset = true;
+                        p.beforeLVolume = -1;
+                        p.beforeRVolume = -1;
+                        p.beforeVolume = -1;
+                        p.pan = new dint(3);
+                        p.beforeTie = false;
+                        
+                        chip.CmdLoopExtProc(p,mml);
+                    }
+                }
+            }
+        }
+
+        public virtual void CmdLoopExtProc(partWork pw, MML mml)
+        {
+            throw new NotImplementedException("継承先で要実装");
+        }
+
+
+        public virtual void CmdInstrument(partWork pw, MML mml)
+        {
+            throw new NotImplementedException("継承先で要実装");
+        }
+
+
+
         public virtual void CmdExtendChannel(partWork pw, MML mml)
         {
             msgBox.setWrnMsg(msg.get("E10012")
@@ -941,6 +965,7 @@ namespace Core
                     , mml.line.Num
                     );
         }
+
 
         public virtual void CmdRenpuStart(partWork pw, MML mml)
         {
@@ -998,6 +1023,7 @@ namespace Core
 
         }
 
+
         public virtual void CmdRepeatStart(partWork pw, MML mml)
         {
             //何もする必要なし
@@ -1046,6 +1072,7 @@ namespace Core
                 pw.mmlPos = pos-1;
             }
         }
+
 
         public virtual void CmdNote(partWork pw, MML mml)
         {
@@ -1187,7 +1214,7 @@ namespace Core
                 ml = (int)pw.length;
             }
 
-            str = string.Format("[{0}]{1}\0", parent.dSample.ToString(), str);
+            str = string.Format("[{0}]{1}", parent.dSample.ToString(), str);
             parent.lyric += str;
             //WaitClockの決定
             pw.waitCounter = ml;
@@ -1201,15 +1228,16 @@ namespace Core
             //何もする必要なし
         }
 
-        public virtual void CmdNoiseToneMixer(partWork pw, MML mml)
-        {
-            msgBox.setErrMsg(msg.get("E10014")
-                , mml.line.Fn
-                , mml.line.Num);
-        }
 
         public virtual void MultiChannelCommand()
         { }
+
+
+        public virtual string DispRegion(clsPcm pcm)
+        {
+            return "みじっそう";
+        }
+
     }
 
     public class clsPcmDataInfo

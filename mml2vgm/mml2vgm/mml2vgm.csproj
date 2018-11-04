@@ -201,6 +201,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="sample\testC140.gwi" />
+    <None Include="sample\testConductor.gwi">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="sample\testP_PD_PI.gwi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

@@ -131,7 +131,7 @@ namespace Core
                     , v.Value.freq != -1 ? v.Value.freq : samplerate
                     , v.Value.vol
                     , pi.totalBufPtr
-                    , pi.totalBufPtr + size
+                    , pi.totalBufPtr + size - 1
                     , size
                     , -1
                     , is16bit
