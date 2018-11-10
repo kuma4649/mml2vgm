@@ -1133,6 +1133,8 @@ namespace Core
                         if (chip.SupportReversePartWork) chip.ReversePartWork = !chip.ReversePartWork;
 
                         log.Write("channelを跨ぐコマンド向け処理");
+                        //未使用のパートの場合は処理を行わない
+                        if (!chip.use) continue;
                         chip.MultiChannelCommand();
                     }
                 }
