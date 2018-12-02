@@ -80,6 +80,8 @@ namespace Core
                     }
                 }
             }
+
+            if (ChipID != 0) parent.dat[0x9f] |= 0x40;//use Secondary
         }
 
         public override void InitPart(ref partWork pw)
