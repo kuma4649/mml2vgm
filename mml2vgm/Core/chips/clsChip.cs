@@ -699,7 +699,6 @@ namespace Core
                 pw.lfo[c].param[0] = Common.CheckRange(pw.lfo[c].param[0], 0, (int)parent.info.clockCount);
                 pw.lfo[c].param[1] = Common.CheckRange(pw.lfo[c].param[1], 1, 255);
                 pw.lfo[c].param[2] = Common.CheckRange(pw.lfo[c].param[2], -32768, 32787);
-                pw.lfo[c].param[3] = Math.Abs(Common.CheckRange(pw.lfo[c].param[3], 0, 32787));
                 if (pw.lfo[c].param.Count > 4)
                 {
                     pw.lfo[c].param[4] = Common.CheckRange(pw.lfo[c].param[4], 0, 4);
@@ -708,6 +707,10 @@ namespace Core
                 {
                     pw.lfo[c].param.Add(0);
                 }
+
+                if (pw.lfo[c].param[4] != 2) pw.lfo[c].param[3] = Math.Abs(Common.CheckRange(pw.lfo[c].param[3], 0, 32787));
+                else pw.lfo[c].param[3] = Common.CheckRange(pw.lfo[c].param[3], -32768, 32787);
+
                 if (pw.lfo[c].param.Count > 5)
                 {
                     pw.lfo[c].param[5] = Common.CheckRange(pw.lfo[c].param[5], 0, 1);
@@ -719,11 +722,11 @@ namespace Core
                 if (pw.lfo[c].param.Count > 6)
                 {
                     pw.lfo[c].param[6] = Common.CheckRange(pw.lfo[c].param[6], -32768, 32787);
-                    if (pw.lfo[c].param[6] == 0) pw.lfo[c].param[6] = 1;
+                    //if (pw.lfo[c].param[6] == 0) pw.lfo[c].param[6] = 1;
                 }
                 else
                 {
-                    pw.lfo[c].param.Add(1);
+                    pw.lfo[c].param.Add(0);
                 }
 
                 pw.lfo[c].sw = true;
@@ -731,6 +734,7 @@ namespace Core
                 pw.lfo[c].value = (pw.lfo[c].param[0] == 0) ? pw.lfo[c].param[6] : 0;//ディレイ中は振幅補正は適用されない
                 pw.lfo[c].waitCounter = pw.lfo[c].param[0];
                 pw.lfo[c].direction = pw.lfo[c].param[2] < 0 ? -1 : 1;
+                if (pw.lfo[c].param[4] == 2) pw.lfo[c].direction = -1; //矩形の場合は必ず-1(Val1から開始する)をセット
             }
             else
             {

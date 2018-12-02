@@ -23,6 +23,7 @@ namespace Core
         public YM2413[] ym2413 = null;
         public C140[] c140 = null;
         public AY8910[] ay8910 = null;
+        public K051649[] k051649 = null;
 
         public Dictionary<enmChipType, ClsChip[]> chips;
 
@@ -68,6 +69,7 @@ namespace Core
             ym2413 = new YM2413[] { new YM2413(this, 0, "L", stPath, false), new YM2413(this, 1, "Ls", stPath, true) };
             c140 = new C140[] { new C140(this, 0, "Y", stPath, false), new C140(this, 1, "Ys", stPath, true) };
             ay8910 = new AY8910[] { new AY8910(this, 0, "A", stPath, false), new AY8910(this, 1, "As", stPath, true) };
+            k051649 = new K051649[] { new K051649(this, 0, "K", stPath, false), new K051649(this, 1, "Ks", stPath, true) };
 
             chips.Add(enmChipType.CONDUCTOR, conductor);
             chips.Add(enmChipType.YM2612, ym2612);
@@ -83,6 +85,7 @@ namespace Core
             chips.Add(enmChipType.YM2413, ym2413);
             chips.Add(enmChipType.C140, c140);
             chips.Add(enmChipType.AY8910, ay8910);
+            chips.Add(enmChipType.K051649, k051649);
 
             List<clsTD> lstTD = new List<clsTD>
             {
@@ -1429,6 +1432,7 @@ namespace Core
             long useC140 = 0;
             long useAY8910 = 0;
             long useYM2413 = 0;
+            long useK051649 = 0;
 
             for (int i = 0; i < 2; i++)
             {
@@ -1456,6 +1460,8 @@ namespace Core
                 { useAY8910 += pw.clockCounter; }
                 foreach (partWork pw in ym2413[i].lstPartWork)
                 { useYM2413 += pw.clockCounter; }
+                foreach (partWork pw in k051649[i].lstPartWork)
+                { useK051649 += pw.clockCounter; }
             }
 
             if (useSN76489 == 0)
@@ -1489,6 +1495,8 @@ namespace Core
             { dat[0x74] = 0; dat[0x75] = 0; dat[0x76] = 0; dat[0x77] = 0; dat[0x78] = 0; dat[0x79] = 0; dat[0x7a] = 0; dat[0x7b] = 0; }
             if (useYM2413 == 0)
             { dat[0x10] = 0; dat[0x11] = 0; dat[0x12] = 0; dat[0x13] = 0; }
+            if (useK051649 == 0)
+            { dat[0x9c] = 0; dat[0x9d] = 0; dat[0x9e] = 0; dat[0x9f] = 0; }
 
             if (info.Version == 1.51f)
             { dat[0x08] = 0x51; dat[0x09] = 0x01; }
@@ -2195,7 +2203,8 @@ namespace Core
                         }
                         break;
                     case 2: //矩形
-                        pl.value = pl.param[3] * pl.direction;
+                        if (pl.direction < 0) pl.value = pl.param[2];
+                        else pl.value = pl.param[3];
                         pl.waitCounter = pl.param[1];
                         pl.direction = -pl.direction;
                         break;

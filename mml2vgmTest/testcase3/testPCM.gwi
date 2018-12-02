@@ -1,0 +1,28 @@
+'{
+	TitleName=Russian Rave Voice Test
+	SystemName=Amiga Mod
+}
+
+'@ P 0, "voice1.8000u.wav", 8000, 100, SegaPCM, 55842
+'@ P 1, "voice2.8000u.wav", 8000, 100, SegaPCM, 56472
+'@ P 2, "voice3.8000u.wav", 8000, 100, SegaPCM, 57376
+'@ P 3, "voice4.8000u.wav", 8000, 100, SegaPCM, 55726
+
+
+'@ P 4, "v1.wav", 8272, 100, C140, 55842
+'@ P 5, "v2.wav", 8272, 100, C140, 56472
+'@ P 6, "v3.wav", 8272, 100, C140, 57376
+'@ P 7, "v4.wav", 8272, 100, C140, 55726
+
+
+@ P 0, "voice1.8000u.wav", 8000, 100, C140, 55842
+@ P 1, "voice2.8000u.wav", 8000, 100, C140, 56472
+@ P 2, "voice3.8000u.wav", 8000, 100, C140, 57376
+@ P 3, "voice4.8000u.wav", 8000, 100, C140, 55726
+
+
+'Y01,R1,Z01 T162
+R1 l1 o3 L [@0 c1&c1 @1 c1&c1 rr2r32r64 rr2r32r64]2
+Z01 l1 o4 [@0 c&c @1 c&c @2 c1&c1 @3 c1&c1]2
+
+'Y01 l1 o5 [@4 d+&d+ @5 d+&d+ @6 d+&d+ @7 d+&d+]2

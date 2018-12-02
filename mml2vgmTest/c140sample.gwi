@@ -1,0 +1,21 @@
+'{
+  TitleName = C140Test
+  ComposerJ = NightRadio (Part of phrase)
+  GameName = SunVox (v1.9.4c)
+  GameNameJ = SunVox (v1.9.4c)
+  Converted = Chromaryu/devling
+  Notes = "these sounds awesome on SunVox."
+  Octave-Rev = false
+}
+
+
+
+
+@ P No , "FileName" , Freq , Volume ( , ChipName , Option )
+'@ P 0,"b.wav",8000,100,C140,6374
+
+'Y01-24 T125
+'Y01-08 @0 l8 o0
+
+'Y01 @0o1 d>d>dga>cef<<d
+

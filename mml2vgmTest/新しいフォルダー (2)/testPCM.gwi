@@ -1,0 +1,12 @@
+'{
+	TitleName=Russian Rave Voice Test
+	SystemName=Amiga Mod
+}
+
+'@ P 0, "voice1.8000u.wav", 8000, 100, C140, 55842
+'@ P 1, "voice2.8000u.wav", 8000, 100, C140, 56472
+'@ P 2, "voice3.8000u.wav", 8000, 100, C140, 57376
+'@ P 3, "voice4.8000u.wav", 8000, 100, C140, 55726
+
+'Y01 T125
+'Y01 l1 o4 [@0 c&c2&c32&c64 @1 c&c2&c32&c64 @2 c&c2&c32&c64 @3 c&c2&c32&c64]2

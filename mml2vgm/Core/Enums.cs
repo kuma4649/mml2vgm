@@ -49,7 +49,8 @@ namespace Core
         YM2413 = 10,
         C140 = 11,
         AY8910 = 12,
-        CONDUCTOR = 13
+        CONDUCTOR = 13,
+        K051649 = 14
     }
 
     public enum enmPcmDefineType

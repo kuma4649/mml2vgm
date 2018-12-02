@@ -68,6 +68,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <Content Include="FNUM_K051649.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="sample\bendTest.gwi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -202,6 +205,12 @@
     </Content>
     <None Include="sample\testC140.gwi" />
     <None Include="sample\testConductor.gwi">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="sample\testK051649.gwi">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="sample\testLylics.gwi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="sample\testP_PD_PI.gwi">

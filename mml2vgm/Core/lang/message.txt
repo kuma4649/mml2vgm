@@ -233,6 +233,9 @@ E10015=This chip can't use P command.
 E10016=This chip can't use PD command.
 E10017=This chip can't use PI command.
 E10018={0} can't use PI command.
+E10019=This soundchip doesn't have instruments.
+E10020=ToneDoubler cannot be used if chip is not OPN or OPM.
+E10021=Selecting undefined sound patch ({0}).
 
 
 

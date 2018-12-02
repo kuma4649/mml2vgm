@@ -27,6 +27,7 @@ namespace Core
         public const string FORMAT = "FORMAT";
         public const string XGMBASEFRAME = "XGMBASEFRAME";
         public const string OCTAVEREV = "OCTAVE-REV";
+        public const string ISK052539 = "ISK052539";
         public const string PRIMARY = "PRIMARY";
         public const string SECONDARY = "SECONDARY";
         readonly public static string[] IDName = new string[] { PRIMARY, SECONDARY };
@@ -59,7 +60,7 @@ namespace Core
         public double samplesPerClock = DEFAULT_SAMPLES_PER_CLOCK;
         public long xgmSamplesPerSecond = 60L;
         public bool octaveRev = false;
-
+        public bool isK052539 = false;
 
 
         public int AddInformation(string buf, int lineNumber, string fn, Dictionary<enmChipType, ClsChip[]> chips)
@@ -97,6 +98,7 @@ namespace Core
                     else if (wrd == FORMAT) SetFormat(val);
                     else if (wrd == XGMBASEFRAME) SetXgmBaseFrame(val);
                     else if (wrd == OCTAVEREV) SetOctaveRev(val);
+                    else if (wrd == ISK052539) SetIsK052539(val);
                     else if (wrd == FORCEDMONOPARTYM2612) SetMonoPart(val, chips);
                     else
                     {
@@ -188,5 +190,24 @@ namespace Core
             }
         }
 
+        private void SetIsK052539(string val)
+        {
+            switch (val.ToUpper())
+            {
+                case "TRUE":
+                case "1":
+                case "YES":
+                case "Y":
+                    isK052539 = true;
+                    break;
+                case "FALSE":
+                case "0":
+                case "NO":
+                case "N":
+                default:
+                    isK052539 = false;
+                    break;
+            }
+        }
     }
 }

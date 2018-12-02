@@ -1,0 +1,19 @@
+'{
+	TitleName   =AY-3-8910 TEST
+	TitleNameJ  =AY-3-8910‚ÌƒeƒXƒg
+	Octave-Rev  =TRUE
+}
+
+'A1-3 T120 
+
+@ E No , SV , AR , DR , SL , SR , RR , ST , ChipName
+'@ E 0,13,1,9,0,2,1,1,AY8910
+
+'A1 @0 EON l4 o4 v13
+'A1 cdef edcr efga gfer
+'A1 crcr crcr l8 ccddeeff l4 edcr
+
+'A2 @0 EON l4 o4 v9
+'A2 r8cdef edcr efga gfer
+'A2 crcr crcr l8 ccddeeff l4 edcr8
+
