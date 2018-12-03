@@ -165,6 +165,11 @@ namespace Core
         public int instrument = -1;
 
         /// <summary>
+        /// OPLLのサスティン
+        /// </summary>
+        public bool sus = false;
+
+        /// <summary>
         /// 使用中のエンベロープ定義番号
         /// </summary>
         public int envInstrument = -1;

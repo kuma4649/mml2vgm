@@ -634,6 +634,14 @@ namespace Core
                     );
         }
 
+        public virtual void CmdSusOnOff(partWork pw, MML mml)
+        {
+            msgBox.setErrMsg(msg.get("E10022")
+                    , mml.line.Fn
+                    , mml.line.Num
+                    );
+        }
+
 
         public virtual void CmdMPMS(partWork pw, MML mml)
         {

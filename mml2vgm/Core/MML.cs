@@ -58,6 +58,7 @@ namespace Core
         TiePC,          // ^
         TieMC,          // ~
         ToneDoubler,    // , 0
-        Lyric           // "
+        Lyric,          // "
+        SusOnOff        // so sf
     }
 }

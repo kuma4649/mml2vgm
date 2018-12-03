@@ -189,6 +189,7 @@ E05047=']' not found as escape point from '/'.
 E05048=Loop left open. '[' or ']' missing in loop defintion.
 E05049=Tuplet and repeat command can't straddle each other.
 E05050='{' or '}' missing in sound or meta definiton.
+E05051=Failed to parse 'so' or 'sf' command.
 
 
 
@@ -216,7 +217,7 @@ E09005=Sound patch isn't selected.
 ;clsChip.cs 10000
 E10000=Sound patch selected as envelope definition does not exist.
 E10001=Defined LFO parameter is not defined.
-E10002=This cannel can't use w command.
+E10002=This channel can't use w command.
 E10003=This channel can't use MPMS command.
 E10004=This channel can't use MAMS command.
 E10005=Parameters missing or not enough to setup LFO.
@@ -236,6 +237,7 @@ E10018={0} can't use PI command.
 E10019=This soundchip doesn't have instruments.
 E10020=ToneDoubler cannot be used if chip is not OPN or OPM.
 E10021=Selecting undefined sound patch ({0}).
+E10022=This channel can't use so or sf command.
 
 
 

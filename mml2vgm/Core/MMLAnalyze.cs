@@ -209,6 +209,10 @@ namespace Core
                     log.Write("key shift");
                     CmdKeyShift(pw, mml);
                     break;
+                case 's': // sus ON/OFF
+                    log.Write("sus ON/OFF");
+                    CmdSusOnOff(pw, mml);
+                    break;
                 case 'c':
                 case 'd':
                 case 'e':
@@ -915,6 +919,22 @@ namespace Core
             mml.args = new List<object>();
             mml.args.Add(c);
             mml.args.Add(n);
+        }
+
+        private void CmdSusOnOff(partWork pw,MML mml)
+        {
+            pw.incPos();
+            char c = pw.getChar();
+            pw.incPos();
+            if (c != 'o' && c != 'f')
+            {
+                msgBox.setErrMsg(msg.get("E05031"), pw.getSrcFn(), pw.getLineNumber());
+                return;
+            }
+
+            mml.type = enmMMLType.SusOnOff;
+            mml.args = new List<object>();
+            mml.args.Add(c);
         }
 
         private void CmdY(partWork pw,MML mml)

@@ -2470,6 +2470,11 @@ namespace Core
                     pw.chip.CmdKeyShift(pw, mml);
                     pw.mmlPos++;
                     break;
+                case enmMMLType.SusOnOff:
+                    log.Write("SusOnOff");
+                    pw.chip.CmdSusOnOff(pw, mml);
+                    pw.mmlPos++;
+                    break;
 
                 default:
                     msgBox.setErrMsg(string.Format(msg.get("E01016")

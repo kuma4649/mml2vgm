@@ -355,6 +355,12 @@ namespace Core
         {
         }
 
+        public override void CmdSusOnOff(partWork pw, MML mml)
+        {
+            char c = (char)mml.args[0];
+            pw.sus = (c == 'o');
+        }
+
         public override void MultiChannelCommand()
         {
             foreach (partWork pw in lstPartWork)
@@ -393,6 +399,7 @@ namespace Core
                             , (byte)(
                                 ((pw.freq >> 8) & 0xf)
                                 | (pw.keyOn ? 0x10 : 0x00)
+                                | (pw.sus ? 0x20 : 0x00)
                               )
                             );
                     }
