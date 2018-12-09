@@ -701,8 +701,10 @@ Tn              oooooooooooooooooooooooooooo  テンポ(1 - 1200)
 Kn              -ooo-ooooo-oooo-oooooooooo-o  移調絶対指定 ( -12 - +12 )
 #n(廃止)        ----------------------------  音長をクロック値で指定(lコマンドの後に#でクロック指定してください)
 pn              -o-oo--o--ooo--ooo--o-------  パン (0: 発音しない  1: 右  2: 左  3: 中央)
-pn1,n2          ------o---------------o----o  パン (n1: 左 0 - 15  n2: 右 0 - 15 )
+pn1,n2          ------o---------------o-----  パン (n1: 左 0 - 15  n2: 右 0 - 15 )
 pn1,n2          ---------------------o-o----  パン (n1: 左 0 - 127 n2: 右 0 - 127)
+so              -------------------------oo-  サスティンON
+sf              -------------------------oo-  サスティンOFF
 %xxx            oooooooooooooooooooooooooooo  エイリアス展開
                  
 c               -ooooooooooooooooooooooooooo  音符ド
