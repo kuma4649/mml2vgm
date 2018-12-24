@@ -995,16 +995,39 @@ namespace Core
                     }
                     if (res != 0)
                     {
-                        pw.slots = res;
+                        pw.slotsEX = res;
+                        if (pw.Ch3SpecialMode) pw.slots = pw.slotsEX;
                     }
                     break;
                 case "EXON":
                     pw.Ch3SpecialMode = true;
                     ((ClsOPN)pw.chip).OutOPNSetCh3SpecialMode(pw, true);
+                    foreach (partWork p in pw.chip.lstPartWork)
+                    {
+                        if (p.Type == enmChannelType.FMOPNex)
+                        {
+                            p.slots = p.slotsEX;
+                            p.beforeVolume = -1;
+                            p.beforeFNum = -1;
+                            p.freq = -1;
+                            //SetFmFNum(p);
+                        }
+                    }
                     break;
                 case "EXOF":
                     pw.Ch3SpecialMode = false;
                     ((ClsOPN)pw.chip).OutOPNSetCh3SpecialMode(pw, false);
+                    foreach (partWork p in pw.chip.lstPartWork) {
+                        if (p.Type == enmChannelType.FMOPNex)
+                        {
+                            if (p.ch != 2) p.slots = 0;
+                            else p.slots = p.slots4OP;
+                            p.beforeVolume = -1;
+                            p.beforeFNum = -1;
+                            p.freq = -1;
+                            //SetFmFNum(p);
+                        }
+                    }
                     break;
                 case "EXD":
                     pw.slotDetune[0] = (int)mml.args[1];

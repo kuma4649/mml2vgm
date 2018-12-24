@@ -252,9 +252,19 @@ namespace Core
         public bool gatetimePmode = false;
 
         /// <summary>
-        /// 使用するスロット
+        /// 使用する現在のスロット
         /// </summary>
         public byte slots = 0xf;
+
+        /// <summary>
+        /// 4OP(通常)時に使用するスロット
+        /// </summary>
+        public byte slots4OP = 0xf;
+
+        /// <summary>
+        /// EX時に使用するスロット
+        /// </summary>
+        public byte slotsEX = 0x0;
 
         /// <summary>
         /// タイ
