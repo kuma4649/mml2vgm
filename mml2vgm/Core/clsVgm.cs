@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -252,6 +253,18 @@ namespace Core
 
             string s = buf.Substring(1).TrimStart();
 
+            if (s.ToUpper().IndexOf("MUCOM88") == 0)
+            {
+                defineMUCOM88Instrument(srcFn, s, lineNumber);
+                return 0;
+            }
+
+            if (s.ToUpper().IndexOf("TFI") == 0)
+            {
+                defineTFIInstrument(srcFn, s, lineNumber);
+                return 0;
+            }
+
             // FMの音色を定義中の場合
             if (instrumentCounter != -1)
             {
@@ -381,6 +394,121 @@ namespace Core
             }
 
             return 0;
+        }
+
+        private void defineMUCOM88Instrument(string srcFn, string s, int lineNumber)
+        {
+            try
+            {
+                string[] vs = s.Substring(7).Trim().Split(new string[] { "," }, StringSplitOptions.None);
+                if (vs.Length < 1) throw new ArgumentOutOfRangeException();
+                for (int i = 0; i < vs.Length; i++) vs[i] = vs[i].Trim();
+
+                int num = Common.ParseNumber(vs[0]);
+                string fn = vs[1].Trim().Trim('"');
+                string path = Path.GetDirectoryName(Path.GetFullPath(srcFn));
+                byte[] buf;
+                buf = File.ReadAllBytes(Path.Combine(path, fn));
+
+                for (int p = 0; p < buf.Length; p += 32)
+                {
+                    byte[] voi = new byte[26];
+                    Array.Copy(buf, p + 0, voi, 0, 26);
+                    if (instFM.ContainsKey(num + p / 32))
+                    {
+                        instFM.Remove(num + p / 32);
+                    }
+                    instFM.Add(num + p / 32, ConvertMUCOM88toM(num,voi));
+                }
+
+                return;
+            }
+            catch
+            {
+                msgBox.setWrnMsg(msg.get("E01018"), srcFn, lineNumber);
+            }
+        }
+
+        private byte[] ConvertMUCOM88toM(int num, byte[] voi)
+        {
+            List<byte> ret = new List<byte>();
+            ret.Add((byte)voi[0]);
+
+            int[] op = new int[] { 0, 2, 1, 3 };
+            int sft = 1;
+            for (int i = 0; i < 4; i++)
+            {
+                ret.Add((byte)(voi[8 + op[i] + sft] & 0x1f));//AR OP1   +0
+                ret.Add((byte)(voi[12 + op[i] + sft] & 0x1f));//DR OP1   +1
+                ret.Add((byte)(voi[16 + op[i] + sft] & 0x1f));//SR OP1   +2
+                ret.Add((byte)(voi[20 + op[i] + sft] & 0x0f));//RR OP1   +3
+                ret.Add((byte)((voi[20 + op[i] + sft] >> 4) & 0x0f));//SL OP1   +4
+                ret.Add((byte)(voi[4 + op[i] + sft] & 0x7f));//TL OP1   +5
+                ret.Add((byte)((voi[8 + op[i] + sft] >> 6) & 0x03));//KS OP1   +6
+                ret.Add((byte)((voi[0 + op[i] + sft] >> 0) & 0x0f));//ML OP1   +7
+                ret.Add((byte)((voi[0 + op[i] + sft] >> 4) & 0x07));//DT1 OP1   +8
+                ret.Add(1);//AM OP1   +9
+                ret.Add(0);//SSGEG OP1   +10
+            }
+            ret.Add((byte)(voi[4 * 6 + sft] & 0x7));//ALG
+            ret.Add((byte)((voi[4 * 6 + sft] >> 3) & 0x7));//FB
+
+            return ret.ToArray();
+        }
+
+        private void defineTFIInstrument(string srcFn, string s, int lineNumber)
+        {
+            try
+            {
+                string[] vs = s.Substring(3).Trim().Split(new string[] { "," }, StringSplitOptions.None);
+                if (vs.Length < 1) throw new ArgumentOutOfRangeException();
+                for (int i = 0; i < vs.Length; i++) vs[i] = vs[i].Trim();
+
+                int num = Common.ParseNumber(vs[0]);
+                string fn = vs[1].Trim().Trim('"');
+                string path = Path.GetDirectoryName(Path.GetFullPath(srcFn));
+                byte[] buf;
+                buf = File.ReadAllBytes(Path.Combine(path, fn));
+
+                if (instFM.ContainsKey(num))
+                {
+                    instFM.Remove(num);
+                }
+                instFM.Add(num, ConvertTFItoM(num, buf));
+
+                return;
+            }
+            catch
+            {
+                msgBox.setWrnMsg(msg.get("E01018"), srcFn, lineNumber);
+            }
+        }
+
+        private byte[] ConvertTFItoM(int num, byte[] voi)
+        {
+            List<byte> ret = new List<byte>();
+            ret.Add((byte)num);
+
+            int[] op = new int[] { 0, 2, 1, 3 };
+            int sft = 2;
+            for (int i = 0; i < 4; i++)
+            {
+                ret.Add((byte)(voi[0x04 + op[i] * 10 + sft] & 0x1f));//AR OP1   +0
+                ret.Add((byte)(voi[0x05 + op[i] * 10 + sft] & 0x1f));//DR OP1   +1
+                ret.Add((byte)(voi[0x06 + op[i] * 10 + sft] & 0x1f));//SR OP1   +2
+                ret.Add((byte)(voi[0x07 + op[i] * 10 + sft] & 0x0f));//RR OP1   +3
+                ret.Add((byte)(voi[0x08 + op[i] * 10 + sft] & 0x0f));//SL OP1   +4
+                ret.Add((byte)(voi[0x02 + op[i] * 10 + sft] & 0x7f));//TL OP1   +5
+                ret.Add((byte)(voi[0x03 + op[i] * 10 + sft] & 0x03));//KS OP1   +6
+                ret.Add((byte)(voi[0x00 + op[i] * 10 + sft] & 0x0f));//ML OP1   +7
+                ret.Add((byte)((voi[0x01 + op[i] * 10 + sft] & 0x07) - 3));//DT1 OP1   +8
+                ret.Add(1);//AM OP1   +9
+                ret.Add((byte)(voi[0x09 + op[i] * 10 + sft] & 0x0f));//SSGEG OP1   +10
+            }
+            ret.Add((byte)(voi[0] & 0x7));//ALG
+            ret.Add((byte)(voi[1] & 0x7));//FB
+
+            return ret.ToArray();
         }
 
         private void definePCMInstrument(string srcFn, string s, int lineNumber)
@@ -1092,7 +1220,7 @@ namespace Core
 
         private Random rnd = new Random();
 
-
+        public int useJumpCommand = 0;
 
         public byte[] Vgm_getByteData(Dictionary<string, List<MML>> mmlData)
         {
@@ -1250,15 +1378,17 @@ namespace Core
                     lClock += waitCounter;
                     dSample += (long)(info.samplesPerClock * waitCounter);
 
-                    if (ym2612[0].lstPartWork[5].pcmWaitKeyOnCounter <= 0)//== -1)
+                    if (useJumpCommand == 0)
                     {
-                        OutWaitNSamples((long)(info.samplesPerClock * waitCounter));
+                        if (ym2612[0].lstPartWork[5].pcmWaitKeyOnCounter <= 0)//== -1)
+                        {
+                            OutWaitNSamples((long)(info.samplesPerClock * waitCounter));
+                        }
+                        else
+                        {
+                            OutWaitNSamplesWithPCMSending(ym2612[0].lstPartWork[5], waitCounter);
+                        }
                     }
-                    else
-                    {
-                        OutWaitNSamplesWithPCMSending(ym2612[0].lstPartWork[5], waitCounter);
-                    }
-
                 }
 
                 log.Write("終了パートのカウント");
@@ -1898,14 +2028,17 @@ namespace Core
                 }
             }
 
-            // wait発行
-            lClock += cnt;
-            dSample += (long)(info.samplesPerClock * cnt);
-            //Console.WriteLine("pw.ch{0} lclock{1}", ym2612x[0].lstPartWork[0].clockCounter, lClock);
+            if (useJumpCommand == 0)
+            {
+                // wait発行
+                lClock += cnt;
+                dSample += (long)(info.samplesPerClock * cnt);
+                //Console.WriteLine("pw.ch{0} lclock{1}", ym2612x[0].lstPartWork[0].clockCounter, lClock);
 
-            sampleB += info.samplesPerClock * cnt;
-            OutWaitNSamples((long)(sampleB));
-            sampleB -= (long)sampleB;
+                sampleB += info.samplesPerClock * cnt;
+                OutWaitNSamples((long)(sampleB));
+                sampleB -= (long)sampleB;
+            }
         }
 
         private List<byte> ConvertVGMtoXGM(List<byte> src)
@@ -2458,6 +2591,12 @@ namespace Core
                 case enmMMLType.LoopPoint:
                     log.Write("LoopPoint");
                     pw.chip.CmdLoop(pw, mml);
+                    pw.mmlPos++;
+                    break;
+                case enmMMLType.JumpPoint:
+                    log.Write("JumpPoint");
+                    useJumpCommand--;
+                    if (useJumpCommand < 0) useJumpCommand = 0;
                     pw.mmlPos++;
                     break;
                 case enmMMLType.NoiseToneMixer:

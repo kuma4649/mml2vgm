@@ -59,6 +59,7 @@ namespace Core
         TieMC,          // ~
         ToneDoubler,    // , 0
         Lyric,          // "
-        SusOnOff        // so sf
+        SusOnOff,       // so sf
+        JumpPoint       // J
     }
 }

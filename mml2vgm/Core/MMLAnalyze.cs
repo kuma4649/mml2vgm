@@ -14,13 +14,15 @@ namespace Core
 
         private Dictionary<enmChipType, ClsChip[]> chips;
         private Information info;
-
+        private ClsVgm desVGM;
 
         public MMLAnalyze(ClsVgm desVGM)
         {
             desVGM.PartInit();
             this.chips = desVGM.chips;
             this.info = desVGM.info;
+            desVGM.useJumpCommand = 0;
+            this.desVGM = desVGM;
         }
 
         public int Start()
@@ -164,6 +166,10 @@ namespace Core
                 case 'L': // loop point
                     log.Write(" loop point");
                     CmdLoop(pw, mml);
+                    break;
+                case 'J': // Jump point
+                    log.Write("Jump point");
+                    CmdJump(pw, mml);
                     break;
                 case '[': // repeat
                     log.Write("repeat [");
@@ -733,11 +739,19 @@ namespace Core
 
         }
 
-        private void CmdLoop(partWork pw,MML mml)
+        private void CmdLoop(partWork pw, MML mml)
         {
             pw.incPos();
             mml.type = enmMMLType.LoopPoint;
             mml.args = null;
+        }
+
+        private void CmdJump(partWork pw, MML mml)
+        {
+            pw.incPos();
+            mml.type = enmMMLType.JumpPoint;
+            mml.args = null;
+            desVGM.useJumpCommand++;
         }
 
         private void CmdRepeatStart(partWork pw,MML mml)
