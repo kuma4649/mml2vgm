@@ -66,7 +66,11 @@ namespace Core
         /// <summary>
         /// 音色情報のみ定義
         /// </summary>
-        Set
+        Set,
+        /// <summary>
+        /// Mucom88Adpcm定義
+        /// </summary>
+        Mucom88
     }
 
     public enum enmPCMSTATUS

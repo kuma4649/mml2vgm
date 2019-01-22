@@ -686,6 +686,7 @@ EXn             -oo----oo---oo---oo---------  効果音モードのスロット�
 EXDn1,n2,n3,n4  -oo----oo---oo---oo---------  効果音モードのスロットディチューン。
                 -                               n1～n4はそれぞれOP1～OP4までのディチューン値。
 L               oooooooooooooooooooooooooooo  曲全体のループ位置指定(曲者です)
+J               oooooooooooooooooooooooooooo  指定した位置まで演奏をスキップする。複数指定した場合は最後のJが有効になる
 qn              -ooo-ooooooooooooooooooooooo  ゲートタイム指定(クロック数で指定。音長分のクロック数からn引いた分が
                                               発音する長さになる。)
 Qn              -ooo-ooooooooooooooooooooooo  ゲートタイム割合指定(1 - 8)
@@ -795,6 +796,24 @@ b               -ooooooooooooooooooooooooooo  音符シ
 '@ AR DR SL RR KL MT AM VB EG KR DT
 '@ AR DR SL RR KL MT AM VB EG KR DT
 '@ TL FB
+
+
+  MUCOM88の音色を読み込む
+　filenameの音色データファイルを読み込み、 NUM で指定した番号から定義を行う。
+'@ MUCOM88 NUM,"filename"
+
+例)
+'@ MUCOM88 0,"voice.dat"
+　voice.datを読み込み、音色番号0から順に定義する。
+
+
+  TFIの音色を読み込む
+　filenameの音色データファイルを読み込み、 NUM で指定した番号に定義を行う。
+'@ TFI NUM,"filename"
+
+例)
+'@ TFI 0,"voice.tfi"
+　voice.tfiを読み込み、音色番号0に定義する。
 
 
 (2) PCM音源音色定義

@@ -302,6 +302,66 @@ namespace Core
 
                         }
                         break;
+                    case enmPcmDefineType.Mucom88:
+                        if (desVGM.instPCM.ContainsKey(pds.No))
+                        {
+                            desVGM.instPCM.Remove(pds.No);
+                        }
+                        v = new clsPcm(
+                            pds.No
+                            , pcmDataSeqNum++
+                            , pds.chip
+                            , pds.isSecondary
+                            , pds.FileName
+                            , pds.BaseFreq
+                            , pds.Volume
+                            , 0
+                            , 0
+                            , 0
+                            , pds.DatLoopAdr
+                            , false
+                            , 8000);
+                        desVGM.instPCM.Add(pds.No, v);
+
+                        mucomADPCM2PCM.mucomPCMInfo info = null;
+                        for (int i = 0; i < mucomADPCM2PCM.lstMucomPCMInfo.Count; i++)
+                        {
+                            mucomADPCM2PCM.mucomPCMInfo inf = mucomADPCM2PCM.lstMucomPCMInfo[i];
+                            if (pds.No == inf.no)
+                            {
+                                info = inf;
+                                break;
+                            }
+                        }
+                        if (info == null) return;
+
+                        //ファイルの読み込み
+                        buf = mucomADPCM2PCM.GetPcmData(info);
+                        if (buf == null)
+                        {
+                            msgBox.setErrMsg(string.Format(
+                                msg.get("E04007")
+                                , v.fileName));
+                            continue;
+                        }
+
+                        if (desVGM.info.format == enmFormat.XGM && v.isSecondary)
+                        {
+                            msgBox.setErrMsg(string.Format(
+                                msg.get("E01017")
+                                , v.fileName));
+                            continue;
+                        }
+
+                        desVGM.chips[v.chip][v.isSecondary ? 1 : 0]
+                            .StorePcm(
+                            newDic
+                            , new KeyValuePair<int, clsPcm>(pds.No, v)
+                            , buf
+                            , false
+                            , 8000);
+
+                        break;
                     case enmPcmDefineType.RawData:
                         //ファイルの読み込み
                         buf = Common.GetPCMDataFromFile(path, pds.FileName, 100, out isRaw, out is16bit, out samplerate);

@@ -81,7 +81,8 @@ E01014=ToneDoubler definition illegal.
 E01015=Exceeding byte limit (256bytes) per one frame. Please spread datas. Frame {0} : {1}bytes
 E01016=Found unknown command {0}.
 E01017=Can't define PCM other than YM2612X(OPN2X) on XGM format.
-
+E01018=Failed to load MUCOM88 voice file.
+E01019=Failed to load MUCOM88 ADPCM file.
 
 
 ;Common.cs 02000

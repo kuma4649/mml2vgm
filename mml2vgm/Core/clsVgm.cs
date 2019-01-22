@@ -253,6 +253,12 @@ namespace Core
 
             string s = buf.Substring(1).TrimStart();
 
+            if (s.ToUpper().IndexOf("MUCOM88ADPCM") == 0)
+            {
+                defineMUCOM88ADPCMInstrument(srcFn, s, lineNumber);
+                return 0;
+            }
+
             if (s.ToUpper().IndexOf("MUCOM88") == 0)
             {
                 defineMUCOM88Instrument(srcFn, s, lineNumber);
@@ -394,6 +400,47 @@ namespace Core
             }
 
             return 0;
+        }
+
+        private void defineMUCOM88ADPCMInstrument(string srcFn, string s, int lineNumber)
+        {
+            try
+            {
+                string[] vs = s.Substring(12).Trim().Split(new string[] { "," }, StringSplitOptions.None);
+                if (vs.Length < 1) throw new ArgumentOutOfRangeException();
+                for (int i = 0; i < vs.Length; i++) vs[i] = vs[i].Trim();
+
+                int num = Common.ParseNumber(vs[0]);
+                string fn = vs[1].Trim().Trim('"');
+                string path = Path.GetDirectoryName(Path.GetFullPath(srcFn));
+                byte[] pcmdat;
+
+                pcmdat = File.ReadAllBytes(Path.Combine(path, fn));
+                mucomADPCM2PCM.initial(pcmdat);
+                List<mucomADPCM2PCM.mucomPCMInfo> lstInfo = mucomADPCM2PCM.lstMucomPCMInfo;
+
+                foreach (mucomADPCM2PCM.mucomPCMInfo info in lstInfo)
+                {
+                    clsPcmDatSeq pds = new clsPcmDatSeq(
+                        enmPcmDefineType.Mucom88
+                        , info.no+num
+                        , info.name
+                        , 8000
+                        , 150
+                        , enmChipType.YM2612
+                        , false
+                        , -1
+                        );
+
+                    instPCMDatSeq.Add(pds);
+                }
+
+                return;
+            }
+            catch
+            {
+                msgBox.setWrnMsg(msg.get("E01019"), srcFn, lineNumber);
+            }
         }
 
         private void defineMUCOM88Instrument(string srcFn, string s, int lineNumber)

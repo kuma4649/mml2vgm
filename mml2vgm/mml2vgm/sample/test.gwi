@@ -21,9 +21,8 @@
 
 '@ MUCOM88 1,"voice.dat"
 '@ TFI 0,"test.tfi"
+'@ MUCOM88ADPCM 0,"mucompcm.bin"
 
-'F1 T126
-'F1 @0o4c4d4e4
-'F1 @71o4[c4d4e4]10
-'F1 Jg4a4b4
-'F1 J>>g4a4b4
+'F6 T126
+'F6 m1@1o4c4@2d4@3e4
+

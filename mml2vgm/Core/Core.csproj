@@ -31,6 +31,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MDSound, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>.\MDSound.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -73,6 +77,7 @@
     <Compile Include="mml2vgm.cs" />
     <Compile Include="MMLAnalyze.cs" />
     <Compile Include="msgBox.cs" />
+    <Compile Include="mucomADPCM2PCM.cs" />
     <Compile Include="Note.cs" />
     <Compile Include="partWork.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -82,6 +87,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="lang\message.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MDSound.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
