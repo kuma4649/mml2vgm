@@ -91,12 +91,7 @@ namespace Core
 
         public void SetSsgFNum(partWork pw)
         {
-            int f = GetSsgFNum(pw, pw.octaveNow, pw.noteCmd, pw.shift + pw.keyShift);//
-            if (pw.bendWaitCounter != -1)
-            {
-                f = pw.bendFnum;
-            }
-            f = f + pw.detune;
+            int f = - pw.detune;
             for (int lfo = 0; lfo < 4; lfo++)
             {
                 if (!pw.lfo[lfo].sw)
@@ -107,7 +102,25 @@ namespace Core
                 {
                     continue;
                 }
-                f += pw.lfo[lfo].value + pw.lfo[lfo].param[6];
+                f -= pw.lfo[lfo].value + pw.lfo[lfo].param[6];
+            }
+
+            if (pw.octaveNow < 1)
+            {
+                f <<= -pw.octaveNow;
+            }
+            else
+            {
+                f >>= pw.octaveNow - 1;
+            }
+
+            if (pw.bendWaitCounter != -1)
+            {
+                f += pw.bendFnum;
+            }
+            else
+            {
+                f += GetSsgFNum(pw, pw.octaveNow, pw.noteCmd, pw.shift + pw.keyShift);//
             }
 
             f = Common.CheckRange(f, 0, 0xfff);

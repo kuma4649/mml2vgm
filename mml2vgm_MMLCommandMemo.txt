@@ -897,6 +897,11 @@ b               -ooooooooooooooooooooooooooo  音符シ
   C140Secondary    C140Secondary         ooo 可       可         
 
 
+  MUCOM88のADPCMを読み込む
+　filenameのADPCMデータファイルを読み込み、 NUM で指定した番号から定義を行う。
+'@ MUCOM88ADPCM NUM,"filename"
+
+
 (3) 波形メモリ音源音色定義
 
 '@ H No , val1, ... val32

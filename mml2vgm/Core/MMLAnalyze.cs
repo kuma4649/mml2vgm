@@ -468,6 +468,23 @@ namespace Core
                     n = Common.CheckRange(n, 1, 65535);
                 }
 
+                //.の解析
+                int futen = 0;
+                int fn = n;
+                while (pw.getChar() == '.')
+                {
+                    if (fn % 2 != 0)
+                    {
+                        msgBox.setWrnMsg(msg.get("E05036")
+                            , mml.line.Fn
+                            , mml.line.Num);
+                    }
+                    fn = fn / 2;
+                    futen += fn;
+                    pw.incPos();
+                }
+                n += futen;
+
             }
             mml.type = enmMMLType.Length;
             mml.args = new List<object>();

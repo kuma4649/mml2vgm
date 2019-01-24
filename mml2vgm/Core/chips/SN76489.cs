@@ -146,7 +146,7 @@ namespace Core
                     {
                         continue;
                     }
-                    f += pw.lfo[lfo].value + pw.lfo[lfo].param[6];//param[6] : 位相
+                    f -= pw.lfo[lfo].value + pw.lfo[lfo].param[6];//param[6] : 位相
                 }
 
                 if (pw.octaveNow < 1)
