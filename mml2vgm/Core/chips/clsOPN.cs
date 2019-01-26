@@ -323,6 +323,7 @@ namespace Core
             {
                 if (algs[alg][i] == 0 || (pw.slots & (1 << i)) == 0)
                 {
+                    ope[i] = -1;
                     continue;
                 }
                 ope[i] = ope[i] + (127 - vol);
@@ -336,10 +337,14 @@ namespace Core
                 vpw = pw.chip.lstPartWork[2];
             }
 
-            if ((pw.slots & 1) != 0) ((ClsOPN)pw.chip).OutFmSetTl(vpw, 0, ope[0]);
-            if ((pw.slots & 2) != 0) ((ClsOPN)pw.chip).OutFmSetTl(vpw, 1, ope[1]);
-            if ((pw.slots & 4) != 0) ((ClsOPN)pw.chip).OutFmSetTl(vpw, 2, ope[2]);
-            if ((pw.slots & 8) != 0) ((ClsOPN)pw.chip).OutFmSetTl(vpw, 3, ope[3]);
+            if ((pw.slots & 1) != 0 && ope[0] != -1) ((ClsOPN)pw.chip).OutFmSetTl(vpw, 0, ope[0]);
+            if ((pw.slots & 2) != 0 && ope[1] != -1) ((ClsOPN)pw.chip).OutFmSetTl(vpw, 1, ope[1]);
+            if ((pw.slots & 4) != 0 && ope[2] != -1) ((ClsOPN)pw.chip).OutFmSetTl(vpw, 2, ope[2]);
+            if ((pw.slots & 8) != 0 && ope[3] != -1) ((ClsOPN)pw.chip).OutFmSetTl(vpw, 3, ope[3]);
+            //if ((pw.slots & 1) != 0 ) ((ClsOPN)pw.chip).OutFmSetTl(vpw, 0, ope[0]);
+            //if ((pw.slots & 2) != 0 ) ((ClsOPN)pw.chip).OutFmSetTl(vpw, 1, ope[1]);
+            //if ((pw.slots & 4) != 0 ) ((ClsOPN)pw.chip).OutFmSetTl(vpw, 2, ope[2]);
+            //if ((pw.slots & 8) != 0 ) ((ClsOPN)pw.chip).OutFmSetTl(vpw, 3, ope[3]);
         }
 
         public void OutFmCh3SpecialModeSetFnum(partWork pw, byte ope, int octave, int num)
@@ -376,25 +381,72 @@ namespace Core
 
             for (int ope = 0; ope < 4; ope++)
             {
-
+                //ch3以外の拡張チャンネルでも音色設定できるようにする場合はslotの様子もみてセットすること
                 ((ClsOPN)pw.chip).OutFmSetDtMl(pw, ope, parent.instFM[n][ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 9], parent.instFM[n][ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 8]);
                 ((ClsOPN)pw.chip).OutFmSetKsAr(pw, ope, parent.instFM[n][ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 7], parent.instFM[n][ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 1]);
                 ((ClsOPN)pw.chip).OutFmSetAmDr(pw, ope, parent.instFM[n][ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 10], parent.instFM[n][ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 2]);
                 ((ClsOPN)pw.chip).OutFmSetSr(pw, ope, parent.instFM[n][ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 3]);
                 ((ClsOPN)pw.chip).OutFmSetSlRr(pw, ope, parent.instFM[n][ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 5], parent.instFM[n][ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 4]);
                 ((ClsOPN)pw.chip).OutFmSetSSGEG(pw, ope, parent.instFM[n][ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 11]);
-
             }
+            //ch3以外の拡張チャンネルでも音色設定できるようにする場合はslotの様子もみてセットすること
             pw.op1ml = parent.instFM[n][0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
             pw.op2ml = parent.instFM[n][1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
             pw.op3ml = parent.instFM[n][2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
             pw.op4ml = parent.instFM[n][3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
+            //ch3以外の拡張チャンネルでも音色設定できるようにする場合はslotの様子もみてセットすること
             pw.op1dt2 = 0;
             pw.op2dt2 = 0;
             pw.op3dt2 = 0;
             pw.op4dt2 = 0;
 
             ((ClsOPN)pw.chip).OutFmSetFeedbackAlgorithm(pw, parent.instFM[n][46], parent.instFM[n][45]);
+
+            int alg = parent.instFM[n][45] & 0x7;
+            int[] op = new int[4] {
+                parent.instFM[n][0*Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
+                , parent.instFM[n][1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
+                , parent.instFM[n][2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
+                , parent.instFM[n][3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
+            };
+            int[][] algs = new int[8][]
+            {
+                new int[4] { 1,1,1,0}
+                ,new int[4] { 1,1,1,0}
+                ,new int[4] { 1,1,1,0}
+                ,new int[4] { 1,1,1,0}
+                ,new int[4] { 1,0,1,0}
+                ,new int[4] { 1,0,0,0}
+                ,new int[4] { 1,0,0,0}
+                ,new int[4] { 0,0,0,0}
+            };
+
+            for (int i = 0; i < 4; i++)
+            {
+                //ch3以外の拡張チャンネルでも音色設定できるようになったら以下を有効に
+                if (algs[alg][i] == 0)// || (pw.slots & (1 << i)) == 0)
+                {
+                    op[i] = -1;
+                    continue;
+                }
+                op[i] = Common.CheckRange(op[i], 0, 127);
+            }
+
+            partWork vpw = pw;
+            if (pw.chip.lstPartWork[2].Ch3SpecialMode && pw.ch >= m + 3 && pw.ch < m + 6)
+            {
+                vpw = pw.chip.lstPartWork[2];
+            }
+
+            //ch3以外の拡張チャンネルでも音色設定できるようになったら以下を有効に
+            //if ((pw.slots & 1) != 0 && op[0] != -1) ((ClsOPN)pw.chip).OutFmSetTl(vpw, 0, op[0]);
+            //if ((pw.slots & 2) != 0 && op[1] != -1) ((ClsOPN)pw.chip).OutFmSetTl(vpw, 1, op[1]);
+            //if ((pw.slots & 4) != 0 && op[2] != -1) ((ClsOPN)pw.chip).OutFmSetTl(vpw, 2, op[2]);
+            //if ((pw.slots & 8) != 0 && op[3] != -1) ((ClsOPN)pw.chip).OutFmSetTl(vpw, 3, op[3]);
+            if (op[0] != -1) ((ClsOPN)pw.chip).OutFmSetTl(vpw, 0, op[0]);
+            if (op[1] != -1) ((ClsOPN)pw.chip).OutFmSetTl(vpw, 1, op[1]);
+            if (op[2] != -1) ((ClsOPN)pw.chip).OutFmSetTl(vpw, 2, op[2]);
+            if (op[3] != -1) ((ClsOPN)pw.chip).OutFmSetTl(vpw, 3, op[3]);
 
             OutFmSetVolume(pw, vol, n);
 

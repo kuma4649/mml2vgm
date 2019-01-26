@@ -122,6 +122,7 @@ namespace Core
             {
                 if (algs[alg][i] == 0 || (pw.slots & (1 << i)) == 0)
                 {
+                    ope[i] = -1;
                     continue;
                 }
                 //ope[i] = ope[i] - minV + (127 - vol);
@@ -136,10 +137,10 @@ namespace Core
                 }
             }
 
-            if ((pw.slots & 1) != 0) OutSetTl(pw, 0, ope[0]);
-            if ((pw.slots & 2) != 0) OutSetTl(pw, 1, ope[1]);
-            if ((pw.slots & 4) != 0) OutSetTl(pw, 2, ope[2]);
-            if ((pw.slots & 8) != 0) OutSetTl(pw, 3, ope[3]);
+            if ((pw.slots & 1) != 0 && ope[0] != -1) OutSetTl(pw, 0, ope[0]);
+            if ((pw.slots & 2) != 0 && ope[1] != -1) OutSetTl(pw, 1, ope[1]);
+            if ((pw.slots & 4) != 0 && ope[2] != -1) OutSetTl(pw, 2, ope[2]);
+            if ((pw.slots & 8) != 0 && ope[3] != -1) OutSetTl(pw, 3, ope[3]);
         }
 
         public void OutSetTl(partWork pw, int ope, int tl)
@@ -282,6 +283,48 @@ namespace Core
             pw.op4dt2 = parent.instFM[n][3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 10];
 
             OutSetPanFeedbackAlgorithm(pw, (int)pw.pan.val, parent.instFM[n][46], parent.instFM[n][45]);
+
+            int alg = parent.instFM[n][45] & 0x7;
+            int[] op = new int[4] {
+                parent.instFM[n][0*Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
+                , parent.instFM[n][1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
+                , parent.instFM[n][2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
+                , parent.instFM[n][3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
+            };
+            int[][] algs = new int[8][]
+            {
+                new int[4] { 1,1,1,0}
+                ,new int[4] { 1,1,1,0}
+                ,new int[4] { 1,1,1,0}
+                ,new int[4] { 1,1,1,0}
+                ,new int[4] { 1,0,1,0}
+                ,new int[4] { 1,0,0,0}
+                ,new int[4] { 1,0,0,0}
+                ,new int[4] { 0,0,0,0}
+            };
+
+            for (int i = 0; i < 4; i++)
+            {
+                if (algs[alg][i] == 0 || (pw.slots & (1 << i)) == 0)
+                {
+                    op[i] = -1;
+                    continue;
+                }
+                if (op[i] < 0)
+                {
+                    op[i] = 0;
+                }
+                if (op[i] > 127)
+                {
+                    op[i] = 127;
+                }
+            }
+
+            if ((pw.slots & 1) != 0 && op[0] != -1) OutSetTl(pw, 0, op[0]);
+            if ((pw.slots & 2) != 0 && op[1] != -1) OutSetTl(pw, 1, op[1]);
+            if ((pw.slots & 4) != 0 && op[2] != -1) OutSetTl(pw, 2, op[2]);
+            if ((pw.slots & 8) != 0 && op[3] != -1) OutSetTl(pw, 3, op[3]);
+
             ((YM2151)pw.chip).OutSetVolume(pw, vol, n);
 
         }
