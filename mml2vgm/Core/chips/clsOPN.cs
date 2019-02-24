@@ -482,6 +482,20 @@ namespace Core
                 return;
             }
 
+
+            if (parent.info.Version == 1.51f)
+            {
+
+            }
+            else
+            {
+                //Stop Stream
+                parent.OutData(
+                    0x94
+                    , (byte)pw.streamID
+                    );
+            }
+
             pw.pcmWaitKeyOnCounter = -1;
         }
 

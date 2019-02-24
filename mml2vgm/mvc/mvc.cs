@@ -1,10 +1,8 @@
-﻿using System;
+﻿using Core;
+using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.IO;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using Core;
 
 namespace mvc
 {
@@ -28,7 +26,7 @@ namespace mvc
             }
 
             srcFn = args[0];
-            if (System.IO.Path.GetExtension(srcFn) == "")
+            if (Path.GetExtension(srcFn) == "")
             {
                 srcFn += ".gwi";
             }
@@ -39,7 +37,7 @@ namespace mvc
             }
             else
             {
-                desFn = System.IO.Path.GetFileNameWithoutExtension(srcFn) + ".vgm";
+                desFn = Path.Combine(Path.GetDirectoryName(srcFn), Path.GetFileNameWithoutExtension(srcFn) + ".vgm");
             }
 
             Core.log.debug = false;

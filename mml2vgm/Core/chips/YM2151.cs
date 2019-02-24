@@ -582,7 +582,7 @@ namespace Core
         public override void CmdPan(partWork pw, MML mml)
         {
             int n = (int)mml.args[0];
-            n = Common.CheckRange(n, 1, 3);
+            n = Common.CheckRange(n, 0, 3);
             pw.pan.val = (n == 1) ? 2 : (n == 2 ? 1 : n);
             if (pw.instrument < 0)
             {

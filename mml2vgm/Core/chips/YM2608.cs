@@ -609,7 +609,7 @@ namespace Core
             int n = (int)mml.args[0];
             if (pw.Type == enmChannelType.FMOPN || pw.Type == enmChannelType.FMOPNex)
             {
-                n = Common.CheckRange(n, 1, 3);
+                n = Common.CheckRange(n, 0, 3);
                 pw.pan.val = n;
                 ((ClsOPN)pw.chip).OutOPNSetPanAMSPMS(pw, n, pw.ams, pw.fms);
             }
