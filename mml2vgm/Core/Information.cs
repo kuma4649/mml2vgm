@@ -30,6 +30,8 @@ namespace Core
         public const string ISK052539 = "ISK052539";
         public const string PRIMARY = "PRIMARY";
         public const string SECONDARY = "SECONDARY";
+        public const string MODEBEFORESEND = "MODEBEFORESEND";
+
         readonly public static string[] IDName = new string[] { PRIMARY, SECONDARY };
         public const long DEFAULT_TEMPO = 120L;
         public const long DEFAULT_CLOCK_COUNT = 192L;
@@ -61,6 +63,7 @@ namespace Core
         public long xgmSamplesPerSecond = 60L;
         public bool octaveRev = false;
         public bool isK052539 = false;
+        public int modeBeforeSend = 0;
 
 
         public int AddInformation(string buf, int lineNumber, string fn, Dictionary<enmChipType, ClsChip[]> chips)
@@ -100,6 +103,7 @@ namespace Core
                     else if (wrd == OCTAVEREV) SetOctaveRev(val);
                     else if (wrd == ISK052539) SetIsK052539(val);
                     else if (wrd == FORCEDMONOPARTYM2612) SetMonoPart(val, chips);
+                    else if (wrd == MODEBEFORESEND) SetModeBeforeSend(val);
                     else
                     {
                         foreach (ClsChip[] aryChip in chips.Values)
@@ -209,5 +213,27 @@ namespace Core
                     break;
             }
         }
+
+        private void SetModeBeforeSend(string val)
+        {
+            switch (val.ToUpper())
+            {
+                case "N":
+                case "NONE":
+                    modeBeforeSend = 0;
+                    break;
+                case "R":
+                case "RR":
+                case "RELEASERATE":
+                    modeBeforeSend = 1;
+                    break;
+                case "A":
+                case "ALL":
+                case "TAKUMI":
+                    modeBeforeSend = 2;
+                    break;
+            }
+        }
+
     }
 }

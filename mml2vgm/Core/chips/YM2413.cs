@@ -87,7 +87,7 @@ namespace Core
             }
         }
 
-        public void outYM2413SetInstrument(partWork pw, int n)
+        public void outYM2413SetInstrument(partWork pw, int n, int modeBeforeSend)
         {
             pw.instrument = n;
 
@@ -95,6 +95,51 @@ namespace Core
             {
                 msgBox.setWrnMsg(string.Format(msg.get("E17000"), n), pw.getSrcFn(), pw.getLineNumber());
                 return;
+            }
+
+            switch (modeBeforeSend)
+            {
+                case 0: // N)one
+                    break;
+                case 1: // R)R only
+                    for (int ope = 0; ope < 2; ope++)
+                    {
+                        parent.OutData(pw.port0, (byte)(0x6 + ope), (byte)((
+                            (0 & 0xf) << 4) //SL
+                            | (15 & 0xf) // RR
+                            ));
+                    }
+                    break;
+                case 2: // A)ll
+                    for (byte ope = 0; ope < 2; ope++)
+                    {
+                        outYM2413SetAdr00_01(pw, ope
+                            , false //AM
+                            , false //VIB
+                            , false //EG
+                            , false //KS
+                            , 0 //MT
+                            );
+                        parent.OutData(pw.port0, (byte)(0x4 + ope), (byte)((
+                            (15 & 0xf) << 4) //AR
+                            | (15 & 0xf) // DR
+                            ));
+                        parent.OutData(pw.port0, (byte)(0x6 + ope), (byte)((
+                            (0 & 0xf) << 4) //SL
+                            | (15 & 0xf) // RR
+                            ));
+                    }
+                    parent.OutData(pw.port0, (byte)(0x2), (byte)(
+                        (0 << 6)  //KL(M)
+                        | (0 & 0x3f) //TL
+                        ));
+                    parent.OutData(pw.port0, (byte)(0x3), (byte)((
+                        (3 & 0x3) << 6) //KL(C)
+                        | (0) // DT(M)
+                        | (0) // DT(C)
+                        | (7 & 0x07) //FB
+                        ));
+                    break;
             }
 
             for (byte ope = 0; ope < 2; ope++)
@@ -327,7 +372,22 @@ namespace Core
             n = Common.CheckRange(n, 0, 255);
             if (pw.instrument == n) return;
 
-            outYM2413SetInstrument(pw, n); //音色のセット
+            pw.instrument = n;
+            int modeBeforeSend = parent.info.modeBeforeSend;
+            if (type == 'N')
+            {
+                modeBeforeSend = 0;
+            }
+            else if (type == 'R')
+            {
+                modeBeforeSend = 1;
+            }
+            else if (type == 'A')
+            {
+                modeBeforeSend = 2;
+            }
+
+            outYM2413SetInstrument(pw, n, modeBeforeSend); //音色のセット
             pw.envInstrument = 0;
             //outYM2413SetInstVol(pw, 0, pw.volume); //INSTを0にセット
 

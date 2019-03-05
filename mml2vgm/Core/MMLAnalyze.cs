@@ -330,10 +330,31 @@ namespace Core
                 mml.args.Add('I');
                 pw.incPos();
             }
+            //@Nn
+            else if (pw.getChar() == 'N')
+            {
+                //None(音色設定直前に何もしない)
+                mml.args.Add('N');
+                pw.incPos();
+            }
+            //@Rn
+            else if (pw.getChar() == 'R')
+            {
+                //RR(音色設定直前にRR=15をセットする)
+                mml.args.Add('R');
+                pw.incPos();
+            }
+            //@An
+            else if (pw.getChar() == 'A')
+            {
+                //All send(音色設定直前に消音向け音色をセットする)
+                mml.args.Add('A');
+                pw.incPos();
+            }
             else
             {
                 //normal
-                mml.args.Add('N');
+                mml.args.Add('n');
             }
 
             //@n

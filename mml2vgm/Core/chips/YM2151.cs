@@ -254,13 +254,33 @@ namespace Core
             }
         }
 
-        public void OutSetInstrument(partWork pw, int n, int vol)
+        public void OutSetInstrument(partWork pw, int n, int vol,int modeBeforeSend)
         {
 
             if (!parent.instFM.ContainsKey(n))
             {
                 msgBox.setWrnMsg(string.Format(msg.get("E16001"), n), pw.getSrcFn(), pw.getLineNumber());
                 return;
+            }
+
+            switch (modeBeforeSend)
+            {
+                case 0: // N)one
+                    break;
+                case 1: // R)R only
+                    for (int ope = 0; ope < 4; ope++) OutSetSlRr(pw, ope, 0, 15);
+                    break;
+                case 2: // A)ll
+                    for (int ope = 0; ope < 4; ope++)
+                    {
+                        OutSetDtMl(pw, ope, 0, 0);
+                        OutSetKsAr(pw, ope, 3, 31);
+                        OutSetAmDr(pw, ope, 1, 31);
+                        OutSetDt2Sr(pw, ope, 0, 31);
+                        OutSetSlRr(pw, ope, 0, 15);
+                    }
+                    OutSetPanFeedbackAlgorithm(pw, (int)pw.pan.val, 7, 7);
+                    break;
             }
 
             for (int ope = 0; ope < 4; ope++)
@@ -624,11 +644,26 @@ namespace Core
                 return;
             }
 
+            pw.instrument = n;
+            int modeBeforeSend = parent.info.modeBeforeSend;
+            if (type == 'N')
+            {
+                modeBeforeSend = 0;
+            }
+            else if (type == 'R')
+            {
+                modeBeforeSend = 1;
+            }
+            else if (type == 'A')
+            {
+                modeBeforeSend = 2;
+            }
+
             n = Common.CheckRange(n, 0, 255);
             if (pw.instrument == n) return;
 
             pw.instrument = n;
-            OutSetInstrument(pw, n, pw.volume);
+            OutSetInstrument(pw, n, pw.volume, modeBeforeSend);
         }
 
         public override void CmdY(partWork pw, MML mml)

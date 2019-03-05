@@ -182,19 +182,19 @@ namespace Core
             char type = (char)mml.args[0];
             int n = (int)mml.args[1];
 
-            if (type == 'N')
+            if (type == 'n' || type == 'N' || type == 'R' || type == 'A')
             {
                 if (pw.Type == enmChannelType.FMOPNex)
                 {
-                    pw.instrument = n;
                     lstPartWork[2].instrument = n;
                     lstPartWork[6].instrument = n;
                     lstPartWork[7].instrument = n;
                     lstPartWork[8].instrument = n;
-                    OutFmSetInstrument(pw, n, pw.volume);
-                    return;
                 }
+            }
 
+            if (type == 'n')
+            {
                 if (pw.pcm)
                 {
                     pw.instrument = n;

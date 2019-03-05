@@ -362,7 +362,7 @@ namespace Core
             }
         }
 
-        public void OutFmSetInstrument(partWork pw, int n, int vol)
+        public void OutFmSetInstrument(partWork pw, int n, int vol,int modeBeforeSend)
         {
 
             if (!parent.instFM.ContainsKey(n))
@@ -378,6 +378,28 @@ namespace Core
                 msgBox.setWrnMsg(msg.get("E11002"), pw.getSrcFn(), pw.getLineNumber());
                 return;
             }
+
+            switch (modeBeforeSend)
+            {
+                case 0: // N)one
+                    break;
+                case 1: // R)R only
+                    for (int ope = 0; ope < 4; ope++) ((ClsOPN)pw.chip).OutFmSetSlRr(pw, ope, 0, 15);
+                    break;
+                case 2: // A)ll
+                    for (int ope = 0; ope < 4; ope++)
+                    {
+                        ((ClsOPN)pw.chip).OutFmSetDtMl(pw, ope, 0, 0);
+                        ((ClsOPN)pw.chip).OutFmSetKsAr(pw, ope, 3, 31);
+                        ((ClsOPN)pw.chip).OutFmSetAmDr(pw, ope, 1, 31);
+                        ((ClsOPN)pw.chip).OutFmSetSr(pw, ope, 31);
+                        ((ClsOPN)pw.chip).OutFmSetSlRr(pw, ope, 0, 15);
+                        ((ClsOPN)pw.chip).OutFmSetSSGEG(pw, ope, 0);
+                    }
+                    ((ClsOPN)pw.chip).OutFmSetFeedbackAlgorithm(pw, 7, 7);
+                    break;
+            }
+
 
             for (int ope = 0; ope < 4; ope++)
             {
@@ -1006,13 +1028,13 @@ namespace Core
 
             if (type == 'E')
             {
-                SetEnvelopParamFromInstrument(pw, n,mml);
+                SetEnvelopParamFromInstrument(pw, n, mml);
                 return;
             }
 
             if (pw.Type == enmChannelType.SSG)
             {
-                SetEnvelopParamFromInstrument(pw, n,mml);
+                SetEnvelopParamFromInstrument(pw, n, mml);
                 return;
             }
 
@@ -1020,7 +1042,21 @@ namespace Core
             if (pw.instrument == n) return;
 
             pw.instrument = n;
-            ((ClsOPN)pw.chip).OutFmSetInstrument(pw, n, pw.volume);
+            int modeBeforeSend = parent.info.modeBeforeSend;
+            if (type == 'N')
+            {
+                modeBeforeSend = 0;
+            }
+            else if (type == 'R')
+            {
+                modeBeforeSend = 1;
+            }
+            else if (type == 'A')
+            {
+                modeBeforeSend = 2;
+            }
+
+            ((ClsOPN)pw.chip).OutFmSetInstrument(pw, n, pw.volume, modeBeforeSend);
         }
 
         public override void CmdEnvelope(partWork pw, MML mml)

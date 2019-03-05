@@ -194,6 +194,9 @@
     <None Include="sample\Syntax\test__.gwi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="sample\test.gwi">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="sample\testFMPCMSecondary.gwi" />
     <None Include="sample\testFMSecondary.gwi" />
     <None Include="sample\YM2151\testYM2151.gwi">
