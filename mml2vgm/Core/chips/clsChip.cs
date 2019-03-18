@@ -626,6 +626,15 @@ namespace Core
             pw.keyShift = Common.CheckRange(n, -128, 128);
         }
 
+        public virtual void CmdAddressShift(partWork pw, MML mml)
+        {
+            int sign = (int)mml.args[0];
+            int n = (int)mml.args[1];
+
+            pw.addressShift = (sign == 0) ? n : (pw.addressShift + (n * sign));
+            if (pw.addressShift < 0) pw.addressShift = 0;
+        }
+
         public virtual void CmdNoise(partWork pw, MML mml)
         {
             msgBox.setErrMsg(msg.get("E10002")

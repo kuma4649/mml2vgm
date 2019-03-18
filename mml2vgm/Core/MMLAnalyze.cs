@@ -257,6 +257,10 @@ namespace Core
                     log.Write("tie minus clock");
                     CmdTieMC(pw, mml);
                     break;
+                case 'A': // Address shift
+                    log.Write("Address shift");
+                    CmdAddressShift(pw, mml);
+                    break;
                 default:
                     msgBox.setErrMsg(string.Format(msg.get("E05000"), cmd), pw.getSrcFn(), pw.getLineNumber());
                     pw.incPos();
@@ -1099,7 +1103,7 @@ namespace Core
 
         }
 
-        private void CmdKeyShift(partWork pw,MML mml)
+        private void CmdKeyShift(partWork pw, MML mml)
         {
             int n = -1;
             pw.incPos();
@@ -1112,6 +1116,35 @@ namespace Core
             }
             mml.type = enmMMLType.KeyShift;
             mml.args = new List<object>();
+            mml.args.Add(n);
+        }
+
+        private void CmdAddressShift(partWork pw, MML mml)
+        {
+            int n = -1;
+            pw.incPos();
+            int sign = 0;
+
+            if (pw.getChar() == '+')
+            {
+                sign = 1;
+                pw.incPos();
+            }
+            else if (pw.getChar() == '-')
+            {
+                sign = -1;
+                pw.incPos();
+            }
+
+            if (!pw.getNum(out n))
+            {
+                msgBox.setErrMsg(msg.get("E05052"), pw.getSrcFn(), pw.getLineNumber());
+                return;
+
+            }
+            mml.type = enmMMLType.AddressShift;
+            mml.args = new List<object>();
+            mml.args.Add(sign);
             mml.args.Add(n);
         }
 

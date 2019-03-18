@@ -114,14 +114,18 @@ namespace Core
             //Volume
             SetVolume(pw);
 
+            //Address shift
+            int stAdr = pw.pcmStartAddress + pw.addressShift;
+            if (stAdr >= pw.pcmEndAddress) stAdr = pw.pcmEndAddress - 1;
+
             //StartAdr
             adr = pw.ch * 8 + 0x85;
-            d = (byte)((pw.pcmStartAddress & 0xff00) >> 8);
+            d = (byte)((stAdr & 0xff00) >> 8);
             OutSegaPcmPort(pw, adr, d);
 
             //StartAdr
             adr = pw.ch * 8 + 0x84;
-            d = (byte)((pw.pcmStartAddress & 0x00ff) >> 0);
+            d = (byte)((stAdr & 0x00ff) >> 0);
             OutSegaPcmPort(pw, adr, d);
 
             if (pw.pcmLoopAddress != -1)

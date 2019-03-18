@@ -355,6 +355,11 @@ namespace Core
         /// </summary>
         public int keyShift = 0;
 
+        /// <summary>
+        /// アドレスシフト値
+        /// </summary>
+        public int addressShift = 0;
+
         public string PartName="";
 
         public int rf5c164AddressIncrement = -1;

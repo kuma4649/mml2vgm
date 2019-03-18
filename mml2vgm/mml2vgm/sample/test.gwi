@@ -1,11 +1,11 @@
 ﻿'{
 
 	TitleName   =
-	TitleNameJ  =音色設定直前処理
+	TitleNameJ  =アドレスシフトテスト
 	GameName    =
 	GameNameJ   =
-	SystemName  =Sega Genesis
-	SystemNameJ =Sega MegaDrive
+	SystemName  =
+	SystemNameJ =
 	Composer    =
 	ComposerJ   =
 	ReleaseDate =2019/03/05
@@ -17,15 +17,8 @@
 
 }
 
-(from WING☆GHOST @8)
-'@ F 008
-   AR  DR  SR  RR  SL  TL  KS  ML  DT
-'@  31,  2,  1,  1,  1, 23,  0,  1,  0
-'@  31,  3,  2,  1,  2, 24,  0,  1,  0
-'@  31,  3,  2,  1,  2, 25,  0,  1,  5
-'@  25,  2,  1,  7,  1,  3,  0,  1,  0
-'@   3,  5
+'@ P 1,"wav\Guitar.wav"        , 8000 , 100 , C140 , 14000
 
-
-'F1  o4@8v120l4cde
+'Y01 T126
+'Y01 D0o4l4q0p255,255v255A0[@1c4A+1500]10
 

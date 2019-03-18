@@ -50,6 +50,7 @@ namespace Core
         Noise,          // w
         NoiseToneMixer, // P
         KeyShift,       // K
+        AddressShift,   // A
         Note,           // c d e f g a b
         Rest,           // r
         RestNoWork,     // R

@@ -2656,6 +2656,11 @@ namespace Core
                     pw.chip.CmdKeyShift(pw, mml);
                     pw.mmlPos++;
                     break;
+                case enmMMLType.AddressShift:
+                    log.Write("AddressShift");
+                    pw.chip.CmdAddressShift(pw, mml);
+                    pw.mmlPos++;
+                    break;
                 case enmMMLType.SusOnOff:
                     log.Write("SusOnOff");
                     pw.chip.CmdSusOnOff(pw, mml);

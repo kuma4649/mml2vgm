@@ -515,11 +515,15 @@ namespace Core
             //Volume
             SetVolume(pw);
 
-            if (pw.beforepcmStartAddress != pw.pcmStartAddress)
+            //Address shift
+            int stAdr = pw.pcmStartAddress + pw.addressShift;
+            if (stAdr >= pw.pcmEndAddress) stAdr = pw.pcmEndAddress - 1;
+
+            if (pw.beforepcmStartAddress != stAdr)
             {
                 //StartAdr H
                 adr = pw.ch * 16 + 0x06;
-                data = (byte)((pw.pcmStartAddress & 0xff00) >> 8);
+                data = (byte)((stAdr & 0xff00) >> 8);
                 OutC140Port(pw
                     , (byte)(adr >> 8)
                     , (byte)adr
@@ -527,13 +531,13 @@ namespace Core
 
                 //StartAdr L
                 adr = pw.ch * 16 + 0x07;
-                data = (byte)((pw.pcmStartAddress & 0x00ff) >> 0);
+                data = (byte)((stAdr & 0x00ff) >> 0);
                 OutC140Port(pw
                     , (byte)(adr >> 8)
                     , (byte)adr
                     , data);
 
-                pw.beforepcmStartAddress = pw.pcmStartAddress;
+                pw.beforepcmStartAddress = stAdr;
             }
 
             if (pw.beforepcmEndAddress != pw.pcmEndAddress)

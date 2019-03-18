@@ -55,7 +55,9 @@ namespace Core
                 partWork pw = lstPartWork[ch];
 
                 SetRf5c164CurrentChannel(pw);
-                SetRf5c164SampleStartAddress(pw, 0);
+                pw.beforepcmStartAddress = -1;
+                pw.pcmStartAddress = 0;
+                SetRf5c164SampleStartAddress(pw);
                 SetRf5c164LoopAddress(pw, 0);
                 SetRf5c164AddressIncrement(pw, 0x400);
                 SetRf5c164Pan(pw, 0xff);
@@ -146,14 +148,18 @@ namespace Core
             }
         }
 
-        public void SetRf5c164SampleStartAddress(partWork pw, int adr)
+        public void SetRf5c164SampleStartAddress(partWork pw)
         {
-            if (pw.pcmStartAddress != adr)
+            //Address shift
+            int stAdr = pw.pcmStartAddress + pw.addressShift;
+            if (stAdr >= pw.pcmEndAddress) stAdr = pw.pcmEndAddress - 1;
+
+            if (pw.beforepcmStartAddress != stAdr)
             {
                 SetRf5c164CurrentChannel(pw);
-                byte data = (byte)(adr >> 8);
+                byte data = (byte)(stAdr >> 8);
                 OutRf5c164Port(pw.isSecondary, 0x6, data);
-                pw.pcmStartAddress = adr;
+                pw.pcmStartAddress = stAdr;
             }
         }
 
@@ -172,6 +178,7 @@ namespace Core
 
         public void OutRf5c164KeyOn(partWork pw)
         {
+            SetRf5c164SampleStartAddress(pw);
             KeyOn |= (byte)(1 << pw.ch);
             byte data = (byte)(~KeyOn);
             OutRf5c164Port(pw.isSecondary, 0x8, data);
@@ -483,9 +490,9 @@ namespace Core
                 {
                     SetRf5c164CurrentChannel(p);
                     SetFNum(p);
-                    SetRf5c164SampleStartAddress(
-                        p
-                        , (int)parent.instPCM[n].stAdr);
+                    p.beforepcmStartAddress = -1;
+                    p.pcmStartAddress = (int)parent.instPCM[n].stAdr;
+                    SetRf5c164SampleStartAddress(p);
                     SetRf5c164LoopAddress(
                         p
                         , (int)(parent.instPCM[n].loopAdr));
@@ -531,7 +538,9 @@ namespace Core
             }
 
             pw.instrument = n;
-            SetRf5c164SampleStartAddress(pw, (int)parent.instPCM[n].stAdr);
+            pw.beforepcmStartAddress = -1;
+            pw.pcmStartAddress = (int)parent.instPCM[n].stAdr;
+            SetRf5c164SampleStartAddress(pw);
             SetRf5c164LoopAddress(pw, (int)(parent.instPCM[n].loopAdr));
 
         }
