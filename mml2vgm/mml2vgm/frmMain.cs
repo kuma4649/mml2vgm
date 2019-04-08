@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Core;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using System.Windows.Forms;
-using Core;
 
 namespace mml2vgm
 {
@@ -193,9 +193,9 @@ namespace mml2vgm
                 {
                     try
                     {
-                        Process.Start(Path.ChangeExtension(args[1], (mv.desVGM.info.format== enmFormat.VGM) ? Properties.Resources.ExtensionVGM : Properties.Resources.ExtensionXGM));
+                        Process.Start(Path.ChangeExtension(args[1], (mv.desVGM.info.format == enmFormat.VGM) ? Properties.Resources.ExtensionVGM : Properties.Resources.ExtensionXGM));
                     }
-                    catch(Exception )
+                    catch (Exception)
                     {
                         MessageBox.Show(msg.get("E0100"), "mml2vgm", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
@@ -222,7 +222,7 @@ namespace mml2vgm
                 }
 
 
-                title = Path.GetFileName( arg);
+                title = Path.GetFileName(arg);
                 this.Invoke(dmy);
 
                 Core.log.Write(string.Format("  compile at [{0}]", args[i]));
@@ -258,14 +258,14 @@ namespace mml2vgm
 
         private void Disp(string msg)
         {
-            Action<string> msgDisp=MsgDisp;
-            this.Invoke(msgDisp,msg);
+            Action<string> msgDisp = MsgDisp;
+            this.Invoke(msgDisp, msg);
             Core.log.Write(msg);
         }
 
         private void MsgDisp(string msg)
         {
-            textBox1.AppendText(msg+"\r\n");
+            textBox1.AppendText(msg + "\r\n");
         }
 
         private void startWatch()

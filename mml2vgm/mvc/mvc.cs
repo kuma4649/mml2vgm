@@ -46,7 +46,7 @@ namespace mvc
 
             Assembly myAssembly = Assembly.GetEntryAssembly();
             string path = System.IO.Path.GetDirectoryName(myAssembly.Location);
-            Mml2vgm mv = new Mml2vgm(srcFn, desFn, path,Disp);
+            Mml2vgm mv = new Mml2vgm(srcFn, desFn, path, Disp);
             int ret = mv.Start();
 
             if (ret == 0)

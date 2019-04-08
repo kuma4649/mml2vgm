@@ -144,6 +144,7 @@ namespace Core
 
             if (File.Exists(Path.Combine(stPath, fn)))
             {
+                fn = Path.Combine(stPath, fn);
                 stream = new FileStream(fn, FileMode.Open, FileAccess.Read, FileShare.Read);
             }
             else

@@ -55,7 +55,6 @@ namespace Core
         {
             chips = new Dictionary<enmChipType, ClsChip[]>();
             info = new Information();
-
             conductor = new Conductor[] { new Conductor(this, 0, "Cn", stPath, false) };
             ym2151 = new YM2151[] { new YM2151(this, 0, "X", stPath,false), new YM2151(this, 1, "Xs", stPath,true) };
             ym2203 = new YM2203[] { new YM2203(this, 0, "N", stPath, false), new YM2203(this, 1, "Ns", stPath, true) };
