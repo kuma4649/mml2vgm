@@ -342,6 +342,7 @@ namespace Core
                     lstPartWork[7].instrument = n;
                     lstPartWork[8].instrument = n;
                     OutFmSetInstrument(pw, n, pw.volume, type);
+                    return;
                 }
             }
 

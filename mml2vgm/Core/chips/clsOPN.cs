@@ -1056,7 +1056,7 @@ namespace Core
 
             n = Common.CheckRange(n, 0, 255);
             if (pw.instrument == n) return;
-
+            pw.instrument = n;
             ((ClsOPN)pw.chip).OutFmSetInstrument(pw, n, pw.volume, type);
         }
 
