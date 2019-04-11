@@ -748,10 +748,13 @@ namespace Core
             {
                 if (pw.Type == enmChannelType.FMOPNex)
                 {
+                    pw.instrument = n;
                     lstPartWork[2].instrument = n;
                     lstPartWork[6].instrument = n;
                     lstPartWork[7].instrument = n;
                     lstPartWork[8].instrument = n;
+                    OutFmSetInstrument(pw, n, pw.volume, type);
+                    return;
                 }
             }
 

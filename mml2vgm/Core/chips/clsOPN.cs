@@ -362,8 +362,24 @@ namespace Core
             }
         }
 
-        public void OutFmSetInstrument(partWork pw, int n, int vol,int modeBeforeSend)
+        public void OutFmSetInstrument(partWork pw, int n, int vol,char typeBeforeSend)
         {
+            int modeBeforeSend = parent.info.modeBeforeSend;
+            if (typeBeforeSend == 'n' || typeBeforeSend == 'N' || typeBeforeSend == 'R' || typeBeforeSend == 'A')
+            {
+                if (typeBeforeSend == 'N')
+                {
+                    modeBeforeSend = 0;
+                }
+                else if (typeBeforeSend == 'R')
+                {
+                    modeBeforeSend = 1;
+                }
+                else if (typeBeforeSend == 'A')
+                {
+                    modeBeforeSend = 2;
+                }
+            }
 
             if (!parent.instFM.ContainsKey(n))
             {
@@ -1041,22 +1057,7 @@ namespace Core
             n = Common.CheckRange(n, 0, 255);
             if (pw.instrument == n) return;
 
-            pw.instrument = n;
-            int modeBeforeSend = parent.info.modeBeforeSend;
-            if (type == 'N')
-            {
-                modeBeforeSend = 0;
-            }
-            else if (type == 'R')
-            {
-                modeBeforeSend = 1;
-            }
-            else if (type == 'A')
-            {
-                modeBeforeSend = 2;
-            }
-
-            ((ClsOPN)pw.chip).OutFmSetInstrument(pw, n, pw.volume, modeBeforeSend);
+            ((ClsOPN)pw.chip).OutFmSetInstrument(pw, n, pw.volume, type);
         }
 
         public override void CmdEnvelope(partWork pw, MML mml)
