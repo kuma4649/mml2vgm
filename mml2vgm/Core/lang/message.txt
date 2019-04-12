@@ -83,6 +83,7 @@ E01016=Found unknown command {0}.
 E01017=Can't define PCM other than YM2612X(OPN2X) on XGM format.
 E01018=Failed to load MUCOM88 voice file.
 E01019=Failed to load MUCOM88 ADPCM file.
+E01020=Found unknown command {0}.(XGM format)
 
 
 ;Common.cs 02000

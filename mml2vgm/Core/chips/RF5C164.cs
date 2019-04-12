@@ -150,16 +150,17 @@ namespace Core
 
         public void SetRf5c164SampleStartAddress(partWork pw)
         {
+
             //Address shift
             int stAdr = pw.pcmStartAddress + pw.addressShift;
-            if (stAdr >= pw.pcmEndAddress) stAdr = pw.pcmEndAddress - 1;
+            //if (stAdr >= pw.pcmEndAddress) stAdr = pw.pcmEndAddress - 1;
 
-            if (pw.beforepcmStartAddress != stAdr)
+            if (pw.beforepcmStartAddress != stAdr && stAdr>=0)
             {
                 SetRf5c164CurrentChannel(pw);
                 byte data = (byte)(stAdr >> 8);
                 OutRf5c164Port(pw.isSecondary, 0x6, data);
-                pw.pcmStartAddress = stAdr;
+                //pw.pcmStartAddress = stAdr;
             }
         }
 

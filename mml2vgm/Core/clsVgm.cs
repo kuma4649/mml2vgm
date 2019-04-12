@@ -2264,6 +2264,7 @@ namespace Core
                         for (int i = 0; i < 512; i++) opn2reg[i / 0x100][i % 0x100] = -1;
                         break;
                     default:
+                        msgBox.setErrMsg(string.Format("",cmd));
                         return null;
                 }
             }
