@@ -142,9 +142,9 @@ namespace Core
             Stream stream = null;
             Dictionary<string, List<double>> dic = new Dictionary<string, List<double>>();
 
-            if (File.Exists(Path.Combine(stPath, fn)))
+            if (File.Exists(Path.Combine(stPath, "fnum", fn)))
             {
-                fn = Path.Combine(stPath, fn);
+                fn = Path.Combine(stPath, "fnum", fn);
                 stream = new FileStream(fn, FileMode.Open, FileAccess.Read, FileShare.Read);
             }
             else

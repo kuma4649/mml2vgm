@@ -122,9 +122,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="App.config" />
-    <Content Include="FNUM_K051649.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <None Include="sample\AY3\testAY38910.gwi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -231,27 +228,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="FNUM_AY8910.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="FNUM_YM2612.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="FNUM_YM2612X.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="FNUM_SN76489.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="FNUM_YM2610B.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="FNUM_YM2608.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="FNUM_YM2203.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="res\icon1.png" />
     <Content Include="res\icon2.png" />
     <Content Include="res\icon3.png" />
