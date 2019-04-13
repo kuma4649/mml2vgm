@@ -69,6 +69,8 @@ MML2VGM,MVCはMITライセンスに準ずる物とします。LICENSE.txtを参照。
  ・Git  
  ・SourceTree  
  ・さくらエディター  
+ ・Azuki
+ ・Dock Panel Suite
   
  ・SGDKとは - nendo  
  ・FutureDriver  
