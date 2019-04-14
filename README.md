@@ -58,12 +58,13 @@ MML2VGM,MVCはMITライセンスに準ずる物とします。LICENSE.txtを参照。
  ・なると さん  
  ・hex125 さん  
  ・くろま さん  
+ ・TAN-Y さん  
   
  ・XPCMK  
  ・FMP7  
  ・Music LALF  
  ・NRTDRV  
- ・Visual Studio Community 2015  
+ ・Visual Studio Community 2015/2019  
  ・SGDK  
  ・VGM Player  
  ・Git  
@@ -71,6 +72,7 @@ MML2VGM,MVCはMITライセンスに準ずる物とします。LICENSE.txtを参照。
  ・さくらエディター  
  ・Azuki
  ・Dock Panel Suite
+ ・CodeWarrior
   
  ・SGDKとは - nendo  
  ・FutureDriver  

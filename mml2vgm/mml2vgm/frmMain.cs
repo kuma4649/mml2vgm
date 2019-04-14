@@ -132,14 +132,14 @@ namespace mml2vgm
 
             textBox1.AppendText(msg.get("I0107"));
 
-            foreach (string mes in msgBox.getWrn())
+            foreach (msgInfo mes in msgBox.getWrn())
             {
-                textBox1.AppendText(string.Format(msg.get("I0108"), mes));
+                textBox1.AppendText(string.Format(msg.get("I0108"), mes.filename, mes.line == -1 ? "-" : mes.line.ToString(), mes.body));
             }
 
-            foreach (string mes in msgBox.getErr())
+            foreach (msgInfo mes in msgBox.getErr())
             {
-                textBox1.AppendText(string.Format(msg.get("I0109"), mes));
+                textBox1.AppendText(string.Format(msg.get("I0109"), mes.filename, mes.line == -1 ? "-" : mes.line.ToString(), mes.body));
             }
 
             textBox1.AppendText("\r\n");

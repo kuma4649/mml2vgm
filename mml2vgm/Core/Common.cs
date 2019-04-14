@@ -39,7 +39,7 @@ namespace Core
 
             if (!File.Exists(fnPcm))
             {
-                msgBox.setErrMsg(string.Format(msg.get("E02000"), fileName));
+                msgBox.setErrMsg(string.Format(msg.get("E02000"), fileName), "-", -1);
                 return null;
             }
 
@@ -54,12 +54,12 @@ namespace Core
 
             if (buf.Length < 4)
             {
-                msgBox.setErrMsg(msg.get("E02001"));
+                msgBox.setErrMsg(msg.get("E02001"), "-", -1);
                 return null;
             }
             if (buf[0] != 'R' || buf[1] != 'I' || buf[2] != 'F' || buf[3] != 'F')
             {
-                msgBox.setErrMsg(msg.get("E02002"));
+                msgBox.setErrMsg(msg.get("E02002"), "-", -1);
                 return null;
             }
 
@@ -68,7 +68,7 @@ namespace Core
 
             if (buf[0x8] != 'W' || buf[0x9] != 'A' || buf[0xa] != 'V' || buf[0xb] != 'E')
             {
-                msgBox.setErrMsg(msg.get("E02003"));
+                msgBox.setErrMsg(msg.get("E02003"), "-", -1);
                 return null;
             }
 
@@ -87,21 +87,21 @@ namespace Core
                         int format = buf[p + 0] + buf[p + 1] * 0x100;
                         if (format != 1)
                         {
-                            msgBox.setErrMsg(string.Format(msg.get("E02004"), format));
+                            msgBox.setErrMsg(string.Format(msg.get("E02004"), format), "-", -1);
                             return null;
                         }
 
                         int channels = buf[p + 2] + buf[p + 3] * 0x100;
                         if (channels != 1)
                         {
-                            msgBox.setErrMsg(string.Format(msg.get("E02005"), channels));
+                            msgBox.setErrMsg(string.Format(msg.get("E02005"), channels), "-", -1);
                             return null;
                         }
 
                         samplerate = buf[p + 4] + buf[p + 5] * 0x100 + buf[p + 6] * 0x10000 + buf[p + 7] * 0x1000000;
                         if (samplerate != 8000 && samplerate != 16000 && samplerate != 18500 && samplerate != 14000)
                         {
-                            msgBox.setWrnMsg(string.Format(msg.get("E02006"), samplerate));
+                            msgBox.setWrnMsg(string.Format(msg.get("E02006"), samplerate), "-", -1);
                             //return null;
                         }
 
@@ -115,7 +115,7 @@ namespace Core
                         int bitswidth = buf[p + 14] + buf[p + 15] * 0x100;
                         if (bitswidth != 8 && bitswidth != 16)
                         {
-                            msgBox.setErrMsg(string.Format(msg.get("E02007"), bitswidth));
+                            msgBox.setErrMsg(string.Format(msg.get("E02007"), bitswidth), "-", -1);
                             return null;
                         }
 
@@ -124,7 +124,7 @@ namespace Core
                         int blockalign = buf[p + 12] + buf[p + 13] * 0x100;
                         if (blockalign != (is16bit ? 2 : 1))
                         {
-                            msgBox.setErrMsg(string.Format(msg.get("E02008"), blockalign));
+                            msgBox.setErrMsg(string.Format(msg.get("E02008"), blockalign), "-", -1);
                             return null;
                         }
 
@@ -187,7 +187,7 @@ namespace Core
             }
             catch
             {
-                msgBox.setErrMsg(msg.get("E02009"));
+                msgBox.setErrMsg(msg.get("E02009"), "-", -1);
                 return null;
             }
         }

@@ -230,7 +230,7 @@ namespace Core
                 {
                     msgBox.setWrnMsg(string.Format(
                         msg.get("E01000")
-                        , p.Substring(0, 2).Trim() + int.Parse(p.Substring(2, 2)).ToString()));
+                        , p.Substring(0, 2).Trim() + int.Parse(p.Substring(2, 2)).ToString()), "-", -1);
                     flg = false;
                 }
             }
@@ -630,7 +630,7 @@ namespace Core
             {
                 if(enmChip!= enmChipType.YM2612X)
                 {
-                    msgBox.setErrMsg(msg.get("E01017"));
+                    msgBox.setErrMsg(msg.get("E01017"), "-", -1);
                     return;
                 }
             }
@@ -685,7 +685,7 @@ namespace Core
             {
                 if (ChipName != enmChipType.YM2612X)
                 {
-                    msgBox.setErrMsg(msg.get("E01017"));
+                    msgBox.setErrMsg(msg.get("E01017"), "-", -1);
                     return;
                 }
             }
@@ -738,14 +738,14 @@ namespace Core
             {
                 if (ChipName != enmChipType.YM2612X)
                 {
-                    msgBox.setErrMsg(msg.get("E01017"));
+                    msgBox.setErrMsg(msg.get("E01017"), "-", -1);
                     return;
                 }
             }
 
             if (!chips[ChipName][0].CanUsePICommand())
             {
-                msgBox.setWrnMsg(string.Format(msg.get("E10018"), chips[ChipName][0].Name));
+                msgBox.setWrnMsg(string.Format(msg.get("E10018"), chips[ChipName][0].Name), "-", -1);
                 return;
             }
 
@@ -2138,7 +2138,7 @@ namespace Core
 
                         if (des.Count - framePtr > 256)
                         {
-                            msgBox.setWrnMsg(string.Format(msg.get("E01015"), frameCnt, des.Count - framePtr));
+                            msgBox.setWrnMsg(string.Format(msg.get("E01015"), frameCnt, des.Count - framePtr), "-", -1);
                         }
                         framePtr = des.Count;
 
@@ -2264,7 +2264,7 @@ namespace Core
                         for (int i = 0; i < 512; i++) opn2reg[i / 0x100][i % 0x100] = -1;
                         break;
                     default:
-                        msgBox.setErrMsg(string.Format("",cmd));
+                        msgBox.setErrMsg(string.Format("",cmd), "-", -1);
                         return null;
                 }
             }

@@ -45,7 +45,7 @@ namespace Core
                 Disp(msg.get("I04001"));
                 if (!File.Exists(srcFn))
                 {
-                    msgBox.setErrMsg(msg.get("E04000"));
+                    msgBox.setErrMsg(msg.get("E04000"), "-", -1);
                     return -1;
                 }
 
@@ -54,7 +54,7 @@ namespace Core
                 List<Line> src = GetSrc(File.ReadAllLines(srcFn), path);
                 if (src == null)
                 {
-                    msgBox.setErrMsg(msg.get("E04001"));
+                    msgBox.setErrMsg(msg.get("E04001"), "-", -1);
                     return -1;
                 }
 
@@ -64,7 +64,7 @@ namespace Core
                 {
                     msgBox.setErrMsg(string.Format(
                         msg.get("E04002")
-                        , desVGM.lineNumber));
+                        , desVGM.lineNumber), "-", -1);
                     return -1;
                 }
 
@@ -77,7 +77,7 @@ namespace Core
                 {
                     msgBox.setErrMsg(string.Format(
                         msg.get("E04003")
-                        , mmlAnalyze.lineNumber));
+                        , mmlAnalyze.lineNumber), "-", -1);
                     return -1;
                 }
 
@@ -102,7 +102,7 @@ namespace Core
                 {
                     msgBox.setErrMsg(string.Format(
                         msg.get("E04004")
-                        , desVGM.lineNumber));
+                        , desVGM.lineNumber), "-", -1);
                     return -1;
                 }
 
@@ -112,6 +112,10 @@ namespace Core
 
                 Result();
 
+                FileInformation.loopCounter = desVGM.loopClock;
+                FileInformation.totalCounter = desVGM.lClock;
+                FileInformation.format =desVGM.info.format;
+
                 return 0;
             }
             catch (Exception ex)
@@ -119,7 +123,7 @@ namespace Core
                 msgBox.setErrMsg(string.Format(msg.get("E04005")
                     , desVGM.lineNumber
                     , ex.Message
-                    , ex.StackTrace));
+                    , ex.StackTrace), "-", -1);
                 return -1;
             }
             finally
@@ -196,7 +200,7 @@ namespace Core
                         {
                             msgBox.setErrMsg(string.Format(
                                 msg.get("E04006")
-                                , includeFn));
+                                , includeFn), "-", -1);
                             return null;
                         }
                     }
@@ -263,7 +267,7 @@ namespace Core
                         {
                             msgBox.setErrMsg(string.Format(
                                 msg.get("E04007")
-                                , v.fileName));
+                                , v.fileName), "-", -1);
                             continue;
                         }
 
@@ -271,7 +275,7 @@ namespace Core
                         {
                             msgBox.setErrMsg(string.Format(
                                 msg.get("E01017")
-                                , v.fileName));
+                                , v.fileName), "-", -1);
                             continue;
                         }
 
@@ -341,7 +345,7 @@ namespace Core
                         {
                             msgBox.setErrMsg(string.Format(
                                 msg.get("E04007")
-                                , v.fileName));
+                                , v.fileName), "-", -1);
                             continue;
                         }
 
@@ -349,7 +353,7 @@ namespace Core
                         {
                             msgBox.setErrMsg(string.Format(
                                 msg.get("E01017")
-                                , v.fileName));
+                                , v.fileName), "-", -1);
                             continue;
                         }
 
@@ -369,7 +373,7 @@ namespace Core
                         {
                             msgBox.setErrMsg(string.Format(
                                 msg.get("E04007")
-                                , pds.FileName));
+                                , pds.FileName), "-", -1);
                             continue;
                         }
                         desVGM.chips[pds.chip][pds.isSecondary ? 1 : 0]

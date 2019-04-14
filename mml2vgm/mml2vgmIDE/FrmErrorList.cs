@@ -10,9 +10,19 @@ namespace mml2vgmIDE
 {
     public partial class FrmErrorList : WeifenLuo.WinFormsUI.Docking.DockContent
     {
+        public Action parentUpdate = null;
+
         public FrmErrorList()
         {
             InitializeComponent();
+        }
+
+        private void FrmErrorList_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            e.Cancel = true;
+            this.Hide();
+            parentUpdate?.Invoke();
+
         }
     }
 }

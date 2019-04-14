@@ -21,13 +21,16 @@ namespace mml2vgmIDE
 
         public Document()
         {
-            gwiFullPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "(新規mmlファイル).gwi");
+            gwiFullPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "(新規mmlファイル).gwi*");
             errBox = null;
             wrnBox = null;
             InitFolderTree();
             editor = new FrmEditor();
             editor.Text = Path.GetFileName(gwiFullPath);
-            editor.azukiControl1.Text = "";
+            editor.azukiControl.Text = "";
+            editor.azukiControl.ClearHistory();
+            editor.Tag = this;
+            editor.azukiControl.Tag = this;
             isNew = true;
             edit = false;
         }
@@ -44,7 +47,10 @@ namespace mml2vgmIDE
             wrnBox = null;
             InitFolderTree();
             editor.Text = Path.GetFileName(fullPath);
-            editor.azukiControl1.Text = File.ReadAllText(fullPath);
+            editor.azukiControl.Text = File.ReadAllText(fullPath);
+            editor.azukiControl.ClearHistory();
+            editor.Tag = this;
+            editor.azukiControl.Tag = this;
             isNew = false;
             edit = false;
 

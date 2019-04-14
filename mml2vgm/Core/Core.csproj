@@ -69,6 +69,7 @@
     <Compile Include="dv.cs" />
     <Compile Include="chips\EncAdpcmA.cs" />
     <Compile Include="Enums.cs" />
+    <Compile Include="FileInformation.cs" />
     <Compile Include="Information.cs" />
     <Compile Include="Line.cs" />
     <Compile Include="log.cs" />

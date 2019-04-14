@@ -178,7 +178,7 @@ namespace Core
                 {
                     msgBox.setErrMsg(string.Format(msg.get("E09000")
                         , newDic[v.Key].loopAdr
-                        , size - 1));
+                        , size - 1), "-", -1);
                     newDic[v.Key].loopAdr = -1;
                     newDic[v.Key].status = enmPCMSTATUS.ERROR;
                 }
@@ -505,7 +505,7 @@ namespace Core
 
             if(pw.instrument==-1)
             {
-                msgBox.setErrMsg(msg.get("E09005"));
+                msgBox.setErrMsg(msg.get("E09005"), "-", -1);
                 return;
             }
 

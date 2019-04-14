@@ -74,15 +74,16 @@ namespace mvc
 
             Console.WriteLine(msg.get("I0003"));
 
-            foreach (string mes in msgBox.getWrn())
+            foreach (msgInfo mes in msgBox.getWrn())
             {
-                Console.WriteLine(string.Format(msg.get("I0004"), mes));
+                Console.WriteLine(string.Format(msg.get("I0004"), mes.filename, mes.line == -1 ? "-" : mes.line.ToString(), mes.body));
             }
 
-            foreach (string mes in msgBox.getErr())
+            foreach (msgInfo mes in msgBox.getErr())
             {
-                Console.WriteLine(string.Format(msg.get("I0005"), mes));
+                Console.WriteLine(string.Format(msg.get("I0005"), mes.filename, mes.line == -1 ? "-" : mes.line.ToString(), mes.body));
             }
+
 
             Console.WriteLine("");
             Console.WriteLine(string.Format(msg.get("I0006"), msgBox.getErr().Length, msgBox.getWrn().Length));

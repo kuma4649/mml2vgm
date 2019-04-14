@@ -48,6 +48,7 @@
             this.Controls.Add(this.textBox1);
             this.Name = "FrmLog";
             this.Text = "Log";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FrmLog_FormClosing);
             this.ResumeLayout(false);
             this.PerformLayout();
 

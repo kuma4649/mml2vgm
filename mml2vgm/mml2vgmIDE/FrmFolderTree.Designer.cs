@@ -45,6 +45,7 @@
             this.Controls.Add(this.treeView1);
             this.Name = "FrmFolderTree";
             this.Text = "Folder";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FrmFolderTree_FormClosing);
             this.ResumeLayout(false);
 
         }

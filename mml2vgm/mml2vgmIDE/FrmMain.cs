@@ -17,18 +17,19 @@ namespace mml2vgmIDE
 {
     public partial class FrmMain : Form
     {
-
+        private string appName = "MmlWarrior";
         private List<Form> FormBox = new List<Form>();
         private List<Document> DocumentBox = new List<Document>();
         private bool isSuccess = true;
         private string[] args;
         private Mml2vgm mv = null;
         private string title = "";
-        private FrmLog frmConsole = null;
+        private FrmLog frmLog = null;
         private FrmPartCounter frmPartCounter = null;
         private FrmFolderTree frmFolderTree = null;
         private FrmErrorList frmErrorList = null;
         private bool doPlay = false;
+        private bool Compiling = false;
 
         public FrmMain()
         {
@@ -41,47 +42,60 @@ namespace mml2vgmIDE
 
             frmPartCounter = new FrmPartCounter();
             frmPartCounter.Show(dpMain, WeifenLuo.WinFormsUI.Docking.DockState.DockLeft);
+            frmPartCounter.parentUpdate = UpdateControl;
             FormBox.Add(frmPartCounter);
 
-            frmConsole = new FrmLog();
-            frmConsole.Show(dpMain, WeifenLuo.WinFormsUI.Docking.DockState.DockBottom);
-            FormBox.Add(frmConsole);
+            frmLog = new FrmLog();
+            frmLog.Show(dpMain, WeifenLuo.WinFormsUI.Docking.DockState.DockBottom);
+            frmLog.parentUpdate = UpdateControl;
+            FormBox.Add(frmLog);
 
             frmFolderTree = new FrmFolderTree();
             frmFolderTree.Show(dpMain, WeifenLuo.WinFormsUI.Docking.DockState.DockLeft);
+            frmFolderTree.parentUpdate = UpdateControl;
             FormBox.Add(frmFolderTree);
 
             frmErrorList = new FrmErrorList();
             frmErrorList.Show(dpMain, WeifenLuo.WinFormsUI.Docking.DockState.DockBottom);
+            frmErrorList.parentUpdate = UpdateControl;
             FormBox.Add(frmErrorList);
-        }
 
-        private void AzukiControl1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void DockPanel1_ActiveContentChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void TsmiExit_Click(object sender, EventArgs e)
-        {
-            this.Close();
+            UpdateControl();
         }
 
         private void FrmMain_FormClosing(object sender, FormClosingEventArgs e)
         {
+            bool flg = false;
+            foreach(Document d in DocumentBox)
+            {
+                if(d.isNew || d.edit)
+                {
+                    flg = true;
+                    break;
+                }
+            }
 
-            //DialogResult res= MessageBox.Show("終了しますか？"
-            //    , "修了確認"
-            //    , MessageBoxButtons.YesNoCancel
-            //    , MessageBoxIcon.Question);
-            //if(res!= DialogResult.Yes)
-            //{
-            //    e.Cancel = true;
-            //}
+            if (flg)
+            {
+                DialogResult res = MessageBox.Show("保存していないファイルがあります。終了しますか？"
+                    , "終了確認"
+                    , MessageBoxButtons.YesNo
+                    , MessageBoxIcon.Question);
+                if (res != DialogResult.Yes)
+                {
+                    e.Cancel = true;
+                }
+            }
+        }
+
+        public void RemoveForm(Form frm)
+        {
+            FormBox.Remove(frm);
+        }
+
+        public void RemoveDocument(Document parent)
+        {
+            DocumentBox.Remove(parent);
         }
 
         private void TsmiNew_Click(object sender, EventArgs e)
@@ -89,7 +103,7 @@ namespace mml2vgmIDE
             OpenFile("");
         }
 
-        private void TsmiFileOpen_Click(object sender, EventArgs e)
+        public void TsmiFileOpen_Click(object sender, EventArgs e)
         {
             OpenFileDialog ofd = new OpenFileDialog();
 
@@ -105,6 +119,139 @@ namespace mml2vgmIDE
             OpenFile(ofd.FileName);
         }
 
+        private void TsmiOpenFolder_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        public void TsmiSaveFile_Click(object sender, EventArgs e)
+        {
+            DockContent dc = null;
+            Document d = null;
+            if (dpMain.ActiveDocument is DockContent)
+            {
+                dc = (DockContent)dpMain.ActiveDocument;
+                if (dc.Tag is Document)
+                {
+                    d = (Document)dc.Tag;
+                }
+            }
+            if (d == null) return;
+
+            File.WriteAllText(d.gwiFullPath, d.editor.azukiControl.Text, Encoding.UTF8);
+
+            d.edit = false;
+            d.editor.azukiControl.ClearHistory();
+            if (d.editor.Text.Length>0 && d.editor.Text[d.editor.Text.Length - 1] == '*')
+            {
+                d.editor.Text = d.editor.Text.Substring(0, d.editor.Text.Length - 1);
+            }
+            d.isNew = false;
+            UpdateControl();
+        }
+
+        private void TsmiSaveAs_Click(object sender, EventArgs e)
+        {
+            DockContent dc = null;
+            Document d = null;
+            if (dpMain.ActiveDocument is DockContent)
+            {
+                dc = (DockContent)dpMain.ActiveDocument;
+                if (dc.Tag is Document)
+                {
+                    d = (Document)dc.Tag;
+                }
+            }
+            if (d == null) return;
+
+            SaveFileDialog sfd = new SaveFileDialog();
+            string fn = d.gwiFullPath;
+            if (fn.Length > 0 && fn[fn.Length - 1] == '*')
+            {
+                fn = fn.Substring(0, fn.Length - 1);
+            }
+            sfd.FileName = Path.GetFileName(fn);
+            sfd.InitialDirectory = Path.GetDirectoryName(fn);
+            sfd.Filter = "gwiファイル(*.gwi)|*.gwi|すべてのファイル(*.*)|*.*";
+            sfd.Title = "名前を付けて保存";
+            sfd.RestoreDirectory = true;
+            if (sfd.ShowDialog() != DialogResult.OK)
+            {
+                return;
+            }
+            fn = Path.Combine(Path.GetDirectoryName(fn), sfd.FileName);
+            d.editor.Text = Path.GetFileName(sfd.FileName);
+            d.gwiFullPath = fn;
+            TsmiSaveFile_Click(null, null);
+        }
+
+        private void TsmiExport_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                DockContent dc = null;
+                Document d = null;
+                if (dpMain.ActiveDocument is DockContent)
+                {
+                    dc = (DockContent)dpMain.ActiveDocument;
+                    if (dc.Tag is Document)
+                    {
+                        d = (Document)dc.Tag;
+                    }
+                }
+                if (d == null) return;
+
+                Compile(false);
+                while (Compiling) { Application.DoEvents(); }//待ち合わせ
+
+                if (msgBox.getErr().Length > 0)
+                {
+                    MessageBox.Show("コンパイル時にエラーが発生しました。エクスポート処理を中断します。",
+                        "エラー発生",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
+
+                    return;
+                }
+
+                SaveFileDialog sfd = new SaveFileDialog();
+                string fn = d.gwiFullPath;
+                if (fn.Length > 0 && fn[fn.Length - 1] == '*')
+                {
+                    fn = fn.Substring(0, fn.Length - 1);
+                }
+                sfd.FileName = Path.GetFileNameWithoutExtension(fn) + (FileInformation.format == enmFormat.VGM ? ".vgm" : ".xgm");
+                sfd.InitialDirectory = Path.GetDirectoryName(fn);
+                sfd.Filter = "vgmファイル(*.vgm)|*.vgm|すべてのファイル(*.*)|*.*";
+                if (FileInformation.format == enmFormat.XGM)
+                {
+                    sfd.Filter = "xgmファイル(*.xgm)|*.xgm|すべてのファイル(*.*)|*.*";
+                }
+                sfd.Title = "エクスポート";
+                sfd.RestoreDirectory = true;
+                if (sfd.ShowDialog() != DialogResult.OK)
+                {
+                    return;
+                }
+                fn = sfd.FileName;
+                if (Path.GetExtension(fn) == "")
+                {
+                    fn = Path.GetFileNameWithoutExtension(fn) + (FileInformation.format == enmFormat.VGM ? ".vgm" : ".xgm");
+                }
+
+                File.Copy(Path.Combine(Common.GetApplicationDataFolder(true), "temp.gwi"), fn);
+            }
+            catch(Exception )
+            {
+                MessageBox.Show("エクスポート処理に失敗しました。", "エクスポート失敗", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void TsmiExit_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
         public void TsmiCompileAndPlay_Click(object sender, EventArgs e)
         {
             Compile(true);
@@ -115,6 +262,102 @@ namespace mml2vgmIDE
             Compile(false);
         }
 
+        private void TsmiUndo_Click(object sender, EventArgs e)
+        {
+            DockContent dc = null;
+            Document d = null;
+            if (dpMain.ActiveDocument is DockContent)
+            {
+                dc = (DockContent)dpMain.ActiveDocument;
+                if (dc.Tag is Document)
+                {
+                    d = (Document)dc.Tag;
+                }
+            }
+
+            if (d != null) d.editor.azukiControl.Undo();
+            UpdateControl();
+        }
+
+        private void TsmiRedo_Click(object sender, EventArgs e)
+        {
+            DockContent dc = null;
+            Document d = null;
+            if (dpMain.ActiveDocument is DockContent)
+            {
+                dc = (DockContent)dpMain.ActiveDocument;
+                if (dc.Tag is Document)
+                {
+                    d = (Document)dc.Tag;
+                }
+            }
+
+            if (d != null) d.editor.azukiControl.Redo();
+            UpdateControl();
+        }
+
+        private void TsmiShowPartCounter_Click(object sender, EventArgs e)
+        {
+            if (frmPartCounter.IsHidden) frmPartCounter.Show();
+            else frmPartCounter.Hide();
+
+            TsmiShowPartCounter.Checked = !frmPartCounter.IsHidden;
+        }
+
+        private void TsmiShowFolderTree_Click(object sender, EventArgs e)
+        {
+            if (frmFolderTree.IsHidden) frmFolderTree.Show();
+            else frmFolderTree.Hide();
+
+            TsmiShowFolderTree.Checked = !frmFolderTree.IsHidden;
+        }
+
+        private void TsmiShowErrorList_Click(object sender, EventArgs e)
+        {
+            if (frmErrorList.IsHidden) frmErrorList.Show();
+            else frmErrorList.Hide();
+
+            TsmiShowErrorList.Checked = !frmErrorList.IsHidden;
+        }
+
+        private void TsmiShowLog_Click(object sender, EventArgs e)
+        {
+            if (frmLog.IsHidden) frmLog.Show();
+            else frmLog.Hide();
+
+            TsmiShowLog.Checked = !frmLog.IsHidden;
+        }
+
+        private void TsmiTutorial_Click(object sender, EventArgs e)
+        {
+            Process.Start("Tutorial.txt");
+        }
+
+        private void TsmiReference_Click(object sender, EventArgs e)
+        {
+            Process.Start("CommandReference.txt");
+        }
+
+        private void TsmiAbout_Click(object sender, EventArgs e)
+        {
+            FrmAbout frm = new FrmAbout();
+            frm.ShowDialog();
+        }
+
+        private void TssbOpen_ButtonClick(object sender, EventArgs e)
+        {
+            TsmiFileOpen_Click(null, null);
+        }
+
+        private void TssbSave_ButtonClick(object sender, EventArgs e)
+        {
+            TsmiSaveFile_Click(null, null);
+        }
+
+        private void TssbCompile_ButtonClick(object sender, EventArgs e)
+        {
+            TsmiCompileAndPlay_Click(null, null);
+        }
 
 
         private void OpenFile(string fileName)
@@ -123,6 +366,7 @@ namespace mml2vgmIDE
             if (fileName != "") dc.InitOpen(fileName);
             dc.editor.Show(dpMain, DockState.Document);
             dc.editor.main = this;
+            dc.editor.parent = dc;
 
             frmFolderTree.treeView1.Nodes.Clear();
             frmFolderTree.treeView1.Nodes.Add(dc.gwiTree);
@@ -137,7 +381,7 @@ namespace mml2vgmIDE
             if (dc == null) return;
             if (!(dc is FrmEditor)) return;
 
-            string text = ((FrmEditor)dc).azukiControl1.Text;
+            string text = ((FrmEditor)dc).azukiControl.Text;
             string tempPath = Path.Combine(Common.GetApplicationDataFolder(true), "temp.gwi");
 
             File.WriteAllText(tempPath, text);
@@ -150,6 +394,7 @@ namespace mml2vgmIDE
 
             Thread trdStartCompile = new Thread(new ThreadStart(startCompile));
             trdStartCompile.Start();
+            Compiling = true;
         }
 
         private void startCompile()
@@ -207,11 +452,11 @@ namespace mml2vgmIDE
         {
             if (title == "")
             {
-                this.Text = "mml2vgmIDE";
+                this.Text = appName;
             }
             else
             {
-                this.Text = string.Format("mml2vgmIDE - {0}", title);
+                this.Text = string.Format("{0} - {1}", appName, title);
             }
         }
         private void Disp(string msg)
@@ -223,17 +468,17 @@ namespace mml2vgmIDE
 
         private void MsgDisp(string msg)
         {
-            if (frmConsole == null) return;
-            if (frmConsole.IsDisposed) return;
+            if (frmLog == null) return;
+            if (frmLog.IsDisposed) return;
 
-            frmConsole.textBox1.AppendText(msg + "\r\n");
+            frmLog.textBox1.AppendText(msg + "\r\n");
         }
 
         private void finishedCompile()
         {
             if (mv == null)
             {
-                if (frmConsole != null && !frmConsole.IsDisposed) frmConsole.textBox1.AppendText(msg.get("I0105"));
+                if (frmLog != null && !frmLog.IsDisposed) frmLog.textBox1.AppendText(msg.get("I0105"));
                 //this.toolStrip1.Enabled = true;
                 //this.tsslMessage.Text = msg.get("I0106");
                 return;
@@ -263,43 +508,43 @@ namespace mml2vgmIDE
                 }
             }
 
-            frmConsole.textBox1.AppendText(msg.get("I0107"));
+            frmLog.textBox1.AppendText(msg.get("I0107"));
 
-            foreach (string mes in msgBox.getErr())
+            foreach (msgInfo mes in msgBox.getErr())
             {
-                frmErrorList.dataGridView1.Rows.Add("Error", "-", "-", mes);
+                frmErrorList.dataGridView1.Rows.Add("Error", mes.filename, mes.line == -1 ? "-" : mes.line.ToString(), mes.body);
                 //frmConsole.textBox1.AppendText(string.Format(msg.get("I0109"), mes));
             }
 
-            foreach (string mes in msgBox.getWrn())
+            foreach (msgInfo mes in msgBox.getWrn())
             {
-                frmErrorList.dataGridView1.Rows.Add("Warning", "-", "-", mes);
+                frmErrorList.dataGridView1.Rows.Add("Warning", mes.filename, mes.line == -1 ? "-" : mes.line.ToString(), mes.body);
                 //frmConsole.textBox1.AppendText(string.Format(msg.get("I0108"), mes));
             }
 
-            frmConsole.textBox1.AppendText("\r\n");
-            frmConsole.textBox1.AppendText(string.Format(msg.get("I0110"), msgBox.getErr().Length, msgBox.getWrn().Length));
+            frmLog.textBox1.AppendText("\r\n");
+            frmLog.textBox1.AppendText(string.Format(msg.get("I0110"), msgBox.getErr().Length, msgBox.getWrn().Length));
 
             if (mv.desVGM.loopSamples != -1)
             {
-                frmConsole.textBox1.AppendText(string.Format(msg.get("I0111"), mv.desVGM.loopClock));
+                frmLog.textBox1.AppendText(string.Format(msg.get("I0111"), mv.desVGM.loopClock));
                 if (mv.desVGM.info.format == enmFormat.VGM)
-                    frmConsole.textBox1.AppendText(string.Format(msg.get("I0112")
+                    frmLog.textBox1.AppendText(string.Format(msg.get("I0112")
                         , mv.desVGM.loopSamples
                         , mv.desVGM.loopSamples / 44100L));
                 else
-                    frmConsole.textBox1.AppendText(string.Format(msg.get("I0112")
+                    frmLog.textBox1.AppendText(string.Format(msg.get("I0112")
                         , mv.desVGM.loopSamples
                         , mv.desVGM.loopSamples / (mv.desVGM.info.xgmSamplesPerSecond)));
             }
 
-            frmConsole.textBox1.AppendText(string.Format(msg.get("I0113"), mv.desVGM.lClock));
+            frmLog.textBox1.AppendText(string.Format(msg.get("I0113"), mv.desVGM.lClock));
             if (mv.desVGM.info.format == enmFormat.VGM)
-                frmConsole.textBox1.AppendText(string.Format(msg.get("I0114")
+                frmLog.textBox1.AppendText(string.Format(msg.get("I0114")
                     , mv.desVGM.dSample
                     , mv.desVGM.dSample / 44100L));
             else
-                frmConsole.textBox1.AppendText(string.Format(msg.get("I0114")
+                frmLog.textBox1.AppendText(string.Format(msg.get("I0114")
                     , mv.desVGM.dSample
                     , mv.desVGM.dSample / (mv.desVGM.info.xgmSamplesPerSecond)));
 
@@ -318,13 +563,13 @@ namespace mml2vgmIDE
             //if (mv.desVGM.huc6280[1].pcmDataEasy != null) textBox1.AppendText(string.Format(msg.get("I0125"), mv.desVGM.huc6280[1].pcmDataEasy.Length));
 
 
-            frmConsole.textBox1.AppendText(msg.get("I0126"));
+            frmLog.textBox1.AppendText(msg.get("I0126"));
             //this.toolStrip1.Enabled = true;
             //this.tsslMessage.Text = msg.get("I0106");
 
             if (isSuccess)
             {
-                if (args.Length == 2 && doPlay)
+                if (args.Length == 2 && doPlay && msgBox.getErr().Length < 1)
                 {
                     try
                     {
@@ -337,6 +582,75 @@ namespace mml2vgmIDE
                 }
             }
 
+            Compiling = false;
+            UpdateControl();
         }
+
+        private void DpMain_ActiveDocumentChanged(object sender, EventArgs e)
+        {
+            UpdateControl();
+        }
+
+        public void UpdateControl()
+        {
+            DockContent dc = null;
+            Document d = null;
+            if (dpMain.ActiveDocument is DockContent)
+            {
+                dc = (DockContent)dpMain.ActiveDocument;
+                if (dc.Tag is Document)
+                {
+                    d = (Document)dc.Tag;
+                }
+            }
+
+            if (d != null)
+            {
+                //メニューの有効無効を切り替え
+                if (d.isNew)
+                {
+                    TsmiSaveFile.Enabled = false;
+                    tssbSave.Enabled = false;
+                    TsmiSaveAs.Enabled = true;
+                }
+                else
+                {
+                    TsmiSaveFile.Enabled = true;
+                    tssbSave.Enabled = true;
+                    TsmiSaveAs.Enabled = true;
+                }
+
+                TsmiUndo.Enabled = d.editor.azukiControl.CanUndo;
+                TsmiRedo.Enabled = d.editor.azukiControl.CanRedo;
+
+                frmFolderTree.treeView1.Nodes.Clear();
+                frmFolderTree.treeView1.Nodes.Add(d.gwiTree);
+
+                this.Text = string.Format("{0} - {1}", appName, d.editor.Text);
+            }
+            else
+            {
+                TsmiSaveFile.Enabled = false;
+                TsmiSaveAs.Enabled = false;
+                TsmiUndo.Enabled = false;
+                TsmiRedo.Enabled = false;
+
+                this.Text = appName;
+            }
+
+            TsmiShowPartCounter.Checked = !frmPartCounter.IsHidden;
+            TsmiShowFolderTree.Checked = !frmFolderTree.IsHidden;
+            TsmiShowErrorList.Checked = !frmErrorList.IsHidden;
+            TsmiShowLog.Checked = !frmLog.IsHidden;
+
+            tsslCompileStatus.Text = string.Format(
+                "Err:{0} Wrn:{1} TCnt:{2} LCnt:{3}",
+                msgBox.getErr().Length,
+                msgBox.getWrn().Length,
+                FileInformation.totalCounter,
+                FileInformation.loopCounter == -1 ? "-" : FileInformation.loopCounter.ToString()
+                );
+        }
+
     }
 }

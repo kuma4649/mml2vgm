@@ -34,21 +34,33 @@
             this.visualStudioToolStripExtender1 = new WeifenLuo.WinFormsUI.Docking.VisualStudioToolStripExtender(this.components);
             this.vS2005Theme1 = new WeifenLuo.WinFormsUI.Docking.VS2005Theme();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.tssbOpen = new System.Windows.Forms.ToolStripSplitButton();
+            this.tssbSave = new System.Windows.Forms.ToolStripSplitButton();
+            this.tssbCompile = new System.Windows.Forms.ToolStripSplitButton();
+            this.tssbPlay = new System.Windows.Forms.ToolStripSplitButton();
+            this.tssbSlow = new System.Windows.Forms.ToolStripSplitButton();
+            this.tssbFast = new System.Windows.Forms.ToolStripSplitButton();
+            this.tssbStop = new System.Windows.Forms.ToolStripSplitButton();
+            this.tsslCompileStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.TsmiFile = new System.Windows.Forms.ToolStripMenuItem();
             this.TsmiNew = new System.Windows.Forms.ToolStripMenuItem();
-            this.TsmiFileOpen = new System.Windows.Forms.ToolStripMenuItem();
-            this.フォルダーを開くFToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.TsmiOpenFile = new System.Windows.Forms.ToolStripMenuItem();
+            this.TsmiOpenFolder = new System.Windows.Forms.ToolStripMenuItem();
+            this.TsmiSaveFile = new System.Windows.Forms.ToolStripMenuItem();
+            this.TsmiSaveAs = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsmiExport = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.TsmiExit = new System.Windows.Forms.ToolStripMenuItem();
             this.TsmiEdit = new System.Windows.Forms.ToolStripMenuItem();
-            this.元に戻すToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.やり直すToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.TsmiUndo = new System.Windows.Forms.ToolStripMenuItem();
+            this.TsmiRedo = new System.Windows.Forms.ToolStripMenuItem();
             this.表示VToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.パートカウンターToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.フォルダーツリーToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.エラーリストToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.ログToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.TsmiShowPartCounter = new System.Windows.Forms.ToolStripMenuItem();
+            this.TsmiShowFolderTree = new System.Windows.Forms.ToolStripMenuItem();
+            this.TsmiShowErrorList = new System.Windows.Forms.ToolStripMenuItem();
+            this.TsmiShowLog = new System.Windows.Forms.ToolStripMenuItem();
             this.コンパイルCToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.TsmiCompileAndPlay = new System.Windows.Forms.ToolStripMenuItem();
             this.TsmiAllCompile = new System.Windows.Forms.ToolStripMenuItem();
@@ -56,17 +68,9 @@
             this.ツールTToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.オプションOToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.TsmiHelp = new System.Windows.Forms.ToolStripMenuItem();
-            this.データ作成手順ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.mmlコマンドリファレンスToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripSplitButton1 = new System.Windows.Forms.ToolStripSplitButton();
-            this.toolStripSplitButton2 = new System.Windows.Forms.ToolStripSplitButton();
-            this.toolStripSplitButton3 = new System.Windows.Forms.ToolStripSplitButton();
-            this.toolStripSplitButton4 = new System.Windows.Forms.ToolStripSplitButton();
-            this.toolStripSplitButton5 = new System.Windows.Forms.ToolStripSplitButton();
-            this.toolStripSplitButton6 = new System.Windows.Forms.ToolStripSplitButton();
-            this.toolStripSplitButton7 = new System.Windows.Forms.ToolStripSplitButton();
+            this.TsmiTutorial = new System.Windows.Forms.ToolStripMenuItem();
+            this.TsmiReference = new System.Windows.Forms.ToolStripMenuItem();
+            this.TsmiAbout = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -80,7 +84,7 @@
             this.dpMain.Name = "dpMain";
             this.dpMain.Size = new System.Drawing.Size(800, 405);
             this.dpMain.TabIndex = 0;
-            this.dpMain.ActiveContentChanged += new System.EventHandler(this.DockPanel1_ActiveContentChanged);
+            this.dpMain.ActiveDocumentChanged += new System.EventHandler(this.DpMain_ActiveDocumentChanged);
             // 
             // visualStudioToolStripExtender1
             // 
@@ -89,19 +93,96 @@
             // statusStrip1
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripSplitButton2,
-            this.toolStripSplitButton3,
-            this.toolStripSplitButton1,
-            this.toolStripSplitButton4,
-            this.toolStripSplitButton6,
-            this.toolStripSplitButton7,
-            this.toolStripSplitButton5,
-            this.toolStripStatusLabel1});
+            this.tssbOpen,
+            this.tssbSave,
+            this.tssbCompile,
+            this.tssbPlay,
+            this.tssbSlow,
+            this.tssbFast,
+            this.tssbStop,
+            this.tsslCompileStatus});
             this.statusStrip1.Location = new System.Drawing.Point(0, 428);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(800, 22);
             this.statusStrip1.TabIndex = 2;
             this.statusStrip1.Text = "statusStrip1";
+            // 
+            // tssbOpen
+            // 
+            this.tssbOpen.DropDownButtonWidth = 0;
+            this.tssbOpen.Image = ((System.Drawing.Image)(resources.GetObject("tssbOpen.Image")));
+            this.tssbOpen.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tssbOpen.Name = "tssbOpen";
+            this.tssbOpen.Size = new System.Drawing.Size(62, 20);
+            this.tssbOpen.Text = "F1:開く";
+            this.tssbOpen.ButtonClick += new System.EventHandler(this.TssbOpen_ButtonClick);
+            // 
+            // tssbSave
+            // 
+            this.tssbSave.DropDownButtonWidth = 0;
+            this.tssbSave.Enabled = false;
+            this.tssbSave.Image = ((System.Drawing.Image)(resources.GetObject("tssbSave.Image")));
+            this.tssbSave.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tssbSave.Name = "tssbSave";
+            this.tssbSave.Size = new System.Drawing.Size(67, 20);
+            this.tssbSave.Text = "F2:保存";
+            this.tssbSave.ButtonClick += new System.EventHandler(this.TssbSave_ButtonClick);
+            // 
+            // tssbCompile
+            // 
+            this.tssbCompile.DropDownButtonWidth = 0;
+            this.tssbCompile.Image = ((System.Drawing.Image)(resources.GetObject("tssbCompile.Image")));
+            this.tssbCompile.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tssbCompile.Name = "tssbCompile";
+            this.tssbCompile.Size = new System.Drawing.Size(113, 20);
+            this.tssbCompile.Text = "F5:コンパイル&再生";
+            this.tssbCompile.ButtonClick += new System.EventHandler(this.TssbCompile_ButtonClick);
+            // 
+            // tssbPlay
+            // 
+            this.tssbPlay.DropDownButtonWidth = 0;
+            this.tssbPlay.Enabled = false;
+            this.tssbPlay.Image = ((System.Drawing.Image)(resources.GetObject("tssbPlay.Image")));
+            this.tssbPlay.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tssbPlay.Name = "tssbPlay";
+            this.tssbPlay.Size = new System.Drawing.Size(67, 20);
+            this.tssbPlay.Text = "F6:再生";
+            // 
+            // tssbSlow
+            // 
+            this.tssbSlow.DropDownButtonWidth = 0;
+            this.tssbSlow.Enabled = false;
+            this.tssbSlow.Image = ((System.Drawing.Image)(resources.GetObject("tssbSlow.Image")));
+            this.tssbSlow.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tssbSlow.Name = "tssbSlow";
+            this.tssbSlow.Size = new System.Drawing.Size(69, 20);
+            this.tssbSlow.Text = "F7:スロー";
+            // 
+            // tssbFast
+            // 
+            this.tssbFast.DropDownButtonWidth = 0;
+            this.tssbFast.Enabled = false;
+            this.tssbFast.Image = ((System.Drawing.Image)(resources.GetObject("tssbFast.Image")));
+            this.tssbFast.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tssbFast.Name = "tssbFast";
+            this.tssbFast.Size = new System.Drawing.Size(73, 20);
+            this.tssbFast.Text = "F8:4倍速";
+            // 
+            // tssbStop
+            // 
+            this.tssbStop.DropDownButtonWidth = 0;
+            this.tssbStop.Enabled = false;
+            this.tssbStop.Image = ((System.Drawing.Image)(resources.GetObject("tssbStop.Image")));
+            this.tssbStop.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tssbStop.Name = "tssbStop";
+            this.tssbStop.Size = new System.Drawing.Size(67, 20);
+            this.tssbStop.Text = "F9:停止";
+            // 
+            // tsslCompileStatus
+            // 
+            this.tsslCompileStatus.Name = "tsslCompileStatus";
+            this.tsslCompileStatus.Size = new System.Drawing.Size(149, 17);
+            this.tsslCompileStatus.Text = "E:123 W:123 C:9999 LC:9999";
             // 
             // menuStrip1
             // 
@@ -122,8 +203,12 @@
             // 
             this.TsmiFile.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.TsmiNew,
-            this.TsmiFileOpen,
-            this.フォルダーを開くFToolStripMenuItem,
+            this.TsmiOpenFile,
+            this.TsmiOpenFolder,
+            this.TsmiSaveFile,
+            this.TsmiSaveAs,
+            this.toolStripSeparator2,
+            this.tsmiExport,
             this.toolStripSeparator1,
             this.TsmiExit});
             this.TsmiFile.Name = "TsmiFile";
@@ -133,90 +218,128 @@
             // TsmiNew
             // 
             this.TsmiNew.Name = "TsmiNew";
-            this.TsmiNew.Size = new System.Drawing.Size(159, 22);
+            this.TsmiNew.Size = new System.Drawing.Size(177, 22);
             this.TsmiNew.Text = "新規作成(&N)";
             this.TsmiNew.Click += new System.EventHandler(this.TsmiNew_Click);
             // 
-            // TsmiFileOpen
+            // TsmiOpenFile
             // 
-            this.TsmiFileOpen.Name = "TsmiFileOpen";
-            this.TsmiFileOpen.Size = new System.Drawing.Size(159, 22);
-            this.TsmiFileOpen.Text = "ファイルを開く(&O)";
-            this.TsmiFileOpen.Click += new System.EventHandler(this.TsmiFileOpen_Click);
+            this.TsmiOpenFile.Name = "TsmiOpenFile";
+            this.TsmiOpenFile.Size = new System.Drawing.Size(177, 22);
+            this.TsmiOpenFile.Text = "ファイルを開く(&O)";
+            this.TsmiOpenFile.Click += new System.EventHandler(this.TsmiFileOpen_Click);
             // 
-            // フォルダーを開くFToolStripMenuItem
+            // TsmiOpenFolder
             // 
-            this.フォルダーを開くFToolStripMenuItem.Name = "フォルダーを開くFToolStripMenuItem";
-            this.フォルダーを開くFToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
-            this.フォルダーを開くFToolStripMenuItem.Text = "フォルダーを開く(&F)";
+            this.TsmiOpenFolder.Enabled = false;
+            this.TsmiOpenFolder.Name = "TsmiOpenFolder";
+            this.TsmiOpenFolder.Size = new System.Drawing.Size(177, 22);
+            this.TsmiOpenFolder.Text = "フォルダーを開く(&F)";
+            this.TsmiOpenFolder.Click += new System.EventHandler(this.TsmiOpenFolder_Click);
+            // 
+            // TsmiSaveFile
+            // 
+            this.TsmiSaveFile.Enabled = false;
+            this.TsmiSaveFile.Name = "TsmiSaveFile";
+            this.TsmiSaveFile.Size = new System.Drawing.Size(177, 22);
+            this.TsmiSaveFile.Text = "上書き保存(&S)";
+            this.TsmiSaveFile.Click += new System.EventHandler(this.TsmiSaveFile_Click);
+            // 
+            // TsmiSaveAs
+            // 
+            this.TsmiSaveAs.Enabled = false;
+            this.TsmiSaveAs.Name = "TsmiSaveAs";
+            this.TsmiSaveAs.Size = new System.Drawing.Size(177, 22);
+            this.TsmiSaveAs.Text = "名前を付けて保存(&A)";
+            this.TsmiSaveAs.Click += new System.EventHandler(this.TsmiSaveAs_Click);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(174, 6);
+            // 
+            // tsmiExport
+            // 
+            this.tsmiExport.Name = "tsmiExport";
+            this.tsmiExport.Size = new System.Drawing.Size(177, 22);
+            this.tsmiExport.Text = "エクスポート";
+            this.tsmiExport.Click += new System.EventHandler(this.TsmiExport_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(156, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(174, 6);
             // 
             // TsmiExit
             // 
             this.TsmiExit.Name = "TsmiExit";
-            this.TsmiExit.Size = new System.Drawing.Size(159, 22);
+            this.TsmiExit.Size = new System.Drawing.Size(177, 22);
             this.TsmiExit.Text = "終了(&E)";
             this.TsmiExit.Click += new System.EventHandler(this.TsmiExit_Click);
             // 
             // TsmiEdit
             // 
             this.TsmiEdit.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.元に戻すToolStripMenuItem,
-            this.やり直すToolStripMenuItem});
+            this.TsmiUndo,
+            this.TsmiRedo});
             this.TsmiEdit.Name = "TsmiEdit";
             this.TsmiEdit.Size = new System.Drawing.Size(57, 20);
             this.TsmiEdit.Text = "編集(&E)";
             // 
-            // 元に戻すToolStripMenuItem
+            // TsmiUndo
             // 
-            this.元に戻すToolStripMenuItem.Name = "元に戻すToolStripMenuItem";
-            this.元に戻すToolStripMenuItem.Size = new System.Drawing.Size(117, 22);
-            this.元に戻すToolStripMenuItem.Text = "元に戻す";
+            this.TsmiUndo.Enabled = false;
+            this.TsmiUndo.Name = "TsmiUndo";
+            this.TsmiUndo.Size = new System.Drawing.Size(117, 22);
+            this.TsmiUndo.Text = "元に戻す";
+            this.TsmiUndo.Click += new System.EventHandler(this.TsmiUndo_Click);
             // 
-            // やり直すToolStripMenuItem
+            // TsmiRedo
             // 
-            this.やり直すToolStripMenuItem.Name = "やり直すToolStripMenuItem";
-            this.やり直すToolStripMenuItem.Size = new System.Drawing.Size(117, 22);
-            this.やり直すToolStripMenuItem.Text = "やり直し";
+            this.TsmiRedo.Enabled = false;
+            this.TsmiRedo.Name = "TsmiRedo";
+            this.TsmiRedo.Size = new System.Drawing.Size(117, 22);
+            this.TsmiRedo.Text = "やり直し";
+            this.TsmiRedo.Click += new System.EventHandler(this.TsmiRedo_Click);
             // 
             // 表示VToolStripMenuItem
             // 
             this.表示VToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.パートカウンターToolStripMenuItem,
-            this.フォルダーツリーToolStripMenuItem,
-            this.エラーリストToolStripMenuItem,
-            this.ログToolStripMenuItem});
+            this.TsmiShowPartCounter,
+            this.TsmiShowFolderTree,
+            this.TsmiShowErrorList,
+            this.TsmiShowLog});
             this.表示VToolStripMenuItem.Name = "表示VToolStripMenuItem";
             this.表示VToolStripMenuItem.Size = new System.Drawing.Size(58, 20);
             this.表示VToolStripMenuItem.Text = "表示(&V)";
             // 
-            // パートカウンターToolStripMenuItem
+            // TsmiShowPartCounter
             // 
-            this.パートカウンターToolStripMenuItem.Name = "パートカウンターToolStripMenuItem";
-            this.パートカウンターToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
-            this.パートカウンターToolStripMenuItem.Text = "パートカウンター";
+            this.TsmiShowPartCounter.Name = "TsmiShowPartCounter";
+            this.TsmiShowPartCounter.Size = new System.Drawing.Size(144, 22);
+            this.TsmiShowPartCounter.Text = "パートカウンター";
+            this.TsmiShowPartCounter.Click += new System.EventHandler(this.TsmiShowPartCounter_Click);
             // 
-            // フォルダーツリーToolStripMenuItem
+            // TsmiShowFolderTree
             // 
-            this.フォルダーツリーToolStripMenuItem.Name = "フォルダーツリーToolStripMenuItem";
-            this.フォルダーツリーToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
-            this.フォルダーツリーToolStripMenuItem.Text = "フォルダーツリー";
+            this.TsmiShowFolderTree.Name = "TsmiShowFolderTree";
+            this.TsmiShowFolderTree.Size = new System.Drawing.Size(144, 22);
+            this.TsmiShowFolderTree.Text = "フォルダーツリー";
+            this.TsmiShowFolderTree.Click += new System.EventHandler(this.TsmiShowFolderTree_Click);
             // 
-            // エラーリストToolStripMenuItem
+            // TsmiShowErrorList
             // 
-            this.エラーリストToolStripMenuItem.Name = "エラーリストToolStripMenuItem";
-            this.エラーリストToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
-            this.エラーリストToolStripMenuItem.Text = "エラーリスト";
+            this.TsmiShowErrorList.Name = "TsmiShowErrorList";
+            this.TsmiShowErrorList.Size = new System.Drawing.Size(144, 22);
+            this.TsmiShowErrorList.Text = "エラーリスト";
+            this.TsmiShowErrorList.Click += new System.EventHandler(this.TsmiShowErrorList_Click);
             // 
-            // ログToolStripMenuItem
+            // TsmiShowLog
             // 
-            this.ログToolStripMenuItem.Name = "ログToolStripMenuItem";
-            this.ログToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
-            this.ログToolStripMenuItem.Text = "ログ";
+            this.TsmiShowLog.Name = "TsmiShowLog";
+            this.TsmiShowLog.Size = new System.Drawing.Size(144, 22);
+            this.TsmiShowLog.Text = "ログ";
+            this.TsmiShowLog.Click += new System.EventHandler(this.TsmiShowLog_Click);
             // 
             // コンパイルCToolStripMenuItem
             // 
@@ -259,6 +382,7 @@
             // 
             // オプションOToolStripMenuItem
             // 
+            this.オプションOToolStripMenuItem.Enabled = false;
             this.オプションOToolStripMenuItem.Name = "オプションOToolStripMenuItem";
             this.オプションOToolStripMenuItem.Size = new System.Drawing.Size(135, 22);
             this.オプションOToolStripMenuItem.Text = "オプション(&O)";
@@ -266,99 +390,33 @@
             // TsmiHelp
             // 
             this.TsmiHelp.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.データ作成手順ToolStripMenuItem,
-            this.mmlコマンドリファレンスToolStripMenuItem,
-            this.aboutToolStripMenuItem});
+            this.TsmiTutorial,
+            this.TsmiReference,
+            this.TsmiAbout});
             this.TsmiHelp.Name = "TsmiHelp";
             this.TsmiHelp.Size = new System.Drawing.Size(65, 20);
             this.TsmiHelp.Text = "ヘルプ(&H)";
             // 
-            // データ作成手順ToolStripMenuItem
+            // TsmiTutorial
             // 
-            this.データ作成手順ToolStripMenuItem.Name = "データ作成手順ToolStripMenuItem";
-            this.データ作成手順ToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
-            this.データ作成手順ToolStripMenuItem.Text = "データ作成手順";
+            this.TsmiTutorial.Name = "TsmiTutorial";
+            this.TsmiTutorial.Size = new System.Drawing.Size(181, 22);
+            this.TsmiTutorial.Text = "データ作成手順";
+            this.TsmiTutorial.Click += new System.EventHandler(this.TsmiTutorial_Click);
             // 
-            // mmlコマンドリファレンスToolStripMenuItem
+            // TsmiReference
             // 
-            this.mmlコマンドリファレンスToolStripMenuItem.Name = "mmlコマンドリファレンスToolStripMenuItem";
-            this.mmlコマンドリファレンスToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
-            this.mmlコマンドリファレンスToolStripMenuItem.Text = "mmlコマンドリファレンス";
+            this.TsmiReference.Name = "TsmiReference";
+            this.TsmiReference.Size = new System.Drawing.Size(181, 22);
+            this.TsmiReference.Text = "mmlコマンドリファレンス";
+            this.TsmiReference.Click += new System.EventHandler(this.TsmiReference_Click);
             // 
-            // aboutToolStripMenuItem
+            // TsmiAbout
             // 
-            this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
-            this.aboutToolStripMenuItem.Text = "About";
-            // 
-            // toolStripStatusLabel1
-            // 
-            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(149, 17);
-            this.toolStripStatusLabel1.Text = "E:123 W:123 C:9999 LC:9999";
-            // 
-            // toolStripSplitButton1
-            // 
-            this.toolStripSplitButton1.DropDownButtonWidth = 0;
-            this.toolStripSplitButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripSplitButton1.Image")));
-            this.toolStripSplitButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripSplitButton1.Name = "toolStripSplitButton1";
-            this.toolStripSplitButton1.Size = new System.Drawing.Size(113, 20);
-            this.toolStripSplitButton1.Text = "F5:コンパイル&再生";
-            // 
-            // toolStripSplitButton2
-            // 
-            this.toolStripSplitButton2.DropDownButtonWidth = 0;
-            this.toolStripSplitButton2.Image = ((System.Drawing.Image)(resources.GetObject("toolStripSplitButton2.Image")));
-            this.toolStripSplitButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripSplitButton2.Name = "toolStripSplitButton2";
-            this.toolStripSplitButton2.Size = new System.Drawing.Size(62, 20);
-            this.toolStripSplitButton2.Text = "F1:開く";
-            // 
-            // toolStripSplitButton3
-            // 
-            this.toolStripSplitButton3.DropDownButtonWidth = 0;
-            this.toolStripSplitButton3.Image = ((System.Drawing.Image)(resources.GetObject("toolStripSplitButton3.Image")));
-            this.toolStripSplitButton3.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripSplitButton3.Name = "toolStripSplitButton3";
-            this.toolStripSplitButton3.Size = new System.Drawing.Size(67, 20);
-            this.toolStripSplitButton3.Text = "F2:保存";
-            // 
-            // toolStripSplitButton4
-            // 
-            this.toolStripSplitButton4.DropDownButtonWidth = 0;
-            this.toolStripSplitButton4.Image = ((System.Drawing.Image)(resources.GetObject("toolStripSplitButton4.Image")));
-            this.toolStripSplitButton4.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripSplitButton4.Name = "toolStripSplitButton4";
-            this.toolStripSplitButton4.Size = new System.Drawing.Size(67, 20);
-            this.toolStripSplitButton4.Text = "F6:再生";
-            // 
-            // toolStripSplitButton5
-            // 
-            this.toolStripSplitButton5.DropDownButtonWidth = 0;
-            this.toolStripSplitButton5.Image = ((System.Drawing.Image)(resources.GetObject("toolStripSplitButton5.Image")));
-            this.toolStripSplitButton5.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripSplitButton5.Name = "toolStripSplitButton5";
-            this.toolStripSplitButton5.Size = new System.Drawing.Size(67, 20);
-            this.toolStripSplitButton5.Text = "F9:停止";
-            // 
-            // toolStripSplitButton6
-            // 
-            this.toolStripSplitButton6.DropDownButtonWidth = 0;
-            this.toolStripSplitButton6.Image = ((System.Drawing.Image)(resources.GetObject("toolStripSplitButton6.Image")));
-            this.toolStripSplitButton6.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripSplitButton6.Name = "toolStripSplitButton6";
-            this.toolStripSplitButton6.Size = new System.Drawing.Size(69, 20);
-            this.toolStripSplitButton6.Text = "F7:スロー";
-            // 
-            // toolStripSplitButton7
-            // 
-            this.toolStripSplitButton7.DropDownButtonWidth = 0;
-            this.toolStripSplitButton7.Image = ((System.Drawing.Image)(resources.GetObject("toolStripSplitButton7.Image")));
-            this.toolStripSplitButton7.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripSplitButton7.Name = "toolStripSplitButton7";
-            this.toolStripSplitButton7.Size = new System.Drawing.Size(73, 20);
-            this.toolStripSplitButton7.Text = "F8:4倍速";
+            this.TsmiAbout.Name = "TsmiAbout";
+            this.TsmiAbout.Size = new System.Drawing.Size(181, 22);
+            this.TsmiAbout.Text = "About";
+            this.TsmiAbout.Click += new System.EventHandler(this.TsmiAbout_Click);
             // 
             // FrmMain
             // 
@@ -370,7 +428,7 @@
             this.Controls.Add(this.dpMain);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "FrmMain";
-            this.Text = "mml2vgmIDE";
+            this.Text = appName;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FrmMain_FormClosing);
             this.Shown += new System.EventHandler(this.Form1_Shown);
             this.statusStrip1.ResumeLayout(false);
@@ -391,7 +449,7 @@
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem TsmiFile;
         private System.Windows.Forms.ToolStripMenuItem TsmiNew;
-        private System.Windows.Forms.ToolStripMenuItem TsmiFileOpen;
+        private System.Windows.Forms.ToolStripMenuItem TsmiOpenFile;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem TsmiExit;
         private System.Windows.Forms.ToolStripMenuItem TsmiEdit;
@@ -400,27 +458,31 @@
         private System.Windows.Forms.ToolStripMenuItem TsmiCompileAndPlay;
         private System.Windows.Forms.ToolStripMenuItem TsmiAllCompile;
         private System.Windows.Forms.ToolStripMenuItem TsmiCompile;
-        private System.Windows.Forms.ToolStripMenuItem フォルダーを開くFToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem 元に戻すToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem やり直すToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem TsmiOpenFolder;
+        private System.Windows.Forms.ToolStripMenuItem TsmiAbout;
         private System.Windows.Forms.ToolStripMenuItem 表示VToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem パートカウンターToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem フォルダーツリーToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem エラーリストToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem ログToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem TsmiShowPartCounter;
+        private System.Windows.Forms.ToolStripMenuItem TsmiShowFolderTree;
+        private System.Windows.Forms.ToolStripMenuItem TsmiShowErrorList;
+        private System.Windows.Forms.ToolStripMenuItem TsmiShowLog;
         private System.Windows.Forms.ToolStripMenuItem ツールTToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem オプションOToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem データ作成手順ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem mmlコマンドリファレンスToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSplitButton toolStripSplitButton2;
-        private System.Windows.Forms.ToolStripSplitButton toolStripSplitButton3;
-        private System.Windows.Forms.ToolStripSplitButton toolStripSplitButton1;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
-        private System.Windows.Forms.ToolStripSplitButton toolStripSplitButton4;
-        private System.Windows.Forms.ToolStripSplitButton toolStripSplitButton6;
-        private System.Windows.Forms.ToolStripSplitButton toolStripSplitButton7;
-        private System.Windows.Forms.ToolStripSplitButton toolStripSplitButton5;
+        private System.Windows.Forms.ToolStripMenuItem TsmiTutorial;
+        private System.Windows.Forms.ToolStripMenuItem TsmiReference;
+        private System.Windows.Forms.ToolStripSplitButton tssbOpen;
+        private System.Windows.Forms.ToolStripSplitButton tssbSave;
+        private System.Windows.Forms.ToolStripSplitButton tssbCompile;
+        private System.Windows.Forms.ToolStripStatusLabel tsslCompileStatus;
+        private System.Windows.Forms.ToolStripSplitButton tssbPlay;
+        private System.Windows.Forms.ToolStripSplitButton tssbSlow;
+        private System.Windows.Forms.ToolStripSplitButton tssbFast;
+        private System.Windows.Forms.ToolStripSplitButton tssbStop;
+        private System.Windows.Forms.ToolStripMenuItem TsmiSaveFile;
+        private System.Windows.Forms.ToolStripMenuItem TsmiSaveAs;
+        private System.Windows.Forms.ToolStripMenuItem TsmiUndo;
+        private System.Windows.Forms.ToolStripMenuItem TsmiRedo;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripMenuItem tsmiExport;
     }
 }
 

@@ -62,18 +62,21 @@
             // 
             this.ClmEtype.HeaderText = "";
             this.ClmEtype.Name = "ClmEtype";
+            this.ClmEtype.ReadOnly = true;
             this.ClmEtype.Width = 60;
             // 
             // ClmFileName
             // 
             this.ClmFileName.HeaderText = "File name";
             this.ClmFileName.Name = "ClmFileName";
+            this.ClmFileName.ReadOnly = true;
             this.ClmFileName.Width = 90;
             // 
             // ClmLine
             // 
             this.ClmLine.HeaderText = "Line";
             this.ClmLine.Name = "ClmLine";
+            this.ClmLine.ReadOnly = true;
             this.ClmLine.Width = 90;
             // 
             // ClmMessage
@@ -81,6 +84,7 @@
             this.ClmMessage.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.ClmMessage.HeaderText = "Message";
             this.ClmMessage.Name = "ClmMessage";
+            this.ClmMessage.ReadOnly = true;
             // 
             // FrmErrorList
             // 
@@ -88,6 +92,7 @@
             this.Controls.Add(this.dataGridView1);
             this.Name = "FrmErrorList";
             this.Text = "Error list";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FrmErrorList_FormClosing);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
 
