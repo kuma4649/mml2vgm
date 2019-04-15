@@ -412,6 +412,8 @@ namespace mml2vgmIDE
             DocumentBox.Add(dc);
         }
 
+        string wrkPath = "";
+
         private void Compile(bool doPlay)
         {
             IDockContent dc = dpMain.ActiveDocument;
@@ -424,10 +426,10 @@ namespace mml2vgmIDE
                 Directory.CreateDirectory(Path.Combine(Common.GetApplicationDataFolder(true), "temp"));
             }
             string tempPath = Path.Combine(Common.GetApplicationDataFolder(true), "temp", Path.GetFileName(((Document)((FrmEditor)dc).Tag).gwiFullPath));
-
             File.WriteAllText(tempPath, text);
             args = new string[2];
             args[1] = tempPath;
+            wrkPath = Path.GetDirectoryName(((Document)((FrmEditor)dc).Tag).gwiFullPath);
 
             isSuccess = true;
             this.doPlay = doPlay;
@@ -470,7 +472,7 @@ namespace mml2vgmIDE
 
                 Core.log.Write("Call mml2vgm core");
 
-                mv = new Mml2vgm(arg, desfn, stPath, Disp);
+                mv = new Mml2vgm(arg, desfn, stPath, Disp, wrkPath);
                 if (mv.Start() != 0)
                 {
                     isSuccess = false;

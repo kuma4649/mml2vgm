@@ -17,18 +17,39 @@ namespace Core
         public ClsVgm desVGM = null;
         private Action<string> Disp = null;
         private int pcmDataSeqNum = 0;
+        private string wrkPath;
 
         /// <summary>
         /// コンストラクタ
         /// </summary>
         /// <param name="srcFn">ソースファイル</param>
         /// <param name="desFn">出力ファイル</param>
-        public Mml2vgm(string srcFn, string desFn, string stPath,Action<string> disp)
+        /// <param name="stPath">アプリケーションパス</param>
+        /// <param name="disp">メッセージ表示メソッド</param>
+        public Mml2vgm(string srcFn, string desFn, string stPath, Action<string> disp)
         {
             this.srcFn = srcFn;
             this.desFn = desFn;
             this.stPath = stPath;
             this.Disp = disp;
+            this.wrkPath = Path.GetDirectoryName(Path.GetFullPath(srcFn));
+        }
+
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
+        /// <param name="srcFn">ソースファイル</param>
+        /// <param name="desFn">出力ファイル</param>
+        /// <param name="stPath">アプリケーションパス</param>
+        /// <param name="disp">メッセージ表示メソッド</param>
+        /// <param name="wrkPath">取り込みファイルが存在するパス(通常はソースファイルと同じパス)</param>
+        public Mml2vgm(string srcFn, string desFn, string stPath, Action<string> disp ,string wrkPath)
+        {
+            this.srcFn = srcFn;
+            this.desFn = desFn;
+            this.stPath = stPath;
+            this.Disp = disp;
+            this.wrkPath = wrkPath;
         }
 
         /// <summary>
@@ -50,8 +71,9 @@ namespace Core
                 }
 
                 Disp(msg.get("I04002"));
-                string path = Path.GetDirectoryName(Path.GetFullPath(srcFn));
-                List<Line> src = GetSrc(File.ReadAllLines(srcFn), path);
+                //string path = Path.GetDirectoryName(Path.GetFullPath(srcFn));
+                //wrkPath インクルードファイル取り込み対象パス
+                List<Line> src = GetSrc(File.ReadAllLines(srcFn), wrkPath);
                 if (src == null)
                 {
                     msgBox.setErrMsg(msg.get("E04001"), "-", -1);
@@ -69,7 +91,8 @@ namespace Core
                 }
 
                 Disp(msg.get("I04004"));
-                if (desVGM.instPCMDatSeq.Count > 0) GetPCMData(path);
+                //wrkPath PCMファイル取り込み対象パス
+                if (desVGM.instPCMDatSeq.Count > 0) GetPCMData(wrkPath);
 
                 Disp(msg.get("I04005"));
                 MMLAnalyze mmlAnalyze = new MMLAnalyze(desVGM);
