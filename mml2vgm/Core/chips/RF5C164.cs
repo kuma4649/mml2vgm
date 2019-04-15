@@ -179,6 +179,7 @@ namespace Core
 
         public void OutRf5c164KeyOn(partWork pw)
         {
+            if (parent.instPCM.Count < 1) return;
             SetRf5c164SampleStartAddress(pw);
             KeyOn |= (byte)(1 << pw.ch);
             byte data = (byte)(~KeyOn);

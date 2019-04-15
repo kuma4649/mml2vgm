@@ -59,8 +59,9 @@ namespace mml2vgmIDE
 
         private void InitFolderTree()
         {
-            TreeNode tn = new TreeNode(Path.GetFileName(Path.GetDirectoryName(gwiFullPath)));
+            TreeNode tn = new TreeNode(Path.GetFileName(Path.GetDirectoryName(gwiFullPath)),1,1);
             gwiTree = tn;
+            tn.Expand();
             TreeNode ts = new TreeNode();
             DirectoryInfo dm = new DirectoryInfo(Path.GetDirectoryName(gwiFullPath));
 
@@ -68,12 +69,13 @@ namespace mml2vgmIDE
             {
                 foreach (DirectoryInfo ds in dm.GetDirectories())
                 {
-                    ts = new TreeNode(ds.Name);
+                    ts = new TreeNode(ds.Name,1,1);
+                    ts.Nodes.Add("!dmy");
                     tn.Nodes.Add(ts);
                 }
                 foreach (FileInfo fi in dm.GetFiles())
                 {
-                    ts = new TreeNode(fi.Name);
+                    ts = new TreeNode(fi.Name,0,0);
                     tn.Nodes.Add(ts);
                 }
             }

@@ -17,7 +17,7 @@ namespace mml2vgmIDE
 {
     public partial class FrmMain : Form
     {
-        private string appName = "MmlWarrior";
+        private string appName = "mml2vgmIDE";
         private List<Form> FormBox = new List<Form>();
         private List<Document> DocumentBox = new List<Document>();
         private bool isSuccess = true;
@@ -34,6 +34,21 @@ namespace mml2vgmIDE
         public FrmMain()
         {
             InitializeComponent();
+
+            this.KeyPreview = true;
+
+            if (Directory.Exists(Path.Combine(Common.GetApplicationDataFolder(true), "temp")))
+            {
+                DirectoryInfo target = new DirectoryInfo(Path.Combine(Common.GetApplicationDataFolder(true), "temp"));
+                foreach (FileInfo file in target.GetFiles())
+                {
+                    file.Delete();
+                }
+            }
+            else
+            {
+                Directory.CreateDirectory(Path.Combine(Common.GetApplicationDataFolder(true), "temp"));
+            }
         }
 
         private void Form1_Shown(object sender, EventArgs e)
@@ -53,11 +68,13 @@ namespace mml2vgmIDE
             frmFolderTree = new FrmFolderTree();
             frmFolderTree.Show(dpMain, WeifenLuo.WinFormsUI.Docking.DockState.DockLeft);
             frmFolderTree.parentUpdate = UpdateControl;
+            frmFolderTree.parentExecFile = ExecFile;
             FormBox.Add(frmFolderTree);
 
             frmErrorList = new FrmErrorList();
             frmErrorList.Show(dpMain, WeifenLuo.WinFormsUI.Docking.DockState.DockBottom);
             frmErrorList.parentUpdate = UpdateControl;
+            frmErrorList.parentJumpDocument = JumpDocument;
             FormBox.Add(frmErrorList);
 
             UpdateControl();
@@ -239,7 +256,7 @@ namespace mml2vgmIDE
                     fn = Path.GetFileNameWithoutExtension(fn) + (FileInformation.format == enmFormat.VGM ? ".vgm" : ".xgm");
                 }
 
-                File.Copy(Path.Combine(Common.GetApplicationDataFolder(true), "temp.gwi"), fn);
+                File.Copy(Path.Combine(Common.GetApplicationDataFolder(true), "temp", sfd.FileName), fn);
             }
             catch(Exception )
             {
@@ -359,6 +376,25 @@ namespace mml2vgmIDE
             TsmiCompileAndPlay_Click(null, null);
         }
 
+        private void FrmMain_KeyDown(object sender, KeyEventArgs e)
+        {
+            switch (e.KeyCode)
+            {
+                case Keys.F1:
+                case Keys.Control | Keys.O:
+                    TsmiFileOpen_Click(null, null);
+                    break;
+                case Keys.F2:
+                case Keys.Control | Keys.S:
+                    TsmiSaveFile_Click(null, null);
+                    break;
+                case Keys.F5:
+                    TsmiCompileAndPlay_Click(null, null);
+                    break;
+            }
+        }
+
+
 
         private void OpenFile(string fileName)
         {
@@ -370,6 +406,7 @@ namespace mml2vgmIDE
 
             frmFolderTree.treeView1.Nodes.Clear();
             frmFolderTree.treeView1.Nodes.Add(dc.gwiTree);
+            frmFolderTree.basePath = Path.GetDirectoryName(dc.gwiFullPath);
 
             FormBox.Add(dc.editor);
             DocumentBox.Add(dc);
@@ -382,7 +419,11 @@ namespace mml2vgmIDE
             if (!(dc is FrmEditor)) return;
 
             string text = ((FrmEditor)dc).azukiControl.Text;
-            string tempPath = Path.Combine(Common.GetApplicationDataFolder(true), "temp.gwi");
+            if (!Directory.Exists(Path.Combine(Common.GetApplicationDataFolder(true), "temp")))
+            {
+                Directory.CreateDirectory(Path.Combine(Common.GetApplicationDataFolder(true), "temp"));
+            }
+            string tempPath = Path.Combine(Common.GetApplicationDataFolder(true), "temp", Path.GetFileName(((Document)((FrmEditor)dc).Tag).gwiFullPath));
 
             File.WriteAllText(tempPath, text);
             args = new string[2];
@@ -650,6 +691,63 @@ namespace mml2vgmIDE
                 FileInformation.totalCounter,
                 FileInformation.loopCounter == -1 ? "-" : FileInformation.loopCounter.ToString()
                 );
+        }
+
+        private System.Media.SoundPlayer player = null;
+        private void ExecFile(string filename)
+        {
+            if (Path.GetExtension(filename).ToUpper() == ".WAV")
+            {
+                if (player != null)
+                    StopSound();
+                player = new System.Media.SoundPlayer(filename);
+                player.Play();
+                return;
+            }
+            try
+            {
+                Process.Start(filename);
+            }
+            catch
+            {
+            }
+        }
+        private void StopSound()
+        {
+            if (player != null)
+            {
+                player.Stop();
+                player.Dispose();
+                player = null;
+            }
+        }
+
+        private void JumpDocument(string fn, long ln,bool wantFocus)
+        {
+            foreach(DockContent dc in dpMain.Documents)
+            {
+                if (Path.GetFileName(((Document)dc.Tag).gwiFullPath) != fn)
+                {
+                    continue;
+                }
+                
+                Application.DoEvents();
+                Sgry.Azuki.Document d = ((Document)dc.Tag).editor.azukiControl.Document;
+                Sgry.Azuki.IView v = ((Document)dc.Tag).editor.azukiControl.View;
+                int anc = d.GetLineHeadIndex((int)(ln - 1));
+                int caret = d.GetLineHeadIndex((int)ln) - 2;//改行前までを選択する
+                int ancM = d.GetLineHeadIndex((int)(ln - 2));
+                anc = Math.Max(anc, 0);
+                ancM = Math.Max(ancM, 0);
+                caret = Math.Max(anc, caret);
+                v.ScrollPos= v.GetVirPosFromIndex(ancM);//1行手前を画面の最上部になるようスクロールさせる。
+
+                v.Scroll(1);//scroll barの表示を更新させるため
+                v.Scroll(-1);//scroll barの表示を更新させるため
+
+                d.SetSelection(anc, caret);
+                if (wantFocus) ((Document)dc.Tag).editor.azukiControl.Focus();
+            }
         }
 
     }

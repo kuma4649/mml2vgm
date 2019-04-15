@@ -19,29 +19,6 @@ namespace mml2vgmIDE
         {
             InitializeComponent();
 
-            azukiControl.SetKeyBind(Keys.F1, Open);
-            azukiControl.SetKeyBind(Keys.F2, Save);
-            azukiControl.SetKeyBind(Keys.F5, CompileAndPlay);
-            azukiControl.SetKeyBind(Keys.Control | Keys.O, Open);
-            azukiControl.SetKeyBind(Keys.Control | Keys.S, Save);
-        }
-
-        private void Open(IUserInterface ui)
-        {
-            if (main == null) return;
-            main.TsmiFileOpen_Click(null, null);
-        }
-
-        private void Save(IUserInterface ui)
-        {
-            if (main == null) return;
-            main.TsmiSaveFile_Click(null, null);
-        }
-
-        private void CompileAndPlay(IUserInterface ui)
-        {
-            if (main == null) return;
-            main.TsmiCompileAndPlay_Click(null, null);
         }
 
         private void AzukiControl_TextChanged(object sender, EventArgs e)

@@ -155,6 +155,8 @@
     <Content Include="CommandReference.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Resource\File.png" />
+    <Content Include="Resource\Folder.png" />
     <Content Include="Tutorial.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
