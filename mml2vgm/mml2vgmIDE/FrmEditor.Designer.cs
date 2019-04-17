@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            Sgry.Azuki.FontInfo fontInfo2 = new Sgry.Azuki.FontInfo();
+            Sgry.Azuki.FontInfo fontInfo1 = new Sgry.Azuki.FontInfo();
             this.azukiControl = new Sgry.Azuki.WinForms.AzukiControl();
             this.SuspendLayout();
             // 
@@ -46,10 +46,10 @@
             | Sgry.Azuki.DrawingOption.HighlightsMatchedBracket)));
             this.azukiControl.FirstVisibleLine = 0;
             this.azukiControl.Font = new System.Drawing.Font("Consolas", 9F);
-            fontInfo2.Name = "Consolas";
-            fontInfo2.Size = 9;
-            fontInfo2.Style = System.Drawing.FontStyle.Regular;
-            this.azukiControl.FontInfo = fontInfo2;
+            fontInfo1.Name = "Consolas";
+            fontInfo1.Size = 9;
+            fontInfo1.Style = System.Drawing.FontStyle.Regular;
+            this.azukiControl.FontInfo = fontInfo1;
             this.azukiControl.ForeColor = System.Drawing.Color.Black;
             this.azukiControl.Location = new System.Drawing.Point(0, 0);
             this.azukiControl.Name = "azukiControl";
@@ -59,7 +59,11 @@
             this.azukiControl.TabIndex = 0;
             this.azukiControl.Text = "azukiControl1";
             this.azukiControl.ViewWidth = 4136;
+            this.azukiControl.VScroll += new System.EventHandler(this.AzukiControl_CancelSien);
+            this.azukiControl.HScroll += new System.EventHandler(this.AzukiControl_CancelSien);
             this.azukiControl.TextChanged += new System.EventHandler(this.AzukiControl_TextChanged);
+            this.azukiControl.Click += new System.EventHandler(this.AzukiControl_CancelSien);
+            this.azukiControl.KeyDown += new System.Windows.Forms.KeyEventHandler(this.AzukiControl_KeyDown);
             // 
             // FrmEditor
             // 
@@ -67,7 +71,6 @@
             this.Controls.Add(this.azukiControl);
             this.Name = "FrmEditor";
             this.Text = "新しいファイル.gwi";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FrmEditor_FormClosing);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.FrmEditor_FormClosed);
             this.ResumeLayout(false);
 

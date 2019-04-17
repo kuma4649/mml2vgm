@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using System.IO;
+using System.Reflection;
 
 namespace mml2vgmIDE
 {
@@ -64,5 +65,6 @@ namespace mml2vgmIDE
             string fullpath = System.IO.Path.Combine(Path.GetDirectoryName(basePath), e.Node.FullPath);
             parentExecFile?.Invoke(fullpath);
         }
+
     }
 }

@@ -666,8 +666,11 @@ namespace mml2vgmIDE
                 TsmiUndo.Enabled = d.editor.azukiControl.CanUndo;
                 TsmiRedo.Enabled = d.editor.azukiControl.CanRedo;
 
-                frmFolderTree.treeView1.Nodes.Clear();
-                frmFolderTree.treeView1.Nodes.Add(d.gwiTree);
+                if (frmFolderTree.treeView1.Nodes.Count==0 || frmFolderTree.treeView1.Nodes[0] != d.gwiTree)
+                {
+                    frmFolderTree.treeView1.Nodes.Clear();
+                    frmFolderTree.treeView1.Nodes.Add(d.gwiTree);
+                }
 
                 this.Text = string.Format("{0} - {1}", appName, d.editor.Text);
             }

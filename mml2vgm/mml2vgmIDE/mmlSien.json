@@ -1,0 +1,54 @@
+{
+  "list": [
+    {
+      "sienType": 0,
+      "nextAnchor": 3,
+      "nextCaret": 6,
+      "pattern": "'@ L",
+      "patternType": "Z",
+      "title": "'@ OPL FM音色定義　テンプレート",
+      "description": "OPL(YM2413)系FM音色定義のテンプレートを挿入します。",
+      "content": "'@ L 000\r\n   AR DR SL RR KL MT AM VB EG KR DT\r\n'@ 00 00 00 00 00 00 00 00 00 00 00\r\n'@ 00 00 00 00 00 00 00 00 00 00 00\r\n   TL FB\r\n'@ 00 00\r\n"
+    },
+    {
+      "sienType": 0,
+      "nextAnchor": 3,
+      "nextCaret": 6,
+      "pattern": "'@ N",
+      "patternType": "Z",
+      "title": "'@ OPN FM音色定義　テンプレート",
+      "description": "OPN(YM2203)系FM音色定義のテンプレートを挿入します。",
+      "content": "'@ N 000\r\n   AR DR SR RR SL TL  KS ML DT AM SSGEG\r\n'@ 00 00 00 00 00 000 00 00 00 00 00\r\n'@ 00 00 00 00 00 000 00 00 00 00 00\r\n'@ 00 00 00 00 00 000 00 00 00 00 00\r\n'@ 00 00 00 00 00 000 00 00 00 00 00\r\n   AL FB\r\n'@ 00 00\r\n"
+    },
+    {
+      "sienType": 0,
+      "nextAnchor": 3,
+      "nextCaret": 6,
+      "pattern": "'@ M",
+      "patternType": "Z",
+      "title": "'@ OPM FM音色定義　テンプレート",
+      "description": "OPM(YM2151)系FM音色定義のテンプレートを挿入します。",
+      "content": "'@ M 000\r\n   AR DR SR RR SL TL  KS ML DT1 DT2 AME\r\n'@ 00 00 00 00 00 000 00 00 00  00  00\r\n'@ 00 00 00 00 00 000 00 00 00  00  00\r\n'@ 00 00 00 00 00 000 00 00 00  00  00\r\n'@ 00 00 00 00 00 000 00 00 00  00  00\r\n   AL FB\r\n'@ 00 00\r\n"
+    },
+    {
+      "sienType": 0,
+      "nextAnchor": 3,
+      "nextCaret": 6,
+      "pattern": "'@ P",
+      "patternType": "Z",
+      "title": "'@ PCM音色定義　テンプレート",
+      "description": "PCM音色定義のテンプレートを挿入します。",
+      "content": "     No  , \"FileName\" , [BaseFreq] , Volume ( , [ChipName] , [Option] )\r\n'@ P 000 , \"XXXX.wav\" ,       8000 ,    100\r\n"
+    },
+    {
+      "sienType": 0,
+      "nextAnchor": 3,
+      "nextCaret": 6,
+      "pattern": "'@ H",
+      "patternType": "Z",
+      "title": "'@ 波形メモリ音色定義　テンプレート",
+      "description": "波形メモリ音色定義のテンプレートを挿入します。",
+      "content": "     No\r\n'@ H 000\r\n     +0  +1  +2  +3  +4  +5  +6  +7\r\n'@   000 000 000 000 000 000 000 000\r\n'@   000 000 000 000 000 000 000 000\r\n'@   000 000 000 000 000 000 000 000\r\n'@   000 000 000 000 000 000 000 000\r\n"
+    }
+  ]
+}
