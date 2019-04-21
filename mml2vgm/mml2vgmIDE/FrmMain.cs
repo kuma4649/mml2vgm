@@ -689,10 +689,16 @@ namespace mml2vgmIDE
             TsmiShowErrorList.Checked = !frmErrorList.IsHidden;
             TsmiShowLog.Checked = !frmLog.IsHidden;
 
+            tsslCompileError.Text = string.Format(
+                "{0}",
+                msgBox.getErr().Length
+                );
+            tsslCompileWarning.Text = string.Format(
+                "{0}",
+                msgBox.getWrn().Length
+                );
             tsslCompileStatus.Text = string.Format(
-                "Err:{0} Wrn:{1} TCnt:{2} LCnt:{3}",
-                msgBox.getErr().Length,
-                msgBox.getWrn().Length,
+                "TCnt:{0} LCnt:{1}",
                 FileInformation.totalCounter,
                 FileInformation.loopCounter == -1 ? "-" : FileInformation.loopCounter.ToString()
                 );

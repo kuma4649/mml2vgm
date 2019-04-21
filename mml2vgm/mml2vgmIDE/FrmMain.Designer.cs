@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmMain));
             this.dpMain = new WeifenLuo.WinFormsUI.Docking.DockPanel();
             this.visualStudioToolStripExtender1 = new WeifenLuo.WinFormsUI.Docking.VisualStudioToolStripExtender(this.components);
             this.vS2005Theme1 = new WeifenLuo.WinFormsUI.Docking.VS2005Theme();
@@ -41,7 +40,7 @@
             this.tssbSlow = new System.Windows.Forms.ToolStripSplitButton();
             this.tssbFast = new System.Windows.Forms.ToolStripSplitButton();
             this.tssbStop = new System.Windows.Forms.ToolStripSplitButton();
-            this.tsslCompileStatus = new System.Windows.Forms.ToolStripStatusLabel();
+            this.tsslCompileError = new System.Windows.Forms.ToolStripStatusLabel();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.TsmiFile = new System.Windows.Forms.ToolStripMenuItem();
             this.TsmiNew = new System.Windows.Forms.ToolStripMenuItem();
@@ -71,6 +70,8 @@
             this.TsmiTutorial = new System.Windows.Forms.ToolStripMenuItem();
             this.TsmiReference = new System.Windows.Forms.ToolStripMenuItem();
             this.TsmiAbout = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsslCompileWarning = new System.Windows.Forms.ToolStripStatusLabel();
+            this.tsslCompileStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -100,6 +101,8 @@
             this.tssbSlow,
             this.tssbFast,
             this.tssbStop,
+            this.tsslCompileError,
+            this.tsslCompileWarning,
             this.tsslCompileStatus});
             this.statusStrip1.Location = new System.Drawing.Point(0, 428);
             this.statusStrip1.Name = "statusStrip1";
@@ -110,79 +113,88 @@
             // tssbOpen
             // 
             this.tssbOpen.DropDownButtonWidth = 0;
-            this.tssbOpen.Image = ((System.Drawing.Image)(resources.GetObject("tssbOpen.Image")));
+            this.tssbOpen.Image = global::mml2vgmIDE.Properties.Resources.F01;
+            this.tssbOpen.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.tssbOpen.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tssbOpen.Name = "tssbOpen";
-            this.tssbOpen.Size = new System.Drawing.Size(62, 20);
-            this.tssbOpen.Text = "F1:開く";
+            this.tssbOpen.Size = new System.Drawing.Size(63, 20);
+            this.tssbOpen.Text = "開く";
             this.tssbOpen.ButtonClick += new System.EventHandler(this.TssbOpen_ButtonClick);
             // 
             // tssbSave
             // 
             this.tssbSave.DropDownButtonWidth = 0;
             this.tssbSave.Enabled = false;
-            this.tssbSave.Image = ((System.Drawing.Image)(resources.GetObject("tssbSave.Image")));
+            this.tssbSave.Image = global::mml2vgmIDE.Properties.Resources.F02;
+            this.tssbSave.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.tssbSave.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tssbSave.Name = "tssbSave";
-            this.tssbSave.Size = new System.Drawing.Size(67, 20);
-            this.tssbSave.Text = "F2:保存";
+            this.tssbSave.Size = new System.Drawing.Size(68, 20);
+            this.tssbSave.Text = "保存";
             this.tssbSave.ButtonClick += new System.EventHandler(this.TssbSave_ButtonClick);
             // 
             // tssbCompile
             // 
             this.tssbCompile.DropDownButtonWidth = 0;
-            this.tssbCompile.Image = ((System.Drawing.Image)(resources.GetObject("tssbCompile.Image")));
+            this.tssbCompile.Image = global::mml2vgmIDE.Properties.Resources.F05;
+            this.tssbCompile.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.tssbCompile.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tssbCompile.Name = "tssbCompile";
-            this.tssbCompile.Size = new System.Drawing.Size(113, 20);
-            this.tssbCompile.Text = "F5:コンパイル&再生";
+            this.tssbCompile.Size = new System.Drawing.Size(114, 20);
+            this.tssbCompile.Text = "コンパイル&再生";
             this.tssbCompile.ButtonClick += new System.EventHandler(this.TssbCompile_ButtonClick);
             // 
             // tssbPlay
             // 
             this.tssbPlay.DropDownButtonWidth = 0;
             this.tssbPlay.Enabled = false;
-            this.tssbPlay.Image = ((System.Drawing.Image)(resources.GetObject("tssbPlay.Image")));
+            this.tssbPlay.Image = global::mml2vgmIDE.Properties.Resources.F06;
+            this.tssbPlay.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.tssbPlay.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tssbPlay.Name = "tssbPlay";
-            this.tssbPlay.Size = new System.Drawing.Size(67, 20);
-            this.tssbPlay.Text = "F6:再生";
+            this.tssbPlay.Size = new System.Drawing.Size(68, 20);
+            this.tssbPlay.Text = "再生";
             // 
             // tssbSlow
             // 
             this.tssbSlow.DropDownButtonWidth = 0;
             this.tssbSlow.Enabled = false;
-            this.tssbSlow.Image = ((System.Drawing.Image)(resources.GetObject("tssbSlow.Image")));
+            this.tssbSlow.Image = global::mml2vgmIDE.Properties.Resources.F07;
+            this.tssbSlow.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.tssbSlow.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tssbSlow.Name = "tssbSlow";
-            this.tssbSlow.Size = new System.Drawing.Size(69, 20);
-            this.tssbSlow.Text = "F7:スロー";
+            this.tssbSlow.Size = new System.Drawing.Size(70, 20);
+            this.tssbSlow.Text = "スロー";
             // 
             // tssbFast
             // 
             this.tssbFast.DropDownButtonWidth = 0;
             this.tssbFast.Enabled = false;
-            this.tssbFast.Image = ((System.Drawing.Image)(resources.GetObject("tssbFast.Image")));
+            this.tssbFast.Image = global::mml2vgmIDE.Properties.Resources.F08;
+            this.tssbFast.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.tssbFast.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tssbFast.Name = "tssbFast";
-            this.tssbFast.Size = new System.Drawing.Size(73, 20);
-            this.tssbFast.Text = "F8:4倍速";
+            this.tssbFast.Size = new System.Drawing.Size(74, 20);
+            this.tssbFast.Text = "4倍速";
             // 
             // tssbStop
             // 
             this.tssbStop.DropDownButtonWidth = 0;
             this.tssbStop.Enabled = false;
-            this.tssbStop.Image = ((System.Drawing.Image)(resources.GetObject("tssbStop.Image")));
+            this.tssbStop.Image = global::mml2vgmIDE.Properties.Resources.F09;
+            this.tssbStop.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.tssbStop.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tssbStop.Name = "tssbStop";
-            this.tssbStop.Size = new System.Drawing.Size(67, 20);
-            this.tssbStop.Text = "F9:停止";
+            this.tssbStop.Size = new System.Drawing.Size(68, 20);
+            this.tssbStop.Text = "停止";
             // 
-            // tsslCompileStatus
+            // tsslCompileError
             // 
-            this.tsslCompileStatus.Name = "tsslCompileStatus";
-            this.tsslCompileStatus.Size = new System.Drawing.Size(149, 17);
-            this.tsslCompileStatus.Text = "E:123 W:123 C:9999 LC:9999";
+            this.tsslCompileError.Image = global::mml2vgmIDE.Properties.Resources.Error;
+            this.tsslCompileError.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.tsslCompileError.Name = "tsslCompileError";
+            this.tsslCompileError.Size = new System.Drawing.Size(41, 17);
+            this.tsslCompileError.Text = "123";
             // 
             // menuStrip1
             // 
@@ -418,6 +430,20 @@
             this.TsmiAbout.Text = "About";
             this.TsmiAbout.Click += new System.EventHandler(this.TsmiAbout_Click);
             // 
+            // tsslCompileWarning
+            // 
+            this.tsslCompileWarning.Image = global::mml2vgmIDE.Properties.Resources.Warning;
+            this.tsslCompileWarning.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.tsslCompileWarning.Name = "tsslCompileWarning";
+            this.tsslCompileWarning.Size = new System.Drawing.Size(41, 17);
+            this.tsslCompileWarning.Text = "123";
+            // 
+            // tsslCompileStatus
+            // 
+            this.tsslCompileStatus.Name = "tsslCompileStatus";
+            this.tsslCompileStatus.Size = new System.Drawing.Size(84, 17);
+            this.tsslCompileStatus.Text = "C:9999 LC:9999";
+            // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -473,7 +499,7 @@
         private System.Windows.Forms.ToolStripSplitButton tssbOpen;
         private System.Windows.Forms.ToolStripSplitButton tssbSave;
         private System.Windows.Forms.ToolStripSplitButton tssbCompile;
-        private System.Windows.Forms.ToolStripStatusLabel tsslCompileStatus;
+        private System.Windows.Forms.ToolStripStatusLabel tsslCompileError;
         private System.Windows.Forms.ToolStripSplitButton tssbPlay;
         private System.Windows.Forms.ToolStripSplitButton tssbSlow;
         private System.Windows.Forms.ToolStripSplitButton tssbFast;
@@ -484,6 +510,8 @@
         private System.Windows.Forms.ToolStripMenuItem TsmiRedo;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem tsmiExport;
+        private System.Windows.Forms.ToolStripStatusLabel tsslCompileWarning;
+        private System.Windows.Forms.ToolStripStatusLabel tsslCompileStatus;
     }
 }
 

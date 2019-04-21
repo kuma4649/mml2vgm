@@ -33,9 +33,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Azuki, Version=1.7.10.10248, Culture=neutral, PublicKeyToken=46b77eb7f2d82aba, processorArchitecture=MSIL">
+    <Reference Include="Azuki, Version=1.7.10.27908, Culture=neutral, PublicKeyToken=46b77eb7f2d82aba, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>bin\Debug\Azuki.dll</HintPath>
+      <HintPath>lib\Azuki.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -111,6 +111,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sien.cs" />
+    <Compile Include="SienSearch.cs" />
     <EmbeddedResource Include="FrmSien.resx">
       <DependentUpon>FrmSien.cs</DependentUpon>
     </EmbeddedResource>
@@ -172,8 +173,27 @@
     <Content Include="CommandReference.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="lib\Azuki.dll" />
+    <Content Include="lib\Azuki.xml" />
+    <Content Include="Resource\BreakPoint.png" />
+    <Content Include="Resource\BreakPointMute.png" />
+    <Content Include="Resource\Error.png" />
+    <Content Include="Resource\F01.png" />
+    <Content Include="Resource\F02.png" />
+    <Content Include="Resource\F03.png" />
+    <Content Include="Resource\F04.png" />
+    <Content Include="Resource\F05.png" />
+    <Content Include="Resource\F06.png" />
+    <Content Include="Resource\F07.png" />
+    <Content Include="Resource\F08.png" />
+    <Content Include="Resource\F09.png" />
+    <Content Include="Resource\F10.png" />
+    <Content Include="Resource\F11.png" />
+    <Content Include="Resource\F12.png" />
     <Content Include="Resource\File.png" />
     <Content Include="Resource\Folder.png" />
+    <Content Include="Resource\LineCursor.png" />
+    <Content Include="Resource\Warning.png" />
     <Content Include="Tutorial.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

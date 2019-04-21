@@ -32,8 +32,8 @@
     },
     {
       "sienType": 0,
-      "nextAnchor": 3,
-      "nextCaret": 6,
+      "nextAnchor": 76,
+      "nextCaret": 79,
       "pattern": "'@ P",
       "patternType": "Z",
       "title": "'@ PCM音色定義　テンプレート",
@@ -42,13 +42,103 @@
     },
     {
       "sienType": 0,
-      "nextAnchor": 3,
-      "nextCaret": 6,
+      "nextAnchor": 12,
+      "nextCaret": 15,
       "pattern": "'@ H",
       "patternType": "Z",
       "title": "'@ 波形メモリ音色定義　テンプレート",
       "description": "波形メモリ音色定義のテンプレートを挿入します。",
       "content": "     No\r\n'@ H 000\r\n     +0  +1  +2  +3  +4  +5  +6  +7\r\n'@   000 000 000 000 000 000 000 000\r\n'@   000 000 000 000 000 000 000 000\r\n'@   000 000 000 000 000 000 000 000\r\n'@   000 000 000 000 000 000 000 000\r\n"
+    },
+    {
+      "sienType": 0,
+      "nextAnchor": 1,
+      "nextCaret": 1,
+      "pattern": "y",
+      "patternType": "B",
+      "title": "yn1,n2 レジスタ直接書き込み(n1=Address n2=Data)",
+      "description": "",
+      "content": "y"
+    },
+    {
+      "sienType": 0,
+      "nextAnchor": 6,
+      "nextCaret": 6,
+      "pattern": "yDTML,n1,n2 DT,MLレジスタ直接書き込み(n1=OP(1 - 4) n2=データ)",
+      "patternType": "B",
+      "title": "yDTML,n1,n2",
+      "description": "",
+      "content": "yDTML,"
+    },
+    {
+      "sienType": 0,
+      "nextAnchor": 4,
+      "nextCaret": 4,
+      "pattern": "yTL,",
+      "patternType": "B",
+      "title": "yTL,op,n",
+      "description": "",
+      "content": "yTL,"
+    },
+    {
+      "sienType": 0,
+      "nextAnchor": 6,
+      "nextCaret": 6,
+      "pattern": "yKSAR,",
+      "patternType": "B",
+      "title": "yKSAR,op,n",
+      "description": "",
+      "content": "yKSAR,"
+    },
+    {
+      "sienType": 0,
+      "nextAnchor": 6,
+      "nextCaret": 6,
+      "pattern": "yAMDR,",
+      "patternType": "B",
+      "title": "yAMDR,op,n",
+      "description": "",
+      "content": "yAMDR,"
+    },
+    {
+      "sienType": 0,
+      "nextAnchor": 4,
+      "nextCaret": 4,
+      "pattern": "ySR,",
+      "patternType": "B",
+      "title": "ySR,op,n",
+      "description": "",
+      "content": "ySR,"
+    },
+    {
+      "sienType": 0,
+      "nextAnchor": 6,
+      "nextCaret": 6,
+      "pattern": "ySLRR,",
+      "patternType": "B",
+      "title": "ySLRR,op,n",
+      "description": "",
+      "content": "ySLRR,"
+    },
+    {
+      "sienType": 0,
+      "nextAnchor": 5,
+      "nextCaret": 5,
+      "pattern": "ySSG,",
+      "patternType": "B",
+      "title": "ySSG,op,n",
+      "description": "",
+      "content": "ySSG,"
+    },
+    {
+      "sienType": 0,
+      "nextAnchor": 6,
+      "nextCaret": 6,
+      "pattern": "yFBAL,",
+      "patternType": "B",
+      "title": "yFBAL,op,n",
+      "description": "",
+      "content": "yFBAL,"
     }
   ]
 }
