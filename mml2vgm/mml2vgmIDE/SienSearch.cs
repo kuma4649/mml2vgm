@@ -81,7 +81,11 @@ namespace mml2vgmIDE
                 switch (si.patternType)
                 {
                     case "Z":
-                        if (si.pattern.IndexOf(reqText) == 0) found.Add(si);
+                        if (si.pattern.IndexOf(reqText) == 0)
+                        {
+                            found.Add(si);
+                            si.foundCnt = reqText.Length;
+                        }
                         break;
 
                     case "B":
@@ -91,6 +95,7 @@ namespace mml2vgmIDE
                             if (si.pattern.IndexOf(src) == 0)
                             {
                                 found.Add(si);
+                                si.foundCnt = i + 1;
                                 break;
                             }
                         }

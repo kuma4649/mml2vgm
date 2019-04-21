@@ -22,13 +22,6 @@ namespace mml2vgmIDE
         {
             InitializeComponent();
             ss = new SienSearch("mmlSien.json");
-
-            //Sien sien = JsonConvert.DeserializeObject<Sien>(System.IO.File.ReadAllText("mmlSien.json"));
-            //foreach(var item in sien.list)
-            //{
-            //    dgvItem.Rows.Add(item.title);
-            //    dgvItem.Rows[dgvItem.Rows.Count - 1].Tag = item;
-            //}
         }
 
         private void dgvItem_CellClick(object sender, DataGridViewCellEventArgs e)

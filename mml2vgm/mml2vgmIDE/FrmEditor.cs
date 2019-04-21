@@ -68,9 +68,12 @@ namespace mml2vgmIDE
 
         private void AzukiControl_IconBarClicked(object sender, IconBarClickedEventArgs e)
         {
+            AzukiControl_CancelSien(null, null);
             int n = azukiControl.Document.GetLineIconIndex(e.clickedIndex);
             n++;
             if (n == imglstIconBar.Images.Count) n = -1;
+            int c = azukiControl.GetLineHeadIndex(e.clickedIndex);
+            azukiControl.SetSelection(c, c);
             azukiControl.Document.SetLineIconIndex(e.clickedIndex, n);
         }
 
@@ -174,10 +177,10 @@ namespace mml2vgmIDE
                         SienItem si = (SienItem)frmSien.dgvItem.Rows[frmSien.dgvItem.SelectedRows[0].Index].Tag;
                         azukiControl.Document.Replace(
                             si.content,
-                            ci - 2,
+                            ci - si.foundCnt,
                             ci);
 
-//                        azukiControl.SetSelection(ci + si.nextAnchor, ci + si.nextCaret);
+                        azukiControl.SetSelection(ci - si.foundCnt + si.nextAnchor, ci - si.foundCnt + si.nextCaret);
                     }
                     break;
                 case Keys.Right:
