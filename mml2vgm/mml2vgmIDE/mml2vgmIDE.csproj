@@ -14,31 +14,44 @@
     <Deterministic>true</Deterministic>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x86</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
+    <Optimize>true</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>
+    </DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Azuki, Version=1.7.10.27908, Culture=neutral, PublicKeyToken=46b77eb7f2d82aba, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>lib\Azuki.dll</HintPath>
     </Reference>
+    <Reference Include="MDSound">
+      <HintPath>..\Core\MDSound.dll</HintPath>
+    </Reference>
+    <Reference Include="NAudio, Version=1.8.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\NAudio.1.8.5\lib\net35\NAudio.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="RealChipCtlWrap, Version=0.0.0.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>lib\RealChipCtlWrap.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -58,83 +71,137 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Audio.cs" />
+    <Compile Include="ChipLEDs.cs" />
+    <Compile Include="ChipRegister.cs" />
     <Compile Include="Common.cs" />
+    <Compile Include="dacControl.cs" />
     <Compile Include="Document.cs" />
-    <Compile Include="FrmSien.cs">
+    <Compile Include="Driver\baseDriver.cs" />
+    <Compile Include="Driver\vgm.cs" />
+    <Compile Include="Driver\xgm.cs" />
+    <Compile Include="Enums.cs" />
+    <Compile Include="form\frmDebug.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FrmSien.Designer.cs">
+    <Compile Include="form\frmDebug.Designer.cs">
+      <DependentUpon>frmDebug.cs</DependentUpon>
+    </Compile>
+    <Compile Include="form\FrmSetting.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="form\FrmSetting.Designer.cs">
+      <DependentUpon>FrmSetting.cs</DependentUpon>
+    </Compile>
+    <Compile Include="form\FrmSien.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="form\FrmSien.Designer.cs">
       <DependentUpon>FrmSien.cs</DependentUpon>
     </Compile>
-    <Compile Include="FrmAbout.cs">
+    <Compile Include="form\FrmAbout.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FrmAbout.Designer.cs">
+    <Compile Include="form\FrmAbout.Designer.cs">
       <DependentUpon>FrmAbout.cs</DependentUpon>
     </Compile>
-    <Compile Include="FrmErrorList.cs">
+    <Compile Include="form\FrmErrorList.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FrmErrorList.Designer.cs">
+    <Compile Include="form\FrmErrorList.Designer.cs">
       <DependentUpon>FrmErrorList.cs</DependentUpon>
     </Compile>
-    <Compile Include="FrmFolderTree.cs">
+    <Compile Include="form\FrmFolderTree.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FrmFolderTree.Designer.cs">
+    <Compile Include="form\FrmFolderTree.Designer.cs">
       <DependentUpon>FrmFolderTree.cs</DependentUpon>
     </Compile>
-    <Compile Include="FrmMain.cs">
+    <Compile Include="form\FrmMain.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FrmMain.Designer.cs">
+    <Compile Include="form\FrmMain.Designer.cs">
       <DependentUpon>FrmMain.cs</DependentUpon>
     </Compile>
-    <Compile Include="FrmPartCounter.cs">
+    <Compile Include="form\FrmPartCounter.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FrmPartCounter.Designer.cs">
+    <Compile Include="form\FrmPartCounter.Designer.cs">
       <DependentUpon>FrmPartCounter.cs</DependentUpon>
     </Compile>
-    <Compile Include="FrmEditor.cs">
+    <Compile Include="form\FrmEditor.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FrmEditor.Designer.cs">
+    <Compile Include="form\FrmEditor.Designer.cs">
       <DependentUpon>FrmEditor.cs</DependentUpon>
     </Compile>
-    <Compile Include="FrmLog.cs">
+    <Compile Include="form\FrmLog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FrmLog.Designer.cs">
+    <Compile Include="form\FrmLog.Designer.cs">
       <DependentUpon>FrmLog.cs</DependentUpon>
     </Compile>
+    <Compile Include="form\ucSettingInstruments.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="form\ucSettingInstruments.Designer.cs">
+      <DependentUpon>ucSettingInstruments.cs</DependentUpon>
+    </Compile>
+    <Compile Include="log.cs" />
+    <Compile Include="NAudioWrap.cs" />
+    <Compile Include="NullOut.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RealChip.cs" />
+    <Compile Include="Setting.cs" />
     <Compile Include="Sien.cs" />
     <Compile Include="SienSearch.cs" />
-    <EmbeddedResource Include="FrmSien.resx">
+    <Compile Include="SoundManager\BaseMakerSender.cs" />
+    <Compile Include="SoundManager\BaseSender.cs" />
+    <Compile Include="SoundManager\Chip.cs" />
+    <Compile Include="SoundManager\ChipSender.cs" />
+    <Compile Include="SoundManager\DataMaker.cs" />
+    <Compile Include="SoundManager\DataSender.cs" />
+    <Compile Include="SoundManager\DriverAction.cs" />
+    <Compile Include="SoundManager\EmuChipSender.cs" />
+    <Compile Include="SoundManager\Pack.cs" />
+    <Compile Include="SoundManager\RealChipSender.cs" />
+    <Compile Include="SoundManager\RingBuffer.cs" />
+    <Compile Include="SoundManager\SoundManager.cs" />
+    <Compile Include="Tables.cs" />
+    <Compile Include="VisVolume.cs" />
+    <EmbeddedResource Include="form\frmDebug.resx">
+      <DependentUpon>frmDebug.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="form\FrmSetting.resx">
+      <DependentUpon>FrmSetting.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="form\FrmSien.resx">
       <DependentUpon>FrmSien.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FrmAbout.resx">
+    <EmbeddedResource Include="form\FrmAbout.resx">
       <DependentUpon>FrmAbout.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FrmErrorList.resx">
+    <EmbeddedResource Include="form\FrmErrorList.resx">
       <DependentUpon>FrmErrorList.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FrmFolderTree.resx">
+    <EmbeddedResource Include="form\FrmFolderTree.resx">
       <DependentUpon>FrmFolderTree.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FrmMain.resx">
+    <EmbeddedResource Include="form\FrmMain.resx">
       <DependentUpon>FrmMain.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FrmPartCounter.resx">
+    <EmbeddedResource Include="form\FrmPartCounter.resx">
       <DependentUpon>FrmPartCounter.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FrmEditor.resx">
+    <EmbeddedResource Include="form\FrmEditor.resx">
       <DependentUpon>FrmEditor.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FrmLog.resx">
+    <EmbeddedResource Include="form\FrmLog.resx">
       <DependentUpon>FrmLog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="form\ucSettingInstruments.resx">
+      <DependentUpon>ucSettingInstruments.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -146,6 +213,15 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <None Include="azukiColorScheme.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="c86ctl.ini">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="scci.ini">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="mmlSien.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -173,10 +249,30 @@
     <Content Include="CommandReference.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="lib\Azuki.dll" />
-    <Content Include="lib\Azuki.xml" />
+    <Content Include="Azuki.dll" />
+    <Content Include="Azuki.xml" />
+    <Content Include="c86ctl.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="RealChipCtlWrap.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="scci.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="scciconfig.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resource\BreakPoint.png" />
     <Content Include="Resource\BreakPointMute.png" />
+    <Content Include="Resource\ccFadeout.png" />
+    <Content Include="Resource\ccFast.png" />
+    <Content Include="Resource\ccNext.png" />
+    <Content Include="Resource\ccPause.png" />
+    <Content Include="Resource\ccPlay.png" />
+    <Content Include="Resource\ccPrevious.png" />
+    <Content Include="Resource\ccSlow.png" />
+    <Content Include="Resource\ccStop.png" />
     <Content Include="Resource\Error.png" />
     <Content Include="Resource\F01.png" />
     <Content Include="Resource\F02.png" />

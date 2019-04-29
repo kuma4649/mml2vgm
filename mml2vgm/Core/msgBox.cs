@@ -22,10 +22,10 @@ namespace Core
             errBox.Add(msg);
         }
 
-        public static void setErrMsg(string msg, string fn, int lineNumber)
+        public static void setErrMsg(string msg,LinePos lp)
         {
             //errBox.Add(string.Format("(F : {0}  L : {1}) : {2}", System.IO.Path.GetFileName(fn), lineNumber, msg));
-            errBox.Add(new msgInfo(System.IO.Path.GetFileName(fn), lineNumber, msg));
+            errBox.Add(new msgInfo(lp.filename, lp.row, lp.col, lp.length, msg));
         }
 
         public static void setWrnMsg(msgInfo msg)
@@ -33,9 +33,9 @@ namespace Core
             wrnBox.Add(msg);
         }
 
-        public static void setWrnMsg(string msg, string fn, int lineNumber)
+        public static void setWrnMsg(string msg, LinePos lp)
         {
-            wrnBox.Add(new msgInfo(System.IO.Path.GetFileName(fn), lineNumber, msg));
+            wrnBox.Add(new msgInfo(lp.filename, lp.row, lp.col, lp.length, msg));
         }
 
         public static msgInfo[] getErr()
@@ -53,12 +53,16 @@ namespace Core
     {
         public string filename = "-";
         public int line = -1;
+        public int column = -1;
+        public int length = -1;
         public string body = "";
 
-        public msgInfo(string filename, int line, string body)
+        public msgInfo(string filename, int line,int column,int length, string body)
         {
             this.filename = filename;
             this.line = line;
+            this.column = column;
+            this.length = length;
             this.body = body;
         }
     }

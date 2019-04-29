@@ -72,6 +72,7 @@
     <Compile Include="FileInformation.cs" />
     <Compile Include="Information.cs" />
     <Compile Include="Line.cs" />
+    <Compile Include="LinePos.cs" />
     <Compile Include="log.cs" />
     <Compile Include="message.cs" />
     <Compile Include="MML.cs" />
@@ -80,6 +81,7 @@
     <Compile Include="msgBox.cs" />
     <Compile Include="mucomADPCM2PCM.cs" />
     <Compile Include="Note.cs" />
+    <Compile Include="outDatum.cs" />
     <Compile Include="partWork.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

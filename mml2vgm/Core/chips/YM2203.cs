@@ -105,8 +105,8 @@ namespace Core
             if (!use) return;
 
             //initialize shared param
-            OutOPNSetHardLfo(lstPartWork[0], false, 0);
-            OutOPNSetCh3SpecialMode(lstPartWork[0], false);
+            OutOPNSetHardLfo(null, lstPartWork[0], false, 0);
+            OutOPNSetCh3SpecialMode(null, lstPartWork[0], false);
 
             //FM Off
             outYM2203AllKeyOff(this);
@@ -114,7 +114,7 @@ namespace Core
             //SSG Off
             for (int ch = 6; ch < 9; ch++)
             {
-                outYM2203SsgKeyOff(lstPartWork[ch]);
+                outYM2203SsgKeyOff(null,lstPartWork[ch]);
                 lstPartWork[ch].volume = 0;
             }
 
@@ -124,12 +124,15 @@ namespace Core
                 {
                     pw.hardLfoSw = false;
                     pw.hardLfoNum = 0;
-                    OutOPNSetHardLfo(pw, pw.hardLfoSw, pw.hardLfoNum);
+                    OutOPNSetHardLfo(null, pw, pw.hardLfoSw, pw.hardLfoNum);
                 }
 
             }
 
-            if (ChipID != 0) parent.dat[0x47] |= 0x40;//use Secondary
+            if (ChipID != 0)
+            {
+                parent.dat[0x47] = new outDatum(enmMMLType.unknown, null, null, (byte)(parent.dat[0x47].val | 0x40));//use Secondary
+            }
 
         }
 
@@ -142,16 +145,16 @@ namespace Core
                 if (pw.dataEnd) continue;
                 if (pw.ch > 2) continue;
 
-                OutFmKeyOff(pw);
-                OutFmSetTl(pw, 0, 127);
-                OutFmSetTl(pw, 1, 127);
-                OutFmSetTl(pw, 2, 127);
-                OutFmSetTl(pw, 3, 127);
+                OutFmKeyOff(pw, null);
+                OutFmSetTl(null,pw, 0, 127);
+                OutFmSetTl(null,pw, 1, 127);
+                OutFmSetTl(null,pw, 2, 127);
+                OutFmSetTl(null,pw, 3, 127);
             }
 
         }
 
-        public void outYM2203SsgKeyOff(partWork pw)
+        public void outYM2203SsgKeyOff(MML mml,partWork pw)
         {
             byte pch = (byte)(pw.ch - 6);
             int n = 9;
@@ -160,38 +163,38 @@ namespace Core
             data = (byte)(((YM2203)pw.chip).SSGKeyOn | (n << pch));
             ((YM2203)pw.chip).SSGKeyOn = data;
 
-            parent.OutData(pw.port0, (byte)(0x08 + pch), 0);
+            parent.OutData(mml,pw.port0, (byte)(0x08 + pch), 0);
             pw.beforeVolume = -1;
-            parent.OutData(pw.port0, 0x07, data);
+            parent.OutData(mml,pw.port0, 0x07, data);
         }
 
 
-        public override void SetFNum(partWork pw)
+        public override void SetFNum(partWork pw, MML mml)
         {
             if (pw.Type != enmChannelType.SSG)
-                SetFmFNum(pw);
+                SetFmFNum(pw,mml);
             else if (pw.Type == enmChannelType.SSG)
             {
-                SetSsgFNum(pw);
+                SetSsgFNum(pw,mml);
             }
         }
 
-        public override void SetKeyOn(partWork pw)
+        public override void SetKeyOn(partWork pw, MML mml)
         {
             if (pw.Type != enmChannelType.SSG)
-                OutFmKeyOn(pw);
+                OutFmKeyOn(pw,mml);
             else if (pw.Type == enmChannelType.SSG)
             {
-                OutSsgKeyOn(pw);
+                OutSsgKeyOn(pw,mml);
             }
         }
 
-        public override void SetKeyOff(partWork pw)
+        public override void SetKeyOff(partWork pw, MML mml)
         {
             if (pw.Type != enmChannelType.SSG)
-                OutFmKeyOff(pw);
+                OutFmKeyOff(pw,mml);
             else
-                OutSsgKeyOff(pw);
+                OutSsgKeyOff(mml,pw);
         }
 
 
@@ -204,7 +207,7 @@ namespace Core
             byte adr = (byte)mml.args[0];
             byte dat = (byte)mml.args[1];
 
-            parent.OutData(pw.port0, adr, dat);
+            parent.OutData(mml,pw.port0, adr, dat);
         }
 
         public override void CmdInstrument(partWork pw, MML mml)
@@ -221,7 +224,7 @@ namespace Core
                     lstPartWork[6].instrument = n;
                     lstPartWork[7].instrument = n;
                     lstPartWork[8].instrument = n;
-                    OutFmSetInstrument(pw, n, pw.volume, type);
+                    OutFmSetInstrument(pw,mml, n, pw.volume, type);
                     return;
                 }
             }

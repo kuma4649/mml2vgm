@@ -66,14 +66,13 @@ namespace Core
         public int modeBeforeSend = 0;
 
 
-        public int AddInformation(string buf, int lineNumber, string fn, Dictionary<enmChipType, ClsChip[]> chips)
+        public int AddInformation(List<Line> lstLine, Dictionary<enmChipType, ClsChip[]> chips)
         {
-            string[] settings = buf.Split(new string[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
-
-            foreach (string s in settings)
+            foreach (Line ln in lstLine)
             {
                 try
                 {
+                    string s = ln.Txt.Replace("'{", "").Replace("}", "");
                     int p = s.IndexOf("=");
                     if (p < 0) continue;
 
@@ -123,7 +122,7 @@ namespace Core
                 }
                 catch
                 {
-                    msgBox.setWrnMsg(string.Format(msg.get("E03000"), s), fn, lineNumber);
+                    msgBox.setWrnMsg(string.Format(msg.get("E03000"), ln.Txt), ln.Lp);
                 }
             }
             return 0;

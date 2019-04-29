@@ -15,6 +15,7 @@ namespace Core
         private string desFn;
         private string stPath;
         public ClsVgm desVGM = null;
+        public outDatum[] desBuf = null;
         private Action<string> Disp = null;
         private int pcmDataSeqNum = 0;
         private string wrkPath;
@@ -66,7 +67,7 @@ namespace Core
                 Disp(msg.get("I04001"));
                 if (!File.Exists(srcFn))
                 {
-                    msgBox.setErrMsg(msg.get("E04000"), "-", -1);
+                    msgBox.setErrMsg(msg.get("E04000"), new LinePos(srcFn));
                     return -1;
                 }
 
@@ -76,7 +77,7 @@ namespace Core
                 List<Line> src = GetSrc(File.ReadAllLines(srcFn), wrkPath);
                 if (src == null)
                 {
-                    msgBox.setErrMsg(msg.get("E04001"), "-", -1);
+                    msgBox.setErrMsg(msg.get("E04001"), new LinePos(srcFn));
                     return -1;
                 }
 
@@ -86,7 +87,7 @@ namespace Core
                 {
                     msgBox.setErrMsg(string.Format(
                         msg.get("E04002")
-                        , desVGM.lineNumber), "-", -1);
+                        , desVGM.linePos.row), desVGM.linePos);
                     return -1;
                 }
 
@@ -100,11 +101,10 @@ namespace Core
                 {
                     msgBox.setErrMsg(string.Format(
                         msg.get("E04003")
-                        , mmlAnalyze.lineNumber), "-", -1);
+                        , mmlAnalyze.linePos.row), mmlAnalyze.linePos);
                     return -1;
                 }
 
-                byte[] desBuf = null;
                 switch (desVGM.info.format)
                 {
                     case enmFormat.VGM:
@@ -125,7 +125,7 @@ namespace Core
                 {
                     msgBox.setErrMsg(string.Format(
                         msg.get("E04004")
-                        , desVGM.lineNumber), "-", -1);
+                        , desVGM.linePos.row), desVGM.linePos);
                     return -1;
                 }
 
@@ -144,9 +144,9 @@ namespace Core
             catch (Exception ex)
             {
                 msgBox.setErrMsg(string.Format(msg.get("E04005")
-                    , desVGM.lineNumber
+                    , desVGM.linePos
                     , ex.Message
-                    , ex.StackTrace), "-", -1);
+                    , ex.StackTrace), desVGM.linePos);
                 return -1;
             }
             finally
@@ -156,8 +156,12 @@ namespace Core
             }
         }
 
-        private void outFile(byte[] desBuf)
+        private void outFile(outDatum[] desBuf)
         {
+            List<byte> lstBuf = new List<byte>();
+            foreach (outDatum od in desBuf) lstBuf.Add(od.val);
+            byte[] bufs = lstBuf.ToArray();
+
             if (Path.GetExtension(desFn).ToLower() != ".vgz")
             {
                 if (desVGM.info.format == enmFormat.VGM)
@@ -165,7 +169,7 @@ namespace Core
                     log.Write("VGMファイル出力");
                     File.WriteAllBytes(
                         desFn
-                        , desBuf);
+                        , bufs);
                 }
                 else
                 {
@@ -175,7 +179,7 @@ namespace Core
                             Path.GetDirectoryName(desFn)
                             , Path.GetFileNameWithoutExtension(desFn) + ".xgm"
                             )
-                        , desBuf);
+                        , bufs);
                 }
                 return;
             }
@@ -185,7 +189,7 @@ namespace Core
             int num;
             byte[] buf = new byte[1024];
 
-            MemoryStream inStream = new MemoryStream(desBuf);
+            MemoryStream inStream = new MemoryStream(bufs);
             FileStream outStream = new FileStream(desFn, FileMode.Create);
             GZipStream compStream = new GZipStream(outStream, CompressionMode.Compress);
 
@@ -207,12 +211,30 @@ namespace Core
 
         private List<Line> GetSrc(string[] srcBuf, string path)
         {
-            List<Line> src = new List<Line>();
-            int ln = 1;
+            try
+            {
+                List<Line> des = new List<Line>();
+                return GetSrcRec(srcBuf, des, path, srcFn, 0);
+            }
+            catch
+            {
+                msgBox.setErrMsg(string.Format(
+                                msg.get("E04008")
+                                , srcFn), new LinePos(srcFn));
+                return null;
+            }
+        }
+
+        private List<Line> GetSrcRec(string[] srcBuf, List<Line> des, string path, string sourceFileName, int sourceLineNumber)
+        {
             foreach (string s in srcBuf)
             {
-                if (!string.IsNullOrEmpty(s) 
-                    && s.TrimStart().Length > 2 
+                Line line = new Line(new LinePos(sourceFileName, sourceLineNumber), s);
+                des.Add(line);
+                sourceLineNumber++;
+
+                if (!string.IsNullOrEmpty(s)
+                    && s.TrimStart().Length > 2
                     && s.TrimStart().Substring(0, 2) == "'+")
                 {
                     string includeFn = s.Substring(2).Trim().Trim('"');
@@ -223,29 +245,16 @@ namespace Core
                         {
                             msgBox.setErrMsg(string.Format(
                                 msg.get("E04006")
-                                , includeFn), "-", -1);
+                                , includeFn), new LinePos(sourceFileName, sourceLineNumber, 0, s.Length));
                             return null;
                         }
                     }
                     string[] incBuf = File.ReadAllLines(includeFn);
-                    int iln = 1;
-                    foreach (string i in incBuf)
-                    {
-                        Line iline = new Line(includeFn, iln, i);
-                        src.Add(iline);
-                        iln++;
-                    }
-
-                    ln++;
-                    continue;
+                    des = GetSrcRec(incBuf, des, path, includeFn, 0);
                 }
-
-                Line line = new Line(srcFn, ln, s);
-                src.Add(line);
-                ln++;
             }
 
-            return src;
+            return des;
         }
 
         private void GetPCMData(string path)
@@ -290,7 +299,7 @@ namespace Core
                         {
                             msgBox.setErrMsg(string.Format(
                                 msg.get("E04007")
-                                , v.fileName), "-", -1);
+                                , v.fileName), new LinePos(pds.FileName));
                             continue;
                         }
 
@@ -298,7 +307,7 @@ namespace Core
                         {
                             msgBox.setErrMsg(string.Format(
                                 msg.get("E01017")
-                                , v.fileName), "-", -1);
+                                , v.fileName), new LinePos(pds.FileName));
                             continue;
                         }
 
@@ -368,7 +377,7 @@ namespace Core
                         {
                             msgBox.setErrMsg(string.Format(
                                 msg.get("E04007")
-                                , v.fileName), "-", -1);
+                                , v.fileName), new LinePos(pds.FileName));
                             continue;
                         }
 
@@ -376,7 +385,7 @@ namespace Core
                         {
                             msgBox.setErrMsg(string.Format(
                                 msg.get("E01017")
-                                , v.fileName), "-", -1);
+                                , v.fileName), new LinePos(pds.FileName));
                             continue;
                         }
 
@@ -396,7 +405,7 @@ namespace Core
                         {
                             msgBox.setErrMsg(string.Format(
                                 msg.get("E04007")
-                                , pds.FileName), "-", -1);
+                                , pds.FileName), new LinePos(pds.FileName));
                             continue;
                         }
                         desVGM.chips[pds.chip][pds.isSecondary ? 1 : 0]
@@ -426,10 +435,10 @@ namespace Core
                             , 100
                             , pds.DatStartAdr
                             , pds.DatEndAdr
-                            , pds.chip!= enmChipType.RF5C164 
+                            , pds.chip != enmChipType.RF5C164
                                 ? (pds.DatEndAdr - pds.DatStartAdr + 1)
-                                : (pds.DatLoopAdr - pds.DatStartAdr + 1 )
-                            , pds.DatLoopAdr 
+                                : (pds.DatLoopAdr - pds.DatStartAdr + 1)
+                            , pds.DatLoopAdr
                             , false
                             , 8000
                             , pds.Option);

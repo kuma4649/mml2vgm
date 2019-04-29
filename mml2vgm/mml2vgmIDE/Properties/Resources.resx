@@ -124,6 +124,30 @@
   <data name="BreakPointMute" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resource\BreakPointMute.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="ccFadeout" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resource\ccFadeout.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ccFast" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resource\ccFast.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ccNext" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resource\ccNext.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ccPause" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resource\ccPause.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ccPlay" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resource\ccPlay.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ccPrevious" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resource\ccPrevious.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ccSlow" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resource\ccSlow.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ccStop" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resource\ccStop.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="Error" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resource\Error.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -183,5 +207,23 @@
   </data>
   <data name="Warning" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resource\Warning.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="cntExceptionFormat" xml:space="preserve">
+    <value>例外発生:\r\n- Type ------\r\n{0}\r\n- Message ------\r\n{1}\r\n- Source ------\r\n{2}\r\n- StackTrace ------\r\n{3}\r\n</value>
+  </data>
+  <data name="cntInnerExceptionFormat" xml:space="preserve">
+    <value>内部例外:\r\n- Type ------\r\n{0}\r\n- Message ------\r\n{1}\r\n- Source ------\r\n{2}\r\n- StackTrace ------\r\n{3}\r\n</value>
+  </data>
+  <data name="cntLogFilename" xml:space="preserve">
+    <value>log.txt</value>
+  </data>
+  <data name="cntSettingFileName" xml:space="preserve">
+    <value>Setting.xml</value>
+  </data>
+  <data name="cntTimeFormat" xml:space="preserve">
+    <value>yyyy/MM/dd HH:mm:ss    </value>
+  </data>
+  <data name="cntDescription" xml:space="preserve">
+    <value />
   </data>
 </root>

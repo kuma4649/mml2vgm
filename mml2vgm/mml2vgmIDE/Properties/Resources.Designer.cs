@@ -83,6 +83,140 @@ namespace mml2vgmIDE.Properties {
         /// <summary>
         ///   型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
         /// </summary>
+        internal static System.Drawing.Bitmap ccFadeout {
+            get {
+                object obj = ResourceManager.GetObject("ccFadeout", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
+        /// </summary>
+        internal static System.Drawing.Bitmap ccFast {
+            get {
+                object obj = ResourceManager.GetObject("ccFast", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
+        /// </summary>
+        internal static System.Drawing.Bitmap ccNext {
+            get {
+                object obj = ResourceManager.GetObject("ccNext", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
+        /// </summary>
+        internal static System.Drawing.Bitmap ccPause {
+            get {
+                object obj = ResourceManager.GetObject("ccPause", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
+        /// </summary>
+        internal static System.Drawing.Bitmap ccPlay {
+            get {
+                object obj = ResourceManager.GetObject("ccPlay", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
+        /// </summary>
+        internal static System.Drawing.Bitmap ccPrevious {
+            get {
+                object obj = ResourceManager.GetObject("ccPrevious", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
+        /// </summary>
+        internal static System.Drawing.Bitmap ccSlow {
+            get {
+                object obj = ResourceManager.GetObject("ccSlow", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
+        /// </summary>
+        internal static System.Drawing.Bitmap ccStop {
+            get {
+                object obj = ResourceManager.GetObject("ccStop", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///    に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string cntDescription {
+            get {
+                return ResourceManager.GetString("cntDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   例外発生:\r\n- Type ------\r\n{0}\r\n- Message ------\r\n{1}\r\n- Source ------\r\n{2}\r\n- StackTrace ------\r\n{3}\r\n に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string cntExceptionFormat {
+            get {
+                return ResourceManager.GetString("cntExceptionFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   内部例外:\r\n- Type ------\r\n{0}\r\n- Message ------\r\n{1}\r\n- Source ------\r\n{2}\r\n- StackTrace ------\r\n{3}\r\n に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string cntInnerExceptionFormat {
+            get {
+                return ResourceManager.GetString("cntInnerExceptionFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   log.txt に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string cntLogFilename {
+            get {
+                return ResourceManager.GetString("cntLogFilename", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Setting.xml に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string cntSettingFileName {
+            get {
+                return ResourceManager.GetString("cntSettingFileName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   yyyy/MM/dd HH:mm:ss     に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string cntTimeFormat {
+            get {
+                return ResourceManager.GetString("cntTimeFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
+        /// </summary>
         internal static System.Drawing.Bitmap Error {
             get {
                 object obj = ResourceManager.GetObject("Error", resourceCulture);

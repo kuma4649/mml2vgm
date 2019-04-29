@@ -74,7 +74,10 @@ namespace Core
                 pw.volume = pw.MaxVolume;
             }
 
-            if (IsSecondary) parent.dat[0xab] |= 0x40;
+            if (IsSecondary)
+            {
+                parent.dat[0xab] = new outDatum(enmMMLType.unknown, null, null, (byte)(parent.dat[0xab].val | 0x40));
+            }
         }
 
 
@@ -178,7 +181,7 @@ namespace Core
                 {
                     msgBox.setErrMsg(string.Format(msg.get("E09000")
                         , newDic[v.Key].loopAdr
-                        , size - 1), "-", -1);
+                        , size - 1), new LinePos("-"));
                     newDic[v.Key].loopAdr = -1;
                     newDic[v.Key].status = enmPCMSTATUS.ERROR;
                 }
@@ -424,7 +427,7 @@ namespace Core
         }
         //Encoder code ここまで
 
-        public int GetC140FNum(partWork pw, int octave, char noteCmd, int shift)
+        public int GetC140FNum(MML mml,partWork pw, int octave, char noteCmd, int shift)
         {
             try
             {
@@ -477,9 +480,10 @@ namespace Core
             }
         }
 
-        public void OutC140Port(partWork pw, byte port, byte adr, byte data)
+        public void OutC140Port(MML mml, partWork pw, byte port, byte adr, byte data)
         {
             parent.OutData(
+                mml,
                 pw.port0
                 , (byte)(port | (IsSecondary ? 0x80 : 0))
                 , adr
@@ -487,25 +491,25 @@ namespace Core
                 );
         }
 
-        public void OutC140KeyOff(partWork pw)
+        public void OutC140KeyOff(MML mml, partWork pw)
         {
             int adr = pw.ch * 16 + 0x05;
             byte data = 0x00;
 
-            OutC140Port(pw
+            OutC140Port(mml, pw
                 , (byte)(adr >> 8)
                 , (byte)adr
                 , data);
         }
 
-        public void OutC140KeyOn(partWork pw)
+        public void OutC140KeyOn(partWork pw, MML mml)
         {
             int adr = 0;
             byte data = 0;
 
             if(pw.instrument==-1)
             {
-                msgBox.setErrMsg(msg.get("E09005"), "-", -1);
+                msgBox.setErrMsg(msg.get("E09005"), new LinePos("-"));
                 return;
             }
 
@@ -513,7 +517,7 @@ namespace Core
             //OutC140KeyOff(pw);
 
             //Volume
-            SetVolume(pw);
+            SetVolume(pw,mml);
 
             //Address shift
             int stAdr = pw.pcmStartAddress + pw.addressShift;
@@ -524,7 +528,7 @@ namespace Core
                 //StartAdr H
                 adr = pw.ch * 16 + 0x06;
                 data = (byte)((stAdr & 0xff00) >> 8);
-                OutC140Port(pw
+                OutC140Port(mml,pw
                     , (byte)(adr >> 8)
                     , (byte)adr
                     , data);
@@ -532,7 +536,7 @@ namespace Core
                 //StartAdr L
                 adr = pw.ch * 16 + 0x07;
                 data = (byte)((stAdr & 0x00ff) >> 0);
-                OutC140Port(pw
+                OutC140Port(mml,pw
                     , (byte)(adr >> 8)
                     , (byte)adr
                     , data);
@@ -545,14 +549,14 @@ namespace Core
                 //EndAdr H
                 adr = pw.ch * 16 + 0x08;
                 data = (byte)((pw.pcmEndAddress & 0xff00) >> 8);
-                OutC140Port(pw
+                OutC140Port(mml,pw
                     , (byte)(adr >> 8)
                     , (byte)adr
                     , data);
                 //EndAdr L
                 adr = pw.ch * 16 + 0x09;
                 data = (byte)((pw.pcmEndAddress & 0x00ff) >> 0);
-                OutC140Port(pw
+                OutC140Port(mml,pw
                     , (byte)(adr >> 8)
                     , (byte)adr
                     , data);
@@ -567,7 +571,7 @@ namespace Core
                     //LoopAdr H
                     adr = pw.ch * 16 + 0x0a;
                     data = (byte)((pw.pcmLoopAddress & 0xff00) >> 8);
-                    OutC140Port(pw
+                    OutC140Port(mml,pw
                         , (byte)(adr >> 8)
                         , (byte)adr
                         , data);
@@ -575,7 +579,7 @@ namespace Core
                     //LoopAdr L
                     adr = pw.ch * 16 + 0x0b;
                     data = (byte)((pw.pcmLoopAddress & 0x00ff) >> 0);
-                    OutC140Port(pw
+                    OutC140Port(mml,pw
                         , (byte)(adr >> 8)
                         , (byte)adr
                         , data);
@@ -588,7 +592,7 @@ namespace Core
             {
                 adr = pw.ch * 16 + 0x04;
                 data = (byte)((pw.pcmBank & 7) | (isSystem2 ? ((pw.pcmBank & 0x8) << 2) : ((pw.pcmBank & 0x18) << 1)));
-                OutC140Port(pw
+                OutC140Port(mml,pw
                     , (byte)(adr >> 8)
                     , (byte)adr
                     , data);
@@ -614,16 +618,16 @@ namespace Core
                 | (is16bit ? 0x08 : 0x00) //CompPCM
                 | ((pw.pcmLoopAddress != -1) ? 0x10 : 0x00) //Loop
                 );
-            OutC140Port(pw
+            OutC140Port(mml,pw
                 , (byte)(adr >> 8)
                 , (byte)adr
                 , data);
         }
 
 
-        public override void SetFNum(partWork pw)
+        public override void SetFNum(partWork pw, MML mml)
         {
-            int f = GetC140FNum(pw, pw.octaveNow, pw.noteCmd, pw.shift + pw.keyShift);//
+            int f = GetC140FNum(mml, pw, pw.octaveNow, pw.noteCmd, pw.shift + pw.keyShift);//
             if (pw.bendWaitCounter != -1)
             {
                 f = pw.bendFnum;
@@ -653,12 +657,12 @@ namespace Core
             if (pw.beforeFNum != data)
             {
                 int adr = pw.ch * 16 + 0x02;
-                OutC140Port(pw
+                OutC140Port(mml, pw
                     , (byte)(adr >> 8)
                     , (byte)adr
                     , (byte)(data >> 8));
                 adr++;
-                OutC140Port(pw
+                OutC140Port(mml, pw
                     , (byte)(adr >> 8)
                     , (byte)adr
                     , (byte)data);
@@ -667,22 +671,22 @@ namespace Core
 
         }
 
-        public override int GetFNum(partWork pw, int octave, char cmd, int shift)
+        public override int GetFNum(partWork pw, MML mml, int octave, char cmd, int shift)
         {
-            return GetC140FNum(pw, octave, cmd, shift);
+            return GetC140FNum(mml,pw, octave, cmd, shift);
         }
 
-        public override void SetKeyOn(partWork pw)
+        public override void SetKeyOn(partWork pw, MML mml)
         {
-            OutC140KeyOn(pw);
+            OutC140KeyOn(pw,mml);
         }
 
-        public override void SetKeyOff(partWork pw)
+        public override void SetKeyOff(partWork pw, MML mml)
         {
-            OutC140KeyOff(pw);
+            OutC140KeyOff(mml,pw);
         }
 
-        public override void SetVolume(partWork pw)
+        public override void SetVolume(partWork pw, MML mml)
         {
             int vol = pw.volume;
 
@@ -718,7 +722,7 @@ namespace Core
             {
                 //Volume(Left)
                 int adr = pw.ch * 16 + 0x01;
-                OutC140Port(pw
+                OutC140Port(mml,pw
                     , (byte)(adr >> 8)
                     , (byte)adr
                     , (byte)vl);
@@ -729,7 +733,7 @@ namespace Core
             {
                 //Volume(Right)
                 int adr = pw.ch * 16 + 0x00;
-                OutC140Port(pw
+                OutC140Port(mml,pw
                     , (byte)(adr >> 8)
                     , (byte)adr
                     , (byte)vr);
@@ -737,7 +741,7 @@ namespace Core
             }
         }
 
-        public override void SetLfoAtKeyOn(partWork pw)
+        public override void SetLfoAtKeyOn(partWork pw, MML mml)
         {
             for (int lfo = 0; lfo < 4; lfo++)
             {
@@ -755,12 +759,12 @@ namespace Core
 
                 if (pl.type == eLfoType.Vibrato)
                 {
-                    SetFNum(pw);
+                    SetFNum(pw,mml);
                 }
                 if (pl.type == eLfoType.Tremolo)
                 {
                     pw.beforeVolume = -1;
-                    SetVolume(pw);
+                    SetVolume(pw,mml);
                 }
             }
         }
@@ -795,16 +799,14 @@ namespace Core
             if (type == 'I')
             {
                 msgBox.setErrMsg(msg.get("E09001")
-                    , mml.line.Fn
-                    , mml.line.Num);
+                    , mml.line.Lp);
                 return;
             }
 
             if (type == 'T')
             {
                 msgBox.setErrMsg(msg.get("E09002")
-                    , mml.line.Fn
-                    , mml.line.Num);
+                    , mml.line.Lp);
                 return;
             }
 
@@ -819,16 +821,14 @@ namespace Core
             if (!parent.instPCM.ContainsKey(n))
             {
                 msgBox.setErrMsg(string.Format(msg.get("E09003"), n)
-                    , mml.line.Fn
-                    , mml.line.Num);
+                    , mml.line.Lp);
                 return;
             }
 
             if (parent.instPCM[n].chip != enmChipType.C140)
             {
                 msgBox.setErrMsg(string.Format(msg.get("E09004"), n)
-                    , mml.line.Fn
-                    , mml.line.Num);
+                    , mml.line.Lp);
                 return;
             }
 
@@ -847,7 +847,7 @@ namespace Core
             int adr = (int)mml.args[0];
             byte dat = (byte)mml.args[1];
 
-            OutC140Port(pw, (byte)(adr >> 8), (byte)adr, dat);
+            OutC140Port(mml, pw, (byte)(adr >> 8), (byte)adr, dat);
         }
 
         public override void CmdLoopExtProc(partWork pw, MML mml)

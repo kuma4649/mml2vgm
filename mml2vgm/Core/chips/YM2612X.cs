@@ -69,7 +69,7 @@ namespace Core
         }
 
 
-        public void OutYM2612XPcmKeyON(partWork pw)
+        public void OutYM2612XPcmKeyON(MML mml,partWork pw)
         {
             if (pw.instrument >= 63) return;
 
@@ -78,6 +78,7 @@ namespace Core
             int priority = 0;
 
             parent.OutData(
+                mml,
                 0x54 // original vgm command : YM2151
                 , (byte)(0x50 + ((priority & 0x3) << 2) + (ch & 0x3))
                 , (byte)id
@@ -166,6 +167,7 @@ namespace Core
                 pw.freq = -1;//freqをリセット
                 pw.instrument = -1;
                 OutSetCh6PCMMode(
+                    mml,
                     pw.chip.lstPartWork[5]
                     , pw.chip.lstPartWork[5].pcm
                     );
@@ -191,7 +193,7 @@ namespace Core
                     lstPartWork[6].instrument = n;
                     lstPartWork[7].instrument = n;
                     lstPartWork[8].instrument = n;
-                    OutFmSetInstrument(pw, n, pw.volume, type);
+                    OutFmSetInstrument(pw, mml, n, pw.volume, type);
                     return;
                 }
             }
@@ -203,13 +205,13 @@ namespace Core
                     pw.instrument = n;
                     if (!parent.instPCM.ContainsKey(n))
                     {
-                        msgBox.setErrMsg(string.Format(msg.get("E21000"), n), pw.getSrcFn(), pw.getLineNumber());
+                        msgBox.setErrMsg(string.Format(msg.get("E21000"), n), mml.line.Lp);
                     }
                     else
                     {
                         if (parent.instPCM[n].chip != enmChipType.YM2612X)
                         {
-                            msgBox.setErrMsg(string.Format(msg.get("E21001"), n), pw.getSrcFn(), pw.getLineNumber());
+                            msgBox.setErrMsg(string.Format(msg.get("E21001"), n), mml.line.Lp);
                         }
                     }
                     return;

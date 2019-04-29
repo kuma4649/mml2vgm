@@ -58,30 +58,33 @@ namespace Core
             //isK052539 = false;
 
             //keyOnOff : 0
-            OutK051649Port(IsSecondary, 3, 0, 0);
+            OutK051649Port(null,IsSecondary, 3, 0, 0);
             keyOnStatus = 0;
             keyOnStatusOld = 0;
 
             for (int i = 0; i < _ChMax; i++)
             {
                 //freq : 0
-                OutK051649Port(IsSecondary, 1, (byte)(i * 2 + 0), 0);
-                OutK051649Port(IsSecondary, 1, (byte)(i * 2 + 1), 0);
+                OutK051649Port(null,IsSecondary, 1, (byte)(i * 2 + 0), 0);
+                OutK051649Port(null,IsSecondary, 1, (byte)(i * 2 + 1), 0);
 
                 //volume : 0
-                OutK051649Port(IsSecondary, 2, (byte)i, 0);
+                OutK051649Port(null,IsSecondary, 2, (byte)i, 0);
 
                 //WaveForm : all 0
                 if (parent.info.isK052539 || i < 4) //K051の場合は4Ch分の初期化を行う
                 {
                     for (int j = 0; j < 32; j++)
                     {
-                        OutK051649Port(IsSecondary, (byte)(parent.info.isK052539 ? 4 : 0), (byte)(i * 32 + j), 0);
+                        OutK051649Port(null,IsSecondary, (byte)(parent.info.isK052539 ? 4 : 0), (byte)(i * 32 + j), 0);
                     }
                 }
             }
 
-            if (ChipID != 0) parent.dat[0x9f] |= 0x40;//use Secondary
+            if (ChipID != 0)
+            {
+                parent.dat[0x9f] = new outDatum(enmMMLType.unknown, null, null, (byte)(parent.dat[0x9f].val | 0x40));//use Secondary
+            }
         }
 
         public override void InitPart(ref partWork pw)
@@ -97,21 +100,22 @@ namespace Core
             pw.port0 = 0xd2;
         }
 
-        public void OutK051649Port(bool isSecondary, byte port, byte adr, byte data)
+        public void OutK051649Port(MML mml,bool isSecondary, byte port, byte adr, byte data)
         {
             parent.OutData(
+                mml,
                 0xd2
                 , (byte)((isSecondary ? 0x80 : 0x00) + port)
                 , adr
                 , data);
         }
 
-        public void OutK051649SetInstrument(partWork pw, int n)
+        public void OutK051649SetInstrument(partWork pw, MML mml, int n)
         {
 
             if (!parent.instWF.ContainsKey(n))
             {
-                msgBox.setWrnMsg(string.Format(msg.get("E10021"), n), pw.getSrcFn(), pw.getLineNumber());
+                msgBox.setWrnMsg(string.Format(msg.get("E10021"), n), mml.line.Lp);
                 return;
             }
 
@@ -120,7 +124,9 @@ namespace Core
                 int ch = pw.ch;
                 if (!parent.info.isK052539 && ch == 4) ch = 3;
 
-                OutK051649Port(pw.isSecondary
+                OutK051649Port(
+                    mml,
+                    pw.isSecondary
                     , (byte)(parent.info.isK052539 ? 4 : 0)
                     , (byte)(ch * 32 + i - 1)
                     , parent.instWF[n][i]);
@@ -136,7 +142,7 @@ namespace Core
         {
         }
 
-        public override void MultiChannelCommand()
+        public override void MultiChannelCommand(MML mml)
         {
             if (!use) return;
 
@@ -148,15 +154,15 @@ namespace Core
                 if (pw.beforeFNum != pw.FNum)
                 {
                     byte data = (byte)pw.FNum;
-                    OutK051649Port(IsSecondary, 1, (byte)(0 + pw.ch * 2), data);
+                    OutK051649Port(mml, IsSecondary, 1, (byte)(0 + pw.ch * 2), data);
 
                     data = (byte)((pw.FNum & 0xf00) >> 8);
-                    OutK051649Port(IsSecondary, 1, (byte)(1 + pw.ch * 2), data);
+                    OutK051649Port(mml,IsSecondary, 1, (byte)(1 + pw.ch * 2), data);
                     pw.beforeFNum = pw.FNum;
                 }
 
                 //volume
-                SetSsgVolume(pw);
+                SetSsgVolume(mml,pw);
 
                 //keyonoff
                 if (pw.keyOn)
@@ -172,25 +178,25 @@ namespace Core
             //keyonoff
             if (keyOnStatus != keyOnStatusOld)
             {
-                OutK051649Port(IsSecondary, 3, 0, keyOnStatus);
+                OutK051649Port(mml,IsSecondary, 3, 0, keyOnStatus);
                 keyOnStatusOld = keyOnStatus;
             }
 
         }
 
-        public void OutSsgKeyOn(partWork pw)
+        public void OutSsgKeyOn(MML mml,partWork pw)
         {
-            SetSsgVolume(pw);
+            SetSsgVolume(mml,pw);
             pw.keyOn = true;
         }
 
-        public void OutSsgKeyOff(partWork pw)
+        public void OutSsgKeyOff(MML mml,partWork pw)
         {
-            SetSsgVolume(pw);
+            SetSsgVolume(mml,pw);
             pw.keyOn = false;
         }
 
-        public void SetSsgVolume(partWork pw)
+        public void SetSsgVolume(MML mml,partWork pw)
         {
             byte pch = (byte)pw.ch;
 
@@ -216,7 +222,7 @@ namespace Core
 
             if (pw.beforeVolume != vol)
             {
-                OutK051649Port(IsSecondary, 2, (byte)pw.ch, (byte)vol);
+                OutK051649Port(mml, IsSecondary, 2, (byte)pw.ch, (byte)vol);
                 pw.beforeVolume = vol;
             }
         }
@@ -261,33 +267,33 @@ namespace Core
             return FNumTbl[0][f];
         }
 
-        public override int GetFNum(partWork pw, int octave, char cmd, int shift)
+        public override int GetFNum(partWork pw, MML mml, int octave, char cmd, int shift)
         {
             return GetSsgFNum(pw, octave, cmd, shift);
         }
 
 
-        public override void SetFNum(partWork pw)
+        public override void SetFNum(partWork pw, MML mml)
         {
             SetSsgFNum(pw);
         }
 
-        public override void SetKeyOn(partWork pw)
+        public override void SetKeyOn(partWork pw, MML mml)
         {
-            OutSsgKeyOn(pw);
+            OutSsgKeyOn(mml,pw);
         }
 
-        public override void SetKeyOff(partWork pw)
+        public override void SetKeyOff(partWork pw, MML mml)
         {
-            OutSsgKeyOff(pw);
+            OutSsgKeyOff(mml,pw);
         }
 
-        public override void SetVolume(partWork pw)
+        public override void SetVolume(partWork pw, MML mml)
         {
-            SetSsgVolume(pw);
+            SetSsgVolume(mml,pw);
         }
 
-        public override void SetLfoAtKeyOn(partWork pw)
+        public override void SetLfoAtKeyOn(partWork pw, MML mml)
         {
             for (int lfo = 0; lfo < 4; lfo++)
             {
@@ -319,7 +325,7 @@ namespace Core
             byte adr = (byte)mml.args[0];
             byte dat = (byte)mml.args[1];
 
-            OutK051649Port(pw.isSecondary, port, adr, dat);
+            OutK051649Port(mml,pw.isSecondary, port, adr, dat);
         }
 
         public override void CmdLoopExtProc(partWork p, MML mml)
@@ -337,13 +343,13 @@ namespace Core
 
             if (type == 'I')
             {
-                msgBox.setErrMsg(msg.get("E10019"), pw.getSrcFn(), pw.getLineNumber());
+                msgBox.setErrMsg(msg.get("E10019"), mml.line.Lp);
                 return;
             }
 
             if (type == 'T')
             {
-                msgBox.setErrMsg(msg.get("E10020"), pw.getSrcFn(), pw.getLineNumber());
+                msgBox.setErrMsg(msg.get("E10020"), mml.line.Lp);
                 return;
             }
 
@@ -357,7 +363,7 @@ namespace Core
             if (pw.instrument != n)
             {
                 pw.instrument = n;
-                ((K051649)pw.chip).OutK051649SetInstrument(pw, n);
+                ((K051649)pw.chip).OutK051649SetInstrument(pw,mml, n);
             }
 
         }

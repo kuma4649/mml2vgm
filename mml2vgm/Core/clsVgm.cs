@@ -28,7 +28,6 @@ namespace Core
 
         public Dictionary<enmChipType, ClsChip[]> chips;
 
-        public int lineNumber = 0;
 
         public Dictionary<int, byte[]> instFM = new Dictionary<int, byte[]>();
         public Dictionary<int, int[]> instENV = new Dictionary<int, int[]>();
@@ -125,17 +124,14 @@ namespace Core
         public int Analyze(List<Line> src)
         {
             log.Write("テキスト解析開始");
-            lineNumber = 0;
 
             bool multiLine = false;
-            string s2 = "";
+            List<Line> strInfo = new List<Line>();
 
             foreach (Line line in src)
             {
 
                 string s = line.Txt;
-                int lineNumber = line.Num;
-                string fn = line.Fn;
 
                 if (multiLine)
                 {
@@ -143,15 +139,14 @@ namespace Core
                     {
                         continue;
                     }
-                    s2 += s.Trim() + "\r\n";
+                    strInfo.Add(line);
                     if (s.IndexOf("}") < 0)
                     {
                         continue;
                     }
                     multiLine = false;
-                    s2 = s2.Substring(0, s2.IndexOf("}"));
                     // Information
-                    info.AddInformation(s2, lineNumber, fn, chips);
+                    info.AddInformation(strInfo, chips);
                     continue;
                 }
 
@@ -161,43 +156,43 @@ namespace Core
                     continue;
                 }
 
-                s2 = s.TrimStart().Substring(1).TrimStart();
+                s = s.TrimStart().Substring(1).TrimStart();
                 // 'のみの行も読み飛ばす
-                if (s2.Trim() == "")
+                if (s.Trim() == "")
                 {
                     continue;
                 }
 
-                if (s2.IndexOf("{") == 0)
+                if (s.IndexOf("{") == 0)
                 {
                     multiLine = true;
-                    s2 = s2.Substring(1);
+                    strInfo.Clear();
+                    strInfo.Add(line);
 
-                    if (s2.IndexOf("}") > -1)
+                    if (s.IndexOf("}") > -1)
                     {
                         multiLine = false;
-                        s2 = s2.Substring(0, s2.IndexOf("}")).Trim();
                         // Information
-                        info.AddInformation(s2, lineNumber, fn, chips);
+                        info.AddInformation(strInfo, chips);
                     }
                     continue;
                 }
-                else if (s2.IndexOf("@") == 0)
+                else if (s.IndexOf("@") == 0)
                 {
                     // Instrument
-                    AddInstrument(s2, fn, lineNumber);
+                    AddInstrument(line);
                     continue;
                 }
-                else if (s2.IndexOf("%") == 0)
+                else if (s.IndexOf("%") == 0)
                 {
                     // Alies
-                    AddAlies(s2, fn, lineNumber);
+                    AddAlies(line);
                     continue;
                 }
                 else
                 {
                     // Part
-                    AddPart(s2, fn, lineNumber);
+                    AddPart(line);
                     continue;
                 }
 
@@ -230,7 +225,10 @@ namespace Core
                 {
                     msgBox.setWrnMsg(string.Format(
                         msg.get("E01000")
-                        , p.Substring(0, 2).Trim() + int.Parse(p.Substring(2, 2)).ToString()), "-", -1);
+                        , p.Substring(0, 2).Trim() + int.Parse(p.Substring(2, 2)).ToString()
+                        ),
+                        new LinePos("-")
+                        );
                     flg = false;
                 }
             }
@@ -242,31 +240,31 @@ namespace Core
 
         }
 
-        private int AddInstrument(string buf, string srcFn, int lineNumber)
+        private int AddInstrument(Line line)
         {
-            if (buf == null || buf.Length < 2)
+            string buf = line.Txt.Trim().Replace("'@", "").Trim();
+
+            if (buf.Length < 1)
             {
-                msgBox.setWrnMsg(msg.get("E01001"), srcFn, lineNumber);
+                msgBox.setWrnMsg(msg.get("E01001"), line.Lp);
                 return -1;
             }
 
-            string s = buf.Substring(1).TrimStart();
-
-            if (s.ToUpper().IndexOf("MUCOM88ADPCM") == 0)
+            if (buf.ToUpper().IndexOf("MUCOM88ADPCM") == 0)
             {
-                defineMUCOM88ADPCMInstrument(srcFn, s, lineNumber);
+                defineMUCOM88ADPCMInstrument(line);
                 return 0;
             }
 
-            if (s.ToUpper().IndexOf("MUCOM88") == 0)
+            if (buf.ToUpper().IndexOf("MUCOM88") == 0)
             {
-                defineMUCOM88Instrument(srcFn, s, lineNumber);
+                defineMUCOM88Instrument(line);
                 return 0;
             }
 
-            if (s.ToUpper().IndexOf("TFI") == 0)
+            if (buf.ToUpper().IndexOf("TFI") == 0)
             {
-                defineTFIInstrument(srcFn, s, lineNumber);
+                defineTFIInstrument(line);
                 return 0;
             }
 
@@ -274,7 +272,7 @@ namespace Core
             if (instrumentCounter != -1)
             {
 
-                return SetInstrument(s, srcFn, lineNumber);
+                return SetInstrument(line);
 
             }
 
@@ -282,11 +280,11 @@ namespace Core
             if (wfInstrumentCounter != -1)
             {
 
-                return SetWfInstrument(s, srcFn, lineNumber);
+                return SetWfInstrument(line);
 
             }
 
-            char t = s.ToUpper()[0];
+            char t = buf.ToUpper()[0];
             if (toneDoublerCounter != -1)
             {
                 if (t == 'F' || t == 'N' || t == 'M' || t == 'L' || t == 'P' || t == 'E' || t == 'T' || t == 'H')
@@ -301,36 +299,36 @@ namespace Core
                 case 'F':
                     instrumentBufCache = new byte[Const.INSTRUMENT_SIZE - 8];
                     instrumentCounter = 0;
-                    SetInstrument(s.Substring(1).TrimStart(), srcFn, lineNumber);
+                    SetInstrument(line);
                     return 0;
 
                 case 'N':
                     instrumentBufCache = new byte[Const.INSTRUMENT_SIZE];
                     instrumentCounter = 0;
-                    SetInstrument(s.Substring(1).TrimStart(), srcFn, lineNumber);
+                    SetInstrument(line);
                     return 0;
 
                 case 'M':
                     instrumentBufCache = new byte[Const.INSTRUMENT_SIZE];
                     instrumentCounter = 0;
-                    SetInstrument(s.Substring(1).TrimStart(), srcFn, lineNumber);
+                    SetInstrument(line);
                     return 0;
 
                 case 'L':
                     instrumentBufCache = new byte[Const.OPL_INSTRUMENT_SIZE];
                     instrumentCounter = 0;
-                    SetInstrument(s.Substring(1).TrimStart(), srcFn, lineNumber);
+                    SetInstrument(line);
                     return 0;
 
                 case 'P':
-                    definePCMInstrument(srcFn, s, lineNumber);
+                    definePCMInstrument(line);
                     return 0;
 
                 case 'E':
                     try
                     {
                         instrumentCounter = -1;
-                        string[] vs = s.Substring(1).Trim().Split(new string[] { "," }, StringSplitOptions.None);
+                        string[] vs = buf.Substring(1).Trim().Split(new string[] { "," }, StringSplitOptions.None);
                         int[] env = null;
                         env = new int[9];
                         int num = int.Parse(vs[0]);
@@ -348,12 +346,12 @@ namespace Core
                         enmChipType chiptype = GetChipType(env[8]);
                         if (chips.ContainsKey(chiptype) && chips[chiptype][0].Envelope != null)
                         {
-                            CheckEnvelopeVolumeRange(srcFn, lineNumber, env, chips[chiptype][0].Envelope.Max, chips[chiptype][0].Envelope.Min);
+                            CheckEnvelopeVolumeRange(line, env, chips[chiptype][0].Envelope.Max, chips[chiptype][0].Envelope.Min);
                             if (env[7] == 0) env[7] = 1;
                         }
                         else
                         {
-                            msgBox.setWrnMsg(msg.get("E01004"), srcFn, lineNumber);
+                            msgBox.setWrnMsg(msg.get("E01004"),line.Lp);
                         }
 
                         if (instENV.ContainsKey(num))
@@ -364,7 +362,7 @@ namespace Core
                     }
                     catch
                     {
-                        msgBox.setWrnMsg(msg.get("E01005"), srcFn, lineNumber);
+                        msgBox.setWrnMsg(msg.get("E01005"), line.Lp);
                     }
                     return 0;
 
@@ -373,21 +371,21 @@ namespace Core
                     {
                         instrumentCounter = -1;
 
-                        if (s.ToUpper()[1] != 'D') return 0;
+                        if (buf.ToUpper()[1] != 'D') return 0;
 
                         toneDoublerBufCache.Clear();
-                        StoreToneDoublerBuffer(s.ToUpper().Substring(2).TrimStart(), srcFn, lineNumber);
+                        StoreToneDoublerBuffer(buf.ToUpper().Substring(2).TrimStart(), line);
                     }
                     catch
                     {
-                        msgBox.setWrnMsg(msg.get("E01006"), srcFn, lineNumber);
+                        msgBox.setWrnMsg(msg.get("E01006"), line.Lp);
                     }
                     return 0;
 
                 case 'H':
                     wfInstrumentBufCache = new byte[Const.WF_INSTRUMENT_SIZE];
                     wfInstrumentCounter = 0;
-                    SetWfInstrument(s.Substring(1).TrimStart(), srcFn, lineNumber);
+                    SetWfInstrument(line);
                     return 0;
 
             }
@@ -395,26 +393,28 @@ namespace Core
             // ToneDoublerを定義中の場合
             if (toneDoublerCounter != -1)
             {
-                return StoreToneDoublerBuffer(s.ToUpper(), srcFn, lineNumber);
+                return StoreToneDoublerBuffer(buf.ToUpper(), line);
             }
 
             return 0;
         }
 
-        private void defineMUCOM88ADPCMInstrument(string srcFn, string s, int lineNumber)
+        private void defineMUCOM88ADPCMInstrument(Line line)
         {
             try
             {
-                string[] vs = s.Substring(12).Trim().Split(new string[] { "," }, StringSplitOptions.None);
+                string[] vs = line.Txt.Trim().Substring(2).Trim().Substring(12).Trim().Split(new string[] { "," }, StringSplitOptions.None);
                 if (vs.Length < 1) throw new ArgumentOutOfRangeException();
                 for (int i = 0; i < vs.Length; i++) vs[i] = vs[i].Trim();
 
                 int num = Common.ParseNumber(vs[0]);
                 string fn = vs[1].Trim().Trim('"');
-                string path = Path.GetDirectoryName(Path.GetFullPath(srcFn));
-                byte[] pcmdat;
+                if (!File.Exists(fn))
+                {
+                    fn = Path.Combine(line.Lp.path, fn);
+                }
 
-                pcmdat = File.ReadAllBytes(Path.Combine(path, fn));
+                byte[] pcmdat = File.ReadAllBytes(fn);
                 mucomADPCM2PCM.initial(pcmdat);
                 List<mucomADPCM2PCM.mucomPCMInfo> lstInfo = mucomADPCM2PCM.lstMucomPCMInfo;
 
@@ -438,24 +438,26 @@ namespace Core
             }
             catch
             {
-                msgBox.setWrnMsg(msg.get("E01019"), srcFn, lineNumber);
+                msgBox.setWrnMsg(msg.get("E01019"), line.Lp);
             }
         }
 
-        private void defineMUCOM88Instrument(string srcFn, string s, int lineNumber)
+        private void defineMUCOM88Instrument(Line line)
         {
             try
             {
-                string[] vs = s.Substring(7).Trim().Split(new string[] { "," }, StringSplitOptions.None);
+                string[] vs = line.Txt.Trim().Substring(2).Trim().Substring(7).Trim().Split(new string[] { "," }, StringSplitOptions.None);
                 if (vs.Length < 1) throw new ArgumentOutOfRangeException();
                 for (int i = 0; i < vs.Length; i++) vs[i] = vs[i].Trim();
 
                 int num = Common.ParseNumber(vs[0]);
                 string fn = vs[1].Trim().Trim('"');
-                string path = Path.GetDirectoryName(Path.GetFullPath(srcFn));
-                byte[] buf;
-                buf = File.ReadAllBytes(Path.Combine(path, fn));
+                if (!File.Exists(fn))
+                {
+                    fn = Path.Combine(line.Lp.path, fn);
+                }
 
+                byte[] buf = File.ReadAllBytes(fn);
                 for (int p = 0; p < buf.Length; p += 32)
                 {
                     byte[] voi = new byte[26];
@@ -471,7 +473,7 @@ namespace Core
             }
             catch
             {
-                msgBox.setWrnMsg(msg.get("E01018"), srcFn, lineNumber);
+                msgBox.setWrnMsg(msg.get("E01018"), line.Lp);
             }
         }
 
@@ -502,19 +504,18 @@ namespace Core
             return ret.ToArray();
         }
 
-        private void defineTFIInstrument(string srcFn, string s, int lineNumber)
+        private void defineTFIInstrument(Line line)
         {
             try
             {
-                string[] vs = s.Substring(3).Trim().Split(new string[] { "," }, StringSplitOptions.None);
+                string[] vs = line.Txt.Trim().Substring(2).Trim().Substring(3).Trim().Split(new string[] { "," }, StringSplitOptions.None);
                 if (vs.Length < 1) throw new ArgumentOutOfRangeException();
                 for (int i = 0; i < vs.Length; i++) vs[i] = vs[i].Trim();
 
                 int num = Common.ParseNumber(vs[0]);
                 string fn = vs[1].Trim().Trim('"');
-                string path = Path.GetDirectoryName(Path.GetFullPath(srcFn));
                 byte[] buf;
-                buf = File.ReadAllBytes(Path.Combine(path, fn));
+                buf = File.ReadAllBytes(Path.Combine(line.Lp.path, fn));
 
                 if (instFM.ContainsKey(num))
                 {
@@ -526,7 +527,7 @@ namespace Core
             }
             catch
             {
-                msgBox.setWrnMsg(msg.get("E01018"), srcFn, lineNumber);
+                msgBox.setWrnMsg(msg.get("E01018"), line.Lp);
             }
         }
 
@@ -557,24 +558,24 @@ namespace Core
             return ret.ToArray();
         }
 
-        private void definePCMInstrument(string srcFn, string s, int lineNumber)
+        private void definePCMInstrument(Line line)
         {
             try
             {
-                string[] vs = s.Substring(1).Trim().Split(new string[] { "," }, StringSplitOptions.None);
+                string[] vs = line.Txt.Trim().Substring(2).Trim().Substring(1).Trim().Split(new string[] { "," }, StringSplitOptions.None);
                 if (vs.Length < 1) throw new ArgumentOutOfRangeException();
                 for (int i = 0; i < vs.Length; i++) vs[i] = vs[i].Trim();
 
                 switch (vs[0][0])
                 {
                     case 'D':
-                        definePCMInstrumentRawData(srcFn, lineNumber, vs);
+                        definePCMInstrumentRawData(line, vs);
                         break;
                     case 'I':
-                        definePCMInstrumentSet(srcFn, lineNumber, vs);
+                        definePCMInstrumentSet(line, vs);
                         break;
                     default:
-                        definePCMInstrumentEasy(srcFn, lineNumber, vs);
+                        definePCMInstrumentEasy(line, vs);
                         break;
                 }
 
@@ -582,14 +583,14 @@ namespace Core
             }
             catch
             {
-                msgBox.setWrnMsg(msg.get("E01003"), srcFn, lineNumber);
+                msgBox.setWrnMsg(msg.get("E01003"), line.Lp);
             }
         }
 
         /// <summary>
         /// '@ P No , "FileName" , [BaseFreq] , Volume ( , [ChipName] , [Option] )
         /// </summary>
-        private void definePCMInstrumentEasy(string srcFn, int lineNumber, string[] vs)
+        private void definePCMInstrumentEasy(Line line, string[] vs)
         {
             instrumentCounter = -1;
             enmChipType enmChip = enmChipType.YM2612;
@@ -622,7 +623,7 @@ namespace Core
 
             if (vs.Length > 4)
             {
-                enmChip = GetChipTypeForPCM(srcFn, lineNumber, vs[4], out isSecondary);
+                enmChip = GetChipTypeForPCM(line, vs[4], out isSecondary);
                 if (enmChip == enmChipType.None) return;
             }
 
@@ -630,7 +631,7 @@ namespace Core
             {
                 if(enmChip!= enmChipType.YM2612X)
                 {
-                    msgBox.setErrMsg(msg.get("E01017"), "-", -1);
+                    msgBox.setErrMsg(msg.get("E01017"), line.Lp);
                     return;
                 }
             }
@@ -675,17 +676,17 @@ namespace Core
         /// <summary>
         /// '@ PD "FileName" , ChipName , [SrcStartAdr] , [DesStartAdr] , [Length] , [Option]
         /// </summary>
-        private void definePCMInstrumentRawData(string srcFn, int lineNumber, string[] vs)
+        private void definePCMInstrumentRawData(Line line, string[] vs)
         {
 
             string FileName = vs[0].Substring(1).Trim().Trim('"');
-            enmChipType ChipName = GetChipTypeForPCM(srcFn, lineNumber, vs[1], out bool isSecondary);
+            enmChipType ChipName = GetChipTypeForPCM(line, vs[1], out bool isSecondary);
 
             if (info.format == enmFormat.XGM)
             {
                 if (ChipName != enmChipType.YM2612X)
                 {
-                    msgBox.setErrMsg(msg.get("E01017"), "-", -1);
+                    msgBox.setErrMsg(msg.get("E01017"), line.Lp);
                     return;
                 }
             }
@@ -728,24 +729,24 @@ namespace Core
         /// <summary>
         /// '@ PI No , ChipName , [BaseFreq] , StartAdr , EndAdr , [LoopAdr] , [Option]
         /// </summary>
-        private void definePCMInstrumentSet(string srcFn,int lineNumber, string[] vs)
+        private void definePCMInstrumentSet(Line line, string[] vs)
         {
             int num = Common.ParseNumber(vs[0].Substring(1));
-            enmChipType ChipName = GetChipTypeForPCM(srcFn, lineNumber, vs[1], out bool isSecondary);
+            enmChipType ChipName = GetChipTypeForPCM(line, vs[1], out bool isSecondary);
             if (ChipName == enmChipType.None) return;
 
             if (info.format == enmFormat.XGM)
             {
                 if (ChipName != enmChipType.YM2612X)
                 {
-                    msgBox.setErrMsg(msg.get("E01017"), "-", -1);
+                    msgBox.setErrMsg(msg.get("E01017"), line.Lp);
                     return;
                 }
             }
 
             if (!chips[ChipName][0].CanUsePICommand())
             {
-                msgBox.setWrnMsg(string.Format(msg.get("E10018"), chips[ChipName][0].Name), "-", -1);
+                msgBox.setWrnMsg(string.Format(msg.get("E10018"), chips[ChipName][0].Name), line.Lp);
                 return;
             }
 
@@ -828,7 +829,7 @@ namespace Core
 
         }
 
-        private static void CheckEnvelopeVolumeRange(string srcFn, int lineNumber, int[] env, int max, int min)
+        private static void CheckEnvelopeVolumeRange(Line line, int[] env, int max, int min)
         {
             for (int i = 0; i < env.Length - 1; i++)
             {
@@ -837,18 +838,18 @@ namespace Core
                 if (env[i] > max)
                 {
                     env[i] = max;
-                    msgBox.setWrnMsg(string.Format(msg.get("E01007"), max), srcFn, lineNumber);
+                    msgBox.setWrnMsg(string.Format(msg.get("E01007"), max), line.Lp);
                 }
                 if (env[i] < min)
                 {
                     env[i] = min;
-                    msgBox.setWrnMsg(string.Format(msg.get("E01008"), min), srcFn, lineNumber);
+                    msgBox.setWrnMsg(string.Format(msg.get("E01008"), min), line.Lp);
                 }
             }
         }
 
 
-        private enmChipType GetChipTypeForPCM(string srcFn, int lineNumber, string strChip, out bool isSecondary)
+        private enmChipType GetChipTypeForPCM(Line line, string strChip, out bool isSecondary)
         {
             enmChipType enmChip = enmChipType.YM2612;
             string chipName = strChip.Trim().ToUpper();
@@ -868,7 +869,7 @@ namespace Core
 
             if (!GetChip(chipName).CanUsePcm)
             {
-                msgBox.setWrnMsg(string.Format(msg.get("E01002"), chipName), srcFn, lineNumber);
+                msgBox.setWrnMsg(string.Format(msg.get("E01002"), chipName), line.Lp);
                 return enmChipType.None;
             }
             enmChip = GetChipType(chipName);
@@ -923,45 +924,11 @@ namespace Core
             return null;
         }
 
-        private int AddAlies(string buf, string srcFn, int lineNumber)
+        private int AddAlies(Line line)
         {
             string name = "";
             string data = "";
-
-            int i = buf.Substring(1).Trim().IndexOfAny(new char[] { ' ', '\t' });
-            if (i < 0)
-            {
-                //空白による区切りが見つからない場合は無視する
-                return 0;
-            }
-
-            name = buf.Substring(1).Trim().Substring(0, i).Trim();
-            data = buf.Substring(1).Trim().Substring(i).Trim();
-            if (name == "")
-            {
-                //エイリアス指定がない場合は警告とする
-                msgBox.setWrnMsg(msg.get("E01009"), srcFn, lineNumber);
-                return -1;
-            }
-            if (data == "")
-            {
-                //データがない場合は警告する
-                msgBox.setWrnMsg(msg.get("E01010"), srcFn, lineNumber);
-            }
-
-            if (aliesData.ContainsKey(name))
-            {
-                aliesData.Remove(name);
-            }
-            aliesData.Add(name, new Line("", lineNumber, data));
-
-            return 0;
-        }
-
-        private int AddPart(string buf, string srcFn, int lineNumber)
-        {
-            List<string> part = new List<string>();
-            string data = "";
+            string buf = line.Txt.Trim().Substring(2).Trim();
 
             int i = buf.IndexOfAny(new char[] { ' ', '\t' });
             if (i < 0)
@@ -970,12 +937,50 @@ namespace Core
                 return 0;
             }
 
-            part = Common.DivParts(buf.Substring(0, i).Trim(), chips);
+            name = buf.Substring(0, i).Trim();
+            data = buf.Substring(i).Trim();
+            if (name == "")
+            {
+                //エイリアス指定がない場合は警告とする
+                msgBox.setWrnMsg(msg.get("E01009"), line.Lp);
+                return -1;
+            }
+            if (data == "")
+            {
+                //データがない場合は警告する
+                msgBox.setWrnMsg(msg.get("E01010"), line.Lp);
+            }
+
+            if (aliesData.ContainsKey(name))
+            {
+                aliesData.Remove(name);
+            }
+            Line l = new Line(new LinePos(line.Lp.fullPath, line.Lp.row, line.Lp.col, line.Lp.length, line.Lp.part, line.Lp.chip, line.Lp.ch), line.Txt);
+            l.Lp.col = buf.IndexOfAny(new char[] { ' ', '\t' }) + 3;
+            aliesData.Add(name, l);
+
+            return 0;
+        }
+
+        private int AddPart(Line line)
+        {
+            List<string> part = new List<string>();
+            string data = "";
+            string buf = line.Txt;
+
+            int i = buf.IndexOfAny(new char[] { ' ', '\t' });
+            if (i < 0)
+            {
+                //空白による区切りが見つからない場合は無視する
+                return 0;
+            }
+
+            part = Common.DivParts(buf.Substring(1, i).Trim(), chips);
             data = buf.Substring(i).Trim();
             if (part == null)
             {
                 //パート指定がない場合は警告とする
-                msgBox.setWrnMsg(msg.get("E01011"), srcFn, lineNumber);
+                msgBox.setWrnMsg(msg.get("E01011"), line.Lp);
                 return -1;
             }
             if (data == "")
@@ -990,18 +995,20 @@ namespace Core
                 {
                     partData.Add(p, new List<Line>());
                 }
-                partData[p].Add(new Line(srcFn, lineNumber, data));
+                Line l = new Line(new LinePos(line.Lp.fullPath, line.Lp.row, line.Lp.col, line.Lp.length, line.Lp.part, line.Lp.chip, line.Lp.ch), line.Txt);
+                l.Lp.col = i + 1;
+                partData[p].Add(l);
             }
 
             return 0;
         }
 
-        private int SetInstrument(string vals, string srcFn, int lineNumber)
+        private int SetInstrument(Line line)
         {
 
             try
             {
-                instrumentCounter= GetNums(instrumentBufCache, instrumentCounter, vals);
+                instrumentCounter= GetNums(instrumentBufCache, instrumentCounter, line.Txt.Substring(1).TrimStart());
 
                 if (instrumentCounter == instrumentBufCache.Length)
                 {
@@ -1033,18 +1040,18 @@ namespace Core
             }
             catch
             {
-                msgBox.setErrMsg(msg.get("E01012"), srcFn, lineNumber);
+                msgBox.setErrMsg(msg.get("E01012"), line.Lp);
             }
 
             return 0;
         }
 
-        private int SetWfInstrument(string vals, string srcFn, int lineNumber)
+        private int SetWfInstrument(Line line)
         {
 
             try
             {
-                wfInstrumentCounter= GetNums(wfInstrumentBufCache, wfInstrumentCounter, vals);
+                wfInstrumentCounter = GetNums(wfInstrumentBufCache, wfInstrumentCounter, line.Txt.Substring(1).TrimStart());
 
                 if (wfInstrumentCounter == wfInstrumentBufCache.Length)
                 {
@@ -1059,7 +1066,7 @@ namespace Core
             }
             catch
             {
-                msgBox.setErrMsg(msg.get("E01013"), srcFn, lineNumber);
+                msgBox.setErrMsg(msg.get("E01013"), line.Lp);
             }
 
             return 0;
@@ -1122,7 +1129,7 @@ namespace Core
             return aryIndex;
         }
 
-        private int StoreToneDoublerBuffer(string vals, string srcFn, int lineNumber)
+        private int StoreToneDoublerBuffer(string vals, Line line)
         {
             string n = "";
             string h = "";
@@ -1181,7 +1188,7 @@ namespace Core
             }
             catch
             {
-                msgBox.setErrMsg(msg.get("E01014"), srcFn, lineNumber);
+                msgBox.setErrMsg(msg.get("E01014"), line.Lp);
             }
 
             return 0;
@@ -1249,9 +1256,9 @@ namespace Core
 
 
 
-        public List<byte> dat = null;
+        public List<outDatum> dat = null;
         //xgm music data
-        public List<byte> xdat = null;
+        public List<outDatum> xdat = null;
         //xgm keyOnDataList
         public List<byte> xgmKeyOnData = null;
 
@@ -1268,10 +1275,12 @@ namespace Core
 
         public int useJumpCommand = 0;
 
-        public byte[] Vgm_getByteData(Dictionary<string, List<MML>> mmlData)
+        public LinePos linePos { get; internal set; }
+
+        public outDatum[] Vgm_getByteData(Dictionary<string, List<MML>> mmlData)
         {
 
-            dat = new List<byte>();
+            dat = new List<outDatum>();
 
             log.Write("ヘッダー情報作成");
             MakeHeader();
@@ -1312,7 +1321,7 @@ namespace Core
                         log.Write("channelを跨ぐコマンド向け処理");
                         //未使用のパートの場合は処理を行わない
                         if (!chip.use) continue;
-                        chip.MultiChannelCommand();
+                        chip.MultiChannelCommand(null);
                     }
                 }
 
@@ -1490,8 +1499,8 @@ namespace Core
             log.Write("Envelope");
             ProcEnvelope(pw);
 
-            pw.chip.SetFNum(pw);
-            pw.chip.SetVolume(pw);
+            pw.chip.SetFNum(pw,null);
+            pw.chip.SetVolume(pw,null);
 
             log.Write("wait消化待ち");
             if (pw.waitCounter > 0)
@@ -1533,14 +1542,14 @@ namespace Core
         {
 
             //Header
-            OutData(Const.hDat);
+            OutData(null, Const.hDat);
 
             //PCM Data block
             foreach (KeyValuePair<enmChipType, ClsChip[]> kvp in chips)
             {
                 foreach (ClsChip chip in kvp.Value)
                 {
-                    chip.SetPCMDataBlock();
+                    chip.SetPCMDataBlock(null);
                 }
             }
 
@@ -1561,25 +1570,37 @@ namespace Core
             byte[] v;
 
             //end of data
-            OutData(0x66);
+            OutData(null, 0x66);
 
             //GD3 offset
             v = DivInt2ByteAry(dat.Count - 0x14);
-            dat[0x14] = v[0]; dat[0x15] = v[1]; dat[0x16] = v[2]; dat[0x17] = v[3];
+            dat[0x14] = new outDatum(enmMMLType.unknown, null, null, v[0]);
+            dat[0x15] = new outDatum(enmMMLType.unknown, null, null, v[1]);
+            dat[0x16] = new outDatum(enmMMLType.unknown, null, null, v[2]);
+            dat[0x17] = new outDatum(enmMMLType.unknown, null, null, v[3]);
 
             //Total # samples
             v = DivInt2ByteAry((int)dSample);
-            dat[0x18] = v[0]; dat[0x19] = v[1]; dat[0x1a] = v[2]; dat[0x1b] = v[3];
+            dat[0x18] = new outDatum(enmMMLType.unknown, null, null, v[0]);
+            dat[0x19] = new outDatum(enmMMLType.unknown, null, null, v[1]);
+            dat[0x1a] = new outDatum(enmMMLType.unknown, null, null, v[2]);
+            dat[0x1b] = new outDatum(enmMMLType.unknown, null, null, v[3]);
 
             if (loopOffset != -1)
             {
                 //Loop offset
                 v = DivInt2ByteAry((int)(loopOffset - 0x1c));
-                dat[0x1c] = v[0]; dat[0x1d] = v[1]; dat[0x1e] = v[2]; dat[0x1f] = v[3];
+                dat[0x1c] = new outDatum(enmMMLType.unknown, null, null, v[0]);
+                dat[0x1d] = new outDatum(enmMMLType.unknown, null, null, v[1]);
+                dat[0x1e] = new outDatum(enmMMLType.unknown, null, null, v[2]);
+                dat[0x1f] = new outDatum(enmMMLType.unknown, null, null, v[3]);
 
                 //Loop # samples
                 v = DivInt2ByteAry((int)(dSample - loopSamples));
-                dat[0x20] = v[0]; dat[0x21] = v[1]; dat[0x22] = v[2]; dat[0x23] = v[3];
+                dat[0x20] = new outDatum(enmMMLType.unknown, null, null, v[0]);
+                dat[0x21] = new outDatum(enmMMLType.unknown, null, null, v[1]);
+                dat[0x22] = new outDatum(enmMMLType.unknown, null, null, v[2]);
+                dat[0x23] = new outDatum(enmMMLType.unknown, null, null, v[3]);
             }
 
             int p = dat.Count + 12;
@@ -1588,13 +1609,19 @@ namespace Core
 
             //EoF offset
             v = DivInt2ByteAry(dat.Count - 0x4);
-            dat[0x4] = v[0]; dat[0x5] = v[1]; dat[0x6] = v[2]; dat[0x7] = v[3];
+            dat[0x4] = new outDatum(enmMMLType.unknown, null, null, v[0]);
+            dat[0x5] = new outDatum(enmMMLType.unknown, null, null, v[1]);
+            dat[0x6] = new outDatum(enmMMLType.unknown, null, null, v[2]);
+            dat[0x7] = new outDatum(enmMMLType.unknown, null, null, v[3]);
 
             int q = dat.Count - p;
 
             //GD3 Length
             v = DivInt2ByteAry(q);
-            dat[p - 4] = v[0]; dat[p - 3] = v[1]; dat[p - 2] = v[2]; dat[p - 1] = v[3];
+            dat[p - 4] = new outDatum(enmMMLType.unknown, null, null, v[0]);
+            dat[p - 3] = new outDatum(enmMMLType.unknown, null, null, v[1]);
+            dat[p - 2] = new outDatum(enmMMLType.unknown, null, null, v[2]);
+            dat[p - 1] = new outDatum(enmMMLType.unknown, null, null, v[3]);
 
             long useYM2151 = 0;
             long useYM2203 = 0;
@@ -1641,111 +1668,215 @@ namespace Core
             }
 
             if (useSN76489 == 0)
-            { dat[0x0c] = 0; dat[0x0d] = 0; dat[0x0e] = 0; dat[0x0f] = 0; }
+            {
+                dat[0x0c] = new outDatum(enmMMLType.unknown, null, null, 0);
+                dat[0x0d] = new outDatum(enmMMLType.unknown, null, null, 0);
+                dat[0x0e] = new outDatum(enmMMLType.unknown, null, null, 0);
+                dat[0x0f] = new outDatum(enmMMLType.unknown, null, null, 0);
+            }
             if (useYM2612 == 0)
-            { dat[0x2c] = 0; dat[0x2d] = 0; dat[0x2e] = 0; dat[0x2f] = 0; }
+            {
+                dat[0x2c] = new outDatum(enmMMLType.unknown, null, null, 0);
+                dat[0x2d] = new outDatum(enmMMLType.unknown, null, null, 0);
+                dat[0x2e] = new outDatum(enmMMLType.unknown, null, null, 0);
+                dat[0x2f] = new outDatum(enmMMLType.unknown, null, null, 0);
+            }
             if (useYM2151 == 0)
-            { dat[0x30] = 0; dat[0x31] = 0; dat[0x32] = 0; dat[0x33] = 0; }
+            {
+                dat[0x30] = new outDatum(enmMMLType.unknown, null, null, 0);
+                dat[0x31] = new outDatum(enmMMLType.unknown, null, null, 0);
+                dat[0x32] = new outDatum(enmMMLType.unknown, null, null, 0);
+                dat[0x33] = new outDatum(enmMMLType.unknown, null, null, 0);
+            }
             if (useSegaPcm == 0)
-            { dat[0x38] = 0; dat[0x39] = 0; dat[0x3a] = 0; dat[0x3b] = 0; dat[0x3c] = 0; dat[0x3d] = 0; dat[0x3e] = 0; dat[0x3f] = 0; }
+            {
+                dat[0x38] = new outDatum(enmMMLType.unknown, null, null, 0);
+                dat[0x39] = new outDatum(enmMMLType.unknown, null, null, 0);
+                dat[0x3a] = new outDatum(enmMMLType.unknown, null, null, 0);
+                dat[0x3b] = new outDatum(enmMMLType.unknown, null, null, 0);
+
+                dat[0x3c] = new outDatum(enmMMLType.unknown, null, null, 0);
+                dat[0x3d] = new outDatum(enmMMLType.unknown, null, null, 0);
+                dat[0x3e] = new outDatum(enmMMLType.unknown, null, null, 0);
+                dat[0x3f] = new outDatum(enmMMLType.unknown, null, null, 0);
+
+            }
             if (useYM2203 == 0)
-            { dat[0x44] = 0; dat[0x45] = 0; dat[0x46] = 0; dat[0x47] = 0; }
+            {
+                dat[0x44] = new outDatum(enmMMLType.unknown, null, null, 0);
+                dat[0x45] = new outDatum(enmMMLType.unknown, null, null, 0);
+                dat[0x46] = new outDatum(enmMMLType.unknown, null, null, 0);
+                dat[0x47] = new outDatum(enmMMLType.unknown, null, null, 0);
+            }
             if (useYM2608 == 0)
-            { dat[0x48] = 0; dat[0x49] = 0; dat[0x4a] = 0; dat[0x4b] = 0; }
+            {
+                dat[0x48] = new outDatum(enmMMLType.unknown, null, null, 0);
+                dat[0x49] = new outDatum(enmMMLType.unknown, null, null, 0);
+                dat[0x4a] = new outDatum(enmMMLType.unknown, null, null, 0);
+                dat[0x4b] = new outDatum(enmMMLType.unknown, null, null, 0);
+            }
             if (useYM2610B == 0)
-            { dat[0x4c] = 0; dat[0x4d] = 0; dat[0x4e] = 0; dat[0x4f] = 0; }
+            {
+                dat[0x4c] = new outDatum(enmMMLType.unknown, null, null, 0);
+                dat[0x4d] = new outDatum(enmMMLType.unknown, null, null, 0);
+                dat[0x4e] = new outDatum(enmMMLType.unknown, null, null, 0);
+                dat[0x4f] = new outDatum(enmMMLType.unknown, null, null, 0);
+            }
             if (useRf5c164 == 0)
-            { dat[0x6c] = 0; dat[0x6d] = 0; dat[0x6e] = 0; dat[0x6f] = 0; }
+            {
+                dat[0x6c] = new outDatum(enmMMLType.unknown, null, null, 0);
+                dat[0x6d] = new outDatum(enmMMLType.unknown, null, null, 0);
+                dat[0x6e] = new outDatum(enmMMLType.unknown, null, null, 0);
+                dat[0x6f] = new outDatum(enmMMLType.unknown, null, null, 0);
+            }
             if (useHuC6280 == 0)
-            { dat[0xa4] = 0; dat[0xa5] = 0; dat[0xa6] = 0; dat[0xa7] = 0; }
+            {
+                dat[0xa4] = new outDatum(enmMMLType.unknown, null, null, 0);
+                dat[0xa5] = new outDatum(enmMMLType.unknown, null, null, 0);
+                dat[0xa6] = new outDatum(enmMMLType.unknown, null, null, 0);
+                dat[0xa7] = new outDatum(enmMMLType.unknown, null, null, 0);
+            }
             if (useC140 == 0)
             {
-                dat[0xa8] = 0; dat[0xa9] = 0; dat[0xaa] = 0; dat[0xab] = 0;
-                dat[0x96] = 0;
+                dat[0xa8] = new outDatum(enmMMLType.unknown, null, null, 0);
+                dat[0xa9] = new outDatum(enmMMLType.unknown, null, null, 0);
+                dat[0xaa] = new outDatum(enmMMLType.unknown, null, null, 0);
+                dat[0xab] = new outDatum(enmMMLType.unknown, null, null, 0);
+
+                dat[0x96] = new outDatum(enmMMLType.unknown, null, null, 0);
             }
             else
             {
-                dat[0x96] = (byte)((!c140[0].isSystem2 || !c140[1].isSystem2) ? 1 : 0);
+                dat[0x96] = new outDatum(enmMMLType.unknown, null, null, (byte)((!c140[0].isSystem2 || !c140[1].isSystem2) ? 1 : 0));
             }
             if (useAY8910 == 0)
-            { dat[0x74] = 0; dat[0x75] = 0; dat[0x76] = 0; dat[0x77] = 0; dat[0x78] = 0; dat[0x79] = 0; dat[0x7a] = 0; dat[0x7b] = 0; }
+            {
+                dat[0x74] = new outDatum(enmMMLType.unknown, null, null, 0);
+                dat[0x75] = new outDatum(enmMMLType.unknown, null, null, 0);
+                dat[0x76] = new outDatum(enmMMLType.unknown, null, null, 0);
+                dat[0x77] = new outDatum(enmMMLType.unknown, null, null, 0);
+                dat[0x78] = new outDatum(enmMMLType.unknown, null, null, 0);
+                dat[0x79] = new outDatum(enmMMLType.unknown, null, null, 0);
+                dat[0x7a] = new outDatum(enmMMLType.unknown, null, null, 0);
+                dat[0x7b] = new outDatum(enmMMLType.unknown, null, null, 0);
+            }
             if (useYM2413 == 0)
-            { dat[0x10] = 0; dat[0x11] = 0; dat[0x12] = 0; dat[0x13] = 0; }
+            {
+                dat[0x10] = new outDatum(enmMMLType.unknown, null, null, 0);
+                dat[0x11] = new outDatum(enmMMLType.unknown, null, null, 0);
+                dat[0x12] = new outDatum(enmMMLType.unknown, null, null, 0);
+                dat[0x13] = new outDatum(enmMMLType.unknown, null, null, 0);
+            }
             if (useK051649 == 0)
-            { dat[0x9c] = 0; dat[0x9d] = 0; dat[0x9e] = 0; dat[0x9f] = 0; }
+            {
+                dat[0x9c] = new outDatum(enmMMLType.unknown, null, null, 0);
+                dat[0x9d] = new outDatum(enmMMLType.unknown, null, null, 0);
+                dat[0x9e] = new outDatum(enmMMLType.unknown, null, null, 0);
+                dat[0x9f] = new outDatum(enmMMLType.unknown, null, null, 0);
+            }
 
             if (info.Version == 1.51f)
-            { dat[0x08] = 0x51; dat[0x09] = 0x01; }
+            {
+                dat[0x08] = new outDatum(enmMMLType.unknown, null, null, 0x51);
+                dat[0x09] = new outDatum(enmMMLType.unknown, null, null, 0x01);
+            }
             else if (info.Version == 1.60f)
-            { dat[0x08] = 0x60; dat[0x09] = 0x01; }
+            {
+                dat[0x08] = new outDatum(enmMMLType.unknown, null, null, 0x60);
+                dat[0x09] = new outDatum(enmMMLType.unknown, null, null, 0x01);
+            }
             else
-            { dat[0x08] = 0x61; dat[0x09] = 0x01; }
+            {
+                dat[0x08] = new outDatum(enmMMLType.unknown, null, null, 0x61);
+                dat[0x09] = new outDatum(enmMMLType.unknown, null, null, 0x01);
+            }
 
         }
 
-        private void MakeGD3(List<byte> dat)
+        private void MakeGD3(List<outDatum> dat)
         {
             //'Gd3 '
-            dat.Add(0x47); dat.Add(0x64); dat.Add(0x33); dat.Add(0x20);
+            dat.Add(new outDatum(enmMMLType.unknown, null, null, 0x47));
+            dat.Add(new outDatum(enmMMLType.unknown, null, null, 0x64));
+            dat.Add(new outDatum(enmMMLType.unknown, null, null, 0x33));
+            dat.Add(new outDatum(enmMMLType.unknown, null, null, 0x20));
 
             //GD3 Version
-            dat.Add(0x00); dat.Add(0x01); dat.Add(0x00); dat.Add(0x00);
+            dat.Add(new outDatum(enmMMLType.unknown, null, null, 0x00));
+            dat.Add(new outDatum(enmMMLType.unknown, null, null, 0x01));
+            dat.Add(new outDatum(enmMMLType.unknown, null, null, 0x00));
+            dat.Add(new outDatum(enmMMLType.unknown, null, null, 0x00));
 
             //GD3 Length(dummy)
-            dat.Add(0x00); dat.Add(0x00); dat.Add(0x00); dat.Add(0x00);
+            dat.Add(new outDatum(enmMMLType.unknown, null, null, 0x00));
+            dat.Add(new outDatum(enmMMLType.unknown, null, null, 0x00));
+            dat.Add(new outDatum(enmMMLType.unknown, null, null, 0x00));
+            dat.Add(new outDatum(enmMMLType.unknown, null, null, 0x00));
 
             //TrackName
-            dat.AddRange(Encoding.Unicode.GetBytes(info.TitleName));
-            dat.Add(0x00); dat.Add(0x00);
-            dat.AddRange(Encoding.Unicode.GetBytes(info.TitleNameJ));
-            dat.Add(0x00); dat.Add(0x00);
+            foreach (byte b in Encoding.Unicode.GetBytes(info.TitleName)) dat.Add(new outDatum(enmMMLType.unknown, null, null, b));
+            dat.Add(new outDatum(enmMMLType.unknown, null, null, 0x00));
+            dat.Add(new outDatum(enmMMLType.unknown, null, null, 0x00));
+            foreach (byte b in Encoding.Unicode.GetBytes(info.TitleNameJ)) dat.Add(new outDatum(enmMMLType.unknown, null, null, b));
+            dat.Add(new outDatum(enmMMLType.unknown, null, null, 0x00));
+            dat.Add(new outDatum(enmMMLType.unknown, null, null, 0x00));
 
             //GameName
-            dat.AddRange(Encoding.Unicode.GetBytes(info.GameName));
-            dat.Add(0x00); dat.Add(0x00);
-            dat.AddRange(Encoding.Unicode.GetBytes(info.GameNameJ));
-            dat.Add(0x00); dat.Add(0x00);
+            foreach (byte b in Encoding.Unicode.GetBytes(info.GameName)) dat.Add(new outDatum(enmMMLType.unknown, null, null, b));
+            dat.Add(new outDatum(enmMMLType.unknown, null, null, 0x00));
+            dat.Add(new outDatum(enmMMLType.unknown, null, null, 0x00));
+            foreach (byte b in Encoding.Unicode.GetBytes(info.GameNameJ)) dat.Add(new outDatum(enmMMLType.unknown, null, null, b));
+            dat.Add(new outDatum(enmMMLType.unknown, null, null, 0x00));
+            dat.Add(new outDatum(enmMMLType.unknown, null, null, 0x00));
 
             //SystemName
-            dat.AddRange(Encoding.Unicode.GetBytes(info.SystemName));
-            dat.Add(0x00); dat.Add(0x00);
-            dat.AddRange(Encoding.Unicode.GetBytes(info.SystemNameJ));
-            dat.Add(0x00); dat.Add(0x00);
+            foreach (byte b in Encoding.Unicode.GetBytes(info.SystemName)) dat.Add(new outDatum(enmMMLType.unknown, null, null, b));
+            dat.Add(new outDatum(enmMMLType.unknown, null, null, 0x00));
+            dat.Add(new outDatum(enmMMLType.unknown, null, null, 0x00));
+            foreach (byte b in Encoding.Unicode.GetBytes(info.SystemNameJ)) dat.Add(new outDatum(enmMMLType.unknown, null, null, b));
+            dat.Add(new outDatum(enmMMLType.unknown, null, null, 0x00));
+            dat.Add(new outDatum(enmMMLType.unknown, null, null, 0x00));
 
             //Composer
-            dat.AddRange(Encoding.Unicode.GetBytes(info.Composer));
-            dat.Add(0x00); dat.Add(0x00);
-            dat.AddRange(Encoding.Unicode.GetBytes(info.ComposerJ));
-            dat.Add(0x00); dat.Add(0x00);
+            foreach (byte b in Encoding.Unicode.GetBytes(info.Composer)) dat.Add(new outDatum(enmMMLType.unknown, null, null, b));
+            dat.Add(new outDatum(enmMMLType.unknown, null, null, 0x00));
+            dat.Add(new outDatum(enmMMLType.unknown, null, null, 0x00));
+            foreach (byte b in Encoding.Unicode.GetBytes(info.ComposerJ)) dat.Add(new outDatum(enmMMLType.unknown, null, null, b));
+            dat.Add(new outDatum(enmMMLType.unknown, null, null, 0x00));
+            dat.Add(new outDatum(enmMMLType.unknown, null, null, 0x00));
 
             //ReleaseDate
-            dat.AddRange(Encoding.Unicode.GetBytes(info.ReleaseDate));
-            dat.Add(0x00); dat.Add(0x00);
+            foreach (byte b in Encoding.Unicode.GetBytes(info.ReleaseDate)) dat.Add(new outDatum(enmMMLType.unknown, null, null, b));
+            dat.Add(new outDatum(enmMMLType.unknown, null, null, 0x00));
+            dat.Add(new outDatum(enmMMLType.unknown, null, null, 0x00));
 
             //Converted
-            dat.AddRange(Encoding.Unicode.GetBytes(info.Converted));
-            dat.Add(0x00); dat.Add(0x00);
+            foreach (byte b in Encoding.Unicode.GetBytes(info.Converted)) dat.Add(new outDatum(enmMMLType.unknown, null, null, b));
+            dat.Add(new outDatum(enmMMLType.unknown, null, null, 0x00));
+            dat.Add(new outDatum(enmMMLType.unknown, null, null, 0x00));
 
             //Notes
-            dat.AddRange(Encoding.Unicode.GetBytes(info.Notes));
-            dat.Add(0x00); dat.Add(0x00);
+            foreach (byte b in Encoding.Unicode.GetBytes(info.Notes)) dat.Add(new outDatum(enmMMLType.unknown, null, null, b));
+            dat.Add(new outDatum(enmMMLType.unknown, null, null, 0x00));
+            dat.Add(new outDatum(enmMMLType.unknown, null, null, 0x00));
 
             //歌詞
             if (lyric != "")
             {
-                dat.AddRange(Encoding.Unicode.GetBytes(lyric));
-                dat.Add(0x00); dat.Add(0x00);
+                foreach (byte b in Encoding.Unicode.GetBytes(lyric)) dat.Add(new outDatum(enmMMLType.unknown, null, null, b));
+                dat.Add(new outDatum(enmMMLType.unknown, null, null, 0x00));
+                dat.Add(new outDatum(enmMMLType.unknown, null, null, 0x00));
             }
         }
 
 
-        public byte[] Xgm_getByteData(Dictionary<string, List<MML>> mmlData)
+        public outDatum[] Xgm_getByteData(Dictionary<string, List<MML>> mmlData)
         {
 
             //PartInit();
 
-            dat = new List<byte>();
-            xdat = new List<byte>();
+            dat = new List<outDatum>();
+            xdat = new List<outDatum>();
 
             log.Write("ヘッダー情報作成(XGM)");
             Xgm_makeHeader();
@@ -1789,7 +1920,7 @@ namespace Core
                 waitCounter = Xgm_procCheckMinimumWaitCounter();
 
                 log.Write("KeyOn情報をかき出し");
-                foreach (byte dat in xgmKeyOnData) OutData(0x52, 0x28, dat);
+                foreach (byte dat in xgmKeyOnData) OutData(null, 0x52, 0x28, dat);
 
                 log.Write("全パートのwaitcounterを減らす");
                 if (waitCounter != long.MaxValue)
@@ -1835,14 +1966,14 @@ namespace Core
             //Header
             foreach (byte b in Const.xhDat)
             {
-                xdat.Add(b);
+                xdat.Add(new outDatum(enmMMLType.unknown, null, null, b));
             }
 
             //FM音源を初期化
 
-            ym2612x[0].OutOPNSetHardLfo(ym2612x[0].lstPartWork[0], false, 0);
-            ym2612x[0].OutOPNSetCh3SpecialMode(ym2612x[0].lstPartWork[0], false);
-            ym2612x[0].OutSetCh6PCMMode(ym2612x[0].lstPartWork[0], false);
+            ym2612x[0].OutOPNSetHardLfo(null,ym2612x[0].lstPartWork[0], false, 0);
+            ym2612x[0].OutOPNSetCh3SpecialMode(null,ym2612x[0].lstPartWork[0], false);
+            ym2612x[0].OutSetCh6PCMMode(null,ym2612x[0].lstPartWork[0], false);
             ym2612x[0].OutFmAllKeyOff();
 
             foreach (partWork pw in ym2612x[0].lstPartWork)
@@ -1851,7 +1982,7 @@ namespace Core
                 {
                     pw.hardLfoSw = false;
                     pw.hardLfoNum = 0;
-                    ym2612x[0].OutOPNSetHardLfo(pw, pw.hardLfoSw, pw.hardLfoNum);
+                    ym2612x[0].OutOPNSetHardLfo(null,pw, pw.hardLfoSw, pw.hardLfoNum);
                 }
 
                 if (pw.ch < 6)
@@ -1859,7 +1990,7 @@ namespace Core
                     pw.pan.val = 3;
                     pw.ams = 0;
                     pw.fms = 0;
-                    if (!pw.dataEnd) ym2612x[0].OutOPNSetPanAMSPMS(pw, 3, 0, 0);
+                    if (!pw.dataEnd) ym2612x[0].OutOPNSetPanAMSPMS(null,pw, 3, 0, 0);
                 }
             }
 
@@ -1884,10 +2015,10 @@ namespace Core
                 }
                 p.size = size;
 
-                xdat[n + 0] = (byte)((stAdr / 256) & 0xff);
-                xdat[n + 1] = (byte)(((stAdr / 256) & 0xff00) >> 8);
-                xdat[n + 2] = (byte)((size / 256) & 0xff);
-                xdat[n + 3] = (byte)(((size / 256) & 0xff00) >> 8);
+                xdat[n + 0] = new outDatum(enmMMLType.unknown, null, null, (byte)((stAdr / 256) & 0xff));
+                xdat[n + 1] = new outDatum(enmMMLType.unknown, null, null, (byte)(((stAdr / 256) & 0xff00) >> 8));
+                xdat[n + 2] = new outDatum(enmMMLType.unknown, null, null, (byte)((size / 256) & 0xff));
+                xdat[n + 3] = new outDatum(enmMMLType.unknown, null, null, (byte)(((size / 256) & 0xff00) >> 8));
 
                 ptr += size;
                 n += 4;
@@ -1896,17 +2027,17 @@ namespace Core
             //$0100               Sample data bloc size / 256
             if (ym2612x[0].pcmDataEasy != null)
             {
-                xdat[0x100] = (byte)((ptr / 256) & 0xff);
-                xdat[0x101] = (byte)(((ptr / 256) & 0xff00) >> 8);
+                xdat[0x100] = new outDatum(enmMMLType.unknown, null, null, (byte)((ptr / 256) & 0xff));
+                xdat[0x101] = new outDatum(enmMMLType.unknown, null, null, (byte)(((ptr / 256) & 0xff00) >> 8));
             }
             else
             {
-                xdat[0x100] = 0;
-                xdat[0x101] = 0;
+                xdat[0x100] = new outDatum(enmMMLType.unknown, null, null, 0);
+                xdat[0x101] = new outDatum(enmMMLType.unknown, null, null, 0);
             }
 
             //$0103 bit #0: NTSC / PAL information
-            xdat[0x103] |= (byte)(info.xgmSamplesPerSecond == 50 ? 1 : 0);
+            xdat[0x103] = new outDatum(enmMMLType.unknown, null, null, (byte)(xdat[0x103].val | (byte)(info.xgmSamplesPerSecond == 50 ? 1 : 0)));
 
             //$0104               Sample data block
             if (ym2612x[0].pcmDataEasy != null)
@@ -1917,7 +2048,7 @@ namespace Core
 
                     for (uint cnt = 0; cnt < p.size; cnt++)
                     {
-                        xdat.Add(ym2612x[0].pcmDataEasy[p.stAdr + cnt]);
+                        xdat.Add(new outDatum(enmMMLType.unknown, null, null, ym2612x[0].pcmDataEasy[p.stAdr + cnt]));
                     }
 
                 }
@@ -1927,23 +2058,23 @@ namespace Core
             if (dat != null)
             {
                 //$0104 + SLEN        Music data bloc size.
-                xdat.Add((byte)((dat.Count & 0xff) >> 0));
-                xdat.Add((byte)((dat.Count & 0xff00) >> 8));
-                xdat.Add((byte)((dat.Count & 0xff0000) >> 16));
-                xdat.Add((byte)((dat.Count & 0xff000000) >> 24));
+                xdat.Add(new outDatum(enmMMLType.unknown, null, null, (byte)((dat.Count & 0xff) >> 0)));
+                xdat.Add(new outDatum(enmMMLType.unknown, null, null, (byte)((dat.Count & 0xff00) >> 8)));
+                xdat.Add(new outDatum(enmMMLType.unknown, null, null, (byte)((dat.Count & 0xff0000) >> 16)));
+                xdat.Add(new outDatum(enmMMLType.unknown, null, null, (byte)((dat.Count & 0xff000000) >> 24)));
 
                 //$0108 + SLEN        Music data bloc
-                foreach (byte b in dat)
+                foreach (outDatum b in dat)
                 {
                     xdat.Add(b);
                 }
             }
             else
             {
-                xdat.Add(0);
-                xdat.Add(0);
-                xdat.Add(0);
-                xdat.Add(0);
+                xdat.Add(new outDatum(enmMMLType.unknown, null, null, 0));
+                xdat.Add(new outDatum(enmMMLType.unknown, null, null, 0));
+                xdat.Add(new outDatum(enmMMLType.unknown, null, null, 0));
+                xdat.Add(new outDatum(enmMMLType.unknown, null, null, 0));
             }
 
             //$0108 + SLEN + MLEN GD3 tags
@@ -1968,8 +2099,8 @@ namespace Core
                 log.Write("Envelope");
                 ProcEnvelope(pw);
 
-                pw.chip.SetFNum(pw);
-                pw.chip.SetVolume(pw);
+                pw.chip.SetFNum(pw,null);
+                pw.chip.SetVolume(pw,null);
 
                 log.Write("wait消化待ち");
                 if (pw.waitCounter > 0) continue;
@@ -2087,7 +2218,7 @@ namespace Core
             }
         }
 
-        private List<byte> ConvertVGMtoXGM(List<byte> src)
+        private List<outDatum> ConvertVGMtoXGM(List<outDatum> src)
         {
             if (src == null || src.Count < 1) return null;
 
@@ -2106,11 +2237,11 @@ namespace Core
             for (int ptr = 0; ptr < src.Count; ptr++)
             {
 
-                byte cmd = src[ptr];
+                outDatum cmd = src[ptr];
                 int p;
                 int c;
 
-                switch (cmd)
+                switch (cmd.val)
                 {
                     case 0x61: //Wait
 
@@ -2138,11 +2269,11 @@ namespace Core
 
                         if (des.Count - framePtr > 256)
                         {
-                            msgBox.setWrnMsg(string.Format(msg.get("E01015"), frameCnt, des.Count - framePtr), "-", -1);
+                            msgBox.setWrnMsg(string.Format(msg.get("E01015"), frameCnt, des.Count - framePtr),new LinePos("-"));
                         }
                         framePtr = des.Count;
 
-                        int cnt = src[ptr + 1] + src[ptr + 2] * 0x100;
+                        int cnt = src[ptr + 1].val + src[ptr + 2].val * 0x100;
                         for (int j = 0; j < cnt; j++)
                         {
                             //wait
@@ -2154,11 +2285,11 @@ namespace Core
                     case 0x50: //DCSG
                         do
                         {
-                            bool latch = (src[ptr + 1] & 0x80) != 0;
-                            int ch = (src[ptr + 1] & 0x60) >> 5;
-                            int tp = (src[ptr + 1] & 0x10) >> 3;
-                            int d1 = (src[ptr + 1] & 0xf);
-                            int d2 = (src[ptr + 1] & 0x3f);
+                            bool latch = (src[ptr + 1].val & 0x80) != 0;
+                            int ch = (src[ptr + 1].val & 0x60) >> 5;
+                            int tp = (src[ptr + 1].val & 0x10) >> 3;
+                            int d1 = (src[ptr + 1].val & 0xf);
+                            int d2 = (src[ptr + 1].val & 0x3f);
                             if (latch)
                             {
                                 psgch = ch;
@@ -2174,14 +2305,14 @@ namespace Core
                                 psgch = -1;
                             }
                             ptr += 2;
-                        }while(ptr < src.Count - 1 && src[ptr] == 0x50);
+                        }while(ptr < src.Count - 1 && src[ptr].val == 0x50);
                         ptr--;
                         break;
                     case 0x52: //YM2612 Port0
-                        if (opn2reg[0][src[ptr + 1]] != src[ptr + 2] || src[ptr + 1] == 0x28)
+                        if (opn2reg[0][src[ptr + 1].val] != src[ptr + 2].val || src[ptr + 1].val == 0x28)
                         {
 
-                            bool isKeyOn = src[ptr + 1] == 0x28;
+                            bool isKeyOn = src[ptr + 1].val == 0x28;
                             if (!isKeyOn)
                             {
                                 p = des.Count;
@@ -2189,17 +2320,17 @@ namespace Core
                                 des.Add(0x20);
                                 do
                                 {
-                                    if (opn2reg[0][src[ptr + 1]] != src[ptr + 2])
+                                    if (opn2reg[0][src[ptr + 1].val] != src[ptr + 2].val)
                                     {
                                         //F-numの場合は圧縮対象外
-                                        if(src[ptr+1]<0xa0 || src[ptr+1]>=0xb0) opn2reg[0][src[ptr + 1]] = src[ptr + 2];
+                                        if(src[ptr+1].val < 0xa0 || src[ptr+1].val >= 0xb0) opn2reg[0][src[ptr + 1].val] = src[ptr + 2].val;
 
-                                        des.Add(src[ptr + 1]);
-                                        des.Add(src[ptr + 2]);
+                                        des.Add(src[ptr + 1].val);
+                                        des.Add(src[ptr + 2].val);
                                         c++;
                                     }
                                     ptr += 3;
-                                } while (c < 16 && ptr < src.Count - 1 && src[ptr] == 0x52 && src[ptr + 1] != 0x28);
+                                } while (c < 16 && ptr < src.Count - 1 && src[ptr].val == 0x52 && src[ptr + 1].val != 0x28);
                                 c--;
                                 ptr--;
                                 des[p] |= (byte)c;
@@ -2212,10 +2343,10 @@ namespace Core
                                 do
                                 {
                                     //des.Add(src[ptr + 1]);
-                                    des.Add(src[ptr + 2]);
+                                    des.Add(src[ptr + 2].val);
                                     c++;
                                     ptr += 3;
-                                } while (c < 16 && ptr < src.Count - 1 && src[ptr] == 0x52 && src[ptr + 1] == 0x28);
+                                } while (c < 16 && ptr < src.Count - 1 && src[ptr].val == 0x52 && src[ptr + 1].val == 0x28);
                                 c--;
                                 ptr--;
                                 des[p] |= (byte)c;
@@ -2227,7 +2358,7 @@ namespace Core
                         }
                         break;
                     case 0x53: //YM2612 Port1
-                        if (opn2reg[1][src[ptr + 1]] != src[ptr + 2])
+                        if (opn2reg[1][src[ptr + 1].val] != src[ptr + 2].val)
                         {
 
                             p = des.Count;
@@ -2235,16 +2366,16 @@ namespace Core
                             des.Add(0x30);
                             do
                             {
-                                if (opn2reg[1][src[ptr + 1]] != src[ptr + 2])
+                                if (opn2reg[1][src[ptr + 1].val] != src[ptr + 2].val)
                                 {
                                     //F-numの場合は圧縮対象外
-                                    if (src[ptr + 1] < 0xa0 || src[ptr + 1] >= 0xb0) opn2reg[1][src[ptr + 1]] = src[ptr + 2];
-                                    des.Add(src[ptr + 1]);
-                                    des.Add(src[ptr + 2]);
+                                    if (src[ptr + 1].val < 0xa0 || src[ptr + 1].val >= 0xb0) opn2reg[1][src[ptr + 1].val] = src[ptr + 2].val;
+                                    des.Add(src[ptr + 1].val);
+                                    des.Add(src[ptr + 2].val);
                                     c++;
                                 }
                                 ptr += 3;
-                            } while (c < 16 && ptr < src.Count - 1 && src[ptr] == 0x53);
+                            } while (c < 16 && ptr < src.Count - 1 && src[ptr].val == 0x53);
                             c--;
                             ptr--;
                             des[p] |= (byte)c;
@@ -2255,8 +2386,8 @@ namespace Core
                         }
                         break;
                     case 0x54: //PCM KeyON (YM2151)
-                        des.Add(src[ptr + 1]);
-                        des.Add(src[ptr + 2]);
+                        des.Add(src[ptr + 1].val);
+                        des.Add(src[ptr + 2].val);
                         ptr += 2;
                         break;
                     case 0x7e: //LOOP Point
@@ -2264,7 +2395,7 @@ namespace Core
                         for (int i = 0; i < 512; i++) opn2reg[i / 0x100][i % 0x100] = -1;
                         break;
                     default:
-                        msgBox.setErrMsg(string.Format("",cmd), "-", -1);
+                        msgBox.setErrMsg(string.Format("", cmd),new LinePos("-"));
                         return null;
                 }
             }
@@ -2281,7 +2412,10 @@ namespace Core
                 des.Add((byte)((loopOffset & 0xff0000) >> 16));
             }
 
-            return des;
+            List<outDatum> d = new List<outDatum>();
+            foreach (byte b in des) d.Add(new outDatum(enmMMLType.unknown, null, null, b));
+
+            return d;
         }
 
 
@@ -2293,7 +2427,7 @@ namespace Core
                 {
                     if (!pw.envelopeMode)
                     {
-                        pw.chip.SetKeyOff(pw);
+                        pw.chip.SetKeyOff(pw,null);
                     }
                     else
                     {
@@ -2354,10 +2488,10 @@ namespace Core
                     {
                         cpw.ams = pl.param[3];
                         cpw.fms = pl.param[2];
-                        ((ClsOPN)cpw.chip).OutOPNSetPanAMSPMS(cpw, (int)cpw.pan.val, cpw.ams, cpw.fms);
+                        ((ClsOPN)cpw.chip).OutOPNSetPanAMSPMS(null, cpw, (int)cpw.pan.val, cpw.ams, cpw.fms);
                         cpw.chip.lstPartWork[0].hardLfoSw = true;
                         cpw.chip.lstPartWork[0].hardLfoNum = pl.param[1];
-                        ((ClsOPN)cpw.chip).OutOPNSetHardLfo(cpw, cpw.hardLfoSw, cpw.hardLfoNum);
+                        ((ClsOPN)cpw.chip).OutOPNSetHardLfo(null, cpw, cpw.hardLfoSw, cpw.hardLfoNum);
                         pl.waitCounter = -1;
                     }
                     continue;
@@ -2466,7 +2600,7 @@ namespace Core
 
             if (pw.envIndex == -1)
             {
-                pw.chip.SetKeyOff(pw);
+                pw.chip.SetKeyOff(pw, null);
             }
         }
 
@@ -2670,8 +2804,7 @@ namespace Core
                 default:
                     msgBox.setErrMsg(string.Format(msg.get("E01016")
                         , mml.type)
-                        , mml.line.Fn
-                        , mml.line.Num);
+                        , mml.line.Lp);
                     pw.mmlPos++;
                     break;
             }
@@ -2766,9 +2899,29 @@ namespace Core
             };
         }
 
-        public void OutData(params byte[] data)
+        public void OutData(MML mml, params byte[] data)
         {
-            foreach(byte d in data) dat.Add(d);
+            foreach (byte d in data)
+            {
+                outDatum od = new outDatum();
+                od.val = d;
+                if (mml != null)
+                {
+                    od.type = mml.type;
+                    if (mml.line != null && mml.line.Lp != null)
+                    {
+                        od.linePos = new LinePos(
+                            mml.line.Lp.fullPath,
+                            mml.line.Lp.row,
+                            mml.line.Lp.col,
+                            mml.line.Lp.length,
+                            mml.line.Lp.part,
+                            mml.line.Lp.chip,
+                            mml.line.Lp.ch);
+                    }
+                }
+                dat.Add(od);
+            }
         }
 
         private void OutWaitNSamples(long n)
@@ -2780,18 +2933,20 @@ namespace Core
                 if (m > 0xffff)
                 {
                     OutData(
-                        0x61
-                        , (byte)0xff
-                        , (byte)0xff
+                        null,
+                        0x61,
+                        (byte)0xff,
+                        (byte)0xff
                         );
                     m -= 0xffff;
                 }
                 else
                 {
                     OutData(
-                        0x61
-                        , (byte)(m & 0xff)
-                        , (byte)((m & 0xff00) >> 8)
+                        null,
+                        0x61,
+                        (byte)(m & 0xff),
+                        (byte)((m & 0xff00) >> 8)
                         );
                     m = 0L;
                 }
@@ -2802,7 +2957,7 @@ namespace Core
         {
             for (int i = 0; i < repeatCount; i++)
             {
-                OutData(0x62);
+                OutData(null,0x62);
             }
         }
 
@@ -2810,7 +2965,7 @@ namespace Core
         {
             for (int i = 0; i < repeatCount; i++)
             {
-                OutData(0x63);
+                OutData(null,0x63);
             }
         }
 
@@ -2834,7 +2989,7 @@ namespace Core
                 if (cpw.pcmSizeCounter > 0)
                 {
                     cpw.pcmSizeCounter--;
-                    OutData((byte)(0x80 + f));
+                    OutData(null, (byte)(0x80 + f));
                 }
                 else
                 {

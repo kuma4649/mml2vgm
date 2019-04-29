@@ -77,9 +77,9 @@ namespace Core
         {
             if (!use) return;
 
-            OutOPNSetHardLfo(lstPartWork[0], false, 0);
-            OutOPNSetCh3SpecialMode(lstPartWork[0], false);
-            OutSetCh6PCMMode(lstPartWork[0], false);
+            OutOPNSetHardLfo(null,lstPartWork[0], false, 0);
+            OutOPNSetCh3SpecialMode(null, lstPartWork[0], false);
+            OutSetCh6PCMMode(null, lstPartWork[0], false);
 
             OutFmAllKeyOff();
 
@@ -96,18 +96,22 @@ namespace Core
                     pw.pan.val = 3;
                     pw.ams = 0;
                     pw.fms = 0;
-                    if (!pw.dataEnd) OutOPNSetPanAMSPMS(pw, 3, 0, 0);
+                    if (!pw.dataEnd) OutOPNSetPanAMSPMS(null, pw, 3, 0, 0);
                 }
             }
 
-            if (ChipID != 0) parent.dat[0x2f] |= 0x40;
+            if (ChipID != 0)
+            {
+                parent.dat[0x2f]=new outDatum(enmMMLType.unknown,null,null,(byte)(parent.dat[0x2f].val | 0x40));
+            }
 
         }
 
 
-        public void OutSetCh6PCMMode(partWork pw, bool sw)
+        public void OutSetCh6PCMMode(MML mml,partWork pw, bool sw)
         {
             parent.OutData(
+                mml,
                 pw.port0
                 , 0x2b
                 , (byte)((sw ? 0x80 : 0))
@@ -138,19 +142,19 @@ namespace Core
         }
 
 
-        public override void SetFNum(partWork pw)
+        public override void SetFNum(partWork pw,MML mml)
         {
-            SetFmFNum(pw);
+            SetFmFNum(pw, mml);
         }
 
-        public override void SetKeyOn(partWork pw)
+        public override void SetKeyOn(partWork pw,MML mml)
         {
-            OutFmKeyOn(pw);
+            OutFmKeyOn(pw,mml);
         }
 
-        public override void SetKeyOff(partWork pw)
+        public override void SetKeyOff(partWork pw,MML mml)
         {
-            OutFmKeyOff(pw);
+            OutFmKeyOff(pw,mml);
         }
 
         public override void StorePcm(Dictionary<int, clsPcm> newDic, KeyValuePair<int, clsPcm> v, byte[] buf, bool is16bit, int samplerate, params object[] option)
@@ -200,7 +204,7 @@ namespace Core
 
         public override void StorePcmRawData(clsPcmDatSeq pds, byte[] buf, bool isRaw, bool is16bit, int samplerate, params object[] option)
         {
-            msgBox.setWrnMsg(msg.get("E20004"), "-", -1);
+            msgBox.setWrnMsg(msg.get("E20004"),new LinePos("-"));
         }
 
 
@@ -212,7 +216,7 @@ namespace Core
 
             byte adr = (byte)mml.args[0];
             byte dat = (byte)mml.args[1];
-            parent.OutData((pw.ch > 2 && pw.ch < 6) ? pw.port1 : pw.port0, adr, dat);
+            parent.OutData(mml, (pw.ch > 2 && pw.ch < 6) ? pw.port1 : pw.port0, adr, dat);
         }
 
         public override void CmdMPMS(partWork pw, MML mml)
@@ -222,6 +226,7 @@ namespace Core
             n = Common.CheckRange(n, 0, 3);
             pw.pms = n;
             ((ClsOPN)pw.chip).OutOPNSetPanAMSPMS(
+                mml,
                 pw
                 , (int)pw.pan.val
                 , pw.ams
@@ -235,6 +240,7 @@ namespace Core
             n = Common.CheckRange(n, 0, 7);
             pw.ams = n;
             ((ClsOPN)pw.chip).OutOPNSetPanAMSPMS(
+                mml,
                 pw
                 , (int)pw.pan.val
                 , pw.ams
@@ -250,12 +256,12 @@ namespace Core
             {
                 if (pw.lfo[c].param.Count < 4)
                 {
-                    msgBox.setErrMsg(msg.get("E20000"), pw.getSrcFn(), pw.getLineNumber());
+                    msgBox.setErrMsg(msg.get("E20000"), mml.line.Lp);
                     return;
                 }
                 if (pw.lfo[c].param.Count > 5)
                 {
-                    msgBox.setErrMsg(msg.get("E20001"), pw.getSrcFn(), pw.getLineNumber());
+                    msgBox.setErrMsg(msg.get("E20001"), mml.line.Lp);
                     return;
                 }
 
@@ -284,11 +290,11 @@ namespace Core
             {
                 if (pw.lfo[c].param[4] == 0)
                 {
-                    ((ClsOPN)pw.chip).OutOPNSetHardLfo(pw, (n == 0) ? false : true, pw.lfo[c].param[1]);
+                    ((ClsOPN)pw.chip).OutOPNSetHardLfo(mml, pw, (n == 0) ? false : true, pw.lfo[c].param[1]);
                 }
                 else
                 {
-                    ((ClsOPN)pw.chip).OutOPNSetHardLfo(pw, false, pw.lfo[c].param[1]);
+                    ((ClsOPN)pw.chip).OutOPNSetHardLfo(mml, pw, false, pw.lfo[c].param[1]);
                 }
             }
         }
@@ -306,7 +312,7 @@ namespace Core
 
             n = Common.CheckRange(n, 0, 3);
             pw.pan.val = n;
-            ((ClsOPN)pw.chip).OutOPNSetPanAMSPMS(pw, n, pw.ams, pw.fms);
+            ((ClsOPN)pw.chip).OutOPNSetPanAMSPMS(mml, pw, n, pw.ams, pw.fms);
         }
 
         public override void CmdMode(partWork pw, MML mml)
@@ -318,7 +324,7 @@ namespace Core
                 pw.pcm = (n == 1);
                 pw.freq = -1;//freqをリセット
                 pw.instrument = -1;
-                ((YM2612)(pw.chip)).OutSetCh6PCMMode(pw, pw.pcm);
+                ((YM2612)(pw.chip)).OutSetCh6PCMMode(mml, pw, pw.pcm);
 
                 return;
             }
@@ -341,7 +347,7 @@ namespace Core
                     lstPartWork[6].instrument = n;
                     lstPartWork[7].instrument = n;
                     lstPartWork[8].instrument = n;
-                    OutFmSetInstrument(pw, n, pw.volume, type);
+                    OutFmSetInstrument(pw,mml, n, pw.volume, type);
                     return;
                 }
             }
@@ -353,13 +359,13 @@ namespace Core
                     pw.instrument = n;
                     if (!parent.instPCM.ContainsKey(n))
                     {
-                        msgBox.setErrMsg(string.Format(msg.get("E20002"), n), pw.getSrcFn(), pw.getLineNumber());
+                        msgBox.setErrMsg(string.Format(msg.get("E20002"), n), mml.line.Lp);
                     }
                     else
                     {
                         if (parent.instPCM[n].chip != enmChipType.YM2612)
                         {
-                            msgBox.setErrMsg(string.Format(msg.get("E20003"), n), pw.getSrcFn(), pw.getLineNumber());
+                            msgBox.setErrMsg(string.Format(msg.get("E20003"), n), mml.line.Lp);
                         }
                     }
                     return;
@@ -370,7 +376,7 @@ namespace Core
             base.CmdInstrument(pw, mml);
         }
 
-        public override void SetLfoAtKeyOn(partWork pw)
+        public override void SetLfoAtKeyOn(partWork pw, MML mml)
         {
             for (int lfo = 0; lfo < 4; lfo++)
             {
@@ -388,14 +394,14 @@ namespace Core
 
                 if (pl.type == eLfoType.Vibrato)
                 {
-                    SetFmFNum(pw);
+                    SetFmFNum(pw, mml);
 
                 }
 
                 if (pl.type == eLfoType.Tremolo)
                 {
                     pw.beforeVolume = -1;
-                    SetFmVolume(pw);
+                    SetFmVolume(pw, mml);
 
                 }
 

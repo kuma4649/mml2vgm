@@ -10,7 +10,6 @@ namespace Core
     {
 
         public Dictionary<string, List<MML>> mmlData = new Dictionary<string, List<MML>>();
-        public int lineNumber = 0;
 
         private Dictionary<enmChipType, ClsChip[]> chips;
         private Information info;
@@ -65,13 +64,15 @@ namespace Core
                 if (cmd == 0) pw.dataEnd = true;
                 else
                 {
-                    lineNumber = pw.getLineNumber();
+                    //lineNumber = pw.getLineNumber();
                     Commander(pw, cmd);
                 }
             }
         }
 
         private bool swToneDoubler = false;
+
+        public LinePos linePos { get; internal set; }
 
         private void Commander(partWork pw, char cmd)
         {
@@ -262,7 +263,7 @@ namespace Core
                     CmdAddressShift(pw, mml);
                     break;
                 default:
-                    msgBox.setErrMsg(string.Format(msg.get("E05000"), cmd), pw.getSrcFn(), pw.getLineNumber());
+                    msgBox.setErrMsg(string.Format(msg.get("E05000"), cmd), mml.line.Lp);
                     pw.incPos();
                     break;
             }
@@ -295,7 +296,7 @@ namespace Core
             pw.incPos();
             if (!pw.getNum(out int n))
             {
-                msgBox.setErrMsg(msg.get("E05001"), pw.getSrcFn(), pw.getLineNumber());
+                msgBox.setErrMsg(msg.get("E05001"), mml.line.Lp);
                 n = 120;
             }
             n = Common.CheckRange(n, 1, 1200);
@@ -365,7 +366,7 @@ namespace Core
 
             if (!pw.getNum(out n))
             {
-                msgBox.setErrMsg(msg.get("E05002"), pw.getSrcFn(), pw.getLineNumber());
+                msgBox.setErrMsg(msg.get("E05002"), mml.line.Lp);
                 n = 0;
             }
             n = Common.CheckRange(n, 0, 255);
@@ -382,7 +383,7 @@ namespace Core
 
             if (!pw.getNum(out n))
             {
-                msgBox.setErrMsg(msg.get("E05003"), pw.getSrcFn(), pw.getLineNumber());
+                msgBox.setErrMsg(msg.get("E05003"), mml.line.Lp);
                 n = (int)(pw.MaxVolume * 0.9);
             }
             n = Common.CheckRange(n, 0, pw.MaxVolume);
@@ -398,7 +399,7 @@ namespace Core
 
             if (!pw.getNum(out n))
             {
-                msgBox.setErrMsg(msg.get("E05004"), pw.getSrcFn(), pw.getLineNumber());
+                msgBox.setErrMsg(msg.get("E05004"), mml.line.Lp);
                 n = 0;
             }
             mml.args.Add(n);
@@ -408,7 +409,7 @@ namespace Core
                 pw.incPos();
                 if (!pw.getNum(out n))
                 {
-                    msgBox.setErrMsg(msg.get("E05004"), pw.getSrcFn(), pw.getLineNumber());
+                    msgBox.setErrMsg(msg.get("E05004"), mml.line.Lp);
                     n = 0;
                 }
                 mml.args.Add(n);
@@ -421,7 +422,7 @@ namespace Core
             pw.incPos();
             if (!pw.getNum(out int n))
             {
-                msgBox.setErrMsg(msg.get("E05005"), pw.getSrcFn(), pw.getLineNumber());
+                msgBox.setErrMsg(msg.get("E05005"), mml.line.Lp);
                 n = 110;
             }
             n = Common.CheckRange(n, 1, 8);
@@ -451,7 +452,7 @@ namespace Core
             pw.incPos();
             if (!pw.getNum(out n))
             {
-                msgBox.setErrMsg(msg.get("E05006"), pw.getSrcFn(), pw.getLineNumber());
+                msgBox.setErrMsg(msg.get("E05006"), mml.line.Lp);
                 return;
             }
             mml.type = enmMMLType.VolumeUp;
@@ -465,7 +466,7 @@ namespace Core
             pw.incPos();
             if (!pw.getNum(out int n))
             {
-                msgBox.setErrMsg(msg.get("E05007"), pw.getSrcFn(), pw.getLineNumber());
+                msgBox.setErrMsg(msg.get("E05007"), mml.line.Lp);
                 n = 10;
             }
             n = Common.CheckRange(n, 1, pw.MaxVolume);
@@ -484,7 +485,7 @@ namespace Core
                 {
                     if ((int)info.clockCount % n != 0)
                     {
-                        msgBox.setWrnMsg(string.Format(msg.get("E05008"), n), pw.getSrcFn(), pw.getLineNumber());
+                        msgBox.setWrnMsg(string.Format(msg.get("E05008"), n), mml.line.Lp);
                     }
                     n = (int)info.clockCount / n;
                 }
@@ -501,8 +502,7 @@ namespace Core
                     if (fn % 2 != 0)
                     {
                         msgBox.setWrnMsg(msg.get("E05036")
-                            , mml.line.Fn
-                            , mml.line.Num);
+                            , mml.line.Lp);
                     }
                     fn = fn / 2;
                     futen += fn;
@@ -522,7 +522,7 @@ namespace Core
             pw.incPos();
             if (!pw.getNum(out int n))
             {
-                msgBox.setErrMsg(msg.get("E05009"), pw.getSrcFn(), pw.getLineNumber());
+                msgBox.setErrMsg(msg.get("E05009"), mml.line.Lp);
                 n = 10;
             }
             n = Common.CheckRange(n, 1, 65535);
@@ -538,7 +538,7 @@ namespace Core
             pw.incPos();
             if (!pw.getNum(out n))
             {
-                msgBox.setErrMsg(msg.get("E05010"), pw.getSrcFn(), pw.getLineNumber());
+                msgBox.setErrMsg(msg.get("E05010"), mml.line.Lp);
             }
             mml.type = enmMMLType.Pan;
             mml.args = new List<object>();
@@ -549,7 +549,7 @@ namespace Core
                 pw.incPos();
                 if (!pw.getNum(out n))
                 {
-                    msgBox.setErrMsg(msg.get("E05010"), pw.getSrcFn(), pw.getLineNumber());
+                    msgBox.setErrMsg(msg.get("E05010"), mml.line.Lp);
                 }
                 mml.args.Add(n);
             }
@@ -561,7 +561,7 @@ namespace Core
             pw.incPos();
             if (!pw.getNum(out n))
             {
-                msgBox.setErrMsg(msg.get("E05011"), pw.getSrcFn(), pw.getLineNumber());
+                msgBox.setErrMsg(msg.get("E05011"), mml.line.Lp);
                 n = 0;
             }
             mml.type = enmMMLType.Detune;
@@ -575,7 +575,7 @@ namespace Core
             pw.incPos();
             if (!pw.getNum(out n))
             {
-                msgBox.setErrMsg(msg.get("E05012"), pw.getSrcFn(), pw.getLineNumber());
+                msgBox.setErrMsg(msg.get("E05012"), mml.line.Lp);
                 n = 0;
             }
             mml.type = enmMMLType.PcmMode;
@@ -589,7 +589,7 @@ namespace Core
             pw.incPos();
             if (!pw.getNum(out n))
             {
-                msgBox.setErrMsg(msg.get("E05013"), pw.getSrcFn(), pw.getLineNumber());
+                msgBox.setErrMsg(msg.get("E05013"), mml.line.Lp);
                 n = 0;
             }
             n = Common.CheckRange(n, 0, 255);
@@ -604,7 +604,7 @@ namespace Core
             pw.incPos();
             if (!pw.getNum(out n))
             {
-                msgBox.setErrMsg(msg.get("E05014"), pw.getSrcFn(), pw.getLineNumber());
+                msgBox.setErrMsg(msg.get("E05014"), mml.line.Lp);
                 n = 1;
             }
             n = Common.CheckRange(n, 1, 8);
@@ -638,8 +638,7 @@ namespace Core
                         default:
                             msgBox.setErrMsg(string.Format(msg.get("E05015")
                                 , pw.getChar())
-                                , pw.getSrcFn()
-                                , pw.getLineNumber());
+                                , mml.line.Lp);
                             break;
                     }
                     break;
@@ -666,8 +665,7 @@ namespace Core
                             default:
                                 msgBox.setErrMsg(string.Format(msg.get("E05016")
                                     , pw.getChar())
-                                    , pw.getSrcFn()
-                                    , pw.getLineNumber());
+                                    , mml.line.Lp);
                                 break;
                         }
                     }
@@ -680,8 +678,7 @@ namespace Core
                         if (!pw.getNum(out n))
                         {
                             msgBox.setErrMsg(msg.get("E05017")
-                                , pw.getSrcFn()
-                                , pw.getLineNumber());
+                                , mml.line.Lp);
                             break;
                         }
                         mml.args.Add(n);
@@ -690,8 +687,7 @@ namespace Core
                     else if (!pw.getNum(out n))
                     {
                         msgBox.setErrMsg(msg.get("E05018")
-                            , pw.getSrcFn()
-                            , pw.getLineNumber());
+                                , mml.line.Lp);
                         n = 0;
                     }
                     if (n != -1)
@@ -723,7 +719,7 @@ namespace Core
                                 mml.args.Add("EXOF");
                                 break;
                             default:
-                                msgBox.setErrMsg(string.Format(msg.get("E05019"), pw.getChar()), pw.getSrcFn(), pw.getLineNumber());
+                                msgBox.setErrMsg(string.Format(msg.get("E05019"), pw.getChar()), mml.line.Lp);
                                 break;
                         }
                     }
@@ -737,7 +733,7 @@ namespace Core
                         {
                             if (!pw.getNum(out n))
                             {
-                                msgBox.setErrMsg(msg.get("E05020"), pw.getSrcFn(), pw.getLineNumber());
+                                msgBox.setErrMsg(msg.get("E05020"), mml.line.Lp);
                                 break;
                             }
                             mml.args.Add(n);
@@ -748,7 +744,7 @@ namespace Core
                     }
                     else if (!pw.getNum(out n))
                     {
-                        msgBox.setErrMsg(msg.get("E05021"), pw.getSrcFn(), pw.getLineNumber());
+                        msgBox.setErrMsg(msg.get("E05021"), mml.line.Lp);
                         n = 0;
                     }
                     if (n != -1)
@@ -770,7 +766,7 @@ namespace Core
                         }
                         else
                         {
-                            msgBox.setErrMsg(msg.get("E05022"), pw.getSrcFn(), pw.getLineNumber());
+                            msgBox.setErrMsg(msg.get("E05022"), mml.line.Lp);
                             break;
                         }
                         if (i == 3) break;
@@ -834,7 +830,7 @@ namespace Core
                 {
                     if ((int)info.clockCount % n != 0)
                     {
-                        msgBox.setWrnMsg(string.Format(msg.get("E05023"), n), pw.getSrcFn(), pw.getLineNumber());
+                        msgBox.setWrnMsg(string.Format(msg.get("E05023"), n), mml.line.Lp);
                     }
                     n = (int)info.clockCount / n;
                 }
@@ -874,7 +870,7 @@ namespace Core
                         pw.incPos();
                         if (!pw.getNum(out n))
                         {
-                            msgBox.setErrMsg(msg.get("E05024"), pw.getSrcFn(), pw.getLineNumber());
+                            msgBox.setErrMsg(msg.get("E05024"), mml.line.Lp);
                             return;
                         }
                         mml.type = enmMMLType.Lfo;
@@ -884,13 +880,13 @@ namespace Core
                         return;
                     }
                 }
-                msgBox.setErrMsg(msg.get("E05025"), pw.getSrcFn(), pw.getLineNumber());
+                msgBox.setErrMsg(msg.get("E05025"), mml.line.Lp);
                 return;
             }
 
             if (c < 'P' && c > 'S')
             {
-                msgBox.setErrMsg(msg.get("E05026"), pw.getSrcFn(), pw.getLineNumber());
+                msgBox.setErrMsg(msg.get("E05026"), mml.line.Lp);
                 return;
             }
 
@@ -906,7 +902,7 @@ namespace Core
                     pw.incPos();
                     if (!pw.getNum(out n))
                     {
-                        msgBox.setErrMsg(msg.get("E05027"), pw.getSrcFn(), pw.getLineNumber());
+                        msgBox.setErrMsg(msg.get("E05027"), mml.line.Lp);
                         return;
                     }
                     mml.type = enmMMLType.Lfo;
@@ -915,13 +911,13 @@ namespace Core
                     mml.args.Add(n);
                     return;
                 }
-                msgBox.setErrMsg(msg.get("E05028"), pw.getSrcFn(), pw.getLineNumber());
+                msgBox.setErrMsg(msg.get("E05028"), mml.line.Lp);
                 return;
             }
 
             if (t != 'T' && t != 'V' && t != 'H')
             {
-                msgBox.setErrMsg(msg.get("E05029"), pw.getSrcFn(), pw.getLineNumber());
+                msgBox.setErrMsg(msg.get("E05029"), mml.line.Lp);
                 return;
             }
 
@@ -940,7 +936,7 @@ namespace Core
                 }
                 else
                 {
-                    msgBox.setErrMsg(msg.get("E05030"), pw.getSrcFn(), pw.getLineNumber());
+                    msgBox.setErrMsg(msg.get("E05030"), mml.line.Lp);
                     return;
                 }
 
@@ -957,7 +953,7 @@ namespace Core
             char c = pw.getChar();
             if (c < 'P' || c > 'S')
             {
-                msgBox.setErrMsg(msg.get("E05031"), pw.getSrcFn(), pw.getLineNumber());
+                msgBox.setErrMsg(msg.get("E05031"), mml.line.Lp);
                 pw.incPos();
                 return;
             }
@@ -966,7 +962,7 @@ namespace Core
             pw.incPos();
             if (!pw.getNum(out n))
             {
-                msgBox.setErrMsg(msg.get("E05032"), pw.getSrcFn(), pw.getLineNumber());
+                msgBox.setErrMsg(msg.get("E05032"), mml.line.Lp);
                 return;
             }
             n = Common.CheckRange(n, 0, 2);
@@ -984,7 +980,7 @@ namespace Core
             pw.incPos();
             if (c != 'o' && c != 'f')
             {
-                msgBox.setErrMsg(msg.get("E05031"), pw.getSrcFn(), pw.getLineNumber());
+                msgBox.setErrMsg(msg.get("E05031"), mml.line.Lp);
                 return;
             }
 
@@ -1077,7 +1073,7 @@ namespace Core
 
             if (!pw.getNum(out n))
             {
-                msgBox.setErrMsg(msg.get("E05033"), pw.getSrcFn(), pw.getLineNumber());
+                msgBox.setErrMsg(msg.get("E05033"), mml.line.Lp);
                 return;
 
             }
@@ -1093,7 +1089,7 @@ namespace Core
 
             if (!pw.getNum(out n))
             {
-                msgBox.setErrMsg(msg.get("E05034"), pw.getSrcFn(), pw.getLineNumber());
+                msgBox.setErrMsg(msg.get("E05034"), mml.line.Lp);
                 return;
 
             }
@@ -1110,7 +1106,7 @@ namespace Core
 
             if (!pw.getNum(out n))
             {
-                msgBox.setErrMsg(msg.get("E05035"), pw.getSrcFn(), pw.getLineNumber());
+                msgBox.setErrMsg(msg.get("E05035"), mml.line.Lp);
                 return;
 
             }
@@ -1138,7 +1134,7 @@ namespace Core
 
             if (!pw.getNum(out n))
             {
-                msgBox.setErrMsg(msg.get("E05052"), pw.getSrcFn(), pw.getLineNumber());
+                msgBox.setErrMsg(msg.get("E05052"), mml.line.Lp);
                 return;
 
             }
@@ -1179,7 +1175,7 @@ namespace Core
                 {
                     if ((int)info.clockCount % n != 0)
                     {
-                        msgBox.setWrnMsg(string.Format(msg.get("E05023"), n), pw.getSrcFn(), pw.getLineNumber());
+                        msgBox.setWrnMsg(string.Format(msg.get("E05023"), n), mml.line.Lp);
                     }
                     n = (int)info.clockCount / n;
                 }
@@ -1218,8 +1214,7 @@ namespace Core
                 if (fn % 2 != 0)
                 {
                     msgBox.setWrnMsg(msg.get("E05036")
-                        , mml.line.Fn
-                        , mml.line.Num);
+                        , mml.line.Lp);
                 }
                 fn = fn / 2;
                 futen += fn;
@@ -1249,7 +1244,7 @@ namespace Core
                 {
                     if ((int)info.clockCount % n != 0)
                     {
-                        msgBox.setWrnMsg(string.Format(msg.get("E05023"), n), pw.getSrcFn(), pw.getLineNumber());
+                        msgBox.setWrnMsg(string.Format(msg.get("E05023"), n), mml.line.Lp);
                     }
                     n = (int)info.clockCount / n;
                 }
@@ -1274,8 +1269,7 @@ namespace Core
                 if (fn % 2 != 0)
                 {
                     msgBox.setWrnMsg(msg.get("E05036")
-                        , mml.line.Fn
-                        , mml.line.Num);
+                        , mml.line.Lp);
                 }
                 fn = fn / 2;
                 futen += fn;
@@ -1307,8 +1301,7 @@ namespace Core
                     {
                         msgBox.setWrnMsg(string.Format(msg.get("E05023")
                             , n)
-                            , pw.getSrcFn()
-                            , pw.getLineNumber());
+                            , mml.line.Lp);
                     }
                     n = (int)info.clockCount / n;
                 }
@@ -1333,8 +1326,7 @@ namespace Core
                 if (fn % 2 != 0)
                 {
                     msgBox.setWrnMsg(msg.get("E05036")
-                        , mml.line.Fn
-                        , mml.line.Num);
+                        , mml.line.Lp);
                 }
                 fn = fn / 2;
                 futen += fn;
@@ -1385,7 +1377,7 @@ namespace Core
                 {
                     if ((int)info.clockCount % n != 0)
                     {
-                        msgBox.setWrnMsg(string.Format(msg.get("E05023"), n), pw.getSrcFn(), pw.getLineNumber());
+                        msgBox.setWrnMsg(string.Format(msg.get("E05023"), n), mml.line.Lp);
                     }
                     n = (int)info.clockCount / n;
                 }
@@ -1410,8 +1402,7 @@ namespace Core
                 if (fn % 2 != 0)
                 {
                     msgBox.setWrnMsg(msg.get("E05036")
-                        , mml.line.Fn
-                        , mml.line.Num);
+                        , mml.line.Lp);
                 }
                 fn = fn / 2;
                 futen += fn;
@@ -1449,7 +1440,7 @@ namespace Core
                 {
                     msgBox.setWrnMsg(string.Format(
                         msg.get("E05023")
-                        , n), pw.getSrcFn(), pw.getLineNumber());
+                        , n), mml.line.Lp);
                 }
                 n = (int)info.clockCount / n;
             }
@@ -1466,8 +1457,7 @@ namespace Core
                 if (fn % 2 != 0)
                 {
                     msgBox.setWrnMsg(msg.get("E05036")
-                        , mml.line.Fn
-                        , mml.line.Num);
+                        , mml.line.Lp);
                 }
                 fn = fn / 2;
                 futen += fn;
@@ -1494,7 +1484,7 @@ namespace Core
                     if ((int)info.clockCount % n != 0)
                     {
                         msgBox.setWrnMsg(string.Format(msg.get("E05023")
-                            , n), pw.getSrcFn(), pw.getLineNumber());
+                            , n), mml.line.Lp);
                     }
                     n = (int)info.clockCount / n;
                 }
@@ -1517,8 +1507,7 @@ namespace Core
                 if (fn % 2 != 0)
                 {
                     msgBox.setWrnMsg(msg.get("E05036")
-                        , mml.line.Fn
-                        , mml.line.Num);
+                        , mml.line.Lp);
                 }
                 fn = fn / 2;
                 futen += fn;
@@ -1545,7 +1534,7 @@ namespace Core
                     if ((int)info.clockCount % n != 0)
                     {
                         msgBox.setWrnMsg(string.Format(msg.get("E05023")
-                            , n), pw.getSrcFn(), pw.getLineNumber());
+                            , n), mml.line.Lp);
                     }
                     n = (int)info.clockCount / n;
                 }
@@ -1568,8 +1557,7 @@ namespace Core
                 if (fn % 2 != 0)
                 {
                     msgBox.setWrnMsg(msg.get("E05036")
-                        , mml.line.Fn
-                        , mml.line.Num);
+                        , mml.line.Lp);
                 }
                 fn = fn / 2;
                 futen += fn;
@@ -1635,8 +1623,7 @@ namespace Core
             if (pos < 1 || pw.mmlData[pos - 1].type != enmMMLType.Note)
             {
                 msgBox.setErrMsg(msg.get("E05037")
-                , pw.mmlData[pos].line.Fn
-                , pw.mmlData[pos].line.Num);
+                , pw.mmlData[pos].line.Lp);
                 return;
             }
 
@@ -1666,8 +1653,7 @@ namespace Core
                         break;
                     default:
                         msgBox.setErrMsg(msg.get("E05038")
-                        , pw.mmlData[i].line.Fn
-                        , pw.mmlData[i].line.Num);
+                        , pw.mmlData[i].line.Lp);
                         return;
                 }
             }
@@ -1700,8 +1686,7 @@ namespace Core
                 ))
             {
                 msgBox.setErrMsg(msg.get("E05039")
-                , pw.mmlData[pos].line.Fn
-                , pw.mmlData[pos].line.Num);
+                , pw.mmlData[pos].line.Lp);
                 return;
             }
 
@@ -1731,8 +1716,7 @@ namespace Core
                         break;
                     default:
                         msgBox.setErrMsg(msg.get("E05040")
-                        , pw.mmlData[i].line.Fn
-                        , pw.mmlData[i].line.Num);
+                        , pw.mmlData[i].line.Lp);
                         return;
                 }
             }
@@ -1769,15 +1753,13 @@ namespace Core
                         goto loop_exit;
                     default:
                         msgBox.setErrMsg(msg.get("E05041")
-                        , pw.mmlData[pos].line.Fn
-                        , pw.mmlData[pos].line.Num);
+                        , pw.mmlData[pos].line.Lp);
                         return;
                 }
             }
 
             msgBox.setErrMsg(msg.get("E05042")
-            , pw.mmlData[pos].line.Fn
-            , pw.mmlData[pos].line.Num);
+            , pw.mmlData[pos].line.Lp);
             return;
             loop_exit:
 
@@ -1804,15 +1786,13 @@ namespace Core
                         goto loop_exit;
                     default:
                         msgBox.setErrMsg(msg.get("E05043")
-                        , pw.mmlData[pos].line.Fn
-                        , pw.mmlData[pos].line.Num);
+                        , pw.mmlData[pos].line.Lp);
                         return;
                 }
             }
 
             msgBox.setErrMsg(msg.get("E05044")
-            , pw.mmlData[pos].line.Fn
-            , pw.mmlData[pos].line.Num);
+            , pw.mmlData[pos].line.Lp);
             return;
             loop_exit:
 
@@ -1837,15 +1817,13 @@ namespace Core
                         goto loop_exit;
                     default:
                         msgBox.setErrMsg(msg.get("E05045")
-                        , pw.mmlData[pos].line.Fn
-                        , pw.mmlData[pos].line.Num);
+                        , pw.mmlData[pos].line.Lp);
                         return;
                 }
             }
 
             msgBox.setErrMsg(msg.get("E05046")
-            , pw.mmlData[pos].line.Fn
-            , pw.mmlData[pos].line.Num);
+            , pw.mmlData[pos].line.Lp);
             return;
             loop_exit:
 
@@ -1917,8 +1895,7 @@ namespace Core
             }
 
             msgBox.setWrnMsg(msg.get("E05047")
-                , pw.mmlData[pos].line.Fn 
-                , pw.mmlData[pos].line.Num);
+                , pw.mmlData[pos].line.Lp);
 
         }
 
@@ -1932,8 +1909,7 @@ namespace Core
             catch
             {
                 msgBox.setWrnMsg(msg.get("E05048")
-                , pw.mmlData[pos].line.Fn
-                , pw.mmlData[pos].line.Num);
+                , pw.mmlData[pos].line.Lp);
             }
         }
 
@@ -1972,8 +1948,7 @@ namespace Core
                 if (r.repeatStackCount != pw.stackRepeat.Count)
                 {
                     msgBox.setWrnMsg(msg.get("E05049")
-                    , pw.mmlData[pos].line.Fn
-                    , pw.mmlData[pos].line.Num);
+                    , pw.mmlData[pos].line.Lp);
                 }
 
                 if (r.noteCount > 0)
@@ -1987,8 +1962,7 @@ namespace Core
             catch
             {
                 msgBox.setWrnMsg(msg.get("E05050")
-                , pw.mmlData[pos].line.Fn
-                , pw.mmlData[pos].line.Num);
+                , pw.mmlData[pos].line.Lp);
             }
         }
 

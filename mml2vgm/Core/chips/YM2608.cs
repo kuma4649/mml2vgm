@@ -117,8 +117,8 @@ namespace Core
             if (!use) return;
 
             //initialize shared param
-            OutOPNSetHardLfo(lstPartWork[0], false, 0);
-            OutOPNSetCh3SpecialMode(lstPartWork[0], false);
+            OutOPNSetHardLfo(null, lstPartWork[0], false, 0);
+            OutOPNSetCh3SpecialMode(null, lstPartWork[0], false);
 
             //FM Off
             OutFmAllKeyOff();
@@ -126,19 +126,19 @@ namespace Core
             //SSG Off
             for (int ch = 9; ch < 12; ch++)
             {
-                OutSsgKeyOff(lstPartWork[ch]);
+                OutSsgKeyOff(null, lstPartWork[ch]);
                 lstPartWork[ch].volume = 0;
             }
 
             //Use OPNA mode
-            parent.OutData(lstPartWork[0].port0, 0x29, 0x82);
-            parent.OutData(lstPartWork[0].port1, 0x29, 0x82);
+            parent.OutData(null, lstPartWork[0].port0, 0x29, 0x82);
+            parent.OutData(null, lstPartWork[0].port1, 0x29, 0x82);
             //ADPCM Reset
-            parent.OutData(lstPartWork[0].port1, 0x10, 0x17);
-            parent.OutData(lstPartWork[0].port1, 0x10, 0x80);
-            parent.OutData(lstPartWork[0].port1, 0x00, 0x80);
-            parent.OutData(lstPartWork[0].port1, 0x01, 0xc0);
-            parent.OutData(lstPartWork[0].port1, 0x00, 0x01);
+            parent.OutData(null, lstPartWork[0].port1, 0x10, 0x17);
+            parent.OutData(null, lstPartWork[0].port1, 0x10, 0x80);
+            parent.OutData(null, lstPartWork[0].port1, 0x00, 0x80);
+            parent.OutData(null, lstPartWork[0].port1, 0x01, 0xc0);
+            parent.OutData(null, lstPartWork[0].port1, 0x00, 0x01);
 
             foreach (partWork pw in lstPartWork)
             {
@@ -146,7 +146,7 @@ namespace Core
                 {
                     pw.hardLfoSw = false;
                     pw.hardLfoNum = 0;
-                    OutOPNSetHardLfo(pw, pw.hardLfoSw, pw.hardLfoNum);
+                    OutOPNSetHardLfo(null, pw, pw.hardLfoSw, pw.hardLfoNum);
                 }
 
                 if (pw.ch < 6)
@@ -154,11 +154,14 @@ namespace Core
                     pw.pan.val = 3;
                     pw.ams = 0;
                     pw.fms = 0;
-                    if (!pw.dataEnd) OutOPNSetPanAMSPMS(pw, 3, 0, 0);
+                    if (!pw.dataEnd) OutOPNSetPanAMSPMS(null, pw, 3, 0, 0);
                 }
             }
 
-            if (IsSecondary) parent.dat[0x4b] |= 0x40;//use Secondary
+            if (IsSecondary)
+            {
+                parent.dat[0x4b] = new outDatum(enmMMLType.unknown, null, null, (byte)(parent.dat[0x4b].val | 0x40));//use Secondary
+            }
         }
 
         public override void InitPart(ref partWork pw)
@@ -189,25 +192,25 @@ namespace Core
         }
 
 
-        public void SetADPCMAddress(partWork pw, int startAdr, int endAdr)
+        public void SetADPCMAddress(MML mml, partWork pw, int startAdr, int endAdr)
         {
             if (pw.pcmStartAddress != startAdr)
             {
-                parent.OutData(pw.port1, 0x02, (byte)((startAdr >> 2) & 0xff));
-                parent.OutData(pw.port1, 0x03, (byte)((startAdr >> 10) & 0xff));
+                parent.OutData(mml, pw.port1, 0x02, (byte)((startAdr >> 2) & 0xff));
+                parent.OutData(mml, pw.port1, 0x03, (byte)((startAdr >> 10) & 0xff));
                 pw.pcmStartAddress = startAdr;
             }
 
             if (pw.pcmEndAddress != endAdr)
             {
-                parent.OutData(pw.port1, 0x04, (byte)(((endAdr - 0x04) >> 2) & 0xff));
-                parent.OutData(pw.port1, 0x05, (byte)(((endAdr - 0x04) >> 10) & 0xff));
+                parent.OutData(mml, pw.port1, 0x04, (byte)(((endAdr - 0x04) >> 2) & 0xff));
+                parent.OutData(mml, pw.port1, 0x05, (byte)(((endAdr - 0x04) >> 10) & 0xff));
                 pw.pcmEndAddress = endAdr;
             }
 
         }
 
-        public void SetAdpcmFNum(partWork pw)
+        public void SetAdpcmFNum(MML mml,partWork pw)
         {
             int f = GetAdpcmFNum(pw.octaveNow, pw.noteCmd, pw.shift + pw.keyShift);//
             if (pw.bendWaitCounter != -1)
@@ -236,13 +239,13 @@ namespace Core
             byte data = 0;
 
             data = (byte)(f & 0xff);
-            parent.OutData(pw.port1, 0x09, data);
+            parent.OutData(mml,pw.port1, 0x09, data);
 
             data = (byte)((f & 0xff00) >> 8);
-            parent.OutData(pw.port1, 0x0a, data);
+            parent.OutData(mml,pw.port1, 0x0a, data);
         }
 
-        public void SetAdpcmVolume(partWork pw)
+        public void SetAdpcmVolume(MML mml,partWork pw)
         {
 
             int vol = pw.volume;
@@ -258,16 +261,16 @@ namespace Core
 
             if (pw.beforeVolume != vol)
             {
-                parent.OutData(pw.port1, 0x0b, (byte)vol);
+                parent.OutData(mml,pw.port1, 0x0b, (byte)vol);
                 pw.beforeVolume = pw.volume;
             }
         }
 
-        public void SetAdpcmPan(partWork pw, int pan)
+        public void SetAdpcmPan(MML mml,partWork pw, int pan)
         {
             if (pw.pan.val != pan)
             {
-                parent.OutData(pw.port1, 0x01, (byte)((pan & 0x3) << 6));
+                parent.OutData(mml,pw.port1, 0x01, (byte)((pan & 0x3) << 6));
                 pw.pan.val = pan;
             }
         }
@@ -293,46 +296,46 @@ namespace Core
             return (int)(0x49ba * Const.pcmMTbl[n] * Math.Pow(2, (o - 4)));
         }
 
-        public void OutAdpcmKeyOn(partWork pw)
+        public void OutAdpcmKeyOn(MML mml,partWork pw)
         {
 
-            SetAdpcmVolume(pw);
-            parent.OutData(pw.port1, 0x00, 0xa0);
+            SetAdpcmVolume(mml,pw);
+            parent.OutData(mml,pw.port1, 0x00, 0xa0);
 
         }
 
-        public void OutAdpcmKeyOff(partWork pw)
+        public void OutAdpcmKeyOff(MML mml,partWork pw)
         {
 
-            parent.OutData(pw.port1, 0x00, 0x01);
+            parent.OutData(mml,pw.port1, 0x00, 0x01);
 
         }
 
 
-        public override void SetFNum(partWork pw)
+        public override void SetFNum(partWork pw, MML mml)
         {
             if (pw.ch < 9)
-                SetFmFNum(pw);
+                SetFmFNum(pw,mml);
             else if (pw.Type == enmChannelType.SSG)
             {
-                SetSsgFNum(pw);
+                SetSsgFNum(pw,mml);
             }
             else if (pw.Type == enmChannelType.RHYTHM)
             {
             }
             else if (pw.Type == enmChannelType.ADPCM)
             {
-                SetAdpcmFNum(pw);
+                SetAdpcmFNum(mml,pw);
             }
         }
 
-        public override void SetKeyOn(partWork pw)
+        public override void SetKeyOn(partWork pw, MML mml)
         {
             if (pw.ch < 9)
-                OutFmKeyOn(pw);
+                OutFmKeyOn(pw,mml);
             else if (pw.Type == enmChannelType.SSG)
             {
-                OutSsgKeyOn(pw);
+                OutSsgKeyOn(pw,mml);
             }
             else if (pw.Type == enmChannelType.RHYTHM)
             {
@@ -341,17 +344,17 @@ namespace Core
             }
             else if (pw.Type == enmChannelType.ADPCM)
             {
-                OutAdpcmKeyOn(pw);
+                OutAdpcmKeyOn(mml,pw);
             }
         }
 
-        public override void SetKeyOff(partWork pw)
+        public override void SetKeyOff(partWork pw, MML mml)
         {
             if (pw.ch < 9)
-                OutFmKeyOff(pw);
+                OutFmKeyOff(pw,mml);
             else if (pw.Type == enmChannelType.SSG)
             {
-                OutSsgKeyOff(pw);
+                OutSsgKeyOff(mml,pw);
             }
             else if (pw.Type == enmChannelType.RHYTHM)
             {
@@ -360,26 +363,26 @@ namespace Core
             }
             else if (pw.Type == enmChannelType.ADPCM)
             {
-                OutAdpcmKeyOff(pw);
+                OutAdpcmKeyOff(mml,pw);
             }
         }
 
-        public override void SetVolume(partWork pw)
+        public override void SetVolume(partWork pw, MML mml)
         {
-            base.SetVolume(pw);
+            base.SetVolume(pw,mml);
 
             if (pw.Type == enmChannelType.RHYTHM)
             {
             }
             else if (pw.Type == enmChannelType.ADPCM)
             {
-                SetAdpcmVolume(pw);
+                SetAdpcmVolume(mml,pw);
             }
         }
 
-        public override void SetLfoAtKeyOn(partWork pw)
+        public override void SetLfoAtKeyOn(partWork pw, MML mml)
         {
-            base.SetLfoAtKeyOn(pw);
+            base.SetLfoAtKeyOn(pw,mml);
 
             for (int lfo = 0; lfo < 4; lfo++)
             {
@@ -398,7 +401,7 @@ namespace Core
                 if (pl.type == eLfoType.Vibrato)
                 {
                     if (pw.Type == enmChannelType.ADPCM)
-                        SetAdpcmFNum(pw);
+                        SetAdpcmFNum(mml,pw);
 
                 }
 
@@ -409,7 +412,7 @@ namespace Core
                     //if (pw.Type == enmChannelType.RHYTHM)
                     //SetRhythmVolume(pw);
                     if (pw.Type == enmChannelType.ADPCM)
-                        SetAdpcmVolume(pw);
+                        SetAdpcmVolume(mml,pw);
 
                 }
 
@@ -494,20 +497,20 @@ namespace Core
             byte dat = (byte)mml.args[1];
 
             if (pw.Type == enmChannelType.FMOPN || pw.Type == enmChannelType.FMOPNex)
-                parent.OutData((pw.ch > 2 && pw.ch < 6) ? pw.port1 : pw.port0, adr, dat);
+                parent.OutData(mml, (pw.ch > 2 && pw.ch < 6) ? pw.port1 : pw.port0, adr, dat);
             else if (pw.Type == enmChannelType.SSG)
-                parent.OutData(pw.port0, adr, dat);
+                parent.OutData(mml, pw.port0, adr, dat);
             else if (pw.Type == enmChannelType.RHYTHM)
-                parent.OutData(pw.port0, adr, dat);
+                parent.OutData(mml, pw.port0, adr, dat);
             else if (pw.Type == enmChannelType.ADPCM)
-                parent.OutData(pw.port1, adr, dat);
+                parent.OutData(mml, pw.port1, adr, dat);
         }
 
         public override void CmdMPMS(partWork pw, MML mml)
         {
             if (pw.Type != enmChannelType.FMOPN)
             {
-                msgBox.setWrnMsg(msg.get("E18000"), pw.getSrcFn(), pw.getLineNumber());
+                msgBox.setWrnMsg(msg.get("E18000"), mml.line.Lp);
                 return;
             }
 
@@ -515,6 +518,7 @@ namespace Core
             n = Common.CheckRange(n, 0, 3);
             pw.pms = n;
             ((ClsOPN)pw.chip).OutOPNSetPanAMSPMS(
+                mml,
                 pw
                 , (int)pw.pan.val
                 , pw.ams
@@ -525,7 +529,7 @@ namespace Core
         {
             if (pw.Type != enmChannelType.FMOPN)
             {
-                msgBox.setWrnMsg(msg.get("E18001"), pw.getSrcFn(), pw.getLineNumber());
+                msgBox.setWrnMsg(msg.get("E18001"), mml.line.Lp);
                 return;
             }
 
@@ -533,6 +537,7 @@ namespace Core
             n = Common.CheckRange(n, 0, 7);
             pw.ams = n;
             ((ClsOPN)pw.chip).OutOPNSetPanAMSPMS(
+                mml,
                 pw
                 , (int)pw.pan.val
                 , pw.ams
@@ -550,12 +555,12 @@ namespace Core
                 {
                     if (pw.lfo[c].param.Count < 4)
                     {
-                        msgBox.setErrMsg(msg.get("E18002"), pw.getSrcFn(), pw.getLineNumber());
+                        msgBox.setErrMsg(msg.get("E18002"), mml.line.Lp);
                         return;
                     }
                     if (pw.lfo[c].param.Count > 5)
                     {
-                        msgBox.setErrMsg(msg.get("E18003"), pw.getSrcFn(), pw.getLineNumber());
+                        msgBox.setErrMsg(msg.get("E18003"), mml.line.Lp);
                         return;
                     }
 
@@ -587,11 +592,11 @@ namespace Core
                 {
                     if (pw.lfo[c].param[4] == 0)
                     {
-                        ((ClsOPN)pw.chip).OutOPNSetHardLfo(pw, (n == 0) ? false : true, pw.lfo[c].param[1]);
+                        ((ClsOPN)pw.chip).OutOPNSetHardLfo(mml, pw, (n == 0) ? false : true, pw.lfo[c].param[1]);
                     }
                     else
                     {
-                        ((ClsOPN)pw.chip).OutOPNSetHardLfo(pw, false, pw.lfo[c].param[1]);
+                        ((ClsOPN)pw.chip).OutOPNSetHardLfo(mml, pw, false, pw.lfo[c].param[1]);
                     }
                 }
             }
@@ -611,7 +616,7 @@ namespace Core
             {
                 n = Common.CheckRange(n, 0, 3);
                 pw.pan.val = n;
-                ((ClsOPN)pw.chip).OutOPNSetPanAMSPMS(pw, n, pw.ams, pw.fms);
+                ((ClsOPN)pw.chip).OutOPNSetPanAMSPMS(mml, pw, n, pw.ams, pw.fms);
             }
             else if (pw.Type == enmChannelType.RHYTHM)
             {
@@ -621,7 +626,7 @@ namespace Core
             else if (pw.Type == enmChannelType.ADPCM)
             {
                 n = Common.CheckRange(n, 0, 3);
-                ((YM2608)pw.chip).SetAdpcmPan(pw, n);
+                ((YM2608)pw.chip).SetAdpcmPan(mml, pw, n);
             }
         }
 
@@ -639,7 +644,7 @@ namespace Core
                     lstPartWork[6].instrument = n;
                     lstPartWork[7].instrument = n;
                     lstPartWork[8].instrument = n;
-                    OutFmSetInstrument(pw, n, pw.volume, type);
+                    OutFmSetInstrument(pw,mml, n, pw.volume, type);
                     return;
                 }
             }
@@ -651,16 +656,17 @@ namespace Core
                     n = Common.CheckRange(n, 0, 255);
                     if (!parent.instPCM.ContainsKey(n))
                     {
-                        msgBox.setErrMsg(string.Format(msg.get("E18004"), n), pw.getSrcFn(), pw.getLineNumber());
+                        msgBox.setErrMsg(string.Format(msg.get("E18004"), n), mml.line.Lp);
                     }
                     else
                     {
                         if (parent.instPCM[n].chip != enmChipType.YM2608)
                         {
-                            msgBox.setErrMsg(string.Format(msg.get("E18005"), n), pw.getSrcFn(), pw.getLineNumber());
+                            msgBox.setErrMsg(string.Format(msg.get("E18005"), n), mml.line.Lp);
                         }
                         pw.instrument = n;
                         SetADPCMAddress(
+                            mml,
                             pw
                             , (int)parent.instPCM[n].stAdr
                             , (int)parent.instPCM[n].edAdr);
@@ -678,7 +684,7 @@ namespace Core
             base.CmdInstrument(pw, mml);
         }
 
-        public override void MultiChannelCommand()
+        public override void MultiChannelCommand(MML mml)
         {
             if (!use) return;
             //コマンドを跨ぐデータ向け処理
@@ -689,7 +695,7 @@ namespace Core
                     //Rhythm Volume処理
                     if (pw.beforeVolume != pw.volume || !pw.pan.eq())
                     {
-                        parent.OutData(pw.port0, (byte)(0x18 + (pw.ch - 12)), (byte)((byte)((pw.pan.val & 0x3) << 6) | (byte)(pw.volume & 0x1f)));
+                        parent.OutData(mml,pw.port0, (byte)(0x18 + (pw.ch - 12)), (byte)((byte)((pw.pan.val & 0x3) << 6) | (byte)(pw.volume & 0x1f)));
                         pw.beforeVolume = pw.volume;
                         pw.pan.rst();
                     }
@@ -705,14 +711,14 @@ namespace Core
             if (0 != rhythm_KeyOff)
             {
                 byte data = (byte)(0x80 + rhythm_KeyOff);
-                parent.OutData(lstPartWork[0].port0, 0x10, data);
+                parent.OutData(mml,lstPartWork[0].port0, 0x10, data);
                 rhythm_KeyOff = 0;
             }
 
             //Rhythm TotalVolume処理
             if (rhythm_beforeTotalVolume != rhythm_TotalVolume)
             {
-                parent.OutData(lstPartWork[0].port0, 0x11, (byte)(rhythm_TotalVolume & 0x3f));
+                parent.OutData(mml,lstPartWork[0].port0, 0x11, (byte)(rhythm_TotalVolume & 0x3f));
                 rhythm_beforeTotalVolume = rhythm_TotalVolume;
             }
 
@@ -720,7 +726,7 @@ namespace Core
             if (0 != rhythm_KeyOn)
             {
                 byte data = (byte)(0x00 + rhythm_KeyOn);
-                parent.OutData(lstPartWork[0].port0, 0x10, data);
+                parent.OutData(mml,lstPartWork[0].port0, 0x10, data);
                 rhythm_KeyOn = 0;
             }
         }

@@ -54,17 +54,20 @@ namespace Core
             {
                 partWork pw = lstPartWork[ch];
 
-                SetRf5c164CurrentChannel(pw);
+                SetRf5c164CurrentChannel(null,pw);
                 pw.beforepcmStartAddress = -1;
                 pw.pcmStartAddress = 0;
-                SetRf5c164SampleStartAddress(pw);
-                SetRf5c164LoopAddress(pw, 0);
-                SetRf5c164AddressIncrement(pw, 0x400);
-                SetRf5c164Pan(pw, 0xff);
-                SetRf5c164Envelope(pw, 0xff);
+                SetRf5c164SampleStartAddress(null,pw);
+                SetRf5c164LoopAddress(null,pw, 0);
+                SetRf5c164AddressIncrement(null,pw, 0x400);
+                SetRf5c164Pan(null,pw, 0xff);
+                SetRf5c164Envelope(null,pw, 0xff);
             }
 
-            if (IsSecondary) parent.dat[0x6f] |= 0x40;
+            if (IsSecondary)
+            {
+                parent.dat[0x6f] = new outDatum(enmMMLType.unknown, null, null, (byte)(parent.dat[0x6f].val | 0x40));
+            }
 
             SupportReversePartWork = true;
         }
@@ -98,29 +101,29 @@ namespace Core
             return (int)(0x0400 * Const.pcmMTbl[n] * Math.Pow(2, (o - 4)));
         }
 
-        public void SetRf5c164Envelope(partWork pw, int volume)
+        public void SetRf5c164Envelope(MML mml,partWork pw, int volume)
         {
             if (pw.rf5c164Envelope != volume)
             {
-                SetRf5c164CurrentChannel(pw);
+                SetRf5c164CurrentChannel(mml,pw);
                 byte data = (byte)(volume & 0xff);
-                OutRf5c164Port(pw.isSecondary, 0x0, data);
+                OutRf5c164Port(mml,pw.isSecondary, 0x0, data);
                 pw.rf5c164Envelope = volume;
             }
         }
 
-        public void SetRf5c164Pan(partWork pw, int pan)
+        public void SetRf5c164Pan(MML mml,partWork pw, int pan)
         {
             if (pw.rf5c164Pan != pan)
             {
-                SetRf5c164CurrentChannel(pw);
+                SetRf5c164CurrentChannel(mml,pw);
                 byte data = (byte)(pan & 0xff);
-                OutRf5c164Port(pw.isSecondary, 0x1, data);
+                OutRf5c164Port(mml,pw.isSecondary, 0x1, data);
                 pw.rf5c164Pan = pan;
             }
         }
 
-        public void SetRf5c164CurrentChannel(partWork pw)
+        public void SetRf5c164CurrentChannel(MML mml,partWork pw)
         {
             byte pch = (byte)pw.ch;
             bool isSecondary = pw.isSecondary;
@@ -129,26 +132,26 @@ namespace Core
             if (CurrentChannel != pch)
             {
                 byte data = (byte)(0xc0 + pch);
-                OutRf5c164Port(isSecondary, 0x7, data);
+                OutRf5c164Port(mml,isSecondary, 0x7, data);
                 CurrentChannel = pch;
             }
         }
 
-        public void SetRf5c164AddressIncrement(partWork pw, int f)
+        public void SetRf5c164AddressIncrement(MML mml,partWork pw, int f)
         {
             if (pw.rf5c164AddressIncrement != f)
             {
-                SetRf5c164CurrentChannel(pw);
+                SetRf5c164CurrentChannel(mml,pw);
 
                 byte data = (byte)(f & 0xff);
-                OutRf5c164Port(pw.isSecondary, 0x2, data);
+                OutRf5c164Port(mml,pw.isSecondary, 0x2, data);
                 data = (byte)((f >> 8) & 0xff);
-                OutRf5c164Port(pw.isSecondary, 0x3, data);
+                OutRf5c164Port(mml,pw.isSecondary, 0x3, data);
                 pw.rf5c164AddressIncrement = f;
             }
         }
 
-        public void SetRf5c164SampleStartAddress(partWork pw)
+        public void SetRf5c164SampleStartAddress(MML mml,partWork pw)
         {
 
             //Address shift
@@ -157,49 +160,50 @@ namespace Core
 
             if (pw.beforepcmStartAddress != stAdr && stAdr>=0)
             {
-                SetRf5c164CurrentChannel(pw);
+                SetRf5c164CurrentChannel(mml,pw);
                 byte data = (byte)(stAdr >> 8);
-                OutRf5c164Port(pw.isSecondary, 0x6, data);
+                OutRf5c164Port(mml,pw.isSecondary, 0x6, data);
                 //pw.pcmStartAddress = stAdr;
             }
         }
 
-        public void SetRf5c164LoopAddress(partWork pw, int adr)
+        public void SetRf5c164LoopAddress(MML mml,partWork pw, int adr)
         {
             if (pw.pcmLoopAddress != adr)
             {
-                SetRf5c164CurrentChannel(pw);
+                SetRf5c164CurrentChannel(mml,pw);
                 byte data = (byte)(adr >> 8);
-                OutRf5c164Port(pw.isSecondary, 0x5, data);
+                OutRf5c164Port(mml,pw.isSecondary, 0x5, data);
                 data = (byte)adr;
-                OutRf5c164Port(pw.isSecondary, 0x4, data);
+                OutRf5c164Port(mml,pw.isSecondary, 0x4, data);
                 pw.pcmLoopAddress = adr;
             }
         }
 
-        public void OutRf5c164KeyOn(partWork pw)
+        public void OutRf5c164KeyOn(MML mml,partWork pw)
         {
             if (parent.instPCM.Count < 1) return;
-            SetRf5c164SampleStartAddress(pw);
+            SetRf5c164SampleStartAddress(mml,pw);
             KeyOn |= (byte)(1 << pw.ch);
             byte data = (byte)(~KeyOn);
-            OutRf5c164Port(pw.isSecondary, 0x8, data);
+            OutRf5c164Port(mml,pw.isSecondary, 0x8, data);
             if (parent.instPCM[pw.instrument].status != enmPCMSTATUS.ERROR)
             {
                 parent.instPCM[pw.instrument].status = enmPCMSTATUS.USED;
             }
         }
 
-        public void OutRf5c164KeyOff(partWork pw)
+        public void OutRf5c164KeyOff(MML mml,partWork pw)
         {
             KeyOn &= (byte)(~(1 << pw.ch));
             byte data = (byte)(~KeyOn);
-            OutRf5c164Port(pw.isSecondary, 0x8, data);
+            OutRf5c164Port(mml,pw.isSecondary, 0x8, data);
         }
 
-        public void OutRf5c164Port(bool isSecondary, byte adr, byte data)
+        public void OutRf5c164Port(MML mml,bool isSecondary, byte adr, byte data)
         {
             parent.OutData(
+                mml,
                 0xb1
                 , (byte)((adr & 0x7f) | (isSecondary ? 0x80 : 0x00))
                 , data
@@ -318,27 +322,27 @@ namespace Core
 
         }
 
-        public override void SetPCMDataBlock()
+        public override void SetPCMDataBlock(MML mml)
         {
             if (!CanUsePcm) return;
             if (!use) return;
 
             if (pcmDataEasy != null && pcmDataEasy.Length > 0)
-                parent.OutData(pcmDataEasy);
+                parent.OutData(mml,pcmDataEasy);
 
             if (pcmDataDirect.Count < 1) return;
 
             foreach (byte[] dat in pcmDataDirect)
             {
                 if (dat != null && dat.Length > 0)
-                    parent.OutData(dat);
+                    parent.OutData(mml,dat);
             }
         }
 
 
 
 
-        public override void SetVolume(partWork pw)
+        public override void SetVolume(partWork pw, MML mml)
         {
             int vol = pw.volume;
 
@@ -368,19 +372,19 @@ namespace Core
 
             if (pw.beforeVolume != vol)
             {
-                SetRf5c164Envelope(pw, vol);
+                SetRf5c164Envelope(mml,pw, vol);
                 pw.beforeVolume = vol;
             }
         }
 
-        public override int GetFNum(partWork pw, int octave, char cmd, int shift)
+        public override int GetFNum(partWork pw, MML mml, int octave, char cmd, int shift)
         {
             return GetRf5c164PcmNote(octave, cmd, shift);
         }
 
-        public override void SetFNum(partWork pw)
+        public override void SetFNum(partWork pw, MML mml)
         {
-            int f = GetFNum(pw, pw.octaveNow, pw.noteCmd, pw.keyShift + pw.shift);//
+            int f = GetFNum(pw,mml, pw.octaveNow, pw.noteCmd, pw.keyShift + pw.shift);//
 
             if (pw.bendWaitCounter != -1)
             {
@@ -404,21 +408,21 @@ namespace Core
             pw.freq = f;
 
             //Address increment 再生スピードをセット
-            SetRf5c164AddressIncrement(pw, f);
+            SetRf5c164AddressIncrement(mml,pw, f);
 
         }
 
-        public override void SetKeyOff(partWork pw)
+        public override void SetKeyOff(partWork pw, MML mml)
         {
-            OutRf5c164KeyOff(pw);
+            OutRf5c164KeyOff(mml,pw);
         }
 
-        public override void SetKeyOn(partWork pw)
+        public override void SetKeyOn(partWork pw, MML mml)
         {
-            OutRf5c164KeyOn(pw);
+            OutRf5c164KeyOn(mml,pw);
         }
 
-        public override void SetLfoAtKeyOn(partWork pw)
+        public override void SetLfoAtKeyOn(partWork pw, MML mml)
         {
             for (int lfo = 0; lfo < 4; lfo++)
             {
@@ -436,12 +440,12 @@ namespace Core
 
                 if (pl.type == eLfoType.Vibrato)
                 {
-                    SetFNum(pw);
+                    SetFNum(pw,mml);
                 }
                 if (pl.type == eLfoType.Tremolo)
                 {
                     pw.beforeVolume = -1;
-                    SetVolume(pw);
+                    SetVolume(pw,mml);
                 }
             }
         }
@@ -464,7 +468,7 @@ namespace Core
             byte adr = (byte)mml.args[0];
             byte dat = (byte)mml.args[1];
 
-            OutRf5c164Port(pw.isSecondary, adr, dat);
+            OutRf5c164Port(mml,pw.isSecondary, adr, dat);
         }
 
         public override void CmdPan(partWork pw, MML mml)
@@ -475,7 +479,7 @@ namespace Core
             l = Common.CheckRange(l, 0, 15);
             r = Common.CheckRange(r, 0, 15);
             pw.pan.val = (r << 4) | l;
-            SetRf5c164Pan(pw, (int)pw.pan.val);
+            SetRf5c164Pan(mml,pw, (int)pw.pan.val);
         }
 
         public override void CmdLoopExtProc(partWork p, MML mml)
@@ -490,12 +494,13 @@ namespace Core
                 p.freq = -1;
                 if (n != -1)
                 {
-                    SetRf5c164CurrentChannel(p);
-                    SetFNum(p);
+                    SetRf5c164CurrentChannel(mml,p);
+                    SetFNum(p,mml);
                     p.beforepcmStartAddress = -1;
                     p.pcmStartAddress = (int)parent.instPCM[n].stAdr;
-                    SetRf5c164SampleStartAddress(p);
+                    SetRf5c164SampleStartAddress(mml,p);
                     SetRf5c164LoopAddress(
+                        mml,
                         p
                         , (int)(parent.instPCM[n].loopAdr));
                 }
@@ -509,13 +514,13 @@ namespace Core
 
             if (type == 'I')
             {
-                msgBox.setErrMsg(msg.get("E13001"), pw.getSrcFn(), pw.getLineNumber());
+                msgBox.setErrMsg(msg.get("E13001"), mml.line.Lp);
                 return;
             }
 
             if (type == 'T')
             {
-                msgBox.setErrMsg(msg.get("E13002"), pw.getSrcFn(), pw.getLineNumber());
+                msgBox.setErrMsg(msg.get("E13002"), mml.line.Lp);
                 return;
             }
 
@@ -529,25 +534,25 @@ namespace Core
 
             if (!parent.instPCM.ContainsKey(n))
             {
-                msgBox.setErrMsg(string.Format(msg.get("E13003"), n), pw.getSrcFn(), pw.getLineNumber());
+                msgBox.setErrMsg(string.Format(msg.get("E13003"), n), mml.line.Lp);
                 return;
             }
 
             if (parent.instPCM[n].chip != enmChipType.RF5C164)
             {
-                msgBox.setErrMsg(string.Format(msg.get("E13004"), n), pw.getSrcFn(), pw.getLineNumber());
+                msgBox.setErrMsg(string.Format(msg.get("E13004"), n), mml.line.Lp);
                 return;
             }
 
             pw.instrument = n;
             pw.beforepcmStartAddress = -1;
             pw.pcmStartAddress = (int)parent.instPCM[n].stAdr;
-            SetRf5c164SampleStartAddress(pw);
-            SetRf5c164LoopAddress(pw, (int)(parent.instPCM[n].loopAdr));
+            SetRf5c164SampleStartAddress(mml,pw);
+            SetRf5c164LoopAddress(mml,pw, (int)(parent.instPCM[n].loopAdr));
 
         }
 
-        public override void MultiChannelCommand()
+        public override void MultiChannelCommand(MML mml)
         {
         }
 

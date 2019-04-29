@@ -55,44 +55,44 @@ namespace Core
 
             //MasterVolume(Max volume)
             TotalVolume = 0xff;
-            OutHuC6280Port(IsSecondary, 1, 0xff);
+            OutHuC6280Port(null,IsSecondary, 1, 0xff);
             //LFO freq 0
-            OutHuC6280Port(IsSecondary, 8, 0);
+            OutHuC6280Port(null, IsSecondary, 8, 0);
             //LFO ctrl 0
-            OutHuC6280Port(IsSecondary, 9, 0);
+            OutHuC6280Port(null, IsSecondary, 9, 0);
 
             SupportReversePartWork = true;
 
             foreach (partWork pw in lstPartWork)
             {
-                SetHuC6280CurrentChannel(pw);
+                SetHuC6280CurrentChannel(null, pw);
 
                 //freq( 0 )
                 pw.freq = 0;
-                OutHuC6280Port(IsSecondary, 2, 0);
-                OutHuC6280Port(IsSecondary, 3, 0);
+                OutHuC6280Port(null, IsSecondary, 2, 0);
+                OutHuC6280Port(null, IsSecondary, 3, 0);
 
                 pw.pcm = false;
 
                 //volume
                 byte data = (byte)(0x80 + (0 & 0x1f));
-                OutHuC6280Port(pw.isSecondary, 4, data);
+                OutHuC6280Port(null, pw.isSecondary, 4, data);
 
                 //pan
                 pw.panL = 0;
                 pw.panR = 0;
-                OutHuC6280Port(IsSecondary, 5, 0xff);
+                OutHuC6280Port(null, IsSecondary, 5, 0xff);
 
                 for (int j = 0; j < 32; j++)
                 {
-                    OutHuC6280Port(IsSecondary, 6, 0);
+                    OutHuC6280Port(null, IsSecondary, 6, 0);
                 }
 
                 if (pw.ch > 3)
                 {
                     //noise(Ch5,6 only)
                     pw.noise = 0x1f;
-                    OutHuC6280Port(IsSecondary, 7, 0x1f);
+                    OutHuC6280Port(null, IsSecondary, 7, 0x1f);
                 }
             }
         }
@@ -166,10 +166,10 @@ namespace Core
 
         public override void StorePcmRawData(clsPcmDatSeq pds, byte[] buf, bool isRaw, bool is16bit, int samplerate, params object[] option)
         {
-            msgBox.setWrnMsg(msg.get("E12007"), "-", -1);
+            msgBox.setWrnMsg(msg.get("E12007"), new LinePos("-"));
         }
 
-        public override void MultiChannelCommand()
+        public override void MultiChannelCommand(MML mml)
         {
             //PCMをストリームの機能を使用し再生するため、1Frame毎にカレントチャンネル情報が破壊される。よって次のフレームでリセットできるようにする。
             if (!use) return;
@@ -197,18 +197,18 @@ namespace Core
             return (int)(Frequency / 32.0f / 261.62f / (Const.pcmMTbl[n] * (float)Math.Pow(2, (o - 4))));
         }
 
-        public void SetHuC6280Envelope(partWork pw, int volume)
+        public void SetHuC6280Envelope(MML mml,partWork pw, int volume)
         {
             if (pw.huc6280Envelope != volume)
             {
-                SetHuC6280CurrentChannel(pw);
+                SetHuC6280CurrentChannel(mml,pw);
                 byte data = (byte)(0x80 + (volume & 0x1f));
-                OutHuC6280Port(pw.isSecondary, 4, data);
+                OutHuC6280Port(mml,pw.isSecondary, 4, data);
                 pw.huc6280Envelope = volume;
             }
         }
 
-        public void SetHuC6280CurrentChannel(partWork pw)
+        public void SetHuC6280CurrentChannel(MML mml,partWork pw)
         {
             byte pch = (byte)pw.ch;
             bool isSecondary = pw.isSecondary;
@@ -216,50 +216,51 @@ namespace Core
             if (CurrentChannel != pch)
             {
                 byte data = (byte)(pch & 0x7);
-                OutHuC6280Port(isSecondary, 0x0, data);
+                OutHuC6280Port(mml,isSecondary, 0x0, data);
                 CurrentChannel = pch;
             }
         }
 
-        public void SetHuC6280Pan(partWork pw, int pan)
+        public void SetHuC6280Pan(MML mml,partWork pw, int pan)
         {
             if (pw.huc6280Pan != pan)
             {
-                SetHuC6280CurrentChannel(pw);
+                SetHuC6280CurrentChannel(mml,pw);
                 byte data = (byte)(pan & 0xff);
-                OutHuC6280Port(pw.isSecondary, 0x5, data);
+                OutHuC6280Port(mml,pw.isSecondary, 0x5, data);
                 pw.huc6280Pan = pan;
             }
         }
 
-        public void OutHuC6280Port(bool isSecondary, byte adr, byte data)
+        public void OutHuC6280Port(MML mml,bool isSecondary, byte adr, byte data)
         {
             parent.OutData(
+                mml,
                 0xb9
                 , (byte)((isSecondary ? 0x80 : 0x00) + adr)
                 ,data);
         }
 
-        public void OutHuC6280SetInstrument(partWork pw, int n)
+        public void OutHuC6280SetInstrument(partWork pw, MML mml, int n)
         {
 
             if (!parent.instWF.ContainsKey(n))
             {
-                msgBox.setWrnMsg(string.Format(msg.get("E12000"), n), pw.getSrcFn(), pw.getLineNumber());
+                msgBox.setWrnMsg(string.Format(msg.get("E12000"), n), mml.line.Lp);
                 return;
             }
 
-            SetHuC6280CurrentChannel(pw);
-            OutHuC6280Port(pw.isSecondary, 4, (byte)(0x40 + pw.volume)); //WaveIndexReset(=0x40)
+            SetHuC6280CurrentChannel(mml, pw);
+            OutHuC6280Port(mml, pw.isSecondary, 4, (byte)(0x40 + pw.volume)); //WaveIndexReset(=0x40)
 
             for (int i = 1; i < parent.instWF[n].Length; i++) // 0 は音色番号が入っている為1からスタート
             {
-                OutHuC6280Port(pw.isSecondary, 6, (byte)(parent.instWF[n][i] & 0x1f));
+                OutHuC6280Port(mml, pw.isSecondary, 6, (byte)(parent.instWF[n][i] & 0x1f));
             }
 
         }
 
-        public void OutHuC6280KeyOn(partWork pw)
+        public void OutHuC6280KeyOn(MML mml,partWork pw)
         {
             int vol = pw.volume;
             if (pw.envelopeMode)
@@ -276,9 +277,9 @@ namespace Core
 
             if (!pw.pcm)
             {
-                SetHuC6280CurrentChannel(pw);
-                OutHuC6280Port(pw.isSecondary, 0x4, data);
-                OutHuC6280Port(pw.isSecondary, 0x5, (byte)pw.huc6280Pan);
+                SetHuC6280CurrentChannel(mml,pw);
+                OutHuC6280Port(mml,pw.isSecondary, 0x4, data);
+                OutHuC6280Port(mml,pw.isSecondary, 0x5, (byte)pw.huc6280Pan);
                 return;
             }
 
@@ -287,10 +288,10 @@ namespace Core
                 return;
             }
 
-            SetHuC6280CurrentChannel(pw);
+            SetHuC6280CurrentChannel(mml,pw);
             data |= 0x40;
-            OutHuC6280Port(pw.isSecondary, 0x4, data);
-            OutHuC6280Port(pw.isSecondary, 0x5, (byte)pw.huc6280Pan);
+            OutHuC6280Port(mml,pw.isSecondary, 0x4, data);
+            OutHuC6280Port(mml,pw.isSecondary, 0x5, (byte)pw.huc6280Pan);
 
             float m = Const.pcmMTbl[pw.pcmNote] * (float)Math.Pow(2, (pw.pcmOctave - 4));
             pw.pcmBaseFreqPerFreq = Information.VGM_SAMPLE_PER_SECOND / ((float)parent.instPCM[pw.instrument].freq * m);
@@ -316,6 +317,7 @@ namespace Core
                 parent.newStreamID++;
                 pw.streamID = parent.newStreamID;
                 parent.OutData(
+                    mml,
                     // setup stream control
                     0x90
                     , (byte)pw.streamID
@@ -337,6 +339,7 @@ namespace Core
             {
                 //Set Stream Frequency
                 parent.OutData(
+                    mml,
                     0x92
                     ,(byte)pw.streamID
 
@@ -351,6 +354,7 @@ namespace Core
 
             //Start Stream
             parent.OutData(
+                mml,
                 0x93
                 ,(byte)pw.streamID
 
@@ -373,15 +377,15 @@ namespace Core
             }
         }
 
-        public void OutHuC6280KeyOff(partWork pw)
+        public void OutHuC6280KeyOff(MML mml,partWork pw)
         {
-            SetHuC6280CurrentChannel(pw);
+            SetHuC6280CurrentChannel(mml,pw);
 
-            OutHuC6280Port(pw.isSecondary, 0x4, 0x80);
+            OutHuC6280Port(mml,pw.isSecondary, 0x4, 0x80);
             //OutHuC6280Port(pw.isSecondary, 0x5, 0);
         }
 
-        public override void SetFNum(partWork pw)
+        public override void SetFNum(partWork pw, MML mml)
         {
             int f = GetHuC6280Freq(pw.octaveNow, pw.noteCmd, pw.keyShift + pw.shift);//
 
@@ -407,9 +411,9 @@ namespace Core
 
             if (pw.freq == f) return;
 
-            SetHuC6280CurrentChannel(pw);
-            if ((pw.freq & 0x0ff) != (f & 0x0ff)) OutHuC6280Port(pw.isSecondary, 2, (byte)(f & 0xff));
-            if ((pw.freq & 0xf00) != (f & 0xf00)) OutHuC6280Port(pw.isSecondary, 3, (byte)((f & 0xf00) >> 8));
+            SetHuC6280CurrentChannel(mml,pw);
+            if ((pw.freq & 0x0ff) != (f & 0x0ff)) OutHuC6280Port(mml,pw.isSecondary, 2, (byte)(f & 0xff));
+            if ((pw.freq & 0xf00) != (f & 0xf00)) OutHuC6280Port(mml,pw.isSecondary, 3, (byte)((f & 0xf00) >> 8));
             //OutHuC6280Port(pw.isSecondary, 2, (byte)(f & 0xff));
             //OutHuC6280Port(pw.isSecondary, 3, (byte)((f & 0xf00) >> 8));
 
@@ -417,19 +421,19 @@ namespace Core
 
         }
 
-        public override void SetKeyOn(partWork pw)
+        public override void SetKeyOn(partWork pw, MML mml)
         {
-            OutHuC6280KeyOn(pw);
+            OutHuC6280KeyOn(mml,pw);
             pw.keyOn = true;
         }
 
-        public override void SetKeyOff(partWork pw)
+        public override void SetKeyOff(partWork pw, MML mml)
         {
-            OutHuC6280KeyOff(pw);
+            OutHuC6280KeyOff(mml,pw);
             pw.keyOn = false;
         }
 
-        public override void SetVolume(partWork pw)
+        public override void SetVolume(partWork pw, MML mml)
         {
             int vol = 0;
             if (pw.envelopeMode)
@@ -470,12 +474,12 @@ namespace Core
             vol = Common.CheckRange(vol, 0, 31);
             if (pw.beforeVolume != vol)
             {
-                SetHuC6280Envelope(pw, vol);
+                SetHuC6280Envelope(mml,pw, vol);
                 pw.beforeVolume = vol;
             }
         }
 
-        public override void SetLfoAtKeyOn(partWork pw)
+        public override void SetLfoAtKeyOn(partWork pw, MML mml)
         {
             for (int lfo = 0; lfo < 4; lfo++)
             {
@@ -493,12 +497,12 @@ namespace Core
 
                 if (pl.type == eLfoType.Vibrato)
                 {
-                    SetFNum(pw);
+                    SetFNum(pw,mml);
                 }
                 if (pl.type == eLfoType.Tremolo)
                 {
                     pw.beforeVolume = -1;
-                    SetVolume(pw);
+                    SetVolume(pw,mml);
                 }
             }
         }
@@ -516,8 +520,8 @@ namespace Core
             if (pw.noise != n)
             {
                 pw.noise = n;
-                SetHuC6280CurrentChannel(pw);
-                OutHuC6280Port(pw.isSecondary, 7, (byte)((pw.mixer != 0 ? 0x80 : 0x00) + (pw.noise & 0x1f)));
+                SetHuC6280CurrentChannel(mml,pw);
+                OutHuC6280Port(mml,pw.isSecondary, 7, (byte)((pw.mixer != 0 ? 0x80 : 0x00) + (pw.noise & 0x1f)));
             }
         }
 
@@ -530,12 +534,12 @@ namespace Core
             {
                 if (pw.lfo[c].param.Count < 3)
                 {
-                    msgBox.setErrMsg(msg.get("E12001"), pw.getSrcFn(), pw.getLineNumber());
+                    msgBox.setErrMsg(msg.get("E12001"), mml.line.Lp);
                     return;
                 }
                 if (pw.lfo[c].param.Count > 3)
                 {
-                    msgBox.setErrMsg(msg.get("E12002"), pw.getSrcFn(), pw.getLineNumber());
+                    msgBox.setErrMsg(msg.get("E12002"), mml.line.Lp);
                     return;
                 }
 
@@ -556,16 +560,16 @@ namespace Core
             {
                 if (n == 0)
                 {
-                    OutHuC6280Port(pw.isSecondary, 9, 0); //disable
+                    OutHuC6280Port(mml,pw.isSecondary, 9, 0); //disable
                 }
                 else
                 {
-                    OutHuC6280Port(pw.isSecondary, 9, (byte)pw.lfo[c].param[0]);
-                    OutHuC6280Port(pw.isSecondary, 8, (byte)pw.lfo[c].param[1]);
-                    OutHuC6280Port(pw.isSecondary, 0, 1);//CurrentChannel 2
+                    OutHuC6280Port(mml,pw.isSecondary, 9, (byte)pw.lfo[c].param[0]);
+                    OutHuC6280Port(mml,pw.isSecondary, 8, (byte)pw.lfo[c].param[1]);
+                    OutHuC6280Port(mml,pw.isSecondary, 0, 1);//CurrentChannel 2
                     CurrentChannel = 1;
-                    OutHuC6280Port(pw.isSecondary, 2, (byte)(pw.lfo[c].param[2] & 0xff));
-                    OutHuC6280Port(pw.isSecondary, 3, (byte)((pw.lfo[c].param[2] & 0xf00) >> 8));
+                    OutHuC6280Port(mml,pw.isSecondary, 2, (byte)(pw.lfo[c].param[2] & 0xff));
+                    OutHuC6280Port(mml,pw.isSecondary, 3, (byte)((pw.lfo[c].param[2] & 0xf00) >> 8));
                     lstPartWork[1].freq = pw.lfo[c].param[2];
                 }
             }
@@ -580,6 +584,7 @@ namespace Core
             TotalVolume = (r << 4) | l;
 
             OutHuC6280Port(
+                mml,
                 pw.isSecondary
                 , 1
                 , (byte)TotalVolume
@@ -595,7 +600,7 @@ namespace Core
             r = Common.CheckRange(r, 0, 15);
             pw.pan.val = (l << 4) | r;
             //SetHuC6280CurrentChannel(pw);
-            SetHuC6280Pan(pw, (int)pw.pan.val);
+            SetHuC6280Pan(mml,pw, (int)pw.pan.val);
         }
 
         public override void CmdMode(partWork pw, MML mml)
@@ -621,7 +626,7 @@ namespace Core
             byte adr = (byte)mml.args[0];
             byte dat = (byte)mml.args[1];
 
-            OutHuC6280Port(pw.isSecondary, adr, dat);
+            OutHuC6280Port(mml,pw.isSecondary, adr, dat);
         }
 
         public override void CmdLoopExtProc(partWork p, MML mml)
@@ -643,13 +648,13 @@ namespace Core
 
             if (type == 'I')
             {
-                msgBox.setErrMsg(msg.get("E12003"), pw.getSrcFn(), pw.getLineNumber());
+                msgBox.setErrMsg(msg.get("E12003"), mml.line.Lp);
                 return;
             }
 
             if (type == 'T')
             {
-                msgBox.setErrMsg(msg.get("E12004"), pw.getSrcFn(), pw.getLineNumber());
+                msgBox.setErrMsg(msg.get("E12004"), mml.line.Lp);
                 return;
             }
 
@@ -665,7 +670,7 @@ namespace Core
                 if (pw.instrument != n)
                 {
                     pw.instrument = n;
-                    ((HuC6280)pw.chip).OutHuC6280SetInstrument(pw, n);
+                    ((HuC6280)pw.chip).OutHuC6280SetInstrument(pw,mml, n);
                 }
                 return;
             }
@@ -674,13 +679,13 @@ namespace Core
 
             if (!parent.instPCM.ContainsKey(n))
             {
-                msgBox.setErrMsg(string.Format(msg.get("E12005"), n), pw.getSrcFn(), pw.getLineNumber());
+                msgBox.setErrMsg(string.Format(msg.get("E12005"), n),mml.line.Lp);
                 return;
             }
 
             if (parent.instPCM[n].chip != enmChipType.HuC6280)
             {
-                msgBox.setErrMsg(string.Format(msg.get("E12006"), n), pw.getSrcFn(), pw.getLineNumber());
+                msgBox.setErrMsg(string.Format(msg.get("E12006"), n), mml.line.Lp);
             }
 
             pw.instrument = n;
@@ -695,8 +700,8 @@ namespace Core
             if (pw.mixer != n)
             {
                 pw.mixer = n;
-                SetHuC6280CurrentChannel(pw);
-                OutHuC6280Port(pw.isSecondary, 7, (byte)((pw.mixer != 0 ? 0x80 : 0x00) + (pw.noise & 0x1f)));
+                SetHuC6280CurrentChannel(mml,pw);
+                OutHuC6280Port(mml,pw.isSecondary, 7, (byte)((pw.mixer != 0 ? 0x80 : 0x00) + (pw.noise & 0x1f)));
             }
         }
 

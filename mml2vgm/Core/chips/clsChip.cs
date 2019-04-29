@@ -251,8 +251,7 @@ namespace Core
             if (!parent.instENV.ContainsKey(n))
             {
                 msgBox.setErrMsg(string.Format(msg.get("E10000"), n)
-                    , mml.line.Fn
-                    , mml.line.Num);
+                    , mml.line.Lp);
             }
             else
             {
@@ -271,7 +270,7 @@ namespace Core
             return n;
         }
 
-        private int AnalyzeBend(partWork pw, Note note, int ml)
+        private int AnalyzeBend(partWork pw,MML mml, Note note, int ml)
         {
             int n = -1;
             int bendDelayCounter;
@@ -334,6 +333,7 @@ namespace Core
                     tl += wait;
                     GetFNumAtoB(
                         pw
+                        ,mml
                         , out int a
                         , pw.octaveNow
                         , note.cmd
@@ -389,8 +389,7 @@ namespace Core
             if (pw.lfo[c].param == null)
             {
                 msgBox.setErrMsg(msg.get("E10001")
-                    , mml.line.Fn
-                    , mml.line.Num);
+                    , mml.line.Lp);
                 return false;
             }
 
@@ -430,7 +429,7 @@ namespace Core
             throw new NotImplementedException("継承先で要実装");
         }
 
-        public virtual void SetPCMDataBlock()
+        public virtual void SetPCMDataBlock(MML mml)
         {
             if (!CanUsePcm) return;
             if (!use) return;
@@ -481,14 +480,14 @@ namespace Core
             }
 
             if (pcmDataEasy != null && pcmDataEasy.Length > 0)
-                parent.OutData(pcmDataEasy);
+                parent.OutData(mml, pcmDataEasy);
 
             if (pcmDataDirect.Count < 1) return;
 
             foreach (byte[] dat in pcmDataDirect)
             {
                 if (dat != null && dat.Length > 0)
-                    parent.OutData(dat);
+                    parent.OutData(mml, dat);
             }
         }
 
@@ -504,47 +503,47 @@ namespace Core
         }
 
 
-        public virtual int GetFNum(partWork pw, int octave, char cmd, int shift)
+        public virtual int GetFNum(partWork pw,MML mml, int octave, char cmd, int shift)
         {
             throw new NotImplementedException("継承先で要実装");
         }
 
-        public virtual void GetFNumAtoB(partWork pw
+        public virtual void GetFNumAtoB(partWork pw, MML mml
             , out int a, int aOctaveNow, char aCmd, int aShift
             , out int b, int bOctaveNow, char bCmd, int bShift
             , int dir)
         {
-            a = GetFNum(pw, aOctaveNow, aCmd, aShift);
-            b = GetFNum(pw, bOctaveNow, bCmd, bShift);
+            a = GetFNum(pw,mml, aOctaveNow, aCmd, aShift);
+            b = GetFNum(pw,mml, bOctaveNow, bCmd, bShift);
         }
 
-        public virtual void SetFNum(partWork pw)
+        public virtual void SetFNum(partWork pw, MML mml)
         {
             throw new NotImplementedException("継承先で要実装");
         }
 
 
-        public virtual void SetKeyOn(partWork pw)
+        public virtual void SetKeyOn(partWork pw, MML mml)
         {
             throw new NotImplementedException("継承先で要実装");
         }
 
-        public virtual void SetKeyOff(partWork pw)
+        public virtual void SetKeyOff(partWork pw, MML mml)
         {
             throw new NotImplementedException("継承先で要実装");
         }
 
-        public virtual void SetVolume(partWork pw)
+        public virtual void SetVolume(partWork pw,MML mml)
         {
             throw new NotImplementedException("継承先で要実装");
         }
 
-        public virtual void SetLfoAtKeyOn(partWork pw)
+        public virtual void SetLfoAtKeyOn(partWork pw,MML mml)
         {
             throw new NotImplementedException("継承先で要実装");
         }
 
-        public virtual void SetEnvelopeAtKeyOn(partWork pw)
+        public virtual void SetEnvelopeAtKeyOn(partWork pw, MML mml)
         {
             if (!pw.envelopeMode)
             {
@@ -639,34 +638,26 @@ namespace Core
         public virtual void CmdNoise(partWork pw, MML mml)
         {
             msgBox.setErrMsg(msg.get("E10002")
-                    , mml.line.Fn
-                    , mml.line.Num
-                    );
+                    , mml.line.Lp);
         }
 
         public virtual void CmdSusOnOff(partWork pw, MML mml)
         {
             msgBox.setErrMsg(msg.get("E10022")
-                    , mml.line.Fn
-                    , mml.line.Num
-                    );
+                    , mml.line.Lp);
         }
 
 
         public virtual void CmdMPMS(partWork pw, MML mml)
         {
             msgBox.setErrMsg(msg.get("E10003")
-                    , mml.line.Fn
-                    , mml.line.Num
-                    );
+                    , mml.line.Lp);
         }
 
         public virtual void CmdMAMS(partWork pw, MML mml)
         {
             msgBox.setErrMsg(msg.get("E10004")
-                    , mml.line.Fn
-                    , mml.line.Num
-                    );
+                    , mml.line.Lp);
         }
 
         public virtual void CmdLfo(partWork pw, MML mml)
@@ -700,17 +691,13 @@ namespace Core
                 if (pw.lfo[c].param.Count < 4)
                 {
                     msgBox.setErrMsg(msg.get("E10005")
-                    , mml.line.Fn
-                    , mml.line.Num
-                    );
+                    , mml.line.Lp);
                     return;
                 }
                 if (pw.lfo[c].param.Count > 7)
                 {
                     msgBox.setErrMsg(msg.get("E10006")
-                    , mml.line.Fn
-                    , mml.line.Num
-                    );
+                    , mml.line.Lp);
                     return;
                 }
 
@@ -785,8 +772,7 @@ namespace Core
             if (!(mml.args[0] is string))
             {
                 msgBox.setErrMsg(msg.get("E10010")
-                    , mml.line.Fn
-                    , mml.line.Num);
+                    , mml.line.Lp);
 
                 return;
             }
@@ -812,18 +798,14 @@ namespace Core
         public virtual void CmdHardEnvelope(partWork pw, MML mml)
         {
             msgBox.setWrnMsg(msg.get("E10011")
-                    , mml.line.Fn
-                    , mml.line.Num
-                    );
+                    , mml.line.Lp);
         }
 
 
         public virtual void CmdTotalVolume(partWork pw, MML mml)
         {
             msgBox.setErrMsg(msg.get("E10007")
-                    , mml.line.Fn
-                    , mml.line.Num
-                    );
+                    , mml.line.Lp);
         }
 
         public virtual void CmdVolume(partWork pw, MML mml)
@@ -889,9 +871,7 @@ namespace Core
         public virtual void CmdPan(partWork pw, MML mml)
         {
             msgBox.setErrMsg(msg.get("E10008")
-                    , mml.line.Fn
-                    , mml.line.Num
-                    );
+                    , mml.line.Lp);
         }
 
 
@@ -923,16 +903,13 @@ namespace Core
         public virtual void CmdMode(partWork pw, MML mml)
         {
             msgBox.setErrMsg(msg.get("E10009")
-                    , mml.line.Fn
-                    , mml.line.Num
-                    );
+                    , mml.line.Lp);
         }
 
         public virtual void CmdNoiseToneMixer(partWork pw, MML mml)
         {
             msgBox.setErrMsg(msg.get("E10014")
-                , mml.line.Fn
-                , mml.line.Num);
+                    , mml.line.Lp);
         }
 
 
@@ -945,7 +922,7 @@ namespace Core
 
             if (parent.info.format == enmFormat.XGM)
             {
-                parent.OutData(0x7e);
+                parent.OutData(mml, 0x7e);
             }
 
             foreach (KeyValuePair<enmChipType, ClsChip[]> kvp in parent.chips)
@@ -983,9 +960,7 @@ namespace Core
         public virtual void CmdExtendChannel(partWork pw, MML mml)
         {
             msgBox.setWrnMsg(msg.get("E10012")
-                    , mml.line.Fn
-                    , mml.line.Num
-                    );
+                    , mml.line.Lp);
         }
 
 
@@ -1116,16 +1091,14 @@ namespace Core
             int bendDelayCounter = 0;
             if (note.bendSw)
             {
-                bendDelayCounter = AnalyzeBend(pw, note, ml);
+                bendDelayCounter = AnalyzeBend(pw, mml, note, ml);
             }
 
 
             if (note.length < 1)
             {
                 msgBox.setErrMsg(msg.get("E10013")
-                    , mml.line.Fn
-                    , mml.line.Num
-                    );
+                    , mml.line.Lp);
                 ml = (int)pw.length;
             }
 
@@ -1167,22 +1140,22 @@ namespace Core
             //タイ指定では無い場合はキーオンする
             if (!pw.beforeTie)
             {
-                SetEnvelopeAtKeyOn(pw);
-                SetLfoAtKeyOn(pw);
-                SetVolume(pw);
+                SetEnvelopeAtKeyOn(pw,mml);
+                SetLfoAtKeyOn(pw, mml);
+                SetVolume(pw, mml);
                 //強制設定
                 //pw.freq = -1;
                 //発音周波数の決定
-                SetFNum(pw);
-                SetKeyOn(pw);
+                SetFNum(pw,mml);
+                SetKeyOn(pw,mml);
             }
             else
             {
                 //強制設定
                 //pw.freq = -1;
                 //発音周波数の決定
-                SetFNum(pw);
-                SetVolume(pw);
+                SetFNum(pw,mml);
+                SetVolume(pw, mml);
             }
 
             //gateTimeの決定
@@ -1205,9 +1178,7 @@ namespace Core
             if (rest.length < 1)
             {
                 msgBox.setErrMsg(msg.get("E10013")
-                    , mml.line.Fn
-                    , mml.line.Num
-                    );
+                    , mml.line.Lp);
                 ml = (int)pw.length;
             }
 
@@ -1230,9 +1201,7 @@ namespace Core
             if (ml < 1)
             {
                 msgBox.setErrMsg(msg.get("E10013")
-                    , mml.line.Fn
-                    , mml.line.Num
-                    );
+                    , mml.line.Lp);
                 ml = (int)pw.length;
             }
 
@@ -1251,7 +1220,7 @@ namespace Core
         }
 
 
-        public virtual void MultiChannelCommand()
+        public virtual void MultiChannelCommand(MML mml)
         { }
 
 

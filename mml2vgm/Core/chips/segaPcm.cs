@@ -70,7 +70,10 @@ namespace Core
                 pw.volume = pw.MaxVolume;
             }
 
-            if (IsSecondary) parent.dat[0x3b] |= 0x40;
+            if (IsSecondary)
+            {
+                parent.dat[0x3b]=new outDatum(enmMMLType.unknown,null,null,(byte)(parent.dat[0x3b].val | 0x40));
+            }
         }
 
 
@@ -95,24 +98,24 @@ namespace Core
             return ((int)(64 * Const.pcmMTbl[n] * Math.Pow(2, (o - 3))) + 1);
         }
 
-        public void OutSegaPcmKeyOff(partWork pw)
+        public void OutSegaPcmKeyOff(MML mml,partWork pw)
         {
             int adr = pw.ch * 8 + 0x86;
             byte d = (byte)(((pw.pcmBank & 0x3f) << 2) | (pw.pcmLoopAddress != -1 ? 0 : 2) | 1);
 
-            OutSegaPcmPort(pw, adr, d);
+            OutSegaPcmPort(mml,pw, adr, d);
         }
 
-        public void OutSegaPcmKeyOn(partWork pw)
+        public void OutSegaPcmKeyOn(partWork pw, MML mml)
         {
             int adr = 0;
             byte d = 0;
 
             //KeyOff
-            OutSegaPcmKeyOff(pw);
+            OutSegaPcmKeyOff(mml,pw);
 
             //Volume
-            SetVolume(pw);
+            SetVolume(pw,mml);
 
             //Address shift
             int stAdr = pw.pcmStartAddress + pw.addressShift;
@@ -121,12 +124,12 @@ namespace Core
             //StartAdr
             adr = pw.ch * 8 + 0x85;
             d = (byte)((stAdr & 0xff00) >> 8);
-            OutSegaPcmPort(pw, adr, d);
+            OutSegaPcmPort(mml,pw, adr, d);
 
             //StartAdr
             adr = pw.ch * 8 + 0x84;
             d = (byte)((stAdr & 0x00ff) >> 0);
-            OutSegaPcmPort(pw, adr, d);
+            OutSegaPcmPort(mml,pw, adr, d);
 
             if (pw.pcmLoopAddress != -1)
             {
@@ -135,12 +138,12 @@ namespace Core
                     //LoopAdr
                     adr = pw.ch * 8 + 0x05;
                     d = (byte)((pw.pcmLoopAddress & 0xff00) >> 8);
-                    OutSegaPcmPort(pw, adr, d);
+                    OutSegaPcmPort(mml,pw, adr, d);
 
                     //LoopAdr
                     adr = pw.ch * 8 + 0x04;
                     d = (byte)((pw.pcmLoopAddress & 0x00ff) >> 0);
-                    OutSegaPcmPort(pw, adr, d);
+                    OutSegaPcmPort(mml,pw, adr, d);
 
                     pw.beforepcmLoopAddress = pw.pcmLoopAddress;
                 }
@@ -152,13 +155,13 @@ namespace Core
                 adr = pw.ch * 8 + 0x06;
                 d = (byte)((pw.pcmEndAddress & 0xff00) >> 8);
                 d = (byte)((d != 0) ? (d - 1) : 0);
-                OutSegaPcmPort(pw, adr, d);
+                OutSegaPcmPort(mml,pw, adr, d);
                 pw.beforepcmEndAddress = pw.pcmEndAddress;
             }
 
             adr = pw.ch * 8 + 0x86;
             d = (byte)(((pw.pcmBank & 0x3f) << 2) | (pw.pcmLoopAddress != -1 ? 0 : 2) | 0);
-            OutSegaPcmPort(pw, adr, d);
+            OutSegaPcmPort(mml,pw, adr, d);
 
             if (parent.instPCM[pw.instrument].status != enmPCMSTATUS.ERROR)
             {
@@ -166,9 +169,10 @@ namespace Core
             }
         }
 
-        public void OutSegaPcmPort(partWork pw, int adr, byte data)
+        public void OutSegaPcmPort(MML mml,partWork pw, int adr, byte data)
         {
             parent.OutData(
+                mml,
                 pw.port0
                 , (byte)adr //ll
                 , (byte)(((adr & 0x7f00) >> 8) | (pw.isSecondary ? 0x80 : 0)) //hh
@@ -309,7 +313,7 @@ namespace Core
             return buf;
         }
 
-        public override void SetFNum(partWork pw)
+        public override void SetFNum(partWork pw, MML mml)
         {
             int f = GetSegaPcmFNum(pw.octaveNow, pw.noteCmd, pw.shift + pw.keyShift);//
             if (pw.bendWaitCounter != -1)
@@ -341,13 +345,13 @@ namespace Core
             int adr = pw.ch * 8 + 0x07;
             if (pw.beforeFNum != data)
             {
-                OutSegaPcmPort(pw, adr, data);
+                OutSegaPcmPort(mml,pw, adr, data);
                 pw.beforeFNum = data;
             }
 
         }
 
-        public override void SetVolume(partWork pw)
+        public override void SetVolume(partWork pw, MML mml)
         {
             int vol = pw.volume;
 
@@ -382,7 +386,7 @@ namespace Core
             {
                 //Volume(Left)
                 int adr = pw.ch * 8 + 0x02;
-                OutSegaPcmPort(pw, adr, (byte)vl);
+                OutSegaPcmPort(mml,pw, adr, (byte)vl);
                 pw.beforeLVolume = vl;
             }
 
@@ -390,27 +394,27 @@ namespace Core
             {
                 //Volume(Right)
                 int adr = pw.ch * 8 + 0x03;
-                OutSegaPcmPort(pw, adr, (byte)vr);
+                OutSegaPcmPort(mml,pw, adr, (byte)vr);
                 pw.beforeRVolume = vr;
             }
         }
 
-        public override int GetFNum(partWork pw, int octave, char cmd, int shift)
+        public override int GetFNum(partWork pw, MML mml, int octave, char cmd, int shift)
         {
             return GetSegaPcmFNum(octave, cmd, shift);
         }
 
-        public override void SetKeyOn(partWork pw)
+        public override void SetKeyOn(partWork pw, MML mml)
         {
-            OutSegaPcmKeyOn(pw);
+            OutSegaPcmKeyOn(pw,mml);
         }
 
-        public override void SetKeyOff(partWork pw)
+        public override void SetKeyOff(partWork pw, MML mml)
         {
-            OutSegaPcmKeyOff(pw);
+            OutSegaPcmKeyOff(mml,pw);
         }
 
-        public override void SetLfoAtKeyOn(partWork pw)
+        public override void SetLfoAtKeyOn(partWork pw, MML mml)
         {
             for (int lfo = 0; lfo < 4; lfo++)
             {
@@ -428,12 +432,12 @@ namespace Core
 
                 if (pl.type == eLfoType.Vibrato)
                 {
-                    SetFNum(pw);
+                    SetFNum(pw,mml);
                 }
                 if (pl.type == eLfoType.Tremolo)
                 {
                     pw.beforeVolume = -1;
-                    SetVolume(pw);
+                    SetVolume(pw,mml);
                 }
             }
         }
@@ -456,7 +460,7 @@ namespace Core
             byte adr = (byte)mml.args[0];
             byte dat = (byte)mml.args[1];
 
-            OutSegaPcmPort(pw, adr, dat);
+            OutSegaPcmPort(mml,pw, adr, dat);
         }
 
         public override void CmdPan(partWork pw, MML mml)
@@ -478,16 +482,14 @@ namespace Core
             if (type == 'I')
             {
                 msgBox.setErrMsg(msg.get("E14001")
-                    , mml.line.Fn
-                    , mml.line.Num);
+                    , mml.line.Lp);
                 return;
             }
 
             if (type == 'T')
             {
                 msgBox.setErrMsg(msg.get("E14002")
-                    , mml.line.Fn
-                    , mml.line.Num);
+                    , mml.line.Lp);
                 return;
             }
 
@@ -502,16 +504,14 @@ namespace Core
             if (!parent.instPCM.ContainsKey(n))
             {
                 msgBox.setErrMsg(string.Format(msg.get("E14003"), n)
-                    , mml.line.Fn
-                    , mml.line.Num);
+                    , mml.line.Lp);
                 return;
             }
 
             if (parent.instPCM[n].chip != enmChipType.SEGAPCM)
             {
                 msgBox.setErrMsg(string.Format(msg.get("E14004"), n)
-                    , mml.line.Fn
-                    , mml.line.Num);
+                    , mml.line.Lp);
                 return;
             }
 

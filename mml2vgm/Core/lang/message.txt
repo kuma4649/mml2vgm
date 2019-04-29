@@ -136,7 +136,7 @@ E04004=Unexpected Error: Source analysis failed?(getByteData)(line:{0})
 E04005=Unexpected Error: line:{0}\r\nMessage:\r\n{1}\r\nStack Trace:\r\n{2}\r\n
 E04006=Include file({0}) not found.
 E04007=Failed to load PCM file. (filename:{0})
-
+E04008=Out of memory.
 
 
 ;MMLAnalyze.cs 05000

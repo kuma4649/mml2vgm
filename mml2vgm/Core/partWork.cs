@@ -433,9 +433,9 @@ namespace Core
         {
             if (pos.alies == "")
             {
-                return pData[pos.row].Num;
+                return pData[pos.row].Lp.row;
             }
-            return aData[pos.alies].Num;
+            return aData[pos.alies].Lp.row;
         }
 
         /// <summary>
@@ -446,9 +446,9 @@ namespace Core
         {
             if (pos.alies == "")
             {
-                return pData[pos.row].Fn;
+                return pData[pos.row].Lp.filename;
             }
-            return aData[pos.alies].Fn;
+            return aData[pos.alies].Lp.filename;
         }
 
         /// <summary>
@@ -462,18 +462,18 @@ namespace Core
             char ch;
             if (pos.alies == "")
             {
-                if (pData[pos.row].Txt.Length <= pos.col) {
+                if (pData[pos.row].Txt.Length <= pos.col+pData[pos.row].Lp.col) {
                     return (char)0;
                 }
-                ch = pData[pos.row].Txt[pos.col];
+                ch = pData[pos.row].Txt[pos.col + pData[pos.row].Lp.col];
             }
             else
             {
-                if (aData[pos.alies].Txt.Length <= pos.col)
+                if (aData[pos.alies].Txt.Length <= pos.col + aData[pos.alies].Lp.col)
                 {
                     return (char)0;
                 }
-                ch = aData[pos.alies].Txt[pos.col];
+                ch = aData[pos.alies].Txt[pos.col + aData[pos.alies].Lp.col];
             }
             //Console.Write(ch);
             return ch;
@@ -550,6 +550,7 @@ namespace Core
             int tCol = 0;
             int row = 0;
             int col = 0;
+            int pCol = 0;
             string aliesName = "";
 
             LstPos = new List<clsPos>();
@@ -569,14 +570,16 @@ namespace Core
                         return;
                     }
                     data = pData[row].Txt;
+                    pCol = pData[row].Lp.col;
                 }
                 else
                 {
                     data = aData[aliesName].Txt;
+                    pCol = aData[aliesName].Lp.col;
                 }
 
                 //解析行の解析位置が終端に達したときの処理
-                while (data.Length == col)
+                while (data.Length == col+pCol)
                 {
                     if (aliesName == "")
                     {
@@ -588,7 +591,8 @@ namespace Core
                         else
                         {
                             data = pData[row].Txt;
-                            col = 0;
+                            pCol = pData[row].Lp.col;
+                            col = 0;// pData[row].Lp.col;
 
                             clsPos p = new clsPos();
                             p.tCol = tCol;
@@ -609,10 +613,12 @@ namespace Core
                         if (aliesName == "")
                         {
                             data = pData[row].Txt;
+                            pCol = pData[row].Lp.col;
                         }
                         else
                         {
                             data = aData[aliesName].Txt;
+                            pCol = aData[aliesName].Lp.col;
                         }
 
                         p.tCol = tCol;
@@ -620,12 +626,12 @@ namespace Core
                     }
                 }
 
-                ch = data[col];
+                ch = data[col + pCol];
 
                 //解析位置でエイリアス指定されている場合
                 while (ch == '%')
                 {
-                    string a = getAliesName(data, col);
+                    string a = getAliesName(data, col + pCol);
                     if (a != "")
                     {
                         clsPos p = new clsPos();
@@ -635,6 +641,7 @@ namespace Core
                         stackPos.Push(p);
 
                         data = aData[a].Txt;
+                        pCol = aData[a].Lp.col;
                         col = 0;
                         aliesName = a;
                         row = 0;
@@ -649,19 +656,18 @@ namespace Core
                     else
                     {
                         msgBox.setWrnMsg(msg.get("E06000")
-                            , (aliesName == "") ? pData[row].Fn : aData[aliesName].Fn
-                            , (aliesName == "") ? pData[row].Num : aData[aliesName].Num
+                            , (aliesName == "") ? pData[row].Lp : aData[aliesName].Lp
                             );
                         col++;
                     }
 
-                    ch = data[col];
+                    ch = data[col + pCol];
                 }
 
                 tCol++;
                 col++;
                 //解析行の解析位置が終端に達したときの処理
-                while (data.Length == col)
+                while (data.Length == col+pCol)
                 {
                     if (aliesName == "")
                     {
@@ -673,6 +679,7 @@ namespace Core
                         else
                         {
                             data = pData[row].Txt;
+                            pCol = pData[row].Lp.col;
                             col = 0;
 
                             clsPos p = new clsPos();
@@ -694,10 +701,12 @@ namespace Core
                         if (aliesName == "")
                         {
                             data = pData[row].Txt;
+                            pCol = pData[row].Lp.col;
                         }
                         else
                         {
                             data = aData[aliesName].Txt;
+                            pCol = aData[aliesName].Lp.col;
                         }
 
                         p.tCol = tCol;

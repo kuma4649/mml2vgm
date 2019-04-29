@@ -9,13 +9,11 @@ namespace Core
     public class Line
     {
         public string Txt = "";
-        public int Num = 0;
-        public string Fn = "";
+        public LinePos Lp = null;
 
-        public Line(string fn, int num, string txt)
+        public Line(LinePos lp, string txt)
         {
-            Fn = fn;
-            Num = num;
+            Lp = lp;
             Txt = txt;
         }
     }
