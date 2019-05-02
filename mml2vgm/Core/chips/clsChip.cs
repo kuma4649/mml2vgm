@@ -523,6 +523,11 @@ namespace Core
         }
 
 
+        public virtual void SetDummyData(partWork pw, MML mml)
+        {
+            parent.OutData(mml, 0x2f, pw.port0, (byte)(pw.chip.IsSecondary ? 1 : 0));//0x2f:DummyChip (!!CAUTION!!)
+        }
+
         public virtual void SetKeyOn(partWork pw, MML mml)
         {
             throw new NotImplementedException("継承先で要実装");
@@ -1191,6 +1196,7 @@ namespace Core
             pw.tie = false;
 
             pw.clockCounter += pw.waitCounter;
+            SetDummyData(pw, mml);
         }
 
         public virtual void CmdLyric(partWork pw, MML mml)

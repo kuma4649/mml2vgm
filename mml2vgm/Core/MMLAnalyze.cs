@@ -79,7 +79,6 @@ namespace Core
             MML mml = new MML();
             mml.line = pw.getLine();
             mml.column = pw.pos.col + 1;// pw.getPos();
-            int p = pw.getPos();
 
 
             //コマンド解析
@@ -267,8 +266,6 @@ namespace Core
                     pw.incPos();
                     break;
             }
-
-            mml.line.Lp.length = 1;// pw.getPos() - p;
 
             //mmlコマンドの追加
 
@@ -1147,6 +1144,7 @@ namespace Core
         private void CmdNote(partWork pw, char cmd, MML mml)
         {
             pw.incPos();
+            mml.line.Lp.length = 1;
             mml.type = enmMMLType.Note;
             mml.args = new List<object>();
             Note note = new Note();
@@ -1162,14 +1160,16 @@ namespace Core
                 else
                     shift--;
                 pw.incPos();
+                mml.line.Lp.length++;
             }
             note.shift = shift;
 
             int n = -1;
             bool directFlg = false;
+            int col = 0;
 
             //数値の解析
-            if (pw.getNumNoteLength(out n, out directFlg))
+            if (pw.getNumNoteLength(out n, out directFlg,out col))
             {
                 if (!directFlg)
                 {
@@ -1185,6 +1185,7 @@ namespace Core
                 }
 
                 note.length = n;
+                mml.line.Lp.length += col;
 
                 //ToneDoubler'0'指定の場合はここで解析終了
                 if (n == 0)
@@ -1201,6 +1202,7 @@ namespace Core
                 if (pw.getChar() == ',')
                 {
                     pw.incPos();
+                    mml.line.Lp.length++;
                     swToneDoubler = true;
                     return;
                 }
@@ -1219,6 +1221,7 @@ namespace Core
                 fn = fn / 2;
                 futen += fn;
                 pw.incPos();
+                mml.line.Lp.length++;
             }
             note.length += futen;
 
@@ -1227,6 +1230,7 @@ namespace Core
         private void CmdRest(partWork pw, MML mml)
         {
             pw.incPos();
+            mml.line.Lp.length = 1;
             mml.type = enmMMLType.Rest;
             mml.args = new List<object>();
             Rest rest = new Rest();
@@ -1236,9 +1240,10 @@ namespace Core
 
             int n = -1;
             bool directFlg = false;
+            int col = 0;
 
             //数値の解析
-            if (pw.getNumNoteLength(out n, out directFlg))
+            if (pw.getNumNoteLength(out n, out directFlg,out col))
             {
                 if (!directFlg)
                 {
@@ -1254,6 +1259,7 @@ namespace Core
                 }
 
                 rest.length = n;
+                mml.line.Lp.length += col;
 
             }
             else
@@ -1274,6 +1280,7 @@ namespace Core
                 fn = fn / 2;
                 futen += fn;
                 pw.incPos();
+                mml.line.Lp.length ++;
             }
             rest.length += futen;
 
@@ -1282,6 +1289,7 @@ namespace Core
         private void CmdRestNoWork(partWork pw, MML mml)
         {
             pw.incPos();
+            mml.line.Lp.length = 1;
             mml.type = enmMMLType.Rest;
             mml.args = new List<object>();
             Rest rest = new Rest();
@@ -1291,9 +1299,10 @@ namespace Core
 
             int n = -1;
             bool directFlg = false;
+            int col = 0;
 
             //数値の解析
-            if (pw.getNumNoteLength(out n, out directFlg))
+            if (pw.getNumNoteLength(out n, out directFlg,out col))
             {
                 if (!directFlg)
                 {
@@ -1311,6 +1320,7 @@ namespace Core
                 }
 
                 rest.length = n;
+                mml.line.Lp.length += col;
 
             }
             else
@@ -1331,6 +1341,7 @@ namespace Core
                 fn = fn / 2;
                 futen += fn;
                 pw.incPos();
+                mml.line.Lp.length++;
             }
             rest.length += futen;
 

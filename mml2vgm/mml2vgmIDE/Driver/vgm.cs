@@ -310,6 +310,7 @@ namespace mml2vgmIDE
 
             for (int i = 0; i < vgmCmdTbl.Length; i++) vgmCmdTbl[i] = null;
 
+            vgmCmdTbl[0x2f] = vcDummyChip;
             vgmCmdTbl[0x30] = vcPSG;
             vgmCmdTbl[0x31] = vcDummy1Ope;
             vgmCmdTbl[0x32] = vcDummy1Ope;
@@ -542,6 +543,12 @@ namespace mml2vgmIDE
             vgmCmdTbl[0xfe] = vcDummy4Ope;
             vgmCmdTbl[0xff] = vcDummy4Ope;
 
+        }
+
+        private void vcDummyChip(outDatum od)
+        {
+            chipRegister.writeDummyChip(od, Audio.DriverSeqCounter, vgmBuf[vgmAdr + 1].val, vgmBuf[vgmAdr + 2].val);
+            vgmAdr += 3;
         }
 
         private void vcDummy1Ope(outDatum od)
@@ -1344,7 +1351,7 @@ namespace mml2vgmIDE
             //Last95Drum = 0xFFFF;
             byte TempByt = vgmBuf[vgmAdr + 6].val;
             uint DataLen = getLE32(vgmAdr + 7);
-                dacControl.start(si, DataStart, TempByt, DataLen);
+            dacControl.start(si, DataStart, TempByt, DataLen, od);
             vgmAdr += 0x0B;
 
         }
@@ -1402,7 +1409,7 @@ namespace mml2vgmIDE
             byte TempByt = (byte)(dacControl.DCTRL_LMODE_BYTES |
                         (vgmBuf[vgmAdr + 4].val & 0x10) |         // Reverse Mode
                         ((vgmBuf[vgmAdr + 4].val & 0x01) << 7));   // Looping
-            dacControl.start(CurChip, TempBnk.DataStart, TempByt, TempBnk.DataSize);
+            dacControl.start(CurChip, TempBnk.DataStart, TempByt, TempBnk.DataSize, od);
             vgmAdr += 0x05;
 
         }

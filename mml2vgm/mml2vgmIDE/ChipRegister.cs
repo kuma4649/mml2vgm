@@ -3812,6 +3812,7 @@ namespace mml2vgmIDE
         public void YM2612SetRegisterProcessing(ref long Counter, ref Chip Chip, ref EnmDataType Type, ref int Address, ref int dData, ref object ExData)
         {
             if (ctYM2612 == null) return;
+            if (Address == -1 && dData == -1) return;
 
             if (Chip.Number == 0) chipLED.PriOPN2 = 2;
             else chipLED.SecOPN2 = 2;
@@ -4416,6 +4417,19 @@ namespace mml2vgmIDE
                 {
                     Audio.sm.ResetInterrupt();
                 }
+            }
+        }
+
+        public void writeDummyChip(outDatum od, long Counter, byte chipID, byte isSecondary)
+        {
+            switch (chipID)
+            {
+                case 0x50:
+                    enq(od, Counter, SN76489[isSecondary], EnmDataType.Normal, -1, -1, null);
+                    break;
+                case 0x52:
+                    enq(od, Counter, YM2612[isSecondary], EnmDataType.Normal, -1, -1, null);
+                    break;
             }
         }
 

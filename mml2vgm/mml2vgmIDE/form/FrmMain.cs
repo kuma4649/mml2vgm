@@ -1130,7 +1130,7 @@ namespace mml2vgmIDE
             outDatum odo = odos[ch];
             if (od != null
                 && od != odo
-                && od.type == enmMMLType.Note
+                && (od.type == enmMMLType.Note || od.type == enmMMLType.Rest)
                 && (
                     (odo != null && od.linePos.col != odo.linePos.col)
                     || odo == null

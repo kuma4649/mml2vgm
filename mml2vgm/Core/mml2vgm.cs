@@ -159,7 +159,26 @@ namespace Core
         private void outFile(outDatum[] desBuf)
         {
             List<byte> lstBuf = new List<byte>();
-            foreach (outDatum od in desBuf) lstBuf.Add(od.val);
+            int skipCount = 0;
+            foreach (outDatum od in desBuf)
+            {
+
+                //ダミーコマンドをスキップする
+                if (skipCount > 0)
+                {
+                    skipCount--;
+                    continue;
+                }
+                if (od.val == 0x2f //dummyChipコマンド　(第2引数：chipID 第３引数:isSecondary)
+                    && od.type == enmMMLType.Rest//ここで指定できるmmlコマンドは元々はChipに送信することのないコマンドのみ(さもないと、通常のコマンドのデータと見分けがつかなくなる可能性がある)
+                    )
+                {
+                    skipCount = 2;
+                    continue;
+                }
+
+                lstBuf.Add(od.val);
+            }
             byte[] bufs = lstBuf.ToArray();
 
             if (Path.GetExtension(desFn).ToLower() != ".vgz")

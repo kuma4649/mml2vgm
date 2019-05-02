@@ -6119,7 +6119,15 @@ namespace mml2vgmIDE
                 {
                     ;
                 }
-                chipRegister.SendChipData(PackCounter, Pack.Chip, Pack.Type, Pack.Address, Pack.Data, Pack.ExData);
+
+                if (Pack.Address != -1 || Pack.Data != -1)
+                {
+                    chipRegister.SendChipData(PackCounter, Pack.Chip, Pack.Type, Pack.Address, Pack.Data, Pack.ExData);
+                }
+                else
+                {
+                    ;
+                }
 
                 SetMMLTraceInfo?.Invoke(Pack);
                 //if (Pack.od != null && Pack.od.linePos != null)

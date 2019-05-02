@@ -16,6 +16,13 @@ namespace Core
             Lp = lp;
             Txt = txt;
         }
+
+        public Line Copy()
+        {
+            LinePos lp = new LinePos(this.Lp.fullPath,this.Lp.row,this.Lp.col,this.Lp.length,this.Lp.part,this.Lp.chip,this.Lp.ch);
+            Line l = new Line(lp, this.Txt);
+            return l;
+        }
     }
 
 }

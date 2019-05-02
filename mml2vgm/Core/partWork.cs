@@ -420,9 +420,9 @@ namespace Core
         {
             if (pos.alies == "")
             {
-                return pData[pos.row];
+                return pData[pos.row].Copy();
             }
-            return aData[pos.alies];
+            return aData[pos.alies].Copy();
         }
 
         /// <summary>
@@ -804,7 +804,96 @@ namespace Core
             return true;
         }
 
-        public bool getNumNoteLength(out int num, out bool flg) {
+        public bool getNum(out int num,ref int col)
+        {
+
+            string n = "";
+            int ret = -1;
+
+            //タブと空白は読み飛ばす
+            while (getChar() == ' ' || getChar() == '\t')
+            {
+                incPos();
+                col++;
+            }
+
+            //符号を取得する(ない場合は正とする)
+            if (getChar() == '-' || getChar() == '+')
+            {
+                n = getChar().ToString();
+                incPos();
+                col++;
+            }
+
+            //タブと空白は読み飛ばす
+            while (getChar() == ' ' || getChar() == '\t')
+            {
+                incPos();
+                col++;
+            }
+
+            //１６進数指定されているか
+            if (getChar() != '$')
+            {
+                //数字でなくなるまで取得
+                while (true)
+                {
+                    if (getChar() >= '0' && getChar() <= '9')
+                    {
+                        try
+                        {
+                            n += getChar();
+                            incPos();
+                            col++;
+                        }
+                        catch
+                        {
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+
+                //数値に変換できたら成功
+                if (!int.TryParse(n, out ret))
+                {
+                    num = -1;
+                    return false;
+                }
+
+                num = ret;
+            }
+            else
+            {
+                //２文字取得
+                incPos();
+                col++;
+                n += getChar();
+                incPos();
+                col++;
+                n += getChar();
+                incPos();
+                col++;
+                //数値に変換できたら成功
+                try
+                {
+                    num = Convert.ToInt32(n, 16);
+                }
+                catch
+                {
+                    num = -1;
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        public bool getNumNoteLength(out int num, out bool flg)
+        {
 
             flg = false;
 
@@ -822,6 +911,30 @@ namespace Core
             }
 
             return getNum(out num);
+        }
+
+        public bool getNumNoteLength(out int num, out bool flg,out int col)
+        {
+
+            flg = false;
+            col = 0;
+
+            //タブと空白は読み飛ばす
+            while (getChar() == ' ' || getChar() == '\t')
+            {
+                incPos();
+                col++;
+            }
+
+            //クロック直接指定
+            if (getChar() == '#')
+            {
+                flg = true;
+                incPos();
+                col++;
+            }
+
+            return getNum(out num,ref col);
         }
 
         /// <summary>
