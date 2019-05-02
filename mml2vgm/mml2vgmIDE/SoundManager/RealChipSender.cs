@@ -40,9 +40,9 @@ namespace SoundManager
 
                         try
                         {
-                            while (ringBuffer.Deq(ref Counter, ref Chip, ref Type, ref Address, ref Data, ref ExData))
+                            while (ringBuffer.Deq(ref od,ref Counter, ref Chip, ref Type, ref Address, ref Data, ref ExData))
                             {
-                                ActionOfChip?.Invoke(Counter, Chip, Type, Address, Data, ExData);
+                                ActionOfChip?.Invoke(od,Counter, Chip, Type, Address, Data, ExData);
                             }
                         }
                         catch

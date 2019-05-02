@@ -12,6 +12,7 @@ using WeifenLuo.WinFormsUI.Docking;
 using System.IO;
 using Core;
 using System.Diagnostics;
+using SoundManager;
 
 namespace mml2vgmIDE
 {
@@ -30,6 +31,7 @@ namespace mml2vgmIDE
         private FrmErrorList frmErrorList = null;
         private frmDebug frmDebug = null;
         private bool doPlay = false;
+        private bool isTrace = false;
         private bool Compiling = false;
         private bool flgReinit = false;
 
@@ -210,7 +212,7 @@ namespace mml2vgmIDE
                 }
                 if (d == null) return;
 
-                Compile(false);
+                Compile(false, false);
                 while (Compiling) { Application.DoEvents(); }//待ち合わせ
 
                 if (msgBox.getErr().Length > 0)
@@ -263,12 +265,17 @@ namespace mml2vgmIDE
 
         public void TsmiCompileAndPlay_Click(object sender, EventArgs e)
         {
-            Compile(true);
+            Compile(true,false);
+        }
+
+        private void TsmiCompileAndTracePlay_Click(object sender, EventArgs e)
+        {
+            Compile(true, true);
         }
 
         private void TsmiCompile_Click(object sender, EventArgs e)
         {
-            Compile(false);
+            Compile(false,false);
         }
 
         private void TsmiUndo_Click(object sender, EventArgs e)
@@ -398,7 +405,7 @@ namespace mml2vgmIDE
 
         private void TssbPlay_ButtonClick(object sender, EventArgs e)
         {
-
+            TsmiCompileAndTracePlay_Click(null, null);
         }
 
         private void FrmMain_KeyDown(object sender, KeyEventArgs e)
@@ -415,6 +422,15 @@ namespace mml2vgmIDE
                     break;
                 case Keys.F5:
                     TsmiCompileAndPlay_Click(null, null);
+                    break;
+                case Keys.F6:
+                    TsmiCompileAndTracePlay_Click(null, null);
+                    break;
+                case Keys.F7:
+                    slow();
+                    break;
+                case Keys.F8:
+                    ff();
                     break;
                 case Keys.F9:
                     stop();
@@ -442,7 +458,7 @@ namespace mml2vgmIDE
 
         string wrkPath = "";
 
-        private void Compile(bool doPlay)
+        private void Compile(bool doPlay,bool isTrace)
         {
             IDockContent dc = dpMain.ActiveDocument;
             if (dc == null) return;
@@ -459,8 +475,17 @@ namespace mml2vgmIDE
             args[1] = tempPath;
             wrkPath = Path.GetDirectoryName(((Document)((FrmEditor)dc).Tag).gwiFullPath);
 
+            traceInfoSw = false;
+            Sgry.Azuki.WinForms.AzukiControl ac = ((FrmEditor)dc).azukiControl;
+            ac.ColorScheme.LineNumberBack = Color.FromArgb(40, 30, 60);
+            ac.ColorScheme.LineNumberFore = Color.FromArgb(80, 170, 200);
+            ac.Document.Unmark(0, ac.Text.Length, 1);
+            ac.IsReadOnly = false;
+            ac.Refresh();
+
             isSuccess = true;
             this.doPlay = doPlay;
+            this.isTrace = isTrace;
             frmPartCounter.dataGridView1.Rows.Clear();
             frmErrorList.dataGridView1.Rows.Clear();
 
@@ -531,6 +556,7 @@ namespace mml2vgmIDE
                 this.Text = string.Format("{0} - {1}", appName, title);
             }
         }
+
         private void Disp(string msg)
         {
             Action<string> msgDisp = MsgDisp;
@@ -818,6 +844,8 @@ namespace mml2vgmIDE
             log.ForcedWrite("起動時のAudio初期化処理開始");
             Audio.Init(setting);
 
+            Audio.SetMMLTraceInfo = SetMMLTraceInfo;
+
             log.ForcedWrite("デバッグウィンドウ起動");
             log.debug = setting.Debug_DispFrameCounter;
             if (setting.Debug_DispFrameCounter)
@@ -885,6 +913,21 @@ namespace mml2vgmIDE
                 if (setting.other.InitAlways) flgReinit = true;
                 Reinit(setting);
 
+                IDockContent dc = dpMain.ActiveDocument;
+                if (dc == null) return false;
+                if (!(dc is FrmEditor)) return false;
+                Sgry.Azuki.WinForms.AzukiControl ac = ((FrmEditor)dc).azukiControl;
+
+                //rowとcolをazuki向けlinePosに変換する
+                foreach (outDatum od in srcBuf)
+                {
+                    if (od.linePos == null) continue;
+                    //Console.WriteLine("{0} {1}", od.linePos.row, od.linePos.col);
+                    od.linePos.col = ac.GetCharIndexFromLineColumnIndex(od.linePos.row,od.linePos.col);
+                    
+                }
+
+
                 if (Audio.isPaused)
                 {
                     Audio.Pause();
@@ -898,6 +941,14 @@ namespace mml2vgmIDE
                     if (Audio.errMsg != "") return false;
                 }
 
+                if (isTrace)
+                {
+                    ac.ColorScheme.LineNumberBack = Color.FromArgb(150, 180, 60);
+                    ac.ColorScheme.LineNumberFore = Color.FromArgb(20, 40, 10);
+                    ac.Refresh();
+                    ac.IsReadOnly = true;
+                    traceInfoSw = true;
+                }
             }
             catch (Exception ex)
             {
@@ -985,5 +1036,131 @@ namespace mml2vgmIDE
 
             Audio.Slow();
         }
+
+        private void SetMMLTraceInfo(PackData pd)
+        {
+            if (pd == null) return;
+            if (pd.od == null) return;
+            if (pd.od.linePos == null) return;
+
+            outDatum od = pd.od;
+
+            switch (pd.od.linePos.chip)//.Chip.Device)
+            {
+                //case EnmDevice.YM2612:
+                case "YM2612":
+                    lock (traceInfoLockObj)
+                    {
+                        TraceInfo_YM2612[od.linePos.ch] = od;
+                    }
+                    break;
+                //case EnmDevice.SN76489:
+                case "SN76489":
+                    lock (traceInfoLockObj)
+                    {
+                        TraceInfo_SN76489[od.linePos.ch] = od;
+                    }
+                    break;
+                default:
+                    break;
+            }
+            //int i, c;
+            //ac.GetLineColumnIndexFromCharIndex(od.linePos.col,out i,out c);
+            //Console.WriteLine("{0} {1}", i, c);
+            //ac.Document.Mark(od.linePos.col, od.linePos.col + od.linePos.length, 1);
+        }
+
+        private outDatum[] TraceInfo_YM2612 = new outDatum[9];
+        private outDatum[] TraceInfo_YM2612old = new outDatum[9];
+        private outDatum[] TraceInfo_SN76489 = new outDatum[4];
+        private outDatum[] TraceInfo_SN76489old = new outDatum[4];
+        private object traceInfoLockObj = new object();
+        private bool traceInfoSw = false;
+
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            if (!traceInfoSw) return;
+
+            IDockContent dcnt = dpMain.ActiveDocument;
+            if (dcnt == null) return;
+            if (!(dcnt is FrmEditor)) return;
+            FrmEditor fe = ((FrmEditor)dcnt);
+            Sgry.Azuki.WinForms.AzukiControl ac = fe.azukiControl;
+            bool refresh = false;
+
+            if (!Audio.sm.IsRunningAtDataSender())
+            {
+                traceInfoSw = false;
+                ac.ColorScheme.LineNumberBack = Color.FromArgb(40, 30, 60);
+                ac.ColorScheme.LineNumberFore = Color.FromArgb(80, 170, 200);
+                ac.Document.Unmark(0, ac.Text.Length, 1);
+                ac.IsReadOnly = false;
+                ac.Refresh();
+            }
+
+            try
+            {
+                for (int ch = 0; ch < 9; ch++)
+                {
+                    bool ret = MarkUpTraceInfo(TraceInfo_YM2612, TraceInfo_YM2612old, ch, fe, ac);
+                    if (ret) refresh = ret;
+                }
+
+                for (int ch = 0; ch < 4; ch++)
+                {
+                    bool ret = MarkUpTraceInfo(TraceInfo_SN76489, TraceInfo_SN76489old, ch, fe, ac);
+                    if (ret) refresh = ret;
+                }
+
+                if (refresh)
+                {
+                    ac.Refresh();
+                    //ac.View.ScrollToCaret();
+                }
+            }
+            catch
+            {
+                ;//何もしない
+            }
+        }
+
+        private bool MarkUpTraceInfo(outDatum[] ods,outDatum[] odos,int ch,FrmEditor fe, Sgry.Azuki.WinForms.AzukiControl ac)
+        {
+            outDatum od = ods[ch];
+            outDatum odo = odos[ch];
+            if (od != null
+                && od != odo
+                && od.type == enmMMLType.Note
+                && (
+                    (odo != null && od.linePos.col != odo.linePos.col)
+                    || odo == null
+                )
+                && (fe.Text == od.linePos.filename || fe.Text == od.linePos.filename + "*")
+            )
+            {
+                int i, c;
+                ac.GetLineColumnIndexFromCharIndex(od.linePos.col, out i, out c);
+                //log.Write(string.Format("{0} {1}", i, c));
+                lock (traceInfoLockObj)
+                {
+                    if (odo != null)
+                    {
+                        try
+                        {
+                            ac.Document.Unmark(odo.linePos.col, odo.linePos.col + odo.linePos.length, 1);
+                        }
+                        catch
+                        {
+                            ;//何もしない
+                        }
+                    }
+                    ac.Document.Mark(od.linePos.col, od.linePos.col + od.linePos.length, 1);
+                    odos[ch] = ods[ch];
+                }
+                return true;
+            }
+            return false;
+        }
+
     }
 }

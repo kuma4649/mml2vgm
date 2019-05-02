@@ -72,6 +72,8 @@
             this.TsmiTutorial = new System.Windows.Forms.ToolStripMenuItem();
             this.TsmiReference = new System.Windows.Forms.ToolStripMenuItem();
             this.TsmiAbout = new System.Windows.Forms.ToolStripMenuItem();
+            this.timer = new System.Windows.Forms.Timer(this.components);
+            this.TsmiCompileAndTracePlay = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -151,8 +153,8 @@
             this.tssbPlay.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.tssbPlay.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tssbPlay.Name = "tssbPlay";
-            this.tssbPlay.Size = new System.Drawing.Size(68, 20);
-            this.tssbPlay.Text = "再生";
+            this.tssbPlay.Size = new System.Drawing.Size(148, 20);
+            this.tssbPlay.Text = "コンパイル&トレース再生";
             this.tssbPlay.ButtonClick += new System.EventHandler(this.TssbPlay_ButtonClick);
             // 
             // tssbSlow
@@ -371,6 +373,7 @@
             // 
             this.コンパイルCToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.TsmiCompileAndPlay,
+            this.TsmiCompileAndTracePlay,
             this.TsmiAllCompile,
             this.TsmiCompile});
             this.コンパイルCToolStripMenuItem.Name = "コンパイルCToolStripMenuItem";
@@ -444,6 +447,19 @@
             this.TsmiAbout.Text = "About";
             this.TsmiAbout.Click += new System.EventHandler(this.TsmiAbout_Click);
             // 
+            // timer
+            // 
+            this.timer.Enabled = true;
+            this.timer.Interval = 16;
+            this.timer.Tick += new System.EventHandler(this.Timer_Tick);
+            // 
+            // TsmiCompileAndTracePlay
+            // 
+            this.TsmiCompileAndTracePlay.Name = "TsmiCompileAndTracePlay";
+            this.TsmiCompileAndTracePlay.Size = new System.Drawing.Size(225, 22);
+            this.TsmiCompileAndTracePlay.Text = "コンパイルとトレース再生";
+            this.TsmiCompileAndTracePlay.Click += new System.EventHandler(this.TsmiCompileAndTracePlay_Click);
+            // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -512,6 +528,8 @@
         private System.Windows.Forms.ToolStripMenuItem tsmiExport;
         private System.Windows.Forms.ToolStripStatusLabel tsslCompileWarning;
         private System.Windows.Forms.ToolStripStatusLabel tsslCompileStatus;
+        private System.Windows.Forms.Timer timer;
+        private System.Windows.Forms.ToolStripMenuItem TsmiCompileAndTracePlay;
     }
 }
 

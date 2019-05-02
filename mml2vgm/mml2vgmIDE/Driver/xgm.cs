@@ -287,7 +287,7 @@ namespace mml2vgmIDE
             for (int i = 0; i < X + 1; i++)
             {
                 byte data = vgmBuf[musicPtr++].val;
-                chipRegister.SN76489SetRegister(Audio.DriverSeqCounter, 0, data);
+                chipRegister.SN76489SetRegister(null,Audio.DriverSeqCounter, 0, data);
             }
         }
 
@@ -298,7 +298,7 @@ namespace mml2vgmIDE
                 byte adr = vgmBuf[musicPtr++].val;
                 byte val = vgmBuf[musicPtr++].val;
                 if (adr == 0x2b) DACEnable = (byte)(val & 0x80);
-                chipRegister.YM2612SetRegister(Audio.DriverSeqCounter, 0, 0, adr, val);
+                chipRegister.YM2612SetRegister(null,Audio.DriverSeqCounter, 0, 0, adr, val);
             }
         }
 
@@ -308,7 +308,7 @@ namespace mml2vgmIDE
             {
                 byte adr = vgmBuf[musicPtr++].val;
                 byte val = vgmBuf[musicPtr++].val;
-                chipRegister.YM2612SetRegister(Audio.DriverSeqCounter, 0, 1, adr, val);
+                chipRegister.YM2612SetRegister(null,Audio.DriverSeqCounter, 0, 1, adr, val);
             }
         }
 
@@ -317,7 +317,7 @@ namespace mml2vgmIDE
             for (int i = 0; i < X + 1; i++)
             {
                 byte val = vgmBuf[musicPtr++].val;
-                chipRegister.YM2612SetRegister(Audio.DriverSeqCounter, 0, 0, 0x28, val);
+                chipRegister.YM2612SetRegister(null,Audio.DriverSeqCounter, 0, 0, 0x28, val);
             }
         }
 
@@ -400,7 +400,7 @@ namespace mml2vgmIDE
             //    o = 0;
             //}
             //Console.Write("{0} ", o);
-            chipRegister.YM2612SetRegister(Audio.DriverSeqCounter, 0, 0, 0x2a, o);
+            chipRegister.YM2612SetRegister(null,Audio.DriverSeqCounter, 0, 0, 0x2a, o);
         }
 
         public override GD3 getGD3Info(byte[] buf, uint vgmGd3)

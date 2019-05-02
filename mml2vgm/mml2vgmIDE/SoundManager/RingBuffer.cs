@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Core;
 using mml2vgmIDE;
 
 namespace SoundManager
@@ -47,9 +48,9 @@ namespace SoundManager
             bLength = 0;
         }
 
-        public bool Enq(long Counter, Chip Chip, EnmDataType Type, int Address, int Data, object ExData)
+        public bool Enq(outDatum od, long Counter, Chip Chip, EnmDataType Type, int Address, int Data, object ExData)
         {
-            if (name != "") log.Write(
+            if (name != "") mml2vgmIDE.log.Write(
                 string.Format("[{0}]:Enqueue:Counter:{1}:Model:{2}:Device:{3}:Number:{4}:Type:{5}:Address:{6:x4}:Data:{7:x4}"
                 , name, Counter, Chip.Model, Chip.Device, Chip.Number, Type, Address, Data));
 
@@ -81,7 +82,7 @@ namespace SoundManager
 
                 //データをセット
                 enqPos.Counter = Counter;
-                enqPos.pack.Copy(Chip, Type, Address, Data, ExData);
+                enqPos.pack.Copy(od, Chip, Type, Address, Data, ExData);
 
                 if (Counter >= enqPos.prev.Counter)
                 {
@@ -126,10 +127,11 @@ namespace SoundManager
             }
         }
 
-        public bool Deq(ref long Counter,ref Chip Chip, ref EnmDataType Type, ref int Address, ref int Data, ref object ExData)
+        public bool Deq(ref outDatum od, ref long Counter,ref Chip Chip, ref EnmDataType Type, ref int Address, ref int Data, ref object ExData)
         {
             lock (lockObj)
             {
+                od = deqPos.pack.od;
                 Counter = deqPos.Counter;
 
                 Chip.Move(deqPos.pack.Chip);

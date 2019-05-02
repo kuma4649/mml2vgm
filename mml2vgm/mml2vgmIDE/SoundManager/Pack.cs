@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Core;
 using mml2vgmIDE;
 
 namespace SoundManager
@@ -33,13 +34,16 @@ namespace SoundManager
         /// </summary>
         public object ExData;
 
+        public outDatum od;
+
         public PackData()
         {
 
         }
 
-        public PackData(Chip Chip, EnmDataType Type, int Address, int Data, object ExData)
+        public PackData(outDatum od, Chip Chip, EnmDataType Type, int Address, int Data, object ExData)
         {
+            this.od = od;
             this.Chip.Move(Chip);
             this.Type = Type;
             this.Address = Address;
@@ -56,8 +60,17 @@ namespace SoundManager
             ExData = pack.ExData;
         }
 
-        public void Copy(Chip Chip, EnmDataType Type, int Address, int Data, object ExData)
+        public void Copy(outDatum od, Chip Chip, EnmDataType Type, int Address, int Data, object ExData)
         {
+            this.od = null;
+            if (od != null)
+            {
+                this.od = new outDatum();
+                this.od.args = od.args;
+                this.od.linePos = od.linePos;
+                this.od.type = od.type;
+                this.od.val = od.val;
+            }
             this.Chip.Move(Chip);
             this.Type = Type;
             this.Address = Address;

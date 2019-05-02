@@ -34,7 +34,7 @@ namespace Core
         /// <summary>
         /// 次に演奏されるデータの位置
         /// </summary>
-        private clsPos pos = new clsPos();
+        public clsPos pos = new clsPos();
 
         /// <summary>
         /// 位置情報のスタック

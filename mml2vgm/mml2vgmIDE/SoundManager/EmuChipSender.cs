@@ -54,13 +54,13 @@ namespace SoundManager
 
                         try
                         {
-                            while (ringBuffer.Deq(ref Counter, ref Chip, ref Type, ref Address, ref Data, ref ExData))
+                            while (ringBuffer.Deq(ref od, ref Counter, ref Chip, ref Type, ref Address, ref Data, ref ExData))
                             {
                                 //ActionOfChip?.Invoke(Counter, Dev, Typ, Adr, Val, Ex);
-                                if (!recvBuffer.Enq(Counter, Chip, Type, Address, Data, ExData))
+                                if (!recvBuffer.Enq(od,Counter, Chip, Type, Address, Data, ExData))
                                 {
                                     parent.SetInterrupt();
-                                    while (!recvBuffer.Enq(Counter, Chip, Type, Address, Data, ExData)) { }
+                                    while (!recvBuffer.Enq(od,Counter, Chip, Type, Address, Data, ExData)) { }
                                     parent.ResetInterrupt();
                                 }
                             }

@@ -153,7 +153,12 @@ namespace mml2vgmIDE
         private static RingBuffer emuRecvBuffer = null;
         public static long DriverSeqCounter=0;
         public static long EmuSeqCounter=0;
+        public static Action<PackData> SetMMLTraceInfo = null;
 
+        //private static void SetMMLTraceInfo(PackData pack)
+        //{
+        //    if (Pack.od == null || Pack.od.linePos == null) return;
+        //}
 
 
 
@@ -811,7 +816,7 @@ namespace mml2vgmIDE
             softReset(DriverSeqCounter);
         }
 
-        private static void RealChipAction(long Counter,Chip Chip, EnmDataType Type, int Address, int Data, object ExData)
+        private static void RealChipAction(outDatum od, long Counter,Chip Chip, EnmDataType Type, int Address, int Data, object ExData)
         {
             chipRegister.SendChipData(Counter, Chip, Type, Address, Data, ExData);
         }
@@ -6101,7 +6106,7 @@ namespace mml2vgmIDE
                     return;
                 }
 
-                bool ret = emuRecvBuffer.Deq(ref PackCounter, ref Pack.Chip, ref Pack.Type, ref Pack.Address, ref Pack.Data, ref Pack.ExData);
+                bool ret = emuRecvBuffer.Deq(ref Pack.od, ref PackCounter, ref Pack.Chip, ref Pack.Type, ref Pack.Address, ref Pack.Data, ref Pack.ExData);
                 if (!ret)
                 {
                     if (!sm.IsRunningAtDataSender())
@@ -6115,6 +6120,20 @@ namespace mml2vgmIDE
                     ;
                 }
                 chipRegister.SendChipData(PackCounter, Pack.Chip, Pack.Type, Pack.Address, Pack.Data, Pack.ExData);
+
+                SetMMLTraceInfo?.Invoke(Pack);
+                //if (Pack.od != null && Pack.od.linePos != null)
+                //{
+                //    log.Write(string.Format("{0} row:{1} col:{2} len:{3} chip:{4} ch:{5} part:{6}",
+                //        Pack.od.type,
+                //        Pack.od.linePos.row,
+                //        Pack.od.linePos.col,
+                //        Pack.od.linePos.length,
+                //        Pack.od.linePos.chip,
+                //        Pack.od.linePos.ch,
+                //        Pack.od.linePos.part
+                //        ));
+                //}
                 //log.Write(PackCounter.ToString());
             }
 

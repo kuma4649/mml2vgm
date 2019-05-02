@@ -1,12 +1,13 @@
 ﻿using System;
 using mml2vgmIDE;
 using System.Windows.Forms;
+using Core;
 
 namespace SoundManager
 {
-    public delegate bool Enq(long Counter, Chip Chip, EnmDataType Type, int Address, int Data, object ExData);
-    public delegate bool Deq(ref long Counter, ref Chip Chip, ref EnmDataType Type, ref int Address, ref int Data, ref object ExData);
-    public delegate void Snd(long Counter, Chip Chip, EnmDataType Type, int Address, int Data, object ExData);
+    public delegate bool Enq(outDatum od, long Counter, Chip Chip, EnmDataType Type, int Address, int Data, object ExData);
+    public delegate bool Deq(ref outDatum od, ref long Counter, ref Chip Chip, ref EnmDataType Type, ref int Address, ref int Data, ref object ExData);
+    public delegate void Snd(outDatum od, long Counter, Chip Chip, EnmDataType Type, int Address, int Data, object ExData);
 
     public class SoundManager : IDisposable
     {

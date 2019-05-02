@@ -1531,6 +1531,13 @@ namespace Core
                 else
                 {
                     MML mml = pw.mmlData[pw.mmlPos];
+                    mml.line.Lp.ch = pw.ch;
+                    mml.line.Lp.chip = pw.chip.Name;
+                    int c = mml.line.Txt.IndexOfAny(new char[] { ' ', '\t' });
+                    //c += mml.line.Txt.Substring(c).Length - mml.line.Txt.Substring(c).TrimStart().Length;
+                    mml.line.Lp.col = mml.column + c;//-1;
+                    mml.line.Lp.part = pw.Type.ToString();
+                    
                     //lineNumber = pw.getLineNumber();
                     Commander(pw, mml);
                 }

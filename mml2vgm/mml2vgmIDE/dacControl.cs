@@ -430,7 +430,7 @@ namespace mml2vgmIDE
             switch (ChipType)
             {
                 case 0x02:  // YM2612
-                    chipRegister.YM2612SetRegister(Counter, ChipID, Port, Offset, Data);
+                    chipRegister.YM2612SetRegister(null,Counter, ChipID, Port, Offset, Data);
                     //log.Write(string.Format("Cnt{0} Data{1}",Counter,Data));
                     break;
                 case 0x10:

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Threading;
+using Core;
 using mml2vgmIDE;
 
 namespace SoundManager
@@ -100,30 +101,30 @@ namespace SoundManager
                 {
                     //振り分けてEnqueue
                     if (dat.Chip.Model == EnmModel.VirtualModel)
-                        while (!EmuEnq(0, dat.Chip, dat.Type, dat.Address, dat.Data, null)) Thread.Sleep(1);
+                        while (!EmuEnq(dat.od, 0, dat.Chip, dat.Type, dat.Address, dat.Data, null)) Thread.Sleep(1);
                     else
-                        while (!RealEnq(0, dat.Chip, dat.Type, dat.Address, dat.Data, null)) Thread.Sleep(1);
+                        while (!RealEnq(dat.od, 0, dat.Chip, dat.Type, dat.Address, dat.Data, null)) Thread.Sleep(1);
                 }
             }
 
         }
 
-        public new bool Enq(long Counter, Chip Chip, EnmDataType Type, int Address, int Data, object ExData)
+        public new bool Enq(outDatum od, long Counter, Chip Chip, EnmDataType Type, int Address, int Data, object ExData)
         {
             switch (Chip.Model)
             {
                 case EnmModel.None:
-                    return ringBuffer.Enq(Counter, Chip, Type, Address, Data, ExData);
+                    return ringBuffer.Enq(od,Counter, Chip, Type, Address, Data, ExData);
 
                 case EnmModel.VirtualModel:
-                    return ringBuffer.Enq(Counter + EmuDelay, Chip, Type, Address, Data, ExData);
+                    return ringBuffer.Enq(od,Counter + EmuDelay, Chip, Type, Address, Data, ExData);
 
                 case EnmModel.RealModel:
-                    return ringBuffer.Enq(Counter + RealDelay, Chip, Type, Address, Data, ExData);
+                    return ringBuffer.Enq(od,Counter + RealDelay, Chip, Type, Address, Data, ExData);
 
             }
 
-            return ringBuffer.Enq(Counter, Chip, Type, Address, Data, ExData);
+            return ringBuffer.Enq(od,Counter, Chip, Type, Address, Data, ExData);
         }
 
         private void Main()
@@ -202,18 +203,18 @@ namespace SoundManager
                         //dataが貯まってます！
                         while (SeqCounter >= ringBuffer.LookUpCounter())
                         {
-                            if (!ringBuffer.Deq(ref Counter, ref Chip, ref Type, ref Address, ref Data, ref ExData))
+                            if (!ringBuffer.Deq(ref od,ref Counter, ref Chip, ref Type, ref Address, ref Data, ref ExData))
                             {
                                 break;
                             }
 
                             //データ加工
-                            ProcessingData?.Invoke(ref Counter, ref Chip, ref Type, ref Address, ref Data, ref ExData);
+                            ProcessingData?.Invoke(ref od,ref Counter, ref Chip, ref Type, ref Address, ref Data, ref ExData);
 
                             //振り分けてEnqueue
                             if (Chip.Model == EnmModel.VirtualModel)
                             {
-                                while (!EmuEnq(Counter, Chip, Type, Address, Data, ExData))
+                                while (!EmuEnq(od,Counter, Chip, Type, Address, Data, ExData))
                                 {
                                     if (!Start)
                                     {
@@ -224,7 +225,7 @@ namespace SoundManager
                             }
                             else if (Chip.Model == EnmModel.RealModel)
                             {
-                                while (!RealEnq(Counter, Chip, Type, Address, Data, ExData))
+                                while (!RealEnq(od,Counter, Chip, Type, Address, Data, ExData))
                                 {
                                     if (!Start)
                                     {
@@ -256,7 +257,7 @@ namespace SoundManager
                         {
 
                             //データ加工
-                            ProcessingData?.Invoke(ref SeqCounter, ref dat.Chip, ref dat.Type, ref dat.Address, ref dat.Data, ref dat.ExData);
+                            ProcessingData?.Invoke(ref dat.od, ref SeqCounter, ref dat.Chip, ref dat.Type, ref dat.Address, ref dat.Data, ref dat.ExData);
 
                             //振り分けてEnqueue
                             if (dat.Chip.Model == EnmModel.VirtualModel)
@@ -264,7 +265,7 @@ namespace SoundManager
                                 if (parent.IsRunningAtEmuChipSender())
                                 {
                                     int timeOut = 1000;
-                                    while (!EmuEnq(SeqCounter, dat.Chip, dat.Type, dat.Address, dat.Data, dat.ExData))
+                                    while (!EmuEnq(dat.od, SeqCounter, dat.Chip, dat.Type, dat.Address, dat.Data, dat.ExData))
                                     {
                                         Thread.Sleep(1);
                                         timeOut--;
@@ -277,7 +278,7 @@ namespace SoundManager
                                 if (parent.IsRunningAtRealChipSender())
                                 {
                                     int timeOut = 1000;
-                                    while (!RealEnq(SeqCounter, dat.Chip, dat.Type, dat.Address, dat.Data, dat.ExData))
+                                    while (!RealEnq(dat.od, SeqCounter, dat.Chip, dat.Type, dat.Address, dat.Data, dat.ExData))
                                     {
                                         Thread.Sleep(1);
                                         timeOut--;

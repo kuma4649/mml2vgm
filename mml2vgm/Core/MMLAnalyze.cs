@@ -78,8 +78,8 @@ namespace Core
         {
             MML mml = new MML();
             mml.line = pw.getLine();
-            mml.column = pw.getPos();
-
+            mml.column = pw.pos.col + 1;// pw.getPos();
+            int p = pw.getPos();
 
 
             //コマンド解析
@@ -268,7 +268,7 @@ namespace Core
                     break;
             }
 
-
+            mml.line.Lp.length = 1;// pw.getPos() - p;
 
             //mmlコマンドの追加
 

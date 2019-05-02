@@ -60,10 +60,20 @@ namespace mml2vgmIDE
             azukiControl.ColorScheme.ForeColor = Color.FromArgb(235, 235, 255);
             azukiControl.ColorScheme.BackColor = Color.FromArgb(40, 30, 60);
             azukiControl.ColorScheme.IconBarBack = Color.FromArgb(70, 60, 90);
+            azukiControl.ColorScheme.LineNumberBack = Color.FromArgb(40, 30, 60);
+            azukiControl.ColorScheme.LineNumberFore = Color.FromArgb(80, 170, 200);
+            //azukiControl.ColorScheme.LineNumberBack = Color.FromArgb(150, 180, 60);
+            //azukiControl.ColorScheme.LineNumberFore = Color.FromArgb(20, 40, 10);
             azukiControl.ColorScheme.SetColor(CharClass.Keyword, Color.FromArgb(255, 190, 60), Color.Transparent);
             azukiControl.ColorScheme.SetColor(CharClass.Comment, Color.FromArgb(250, 190, 240), Color.Transparent);
             azukiControl.ColorScheme.SetColor(CharClass.DocComment, Color.FromArgb(230, 130, 230), Color.Transparent);
             azukiControl.ColorScheme.SetColor(CharClass.Number, Color.FromArgb(235, 235, 255), Color.Transparent);
+
+            MarkingInfo info = new MarkingInfo(1, "TraceInfo");
+            Marking.Register(info);
+            TextDecoration dec = new BgColorTextDecoration(Color.DarkGoldenrod);
+            azukiControl.ColorScheme.SetMarkingDecoration(1, dec);
+
             this.Controls.Add(azukiControl);
 
             frmSien = new FrmSien();

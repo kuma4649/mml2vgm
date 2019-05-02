@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Core;
 using mml2vgmIDE;
 
 namespace SoundManager
@@ -53,14 +54,14 @@ namespace SoundManager
             return true;
         }
 
-        public bool Enq(long Counter, Chip Chip, EnmDataType Type, int Address, int Data, object ExData)
+        public bool Enq(outDatum od, long Counter, Chip Chip, EnmDataType Type, int Address, int Data, object ExData)
         {
-            return ringBuffer.Enq(Counter, Chip , Type, Address, Data, ExData);
+            return ringBuffer.Enq(od,Counter, Chip , Type, Address, Data, ExData);
         }
 
-        public bool Deq(ref long Counter, ref Chip Chip, ref EnmDataType Type, ref int Address, ref int Data, ref object ExData)
+        public bool Deq(ref outDatum od, ref long Counter, ref Chip Chip, ref EnmDataType Type, ref int Address, ref int Data, ref object ExData)
         {
-            return ringBuffer.Deq(ref Counter, ref Chip, ref Type, ref Address, ref Data, ref ExData);
+            return ringBuffer.Deq(ref od, ref Counter, ref Chip, ref Type, ref Address, ref Data, ref ExData);
         }
 
         public void RequestStart()
