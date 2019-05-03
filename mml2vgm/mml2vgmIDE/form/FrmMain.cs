@@ -39,35 +39,11 @@ namespace mml2vgmIDE
         {
             InitializeComponent();
 
-            Init();
+            //Init();
         }
 
         private void Form1_Shown(object sender, EventArgs e)
         {
-            this.IsMdiContainer = true;
-
-            frmPartCounter = new FrmPartCounter();
-            frmPartCounter.Show(dpMain, WeifenLuo.WinFormsUI.Docking.DockState.DockLeft);
-            frmPartCounter.parentUpdate = UpdateControl;
-            FormBox.Add(frmPartCounter);
-
-            frmLog = new FrmLog();
-            frmLog.Show(dpMain, WeifenLuo.WinFormsUI.Docking.DockState.DockBottom);
-            frmLog.parentUpdate = UpdateControl;
-            FormBox.Add(frmLog);
-
-            frmFolderTree = new FrmFolderTree();
-            frmFolderTree.Show(dpMain, WeifenLuo.WinFormsUI.Docking.DockState.DockLeft);
-            frmFolderTree.parentUpdate = UpdateControl;
-            frmFolderTree.parentExecFile = ExecFile;
-            FormBox.Add(frmFolderTree);
-
-            frmErrorList = new FrmErrorList();
-            frmErrorList.Show(dpMain, WeifenLuo.WinFormsUI.Docking.DockState.DockBottom);
-            frmErrorList.parentUpdate = UpdateControl;
-            frmErrorList.parentJumpDocument = JumpDocument;
-            FormBox.Add(frmErrorList);
-
             UpdateControl();
         }
 
@@ -442,7 +418,7 @@ namespace mml2vgmIDE
 
         private void OpenFile(string fileName)
         {
-            Document dc = new Document();
+            Document dc = new Document(setting);
             if (fileName != "") dc.InitOpen(fileName);
             dc.editor.Show(dpMain, DockState.Document);
             dc.editor.main = this;
@@ -477,8 +453,8 @@ namespace mml2vgmIDE
 
             traceInfoSw = false;
             Sgry.Azuki.WinForms.AzukiControl ac = ((FrmEditor)dc).azukiControl;
-            ac.ColorScheme.LineNumberBack = Color.FromArgb(40, 30, 60);
-            ac.ColorScheme.LineNumberFore = Color.FromArgb(80, 170, 200);
+            ac.ColorScheme.LineNumberBack = Color.FromArgb(setting.ColorScheme.Azuki_LineNumberBack_Normal);
+            ac.ColorScheme.LineNumberFore = Color.FromArgb(setting.ColorScheme.Azuki_LineNumberFore_Normal);
             ac.Document.Unmark(0, ac.Text.Length, 1);
             ac.IsReadOnly = false;
             ac.Refresh();
@@ -610,13 +586,13 @@ namespace mml2vgmIDE
 
             foreach (msgInfo mes in msgBox.getErr())
             {
-                frmErrorList.dataGridView1.Rows.Add("Error", mes.filename, mes.line == -1 ? "-" : mes.line.ToString(), mes.body);
+                frmErrorList.dataGridView1.Rows.Add("Error", mes.filename, mes.line == -1 ? "-" : (mes.line + 1).ToString(), mes.body);
                 //frmConsole.textBox1.AppendText(string.Format(msg.get("I0109"), mes));
             }
 
             foreach (msgInfo mes in msgBox.getWrn())
             {
-                frmErrorList.dataGridView1.Rows.Add("Warning", mes.filename, mes.line == -1 ? "-" : mes.line.ToString(), mes.body);
+                frmErrorList.dataGridView1.Rows.Add("Warning", mes.filename, mes.line == -1 ? "-" : (mes.line + 1).ToString(), mes.body);
                 //frmConsole.textBox1.AppendText(string.Format(msg.get("I0108"), mes));
             }
 
@@ -763,7 +739,7 @@ namespace mml2vgmIDE
         }
 
         private System.Media.SoundPlayer player = null;
-        private Setting setting;
+        public Setting setting;
 
         private void ExecFile(string filename)
         {
@@ -824,7 +800,7 @@ namespace mml2vgmIDE
 
         public void Init()
         {
-            setting = Setting.Load();
+            //setting = Setting.Load();
 
             this.KeyPreview = true;
 
@@ -842,7 +818,7 @@ namespace mml2vgmIDE
             }
 
             log.ForcedWrite("起動時のAudio初期化処理開始");
-            Audio.Init(setting);
+            //Audio.Init(setting);
 
             Audio.SetMMLTraceInfo = SetMMLTraceInfo;
 
@@ -857,6 +833,57 @@ namespace mml2vgmIDE
                 frmDebug = new frmDebug();
                 frmDebug.Show();
             }
+
+            this.IsMdiContainer = true;
+
+            FormBox.Add(this);
+
+            frmPartCounter = new FrmPartCounter(setting);
+            FormBox.Add(frmPartCounter);
+
+            frmLog = new FrmLog(setting);
+            FormBox.Add(frmLog);
+
+            frmFolderTree = new FrmFolderTree(setting);
+            FormBox.Add(frmFolderTree);
+
+            frmErrorList = new FrmErrorList(setting);
+            FormBox.Add(frmErrorList);
+
+            if (string.IsNullOrEmpty(setting.dockingState))
+            {
+                frmPartCounter.Show(dpMain, WeifenLuo.WinFormsUI.Docking.DockState.DockLeft);
+                frmLog.Show(dpMain, WeifenLuo.WinFormsUI.Docking.DockState.DockBottom);
+                frmFolderTree.Show(dpMain, WeifenLuo.WinFormsUI.Docking.DockState.DockLeft);
+                frmErrorList.Show(dpMain, WeifenLuo.WinFormsUI.Docking.DockState.DockBottom);
+            }
+            else
+            {
+                MemoryStream stream = new MemoryStream(Encoding.UTF8.GetBytes(setting.dockingState));
+                dpMain.LoadFromXml(stream, new DeserializeDockContent(GetDockContentFromPersistString));
+            }
+
+            frmPartCounter.parentUpdate = UpdateControl;
+            frmLog.parentUpdate = UpdateControl;
+            frmFolderTree.parentUpdate = UpdateControl;
+            frmFolderTree.parentExecFile = ExecFile;
+            frmErrorList.parentUpdate = UpdateControl;
+            frmErrorList.parentJumpDocument = JumpDocument;
+        }
+
+        private IDockContent GetDockContentFromPersistString(string persistString)
+        {
+            foreach(Form frm in FormBox)
+            {
+                if (!(frm is IDockContent)) continue;
+
+                if (frm.Name == persistString)
+                {
+                    return (IDockContent)frm;
+                }
+            }
+
+            return null;
         }
 
         private void Reinit(Setting setting)
@@ -903,20 +930,31 @@ namespace mml2vgmIDE
             Audio.Close();
             Audio.RealChipClose();
 
+            MemoryStream stream=new MemoryStream();
+            dpMain.SaveAsXml(stream, Encoding.UTF8);
+            setting.dockingState = Encoding.UTF8.GetString(stream.ToArray());
+
+            setting.Save();
         }
 
         public bool InitPlayer(EnmFileFormat format, outDatum[] srcBuf)
         {
             try
             {
-                if (Audio.flgReinit) flgReinit = true;
-                if (setting.other.InitAlways) flgReinit = true;
-                Reinit(setting);
-
                 IDockContent dc = dpMain.ActiveDocument;
                 if (dc == null) return false;
                 if (!(dc is FrmEditor)) return false;
                 Sgry.Azuki.WinForms.AzukiControl ac = ((FrmEditor)dc).azukiControl;
+
+                if (isTrace)
+                {
+                    ac.IsReadOnly = true;
+                }
+
+                if (Audio.flgReinit) flgReinit = true;
+                if (setting.other.InitAlways) flgReinit = true;
+                //Reinit(setting);
+
 
                 //rowとcolをazuki向けlinePosに変換する
                 foreach (outDatum od in srcBuf)
@@ -935,18 +973,27 @@ namespace mml2vgmIDE
 
                 Audio.SetVGMBuffer(format, srcBuf);
 
+                for(int i = 0; i < 100; i++)
+                {
+                    Thread.Sleep(1);
+                    Application.DoEvents();
+                }
+
                 if (srcBuf != null)
                 {
                     playdata();
-                    if (Audio.errMsg != "") return false;
+                    if (Audio.errMsg != "")
+                    {
+                        stop();
+                        return false;
+                    }
                 }
 
                 if (isTrace)
                 {
-                    ac.ColorScheme.LineNumberBack = Color.FromArgb(150, 180, 60);
-                    ac.ColorScheme.LineNumberFore = Color.FromArgb(20, 40, 10);
+                    ac.ColorScheme.LineNumberBack = Color.FromArgb(setting.ColorScheme.Azuki_LineNumberBack_Trace);
+                    ac.ColorScheme.LineNumberFore = Color.FromArgb(setting.ColorScheme.Azuki_LineNumberFore_Trace);
                     ac.Refresh();
-                    ac.IsReadOnly = true;
                     traceInfoSw = true;
                 }
             }
@@ -1091,8 +1138,8 @@ namespace mml2vgmIDE
             if (!Audio.sm.IsRunningAtDataSender())
             {
                 traceInfoSw = false;
-                ac.ColorScheme.LineNumberBack = Color.FromArgb(40, 30, 60);
-                ac.ColorScheme.LineNumberFore = Color.FromArgb(80, 170, 200);
+                ac.ColorScheme.LineNumberBack = Color.FromArgb(setting.ColorScheme.Azuki_LineNumberBack_Normal);
+                ac.ColorScheme.LineNumberFore = Color.FromArgb(setting.ColorScheme.Azuki_LineNumberFore_Normal);
                 ac.Document.Unmark(0, ac.Text.Length, 1);
                 ac.IsReadOnly = false;
                 ac.Refresh();

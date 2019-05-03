@@ -75,6 +75,7 @@
     <Compile Include="Audio.cs" />
     <Compile Include="ChipLEDs.cs" />
     <Compile Include="ChipRegister.cs" />
+    <Compile Include="ColorScheme.cs" />
     <Compile Include="Common.cs" />
     <Compile Include="dacControl.cs" />
     <Compile Include="Document.cs" />
@@ -142,6 +143,7 @@
     <Compile Include="form\FrmLog.Designer.cs">
       <DependentUpon>FrmLog.cs</DependentUpon>
     </Compile>
+    <Compile Include="form\IForm.cs" />
     <Compile Include="form\ucSettingInstruments.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -171,6 +173,7 @@
     <Compile Include="SoundManager\SoundManager.cs" />
     <Compile Include="Tables.cs" />
     <Compile Include="VisVolume.cs" />
+    <Compile Include="WindowPosition.cs" />
     <EmbeddedResource Include="form\frmDebug.resx">
       <DependentUpon>frmDebug.cs</DependentUpon>
     </EmbeddedResource>

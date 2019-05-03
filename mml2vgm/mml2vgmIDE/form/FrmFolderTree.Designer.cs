@@ -58,6 +58,10 @@
             // 
             this.ClientSize = new System.Drawing.Size(289, 380);
             this.Controls.Add(this.treeView1);
+            this.DockAreas = ((WeifenLuo.WinFormsUI.Docking.DockAreas)(((((WeifenLuo.WinFormsUI.Docking.DockAreas.Float | WeifenLuo.WinFormsUI.Docking.DockAreas.DockLeft) 
+            | WeifenLuo.WinFormsUI.Docking.DockAreas.DockRight) 
+            | WeifenLuo.WinFormsUI.Docking.DockAreas.DockTop) 
+            | WeifenLuo.WinFormsUI.Docking.DockAreas.DockBottom)));
             this.Name = "FrmFolderTree";
             this.Text = "Folder";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FrmFolderTree_FormClosing);

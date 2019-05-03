@@ -12,9 +12,15 @@ namespace mml2vgmIDE
     {
         public Action parentUpdate = null;
 
-        public FrmLog()
+        public FrmLog(Setting setting)
         {
             InitializeComponent();
+            this.textBox1.BackColor = Color.FromArgb(setting.ColorScheme.Log_BackColor);
+            this.textBox1.ForeColor = Color.FromArgb(setting.ColorScheme.Log_ForeColor);
+        }
+        protected override string GetPersistString()
+        {
+            return this.Name;
         }
 
         private void FrmLog_FormClosing(object sender, FormClosingEventArgs e)

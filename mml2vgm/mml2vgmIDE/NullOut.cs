@@ -40,6 +40,7 @@ namespace mml2vgmIDE
 
         public void Dispose()
         {
+            if (PlaybackStopped != null) PlaybackStopped = null;
         }
 
         public void Init(IWaveProvider waveProvider)

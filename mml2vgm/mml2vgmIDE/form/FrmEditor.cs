@@ -34,7 +34,7 @@ namespace mml2vgmIDE
         //public int col = -1;
         public AzukiControl azukiControl;
 
-        public FrmEditor()
+        public FrmEditor(Setting setting)
         {
             InitializeComponent();
 
@@ -57,17 +57,16 @@ namespace mml2vgmIDE
             azukiControl.VScroll += AzukiControl_CancelSien;
             azukiControl.LocationChanged += AzukiControl_CancelSien;
             azukiControl.SizeChanged += AzukiControl_CancelSien;
-            azukiControl.ColorScheme.ForeColor = Color.FromArgb(235, 235, 255);
-            azukiControl.ColorScheme.BackColor = Color.FromArgb(40, 30, 60);
-            azukiControl.ColorScheme.IconBarBack = Color.FromArgb(70, 60, 90);
-            azukiControl.ColorScheme.LineNumberBack = Color.FromArgb(40, 30, 60);
-            azukiControl.ColorScheme.LineNumberFore = Color.FromArgb(80, 170, 200);
-            //azukiControl.ColorScheme.LineNumberBack = Color.FromArgb(150, 180, 60);
-            //azukiControl.ColorScheme.LineNumberFore = Color.FromArgb(20, 40, 10);
-            azukiControl.ColorScheme.SetColor(CharClass.Keyword, Color.FromArgb(255, 190, 60), Color.Transparent);
-            azukiControl.ColorScheme.SetColor(CharClass.Comment, Color.FromArgb(250, 190, 240), Color.Transparent);
-            azukiControl.ColorScheme.SetColor(CharClass.DocComment, Color.FromArgb(230, 130, 230), Color.Transparent);
-            azukiControl.ColorScheme.SetColor(CharClass.Number, Color.FromArgb(235, 235, 255), Color.Transparent);
+
+            azukiControl.ColorScheme.ForeColor = Color.FromArgb(setting.ColorScheme.Azuki_ForeColor);
+            azukiControl.ColorScheme.BackColor = Color.FromArgb(setting.ColorScheme.Azuki_BackColor);
+            azukiControl.ColorScheme.IconBarBack = Color.FromArgb(setting.ColorScheme.Azuki_IconBarBack);
+            azukiControl.ColorScheme.LineNumberBack = Color.FromArgb(setting.ColorScheme.Azuki_LineNumberBack_Normal);
+            azukiControl.ColorScheme.LineNumberFore = Color.FromArgb(setting.ColorScheme.Azuki_LineNumberFore_Normal);
+            azukiControl.ColorScheme.SetColor(CharClass.Keyword, Color.FromArgb(setting.ColorScheme.Azuki_Keyword), Color.Transparent);
+            azukiControl.ColorScheme.SetColor(CharClass.Comment, Color.FromArgb(setting.ColorScheme.Azuki_Comment), Color.Transparent);
+            azukiControl.ColorScheme.SetColor(CharClass.DocComment, Color.FromArgb(setting.ColorScheme.Azuki_DocComment), Color.Transparent);
+            azukiControl.ColorScheme.SetColor(CharClass.Number, Color.FromArgb(setting.ColorScheme.Azuki_Number), Color.Transparent);
 
             MarkingInfo info = new MarkingInfo(1, "TraceInfo");
             Marking.Register(info);
@@ -79,6 +78,11 @@ namespace mml2vgmIDE
             frmSien = new FrmSien();
             frmSien.parent = main;
             frmSien.Show();
+        }
+
+        protected override string GetPersistString()
+        {
+            return this.Name;
         }
 
         private void AzukiControl_IconBarClicked(object sender, IconBarClickedEventArgs e)

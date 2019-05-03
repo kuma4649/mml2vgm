@@ -16,9 +16,15 @@ namespace mml2vgmIDE
         public Action<string> parentExecFile = null;
         public string basePath = "";
 
-        public FrmFolderTree()
+        public FrmFolderTree(Setting setting)
         {
             InitializeComponent();
+            this.treeView1.BackColor = Color.FromArgb(setting.ColorScheme.FolderTree_BackColor);
+            this.treeView1.ForeColor = Color.FromArgb(setting.ColorScheme.FolderTree_ForeColor);
+        }
+        protected override string GetPersistString()
+        {
+            return this.Name;
         }
 
         private void FrmFolderTree_FormClosing(object sender, FormClosingEventArgs e)

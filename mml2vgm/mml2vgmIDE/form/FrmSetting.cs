@@ -1906,10 +1906,9 @@ namespace mml2vgmIDE
 
         private void btnResetPosition_Click(object sender, EventArgs e)
         {
-            DialogResult res= MessageBox.Show("表示位置を全てリセットします。よろしいですか。(現在開いているウィンドウの位置はリセットできません。)", "確認", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            DialogResult res= MessageBox.Show("表示位置を全てリセットします。よろしいですか。", "確認", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (res == DialogResult.No) return;
 
-            setting.location = new Setting.Location();
         }
 
         private void cbUseMIDIExport_CheckedChanged(object sender, EventArgs e)

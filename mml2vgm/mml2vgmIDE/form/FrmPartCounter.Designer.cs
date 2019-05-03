@@ -35,6 +35,7 @@
             this.ClmPart = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ClmChip = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ClmCounter = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ClmSpacer = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -48,9 +49,11 @@
             this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.ClmPart,
             this.ClmChip,
-            this.ClmCounter});
+            this.ClmCounter,
+            this.ClmSpacer});
             this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridView1.EnableHeadersVisualStyles = false;
+            this.dataGridView1.GridColor = System.Drawing.Color.Indigo;
             this.dataGridView1.Location = new System.Drawing.Point(0, 0);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.RowHeadersVisible = false;
@@ -82,13 +85,25 @@
             this.ClmCounter.HeaderText = "Counter";
             this.ClmCounter.Name = "ClmCounter";
             // 
+            // ClmSpacer
+            // 
+            this.ClmSpacer.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.ClmSpacer.HeaderText = "";
+            this.ClmSpacer.Name = "ClmSpacer";
+            this.ClmSpacer.ReadOnly = true;
+            // 
             // FrmPartCounter
             // 
             this.ClientSize = new System.Drawing.Size(284, 261);
             this.Controls.Add(this.dataGridView1);
+            this.DockAreas = ((WeifenLuo.WinFormsUI.Docking.DockAreas)(((((WeifenLuo.WinFormsUI.Docking.DockAreas.Float | WeifenLuo.WinFormsUI.Docking.DockAreas.DockLeft) 
+            | WeifenLuo.WinFormsUI.Docking.DockAreas.DockRight) 
+            | WeifenLuo.WinFormsUI.Docking.DockAreas.DockTop) 
+            | WeifenLuo.WinFormsUI.Docking.DockAreas.DockBottom)));
             this.Name = "FrmPartCounter";
             this.Text = "Part counter";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FrmPartCounter_FormClosing);
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.FrmPartCounter_FormClosed);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
 
@@ -99,5 +114,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn ClmPart;
         private System.Windows.Forms.DataGridViewTextBoxColumn ClmChip;
         private System.Windows.Forms.DataGridViewTextBoxColumn ClmCounter;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ClmSpacer;
     }
 }

@@ -126,11 +126,11 @@ namespace mml2vgmIDE
 
         private static int MasterVolume = 0;
         private static byte[] chips = new byte[256];
-        private static string PlayingFileName;
-        private static string PlayingArcFileName;
-        private static int MidiMode = 0;
-        private static int SongNo = 0;
-        private static List<Tuple<string, byte[]>> ExtendFile = null;
+        //private static string PlayingFileName;
+        //private static string PlayingArcFileName;
+        //private static int MidiMode = 0;
+        //private static int SongNo = 0;
+        //private static List<Tuple<string, byte[]>> ExtendFile = null;
         private static EnmFileFormat PlayingFileFormat;
 
         private static System.Diagnostics.Stopwatch stwh = System.Diagnostics.Stopwatch.StartNew();
@@ -1674,7 +1674,7 @@ namespace mml2vgmIDE
             //開始時にバッファ分のデータが貯まらないうちにコールバックがくるとテンポが乱れるため、レイテンシ(デバイスのバッファ)分だけ演奏開始を待つ。
             DriverSeqCounter += getLatency();
 
-            log.Write(string.Format("Playing filename [{0}]", PlayingFileName));
+            //log.Write(string.Format("Playing filename [{0}]", PlayingFileName));
 
             //try
             //{

@@ -14,9 +14,15 @@ namespace mml2vgmIDE
         [STAThread]
         static void Main()
         {
+            Setting setting = Setting.Load();
+            Audio.Init(setting);
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new FrmMain());
+            FrmMain f = new FrmMain();
+            f.setting = setting;
+            f.Init();
+            Application.Run(f);
         }
     }
 }

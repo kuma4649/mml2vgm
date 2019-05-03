@@ -127,9 +127,15 @@ namespace SoundManager
             dataSender.Init();
 
             dataMaker.RequestStart();
-            while (!dataMaker.IsRunning()) ;
+            while (!dataMaker.IsRunning())
+            {
+                //Application.DoEvents();
+            }
             dataSender.RequestStart();
-            while (!dataSender.IsRunning()) ;
+            while (!dataSender.IsRunning())
+            {
+                Application.DoEvents();
+            }
 
             emuChipSender.RequestStart();
             realChipSender.RequestStart();
@@ -271,6 +277,7 @@ namespace SoundManager
 
         public double GetSpeed()
         {
+            if (dataSender == null) return 1.0;
             return dataSender.GetSpeed();
         }
 

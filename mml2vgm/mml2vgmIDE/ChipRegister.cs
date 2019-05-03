@@ -18,9 +18,9 @@ namespace mml2vgmIDE
         private MDSound.MDSound mds = null;
         //private midiOutInfo[] midiOutInfos = null;
         private List<NAudio.Midi.MidiOut> midiOuts = null;
-        private List<int> midiOutsType = null;
+        //private List<int> midiOutsType = null;
         //private List<vstInfo2> vstMidiOuts = null;
-        private List<int> vstMidiOutsType = null;
+        //private List<int> vstMidiOutsType = null;
 
 
         private Dictionary<MDSound.MDSound.enmInstrumentType, MDSound.MDSound.Chip> dicChipsInfo = new Dictionary<MDSound.MDSound.enmInstrumentType, MDSound.MDSound.Chip>();

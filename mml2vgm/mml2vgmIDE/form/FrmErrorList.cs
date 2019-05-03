@@ -13,9 +13,16 @@ namespace mml2vgmIDE
         public Action parentUpdate = null;
         public Action<string, long, bool> parentJumpDocument = null;
 
-        public FrmErrorList()
+        public FrmErrorList(Setting setting)
         {
             InitializeComponent();
+            this.dataGridView1.BackgroundColor = Color.FromArgb(setting.ColorScheme.ErrorList_BackColor);
+            this.dataGridView1.DefaultCellStyle.BackColor = Color.FromArgb(setting.ColorScheme.ErrorList_BackColor);
+            this.dataGridView1.ForeColor = Color.FromArgb(setting.ColorScheme.ErrorList_ForeColor);
+        }
+        protected override string GetPersistString()
+        {
+            return this.Name;
         }
 
         private void FrmErrorList_FormClosing(object sender, FormClosingEventArgs e)
@@ -49,7 +56,7 @@ namespace mml2vgmIDE
 
         private void JumpDocument(int rowIndex, bool wantFocus)
         {
-            if (rowIndex < 1 || rowIndex > dataGridView1.Rows.Count - 1) return;
+            if (rowIndex < 0 || rowIndex > dataGridView1.Rows.Count - 1) return;
             string f = dataGridView1.Rows[rowIndex].Cells[1].Value.ToString();
             string l = dataGridView1.Rows[rowIndex].Cells[2].Value.ToString();
             long n = 0;

@@ -19,13 +19,13 @@ namespace mml2vgmIDE
         public bool isNew = false;
         public bool edit = false;
 
-        public Document()
+        public Document(Setting setting)
         {
             gwiFullPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "(新規mmlファイル).gwi*");
             errBox = null;
             wrnBox = null;
             InitFolderTree();
-            editor = new FrmEditor();
+            editor = new FrmEditor(setting);
             editor.Text = Path.GetFileName(gwiFullPath);
             editor.azukiControl.Text = "";
             editor.azukiControl.ClearHistory();
