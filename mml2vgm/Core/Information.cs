@@ -109,12 +109,30 @@ namespace Core
                         {
                             foreach (ClsChip chip in aryChip)
                             {
-                                if (wrd == PARTNAME + chip.Name + IDName[chip.ChipID]) chip.SetPartToCh(chip.Ch, val);
-                                if (wrd == PARTNAME + chip.ShortName + IDName[chip.ChipID]) chip.SetPartToCh(chip.Ch, val);
+                                bool flg = false;
+                                if (wrd == PARTNAME + chip.Name + IDName[chip.ChipID]) flg = true;
+                                if (wrd == PARTNAME + chip.ShortName + IDName[chip.ChipID]) flg = true;
                                 if (chip.ChipID == 0)
                                 {
-                                    if (wrd == PARTNAME + chip.Name) chip.SetPartToCh(chip.Ch, val);
-                                    if (wrd == PARTNAME + chip.ShortName) chip.SetPartToCh(chip.Ch, val);
+                                    if (wrd == PARTNAME + chip.Name) flg = true;
+                                    if (wrd == PARTNAME + chip.ShortName) flg = true;
+                                }
+                                if (flg)
+                                {
+                                    foreach (ClsChip[] ac in chips.Values)
+                                    {
+                                        foreach (ClsChip cp in ac)
+                                        {
+                                            if (cp.Ch[0].Name.IndexOf((val + " ").Substring(0, 2)) != 0)
+                                                continue;
+                                            foreach (ClsChannel cch in cp.Ch)
+                                            {
+                                                cch.Name = "";
+                                            }
+                                        }
+                                    }
+
+                                    chip.SetPartToCh(chip.Ch, val);
                                 }
                             }
                         }

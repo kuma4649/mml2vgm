@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace mml2vgmIDE
 {
@@ -20,6 +21,7 @@ namespace mml2vgmIDE
 
         public SienSearch(string filename)
         {
+            filename = filename.Replace('\\', Path.DirectorySeparatorChar).Replace('/', Path.DirectorySeparatorChar);
             sien = JsonConvert.DeserializeObject<Sien>(System.IO.File.ReadAllText(filename));
             tokenSource = new CancellationTokenSource();
             cancellationToken = tokenSource.Token;

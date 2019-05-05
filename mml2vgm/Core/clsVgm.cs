@@ -409,9 +409,11 @@ namespace Core
 
                 int num = Common.ParseNumber(vs[0]);
                 string fn = vs[1].Trim().Trim('"');
+                fn = fn.Replace('\\', Path.DirectorySeparatorChar).Replace('/', Path.DirectorySeparatorChar);
                 if (!File.Exists(fn))
                 {
                     fn = Path.Combine(line.Lp.path, fn);
+                    fn = fn.Replace('\\', Path.DirectorySeparatorChar).Replace('/', Path.DirectorySeparatorChar);
                 }
 
                 byte[] pcmdat = File.ReadAllBytes(fn);
@@ -452,9 +454,11 @@ namespace Core
 
                 int num = Common.ParseNumber(vs[0]);
                 string fn = vs[1].Trim().Trim('"');
+                fn = fn.Replace('\\', Path.DirectorySeparatorChar).Replace('/', Path.DirectorySeparatorChar);
                 if (!File.Exists(fn))
                 {
                     fn = Path.Combine(line.Lp.path, fn);
+                    fn = fn.Replace('\\', Path.DirectorySeparatorChar).Replace('/', Path.DirectorySeparatorChar);
                 }
 
                 byte[] buf = File.ReadAllBytes(fn);
@@ -515,7 +519,9 @@ namespace Core
                 int num = Common.ParseNumber(vs[0]);
                 string fn = vs[1].Trim().Trim('"');
                 byte[] buf;
-                buf = File.ReadAllBytes(Path.Combine(line.Lp.path, fn));
+                fn = Path.Combine(line.Lp.path, fn);
+                fn = fn.Replace('\\', Path.DirectorySeparatorChar).Replace('/', Path.DirectorySeparatorChar);
+                buf = File.ReadAllBytes(fn);
 
                 if (instFM.ContainsKey(num))
                 {

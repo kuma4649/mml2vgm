@@ -65,6 +65,7 @@ namespace Core
                 Disp("");
 
                 Disp(msg.get("I04001"));
+                srcFn = srcFn.Replace('\\', Path.DirectorySeparatorChar).Replace('/', Path.DirectorySeparatorChar);
                 if (!File.Exists(srcFn))
                 {
                     msgBox.setErrMsg(msg.get("E04000"), new LinePos(srcFn));
@@ -257,9 +258,11 @@ namespace Core
                     && s.TrimStart().Substring(0, 2) == "'+")
                 {
                     string includeFn = s.Substring(2).Trim().Trim('"');
+                    includeFn = includeFn.Replace('\\', Path.DirectorySeparatorChar).Replace('/', Path.DirectorySeparatorChar);
                     if (!File.Exists(includeFn))
                     {
                         includeFn = Path.Combine(path, includeFn);
+                        includeFn = includeFn.Replace('\\', Path.DirectorySeparatorChar).Replace('/', Path.DirectorySeparatorChar);
                         if (!File.Exists(includeFn))
                         {
                             msgBox.setErrMsg(string.Format(

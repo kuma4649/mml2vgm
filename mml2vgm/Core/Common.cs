@@ -32,7 +32,8 @@ namespace Core
 
         public static byte[] GetPCMDataFromFile(string path, string fileName,int vol,out bool isRaw, out bool is16bit, out int samplerate)
         {
-            string fnPcm = Path.Combine(path, fileName);
+            string fnPcm = Path.Combine(path, fileName).Replace('\\', Path.DirectorySeparatorChar).Replace('/', Path.DirectorySeparatorChar);
+
             isRaw = false;
             is16bit = false;
             samplerate = 8000;

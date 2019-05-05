@@ -37,6 +37,8 @@ namespace mml2vgmIDE
 
         public bool InitOpen(string fullPath)
         {
+            fullPath = fullPath.Replace('\\', Path.DirectorySeparatorChar).Replace('/', Path.DirectorySeparatorChar);
+
             if (!File.Exists(fullPath))
             {
                 return false;

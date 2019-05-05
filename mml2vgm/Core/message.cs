@@ -15,13 +15,16 @@ namespace Core
             string path = Path.GetDirectoryName(myAssembly.Location);
             string lang = System.Globalization.CultureInfo.CurrentCulture.Name;
             string file = Path.Combine(path, "lang", string.Format("message.{0}.txt", lang));
+            file = file.Replace('\\', Path.DirectorySeparatorChar).Replace('/', Path.DirectorySeparatorChar);
             string[] lines = null;
             try
             {
-                if (File.Exists(file))
-                    lines = File.ReadAllLines(file);
-                else
-                    lines = File.ReadAllLines(Path.Combine(path, "lang", "message.txt"));
+                if (!File.Exists(file))
+                {
+                    file = Path.Combine(path, "lang", "message.txt");
+                    file = file.Replace('\\', Path.DirectorySeparatorChar).Replace('/', Path.DirectorySeparatorChar);
+                }
+                lines = File.ReadAllLines(file);
             }
             catch
             {
