@@ -648,6 +648,16 @@ namespace mml2vgmIDE
                     try
                     {
                         //Process.Start(Path.ChangeExtension(args[1], (mv.desVGM.info.format == enmFormat.VGM) ? Properties.Resources.ExtensionVGM : Properties.Resources.ExtensionXGM));
+                        //ヘッダー情報にダミーコマンド情報分の値を水増しした値をセットしなおす
+                        if(mv.desVGM.info.format== enmFormat.VGM)
+                        {
+                            uint EOFOffset = Common.getLE32(mv.desBuf, 0x04) + (uint)mv.desVGM.dummyCmdCounter;
+                            Common.SetLE32(mv.desBuf, 0x04, EOFOffset);
+                            uint GD3Offset = Common.getLE32(mv.desBuf, 0x14) + (uint)mv.desVGM.dummyCmdCounter;
+                            Common.SetLE32(mv.desBuf, 0x14, GD3Offset);
+                            uint LoopOffset = Common.getLE32(mv.desBuf, 0x1c) + (uint)mv.desVGM.dummyCmdLoopOffset;
+                            Common.SetLE32(mv.desBuf, 0x1c, LoopOffset);
+                        }
                         InitPlayer(
                             mv.desVGM.info.format == enmFormat.VGM ? EnmFileFormat.VGM : EnmFileFormat.XGM,
                             mv.desBuf);
@@ -1207,6 +1217,53 @@ namespace mml2vgmIDE
                 return true;
             }
             return false;
+        }
+
+        private void TsmiFncHide_Click(object sender, EventArgs e)
+        {
+            SetFunctionKeyButtonState(false, ToolStripItemDisplayStyle.None);
+            TsmiFncHide.Checked = true;
+            TsmiFncButtonOnly.Checked = false;
+            TsmiFncButtonAndText.Checked = false;
+        }
+
+        private void TsmiFncButtonOnly_Click(object sender, EventArgs e)
+        {
+            SetFunctionKeyButtonState(true, ToolStripItemDisplayStyle.Image);
+            TsmiFncHide.Checked = false;
+            TsmiFncButtonOnly.Checked = true;
+            TsmiFncButtonAndText.Checked = false;
+
+        }
+
+        private void TsmiFncButtonAndText_Click(object sender, EventArgs e)
+        {
+            SetFunctionKeyButtonState(true, ToolStripItemDisplayStyle.ImageAndText);
+            TsmiFncHide.Checked = false;
+            TsmiFncButtonOnly.Checked = false;
+            TsmiFncButtonAndText.Checked = true;
+
+        }
+
+        private void SetFunctionKeyButtonState(bool visible,ToolStripItemDisplayStyle style)
+        {
+            tssbOpen.Visible = visible;
+            tssbSave.Visible = visible;
+            tssbCompile.Visible = visible;
+            tssbTracePlay.Visible = visible;
+            tssbSoloPlay.Visible = visible;
+            tssbStop.Visible = visible;
+            tssbSlow.Visible = visible;
+            tssbFast.Visible = visible;
+
+            tssbOpen.DisplayStyle = style;
+            tssbSave.DisplayStyle = style;
+            tssbCompile.DisplayStyle = style;
+            tssbTracePlay.DisplayStyle = style;
+            tssbSoloPlay.DisplayStyle = style;
+            tssbStop.DisplayStyle = style;
+            tssbSlow.DisplayStyle = style;
+            tssbFast.DisplayStyle = style;
         }
 
     }

@@ -30,6 +30,7 @@
         {
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmErrorList));
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.ClmEtype = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ClmFileName = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -116,6 +117,7 @@
             | WeifenLuo.WinFormsUI.Docking.DockAreas.DockRight) 
             | WeifenLuo.WinFormsUI.Docking.DockAreas.DockTop) 
             | WeifenLuo.WinFormsUI.Docking.DockAreas.DockBottom)));
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "FrmErrorList";
             this.Text = "Error list";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FrmErrorList_FormClosing);

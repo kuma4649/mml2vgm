@@ -1275,6 +1275,32 @@ namespace Core
 
         public int useJumpCommand = 0;
 
+        /// <summary>
+        /// ダミーコマンドの総バイト数
+        /// </summary>
+        public long dummyCmdCounter = 0;
+        /// <summary>
+        /// ダミーコマンドの総クロック数
+        /// </summary>
+        public long dummyCmdClock = 0;
+        /// <summary>
+        /// ダミーコマンドの総サンプル数
+        /// </summary>
+        public long dummyCmdSample = 0;
+        /// <summary>
+        /// ダミーコマンドを含むLoopOffset
+        /// </summary>
+        public long dummyCmdLoopOffset = 0;
+        /// <summary>
+        /// ダミーコマンドを含むLoopOffset
+        /// </summary>
+        public long dummyCmdLoopClock = 0;
+        /// <summary>
+        /// ダミーコマンドを含むLoopOffset
+        /// </summary>
+        public long dummyCmdLoopSamples = 0;
+
+
         public LinePos linePos { get; internal set; }
 
         public outDatum[] Vgm_getByteData(Dictionary<string, List<MML>> mmlData)
@@ -1580,7 +1606,7 @@ namespace Core
             OutData(null, 0x66);
 
             //GD3 offset
-            v = DivInt2ByteAry(dat.Count - 0x14);
+            v = DivInt2ByteAry(dat.Count - 0x14 - (int)dummyCmdCounter);
             dat[0x14] = new outDatum(enmMMLType.unknown, null, null, v[0]);
             dat[0x15] = new outDatum(enmMMLType.unknown, null, null, v[1]);
             dat[0x16] = new outDatum(enmMMLType.unknown, null, null, v[2]);
@@ -1615,7 +1641,7 @@ namespace Core
             MakeGD3(dat);
 
             //EoF offset
-            v = DivInt2ByteAry(dat.Count - 0x4);
+            v = DivInt2ByteAry(dat.Count - 0x4 - (int)dummyCmdCounter);
             dat[0x4] = new outDatum(enmMMLType.unknown, null, null, v[0]);
             dat[0x5] = new outDatum(enmMMLType.unknown, null, null, v[1]);
             dat[0x6] = new outDatum(enmMMLType.unknown, null, null, v[2]);
@@ -2229,7 +2255,7 @@ namespace Core
         {
             if (src == null || src.Count < 1) return null;
 
-            List<byte> des = new List<byte>();
+            List<outDatum> des = new List<outDatum>();
             loopOffset = -1;
 
             int[][] opn2reg = new int[2][] { new int[0x100], new int[0x100] };
@@ -2240,6 +2266,8 @@ namespace Core
             for (int i = 0; i < 16; i++) psgreg[i] = -1;
             int framePtr = 0;
             int frameCnt = 0;
+            outDatum od;
+            int dummyCmdCount = 0;
 
             for (int ptr = 0; ptr < src.Count; ptr++)
             {
@@ -2256,18 +2284,20 @@ namespace Core
                         {
                             p = des.Count;
                             c = 0;
-                            des.Add(0x10);
+                            od = new outDatum(cmd.type, cmd.args, cmd.linePos, 0x10);
+                            des.Add(od);
                             for (int j = 0; j < 16; j++)
                             {
                                 if (psgreg[j] == -1) continue;
                                 int latch = (j & 1) == 0 ? 0x80 : 0;
                                 int ch = (j & 0x0c) << 3;
                                 int tp = (j & 2) << 3;
-                                des.Add((byte)(latch | (latch != 0 ? (ch | tp) : 0) | psgreg[j]));
+                                od = new outDatum(cmd.type, cmd.args, cmd.linePos, (byte)(latch | (latch != 0 ? (ch | tp) : 0) | psgreg[j]));
+                                des.Add(od);
                                 c++;
                             }
                             c--;
-                            des[p] |= (byte)c;
+                            des[p].val |= (byte)c;
 
                             psgch = -1;
                             psgtp = -1;
@@ -2276,7 +2306,7 @@ namespace Core
 
                         if (des.Count - framePtr > 256)
                         {
-                            msgBox.setWrnMsg(string.Format(msg.get("E01015"), frameCnt, des.Count - framePtr),new LinePos("-"));
+                            msgBox.setWrnMsg(string.Format(msg.get("E01015"), frameCnt, des.Count - framePtr), new LinePos("-"));
                         }
                         framePtr = des.Count;
 
@@ -2284,7 +2314,8 @@ namespace Core
                         for (int j = 0; j < cnt; j++)
                         {
                             //wait
-                            des.Add(0x00);
+                            od = new outDatum(cmd.type, cmd.args, cmd.linePos, 0x00);
+                            des.Add(od);
                             frameCnt++;
                         }
                         ptr += 2;
@@ -2312,7 +2343,7 @@ namespace Core
                                 psgch = -1;
                             }
                             ptr += 2;
-                        }while(ptr < src.Count - 1 && src[ptr].val == 0x50);
+                        } while (ptr < src.Count - 1 && src[ptr].val == 0x50);
                         ptr--;
                         break;
                     case 0x52: //YM2612 Port0
@@ -2324,39 +2355,44 @@ namespace Core
                             {
                                 p = des.Count;
                                 c = 0;
-                                des.Add(0x20);
+                                od = new outDatum(cmd.type, cmd.args, cmd.linePos, 0x20);
+                                des.Add(od);
                                 do
                                 {
                                     if (opn2reg[0][src[ptr + 1].val] != src[ptr + 2].val)
                                     {
                                         //F-numの場合は圧縮対象外
-                                        if(src[ptr+1].val < 0xa0 || src[ptr+1].val >= 0xb0) opn2reg[0][src[ptr + 1].val] = src[ptr + 2].val;
+                                        if (src[ptr + 1].val < 0xa0 || src[ptr + 1].val >= 0xb0) opn2reg[0][src[ptr + 1].val] = src[ptr + 2].val;
 
-                                        des.Add(src[ptr + 1].val);
-                                        des.Add(src[ptr + 2].val);
+                                        od = new outDatum(src[ptr + 1].type, src[ptr + 1].args, src[ptr + 1].linePos, src[ptr + 1].val);
+                                        des.Add(od);
+                                        od = new outDatum(src[ptr + 2].type, src[ptr + 2].args, src[ptr + 2].linePos, src[ptr + 2].val);
+                                        des.Add(od);
                                         c++;
                                     }
                                     ptr += 3;
                                 } while (c < 16 && ptr < src.Count - 1 && src[ptr].val == 0x52 && src[ptr + 1].val != 0x28);
                                 c--;
                                 ptr--;
-                                des[p] |= (byte)c;
+                                des[p].val |= (byte)c;
                             }
                             else
                             {
                                 p = des.Count;
                                 c = 0;
-                                des.Add(0x40);
+                                od = new outDatum(cmd.type, cmd.args, cmd.linePos, 0x40);
+                                des.Add(od);
                                 do
                                 {
                                     //des.Add(src[ptr + 1]);
-                                    des.Add(src[ptr + 2].val);
+                                    od = new outDatum(src[ptr + 2].type, src[ptr + 2].args, src[ptr + 2].linePos, src[ptr + 2].val);
+                                    des.Add(od);
                                     c++;
                                     ptr += 3;
                                 } while (c < 16 && ptr < src.Count - 1 && src[ptr].val == 0x52 && src[ptr + 1].val == 0x28);
                                 c--;
                                 ptr--;
-                                des[p] |= (byte)c;
+                                des[p].val |= (byte)c;
                             }
                         }
                         else
@@ -2370,22 +2406,25 @@ namespace Core
 
                             p = des.Count;
                             c = 0;
-                            des.Add(0x30);
+                            od = new outDatum(cmd.type, cmd.args, cmd.linePos, 0x30);
+                            des.Add(od);
                             do
                             {
                                 if (opn2reg[1][src[ptr + 1].val] != src[ptr + 2].val)
                                 {
                                     //F-numの場合は圧縮対象外
                                     if (src[ptr + 1].val < 0xa0 || src[ptr + 1].val >= 0xb0) opn2reg[1][src[ptr + 1].val] = src[ptr + 2].val;
-                                    des.Add(src[ptr + 1].val);
-                                    des.Add(src[ptr + 2].val);
+                                    od = new outDatum(src[ptr + 1].type, src[ptr + 1].args, src[ptr + 1].linePos, src[ptr + 1].val);
+                                    des.Add(od);
+                                    od = new outDatum(src[ptr + 2].type, src[ptr + 2].args, src[ptr + 2].linePos, src[ptr + 2].val);
+                                    des.Add(od);
                                     c++;
                                 }
                                 ptr += 3;
                             } while (c < 16 && ptr < src.Count - 1 && src[ptr].val == 0x53);
                             c--;
                             ptr--;
-                            des[p] |= (byte)c;
+                            des[p].val |= (byte)c;
                         }
                         else
                         {
@@ -2393,36 +2432,53 @@ namespace Core
                         }
                         break;
                     case 0x54: //PCM KeyON (YM2151)
-                        des.Add(src[ptr + 1].val);
-                        des.Add(src[ptr + 2].val);
+                        od = new outDatum(src[ptr + 1].type, src[ptr + 1].args, src[ptr + 1].linePos, src[ptr + 1].val);
+                        des.Add(od);
+                        od = new outDatum(src[ptr + 2].type, src[ptr + 2].args, src[ptr + 2].linePos, src[ptr + 2].val);
+                        des.Add(od);
                         ptr += 2;
                         break;
                     case 0x7e: //LOOP Point
-                        loopOffset = des.Count;
+                        loopOffset = des.Count - dummyCmdCount;
                         for (int i = 0; i < 512; i++) opn2reg[i / 0x100][i % 0x100] = -1;
                         break;
+                    case 0x2f: //Dummy Command
+                        if (cmd.val == 0x2f //dummyChipコマンド　(第2引数：chipID 第３引数:isSecondary)
+                            && cmd.type == enmMMLType.Rest//ここで指定できるmmlコマンドは元々はChipに送信することのないコマンドのみ(さもないと、通常のコマンドのデータと見分けがつかなくなる可能性がある)
+                            )
+                        {
+                            des.Add(src[ptr]);
+                            des.Add(src[ptr + 1]);
+                            des.Add(src[ptr + 2]);
+                            ptr += 2;
+                            dummyCmdCount += 3;
+                        }
+                        break;
                     default:
-                        msgBox.setErrMsg(string.Format("", cmd),new LinePos("-"));
+                        msgBox.setErrMsg(string.Format("Unknown command[{0:X}]", cmd.val), new LinePos("-"));
                         return null;
                 }
             }
 
             if (loopOffset == -1 || loopOffset == des.Count)
             {
-                des.Add(0x7f);
+                od = new outDatum(enmMMLType.unknown, null, null, 0x7f);
+                des.Add(od);
             }
             else
             {
-                des.Add(0x7e);
-                des.Add((byte)(loopOffset & 0xff));
-                des.Add((byte)((loopOffset & 0xff00) >> 8));
-                des.Add((byte)((loopOffset & 0xff0000) >> 16));
+                od = new outDatum(enmMMLType.unknown, null, null, 0x7e);
+                des.Add(od);
+                od = new outDatum(enmMMLType.unknown, null, null, (byte)loopOffset);
+                des.Add(od);
+                od = new outDatum(enmMMLType.unknown, null, null, (byte)(loopOffset >> 8));
+                des.Add(od);
+                od = new outDatum(enmMMLType.unknown, null, null, (byte)(loopOffset >> 16));
+                des.Add(od);
+
             }
 
-            List<outDatum> d = new List<outDatum>();
-            foreach (byte b in des) d.Add(new outDatum(enmMMLType.unknown, null, null, b));
-
-            return d;
+            return des;
         }
 
 

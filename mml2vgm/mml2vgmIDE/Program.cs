@@ -19,9 +19,13 @@ namespace mml2vgmIDE
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            FrmMain f = new FrmMain();
-            f.setting = setting;
+
+            FrmMain f = new FrmMain
+            {
+                setting = setting
+            };
             f.Init();
+
             Application.Run(f);
         }
     }

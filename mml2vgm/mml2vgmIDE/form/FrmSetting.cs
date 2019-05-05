@@ -37,6 +37,7 @@ namespace mml2vgmIDE
             tcSetting.TabPages.Remove(tpKeyBoard);
             tcSetting.TabPages.Remove(tpBalance);
             tcSetting.TabPages.Remove(tpOther);
+            tcSetting.TabPages.Remove(tpAbout);
         }
 
         public void Init()

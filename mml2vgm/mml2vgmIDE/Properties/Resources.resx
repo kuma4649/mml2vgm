@@ -226,4 +226,10 @@
   <data name="cntDescription" xml:space="preserve">
     <value />
   </data>
+  <data name="フェーリ48" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resource\フェーリ48.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="フェーリ" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resource\フェーリ.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

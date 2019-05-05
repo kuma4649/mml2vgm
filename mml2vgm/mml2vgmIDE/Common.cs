@@ -250,6 +250,14 @@ namespace mml2vgmIDE
             return dat;
         }
 
+        public static void SetLE32(outDatum[] desBuf, uint adr, uint val)
+        {
+            desBuf[adr].val = (byte)val;
+            desBuf[adr + 1].val = (byte)(val >> 8);
+            desBuf[adr + 2].val = (byte)(val >> 16);
+            desBuf[adr + 3].val = (byte)(val >> 24);
+        }
+
         public static byte[] getByteArray(byte[] buf, ref uint adr)
         {
             if (adr >= buf.Length) return null;

@@ -526,6 +526,7 @@ namespace Core
         public virtual void SetDummyData(partWork pw, MML mml)
         {
             parent.OutData(mml, 0x2f, pw.port0, (byte)(pw.chip.IsSecondary ? 1 : 0));//0x2f:DummyChip (!!CAUTION!!)
+            parent.dummyCmdCounter += 3;
         }
 
         public virtual void SetKeyOn(partWork pw, MML mml)
@@ -921,9 +922,12 @@ namespace Core
         public void CmdLoop(partWork pw, MML mml)
         {
             pw.incPos();
-            parent.loopOffset = (long)parent.dat.Count;
-            parent.loopClock = (long)parent.lClock;
-            parent.loopSamples = (long)parent.dSample;
+            parent.loopOffset = (long)parent.dat.Count - parent.dummyCmdCounter;
+            parent.loopClock = (long)parent.lClock - parent.dummyCmdClock;
+            parent.loopSamples = (long)parent.dSample - parent.dummyCmdSample;
+            parent.dummyCmdLoopOffset = (long)parent.dat.Count;
+            parent.dummyCmdLoopClock = (long)parent.lClock;
+            parent.dummyCmdLoopSamples = (long)parent.dSample;
 
             if (parent.info.format == enmFormat.XGM)
             {

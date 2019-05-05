@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmSetting));
             this.btnOK = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
             this.gbWaveOut = new System.Windows.Forms.GroupBox();
@@ -536,9 +537,9 @@
             // btnOK
             // 
             this.btnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnOK.Location = new System.Drawing.Point(296, 406);
+            this.btnOK.Location = new System.Drawing.Point(345, 406);
             this.btnOK.Name = "btnOK";
-            this.btnOK.Size = new System.Drawing.Size(75, 23);
+            this.btnOK.Size = new System.Drawing.Size(87, 23);
             this.btnOK.TabIndex = 0;
             this.btnOK.Text = "OK";
             this.btnOK.UseVisualStyleBackColor = true;
@@ -548,9 +549,9 @@
             // 
             this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(377, 406);
+            this.btnCancel.Location = new System.Drawing.Point(440, 406);
             this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(75, 23);
+            this.btnCancel.Size = new System.Drawing.Size(87, 23);
             this.btnCancel.TabIndex = 1;
             this.btnCancel.Text = "キャンセル";
             this.btnCancel.UseVisualStyleBackColor = true;
@@ -560,9 +561,9 @@
             this.gbWaveOut.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.gbWaveOut.Controls.Add(this.cmbWaveOutDevice);
-            this.gbWaveOut.Location = new System.Drawing.Point(6, 10);
+            this.gbWaveOut.Location = new System.Drawing.Point(7, 10);
             this.gbWaveOut.Name = "gbWaveOut";
-            this.gbWaveOut.Size = new System.Drawing.Size(417, 48);
+            this.gbWaveOut.Size = new System.Drawing.Size(488, 48);
             this.gbWaveOut.TabIndex = 1;
             this.gbWaveOut.TabStop = false;
             // 
@@ -572,18 +573,18 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.cmbWaveOutDevice.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbWaveOutDevice.FormattingEnabled = true;
-            this.cmbWaveOutDevice.Location = new System.Drawing.Point(6, 18);
+            this.cmbWaveOutDevice.Location = new System.Drawing.Point(7, 18);
             this.cmbWaveOutDevice.Name = "cmbWaveOutDevice";
-            this.cmbWaveOutDevice.Size = new System.Drawing.Size(405, 20);
+            this.cmbWaveOutDevice.Size = new System.Drawing.Size(474, 20);
             this.cmbWaveOutDevice.TabIndex = 0;
             // 
             // rbWaveOut
             // 
             this.rbWaveOut.AutoSize = true;
             this.rbWaveOut.Checked = true;
-            this.rbWaveOut.Location = new System.Drawing.Point(12, 6);
+            this.rbWaveOut.Location = new System.Drawing.Point(14, 6);
             this.rbWaveOut.Name = "rbWaveOut";
-            this.rbWaveOut.Size = new System.Drawing.Size(68, 16);
+            this.rbWaveOut.Size = new System.Drawing.Size(69, 16);
             this.rbWaveOut.TabIndex = 0;
             this.rbWaveOut.TabStop = true;
             this.rbWaveOut.Text = "WaveOut";
@@ -593,9 +594,9 @@
             // rbAsioOut
             // 
             this.rbAsioOut.AutoSize = true;
-            this.rbAsioOut.Location = new System.Drawing.Point(12, 174);
+            this.rbAsioOut.Location = new System.Drawing.Point(14, 174);
             this.rbAsioOut.Name = "rbAsioOut";
-            this.rbAsioOut.Size = new System.Drawing.Size(64, 16);
+            this.rbAsioOut.Size = new System.Drawing.Size(65, 16);
             this.rbAsioOut.TabIndex = 6;
             this.rbAsioOut.Text = "AsioOut";
             this.rbAsioOut.UseVisualStyleBackColor = true;
@@ -604,9 +605,9 @@
             // rbWasapiOut
             // 
             this.rbWasapiOut.AutoSize = true;
-            this.rbWasapiOut.Location = new System.Drawing.Point(12, 117);
+            this.rbWasapiOut.Location = new System.Drawing.Point(14, 117);
             this.rbWasapiOut.Name = "rbWasapiOut";
-            this.rbWasapiOut.Size = new System.Drawing.Size(77, 16);
+            this.rbWasapiOut.Size = new System.Drawing.Size(78, 16);
             this.rbWasapiOut.TabIndex = 4;
             this.rbWasapiOut.Text = "WasapiOut";
             this.rbWasapiOut.UseVisualStyleBackColor = true;
@@ -618,18 +619,18 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.gbAsioOut.Controls.Add(this.btnASIOControlPanel);
             this.gbAsioOut.Controls.Add(this.cmbAsioDevice);
-            this.gbAsioOut.Location = new System.Drawing.Point(6, 177);
+            this.gbAsioOut.Location = new System.Drawing.Point(7, 177);
             this.gbAsioOut.Name = "gbAsioOut";
-            this.gbAsioOut.Size = new System.Drawing.Size(417, 50);
+            this.gbAsioOut.Size = new System.Drawing.Size(488, 50);
             this.gbAsioOut.TabIndex = 7;
             this.gbAsioOut.TabStop = false;
             // 
             // btnASIOControlPanel
             // 
             this.btnASIOControlPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnASIOControlPanel.Location = new System.Drawing.Point(330, 8);
+            this.btnASIOControlPanel.Location = new System.Drawing.Point(387, 8);
             this.btnASIOControlPanel.Name = "btnASIOControlPanel";
-            this.btnASIOControlPanel.Size = new System.Drawing.Size(81, 39);
+            this.btnASIOControlPanel.Size = new System.Drawing.Size(94, 39);
             this.btnASIOControlPanel.TabIndex = 8;
             this.btnASIOControlPanel.Text = "ASIO Control Panel";
             this.btnASIOControlPanel.UseVisualStyleBackColor = true;
@@ -641,15 +642,15 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.cmbAsioDevice.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbAsioDevice.FormattingEnabled = true;
-            this.cmbAsioDevice.Location = new System.Drawing.Point(6, 18);
+            this.cmbAsioDevice.Location = new System.Drawing.Point(7, 18);
             this.cmbAsioDevice.Name = "cmbAsioDevice";
-            this.cmbAsioDevice.Size = new System.Drawing.Size(318, 20);
+            this.cmbAsioDevice.Size = new System.Drawing.Size(372, 20);
             this.cmbAsioDevice.TabIndex = 6;
             // 
             // rbDirectSoundOut
             // 
             this.rbDirectSoundOut.AutoSize = true;
-            this.rbDirectSoundOut.Location = new System.Drawing.Point(12, 62);
+            this.rbDirectSoundOut.Location = new System.Drawing.Point(14, 62);
             this.rbDirectSoundOut.Name = "rbDirectSoundOut";
             this.rbDirectSoundOut.Size = new System.Drawing.Size(85, 16);
             this.rbDirectSoundOut.TabIndex = 2;
@@ -664,9 +665,9 @@
             this.gbWasapiOut.Controls.Add(this.rbExclusive);
             this.gbWasapiOut.Controls.Add(this.rbShare);
             this.gbWasapiOut.Controls.Add(this.cmbWasapiDevice);
-            this.gbWasapiOut.Location = new System.Drawing.Point(6, 121);
+            this.gbWasapiOut.Location = new System.Drawing.Point(7, 121);
             this.gbWasapiOut.Name = "gbWasapiOut";
-            this.gbWasapiOut.Size = new System.Drawing.Size(417, 50);
+            this.gbWasapiOut.Size = new System.Drawing.Size(488, 50);
             this.gbWasapiOut.TabIndex = 5;
             this.gbWasapiOut.TabStop = false;
             // 
@@ -674,7 +675,7 @@
             // 
             this.rbExclusive.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.rbExclusive.AutoSize = true;
-            this.rbExclusive.Location = new System.Drawing.Point(330, 31);
+            this.rbExclusive.Location = new System.Drawing.Point(395, 31);
             this.rbExclusive.Name = "rbExclusive";
             this.rbExclusive.Size = new System.Drawing.Size(47, 16);
             this.rbExclusive.TabIndex = 7;
@@ -686,7 +687,7 @@
             // 
             this.rbShare.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.rbShare.AutoSize = true;
-            this.rbShare.Location = new System.Drawing.Point(330, 9);
+            this.rbShare.Location = new System.Drawing.Point(395, 9);
             this.rbShare.Name = "rbShare";
             this.rbShare.Size = new System.Drawing.Size(47, 16);
             this.rbShare.TabIndex = 6;
@@ -700,9 +701,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.cmbWasapiDevice.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbWasapiDevice.FormattingEnabled = true;
-            this.cmbWasapiDevice.Location = new System.Drawing.Point(6, 18);
+            this.cmbWasapiDevice.Location = new System.Drawing.Point(7, 18);
             this.cmbWasapiDevice.Name = "cmbWasapiDevice";
-            this.cmbWasapiDevice.Size = new System.Drawing.Size(318, 20);
+            this.cmbWasapiDevice.Size = new System.Drawing.Size(372, 20);
             this.cmbWasapiDevice.TabIndex = 4;
             // 
             // gbDirectSound
@@ -710,9 +711,9 @@
             this.gbDirectSound.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.gbDirectSound.Controls.Add(this.cmbDirectSoundDevice);
-            this.gbDirectSound.Location = new System.Drawing.Point(6, 66);
+            this.gbDirectSound.Location = new System.Drawing.Point(7, 66);
             this.gbDirectSound.Name = "gbDirectSound";
-            this.gbDirectSound.Size = new System.Drawing.Size(417, 48);
+            this.gbDirectSound.Size = new System.Drawing.Size(488, 48);
             this.gbDirectSound.TabIndex = 3;
             this.gbDirectSound.TabStop = false;
             // 
@@ -722,9 +723,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.cmbDirectSoundDevice.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbDirectSoundDevice.FormattingEnabled = true;
-            this.cmbDirectSoundDevice.Location = new System.Drawing.Point(6, 18);
+            this.cmbDirectSoundDevice.Location = new System.Drawing.Point(7, 18);
             this.cmbDirectSoundDevice.Name = "cmbDirectSoundDevice";
-            this.cmbDirectSoundDevice.Size = new System.Drawing.Size(405, 20);
+            this.cmbDirectSoundDevice.Size = new System.Drawing.Size(474, 20);
             this.cmbDirectSoundDevice.TabIndex = 2;
             // 
             // tcSetting
@@ -746,7 +747,7 @@
             this.tcSetting.Location = new System.Drawing.Point(1, 3);
             this.tcSetting.Name = "tcSetting";
             this.tcSetting.SelectedIndex = 0;
-            this.tcSetting.Size = new System.Drawing.Size(451, 397);
+            this.tcSetting.Size = new System.Drawing.Size(526, 397);
             this.tcSetting.TabIndex = 2;
             // 
             // tpOutput
@@ -755,7 +756,7 @@
             this.tpOutput.Location = new System.Drawing.Point(4, 22);
             this.tpOutput.Name = "tpOutput";
             this.tpOutput.Padding = new System.Windows.Forms.Padding(3);
-            this.tpOutput.Size = new System.Drawing.Size(443, 371);
+            this.tpOutput.Size = new System.Drawing.Size(518, 371);
             this.tpOutput.TabIndex = 0;
             this.tpOutput.Text = "出力";
             this.tpOutput.UseVisualStyleBackColor = true;
@@ -770,7 +771,7 @@
             this.tabControl1.Location = new System.Drawing.Point(3, 3);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(437, 365);
+            this.tabControl1.Size = new System.Drawing.Size(512, 365);
             this.tabControl1.TabIndex = 7;
             // 
             // tabPage11
@@ -796,7 +797,7 @@
             this.tabPage11.Location = new System.Drawing.Point(4, 22);
             this.tabPage11.Name = "tabPage11";
             this.tabPage11.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage11.Size = new System.Drawing.Size(429, 339);
+            this.tabPage11.Size = new System.Drawing.Size(504, 339);
             this.tabPage11.TabIndex = 0;
             this.tabPage11.Text = "Emulation";
             this.tabPage11.UseVisualStyleBackColor = true;
@@ -805,7 +806,7 @@
             // 
             this.rbSPPCM.AutoSize = true;
             this.rbSPPCM.Enabled = false;
-            this.rbSPPCM.Location = new System.Drawing.Point(12, 230);
+            this.rbSPPCM.Location = new System.Drawing.Point(14, 230);
             this.rbSPPCM.Name = "rbSPPCM";
             this.rbSPPCM.Size = new System.Drawing.Size(61, 16);
             this.rbSPPCM.TabIndex = 2;
@@ -815,9 +816,9 @@
             // 
             // rbNullDevice
             // 
-            this.rbNullDevice.Location = new System.Drawing.Point(225, 243);
+            this.rbNullDevice.Location = new System.Drawing.Point(262, 243);
             this.rbNullDevice.Name = "rbNullDevice";
-            this.rbNullDevice.Size = new System.Drawing.Size(158, 29);
+            this.rbNullDevice.Size = new System.Drawing.Size(184, 29);
             this.rbNullDevice.TabIndex = 2;
             this.rbNullDevice.Text = "NULL(サウンドデバイスを使用しない)";
             this.rbNullDevice.UseVisualStyleBackColor = true;
@@ -831,9 +832,9 @@
             this.groupBox3.Controls.Add(this.tbLatencyEmu);
             this.groupBox3.Controls.Add(this.tbLatencySCCI);
             this.groupBox3.Controls.Add(this.label10);
-            this.groupBox3.Location = new System.Drawing.Point(258, 272);
+            this.groupBox3.Location = new System.Drawing.Point(301, 272);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(158, 62);
+            this.groupBox3.Size = new System.Drawing.Size(184, 62);
             this.groupBox3.TabIndex = 6;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "遅延演奏";
@@ -841,7 +842,7 @@
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(6, 18);
+            this.label13.Location = new System.Drawing.Point(7, 18);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(29, 12);
             this.label13.TabIndex = 0;
@@ -850,7 +851,7 @@
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(6, 40);
+            this.label12.Location = new System.Drawing.Point(7, 40);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(28, 12);
             this.label12.TabIndex = 3;
@@ -859,7 +860,7 @@
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(132, 40);
+            this.label11.Location = new System.Drawing.Point(154, 40);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(20, 12);
             this.label11.TabIndex = 5;
@@ -867,22 +868,22 @@
             // 
             // tbLatencyEmu
             // 
-            this.tbLatencyEmu.Location = new System.Drawing.Point(41, 15);
+            this.tbLatencyEmu.Location = new System.Drawing.Point(48, 15);
             this.tbLatencyEmu.Name = "tbLatencyEmu";
-            this.tbLatencyEmu.Size = new System.Drawing.Size(85, 19);
+            this.tbLatencyEmu.Size = new System.Drawing.Size(98, 19);
             this.tbLatencyEmu.TabIndex = 1;
             // 
             // tbLatencySCCI
             // 
-            this.tbLatencySCCI.Location = new System.Drawing.Point(41, 37);
+            this.tbLatencySCCI.Location = new System.Drawing.Point(48, 37);
             this.tbLatencySCCI.Name = "tbLatencySCCI";
-            this.tbLatencySCCI.Size = new System.Drawing.Size(85, 19);
+            this.tbLatencySCCI.Size = new System.Drawing.Size(98, 19);
             this.tbLatencySCCI.TabIndex = 4;
             // 
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(132, 18);
+            this.label10.Location = new System.Drawing.Point(154, 18);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(20, 12);
             this.label10.TabIndex = 2;
@@ -891,7 +892,7 @@
             // lblWaitTime
             // 
             this.lblWaitTime.AutoSize = true;
-            this.lblWaitTime.Location = new System.Drawing.Point(234, 316);
+            this.lblWaitTime.Location = new System.Drawing.Point(273, 316);
             this.lblWaitTime.Name = "lblWaitTime";
             this.lblWaitTime.Size = new System.Drawing.Size(20, 12);
             this.lblWaitTime.TabIndex = 9;
@@ -900,7 +901,7 @@
             // lblLatencyUnit
             // 
             this.lblLatencyUnit.AutoSize = true;
-            this.lblLatencyUnit.Location = new System.Drawing.Point(234, 290);
+            this.lblLatencyUnit.Location = new System.Drawing.Point(273, 290);
             this.lblLatencyUnit.Name = "lblLatencyUnit";
             this.lblLatencyUnit.Size = new System.Drawing.Size(20, 12);
             this.lblLatencyUnit.TabIndex = 9;
@@ -910,9 +911,9 @@
             // 
             this.groupBox16.Controls.Add(this.cmbSPPCMDevice);
             this.groupBox16.Enabled = false;
-            this.groupBox16.Location = new System.Drawing.Point(6, 233);
+            this.groupBox16.Location = new System.Drawing.Point(7, 233);
             this.groupBox16.Name = "groupBox16";
-            this.groupBox16.Size = new System.Drawing.Size(213, 48);
+            this.groupBox16.Size = new System.Drawing.Size(248, 48);
             this.groupBox16.TabIndex = 3;
             this.groupBox16.TabStop = false;
             // 
@@ -922,15 +923,15 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.cmbSPPCMDevice.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbSPPCMDevice.FormattingEnabled = true;
-            this.cmbSPPCMDevice.Location = new System.Drawing.Point(6, 19);
+            this.cmbSPPCMDevice.Location = new System.Drawing.Point(7, 19);
             this.cmbSPPCMDevice.Name = "cmbSPPCMDevice";
-            this.cmbSPPCMDevice.Size = new System.Drawing.Size(201, 20);
+            this.cmbSPPCMDevice.Size = new System.Drawing.Size(234, 20);
             this.cmbSPPCMDevice.TabIndex = 2;
             // 
             // label28
             // 
             this.label28.AutoSize = true;
-            this.label28.Location = new System.Drawing.Point(6, 316);
+            this.label28.Location = new System.Drawing.Point(7, 316);
             this.label28.Name = "label28";
             this.label28.Size = new System.Drawing.Size(98, 12);
             this.label28.TabIndex = 9;
@@ -939,9 +940,9 @@
             // lblLatency
             // 
             this.lblLatency.AutoSize = true;
-            this.lblLatency.Location = new System.Drawing.Point(5, 283);
+            this.lblLatency.Location = new System.Drawing.Point(6, 283);
             this.lblLatency.Name = "lblLatency";
-            this.lblLatency.Size = new System.Drawing.Size(97, 24);
+            this.lblLatency.Size = new System.Drawing.Size(96, 24);
             this.lblLatency.TabIndex = 9;
             this.lblLatency.Text = "遅延時間\r\n(レンダリングバッファ)";
             // 
@@ -961,9 +962,9 @@
             "4000",
             "4500",
             "5000"});
-            this.cmbWaitTime.Location = new System.Drawing.Point(107, 313);
+            this.cmbWaitTime.Location = new System.Drawing.Point(125, 313);
             this.cmbWaitTime.Name = "cmbWaitTime";
-            this.cmbWaitTime.Size = new System.Drawing.Size(121, 20);
+            this.cmbWaitTime.Size = new System.Drawing.Size(140, 20);
             this.cmbWaitTime.TabIndex = 8;
             // 
             // cmbLatency
@@ -979,9 +980,9 @@
             "300",
             "400",
             "500"});
-            this.cmbLatency.Location = new System.Drawing.Point(107, 287);
+            this.cmbLatency.Location = new System.Drawing.Point(125, 287);
             this.cmbLatency.Name = "cmbLatency";
-            this.cmbLatency.Size = new System.Drawing.Size(121, 20);
+            this.cmbLatency.Size = new System.Drawing.Size(140, 20);
             this.cmbLatency.TabIndex = 8;
             // 
             // tabPage12
@@ -990,7 +991,7 @@
             this.tabPage12.Location = new System.Drawing.Point(4, 22);
             this.tabPage12.Name = "tabPage12";
             this.tabPage12.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage12.Size = new System.Drawing.Size(429, 339);
+            this.tabPage12.Size = new System.Drawing.Size(504, 339);
             this.tabPage12.TabIndex = 1;
             this.tabPage12.Text = "実音源";
             this.tabPage12.UseVisualStyleBackColor = true;
@@ -1004,7 +1005,7 @@
             this.groupBox27.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox27.Location = new System.Drawing.Point(3, 3);
             this.groupBox27.Name = "groupBox27";
-            this.groupBox27.Size = new System.Drawing.Size(423, 333);
+            this.groupBox27.Size = new System.Drawing.Size(498, 333);
             this.groupBox27.TabIndex = 9;
             this.groupBox27.TabStop = false;
             this.groupBox27.Text = "音源の割り当て";
@@ -1012,7 +1013,7 @@
             // rbManualDetect
             // 
             this.rbManualDetect.AutoSize = true;
-            this.rbManualDetect.Location = new System.Drawing.Point(12, 71);
+            this.rbManualDetect.Location = new System.Drawing.Point(14, 71);
             this.rbManualDetect.Name = "rbManualDetect";
             this.rbManualDetect.Size = new System.Drawing.Size(47, 16);
             this.rbManualDetect.TabIndex = 10;
@@ -1023,7 +1024,7 @@
             // 
             this.rbAutoDetect.AutoSize = true;
             this.rbAutoDetect.Checked = true;
-            this.rbAutoDetect.Location = new System.Drawing.Point(12, 17);
+            this.rbAutoDetect.Location = new System.Drawing.Point(14, 17);
             this.rbAutoDetect.Name = "rbAutoDetect";
             this.rbAutoDetect.Size = new System.Drawing.Size(47, 16);
             this.rbAutoDetect.TabIndex = 10;
@@ -1037,18 +1038,18 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox28.Controls.Add(this.rbSCCIDetect);
             this.groupBox28.Controls.Add(this.rbC86ctlDetect);
-            this.groupBox28.Location = new System.Drawing.Point(6, 18);
+            this.groupBox28.Location = new System.Drawing.Point(7, 18);
             this.groupBox28.Name = "groupBox28";
-            this.groupBox28.Size = new System.Drawing.Size(411, 46);
+            this.groupBox28.Size = new System.Drawing.Size(484, 46);
             this.groupBox28.TabIndex = 9;
             this.groupBox28.TabStop = false;
             // 
             // rbSCCIDetect
             // 
             this.rbSCCIDetect.AutoSize = true;
-            this.rbSCCIDetect.Location = new System.Drawing.Point(212, 21);
+            this.rbSCCIDetect.Location = new System.Drawing.Point(247, 21);
             this.rbSCCIDetect.Name = "rbSCCIDetect";
-            this.rbSCCIDetect.Size = new System.Drawing.Size(158, 16);
+            this.rbSCCIDetect.Size = new System.Drawing.Size(157, 16);
             this.rbSCCIDetect.TabIndex = 0;
             this.rbSCCIDetect.Text = "SCCIのモジュールを優先する";
             this.rbSCCIDetect.UseVisualStyleBackColor = true;
@@ -1057,9 +1058,9 @@
             // 
             this.rbC86ctlDetect.AutoSize = true;
             this.rbC86ctlDetect.Checked = true;
-            this.rbC86ctlDetect.Location = new System.Drawing.Point(21, 21);
+            this.rbC86ctlDetect.Location = new System.Drawing.Point(24, 21);
             this.rbC86ctlDetect.Name = "rbC86ctlDetect";
-            this.rbC86ctlDetect.Size = new System.Drawing.Size(165, 16);
+            this.rbC86ctlDetect.Size = new System.Drawing.Size(164, 16);
             this.rbC86ctlDetect.TabIndex = 0;
             this.rbC86ctlDetect.TabStop = true;
             this.rbC86ctlDetect.Text = "C86ctlのモジュールを優先する";
@@ -1071,9 +1072,9 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox1.Controls.Add(this.ucSI);
-            this.groupBox1.Location = new System.Drawing.Point(6, 71);
+            this.groupBox1.Location = new System.Drawing.Point(7, 71);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(411, 256);
+            this.groupBox1.Size = new System.Drawing.Size(484, 256);
             this.groupBox1.TabIndex = 8;
             this.groupBox1.TabStop = false;
             // 
@@ -1085,7 +1086,7 @@
             this.ucSI.AutoScroll = true;
             this.ucSI.Location = new System.Drawing.Point(3, 18);
             this.ucSI.Name = "ucSI";
-            this.ucSI.Size = new System.Drawing.Size(405, 235);
+            this.ucSI.Size = new System.Drawing.Size(477, 235);
             this.ucSI.TabIndex = 7;
             // 
             // tabPage13
@@ -1093,7 +1094,7 @@
             this.tabPage13.Controls.Add(this.splitContainer1);
             this.tabPage13.Location = new System.Drawing.Point(4, 22);
             this.tabPage13.Name = "tabPage13";
-            this.tabPage13.Size = new System.Drawing.Size(429, 339);
+            this.tabPage13.Size = new System.Drawing.Size(504, 339);
             this.tabPage13.TabIndex = 2;
             this.tabPage13.Text = "MIDI";
             this.tabPage13.UseVisualStyleBackColor = true;
@@ -1117,7 +1118,7 @@
             this.splitContainer1.Panel2.Controls.Add(this.label18);
             this.splitContainer1.Panel2.Controls.Add(this.btnAddMIDIout);
             this.splitContainer1.Panel2.Controls.Add(this.btnSubMIDIout);
-            this.splitContainer1.Size = new System.Drawing.Size(429, 339);
+            this.splitContainer1.Size = new System.Drawing.Size(504, 339);
             this.splitContainer1.SplitterDistance = 136;
             this.splitContainer1.TabIndex = 6;
             // 
@@ -1126,7 +1127,7 @@
             this.label16.AutoSize = true;
             this.label16.Location = new System.Drawing.Point(3, 0);
             this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(126, 12);
+            this.label16.Size = new System.Drawing.Size(124, 12);
             this.label16.TabIndex = 0;
             this.label16.Text = "MIDI Outデバイス パレット";
             // 
@@ -1150,7 +1151,7 @@
             this.dgvMIDIoutPallet.RowHeadersVisible = false;
             this.dgvMIDIoutPallet.RowTemplate.Height = 21;
             this.dgvMIDIoutPallet.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvMIDIoutPallet.Size = new System.Drawing.Size(422, 118);
+            this.dgvMIDIoutPallet.Size = new System.Drawing.Size(496, 118);
             this.dgvMIDIoutPallet.TabIndex = 1;
             // 
             // clmID
@@ -1205,7 +1206,7 @@
             this.tbcMIDIoutList.Location = new System.Drawing.Point(3, 31);
             this.tbcMIDIoutList.Name = "tbcMIDIoutList";
             this.tbcMIDIoutList.SelectedIndex = 0;
-            this.tbcMIDIoutList.Size = new System.Drawing.Size(422, 165);
+            this.tbcMIDIoutList.Size = new System.Drawing.Size(496, 165);
             this.tbcMIDIoutList.TabIndex = 4;
             // 
             // tabPage1
@@ -1216,7 +1217,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(414, 139);
+            this.tabPage1.Size = new System.Drawing.Size(488, 139);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Tag = "0";
             this.tabPage1.Text = "A";
@@ -1246,7 +1247,7 @@
             this.dgvMIDIoutListA.RowHeadersVisible = false;
             this.dgvMIDIoutListA.RowTemplate.Height = 21;
             this.dgvMIDIoutListA.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvMIDIoutListA.Size = new System.Drawing.Size(383, 134);
+            this.dgvMIDIoutListA.Size = new System.Drawing.Size(451, 134);
             this.dgvMIDIoutListA.TabIndex = 1;
             // 
             // dataGridViewTextBoxColumn1
@@ -1326,9 +1327,9 @@
             // btnUP_A
             // 
             this.btnUP_A.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnUP_A.Location = new System.Drawing.Point(389, 0);
+            this.btnUP_A.Location = new System.Drawing.Point(458, 0);
             this.btnUP_A.Name = "btnUP_A";
-            this.btnUP_A.Size = new System.Drawing.Size(22, 58);
+            this.btnUP_A.Size = new System.Drawing.Size(26, 58);
             this.btnUP_A.TabIndex = 3;
             this.btnUP_A.Text = "↑";
             this.btnUP_A.UseVisualStyleBackColor = true;
@@ -1337,9 +1338,9 @@
             // btnDOWN_A
             // 
             this.btnDOWN_A.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnDOWN_A.Location = new System.Drawing.Point(389, 76);
+            this.btnDOWN_A.Location = new System.Drawing.Point(458, 76);
             this.btnDOWN_A.Name = "btnDOWN_A";
-            this.btnDOWN_A.Size = new System.Drawing.Size(22, 58);
+            this.btnDOWN_A.Size = new System.Drawing.Size(26, 58);
             this.btnDOWN_A.TabIndex = 3;
             this.btnDOWN_A.Text = "↓";
             this.btnDOWN_A.UseVisualStyleBackColor = true;
@@ -1353,7 +1354,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(414, 139);
+            this.tabPage2.Size = new System.Drawing.Size(488, 139);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Tag = "1";
             this.tabPage2.Text = "B";
@@ -1374,15 +1375,15 @@
             this.dgvMIDIoutListB.RowHeadersVisible = false;
             this.dgvMIDIoutListB.RowTemplate.Height = 21;
             this.dgvMIDIoutListB.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvMIDIoutListB.Size = new System.Drawing.Size(383, 134);
+            this.dgvMIDIoutListB.Size = new System.Drawing.Size(449, 134);
             this.dgvMIDIoutListB.TabIndex = 7;
             // 
             // btnUP_B
             // 
             this.btnUP_B.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnUP_B.Location = new System.Drawing.Point(389, 0);
+            this.btnUP_B.Location = new System.Drawing.Point(456, 0);
             this.btnUP_B.Name = "btnUP_B";
-            this.btnUP_B.Size = new System.Drawing.Size(22, 58);
+            this.btnUP_B.Size = new System.Drawing.Size(26, 58);
             this.btnUP_B.TabIndex = 5;
             this.btnUP_B.Text = "↑";
             this.btnUP_B.UseVisualStyleBackColor = true;
@@ -1391,9 +1392,9 @@
             // btnDOWN_B
             // 
             this.btnDOWN_B.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnDOWN_B.Location = new System.Drawing.Point(389, 76);
+            this.btnDOWN_B.Location = new System.Drawing.Point(456, 76);
             this.btnDOWN_B.Name = "btnDOWN_B";
-            this.btnDOWN_B.Size = new System.Drawing.Size(22, 58);
+            this.btnDOWN_B.Size = new System.Drawing.Size(26, 58);
             this.btnDOWN_B.TabIndex = 6;
             this.btnDOWN_B.Text = "↓";
             this.btnDOWN_B.UseVisualStyleBackColor = true;
@@ -1406,7 +1407,7 @@
             this.tabPage3.Controls.Add(this.btnDOWN_C);
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Size = new System.Drawing.Size(414, 139);
+            this.tabPage3.Size = new System.Drawing.Size(488, 139);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Tag = "2";
             this.tabPage3.Text = "C";
@@ -1427,15 +1428,15 @@
             this.dgvMIDIoutListC.RowHeadersVisible = false;
             this.dgvMIDIoutListC.RowTemplate.Height = 21;
             this.dgvMIDIoutListC.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvMIDIoutListC.Size = new System.Drawing.Size(383, 134);
+            this.dgvMIDIoutListC.Size = new System.Drawing.Size(449, 134);
             this.dgvMIDIoutListC.TabIndex = 7;
             // 
             // btnUP_C
             // 
             this.btnUP_C.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnUP_C.Location = new System.Drawing.Point(389, 0);
+            this.btnUP_C.Location = new System.Drawing.Point(456, 0);
             this.btnUP_C.Name = "btnUP_C";
-            this.btnUP_C.Size = new System.Drawing.Size(22, 58);
+            this.btnUP_C.Size = new System.Drawing.Size(26, 58);
             this.btnUP_C.TabIndex = 5;
             this.btnUP_C.Text = "↑";
             this.btnUP_C.UseVisualStyleBackColor = true;
@@ -1444,9 +1445,9 @@
             // btnDOWN_C
             // 
             this.btnDOWN_C.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnDOWN_C.Location = new System.Drawing.Point(389, 76);
+            this.btnDOWN_C.Location = new System.Drawing.Point(456, 76);
             this.btnDOWN_C.Name = "btnDOWN_C";
-            this.btnDOWN_C.Size = new System.Drawing.Size(22, 58);
+            this.btnDOWN_C.Size = new System.Drawing.Size(26, 58);
             this.btnDOWN_C.TabIndex = 6;
             this.btnDOWN_C.Text = "↓";
             this.btnDOWN_C.UseVisualStyleBackColor = true;
@@ -1459,7 +1460,7 @@
             this.tabPage4.Controls.Add(this.btnDOWN_D);
             this.tabPage4.Location = new System.Drawing.Point(4, 22);
             this.tabPage4.Name = "tabPage4";
-            this.tabPage4.Size = new System.Drawing.Size(414, 139);
+            this.tabPage4.Size = new System.Drawing.Size(488, 139);
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Tag = "3";
             this.tabPage4.Text = "D";
@@ -1480,15 +1481,15 @@
             this.dgvMIDIoutListD.RowHeadersVisible = false;
             this.dgvMIDIoutListD.RowTemplate.Height = 21;
             this.dgvMIDIoutListD.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvMIDIoutListD.Size = new System.Drawing.Size(383, 134);
+            this.dgvMIDIoutListD.Size = new System.Drawing.Size(449, 134);
             this.dgvMIDIoutListD.TabIndex = 7;
             // 
             // btnUP_D
             // 
             this.btnUP_D.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnUP_D.Location = new System.Drawing.Point(389, 0);
+            this.btnUP_D.Location = new System.Drawing.Point(456, 0);
             this.btnUP_D.Name = "btnUP_D";
-            this.btnUP_D.Size = new System.Drawing.Size(22, 58);
+            this.btnUP_D.Size = new System.Drawing.Size(26, 58);
             this.btnUP_D.TabIndex = 5;
             this.btnUP_D.Text = "↑";
             this.btnUP_D.UseVisualStyleBackColor = true;
@@ -1497,9 +1498,9 @@
             // btnDOWN_D
             // 
             this.btnDOWN_D.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnDOWN_D.Location = new System.Drawing.Point(389, 76);
+            this.btnDOWN_D.Location = new System.Drawing.Point(456, 76);
             this.btnDOWN_D.Name = "btnDOWN_D";
-            this.btnDOWN_D.Size = new System.Drawing.Size(22, 58);
+            this.btnDOWN_D.Size = new System.Drawing.Size(26, 58);
             this.btnDOWN_D.TabIndex = 6;
             this.btnDOWN_D.Text = "↓";
             this.btnDOWN_D.UseVisualStyleBackColor = true;
@@ -1512,7 +1513,7 @@
             this.tabPage5.Controls.Add(this.btnDOWN_E);
             this.tabPage5.Location = new System.Drawing.Point(4, 22);
             this.tabPage5.Name = "tabPage5";
-            this.tabPage5.Size = new System.Drawing.Size(414, 139);
+            this.tabPage5.Size = new System.Drawing.Size(488, 139);
             this.tabPage5.TabIndex = 4;
             this.tabPage5.Tag = "4";
             this.tabPage5.Text = "E";
@@ -1533,15 +1534,15 @@
             this.dgvMIDIoutListE.RowHeadersVisible = false;
             this.dgvMIDIoutListE.RowTemplate.Height = 21;
             this.dgvMIDIoutListE.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvMIDIoutListE.Size = new System.Drawing.Size(383, 134);
+            this.dgvMIDIoutListE.Size = new System.Drawing.Size(449, 134);
             this.dgvMIDIoutListE.TabIndex = 7;
             // 
             // btnUP_E
             // 
             this.btnUP_E.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnUP_E.Location = new System.Drawing.Point(389, 0);
+            this.btnUP_E.Location = new System.Drawing.Point(456, 0);
             this.btnUP_E.Name = "btnUP_E";
-            this.btnUP_E.Size = new System.Drawing.Size(22, 58);
+            this.btnUP_E.Size = new System.Drawing.Size(26, 58);
             this.btnUP_E.TabIndex = 5;
             this.btnUP_E.Text = "↑";
             this.btnUP_E.UseVisualStyleBackColor = true;
@@ -1550,9 +1551,9 @@
             // btnDOWN_E
             // 
             this.btnDOWN_E.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnDOWN_E.Location = new System.Drawing.Point(389, 76);
+            this.btnDOWN_E.Location = new System.Drawing.Point(456, 76);
             this.btnDOWN_E.Name = "btnDOWN_E";
-            this.btnDOWN_E.Size = new System.Drawing.Size(22, 58);
+            this.btnDOWN_E.Size = new System.Drawing.Size(26, 58);
             this.btnDOWN_E.TabIndex = 6;
             this.btnDOWN_E.Text = "↓";
             this.btnDOWN_E.UseVisualStyleBackColor = true;
@@ -1565,7 +1566,7 @@
             this.tabPage6.Controls.Add(this.btnDOWN_F);
             this.tabPage6.Location = new System.Drawing.Point(4, 22);
             this.tabPage6.Name = "tabPage6";
-            this.tabPage6.Size = new System.Drawing.Size(414, 139);
+            this.tabPage6.Size = new System.Drawing.Size(488, 139);
             this.tabPage6.TabIndex = 5;
             this.tabPage6.Tag = "5";
             this.tabPage6.Text = "F";
@@ -1586,15 +1587,15 @@
             this.dgvMIDIoutListF.RowHeadersVisible = false;
             this.dgvMIDIoutListF.RowTemplate.Height = 21;
             this.dgvMIDIoutListF.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvMIDIoutListF.Size = new System.Drawing.Size(383, 134);
+            this.dgvMIDIoutListF.Size = new System.Drawing.Size(449, 134);
             this.dgvMIDIoutListF.TabIndex = 7;
             // 
             // btnUP_F
             // 
             this.btnUP_F.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnUP_F.Location = new System.Drawing.Point(389, 0);
+            this.btnUP_F.Location = new System.Drawing.Point(456, 0);
             this.btnUP_F.Name = "btnUP_F";
-            this.btnUP_F.Size = new System.Drawing.Size(22, 58);
+            this.btnUP_F.Size = new System.Drawing.Size(26, 58);
             this.btnUP_F.TabIndex = 5;
             this.btnUP_F.Text = "↑";
             this.btnUP_F.UseVisualStyleBackColor = true;
@@ -1603,9 +1604,9 @@
             // btnDOWN_F
             // 
             this.btnDOWN_F.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnDOWN_F.Location = new System.Drawing.Point(389, 76);
+            this.btnDOWN_F.Location = new System.Drawing.Point(456, 76);
             this.btnDOWN_F.Name = "btnDOWN_F";
-            this.btnDOWN_F.Size = new System.Drawing.Size(22, 58);
+            this.btnDOWN_F.Size = new System.Drawing.Size(26, 58);
             this.btnDOWN_F.TabIndex = 6;
             this.btnDOWN_F.Text = "↓";
             this.btnDOWN_F.UseVisualStyleBackColor = true;
@@ -1618,7 +1619,7 @@
             this.tabPage7.Controls.Add(this.btnDOWN_G);
             this.tabPage7.Location = new System.Drawing.Point(4, 22);
             this.tabPage7.Name = "tabPage7";
-            this.tabPage7.Size = new System.Drawing.Size(414, 139);
+            this.tabPage7.Size = new System.Drawing.Size(488, 139);
             this.tabPage7.TabIndex = 6;
             this.tabPage7.Tag = "6";
             this.tabPage7.Text = "G";
@@ -1639,15 +1640,15 @@
             this.dgvMIDIoutListG.RowHeadersVisible = false;
             this.dgvMIDIoutListG.RowTemplate.Height = 21;
             this.dgvMIDIoutListG.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvMIDIoutListG.Size = new System.Drawing.Size(383, 134);
+            this.dgvMIDIoutListG.Size = new System.Drawing.Size(449, 134);
             this.dgvMIDIoutListG.TabIndex = 7;
             // 
             // btnUP_G
             // 
             this.btnUP_G.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnUP_G.Location = new System.Drawing.Point(389, 0);
+            this.btnUP_G.Location = new System.Drawing.Point(456, 0);
             this.btnUP_G.Name = "btnUP_G";
-            this.btnUP_G.Size = new System.Drawing.Size(22, 58);
+            this.btnUP_G.Size = new System.Drawing.Size(26, 58);
             this.btnUP_G.TabIndex = 5;
             this.btnUP_G.Text = "↑";
             this.btnUP_G.UseVisualStyleBackColor = true;
@@ -1656,9 +1657,9 @@
             // btnDOWN_G
             // 
             this.btnDOWN_G.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnDOWN_G.Location = new System.Drawing.Point(389, 76);
+            this.btnDOWN_G.Location = new System.Drawing.Point(456, 76);
             this.btnDOWN_G.Name = "btnDOWN_G";
-            this.btnDOWN_G.Size = new System.Drawing.Size(22, 58);
+            this.btnDOWN_G.Size = new System.Drawing.Size(26, 58);
             this.btnDOWN_G.TabIndex = 6;
             this.btnDOWN_G.Text = "↓";
             this.btnDOWN_G.UseVisualStyleBackColor = true;
@@ -1671,7 +1672,7 @@
             this.tabPage8.Controls.Add(this.btnDOWN_H);
             this.tabPage8.Location = new System.Drawing.Point(4, 22);
             this.tabPage8.Name = "tabPage8";
-            this.tabPage8.Size = new System.Drawing.Size(414, 139);
+            this.tabPage8.Size = new System.Drawing.Size(488, 139);
             this.tabPage8.TabIndex = 7;
             this.tabPage8.Tag = "7";
             this.tabPage8.Text = "H";
@@ -1692,15 +1693,15 @@
             this.dgvMIDIoutListH.RowHeadersVisible = false;
             this.dgvMIDIoutListH.RowTemplate.Height = 21;
             this.dgvMIDIoutListH.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvMIDIoutListH.Size = new System.Drawing.Size(383, 134);
+            this.dgvMIDIoutListH.Size = new System.Drawing.Size(449, 134);
             this.dgvMIDIoutListH.TabIndex = 7;
             // 
             // btnUP_H
             // 
             this.btnUP_H.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnUP_H.Location = new System.Drawing.Point(389, 0);
+            this.btnUP_H.Location = new System.Drawing.Point(456, 0);
             this.btnUP_H.Name = "btnUP_H";
-            this.btnUP_H.Size = new System.Drawing.Size(22, 58);
+            this.btnUP_H.Size = new System.Drawing.Size(26, 58);
             this.btnUP_H.TabIndex = 5;
             this.btnUP_H.Text = "↑";
             this.btnUP_H.UseVisualStyleBackColor = true;
@@ -1709,9 +1710,9 @@
             // btnDOWN_H
             // 
             this.btnDOWN_H.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnDOWN_H.Location = new System.Drawing.Point(389, 76);
+            this.btnDOWN_H.Location = new System.Drawing.Point(456, 76);
             this.btnDOWN_H.Name = "btnDOWN_H";
-            this.btnDOWN_H.Size = new System.Drawing.Size(22, 58);
+            this.btnDOWN_H.Size = new System.Drawing.Size(26, 58);
             this.btnDOWN_H.TabIndex = 6;
             this.btnDOWN_H.Text = "↓";
             this.btnDOWN_H.UseVisualStyleBackColor = true;
@@ -1724,7 +1725,7 @@
             this.tabPage9.Controls.Add(this.btnDOWN_I);
             this.tabPage9.Location = new System.Drawing.Point(4, 22);
             this.tabPage9.Name = "tabPage9";
-            this.tabPage9.Size = new System.Drawing.Size(414, 139);
+            this.tabPage9.Size = new System.Drawing.Size(488, 139);
             this.tabPage9.TabIndex = 8;
             this.tabPage9.Tag = "8";
             this.tabPage9.Text = "I";
@@ -1745,15 +1746,15 @@
             this.dgvMIDIoutListI.RowHeadersVisible = false;
             this.dgvMIDIoutListI.RowTemplate.Height = 21;
             this.dgvMIDIoutListI.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvMIDIoutListI.Size = new System.Drawing.Size(383, 134);
+            this.dgvMIDIoutListI.Size = new System.Drawing.Size(449, 134);
             this.dgvMIDIoutListI.TabIndex = 7;
             // 
             // btnUP_I
             // 
             this.btnUP_I.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnUP_I.Location = new System.Drawing.Point(389, 0);
+            this.btnUP_I.Location = new System.Drawing.Point(456, 0);
             this.btnUP_I.Name = "btnUP_I";
-            this.btnUP_I.Size = new System.Drawing.Size(22, 58);
+            this.btnUP_I.Size = new System.Drawing.Size(26, 58);
             this.btnUP_I.TabIndex = 5;
             this.btnUP_I.Text = "↑";
             this.btnUP_I.UseVisualStyleBackColor = true;
@@ -1762,9 +1763,9 @@
             // btnDOWN_I
             // 
             this.btnDOWN_I.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnDOWN_I.Location = new System.Drawing.Point(389, 76);
+            this.btnDOWN_I.Location = new System.Drawing.Point(456, 76);
             this.btnDOWN_I.Name = "btnDOWN_I";
-            this.btnDOWN_I.Size = new System.Drawing.Size(22, 58);
+            this.btnDOWN_I.Size = new System.Drawing.Size(26, 58);
             this.btnDOWN_I.TabIndex = 6;
             this.btnDOWN_I.Text = "↓";
             this.btnDOWN_I.UseVisualStyleBackColor = true;
@@ -1777,7 +1778,7 @@
             this.tabPage10.Controls.Add(this.btnDOWN_J);
             this.tabPage10.Location = new System.Drawing.Point(4, 22);
             this.tabPage10.Name = "tabPage10";
-            this.tabPage10.Size = new System.Drawing.Size(414, 139);
+            this.tabPage10.Size = new System.Drawing.Size(488, 139);
             this.tabPage10.TabIndex = 9;
             this.tabPage10.Tag = "9";
             this.tabPage10.Text = "J";
@@ -1798,15 +1799,15 @@
             this.dgvMIDIoutListJ.RowHeadersVisible = false;
             this.dgvMIDIoutListJ.RowTemplate.Height = 21;
             this.dgvMIDIoutListJ.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvMIDIoutListJ.Size = new System.Drawing.Size(383, 134);
+            this.dgvMIDIoutListJ.Size = new System.Drawing.Size(449, 134);
             this.dgvMIDIoutListJ.TabIndex = 7;
             // 
             // button17
             // 
             this.button17.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button17.Location = new System.Drawing.Point(389, 0);
+            this.button17.Location = new System.Drawing.Point(456, 0);
             this.button17.Name = "button17";
-            this.button17.Size = new System.Drawing.Size(22, 58);
+            this.button17.Size = new System.Drawing.Size(26, 58);
             this.button17.TabIndex = 5;
             this.button17.Text = "↑";
             this.button17.UseVisualStyleBackColor = true;
@@ -1815,9 +1816,9 @@
             // btnDOWN_J
             // 
             this.btnDOWN_J.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnDOWN_J.Location = new System.Drawing.Point(389, 76);
+            this.btnDOWN_J.Location = new System.Drawing.Point(456, 76);
             this.btnDOWN_J.Name = "btnDOWN_J";
-            this.btnDOWN_J.Size = new System.Drawing.Size(22, 58);
+            this.btnDOWN_J.Size = new System.Drawing.Size(26, 58);
             this.btnDOWN_J.TabIndex = 6;
             this.btnDOWN_J.Text = "↓";
             this.btnDOWN_J.UseVisualStyleBackColor = true;
@@ -1825,9 +1826,9 @@
             // 
             // btnAddVST
             // 
-            this.btnAddVST.Location = new System.Drawing.Point(263, 4);
+            this.btnAddVST.Location = new System.Drawing.Point(307, 4);
             this.btnAddVST.Name = "btnAddVST";
-            this.btnAddVST.Size = new System.Drawing.Size(75, 23);
+            this.btnAddVST.Size = new System.Drawing.Size(87, 23);
             this.btnAddVST.TabIndex = 5;
             this.btnAddVST.Text = "Add VST";
             this.btnAddVST.UseVisualStyleBackColor = true;
@@ -1836,7 +1837,7 @@
             // label18
             // 
             this.label18.AutoSize = true;
-            this.label18.Location = new System.Drawing.Point(6, 16);
+            this.label18.Location = new System.Drawing.Point(7, 16);
             this.label18.Name = "label18";
             this.label18.Size = new System.Drawing.Size(74, 12);
             this.label18.TabIndex = 2;
@@ -1844,9 +1845,9 @@
             // 
             // btnAddMIDIout
             // 
-            this.btnAddMIDIout.Location = new System.Drawing.Point(118, 4);
+            this.btnAddMIDIout.Location = new System.Drawing.Point(138, 4);
             this.btnAddMIDIout.Name = "btnAddMIDIout";
-            this.btnAddMIDIout.Size = new System.Drawing.Size(66, 24);
+            this.btnAddMIDIout.Size = new System.Drawing.Size(77, 24);
             this.btnAddMIDIout.TabIndex = 3;
             this.btnAddMIDIout.Text = "↓ +";
             this.btnAddMIDIout.UseVisualStyleBackColor = true;
@@ -1854,9 +1855,9 @@
             // 
             // btnSubMIDIout
             // 
-            this.btnSubMIDIout.Location = new System.Drawing.Point(190, 4);
+            this.btnSubMIDIout.Location = new System.Drawing.Point(222, 4);
             this.btnSubMIDIout.Name = "btnSubMIDIout";
-            this.btnSubMIDIout.Size = new System.Drawing.Size(66, 24);
+            this.btnSubMIDIout.Size = new System.Drawing.Size(77, 24);
             this.btnSubMIDIout.TabIndex = 3;
             this.btnSubMIDIout.Text = "-";
             this.btnSubMIDIout.UseVisualStyleBackColor = true;
@@ -1867,7 +1868,7 @@
             this.tpNuked.Controls.Add(this.tabControl2);
             this.tpNuked.Location = new System.Drawing.Point(4, 22);
             this.tpNuked.Name = "tpNuked";
-            this.tpNuked.Size = new System.Drawing.Size(443, 371);
+            this.tpNuked.Size = new System.Drawing.Size(518, 371);
             this.tpNuked.TabIndex = 14;
             this.tpNuked.Text = "チップ別";
             this.tpNuked.UseVisualStyleBackColor = true;
@@ -1880,7 +1881,7 @@
             this.tabControl2.Location = new System.Drawing.Point(0, 0);
             this.tabControl2.Name = "tabControl2";
             this.tabControl2.SelectedIndex = 0;
-            this.tabControl2.Size = new System.Drawing.Size(443, 371);
+            this.tabControl2.Size = new System.Drawing.Size(518, 371);
             this.tabControl2.TabIndex = 1;
             // 
             // tabPage14
@@ -1889,7 +1890,7 @@
             this.tabPage14.Location = new System.Drawing.Point(4, 22);
             this.tabPage14.Name = "tabPage14";
             this.tabPage14.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage14.Size = new System.Drawing.Size(435, 345);
+            this.tabPage14.Size = new System.Drawing.Size(510, 345);
             this.tabPage14.TabIndex = 0;
             this.tabPage14.Text = "Nuked-OPN2";
             this.tabPage14.UseVisualStyleBackColor = true;
@@ -1901,9 +1902,9 @@
             this.groupBox26.Controls.Add(this.rbNukedOPN2OptionDiscrete);
             this.groupBox26.Controls.Add(this.rbNukedOPN2OptionASIClp);
             this.groupBox26.Controls.Add(this.rbNukedOPN2OptionASIC);
-            this.groupBox26.Location = new System.Drawing.Point(6, 6);
+            this.groupBox26.Location = new System.Drawing.Point(7, 6);
             this.groupBox26.Name = "groupBox26";
-            this.groupBox26.Size = new System.Drawing.Size(318, 128);
+            this.groupBox26.Size = new System.Drawing.Size(371, 128);
             this.groupBox26.TabIndex = 0;
             this.groupBox26.TabStop = false;
             this.groupBox26.Text = "Emulation type";
@@ -1911,7 +1912,7 @@
             // rbNukedOPN2OptionYM2612u
             // 
             this.rbNukedOPN2OptionYM2612u.AutoSize = true;
-            this.rbNukedOPN2OptionYM2612u.Location = new System.Drawing.Point(6, 84);
+            this.rbNukedOPN2OptionYM2612u.Location = new System.Drawing.Point(7, 84);
             this.rbNukedOPN2OptionYM2612u.Name = "rbNukedOPN2OptionYM2612u";
             this.rbNukedOPN2OptionYM2612u.Size = new System.Drawing.Size(189, 16);
             this.rbNukedOPN2OptionYM2612u.TabIndex = 0;
@@ -1922,7 +1923,7 @@
             // rbNukedOPN2OptionYM2612
             // 
             this.rbNukedOPN2OptionYM2612.AutoSize = true;
-            this.rbNukedOPN2OptionYM2612.Location = new System.Drawing.Point(6, 62);
+            this.rbNukedOPN2OptionYM2612.Location = new System.Drawing.Point(7, 62);
             this.rbNukedOPN2OptionYM2612.Name = "rbNukedOPN2OptionYM2612";
             this.rbNukedOPN2OptionYM2612.Size = new System.Drawing.Size(188, 16);
             this.rbNukedOPN2OptionYM2612.TabIndex = 0;
@@ -1933,7 +1934,7 @@
             // rbNukedOPN2OptionDiscrete
             // 
             this.rbNukedOPN2OptionDiscrete.AutoSize = true;
-            this.rbNukedOPN2OptionDiscrete.Location = new System.Drawing.Point(6, 18);
+            this.rbNukedOPN2OptionDiscrete.Location = new System.Drawing.Point(7, 18);
             this.rbNukedOPN2OptionDiscrete.Name = "rbNukedOPN2OptionDiscrete";
             this.rbNukedOPN2OptionDiscrete.Size = new System.Drawing.Size(122, 16);
             this.rbNukedOPN2OptionDiscrete.TabIndex = 0;
@@ -1944,7 +1945,7 @@
             // rbNukedOPN2OptionASIClp
             // 
             this.rbNukedOPN2OptionASIClp.AutoSize = true;
-            this.rbNukedOPN2OptionASIClp.Location = new System.Drawing.Point(6, 106);
+            this.rbNukedOPN2OptionASIClp.Location = new System.Drawing.Point(7, 106);
             this.rbNukedOPN2OptionASIClp.Name = "rbNukedOPN2OptionASIClp";
             this.rbNukedOPN2OptionASIClp.Size = new System.Drawing.Size(151, 16);
             this.rbNukedOPN2OptionASIClp.TabIndex = 0;
@@ -1955,7 +1956,7 @@
             // rbNukedOPN2OptionASIC
             // 
             this.rbNukedOPN2OptionASIC.AutoSize = true;
-            this.rbNukedOPN2OptionASIC.Location = new System.Drawing.Point(6, 40);
+            this.rbNukedOPN2OptionASIC.Location = new System.Drawing.Point(7, 40);
             this.rbNukedOPN2OptionASIC.Name = "rbNukedOPN2OptionASIC";
             this.rbNukedOPN2OptionASIC.Size = new System.Drawing.Size(174, 16);
             this.rbNukedOPN2OptionASIC.TabIndex = 0;
@@ -1968,7 +1969,7 @@
             this.tpNSF.Controls.Add(this.tabControl3);
             this.tpNSF.Location = new System.Drawing.Point(4, 22);
             this.tpNSF.Name = "tpNSF";
-            this.tpNSF.Size = new System.Drawing.Size(443, 371);
+            this.tpNSF.Size = new System.Drawing.Size(518, 371);
             this.tpNSF.TabIndex = 9;
             this.tpNSF.Text = "ファイル別";
             this.tpNSF.UseVisualStyleBackColor = true;
@@ -1984,7 +1985,7 @@
             this.tabControl3.Multiline = true;
             this.tabControl3.Name = "tabControl3";
             this.tabControl3.SelectedIndex = 0;
-            this.tabControl3.Size = new System.Drawing.Size(443, 371);
+            this.tabControl3.Size = new System.Drawing.Size(518, 371);
             this.tabControl3.TabIndex = 9;
             // 
             // tabPage15
@@ -1997,7 +1998,7 @@
             this.tabPage15.Location = new System.Drawing.Point(4, 22);
             this.tabPage15.Name = "tabPage15";
             this.tabPage15.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage15.Size = new System.Drawing.Size(435, 345);
+            this.tabPage15.Size = new System.Drawing.Size(510, 345);
             this.tabPage15.TabIndex = 0;
             this.tabPage15.Text = ".NSF";
             this.tabPage15.UseVisualStyleBackColor = true;
@@ -2010,7 +2011,7 @@
             this.groupBox9.Controls.Add(this.cbNFSNes_UnmuteOnReset);
             this.groupBox9.Location = new System.Drawing.Point(3, 3);
             this.groupBox9.Name = "groupBox9";
-            this.groupBox9.Size = new System.Drawing.Size(210, 107);
+            this.groupBox9.Size = new System.Drawing.Size(245, 107);
             this.groupBox9.TabIndex = 8;
             this.groupBox9.TabStop = false;
             this.groupBox9.Text = "NES";
@@ -2018,9 +2019,9 @@
             // cbNFSNes_DutySwap
             // 
             this.cbNFSNes_DutySwap.AutoSize = true;
-            this.cbNFSNes_DutySwap.Location = new System.Drawing.Point(6, 84);
+            this.cbNFSNes_DutySwap.Location = new System.Drawing.Point(7, 84);
             this.cbNFSNes_DutySwap.Name = "cbNFSNes_DutySwap";
-            this.cbNFSNes_DutySwap.Size = new System.Drawing.Size(78, 16);
+            this.cbNFSNes_DutySwap.Size = new System.Drawing.Size(77, 16);
             this.cbNFSNes_DutySwap.TabIndex = 7;
             this.cbNFSNes_DutySwap.Text = "Duty swap";
             this.cbNFSNes_DutySwap.UseVisualStyleBackColor = true;
@@ -2028,7 +2029,7 @@
             // cbNFSNes_PhaseRefresh
             // 
             this.cbNFSNes_PhaseRefresh.AutoSize = true;
-            this.cbNFSNes_PhaseRefresh.Location = new System.Drawing.Point(6, 62);
+            this.cbNFSNes_PhaseRefresh.Location = new System.Drawing.Point(7, 62);
             this.cbNFSNes_PhaseRefresh.Name = "cbNFSNes_PhaseRefresh";
             this.cbNFSNes_PhaseRefresh.Size = new System.Drawing.Size(95, 16);
             this.cbNFSNes_PhaseRefresh.TabIndex = 7;
@@ -2038,7 +2039,7 @@
             // cbNFSNes_NonLinearMixer
             // 
             this.cbNFSNes_NonLinearMixer.AutoSize = true;
-            this.cbNFSNes_NonLinearMixer.Location = new System.Drawing.Point(6, 40);
+            this.cbNFSNes_NonLinearMixer.Location = new System.Drawing.Point(7, 40);
             this.cbNFSNes_NonLinearMixer.Name = "cbNFSNes_NonLinearMixer";
             this.cbNFSNes_NonLinearMixer.Size = new System.Drawing.Size(110, 16);
             this.cbNFSNes_NonLinearMixer.TabIndex = 7;
@@ -2048,7 +2049,7 @@
             // cbNFSNes_UnmuteOnReset
             // 
             this.cbNFSNes_UnmuteOnReset.AutoSize = true;
-            this.cbNFSNes_UnmuteOnReset.Location = new System.Drawing.Point(6, 18);
+            this.cbNFSNes_UnmuteOnReset.Location = new System.Drawing.Point(7, 18);
             this.cbNFSNes_UnmuteOnReset.Name = "cbNFSNes_UnmuteOnReset";
             this.cbNFSNes_UnmuteOnReset.Size = new System.Drawing.Size(109, 16);
             this.cbNFSNes_UnmuteOnReset.TabIndex = 7;
@@ -2065,9 +2066,9 @@
             this.groupBox10.Controls.Add(this.cbNSFDmc_Enable4011);
             this.groupBox10.Controls.Add(this.cbNSFDmc_NonLinearMixer);
             this.groupBox10.Controls.Add(this.cbNSFDmc_UnmuteOnReset);
-            this.groupBox10.Location = new System.Drawing.Point(220, 3);
+            this.groupBox10.Location = new System.Drawing.Point(257, 3);
             this.groupBox10.Name = "groupBox10";
-            this.groupBox10.Size = new System.Drawing.Size(210, 200);
+            this.groupBox10.Size = new System.Drawing.Size(245, 200);
             this.groupBox10.TabIndex = 8;
             this.groupBox10.TabStop = false;
             this.groupBox10.Text = "DMC";
@@ -2075,7 +2076,7 @@
             // cbNSFDmc_TriNull
             // 
             this.cbNSFDmc_TriNull.AutoSize = true;
-            this.cbNSFDmc_TriNull.Location = new System.Drawing.Point(6, 171);
+            this.cbNSFDmc_TriNull.Location = new System.Drawing.Point(7, 171);
             this.cbNSFDmc_TriNull.Name = "cbNSFDmc_TriNull";
             this.cbNSFDmc_TriNull.Size = new System.Drawing.Size(64, 16);
             this.cbNSFDmc_TriNull.TabIndex = 7;
@@ -2085,7 +2086,7 @@
             // cbNSFDmc_TriMute
             // 
             this.cbNSFDmc_TriMute.AutoSize = true;
-            this.cbNSFDmc_TriMute.Location = new System.Drawing.Point(6, 149);
+            this.cbNSFDmc_TriMute.Location = new System.Drawing.Point(7, 149);
             this.cbNSFDmc_TriMute.Name = "cbNSFDmc_TriMute";
             this.cbNSFDmc_TriMute.Size = new System.Drawing.Size(71, 16);
             this.cbNSFDmc_TriMute.TabIndex = 7;
@@ -2095,9 +2096,9 @@
             // cbNSFDmc_RandomizeNoise
             // 
             this.cbNSFDmc_RandomizeNoise.AutoSize = true;
-            this.cbNSFDmc_RandomizeNoise.Location = new System.Drawing.Point(6, 128);
+            this.cbNSFDmc_RandomizeNoise.Location = new System.Drawing.Point(7, 128);
             this.cbNSFDmc_RandomizeNoise.Name = "cbNSFDmc_RandomizeNoise";
-            this.cbNSFDmc_RandomizeNoise.Size = new System.Drawing.Size(110, 16);
+            this.cbNSFDmc_RandomizeNoise.Size = new System.Drawing.Size(111, 16);
             this.cbNSFDmc_RandomizeNoise.TabIndex = 7;
             this.cbNSFDmc_RandomizeNoise.Text = "Randomize noise";
             this.cbNSFDmc_RandomizeNoise.UseVisualStyleBackColor = true;
@@ -2105,7 +2106,7 @@
             // cbNSFDmc_DPCMAntiClick
             // 
             this.cbNSFDmc_DPCMAntiClick.AutoSize = true;
-            this.cbNSFDmc_DPCMAntiClick.Location = new System.Drawing.Point(6, 106);
+            this.cbNSFDmc_DPCMAntiClick.Location = new System.Drawing.Point(7, 106);
             this.cbNSFDmc_DPCMAntiClick.Name = "cbNSFDmc_DPCMAntiClick";
             this.cbNSFDmc_DPCMAntiClick.Size = new System.Drawing.Size(107, 16);
             this.cbNSFDmc_DPCMAntiClick.TabIndex = 7;
@@ -2115,7 +2116,7 @@
             // cbNSFDmc_EnablePNoise
             // 
             this.cbNSFDmc_EnablePNoise.AutoSize = true;
-            this.cbNSFDmc_EnablePNoise.Location = new System.Drawing.Point(6, 84);
+            this.cbNSFDmc_EnablePNoise.Location = new System.Drawing.Point(7, 84);
             this.cbNSFDmc_EnablePNoise.Name = "cbNSFDmc_EnablePNoise";
             this.cbNSFDmc_EnablePNoise.Size = new System.Drawing.Size(96, 16);
             this.cbNSFDmc_EnablePNoise.TabIndex = 7;
@@ -2125,7 +2126,7 @@
             // cbNSFDmc_Enable4011
             // 
             this.cbNSFDmc_Enable4011.AutoSize = true;
-            this.cbNSFDmc_Enable4011.Location = new System.Drawing.Point(6, 62);
+            this.cbNSFDmc_Enable4011.Location = new System.Drawing.Point(7, 62);
             this.cbNSFDmc_Enable4011.Name = "cbNSFDmc_Enable4011";
             this.cbNSFDmc_Enable4011.Size = new System.Drawing.Size(92, 16);
             this.cbNSFDmc_Enable4011.TabIndex = 7;
@@ -2135,7 +2136,7 @@
             // cbNSFDmc_NonLinearMixer
             // 
             this.cbNSFDmc_NonLinearMixer.AutoSize = true;
-            this.cbNSFDmc_NonLinearMixer.Location = new System.Drawing.Point(6, 40);
+            this.cbNSFDmc_NonLinearMixer.Location = new System.Drawing.Point(7, 40);
             this.cbNSFDmc_NonLinearMixer.Name = "cbNSFDmc_NonLinearMixer";
             this.cbNSFDmc_NonLinearMixer.Size = new System.Drawing.Size(110, 16);
             this.cbNSFDmc_NonLinearMixer.TabIndex = 7;
@@ -2145,7 +2146,7 @@
             // cbNSFDmc_UnmuteOnReset
             // 
             this.cbNSFDmc_UnmuteOnReset.AutoSize = true;
-            this.cbNSFDmc_UnmuteOnReset.Location = new System.Drawing.Point(6, 18);
+            this.cbNSFDmc_UnmuteOnReset.Location = new System.Drawing.Point(7, 18);
             this.cbNSFDmc_UnmuteOnReset.Name = "cbNSFDmc_UnmuteOnReset";
             this.cbNSFDmc_UnmuteOnReset.Size = new System.Drawing.Size(109, 16);
             this.cbNSFDmc_UnmuteOnReset.TabIndex = 7;
@@ -2161,7 +2162,7 @@
             this.groupBox8.Controls.Add(this.cbNSFFDSWriteDisable8000);
             this.groupBox8.Location = new System.Drawing.Point(3, 116);
             this.groupBox8.Name = "groupBox8";
-            this.groupBox8.Size = new System.Drawing.Size(210, 87);
+            this.groupBox8.Size = new System.Drawing.Size(245, 87);
             this.groupBox8.TabIndex = 8;
             this.groupBox8.TabStop = false;
             this.groupBox8.Text = "FDS";
@@ -2169,16 +2170,16 @@
             // label21
             // 
             this.label21.AutoSize = true;
-            this.label21.Location = new System.Drawing.Point(143, 16);
+            this.label21.Location = new System.Drawing.Point(167, 16);
             this.label21.Name = "label21";
-            this.label21.Size = new System.Drawing.Size(18, 12);
+            this.label21.Size = new System.Drawing.Size(19, 12);
             this.label21.TabIndex = 10;
             this.label21.Text = "Hz";
             // 
             // label20
             // 
             this.label20.AutoSize = true;
-            this.label20.Location = new System.Drawing.Point(6, 16);
+            this.label20.Location = new System.Drawing.Point(7, 16);
             this.label20.Name = "label20";
             this.label20.Size = new System.Drawing.Size(25, 12);
             this.label20.TabIndex = 10;
@@ -2186,15 +2187,15 @@
             // 
             // tbNSFFds_LPF
             // 
-            this.tbNSFFds_LPF.Location = new System.Drawing.Point(37, 13);
+            this.tbNSFFds_LPF.Location = new System.Drawing.Point(43, 13);
             this.tbNSFFds_LPF.Name = "tbNSFFds_LPF";
-            this.tbNSFFds_LPF.Size = new System.Drawing.Size(100, 19);
+            this.tbNSFFds_LPF.Size = new System.Drawing.Size(116, 19);
             this.tbNSFFds_LPF.TabIndex = 9;
             // 
             // cbNFSFds_4085Reset
             // 
             this.cbNFSFds_4085Reset.AutoSize = true;
-            this.cbNFSFds_4085Reset.Location = new System.Drawing.Point(6, 38);
+            this.cbNFSFds_4085Reset.Location = new System.Drawing.Point(7, 38);
             this.cbNFSFds_4085Reset.Name = "cbNFSFds_4085Reset";
             this.cbNFSFds_4085Reset.Size = new System.Drawing.Size(84, 16);
             this.cbNFSFds_4085Reset.TabIndex = 7;
@@ -2204,7 +2205,7 @@
             // cbNSFFDSWriteDisable8000
             // 
             this.cbNSFFDSWriteDisable8000.AutoSize = true;
-            this.cbNSFFDSWriteDisable8000.Location = new System.Drawing.Point(6, 60);
+            this.cbNSFFDSWriteDisable8000.Location = new System.Drawing.Point(7, 60);
             this.cbNSFFDSWriteDisable8000.Name = "cbNSFFDSWriteDisable8000";
             this.cbNSFFDSWriteDisable8000.Size = new System.Drawing.Size(177, 16);
             this.cbNSFFDSWriteDisable8000.TabIndex = 7;
@@ -2214,9 +2215,9 @@
             // groupBox12
             // 
             this.groupBox12.Controls.Add(this.cbNSFN160_Serial);
-            this.groupBox12.Location = new System.Drawing.Point(220, 209);
+            this.groupBox12.Location = new System.Drawing.Point(257, 209);
             this.groupBox12.Name = "groupBox12";
-            this.groupBox12.Size = new System.Drawing.Size(210, 62);
+            this.groupBox12.Size = new System.Drawing.Size(245, 62);
             this.groupBox12.TabIndex = 8;
             this.groupBox12.TabStop = false;
             this.groupBox12.Text = "N160";
@@ -2224,7 +2225,7 @@
             // cbNSFN160_Serial
             // 
             this.cbNSFN160_Serial.AutoSize = true;
-            this.cbNSFN160_Serial.Location = new System.Drawing.Point(6, 18);
+            this.cbNSFN160_Serial.Location = new System.Drawing.Point(7, 18);
             this.cbNSFN160_Serial.Name = "cbNSFN160_Serial";
             this.cbNSFN160_Serial.Size = new System.Drawing.Size(53, 16);
             this.cbNSFN160_Serial.TabIndex = 7;
@@ -2237,7 +2238,7 @@
             this.groupBox11.Controls.Add(this.cbNSFMmc5_NonLinearMixer);
             this.groupBox11.Location = new System.Drawing.Point(3, 209);
             this.groupBox11.Name = "groupBox11";
-            this.groupBox11.Size = new System.Drawing.Size(210, 62);
+            this.groupBox11.Size = new System.Drawing.Size(245, 62);
             this.groupBox11.TabIndex = 8;
             this.groupBox11.TabStop = false;
             this.groupBox11.Text = "MMC5";
@@ -2245,7 +2246,7 @@
             // cbNSFMmc5_PhaseRefresh
             // 
             this.cbNSFMmc5_PhaseRefresh.AutoSize = true;
-            this.cbNSFMmc5_PhaseRefresh.Location = new System.Drawing.Point(6, 40);
+            this.cbNSFMmc5_PhaseRefresh.Location = new System.Drawing.Point(7, 40);
             this.cbNSFMmc5_PhaseRefresh.Name = "cbNSFMmc5_PhaseRefresh";
             this.cbNSFMmc5_PhaseRefresh.Size = new System.Drawing.Size(95, 16);
             this.cbNSFMmc5_PhaseRefresh.TabIndex = 7;
@@ -2255,7 +2256,7 @@
             // cbNSFMmc5_NonLinearMixer
             // 
             this.cbNSFMmc5_NonLinearMixer.AutoSize = true;
-            this.cbNSFMmc5_NonLinearMixer.Location = new System.Drawing.Point(6, 18);
+            this.cbNSFMmc5_NonLinearMixer.Location = new System.Drawing.Point(7, 18);
             this.cbNSFMmc5_NonLinearMixer.Name = "cbNSFMmc5_NonLinearMixer";
             this.cbNSFMmc5_NonLinearMixer.Size = new System.Drawing.Size(110, 16);
             this.cbNSFMmc5_NonLinearMixer.TabIndex = 7;
@@ -2272,7 +2273,7 @@
             this.tabPage16.Location = new System.Drawing.Point(4, 22);
             this.tabPage16.Name = "tabPage16";
             this.tabPage16.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage16.Size = new System.Drawing.Size(435, 345);
+            this.tabPage16.Size = new System.Drawing.Size(510, 345);
             this.tabPage16.TabIndex = 1;
             this.tabPage16.Text = ".SID";
             this.tabPage16.UseVisualStyleBackColor = true;
@@ -2288,7 +2289,7 @@
             this.groupBox14.Controls.Add(this.rdSIDQ4);
             this.groupBox14.Location = new System.Drawing.Point(3, 109);
             this.groupBox14.Name = "groupBox14";
-            this.groupBox14.Size = new System.Drawing.Size(280, 111);
+            this.groupBox14.Size = new System.Drawing.Size(327, 111);
             this.groupBox14.TabIndex = 2;
             this.groupBox14.TabStop = false;
             this.groupBox14.Text = "Quality";
@@ -2296,7 +2297,7 @@
             // label27
             // 
             this.label27.AutoSize = true;
-            this.label27.Location = new System.Drawing.Point(162, 86);
+            this.label27.Location = new System.Drawing.Point(189, 86);
             this.label27.Name = "label27";
             this.label27.Size = new System.Drawing.Size(58, 12);
             this.label27.TabIndex = 2;
@@ -2305,7 +2306,7 @@
             // label26
             // 
             this.label26.AutoSize = true;
-            this.label26.Location = new System.Drawing.Point(162, 54);
+            this.label26.Location = new System.Drawing.Point(189, 54);
             this.label26.Name = "label26";
             this.label26.Size = new System.Drawing.Size(38, 12);
             this.label26.TabIndex = 2;
@@ -2314,9 +2315,9 @@
             // label25
             // 
             this.label25.AutoSize = true;
-            this.label25.Location = new System.Drawing.Point(162, 20);
+            this.label25.Location = new System.Drawing.Point(189, 20);
             this.label25.Name = "label25";
-            this.label25.Size = new System.Drawing.Size(68, 12);
+            this.label25.Size = new System.Drawing.Size(67, 12);
             this.label25.TabIndex = 2;
             this.label25.Text = "High(Heavy)";
             // 
@@ -2324,7 +2325,7 @@
             // 
             this.rdSIDQ1.AutoSize = true;
             this.rdSIDQ1.Checked = true;
-            this.rdSIDQ1.Location = new System.Drawing.Point(6, 84);
+            this.rdSIDQ1.Location = new System.Drawing.Point(7, 84);
             this.rdSIDQ1.Name = "rdSIDQ1";
             this.rdSIDQ1.Size = new System.Drawing.Size(111, 16);
             this.rdSIDQ1.TabIndex = 1;
@@ -2335,7 +2336,7 @@
             // rdSIDQ3
             // 
             this.rdSIDQ3.AutoSize = true;
-            this.rdSIDQ3.Location = new System.Drawing.Point(6, 40);
+            this.rdSIDQ3.Location = new System.Drawing.Point(7, 40);
             this.rdSIDQ3.Name = "rdSIDQ3";
             this.rdSIDQ3.Size = new System.Drawing.Size(107, 16);
             this.rdSIDQ3.TabIndex = 1;
@@ -2345,7 +2346,7 @@
             // rdSIDQ2
             // 
             this.rdSIDQ2.AutoSize = true;
-            this.rdSIDQ2.Location = new System.Drawing.Point(6, 62);
+            this.rdSIDQ2.Location = new System.Drawing.Point(7, 62);
             this.rdSIDQ2.Name = "rdSIDQ2";
             this.rdSIDQ2.Size = new System.Drawing.Size(77, 16);
             this.rdSIDQ2.TabIndex = 1;
@@ -2355,7 +2356,7 @@
             // rdSIDQ4
             // 
             this.rdSIDQ4.AutoSize = true;
-            this.rdSIDQ4.Location = new System.Drawing.Point(6, 18);
+            this.rdSIDQ4.Location = new System.Drawing.Point(7, 18);
             this.rdSIDQ4.Name = "rdSIDQ4";
             this.rdSIDQ4.Size = new System.Drawing.Size(73, 16);
             this.rdSIDQ4.TabIndex = 1;
@@ -2377,7 +2378,7 @@
             this.groupBox13.Controls.Add(this.label22);
             this.groupBox13.Location = new System.Drawing.Point(3, 3);
             this.groupBox13.Name = "groupBox13";
-            this.groupBox13.Size = new System.Drawing.Size(429, 100);
+            this.groupBox13.Size = new System.Drawing.Size(501, 100);
             this.groupBox13.TabIndex = 0;
             this.groupBox13.TabStop = false;
             this.groupBox13.Text = "ROM Image";
@@ -2385,9 +2386,9 @@
             // btnSIDBasic
             // 
             this.btnSIDBasic.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSIDBasic.Location = new System.Drawing.Point(400, 44);
+            this.btnSIDBasic.Location = new System.Drawing.Point(468, 44);
             this.btnSIDBasic.Name = "btnSIDBasic";
-            this.btnSIDBasic.Size = new System.Drawing.Size(23, 23);
+            this.btnSIDBasic.Size = new System.Drawing.Size(27, 23);
             this.btnSIDBasic.TabIndex = 2;
             this.btnSIDBasic.Text = "...";
             this.btnSIDBasic.UseVisualStyleBackColor = true;
@@ -2396,9 +2397,9 @@
             // btnSIDCharacter
             // 
             this.btnSIDCharacter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSIDCharacter.Location = new System.Drawing.Point(400, 69);
+            this.btnSIDCharacter.Location = new System.Drawing.Point(468, 69);
             this.btnSIDCharacter.Name = "btnSIDCharacter";
-            this.btnSIDCharacter.Size = new System.Drawing.Size(23, 23);
+            this.btnSIDCharacter.Size = new System.Drawing.Size(27, 23);
             this.btnSIDCharacter.TabIndex = 2;
             this.btnSIDCharacter.Text = "...";
             this.btnSIDCharacter.UseVisualStyleBackColor = true;
@@ -2407,9 +2408,9 @@
             // btnSIDKernal
             // 
             this.btnSIDKernal.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSIDKernal.Location = new System.Drawing.Point(400, 19);
+            this.btnSIDKernal.Location = new System.Drawing.Point(468, 19);
             this.btnSIDKernal.Name = "btnSIDKernal";
-            this.btnSIDKernal.Size = new System.Drawing.Size(23, 23);
+            this.btnSIDKernal.Size = new System.Drawing.Size(27, 23);
             this.btnSIDKernal.TabIndex = 2;
             this.btnSIDKernal.Text = "...";
             this.btnSIDKernal.UseVisualStyleBackColor = true;
@@ -2419,33 +2420,33 @@
             // 
             this.tbSIDCharacter.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbSIDCharacter.Location = new System.Drawing.Point(67, 71);
+            this.tbSIDCharacter.Location = new System.Drawing.Point(78, 71);
             this.tbSIDCharacter.Name = "tbSIDCharacter";
-            this.tbSIDCharacter.Size = new System.Drawing.Size(327, 19);
+            this.tbSIDCharacter.Size = new System.Drawing.Size(382, 19);
             this.tbSIDCharacter.TabIndex = 1;
             // 
             // tbSIDBasic
             // 
             this.tbSIDBasic.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbSIDBasic.Location = new System.Drawing.Point(67, 46);
+            this.tbSIDBasic.Location = new System.Drawing.Point(78, 46);
             this.tbSIDBasic.Name = "tbSIDBasic";
-            this.tbSIDBasic.Size = new System.Drawing.Size(327, 19);
+            this.tbSIDBasic.Size = new System.Drawing.Size(382, 19);
             this.tbSIDBasic.TabIndex = 1;
             // 
             // tbSIDKernal
             // 
             this.tbSIDKernal.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbSIDKernal.Location = new System.Drawing.Point(67, 21);
+            this.tbSIDKernal.Location = new System.Drawing.Point(78, 21);
             this.tbSIDKernal.Name = "tbSIDKernal";
-            this.tbSIDKernal.Size = new System.Drawing.Size(327, 19);
+            this.tbSIDKernal.Size = new System.Drawing.Size(382, 19);
             this.tbSIDKernal.TabIndex = 1;
             // 
             // label24
             // 
             this.label24.AutoSize = true;
-            this.label24.Location = new System.Drawing.Point(6, 74);
+            this.label24.Location = new System.Drawing.Point(7, 74);
             this.label24.Name = "label24";
             this.label24.Size = new System.Drawing.Size(55, 12);
             this.label24.TabIndex = 0;
@@ -2454,7 +2455,7 @@
             // label23
             // 
             this.label23.AutoSize = true;
-            this.label23.Location = new System.Drawing.Point(6, 49);
+            this.label23.Location = new System.Drawing.Point(7, 49);
             this.label23.Name = "label23";
             this.label23.Size = new System.Drawing.Size(34, 12);
             this.label23.TabIndex = 0;
@@ -2463,7 +2464,7 @@
             // label22
             // 
             this.label22.AutoSize = true;
-            this.label22.Location = new System.Drawing.Point(6, 24);
+            this.label22.Location = new System.Drawing.Point(7, 24);
             this.label22.Name = "label22";
             this.label22.Size = new System.Drawing.Size(37, 12);
             this.label22.TabIndex = 0;
@@ -2472,26 +2473,26 @@
             // label49
             // 
             this.label49.AutoSize = true;
-            this.label49.Location = new System.Drawing.Point(9, 229);
+            this.label49.Location = new System.Drawing.Point(10, 229);
             this.label49.Name = "label49";
-            this.label49.Size = new System.Drawing.Size(95, 12);
+            this.label49.Size = new System.Drawing.Size(97, 12);
             this.label49.TabIndex = 0;
             this.label49.Text = "OutputBuffer size";
             // 
             // label51
             // 
-            this.label51.Location = new System.Drawing.Point(209, 224);
+            this.label51.Location = new System.Drawing.Point(244, 224);
             this.label51.Name = "label51";
-            this.label51.Size = new System.Drawing.Size(223, 38);
+            this.label51.Size = new System.Drawing.Size(260, 38);
             this.label51.TabIndex = 0;
             this.label51.Text = "テンポが速かったり、音が途切れる場合に調整すると改善することがあります。通常は5000。";
             // 
             // tbSIDOutputBufferSize
             // 
-            this.tbSIDOutputBufferSize.Location = new System.Drawing.Point(110, 226);
+            this.tbSIDOutputBufferSize.Location = new System.Drawing.Point(128, 226);
             this.tbSIDOutputBufferSize.MaxLength = 10;
             this.tbSIDOutputBufferSize.Name = "tbSIDOutputBufferSize";
-            this.tbSIDOutputBufferSize.Size = new System.Drawing.Size(93, 19);
+            this.tbSIDOutputBufferSize.Size = new System.Drawing.Size(108, 19);
             this.tbSIDOutputBufferSize.TabIndex = 1;
             // 
             // tabPage17
@@ -2499,7 +2500,7 @@
             this.tabPage17.Controls.Add(this.groupBox15);
             this.tabPage17.Location = new System.Drawing.Point(4, 22);
             this.tabPage17.Name = "tabPage17";
-            this.tabPage17.Size = new System.Drawing.Size(435, 345);
+            this.tabPage17.Size = new System.Drawing.Size(510, 345);
             this.tabPage17.TabIndex = 2;
             this.tabPage17.Text = ".MID/.RCP";
             this.tabPage17.UseVisualStyleBackColor = true;
@@ -2520,7 +2521,7 @@
             this.groupBox15.Controls.Add(this.label31);
             this.groupBox15.Location = new System.Drawing.Point(3, 3);
             this.groupBox15.Name = "groupBox15";
-            this.groupBox15.Size = new System.Drawing.Size(429, 199);
+            this.groupBox15.Size = new System.Drawing.Size(501, 199);
             this.groupBox15.TabIndex = 0;
             this.groupBox15.TabStop = false;
             this.groupBox15.Text = "Before Send";
@@ -2528,9 +2529,9 @@
             // btnBeforeSend_Default
             // 
             this.btnBeforeSend_Default.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnBeforeSend_Default.Location = new System.Drawing.Point(348, 123);
+            this.btnBeforeSend_Default.Location = new System.Drawing.Point(407, 123);
             this.btnBeforeSend_Default.Name = "btnBeforeSend_Default";
-            this.btnBeforeSend_Default.Size = new System.Drawing.Size(75, 23);
+            this.btnBeforeSend_Default.Size = new System.Drawing.Size(87, 23);
             this.btnBeforeSend_Default.TabIndex = 2;
             this.btnBeforeSend_Default.Text = "元に戻す";
             this.btnBeforeSend_Default.UseVisualStyleBackColor = true;
@@ -2540,25 +2541,25 @@
             // 
             this.tbBeforeSend_Custom.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbBeforeSend_Custom.Location = new System.Drawing.Point(90, 98);
+            this.tbBeforeSend_Custom.Location = new System.Drawing.Point(105, 98);
             this.tbBeforeSend_Custom.Name = "tbBeforeSend_Custom";
-            this.tbBeforeSend_Custom.Size = new System.Drawing.Size(333, 19);
+            this.tbBeforeSend_Custom.Size = new System.Drawing.Size(389, 19);
             this.tbBeforeSend_Custom.TabIndex = 1;
             // 
             // tbBeforeSend_XGReset
             // 
             this.tbBeforeSend_XGReset.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbBeforeSend_XGReset.Location = new System.Drawing.Point(90, 48);
+            this.tbBeforeSend_XGReset.Location = new System.Drawing.Point(105, 48);
             this.tbBeforeSend_XGReset.Name = "tbBeforeSend_XGReset";
-            this.tbBeforeSend_XGReset.Size = new System.Drawing.Size(333, 19);
+            this.tbBeforeSend_XGReset.Size = new System.Drawing.Size(389, 19);
             this.tbBeforeSend_XGReset.TabIndex = 1;
             // 
             // label35
             // 
             this.label35.AutoSize = true;
             this.label35.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label35.Location = new System.Drawing.Point(6, 128);
+            this.label35.Location = new System.Drawing.Point(7, 128);
             this.label35.Name = "label35";
             this.label35.Size = new System.Drawing.Size(329, 28);
             this.label35.TabIndex = 0;
@@ -2567,7 +2568,7 @@
             // label34
             // 
             this.label34.AutoSize = true;
-            this.label34.Location = new System.Drawing.Point(6, 101);
+            this.label34.Location = new System.Drawing.Point(7, 101);
             this.label34.Name = "label34";
             this.label34.Size = new System.Drawing.Size(44, 12);
             this.label34.TabIndex = 0;
@@ -2576,7 +2577,7 @@
             // label32
             // 
             this.label32.AutoSize = true;
-            this.label32.Location = new System.Drawing.Point(6, 51);
+            this.label32.Location = new System.Drawing.Point(7, 51);
             this.label32.Name = "label32";
             this.label32.Size = new System.Drawing.Size(76, 12);
             this.label32.TabIndex = 0;
@@ -2586,15 +2587,15 @@
             // 
             this.tbBeforeSend_GSReset.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbBeforeSend_GSReset.Location = new System.Drawing.Point(90, 73);
+            this.tbBeforeSend_GSReset.Location = new System.Drawing.Point(105, 73);
             this.tbBeforeSend_GSReset.Name = "tbBeforeSend_GSReset";
-            this.tbBeforeSend_GSReset.Size = new System.Drawing.Size(333, 19);
+            this.tbBeforeSend_GSReset.Size = new System.Drawing.Size(389, 19);
             this.tbBeforeSend_GSReset.TabIndex = 1;
             // 
             // label33
             // 
             this.label33.AutoSize = true;
-            this.label33.Location = new System.Drawing.Point(6, 76);
+            this.label33.Location = new System.Drawing.Point(7, 76);
             this.label33.Name = "label33";
             this.label33.Size = new System.Drawing.Size(54, 12);
             this.label33.TabIndex = 0;
@@ -2604,15 +2605,15 @@
             // 
             this.tbBeforeSend_GMReset.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbBeforeSend_GMReset.Location = new System.Drawing.Point(90, 23);
+            this.tbBeforeSend_GMReset.Location = new System.Drawing.Point(105, 23);
             this.tbBeforeSend_GMReset.Name = "tbBeforeSend_GMReset";
-            this.tbBeforeSend_GMReset.Size = new System.Drawing.Size(333, 19);
+            this.tbBeforeSend_GMReset.Size = new System.Drawing.Size(389, 19);
             this.tbBeforeSend_GMReset.TabIndex = 1;
             // 
             // label31
             // 
             this.label31.AutoSize = true;
-            this.label31.Location = new System.Drawing.Point(6, 26);
+            this.label31.Location = new System.Drawing.Point(7, 26);
             this.label31.Name = "label31";
             this.label31.Size = new System.Drawing.Size(78, 12);
             this.label31.TabIndex = 0;
@@ -2624,7 +2625,7 @@
             this.tpMIDIExp.Controls.Add(this.gbMIDIExport);
             this.tpMIDIExp.Location = new System.Drawing.Point(4, 22);
             this.tpMIDIExp.Name = "tpMIDIExp";
-            this.tpMIDIExp.Size = new System.Drawing.Size(443, 371);
+            this.tpMIDIExp.Size = new System.Drawing.Size(518, 371);
             this.tpMIDIExp.TabIndex = 6;
             this.tpMIDIExp.Text = "MIDIExport";
             this.tpMIDIExp.UseVisualStyleBackColor = true;
@@ -2632,9 +2633,9 @@
             // cbUseMIDIExport
             // 
             this.cbUseMIDIExport.AutoSize = true;
-            this.cbUseMIDIExport.Location = new System.Drawing.Point(15, 3);
+            this.cbUseMIDIExport.Location = new System.Drawing.Point(17, 3);
             this.cbUseMIDIExport.Name = "cbUseMIDIExport";
-            this.cbUseMIDIExport.Size = new System.Drawing.Size(177, 16);
+            this.cbUseMIDIExport.Size = new System.Drawing.Size(176, 16);
             this.cbUseMIDIExport.TabIndex = 1;
             this.cbUseMIDIExport.Text = "演奏時MIDIファイルをexportする";
             this.cbUseMIDIExport.UseVisualStyleBackColor = true;
@@ -2652,16 +2653,16 @@
             this.gbMIDIExport.Controls.Add(this.btnMIDIOutputPath);
             this.gbMIDIExport.Controls.Add(this.lblOutputPath);
             this.gbMIDIExport.Controls.Add(this.tbMIDIOutputPath);
-            this.gbMIDIExport.Location = new System.Drawing.Point(7, 3);
+            this.gbMIDIExport.Location = new System.Drawing.Point(8, 3);
             this.gbMIDIExport.Name = "gbMIDIExport";
-            this.gbMIDIExport.Size = new System.Drawing.Size(433, 365);
+            this.gbMIDIExport.Size = new System.Drawing.Size(505, 365);
             this.gbMIDIExport.TabIndex = 0;
             this.gbMIDIExport.TabStop = false;
             // 
             // cbMIDIKeyOnFnum
             // 
             this.cbMIDIKeyOnFnum.AutoSize = true;
-            this.cbMIDIKeyOnFnum.Location = new System.Drawing.Point(21, 66);
+            this.cbMIDIKeyOnFnum.Location = new System.Drawing.Point(24, 66);
             this.cbMIDIKeyOnFnum.Name = "cbMIDIKeyOnFnum";
             this.cbMIDIKeyOnFnum.Size = new System.Drawing.Size(169, 16);
             this.cbMIDIKeyOnFnum.TabIndex = 23;
@@ -2671,9 +2672,9 @@
             // cbMIDIUseVOPM
             // 
             this.cbMIDIUseVOPM.AutoSize = true;
-            this.cbMIDIUseVOPM.Location = new System.Drawing.Point(21, 44);
+            this.cbMIDIUseVOPM.Location = new System.Drawing.Point(24, 44);
             this.cbMIDIUseVOPM.Name = "cbMIDIUseVOPM";
-            this.cbMIDIUseVOPM.Size = new System.Drawing.Size(196, 16);
+            this.cbMIDIUseVOPM.Size = new System.Drawing.Size(195, 16);
             this.cbMIDIUseVOPM.TabIndex = 23;
             this.cbMIDIUseVOPM.Text = "VOPMex向けコントロールを出力する";
             this.cbMIDIUseVOPM.UseVisualStyleBackColor = true;
@@ -2692,9 +2693,9 @@
             this.groupBox6.Controls.Add(this.cbMIDIYM2608Sec);
             this.groupBox6.Controls.Add(this.cbMIDIYM2203Sec);
             this.groupBox6.Controls.Add(this.cbMIDIYM2608);
-            this.groupBox6.Location = new System.Drawing.Point(20, 113);
+            this.groupBox6.Location = new System.Drawing.Point(23, 113);
             this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Size = new System.Drawing.Size(188, 152);
+            this.groupBox6.Size = new System.Drawing.Size(219, 152);
             this.groupBox6.TabIndex = 22;
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = "出力対象音源";
@@ -2704,7 +2705,7 @@
             this.cbMIDIYM2612.AutoSize = true;
             this.cbMIDIYM2612.Checked = true;
             this.cbMIDIYM2612.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbMIDIYM2612.Location = new System.Drawing.Point(6, 18);
+            this.cbMIDIYM2612.Location = new System.Drawing.Point(7, 18);
             this.cbMIDIYM2612.Name = "cbMIDIYM2612";
             this.cbMIDIYM2612.Size = new System.Drawing.Size(64, 16);
             this.cbMIDIYM2612.TabIndex = 21;
@@ -2715,7 +2716,7 @@
             // 
             this.cbMIDISN76489Sec.AutoSize = true;
             this.cbMIDISN76489Sec.Enabled = false;
-            this.cbMIDISN76489Sec.Location = new System.Drawing.Point(84, 128);
+            this.cbMIDISN76489Sec.Location = new System.Drawing.Point(98, 128);
             this.cbMIDISN76489Sec.Name = "cbMIDISN76489Sec";
             this.cbMIDISN76489Sec.Size = new System.Drawing.Size(96, 16);
             this.cbMIDISN76489Sec.TabIndex = 21;
@@ -2726,7 +2727,7 @@
             // 
             this.cbMIDIYM2612Sec.AutoSize = true;
             this.cbMIDIYM2612Sec.Enabled = false;
-            this.cbMIDIYM2612Sec.Location = new System.Drawing.Point(84, 18);
+            this.cbMIDIYM2612Sec.Location = new System.Drawing.Point(98, 18);
             this.cbMIDIYM2612Sec.Name = "cbMIDIYM2612Sec";
             this.cbMIDIYM2612Sec.Size = new System.Drawing.Size(91, 16);
             this.cbMIDIYM2612Sec.TabIndex = 21;
@@ -2737,7 +2738,7 @@
             // 
             this.cbMIDISN76489.AutoSize = true;
             this.cbMIDISN76489.Enabled = false;
-            this.cbMIDISN76489.Location = new System.Drawing.Point(6, 128);
+            this.cbMIDISN76489.Location = new System.Drawing.Point(7, 128);
             this.cbMIDISN76489.Name = "cbMIDISN76489";
             this.cbMIDISN76489.Size = new System.Drawing.Size(69, 16);
             this.cbMIDISN76489.TabIndex = 21;
@@ -2747,7 +2748,7 @@
             // cbMIDIYM2151
             // 
             this.cbMIDIYM2151.AutoSize = true;
-            this.cbMIDIYM2151.Location = new System.Drawing.Point(6, 40);
+            this.cbMIDIYM2151.Location = new System.Drawing.Point(7, 40);
             this.cbMIDIYM2151.Name = "cbMIDIYM2151";
             this.cbMIDIYM2151.Size = new System.Drawing.Size(64, 16);
             this.cbMIDIYM2151.TabIndex = 21;
@@ -2758,7 +2759,7 @@
             // 
             this.cbMIDIYM2610BSec.AutoSize = true;
             this.cbMIDIYM2610BSec.Enabled = false;
-            this.cbMIDIYM2610BSec.Location = new System.Drawing.Point(84, 106);
+            this.cbMIDIYM2610BSec.Location = new System.Drawing.Point(98, 106);
             this.cbMIDIYM2610BSec.Name = "cbMIDIYM2610BSec";
             this.cbMIDIYM2610BSec.Size = new System.Drawing.Size(99, 16);
             this.cbMIDIYM2610BSec.TabIndex = 21;
@@ -2769,7 +2770,7 @@
             // 
             this.cbMIDIYM2151Sec.AutoSize = true;
             this.cbMIDIYM2151Sec.Enabled = false;
-            this.cbMIDIYM2151Sec.Location = new System.Drawing.Point(84, 40);
+            this.cbMIDIYM2151Sec.Location = new System.Drawing.Point(98, 40);
             this.cbMIDIYM2151Sec.Name = "cbMIDIYM2151Sec";
             this.cbMIDIYM2151Sec.Size = new System.Drawing.Size(91, 16);
             this.cbMIDIYM2151Sec.TabIndex = 21;
@@ -2780,7 +2781,7 @@
             // 
             this.cbMIDIYM2610B.AutoSize = true;
             this.cbMIDIYM2610B.Enabled = false;
-            this.cbMIDIYM2610B.Location = new System.Drawing.Point(6, 106);
+            this.cbMIDIYM2610B.Location = new System.Drawing.Point(7, 106);
             this.cbMIDIYM2610B.Name = "cbMIDIYM2610B";
             this.cbMIDIYM2610B.Size = new System.Drawing.Size(72, 16);
             this.cbMIDIYM2610B.TabIndex = 21;
@@ -2791,7 +2792,7 @@
             // 
             this.cbMIDIYM2203.AutoSize = true;
             this.cbMIDIYM2203.Enabled = false;
-            this.cbMIDIYM2203.Location = new System.Drawing.Point(6, 62);
+            this.cbMIDIYM2203.Location = new System.Drawing.Point(7, 62);
             this.cbMIDIYM2203.Name = "cbMIDIYM2203";
             this.cbMIDIYM2203.Size = new System.Drawing.Size(64, 16);
             this.cbMIDIYM2203.TabIndex = 21;
@@ -2802,7 +2803,7 @@
             // 
             this.cbMIDIYM2608Sec.AutoSize = true;
             this.cbMIDIYM2608Sec.Enabled = false;
-            this.cbMIDIYM2608Sec.Location = new System.Drawing.Point(84, 84);
+            this.cbMIDIYM2608Sec.Location = new System.Drawing.Point(98, 84);
             this.cbMIDIYM2608Sec.Name = "cbMIDIYM2608Sec";
             this.cbMIDIYM2608Sec.Size = new System.Drawing.Size(91, 16);
             this.cbMIDIYM2608Sec.TabIndex = 21;
@@ -2813,7 +2814,7 @@
             // 
             this.cbMIDIYM2203Sec.AutoSize = true;
             this.cbMIDIYM2203Sec.Enabled = false;
-            this.cbMIDIYM2203Sec.Location = new System.Drawing.Point(84, 62);
+            this.cbMIDIYM2203Sec.Location = new System.Drawing.Point(98, 62);
             this.cbMIDIYM2203Sec.Name = "cbMIDIYM2203Sec";
             this.cbMIDIYM2203Sec.Size = new System.Drawing.Size(91, 16);
             this.cbMIDIYM2203Sec.TabIndex = 21;
@@ -2824,7 +2825,7 @@
             // 
             this.cbMIDIYM2608.AutoSize = true;
             this.cbMIDIYM2608.Enabled = false;
-            this.cbMIDIYM2608.Location = new System.Drawing.Point(6, 84);
+            this.cbMIDIYM2608.Location = new System.Drawing.Point(7, 84);
             this.cbMIDIYM2608.Name = "cbMIDIYM2608";
             this.cbMIDIYM2608.Size = new System.Drawing.Size(64, 16);
             this.cbMIDIYM2608.TabIndex = 21;
@@ -2835,9 +2836,9 @@
             // 
             this.cbMIDIPlayless.AutoSize = true;
             this.cbMIDIPlayless.Enabled = false;
-            this.cbMIDIPlayless.Location = new System.Drawing.Point(21, 22);
+            this.cbMIDIPlayless.Location = new System.Drawing.Point(24, 22);
             this.cbMIDIPlayless.Name = "cbMIDIPlayless";
-            this.cbMIDIPlayless.Size = new System.Drawing.Size(141, 16);
+            this.cbMIDIPlayless.Size = new System.Drawing.Size(142, 16);
             this.cbMIDIPlayless.TabIndex = 20;
             this.cbMIDIPlayless.Text = "演奏を行わずに出力する";
             this.cbMIDIPlayless.UseVisualStyleBackColor = true;
@@ -2845,9 +2846,9 @@
             // btnMIDIOutputPath
             // 
             this.btnMIDIOutputPath.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnMIDIOutputPath.Location = new System.Drawing.Point(403, 86);
+            this.btnMIDIOutputPath.Location = new System.Drawing.Point(470, 86);
             this.btnMIDIOutputPath.Name = "btnMIDIOutputPath";
-            this.btnMIDIOutputPath.Size = new System.Drawing.Size(23, 23);
+            this.btnMIDIOutputPath.Size = new System.Drawing.Size(27, 23);
             this.btnMIDIOutputPath.TabIndex = 19;
             this.btnMIDIOutputPath.Text = "...";
             this.btnMIDIOutputPath.UseVisualStyleBackColor = true;
@@ -2856,7 +2857,7 @@
             // lblOutputPath
             // 
             this.lblOutputPath.AutoSize = true;
-            this.lblOutputPath.Location = new System.Drawing.Point(19, 91);
+            this.lblOutputPath.Location = new System.Drawing.Point(22, 91);
             this.lblOutputPath.Name = "lblOutputPath";
             this.lblOutputPath.Size = new System.Drawing.Size(52, 12);
             this.lblOutputPath.TabIndex = 17;
@@ -2866,9 +2867,9 @@
             // 
             this.tbMIDIOutputPath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbMIDIOutputPath.Location = new System.Drawing.Point(77, 88);
+            this.tbMIDIOutputPath.Location = new System.Drawing.Point(90, 88);
             this.tbMIDIOutputPath.Name = "tbMIDIOutputPath";
-            this.tbMIDIOutputPath.Size = new System.Drawing.Size(320, 19);
+            this.tbMIDIOutputPath.Size = new System.Drawing.Size(373, 19);
             this.tbMIDIOutputPath.TabIndex = 18;
             // 
             // tpMIDIKBD
@@ -2877,7 +2878,7 @@
             this.tpMIDIKBD.Controls.Add(this.gbMIDIKeyboard);
             this.tpMIDIKBD.Location = new System.Drawing.Point(4, 22);
             this.tpMIDIKBD.Name = "tpMIDIKBD";
-            this.tpMIDIKBD.Size = new System.Drawing.Size(443, 371);
+            this.tpMIDIKBD.Size = new System.Drawing.Size(518, 371);
             this.tpMIDIKBD.TabIndex = 5;
             this.tpMIDIKBD.Text = "MIDI鍵盤";
             this.tpMIDIKBD.UseVisualStyleBackColor = true;
@@ -2885,9 +2886,9 @@
             // cbUseMIDIKeyboard
             // 
             this.cbUseMIDIKeyboard.AutoSize = true;
-            this.cbUseMIDIKeyboard.Location = new System.Drawing.Point(11, 4);
+            this.cbUseMIDIKeyboard.Location = new System.Drawing.Point(13, 4);
             this.cbUseMIDIKeyboard.Name = "cbUseMIDIKeyboard";
-            this.cbUseMIDIKeyboard.Size = new System.Drawing.Size(124, 16);
+            this.cbUseMIDIKeyboard.Size = new System.Drawing.Size(125, 16);
             this.cbUseMIDIKeyboard.TabIndex = 1;
             this.cbUseMIDIKeyboard.Text = "MIDIキーボードを使う";
             this.cbUseMIDIKeyboard.UseVisualStyleBackColor = true;
@@ -2927,203 +2928,203 @@
             this.gbMIDIKeyboard.Enabled = false;
             this.gbMIDIKeyboard.Location = new System.Drawing.Point(3, 6);
             this.gbMIDIKeyboard.Name = "gbMIDIKeyboard";
-            this.gbMIDIKeyboard.Size = new System.Drawing.Size(437, 362);
+            this.gbMIDIKeyboard.Size = new System.Drawing.Size(510, 362);
             this.gbMIDIKeyboard.TabIndex = 0;
             this.gbMIDIKeyboard.TabStop = false;
             // 
             // pictureBox8
             // 
             this.pictureBox8.Image = global::mml2vgmIDE.Properties.Resources.ccNext;
-            this.pictureBox8.Location = new System.Drawing.Point(371, 257);
+            this.pictureBox8.Location = new System.Drawing.Point(433, 257);
             this.pictureBox8.Name = "pictureBox8";
-            this.pictureBox8.Size = new System.Drawing.Size(16, 16);
+            this.pictureBox8.Size = new System.Drawing.Size(19, 16);
             this.pictureBox8.TabIndex = 4;
             this.pictureBox8.TabStop = false;
             // 
             // pictureBox7
             // 
             this.pictureBox7.Image = global::mml2vgmIDE.Properties.Resources.ccFast;
-            this.pictureBox7.Location = new System.Drawing.Point(261, 257);
+            this.pictureBox7.Location = new System.Drawing.Point(304, 257);
             this.pictureBox7.Name = "pictureBox7";
-            this.pictureBox7.Size = new System.Drawing.Size(16, 16);
+            this.pictureBox7.Size = new System.Drawing.Size(19, 16);
             this.pictureBox7.TabIndex = 4;
             this.pictureBox7.TabStop = false;
             // 
             // pictureBox6
             // 
             this.pictureBox6.Image = global::mml2vgmIDE.Properties.Resources.ccPlay;
-            this.pictureBox6.Location = new System.Drawing.Point(152, 258);
+            this.pictureBox6.Location = new System.Drawing.Point(177, 258);
             this.pictureBox6.Name = "pictureBox6";
-            this.pictureBox6.Size = new System.Drawing.Size(16, 16);
+            this.pictureBox6.Size = new System.Drawing.Size(19, 16);
             this.pictureBox6.TabIndex = 4;
             this.pictureBox6.TabStop = false;
             // 
             // pictureBox5
             // 
             this.pictureBox5.Image = global::mml2vgmIDE.Properties.Resources.ccSlow;
-            this.pictureBox5.Location = new System.Drawing.Point(42, 258);
+            this.pictureBox5.Location = new System.Drawing.Point(49, 258);
             this.pictureBox5.Name = "pictureBox5";
-            this.pictureBox5.Size = new System.Drawing.Size(16, 16);
+            this.pictureBox5.Size = new System.Drawing.Size(19, 16);
             this.pictureBox5.TabIndex = 4;
             this.pictureBox5.TabStop = false;
             // 
             // pictureBox4
             // 
             this.pictureBox4.Image = global::mml2vgmIDE.Properties.Resources.ccStop;
-            this.pictureBox4.Location = new System.Drawing.Point(42, 234);
+            this.pictureBox4.Location = new System.Drawing.Point(49, 234);
             this.pictureBox4.Name = "pictureBox4";
-            this.pictureBox4.Size = new System.Drawing.Size(16, 16);
+            this.pictureBox4.Size = new System.Drawing.Size(19, 16);
             this.pictureBox4.TabIndex = 4;
             this.pictureBox4.TabStop = false;
             // 
             // pictureBox3
             // 
             this.pictureBox3.Image = global::mml2vgmIDE.Properties.Resources.ccPause;
-            this.pictureBox3.Location = new System.Drawing.Point(152, 234);
+            this.pictureBox3.Location = new System.Drawing.Point(177, 234);
             this.pictureBox3.Name = "pictureBox3";
-            this.pictureBox3.Size = new System.Drawing.Size(16, 16);
+            this.pictureBox3.Size = new System.Drawing.Size(19, 16);
             this.pictureBox3.TabIndex = 4;
             this.pictureBox3.TabStop = false;
             // 
             // pictureBox2
             // 
             this.pictureBox2.Image = global::mml2vgmIDE.Properties.Resources.ccPrevious;
-            this.pictureBox2.Location = new System.Drawing.Point(371, 234);
+            this.pictureBox2.Location = new System.Drawing.Point(433, 234);
             this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(16, 16);
+            this.pictureBox2.Size = new System.Drawing.Size(19, 16);
             this.pictureBox2.TabIndex = 4;
             this.pictureBox2.TabStop = false;
             // 
             // pictureBox1
             // 
             this.pictureBox1.Image = global::mml2vgmIDE.Properties.Resources.ccFadeout;
-            this.pictureBox1.Location = new System.Drawing.Point(261, 234);
+            this.pictureBox1.Location = new System.Drawing.Point(304, 234);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(16, 16);
+            this.pictureBox1.Size = new System.Drawing.Size(19, 16);
             this.pictureBox1.TabIndex = 4;
             this.pictureBox1.TabStop = false;
             // 
             // tbCCFadeout
             // 
-            this.tbCCFadeout.Location = new System.Drawing.Point(225, 232);
+            this.tbCCFadeout.Location = new System.Drawing.Point(262, 232);
             this.tbCCFadeout.MaxLength = 3;
             this.tbCCFadeout.Name = "tbCCFadeout";
-            this.tbCCFadeout.Size = new System.Drawing.Size(30, 19);
+            this.tbCCFadeout.Size = new System.Drawing.Size(34, 19);
             this.tbCCFadeout.TabIndex = 12;
             // 
             // tbCCPause
             // 
-            this.tbCCPause.Location = new System.Drawing.Point(116, 232);
+            this.tbCCPause.Location = new System.Drawing.Point(135, 232);
             this.tbCCPause.MaxLength = 3;
             this.tbCCPause.Name = "tbCCPause";
-            this.tbCCPause.Size = new System.Drawing.Size(30, 19);
+            this.tbCCPause.Size = new System.Drawing.Size(34, 19);
             this.tbCCPause.TabIndex = 11;
             // 
             // tbCCSlow
             // 
-            this.tbCCSlow.Location = new System.Drawing.Point(6, 257);
+            this.tbCCSlow.Location = new System.Drawing.Point(7, 257);
             this.tbCCSlow.MaxLength = 3;
             this.tbCCSlow.Name = "tbCCSlow";
-            this.tbCCSlow.Size = new System.Drawing.Size(30, 19);
+            this.tbCCSlow.Size = new System.Drawing.Size(34, 19);
             this.tbCCSlow.TabIndex = 14;
             // 
             // tbCCPrevious
             // 
-            this.tbCCPrevious.Location = new System.Drawing.Point(335, 232);
+            this.tbCCPrevious.Location = new System.Drawing.Point(391, 232);
             this.tbCCPrevious.MaxLength = 3;
             this.tbCCPrevious.Name = "tbCCPrevious";
-            this.tbCCPrevious.Size = new System.Drawing.Size(30, 19);
+            this.tbCCPrevious.Size = new System.Drawing.Size(34, 19);
             this.tbCCPrevious.TabIndex = 13;
             // 
             // tbCCNext
             // 
-            this.tbCCNext.Location = new System.Drawing.Point(335, 257);
+            this.tbCCNext.Location = new System.Drawing.Point(391, 257);
             this.tbCCNext.MaxLength = 3;
             this.tbCCNext.Name = "tbCCNext";
-            this.tbCCNext.Size = new System.Drawing.Size(30, 19);
+            this.tbCCNext.Size = new System.Drawing.Size(34, 19);
             this.tbCCNext.TabIndex = 17;
             // 
             // tbCCFast
             // 
-            this.tbCCFast.Location = new System.Drawing.Point(225, 257);
+            this.tbCCFast.Location = new System.Drawing.Point(262, 257);
             this.tbCCFast.MaxLength = 3;
             this.tbCCFast.Name = "tbCCFast";
-            this.tbCCFast.Size = new System.Drawing.Size(30, 19);
+            this.tbCCFast.Size = new System.Drawing.Size(34, 19);
             this.tbCCFast.TabIndex = 16;
             // 
             // tbCCStop
             // 
-            this.tbCCStop.Location = new System.Drawing.Point(6, 232);
+            this.tbCCStop.Location = new System.Drawing.Point(7, 232);
             this.tbCCStop.MaxLength = 3;
             this.tbCCStop.Name = "tbCCStop";
-            this.tbCCStop.Size = new System.Drawing.Size(30, 19);
+            this.tbCCStop.Size = new System.Drawing.Size(34, 19);
             this.tbCCStop.TabIndex = 10;
             // 
             // tbCCPlay
             // 
-            this.tbCCPlay.Location = new System.Drawing.Point(116, 257);
+            this.tbCCPlay.Location = new System.Drawing.Point(135, 257);
             this.tbCCPlay.MaxLength = 3;
             this.tbCCPlay.Name = "tbCCPlay";
-            this.tbCCPlay.Size = new System.Drawing.Size(30, 19);
+            this.tbCCPlay.Size = new System.Drawing.Size(34, 19);
             this.tbCCPlay.TabIndex = 15;
             // 
             // tbCCCopyLog
             // 
-            this.tbCCCopyLog.Location = new System.Drawing.Point(6, 207);
+            this.tbCCCopyLog.Location = new System.Drawing.Point(7, 207);
             this.tbCCCopyLog.MaxLength = 3;
             this.tbCCCopyLog.Name = "tbCCCopyLog";
-            this.tbCCCopyLog.Size = new System.Drawing.Size(30, 19);
+            this.tbCCCopyLog.Size = new System.Drawing.Size(34, 19);
             this.tbCCCopyLog.TabIndex = 8;
             // 
             // label17
             // 
             this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(42, 210);
+            this.label17.Location = new System.Drawing.Point(49, 210);
             this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(230, 12);
+            this.label17.Size = new System.Drawing.Size(232, 12);
             this.label17.TabIndex = 9;
             this.label17.Text = "MONOモード時、選択ログをクリップボードに設定";
             // 
             // tbCCDelLog
             // 
-            this.tbCCDelLog.Location = new System.Drawing.Point(6, 182);
+            this.tbCCDelLog.Location = new System.Drawing.Point(7, 182);
             this.tbCCDelLog.MaxLength = 3;
             this.tbCCDelLog.Name = "tbCCDelLog";
-            this.tbCCDelLog.Size = new System.Drawing.Size(30, 19);
+            this.tbCCDelLog.Size = new System.Drawing.Size(34, 19);
             this.tbCCDelLog.TabIndex = 6;
             // 
             // label15
             // 
             this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(42, 185);
+            this.label15.Location = new System.Drawing.Point(49, 185);
             this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(117, 12);
+            this.label15.Size = new System.Drawing.Size(116, 12);
             this.label15.TabIndex = 7;
             this.label15.Text = "直近のログをひとつ削除";
             // 
             // tbCCChCopy
             // 
-            this.tbCCChCopy.Location = new System.Drawing.Point(6, 157);
+            this.tbCCChCopy.Location = new System.Drawing.Point(7, 157);
             this.tbCCChCopy.MaxLength = 3;
             this.tbCCChCopy.Name = "tbCCChCopy";
-            this.tbCCChCopy.Size = new System.Drawing.Size(30, 19);
+            this.tbCCChCopy.Size = new System.Drawing.Size(34, 19);
             this.tbCCChCopy.TabIndex = 4;
             // 
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(6, 142);
+            this.label8.Location = new System.Drawing.Point(7, 142);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(159, 12);
+            this.label8.Size = new System.Drawing.Size(160, 12);
             this.label8.TabIndex = 3;
             this.label8.Text = "CC(Control Change)による操作";
             // 
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(42, 160);
+            this.label9.Location = new System.Drawing.Point(49, 160);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(261, 12);
+            this.label9.Size = new System.Drawing.Size(263, 12);
             this.label9.TabIndex = 5;
             this.label9.Text = "1Chの音色を全てのチャンネルにコピー(選択状況無視)";
             // 
@@ -3133,9 +3134,9 @@
             this.gbUseChannel.Controls.Add(this.rbPOLY);
             this.gbUseChannel.Controls.Add(this.groupBox7);
             this.gbUseChannel.Controls.Add(this.groupBox2);
-            this.gbUseChannel.Location = new System.Drawing.Point(6, 44);
+            this.gbUseChannel.Location = new System.Drawing.Point(7, 44);
             this.gbUseChannel.Name = "gbUseChannel";
-            this.gbUseChannel.Size = new System.Drawing.Size(425, 86);
+            this.gbUseChannel.Size = new System.Drawing.Size(496, 86);
             this.gbUseChannel.TabIndex = 2;
             this.gbUseChannel.TabStop = false;
             this.gbUseChannel.Text = "use channel";
@@ -3144,9 +3145,9 @@
             // 
             this.rbMONO.AutoSize = true;
             this.rbMONO.Checked = true;
-            this.rbMONO.Location = new System.Drawing.Point(12, 17);
+            this.rbMONO.Location = new System.Drawing.Point(14, 17);
             this.rbMONO.Name = "rbMONO";
-            this.rbMONO.Size = new System.Drawing.Size(56, 16);
+            this.rbMONO.Size = new System.Drawing.Size(58, 16);
             this.rbMONO.TabIndex = 1;
             this.rbMONO.TabStop = true;
             this.rbMONO.Text = "MONO";
@@ -3155,9 +3156,9 @@
             // rbPOLY
             // 
             this.rbPOLY.AutoSize = true;
-            this.rbPOLY.Location = new System.Drawing.Point(215, 17);
+            this.rbPOLY.Location = new System.Drawing.Point(251, 17);
             this.rbPOLY.Name = "rbPOLY";
-            this.rbPOLY.Size = new System.Drawing.Size(51, 16);
+            this.rbPOLY.Size = new System.Drawing.Size(52, 16);
             this.rbPOLY.TabIndex = 3;
             this.rbPOLY.Text = "POLY";
             this.rbPOLY.UseVisualStyleBackColor = true;
@@ -3170,16 +3171,16 @@
             this.groupBox7.Controls.Add(this.rbFM2);
             this.groupBox7.Controls.Add(this.rbFM4);
             this.groupBox7.Controls.Add(this.rbFM1);
-            this.groupBox7.Location = new System.Drawing.Point(6, 18);
+            this.groupBox7.Location = new System.Drawing.Point(7, 18);
             this.groupBox7.Name = "groupBox7";
-            this.groupBox7.Size = new System.Drawing.Size(197, 62);
+            this.groupBox7.Size = new System.Drawing.Size(230, 62);
             this.groupBox7.TabIndex = 0;
             this.groupBox7.TabStop = false;
             // 
             // rbFM6
             // 
             this.rbFM6.AutoSize = true;
-            this.rbFM6.Location = new System.Drawing.Point(108, 40);
+            this.rbFM6.Location = new System.Drawing.Point(126, 40);
             this.rbFM6.Name = "rbFM6";
             this.rbFM6.Size = new System.Drawing.Size(45, 16);
             this.rbFM6.TabIndex = 5;
@@ -3189,7 +3190,7 @@
             // rbFM3
             // 
             this.rbFM3.AutoSize = true;
-            this.rbFM3.Location = new System.Drawing.Point(108, 18);
+            this.rbFM3.Location = new System.Drawing.Point(126, 18);
             this.rbFM3.Name = "rbFM3";
             this.rbFM3.Size = new System.Drawing.Size(45, 16);
             this.rbFM3.TabIndex = 2;
@@ -3199,7 +3200,7 @@
             // rbFM5
             // 
             this.rbFM5.AutoSize = true;
-            this.rbFM5.Location = new System.Drawing.Point(57, 40);
+            this.rbFM5.Location = new System.Drawing.Point(66, 40);
             this.rbFM5.Name = "rbFM5";
             this.rbFM5.Size = new System.Drawing.Size(45, 16);
             this.rbFM5.TabIndex = 4;
@@ -3209,7 +3210,7 @@
             // rbFM2
             // 
             this.rbFM2.AutoSize = true;
-            this.rbFM2.Location = new System.Drawing.Point(57, 18);
+            this.rbFM2.Location = new System.Drawing.Point(66, 18);
             this.rbFM2.Name = "rbFM2";
             this.rbFM2.Size = new System.Drawing.Size(45, 16);
             this.rbFM2.TabIndex = 1;
@@ -3219,7 +3220,7 @@
             // rbFM4
             // 
             this.rbFM4.AutoSize = true;
-            this.rbFM4.Location = new System.Drawing.Point(6, 40);
+            this.rbFM4.Location = new System.Drawing.Point(7, 40);
             this.rbFM4.Name = "rbFM4";
             this.rbFM4.Size = new System.Drawing.Size(45, 16);
             this.rbFM4.TabIndex = 3;
@@ -3230,7 +3231,7 @@
             // 
             this.rbFM1.AutoSize = true;
             this.rbFM1.Checked = true;
-            this.rbFM1.Location = new System.Drawing.Point(6, 18);
+            this.rbFM1.Location = new System.Drawing.Point(7, 18);
             this.rbFM1.Name = "rbFM1";
             this.rbFM1.Size = new System.Drawing.Size(45, 16);
             this.rbFM1.TabIndex = 0;
@@ -3246,9 +3247,9 @@
             this.groupBox2.Controls.Add(this.cbFM5);
             this.groupBox2.Controls.Add(this.cbFM3);
             this.groupBox2.Controls.Add(this.cbFM4);
-            this.groupBox2.Location = new System.Drawing.Point(209, 18);
+            this.groupBox2.Location = new System.Drawing.Point(244, 18);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(210, 62);
+            this.groupBox2.Size = new System.Drawing.Size(245, 62);
             this.groupBox2.TabIndex = 2;
             this.groupBox2.TabStop = false;
             // 
@@ -3257,7 +3258,7 @@
             this.cbFM1.AutoSize = true;
             this.cbFM1.Checked = true;
             this.cbFM1.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbFM1.Location = new System.Drawing.Point(6, 18);
+            this.cbFM1.Location = new System.Drawing.Point(7, 18);
             this.cbFM1.Name = "cbFM1";
             this.cbFM1.Size = new System.Drawing.Size(46, 16);
             this.cbFM1.TabIndex = 0;
@@ -3269,7 +3270,7 @@
             this.cbFM6.AutoSize = true;
             this.cbFM6.Checked = true;
             this.cbFM6.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbFM6.Location = new System.Drawing.Point(110, 40);
+            this.cbFM6.Location = new System.Drawing.Point(128, 40);
             this.cbFM6.Name = "cbFM6";
             this.cbFM6.Size = new System.Drawing.Size(46, 16);
             this.cbFM6.TabIndex = 5;
@@ -3281,7 +3282,7 @@
             this.cbFM2.AutoSize = true;
             this.cbFM2.Checked = true;
             this.cbFM2.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbFM2.Location = new System.Drawing.Point(58, 18);
+            this.cbFM2.Location = new System.Drawing.Point(68, 18);
             this.cbFM2.Name = "cbFM2";
             this.cbFM2.Size = new System.Drawing.Size(46, 16);
             this.cbFM2.TabIndex = 1;
@@ -3293,7 +3294,7 @@
             this.cbFM5.AutoSize = true;
             this.cbFM5.Checked = true;
             this.cbFM5.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbFM5.Location = new System.Drawing.Point(58, 40);
+            this.cbFM5.Location = new System.Drawing.Point(68, 40);
             this.cbFM5.Name = "cbFM5";
             this.cbFM5.Size = new System.Drawing.Size(46, 16);
             this.cbFM5.TabIndex = 4;
@@ -3305,7 +3306,7 @@
             this.cbFM3.AutoSize = true;
             this.cbFM3.Checked = true;
             this.cbFM3.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbFM3.Location = new System.Drawing.Point(110, 18);
+            this.cbFM3.Location = new System.Drawing.Point(128, 18);
             this.cbFM3.Name = "cbFM3";
             this.cbFM3.Size = new System.Drawing.Size(46, 16);
             this.cbFM3.TabIndex = 2;
@@ -3317,7 +3318,7 @@
             this.cbFM4.AutoSize = true;
             this.cbFM4.Checked = true;
             this.cbFM4.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbFM4.Location = new System.Drawing.Point(6, 40);
+            this.cbFM4.Location = new System.Drawing.Point(7, 40);
             this.cbFM4.Name = "cbFM4";
             this.cbFM4.Size = new System.Drawing.Size(46, 16);
             this.cbFM4.TabIndex = 3;
@@ -3330,15 +3331,15 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.cmbMIDIIN.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbMIDIIN.FormattingEnabled = true;
-            this.cmbMIDIIN.Location = new System.Drawing.Point(72, 18);
+            this.cmbMIDIIN.Location = new System.Drawing.Point(84, 18);
             this.cmbMIDIIN.Name = "cmbMIDIIN";
-            this.cmbMIDIIN.Size = new System.Drawing.Size(359, 20);
+            this.cmbMIDIIN.Size = new System.Drawing.Size(418, 20);
             this.cmbMIDIIN.TabIndex = 1;
             // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(6, 21);
+            this.label5.Location = new System.Drawing.Point(7, 21);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(43, 12);
             this.label5.TabIndex = 0;
@@ -3359,7 +3360,7 @@
             this.tpKeyBoard.Controls.Add(this.cbNextWin);
             this.tpKeyBoard.Location = new System.Drawing.Point(4, 22);
             this.tpKeyBoard.Name = "tpKeyBoard";
-            this.tpKeyBoard.Size = new System.Drawing.Size(443, 371);
+            this.tpKeyBoard.Size = new System.Drawing.Size(518, 371);
             this.tpKeyBoard.TabIndex = 13;
             this.tpKeyBoard.Text = "キーボード";
             this.tpKeyBoard.UseVisualStyleBackColor = true;
@@ -3367,9 +3368,9 @@
             // cbUseKeyBoardHook
             // 
             this.cbUseKeyBoardHook.AutoSize = true;
-            this.cbUseKeyBoardHook.Location = new System.Drawing.Point(18, 3);
+            this.cbUseKeyBoardHook.Location = new System.Drawing.Point(21, 3);
             this.cbUseKeyBoardHook.Name = "cbUseKeyBoardHook";
-            this.cbUseKeyBoardHook.Size = new System.Drawing.Size(124, 16);
+            this.cbUseKeyBoardHook.Size = new System.Drawing.Size(125, 16);
             this.cbUseKeyBoardHook.TabIndex = 27;
             this.cbUseKeyBoardHook.Text = "キーボードフックを使う";
             this.cbUseKeyBoardHook.UseVisualStyleBackColor = true;
@@ -3448,9 +3449,9 @@
             this.gbUseKeyBoardHook.Controls.Add(this.cbPlayShift);
             this.gbUseKeyBoardHook.Controls.Add(this.cbNextShift);
             this.gbUseKeyBoardHook.Controls.Add(this.cbFastShift);
-            this.gbUseKeyBoardHook.Location = new System.Drawing.Point(7, 3);
+            this.gbUseKeyBoardHook.Location = new System.Drawing.Point(8, 3);
             this.gbUseKeyBoardHook.Name = "gbUseKeyBoardHook";
-            this.gbUseKeyBoardHook.Size = new System.Drawing.Size(433, 305);
+            this.gbUseKeyBoardHook.Size = new System.Drawing.Size(505, 305);
             this.gbUseKeyBoardHook.TabIndex = 28;
             this.gbUseKeyBoardHook.TabStop = false;
             // 
@@ -3458,7 +3459,7 @@
             // 
             this.lblKeyBoardHookNotice.AutoSize = true;
             this.lblKeyBoardHookNotice.ForeColor = System.Drawing.Color.Red;
-            this.lblKeyBoardHookNotice.Location = new System.Drawing.Point(6, 277);
+            this.lblKeyBoardHookNotice.Location = new System.Drawing.Point(7, 277);
             this.lblKeyBoardHookNotice.Name = "lblKeyBoardHookNotice";
             this.lblKeyBoardHookNotice.Size = new System.Drawing.Size(169, 12);
             this.lblKeyBoardHookNotice.TabIndex = 30;
@@ -3468,9 +3469,9 @@
             // btNextClr
             // 
             this.btNextClr.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btNextClr.Location = new System.Drawing.Point(391, 243);
+            this.btNextClr.Location = new System.Drawing.Point(456, 243);
             this.btNextClr.Name = "btNextClr";
-            this.btNextClr.Size = new System.Drawing.Size(36, 23);
+            this.btNextClr.Size = new System.Drawing.Size(42, 23);
             this.btNextClr.TabIndex = 29;
             this.btNextClr.Text = "Clr";
             this.btNextClr.UseVisualStyleBackColor = true;
@@ -3479,9 +3480,9 @@
             // btPrevClr
             // 
             this.btPrevClr.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btPrevClr.Location = new System.Drawing.Point(391, 127);
+            this.btPrevClr.Location = new System.Drawing.Point(456, 127);
             this.btPrevClr.Name = "btPrevClr";
-            this.btPrevClr.Size = new System.Drawing.Size(36, 23);
+            this.btPrevClr.Size = new System.Drawing.Size(42, 23);
             this.btPrevClr.TabIndex = 29;
             this.btPrevClr.Text = "Clr";
             this.btPrevClr.UseVisualStyleBackColor = true;
@@ -3490,9 +3491,9 @@
             // btPlayClr
             // 
             this.btPlayClr.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btPlayClr.Location = new System.Drawing.Point(391, 185);
+            this.btPlayClr.Location = new System.Drawing.Point(456, 185);
             this.btPlayClr.Name = "btPlayClr";
-            this.btPlayClr.Size = new System.Drawing.Size(36, 23);
+            this.btPlayClr.Size = new System.Drawing.Size(42, 23);
             this.btPlayClr.TabIndex = 29;
             this.btPlayClr.Text = "Clr";
             this.btPlayClr.UseVisualStyleBackColor = true;
@@ -3501,9 +3502,9 @@
             // btPauseClr
             // 
             this.btPauseClr.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btPauseClr.Location = new System.Drawing.Point(391, 69);
+            this.btPauseClr.Location = new System.Drawing.Point(456, 69);
             this.btPauseClr.Name = "btPauseClr";
-            this.btPauseClr.Size = new System.Drawing.Size(36, 23);
+            this.btPauseClr.Size = new System.Drawing.Size(42, 23);
             this.btPauseClr.TabIndex = 29;
             this.btPauseClr.Text = "Clr";
             this.btPauseClr.UseVisualStyleBackColor = true;
@@ -3512,9 +3513,9 @@
             // btFastClr
             // 
             this.btFastClr.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btFastClr.Location = new System.Drawing.Point(391, 214);
+            this.btFastClr.Location = new System.Drawing.Point(456, 214);
             this.btFastClr.Name = "btFastClr";
-            this.btFastClr.Size = new System.Drawing.Size(36, 23);
+            this.btFastClr.Size = new System.Drawing.Size(42, 23);
             this.btFastClr.TabIndex = 29;
             this.btFastClr.Text = "Clr";
             this.btFastClr.UseVisualStyleBackColor = true;
@@ -3523,9 +3524,9 @@
             // btFadeoutClr
             // 
             this.btFadeoutClr.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btFadeoutClr.Location = new System.Drawing.Point(391, 98);
+            this.btFadeoutClr.Location = new System.Drawing.Point(456, 98);
             this.btFadeoutClr.Name = "btFadeoutClr";
-            this.btFadeoutClr.Size = new System.Drawing.Size(36, 23);
+            this.btFadeoutClr.Size = new System.Drawing.Size(42, 23);
             this.btFadeoutClr.TabIndex = 29;
             this.btFadeoutClr.Text = "Clr";
             this.btFadeoutClr.UseVisualStyleBackColor = true;
@@ -3534,9 +3535,9 @@
             // btSlowClr
             // 
             this.btSlowClr.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btSlowClr.Location = new System.Drawing.Point(391, 156);
+            this.btSlowClr.Location = new System.Drawing.Point(456, 156);
             this.btSlowClr.Name = "btSlowClr";
-            this.btSlowClr.Size = new System.Drawing.Size(36, 23);
+            this.btSlowClr.Size = new System.Drawing.Size(42, 23);
             this.btSlowClr.TabIndex = 29;
             this.btSlowClr.Text = "Clr";
             this.btSlowClr.UseVisualStyleBackColor = true;
@@ -3545,9 +3546,9 @@
             // btStopClr
             // 
             this.btStopClr.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btStopClr.Location = new System.Drawing.Point(391, 40);
+            this.btStopClr.Location = new System.Drawing.Point(456, 40);
             this.btStopClr.Name = "btStopClr";
-            this.btStopClr.Size = new System.Drawing.Size(36, 23);
+            this.btStopClr.Size = new System.Drawing.Size(42, 23);
             this.btStopClr.TabIndex = 29;
             this.btStopClr.Text = "Clr";
             this.btStopClr.UseVisualStyleBackColor = true;
@@ -3556,9 +3557,9 @@
             // btNextSet
             // 
             this.btNextSet.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btNextSet.Location = new System.Drawing.Point(349, 243);
+            this.btNextSet.Location = new System.Drawing.Point(407, 243);
             this.btNextSet.Name = "btNextSet";
-            this.btNextSet.Size = new System.Drawing.Size(36, 23);
+            this.btNextSet.Size = new System.Drawing.Size(42, 23);
             this.btNextSet.TabIndex = 29;
             this.btNextSet.Text = "Set";
             this.btNextSet.UseVisualStyleBackColor = true;
@@ -3567,9 +3568,9 @@
             // btPrevSet
             // 
             this.btPrevSet.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btPrevSet.Location = new System.Drawing.Point(349, 127);
+            this.btPrevSet.Location = new System.Drawing.Point(407, 127);
             this.btPrevSet.Name = "btPrevSet";
-            this.btPrevSet.Size = new System.Drawing.Size(36, 23);
+            this.btPrevSet.Size = new System.Drawing.Size(42, 23);
             this.btPrevSet.TabIndex = 29;
             this.btPrevSet.Text = "Set";
             this.btPrevSet.UseVisualStyleBackColor = true;
@@ -3578,9 +3579,9 @@
             // btPlaySet
             // 
             this.btPlaySet.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btPlaySet.Location = new System.Drawing.Point(349, 185);
+            this.btPlaySet.Location = new System.Drawing.Point(407, 185);
             this.btPlaySet.Name = "btPlaySet";
-            this.btPlaySet.Size = new System.Drawing.Size(36, 23);
+            this.btPlaySet.Size = new System.Drawing.Size(42, 23);
             this.btPlaySet.TabIndex = 29;
             this.btPlaySet.Text = "Set";
             this.btPlaySet.UseVisualStyleBackColor = true;
@@ -3589,9 +3590,9 @@
             // btPauseSet
             // 
             this.btPauseSet.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btPauseSet.Location = new System.Drawing.Point(349, 69);
+            this.btPauseSet.Location = new System.Drawing.Point(407, 69);
             this.btPauseSet.Name = "btPauseSet";
-            this.btPauseSet.Size = new System.Drawing.Size(36, 23);
+            this.btPauseSet.Size = new System.Drawing.Size(42, 23);
             this.btPauseSet.TabIndex = 29;
             this.btPauseSet.Text = "Set";
             this.btPauseSet.UseVisualStyleBackColor = true;
@@ -3600,9 +3601,9 @@
             // btFastSet
             // 
             this.btFastSet.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btFastSet.Location = new System.Drawing.Point(349, 214);
+            this.btFastSet.Location = new System.Drawing.Point(407, 214);
             this.btFastSet.Name = "btFastSet";
-            this.btFastSet.Size = new System.Drawing.Size(36, 23);
+            this.btFastSet.Size = new System.Drawing.Size(42, 23);
             this.btFastSet.TabIndex = 29;
             this.btFastSet.Text = "Set";
             this.btFastSet.UseVisualStyleBackColor = true;
@@ -3611,9 +3612,9 @@
             // btFadeoutSet
             // 
             this.btFadeoutSet.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btFadeoutSet.Location = new System.Drawing.Point(349, 98);
+            this.btFadeoutSet.Location = new System.Drawing.Point(407, 98);
             this.btFadeoutSet.Name = "btFadeoutSet";
-            this.btFadeoutSet.Size = new System.Drawing.Size(36, 23);
+            this.btFadeoutSet.Size = new System.Drawing.Size(42, 23);
             this.btFadeoutSet.TabIndex = 29;
             this.btFadeoutSet.Text = "Set";
             this.btFadeoutSet.UseVisualStyleBackColor = true;
@@ -3622,9 +3623,9 @@
             // btSlowSet
             // 
             this.btSlowSet.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btSlowSet.Location = new System.Drawing.Point(349, 156);
+            this.btSlowSet.Location = new System.Drawing.Point(407, 156);
             this.btSlowSet.Name = "btSlowSet";
-            this.btSlowSet.Size = new System.Drawing.Size(36, 23);
+            this.btSlowSet.Size = new System.Drawing.Size(42, 23);
             this.btSlowSet.TabIndex = 29;
             this.btSlowSet.Text = "Set";
             this.btSlowSet.UseVisualStyleBackColor = true;
@@ -3633,9 +3634,9 @@
             // btStopSet
             // 
             this.btStopSet.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btStopSet.Location = new System.Drawing.Point(349, 40);
+            this.btStopSet.Location = new System.Drawing.Point(407, 40);
             this.btStopSet.Name = "btStopSet";
-            this.btStopSet.Size = new System.Drawing.Size(36, 23);
+            this.btStopSet.Size = new System.Drawing.Size(42, 23);
             this.btStopSet.TabIndex = 29;
             this.btStopSet.Text = "Set";
             this.btStopSet.UseVisualStyleBackColor = true;
@@ -3644,16 +3645,16 @@
             // label50
             // 
             this.label50.AutoSize = true;
-            this.label50.Location = new System.Drawing.Point(240, 24);
+            this.label50.Location = new System.Drawing.Point(280, 24);
             this.label50.Name = "label50";
-            this.label50.Size = new System.Drawing.Size(24, 12);
+            this.label50.Size = new System.Drawing.Size(23, 12);
             this.label50.TabIndex = 28;
             this.label50.Text = "Key";
             // 
             // lblNextKey
             // 
             this.lblNextKey.AutoSize = true;
-            this.lblNextKey.Location = new System.Drawing.Point(240, 248);
+            this.lblNextKey.Location = new System.Drawing.Point(280, 248);
             this.lblNextKey.Name = "lblNextKey";
             this.lblNextKey.Size = new System.Drawing.Size(39, 12);
             this.lblNextKey.TabIndex = 28;
@@ -3662,7 +3663,7 @@
             // lblFastKey
             // 
             this.lblFastKey.AutoSize = true;
-            this.lblFastKey.Location = new System.Drawing.Point(240, 219);
+            this.lblFastKey.Location = new System.Drawing.Point(280, 219);
             this.lblFastKey.Name = "lblFastKey";
             this.lblFastKey.Size = new System.Drawing.Size(39, 12);
             this.lblFastKey.TabIndex = 28;
@@ -3671,7 +3672,7 @@
             // lblPlayKey
             // 
             this.lblPlayKey.AutoSize = true;
-            this.lblPlayKey.Location = new System.Drawing.Point(240, 190);
+            this.lblPlayKey.Location = new System.Drawing.Point(280, 190);
             this.lblPlayKey.Name = "lblPlayKey";
             this.lblPlayKey.Size = new System.Drawing.Size(39, 12);
             this.lblPlayKey.TabIndex = 28;
@@ -3680,7 +3681,7 @@
             // lblSlowKey
             // 
             this.lblSlowKey.AutoSize = true;
-            this.lblSlowKey.Location = new System.Drawing.Point(240, 161);
+            this.lblSlowKey.Location = new System.Drawing.Point(280, 161);
             this.lblSlowKey.Name = "lblSlowKey";
             this.lblSlowKey.Size = new System.Drawing.Size(39, 12);
             this.lblSlowKey.TabIndex = 28;
@@ -3689,7 +3690,7 @@
             // lblPrevKey
             // 
             this.lblPrevKey.AutoSize = true;
-            this.lblPrevKey.Location = new System.Drawing.Point(240, 132);
+            this.lblPrevKey.Location = new System.Drawing.Point(280, 132);
             this.lblPrevKey.Name = "lblPrevKey";
             this.lblPrevKey.Size = new System.Drawing.Size(39, 12);
             this.lblPrevKey.TabIndex = 28;
@@ -3698,7 +3699,7 @@
             // lblFadeoutKey
             // 
             this.lblFadeoutKey.AutoSize = true;
-            this.lblFadeoutKey.Location = new System.Drawing.Point(240, 103);
+            this.lblFadeoutKey.Location = new System.Drawing.Point(280, 103);
             this.lblFadeoutKey.Name = "lblFadeoutKey";
             this.lblFadeoutKey.Size = new System.Drawing.Size(39, 12);
             this.lblFadeoutKey.TabIndex = 28;
@@ -3707,7 +3708,7 @@
             // lblPauseKey
             // 
             this.lblPauseKey.AutoSize = true;
-            this.lblPauseKey.Location = new System.Drawing.Point(240, 74);
+            this.lblPauseKey.Location = new System.Drawing.Point(280, 74);
             this.lblPauseKey.Name = "lblPauseKey";
             this.lblPauseKey.Size = new System.Drawing.Size(39, 12);
             this.lblPauseKey.TabIndex = 28;
@@ -3716,7 +3717,7 @@
             // lblStopKey
             // 
             this.lblStopKey.AutoSize = true;
-            this.lblStopKey.Location = new System.Drawing.Point(240, 45);
+            this.lblStopKey.Location = new System.Drawing.Point(280, 45);
             this.lblStopKey.Name = "lblStopKey";
             this.lblStopKey.Size = new System.Drawing.Size(39, 12);
             this.lblStopKey.TabIndex = 28;
@@ -3725,25 +3726,25 @@
             // pictureBox14
             // 
             this.pictureBox14.Image = global::mml2vgmIDE.Properties.Resources.ccStop;
-            this.pictureBox14.Location = new System.Drawing.Point(4, 41);
+            this.pictureBox14.Location = new System.Drawing.Point(5, 41);
             this.pictureBox14.Name = "pictureBox14";
-            this.pictureBox14.Size = new System.Drawing.Size(16, 16);
+            this.pictureBox14.Size = new System.Drawing.Size(19, 16);
             this.pictureBox14.TabIndex = 22;
             this.pictureBox14.TabStop = false;
             // 
             // pictureBox17
             // 
             this.pictureBox17.Image = global::mml2vgmIDE.Properties.Resources.ccFadeout;
-            this.pictureBox17.Location = new System.Drawing.Point(4, 99);
+            this.pictureBox17.Location = new System.Drawing.Point(5, 99);
             this.pictureBox17.Name = "pictureBox17";
-            this.pictureBox17.Size = new System.Drawing.Size(16, 16);
+            this.pictureBox17.Size = new System.Drawing.Size(19, 16);
             this.pictureBox17.TabIndex = 25;
             this.pictureBox17.TabStop = false;
             // 
             // cbNextAlt
             // 
             this.cbNextAlt.AutoSize = true;
-            this.cbNextAlt.Location = new System.Drawing.Point(201, 246);
+            this.cbNextAlt.Location = new System.Drawing.Point(234, 246);
             this.cbNextAlt.Name = "cbNextAlt";
             this.cbNextAlt.Size = new System.Drawing.Size(15, 14);
             this.cbNextAlt.TabIndex = 27;
@@ -3752,16 +3753,16 @@
             // pictureBox16
             // 
             this.pictureBox16.Image = global::mml2vgmIDE.Properties.Resources.ccPrevious;
-            this.pictureBox16.Location = new System.Drawing.Point(4, 128);
+            this.pictureBox16.Location = new System.Drawing.Point(5, 128);
             this.pictureBox16.Name = "pictureBox16";
-            this.pictureBox16.Size = new System.Drawing.Size(16, 16);
+            this.pictureBox16.Size = new System.Drawing.Size(19, 16);
             this.pictureBox16.TabIndex = 24;
             this.pictureBox16.TabStop = false;
             // 
             // cbFastAlt
             // 
             this.cbFastAlt.AutoSize = true;
-            this.cbFastAlt.Location = new System.Drawing.Point(201, 219);
+            this.cbFastAlt.Location = new System.Drawing.Point(234, 219);
             this.cbFastAlt.Name = "cbFastAlt";
             this.cbFastAlt.Size = new System.Drawing.Size(15, 14);
             this.cbFastAlt.TabIndex = 27;
@@ -3770,16 +3771,16 @@
             // pictureBox15
             // 
             this.pictureBox15.Image = global::mml2vgmIDE.Properties.Resources.ccPause;
-            this.pictureBox15.Location = new System.Drawing.Point(4, 70);
+            this.pictureBox15.Location = new System.Drawing.Point(5, 70);
             this.pictureBox15.Name = "pictureBox15";
-            this.pictureBox15.Size = new System.Drawing.Size(16, 16);
+            this.pictureBox15.Size = new System.Drawing.Size(19, 16);
             this.pictureBox15.TabIndex = 23;
             this.pictureBox15.TabStop = false;
             // 
             // cbPlayAlt
             // 
             this.cbPlayAlt.AutoSize = true;
-            this.cbPlayAlt.Location = new System.Drawing.Point(201, 190);
+            this.cbPlayAlt.Location = new System.Drawing.Point(234, 190);
             this.cbPlayAlt.Name = "cbPlayAlt";
             this.cbPlayAlt.Size = new System.Drawing.Size(15, 14);
             this.cbPlayAlt.TabIndex = 27;
@@ -3788,16 +3789,16 @@
             // pictureBox13
             // 
             this.pictureBox13.Image = global::mml2vgmIDE.Properties.Resources.ccSlow;
-            this.pictureBox13.Location = new System.Drawing.Point(4, 157);
+            this.pictureBox13.Location = new System.Drawing.Point(5, 157);
             this.pictureBox13.Name = "pictureBox13";
-            this.pictureBox13.Size = new System.Drawing.Size(16, 16);
+            this.pictureBox13.Size = new System.Drawing.Size(19, 16);
             this.pictureBox13.TabIndex = 21;
             this.pictureBox13.TabStop = false;
             // 
             // cbSlowAlt
             // 
             this.cbSlowAlt.AutoSize = true;
-            this.cbSlowAlt.Location = new System.Drawing.Point(201, 161);
+            this.cbSlowAlt.Location = new System.Drawing.Point(234, 161);
             this.cbSlowAlt.Name = "cbSlowAlt";
             this.cbSlowAlt.Size = new System.Drawing.Size(15, 14);
             this.cbSlowAlt.TabIndex = 27;
@@ -3806,16 +3807,16 @@
             // pictureBox12
             // 
             this.pictureBox12.Image = global::mml2vgmIDE.Properties.Resources.ccPlay;
-            this.pictureBox12.Location = new System.Drawing.Point(4, 186);
+            this.pictureBox12.Location = new System.Drawing.Point(5, 186);
             this.pictureBox12.Name = "pictureBox12";
-            this.pictureBox12.Size = new System.Drawing.Size(16, 16);
+            this.pictureBox12.Size = new System.Drawing.Size(19, 16);
             this.pictureBox12.TabIndex = 20;
             this.pictureBox12.TabStop = false;
             // 
             // cbPrevAlt
             // 
             this.cbPrevAlt.AutoSize = true;
-            this.cbPrevAlt.Location = new System.Drawing.Point(201, 132);
+            this.cbPrevAlt.Location = new System.Drawing.Point(234, 132);
             this.cbPrevAlt.Name = "cbPrevAlt";
             this.cbPrevAlt.Size = new System.Drawing.Size(15, 14);
             this.cbPrevAlt.TabIndex = 27;
@@ -3824,16 +3825,16 @@
             // pictureBox11
             // 
             this.pictureBox11.Image = global::mml2vgmIDE.Properties.Resources.ccFast;
-            this.pictureBox11.Location = new System.Drawing.Point(4, 215);
+            this.pictureBox11.Location = new System.Drawing.Point(5, 215);
             this.pictureBox11.Name = "pictureBox11";
-            this.pictureBox11.Size = new System.Drawing.Size(16, 16);
+            this.pictureBox11.Size = new System.Drawing.Size(19, 16);
             this.pictureBox11.TabIndex = 19;
             this.pictureBox11.TabStop = false;
             // 
             // cbFadeoutAlt
             // 
             this.cbFadeoutAlt.AutoSize = true;
-            this.cbFadeoutAlt.Location = new System.Drawing.Point(201, 103);
+            this.cbFadeoutAlt.Location = new System.Drawing.Point(234, 103);
             this.cbFadeoutAlt.Name = "cbFadeoutAlt";
             this.cbFadeoutAlt.Size = new System.Drawing.Size(15, 14);
             this.cbFadeoutAlt.TabIndex = 27;
@@ -3842,16 +3843,16 @@
             // pictureBox10
             // 
             this.pictureBox10.Image = global::mml2vgmIDE.Properties.Resources.ccNext;
-            this.pictureBox10.Location = new System.Drawing.Point(4, 242);
+            this.pictureBox10.Location = new System.Drawing.Point(5, 242);
             this.pictureBox10.Name = "pictureBox10";
-            this.pictureBox10.Size = new System.Drawing.Size(16, 16);
+            this.pictureBox10.Size = new System.Drawing.Size(19, 16);
             this.pictureBox10.TabIndex = 18;
             this.pictureBox10.TabStop = false;
             // 
             // cbPauseAlt
             // 
             this.cbPauseAlt.AutoSize = true;
-            this.cbPauseAlt.Location = new System.Drawing.Point(201, 74);
+            this.cbPauseAlt.Location = new System.Drawing.Point(234, 74);
             this.cbPauseAlt.Name = "cbPauseAlt";
             this.cbPauseAlt.Size = new System.Drawing.Size(15, 14);
             this.cbPauseAlt.TabIndex = 27;
@@ -3860,7 +3861,7 @@
             // label37
             // 
             this.label37.AutoSize = true;
-            this.label37.Location = new System.Drawing.Point(26, 45);
+            this.label37.Location = new System.Drawing.Point(30, 45);
             this.label37.Name = "label37";
             this.label37.Size = new System.Drawing.Size(29, 12);
             this.label37.TabIndex = 26;
@@ -3869,7 +3870,7 @@
             // cbStopAlt
             // 
             this.cbStopAlt.AutoSize = true;
-            this.cbStopAlt.Location = new System.Drawing.Point(201, 45);
+            this.cbStopAlt.Location = new System.Drawing.Point(234, 45);
             this.cbStopAlt.Name = "cbStopAlt";
             this.cbStopAlt.Size = new System.Drawing.Size(15, 14);
             this.cbStopAlt.TabIndex = 27;
@@ -3878,7 +3879,7 @@
             // label45
             // 
             this.label45.AutoSize = true;
-            this.label45.Location = new System.Drawing.Point(127, 24);
+            this.label45.Location = new System.Drawing.Point(148, 24);
             this.label45.Name = "label45";
             this.label45.Size = new System.Drawing.Size(29, 12);
             this.label45.TabIndex = 26;
@@ -3887,7 +3888,7 @@
             // label46
             // 
             this.label46.AutoSize = true;
-            this.label46.Location = new System.Drawing.Point(163, 24);
+            this.label46.Location = new System.Drawing.Point(190, 24);
             this.label46.Name = "label46";
             this.label46.Size = new System.Drawing.Size(24, 12);
             this.label46.TabIndex = 26;
@@ -3896,7 +3897,7 @@
             // label48
             // 
             this.label48.AutoSize = true;
-            this.label48.Location = new System.Drawing.Point(199, 24);
+            this.label48.Location = new System.Drawing.Point(232, 24);
             this.label48.Name = "label48";
             this.label48.Size = new System.Drawing.Size(20, 12);
             this.label48.TabIndex = 26;
@@ -3905,7 +3906,7 @@
             // label38
             // 
             this.label38.AutoSize = true;
-            this.label38.Location = new System.Drawing.Point(26, 74);
+            this.label38.Location = new System.Drawing.Point(30, 74);
             this.label38.Name = "label38";
             this.label38.Size = new System.Drawing.Size(53, 12);
             this.label38.TabIndex = 26;
@@ -3914,7 +3915,7 @@
             // label39
             // 
             this.label39.AutoSize = true;
-            this.label39.Location = new System.Drawing.Point(26, 103);
+            this.label39.Location = new System.Drawing.Point(30, 103);
             this.label39.Name = "label39";
             this.label39.Size = new System.Drawing.Size(65, 12);
             this.label39.TabIndex = 26;
@@ -3923,7 +3924,7 @@
             // label40
             // 
             this.label40.AutoSize = true;
-            this.label40.Location = new System.Drawing.Point(26, 132);
+            this.label40.Location = new System.Drawing.Point(30, 132);
             this.label40.Name = "label40";
             this.label40.Size = new System.Drawing.Size(29, 12);
             this.label40.TabIndex = 26;
@@ -3932,16 +3933,16 @@
             // label41
             // 
             this.label41.AutoSize = true;
-            this.label41.Location = new System.Drawing.Point(26, 161);
+            this.label41.Location = new System.Drawing.Point(30, 161);
             this.label41.Name = "label41";
-            this.label41.Size = new System.Drawing.Size(57, 12);
+            this.label41.Size = new System.Drawing.Size(56, 12);
             this.label41.TabIndex = 26;
             this.label41.Text = "スロー再生";
             // 
             // label42
             // 
             this.label42.AutoSize = true;
-            this.label42.Location = new System.Drawing.Point(26, 190);
+            this.label42.Location = new System.Drawing.Point(30, 190);
             this.label42.Name = "label42";
             this.label42.Size = new System.Drawing.Size(29, 12);
             this.label42.TabIndex = 26;
@@ -3950,7 +3951,7 @@
             // cbNextCtrl
             // 
             this.cbNextCtrl.AutoSize = true;
-            this.cbNextCtrl.Location = new System.Drawing.Point(165, 246);
+            this.cbNextCtrl.Location = new System.Drawing.Point(192, 246);
             this.cbNextCtrl.Name = "cbNextCtrl";
             this.cbNextCtrl.Size = new System.Drawing.Size(15, 14);
             this.cbNextCtrl.TabIndex = 27;
@@ -3959,7 +3960,7 @@
             // label43
             // 
             this.label43.AutoSize = true;
-            this.label43.Location = new System.Drawing.Point(26, 219);
+            this.label43.Location = new System.Drawing.Point(30, 219);
             this.label43.Name = "label43";
             this.label43.Size = new System.Drawing.Size(59, 12);
             this.label43.TabIndex = 26;
@@ -3968,7 +3969,7 @@
             // cbFastCtrl
             // 
             this.cbFastCtrl.AutoSize = true;
-            this.cbFastCtrl.Location = new System.Drawing.Point(165, 219);
+            this.cbFastCtrl.Location = new System.Drawing.Point(192, 219);
             this.cbFastCtrl.Name = "cbFastCtrl";
             this.cbFastCtrl.Size = new System.Drawing.Size(15, 14);
             this.cbFastCtrl.TabIndex = 27;
@@ -3977,7 +3978,7 @@
             // label44
             // 
             this.label44.AutoSize = true;
-            this.label44.Location = new System.Drawing.Point(26, 246);
+            this.label44.Location = new System.Drawing.Point(30, 246);
             this.label44.Name = "label44";
             this.label44.Size = new System.Drawing.Size(29, 12);
             this.label44.TabIndex = 26;
@@ -3986,7 +3987,7 @@
             // cbPlayCtrl
             // 
             this.cbPlayCtrl.AutoSize = true;
-            this.cbPlayCtrl.Location = new System.Drawing.Point(165, 190);
+            this.cbPlayCtrl.Location = new System.Drawing.Point(192, 190);
             this.cbPlayCtrl.Name = "cbPlayCtrl";
             this.cbPlayCtrl.Size = new System.Drawing.Size(15, 14);
             this.cbPlayCtrl.TabIndex = 27;
@@ -3995,7 +3996,7 @@
             // cbStopShift
             // 
             this.cbStopShift.AutoSize = true;
-            this.cbStopShift.Location = new System.Drawing.Point(129, 45);
+            this.cbStopShift.Location = new System.Drawing.Point(150, 45);
             this.cbStopShift.Name = "cbStopShift";
             this.cbStopShift.Size = new System.Drawing.Size(15, 14);
             this.cbStopShift.TabIndex = 27;
@@ -4004,7 +4005,7 @@
             // cbSlowCtrl
             // 
             this.cbSlowCtrl.AutoSize = true;
-            this.cbSlowCtrl.Location = new System.Drawing.Point(165, 161);
+            this.cbSlowCtrl.Location = new System.Drawing.Point(192, 161);
             this.cbSlowCtrl.Name = "cbSlowCtrl";
             this.cbSlowCtrl.Size = new System.Drawing.Size(15, 14);
             this.cbSlowCtrl.TabIndex = 27;
@@ -4013,7 +4014,7 @@
             // cbPauseShift
             // 
             this.cbPauseShift.AutoSize = true;
-            this.cbPauseShift.Location = new System.Drawing.Point(129, 74);
+            this.cbPauseShift.Location = new System.Drawing.Point(150, 74);
             this.cbPauseShift.Name = "cbPauseShift";
             this.cbPauseShift.Size = new System.Drawing.Size(15, 14);
             this.cbPauseShift.TabIndex = 27;
@@ -4022,7 +4023,7 @@
             // cbPrevCtrl
             // 
             this.cbPrevCtrl.AutoSize = true;
-            this.cbPrevCtrl.Location = new System.Drawing.Point(165, 132);
+            this.cbPrevCtrl.Location = new System.Drawing.Point(192, 132);
             this.cbPrevCtrl.Name = "cbPrevCtrl";
             this.cbPrevCtrl.Size = new System.Drawing.Size(15, 14);
             this.cbPrevCtrl.TabIndex = 27;
@@ -4031,7 +4032,7 @@
             // cbFadeoutShift
             // 
             this.cbFadeoutShift.AutoSize = true;
-            this.cbFadeoutShift.Location = new System.Drawing.Point(129, 103);
+            this.cbFadeoutShift.Location = new System.Drawing.Point(150, 103);
             this.cbFadeoutShift.Name = "cbFadeoutShift";
             this.cbFadeoutShift.Size = new System.Drawing.Size(15, 14);
             this.cbFadeoutShift.TabIndex = 27;
@@ -4040,7 +4041,7 @@
             // cbFadeoutCtrl
             // 
             this.cbFadeoutCtrl.AutoSize = true;
-            this.cbFadeoutCtrl.Location = new System.Drawing.Point(165, 103);
+            this.cbFadeoutCtrl.Location = new System.Drawing.Point(192, 103);
             this.cbFadeoutCtrl.Name = "cbFadeoutCtrl";
             this.cbFadeoutCtrl.Size = new System.Drawing.Size(15, 14);
             this.cbFadeoutCtrl.TabIndex = 27;
@@ -4049,7 +4050,7 @@
             // cbPrevShift
             // 
             this.cbPrevShift.AutoSize = true;
-            this.cbPrevShift.Location = new System.Drawing.Point(129, 132);
+            this.cbPrevShift.Location = new System.Drawing.Point(150, 132);
             this.cbPrevShift.Name = "cbPrevShift";
             this.cbPrevShift.Size = new System.Drawing.Size(15, 14);
             this.cbPrevShift.TabIndex = 27;
@@ -4058,7 +4059,7 @@
             // cbPauseCtrl
             // 
             this.cbPauseCtrl.AutoSize = true;
-            this.cbPauseCtrl.Location = new System.Drawing.Point(165, 74);
+            this.cbPauseCtrl.Location = new System.Drawing.Point(192, 74);
             this.cbPauseCtrl.Name = "cbPauseCtrl";
             this.cbPauseCtrl.Size = new System.Drawing.Size(15, 14);
             this.cbPauseCtrl.TabIndex = 27;
@@ -4067,7 +4068,7 @@
             // cbSlowShift
             // 
             this.cbSlowShift.AutoSize = true;
-            this.cbSlowShift.Location = new System.Drawing.Point(129, 161);
+            this.cbSlowShift.Location = new System.Drawing.Point(150, 161);
             this.cbSlowShift.Name = "cbSlowShift";
             this.cbSlowShift.Size = new System.Drawing.Size(15, 14);
             this.cbSlowShift.TabIndex = 27;
@@ -4076,7 +4077,7 @@
             // cbStopCtrl
             // 
             this.cbStopCtrl.AutoSize = true;
-            this.cbStopCtrl.Location = new System.Drawing.Point(165, 45);
+            this.cbStopCtrl.Location = new System.Drawing.Point(192, 45);
             this.cbStopCtrl.Name = "cbStopCtrl";
             this.cbStopCtrl.Size = new System.Drawing.Size(15, 14);
             this.cbStopCtrl.TabIndex = 27;
@@ -4085,7 +4086,7 @@
             // cbPlayShift
             // 
             this.cbPlayShift.AutoSize = true;
-            this.cbPlayShift.Location = new System.Drawing.Point(129, 190);
+            this.cbPlayShift.Location = new System.Drawing.Point(150, 190);
             this.cbPlayShift.Name = "cbPlayShift";
             this.cbPlayShift.Size = new System.Drawing.Size(15, 14);
             this.cbPlayShift.TabIndex = 27;
@@ -4094,7 +4095,7 @@
             // cbNextShift
             // 
             this.cbNextShift.AutoSize = true;
-            this.cbNextShift.Location = new System.Drawing.Point(129, 246);
+            this.cbNextShift.Location = new System.Drawing.Point(150, 246);
             this.cbNextShift.Name = "cbNextShift";
             this.cbNextShift.Size = new System.Drawing.Size(15, 14);
             this.cbNextShift.TabIndex = 27;
@@ -4103,7 +4104,7 @@
             // cbFastShift
             // 
             this.cbFastShift.AutoSize = true;
-            this.cbFastShift.Location = new System.Drawing.Point(129, 219);
+            this.cbFastShift.Location = new System.Drawing.Point(150, 219);
             this.cbFastShift.Name = "cbFastShift";
             this.cbFastShift.Size = new System.Drawing.Size(15, 14);
             this.cbFastShift.TabIndex = 27;
@@ -4112,7 +4113,7 @@
             // label47
             // 
             this.label47.AutoSize = true;
-            this.label47.Location = new System.Drawing.Point(63, 311);
+            this.label47.Location = new System.Drawing.Point(73, 311);
             this.label47.Name = "label47";
             this.label47.Size = new System.Drawing.Size(23, 12);
             this.label47.TabIndex = 26;
@@ -4122,7 +4123,7 @@
             // cbStopWin
             // 
             this.cbStopWin.AutoSize = true;
-            this.cbStopWin.Location = new System.Drawing.Point(92, 309);
+            this.cbStopWin.Location = new System.Drawing.Point(107, 309);
             this.cbStopWin.Name = "cbStopWin";
             this.cbStopWin.Size = new System.Drawing.Size(15, 14);
             this.cbStopWin.TabIndex = 27;
@@ -4132,7 +4133,7 @@
             // cbPauseWin
             // 
             this.cbPauseWin.AutoSize = true;
-            this.cbPauseWin.Location = new System.Drawing.Point(113, 309);
+            this.cbPauseWin.Location = new System.Drawing.Point(132, 309);
             this.cbPauseWin.Name = "cbPauseWin";
             this.cbPauseWin.Size = new System.Drawing.Size(15, 14);
             this.cbPauseWin.TabIndex = 27;
@@ -4142,7 +4143,7 @@
             // cbFadeoutWin
             // 
             this.cbFadeoutWin.AutoSize = true;
-            this.cbFadeoutWin.Location = new System.Drawing.Point(134, 309);
+            this.cbFadeoutWin.Location = new System.Drawing.Point(156, 309);
             this.cbFadeoutWin.Name = "cbFadeoutWin";
             this.cbFadeoutWin.Size = new System.Drawing.Size(15, 14);
             this.cbFadeoutWin.TabIndex = 27;
@@ -4152,7 +4153,7 @@
             // cbPrevWin
             // 
             this.cbPrevWin.AutoSize = true;
-            this.cbPrevWin.Location = new System.Drawing.Point(155, 309);
+            this.cbPrevWin.Location = new System.Drawing.Point(181, 309);
             this.cbPrevWin.Name = "cbPrevWin";
             this.cbPrevWin.Size = new System.Drawing.Size(15, 14);
             this.cbPrevWin.TabIndex = 27;
@@ -4162,7 +4163,7 @@
             // cbSlowWin
             // 
             this.cbSlowWin.AutoSize = true;
-            this.cbSlowWin.Location = new System.Drawing.Point(176, 309);
+            this.cbSlowWin.Location = new System.Drawing.Point(205, 309);
             this.cbSlowWin.Name = "cbSlowWin";
             this.cbSlowWin.Size = new System.Drawing.Size(15, 14);
             this.cbSlowWin.TabIndex = 27;
@@ -4172,7 +4173,7 @@
             // cbPlayWin
             // 
             this.cbPlayWin.AutoSize = true;
-            this.cbPlayWin.Location = new System.Drawing.Point(197, 309);
+            this.cbPlayWin.Location = new System.Drawing.Point(230, 309);
             this.cbPlayWin.Name = "cbPlayWin";
             this.cbPlayWin.Size = new System.Drawing.Size(15, 14);
             this.cbPlayWin.TabIndex = 27;
@@ -4182,7 +4183,7 @@
             // cbFastWin
             // 
             this.cbFastWin.AutoSize = true;
-            this.cbFastWin.Location = new System.Drawing.Point(218, 309);
+            this.cbFastWin.Location = new System.Drawing.Point(254, 309);
             this.cbFastWin.Name = "cbFastWin";
             this.cbFastWin.Size = new System.Drawing.Size(15, 14);
             this.cbFastWin.TabIndex = 27;
@@ -4192,7 +4193,7 @@
             // cbNextWin
             // 
             this.cbNextWin.AutoSize = true;
-            this.cbNextWin.Location = new System.Drawing.Point(239, 309);
+            this.cbNextWin.Location = new System.Drawing.Point(279, 309);
             this.cbNextWin.Name = "cbNextWin";
             this.cbNextWin.Size = new System.Drawing.Size(15, 14);
             this.cbNextWin.TabIndex = 27;
@@ -4206,7 +4207,7 @@
             this.tpBalance.Controls.Add(this.groupBox18);
             this.tpBalance.Location = new System.Drawing.Point(4, 22);
             this.tpBalance.Name = "tpBalance";
-            this.tpBalance.Size = new System.Drawing.Size(443, 371);
+            this.tpBalance.Size = new System.Drawing.Size(518, 371);
             this.tpBalance.TabIndex = 12;
             this.tpBalance.Text = "ミキサーバランス";
             this.tpBalance.UseVisualStyleBackColor = true;
@@ -4217,9 +4218,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox25.Controls.Add(this.rbAutoBalanceNotSamePositionAsSongData);
             this.groupBox25.Controls.Add(this.rbAutoBalanceSamePositionAsSongData);
-            this.groupBox25.Location = new System.Drawing.Point(7, 327);
+            this.groupBox25.Location = new System.Drawing.Point(8, 327);
             this.groupBox25.Name = "groupBox25";
-            this.groupBox25.Size = new System.Drawing.Size(433, 41);
+            this.groupBox25.Size = new System.Drawing.Size(505, 41);
             this.groupBox25.TabIndex = 1;
             this.groupBox25.TabStop = false;
             this.groupBox25.Text = "ソングミキサーバランス参照フォルダー";
@@ -4228,9 +4229,9 @@
             // 
             this.rbAutoBalanceNotSamePositionAsSongData.AutoSize = true;
             this.rbAutoBalanceNotSamePositionAsSongData.Checked = true;
-            this.rbAutoBalanceNotSamePositionAsSongData.Location = new System.Drawing.Point(6, 18);
+            this.rbAutoBalanceNotSamePositionAsSongData.Location = new System.Drawing.Point(7, 18);
             this.rbAutoBalanceNotSamePositionAsSongData.Name = "rbAutoBalanceNotSamePositionAsSongData";
-            this.rbAutoBalanceNotSamePositionAsSongData.Size = new System.Drawing.Size(110, 16);
+            this.rbAutoBalanceNotSamePositionAsSongData.Size = new System.Drawing.Size(108, 16);
             this.rbAutoBalanceNotSamePositionAsSongData.TabIndex = 0;
             this.rbAutoBalanceNotSamePositionAsSongData.TabStop = true;
             this.rbAutoBalanceNotSamePositionAsSongData.Text = "設定ファイルと同じ";
@@ -4239,9 +4240,9 @@
             // rbAutoBalanceSamePositionAsSongData
             // 
             this.rbAutoBalanceSamePositionAsSongData.AutoSize = true;
-            this.rbAutoBalanceSamePositionAsSongData.Location = new System.Drawing.Point(122, 18);
+            this.rbAutoBalanceSamePositionAsSongData.Location = new System.Drawing.Point(142, 18);
             this.rbAutoBalanceSamePositionAsSongData.Name = "rbAutoBalanceSamePositionAsSongData";
-            this.rbAutoBalanceSamePositionAsSongData.Size = new System.Drawing.Size(92, 16);
+            this.rbAutoBalanceSamePositionAsSongData.Size = new System.Drawing.Size(91, 16);
             this.rbAutoBalanceSamePositionAsSongData.TabIndex = 0;
             this.rbAutoBalanceSamePositionAsSongData.Text = "曲データと同じ";
             this.rbAutoBalanceSamePositionAsSongData.UseVisualStyleBackColor = true;
@@ -4251,7 +4252,7 @@
             this.cbAutoBalanceUseThis.AutoSize = true;
             this.cbAutoBalanceUseThis.Checked = true;
             this.cbAutoBalanceUseThis.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbAutoBalanceUseThis.Location = new System.Drawing.Point(13, 3);
+            this.cbAutoBalanceUseThis.Location = new System.Drawing.Point(15, 3);
             this.cbAutoBalanceUseThis.Name = "cbAutoBalanceUseThis";
             this.cbAutoBalanceUseThis.Size = new System.Drawing.Size(221, 16);
             this.cbAutoBalanceUseThis.TabIndex = 1;
@@ -4264,9 +4265,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox18.Controls.Add(this.groupBox24);
             this.groupBox18.Controls.Add(this.groupBox23);
-            this.groupBox18.Location = new System.Drawing.Point(7, 3);
+            this.groupBox18.Location = new System.Drawing.Point(8, 3);
             this.groupBox18.Name = "groupBox18";
-            this.groupBox18.Size = new System.Drawing.Size(433, 318);
+            this.groupBox18.Size = new System.Drawing.Size(505, 318);
             this.groupBox18.TabIndex = 0;
             this.groupBox18.TabStop = false;
             // 
@@ -4276,9 +4277,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox24.Controls.Add(this.groupBox21);
             this.groupBox24.Controls.Add(this.groupBox22);
-            this.groupBox24.Location = new System.Drawing.Point(6, 185);
+            this.groupBox24.Location = new System.Drawing.Point(7, 185);
             this.groupBox24.Name = "groupBox24";
-            this.groupBox24.Size = new System.Drawing.Size(421, 127);
+            this.groupBox24.Size = new System.Drawing.Size(491, 127);
             this.groupBox24.TabIndex = 1;
             this.groupBox24.TabStop = false;
             this.groupBox24.Text = "保存";
@@ -4289,9 +4290,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox21.Controls.Add(this.rbAutoBalanceNotSaveSongBalance);
             this.groupBox21.Controls.Add(this.rbAutoBalanceSaveSongBalance);
-            this.groupBox21.Location = new System.Drawing.Point(6, 18);
+            this.groupBox21.Location = new System.Drawing.Point(7, 18);
             this.groupBox21.Name = "groupBox21";
-            this.groupBox21.Size = new System.Drawing.Size(409, 62);
+            this.groupBox21.Size = new System.Drawing.Size(477, 62);
             this.groupBox21.TabIndex = 0;
             this.groupBox21.TabStop = false;
             this.groupBox21.Text = "ソングミキサーバランス(曲データ毎)";
@@ -4300,7 +4301,7 @@
             // 
             this.rbAutoBalanceNotSaveSongBalance.AutoSize = true;
             this.rbAutoBalanceNotSaveSongBalance.Checked = true;
-            this.rbAutoBalanceNotSaveSongBalance.Location = new System.Drawing.Point(6, 40);
+            this.rbAutoBalanceNotSaveSongBalance.Location = new System.Drawing.Point(7, 40);
             this.rbAutoBalanceNotSaveSongBalance.Name = "rbAutoBalanceNotSaveSongBalance";
             this.rbAutoBalanceNotSaveSongBalance.Size = new System.Drawing.Size(153, 16);
             this.rbAutoBalanceNotSaveSongBalance.TabIndex = 0;
@@ -4311,9 +4312,9 @@
             // rbAutoBalanceSaveSongBalance
             // 
             this.rbAutoBalanceSaveSongBalance.AutoSize = true;
-            this.rbAutoBalanceSaveSongBalance.Location = new System.Drawing.Point(6, 18);
+            this.rbAutoBalanceSaveSongBalance.Location = new System.Drawing.Point(7, 18);
             this.rbAutoBalanceSaveSongBalance.Name = "rbAutoBalanceSaveSongBalance";
-            this.rbAutoBalanceSaveSongBalance.Size = new System.Drawing.Size(150, 16);
+            this.rbAutoBalanceSaveSongBalance.Size = new System.Drawing.Size(151, 16);
             this.rbAutoBalanceSaveSongBalance.TabIndex = 0;
             this.rbAutoBalanceSaveSongBalance.Text = "演奏停止時に自動で保存";
             this.rbAutoBalanceSaveSongBalance.UseVisualStyleBackColor = true;
@@ -4323,9 +4324,9 @@
             this.groupBox22.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox22.Controls.Add(this.label4);
-            this.groupBox22.Location = new System.Drawing.Point(6, 86);
+            this.groupBox22.Location = new System.Drawing.Point(7, 86);
             this.groupBox22.Name = "groupBox22";
-            this.groupBox22.Size = new System.Drawing.Size(409, 35);
+            this.groupBox22.Size = new System.Drawing.Size(477, 35);
             this.groupBox22.TabIndex = 0;
             this.groupBox22.TabStop = false;
             this.groupBox22.Text = "ドライバーミキサーバランス(ドライバ毎)";
@@ -4333,7 +4334,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(6, 15);
+            this.label4.Location = new System.Drawing.Point(7, 15);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(74, 12);
             this.label4.TabIndex = 1;
@@ -4345,9 +4346,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox23.Controls.Add(this.groupBox19);
             this.groupBox23.Controls.Add(this.groupBox20);
-            this.groupBox23.Location = new System.Drawing.Point(6, 22);
+            this.groupBox23.Location = new System.Drawing.Point(7, 22);
             this.groupBox23.Name = "groupBox23";
-            this.groupBox23.Size = new System.Drawing.Size(421, 157);
+            this.groupBox23.Size = new System.Drawing.Size(491, 157);
             this.groupBox23.TabIndex = 1;
             this.groupBox23.TabStop = false;
             this.groupBox23.Text = "読み込み";
@@ -4358,9 +4359,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox19.Controls.Add(this.rbAutoBalanceNotLoadSongBalance);
             this.groupBox19.Controls.Add(this.rbAutoBalanceLoadSongBalance);
-            this.groupBox19.Location = new System.Drawing.Point(6, 18);
+            this.groupBox19.Location = new System.Drawing.Point(7, 18);
             this.groupBox19.Name = "groupBox19";
-            this.groupBox19.Size = new System.Drawing.Size(409, 63);
+            this.groupBox19.Size = new System.Drawing.Size(477, 63);
             this.groupBox19.TabIndex = 0;
             this.groupBox19.TabStop = false;
             this.groupBox19.Text = "ソングミキサーバランス(曲データ毎)";
@@ -4369,7 +4370,7 @@
             // 
             this.rbAutoBalanceNotLoadSongBalance.AutoSize = true;
             this.rbAutoBalanceNotLoadSongBalance.Checked = true;
-            this.rbAutoBalanceNotLoadSongBalance.Location = new System.Drawing.Point(6, 40);
+            this.rbAutoBalanceNotLoadSongBalance.Location = new System.Drawing.Point(7, 40);
             this.rbAutoBalanceNotLoadSongBalance.Name = "rbAutoBalanceNotLoadSongBalance";
             this.rbAutoBalanceNotLoadSongBalance.Size = new System.Drawing.Size(102, 16);
             this.rbAutoBalanceNotLoadSongBalance.TabIndex = 0;
@@ -4380,9 +4381,9 @@
             // rbAutoBalanceLoadSongBalance
             // 
             this.rbAutoBalanceLoadSongBalance.AutoSize = true;
-            this.rbAutoBalanceLoadSongBalance.Location = new System.Drawing.Point(6, 18);
+            this.rbAutoBalanceLoadSongBalance.Location = new System.Drawing.Point(7, 18);
             this.rbAutoBalanceLoadSongBalance.Name = "rbAutoBalanceLoadSongBalance";
-            this.rbAutoBalanceLoadSongBalance.Size = new System.Drawing.Size(147, 16);
+            this.rbAutoBalanceLoadSongBalance.Size = new System.Drawing.Size(148, 16);
             this.rbAutoBalanceLoadSongBalance.TabIndex = 0;
             this.rbAutoBalanceLoadSongBalance.Text = "再生時に自動で読み込む";
             this.rbAutoBalanceLoadSongBalance.UseVisualStyleBackColor = true;
@@ -4393,9 +4394,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox20.Controls.Add(this.rbAutoBalanceNotLoadDriverBalance);
             this.groupBox20.Controls.Add(this.rbAutoBalanceLoadDriverBalance);
-            this.groupBox20.Location = new System.Drawing.Point(6, 87);
+            this.groupBox20.Location = new System.Drawing.Point(7, 87);
             this.groupBox20.Name = "groupBox20";
-            this.groupBox20.Size = new System.Drawing.Size(409, 63);
+            this.groupBox20.Size = new System.Drawing.Size(477, 63);
             this.groupBox20.TabIndex = 0;
             this.groupBox20.TabStop = false;
             this.groupBox20.Text = "ドライバーミキサーバランス(ドライバ毎)";
@@ -4403,7 +4404,7 @@
             // rbAutoBalanceNotLoadDriverBalance
             // 
             this.rbAutoBalanceNotLoadDriverBalance.AutoSize = true;
-            this.rbAutoBalanceNotLoadDriverBalance.Location = new System.Drawing.Point(6, 40);
+            this.rbAutoBalanceNotLoadDriverBalance.Location = new System.Drawing.Point(7, 40);
             this.rbAutoBalanceNotLoadDriverBalance.Name = "rbAutoBalanceNotLoadDriverBalance";
             this.rbAutoBalanceNotLoadDriverBalance.Size = new System.Drawing.Size(102, 16);
             this.rbAutoBalanceNotLoadDriverBalance.TabIndex = 0;
@@ -4414,7 +4415,7 @@
             // 
             this.rbAutoBalanceLoadDriverBalance.AutoSize = true;
             this.rbAutoBalanceLoadDriverBalance.Checked = true;
-            this.rbAutoBalanceLoadDriverBalance.Location = new System.Drawing.Point(6, 18);
+            this.rbAutoBalanceLoadDriverBalance.Location = new System.Drawing.Point(7, 18);
             this.rbAutoBalanceLoadDriverBalance.Name = "rbAutoBalanceLoadDriverBalance";
             this.rbAutoBalanceLoadDriverBalance.Size = new System.Drawing.Size(343, 16);
             this.rbAutoBalanceLoadDriverBalance.TabIndex = 0;
@@ -4447,7 +4448,7 @@
             this.tpOther.Controls.Add(this.cbUseLoopTimes);
             this.tpOther.Location = new System.Drawing.Point(4, 22);
             this.tpOther.Name = "tpOther";
-            this.tpOther.Size = new System.Drawing.Size(443, 371);
+            this.tpOther.Size = new System.Drawing.Size(518, 371);
             this.tpOther.TabIndex = 2;
             this.tpOther.Text = "Other";
             this.tpOther.UseVisualStyleBackColor = true;
@@ -4455,7 +4456,7 @@
             // cbWavSwitch
             // 
             this.cbWavSwitch.AutoSize = true;
-            this.cbWavSwitch.Location = new System.Drawing.Point(14, 202);
+            this.cbWavSwitch.Location = new System.Drawing.Point(16, 202);
             this.cbWavSwitch.Name = "cbWavSwitch";
             this.cbWavSwitch.Size = new System.Drawing.Size(177, 16);
             this.cbWavSwitch.TabIndex = 0;
@@ -4473,9 +4474,9 @@
             this.groupBox17.Controls.Add(this.label1);
             this.groupBox17.Controls.Add(this.label3);
             this.groupBox17.Controls.Add(this.label2);
-            this.groupBox17.Location = new System.Drawing.Point(7, 256);
+            this.groupBox17.Location = new System.Drawing.Point(8, 256);
             this.groupBox17.Name = "groupBox17";
-            this.groupBox17.Size = new System.Drawing.Size(227, 83);
+            this.groupBox17.Size = new System.Drawing.Size(265, 83);
             this.groupBox17.TabIndex = 1;
             this.groupBox17.TabStop = false;
             this.groupBox17.Text = "File Extension";
@@ -4484,33 +4485,33 @@
             // 
             this.tbImageExt.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbImageExt.Location = new System.Drawing.Point(52, 58);
+            this.tbImageExt.Location = new System.Drawing.Point(61, 58);
             this.tbImageExt.Name = "tbImageExt";
-            this.tbImageExt.Size = new System.Drawing.Size(164, 19);
+            this.tbImageExt.Size = new System.Drawing.Size(191, 19);
             this.tbImageExt.TabIndex = 1;
             // 
             // tbMMLExt
             // 
             this.tbMMLExt.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbMMLExt.Location = new System.Drawing.Point(52, 35);
+            this.tbMMLExt.Location = new System.Drawing.Point(61, 35);
             this.tbMMLExt.Name = "tbMMLExt";
-            this.tbMMLExt.Size = new System.Drawing.Size(164, 19);
+            this.tbMMLExt.Size = new System.Drawing.Size(191, 19);
             this.tbMMLExt.TabIndex = 1;
             // 
             // tbTextExt
             // 
             this.tbTextExt.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbTextExt.Location = new System.Drawing.Point(52, 12);
+            this.tbTextExt.Location = new System.Drawing.Point(61, 12);
             this.tbTextExt.Name = "tbTextExt";
-            this.tbTextExt.Size = new System.Drawing.Size(164, 19);
+            this.tbTextExt.Size = new System.Drawing.Size(191, 19);
             this.tbTextExt.TabIndex = 1;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(6, 15);
+            this.label1.Location = new System.Drawing.Point(7, 15);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(28, 12);
             this.label1.TabIndex = 0;
@@ -4519,7 +4520,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(6, 61);
+            this.label3.Location = new System.Drawing.Point(7, 61);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(35, 12);
             this.label3.TabIndex = 0;
@@ -4528,7 +4529,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(6, 38);
+            this.label2.Location = new System.Drawing.Point(7, 38);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(29, 12);
             this.label2.TabIndex = 0;
@@ -4537,9 +4538,9 @@
             // cbUseGetInst
             // 
             this.cbUseGetInst.AutoSize = true;
-            this.cbUseGetInst.Location = new System.Drawing.Point(14, 31);
+            this.cbUseGetInst.Location = new System.Drawing.Point(16, 31);
             this.cbUseGetInst.Name = "cbUseGetInst";
-            this.cbUseGetInst.Size = new System.Drawing.Size(286, 16);
+            this.cbUseGetInst.Size = new System.Drawing.Size(287, 16);
             this.cbUseGetInst.TabIndex = 12;
             this.cbUseGetInst.Text = "音色欄をクリック時、その音色をクリップボードにコピーする";
             this.cbUseGetInst.UseVisualStyleBackColor = true;
@@ -4551,9 +4552,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox4.Controls.Add(this.cmbInstFormat);
             this.groupBox4.Controls.Add(this.lblInstFormat);
-            this.groupBox4.Location = new System.Drawing.Point(7, 31);
+            this.groupBox4.Location = new System.Drawing.Point(8, 31);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(433, 45);
+            this.groupBox4.Size = new System.Drawing.Size(505, 45);
             this.groupBox4.TabIndex = 23;
             this.groupBox4.TabStop = false;
             // 
@@ -4572,26 +4573,26 @@
             "MML2VGM",
             "NRTDRV",
             "HuSIC"});
-            this.cmbInstFormat.Location = new System.Drawing.Point(298, 19);
+            this.cmbInstFormat.Location = new System.Drawing.Point(348, 19);
             this.cmbInstFormat.Name = "cmbInstFormat";
-            this.cmbInstFormat.Size = new System.Drawing.Size(129, 20);
+            this.cmbInstFormat.Size = new System.Drawing.Size(150, 20);
             this.cmbInstFormat.TabIndex = 18;
             // 
             // lblInstFormat
             // 
             this.lblInstFormat.AutoSize = true;
-            this.lblInstFormat.Location = new System.Drawing.Point(237, 22);
+            this.lblInstFormat.Location = new System.Drawing.Point(276, 22);
             this.lblInstFormat.Name = "lblInstFormat";
-            this.lblInstFormat.Size = new System.Drawing.Size(55, 12);
+            this.lblInstFormat.Size = new System.Drawing.Size(54, 12);
             this.lblInstFormat.TabIndex = 17;
             this.lblInstFormat.Text = "フォーマット";
             // 
             // cbDumpSwitch
             // 
             this.cbDumpSwitch.AutoSize = true;
-            this.cbDumpSwitch.Location = new System.Drawing.Point(14, 152);
+            this.cbDumpSwitch.Location = new System.Drawing.Point(16, 152);
             this.cbDumpSwitch.Name = "cbDumpSwitch";
-            this.cbDumpSwitch.Size = new System.Drawing.Size(220, 16);
+            this.cbDumpSwitch.Size = new System.Drawing.Size(221, 16);
             this.cbDumpSwitch.TabIndex = 0;
             this.cbDumpSwitch.Text = "DataBlock処理時にその内容をダンプする";
             this.cbDumpSwitch.UseVisualStyleBackColor = true;
@@ -4604,18 +4605,18 @@
             this.gbWav.Controls.Add(this.btnWavPath);
             this.gbWav.Controls.Add(this.label7);
             this.gbWav.Controls.Add(this.tbWavPath);
-            this.gbWav.Location = new System.Drawing.Point(7, 205);
+            this.gbWav.Location = new System.Drawing.Point(8, 205);
             this.gbWav.Name = "gbWav";
-            this.gbWav.Size = new System.Drawing.Size(433, 45);
+            this.gbWav.Size = new System.Drawing.Size(505, 45);
             this.gbWav.TabIndex = 22;
             this.gbWav.TabStop = false;
             // 
             // btnWavPath
             // 
             this.btnWavPath.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnWavPath.Location = new System.Drawing.Point(404, 16);
+            this.btnWavPath.Location = new System.Drawing.Point(471, 16);
             this.btnWavPath.Name = "btnWavPath";
-            this.btnWavPath.Size = new System.Drawing.Size(23, 23);
+            this.btnWavPath.Size = new System.Drawing.Size(27, 23);
             this.btnWavPath.TabIndex = 16;
             this.btnWavPath.Text = "...";
             this.btnWavPath.UseVisualStyleBackColor = true;
@@ -4624,7 +4625,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(6, 21);
+            this.label7.Location = new System.Drawing.Point(7, 21);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(52, 12);
             this.label7.TabIndex = 14;
@@ -4634,9 +4635,9 @@
             // 
             this.tbWavPath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbWavPath.Location = new System.Drawing.Point(73, 18);
+            this.tbWavPath.Location = new System.Drawing.Point(85, 18);
             this.tbWavPath.Name = "tbWavPath";
-            this.tbWavPath.Size = new System.Drawing.Size(325, 19);
+            this.tbWavPath.Size = new System.Drawing.Size(378, 19);
             this.tbWavPath.TabIndex = 15;
             // 
             // gbDump
@@ -4646,18 +4647,18 @@
             this.gbDump.Controls.Add(this.btnDumpPath);
             this.gbDump.Controls.Add(this.label6);
             this.gbDump.Controls.Add(this.tbDumpPath);
-            this.gbDump.Location = new System.Drawing.Point(7, 154);
+            this.gbDump.Location = new System.Drawing.Point(8, 154);
             this.gbDump.Name = "gbDump";
-            this.gbDump.Size = new System.Drawing.Size(433, 45);
+            this.gbDump.Size = new System.Drawing.Size(505, 45);
             this.gbDump.TabIndex = 22;
             this.gbDump.TabStop = false;
             // 
             // btnDumpPath
             // 
             this.btnDumpPath.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnDumpPath.Location = new System.Drawing.Point(404, 16);
+            this.btnDumpPath.Location = new System.Drawing.Point(471, 16);
             this.btnDumpPath.Name = "btnDumpPath";
-            this.btnDumpPath.Size = new System.Drawing.Size(23, 23);
+            this.btnDumpPath.Size = new System.Drawing.Size(27, 23);
             this.btnDumpPath.TabIndex = 16;
             this.btnDumpPath.Text = "...";
             this.btnDumpPath.UseVisualStyleBackColor = true;
@@ -4666,7 +4667,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(6, 21);
+            this.label6.Location = new System.Drawing.Point(7, 21);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(52, 12);
             this.label6.TabIndex = 14;
@@ -4676,40 +4677,40 @@
             // 
             this.tbDumpPath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbDumpPath.Location = new System.Drawing.Point(73, 18);
+            this.tbDumpPath.Location = new System.Drawing.Point(85, 18);
             this.tbDumpPath.Name = "tbDumpPath";
-            this.tbDumpPath.Size = new System.Drawing.Size(325, 19);
+            this.tbDumpPath.Size = new System.Drawing.Size(378, 19);
             this.tbDumpPath.TabIndex = 15;
             // 
             // label30
             // 
             this.label30.AutoSize = true;
-            this.label30.Location = new System.Drawing.Point(136, 132);
+            this.label30.Location = new System.Drawing.Point(159, 132);
             this.label30.Name = "label30";
-            this.label30.Size = new System.Drawing.Size(30, 12);
+            this.label30.Size = new System.Drawing.Size(31, 12);
             this.label30.TabIndex = 21;
             this.label30.Text = "Hz/s";
             // 
             // tbScreenFrameRate
             // 
-            this.tbScreenFrameRate.Location = new System.Drawing.Point(80, 129);
+            this.tbScreenFrameRate.Location = new System.Drawing.Point(93, 129);
             this.tbScreenFrameRate.Name = "tbScreenFrameRate";
-            this.tbScreenFrameRate.Size = new System.Drawing.Size(50, 19);
+            this.tbScreenFrameRate.Size = new System.Drawing.Size(58, 19);
             this.tbScreenFrameRate.TabIndex = 20;
             // 
             // label29
             // 
             this.label29.AutoSize = true;
-            this.label29.Location = new System.Drawing.Point(5, 132);
+            this.label29.Location = new System.Drawing.Point(6, 132);
             this.label29.Name = "label29";
-            this.label29.Size = new System.Drawing.Size(69, 12);
+            this.label29.Size = new System.Drawing.Size(66, 12);
             this.label29.TabIndex = 19;
             this.label29.Text = "フレームレート";
             // 
             // lblLoopTimes
             // 
             this.lblLoopTimes.AutoSize = true;
-            this.lblLoopTimes.Location = new System.Drawing.Point(340, 8);
+            this.lblLoopTimes.Location = new System.Drawing.Point(397, 8);
             this.lblLoopTimes.Name = "lblLoopTimes";
             this.lblLoopTimes.Size = new System.Drawing.Size(17, 12);
             this.lblLoopTimes.TabIndex = 1;
@@ -4718,9 +4719,9 @@
             // btnDataPath
             // 
             this.btnDataPath.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnDataPath.Location = new System.Drawing.Point(411, 102);
+            this.btnDataPath.Location = new System.Drawing.Point(479, 102);
             this.btnDataPath.Name = "btnDataPath";
-            this.btnDataPath.Size = new System.Drawing.Size(23, 23);
+            this.btnDataPath.Size = new System.Drawing.Size(27, 23);
             this.btnDataPath.TabIndex = 16;
             this.btnDataPath.Text = "...";
             this.btnDataPath.UseVisualStyleBackColor = true;
@@ -4728,24 +4729,24 @@
             // 
             // tbLoopTimes
             // 
-            this.tbLoopTimes.Location = new System.Drawing.Point(282, 5);
+            this.tbLoopTimes.Location = new System.Drawing.Point(329, 5);
             this.tbLoopTimes.Name = "tbLoopTimes";
-            this.tbLoopTimes.Size = new System.Drawing.Size(52, 19);
+            this.tbLoopTimes.Size = new System.Drawing.Size(60, 19);
             this.tbLoopTimes.TabIndex = 0;
             // 
             // tbDataPath
             // 
             this.tbDataPath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbDataPath.Location = new System.Drawing.Point(80, 104);
+            this.tbDataPath.Location = new System.Drawing.Point(93, 104);
             this.tbDataPath.Name = "tbDataPath";
-            this.tbDataPath.Size = new System.Drawing.Size(325, 19);
+            this.tbDataPath.Size = new System.Drawing.Size(378, 19);
             this.tbDataPath.TabIndex = 15;
             // 
             // label19
             // 
             this.label19.AutoSize = true;
-            this.label19.Location = new System.Drawing.Point(5, 107);
+            this.label19.Location = new System.Drawing.Point(6, 107);
             this.label19.Name = "label19";
             this.label19.Size = new System.Drawing.Size(56, 12);
             this.label19.TabIndex = 14;
@@ -4754,9 +4755,9 @@
             // btnResetPosition
             // 
             this.btnResetPosition.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnResetPosition.Location = new System.Drawing.Point(167, 345);
+            this.btnResetPosition.Location = new System.Drawing.Point(195, 345);
             this.btnResetPosition.Name = "btnResetPosition";
-            this.btnResetPosition.Size = new System.Drawing.Size(142, 23);
+            this.btnResetPosition.Size = new System.Drawing.Size(166, 23);
             this.btnResetPosition.TabIndex = 13;
             this.btnResetPosition.Text = "ウィンドウ位置をリセット";
             this.btnResetPosition.UseVisualStyleBackColor = true;
@@ -4765,9 +4766,9 @@
             // btnOpenSettingFolder
             // 
             this.btnOpenSettingFolder.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnOpenSettingFolder.Location = new System.Drawing.Point(315, 345);
+            this.btnOpenSettingFolder.Location = new System.Drawing.Point(367, 345);
             this.btnOpenSettingFolder.Name = "btnOpenSettingFolder";
-            this.btnOpenSettingFolder.Size = new System.Drawing.Size(125, 23);
+            this.btnOpenSettingFolder.Size = new System.Drawing.Size(146, 23);
             this.btnOpenSettingFolder.TabIndex = 13;
             this.btnOpenSettingFolder.Text = "設定フォルダーを開く";
             this.btnOpenSettingFolder.UseVisualStyleBackColor = true;
@@ -4777,9 +4778,9 @@
             // 
             this.cbEmptyPlayList.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.cbEmptyPlayList.AutoSize = true;
-            this.cbEmptyPlayList.Location = new System.Drawing.Point(240, 308);
+            this.cbEmptyPlayList.Location = new System.Drawing.Point(310, 308);
             this.cbEmptyPlayList.Name = "cbEmptyPlayList";
-            this.cbEmptyPlayList.Size = new System.Drawing.Size(177, 16);
+            this.cbEmptyPlayList.Size = new System.Drawing.Size(176, 16);
             this.cbEmptyPlayList.TabIndex = 0;
             this.cbEmptyPlayList.Text = "起動時にプレイリストを空にする。";
             this.cbEmptyPlayList.UseVisualStyleBackColor = true;
@@ -4788,9 +4789,9 @@
             // cbInitAlways
             // 
             this.cbInitAlways.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.cbInitAlways.Location = new System.Drawing.Point(240, 263);
+            this.cbInitAlways.Location = new System.Drawing.Point(280, 263);
             this.cbInitAlways.Name = "cbInitAlways";
-            this.cbInitAlways.Size = new System.Drawing.Size(194, 39);
+            this.cbInitAlways.Size = new System.Drawing.Size(226, 39);
             this.cbInitAlways.TabIndex = 0;
             this.cbInitAlways.Text = "再生開始時に必ずデバイスを初期化する。";
             this.cbInitAlways.UseVisualStyleBackColor = true;
@@ -4799,7 +4800,7 @@
             // cbAutoOpen
             // 
             this.cbAutoOpen.AutoSize = true;
-            this.cbAutoOpen.Location = new System.Drawing.Point(7, 82);
+            this.cbAutoOpen.Location = new System.Drawing.Point(8, 82);
             this.cbAutoOpen.Name = "cbAutoOpen";
             this.cbAutoOpen.Size = new System.Drawing.Size(167, 16);
             this.cbAutoOpen.TabIndex = 0;
@@ -4810,7 +4811,7 @@
             // cbUseLoopTimes
             // 
             this.cbUseLoopTimes.AutoSize = true;
-            this.cbUseLoopTimes.Location = new System.Drawing.Point(7, 7);
+            this.cbUseLoopTimes.Location = new System.Drawing.Point(8, 7);
             this.cbUseLoopTimes.Name = "cbUseLoopTimes";
             this.cbUseLoopTimes.Size = new System.Drawing.Size(216, 16);
             this.cbUseLoopTimes.TabIndex = 0;
@@ -4828,18 +4829,18 @@
             this.tpOmake.Controls.Add(this.groupBox5);
             this.tpOmake.Location = new System.Drawing.Point(4, 22);
             this.tpOmake.Name = "tpOmake";
-            this.tpOmake.Size = new System.Drawing.Size(443, 371);
+            this.tpOmake.Size = new System.Drawing.Size(518, 371);
             this.tpOmake.TabIndex = 7;
             this.tpOmake.Text = "おまけ";
             this.tpOmake.UseVisualStyleBackColor = true;
             // 
             // tbOpacity
             // 
-            this.tbOpacity.Location = new System.Drawing.Point(109, 81);
+            this.tbOpacity.Location = new System.Drawing.Point(127, 81);
             this.tbOpacity.Maximum = 100;
             this.tbOpacity.Minimum = 1;
             this.tbOpacity.Name = "tbOpacity";
-            this.tbOpacity.Size = new System.Drawing.Size(143, 45);
+            this.tbOpacity.Size = new System.Drawing.Size(167, 45);
             this.tbOpacity.TabIndex = 20;
             this.tbOpacity.TickFrequency = 10;
             this.tbOpacity.TickStyle = System.Windows.Forms.TickStyle.Both;
@@ -4849,7 +4850,7 @@
             // label52
             // 
             this.label52.AutoSize = true;
-            this.label52.Location = new System.Drawing.Point(7, 96);
+            this.label52.Location = new System.Drawing.Point(8, 96);
             this.label52.Name = "label52";
             this.label52.Size = new System.Drawing.Size(96, 12);
             this.label52.TabIndex = 19;
@@ -4858,7 +4859,7 @@
             // label14
             // 
             this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(7, 59);
+            this.label14.Location = new System.Drawing.Point(8, 59);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(61, 12);
             this.label14.TabIndex = 19;
@@ -4867,9 +4868,9 @@
             // 
             // btVST
             // 
-            this.btVST.Location = new System.Drawing.Point(417, 54);
+            this.btVST.Location = new System.Drawing.Point(486, 54);
             this.btVST.Name = "btVST";
-            this.btVST.Size = new System.Drawing.Size(23, 23);
+            this.btVST.Size = new System.Drawing.Size(27, 23);
             this.btVST.TabIndex = 18;
             this.btVST.Text = "...";
             this.btVST.UseVisualStyleBackColor = true;
@@ -4878,18 +4879,18 @@
             // 
             // tbVST
             // 
-            this.tbVST.Location = new System.Drawing.Point(88, 56);
+            this.tbVST.Location = new System.Drawing.Point(103, 56);
             this.tbVST.Name = "tbVST";
-            this.tbVST.Size = new System.Drawing.Size(323, 19);
+            this.tbVST.Size = new System.Drawing.Size(376, 19);
             this.tbVST.TabIndex = 17;
             this.tbVST.Visible = false;
             // 
             // groupBox5
             // 
             this.groupBox5.Controls.Add(this.cbDispFrameCounter);
-            this.groupBox5.Location = new System.Drawing.Point(7, 3);
+            this.groupBox5.Location = new System.Drawing.Point(8, 3);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(184, 37);
+            this.groupBox5.Size = new System.Drawing.Size(215, 37);
             this.groupBox5.TabIndex = 3;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Debug Mode";
@@ -4897,7 +4898,7 @@
             // cbDispFrameCounter
             // 
             this.cbDispFrameCounter.AutoSize = true;
-            this.cbDispFrameCounter.Location = new System.Drawing.Point(6, 17);
+            this.cbDispFrameCounter.Location = new System.Drawing.Point(7, 17);
             this.cbDispFrameCounter.Name = "cbDispFrameCounter";
             this.cbDispFrameCounter.Size = new System.Drawing.Size(120, 16);
             this.cbDispFrameCounter.TabIndex = 2;
@@ -4910,7 +4911,7 @@
             this.tpAbout.Location = new System.Drawing.Point(4, 22);
             this.tpAbout.Name = "tpAbout";
             this.tpAbout.Padding = new System.Windows.Forms.Padding(3);
-            this.tpAbout.Size = new System.Drawing.Size(443, 371);
+            this.tpAbout.Size = new System.Drawing.Size(518, 371);
             this.tpAbout.TabIndex = 1;
             this.tpAbout.Text = "About";
             this.tpAbout.UseVisualStyleBackColor = true;
@@ -4936,7 +4937,7 @@
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 8.070175F));
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 53.33333F));
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 8.421053F));
-            this.tableLayoutPanel.Size = new System.Drawing.Size(437, 365);
+            this.tableLayoutPanel.Size = new System.Drawing.Size(512, 365);
             this.tableLayoutPanel.TabIndex = 1;
             // 
             // logoPictureBox
@@ -4946,7 +4947,7 @@
             this.logoPictureBox.Location = new System.Drawing.Point(3, 3);
             this.logoPictureBox.Name = "logoPictureBox";
             this.tableLayoutPanel.SetRowSpan(this.logoPictureBox, 6);
-            this.logoPictureBox.Size = new System.Drawing.Size(138, 359);
+            this.logoPictureBox.Size = new System.Drawing.Size(162, 359);
             this.logoPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.logoPictureBox.TabIndex = 12;
             this.logoPictureBox.TabStop = false;
@@ -4954,11 +4955,11 @@
             // labelProductName
             // 
             this.labelProductName.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.labelProductName.Location = new System.Drawing.Point(150, 0);
-            this.labelProductName.Margin = new System.Windows.Forms.Padding(6, 0, 3, 0);
+            this.labelProductName.Location = new System.Drawing.Point(175, 0);
+            this.labelProductName.Margin = new System.Windows.Forms.Padding(7, 0, 3, 0);
             this.labelProductName.MaximumSize = new System.Drawing.Size(0, 16);
             this.labelProductName.Name = "labelProductName";
-            this.labelProductName.Size = new System.Drawing.Size(284, 16);
+            this.labelProductName.Size = new System.Drawing.Size(334, 16);
             this.labelProductName.TabIndex = 19;
             this.labelProductName.Text = "製品名";
             this.labelProductName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -4966,11 +4967,11 @@
             // labelVersion
             // 
             this.labelVersion.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.labelVersion.Location = new System.Drawing.Point(150, 36);
-            this.labelVersion.Margin = new System.Windows.Forms.Padding(6, 0, 3, 0);
+            this.labelVersion.Location = new System.Drawing.Point(175, 36);
+            this.labelVersion.Margin = new System.Windows.Forms.Padding(7, 0, 3, 0);
             this.labelVersion.MaximumSize = new System.Drawing.Size(0, 16);
             this.labelVersion.Name = "labelVersion";
-            this.labelVersion.Size = new System.Drawing.Size(284, 16);
+            this.labelVersion.Size = new System.Drawing.Size(334, 16);
             this.labelVersion.TabIndex = 0;
             this.labelVersion.Text = "バージョン";
             this.labelVersion.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -4978,11 +4979,11 @@
             // labelCopyright
             // 
             this.labelCopyright.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.labelCopyright.Location = new System.Drawing.Point(150, 72);
-            this.labelCopyright.Margin = new System.Windows.Forms.Padding(6, 0, 3, 0);
+            this.labelCopyright.Location = new System.Drawing.Point(175, 72);
+            this.labelCopyright.Margin = new System.Windows.Forms.Padding(7, 0, 3, 0);
             this.labelCopyright.MaximumSize = new System.Drawing.Size(0, 16);
             this.labelCopyright.Name = "labelCopyright";
-            this.labelCopyright.Size = new System.Drawing.Size(284, 16);
+            this.labelCopyright.Size = new System.Drawing.Size(334, 16);
             this.labelCopyright.TabIndex = 21;
             this.labelCopyright.Text = "著作権";
             this.labelCopyright.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -4990,11 +4991,11 @@
             // labelCompanyName
             // 
             this.labelCompanyName.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.labelCompanyName.Location = new System.Drawing.Point(150, 108);
-            this.labelCompanyName.Margin = new System.Windows.Forms.Padding(6, 0, 3, 0);
+            this.labelCompanyName.Location = new System.Drawing.Point(175, 108);
+            this.labelCompanyName.Margin = new System.Windows.Forms.Padding(7, 0, 3, 0);
             this.labelCompanyName.MaximumSize = new System.Drawing.Size(0, 16);
             this.labelCompanyName.Name = "labelCompanyName";
-            this.labelCompanyName.Size = new System.Drawing.Size(284, 16);
+            this.labelCompanyName.Size = new System.Drawing.Size(334, 16);
             this.labelCompanyName.TabIndex = 22;
             this.labelCompanyName.Text = "会社名";
             this.labelCompanyName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -5002,13 +5003,13 @@
             // textBoxDescription
             // 
             this.textBoxDescription.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBoxDescription.Location = new System.Drawing.Point(150, 140);
-            this.textBoxDescription.Margin = new System.Windows.Forms.Padding(6, 3, 3, 3);
+            this.textBoxDescription.Location = new System.Drawing.Point(175, 140);
+            this.textBoxDescription.Margin = new System.Windows.Forms.Padding(7, 3, 3, 3);
             this.textBoxDescription.Multiline = true;
             this.textBoxDescription.Name = "textBoxDescription";
             this.textBoxDescription.ReadOnly = true;
             this.textBoxDescription.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.textBoxDescription.Size = new System.Drawing.Size(284, 189);
+            this.textBoxDescription.Size = new System.Drawing.Size(334, 189);
             this.textBoxDescription.TabIndex = 23;
             this.textBoxDescription.TabStop = false;
             this.textBoxDescription.Text = "説明";
@@ -5016,7 +5017,7 @@
             // cbHiyorimiMode
             // 
             this.cbHiyorimiMode.AutoSize = true;
-            this.cbHiyorimiMode.Location = new System.Drawing.Point(8, 410);
+            this.cbHiyorimiMode.Location = new System.Drawing.Point(9, 410);
             this.cbHiyorimiMode.Name = "cbHiyorimiMode";
             this.cbHiyorimiMode.Size = new System.Drawing.Size(220, 28);
             this.cbHiyorimiMode.TabIndex = 6;
@@ -5026,15 +5027,16 @@
             // 
             // FrmSetting
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(464, 441);
+            this.ClientSize = new System.Drawing.Size(541, 441);
             this.Controls.Add(this.cbHiyorimiMode);
             this.Controls.Add(this.tcSetting);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnOK);
-            this.MinimumSize = new System.Drawing.Size(480, 480);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MinimumSize = new System.Drawing.Size(557, 480);
             this.Name = "FrmSetting";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "オプション";

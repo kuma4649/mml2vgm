@@ -60,22 +60,22 @@
             this.lblEmuSeqCounter = new System.Windows.Forms.Label();
             this.lblDriverSeqCounter = new System.Windows.Forms.Label();
             this.label15 = new System.Windows.Forms.Label();
+            this.lblEmuProcTimePer1Frame = new System.Windows.Forms.Label();
             this.lblRECounter = new System.Windows.Forms.Label();
+            this.lblEmuSampleCount = new System.Windows.Forms.Label();
             this.lblRealSeqCounterDelta = new System.Windows.Forms.Label();
             this.lblEmuSeqCounterDelta = new System.Windows.Forms.Label();
             this.lblSeqCounter = new System.Windows.Forms.Label();
+            this.label21 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
             this.label17 = new System.Windows.Forms.Label();
+            this.label20 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label19 = new System.Windows.Forms.Label();
             this.label18 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.textBox1 = new System.Windows.Forms.TextBox();
-            this.label20 = new System.Windows.Forms.Label();
-            this.lblEmuSampleCount = new System.Windows.Forms.Label();
-            this.label21 = new System.Windows.Forms.Label();
-            this.lblEmuProcTimePer1Frame = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -126,9 +126,9 @@
             this.groupBox1.Controls.Add(this.label19);
             this.groupBox1.Controls.Add(this.label18);
             this.groupBox1.Controls.Add(this.label4);
-            this.groupBox1.Location = new System.Drawing.Point(12, 12);
+            this.groupBox1.Location = new System.Drawing.Point(14, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(578, 239);
+            this.groupBox1.Size = new System.Drawing.Size(674, 239);
             this.groupBox1.TabIndex = 7;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Status";
@@ -137,35 +137,35 @@
             // 
             this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
-            this.groupBox2.Location = new System.Drawing.Point(284, 18);
+            this.groupBox2.Location = new System.Drawing.Point(331, 18);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(4, 206);
+            this.groupBox2.Size = new System.Drawing.Size(5, 206);
             this.groupBox2.TabIndex = 1;
             this.groupBox2.TabStop = false;
             // 
             // lblInterrupt
             // 
-            this.lblInterrupt.Location = new System.Drawing.Point(471, 63);
+            this.lblInterrupt.Location = new System.Drawing.Point(549, 63);
             this.lblInterrupt.Name = "lblInterrupt";
-            this.lblInterrupt.Size = new System.Drawing.Size(95, 12);
+            this.lblInterrupt.Size = new System.Drawing.Size(111, 12);
             this.lblInterrupt.TabIndex = 0;
             this.lblInterrupt.Text = "Disable";
             this.lblInterrupt.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // lblRealChipSenderIsRunning
             // 
-            this.lblRealChipSenderIsRunning.Location = new System.Drawing.Point(179, 218);
+            this.lblRealChipSenderIsRunning.Location = new System.Drawing.Point(209, 218);
             this.lblRealChipSenderIsRunning.Name = "lblRealChipSenderIsRunning";
-            this.lblRealChipSenderIsRunning.Size = new System.Drawing.Size(95, 12);
+            this.lblRealChipSenderIsRunning.Size = new System.Drawing.Size(111, 12);
             this.lblRealChipSenderIsRunning.TabIndex = 0;
             this.lblRealChipSenderIsRunning.Text = "Stop";
             this.lblRealChipSenderIsRunning.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // lblEmuChipSenderIsRunning
             // 
-            this.lblEmuChipSenderIsRunning.Location = new System.Drawing.Point(179, 206);
+            this.lblEmuChipSenderIsRunning.Location = new System.Drawing.Point(209, 206);
             this.lblEmuChipSenderIsRunning.Name = "lblEmuChipSenderIsRunning";
-            this.lblEmuChipSenderIsRunning.Size = new System.Drawing.Size(95, 12);
+            this.lblEmuChipSenderIsRunning.Size = new System.Drawing.Size(111, 12);
             this.lblEmuChipSenderIsRunning.TabIndex = 0;
             this.lblEmuChipSenderIsRunning.Text = "Stop";
             this.lblEmuChipSenderIsRunning.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -173,25 +173,25 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(298, 51);
+            this.label2.Location = new System.Drawing.Point(348, 51);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(90, 12);
+            this.label2.Size = new System.Drawing.Size(91, 12);
             this.label2.TabIndex = 0;
             this.label2.Text = "FadeOutCounter:";
             // 
             // label16
             // 
             this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(298, 39);
+            this.label16.Location = new System.Drawing.Point(348, 39);
             this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(50, 12);
+            this.label16.Size = new System.Drawing.Size(51, 12);
             this.label16.TabIndex = 0;
             this.label16.Text = "FadeOut:";
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(298, 27);
+            this.label3.Location = new System.Drawing.Point(348, 27);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(57, 12);
             this.label3.TabIndex = 0;
@@ -200,7 +200,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(298, 15);
+            this.label1.Location = new System.Drawing.Point(348, 15);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(71, 12);
             this.label1.TabIndex = 0;
@@ -209,7 +209,7 @@
             // label14
             // 
             this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(298, 63);
+            this.label14.Location = new System.Drawing.Point(348, 63);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(54, 12);
             this.label14.TabIndex = 0;
@@ -217,9 +217,9 @@
             // 
             // lblDataSenderIsRunning
             // 
-            this.lblDataSenderIsRunning.Location = new System.Drawing.Point(179, 194);
+            this.lblDataSenderIsRunning.Location = new System.Drawing.Point(209, 194);
             this.lblDataSenderIsRunning.Name = "lblDataSenderIsRunning";
-            this.lblDataSenderIsRunning.Size = new System.Drawing.Size(95, 12);
+            this.lblDataSenderIsRunning.Size = new System.Drawing.Size(111, 12);
             this.lblDataSenderIsRunning.TabIndex = 0;
             this.lblDataSenderIsRunning.Text = "Stop";
             this.lblDataSenderIsRunning.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -227,7 +227,7 @@
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(6, 218);
+            this.label13.Location = new System.Drawing.Point(7, 218);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(142, 12);
             this.label13.TabIndex = 0;
@@ -235,9 +235,9 @@
             // 
             // lblDataMakerIsRunning
             // 
-            this.lblDataMakerIsRunning.Location = new System.Drawing.Point(179, 182);
+            this.lblDataMakerIsRunning.Location = new System.Drawing.Point(209, 182);
             this.lblDataMakerIsRunning.Name = "lblDataMakerIsRunning";
-            this.lblDataMakerIsRunning.Size = new System.Drawing.Size(95, 12);
+            this.lblDataMakerIsRunning.Size = new System.Drawing.Size(111, 12);
             this.lblDataMakerIsRunning.TabIndex = 0;
             this.lblDataMakerIsRunning.Text = "Stop";
             this.lblDataMakerIsRunning.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -245,7 +245,7 @@
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(6, 206);
+            this.label10.Location = new System.Drawing.Point(7, 206);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(141, 12);
             this.label10.TabIndex = 0;
@@ -253,45 +253,45 @@
             // 
             // lblFadeOutCounter
             // 
-            this.lblFadeOutCounter.Location = new System.Drawing.Point(471, 51);
+            this.lblFadeOutCounter.Location = new System.Drawing.Point(549, 51);
             this.lblFadeOutCounter.Name = "lblFadeOutCounter";
-            this.lblFadeOutCounter.Size = new System.Drawing.Size(95, 12);
+            this.lblFadeOutCounter.Size = new System.Drawing.Size(111, 12);
             this.lblFadeOutCounter.TabIndex = 0;
             this.lblFadeOutCounter.Text = "0";
             this.lblFadeOutCounter.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // lblFadeOut
             // 
-            this.lblFadeOut.Location = new System.Drawing.Point(471, 39);
+            this.lblFadeOut.Location = new System.Drawing.Point(549, 39);
             this.lblFadeOut.Name = "lblFadeOut";
-            this.lblFadeOut.Size = new System.Drawing.Size(95, 12);
+            this.lblFadeOut.Size = new System.Drawing.Size(111, 12);
             this.lblFadeOut.TabIndex = 0;
             this.lblFadeOut.Text = "0";
             this.lblFadeOut.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // lblSeqSpeed
             // 
-            this.lblSeqSpeed.Location = new System.Drawing.Point(471, 27);
+            this.lblSeqSpeed.Location = new System.Drawing.Point(549, 27);
             this.lblSeqSpeed.Name = "lblSeqSpeed";
-            this.lblSeqSpeed.Size = new System.Drawing.Size(95, 12);
+            this.lblSeqSpeed.Size = new System.Drawing.Size(111, 12);
             this.lblSeqSpeed.TabIndex = 0;
             this.lblSeqSpeed.Text = "0";
             this.lblSeqSpeed.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // lblLoopCounter
             // 
-            this.lblLoopCounter.Location = new System.Drawing.Point(471, 15);
+            this.lblLoopCounter.Location = new System.Drawing.Point(549, 15);
             this.lblLoopCounter.Name = "lblLoopCounter";
-            this.lblLoopCounter.Size = new System.Drawing.Size(95, 12);
+            this.lblLoopCounter.Size = new System.Drawing.Size(111, 12);
             this.lblLoopCounter.TabIndex = 0;
             this.lblLoopCounter.Text = "0";
             this.lblLoopCounter.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // lblRealChipSenderBufferSize
             // 
-            this.lblRealChipSenderBufferSize.Location = new System.Drawing.Point(179, 162);
+            this.lblRealChipSenderBufferSize.Location = new System.Drawing.Point(209, 162);
             this.lblRealChipSenderBufferSize.Name = "lblRealChipSenderBufferSize";
-            this.lblRealChipSenderBufferSize.Size = new System.Drawing.Size(95, 12);
+            this.lblRealChipSenderBufferSize.Size = new System.Drawing.Size(111, 12);
             this.lblRealChipSenderBufferSize.TabIndex = 0;
             this.lblRealChipSenderBufferSize.Text = "0";
             this.lblRealChipSenderBufferSize.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -299,7 +299,7 @@
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(6, 194);
+            this.label11.Location = new System.Drawing.Point(7, 194);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(120, 12);
             this.label11.TabIndex = 0;
@@ -308,7 +308,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(6, 182);
+            this.label8.Location = new System.Drawing.Point(7, 182);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(116, 12);
             this.label8.TabIndex = 0;
@@ -316,9 +316,9 @@
             // 
             // lblEmuChipSenderBufferSize
             // 
-            this.lblEmuChipSenderBufferSize.Location = new System.Drawing.Point(179, 150);
+            this.lblEmuChipSenderBufferSize.Location = new System.Drawing.Point(209, 150);
             this.lblEmuChipSenderBufferSize.Name = "lblEmuChipSenderBufferSize";
-            this.lblEmuChipSenderBufferSize.Size = new System.Drawing.Size(95, 12);
+            this.lblEmuChipSenderBufferSize.Size = new System.Drawing.Size(111, 12);
             this.lblEmuChipSenderBufferSize.TabIndex = 0;
             this.lblEmuChipSenderBufferSize.Text = "0";
             this.lblEmuChipSenderBufferSize.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -326,17 +326,17 @@
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(6, 162);
+            this.label9.Location = new System.Drawing.Point(7, 162);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(145, 12);
+            this.label9.Size = new System.Drawing.Size(146, 12);
             this.label9.TabIndex = 0;
             this.label9.Text = "RealChipSenderBufferSize :";
             // 
             // lblDataSenderBufferSize
             // 
-            this.lblDataSenderBufferSize.Location = new System.Drawing.Point(179, 138);
+            this.lblDataSenderBufferSize.Location = new System.Drawing.Point(209, 138);
             this.lblDataSenderBufferSize.Name = "lblDataSenderBufferSize";
-            this.lblDataSenderBufferSize.Size = new System.Drawing.Size(95, 12);
+            this.lblDataSenderBufferSize.Size = new System.Drawing.Size(111, 12);
             this.lblDataSenderBufferSize.TabIndex = 0;
             this.lblDataSenderBufferSize.Text = "0";
             this.lblDataSenderBufferSize.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -344,17 +344,17 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(6, 150);
+            this.label7.Location = new System.Drawing.Point(7, 150);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(144, 12);
+            this.label7.Size = new System.Drawing.Size(145, 12);
             this.label7.TabIndex = 0;
             this.label7.Text = "EmuChipSenderBufferSize :";
             // 
             // lblDataSenderBufferCounter
             // 
-            this.lblDataSenderBufferCounter.Location = new System.Drawing.Point(179, 126);
+            this.lblDataSenderBufferCounter.Location = new System.Drawing.Point(209, 126);
             this.lblDataSenderBufferCounter.Name = "lblDataSenderBufferCounter";
-            this.lblDataSenderBufferCounter.Size = new System.Drawing.Size(95, 12);
+            this.lblDataSenderBufferCounter.Size = new System.Drawing.Size(111, 12);
             this.lblDataSenderBufferCounter.TabIndex = 0;
             this.lblDataSenderBufferCounter.Text = "0";
             this.lblDataSenderBufferCounter.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -362,26 +362,26 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(6, 138);
+            this.label6.Location = new System.Drawing.Point(7, 138);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(123, 12);
+            this.label6.Size = new System.Drawing.Size(124, 12);
             this.label6.TabIndex = 0;
             this.label6.Text = "DataSenderBufferSize :";
             // 
             // lblEmuSeqCounter
             // 
-            this.lblEmuSeqCounter.Location = new System.Drawing.Point(179, 27);
+            this.lblEmuSeqCounter.Location = new System.Drawing.Point(209, 27);
             this.lblEmuSeqCounter.Name = "lblEmuSeqCounter";
-            this.lblEmuSeqCounter.Size = new System.Drawing.Size(95, 12);
+            this.lblEmuSeqCounter.Size = new System.Drawing.Size(111, 12);
             this.lblEmuSeqCounter.TabIndex = 0;
             this.lblEmuSeqCounter.Text = "0";
             this.lblEmuSeqCounter.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // lblDriverSeqCounter
             // 
-            this.lblDriverSeqCounter.Location = new System.Drawing.Point(179, 15);
+            this.lblDriverSeqCounter.Location = new System.Drawing.Point(209, 15);
             this.lblDriverSeqCounter.Name = "lblDriverSeqCounter";
-            this.lblDriverSeqCounter.Size = new System.Drawing.Size(95, 12);
+            this.lblDriverSeqCounter.Size = new System.Drawing.Size(111, 12);
             this.lblDriverSeqCounter.TabIndex = 0;
             this.lblDriverSeqCounter.Text = "0";
             this.lblDriverSeqCounter.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -389,52 +389,79 @@
             // label15
             // 
             this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(6, 27);
+            this.label15.Location = new System.Drawing.Point(7, 27);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(92, 12);
             this.label15.TabIndex = 0;
             this.label15.Text = "EmuSeqCounter :";
             // 
+            // lblEmuProcTimePer1Frame
+            // 
+            this.lblEmuProcTimePer1Frame.Location = new System.Drawing.Point(209, 99);
+            this.lblEmuProcTimePer1Frame.Name = "lblEmuProcTimePer1Frame";
+            this.lblEmuProcTimePer1Frame.Size = new System.Drawing.Size(111, 12);
+            this.lblEmuProcTimePer1Frame.TabIndex = 0;
+            this.lblEmuProcTimePer1Frame.Text = "0";
+            this.lblEmuProcTimePer1Frame.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
             // lblRECounter
             // 
-            this.lblRECounter.Location = new System.Drawing.Point(179, 87);
+            this.lblRECounter.Location = new System.Drawing.Point(209, 87);
             this.lblRECounter.Name = "lblRECounter";
-            this.lblRECounter.Size = new System.Drawing.Size(95, 12);
+            this.lblRECounter.Size = new System.Drawing.Size(111, 12);
             this.lblRECounter.TabIndex = 0;
             this.lblRECounter.Text = "0";
             this.lblRECounter.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
+            // lblEmuSampleCount
+            // 
+            this.lblEmuSampleCount.Location = new System.Drawing.Point(209, 75);
+            this.lblEmuSampleCount.Name = "lblEmuSampleCount";
+            this.lblEmuSampleCount.Size = new System.Drawing.Size(111, 12);
+            this.lblEmuSampleCount.TabIndex = 0;
+            this.lblEmuSampleCount.Text = "0";
+            this.lblEmuSampleCount.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
             // lblRealSeqCounterDelta
             // 
-            this.lblRealSeqCounterDelta.Location = new System.Drawing.Point(179, 63);
+            this.lblRealSeqCounterDelta.Location = new System.Drawing.Point(209, 63);
             this.lblRealSeqCounterDelta.Name = "lblRealSeqCounterDelta";
-            this.lblRealSeqCounterDelta.Size = new System.Drawing.Size(95, 12);
+            this.lblRealSeqCounterDelta.Size = new System.Drawing.Size(111, 12);
             this.lblRealSeqCounterDelta.TabIndex = 0;
             this.lblRealSeqCounterDelta.Text = "0";
             this.lblRealSeqCounterDelta.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // lblEmuSeqCounterDelta
             // 
-            this.lblEmuSeqCounterDelta.Location = new System.Drawing.Point(179, 51);
+            this.lblEmuSeqCounterDelta.Location = new System.Drawing.Point(209, 51);
             this.lblEmuSeqCounterDelta.Name = "lblEmuSeqCounterDelta";
-            this.lblEmuSeqCounterDelta.Size = new System.Drawing.Size(95, 12);
+            this.lblEmuSeqCounterDelta.Size = new System.Drawing.Size(111, 12);
             this.lblEmuSeqCounterDelta.TabIndex = 0;
             this.lblEmuSeqCounterDelta.Text = "0";
             this.lblEmuSeqCounterDelta.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // lblSeqCounter
             // 
-            this.lblSeqCounter.Location = new System.Drawing.Point(179, 39);
+            this.lblSeqCounter.Location = new System.Drawing.Point(209, 39);
             this.lblSeqCounter.Name = "lblSeqCounter";
-            this.lblSeqCounter.Size = new System.Drawing.Size(95, 12);
+            this.lblSeqCounter.Size = new System.Drawing.Size(111, 12);
             this.lblSeqCounter.TabIndex = 0;
             this.lblSeqCounter.Text = "0";
             this.lblSeqCounter.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
+            // label21
+            // 
+            this.label21.AutoSize = true;
+            this.label21.Location = new System.Drawing.Point(7, 99);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(132, 12);
+            this.label21.TabIndex = 0;
+            this.label21.Text = "EmuProcTimePer1Frame:";
+            // 
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(6, 15);
+            this.label12.Location = new System.Drawing.Point(7, 15);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(101, 12);
             this.label12.TabIndex = 0;
@@ -443,16 +470,25 @@
             // label17
             // 
             this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(6, 87);
+            this.label17.Location = new System.Drawing.Point(7, 87);
             this.label17.Name = "label17";
             this.label17.Size = new System.Drawing.Size(110, 12);
             this.label17.TabIndex = 0;
             this.label17.Text = "Real - Emu Counter:";
             // 
+            // label20
+            // 
+            this.label20.AutoSize = true;
+            this.label20.Location = new System.Drawing.Point(7, 75);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(96, 12);
+            this.label20.TabIndex = 0;
+            this.label20.Text = "EmuSampleCount:";
+            // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(6, 126);
+            this.label5.Location = new System.Drawing.Point(7, 126);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(142, 12);
             this.label5.TabIndex = 0;
@@ -461,7 +497,7 @@
             // label19
             // 
             this.label19.AutoSize = true;
-            this.label19.Location = new System.Drawing.Point(6, 63);
+            this.label19.Location = new System.Drawing.Point(7, 63);
             this.label19.Name = "label19";
             this.label19.Size = new System.Drawing.Size(116, 12);
             this.label19.TabIndex = 0;
@@ -470,7 +506,7 @@
             // label18
             // 
             this.label18.AutoSize = true;
-            this.label18.Location = new System.Drawing.Point(6, 51);
+            this.label18.Location = new System.Drawing.Point(7, 51);
             this.label18.Name = "label18";
             this.label18.Size = new System.Drawing.Size(115, 12);
             this.label18.TabIndex = 0;
@@ -479,7 +515,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(6, 39);
+            this.label4.Location = new System.Drawing.Point(7, 39);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(101, 12);
             this.label4.TabIndex = 0;
@@ -496,58 +532,22 @@
             this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox1.Location = new System.Drawing.Point(12, 257);
+            this.textBox1.Location = new System.Drawing.Point(14, 257);
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
             this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.textBox1.Size = new System.Drawing.Size(578, 76);
+            this.textBox1.Size = new System.Drawing.Size(674, 76);
             this.textBox1.TabIndex = 8;
-            // 
-            // label20
-            // 
-            this.label20.AutoSize = true;
-            this.label20.Location = new System.Drawing.Point(6, 75);
-            this.label20.Name = "label20";
-            this.label20.Size = new System.Drawing.Size(96, 12);
-            this.label20.TabIndex = 0;
-            this.label20.Text = "EmuSampleCount:";
-            // 
-            // lblEmuSampleCount
-            // 
-            this.lblEmuSampleCount.Location = new System.Drawing.Point(179, 75);
-            this.lblEmuSampleCount.Name = "lblEmuSampleCount";
-            this.lblEmuSampleCount.Size = new System.Drawing.Size(95, 12);
-            this.lblEmuSampleCount.TabIndex = 0;
-            this.lblEmuSampleCount.Text = "0";
-            this.lblEmuSampleCount.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // label21
-            // 
-            this.label21.AutoSize = true;
-            this.label21.Location = new System.Drawing.Point(6, 99);
-            this.label21.Name = "label21";
-            this.label21.Size = new System.Drawing.Size(132, 12);
-            this.label21.TabIndex = 0;
-            this.label21.Text = "EmuProcTimePer1Frame:";
-            // 
-            // lblEmuProcTimePer1Frame
-            // 
-            this.lblEmuProcTimePer1Frame.Location = new System.Drawing.Point(179, 99);
-            this.lblEmuProcTimePer1Frame.Name = "lblEmuProcTimePer1Frame";
-            this.lblEmuProcTimePer1Frame.Size = new System.Drawing.Size(95, 12);
-            this.lblEmuProcTimePer1Frame.TabIndex = 0;
-            this.lblEmuProcTimePer1Frame.Text = "0";
-            this.lblEmuProcTimePer1Frame.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // frmDebug
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(602, 345);
+            this.ClientSize = new System.Drawing.Size(702, 345);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.groupBox1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MinimumSize = new System.Drawing.Size(320, 384);
+            this.MinimumSize = new System.Drawing.Size(371, 384);
             this.Name = "frmDebug";
             this.Text = "Debug";
             this.groupBox1.ResumeLayout(false);
