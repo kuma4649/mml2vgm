@@ -131,14 +131,14 @@ namespace Core
             }
 
             //Use OPNA mode
-            parent.OutData(null, lstPartWork[0].port0, 0x29, 0x82);
-            parent.OutData(null, lstPartWork[0].port1, 0x29, 0x82);
+            parent.OutData((MML)null, lstPartWork[0].port0, 0x29, 0x82);
+            parent.OutData((MML)null, lstPartWork[0].port1, 0x29, 0x82);
             //ADPCM Reset
-            parent.OutData(null, lstPartWork[0].port1, 0x10, 0x17);
-            parent.OutData(null, lstPartWork[0].port1, 0x10, 0x80);
-            parent.OutData(null, lstPartWork[0].port1, 0x00, 0x80);
-            parent.OutData(null, lstPartWork[0].port1, 0x01, 0xc0);
-            parent.OutData(null, lstPartWork[0].port1, 0x00, 0x01);
+            parent.OutData((MML)null, lstPartWork[0].port1, 0x10, 0x17);
+            parent.OutData((MML)null, lstPartWork[0].port1, 0x10, 0x80);
+            parent.OutData((MML)null, lstPartWork[0].port1, 0x00, 0x80);
+            parent.OutData((MML)null, lstPartWork[0].port1, 0x01, 0xc0);
+            parent.OutData((MML)null, lstPartWork[0].port1, 0x00, 0x01);
 
             foreach (partWork pw in lstPartWork)
             {

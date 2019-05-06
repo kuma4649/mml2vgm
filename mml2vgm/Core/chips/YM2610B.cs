@@ -142,10 +142,10 @@ namespace Core
             }
 
             //ADPCM-A/B Reset
-            parent.OutData(null,lstPartWork[0].port0, 0x1c, 0xbf);
-            parent.OutData(null,lstPartWork[0].port0, 0x1c, 0x00);
-            parent.OutData(null,lstPartWork[0].port0, 0x10, 0x00);
-            parent.OutData(null,lstPartWork[0].port0, 0x11, 0xc0);
+            parent.OutData((MML)null,lstPartWork[0].port0, 0x1c, 0xbf);
+            parent.OutData((MML)null,lstPartWork[0].port0, 0x1c, 0x00);
+            parent.OutData((MML)null,lstPartWork[0].port0, 0x10, 0x00);
+            parent.OutData((MML)null,lstPartWork[0].port0, 0x11, 0xc0);
 
             foreach (partWork pw in lstPartWork)
             {

@@ -1266,7 +1266,7 @@ namespace Core
         //xgm music data
         public List<outDatum> xdat = null;
         //xgm keyOnDataList
-        public List<byte> xgmKeyOnData = null;
+        public List<outDatum> xgmKeyOnData = null;
 
         public double dSample = 0.0;
         public long lClock = 0L;
@@ -1305,7 +1305,7 @@ namespace Core
         /// ダミーコマンドを含むLoopOffset
         /// </summary>
         public long dummyCmdLoopSamples = 0;
-
+        public long dummyCmdLoopOffsetAddress=0;
 
         public LinePos linePos { get; internal set; }
 
@@ -1581,7 +1581,7 @@ namespace Core
         {
 
             //Header
-            OutData(null, Const.hDat);
+            OutData((MML)null, Const.hDat);
 
             //PCM Data block
             foreach (KeyValuePair<enmChipType, ClsChip[]> kvp in chips)
@@ -1609,7 +1609,7 @@ namespace Core
             byte[] v;
 
             //end of data
-            OutData(null, 0x66);
+            OutData((MML)null, 0x66);
 
             //GD3 offset
             v = DivInt2ByteAry(dat.Count - 0x14 - (int)dummyCmdCounter);
@@ -1939,7 +1939,7 @@ namespace Core
             do
             {
                 //KeyOnリストをクリア
-                xgmKeyOnData = new List<byte>();
+                xgmKeyOnData = new List<outDatum>();
 
                 foreach (KeyValuePair<enmChipType, ClsChip[]> kvp in chips)
                 {
@@ -1959,7 +1959,7 @@ namespace Core
                 waitCounter = Xgm_procCheckMinimumWaitCounter();
 
                 log.Write("KeyOn情報をかき出し");
-                foreach (byte dat in xgmKeyOnData) OutData(null, 0x52, 0x28, dat);
+                foreach (outDatum dat in xgmKeyOnData) OutData(dat, 0x52, 0x28, dat.val);
 
                 log.Write("全パートのwaitcounterを減らす");
                 if (waitCounter != long.MaxValue)
@@ -2094,6 +2094,8 @@ namespace Core
 
             }
 
+            dummyCmdLoopOffsetAddress += xdat.Count+4;
+
             if (dat != null)
             {
                 //$0104 + SLEN        Music data bloc size.
@@ -2164,6 +2166,13 @@ namespace Core
                     else
                     {
                         MML mml = pw.mmlData[pw.mmlPos];
+                        mml.line.Lp.ch = pw.ch;
+                        mml.line.Lp.chip = pw.chip.Name;
+                        int c = mml.line.Txt.IndexOfAny(new char[] { ' ', '\t' });
+                        //c += mml.line.Txt.Substring(c).Length - mml.line.Txt.Substring(c).TrimStart().Length;
+                        mml.line.Lp.col = mml.column + c;//-1;
+                        mml.line.Lp.part = pw.Type.ToString();
+
                         //lineNumber = pw.getLineNumber();
                         Commander(pw, mml);
                     }
@@ -2273,7 +2282,7 @@ namespace Core
             int framePtr = 0;
             int frameCnt = 0;
             outDatum od;
-            int dummyCmdCount = 0;
+            dummyCmdCounter = 0;
 
             for (int ptr = 0; ptr < src.Count; ptr++)
             {
@@ -2445,7 +2454,8 @@ namespace Core
                         ptr += 2;
                         break;
                     case 0x7e: //LOOP Point
-                        loopOffset = des.Count - dummyCmdCount;
+                        loopOffset = des.Count - dummyCmdCounter;
+                        dummyCmdLoopOffset = des.Count;
                         for (int i = 0; i < 512; i++) opn2reg[i / 0x100][i % 0x100] = -1;
                         break;
                     case 0x2f: //Dummy Command
@@ -2457,7 +2467,7 @@ namespace Core
                             des.Add(src[ptr + 1]);
                             des.Add(src[ptr + 2]);
                             ptr += 2;
-                            dummyCmdCount += 3;
+                            dummyCmdCounter += 3;
                         }
                         break;
                     default:
@@ -2473,6 +2483,7 @@ namespace Core
             }
             else
             {
+                dummyCmdLoopOffsetAddress = des.Count;
                 od = new outDatum(enmMMLType.unknown, null, null, 0x7e);
                 des.Add(od);
                 od = new outDatum(enmMMLType.unknown, null, null, (byte)loopOffset);
@@ -2993,6 +3004,31 @@ namespace Core
             }
         }
 
+        public void OutData(outDatum od, params byte[] data)
+        {
+            foreach (byte d in data)
+            {
+                outDatum o = new outDatum();
+                o.val = d;
+                if (od != null)
+                {
+                    o.type = od.type;
+                    if (od.linePos != null)
+                    {
+                        o.linePos = new LinePos(
+                            od.linePos.fullPath,
+                            od.linePos.row,
+                            od.linePos.col,
+                            od.linePos.length,
+                            od.linePos.part,
+                            od.linePos.chip,
+                            od.linePos.ch);
+                    }
+                }
+                dat.Add(o);
+            }
+        }
+
         private void OutWaitNSamples(long n)
         {
             long m = n;
@@ -3002,7 +3038,7 @@ namespace Core
                 if (m > 0xffff)
                 {
                     OutData(
-                        null,
+                        (MML)null,
                         0x61,
                         (byte)0xff,
                         (byte)0xff
@@ -3012,7 +3048,7 @@ namespace Core
                 else
                 {
                     OutData(
-                        null,
+                        (MML)null,
                         0x61,
                         (byte)(m & 0xff),
                         (byte)((m & 0xff00) >> 8)
@@ -3026,7 +3062,7 @@ namespace Core
         {
             for (int i = 0; i < repeatCount; i++)
             {
-                OutData(null,0x62);
+                OutData((MML)null,0x62);
             }
         }
 
@@ -3034,7 +3070,7 @@ namespace Core
         {
             for (int i = 0; i < repeatCount; i++)
             {
-                OutData(null,0x63);
+                OutData((MML)null,0x63);
             }
         }
 
@@ -3058,7 +3094,7 @@ namespace Core
                 if (cpw.pcmSizeCounter > 0)
                 {
                     cpw.pcmSizeCounter--;
-                    OutData(null, (byte)(0x80 + f));
+                    OutData((MML)null, (byte)(0x80 + f));
                 }
                 else
                 {

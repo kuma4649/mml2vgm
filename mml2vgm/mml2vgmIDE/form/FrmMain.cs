@@ -658,6 +658,12 @@ namespace mml2vgmIDE
                             uint LoopOffset = Common.getLE32(mv.desBuf, 0x1c) + (uint)mv.desVGM.dummyCmdLoopOffset;
                             Common.SetLE32(mv.desBuf, 0x1c, LoopOffset);
                         }
+                        else
+                        {
+                            uint LoopOffserAddress = (uint)mv.desVGM.dummyCmdLoopOffset;
+                            uint LoopOffset = (uint)mv.desVGM.dummyCmdLoopOffset;
+                            Common.SetLE24(mv.desBuf, (uint)(mv.desVGM.dummyCmdLoopOffsetAddress + 1), LoopOffset);
+                        }
                         InitPlayer(
                             mv.desVGM.info.format == enmFormat.VGM ? EnmFileFormat.VGM : EnmFileFormat.XGM,
                             mv.desBuf);
@@ -1106,6 +1112,7 @@ namespace mml2vgmIDE
             {
                 //case EnmDevice.YM2612:
                 case "YM2612":
+                case "YM2612X":
                     lock (traceInfoLockObj)
                     {
                         TraceInfo_YM2612[od.linePos.ch] = od;
@@ -1119,6 +1126,8 @@ namespace mml2vgmIDE
                     }
                     break;
                 default:
+                    if(pd.od.linePos.chip!="")
+                    Console.WriteLine(pd.od.linePos.chip);
                     break;
             }
             //int i, c;

@@ -1780,7 +1780,7 @@ namespace mml2vgmIDE
                 //    driverReal.setting = setting;
                 //}
 
-                return xgmPlay(setting);
+                ret = xgmPlay(setting);
             }
 
             //if (PlayingFileFormat == EnmFileFormat.S98)
@@ -1882,7 +1882,7 @@ namespace mml2vgmIDE
                 //    ((vgm)driverReal).dacControl.chipRegister = chipRegister;
                 //    ((vgm)driverReal).dacControl.model = EnmModel.RealModel;
                 //}
-                ret= vgmPlay(setting);
+                ret = vgmPlay(setting);
             }
 
             if (!ret) return false;
@@ -1895,8 +1895,8 @@ namespace mml2vgmIDE
             EmuSeqCounter = 0;
             Stopped = false;
 
-            if(!useEmu) sm.RequestStopAtEmuChipSender();
-            if(!useReal) sm.RequestStopAtRealChipSender();
+            if (!useEmu) sm.RequestStopAtEmuChipSender();
+            if (!useReal) sm.RequestStopAtRealChipSender();
 
             //if (rsc == null)
             //{
@@ -2680,7 +2680,7 @@ namespace mml2vgmIDE
 
                 if (vgmBuf == null || setting == null) return false;
 
-                //Stop();
+                xgm xgmDriver = (xgm)driver;
 
                 //chipRegister.resetChips();
                 ResetFadeOutParam();
@@ -2697,6 +2697,10 @@ namespace mml2vgmIDE
                 chipLED = new ChipLEDs();
 
                 MasterVolume = setting.balance.MasterVolume;
+
+                if (!driver.init(vgmBuf, chipRegister, new EnmChip[] { EnmChip.YM2612, EnmChip.SN76489 }
+                    , (uint)(Common.SampleRate * setting.LatencyEmulation / 1000)
+                    , (uint)(Common.SampleRate * setting.outputDevice.WaitTime / 1000))) return false;
 
                 chip = new MDSound.MDSound.Chip();
                 chip.ID = (byte)0;
@@ -2743,9 +2747,10 @@ namespace mml2vgmIDE
                 }
                 chip.SamplingRate = (UInt32)Common.SampleRate;
                 chip.Volume = setting.balance.YM2612Volume;
-                chip.Clock = 7670454;
+                chip.Clock = (uint)xgmDriver.YM2612ClockValue;
                 chip.Option = null;
                 chipLED.PriOPN2 = 1;
+                chipRegister.YM2612[0].Use = true;
                 lstChips.Add(chip);
                 useChip.Add(EnmChip.YM2612);
 
@@ -2760,9 +2765,10 @@ namespace mml2vgmIDE
                 chip.Reset = sn76489.Reset;
                 chip.SamplingRate = (UInt32)Common.SampleRate;
                 chip.Volume = setting.balance.SN76489Volume;
-                chip.Clock = 3579545;
+                chip.Clock = (uint)xgmDriver.SN76489ClockValue;
                 chip.Option = null;
                 chipLED.PriDCSG = 1;
+                chipRegister.SN76489[0].Use = true;
                 lstChips.Add(chip);
                 useChip.Add(EnmChip.SN76489);
 
@@ -2776,6 +2782,35 @@ namespace mml2vgmIDE
 
                 chipRegister.initChipRegister(lstChips.ToArray());
 
+                if (setting.IsManualDetect)
+                {
+                    RealChipManualDetect(setting);
+                }
+                else
+                {
+                    RealChipAutoDetect(setting);
+                }
+
+                for (int i = 0; i < 2; i++)
+                {
+                    if (chipRegister.SN76489[i].Use)
+                    {
+                        if (chipRegister.SN76489[i].Model == EnmModel.VirtualModel) useEmu = true;
+                        if (chipRegister.SN76489[i].Model == EnmModel.RealModel) useReal = true;
+                    }
+
+                    if (chipRegister.YM2612[i].Use)
+                    {
+                        if (chipRegister.YM2612[i].Model == EnmModel.VirtualModel) useEmu = true;
+                        if (chipRegister.YM2612[i].Model == EnmModel.RealModel)
+                        {
+                            if (setting.YM2612Type.OnlyPCMEmulation) useEmu = true;
+                            useReal = true;
+                        }
+                    }
+
+                }
+
                 SetYM2612Volume(true, setting.balance.YM2612Volume);
                 SetSN76489Volume(true, setting.balance.SN76489Volume);
                 //chipRegister.setYM2203SSGVolume(0, setting.balance.GimicOPNVolume, enmModel.RealModel);
@@ -2783,9 +2818,14 @@ namespace mml2vgmIDE
                 //chipRegister.setYM2608SSGVolume(0, setting.balance.GimicOPNAVolume, enmModel.RealModel);
                 //chipRegister.setYM2608SSGVolume(1, setting.balance.GimicOPNAVolume, enmModel.RealModel);
 
-                if (!driver.init(vgmBuf, chipRegister,  new EnmChip[] { EnmChip.YM2612, EnmChip.SN76489 }
-                    , (uint)(Common.SampleRate * setting.LatencyEmulation / 1000)
-                    , (uint)(Common.SampleRate * setting.outputDevice.WaitTime / 1000))) return false;
+                log.Write("Clock 設定");
+
+                for (int i = 0; i < 2; i++)
+                {
+                    if (chipRegister.SN76489[i].Use) chipRegister.SN76489WriteClock((byte)i, (int)xgmDriver.SN76489ClockValue);
+                    if (chipRegister.YM2612[i].Use) chipRegister.YM2612WriteClock((byte)i, (int)xgmDriver.YM2612ClockValue);
+                }
+
                 //if (driverReal != null)
                 //{
                 //    if (!driverReal.init(vgmBuf, chipRegister, EnmModel.RealModel, new EnmChip[] { EnmChip.YM2612, EnmChip.SN76489 }
@@ -2794,12 +2834,17 @@ namespace mml2vgmIDE
                 //}
                 //Play
 
+                PackData[] stopData = MakeSoftResetData();
+                sm.SetStopData(stopData);
+
                 Paused = false;
                 //oneTimeReset = false;
 
-                Thread.Sleep(500);
+                Thread.Sleep(100);
 
-                Stopped = false;
+                //Stopped = false;
+
+                log.Write("初期化完了");
 
                 return true;
             }

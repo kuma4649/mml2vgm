@@ -12,6 +12,9 @@ namespace mml2vgmIDE
         public const int FCC_XGM = 0x204d4758;	// "XGM "
         public const int FCC_GD3 = 0x20336447;  // "Gd3 "
 
+        public readonly int SN76489ClockValue = 3579545;
+        public readonly int YM2612ClockValue = 7670454;
+
         private class XGMSampleID
         {
             public uint addr = 0;
@@ -198,6 +201,7 @@ namespace mml2vgmIDE
 
                 Counter++;
                 vgmFrameCounter++;
+                Audio.DriverSeqCounter++;
 
                 musicStep = Common.SampleRate / (isNTSC ? 60.0 : 50.0);
 
@@ -230,13 +234,13 @@ namespace mml2vgmIDE
             while (true)
             {
 
-                byte cmd = vgmBuf[musicPtr++].val;
+                outDatum cmd = vgmBuf[musicPtr++];
 
                 //wait
-                if (cmd == 0) break;
+                if (cmd.val == 0) break;
 
                 //loop command
-                if (cmd == 0x7e)
+                if (cmd.val == 0x7e)
                 {
                     musicPtr = musicDataBlockAddr + Common.getLE24(vgmBuf, musicPtr);
                     vgmCurLoop++;
@@ -244,80 +248,87 @@ namespace mml2vgmIDE
                 }
 
                 //end command
-                if (cmd == 0x7f)
+                if (cmd.val == 0x7f)
                 {
                     Stopped = true;
                     break;
                 }
 
-                byte X = (byte)(cmd & 0xf);
-                cmd &= 0xf0;
+                //Dummy
+                if (cmd.val == 0x2f && cmd.type == enmMMLType.Rest)
+                {
+                    musicPtr += 2;
+                    continue;
+                }
 
-                if (cmd == 0x10)
+                byte L = (byte)(cmd.val & 0xf);
+                byte H = (byte)(cmd.val & 0xf0);
+
+                if (H == 0x10)
                 {
                     //PSG register write:
-                    WritePSG(X);
+                    WritePSG(cmd, L);
                 }
-                else if (cmd == 0x20)
+                else if (H == 0x20)
                 {
                     //YM2612 port 0 register write:
-                    WriteYM2612P0(X);
+                    WriteYM2612P0(cmd, L);
                 }
-                else if (cmd == 0x30)
+                else if (H == 0x30)
                 {
                     //YM2612 port 1 register write:
-                    WriteYM2612P1(X);
+                    WriteYM2612P1(cmd, L);
                 }
-                else if (cmd == 0x40)
+                else if (H == 0x40)
                 {
                     //YM2612 key off/on ($28) command write:
-                    WriteYM2612Key(X);
+                    WriteYM2612Key(cmd, L);
                 }
-                else if (cmd == 0x50)
+                else if (H == 0x50)
                 {
                     //PCM play command:
-                    PlayPCM(X);
+                    PlayPCM(cmd, L);
                 }
 
             }
         }
 
-        private void WritePSG(byte X)
+        private void WritePSG(outDatum cmd, byte X)
         {
             for (int i = 0; i < X + 1; i++)
             {
                 byte data = vgmBuf[musicPtr++].val;
-                chipRegister.SN76489SetRegister(null,Audio.DriverSeqCounter, 0, data);
+                chipRegister.SN76489SetRegister(cmd, Audio.DriverSeqCounter, 0, data);
             }
         }
 
-        private void WriteYM2612P0(byte X)
+        private void WriteYM2612P0(outDatum cmd, byte X)
         {
             for (int i = 0; i < X + 1; i++)
             {
                 byte adr = vgmBuf[musicPtr++].val;
                 byte val = vgmBuf[musicPtr++].val;
                 if (adr == 0x2b) DACEnable = (byte)(val & 0x80);
-                chipRegister.YM2612SetRegister(null,Audio.DriverSeqCounter, 0, 0, adr, val);
+                chipRegister.YM2612SetRegister(cmd, Audio.DriverSeqCounter, 0, 0, adr, val);
             }
         }
 
-        private void WriteYM2612P1(byte X)
+        private void WriteYM2612P1(outDatum cmd, byte X)
         {
             for (int i = 0; i < X + 1; i++)
             {
                 byte adr = vgmBuf[musicPtr++].val;
                 byte val = vgmBuf[musicPtr++].val;
-                chipRegister.YM2612SetRegister(null,Audio.DriverSeqCounter, 0, 1, adr, val);
+                chipRegister.YM2612SetRegister(cmd, Audio.DriverSeqCounter, 0, 1, adr, val);
             }
         }
 
-        private void WriteYM2612Key(byte X)
+        private void WriteYM2612Key(outDatum cmd, byte X)
         {
             for (int i = 0; i < X + 1; i++)
             {
                 byte val = vgmBuf[musicPtr++].val;
-                chipRegister.YM2612SetRegister(null,Audio.DriverSeqCounter, 0, 0, 0x28, val);
+                chipRegister.YM2612SetRegister(cmd, Audio.DriverSeqCounter, 0, 0, 0x28, val);
             }
         }
 
@@ -334,7 +345,7 @@ namespace mml2vgmIDE
 
         public XGMPCM[] xgmpcm = null;
 
-        private void PlayPCM(byte X)
+        private void PlayPCM(outDatum cmd, byte X)
         {
             byte priority = (byte)(X & 0xc);
             byte channel = (byte)(X & 0x3);

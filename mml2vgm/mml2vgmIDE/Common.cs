@@ -250,6 +250,13 @@ namespace mml2vgmIDE
             return dat;
         }
 
+        public static void SetLE24(outDatum[] desBuf, uint adr, uint val)
+        {
+            desBuf[adr].val = (byte)val;
+            desBuf[adr + 1].val = (byte)(val >> 8);
+            desBuf[adr + 2].val = (byte)(val >> 16);
+        }
+
         public static void SetLE32(outDatum[] desBuf, uint adr, uint val)
         {
             desBuf[adr].val = (byte)val;

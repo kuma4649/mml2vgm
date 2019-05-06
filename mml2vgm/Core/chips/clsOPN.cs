@@ -642,7 +642,25 @@ namespace Core
 
                     if (pw.chip is YM2612X)
                     {
-                        parent.xgmKeyOnData.Add((byte)((slot << 4) + 2));
+                        outDatum od = new outDatum();
+                        od.val = (byte)((slot << 4) +2);
+                        if (mml != null)
+                        {
+                            od.type = mml.type;
+                            if (mml.line != null && mml.line.Lp != null)
+                            {
+                                od.linePos = new LinePos(
+                                    mml.line.Lp.fullPath,
+                                    mml.line.Lp.row,
+                                    mml.line.Lp.col,
+                                    mml.line.Lp.length,
+                                    mml.line.Lp.part,
+                                    mml.line.Lp.chip,
+                                    mml.line.Lp.ch);
+                            }
+                        }
+
+                        parent.xgmKeyOnData.Add(od);
                     }
                     else
                     {
@@ -656,7 +674,25 @@ namespace Core
                         byte vch = (byte)((pw.ch > 2) ? pw.ch + 1 : pw.ch);
                         if (pw.chip is YM2612X)
                         {
-                            parent.xgmKeyOnData.Add((byte)((pw.slots << 4) + (vch & 7)));
+                            outDatum od = new outDatum();
+                            od.val = (byte)((pw.slots << 4) + (vch & 7));
+                            if (mml != null)
+                            {
+                                od.type = mml.type;
+                                if (mml.line != null && mml.line.Lp != null)
+                                {
+                                    od.linePos = new LinePos(
+                                        mml.line.Lp.fullPath,
+                                        mml.line.Lp.row,
+                                        mml.line.Lp.col,
+                                        mml.line.Lp.length,
+                                        mml.line.Lp.part,
+                                        mml.line.Lp.chip,
+                                        mml.line.Lp.ch);
+                                }
+                            }
+
+                            parent.xgmKeyOnData.Add(od);
                         }
                         else
                         {
