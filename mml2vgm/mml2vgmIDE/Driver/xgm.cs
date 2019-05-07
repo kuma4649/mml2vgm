@@ -257,6 +257,7 @@ namespace mml2vgmIDE
                 //Dummy
                 if (cmd.val == 0x2f && cmd.type == enmMMLType.Rest)
                 {
+                    chipRegister.YM2612SetRegister(cmd, Audio.DriverSeqCounter, 0, 0, -1, -1);
                     musicPtr += 2;
                     continue;
                 }
@@ -297,8 +298,9 @@ namespace mml2vgmIDE
         {
             for (int i = 0; i < X + 1; i++)
             {
-                byte data = vgmBuf[musicPtr++].val;
-                chipRegister.SN76489SetRegister(cmd, Audio.DriverSeqCounter, 0, data);
+                outDatum od = vgmBuf[musicPtr];
+                chipRegister.SN76489SetRegister(vgmBuf[musicPtr], Audio.DriverSeqCounter, 0, vgmBuf[musicPtr].val);
+                musicPtr++;
             }
         }
 
@@ -327,8 +329,8 @@ namespace mml2vgmIDE
         {
             for (int i = 0; i < X + 1; i++)
             {
-                byte val = vgmBuf[musicPtr++].val;
-                chipRegister.YM2612SetRegister(cmd, Audio.DriverSeqCounter, 0, 0, 0x28, val);
+                chipRegister.YM2612SetRegister(vgmBuf[musicPtr], Audio.DriverSeqCounter, 0, 0, 0x28, vgmBuf[musicPtr].val);
+                musicPtr++;
             }
         }
 
@@ -341,6 +343,7 @@ namespace mml2vgmIDE
             public uint inst = 0;
             public bool isPlaying = false;
             public byte data = 0;
+            public outDatum od = null;
         }
 
         public XGMPCM[] xgmpcm = null;
@@ -363,6 +366,7 @@ namespace mml2vgmIDE
                     xgmpcm[channel].addr = 0;
                     xgmpcm[channel].inst = id;
                     xgmpcm[channel].isPlaying = false;
+                    xgmpcm[channel].od = cmd;
                 }
                 else
                 {
@@ -372,6 +376,7 @@ namespace mml2vgmIDE
                     xgmpcm[channel].addr = sampleDataBlockAddr + sampleID[id - 1].addr;
                     xgmpcm[channel].inst = id;
                     xgmpcm[channel].isPlaying = true;
+                    xgmpcm[channel].od = cmd;
                 }
             }
         }
@@ -395,6 +400,7 @@ namespace mml2vgmIDE
                     xgmpcm[i].isPlaying = false;
                     xgmpcm[i].data = 0;
                 }
+                if (xgmpcm[i].isPlaying) chipRegister.YM2612SetRegister(xgmpcm[i].od, Audio.DriverSeqCounter, 0, 0, -1, -1);
             }
 
             //if (cnt > 1)
@@ -411,7 +417,7 @@ namespace mml2vgmIDE
             //    o = 0;
             //}
             //Console.Write("{0} ", o);
-            chipRegister.YM2612SetRegister(null,Audio.DriverSeqCounter, 0, 0, 0x2a, o);
+            chipRegister.YM2612SetRegister(null, Audio.DriverSeqCounter, 0, 0, 0x2a, o);
         }
 
         public override GD3 getGD3Info(byte[] buf, uint vgmGd3)

@@ -2275,10 +2275,10 @@ namespace Core
 
             int[][] opn2reg = new int[2][] { new int[0x100], new int[0x100] };
             for (int i = 0; i < 512; i++) opn2reg[i / 0x100][i % 0x100] = -1;
-            int[] psgreg = new int[16];
+            outDatum[] psgreg = new outDatum[16];
             int psgch = -1;
             int psgtp = -1;
-            for (int i = 0; i < 16; i++) psgreg[i] = -1;
+            //for (int i = 0; i < 16; i++) psgreg[i] = -1;
             int framePtr = 0;
             int frameCnt = 0;
             outDatum od;
@@ -2303,11 +2303,11 @@ namespace Core
                             des.Add(od);
                             for (int j = 0; j < 16; j++)
                             {
-                                if (psgreg[j] == -1) continue;
+                                if (psgreg[j] == null) continue;
                                 int latch = (j & 1) == 0 ? 0x80 : 0;
                                 int ch = (j & 0x0c) << 3;
                                 int tp = (j & 2) << 3;
-                                od = new outDatum(cmd.type, cmd.args, cmd.linePos, (byte)(latch | (latch != 0 ? (ch | tp) : 0) | psgreg[j]));
+                                od = new outDatum(psgreg[j].type, psgreg[j].args, psgreg[j].linePos, (byte)(latch | (latch != 0 ? (ch | tp) : 0) | psgreg[j].val));
                                 des.Add(od);
                                 c++;
                             }
@@ -2316,7 +2316,7 @@ namespace Core
 
                             psgch = -1;
                             psgtp = -1;
-                            for (int i = 0; i < 16; i++) psgreg[i] = -1;
+                            for (int i = 0; i < 16; i++) psgreg[i] = null;
                         }
 
                         if (des.Count - framePtr > 256)
@@ -2347,13 +2347,13 @@ namespace Core
                             {
                                 psgch = ch;
                                 psgtp = tp;
-                                psgreg[ch * 4 + 0 + tp] = d1;
+                                psgreg[ch * 4 + 0 + tp] = new outDatum(src[ptr + 1].type, src[ptr + 1].args, src[ptr + 1].linePos, (byte)d1);
                             }
                             else
                             {
                                 if (psgch != -1)
                                 {
-                                    psgreg[psgch * 4 + 1 + psgtp] = d2;
+                                    psgreg[psgch * 4 + 1 + psgtp] = new outDatum(src[ptr + 1].type, src[ptr + 1].args, src[ptr + 1].linePos, (byte)d2);
                                 }
                                 psgch = -1;
                             }

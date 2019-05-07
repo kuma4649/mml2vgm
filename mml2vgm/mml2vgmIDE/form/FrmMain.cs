@@ -648,14 +648,17 @@ namespace mml2vgmIDE
                     try
                     {
                         //Process.Start(Path.ChangeExtension(args[1], (mv.desVGM.info.format == enmFormat.VGM) ? Properties.Resources.ExtensionVGM : Properties.Resources.ExtensionXGM));
+                        
                         //ヘッダー情報にダミーコマンド情報分の値を水増しした値をセットしなおす
                         if(mv.desVGM.info.format== enmFormat.VGM)
                         {
                             uint EOFOffset = Common.getLE32(mv.desBuf, 0x04) + (uint)mv.desVGM.dummyCmdCounter;
                             Common.SetLE32(mv.desBuf, 0x04, EOFOffset);
+
                             uint GD3Offset = Common.getLE32(mv.desBuf, 0x14) + (uint)mv.desVGM.dummyCmdCounter;
                             Common.SetLE32(mv.desBuf, 0x14, GD3Offset);
-                            uint LoopOffset = Common.getLE32(mv.desBuf, 0x1c) + (uint)mv.desVGM.dummyCmdLoopOffset;
+
+                            uint LoopOffset = (uint)mv.desVGM.dummyCmdLoopOffset;
                             Common.SetLE32(mv.desBuf, 0x1c, LoopOffset);
                         }
                         else
@@ -1136,8 +1139,8 @@ namespace mml2vgmIDE
             //ac.Document.Mark(od.linePos.col, od.linePos.col + od.linePos.length, 1);
         }
 
-        private outDatum[] TraceInfo_YM2612 = new outDatum[9];
-        private outDatum[] TraceInfo_YM2612old = new outDatum[9];
+        private outDatum[] TraceInfo_YM2612 = new outDatum[12];
+        private outDatum[] TraceInfo_YM2612old = new outDatum[12];
         private outDatum[] TraceInfo_SN76489 = new outDatum[4];
         private outDatum[] TraceInfo_SN76489old = new outDatum[4];
         private object traceInfoLockObj = new object();
@@ -1166,7 +1169,7 @@ namespace mml2vgmIDE
 
             try
             {
-                for (int ch = 0; ch < 9; ch++)
+                for (int ch = 0; ch < 12; ch++)
                 {
                     bool ret = MarkUpTraceInfo(TraceInfo_YM2612, TraceInfo_YM2612old, ch, fe, ac);
                     if (ret) refresh = ret;
