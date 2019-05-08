@@ -631,6 +631,20 @@ namespace mml2vgmIDE
             }
         }
 
+        private Location _location = new Location();
+        public Location location
+        {
+            get
+            {
+                return _location;
+            }
+
+            set
+            {
+                _location = value;
+            }
+        }
+
         private string _dockingState = "";
         public string dockingState
         {
@@ -2493,6 +2507,23 @@ namespace mml2vgmIDE
         }
 
         [Serializable]
+        public class Location
+        {
+            private Rectangle _RMain = Rectangle.Empty;
+
+            public Rectangle RMain { get => _RMain; set => _RMain = value; }
+
+            public Location Copy()
+            {
+                Location Location = new Location();
+
+                Location.RMain = this.RMain;
+
+                return Location;
+            }
+        }
+
+            [Serializable]
         public class MidiExport
         {
 
@@ -3436,6 +3467,7 @@ namespace mml2vgmIDE
 
             setting.other = this.other.Copy();
             setting.balance = this.balance.Copy();
+            setting.location = this.location.Copy();
             setting.LatencyEmulation = this.LatencyEmulation;
             setting.LatencySCCI = this.LatencySCCI;
             setting.Debug_DispFrameCounter = this.Debug_DispFrameCounter;

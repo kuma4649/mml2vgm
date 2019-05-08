@@ -73,11 +73,65 @@ namespace mml2vgmIDE
             TextDecoration dec = new BgColorTextDecoration(Color.DarkGoldenrod);
             azukiControl.ColorScheme.SetMarkingDecoration(1, dec);
 
+            azukiControl.SetKeyBind(Keys.Home, ActionHome);
+
             this.Controls.Add(azukiControl);
 
             frmSien = new FrmSien();
             frmSien.parent = main;
             frmSien.Show();
+        }
+
+        private void ActionHome(IUserInterface ui)
+        {
+            int ci = azukiControl.CaretIndex;
+            int st = azukiControl.GetLineHeadIndexFromCharIndex(ci);
+            int li = azukiControl.GetLineIndexFromCharIndex(ci);
+            int ed = st + azukiControl.GetLineLength(li);
+            string line = azukiControl.GetTextInRange(st, ed);
+            int a = -1;
+
+            if (line == null || line.Length < 1) return;
+            //先頭の文字が'ではないときは既存の動作
+            if (line[0] != '\'')
+            {
+                a = 0;
+                while (a < line.Length && (line[a] == ' ' || line[a] == '\t'))
+                {
+                    a++;
+                }
+
+            }
+            else
+            {
+                //1行を左からサーチし、初めに出現する空白又はタブの位置を取得する
+                int s = line.IndexOf(' ');
+                int t = line.IndexOf('\t');
+                if (s < 0) a = t;
+                if (t < 0) a = s;
+                if (s >= 0 && t >= 0) a = Math.Min(s, t);
+
+                //空白又はタブが見つからなかった場合は先頭へ移動
+                if (a < 0)
+                {
+                    azukiControl.SetSelection(st, st);
+                    return;
+                }
+
+                while (a < line.Length && (line[a] == ' ' || line[a] == '\t'))
+                {
+                    a++;
+                }
+            }
+
+            //既に移動済みの場合は先頭へ移動
+            if (st + a == ci)
+            {
+                azukiControl.SetSelection(st, st);
+                return;
+            }
+
+            azukiControl.SetSelection(st + a, st + a);
         }
 
         protected override string GetPersistString()

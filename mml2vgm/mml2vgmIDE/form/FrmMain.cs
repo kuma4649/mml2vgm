@@ -389,12 +389,22 @@ namespace mml2vgmIDE
             switch (e.KeyCode)
             {
                 case Keys.F1:
-                case Keys.Control | Keys.O:
                     TsmiFileOpen_Click(null, null);
                     break;
+                case Keys.O:
+                    if ((e.Modifiers & Keys.Control) == Keys.Control)
+                    {
+                        TsmiFileOpen_Click(null, null);
+                    }
+                    break;
                 case Keys.F2:
-                case Keys.Control | Keys.S:
                     TsmiSaveFile_Click(null, null);
+                    break;
+                case Keys.S:
+                    if ((e.Modifiers & Keys.Control) == Keys.Control)
+                    {
+                        TsmiSaveFile_Click(null, null);
+                    }
                     break;
                 case Keys.F5:
                     TsmiCompileAndPlay_Click(null, null);
@@ -402,19 +412,17 @@ namespace mml2vgmIDE
                 case Keys.F6:
                     TsmiCompileAndTracePlay_Click(null, null);
                     break;
-                case Keys.F7:
-                    slow();
-                    break;
-                case Keys.F8:
-                    ff();
-                    break;
                 case Keys.F9:
                     stop();
                     break;
+                case Keys.F10:
+                    slow();
+                    break;
+                case Keys.F11:
+                    ff();
+                    break;
             }
         }
-
-
 
         private void OpenFile(string fileName)
         {
@@ -953,6 +961,15 @@ namespace mml2vgmIDE
             dpMain.SaveAsXml(stream, Encoding.UTF8);
             setting.dockingState = Encoding.UTF8.GetString(stream.ToArray());
 
+            if (WindowState == FormWindowState.Normal)
+            {
+                setting.location.RMain = new Rectangle(this.Location.X, this.Location.Y, this.Size.Width, this.Size.Height);
+            }
+            else
+            {
+                setting.location.RMain = new Rectangle(RestoreBounds.Location.X, RestoreBounds.Location.Y, RestoreBounds.Size.Width, RestoreBounds.Size.Height);
+            }
+
             setting.Save();
         }
 
@@ -1263,7 +1280,6 @@ namespace mml2vgmIDE
             tssbSave.Visible = visible;
             tssbCompile.Visible = visible;
             tssbTracePlay.Visible = visible;
-            tssbSoloPlay.Visible = visible;
             tssbStop.Visible = visible;
             tssbSlow.Visible = visible;
             tssbFast.Visible = visible;
@@ -1272,11 +1288,20 @@ namespace mml2vgmIDE
             tssbSave.DisplayStyle = style;
             tssbCompile.DisplayStyle = style;
             tssbTracePlay.DisplayStyle = style;
-            tssbSoloPlay.DisplayStyle = style;
             tssbStop.DisplayStyle = style;
             tssbSlow.DisplayStyle = style;
             tssbFast.DisplayStyle = style;
         }
 
+        private void FrmMain_Load(object sender, EventArgs e)
+        {
+
+            if (setting.location.RMain != System.Drawing.Rectangle.Empty)
+            {
+                this.Location = new Point(setting.location.RMain.X, setting.location.RMain.Y);
+                this.Size = new Size(setting.location.RMain.Width, setting.location.RMain.Height);
+            }
+
+        }
     }
 }

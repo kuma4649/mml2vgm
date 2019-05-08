@@ -34,16 +34,18 @@
             this.visualStudioToolStripExtender1 = new WeifenLuo.WinFormsUI.Docking.VisualStudioToolStripExtender(this.components);
             this.vS2005Theme1 = new WeifenLuo.WinFormsUI.Docking.VS2005Theme();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.tsslCompileError = new System.Windows.Forms.ToolStripStatusLabel();
+            this.tsslCompileWarning = new System.Windows.Forms.ToolStripStatusLabel();
+            this.tsslCompileStatus = new System.Windows.Forms.ToolStripStatusLabel();
+            this.TsslLineCol = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.tssbOpen = new System.Windows.Forms.ToolStripSplitButton();
             this.tssbSave = new System.Windows.Forms.ToolStripSplitButton();
             this.tssbCompile = new System.Windows.Forms.ToolStripSplitButton();
             this.tssbTracePlay = new System.Windows.Forms.ToolStripSplitButton();
+            this.tssbStop = new System.Windows.Forms.ToolStripSplitButton();
             this.tssbSlow = new System.Windows.Forms.ToolStripSplitButton();
             this.tssbFast = new System.Windows.Forms.ToolStripSplitButton();
-            this.tssbStop = new System.Windows.Forms.ToolStripSplitButton();
-            this.tsslCompileError = new System.Windows.Forms.ToolStripStatusLabel();
-            this.tsslCompileWarning = new System.Windows.Forms.ToolStripStatusLabel();
-            this.tsslCompileStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.TsmiFile = new System.Windows.Forms.ToolStripMenuItem();
             this.TsmiNew = new System.Windows.Forms.ToolStripMenuItem();
@@ -63,6 +65,10 @@
             this.TsmiShowFolderTree = new System.Windows.Forms.ToolStripMenuItem();
             this.TsmiShowErrorList = new System.Windows.Forms.ToolStripMenuItem();
             this.TsmiShowLog = new System.Windows.Forms.ToolStripMenuItem();
+            this.TsmiFunctionKey = new System.Windows.Forms.ToolStripMenuItem();
+            this.TsmiFncHide = new System.Windows.Forms.ToolStripMenuItem();
+            this.TsmiFncButtonOnly = new System.Windows.Forms.ToolStripMenuItem();
+            this.TsmiFncButtonAndText = new System.Windows.Forms.ToolStripMenuItem();
             this.コンパイルCToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.TsmiCompileAndPlay = new System.Windows.Forms.ToolStripMenuItem();
             this.TsmiCompileAndTracePlay = new System.Windows.Forms.ToolStripMenuItem();
@@ -75,13 +81,6 @@
             this.TsmiReference = new System.Windows.Forms.ToolStripMenuItem();
             this.TsmiAbout = new System.Windows.Forms.ToolStripMenuItem();
             this.timer = new System.Windows.Forms.Timer(this.components);
-            this.tssbSoloPlay = new System.Windows.Forms.ToolStripSplitButton();
-            this.TsmiFunctionKey = new System.Windows.Forms.ToolStripMenuItem();
-            this.TsmiFncHide = new System.Windows.Forms.ToolStripMenuItem();
-            this.TsmiFncButtonOnly = new System.Windows.Forms.ToolStripMenuItem();
-            this.TsmiFncButtonAndText = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.TsslLineCol = new System.Windows.Forms.ToolStripStatusLabel();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -113,7 +112,6 @@
             this.tssbSave,
             this.tssbCompile,
             this.tssbTracePlay,
-            this.tssbSoloPlay,
             this.tssbStop,
             this.tssbSlow,
             this.tssbFast});
@@ -124,6 +122,47 @@
             this.statusStrip1.Size = new System.Drawing.Size(933, 22);
             this.statusStrip1.TabIndex = 2;
             this.statusStrip1.Text = "statusStrip1";
+            // 
+            // tsslCompileError
+            // 
+            this.tsslCompileError.AutoToolTip = true;
+            this.tsslCompileError.Image = global::mml2vgmIDE.Properties.Resources.Error;
+            this.tsslCompileError.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.tsslCompileError.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.tsslCompileError.Name = "tsslCompileError";
+            this.tsslCompileError.Size = new System.Drawing.Size(41, 17);
+            this.tsslCompileError.Text = "123";
+            this.tsslCompileError.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.tsslCompileError.ToolTipText = "エラー数";
+            // 
+            // tsslCompileWarning
+            // 
+            this.tsslCompileWarning.AutoToolTip = true;
+            this.tsslCompileWarning.Image = global::mml2vgmIDE.Properties.Resources.Warning;
+            this.tsslCompileWarning.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.tsslCompileWarning.Name = "tsslCompileWarning";
+            this.tsslCompileWarning.Size = new System.Drawing.Size(41, 17);
+            this.tsslCompileWarning.Text = "123";
+            this.tsslCompileWarning.ToolTipText = "警告数";
+            // 
+            // tsslCompileStatus
+            // 
+            this.tsslCompileStatus.Name = "tsslCompileStatus";
+            this.tsslCompileStatus.Size = new System.Drawing.Size(84, 17);
+            this.tsslCompileStatus.Text = "C:9999 LC:9999";
+            // 
+            // TsslLineCol
+            // 
+            this.TsslLineCol.Name = "TsslLineCol";
+            this.TsslLineCol.Size = new System.Drawing.Size(103, 17);
+            this.TsslLineCol.Text = "Line:9999 Col:9999";
+            // 
+            // toolStripStatusLabel1
+            // 
+            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(134, 17);
+            this.toolStripStatusLabel1.Spring = true;
+            this.toolStripStatusLabel1.Text = " ";
             // 
             // tssbOpen
             // 
@@ -170,6 +209,17 @@
             this.tssbTracePlay.Text = "トレース再生";
             this.tssbTracePlay.ButtonClick += new System.EventHandler(this.TssbPlay_ButtonClick);
             // 
+            // tssbStop
+            // 
+            this.tssbStop.DropDownButtonWidth = 0;
+            this.tssbStop.Image = global::mml2vgmIDE.Properties.Resources.F09;
+            this.tssbStop.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.tssbStop.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tssbStop.Name = "tssbStop";
+            this.tssbStop.Size = new System.Drawing.Size(68, 20);
+            this.tssbStop.Text = "停止";
+            this.tssbStop.ButtonClick += new System.EventHandler(this.TssbStop_ButtonClick);
+            // 
             // tssbSlow
             // 
             this.tssbSlow.DropDownButtonWidth = 0;
@@ -191,45 +241,6 @@
             this.tssbFast.Size = new System.Drawing.Size(74, 20);
             this.tssbFast.Text = "4倍速";
             this.tssbFast.ButtonClick += new System.EventHandler(this.TssbFast_ButtonClick);
-            // 
-            // tssbStop
-            // 
-            this.tssbStop.DropDownButtonWidth = 0;
-            this.tssbStop.Image = global::mml2vgmIDE.Properties.Resources.F09;
-            this.tssbStop.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.tssbStop.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tssbStop.Name = "tssbStop";
-            this.tssbStop.Size = new System.Drawing.Size(68, 20);
-            this.tssbStop.Text = "停止";
-            this.tssbStop.ButtonClick += new System.EventHandler(this.TssbStop_ButtonClick);
-            // 
-            // tsslCompileError
-            // 
-            this.tsslCompileError.AutoToolTip = true;
-            this.tsslCompileError.Image = global::mml2vgmIDE.Properties.Resources.Error;
-            this.tsslCompileError.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.tsslCompileError.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.tsslCompileError.Name = "tsslCompileError";
-            this.tsslCompileError.Size = new System.Drawing.Size(41, 17);
-            this.tsslCompileError.Text = "123";
-            this.tsslCompileError.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.tsslCompileError.ToolTipText = "エラー数";
-            // 
-            // tsslCompileWarning
-            // 
-            this.tsslCompileWarning.AutoToolTip = true;
-            this.tsslCompileWarning.Image = global::mml2vgmIDE.Properties.Resources.Warning;
-            this.tsslCompileWarning.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.tsslCompileWarning.Name = "tsslCompileWarning";
-            this.tsslCompileWarning.Size = new System.Drawing.Size(41, 17);
-            this.tsslCompileWarning.Text = "123";
-            this.tsslCompileWarning.ToolTipText = "警告数";
-            // 
-            // tsslCompileStatus
-            // 
-            this.tsslCompileStatus.Name = "tsslCompileStatus";
-            this.tsslCompileStatus.Size = new System.Drawing.Size(84, 17);
-            this.tsslCompileStatus.Text = "C:9999 LC:9999";
             // 
             // menuStrip1
             // 
@@ -365,30 +376,61 @@
             // TsmiShowPartCounter
             // 
             this.TsmiShowPartCounter.Name = "TsmiShowPartCounter";
-            this.TsmiShowPartCounter.Size = new System.Drawing.Size(180, 22);
+            this.TsmiShowPartCounter.Size = new System.Drawing.Size(150, 22);
             this.TsmiShowPartCounter.Text = "パートカウンター";
             this.TsmiShowPartCounter.Click += new System.EventHandler(this.TsmiShowPartCounter_Click);
             // 
             // TsmiShowFolderTree
             // 
             this.TsmiShowFolderTree.Name = "TsmiShowFolderTree";
-            this.TsmiShowFolderTree.Size = new System.Drawing.Size(180, 22);
+            this.TsmiShowFolderTree.Size = new System.Drawing.Size(150, 22);
             this.TsmiShowFolderTree.Text = "フォルダーツリー";
             this.TsmiShowFolderTree.Click += new System.EventHandler(this.TsmiShowFolderTree_Click);
             // 
             // TsmiShowErrorList
             // 
             this.TsmiShowErrorList.Name = "TsmiShowErrorList";
-            this.TsmiShowErrorList.Size = new System.Drawing.Size(180, 22);
+            this.TsmiShowErrorList.Size = new System.Drawing.Size(150, 22);
             this.TsmiShowErrorList.Text = "エラーリスト";
             this.TsmiShowErrorList.Click += new System.EventHandler(this.TsmiShowErrorList_Click);
             // 
             // TsmiShowLog
             // 
             this.TsmiShowLog.Name = "TsmiShowLog";
-            this.TsmiShowLog.Size = new System.Drawing.Size(180, 22);
+            this.TsmiShowLog.Size = new System.Drawing.Size(150, 22);
             this.TsmiShowLog.Text = "ログ";
             this.TsmiShowLog.Click += new System.EventHandler(this.TsmiShowLog_Click);
+            // 
+            // TsmiFunctionKey
+            // 
+            this.TsmiFunctionKey.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.TsmiFncHide,
+            this.TsmiFncButtonOnly,
+            this.TsmiFncButtonAndText});
+            this.TsmiFunctionKey.Name = "TsmiFunctionKey";
+            this.TsmiFunctionKey.Size = new System.Drawing.Size(150, 22);
+            this.TsmiFunctionKey.Text = "ファンクションキー";
+            // 
+            // TsmiFncHide
+            // 
+            this.TsmiFncHide.Name = "TsmiFncHide";
+            this.TsmiFncHide.Size = new System.Drawing.Size(146, 22);
+            this.TsmiFncHide.Text = "非表示";
+            this.TsmiFncHide.Click += new System.EventHandler(this.TsmiFncHide_Click);
+            // 
+            // TsmiFncButtonOnly
+            // 
+            this.TsmiFncButtonOnly.Name = "TsmiFncButtonOnly";
+            this.TsmiFncButtonOnly.Size = new System.Drawing.Size(146, 22);
+            this.TsmiFncButtonOnly.Text = "ボタンのみ";
+            this.TsmiFncButtonOnly.Click += new System.EventHandler(this.TsmiFncButtonOnly_Click);
+            // 
+            // TsmiFncButtonAndText
+            // 
+            this.TsmiFncButtonAndText.Name = "TsmiFncButtonAndText";
+            this.TsmiFncButtonAndText.Size = new System.Drawing.Size(146, 22);
+            this.TsmiFncButtonAndText.Text = "ボタンとテキスト";
+            this.TsmiFncButtonAndText.Click += new System.EventHandler(this.TsmiFncButtonAndText_Click);
             // 
             // コンパイルCToolStripMenuItem
             // 
@@ -481,60 +523,6 @@
             this.timer.Interval = 16;
             this.timer.Tick += new System.EventHandler(this.Timer_Tick);
             // 
-            // tssbSoloPlay
-            // 
-            this.tssbSoloPlay.DropDownButtonWidth = 0;
-            this.tssbSoloPlay.Image = global::mml2vgmIDE.Properties.Resources.F07;
-            this.tssbSoloPlay.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.tssbSoloPlay.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tssbSoloPlay.Name = "tssbSoloPlay";
-            this.tssbSoloPlay.Size = new System.Drawing.Size(86, 20);
-            this.tssbSoloPlay.Text = "ソロ再生";
-            // 
-            // TsmiFunctionKey
-            // 
-            this.TsmiFunctionKey.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.TsmiFncHide,
-            this.TsmiFncButtonOnly,
-            this.TsmiFncButtonAndText});
-            this.TsmiFunctionKey.Name = "TsmiFunctionKey";
-            this.TsmiFunctionKey.Size = new System.Drawing.Size(180, 22);
-            this.TsmiFunctionKey.Text = "ファンクションキー";
-            // 
-            // TsmiFncHide
-            // 
-            this.TsmiFncHide.Name = "TsmiFncHide";
-            this.TsmiFncHide.Size = new System.Drawing.Size(180, 22);
-            this.TsmiFncHide.Text = "非表示";
-            this.TsmiFncHide.Click += new System.EventHandler(this.TsmiFncHide_Click);
-            // 
-            // TsmiFncButtonOnly
-            // 
-            this.TsmiFncButtonOnly.Name = "TsmiFncButtonOnly";
-            this.TsmiFncButtonOnly.Size = new System.Drawing.Size(180, 22);
-            this.TsmiFncButtonOnly.Text = "ボタンのみ";
-            this.TsmiFncButtonOnly.Click += new System.EventHandler(this.TsmiFncButtonOnly_Click);
-            // 
-            // TsmiFncButtonAndText
-            // 
-            this.TsmiFncButtonAndText.Name = "TsmiFncButtonAndText";
-            this.TsmiFncButtonAndText.Size = new System.Drawing.Size(180, 22);
-            this.TsmiFncButtonAndText.Text = "ボタンとテキスト";
-            this.TsmiFncButtonAndText.Click += new System.EventHandler(this.TsmiFncButtonAndText_Click);
-            // 
-            // toolStripStatusLabel1
-            // 
-            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(17, 17);
-            this.toolStripStatusLabel1.Spring = true;
-            this.toolStripStatusLabel1.Text = " ";
-            // 
-            // TsslLineCol
-            // 
-            this.TsslLineCol.Name = "TsslLineCol";
-            this.TsslLineCol.Size = new System.Drawing.Size(103, 17);
-            this.TsslLineCol.Text = "Line:9999 Col:9999";
-            // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
@@ -548,6 +536,7 @@
             this.Name = "FrmMain";
             this.Text = "mml2vgmIDE";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FrmMain_FormClosing);
+            this.Load += new System.EventHandler(this.FrmMain_Load);
             this.Shown += new System.EventHandler(this.Form1_Shown);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.FrmMain_KeyDown);
             this.statusStrip1.ResumeLayout(false);
@@ -605,7 +594,6 @@
         private System.Windows.Forms.Timer timer;
         private System.Windows.Forms.ToolStripMenuItem TsmiCompileAndTracePlay;
         public WeifenLuo.WinFormsUI.Docking.DockPanel dpMain;
-        private System.Windows.Forms.ToolStripSplitButton tssbSoloPlay;
         private System.Windows.Forms.ToolStripMenuItem TsmiFunctionKey;
         private System.Windows.Forms.ToolStripMenuItem TsmiFncHide;
         private System.Windows.Forms.ToolStripMenuItem TsmiFncButtonOnly;
