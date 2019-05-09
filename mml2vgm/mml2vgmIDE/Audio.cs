@@ -437,6 +437,19 @@ namespace mml2vgmIDE
             for (int i = 0; i < 2; i++)
             {
                 chipType[i] = new Setting.ChipType();
+                if (!chipRegister.RF5C164[i].Use) continue;
+                chipRegister.RF5C164[i].Model = EnmModel.VirtualModel;
+                chipType[i].UseEmu = true;
+                chipType[i].UseScci = false;
+                if (ret.Count == 0) continue;
+                //SearchRealChip(chipType, ret, i, EnmDevice.RF5C164, chipRegister.RF5C164[i], setting.AutoDetectModuleType == 0 ? 0 : 1);
+                //if (chipType[i].UseEmu) SearchRealChip(chipType, ret, i, EnmDevice.RF5C164, chipRegister.RF5C164[i], setting.AutoDetectModuleType == 0 ? 1 : 0);
+            }
+            chipRegister.SetRealChipInfo(EnmDevice.RF5C164, chipType[0], chipType[1], setting.LatencyEmulation, setting.LatencySCCI);
+
+            for (int i = 0; i < 2; i++)
+            {
+                chipType[i] = new Setting.ChipType();
                 if (!chipRegister.SEGAPCM[i].Use) continue;
                 chipRegister.SEGAPCM[i].Model = EnmModel.VirtualModel;
                 chipType[i].UseEmu = true;
@@ -4378,11 +4391,24 @@ namespace mml2vgmIDE
 
                             hiyorimiDeviceFlag |= 0x2;
 
-                            if (i == 0) chipLED.PriRF5C = 1;
-                            else chipLED.SecRF5C = 1;
+                            if (i == 0)
+                            {
+                                chipLED.PriRF5C = 1;
+                                useChip.Add(EnmChip.RF5C164);
+                            }
+                            else
+                            {
+                                chipLED.SecRF5C = 1;
+                                useChip.Add(EnmChip.S_RF5C164);
+                            }
 
+                            log.Write(string.Format("Use RF5C164({0}) Clk:{1}"
+                                , (i == 0) ? "Pri" : "Sec"
+                                , chip.Clock
+                                ));
+
+                            chipRegister.RF5C164[i].Use = true;
                             lstChips.Add(chip);
-                            useChip.Add(i == 0 ? EnmChip.RF5C164 : EnmChip.S_RF5C164);
                         }
                     }
 
@@ -5019,6 +5045,12 @@ namespace mml2vgmIDE
                         if (chipRegister.C140[i].Model == EnmModel.RealModel) useReal = true;
                     }
 
+                    if (chipRegister.RF5C164[i].Use)
+                    {
+                        if (chipRegister.RF5C164[i].Model == EnmModel.VirtualModel) useEmu = true;
+                        if (chipRegister.RF5C164[i].Model == EnmModel.RealModel) useReal = true;
+                    }
+
                     if (chipRegister.SEGAPCM[i].Use)
                     {
                         if (chipRegister.SEGAPCM[i].Model == EnmModel.VirtualModel) useEmu = true;
@@ -5122,6 +5154,7 @@ namespace mml2vgmIDE
                         chipRegister.C140WriteClock((byte)i, (int)vgmDriver.C140ClockValue);
                         chipRegister.C140WriteType(chipRegister.C140[i], vgmDriver.C140Type);
                     }
+                    if (chipRegister.RF5C164[i].Use) chipRegister.RF5C164WriteClock((byte)i, (int)vgmDriver.RF5C164ClockValue);
                     if (chipRegister.SEGAPCM[i].Use) chipRegister.SEGAPCMWriteClock((byte)i, (int)vgmDriver.SEGAPCMClockValue);
                     if (chipRegister.SN76489[i].Use) chipRegister.SN76489WriteClock((byte)i, (int)vgmDriver.SN76489ClockValue);
                     if (chipRegister.YM2151[i].Use) chipRegister.YM2151WriteClock((byte)i, (int)vgmDriver.YM2151ClockValue);
@@ -5877,6 +5910,7 @@ namespace mml2vgmIDE
             {
                 if (chipRegister.AY8910[i].Use) chipRegister.AY8910SoftReset(counter, i);
                 if (chipRegister.C140[i].Use) chipRegister.C140SoftReset(counter, i);
+                if (chipRegister.RF5C164[i].Use) chipRegister.RF5C164SoftReset(counter, i);
                 if (chipRegister.SEGAPCM[i].Use) chipRegister.SEGAPCMSoftReset(counter, i);
                 if (chipRegister.SN76489[i].Use) chipRegister.SN76489SoftReset(counter, i);
                 if (chipRegister.YM2151[i].Use) chipRegister.YM2151SoftReset(counter, i);
@@ -5899,6 +5933,7 @@ namespace mml2vgmIDE
             {
                 if (chipRegister.AY8910[i].Use) data.AddRange(chipRegister.AY8910MakeSoftReset(i));
                 if (chipRegister.C140[i].Use) data.AddRange(chipRegister.C140MakeSoftReset(i));
+                if (chipRegister.RF5C164[i].Use) data.AddRange(chipRegister.RF5C164MakeSoftReset(i));
                 if (chipRegister.SEGAPCM[i].Use) data.AddRange(chipRegister.SEGAPCMMakeSoftReset(i));
                 if (chipRegister.SN76489[i].Use) data.AddRange(chipRegister.SN76489MakeSoftReset(i));
                 if (chipRegister.YM2151[i].Use) data.AddRange(chipRegister.YM2151MakeSoftReset(i));

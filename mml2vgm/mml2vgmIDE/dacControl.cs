@@ -446,7 +446,7 @@ namespace mml2vgmIDE
                     //log.Write(string.Format("Cnt{0} Data{1}",Counter,Data));
                     break;
                 case 0x10:
-                    chipRegister.writeRF5C164(ChipID, Offset, Data);
+                    chipRegister.RF5C164SetRegister(od, Counter, ChipID, Offset, Data);
                     break;
                 case 0x11:  // PWM
                     chipRegister.writePWM(ChipID, Port, (uint)((Offset << 8) | (Data << 0)));

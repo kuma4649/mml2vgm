@@ -666,7 +666,7 @@ namespace mml2vgmIDE
                             uint GD3Offset = Common.getLE32(mv.desBuf, 0x14) + (uint)mv.desVGM.dummyCmdCounter;
                             Common.SetLE32(mv.desBuf, 0x14, GD3Offset);
 
-                            uint LoopOffset = (uint)mv.desVGM.dummyCmdLoopOffset;
+                            uint LoopOffset = (uint)mv.desVGM.dummyCmdLoopOffset - 0x1c;
                             Common.SetLE32(mv.desBuf, 0x1c, LoopOffset);
                         }
                         else
@@ -1145,6 +1145,12 @@ namespace mml2vgmIDE
                         TraceInfo_SN76489[od.linePos.ch] = od;
                     }
                     break;
+                case "RF5C164":
+                    lock (traceInfoLockObj)
+                    {
+                        TraceInfo_RF5C164[od.linePos.ch] = od;
+                    }
+                    break;
                 default:
                     if(pd.od.linePos.chip!="")
                     Console.WriteLine(pd.od.linePos.chip);
@@ -1160,6 +1166,8 @@ namespace mml2vgmIDE
         private outDatum[] TraceInfo_YM2612old = new outDatum[12];
         private outDatum[] TraceInfo_SN76489 = new outDatum[4];
         private outDatum[] TraceInfo_SN76489old = new outDatum[4];
+        private outDatum[] TraceInfo_RF5C164 = new outDatum[8];
+        private outDatum[] TraceInfo_RF5C164old = new outDatum[8];
         private object traceInfoLockObj = new object();
         private bool traceInfoSw = false;
 
@@ -1195,6 +1203,12 @@ namespace mml2vgmIDE
                 for (int ch = 0; ch < 4; ch++)
                 {
                     bool ret = MarkUpTraceInfo(TraceInfo_SN76489, TraceInfo_SN76489old, ch, fe, ac);
+                    if (ret) refresh = ret;
+                }
+
+                for (int ch = 0; ch < 8; ch++)
+                {
+                    bool ret = MarkUpTraceInfo(TraceInfo_RF5C164, TraceInfo_RF5C164old, ch, fe, ac);
                     if (ret) refresh = ret;
                 }
 

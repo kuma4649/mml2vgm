@@ -242,7 +242,7 @@ namespace mml2vgmIDE
                 else
                 {
                     //わからんコマンド
-                    Console.WriteLine("unknown command: Adr:{0:X} Dat:{1:X}", vgmAdr , vgmBuf[vgmAdr]);
+                    Console.WriteLine("unknown command: Adr:{0:X} Dat:{1:X}", vgmAdr , vgmBuf[vgmAdr].val);
                     vgmAdr++;
                 }
                 countNum++;
@@ -1089,7 +1089,7 @@ namespace mml2vgmIDE
                                 //chipRegister.writeRF5C164PCMData(chipID, stAdr, dataSize, vgmBuf, vgmAdr + 9);
                                 pcmDat.Clear();
                                 for (uint i = vgmAdr + 9; i < vgmAdr + 9 + dataSize; i++) pcmDat.Add(vgmBuf[i].val);
-                                chipRegister.writeRF5C164PCMData(chipID, stAdr, dataSize, pcmDat.ToArray(), 0);
+                                chipRegister.RF5C164WritePCMData(od, Audio.DriverSeqCounter, chipID, stAdr, dataSize, pcmDat.ToArray(), 0);
                                 //dumpData(model, "RF5C164_PCMData(8BitMonoSigned)", vgmAdr + 9, dataSize);
                                 break;
                             case 0xc2:
@@ -1226,7 +1226,7 @@ namespace mml2vgmIDE
                 }
                 if (bType == 0x02)
                 {
-                    chipRegister.writeRF5C164PCMData(0, bWriteOffset, bSize, PCMBank[bType].Data, (uint)pcmAdr);
+                    chipRegister.RF5C164WritePCMData(od, Audio.DriverSeqCounter, 0, bWriteOffset, bSize, PCMBank[bType].Data, (uint)pcmAdr);
                 }
             }
 
@@ -1439,14 +1439,14 @@ namespace mml2vgmIDE
         {
             byte id = (byte)((vgmBuf[vgmAdr + 1].val & 0x80) != 0 ? 1 : 0);
             byte cmd = (byte)(vgmBuf[vgmAdr + 1].val & 0x7f);
-            chipRegister.writeRF5C164(id, cmd, vgmBuf[vgmAdr + 2].val);
+            chipRegister.RF5C164SetRegister(od, Audio.DriverSeqCounter, id, cmd, vgmBuf[vgmAdr + 2].val);
             vgmAdr += 3;
         }
 
         private void vcRf5c164MemoryWrite(outDatum od)
         {
             uint offset = getLE16(vgmAdr + 1);
-            chipRegister.writeRF5C164MemW(0, offset, vgmBuf[vgmAdr + 3].val);
+            chipRegister.writeRF5C164MemW(od, Audio.DriverSeqCounter, 0, offset, vgmBuf[vgmAdr + 3].val);
             vgmAdr += 4;
         }
 

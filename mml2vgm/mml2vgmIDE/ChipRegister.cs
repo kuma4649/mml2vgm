@@ -25,28 +25,30 @@ namespace mml2vgmIDE
 
         private Dictionary<MDSound.MDSound.enmInstrumentType, MDSound.MDSound.Chip> dicChipsInfo = new Dictionary<MDSound.MDSound.enmInstrumentType, MDSound.MDSound.Chip>();
 
+        private Setting.ChipType[] ctAY8910 = new Setting.ChipType[2] { null, null };
+        private Setting.ChipType[] ctC140 = new Setting.ChipType[2] { null, null };
+        private Setting.ChipType[] ctHuC6280 = new Setting.ChipType[2] { null, null };
+        private Setting.ChipType[] ctRF5C164 = new Setting.ChipType[2] { null, null };
+        private Setting.ChipType[] ctSEGAPCM = new Setting.ChipType[2] { null, null };
         private Setting.ChipType[] ctSN76489 = new Setting.ChipType[2] { null, null };
-        private Setting.ChipType[] ctYM2612 = new Setting.ChipType[2] { null, null };
-        private Setting.ChipType[] ctYM2608 = new Setting.ChipType[2] { null, null };
+        private Setting.ChipType[] ctY8950 = new Setting.ChipType[2] { null, null };
         private Setting.ChipType[] ctYM2151 = new Setting.ChipType[2] { null, null };
         private Setting.ChipType[] ctYM2203 = new Setting.ChipType[2] { null, null };
+        private Setting.ChipType[] ctYM2413 = new Setting.ChipType[2] { null, null };
+        private Setting.ChipType[] ctYM2608 = new Setting.ChipType[2] { null, null };
         private Setting.ChipType[] ctYM2610 = new Setting.ChipType[2] { null, null };
+        private Setting.ChipType[] ctYM2612 = new Setting.ChipType[2] { null, null };
+        private Setting.ChipType[] ctYM3526 = new Setting.ChipType[2] { null, null };
         private Setting.ChipType[] ctYMF262 = new Setting.ChipType[2] { null, null };
         private Setting.ChipType[] ctYMF271 = new Setting.ChipType[2] { null, null };
         private Setting.ChipType[] ctYMF278B = new Setting.ChipType[2] { null, null };
         private Setting.ChipType[] ctYMZ280B = new Setting.ChipType[2] { null, null };
-        private Setting.ChipType[] ctAY8910 = new Setting.ChipType[2] { null, null };
-        private Setting.ChipType[] ctYM2413 = new Setting.ChipType[2] { null, null };
-        private Setting.ChipType[] ctHuC6280 = new Setting.ChipType[2] { null, null };
-        private Setting.ChipType[] ctYM3526 = new Setting.ChipType[2] { null, null };
-        private Setting.ChipType[] ctY8950 = new Setting.ChipType[2] { null, null };
-        private Setting.ChipType[] ctSEGAPCM = new Setting.ChipType[2] { null, null };
-        private Setting.ChipType[] ctC140 = new Setting.ChipType[2] { null, null };
 
         private RealChip realChip = null;
         private RSoundChip[] scAY8910 = new RSoundChip[2] { null, null };
-        private RSoundChip[] scSEGAPCM = new RSoundChip[2] { null, null };
         private RSoundChip[] scC140 = new RSoundChip[2] { null, null };
+        private RSoundChip[] scRF5C164= new RSoundChip[2] { null, null };
+        private RSoundChip[] scSEGAPCM = new RSoundChip[2] { null, null };
         private RSoundChip[] scSN76489 =  new RSoundChip[2] { null, null };
         private RSoundChip[] scYM2151 = new RSoundChip[2] { null, null };
         private RSoundChip[] scYM2203 = new RSoundChip[2] { null, null };
@@ -282,6 +284,7 @@ namespace mml2vgmIDE
         };
 
         private int[] C140NowFadeoutVol = new int[] { 0, 0 };
+        private int[] RF5C164NowFadeoutVol = new int[] { 0, 0 };
         private int[] SEGAPCMNowFadeoutVol = new int[] { 0, 0 };
 
         private bool[] maskOKIM6258 = new bool[2] { false, false };
@@ -346,6 +349,7 @@ namespace mml2vgmIDE
         public Chip[] AY8910 = new Chip[] { new Chip(), new Chip() };
         public Chip[] C140 = new Chip[] { new Chip(), new Chip() };
         public Chip MIDI = new Chip();
+        public Chip[] RF5C164 = new Chip[] { new Chip(), new Chip() };
         public Chip[] SEGAPCM = new Chip[] { new Chip(), new Chip() };
         public Chip[] SN76489 = new Chip[] { new Chip(), new Chip() };
         public Chip[] YM2151 = new Chip[] { new Chip(), new Chip() };
@@ -395,6 +399,16 @@ namespace mml2vgmIDE
                         if (scC140[i] != null) scC140[i].init();
                         C140[i].Model = ctC140[i].UseEmu ? EnmModel.VirtualModel : EnmModel.RealModel;
                         C140[i].Delay = (C140[i].Model == EnmModel.VirtualModel ? LEmu : LReal);
+                    }
+                    break;
+                case EnmDevice.RF5C164:
+                    ctRF5C164 = new Setting.ChipType[] { chipTypeP, chipTypeS };
+                    for (int i = 0; i < 2; i++)
+                    {
+                        scRF5C164[i] = null;
+                        if (scRF5C164[i] != null) scRF5C164[i].init();
+                        RF5C164[i].Model = ctRF5C164[i].UseEmu ? EnmModel.VirtualModel : EnmModel.RealModel;
+                        RF5C164[i].Delay = (RF5C164[i].Model == EnmModel.VirtualModel ? LEmu : LReal);
                     }
                     break;
                 case EnmDevice.SegaPCM:
@@ -523,6 +537,12 @@ namespace mml2vgmIDE
                 C140[i].Number = i;
                 C140[i].Hosei = 0;
 
+                RF5C164[i].Use = false;
+                RF5C164[i].Model = EnmModel.None;
+                RF5C164[i].Device = EnmDevice.RF5C164;
+                RF5C164[i].Number = i;
+                RF5C164[i].Hosei = 0;
+
                 SEGAPCM[i].Use = false;
                 SEGAPCM[i].Model = EnmModel.None;
                 SEGAPCM[i].Device = EnmDevice.SegaPCM;
@@ -591,6 +611,9 @@ namespace mml2vgmIDE
                 case EnmDevice.C140:
                     C140SetRegisterProcessing(ref Counter, ref Chip, ref Type, ref Address, ref Data, ref ExData);
                     break;
+                case EnmDevice.RF5C164:
+                    RF5C164SetRegisterProcessing(ref Counter, ref Chip, ref Type, ref Address, ref Data, ref ExData);
+                    break;
                 case EnmDevice.SegaPCM:
                     SEGAPCMSetRegisterProcessing(ref Counter, ref Chip, ref Type, ref Address, ref Data, ref ExData);
                     break;
@@ -633,6 +656,9 @@ namespace mml2vgmIDE
                 case EnmDevice.MIDIGM:
                     //MIDIWriteRegisterControl(Chip, type, address, data, exData);
                     break;
+                case EnmDevice.RF5C164:
+                    RF5C164WriteRegisterControl(Chip, type, address, data, exData);
+                    break;
                 case EnmDevice.SegaPCM:
                     SEGAPCMWriteRegisterControl(Chip, type, address, data, exData);
                     break;
@@ -664,6 +690,7 @@ namespace mml2vgmIDE
         {
             AY8910SetFadeoutVolume(counter, (int)((1.0 - fadeoutCounter) * 15.0));
             C140SetFadeoutVolume(counter, (int)((1.0 - fadeoutCounter) * 255.0));
+            RF5C164SetFadeoutVolume(counter, (int)((1.0 - fadeoutCounter) * 255.0));
             SEGAPCMSetFadeoutVolume(counter, (int)((1.0 - fadeoutCounter) * 255.0));
             SN76489SetFadeoutVolume(counter, (int)((1.0 - fadeoutCounter) * 15.0));
             YM2151SetFadeoutVolume(counter, (int)((1.0 - fadeoutCounter) * 127.0));
@@ -843,6 +870,7 @@ namespace mml2vgmIDE
 
                 AY8910NowFadeoutVol[chipID] = 0;
                 C140NowFadeoutVol[chipID] = 0;
+                RF5C164NowFadeoutVol[chipID] = 0;
                 SEGAPCMNowFadeoutVol[chipID] = 0;
                 SN76489NowFadeoutVol[chipID] = 0;
                 YM2151NowFadeoutVol[chipID] = 0;
@@ -1028,6 +1056,7 @@ namespace mml2vgmIDE
 
                 AY8910NowFadeoutVol[chipID] = 0;
                 C140NowFadeoutVol[chipID] = 0;
+                RF5C164NowFadeoutVol[chipID] = 0;
                 SEGAPCMNowFadeoutVol[chipID] = 0;
                 SN76489NowFadeoutVol[chipID] = 0;
                 YM2151NowFadeoutVol[chipID] = 0;
@@ -1330,6 +1359,24 @@ namespace mml2vgmIDE
 
         //    return data;
         //}
+
+
+
+        public void writeDummyChip(outDatum od, long Counter, byte chipID, byte isSecondary)
+        {
+            switch (chipID)
+            {
+                case 0x50:
+                    enq(od, Counter, SN76489[isSecondary], EnmDataType.Normal, -1, -1, null);
+                    break;
+                case 0x52:
+                    enq(od, Counter, YM2612[isSecondary], EnmDataType.Normal, -1, -1, null);
+                    break;
+                case 0xb1:
+                    enq(od, Counter, RF5C164[isSecondary], EnmDataType.Normal, -1, -1, null);
+                    break;
+            }
+        }
 
 
 
@@ -1758,6 +1805,176 @@ namespace mml2vgmIDE
                 {
                     C140SetRegister(null,Counter, i, (c << 4) + 0, pcmRegisterC140[i][(c << 4) + 0]);
                     C140SetRegister(null,Counter, i, (c << 4) + 1, pcmRegisterC140[i][(c << 4) + 1]);
+                }
+            }
+        }
+
+
+
+        public void writeRF5C68PCMData(byte chipid, uint stAdr, uint dataSize, byte[] vgmBuf, uint vgmAdr)
+        {
+            EnmModel model = EnmModel.VirtualModel;
+            //if (chipid == 0) chipLED.PriRF5C = 2;
+            //else chipLED.SecRF5C = 2;
+
+            if (model == EnmModel.VirtualModel)
+                mds.WriteRF5C68PCMData(chipid, stAdr, dataSize, vgmBuf, vgmAdr);
+        }
+
+        public void writeRF5C68(byte chipid, byte adr, byte data)
+        {
+            EnmModel model = EnmModel.VirtualModel;
+
+            if (model == EnmModel.VirtualModel)
+            {
+                mds.WriteRF5C68(chipid, adr, data);
+            }
+        }
+
+        public void writeRF5C68MemW(byte chipid, uint offset, byte data)
+        {
+            EnmModel model = EnmModel.VirtualModel;
+            if (model == EnmModel.VirtualModel)
+                mds.WriteRF5C68MemW(chipid, offset, data);
+        }
+
+
+
+        private void RF5C164WriteRegisterControl(Chip Chip, EnmDataType type, int address, int data, object exData)
+        {
+            if (type == EnmDataType.Normal)
+            {
+                if (Chip.Model == EnmModel.VirtualModel)
+                {
+                    //if (!ctRF5C164[Chip.Number].UseScci && ctRF5C164[Chip.Number].UseEmu)
+                    //{
+                    mds.WriteRF5C164((byte)Chip.Number, (byte)address, (byte)data);
+                    //}
+                }
+                if (Chip.Model == EnmModel.RealModel)
+                {
+                    ;
+                }
+            }
+            else if (type == EnmDataType.Block)
+            {
+                Audio.sm.SetInterrupt();
+
+                try
+                {
+                    if (exData == null) return;
+
+                    if (exData is PackData[])
+                    {
+                        PackData[] pdata = (PackData[])exData;
+                        if (Chip.Model == EnmModel.VirtualModel)
+                        {
+                            if (data == -1)
+                            {
+                                foreach (PackData dat in pdata)
+                                    mds.WriteRF5C164((byte)dat.Chip.Number, (byte)dat.Address, (byte)dat.Data);
+                            }
+                            else
+                            {
+                                foreach (PackData dat in pdata)
+                                    mds.WriteRF5C164MemW((byte)dat.Chip.Number, (byte)dat.Address, (byte)dat.Data);
+                            }
+                        }
+                        if (Chip.Model == EnmModel.RealModel)
+                        {
+                            ;
+                        }
+                        return;
+                    }
+
+                    uint stAdr = (uint)((object[])exData)[0];
+                    uint dataSize = (uint)((object[])exData)[1];
+                    byte[] pcmData = (byte[])((object[])exData)[2];
+                    uint vgmAdr = (uint)((object[])exData)[3];
+
+                    if (Chip.Model == EnmModel.VirtualModel)
+                    {
+                        log.Write("Sending RF5C164(Emu) PCM");
+                        mds.WriteRF5C164PCMData((byte)Chip.Number, stAdr, dataSize, pcmData, vgmAdr);
+                    }
+                    if (Chip.Model == EnmModel.RealModel)
+                    {
+                        ;
+                    }
+                }
+                finally
+                {
+                    Audio.sm.ResetInterrupt();
+                }
+            }
+        }
+
+        public void RF5C164SetRegisterProcessing(ref long Counter, ref Chip Chip, ref EnmDataType Type, ref int Address, ref int dData, ref object ExData)
+        {
+            //if (ctRF5C164 == null) return;
+
+            if (Chip.Number == 0) chipLED.PriRF5C = 2;
+            else chipLED.SecRF5C = 2;
+
+        }
+
+        public void RF5C164SetRegister(outDatum od, long Counter, byte ChipID, byte dAddr, byte dData)
+        {
+            enq(od, Counter, RF5C164[ChipID], EnmDataType.Normal, dAddr, dData, null);
+        }
+
+        public void RF5C164SetRegister(outDatum od, long Counter, int ChipID, PackData[] data)
+        {
+            enq(od, Counter, RF5C164[ChipID], EnmDataType.Block, -1, -1, data);
+        }
+
+        public void RF5C164WritePCMData(outDatum od, long Counter, byte ChipID, uint stAdr, uint dataSize, byte[] vgmBuf, uint vgmAdr)
+        {
+            enq(od, Counter, RF5C164[ChipID], EnmDataType.Block, -1, -2, new object[] { stAdr, dataSize, vgmBuf, vgmAdr });
+
+        }
+
+        public void writeRF5C164MemW(outDatum od, long Counter, byte ChipID, uint offset, byte data)
+        {
+            enq(od, Counter, RF5C164[ChipID], EnmDataType.Block, -1, -2, new PackData[] { new PackData(od, RF5C164[ChipID], EnmDataType.Normal, (int)offset, data, null) });
+        }
+
+        public void RF5C164SoftReset(long Counter, int ChipID)
+        {
+            List<PackData> data = RF5C164MakeSoftReset(ChipID);
+            RF5C164SetRegister(null, Counter, ChipID, data.ToArray());
+        }
+
+        public List<PackData> RF5C164MakeSoftReset(int chipID)
+        {
+            List<PackData> data = new List<PackData>();
+            data.Add(new PackData(null, RF5C164[chipID], EnmDataType.Normal, 0x8, 0xff, null));
+
+            return data;
+        }
+
+        public void RF5C164WriteClock(byte chipID, int clock)
+        {
+            if (scRF5C164 != null && scRF5C164[chipID] != null)
+            {
+                scRF5C164[chipID].dClock = scRF5C164[chipID].SetMasterClock((uint)clock);
+                scRF5C164[chipID].mul = (double)scRF5C164[chipID].dClock / (double)clock;
+            }
+        }
+
+        public void RF5C164SetFadeoutVolume(long Counter, int v)
+        {
+            for (int i = 0; i < RF5C164.Length; i++)
+            {
+                if (!RF5C164[i].Use) continue;
+                if (RF5C164[i].Model == EnmModel.VirtualModel) continue;
+                if (RF5C164NowFadeoutVol[i] >> 4 == v >> 4) continue;
+
+                RF5C164NowFadeoutVol[i] = v;
+                for (int c = 0; c < 24; c++)
+                {
+                    //RF5C164SetRegister(null, Counter, i, (c << 4) + 0, pcmRegisterC140[i][(c << 4) + 0]);
+                    //RF5C164SetRegister(null, Counter, i, (c << 4) + 1, pcmRegisterC140[i][(c << 4) + 1]);
                 }
             }
         }
@@ -4420,19 +4637,6 @@ namespace mml2vgmIDE
             }
         }
 
-        public void writeDummyChip(outDatum od, long Counter, byte chipID, byte isSecondary)
-        {
-            switch (chipID)
-            {
-                case 0x50:
-                    enq(od, Counter, SN76489[isSecondary], EnmDataType.Normal, -1, -1, null);
-                    break;
-                case 0x52:
-                    enq(od, Counter, YM2612[isSecondary], EnmDataType.Normal, -1, -1, null);
-                    break;
-            }
-        }
-
         public void SN76489SetRegisterGGpanning(outDatum od, long Counter, int ChipID, int dData)
         {
             enq(od, Counter, SN76489[ChipID], EnmDataType.Normal, 0x100, dData, null);
@@ -5333,43 +5537,6 @@ namespace mml2vgmIDE
 
         }
 
-        public void writeRF5C68PCMData(byte chipid, uint stAdr, uint dataSize, byte[] vgmBuf, uint vgmAdr)
-        {
-            EnmModel model = EnmModel.VirtualModel;
-            //if (chipid == 0) chipLED.PriRF5C = 2;
-            //else chipLED.SecRF5C = 2;
-
-            if (model == EnmModel.VirtualModel)
-                mds.WriteRF5C68PCMData(chipid, stAdr, dataSize, vgmBuf, vgmAdr);
-        }
-
-        public void writeRF5C68(byte chipid, byte adr, byte data)
-        {
-            EnmModel model = EnmModel.VirtualModel;
-
-            if (model == EnmModel.VirtualModel)
-            {
-                mds.WriteRF5C68(chipid, adr, data);
-            }
-        }
-
-        public void writeRF5C68MemW(byte chipid, uint offset, byte data)
-        {
-            EnmModel model = EnmModel.VirtualModel;
-            if (model == EnmModel.VirtualModel)
-                mds.WriteRF5C68MemW(chipid, offset, data);
-        }
-
-        public void writeRF5C164PCMData(byte chipid, uint stAdr, uint dataSize, byte[] vgmBuf, uint vgmAdr)
-        {
-            EnmModel model = EnmModel.VirtualModel;
-            if (chipid == 0) chipLED.PriRF5C = 2;
-            else chipLED.SecRF5C = 2;
-
-            if (model == EnmModel.VirtualModel)
-                mds.WriteRF5C164PCMData(chipid, stAdr, dataSize, vgmBuf, vgmAdr);
-        }
-
         public void writeNESPCMData(byte chipid, uint stAdr, uint dataSize, byte[] vgmBuf, uint vgmAdr)
         {
             EnmModel model = EnmModel.VirtualModel;
@@ -5378,28 +5545,6 @@ namespace mml2vgmIDE
 
             if (model == EnmModel.VirtualModel)
                 mds.WriteNESRam(chipid, (int)stAdr, (int)dataSize, vgmBuf, (int)vgmAdr);
-        }
-
-        public void writeRF5C164(byte chipid, byte adr, byte data)
-        {
-            EnmModel model = EnmModel.VirtualModel;
-            if (chipid == 0) chipLED.PriRF5C = 2;
-            else chipLED.SecRF5C = 2;
-
-            if (model == EnmModel.VirtualModel)
-            {
-                mds.WriteRF5C164(chipid, adr, data);
-            }
-        }
-
-        public void writeRF5C164MemW(byte chipid, uint offset, byte data)
-        {
-            EnmModel model = EnmModel.VirtualModel;
-            if (chipid == 0) chipLED.PriRF5C = 2;
-            else chipLED.SecRF5C = 2;
-
-            if (model == EnmModel.VirtualModel)
-                mds.WriteRF5C164MemW(chipid, offset, data);
         }
 
         public void writePWM(byte chipid, byte adr, uint data)
@@ -5892,93 +6037,6 @@ namespace mml2vgmIDE
             fmRegisterYMF278BFM[chipID] = 0;
         }
 
-
-
-        //public int x68Sound_TotalVolume(int vol, enmModel model)
-        //{
-        //    if (model == enmModel.RealModel) return 0;
-
-        //    return x68Sound.X68Sound_TotalVolume(vol);
-        //}
-
-        //public int x68Sound_GetPcm(short[] buf, int len, enmModel model, Action<Action, bool> oneFrameProc = null)
-        //{
-        //    if (model == enmModel.RealModel) return 0;
-        //    return x68Sound.X68Sound_GetPcm(buf, len, oneFrameProc);
-        //}
-
-        //public void x68Sound_Free(enmModel model)
-        //{
-        //    if (model == enmModel.RealModel) return;
-        //    x68Sound.X68Sound_Free();
-        //}
-
-        //public void x68Sound_OpmInt(Action p, enmModel model)
-        //{
-        //    if (model == enmModel.RealModel) return;
-        //    x68Sound.X68Sound_OpmInt(p);
-        //}
-
-        //public int x68Sound_StartPcm(int samprate, int v1, int v2, int pcmbuf, enmModel model)
-        //{
-        //    if (model == enmModel.RealModel) return 0;
-        //    return x68Sound.X68Sound_StartPcm(samprate, v1, v2, pcmbuf);
-        //}
-
-        //public int x68Sound_Start(int samprate, int v1, int v2, int betw, int pcmbuf, int late, double v3, enmModel model)
-        //{
-        //    if (model == enmModel.RealModel) return 0;
-        //    return x68Sound.X68Sound_Start(samprate, v1, v2, betw, pcmbuf, late, v3);
-        //}
-
-        //public int x68Sound_OpmWait(int v, enmModel model)
-        //{
-        //    if (model == enmModel.RealModel) return 0;
-        //    return x68Sound.X68Sound_OpmWait(v);
-        //}
-
-        //public void x68Sound_Pcm8_Out(int v, byte[] p, uint a1, int d1, int d2, enmModel model)
-        //{
-        //    if (model == enmModel.RealModel) return;
-        //    x68Sound.X68Sound_Pcm8_Out(v, p, a1, d1, d2);
-        //}
-
-        //public void x68Sound_Pcm8_Abort(enmModel model)
-        //{
-        //    if (model == enmModel.RealModel) return;
-        //    x68Sound.X68Sound_Pcm8_Abort();
-        //}
-
-        //internal void x68Sound_MountMemory(byte[] mm, enmModel model)
-        //{
-        //    if (model == enmModel.RealModel) return;
-        //    x68Sound.MountMemory(mm);
-        //}
-
-        //public void sound_iocs_init(enmModel model)
-        //{
-        //    if (model == enmModel.RealModel) return;
-        //    sound_iocs.init();
-        //}
-
-        //public void sound_iocs_iocs_adpcmmod(int v, enmModel model)
-        //{
-        //    if (model == enmModel.RealModel) return;
-        //    sound_iocs._iocs_adpcmmod(v);
-        //}
-
-        //public void sound_iocs_iocs_adpcmout(uint a1, int d1, int d2, enmModel model)
-        //{
-        //    if (model == enmModel.RealModel) return;
-        //    sound_iocs._iocs_adpcmout(a1, d1, d2);
-        //}
-
-        //public void sound_iocs_iocs_opmset(byte d1, byte d2, enmModel model)
-        //{
-        //    //if (model == enmModel.RealModel) return;
-        //    setYM2151Register(0, 0, d1, d2, model, 0, 0);
-        //    sound_iocs._iocs_opmset(d1, d2);
-        //}
 
 
     }
