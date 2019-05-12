@@ -59,6 +59,7 @@ MML2VGM,MVCはMITライセンスに準ずる物とします。LICENSE.txtを参照。
  ・hex125 さん  
  ・くろま さん  
  ・TAN-Y さん  
+ ・阿保 さん  
   
  ・XPCMK  
  ・FMP7  
@@ -70,9 +71,9 @@ MML2VGM,MVCはMITライセンスに準ずる物とします。LICENSE.txtを参照。
  ・Git  
  ・SourceTree  
  ・さくらエディター  
- ・Azuki
- ・Dock Panel Suite
- ・CodeWarrior
+ ・Azuki  
+ ・Dock Panel Suite  
+ ・CodeWarrior  
   
  ・SGDKとは - nendo  
  ・FutureDriver  
@@ -80,4 +81,5 @@ MML2VGM,MVCはMITライセンスに準ずる物とします。LICENSE.txtを参照。
  ・DOBON.NET  
  ・Wikipedia  
  ・retroPC.net  
+ ・VAL-SOUND  
   
