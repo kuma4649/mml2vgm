@@ -1280,6 +1280,7 @@ namespace Core
         private Random rnd = new Random();
 
         public int useJumpCommand = 0;
+        public int useIDEJumpCommand = 0;
 
         /// <summary>
         /// ダミーコマンドの総バイト数

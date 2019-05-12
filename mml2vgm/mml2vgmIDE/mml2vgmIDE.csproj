@@ -44,14 +44,17 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>lib\Azuki.dll</HintPath>
     </Reference>
+    <Reference Include="HtmlAgilityPack, Version=1.11.4.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
+      <HintPath>..\packages\HtmlAgilityPack.1.11.4\lib\Net45\HtmlAgilityPack.dll</HintPath>
+    </Reference>
     <Reference Include="MDSound">
       <HintPath>..\Core\MDSound.dll</HintPath>
     </Reference>
-    <Reference Include="NAudio, Version=1.8.5.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\NAudio.1.8.5\lib\net35\NAudio.dll</HintPath>
+    <Reference Include="NAudio, Version=1.9.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\NAudio.1.9.0\lib\net35\NAudio.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="RealChipCtlWrap, Version=0.0.0.0, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
@@ -153,6 +156,7 @@
     <Compile Include="form\ucSettingInstruments.Designer.cs">
       <DependentUpon>ucSettingInstruments.cs</DependentUpon>
     </Compile>
+    <Compile Include="InstrumentAtValSound.cs" />
     <Compile Include="log.cs" />
     <Compile Include="NAudioWrap.cs" />
     <Compile Include="NullOut.cs" />

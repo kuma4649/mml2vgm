@@ -179,6 +179,126 @@
       "title": "yFBAL,op,n",
       "description": "",
       "content": "yFBAL,"
+    },
+    {
+      "sienType": 1,
+      "nextAnchor": 0,
+      "nextCaret": 0,
+      "pattern": "'@ N ",
+      "patternType": "B",
+      "title": "'@ OPN {0}",
+      "description": "VAL-SOUND様からFM音色を参照します。",
+      "content": "'(from VAL-SOUND)','http://valsound.fc2web.com/fmindex/data/bass01.html','Shift_JIS','//body/tt','a','pre'"
+    },
+    {
+      "sienType": 1,
+      "nextAnchor": 0,
+      "nextCaret": 0,
+      "pattern": "'@ N ",
+      "patternType": "B",
+      "title": "'@ OPN {0}",
+      "description": "VAL-SOUND様からFM音色を参照します。",
+      "content": "'(from VAL-SOUND)','http://valsound.fc2web.com/fmindex/data/bell01.html','Shift_JIS','//body/tt','a','pre'"
+    },
+    {
+      "sienType": 1,
+      "nextAnchor": 0,
+      "nextCaret": 0,
+      "pattern": "'@ N ",
+      "patternType": "B",
+      "title": "'@ OPN {0}",
+      "description": "VAL-SOUND様からFM音色を参照します。",
+      "content": "'(from VAL-SOUND)','http://valsound.fc2web.com/fmindex/data/brass01.html','Shift_JIS','//body','a','pre'"
+    },
+    {
+      "sienType": 1,
+      "nextAnchor": 0,
+      "nextCaret": 0,
+      "pattern": "'@ N ",
+      "patternType": "B",
+      "title": "'@ OPN {0}",
+      "description": "VAL-SOUND様からFM音色を参照します。",
+      "content": "'(from VAL-SOUND)','http://valsound.fc2web.com/fmindex/data/guitar01.html','Shift_JIS','//body','a','pre'"
+    },
+    {
+      "sienType": 1,
+      "nextAnchor": 0,
+      "nextCaret": 0,
+      "pattern": "'@ N ",
+      "patternType": "B",
+      "title": "'@ OPN {0}",
+      "description": "VAL-SOUND様からFM音色を参照します。",
+      "content": "'(from VAL-SOUND)','http://valsound.fc2web.com/fmindex/data/lead01.html','Shift_JIS','//body/tt','a','pre'"
+    },
+    {
+      "sienType": 1,
+      "nextAnchor": 0,
+      "nextCaret": 0,
+      "pattern": "'@ N ",
+      "patternType": "B",
+      "title": "'@ OPN {0}",
+      "description": "VAL-SOUND様からFM音色を参照します。",
+      "content": "'(from VAL-SOUND)','http://valsound.fc2web.com/fmindex/data/percus01.html','Shift_JIS','//body/tt','a','pre'"
+    },
+    {
+      "sienType": 1,
+      "nextAnchor": 0,
+      "nextCaret": 0,
+      "pattern": "'@ N ",
+      "patternType": "B",
+      "title": "'@ OPN {0}",
+      "description": "VAL-SOUND様からFM音色を参照します。",
+      "content": "'(from VAL-SOUND)','http://valsound.fc2web.com/fmindex/data/piano01.html','Shift_JIS','//body/tt','a','pre'"
+    },
+    {
+      "sienType": 1,
+      "nextAnchor": 0,
+      "nextCaret": 0,
+      "pattern": "'@ N ",
+      "patternType": "B",
+      "title": "'@ OPN {0}",
+      "description": "VAL-SOUND様からFM音色を参照します。",
+      "content": "'(from VAL-SOUND)','http://valsound.fc2web.com/fmindex/data/se01.html','Shift_JIS','//body','a','pre'"
+    },
+    {
+      "sienType": 1,
+      "nextAnchor": 0,
+      "nextCaret": 0,
+      "pattern": "'@ N ",
+      "patternType": "B",
+      "title": "'@ OPN {0}",
+      "description": "VAL-SOUND様からFM音色を参照します。",
+      "content": "'(from VAL-SOUND)','http://valsound.fc2web.com/fmindex/data/specal01.html','Shift_JIS','//body/tt','a','pre'"
+    },
+    {
+      "sienType": 1,
+      "nextAnchor": 0,
+      "nextCaret": 0,
+      "pattern": "'@ N ",
+      "patternType": "B",
+      "title": "'@ OPN {0}",
+      "description": "VAL-SOUND様からFM音色を参照します。",
+      "content": "'(from VAL-SOUND)','http://valsound.fc2web.com/fmindex/data/strpad01.html','Shift_JIS','//body/tt','a','pre'"
+    },
+    {
+      "sienType": 1,
+      "nextAnchor": 0,
+      "nextCaret": 0,
+      "pattern": "'@ N ",
+      "patternType": "B",
+      "title": "'@ OPN {0}",
+      "description": "VAL-SOUND様からFM音色を参照します。",
+      "content": "'(from VAL-SOUND)','http://valsound.fc2web.com/fmindex/data/wind01.html','Shift_JIS','//body/tt','a','pre'"
+    },
+    {
+      "sienType": 1,
+      "nextAnchor": 0,
+      "nextCaret": 0,
+      "pattern": "'@ N ",
+      "patternType": "B",
+      "title": "'@ OPN {0}",
+      "description": "VAL-SOUND様からFM音色を参照します。",
+      "content": "'(from VAL-SOUND)','http://valsound.fc2web.com/fmindex/data/world01.html','Shift_JIS','//body/tt','a','pre'"
     }
   ]
 }

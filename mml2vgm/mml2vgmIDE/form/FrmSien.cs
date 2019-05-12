@@ -17,6 +17,7 @@ namespace mml2vgmIDE
         public FrmMain parent = null;
         private SienSearch ss;
         public int selRow = -1;
+        private Dictionary<string, string[]> instCache = new Dictionary<string, string[]>();
 
         public FrmSien()
         {
@@ -61,17 +62,94 @@ namespace mml2vgmIDE
 
             foreach (SienItem si in found)
             {
-                dgvItem.Rows.Add(
-                    si.title,
-                    si.description,
-                    si.content);
-                dgvItem.Rows[dgvItem.Rows.Count - 1].Tag = si;
+                if (si.sienType == 1)
+                {
+                    GetInstrument(si);
+                }
+                else
+                {
+                    dgvItem.Rows.Add(
+                        si.title,
+                        si.description,
+                        si.content);
+                    dgvItem.Rows[dgvItem.Rows.Count - 1].Tag = si;
+                }
             }
             if (selRow==-1 && dgvItem.SelectedRows.Count > 0)
             {
                 dgvItem.SelectedRows[0].Selected = false;
             }
             update();
+        }
+
+
+        private void GetInstrument(SienItem si)
+        {
+            InstrumentAtValSound iavs = new InstrumentAtValSound();
+            string[] param = new string[6];
+            string[] val = si.content.Split(',');
+            for(int i = 0; i < param.Length; i++)
+            {
+                param[i] = val[i].Trim().Trim('\'');
+            }
+
+            if (!instCache.ContainsKey(si.content))
+            {
+                iavs.Start(
+                    si
+                    , param[0]
+                    , param[1]
+                    , Encoding.GetEncoding(param[2])
+                    , param[3]
+                    , param[4]
+                    , param[5]
+                    , GetInstrumentComp);
+            }
+            else
+            {
+                GetInstrumentComp(si, instCache[si.content]);
+            }
+        }
+
+
+        private void GetInstrumentComp(object sender, string[] obj)
+        {
+            if (!(sender is SienItem)) return;
+            if (obj == null || obj.Length < 1) return;
+
+            try
+            {
+                SienItem si = (SienItem)sender;
+
+                foreach (string line in obj)
+                {
+                    SienItem ssi = new SienItem();
+                    ssi.title = string.Format(si.title, line.Substring(0, line.IndexOf("\r\n")).Trim());
+                    ssi.content = line;
+                    ssi.description = si.description;
+                    ssi.foundCnt = si.foundCnt;
+                    ssi.nextAnchor = si.nextAnchor;
+                    ssi.nextCaret = si.nextCaret;
+                    ssi.pattern = si.pattern;
+                    ssi.patternType = si.patternType;
+                    ssi.sienType = ssi.sienType;
+
+                    dgvItem.Rows.Add(
+                        ssi.title,
+                        ssi.description,
+                        ssi.content);
+                    dgvItem.Rows[dgvItem.Rows.Count - 1].Tag = ssi;
+                }
+
+                if (!instCache.ContainsKey(si.content))
+                {
+                    instCache.Add(si.content, obj);
+                }
+            }
+            catch(Exception ex)
+            {
+                log.ForcedWrite(ex);
+            }
         }
     }
 
