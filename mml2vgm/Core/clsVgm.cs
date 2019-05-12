@@ -961,7 +961,7 @@ namespace Core
             {
                 aliesData.Remove(name);
             }
-            Line l = new Line(new LinePos(line.Lp.fullPath, line.Lp.row, line.Lp.col, line.Lp.length, line.Lp.part, line.Lp.chip, line.Lp.ch), line.Txt);
+            Line l = new Line(new LinePos(line.Lp.fullPath, line.Lp.row, line.Lp.col, line.Lp.length, line.Lp.part, line.Lp.chip, line.Lp.isSecondary, line.Lp.ch), line.Txt);
             l.Lp.col = buf.IndexOfAny(new char[] { ' ', '\t' }) + 3;
             aliesData.Add(name, l);
 
@@ -1001,7 +1001,7 @@ namespace Core
                 {
                     partData.Add(p, new List<Line>());
                 }
-                Line l = new Line(new LinePos(line.Lp.fullPath, line.Lp.row, line.Lp.col, line.Lp.length, line.Lp.part, line.Lp.chip, line.Lp.ch), line.Txt);
+                Line l = new Line(new LinePos(line.Lp.fullPath, line.Lp.row, line.Lp.col, line.Lp.length, line.Lp.part, line.Lp.chip, line.Lp.isSecondary, line.Lp.ch), line.Txt);
                 l.Lp.col = i + 1;
                 partData[p].Add(l);
             }
@@ -1565,6 +1565,7 @@ namespace Core
                 {
                     MML mml = pw.mmlData[pw.mmlPos];
                     mml.line.Lp.ch = pw.ch;
+                    mml.line.Lp.isSecondary = pw.isSecondary ? 1 : 0;
                     mml.line.Lp.chip = pw.chip.Name;
                     int c = mml.line.Txt.IndexOfAny(new char[] { ' ', '\t' });
                     //c += mml.line.Txt.Substring(c).Length - mml.line.Txt.Substring(c).TrimStart().Length;
@@ -2168,6 +2169,7 @@ namespace Core
                     {
                         MML mml = pw.mmlData[pw.mmlPos];
                         mml.line.Lp.ch = pw.ch;
+                        mml.line.Lp.isSecondary = pw.isSecondary ? 1 : 0;
                         mml.line.Lp.chip = pw.chip.Name;
                         int c = mml.line.Txt.IndexOfAny(new char[] { ' ', '\t' });
                         //c += mml.line.Txt.Substring(c).Length - mml.line.Txt.Substring(c).TrimStart().Length;
@@ -2998,6 +3000,7 @@ namespace Core
                             mml.line.Lp.length,
                             mml.line.Lp.part,
                             mml.line.Lp.chip,
+                            mml.line.Lp.isSecondary,
                             mml.line.Lp.ch);
                     }
                 }
@@ -3023,6 +3026,7 @@ namespace Core
                             od.linePos.length,
                             od.linePos.part,
                             od.linePos.chip,
+                            od.linePos.isSecondary,
                             od.linePos.ch);
                     }
                 }

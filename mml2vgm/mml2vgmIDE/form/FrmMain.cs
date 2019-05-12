@@ -226,7 +226,7 @@ namespace mml2vgmIDE
                     fn = Path.GetFileNameWithoutExtension(fn) + (FileInformation.format == enmFormat.VGM ? ".vgm" : ".xgm");
                 }
 
-                File.Copy(Path.Combine(Common.GetApplicationDataFolder(true), "temp", sfd.FileName), fn);
+                File.Copy(Path.Combine(Common.GetApplicationDataFolder(true), "temp", Path.GetFileName(sfd.FileName)), fn);
             }
             catch(Exception )
             {
@@ -1130,25 +1130,49 @@ namespace mml2vgmIDE
 
             switch (pd.od.linePos.chip)//.Chip.Device)
             {
+                case "YM2151":
+                    lock (traceInfoLockObj)
+                    {
+                        TraceInfo_YM2151[od.linePos.ch + od.linePos.isSecondary * 8] = od;
+                    }
+                    break;
+                case "YM2203":
+                    lock (traceInfoLockObj)
+                    {
+                        TraceInfo_YM2203[od.linePos.ch + od.linePos.isSecondary * 9] = od;
+                    }
+                    break;
+                case "YM2608":
+                    lock (traceInfoLockObj)
+                    {
+                        TraceInfo_YM2608[od.linePos.ch + od.linePos.isSecondary * 19] = od;
+                    }
+                    break;
+                case "YM2610B":
+                    lock (traceInfoLockObj)
+                    {
+                        TraceInfo_YM2610B[od.linePos.ch + od.linePos.isSecondary * 19] = od;
+                    }
+                    break;
                 //case EnmDevice.YM2612:
                 case "YM2612":
                 case "YM2612X":
                     lock (traceInfoLockObj)
                     {
-                        TraceInfo_YM2612[od.linePos.ch] = od;
+                        TraceInfo_YM2612[od.linePos.ch + od.linePos.isSecondary * 12] = od;
                     }
                     break;
                 //case EnmDevice.SN76489:
                 case "SN76489":
                     lock (traceInfoLockObj)
                     {
-                        TraceInfo_SN76489[od.linePos.ch] = od;
+                        TraceInfo_SN76489[od.linePos.ch + od.linePos.isSecondary * 4] = od;
                     }
                     break;
                 case "RF5C164":
                     lock (traceInfoLockObj)
                     {
-                        TraceInfo_RF5C164[od.linePos.ch] = od;
+                        TraceInfo_RF5C164[od.linePos.ch + od.linePos.isSecondary * 8] = od;
                     }
                     break;
                 default:
@@ -1162,12 +1186,20 @@ namespace mml2vgmIDE
             //ac.Document.Mark(od.linePos.col, od.linePos.col + od.linePos.length, 1);
         }
 
-        private outDatum[] TraceInfo_YM2612 = new outDatum[12];
-        private outDatum[] TraceInfo_YM2612old = new outDatum[12];
-        private outDatum[] TraceInfo_SN76489 = new outDatum[4];
-        private outDatum[] TraceInfo_SN76489old = new outDatum[4];
-        private outDatum[] TraceInfo_RF5C164 = new outDatum[8];
-        private outDatum[] TraceInfo_RF5C164old = new outDatum[8];
+        private outDatum[] TraceInfo_YM2151 = new outDatum[16];
+        private outDatum[] TraceInfo_YM2151old = new outDatum[16];
+        private outDatum[] TraceInfo_YM2203 = new outDatum[18];
+        private outDatum[] TraceInfo_YM2203old = new outDatum[18];
+        private outDatum[] TraceInfo_YM2608 = new outDatum[38];
+        private outDatum[] TraceInfo_YM2608old = new outDatum[38];
+        private outDatum[] TraceInfo_YM2610B = new outDatum[38];
+        private outDatum[] TraceInfo_YM2610Bold = new outDatum[38];
+        private outDatum[] TraceInfo_YM2612 = new outDatum[24];
+        private outDatum[] TraceInfo_YM2612old = new outDatum[24];
+        private outDatum[] TraceInfo_SN76489 = new outDatum[8];
+        private outDatum[] TraceInfo_SN76489old = new outDatum[8];
+        private outDatum[] TraceInfo_RF5C164 = new outDatum[16];
+        private outDatum[] TraceInfo_RF5C164old = new outDatum[16];
         private object traceInfoLockObj = new object();
         private bool traceInfoSw = false;
 
@@ -1194,19 +1226,43 @@ namespace mml2vgmIDE
 
             try
             {
-                for (int ch = 0; ch < 12; ch++)
+                for (int ch = 0; ch < 16; ch++)
+                {
+                    bool ret = MarkUpTraceInfo(TraceInfo_YM2151, TraceInfo_YM2151old, ch, fe, ac);
+                    if (ret) refresh = ret;
+                }
+
+                for (int ch = 0; ch < 18; ch++)
+                {
+                    bool ret = MarkUpTraceInfo(TraceInfo_YM2203, TraceInfo_YM2203old, ch, fe, ac);
+                    if (ret) refresh = ret;
+                }
+
+                for (int ch = 0; ch < 38; ch++)
+                {
+                    bool ret = MarkUpTraceInfo(TraceInfo_YM2608, TraceInfo_YM2608old, ch, fe, ac);
+                    if (ret) refresh = ret;
+                }
+
+                for (int ch = 0; ch < 38; ch++)
+                {
+                    bool ret = MarkUpTraceInfo(TraceInfo_YM2610B, TraceInfo_YM2610Bold, ch, fe, ac);
+                    if (ret) refresh = ret;
+                }
+
+                for (int ch = 0; ch < 24; ch++)
                 {
                     bool ret = MarkUpTraceInfo(TraceInfo_YM2612, TraceInfo_YM2612old, ch, fe, ac);
                     if (ret) refresh = ret;
                 }
 
-                for (int ch = 0; ch < 4; ch++)
+                for (int ch = 0; ch < 8; ch++)
                 {
                     bool ret = MarkUpTraceInfo(TraceInfo_SN76489, TraceInfo_SN76489old, ch, fe, ac);
                     if (ret) refresh = ret;
                 }
 
-                for (int ch = 0; ch < 8; ch++)
+                for (int ch = 0; ch < 16; ch++)
                 {
                     bool ret = MarkUpTraceInfo(TraceInfo_RF5C164, TraceInfo_RF5C164old, ch, fe, ac);
                     if (ret) refresh = ret;

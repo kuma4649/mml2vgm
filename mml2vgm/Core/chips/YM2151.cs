@@ -565,6 +565,8 @@ namespace Core
         {
             base.CmdLfo(pw, mml);
 
+            if (mml.args[0] is string) return;
+
             int c = (char)mml.args[0] - 'P';
             if (pw.lfo[c].type == eLfoType.Hardware)
             {
@@ -652,6 +654,9 @@ namespace Core
                 return;
             }
 
+            n = Common.CheckRange(n, 0, 255);
+            if (pw.instrument == n) return;
+
             pw.instrument = n;
             int modeBeforeSend = parent.info.modeBeforeSend;
             if (type == 'N')
@@ -667,10 +672,6 @@ namespace Core
                 modeBeforeSend = 2;
             }
 
-            n = Common.CheckRange(n, 0, 255);
-            if (pw.instrument == n) return;
-
-            pw.instrument = n;
             OutSetInstrument(pw,mml, n, pw.volume, modeBeforeSend);
         }
 

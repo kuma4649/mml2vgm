@@ -1370,7 +1370,24 @@ namespace mml2vgmIDE
                     enq(od, Counter, SN76489[isSecondary], EnmDataType.Normal, -1, -1, null);
                     break;
                 case 0x52:
+                case 0xa2:
                     enq(od, Counter, YM2612[isSecondary], EnmDataType.Normal, -1, -1, null);
+                    break;
+                case 0x54:
+                case 0xa4:
+                    enq(od, Counter, YM2151[isSecondary], EnmDataType.Normal, -1, -1, null);
+                    break;
+                case 0x55:
+                case 0xa5:
+                    enq(od, Counter, YM2203[isSecondary], EnmDataType.Normal, -1, -1, null);
+                    break;
+                case 0x56:
+                case 0xa6:
+                    enq(od, Counter, YM2608[isSecondary], EnmDataType.Normal, -1, -1, null);
+                    break;
+                case 0x58:
+                case 0xa8:
+                    enq(od, Counter, YM2610[isSecondary], EnmDataType.Normal, -1, -1, null);
                     break;
                 case 0xb1:
                     enq(od, Counter, RF5C164[isSecondary], EnmDataType.Normal, -1, -1, null);

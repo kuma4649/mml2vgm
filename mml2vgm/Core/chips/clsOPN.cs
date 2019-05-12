@@ -656,6 +656,7 @@ namespace Core
                                     mml.line.Lp.length,
                                     mml.line.Lp.part,
                                     mml.line.Lp.chip,
+                                    mml.line.Lp.isSecondary,
                                     mml.line.Lp.ch);
                             }
                         }
@@ -688,6 +689,7 @@ namespace Core
                                         mml.line.Lp.length,
                                         mml.line.Lp.part,
                                         mml.line.Lp.chip,
+                                        mml.line.Lp.isSecondary,
                                         mml.line.Lp.ch);
                                 }
                             }
