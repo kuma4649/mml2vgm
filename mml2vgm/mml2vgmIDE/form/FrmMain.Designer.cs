@@ -81,6 +81,7 @@
             this.TsmiReference = new System.Windows.Forms.ToolStripMenuItem();
             this.TsmiAbout = new System.Windows.Forms.ToolStripMenuItem();
             this.timer = new System.Windows.Forms.Timer(this.components);
+            this.tsmiGwiFileHistory = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -264,6 +265,7 @@
             this.TsmiNew,
             this.TsmiOpenFile,
             this.TsmiOpenFolder,
+            this.tsmiGwiFileHistory,
             this.TsmiSaveFile,
             this.TsmiSaveAs,
             this.toolStripSeparator2,
@@ -277,14 +279,14 @@
             // TsmiNew
             // 
             this.TsmiNew.Name = "TsmiNew";
-            this.TsmiNew.Size = new System.Drawing.Size(177, 22);
+            this.TsmiNew.Size = new System.Drawing.Size(201, 22);
             this.TsmiNew.Text = "新規作成(&N)";
             this.TsmiNew.Click += new System.EventHandler(this.TsmiNew_Click);
             // 
             // TsmiOpenFile
             // 
             this.TsmiOpenFile.Name = "TsmiOpenFile";
-            this.TsmiOpenFile.Size = new System.Drawing.Size(177, 22);
+            this.TsmiOpenFile.Size = new System.Drawing.Size(201, 22);
             this.TsmiOpenFile.Text = "ファイルを開く(&O)";
             this.TsmiOpenFile.Click += new System.EventHandler(this.TsmiFileOpen_Click);
             // 
@@ -292,7 +294,7 @@
             // 
             this.TsmiOpenFolder.Enabled = false;
             this.TsmiOpenFolder.Name = "TsmiOpenFolder";
-            this.TsmiOpenFolder.Size = new System.Drawing.Size(177, 22);
+            this.TsmiOpenFolder.Size = new System.Drawing.Size(201, 22);
             this.TsmiOpenFolder.Text = "フォルダーを開く(&F)";
             this.TsmiOpenFolder.Click += new System.EventHandler(this.TsmiOpenFolder_Click);
             // 
@@ -300,7 +302,7 @@
             // 
             this.TsmiSaveFile.Enabled = false;
             this.TsmiSaveFile.Name = "TsmiSaveFile";
-            this.TsmiSaveFile.Size = new System.Drawing.Size(177, 22);
+            this.TsmiSaveFile.Size = new System.Drawing.Size(201, 22);
             this.TsmiSaveFile.Text = "上書き保存(&S)";
             this.TsmiSaveFile.Click += new System.EventHandler(this.TsmiSaveFile_Click);
             // 
@@ -308,31 +310,31 @@
             // 
             this.TsmiSaveAs.Enabled = false;
             this.TsmiSaveAs.Name = "TsmiSaveAs";
-            this.TsmiSaveAs.Size = new System.Drawing.Size(177, 22);
+            this.TsmiSaveAs.Size = new System.Drawing.Size(201, 22);
             this.TsmiSaveAs.Text = "名前を付けて保存(&A)";
             this.TsmiSaveAs.Click += new System.EventHandler(this.TsmiSaveAs_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(174, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(198, 6);
             // 
             // tsmiExport
             // 
             this.tsmiExport.Name = "tsmiExport";
-            this.tsmiExport.Size = new System.Drawing.Size(177, 22);
+            this.tsmiExport.Size = new System.Drawing.Size(201, 22);
             this.tsmiExport.Text = "エクスポート";
             this.tsmiExport.Click += new System.EventHandler(this.TsmiExport_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(174, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(198, 6);
             // 
             // TsmiExit
             // 
             this.TsmiExit.Name = "TsmiExit";
-            this.TsmiExit.Size = new System.Drawing.Size(177, 22);
+            this.TsmiExit.Size = new System.Drawing.Size(201, 22);
             this.TsmiExit.Text = "終了(&E)";
             this.TsmiExit.Click += new System.EventHandler(this.TsmiExit_Click);
             // 
@@ -523,6 +525,12 @@
             this.timer.Interval = 16;
             this.timer.Tick += new System.EventHandler(this.Timer_Tick);
             // 
+            // tsmiGwiFileHistory
+            // 
+            this.tsmiGwiFileHistory.Name = "tsmiGwiFileHistory";
+            this.tsmiGwiFileHistory.Size = new System.Drawing.Size(201, 22);
+            this.tsmiGwiFileHistory.Text = "最近使用したファイルを開く";
+            // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
@@ -600,6 +608,7 @@
         private System.Windows.Forms.ToolStripMenuItem TsmiFncButtonAndText;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
         private System.Windows.Forms.ToolStripStatusLabel TsslLineCol;
+        private System.Windows.Forms.ToolStripMenuItem tsmiGwiFileHistory;
     }
 }
 

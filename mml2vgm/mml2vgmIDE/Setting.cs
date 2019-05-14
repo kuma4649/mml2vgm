@@ -763,7 +763,6 @@ namespace mml2vgmIDE
         }
         public KeyBoardHook keyBoardHook { get => _keyBoardHook; set => _keyBoardHook = value; }
         public ColorScheme ColorScheme { get => _colorScheme; set => _colorScheme = value; }
-
         private KeyBoardHook _keyBoardHook = new KeyBoardHook();
 
         private ColorScheme _colorScheme = new ColorScheme();
@@ -1551,6 +1550,15 @@ namespace mml2vgmIDE
                     _Opacity = Common.Range(_Opacity, 10, 100);
                 }
             }
+            private string _TextFontName = "Consolas";
+            public string TextFontName { get => _TextFontName; set => _TextFontName = value; }
+            private float _TextFontSize = 12.0f;
+            public float TextFontSize { get => _TextFontSize; set => _TextFontSize = value; }
+            private FontStyle _TextFontStyle = FontStyle.Regular;
+            public FontStyle TextFontStyle { get => _TextFontStyle; set => _TextFontStyle = value; }
+            private string[] _GwiFileHistory = null;
+            public string[] GwiFileHistory { get => _GwiFileHistory; set => _GwiFileHistory = value; }
+
 
             public Other Copy()
             {
@@ -1574,6 +1582,10 @@ namespace mml2vgmIDE
                 other.InitAlways = this.InitAlways;
                 other.EmptyPlayList = this.EmptyPlayList;
                 other.Opacity = this.Opacity;
+                other.TextFontName = this.TextFontName;
+                other.TextFontSize = this.TextFontSize;
+                other.TextFontStyle = this.TextFontStyle;
+                other.GwiFileHistory = this.GwiFileHistory;
 
                 return other;
             }

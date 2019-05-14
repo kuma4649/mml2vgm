@@ -456,7 +456,7 @@ namespace mml2vgmIDE
                         chipRegister.writeOKIM6258(ChipID, Offset, Data);
                     break;
                 case 0x1b:  // HuC6280
-                    chipRegister.setHuC6280Register(ChipID, Offset, Data);
+                    chipRegister.HuC6280SetRegister(od, Counter, ChipID, Offset, Data);
                     break;
             }
         }

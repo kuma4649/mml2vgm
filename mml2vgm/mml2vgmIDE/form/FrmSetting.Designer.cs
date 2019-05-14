@@ -412,6 +412,14 @@
             this.cbAutoOpen = new System.Windows.Forms.CheckBox();
             this.cbUseLoopTimes = new System.Windows.Forms.CheckBox();
             this.tpOmake = new System.Windows.Forms.TabPage();
+            this.groupBox29 = new System.Windows.Forms.GroupBox();
+            this.label36 = new System.Windows.Forms.Label();
+            this.btFont = new System.Windows.Forms.Button();
+            this.label54 = new System.Windows.Forms.Label();
+            this.lblFontName = new System.Windows.Forms.Label();
+            this.label53 = new System.Windows.Forms.Label();
+            this.lblFontSize = new System.Windows.Forms.Label();
+            this.lblFontStyle = new System.Windows.Forms.Label();
             this.tbOpacity = new System.Windows.Forms.TrackBar();
             this.label52 = new System.Windows.Forms.Label();
             this.label14 = new System.Windows.Forms.Label();
@@ -527,6 +535,7 @@
             this.gbWav.SuspendLayout();
             this.gbDump.SuspendLayout();
             this.tpOmake.SuspendLayout();
+            this.groupBox29.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tbOpacity)).BeginInit();
             this.groupBox5.SuspendLayout();
             this.tpAbout.SuspendLayout();
@@ -4821,6 +4830,7 @@
             // 
             // tpOmake
             // 
+            this.tpOmake.Controls.Add(this.groupBox29);
             this.tpOmake.Controls.Add(this.tbOpacity);
             this.tpOmake.Controls.Add(this.label52);
             this.tpOmake.Controls.Add(this.label14);
@@ -4833,6 +4843,86 @@
             this.tpOmake.TabIndex = 7;
             this.tpOmake.Text = "おまけ";
             this.tpOmake.UseVisualStyleBackColor = true;
+            // 
+            // groupBox29
+            // 
+            this.groupBox29.Controls.Add(this.label36);
+            this.groupBox29.Controls.Add(this.btFont);
+            this.groupBox29.Controls.Add(this.label54);
+            this.groupBox29.Controls.Add(this.lblFontName);
+            this.groupBox29.Controls.Add(this.label53);
+            this.groupBox29.Controls.Add(this.lblFontSize);
+            this.groupBox29.Controls.Add(this.lblFontStyle);
+            this.groupBox29.Location = new System.Drawing.Point(10, 132);
+            this.groupBox29.Name = "groupBox29";
+            this.groupBox29.Size = new System.Drawing.Size(248, 85);
+            this.groupBox29.TabIndex = 21;
+            this.groupBox29.TabStop = false;
+            this.groupBox29.Text = "フォント";
+            // 
+            // label36
+            // 
+            this.label36.AutoSize = true;
+            this.label36.Location = new System.Drawing.Point(6, 15);
+            this.label36.Name = "label36";
+            this.label36.Size = new System.Drawing.Size(34, 12);
+            this.label36.TabIndex = 19;
+            this.label36.Text = "Name";
+            // 
+            // btFont
+            // 
+            this.btFont.Location = new System.Drawing.Point(214, 55);
+            this.btFont.Name = "btFont";
+            this.btFont.Size = new System.Drawing.Size(27, 23);
+            this.btFont.TabIndex = 18;
+            this.btFont.Text = "...";
+            this.btFont.UseVisualStyleBackColor = true;
+            this.btFont.Click += new System.EventHandler(this.BtFont_Click);
+            // 
+            // label54
+            // 
+            this.label54.AutoSize = true;
+            this.label54.Location = new System.Drawing.Point(6, 60);
+            this.label54.Name = "label54";
+            this.label54.Size = new System.Drawing.Size(30, 12);
+            this.label54.TabIndex = 19;
+            this.label54.Text = "Style";
+            // 
+            // lblFontName
+            // 
+            this.lblFontName.AutoSize = true;
+            this.lblFontName.Location = new System.Drawing.Point(64, 15);
+            this.lblFontName.Name = "lblFontName";
+            this.lblFontName.Size = new System.Drawing.Size(52, 12);
+            this.lblFontName.TabIndex = 19;
+            this.lblFontName.Text = "Consolas";
+            // 
+            // label53
+            // 
+            this.label53.AutoSize = true;
+            this.label53.Location = new System.Drawing.Point(6, 38);
+            this.label53.Name = "label53";
+            this.label53.Size = new System.Drawing.Size(27, 12);
+            this.label53.TabIndex = 19;
+            this.label53.Text = "Size";
+            // 
+            // lblFontSize
+            // 
+            this.lblFontSize.AutoSize = true;
+            this.lblFontSize.Location = new System.Drawing.Point(64, 38);
+            this.lblFontSize.Name = "lblFontSize";
+            this.lblFontSize.Size = new System.Drawing.Size(17, 12);
+            this.lblFontSize.TabIndex = 19;
+            this.lblFontSize.Text = "12";
+            // 
+            // lblFontStyle
+            // 
+            this.lblFontStyle.AutoSize = true;
+            this.lblFontStyle.Location = new System.Drawing.Point(64, 60);
+            this.lblFontStyle.Name = "lblFontStyle";
+            this.lblFontStyle.Size = new System.Drawing.Size(44, 12);
+            this.lblFontStyle.TabIndex = 19;
+            this.lblFontStyle.Text = "Regular";
             // 
             // tbOpacity
             // 
@@ -5180,6 +5270,8 @@
             this.gbDump.PerformLayout();
             this.tpOmake.ResumeLayout(false);
             this.tpOmake.PerformLayout();
+            this.groupBox29.ResumeLayout(false);
+            this.groupBox29.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tbOpacity)).EndInit();
             this.groupBox5.ResumeLayout(false);
             this.groupBox5.PerformLayout();
@@ -5594,5 +5686,13 @@
         private System.Windows.Forms.TabPage tabPage15;
         private System.Windows.Forms.TabPage tabPage16;
         private System.Windows.Forms.TabPage tabPage17;
+        private System.Windows.Forms.Label label36;
+        private System.Windows.Forms.Button btFont;
+        private System.Windows.Forms.Label label54;
+        private System.Windows.Forms.Label label53;
+        private System.Windows.Forms.Label lblFontStyle;
+        private System.Windows.Forms.Label lblFontSize;
+        private System.Windows.Forms.Label lblFontName;
+        private System.Windows.Forms.GroupBox groupBox29;
     }
 }

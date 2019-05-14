@@ -639,7 +639,7 @@ namespace mml2vgmIDE
 
         private void vcHuC6280(outDatum od)
         {
-            chipRegister.setHuC6280Register((vgmBuf[vgmAdr + 1].val & 0x80) == 0 ? 0 : 1, vgmBuf[vgmAdr + 1].val & 0x7f, vgmBuf[vgmAdr + 2].val);
+            chipRegister.HuC6280SetRegister(od, Audio.DriverSeqCounter, (vgmBuf[vgmAdr + 1].val & 0x80) == 0 ? 0 : 1, vgmBuf[vgmAdr + 1].val & 0x7f, vgmBuf[vgmAdr + 2].val);
             vgmAdr += 3;
         }
 

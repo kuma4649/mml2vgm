@@ -483,6 +483,9 @@ namespace mml2vgmIDE
             cbInitAlways.Checked = setting.other.InitAlways;
             cbEmptyPlayList.Checked = setting.other.EmptyPlayList;
             tbOpacity.Value = setting.other.Opacity;
+            lblFontName.Text=setting.other.TextFontName;
+            lblFontSize.Text = setting.other.TextFontSize.ToString();
+            lblFontStyle.Text = setting.other.TextFontStyle.ToString();
 
             cbUseMIDIExport.Checked = setting.midiExport.UseMIDIExport;
             gbMIDIExport.Enabled = cbUseMIDIExport.Checked;
@@ -1414,6 +1417,13 @@ namespace mml2vgmIDE
             setting.other.InitAlways = cbInitAlways.Checked;
             setting.other.EmptyPlayList = cbEmptyPlayList.Checked;
             setting.other.Opacity = tbOpacity.Value;
+            setting.other.TextFontName = lblFontName.Text;
+            setting.other.TextFontSize = float.Parse(lblFontSize.Text);
+            setting.other.TextFontStyle =
+                lblFontStyle.Text.ToUpper() == "REGULAR" ? System.Drawing.FontStyle.Regular : (
+                lblFontStyle.Text.ToUpper() == "BOLD" ? System.Drawing.FontStyle.Bold : (
+                lblFontStyle.Text.ToUpper() == "ITALIC" ? System.Drawing.FontStyle.Italic : (
+                lblFontStyle.Text.ToUpper() == "STRIKEOUT" ? System.Drawing.FontStyle.Strikeout : System.Drawing.FontStyle.Underline)));
 
             setting.Debug_DispFrameCounter = cbDispFrameCounter.Checked;
             setting.HiyorimiMode = cbHiyorimiMode.Checked;
@@ -2374,6 +2384,28 @@ namespace mml2vgmIDE
         private void tbOpacity_Scroll(object sender, EventArgs e)
         {
             this.Opacity = tbOpacity.Value / 100.0;
+        }
+
+        private void BtFont_Click(object sender, EventArgs e)
+        {
+            FontDialog fd = new FontDialog();
+            try
+            {
+                fd.Font = new System.Drawing.Font(setting.other.TextFontName, setting.other.TextFontSize, setting.other.TextFontStyle);
+            }
+            catch { }
+
+            DialogResult dr = fd.ShowDialog();
+            if (dr == System.Windows.Forms.DialogResult.OK)
+            {
+                lblFontName.Text = fd.Font.Name;
+                lblFontName.Font = fd.Font;
+                lblFontSize.Text = fd.Font.Size.ToString();
+                lblFontSize.Font = fd.Font;
+                lblFontStyle.Text = fd.Font.Style.ToString();
+                lblFontStyle.Font = fd.Font;
+
+            }
         }
     }
 

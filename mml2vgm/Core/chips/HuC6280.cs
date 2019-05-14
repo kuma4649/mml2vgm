@@ -67,6 +67,8 @@ namespace Core
             {
                 SetHuC6280CurrentChannel(null, pw);
 
+                pw.port0 = 0xb9;
+
                 //freq( 0 )
                 pw.freq = 0;
                 OutHuC6280Port(null, IsSecondary, 2, 0);

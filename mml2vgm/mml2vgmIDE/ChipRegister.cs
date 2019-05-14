@@ -47,7 +47,8 @@ namespace mml2vgmIDE
         private RealChip realChip = null;
         private RSoundChip[] scAY8910 = new RSoundChip[2] { null, null };
         private RSoundChip[] scC140 = new RSoundChip[2] { null, null };
-        private RSoundChip[] scRF5C164= new RSoundChip[2] { null, null };
+        private RSoundChip[] scHuC6280 = new RSoundChip[2] { null, null };
+        private RSoundChip[] scRF5C164 = new RSoundChip[2] { null, null };
         private RSoundChip[] scSEGAPCM = new RSoundChip[2] { null, null };
         private RSoundChip[] scSN76489 =  new RSoundChip[2] { null, null };
         private RSoundChip[] scYM2151 = new RSoundChip[2] { null, null };
@@ -286,6 +287,7 @@ namespace mml2vgmIDE
         private int[] C140NowFadeoutVol = new int[] { 0, 0 };
         private int[] RF5C164NowFadeoutVol = new int[] { 0, 0 };
         private int[] SEGAPCMNowFadeoutVol = new int[] { 0, 0 };
+        private int[] HuC6280NowFadeoutVol = new int[] { 0, 0 };
 
         private bool[] maskOKIM6258 = new bool[2] { false, false };
         public bool[] okim6258Keyon = new bool[2] { false, false };
@@ -349,6 +351,7 @@ namespace mml2vgmIDE
         public Chip[] AY8910 = new Chip[] { new Chip(), new Chip() };
         public Chip[] C140 = new Chip[] { new Chip(), new Chip() };
         public Chip MIDI = new Chip();
+        public Chip[] HuC6280 = new Chip[] { new Chip(), new Chip() };
         public Chip[] RF5C164 = new Chip[] { new Chip(), new Chip() };
         public Chip[] SEGAPCM = new Chip[] { new Chip(), new Chip() };
         public Chip[] SN76489 = new Chip[] { new Chip(), new Chip() };
@@ -399,6 +402,16 @@ namespace mml2vgmIDE
                         if (scC140[i] != null) scC140[i].init();
                         C140[i].Model = ctC140[i].UseEmu ? EnmModel.VirtualModel : EnmModel.RealModel;
                         C140[i].Delay = (C140[i].Model == EnmModel.VirtualModel ? LEmu : LReal);
+                    }
+                    break;
+                case EnmDevice.HuC6280:
+                    ctHuC6280 = new Setting.ChipType[] { chipTypeP, chipTypeS };
+                    for (int i = 0; i < 2; i++)
+                    {
+                        scHuC6280[i] = null;
+                        if (scHuC6280[i] != null) scHuC6280[i].init();
+                        HuC6280[i].Model = ctHuC6280[i].UseEmu ? EnmModel.VirtualModel : EnmModel.RealModel;
+                        HuC6280[i].Delay = (HuC6280[i].Model == EnmModel.VirtualModel ? LEmu : LReal);
                     }
                     break;
                 case EnmDevice.RF5C164:
@@ -496,9 +509,6 @@ namespace mml2vgmIDE
                     }
                     break;
 
-                case EnmDevice.HuC6280:
-                    ctHuC6280 = new Setting.ChipType[] { chipTypeP, chipTypeS };
-                    break;
                 case EnmDevice.Y8950:
                     ctY8950 = new Setting.ChipType[] { chipTypeP, chipTypeS };
                     break;
@@ -536,6 +546,12 @@ namespace mml2vgmIDE
                 C140[i].Device = EnmDevice.C140;
                 C140[i].Number = i;
                 C140[i].Hosei = 0;
+
+                HuC6280[i].Use = false;
+                HuC6280[i].Model = EnmModel.None;
+                HuC6280[i].Device = EnmDevice.HuC6280;
+                HuC6280[i].Number = i;
+                HuC6280[i].Hosei = 0;
 
                 RF5C164[i].Use = false;
                 RF5C164[i].Model = EnmModel.None;
@@ -611,6 +627,9 @@ namespace mml2vgmIDE
                 case EnmDevice.C140:
                     C140SetRegisterProcessing(ref Counter, ref Chip, ref Type, ref Address, ref Data, ref ExData);
                     break;
+                case EnmDevice.HuC6280:
+                    HuC6280SetRegisterProcessing(ref Counter, ref Chip, ref Type, ref Address, ref Data, ref ExData);
+                    break;
                 case EnmDevice.RF5C164:
                     RF5C164SetRegisterProcessing(ref Counter, ref Chip, ref Type, ref Address, ref Data, ref ExData);
                     break;
@@ -656,6 +675,9 @@ namespace mml2vgmIDE
                 case EnmDevice.MIDIGM:
                     //MIDIWriteRegisterControl(Chip, type, address, data, exData);
                     break;
+                case EnmDevice.HuC6280:
+                    HuC6280WriteRegisterControl(Chip, type, address, data, exData);
+                    break;
                 case EnmDevice.RF5C164:
                     RF5C164WriteRegisterControl(Chip, type, address, data, exData);
                     break;
@@ -690,6 +712,7 @@ namespace mml2vgmIDE
         {
             AY8910SetFadeoutVolume(counter, (int)((1.0 - fadeoutCounter) * 15.0));
             C140SetFadeoutVolume(counter, (int)((1.0 - fadeoutCounter) * 255.0));
+            HuC6280SetFadeoutVolume(counter, (int)((1.0 - fadeoutCounter) * 127.0));
             RF5C164SetFadeoutVolume(counter, (int)((1.0 - fadeoutCounter) * 255.0));
             SEGAPCMSetFadeoutVolume(counter, (int)((1.0 - fadeoutCounter) * 255.0));
             SN76489SetFadeoutVolume(counter, (int)((1.0 - fadeoutCounter) * 15.0));
@@ -1392,6 +1415,9 @@ namespace mml2vgmIDE
                 case 0xb1:
                     enq(od, Counter, RF5C164[isSecondary], EnmDataType.Normal, -1, -1, null);
                     break;
+                case 0xb9:
+                    enq(od, Counter, HuC6280[isSecondary], EnmDataType.Normal, -1, -1, null);
+                    break;
             }
         }
 
@@ -1825,6 +1851,122 @@ namespace mml2vgmIDE
                 }
             }
         }
+
+
+
+        private void HuC6280WriteRegisterControl(Chip Chip, EnmDataType type, int address, int data, object exData)
+        {
+            if (type == EnmDataType.Normal)
+            {
+                if (Chip.Model == EnmModel.VirtualModel)
+                {
+                    if (!ctHuC6280[Chip.Number].UseScci)
+                    {
+                        mds.WriteHuC6280((byte)Chip.Number, (byte)address, (byte)data);
+                    }
+                }
+                if (Chip.Model == EnmModel.RealModel)
+                {
+                }
+            }
+            else if (type == EnmDataType.Block)
+            {
+                Audio.sm.SetInterrupt();
+
+                try
+                {
+                    if (exData == null) return;
+
+                    PackData[] pdata = (PackData[])exData;
+                    if (Chip.Model == EnmModel.VirtualModel)
+                    {
+                        foreach (PackData dat in pdata)
+                            mds.WriteHuC6280((byte)dat.Chip.Number, (byte)dat.Address, (byte)dat.Data);
+                    }
+                    if (Chip.Model == EnmModel.RealModel)
+                    {
+                    }
+                }
+                finally
+                {
+                    Audio.sm.ResetInterrupt();
+                }
+            }
+        }
+
+        public void HuC6280SetRegisterProcessing(ref long Counter, ref Chip Chip, ref EnmDataType Type, ref int Address, ref int dData, ref object ExData)
+        {
+            if (ctHuC6280 == null) return;
+            if (Address == -1 && dData == -1) return;
+
+            if (Chip.Number == 0) chipLED.PriHuC = 2;
+            else chipLED.SecHuC = 2;
+
+        }
+
+        public void HuC6280SetRegister(outDatum od, long Counter, int chipID, int dAddr, int dData)
+        {
+            enq(od, Counter, HuC6280[chipID], EnmDataType.Normal, dAddr, dData, null);
+
+        }
+
+        public void HuC6280SetRegister(outDatum od, long Counter, int chipID, PackData[] data)
+        {
+            enq(od, Counter, HuC6280[chipID], EnmDataType.Block, -1, -1, data);
+
+        }
+
+        public void HuC6280SoftReset(long Counter, int chipID)
+        {
+            List<PackData> data = HuC6280MakeSoftReset(chipID);
+            HuC6280SetRegister(null, Counter, chipID, data.ToArray());
+        }
+
+        public void HuC6280SetMask(long Counter, int chipID, int ch, bool mask)
+        {
+            //mds.setHuC6280Mask(chipID, 1 << ch);
+            //mds.resetHuC6280Mask(chipID, 1 << ch);
+        }
+
+        public void HuC6280WriteClock(byte chipID, int clock)
+        {
+            if (scHuC6280 != null && scHuC6280[chipID] != null)
+            {
+                scHuC6280[chipID].dClock = scHuC6280[chipID].SetMasterClock((uint)clock);
+            }
+        }
+
+        public void HuC6280SetFadeoutVolume(long Counter, int v)
+        {
+            for (int i = 0; i < HuC6280.Length; i++)
+            {
+                if (!HuC6280[i].Use) continue;
+                if (HuC6280[i].Model == EnmModel.VirtualModel) continue;
+                if (HuC6280NowFadeoutVol[i] == v) continue;
+
+                HuC6280NowFadeoutVol[i] = v;
+
+                for (int c = 0; c < 3; c++)
+                {
+                }
+            }
+        }
+
+        public List<PackData> HuC6280MakeSoftReset(int chipID)
+        {
+            List<PackData> data = new List<PackData>();
+            int i;
+
+            for (i = 0; i < 6; i++)
+            {
+                data.Add(new PackData(null, HuC6280[chipID], EnmDataType.Normal, 0x00, i, null));
+                data.Add(new PackData(null, HuC6280[chipID], EnmDataType.Normal, 0x04, 0x80, null));
+            }
+            data.Add(new PackData(null, HuC6280[chipID], EnmDataType.Normal, 0x01, 0x00, null));//TotalVolume0
+
+            return data;
+        }
+
 
 
 
@@ -5195,27 +5337,6 @@ namespace mml2vgmIDE
 
         }
 
-        public void setHuC6280Register(int chipID, int dAddr, int dData)
-        {
-            EnmModel model = EnmModel.VirtualModel;
-            if (ctHuC6280 == null) return;
-
-            if (chipID == 0) chipLED.PriHuC = 2;
-            else chipLED.SecHuC = 2;
-
-            if (model == EnmModel.VirtualModel)
-            {
-                if (!ctHuC6280[chipID].UseScci)
-                {
-                    //System.Console.WriteLine("chipID:{0} Adr:{1} Dat:{2}", chipID, dAddr, dData);
-                    mds.WriteHuC6280((byte)chipID, (byte)dAddr, (byte)dData);
-                }
-            }
-            else
-            {
-                //if (scHuC6280[chipID] == null) return;
-            }
-        }
 
         public void setYMF262Register(int chipID, int dPort, int dAddr, int dData)
         {

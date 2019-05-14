@@ -45,7 +45,7 @@ namespace mml2vgmIDE
             keywordHighlighter.AddRegex("^'%\\S+ ", CharClass.Keyword);
             keywordHighlighter.AddEnclosure("'{", "}", CharClass.Comment, true);
             azukiControl = new AzukiControl();
-            azukiControl.Font = new Font("Consolas", 12);
+            azukiControl.Font = new Font(setting.other.TextFontName, setting.other.TextFontSize, setting.other.TextFontStyle);
             azukiControl.Dock = DockStyle.Fill;
             azukiControl.ShowsIconBar = true;
             azukiControl.Highlighter = keywordHighlighter;

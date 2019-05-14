@@ -126,6 +126,8 @@ namespace mml2vgmIDE
             if (d == null) return;
 
             File.WriteAllText(d.gwiFullPath, d.editor.azukiControl.Text, Encoding.UTF8);
+            AddGwiFileHistory(d.gwiFullPath);
+            UpdateGwiFileHistory();
 
             d.edit = false;
             d.editor.azukiControl.ClearHistory();
@@ -438,6 +440,52 @@ namespace mml2vgmIDE
 
             FormBox.Add(dc.editor);
             DocumentBox.Add(dc);
+            AddGwiFileHistory(fileName);
+            UpdateGwiFileHistory();
+        }
+
+        private void AddGwiFileHistory(string fileName)
+        {
+            List<string> lst = new List<string>();
+            lst.Add(fileName);
+            if (setting.other.GwiFileHistory != null)
+            {
+                foreach (string fn in setting.other.GwiFileHistory)
+                {
+                    bool flg = false;
+                    for (int i = 0; i < lst.Count; i++)
+                    {
+                        if (lst[i] == fn)
+                        {
+                            flg = true;
+                            break;
+                        }
+                    }
+
+                    if (!flg && !string.IsNullOrEmpty(fn)) lst.Add(fn);
+                    if (lst.Count == 10) break;
+                }
+            }
+
+            setting.other.GwiFileHistory = lst.ToArray();
+        }
+
+        private void UpdateGwiFileHistory()
+        { 
+            tsmiGwiFileHistory.DropDownItems.Clear();
+            if (setting.other.GwiFileHistory == null) return;
+            foreach(string fn in setting.other.GwiFileHistory)
+            {
+                ToolStripMenuItem tsmi = new ToolStripMenuItem(fn);
+                tsmi.Click += Tsmi_Click;
+                tsmiGwiFileHistory.DropDownItems.Add(tsmi);
+            }
+        }
+
+        private void Tsmi_Click(object sender, EventArgs e)
+        {
+            string fn = ((ToolStripMenuItem)sender).Text;
+            OpenFile(fn); 
         }
 
         string wrkPath = "";
@@ -920,6 +968,12 @@ namespace mml2vgmIDE
             Audio.Stop();
             Audio.Close();
 
+            foreach(var dc in dpMain.Documents)
+            {
+                ((FrmEditor)dc).azukiControl.Font = new Font(setting.other.TextFontName, setting.other.TextFontSize, setting.other.TextFontStyle);
+            }
+
+
             this.setting = setting;
             this.setting.Save();
 
@@ -1169,6 +1223,12 @@ namespace mml2vgmIDE
                         TraceInfo_SN76489[od.linePos.ch + od.linePos.isSecondary * 4] = od;
                     }
                     break;
+                case "HuC6280":
+                    lock (traceInfoLockObj)
+                    {
+                        TraceInfo_HuC6280[od.linePos.ch + od.linePos.isSecondary * 6] = od;
+                    }
+                    break;
                 case "RF5C164":
                     lock (traceInfoLockObj)
                     {
@@ -1198,6 +1258,8 @@ namespace mml2vgmIDE
         private outDatum[] TraceInfo_YM2612old = new outDatum[24];
         private outDatum[] TraceInfo_SN76489 = new outDatum[8];
         private outDatum[] TraceInfo_SN76489old = new outDatum[8];
+        private outDatum[] TraceInfo_HuC6280 = new outDatum[6];
+        private outDatum[] TraceInfo_HuC6280old = new outDatum[6];
         private outDatum[] TraceInfo_RF5C164 = new outDatum[16];
         private outDatum[] TraceInfo_RF5C164old = new outDatum[16];
         private object traceInfoLockObj = new object();
@@ -1259,6 +1321,12 @@ namespace mml2vgmIDE
                 for (int ch = 0; ch < 8; ch++)
                 {
                     bool ret = MarkUpTraceInfo(TraceInfo_SN76489, TraceInfo_SN76489old, ch, fe, ac);
+                    if (ret) refresh = ret;
+                }
+
+                for (int ch = 0; ch < 6; ch++)
+                {
+                    bool ret = MarkUpTraceInfo(TraceInfo_HuC6280, TraceInfo_HuC6280old, ch, fe, ac);
                     if (ret) refresh = ret;
                 }
 
@@ -1372,6 +1440,7 @@ namespace mml2vgmIDE
                 this.Size = new Size(setting.location.RMain.Width, setting.location.RMain.Height);
             }
 
+            UpdateGwiFileHistory();
         }
     }
 }
