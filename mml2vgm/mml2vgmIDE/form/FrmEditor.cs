@@ -74,12 +74,105 @@ namespace mml2vgmIDE
             azukiControl.ColorScheme.SetMarkingDecoration(1, dec);
 
             azukiControl.SetKeyBind(Keys.Home, ActionHome);
+            azukiControl.SetKeyBind((uint)(Keys.Shift | Keys.Enter), ActionShiftEnter);
+            azukiControl.SetKeyBind((uint)(Keys.Control | Keys.Divide), ActionComment);
+            azukiControl.SetKeyBind((uint)(Keys.Control | Keys.OemQuestion), ActionComment);
 
             this.Controls.Add(azukiControl);
 
             frmSien = new FrmSien();
             frmSien.parent = main;
             frmSien.Show();
+        }
+
+        private void ActionComment(IUserInterface ui)
+        {
+            int b;
+            int e;
+            azukiControl.GetSelection(out b, out e);
+
+            int st = azukiControl.GetLineHeadIndexFromCharIndex(b);
+            b = azukiControl.GetLineHeadIndexFromCharIndex(e);
+            int li = azukiControl.GetLineIndexFromCharIndex(e);
+            int ed = b + azukiControl.GetLineLength(li);
+            azukiControl.SetSelection(st, ed);
+            string line = azukiControl.GetSelectedText();
+            string[] lines = line.Split(new string[] { "\r\n" }, StringSplitOptions.None);
+            //チェック
+            bool flg = false;
+            foreach (string s in lines)
+            {
+                if (s.Length < 1 || s[0] != '\'')
+                {
+                    flg = true;
+                    break;
+                }
+            }
+            line = "";
+            if (flg)
+            {
+                // 'をつける
+                foreach (string s in lines)
+                {
+                    line += "'" + s + "\r\n";
+                }
+                line = line.Substring(0, line.Length - 2);
+            }
+            else
+            {
+                // 'をカットする
+                foreach (string s in lines)
+                {
+                    line += s.Substring(1) + "\r\n";
+                }
+                line = line.Substring(0, line.Length - 2);
+            }
+            azukiControl.Document.Replace(line, st, ed);
+            azukiControl.SetSelection(st, st+line.Length);
+        }
+
+        private void ActionShiftEnter(IUserInterface ui)
+        {
+            int ci = azukiControl.CaretIndex;
+            int st = azukiControl.GetLineHeadIndexFromCharIndex(ci);
+            int li = azukiControl.GetLineIndexFromCharIndex(ci);
+            int ed = st + azukiControl.GetLineLength(li);
+            string line = azukiControl.GetTextInRange(st, ci);
+
+            if (line == null || line.Length < 1) return;
+            //先頭の文字が'ではないときは既存の動作
+            if (line[0] != '\'')
+            {
+                return;
+            }
+
+            int a = -1;
+
+            //1行を左からサーチし、初めに出現する空白又はタブの位置を取得する
+            int s = line.IndexOf(' ');
+            int t = line.IndexOf('\t');
+            if (s < 0) a = t;
+            if (t < 0) a = s;
+            if (s >= 0 && t >= 0) a = Math.Min(s, t);
+
+
+            //空白又はタブが見つからなかった場合は行末まで
+            if (a < 0)
+            {
+                a = line.Length;
+                a = (ci - st) < a ? (ci - st) : a;
+            }
+            else
+            {
+                if (a + st > ci) a = ci - st;
+
+                while (a < line.Length && (line[a] == ' ' || line[a] == '\t'))
+                {
+                    a++;
+                }
+            }
+
+            azukiControl.Document.Replace("\r\n" + line.Substring(0, a));
         }
 
         private void ActionHome(IUserInterface ui)
