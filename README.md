@@ -30,7 +30,7 @@
  ・気合と根性  
   
 [著作権・免責]  
-MML2VGM,MVCはMITライセンスに準ずる物とします。LICENSE.txtを参照。  
+MML2VGM,MVC,IDEはMITライセンスに準ずる物とします。LICENSE.txtを参照。  
 著作権は作者が保有しています。  
 このソフトは無保証であり、このソフトを使用した事による  
 いかなる損害も作者は一切の責任を負いません。  
@@ -60,6 +60,7 @@ MML2VGM,MVCはMITライセンスに準ずる物とします。LICENSE.txtを参照。
  ・くろま さん  
  ・TAN-Y さん  
  ・阿保 さん  
+ ・Rerrah さん  
   
  ・XPCMK  
  ・FMP7  
@@ -74,6 +75,7 @@ MML2VGM,MVCはMITライセンスに準ずる物とします。LICENSE.txtを参照。
  ・Azuki  
  ・Dock Panel Suite  
  ・CodeWarrior  
+ ・BambooTracker  
   
  ・SGDKとは - nendo  
  ・FutureDriver  
