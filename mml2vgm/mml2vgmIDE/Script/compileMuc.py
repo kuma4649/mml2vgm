@@ -3,24 +3,31 @@
 
 from mml2vgmIDE import ScriptInfo
 from mml2vgmIDE import Mml2vgmInfo
-from System.Diagnostics import Process
 from System.IO import Directory
 from System.IO import Path
 from System.IO import File
 
 class Mml2vgmScript:
     def title(self):
-        return r"mucのコンパイルと再生(mucom88)"
+        return r"mucのコンパイルと再生_test"
 
     def run(self, Mml2vgmInfo):
         
-        #mucom88.exeの場所をフルパスでmcに設定してください↓
-        #例
-        #mc = r"D:\bootcamp\FM音源\player\mucom88\mucom88win190323\mucom88.exe"
-        mc = ""
+        #設定値の読み込み
+        Mml2vgmInfo.loadSetting()
+
+        #初回のみ(設定値が無いときのみ)mucom88.exeの場所をユーザーに問い合わせ、設定値として保存する
+        mc = Mml2vgmInfo.getSettingValue("mucom88path")
+        if mc is None:
+            mc = Mml2vgmInfo.fileSelect("mucom88.exeを選択してください(この選択内容は設定値として保存され次回からの問い合わせはありません)")
+            if not Mml2vgmInfo.confirm("mucom88.exeの場所は以下でよろしいですか\r\n" + mc):
+                return None
+            Mml2vgmInfo.setSettingValue("mucom88path",mc)
+            Mml2vgmInfo.saveSetting()
         
+        #念のため
         if mc is None or mc == "":
-            Mml2vgmInfo.msg("スクリプトファイル(compileMuc.py)を開き、mucom88.exeの場所をフルパスでmcに設定してください")
+            Mml2vgmInfo.msg("mucom88.exeを指定してください")
             return None
         
         #ファイル選択
@@ -35,15 +42,8 @@ class Mml2vgmScript:
         Directory.SetCurrentDirectory(wp)
         
         #mucom88.exeでコンパイルを行いmubファイルを生成する
-        p = Process();
-        p.StartInfo.UseShellExecute = False
-        p.StartInfo.RedirectStandardOutput = False
-        p.StartInfo.FileName = mc
-        opt = r"-c"
-        p.StartInfo.Arguments = opt + " " + muc
-        p.Start()
-        p.WaitForExit()
-        p.Close()
+        args = "-c " + muc
+        Mml2vgmInfo.runCommand(mc, args, True)
         
         #mubファイルが出来たかチェック(mucom88.exeはコンパイルが成功するとmucom88.mubというファイルができる)
         mm = Path.Combine(wp , "mucom88.mub")
@@ -58,12 +58,7 @@ class Mml2vgmScript:
         File.Move(mm, mub)
         
         #mucom88.exeで演奏を開始
-        p = Process();
-        p.StartInfo.UseShellExecute = False
-        p.StartInfo.RedirectStandardOutput = False
-        p.StartInfo.FileName = mc
-        p.StartInfo.Arguments = mub
-        p.Start()
+        Mml2vgmInfo.runCommand(mc, mub, False)
         
         #戻り値を生成(何もしないけど念のため)
         si = ScriptInfo()

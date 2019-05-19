@@ -216,10 +216,17 @@ namespace mml2vgmIDE
         }
 
         public void loadSetting(string xmlFilename = null) {
-            if(xmlFilename == null) xmlFilename = defaultXmlFilename;
-            if(!File.Exists(xmlFilename)) return;
-            var xe = System.Xml.Linq.XElement.Load(xmlFilename);
+            string xmlPath = getXmlPath(xmlFilename);
+            if(!File.Exists(xmlPath)) return;
+
+            var xe = System.Xml.Linq.XElement.Load(xmlPath);
             settingData = xe.Elements().ToDictionary(x => x.Name.LocalName, x => (string)x);
+        }
+
+        private string getXmlPath(string xmlFilename) {
+            if(xmlFilename == null) xmlFilename = defaultXmlFilename;
+            var xmlPath = Path.Combine(getApplicationDataFolder(), xmlFilename);
+            return xmlPath;
         }
 
         public void saveSetting(string xmlFilename = null) {
@@ -227,7 +234,9 @@ namespace mml2vgmIDE
             foreach(var k in settingData.Keys) {
                 xe.Add(new System.Xml.Linq.XElement(k, settingData[k]));
             }
-            xe.Save(xmlFilename != null ? xmlFilename : defaultXmlFilename);
+
+            var xmlPath = getXmlPath(xmlFilename);
+            xe.Save(xmlPath);
         }
 
         public string getSettingValue(string key) {
@@ -235,18 +244,13 @@ namespace mml2vgmIDE
             return settingData[key];
         }
 
-        public void removeSetting(string key) {
-            if(!settingData.ContainsKey(key)) return;
-            settingData.Remove(key);
-        }
-
         public void setSettingValue(string key, string value) {
             settingData[key] = value;
         }
 
-
-        public void start(string cmdline) {
-            System.Windows.Forms.MessageBox.Show(document.editor.Text);
+        public void removeSetting(string key) {
+            if(!settingData.ContainsKey(key)) return;
+            settingData.Remove(key);
         }
 
     }

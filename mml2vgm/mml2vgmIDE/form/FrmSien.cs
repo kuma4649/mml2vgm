@@ -22,7 +22,7 @@ namespace mml2vgmIDE
         public FrmSien()
         {
             InitializeComponent();
-            ss = new SienSearch("mmlSien.json");
+            ss = new SienSearch(System.IO.Path.Combine(Common.GetApplicationFolder(), "mmlSien.json"));
         }
 
         private void dgvItem_CellClick(object sender, DataGridViewCellEventArgs e)
