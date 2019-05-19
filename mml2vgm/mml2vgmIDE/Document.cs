@@ -58,7 +58,17 @@ namespace mml2vgmIDE
             wrnBox = null;
             InitFolderTree();
             editor.Text = Path.GetFileName(fullPath);
-            editor.azukiControl.Text = File.ReadAllText(fullPath);
+            switch (Path.GetExtension(fullPath))
+            {
+                case ".gwi":
+                default:
+                    editor.azukiControl.Text = File.ReadAllText(fullPath);
+                    break;
+                case ".btm"://BambooTracker
+                    Sequencer.Importer.BambooImporter bmbImp = new Sequencer.Importer.BambooImporter();
+                    editor.azukiControl.Text = bmbImp.Convert(fullPath);
+                    break;
+            }
             editor.azukiControl.ClearHistory();
             editor.Tag = this;
             editor.azukiControl.Tag = this;
@@ -94,4 +104,5 @@ namespace mml2vgmIDE
 
         }
     }
+
 }

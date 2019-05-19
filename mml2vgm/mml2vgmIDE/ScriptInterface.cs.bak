@@ -1,0 +1,89 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.IO;
+using IronPython.Hosting;
+using Microsoft.Scripting.Hosting;
+using System.Reflection;
+
+namespace mml2vgmIDE
+{
+    public static class ScriptInterface
+    {
+        private static ScriptEngine engine = Python.CreateEngine();
+
+        public static void Init()
+        {
+        }
+
+        public static string GetScriptTitle(string path)
+        {
+            try
+            {
+                ScriptSource source = engine.CreateScriptSourceFromFile(path);
+                CompiledCode code = source.Compile();
+                ScriptScope scope = engine.CreateScope();
+                ScriptRuntime runtime = engine.Runtime;
+                Assembly assembly = typeof(Program).Assembly;
+                runtime.LoadAssembly(Assembly.LoadFile(assembly.Location));
+                source.Execute(scope);
+
+                dynamic pyClass = scope.GetVariable("Mml2vgmScript");
+                dynamic mml2vgmScript = pyClass();
+                return mml2vgmScript.title();
+            }
+            catch (Exception ex)
+            {
+                log.ForcedWrite(ex);
+                return Path.GetFileName(path);
+            }
+        }
+
+        public static void run(string path, Mml2vgmInfo info)
+        {
+            try
+            {
+                ScriptSource source = engine.CreateScriptSourceFromFile(path);
+                CompiledCode code = source.Compile();
+                ScriptScope scope = engine.CreateScope();
+                ScriptRuntime runtime = engine.Runtime;
+                Assembly assembly = typeof(Program).Assembly;
+                runtime.LoadAssembly(Assembly.LoadFile(assembly.Location));
+                source.Execute(scope);
+
+                dynamic pyClass = scope.GetVariable("Mml2vgmScript");
+                dynamic mml2vgmScript = pyClass();
+                ScriptInfo si = mml2vgmScript.run(info);
+
+                info.document.editor.azukiControl.Document.Replace(si.responseMessage);
+            }
+            catch (Exception ex)
+            {
+                log.ForcedWrite(ex);
+            }
+        }
+
+        private static void Reflect(ScriptInfo si)
+        {
+            if (si == null) return;
+        }
+    }
+
+    public class ScriptInfo
+    {
+        public string responseMessage = "";
+    }
+
+    public class Mml2vgmInfo
+    {
+        public string name = "";
+        public Document document = null;
+
+        public void msg(string msg)
+        {
+            System.Windows.Forms.MessageBox.Show(msg);
+        }
+    }
+}

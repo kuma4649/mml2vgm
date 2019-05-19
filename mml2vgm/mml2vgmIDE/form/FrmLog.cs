@@ -15,8 +15,8 @@ namespace mml2vgmIDE
         public FrmLog(Setting setting)
         {
             InitializeComponent();
-            this.textBox1.BackColor = Color.FromArgb(setting.ColorScheme.Log_BackColor);
-            this.textBox1.ForeColor = Color.FromArgb(setting.ColorScheme.Log_ForeColor);
+            this.tbLog.BackColor = Color.FromArgb(setting.ColorScheme.Log_BackColor);
+            this.tbLog.ForeColor = Color.FromArgb(setting.ColorScheme.Log_ForeColor);
         }
         protected override string GetPersistString()
         {

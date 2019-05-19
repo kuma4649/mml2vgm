@@ -94,7 +94,7 @@ namespace mml2vgmIDE
         {
             OpenFileDialog ofd = new OpenFileDialog();
 
-            ofd.Filter = "gwiLファイル(*.gwi)|*.gwi|すべてのファイル(*.*)|*.*";
+            ofd.Filter = "gwiファイル(*.gwi)|*.gwi|すべてのファイル(*.*)|*.*";
             ofd.Title = "ファイルを開く";
             ofd.RestoreDirectory = true;
 
@@ -172,6 +172,22 @@ namespace mml2vgmIDE
             d.editor.Text = Path.GetFileName(sfd.FileName);
             d.gwiFullPath = fn;
             TsmiSaveFile_Click(null, null);
+        }
+
+        private void TsmiImport_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog ofd = new OpenFileDialog();
+
+            ofd.Filter = "btmファイル(*.btm)|*.btm|すべてのファイル(*.*)|*.*";
+            ofd.Title = "ファイルを開く";
+            ofd.RestoreDirectory = true;
+
+            if (ofd.ShowDialog() != DialogResult.OK)
+            {
+                return;
+            }
+
+            ImportFile(ofd.FileName);
         }
 
         private void TsmiExport_Click(object sender, EventArgs e)
@@ -444,6 +460,22 @@ namespace mml2vgmIDE
             UpdateGwiFileHistory();
         }
 
+        private void ImportFile(string fileName)
+        {
+            Document dc = new Document(setting);
+            if (fileName != "") dc.InitOpen(fileName);
+            dc.editor.Show(dpMain, DockState.Document);
+            dc.editor.main = this;
+            dc.editor.parent = dc;
+
+            frmFolderTree.treeView1.Nodes.Clear();
+            frmFolderTree.treeView1.Nodes.Add(dc.gwiTree);
+            frmFolderTree.basePath = Path.GetDirectoryName(dc.gwiFullPath);
+
+            FormBox.Add(dc.editor);
+            DocumentBox.Add(dc);
+        }
+
         private void AddGwiFileHistory(string fileName)
         {
             List<string> lst = new List<string>();
@@ -596,19 +628,27 @@ namespace mml2vgmIDE
             Core.log.Write(msg);
         }
 
-        private void MsgDisp(string msg)
+        public void MsgDisp(string msg)
         {
             if (frmLog == null) return;
             if (frmLog.IsDisposed) return;
 
-            frmLog.textBox1.AppendText(msg + "\r\n");
+            frmLog.tbLog.AppendText(msg + "\r\n");
+        }
+
+        public void MsgClear()
+        {
+            if (frmLog == null) return;
+            if (frmLog.IsDisposed) return;
+
+            frmLog.tbLog.Clear();
         }
 
         private void finishedCompile()
         {
             if (mv == null)
             {
-                if (frmLog != null && !frmLog.IsDisposed) frmLog.textBox1.AppendText(msg.get("I0105"));
+                if (frmLog != null && !frmLog.IsDisposed) frmLog.tbLog.AppendText(msg.get("I0105"));
                 //this.toolStrip1.Enabled = true;
                 //this.tsslMessage.Text = msg.get("I0106");
                 return;
@@ -638,7 +678,7 @@ namespace mml2vgmIDE
                 }
             }
 
-            frmLog.textBox1.AppendText(msg.get("I0107"));
+            frmLog.tbLog.AppendText(msg.get("I0107"));
 
             foreach (msgInfo mes in msgBox.getErr())
             {
@@ -652,29 +692,29 @@ namespace mml2vgmIDE
                 //frmConsole.textBox1.AppendText(string.Format(msg.get("I0108"), mes));
             }
 
-            frmLog.textBox1.AppendText("\r\n");
-            frmLog.textBox1.AppendText(string.Format(msg.get("I0110"), msgBox.getErr().Length, msgBox.getWrn().Length));
+            frmLog.tbLog.AppendText("\r\n");
+            frmLog.tbLog.AppendText(string.Format(msg.get("I0110"), msgBox.getErr().Length, msgBox.getWrn().Length));
 
             if (mv.desVGM.loopSamples != -1)
             {
-                frmLog.textBox1.AppendText(string.Format(msg.get("I0111"), mv.desVGM.loopClock));
+                frmLog.tbLog.AppendText(string.Format(msg.get("I0111"), mv.desVGM.loopClock));
                 if (mv.desVGM.info.format == enmFormat.VGM)
-                    frmLog.textBox1.AppendText(string.Format(msg.get("I0112")
+                    frmLog.tbLog.AppendText(string.Format(msg.get("I0112")
                         , mv.desVGM.loopSamples
                         , mv.desVGM.loopSamples / 44100L));
                 else
-                    frmLog.textBox1.AppendText(string.Format(msg.get("I0112")
+                    frmLog.tbLog.AppendText(string.Format(msg.get("I0112")
                         , mv.desVGM.loopSamples
                         , mv.desVGM.loopSamples / (mv.desVGM.info.xgmSamplesPerSecond)));
             }
 
-            frmLog.textBox1.AppendText(string.Format(msg.get("I0113"), mv.desVGM.lClock));
+            frmLog.tbLog.AppendText(string.Format(msg.get("I0113"), mv.desVGM.lClock));
             if (mv.desVGM.info.format == enmFormat.VGM)
-                frmLog.textBox1.AppendText(string.Format(msg.get("I0114")
+                frmLog.tbLog.AppendText(string.Format(msg.get("I0114")
                     , mv.desVGM.dSample
                     , mv.desVGM.dSample / 44100L));
             else
-                frmLog.textBox1.AppendText(string.Format(msg.get("I0114")
+                frmLog.tbLog.AppendText(string.Format(msg.get("I0114")
                     , mv.desVGM.dSample
                     , mv.desVGM.dSample / (mv.desVGM.info.xgmSamplesPerSecond)));
 
@@ -693,7 +733,7 @@ namespace mml2vgmIDE
             //if (mv.desVGM.huc6280[1].pcmDataEasy != null) textBox1.AppendText(string.Format(msg.get("I0125"), mv.desVGM.huc6280[1].pcmDataEasy.Length));
 
 
-            frmLog.textBox1.AppendText(msg.get("I0126"));
+            frmLog.tbLog.AppendText(msg.get("I0126"));
             //this.toolStrip1.Enabled = true;
             //this.tsslMessage.Text = msg.get("I0106");
 
@@ -944,6 +984,7 @@ namespace mml2vgmIDE
             frmFolderTree.parentExecFile = ExecFile;
             frmErrorList.parentUpdate = UpdateControl;
             frmErrorList.parentJumpDocument = JumpDocument;
+
         }
 
         private IDockContent GetDockContentFromPersistString(string persistString)
@@ -1441,6 +1482,78 @@ namespace mml2vgmIDE
             }
 
             UpdateGwiFileHistory();
+
+            log.ForcedWrite("スクリプトの検索");
+            tsmiScript.Enabled = false;
+            if (!Directory.Exists(Path.Combine(Common.GetApplicationFolder(), "Script")))
+            {
+                Directory.CreateDirectory(Path.Combine(Common.GetApplicationFolder(), "Script"));
+            }
+            SearchScript(tsmiScript, Path.Combine(Common.GetApplicationFolder(), "Script"));
+
         }
+
+        private void SearchScript(ToolStripMenuItem parent, string path)
+        {
+            DirectoryInfo dm = new DirectoryInfo(path);
+
+            try
+            {
+                foreach (DirectoryInfo ds in dm.GetDirectories())
+                {
+                    ToolStripMenuItem tsmi = new ToolStripMenuItem(ds.Name);
+                    tsmi.Tag = "+" + ds.FullName;
+                    parent.DropDownItems.Add(tsmi);
+                    tsmi.Click += tsmiScriptDirectoryItem_Clicked;
+                    parent.Enabled = true;
+                }
+                foreach (FileInfo fi in dm.GetFiles())
+                {
+                    string scriptTitle = ScriptInterface.GetScriptTitle(fi.FullName);
+                    ToolStripMenuItem tsmi = new ToolStripMenuItem(scriptTitle);
+                    tsmi.Tag = fi.FullName;
+                    parent.DropDownItems.Add(tsmi);
+                    tsmi.Click += tsmiScriptFileItem_Clicked;
+                    parent.Enabled = true;
+                }
+            }
+            catch { }
+        }
+
+        private void tsmiScriptDirectoryItem_Clicked(object sender, EventArgs e)
+        {
+            ToolStripMenuItem tsmi = (ToolStripMenuItem)sender;
+            string path = (string)tsmi.Tag;
+            if (string.IsNullOrEmpty(path) || path[0] != '+') return;
+            path = path.Substring(1);
+            if (string.IsNullOrEmpty(path)) return;
+            tsmi.Tag = path;
+
+            SearchScript(tsmi, path);
+        }
+
+        private void tsmiScriptFileItem_Clicked(object sender, EventArgs e)
+        {
+            DockContent dc = null;
+            Document d = null;
+            if (dpMain.ActiveDocument is DockContent)
+            {
+                dc = (DockContent)dpMain.ActiveDocument;
+                if (dc.Tag is Document)
+                {
+                    d = (Document)dc.Tag;
+                }
+            }
+            //if (d == null) return;
+
+            string fn = (string)((ToolStripMenuItem)sender).Tag;
+
+            Mml2vgmInfo info = new Mml2vgmInfo();
+            info.parent = this;
+            info.name = "";
+            info.document = d;
+            ScriptInterface.run(fn, info);
+        }
+
     }
 }

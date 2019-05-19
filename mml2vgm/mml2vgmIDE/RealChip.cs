@@ -46,10 +46,10 @@ namespace mml2vgmIDE
             try
             {
                 nScci = new NScci.NScci();
-                n = nScci.NSoundInterfaceManager_.getInterfaceCount();
+                n = nScci.NSoundInterfaceManager_ == null ? 0 : nScci.NSoundInterfaceManager_.getInterfaceCount();
                 if (n == 0)
                 {
-                    nScci.Dispose();
+                    if (nScci != null) nScci.Dispose();
                     nScci = null;
                     log.ForcedWrite("RealChip:Ctr:Not found SCCI.");
                 }
