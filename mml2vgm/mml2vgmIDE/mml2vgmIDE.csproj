@@ -185,8 +185,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RealChip.cs" />
     <Compile Include="ScriptInterface.cs" />
-    <Compile Include="Sequencer\Importer\BambooImporter.cs" />
-    <Compile Include="Sequencer\Importer\Importer.cs" />
     <Compile Include="Setting.cs" />
     <Compile Include="Sien.cs" />
     <Compile Include="SienSearch.cs" />

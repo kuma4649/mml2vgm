@@ -64,10 +64,6 @@ namespace mml2vgmIDE
                 default:
                     editor.azukiControl.Text = File.ReadAllText(fullPath);
                     break;
-                case ".btm"://BambooTracker
-                    Sequencer.Importer.BambooImporter bmbImp = new Sequencer.Importer.BambooImporter();
-                    editor.azukiControl.Text = bmbImp.Convert(fullPath);
-                    break;
             }
             editor.azukiControl.ClearHistory();
             editor.Tag = this;
