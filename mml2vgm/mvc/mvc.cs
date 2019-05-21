@@ -134,6 +134,11 @@ namespace mvc
             Core.log.Close();
 
 
+            if (msgBox.getErr().Length > 0)
+            {
+                Environment.Exit(msgBox.getErr().Length);
+            }
+
             Environment.Exit(ret);
         }
 

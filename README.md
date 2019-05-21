@@ -37,12 +37,38 @@ MML2VGM,MVCはMITライセンスに準ずる物とします。LICENSE.txtを参照。
 また、MITライセンスは著作権表示および本許諾表示を求めますが本ソフトでは不要です。  
   
 以下のソフトウェアのソースコードをC#向けに改変し使用しています。  
-これらのソースは各著作者が著作権を持ちます。
-ライセンスに関しては、各ドキュメントを参照してください。
+これらのソースは各著作者が著作権を持ちます。  
+ライセンスに関しては、各ドキュメントを参照してください。  
+  
+  ・EncAdpcmA.cs  参考元：https://wiki.neogeodev.org/index.php?title=ADPCM_codecs  
+  
+  
+以下のソフトウェアをライブラリとして動的リンクし使用しています。  
+これらのソースは各著作者が著作権を持ちます。  
+ライセンスに関しては、各ドキュメントを参照してください。  
 
-・EncAdpcmA.cs  参考元：https://wiki.neogeodev.org/index.php?title=ADPCM_codecs  
-
-
+  ・MDSound  
+    LGPL  
+  
+  以下、mml2vgmIDEのみ使用  
+  
+  ・NAudio  
+    ms-pl  
+  
+  ・Azukiエディター  
+    zlib License  
+    オリジナルではなく改造したものを使用しています。  
+  
+  ・IronPython  
+    Apache License,Ver.2.0  
+  
+  ・Json.NET  
+    MIT License  
+  
+  ・DockPanel Suite  
+    MIT License  
+  
+  
 [SpecialThanks]  
  本ツールは以下の方々にお世話になっております。また以下のソフトウェア、ウェブページを参考、使用しています。  
  本当にありがとうございます。  
