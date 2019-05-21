@@ -621,7 +621,7 @@ namespace mml2vgmIDE
             }
         }
 
-        private void Disp(string msg)
+        public void Disp(string msg)
         {
             Action<string> msgDisp = MsgDisp;
             this.Invoke(msgDisp, msg);
@@ -632,6 +632,21 @@ namespace mml2vgmIDE
         {
             if (frmLog == null) return;
             if (frmLog.IsDisposed) return;
+
+            frmLog.tbLog.AppendText(msg + "\r\n");
+        }
+
+        public void ProcessMsgDisp(string msg)
+        {
+            Action<string> msgDisp = PMsgDisp;
+            this.Invoke(msgDisp, msg);
+        }
+
+        private void PMsgDisp(string msg)
+        {
+            if (frmLog == null) return;
+            if (frmLog.IsDisposed) return;
+            if (string.IsNullOrEmpty(msg)) return;
 
             frmLog.tbLog.AppendText(msg + "\r\n");
         }

@@ -7,6 +7,7 @@ using System.IO;
 using IronPython.Hosting;
 using Microsoft.Scripting.Hosting;
 using System.Reflection;
+using System.Diagnostics;
 
 namespace mml2vgmIDE
 {
@@ -196,17 +197,69 @@ namespace mml2vgmIDE
         }
 
         public void runCommand(string cmdname, string arguments, bool waitEnd = false) {
-            var psi =new System.Diagnostics.ProcessStartInfo();
+
+            //if (waitEnd)
+            //{
+            //    using (process = new System.Diagnostics.Process())
+            //    {
+            //        process.StartInfo.FileName = cmdname;
+            //        process.StartInfo.Arguments = arguments;
+            //        process.StartInfo.UseShellExecute = false;
+            //        process.StartInfo.RedirectStandardOutput = true;
+            //        process.StartInfo.CreateNoWindow = true;
+            //        process.OutputDataReceived += new System.Diagnostics.DataReceivedEventHandler(process_DataReceived);
+            //        process.Exited += Process_Exited;
+            //        process.EnableRaisingEvents = true;
+            //        isProcessRunning = true;
+            //        process.Start();
+            //        process.BeginOutputReadLine();
+
+            //        while (isProcessRunning)
+            //        {
+            //            System.Threading.Thread.Sleep(0);
+            //            System.Windows.Forms.Application.DoEvents();
+            //        }
+            //        process.Close();
+            //    }
+            //}
+            //else
+            //{
+            //    process = new System.Diagnostics.Process();
+            //    process.StartInfo.FileName = cmdname;
+            //    process.StartInfo.Arguments = arguments;
+            //    //process.StartInfo.UseShellExecute = false;
+            //    //process.StartInfo.RedirectStandardOutput = true;
+            //    //process.StartInfo.CreateNoWindow = true;
+            //    //process.OutputDataReceived += new System.Diagnostics.DataReceivedEventHandler(process_DataReceived);
+            //    process.Start();
+            //    //process.BeginOutputReadLine();
+            //}
+
+            var psi = new System.Diagnostics.ProcessStartInfo();
             psi.FileName = cmdname;
             psi.Arguments = arguments;
 
-            var p = System.Diagnostics.Process.Start(psi);
-
-            if (waitEnd) {
-                p.WaitForExit();
+            using (var p = System.Diagnostics.Process.Start(psi))
+            {
+                if (waitEnd)
+                {
+                    p.WaitForExit();
+                }
                 p.Close();
             }
         }
+
+        //private Process process = null;
+        //private bool isProcessRunning = false;
+        //private void Process_Exited(object sender, EventArgs e)
+        //{
+        //    isProcessRunning = false;
+        //}
+
+        //private void process_DataReceived(object sender, DataReceivedEventArgs e)
+        //{
+        //    parent.ProcessMsgDisp(e.Data);
+        //}
 
         public string fileSelect(string title) {
             var ofd = new System.Windows.Forms.OpenFileDialog();

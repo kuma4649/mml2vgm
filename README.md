@@ -30,18 +30,17 @@
  ・気合と根性  
   
 [著作権・免責]  
-MML2VGM,MVC,IDEはMITライセンスに準ずる物とします。LICENSE.txtを参照。  
+MML2VGM,MVC,IDEはGPLライセンスに準ずる物とします。LICENSE.txtを参照。  
 著作権は作者が保有しています。  
 このソフトは無保証であり、このソフトを使用した事による  
 いかなる損害も作者は一切の責任を負いません。  
-また、MITライセンスは著作権表示および本許諾表示を求めますが本ソフトでは不要です。  
   
 以下のソフトウェアのソースコードをC#向けに改変し使用しています。  
 これらのソースは各著作者が著作権を持ちます。
 ライセンスに関しては、各ドキュメントを参照してください。
 
-該当ソース：EncAdpcmA.cs  
-参考元：https://wiki.neogeodev.org/index.php?title=ADPCM_codecs  
+・EncAdpcmA.cs  参考元：https://wiki.neogeodev.org/index.php?title=ADPCM_codecs  
+・Bamboo Tracker
 
 
 [SpecialThanks]  
