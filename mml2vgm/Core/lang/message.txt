@@ -4,6 +4,7 @@
 ;Translation by Chromaryu. (aka くろま)
 
 ;mvc.cs 0000
+E0000=Illegal option.
 I0000=\r\nPart  Chip    Count
 I0001=--------------------
 I0002= {0}   {1}   {2}
@@ -127,6 +128,8 @@ I04017=CHIP       PRI/SEC SMPID BANK START(H) END(H)   LOOP(H)  LENGTH(H) MODE S
 I04018= Total Length : {0} byte\r\n
 I04019=-- DATA BLOCK LIST --
 I04020=CHIP       PRI/SEC START(H) END(H)   LENGTH(H) STATUS
+I04021=Write VGZ file.
+I04022=Write TraceInfo(.ti) file.
 
 E04000=File not found.
 E04001=Unexpected Error: Failed to get source file.

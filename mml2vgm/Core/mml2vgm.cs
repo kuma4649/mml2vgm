@@ -11,11 +11,15 @@ namespace Core
     public class Mml2vgm
     {
 
+        public ClsVgm desVGM = null;
+        public outDatum[] desBuf = null;
+        public bool outVgmFile = true;
+        public bool outTraceInfoFile = false;
+        public string desTiFn = "";
+
         private string srcFn;
         private string desFn;
         private string stPath;
-        public ClsVgm desVGM = null;
-        public outDatum[] desBuf = null;
         private Action<string> Disp = null;
         private int pcmDataSeqNum = 0;
         private string wrkPath;
@@ -130,9 +134,17 @@ namespace Core
                     return -1;
                 }
 
-                Disp(msg.get("I04010"));
-                outFile(desBuf);
+                if (outVgmFile)
+                {
+                    Disp(msg.get("I04021"));
+                    OutVgmFile(desBuf);
+                }
 
+                if (outTraceInfoFile)
+                {
+                    Disp(msg.get("I04022"));
+                    OutTraceInfoFile(desBuf);
+                }
 
                 Result();
 
@@ -144,8 +156,9 @@ namespace Core
             }
             catch (Exception ex)
             {
+                Disp(ex.Message);
                 msgBox.setErrMsg(string.Format(msg.get("E04005")
-                    , desVGM.linePos
+                    , (desVGM.linePos == null ? "-" : desVGM.linePos.row.ToString())
                     , ex.Message
                     , ex.StackTrace), desVGM.linePos);
                 return -1;
@@ -157,7 +170,7 @@ namespace Core
             }
         }
 
-        private void outFile(outDatum[] desBuf)
+        private void OutVgmFile(outDatum[] desBuf)
         {
             List<byte> lstBuf = new List<byte>();
             int skipCount = 0;
@@ -204,7 +217,7 @@ namespace Core
                 return;
             }
 
-            log.Write("VGZファイル出力");
+            log.Write(msg.get("I04021"));
 
             int num;
             byte[] buf = new byte[1024];
@@ -227,6 +240,47 @@ namespace Core
                 if (outStream != null) outStream.Dispose();
                 if (inStream != null) inStream.Dispose();
             }
+        }
+
+        private void OutTraceInfoFile(outDatum[] desBuf)
+        {
+            List<string> buf = new List<string>();
+            foreach (outDatum od in desBuf)
+            {
+                if (od.linePos != null)
+                {
+                    buf.Add(string.Format(
+                        "File:[{0}] Row:[{1}] Col:[{2}] Len:[{3}] Chip:[{4}] Secondary:[{5}] Part:[{6}] Ch:[{7}] MMLType:[{8}] Val:[{9:X2}]"
+                        , od.linePos.filename
+                        , od.linePos.row
+                        , od.linePos.col
+                        , od.linePos.length
+                        , od.linePos.chip
+                        , od.linePos.isSecondary
+                        , od.linePos.part
+                        , od.linePos.ch
+                        , od.type
+                        , od.val));
+                }
+                else
+                {
+                    buf.Add(string.Format(
+                        "File:[{0}] Row:[{1}] Col:[{2}] Len:[{3}] Chip:[{4}] Secondary:[{5}] Part:[{6}] Ch:[{7}] MMLType:[{8}] Val:[{9:X2}]"
+                        , ""
+                        , ""
+                        , ""
+                        , ""
+                        , ""
+                        , ""
+                        , ""
+                        , ""
+                        , od.type
+                        , od.val));
+                }
+            }
+
+            log.Write(msg.get("I04022"));
+            File.WriteAllLines(desTiFn, buf, System.Text.Encoding.UTF8);
         }
 
         private List<Line> GetSrc(string[] srcBuf, string path)

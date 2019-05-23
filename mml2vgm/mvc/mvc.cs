@@ -13,6 +13,9 @@ namespace mvc
         /// </summary>
         public string srcFn = "";
         public string desFn = "";
+        public string desTiFn = "";
+        public bool outVgmFile = true;
+        public bool outTraceInfoFile = false;
 
         public mvc(string[] args)
         {
@@ -25,20 +28,61 @@ namespace mvc
                 Environment.Exit(0);
             }
 
-            srcFn = args[0];
+            int cnt = 0;
+            try
+            {
+                List<string> lstOpt = new List<string>();
+                while (args[cnt].Length > 1 && (args[cnt][0] == '-' || args[cnt][0] == '/'))
+                {
+                    lstOpt.Add(args[cnt++].Substring(1));
+                }
+
+                foreach (string opt in lstOpt)
+                {
+                    //vgm switch
+                    switch (opt[0])
+                    {
+                        case 'v':
+                            if (opt[1] == '+') outVgmFile = true;
+                            if (opt[1] == '-') outVgmFile = false;
+                            break;
+                        case 't':
+                            if (opt[1] == '+') outTraceInfoFile = true;
+                            if (opt[1] == '-') outTraceInfoFile = false;
+                            break;
+                    }
+                }
+            }
+            catch
+            {
+                Console.WriteLine(msg.get("E0000"));
+                Environment.Exit(0);
+            }
+
+            //ファイルの指定無し
+            if (args == null || args.Length < cnt)
+            {
+                //disp usage
+                Console.WriteLine(msg.get("I07000"));
+                Environment.Exit(0);
+            }
+
+            srcFn = args[cnt++];
             if (Path.GetExtension(srcFn) == "")
             {
                 srcFn += ".gwi";
             }
 
-            if (args.Length > 1)
+            if (args.Length > cnt)
             {
-                desFn = args[1];
+                desFn = args[cnt + 1];
             }
             else
             {
                 desFn = Path.Combine(Path.GetDirectoryName(srcFn), Path.GetFileNameWithoutExtension(srcFn) + ".vgm");
             }
+
+            desTiFn = Path.Combine(Path.GetDirectoryName(srcFn), Path.GetFileNameWithoutExtension(srcFn) + ".ti");
 
             Core.log.debug = false;
             Core.log.Open();
@@ -46,7 +90,12 @@ namespace mvc
 
             Assembly myAssembly = Assembly.GetEntryAssembly();
             string path = System.IO.Path.GetDirectoryName(myAssembly.Location);
+
             Mml2vgm mv = new Mml2vgm(srcFn, desFn, path, Disp);
+            mv.outVgmFile = outVgmFile;
+            mv.outTraceInfoFile = outTraceInfoFile;
+            mv.desTiFn = desTiFn;
+
             int ret = mv.Start();
 
             if (ret == 0)
@@ -76,12 +125,12 @@ namespace mvc
 
             foreach (msgInfo mes in msgBox.getWrn())
             {
-                Console.WriteLine(string.Format(msg.get("I0004"), mes.filename, mes.line == -1 ? "-" : mes.line.ToString(), mes.body));
+                Console.Error.WriteLine(string.Format(msg.get("I0004"), mes.filename, mes.line == -1 ? "-" : (mes.line + 1).ToString(), mes.body));
             }
 
             foreach (msgInfo mes in msgBox.getErr())
             {
-                Console.WriteLine(string.Format(msg.get("I0005"), mes.filename, mes.line == -1 ? "-" : mes.line.ToString(), mes.body));
+                Console.Error.WriteLine(string.Format(msg.get("I0005"), mes.filename, mes.line == -1 ? "-" : (mes.line + 1).ToString(), mes.body));
             }
 
 

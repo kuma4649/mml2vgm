@@ -4,6 +4,7 @@
 
 
 ;mvc.cs 0000
+E0000=オプションの解析に失敗しました。
 I0000=\r\nPart  Chip    Count
 I0001=--------------------
 I0002= {0}   {1}   {2}
@@ -130,6 +131,8 @@ I04017=CHIP       PRI/SEC SMPID BANK START(H) END(H)   LOOP(H)  LENGTH(H) MODE S
 I04018= Total Length : {0} byte\r\n
 I04019=-- DATA BLOCK LIST --
 I04020=CHIP       PRI/SEC START(H) END(H)   LENGTH(H) STATUS
+I04021=VGZファイル出力
+I04022=TraceInfo(.ti)ファイル出力
 
 E04000=ファイルが見つかりません。
 E04001=想定外のエラー　ソースファイルの取得に失敗
@@ -205,7 +208,7 @@ E06000=指定されたエイリアス名は定義されていません。
 
 
 ;usage 07000
-I07000=mml2vgm コマンドライン版\r\n                                      By kuma\r\n\r\nUsage:\r\n    mvc gwi[.gwi] [vgm[.vgm|.vgz|.xgm]]\r\n\r\nParameter\r\n    gwi        gwiファイルを指定してください。\r\n               拡張子を省略すると.gwiが補完されます。\r\n    vgm        出力するvgm,vgz,xgmファイルを指定できます。\r\n               基本的に指定しなくて大丈夫だがvgzの場合は必須。\r\n
+I07000=mml2vgm コマンドライン版\r\n                                      By kuma\r\n\r\nUsage:\r\n    mvc [-v+|-v-] [-t+|-t-] gwi[.gwi] [vgm[.vgm|.vgz|.xgm]]\r\n\r\nOption\r\n    -v+        vgm/vgzファイルを出力する(Default)\r\n    -v-        vgm/vgzファイルを出力しない\r\n    -t+        TraceInfo(.ti)ファイルを出力する\r\n    -t-        TraceInfo(.ti)ファイルを出力しない(Default)\r\nParameter\r\n    gwi\r\n        gwiファイルを指定してください。\r\n        拡張子を省略すると.gwiが補完されます。\r\n    vgm\r\n        出力するvgm,vgz,xgmファイルを指定できます。\r\n        基本的に指定しなくて大丈夫だがvgzの場合は必須。\r\n
 
 
 

@@ -25,7 +25,14 @@ namespace Core
         public static void setErrMsg(string msg,LinePos lp)
         {
             //errBox.Add(string.Format("(F : {0}  L : {1}) : {2}", System.IO.Path.GetFileName(fn), lineNumber, msg));
-            errBox.Add(new msgInfo(lp.filename, lp.row, lp.col, lp.length, msg));
+            if (lp != null)
+            {
+                errBox.Add(new msgInfo(lp.filename, lp.row, lp.col, lp.length, msg));
+            }
+            else
+            {
+                errBox.Add(new msgInfo("-", -1, -1, -1, msg));
+            }
         }
 
         public static void setWrnMsg(msgInfo msg)
