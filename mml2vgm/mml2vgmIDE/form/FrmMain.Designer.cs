@@ -76,6 +76,7 @@
             this.TsmiCompileAndTracePlay = new System.Windows.Forms.ToolStripMenuItem();
             this.TsmiAllCompile = new System.Windows.Forms.ToolStripMenuItem();
             this.TsmiCompile = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiScript = new System.Windows.Forms.ToolStripMenuItem();
             this.ツールTToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiOption = new System.Windows.Forms.ToolStripMenuItem();
             this.TsmiHelp = new System.Windows.Forms.ToolStripMenuItem();
@@ -83,7 +84,7 @@
             this.TsmiReference = new System.Windows.Forms.ToolStripMenuItem();
             this.TsmiAbout = new System.Windows.Forms.ToolStripMenuItem();
             this.timer = new System.Windows.Forms.Timer(this.components);
-            this.tsmiScript = new System.Windows.Forms.ToolStripMenuItem();
+            this.TsmiShowMixer = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -95,7 +96,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dpMain.Location = new System.Drawing.Point(0, 23);
             this.dpMain.Name = "dpMain";
-            this.dpMain.Size = new System.Drawing.Size(933, 406);
+            this.dpMain.Size = new System.Drawing.Size(942, 406);
             this.dpMain.TabIndex = 1;
             this.dpMain.ActiveDocumentChanged += new System.EventHandler(this.DpMain_ActiveDocumentChanged);
             // 
@@ -120,9 +121,8 @@
             this.tssbFast});
             this.statusStrip1.Location = new System.Drawing.Point(0, 428);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Padding = new System.Windows.Forms.Padding(1, 0, 16, 0);
             this.statusStrip1.ShowItemToolTips = true;
-            this.statusStrip1.Size = new System.Drawing.Size(933, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(942, 22);
             this.statusStrip1.TabIndex = 2;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -163,7 +163,7 @@
             // toolStripStatusLabel1
             // 
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(134, 17);
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(145, 17);
             this.toolStripStatusLabel1.Spring = true;
             this.toolStripStatusLabel1.Text = " ";
             // 
@@ -257,8 +257,7 @@
             this.TsmiHelp});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Padding = new System.Windows.Forms.Padding(7, 2, 0, 2);
-            this.menuStrip1.Size = new System.Drawing.Size(933, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(942, 24);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -369,7 +368,7 @@
             // 
             this.TsmiUndo.Enabled = false;
             this.TsmiUndo.Name = "TsmiUndo";
-            this.TsmiUndo.Size = new System.Drawing.Size(180, 22);
+            this.TsmiUndo.Size = new System.Drawing.Size(117, 22);
             this.TsmiUndo.Text = "元に戻す";
             this.TsmiUndo.Click += new System.EventHandler(this.TsmiUndo_Click);
             // 
@@ -377,7 +376,7 @@
             // 
             this.TsmiRedo.Enabled = false;
             this.TsmiRedo.Name = "TsmiRedo";
-            this.TsmiRedo.Size = new System.Drawing.Size(180, 22);
+            this.TsmiRedo.Size = new System.Drawing.Size(117, 22);
             this.TsmiRedo.Text = "やり直し";
             this.TsmiRedo.Click += new System.EventHandler(this.TsmiRedo_Click);
             // 
@@ -388,6 +387,7 @@
             this.TsmiShowFolderTree,
             this.TsmiShowErrorList,
             this.TsmiShowLog,
+            this.TsmiShowMixer,
             this.TsmiFunctionKey});
             this.表示VToolStripMenuItem.Name = "表示VToolStripMenuItem";
             this.表示VToolStripMenuItem.Size = new System.Drawing.Size(58, 20);
@@ -491,6 +491,12 @@
             this.TsmiCompile.Text = "コンパイルのみ";
             this.TsmiCompile.Click += new System.EventHandler(this.TsmiCompile_Click);
             // 
+            // tsmiScript
+            // 
+            this.tsmiScript.Name = "tsmiScript";
+            this.tsmiScript.Size = new System.Drawing.Size(76, 20);
+            this.tsmiScript.Text = "スクリプト(&S)";
+            // 
             // ツールTToolStripMenuItem
             // 
             this.ツールTToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -502,7 +508,7 @@
             // tsmiOption
             // 
             this.tsmiOption.Name = "tsmiOption";
-            this.tsmiOption.Size = new System.Drawing.Size(180, 22);
+            this.tsmiOption.Size = new System.Drawing.Size(135, 22);
             this.tsmiOption.Text = "オプション(&O)";
             this.tsmiOption.Click += new System.EventHandler(this.TsmiOption_Click);
             // 
@@ -543,17 +549,18 @@
             this.timer.Interval = 16;
             this.timer.Tick += new System.EventHandler(this.Timer_Tick);
             // 
-            // tsmiScript
+            // TsmiShowMixer
             // 
-            this.tsmiScript.Name = "tsmiScript";
-            this.tsmiScript.Size = new System.Drawing.Size(76, 20);
-            this.tsmiScript.Text = "スクリプト(&S)";
+            this.TsmiShowMixer.Name = "TsmiShowMixer";
+            this.TsmiShowMixer.Size = new System.Drawing.Size(180, 22);
+            this.TsmiShowMixer.Text = "音源ミキサー";
+            this.TsmiShowMixer.Click += new System.EventHandler(this.TsmiShowMixer_Click);
             // 
             // FrmMain
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(933, 450);
+            this.ClientSize = new System.Drawing.Size(942, 450);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.menuStrip1);
             this.Controls.Add(this.dpMain);
@@ -629,6 +636,7 @@
         private System.Windows.Forms.ToolStripMenuItem tsmiGwiFileHistory;
         private System.Windows.Forms.ToolStripMenuItem tsmiImport;
         private System.Windows.Forms.ToolStripMenuItem tsmiScript;
+        private System.Windows.Forms.ToolStripMenuItem TsmiShowMixer;
     }
 }
 

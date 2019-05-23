@@ -2525,11 +2525,15 @@ namespace mml2vgmIDE
 
             public Rectangle RMain { get => _RMain; set => _RMain = value; }
 
+            private Rectangle _RMixer = Rectangle.Empty;
+            public Rectangle RMixer { get => _RMixer; set => _RMixer = value; }
+
             public Location Copy()
             {
                 Location Location = new Location();
 
                 Location.RMain = this.RMain;
+                Location.RMixer = this.RMixer;
 
                 return Location;
             }

@@ -37,6 +37,7 @@ namespace SoundManager
                         {
                             break;
                         }
+                        if (unmount) return;
                     }
 
                     lock (lockObj) isRunning = true;
@@ -46,6 +47,7 @@ namespace SoundManager
                     while (true)
                     {
                         if (!GetStart()) break;
+                        if (unmount) return;
 
                         if (pause)
                         {
@@ -80,6 +82,10 @@ namespace SoundManager
                     isRunning = false;
                     Start = false;
                 }
+            }
+            finally
+            {
+                procExit = true;
             }
         }
 

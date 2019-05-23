@@ -136,6 +136,7 @@ namespace SoundManager
                 {
                     while (!GetStart())
                     {
+                        if (unmount) return;
                         Thread.Sleep(100);
                     }
 
@@ -150,6 +151,7 @@ namespace SoundManager
                     while (true)
                     {
                         if (!GetStart()) break;
+                        if (unmount) return;
                         Thread.Sleep(0);
 
                         double el1 = sw.ElapsedTicks / swFreq;
@@ -203,6 +205,7 @@ namespace SoundManager
                         //dataが貯まってます！
                         while (SeqCounter >= ringBuffer.LookUpCounter())
                         {
+                            if (unmount) return;
                             if (!ringBuffer.Deq(ref od,ref Counter, ref Chip, ref Type, ref Address, ref Data, ref ExData))
                             {
                                 break;
@@ -220,6 +223,7 @@ namespace SoundManager
                                     {
                                         break;
                                     }
+                                    if (unmount) return;
                                     Thread.Sleep(0);
                                 }
                             }
@@ -231,6 +235,7 @@ namespace SoundManager
                                     {
                                         break;
                                     }
+                                    if (unmount) return;
                                     Thread.Sleep(0);
                                 }
                             }
@@ -267,6 +272,7 @@ namespace SoundManager
                                     int timeOut = 1000;
                                     while (!EmuEnq(dat.od, SeqCounter, dat.Chip, dat.Type, dat.Address, dat.Data, dat.ExData))
                                     {
+                                        if (unmount) return;
                                         Thread.Sleep(1);
                                         timeOut--;
                                         if (timeOut == 0) goto Timeout;
@@ -280,6 +286,7 @@ namespace SoundManager
                                     int timeOut = 1000;
                                     while (!RealEnq(dat.od, SeqCounter, dat.Chip, dat.Type, dat.Address, dat.Data, dat.ExData))
                                     {
+                                        if (unmount) return;
                                         Thread.Sleep(1);
                                         timeOut--;
                                         if (timeOut == 0) goto Timeout;
@@ -307,6 +314,10 @@ namespace SoundManager
                     isRunning = false;
                     Start = false;
                 }
+            }
+            finally
+            {
+                procExit = true;
             }
         }
 

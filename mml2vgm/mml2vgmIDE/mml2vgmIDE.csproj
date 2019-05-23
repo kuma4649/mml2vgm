@@ -23,6 +23,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -106,6 +107,7 @@
     <Compile Include="Common.cs" />
     <Compile Include="dacControl.cs" />
     <Compile Include="Document.cs" />
+    <Compile Include="DrawBuff.cs" />
     <Compile Include="Driver\baseDriver.cs" />
     <Compile Include="Driver\vgm.cs" />
     <Compile Include="Driver\xgm.cs" />
@@ -115,6 +117,12 @@
     </Compile>
     <Compile Include="form\frmDebug.Designer.cs">
       <DependentUpon>frmDebug.cs</DependentUpon>
+    </Compile>
+    <Compile Include="form\FrmMixer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="form\FrmMixer.Designer.cs">
+      <DependentUpon>FrmMixer.cs</DependentUpon>
     </Compile>
     <Compile Include="form\FrmSetting.cs">
       <SubType>Form</SubType>
@@ -177,8 +185,10 @@
     <Compile Include="form\ucSettingInstruments.Designer.cs">
       <DependentUpon>ucSettingInstruments.cs</DependentUpon>
     </Compile>
+    <Compile Include="FrameBuffer.cs" />
     <Compile Include="InstrumentAtValSound.cs" />
     <Compile Include="log.cs" />
+    <Compile Include="MDChipParams.cs" />
     <Compile Include="NAudioWrap.cs" />
     <Compile Include="NullOut.cs" />
     <Compile Include="Program.cs" />
@@ -205,6 +215,9 @@
     <Compile Include="WindowPosition.cs" />
     <EmbeddedResource Include="form\frmDebug.resx">
       <DependentUpon>frmDebug.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="form\FrmMixer.resx">
+      <DependentUpon>FrmMixer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="form\FrmSetting.resx">
       <DependentUpon>FrmSetting.cs</DependentUpon>
@@ -293,6 +306,13 @@
     <Content Include="RealChipCtlWrap.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Resource\planeMixer.png" />
+    <None Include="Resource\rFader.png" />
+    <None Include="Resource\rFont_03.png" />
+    <None Include="Resource\rFont_04.png" />
+    <None Include="Resource\rMIDILCD_Font_04.png" />
+    <None Include="Resource\rMIDILCD_Font_05.png" />
+    <None Include="Resource\rMIDILCD_Font_06.png" />
     <Content Include="Resource\フェーリ.mdp" />
     <Content Include="Resource\フェーリ.png" />
     <Content Include="Resource\フェーリ48.ico" />

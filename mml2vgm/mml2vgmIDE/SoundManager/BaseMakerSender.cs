@@ -21,7 +21,8 @@ namespace SoundManager
         protected object lockObj = new object();
 
         public SoundManager parent = null;
-
+        public bool unmount = false;
+        public bool procExit = false;
 
         public long GetRingBufferCounter()
         {
@@ -35,6 +36,7 @@ namespace SoundManager
 
         public bool Mount()
         {
+            unmount = false;
             tokenSource = new CancellationTokenSource();
             cancellationToken = tokenSource.Token;
 
@@ -46,6 +48,16 @@ namespace SoundManager
 
         public bool Unmount()
         {
+            unmount = true;
+
+            int timeout = 1000;
+            while (timeout > 0 && !procExit)
+            {
+                timeout--;
+                Thread.Sleep(1);
+                System.Windows.Forms.Application.DoEvents();
+            }
+
             if (task.Status == TaskStatus.Running)
             {
                 tokenSource.Cancel();

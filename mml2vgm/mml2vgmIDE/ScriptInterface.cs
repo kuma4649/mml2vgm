@@ -8,12 +8,14 @@ using IronPython.Hosting;
 using Microsoft.Scripting.Hosting;
 using System.Reflection;
 using System.Diagnostics;
+using Microsoft.Scripting.Hosting.Providers;
+using IronPython.Runtime;
+using System.Runtime.InteropServices;
 
 namespace mml2vgmIDE
 {
     public static class ScriptInterface
     {
-        private static ScriptEngine engine = Python.CreateEngine();
 
         public static void Init()
         {
@@ -21,12 +23,20 @@ namespace mml2vgmIDE
 
         public static string GetScriptTitle(string path)
         {
+            ScriptEngine engine=null;
+            ScriptRuntime runtime = null;
+
             try
             {
+                engine = Python.CreateEngine();
+                var pc = HostingHelpers.GetLanguageContext(engine) as PythonContext;
+                var hooks = pc.SystemState.Get__dict__()["path_hooks"] as List;
+                hooks.Clear();
                 ScriptSource source = engine.CreateScriptSourceFromFile(path);
                 CompiledCode code = source.Compile();
                 ScriptScope scope = engine.CreateScope();
-                ScriptRuntime runtime = engine.Runtime;
+                runtime = engine.Runtime;
+
                 Assembly assembly = typeof(Program).Assembly;
                 runtime.LoadAssembly(Assembly.LoadFile(assembly.Location));
                 source.Execute(scope);
@@ -40,16 +50,27 @@ namespace mml2vgmIDE
                 log.ForcedWrite(ex);
                 return Path.GetFileName(path);
             }
+            finally
+            {
+                runtime.Shutdown();
+            }
         }
 
         public static void run(string path, Mml2vgmInfo info)
         {
+            ScriptEngine engine = null;
+            ScriptRuntime runtime = null;
+
             try
             {
+                engine = Python.CreateEngine();
+                var pc = HostingHelpers.GetLanguageContext(engine) as PythonContext;
+                var hooks = pc.SystemState.Get__dict__()["path_hooks"] as List;
+                hooks.Clear();
                 ScriptSource source = engine.CreateScriptSourceFromFile(path);
                 CompiledCode code = source.Compile();
                 ScriptScope scope = engine.CreateScope();
-                ScriptRuntime runtime = engine.Runtime;
+                runtime = engine.Runtime;
                 Assembly assembly = typeof(Program).Assembly;
                 runtime.LoadAssembly(Assembly.LoadFile(assembly.Location));
                 source.Execute(scope);
@@ -65,6 +86,10 @@ namespace mml2vgmIDE
             catch (Exception ex)
             {
                 log.ForcedWrite(ex);
+            }
+            finally
+            {
+                runtime.Shutdown();
             }
         }
 

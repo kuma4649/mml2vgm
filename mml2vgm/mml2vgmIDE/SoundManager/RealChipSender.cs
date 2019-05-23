@@ -18,12 +18,14 @@ namespace SoundManager
                     while (!GetStart())
                     {
                         Thread.Sleep(100);
+                        if (unmount) return;
                     }
 
                     lock (lockObj) isRunning = true;
 
                     while (true)
                     {
+                        if (unmount) return;
                         Thread.Sleep(1);
                         if (ringBuffer.GetDataSize() == 0)
                         {
@@ -43,6 +45,7 @@ namespace SoundManager
                             while (ringBuffer.Deq(ref od,ref Counter, ref Chip, ref Type, ref Address, ref Data, ref ExData))
                             {
                                 ActionOfChip?.Invoke(od,Counter, Chip, Type, Address, Data, ExData);
+                                if (unmount) return;
                             }
                         }
                         catch
@@ -71,6 +74,10 @@ namespace SoundManager
                     isRunning = false;
                     Start = false;
                 }
+            }
+            finally
+            {
+                procExit = true;
             }
         }
     }

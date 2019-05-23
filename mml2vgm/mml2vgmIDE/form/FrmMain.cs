@@ -13,6 +13,7 @@ using System.IO;
 using Core;
 using System.Diagnostics;
 using SoundManager;
+using System.Runtime.InteropServices;
 
 namespace mml2vgmIDE
 {
@@ -30,16 +31,94 @@ namespace mml2vgmIDE
         private FrmFolderTree frmFolderTree = null;
         private FrmErrorList frmErrorList = null;
         private frmDebug frmDebug = null;
+        private FrmMixer frmMixer = null;
         private bool doPlay = false;
         private bool isTrace = false;
         private bool Compiling = false;
         private bool flgReinit = false;
+        public const int WM_COPYDATA = 0x004A;
+        public const int WM_PASTE = 0x0302;
+
+        //SendMessageで送る構造体（Unicode文字列送信に最適化したパターン）
+        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
+        public struct COPYDATASTRUCT
+        {
+            public IntPtr dwData;
+            public int cbData;
+            [MarshalAs(UnmanagedType.LPWStr)]
+            public string lpData;
+        }
 
         public FrmMain()
         {
             InitializeComponent();
-
+            DrawBuff.Init();
             //Init();
+        }
+
+        public void windowsMessage(ref Message m)
+        {
+            if (m.Msg == WM_COPYDATA)
+            {
+                string sParam = ReceiveString(m);
+                try
+                {
+
+                    //frmPlayList.Stop();
+
+                    //PlayList pl = frmPlayList.getPlayList();
+                    //if (pl.lstMusic.Count < 1 || pl.lstMusic[pl.lstMusic.Count - 1].fileName != sParam)
+                    //{
+                    //    frmPlayList.getPlayList().AddFile(sParam);
+                    //    //frmPlayList.AddList(sParam);
+                    //}
+
+                    //if (!loadAndPlay(0, 0, sParam))
+                    //{
+                    //    frmPlayList.Stop();
+                    //    Audio.Stop();
+                    //    return;
+                    //}
+
+                    //frmPlayList.setStart(-1);
+                    //oldParam = new MDChipParams();
+
+                    //frmPlayList.Play();
+
+                }
+                catch (Exception ex)
+                {
+                    log.ForcedWrite(ex);
+                    //メッセージによる読み込み失敗の場合は何も表示しない
+                    //                    MessageBox.Show("ファイルの読み込みに失敗しました。");
+                }
+            }
+
+        }
+
+        //メッセージ処理
+        protected override void WndProc(ref Message m)
+        {
+            windowsMessage(ref m);
+            base.WndProc(ref m);
+        }
+
+        //SendString()で送信された文字列を取り出す
+        string ReceiveString(Message m)
+        {
+            string str = null;
+            try
+            {
+                COPYDATASTRUCT cds = (COPYDATASTRUCT)m.GetLParam(typeof(COPYDATASTRUCT));
+                str = cds.lpData;
+                str = str.Substring(0, cds.cbData / 2);
+            }
+            catch (Exception ex)
+            {
+                log.ForcedWrite(ex);
+                str = null;
+            }
+            return str;
         }
 
         private void Form1_Shown(object sender, EventArgs e)
@@ -336,6 +415,25 @@ namespace mml2vgmIDE
             else frmLog.Hide();
 
             TsmiShowLog.Checked = !frmLog.IsHidden;
+        }
+
+        public MDChipParams oldParam = new MDChipParams();
+        private MDChipParams newParam = new MDChipParams();
+
+        private void TsmiShowMixer_Click(object sender, EventArgs e)
+        {
+            if (frmMixer == null)
+            {
+                frmMixer = new FrmMixer(this, 1, newParam.mixer);
+                frmMixer.Show();
+            }
+            else
+            {
+                frmMixer.Close();
+                frmMixer = null;
+            }
+
+            TsmiShowMixer.Checked = frmMixer != null;
         }
 
         private void TsmiOption_Click(object sender, EventArgs e)
@@ -1323,6 +1421,41 @@ namespace mml2vgmIDE
 
         private void Timer_Tick(object sender, EventArgs e)
         {
+            UpdateTraceInfo();
+            UpdateScreenInfo();
+        }
+
+        private void UpdateScreenInfo()
+        {
+            screenChangeParams();
+            screenDrawParams();
+        }
+
+        private void screenChangeParams()
+        {
+            if (frmMixer != null && !frmMixer.isClosed)
+            {
+                frmMixer.screenChangeParams();
+            }
+            else
+            {
+                frmMixer = null;
+                TsmiShowMixer.Checked = (frmMixer != null);
+            }
+        }
+
+        private void screenDrawParams()
+        {
+            if (frmMixer != null && !frmMixer.isClosed)
+            {
+                frmMixer.screenDrawParams();
+                frmMixer.update();
+            }
+            else frmMixer = null;
+        }
+
+        private void UpdateTraceInfo()
+        { 
             if (!traceInfoSw) return;
 
             IDockContent dcnt = dpMain.ActiveDocument;
@@ -1495,6 +1628,7 @@ namespace mml2vgmIDE
                 this.Location = new Point(setting.location.RMain.X, setting.location.RMain.Y);
                 this.Size = new Size(setting.location.RMain.Width, setting.location.RMain.Height);
             }
+            this.Opacity = setting.other.Opacity / 100.0;
 
             UpdateGwiFileHistory();
 
