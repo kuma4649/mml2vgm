@@ -32,7 +32,7 @@ namespace mvc
             try
             {
                 List<string> lstOpt = new List<string>();
-                while (args[cnt].Length > 1 && (args[cnt][0] == '-' || args[cnt][0] == '/'))
+                while (args[cnt].Length > 1 && args[cnt][0] == '-')
                 {
                     lstOpt.Add(args[cnt++].Substring(1));
                 }
@@ -75,7 +75,7 @@ namespace mvc
 
             if (args.Length > cnt)
             {
-                desFn = args[cnt + 1];
+                desFn = args[cnt];
             }
             else
             {
