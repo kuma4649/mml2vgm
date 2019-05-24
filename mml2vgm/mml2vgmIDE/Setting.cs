@@ -767,6 +767,10 @@ namespace mml2vgmIDE
 
         private ColorScheme _colorScheme = new ColorScheme();
 
+        private bool _InfiniteOfflineMode = false;
+        public bool InfiniteOfflineMode { get => _InfiniteOfflineMode; set => _InfiniteOfflineMode = value; }
+        public bool OfflineMode = false;
+
         [Serializable]
         public class OutputDevice
         {
@@ -3503,6 +3507,7 @@ namespace mml2vgmIDE
             setting.IsManualDetect = this.IsManualDetect;
             setting.AutoDetectModuleType = this.AutoDetectModuleType;
             setting.ColorScheme = this.ColorScheme.Copy();
+            setting.InfiniteOfflineMode = this.InfiniteOfflineMode;
 
             return setting;
         }
@@ -3536,17 +3541,25 @@ namespace mml2vgmIDE
                 string fullPath = Common.settingFilePath;
                 fullPath = Path.Combine(fullPath, Properties.Resources.cntSettingFileName);
 
-                if (!File.Exists(fullPath)) { return new Setting(); }
+                if (!File.Exists(fullPath)) {
+                    Setting s=new Setting();
+                    s.OfflineMode = s.InfiniteOfflineMode;
+                    return s;
+                }
                 XmlSerializer serializer = new XmlSerializer(typeof(Setting), typeof(Setting).GetNestedTypes());
                 using (StreamReader sr = new StreamReader(fullPath, new UTF8Encoding(false)))
                 {
-                    return (Setting)serializer.Deserialize(sr);
+                    Setting s= (Setting)serializer.Deserialize(sr);
+                    s.OfflineMode = s.InfiniteOfflineMode;
+                    return s;
                 }
             }
             catch (Exception ex)
             {
                 log.ForcedWrite(ex);
-                return new Setting();
+                Setting s = new Setting();
+                s.OfflineMode = s.InfiniteOfflineMode;
+                return s;
             }
         }
 

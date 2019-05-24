@@ -731,6 +731,8 @@ namespace mml2vgmIDE
             cbNextAlt.Checked = setting.keyBoardHook.Next.Alt;
             lblNextKey.Text = setting.keyBoardHook.Next.Key;
             btNextClr.Enabled = (lblNextKey.Text != "(None)" && !string.IsNullOrEmpty(lblNextKey.Text));
+
+            cbInfiniteOfflineMode.Checked = setting.InfiniteOfflineMode;
         }
 
         private void SetSCCICombo(EnmRealChipType scciType, ComboBox cmbP, RadioButton rbP, ComboBox cmbS, RadioButton rbS)
@@ -1596,6 +1598,8 @@ namespace mml2vgmIDE
             setting.keyBoardHook.Next.Alt = cbNextAlt.Checked;
             setting.keyBoardHook.Next.Key = string.IsNullOrEmpty(lblNextKey.Text) ? "(None)" : lblNextKey.Text;
 
+            setting.InfiniteOfflineMode = cbInfiniteOfflineMode.Checked;
+            if (cbInfiniteOfflineMode.Checked) setting.OfflineMode = true;
 
             this.DialogResult = DialogResult.OK;
             this.Close();

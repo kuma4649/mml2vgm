@@ -60,11 +60,16 @@ namespace mml2vgmIDE
 
             Opacity = 1.0;
 
+            bool isFirst = true;
             foreach (SienItem si in found)
             {
                 if (si.sienType == 1)
                 {
-                    GetInstrument(si);
+                    if (!parent.setting.OfflineMode)
+                    {
+                        GetInstrument(si, isFirst);
+                        isFirst = false;
+                    }
                 }
                 else
                 {
@@ -83,12 +88,13 @@ namespace mml2vgmIDE
         }
 
 
-        private void GetInstrument(SienItem si)
+        private void GetInstrument(SienItem si, bool isFirst)
         {
             InstrumentAtValSound iavs = new InstrumentAtValSound();
+            iavs.isFirst = isFirst;
             string[] param = new string[6];
             string[] val = si.content.Split(',');
-            for(int i = 0; i < param.Length; i++)
+            for (int i = 0; i < param.Length; i++)
             {
                 param[i] = val[i].Trim().Trim('\'');
             }
@@ -96,7 +102,8 @@ namespace mml2vgmIDE
             if (!instCache.ContainsKey(si.content))
             {
                 iavs.Start(
-                    si
+                    parent
+                    , si
                     , param[0]
                     , param[1]
                     , Encoding.GetEncoding(param[2])

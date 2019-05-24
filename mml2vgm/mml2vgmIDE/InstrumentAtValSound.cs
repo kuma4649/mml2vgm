@@ -17,9 +17,12 @@ namespace mml2vgmIDE
         private string nameNode = "";
         private string paramsNode = "";
         private Action<object,string[]> CompleteMethod = null;
+        private FrmMain parent = null;
+        public bool isFirst = false;
 
-        public void Start(object sender,string add, string url, Encoding encoding, string xpath, string nameNode, string paramsNode, Action<object,string[]> CompleteMethod)
+        public void Start(FrmMain parent ,object sender, string add, string url, Encoding encoding, string xpath, string nameNode, string paramsNode, Action<object, string[]> CompleteMethod)
         {
+            this.parent = parent;
             this.sender = sender;
             this.add = add;
             this.url = url;
@@ -28,15 +31,50 @@ namespace mml2vgmIDE
             this.nameNode = nameNode;
             this.paramsNode = paramsNode;
             this.CompleteMethod = CompleteMethod;
-
-            WebClient wc = new WebClient();
-            wc.Encoding = encoding;
-            wc.DownloadStringCompleted += CompleteDownloadProc;
-            wc.DownloadStringAsync(new Uri(url));
+            try
+            {
+                WebClient wc = new WebClient();
+                wc.Encoding = encoding;
+                wc.DownloadStringCompleted += CompleteDownloadProc;
+                wc.DownloadStringAsync(new Uri(url));
+            }
+            catch
+            {
+                System.Windows.Forms.MessageBox.Show("音色の取得に失敗しました");
+            }
         }
 
         public void CompleteDownloadProc(Object sender, DownloadStringCompletedEventArgs e)
         {
+            if (parent.setting.OfflineMode)
+            {
+                return;
+            }
+
+            if (e.Error != null)
+            {
+                if (!isFirst) return;
+
+                System.Windows.Forms.DialogResult res = System.Windows.Forms.MessageBox.Show(
+                    @"
+VAL-SOUND様からネットワーク経由での音色情報取得に失敗しました
+Yes    : 再度接続に挑戦する
+No     : オフラインモードに遷移する
+Cancel : 永続的にオフラインモードにする
+", "入力支援機能", System.Windows.Forms.MessageBoxButtons.YesNoCancel, System.Windows.Forms.MessageBoxIcon.Error);
+
+                if (res== System.Windows.Forms.DialogResult.Yes)
+                {
+                    return;
+                }
+                parent.setting.OfflineMode = true;
+                if(res== System.Windows.Forms.DialogResult.Cancel)
+                {
+                    parent.setting.InfiniteOfflineMode = true;
+                }
+                return;
+            }
+
             var doc = new HtmlDocument();
             doc.LoadHtml(e.Result);
 
