@@ -1389,6 +1389,24 @@ namespace mml2vgmIDE
                         TraceInfo_RF5C164[od.linePos.ch + od.linePos.isSecondary * 8] = od;
                     }
                     break;
+                case "C140":
+                    lock (traceInfoLockObj)
+                    {
+                        TraceInfo_C140[od.linePos.ch + od.linePos.isSecondary * 24] = od;
+                    }
+                    break;
+                case "SEGAPCM":
+                    lock (traceInfoLockObj)
+                    {
+                        TraceInfo_SegaPCM[od.linePos.ch + od.linePos.isSecondary * 16] = od;
+                    }
+                    break;
+                case "K051649":
+                    lock (traceInfoLockObj)
+                    {
+                        TraceInfo_K051649[od.linePos.ch + od.linePos.isSecondary * 5] = od;
+                    }
+                    break;
                 default:
                     if(pd.od.linePos.chip!="")
                     Console.WriteLine(pd.od.linePos.chip);
@@ -1416,6 +1434,12 @@ namespace mml2vgmIDE
         private outDatum[] TraceInfo_HuC6280old = new outDatum[6];
         private outDatum[] TraceInfo_RF5C164 = new outDatum[16];
         private outDatum[] TraceInfo_RF5C164old = new outDatum[16];
+        private outDatum[] TraceInfo_C140 = new outDatum[48];
+        private outDatum[] TraceInfo_C140old = new outDatum[48];
+        private outDatum[] TraceInfo_SegaPCM = new outDatum[32];
+        private outDatum[] TraceInfo_SegaPCMold = new outDatum[32];
+        private outDatum[] TraceInfo_K051649 = new outDatum[10];
+        private outDatum[] TraceInfo_K051649old = new outDatum[10];
         private object traceInfoLockObj = new object();
         private bool traceInfoSw = false;
 
@@ -1522,6 +1546,24 @@ namespace mml2vgmIDE
                 for (int ch = 0; ch < 16; ch++)
                 {
                     bool ret = MarkUpTraceInfo(TraceInfo_RF5C164, TraceInfo_RF5C164old, ch, fe, ac);
+                    if (ret) refresh = ret;
+                }
+
+                for (int ch = 0; ch < 48; ch++)
+                {
+                    bool ret = MarkUpTraceInfo(TraceInfo_C140, TraceInfo_C140old, ch, fe, ac);
+                    if (ret) refresh = ret;
+                }
+
+                for (int ch = 0; ch < 32; ch++)
+                {
+                    bool ret = MarkUpTraceInfo(TraceInfo_SegaPCM, TraceInfo_SegaPCMold, ch, fe, ac);
+                    if (ret) refresh = ret;
+                }
+
+                for (int ch = 0; ch < 10; ch++)
+                {
+                    bool ret = MarkUpTraceInfo(TraceInfo_K051649, TraceInfo_K051649old, ch, fe, ac);
                     if (ret) refresh = ret;
                 }
 

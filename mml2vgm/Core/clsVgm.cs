@@ -608,7 +608,8 @@ namespace Core
             int fq;
             try
             {
-                fq = Common.ParseNumber(vs[2]);
+                if (string.IsNullOrEmpty(vs[2])) fq = -1;
+                else fq = Common.ParseNumber(vs[2]);
             }
             catch
             {
@@ -618,7 +619,8 @@ namespace Core
             int vol;
             try
             {
-                vol = Common.ParseNumber(vs[3]);
+                if (string.IsNullOrEmpty(vs[3])) vol = 100;
+                else vol = Common.ParseNumber(vs[3]);
             }
             catch
             {

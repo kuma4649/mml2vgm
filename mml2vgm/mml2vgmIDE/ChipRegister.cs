@@ -352,6 +352,7 @@ namespace mml2vgmIDE
         public Chip[] C140 = new Chip[] { new Chip(), new Chip() };
         public Chip MIDI = new Chip();
         public Chip[] HuC6280 = new Chip[] { new Chip(), new Chip() };
+        public Chip[] K051649 = new Chip[] { new Chip(), new Chip() };
         public Chip[] RF5C164 = new Chip[] { new Chip(), new Chip() };
         public Chip[] SEGAPCM = new Chip[] { new Chip(), new Chip() };
         public Chip[] SN76489 = new Chip[] { new Chip(), new Chip() };
@@ -552,6 +553,12 @@ namespace mml2vgmIDE
                 HuC6280[i].Device = EnmDevice.HuC6280;
                 HuC6280[i].Number = i;
                 HuC6280[i].Hosei = 0;
+
+                K051649[i].Use = false;
+                K051649[i].Model = EnmModel.None;
+                K051649[i].Device = EnmDevice.K051649;
+                K051649[i].Number = i;
+                K051649[i].Hosei = 0;
 
                 RF5C164[i].Use = false;
                 RF5C164[i].Model = EnmModel.None;
@@ -1417,6 +1424,15 @@ namespace mml2vgmIDE
                     break;
                 case 0xb9:
                     enq(od, Counter, HuC6280[isSecondary], EnmDataType.Normal, -1, -1, null);
+                    break;
+                case 0xc0:
+                    enq(od, Counter, SEGAPCM[isSecondary], EnmDataType.Normal, -1, -1, null);
+                    break;
+                case 0xd2:
+                    enq(od, Counter, K051649[isSecondary], EnmDataType.Normal, -1, -1, null);
+                    break;
+                case 0xd4:
+                    enq(od, Counter, C140[isSecondary], EnmDataType.Normal, -1, -1, null);
                     break;
             }
         }

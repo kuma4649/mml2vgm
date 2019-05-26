@@ -23,8 +23,8 @@
 '@ E  2,26, 2, 6, 30,40, 1, 1,SEGAPCM
 
 
-'@ P 0,"Guitar.wav",8000,100,SEGAPCM
-'@ P 1,"muteGuitar.wav",8000,100,SEGAPCM
+'@ P 0,"..\wav\Guitar.wav",8000,100,SEGAPCM
+'@ P 1,"..\wav\muteGuitar.wav",8000,100,SEGAPCM
 
 
 'Z01  p127,127    v110

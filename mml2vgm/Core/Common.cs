@@ -341,7 +341,6 @@ namespace Core
             {
                 return Convert.ToInt32(s.Substring(1), 16);
             }
-
             return int.Parse(s);
         }
 
