@@ -42,7 +42,7 @@ namespace Core
 
 
 
-        public float Version = 1.61f;
+        public float Version = 1.71f;
         public string TitleName = "";
         public string TitleNameJ = "";
         public string GameName = "";
@@ -93,7 +93,17 @@ namespace Core
                     else if (wrd == VERSION)
                     {
                         float.TryParse(val, out float v);
-                        if (v != 1.51f && v != 1.60f) v = 1.60f;
+                        v = Math.Min(Math.Max(v, 1.00f), 1.71f);
+                        if (v != 1.00f
+                            && v != 1.01f
+                            && v != 1.10f
+                            && v != 1.50f
+                            && v != 1.51f
+                            && v != 1.60f
+                            && v != 1.61f
+                            && v != 1.70f
+                            && v != 1.71f
+                            ) v = 1.71f;
                         Version = v;
                     }
                     else if (wrd == CLOCKCOUNT) userClockCount = int.Parse(val);

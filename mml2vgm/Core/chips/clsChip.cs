@@ -38,10 +38,7 @@ namespace Core
 
         public int ChMax
         {
-            get
-            {
-                return _ChMax;
-            }
+            get => _ChMax;
         }
         protected int _ChMax = 0;
 

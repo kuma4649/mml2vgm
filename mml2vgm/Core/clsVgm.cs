@@ -1585,7 +1585,16 @@ namespace Core
         {
 
             //Header
-            OutData((MML)null, Const.hDat);
+            if (info.Version <= 1.50f)
+            {
+                //length 0x40
+                for (int i = 0; i < 0x40; i++) OutData((MML)null, Const.hDat[i]);
+            }
+            else
+            {
+                //length 0x100
+                OutData((MML)null, Const.hDat);
+            }
 
             //PCM Data block
             foreach (KeyValuePair<enmChipType, ClsChip[]> kvp in chips)
@@ -1614,6 +1623,15 @@ namespace Core
 
             //end of data
             OutData((MML)null, 0x66);
+
+            //Version
+            int vs = (int)(info.Version * 100);
+            int hv = vs / 100;
+            vs = vs - hv * 100;
+            dat[0x08] = new outDatum(enmMMLType.unknown, null, null, (byte)((vs % 10) + (vs / 10) * 0x10));
+            dat[0x09] = new outDatum(enmMMLType.unknown, null, null, (byte)hv);
+            dat[0x0a] = new outDatum(enmMMLType.unknown, null, null, 0);
+            dat[0x0b] = new outDatum(enmMMLType.unknown, null, null, 0);
 
             //GD3 offset
             v = DivInt2ByteAry(dat.Count - 0x14 - (int)dummyCmdCounter);
@@ -1710,129 +1728,86 @@ namespace Core
                 { useK051649 += pw.clockCounter; }
             }
 
-            if (useSN76489 == 0)
+            if (info.Version >= 1.00f && useSN76489 != 0)
             {
-                dat[0x0c] = new outDatum(enmMMLType.unknown, null, null, 0);
-                dat[0x0d] = new outDatum(enmMMLType.unknown, null, null, 0);
-                dat[0x0e] = new outDatum(enmMMLType.unknown, null, null, 0);
-                dat[0x0f] = new outDatum(enmMMLType.unknown, null, null, 0);
+                Common.SetLE32(dat, 0x0c, (uint)sn76489[0].Frequency);
             }
-            if (useYM2612 == 0)
+            if (info.Version >= 1.10f && useYM2612 != 0)
             {
-                dat[0x2c] = new outDatum(enmMMLType.unknown, null, null, 0);
-                dat[0x2d] = new outDatum(enmMMLType.unknown, null, null, 0);
-                dat[0x2e] = new outDatum(enmMMLType.unknown, null, null, 0);
-                dat[0x2f] = new outDatum(enmMMLType.unknown, null, null, 0);
+                Common.SetLE32(dat, 0x2c, (uint)ym2612[0].Frequency);
             }
-            if (useYM2151 == 0)
+            if (info.Version >= 1.10f && useYM2151 != 0)
             {
-                dat[0x30] = new outDatum(enmMMLType.unknown, null, null, 0);
-                dat[0x31] = new outDatum(enmMMLType.unknown, null, null, 0);
-                dat[0x32] = new outDatum(enmMMLType.unknown, null, null, 0);
-                dat[0x33] = new outDatum(enmMMLType.unknown, null, null, 0);
+                Common.SetLE32(dat, 0x30, (uint)ym2151[0].Frequency);
             }
-            if (useSegaPcm == 0)
+            if (info.Version >= 1.51f && useSegaPcm != 0)
             {
-                dat[0x38] = new outDatum(enmMMLType.unknown, null, null, 0);
-                dat[0x39] = new outDatum(enmMMLType.unknown, null, null, 0);
-                dat[0x3a] = new outDatum(enmMMLType.unknown, null, null, 0);
-                dat[0x3b] = new outDatum(enmMMLType.unknown, null, null, 0);
+                Common.SetLE32(dat, 0x38, (uint)segapcm[0].Frequency);
 
-                dat[0x3c] = new outDatum(enmMMLType.unknown, null, null, 0);
-                dat[0x3d] = new outDatum(enmMMLType.unknown, null, null, 0);
-                dat[0x3e] = new outDatum(enmMMLType.unknown, null, null, 0);
-                dat[0x3f] = new outDatum(enmMMLType.unknown, null, null, 0);
+                dat[0x3c] = new outDatum(enmMMLType.unknown, null, null, 0x0d);
+                dat[0x3d] = new outDatum(enmMMLType.unknown, null, null, 0x00);
+                dat[0x3e] = new outDatum(enmMMLType.unknown, null, null, 0xf8);
+                dat[0x3f] = new outDatum(enmMMLType.unknown, null, null, 0x00);
 
             }
-            if (useYM2203 == 0)
+            if (info.Version >= 1.51f && useYM2203 != 0)
             {
-                dat[0x44] = new outDatum(enmMMLType.unknown, null, null, 0);
-                dat[0x45] = new outDatum(enmMMLType.unknown, null, null, 0);
-                dat[0x46] = new outDatum(enmMMLType.unknown, null, null, 0);
-                dat[0x47] = new outDatum(enmMMLType.unknown, null, null, 0);
+                Common.SetLE32(dat, 0x44, (uint)ym2203[0].Frequency);
             }
-            if (useYM2608 == 0)
+            if (info.Version >= 1.51f && useYM2608 != 0)
             {
-                dat[0x48] = new outDatum(enmMMLType.unknown, null, null, 0);
-                dat[0x49] = new outDatum(enmMMLType.unknown, null, null, 0);
-                dat[0x4a] = new outDatum(enmMMLType.unknown, null, null, 0);
-                dat[0x4b] = new outDatum(enmMMLType.unknown, null, null, 0);
+                Common.SetLE32(dat, 0x48, (uint)ym2608[0].Frequency);
             }
-            if (useYM2610B == 0)
+            if (info.Version >= 1.51f && useYM2610B != 0)
             {
-                dat[0x4c] = new outDatum(enmMMLType.unknown, null, null, 0);
-                dat[0x4d] = new outDatum(enmMMLType.unknown, null, null, 0);
-                dat[0x4e] = new outDatum(enmMMLType.unknown, null, null, 0);
-                dat[0x4f] = new outDatum(enmMMLType.unknown, null, null, 0);
+                Common.SetLE32(dat, 0x4c, (uint)ym2610b[0].Frequency);
             }
-            if (useRf5c164 == 0)
+            if (info.Version >= 1.51f && useRf5c164 != 0)
             {
-                dat[0x6c] = new outDatum(enmMMLType.unknown, null, null, 0);
-                dat[0x6d] = new outDatum(enmMMLType.unknown, null, null, 0);
-                dat[0x6e] = new outDatum(enmMMLType.unknown, null, null, 0);
-                dat[0x6f] = new outDatum(enmMMLType.unknown, null, null, 0);
+                Common.SetLE32(dat, 0x6c, (uint)rf5c164[0].Frequency);
             }
-            if (useHuC6280 == 0)
+            if (info.Version >= 1.61f && useHuC6280 != 0)
             {
-                dat[0xa4] = new outDatum(enmMMLType.unknown, null, null, 0);
-                dat[0xa5] = new outDatum(enmMMLType.unknown, null, null, 0);
-                dat[0xa6] = new outDatum(enmMMLType.unknown, null, null, 0);
-                dat[0xa7] = new outDatum(enmMMLType.unknown, null, null, 0);
+                Common.SetLE32(dat, 0xa4, (uint)huc6280[0].Frequency);
             }
-            if (useC140 == 0)
+            if (info.Version >= 1.61f && useC140 != 0)
             {
-                dat[0xa8] = new outDatum(enmMMLType.unknown, null, null, 0);
-                dat[0xa9] = new outDatum(enmMMLType.unknown, null, null, 0);
-                dat[0xaa] = new outDatum(enmMMLType.unknown, null, null, 0);
-                dat[0xab] = new outDatum(enmMMLType.unknown, null, null, 0);
-
-                dat[0x96] = new outDatum(enmMMLType.unknown, null, null, 0);
+                Common.SetLE32(dat, 0xa8, (uint)c140[0].Frequency);
+                dat[0x96] = new outDatum(enmMMLType.unknown, null, null,
+                    (byte)((!c140[0].isSystem2 || !c140[1].isSystem2) ? 1 : 0));
             }
-            else
+            if (info.Version >= 1.51f && useAY8910 != 0)
             {
-                dat[0x96] = new outDatum(enmMMLType.unknown, null, null, (byte)((!c140[0].isSystem2 || !c140[1].isSystem2) ? 1 : 0));
-            }
-            if (useAY8910 == 0)
-            {
-                dat[0x74] = new outDatum(enmMMLType.unknown, null, null, 0);
-                dat[0x75] = new outDatum(enmMMLType.unknown, null, null, 0);
-                dat[0x76] = new outDatum(enmMMLType.unknown, null, null, 0);
-                dat[0x77] = new outDatum(enmMMLType.unknown, null, null, 0);
+                Common.SetLE32(dat, 0x74, (uint)ay8910[0].Frequency);
                 dat[0x78] = new outDatum(enmMMLType.unknown, null, null, 0);
                 dat[0x79] = new outDatum(enmMMLType.unknown, null, null, 0);
                 dat[0x7a] = new outDatum(enmMMLType.unknown, null, null, 0);
                 dat[0x7b] = new outDatum(enmMMLType.unknown, null, null, 0);
             }
-            if (useYM2413 == 0)
+            if (info.Version >= 1.00f && useYM2413 != 0)
             {
-                dat[0x10] = new outDatum(enmMMLType.unknown, null, null, 0);
-                dat[0x11] = new outDatum(enmMMLType.unknown, null, null, 0);
-                dat[0x12] = new outDatum(enmMMLType.unknown, null, null, 0);
-                dat[0x13] = new outDatum(enmMMLType.unknown, null, null, 0);
+                Common.SetLE32(dat, 0x10, (uint)ym2413[0].Frequency);
             }
-            if (useK051649 == 0)
+            if (info.Version >= 1.61f && useK051649 != 0)
             {
-                dat[0x9c] = new outDatum(enmMMLType.unknown, null, null, 0);
-                dat[0x9d] = new outDatum(enmMMLType.unknown, null, null, 0);
-                dat[0x9e] = new outDatum(enmMMLType.unknown, null, null, 0);
-                dat[0x9f] = new outDatum(enmMMLType.unknown, null, null, 0);
+                Common.SetLE32(dat, 0x9c, (uint)k051649[0].Frequency);
             }
 
-            if (info.Version == 1.51f)
-            {
-                dat[0x08] = new outDatum(enmMMLType.unknown, null, null, 0x51);
-                dat[0x09] = new outDatum(enmMMLType.unknown, null, null, 0x01);
-            }
-            else if (info.Version == 1.60f)
-            {
-                dat[0x08] = new outDatum(enmMMLType.unknown, null, null, 0x60);
-                dat[0x09] = new outDatum(enmMMLType.unknown, null, null, 0x01);
-            }
-            else
-            {
-                dat[0x08] = new outDatum(enmMMLType.unknown, null, null, 0x61);
-                dat[0x09] = new outDatum(enmMMLType.unknown, null, null, 0x01);
-            }
+            //if (info.Version == 1.51f)
+            //{
+            //    dat[0x08] = new outDatum(enmMMLType.unknown, null, null, 0x51);
+            //    dat[0x09] = new outDatum(enmMMLType.unknown, null, null, 0x01);
+            //}
+            //else if (info.Version == 1.60f)
+            //{
+            //    dat[0x08] = new outDatum(enmMMLType.unknown, null, null, 0x60);
+            //    dat[0x09] = new outDatum(enmMMLType.unknown, null, null, 0x01);
+            //}
+            //else
+            //{
+            //    dat[0x08] = new outDatum(enmMMLType.unknown, null, null, 0x61);
+            //    dat[0x09] = new outDatum(enmMMLType.unknown, null, null, 0x01);
+            //}
 
         }
 

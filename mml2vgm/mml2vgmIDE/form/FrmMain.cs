@@ -323,7 +323,7 @@ namespace mml2vgmIDE
                     fn = Path.GetFileNameWithoutExtension(fn) + (FileInformation.format == enmFormat.VGM ? ".vgm" : ".xgm");
                 }
 
-                File.Copy(Path.Combine(Common.GetApplicationDataFolder(true), "temp", Path.GetFileName(sfd.FileName)), fn);
+                File.Copy(Path.Combine(Common.GetApplicationDataFolder(true), "temp", Path.GetFileName(d.gwiFullPath)), fn, File.Exists(fn));
             }
             catch(Exception )
             {
@@ -1561,7 +1561,7 @@ namespace mml2vgmIDE
                     if (ret) refresh = ret;
                 }
 
-                for (int ch = 0; ch < 10; ch++)
+                for (int ch = 0; ch < 5 * 2; ch++)
                 {
                     bool ret = MarkUpTraceInfo(TraceInfo_K051649, TraceInfo_K051649old, ch, fe, ac);
                     if (ret) refresh = ret;

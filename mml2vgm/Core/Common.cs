@@ -402,5 +402,22 @@ namespace Core
 
             return desDat.ToArray();
         }
+
+        public static void SetLE32(outDatum[] desBuf, uint adr, uint val)
+        {
+            desBuf[adr].val = (byte)val;
+            desBuf[adr + 1].val = (byte)(val >> 8);
+            desBuf[adr + 2].val = (byte)(val >> 16);
+            desBuf[adr + 3].val = (byte)(val >> 24);
+        }
+
+        public static void SetLE32(List<outDatum> desBuf, uint adr, uint val)
+        {
+            desBuf[(int)adr].val = (byte)val;
+            desBuf[(int)adr + 1].val = (byte)(val >> 8);
+            desBuf[(int)adr + 2].val = (byte)(val >> 16);
+            desBuf[(int)adr + 3].val = (byte)(val >> 24);
+        }
+
     }
 }

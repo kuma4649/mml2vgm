@@ -11,7 +11,7 @@ namespace mml2vgmIDE
     public static class DrawBuff
     {
 
-        private static byte[][] rChipName;
+        //private static byte[][] rChipName;
         private static byte[][] rFont1;
         private static byte[][] rFont2;
         private static byte[][] rFont3;
@@ -2376,14 +2376,14 @@ namespace mml2vgmIDE
             oToneFormat = nToneFormat;
         }
 
-        public static void drawChipName(FrameBuffer screen, int x, int y, int t, ref byte oc, byte nc)
-        {
-            if (oc == nc) return;
+        //public static void drawChipName(FrameBuffer screen, int x, int y, int t, ref byte oc, byte nc)
+        //{
+        //    if (oc == nc) return;
 
-            drawChipNameP(screen, x, y, t, nc);
+        //    drawChipNameP(screen, x, y, t, nc);
 
-            oc = nc;
-        }
+        //    oc = nc;
+        //}
 
         public static void drawTimer(FrameBuffer screen, int c, ref int ot1, ref int ot2, ref int ot3, int nt1, int nt2, int nt3)
         {
@@ -3657,20 +3657,20 @@ namespace mml2vgmIDE
             screen.drawByteArray(x, y, rMenuButtons[1], 128, (toneFormat % 3) * 5 * 8, (6 + toneFormat / 3) * 8, 40, 8);
         }
 
-        private static void drawChipNameP(FrameBuffer screen, int x, int y, int t, int c)
-        {
-            if (screen == null)
-            {
-                return;
-            }
+        //private static void drawChipNameP(FrameBuffer screen, int x, int y, int t, int c)
+        //{
+        //    if (screen == null)
+        //    {
+        //        return;
+        //    }
 
-            screen.drawByteArray(x, y, rChipName[c], 128
-                , (t % 8) * 16
-                , (t / 8) * 8
-                , 8 * 2
-                , 8);
+        //    screen.drawByteArray(x, y, rChipName[c], 128
+        //        , (t % 8) * 16
+        //        , (t / 8) * 8
+        //        , 8 * 2
+        //        , 8);
 
-        }
+        //}
 
 
 

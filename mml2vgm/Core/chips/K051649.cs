@@ -146,7 +146,7 @@ namespace Core
         {
             if (!use) return;
 
-            for (int i = 0; i < _ChMax; i++)
+            for (int i = 0; i < ChMax; i++)
             {
                 partWork pw = lstPartWork[i];
 
