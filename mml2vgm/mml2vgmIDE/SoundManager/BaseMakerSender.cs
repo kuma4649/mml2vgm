@@ -42,7 +42,7 @@ namespace SoundManager
 
             task = new Task(action, cancellationToken);
             task.Start();
-
+            
             return true;
         }
 

@@ -323,7 +323,12 @@ namespace mml2vgmIDE
                     fn = Path.GetFileNameWithoutExtension(fn) + (FileInformation.format == enmFormat.VGM ? ".vgm" : ".xgm");
                 }
 
-                File.Copy(Path.Combine(Common.GetApplicationDataFolder(true), "temp", Path.GetFileName(d.gwiFullPath)), fn, File.Exists(fn));
+                string sf = Path.Combine(
+                    Common.GetApplicationDataFolder(true)
+                    , "temp"
+                    , Path.GetFileNameWithoutExtension(Path.GetFileName(d.gwiFullPath)) + (FileInformation.format == enmFormat.VGM ? ".vgm" : ".xgm")
+                    );
+                File.Copy(sf, fn, File.Exists(fn));
             }
             catch(Exception )
             {

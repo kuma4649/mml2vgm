@@ -15,11 +15,13 @@ namespace SoundManager
             {
                 while (true)
                 {
+                    Thread.CurrentThread.Priority = ThreadPriority.BelowNormal;
                     while (!GetStart())
                     {
                         Thread.Sleep(100);
                         if (unmount) return;
                     }
+                    Thread.CurrentThread.Priority = ThreadPriority.AboveNormal;
 
                     lock (lockObj) isRunning = true;
 

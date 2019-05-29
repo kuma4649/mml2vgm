@@ -134,11 +134,13 @@ namespace SoundManager
 
                 while (true)
                 {
+                    Thread.CurrentThread.Priority = ThreadPriority.BelowNormal;
                     while (!GetStart())
                     {
                         if (unmount) return;
                         Thread.Sleep(100);
                     }
+                    Thread.CurrentThread.Priority = ThreadPriority.AboveNormal;
 
                     WaitSync?.Invoke();
 
@@ -318,6 +320,7 @@ namespace SoundManager
             finally
             {
                 procExit = true;
+                Thread.CurrentThread.Priority = ThreadPriority.Normal;
             }
         }
 
