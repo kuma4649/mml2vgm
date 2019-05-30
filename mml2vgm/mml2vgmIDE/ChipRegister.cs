@@ -28,6 +28,7 @@ namespace mml2vgmIDE
         private Setting.ChipType[] ctAY8910 = new Setting.ChipType[2] { null, null };
         private Setting.ChipType[] ctC140 = new Setting.ChipType[2] { null, null };
         private Setting.ChipType[] ctHuC6280 = new Setting.ChipType[2] { null, null };
+        private Setting.ChipType[] ctK051649 = new Setting.ChipType[2] { null, null };
         private Setting.ChipType[] ctRF5C164 = new Setting.ChipType[2] { null, null };
         private Setting.ChipType[] ctSEGAPCM = new Setting.ChipType[2] { null, null };
         private Setting.ChipType[] ctSN76489 = new Setting.ChipType[2] { null, null };
@@ -48,6 +49,7 @@ namespace mml2vgmIDE
         private RSoundChip[] scAY8910 = new RSoundChip[2] { null, null };
         private RSoundChip[] scC140 = new RSoundChip[2] { null, null };
         private RSoundChip[] scHuC6280 = new RSoundChip[2] { null, null };
+        private RSoundChip[] scK051649 = new RSoundChip[2] { null, null };
         private RSoundChip[] scRF5C164 = new RSoundChip[2] { null, null };
         private RSoundChip[] scSEGAPCM = new RSoundChip[2] { null, null };
         private RSoundChip[] scSN76489 =  new RSoundChip[2] { null, null };
@@ -288,6 +290,7 @@ namespace mml2vgmIDE
         private int[] RF5C164NowFadeoutVol = new int[] { 0, 0 };
         private int[] SEGAPCMNowFadeoutVol = new int[] { 0, 0 };
         private int[] HuC6280NowFadeoutVol = new int[] { 0, 0 };
+        private int[] K051649NowFadeoutVol = new int[] { 0, 0 };
 
         private bool[] maskOKIM6258 = new bool[2] { false, false };
         public bool[] okim6258Keyon = new bool[2] { false, false };
@@ -413,6 +416,16 @@ namespace mml2vgmIDE
                         if (scHuC6280[i] != null) scHuC6280[i].init();
                         HuC6280[i].Model = ctHuC6280[i].UseEmu ? EnmModel.VirtualModel : EnmModel.RealModel;
                         HuC6280[i].Delay = (HuC6280[i].Model == EnmModel.VirtualModel ? LEmu : LReal);
+                    }
+                    break;
+                case EnmDevice.K051649:
+                    ctK051649 = new Setting.ChipType[] { chipTypeP, chipTypeS };
+                    for (int i = 0; i < 2; i++)
+                    {
+                        scK051649[i] = null;
+                        if (scK051649[i] != null) scK051649[i].init();
+                        K051649[i].Model = ctK051649[i].UseEmu ? EnmModel.VirtualModel : EnmModel.RealModel;
+                        K051649[i].Delay = (K051649[i].Model == EnmModel.VirtualModel ? LEmu : LReal);
                     }
                     break;
                 case EnmDevice.RF5C164:
@@ -637,6 +650,9 @@ namespace mml2vgmIDE
                 case EnmDevice.HuC6280:
                     HuC6280SetRegisterProcessing(ref Counter, ref Chip, ref Type, ref Address, ref Data, ref ExData);
                     break;
+                case EnmDevice.K051649:
+                    K051649SetRegisterProcessing(ref Counter, ref Chip, ref Type, ref Address, ref Data, ref ExData);
+                    break;
                 case EnmDevice.RF5C164:
                     RF5C164SetRegisterProcessing(ref Counter, ref Chip, ref Type, ref Address, ref Data, ref ExData);
                     break;
@@ -685,6 +701,9 @@ namespace mml2vgmIDE
                 case EnmDevice.HuC6280:
                     HuC6280WriteRegisterControl(Chip, type, address, data, exData);
                     break;
+                case EnmDevice.K051649:
+                    K051649WriteRegisterControl(Chip, type, address, data, exData);
+                    break;
                 case EnmDevice.RF5C164:
                     RF5C164WriteRegisterControl(Chip, type, address, data, exData);
                     break;
@@ -720,6 +739,7 @@ namespace mml2vgmIDE
             AY8910SetFadeoutVolume(counter, (int)((1.0 - fadeoutCounter) * 15.0));
             C140SetFadeoutVolume(counter, (int)((1.0 - fadeoutCounter) * 255.0));
             HuC6280SetFadeoutVolume(counter, (int)((1.0 - fadeoutCounter) * 127.0));
+            K051649SetFadeoutVolume(counter, (int)((1.0 - fadeoutCounter) * 15.0));
             RF5C164SetFadeoutVolume(counter, (int)((1.0 - fadeoutCounter) * 255.0));
             SEGAPCMSetFadeoutVolume(counter, (int)((1.0 - fadeoutCounter) * 255.0));
             SN76489SetFadeoutVolume(counter, (int)((1.0 - fadeoutCounter) * 15.0));
@@ -900,6 +920,8 @@ namespace mml2vgmIDE
 
                 AY8910NowFadeoutVol[chipID] = 0;
                 C140NowFadeoutVol[chipID] = 0;
+                HuC6280NowFadeoutVol[chipID] = 0;
+                K051649NowFadeoutVol[chipID] = 0;
                 RF5C164NowFadeoutVol[chipID] = 0;
                 SEGAPCMNowFadeoutVol[chipID] = 0;
                 SN76489NowFadeoutVol[chipID] = 0;
@@ -923,180 +945,6 @@ namespace mml2vgmIDE
             nes_mmc5 = null;
             nes_fme7 = null;
             nes_vrc7 = null;
-
-        }
-
-        public void initChipRegisterNSF(MDSound.MDSound.Chip[] chipInfos)
-        {
-
-            dicChipsInfo.Clear();
-            if (chipInfos != null)
-            {
-                foreach (MDSound.MDSound.Chip c in chipInfos)
-                {
-                    dicChipsInfo.Add(c.type, c);
-                }
-            }
-
-            for (int chipID = 0; chipID < 2; chipID++)
-            {
-
-                fmRegisterYM2612[chipID] = new int[2][] { new int[0x100], new int[0x100] };
-                for (int i = 0; i < 0x100; i++)
-                {
-                    fmRegisterYM2612[chipID][0][i] = 0;
-                    fmRegisterYM2612[chipID][1][i] = 0;
-                }
-                fmRegisterYM2612[chipID][0][0xb4] = 0xc0;
-                fmRegisterYM2612[chipID][0][0xb5] = 0xc0;
-                fmRegisterYM2612[chipID][0][0xb6] = 0xc0;
-                fmRegisterYM2612[chipID][1][0xb4] = 0xc0;
-                fmRegisterYM2612[chipID][1][0xb5] = 0xc0;
-                fmRegisterYM2612[chipID][1][0xb6] = 0xc0;
-                fmKeyOnYM2612[chipID] = new int[6] { 0, 0, 0, 0, 0, 0 };
-
-                fmRegisterYM2608[chipID] = new int[2][] { new int[0x100], new int[0x100] };
-                for (int i = 0; i < 0x100; i++)
-                {
-                    fmRegisterYM2608[chipID][0][i] = 0;
-                    fmRegisterYM2608[chipID][1][i] = 0;
-                }
-                fmRegisterYM2608[chipID][0][0xb4] = 0xc0;
-                fmRegisterYM2608[chipID][0][0xb5] = 0xc0;
-                fmRegisterYM2608[chipID][0][0xb6] = 0xc0;
-                fmRegisterYM2608[chipID][1][0xb4] = 0xc0;
-                fmRegisterYM2608[chipID][1][0xb5] = 0xc0;
-                fmRegisterYM2608[chipID][1][0xb6] = 0xc0;
-                fmKeyOnYM2608[chipID] = new int[6] { 0, 0, 0, 0, 0, 0 };
-
-                fmRegisterYM2610[chipID] = new int[2][] { new int[0x100], new int[0x100] };
-                for (int i = 0; i < 0x100; i++)
-                {
-                    fmRegisterYM2610[chipID][0][i] = 0;
-                    fmRegisterYM2610[chipID][1][i] = 0;
-                }
-                fmRegisterYM2610[chipID][0][0xb4] = 0xc0;
-                fmRegisterYM2610[chipID][0][0xb5] = 0xc0;
-                fmRegisterYM2610[chipID][0][0xb6] = 0xc0;
-                fmRegisterYM2610[chipID][1][0xb4] = 0xc0;
-                fmRegisterYM2610[chipID][1][0xb5] = 0xc0;
-                fmRegisterYM2610[chipID][1][0xb6] = 0xc0;
-                fmKeyOnYM2610[chipID] = new int[6] { 0, 0, 0, 0, 0, 0 };
-
-                fmRegisterYM3526[chipID] = new int[0x100];
-                for (int i = 0; i < 0x100; i++)
-                {
-                    fmRegisterYM3526[chipID][i] = 0;
-                    fmRegisterYM3526[chipID][i] = 0;
-                }
-
-                fmRegisterYM3812[chipID] = new int[0x100];
-                for (int i = 0; i < 0x100; i++)
-                {
-                    fmRegisterYM3812[chipID][i] = 0;
-                    fmRegisterYM3812[chipID][i] = 0;
-                }
-
-                fmRegisterYMF262[chipID] = new int[2][] { new int[0x100], new int[0x100] };
-                for (int i = 0; i < 0x100; i++)
-                {
-                    fmRegisterYMF262[chipID][0][i] = 0;
-                    fmRegisterYMF262[chipID][1][i] = 0;
-                }
-
-                fmRegisterYMF271[chipID] = new int[7][] { new int[0x100], new int[0x100], new int[0x100], new int[0x100], new int[0x100], new int[0x100], new int[0x100] };
-                for (int i = 0; i < 0x100; i++)
-                {
-                    fmRegisterYMF271[chipID][0][i] = 0;
-                    fmRegisterYMF271[chipID][1][i] = 0;
-                    fmRegisterYMF271[chipID][2][i] = 0;
-                    fmRegisterYMF271[chipID][3][i] = 0;
-                    fmRegisterYMF271[chipID][4][i] = 0;
-                    fmRegisterYMF271[chipID][5][i] = 0;
-                    fmRegisterYMF271[chipID][6][i] = 0;
-                }
-
-                fmRegisterYMF278B[chipID] = new int[3][] { new int[0x100], new int[0x100], new int[0x100] };
-                for (int i = 0; i < 0x100; i++)
-                {
-                    fmRegisterYMF278B[chipID][0][i] = 0;
-                    fmRegisterYMF278B[chipID][1][i] = 0;
-                    fmRegisterYMF278B[chipID][2][i] = 0;
-                }
-                fmRegisterYMF278BRyhthm[0] = 0;
-                fmRegisterYMF278BRyhthm[1] = 0;
-                fmRegisterYMF278BRyhthmB[0] = 0;
-                fmRegisterYMF278BRyhthmB[1] = 0;
-
-                fmRegisterY8950[chipID] = new int[0x100];
-                for (int i = 0; i < 0x100; i++)
-                {
-                    fmRegisterY8950[chipID][i] = 0;
-                }
-
-                YMZ280BRegister[chipID] = new int[0x100];
-                for (int i = 0; i < 0x100; i++)
-                {
-                    YMZ280BRegister[chipID][i] = 0;
-                }
-
-                YM2151FmRegister[chipID] = new int[0x100];
-                for (int i = 0; i < 0x100; i++)
-                {
-                    YM2151FmRegister[chipID][i] = 0;
-                }
-                YM2151FmKeyOn[chipID] = new int[8] { 0, 0, 0, 0, 0, 0, 0, 0 };
-
-                fmRegisterYM2203[chipID] = new int[0x100];
-                for (int i = 0; i < 0x100; i++)
-                {
-                    fmRegisterYM2203[chipID][i] = 0;
-                }
-                fmKeyOnYM2203[chipID] = new int[6] { 0, 0, 0, 0, 0, 0 };
-
-                SN76489Register[chipID] = new int[8] { 0, 15, 0, 15, 0, 15, 0, 15 };
-
-                fmRegisterYM2413[chipID] = new int[0x39];
-                for (int i = 0; i < 0x39; i++)
-                {
-                    fmRegisterYM2413[chipID][i] = 0;
-                }
-                //fmRegisterYM2413Ryhthm[0] = 0;
-                //fmRegisterYM2413Ryhthm[1] = 0;
-                //fmRegisterYM2413RyhthmB[0] = 0;
-                //fmRegisterYM2413RyhthmB[1] = 0;
-
-                AY8910PsgRegister[chipID] = new int[0x100];
-                for (int i = 0; i < 0x100; i++)
-                {
-                    AY8910PsgRegister[chipID][i] = 0;
-                }
-                AY8910PsgKeyOn[chipID] = new int[3] { 0, 0, 0 };
-
-                pcmRegisterC140[chipID] = new byte[0x200];
-                pcmKeyOnC140[chipID] = new bool[24];
-
-                pcmRegisterC352[chipID] = new ushort[0x203];
-                pcmKeyOnC352[chipID] = new ushort[32];
-
-                pcmRegisterSEGAPCM[chipID] = new byte[0x200];
-                pcmKeyOnSEGAPCM[chipID] = new bool[16];
-
-                //midiParams[chipID] = new MIDIParam();
-
-                AY8910NowFadeoutVol[chipID] = 0;
-                C140NowFadeoutVol[chipID] = 0;
-                RF5C164NowFadeoutVol[chipID] = 0;
-                SEGAPCMNowFadeoutVol[chipID] = 0;
-                SN76489NowFadeoutVol[chipID] = 0;
-                YM2151NowFadeoutVol[chipID] = 0;
-                nowYM2203FadeoutVol[chipID] = 0;
-                nowYM2413FadeoutVol[chipID] = 0;
-                nowYM2608FadeoutVol[chipID] = 0;
-                nowYM2610FadeoutVol[chipID] = 0;
-                nowYM2612FadeoutVol[chipID] = 0;
-
-            }
 
         }
 
@@ -1439,6 +1287,8 @@ namespace mml2vgmIDE
 
 
 
+        #region AY8910
+
         private void AY8910WriteRegisterControl(Chip Chip, EnmDataType type, int address, int data, object exData)
         {
             if (type == EnmDataType.Normal)
@@ -1641,7 +1491,11 @@ namespace mml2vgmIDE
             }
         }
 
+        #endregion
 
+
+
+        #region C140
 
         private void C140WriteRegisterControl(Chip Chip, EnmDataType type, int address, int data, object exData)
         {
@@ -1868,7 +1722,11 @@ namespace mml2vgmIDE
             }
         }
 
+        #endregion
 
+
+
+        #region HuC6280
 
         private void HuC6280WriteRegisterControl(Chip Chip, EnmDataType type, int address, int data, object exData)
         {
@@ -1983,8 +1841,147 @@ namespace mml2vgmIDE
             return data;
         }
 
+        #endregion
 
 
+
+        #region K051649(SCC)
+
+        private void K051649WriteRegisterControl(Chip Chip, EnmDataType type, int address, int data, object exData)
+        {
+            if (type == EnmDataType.Normal)
+            {
+                if (Chip.Model == EnmModel.VirtualModel)
+                {
+                    if ((address & 1) != 0)
+                    {
+                        if ((address >> 1) == 3)//keyonoff
+                        {
+                            K051649tKeyOnOff[Chip.Number] = (byte)data;
+                            data &= (byte)(maskChK051649[Chip.Number][0] ? 0xfe : 0xff);
+                            data &= (byte)(maskChK051649[Chip.Number][1] ? 0xfd : 0xff);
+                            data &= (byte)(maskChK051649[Chip.Number][2] ? 0xfb : 0xff);
+                            data &= (byte)(maskChK051649[Chip.Number][3] ? 0xf7 : 0xff);
+                            data &= (byte)(maskChK051649[Chip.Number][4] ? 0xef : 0xff);
+                        }
+                    }
+                    if (!ctHuC6280[Chip.Number].UseScci)
+                    {
+                        mds.WriteK051649((byte)Chip.Number, (byte)address, (byte)data);
+                    }
+                }
+                if (Chip.Model == EnmModel.RealModel)
+                {
+                }
+            }
+            else if (type == EnmDataType.Block)
+            {
+                Audio.sm.SetInterrupt();
+
+                try
+                {
+                    if (exData == null) return;
+
+                    PackData[] pdata = (PackData[])exData;
+                    if (Chip.Model == EnmModel.VirtualModel)
+                    {
+                        foreach (PackData dat in pdata)
+                            mds.WriteK051649((byte)dat.Chip.Number, (byte)dat.Address, (byte)dat.Data);
+                    }
+                    if (Chip.Model == EnmModel.RealModel)
+                    {
+                    }
+                }
+                finally
+                {
+                    Audio.sm.ResetInterrupt();
+                }
+            }
+        }
+
+        public void K051649SetRegisterProcessing(ref long Counter, ref Chip Chip, ref EnmDataType Type, ref int Address, ref int dData, ref object ExData)
+        {
+            if (ctK051649 == null) return;
+            if (Address == -1 && dData == -1) return;
+
+            if (Chip.Number == 0) chipLED.PriK051649 = 2;
+            else chipLED.SecK051649 = 2;
+
+        }
+
+        public void K051649SetRegister(outDatum od, long Counter, int chipID, int dAddr, int dData)
+        {
+            enq(od, Counter, K051649[chipID], EnmDataType.Normal, dAddr, dData, null);
+
+        }
+
+        public void K051649SetRegister(outDatum od, long Counter, int chipID, PackData[] data)
+        {
+            enq(od, Counter, K051649[chipID], EnmDataType.Block, -1, -1, data);
+
+        }
+
+        public void K051649SoftReset(long Counter, int chipID)
+        {
+            List<PackData> data = K051649MakeSoftReset(chipID);
+            K051649SetRegister(null, Counter, chipID, data.ToArray());
+        }
+
+        public void K051649SetMask(long Counter, int chipID, int ch, bool mask)
+        {
+            if (mask)
+            {
+                //set
+                //maskChK051649[chipID][ch] = true;
+                //writeK051649((byte)chipID, (3 << 1) | 1, K051649tKeyOnOff[chipID]);
+            }
+            else
+            {
+                //reset
+                //maskChK051649[chipID][ch] = false;
+                //writeK051649((byte)chipID, (3 << 1) | 1, K051649tKeyOnOff[chipID]);
+            }
+        }
+
+        public void K051649WriteClock(byte chipID, int clock)
+        {
+            if (scK051649 != null && scK051649[chipID] != null)
+            {
+                scK051649[chipID].dClock = scK051649[chipID].SetMasterClock((uint)clock);
+            }
+        }
+
+        public void K051649SetFadeoutVolume(long Counter, int v)
+        {
+            for (int i = 0; i < K051649.Length; i++)
+            {
+                if (!K051649[i].Use) continue;
+                if (K051649[i].Model == EnmModel.VirtualModel) continue;
+                if (K051649NowFadeoutVol[i] == v) continue;
+
+                K051649NowFadeoutVol[i] = v;
+
+                for (int c = 0; c < 3; c++)
+                {
+                }
+            }
+        }
+
+        public List<PackData> K051649MakeSoftReset(int chipID)
+        {
+            List<PackData> data = new List<PackData>();
+            data.Add(new PackData(null, K051649[chipID], EnmDataType.Normal, 0x07, 0x00, null));
+
+            return data;
+        }
+
+        #endregion
+
+
+
+
+
+        #region RF5C68
 
         public void writeRF5C68PCMData(byte chipid, uint stAdr, uint dataSize, byte[] vgmBuf, uint vgmAdr)
         {
@@ -2012,8 +2009,6 @@ namespace mml2vgmIDE
             if (model == EnmModel.VirtualModel)
                 mds.WriteRF5C68MemW(chipid, offset, data);
         }
-
-
 
         private void RF5C164WriteRegisterControl(Chip Chip, EnmDataType type, int address, int data, object exData)
         {
@@ -2154,7 +2149,11 @@ namespace mml2vgmIDE
             }
         }
 
+        #endregion
+        
 
+
+        #region YM2151(OPM)
 
         private void YM2151WriteRegisterControl(Chip Chip, EnmDataType type, int address, int data, object exData)
         {
@@ -2503,7 +2502,11 @@ namespace mml2vgmIDE
             return (int)scYM2151[chipID].dClock;
         }
 
+        #endregion
 
+
+
+        #region YM2203(OPN)
 
         private void YM2203WriteRegisterControl(Chip Chip, EnmDataType type, int address, int data, object exData)
         {
@@ -2807,7 +2810,11 @@ namespace mml2vgmIDE
             }
         }
 
+        #endregion
 
+
+
+        #region YM2413(OPL)
 
         private void YM2413WriteRegisterControl(Chip Chip, EnmDataType type, int address, int data, object exData)
         {
@@ -3003,8 +3010,11 @@ namespace mml2vgmIDE
             }
         }
 
+        #endregion
 
 
+
+        #region YM2608(OPNA)
 
         private void YM2608WriteRegisterControl(Chip Chip, EnmDataType type, int address, int data, object exData)
         {
@@ -3483,7 +3493,11 @@ namespace mml2vgmIDE
             }
         }
 
+        #endregion
 
+
+
+        #region YM2610(OPNB)
 
         private void YM2610WriteRegisterControl(Chip Chip, EnmDataType type, int address, int data, object exData)
         {
@@ -4133,7 +4147,11 @@ namespace mml2vgmIDE
             }
         }
 
+        #endregion
 
+
+
+        #region YM2612(OPN2)
 
         private void YM2612WriteRegisterControl(Chip Chip, EnmDataType type, int address, int data, object exData)
         {
@@ -4534,7 +4552,11 @@ namespace mml2vgmIDE
             }
         }
 
+        #endregion
 
+
+
+        #region segapcm
 
         private void SEGAPCMWriteRegisterControl(Chip Chip, EnmDataType type, int address, int data, object exData)
         {
@@ -4745,7 +4767,11 @@ namespace mml2vgmIDE
             }
         }
 
+        #endregion
 
+
+
+        #region SN76489(DCSG)
 
         private void SN76489WriteRegisterControl(Chip Chip, EnmDataType type, int address, int data, object exData)
         {
@@ -4985,6 +5011,7 @@ namespace mml2vgmIDE
             }
         }
 
+        #endregion
 
 
 
@@ -5099,18 +5126,6 @@ namespace mml2vgmIDE
         {
             nsfVRC7mask &= ~(1 << ch);
             if (nes_vrc7 != null) nes_vrc7.SetMask(nsfVRC7mask);
-        }
-
-        public void setK051649Mask(int chipID, int ch)
-        {
-            maskChK051649[chipID][ch] = true;
-            writeK051649((byte)chipID, (3 << 1) | 1, K051649tKeyOnOff[chipID]);
-        }
-
-        public void resetK051649Mask(int chipID, int ch)
-        {
-            maskChK051649[chipID][ch] = false;
-            writeK051649((byte)chipID, (3 << 1) | 1, K051649tKeyOnOff[chipID]);
         }
 
 
@@ -5709,30 +5724,6 @@ namespace mml2vgmIDE
 
             if (model == EnmModel.VirtualModel)
                 mds.WritePWM(chipid, adr, data);
-        }
-
-        public void writeK051649(byte chipid, uint adr, byte data)
-        {
-            EnmModel model = EnmModel.VirtualModel;
-            if (chipid == 0) chipLED.PriK051649 = 2;
-            else chipLED.SecK051649 = 2;
-
-            if (model == EnmModel.VirtualModel)
-            {
-                if ((adr & 1) != 0)
-                {
-                    if ((adr >> 1) == 3)//keyonoff
-                    {
-                        K051649tKeyOnOff[chipid] = data;
-                        data &= (byte)(maskChK051649[chipid][0] ? 0xfe : 0xff);
-                        data &= (byte)(maskChK051649[chipid][1] ? 0xfd : 0xff);
-                        data &= (byte)(maskChK051649[chipid][2] ? 0xfb : 0xff);
-                        data &= (byte)(maskChK051649[chipid][3] ? 0xf7 : 0xff);
-                        data &= (byte)(maskChK051649[chipid][4] ? 0xef : 0xff);
-                    }
-                }
-                mds.WriteK051649(chipid, (int)adr, data);
-            }
         }
 
         public void writeK053260(byte chipid, uint adr, byte data)

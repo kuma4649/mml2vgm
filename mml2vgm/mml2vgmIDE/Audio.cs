@@ -395,6 +395,7 @@ namespace mml2vgmIDE
             chipRegister.SetRealChipInfo(EnmDevice.YM2612, setting.YM2612Type, setting.YM2612SType, setting.LatencyEmulation, setting.LatencySCCI);
 
             chipRegister.SetRealChipInfo(EnmDevice.HuC6280, setting.HuC6280Type, setting.HuC6280SType, setting.LatencyEmulation, setting.LatencySCCI);
+            chipRegister.SetRealChipInfo(EnmDevice.K051649, setting.K051649Type, setting.K051649SType, setting.LatencyEmulation, setting.LatencySCCI);
             chipRegister.SetRealChipInfo(EnmDevice.Y8950, setting.Y8950Type, setting.Y8950SType, setting.LatencyEmulation, setting.LatencySCCI);
             chipRegister.SetRealChipInfo(EnmDevice.YM3526, setting.YM3526Type, setting.YM3526SType, setting.LatencyEmulation, setting.LatencySCCI);
             chipRegister.SetRealChipInfo(EnmDevice.YMF262, setting.YMF262Type, setting.YMF262SType, setting.LatencyEmulation, setting.LatencySCCI);
@@ -444,6 +445,17 @@ namespace mml2vgmIDE
                 if (ret.Count == 0) continue;
             }
             chipRegister.SetRealChipInfo(EnmDevice.HuC6280, chipType[0], chipType[1], setting.LatencyEmulation, setting.LatencySCCI);
+
+            for (int i = 0; i < 2; i++)
+            {
+                chipType[i] = new Setting.ChipType();
+                if (!chipRegister.K051649[i].Use) continue;
+                chipRegister.K051649[i].Model = EnmModel.VirtualModel;
+                chipType[i].UseEmu = true;
+                chipType[i].UseScci = false;
+                if (ret.Count == 0) continue;
+            }
+            chipRegister.SetRealChipInfo(EnmDevice.K051649, chipType[0], chipType[1], setting.LatencyEmulation, setting.LatencySCCI);
 
             for (int i = 0; i < 2; i++)
             {
@@ -4869,13 +4881,27 @@ namespace mml2vgmIDE
                             chip.Clock = ((vgm)driver).K051649ClockValue;
                             clockK051649 = (int)chip.Clock;
                             chip.Option = null;
-                            if (i == 0) chipLED.PriK051649 = 1;
-                            else chipLED.SecK051649 = 1;
 
                             hiyorimiDeviceFlag |= 0x2;
 
+                            if (i == 0)
+                            {
+                                chipLED.PriK051649 = 1;
+                                useChip.Add(EnmChip.K051649);
+                            }
+                            else
+                            {
+                                chipLED.SecK051649 = 1;
+                                useChip.Add(EnmChip.S_K051649);
+                            }
+
+                            log.Write(string.Format("Use K051649({0}) Clk:{1}"
+                                , (i == 0) ? "Pri" : "Sec"
+                                , chip.Clock
+                                ));
+
+                            chipRegister.K051649[i].Use = true;
                             lstChips.Add(chip);
-                            useChip.Add(i == 0 ? EnmChip.K051649 : EnmChip.S_K051649);
                         }
                     }
 
@@ -5075,6 +5101,12 @@ namespace mml2vgmIDE
                         if (chipRegister.HuC6280[i].Model == EnmModel.RealModel) useReal = true;
                     }
 
+                    if (chipRegister.K051649[i].Use)
+                    {
+                        if (chipRegister.K051649[i].Model == EnmModel.VirtualModel) useEmu = true;
+                        if (chipRegister.K051649[i].Model == EnmModel.RealModel) useReal = true;
+                    }
+
                     if (chipRegister.RF5C164[i].Use)
                     {
                         if (chipRegister.RF5C164[i].Model == EnmModel.VirtualModel) useEmu = true;
@@ -5185,6 +5217,7 @@ namespace mml2vgmIDE
                         chipRegister.C140WriteType(chipRegister.C140[i], vgmDriver.C140Type);
                     }
                     if (chipRegister.HuC6280[i].Use) chipRegister.HuC6280WriteClock((byte)i, (int)vgmDriver.HuC6280ClockValue);
+                    if (chipRegister.K051649[i].Use) chipRegister.K051649WriteClock((byte)i, (int)vgmDriver.K051649ClockValue);
                     if (chipRegister.RF5C164[i].Use) chipRegister.RF5C164WriteClock((byte)i, (int)vgmDriver.RF5C164ClockValue);
                     if (chipRegister.SEGAPCM[i].Use) chipRegister.SEGAPCMWriteClock((byte)i, (int)vgmDriver.SEGAPCMClockValue);
                     if (chipRegister.SN76489[i].Use) chipRegister.SN76489WriteClock((byte)i, (int)vgmDriver.SN76489ClockValue);
@@ -5942,6 +5975,7 @@ namespace mml2vgmIDE
                 if (chipRegister.AY8910[i].Use) chipRegister.AY8910SoftReset(counter, i);
                 if (chipRegister.C140[i].Use) chipRegister.C140SoftReset(counter, i);
                 if (chipRegister.HuC6280[i].Use) chipRegister.HuC6280SoftReset(counter, i);
+                if (chipRegister.K051649[i].Use) chipRegister.K051649SoftReset(counter, i);
                 if (chipRegister.RF5C164[i].Use) chipRegister.RF5C164SoftReset(counter, i);
                 if (chipRegister.SEGAPCM[i].Use) chipRegister.SEGAPCMSoftReset(counter, i);
                 if (chipRegister.SN76489[i].Use) chipRegister.SN76489SoftReset(counter, i);
@@ -5966,6 +6000,7 @@ namespace mml2vgmIDE
                 if (chipRegister.AY8910[i].Use) data.AddRange(chipRegister.AY8910MakeSoftReset(i));
                 if (chipRegister.C140[i].Use) data.AddRange(chipRegister.C140MakeSoftReset(i));
                 if (chipRegister.HuC6280[i].Use) data.AddRange(chipRegister.HuC6280MakeSoftReset(i));
+                if (chipRegister.K051649[i].Use) data.AddRange(chipRegister.K051649MakeSoftReset(i));
                 if (chipRegister.RF5C164[i].Use) data.AddRange(chipRegister.RF5C164MakeSoftReset(i));
                 if (chipRegister.SEGAPCM[i].Use) data.AddRange(chipRegister.SEGAPCMMakeSoftReset(i));
                 if (chipRegister.SN76489[i].Use) data.AddRange(chipRegister.SN76489MakeSoftReset(i));
@@ -7866,7 +7901,7 @@ namespace mml2vgmIDE
 
         public static void setK051649Mask(int chipID, int ch)
         {
-            chipRegister.setK051649Mask(chipID, ch);
+            chipRegister.K051649SetMask(0, chipID, ch, true);
         }
 
 
@@ -8056,7 +8091,7 @@ namespace mml2vgmIDE
 
         public static void resetK051649Mask(int chipID, int ch)
         {
-            chipRegister.resetK051649Mask(chipID, ch);
+            chipRegister.K051649SetMask(0, chipID, ch, false);
         }
 
         #endregion

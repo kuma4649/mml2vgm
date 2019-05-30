@@ -1465,8 +1465,8 @@ namespace mml2vgmIDE
             byte rDat = vgmBuf[vgmAdr + 3].val;
             byte scc1_chipid = (byte)((vgmBuf[vgmAdr + 1].val & 0x80) != 0 ? 1 : 0);
             vgmAdr += 4;
-            chipRegister.writeK051649(scc1_chipid, (uint)((scc1_port << 1) | 0x00), scc1_offset);
-            chipRegister.writeK051649(scc1_chipid, (uint)((scc1_port << 1) | 0x01), rDat);
+            chipRegister.K051649SetRegister(od, Audio.DriverSeqCounter, scc1_chipid, (int)((scc1_port << 1) | 0x00), scc1_offset);
+            chipRegister.K051649SetRegister(od, Audio.DriverSeqCounter, scc1_chipid, (int)((scc1_port << 1) | 0x01), rDat);
 
         }
 

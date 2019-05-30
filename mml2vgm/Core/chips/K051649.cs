@@ -13,7 +13,7 @@ namespace Core
 
         public K051649(ClsVgm parent, int chipID, string initialPartName, string stPath, bool isSecondary) : base(parent, chipID, initialPartName, stPath, isSecondary)
         {
-            _chipType = enmChipType.HuC6280;
+            _chipType = enmChipType.K051649;
             _Name = "K051649";
             _ShortName = "SCC";
             _ChMax = 5;
@@ -281,6 +281,7 @@ namespace Core
         public override void SetKeyOn(partWork pw, MML mml)
         {
             OutSsgKeyOn(mml,pw);
+            SetDummyData(pw, mml);
         }
 
         public override void SetKeyOff(partWork pw, MML mml)

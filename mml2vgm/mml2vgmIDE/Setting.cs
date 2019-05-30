@@ -407,6 +407,20 @@ namespace mml2vgmIDE
             }
         }
 
+        private ChipType _K051649SType = new ChipType();
+        public ChipType K051649SType
+        {
+            get
+            {
+                return _K051649SType;
+            }
+
+            set
+            {
+                _K051649SType = value;
+            }
+        }
+
         private ChipType _YM3526Type = new ChipType();
         public ChipType YM3526Type
         {

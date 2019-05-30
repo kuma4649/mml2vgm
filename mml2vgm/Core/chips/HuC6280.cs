@@ -486,11 +486,9 @@ namespace Core
             for (int lfo = 0; lfo < 4; lfo++)
             {
                 clsLfo pl = pw.lfo[lfo];
-                if (!pl.sw)
-                    continue;
-
-                if (pl.param[5] != 1)
-                    continue;
+                if (!pl.sw) continue;
+                if (pl.type == eLfoType.Hardware) continue;
+                if (pl.param[5] != 1) continue;
 
                 pl.isEnd = false;
                 pl.value = (pl.param[0] == 0) ? pl.param[6] : 0;//ディレイ中は振幅補正は適用されない

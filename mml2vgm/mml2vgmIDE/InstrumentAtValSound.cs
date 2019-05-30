@@ -97,7 +97,12 @@ Cancel : 永続的にオフラインモードにする
                             {
                                 string[] bs = b.InnerText.Replace("\n", ",").Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
                                 List<int> bi = new List<int>();
-                                foreach (string bsi in bs) bi.Add(int.Parse(bsi));
+                                foreach (string bsi in bs)
+                                {
+                                    int bsii;
+                                    if (!int.TryParse(bsi, out bsii)) continue;
+                                    bi.Add(bsii);
+                                }
                                 string i = GetInstrumentString(a.InnerText.Replace("\n", "").Trim(), bi.ToArray());
                                 inst.Add(i);
                             }
