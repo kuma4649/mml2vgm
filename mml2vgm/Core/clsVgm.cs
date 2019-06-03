@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -45,6 +46,8 @@ namespace Core
         private List<int> toneDoublerBufCache = new List<int>();
         private int wfInstrumentCounter = -1;
         private byte[] wfInstrumentBufCache = null;
+        public bool doSkip = false;
+        public Point caretPoint = Point.Empty;
 
         public int newStreamID = -1;
 
@@ -183,7 +186,16 @@ namespace Core
                     AddInstrument(line);
                     continue;
                 }
-                else if (s.IndexOf("%") == 0)
+
+                //if (doSkip)
+                //{
+                //    if (line.Lp.row == caretPoint.Y)
+                //    {
+                //        ;
+                //    }
+                //}
+
+                if (s.IndexOf("%") == 0)
                 {
                     // Alies
                     AddAlies(line);
@@ -993,8 +1005,9 @@ namespace Core
             }
             if (data == "")
             {
-                //データがない場合は無視する
-                return 0;
+                ////データがない場合は無視する
+                //return 0;
+                line.Txt += " ";//スキップ再生に対応するためダミーの空白を強制的に入れる
             }
 
             foreach (string p in part)
@@ -1282,7 +1295,7 @@ namespace Core
         private Random rnd = new Random();
 
         public int useJumpCommand = 0;
-        public int useIDEJumpCommand = 0;
+        public bool useSkipPlayCommand = false;
 
         /// <summary>
         /// ダミーコマンドの総バイト数
@@ -1314,6 +1327,11 @@ namespace Core
 
         public outDatum[] Vgm_getByteData(Dictionary<string, List<MML>> mmlData)
         {
+            //スキップ再生の指定がある場合は、キャレット位置まで(SkipPlayコマンドが来るまで)ウェイトの発行をしない。
+            if (doSkip)
+            {
+                useSkipPlayCommand = true;
+            }
 
             dat = new List<outDatum>();
 
@@ -1468,7 +1486,7 @@ namespace Core
                     lClock += waitCounter;
                     dSample += (long)(info.samplesPerClock * waitCounter);
 
-                    if (useJumpCommand == 0)
+                    if (useJumpCommand == 0 && !useSkipPlayCommand)
                     {
                         if (ym2612[0].lstPartWork[5].pcmWaitKeyOnCounter <= 0)//== -1)
                         {
@@ -2860,7 +2878,11 @@ namespace Core
                     pw.chip.CmdSusOnOff(pw, mml);
                     pw.mmlPos++;
                     break;
-
+                case enmMMLType.SkipPlay:
+                    log.Write("SkipPlay");
+                    useSkipPlayCommand = false;
+                    pw.mmlPos++;
+                    break;
                 default:
                     msgBox.setErrMsg(string.Format(msg.get("E01016")
                         , mml.type)

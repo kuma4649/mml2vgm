@@ -33,7 +33,7 @@ namespace mml2vgmIDE
             tabControl1.TabPages.Remove(tabPage13);
             tcSetting.TabPages.Remove(tpNSF);
             tcSetting.TabPages.Remove(tpMIDIExp);
-            tcSetting.TabPages.Remove(tpMIDIKBD);
+            //tcSetting.TabPages.Remove(tpMIDIKBD);
             tcSetting.TabPages.Remove(tpKeyBoard);
             tcSetting.TabPages.Remove(tpBalance);
             tcSetting.TabPages.Remove(tpOther);
@@ -871,10 +871,11 @@ namespace mml2vgmIDE
         {
             try
             {
-                using (var asio = new AsioOut(cmbAsioDevice.SelectedItem.ToString()))
-                {
-                    asio.ShowControlPanel();
-                }
+                NAudioWrap.ShowControlPanel(cmbAsioDevice.SelectedItem.ToString());
+                //using (var asio = new AsioOut(cmbAsioDevice.SelectedItem.ToString()))
+                //{
+                //    asio.ShowControlPanel();
+                //}
             }
             catch (Exception ex)
             {

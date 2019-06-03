@@ -2546,12 +2546,16 @@ namespace mml2vgmIDE
             private Rectangle _RMixer = Rectangle.Empty;
             public Rectangle RMixer { get => _RMixer; set => _RMixer = value; }
 
+            private Rectangle _RMIDIKbd = Rectangle.Empty;
+            public Rectangle RMIDIKbd { get => _RMIDIKbd; set => _RMIDIKbd = value; }
+
             public Location Copy()
             {
                 Location Location = new Location();
 
                 Location.RMain = this.RMain;
                 Location.RMixer = this.RMixer;
+                Location.RMIDIKbd = this.RMIDIKbd;
 
                 return Location;
             }

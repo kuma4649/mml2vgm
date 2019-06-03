@@ -5,29 +5,29 @@ using System.Threading;
 
 namespace mml2vgmIDE
 {
-    public class NAudioWrap
+    public static class NAudioWrap
     {
 
         public delegate int naudioCallBack(short[] buffer, int offset, int sampleCount);
-        public event EventHandler<StoppedEventArgs> PlaybackStopped;
+        public static event EventHandler<StoppedEventArgs> PlaybackStopped;
 
-        private WaveOut waveOut;
-        private WasapiOut wasapiOut;
-        private DirectSoundOut dsOut;
-        private AsioOut asioOut;
-        private NullOut nullOut;
-        private SineWaveProvider16 waveProvider;
+        private static WaveOut waveOut;
+        private static WasapiOut wasapiOut;
+        private static DirectSoundOut dsOut;
+        private static AsioOut asioOut;
+        private static NullOut nullOut;
+        private static SineWaveProvider16 waveProvider;
 
         private static naudioCallBack callBack = null;
-        private Setting setting = null;
-        private SynchronizationContext syncContext = SynchronizationContext.Current;
+        private static Setting setting = null;
+        private static SynchronizationContext syncContext = SynchronizationContext.Current;
 
-        public NAudioWrap(int sampleRate, naudioCallBack nCallBack)
-        {
-            Init(sampleRate, nCallBack);
-        }
+        //public NAudioWrap(int sampleRate, naudioCallBack nCallBack)
+        //{
+        //Init(sampleRate, nCallBack);
+        //}
 
-        public void Init(int sampleRate, naudioCallBack nCallBack)
+        public static void Init(int sampleRate, naudioCallBack nCallBack)
         {
 
             Stop();
@@ -39,9 +39,9 @@ namespace mml2vgmIDE
             
         }
 
-        public void Start(Setting setting)
+        public static void Start(Setting setting)
         {
-            this.setting = setting;
+            NAudioWrap.setting = setting;
             if (waveOut != null) waveOut.Dispose();
             waveOut = null;
             if (wasapiOut != null) wasapiOut.Dispose();
@@ -171,18 +171,52 @@ namespace mml2vgmIDE
 
         }
 
-        private void DeviceOut_PlaybackStopped(object sender, StoppedEventArgs e)
+        public static void ShowControlPanel(string asioDriverName)
+        {
+            if (asioOut != null)
+            {
+                asioOut.Dispose();
+            }
+
+            int i = 0;
+            foreach (string s in AsioOut.GetDriverNames())
+            {
+                if (asioDriverName == s)
+                {
+                    break;
+                }
+                i++;
+            }
+            int retry = 3;
+            do
+            {
+                try
+                {
+                    asioOut = new AsioOut(i);
+                }
+                catch
+                {
+                    asioOut = null;
+                    Thread.Sleep(1000);
+                    retry--;
+                }
+            } while (asioOut == null && retry > 0);
+
+            asioOut.ShowControlPanel();
+        }
+
+        private static void DeviceOut_PlaybackStopped(object sender, StoppedEventArgs e)
         {
             var handler = PlaybackStopped;
             if (handler != null)
             {
-                if (this.syncContext == null)
+                if (NAudioWrap.syncContext == null)
                 {
-                    handler(this, e);
+                    handler(sender, e);
                 }
                 else
                 {
-                    syncContext.Post(state => handler(this,e), null);
+                    syncContext.Post(state => handler(sender, e), null);
                 }
             }
         }
@@ -190,7 +224,7 @@ namespace mml2vgmIDE
         /// <summary>
         /// コールバックの中から呼び出さないこと(ハングします)
         /// </summary>
-        public void Stop()
+        public static void Stop()
         {
             if (waveOut != null)
             {
@@ -280,7 +314,7 @@ namespace mml2vgmIDE
 
         }
 
-        public NAudio.Wave.PlaybackState? GetPlaybackState()
+        public static NAudio.Wave.PlaybackState? GetPlaybackState()
         {
             bool notNull = false;
 
@@ -308,7 +342,7 @@ namespace mml2vgmIDE
             return notNull ? (PlaybackState?)PlaybackState.Stopped : null;
         }
 
-        public int getAsioLatency()
+        public static int getAsioLatency()
         {
             if (asioOut == null) return 0;
 

@@ -52,6 +52,7 @@
             this.Name = "FrmEditor";
             this.Text = "新しいファイル.gwi";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.FrmEditor_FormClosed);
+            this.Shown += new System.EventHandler(this.FrmEditor_Shown);
             this.ResumeLayout(false);
 
         }

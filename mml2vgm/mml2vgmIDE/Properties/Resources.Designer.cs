@@ -404,6 +404,16 @@ namespace mml2vgmIDE.Properties {
         /// <summary>
         ///   型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
         /// </summary>
+        internal static System.Drawing.Bitmap planeMIDIKB {
+            get {
+                object obj = ResourceManager.GetObject("planeMIDIKB", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
+        /// </summary>
         internal static System.Drawing.Bitmap planeMixer {
             get {
                 object obj = ResourceManager.GetObject("planeMixer", resourceCulture);

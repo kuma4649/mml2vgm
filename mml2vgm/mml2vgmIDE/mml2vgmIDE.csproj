@@ -118,6 +118,12 @@
     <Compile Include="form\frmDebug.Designer.cs">
       <DependentUpon>frmDebug.cs</DependentUpon>
     </Compile>
+    <Compile Include="form\FrmMIDIKbd.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="form\FrmMIDIKbd.Designer.cs">
+      <DependentUpon>FrmMIDIKbd.cs</DependentUpon>
+    </Compile>
     <Compile Include="form\FrmMixer.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -216,6 +222,9 @@
     <EmbeddedResource Include="form\frmDebug.resx">
       <DependentUpon>frmDebug.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="form\FrmMIDIKbd.resx">
+      <DependentUpon>FrmMIDIKbd.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="form\FrmMixer.resx">
       <DependentUpon>FrmMixer.cs</DependentUpon>
     </EmbeddedResource>
@@ -306,6 +315,7 @@
     <Content Include="RealChipCtlWrap.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Resource\planeMIDIKB.png" />
     <Content Include="Resource\planeMixer.png" />
     <None Include="Resource\rFader.png" />
     <None Include="Resource\rFont_03.png" />

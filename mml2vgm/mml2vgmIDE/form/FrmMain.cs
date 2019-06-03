@@ -32,12 +32,18 @@ namespace mml2vgmIDE
         private FrmErrorList frmErrorList = null;
         private frmDebug frmDebug = null;
         private FrmMixer frmMixer = null;
+        private FrmMIDIKbd frmMIDIKbd = null;
         private bool doPlay = false;
         private bool isTrace = false;
+        private bool doSkip = false;
+        private Point caretPoint = Point.Empty;
         private bool Compiling = false;
         private bool flgReinit = false;
         public const int WM_COPYDATA = 0x004A;
         public const int WM_PASTE = 0x0302;
+        public MDChipParams oldParam = new MDChipParams();
+        private MDChipParams newParam = new MDChipParams();
+
 
         //SendMessageで送る構造体（Unicode文字列送信に最適化したパターン）
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
@@ -285,7 +291,7 @@ namespace mml2vgmIDE
                 }
                 if (d == null) return;
 
-                Compile(false, false);
+                Compile(false, false,false);
                 while (Compiling) { Application.DoEvents(); }//待ち合わせ
 
                 if (msgBox.getErr().Length > 0)
@@ -343,17 +349,22 @@ namespace mml2vgmIDE
 
         public void TsmiCompileAndPlay_Click(object sender, EventArgs e)
         {
-            Compile(true,false);
+            Compile(true,false, false);
         }
 
         private void TsmiCompileAndTracePlay_Click(object sender, EventArgs e)
         {
-            Compile(true, true);
+            Compile(true, true, false);
+        }
+
+        private void TsmiCompileAndSkipPlay_Click(object sender, EventArgs e)
+        {
+            Compile(true, true, true);
         }
 
         private void TsmiCompile_Click(object sender, EventArgs e)
         {
-            Compile(false,false);
+            Compile(false,false, false);
         }
 
         private void TsmiUndo_Click(object sender, EventArgs e)
@@ -422,9 +433,6 @@ namespace mml2vgmIDE
             TsmiShowLog.Checked = !frmLog.IsHidden;
         }
 
-        public MDChipParams oldParam = new MDChipParams();
-        private MDChipParams newParam = new MDChipParams();
-
         private void TsmiShowMixer_Click(object sender, EventArgs e)
         {
             if (frmMixer == null)
@@ -439,6 +447,22 @@ namespace mml2vgmIDE
             }
 
             TsmiShowMixer.Checked = frmMixer != null;
+        }
+
+        private void TsmiShowMIDIKbd_Click(object sender, EventArgs e)
+        {
+            if (frmMIDIKbd == null)
+            {
+                frmMIDIKbd = new FrmMIDIKbd(this, 1, newParam.mIDIKbd);
+                frmMIDIKbd.Show();
+            }
+            else
+            {
+                frmMIDIKbd.Close();
+                frmMIDIKbd = null;
+            }
+
+            TsmiShowMIDIKbd.Checked = frmMIDIKbd != null;
         }
 
         private void TsmiOption_Click(object sender, EventArgs e)
@@ -505,6 +529,11 @@ namespace mml2vgmIDE
             TsmiCompileAndTracePlay_Click(null, null);
         }
 
+        private void TssbSkipPlay_ButtonClick(object sender, EventArgs e)
+        {
+            TsmiCompileAndSkipPlay_Click(null, null);
+        }
+
         private void FrmMain_KeyDown(object sender, KeyEventArgs e)
         {
             switch (e.KeyCode)
@@ -532,6 +561,9 @@ namespace mml2vgmIDE
                     break;
                 case Keys.F6:
                     TsmiCompileAndTracePlay_Click(null, null);
+                    break;
+                case Keys.F7:
+                    TsmiCompileAndSkipPlay_Click(null, null);
                     break;
                 case Keys.F9:
                     stop();
@@ -625,7 +657,7 @@ namespace mml2vgmIDE
 
         string wrkPath = "";
 
-        private void Compile(bool doPlay,bool isTrace)
+        private void Compile(bool doPlay,bool isTrace,bool doSkip)
         {
             IDockContent dc = dpMain.ActiveDocument;
             if (dc == null) return;
@@ -653,6 +685,22 @@ namespace mml2vgmIDE
             isSuccess = true;
             this.doPlay = doPlay;
             this.isTrace = isTrace;
+            this.doSkip = doSkip;
+            //スキップ再生の場合はカレットの位置を取得する
+            if (doSkip)
+            {
+                int ci = ac.CaretIndex;
+                int row, col;
+                ac.GetLineColumnIndexFromCharIndex(ci, out row, out col);
+                caretPoint = new Point(col, row);
+                int st = ac.GetLineHeadIndexFromCharIndex(ci);
+                int li = ac.GetLineIndexFromCharIndex(ci);
+                //int ed = st + ac.GetLineLength(li);
+                string line = ac.GetTextInRange(st, ci);
+                if (line == null || line.Length < 1) doSkip = false;
+                //先頭の文字が'ではないときは既存の動作
+                else if (line[0] != '\'') doSkip = false;
+            }
             frmPartCounter.dataGridView1.Rows.Clear();
             frmErrorList.dataGridView1.Rows.Clear();
 
@@ -694,6 +742,8 @@ namespace mml2vgmIDE
                 Core.log.Write("Call mml2vgm core");
 
                 mv = new Mml2vgm(arg, desfn, stPath, Disp, wrkPath);
+                mv.doSkip = doSkip;
+                mv.caretPoint = caretPoint;
                 if (mv.Start() != 0)
                 {
                     isSuccess = false;
@@ -1470,6 +1520,16 @@ namespace mml2vgmIDE
             {
                 frmMixer = null;
                 TsmiShowMixer.Checked = (frmMixer != null);
+            }
+
+            if (frmMIDIKbd != null && !frmMIDIKbd.isClosed)
+            {
+                frmMIDIKbd.screenChangeParams();
+            }
+            else
+            {
+                frmMIDIKbd = null;
+                TsmiShowMIDIKbd.Checked = (frmMIDIKbd != null);
             }
         }
 

@@ -456,5 +456,10 @@ namespace mml2vgmIDE
         }
         public Mixer mixer = new Mixer();
 
+        public class MIDIKbd
+        {
+
+        }
+        public MIDIKbd mIDIKbd = new MIDIKbd();
     }
 }

@@ -57,6 +57,7 @@ namespace mml2vgmIDE
             azukiControl.VScroll += AzukiControl_CancelSien;
             azukiControl.LocationChanged += AzukiControl_CancelSien;
             azukiControl.SizeChanged += AzukiControl_CancelSien;
+            azukiControl.CaretMoved += AzukiControl_CaretMoved;
 
             azukiControl.ColorScheme.ForeColor = Color.FromArgb(setting.ColorScheme.Azuki_ForeColor);
             azukiControl.ColorScheme.BackColor = Color.FromArgb(setting.ColorScheme.Azuki_BackColor);
@@ -83,6 +84,14 @@ namespace mml2vgmIDE
             frmSien = new FrmSien();
             frmSien.parent = main;
             frmSien.Show();
+        }
+
+        private void AzukiControl_CaretMoved(object sender, EventArgs e)
+        {
+            int ci = azukiControl.CaretIndex;
+            int row, col;
+            azukiControl.GetLineColumnIndexFromCharIndex(ci, out row, out col);
+            if (main != null) main.TsslLineCol.Text = string.Format("Line:{0} Col:{1}", row + 1, col + 1);
         }
 
         private void ActionComment(IUserInterface ui)
@@ -371,6 +380,11 @@ namespace mml2vgmIDE
         private void AzukiControl_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void FrmEditor_Shown(object sender, EventArgs e)
+        {
+            AzukiControl_CaretMoved(null, null);
         }
     }
 }

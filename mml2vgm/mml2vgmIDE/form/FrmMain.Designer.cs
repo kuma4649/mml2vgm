@@ -67,6 +67,9 @@
             this.TsmiShowFolderTree = new System.Windows.Forms.ToolStripMenuItem();
             this.TsmiShowErrorList = new System.Windows.Forms.ToolStripMenuItem();
             this.TsmiShowLog = new System.Windows.Forms.ToolStripMenuItem();
+            this.TsmiShowMixer = new System.Windows.Forms.ToolStripMenuItem();
+            this.TsmiShowMIDIKbd = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.TsmiFunctionKey = new System.Windows.Forms.ToolStripMenuItem();
             this.TsmiFncHide = new System.Windows.Forms.ToolStripMenuItem();
             this.TsmiFncButtonOnly = new System.Windows.Forms.ToolStripMenuItem();
@@ -84,7 +87,8 @@
             this.TsmiReference = new System.Windows.Forms.ToolStripMenuItem();
             this.TsmiAbout = new System.Windows.Forms.ToolStripMenuItem();
             this.timer = new System.Windows.Forms.Timer(this.components);
-            this.TsmiShowMixer = new System.Windows.Forms.ToolStripMenuItem();
+            this.tssbSkipPlay = new System.Windows.Forms.ToolStripSplitButton();
+            this.TsmiCompileAndSkipPlay = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -116,6 +120,7 @@
             this.tssbSave,
             this.tssbCompile,
             this.tssbTracePlay,
+            this.tssbSkipPlay,
             this.tssbStop,
             this.tssbSlow,
             this.tssbFast});
@@ -157,13 +162,13 @@
             // TsslLineCol
             // 
             this.TsslLineCol.Name = "TsslLineCol";
-            this.TsslLineCol.Size = new System.Drawing.Size(103, 17);
-            this.TsslLineCol.Text = "Line:9999 Col:9999";
+            this.TsslLineCol.Size = new System.Drawing.Size(65, 17);
+            this.TsslLineCol.Text = "Line:- Col:-";
             // 
             // toolStripStatusLabel1
             // 
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(145, 17);
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(49, 17);
             this.toolStripStatusLabel1.Spring = true;
             this.toolStripStatusLabel1.Text = " ";
             // 
@@ -388,6 +393,8 @@
             this.TsmiShowErrorList,
             this.TsmiShowLog,
             this.TsmiShowMixer,
+            this.TsmiShowMIDIKbd,
+            this.toolStripSeparator3,
             this.TsmiFunctionKey});
             this.表示VToolStripMenuItem.Name = "表示VToolStripMenuItem";
             this.表示VToolStripMenuItem.Size = new System.Drawing.Size(58, 20);
@@ -396,30 +403,49 @@
             // TsmiShowPartCounter
             // 
             this.TsmiShowPartCounter.Name = "TsmiShowPartCounter";
-            this.TsmiShowPartCounter.Size = new System.Drawing.Size(180, 22);
+            this.TsmiShowPartCounter.Size = new System.Drawing.Size(150, 22);
             this.TsmiShowPartCounter.Text = "パートカウンター";
             this.TsmiShowPartCounter.Click += new System.EventHandler(this.TsmiShowPartCounter_Click);
             // 
             // TsmiShowFolderTree
             // 
             this.TsmiShowFolderTree.Name = "TsmiShowFolderTree";
-            this.TsmiShowFolderTree.Size = new System.Drawing.Size(180, 22);
+            this.TsmiShowFolderTree.Size = new System.Drawing.Size(150, 22);
             this.TsmiShowFolderTree.Text = "フォルダーツリー";
             this.TsmiShowFolderTree.Click += new System.EventHandler(this.TsmiShowFolderTree_Click);
             // 
             // TsmiShowErrorList
             // 
             this.TsmiShowErrorList.Name = "TsmiShowErrorList";
-            this.TsmiShowErrorList.Size = new System.Drawing.Size(180, 22);
+            this.TsmiShowErrorList.Size = new System.Drawing.Size(150, 22);
             this.TsmiShowErrorList.Text = "エラーリスト";
             this.TsmiShowErrorList.Click += new System.EventHandler(this.TsmiShowErrorList_Click);
             // 
             // TsmiShowLog
             // 
             this.TsmiShowLog.Name = "TsmiShowLog";
-            this.TsmiShowLog.Size = new System.Drawing.Size(180, 22);
+            this.TsmiShowLog.Size = new System.Drawing.Size(150, 22);
             this.TsmiShowLog.Text = "ログ";
             this.TsmiShowLog.Click += new System.EventHandler(this.TsmiShowLog_Click);
+            // 
+            // TsmiShowMixer
+            // 
+            this.TsmiShowMixer.Name = "TsmiShowMixer";
+            this.TsmiShowMixer.Size = new System.Drawing.Size(150, 22);
+            this.TsmiShowMixer.Text = "音源ミキサー";
+            this.TsmiShowMixer.Click += new System.EventHandler(this.TsmiShowMixer_Click);
+            // 
+            // TsmiShowMIDIKbd
+            // 
+            this.TsmiShowMIDIKbd.Name = "TsmiShowMIDIKbd";
+            this.TsmiShowMIDIKbd.Size = new System.Drawing.Size(150, 22);
+            this.TsmiShowMIDIKbd.Text = "MIDIキーボード";
+            this.TsmiShowMIDIKbd.Click += new System.EventHandler(this.TsmiShowMIDIKbd_Click);
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(147, 6);
             // 
             // TsmiFunctionKey
             // 
@@ -428,7 +454,7 @@
             this.TsmiFncButtonOnly,
             this.TsmiFncButtonAndText});
             this.TsmiFunctionKey.Name = "TsmiFunctionKey";
-            this.TsmiFunctionKey.Size = new System.Drawing.Size(180, 22);
+            this.TsmiFunctionKey.Size = new System.Drawing.Size(150, 22);
             this.TsmiFunctionKey.Text = "ファンクションキー";
             // 
             // TsmiFncHide
@@ -457,6 +483,7 @@
             this.コンパイルCToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.TsmiCompileAndPlay,
             this.TsmiCompileAndTracePlay,
+            this.TsmiCompileAndSkipPlay,
             this.TsmiAllCompile,
             this.TsmiCompile});
             this.コンパイルCToolStripMenuItem.Name = "コンパイルCToolStripMenuItem";
@@ -549,12 +576,23 @@
             this.timer.Interval = 16;
             this.timer.Tick += new System.EventHandler(this.Timer_Tick);
             // 
-            // TsmiShowMixer
+            // tssbSkipPlay
             // 
-            this.TsmiShowMixer.Name = "TsmiShowMixer";
-            this.TsmiShowMixer.Size = new System.Drawing.Size(180, 22);
-            this.TsmiShowMixer.Text = "音源ミキサー";
-            this.TsmiShowMixer.Click += new System.EventHandler(this.TsmiShowMixer_Click);
+            this.tssbSkipPlay.DropDownButtonWidth = 0;
+            this.tssbSkipPlay.Image = global::mml2vgmIDE.Properties.Resources.F07;
+            this.tssbSkipPlay.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.tssbSkipPlay.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tssbSkipPlay.Name = "tssbSkipPlay";
+            this.tssbSkipPlay.Size = new System.Drawing.Size(103, 20);
+            this.tssbSkipPlay.Text = "スキップ再生";
+            this.tssbSkipPlay.ButtonClick += new System.EventHandler(this.TssbSkipPlay_ButtonClick);
+            // 
+            // TsmiCompileAndSkipPlay
+            // 
+            this.TsmiCompileAndSkipPlay.Name = "TsmiCompileAndSkipPlay";
+            this.TsmiCompileAndSkipPlay.Size = new System.Drawing.Size(225, 22);
+            this.TsmiCompileAndSkipPlay.Text = "コンパイルとスキップ再生";
+            this.TsmiCompileAndSkipPlay.Click += new System.EventHandler(this.TsmiCompileAndSkipPlay_Click);
             // 
             // FrmMain
             // 
@@ -632,11 +670,15 @@
         private System.Windows.Forms.ToolStripMenuItem TsmiFncButtonOnly;
         private System.Windows.Forms.ToolStripMenuItem TsmiFncButtonAndText;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
-        private System.Windows.Forms.ToolStripStatusLabel TsslLineCol;
         private System.Windows.Forms.ToolStripMenuItem tsmiGwiFileHistory;
         private System.Windows.Forms.ToolStripMenuItem tsmiImport;
         private System.Windows.Forms.ToolStripMenuItem tsmiScript;
         private System.Windows.Forms.ToolStripMenuItem TsmiShowMixer;
+        private System.Windows.Forms.ToolStripMenuItem TsmiShowMIDIKbd;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private System.Windows.Forms.ToolStripSplitButton tssbSkipPlay;
+        private System.Windows.Forms.ToolStripMenuItem TsmiCompileAndSkipPlay;
+        public System.Windows.Forms.ToolStripStatusLabel TsslLineCol;
     }
 }
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -57,6 +58,7 @@ namespace Core
             pw.resetPos();
             pw.dataEnd = false;
             pw.mmlData = new List<MML>();
+            SkipFlg = false;
 
             while (!pw.dataEnd)
             {
@@ -71,6 +73,9 @@ namespace Core
         }
 
         private bool swToneDoubler = false;
+        public bool doSkip;
+        public Point caretPoint;
+        private bool SkipFlg = false;
 
         public LinePos linePos { get; internal set; }
 
@@ -80,6 +85,16 @@ namespace Core
             mml.line = pw.getLine();
             mml.column = pw.pos.col + 1;// pw.getPos();
 
+            if (!SkipFlg && caretPoint.Y == mml.line.Lp.row && caretPoint.X <= mml.line.Lp.col+mml.column-1)
+            {
+                MML m = new MML();
+                m.type = enmMMLType.SkipPlay;
+                m.line = pw.getLine();
+                m.column = pw.getPos();
+                pw.mmlData.Add(m);
+                SkipFlg = true;
+
+            }
 
             //コマンド解析
 
@@ -271,10 +286,10 @@ namespace Core
 
             if (mml.type == enmMMLType.unknown) return;
 
-            if (!mmlData.ContainsKey(pw.PartName))
-            {
-                mmlData.Add(pw.PartName, new List<MML>());
-            }
+            if (!mmlData.ContainsKey(pw.PartName))//この処理無意味っぽい
+            {//この処理無意味っぽい
+                mmlData.Add(pw.PartName, new List<MML>());//この処理無意味っぽい(mmlData使ってない)
+            }//この処理無意味っぽい
 
             pw.mmlData.Add(mml);
 

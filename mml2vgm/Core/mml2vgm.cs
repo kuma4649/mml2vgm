@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
+using System.Drawing;
 
 namespace Core
 {
@@ -23,6 +24,8 @@ namespace Core
         private Action<string> Disp = null;
         private int pcmDataSeqNum = 0;
         private string wrkPath;
+        public bool doSkip = false;
+        public Point caretPoint = Point.Empty;
 
         /// <summary>
         /// コンストラクタ
@@ -88,6 +91,8 @@ namespace Core
 
                 Disp(msg.get("I04003"));
                 desVGM = new ClsVgm(stPath);
+                desVGM.doSkip = doSkip;
+                desVGM.caretPoint = caretPoint;
                 if (desVGM.Analyze(src) != 0)
                 {
                     msgBox.setErrMsg(string.Format(
@@ -101,7 +106,11 @@ namespace Core
                 if (desVGM.instPCMDatSeq.Count > 0) GetPCMData(wrkPath);
 
                 Disp(msg.get("I04005"));
+
                 MMLAnalyze mmlAnalyze = new MMLAnalyze(desVGM);
+                mmlAnalyze.doSkip = doSkip;
+                mmlAnalyze.caretPoint = caretPoint;
+
                 if (mmlAnalyze.Start() != 0)
                 {
                     msgBox.setErrMsg(string.Format(

@@ -61,7 +61,7 @@ namespace mml2vgmIDE
         private static uint samplingBuffer = 1024;
         private static MDSound.MDSound mds = null;
         public static MDSound.MDSound mdsMIDI = null;
-        private static NAudioWrap naudioWrap;
+        //private static NAudioWrap naudioWrap;
         //private static WaveWriter waveWriter = null;
 
 
@@ -167,8 +167,9 @@ namespace mml2vgmIDE
             log.ForcedWrite("Audio:Init:Begin");
 
             log.ForcedWrite("Audio:Init:STEP 01");
-            naudioWrap = new NAudioWrap((int)Common.SampleRate, trdVgmVirtualFunction);
-            naudioWrap.PlaybackStopped += NaudioWrap_PlaybackStopped;
+            //naudioWrap = new NAudioWrap((int)Common.SampleRate, trdVgmVirtualFunction);
+            NAudioWrap.Init((int)Common.SampleRate, trdVgmVirtualFunction);
+            NAudioWrap.PlaybackStopped += NaudioWrap_PlaybackStopped;
 
 
 
@@ -366,7 +367,7 @@ namespace mml2vgmIDE
 
 
             log.ForcedWrite("Audio:Init:STEP 09");
-            naudioWrap.Start(Audio.setting);
+            NAudioWrap.Start(Audio.setting);
 
 
 
@@ -1667,7 +1668,7 @@ namespace mml2vgmIDE
             {
                 return (int)Common.SampleRate * setting.outputDevice.Latency / 1000;
             }
-            return naudioWrap.getAsioLatency();
+            return NAudioWrap.getAsioLatency();
         }
 
         //public static void SetVGMBuffer(EnmFileFormat format, byte[] srcBuf, string playingFileName, string playingArcFileName, int midiMode, int songNo, List<Tuple<string, byte[]>> extFile)
@@ -5476,7 +5477,7 @@ namespace mml2vgmIDE
             {
 
                 Stop();
-                naudioWrap.Stop();
+                NAudioWrap.Stop();
 
                 //midi outをリリース
                 //if (midiOuts.Count > 0)
@@ -5798,7 +5799,7 @@ namespace mml2vgmIDE
 
                 try
                 {
-                    naudioWrap.Stop();
+                    NAudioWrap.Stop();
                 }
                 catch (Exception ex)
                 {

@@ -61,6 +61,7 @@ namespace Core
         ToneDoubler,    // , 0
         Lyric,          // "
         SusOnOff,       // so sf
-        JumpPoint       // J
+        JumpPoint,      // J
+        SkipPlay        // caret位置からの演奏のための特殊コマンド
     }
 }
