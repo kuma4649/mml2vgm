@@ -2,6 +2,7 @@
 using mml2vgmIDE;
 using System.Windows.Forms;
 using Core;
+using System.Threading;
 
 namespace SoundManager
 {
@@ -386,6 +387,8 @@ namespace SoundManager
         #region IDisposable Support
         private bool disposedValue = false; // 重複する呼び出しを検出するには
 
+        public SendMode Mode { get; private set; }
+
         protected virtual void Dispose(bool disposing)
         {
             if (!disposedValue)
@@ -418,6 +421,16 @@ namespace SoundManager
             Dispose(true);
             // TODO: 上のファイナライザーがオーバーライドされる場合は、次の行のコメントを解除してください。
             // GC.SuppressFinalize(this);
+        }
+
+        public void ClearData()
+        {
+            dataSender.ClearBuffer();
+        }
+
+        internal void SetMode(SendMode mode)
+        {
+            Mode = mode;
         }
 
         #endregion

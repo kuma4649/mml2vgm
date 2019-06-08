@@ -111,7 +111,7 @@ namespace mml2vgmIDE
             //rMIDILCD_Fader[1] = getByteArray(Properties.Resources.rMIDILCD_Fader_02);
             //rMIDILCD_Fader[2] = getByteArray(Properties.Resources.rMIDILCD_Fader_03);
 
-            //rMIDILCD_KBD = getByteArray(Properties.Resources.rMIDILCD_KBD_01);
+            rMIDILCD_KBD = getByteArray(Properties.Resources.rMIDILCD_KBD_01);
 
             //rMIDILCD_Vol = new byte[3][];
             //rMIDILCD_Vol[0] = getByteArray(Properties.Resources.rMIDILCD_Vol_01);
@@ -3110,7 +3110,16 @@ namespace mml2vgmIDE
 
         private static void drawMIDILCD_KbdP(FrameBuffer screen, int x, int y, int note, int vel)
         {
-            screen.drawByteArrayTransp(x + Tables.kbdl[note % 12] + note / 12 * 28, y, rMIDILCD_KBD, 16, Tables.kbl2[note % 12], vel / 16 * 8, 4, 8);
+            screen.drawByteArrayTransp(
+                x + Tables.kbdl[note % 12] + note / 12 * 7 * 8,
+                y + ((note % 12) == 0 ? 8 : 0),
+                rMIDILCD_KBD,
+                32,
+                Tables.kbl2[note % 12],
+                vel / 16 * 32 + ((note % 12) == 0 ? 8 : 0),
+                8,
+                32 - ((note % 12) == 0 ? 8 : 0)
+                );
         }
 
         private static void ChAY8910_P(FrameBuffer screen, int x, int y, int ch, bool mask, int tp)

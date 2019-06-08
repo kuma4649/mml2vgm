@@ -170,14 +170,14 @@ namespace Core
                         , v.Value.freq
                         , v.Value.vol
                         , freeAdr
-                        , freeAdr + size -1
+                        , freeAdr + size - 1
                         , size
-                        , v.Value.loopAdr
+                        , (v.Value.loopAdr == -1 ? v.Value.loopAdr : (v.Value.loopAdr + freeAdr))
                         , is16bit
                         , samplerate)
                     );
                 
-                if (newDic[v.Key].loopAdr != -1 && (newDic[v.Key].loopAdr < 0 || newDic[v.Key].loopAdr >= size))
+                if (newDic[v.Key].loopAdr != -1 && (v.Value.loopAdr < 0 || v.Value.loopAdr >= size))
                 {
                     msgBox.setErrMsg(string.Format(msg.get("E09000")
                         , newDic[v.Key].loopAdr

@@ -458,6 +458,12 @@ namespace mml2vgmIDE
 
         public class MIDIKbd
         {
+            public byte[] note = new byte[37];
+            public int cOctave = -1;
+            public int kbOctave = -1;
+            public int kcOctave = -1;
+            public int kaOctave = -1;
+            public int kaaOctave = -1;
 
         }
         public MIDIKbd mIDIKbd = new MIDIKbd();

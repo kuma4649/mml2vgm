@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using mml2vgmIDE;
 
 namespace SoundManager
 {
@@ -14,6 +15,8 @@ namespace SoundManager
     {
         private readonly DriverAction ActionOfDriver;
         private bool pause = false;
+
+        public SendMode Mode { get; internal set; }
 
         public DataMaker(DriverAction ActionOfDriver)
         {
@@ -89,6 +92,10 @@ namespace SoundManager
             }
         }
 
+        internal void RequestChangeMode(SendMode mode)
+        {
+            throw new NotImplementedException();
+        }
     }
 
 }

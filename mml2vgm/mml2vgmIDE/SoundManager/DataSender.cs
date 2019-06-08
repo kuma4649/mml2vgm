@@ -25,6 +25,7 @@ namespace SoundManager
         private Action WaitSync = null;
         private long EmuDelay = 0;
         private long RealDelay = 0;
+        private bool reqSendStopData;
 
         public DataSender(
             Enq EmuEnq
@@ -170,7 +171,6 @@ namespace SoundManager
                             o += step;
                         }
 
-                        //lock (lockObj)
                         {
                             //待ち合わせ割り込み
                             if (parent.GetInterrupt())
@@ -191,17 +191,25 @@ namespace SoundManager
                             //コールバック実施
                             DataSeqFrqCallBack?.Invoke(SeqCounter);
 
-                            if (ringBuffer.GetDataSize() == 0)
+                            if (parent.Mode == SendMode.MML)
                             {
-                                if (!parent.IsRunningAtDataMaker())
+                                if (ringBuffer.GetDataSize() == 0)
                                 {
-                                    //RequestStop();
-                                    break;
+                                    if (!parent.IsRunningAtDataMaker())
+                                    {
+                                        break;
+                                    }
+                                    continue;
                                 }
-                                continue;
                             }
-                            if (SeqCounter < ringBuffer.LookUpCounter()) continue;
-                            //continue;
+                            else
+                            {
+                                if (reqSendStopData)
+                                {
+                                    reqSendStopData = false;
+                                    if (SendStopData() == -1) return;
+                                }
+                            }
                         }
 
                         //dataが貯まってます！
@@ -257,47 +265,7 @@ namespace SoundManager
                         }
                     }
 
-                    //停止時のデータの送信
-                    if (stopData != null)
-                    {
-                        foreach (PackData dat in stopData)
-                        {
-
-                            //データ加工
-                            ProcessingData?.Invoke(ref dat.od, ref SeqCounter, ref dat.Chip, ref dat.Type, ref dat.Address, ref dat.Data, ref dat.ExData);
-
-                            //振り分けてEnqueue
-                            if (dat.Chip.Model == EnmModel.VirtualModel)
-                            {
-                                if (parent.IsRunningAtEmuChipSender())
-                                {
-                                    int timeOut = 1000;
-                                    while (!EmuEnq(dat.od, SeqCounter, dat.Chip, dat.Type, dat.Address, dat.Data, dat.ExData))
-                                    {
-                                        if (unmount) return;
-                                        Thread.Sleep(1);
-                                        timeOut--;
-                                        if (timeOut == 0) goto Timeout;
-                                    }
-                                }
-                            }
-                            else if (dat.Chip.Model == EnmModel.RealModel)
-                            {
-                                if (parent.IsRunningAtRealChipSender())
-                                {
-                                    int timeOut = 1000;
-                                    while (!RealEnq(dat.od, SeqCounter, dat.Chip, dat.Type, dat.Address, dat.Data, dat.ExData))
-                                    {
-                                        if (unmount) return;
-                                        Thread.Sleep(1);
-                                        timeOut--;
-                                        if (timeOut == 0) goto Timeout;
-                                    }
-                                }
-                            }
-                        }
-                    Timeout:;
-                    }
+                    if (SendStopData() == -1) return;
 
                     lock (lockObj)
                     {
@@ -324,9 +292,63 @@ namespace SoundManager
             }
         }
 
+        private int SendStopData()
+        {
+            if (stopData == null) return 0;
+
+            foreach (PackData dat in stopData)
+            {
+                //データ加工
+                ProcessingData?.Invoke(ref dat.od, ref SeqCounter, ref dat.Chip, ref dat.Type, ref dat.Address, ref dat.Data, ref dat.ExData);
+
+                //振り分けてEnqueue
+                if (dat.Chip.Model == EnmModel.VirtualModel)
+                {
+                    if (parent.IsRunningAtEmuChipSender())
+                    {
+                        int timeOut = 1000;
+                        while (!EmuEnq(dat.od, SeqCounter, dat.Chip, dat.Type, dat.Address, dat.Data, dat.ExData))
+                        {
+                            if (unmount) return -1;
+
+                            Thread.Sleep(1);
+                            timeOut--;
+                            if (timeOut == 0) return 0;
+                        }
+                    }
+                }
+                else if (dat.Chip.Model == EnmModel.RealModel)
+                {
+                    if (parent.IsRunningAtRealChipSender())
+                    {
+                        int timeOut = 1000;
+                        while (!RealEnq(dat.od, SeqCounter, dat.Chip, dat.Type, dat.Address, dat.Data, dat.ExData))
+                        {
+                            if (unmount) return -1;
+
+                            Thread.Sleep(1);
+                            timeOut--;
+                            if (timeOut == 0) return 0;
+                        }
+                    }
+                }
+            }
+
+            return 0;
+        }
+
         public void SetStopData(PackData[] stopData)
         {
             this.stopData = stopData;
+        }
+
+        public void ClearBuffer()
+        {
+            lock (lockObj)
+            {
+                reqSendStopData = true;
+                ringBuffer.Init(0);
+            }
         }
     }
 

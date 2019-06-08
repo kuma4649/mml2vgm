@@ -42,7 +42,6 @@
             this.tssbOpen = new System.Windows.Forms.ToolStripSplitButton();
             this.tssbSave = new System.Windows.Forms.ToolStripSplitButton();
             this.tssbCompile = new System.Windows.Forms.ToolStripSplitButton();
-            this.tssbTracePlay = new System.Windows.Forms.ToolStripSplitButton();
             this.tssbStop = new System.Windows.Forms.ToolStripSplitButton();
             this.tssbSlow = new System.Windows.Forms.ToolStripSplitButton();
             this.tssbFast = new System.Windows.Forms.ToolStripSplitButton();
@@ -77,6 +76,7 @@
             this.コンパイルCToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.TsmiCompileAndPlay = new System.Windows.Forms.ToolStripMenuItem();
             this.TsmiCompileAndTracePlay = new System.Windows.Forms.ToolStripMenuItem();
+            this.TsmiCompileAndSkipPlay = new System.Windows.Forms.ToolStripMenuItem();
             this.TsmiAllCompile = new System.Windows.Forms.ToolStripMenuItem();
             this.TsmiCompile = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiScript = new System.Windows.Forms.ToolStripMenuItem();
@@ -87,8 +87,6 @@
             this.TsmiReference = new System.Windows.Forms.ToolStripMenuItem();
             this.TsmiAbout = new System.Windows.Forms.ToolStripMenuItem();
             this.timer = new System.Windows.Forms.Timer(this.components);
-            this.tssbSkipPlay = new System.Windows.Forms.ToolStripSplitButton();
-            this.TsmiCompileAndSkipPlay = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -119,8 +117,6 @@
             this.tssbOpen,
             this.tssbSave,
             this.tssbCompile,
-            this.tssbTracePlay,
-            this.tssbSkipPlay,
             this.tssbStop,
             this.tssbSlow,
             this.tssbFast});
@@ -168,7 +164,7 @@
             // toolStripStatusLabel1
             // 
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(49, 17);
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(285, 17);
             this.toolStripStatusLabel1.Spring = true;
             this.toolStripStatusLabel1.Text = " ";
             // 
@@ -205,17 +201,6 @@
             this.tssbCompile.Size = new System.Drawing.Size(68, 20);
             this.tssbCompile.Text = "再生";
             this.tssbCompile.ButtonClick += new System.EventHandler(this.TssbCompile_ButtonClick);
-            // 
-            // tssbTracePlay
-            // 
-            this.tssbTracePlay.DropDownButtonWidth = 0;
-            this.tssbTracePlay.Image = global::mml2vgmIDE.Properties.Resources.F06;
-            this.tssbTracePlay.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.tssbTracePlay.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tssbTracePlay.Name = "tssbTracePlay";
-            this.tssbTracePlay.Size = new System.Drawing.Size(102, 20);
-            this.tssbTracePlay.Text = "トレース再生";
-            this.tssbTracePlay.ButtonClick += new System.EventHandler(this.TssbPlay_ButtonClick);
             // 
             // tssbStop
             // 
@@ -493,6 +478,7 @@
             // TsmiCompileAndPlay
             // 
             this.TsmiCompileAndPlay.Name = "TsmiCompileAndPlay";
+            this.TsmiCompileAndPlay.ShortcutKeyDisplayString = "";
             this.TsmiCompileAndPlay.Size = new System.Drawing.Size(225, 22);
             this.TsmiCompileAndPlay.Text = "コンパイルと再生";
             this.TsmiCompileAndPlay.Click += new System.EventHandler(this.TsmiCompileAndPlay_Click);
@@ -500,9 +486,18 @@
             // TsmiCompileAndTracePlay
             // 
             this.TsmiCompileAndTracePlay.Name = "TsmiCompileAndTracePlay";
+            this.TsmiCompileAndTracePlay.ShortcutKeyDisplayString = "";
             this.TsmiCompileAndTracePlay.Size = new System.Drawing.Size(225, 22);
             this.TsmiCompileAndTracePlay.Text = "コンパイルとトレース再生";
             this.TsmiCompileAndTracePlay.Click += new System.EventHandler(this.TsmiCompileAndTracePlay_Click);
+            // 
+            // TsmiCompileAndSkipPlay
+            // 
+            this.TsmiCompileAndSkipPlay.Name = "TsmiCompileAndSkipPlay";
+            this.TsmiCompileAndSkipPlay.ShortcutKeyDisplayString = "";
+            this.TsmiCompileAndSkipPlay.Size = new System.Drawing.Size(225, 22);
+            this.TsmiCompileAndSkipPlay.Text = "コンパイルとスキップ再生";
+            this.TsmiCompileAndSkipPlay.Click += new System.EventHandler(this.TsmiCompileAndSkipPlay_Click);
             // 
             // TsmiAllCompile
             // 
@@ -576,24 +571,6 @@
             this.timer.Interval = 16;
             this.timer.Tick += new System.EventHandler(this.Timer_Tick);
             // 
-            // tssbSkipPlay
-            // 
-            this.tssbSkipPlay.DropDownButtonWidth = 0;
-            this.tssbSkipPlay.Image = global::mml2vgmIDE.Properties.Resources.F07;
-            this.tssbSkipPlay.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.tssbSkipPlay.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tssbSkipPlay.Name = "tssbSkipPlay";
-            this.tssbSkipPlay.Size = new System.Drawing.Size(103, 20);
-            this.tssbSkipPlay.Text = "スキップ再生";
-            this.tssbSkipPlay.ButtonClick += new System.EventHandler(this.TssbSkipPlay_ButtonClick);
-            // 
-            // TsmiCompileAndSkipPlay
-            // 
-            this.TsmiCompileAndSkipPlay.Name = "TsmiCompileAndSkipPlay";
-            this.TsmiCompileAndSkipPlay.Size = new System.Drawing.Size(225, 22);
-            this.TsmiCompileAndSkipPlay.Text = "コンパイルとスキップ再生";
-            this.TsmiCompileAndSkipPlay.Click += new System.EventHandler(this.TsmiCompileAndSkipPlay_Click);
-            // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -610,6 +587,7 @@
             this.Load += new System.EventHandler(this.FrmMain_Load);
             this.Shown += new System.EventHandler(this.Form1_Shown);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.FrmMain_KeyDown);
+            this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.FrmMain_KeyUp);
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
@@ -650,7 +628,6 @@
         private System.Windows.Forms.ToolStripSplitButton tssbSave;
         private System.Windows.Forms.ToolStripSplitButton tssbCompile;
         private System.Windows.Forms.ToolStripStatusLabel tsslCompileError;
-        private System.Windows.Forms.ToolStripSplitButton tssbTracePlay;
         private System.Windows.Forms.ToolStripSplitButton tssbSlow;
         private System.Windows.Forms.ToolStripSplitButton tssbFast;
         private System.Windows.Forms.ToolStripSplitButton tssbStop;
@@ -676,7 +653,6 @@
         private System.Windows.Forms.ToolStripMenuItem TsmiShowMixer;
         private System.Windows.Forms.ToolStripMenuItem TsmiShowMIDIKbd;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
-        private System.Windows.Forms.ToolStripSplitButton tssbSkipPlay;
         private System.Windows.Forms.ToolStripMenuItem TsmiCompileAndSkipPlay;
         public System.Windows.Forms.ToolStripStatusLabel TsslLineCol;
     }

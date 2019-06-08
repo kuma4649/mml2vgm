@@ -43,6 +43,9 @@ namespace mml2vgmIDE
         public const int WM_PASTE = 0x0302;
         public MDChipParams oldParam = new MDChipParams();
         private MDChipParams newParam = new MDChipParams();
+        private bool ctrl = false;
+        private bool shift = false;
+
 
 
         //SendMessageで送る構造体（Unicode文字列送信に最適化したパターン）
@@ -506,7 +509,8 @@ namespace mml2vgmIDE
 
         private void TssbCompile_ButtonClick(object sender, EventArgs e)
         {
-            TsmiCompileAndPlay_Click(null, null);
+            Compile(true, ctrl, shift);
+            //TsmiCompileAndPlay_Click(null, null);
         }
 
         private void TssbStop_ButtonClick(object sender, EventArgs e)
@@ -536,6 +540,10 @@ namespace mml2vgmIDE
 
         private void FrmMain_KeyDown(object sender, KeyEventArgs e)
         {
+            ctrl = (e.KeyData & Keys.Control) == Keys.Control;
+            shift = (e.KeyData & Keys.Shift) == Keys.Shift;
+            tssbCompile.Text = (ctrl ? "トレース+" : "") + (shift ? "スキップ+" : "") + "再生";
+
             switch (e.KeyCode)
             {
                 case Keys.F1:
@@ -557,13 +565,7 @@ namespace mml2vgmIDE
                     }
                     break;
                 case Keys.F5:
-                    TsmiCompileAndPlay_Click(null, null);
-                    break;
-                case Keys.F6:
-                    TsmiCompileAndTracePlay_Click(null, null);
-                    break;
-                case Keys.F7:
-                    TsmiCompileAndSkipPlay_Click(null, null);
+                    Compile(true, ctrl, shift);
                     break;
                 case Keys.F9:
                     stop();
@@ -574,8 +576,22 @@ namespace mml2vgmIDE
                 case Keys.F11:
                     ff();
                     break;
+                default:
+                    //↓KeyData確認用
+                    //log.Write(string.Format("動作未定義のキー：{0}",e.KeyData));
+                    break;
             }
         }
+
+        private void FrmMain_KeyUp(object sender, KeyEventArgs e)
+        {
+
+            ctrl = (e.KeyData & Keys.Control) == Keys.Control;
+            shift = (e.KeyData & Keys.Shift) == Keys.Shift;
+            tssbCompile.Text = (ctrl ? "トレース+" : "") + (shift ? "スキップ+" : "") + "再生";
+
+        }
+
 
         private void OpenFile(string fileName)
         {
@@ -1174,7 +1190,7 @@ namespace mml2vgmIDE
         {
             if (!flgReinit) return;
 
-            Audio.Stop();
+            Audio.Stop(0);
             Audio.Close();
 
             foreach(var dc in dpMain.Documents)
@@ -1320,13 +1336,13 @@ namespace mml2vgmIDE
                 {
                     Audio.Pause();
                 }
-                Audio.Stop();
+                Audio.Stop(0);
 
                 if (!Audio.Play(setting))
                 {
                     try
                     {
-                        Audio.Stop();
+                        Audio.Stop(0);
                     }
                     catch (Exception ex)
                     {
@@ -1353,7 +1369,9 @@ namespace mml2vgmIDE
             {
                 Audio.Pause();
             }
-            Audio.Stop();
+
+            if (frmMIDIKbd == null) Audio.Stop(0);
+            else Audio.Stop(1);
         }
 
         public void ff()
@@ -1541,6 +1559,13 @@ namespace mml2vgmIDE
                 frmMixer.update();
             }
             else frmMixer = null;
+
+            if (frmMIDIKbd != null && !frmMIDIKbd.isClosed)
+            {
+                frmMIDIKbd.screenDrawParams();
+                frmMIDIKbd.update();
+            }
+            else frmMIDIKbd = null;
         }
 
         private void UpdateTraceInfo()
@@ -1713,7 +1738,7 @@ namespace mml2vgmIDE
             tssbOpen.Visible = visible;
             tssbSave.Visible = visible;
             tssbCompile.Visible = visible;
-            tssbTracePlay.Visible = visible;
+            //tssbTracePlay.Visible = visible;
             tssbStop.Visible = visible;
             tssbSlow.Visible = visible;
             tssbFast.Visible = visible;
@@ -1721,7 +1746,7 @@ namespace mml2vgmIDE
             tssbOpen.DisplayStyle = style;
             tssbSave.DisplayStyle = style;
             tssbCompile.DisplayStyle = style;
-            tssbTracePlay.DisplayStyle = style;
+            //tssbTracePlay.DisplayStyle = style;
             tssbStop.DisplayStyle = style;
             tssbSlow.DisplayStyle = style;
             tssbFast.DisplayStyle = style;

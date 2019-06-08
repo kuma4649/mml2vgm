@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Core;
 using NAudio;
 using NAudio.Midi;
 
@@ -39,6 +40,13 @@ namespace mml2vgmIDE
             ,Keys.Oem2,Keys.Oem1 //  / :
         };
         private bool[] keyPress = null;
+        private byte[] noteFlg = new byte[164];
+        private int latestNoteNumberMONO = -1;
+        private partWork pw;
+        private ClsChip cChip = null;
+        private int[] shiftTbl = new int[] { 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0 };
+
+
 
         public FrmMIDIKbd(FrmMain frm, int zoom, MDChipParams.MIDIKbd newParam)
         {
@@ -129,10 +137,29 @@ namespace mml2vgmIDE
 
         public void screenChangeParams()
         {
+            for (int i = 0; i < 37; i++) newParam.note[i] = noteFlg[i + (cOct - 1) * 12];
+
+            newParam.cOctave = cOct;
+            newParam.kbOctave = cOct - 1;
+            newParam.kcOctave = cOct;
+            newParam.kaOctave = cOct + 1;
+            newParam.kaaOctave = cOct + 2;
         }
 
         public void screenDrawParams()
         {
+            for (int n = 0; n < 37; n++)
+            {
+                DrawBuff.drawMIDILCD_Kbd(frameBuffer, 1
+                    , 56, n, ref oldParam.note[n], newParam.note[n]);
+
+            }
+
+            DrawBuff.font4Int2(frameBuffer, 41 * 4 + 1, 0, 0, 0, ref oldParam.cOctave, newParam.cOctave);
+            DrawBuff.font4Hex4Bit(frameBuffer,  0, 56, 0, ref oldParam.kbOctave, newParam.kbOctave);
+            DrawBuff.font4Hex4Bit(frameBuffer, 56, 56, 0, ref oldParam.kcOctave, newParam.kcOctave);
+            DrawBuff.font4Hex4Bit(frameBuffer, 112, 56, 0, ref oldParam.kaOctave, newParam.kaOctave);
+            DrawBuff.font4Hex4Bit(frameBuffer, 168, 56, 0, ref oldParam.kaaOctave, newParam.kaaOctave);
         }
 
         public void screenInit()
@@ -220,7 +247,7 @@ namespace mml2vgmIDE
             {
                 case MidiCommandCode.NoteOn:
                     NoteOnEvent noe = (NoteOnEvent)e.MidiEvent;
-                    NoteOn(noe.NoteNumber);
+                    NoteOn(noe.NoteNumber, 127);// noe.Velocity);
                     break;
                 case MidiCommandCode.NoteOff:
                     NoteEvent ne = (NoteEvent)e.MidiEvent;
@@ -240,8 +267,8 @@ namespace mml2vgmIDE
                     keyPress[i] = true;
                     if (i >= 2)
                     {
-                        int n = Math.Min(Math.Max((i - 6) + cOct * 12, 0), 12 * 10);
-                        NoteOn(n);
+                        int n = Math.Min(Math.Max((i - 6) + (cOct - 1 + 1) * 12, 0), 127);
+                        NoteOn(n, 127);
                     }
                 }
             }
@@ -256,24 +283,97 @@ namespace mml2vgmIDE
                 keyPress[i] = false;
                 if (i >= 2)
                 {
-                    int n = Math.Min(Math.Max((i - 6) + cOct * 12, 0), 12 * 10);
+                    int n = Math.Min(Math.Max((i - 6) + (cOct - 1 + 1) * 12, 0), 127);
                     NoteOff(n);
                 }
                 else
                 {
-                    cOct = Math.Min(Math.Max((i == 0) ? (cOct - 1) : (cOct + 1), 0), 9);
+                    cOct = Math.Min(Math.Max((i == 0) ? (cOct - 1) : (cOct + 1), 1), 11);
                 }
             }
         }
 
-        private void NoteOn(int n)
+        private void NoteOn(int n,int velocity)
         {
+            noteFlg[n & 0x7f] = (byte)(velocity & 0x7f);
             log.Write(string.Format("MIDIKbd:Note On{0}", n));
+
+            if (setting.midiKbd.IsMONO) NoteOnMONO(n, velocity);
+            else NoteOnPOLY(n, velocity);
+        }
+
+        private void NoteOnPOLY(int n, int velocity)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        private void NoteOnMONO(int n, int velocity)
+        {
+            if (cChip == null) return;
+
+            MML mml = MakeOctave(n);
+            cChip.CmdOctave(pw, mml);
+            mml = MakeNoteOnMml(n);
+            cChip.SetEnvelopeAtKeyOn(pw, mml);
+            cChip.SetLfoAtKeyOn(pw, mml);
+            cChip.SetVolume(pw, mml);
+            cChip.SetFNum(pw, mml);
+            cChip.SetKeyOn(pw, mml);
+
+            latestNoteNumberMONO = n;
         }
 
         private void NoteOff(int n)
         {
+            noteFlg[n & 0x7f] = 0;
             log.Write(string.Format("MIDIKbd:Note Off{0}", n));
+
+            if (setting.midiKbd.IsMONO) NoteOffMONO(n);
+            else NoteOffPOLY(n);
         }
+
+        private void NoteOffPOLY(int n)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void NoteOffMONO(int n)
+        {
+            if (cChip == null) return;
+            if (latestNoteNumberMONO != n) return;
+
+            MML mml = MakeNoteOnMml(n);//NoteOffの場合もmmlはOnと同じ
+            cChip.SetKeyOff(pw, mml);
+        }
+
+        private MML MakeOctave(int n)
+        {
+            MML mml = new MML();
+            mml.type = enmMMLType.Octave;
+            mml.line = null;
+            mml.column = -1;
+            mml.args = new List<object>();
+            mml.args.Add(n / 12);
+
+            return mml;
+        }
+
+        private MML MakeNoteOnMml(int n)
+        {
+            MML mml = new MML();
+            mml.type = enmMMLType.Note;
+            mml.line = null;
+            mml.column = -1;
+            mml.args = new List<object>();
+            Note note = new Note();
+            mml.args.Add(note);
+            note.cmd = "ccddeffggaab"[n % 12];
+            note.shift = shiftTbl[n % 12];
+            note.length = 0;
+
+            return mml;
+        }
+
     }
 }

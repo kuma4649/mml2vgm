@@ -1700,7 +1700,7 @@ namespace mml2vgmIDE
             useReal = false;
 
             errMsg = "";
-            Stop();
+            Stop(0);
 
             sm.SetSpeed(1.0);
             vgmSpeed = 1.0;
@@ -5399,14 +5399,36 @@ namespace mml2vgmIDE
             //vgmFadeout = true;
         }
 
-        public static void Stop()
+        public static void Stop(int mode)
         {
-
-            sm.RequestStop();
-            while (sm.IsRunningAsync())
+            if (mode == 0)
             {
-                Thread.Sleep(1);
-                System.Windows.Forms.Application.DoEvents();
+                sm.RequestStop();
+                while (sm.IsRunningAsync())
+                {
+                    Thread.Sleep(1);
+                    System.Windows.Forms.Application.DoEvents();
+                }
+            }
+            else
+            {
+                //鍵盤が表示されている場合の「停止」はデータ演奏モード(SendMode.MML)からリアルタイム演奏モード(SendMode.RealTime)へ切り替える
+                sm.SetMode(SendMode.RealTime);
+
+                //データメーカーを止めて、コールバックが来ないようにする
+                sm.RequestStopAtDataMaker();
+                while (sm.IsRunningAtDataMaker())
+                {
+                    Thread.Sleep(1);
+                    System.Windows.Forms.Application.DoEvents();
+                }
+
+                PackData[] keyOffData = MakeKeyOffData();
+                sm.SetStopData(keyOffData);
+
+                //DataSenderに溜まっているであろう演奏データをクリアし、演奏を打ち切る
+                sm.ClearData();
+
             }
 
             //try
@@ -5476,7 +5498,7 @@ namespace mml2vgmIDE
             try
             {
 
-                Stop();
+                Stop(0);
                 NAudioWrap.Stop();
 
                 //midi outをリリース
@@ -5811,7 +5833,7 @@ namespace mml2vgmIDE
             {
                 try
                 {
-                    Stop();
+                    Stop(0);
                 }
                 catch { }
             }
@@ -5987,10 +6009,6 @@ namespace mml2vgmIDE
                 if (chipRegister.YM2610[i].Use) chipRegister.YM2610SoftReset(counter, i);
                 if (chipRegister.YM2612[i].Use) chipRegister.YM2612SoftReset(counter, i);
             }
-            //for (int i = 0; i < midiOuts.Count; i++)
-            //{
-                //chipRegister.MIDISoftReset(counter, i);
-            //}
         }
 
         private static PackData[] MakeSoftResetData()
@@ -6013,14 +6031,31 @@ namespace mml2vgmIDE
                 if (chipRegister.YM2612[i].Use) data.AddRange(chipRegister.YM2612MakeSoftReset(i));
             }
 
-            //for (int i = 0; i < midiOuts.Count; i++)
-            //{
-                //data.AddRange(chipRegister.MIDIMakeSoftReset(i));
-            //}
-
             return data.ToArray();
         }
 
+        private static PackData[] MakeKeyOffData()
+        {
+            List<PackData> data = new List<PackData>();
+            for (int i = 0; i < 2; i++)
+            {
+                if (chipRegister.AY8910[i].Use) data.AddRange(chipRegister.AY8910MakeSoftReset(i));
+                if (chipRegister.C140[i].Use) data.AddRange(chipRegister.C140MakeSoftReset(i));
+                if (chipRegister.HuC6280[i].Use) data.AddRange(chipRegister.HuC6280MakeSoftReset(i));
+                if (chipRegister.K051649[i].Use) data.AddRange(chipRegister.K051649MakeSoftReset(i));
+                if (chipRegister.RF5C164[i].Use) data.AddRange(chipRegister.RF5C164MakeSoftReset(i));
+                if (chipRegister.SEGAPCM[i].Use) data.AddRange(chipRegister.SEGAPCMMakeSoftReset(i));
+                if (chipRegister.SN76489[i].Use) data.AddRange(chipRegister.SN76489MakeSoftReset(i));
+                if (chipRegister.YM2151[i].Use) data.AddRange(chipRegister.YM2151MakeSoftReset(i));
+                if (chipRegister.YM2203[i].Use) data.AddRange(chipRegister.YM2203MakeSoftReset(i));
+                if (chipRegister.YM2413[i].Use) data.AddRange(chipRegister.YM2413MakeSoftReset(i));
+                if (chipRegister.YM2608[i].Use) data.AddRange(chipRegister.YM2608MakeSoftReset(i));
+                if (chipRegister.YM2610[i].Use) data.AddRange(chipRegister.YM2610MakeSoftReset(i));
+                if (chipRegister.YM2612[i].Use) data.AddRange(chipRegister.YM2612MakeSoftReset(i));
+            }
+
+            return data.ToArray();
+        }
 
         public static int trdVgmVirtualFunction(short[] buffer, int offset, int sampleCount)
         {
