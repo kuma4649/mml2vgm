@@ -22,10 +22,13 @@ namespace Core
         private string desFn;
         private string stPath;
         private Action<string> Disp = null;
-        private int pcmDataSeqNum = 0;
         private string wrkPath;
+        private string[] srcTxt;
+
+        private int pcmDataSeqNum = 0;
         public bool doSkip = false;
         public Point caretPoint = Point.Empty;
+        private bool bufferMode = false;
 
         /// <summary>
         /// コンストラクタ
@@ -41,6 +44,8 @@ namespace Core
             this.stPath = stPath;
             this.Disp = disp;
             this.wrkPath = Path.GetDirectoryName(Path.GetFullPath(srcFn));
+            this.srcTxt = null;
+            bufferMode = false;
         }
 
         /// <summary>
@@ -58,6 +63,19 @@ namespace Core
             this.stPath = stPath;
             this.Disp = disp;
             this.wrkPath = wrkPath;
+            this.srcTxt = null;
+            bufferMode = false;
+        }
+
+        public Mml2vgm(string[] srcTxt, string srcFn, string stPath, Action<string> disp, string wrkPath)
+        {
+            this.srcFn = srcFn;
+            this.desFn = null;
+            this.stPath = stPath;
+            this.Disp = disp;
+            this.wrkPath = wrkPath;
+            this.srcTxt = srcTxt;
+            bufferMode = true;
         }
 
         /// <summary>
@@ -71,18 +89,25 @@ namespace Core
                 Disp(string.Format(msg.get("I04000"), "mml2vgm"));
                 Disp("");
 
-                Disp(msg.get("I04001"));
-                srcFn = srcFn.Replace('\\', Path.DirectorySeparatorChar).Replace('/', Path.DirectorySeparatorChar);
-                if (!File.Exists(srcFn))
+                List<Line> src = null;
+
+                if (!bufferMode)
                 {
-                    msgBox.setErrMsg(msg.get("E04000"), new LinePos(srcFn));
-                    return -1;
+                    Disp(msg.get("I04001"));
+                    srcFn = srcFn.Replace('\\', Path.DirectorySeparatorChar).Replace('/', Path.DirectorySeparatorChar);
+                    if (!File.Exists(srcFn))
+                    {
+                        msgBox.setErrMsg(msg.get("E04000"), new LinePos(srcFn));
+                        return -1;
+                    }
+
+                    Disp(msg.get("I04002"));
+                    //string path = Path.GetDirectoryName(Path.GetFullPath(srcFn));
+                    //wrkPath インクルードファイル取り込み対象パス
+                    srcTxt = File.ReadAllLines(srcFn);
                 }
 
-                Disp(msg.get("I04002"));
-                //string path = Path.GetDirectoryName(Path.GetFullPath(srcFn));
-                //wrkPath インクルードファイル取り込み対象パス
-                List<Line> src = GetSrc(File.ReadAllLines(srcFn), wrkPath);
+                src = GetSrc(srcTxt, wrkPath);
                 if (src == null)
                 {
                     msgBox.setErrMsg(msg.get("E04001"), new LinePos(srcFn));
@@ -143,13 +168,13 @@ namespace Core
                     return -1;
                 }
 
-                if (outVgmFile)
+                if (outVgmFile && !bufferMode)
                 {
                     Disp(msg.get("I04021"));
                     OutVgmFile(desBuf);
                 }
 
-                if (outTraceInfoFile)
+                if (outTraceInfoFile && !bufferMode)
                 {
                     Disp(msg.get("I04022"));
                     OutTraceInfoFile(desBuf);

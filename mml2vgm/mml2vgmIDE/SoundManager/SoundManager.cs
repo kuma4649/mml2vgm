@@ -3,6 +3,7 @@ using mml2vgmIDE;
 using System.Windows.Forms;
 using Core;
 using System.Threading;
+using System.Collections.Generic;
 
 namespace SoundManager
 {
@@ -382,6 +383,12 @@ namespace SoundManager
         {
             if (realChipSender == null) return 0;
             return realChipSender.GetRingBufferSize();
+        }
+
+        public void SendRealTimeData(List<outDatum> dat, Chip chip)
+        {
+            if (dataSender == null) return;
+            dataSender.SendRealTimeData(dat, chip);
         }
 
         #region IDisposable Support

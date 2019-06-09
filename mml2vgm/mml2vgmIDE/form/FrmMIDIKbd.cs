@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using Core;
 using NAudio;
 using NAudio.Midi;
+using SoundManager;
 
 namespace mml2vgmIDE
 {
@@ -42,9 +43,13 @@ namespace mml2vgmIDE
         private bool[] keyPress = null;
         private byte[] noteFlg = new byte[164];
         private int latestNoteNumberMONO = -1;
+        private int[] shiftTbl = new int[] { 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0 };
+
+        private Mml2vgm mv = null;
         private partWork pw;
         private ClsChip cChip = null;
-        private int[] shiftTbl = new int[] { 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0 };
+        private Chip eChip = null;
+        public SoundManager.SoundManager SoundManager { get; internal set; }
 
 
 
@@ -62,6 +67,7 @@ namespace mml2vgmIDE
             frameBuffer.Add(pbScreen, Properties.Resources.planeMIDIKB, null, zoom);
             DrawBuff.screenInitMixer(frameBuffer);
             update();
+            Init();
         }
 
         protected override bool ShowWithoutActivation
@@ -71,6 +77,7 @@ namespace mml2vgmIDE
                 return true;
             }
         }
+
 
         protected override void WndProc(ref Message m)
         {
@@ -311,15 +318,23 @@ namespace mml2vgmIDE
         private void NoteOnMONO(int n, int velocity)
         {
             if (cChip == null) return;
+            eChip = Audio.GetChip(EnmChip.YM2612);
+            if (eChip == null) return;
+            if (n < 0 || n > 127) return;
 
+            NoteOffMONO(latestNoteNumberMONO);
             MML mml = MakeOctave(n);
             cChip.CmdOctave(pw, mml);
             mml = MakeNoteOnMml(n);
+            cChip.CmdNote(pw, mml);
             cChip.SetEnvelopeAtKeyOn(pw, mml);
             cChip.SetLfoAtKeyOn(pw, mml);
             cChip.SetVolume(pw, mml);
             cChip.SetFNum(pw, mml);
             cChip.SetKeyOn(pw, mml);
+
+            SoundManager.SendRealTimeData(mv.desVGM.dat, eChip);
+            mv.desVGM.dat.Clear();
 
             latestNoteNumberMONO = n;
         }
@@ -341,10 +356,17 @@ namespace mml2vgmIDE
         private void NoteOffMONO(int n)
         {
             if (cChip == null) return;
+            eChip = Audio.GetChip(EnmChip.YM2612);
+            if (eChip == null) return;
+            if (n < 0 || n > 127) return;
+
             if (latestNoteNumberMONO != n) return;
 
             MML mml = MakeNoteOnMml(n);//NoteOffの場合もmmlはOnと同じ
             cChip.SetKeyOff(pw, mml);
+
+            SoundManager.SendRealTimeData(mv.desVGM.dat, eChip);
+            mv.desVGM.dat.Clear();
         }
 
         private MML MakeOctave(int n)
@@ -370,10 +392,35 @@ namespace mml2vgmIDE
             mml.args.Add(note);
             note.cmd = "ccddeffggaab"[n % 12];
             note.shift = shiftTbl[n % 12];
-            note.length = 0;
+            note.length = 1;
 
             return mml;
         }
 
+        private void Init()
+        {
+            string txt = Properties.Resources.tmpMIDIKbd;
+            txt = string.Format(
+                txt
+                , "192"
+                , "177");
+            string[] text = txt.Split(new string[] { "\r\n" }, StringSplitOptions.None);
+            string stPath = System.Windows.Forms.Application.StartupPath;
+            Action<string> dmy = dmyDisp;
+            string wrkPath = "";
+
+            mv = new Mml2vgm(text, "", stPath, dmy, wrkPath);
+            mv.Start();
+            cChip = mv.desVGM.ym2612[0];
+            pw = cChip.lstPartWork[0];
+
+            mv.desBuf = null;
+            if (mv.desVGM.dat != null) mv.desVGM.dat.Clear();
+            if (mv.desVGM.xdat != null) mv.desVGM.xdat.Clear();
+        }
+        private void dmyDisp(string dmy)
+        {
+            log.Write(dmy);
+        }
     }
 }

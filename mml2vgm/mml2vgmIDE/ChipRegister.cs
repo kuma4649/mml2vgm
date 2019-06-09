@@ -4544,6 +4544,25 @@ namespace mml2vgmIDE
             return data;
         }
 
+        public List<PackData> YM2612MakeSoftResetKeyOffOnly(int chipID)
+        {
+            List<PackData> data = new List<PackData>();
+            int i;
+
+            // FM全チャネルキーオフ
+            data.Add(new PackData(null, YM2612[chipID], EnmDataType.Normal, 0x28, 0x00, null));
+            data.Add(new PackData(null, YM2612[chipID], EnmDataType.Normal, 0x28, 0x01, null));
+            data.Add(new PackData(null, YM2612[chipID], EnmDataType.Normal, 0x28, 0x02, null));
+            data.Add(new PackData(null, YM2612[chipID], EnmDataType.Normal, 0x28, 0x04, null));
+            data.Add(new PackData(null, YM2612[chipID], EnmDataType.Normal, 0x28, 0x05, null));
+            data.Add(new PackData(null, YM2612[chipID], EnmDataType.Normal, 0x28, 0x06, null));
+
+            data.Add(new PackData(null, YM2612[chipID], EnmDataType.Normal, 0x29, 0x80, null)); // FM4-6 Enable
+            data.Add(new PackData(null, YM2612[chipID], EnmDataType.Normal, 0x2a, 0x80, null)); // PCM 0
+
+            return data;
+        }
+
         public void YM2612SetSyncWait(byte chipID, int wait)
         {
             if (scYM2612[chipID] != null && ctYM2612[chipID].UseWait)

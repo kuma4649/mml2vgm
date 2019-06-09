@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
 using Core;
@@ -58,7 +59,7 @@ namespace SoundManager
             this.RealDelay = RealDelay;
         }
 
-    public void ResetSeqCounter()
+        public void ResetSeqCounter()
         {
             lock (lockObj)
             {
@@ -115,17 +116,17 @@ namespace SoundManager
             switch (Chip.Model)
             {
                 case EnmModel.None:
-                    return ringBuffer.Enq(od,Counter, Chip, Type, Address, Data, ExData);
+                    return ringBuffer.Enq(od, Counter, Chip, Type, Address, Data, ExData);
 
                 case EnmModel.VirtualModel:
-                    return ringBuffer.Enq(od,Counter + EmuDelay, Chip, Type, Address, Data, ExData);
+                    return ringBuffer.Enq(od, Counter + EmuDelay, Chip, Type, Address, Data, ExData);
 
                 case EnmModel.RealModel:
-                    return ringBuffer.Enq(od,Counter + RealDelay, Chip, Type, Address, Data, ExData);
+                    return ringBuffer.Enq(od, Counter + RealDelay, Chip, Type, Address, Data, ExData);
 
             }
 
-            return ringBuffer.Enq(od,Counter, Chip, Type, Address, Data, ExData);
+            return ringBuffer.Enq(od, Counter, Chip, Type, Address, Data, ExData);
         }
 
         private void Main()
@@ -216,18 +217,18 @@ namespace SoundManager
                         while (SeqCounter >= ringBuffer.LookUpCounter())
                         {
                             if (unmount) return;
-                            if (!ringBuffer.Deq(ref od,ref Counter, ref Chip, ref Type, ref Address, ref Data, ref ExData))
+                            if (!ringBuffer.Deq(ref od, ref Counter, ref Chip, ref Type, ref Address, ref Data, ref ExData))
                             {
                                 break;
                             }
 
                             //データ加工
-                            ProcessingData?.Invoke(ref od,ref Counter, ref Chip, ref Type, ref Address, ref Data, ref ExData);
+                            ProcessingData?.Invoke(ref od, ref Counter, ref Chip, ref Type, ref Address, ref Data, ref ExData);
 
                             //振り分けてEnqueue
                             if (Chip.Model == EnmModel.VirtualModel)
                             {
-                                while (!EmuEnq(od,Counter, Chip, Type, Address, Data, ExData))
+                                while (!EmuEnq(od, Counter, Chip, Type, Address, Data, ExData))
                                 {
                                     if (!Start)
                                     {
@@ -239,7 +240,7 @@ namespace SoundManager
                             }
                             else if (Chip.Model == EnmModel.RealModel)
                             {
-                                while (!RealEnq(od,Counter, Chip, Type, Address, Data, ExData))
+                                while (!RealEnq(od, Counter, Chip, Type, Address, Data, ExData))
                                 {
                                     if (!Start)
                                     {
@@ -337,6 +338,25 @@ namespace SoundManager
             return 0;
         }
 
+        public void SendRealTimeData(List<outDatum> dat, Chip chip)
+        {
+            int badr = 0;
+            while (badr < dat.Count)
+            {
+                byte val = dat[badr].val;
+                switch (val)
+                {
+                    case 0x52:
+                        byte adr = dat[badr + 1].val;
+                        byte prm = dat[badr + 2].val;
+                        Enq(dat[badr], 0, chip, EnmDataType.Normal, adr, prm, null);
+                        badr += 2;
+                        break;
+                }
+                badr++;
+            }
+        }
+
         public void SetStopData(PackData[] stopData)
         {
             this.stopData = stopData;
@@ -347,7 +367,7 @@ namespace SoundManager
             lock (lockObj)
             {
                 reqSendStopData = true;
-                ringBuffer.Init(0);
+                ringBuffer.Init(ringBufferSize);
             }
         }
     }

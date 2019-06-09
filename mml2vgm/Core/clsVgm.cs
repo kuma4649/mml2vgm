@@ -1277,9 +1277,34 @@ namespace Core
 
 
 
-        public List<outDatum> dat = null;
+        private List<outDatum> _dat = null;
+
+        public List<outDatum> dat
+        {
+            get
+            {
+                return _dat;
+            }
+            set
+            {
+                _dat = value;
+            }
+        }
+
         //xgm music data
-        public List<outDatum> xdat = null;
+        private List<outDatum> _xdat = null;
+        public List<outDatum> xdat
+        {
+            get
+            {
+                return _xdat;
+            }
+            set
+            {
+                _xdat = value;
+            }
+        }
+
         //xgm keyOnDataList
         public List<outDatum> xgmKeyOnData = null;
 

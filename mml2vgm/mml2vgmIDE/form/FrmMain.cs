@@ -456,8 +456,9 @@ namespace mml2vgmIDE
         {
             if (frmMIDIKbd == null)
             {
-                frmMIDIKbd = new FrmMIDIKbd(this, 1, newParam.mIDIKbd);
+                frmMIDIKbd = new FrmMIDIKbd(this, 2, newParam.mIDIKbd);
                 frmMIDIKbd.Show();
+                frmMIDIKbd.SoundManager = Audio.sm;
             }
             else
             {
@@ -679,13 +680,14 @@ namespace mml2vgmIDE
             if (dc == null) return;
             if (!(dc is FrmEditor)) return;
 
-            string text = ((FrmEditor)dc).azukiControl.Text;
-            if (!Directory.Exists(Path.Combine(Common.GetApplicationDataFolder(true), "temp")))
-            {
-                Directory.CreateDirectory(Path.Combine(Common.GetApplicationDataFolder(true), "temp"));
-            }
+            activeMMLTextLines = ((FrmEditor)dc).azukiControl.Text.Split(new string[] { "\r\n" }, StringSplitOptions.None);
+            //if (!Directory.Exists(Path.Combine(Common.GetApplicationDataFolder(true), "temp")))
+            //{
+            //    Directory.CreateDirectory(Path.Combine(Common.GetApplicationDataFolder(true), "temp"));
+            //}
             string tempPath = Path.Combine(Common.GetApplicationDataFolder(true), "temp", Path.GetFileName(((Document)((FrmEditor)dc).Tag).gwiFullPath));
-            File.WriteAllText(tempPath, text);
+            title = Path.GetFileName(Path.GetFileName(((Document)((FrmEditor)dc).Tag).gwiFullPath));
+            //File.WriteAllText(tempPath, text);
             args = new string[2];
             args[1] = tempPath;
             wrkPath = Path.GetDirectoryName(((Document)((FrmEditor)dc).Tag).gwiFullPath);
@@ -725,6 +727,8 @@ namespace mml2vgmIDE
             Compiling = true;
         }
 
+        private string[] activeMMLTextLines = null;
+
         private void startCompile()
         {
             Core.log.Open();
@@ -733,23 +737,22 @@ namespace mml2vgmIDE
             Action dmy = updateTitle;
             string stPath = System.Windows.Forms.Application.StartupPath;
 
-            for (int i = 1; i < args.Length; i++)
-            {
-                string arg = args[i];
-                if (!File.Exists(arg))
-                {
-                    continue;
-                }
+            //for (int i = 1; i < args.Length; i++)
+            //{
+                //string arg = args[i];
+                //if (!File.Exists(arg))
+                //{
+                    //continue;
+                //}
 
 
-                title = Path.GetFileName(arg);
                 this.Invoke(dmy);
 
-                Core.log.Write(string.Format("  compile at [{0}]", args[i]));
+                Core.log.Write(string.Format("  compile at [{0}]", title));
 
                 msgBox.clear();
 
-                string desfn = Path.ChangeExtension(arg, Properties.Resources.ExtensionVGM);
+                //string desfn = Path.ChangeExtension(arg, Properties.Resources.ExtensionVGM);
                 //if (tsbToVGZ.Checked)
                 //{
                     //desfn = Path.ChangeExtension(arg, Properties.Resources.ExtensionVGZ);
@@ -757,17 +760,17 @@ namespace mml2vgmIDE
 
                 Core.log.Write("Call mml2vgm core");
 
-                mv = new Mml2vgm(arg, desfn, stPath, Disp, wrkPath);
+            mv = new Mml2vgm(activeMMLTextLines, args[1], stPath, Disp, wrkPath);
                 mv.doSkip = doSkip;
                 mv.caretPoint = caretPoint;
                 if (mv.Start() != 0)
                 {
                     isSuccess = false;
-                    break;
+                    //break;
                 }
 
                 Core.log.Write("Return mml2vgm core");
-            }
+            //}
 
             Core.log.Write("Disp Result");
 
@@ -858,6 +861,7 @@ namespace mml2vgmIDE
                             row.Cells[2].Value = pw[i].clockCounter;
                             frmPartCounter.dataGridView1.Rows.Add(row);
                         }
+
                     }
                 }
             }
@@ -1513,6 +1517,7 @@ namespace mml2vgmIDE
         private outDatum[] TraceInfo_SegaPCMold = new outDatum[32];
         private outDatum[] TraceInfo_K051649 = new outDatum[10];
         private outDatum[] TraceInfo_K051649old = new outDatum[10];
+
         private object traceInfoLockObj = new object();
         private bool traceInfoSw = false;
 

@@ -492,6 +492,33 @@ namespace mml2vgmIDE.Properties {
         }
         
         /// <summary>
+        ///   &apos;{{
+        ///
+        ///	TitleName   =
+        ///	TitleNameJ  =
+        ///	GameName    =
+        ///	GameNameJ   =
+        ///	SystemName  =
+        ///	SystemNameJ =
+        ///	Composer    =
+        ///	ComposerJ   =
+        ///	ReleaseDate =
+        ///	Converted   =
+        ///	Notes       =
+        ///
+        ///	ClockCount  ={0}
+        ///
+        ///}}
+        ///
+        ///&apos;Cn1 T{1} に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string tmpMIDIKbd {
+            get {
+                return ResourceManager.GetString("tmpMIDIKbd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
         /// </summary>
         internal static System.Drawing.Bitmap Warning {
