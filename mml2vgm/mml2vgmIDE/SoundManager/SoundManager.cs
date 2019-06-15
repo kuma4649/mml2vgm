@@ -70,7 +70,7 @@ namespace SoundManager
             DriverAction DriverAction
             , Snd RealChipAction
             , Deq ProcessingData
-            , Action<long> DataSeqFrqCallBack
+            , DataSeqFrqEventHandler DataSeqFrqCallBack
             , Action WaitSync
             , PackData[] startData
             , long EmuDelay
@@ -120,19 +120,25 @@ namespace SoundManager
             if (realChipSender != null) realChipSender.Unmount();
         }
 
-        public void RequestStart()
+        public void RequestStart(SendMode mode)
         {
             SetInterrupt();
             fadeOut = false;
             loopCounter = 0;
 
+            Mode = mode;//orではない
+
             dataSender.Init();
 
-            dataMaker.RequestStart();
-            while (!dataMaker.IsRunning())
+            if ((mode & SendMode.MML) == SendMode.MML)
             {
-                //Application.DoEvents();
+                dataMaker.RequestStart();
+                while (!dataMaker.IsRunning())
+                {
+                    //Application.DoEvents();
+                }
             }
+
             dataSender.RequestStart();
             while (!dataSender.IsRunning())
             {
@@ -385,16 +391,11 @@ namespace SoundManager
             return realChipSender.GetRingBufferSize();
         }
 
-        public void SendRealTimeData(List<outDatum> dat, Chip chip)
-        {
-            if (dataSender == null) return;
-            dataSender.SendRealTimeData(dat, chip);
-        }
-
         #region IDisposable Support
         private bool disposedValue = false; // 重複する呼び出しを検出するには
 
         public SendMode Mode { get; private set; }
+        public int CurrentTempo { get; internal set; }
 
         protected virtual void Dispose(bool disposing)
         {
@@ -435,9 +436,24 @@ namespace SoundManager
             dataSender.ClearBuffer();
         }
 
-        internal void SetMode(SendMode mode)
+        public void SetMode(SendMode mode)
         {
-            Mode = mode;
+            Mode |= mode;
+        }
+
+        public void ResetMode(SendMode mode)
+        {
+            Mode &= (~mode) & SendMode.Both;
+        }
+
+        public void AddDataSeqFrqEvent(DataSeqFrqEventHandler h)
+        {
+            dataSender.OnDataSeqFrq += h;
+        }
+
+        public void RemoveDataSeqFrqEvent(DataSeqFrqEventHandler h)
+        {
+            dataSender.OnDataSeqFrq -= h;
         }
 
         #endregion

@@ -61,6 +61,12 @@ namespace mml2vgmIDE
         private static uint samplingBuffer = 1024;
         private static MDSound.MDSound mds = null;
         public static MDSound.MDSound mdsMIDI = null;
+
+        public static bool ReadyOK()
+        {
+            return mds != null;
+        }
+
         //private static NAudioWrap naudioWrap;
         //private static WaveWriter waveWriter = null;
 
@@ -181,32 +187,32 @@ namespace mml2vgmIDE
 
             log.ForcedWrite("Audio:Init:STEP 03");
             {
-                log.ForcedWrite("Audio:Init:STEP 03:Init MDSound");
-                if (mds == null)
-                    mds = new MDSound.MDSound((UInt32)Common.SampleRate, samplingBuffer, null);
-                else
-                    mds.Init((UInt32)Common.SampleRate, samplingBuffer, null);
+                //log.ForcedWrite("Audio:Init:STEP 03:Init MDSound");
+                //if (mds == null)
+                //    mds = new MDSound.MDSound((UInt32)Common.SampleRate, samplingBuffer, null);
+                //else
+                //    mds.Init((UInt32)Common.SampleRate, samplingBuffer, null);
 
-                log.ForcedWrite("Audio:Init:STEP 03:Init MDSound(OPN2 midi)");
-                List<MDSound.MDSound.Chip> lstChips = new List<MDSound.MDSound.Chip>();
-                MDSound.MDSound.Chip chip;
-                ym2612 ym2612 = new ym2612();
-                chip = new MDSound.MDSound.Chip();
-                chip.type = MDSound.MDSound.enmInstrumentType.YM2612;
-                chip.ID = (byte)0;
-                chip.Instrument = ym2612;
-                chip.Update = ym2612.Update;
-                chip.Start = ym2612.Start;
-                chip.Stop = ym2612.Stop;
-                chip.Reset = ym2612.Reset;
-                chip.SamplingRate = (UInt32)Common.SampleRate;
-                chip.Volume = setting.balance.YM2612Volume;
-                chip.Clock = 7670454;
-                chip.Option = null;
-                chipLED.PriOPN2 = 1;
-                lstChips.Add(chip);
-                if (mdsMIDI == null) mdsMIDI = new MDSound.MDSound((UInt32)Common.SampleRate, samplingBuffer, lstChips.ToArray());
-                else mdsMIDI.Init((UInt32)Common.SampleRate, samplingBuffer, lstChips.ToArray());
+                //log.ForcedWrite("Audio:Init:STEP 03:Init MDSound(OPN2 midi)");
+                //List<MDSound.MDSound.Chip> lstChips = new List<MDSound.MDSound.Chip>();
+                //MDSound.MDSound.Chip chip;
+                //ym2612 ym2612 = new ym2612();
+                //chip = new MDSound.MDSound.Chip();
+                //chip.type = MDSound.MDSound.enmInstrumentType.YM2612;
+                //chip.ID = (byte)0;
+                //chip.Instrument = ym2612;
+                //chip.Update = ym2612.Update;
+                //chip.Start = ym2612.Start;
+                //chip.Stop = ym2612.Stop;
+                //chip.Reset = ym2612.Reset;
+                //chip.SamplingRate = (UInt32)Common.SampleRate;
+                //chip.Volume = setting.balance.YM2612Volume;
+                //chip.Clock = 7670454;
+                //chip.Option = null;
+                //chipLED.PriOPN2 = 1;
+                //lstChips.Add(chip);
+                //if (mdsMIDI == null) mdsMIDI = new MDSound.MDSound((UInt32)Common.SampleRate, samplingBuffer, lstChips.ToArray());
+                //else mdsMIDI.Init((UInt32)Common.SampleRate, samplingBuffer, lstChips.ToArray());
             }
 
 
@@ -1566,108 +1572,6 @@ namespace mml2vgmIDE
             return realChip.GetRealChipList(scciType);
         }
 
-        //private static void MakeMIDIout(Setting setting, int m)
-        //{
-        //    if (setting.midiOut.lstMidiOutInfo == null || setting.midiOut.lstMidiOutInfo.Count < 1) return;
-        //    if (setting.midiOut.lstMidiOutInfo[m] == null || setting.midiOut.lstMidiOutInfo[m].Length < 1) return;
-
-        //    for (int i = 0; i < setting.midiOut.lstMidiOutInfo[m].Length; i++)
-        //    {
-        //        int n = -1;
-        //        int t = 0;
-        //        NAudio.Midi.MidiOut mo = null;
-        //        int vn = -1;
-        //        int vt = 0;
-        //        vstInfo2 vmo = null;
-
-        //        for (int j = 0; j < NAudio.Midi.MidiOut.NumberOfDevices; j++)
-        //        {
-        //            if (setting.midiOut.lstMidiOutInfo[m][i].name != NAudio.Midi.MidiOut.DeviceInfo(j).ProductName) continue;
-
-        //            n = j;
-        //            t = setting.midiOut.lstMidiOutInfo[m][i].type;
-        //            break;
-        //        }
-
-        //        if (n != -1)
-        //        {
-        //            try
-        //            {
-        //                mo = new NAudio.Midi.MidiOut(n);
-        //            }
-        //            catch
-        //            {
-        //                mo = null;
-        //            }
-        //        }
-
-
-        //        if (n == -1)
-        //        {
-        //            for (int j = 0; j < vstPluginsInst.Count; j++)
-        //            {
-        //                if (!vstPluginsInst[j].isInstrument || setting.midiOut.lstMidiOutInfo[m][i].fileName != vstPluginsInst[j].fileName) continue;
-        //                bool k = false;
-        //                foreach (vstInfo2 v in vstMidiOuts) if (v == vstPluginsInst[j]) { k = true; break; }
-        //                if (k) continue;
-        //                vn = j;
-        //                vt = setting.midiOut.lstMidiOutInfo[m][i].type;
-        //                break;
-        //            }
-
-        //            if (vn != -1)
-        //            {
-        //                try
-        //                {
-        //                    vmo = vstPluginsInst[vn];
-        //                }
-        //                catch
-        //                {
-        //                    vmo = null;
-        //                }
-        //            }
-        //        }
-
-        //        if (mo != null || vmo != null)
-        //        {
-        //            midiOuts.Add(mo);
-        //            midiOutsType.Add(t);
-
-        //            vstMidiOuts.Add(vmo);
-        //            vstMidiOutsType.Add(vt);
-        //        }
-        //    }
-        //}
-
-        //private static void ReleaseAllMIDIout()
-        //{
-        //    if (midiOuts.Count > 0)
-        //    {
-        //        for (int i = 0; i < midiOuts.Count; i++)
-        //        {
-        //            if (midiOuts[i] != null)
-        //            {
-        //                try
-        //                {
-        //                    //resetできない機種もある?
-        //                    midiOuts[i].Reset();
-        //                }
-        //                catch { }
-        //                midiOuts[i].Close();
-        //                midiOuts[i] = null;
-        //            }
-        //        }
-        //        midiOuts.Clear();
-        //        midiOutsType.Clear();
-        //    }
-
-        //    if (vstMidiOuts.Count > 0)
-        //    {
-        //        vstMidiOuts.Clear();
-        //        vstMidiOutsType.Clear();
-        //    }
-        //}
-
         public static MDSound.MDSound.Chip GetMDSChipInfo(MDSound.MDSound.enmInstrumentType typ)
         {
             return chipRegister.GetChipInfo(typ);
@@ -1682,28 +1586,7 @@ namespace mml2vgmIDE
             return NAudioWrap.getAsioLatency();
         }
 
-        //public static void SetVGMBuffer(EnmFileFormat format, byte[] srcBuf, string playingFileName, string playingArcFileName, int midiMode, int songNo, List<Tuple<string, byte[]>> extFile)
-        //{
-        //    //Stop();
-        //    PlayingFileFormat = format;
-        //    vgmBuf = srcBuf;
-        //    PlayingFileName = playingFileName;//WaveWriter向け
-        //    PlayingArcFileName = playingArcFileName;
-        //    MidiMode = midiMode;
-        //    SongNo = songNo;
-        //    //chipRegister.SetFileName(playingFileName);//ExportMIDI向け
-        //    ExtendFile = extFile;//追加ファイル
-        //}
-
-        //public static void getPlayingFileName(out string playingFileName, out string playingArcFileName)
-        //{
-        //    playingFileName = PlayingFileName;
-        //    playingArcFileName = PlayingArcFileName;
-        //}
-
-
-
-        public static bool Play(Setting setting)
+        public static bool Play(Setting setting,bool doSkipStop=false)
         {
             bool ret = false;
 
@@ -1711,7 +1594,12 @@ namespace mml2vgmIDE
             useReal = false;
 
             errMsg = "";
-            Stop(0);
+            Stop(SendMode.Both);
+
+            if (doSkipStop)
+            {
+                sm.SetMode(SendMode.RealTime);
+            }
 
             sm.SetSpeed(1.0);
             vgmSpeed = 1.0;
@@ -1752,7 +1640,16 @@ namespace mml2vgmIDE
 
             if (!ret) return false;
 
-            sm.RequestStart();
+            sm.SetMode(SendMode.MML);
+            if (sm.Mode == SendMode.MML)
+            {
+                sm.RequestStart(SendMode.MML);
+            }
+            else
+            {
+                sm.RequestStart(SendMode.Both);
+            }
+
             while (!sm.IsRunningAsync())
             {
             }
@@ -3174,7 +3071,7 @@ namespace mml2vgmIDE
                     mds.Init((UInt32)Common.SampleRate, samplingBuffer, lstChips.ToArray());
 
                 log.Write("ChipRegister 初期化");
-
+                chipRegister.SetMDSound(mds);
                 chipRegister.initChipRegister(lstChips.ToArray());
 
                 if (setting.IsManualDetect)
@@ -3503,97 +3400,42 @@ namespace mml2vgmIDE
             //vgmFadeout = true;
         }
 
-        public static void Stop(int mode)
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="mode">停止させたいモードを指定</param>
+        public static void Stop(SendMode mode)
         {
-            if (mode == 0)
+            switch (mode)
             {
-                sm.RequestStop();
-                while (sm.IsRunningAsync())
-                {
-                    Thread.Sleep(1);
-                    System.Windows.Forms.Application.DoEvents();
-                }
+                case SendMode.Both:
+                    sm.RequestStop();
+                    while (sm.IsRunningAsync())
+                    {
+                        Thread.Sleep(1);
+                        System.Windows.Forms.Application.DoEvents();
+                    }
+                    break;
+                case SendMode.MML:
+                    //鍵盤が表示されている場合の「停止」はデータ演奏モード(SendMode.MML)のみ停止する
+                    sm.ResetMode(SendMode.MML);
+
+                    //データメーカーを止めて、コールバックが来ないようにする
+                    sm.RequestStopAtDataMaker();
+                    while (sm.IsRunningAtDataMaker())
+                    {
+                        Thread.Sleep(1);
+                        System.Windows.Forms.Application.DoEvents();
+                    }
+
+                    PackData[] keyOffData = MakeKeyOffData();
+                    sm.SetStopData(keyOffData);
+
+                    //DataSenderに溜まっているであろう演奏データをクリアし、演奏を打ち切る
+                    sm.ClearData();
+                    break;
             }
-            else
-            {
-                //鍵盤が表示されている場合の「停止」はデータ演奏モード(SendMode.MML)からリアルタイム演奏モード(SendMode.RealTime)へ切り替える
-                sm.SetMode(SendMode.RealTime);
-
-                //データメーカーを止めて、コールバックが来ないようにする
-                sm.RequestStopAtDataMaker();
-                while (sm.IsRunningAtDataMaker())
-                {
-                    Thread.Sleep(1);
-                    System.Windows.Forms.Application.DoEvents();
-                }
-
-                PackData[] keyOffData = MakeKeyOffData();
-                sm.SetStopData(keyOffData);
-
-                //DataSenderに溜まっているであろう演奏データをクリアし、演奏を打ち切る
-                sm.ClearData();
-
-            }
-
-            //try
-            //{
-
-            //    if (Stopped)
-            //    {
-            //        trdClosed = true;
-            //        while (!trdStopped) { Thread.Sleep(1); };
-            //        return;
-            //    }
-
-            //    if (!Paused)
-            //    {
-            //        NAudio.Wave.PlaybackState? ps = naudioWrap.GetPlaybackState();
-            //        if (ps != null && ps != NAudio.Wave.PlaybackState.Stopped)
-            //        {
-            //            vgmFadeoutCounterV = 0.1;
-            //            vgmFadeout = true;
-            //            int cnt = 0;
-            //            while (!Stopped && cnt < 100)
-            //            {
-            //                System.Threading.Thread.Sleep(1);
-            //                System.Windows.Forms.Application.DoEvents();
-            //                cnt++;
-            //            }
-            //        }
-            //    }
-            //    trdClosed = true;
-
-            //    softReset(EnmModel.VirtualModel);
-            //    softReset(EnmModel.RealModel);
-
-            //    int timeout = 5000;
-            //    while (!trdStopped)
-            //    {
-            //        Thread.Sleep(1);
-            //        timeout--;
-            //        if (timeout < 1) break;
-            //    };
-            //    while (!Stopped)
-            //    {
-            //        Thread.Sleep(1);
-            //        timeout--;
-            //        if (timeout < 1) break;
-            //    };
-
-            //    softReset(EnmModel.VirtualModel);
-            //    softReset(EnmModel.RealModel);
-
-            //    //chipRegister.outMIDIData_Close();
-            //    Thread.Sleep(500);
-            //    waveWriter.Close();
-
-            //    //DEBUG
-            //    //vstparse();
-            //}
-            //catch (Exception ex)
-            //{
-            //    log.ForcedWrite(ex);
-            //}
 
         }
 
@@ -4171,11 +4013,11 @@ namespace mml2vgmIDE
                 {
                     bufVirtualFunction_MIDIKeyboard = new short[sampleCount];
                 }
-                mdsMIDI.Update(bufVirtualFunction_MIDIKeyboard, 0, sampleCount, null);
-                for (int i = 0; i < sampleCount; i++)
-                {
-                    buffer[i + offset] += bufVirtualFunction_MIDIKeyboard[i];
-                }
+                //mdsMIDI.Update(bufVirtualFunction_MIDIKeyboard, 0, sampleCount, null);
+                //for (int i = 0; i < sampleCount; i++)
+                //{
+                //    buffer[i + offset] += bufVirtualFunction_MIDIKeyboard[i];
+                //}
             }
             return cnt;
         }
@@ -4217,7 +4059,7 @@ namespace mml2vgmIDE
                 return sampleCount;
             }
 
-            if (sm == null || !GetAudioDeviceSync())
+            if (mds == null || sm == null || !GetAudioDeviceSync())
             {
                 SetAudioDeviceSync();
                 return sampleCount;
@@ -4448,6 +4290,8 @@ namespace mml2vgmIDE
 
         private static void updateVisualVolume(short[] buffer, int offset)
         {
+            if (mds == null) return;
+
             visVolume.master = buffer[offset];
 
             int[][][] vol = mds.getYM2151VisVolume();
@@ -4988,10 +4832,10 @@ namespace mml2vgmIDE
             return chipRegister.fmRegisterYM2612[chipID];
         }
 
-        public static int[][] GetYM2612MIDIRegister()
-        {
-            return mdsMIDI.ReadYM2612Register(0);
-        }
+        //public static int[][] GetYM2612MIDIRegister()
+        //{
+        //    return mdsMIDI.ReadYM2612Register(0);
+        //}
 
         public static int[] GetYM2151Register(int chipID)
         {

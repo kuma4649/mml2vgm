@@ -44,12 +44,15 @@ namespace mml2vgmIDE
         private byte[] noteFlg = new byte[164];
         private int latestNoteNumberMONO = -1;
         private int[] shiftTbl = new int[] { 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0 };
+        private NoteLog[] noteLogs = new NoteLog[100];
+        private int noteLogPtr = 0;
 
         private Mml2vgm mv = null;
         private partWork pw;
         private ClsChip cChip = null;
         private Chip eChip = null;
         public SoundManager.SoundManager SoundManager { get; internal set; }
+        private object lockObject = new object();
 
 
 
@@ -60,6 +63,8 @@ namespace mml2vgmIDE
             this.setting = parent.setting;
             keyPress = new bool[kbdTbl.Length];
             cOct = 4;
+            SoundManager = Audio.sm;
+            SoundManager.AddDataSeqFrqEvent(OnDataSeqFrq);
 
             InitializeComponent();
 
@@ -104,7 +109,19 @@ namespace mml2vgmIDE
                 parent.setting.location.RMIDIKbd = new Rectangle(RestoreBounds.Location.X, RestoreBounds.Location.Y, 0, 0);
             }
 
+            SoundManager.RemoveDataSeqFrqEvent(OnDataSeqFrq);
             StopMIDIInMonitoring();
+            if ((SoundManager.Mode & SendMode.RealTime) == SendMode.RealTime)
+            {
+                if (SoundManager.Mode == SendMode.none)
+                {
+                    Audio.Stop(SendMode.Both);
+                }
+                else
+                {
+                    SoundManager.ResetMode(SendMode.RealTime);
+                }
+            }
             isClosed = true;
         }
 
@@ -151,6 +168,8 @@ namespace mml2vgmIDE
             newParam.kcOctave = cOct;
             newParam.kaOctave = cOct + 1;
             newParam.kaaOctave = cOct + 2;
+            newParam.cTempo = SoundManager.CurrentTempo;
+            newParam.cClockCnt = (int)mv.desVGM.info.clockCount;
         }
 
         public void screenDrawParams()
@@ -163,10 +182,13 @@ namespace mml2vgmIDE
             }
 
             DrawBuff.font4Int2(frameBuffer, 41 * 4 + 1, 0, 0, 0, ref oldParam.cOctave, newParam.cOctave);
-            DrawBuff.font4Hex4Bit(frameBuffer,  0, 56, 0, ref oldParam.kbOctave, newParam.kbOctave);
-            DrawBuff.font4Hex4Bit(frameBuffer, 56, 56, 0, ref oldParam.kcOctave, newParam.kcOctave);
-            DrawBuff.font4Hex4Bit(frameBuffer, 112, 56, 0, ref oldParam.kaOctave, newParam.kaOctave);
-            DrawBuff.font4Hex4Bit(frameBuffer, 168, 56, 0, ref oldParam.kaaOctave, newParam.kaaOctave);
+            DrawBuff.font4Hex4Bit(frameBuffer, 0 + 1, 56, 0, ref oldParam.kbOctave, newParam.kbOctave);
+            DrawBuff.font4Hex4Bit(frameBuffer, 56 + 1, 56, 0, ref oldParam.kcOctave, newParam.kcOctave);
+            DrawBuff.font4Hex4Bit(frameBuffer, 112 + 1, 56, 0, ref oldParam.kaOctave, newParam.kaOctave);
+            DrawBuff.font4Hex4Bit(frameBuffer, 168 + 1, 56, 0, ref oldParam.kaaOctave, newParam.kaaOctave);
+
+            DrawBuff.font4Int3(frameBuffer, 34 * 4 + 1, 8, 0, 3, ref oldParam.cTempo, newParam.cTempo);
+            DrawBuff.font4Int3(frameBuffer, 40 * 4 + 1, 8, 0, 3, ref oldParam.cClockCnt, newParam.cClockCnt);
         }
 
         public void screenInit()
@@ -314,7 +336,6 @@ namespace mml2vgmIDE
             throw new NotImplementedException();
         }
 
-
         private void NoteOnMONO(int n, int velocity)
         {
             if (cChip == null) return;
@@ -323,18 +344,21 @@ namespace mml2vgmIDE
             if (n < 0 || n > 127) return;
 
             NoteOffMONO(latestNoteNumberMONO);
-            MML mml = MakeOctave(n);
+            MML mml = MakeMML_Octave(n);
             cChip.CmdOctave(pw, mml);
-            mml = MakeNoteOnMml(n);
-            cChip.CmdNote(pw, mml);
-            cChip.SetEnvelopeAtKeyOn(pw, mml);
-            cChip.SetLfoAtKeyOn(pw, mml);
-            cChip.SetVolume(pw, mml);
-            cChip.SetFNum(pw, mml);
-            cChip.SetKeyOn(pw, mml);
-
-            SoundManager.SendRealTimeData(mv.desVGM.dat, eChip);
-            mv.desVGM.dat.Clear();
+            mml = MakeMML_NoteOn(n);
+            lock (lockObject)
+            {
+                cChip.CmdNote(pw, mml);
+            }
+            //cChip.SetEnvelopeAtKeyOn(pw, mml);
+            //cChip.SetLfoAtKeyOn(pw, mml);
+            //cChip.SetVolume(pw, mml);
+            //lock (lockObject)
+            //{
+            //    cChip.SetFNum(pw, mml);
+            //    cChip.SetKeyOn(pw, mml);
+            //}
 
             latestNoteNumberMONO = n;
         }
@@ -362,14 +386,15 @@ namespace mml2vgmIDE
 
             if (latestNoteNumberMONO != n) return;
 
-            MML mml = MakeNoteOnMml(n);//NoteOffの場合もmmlはOnと同じ
-            cChip.SetKeyOff(pw, mml);
+            MML mml = MakeMML_NoteOff(n);
+            lock (lockObject)
+            {
+                cChip.SetKeyOff(pw, mml);
+            }
 
-            SoundManager.SendRealTimeData(mv.desVGM.dat, eChip);
-            mv.desVGM.dat.Clear();
         }
 
-        private MML MakeOctave(int n)
+        private MML MakeMML_Octave(int n)
         {
             MML mml = new MML();
             mml.type = enmMMLType.Octave;
@@ -381,7 +406,7 @@ namespace mml2vgmIDE
             return mml;
         }
 
-        private MML MakeNoteOnMml(int n)
+        private MML MakeMML_NoteOn(int n)
         {
             MML mml = new MML();
             mml.type = enmMMLType.Note;
@@ -393,6 +418,24 @@ namespace mml2vgmIDE
             note.cmd = "ccddeffggaab"[n % 12];
             note.shift = shiftTbl[n % 12];
             note.length = 1;
+            mml.args.Add(n);
+
+            return mml;
+        }
+
+        private MML MakeMML_NoteOff(int n)
+        {
+            MML mml = new MML();
+            mml.type = enmMMLType.Note;
+            mml.line = null;
+            mml.column = -1;
+            mml.args = new List<object>();
+            Note note = new Note();
+            mml.args.Add(note);
+            note.cmd = "ccddeffggaab"[n % 12];
+            note.shift = shiftTbl[n % 12];
+            note.length = 1;
+            mml.args.Add(-n);
 
             return mml;
         }
@@ -402,8 +445,9 @@ namespace mml2vgmIDE
             string txt = Properties.Resources.tmpMIDIKbd;
             txt = string.Format(
                 txt
-                , "192"
-                , "177");
+                , newParam.cClockCnt < 1 ? 192 : newParam.cClockCnt
+                , newParam.cTempo < 1 ? 177 : newParam.cTempo
+                );
             string[] text = txt.Split(new string[] { "\r\n" }, StringSplitOptions.None);
             string stPath = System.Windows.Forms.Application.StartupPath;
             Action<string> dmy = dmyDisp;
@@ -417,10 +461,76 @@ namespace mml2vgmIDE
             mv.desBuf = null;
             if (mv.desVGM.dat != null) mv.desVGM.dat.Clear();
             if (mv.desVGM.xdat != null) mv.desVGM.xdat.Clear();
+
+            for(int i = 0; i < noteLogs.Length; i++)
+            {
+                noteLogs[i] = new NoteLog();
+            }
+            noteLogPtr = 0;
+
+            SoundManager.SetMode(SendMode.RealTime);
         }
+
         private void dmyDisp(string dmy)
         {
             log.Write(dmy);
         }
+
+
+        private void OnDataSeqFrq(long SeqCounter)
+        {
+            //throw new NotImplementedException();
+            if (mv == null) return;
+            if (mv.desVGM == null) return;
+            if (mv.desVGM.dat == null) return;
+            if (mv.desVGM.dat.Count == 0) return;
+            eChip = Audio.GetChip(EnmChip.YM2612);
+            if (eChip == null) return;
+
+            Enq enq = SoundManager.GetDriverDataEnqueue();
+            List<outDatum> dat = mv.desVGM.dat;
+
+            lock (lockObject)
+            {
+                int badr = 0;
+                while (badr < dat.Count)
+                {
+                    outDatum od = dat[badr];
+                    if (od == null)
+                    {
+                        badr++;
+                        continue;
+                    }
+
+                    byte val = od.val;
+                    switch (val)
+                    {
+                        case 0x52:
+                            byte adr = dat[badr + 1].val;
+                            byte prm = dat[badr + 2].val;
+                            enq(dat[badr], 0, eChip, EnmDataType.Normal, adr, prm, null);
+                            if (adr == 0x28 && dat[badr].type == enmMMLType.Note && dat[badr].args != null && dat[badr].args.Count > 1)
+                            {
+                                noteLogs[noteLogPtr].note = (int)dat[badr].args[1];
+                                noteLogs[noteLogPtr].counter = SeqCounter;
+                                log.Write(string.Format("noteLog: note:{0} counter:{1}", noteLogs[noteLogPtr].note, noteLogs[noteLogPtr].counter));
+                                noteLogPtr++;
+                                if (noteLogPtr >= noteLogs.Length) noteLogPtr = 0;
+                            }
+                            badr += 2;
+                            break;
+                    }
+                    badr++;
+                }
+                dat.Clear();
+            }
+        }
+
+    }
+
+    public class NoteLog
+    {
+        public int note;
+        public long counter;
     }
 }

@@ -255,7 +255,7 @@ namespace mml2vgmIDE
                 }
 
                 //Dummy
-                if (cmd.val == 0x2f && cmd.type == enmMMLType.Rest)
+                if (cmd.val == 0x2f && (cmd.type == enmMMLType.Rest|| cmd.type == enmMMLType.Tempo))
                 {
                     chipRegister.YM2612SetRegister(cmd, Audio.DriverSeqCounter, 0, 0, -1, -1);
                     musicPtr += 2;

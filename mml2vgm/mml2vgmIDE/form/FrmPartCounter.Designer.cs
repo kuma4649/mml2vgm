@@ -69,6 +69,7 @@
             this.ClmPart.DefaultCellStyle = dataGridViewCellStyle1;
             this.ClmPart.HeaderText = "Part";
             this.ClmPart.Name = "ClmPart";
+            this.ClmPart.ReadOnly = true;
             this.ClmPart.Width = 50;
             // 
             // ClmChip
@@ -77,6 +78,7 @@
             this.ClmChip.DefaultCellStyle = dataGridViewCellStyle2;
             this.ClmChip.HeaderText = "Chip";
             this.ClmChip.Name = "ClmChip";
+            this.ClmChip.ReadOnly = true;
             // 
             // ClmCounter
             // 
@@ -85,6 +87,7 @@
             this.ClmCounter.DefaultCellStyle = dataGridViewCellStyle3;
             this.ClmCounter.HeaderText = "Counter";
             this.ClmCounter.Name = "ClmCounter";
+            this.ClmCounter.ReadOnly = true;
             // 
             // ClmSpacer
             // 

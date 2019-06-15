@@ -21,7 +21,7 @@ namespace Core
             desVGM.PartInit();
             this.chips = desVGM.chips;
             this.info = desVGM.info;
-            desVGM.useJumpCommand = 0;
+            desVGM.jumpCommandCounter = 0;
             this.desVGM = desVGM;
         }
 
@@ -801,7 +801,8 @@ namespace Core
             pw.incPos();
             mml.type = enmMMLType.JumpPoint;
             mml.args = null;
-            desVGM.useJumpCommand++;
+            desVGM.jumpCommandCounter++;
+            desVGM.useJumpCommand = true;
         }
 
         private void CmdRepeatStart(partWork pw,MML mml)

@@ -7,8 +7,12 @@ using mml2vgmIDE;
 
 namespace SoundManager
 {
+    public delegate void DataSeqFrqEventHandler(long SeqCounter);
+
     public class DataSender : BaseSender
     {
+        public event DataSeqFrqEventHandler OnDataSeqFrq;
+
         private static Stopwatch sw = Stopwatch.StartNew();
         private static readonly double swFreq = Stopwatch.Frequency;
         private readonly int Frq = DATA_SEQUENCE_FREQUENCE;
@@ -22,7 +26,6 @@ namespace SoundManager
         private PackData[] startData = null;
         private PackData[] stopData = null;
         private Deq ProcessingData;
-        private Action<long> DataSeqFrqCallBack = null;
         private Action WaitSync = null;
         private long EmuDelay = 0;
         private long RealDelay = 0;
@@ -34,7 +37,7 @@ namespace SoundManager
             , Deq ProcessingData
             , PackData[] startData
             , PackData[] stopData
-            , Action<long> DataSeqFrqCallBack
+            , DataSeqFrqEventHandler DataSeqFrqCallBack
             , Action WaitSync
             , long EmuDelay
             , long RealDelay
@@ -53,7 +56,7 @@ namespace SoundManager
             this.startData = startData;
             this.stopData = stopData;
             this.ProcessingData = ProcessingData;
-            this.DataSeqFrqCallBack = DataSeqFrqCallBack;
+            OnDataSeqFrq += DataSeqFrqCallBack;
             this.WaitSync = WaitSync;
             this.EmuDelay = EmuDelay;
             this.RealDelay = RealDelay;
@@ -113,6 +116,11 @@ namespace SoundManager
 
         public new bool Enq(outDatum od, long Counter, Chip Chip, EnmDataType Type, int Address, int Data, object ExData)
         {
+            if (Chip == null)
+            {
+                return ringBuffer.Enq(od, Counter, Chip, Type, Address, Data, ExData);
+            }
+
             switch (Chip.Model)
             {
                 case EnmModel.None:
@@ -189,27 +197,37 @@ namespace SoundManager
 
                             if (SeqCounter < 0) continue;
 
-                            //コールバック実施
-                            DataSeqFrqCallBack?.Invoke(SeqCounter);
+                            //イベント実施
+                            OnDataSeqFrq(SeqCounter);
 
-                            if (parent.Mode == SendMode.MML)
+                            //if (parent.Mode == SendMode.Both)
+                            //{
+                                //throw new ArgumentOutOfRangeException("演奏時は両モード同時指定できません");
+                            //}
+                            if ((parent.Mode & SendMode.MML) == SendMode.MML)
                             {
                                 if (ringBuffer.GetDataSize() == 0)
                                 {
                                     if (!parent.IsRunningAtDataMaker())
                                     {
-                                        break;
+                                        if ((parent.Mode & SendMode.RealTime) != SendMode.RealTime)
+                                            break;
                                     }
                                     continue;
                                 }
                             }
-                            else
+                            if ((parent.Mode & SendMode.RealTime) == SendMode.RealTime)
                             {
                                 if (reqSendStopData)
                                 {
                                     reqSendStopData = false;
                                     if (SendStopData() == -1) return;
                                 }
+                            }
+                            if (parent.Mode == SendMode.none)
+                            {
+                                //モード指定がnoneの場合はループを抜ける
+                                break;
                             }
                         }
 
@@ -224,6 +242,12 @@ namespace SoundManager
 
                             //データ加工
                             ProcessingData?.Invoke(ref od, ref Counter, ref Chip, ref Type, ref Address, ref Data, ref ExData);
+
+                            if (od != null && od.type == enmMMLType.Tempo)
+                            {
+                                parent.CurrentTempo = (int)od.args[0];
+                                continue;
+                            }
 
                             //振り分けてEnqueue
                             if (Chip.Model == EnmModel.VirtualModel)
@@ -255,6 +279,8 @@ namespace SoundManager
                                 //演奏制御処理
                                 switch (Type)
                                 {
+                                    case EnmDataType.Normal:
+                                        break;
                                     case EnmDataType.FadeOut:
                                         parent.SetFadeOut();
                                         break;
@@ -278,8 +304,9 @@ namespace SoundManager
                     parent.RequestStopAtRealChipSender();
                 }
             }
-            catch
+            catch(Exception ex)
             {
+                mml2vgmIDE.log.ForcedWrite(ex);
                 lock (lockObj)
                 {
                     isRunning = false;
@@ -336,25 +363,6 @@ namespace SoundManager
             }
 
             return 0;
-        }
-
-        public void SendRealTimeData(List<outDatum> dat, Chip chip)
-        {
-            int badr = 0;
-            while (badr < dat.Count)
-            {
-                byte val = dat[badr].val;
-                switch (val)
-                {
-                    case 0x52:
-                        byte adr = dat[badr + 1].val;
-                        byte prm = dat[badr + 2].val;
-                        Enq(dat[badr], 0, chip, EnmDataType.Normal, adr, prm, null);
-                        badr += 2;
-                        break;
-                }
-                badr++;
-            }
         }
 
         public void SetStopData(PackData[] stopData)

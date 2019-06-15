@@ -47,6 +47,7 @@ namespace Core
         private int wfInstrumentCounter = -1;
         private byte[] wfInstrumentBufCache = null;
         public bool doSkip = false;
+        public bool doSkipStop = false;
         public Point caretPoint = Point.Empty;
 
         public int newStreamID = -1;
@@ -1319,7 +1320,8 @@ namespace Core
 
         private Random rnd = new Random();
 
-        public int useJumpCommand = 0;
+        public int jumpCommandCounter = 0;
+        public bool useJumpCommand = false;
         public bool useSkipPlayCommand = false;
 
         /// <summary>
@@ -1511,7 +1513,7 @@ namespace Core
                     lClock += waitCounter;
                     dSample += (long)(info.samplesPerClock * waitCounter);
 
-                    if (useJumpCommand == 0 && !useSkipPlayCommand)
+                    if (jumpCommandCounter == 0 && !useSkipPlayCommand)
                     {
                         if (ym2612[0].lstPartWork[5].pcmWaitKeyOnCounter <= 0)//== -1)
                         {
@@ -1590,6 +1592,11 @@ namespace Core
             if (pw.dataEnd)
             {
                 return;
+            }
+
+            if(doSkipStop && !useSkipPlayCommand)
+            {
+                pw.dataEnd = true;
             }
 
             log.Write("パートのデータがない場合は何もしないで次へ");
@@ -1690,7 +1697,7 @@ namespace Core
             dat[0x1a] = new outDatum(enmMMLType.unknown, null, null, v[2]);
             dat[0x1b] = new outDatum(enmMMLType.unknown, null, null, v[3]);
 
-            if (loopOffset != -1)
+            if (loopOffset != -1 && (!doSkip && !useJumpCommand)) //!(doSkip && doSkipStop) スキップ時又はJコマンド使用時は　Lコマンドループしない
             {
                 //Loop offset
                 v = DivInt2ByteAry((int)(loopOffset - 0x1c));
@@ -2276,7 +2283,7 @@ namespace Core
                 }
             }
 
-            if (useJumpCommand == 0)
+            if (jumpCommandCounter == 0)
             {
                 // wait発行
                 lClock += cnt;
@@ -2483,8 +2490,9 @@ namespace Core
                         break;
                     case 0x2f: //Dummy Command
                         if (cmd.val == 0x2f //dummyChipコマンド　(第2引数：chipID 第３引数:isSecondary)
-                            && cmd.type == enmMMLType.Rest//ここで指定できるmmlコマンドは元々はChipに送信することのないコマンドのみ(さもないと、通常のコマンドのデータと見分けがつかなくなる可能性がある)
-                            )
+                            && (cmd.type == enmMMLType.Rest//ここで指定できるmmlコマンドは元々はChipに送信することのないコマンドのみ(さもないと、通常のコマンドのデータと見分けがつかなくなる可能性がある)
+                            || cmd.type == enmMMLType.Tempo
+                            ))
                         {
                             des.Add(src[ptr]);
                             des.Add(src[ptr + 1]);
@@ -2879,8 +2887,8 @@ namespace Core
                     break;
                 case enmMMLType.JumpPoint:
                     log.Write("JumpPoint");
-                    useJumpCommand--;
-                    if (useJumpCommand < 0) useJumpCommand = 0;
+                    jumpCommandCounter--;
+                    if (jumpCommandCounter < 0) jumpCommandCounter = 0;
                     pw.mmlPos++;
                     break;
                 case enmMMLType.NoiseToneMixer:
@@ -2906,6 +2914,10 @@ namespace Core
                 case enmMMLType.SkipPlay:
                     log.Write("SkipPlay");
                     useSkipPlayCommand = false;
+                    if (doSkipStop)
+                    {
+                        pw.dataEnd = true;
+                    }
                     pw.mmlPos++;
                     break;
                 default:
@@ -3015,6 +3027,7 @@ namespace Core
                 if (mml != null)
                 {
                     od.type = mml.type;
+                    od.args = mml.args;
                     if (mml.line != null && mml.line.Lp != null)
                     {
                         od.linePos = new LinePos(

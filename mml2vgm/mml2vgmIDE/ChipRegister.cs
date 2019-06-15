@@ -381,6 +381,11 @@ namespace mml2vgmIDE
             //midiExport.fmRegisterYM2151 = YM2151FmRegister;
         }
 
+        public void SetMDSound(MDSound.MDSound mds)
+        {
+            this.mds = mds;
+        }
+
         public void SetRealChipInfo(EnmDevice dev, Setting.ChipType chipTypeP, Setting.ChipType chipTypeS, int LatencyEmulation,int LatencyReal)
         {
             int LEmu = SoundManager.SoundManager.DATA_SEQUENCE_FREQUENCE * LatencyEmulation / 1000;
@@ -1244,6 +1249,9 @@ namespace mml2vgmIDE
         {
             switch (chipID)
             {
+                case 0:
+                    enq(od, Counter, null, EnmDataType.Normal, -1, -1, null);
+                    break;
                 case 0x50:
                     enq(od, Counter, SN76489[isSecondary], EnmDataType.Normal, -1, -1, null);
                     break;

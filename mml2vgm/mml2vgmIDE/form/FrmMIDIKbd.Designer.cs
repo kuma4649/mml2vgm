@@ -50,6 +50,7 @@
             this.Controls.Add(this.pbScreen);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.KeyPreview = true;
             this.Name = "FrmMIDIKbd";
             this.Text = "Keyboard";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.FrmMIDIKbd_FormClosed);

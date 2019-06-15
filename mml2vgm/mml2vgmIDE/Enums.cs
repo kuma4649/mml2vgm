@@ -216,8 +216,11 @@ namespace mml2vgmIDE
         MUC = 17
     }
 
-    public enum SendMode
+    public enum SendMode : int
     {
-        MML,RealTime
+        none = 0,
+        MML = 1,
+        RealTime = 2,
+        Both = 3
     }
 }

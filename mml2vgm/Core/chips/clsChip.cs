@@ -621,6 +621,8 @@ namespace Core
             {
                 parent.info.samplesPerClock = parent.info.xgmSamplesPerSecond * 60.0 * 4.0 / (parent.info.tempo * parent.info.clockCount);
             }
+
+            SetDummyData(pw, mml);
         }
 
         public virtual void CmdKeyShift(partWork pw, MML mml)
@@ -1153,7 +1155,10 @@ namespace Core
                 //pw.freq = -1;
                 //発音周波数の決定
                 SetFNum(pw,mml);
-                SetKeyOn(pw,mml);
+                if (!pw.chip.parent.useSkipPlayCommand)
+                {
+                    SetKeyOn(pw, mml);
+                }
             }
             else
             {

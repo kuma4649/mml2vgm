@@ -464,7 +464,8 @@ namespace mml2vgmIDE
             public int kcOctave = -1;
             public int kaOctave = -1;
             public int kaaOctave = -1;
-
+            public int cTempo = -1;
+            public int cClockCnt = -1;
         }
         public MIDIKbd mIDIKbd = new MIDIKbd();
     }

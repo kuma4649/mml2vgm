@@ -36,6 +36,7 @@ namespace mml2vgmIDE
         private bool doPlay = false;
         private bool isTrace = false;
         private bool doSkip = false;
+        private bool doSkipStop = false;
         private Point caretPoint = Point.Empty;
         private bool Compiling = false;
         private bool flgReinit = false;
@@ -138,9 +139,9 @@ namespace mml2vgmIDE
         private void FrmMain_FormClosing(object sender, FormClosingEventArgs e)
         {
             bool flg = false;
-            foreach(Document d in DocumentBox)
+            foreach (Document d in DocumentBox)
             {
-                if(d.isNew || d.edit)
+                if (d.isNew || d.edit)
                 {
                     flg = true;
                     break;
@@ -219,7 +220,7 @@ namespace mml2vgmIDE
 
             d.edit = false;
             d.editor.azukiControl.ClearHistory();
-            if (d.editor.Text.Length>0 && d.editor.Text[d.editor.Text.Length - 1] == '*')
+            if (d.editor.Text.Length > 0 && d.editor.Text[d.editor.Text.Length - 1] == '*')
             {
                 d.editor.Text = d.editor.Text.Substring(0, d.editor.Text.Length - 1);
             }
@@ -294,7 +295,7 @@ namespace mml2vgmIDE
                 }
                 if (d == null) return;
 
-                Compile(false, false,false);
+                Compile(false, false, false, false);
                 while (Compiling) { Application.DoEvents(); }//待ち合わせ
 
                 if (msgBox.getErr().Length > 0)
@@ -339,7 +340,7 @@ namespace mml2vgmIDE
                     );
                 File.Copy(sf, fn, File.Exists(fn));
             }
-            catch(Exception )
+            catch (Exception)
             {
                 MessageBox.Show("エクスポート処理に失敗しました。", "エクスポート失敗", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
@@ -352,22 +353,22 @@ namespace mml2vgmIDE
 
         public void TsmiCompileAndPlay_Click(object sender, EventArgs e)
         {
-            Compile(true,false, false);
+            Compile(true, false, false, false);
         }
 
         private void TsmiCompileAndTracePlay_Click(object sender, EventArgs e)
         {
-            Compile(true, true, false);
+            Compile(true, true, false, false);
         }
 
         private void TsmiCompileAndSkipPlay_Click(object sender, EventArgs e)
         {
-            Compile(true, true, true);
+            Compile(true, true, true, false);
         }
 
         private void TsmiCompile_Click(object sender, EventArgs e)
         {
-            Compile(false,false, false);
+            Compile(false, false, false, false);
         }
 
         private void TsmiUndo_Click(object sender, EventArgs e)
@@ -456,9 +457,16 @@ namespace mml2vgmIDE
         {
             if (frmMIDIKbd == null)
             {
+                if (!Audio.ReadyOK())
+                {
+                    firstPlay();
+                }
+
                 frmMIDIKbd = new FrmMIDIKbd(this, 2, newParam.mIDIKbd);
+                frmMIDIKbd.KeyDown += FrmMain_KeyDown;
+                frmMIDIKbd.KeyUp += FrmMain_KeyUp;
                 frmMIDIKbd.Show();
-                frmMIDIKbd.SoundManager = Audio.sm;
+                ChannelInfo ci = GetCurrentChannelInfo();
             }
             else
             {
@@ -469,11 +477,29 @@ namespace mml2vgmIDE
             TsmiShowMIDIKbd.Checked = frmMIDIKbd != null;
         }
 
+        private void FrmMIDIKbd_KeyDown(object sender, KeyEventArgs e)
+        {
+            FrmMain_KeyDown(sender, e);
+        }
+
+        private void firstPlay()
+        {
+            string file = Path.Combine(System.Windows.Forms.Application.StartupPath, "Setup.gwi");
+            file = File.ReadAllText(file);
+            string[] text = file.Split(new string[] { "\r\n" }, StringSplitOptions.None);
+            Compile(true, false, false, false, text);
+            while (Compiling)
+            {
+                Thread.Sleep(0);
+                Application.DoEvents();
+            }
+        }
+
         private void TsmiOption_Click(object sender, EventArgs e)
         {
             FrmSetting frmSetting = new FrmSetting(setting);
-            DialogResult res= frmSetting.ShowDialog();
-            if(res!= DialogResult.OK)
+            DialogResult res = frmSetting.ShowDialog();
+            if (res != DialogResult.OK)
             {
                 return;
             }
@@ -510,7 +536,7 @@ namespace mml2vgmIDE
 
         private void TssbCompile_ButtonClick(object sender, EventArgs e)
         {
-            Compile(true, ctrl, shift);
+            Compile(true, ctrl, shift, false);
             //TsmiCompileAndPlay_Click(null, null);
         }
 
@@ -566,7 +592,7 @@ namespace mml2vgmIDE
                     }
                     break;
                 case Keys.F5:
-                    Compile(true, ctrl, shift);
+                    Compile(true, ctrl, shift, false);
                     break;
                 case Keys.F9:
                     stop();
@@ -655,11 +681,15 @@ namespace mml2vgmIDE
         }
 
         private void UpdateGwiFileHistory()
-        { 
+        {
             tsmiGwiFileHistory.DropDownItems.Clear();
             if (setting.other.GwiFileHistory == null) return;
-            foreach(string fn in setting.other.GwiFileHistory)
+            foreach (string fn in setting.other.GwiFileHistory)
             {
+                if (string.IsNullOrEmpty(fn))
+                {
+                    continue;
+                }
                 ToolStripMenuItem tsmi = new ToolStripMenuItem(fn);
                 tsmi.Click += Tsmi_Click;
                 tsmiGwiFileHistory.DropDownItems.Add(tsmi);
@@ -669,55 +699,72 @@ namespace mml2vgmIDE
         private void Tsmi_Click(object sender, EventArgs e)
         {
             string fn = ((ToolStripMenuItem)sender).Text;
-            OpenFile(fn); 
+            OpenFile(fn);
         }
 
         string wrkPath = "";
 
-        private void Compile(bool doPlay,bool isTrace,bool doSkip)
+        private void Compile(bool doPlay, bool isTrace, bool doSkip, bool doSkipStop,string[] text=null)
         {
             IDockContent dc = dpMain.ActiveDocument;
-            if (dc == null) return;
-            if (!(dc is FrmEditor)) return;
+            if (text == null)
+            {
+                if (dc == null) return;
+                if (!(dc is FrmEditor)) return;
+                activeMMLTextLines = ((FrmEditor)dc).azukiControl.Text.Split(new string[] { "\r\n" }, StringSplitOptions.None);
 
-            activeMMLTextLines = ((FrmEditor)dc).azukiControl.Text.Split(new string[] { "\r\n" }, StringSplitOptions.None);
-            //if (!Directory.Exists(Path.Combine(Common.GetApplicationDataFolder(true), "temp")))
-            //{
-            //    Directory.CreateDirectory(Path.Combine(Common.GetApplicationDataFolder(true), "temp"));
-            //}
-            string tempPath = Path.Combine(Common.GetApplicationDataFolder(true), "temp", Path.GetFileName(((Document)((FrmEditor)dc).Tag).gwiFullPath));
-            title = Path.GetFileName(Path.GetFileName(((Document)((FrmEditor)dc).Tag).gwiFullPath));
-            //File.WriteAllText(tempPath, text);
-            args = new string[2];
-            args[1] = tempPath;
-            wrkPath = Path.GetDirectoryName(((Document)((FrmEditor)dc).Tag).gwiFullPath);
+                string tempPath = Path.Combine(Common.GetApplicationDataFolder(true), "temp", Path.GetFileName(((Document)((FrmEditor)dc).Tag).gwiFullPath));
+                title = Path.GetFileName(Path.GetFileName(((Document)((FrmEditor)dc).Tag).gwiFullPath));
+                //File.WriteAllText(tempPath, text);
+                args = new string[2];
+                args[1] = tempPath;
+                wrkPath = Path.GetDirectoryName(((Document)((FrmEditor)dc).Tag).gwiFullPath);
+            }
+            else
+            {
+                activeMMLTextLines = text;
+                args = new string[2];
+                //string file = Path.Combine(System.Windows.Forms.Application.StartupPath, "Setup.gwi");
+                string tempPath = Path.Combine(Common.GetApplicationDataFolder(true), "temp", "Setup.gwi");
+                args[1] = tempPath;
+                wrkPath = System.Windows.Forms.Application.StartupPath;
+            }
+
 
             traceInfoSw = false;
-            Sgry.Azuki.WinForms.AzukiControl ac = ((FrmEditor)dc).azukiControl;
-            ac.ColorScheme.LineNumberBack = Color.FromArgb(setting.ColorScheme.Azuki_LineNumberBack_Normal);
-            ac.ColorScheme.LineNumberFore = Color.FromArgb(setting.ColorScheme.Azuki_LineNumberFore_Normal);
-            ac.Document.Unmark(0, ac.Text.Length, 1);
-            ac.IsReadOnly = false;
-            ac.Refresh();
+            Sgry.Azuki.WinForms.AzukiControl ac = null;
+            if (dc != null)
+            {
+                ac = ((FrmEditor)dc).azukiControl;
+                ac.ColorScheme.LineNumberBack = Color.FromArgb(setting.ColorScheme.Azuki_LineNumberBack_Normal);
+                ac.ColorScheme.LineNumberFore = Color.FromArgb(setting.ColorScheme.Azuki_LineNumberFore_Normal);
+                ac.Document.Unmark(0, ac.Text.Length, 1);
+                ac.IsReadOnly = false;
+                ac.Refresh();
+            }
 
             isSuccess = true;
             this.doPlay = doPlay;
             this.isTrace = isTrace;
             this.doSkip = doSkip;
+            this.doSkipStop = doSkipStop;
             //スキップ再生の場合はカレットの位置を取得する
             if (doSkip)
             {
-                int ci = ac.CaretIndex;
-                int row, col;
-                ac.GetLineColumnIndexFromCharIndex(ci, out row, out col);
-                caretPoint = new Point(col, row);
-                int st = ac.GetLineHeadIndexFromCharIndex(ci);
-                int li = ac.GetLineIndexFromCharIndex(ci);
-                //int ed = st + ac.GetLineLength(li);
-                string line = ac.GetTextInRange(st, ci);
-                if (line == null || line.Length < 1) doSkip = false;
-                //先頭の文字が'ではないときは既存の動作
-                else if (line[0] != '\'') doSkip = false;
+                if (ac != null)
+                {
+                    int ci = ac.CaretIndex;
+                    int row, col;
+                    ac.GetLineColumnIndexFromCharIndex(ci, out row, out col);
+                    caretPoint = new Point(col, row);
+                    int st = ac.GetLineHeadIndexFromCharIndex(ci);
+                    int li = ac.GetLineIndexFromCharIndex(ci);
+                    //int ed = st + ac.GetLineLength(li);
+                    string line = ac.GetTextInRange(st, ci);
+                    if (line == null || line.Length < 1) doSkip = false;
+                    //先頭の文字が'ではないときは既存の動作
+                    else if (line[0] != '\'') doSkip = false;
+                }
             }
             frmPartCounter.dataGridView1.Rows.Clear();
             frmErrorList.dataGridView1.Rows.Clear();
@@ -739,37 +786,38 @@ namespace mml2vgmIDE
 
             //for (int i = 1; i < args.Length; i++)
             //{
-                //string arg = args[i];
-                //if (!File.Exists(arg))
-                //{
-                    //continue;
-                //}
+            //string arg = args[i];
+            //if (!File.Exists(arg))
+            //{
+            //continue;
+            //}
 
 
-                this.Invoke(dmy);
+            this.Invoke(dmy);
 
-                Core.log.Write(string.Format("  compile at [{0}]", title));
+            Core.log.Write(string.Format("  compile at [{0}]", title));
 
-                msgBox.clear();
+            msgBox.clear();
 
-                //string desfn = Path.ChangeExtension(arg, Properties.Resources.ExtensionVGM);
-                //if (tsbToVGZ.Checked)
-                //{
-                    //desfn = Path.ChangeExtension(arg, Properties.Resources.ExtensionVGZ);
-                //}
+            //string desfn = Path.ChangeExtension(arg, Properties.Resources.ExtensionVGM);
+            //if (tsbToVGZ.Checked)
+            //{
+            //desfn = Path.ChangeExtension(arg, Properties.Resources.ExtensionVGZ);
+            //}
 
-                Core.log.Write("Call mml2vgm core");
+            Core.log.Write("Call mml2vgm core");
 
             mv = new Mml2vgm(activeMMLTextLines, args[1], stPath, Disp, wrkPath);
-                mv.doSkip = doSkip;
-                mv.caretPoint = caretPoint;
-                if (mv.Start() != 0)
-                {
-                    isSuccess = false;
-                    //break;
-                }
+            mv.doSkip = doSkip;
+            mv.doSkipStop = doSkipStop;
+            mv.caretPoint = caretPoint;
+            if (mv.Start() != 0)
+            {
+                isSuccess = false;
+                //break;
+            }
 
-                Core.log.Write("Return mml2vgm core");
+            Core.log.Write("Return mml2vgm core");
             //}
 
             Core.log.Write("Disp Result");
@@ -932,9 +980,9 @@ namespace mml2vgmIDE
                     try
                     {
                         //Process.Start(Path.ChangeExtension(args[1], (mv.desVGM.info.format == enmFormat.VGM) ? Properties.Resources.ExtensionVGM : Properties.Resources.ExtensionXGM));
-                        
+
                         //ヘッダー情報にダミーコマンド情報分の値を水増しした値をセットしなおす
-                        if(mv.desVGM.info.format== enmFormat.VGM)
+                        if (mv.desVGM.info.format == enmFormat.VGM)
                         {
                             uint EOFOffset = Common.getLE32(mv.desBuf, 0x04) + (uint)mv.desVGM.dummyCmdCounter;
                             Common.SetLE32(mv.desBuf, 0x04, EOFOffset);
@@ -1003,7 +1051,7 @@ namespace mml2vgmIDE
                 TsmiUndo.Enabled = d.editor.azukiControl.CanUndo;
                 TsmiRedo.Enabled = d.editor.azukiControl.CanRedo;
 
-                if (frmFolderTree.treeView1.Nodes.Count==0 || frmFolderTree.treeView1.Nodes[0] != d.gwiTree)
+                if (frmFolderTree.treeView1.Nodes.Count == 0 || frmFolderTree.treeView1.Nodes[0] != d.gwiTree)
                 {
                     frmFolderTree.treeView1.Nodes.Clear();
                     frmFolderTree.treeView1.Nodes.Add(d.gwiTree);
@@ -1073,15 +1121,15 @@ namespace mml2vgmIDE
             }
         }
 
-        private void JumpDocument(string fn, long ln,bool wantFocus)
+        private void JumpDocument(string fn, long ln, bool wantFocus)
         {
-            foreach(DockContent dc in dpMain.Documents)
+            foreach (DockContent dc in dpMain.Documents)
             {
                 if (Path.GetFileName(((Document)dc.Tag).gwiFullPath) != fn)
                 {
                     continue;
                 }
-                
+
                 Application.DoEvents();
                 Sgry.Azuki.Document d = ((Document)dc.Tag).editor.azukiControl.Document;
                 Sgry.Azuki.IView v = ((Document)dc.Tag).editor.azukiControl.View;
@@ -1091,7 +1139,7 @@ namespace mml2vgmIDE
                 anc = Math.Max(anc, 0);
                 ancM = Math.Max(ancM, 0);
                 caret = Math.Max(anc, caret);
-                v.ScrollPos= v.GetVirPosFromIndex(ancM);//1行手前を画面の最上部になるようスクロールさせる。
+                v.ScrollPos = v.GetVirPosFromIndex(ancM);//1行手前を画面の最上部になるようスクロールさせる。
 
                 v.Scroll(1);//scroll barの表示を更新させるため
                 v.Scroll(-1);//scroll barの表示を更新させるため
@@ -1162,8 +1210,20 @@ namespace mml2vgmIDE
             }
             else
             {
-                MemoryStream stream = new MemoryStream(Encoding.UTF8.GetBytes(setting.dockingState));
-                dpMain.LoadFromXml(stream, new DeserializeDockContent(GetDockContentFromPersistString));
+                try
+                {
+                    MemoryStream stream = new MemoryStream(Encoding.UTF8.GetBytes(setting.dockingState));
+                    dpMain.LoadFromXml(stream, new DeserializeDockContent(GetDockContentFromPersistString));
+                }
+                catch (Exception ex)
+                {
+                    log.ForcedWrite(ex);
+
+                    frmPartCounter.Show(dpMain, WeifenLuo.WinFormsUI.Docking.DockState.DockLeft);
+                    frmLog.Show(dpMain, WeifenLuo.WinFormsUI.Docking.DockState.DockBottom);
+                    frmFolderTree.Show(dpMain, WeifenLuo.WinFormsUI.Docking.DockState.DockLeft);
+                    frmErrorList.Show(dpMain, WeifenLuo.WinFormsUI.Docking.DockState.DockBottom);
+                }
             }
 
             frmPartCounter.parentUpdate = UpdateControl;
@@ -1177,7 +1237,7 @@ namespace mml2vgmIDE
 
         private IDockContent GetDockContentFromPersistString(string persistString)
         {
-            foreach(Form frm in FormBox)
+            foreach (Form frm in FormBox)
             {
                 if (!(frm is IDockContent)) continue;
 
@@ -1197,7 +1257,7 @@ namespace mml2vgmIDE
             Audio.Stop(0);
             Audio.Close();
 
-            foreach(var dc in dpMain.Documents)
+            foreach (var dc in dpMain.Documents)
             {
                 ((FrmEditor)dc).azukiControl.Font = new Font(setting.other.TextFontName, setting.other.TextFontSize, setting.other.TextFontStyle);
             }
@@ -1240,7 +1300,7 @@ namespace mml2vgmIDE
             Audio.Close();
             Audio.RealChipClose();
 
-            MemoryStream stream=new MemoryStream();
+            MemoryStream stream = new MemoryStream();
             dpMain.SaveAsXml(stream, Encoding.UTF8);
             setting.dockingState = Encoding.UTF8.GetString(stream.ToArray());
 
@@ -1261,11 +1321,13 @@ namespace mml2vgmIDE
             try
             {
                 IDockContent dc = dpMain.ActiveDocument;
-                if (dc == null) return false;
-                if (!(dc is FrmEditor)) return false;
-                Sgry.Azuki.WinForms.AzukiControl ac = ((FrmEditor)dc).azukiControl;
+                Sgry.Azuki.WinForms.AzukiControl ac = null;
+                if (dc != null && (dc is FrmEditor))
+                {
+                    ac = ((FrmEditor)dc).azukiControl;
+                }
 
-                if (isTrace)
+                if (isTrace && ac!=null)
                 {
                     ac.IsReadOnly = true;
                 }
@@ -1276,12 +1338,15 @@ namespace mml2vgmIDE
 
 
                 //rowとcolをazuki向けlinePosに変換する
-                foreach (outDatum od in srcBuf)
+                if (ac != null)
                 {
-                    if (od.linePos == null) continue;
-                    //Console.WriteLine("{0} {1}", od.linePos.row, od.linePos.col);
-                    od.linePos.col = ac.GetCharIndexFromLineColumnIndex(od.linePos.row,od.linePos.col);
-                    
+                    foreach (outDatum od in srcBuf)
+                    {
+                        if (od.linePos == null) continue;
+                        //Console.WriteLine("{0} {1}", od.linePos.row, od.linePos.col);
+                        od.linePos.col = ac.GetCharIndexFromLineColumnIndex(od.linePos.row, od.linePos.col);
+
+                    }
                 }
 
 
@@ -1292,7 +1357,7 @@ namespace mml2vgmIDE
 
                 Audio.SetVGMBuffer(format, srcBuf);
 
-                for(int i = 0; i < 100; i++)
+                for (int i = 0; i < 100; i++)
                 {
                     Thread.Sleep(1);
                     Application.DoEvents();
@@ -1308,7 +1373,7 @@ namespace mml2vgmIDE
                     }
                 }
 
-                if (isTrace)
+                if (isTrace && ac != null)
                 {
                     ac.ColorScheme.LineNumberBack = Color.FromArgb(setting.ColorScheme.Azuki_LineNumberBack_Trace);
                     ac.ColorScheme.LineNumberFore = Color.FromArgb(setting.ColorScheme.Azuki_LineNumberFore_Trace);
@@ -1342,7 +1407,7 @@ namespace mml2vgmIDE
                 }
                 Audio.Stop(0);
 
-                if (!Audio.Play(setting))
+                if (!Audio.Play(setting, doSkipStop))
                 {
                     try
                     {
@@ -1374,8 +1439,16 @@ namespace mml2vgmIDE
                 Audio.Pause();
             }
 
-            if (frmMIDIKbd == null) Audio.Stop(0);
-            else Audio.Stop(1);
+            if (frmMIDIKbd == null)
+            {
+                //鍵盤が表示されていない場合は完全に停止する
+                Audio.Stop(SendMode.Both);
+            }
+            else
+            {
+                //鍵盤が表示されている場合はmmlの演奏のみ停止し、リアルタイム入力は受け付けるままにする
+                Audio.Stop(SendMode.MML);
+            }
         }
 
         public void ff()
@@ -1485,8 +1558,8 @@ namespace mml2vgmIDE
                     }
                     break;
                 default:
-                    if(pd.od.linePos.chip!="")
-                    Console.WriteLine(pd.od.linePos.chip);
+                    if (pd.od.linePos.chip != "")
+                        Console.WriteLine(pd.od.linePos.chip);
                     break;
             }
             //int i, c;
@@ -1574,7 +1647,7 @@ namespace mml2vgmIDE
         }
 
         private void UpdateTraceInfo()
-        { 
+        {
             if (!traceInfoSw) return;
 
             IDockContent dcnt = dpMain.ActiveDocument;
@@ -1674,7 +1747,7 @@ namespace mml2vgmIDE
             }
         }
 
-        private bool MarkUpTraceInfo(outDatum[] ods,outDatum[] odos,int ch,FrmEditor fe, Sgry.Azuki.WinForms.AzukiControl ac)
+        private bool MarkUpTraceInfo(outDatum[] ods, outDatum[] odos, int ch, FrmEditor fe, Sgry.Azuki.WinForms.AzukiControl ac)
         {
             outDatum od = ods[ch];
             outDatum odo = odos[ch];
@@ -1709,6 +1782,10 @@ namespace mml2vgmIDE
                 }
                 return true;
             }
+            if (od != null && od.type == enmMMLType.Tempo)
+            {
+                ;
+            }
             return false;
         }
 
@@ -1738,7 +1815,7 @@ namespace mml2vgmIDE
 
         }
 
-        private void SetFunctionKeyButtonState(bool visible,ToolStripItemDisplayStyle style)
+        private void SetFunctionKeyButtonState(bool visible, ToolStripItemDisplayStyle style)
         {
             tssbOpen.Visible = visible;
             tssbSave.Visible = visible;
@@ -1839,6 +1916,50 @@ namespace mml2vgmIDE
             info.name = "";
             info.document = d;
             ScriptInterface.run(fn, info);
+        }
+
+        private ChannelInfo defaultChannelInfo = null;
+
+        private ChannelInfo GetCurrentChannelInfo()
+        {
+            ChannelInfo chi = null;
+
+            DockContent dc = null;
+            Document d = null;
+            if (dpMain.ActiveDocument is DockContent)
+            {
+                dc = (DockContent)dpMain.ActiveDocument;
+                if (dc.Tag is Document)
+                {
+                    d = (Document)dc.Tag;
+                }
+            }
+            if (d == null)
+            {
+                return defaultChannelInfo;
+            }
+
+            //int ci = d.editor.azukiControl.CaretIndex;
+            //int st = d.editor.azukiControl.GetLineHeadIndexFromCharIndex(ci);
+            //string line = d.editor.azukiControl.GetTextInRange(st, ci).TrimStart();
+            //if (line == "" || line[0] != '\'')
+            //{
+            //    return defaultChannelInfo;
+            //}
+
+            //演奏中はコンパイルしない
+            if (!Audio.sm.IsRunningAsync())
+            {
+                Compile(true, false, true, true);
+            }
+
+
+            return chi;
+        }
+
+        private void dmyDisp(string dmy)
+        {
+            log.Write(dmy);
         }
 
     }

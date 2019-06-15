@@ -388,49 +388,49 @@
             // TsmiShowPartCounter
             // 
             this.TsmiShowPartCounter.Name = "TsmiShowPartCounter";
-            this.TsmiShowPartCounter.Size = new System.Drawing.Size(150, 22);
+            this.TsmiShowPartCounter.Size = new System.Drawing.Size(180, 22);
             this.TsmiShowPartCounter.Text = "パートカウンター";
             this.TsmiShowPartCounter.Click += new System.EventHandler(this.TsmiShowPartCounter_Click);
             // 
             // TsmiShowFolderTree
             // 
             this.TsmiShowFolderTree.Name = "TsmiShowFolderTree";
-            this.TsmiShowFolderTree.Size = new System.Drawing.Size(150, 22);
+            this.TsmiShowFolderTree.Size = new System.Drawing.Size(180, 22);
             this.TsmiShowFolderTree.Text = "フォルダーツリー";
             this.TsmiShowFolderTree.Click += new System.EventHandler(this.TsmiShowFolderTree_Click);
             // 
             // TsmiShowErrorList
             // 
             this.TsmiShowErrorList.Name = "TsmiShowErrorList";
-            this.TsmiShowErrorList.Size = new System.Drawing.Size(150, 22);
+            this.TsmiShowErrorList.Size = new System.Drawing.Size(180, 22);
             this.TsmiShowErrorList.Text = "エラーリスト";
             this.TsmiShowErrorList.Click += new System.EventHandler(this.TsmiShowErrorList_Click);
             // 
             // TsmiShowLog
             // 
             this.TsmiShowLog.Name = "TsmiShowLog";
-            this.TsmiShowLog.Size = new System.Drawing.Size(150, 22);
+            this.TsmiShowLog.Size = new System.Drawing.Size(180, 22);
             this.TsmiShowLog.Text = "ログ";
             this.TsmiShowLog.Click += new System.EventHandler(this.TsmiShowLog_Click);
             // 
             // TsmiShowMixer
             // 
             this.TsmiShowMixer.Name = "TsmiShowMixer";
-            this.TsmiShowMixer.Size = new System.Drawing.Size(150, 22);
+            this.TsmiShowMixer.Size = new System.Drawing.Size(180, 22);
             this.TsmiShowMixer.Text = "音源ミキサー";
             this.TsmiShowMixer.Click += new System.EventHandler(this.TsmiShowMixer_Click);
             // 
             // TsmiShowMIDIKbd
             // 
             this.TsmiShowMIDIKbd.Name = "TsmiShowMIDIKbd";
-            this.TsmiShowMIDIKbd.Size = new System.Drawing.Size(150, 22);
+            this.TsmiShowMIDIKbd.Size = new System.Drawing.Size(180, 22);
             this.TsmiShowMIDIKbd.Text = "MIDIキーボード";
             this.TsmiShowMIDIKbd.Click += new System.EventHandler(this.TsmiShowMIDIKbd_Click);
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(147, 6);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(177, 6);
             // 
             // TsmiFunctionKey
             // 
@@ -439,7 +439,7 @@
             this.TsmiFncButtonOnly,
             this.TsmiFncButtonAndText});
             this.TsmiFunctionKey.Name = "TsmiFunctionKey";
-            this.TsmiFunctionKey.Size = new System.Drawing.Size(150, 22);
+            this.TsmiFunctionKey.Size = new System.Drawing.Size(180, 22);
             this.TsmiFunctionKey.Text = "ファンクションキー";
             // 
             // TsmiFncHide
@@ -580,6 +580,7 @@
             this.Controls.Add(this.menuStrip1);
             this.Controls.Add(this.dpMain);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.KeyPreview = true;
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "FrmMain";
             this.Text = "mml2vgmIDE";

@@ -112,6 +112,7 @@
     <Compile Include="Driver\vgm.cs" />
     <Compile Include="Driver\xgm.cs" />
     <Compile Include="Enums.cs" />
+    <Compile Include="form\ChannelInfo.cs" />
     <Compile Include="form\frmDebug.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -366,6 +367,9 @@
     <Content Include="Script\test.py">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="Setup.gwi">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <Content Include="Tutorial.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
