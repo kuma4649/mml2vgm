@@ -1351,6 +1351,7 @@ namespace Core
         public long dummyCmdLoopOffsetAddress=0;
 
         public LinePos linePos { get; internal set; }
+        public bool isRealTimeMode { get; set; }
 
         public outDatum[] Vgm_getByteData(Dictionary<string, List<MML>> mmlData)
         {
@@ -1556,19 +1557,19 @@ namespace Core
             return dat.ToArray();
         }
 
-        private void partWorkByteData(partWork pw)
+        public void partWorkByteData(partWork pw)
         {
 
             //未使用のパートの場合は処理を行わない
             if (!pw.chip.use) return;
-            if (pw.mmlData == null) return;
+            if (pw.mmlData == null && !isRealTimeMode) return;
 
             log.Write("MD stream pcm sound off");
             if (pw.pcmWaitKeyOnCounter == 0)
                 pw.pcmWaitKeyOnCounter = -1;
 
             log.Write("KeyOff");
-            ProcKeyOff(pw);
+            if (!isRealTimeMode) ProcKeyOff(pw);
 
             log.Write("Bend");
             ProcBend(pw);
@@ -1581,6 +1582,8 @@ namespace Core
 
             pw.chip.SetFNum(pw,null);
             pw.chip.SetVolume(pw,null);
+
+            if (isRealTimeMode) return;
 
             log.Write("wait消化待ち");
             if (pw.waitCounter > 0)

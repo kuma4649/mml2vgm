@@ -51,6 +51,8 @@ namespace mml2vgmIDE
         private partWork pw;
         private ClsChip cChip = null;
         private Chip eChip = null;
+        private RealTimeMML rtMML = null;
+
         public SoundManager.SoundManager SoundManager { get; internal set; }
         private object lockObject = new object();
 
@@ -351,14 +353,6 @@ namespace mml2vgmIDE
             {
                 cChip.CmdNote(pw, mml);
             }
-            //cChip.SetEnvelopeAtKeyOn(pw, mml);
-            //cChip.SetLfoAtKeyOn(pw, mml);
-            //cChip.SetVolume(pw, mml);
-            //lock (lockObject)
-            //{
-            //    cChip.SetFNum(pw, mml);
-            //    cChip.SetKeyOn(pw, mml);
-            //}
 
             latestNoteNumberMONO = n;
         }
@@ -457,6 +451,19 @@ namespace mml2vgmIDE
             mv.Start();
             cChip = mv.desVGM.ym2612[0];
             pw = cChip.lstPartWork[0];
+            cChip.use = true;
+            mv.desVGM.isRealTimeMode = true;
+            pw.lfo[0].sw = true;
+            pw.lfo[0].direction = 1;
+            pw.lfo[0].type = eLfoType.Vibrato;
+            pw.lfo[0].param = new List<int>();
+            pw.lfo[0].param.Add(100);//delay
+            pw.lfo[0].param.Add(1);
+            pw.lfo[0].param.Add(3);
+            pw.lfo[0].param.Add(15);//depth
+            pw.lfo[0].param.Add(0);//type 0:tri
+            pw.lfo[0].param.Add(1);
+            pw.lfo[0].param.Add(0);
 
             mv.desBuf = null;
             if (mv.desVGM.dat != null) mv.desVGM.dat.Clear();
@@ -467,6 +474,10 @@ namespace mml2vgmIDE
                 noteLogs[i] = new NoteLog();
             }
             noteLogPtr = 0;
+
+            rtMML = new RealTimeMML();
+            rtMML.chip = cChip;
+            rtMML.vgm = mv.desVGM;
 
             SoundManager.SetMode(SendMode.RealTime);
         }
@@ -483,9 +494,17 @@ namespace mml2vgmIDE
             if (mv == null) return;
             if (mv.desVGM == null) return;
             if (mv.desVGM.dat == null) return;
+
+            if ((Audio.sm.Mode & SendMode.MML) != SendMode.MML)
+            {
+                if(rtMML!=null)
+                rtMML.OneFrameSeq();
+            }
+
             if (mv.desVGM.dat.Count == 0) return;
             eChip = Audio.GetChip(EnmChip.YM2612);
             if (eChip == null) return;
+
 
             Enq enq = SoundManager.GetDriverDataEnqueue();
             List<outDatum> dat = mv.desVGM.dat;
@@ -508,7 +527,8 @@ namespace mml2vgmIDE
                         case 0x52:
                             byte adr = dat[badr + 1].val;
                             byte prm = dat[badr + 2].val;
-                            enq(dat[badr], 0, eChip, EnmDataType.Normal, adr, prm, null);
+                            enq(dat[badr], SeqCounter, eChip, EnmDataType.Normal, adr, prm, null);
+                            //enq(dat[badr], 0, eChip, EnmDataType.Normal, adr, prm, null);
                             if (adr == 0x28 && dat[badr].type == enmMMLType.Note && dat[badr].args != null && dat[badr].args.Count > 1)
                             {
                                 noteLogs[noteLogPtr].note = (int)dat[badr].args[1];

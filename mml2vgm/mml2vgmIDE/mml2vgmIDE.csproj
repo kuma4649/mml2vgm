@@ -201,6 +201,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RealChip.cs" />
+    <Compile Include="RealTimeMML.cs" />
     <Compile Include="ScriptInterface.cs" />
     <Compile Include="Setting.cs" />
     <Compile Include="Sien.cs" />

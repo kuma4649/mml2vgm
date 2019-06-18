@@ -210,6 +210,7 @@ namespace SoundManager
                                 {
                                     if (!parent.IsRunningAtDataMaker())
                                     {
+                                        parent.ResetMode(SendMode.MML);
                                         if ((parent.Mode & SendMode.RealTime) != SendMode.RealTime)
                                             break;
                                     }

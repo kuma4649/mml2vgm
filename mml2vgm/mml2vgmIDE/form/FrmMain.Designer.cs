@@ -87,6 +87,7 @@
             this.TsmiReference = new System.Windows.Forms.ToolStripMenuItem();
             this.TsmiAbout = new System.Windows.Forms.ToolStripMenuItem();
             this.timer = new System.Windows.Forms.Timer(this.components);
+            this.tssbMIDIKbd = new System.Windows.Forms.ToolStripSplitButton();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -119,7 +120,8 @@
             this.tssbCompile,
             this.tssbStop,
             this.tssbSlow,
-            this.tssbFast});
+            this.tssbFast,
+            this.tssbMIDIKbd});
             this.statusStrip1.Location = new System.Drawing.Point(0, 428);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.ShowItemToolTips = true;
@@ -164,7 +166,7 @@
             // toolStripStatusLabel1
             // 
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(285, 17);
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(186, 17);
             this.toolStripStatusLabel1.Spring = true;
             this.toolStripStatusLabel1.Text = " ";
             // 
@@ -571,6 +573,17 @@
             this.timer.Interval = 16;
             this.timer.Tick += new System.EventHandler(this.Timer_Tick);
             // 
+            // tssbMIDIKbd
+            // 
+            this.tssbMIDIKbd.DropDownButtonWidth = 0;
+            this.tssbMIDIKbd.Image = global::mml2vgmIDE.Properties.Resources.F12;
+            this.tssbMIDIKbd.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.tssbMIDIKbd.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tssbMIDIKbd.Name = "tssbMIDIKbd";
+            this.tssbMIDIKbd.Size = new System.Drawing.Size(68, 20);
+            this.tssbMIDIKbd.Text = "鍵盤";
+            this.tssbMIDIKbd.ButtonClick += new System.EventHandler(this.TssbMIDIKbd_ButtonClick);
+            // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -656,6 +669,7 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripMenuItem TsmiCompileAndSkipPlay;
         public System.Windows.Forms.ToolStripStatusLabel TsslLineCol;
+        private System.Windows.Forms.ToolStripSplitButton tssbMIDIKbd;
     }
 }
 

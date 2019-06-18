@@ -461,6 +461,17 @@ namespace mml2vgmIDE
                 {
                     firstPlay();
                 }
+                else
+                {
+                    if (Audio.sm.Mode == SendMode.none)
+                    {
+                        Audio.sm.RequestStart(SendMode.RealTime);
+                    }
+                    else
+                    {
+                        Audio.sm.SetMode(SendMode.RealTime);
+                    }
+                }
 
                 frmMIDIKbd = new FrmMIDIKbd(this, 2, newParam.mIDIKbd);
                 frmMIDIKbd.KeyDown += FrmMain_KeyDown;
@@ -493,6 +504,7 @@ namespace mml2vgmIDE
                 Thread.Sleep(0);
                 Application.DoEvents();
             }
+            Audio.sm.ResetMode(SendMode.MML);
         }
 
         private void TsmiOption_Click(object sender, EventArgs e)
@@ -565,6 +577,11 @@ namespace mml2vgmIDE
             TsmiCompileAndSkipPlay_Click(null, null);
         }
 
+        private void TssbMIDIKbd_ButtonClick(object sender, EventArgs e)
+        {
+            TsmiShowMIDIKbd_Click(null, null);
+        }
+
         private void FrmMain_KeyDown(object sender, KeyEventArgs e)
         {
             ctrl = (e.KeyData & Keys.Control) == Keys.Control;
@@ -603,6 +620,9 @@ namespace mml2vgmIDE
                 case Keys.F11:
                     ff();
                     break;
+                case Keys.F12:
+                    TsmiShowMIDIKbd_Click(null, null);
+                    break;
                 default:
                     //↓KeyData確認用
                     //log.Write(string.Format("動作未定義のキー：{0}",e.KeyData));
@@ -628,8 +648,8 @@ namespace mml2vgmIDE
             dc.editor.main = this;
             dc.editor.parent = dc;
 
-            frmFolderTree.treeView1.Nodes.Clear();
-            frmFolderTree.treeView1.Nodes.Add(dc.gwiTree);
+            frmFolderTree.tvFolderTree.Nodes.Clear();
+            frmFolderTree.tvFolderTree.Nodes.Add(dc.gwiTree);
             frmFolderTree.basePath = Path.GetDirectoryName(dc.gwiFullPath);
 
             FormBox.Add(dc.editor);
@@ -646,8 +666,8 @@ namespace mml2vgmIDE
             dc.editor.main = this;
             dc.editor.parent = dc;
 
-            frmFolderTree.treeView1.Nodes.Clear();
-            frmFolderTree.treeView1.Nodes.Add(dc.gwiTree);
+            frmFolderTree.tvFolderTree.Nodes.Clear();
+            frmFolderTree.tvFolderTree.Nodes.Add(dc.gwiTree);
             frmFolderTree.basePath = Path.GetDirectoryName(dc.gwiFullPath);
 
             FormBox.Add(dc.editor);
@@ -1051,10 +1071,10 @@ namespace mml2vgmIDE
                 TsmiUndo.Enabled = d.editor.azukiControl.CanUndo;
                 TsmiRedo.Enabled = d.editor.azukiControl.CanRedo;
 
-                if (frmFolderTree.treeView1.Nodes.Count == 0 || frmFolderTree.treeView1.Nodes[0] != d.gwiTree)
+                if (frmFolderTree.tvFolderTree.Nodes.Count == 0 || frmFolderTree.tvFolderTree.Nodes[0] != d.gwiTree)
                 {
-                    frmFolderTree.treeView1.Nodes.Clear();
-                    frmFolderTree.treeView1.Nodes.Add(d.gwiTree);
+                    frmFolderTree.tvFolderTree.Nodes.Clear();
+                    frmFolderTree.tvFolderTree.Nodes.Add(d.gwiTree);
                 }
 
                 this.Text = string.Format("{0} - {1}", appName, d.editor.Text);
@@ -1094,6 +1114,13 @@ namespace mml2vgmIDE
 
         private void ExecFile(string filename)
         {
+
+            if (Path.GetExtension(filename).ToUpper() == ".GWI")
+            {
+                OpenFile(filename);
+                return;
+            }
+
             if (Path.GetExtension(filename).ToUpper() == ".WAV")
             {
                 if (player != null)
@@ -1102,6 +1129,7 @@ namespace mml2vgmIDE
                 player.Play();
                 return;
             }
+
             try
             {
                 Process.Start(filename);
@@ -1657,7 +1685,8 @@ namespace mml2vgmIDE
             Sgry.Azuki.WinForms.AzukiControl ac = fe.azukiControl;
             bool refresh = false;
 
-            if (!Audio.sm.IsRunningAtDataSender())
+            //if (!Audio.sm.IsRunningAtDataSender())
+            if ((Audio.sm.Mode & SendMode.MML)!= SendMode.MML)
             {
                 traceInfoSw = false;
                 ac.ColorScheme.LineNumberBack = Color.FromArgb(setting.ColorScheme.Azuki_LineNumberBack_Normal);
@@ -1936,6 +1965,7 @@ namespace mml2vgmIDE
             }
             if (d == null)
             {
+                firstPlay();
                 return defaultChannelInfo;
             }
 
@@ -1948,9 +1978,15 @@ namespace mml2vgmIDE
             //}
 
             //演奏中はコンパイルしない
-            if (!Audio.sm.IsRunningAsync())
+            if (!Audio.sm.IsRunningAtDataMaker())
             {
                 Compile(true, false, true, true);
+                while (Compiling)
+                {
+                    Thread.Sleep(0);
+                    Application.DoEvents();
+                }
+                Audio.sm.ResetMode(SendMode.MML);
             }
 
 

@@ -19,8 +19,8 @@ namespace mml2vgmIDE
         public FrmFolderTree(Setting setting)
         {
             InitializeComponent();
-            this.treeView1.BackColor = Color.FromArgb(setting.ColorScheme.FolderTree_BackColor);
-            this.treeView1.ForeColor = Color.FromArgb(setting.ColorScheme.FolderTree_ForeColor);
+            this.tvFolderTree.BackColor = Color.FromArgb(setting.ColorScheme.FolderTree_BackColor);
+            this.tvFolderTree.ForeColor = Color.FromArgb(setting.ColorScheme.FolderTree_ForeColor);
         }
         protected override string GetPersistString()
         {
@@ -61,6 +61,10 @@ namespace mml2vgmIDE
                         node.Nodes.Add(ts);
                     }
                 }
+                catch(UnauthorizedAccessException)
+                {
+                    MessageBox.Show("アクセスが拒否されました。", "権限不足", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
                 catch { }
             }
         }
@@ -72,5 +76,38 @@ namespace mml2vgmIDE
             parentExecFile?.Invoke(fullpath);
         }
 
+        private void TvFolderTree_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == '\r')
+            {
+                TreeNode tn = tvFolderTree.SelectedNode;
+                if (tn == null) return;
+                if (tn.ImageIndex == 1) return;
+                string fullpath = System.IO.Path.Combine(Path.GetDirectoryName(basePath), tn.FullPath);
+                parentExecFile?.Invoke(fullpath);
+                e.Handled = true;
+            }
+        }
+
+        private void TvFolderTree_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                tvFolderTree.SelectedNode = e.Node;
+                TreeNode tn = e.Node;
+                if (tn == null) return;
+                if (tn.ImageIndex == 1) return;
+                cmsMenu.Show((Control)sender, e.X, e.Y);
+            }
+        }
+
+        private void TsmiOpen_Click(object sender, EventArgs e)
+        {
+            TreeNode tn = tvFolderTree.SelectedNode;
+            if (tn == null) return;
+            if (tn.ImageIndex == 1) return;
+            string fullpath = System.IO.Path.Combine(Path.GetDirectoryName(basePath), tn.FullPath);
+            parentExecFile?.Invoke(fullpath);
+        }
     }
 }
