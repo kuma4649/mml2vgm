@@ -247,6 +247,17 @@ namespace SoundManager
                             if (od != null && od.type == enmMMLType.Tempo)
                             {
                                 parent.CurrentTempo = (int)od.args[0];
+                                parent.CurrentClockCount = (int)od.args[1];
+                                continue;
+                            }
+
+                            if (od != null && od.type == enmMMLType.Length)
+                            {
+                                if (od.linePos.chip == parent.CurrentChip
+                                    && od.linePos.ch == parent.CurrentCh - 1)
+                                {
+                                    parent.CurrentNoteLength = (int)od.args[0];
+                                }
                                 continue;
                             }
 

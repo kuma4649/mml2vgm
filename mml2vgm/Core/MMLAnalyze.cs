@@ -316,6 +316,7 @@ namespace Core
             mml.type = enmMMLType.Tempo;
             mml.args = new List<object>();
             mml.args.Add(n);
+            mml.args.Add((int)desVGM.info.clockCount);
         }
 
         private void CmdInstrument(partWork pw, MML mml)

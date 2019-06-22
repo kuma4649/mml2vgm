@@ -33,6 +33,7 @@ namespace mml2vgmIDE
         public static byte[][] rPlane_MIDI;
         private static byte[] rNESDMC;
         private static byte[] rKakko;
+        private static byte[] rec;
         private static Bitmap[] bitmapMIDILyric = null;
         private static Graphics[] gMIDILyric = null;
         private static Font[] fntMIDILyric = null;
@@ -142,6 +143,8 @@ namespace mml2vgmIDE
             //fntMIDILyric = new Font[2];
             //fntMIDILyric[0] = new Font("MS UI Gothic", 8);//, FontStyle.Bold);
             //fntMIDILyric[1] = new Font("MS UI Gothic", 8);//, FontStyle.Bold);
+
+            rec = getByteArray(Properties.Resources.rec);
         }
 
 
@@ -1940,6 +1943,14 @@ namespace mml2vgmIDE
             drawMIDILCD_KbdP(screen, x, y, note, vel);
         }
 
+        public static void drawREC(FrameBuffer screen, int x, int y, ref int oldVel, int vel)
+        {
+            if (oldVel == vel) return;
+            oldVel = vel;
+
+            drawREC_P(screen, x, y, vel);
+        }
+
         public static void drawFont4MIDINotes(FrameBuffer screen, int x, int y, int t, ref string oldnotes, string notes)
         {
             if (oldnotes == notes) return;
@@ -3119,6 +3130,20 @@ namespace mml2vgmIDE
                 vel / 16 * 32 + ((note % 12) == 0 ? 8 : 0),
                 8,
                 32 - ((note % 12) == 0 ? 8 : 0)
+                );
+        }
+
+        private static void drawREC_P(FrameBuffer screen, int x, int y, int vel)
+        {
+            screen.drawByteArray(
+                x,
+                y,
+                rec,
+                28,
+                0,
+                vel * 8,
+                28,
+                8
                 );
         }
 

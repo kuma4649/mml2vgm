@@ -395,7 +395,26 @@ namespace SoundManager
         private bool disposedValue = false; // 重複する呼び出しを検出するには
 
         public SendMode Mode { get; private set; }
-        public int CurrentTempo { get; internal set; }
+
+        private int _CurrentTempo = 120;
+        public int CurrentTempo
+        { get => _CurrentTempo; set => _CurrentTempo = value; }
+
+        private int _CurrentClockCount = 192;
+        public int CurrentClockCount
+        { get => _CurrentClockCount; set => _CurrentClockCount = value; }
+
+        private int _CurrentNoteLength = 0;
+        public int CurrentNoteLength
+        { get => _CurrentNoteLength; set => _CurrentNoteLength = value; }
+
+        private string _CurrentChip = "";
+        public string CurrentChip
+        { get => _CurrentChip; set => _CurrentChip = value; }
+        private int _CurrentCh = 0;
+        public int CurrentCh
+        { get => _CurrentCh; set => _CurrentCh = value; }
+
 
         protected virtual void Dispose(bool disposing)
         {

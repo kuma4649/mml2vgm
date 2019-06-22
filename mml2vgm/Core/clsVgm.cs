@@ -2495,6 +2495,7 @@ namespace Core
                         if (cmd.val == 0x2f //dummyChipコマンド　(第2引数：chipID 第３引数:isSecondary)
                             && (cmd.type == enmMMLType.Rest//ここで指定できるmmlコマンドは元々はChipに送信することのないコマンドのみ(さもないと、通常のコマンドのデータと見分けがつかなくなる可能性がある)
                             || cmd.type == enmMMLType.Tempo
+                            || cmd.type== enmMMLType.Length
                             ))
                         {
                             des.Add(src[ptr]);

@@ -325,6 +325,7 @@
     <None Include="Resource\rMIDILCD_Font_04.png" />
     <None Include="Resource\rMIDILCD_Font_05.png" />
     <None Include="Resource\rMIDILCD_Font_06.png" />
+    <Content Include="Resource\rec.png" />
     <Content Include="Resource\rMIDILCD_KBD_01.png" />
     <Content Include="Resource\フェーリ.mdp" />
     <Content Include="Resource\フェーリ.png" />

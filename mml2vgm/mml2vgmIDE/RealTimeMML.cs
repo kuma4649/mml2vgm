@@ -20,6 +20,9 @@ namespace mml2vgmIDE
             if (chip == null) return;
             if (vgm == null) return;
 
+            tempo = Audio.sm.CurrentTempo;
+            clockCount = Audio.sm.CurrentClockCount;
+
             //割り込み回数が１クロック当たりのサンプル数を超えたかチェック
             samplesPerClock = Core.Information.VGM_SAMPLE_PER_SECOND * 60.0 * 4.0 / (tempo * clockCount);
             sampleCount++;

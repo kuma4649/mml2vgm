@@ -221,7 +221,9 @@ namespace Core
                 }
                 if (od.val == 0x2f //dummyChipコマンド　(第2引数：chipID 第３引数:isSecondary)
                     && (od.type == enmMMLType.Rest//ここで指定できるmmlコマンドは元々はChipに送信することのないコマンドのみ(さもないと、通常のコマンドのデータと見分けがつかなくなる可能性がある)
-                    || od.type == enmMMLType.Tempo)
+                    || od.type == enmMMLType.Tempo
+                    || od.type == enmMMLType.Length
+                    )
                     )
                 {
                     skipCount = 2;

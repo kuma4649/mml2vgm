@@ -10,7 +10,9 @@ using System.Windows.Forms;
 using Core;
 using NAudio;
 using NAudio.Midi;
+using Sgry.Azuki.WinForms;
 using SoundManager;
+using WeifenLuo.WinFormsUI.Docking;
 
 namespace mml2vgmIDE
 {
@@ -27,6 +29,9 @@ namespace mml2vgmIDE
         private Setting setting = null;
         private MidiIn midiin = null;
         private int cOct = 4;
+        private int cQuantize = 8;
+        private int recMode = 0;
+        private AzukiControl recAC = null;
 
         private MDChipParams.MIDIKbd newParam = null;
         private MDChipParams.MIDIKbd oldParam = new MDChipParams.MIDIKbd();
@@ -67,6 +72,8 @@ namespace mml2vgmIDE
             cOct = 4;
             SoundManager = Audio.sm;
             SoundManager.AddDataSeqFrqEvent(OnDataSeqFrq);
+            SoundManager.CurrentChip = "YM2612";
+            SoundManager.CurrentCh = 1;
 
             InitializeComponent();
 
@@ -170,9 +177,25 @@ namespace mml2vgmIDE
             newParam.kcOctave = cOct;
             newParam.kaOctave = cOct + 1;
             newParam.kaaOctave = cOct + 2;
-            newParam.cTempo = SoundManager.CurrentTempo;
-            newParam.cClockCnt = (int)mv.desVGM.info.clockCount;
+            newParam.cTempo = Audio.sm.CurrentTempo;
+            newParam.cClockCnt = Audio.sm.CurrentClockCount;
+            newParam.cNoteLength = Audio.sm.CurrentNoteLength < 1 ? 0 : (newParam.cClockCnt / Audio.sm.CurrentNoteLength);
+            newParam.cQuantize = cQuantize;
+            newParam.rec = recMode == 0 ? 0 : (((recMode - 1) / 17) + 1);
+            recMode = recMode == 0 ? 0 : ((((++recMode) - 1) % 34) + 1);
+            newParam.cChip = Audio.sm.CurrentChip;
+            newParam.cCh = Audio.sm.CurrentCh;
+
+            if (recAC != null)
+            {
+                while (recBuf.Count > 0)
+                {
+                    recAC.Document.Replace(recBuf.Dequeue());
+                }
+            }
         }
+
+        private Queue<string> recBuf = new Queue<string>();
 
         public void screenDrawParams()
         {
@@ -189,8 +212,14 @@ namespace mml2vgmIDE
             DrawBuff.font4Hex4Bit(frameBuffer, 112 + 1, 56, 0, ref oldParam.kaOctave, newParam.kaOctave);
             DrawBuff.font4Hex4Bit(frameBuffer, 168 + 1, 56, 0, ref oldParam.kaaOctave, newParam.kaaOctave);
 
+            DrawBuff.font4Int3(frameBuffer, 33 * 4 + 1, 0, 0, 3, ref oldParam.cCh, newParam.cCh);
             DrawBuff.font4Int3(frameBuffer, 34 * 4 + 1, 8, 0, 3, ref oldParam.cTempo, newParam.cTempo);
             DrawBuff.font4Int3(frameBuffer, 40 * 4 + 1, 8, 0, 3, ref oldParam.cClockCnt, newParam.cClockCnt);
+            DrawBuff.font4Int3(frameBuffer, 21 * 4 + 1, 12 * 8, 0, 3, ref oldParam.cNoteLength, newParam.cNoteLength);
+            DrawBuff.font4Int3(frameBuffer, 29 * 4 + 1, 13 * 8, 0, 3, ref oldParam.cQuantize, newParam.cQuantize);
+
+            DrawBuff.drawREC(frameBuffer, 0 + 1, 13 * 8, ref oldParam.rec, newParam.rec);
+
         }
 
         public void screenInit()
@@ -303,7 +332,21 @@ namespace mml2vgmIDE
                     }
                 }
             }
+
+            if (e.KeyCode == Keys.Space)
+            {
+                if (recMode == 0)
+                {
+                    StartRecording();
+                }
+                else
+                {
+                    recMode = 0;
+                    recAC = null;
+                }
+            }
         }
+
 
         private void FrmMIDIKbd_KeyUp(object sender, KeyEventArgs e)
         {
@@ -534,6 +577,17 @@ namespace mml2vgmIDE
                                 noteLogs[noteLogPtr].note = (int)dat[badr].args[1];
                                 noteLogs[noteLogPtr].counter = SeqCounter;
                                 log.Write(string.Format("noteLog: note:{0} counter:{1}", noteLogs[noteLogPtr].note, noteLogs[noteLogPtr].counter));
+                                if (recMode != 0)
+                                {
+                                    if (noteLogs[noteLogPtr].note >= 0)
+                                    {
+                                        NoteON(SeqCounter, noteLogs[noteLogPtr].note);
+                                    }
+                                    else
+                                    {
+                                        NoteOFF(SeqCounter, noteLogs[noteLogPtr].note);
+                                    }
+                                }
                                 noteLogPtr++;
                                 if (noteLogPtr >= noteLogs.Length) noteLogPtr = 0;
                             }
@@ -543,6 +597,121 @@ namespace mml2vgmIDE
                     badr++;
                 }
                 dat.Clear();
+            }
+        }
+
+        private int rec_oldNote = -1;
+        private long rec_startCounter = 0;
+        private string[] rec_noteTable = new string[] { "c", "c+", "d", "d+", "e", "f", "f+", "g", "g+", "a", "a+", "b" };
+        private int rec_currentOctave = -1;
+
+        private void StartRecording()
+        {
+            DockContent dc = null;
+            Document d = null;
+            if (parent.dpMain.ActiveDocument is DockContent)
+            {
+                dc = (DockContent)parent.dpMain.ActiveDocument;
+                if (dc.Tag is Document)
+                {
+                    d = (Document)dc.Tag;
+                }
+            }
+            if (d == null) return;
+
+
+            recAC = d.editor.azukiControl;
+            recMode = 1;
+            rec_oldNote = -1;
+            rec_startCounter = 0;
+            rec_currentOctave = -1;
+        }
+
+        private void NoteON(long sqCnt, int note)
+        {
+            if (rec_oldNote == 255)//休符
+            {
+                long length = (long)((sqCnt - rec_startCounter) / rtMML.samplesPerClock);
+                if (length != 0)
+                    rec_dispNote(255, length);
+            }
+            else if (rec_oldNote > -1)
+            {
+
+            }
+
+            rec_startCounter = sqCnt;
+            rec_oldNote = note;
+        }
+
+        private void NoteOFF(long sqCnt, int note)
+        {
+            if (rec_oldNote != 255 && rec_oldNote > -1 && rec_oldNote == -note)
+            {
+                note = -note;
+                rec_dispOctave(note);
+
+                long length = (long)((sqCnt - rec_startCounter) / rtMML.samplesPerClock);
+                if (length != 0)
+                    rec_dispNote(note, length);
+            }
+
+            if (rec_oldNote != 255) rec_startCounter = sqCnt;
+            rec_oldNote = 255;
+        }
+
+        private void rec_dispOctave(int note)
+        {
+            int octave = note / 12;
+            if (rec_currentOctave < 0) recBuf.Enqueue(string.Format("o{0}", octave));
+            else if (rec_currentOctave != octave)
+            {
+                int d = rec_currentOctave - octave;
+                if (d > 0)
+                    for (int i = 0; i < d; i++) recBuf.Enqueue("<");
+                else
+                    for (int i = 0; i < -d; i++) recBuf.Enqueue(">");
+            }
+            rec_currentOctave = octave;
+        }
+
+        private void rec_dispNote(int note,long length)
+        {
+            long c = rtMML.clockCount;
+            long len = length;
+            long n = 1;
+
+            if((len % (rtMML.clockCount / cQuantize)) < (rtMML.clockCount / cQuantize / 2))
+            {
+                len -= (len % (rtMML.clockCount / cQuantize));
+            }
+            else
+            {
+                len -= (len % (rtMML.clockCount / cQuantize));
+                len += (rtMML.clockCount / cQuantize);
+            }
+
+            while (n <= 64 && len > 0)
+            {
+                while (len >= c)
+                {
+                    recBuf.Enqueue(string.Format("{0}{1}{2}"
+                        , note == 255 ? "r" : rec_noteTable[note % 12]
+                        , (Audio.sm.CurrentNoteLength != rtMML.clockCount / n) ? n.ToString() : ""
+                        , note == 255 ? "" : ((len - c) > 0 ? "&" : "")
+                        ));
+                    len -= c;
+                }
+                c /= 2;
+                n *= 2;
+            }
+
+            if (len > 0)
+            {
+                recBuf.Enqueue(string.Format("{0}#{1}"
+                    , note == 255 ? "r" : rec_noteTable[note % 12]
+                    , len
+                    ));
             }
         }
 

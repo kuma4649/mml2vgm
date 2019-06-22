@@ -863,6 +863,8 @@ namespace Core
             int n = (int)mml.args[0];
             n = Common.CheckRange(n, 1, 65535);
             pw.length = n;
+
+            SetDummyData(pw, mml);
         }
 
         public virtual void CmdClockLength(partWork pw, MML mml)
