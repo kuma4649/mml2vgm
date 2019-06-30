@@ -4169,6 +4169,7 @@ namespace mml2vgmIDE
                 {
                     if (!ctYM2612[Chip.Number].UseScci)
                     {
+                        if (mds == null) return;
                         if (ctYM2612[Chip.Number].UseEmu)
                         {
                             mds.WriteYM2612((byte)Chip.Number, (byte)(address >> 8), (byte)address, (byte)data);
@@ -4182,6 +4183,7 @@ namespace mml2vgmIDE
                     {
                         if (address == 0x2a || address == 0x2b)
                         {
+                            if (mds == null) return;
                             if (ctYM2612[Chip.Number].UseEmu)
                             {
                                 mds.WriteYM2612((byte)Chip.Number, (byte)(address >> 8), (byte)address, (byte)data);
@@ -4210,6 +4212,7 @@ namespace mml2vgmIDE
                     PackData[] pdata = (PackData[])exData;
                     if (Chip.Model == EnmModel.VirtualModel)
                     {
+                        if (mds == null) return;
                         foreach (PackData dat in pdata)
                             mds.WriteYM2612((byte)dat.Chip.Number, (byte)(dat.Address >> 8), (byte)dat.Address, (byte)dat.Data);
                     }
@@ -4810,6 +4813,7 @@ namespace mml2vgmIDE
                     {
                         if (ctSN76489[Chip.Number].UseEmu)
                         {
+                            if (mds == null) return;
                             if (address != 0x100)
                             {
                                 mds.WriteSN76489((byte)Chip.Number, (byte)data);
@@ -4840,6 +4844,7 @@ namespace mml2vgmIDE
                     PackData[] pdata = (PackData[])exData;
                     if (Chip.Model == EnmModel.VirtualModel)
                     {
+                        if (mds == null) return;
                         foreach (PackData dat in pdata)
                             if (dat.Address != 0x100)
                             {

@@ -455,6 +455,8 @@ namespace mml2vgmIDE
             rbFM5.Checked = setting.midiKbd.UseMONOChannel == 4;
             rbFM6.Checked = setting.midiKbd.UseMONOChannel == 5;
 
+            cbMIDIKbdAlwaysTop.Checked = setting.midiKbd.AlwaysTop;
+
             tbLatencyEmu.Text = setting.LatencyEmulation.ToString();
             tbLatencySCCI.Text = setting.LatencySCCI.ToString();
 
@@ -1386,6 +1388,8 @@ namespace mml2vgmIDE
             if (int.TryParse(tbCCSlow.Text, out i)) setting.midiKbd.MidiCtrl_Slow = Math.Min(Math.Max(i, 0), 127);
             setting.midiKbd.MidiCtrl_Stop = -1;
             if (int.TryParse(tbCCStop.Text, out i)) setting.midiKbd.MidiCtrl_Stop = Math.Min(Math.Max(i, 0), 127);
+
+            setting.midiKbd.AlwaysTop = cbMIDIKbdAlwaysTop.Checked;
 
             if (int.TryParse(tbLatencyEmu.Text, out i))
             {

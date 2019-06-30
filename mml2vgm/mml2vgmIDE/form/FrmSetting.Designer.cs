@@ -438,6 +438,7 @@
             this.labelCompanyName = new System.Windows.Forms.Label();
             this.textBoxDescription = new System.Windows.Forms.TextBox();
             this.cbHiyorimiMode = new System.Windows.Forms.CheckBox();
+            this.cbMIDIKbdAlwaysTop = new System.Windows.Forms.CheckBox();
             this.gbWaveOut.SuspendLayout();
             this.gbAsioOut.SuspendLayout();
             this.gbWasapiOut.SuspendLayout();
@@ -2885,6 +2886,7 @@
             // 
             // tpMIDIKBD
             // 
+            this.tpMIDIKBD.Controls.Add(this.cbMIDIKbdAlwaysTop);
             this.tpMIDIKBD.Controls.Add(this.cbUseMIDIKeyboard);
             this.tpMIDIKBD.Controls.Add(this.gbMIDIKeyboard);
             this.tpMIDIKBD.Location = new System.Drawing.Point(4, 22);
@@ -2939,7 +2941,7 @@
             this.gbMIDIKeyboard.Enabled = false;
             this.gbMIDIKeyboard.Location = new System.Drawing.Point(3, 6);
             this.gbMIDIKeyboard.Name = "gbMIDIKeyboard";
-            this.gbMIDIKeyboard.Size = new System.Drawing.Size(437, 362);
+            this.gbMIDIKeyboard.Size = new System.Drawing.Size(437, 47);
             this.gbMIDIKeyboard.TabIndex = 0;
             this.gbMIDIKeyboard.TabStop = false;
             // 
@@ -5040,9 +5042,9 @@
             this.cbDispFrameCounter.AutoSize = true;
             this.cbDispFrameCounter.Location = new System.Drawing.Point(6, 17);
             this.cbDispFrameCounter.Name = "cbDispFrameCounter";
-            this.cbDispFrameCounter.Size = new System.Drawing.Size(120, 16);
+            this.cbDispFrameCounter.Size = new System.Drawing.Size(123, 16);
             this.cbDispFrameCounter.TabIndex = 2;
-            this.cbDispFrameCounter.Text = "FrameCounter表示";
+            this.cbDispFrameCounter.Text = "Debugウィンドウ表示";
             this.cbDispFrameCounter.UseVisualStyleBackColor = true;
             // 
             // tpAbout
@@ -5164,6 +5166,16 @@
             this.cbHiyorimiMode.Text = "日和見モード(出力タブ：\r\n遅延時間100ms以下の時、使用を推奨)";
             this.cbHiyorimiMode.UseVisualStyleBackColor = true;
             this.cbHiyorimiMode.Visible = false;
+            // 
+            // cbMIDIKbdAlwaysTop
+            // 
+            this.cbMIDIKbdAlwaysTop.AutoSize = true;
+            this.cbMIDIKbdAlwaysTop.Location = new System.Drawing.Point(12, 64);
+            this.cbMIDIKbdAlwaysTop.Name = "cbMIDIKbdAlwaysTop";
+            this.cbMIDIKbdAlwaysTop.Size = new System.Drawing.Size(154, 16);
+            this.cbMIDIKbdAlwaysTop.TabIndex = 2;
+            this.cbMIDIKbdAlwaysTop.Text = "鍵盤を常に手前に表示する";
+            this.cbMIDIKbdAlwaysTop.UseVisualStyleBackColor = true;
             // 
             // FrmSetting
             // 
@@ -5746,5 +5758,6 @@
         private System.Windows.Forms.GroupBox groupBox29;
         private System.Windows.Forms.CheckBox cbInfiniteOfflineMode;
         private NAudio.Gui.Fader fader1;
+        private System.Windows.Forms.CheckBox cbMIDIKbdAlwaysTop;
     }
 }

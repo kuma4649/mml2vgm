@@ -2568,6 +2568,14 @@ namespace mml2vgmIDE
             on = nn;
         }
 
+        public static void font4Int5S(FrameBuffer screen, int x, int y, int t, ref int on, int nn)
+        {
+            if (on == nn) return;
+
+            drawFont4Int5S(screen, x, y, t, nn);
+            on = nn;
+        }
+        
         public static void font4Hex4Bit(FrameBuffer screen, int x, int y, int t, ref int on, int nn)
         {
             if (on == nn) return;
@@ -2984,6 +2992,27 @@ namespace mml2vgmIDE
             n = num / 1;
             x += 4;
             screen.drawByteArray(x, y, rFont2[t], 128, n * 4 + 64, 0, 4, 8);
+        }
+
+        public static void drawFont4Int5S(FrameBuffer screen, int x, int y, int t, int num)
+        {
+            if (screen == null) return;
+
+            screen.drawByteArray(x, y, rFont2[t], 128, ((num >= 0) ? 11 : 13) * 4, 0, 4, 8);
+            x += 4;
+            if (num < 0) num = -num;
+
+            int n;
+            int k = 10000;
+            for (int i = 0; i < 5; i++)
+            {
+                n = num / k;
+                num -= n * k;
+                n = (n > 9) ? 0 : n;
+                screen.drawByteArray(x, y, rFont2[t], 128, n * 4 + 64, 0, 4, 8);
+                x += 4;
+                k /= 10;
+            }
         }
 
         public static void drawFont4Hex4Bit(FrameBuffer screen, int x, int y, int t, int num)

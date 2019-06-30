@@ -652,9 +652,39 @@ Mx1x2n,...      -oo--ooooooooooooooooooooooo  LFO(
                                                n...:パラメーター   
                                               )基本的にはFMPと同じで以下の書式。
                                                 Delay,Speed,Delta,Depth,Type,Sw,Trans
+											  範囲：
+											    Delay   0 ～ clock counter
+												Speed   1 ～ 255
+												Delta   -32768 ～ 32767
+												Depth   0 ～ 32767
+												Type    0 ～ 4
+												Sw      0 ～ 1
+												Trans   -32768 ～ 32767
                                               Type2(矩形波)のみ以下の書式になる。
                                               Val1とVal2は最大値と最小値(逆の並びも可)でVal1,Val2と交互に切り替わる。
                                                 Delay,Speed,Val1 ,Val2 ,Type,Sw,Trans
+											  範囲：
+											    Delay   0 ～ clock counter
+												Speed   1 ～ 255
+												Val1    -32768 ～ 32767
+												Val2    -32768 ～ 32767
+												Type    0 ～ 4
+												Sw      0 ～ 1
+												Trans   -32768 ～ 32767
+											  設定項目説明
+											    Delay   発音してからLFOの効果が開始されるまでの時間をクロック数で指定する。
+												Speed   LFOの1処理あたりの変化速度をクロック数で指定する。1が一番早い変化。
+												Delta   LFOの1処理あたりの変化量を指定する。音程或いは音量に毎度この値が加算(減算)される。
+												Depth   LFOの最大の変化量を指定する。上記Deltaを加算した結果変化量がこの値に達した場合に減算に変わる。
+												Type    LFOの波形を指定する。
+												        0:三角波
+														1:のこぎり波
+														2:矩形波
+														3:ワンショット
+														4:ランダム
+											    Sw      スイッチ。0を指定すると動作しない。よって1固定。Sコマンドの値とは別管理。
+												Trans   位相。LFOの変化量に加算される。例えば矩形波指定のLFOでバッテリー効果を出すのに使用する。
+												        例えば、eを発音した場合のLFOがdfdf...と繰り返すような場合2度分の位相を指定してegeg...と演奏させるイメージ。
                                               ハードウェアLFO
                                                 ハードウェアLFOはSコマンドによる制御必須。
                                                 (Sコマンドによってパラメータが送信されるため)

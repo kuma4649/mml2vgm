@@ -357,7 +357,7 @@ namespace mml2vgmIDE
             //優先度が高い場合または消音中の場合のみ発音できる
             if (xgmpcm[channel].Priority <= priority || !xgmpcm[channel].isPlaying)
             {
-                if (id == 0 || sampleID[id - 1].size == 0)
+                if (id == 0 || id - 1 >= sampleID.Length || sampleID[id - 1].size == 0)
                 {
                     //IDが0の場合や、定義されていないIDが指定された場合は発音を停止する
                     xgmpcm[channel].Priority = 0;

@@ -708,7 +708,7 @@ namespace Core
 
                 pw.lfo[c].param[0] = Common.CheckRange(pw.lfo[c].param[0], 0, (int)parent.info.clockCount);
                 pw.lfo[c].param[1] = Common.CheckRange(pw.lfo[c].param[1], 1, 255);
-                pw.lfo[c].param[2] = Common.CheckRange(pw.lfo[c].param[2], -32768, 32787);
+                pw.lfo[c].param[2] = Common.CheckRange(pw.lfo[c].param[2], -32768, 32767);
                 if (pw.lfo[c].param.Count > 4)
                 {
                     pw.lfo[c].param[4] = Common.CheckRange(pw.lfo[c].param[4], 0, 4);
@@ -718,8 +718,8 @@ namespace Core
                     pw.lfo[c].param.Add(0);
                 }
 
-                if (pw.lfo[c].param[4] != 2) pw.lfo[c].param[3] = Math.Abs(Common.CheckRange(pw.lfo[c].param[3], 0, 32787));
-                else pw.lfo[c].param[3] = Common.CheckRange(pw.lfo[c].param[3], -32768, 32787);
+                if (pw.lfo[c].param[4] != 2) pw.lfo[c].param[3] = Math.Abs(Common.CheckRange(pw.lfo[c].param[3], 0, 32767));
+                else pw.lfo[c].param[3] = Common.CheckRange(pw.lfo[c].param[3], -32768, 32767);
 
                 if (pw.lfo[c].param.Count > 5)
                 {
@@ -731,7 +731,7 @@ namespace Core
                 }
                 if (pw.lfo[c].param.Count > 6)
                 {
-                    pw.lfo[c].param[6] = Common.CheckRange(pw.lfo[c].param[6], -32768, 32787);
+                    pw.lfo[c].param[6] = Common.CheckRange(pw.lfo[c].param[6], -32768, 32767);
                     //if (pw.lfo[c].param[6] == 0) pw.lfo[c].param[6] = 1;
                 }
                 else

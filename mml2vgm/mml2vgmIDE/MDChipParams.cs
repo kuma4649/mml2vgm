@@ -459,7 +459,7 @@ namespace mml2vgmIDE
         public class MIDIKbd
         {
             public int rec = 1;
-            public byte[] note = new byte[37];
+            public byte[] note = new byte[12 * 5];
             public int cOctave = -1;
             public int kbOctave = -1;
             public int kcOctave = -1;
@@ -471,6 +471,7 @@ namespace mml2vgmIDE
             public string cChip = "";
             public int cCh = 0;
             public int cQuantize = -1;
+            public Core.clsLfo[] lfo = new Core.clsLfo[] { new Core.clsLfo(), new Core.clsLfo(), new Core.clsLfo(), new Core.clsLfo() };
         }
         public MIDIKbd mIDIKbd = new MIDIKbd();
     }

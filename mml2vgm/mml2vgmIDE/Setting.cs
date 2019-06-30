@@ -2922,6 +2922,20 @@ namespace mml2vgmIDE
                 }
             }
 
+            private bool _AlwaysTop = false;
+            public bool AlwaysTop
+            {
+                get
+                {
+                    return _AlwaysTop;
+                }
+
+                set
+                {
+                    _AlwaysTop = value;
+                }
+            }
+
             public MidiKbd Copy()
             {
                 MidiKbd midiKbd = new MidiKbd();
@@ -2946,6 +2960,7 @@ namespace mml2vgmIDE
                 midiKbd.MidiCtrl_Previous = this.MidiCtrl_Previous;
                 midiKbd.MidiCtrl_Slow = this.MidiCtrl_Slow;
                 midiKbd.MidiCtrl_Stop = this.MidiCtrl_Stop;
+                midiKbd.AlwaysTop = this.AlwaysTop;
 
                 return midiKbd;
             }
