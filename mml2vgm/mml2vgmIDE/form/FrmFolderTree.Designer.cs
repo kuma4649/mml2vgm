@@ -34,6 +34,8 @@
             this.imgList = new System.Windows.Forms.ImageList(this.components);
             this.cmsMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.TsmiOpen = new System.Windows.Forms.ToolStripMenuItem();
+            this.TsmiDelete = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.cmsMenu.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -41,6 +43,9 @@
             // 
             this.tvFolderTree.AllowDrop = true;
             this.tvFolderTree.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tvFolderTree.FullRowSelect = true;
+            this.tvFolderTree.HideSelection = false;
+            this.tvFolderTree.HotTracking = true;
             this.tvFolderTree.ImageIndex = 0;
             this.tvFolderTree.ImageList = this.imgList;
             this.tvFolderTree.Location = new System.Drawing.Point(0, 0);
@@ -63,9 +68,11 @@
             // cmsMenu
             // 
             this.cmsMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.TsmiOpen});
+            this.TsmiOpen,
+            this.TsmiDelete,
+            this.toolStripSeparator1});
             this.cmsMenu.Name = "cmsMenu";
-            this.cmsMenu.Size = new System.Drawing.Size(94, 26);
+            this.cmsMenu.Size = new System.Drawing.Size(181, 76);
             // 
             // TsmiOpen
             // 
@@ -73,6 +80,18 @@
             this.TsmiOpen.Size = new System.Drawing.Size(180, 22);
             this.TsmiOpen.Text = "開く";
             this.TsmiOpen.Click += new System.EventHandler(this.TsmiOpen_Click);
+            // 
+            // TsmiDelete
+            // 
+            this.TsmiDelete.Name = "TsmiDelete";
+            this.TsmiDelete.Size = new System.Drawing.Size(180, 22);
+            this.TsmiDelete.Text = "削除";
+            this.TsmiDelete.Click += new System.EventHandler(this.TsmiDelete_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
             // 
             // FrmFolderTree
             // 
@@ -86,6 +105,7 @@
             this.Name = "FrmFolderTree";
             this.Text = "Folder";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FrmFolderTree_FormClosing);
+            this.Load += new System.EventHandler(this.FrmFolderTree_Load);
             this.cmsMenu.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -97,5 +117,7 @@
         private System.Windows.Forms.ImageList imgList;
         private System.Windows.Forms.ContextMenuStrip cmsMenu;
         private System.Windows.Forms.ToolStripMenuItem TsmiOpen;
+        private System.Windows.Forms.ToolStripMenuItem TsmiDelete;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
     }
 }

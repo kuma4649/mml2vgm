@@ -1,0 +1,205 @@
+スクリプトについて
+
+　Iron Pythonを使用します。
+  Iron Pythnについてはここでは説明しません。
+  Python関連の素晴らしい解説サイトを参考にしてください。
+
+
+
+動作の仕組み
+　動作の仕組みは、ある程度決められています。
+　まずは以下の関数が呼び出され、
+  その内容に基づきmml2vgmIDEは動作するようになります。
+
+      def title(self)
+      def scriptType(self)
+      def supportFileExt(self)
+
+  title
+    スクリプトのタイトルを設定します。
+	複数設定することが可能です。
+  scriptType
+    スクリプトの追加場所を設定します。
+	複数設定することが可能です。
+	今のところ、メインウィンドウのメニューストリップ、
+	ツリービューのコンテキストメニューの２つを設定します。
+  supportFileExt
+    サポートするファイルの拡張子を設定します。
+	複数設定することが可能です。
+	今のところ、ツリービューからの起動時にのみこの設定が参照されます。
+
+  ユーザーがスクリプトを選択するとmml2vgmIDEはrun関数を呼び出します。
+  引数に、Mml2vgmInfoとindexが指定されています。
+  スクリプトはこれを参照してmml2vgmIDEの様子をみたり、何番目のスクリプトが呼び出されたか知ります。
+
+  runの処理が完了したら、ScriptInfoをmml2vgmIDEに返却します。
+  今のところ、mml2vgmIDEはごく一部のパラメーターしか参照しません。
+
+
+
+ScriptInfoについて
+  ScriptInfoは、スクリプトからmml2vgmIDEに情報を渡す為のクラスになります。
+  以下のパラメーターがあります。
+
+  responseMessage
+    mml2vgmIDEはこのパラメーターに設定されている文字列をエディターに追加します。
+
+
+
+Indexについて
+  Indexは、スクリプトで定義した何番目のタイトルが選択されたかをスクリプトに渡す為の整数になります。
+  0から数えます。
+
+
+
+Mml2vgmInfoについて
+  Mml2vgmInfoは、mml2vgmIDEからスクリプトに情報を渡す為のクラスになります。
+  以下のパラメーター、関数があります。
+
+  fileNameFull
+    ファイルネーム(フルパス)が設定されています。
+
+  defaultXmlFilename = "scriptSetting.xml";
+    スクリプト間で共有する設定ファイルのファイル名が設定されています。
+
+  settingData
+    上記の設定値が入ったディクショナリーです。
+
+  document
+    アクティブなドキュメントのインスタンスです。
+
+  parent
+    メインウィンドウのインスタンスです。
+
+  getApplicationFolder
+    引数
+	  なし
+    戻り値
+      アプリケーションのファイルが存在するフルパス
+
+  getApplicationDataFolder
+    引数
+	  なし
+    戻り値
+      アプリケーションの設定値保存向けフルパス
+
+  getApplicationTempFolder
+    引数
+	  なし
+    戻り値
+      一時的なワーク用のパス(毎回起動時に中身が削除されます)
+
+  msg(string msg)
+    引数
+	  メッセージ
+    戻り値
+	  なし
+    指定したメッセージをメッセージダイアログに表示します
+
+  msgLogWindow(string msg)
+    引数
+	  メッセージ
+    戻り値
+	  なし
+    ログウィンドウにメッセージを表示します。
+
+  clearLogWindow
+    引数
+	  なし
+    戻り値
+	  なし
+    ログウィンドウをクリアします。
+
+  msgDebugWindow(string msg)
+    引数
+	  メッセージ
+    戻り値
+	  なし
+    デバッグウィンドウのログにメッセージを表示する。
+    ログ(否ログウィンドウ)にも記録される
+
+  ReadFileAllBytes(string fullPath)
+    引数
+	  ファイル名
+    戻り値
+	  byte配列
+
+  confirm(string message, string caption = "")
+    引数
+	  確認メッセージ
+	  メッセージウィンドウのタイトル
+    戻り値
+	  ユーザーの返事結果
+
+  inputBox(string caption = "")
+    引数
+	  メッセージウィンドウのタイトル
+    戻り値
+	  ユーザーの入力結果
+
+  string getCurrentFilepath()
+    引数
+	  なし
+    戻り値
+	  編集中のgwiのファイル名
+
+  void refreshFolderTreeView()
+    引数
+	  なし
+    戻り値
+	  なし
+	フォルダーツリービューのツリーを再描画します。
+
+  string runCommand(string cmdname, string arguments, bool waitEnd = false)
+    引数
+	  実行するファイル名
+	  実行時の引数
+	  実行が完了するまで待つか否か
+    戻り値
+	  標準エラー出力
+
+  string fileSelect(string title)
+    引数
+	  ファイル選択ダイアログに表示するタイトル
+    戻り値
+	  ユーザーが選択したファイル名
+    ファイル選択ダイアログを表示します。
+
+  void loadSetting(string xmlFilename = null)
+    引数
+	  設定ファイル名を設定します。指定しない場合は規定値が使用されます
+    戻り値
+	  なし
+    設定ファイルを読み込む。settingDataに設定値が読み込まれます。
+
+  void saveSetting(string xmlFilename = null)
+    引数
+	  設定ファイル名を設定します。指定しない場合は規定値が使用されます
+    戻り値
+	  なし
+    設定ファイルを保存します。
+
+  string getSettingValue(string key)
+    引数
+	  キーとなる文字列
+    戻り値
+	  キーに対応する設定値
+	指定したキーに設定されている値を取得します。
+
+  void setSettingValue(string key, string value)
+    引数
+	  キーとなる文字列
+	  キーに対応する設定値
+    戻り値
+	  なし
+	指定したキーに値を保存します。
+
+  void removeSetting(string key)
+    引数
+	  キーとなる文字列
+    戻り値
+	  なし
+	指定したキーを削除します。
+
+
+

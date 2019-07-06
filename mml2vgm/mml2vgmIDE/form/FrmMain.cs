@@ -26,7 +26,7 @@ namespace mml2vgmIDE
         private string[] args;
         private Mml2vgm mv = null;
         private string title = "";
-        private FrmLog frmLog = null;
+        public FrmLog frmLog = null;
         private FrmPartCounter frmPartCounter = null;
         private FrmFolderTree frmFolderTree = null;
         private FrmErrorList frmErrorList = null;
@@ -46,6 +46,38 @@ namespace mml2vgmIDE
         private MDChipParams newParam = new MDChipParams();
         private bool ctrl = false;
         private bool shift = false;
+        private ChannelInfo defaultChannelInfo = null;
+        private outDatum[] TraceInfo_YM2151 = new outDatum[16];
+        private outDatum[] TraceInfo_YM2151old = new outDatum[16];
+        private outDatum[] TraceInfo_YM2203 = new outDatum[18];
+        private outDatum[] TraceInfo_YM2203old = new outDatum[18];
+        private outDatum[] TraceInfo_YM2608 = new outDatum[38];
+        private outDatum[] TraceInfo_YM2608old = new outDatum[38];
+        private outDatum[] TraceInfo_YM2610B = new outDatum[38];
+        private outDatum[] TraceInfo_YM2610Bold = new outDatum[38];
+        private outDatum[] TraceInfo_YM2612 = new outDatum[24];
+        private outDatum[] TraceInfo_YM2612old = new outDatum[24];
+        private outDatum[] TraceInfo_SN76489 = new outDatum[8];
+        private outDatum[] TraceInfo_SN76489old = new outDatum[8];
+        private outDatum[] TraceInfo_HuC6280 = new outDatum[6];
+        private outDatum[] TraceInfo_HuC6280old = new outDatum[6];
+        private outDatum[] TraceInfo_RF5C164 = new outDatum[16];
+        private outDatum[] TraceInfo_RF5C164old = new outDatum[16];
+        private outDatum[] TraceInfo_C140 = new outDatum[48];
+        private outDatum[] TraceInfo_C140old = new outDatum[48];
+        private outDatum[] TraceInfo_SegaPCM = new outDatum[32];
+        private outDatum[] TraceInfo_SegaPCMold = new outDatum[32];
+        private outDatum[] TraceInfo_K051649 = new outDatum[10];
+        private outDatum[] TraceInfo_K051649old = new outDatum[10];
+
+        private object traceInfoLockObj = new object();
+        private bool traceInfoSw = false;
+        private string wrkPath = "";
+        private string[] activeMMLTextLines = null;
+        private System.Media.SoundPlayer player = null;
+        public Setting setting;
+        private ToolStripMenuItem tsmiTreeView = null;
+
 
 
 
@@ -226,6 +258,11 @@ namespace mml2vgmIDE
             }
             d.isNew = false;
             UpdateControl();
+        }
+
+        public void refreshFolderTreeView()
+        {
+            UpdateFolderTree();
         }
 
         private void TsmiSaveAs_Click(object sender, EventArgs e)
@@ -722,8 +759,6 @@ namespace mml2vgmIDE
             OpenFile(fn);
         }
 
-        string wrkPath = "";
-
         private void Compile(bool doPlay, bool isTrace, bool doSkip, bool doSkipStop,string[] text=null)
         {
             IDockContent dc = dpMain.ActiveDocument;
@@ -793,8 +828,6 @@ namespace mml2vgmIDE
             trdStartCompile.Start();
             Compiling = true;
         }
-
-        private string[] activeMMLTextLines = null;
 
         private void startCompile()
         {
@@ -1071,7 +1104,7 @@ namespace mml2vgmIDE
                 TsmiUndo.Enabled = d.editor.azukiControl.CanUndo;
                 TsmiRedo.Enabled = d.editor.azukiControl.CanRedo;
 
-                if (frmFolderTree.tvFolderTree.Nodes.Count == 0 || frmFolderTree.tvFolderTree.Nodes[0] != d.gwiTree)
+                if (frmFolderTree.tvFolderTree.Nodes.Count == 0 || frmFolderTree.tvFolderTree.Nodes[0] != d.gwiTree) 
                 {
                     frmFolderTree.tvFolderTree.Nodes.Clear();
                     frmFolderTree.tvFolderTree.Nodes.Add(d.gwiTree);
@@ -1109,8 +1142,29 @@ namespace mml2vgmIDE
                 );
         }
 
-        private System.Media.SoundPlayer player = null;
-        public Setting setting;
+        public void UpdateFolderTree()
+        {
+            DockContent dc = null;
+            Document d = null;
+            if (dpMain.ActiveDocument is DockContent)
+            {
+                dc = (DockContent)dpMain.ActiveDocument;
+                if (dc.Tag is Document)
+                {
+                    d = (Document)dc.Tag;
+                }
+            }
+
+            if (d == null) return;
+
+            frmFolderTree.tvFolderTree.Nodes.Clear();
+            frmFolderTree.tvFolderTree.Nodes.Add(d.gwiTree);
+            frmFolderTree.tvFolderTree.Nodes[0].Collapse();
+            frmFolderTree.tvFolderTree.Nodes[0].Nodes.Clear();
+            frmFolderTree.tvFolderTree.Nodes[0].Nodes.Add("!dmy");
+            frmFolderTree.tvFolderTree.Nodes[0].Expand();
+            frmFolderTree.Focus();
+        }
 
         private void ExecFile(string filename)
         {
@@ -1137,6 +1191,12 @@ namespace mml2vgmIDE
             catch
             {
             }
+        }
+
+        private void DeleteFile(string filename)
+        {
+            File.Delete(filename);
+            refreshFolderTreeView();
         }
 
         private void StopSound()
@@ -1258,6 +1318,7 @@ namespace mml2vgmIDE
             frmLog.parentUpdate = UpdateControl;
             frmFolderTree.parentUpdate = UpdateControl;
             frmFolderTree.parentExecFile = ExecFile;
+            frmFolderTree.parentDeleteFile = DeleteFile;
             frmErrorList.parentUpdate = UpdateControl;
             frmErrorList.parentJumpDocument = JumpDocument;
 
@@ -1596,32 +1657,6 @@ namespace mml2vgmIDE
             //ac.Document.Mark(od.linePos.col, od.linePos.col + od.linePos.length, 1);
         }
 
-        private outDatum[] TraceInfo_YM2151 = new outDatum[16];
-        private outDatum[] TraceInfo_YM2151old = new outDatum[16];
-        private outDatum[] TraceInfo_YM2203 = new outDatum[18];
-        private outDatum[] TraceInfo_YM2203old = new outDatum[18];
-        private outDatum[] TraceInfo_YM2608 = new outDatum[38];
-        private outDatum[] TraceInfo_YM2608old = new outDatum[38];
-        private outDatum[] TraceInfo_YM2610B = new outDatum[38];
-        private outDatum[] TraceInfo_YM2610Bold = new outDatum[38];
-        private outDatum[] TraceInfo_YM2612 = new outDatum[24];
-        private outDatum[] TraceInfo_YM2612old = new outDatum[24];
-        private outDatum[] TraceInfo_SN76489 = new outDatum[8];
-        private outDatum[] TraceInfo_SN76489old = new outDatum[8];
-        private outDatum[] TraceInfo_HuC6280 = new outDatum[6];
-        private outDatum[] TraceInfo_HuC6280old = new outDatum[6];
-        private outDatum[] TraceInfo_RF5C164 = new outDatum[16];
-        private outDatum[] TraceInfo_RF5C164old = new outDatum[16];
-        private outDatum[] TraceInfo_C140 = new outDatum[48];
-        private outDatum[] TraceInfo_C140old = new outDatum[48];
-        private outDatum[] TraceInfo_SegaPCM = new outDatum[32];
-        private outDatum[] TraceInfo_SegaPCMold = new outDatum[32];
-        private outDatum[] TraceInfo_K051649 = new outDatum[10];
-        private outDatum[] TraceInfo_K051649old = new outDatum[10];
-
-        private object traceInfoLockObj = new object();
-        private bool traceInfoSw = false;
-
         private void Timer_Tick(object sender, EventArgs e)
         {
             UpdateTraceInfo();
@@ -1881,11 +1916,23 @@ namespace mml2vgmIDE
             {
                 Directory.CreateDirectory(Path.Combine(Common.GetApplicationFolder(), "Script"));
             }
-            SearchScript(tsmiScript, Path.Combine(Common.GetApplicationFolder(), "Script"));
+
+            tsmiTreeView = new ToolStripMenuItem();
+            GetScripts(tsmiScript, tsmiTreeView, Path.Combine(Common.GetApplicationFolder(), "Script"));
 
         }
 
-        private void SearchScript(ToolStripMenuItem parent, string path)
+        private void GetScripts(ToolStripMenuItem tsmiScript, ToolStripMenuItem tsmiTreeView, string path)
+        {
+            TreeNode tn = new TreeNode();
+            SScript(tn, path);
+
+            DivScripts(tsmiScript, tn , "FROMMENU");
+            DivScripts(tsmiTreeView, tn , "FROMTREEVIEWCONTEXTMENU");
+            frmFolderTree.extendItem = tsmiTreeView;
+        }
+
+        private void SScript(TreeNode parent, string path)
         {
             DirectoryInfo dm = new DirectoryInfo(path);
 
@@ -1893,35 +1940,66 @@ namespace mml2vgmIDE
             {
                 foreach (DirectoryInfo ds in dm.GetDirectories())
                 {
-                    ToolStripMenuItem tsmi = new ToolStripMenuItem(ds.Name);
-                    tsmi.Tag = "+" + ds.FullName;
-                    parent.DropDownItems.Add(tsmi);
-                    tsmi.Click += tsmiScriptDirectoryItem_Clicked;
-                    parent.Enabled = true;
+                    TreeNode tn = new TreeNode(ds.Name);
+                    tn.Tag = new Tuple<int, string, string[], string>(-1, "", new string[] { "" }, ds.FullName);
+                    SScript(tn, ds.FullName);
+                    if (tn.Nodes.Count > 0) parent.Nodes.Add(tn);
                 }
                 foreach (FileInfo fi in dm.GetFiles())
                 {
-                    string scriptTitle = ScriptInterface.GetScriptTitle(fi.FullName);
-                    ToolStripMenuItem tsmi = new ToolStripMenuItem(scriptTitle);
-                    tsmi.Tag = fi.FullName;
-                    parent.DropDownItems.Add(tsmi);
-                    tsmi.Click += tsmiScriptFileItem_Clicked;
-                    parent.Enabled = true;
+                    string[] scriptTitles = ScriptInterface.GetScriptTitles(fi.FullName);
+                    string[] scriptTypes = ScriptInterface.GetScriptTypes(fi.FullName);
+                    string[] scriptSupportFileExt= ScriptInterface.GetScriptSupportFileExt(fi.FullName);
+                    for (int i = 0; i < scriptTitles.Length; i++)
+                    {
+                        TreeNode tn = new TreeNode(scriptTitles[i]);
+                        tn.Tag = new Tuple<int, string, string[], string>(i, scriptTypes[i], scriptSupportFileExt[i].Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries), fi.FullName);
+                        parent.Nodes.Add(tn);
+                    }
                 }
             }
             catch { }
         }
 
+        private void DivScripts(ToolStripMenuItem tsmi,TreeNode tn,string target)
+        {
+            foreach (TreeNode ctn in tn.Nodes)
+            {
+                ToolStripMenuItem ctsmi = new ToolStripMenuItem(ctn.Text);
+                Tuple<int, string, string[], string> tpl = (Tuple<int, string, string[], string>)ctn.Tag;
+                if (tpl.Item1 != -1 && tpl.Item2.ToUpper() != target)
+                {
+                    continue;
+                }
+                ctsmi.Tag = ctn.Tag;
+                tsmi.DropDownItems.Add(ctsmi);
+                tsmi.Enabled = true;
+                if (ctn.Nodes.Count > 0)
+                {
+                    ctsmi.Click += tsmiScriptDirectoryItem_Clicked;
+                    DivScripts(ctsmi, ctn, target);
+                    if (ctsmi.DropDownItems.Count == 0)
+                    {
+                        tsmi.DropDownItems.Remove(ctsmi);
+                    }
+                }
+                else
+                {
+                    ctsmi.Click += tsmiScriptFileItem_Clicked;
+                }
+            }
+        }
+
         private void tsmiScriptDirectoryItem_Clicked(object sender, EventArgs e)
         {
             ToolStripMenuItem tsmi = (ToolStripMenuItem)sender;
-            string path = (string)tsmi.Tag;
+            Tuple<int, string, string, string> tpl = (Tuple<int, string, string, string>)((ToolStripMenuItem)sender).Tag;
+            string path = tpl.Item4;
             if (string.IsNullOrEmpty(path) || path[0] != '+') return;
             path = path.Substring(1);
             if (string.IsNullOrEmpty(path)) return;
             tsmi.Tag = path;
 
-            SearchScript(tsmi, path);
         }
 
         private void tsmiScriptFileItem_Clicked(object sender, EventArgs e)
@@ -1938,16 +2016,20 @@ namespace mml2vgmIDE
             }
             //if (d == null) return;
 
-            string fn = (string)((ToolStripMenuItem)sender).Tag;
-
+            Tuple<int,string, string[],string> tpl = (Tuple<int, string, string[], string>)((ToolStripMenuItem)sender).Tag;
+            string fn = tpl.Item4;
             Mml2vgmInfo info = new Mml2vgmInfo();
             info.parent = this;
             info.name = "";
             info.document = d;
-            ScriptInterface.run(fn, info);
-        }
+            TreeNode tn = frmFolderTree.tvFolderTree.SelectedNode;
+            if (tn == null) return;
+            if (tn.ImageIndex == 1) return;
+            string fullpath = System.IO.Path.Combine(Path.GetDirectoryName(frmFolderTree.basePath), tn.FullPath);
+            info.fileNameFull = fullpath;
 
-        private ChannelInfo defaultChannelInfo = null;
+            ScriptInterface.run(fn, info, tpl.Item1);
+        }
 
         private ChannelInfo GetCurrentChannelInfo()
         {

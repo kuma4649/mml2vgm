@@ -2549,6 +2549,9 @@ namespace mml2vgmIDE
             private Rectangle _RMIDIKbd = Rectangle.Empty;
             public Rectangle RMIDIKbd { get => _RMIDIKbd; set => _RMIDIKbd = value; }
 
+            private Rectangle _RInputBox = Rectangle.Empty;
+            public Rectangle RInputBox { get => _RInputBox; set => _RInputBox = value; }
+
             public Location Copy()
             {
                 Location Location = new Location();
@@ -2669,6 +2672,14 @@ namespace mml2vgmIDE
         [Serializable]
         public class MidiKbd
         {
+            private int _Channel = 0;
+            private int _Octave = 0;
+            private int _Tempo = 0;
+            private int _Clockcounter = 0;
+            private int _CurrentLength = 0;
+            private bool _UseQuantize = false;
+            private int _Quantize = 0;
+            private LfoParam[] _LfoParams = new LfoParam[4];
 
             private bool _UseMIDIKeyboard = false;
             public bool UseMIDIKeyboard
@@ -2936,6 +2947,15 @@ namespace mml2vgmIDE
                 }
             }
 
+            public int Channel { get => _Channel; set => _Channel = value; }
+            public int Octave { get => _Octave; set => _Octave = value; }
+            public int Tempo { get => _Tempo; set => _Tempo = value; }
+            public int Clockcounter { get => _Clockcounter; set => _Clockcounter = value; }
+            public int CurrentLength { get => _CurrentLength; set => _CurrentLength = value; }
+            public int Quantize { get => _Quantize; set => _Quantize = value; }
+            public LfoParam[] LfoParams { get => _LfoParams; set => _LfoParams = value; }
+            public bool UseQuantize { get => _UseQuantize; set => _UseQuantize = value; }
+
             public MidiKbd Copy()
             {
                 MidiKbd midiKbd = new MidiKbd();
@@ -2961,8 +2981,54 @@ namespace mml2vgmIDE
                 midiKbd.MidiCtrl_Slow = this.MidiCtrl_Slow;
                 midiKbd.MidiCtrl_Stop = this.MidiCtrl_Stop;
                 midiKbd.AlwaysTop = this.AlwaysTop;
-
+                midiKbd.Channel = this.Channel;
+                midiKbd.Octave = this.Octave;
+                midiKbd.Tempo = this.Tempo;
+                midiKbd.Clockcounter = this.Clockcounter;
+                midiKbd.CurrentLength = this.CurrentLength;
+                midiKbd.Quantize = this.Quantize;
+                midiKbd.LfoParams = null;
+                if (this.LfoParams.Length > 0)
+                {
+                    midiKbd.LfoParams = new LfoParam[this.LfoParams.Length];
+                    for (int i = 0; i < this.LfoParams.Length; i++)
+                    {
+                        if (this.LfoParams[i] == null) continue;
+                        midiKbd.LfoParams[i] = new LfoParam();
+                        midiKbd.LfoParams[i] = this.LfoParams[i].Copy();
+                    }
+                }
                 return midiKbd;
+            }
+        }
+
+        [Serializable]
+        public class LfoParam
+        {
+            private bool _Use = false;
+            private int _Type = 0;
+            private int _Delay = 0;
+            private int _Speed = 0;
+            private int _Delta = 0;
+            private int _Depth = 0;
+            private int _WaveType = 0;
+            private bool _Switch = false;
+            private int _Trans = 0;
+
+            public bool Use { get => _Use; set => _Use = value; }
+            public int Type { get => _Type; set => _Type = value; }
+            public int Delay { get => _Delay; set => _Delay = value; }
+            public int Speed { get => _Speed; set => _Speed = value; }
+            public int Delta { get => _Delta; set => _Delta = value; }
+            public int Depth { get => _Depth; set => _Depth = value; }
+            public int WaveType { get => _WaveType; set => _WaveType = value; }
+            public bool Switch { get => _Switch; set => _Switch = value; }
+            public int Trans { get => _Trans; set => _Trans = value; }
+
+            public LfoParam Copy()
+            {
+                LfoParam ret = new LfoParam();
+                return ret;
             }
         }
 
@@ -3597,4 +3663,5 @@ namespace mml2vgmIDE
         }
 
     }
+
 }

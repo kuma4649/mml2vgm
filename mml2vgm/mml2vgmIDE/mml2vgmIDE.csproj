@@ -119,11 +119,23 @@
     <Compile Include="form\frmDebug.Designer.cs">
       <DependentUpon>frmDebug.cs</DependentUpon>
     </Compile>
+    <Compile Include="form\FrmInputBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="form\FrmInputBox.Designer.cs">
+      <DependentUpon>FrmInputBox.cs</DependentUpon>
+    </Compile>
     <Compile Include="form\FrmMIDIKbd.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="form\FrmMIDIKbd.Designer.cs">
       <DependentUpon>FrmMIDIKbd.cs</DependentUpon>
+    </Compile>
+    <Compile Include="form\FrmMIDIKbd_prm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="form\FrmMIDIKbd_prm.Designer.cs">
+      <DependentUpon>FrmMIDIKbd_prm.cs</DependentUpon>
     </Compile>
     <Compile Include="form\FrmMixer.cs">
       <SubType>Form</SubType>
@@ -224,8 +236,14 @@
     <EmbeddedResource Include="form\frmDebug.resx">
       <DependentUpon>frmDebug.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="form\FrmInputBox.resx">
+      <DependentUpon>FrmInputBox.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="form\FrmMIDIKbd.resx">
       <DependentUpon>FrmMIDIKbd.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="form\FrmMIDIKbd_prm.resx">
+      <DependentUpon>FrmMIDIKbd_prm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="form\FrmMixer.resx">
       <DependentUpon>FrmMixer.cs</DependentUpon>
@@ -366,12 +384,21 @@
     <Content Include="Script\compileMuc.py">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Script\test.py">
+    <Content Include="Script\Git\git.py">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Script\Sample\testMenuItem.py">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Script\Sample\test.py">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="Setup.gwi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <Content Include="Script\SOX\sox.py">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Tutorial.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

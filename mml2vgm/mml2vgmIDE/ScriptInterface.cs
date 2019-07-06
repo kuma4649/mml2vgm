@@ -21,7 +21,7 @@ namespace mml2vgmIDE
         {
         }
 
-        public static string GetScriptTitle(string path)
+        private static string[] GetScriptInfo(string path,int t)
         {
             ScriptEngine engine=null;
             ScriptRuntime runtime = null;
@@ -43,20 +43,43 @@ namespace mml2vgmIDE
 
                 dynamic pyClass = scope.GetVariable("Mml2vgmScript");
                 dynamic mml2vgmScript = pyClass();
-                return mml2vgmScript.title();
+                switch (t)
+                {
+                    case 0:
+                        return mml2vgmScript.title().Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
+                    case 1:
+                        return mml2vgmScript.scriptType().Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
+                    case 2:
+                        return mml2vgmScript.supportFileExt().Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
+                }
             }
             catch (Exception ex)
             {
                 log.ForcedWrite(ex);
-                return Path.GetFileName(path);
             }
             finally
             {
                 runtime.Shutdown();
             }
+            return new string[] { "" };// Path.GetFileName(path);
         }
 
-        public static void run(string path, Mml2vgmInfo info)
+        public static string[] GetScriptTitles(string path)
+        {
+            return GetScriptInfo(path, 0);
+        }
+
+        public static string[] GetScriptTypes(string path)
+        {
+            return GetScriptInfo(path, 1);
+        }
+
+        public static string[] GetScriptSupportFileExt(string path)
+        {
+            return GetScriptInfo(path, 2);
+        }
+
+        public static void run(string path, Mml2vgmInfo info, int index)
         {
             ScriptEngine engine = null;
             ScriptRuntime runtime = null;
@@ -77,7 +100,7 @@ namespace mml2vgmIDE
 
                 dynamic pyClass = scope.GetVariable("Mml2vgmScript");
                 dynamic mml2vgmScript = pyClass();
-                ScriptInfo si = mml2vgmScript.run(info);
+                ScriptInfo si = mml2vgmScript.run(info, index);
                 if (si != null && info.document != null)
                 {
                     info.document.editor.azukiControl.Document.Replace(si.responseMessage);
@@ -135,6 +158,11 @@ namespace mml2vgmIDE
         {
             return Path.Combine(Common.GetApplicationDataFolder(true), "temp");
         }
+
+        /// <summary>
+        /// ファイルネーム(フルパス)
+        /// </summary>
+        public string fileNameFull = "";
 
         /// <summary>
         /// 未使用
@@ -217,11 +245,33 @@ namespace mml2vgmIDE
             return result == System.Windows.Forms.DialogResult.Yes;
         }
 
+        public string inputBox(string caption = "")
+        {
+            string text = "";
+
+            using (FrmInputBox fib = new FrmInputBox(parent.setting))
+            {
+                fib.title = caption;
+                System.Windows.Forms.DialogResult res = fib.ShowDialog();
+                if (res == System.Windows.Forms.DialogResult.Cancel) return "";
+                text = fib.Text;
+            }
+
+            return text;
+        }
+
         public string getCurrentFilepath() {
             return document.gwiFullPath;
         }
 
-        public void runCommand(string cmdname, string arguments, bool waitEnd = false) {
+        public void refreshFolderTreeView()
+        {
+            parent.refreshFolderTreeView();
+        }
+
+
+        public string runCommand(string cmdname, string arguments, bool waitEnd = false)
+        {
 
             //if (waitEnd)
             //{
@@ -263,6 +313,11 @@ namespace mml2vgmIDE
             var psi = new System.Diagnostics.ProcessStartInfo();
             psi.FileName = cmdname;
             psi.Arguments = arguments;
+            psi.RedirectStandardError = true;
+            psi.RedirectStandardOutput = true;
+            psi.UseShellExecute = false;
+            int exitcode;
+            string ret = "";
 
             using (var p = System.Diagnostics.Process.Start(psi))
             {
@@ -270,8 +325,20 @@ namespace mml2vgmIDE
                 {
                     p.WaitForExit();
                 }
+
+                exitcode = p.ExitCode;
+                if (exitcode != 0) ret = p.StandardError.ReadToEnd();
+                else ret = "";
+                string so = p.StandardOutput.ReadToEnd();
+                if (!string.IsNullOrEmpty(so))
+                {
+                    msgLogWindow(so + "\r\n");
+                }
                 p.Close();
             }
+
+            return ret;
+
         }
 
         //private Process process = null;

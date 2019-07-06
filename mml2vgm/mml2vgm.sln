@@ -15,6 +15,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		..\LICENSE.txt = ..\LICENSE.txt
 		..\mml2vgm_MMLCommandMemo.txt = ..\mml2vgm_MMLCommandMemo.txt
 		..\README.md = ..\README.md
+		Script.txt = Script.txt
 		..\ZGMspec.txt = ..\ZGMspec.txt
 	EndProjectSection
 EndProject

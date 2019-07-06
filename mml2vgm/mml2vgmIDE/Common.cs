@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Reflection;
 using Core;
+using System.Windows.Forms;
+using System.Drawing;
 
 namespace mml2vgmIDE
 {
@@ -299,5 +301,31 @@ namespace mml2vgmIDE
             return ary.ToArray();
         }
 
+        public static void SetBFColor(Control parent,Setting setting)
+        {
+            if (parent is Form)
+            {
+                parent.BackColor = Color.FromArgb(setting.ColorScheme.Log_BackColor);
+                parent.ForeColor = Color.FromArgb(setting.ColorScheme.Log_ForeColor);
+            }
+
+            foreach (Control child in parent.Controls)
+            {
+                if (child.Controls != null && child.Controls.Count > 0)
+                    SetBFColor(child, setting);
+
+                if (child is Label || child is TextBox || child is Panel)
+                {
+                    child.BackColor = Color.FromArgb(setting.ColorScheme.Log_BackColor);
+                    child.ForeColor = Color.FromArgb(setting.ColorScheme.Log_ForeColor);
+                }
+
+                if (child is Button)
+                {
+                    child.BackColor = Color.FromArgb(setting.ColorScheme.Log_BackColor);
+                    child.ForeColor = Color.FromArgb(setting.ColorScheme.Log_ForeColor);
+                }
+            }
+        }
     }
 }

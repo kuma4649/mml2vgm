@@ -28,8 +28,7 @@ namespace mml2vgmIDE
         private int chipn = -1;
         private Setting setting = null;
         private MidiIn midiin = null;
-        private int cOct = 4;
-        private int cQuantize = 8;
+        //private int cQuantize = 8;
         private int recMode = 0;
         private AzukiControl recAC = null;
 
@@ -74,7 +73,7 @@ namespace mml2vgmIDE
             this.zoom = zoom;
             this.setting = parent.setting;
             keyPress = new bool[kbdTbl.Length];
-            cOct = 4;
+            if (setting.midiKbd.Octave == 0) setting.midiKbd.Octave = 4;
             SoundManager = Audio.sm;
             SoundManager.AddDataSeqFrqEvent(OnDataSeqFrq);
             SoundManager.CurrentChip = "YM2612";
@@ -137,6 +136,8 @@ namespace mml2vgmIDE
                 }
             }
             isClosed = true;
+
+            if (frmMIDIKbd_prm != null) frmMIDIKbd_prm.Close();
         }
 
         private void FrmMIDIKbd_Load(object sender, EventArgs e)
@@ -177,24 +178,29 @@ namespace mml2vgmIDE
         {
             for (int i = 0; i < newParam.note.Length; i++)
             {
-                int n = i + (cOct - 2) * 12 - 0;
+                int n = i + (setting.midiKbd.Octave - 2) * 12 - 0;
                 n = Math.Min(Math.Max(n, 0), noteFlg.Length - 1);
                 newParam.note[i] = noteFlg[n];
             }
 
-            newParam.cOctave = cOct;
-            newParam.kbOctave = cOct - 1;
-            newParam.kcOctave = cOct;
-            newParam.kaOctave = cOct + 1;
-            newParam.kaaOctave = cOct + 2;
+            newParam.cOctave = setting.midiKbd.Octave;
+            newParam.kbOctave = setting.midiKbd.Octave - 1;
+            newParam.kcOctave = setting.midiKbd.Octave;
+            newParam.kaOctave = setting.midiKbd.Octave + 1;
+            newParam.kaaOctave = setting.midiKbd.Octave + 2;
             newParam.cTempo = Audio.sm.CurrentTempo;
             newParam.cClockCnt = Audio.sm.CurrentClockCount;
-            newParam.cNoteLength = Audio.sm.CurrentNoteLength < 1 ? 0 : (newParam.cClockCnt / Audio.sm.CurrentNoteLength);
-            newParam.cQuantize = cQuantize;
+            setting.midiKbd.Tempo = Audio.sm.CurrentTempo;
+            setting.midiKbd.Clockcounter = Audio.sm.CurrentClockCount;
+            //newParam.cNoteLength = Audio.sm.CurrentNoteLength < 1 ? 0 : (newParam.cClockCnt / Audio.sm.CurrentNoteLength);
+            newParam.cNoteLength = setting.midiKbd.CurrentLength;
+            newParam.cQuantize = setting.midiKbd.Quantize;
+            //newParam.cQuantize = cQuantize;
             newParam.rec = recMode == 0 ? 0 : (((recMode - 1) / 17) + 1);
             recMode = recMode == 0 ? 0 : ((((++recMode) - 1) % 34) + 1);
             newParam.cChip = Audio.sm.CurrentChip;
             newParam.cCh = Audio.sm.CurrentCh;
+            setting.midiKbd.Channel = Audio.sm.CurrentCh;
 
             if (recAC != null)
             {
@@ -416,7 +422,7 @@ namespace mml2vgmIDE
                     keyPress[i] = true;
                     if (i >= 2)
                     {
-                        int n = Math.Min(Math.Max((i - 6) + (cOct - 1 + 1) * 12, 0), 127);
+                        int n = Math.Min(Math.Max((i - 6) + (setting.midiKbd.Octave - 1 + 1) * 12, 0), 127);
                         NoteOn(n, 127);
                     }
                 }
@@ -446,12 +452,12 @@ namespace mml2vgmIDE
                 keyPress[i] = false;
                 if (i >= 2)
                 {
-                    int n = Math.Min(Math.Max((i - 6) + (cOct - 1 + 1) * 12, 0), 127);
+                    int n = Math.Min(Math.Max((i - 6) + (setting.midiKbd.Octave - 1 + 1) * 12, 0), 127);
                     NoteOff(n);
                 }
                 else
                 {
-                    cOct = Math.Min(Math.Max((i == 0) ? (cOct - 1) : (cOct + 1), 1), 11);
+                    setting.midiKbd.Octave = Math.Min(Math.Max((i == 0) ? (setting.midiKbd.Octave - 1) : (setting.midiKbd.Octave + 1), 1), 11);
                 }
             }
         }
@@ -475,7 +481,7 @@ namespace mml2vgmIDE
             int note;
             PbScreen_MouseClick_KeybdArea(px, py, e, out oct, out note);
 
-            int n = Math.Min(Math.Max(note + (oct + cOct - 1) * 12, 0), 127);
+            int n = Math.Min(Math.Max(note + (oct + setting.midiKbd.Octave - 1) * 12, 0), 127);
             NoteOn(n, 127);
             mOct = oct;
             mNote = note;
@@ -486,7 +492,7 @@ namespace mml2vgmIDE
         {
             if (mOct == -1 && mNote == -1) return;
 
-            int n = Math.Min(Math.Max(mNote + (mOct + cOct - 1) * 12, 0), 127);
+            int n = Math.Min(Math.Max(mNote + (mOct + setting.midiKbd.Octave - 1) * 12, 0), 127);
             NoteOff(n);
             mOct = -1;
             mNote = -1;
@@ -820,14 +826,17 @@ namespace mml2vgmIDE
             long len = length;
             long n = 1;
 
-            if((len % (rtMML.clockCount / cQuantize)) < (rtMML.clockCount / cQuantize / 2))
+            if (setting.midiKbd.Quantize != 0)
             {
-                len -= (len % (rtMML.clockCount / cQuantize));
-            }
-            else
-            {
-                len -= (len % (rtMML.clockCount / cQuantize));
-                len += (rtMML.clockCount / cQuantize);
+                if ((len % (rtMML.clockCount / setting.midiKbd.Quantize)) < (rtMML.clockCount / setting.midiKbd.Quantize / 2))
+                {
+                    len -= (len % (rtMML.clockCount / setting.midiKbd.Quantize));
+                }
+                else
+                {
+                    len -= (len % (rtMML.clockCount / setting.midiKbd.Quantize));
+                    len += (rtMML.clockCount / setting.midiKbd.Quantize);
+                }
             }
 
             while (n <= 64 && len > 0)
@@ -896,33 +905,48 @@ namespace mml2vgmIDE
             //chip名表示欄を左クリックしている場合
         }
 
+
+        public enum KbdParam
+        {
+            Unknown,
+            CurrentChannel,
+            Octave,
+            Tempo,
+            ClockCounter,
+            NoteLength,
+            Quantize,
+            Lfo,
+            LfoUse,
+            LfoType,
+            LfoDelay,
+            LfoSpeed,
+            LfoDelta,
+            LfoDepth,
+            LfoWaveType,
+            LfoSw,
+            LfoTrans
+        }
+        private FrmMIDIKbd_prm frmMIDIKbd_prm = null;
+
         private void PbScreen_MouseClick_ParamArea(int px, int py, MouseEventArgs e)
         {
             if (e.Button != MouseButtons.Left) return;
 
-            if (px >= 7 && px <= 9)
+            KbdParam target = KbdParam.Unknown;
+
+            if (px >= 7 && px <= 9) target = KbdParam.CurrentChannel;
+            else if (px >= 15 && px <= 16) target = KbdParam.Octave;
+            else if (px >= 24 && px <= 26) target = KbdParam.Tempo;
+            else if (px >= 32 && px <= 34) target = KbdParam.ClockCounter;
+            else if (px >= 38 && px <= 40) target = KbdParam.NoteLength;
+            else if (px >= 44 && px <= 46) target = KbdParam.Quantize;
+
+            if (frmMIDIKbd_prm == null || frmMIDIKbd_prm.IsDisposed)
             {
-                //CH
-            }
-            else if (px >= 15 && px <= 16)
-            {
-                //OCT
-            }
-            else if (px >= 24 && px <= 26)
-            {
-                //TEMPO
-            }
-            else if (px >= 32 && px <= 34)
-            {
-                //CLK
-            }
-            else if (px >= 38 && px <= 40)
-            {
-                //L
-            }
-            else if (px >= 44 && px <= 46)
-            {
-                //OFF
+                frmMIDIKbd_prm = new FrmMIDIKbd_prm(setting);
+                frmMIDIKbd_prm.Target = target;
+                frmMIDIKbd_prm.TargetTab = 0;
+                frmMIDIKbd_prm.Show();
             }
         }
 
@@ -930,46 +954,25 @@ namespace mml2vgmIDE
         {
             if (py == 2 || e.Button != MouseButtons.Left) return;
 
+            KbdParam target = KbdParam.Unknown;
             int n = py - 3;
-            if (px >= 0 && px <= 2)
+            if (px >= 0 && px <= 2) target = KbdParam.Lfo;
+            else if (px >= 4 && px <= 6) target = KbdParam.LfoUse;
+            else if (px == 8) target = KbdParam.LfoType;
+            else if (px >= 11 && px <= 13) target = KbdParam.LfoDelay;
+            else if (px >= 16 && px <= 18) target = KbdParam.LfoSpeed;
+            else if (px >= 20 && px <= 25) target = KbdParam.LfoDelta;
+            else if (px >= 27 && px <= 32) target = KbdParam.LfoDepth;
+            else if (px >= 34 && px <= 36) target = KbdParam.LfoWaveType;
+            else if (px == 39) target = KbdParam.LfoSw;
+            else if (px >= 41 && px <= 46) target = KbdParam.LfoTrans;
+
+            if (frmMIDIKbd_prm == null || frmMIDIKbd_prm.IsDisposed)
             {
-                //LFO
-            }
-            else if (px >= 4 && px <= 6)
-            {
-                //USE
-            }
-            else if (px == 8)
-            {
-                //T
-            }
-            else if (px >= 11 && px <= 13)
-            {
-                //Delay
-            }
-            else if (px >= 16 && px <= 18)
-            {
-                //Speed
-            }
-            else if (px >= 20 && px <= 25)
-            {
-                //Delta
-            }
-            else if (px >= 27 && px <= 32)
-            {
-                //Depth
-            }
-            else if (px >= 34 && px <= 36)
-            {
-                //TYP
-            }
-            else if (px == 39)
-            {
-                //SW
-            }
-            else if (px >= 41 && px <= 46)
-            {
-                //TRANS
+                frmMIDIKbd_prm = new FrmMIDIKbd_prm(setting);
+                frmMIDIKbd_prm.Target = target;
+                frmMIDIKbd_prm.TargetTab = n + 1;
+                frmMIDIKbd_prm.Show();
             }
         }
 
