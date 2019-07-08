@@ -8,15 +8,18 @@ using System.Windows.Forms;
 using System.IO;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using CustomControl;
+using WeifenLuo.WinFormsUI.Docking;
 
 namespace mml2vgmIDE
 {
     public partial class FrmFolderTree : WeifenLuo.WinFormsUI.Docking.DockContent
     {
         public Action parentUpdate = null;
-        public Action<string> parentExecFile = null;
-        public Action<string> parentDeleteFile = null;
+        public Action<string[]> parentExecFile = null;
+        public Action<string[]> parentDeleteFile = null;
         public string basePath = "";
+        private bool useMouse;
 
         public ToolStripMenuItem extendItem {
             set
@@ -34,11 +37,18 @@ namespace mml2vgmIDE
             }
         }
 
-        public FrmFolderTree(Setting setting)
+        public FrmFolderTree(Setting setting,DockPanel dockPanel)
         {
             InitializeComponent();
             this.tvFolderTree.BackColor = Color.FromArgb(setting.ColorScheme.FolderTree_BackColor);
             this.tvFolderTree.ForeColor = Color.FromArgb(setting.ColorScheme.FolderTree_ForeColor);
+            this.tvFolderTree.HotColor = Color.FromArgb(setting.ColorScheme.FolderTree_BackColor);
+            this.tvFolderTree.HotColor = Color.FromArgb(
+                (int)(tvFolderTree.HotColor.R * 1.3), 
+                (int)(tvFolderTree.HotColor.G * 1.3), 
+                (int)(tvFolderTree.HotColor.B * 1.3));
+
+            dockPanel.Theme.ApplyTo(cmsMenu);
         }
 
         private void FrmFolderTree_Load(object sender, EventArgs e)
@@ -94,42 +104,115 @@ namespace mml2vgmIDE
 
         private void TreeView1_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
         {
-            if (e.Node.ImageIndex == 1) return;
-            string fullpath = System.IO.Path.Combine(Path.GetDirectoryName(basePath), e.Node.FullPath);
-            parentExecFile?.Invoke(fullpath);
+            List<string> lstFullPath = new List<string>();
+            GetCheckTreeNodesFullPath(lstFullPath, tvFolderTree.Nodes);
+            if (lstFullPath.Count < 1) return;
+            parentExecFile?.Invoke(lstFullPath.ToArray());
+
+            //if (e.Node.ImageIndex == 1) return;
+            //string fullpath = System.IO.Path.Combine(Path.GetDirectoryName(basePath), e.Node.FullPath);
+            //parentExecFile?.Invoke(fullpath);
         }
 
         private void TvFolderTree_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (e.KeyChar == '\r')
             {
-                TreeNode tn = tvFolderTree.SelectedNode;
-                if (tn == null) return;
-                if (tn.ImageIndex == 1) return;
-                string fullpath = System.IO.Path.Combine(Path.GetDirectoryName(basePath), tn.FullPath);
-                parentExecFile?.Invoke(fullpath);
+                List<string> lstFullPath = new List<string>();
+                GetCheckTreeNodesFullPath(lstFullPath, tvFolderTree.Nodes);
+                if (lstFullPath.Count < 1) return;
+                parentExecFile?.Invoke(lstFullPath.ToArray());
+
+                //TreeNode tn = tvFolderTree.SelectedNode;
+                //if (tn == null) return;
+                //if (tn.ImageIndex == 1) return;
+                //string fullpath = System.IO.Path.Combine(Path.GetDirectoryName(basePath), tn.FullPath);
+                //parentExecFile?.Invoke(fullpath);
+
                 e.Handled = true;
             }
         }
 
         private void TvFolderTree_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
         {
+            useMouse = true;
+
             if (e.Button == MouseButtons.Right)
             {
-                tvFolderTree.SelectedNode = e.Node;
+                if (!e.Node.Checked)
+                {
+                    if ((Control.ModifierKeys & (Keys.Control | Keys.Shift)) == 0)
+                    {
+                        CheckClear(tvFolderTree.Nodes);
+                    }
+                    tvFolderTree.SelectedNode = e.Node;
+                }
+                e.Node.Checked = true;
                 TreeNode tn = e.Node;
                 if (tn == null) return;
                 if (tn.ImageIndex == 1) return;
 
-                string ext = Path.GetExtension(tn.FullPath);
-                CheckExtension(cmsMenu.Items, ext);
+                List<string> lstFullPathExt = new List<string>();
+                GetCheckTreeNodesFullPathExt(lstFullPathExt, tvFolderTree.Nodes);
+
+                CheckExtension(cmsMenu.Items, lstFullPathExt.ToArray());
 
                 cmsMenu.Show((Control)sender, e.X, e.Y);
+                
+            }
+            else if (e.Button == MouseButtons.Left)
+            {
+                tvFolderTree.SelectedNode = e.Node;
 
+                if ((Control.ModifierKeys & (Keys.Control | Keys.Shift)) == 0)
+                {
+                    CheckClear(tvFolderTree.Nodes);
+                }
+
+                e.Node.Checked = true;
             }
         }
 
-        private void CheckExtension(ToolStripItemCollection pItems, string ext)
+        private void CheckClear(TreeNodeCollection nodes)
+        {
+            foreach (TreeNode tn in nodes)
+            {
+                tn.Checked = false;
+                if (tn.Nodes.Count > 0) CheckClear(tn.Nodes);
+            }
+        }
+
+        public void GetCheckTreeNodesFullPath(List<string> lstFullPath, TreeNodeCollection nodes)
+        {
+            foreach (TreeNode tn in nodes)
+            {
+                if (tn.Nodes.Count > 0)
+                {
+                    GetCheckTreeNodesFullPath(lstFullPath, tn.Nodes);
+                    continue;
+                }
+                if (!tn.Checked) continue;
+
+                string fullpath = System.IO.Path.Combine(Path.GetDirectoryName(basePath), tn.FullPath);
+                lstFullPath.Add(fullpath + ((tn.ImageIndex == 1) ? "\\" : ""));
+            }
+        }
+
+        private void GetCheckTreeNodesFullPathExt(List<string> lstFullPathExt, TreeNodeCollection nodes)
+        {
+            foreach (TreeNode tn in nodes)
+            {
+                if (tn.Nodes.Count > 0)
+                {
+                    GetCheckTreeNodesFullPathExt(lstFullPathExt, tn.Nodes);
+                    continue;
+                }
+                if (!tn.Checked) continue;
+                lstFullPathExt.Add(Path.GetExtension(tn.FullPath));
+            }
+        }
+
+        private void CheckExtension(ToolStripItemCollection pItems, string[] exts)
         {
             foreach(ToolStripItem item in pItems)
             {
@@ -139,7 +222,7 @@ namespace mml2vgmIDE
                 ToolStripMenuItem tsmi = (ToolStripMenuItem)item;
                 if (tsmi.DropDownItems.Count > 0)
                 {
-                    CheckExtension(tsmi.DropDownItems, ext);
+                    CheckExtension(tsmi.DropDownItems, exts);
                 }
 
                 Tuple<int, string, string[], string> tp = (Tuple<int, string, string[], string>)item.Tag;
@@ -147,20 +230,26 @@ namespace mml2vgmIDE
                 if (tp.Item1 < 0) continue;
 
                 bool match = false;
-                foreach (string s in tp.Item3)
+                foreach (string ext in exts)
                 {
-                    if (s == ".*")
+                    match = false;
+                    foreach (string s in tp.Item3)
                     {
-                        match = true;
-                        break;
+                        if (s == ".*")
+                        {
+                            match = true;
+                            break;
+                        }
+
+                        string regexPattern = TransW2Reg(s);
+                        if (new Regex(regexPattern).IsMatch(ext))
+                        {
+                            match = true;
+                            break;
+                        }
                     }
 
-                    string regexPattern = TransW2Reg(s);
-                    if (new Regex(regexPattern).IsMatch(ext))
-                    {
-                        match = true;
-                        break;
-                    }
+                    if (!match) break;
                 }
 
                 item.Enabled = match;
@@ -201,28 +290,89 @@ namespace mml2vgmIDE
             return regexPattern;
         }
 
-        private void TsmiOpen_Click(object sender, EventArgs e)
+        private void TsmiOpen_MouseUp(object sender, MouseEventArgs e)
         {
-            TreeNode tn = tvFolderTree.SelectedNode;
-            if (tn == null) return;
-            if (tn.ImageIndex == 1) return;
-            string fullpath = System.IO.Path.Combine(Path.GetDirectoryName(basePath), tn.FullPath);
-            parentExecFile?.Invoke(fullpath);
+            if (e.Button == MouseButtons.Right) return;
+
+            List<string> lstFullPath = new List<string>();
+            GetCheckTreeNodesFullPath(lstFullPath, tvFolderTree.Nodes);
+            if (lstFullPath.Count < 1) return;
+            parentExecFile?.Invoke(lstFullPath.ToArray());
+
+            //TreeNode tn = tvFolderTree.SelectedNode;
+            //if (tn == null) return;
+            //if (tn.ImageIndex == 1) return;
+            //string fullpath = System.IO.Path.Combine(Path.GetDirectoryName(basePath), tn.FullPath);
+            //parentExecFile?.Invoke(fullpath);
         }
 
-        private void TsmiDelete_Click(object sender, EventArgs e)
+        private void TsmiDelete_MouseUp(object sender, MouseEventArgs e)
         {
-            TreeNode tn = tvFolderTree.SelectedNode;
-            if (tn == null) return;
-            if (tn.ImageIndex == 1) return;
-            string fullpath = System.IO.Path.Combine(Path.GetDirectoryName(basePath), tn.FullPath);
-            DialogResult ret = MessageBox.Show(
-                string.Format("「{0}」を削除します。よろしいですか。",tn.Text)
-                ,"ファイル削除", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+            if (e.Button == MouseButtons.Right) return;
+
+            List<string> lstFullPath = new List<string>();
+            GetCheckTreeNodesFullPath(lstFullPath, tvFolderTree.Nodes);
+            if (lstFullPath.Count < 1) return;
+
+            DialogResult ret = DialogResult.Cancel;
+
+            if (lstFullPath.Count == 1)
+            {
+                ret = MessageBox.Show(
+                    string.Format("「{0}」を削除します。よろしいですか。", lstFullPath[0] )
+                    , "ファイル/フォルダーの削除", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+            }
+            else
+            {
+                string fns = "";
+                for (int i = 0; i < Math.Min(lstFullPath.Count, 3); i++)
+                {
+                    fns += "    " + lstFullPath[i] + "\n";
+                }
+                if (lstFullPath.Count > 3)
+                {
+                    fns += string.Format("\n    他、{0} ファイル/フォルダー\n", lstFullPath.Count - 3);
+                }
+
+                ret = MessageBox.Show(
+                    string.Format("以下のファイル/フォルダーを削除します。よろしいですか。\n\n{0}", fns)
+                    , "ファイル/フォルダーの削除", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+            }
+
             if (ret == DialogResult.Cancel) return;
 
-            parentDeleteFile?.Invoke(fullpath);
+            parentExecFile?.Invoke(lstFullPath.ToArray());
+
+            //TreeNode tn = tvFolderTree.SelectedNode;
+            //if (tn == null) return;
+            //if (tn.ImageIndex == 1) return;
+            //string fullpath = System.IO.Path.Combine(Path.GetDirectoryName(basePath), tn.FullPath);
+            //DialogResult ret = MessageBox.Show(
+                //string.Format("「{0}」を削除します。よろしいですか。", tn.Text)
+                //, "ファイル削除", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+            //if (ret == DialogResult.Cancel) return;
+
+            //parentDeleteFile?.Invoke(fullpath);
+        }
+
+
+        private void TvFolderTree_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+            if (useMouse)
+            {
+                useMouse = false;
+                return;
+            }
+            tvFolderTree.SelectedNode = e.Node;
+
+            if ((Control.ModifierKeys & (Keys.Control | Keys.Shift)) == 0)
+            {
+                CheckClear(tvFolderTree.Nodes);
+            }
+
+            e.Node.Checked = true;
 
         }
+
     }
 }

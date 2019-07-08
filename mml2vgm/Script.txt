@@ -56,8 +56,8 @@ Mml2vgmInfoについて
   Mml2vgmInfoは、mml2vgmIDEからスクリプトに情報を渡す為のクラスになります。
   以下のパラメーター、関数があります。
 
-  fileNameFull
-    ファイルネーム(フルパス)が設定されています。
+  fileNamesFull
+    ファイルネーム(フルパス)が配列で設定されています。
 
   defaultXmlFilename = "scriptSetting.xml";
     スクリプト間で共有する設定ファイルのファイル名が設定されています。

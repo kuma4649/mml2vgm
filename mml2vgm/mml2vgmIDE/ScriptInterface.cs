@@ -162,7 +162,7 @@ namespace mml2vgmIDE
         /// <summary>
         /// ファイルネーム(フルパス)
         /// </summary>
-        public string fileNameFull = "";
+        public string[] fileNamesFull = null;
 
         /// <summary>
         /// 未使用

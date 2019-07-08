@@ -41,29 +41,33 @@ class Mml2vgmScript:
         if gt is None or gt == "":
             Mml2vgmInfo.msg("git.exeを指定してください")
             return None
-        
-        #ファイル情報の整理
-        fnf = Mml2vgmInfo.fileNameFull;
-        wp = Path.GetDirectoryName(fnf)
-        Directory.SetCurrentDirectory(wp)
 
         si = ScriptInfo()
 
-        if index == 0:
-            #git ステージング
-            args = "add " + fnf
-            ret = Mml2vgmInfo.runCommand(gt, args, True)
-            if ret != "":
-                Mml2vgmInfo.msg(ret)
-        else:
+        commitMsg = ""
+        if index == 1:
             #git コミット
-            ret = Mml2vgmInfo.inputBox("コミット時のコメントを入力してください")
-            if ret == "":
+            commitMsg = Mml2vgmInfo.inputBox("コミット時のコメントを入力してください")
+            if commitMsg == "":
                 return si
-            args = "commit -m\"" + ret + "\""
-            ret = Mml2vgmInfo.runCommand(gt, args, True)
-            if ret != "":
-                Mml2vgmInfo.msg(ret)
+
+        #ファイル情報の整理
+        for fnf in Mml2vgmInfo.fileNamesFull:
+            wp = Path.GetDirectoryName(fnf)
+            Directory.SetCurrentDirectory(wp)
+
+            if index == 0:
+                #git ステージング
+                args = "add " + fnf
+                ret = Mml2vgmInfo.runCommand(gt, args, True)
+                if ret != "":
+                    Mml2vgmInfo.msg(ret)
+            else:
+                #git コミット
+                args = "commit -m\"" + commitMsg + "\""
+                ret = Mml2vgmInfo.runCommand(gt, args, True)
+                if ret != "":
+                    Mml2vgmInfo.msg(ret)
 
         return si
 

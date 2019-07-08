@@ -34,6 +34,7 @@
             // 
             // tbLog
             // 
+            this.tbLog.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.tbLog.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tbLog.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbLog.Location = new System.Drawing.Point(0, 0);

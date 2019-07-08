@@ -1,4 +1,10 @@
 更新履歴
+TAG072 2019/07/09
+  mml2vgmIDE
+	・DockPanelSuiteのテーマをVS2015Darkに変更
+	・ツリービューの複数選択関連の各種修正
+      ・複数選択可能なTreeViewを作成
+      ・Script GitとSoxも複数選択に対応
 
 TAG071 2019/07/06
   Script.txt

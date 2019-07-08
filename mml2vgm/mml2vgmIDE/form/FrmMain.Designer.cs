@@ -45,6 +45,7 @@
             this.tssbStop = new System.Windows.Forms.ToolStripSplitButton();
             this.tssbSlow = new System.Windows.Forms.ToolStripSplitButton();
             this.tssbFast = new System.Windows.Forms.ToolStripSplitButton();
+            this.tssbMIDIKbd = new System.Windows.Forms.ToolStripSplitButton();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.TsmiFile = new System.Windows.Forms.ToolStripMenuItem();
             this.TsmiNew = new System.Windows.Forms.ToolStripMenuItem();
@@ -87,7 +88,6 @@
             this.TsmiReference = new System.Windows.Forms.ToolStripMenuItem();
             this.TsmiAbout = new System.Windows.Forms.ToolStripMenuItem();
             this.timer = new System.Windows.Forms.Timer(this.components);
-            this.tssbMIDIKbd = new System.Windows.Forms.ToolStripSplitButton();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -99,6 +99,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dpMain.Location = new System.Drawing.Point(0, 23);
             this.dpMain.Name = "dpMain";
+            this.dpMain.ShowDocumentIcon = true;
             this.dpMain.Size = new System.Drawing.Size(942, 406);
             this.dpMain.TabIndex = 1;
             this.dpMain.ActiveDocumentChanged += new System.EventHandler(this.DpMain_ActiveDocumentChanged);
@@ -166,7 +167,7 @@
             // toolStripStatusLabel1
             // 
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(186, 17);
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(217, 17);
             this.toolStripStatusLabel1.Spring = true;
             this.toolStripStatusLabel1.Text = " ";
             // 
@@ -236,6 +237,17 @@
             this.tssbFast.Size = new System.Drawing.Size(74, 20);
             this.tssbFast.Text = "4倍速";
             this.tssbFast.ButtonClick += new System.EventHandler(this.TssbFast_ButtonClick);
+            // 
+            // tssbMIDIKbd
+            // 
+            this.tssbMIDIKbd.DropDownButtonWidth = 0;
+            this.tssbMIDIKbd.Image = global::mml2vgmIDE.Properties.Resources.F12;
+            this.tssbMIDIKbd.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.tssbMIDIKbd.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tssbMIDIKbd.Name = "tssbMIDIKbd";
+            this.tssbMIDIKbd.Size = new System.Drawing.Size(68, 20);
+            this.tssbMIDIKbd.Text = "鍵盤";
+            this.tssbMIDIKbd.ButtonClick += new System.EventHandler(this.TssbMIDIKbd_ButtonClick);
             // 
             // menuStrip1
             // 
@@ -390,49 +402,49 @@
             // TsmiShowPartCounter
             // 
             this.TsmiShowPartCounter.Name = "TsmiShowPartCounter";
-            this.TsmiShowPartCounter.Size = new System.Drawing.Size(180, 22);
+            this.TsmiShowPartCounter.Size = new System.Drawing.Size(150, 22);
             this.TsmiShowPartCounter.Text = "パートカウンター";
             this.TsmiShowPartCounter.Click += new System.EventHandler(this.TsmiShowPartCounter_Click);
             // 
             // TsmiShowFolderTree
             // 
             this.TsmiShowFolderTree.Name = "TsmiShowFolderTree";
-            this.TsmiShowFolderTree.Size = new System.Drawing.Size(180, 22);
+            this.TsmiShowFolderTree.Size = new System.Drawing.Size(150, 22);
             this.TsmiShowFolderTree.Text = "フォルダーツリー";
             this.TsmiShowFolderTree.Click += new System.EventHandler(this.TsmiShowFolderTree_Click);
             // 
             // TsmiShowErrorList
             // 
             this.TsmiShowErrorList.Name = "TsmiShowErrorList";
-            this.TsmiShowErrorList.Size = new System.Drawing.Size(180, 22);
+            this.TsmiShowErrorList.Size = new System.Drawing.Size(150, 22);
             this.TsmiShowErrorList.Text = "エラーリスト";
             this.TsmiShowErrorList.Click += new System.EventHandler(this.TsmiShowErrorList_Click);
             // 
             // TsmiShowLog
             // 
             this.TsmiShowLog.Name = "TsmiShowLog";
-            this.TsmiShowLog.Size = new System.Drawing.Size(180, 22);
+            this.TsmiShowLog.Size = new System.Drawing.Size(150, 22);
             this.TsmiShowLog.Text = "ログ";
             this.TsmiShowLog.Click += new System.EventHandler(this.TsmiShowLog_Click);
             // 
             // TsmiShowMixer
             // 
             this.TsmiShowMixer.Name = "TsmiShowMixer";
-            this.TsmiShowMixer.Size = new System.Drawing.Size(180, 22);
+            this.TsmiShowMixer.Size = new System.Drawing.Size(150, 22);
             this.TsmiShowMixer.Text = "音源ミキサー";
             this.TsmiShowMixer.Click += new System.EventHandler(this.TsmiShowMixer_Click);
             // 
             // TsmiShowMIDIKbd
             // 
             this.TsmiShowMIDIKbd.Name = "TsmiShowMIDIKbd";
-            this.TsmiShowMIDIKbd.Size = new System.Drawing.Size(180, 22);
+            this.TsmiShowMIDIKbd.Size = new System.Drawing.Size(150, 22);
             this.TsmiShowMIDIKbd.Text = "MIDIキーボード";
             this.TsmiShowMIDIKbd.Click += new System.EventHandler(this.TsmiShowMIDIKbd_Click);
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(177, 6);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(147, 6);
             // 
             // TsmiFunctionKey
             // 
@@ -441,7 +453,7 @@
             this.TsmiFncButtonOnly,
             this.TsmiFncButtonAndText});
             this.TsmiFunctionKey.Name = "TsmiFunctionKey";
-            this.TsmiFunctionKey.Size = new System.Drawing.Size(180, 22);
+            this.TsmiFunctionKey.Size = new System.Drawing.Size(150, 22);
             this.TsmiFunctionKey.Text = "ファンクションキー";
             // 
             // TsmiFncHide
@@ -572,17 +584,6 @@
             this.timer.Enabled = true;
             this.timer.Interval = 16;
             this.timer.Tick += new System.EventHandler(this.Timer_Tick);
-            // 
-            // tssbMIDIKbd
-            // 
-            this.tssbMIDIKbd.DropDownButtonWidth = 0;
-            this.tssbMIDIKbd.Image = global::mml2vgmIDE.Properties.Resources.F12;
-            this.tssbMIDIKbd.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.tssbMIDIKbd.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tssbMIDIKbd.Name = "tssbMIDIKbd";
-            this.tssbMIDIKbd.Size = new System.Drawing.Size(68, 20);
-            this.tssbMIDIKbd.Text = "鍵盤";
-            this.tssbMIDIKbd.ButtonClick += new System.EventHandler(this.TssbMIDIKbd_ButtonClick);
             // 
             // FrmMain
             // 

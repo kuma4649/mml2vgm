@@ -45,33 +45,33 @@ class Mml2vgmScript:
             return None
         
         #ファイル情報の整理
-        fnf = Mml2vgmInfo.fileNameFull
-        ext = Path.GetExtension(fnf)
-        bas = Path.GetFileNameWithoutExtension(fnf)
-        wp = Path.GetDirectoryName(fnf)
-        Directory.SetCurrentDirectory(wp)
+        for fnf in Mml2vgmInfo.fileNamesFull:
+            ext = Path.GetExtension(fnf)
+            bas = Path.GetFileNameWithoutExtension(fnf)
+            wp = Path.GetDirectoryName(fnf)
+            Directory.SetCurrentDirectory(wp)
 
-        si = ScriptInfo()
+            si = ScriptInfo()
 
-        # 引数を組み立てる
-        if index==0:
-            args = "--i \"" + bas + ext + "\""
-        elif index==1:
-            # -b       8bit
-            # -c 1     mono
-            # -r 14k   rate 14KHz
-            args = bas + ext + " -b 8 -r 8k -c 1 " + bas + "_8k" + ext
-        elif index==2:
-            args = bas + ext + " -b 8 -r 14k -e signed-integer -c 1 " + bas + "_14k" + ext
+            # 引数を組み立てる
+            if index==0:
+                args = "--i \"" + bas + ext + "\""
+            elif index==1:
+                # -b       8bit
+                # -c 1     mono
+                # -r 14k   rate 14KHz
+                args = bas + ext + " -b 8 -r 8k -c 1 " + bas + "_8k" + ext
+            elif index==2:
+                args = bas + ext + " -b 8 -r 14k -e signed-integer -c 1 " + bas + "_14k" + ext
 
         
-        ret = Mml2vgmInfo.runCommand(gt, args, True)
+            ret = Mml2vgmInfo.runCommand(gt, args, True)
         
-        if ret != "":
-            Mml2vgmInfo.msg(ret)
-        else:
-            if index != 0:
-                Mml2vgmInfo.msg("success")
+            if ret != "":
+                Mml2vgmInfo.msg(ret)
+            else:
+                if index != 0:
+                    Mml2vgmInfo.msg("success")
 
         Mml2vgmInfo.refreshFolderTreeView()
 

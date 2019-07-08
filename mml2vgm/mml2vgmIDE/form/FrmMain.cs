@@ -1166,36 +1166,67 @@ namespace mml2vgmIDE
             frmFolderTree.Focus();
         }
 
-        private void ExecFile(string filename)
+        private void ExecFile(string[] filenames)
         {
 
-            if (Path.GetExtension(filename).ToUpper() == ".GWI")
+            foreach (string filename in filenames)
             {
-                OpenFile(filename);
-                return;
+                MsgDisp(string.Format("Open '{0}'", filename));
+
+                try
+                {
+                    if (filename.Length < 1) continue;
+                    if (filename[filename.Length - 1] == '\\')
+                    {
+                        continue;
+                    }
+
+                    if (Path.GetExtension(filename).ToUpper() == ".GWI")
+                    {
+                        OpenFile(filename);
+                        continue;
+                    }
+
+                    if (Path.GetExtension(filename).ToUpper() == ".WAV")
+                    {
+                        if (player != null)
+                            StopSound();
+                        player = new System.Media.SoundPlayer(filename);
+                        player.Play();
+                        //player.PlaySync();
+                        continue;
+                    }
+
+                    Process.Start(filename);
+                }
+                catch
+                {
+                }
             }
 
-            if (Path.GetExtension(filename).ToUpper() == ".WAV")
-            {
-                if (player != null)
-                    StopSound();
-                player = new System.Media.SoundPlayer(filename);
-                player.Play();
-                return;
-            }
-
-            try
-            {
-                Process.Start(filename);
-            }
-            catch
-            {
-            }
         }
 
-        private void DeleteFile(string filename)
+        private void DeleteFile(string[] filenames)
         {
-            File.Delete(filename);
+            foreach (string filename in filenames)
+            {
+                try
+                {
+                    if (filename.Length < 1) continue;
+                    if (filename[filename.Length - 1] == '\\')
+                    {
+                        Directory.Delete(filename, true);
+                        continue;
+                    }
+
+                    File.Delete(filename);
+                }
+                catch
+                {
+
+                }
+            }
+
             refreshFolderTreeView();
         }
 
@@ -1239,6 +1270,11 @@ namespace mml2vgmIDE
 
         public void Init()
         {
+            var theme = new VS2015DarkTheme();
+            this.dpMain.Theme = theme;
+            theme.ApplyTo(menuStrip1);
+            //theme.ApplyTo(statusStrip1);
+
             //setting = Setting.Load();
 
             this.KeyPreview = true;
@@ -1283,7 +1319,7 @@ namespace mml2vgmIDE
             frmLog = new FrmLog(setting);
             FormBox.Add(frmLog);
 
-            frmFolderTree = new FrmFolderTree(setting);
+            frmFolderTree = new FrmFolderTree(setting,dpMain);
             FormBox.Add(frmFolderTree);
 
             frmErrorList = new FrmErrorList(setting);
@@ -1321,6 +1357,7 @@ namespace mml2vgmIDE
             frmFolderTree.parentDeleteFile = DeleteFile;
             frmErrorList.parentUpdate = UpdateControl;
             frmErrorList.parentJumpDocument = JumpDocument;
+
 
         }
 
@@ -1976,7 +2013,7 @@ namespace mml2vgmIDE
                 tsmi.Enabled = true;
                 if (ctn.Nodes.Count > 0)
                 {
-                    ctsmi.Click += tsmiScriptDirectoryItem_Clicked;
+                    ctsmi.MouseUp += tsmiScriptDirectoryItem_Clicked;
                     DivScripts(ctsmi, ctn, target);
                     if (ctsmi.DropDownItems.Count == 0)
                     {
@@ -1985,15 +2022,18 @@ namespace mml2vgmIDE
                 }
                 else
                 {
-                    ctsmi.Click += tsmiScriptFileItem_Clicked;
+                    ctsmi.MouseUp += tsmiScriptFileItem_Clicked;
                 }
             }
         }
 
         private void tsmiScriptDirectoryItem_Clicked(object sender, EventArgs e)
         {
+            MouseEventArgs mea = (MouseEventArgs)e;
+            if (mea.Button == MouseButtons.Right) return;
+
             ToolStripMenuItem tsmi = (ToolStripMenuItem)sender;
-            Tuple<int, string, string, string> tpl = (Tuple<int, string, string, string>)((ToolStripMenuItem)sender).Tag;
+            Tuple<int, string, string[], string> tpl = (Tuple<int, string, string[], string>)((ToolStripMenuItem)sender).Tag;
             string path = tpl.Item4;
             if (string.IsNullOrEmpty(path) || path[0] != '+') return;
             path = path.Substring(1);
@@ -2004,6 +2044,9 @@ namespace mml2vgmIDE
 
         private void tsmiScriptFileItem_Clicked(object sender, EventArgs e)
         {
+            MouseEventArgs mea = (MouseEventArgs)e;
+            if (mea.Button == MouseButtons.Right) return;
+
             DockContent dc = null;
             Document d = null;
             if (dpMain.ActiveDocument is DockContent)
@@ -2018,15 +2061,21 @@ namespace mml2vgmIDE
 
             Tuple<int,string, string[],string> tpl = (Tuple<int, string, string[], string>)((ToolStripMenuItem)sender).Tag;
             string fn = tpl.Item4;
+
+            List<string> lstFullPath = new List<string>();
+            frmFolderTree.GetCheckTreeNodesFullPath(lstFullPath, frmFolderTree.tvFolderTree.Nodes);
+            if (lstFullPath.Count < 1) return;
+
+            //TreeNode tn = frmFolderTree.tvFolderTree.SelectedNode;
+            //if (tn == null) return;
+            //if (tn.ImageIndex == 1) return;
+            //string fullpath = System.IO.Path.Combine(Path.GetDirectoryName(frmFolderTree.basePath), tn.FullPath);
+
             Mml2vgmInfo info = new Mml2vgmInfo();
             info.parent = this;
             info.name = "";
             info.document = d;
-            TreeNode tn = frmFolderTree.tvFolderTree.SelectedNode;
-            if (tn == null) return;
-            if (tn.ImageIndex == 1) return;
-            string fullpath = System.IO.Path.Combine(Path.GetDirectoryName(frmFolderTree.basePath), tn.FullPath);
-            info.fileNameFull = fullpath;
+            info.fileNamesFull = lstFullPath.ToArray();
 
             ScriptInterface.run(fn, info, tpl.Item1);
         }

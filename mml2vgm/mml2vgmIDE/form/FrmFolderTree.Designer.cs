@@ -30,33 +30,14 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmFolderTree));
-            this.tvFolderTree = new System.Windows.Forms.TreeView();
             this.imgList = new System.Windows.Forms.ImageList(this.components);
             this.cmsMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.TsmiOpen = new System.Windows.Forms.ToolStripMenuItem();
             this.TsmiDelete = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.tvFolderTree = new CustomControl.MultiSelectTreeView();
             this.cmsMenu.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // tvFolderTree
-            // 
-            this.tvFolderTree.AllowDrop = true;
-            this.tvFolderTree.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tvFolderTree.FullRowSelect = true;
-            this.tvFolderTree.HideSelection = false;
-            this.tvFolderTree.HotTracking = true;
-            this.tvFolderTree.ImageIndex = 0;
-            this.tvFolderTree.ImageList = this.imgList;
-            this.tvFolderTree.Location = new System.Drawing.Point(0, 0);
-            this.tvFolderTree.Name = "tvFolderTree";
-            this.tvFolderTree.SelectedImageIndex = 0;
-            this.tvFolderTree.Size = new System.Drawing.Size(289, 380);
-            this.tvFolderTree.TabIndex = 0;
-            this.tvFolderTree.BeforeExpand += new System.Windows.Forms.TreeViewCancelEventHandler(this.TreeView1_BeforeExpand);
-            this.tvFolderTree.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.TvFolderTree_NodeMouseClick);
-            this.tvFolderTree.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.TreeView1_NodeMouseDoubleClick);
-            this.tvFolderTree.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TvFolderTree_KeyPress);
             // 
             // imgList
             // 
@@ -72,26 +53,52 @@
             this.TsmiDelete,
             this.toolStripSeparator1});
             this.cmsMenu.Name = "cmsMenu";
-            this.cmsMenu.Size = new System.Drawing.Size(181, 76);
+            this.cmsMenu.ShowImageMargin = false;
+            this.cmsMenu.Size = new System.Drawing.Size(156, 76);
             // 
             // TsmiOpen
             // 
             this.TsmiOpen.Name = "TsmiOpen";
-            this.TsmiOpen.Size = new System.Drawing.Size(180, 22);
+            this.TsmiOpen.Size = new System.Drawing.Size(155, 22);
             this.TsmiOpen.Text = "開く";
-            this.TsmiOpen.Click += new System.EventHandler(this.TsmiOpen_Click);
+            this.TsmiOpen.MouseUp += new System.Windows.Forms.MouseEventHandler(this.TsmiOpen_MouseUp);
             // 
             // TsmiDelete
             // 
             this.TsmiDelete.Name = "TsmiDelete";
-            this.TsmiDelete.Size = new System.Drawing.Size(180, 22);
+            this.TsmiDelete.Size = new System.Drawing.Size(155, 22);
             this.TsmiDelete.Text = "削除";
-            this.TsmiDelete.Click += new System.EventHandler(this.TsmiDelete_Click);
+            this.TsmiDelete.MouseUp += new System.Windows.Forms.MouseEventHandler(this.TsmiDelete_MouseUp);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(152, 6);
+            // 
+            // tvFolderTree
+            // 
+            this.tvFolderTree.AllowDrop = true;
+            this.tvFolderTree.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.tvFolderTree.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.tvFolderTree.CheckBoxes = true;
+            this.tvFolderTree.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(80)))), ((int)(((byte)(160)))));
+            this.tvFolderTree.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tvFolderTree.DrawMode = System.Windows.Forms.TreeViewDrawMode.OwnerDrawAll;
+            this.tvFolderTree.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.tvFolderTree.HotColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(90)))));
+            this.tvFolderTree.ImageIndex = 0;
+            this.tvFolderTree.ImageList = this.imgList;
+            this.tvFolderTree.Location = new System.Drawing.Point(0, 0);
+            this.tvFolderTree.Name = "tvFolderTree";
+            this.tvFolderTree.SelectedColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(180)))));
+            this.tvFolderTree.SelectedImageIndex = 0;
+            this.tvFolderTree.Size = new System.Drawing.Size(289, 380);
+            this.tvFolderTree.TabIndex = 0;
+            this.tvFolderTree.BeforeExpand += new System.Windows.Forms.TreeViewCancelEventHandler(this.TreeView1_BeforeExpand);
+            this.tvFolderTree.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.TvFolderTree_AfterSelect);
+            this.tvFolderTree.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.TvFolderTree_NodeMouseClick);
+            this.tvFolderTree.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.TreeView1_NodeMouseDoubleClick);
+            this.tvFolderTree.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TvFolderTree_KeyPress);
             // 
             // FrmFolderTree
             // 
@@ -113,7 +120,7 @@
 
         #endregion
 
-        public System.Windows.Forms.TreeView tvFolderTree;
+        public CustomControl.MultiSelectTreeView tvFolderTree;
         private System.Windows.Forms.ImageList imgList;
         private System.Windows.Forms.ContextMenuStrip cmsMenu;
         private System.Windows.Forms.ToolStripMenuItem TsmiOpen;
