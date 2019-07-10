@@ -113,6 +113,7 @@
             // 
             // FrmErrorList
             // 
+            this.AllowDrop = true;
             this.ClientSize = new System.Drawing.Size(582, 155);
             this.Controls.Add(this.dataGridView1);
             this.DockAreas = ((WeifenLuo.WinFormsUI.Docking.DockAreas)(((((WeifenLuo.WinFormsUI.Docking.DockAreas.Float | WeifenLuo.WinFormsUI.Docking.DockAreas.DockLeft) 
@@ -123,6 +124,7 @@
             this.Name = "FrmErrorList";
             this.Text = "Error list";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FrmErrorList_FormClosing);
+            this.DragOver += new System.Windows.Forms.DragEventHandler(this.FrmErrorList_DragOver);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
 

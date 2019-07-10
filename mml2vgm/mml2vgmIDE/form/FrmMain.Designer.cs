@@ -94,6 +94,7 @@
             // 
             // dpMain
             // 
+            this.dpMain.AllowDrop = true;
             this.dpMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
@@ -103,6 +104,8 @@
             this.dpMain.Size = new System.Drawing.Size(942, 406);
             this.dpMain.TabIndex = 1;
             this.dpMain.ActiveDocumentChanged += new System.EventHandler(this.DpMain_ActiveDocumentChanged);
+            this.dpMain.DragDrop += new System.Windows.Forms.DragEventHandler(this.DpMain_DragDrop);
+            this.dpMain.DragOver += new System.Windows.Forms.DragEventHandler(this.DpMain_DragOver);
             // 
             // visualStudioToolStripExtender1
             // 

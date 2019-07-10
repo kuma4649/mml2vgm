@@ -118,6 +118,7 @@
             // 
             // FrmPartCounter
             // 
+            this.AllowDrop = true;
             this.ClientSize = new System.Drawing.Size(284, 261);
             this.Controls.Add(this.dataGridView1);
             this.DockAreas = ((WeifenLuo.WinFormsUI.Docking.DockAreas)(((((WeifenLuo.WinFormsUI.Docking.DockAreas.Float | WeifenLuo.WinFormsUI.Docking.DockAreas.DockLeft) 
@@ -129,6 +130,7 @@
             this.Text = "Part counter";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FrmPartCounter_FormClosing);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.FrmPartCounter_FormClosed);
+            this.DragOver += new System.Windows.Forms.DragEventHandler(this.FrmPartCounter_DragOver);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
 

@@ -43,5 +43,10 @@ namespace mml2vgmIDE
         {
             return this.Name;
         }
+
+        private void FrmPartCounter_DragOver(object sender, DragEventArgs e)
+        {
+            e.Effect = DragDropEffects.None;
+        }
     }
 }

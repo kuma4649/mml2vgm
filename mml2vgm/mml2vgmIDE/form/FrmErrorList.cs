@@ -67,5 +67,9 @@ namespace mml2vgmIDE
             }
         }
 
+        private void FrmErrorList_DragOver(object sender, DragEventArgs e)
+        {
+            e.Effect = DragDropEffects.None;
+        }
     }
 }

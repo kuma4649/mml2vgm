@@ -262,7 +262,8 @@ namespace mml2vgmIDE
 
         public void refreshFolderTreeView()
         {
-            UpdateFolderTree();
+            frmFolderTree.refresh();
+            //UpdateFolderTree();
         }
 
         private void TsmiSaveAs_Click(object sender, EventArgs e)
@@ -1181,13 +1182,13 @@ namespace mml2vgmIDE
                         continue;
                     }
 
-                    if (Path.GetExtension(filename).ToUpper() == ".GWI")
+                    if (Path.GetExtension(filename).ToLower() == ".gwi")
                     {
                         OpenFile(filename);
                         continue;
                     }
 
-                    if (Path.GetExtension(filename).ToUpper() == ".WAV")
+                    if (Path.GetExtension(filename).ToLower() == ".wav")
                     {
                         if (player != null)
                             StopSound();
@@ -1273,7 +1274,7 @@ namespace mml2vgmIDE
             var theme = new VS2015DarkTheme();
             this.dpMain.Theme = theme;
             theme.ApplyTo(menuStrip1);
-            //theme.ApplyTo(statusStrip1);
+            theme.ApplyTo(statusStrip1);
 
             //setting = Setting.Load();
 
@@ -1316,7 +1317,7 @@ namespace mml2vgmIDE
             frmPartCounter = new FrmPartCounter(setting);
             FormBox.Add(frmPartCounter);
 
-            frmLog = new FrmLog(setting);
+            frmLog = new FrmLog(setting, theme);
             FormBox.Add(frmLog);
 
             frmFolderTree = new FrmFolderTree(setting,dpMain);
@@ -2129,5 +2130,30 @@ namespace mml2vgmIDE
             log.Write(dmy);
         }
 
+        private void DpMain_DragOver(object sender, DragEventArgs e)
+        {
+            //ドラッグされているデータがfileか調べる
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] source = (string[])e.Data.GetData(DataFormats.FileDrop);
+                e.Effect = DragDropEffects.Move;
+            }
+            else
+                e.Effect = DragDropEffects.None;
+
+        }
+
+        private void DpMain_DragDrop(object sender, DragEventArgs e)
+        {
+            if (!e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                e.Effect = DragDropEffects.None;
+                return;
+            }
+
+            string[] source = (string[])e.Data.GetData(DataFormats.FileDrop);
+            ExecFile(source);
+
+        }
     }
 }

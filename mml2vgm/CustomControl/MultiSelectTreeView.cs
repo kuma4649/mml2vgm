@@ -83,6 +83,8 @@ namespace CustomControl
             }
         }
 
+
+
         public MultiSelectTreeView()
         {
             this.DoubleBuffered = true;
@@ -99,28 +101,6 @@ namespace CustomControl
             if (brushCheckedNodeBack != null) brushCheckedNodeBack.Dispose();
             if (brushFontColor != null) brushFontColor.Dispose();
         }
-
-        protected override void OnBeforeSelect(TreeViewCancelEventArgs e)
-        {
-        //    if ((Control.ModifierKeys & (Keys.Control | Keys.Shift)) == 0)
-        //    {
-        //        CheckClear(this.Nodes);
-        //        e.Node.Checked = true;
-        //        return;
-        //    }
-        //    e.Node.Checked = true;
-            base.OnBeforeSelect(e);
-
-        }
-
-        //private void CheckClear(TreeNodeCollection nodes)
-        //{
-        //    foreach (TreeNode tn in nodes)
-        //    {
-        //        tn.Checked = false;
-        //        if (tn.Nodes.Count >= 0) CheckClear(tn.Nodes);
-        //    }
-        //}
 
         protected override void OnDrawNode(DrawTreeNodeEventArgs e)
         {
@@ -208,16 +188,6 @@ namespace CustomControl
 
             this.SelectedNode = e.Node;
 
-        }
-
-        protected override void OnMouseClick(MouseEventArgs e)
-        {
-            base.OnMouseClick(e);
-        }
-
-        protected override void OnClick(EventArgs e)
-        {
-            base.OnClick(e);
         }
 
         protected override void OnMouseMove(MouseEventArgs e)

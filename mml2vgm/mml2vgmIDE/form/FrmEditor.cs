@@ -58,6 +58,7 @@ namespace mml2vgmIDE
             azukiControl.LocationChanged += AzukiControl_CancelSien;
             azukiControl.SizeChanged += AzukiControl_CancelSien;
             azukiControl.CaretMoved += AzukiControl_CaretMoved;
+            azukiControl.AllowDrop = true;
 
             azukiControl.ColorScheme.ForeColor = Color.FromArgb(setting.ColorScheme.Azuki_ForeColor);
             azukiControl.ColorScheme.BackColor = Color.FromArgb(setting.ColorScheme.Azuki_BackColor);
