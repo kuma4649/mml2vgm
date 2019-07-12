@@ -59,6 +59,8 @@ namespace mml2vgmIDE
             azukiControl.SizeChanged += AzukiControl_CancelSien;
             azukiControl.CaretMoved += AzukiControl_CaretMoved;
             azukiControl.AllowDrop = true;
+            azukiControl.DragOver += AzukiControl_DragOver;
+            azukiControl.DragDrop += AzukiControl_DragDrop;
 
             azukiControl.ColorScheme.ForeColor = Color.FromArgb(setting.ColorScheme.Azuki_ForeColor);
             azukiControl.ColorScheme.BackColor = Color.FromArgb(setting.ColorScheme.Azuki_BackColor);
@@ -85,6 +87,161 @@ namespace mml2vgmIDE
             frmSien = new FrmSien();
             frmSien.parent = main;
             frmSien.Show();
+        }
+
+        private void AzukiControl_DragDrop(object sender, DragEventArgs e)
+        {
+            //ドラッグされているデータがfileか調べる
+            if (!e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                e.Effect = DragDropEffects.None;
+                return;
+            }
+
+            if (e.Effect == DragDropEffects.None) return;
+
+            string[] source = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+            if (e.Effect== DragDropEffects.Move)
+            {
+                main.ExecFile(source);
+                return;
+            }
+
+            IncludeFile(source);
+        }
+
+        private void IncludeFile(string[] source)
+        {
+            foreach (string fn in source) IncludeFile(fn);
+        }
+
+        private void IncludeFile(string source)
+        {
+            string ext = System.IO.Path.GetExtension(source).ToLower();
+            if (ext != ".gwi"
+                && ext != ".wav"
+                && ext != ".bin" //mucom PCM data?
+                && ext != ".dat" //mucom voice data?
+                && ext != ".tfi" 
+                )
+            {
+                log.dispMsg(string.Format("Can't include '{0}'.", source));
+                return;
+            }
+
+            string basePath = System.IO.Path.GetDirectoryName(this.parent.gwiFullPath) + "\\";
+            if (source.IndexOf(basePath) == 0)
+            {
+                source = source.Substring(basePath.Length);
+            }
+
+            string define = "";
+            switch (ext)
+            {
+                case ".gwi":
+                    define = "'+ \"{0}\"";
+                    break;
+                case ".wav":
+                    define = "'@ P n , \"{0}\" , 8000 , 100";
+                    break;
+                case ".bin":
+                    define = "'@ MUCOM88ADPCM n , \"{0}\"";
+                    break;
+                case ".dat":
+                    define = "'@ MUCOM88 n , \"{0}\"";
+                    break;
+                case ".tfi":
+                    define = "'@ TFI n , \"{0}\"";
+                    break;
+            }
+
+            azukiControl.Document.Replace(string.Format("\r\n" + define, source));
+
+        }
+
+        private void AzukiControl_DragOver(object sender, DragEventArgs e)
+        {
+            //ドラッグされているデータがfileか調べる
+            if (!e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                e.Effect = DragDropEffects.None;
+                return;
+            }
+
+            string[] source = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+            if (!CanMoveFiles(source))
+            {
+                e.Effect = DragDropEffects.None;
+                return;
+            }
+
+            DragDropEffects efc = DragDropEffects.Move;
+            //shift または ctrl が押されている場合はmove
+            if ((e.KeyState & (8+4)) != 0)
+            {
+
+                if (CanDropFilesToEditor(source))
+                {
+                    efc = DragDropEffects.Copy;
+                    int index = azukiControl.GetIndexFromPosition(azukiControl.PointToClient(new Point(e.X, e.Y)));
+                    //int lin;
+                    //int col;
+                    //azukiControl.GetLineColumnIndexFromCharIndex(index,out lin,out col);
+                    azukiControl.SetSelection(index, index);
+                    //Console.WriteLine("{0} Line:{1} Column:{2}", index,lin,col);
+                }
+                else
+                {
+                    efc = DragDropEffects.None;
+                }
+            }
+
+            e.Effect = efc;
+        }
+
+        private bool CanDropFilesToEditor(string[] source)
+        {
+            foreach (string fn in source)
+            {
+                string ext = System.IO.Path.GetExtension(fn).ToLower();
+                if (ext==".gwi"
+                    || ext == ".wav"
+                    || ext == ".bin" //mucom PCM data?
+                    || ext == ".dat" //mucom voice data?
+                    )
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private bool CanMoveFiles(string[] source)
+        {
+            //ひとつでも移動可能なファイルが含まれるならばtrue
+            foreach(string fn in source)
+            {
+                string ext = System.IO.Path.GetExtension(fn).ToLower();
+                if(ext==".gwi"
+                    || ext == ".mwi" //fmp7 mml data
+                    || ext == ".muc" //mucom mml data
+                    || ext == ".mml" //common mml data
+                    || ext == ".doc"
+                    || ext == ".txt"
+                    || ext == ".hed"
+                    || ext == ".wav"
+                    || ext == ".bin" //mucom PCM data?
+                    || ext == ".dat" //mucom voice data?
+                    )
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         private void AzukiControl_CaretMoved(object sender, EventArgs e)

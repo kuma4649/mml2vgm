@@ -1141,6 +1141,9 @@ namespace mml2vgmIDE
                 FileInformation.totalCounter,
                 FileInformation.loopCounter == -1 ? "-" : FileInformation.loopCounter.ToString()
                 );
+
+            frmFolderTree.refresh();
+
         }
 
         public void UpdateFolderTree()
@@ -1167,7 +1170,7 @@ namespace mml2vgmIDE
             frmFolderTree.Focus();
         }
 
-        private void ExecFile(string[] filenames)
+        public void ExecFile(string[] filenames)
         {
 
             foreach (string filename in filenames)

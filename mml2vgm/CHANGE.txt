@@ -1,6 +1,16 @@
 更新履歴
 
-TAG072 2019/07/11
+TAG074 2019/07/13
+  mml2vgmIDE
+	・ツリービュー中のフォルダーへのDragAndDropした時に、ツリーをソートするようにした
+	・あずきにファイルをCtrlかShiftを押しながらDragAndDropした時、以下のファイルはテキスト中にコマンドを埋め込むようにした。
+        .gwi      + (インクルードコマンド)
+        .wav      @ P    
+        .bin      @ MUCOM88ADPCM 
+        .dat      @ MUCOM88
+        .tfi      @ TFI
+
+TAG073 2019/07/11
   mml2vgmIDE
 	・ツリービュー中のフォルダーへのDragAndDropに対応
 	    ファイルのコピーや移動が可能です

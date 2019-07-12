@@ -10,6 +10,7 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using CustomControl;
 using WeifenLuo.WinFormsUI.Docking;
+using System.Collections;
 
 namespace mml2vgmIDE
 {
@@ -31,6 +32,8 @@ namespace mml2vgmIDE
                 (int)(tvFolderTree.HotColor.R * 1.3), 
                 (int)(tvFolderTree.HotColor.G * 1.3), 
                 (int)(tvFolderTree.HotColor.B * 1.3));
+
+            tvFolderTree.TreeViewNodeSorter = new NodeSorter();
 
             dockPanel.Theme.ApplyTo(cmsMenu);
         }
@@ -425,8 +428,10 @@ namespace mml2vgmIDE
 
         public void refresh()
         {
+            if (string.IsNullOrEmpty(basePath)) return;
             refreshRemoveCheck(tvFolderTree.Nodes);
-            refreshAddCheck(tvFolderTree.Nodes[0]);
+            if (tvFolderTree.Nodes.Count > 0) refreshAddCheck(tvFolderTree.Nodes[0]);
+            tvFolderTree.Sort();
         }
 
         private void refreshRemoveCheck(TreeNodeCollection nodes)
@@ -675,5 +680,21 @@ namespace mml2vgmIDE
             return regexPattern;
         }
 
+        public class NodeSorter : IComparer
+        {
+            // Compare the length of the strings, or the strings
+            // themselves, if they are the same length.
+            public int Compare(object x, object y)
+            {
+                TreeNode tx = x as TreeNode;
+                TreeNode ty = y as TreeNode;
+
+                if (tx.ImageIndex != ty.ImageIndex)
+                    return tx.ImageIndex == 1 ? -1 : 1;
+
+                // If they are the same length, call Compare.
+                return string.Compare(tx.Text, ty.Text);
+            }
+        }
     }
 }
