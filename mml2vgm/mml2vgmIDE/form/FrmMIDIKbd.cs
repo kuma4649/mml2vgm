@@ -752,18 +752,17 @@ namespace mml2vgmIDE
 
         private void StartRecording()
         {
-            DockContent dc = null;
+            DockContent dc = (DockContent)parent.GetActiveDocument();
             Document d = null;
-            if (parent.dpMain.ActiveDocument is DockContent)
+            if (dc != null)
             {
-                dc = (DockContent)parent.dpMain.ActiveDocument;
                 if (dc.Tag is Document)
                 {
                     d = (Document)dc.Tag;
                 }
             }
-            if (d == null) return;
 
+            if (d == null) return;
 
             recAC = d.editor.azukiControl;
             recMode = 1;

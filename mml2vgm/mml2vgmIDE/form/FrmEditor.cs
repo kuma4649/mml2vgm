@@ -451,10 +451,31 @@ namespace mml2vgmIDE
             }
         }
 
+        private void FrmEditor_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (e.CloseReason == CloseReason.UserClosing)
+            {
+                if (parent.isNew || parent.edit)
+                {
+                    DialogResult res = MessageBox.Show("保存せずにファイルを閉じますか？"
+                        , "ファイル保存確認"
+                        , MessageBoxButtons.YesNo
+                        , MessageBoxIcon.Question);
+                    if (res != DialogResult.Yes)
+                    {
+                        e.Cancel = true;
+                        return;
+                    }
+                }
+
+                main.RemoveForm(this);
+                main.RemoveDocument(parent);
+
+            }
+        }
+
         private void FrmEditor_FormClosed(object sender, FormClosedEventArgs e)
         {
-            main.RemoveForm(this);
-            main.RemoveDocument(parent);
         }
 
         private void Hokan(string line,Point ciP)
@@ -476,6 +497,11 @@ namespace mml2vgmIDE
 
         private void AzukiControl_KeyDown(object sender, KeyEventArgs e)
         {
+            if (this.DockState== DockState.Float)
+            {
+                main.FrmMain_KeyDown(sender, e);
+            }
+
             if (frmSien.Opacity == 0.0)
             {
                 e.SuppressKeyPress = false;
@@ -543,6 +569,21 @@ namespace mml2vgmIDE
         private void FrmEditor_Shown(object sender, EventArgs e)
         {
             AzukiControl_CaretMoved(null, null);
+        }
+
+        private void FrmEditor_KeyDown(object sender, KeyEventArgs e)
+        {
+
+        }
+
+        private void FrmEditor_Activated(object sender, EventArgs e)
+        {
+            if (main != null) main.activeDocument = this;
+        }
+
+        private void FrmEditor_Deactivate(object sender, EventArgs e)
+        {
+            if (main != null && main.activeDocument==this) main.activeDocument = null;
         }
     }
 }

@@ -10,19 +10,19 @@ class Mml2vgmScript:
     #複数のタイトルを持つ場合は|をデリミタとして列挙する。(|はタイトル文字として使用できない)
     #run呼び出し時のindexが0から順に割り当てられる
     def title(self):
-        return r"Information(log view)|Convert pcm(8bit,unsigned,8KHz,mono)|Convert pcm(8bit,signed,14KHz,mono)"
+        return r"Information(log view)|Convert pcm(8bit,unsigned,8KHz,mono)|Convert pcm(8bit,signed,14KHz,mono)|Convert pcm(8bit,signed,16KHz,mono)|Convert pcm(8bit,signed,18.5KHz,mono)"
 
     #このスクリプトはどこから実行されることを想定しているかを指定する
     #複数のタイトルを持つ場合はその分だけ|をデリミタとして列挙する。
     # FromMenu メインウィンドウのメニューストリップ、スクリプトから実行されることを想定
     # FromTreeViewContextMenu ツリービューのコンテキストメニューから実行されることを想定
     def scriptType(self):
-        return r"FromTreeViewContextMenu|FromTreeViewContextMenu|FromTreeViewContextMenu"
+        return r"FromTreeViewContextMenu|FromTreeViewContextMenu|FromTreeViewContextMenu|FromTreeViewContextMenu|FromTreeViewContextMenu"
 
     #このスクリプトがサポートするファイル拡張子を|をデリミタとして列挙する。
     #複数の拡張子をサポートする場合は更に;で区切って列挙する
     def supportFileExt(self):
-        return r".wav|.wav|.wav"
+        return r".wav|.wav|.wav|.wav|.wav"
     
     #スクリプトのメインとして実行する
     def run(self, Mml2vgmInfo, index):
@@ -62,7 +62,11 @@ class Mml2vgmScript:
                 # -r 14k   rate 14KHz
                 args = bas + ext + " -b 8 -r 8k -c 1 " + bas + "_8k" + ext
             elif index==2:
-                args = bas + ext + " -b 8 -r 14k -e signed-integer -c 1 " + bas + "_14k" + ext
+                args = bas + ext + " -r 14k -e signed-integer -c 1 " + bas + "_14k" + ext
+            elif index==3:
+                args = bas + ext + " -r 16k -e signed-integer -c 1 " + bas + "_16k" + ext
+            elif index==4:
+                args = bas + ext + " -r 18500 -e signed-integer -c 1 " + bas + "_18500" + ext
 
         
             ret = Mml2vgmInfo.runCommand(gt, args, True)

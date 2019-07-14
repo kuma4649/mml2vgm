@@ -83,7 +83,7 @@ namespace mml2vgmIDE
         private void TvFolderTree_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
         {
             List<string> lstFullPath = new List<string>();
-            GetCheckTreeNodesFullPath(lstFullPath, tvFolderTree.Nodes);
+            GetCheckTreeNodesFullPath(ref lstFullPath, tvFolderTree.Nodes);
             if (lstFullPath.Count < 1) return;
             parentExecFile?.Invoke(lstFullPath.ToArray());
         }
@@ -93,7 +93,7 @@ namespace mml2vgmIDE
             if (e.KeyChar == '\r')
             {
                 List<string> lstFullPath = new List<string>();
-                GetCheckTreeNodesFullPath(lstFullPath, tvFolderTree.Nodes);
+                GetCheckTreeNodesFullPath(ref lstFullPath, tvFolderTree.Nodes);
                 if (lstFullPath.Count < 1) return;
                 parentExecFile?.Invoke(lstFullPath.ToArray());
 
@@ -122,6 +122,7 @@ namespace mml2vgmIDE
                     tvFolderTree.SelectedNode = e.Node;
                 }
                 e.Node.Checked = true;
+                tvFolderTree.SelectedNode = e.Node;
                 TreeNode tn = e.Node;
                 if (tn == null) return;
                 if (tn.ImageIndex == 1) return;
@@ -173,7 +174,7 @@ namespace mml2vgmIDE
             tv.Focus();
 
             List<string> lstFile = new List<string>();
-            GetCheckTreeNodesFullPath(lstFile, tv.Nodes);
+            GetCheckTreeNodesFullPath(ref lstFile, tv.Nodes);
 
             DataObject dataObj = new DataObject(DataFormats.FileDrop, lstFile.ToArray());
             DragDropEffects dde = tv.DoDragDrop(dataObj, DragDropEffects.All);
@@ -265,7 +266,7 @@ namespace mml2vgmIDE
             if (e.Button == MouseButtons.Right) return;
 
             List<string> lstFullPath = new List<string>();
-            GetCheckTreeNodesFullPath(lstFullPath, tvFolderTree.Nodes);
+            GetCheckTreeNodesFullPath(ref lstFullPath, tvFolderTree.Nodes);
             if (lstFullPath.Count < 1) return;
             parentExecFile?.Invoke(lstFullPath.ToArray());
 
@@ -276,7 +277,7 @@ namespace mml2vgmIDE
             if (e.Button == MouseButtons.Right) return;
 
             List<string> lstFullPath = new List<string>();
-            GetCheckTreeNodesFullPath(lstFullPath, tvFolderTree.Nodes);
+            GetCheckTreeNodesFullPath(ref lstFullPath, tvFolderTree.Nodes);
             if (lstFullPath.Count < 1) return;
 
             DialogResult ret = DialogResult.Cancel;
@@ -306,7 +307,7 @@ namespace mml2vgmIDE
 
             if (ret == DialogResult.Cancel) return;
 
-            parentExecFile?.Invoke(lstFullPath.ToArray());
+            parentDeleteFile?.Invoke(lstFullPath.ToArray());
 
         }
 
@@ -558,13 +559,13 @@ namespace mml2vgmIDE
             }
         }
 
-        public void GetCheckTreeNodesFullPath(List<string> lstFullPath, TreeNodeCollection nodes, bool force = false)
+        public void GetCheckTreeNodesFullPath(ref List<string> lstFullPath, TreeNodeCollection nodes, bool force = false)
         {
             foreach (TreeNode tn in nodes)
             {
                 if (tn.Nodes.Count > 0)
                 {
-                    GetCheckTreeNodesFullPath(lstFullPath, tn.Nodes);
+                    GetCheckTreeNodesFullPath(ref lstFullPath, tn.Nodes);
                 }
                 if (!tn.Checked && !tn.IsSelected) continue;
 

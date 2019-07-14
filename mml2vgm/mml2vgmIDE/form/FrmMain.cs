@@ -77,6 +77,7 @@ namespace mml2vgmIDE
         private System.Media.SoundPlayer player = null;
         public Setting setting;
         private ToolStripMenuItem tsmiTreeView = null;
+        public IDockContent activeDocument;
 
 
 
@@ -94,6 +95,7 @@ namespace mml2vgmIDE
         public FrmMain()
         {
             InitializeComponent();
+
             DrawBuff.Init();
             //Init();
         }
@@ -234,16 +236,16 @@ namespace mml2vgmIDE
 
         public void TsmiSaveFile_Click(object sender, EventArgs e)
         {
-            DockContent dc = null;
+            DockContent dc = (DockContent)GetActiveDocument();
             Document d = null;
-            if (dpMain.ActiveDocument is DockContent)
+            if (dc != null)
             {
-                dc = (DockContent)dpMain.ActiveDocument;
                 if (dc.Tag is Document)
                 {
                     d = (Document)dc.Tag;
                 }
             }
+
             if (d == null) return;
 
             File.WriteAllText(d.gwiFullPath, d.editor.azukiControl.Text, Encoding.UTF8);
@@ -268,16 +270,16 @@ namespace mml2vgmIDE
 
         private void TsmiSaveAs_Click(object sender, EventArgs e)
         {
-            DockContent dc = null;
+            DockContent dc = (DockContent)GetActiveDocument();
             Document d = null;
-            if (dpMain.ActiveDocument is DockContent)
+            if (dc != null)
             {
-                dc = (DockContent)dpMain.ActiveDocument;
                 if (dc.Tag is Document)
                 {
                     d = (Document)dc.Tag;
                 }
             }
+
             if (d == null) return;
 
             SaveFileDialog sfd = new SaveFileDialog();
@@ -321,16 +323,16 @@ namespace mml2vgmIDE
         {
             try
             {
-                DockContent dc = null;
+                DockContent dc = (DockContent)GetActiveDocument();
                 Document d = null;
-                if (dpMain.ActiveDocument is DockContent)
+                if (dc != null)
                 {
-                    dc = (DockContent)dpMain.ActiveDocument;
                     if (dc.Tag is Document)
                     {
                         d = (Document)dc.Tag;
                     }
                 }
+
                 if (d == null) return;
 
                 Compile(false, false, false, false);
@@ -411,11 +413,10 @@ namespace mml2vgmIDE
 
         private void TsmiUndo_Click(object sender, EventArgs e)
         {
-            DockContent dc = null;
+            DockContent dc = (DockContent)GetActiveDocument();
             Document d = null;
-            if (dpMain.ActiveDocument is DockContent)
+            if (dc != null)
             {
-                dc = (DockContent)dpMain.ActiveDocument;
                 if (dc.Tag is Document)
                 {
                     d = (Document)dc.Tag;
@@ -428,11 +429,10 @@ namespace mml2vgmIDE
 
         private void TsmiRedo_Click(object sender, EventArgs e)
         {
-            DockContent dc = null;
+            DockContent dc = (DockContent)GetActiveDocument();
             Document d = null;
-            if (dpMain.ActiveDocument is DockContent)
+            if (dc != null)
             {
-                dc = (DockContent)dpMain.ActiveDocument;
                 if (dc.Tag is Document)
                 {
                     d = (Document)dc.Tag;
@@ -620,7 +620,7 @@ namespace mml2vgmIDE
             TsmiShowMIDIKbd_Click(null, null);
         }
 
-        private void FrmMain_KeyDown(object sender, KeyEventArgs e)
+        public void FrmMain_KeyDown(object sender, KeyEventArgs e)
         {
             ctrl = (e.KeyData & Keys.Control) == Keys.Control;
             shift = (e.KeyData & Keys.Shift) == Keys.Shift;
@@ -760,9 +760,39 @@ namespace mml2vgmIDE
             OpenFile(fn);
         }
 
+        public IDockContent GetActiveDocument()
+        {
+            IDockContent dc = null;
+
+            foreach (object o in FormBox)
+            {
+                if (!(o is DockContent))
+                {
+                    continue;
+                }
+
+                DockContent d = (DockContent)o;
+                if (d.DockState != DockState.Float)
+                {
+                    continue;
+                }
+
+                if (activeDocument == d)
+                {
+                    dc = d;
+                    break;
+                }
+            }
+
+            if (dc == null) dc = dpMain.ActiveDocument;
+
+            return dc;
+        }
+
         private void Compile(bool doPlay, bool isTrace, bool doSkip, bool doSkipStop,string[] text=null)
         {
-            IDockContent dc = dpMain.ActiveDocument;
+            IDockContent dc = GetActiveDocument();
+
             if (text == null)
             {
                 if (dc == null) return;
@@ -1075,11 +1105,10 @@ namespace mml2vgmIDE
 
         public void UpdateControl()
         {
-            DockContent dc = null;
+            DockContent dc = (DockContent)GetActiveDocument();
             Document d = null;
-            if (dpMain.ActiveDocument is DockContent)
+            if (dc != null)
             {
-                dc = (DockContent)dpMain.ActiveDocument;
                 if (dc.Tag is Document)
                 {
                     d = (Document)dc.Tag;
@@ -1107,6 +1136,7 @@ namespace mml2vgmIDE
 
                 if (frmFolderTree.tvFolderTree.Nodes.Count == 0 || frmFolderTree.tvFolderTree.Nodes[0] != d.gwiTree) 
                 {
+                    frmFolderTree.basePath = Path.GetDirectoryName(d.gwiFullPath);
                     frmFolderTree.tvFolderTree.Nodes.Clear();
                     frmFolderTree.tvFolderTree.Nodes.Add(d.gwiTree);
                 }
@@ -1148,11 +1178,10 @@ namespace mml2vgmIDE
 
         public void UpdateFolderTree()
         {
-            DockContent dc = null;
+            DockContent dc = (DockContent)GetActiveDocument();
             Document d = null;
-            if (dpMain.ActiveDocument is DockContent)
+            if (dc != null)
             {
-                dc = (DockContent)dpMain.ActiveDocument;
                 if (dc.Tag is Document)
                 {
                     d = (Document)dc.Tag;
@@ -1450,7 +1479,7 @@ namespace mml2vgmIDE
         {
             try
             {
-                IDockContent dc = dpMain.ActiveDocument;
+                IDockContent dc = GetActiveDocument();
                 Sgry.Azuki.WinForms.AzukiControl ac = null;
                 if (dc != null && (dc is FrmEditor))
                 {
@@ -1754,7 +1783,7 @@ namespace mml2vgmIDE
         {
             if (!traceInfoSw) return;
 
-            IDockContent dcnt = dpMain.ActiveDocument;
+            IDockContent dcnt = GetActiveDocument();
             if (dcnt == null) return;
             if (!(dcnt is FrmEditor)) return;
             FrmEditor fe = ((FrmEditor)dcnt);
@@ -2051,29 +2080,23 @@ namespace mml2vgmIDE
             MouseEventArgs mea = (MouseEventArgs)e;
             if (mea.Button == MouseButtons.Right) return;
 
-            DockContent dc = null;
+            DockContent dc = (DockContent)GetActiveDocument();
             Document d = null;
-            if (dpMain.ActiveDocument is DockContent)
+            if (dc != null)
             {
-                dc = (DockContent)dpMain.ActiveDocument;
                 if (dc.Tag is Document)
                 {
                     d = (Document)dc.Tag;
                 }
             }
+
             //if (d == null) return;
 
             Tuple<int,string, string[],string> tpl = (Tuple<int, string, string[], string>)((ToolStripMenuItem)sender).Tag;
             string fn = tpl.Item4;
 
             List<string> lstFullPath = new List<string>();
-            frmFolderTree.GetCheckTreeNodesFullPath(lstFullPath, frmFolderTree.tvFolderTree.Nodes);
-            if (lstFullPath.Count < 1) return;
-
-            //TreeNode tn = frmFolderTree.tvFolderTree.SelectedNode;
-            //if (tn == null) return;
-            //if (tn.ImageIndex == 1) return;
-            //string fullpath = System.IO.Path.Combine(Path.GetDirectoryName(frmFolderTree.basePath), tn.FullPath);
+            frmFolderTree.GetCheckTreeNodesFullPath(ref lstFullPath, frmFolderTree.tvFolderTree.Nodes);
 
             Mml2vgmInfo info = new Mml2vgmInfo();
             info.parent = this;
@@ -2088,16 +2111,16 @@ namespace mml2vgmIDE
         {
             ChannelInfo chi = null;
 
-            DockContent dc = null;
+            DockContent dc = (DockContent)GetActiveDocument();
             Document d = null;
-            if (dpMain.ActiveDocument is DockContent)
+            if (dc != null)
             {
-                dc = (DockContent)dpMain.ActiveDocument;
                 if (dc.Tag is Document)
                 {
                     d = (Document)dc.Tag;
                 }
             }
+
             if (d == null)
             {
                 firstPlay();
