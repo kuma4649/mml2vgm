@@ -403,6 +403,7 @@ namespace mml2vgmIDE
         {
             chipRegister.SetRealChipInfo(EnmDevice.AY8910, setting.AY8910Type, setting.AY8910SType, setting.LatencyEmulation, setting.LatencySCCI);
             chipRegister.SetRealChipInfo(EnmDevice.C140, setting.C140Type, setting.C140SType, setting.LatencyEmulation, setting.LatencySCCI);
+            chipRegister.SetRealChipInfo(EnmDevice.RF5C164, new Setting.ChipType(), new Setting.ChipType(), setting.LatencyEmulation, setting.LatencySCCI);
             chipRegister.SetRealChipInfo(EnmDevice.SegaPCM, setting.SEGAPCMType, setting.SEGAPCMSType, setting.LatencyEmulation, setting.LatencySCCI);
             chipRegister.SetRealChipInfo(EnmDevice.SN76489, setting.SN76489Type, setting.SN76489SType, setting.LatencyEmulation, setting.LatencySCCI);
             chipRegister.SetRealChipInfo(EnmDevice.YM2151, setting.YM2151Type, setting.YM2151SType, setting.LatencyEmulation, setting.LatencySCCI);
@@ -590,9 +591,16 @@ namespace mml2vgmIDE
                 chipType[i].UseEmu2 = true;
                 chipType[i].UseEmu3 = false;
                 chipType[i].UseScci = false;
+
                 if (ret.Count == 0) continue;
                 SearchRealChip(chipType, ret, i, EnmDevice.YM2612, chipRegister.YM2612[i], setting.AutoDetectModuleType == 0 ? 0 : 1);
                 if (chipType[i].UseEmu) SearchRealChip(chipType, ret, i, EnmDevice.YM2612, chipRegister.YM2612[i], setting.AutoDetectModuleType == 0 ? 1 : 0);
+
+                Setting.ChipType ct = (i == 0) ? setting.YM2612Type : setting.YM2612SType;
+                chipType[i].OnlyPCMEmulation = ct.OnlyPCMEmulation;
+                chipType[i].UseEmu = ct.UseEmu;
+                chipType[i].UseEmu2 = ct.UseEmu2;
+                chipType[i].UseEmu3 = ct.UseEmu3;
             }
             chipRegister.SetRealChipInfo(EnmDevice.YM2612, chipType[0], chipType[1], setting.LatencyEmulation, setting.LatencySCCI);
 
@@ -665,8 +673,20 @@ namespace mml2vgmIDE
                         }
                     }
                     break;
+                case EnmDevice.SN76489:
+                    if (chipType.SoundLocation == -1)
+                    {
+                    }
+                    else
+                    {
+                        if (chipType.Type == (int)EnmRealChipType.SN76489)
+                        {
+                            return EnmRealModel.SCCI;
+                        }
+                    }
+                    break;
                 case EnmDevice.SegaPCM:
-                    if (chipType.SoundLocation == -1) 
+                    if (chipType.SoundLocation == -1)
                     {
                     }
                     else
@@ -4250,7 +4270,7 @@ namespace mml2vgmIDE
                     ;
                 }
 
-                if (Pack.Address != -1 || Pack.Data != -1)
+                if (Pack.Address != -1 || Pack.Data != -1 || Pack.ExData!=null)
                 {
                     chipRegister.SendChipData(PackCounter, Pack.Chip, Pack.Type, Pack.Address, Pack.Data, Pack.ExData);
                 }
