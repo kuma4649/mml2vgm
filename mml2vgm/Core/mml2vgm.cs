@@ -30,6 +30,7 @@ namespace Core
         public bool doSkipStop = false;
         public Point caretPoint = Point.Empty;
         private bool bufferMode = false;
+        private bool writeFileMode;
 
         /// <summary>
         /// コンストラクタ
@@ -47,6 +48,7 @@ namespace Core
             this.wrkPath = Path.GetDirectoryName(Path.GetFullPath(srcFn));
             this.srcTxt = null;
             bufferMode = false;
+            this.writeFileMode = true;
         }
 
         /// <summary>
@@ -66,17 +68,19 @@ namespace Core
             this.wrkPath = wrkPath;
             this.srcTxt = null;
             bufferMode = false;
+            this.writeFileMode = true;
         }
 
-        public Mml2vgm(string[] srcTxt, string srcFn, string stPath, Action<string> disp, string wrkPath)
+        public Mml2vgm(string[] srcTxt, string srcFn, string desFn, string stPath, Action<string> disp, string wrkPath, bool writeFileMode)
         {
             this.srcFn = srcFn;
-            this.desFn = null;
+            this.desFn = desFn;
             this.stPath = stPath;
             this.Disp = disp;
             this.wrkPath = wrkPath;
             this.srcTxt = srcTxt;
-            bufferMode = true;
+            this.bufferMode = true;
+            this.writeFileMode = writeFileMode;
         }
 
         /// <summary>
@@ -92,6 +96,7 @@ namespace Core
 
                 List<Line> src = null;
 
+                //.gwiファイルの読み込み
                 if (!bufferMode)
                 {
                     Disp(msg.get("I04001"));
@@ -108,7 +113,9 @@ namespace Core
                     srcTxt = File.ReadAllLines(srcFn);
                 }
 
+                //インクルードファイルのマージ
                 src = GetSrc(srcTxt, wrkPath);
+
                 if (src == null)
                 {
                     msgBox.setErrMsg(msg.get("E04001"), new LinePos(srcFn));
@@ -170,13 +177,16 @@ namespace Core
                     return -1;
                 }
 
-                if (outVgmFile && !bufferMode)
+                if (outVgmFile && writeFileMode)
                 {
                     Disp(msg.get("I04021"));
-                    OutVgmFile(desBuf);
+                    if (desVGM.info.format == enmFormat.VGM)
+                        OutVgmFile(desBuf);
+                    else
+                        OutXgmFile(desBuf);
                 }
 
-                if (outTraceInfoFile && !bufferMode)
+                if (outTraceInfoFile && writeFileMode)
                 {
                     Disp(msg.get("I04022"));
                     OutTraceInfoFile(desBuf);
@@ -233,7 +243,42 @@ namespace Core
                 lstBuf.Add(od.val);
             }
             byte[] bufs = lstBuf.ToArray();
+            OutFile(bufs);
+        }
 
+        private void OutXgmFile(outDatum[] desBuf)
+        {
+            List<byte> lstBuf = new List<byte>();
+            int skipCount = 0;
+            foreach (outDatum od in desBuf)
+            {
+
+                //ダミーコマンドをスキップする
+                if (skipCount > 0)
+                {
+                    skipCount--;
+                    continue;
+                }
+
+                if (od.val == 0x60 //dummyChipコマンド　(第2引数：chipID 第３引数:isSecondary)
+                    && (od.type == enmMMLType.Rest//ここで指定できるmmlコマンドは元々はChipに送信することのないコマンドのみ(さもないと、通常のコマンドのデータと見分けがつかなくなる可能性がある)
+                    || od.type == enmMMLType.Tempo
+                    || od.type == enmMMLType.Length
+                    )
+                    )
+                {
+                    skipCount = 2;
+                    continue;
+                }
+
+                lstBuf.Add(od.val);
+            }
+            byte[] bufs = lstBuf.ToArray();
+            OutFile(bufs);
+        }
+
+        private void OutFile(byte[] bufs)
+        {
             if (Path.GetExtension(desFn).ToLower() != ".vgz")
             {
                 if (desVGM.info.format == enmFormat.VGM)

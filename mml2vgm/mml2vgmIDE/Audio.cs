@@ -1647,8 +1647,7 @@ namespace mml2vgmIDE
 
                 ret = xgmPlay(setting);
             }
-
-            if (PlayingFileFormat == EnmFileFormat.VGM)
+            else if (PlayingFileFormat == EnmFileFormat.VGM)
             {
                 driver = new vgm();
                 driver.setting = setting;
@@ -1786,11 +1785,15 @@ namespace mml2vgmIDE
                 if (hiyorimiNecessary) hiyorimiNecessary = true;
                 else hiyorimiNecessary = false;
 
+                log.Write("MDSound 初期化");
+
                 if (mds == null)
                     mds = new MDSound.MDSound((UInt32)Common.SampleRate, samplingBuffer, lstChips.ToArray());
                 else
                     mds.Init((UInt32)Common.SampleRate, samplingBuffer, lstChips.ToArray());
 
+                log.Write("ChipRegister 初期化");
+                chipRegister.SetMDSound(mds);
                 chipRegister.initChipRegister(lstChips.ToArray());
 
                 if (setting.IsManualDetect)
@@ -1802,40 +1805,25 @@ namespace mml2vgmIDE
                     RealChipAutoDetect(setting);
                 }
 
-                for (int i = 0; i < 2; i++)
+                if (chipRegister.SN76489[0].Model == EnmModel.VirtualModel) useEmu = true;
+                if (chipRegister.SN76489[0].Model == EnmModel.RealModel) useReal = true;
+
+                if (chipRegister.YM2612[0].Model == EnmModel.VirtualModel) useEmu = true;
+                if (chipRegister.YM2612[0].Model == EnmModel.RealModel)
                 {
-                    if (chipRegister.SN76489[i].Use)
-                    {
-                        if (chipRegister.SN76489[i].Model == EnmModel.VirtualModel) useEmu = true;
-                        if (chipRegister.SN76489[i].Model == EnmModel.RealModel) useReal = true;
-                    }
-
-                    if (chipRegister.YM2612[i].Use)
-                    {
-                        if (chipRegister.YM2612[i].Model == EnmModel.VirtualModel) useEmu = true;
-                        if (chipRegister.YM2612[i].Model == EnmModel.RealModel)
-                        {
-                            if (setting.YM2612Type.OnlyPCMEmulation) useEmu = true;
-                            useReal = true;
-                        }
-                    }
-
+                    if (setting.YM2612Type.OnlyPCMEmulation) useEmu = true;
+                    useReal = true;
                 }
+
+                log.Write("Volume 設定");
 
                 SetYM2612Volume(true, setting.balance.YM2612Volume);
                 SetSN76489Volume(true, setting.balance.SN76489Volume);
-                //chipRegister.setYM2203SSGVolume(0, setting.balance.GimicOPNVolume, enmModel.RealModel);
-                //chipRegister.setYM2203SSGVolume(1, setting.balance.GimicOPNVolume, enmModel.RealModel);
-                //chipRegister.setYM2608SSGVolume(0, setting.balance.GimicOPNAVolume, enmModel.RealModel);
-                //chipRegister.setYM2608SSGVolume(1, setting.balance.GimicOPNAVolume, enmModel.RealModel);
 
                 log.Write("Clock 設定");
 
-                for (int i = 0; i < 2; i++)
-                {
-                    if (chipRegister.SN76489[i].Use) chipRegister.SN76489WriteClock((byte)i, (int)xgmDriver.SN76489ClockValue);
-                    if (chipRegister.YM2612[i].Use) chipRegister.YM2612WriteClock((byte)i, (int)xgmDriver.YM2612ClockValue);
-                }
+                chipRegister.SN76489WriteClock((byte)0, (int)xgmDriver.SN76489ClockValue);
+                chipRegister.YM2612WriteClock((byte)0, (int)xgmDriver.YM2612ClockValue);
 
                 //if (driverReal != null)
                 //{
@@ -1908,8 +1896,8 @@ namespace mml2vgmIDE
                 MasterVolume = setting.balance.MasterVolume;
 
 
+                log.Write("使用チップの調査");
                 {
-                    log.Write("使用チップの調査");
 
                     chipRegister.ClearChipParam();
 
@@ -4137,30 +4125,6 @@ namespace mml2vgmIDE
                 //if (!sm.IsRunningAtEmuChipSender()) EmuSeqCounter = 0;
                 callcount = 0;
 
-                //if (driver is nsf)
-                //{
-                //    driver.vstDelta = 0;
-                //    cnt = (Int32)((nsf)driver).Render(buffer, (UInt32)sampleCount / 2, offset) * 2;
-                //}
-                //else if (driver is Driver.SID.sid)
-                //{
-                //    driver.vstDelta = 0;
-                //    cnt = (Int32)((Driver.SID.sid)driver).Render(buffer, (UInt32)sampleCount);
-                //}
-                //else if (driver is Driver.MXDRV.MXDRV)
-                //{
-                //    mds.setIncFlag();
-                //    driver.vstDelta = 0;
-                //    for (i = 0; i < sampleCount; i += 2)
-                //    {
-                //        cnt = (Int32)((Driver.MXDRV.MXDRV)driver).Render(buffer, offset + i, 2);
-                //        mds.Update(buffer, offset + i, 2, null);
-                //    }
-                //    //cnt = (Int32)((Driver.MXDRV.MXDRV)driverVirtual).Render(buffer, offset , sampleCount);
-                //    //mds.Update(buffer, offset , sampleCount, null);
-                //    cnt = sampleCount;
-                //}
-                //else
                 {
                     //if (hiyorimiNecessary)// && driverReal.isDataBlock)
                     //{
@@ -4280,6 +4244,13 @@ namespace mml2vgmIDE
                 }
 
                 SetMMLTraceInfo?.Invoke(Pack);
+
+                ////XGM PCMデータ
+                //if (Pack.od == null && Pack.Address == 0x2a)
+                //{
+                //    log.Write(string.Format("Adr:{0:X} Dat:{1:X}", Pack.Address, Pack.Data));
+                //}
+
                 //if (Pack.od != null && Pack.od.linePos != null)
                 //{
                 //    log.Write(string.Format("{0} row:{1} col:{2} len:{3} chip:{4} ch:{5} part:{6}",

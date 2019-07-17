@@ -202,6 +202,11 @@ namespace Core
                     AddAlies(line);
                     continue;
                 }
+                if (s.IndexOf("+") == 0)
+                {
+                    // Includeはとばす
+                    continue;
+                }
                 else
                 {
                     // Part
@@ -2139,6 +2144,7 @@ namespace Core
                 //$0108 + SLEN        Music data bloc
                 foreach (outDatum b in dat)
                 {
+                    //Console.WriteLine("{0:x2}", b.val);
                     xdat.Add(b);
                 }
             }
@@ -2397,7 +2403,6 @@ namespace Core
                     case 0x52: //YM2612 Port0
                         if (opn2reg[0][src[ptr + 1].val] != src[ptr + 2].val || src[ptr + 1].val == 0x28)
                         {
-
                             bool isKeyOn = src[ptr + 1].val == 0x28;
                             if (!isKeyOn)
                             {
@@ -2414,8 +2419,10 @@ namespace Core
 
                                         od = new outDatum(src[ptr + 1].type, src[ptr + 1].args, src[ptr + 1].linePos, src[ptr + 1].val);
                                         des.Add(od);
+                                        //Console.WriteLine("{0:x2}", od.val);
                                         od = new outDatum(src[ptr + 2].type, src[ptr + 2].args, src[ptr + 2].linePos, src[ptr + 2].val);
                                         des.Add(od);
+                                        //Console.WriteLine("    {0:x2}", od.val);
                                         c++;
                                     }
                                     ptr += 3;
@@ -2489,6 +2496,7 @@ namespace Core
                     case 0x7e: //LOOP Point
                         loopOffset = des.Count - dummyCmdCounter;
                         dummyCmdLoopOffset = des.Count;
+                        dummyCmdLoopOffsetAddress = ptr;
                         for (int i = 0; i < 512; i++) opn2reg[i / 0x100][i % 0x100] = -1;
                         break;
                     case 0x2f: //Dummy Command
@@ -2498,7 +2506,8 @@ namespace Core
                             || cmd.type== enmMMLType.Length
                             ))
                         {
-                            des.Add(src[ptr]);
+                            src[ptr].val = 0x60;//XGM向けダミーコマンド
+                            des.Add( src[ptr]);
                             des.Add(src[ptr + 1]);
                             des.Add(src[ptr + 2]);
                             ptr += 2;
@@ -2521,11 +2530,17 @@ namespace Core
                 dummyCmdLoopOffsetAddress = des.Count;
                 od = new outDatum(enmMMLType.unknown, null, null, 0x7e);
                 des.Add(od);
-                od = new outDatum(enmMMLType.unknown, null, null, (byte)loopOffset);
+                //od = new outDatum(enmMMLType.unknown, null, null, (byte)loopOffset);
+                //des.Add(od);
+                //od = new outDatum(enmMMLType.unknown, null, null, (byte)(loopOffset >> 8));
+                //des.Add(od);
+                //od = new outDatum(enmMMLType.unknown, null, null, (byte)(loopOffset >> 16));
+                //des.Add(od);
+                od = new outDatum(enmMMLType.unknown, null, null, (byte)dummyCmdLoopOffset);
                 des.Add(od);
-                od = new outDatum(enmMMLType.unknown, null, null, (byte)(loopOffset >> 8));
+                od = new outDatum(enmMMLType.unknown, null, null, (byte)(dummyCmdLoopOffset >> 8));
                 des.Add(od);
-                od = new outDatum(enmMMLType.unknown, null, null, (byte)(loopOffset >> 16));
+                od = new outDatum(enmMMLType.unknown, null, null, (byte)(dummyCmdLoopOffset >> 16));
                 des.Add(od);
 
             }

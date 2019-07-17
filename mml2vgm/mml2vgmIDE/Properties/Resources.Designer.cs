@@ -161,6 +161,16 @@ namespace mml2vgmIDE.Properties {
         }
         
         /// <summary>
+        ///   型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
+        /// </summary>
+        internal static System.Drawing.Bitmap ClearLog {
+            get {
+                object obj = ResourceManager.GetObject("ClearLog", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///    に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string cntDescription {

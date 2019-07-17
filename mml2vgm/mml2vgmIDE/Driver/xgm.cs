@@ -255,7 +255,7 @@ namespace mml2vgmIDE
                 }
 
                 //Dummy
-                if (cmd.val == 0x2f && (cmd.type == enmMMLType.Rest|| cmd.type == enmMMLType.Tempo))
+                if (cmd.val == 0x60 && (cmd.type == enmMMLType.Rest || cmd.type == enmMMLType.Tempo || cmd.type == enmMMLType.Length))
                 {
                     chipRegister.YM2612SetRegister(cmd, Audio.DriverSeqCounter, 0, 0, -1, -1);
                     musicPtr += 2;
@@ -272,6 +272,7 @@ namespace mml2vgmIDE
                 }
                 else if (H == 0x20)
                 {
+                    //Console.WriteLine("cmd{0:x2}", cmd.val);
                     //YM2612 port 0 register write:
                     WriteYM2612P0(cmd, L);
                 }
@@ -290,7 +291,10 @@ namespace mml2vgmIDE
                     //PCM play command:
                     PlayPCM(cmd, L);
                 }
-
+                //else if (H == 0x60)
+                //{
+                //    musicPtr += 2;
+                //}
             }
         }
 
@@ -330,8 +334,13 @@ namespace mml2vgmIDE
             for (int i = 0; i < X + 1; i++)
             {
                 chipRegister.YM2612SetRegister(vgmBuf[musicPtr], Audio.DriverSeqCounter, 0, 0, 0x28, vgmBuf[musicPtr].val);
+                //Console.WriteLine("{0:x2}", vgmBuf[musicPtr].val);
                 musicPtr++;
             }
+            //for(int i = 0x108; i < vgmBuf.Length; i++)
+            //{
+                //Console.WriteLine("{0:x2}", vgmBuf[i].val);
+            //}
         }
 
         public class XGMPCM

@@ -53,6 +53,10 @@ namespace mml2vgmIDE
                         return mml2vgmScript.supportFileExt().Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
                 }
             }
+            catch(Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+            {
+                ;//無視
+            }
             catch (Exception ex)
             {
                 log.ForcedWrite(ex);

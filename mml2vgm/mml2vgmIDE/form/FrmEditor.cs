@@ -29,7 +29,7 @@ namespace mml2vgmIDE
                 main.SizeChanged += AzukiControl_CancelSien;
             }
         }
-        public Document parent = null;
+        public Document document = null;
         public FrmSien frmSien = null;
         //public int col = -1;
         public AzukiControl azukiControl;
@@ -130,7 +130,7 @@ namespace mml2vgmIDE
                 return;
             }
 
-            string basePath = System.IO.Path.GetDirectoryName(this.parent.gwiFullPath) + "\\";
+            string basePath = System.IO.Path.GetDirectoryName(this.document.gwiFullPath) + "\\";
             if (source.IndexOf(basePath) == 0)
             {
                 source = source.Substring(basePath.Length);
@@ -423,21 +423,18 @@ namespace mml2vgmIDE
 
         private void AzukiControl_TextChanged(object sender, EventArgs e)
         {
-            if (parent == null) return;
+            if (document == null) return;
 
-            if (parent.edit)
+            if (!document.edit)
             {
-            }
-            else
-            {
-                if (!parent.isNew)
+                if (!document.isNew)
                 {
                     if (azukiControl.CanUndo) this.Text += "*";
                 }
-                parent.edit = true;
+                document.edit = true;
             }
 
-            main.UpdateControl();
+            //main.UpdateControl();
 
             int ci = azukiControl.CaretIndex;
             int st = azukiControl.GetLineHeadIndexFromCharIndex(ci);
@@ -455,7 +452,7 @@ namespace mml2vgmIDE
         {
             if (e.CloseReason == CloseReason.UserClosing)
             {
-                if (parent.isNew || parent.edit)
+                if (document.isNew || document.edit)
                 {
                     DialogResult res = MessageBox.Show("保存せずにファイルを閉じますか？"
                         , "ファイル保存確認"
@@ -469,7 +466,7 @@ namespace mml2vgmIDE
                 }
 
                 main.RemoveForm(this);
-                main.RemoveDocument(parent);
+                main.RemoveDocument(document);
 
             }
         }
@@ -561,19 +558,9 @@ namespace mml2vgmIDE
             frmSien.Opacity = 0.0;
         }
 
-        private void AzukiControl_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void FrmEditor_Shown(object sender, EventArgs e)
         {
             AzukiControl_CaretMoved(null, null);
-        }
-
-        private void FrmEditor_KeyDown(object sender, KeyEventArgs e)
-        {
-
         }
 
         private void FrmEditor_Activated(object sender, EventArgs e)

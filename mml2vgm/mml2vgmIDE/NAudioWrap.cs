@@ -131,7 +131,7 @@ namespace mml2vgmIDE
                                 }
                                 i++;
                             }
-                            int retry = 3;
+                            int retry = 1;
                             do
                             {
                                 try

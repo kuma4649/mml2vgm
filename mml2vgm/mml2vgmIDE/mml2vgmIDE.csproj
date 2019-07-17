@@ -342,6 +342,7 @@
     <Content Include="RealChipCtlWrap.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Resource\ClearLog.png" />
     <Content Include="Resource\planeMIDIKB.png" />
     <Content Include="Resource\planeMixer.png" />
     <None Include="Resource\rFader.png" />

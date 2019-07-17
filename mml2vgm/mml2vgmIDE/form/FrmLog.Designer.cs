@@ -49,7 +49,7 @@
             this.tbLog.Multiline = true;
             this.tbLog.Name = "tbLog";
             this.tbLog.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.tbLog.Size = new System.Drawing.Size(634, 245);
+            this.tbLog.Size = new System.Drawing.Size(634, 220);
             this.tbLog.TabIndex = 0;
             this.tbLog.TextChanged += new System.EventHandler(this.TbLog_TextChanged);
             this.tbLog.DragOver += new System.Windows.Forms.DragEventHandler(this.TbLog_DragOver);
@@ -60,7 +60,7 @@
             // toolStripContainer1.ContentPanel
             // 
             this.toolStripContainer1.ContentPanel.Controls.Add(this.tbLog);
-            this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(634, 245);
+            this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(634, 220);
             this.toolStripContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
             // 
             // toolStripContainer1.LeftToolStripPanel
@@ -79,14 +79,14 @@
             this.tsbClearLog});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(32, 245);
+            this.toolStrip1.Size = new System.Drawing.Size(32, 220);
             this.toolStrip1.Stretch = true;
             this.toolStrip1.TabIndex = 0;
             // 
             // tsbClearLog
             // 
             this.tsbClearLog.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tsbClearLog.Image = ((System.Drawing.Image)(resources.GetObject("tsbClearLog.Image")));
+            this.tsbClearLog.Image = global::mml2vgmIDE.Properties.Resources.ClearLog;
             this.tsbClearLog.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbClearLog.Name = "tsbClearLog";
             this.tsbClearLog.Size = new System.Drawing.Size(30, 20);

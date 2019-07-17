@@ -37,6 +37,7 @@ namespace mml2vgmIDE
         private bool isTrace = false;
         private bool doSkip = false;
         private bool doSkipStop = false;
+        private bool doExport;
         private Point caretPoint = Point.Empty;
         private bool Compiling = false;
         private bool flgReinit = false;
@@ -335,7 +336,7 @@ namespace mml2vgmIDE
 
                 if (d == null) return;
 
-                Compile(false, false, false, false);
+                Compile(false, false, false, false, true);
                 while (Compiling) { Application.DoEvents(); }//待ち合わせ
 
                 if (msgBox.getErr().Length > 0)
@@ -393,22 +394,22 @@ namespace mml2vgmIDE
 
         public void TsmiCompileAndPlay_Click(object sender, EventArgs e)
         {
-            Compile(true, false, false, false);
+            Compile(true, false, false, false, false);
         }
 
         private void TsmiCompileAndTracePlay_Click(object sender, EventArgs e)
         {
-            Compile(true, true, false, false);
+            Compile(true, true, false, false, false);
         }
 
         private void TsmiCompileAndSkipPlay_Click(object sender, EventArgs e)
         {
-            Compile(true, true, true, false);
+            Compile(true, true, true, false, false);
         }
 
         private void TsmiCompile_Click(object sender, EventArgs e)
         {
-            Compile(false, false, false, false);
+            Compile(false, false, false, false, false);
         }
 
         private void TsmiUndo_Click(object sender, EventArgs e)
@@ -536,7 +537,7 @@ namespace mml2vgmIDE
             string file = Path.Combine(System.Windows.Forms.Application.StartupPath, "Setup.gwi");
             file = File.ReadAllText(file);
             string[] text = file.Split(new string[] { "\r\n" }, StringSplitOptions.None);
-            Compile(true, false, false, false, text);
+            Compile(true, false, false, false, false, text);
             while (Compiling)
             {
                 Thread.Sleep(0);
@@ -586,7 +587,7 @@ namespace mml2vgmIDE
 
         private void TssbCompile_ButtonClick(object sender, EventArgs e)
         {
-            Compile(true, ctrl, shift, false);
+            Compile(true, ctrl, shift, false, false);
             //TsmiCompileAndPlay_Click(null, null);
         }
 
@@ -647,7 +648,7 @@ namespace mml2vgmIDE
                     }
                     break;
                 case Keys.F5:
-                    Compile(true, ctrl, shift, false);
+                    Compile(true, ctrl, shift, false,false);
                     break;
                 case Keys.F9:
                     stop();
@@ -684,7 +685,7 @@ namespace mml2vgmIDE
             if (fileName != "") dc.InitOpen(fileName);
             dc.editor.Show(dpMain, DockState.Document);
             dc.editor.main = this;
-            dc.editor.parent = dc;
+            dc.editor.document = dc;
 
             frmFolderTree.tvFolderTree.Nodes.Clear();
             frmFolderTree.tvFolderTree.Nodes.Add(dc.gwiTree);
@@ -702,7 +703,7 @@ namespace mml2vgmIDE
             if (fileName != "") dc.InitOpen(fileName);
             dc.editor.Show(dpMain, DockState.Document);
             dc.editor.main = this;
-            dc.editor.parent = dc;
+            dc.editor.document = dc;
 
             frmFolderTree.tvFolderTree.Nodes.Clear();
             frmFolderTree.tvFolderTree.Nodes.Add(dc.gwiTree);
@@ -789,7 +790,7 @@ namespace mml2vgmIDE
             return dc;
         }
 
-        private void Compile(bool doPlay, bool isTrace, bool doSkip, bool doSkipStop,string[] text=null)
+        private void Compile(bool doPlay, bool isTrace, bool doSkip, bool doSkipStop,bool doExport,string[] text=null)
         {
             IDockContent dc = GetActiveDocument();
 
@@ -834,6 +835,7 @@ namespace mml2vgmIDE
             this.isTrace = isTrace;
             this.doSkip = doSkip;
             this.doSkipStop = doSkipStop;
+            this.doExport = doExport;
             //スキップ再生の場合はカレットの位置を取得する
             if (doSkip)
             {
@@ -891,7 +893,14 @@ namespace mml2vgmIDE
 
             Core.log.Write("Call mml2vgm core");
 
-            mv = new Mml2vgm(activeMMLTextLines, args[1], stPath, Disp, wrkPath);
+            if (!doExport)
+            {
+                mv = new Mml2vgm(activeMMLTextLines, args[1], null, stPath, Disp, wrkPath, false);
+            }
+            else
+            {
+                mv = new Mml2vgm(activeMMLTextLines, args[1], args[1], stPath, Disp, wrkPath, true);
+            }
             mv.doSkip = doSkip;
             mv.doSkipStop = doSkipStop;
             mv.caretPoint = caretPoint;
@@ -1079,9 +1088,9 @@ namespace mml2vgmIDE
                         }
                         else
                         {
-                            uint LoopOffserAddress = (uint)mv.desVGM.dummyCmdLoopOffset;
-                            uint LoopOffset = (uint)mv.desVGM.dummyCmdLoopOffset;
-                            Common.SetLE24(mv.desBuf, (uint)(mv.desVGM.dummyCmdLoopOffsetAddress + 1), LoopOffset);
+                            //uint LoopOffserAddress = (uint)mv.desVGM.dummyCmdLoopOffsetAddress;
+                            //uint LoopOffset = (uint)mv.desVGM.dummyCmdLoopOffset;
+                            //Common.SetLE24(mv.desBuf, (uint)(mv.desVGM.dummyCmdLoopOffsetAddress + 1), LoopOffset);
                         }
                         InitPlayer(
                             mv.desVGM.info.format == enmFormat.VGM ? EnmFileFormat.VGM : EnmFileFormat.XGM,
@@ -1139,6 +1148,7 @@ namespace mml2vgmIDE
                     frmFolderTree.basePath = Path.GetDirectoryName(d.gwiFullPath);
                     frmFolderTree.tvFolderTree.Nodes.Clear();
                     frmFolderTree.tvFolderTree.Nodes.Add(d.gwiTree);
+                    frmFolderTree.refresh();
                 }
 
                 this.Text = string.Format("{0} - {1}", appName, d.editor.Text);
@@ -1172,7 +1182,6 @@ namespace mml2vgmIDE
                 FileInformation.loopCounter == -1 ? "-" : FileInformation.loopCounter.ToString()
                 );
 
-            frmFolderTree.refresh();
 
         }
 
@@ -2138,7 +2147,7 @@ namespace mml2vgmIDE
             //演奏中はコンパイルしない
             if (!Audio.sm.IsRunningAtDataMaker())
             {
-                Compile(true, false, true, true);
+                Compile(true, false, true, true, false);
                 while (Compiling)
                 {
                     Thread.Sleep(0);
