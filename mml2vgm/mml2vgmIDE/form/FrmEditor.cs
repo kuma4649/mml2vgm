@@ -84,7 +84,7 @@ namespace mml2vgmIDE
 
             this.Controls.Add(azukiControl);
 
-            frmSien = new FrmSien();
+            frmSien = new FrmSien(setting);
             frmSien.parent = main;
             frmSien.Show();
         }

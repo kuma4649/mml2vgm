@@ -36,6 +36,7 @@ namespace mml2vgmIDE
             tvFolderTree.TreeViewNodeSorter = new NodeSorter();
 
             dockPanel.Theme.ApplyTo(cmsMenu);
+            dockPanel.Theme.ApplyTo(toolStrip1);
         }
 
         private void FrmFolderTree_FormClosing(object sender, FormClosingEventArgs e)
@@ -432,6 +433,7 @@ namespace mml2vgmIDE
             if (string.IsNullOrEmpty(basePath)) return;
             refreshRemoveCheck(tvFolderTree.Nodes);
             if (tvFolderTree.Nodes.Count > 0) refreshAddCheck(tvFolderTree.Nodes[0]);
+            refreshFilter(tvFolderTree.Nodes[0].Nodes);
             tvFolderTree.Sort();
         }
 
@@ -486,6 +488,12 @@ namespace mml2vgmIDE
                         {
                             refreshAddCheck(ttn);
                         }
+                        else
+                        {
+                            if (ttn.ImageIndex==1 && ttn.Nodes.Count == 0)
+                                refreshAddCheck(ttn);
+
+                        }
 
                         string fpath = Path.Combine(Path.GetDirectoryName(basePath), ttn.FullPath);
                         if (ds.FullName == fpath)
@@ -525,6 +533,64 @@ namespace mml2vgmIDE
                 MessageBox.Show("アクセスが拒否されました。", "権限不足", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch { }
+
+        }
+
+        private void refreshFilter(TreeNodeCollection nodes)
+        {
+            if (tsmiFilterAll.Checked) return;
+
+            int i = 0;
+            while(i< nodes.Count)
+            {
+                TreeNode tn = nodes[i++];
+
+                if (tn.ImageIndex == 1)
+                {
+                    if (!tsmiFilterFolder.Checked)
+                    {
+                        nodes.Remove(tn);
+                        i--;
+                    }
+                    else
+                    {
+                        if (tn.Nodes.Count > 0)
+                        {
+                            refreshFilter(tn.Nodes);
+                        }
+                    }
+                }
+                else
+                {
+                    if (tsmiFilterFile.Checked)
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        if (Path.GetExtension(tn.Text).ToLower() == ".gwi")
+                        {
+                            if (tsmiFilterGwi.Checked)
+                            {
+                                continue;
+                            }
+                        }
+                        else if (Path.GetExtension(tn.Text).ToLower() == ".wav")
+                        {
+                            if (tsmiFilterWav.Checked)
+                            {
+                                continue;
+                            }
+                        }
+                        else if (tn.Text == "!dmy")
+                        {
+                            continue;
+                        }
+                        nodes.Remove(tn);
+                        i--;
+                    }
+                }
+            }
 
         }
 
@@ -696,6 +762,88 @@ namespace mml2vgmIDE
                 // If they are the same length, call Compare.
                 return string.Compare(tx.Text, ty.Text);
             }
+        }
+
+        private void TsbReload_Click(object sender, EventArgs e)
+        {
+            refresh();
+        }
+
+        private const string FILTER_ALL = "*.* (All)";
+        private const string FILTER_FILE = "* (File)";
+        private const string FILTER_FOLDER = "* (Folder)";
+
+        private void TsmiFilterAll_Click(object sender, EventArgs e)
+        {
+            //All以外は全てチェックオフ
+            foreach(ToolStripItem tsi in tsddbFilter.DropDownItems)
+            {
+                if (!(tsi is ToolStripMenuItem)) continue;
+                ToolStripMenuItem item = (ToolStripMenuItem)tsi;
+                if (item.Text == FILTER_ALL) continue;
+                item.CheckState = CheckState.Unchecked;
+            }
+
+            refresh();
+        }
+
+        private void TsmiFilterFolder_Click(object sender, EventArgs e)
+        {
+            foreach (ToolStripItem tsi in tsddbFilter.DropDownItems)
+            {
+                if (!(tsi is ToolStripMenuItem)) continue;
+                ToolStripMenuItem item = (ToolStripMenuItem)tsi;
+                if (item.Text == FILTER_ALL)
+                    item.CheckState = CheckState.Unchecked;
+            }
+
+            refresh();
+        }
+
+        private void TsmiFilterFile_Click(object sender, EventArgs e)
+        {
+            foreach (ToolStripItem tsi in tsddbFilter.DropDownItems)
+            {
+                if (!(tsi is ToolStripMenuItem)) continue;
+                ToolStripMenuItem item = (ToolStripMenuItem)tsi;
+                if (item.Text == FILTER_ALL)
+                    item.CheckState = CheckState.Unchecked;
+                else if (item.Text == FILTER_FILE) continue;
+                else if (item.Text == FILTER_FOLDER) continue;
+                else item.CheckState = CheckState.Unchecked;
+            }
+
+            refresh();
+        }
+
+        private void TsmiFilterGwi_Click(object sender, EventArgs e)
+        {
+            FilterItemCheckStateRefresh();
+
+            refresh();
+        }
+
+        private void TsmiFilterWav_Click(object sender, EventArgs e)
+        {
+            FilterItemCheckStateRefresh();
+
+            refresh();
+        }
+
+        private void FilterItemCheckStateRefresh()
+        {
+            foreach (ToolStripItem tsi in tsddbFilter.DropDownItems)
+            {
+                if (!(tsi is ToolStripMenuItem)) continue;
+                ToolStripMenuItem item = (ToolStripMenuItem)tsi;
+                if (item.Text != FILTER_ALL && item.Text != FILTER_FILE) continue;
+                item.CheckState = CheckState.Unchecked;
+            }
+        }
+
+        private void TvFolderTree_AfterExpand(object sender, TreeViewEventArgs e)
+        {
+            refreshFilter(e.Node.Nodes);
         }
     }
 }

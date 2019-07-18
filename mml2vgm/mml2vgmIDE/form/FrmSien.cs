@@ -15,14 +15,16 @@ namespace mml2vgmIDE
     public partial class FrmSien : Form
     {
         public FrmMain parent = null;
+        public Setting setting = null;
         private SienSearch ss;
         public int selRow = -1;
         private Dictionary<string, string[]> instCache = new Dictionary<string, string[]>();
 
-        public FrmSien()
+        public FrmSien(Setting setting)
         {
             InitializeComponent();
             ss = new SienSearch(System.IO.Path.Combine(Common.GetApplicationFolder(), "mmlSien.json"));
+            this.setting = setting;
         }
 
         private void dgvItem_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -157,6 +159,14 @@ namespace mml2vgmIDE
             {
                 log.ForcedWrite(ex);
             }
+        }
+
+        private void FrmSien_Load(object sender, EventArgs e)
+        {
+            dgvItem.BackColor = Color.FromArgb(setting.ColorScheme.FrmSien_BackColor);
+            dgvItem.ForeColor = Color.FromArgb(setting.ColorScheme.FrmSien_ForeColor);
+            dgvItem.DefaultCellStyle.BackColor = Color.FromArgb(setting.ColorScheme.FrmSien_BackColor);
+            dgvItem.DefaultCellStyle.ForeColor = Color.FromArgb(setting.ColorScheme.FrmSien_ForeColor);
         }
     }
 

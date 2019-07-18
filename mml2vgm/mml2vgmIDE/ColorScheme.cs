@@ -35,6 +35,9 @@ namespace mml2vgmIDE
         public int FolderTree_ForeColor = Color.FromArgb(235, 235, 255).ToArgb();
         public int FolderTree_BackColor = Color.FromArgb(40, 30, 60).ToArgb();
 
+        public int FrmSien_ForeColor = Color.FromArgb(235, 235, 255).ToArgb();
+        public int FrmSien_BackColor = Color.FromArgb(40, 30, 60).ToArgb();
+
         public ColorScheme Copy()
         {
             ColorScheme ret = new ColorScheme();

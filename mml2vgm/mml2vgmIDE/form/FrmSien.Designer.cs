@@ -54,7 +54,7 @@
             this.dgvItem.RowHeadersVisible = false;
             this.dgvItem.RowTemplate.Height = 21;
             this.dgvItem.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvItem.Size = new System.Drawing.Size(560, 125);
+            this.dgvItem.Size = new System.Drawing.Size(480, 125);
             this.dgvItem.TabIndex = 0;
             this.dgvItem.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvItem_CellClick);
             // 
@@ -69,9 +69,9 @@
             // 
             // FrmSien
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(560, 125);
+            this.ClientSize = new System.Drawing.Size(480, 125);
             this.Controls.Add(this.dgvItem);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -81,6 +81,7 @@
             this.ShowInTaskbar = false;
             this.Text = "Form1";
             this.TopMost = true;
+            this.Load += new System.EventHandler(this.FrmSien_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgvItem)).EndInit();
             this.ResumeLayout(false);
 
