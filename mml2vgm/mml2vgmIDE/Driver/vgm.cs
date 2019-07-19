@@ -1365,7 +1365,7 @@ namespace mml2vgmIDE
             //}
 
             byte si = vgmBuf[vgmAdr + 1].val;
-            if (!DacCtrl[si].Enable)
+            if (si<0xff && !DacCtrl[si].Enable)
             {
                 vgmAdr += 0x02;
                 return;

@@ -3424,6 +3424,7 @@ namespace mml2vgmIDE
                         Thread.Sleep(1);
                         System.Windows.Forms.Application.DoEvents();
                     }
+                    sm.ResetMode(SendMode.Both);
                     break;
                 case SendMode.MML:
                     //鍵盤が表示されている場合の「停止」はデータ演奏モード(SendMode.MML)のみ停止する

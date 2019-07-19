@@ -23,6 +23,9 @@ namespace mml2vgmIDE
         public int Azuki_DocComment = Color.FromArgb(230, 130, 230).ToArgb();
         public int Azuki_Number = Color.FromArgb(235, 235, 255).ToArgb();
 
+        public int StatusStripBack_Normal = Color.FromArgb(60, 90, 190).ToArgb();
+        public int StatusStripBack_Trace = Color.FromArgb(100, 150, 10).ToArgb();
+
         public int ErrorList_ForeColor = Color.FromArgb(235, 235, 255).ToArgb();
         public int ErrorList_BackColor = Color.FromArgb(40, 30, 60).ToArgb();
 
@@ -49,6 +52,8 @@ namespace mml2vgmIDE
             ret.Azuki_LineNumberFore_Normal = this.Azuki_LineNumberFore_Normal;
             ret.Azuki_LineNumberBack_Trace = this.Azuki_LineNumberBack_Trace;
             ret.Azuki_LineNumberFore_Trace = this.Azuki_LineNumberFore_Trace;
+            ret.StatusStripBack_Normal = this.StatusStripBack_Normal;
+            ret.StatusStripBack_Trace = this.StatusStripBack_Trace;
             ret.Azuki_Keyword = this.Azuki_Keyword;
             ret.Azuki_Comment = this.Azuki_Comment;
             ret.Azuki_DocComment = this.Azuki_DocComment;

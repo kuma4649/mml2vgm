@@ -162,7 +162,8 @@ namespace SoundManager
 
                     while (true)
                     {
-                        if (!GetStart()) break;
+                        if (!GetStart())
+                            break;
                         if (unmount) return;
                         Thread.Sleep(0);
 

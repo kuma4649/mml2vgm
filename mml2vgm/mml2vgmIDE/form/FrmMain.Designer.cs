@@ -144,6 +144,7 @@
             this.tsslCompileError.Text = "123";
             this.tsslCompileError.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.tsslCompileError.ToolTipText = "エラー数";
+            this.tsslCompileError.Click += new System.EventHandler(this.TsslCompileError_Click);
             // 
             // tsslCompileWarning
             // 
@@ -154,6 +155,7 @@
             this.tsslCompileWarning.Size = new System.Drawing.Size(41, 17);
             this.tsslCompileWarning.Text = "123";
             this.tsslCompileWarning.ToolTipText = "警告数";
+            this.tsslCompileWarning.Click += new System.EventHandler(this.TsslCompileWarning_Click);
             // 
             // tsslCompileStatus
             // 
@@ -170,7 +172,7 @@
             // toolStripStatusLabel1
             // 
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(217, 17);
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(186, 17);
             this.toolStripStatusLabel1.Spring = true;
             this.toolStripStatusLabel1.Text = " ";
             // 

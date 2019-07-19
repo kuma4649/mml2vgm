@@ -825,6 +825,7 @@ namespace mml2vgmIDE
                 ac = ((FrmEditor)dc).azukiControl;
                 ac.ColorScheme.LineNumberBack = Color.FromArgb(setting.ColorScheme.Azuki_LineNumberBack_Normal);
                 ac.ColorScheme.LineNumberFore = Color.FromArgb(setting.ColorScheme.Azuki_LineNumberFore_Normal);
+                statusStrip1.BackColor = Color.FromArgb(setting.ColorScheme.StatusStripBack_Normal);
                 ac.Document.Unmark(0, ac.Text.Length, 1);
                 ac.IsReadOnly = false;
                 ac.Refresh();
@@ -1400,7 +1401,7 @@ namespace mml2vgmIDE
             frmErrorList.parentUpdate = UpdateControl;
             frmErrorList.parentJumpDocument = JumpDocument;
 
-
+            statusStrip1.BackColor = Color.FromArgb(setting.ColorScheme.StatusStripBack_Normal);
         }
 
         private IDockContent GetDockContentFromPersistString(string persistString)
@@ -1543,8 +1544,10 @@ namespace mml2vgmIDE
 
                 if (isTrace && ac != null)
                 {
+                    ClearAllTraceInfo();
                     ac.ColorScheme.LineNumberBack = Color.FromArgb(setting.ColorScheme.Azuki_LineNumberBack_Trace);
                     ac.ColorScheme.LineNumberFore = Color.FromArgb(setting.ColorScheme.Azuki_LineNumberFore_Trace);
+                    statusStrip1.BackColor = Color.FromArgb(setting.ColorScheme.StatusStripBack_Trace);
                     ac.Refresh();
                     traceInfoSw = true;
                 }
@@ -1564,6 +1567,65 @@ namespace mml2vgmIDE
             return true;
         }
 
+        private void ClearAllTraceInfo()
+        {
+            for (int i = 0; i < TraceInfo_C140.Length; i++)
+            {
+                TraceInfo_C140[i] = null;
+                TraceInfo_C140old[i] = null;
+            }
+            for (int i = 0; i < TraceInfo_HuC6280.Length; i++)
+            {
+                TraceInfo_HuC6280[i] = null;
+                TraceInfo_HuC6280old[i] = null;
+            }
+            for (int i = 0; i < TraceInfo_K051649.Length; i++)
+            {
+                TraceInfo_K051649[i] = null;
+                TraceInfo_K051649old[i] = null;
+            }
+            for (int i = 0; i < TraceInfo_RF5C164.Length; i++)
+            {
+                TraceInfo_RF5C164[i] = null;
+                TraceInfo_RF5C164old[i] = null;
+            }
+            for (int i = 0; i < TraceInfo_SegaPCM.Length; i++)
+            {
+                TraceInfo_SegaPCM[i] = null;
+                TraceInfo_SegaPCMold[i] = null;
+            }
+            for (int i = 0; i < TraceInfo_SN76489.Length; i++)
+            {
+                TraceInfo_SN76489[i] = null;
+                TraceInfo_SN76489old[i] = null;
+            }
+            for (int i = 0; i < TraceInfo_YM2151.Length; i++)
+            {
+                TraceInfo_YM2151[i] = null;
+                TraceInfo_YM2151old[i] = null;
+            }
+            for (int i = 0; i < TraceInfo_YM2203.Length; i++)
+            {
+                TraceInfo_YM2203[i] = null;
+                TraceInfo_YM2203old[i] = null;
+            }
+            for (int i = 0; i < TraceInfo_YM2608.Length; i++)
+            {
+                TraceInfo_YM2608[i] = null;
+                TraceInfo_YM2608old[i] = null;
+            }
+            for (int i = 0; i < TraceInfo_YM2610B.Length; i++)
+            {
+                TraceInfo_YM2610B[i] = null;
+                TraceInfo_YM2610Bold[i] = null;
+            }
+            for (int i = 0; i < TraceInfo_YM2612.Length; i++)
+            {
+                TraceInfo_YM2612[i] = null;
+                TraceInfo_YM2612old[i] = null;
+            }
+        }
+
         private void playdata()
         {
             try
@@ -1574,6 +1636,7 @@ namespace mml2vgmIDE
                     Audio.Pause();
                 }
                 Audio.Stop(0);
+                ResumeNormalModeDisp();
 
                 if (!Audio.Play(setting, doSkipStop))
                 {
@@ -1617,6 +1680,7 @@ namespace mml2vgmIDE
                 //鍵盤が表示されている場合はmmlの演奏のみ停止し、リアルタイム入力は受け付けるままにする
                 Audio.Stop(SendMode.MML);
             }
+            ResumeNormalModeDisp();
         }
 
         public void ff()
@@ -1792,23 +1856,22 @@ namespace mml2vgmIDE
         {
             if (!traceInfoSw) return;
 
+
+            if ((Audio.sm.Mode & SendMode.MML) != SendMode.MML)
+            {
+                traceInfoSw = false;
+
+                ResumeNormalModeDisp();
+                return;
+            }
+
+
             IDockContent dcnt = GetActiveDocument();
             if (dcnt == null) return;
             if (!(dcnt is FrmEditor)) return;
             FrmEditor fe = ((FrmEditor)dcnt);
             Sgry.Azuki.WinForms.AzukiControl ac = fe.azukiControl;
             bool refresh = false;
-
-            //if (!Audio.sm.IsRunningAtDataSender())
-            if ((Audio.sm.Mode & SendMode.MML)!= SendMode.MML)
-            {
-                traceInfoSw = false;
-                ac.ColorScheme.LineNumberBack = Color.FromArgb(setting.ColorScheme.Azuki_LineNumberBack_Normal);
-                ac.ColorScheme.LineNumberFore = Color.FromArgb(setting.ColorScheme.Azuki_LineNumberFore_Normal);
-                ac.Document.Unmark(0, ac.Text.Length, 1);
-                ac.IsReadOnly = false;
-                ac.Refresh();
-            }
 
             try
             {
@@ -1888,6 +1951,29 @@ namespace mml2vgmIDE
             {
                 ;//何もしない
             }
+        }
+
+        private void ResumeNormalModeDisp()
+        {
+            foreach (object o in FormBox)
+            {
+                if (!(o is DockContent))
+                {
+                    continue;
+                }
+
+                DockContent d = (DockContent)o;
+                if (d == null) continue;
+                if (!(d is FrmEditor)) continue;
+                Sgry.Azuki.WinForms.AzukiControl a = ((FrmEditor)d).azukiControl;
+                a.ColorScheme.LineNumberBack = Color.FromArgb(setting.ColorScheme.Azuki_LineNumberBack_Normal);
+                a.ColorScheme.LineNumberFore = Color.FromArgb(setting.ColorScheme.Azuki_LineNumberFore_Normal);
+                a.Document.Unmark(0, a.Text.Length, 1);
+                a.IsReadOnly = false;
+                a.Refresh();
+            }
+
+            this.statusStrip1.BackColor = Color.FromArgb(setting.ColorScheme.StatusStripBack_Normal);
         }
 
         private bool MarkUpTraceInfo(outDatum[] ods, outDatum[] odos, int ch, FrmEditor fe, Sgry.Azuki.WinForms.AzukiControl ac)
@@ -2189,6 +2275,24 @@ namespace mml2vgmIDE
             string[] source = (string[])e.Data.GetData(DataFormats.FileDrop);
             ExecFile(source);
 
+        }
+
+        private void TsslCompileError_Click(object sender, EventArgs e)
+        {
+            frmErrorList.Focus();
+            if(frmErrorList.DockState!= DockState.Float)
+            {
+                frmErrorList.Activate();
+            }
+        }
+
+        private void TsslCompileWarning_Click(object sender, EventArgs e)
+        {
+            frmErrorList.Focus();
+            if (frmErrorList.DockState != DockState.Float)
+            {
+                frmErrorList.Activate();
+            }
         }
     }
 }
