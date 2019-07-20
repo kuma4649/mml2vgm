@@ -2401,40 +2401,62 @@ namespace Core
                         ptr--;
                         break;
                     case 0x52: //YM2612 Port0
+                        //送信しようとしているデータがすでにチップに送ったものと同じかどうかチェックする。
+                        //同じ場合は送信しない(データサイズ的には圧縮されることになる)
+                        //また、キーオン(0x28)の場合は別のコマンドになる
                         if (opn2reg[0][src[ptr + 1].val] != src[ptr + 2].val || src[ptr + 1].val == 0x28)
                         {
                             bool isKeyOn = src[ptr + 1].val == 0x28;
                             if (!isKeyOn)
                             {
+                                //キーオンではない場合は、キーオン以外のデータが続くものとして処理する
                                 p = des.Count;
                                 c = 0;
+
+                                //0x20(OPN2のデータが続くことを示すデータ)を書く
                                 od = new outDatum(cmd.type, cmd.args, cmd.linePos, 0x20);
                                 des.Add(od);
+
                                 do
                                 {
+                                    //送信しようとしているデータがすでにチップに送ったものと同じかどうかチェックする。
+                                    //同じ場合は送信しない(データサイズ的には圧縮されることになる)
+                                    //(ループに入った初回は、違うことが保証されているがそれ以降は調べる必要がある)
                                     if (opn2reg[0][src[ptr + 1].val] != src[ptr + 2].val)
                                     {
                                         //F-numの場合は圧縮対象外
                                         if (src[ptr + 1].val < 0xa0 || src[ptr + 1].val >= 0xb0) opn2reg[0][src[ptr + 1].val] = src[ptr + 2].val;
 
+                                        //OPN2アドレスの書き込み
                                         od = new outDatum(src[ptr + 1].type, src[ptr + 1].args, src[ptr + 1].linePos, src[ptr + 1].val);
                                         des.Add(od);
                                         //Console.WriteLine("{0:x2}", od.val);
+                                        //OPN2値の書き込み
                                         od = new outDatum(src[ptr + 2].type, src[ptr + 2].args, src[ptr + 2].linePos, src[ptr + 2].val);
                                         des.Add(od);
                                         //Console.WriteLine("    {0:x2}", od.val);
                                         c++;
                                     }
+
+                                    //次の命令へ移るため3足す(vgmではOPN2の命令長が3byte固定のため)
                                     ptr += 3;
-                                } while (c < 16 && ptr < src.Count - 1 && src[ptr].val == 0x52 && src[ptr + 1].val != 0x28);
-                                c--;
-                                ptr--;
-                                des[p].val |= (byte)c;
+
+                                } while (c < 16 //圧縮は最大16個
+                                    && ptr < src.Count - 1 //ポインターがデータ内であることをチェック
+                                    && src[ptr].val == 0x52 //次の命令がOPN2の命令である間はループ
+                                    && src[ptr + 1].val != 0x28 //しかしキーオン(0x28)の場合はループから抜ける
+                                    );
+                                c--;//cは0x0～0xfで1～16個を表すため-1する
+                                ptr--;//ptrはfor文で必ず+1されるのでその分引いておく
+                                des[p].val |= (byte)c;//命令に圧縮できた個数を論理和
                             }
                             else
                             {
+                                //キーオンの場合は、そのデータが続くものとして処理する
                                 p = des.Count;
                                 c = 0;
+
+                                //0x40(OPN2のキーオンのデータが続くことを示すデータ)を書く
                                 od = new outDatum(cmd.type, cmd.args, cmd.linePos, 0x40);
                                 des.Add(od);
                                 do
@@ -2444,7 +2466,11 @@ namespace Core
                                     des.Add(od);
                                     c++;
                                     ptr += 3;
-                                } while (c < 16 && ptr < src.Count - 1 && src[ptr].val == 0x52 && src[ptr + 1].val == 0x28);
+                                } while (c < 16 
+                                    && ptr < src.Count - 1 
+                                    && src[ptr].val == 0x52 
+                                    && src[ptr + 1].val == 0x28
+                                    );
                                 c--;
                                 ptr--;
                                 des[p].val |= (byte)c;
@@ -2452,6 +2478,7 @@ namespace Core
                         }
                         else
                         {
+                            //次の命令へ
                             ptr += 2;
                         }
                         break;
@@ -2487,6 +2514,7 @@ namespace Core
                         }
                         break;
                     case 0x54: //PCM KeyON (YM2151)
+                        //mml2vgmではxgmを生成するとき0x54を4重PCMのコマンドに割り当てている。(本体はvgmではOPMのコマンド)
                         od = new outDatum(src[ptr + 1].type, src[ptr + 1].args, src[ptr + 1].linePos, src[ptr + 1].val);
                         des.Add(od);
                         od = new outDatum(src[ptr + 2].type, src[ptr + 2].args, src[ptr + 2].linePos, src[ptr + 2].val);
@@ -2494,12 +2522,18 @@ namespace Core
                         ptr += 2;
                         break;
                     case 0x7e: //LOOP Point
-                        loopOffset = des.Count - dummyCmdCounter;
-                        dummyCmdLoopOffset = des.Count;
-                        dummyCmdLoopOffsetAddress = ptr;
+                        loopOffset = des.Count - dummyCmdCounter;//ダミーコマンドを抜いた場合のオフセット値
+                        dummyCmdLoopOffset = des.Count;//ダミーコマンド込みのオフセット値
+                        dummyCmdLoopOffsetAddress = ptr;//ソースのループコマンドが存在するアドレス
+
+                        //ループ後のレジスタに反応するために現在の値を全て初期化する
+                        //さもなくばループ後に音色が変わらないなどの現象が発生する
                         for (int i = 0; i < 512; i++) opn2reg[i / 0x100][i % 0x100] = -1;
+
                         break;
                     case 0x2f: //Dummy Command
+
+                        //dummyコマンドの除去はmml2vgm.cs:OutXgmFileで行う。
                         if (cmd.val == 0x2f //dummyChipコマンド　(第2引数：chipID 第３引数:isSecondary)
                             && (cmd.type == enmMMLType.Rest//ここで指定できるmmlコマンドは元々はChipに送信することのないコマンドのみ(さもないと、通常のコマンドのデータと見分けがつかなくなる可能性がある)
                             || cmd.type == enmMMLType.Tempo
@@ -2507,12 +2541,17 @@ namespace Core
                             ))
                         {
                             src[ptr].val = 0x60;//XGM向けダミーコマンド
-                            des.Add( src[ptr]);
+                            des.Add(src[ptr]);
                             des.Add(src[ptr + 1]);
                             des.Add(src[ptr + 2]);
                             ptr += 2;
                             dummyCmdCounter += 3;
                         }
+                        else
+                        {
+                            ;
+                        }
+
                         break;
                     default:
                         msgBox.setErrMsg(string.Format("Unknown command[{0:X}]", cmd.val), new LinePos("-"));
@@ -2530,6 +2569,7 @@ namespace Core
                 dummyCmdLoopOffsetAddress = des.Count;
                 od = new outDatum(enmMMLType.unknown, null, null, 0x7e);
                 des.Add(od);
+                
                 //od = new outDatum(enmMMLType.unknown, null, null, (byte)loopOffset);
                 //des.Add(od);
                 //od = new outDatum(enmMMLType.unknown, null, null, (byte)(loopOffset >> 8));

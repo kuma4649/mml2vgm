@@ -249,30 +249,93 @@ namespace Core
         private void OutXgmFile(outDatum[] desBuf)
         {
             List<byte> lstBuf = new List<byte>();
-            int skipCount = 0;
-            foreach (outDatum od in desBuf)
+
+            int adr;
+            int sampleDataBlockSize = desBuf[0x100].val + desBuf[0x101].val * 0x100;
+            int sampleDataBlockAddr = 0x104;
+            adr = sampleDataBlockAddr + sampleDataBlockSize * 256;
+            int musicDataBlockSize = desBuf[adr].val + desBuf[adr + 1].val * 0x100 + desBuf[adr + 2].val * 0x100_00 + desBuf[adr + 3].val * 0x100_00_00;
+            int musicDataBlockAddr = sampleDataBlockAddr + sampleDataBlockSize * 256 + 4;
+            int gd3InfoStartAddr = musicDataBlockAddr + musicDataBlockSize;
+            int dumcnt = 0;
+
+            for (int i = 0; i < desBuf.Length;)
             {
 
-                //ダミーコマンドをスキップする
-                if (skipCount > 0)
+                outDatum od = desBuf[i];
+                if (i < musicDataBlockAddr || i >= gd3InfoStartAddr)
                 {
-                    skipCount--;
+                    i++;
+                    lstBuf.Add(od.val);
                     continue;
                 }
 
-                if (od.val == 0x60 //dummyChipコマンド　(第2引数：chipID 第３引数:isSecondary)
-                    && (od.type == enmMMLType.Rest//ここで指定できるmmlコマンドは元々はChipに送信することのないコマンドのみ(さもないと、通常のコマンドのデータと見分けがつかなくなる可能性がある)
-                    || od.type == enmMMLType.Tempo
-                    || od.type == enmMMLType.Length
-                    )
-                    )
-                {
-                    skipCount = 2;
-                    continue;
-                }
+                byte L = (byte)(od.val & 0xf);
+                byte H = (byte)(od.val & 0xf0);
 
-                lstBuf.Add(od.val);
+                //dummyコマンド以外は書き込む
+                if (H != 0x60) lstBuf.Add(od.val);
+
+                i++;
+                switch (H)
+                {
+                    case 0x00://waitコマンド
+                        //Console.WriteLine("Wait command {0:x} adr:{1:x}", H | L, i - 1);
+                        break;
+                    case 0x10://DCSGコマンド
+                        //Console.WriteLine("DCSG command {0:x} adr:{1:x}", H | L, i - 1);
+                        for (int x = 0; x < L + 1; x++) lstBuf.Add(desBuf[i++].val);
+                        break;
+                    case 0x20://OPN2 port0
+                    case 0x30://OPN2 port1
+                        //Console.WriteLine("OPN2 p01 command {0:x} adr:{1:x}", H | L, i - 1);
+                        for (int x = 0; x < L + 1; x++)
+                        {
+                            lstBuf.Add(desBuf[i++].val);
+                            lstBuf.Add(desBuf[i++].val);
+                        }
+                        break;
+                    case 0x40://OPN2 KeyONコマンド
+                        //Console.WriteLine("OPN2 keyon command {0:x} adr:{1:x}", H | L, i - 1);
+                        for (int x = 0; x < L + 1; x++) lstBuf.Add(desBuf[i++].val);
+                        break;
+                    case 0x50://OPN2 PCMコマンド
+                        //Console.WriteLine("OPN2 pcm command {0:x} adr:{1:x}", H | L, i - 1);
+                        lstBuf.Add(desBuf[i++].val);
+                        break;
+                    case 0x60://dummyChipコマンド　(第2引数：chipID 第３引数:isSecondary)
+                        //Console.WriteLine("dummy command {0:x} adr:{1:x}", H | L, i - 1);
+                        if (od.type == enmMMLType.Rest//ここで指定できるmmlコマンドは元々はChipに送信することのないコマンドのみ(さもないと、通常のコマンドのデータと見分けがつかなくなる可能性がある)
+                            || od.type == enmMMLType.Tempo
+                            || od.type == enmMMLType.Length
+                            )
+                        {
+                            //lstBuf.Add(desBuf[i++].val);
+                            //lstBuf.Add(desBuf[i++].val);
+                            i += 2;
+                            dumcnt += 3;
+                        }
+                        break;
+                    case 0x70:
+                        if (L == 0xe)//loop
+                        {
+                            //Console.WriteLine("loop command {0:x} adr:{1:x}", H | L, i - 1);
+                            lstBuf.Add((byte)desVGM.loopOffset );
+                            lstBuf.Add((byte)(desVGM.loopOffset >> 8));
+                            lstBuf.Add((byte)(desVGM.loopOffset >> 16));
+                            i += 3;
+                        }
+                        else if (L == 0xf)//end
+                        {
+                            //Console.WriteLine("end command {0:x} adr:{1:x}", H | L, i - 1);
+                        }
+                        break;
+                    default:
+                        Console.WriteLine("Warning Unkown command {0:x} adr:{1:x}", H | L, i - 1);
+                        break;
+                }
             }
+
             byte[] bufs = lstBuf.ToArray();
             OutFile(bufs);
         }
