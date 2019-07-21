@@ -265,6 +265,16 @@ namespace Core
                 outDatum od = desBuf[i];
                 if (i < musicDataBlockAddr || i >= gd3InfoStartAddr)
                 {
+                    if (i == gd3InfoStartAddr)
+                    {
+                        int newGd3InfoStartAddr = lstBuf.Count;
+                        int newMusicDataBlockSize = newGd3InfoStartAddr - musicDataBlockAddr;
+                        lstBuf[adr] = (byte)newMusicDataBlockSize;
+                        lstBuf[adr + 1] = (byte)(newMusicDataBlockSize >> 8);
+                        lstBuf[adr + 2] = (byte)(newMusicDataBlockSize >> 16);
+                        lstBuf[adr + 3] = (byte)(newMusicDataBlockSize >> 24);
+                    }
+
                     i++;
                     lstBuf.Add(od.val);
                     continue;
@@ -348,7 +358,10 @@ namespace Core
                 {
                     log.Write("VGMファイル出力");
                     File.WriteAllBytes(
-                        desFn
+                        Path.Combine(
+                            Path.GetDirectoryName(desFn)
+                            , Path.GetFileNameWithoutExtension(desFn) + ".vgm"
+                            )
                         , bufs);
                 }
                 else
