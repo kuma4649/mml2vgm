@@ -496,6 +496,12 @@ namespace Core
         {
             int n = (pw.chip is YM2203) ? 0 : 3;
 
+            if (pw.chip is YM2612X && (pw.ch > 8 || pw.ch == 5) && pw.pcm)
+            {
+                ((YM2612X)pw.chip).OutYM2612XPcmKeyOFF(mml, pw);
+                return;
+            }
+
             if (!pw.pcm)
             {
                 if (pw.chip.lstPartWork[2].Ch3SpecialMode && pw.Type == enmChannelType.FMOPNex)

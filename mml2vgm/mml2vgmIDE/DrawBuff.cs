@@ -12,27 +12,27 @@ namespace mml2vgmIDE
     {
 
         //private static byte[][] rChipName;
-        private static byte[][] rFont1;
+        //private static byte[][] rFont1;
         private static byte[][] rFont2;
-        private static byte[][] rFont3;
-        private static byte[][] rKBD;
-        private static byte[][] rMenuButtons;
-        private static byte[][] rPan;
-        private static byte[][] rPan2;
-        private static byte[] rPSGEnv;
-        private static byte[][] rPSGMode;
-        private static byte[][] rType;
-        private static byte[][] rVol;
-        private static byte[] rWavGraph;
+        //private static byte[][] rFont3;
+        //private static byte[][] rKBD;
+        //private static byte[][] rMenuButtons;
+        //private static byte[][] rPan;
+        //private static byte[][] rPan2;
+        //private static byte[] rPSGEnv;
+        //private static byte[][] rPSGMode;
+        //private static byte[][] rType;
+        //private static byte[][] rVol;
+        //private static byte[] rWavGraph;
         private static byte[] rFader;
-        private static byte[][] rMIDILCD_Fader;
+        //private static byte[][] rMIDILCD_Fader;
         private static byte[] rMIDILCD_KBD;
-        private static byte[][] rMIDILCD_Vol;
+        //private static byte[][] rMIDILCD_Vol;
         public static byte[][] rMIDILCD;
-        private static byte[][] rMIDILCD_Font;
+        //private static byte[][] rMIDILCD_Font;
         public static byte[][] rPlane_MIDI;
-        private static byte[] rNESDMC;
-        private static byte[] rKakko;
+        //private static byte[] rNESDMC;
+        //private static byte[] rKakko;
         private static byte[] rec;
         private static Bitmap[] bitmapMIDILyric = null;
         private static Graphics[] gMIDILyric = null;
@@ -754,10 +754,10 @@ namespace mml2vgmIDE
         {
             if (os == ns) return;
 
-            screen.drawByteArray(x + 0, y, rNESDMC, 64, ((ns & 1) != 0 ? 1 : 0) * 4 + 32, 0, 4, 8);
-            screen.drawByteArray(x + 4, y, rNESDMC, 64, ((ns & 2) != 0 ? 1 : 0) * 4 + 32, 0, 4, 8);
-            screen.drawByteArray(x + 8, y, rNESDMC, 64, ((ns & 4) != 0 ? 1 : 0) * 4 + 32, 0, 4, 8);
-            screen.drawByteArray(x + 12, y, rNESDMC, 64, ((ns & 8) != 0 ? 1 : 0) * 4 + 32, 0, 4, 8);
+            //screen.drawByteArray(x + 0, y, rNESDMC, 64, ((ns & 1) != 0 ? 1 : 0) * 4 + 32, 0, 4, 8);
+            //screen.drawByteArray(x + 4, y, rNESDMC, 64, ((ns & 2) != 0 ? 1 : 0) * 4 + 32, 0, 4, 8);
+            //screen.drawByteArray(x + 8, y, rNESDMC, 64, ((ns & 4) != 0 ? 1 : 0) * 4 + 32, 0, 4, 8);
+            //screen.drawByteArray(x + 12, y, rNESDMC, 64, ((ns & 8) != 0 ? 1 : 0) * 4 + 32, 0, 4, 8);
 
             os = ns;
         }
@@ -923,7 +923,7 @@ namespace mml2vgmIDE
             for (int n = (Math.Min(oldValue, value) / 5); n < (Math.Max(oldValue, value) / 5) + 1; n++)
             {
                 s = (value / 5) < n ? 2 : 0;
-                screen.drawByteArray(n * 2 + x, y, rMIDILCD_Vol[MIDImodule], 32, 0 + (n > 23 ? 4 : 0) + s, 0, 2, 8);
+                //screen.drawByteArray(n * 2 + x, y, rMIDILCD_Vol[MIDImodule], 32, 0 + (n > 23 ? 4 : 0) + s, 0, 2, 8);
             }
 
             oldValue = value;
@@ -1770,13 +1770,13 @@ namespace mml2vgmIDE
 
                 int m = 0;
                 m = (n > 7) ? 8 : n;
-                screen.drawByteArray(x, y, rWavGraph, 64, m, 0, 1, 8);
+                //screen.drawByteArray(x, y, rWavGraph, 64, m, 0, 1, 8);
                 m = (n > 15) ? 8 : ((n - 8) < 0 ? 0 : (n - 8));
-                screen.drawByteArray(x, y - 8, rWavGraph, 64, m, 0, 1, 8);
+                //screen.drawByteArray(x, y - 8, rWavGraph, 64, m, 0, 1, 8);
                 m = (n > 23) ? 8 : ((n - 16) < 0 ? 0 : (n - 16));
-                screen.drawByteArray(x, y - 16, rWavGraph, 64, m, 0, 1, 8);
+                //screen.drawByteArray(x, y - 16, rWavGraph, 64, m, 0, 1, 8);
                 m = (n > 31) ? 8 : ((n - 24) < 0 ? 0 : (n - 24));
-                screen.drawByteArray(x, y - 23, rWavGraph, 64, m + 1, 0, 1, 7);
+                //screen.drawByteArray(x, y - 23, rWavGraph, 64, m + 1, 0, 1, 7);
 
                 oi[i] = ni[i];
             }
@@ -1796,13 +1796,13 @@ namespace mml2vgmIDE
 
                 int m = 0;
                 m = (n > 7) ? 8 : n;
-                screen.drawByteArray(x, y, rWavGraph, 64, m, 0, 1, 8);
+                //screen.drawByteArray(x, y, rWavGraph, 64, m, 0, 1, 8);
                 m = (n > 15) ? 8 : ((n - 8) < 0 ? 0 : (n - 8));
-                screen.drawByteArray(x, y - 8, rWavGraph, 64, m, 0, 1, 8);
+                //screen.drawByteArray(x, y - 8, rWavGraph, 64, m, 0, 1, 8);
                 m = (n > 23) ? 8 : ((n - 16) < 0 ? 0 : (n - 16));
-                screen.drawByteArray(x, y - 16, rWavGraph, 64, m, 0, 1, 8);
+                //screen.drawByteArray(x, y - 16, rWavGraph, 64, m, 0, 1, 8);
                 m = (n > 31) ? 8 : ((n - 24) < 0 ? 0 : (n - 24));
-                screen.drawByteArray(x, y - 23, rWavGraph, 64, m + 1, 0, 1, 7);
+                //screen.drawByteArray(x, y - 23, rWavGraph, 64, m + 1, 0, 1, 7);
 
                 oi[i] = ni[i];
             }
@@ -1816,17 +1816,17 @@ namespace mml2vgmIDE
 
                 int n = ni[i];
                 int x = i + c * 4 * 31 + 8;
-                int y = 8 * 6;
+                //int y = 8 * 6;
 
                 int m = 0;
                 m = (n > 7) ? 8 : n;
-                screen.drawByteArray(x, y, rWavGraph, 64, m, 0, 1, 8);
+                //screen.drawByteArray(x, y, rWavGraph, 64, m, 0, 1, 8);
                 m = (n > 15) ? 8 : ((n - 8) < 0 ? 0 : (n - 8));
-                screen.drawByteArray(x, y - 8, rWavGraph, 64, m, 0, 1, 8);
+                //screen.drawByteArray(x, y - 8, rWavGraph, 64, m, 0, 1, 8);
                 m = (n > 23) ? 8 : ((n - 16) < 0 ? 0 : (n - 16));
-                screen.drawByteArray(x, y - 16, rWavGraph, 64, m, 0, 1, 8);
+                //screen.drawByteArray(x, y - 16, rWavGraph, 64, m, 0, 1, 8);
                 m = (n > 31) ? 8 : ((n - 24) < 0 ? 0 : (n - 24));
-                screen.drawByteArray(x, y - 23, rWavGraph, 64, m + 1, 0, 1, 7);
+                //screen.drawByteArray(x, y - 23, rWavGraph, 64, m + 1, 0, 1, 7);
 
                 oi[i] = ni[i];
             }
@@ -2006,7 +2006,7 @@ namespace mml2vgmIDE
                 //if (i < len) 
                 cd = Tables.spc[i] - ' ';
 
-                screen.drawByteArray(x + i * 8, y, rMIDILCD_Font[MIDImodule], 128, (cd % 16) * 8, (cd / 16) * 8, 8, 8);
+                //screen.drawByteArray(x + i * 8, y, rMIDILCD_Font[MIDImodule], 128, (cd % 16) * 8, (cd / 16) * 8, 8, 8);
             }
 
         }
@@ -2024,7 +2024,7 @@ namespace mml2vgmIDE
                 //if (i < len) 
                 cd = value[i] - ' ';
 
-                screen.drawByteArray(x + i * 8, y, rMIDILCD_Font[MIDImodule], 128, (cd % 16) * 8, (cd / 16) * 8, 8, 8);
+                //screen.drawByteArray(x + i * 8, y, rMIDILCD_Font[MIDImodule], 128, (cd % 16) * 8, (cd / 16) * 8, 8, 8);
             }
 
         }
@@ -2303,12 +2303,12 @@ namespace mml2vgmIDE
         {
             if (ot != nt)
             {
-                screen.drawByteArray(x, y, rKakko, 16, nt * 4, 0, 4, 8);
+                //screen.drawByteArray(x, y, rKakko, 16, nt * 4, 0, 4, 8);
                 for (int n = 0; n < t; n++)
                 {
-                    screen.drawByteArray(x, y + n * 8 + 8, rKakko, 16, nt * 4, 8, 4, 8);
+                    //screen.drawByteArray(x, y + n * 8 + 8, rKakko, 16, nt * 4, 8, 4, 8);
                 }
-                screen.drawByteArray(x, y + t * 8 + 8, rKakko, 16, nt * 4, 16, 4, 8);
+                //screen.drawByteArray(x, y + t * 8 + 8, rKakko, 16, nt * 4, 16, 4, 8);
 
                 ot = nt;
             }
@@ -2428,75 +2428,75 @@ namespace mml2vgmIDE
             {
                 case 0:
                     //setting
-                    mainScreen.drawByteArray(x, y, rMenuButtons[t], 128, 5 * 16, 1 * 16, 16, 16);
+                    //mainScreen.drawByteArray(x, y, rMenuButtons[t], 128, 5 * 16, 1 * 16, 16, 16);
                     break;
                 case 1:
                     //stop
-                    mainScreen.drawByteArray(x, y, rMenuButtons[t], 128, 0 * 16, 0 * 16, 16, 16);
+                    //mainScreen.drawByteArray(x, y, rMenuButtons[t], 128, 0 * 16, 0 * 16, 16, 16);
                     break;
                 case 2:
                     //pause
-                    mainScreen.drawByteArray(x, y, rMenuButtons[t], 128, 1 * 16, 0 * 16, 16, 16);
+                    //mainScreen.drawByteArray(x, y, rMenuButtons[t], 128, 1 * 16, 0 * 16, 16, 16);
                     break;
                 case 3:
                     //fadeout
-                    mainScreen.drawByteArray(x, y, rMenuButtons[t], 128, 4 * 16, 1 * 16, 16, 16);
+                    //mainScreen.drawByteArray(x, y, rMenuButtons[t], 128, 4 * 16, 1 * 16, 16, 16);
                     break;
                 case 4:
                     //PREV
-                    mainScreen.drawByteArray(x, y, rMenuButtons[t], 128, 6 * 16, 1 * 16, 16, 16);
+                    //mainScreen.drawByteArray(x, y, rMenuButtons[t], 128, 6 * 16, 1 * 16, 16, 16);
                     break;
                 case 5:
                     //slow
-                    mainScreen.drawByteArray(x, y, rMenuButtons[t], 128, 2 * 16, 0 * 16, 16, 16);
+                    //mainScreen.drawByteArray(x, y, rMenuButtons[t], 128, 2 * 16, 0 * 16, 16, 16);
                     break;
                 case 6:
                     //play
-                    mainScreen.drawByteArray(x, y, rMenuButtons[t], 128, 3 * 16, 0 * 16, 16, 16);
+                    //mainScreen.drawByteArray(x, y, rMenuButtons[t], 128, 3 * 16, 0 * 16, 16, 16);
                     break;
                 case 7:
                     //fast
-                    mainScreen.drawByteArray(x, y, rMenuButtons[t], 128, 4 * 16, 0 * 16, 16, 16);
+                    //mainScreen.drawByteArray(x, y, rMenuButtons[t], 128, 4 * 16, 0 * 16, 16, 16);
                     break;
                 case 8:
                     //NEXT
-                    mainScreen.drawByteArray(x, y, rMenuButtons[t], 128, 7 * 16, 1 * 16, 16, 16);
+                    //mainScreen.drawByteArray(x, y, rMenuButtons[t], 128, 7 * 16, 1 * 16, 16, 16);
                     break;
                 case 9:
                     //loopmode
-                    mainScreen.drawByteArray(x, y, rMenuButtons[t], 128, 1 * 16 + m * 16, 2 * 16, 16, 16);
+                    //mainScreen.drawByteArray(x, y, rMenuButtons[t], 128, 1 * 16 + m * 16, 2 * 16, 16, 16);
                     break;
                 case 10:
                     //folder
-                    mainScreen.drawByteArray(x, y, rMenuButtons[t], 128, 5 * 16, 0 * 16, 16, 16);
+                    //mainScreen.drawByteArray(x, y, rMenuButtons[t], 128, 5 * 16, 0 * 16, 16, 16);
                     break;
                 case 11:
                     //List
-                    mainScreen.drawByteArray(x, y, rMenuButtons[t], 128, 0 * 16, 2 * 16, 16, 16);
+                    //mainScreen.drawByteArray(x, y, rMenuButtons[t], 128, 0 * 16, 2 * 16, 16, 16);
                     break;
                 case 12:
                     //info
-                    mainScreen.drawByteArray(x, y, rMenuButtons[t], 128, 0 * 16, 1 * 16, 16, 16);
+                    //mainScreen.drawByteArray(x, y, rMenuButtons[t], 128, 0 * 16, 1 * 16, 16, 16);
                     break;
                 case 13:
                     //mixer
-                    mainScreen.drawByteArray(x, y, rMenuButtons[t], 128, 2 * 16, 1 * 16, 16, 16);
+                    //mainScreen.drawByteArray(x, y, rMenuButtons[t], 128, 2 * 16, 1 * 16, 16, 16);
                     break;
                 case 14:
                     //panel
-                    mainScreen.drawByteArray(x, y, rMenuButtons[t], 128, 5 * 16, 2 * 16, 16, 16);
+                    //mainScreen.drawByteArray(x, y, rMenuButtons[t], 128, 5 * 16, 2 * 16, 16, 16);
                     break;
                 case 15:
                     //VST List
-                    mainScreen.drawByteArray(x, y, rMenuButtons[t], 128, 7 * 16, 0 * 16, 16, 16);
+                    //mainScreen.drawByteArray(x, y, rMenuButtons[t], 128, 7 * 16, 0 * 16, 16, 16);
                     break;
                 case 16:
                     //MIDI Keyboard
-                    mainScreen.drawByteArray(x, y, rMenuButtons[t], 128, 3 * 16, 1 * 16, 16, 16);
+                    //mainScreen.drawByteArray(x, y, rMenuButtons[t], 128, 3 * 16, 1 * 16, 16, 16);
                     break;
                 case 17:
                     //zoom
-                    mainScreen.drawByteArray(x, y, rMenuButtons[t], 128, 6 * 16, 2 * 16, 16, 16);
+                    //mainScreen.drawByteArray(x, y, rMenuButtons[t], 128, 6 * 16, 2 * 16, 16, 16);
                     break;
             }
         }
@@ -2530,7 +2530,7 @@ namespace mml2vgmIDE
         {
             if (op == np) return;
 
-            screen.drawByteArray(x, y, rNESDMC, 64, np * 8, 0, 8, 8);
+            //screen.drawByteArray(x, y, rNESDMC, 64, np * 8, 0, 8, 8);
 
             op = np;
         }
@@ -2539,7 +2539,7 @@ namespace mml2vgmIDE
         {
             if (os == ns) return;
 
-            screen.drawByteArray(x, y, rNESDMC, 64, (ns ? 1 : 0) * 4 + 32, 0, 4, 8);
+            //screen.drawByteArray(x, y, rNESDMC, 64, (ns ? 1 : 0) * 4 + 32, 0, 4, 8);
 
             os = ns;
         }
@@ -2626,7 +2626,7 @@ namespace mml2vgmIDE
         private static void VolumeP(FrameBuffer screen, int x, int y, int t, int tp)
         {
             if (screen == null) return;
-            screen.drawByteArray(x, y, rVol[tp], 32, 2 * t, 0, 2, 8 - (t / 4) * 4);
+            //screen.drawByteArray(x, y, rVol[tp], 32, 2 * t, 0, 2, 8 - (t / 4) * 4);
         }
 
         public static void drawKbn(FrameBuffer screen, int x, int y, int t, int tp)
@@ -2639,28 +2639,28 @@ namespace mml2vgmIDE
             switch (t)
             {
                 case 0:
-                    screen.drawByteArray(x, y, rKBD[tp], 32, 0, 0, 4, 8);
+                    //screen.drawByteArray(x, y, rKBD[tp], 32, 0, 0, 4, 8);
                     break;
                 case 1:
-                    screen.drawByteArray(x, y, rKBD[tp], 32, 4, 0, 3, 8);
+                    //screen.drawByteArray(x, y, rKBD[tp], 32, 4, 0, 3, 8);
                     break;
                 case 2:
-                    screen.drawByteArray(x, y, rKBD[tp], 32, 8, 0, 4, 8);
+                    //screen.drawByteArray(x, y, rKBD[tp], 32, 8, 0, 4, 8);
                     break;
                 case 3:
-                    screen.drawByteArray(x, y, rKBD[tp], 32, 12, 0, 4, 8);
+                    //screen.drawByteArray(x, y, rKBD[tp], 32, 12, 0, 4, 8);
                     break;
                 case 4:
-                    screen.drawByteArray(x, y, rKBD[tp], 32, 0 + 16, 0, 4, 8);
+                    //screen.drawByteArray(x, y, rKBD[tp], 32, 0 + 16, 0, 4, 8);
                     break;
                 case 5:
-                    screen.drawByteArray(x, y, rKBD[tp], 32, 4 + 16, 0, 3, 8);
+                    //screen.drawByteArray(x, y, rKBD[tp], 32, 4 + 16, 0, 3, 8);
                     break;
                 case 6:
-                    screen.drawByteArray(x, y, rKBD[tp], 32, 8 + 16, 0, 4, 8);
+                    //screen.drawByteArray(x, y, rKBD[tp], 32, 8 + 16, 0, 4, 8);
                     break;
                 case 7:
-                    screen.drawByteArray(x, y, rKBD[tp], 32, 12 + 16, 0, 4, 8);
+                    //screen.drawByteArray(x, y, rKBD[tp], 32, 12 + 16, 0, 4, 8);
                     break;
             }
         }
@@ -2668,7 +2668,7 @@ namespace mml2vgmIDE
         private static void ToneNoiseP(FrameBuffer screen, int x, int y, int t, int tp)
         {
             if (screen == null) return;
-            screen.drawByteArray(x, y, rPSGMode[tp], 32, 8 * t, 0, 8, 8);
+            //screen.drawByteArray(x, y, rPSGMode[tp], 32, 8 * t, 0, 8, 8);
         }
 
         public static void drawFont8(FrameBuffer screen, int x, int y, int t, string msg)
@@ -2681,7 +2681,7 @@ namespace mml2vgmIDE
             foreach (char c in msg)
             {
                 int cd = c - 'A' + 0x20 + 1;
-                screen.drawByteArray(x, y, rFont1[t], 128, (cd % 16) * 8, (cd / 16) * 8, 8, 8);
+                //screen.drawByteArray(x, y, rFont1[t], 128, (cd % 16) * 8, (cd / 16) * 8, 8, 8);
                 x += 8;
             }
         }
@@ -2699,12 +2699,12 @@ namespace mml2vgmIDE
                 n = (n > 9) ? 0 : n;
                 if (n != 0)
                 {
-                    screen.drawByteArray(x, y, rFont1[t], 128, n * 8, 8, 8, 8);
+                    //screen.drawByteArray(x, y, rFont1[t], 128, n * 8, 8, 8, 8);
                     if (n != 0) { f = true; }
                 }
                 else
                 {
-                    screen.drawByteArray(x, y, rFont1[t], 128, 0, 0, 8, 8);
+                    //screen.drawByteArray(x, y, rFont1[t], 128, 0, 0, 8, 8);
                 }
 
                 n = num / 10;
@@ -2712,18 +2712,18 @@ namespace mml2vgmIDE
                 x += 8;
                 if (n != 0 || f)
                 {
-                    screen.drawByteArray(x, y, rFont1[t], 128, n * 8, 8, 8, 8);
+                    //screen.drawByteArray(x, y, rFont1[t], 128, n * 8, 8, 8, 8);
                     if (n != 0) { f = true; }
                 }
                 else
                 {
-                    screen.drawByteArray(x, y, rFont1[t], 128, 0, 0, 8, 8);
+                    //screen.drawByteArray(x, y, rFont1[t], 128, 0, 0, 8, 8);
                 }
 
                 n = num / 1;
                 num -= n * 1;
                 x += 8;
-                screen.drawByteArray(x, y, rFont1[t], 128, n * 8, 8, 8, 8);
+                //screen.drawByteArray(x, y, rFont1[t], 128, n * 8, 8, 8, 8);
                 return;
             }
 
@@ -2732,17 +2732,17 @@ namespace mml2vgmIDE
             n = (n > 9) ? 0 : n;
             if (n != 0)
             {
-                screen.drawByteArray(x, y, rFont1[t], 128, n * 8, 8, 8, 8);
+                //screen.drawByteArray(x, y, rFont1[t], 128, n * 8, 8, 8, 8);
             }
             else
             {
-                screen.drawByteArray(x, y, rFont1[t], 128, 0, 0, 8, 8);
+                //screen.drawByteArray(x, y, rFont1[t], 128, 0, 0, 8, 8);
             }
 
             n = num / 1;
             num -= n * 1;
             x += 8;
-            screen.drawByteArray(x, y, rFont1[t], 128, n * 8, 8, 8, 8);
+            //screen.drawByteArray(x, y, rFont1[t], 128, n * 8, 8, 8, 8);
         }
 
         public static void drawFont8Int2(FrameBuffer screen, int x, int y, int t, int k, int num)
@@ -2756,28 +2756,28 @@ namespace mml2vgmIDE
                 num -= n * 100;
 
                 n = (n > 9) ? 0 : n;
-                if (n == 0) screen.drawByteArray(x, y, rFont1[t], 128, 0, 0, 8, 8);
-                else screen.drawByteArray(x, y, rFont1[t], 128, 0, 8, 8, 8);
+                //if (n == 0) screen.drawByteArray(x, y, rFont1[t], 128, 0, 0, 8, 8);
+                //else screen.drawByteArray(x, y, rFont1[t], 128, 0, 8, 8, 8);
 
                 n = num / 10;
                 num -= n * 10;
                 x += 8;
-                screen.drawByteArray(x, y, rFont1[t], 128, n * 8, 8, 8, 8);
+                //screen.drawByteArray(x, y, rFont1[t], 128, n * 8, 8, 8, 8);
 
                 n = num / 1;
                 x += 8;
-                screen.drawByteArray(x, y, rFont1[t], 128, n * 8, 8, 8, 8);
+                //screen.drawByteArray(x, y, rFont1[t], 128, n * 8, 8, 8, 8);
                 return;
             }
 
             n = num / 10;
             num -= n * 10;
             n = (n > 9) ? 0 : n;
-            screen.drawByteArray(x, y, rFont1[t], 128, n * 8, 8, 8, 8);
+            //screen.drawByteArray(x, y, rFont1[t], 128, n * 8, 8, 8, 8);
 
             n = num / 1;
             x += 8;
-            screen.drawByteArray(x, y, rFont1[t], 128, n * 8, 8, 8, 8);
+            //screen.drawByteArray(x, y, rFont1[t], 128, n * 8, 8, 8, 8);
         }
 
         public static void drawFont4(FrameBuffer screen, int x, int y, int t, string msg)
@@ -3110,7 +3110,7 @@ namespace mml2vgmIDE
             foreach (char c in msg)
             {
                 int cd = c - 'A' + 0x20 + 1;
-                screen.drawByteArray(x, y, rFont3[t], 128, (cd % 16) * 8, (cd / 16) * 4, 8, 4);
+                //screen.drawByteArray(x, y, rFont3[t], 128, (cd % 16) * 8, (cd / 16) * 4, 8, 4);
                 y -= 4;
             }
         }
@@ -3118,13 +3118,13 @@ namespace mml2vgmIDE
         private static void drawEtypeP(FrameBuffer screen, int x, int y, int t)
         {
             if (screen == null) return;
-            screen.drawByteArray(x, y, rPSGEnv, 64, 8 * t, 0, 8, 8);
+            //screen.drawByteArray(x, y, rPSGEnv, 64, 8 * t, 0, 8, 8);
         }
 
         public static void drawPanP(FrameBuffer screen, int x, int y, int t, int tp)
         {
             if (screen == null) return;
-            screen.drawByteArray(x, y, rPan[tp], 32, 8 * t, 0, 8, 8);
+            //screen.drawByteArray(x, y, rPan[tp], 32, 8 * t, 0, 8, 8);
         }
 
         public static void drawPanType2P(FrameBuffer screen, int x, int y, int t, int tp)
@@ -3136,16 +3136,16 @@ namespace mml2vgmIDE
 
             int p = (t & 0x0f);
             p = p == 0 ? 0 : (1 + p / 4);
-            screen.drawByteArray(x, y, rPan2[tp], 32, p * 4, 0, 4, 8);
+            //screen.drawByteArray(x, y, rPan2[tp], 32, p * 4, 0, 4, 8);
             p = ((t & 0xf0) >> 4);
             p = p == 0 ? 0 : (1 + p / 4);
-            screen.drawByteArray(x + 4, y, rPan2[tp], 32, p * 4, 0, 4, 8);
+            //screen.drawByteArray(x + 4, y, rPan2[tp], 32, p * 4, 0, 4, 8);
 
         }
 
         private static void drawMIDILCD_FaderP(FrameBuffer screen, int MIDImodule, int faderType, int x, int y, int value)
         {
-            screen.drawByteArray(x, y, rMIDILCD_Fader[MIDImodule], 64, value * 4, faderType * 16, 4, 16);
+            //screen.drawByteArray(x, y, rMIDILCD_Fader[MIDImodule], 64, value * 4, faderType * 16, 4, 16);
         }
 
         private static void drawMIDILCD_KbdP(FrameBuffer screen, int x, int y, int note, int vel)
@@ -3180,7 +3180,7 @@ namespace mml2vgmIDE
         {
             if (screen == null) return;
 
-            screen.drawByteArray(x, y, rType[tp * 2 + (mask ? 1 : 0)], 128, 32, 0, 16, 8);
+            //screen.drawByteArray(x, y, rType[tp * 2 + (mask ? 1 : 0)], 128, 32, 0, 16, 8);
             drawFont8(screen, x + 16, y, mask ? 1 : 0, (1 + ch).ToString());
         }
 
@@ -3188,7 +3188,7 @@ namespace mml2vgmIDE
         {
             if (screen == null) return;
 
-            screen.drawByteArray(x, y, rType[tp * 2 + (mask ? 1 : 0)], 128, 16, 0, 16, 8);
+            //screen.drawByteArray(x, y, rType[tp * 2 + (mask ? 1 : 0)], 128, 16, 0, 16, 8);
             //if (ch < 9) drawFont8(screen, x + 16, y, mask ? 1 : 0, (1 + ch).ToString());
             //else 
             drawFont4(screen, x + 16, y, mask ? 1 : 0, (1 + ch).ToString("d2"));
@@ -3198,7 +3198,7 @@ namespace mml2vgmIDE
         {
             if (screen == null) return;
 
-            screen.drawByteArray(x, y, rType[tp * 2 + (mask ? 1 : 0)], 128, 16, 0, 16, 8);
+            //screen.drawByteArray(x, y, rType[tp * 2 + (mask ? 1 : 0)], 128, 16, 0, 16, 8);
             //if (ch < 9) drawFont8(screen, x + 16, y, mask ? 1 : 0, (1 + ch).ToString());
             //else
             drawFont4(screen, x + 16, y, mask ? 1 : 0, (1 + ch).ToString("d2"));
@@ -3208,7 +3208,7 @@ namespace mml2vgmIDE
         {
             if (screen == null) return;
 
-            screen.drawByteArray(x, y, rType[tp * 2 + (mask ? 1 : 0)], 128, 112, 0, 16, 8);
+            //screen.drawByteArray(x, y, rType[tp * 2 + (mask ? 1 : 0)], 128, 112, 0, 16, 8);
             drawFont8(screen, x + 16, y, mask ? 1 : 0, (1 + ch).ToString());
         }
 
@@ -3216,7 +3216,7 @@ namespace mml2vgmIDE
         {
             if (screen == null) return;
 
-            screen.drawByteArray(x, y, rType[tp * 2 + (mask ? 1 : 0)], 128, 112, 0, 16, 8);
+            //screen.drawByteArray(x, y, rType[tp * 2 + (mask ? 1 : 0)], 128, 112, 0, 16, 8);
             drawFont8(screen, x + 16, y, mask ? 1 : 0, (1 + ch).ToString());
         }
 
@@ -3224,7 +3224,7 @@ namespace mml2vgmIDE
         {
             if (screen == null) return;
 
-            screen.drawByteArray(x, y, rType[tp * 2 + (mask ? 1 : 0)], 128, 16, 0, 16, 8);
+            //screen.drawByteArray(x, y, rType[tp * 2 + (mask ? 1 : 0)], 128, 16, 0, 16, 8);
             drawFont8(screen, x + 16, y, mask ? 1 : 0, (ch + 1).ToString());
         }
 
@@ -3232,14 +3232,14 @@ namespace mml2vgmIDE
         {
             if (screen == null) return;
 
-            screen.drawByteArray(x, y, rType[tp * 2 + (mask ? 1 : 0)], 128, 8 * 8, 0, 24, 8);
+            //screen.drawByteArray(x, y, rType[tp * 2 + (mask ? 1 : 0)], 128, 8 * 8, 0, 24, 8);
         }
 
         public static void ChSegaPCM_P(FrameBuffer screen, int x, int y, int ch, bool mask, int tp)
         {
             if (screen == null) return;
 
-            screen.drawByteArray(x, y, rType[tp * 2 + (mask ? 1 : 0)], 128, 16, 0, 16, 8);
+            //screen.drawByteArray(x, y, rType[tp * 2 + (mask ? 1 : 0)], 128, 16, 0, 16, 8);
             //if (ch < 9) drawFont8(screen, x + 16, y, mask ? 1 : 0, (1 + ch).ToString());
             //else
             drawFont4(screen, x + 16, y, mask ? 1 : 0, (1 + ch).ToString("d2"));
@@ -3249,7 +3249,7 @@ namespace mml2vgmIDE
         {
             if (screen == null) return;
 
-            screen.drawByteArray(x, y, rType[tp * 2 + (mask ? 1 : 0)], 128, 32, 0, 16, 8);
+            //screen.drawByteArray(x, y, rType[tp * 2 + (mask ? 1 : 0)], 128, 32, 0, 16, 8);
             drawFont8(screen, x + 16, y, mask ? 1 : 0, (1 + ch).ToString());
         }
 
@@ -3257,7 +3257,7 @@ namespace mml2vgmIDE
         {
             if (screen == null) return;
 
-            screen.drawByteArray(x, y, rType[tp * 2 + (mask ? 1 : 0)], 128, 0, 0, 16, 8);
+            //screen.drawByteArray(x, y, rType[tp * 2 + (mask ? 1 : 0)], 128, 0, 0, 16, 8);
             drawFont8(screen, x + 16, y, mask ? 1 : 0, (1 + ch).ToString());
         }
 
@@ -3267,21 +3267,21 @@ namespace mml2vgmIDE
 
             if (ch < 3)
             {
-                screen.drawByteArray(x, y, rType[tp * 2 + (mask ? 1 : 0)], 128, 0, 0, 16, 8);
+                //screen.drawByteArray(x, y, rType[tp * 2 + (mask ? 1 : 0)], 128, 0, 0, 16, 8);
                 drawFont8(screen, x + 16, y, mask ? 1 : 0, (1 + ch).ToString());
             }
             else if (ch < 6)
             {
-                screen.drawByteArray(x, y, rType[tp * 2 + (mask ? 1 : 0)], 128, 32, 0, 16, 8);
+                //screen.drawByteArray(x, y, rType[tp * 2 + (mask ? 1 : 0)], 128, 32, 0, 16, 8);
                 drawFont8(screen, x + 16, y, mask ? 1 : 0, (1 + ch - 3).ToString());
             }
             else if (ch < 9)
             {
-                screen.drawByteArray(x, y, rType[tp * 2 + (mask ? 1 : 0)], 128, 32 * (ch - 5), 24, 32, 8);
+                //screen.drawByteArray(x, y, rType[tp * 2 + (mask ? 1 : 0)], 128, 32 * (ch - 5), 24, 32, 8);
             }
             else
             {
-                screen.drawByteArray(x, y, rType[tp * 2 + (mask ? 1 : 0)], 128, 0, 0, 24, 8);
+                //screen.drawByteArray(x, y, rType[tp * 2 + (mask ? 1 : 0)], 128, 0, 0, 24, 8);
             }
         }
 
@@ -3291,7 +3291,7 @@ namespace mml2vgmIDE
 
             if (ch < 9)
             {
-                screen.drawByteArray(x, y, rType[tp * 2 + (mask ? 1 : 0)], 128, 0, 0, 16, 8);
+                //screen.drawByteArray(x, y, rType[tp * 2 + (mask ? 1 : 0)], 128, 0, 0, 16, 8);
                 drawFont8(screen, x + 16, y, mask ? 1 : 0, (1 + ch).ToString());
             }
             else
@@ -3323,7 +3323,7 @@ namespace mml2vgmIDE
 
             if (ch < 9)
             {
-                screen.drawByteArray(x, y, rType[tp * 2 + (mask ? 1 : 0)], 128, 0, 0, 16, 8);
+                //screen.drawByteArray(x, y, rType[tp * 2 + (mask ? 1 : 0)], 128, 0, 0, 16, 8);
                 drawFont8(screen, x + 16, y, mask ? 1 : 0, (1 + ch).ToString());
             }
             else if (ch < 14)
@@ -3355,7 +3355,7 @@ namespace mml2vgmIDE
 
             if (ch < 9)
             {
-                screen.drawByteArray(x, y, rType[tp * 2 + (mask ? 1 : 0)], 128, 0, 0, 16, 8);
+                //screen.drawByteArray(x, y, rType[tp * 2 + (mask ? 1 : 0)], 128, 0, 0, 16, 8);
                 drawFont8(screen, x + 16, y, mask ? 1 : 0, (1 + ch).ToString());
             }
             else if (ch < 14)
@@ -3381,7 +3381,7 @@ namespace mml2vgmIDE
             }
             else
             {
-                screen.drawByteArray(x, y, rType[tp * 2 + (mask ? 1 : 0)], 128, 64, 0, 24, 8);
+                //screen.drawByteArray(x, y, rType[tp * 2 + (mask ? 1 : 0)], 128, 64, 0, 24, 8);
             }
         }
 
@@ -3391,7 +3391,7 @@ namespace mml2vgmIDE
 
             if (ch < 9)
             {
-                screen.drawByteArray(x, y, rType[tp * 2 + (mask ? 1 : 0)], 128, 0, 0, 16, 8);
+                //screen.drawByteArray(x, y, rType[tp * 2 + (mask ? 1 : 0)], 128, 0, 0, 16, 8);
                 drawFont8(screen, x + 16, y, mask ? 1 : 0, (1 + ch).ToString());
             }
             else if (ch < 14)
@@ -3423,7 +3423,7 @@ namespace mml2vgmIDE
 
             if (ch < 18)
             {
-                screen.drawByteArray(x, y, rType[tp * 2 + (mask ? 1 : 0)], 128, 0, 0, 16, 8);
+                //screen.drawByteArray(x, y, rType[tp * 2 + (mask ? 1 : 0)], 128, 0, 0, 16, 8);
                 //if (ch < 9) drawFont8(screen, x + 16, y, mask ? 1 : 0, (1 + ch).ToString());
                 //else
                 drawFont4(screen, x + 16, y, mask ? 1 : 0, (1 + ch).ToString("d2"));
@@ -3457,7 +3457,7 @@ namespace mml2vgmIDE
 
             if (ch < 18)
             {
-                screen.drawByteArray(x, y, rType[tp * 2 + (mask ? 1 : 0)], 128, 0, 0, 16, 8);
+                //screen.drawByteArray(x, y, rType[tp * 2 + (mask ? 1 : 0)], 128, 0, 0, 16, 8);
                 //if (ch < 9) drawFont8(screen, x + 16, y, mask ? 1 : 0, (1 + ch).ToString());
                 //else
                 drawFont4(screen, x + 16, y, mask ? 1 : 0, (1 + ch).ToString("d2"));
@@ -3485,7 +3485,7 @@ namespace mml2vgmIDE
             }
             else
             {
-                screen.drawByteArray(x, y, rType[tp * 2 + (mask ? 1 : 0)], 128, 16, 0, 16, 8);
+                //screen.drawByteArray(x, y, rType[tp * 2 + (mask ? 1 : 0)], 128, 16, 0, 16, 8);
                 ch -= 23;
                 if (ch < 9) drawFont8(screen, x + 16, y, mask ? 1 : 0, (1 + ch).ToString());
                 else drawFont4(screen, x + 16, y, mask ? 1 : 0, (1 + ch).ToString());
@@ -3498,21 +3498,21 @@ namespace mml2vgmIDE
 
             if (ch < 6)
             {
-                screen.drawByteArray(x, y, rType[tp * 2 + (mask ? 1 : 0)], 128, 0, 0, 16, 8);
+                //screen.drawByteArray(x, y, rType[tp * 2 + (mask ? 1 : 0)], 128, 0, 0, 16, 8);
                 drawFont8(screen, x + 16, y, mask ? 1 : 0, (1 + ch).ToString());
             }
             else if (ch < 9)
             {
-                screen.drawByteArray(x, y, rType[tp * 2 + (mask ? 1 : 0)], 128, 32, 0, 16, 8);
+                //screen.drawByteArray(x, y, rType[tp * 2 + (mask ? 1 : 0)], 128, 32, 0, 16, 8);
                 drawFont8(screen, x + 16, y, mask ? 1 : 0, (1 + ch - 6).ToString());
             }
             else if (ch < 12)
             {
-                screen.drawByteArray(x, y, rType[tp * 2 + (mask ? 1 : 0)], 128, 32 * (ch - 8), 24, 32, 8);
+                //screen.drawByteArray(x, y, rType[tp * 2 + (mask ? 1 : 0)], 128, 32 * (ch - 8), 24, 32, 8);
             }
             else
             {
-                screen.drawByteArray(x, y, rType[tp * 2 + (mask ? 1 : 0)], 128, 64, 0, 24, 8);
+                //screen.drawByteArray(x, y, rType[tp * 2 + (mask ? 1 : 0)], 128, 64, 0, 24, 8);
             }
         }
 
@@ -3534,21 +3534,21 @@ namespace mml2vgmIDE
 
             if (ch < 6)
             {
-                screen.drawByteArray(x, y, rType[tp * 2 + (mask ? 1 : 0)], 128, 0, 0, 16, 8);
+                //screen.drawByteArray(x, y, rType[tp * 2 + (mask ? 1 : 0)], 128, 0, 0, 16, 8);
                 drawFont8(screen, x + 16, y, mask ? 1 : 0, (1 + ch).ToString());
             }
             else if (ch < 9)
             {
-                screen.drawByteArray(x, y, rType[tp * 2 + (mask ? 1 : 0)], 128, 32, 0, 16, 8);
+                //screen.drawByteArray(x, y, rType[tp * 2 + (mask ? 1 : 0)], 128, 32, 0, 16, 8);
                 drawFont8(screen, x + 16, y, mask ? 1 : 0, (1 + ch - 6).ToString());
             }
             else if (ch < 12)
             {
-                screen.drawByteArray(x, y, rType[tp * 2 + (mask ? 1 : 0)], 128, 32 * (ch - 8), 24, 32, 8);
+                //screen.drawByteArray(x, y, rType[tp * 2 + (mask ? 1 : 0)], 128, 32 * (ch - 8), 24, 32, 8);
             }
             else
             {
-                screen.drawByteArray(x, y, rType[tp * 2 + (mask ? 1 : 0)], 128, 64, 32, 24, 8);
+                //screen.drawByteArray(x, y, rType[tp * 2 + (mask ? 1 : 0)], 128, 64, 32, 24, 8);
             }
         }
 
@@ -3568,12 +3568,12 @@ namespace mml2vgmIDE
         {
             if (m == 0)
             {
-                screen.drawByteArray(x, y, rType[tp * 2 + (mask ? 1 : 0)], 128, 0, 0, 16, 8);
+                //screen.drawByteArray(x, y, rType[tp * 2 + (mask ? 1 : 0)], 128, 0, 0, 16, 8);
                 drawFont8(screen, x + 16, y, mask ? 1 : 0, "6");
             }
             else
             {
-                screen.drawByteArray(x, y, rType[tp * 2 + (mask ? 1 : 0)], 128, 16, 0, 16, 8);
+                //screen.drawByteArray(x, y, rType[tp * 2 + (mask ? 1 : 0)], 128, 16, 0, 16, 8);
                 drawFont8(screen, x + 16, y, 0, " ");
             }
         }
@@ -3587,12 +3587,12 @@ namespace mml2vgmIDE
 
             if (ch < 5)
             {
-                screen.drawByteArray(x, y, rType[tp * 2 + (mask ? 1 : 0)], 128, 0, 0, 16, 8);
+                //screen.drawByteArray(x, y, rType[tp * 2 + (mask ? 1 : 0)], 128, 0, 0, 16, 8);
                 drawFont8(screen, x + 16, y, mask ? 1 : 0, (ch + 1).ToString());
             }
             else if (ch < 10)
             {
-                screen.drawByteArray(x, y, rType[tp * 2 + (mask ? 1 : 0)], 128, 32 * (ch - 5), 24, 32, 8);
+                //screen.drawByteArray(x, y, rType[tp * 2 + (mask ? 1 : 0)], 128, 32 * (ch - 5), 24, 32, 8);
             }
         }
 
@@ -3600,12 +3600,12 @@ namespace mml2vgmIDE
         {
             if (!ex)
             {
-                screen.drawByteArray(x, y, rType[tp * 2 + (mask ? 1 : 0)], 128, 0, 0, 16, 8);
+                //screen.drawByteArray(x, y, rType[tp * 2 + (mask ? 1 : 0)], 128, 0, 0, 16, 8);
                 drawFont8(screen, x + 16, y, mask ? 1 : 0, (ch + 1).ToString());
             }
             else
             {
-                screen.drawByteArray(x, y, rType[tp * 2 + (mask ? 1 : 0)], 128, 0, 24, 24, 8);
+                //screen.drawByteArray(x, y, rType[tp * 2 + (mask ? 1 : 0)], 128, 0, 24, 24, 8);
             }
         }
 
@@ -3615,7 +3615,7 @@ namespace mml2vgmIDE
             {
                 //FM mode
 
-                screen.drawByteArray(x, y, rType[tp * 2 + (mask ? 1 : 0)], 128, 0, 0, 16, 8);
+                //screen.drawByteArray(x, y, rType[tp * 2 + (mask ? 1 : 0)], 128, 0, 0, 16, 8);
                 drawFont8(screen, x + 16, y, mask ? 1 : 0, "6");
                 for (int i = 0; i < 96; i++)
                 {
@@ -3628,7 +3628,7 @@ namespace mml2vgmIDE
             {
                 //PCM mode
 
-                screen.drawByteArray(x, y, rType[tp * 2 + (mask ? 1 : 0)], 128, 16, 0, 16, 8);
+                //screen.drawByteArray(x, y, rType[tp * 2 + (mask ? 1 : 0)], 128, 16, 0, 16, 8);
                 drawFont8(screen, x + 16, y, 0, " ");
                 drawFont4(screen, x + 32, y, 0, " 1C00             2C00             3C00             4C00                ");
             }
@@ -3641,21 +3641,21 @@ namespace mml2vgmIDE
             switch (ch)
             {
                 case 0:
-                    screen.drawByteArray(0, 8, rType[tp * 2 + (mask ? 1 : 0)], 128, 48, 8, 16, 8);
+                    //screen.drawByteArray(0, 8, rType[tp * 2 + (mask ? 1 : 0)], 128, 48, 8, 16, 8);
                     drawFont8(screen, 16, 8, mask ? 1 : 0, "1");
                     break;
                 case 1:
-                    screen.drawByteArray(0, 24, rType[tp * 2 + (mask ? 1 : 0)], 128, 48, 8, 16, 8);
+                    //screen.drawByteArray(0, 24, rType[tp * 2 + (mask ? 1 : 0)], 128, 48, 8, 16, 8);
                     drawFont8(screen, 16, 24, mask ? 1 : 0, "2");
                     break;
                 case 2:
-                    screen.drawByteArray(0, 40, rType[tp * 2 + (mask ? 1 : 0)], 128, 64, 8, 32, 8);
+                    //screen.drawByteArray(0, 40, rType[tp * 2 + (mask ? 1 : 0)], 128, 64, 8, 32, 8);
                     break;
                 case 3:
-                    screen.drawByteArray(112, 32, rType[tp * 2 + (mask ? 1 : 0)], 128, 96, 8, 24, 8);
+                    //screen.drawByteArray(112, 32, rType[tp * 2 + (mask ? 1 : 0)], 128, 96, 8, 24, 8);
                     break;
                 case 4:
-                    screen.drawByteArray(112, 48, rType[tp * 2 + (mask ? 1 : 0)], 128, 0, 16, 16, 8);
+                    //screen.drawByteArray(112, 48, rType[tp * 2 + (mask ? 1 : 0)], 128, 0, 16, 16, 8);
                     break;
             }
         }
@@ -3664,7 +3664,7 @@ namespace mml2vgmIDE
         {
             if (screen == null) return;
 
-            screen.drawByteArray(0, 8, rType[tp * 2 + (mask ? 1 : 0)], 128, 14 * 8, 0 * 8, 16, 8);
+            //screen.drawByteArray(0, 8, rType[tp * 2 + (mask ? 1 : 0)], 128, 14 * 8, 0 * 8, 16, 8);
         }
 
         private static void ChMMC5_P(FrameBuffer screen, int ch, bool mask, int tp)
@@ -3674,15 +3674,15 @@ namespace mml2vgmIDE
             switch (ch)
             {
                 case 0:
-                    screen.drawByteArray(0, 8, rType[tp * 2 + (mask ? 1 : 0)], 128, 48, 8, 16, 8);
+                    //screen.drawByteArray(0, 8, rType[tp * 2 + (mask ? 1 : 0)], 128, 48, 8, 16, 8);
                     drawFont8(screen, 16, 8, mask ? 1 : 0, "1");
                     break;
                 case 1:
-                    screen.drawByteArray(0, 24, rType[tp * 2 + (mask ? 1 : 0)], 128, 48, 8, 16, 8);
+                    //screen.drawByteArray(0, 24, rType[tp * 2 + (mask ? 1 : 0)], 128, 48, 8, 16, 8);
                     drawFont8(screen, 16, 24, mask ? 1 : 0, "2");
                     break;
                 case 2:
-                    screen.drawByteArray(112, 32, rType[tp * 2 + (mask ? 1 : 0)], 128, 16, 0, 16, 8);
+                    //screen.drawByteArray(112, 32, rType[tp * 2 + (mask ? 1 : 0)], 128, 16, 0, 16, 8);
                     break;
             }
         }
@@ -3712,12 +3712,12 @@ namespace mml2vgmIDE
         private static void drawTnP(FrameBuffer screen, int x, int y, int t, int tp)
         {
             if (screen == null) return;
-            screen.drawByteArray(x, y, rPSGMode[tp], 32, 8 * t, 0, 8, 8);
+            //screen.drawByteArray(x, y, rPSGMode[tp], 32, 8 * t, 0, 8, 8);
         }
 
         private static void drawToneFormatP(FrameBuffer screen, int x, int y, int toneFormat)
         {
-            screen.drawByteArray(x, y, rMenuButtons[1], 128, (toneFormat % 3) * 5 * 8, (6 + toneFormat / 3) * 8, 40, 8);
+            //screen.drawByteArray(x, y, rMenuButtons[1], 128, (toneFormat % 3) * 5 * 8, (6 + toneFormat / 3) * 8, 40, 8);
         }
 
         //private static void drawChipNameP(FrameBuffer screen, int x, int y, int t, int c)

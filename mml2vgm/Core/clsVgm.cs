@@ -2084,11 +2084,11 @@ namespace Core
 
                 uint stAdr = ptr;
                 uint size = (uint)p.size;
-                if (size > (uint)p.xgmMaxSampleCount + 1)
-                {
-                    size = (uint)p.xgmMaxSampleCount + 1;
-                    size = (uint)((size & 0xffff00) + (size % 0x100 != 0 ? 0x100 : 0x0));
-                }
+                //if (size > (uint)p.xgmMaxSampleCount + 1)
+                //{
+                    //size = (uint)p.xgmMaxSampleCount + 1;
+                    //size = (uint)((size & 0xffff00) + (size % 0x100 != 0 ? 0x100 : 0x0));
+                //}
                 p.size = size;
 
                 xdat[n + 0] = new outDatum(enmMMLType.unknown, null, null, (byte)((stAdr / 256) & 0xff));

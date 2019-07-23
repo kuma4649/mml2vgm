@@ -97,6 +97,23 @@ namespace Core
 
         }
 
+        public void OutYM2612XPcmKeyOFF(MML mml, partWork pw)
+        {
+
+            int id = 0;
+            int ch = Math.Max(0, pw.ch - 8);
+            int priority = 0;
+
+            parent.OutData(
+                mml,
+                0x54 // original vgm command : YM2151
+                , (byte)(0x50 + ((priority & 0x3) << 2) + (ch & 0x3))
+                , (byte)id
+                );
+
+            parent.info.samplesPerClock = parent.info.xgmSamplesPerSecond * 60.0 * 4.0 / (parent.info.tempo * parent.info.clockCount);
+
+        }
 
         public override void StorePcm(Dictionary<int, clsPcm> newDic, KeyValuePair<int, clsPcm> v, byte[] buf, bool is16bit, int samplerate, params object[] option)
         {

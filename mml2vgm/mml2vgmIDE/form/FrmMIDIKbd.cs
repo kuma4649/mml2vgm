@@ -25,7 +25,7 @@ namespace mml2vgmIDE
         private int frameSizeW = 0;
         private int frameSizeH = 0;
         private int zoom = 1;
-        private int chipn = -1;
+        //private int chipn = -1;
         private Setting setting = null;
         private MidiIn midiin = null;
         //private int cQuantize = 8;

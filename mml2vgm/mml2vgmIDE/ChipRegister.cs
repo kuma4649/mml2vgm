@@ -4558,7 +4558,7 @@ namespace mml2vgmIDE
         public List<PackData> YM2612MakeSoftResetKeyOffOnly(int chipID)
         {
             List<PackData> data = new List<PackData>();
-            int i;
+            //int i;
 
             // FM全チャネルキーオフ
             data.Add(new PackData(null, YM2612[chipID], EnmDataType.Normal, 0x28, 0x00, null));
