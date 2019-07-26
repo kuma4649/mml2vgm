@@ -3614,10 +3614,14 @@ namespace mml2vgmIDE
             //}
             //if (driverReal == null)
             //{
-                //if (driver is NRTDRV) return ((NRTDRV)driver).work.TOTALCOUNT;
-                //else
-                if (driver is vgm) return ((vgm)driver).vgmFrameCounter;
-                else return 0;
+            //if (driver is NRTDRV) return ((NRTDRV)driver).work.TOTALCOUNT;
+            //else
+            if (driver is vgm)
+            {
+                //return ((vgm)driver).vgmFrameCounter;
+                return sm.GetDataSenderBufferCounter();
+            }
+            else return 0;
             //}
 
             //if (driverVirtual is NRTDRV && driverReal is NRTDRV)

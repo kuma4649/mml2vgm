@@ -30,6 +30,7 @@ namespace mml2vgmIDE
         private FrmPartCounter frmPartCounter = null;
         private FrmFolderTree frmFolderTree = null;
         private FrmErrorList frmErrorList = null;
+        private FrmLyrics frmLyrics = null;
         private frmDebug frmDebug = null;
         private FrmMixer frmMixer = null;
         private FrmMIDIKbd frmMIDIKbd = null;
@@ -474,6 +475,14 @@ namespace mml2vgmIDE
             else frmLog.Hide();
 
             TsmiShowLog.Checked = !frmLog.IsHidden;
+        }
+
+        private void TsmiShowLyrics_Click(object sender, EventArgs e)
+        {
+            if (frmLyrics.IsHidden) frmLyrics.Show();
+            else frmLyrics.Hide();
+
+            TsmiShowLyrics.Checked = !frmLyrics.IsHidden;
         }
 
         private void TsmiShowMixer_Click(object sender, EventArgs e)
@@ -1168,6 +1177,7 @@ namespace mml2vgmIDE
             TsmiShowFolderTree.Checked = !frmFolderTree.IsHidden;
             TsmiShowErrorList.Checked = !frmErrorList.IsHidden;
             TsmiShowLog.Checked = !frmLog.IsHidden;
+            TsmiShowLyrics.Checked = !frmLyrics.IsHidden;
 
             tsslCompileError.Text = string.Format(
                 "{0}",
@@ -1368,12 +1378,16 @@ namespace mml2vgmIDE
             frmErrorList = new FrmErrorList(setting);
             FormBox.Add(frmErrorList);
 
+            frmLyrics = new FrmLyrics(setting, theme);
+            FormBox.Add(frmLyrics);
+
             if (string.IsNullOrEmpty(setting.dockingState))
             {
                 frmPartCounter.Show(dpMain, WeifenLuo.WinFormsUI.Docking.DockState.DockLeft);
                 frmLog.Show(dpMain, WeifenLuo.WinFormsUI.Docking.DockState.DockBottom);
                 frmFolderTree.Show(dpMain, WeifenLuo.WinFormsUI.Docking.DockState.DockLeft);
                 frmErrorList.Show(dpMain, WeifenLuo.WinFormsUI.Docking.DockState.DockBottom);
+                frmLyrics.Show(dpMain, WeifenLuo.WinFormsUI.Docking.DockState.DockTop);
             }
             else
             {
@@ -1381,6 +1395,12 @@ namespace mml2vgmIDE
                 {
                     MemoryStream stream = new MemoryStream(Encoding.UTF8.GetBytes(setting.dockingState));
                     dpMain.LoadFromXml(stream, new DeserializeDockContent(GetDockContentFromPersistString));
+
+                    if (frmPartCounter.ParentForm == null) frmPartCounter.Show(dpMain, DockState.DockLeft);
+                    if (frmLog.ParentForm == null) frmLog.Show(dpMain, DockState.DockBottom);
+                    if (frmFolderTree.ParentForm == null) frmFolderTree.Show(dpMain, DockState.DockLeft);
+                    if (frmErrorList.ParentForm == null) frmErrorList.Show(dpMain, DockState.DockBottom);
+                    if (frmLyrics.ParentForm == null) frmLyrics.Show(dpMain, DockState.DockTop);
                 }
                 catch (Exception ex)
                 {
@@ -1390,6 +1410,7 @@ namespace mml2vgmIDE
                     frmLog.Show(dpMain, WeifenLuo.WinFormsUI.Docking.DockState.DockBottom);
                     frmFolderTree.Show(dpMain, WeifenLuo.WinFormsUI.Docking.DockState.DockLeft);
                     frmErrorList.Show(dpMain, WeifenLuo.WinFormsUI.Docking.DockState.DockBottom);
+                    frmLyrics.Show(dpMain, WeifenLuo.WinFormsUI.Docking.DockState.DockTop);
                 }
             }
 
@@ -1496,10 +1517,6 @@ namespace mml2vgmIDE
                     ac = ((FrmEditor)dc).azukiControl;
                 }
 
-                if (isTrace && ac!=null)
-                {
-                    ac.IsReadOnly = true;
-                }
 
                 if (Audio.flgReinit) flgReinit = true;
                 if (setting.other.InitAlways) flgReinit = true;
@@ -1542,6 +1559,8 @@ namespace mml2vgmIDE
                     }
                 }
 
+                frmLyrics.update();
+
                 if (isTrace && ac != null)
                 {
                     ClearAllTraceInfo();
@@ -1550,6 +1569,7 @@ namespace mml2vgmIDE
                     statusStrip1.BackColor = Color.FromArgb(setting.ColorScheme.StatusStripBack_Trace);
                     ac.Refresh();
                     traceInfoSw = true;
+                    ac.IsReadOnly = true;
                 }
             }
             catch (Exception ex)
@@ -2294,5 +2314,6 @@ namespace mml2vgmIDE
                 frmErrorList.Activate();
             }
         }
+
     }
 }

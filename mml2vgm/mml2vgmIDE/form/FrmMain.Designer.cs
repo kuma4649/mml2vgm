@@ -88,6 +88,7 @@
             this.TsmiReference = new System.Windows.Forms.ToolStripMenuItem();
             this.TsmiAbout = new System.Windows.Forms.ToolStripMenuItem();
             this.timer = new System.Windows.Forms.Timer(this.components);
+            this.TsmiShowLyrics = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -172,7 +173,7 @@
             // toolStripStatusLabel1
             // 
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(186, 17);
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(217, 17);
             this.toolStripStatusLabel1.Spring = true;
             this.toolStripStatusLabel1.Text = " ";
             // 
@@ -396,6 +397,7 @@
             this.TsmiShowFolderTree,
             this.TsmiShowErrorList,
             this.TsmiShowLog,
+            this.TsmiShowLyrics,
             this.TsmiShowMixer,
             this.TsmiShowMIDIKbd,
             this.toolStripSeparator3,
@@ -407,49 +409,49 @@
             // TsmiShowPartCounter
             // 
             this.TsmiShowPartCounter.Name = "TsmiShowPartCounter";
-            this.TsmiShowPartCounter.Size = new System.Drawing.Size(150, 22);
+            this.TsmiShowPartCounter.Size = new System.Drawing.Size(180, 22);
             this.TsmiShowPartCounter.Text = "パートカウンター";
             this.TsmiShowPartCounter.Click += new System.EventHandler(this.TsmiShowPartCounter_Click);
             // 
             // TsmiShowFolderTree
             // 
             this.TsmiShowFolderTree.Name = "TsmiShowFolderTree";
-            this.TsmiShowFolderTree.Size = new System.Drawing.Size(150, 22);
+            this.TsmiShowFolderTree.Size = new System.Drawing.Size(180, 22);
             this.TsmiShowFolderTree.Text = "フォルダーツリー";
             this.TsmiShowFolderTree.Click += new System.EventHandler(this.TsmiShowFolderTree_Click);
             // 
             // TsmiShowErrorList
             // 
             this.TsmiShowErrorList.Name = "TsmiShowErrorList";
-            this.TsmiShowErrorList.Size = new System.Drawing.Size(150, 22);
+            this.TsmiShowErrorList.Size = new System.Drawing.Size(180, 22);
             this.TsmiShowErrorList.Text = "エラーリスト";
             this.TsmiShowErrorList.Click += new System.EventHandler(this.TsmiShowErrorList_Click);
             // 
             // TsmiShowLog
             // 
             this.TsmiShowLog.Name = "TsmiShowLog";
-            this.TsmiShowLog.Size = new System.Drawing.Size(150, 22);
+            this.TsmiShowLog.Size = new System.Drawing.Size(180, 22);
             this.TsmiShowLog.Text = "ログ";
             this.TsmiShowLog.Click += new System.EventHandler(this.TsmiShowLog_Click);
             // 
             // TsmiShowMixer
             // 
             this.TsmiShowMixer.Name = "TsmiShowMixer";
-            this.TsmiShowMixer.Size = new System.Drawing.Size(150, 22);
+            this.TsmiShowMixer.Size = new System.Drawing.Size(180, 22);
             this.TsmiShowMixer.Text = "音源ミキサー";
             this.TsmiShowMixer.Click += new System.EventHandler(this.TsmiShowMixer_Click);
             // 
             // TsmiShowMIDIKbd
             // 
             this.TsmiShowMIDIKbd.Name = "TsmiShowMIDIKbd";
-            this.TsmiShowMIDIKbd.Size = new System.Drawing.Size(150, 22);
+            this.TsmiShowMIDIKbd.Size = new System.Drawing.Size(180, 22);
             this.TsmiShowMIDIKbd.Text = "MIDIキーボード";
             this.TsmiShowMIDIKbd.Click += new System.EventHandler(this.TsmiShowMIDIKbd_Click);
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(147, 6);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(177, 6);
             // 
             // TsmiFunctionKey
             // 
@@ -458,27 +460,27 @@
             this.TsmiFncButtonOnly,
             this.TsmiFncButtonAndText});
             this.TsmiFunctionKey.Name = "TsmiFunctionKey";
-            this.TsmiFunctionKey.Size = new System.Drawing.Size(150, 22);
+            this.TsmiFunctionKey.Size = new System.Drawing.Size(180, 22);
             this.TsmiFunctionKey.Text = "ファンクションキー";
             // 
             // TsmiFncHide
             // 
             this.TsmiFncHide.Name = "TsmiFncHide";
-            this.TsmiFncHide.Size = new System.Drawing.Size(146, 22);
+            this.TsmiFncHide.Size = new System.Drawing.Size(180, 22);
             this.TsmiFncHide.Text = "非表示";
             this.TsmiFncHide.Click += new System.EventHandler(this.TsmiFncHide_Click);
             // 
             // TsmiFncButtonOnly
             // 
             this.TsmiFncButtonOnly.Name = "TsmiFncButtonOnly";
-            this.TsmiFncButtonOnly.Size = new System.Drawing.Size(146, 22);
+            this.TsmiFncButtonOnly.Size = new System.Drawing.Size(180, 22);
             this.TsmiFncButtonOnly.Text = "ボタンのみ";
             this.TsmiFncButtonOnly.Click += new System.EventHandler(this.TsmiFncButtonOnly_Click);
             // 
             // TsmiFncButtonAndText
             // 
             this.TsmiFncButtonAndText.Name = "TsmiFncButtonAndText";
-            this.TsmiFncButtonAndText.Size = new System.Drawing.Size(146, 22);
+            this.TsmiFncButtonAndText.Size = new System.Drawing.Size(180, 22);
             this.TsmiFncButtonAndText.Text = "ボタンとテキスト";
             this.TsmiFncButtonAndText.Click += new System.EventHandler(this.TsmiFncButtonAndText_Click);
             // 
@@ -590,6 +592,13 @@
             this.timer.Interval = 16;
             this.timer.Tick += new System.EventHandler(this.Timer_Tick);
             // 
+            // TsmiShowLyrics
+            // 
+            this.TsmiShowLyrics.Name = "TsmiShowLyrics";
+            this.TsmiShowLyrics.Size = new System.Drawing.Size(180, 22);
+            this.TsmiShowLyrics.Text = "歌詞";
+            this.TsmiShowLyrics.Click += new System.EventHandler(this.TsmiShowLyrics_Click);
+            // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -676,6 +685,7 @@
         private System.Windows.Forms.ToolStripMenuItem TsmiCompileAndSkipPlay;
         public System.Windows.Forms.ToolStripStatusLabel TsslLineCol;
         private System.Windows.Forms.ToolStripSplitButton tssbMIDIKbd;
+        private System.Windows.Forms.ToolStripMenuItem TsmiShowLyrics;
     }
 }
 

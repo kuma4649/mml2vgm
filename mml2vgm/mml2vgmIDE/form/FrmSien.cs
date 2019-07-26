@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using WeifenLuo.WinFormsUI.Docking;
 
 namespace mml2vgmIDE
 {
@@ -29,6 +30,28 @@ namespace mml2vgmIDE
 
         private void dgvItem_CellClick(object sender, DataGridViewCellEventArgs e)
         {
+            if (e.RowIndex != -1)
+            {
+                dgvItem.Rows[e.RowIndex].Selected = true;
+                DockContent dc = (DockContent)parent.GetActiveDocument();
+                Document d = null;
+                if (dc != null)
+                {
+                    if (dc.Tag is Document)
+                    {
+                        d = (Document)dc.Tag;
+                        int ci = d.editor.azukiControl.CaretIndex;
+                        SienItem si = (SienItem)dgvItem.Rows[e.RowIndex].Tag;
+                        d.editor.azukiControl.Document.Replace(
+                            si.content,
+                            ci - si.foundCnt,
+                            ci);
+
+                        d.editor.azukiControl.SetSelection(ci - si.foundCnt + si.nextAnchor, ci - si.foundCnt + si.nextCaret);
+                    }
+                }
+            }
+
             this.Opacity = 0.0;
             parent.Activate();
         }

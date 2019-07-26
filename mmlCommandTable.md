@@ -65,6 +65,18 @@
 
 ## コマンド
 -----------  
+### 書式について  
+-----------  
+- コマンドは大文字小文字を区別する。  
+- コマンド中のnは数値を表す。  
+- $を付けると16進数と認識し、つづく2文字を1byteの数値として認識する。  
+  必ず2文字、0～Fで記述すること。  
+- 数値は-2147483648 ～ 2147483647まで認識するが  
+  実際に機能として成り立つかはコマンドやチャンネルによる。  
+- コマンド中のxは文字を表す。xxxは複数文字を表す(改行や区切り文字までを認識する)。  
+- nやxの後の数字は何個目のn(或いはx)かを示している。  
+- 省略可能な場合は()で括る  
+
 ### 音色変更  
 -----------  
 
@@ -437,10 +449,10 @@
 -----------  
 - Command  
     \> (上)  
-    \< (下)  
+    < (下)  
 - Format  
     \>  
-    \<  
+    <  
 - 設定可能範囲  
     なし  
 - Support chips  
@@ -614,7 +626,7 @@
     音量を上げたい場合は )  
     音量を下げたい場合は (  
     このコマンドを実行すると音源ごとの最大値、最小値を超える場合は効果を発揮しません。  
-    (無視します。)  
+    (最大値、或いは最小値のままになります。)  
 
 
 ### ADPCM-A/RHYTHM全体のボリューム絶対指定  
@@ -652,5 +664,989 @@
     HuC6280全体の音量を設定します。  
     先ず、このコマンドでボリュームを設定し、vコマンドでチャンネルごとの音量を調整します。  
     左右別々に音量設定可能です。  
+
+
+### タイ  
+-----------  
+- Command  
+    &  
+- Format  
+    &  
+- 設定可能範囲  
+	\-  
+- Support chips  
+	- Conductor  
+	- YM2612  
+	- YM2612X  
+	- YM2612(Ch3 Ex)  
+	- YM2612X(Ch3 Ex)  
+	- YM2612(6ChPCMmode)  
+	- YM2612X(6ChPCMmode)  
+	- SN76489  
+	- RF5C164  
+	- YM2610B(FM)  
+	- YM2610B(Ch3 Ex)  
+	- YM2610B(SSG)  
+	- YM2610B(ADPCM-A)  
+	- YM2610B(ADPCM-B)  
+	- YM2608(FM)  
+	- YM2608(Ch3 Ex)  
+	- YM2608(SSG)  
+	- YM2608(RHYTHM)  
+	- YM2608(ADPCM)  
+	- YM2203(FM)  
+	- YM2203(Ch3 Ex)  
+	- YM2203(SSG)  
+	- YM2151  
+	- SEGAPCM  
+	- HuC6280  
+	- C140  
+	- AY8910  
+	- YM2413(FM)  
+	- YM2413(RHYTHM)  
+	- K051649  
+- Remark  
+    タイ。前後の音符をつなげる。(キーオフせずに次の音を発音する)  
+- Description  
+    タイ。前後の音符をつなげる。(キーオフせずに次の音を発音する)  
+
+
+### レジスタ直接書き込み  
+-----------  
+- Command  
+    y  
+- Format  
+    yn1,n2  
+- 設定可能範囲  
+	n1,n2 : 音源ごとに違うがもっぱら0～255の8bit値  
+- Support chips  
+	- YM2612  
+	- YM2612X  
+	- YM2612(Ch3 Ex)  
+	- YM2612X(Ch3 Ex)  
+	- YM2612(6ChPCMmode)  
+	- SN76489  
+	- RF5C164  
+	- YM2610B(FM)  
+	- YM2610B(Ch3 Ex)  
+	- YM2610B(SSG)  
+	- YM2610B(ADPCM-A)  
+	- YM2610B(ADPCM-B)  
+	- YM2608(FM)  
+	- YM2608(Ch3 Ex)  
+	- YM2608(SSG)  
+	- YM2608(RHYTHM)  
+	- YM2608(ADPCM)  
+	- YM2203(FM)  
+	- YM2203(Ch3 Ex)  
+	- YM2203(SSG)  
+	- YM2151  
+	- SEGAPCM  
+	- HuC6280  
+	- C140  
+	- AY8910  
+	- YM2413(FM)  
+	- YM2413(RHYTHM)  
+	- K051649  
+- Remark  
+    音源にアドレスとデータを直接送信する。  
+- Description  
+    音源にアドレスとデータを直接送信します。  
+    操作するにはある程度の音源の知識が必要になります。  
+
+
+### DT.MLレジスタ直接書き込み  
+-----------  
+- Command  
+    yDTML  
+- Format  
+    yDTML,n1,n2  
+- 設定可能範囲  
+    n1 : オペレーター1～4  
+    n2 : データ。0～255の8bit値  
+- Support chips  
+    - YM2612  
+    - YM2612X  
+    - YM2612(Ch3 Ex)  
+    - YM2612X(Ch3 Ex)  
+    - YM2612(6ChPCMmode)  
+    - YM2610B(FM)  
+    - YM2610B(Ch3 Ex)  
+    - YM2608(FM)  
+    - YM2608(Ch3 Ex)  
+    - YM2203(FM)  
+    - YM2203(Ch3 Ex)  
+- Remark  
+    音源にDT,MLのアドレスにデータを送信する。  
+- Description  
+    音源にDT,MLのアドレスにデータを送信します。  
+    DTとMLは音色パラメーターです。  
+    送信時にはこの2つを8bit長に割り当てた値を指定します。  
+
+
+### TLレジスタ直接書き込み  
+-----------  
+- Command  
+    yTL  
+- Format  
+    yTL,n1,n2  
+- 設定可能範囲  
+    n1 : オペレーター1～4  
+    n2 : データ。0～255の8bit値  
+- Support chips  
+    - YM2612  
+    - YM2612X  
+    - YM2612(Ch3 Ex)  
+    - YM2612X(Ch3 Ex)  
+    - YM2612(6ChPCMmode)  
+    - YM2610B(FM)  
+    - YM2610B(Ch3 Ex)  
+    - YM2608(FM)  
+    - YM2608(Ch3 Ex)  
+    - YM2203(FM)  
+    - YM2203(Ch3 Ex)  
+- Remark  
+    音源のTLのアドレスにデータを送信する。  
+- Description  
+    音源のTLのアドレスにデータを送信します。  
+    TLは音色パラメーターです。  
+    送信時にはこの1つを8bit長に割り当てた値を指定します。  
+
+
+### KS.ARレジスタ直接書き込み  
+-----------  
+- Command  
+    yKSAR  
+- Format  
+    yKSAR,n1,n2  
+- 設定可能範囲  
+    n1 : オペレーター1～4  
+    n2 : データ。0～255の8bit値  
+- Support chips  
+    - YM2612  
+    - YM2612X  
+    - YM2612(Ch3 Ex)  
+    - YM2612X(Ch3 Ex)  
+    - YM2612(6ChPCMmode)  
+    - YM2610B(FM)  
+    - YM2610B(Ch3 Ex)  
+    - YM2608(FM)  
+    - YM2608(Ch3 Ex)  
+    - YM2203(FM)  
+    - YM2203(Ch3 Ex)  
+- Remark  
+    音源にKS,ARのアドレスにデータを送信する。  
+- Description  
+    音源にKS,ARのアドレスにデータを送信します。  
+    KSとARは音色パラメーターです。  
+    送信時にはこの2つを8bit長に割り当てた値を指定します。  
+
+
+### AM.DRレジスタ直接書き込み  
+-----------  
+- Command  
+    yAMDR  
+- Format  
+    yAMDR,n1,n2  
+- 設定可能範囲  
+    n1 : オペレーター1～4  
+    n2 : データ。0～255の8bit値  
+- Support chips  
+    - YM2612  
+    - YM2612X  
+    - YM2612(Ch3 Ex)  
+    - YM2612X(Ch3 Ex)  
+    - YM2612(6ChPCMmode)  
+    - YM2610B(FM)  
+    - YM2610B(Ch3 Ex)  
+    - YM2608(FM)  
+    - YM2608(Ch3 Ex)  
+    - YM2203(FM)  
+    - YM2203(Ch3 Ex)  
+- Remark  
+    音源にAM,DRのアドレスにデータを送信する。  
+- Description  
+    音源にAM,DRのアドレスにデータを送信します。  
+    AMとDRは音色パラメーターです。  
+    送信時にはこの2つを8bit長に割り当てた値を指定します。  
+
+
+### SRレジスタ直接書き込み  
+-----------  
+- Command  
+    ySR  
+- Format  
+    ySR,n1,n2  
+- 設定可能範囲  
+    n1 : オペレーター1～4  
+    n2 : データ。0～255の8bit値  
+- Support chips  
+    - YM2612  
+    - YM2612X  
+    - YM2612(Ch3 Ex)  
+    - YM2612X(Ch3 Ex)  
+    - YM2612(6ChPCMmode)  
+    - YM2610B(FM)  
+    - YM2610B(Ch3 Ex)  
+    - YM2608(FM)  
+    - YM2608(Ch3 Ex)  
+    - YM2203(FM)  
+    - YM2203(Ch3 Ex)  
+- Remark  
+    音源のSRのアドレスにデータを送信する。  
+- Description  
+    音源のSRのアドレスにデータを送信します。  
+    SRは音色パラメーターです。  
+    送信時にはこの1つを8bit長に割り当てた値を指定します。  
+
+
+### SL.RRレジスタ直接書き込み  
+-----------  
+- Command  
+    ySLRR  
+- Format  
+    ySLRR,n1,n2  
+- 設定可能範囲  
+    n1 : オペレーター1～4  
+    n2 : データ。0～255の8bit値  
+- Support chips  
+    - YM2612  
+    - YM2612X  
+    - YM2612(Ch3 Ex)  
+    - YM2612X(Ch3 Ex)  
+    - YM2612(6ChPCMmode)  
+    - YM2610B(FM)  
+    - YM2610B(Ch3 Ex)  
+    - YM2608(FM)  
+    - YM2608(Ch3 Ex)  
+    - YM2203(FM)  
+    - YM2203(Ch3 Ex)  
+- Remark  
+    音源にSL,RRのアドレスにデータを送信する。  
+- Description  
+    音源にSL,RRのアドレスにデータを送信します。  
+    SLとRRは音色パラメーターです。  
+    送信時にはこの2つを8bit長に割り当てた値を指定します。  
+
+
+### SSGレジスタ直接書き込み  
+-----------  
+- Command  
+    ySSG  
+- Format  
+    ySSG,n1,n2  
+- 設定可能範囲  
+    n1 : オペレーター1～4  
+    n2 : データ。0～255の8bit値  
+- Support chips  
+    - YM2612  
+    - YM2612X  
+    - YM2612(Ch3 Ex)  
+    - YM2612X(Ch3 Ex)  
+    - YM2612(6ChPCMmode)  
+    - YM2610B(FM)  
+    - YM2610B(Ch3 Ex)  
+    - YM2608(FM)  
+    - YM2608(Ch3 Ex)  
+    - YM2203(FM)  
+    - YM2203(Ch3 Ex)  
+- Remark  
+    音源のSSGのアドレスにデータを送信する。  
+- Description  
+    音源のSSGのアドレスにデータを送信します。  
+    SSGは音色パラメーターです。  
+    送信時にはこの1つを8bit長に割り当てた値を指定します。  
+
+
+### FB.ALレジスタ直接書き込み  
+-----------  
+- Command  
+    yFBAL  
+- Format  
+    yFBAL,n1  
+- 設定可能範囲  
+    n1 : データ。0～255の8bit値  
+- Support chips  
+    - YM2612  
+    - YM2612X  
+    - YM2612(Ch3 Ex)  
+    - YM2612X(Ch3 Ex)  
+    - YM2612(6ChPCMmode)  
+    - YM2610B(FM)  
+    - YM2610B(Ch3 Ex)  
+    - YM2608(FM)  
+    - YM2608(Ch3 Ex)  
+    - YM2203(FM)  
+    - YM2203(Ch3 Ex)  
+- Remark  
+    音源にFB,ALのアドレスにデータを送信する。  
+- Description  
+    音源にFB,ALのアドレスにデータを送信します。  
+    FBとALは音色パラメーターです。  
+    送信時にはこの2つを8bit長に割り当てた値を指定します。  
+
+
+### PAN,FB.AL(CON)レジスタ直接書き込み  
+-----------  
+- Command  
+    yPANFBAL  
+    yPANFBCON  
+- Format  
+    yPANFBAL,n1  
+    yPANFBCON,n1  
+- 設定可能範囲  
+    n1 : データ。0～255の8bit値  
+- Support chips  
+    - YM2151  
+- Remark  
+    音源にPAN,FB,AL(CON)のアドレスにデータを送信する。  
+- Description  
+    音源にPAN,FB,ALのアドレスにデータを送信します。  
+    PAN,FBとALは音色パラメーターです。  
+    （CONはALの別名です。)  
+    送信時にはこの3つを8bit長に割り当てた値を指定します。  
+
+
+### PMS,AMSレジスタ直接書き込み  
+-----------  
+- Command  
+    yPMSAMS  
+- Format  
+    yPMSAMS,n1  
+- 設定可能範囲  
+    n1 : データ。0～255の8bit値  
+- Support chips  
+    - YM2151  
+- Remark  
+    音源にPMS,AMSのアドレスにデータを送信する。  
+- Description  
+    音源にPMS,AMSのアドレスにデータを送信します。  
+    PMS,AMSは音色パラメーターです。  
+    送信時にはこの2つを8bit長に割り当てた値を指定します。  
+
+
+### DT,MLレジスタ直接書き込み  
+-----------  
+- Command  
+    yDTML  
+    yDTMUL  
+    yDT1ML  
+    yDT1MUL  
+- Format  
+    yDTML,n1,n2  
+    yDTMUL,n1,n2  
+    yDT1ML,n1,n2  
+    yDT1MUL,n1,n2  
+- 設定可能範囲  
+    n1 : オペレーター1～4  
+    n2 : データ。0～255の8bit値  
+- Support chips  
+    - YM2151  
+- Remark  
+    音源にDT,MLのアドレスにデータを送信する。  
+- Description  
+    音源にDT,MLのアドレスにデータを送信します。  
+    DT,MLは音色パラメーターです。  
+    (DT1はDTの別名です。)  
+    (MULはMLの別名です。)  
+    送信時にはこの2つを8bit長に割り当てた値を指定します。  
+
+
+### TLレジスタ直接書き込み  
+-----------  
+- Command  
+    yTL  
+- Format  
+    yTL,n1,n2  
+- 設定可能範囲  
+    n1 : オペレーター1～4  
+    n2 : データ。0～255の8bit値  
+- Support chips  
+    - YM2151  
+- Remark  
+    音源のTLのアドレスにデータを送信する。  
+- Description  
+    音源のTLのアドレスにデータを送信します。  
+    TLは音色パラメーターです。  
+    送信時にはこの1つを8bit長に割り当てた値を指定します。  
+
+
+### KS.ARレジスタ直接書き込み  
+-----------  
+- Command  
+    yKSAR  
+- Format  
+    yKSAR,n1,n2  
+- 設定可能範囲  
+    n1 : オペレーター1～4  
+    n2 : データ。0～255の8bit値  
+- Support chips  
+    - YM2151  
+- Remark  
+    音源にKS,ARのアドレスにデータを送信する。  
+- Description  
+    音源にKS,ARのアドレスにデータを送信します。  
+    KSとARは音色パラメーターです。  
+    送信時にはこの2つを8bit長に割り当てた値を指定します。  
+
+
+### AM.DRレジスタ直接書き込み  
+-----------  
+- Command  
+    yAMDR  
+    yAMED1R  
+- Format  
+    yAMDR,n1,n2  
+    yAMED1R,n1,n2  
+- 設定可能範囲  
+    n1 : オペレーター1～4  
+    n2 : データ。0～255の8bit値  
+- Support chips  
+    - YM2151  
+- Remark  
+    音源にAM,DRのアドレスにデータを送信する。  
+- Description  
+    音源にAM,DRのアドレスにデータを送信します。  
+    AMとDRは音色パラメーターです。  
+    (AMEはAMの別名です。)  
+    (D1RはDRの別名です。)  
+    送信時にはこの2つを8bit長に割り当てた値を指定します。  
+
+
+### DT2.SRレジスタ直接書き込み  
+-----------  
+- Command  
+    yDT2SR  
+    yDT2D2R  
+- Format  
+    yDT2SR,n1,n2  
+    yDT2D2R,n1,n2  
+- 設定可能範囲  
+    n1 : オペレーター1～4  
+    n2 : データ。0～255の8bit値  
+- Support chips  
+    - YM2151  
+- Remark  
+    音源にDT2,SRのアドレスにデータを送信する。  
+- Description  
+    音源にDT2,SRのアドレスにデータを送信します。  
+    DT2とSRは音色パラメーターです。  
+    (D2RはSRの別名です。)  
+    送信時にはこの2つを8bit長に割り当てた値を指定します。  
+
+
+### SL.RRレジスタ直接書き込み  
+-----------  
+- Command  
+    ySLRR  
+    yD1LRR  
+- Format  
+    ySLRR,n1,n2  
+    yD1LRR,n1,n2  
+- 設定可能範囲  
+    n1 : オペレーター1～4  
+    n2 : データ。0～255の8bit値  
+- Support chips  
+    - YM2151  
+- Remark  
+    音源にSL,RRのアドレスにデータを送信する。  
+- Description  
+    音源にSL,RRのアドレスにデータを送信します。  
+    SLとRRは音色パラメーターです。  
+    (D1LはSLの別名です。)  
+    送信時にはこの2つを8bit長に割り当てた値を指定します。  
+
+
+### LFO設定  
+-----------  
+- Command  
+    M  
+- Format  
+    Mx1x2n1,n2,n3,n4,n5,n6,n7  
+- 設定可能範囲  
+    x1 : 識別子 P/Q/R/S(1パート当たり4種類定義、使用できる)  
+    x2 : 種類 T/V/H(T:音量(トレモロ) V:音程(ビブラート) H:ハードウェア)  
+    n1 : Delay 0 ～ ClockCounter  
+    n2 : Speed 1 ～ 255  
+    n3 : Delta -32768 ～ 32767  
+    n4 : Depth 0 ～ 32767  
+    n5 : Type 0 ～ 4  
+    n6 : Sw 0 ～ 1  
+    n7 : Trans -32768 ～ 32767  
+- Support chips  
+    - Conductor           未対応  
+    - YM2612              T/V/Hに対応  
+    - YM2612X             T/V/Hに対応  
+    - YM2612(Ch3 Ex)      T/V/Hに対応  
+    - YM2612X(Ch3 Ex)     T/V/Hに対応  
+    - YM2612(6ChPCMmode)  未対応  
+    - YM2612X(6ChPCMmode) 未対応  
+    - SN76489             T/Vに対応  
+    - RF5C164             T/Vに対応  
+    - YM2610B(FM)         T/V/Hに対応  
+    - YM2610B(Ch3 Ex)     T/V/Hに対応  
+    - YM2610B(SSG)        T/Vに対応  
+    - YM2610B(ADPCM-A)    Tに対応  
+    - YM2610B(ADPCM-B)    T/Vに対応  
+    - YM2608(FM)          T/V/Hに対応  
+    - YM2608(Ch3 Ex)      T/V/Hに対応  
+    - YM2608(SSG)         T/Vに対応  
+    - YM2608(RHYTHM)      Tに対応  
+    - YM2608(ADPCM)       T/Vに対応  
+    - YM2203(FM)          T/V/Hに対応  
+    - YM2203(Ch3 Ex)      T/V/Hに対応  
+    - YM2203(SSG)         T/Vに対応  
+    - YM2151              T/V/Hに対応  
+    - SEGAPCM             T/Vに対応  
+    - HuC6280             T/V/Hに対応  
+    - C140                T/Vに対応  
+    - AY8910              T/Vに対応  
+    - YM2413(FM)          T/Vに対応  
+    - YM2413(RHYTHM)      T/Vに対応  
+    - K051649             T/Vに対応  
+- Remark  
+    LFOを設定し有効にする。  
+- Description  
+    LFOを設定します。  
+    またハードウェアLFO以外はSコマンドの効果もあり、LFOが 有効 になります。  
+    LFOはチャンネル毎に設定することができます。  
+    LFOは種類(音量、音程、ハードウェア)に関わらず、P/Q/R/S の4種類を使用することができます。  
+    音量LFOは複数重ねてセットすることができます。  
+    音程LFOは複数重ねてセットすることができます。  
+    ハードウェアLFOは音源によりますが基本一つだけセットできます。  
+    設定項目説明
+    - Delay   発音してからLFOの効果が開始されるまでの時間をクロック数で指定する。  
+    - Speed   LFOの1処理あたりの変化速度をクロック数で指定する。1が一番早い変化。  
+    - Delta   LFOの1処理あたりの変化量を指定する。音程或いは音量に毎度この値が加算(減算)される。  
+    - Depth   LFOの最大の変化量を指定する。上記Deltaを加算した結果変化量がこの値に達した場合に減算に変わる。  
+    - Type    LFOの波形を指定する。  
+        - 0:三角波  
+        - 1:のこぎり波  
+        - 2:矩形波  
+        - 3:ワンショット  
+        - 4:ランダム  
+    - Sw      スイッチ。0を指定すると動作しない。よって1固定。Sコマンドの値とは別管理。  
+    - Trans  
+        - 位相。LFOの変化量に加算される。例えば矩形波指定のLFOでバッテリー効果を出すのに使用する。  
+          例えば、eを発音した場合のLFOがdfdf...と繰り返すような場合2度分の位相を指定して
+          egeg...と演奏させるイメージ。
+    - ハードウェアLFO  
+        - ハードウェアLFOはSコマンドによる制御必須。  
+          (Sコマンドによってパラメータが送信されるため)  
+        - OPN系(YM2203除く)  
+          : Mx1Hn1,n2,n3,n4  
+            n1 : Delay(無視されます)TBD  
+            n2 : Freq(0 - 7)  
+            n3 : PMS(0 - 7)  
+            n4 : AMS(0 - 3)  
+            n5 : Switch(0必須)TBD  
+        - OPM  
+          : Mx1Hn1,n2,n3,n4,n5  
+            n1 : LFO波形(0 - 3)  
+            n2 : LFRQ(0 - 255)  
+            n3 : PMD(0 - 127)  
+            n4 : AMD(0 - 127)  
+            n5 : LFO RESET(SYNC)(0 - 1)  
+        - HuC6280  
+          : Mx1Hn1,n2,n3  
+            n1 : Control(n= 0(Disable),1-3(Ch2波形加算))  
+            n2 : Freq(n= 0-255)  
+            n3 : Ch2Freq(n= 0-4095)  
+
+
+### LFOスイッチ設定  
+-----------  
+- Command  
+    S  
+- Format  
+    Sxn  
+- 設定可能範囲  
+    x : 識別子 P/Q/R/S(1パート当たり4種類定義、使用できる)  
+    n : スイッチ 0/1(0:OFF 1:ON)  
+- Support chips  
+    - YM2612  
+    - YM2612X  
+    - YM2612(Ch3 Ex)  
+    - YM2612X(Ch3 Ex)  
+    - SN76489  
+    - RF5C164  
+    - YM2610B(FM)  
+    - YM2610B(Ch3 Ex)  
+    - YM2610B(SSG)  
+    - YM2610B(ADPCM-A)  
+    - YM2610B(ADPCM-B)  
+    - YM2608(FM)  
+    - YM2608(Ch3 Ex)  
+    - YM2608(SSG)  
+    - YM2608(RHYTHM)  
+    - YM2608(ADPCM)  
+    - YM2203(FM)  
+    - YM2203(Ch3 Ex)  
+    - YM2203(SSG)  
+    - YM2151  
+    - SEGAPCM  
+    - HuC6280  
+    - C140  
+    - AY8910  
+    - YM2413(FM)  
+    - YM2413(RHYTHM)  
+    - K051649  
+- Remark  
+    LFOのスイッチ  
+- Description  
+    LFOをスイッチとして有効、無効を設定します。  
+    Mコマンドで設定した内容が、0で無効、1で有効になります。  
+
+
+### AMS値 音量LFO感度1  
+-----------  
+- Command  
+    MAMS  
+- Format  
+    MAMSn  
+- 設定可能範囲  
+    n : AMS値 音量LFO感度 0 ～ 7  
+- Support chips  
+    - YM2612  
+    - YM2612X  
+    - YM2612(Ch3 Ex)  
+    - YM2612X(Ch3 Ex)  
+    - YM2610B(FM)  
+    - YM2610B(Ch3 Ex)  
+    - YM2608(FM)  
+    - YM2608(Ch3 Ex)  
+    - YM2203(FM)  
+    - YM2203(Ch3 Ex)  
+- Remark  
+    AMS値 音量LFO感度を設定し有効にする。  
+- Description  
+    AMS値 音量LFO感度を送信します。  
+
+
+### AMS値 音量LFO感度2  
+-----------  
+- Command  
+    MAMS  
+- Format  
+    MAMSn  
+- 設定可能範囲  
+    n : AMS値 音量LFO感度 0 ～ 3  
+- Support chips  
+    - YM2151  
+- Remark  
+    AMS値 音量LFO感度を設定し有効にする。  
+- Description  
+    AMS値 音量LFO感度を送信します。  
+
+
+### PMS値 音程LFO感度1  
+-----------  
+- Command  
+    MPMS  
+- Format  
+    MPMSn  
+- 設定可能範囲  
+    n : PMS値 音程LFO感度 0 ～ 3  
+- Support chips  
+    - YM2612  
+    - YM2612X  
+    - YM2612(Ch3 Ex)  
+    - YM2612X(Ch3 Ex)  
+    - YM2610B(FM)  
+    - YM2610B(Ch3 Ex)  
+    - YM2608(FM)  
+    - YM2608(Ch3 Ex)  
+    - YM2203(FM)  
+    - YM2203(Ch3 Ex)  
+- Remark  
+    PMS値 音程LFO感度を設定し有効にする。  
+- Description  
+    PMS値 音程LFO感度を送信します。  
+
+
+### PMS値 音程LFO感度2  
+-----------  
+- Command  
+    MPMS  
+- Format  
+    MPMSn  
+- 設定可能範囲  
+    n : PMS値 音程LFO感度 0 ～ 7  
+- Support chips  
+    - YM2151  
+- Remark  
+    PMS値 音程LFO感度を設定し有効にする。  
+- Description  
+    PMS値 音程LFO感度を送信します。  
+
+
+### 休符  
+-----------  
+- Command  
+    r  
+- Format  
+    r(n)  
+- 設定可能範囲  
+    n : 未チェック。省略可能。  
+- Support chips  
+    - Conductor  
+    - YM2612  
+    - YM2612X  
+    - YM2612(Ch3 Ex)  
+    - YM2612X(Ch3 Ex)  
+    - YM2612(6ChPCMmode)  
+    - YM2612X(6ChPCMmode)  
+    - SN76489  
+    - RF5C164  
+    - YM2610B(FM)  
+    - YM2610B(Ch3 Ex)  
+    - YM2610B(SSG)  
+    - YM2610B(ADPCM-A)  
+    - YM2610B(ADPCM-B)  
+    - YM2608(FM)  
+    - YM2608(Ch3 Ex)  
+    - YM2608(SSG)  
+    - YM2608(RHYTHM)  
+    - YM2608(ADPCM)  
+    - YM2203(FM)  
+    - YM2203(Ch3 Ex)  
+    - YM2203(SSG)  
+    - YM2151  
+    - SEGAPCM  
+    - HuC6280  
+    - C140  
+    - AY8910  
+    - YM2413(FM)  
+    - YM2413(RHYTHM)  
+    - K051649  
+- Remark  
+    休符  
+- Description  
+    指定の長さ、又はlコマンドで指定した分だけ休みます。  
+    長さはClockCount(#)値の指定も可能です。  
+
+
+### 歌詞  
+-----------  
+- Command  
+    "  
+- Format  
+    "xxx"(n)  
+- 設定可能範囲  
+    xxx : 歌詞。文字列。  
+    n : 未チェック。省略可能。  
+- Support chips  
+    - Conductor  
+    - YM2612  
+    - YM2612X  
+    - YM2612(Ch3 Ex)  
+    - YM2612X(Ch3 Ex)  
+    - YM2612(6ChPCMmode)  
+    - YM2612X(6ChPCMmode)  
+    - SN76489  
+    - RF5C164  
+    - YM2610B(FM)  
+    - YM2610B(Ch3 Ex)  
+    - YM2610B(SSG)  
+    - YM2610B(ADPCM-A)  
+    - YM2610B(ADPCM-B)  
+    - YM2608(FM)  
+    - YM2608(Ch3 Ex)  
+    - YM2608(SSG)  
+    - YM2608(RHYTHM)  
+    - YM2608(ADPCM)  
+    - YM2203(FM)  
+    - YM2203(Ch3 Ex)  
+    - YM2203(SSG)  
+    - YM2151  
+    - SEGAPCM  
+    - HuC6280  
+    - C140  
+    - AY8910  
+    - YM2413(FM)  
+    - YM2413(RHYTHM)  
+    - K051649  
+- Remark  
+    歌詞  
+- Description  
+    歌詞を表示後、指定の長さ、又はlコマンドで指定した分だけ休みます。  
+    長さはClockCount(#)値の指定も可能です。  
+
+
+### 繰り返し  
+-----------  
+- Command  
+    \[  
+    ]  
+    /  
+- Format  
+    \[  
+    ](n)  
+    /  
+- 設定可能範囲  
+    n : 未チェック。省略可能。  
+    省略は2と同等  
+- Support chips  
+    - Conductor  
+    - YM2612  
+    - YM2612X  
+    - YM2612(Ch3 Ex)  
+    - YM2612X(Ch3 Ex)  
+    - YM2612(6ChPCMmode)  
+    - YM2612X(6ChPCMmode)  
+    - SN76489  
+    - RF5C164  
+    - YM2610B(FM)  
+    - YM2610B(Ch3 Ex)  
+    - YM2610B(SSG)  
+    - YM2610B(ADPCM-A)  
+    - YM2610B(ADPCM-B)  
+    - YM2608(FM)  
+    - YM2608(Ch3 Ex)  
+    - YM2608(SSG)  
+    - YM2608(RHYTHM)  
+    - YM2608(ADPCM)  
+    - YM2203(FM)  
+    - YM2203(Ch3 Ex)  
+    - YM2203(SSG)  
+    - YM2151  
+    - SEGAPCM  
+    - HuC6280  
+    - C140  
+    - AY8910  
+    - YM2413(FM)  
+    - YM2413(RHYTHM)  
+    - K051649  
+- Remark  
+    括ったコマンドを繰り返す  
+- Description  
+    [と]で括ったmmlコマンドを指定の回数だけ、繰り返して演奏します。  
+    省略時は2回演奏します。  
+    括った中に/コマンドを指定すると最後の繰り返し時にそのコマンド以降を演奏しません。  
+    ネスト可能です。  
+    演奏結果は展開したものを演奏するのと同じになります。ループ突入時の状態を保持しません。  
+- Example  
+    `[cde]2`  
+    cdecde   と演奏します  
+    `[cde]`  
+    cdecde   と演奏します  
+    `[cd/e]`  
+    cdecd    と演奏します  
+    `[cd[e]]`  
+    cdeecdee と演奏します  
+    `[cd<e]`  
+    cd\<e>cd<e ではなく  
+    cd\<ecd<e と演奏します  
+
+
+### 連符  
+-----------  
+- Command  
+    {  
+    }  
+- Format  
+    {  
+    }(n)  
+- 設定可能範囲  
+    n : 未チェック。省略可能。  
+- Support chips  
+    - Conductor  
+    - YM2612  
+    - YM2612X  
+    - YM2612(Ch3 Ex)  
+    - YM2612X(Ch3 Ex)  
+    - YM2612(6ChPCMmode)  
+    - YM2612X(6ChPCMmode)  
+    - SN76489  
+    - RF5C164  
+    - YM2610B(FM)  
+    - YM2610B(Ch3 Ex)  
+    - YM2610B(SSG)  
+    - YM2610B(ADPCM-A)  
+    - YM2610B(ADPCM-B)  
+    - YM2608(FM)  
+    - YM2608(Ch3 Ex)  
+    - YM2608(SSG)  
+    - YM2608(RHYTHM)  
+    - YM2608(ADPCM)  
+    - YM2203(FM)  
+    - YM2203(Ch3 Ex)  
+    - YM2203(SSG)  
+    - YM2151  
+    - SEGAPCM  
+    - HuC6280  
+    - C140  
+    - AY8910  
+    - YM2413(FM)  
+    - YM2413(RHYTHM)  
+    - K051649  
+- Remark  
+    括ったノートコマンドを指定した長さで演奏する  
+- Description  
+    {と}で括ったノートコマンドをノートの個数で分割した指定の長さで演奏します。  
+    長さ省略時はlコマンドで指定した長さになります。  
+    長さが割り切れない場合は余りが均等に1ClockCountづつ振り分けられます。  
+    当然、振り分けられないコマンドが発生しますが無視します。  
+    括られたコマンドは長さを指定できません。  
+    括ることが可能なコマンドに制限があります。  
+    c , d , e , f , g , a , b , o , < , > , v , p  (未調査)  
+    ネスト可能です。  
+
+
+### エンベロープ  
+-----------  
+- Command  
+    EON  
+    EOF  
+- Format  
+    EON  
+    EOF  
+- 設定可能範囲  
+    なし  
+- Support chips  
+    - SN76489  
+    - RF5C164  
+    - YM2610B(SSG)  
+    - YM2610B(ADPCM-A)  
+    - YM2610B(ADPCM-B)  
+    - YM2608(SSG)  
+    - YM2608(RHYTHM)  
+    - YM2608(ADPCM)  
+    - YM2203(SSG)  
+    - SEGAPCM  
+    - HuC6280  
+    - C140  
+    - AY8910  
+    - YM2413(RHYTHM)  
+    - K051649  
+- Remark  
+    エンベロープの開始(EON)、停止(EOF)  
+- Description  
+    エンベロープを開始(EON)、または停止(EOF)します。  
+
+
+### ハードウェアエンベロープ  
+-----------  
+- Command  
+    EHON  
+    EHOF  
+    EHT  
+    EH  
+- Format  
+    EHTn  
+    EHn  
+- 設定可能範囲  
+    n : 未チェック  
+- Support chips  
+    - YM2610B(SSG)  
+    - YM2608(SSG)  
+    - YM2203(SSG)  
+    - AY8910  
+- Remark  
+    ハードウェアエンベロープの開始(EHON)、停止(EHOF)、タイプ(EHT)、周波数(EH)  
+- Description  
+    ハードウェアエンベロープを開始(EHON)、または停止(EHOF)します。  
+    ハードウェアエンベロープの種類(EHT)を設定します。  
+    ハードウェアエンベロープの周波数(EH)を設定します。  
 
 
