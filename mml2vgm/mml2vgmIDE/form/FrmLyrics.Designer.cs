@@ -52,7 +52,7 @@
             this.rtbLyrics.Size = new System.Drawing.Size(874, 159);
             this.rtbLyrics.TabIndex = 0;
             this.rtbLyrics.TabStop = false;
-            this.rtbLyrics.Text = "Lyrics";
+            this.rtbLyrics.Text = "mml2vgmIDE";
             // 
             // timer
             // 

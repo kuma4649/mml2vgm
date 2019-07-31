@@ -70,6 +70,7 @@ namespace SoundManager
             DriverAction DriverAction
             , Snd RealChipAction
             , Deq ProcessingData
+            , Deq SetMMLParameter
             , DataSeqFrqEventHandler DataSeqFrqCallBack
             , Action WaitSync
             , PackData[] startData
@@ -84,6 +85,7 @@ namespace SoundManager
                 emuChipSender.Enq
                 , realChipSender.Enq
                 , ProcessingData
+                , SetMMLParameter
                 , startData
                 , null
                 , DataSeqFrqCallBack

@@ -864,7 +864,7 @@ namespace mml2vgmIDE
                     else if (line[0] != '\'') doSkip = false;
                 }
             }
-            frmPartCounter.dataGridView1.Rows.Clear();
+            frmPartCounter.ClearCounter();
             frmErrorList.dataGridView1.Rows.Clear();
 
             Thread trdStartCompile = new Thread(new ThreadStart(startCompile));
@@ -994,6 +994,8 @@ namespace mml2vgmIDE
 
             if (isSuccess)
             {
+                Object[] cells = new object[5];
+
                 foreach (KeyValuePair<enmChipType, ClsChip[]> kvp in mv.desVGM.chips)
                 {
                     foreach (ClsChip chip in kvp.Value)
@@ -1003,14 +1005,12 @@ namespace mml2vgmIDE
                         {
                             if (pw[i].clockCounter == 0) continue;
 
-                            DataGridViewRow row = new DataGridViewRow();
-                            row.Cells.Add(new DataGridViewTextBoxCell());
-                            row.Cells[0].Value = pw[i].PartName.Substring(0, 2).Replace(" ", "") + int.Parse(pw[i].PartName.Substring(2, 2)).ToString();
-                            row.Cells.Add(new DataGridViewTextBoxCell());
-                            row.Cells[1].Value = pw[i].chip.Name.ToUpper();
-                            row.Cells.Add(new DataGridViewTextBoxCell());
-                            row.Cells[2].Value = pw[i].clockCounter;
-                            frmPartCounter.dataGridView1.Rows.Add(row);
+                            cells[0] = int.Parse(pw[i].PartName.Substring(2, 2));
+                            cells[1] = pw[i].isSecondary;
+                            cells[2] = pw[i].PartName.Substring(0, 2).Replace(" ", "") + int.Parse(pw[i].PartName.Substring(2, 2)).ToString();
+                            cells[3] = pw[i].chip.Name.ToUpper();
+                            cells[4] = pw[i].clockCounter;
+                            frmPartCounter.AddPartCounter(cells);
                         }
 
                     }
@@ -1560,6 +1560,7 @@ namespace mml2vgmIDE
                 }
 
                 frmLyrics.update();
+                frmPartCounter.Start(Audio.mmlParams);
 
                 if (isTrace && ac != null)
                 {
@@ -1689,6 +1690,8 @@ namespace mml2vgmIDE
             {
                 Audio.Pause();
             }
+
+            frmPartCounter.Stop();
 
             if (frmMIDIKbd == null)
             {
@@ -2103,7 +2106,7 @@ namespace mml2vgmIDE
             }
 
             tsmiTreeView = new ToolStripMenuItem();
-            GetScripts(tsmiScript, tsmiTreeView, Path.Combine(Common.GetApplicationFolder(), "Script"));
+            //GetScripts(tsmiScript, tsmiTreeView, Path.Combine(Common.GetApplicationFolder(), "Script"));
 
         }
 

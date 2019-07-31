@@ -36,6 +36,8 @@ namespace mml2vgmIDE
         public static int clockYM2610 = 0;
         public static int clockYM2612 = 0;
         public static int clockYMF278B = 0;
+        public static MDSound.MDSound mdsMIDI = null;
+        public static MMLParams mmlParams = new MMLParams();
 
         private static object lockObj = new object();
         private static bool _fatalError = false;
@@ -60,7 +62,7 @@ namespace mml2vgmIDE
 
         private static uint samplingBuffer = 1024;
         private static MDSound.MDSound mds = null;
-        public static MDSound.MDSound mdsMIDI = null;
+
 
         public static bool ReadyOK()
         {
@@ -823,6 +825,7 @@ namespace mml2vgmIDE
             sm.Setup(
                 DriverAction, RealChipAction
                 , chipRegister.ProcessingData
+                , mmlParams.SetMMLParameter
                 , DataSeqFrqCallBack, WaitSync
                 , null
                 , SoundManager.SoundManager.DATA_SEQUENCE_FREQUENCE * setting.LatencyEmulation / 1000

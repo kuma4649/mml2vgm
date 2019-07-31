@@ -217,6 +217,7 @@
     <Compile Include="InstrumentAtValSound.cs" />
     <Compile Include="log.cs" />
     <Compile Include="MDChipParams.cs" />
+    <Compile Include="MMLParams.cs" />
     <Compile Include="NAudioWrap.cs" />
     <Compile Include="NullOut.cs" />
     <Compile Include="Program.cs" />

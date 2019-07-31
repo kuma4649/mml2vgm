@@ -16,6 +16,7 @@ namespace Core
         public string chip = "";
         public int isSecondary = 0;
         public int ch = -1;
+
         public string path
         {
             get
@@ -23,6 +24,7 @@ namespace Core
                 return System.IO.Path.GetDirectoryName(fullPath);
             }
         }
+
         public string filename
         {
             get

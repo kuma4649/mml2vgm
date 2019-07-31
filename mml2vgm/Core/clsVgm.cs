@@ -2531,14 +2531,11 @@ namespace Core
                         for (int i = 0; i < 512; i++) opn2reg[i / 0x100][i % 0x100] = -1;
 
                         break;
-                    case 0x2f: //Dummy Command
-
+                    case 0x2f: 
+                        //TODO: Dummy Command
                         //dummyコマンドの除去はmml2vgm.cs:OutXgmFileで行う。
                         if (cmd.val == 0x2f //dummyChipコマンド　(第2引数：chipID 第３引数:isSecondary)
-                            && (cmd.type == enmMMLType.Rest//ここで指定できるmmlコマンドは元々はChipに送信することのないコマンドのみ(さもないと、通常のコマンドのデータと見分けがつかなくなる可能性がある)
-                            || cmd.type == enmMMLType.Tempo
-                            || cmd.type== enmMMLType.Length
-                            ))
+                            && Common.CheckDummyCommand(cmd.type))//ここで指定できるmmlコマンドは元々はChipに送信することのないコマンドのみ(さもないと、通常のコマンドのデータと見分けがつかなくなる可能性がある)
                         {
                             src[ptr].val = 0x60;//XGM向けダミーコマンド
                             des.Add(src[ptr]);

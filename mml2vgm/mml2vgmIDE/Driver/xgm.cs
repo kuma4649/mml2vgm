@@ -254,8 +254,8 @@ namespace mml2vgmIDE
                     break;
                 }
 
-                //Dummy
-                if (cmd.val == 0x60 && (cmd.type == enmMMLType.Rest || cmd.type == enmMMLType.Tempo || cmd.type == enmMMLType.Length))
+                //TODO: Dummy Command
+                if (cmd.val == 0x60 && Core.Common.CheckDummyCommand(cmd.type))
                 {
                     chipRegister.YM2612SetRegister(cmd, Audio.DriverSeqCounter, 0, 0, -1, -1);
                     musicPtr += 2;
@@ -312,10 +312,11 @@ namespace mml2vgmIDE
         {
             for (int i = 0; i < X + 1; i++)
             {
+                outDatum od = vgmBuf[musicPtr];
                 byte adr = vgmBuf[musicPtr++].val;
                 byte val = vgmBuf[musicPtr++].val;
                 if (adr == 0x2b) DACEnable = (byte)(val & 0x80);
-                chipRegister.YM2612SetRegister(cmd, Audio.DriverSeqCounter, 0, 0, adr, val);
+                chipRegister.YM2612SetRegister(od, Audio.DriverSeqCounter, 0, 0, adr, val);
             }
         }
 
@@ -323,9 +324,10 @@ namespace mml2vgmIDE
         {
             for (int i = 0; i < X + 1; i++)
             {
+                outDatum od = vgmBuf[musicPtr];
                 byte adr = vgmBuf[musicPtr++].val;
                 byte val = vgmBuf[musicPtr++].val;
-                chipRegister.YM2612SetRegister(cmd, Audio.DriverSeqCounter, 0, 1, adr, val);
+                chipRegister.YM2612SetRegister(od, Audio.DriverSeqCounter, 0, 1, adr, val);
             }
         }
 

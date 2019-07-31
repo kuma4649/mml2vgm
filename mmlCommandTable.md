@@ -1650,3 +1650,649 @@
     ハードウェアエンベロープの周波数(EH)を設定します。  
 
 
+### 効果音モード  
+-----------  
+- Command  
+    EXON  
+    EXOF  
+    EX  
+- Format  
+    EXON  
+    EXOF  
+    EXn  
+- 設定可能範囲  
+    n : スロットの番号(1～4)を列挙する  
+- Support chips  
+    - YM2612(Ch3 Ex)  
+    - YM2612X(Ch3 Ex)  
+    - YM2610B(Ch3 Ex)  
+    - YM2608(Ch3 Ex)  
+    - YM2203(Ch3 Ex)  
+- Remark  
+    効果音モードの開始(EXON)、停止(EXOF)、割り当て(EX)  
+- Description  
+    効果音モードを開始(EON)、または停止(EOF)します。  
+    また、EXコマンドで使用するスロットを割り当てます。  
+    割り当てたいスロット番号(1～4)を列挙してください。  
+- Example  
+    EX234  スロット2,3,4を割り当てます。  
+
+
+### 効果音モードを利用したスロットディチューン  
+-----------  
+- Command  
+    EXD  
+- Format  
+    EXDn1,n2,n3,n4  
+- 設定可能範囲  
+    n1～n4 : デチューン値  
+- Support chips  
+    - YM2612(Ch3 Ex)  
+    - YM2612X(Ch3 Ex)  
+    - YM2610B(Ch3 Ex)  
+    - YM2608(Ch3 Ex)  
+    - YM2203(Ch3 Ex)  
+- Remark  
+    効果音モードのスロットディチューン  
+- Description  
+    効果音モードを利用しスロットディチューンします。  
+
+
+### 曲全体ループ  
+-----------  
+- Command  
+    L  
+- Format  
+    L  
+- 設定可能範囲  
+    なし  
+- Support chips  
+    - Conductor(推奨)  
+    - YM2612  
+    - YM2612X  
+    - YM2612(Ch3 Ex)  
+    - YM2612X(Ch3 Ex)  
+    - YM2612(6ChPCMmode)  
+    - YM2612X(6ChPCMmode)  
+    - SN76489  
+    - RF5C164  
+    - YM2610B(FM)  
+    - YM2610B(Ch3 Ex)  
+    - YM2610B(SSG)  
+    - YM2610B(ADPCM-A)  
+    - YM2610B(ADPCM-B)  
+    - YM2608(FM)  
+    - YM2608(Ch3 Ex)  
+    - YM2608(SSG)  
+    - YM2608(RHYTHM)  
+    - YM2608(ADPCM)  
+    - YM2203(FM)  
+    - YM2203(Ch3 Ex)  
+    - YM2203(SSG)  
+    - YM2151  
+    - SEGAPCM  
+    - HuC6280  
+    - C140  
+    - AY8910  
+    - YM2413(FM)  
+    - YM2413(RHYTHM)  
+    - K051649  
+- Remark  
+    曲全体のループ位置指定  
+- Description  
+    曲全体がデータの最後まで演奏したとき、ループで戻る位置を指定します。  
+    かなりの曲者コマンドです。Conductorで使用することをお勧めします。  
+
+
+### ジャンプ  
+-----------  
+- Command  
+    J  
+- Format  
+    J  
+- 設定可能範囲  
+    なし  
+- Support chips  
+    - Conductor  
+    - YM2612  
+    - YM2612X  
+    - YM2612(Ch3 Ex)  
+    - YM2612X(Ch3 Ex)  
+    - YM2612(6ChPCMmode)  
+    - YM2612X(6ChPCMmode)  
+    - SN76489  
+    - RF5C164  
+    - YM2610B(FM)  
+    - YM2610B(Ch3 Ex)  
+    - YM2610B(SSG)  
+    - YM2610B(ADPCM-A)  
+    - YM2610B(ADPCM-B)  
+    - YM2608(FM)  
+    - YM2608(Ch3 Ex)  
+    - YM2608(SSG)  
+    - YM2608(RHYTHM)  
+    - YM2608(ADPCM)  
+    - YM2203(FM)  
+    - YM2203(Ch3 Ex)  
+    - YM2203(SSG)  
+    - YM2151  
+    - SEGAPCM  
+    - HuC6280  
+    - C140  
+    - AY8910  
+    - YM2413(FM)  
+    - YM2413(RHYTHM)  
+    - K051649  
+- Remark  
+    指定した位置まで演奏をスキップする。  
+- Description  
+    指定した位置まで演奏をスキップします。  
+    主にデータ作成途中に使用します。  
+    指定位置まで一気にデータを送るので、  
+    実チップの場合はもたることがあると思われます。  
+    複数指定した場合は最後のJが有効になります。  
+
+
+### ゲートタイム指定  
+-----------  
+- Command  
+    q  
+- Format  
+    qn  
+- 設定可能範囲  
+    n : チェックなし  
+- Support chips  
+    - YM2612  
+    - YM2612X  
+    - YM2612(Ch3 Ex)  
+    - YM2612X(Ch3 Ex)  
+    - YM2612(6ChPCMmode)  
+    - YM2612X(6ChPCMmode)  
+    - SN76489  
+    - RF5C164  
+    - YM2610B(FM)  
+    - YM2610B(Ch3 Ex)  
+    - YM2610B(SSG)  
+    - YM2610B(ADPCM-A)  
+    - YM2610B(ADPCM-B)  
+    - YM2608(FM)  
+    - YM2608(Ch3 Ex)  
+    - YM2608(SSG)  
+    - YM2608(RHYTHM)  
+    - YM2608(ADPCM)  
+    - YM2203(FM)  
+    - YM2203(Ch3 Ex)  
+    - YM2203(SSG)  
+    - YM2151  
+    - SEGAPCM  
+    - HuC6280  
+    - C140  
+    - AY8910  
+    - YM2413(FM)  
+    - YM2413(RHYTHM)  
+    - K051649  
+- Remark  
+    ゲートタイム指定(クロック数で指定)  
+- Description  
+    ゲートタイムを指定します。  
+    音長分のクロック数からn引いた分が実際に発音する長さになります。  
+
+
+### ゲートタイム割合指定  
+-----------  
+- Command  
+    Q  
+- Format  
+    Qn  
+- 設定可能範囲  
+    n : 1 ～ 8  
+- Support chips  
+    - YM2612  
+    - YM2612X  
+    - YM2612(Ch3 Ex)  
+    - YM2612X(Ch3 Ex)  
+    - YM2612(6ChPCMmode)  
+    - YM2612X(6ChPCMmode)  
+    - SN76489  
+    - RF5C164  
+    - YM2610B(FM)  
+    - YM2610B(Ch3 Ex)  
+    - YM2610B(SSG)  
+    - YM2610B(ADPCM-A)  
+    - YM2610B(ADPCM-B)  
+    - YM2608(FM)  
+    - YM2608(Ch3 Ex)  
+    - YM2608(SSG)  
+    - YM2608(RHYTHM)  
+    - YM2608(ADPCM)  
+    - YM2203(FM)  
+    - YM2203(Ch3 Ex)  
+    - YM2203(SSG)  
+    - YM2151  
+    - SEGAPCM  
+    - HuC6280  
+    - C140  
+    - AY8910  
+    - YM2413(FM)  
+    - YM2413(RHYTHM)  
+    - K051649  
+- Remark  
+    ゲートタイム指定(8段階の割合で指定)  
+- Description  
+    ゲートタイムを指定します。  
+    音長を８段階に分けた長さの内、どれだけ発音し続けるかを指定します。  
+
+
+### ノイズモード指定1  
+-----------  
+- Command  
+    w  
+- Format  
+    wn  
+- 設定可能範囲  
+    n : 0 ～ 7  
+- Support chips  
+    - SN76489  
+- Remark  
+    ノイズモード指定  
+- Description  
+    ノイズのモードを指定します。  
+
+
+### ノイズ周波数  
+-----------  
+- Command  
+    w  
+- Format  
+    wn  
+- 設定可能範囲  
+    n : チェック無し  
+- Support chips  
+    - YM2610B(SSG)  
+    - YM2608(SSG)  
+    - YM2203(SSG)  
+    - YM2151  
+    - HuC6280  
+    - AY8910  
+- Remark  
+    ノイズ周波数指定  
+- Description  
+    ノイズ周波数を指定します。  
+
+
+### ノイズモード指定2  
+-----------  
+- Command  
+    P  
+- Format  
+    Pn  
+- 設定可能範囲  
+    n : 1 ～ 3  
+- Support chips  
+    - YM2610B(SSG)  
+    - YM2608(SSG)  
+    - YM2203(SSG)  
+    - AY8910  
+- Remark  
+    ノイズモード指定  
+- Description  
+    ノイズのモードを指定します。  
+    1:トーン  
+    2:ノイズ  
+    3:トーン＆ノイズ  
+
+
+### ノイズスイッチ  
+-----------  
+- Command  
+    P  
+- Format  
+    Pn  
+- 設定可能範囲  
+    n : 0 ～ 1  
+- Support chips  
+    - YM2151  
+    - HuC6280  
+- Remark  
+    ノイズスイッチ  
+- Description  
+    ノイズのスイッチ。  
+    0:OFF  
+    1:ON  
+
+
+### PCMモードスイッチ  
+-----------  
+- Command  
+    m  
+- Format  
+    mn  
+- 設定可能範囲  
+    n : 0 ～ 1  
+- Support chips  
+    - YM2612  
+    - YM2612X  
+    - YM2612(Ch3 Ex)  
+    - YM2612X(Ch3 Ex)  
+    - YM2612(6ChPCMmode)  
+    - YM2612X(6ChPCMmode)  
+    - HuC6280  
+- Remark  
+    PCMモードスイッチ  
+- Description  
+    PCMモードスイッチ  
+    YM2612,YM2612XはCh6だけ。  
+    HuC6280はチャンネルごとに指定可能です。  
+    0:OFF  
+    1:ON  
+
+
+### Rhythmモードスイッチ  
+-----------  
+- Command  
+    m  
+- Format  
+    mn  
+- 設定可能範囲  
+    n : 0 ～ 1  
+- Support chips  
+    - YM2413(FM)  
+    - YM2413(RHYTHM)  
+- Remark  
+    Rhythmモードスイッチ  
+- Description  
+    Rhythmモードスイッチ  
+    0:OFF  
+    1:ON  
+
+
+### テンポ  
+-----------  
+- Command  
+    T  
+- Format  
+    Tn  
+- 設定可能範囲  
+    n : 1 ～ 1200  
+- Support chips  
+    - Conductor  
+    - YM2612  
+    - YM2612X  
+    - YM2612(Ch3 Ex)  
+    - YM2612X(Ch3 Ex)  
+    - YM2612(6ChPCMmode)  
+    - YM2612X(6ChPCMmode)  
+    - SN76489  
+    - RF5C164  
+    - YM2610B(FM)  
+    - YM2610B(Ch3 Ex)  
+    - YM2610B(SSG)  
+    - YM2610B(ADPCM-A)  
+    - YM2610B(ADPCM-B)  
+    - YM2608(FM)  
+    - YM2608(Ch3 Ex)  
+    - YM2608(SSG)  
+    - YM2608(RHYTHM)  
+    - YM2608(ADPCM)  
+    - YM2203(FM)  
+    - YM2203(Ch3 Ex)  
+    - YM2203(SSG)  
+    - YM2151  
+    - SEGAPCM  
+    - HuC6280  
+    - C140  
+    - AY8910  
+    - YM2413(FM)  
+    - YM2413(RHYTHM)  
+    - K051649  
+- Remark  
+    テンポ  
+- Description  
+    テンポを指定します。  
+    1分間に4分音符を何回鳴らすことができるかを指定します。  
+
+
+### パートコンパイル停止  
+-----------  
+- Command  
+    !  
+- Format  
+    !  
+- 設定可能範囲  
+    なし  
+- Support chips  
+    - Conductor  
+    - YM2612  
+    - YM2612X  
+    - YM2612(Ch3 Ex)  
+    - YM2612X(Ch3 Ex)  
+    - YM2612(6ChPCMmode)  
+    - YM2612X(6ChPCMmode)  
+    - SN76489  
+    - RF5C164  
+    - YM2610B(FM)  
+    - YM2610B(Ch3 Ex)  
+    - YM2610B(SSG)  
+    - YM2610B(ADPCM-A)  
+    - YM2610B(ADPCM-B)  
+    - YM2608(FM)  
+    - YM2608(Ch3 Ex)  
+    - YM2608(SSG)  
+    - YM2608(RHYTHM)  
+    - YM2608(ADPCM)  
+    - YM2203(FM)  
+    - YM2203(Ch3 Ex)  
+    - YM2203(SSG)  
+    - YM2151  
+    - SEGAPCM  
+    - HuC6280  
+    - C140  
+    - AY8910  
+    - YM2413(FM)  
+    - YM2413(RHYTHM)  
+    - K051649  
+- Remark  
+    パートコンパイル停止  
+- Description  
+    パートのコンパイルをこのコマンド以降停止します。  
+    主にデータを作成中にパートごとの確認を行うために使用することを想定しています。  
+
+
+### 移調絶対指定  
+-----------  
+- Command  
+    K  
+- Format  
+    Kn  
+- 設定可能範囲  
+    n : -12 ～ 12  
+- Support chips  
+    - YM2612  
+    - YM2612X  
+    - YM2612(Ch3 Ex)  
+    - YM2612X(Ch3 Ex)  
+    - SN76489  
+    - RF5C164  
+    - YM2610B(FM)  
+    - YM2610B(Ch3 Ex)  
+    - YM2610B(SSG)  
+    - YM2610B(ADPCM-B)  
+    - YM2608(FM)  
+    - YM2608(Ch3 Ex)  
+    - YM2608(SSG)  
+    - YM2608(ADPCM)  
+    - YM2203(FM)  
+    - YM2203(Ch3 Ex)  
+    - YM2203(SSG)  
+    - YM2151  
+    - SEGAPCM  
+    - HuC6280  
+    - C140  
+    - AY8910  
+    - YM2413(FM)  
+    - K051649  
+- Remark  
+    移調を設定する。絶対指定。  
+- Description  
+    絶対指定で移調する値を設定します。  
+    １オクターブ分上げたり、または下げることができます。  
+
+
+### PCM再生開始位置指定  
+-----------  
+- Command  
+    A  
+- Format  
+    An  
+    A+n  
+    A-n  
+- 設定可能範囲  
+    n : 0 ～ PCMの大きさ - 1  
+- Support chips  
+    - RF5C164  
+    - SEGAPCM  
+    - C140  
+- Remark  
+    A : PCMの再生開始位置を指定。絶対指定。  
+    A+ / A- : PCMの再生開始位置を指定。相対指定。  
+- Description  
+    A : PCMの再生開始位置を指定します。  
+    絶対指定で、PCMデータの初めから終わりの位置まで指定できます。  
+    A+ / A- : PCMの再生開始位置を指定します。  
+    相対指定で指定します。  
+    計算結果が、PCMデータの初めまたは終わりの位置を超えることはありません。  
+    ADPCMは非対応。  
+
+
+### パン1  
+-----------  
+- Command  
+    p  
+- Format  
+    pn  
+- 設定可能範囲  
+    n : 0 ～ 3 (0: 発音しない  1: 右  2: 左  3: 中央)  
+- Support chips  
+    - YM2612  
+    - YM2612X  
+    - YM2612(6ChPCMmode)  
+    - YM2612X(6ChPCMmode)  
+    - YM2610B(FM)  
+    - YM2610B(ADPCM-A)  
+    - YM2610B(ADPCM-B)  
+    - YM2608(FM)  
+    - YM2608(RHYTHM)  
+    - YM2608(ADPCM)  
+    - YM2203(FM)  
+    - YM2151  
+- Remark  
+    パンを指定する。(0: 発音しない  1: 右  2: 左  3: 中央)  
+- Description  
+    パン(定位)を指定します。  
+
+
+### パン2  
+-----------  
+- Command  
+    p  
+- Format  
+    pn1,n2  
+- 設定可能範囲  
+    n1 : 0 ～ 15 (左)  
+    n2 : 0 ～ 15 (右)  
+- Support chips  
+    - RF5C164  
+    - HuC6280  
+- Remark  
+    パンを指定する。n1,n2(0 ～ 15)  
+- Description  
+    パン(定位)を指定します。  
+    左右の音量を必ず指定する必要があります。  
+
+
+### パン3  
+-----------  
+- Command  
+    p  
+- Format  
+    pn1,n2  
+- 設定可能範囲  
+    n1 : 0 ～ 127 (左)  
+    n2 : 0 ～ 127 (右)  
+- Support chips  
+    - SEGAPCM  
+    - C140  
+- Remark  
+    パンを指定する。n1,n2(0 ～ 127)  
+- Description  
+    パン(定位)を指定します。  
+    左右の音量を必ず指定する必要があります。  
+
+
+### サスティン  
+-----------  
+- Command  
+    so  
+    sf  
+- Format  
+    so  
+    sf  
+- 設定可能範囲  
+    無し  
+- Support chips  
+    - YM2413(FM)  
+    - YM2413(RHYTHM)  
+- Remark  
+    サスティンを設定する(so : ON  sf : OFF )  
+- Description  
+    サスティンを設定します。  
+    so : サスティンをONにします。  
+    sf : サスティンをOFFにします。  
+
+
+### エイリアス  
+-----------  
+- Command  
+    %  
+- Format  
+    %xxx  
+- 設定可能範囲  
+    無し  
+- Support chips  
+    - Conductor  
+    - YM2612  
+    - YM2612X  
+    - YM2612(Ch3 Ex)  
+    - YM2612X(Ch3 Ex)  
+    - YM2612(6ChPCMmode)  
+    - YM2612X(6ChPCMmode)  
+    - SN76489  
+    - RF5C164  
+    - YM2610B(FM)  
+    - YM2610B(Ch3 Ex)  
+    - YM2610B(SSG)  
+    - YM2610B(ADPCM-A)  
+    - YM2610B(ADPCM-B)  
+    - YM2608(FM)  
+    - YM2608(Ch3 Ex)  
+    - YM2608(SSG)  
+    - YM2608(RHYTHM)  
+    - YM2608(ADPCM)  
+    - YM2203(FM)  
+    - YM2203(Ch3 Ex)  
+    - YM2203(SSG)  
+    - YM2151  
+    - SEGAPCM  
+    - HuC6280  
+    - C140  
+    - AY8910  
+    - YM2413(FM)  
+    - YM2413(RHYTHM)  
+    - K051649  
+- Remark  
+    エイリアスを設定する  
+- Description  
+    定義済みのエイリアスを設定します。  
+    定義した内容を演奏後、戻ります。  
+
+

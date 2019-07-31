@@ -339,10 +339,16 @@ namespace Core
                 vpw = pw.chip.lstPartWork[2];
             }
 
-            if ((pw.slots & 1) != 0 && ope[0] != -1) ((ClsOPN)pw.chip).OutFmSetTl(mml, vpw, 0, ope[0]);
-            if ((pw.slots & 2) != 0 && ope[1] != -1) ((ClsOPN)pw.chip).OutFmSetTl(mml, vpw, 1, ope[1]);
-            if ((pw.slots & 4) != 0 && ope[2] != -1) ((ClsOPN)pw.chip).OutFmSetTl(mml, vpw, 2, ope[2]);
-            if ((pw.slots & 8) != 0 && ope[3] != -1) ((ClsOPN)pw.chip).OutFmSetTl(mml, vpw, 3, ope[3]);
+            MML vmml = new MML();
+            vmml.args = new List<object>();
+            vmml.args.Add(vol);
+            vmml.type = enmMMLType.Volume;
+            if (mml != null)
+                vmml.line = mml.line;
+            if ((pw.slots & 1) != 0 && ope[0] != -1) ((ClsOPN)pw.chip).OutFmSetTl(vmml, vpw, 0, ope[0]);
+            if ((pw.slots & 2) != 0 && ope[1] != -1) ((ClsOPN)pw.chip).OutFmSetTl(vmml, vpw, 1, ope[1]);
+            if ((pw.slots & 4) != 0 && ope[2] != -1) ((ClsOPN)pw.chip).OutFmSetTl(vmml, vpw, 2, ope[2]);
+            if ((pw.slots & 8) != 0 && ope[3] != -1) ((ClsOPN)pw.chip).OutFmSetTl(vmml, vpw, 3, ope[3]);
             //if ((pw.slots & 1) != 0 ) ((ClsOPN)pw.chip).OutFmSetTl(vpw, 0, ope[0]);
             //if ((pw.slots & 2) != 0 ) ((ClsOPN)pw.chip).OutFmSetTl(vpw, 1, ope[1]);
             //if ((pw.slots & 4) != 0 ) ((ClsOPN)pw.chip).OutFmSetTl(vpw, 2, ope[2]);

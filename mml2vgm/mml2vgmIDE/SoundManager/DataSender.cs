@@ -26,6 +26,7 @@ namespace SoundManager
         private PackData[] startData = null;
         private PackData[] stopData = null;
         private Deq ProcessingData;
+        private Deq SetMMLParameter;
         private Action WaitSync = null;
         private long EmuDelay = 0;
         private long RealDelay = 0;
@@ -35,6 +36,7 @@ namespace SoundManager
             Enq EmuEnq
             , Enq RealEnq
             , Deq ProcessingData
+            , Deq SetMMLParameter
             , PackData[] startData
             , PackData[] stopData
             , DataSeqFrqEventHandler DataSeqFrqCallBack
@@ -56,6 +58,7 @@ namespace SoundManager
             this.startData = startData;
             this.stopData = stopData;
             this.ProcessingData = ProcessingData;
+            this.SetMMLParameter = SetMMLParameter;
             OnDataSeqFrq += DataSeqFrqCallBack;
             this.WaitSync = WaitSync;
             this.EmuDelay = EmuDelay;
@@ -242,8 +245,12 @@ namespace SoundManager
                                 break;
                             }
 
+                            //パラメーターセット
+                            SetMMLParameter?.Invoke(ref od, ref Counter, ref Chip, ref Type, ref Address, ref Data, ref ExData);
+
                             //データ加工
                             ProcessingData?.Invoke(ref od, ref Counter, ref Chip, ref Type, ref Address, ref Data, ref ExData);
+
 
                             if (od != null && od.type == enmMMLType.Tempo)
                             {

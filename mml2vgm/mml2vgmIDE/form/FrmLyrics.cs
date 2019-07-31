@@ -22,6 +22,10 @@ namespace mml2vgmIDE
         public FrmLyrics(Setting setting, ThemeBase theme)
         {
             InitializeComponent();
+            rtbLyrics.BackColor = Color.FromArgb(setting.ColorScheme.Log_BackColor);
+            rtbLyrics.ForeColor = Color.FromArgb(setting.ColorScheme.Log_ForeColor);
+            culColor = Color.FromArgb(setting.ColorScheme.Log_ForeColor);
+
             this.setting = setting;
             rtbLyrics.GotFocus += RichTextBox1_GotFocus;
         }
@@ -145,6 +149,7 @@ namespace mml2vgmIDE
 
         private void FrmLyrics_SizeChanged(object sender, EventArgs e)
         {
+            if (!this.Created) return;
             if (rtbLyrics.Font == null) return;
             if (this.Height < 1) return;
 

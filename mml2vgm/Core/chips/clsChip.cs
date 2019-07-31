@@ -843,18 +843,22 @@ namespace Core
             int n = (int)mml.args[0];
             n = Common.CheckRange(n, 1, 8);
             pw.octaveNew = n;
+
+            SetDummyData(pw, mml);
         }
 
         public virtual void CmdOctaveUp(partWork pw, MML mml)
         {
             pw.octaveNew += parent.info.octaveRev ? -1 : 1;
             pw.octaveNew = Common.CheckRange(pw.octaveNew, 1, 8);
+            SetDummyData(pw, mml);
         }
 
         public virtual void CmdOctaveDown(partWork pw, MML mml)
         {
             pw.octaveNew += parent.info.octaveRev ? 1 : -1;
             pw.octaveNew = Common.CheckRange(pw.octaveNew, 1, 8);
+            SetDummyData(pw, mml);
         }
 
 

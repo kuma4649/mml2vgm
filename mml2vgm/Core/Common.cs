@@ -419,5 +419,20 @@ namespace Core
             desBuf[(int)adr + 3].val = (byte)(val >> 24);
         }
 
+        public static bool CheckDummyCommand(enmMMLType typ)
+        {
+            if (typ == enmMMLType.Rest
+                || typ == enmMMLType.Tempo
+                || typ == enmMMLType.Length
+                || typ == enmMMLType.Octave
+                || typ == enmMMLType.OctaveDown
+                || typ == enmMMLType.OctaveUp
+                )
+            {
+                return true;
+            }
+
+            return false;
+        }
     }
 }

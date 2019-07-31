@@ -229,12 +229,9 @@ namespace Core
                     skipCount--;
                     continue;
                 }
+                //TODO: Dummy Command
                 if (od.val == 0x2f //dummyChipコマンド　(第2引数：chipID 第３引数:isSecondary)
-                    && (od.type == enmMMLType.Rest//ここで指定できるmmlコマンドは元々はChipに送信することのないコマンドのみ(さもないと、通常のコマンドのデータと見分けがつかなくなる可能性がある)
-                    || od.type == enmMMLType.Tempo
-                    || od.type == enmMMLType.Length
-                    )
-                    )
+                    && Common.CheckDummyCommand(od.type))//ここで指定できるmmlコマンドは元々はChipに送信することのないコマンドのみ(さもないと、通常のコマンドのデータと見分けがつかなくなる可能性がある)
                 {
                     skipCount = 2;
                     continue;
@@ -314,11 +311,9 @@ namespace Core
                         lstBuf.Add(desBuf[i++].val);
                         break;
                     case 0x60://dummyChipコマンド　(第2引数：chipID 第３引数:isSecondary)
+                        //TODO: Dummy Command
                         //Console.WriteLine("dummy command {0:x} adr:{1:x}", H | L, i - 1);
-                        if (od.type == enmMMLType.Rest//ここで指定できるmmlコマンドは元々はChipに送信することのないコマンドのみ(さもないと、通常のコマンドのデータと見分けがつかなくなる可能性がある)
-                            || od.type == enmMMLType.Tempo
-                            || od.type == enmMMLType.Length
-                            )
+                        if (Common.CheckDummyCommand(od.type))//ここで指定できるmmlコマンドは元々はChipに送信することのないコマンドのみ(さもないと、通常のコマンドのデータと見分けがつかなくなる可能性がある)
                         {
                             //lstBuf.Add(desBuf[i++].val);
                             //lstBuf.Add(desBuf[i++].val);

@@ -1,57 +1,61 @@
-mml2vgmIDE�ɂ���
+﻿mml2vgmIDEについて
 
- mml2vgmIDE��mml2vgm�̓������A�v���P�[�V�����ł��B
- �G�f�B�^�[��R���p�C���[�A�v���C���[��
- �ЂƂ܂Ƃ߂ɁA�ȒP�A����y�Ɏg�p�ł���悤�ɂ������̂ł��B
+ mml2vgmIDEはmml2vgmの統合環境アプリケーションです。
+ エディターやコンパイラー、プレイヤーを
+ ひとまとめに、簡単、お手軽に使用できるようにしたものです。
 
- mml2vgmIDE��mucom88 Windows������{�ɍ���Ă��܂��B
- �܂��A�e�L�X�g�G�f�B�^�[�̃G���W����azuki���g�p���Ă���܂��B
- �ǂ�������΂炵���v���O�����ł��B
- ��������������܂����琥��g�p���Ă݂邱�Ƃ������߂��܂��B
- ���̂ق��ɂ�mml2vgm�͗l�X�ȃv���O�����𗘗p������F�X�ȕ��̂����͂����������Ă���܂��B
- �{���ɂ��肪�Ƃ��������܂��B
+ mml2vgmIDEはmucom88 Windowsをお手本に作られています。
+ また、テキストエディターのエンジンにazukiを使用しております。
+ どちらもすばらしいプログラムです。
+ ご興味を持たれましたら是非使用してみることをお勧めします。
+ そのほかにもmml2vgmは様々なプログラムを利用したり色々な方のご協力をいただいております。
+ 本当にありがとうございます。
 
-[����]
- �E������Ƃ���visualstudio�̂悤�ȁA�����ڂƑ��슴�B
- �Emuap98��A�z�����鉉�t�g���[�X�@�\�B
- �E�X�N���v�g�ɂ��_���(?)�g�����B
- �EGIMIC��SCCI�ɂ����`�b�v���t�ɑΉ��B
+[特徴]
+ ・ちょっとだけvisualstudioのような、見た目と操作感。
+ ・muap98を連想させる演奏トレース機能。
+ ・スクリプトによる柔軟な(?)拡張性。
+ ・GIMICとSCCIによる実チップ演奏に対応。
 
-[����������]
-�@�P.mml2vgmIDE.exe���_�u���N���b�N���v���O�������N������B
-�@�Q.���j���[����t�@�C����I�сA�V�K�쐬��I�ԁB
-�@�R.�V�K�t�@�C�����G�f�B�^�ɕ\�����ꂽ��F5�L�[�������B
-�@�S.�h���~�t�@�\���V�h�����t�����B
-�@�ȏ�B
+[お試し操作]
+　１.mml2vgmIDE.exeをダブルクリックしプログラムを起動する。
+　２.メニューからファイルを選び、新規作成を選ぶ。
+　３.新規ファイルがエディタに表示されたらF5キーを押す。
+　４.ドレミファソラシドが演奏される。
+　以上。
 
-[����]
-�@�C���X�g�[��
-�@�@�E�C���X�g�[���͕s�v�ł��B
-�@�@�E���k�t�@�C����W�J������쐬����Ă���mml2vgmIDE�t�H���_�[���J���܂��B
+[操作]
+　インストール
+　　・インストールは不要です。
+　　・圧縮ファイルを展開したら作成されているmml2vgmIDEフォルダーを開きます。
 
-�@���O����
-�@�@�EOPNA�������Y�����̃t�@�C����mml2vgmIDE.exe�Ɠ����t�H���_�[�ɃR�s�[���Ă����܂��B
-�@�@�E�X�N���v�g�t�@�C����Script�t�H���_�[�ɃR�s�[���Ă����܂��B
+　事前準備
+　　・OPNA向けリズム音のファイルをmml2vgmIDE.exeと同じフォルダーにコピーしておきます。
+　　・スクリプトファイルはScriptフォルダーにコピーしておきます。
+　　　Git,SOXを利用するスクリプトを同梱しています。
+　　　無くても動作しますが、便利なので予めインストールすることをお勧めします。
+　　　Git : バージョン管理ツール
+　　　SOX : 音声ファイル加工ツール
 
-�@�N��
-�@�@�Emml2vgmIDE.exe���_�u���N���b�N���v���O�������N�����܂��B
+　起動
+　　・mml2vgmIDE.exeをダブルクリックしプログラムを起動します。
 
-�@�I��
-�@�@�E���C���E�B���h�E�́~�{�^�����������A���j���[����t�@�C��>�I���̏��ɑI�����܂��B
+　終了
+　　・メインウィンドウの×ボタンを押すか、メニューからファイル>終了の順に選択します。
 
-�@�A���C���X�g�[��
-�@�@�E�W�J�����Ƃ��ɂł����t�H���_�[�������܂��B
-�@�@�E�ݒ�������Ă��܂������ꍇ�͈ȉ��̃t�H���_�[���폜���܂��B
+　アンインストール
+　　・展開したときにできたフォルダーを消します。
+　　・設定も消してしまいたい場合は以下のフォルダーも削除します。
 
-�@�@�@�@(�V�X�e���̃h���C�u��):\Users\(�g�p���Ă��郆�[�U�[��)\AppData\Roaming\KumaApp\mml2vgmIDE
+　　　　(システムのドライブ名):\Users\(使用しているユーザー名)\AppData\Roaming\KumaApp\mml2vgmIDE
 
-		���V�X�e���̃h���C�u���͒ʏ��C�h���C�u�ł��B(����Ȋ��ł͈قȂ�ꍇ������܂�)
-		���g�p���Ă��郆�[�U�[���͒ʏ��Windows�Ƀ��O�C������Ƃ��̖��O�ł��B(����Ȋ��ł͈قȂ�ꍇ������܂�)
+		＊システムのドライブ名は通常はCドライブです。(特殊な環境では異なる場合があります)
+		＊使用しているユーザー名は通常はWindowsにログインするときの名前です。(特殊な環境では異なる場合があります)
 
-  �t�@�C��
-  �@mml2vgmIDE��mml���L�q����e�L�X�g�t�@�C���Ƃ���.gwi�t�@�C���������܂��B
-    .gwi�t�@�C����UTF8�ACRLF�ABOM�L��`����.NET�A�v���P�[�V�����ł͈�ʓI�ȃe�L�X�g�t�@�C���ł��B
-	���̑��A���PCM�n�̉����f�[�^�̌��t�@�C���Ƃ���.wav�t�@�C�����g�p���܂��B
-	.wav�t�@�C���͗l�X�Ȍ`������邱�Ƃ��\�ŁA�\�����P���AWindows�ł͕W���I�ȉ����t�@�C���ł��B
+  ファイル
+  　mml2vgmIDEはmmlを記述するテキストファイルとして.gwiファイルを扱います。
+    .gwiファイルはUTF8、CRLF、BOM有り形式の.NETアプリケーションでは一般的なテキストファイルです。
+	その他、主にPCM系の音声データの元ファイルとして.wavファイルを使用します。
+	.wavファイルは様々な形式を取ることが可能で、構成が単純、Windowsでは標準的な音声ファイルです。
 
-�ȉ�TBD
+以下TBD
