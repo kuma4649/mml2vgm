@@ -427,6 +427,9 @@ namespace Core
                 || typ == enmMMLType.Octave
                 || typ == enmMMLType.OctaveDown
                 || typ == enmMMLType.OctaveUp
+                || typ == enmMMLType.Instrument
+                || typ == enmMMLType.Envelope
+                || typ== enmMMLType.Volume
                 )
             {
                 return true;

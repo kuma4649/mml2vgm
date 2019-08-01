@@ -420,6 +420,14 @@ namespace Core
         public override void SetKeyOn(partWork pw, MML mml)
         {
             OutRf5c164KeyOn(mml,pw);
+
+            MML vmml = new MML();
+            vmml.type = enmMMLType.Volume;
+            vmml.args = new List<object>();
+            vmml.args.Add(pw.volume);
+            vmml.line = mml.line;
+            SetDummyData(pw, vmml);
+
         }
 
         public override void SetLfoAtKeyOn(partWork pw, MML mml)

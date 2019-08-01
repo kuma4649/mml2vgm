@@ -183,7 +183,7 @@
             // 
             // ClmNote
             // 
-            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle8.Font = new System.Drawing.Font("Consolas", 9F);
             this.ClmNote.DefaultCellStyle = dataGridViewCellStyle8;
             this.ClmNote.HeaderText = "Note";

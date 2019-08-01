@@ -115,6 +115,8 @@ namespace mml2vgmIDE
                 MMLInst mmli = null;
                 if (chip == "YM2612X") mmli = mmlParams.YM2612X;
                 else if (chip == "YM2612") mmli = mmlParams.YM2612;
+                else if (chip == "SN76489") mmli = mmlParams.SN76489;
+                else if (chip == "RF5C164") mmli = mmlParams.RF5C164;
                 if (mmli == null) continue;
 
                 dgvPartCounter.Rows[p].Cells["ClmInstrument"].Value = mmli.inst[r] == null ? "-" : mmli.inst[r].ToString();

@@ -110,6 +110,12 @@ namespace Core
             SetFNum(pw,mml);
             SetVolume(pw,mml);
 
+            MML vmml = new MML();
+            vmml.type = enmMMLType.Volume;
+            vmml.args = new List<object>();
+            vmml.args.Add(pw.volume);
+            vmml.line = mml.line;
+            SetDummyData(pw, vmml);
         }
 
         public void OutPsgKeyOff(partWork pw, MML mml)
@@ -339,7 +345,7 @@ namespace Core
             }
 
             n = SetEnvelopParamFromInstrument(pw, n,mml);
-
+            SetDummyData(pw, mml);
         }
 
         public override void CmdPan(partWork pw, MML mml)
