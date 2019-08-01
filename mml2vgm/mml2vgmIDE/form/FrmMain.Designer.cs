@@ -67,6 +67,7 @@
             this.TsmiShowFolderTree = new System.Windows.Forms.ToolStripMenuItem();
             this.TsmiShowErrorList = new System.Windows.Forms.ToolStripMenuItem();
             this.TsmiShowLog = new System.Windows.Forms.ToolStripMenuItem();
+            this.TsmiShowLyrics = new System.Windows.Forms.ToolStripMenuItem();
             this.TsmiShowMixer = new System.Windows.Forms.ToolStripMenuItem();
             this.TsmiShowMIDIKbd = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
@@ -88,7 +89,6 @@
             this.TsmiReference = new System.Windows.Forms.ToolStripMenuItem();
             this.TsmiAbout = new System.Windows.Forms.ToolStripMenuItem();
             this.timer = new System.Windows.Forms.Timer(this.components);
-            this.TsmiShowLyrics = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -96,14 +96,9 @@
             // dpMain
             // 
             this.dpMain.AllowDrop = true;
-            this.dpMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.dpMain.Location = new System.Drawing.Point(0, 23);
+            resources.ApplyResources(this.dpMain, "dpMain");
             this.dpMain.Name = "dpMain";
             this.dpMain.ShowDocumentIcon = true;
-            this.dpMain.Size = new System.Drawing.Size(942, 406);
-            this.dpMain.TabIndex = 1;
             this.dpMain.ActiveDocumentChanged += new System.EventHandler(this.DpMain_ActiveDocumentChanged);
             this.dpMain.DragDrop += new System.Windows.Forms.DragEventHandler(this.DpMain_DragDrop);
             this.dpMain.DragOver += new System.Windows.Forms.DragEventHandler(this.DpMain_DragOver);
@@ -127,132 +122,96 @@
             this.tssbSlow,
             this.tssbFast,
             this.tssbMIDIKbd});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 428);
+            resources.ApplyResources(this.statusStrip1, "statusStrip1");
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.ShowItemToolTips = true;
-            this.statusStrip1.Size = new System.Drawing.Size(942, 22);
-            this.statusStrip1.TabIndex = 2;
-            this.statusStrip1.Text = "statusStrip1";
             // 
             // tsslCompileError
             // 
             this.tsslCompileError.AutoToolTip = true;
             this.tsslCompileError.Image = global::mml2vgmIDE.Properties.Resources.Error;
-            this.tsslCompileError.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.tsslCompileError.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            resources.ApplyResources(this.tsslCompileError, "tsslCompileError");
             this.tsslCompileError.Name = "tsslCompileError";
-            this.tsslCompileError.Size = new System.Drawing.Size(41, 17);
-            this.tsslCompileError.Text = "123";
-            this.tsslCompileError.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.tsslCompileError.ToolTipText = "エラー数";
             this.tsslCompileError.Click += new System.EventHandler(this.TsslCompileError_Click);
             // 
             // tsslCompileWarning
             // 
             this.tsslCompileWarning.AutoToolTip = true;
             this.tsslCompileWarning.Image = global::mml2vgmIDE.Properties.Resources.Warning;
-            this.tsslCompileWarning.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            resources.ApplyResources(this.tsslCompileWarning, "tsslCompileWarning");
             this.tsslCompileWarning.Name = "tsslCompileWarning";
-            this.tsslCompileWarning.Size = new System.Drawing.Size(41, 17);
-            this.tsslCompileWarning.Text = "123";
-            this.tsslCompileWarning.ToolTipText = "警告数";
             this.tsslCompileWarning.Click += new System.EventHandler(this.TsslCompileWarning_Click);
             // 
             // tsslCompileStatus
             // 
             this.tsslCompileStatus.Name = "tsslCompileStatus";
-            this.tsslCompileStatus.Size = new System.Drawing.Size(84, 17);
-            this.tsslCompileStatus.Text = "C:9999 LC:9999";
+            resources.ApplyResources(this.tsslCompileStatus, "tsslCompileStatus");
             // 
             // TsslLineCol
             // 
             this.TsslLineCol.Name = "TsslLineCol";
-            this.TsslLineCol.Size = new System.Drawing.Size(65, 17);
-            this.TsslLineCol.Text = "Line:- Col:-";
+            resources.ApplyResources(this.TsslLineCol, "TsslLineCol");
             // 
             // toolStripStatusLabel1
             // 
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(217, 17);
+            resources.ApplyResources(this.toolStripStatusLabel1, "toolStripStatusLabel1");
             this.toolStripStatusLabel1.Spring = true;
-            this.toolStripStatusLabel1.Text = " ";
             // 
             // tssbOpen
             // 
             this.tssbOpen.DropDownButtonWidth = 0;
             this.tssbOpen.Image = global::mml2vgmIDE.Properties.Resources.F01;
-            this.tssbOpen.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.tssbOpen.ImageTransparentColor = System.Drawing.Color.Magenta;
+            resources.ApplyResources(this.tssbOpen, "tssbOpen");
             this.tssbOpen.Name = "tssbOpen";
-            this.tssbOpen.Size = new System.Drawing.Size(63, 20);
-            this.tssbOpen.Text = "開く";
             this.tssbOpen.ButtonClick += new System.EventHandler(this.TssbOpen_ButtonClick);
             // 
             // tssbSave
             // 
             this.tssbSave.DropDownButtonWidth = 0;
-            this.tssbSave.Enabled = false;
+            resources.ApplyResources(this.tssbSave, "tssbSave");
             this.tssbSave.Image = global::mml2vgmIDE.Properties.Resources.F02;
-            this.tssbSave.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.tssbSave.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tssbSave.Name = "tssbSave";
-            this.tssbSave.Size = new System.Drawing.Size(68, 20);
-            this.tssbSave.Text = "保存";
             this.tssbSave.ButtonClick += new System.EventHandler(this.TssbSave_ButtonClick);
             // 
             // tssbCompile
             // 
             this.tssbCompile.DropDownButtonWidth = 0;
             this.tssbCompile.Image = global::mml2vgmIDE.Properties.Resources.F05;
-            this.tssbCompile.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.tssbCompile.ImageTransparentColor = System.Drawing.Color.Magenta;
+            resources.ApplyResources(this.tssbCompile, "tssbCompile");
             this.tssbCompile.Name = "tssbCompile";
-            this.tssbCompile.Size = new System.Drawing.Size(68, 20);
-            this.tssbCompile.Text = "再生";
             this.tssbCompile.ButtonClick += new System.EventHandler(this.TssbCompile_ButtonClick);
             // 
             // tssbStop
             // 
             this.tssbStop.DropDownButtonWidth = 0;
             this.tssbStop.Image = global::mml2vgmIDE.Properties.Resources.F09;
-            this.tssbStop.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.tssbStop.ImageTransparentColor = System.Drawing.Color.Magenta;
+            resources.ApplyResources(this.tssbStop, "tssbStop");
             this.tssbStop.Name = "tssbStop";
-            this.tssbStop.Size = new System.Drawing.Size(68, 20);
-            this.tssbStop.Text = "停止";
             this.tssbStop.ButtonClick += new System.EventHandler(this.TssbStop_ButtonClick);
             // 
             // tssbSlow
             // 
             this.tssbSlow.DropDownButtonWidth = 0;
             this.tssbSlow.Image = global::mml2vgmIDE.Properties.Resources.F10;
-            this.tssbSlow.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.tssbSlow.ImageTransparentColor = System.Drawing.Color.Magenta;
+            resources.ApplyResources(this.tssbSlow, "tssbSlow");
             this.tssbSlow.Name = "tssbSlow";
-            this.tssbSlow.Size = new System.Drawing.Size(70, 20);
-            this.tssbSlow.Text = "スロー";
             this.tssbSlow.ButtonClick += new System.EventHandler(this.TssbSlow_ButtonClick);
             // 
             // tssbFast
             // 
             this.tssbFast.DropDownButtonWidth = 0;
             this.tssbFast.Image = global::mml2vgmIDE.Properties.Resources.F11;
-            this.tssbFast.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.tssbFast.ImageTransparentColor = System.Drawing.Color.Magenta;
+            resources.ApplyResources(this.tssbFast, "tssbFast");
             this.tssbFast.Name = "tssbFast";
-            this.tssbFast.Size = new System.Drawing.Size(74, 20);
-            this.tssbFast.Text = "4倍速";
             this.tssbFast.ButtonClick += new System.EventHandler(this.TssbFast_ButtonClick);
             // 
             // tssbMIDIKbd
             // 
             this.tssbMIDIKbd.DropDownButtonWidth = 0;
             this.tssbMIDIKbd.Image = global::mml2vgmIDE.Properties.Resources.F12;
-            this.tssbMIDIKbd.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.tssbMIDIKbd.ImageTransparentColor = System.Drawing.Color.Magenta;
+            resources.ApplyResources(this.tssbMIDIKbd, "tssbMIDIKbd");
             this.tssbMIDIKbd.Name = "tssbMIDIKbd";
-            this.tssbMIDIKbd.Size = new System.Drawing.Size(68, 20);
-            this.tssbMIDIKbd.Text = "鍵盤";
             this.tssbMIDIKbd.ButtonClick += new System.EventHandler(this.TssbMIDIKbd_ButtonClick);
             // 
             // menuStrip1
@@ -265,11 +224,8 @@
             this.tsmiScript,
             this.ツールTToolStripMenuItem,
             this.TsmiHelp});
-            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            resources.ApplyResources(this.menuStrip1, "menuStrip1");
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(942, 24);
-            this.menuStrip1.TabIndex = 0;
-            this.menuStrip1.Text = "menuStrip1";
             // 
             // TsmiFile
             // 
@@ -286,83 +242,69 @@
             this.toolStripSeparator1,
             this.TsmiExit});
             this.TsmiFile.Name = "TsmiFile";
-            this.TsmiFile.Size = new System.Drawing.Size(67, 20);
-            this.TsmiFile.Text = "ファイル(&F)";
+            resources.ApplyResources(this.TsmiFile, "TsmiFile");
             // 
             // TsmiNew
             // 
             this.TsmiNew.Name = "TsmiNew";
-            this.TsmiNew.Size = new System.Drawing.Size(201, 22);
-            this.TsmiNew.Text = "新規作成(&N)";
+            resources.ApplyResources(this.TsmiNew, "TsmiNew");
             this.TsmiNew.Click += new System.EventHandler(this.TsmiNew_Click);
             // 
             // TsmiOpenFile
             // 
             this.TsmiOpenFile.Name = "TsmiOpenFile";
-            this.TsmiOpenFile.Size = new System.Drawing.Size(201, 22);
-            this.TsmiOpenFile.Text = "ファイルを開く(&O)";
+            resources.ApplyResources(this.TsmiOpenFile, "TsmiOpenFile");
             this.TsmiOpenFile.Click += new System.EventHandler(this.TsmiFileOpen_Click);
             // 
             // TsmiOpenFolder
             // 
-            this.TsmiOpenFolder.Enabled = false;
+            resources.ApplyResources(this.TsmiOpenFolder, "TsmiOpenFolder");
             this.TsmiOpenFolder.Name = "TsmiOpenFolder";
-            this.TsmiOpenFolder.Size = new System.Drawing.Size(201, 22);
-            this.TsmiOpenFolder.Text = "フォルダーを開く(&F)";
             this.TsmiOpenFolder.Click += new System.EventHandler(this.TsmiOpenFolder_Click);
             // 
             // tsmiGwiFileHistory
             // 
             this.tsmiGwiFileHistory.Name = "tsmiGwiFileHistory";
-            this.tsmiGwiFileHistory.Size = new System.Drawing.Size(201, 22);
-            this.tsmiGwiFileHistory.Text = "最近使用したファイルを開く";
+            resources.ApplyResources(this.tsmiGwiFileHistory, "tsmiGwiFileHistory");
             // 
             // TsmiSaveFile
             // 
-            this.TsmiSaveFile.Enabled = false;
+            resources.ApplyResources(this.TsmiSaveFile, "TsmiSaveFile");
             this.TsmiSaveFile.Name = "TsmiSaveFile";
-            this.TsmiSaveFile.Size = new System.Drawing.Size(201, 22);
-            this.TsmiSaveFile.Text = "上書き保存(&S)";
             this.TsmiSaveFile.Click += new System.EventHandler(this.TsmiSaveFile_Click);
             // 
             // TsmiSaveAs
             // 
-            this.TsmiSaveAs.Enabled = false;
+            resources.ApplyResources(this.TsmiSaveAs, "TsmiSaveAs");
             this.TsmiSaveAs.Name = "TsmiSaveAs";
-            this.TsmiSaveAs.Size = new System.Drawing.Size(201, 22);
-            this.TsmiSaveAs.Text = "名前を付けて保存(&A)";
             this.TsmiSaveAs.Click += new System.EventHandler(this.TsmiSaveAs_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(198, 6);
+            resources.ApplyResources(this.toolStripSeparator2, "toolStripSeparator2");
             // 
             // tsmiImport
             // 
             this.tsmiImport.Name = "tsmiImport";
-            this.tsmiImport.Size = new System.Drawing.Size(201, 22);
-            this.tsmiImport.Text = "インポート";
-            this.tsmiImport.Visible = false;
+            resources.ApplyResources(this.tsmiImport, "tsmiImport");
             this.tsmiImport.Click += new System.EventHandler(this.TsmiImport_Click);
             // 
             // tsmiExport
             // 
             this.tsmiExport.Name = "tsmiExport";
-            this.tsmiExport.Size = new System.Drawing.Size(201, 22);
-            this.tsmiExport.Text = "エクスポート";
+            resources.ApplyResources(this.tsmiExport, "tsmiExport");
             this.tsmiExport.Click += new System.EventHandler(this.TsmiExport_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(198, 6);
+            resources.ApplyResources(this.toolStripSeparator1, "toolStripSeparator1");
             // 
             // TsmiExit
             // 
             this.TsmiExit.Name = "TsmiExit";
-            this.TsmiExit.Size = new System.Drawing.Size(201, 22);
-            this.TsmiExit.Text = "終了(&E)";
+            resources.ApplyResources(this.TsmiExit, "TsmiExit");
             this.TsmiExit.Click += new System.EventHandler(this.TsmiExit_Click);
             // 
             // TsmiEdit
@@ -371,23 +313,18 @@
             this.TsmiUndo,
             this.TsmiRedo});
             this.TsmiEdit.Name = "TsmiEdit";
-            this.TsmiEdit.Size = new System.Drawing.Size(57, 20);
-            this.TsmiEdit.Text = "編集(&E)";
+            resources.ApplyResources(this.TsmiEdit, "TsmiEdit");
             // 
             // TsmiUndo
             // 
-            this.TsmiUndo.Enabled = false;
+            resources.ApplyResources(this.TsmiUndo, "TsmiUndo");
             this.TsmiUndo.Name = "TsmiUndo";
-            this.TsmiUndo.Size = new System.Drawing.Size(117, 22);
-            this.TsmiUndo.Text = "元に戻す";
             this.TsmiUndo.Click += new System.EventHandler(this.TsmiUndo_Click);
             // 
             // TsmiRedo
             // 
-            this.TsmiRedo.Enabled = false;
+            resources.ApplyResources(this.TsmiRedo, "TsmiRedo");
             this.TsmiRedo.Name = "TsmiRedo";
-            this.TsmiRedo.Size = new System.Drawing.Size(117, 22);
-            this.TsmiRedo.Text = "やり直し";
             this.TsmiRedo.Click += new System.EventHandler(this.TsmiRedo_Click);
             // 
             // 表示VToolStripMenuItem
@@ -403,55 +340,54 @@
             this.toolStripSeparator3,
             this.TsmiFunctionKey});
             this.表示VToolStripMenuItem.Name = "表示VToolStripMenuItem";
-            this.表示VToolStripMenuItem.Size = new System.Drawing.Size(58, 20);
-            this.表示VToolStripMenuItem.Text = "表示(&V)";
+            resources.ApplyResources(this.表示VToolStripMenuItem, "表示VToolStripMenuItem");
             // 
             // TsmiShowPartCounter
             // 
             this.TsmiShowPartCounter.Name = "TsmiShowPartCounter";
-            this.TsmiShowPartCounter.Size = new System.Drawing.Size(180, 22);
-            this.TsmiShowPartCounter.Text = "パートカウンター";
+            resources.ApplyResources(this.TsmiShowPartCounter, "TsmiShowPartCounter");
             this.TsmiShowPartCounter.Click += new System.EventHandler(this.TsmiShowPartCounter_Click);
             // 
             // TsmiShowFolderTree
             // 
             this.TsmiShowFolderTree.Name = "TsmiShowFolderTree";
-            this.TsmiShowFolderTree.Size = new System.Drawing.Size(180, 22);
-            this.TsmiShowFolderTree.Text = "フォルダーツリー";
+            resources.ApplyResources(this.TsmiShowFolderTree, "TsmiShowFolderTree");
             this.TsmiShowFolderTree.Click += new System.EventHandler(this.TsmiShowFolderTree_Click);
             // 
             // TsmiShowErrorList
             // 
             this.TsmiShowErrorList.Name = "TsmiShowErrorList";
-            this.TsmiShowErrorList.Size = new System.Drawing.Size(180, 22);
-            this.TsmiShowErrorList.Text = "エラーリスト";
+            resources.ApplyResources(this.TsmiShowErrorList, "TsmiShowErrorList");
             this.TsmiShowErrorList.Click += new System.EventHandler(this.TsmiShowErrorList_Click);
             // 
             // TsmiShowLog
             // 
             this.TsmiShowLog.Name = "TsmiShowLog";
-            this.TsmiShowLog.Size = new System.Drawing.Size(180, 22);
-            this.TsmiShowLog.Text = "ログ";
+            resources.ApplyResources(this.TsmiShowLog, "TsmiShowLog");
             this.TsmiShowLog.Click += new System.EventHandler(this.TsmiShowLog_Click);
+            // 
+            // TsmiShowLyrics
+            // 
+            this.TsmiShowLyrics.Name = "TsmiShowLyrics";
+            resources.ApplyResources(this.TsmiShowLyrics, "TsmiShowLyrics");
+            this.TsmiShowLyrics.Click += new System.EventHandler(this.TsmiShowLyrics_Click);
             // 
             // TsmiShowMixer
             // 
             this.TsmiShowMixer.Name = "TsmiShowMixer";
-            this.TsmiShowMixer.Size = new System.Drawing.Size(180, 22);
-            this.TsmiShowMixer.Text = "音源ミキサー";
+            resources.ApplyResources(this.TsmiShowMixer, "TsmiShowMixer");
             this.TsmiShowMixer.Click += new System.EventHandler(this.TsmiShowMixer_Click);
             // 
             // TsmiShowMIDIKbd
             // 
             this.TsmiShowMIDIKbd.Name = "TsmiShowMIDIKbd";
-            this.TsmiShowMIDIKbd.Size = new System.Drawing.Size(180, 22);
-            this.TsmiShowMIDIKbd.Text = "MIDIキーボード";
+            resources.ApplyResources(this.TsmiShowMIDIKbd, "TsmiShowMIDIKbd");
             this.TsmiShowMIDIKbd.Click += new System.EventHandler(this.TsmiShowMIDIKbd_Click);
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(177, 6);
+            resources.ApplyResources(this.toolStripSeparator3, "toolStripSeparator3");
             // 
             // TsmiFunctionKey
             // 
@@ -460,28 +396,24 @@
             this.TsmiFncButtonOnly,
             this.TsmiFncButtonAndText});
             this.TsmiFunctionKey.Name = "TsmiFunctionKey";
-            this.TsmiFunctionKey.Size = new System.Drawing.Size(180, 22);
-            this.TsmiFunctionKey.Text = "ファンクションキー";
+            resources.ApplyResources(this.TsmiFunctionKey, "TsmiFunctionKey");
             // 
             // TsmiFncHide
             // 
             this.TsmiFncHide.Name = "TsmiFncHide";
-            this.TsmiFncHide.Size = new System.Drawing.Size(180, 22);
-            this.TsmiFncHide.Text = "非表示";
+            resources.ApplyResources(this.TsmiFncHide, "TsmiFncHide");
             this.TsmiFncHide.Click += new System.EventHandler(this.TsmiFncHide_Click);
             // 
             // TsmiFncButtonOnly
             // 
             this.TsmiFncButtonOnly.Name = "TsmiFncButtonOnly";
-            this.TsmiFncButtonOnly.Size = new System.Drawing.Size(180, 22);
-            this.TsmiFncButtonOnly.Text = "ボタンのみ";
+            resources.ApplyResources(this.TsmiFncButtonOnly, "TsmiFncButtonOnly");
             this.TsmiFncButtonOnly.Click += new System.EventHandler(this.TsmiFncButtonOnly_Click);
             // 
             // TsmiFncButtonAndText
             // 
             this.TsmiFncButtonAndText.Name = "TsmiFncButtonAndText";
-            this.TsmiFncButtonAndText.Size = new System.Drawing.Size(180, 22);
-            this.TsmiFncButtonAndText.Text = "ボタンとテキスト";
+            resources.ApplyResources(this.TsmiFncButtonAndText, "TsmiFncButtonAndText");
             this.TsmiFncButtonAndText.Click += new System.EventHandler(this.TsmiFncButtonAndText_Click);
             // 
             // コンパイルCToolStripMenuItem
@@ -493,66 +425,53 @@
             this.TsmiAllCompile,
             this.TsmiCompile});
             this.コンパイルCToolStripMenuItem.Name = "コンパイルCToolStripMenuItem";
-            this.コンパイルCToolStripMenuItem.Size = new System.Drawing.Size(80, 20);
-            this.コンパイルCToolStripMenuItem.Text = "コンパイル(&C)";
+            resources.ApplyResources(this.コンパイルCToolStripMenuItem, "コンパイルCToolStripMenuItem");
             // 
             // TsmiCompileAndPlay
             // 
             this.TsmiCompileAndPlay.Name = "TsmiCompileAndPlay";
-            this.TsmiCompileAndPlay.ShortcutKeyDisplayString = "";
-            this.TsmiCompileAndPlay.Size = new System.Drawing.Size(225, 22);
-            this.TsmiCompileAndPlay.Text = "コンパイルと再生";
+            resources.ApplyResources(this.TsmiCompileAndPlay, "TsmiCompileAndPlay");
             this.TsmiCompileAndPlay.Click += new System.EventHandler(this.TsmiCompileAndPlay_Click);
             // 
             // TsmiCompileAndTracePlay
             // 
             this.TsmiCompileAndTracePlay.Name = "TsmiCompileAndTracePlay";
-            this.TsmiCompileAndTracePlay.ShortcutKeyDisplayString = "";
-            this.TsmiCompileAndTracePlay.Size = new System.Drawing.Size(225, 22);
-            this.TsmiCompileAndTracePlay.Text = "コンパイルとトレース再生";
+            resources.ApplyResources(this.TsmiCompileAndTracePlay, "TsmiCompileAndTracePlay");
             this.TsmiCompileAndTracePlay.Click += new System.EventHandler(this.TsmiCompileAndTracePlay_Click);
             // 
             // TsmiCompileAndSkipPlay
             // 
             this.TsmiCompileAndSkipPlay.Name = "TsmiCompileAndSkipPlay";
-            this.TsmiCompileAndSkipPlay.ShortcutKeyDisplayString = "";
-            this.TsmiCompileAndSkipPlay.Size = new System.Drawing.Size(225, 22);
-            this.TsmiCompileAndSkipPlay.Text = "コンパイルとスキップ再生";
+            resources.ApplyResources(this.TsmiCompileAndSkipPlay, "TsmiCompileAndSkipPlay");
             this.TsmiCompileAndSkipPlay.Click += new System.EventHandler(this.TsmiCompileAndSkipPlay_Click);
             // 
             // TsmiAllCompile
             // 
-            this.TsmiAllCompile.Enabled = false;
+            resources.ApplyResources(this.TsmiAllCompile, "TsmiAllCompile");
             this.TsmiAllCompile.Name = "TsmiAllCompile";
-            this.TsmiAllCompile.Size = new System.Drawing.Size(225, 22);
-            this.TsmiAllCompile.Text = "開いているファイル全てコンパイル";
             // 
             // TsmiCompile
             // 
             this.TsmiCompile.Name = "TsmiCompile";
-            this.TsmiCompile.Size = new System.Drawing.Size(225, 22);
-            this.TsmiCompile.Text = "コンパイルのみ";
+            resources.ApplyResources(this.TsmiCompile, "TsmiCompile");
             this.TsmiCompile.Click += new System.EventHandler(this.TsmiCompile_Click);
             // 
             // tsmiScript
             // 
             this.tsmiScript.Name = "tsmiScript";
-            this.tsmiScript.Size = new System.Drawing.Size(76, 20);
-            this.tsmiScript.Text = "スクリプト(&S)";
+            resources.ApplyResources(this.tsmiScript, "tsmiScript");
             // 
             // ツールTToolStripMenuItem
             // 
             this.ツールTToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsmiOption});
             this.ツールTToolStripMenuItem.Name = "ツールTToolStripMenuItem";
-            this.ツールTToolStripMenuItem.Size = new System.Drawing.Size(60, 20);
-            this.ツールTToolStripMenuItem.Text = "ツール(&T)";
+            resources.ApplyResources(this.ツールTToolStripMenuItem, "ツールTToolStripMenuItem");
             // 
             // tsmiOption
             // 
             this.tsmiOption.Name = "tsmiOption";
-            this.tsmiOption.Size = new System.Drawing.Size(135, 22);
-            this.tsmiOption.Text = "オプション(&O)";
+            resources.ApplyResources(this.tsmiOption, "tsmiOption");
             this.tsmiOption.Click += new System.EventHandler(this.TsmiOption_Click);
             // 
             // TsmiHelp
@@ -562,28 +481,24 @@
             this.TsmiReference,
             this.TsmiAbout});
             this.TsmiHelp.Name = "TsmiHelp";
-            this.TsmiHelp.Size = new System.Drawing.Size(65, 20);
-            this.TsmiHelp.Text = "ヘルプ(&H)";
+            resources.ApplyResources(this.TsmiHelp, "TsmiHelp");
             // 
             // TsmiTutorial
             // 
             this.TsmiTutorial.Name = "TsmiTutorial";
-            this.TsmiTutorial.Size = new System.Drawing.Size(181, 22);
-            this.TsmiTutorial.Text = "データ作成手順";
+            resources.ApplyResources(this.TsmiTutorial, "TsmiTutorial");
             this.TsmiTutorial.Click += new System.EventHandler(this.TsmiTutorial_Click);
             // 
             // TsmiReference
             // 
             this.TsmiReference.Name = "TsmiReference";
-            this.TsmiReference.Size = new System.Drawing.Size(181, 22);
-            this.TsmiReference.Text = "mmlコマンドリファレンス";
+            resources.ApplyResources(this.TsmiReference, "TsmiReference");
             this.TsmiReference.Click += new System.EventHandler(this.TsmiReference_Click);
             // 
             // TsmiAbout
             // 
             this.TsmiAbout.Name = "TsmiAbout";
-            this.TsmiAbout.Size = new System.Drawing.Size(181, 22);
-            this.TsmiAbout.Text = "About";
+            resources.ApplyResources(this.TsmiAbout, "TsmiAbout");
             this.TsmiAbout.Click += new System.EventHandler(this.TsmiAbout_Click);
             // 
             // timer
@@ -592,26 +507,16 @@
             this.timer.Interval = 16;
             this.timer.Tick += new System.EventHandler(this.Timer_Tick);
             // 
-            // TsmiShowLyrics
-            // 
-            this.TsmiShowLyrics.Name = "TsmiShowLyrics";
-            this.TsmiShowLyrics.Size = new System.Drawing.Size(180, 22);
-            this.TsmiShowLyrics.Text = "歌詞";
-            this.TsmiShowLyrics.Click += new System.EventHandler(this.TsmiShowLyrics_Click);
-            // 
             // FrmMain
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
+            resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(942, 450);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.menuStrip1);
             this.Controls.Add(this.dpMain);
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.KeyPreview = true;
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "FrmMain";
-            this.Text = "mml2vgmIDE";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FrmMain_FormClosing);
             this.Load += new System.EventHandler(this.FrmMain_Load);
             this.Shown += new System.EventHandler(this.Form1_Shown);

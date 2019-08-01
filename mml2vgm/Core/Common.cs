@@ -429,7 +429,8 @@ namespace Core
                 || typ == enmMMLType.OctaveUp
                 || typ == enmMMLType.Instrument
                 || typ == enmMMLType.Envelope
-                || typ== enmMMLType.Volume
+                || typ == enmMMLType.Volume
+                || typ == enmMMLType.Note
                 )
             {
                 return true;

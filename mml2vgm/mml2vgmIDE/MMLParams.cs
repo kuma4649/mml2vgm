@@ -243,13 +243,13 @@ namespace mml2vgmIDE
 
         public MMLInst(int n)
         {
-            inst = new int?[9];
-            envelope = new int?[9];
-            notecmd = new string[9];
-            vol = new int?[9];
-            octave = new int?[9];
-            length = new string[9];
-            pan = new string[9];
+            inst = new int?[n];
+            envelope = new int?[n];
+            notecmd = new string[n];
+            vol = new int?[n];
+            octave = new int?[n];
+            length = new string[n];
+            pan = new string[n];
         }
     }
 }
