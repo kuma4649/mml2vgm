@@ -220,6 +220,7 @@ namespace Core
                 if (pw.pcm)
                 {
                     pw.instrument = n;
+                    SetDummyData(pw, mml);
                     if (!parent.instPCM.ContainsKey(n))
                     {
                         msgBox.setErrMsg(string.Format(msg.get("E21000"), n), mml.line.Lp);

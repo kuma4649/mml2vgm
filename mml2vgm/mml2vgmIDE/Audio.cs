@@ -10,6 +10,7 @@ using System.IO.Compression;
 //using mml2vgmIDE.form;
 using SoundManager;
 using MDSound;
+using mml2vgmIDE.MMLParameter;
 
 namespace mml2vgmIDE
 {
@@ -37,7 +38,7 @@ namespace mml2vgmIDE
         public static int clockYM2612 = 0;
         public static int clockYMF278B = 0;
         public static MDSound.MDSound mdsMIDI = null;
-        public static MMLParams mmlParams = new MMLParams();
+        public static Manager mmlParams = new Manager();
 
         private static object lockObj = new object();
         private static bool _fatalError = false;

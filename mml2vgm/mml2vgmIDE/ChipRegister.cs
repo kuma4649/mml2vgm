@@ -1345,6 +1345,7 @@ namespace mml2vgmIDE
         public void AY8910SetRegisterProcessing(ref long Counter, ref Chip Chip, ref EnmDataType Type, ref int Address, ref int dData, ref object ExData)
         {
             if (ctAY8910 == null) return;
+            if (Address == -1 && dData == -1) return;
             if (!AY8910[Chip.Number].Use) return;
 
             if (Chip.Number == 0) chipLED.PriAY10 = 2;
@@ -1580,6 +1581,7 @@ namespace mml2vgmIDE
         public void C140SetRegisterProcessing(ref long Counter, ref Chip Chip, ref EnmDataType Type, ref int Address, ref int dData, ref object ExData)
         {
             if (ctC140 == null) return;
+            if (Address == -1 && dData == -1) return;
 
             if (Chip.Number == 0) chipLED.PriC140 = 2;
             else chipLED.SecC140 = 2;
@@ -2090,6 +2092,7 @@ namespace mml2vgmIDE
         public void RF5C164SetRegisterProcessing(ref long Counter, ref Chip Chip, ref EnmDataType Type, ref int Address, ref int dData, ref object ExData)
         {
             //if (ctRF5C164 == null) return;
+            if (Address == -1 && dData == -1) return;
 
             if (Chip.Number == 0) chipLED.PriRF5C = 2;
             else chipLED.SecRF5C = 2;
@@ -2240,8 +2243,8 @@ namespace mml2vgmIDE
 
         public void YM2151SetRegisterProcessing(ref long Counter, ref Chip Chip, ref EnmDataType Type, ref int Address, ref int dData, ref object ExData)
         {
-
             if (ctYM2151 == null) return;
+            if (Address == -1 && dData == -1) return;
 
             if (Chip.Number == 0) chipLED.PriOPM = 2;
             else chipLED.SecOPM = 2;
@@ -2564,6 +2567,7 @@ namespace mml2vgmIDE
         public void YM2203SetRegisterProcessing(ref long Counter, ref Chip Chip, ref EnmDataType Type, ref int Address, ref int dData, ref object ExData)
         {
             if (ctYM2203 == null) return;
+            if (Address == -1 && dData == -1) return;
 
             if (Chip.Number == 0) chipLED.PriOPN = 2;
             else chipLED.SecOPN = 2;
@@ -2872,6 +2876,7 @@ namespace mml2vgmIDE
         public void YM2413SetRegisterProcessing(ref long Counter, ref Chip Chip, ref EnmDataType Type, ref int Address, ref int dData, ref object ExData)
         {
             if (ctYM2413 == null) return;
+            if (Address == -1 && dData == -1) return;
 
             if (Chip.Number == 0) chipLED.PriOPLL = 2;
             else chipLED.SecOPLL = 2;
@@ -3113,6 +3118,7 @@ namespace mml2vgmIDE
         public void YM2608SetRegisterProcessing(ref long Counter, ref Chip Chip, ref EnmDataType Type, ref int Address, ref int dData, ref object ExData)
         {
             if (ctYM2608 == null) return;
+            if (Address == -1 && dData == -1) return;
 
             if (Chip.Number == 0) chipLED.PriOPNA = 2;
             else chipLED.SecOPNA = 2;
@@ -3702,6 +3708,7 @@ namespace mml2vgmIDE
         public void YM2610SetRegisterProcessing(ref long Counter, ref Chip Chip, ref EnmDataType Type, ref int Address, ref int dData, ref object ExData)
         {
             if (ctYM2610 == null) return;
+            if (Address == -1 && dData == -1) return;
 
             if (Chip.Number == 0) chipLED.PriOPNB = 2;
             else chipLED.SecOPNB = 2;
@@ -4670,6 +4677,7 @@ namespace mml2vgmIDE
         public void SEGAPCMSetRegisterProcessing(ref long Counter, ref Chip Chip, ref EnmDataType Type, ref int Address, ref int dData, ref object ExData)
         {
             if (ctSEGAPCM == null) return;
+            if (Address == -1 && dData == -1) return;
 
             if (Chip.Number == 0) chipLED.PriSPCM = 2;
             else chipLED.SecSPCM = 2;
@@ -4900,6 +4908,7 @@ namespace mml2vgmIDE
         public void SN76489SetRegisterProcessing(ref long Counter, ref Chip Chip, ref EnmDataType Type, ref int Address, ref int dData, ref object ExData)
         {
             if (ctSN76489 == null) return;
+            if (Address == -1 && dData == -1) return;
 
             if (Chip.Number == 0) chipLED.PriDCSG = 2;
             else chipLED.SecDCSG = 2;

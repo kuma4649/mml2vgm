@@ -13,7 +13,7 @@ namespace mml2vgmIDE
     public partial class FrmPartCounter : DockContent,IForm
     {
         public Action parentUpdate = null;
-        private MMLParams mmlParams = null;
+        private MMLParameter.Manager mmlParams = null;
 
         public FrmPartCounter(Setting setting)
         {
@@ -44,7 +44,7 @@ namespace mml2vgmIDE
             dgvPartCounter.Rows.Add(r);
         }
 
-        public void Start(MMLParams mmlParams)
+        public void Start(MMLParameter.Manager mmlParams)
         {
             timer.Enabled = true;
             this.mmlParams = mmlParams;
@@ -110,13 +110,13 @@ namespace mml2vgmIDE
             {
                 string chip = (string)dgvPartCounter.Rows[p].Cells["ClmChip"].Value;
                 int r = (int)dgvPartCounter.Rows[p].Cells["ClmPartNumber"].Value-1;
-                bool isSecondary=(bool)dgvPartCounter.Rows[p].Cells["ClmIsSecondary"].Value;
+                int isSecondary=((bool)dgvPartCounter.Rows[p].Cells["ClmIsSecondary"].Value ? 1 : 0);
 
-                MMLInst mmli = null;
-                if (chip == "YM2612X") mmli = mmlParams.YM2612X;
-                else if (chip == "YM2612") mmli = mmlParams.YM2612;
-                else if (chip == "SN76489") mmli = mmlParams.SN76489;
-                else if (chip == "RF5C164") mmli = mmlParams.RF5C164;
+                MMLParameter.Instrument mmli = null;
+                if (chip == "YM2612X") mmli = mmlParams.YM2612X[isSecondary];
+                else if (chip == "YM2612") mmli = mmlParams.YM2612[isSecondary];
+                else if (chip == "SN76489") mmli = mmlParams.SN76489[isSecondary];
+                else if (chip == "RF5C164") mmli = mmlParams.RF5C164[isSecondary];
                 if (mmli == null) continue;
 
                 dgvPartCounter.Rows[p].Cells["ClmInstrument"].Value = mmli.inst[r] == null ? "-" : mmli.inst[r].ToString();

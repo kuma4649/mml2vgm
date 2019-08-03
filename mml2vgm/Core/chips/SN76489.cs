@@ -107,8 +107,8 @@ namespace Core
         {
 
             pw.keyOn = true;
-            SetFNum(pw,mml);
-            SetVolume(pw,mml);
+            SetFNum(pw, mml);
+            SetVolume(pw, mml);
 
             MML vmml = new MML();
             vmml.type = enmMMLType.Volume;

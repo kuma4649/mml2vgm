@@ -24,5 +24,17 @@ namespace Core
             this.linePos = linePos;
             this.val = val;
         }
+
+        public outDatum Copy()
+        {
+            outDatum ret = new outDatum();
+            ret.type = this.type;
+            ret.type = this.type;
+            ret.args = this.args;
+            ret.linePos = this.linePos;
+            ret.val = this.val;
+
+            return ret;
+        }
     }
 }

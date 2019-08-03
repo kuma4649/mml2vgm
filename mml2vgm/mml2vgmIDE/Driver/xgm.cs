@@ -234,7 +234,7 @@ namespace mml2vgmIDE
             while (true)
             {
 
-                outDatum cmd = vgmBuf[musicPtr++];
+                outDatum cmd = vgmBuf[musicPtr++].Copy();
 
                 //wait
                 if (cmd.val == 0) break;

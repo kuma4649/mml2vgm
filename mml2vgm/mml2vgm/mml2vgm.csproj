@@ -37,7 +37,7 @@
     <StartupObject />
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Resources\フェーリ48.ico</ApplicationIcon>
+    <ApplicationIcon>Resources\Feli48.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -235,7 +235,7 @@
     <Content Include="res\icon5.png" />
     <Content Include="res\フェーリ48.ico" />
     <Content Include="res\フェーリ48.png" />
-    <Content Include="Resources\フェーリ48.ico" />
+    <Content Include="Resources\Feli48.ico" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="frmMain.resx">

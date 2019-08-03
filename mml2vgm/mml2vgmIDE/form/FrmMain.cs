@@ -49,28 +49,29 @@ namespace mml2vgmIDE
         private bool ctrl = false;
         private bool shift = false;
         private ChannelInfo defaultChannelInfo = null;
-        private outDatum[] TraceInfo_YM2151 = new outDatum[16];
-        private outDatum[] TraceInfo_YM2151old = new outDatum[16];
-        private outDatum[] TraceInfo_YM2203 = new outDatum[18];
-        private outDatum[] TraceInfo_YM2203old = new outDatum[18];
-        private outDatum[] TraceInfo_YM2608 = new outDatum[38];
-        private outDatum[] TraceInfo_YM2608old = new outDatum[38];
-        private outDatum[] TraceInfo_YM2610B = new outDatum[38];
-        private outDatum[] TraceInfo_YM2610Bold = new outDatum[38];
-        private outDatum[] TraceInfo_YM2612 = new outDatum[24];
-        private outDatum[] TraceInfo_YM2612old = new outDatum[24];
-        private outDatum[] TraceInfo_SN76489 = new outDatum[8];
-        private outDatum[] TraceInfo_SN76489old = new outDatum[8];
-        private outDatum[] TraceInfo_HuC6280 = new outDatum[6];
-        private outDatum[] TraceInfo_HuC6280old = new outDatum[6];
-        private outDatum[] TraceInfo_RF5C164 = new outDatum[16];
-        private outDatum[] TraceInfo_RF5C164old = new outDatum[16];
-        private outDatum[] TraceInfo_C140 = new outDatum[48];
+
+        private Queue<outDatum>[] TraceInfo_C140 = new Queue<outDatum>[48];
         private outDatum[] TraceInfo_C140old = new outDatum[48];
-        private outDatum[] TraceInfo_SegaPCM = new outDatum[32];
-        private outDatum[] TraceInfo_SegaPCMold = new outDatum[32];
-        private outDatum[] TraceInfo_K051649 = new outDatum[10];
+        private Queue<outDatum>[] TraceInfo_HuC6280 = new Queue<outDatum>[6];
+        private outDatum[] TraceInfo_HuC6280old = new outDatum[6];
+        private Queue<outDatum>[] TraceInfo_K051649 = new Queue<outDatum>[10];
         private outDatum[] TraceInfo_K051649old = new outDatum[10];
+        private Queue<outDatum>[] TraceInfo_RF5C164 = new Queue<outDatum>[16];
+        private outDatum[] TraceInfo_RF5C164old = new outDatum[16];
+        private Queue<outDatum>[] TraceInfo_SegaPCM = new Queue<outDatum>[32];
+        private outDatum[] TraceInfo_SegaPCMold = new outDatum[32];
+        private Queue<outDatum>[] TraceInfo_SN76489 = new Queue<outDatum>[8];
+        private outDatum[] TraceInfo_SN76489old = new outDatum[8];
+        private Queue<outDatum>[] TraceInfo_YM2151 = new Queue<outDatum>[16];
+        private outDatum[] TraceInfo_YM2151old = new outDatum[16];
+        private Queue<outDatum>[] TraceInfo_YM2203 = new Queue<outDatum>[18];
+        private outDatum[] TraceInfo_YM2203old = new outDatum[18];
+        private Queue<outDatum>[] TraceInfo_YM2608 = new Queue<outDatum>[38];
+        private outDatum[] TraceInfo_YM2608old = new outDatum[38];
+        private Queue<outDatum>[] TraceInfo_YM2610B = new Queue<outDatum>[38];
+        private outDatum[] TraceInfo_YM2610Bold = new outDatum[38];
+        private Queue<outDatum>[] TraceInfo_YM2612 = new Queue<outDatum>[24];
+        private outDatum[] TraceInfo_YM2612old = new outDatum[24];
 
         private object traceInfoLockObj = new object();
         private bool traceInfoSw = false;
@@ -1423,6 +1424,8 @@ namespace mml2vgmIDE
             frmErrorList.parentJumpDocument = JumpDocument;
 
             statusStrip1.BackColor = Color.FromArgb(setting.ColorScheme.StatusStripBack_Normal);
+
+            ClearAllTraceInfo();
         }
 
         private IDockContent GetDockContentFromPersistString(string persistString)
@@ -1560,6 +1563,8 @@ namespace mml2vgmIDE
                 }
 
                 frmLyrics.update();
+                frmPartCounter.Stop();
+                Audio.mmlParams.Init();
                 frmPartCounter.Start(Audio.mmlParams);
 
                 if (isTrace && ac != null)
@@ -1592,57 +1597,57 @@ namespace mml2vgmIDE
         {
             for (int i = 0; i < TraceInfo_C140.Length; i++)
             {
-                TraceInfo_C140[i] = null;
+                TraceInfo_C140[i] = new Queue<outDatum>();
                 TraceInfo_C140old[i] = null;
             }
             for (int i = 0; i < TraceInfo_HuC6280.Length; i++)
             {
-                TraceInfo_HuC6280[i] = null;
+                TraceInfo_HuC6280[i] = new Queue<outDatum>();
                 TraceInfo_HuC6280old[i] = null;
             }
             for (int i = 0; i < TraceInfo_K051649.Length; i++)
             {
-                TraceInfo_K051649[i] = null;
+                TraceInfo_K051649[i] = new Queue<outDatum>();
                 TraceInfo_K051649old[i] = null;
             }
             for (int i = 0; i < TraceInfo_RF5C164.Length; i++)
             {
-                TraceInfo_RF5C164[i] = null;
+                TraceInfo_RF5C164[i] = new Queue<outDatum>();
                 TraceInfo_RF5C164old[i] = null;
             }
             for (int i = 0; i < TraceInfo_SegaPCM.Length; i++)
             {
-                TraceInfo_SegaPCM[i] = null;
+                TraceInfo_SegaPCM[i] = new Queue<outDatum>();
                 TraceInfo_SegaPCMold[i] = null;
             }
             for (int i = 0; i < TraceInfo_SN76489.Length; i++)
             {
-                TraceInfo_SN76489[i] = null;
+                TraceInfo_SN76489[i] = new Queue<outDatum>();
                 TraceInfo_SN76489old[i] = null;
             }
             for (int i = 0; i < TraceInfo_YM2151.Length; i++)
             {
-                TraceInfo_YM2151[i] = null;
+                TraceInfo_YM2151[i] = new Queue<outDatum>();
                 TraceInfo_YM2151old[i] = null;
             }
             for (int i = 0; i < TraceInfo_YM2203.Length; i++)
             {
-                TraceInfo_YM2203[i] = null;
+                TraceInfo_YM2203[i] = new Queue<outDatum>();
                 TraceInfo_YM2203old[i] = null;
             }
             for (int i = 0; i < TraceInfo_YM2608.Length; i++)
             {
-                TraceInfo_YM2608[i] = null;
+                TraceInfo_YM2608[i] = new Queue<outDatum>();
                 TraceInfo_YM2608old[i] = null;
             }
             for (int i = 0; i < TraceInfo_YM2610B.Length; i++)
             {
-                TraceInfo_YM2610B[i] = null;
+                TraceInfo_YM2610B[i] = new Queue<outDatum>();
                 TraceInfo_YM2610Bold[i] = null;
             }
             for (int i = 0; i < TraceInfo_YM2612.Length; i++)
             {
-                TraceInfo_YM2612[i] = null;
+                TraceInfo_YM2612[i] = new Queue<outDatum>();
                 TraceInfo_YM2612old[i] = null;
             }
         }
@@ -1735,10 +1740,11 @@ namespace mml2vgmIDE
 
         private void SetMMLTraceInfo(PackData pd)
         {
+            if (!isTrace) return;
             if (pd == null) return;
             if (pd.od == null) return;
             if (pd.od.linePos == null) return;
-
+            
             outDatum od = pd.od;
 
             switch (pd.od.linePos.chip)//.Chip.Device)
@@ -1746,75 +1752,77 @@ namespace mml2vgmIDE
                 case "YM2151":
                     lock (traceInfoLockObj)
                     {
-                        TraceInfo_YM2151[od.linePos.ch + od.linePos.isSecondary * 8] = od;
+                        TraceInfo_YM2151[od.linePos.ch + od.linePos.isSecondary * 8].Enqueue(od);
                     }
                     break;
                 case "YM2203":
                     lock (traceInfoLockObj)
                     {
-                        TraceInfo_YM2203[od.linePos.ch + od.linePos.isSecondary * 9] = od;
+                        TraceInfo_YM2203[od.linePos.ch + od.linePos.isSecondary * 9].Enqueue(od);
                     }
                     break;
                 case "YM2608":
                     lock (traceInfoLockObj)
                     {
-                        TraceInfo_YM2608[od.linePos.ch + od.linePos.isSecondary * 19] = od;
+                        TraceInfo_YM2608[od.linePos.ch + od.linePos.isSecondary * 19].Enqueue(od);
                     }
                     break;
                 case "YM2610B":
                     lock (traceInfoLockObj)
                     {
-                        TraceInfo_YM2610B[od.linePos.ch + od.linePos.isSecondary * 19] = od;
+                        TraceInfo_YM2610B[od.linePos.ch + od.linePos.isSecondary * 19].Enqueue(od);
                     }
                     break;
-                //case EnmDevice.YM2612:
                 case "YM2612":
                 case "YM2612X":
                     lock (traceInfoLockObj)
                     {
-                        TraceInfo_YM2612[od.linePos.ch + od.linePos.isSecondary * 12] = od;
+                        TraceInfo_YM2612[od.linePos.ch + od.linePos.isSecondary * 12].Enqueue(od);
                     }
                     break;
-                //case EnmDevice.SN76489:
                 case "SN76489":
                     lock (traceInfoLockObj)
                     {
-                        TraceInfo_SN76489[od.linePos.ch + od.linePos.isSecondary * 4] = od;
+                        TraceInfo_SN76489[od.linePos.ch + od.linePos.isSecondary * 4].Enqueue(od);
                     }
                     break;
                 case "HuC6280":
                     lock (traceInfoLockObj)
                     {
-                        TraceInfo_HuC6280[od.linePos.ch + od.linePos.isSecondary * 6] = od;
+                        TraceInfo_HuC6280[od.linePos.ch + od.linePos.isSecondary * 6].Enqueue(od);
                     }
                     break;
                 case "RF5C164":
                     lock (traceInfoLockObj)
                     {
-                        TraceInfo_RF5C164[od.linePos.ch + od.linePos.isSecondary * 8] = od;
+                        //if(od.type == enmMMLType.Note && od.linePos.ch == 0)
+                        //{
+                        //    Console.WriteLine("in {0}", ((Core.Note)od.args[0]).cmd);
+                        //}
+                        TraceInfo_RF5C164[od.linePos.ch + od.linePos.isSecondary * 8].Enqueue(od);
                     }
                     break;
                 case "C140":
                     lock (traceInfoLockObj)
                     {
-                        TraceInfo_C140[od.linePos.ch + od.linePos.isSecondary * 24] = od;
+                        TraceInfo_C140[od.linePos.ch + od.linePos.isSecondary * 24].Enqueue(od);
                     }
                     break;
                 case "SEGAPCM":
                     lock (traceInfoLockObj)
                     {
-                        TraceInfo_SegaPCM[od.linePos.ch + od.linePos.isSecondary * 16] = od;
+                        TraceInfo_SegaPCM[od.linePos.ch + od.linePos.isSecondary * 16].Enqueue(od);
                     }
                     break;
                 case "K051649":
                     lock (traceInfoLockObj)
                     {
-                        TraceInfo_K051649[od.linePos.ch + od.linePos.isSecondary * 5] = od;
+                        TraceInfo_K051649[od.linePos.ch + od.linePos.isSecondary * 5].Enqueue(od);
                     }
                     break;
                 default:
-                    if (pd.od.linePos.chip != "")
-                        Console.WriteLine(pd.od.linePos.chip);
+                    //if (pd.od.linePos.chip != "")
+                        //Console.WriteLine(pd.od.linePos.chip);
                     break;
             }
             //int i, c;
@@ -1999,46 +2007,58 @@ namespace mml2vgmIDE
             this.statusStrip1.BackColor = Color.FromArgb(setting.ColorScheme.StatusStripBack_Normal);
         }
 
-        private bool MarkUpTraceInfo(outDatum[] ods, outDatum[] odos, int ch, FrmEditor fe, Sgry.Azuki.WinForms.AzukiControl ac)
+        private bool MarkUpTraceInfo(Queue<outDatum>[] ods, outDatum[] odos, int ch, FrmEditor fe, Sgry.Azuki.WinForms.AzukiControl ac)
         {
-            outDatum od = ods[ch];
-            outDatum odo = odos[ch];
-            if (od != null
-                && od != odo
-                && (od.type == enmMMLType.Note || od.type == enmMMLType.Rest)
-                && (
-                    (odo != null && od.linePos.col != odo.linePos.col)
-                    || odo == null
-                )
-                && (fe.Text == od.linePos.filename || fe.Text == od.linePos.filename + "*")
-            )
+            bool flg = false;
+            if (ods[ch] == null) return false;
+
+            while (ods[ch].Count > 0)
             {
-                int i, c;
-                ac.GetLineColumnIndexFromCharIndex(od.linePos.col, out i, out c);
-                //log.Write(string.Format("{0} {1}", i, c));
+                outDatum od;
                 lock (traceInfoLockObj)
                 {
-                    if (odo != null)
-                    {
-                        try
-                        {
-                            ac.Document.Unmark(odo.linePos.col, odo.linePos.col + odo.linePos.length, 1);
-                        }
-                        catch
-                        {
-                            ;//何もしない
-                        }
-                    }
-                    ac.Document.Mark(od.linePos.col, od.linePos.col + od.linePos.length, 1);
-                    odos[ch] = ods[ch];
+                    od = ods[ch].Dequeue();
                 }
-                return true;
+                outDatum odo = odos[ch];
+                if (od != null
+                    && od != odo
+                    && (od.type == enmMMLType.Note || od.type == enmMMLType.Rest)
+                    && (
+                        (odo != null && od.linePos.col != odo.linePos.col)
+                        || odo == null
+                    )
+                    && (fe.Text == od.linePos.filename || fe.Text == od.linePos.filename + "*")
+                )
+                {
+                    int i, c;
+                    ac.GetLineColumnIndexFromCharIndex(od.linePos.col, out i, out c);
+                    //log.Write(string.Format("{0} {1}", i, c));
+                    lock (traceInfoLockObj)
+                    {
+                        if (odo != null)
+                        {
+                            try
+                            {
+                                ac.Document.Unmark(odo.linePos.col, odo.linePos.col + odo.linePos.length, 1);
+                            }
+                            catch
+                            {
+                                ;//何もしない
+                            }
+                        }
+                        ac.Document.Mark(od.linePos.col, od.linePos.col + od.linePos.length, 1);
+                        odos[ch] = od;
+                    }
+                    flg = true;
+                    continue;
+                }
+                if (od != null && od.type == enmMMLType.Tempo)
+                {
+                    ;
+                }
             }
-            if (od != null && od.type == enmMMLType.Tempo)
-            {
-                ;
-            }
-            return false;
+
+            return flg;
         }
 
         private void TsmiFncHide_Click(object sender, EventArgs e)

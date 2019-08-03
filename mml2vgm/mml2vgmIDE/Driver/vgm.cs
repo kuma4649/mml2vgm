@@ -232,7 +232,7 @@ namespace mml2vgmIDE
                     }
                 }
 
-                outDatum cmd = vgmBuf[vgmAdr];
+                outDatum cmd = vgmBuf[vgmAdr].Copy();
                 //Console.WriteLine("[{0}]: Adr:{1:X} Dat:{2:X}",model, vgmAdr , vgmBuf[vgmAdr]);
                 if (vgmCmdTbl[cmd.val] != null)
                 {

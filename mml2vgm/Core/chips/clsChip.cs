@@ -824,7 +824,7 @@ namespace Core
             int n = (int)mml.args[0];
             n = Common.CheckRange(n, 1, pw.MaxVolume);
             pw.volume += n;
-            n = Common.CheckRange(n, 0, pw.MaxVolume);
+            pw.volume = Common.CheckRange(pw.volume, 0, pw.MaxVolume);
 
         }
 
