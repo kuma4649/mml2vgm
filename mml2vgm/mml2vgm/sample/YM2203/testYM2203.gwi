@@ -25,7 +25,12 @@
 '@ 004,007
 
 
+     No, SV, AR, DR, SL, SR, RR, ST, Chip
+'@ E  1, 15,  0, 20, 12, 30,  4,  1
+
+
 'N1 T160
 'N1 @110v125o4l8D0[cdefgab>c<]
+'N7 EON@E1v13o5l8crdrerfrgrarbr>cr
 
 'Ns1 @110v116o4l8rD2[cdefgab>c<]

@@ -1990,35 +1990,46 @@ namespace mml2vgmIDE
 
                     if (vgmDriver.SEGAPCMClockValue != 0)
                     {
-                        chip = new MDSound.MDSound.Chip();
-                        chip.type = MDSound.MDSound.enmInstrumentType.SEGAPCM;
-                        chip.ID = 0;
                         MDSound.segapcm segapcm = new MDSound.segapcm();
-                        chip.Instrument = segapcm;
-                        chip.Update = segapcm.Update;
-                        chip.Start = segapcm.Start;
-                        chip.Stop = segapcm.Stop;
-                        chip.Reset = segapcm.Reset;
-                        chip.SamplingRate = (UInt32)Common.SampleRate;
-                        chip.Volume = setting.balance.SEGAPCMVolume;
-                        chip.Clock = ((vgm)driver).SEGAPCMClockValue;
-                        chip.Option = new object[1] { ((vgm)driver).SEGAPCMInterface };
+                        for (int i = 0; i < (((vgm)driver).SEGAPCMDualChipFlag ? 2 : 1); i++)
+                        {
+                            chip = new MDSound.MDSound.Chip();
+                            chip.type = MDSound.MDSound.enmInstrumentType.SEGAPCM;
+                            chip.ID = (byte)i;
+                            chip.Instrument = segapcm;
+                            chip.Update = segapcm.Update;
+                            chip.Start = segapcm.Start;
+                            chip.Stop = segapcm.Stop;
+                            chip.Reset = segapcm.Reset;
+                            chip.SamplingRate = (UInt32)Common.SampleRate;
+                            chip.Volume = setting.balance.SEGAPCMVolume;
+                            chip.Clock = ((vgm)driver).SEGAPCMClockValue;
+                            chip.Option = new object[1] { ((vgm)driver).SEGAPCMInterface };
 
-                        hiyorimiDeviceFlag |= 0x2;
+                            hiyorimiDeviceFlag |= 0x2;
 
-                        chipLED.PriSPCM = 1;
-                        useChip.Add(EnmChip.SEGAPCM);
+                            if (i == 0)
+                            {
+                                chipLED.PriSPCM = 1;
+                                useChip.Add(EnmChip.SEGAPCM);
+                            }
+                            else
+                            {
+                                chipLED.SecSPCM = 1;
+                                useChip.Add(EnmChip.S_SEGAPCM);
+                            }
 
-                        log.Write(string.Format("Use SEGAPCM({0}) Clk:{1} Model:{2} Type:{3}"
-                            , (0 == 0) ? "Pri" : "Sec"
-                            , chip.Clock
-                            , chipRegister.SEGAPCM[0].Model
-                            , chip.Option[0]
-                            ));
+                            log.Write(string.Format("Use SEGAPCM({0}) Clk:{1} Model:{2} Type:{3}"
+                                , (i == 0) ? "Pri" : "Sec"
+                                , chip.Clock
+                                , chipRegister.SEGAPCM[i].Model
+                                , chip.Option[0]
+                                ));
 
-                        chipRegister.SEGAPCM[0].Use = true;
+                            chipRegister.SEGAPCM[i].Use = true;
 
-                        lstChips.Add(chip);
+                            lstChips.Add(chip);
+                        }
                     }
 
                     if (vgmDriver.SN76489ClockValue != 0)

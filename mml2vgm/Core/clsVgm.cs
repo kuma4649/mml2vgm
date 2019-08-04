@@ -1755,52 +1755,65 @@ namespace Core
             long useAY8910 = 0;
             long useYM2413 = 0;
             long useK051649 = 0;
+            long useYM2151_S = 0;
+            long useYM2203_S = 0;
+            long useYM2608_S = 0;
+            long useYM2610B_S = 0;
+            long useYM2612_S = 0;
+            long useSN76489_S = 0;
+            long useRf5c164_S = 0;
+            long useSegaPcm_S = 0;
+            long useHuC6280_S = 0;
+            long useC140_S = 0;
+            long useAY8910_S = 0;
+            long useYM2413_S = 0;
+            long useK051649_S = 0;
 
             for (int i = 0; i < 2; i++)
             {
                 foreach (partWork pw in ym2151[i].lstPartWork)
-                { useYM2151 += pw.clockCounter; }
+                { useYM2151 += pw.clockCounter; if (i == 1) useYM2151_S += pw.clockCounter; }
                 foreach (partWork pw in ym2203[i].lstPartWork)
-                { useYM2203 += pw.clockCounter; }
+                { useYM2203 += pw.clockCounter; if (i == 1) useYM2203_S += pw.clockCounter; }
                 foreach (partWork pw in ym2608[i].lstPartWork)
-                { useYM2608 += pw.clockCounter; }
+                { useYM2608 += pw.clockCounter; if (i == 1) useYM2608_S += pw.clockCounter; }
                 foreach (partWork pw in ym2610b[i].lstPartWork)
-                { useYM2610B += pw.clockCounter; }
+                { useYM2610B += pw.clockCounter; if (i == 1) useYM2610B_S += pw.clockCounter; }
                 foreach (partWork pw in ym2612[i].lstPartWork)
-                { useYM2612 += pw.clockCounter; }
+                { useYM2612 += pw.clockCounter; if (i == 1) useYM2612_S += pw.clockCounter; }
                 foreach (partWork pw in sn76489[i].lstPartWork)
-                { useSN76489 += pw.clockCounter; }
+                { useSN76489 += pw.clockCounter; if (i == 1) useSN76489_S += pw.clockCounter; }
                 foreach (partWork pw in rf5c164[i].lstPartWork)
-                { useRf5c164 += pw.clockCounter; }
+                { useRf5c164 += pw.clockCounter; if (i == 1) useRf5c164_S += pw.clockCounter; }
                 foreach (partWork pw in segapcm[i].lstPartWork)
-                { useSegaPcm += pw.clockCounter; }
+                { useSegaPcm += pw.clockCounter; if (i == 1) useSegaPcm_S += pw.clockCounter; }
                 foreach (partWork pw in huc6280[i].lstPartWork)
-                { useHuC6280 += pw.clockCounter; }
+                { useHuC6280 += pw.clockCounter; if (i == 1) useHuC6280_S += pw.clockCounter; }
                 foreach (partWork pw in c140[i].lstPartWork)
-                { useC140 += pw.clockCounter; }
+                { useC140 += pw.clockCounter; if (i == 1) useC140_S += pw.clockCounter; }
                 foreach (partWork pw in ay8910[i].lstPartWork)
-                { useAY8910 += pw.clockCounter; }
+                { useAY8910 += pw.clockCounter; if (i == 1) useAY8910_S += pw.clockCounter; }
                 foreach (partWork pw in ym2413[i].lstPartWork)
-                { useYM2413 += pw.clockCounter; }
+                { useYM2413 += pw.clockCounter; if (i == 1) useYM2413_S += pw.clockCounter; }
                 foreach (partWork pw in k051649[i].lstPartWork)
-                { useK051649 += pw.clockCounter; }
+                { useK051649 += pw.clockCounter; if (i == 1) useK051649_S += pw.clockCounter; }
             }
 
             if (info.Version >= 1.00f && useSN76489 != 0)
             {
-                Common.SetLE32(dat, 0x0c, (uint)sn76489[0].Frequency);
+                Common.SetLE32(dat, 0x0c, (uint)sn76489[0].Frequency | (uint)(useSN76489_S == 0 ? 0 : 0x40000000));
             }
             if (info.Version >= 1.10f && useYM2612 != 0)
             {
-                Common.SetLE32(dat, 0x2c, (uint)ym2612[0].Frequency);
+                Common.SetLE32(dat, 0x2c, (uint)ym2612[0].Frequency | (uint)(useYM2612_S == 0 ? 0 : 0x40000000));
             }
             if (info.Version >= 1.10f && useYM2151 != 0)
             {
-                Common.SetLE32(dat, 0x30, (uint)ym2151[0].Frequency);
+                Common.SetLE32(dat, 0x30, (uint)ym2151[0].Frequency | (uint)(useYM2151_S == 0 ? 0 : 0x40000000));
             }
             if (info.Version >= 1.51f && useSegaPcm != 0)
             {
-                Common.SetLE32(dat, 0x38, (uint)segapcm[0].Frequency);
+                Common.SetLE32(dat, 0x38, (uint)segapcm[0].Frequency | (uint)(useSegaPcm_S == 0 ? 0 : 0x40000000));
 
                 dat[0x3c] = new outDatum(enmMMLType.unknown, null, null, 0x0d);
                 dat[0x3d] = new outDatum(enmMMLType.unknown, null, null, 0x00);
@@ -1810,33 +1823,33 @@ namespace Core
             }
             if (info.Version >= 1.51f && useYM2203 != 0)
             {
-                Common.SetLE32(dat, 0x44, (uint)ym2203[0].Frequency);
+                Common.SetLE32(dat, 0x44, (uint)ym2203[0].Frequency | (uint)(useYM2203_S == 0 ? 0 : 0x40000000));
             }
             if (info.Version >= 1.51f && useYM2608 != 0)
             {
-                Common.SetLE32(dat, 0x48, (uint)ym2608[0].Frequency);
+                Common.SetLE32(dat, 0x48, (uint)ym2608[0].Frequency | (uint)(useYM2608_S == 0 ? 0 : 0x40000000));
             }
             if (info.Version >= 1.51f && useYM2610B != 0)
             {
-                Common.SetLE32(dat, 0x4c, (uint)ym2610b[0].Frequency);
+                Common.SetLE32(dat, 0x4c, (uint)ym2610b[0].Frequency | (uint)(useYM2610B_S == 0 ? 0 : 0x40000000));
             }
             if (info.Version >= 1.51f && useRf5c164 != 0)
             {
-                Common.SetLE32(dat, 0x6c, (uint)rf5c164[0].Frequency);
+                Common.SetLE32(dat, 0x6c, (uint)rf5c164[0].Frequency | (uint)(useRf5c164_S == 0 ? 0 : 0x40000000));
             }
             if (info.Version >= 1.61f && useHuC6280 != 0)
             {
-                Common.SetLE32(dat, 0xa4, (uint)huc6280[0].Frequency);
+                Common.SetLE32(dat, 0xa4, (uint)huc6280[0].Frequency | (uint)(useHuC6280_S == 0 ? 0 : 0x40000000));
             }
             if (info.Version >= 1.61f && useC140 != 0)
             {
-                Common.SetLE32(dat, 0xa8, (uint)c140[0].Frequency);
+                Common.SetLE32(dat, 0xa8, (uint)c140[0].Frequency | (uint)(useC140_S == 0 ? 0 : 0x40000000));
                 dat[0x96] = new outDatum(enmMMLType.unknown, null, null,
                     (byte)((!c140[0].isSystem2 || !c140[1].isSystem2) ? 1 : 0));
             }
             if (info.Version >= 1.51f && useAY8910 != 0)
             {
-                Common.SetLE32(dat, 0x74, (uint)ay8910[0].Frequency);
+                Common.SetLE32(dat, 0x74, (uint)ay8910[0].Frequency | (uint)(useAY8910_S == 0 ? 0 : 0x40000000));
                 dat[0x78] = new outDatum(enmMMLType.unknown, null, null, 0);
                 dat[0x79] = new outDatum(enmMMLType.unknown, null, null, 0);
                 dat[0x7a] = new outDatum(enmMMLType.unknown, null, null, 0);
@@ -1844,11 +1857,11 @@ namespace Core
             }
             if (info.Version >= 1.00f && useYM2413 != 0)
             {
-                Common.SetLE32(dat, 0x10, (uint)ym2413[0].Frequency);
+                Common.SetLE32(dat, 0x10, (uint)ym2413[0].Frequency | (uint)(useYM2413_S == 0 ? 0 : 0x40000000));
             }
             if (info.Version >= 1.61f && useK051649 != 0)
             {
-                Common.SetLE32(dat, 0x9c, (uint)k051649[0].Frequency);
+                Common.SetLE32(dat, 0x9c, (uint)k051649[0].Frequency | (uint)(useK051649_S == 0 ? 0 : 0x40000000));
             }
 
             //if (info.Version == 1.51f)

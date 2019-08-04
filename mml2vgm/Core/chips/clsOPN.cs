@@ -33,6 +33,14 @@ namespace Core
                 parent.OutData(mml,pw.port0, 0x0d, (byte)(pw.HardEnvelopeType & 0xf));
             }
             parent.OutData(mml,pw.port0, 0x07, data);
+
+            MML vmml = new MML();
+            vmml.type = enmMMLType.Volume;
+            vmml.args = new List<object>();
+            vmml.args.Add(pw.volume);
+            vmml.line = mml.line;
+            SetDummyData(pw, vmml);
+
         }
 
         public void OutSsgKeyOff(MML mml, partWork pw)

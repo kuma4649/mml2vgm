@@ -113,11 +113,32 @@ namespace mml2vgmIDE
                 int isSecondary=((bool)dgvPartCounter.Rows[p].Cells["ClmIsSecondary"].Value ? 1 : 0);
 
                 MMLParameter.Instrument mmli = null;
-                if (chip == "YM2612X") mmli = mmlParams.YM2612X[isSecondary];
-                else if (chip == "YM2612") mmli = mmlParams.YM2612[isSecondary];
-                else if (chip == "SN76489") mmli = mmlParams.SN76489[isSecondary];
-                else if (chip == "RF5C164") mmli = mmlParams.RF5C164[isSecondary];
-                if (mmli == null) continue;
+                switch (chip)
+                {
+                    case "YM2203":
+                        mmli = mmlParams.YM2203[isSecondary];
+                        break;
+                    case "YM2608":
+                        mmli = mmlParams.YM2608[isSecondary];
+                        break;
+                    case "YM2610B":
+                        mmli = mmlParams.YM2610B[isSecondary];
+                        break;
+                    case "YM2612":
+                        mmli = mmlParams.YM2612[isSecondary];
+                        break;
+                    case "YM2612X":
+                        mmli = mmlParams.YM2612X[isSecondary];
+                        break;
+                    case "SN76489":
+                        mmli = mmlParams.SN76489[isSecondary];
+                        break;
+                    case "RF5C164":
+                        mmli = mmlParams.RF5C164[isSecondary];
+                        break;
+                    default:
+                        continue;
+                }
 
                 dgvPartCounter.Rows[p].Cells["ClmInstrument"].Value = mmli.inst[r] == null ? "-" : mmli.inst[r].ToString();
                 dgvPartCounter.Rows[p].Cells["ClmEnvelope"].Value = mmli.envelope[r] == null ? "-" : mmli.envelope[r].ToString();

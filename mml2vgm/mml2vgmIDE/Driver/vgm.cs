@@ -76,6 +76,7 @@ namespace mml2vgmIDE
         public bool YMZ280BDualChipFlag;
         public bool OKIM6295DualChipFlag;
         public bool SN76489DualChipFlag;
+        public bool SEGAPCMDualChipFlag;
         public bool RF5C68DualChipFlag;
         public bool RF5C164DualChipFlag;
         public bool AY8910DualChipFlag;
@@ -2036,11 +2037,13 @@ namespace mml2vgmIDE
                     if (vgmDataOffset > 0x38)
                     {
                         uint SegaPCMclock = getLE32(0x38);
+                        SEGAPCMClockValue = SegaPCMclock & 0x3fffffff;
+                        SEGAPCMDualChipFlag = (SegaPCMclock & 0x40000000) != 0;
                         int SPCMInterface = (int)getLE32(0x3c);
                         if (SegaPCMclock != 0 && SPCMInterface != 0)
                         {
-                            chips.Add("Sega PCM");
-                            SEGAPCMClockValue = SegaPCMclock;
+                            if (SEGAPCMDualChipFlag) chips.Add("Sega PCMx2");
+                            else chips.Add("Sega PCM");
                             SEGAPCMInterface = SPCMInterface;
                         }
                     }
@@ -2100,7 +2103,7 @@ namespace mml2vgmIDE
                         {
                             YM3812ClockValue = YM3812clock & 0x3fffffff;
                             YM3812DualChipFlag = (YM3812clock & 0x40000000) != 0;
-                            if (YM2610DualChipFlag) chips.Add("YM3812x2");
+                            if (YM3812DualChipFlag) chips.Add("YM3812x2");
                             else chips.Add("YM3812");
                         }
                     }
@@ -2297,8 +2300,10 @@ namespace mml2vgmIDE
                         uint HuC6280clock = getLE32(0xa4);
                         if (HuC6280clock != 0)
                         {
-                            chips.Add("HuC6280");
-                            HuC6280ClockValue = HuC6280clock;
+                            HuC6280ClockValue = HuC6280clock & 0x3fff_ffff;
+                            HuC6280DualChipFlag = (HuC6280clock & 0x40000000) != 0;
+                            if (HuC6280DualChipFlag) chips.Add("HuC6280x2");
+                            else chips.Add("HuC6280");
                         }
                     }
 

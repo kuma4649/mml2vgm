@@ -341,6 +341,7 @@ namespace Core
             {
                 pw.keyOn = true;
                 pw.keyOff = false;
+                SetDummyData(pw, mml);
             }
             else if (pw.Type == enmChannelType.ADPCM)
             {
@@ -628,6 +629,7 @@ namespace Core
                 n = Common.CheckRange(n, 0, 3);
                 ((YM2608)pw.chip).SetAdpcmPan(mml, pw, n);
             }
+            SetDummyData(pw, mml);
         }
 
         public override void CmdInstrument(partWork pw, MML mml)

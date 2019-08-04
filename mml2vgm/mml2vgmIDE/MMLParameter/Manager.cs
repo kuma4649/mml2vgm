@@ -9,6 +9,9 @@ namespace mml2vgmIDE.MMLParameter
     {
         public Instrument[] RF5C164;
         public Instrument[] SN76489;
+        public Instrument[] YM2203;
+        public Instrument[] YM2608;
+        public Instrument[] YM2610B;
         public Instrument[] YM2612;
         public Instrument[] YM2612X;
 
@@ -28,6 +31,15 @@ namespace mml2vgmIDE.MMLParameter
 
             SN76489 = new SN76489[] { new SN76489(), new SN76489() };
             dicInstAdd(SN76489);
+
+            YM2203 = new YM2203[] { new YM2203(), new YM2203() };
+            dicInstAdd(YM2203);
+
+            YM2608 = new YM2608[] { new YM2608(), new YM2608() };
+            dicInstAdd(YM2608);
+
+            YM2610B = new YM2610B[] { new YM2610B(), new YM2610B() };
+            dicInstAdd(YM2610B);
 
             YM2612 = new YM2612[] { new YM2612(), new YM2612() };
             dicInstAdd(YM2612);

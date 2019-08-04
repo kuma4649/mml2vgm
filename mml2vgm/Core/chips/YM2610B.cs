@@ -374,6 +374,7 @@ namespace Core
                 {
                     parent.instPCM[pw.instrument].status = enmPCMSTATUS.USED;
                 }
+                SetDummyData(pw, mml);
             }
             else if (pw.Type == enmChannelType.ADPCMB)
             {
@@ -406,7 +407,7 @@ namespace Core
 
         public override void SetVolume(partWork pw, MML mml)
         {
-            base.SetVolume(pw,mml);
+            base.SetVolume(pw, mml);
 
             if (pw.Type == enmChannelType.ADPCMA)
             {
@@ -414,6 +415,16 @@ namespace Core
             else if (pw.Type == enmChannelType.ADPCMB)
             {
                 SetAdpcmBVolume(mml, pw);
+            }
+
+            if (mml != null)
+            {
+                MML vmml = new MML();
+                vmml.type = enmMMLType.Volume;
+                vmml.args = new List<object>();
+                vmml.args.Add(pw.volume);
+                vmml.line = mml.line;
+                SetDummyData(pw, vmml);
             }
         }
 
@@ -742,6 +753,7 @@ namespace Core
                 n = Common.CheckRange(n, 0, 3);
                 ((YM2610B)pw.chip).SetAdpcmBPan(mml, pw, n);
             }
+            SetDummyData(pw, mml);
         }
 
         public override void CmdInstrument(partWork pw, MML mml)
