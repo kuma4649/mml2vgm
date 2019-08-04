@@ -817,6 +817,14 @@ namespace Core
         {
             int n = (int)mml.args[0];
             pw.volume = Common.CheckRange(n, 0, pw.MaxVolume);
+
+            MML vmml = new MML();
+            vmml.type = enmMMLType.Volume;
+            vmml.args = new List<object>();
+            vmml.args.Add(pw.volume);
+            vmml.line = mml.line;
+            SetDummyData(pw, vmml);
+
         }
 
         public virtual void CmdVolumeUp(partWork pw, MML mml)
@@ -826,6 +834,12 @@ namespace Core
             pw.volume += n;
             pw.volume = Common.CheckRange(pw.volume, 0, pw.MaxVolume);
 
+            MML vmml = new MML();
+            vmml.type = enmMMLType.Volume;
+            vmml.args = new List<object>();
+            vmml.args.Add(pw.volume);
+            vmml.line = mml.line;
+            SetDummyData(pw, vmml);
         }
 
         public virtual void CmdVolumeDown(partWork pw, MML mml)
@@ -835,6 +849,12 @@ namespace Core
             pw.volume -= n;
             pw.volume = Common.CheckRange(pw.volume, 0, pw.MaxVolume);
 
+            MML vmml = new MML();
+            vmml.type = enmMMLType.Volume;
+            vmml.args = new List<object>();
+            vmml.args.Add(pw.volume);
+            vmml.line = mml.line;
+            SetDummyData(pw, vmml);
         }
 
 
@@ -851,14 +871,26 @@ namespace Core
         {
             pw.octaveNew += parent.info.octaveRev ? -1 : 1;
             pw.octaveNew = Common.CheckRange(pw.octaveNew, 1, 8);
-            SetDummyData(pw, mml);
+
+            MML vmml = new MML();
+            vmml.type = enmMMLType.Octave;
+            vmml.args = new List<object>();
+            vmml.args.Add(pw.octaveNow);
+            vmml.line = mml.line;
+            SetDummyData(pw, vmml);
         }
 
         public virtual void CmdOctaveDown(partWork pw, MML mml)
         {
             pw.octaveNew += parent.info.octaveRev ? 1 : -1;
             pw.octaveNew = Common.CheckRange(pw.octaveNew, 1, 8);
-            SetDummyData(pw, mml);
+
+            MML vmml = new MML();
+            vmml.type = enmMMLType.Octave;
+            vmml.args = new List<object>();
+            vmml.args.Add(pw.octaveNow);
+            vmml.line = mml.line;
+            SetDummyData(pw, vmml);
         }
 
 

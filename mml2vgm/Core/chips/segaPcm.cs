@@ -472,6 +472,8 @@ namespace Core
             r = Common.CheckRange(r, 0, 127);
             pw.panL = l;
             pw.panR = r;
+
+            SetDummyData(pw, mml);
         }
 
         public override void CmdInstrument(partWork pw, MML mml)
@@ -520,7 +522,7 @@ namespace Core
             pw.pcmEndAddress = (int)parent.instPCM[n].edAdr;
             pw.pcmLoopAddress = parent.instPCM[n].loopAdr == 0 ? -1 : (int)parent.instPCM[n].loopAdr;
             pw.pcmBank = (int)((parent.instPCM[n].stAdr >> 16) << 1);
-
+            SetDummyData(pw, mml);
         }
 
         public override void CmdLoopExtProc(partWork pw, MML mml)

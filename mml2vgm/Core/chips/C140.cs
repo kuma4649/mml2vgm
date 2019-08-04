@@ -789,6 +789,8 @@ namespace Core
             r = Common.CheckRange(r, 0, 255);
             pw.panL = l;
             pw.panR = r;
+
+            SetDummyData(pw, mml);
         }
 
         public override void CmdInstrument(partWork pw, MML mml)
@@ -837,6 +839,7 @@ namespace Core
             pw.pcmEndAddress = (int)parent.instPCM[n].edAdr;
             pw.pcmLoopAddress = (int)parent.instPCM[n].loopAdr;
             pw.pcmBank = (int)((parent.instPCM[n].stAdr >> 16));
+            SetDummyData(pw, mml);
 
         }
 
