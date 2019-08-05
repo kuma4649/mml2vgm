@@ -377,6 +377,7 @@ namespace Core
             {
                 parent.instPCM[pw.instrument].status = enmPCMSTATUS.USED;
             }
+
         }
 
         public void OutHuC6280KeyOff(MML mml,partWork pw)
@@ -689,7 +690,7 @@ namespace Core
             }
 
             pw.instrument = n;
-
+            SetDummyData(pw, mml);
         }
 
         public override void CmdNoiseToneMixer(partWork pw, MML mml)

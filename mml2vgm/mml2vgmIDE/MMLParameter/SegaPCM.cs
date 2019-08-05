@@ -23,7 +23,7 @@ namespace mml2vgmIDE.MMLParameter
                     if ((char)od.args[0] == 'E')
                         envelope[od.linePos.ch] = (int)od.args[1];
                     else
-                        inst[od.linePos.ch] = (int)od.args[1];
+                        inst[od.linePos.ch] = od.args[1].ToString();
                     break;
                 case enmMMLType.Envelope:
                     break;

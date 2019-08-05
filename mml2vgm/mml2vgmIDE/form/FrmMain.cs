@@ -1009,7 +1009,7 @@ namespace mml2vgmIDE
                             cells[0] = int.Parse(pw[i].PartName.Substring(2, 2));
                             cells[1] = pw[i].isSecondary;
                             cells[2] = pw[i].PartName.Substring(0, 2).Replace(" ", "") + int.Parse(pw[i].PartName.Substring(2, 2)).ToString();
-                            cells[3] = pw[i].chip.Name.ToUpper();
+                            cells[3] = pw[i].chip.Name;//.ToUpper();
                             cells[4] = pw[i].clockCounter;
                             frmPartCounter.AddPartCounter(cells);
                         }

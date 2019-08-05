@@ -1,28 +1,40 @@
-﻿using Core;
-using System;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Core;
 
 namespace mml2vgmIDE.MMLParameter
 {
-    public class RF5C164 : Instrument
+    public class YM2413 : Instrument
     {
-        public RF5C164() : base(8)
-        {
-        }
+        public YM2413():base(14)
+        { }
 
-        public override string Name => "RF5C164";
+        public override string Name => "YM2413";
 
         public override void SetParameter(outDatum od, int cc)
         {
             switch (od.type)
             {
                 case enmMMLType.Instrument:
-                    if ((char)od.args[0] == 'E')
-                        envelope[od.linePos.ch] = (int)od.args[1];
+                    if ((char)od.args[0] == 'I')
+                    {
+                        inst[od.linePos.ch] = string.Format("{0}(Preset)" , od.args[1]);
+                    }
                     else
+                    {
                         inst[od.linePos.ch] = od.args[1].ToString();
+                    }
                     break;
-                case enmMMLType.Envelope:
+                case enmMMLType.Volume:
+                    if (od.linePos != null)
+                        vol[od.linePos.ch] = (int)od.args[0];
+                    break;
+                case enmMMLType.Pan:
+                    int n = (int)od.args[0];
+                    pan[od.linePos.ch] = n == 0 ? "-" : (n == 1 ? "Right" : (n == 2 ? "Left" : "Center"));
                     break;
                 case enmMMLType.Octave:
                     octave[od.linePos.ch] = (int)od.args[0];
@@ -48,16 +60,7 @@ namespace mml2vgmIDE.MMLParameter
                     notecmd[od.linePos.ch] = "r";
                     length[od.linePos.ch] = string.Format("{0:0.##}(#{1:d})", 1.0 * cc / rs.length, rs.length);
                     break;
-                case enmMMLType.Volume:
-                    if (od.linePos != null)
-                        vol[od.linePos.ch] = (int)od.args[0];
-                    break;
-                case enmMMLType.Pan:
-                    pan[od.linePos.ch] = string.Format("L{0} R{1}", (int)od.args[0], (int)od.args[1]);
-                    break;
-
             }
         }
-
     }
 }

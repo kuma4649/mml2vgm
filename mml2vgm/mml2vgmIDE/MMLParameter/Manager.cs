@@ -7,12 +7,16 @@ namespace mml2vgmIDE.MMLParameter
 {
     public class Manager
     {
+        public Instrument[] AY8910;
         public Instrument[] C140;
+        public Instrument[] HuC6280;
+        public Instrument[] K051649;
         public Instrument[] RF5C164;
         public Instrument[] SN76489;
         public Instrument[] SegaPCM;
         public Instrument[] YM2151;
         public Instrument[] YM2203;
+        public Instrument[] YM2413;
         public Instrument[] YM2608;
         public Instrument[] YM2610B;
         public Instrument[] YM2612;
@@ -31,9 +35,21 @@ namespace mml2vgmIDE.MMLParameter
             dicInst.Clear();
             Insts = new Dictionary<string, Instrument[]>();
 
+            AY8910 = new AY8910[] { new AY8910(), new AY8910() };
+            dicInstAdd(AY8910);
+            Insts.Add(AY8910[0].Name, AY8910);
+
             C140 = new C140[] { new C140(), new C140() };
             dicInstAdd(C140);
             Insts.Add(C140[0].Name, C140);
+
+            HuC6280 = new HuC6280[] { new HuC6280(), new HuC6280() };
+            dicInstAdd(HuC6280);
+            Insts.Add(HuC6280[0].Name, HuC6280);
+
+            K051649 = new K051649[] { new K051649(), new K051649() };
+            dicInstAdd(K051649);
+            Insts.Add(K051649[0].Name, K051649);
 
             RF5C164 = new RF5C164[] { new RF5C164(), new RF5C164() };
             dicInstAdd(RF5C164);
@@ -54,6 +70,10 @@ namespace mml2vgmIDE.MMLParameter
             YM2203 = new YM2203[] { new YM2203(), new YM2203() };
             dicInstAdd(YM2203);
             Insts.Add(YM2203[0].Name, YM2203);
+
+            YM2413 = new YM2413[] { new YM2413(), new YM2413() };
+            dicInstAdd(YM2413);
+            Insts.Add(YM2413[0].Name, YM2413);
 
             YM2608 = new YM2608[] { new YM2608(), new YM2608() };
             dicInstAdd(YM2608);

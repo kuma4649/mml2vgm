@@ -6,7 +6,7 @@ namespace mml2vgmIDE.MMLParameter
     {
         public abstract string Name { get; }
 
-        public int?[] inst;
+        public string[] inst;
         public int?[] envelope;
         public string[] notecmd;
         public int?[] vol;
@@ -16,7 +16,7 @@ namespace mml2vgmIDE.MMLParameter
 
         public Instrument(int n)
         {
-            inst = new int?[n];
+            inst = new string[n];
             envelope = new int?[n];
             notecmd = new string[n];
             vol = new int?[n];

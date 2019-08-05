@@ -27,7 +27,21 @@ namespace Core
 
             Frequency = 3579545;
 
-            MakeFNumTbl();
+            Dictionary<string, List<double>> dic = MakeFNumTbl();
+            if (dic != null)
+            {
+                int c = 0;
+                FNumTbl = new int[1][];
+                FNumTbl[0] = new int[13];
+                foreach (double v in dic["FNUM_00"])
+                {
+                    FNumTbl[0][c++] = (int)v;
+                    if (c == FNumTbl[0].Length) break;
+                }
+                FNumTbl[0][FNumTbl[0].Length - 1] = FNumTbl[0][0] * 2;
+
+            }
+
             Ch = new ClsChannel[ChMax];
             SetPartToCh(Ch, initialPartName);
             int i = 0;
@@ -322,6 +336,7 @@ namespace Core
         public override void SetKeyOn(partWork pw, MML mml)
         {
             pw.keyOn = true;
+            SetDummyData(pw, mml);
         }
 
         public override void SetKeyOff(partWork pw, MML mml)
@@ -370,6 +385,7 @@ namespace Core
                     pw.envInstrument = n;
                     //outYM2413SetInstVol(pw, n, pw.volume); //INSTをnにセット
                 }
+                SetDummyData(pw, mml);
                 return;
             }
 

@@ -25,7 +25,7 @@ namespace mml2vgmIDE.MMLParameter
                     }
                     else
                     {
-                        inst[od.linePos.ch] = (int)od.args[1];
+                        inst[od.linePos.ch] = od.args[1].ToString();
                     }
                     break;
                 case enmMMLType.Volume:

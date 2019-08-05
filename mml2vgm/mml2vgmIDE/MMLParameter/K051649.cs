@@ -1,16 +1,19 @@
-﻿using Core;
-using System;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Core;
 
 namespace mml2vgmIDE.MMLParameter
 {
-    public class RF5C164 : Instrument
+    public class K051649 : Instrument
     {
-        public RF5C164() : base(8)
+        public K051649():base(5)
         {
         }
 
-        public override string Name => "RF5C164";
+        public override string Name => "K051649";
 
         public override void SetParameter(outDatum od, int cc)
         {
@@ -58,6 +61,5 @@ namespace mml2vgmIDE.MMLParameter
 
             }
         }
-
     }
 }

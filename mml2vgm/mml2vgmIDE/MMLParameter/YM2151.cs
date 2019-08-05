@@ -20,7 +20,7 @@ namespace mml2vgmIDE.MMLParameter
             switch (od.type)
             {
                 case enmMMLType.Instrument:
-                    inst[od.linePos.ch] = (int)od.args[1];
+                    inst[od.linePos.ch] = od.args[1].ToString();
                     break;
                 case enmMMLType.Volume:
                     if (od.linePos != null)

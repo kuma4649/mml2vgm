@@ -1,28 +1,29 @@
-﻿using Core;
-using System;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Core;
 
 namespace mml2vgmIDE.MMLParameter
 {
-    public class RF5C164 : Instrument
+    public class AY8910 : Instrument
     {
-        public RF5C164() : base(8)
+        public AY8910() : base(3)
         {
         }
 
-        public override string Name => "RF5C164";
+        public override string Name => "AY8910";
 
         public override void SetParameter(outDatum od, int cc)
         {
             switch (od.type)
             {
                 case enmMMLType.Instrument:
-                    if ((char)od.args[0] == 'E')
-                        envelope[od.linePos.ch] = (int)od.args[1];
-                    else
-                        inst[od.linePos.ch] = od.args[1].ToString();
+                    envelope[od.linePos.ch] = (int)od.args[1];
                     break;
                 case enmMMLType.Envelope:
+                    envelope[od.linePos.ch] = (int)od.args[1];
                     break;
                 case enmMMLType.Octave:
                     octave[od.linePos.ch] = (int)od.args[0];
@@ -58,6 +59,5 @@ namespace mml2vgmIDE.MMLParameter
 
             }
         }
-
     }
 }
