@@ -949,6 +949,12 @@ namespace Core
                     , mml.line.Lp);
         }
 
+        public virtual void CmdPcmMapSw(partWork pw, MML mml)
+        {
+            msgBox.setErrMsg(msg.get("E10023")
+                    , mml.line.Lp);
+        }
+
         public virtual void CmdNoiseToneMixer(partWork pw, MML mml)
         {
             msgBox.setErrMsg(msg.get("E10014")

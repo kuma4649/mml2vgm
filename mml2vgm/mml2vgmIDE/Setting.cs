@@ -2552,6 +2552,9 @@ namespace mml2vgmIDE
             private Rectangle _RInputBox = Rectangle.Empty;
             public Rectangle RInputBox { get => _RInputBox; set => _RInputBox = value; }
 
+            private dgvColumnInfo[] _PartCounterClmInfo = null;
+            public dgvColumnInfo[] PartCounterClmInfo { get => _PartCounterClmInfo; set => _PartCounterClmInfo = value; }
+
             public Location Copy()
             {
                 Location Location = new Location();
@@ -2559,6 +2562,7 @@ namespace mml2vgmIDE
                 Location.RMain = this.RMain;
                 Location.RMixer = this.RMixer;
                 Location.RMIDIKbd = this.RMIDIKbd;
+                Location.PartCounterClmInfo = this.PartCounterClmInfo;
 
                 return Location;
             }

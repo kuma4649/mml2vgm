@@ -197,8 +197,15 @@
     <None Include="sample\testBeforeVoice.gwi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="sample\testFMPCMSecondary.gwi" />
-    <None Include="sample\testFMSecondary.gwi" />
+    <None Include="sample\testFMPCMSecondary.gwi">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="sample\testFMSecondary.gwi">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="sample\testPCMMapMode.gwi">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="sample\YM2151\testYM2151.gwi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

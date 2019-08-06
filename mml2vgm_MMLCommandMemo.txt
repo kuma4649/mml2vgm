@@ -738,6 +738,8 @@ wn              ---------o----o----oo-o-o---  ノイズ周波数
 Pn              ---------o----o----o----o---  1:トーン 2:ノイズ 3:トーン＆ノイズ
 Pn              --------------------o-o-----  ノイズ 0:OFF 1:ON
 mn              -oooo-----------------------  YM2612PCMモード指定(0: 停止  1: 開始) 6Ch only
+mon             ----o-----------------------  PCMマッピングモードをONにする。音色が音符コマンドによって切り替わる。 XGM pcm Ch. Only
+mof             ----o-----------------------  PCMマッピングモードをOFFにする。 XGM pcm Ch. Only
 mn              ----------------------o-----  HuC6280PCMモード指定(0: 停止  1: 開始)チャンネルごとに指定
 mn              -------------------------oo-  YM2413Rhythmモード指定(0: 停止  1: 開始)
 Tn              oooooooooooooooooooooooooooo  テンポ(1 - 1200)
@@ -921,27 +923,33 @@ b               -ooooooooooooooooooooooooooo  音符シ
     PとPDを併せて指定することも可能だが、お互いの都合を考慮しない。
     その為思わぬ場所にデータが上書きされていることがある。
 
+'@ PM Octave , Note , No
+    PCMマッピングモード定義
+    Octave      オクターブ(1-8)
+    Note        ノート番号(0-11) 0:c 1:c+ ... 10:a+ 11:b
+    No          定義番号(0-62)
+	XGM専用コマンド。指定のノートにPCMを割り当てます。同じ音程の定義は上書きされます。
 
   PCM使用可能音源毎のコマンド対応表
-                                         PPP                         
-  名称             略称          タイプ   DI Freq指定 ループ指定 備考
+                                         PPPP                         
+  名称             略称          タイプ   DIM Freq指定 ループ指定 備考
   ---------------------------------------------------------------------------------------------
-  YM2612           OPN2                  o-- 不可     不可       
-  YM2612X          OPN2X                 o-- 不可     不可       XGM専用
-  RF5C164          RF5C                  ooo 可       可         StartAdr 8bit  EndAdr指定無し(ループ指定必須)
-  RF5C164Secondary RF5CSecondary         ooo 可       可         StartAdr 8bit  EndAdr指定無し(ループ指定必須)
-  YM2608           OPNA          ADPCM   ooo 可       不可       
-  YM2608Secondary  OPNASecondary ADPCM   ooo 可       不可       
-  YM2610B          OPNB          ADPCM-A ooo 不可     不可       
-  YM2610BSecondary OPNBSecondary ADPCM-A ooo 不可     不可       
-  YM2610B          OPNB          ADPCM-B ooo 可       不可       
-  YM2610BSecondary OPNBSecondary ADPCM-B ooo 可       不可       
-  SegaPCM          SPCM                  ooo 可       可         
-  SegaPCMSecondary SPCMSecondary         ooo 可       可         
-  HuC6280          HuC8                  o-- 不可     不可       
-  HuC6280Secondary HuC8Secondary         o-- 不可     不可       
-  C140             C140                  ooo 可       可         
-  C140Secondary    C140Secondary         ooo 可       可         
+  YM2612           OPN2                  o--- 不可     不可       
+  YM2612X          OPN2X                 o--o 不可     不可       XGM専用
+  RF5C164          RF5C                  ooo- 可       可         StartAdr 8bit  EndAdr指定無し(ループ指定必須)
+  RF5C164Secondary RF5CSecondary         ooo- 可       可         StartAdr 8bit  EndAdr指定無し(ループ指定必須)
+  YM2608           OPNA          ADPCM   ooo- 可       不可       
+  YM2608Secondary  OPNASecondary ADPCM   ooo- 可       不可       
+  YM2610B          OPNB          ADPCM-A ooo- 不可     不可       
+  YM2610BSecondary OPNBSecondary ADPCM-A ooo- 不可     不可       
+  YM2610B          OPNB          ADPCM-B ooo- 可       不可       
+  YM2610BSecondary OPNBSecondary ADPCM-B ooo- 可       不可       
+  SegaPCM          SPCM                  ooo- 可       可         
+  SegaPCMSecondary SPCMSecondary         ooo- 可       可         
+  HuC6280          HuC8                  o--- 不可     不可       
+  HuC6280Secondary HuC8Secondary         o--- 不可     不可       
+  C140             C140                  ooo- 可       可         
+  C140Secondary    C140Secondary         ooo- 可       可         
 
 
   MUCOM88のADPCMを読み込む

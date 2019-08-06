@@ -33,6 +33,7 @@ namespace Core
         Pan,            // p
         Detune,         // D
         PcmMode,        // m
+        PcmMap,         // mon mof
         Gatetime,       // q
         GatetimeDiv,    // Q
         Envelope,       // E

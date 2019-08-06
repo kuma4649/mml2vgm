@@ -231,6 +231,11 @@ namespace Core
         /// </summary>
         public bool pcm = false;
 
+        /// <summary>
+        /// PCM マッピングモードスイッチ
+        /// </summary>
+        public bool isPcmMap = false;
+
         public float pcmBaseFreqPerFreq = 0.0f;
         public float pcmFreqCountBuffer = 0.0f;
         public long pcmWaitKeyOnCounter = 0L;

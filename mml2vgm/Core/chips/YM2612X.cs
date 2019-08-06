@@ -73,7 +73,28 @@ namespace Core
         {
             if (pw.instrument >= 63) return;
 
+            if (pw.isPcmMap)
+            {
+                int n = Const.NOTE.IndexOf(pw.noteCmd);
+                int f = pw.octaveNow * 12 + n + pw.shift + pw.keyShift;
+                if (parent.instPCMMap.ContainsKey(f))
+                {
+                    pw.instrument = parent.instPCMMap[f];
+                }
+                else
+                {
+                    return;
+                }
+            }
+
+            if (!parent.instPCM.ContainsKey(pw.instrument))
+            {
+                msgBox.setErrMsg(string.Format(msg.get("E21000"), pw.instrument), mml.line.Lp);
+                return;
+            }
+
             int id = parent.instPCM[pw.instrument].seqNum + 1;
+
             int ch = Math.Max(0, pw.ch - 8);
             int priority = 0;
 
@@ -195,6 +216,16 @@ namespace Core
             base.CmdMode(pw, mml);
 
         }
+
+        public override void CmdPcmMapSw(partWork pw, MML mml)
+        {
+            bool sw = (bool)mml.args[0];
+            if(pw.Type== enmChannelType.FMPCMex)
+            {
+                pw.isPcmMap = sw;
+            }
+        }
+
 
         public override void CmdInstrument(partWork pw, MML mml)
         {

@@ -1987,6 +1987,29 @@
     1:ON  
 
 
+### PCMマッピングモードスイッチ  
+-----------  
+- Command  
+    mon  
+    mof  
+- Format  
+    mon  
+    mof  
+- 設定可能範囲  
+    無し
+- Support chips  
+    - YM2612X(6ChPCMmode)  
+- Remark  
+    PCMマッピングモードスイッチ  
+- Description  
+    PCMマッピングモードスイッチ  
+    YM2612XのPCMChごとに指定可能です。  
+    mof:OFF  
+    mon:ON  
+	このモードを有効にすると音符コマンドごとに音色を切り替えるようになります。  
+	音符ごとにどの音色を再生させるかは@PMコマンドで定義します。  
+
+
 ### Rhythmモードスイッチ  
 -----------  
 - Command  

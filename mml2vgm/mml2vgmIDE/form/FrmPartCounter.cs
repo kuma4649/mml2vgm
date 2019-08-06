@@ -10,19 +10,22 @@ using WeifenLuo.WinFormsUI.Docking;
 
 namespace mml2vgmIDE
 {
-    public partial class FrmPartCounter : DockContent,IForm
+    public partial class FrmPartCounter : DockContent, IForm
     {
         public Action parentUpdate = null;
         private MMLParameter.Manager mmlParams = null;
+        private Setting setting = null;
 
         public FrmPartCounter(Setting setting)
         {
             InitializeComponent();
+            this.setting = setting;
 
             dgvPartCounter.BackgroundColor = Color.FromArgb(setting.ColorScheme.PartCounter_BackColor);
             dgvPartCounter.DefaultCellStyle.BackColor = Color.FromArgb(setting.ColorScheme.PartCounter_BackColor);
             dgvPartCounter.ForeColor = Color.FromArgb(setting.ColorScheme.PartCounter_ForeColor);
             EnableDoubleBuffering(dgvPartCounter);
+            SetDisplayIndex(setting.location.PartCounterClmInfo);
         }
 
         public void ClearCounter()
@@ -72,6 +75,8 @@ namespace mml2vgmIDE
 
         private void FrmPartCounter_FormClosing(object sender, FormClosingEventArgs e)
         {
+            setting.location.PartCounterClmInfo = getDisplayIndex();
+
             if (e.CloseReason == CloseReason.UserClosing)
             {
                 e.Cancel = true;
@@ -80,6 +85,7 @@ namespace mml2vgmIDE
                 return;
             }
         }
+
 
         private void FrmPartCounter_FormClosed(object sender, FormClosedEventArgs e)
         {
@@ -127,5 +133,50 @@ namespace mml2vgmIDE
 
             dgvPartCounter.ResumeLayout();
         }
+
+        private dgvColumnInfo[] getDisplayIndex()
+        {
+            List<dgvColumnInfo> ret = new List<dgvColumnInfo>();
+
+            for (int i = 0; i < dgvPartCounter.Columns.Count; i++)
+            {
+                dgvColumnInfo info = new dgvColumnInfo();
+
+                info.columnName = dgvPartCounter.Columns[i].Name;
+                info.displayIndex = dgvPartCounter.Columns[i].DisplayIndex;
+                info.size = dgvPartCounter.Columns[i].Width;
+                info.visible = dgvPartCounter.Columns[i].Visible;
+
+                ret.Add(info);
+            }
+
+            return ret.ToArray();
+        }
+
+        private void SetDisplayIndex(dgvColumnInfo[] aryIndex)
+        {
+            if (aryIndex == null || aryIndex.Length < 1) return;
+
+            for (int i = 0; i < aryIndex.Length; i++)
+            {
+                if (!dgvPartCounter.Columns.Contains(aryIndex[i].columnName)) continue;
+
+                dgvPartCounter.Columns[aryIndex[i].columnName].DisplayIndex = aryIndex[i].displayIndex;
+                dgvPartCounter.Columns[aryIndex[i].columnName].Width = Math.Max(aryIndex[i].size, 10);
+                dgvPartCounter.Columns[aryIndex[i].columnName].Visible = aryIndex[i].visible;
+            }
+
+            //spacerは常に最後にする
+            dgvPartCounter.Columns["ClmSpacer"].DisplayIndex = dgvPartCounter.Columns.Count  - 1;
+        }
+
+    }
+
+    public class dgvColumnInfo
+    {
+        public string columnName = "";
+        public int displayIndex = 0;
+        public int size = 10;
+        public bool visible = true;
     }
 }

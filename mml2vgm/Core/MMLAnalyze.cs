@@ -162,8 +162,8 @@ namespace Core
                     log.Write("Detune");
                     CmdDetune(pw, mml);
                     break;
-                case 'm': // pcm mode
-                    log.Write("pcm mode");
+                case 'm': // pcm mode / pcm mapMode Sw
+                    log.Write("pcm mode / pcm mapMode Sw");
                     CmdMode(pw, mml);
                     break;
                 case 'q': // gatetime
@@ -586,14 +586,41 @@ namespace Core
         {
             int n;
             pw.incPos();
-            if (!pw.getNum(out n))
+
+            if (pw.getChar() == 'o')
             {
-                msgBox.setErrMsg(msg.get("E05012"), mml.line.Lp);
-                n = 0;
+                //pcm mapMode ?
+                pw.incPos();
+                if (pw.getChar() == 'n')
+                {
+                    mml.type = enmMMLType.PcmMap;
+                    mml.args = new List<object>();
+                    mml.args.Add(true);
+                    pw.incPos();
+                }
+                else if (pw.getChar() == 'f')
+                {
+                    mml.type = enmMMLType.PcmMap;
+                    mml.args = new List<object>();
+                    mml.args.Add(false);
+                    pw.incPos();
+                }
+                else
+                {
+                    msgBox.setErrMsg(msg.get("E05053"), mml.line.Lp);
+                }
             }
-            mml.type = enmMMLType.PcmMode;
-            mml.args = new List<object>();
-            mml.args.Add(n);
+            else
+            {
+                if (!pw.getNum(out n))
+                {
+                    msgBox.setErrMsg(msg.get("E05012"), mml.line.Lp);
+                    n = 0;
+                }
+                mml.type = enmMMLType.PcmMode;
+                mml.args = new List<object>();
+                mml.args.Add(n);
+            }
         }
 
         private void CmdGatetime(partWork pw, MML mml)

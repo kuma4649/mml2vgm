@@ -34,6 +34,7 @@ namespace Core
         public Dictionary<int, int[]> instENV = new Dictionary<int, int[]>();
         public Dictionary<int, clsPcm> instPCM = new Dictionary<int, clsPcm>();
         public List<clsPcmDatSeq> instPCMDatSeq = new List<clsPcmDatSeq>();
+        public Dictionary<int, int> instPCMMap = new Dictionary<int, int>();
         public Dictionary<int, clsToneDoubler> instToneDoubler = new Dictionary<int, clsToneDoubler>();
         public Dictionary<int, byte[]> instWF = new Dictionary<int, byte[]>();
 
@@ -598,6 +599,9 @@ namespace Core
                     case 'I':
                         definePCMInstrumentSet(line, vs);
                         break;
+                    case 'M':
+                        definePCMMapModeSet(line, vs);
+                        break;
                     default:
                         definePCMInstrumentEasy(line, vs);
                         break;
@@ -853,6 +857,25 @@ namespace Core
                 , Option
                 ));
 
+        }
+
+        /// <summary>
+        /// '@ PM Octave , Note , No
+        /// </summary>
+        private void definePCMMapModeSet(Line line, string[] vs)
+        {
+            int oct = Common.ParseNumber(vs[0].Substring(1));
+            oct = Math.Min(Math.Max(oct, 1), 8);
+            int note = Common.ParseNumber(vs[1]);
+            note = Math.Min(Math.Max(note, 0), 11);
+            int no = Common.ParseNumber(vs[2]);
+            no = Math.Min(Math.Max(no, 0), 62);
+
+            if (instPCMMap.ContainsKey(oct * 12 + note))
+            {
+                instPCMMap.Remove(oct * 12 + note);
+            }
+            instPCMMap.Add(oct * 12 + note, no);
         }
 
         private static void CheckEnvelopeVolumeRange(Line line, int[] env, int max, int min)
@@ -2932,6 +2955,11 @@ namespace Core
                 case enmMMLType.PcmMode:
                     log.Write("PcmMode");
                     pw.chip.CmdMode(pw, mml);
+                    pw.mmlPos++;
+                    break;
+                case enmMMLType.PcmMap:
+                    log.Write("PcmMapMode");
+                    pw.chip.CmdPcmMapSw(pw, mml);
                     pw.mmlPos++;
                     break;
                 case enmMMLType.Noise:
