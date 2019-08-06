@@ -41,7 +41,6 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmPartCounter));
             this.dgvPartCounter = new System.Windows.Forms.DataGridView();
-            this.timer = new System.Windows.Forms.Timer(this.components);
             this.ClmPartNumber = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ClmIsSecondary = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.ClmPart = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -54,7 +53,11 @@
             this.ClmNote = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ClmLength = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ClmSpacer = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cmsMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.testToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.timer = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.dgvPartCounter)).BeginInit();
+            this.cmsMenu.SuspendLayout();
             this.SuspendLayout();
             // 
             // dgvPartCounter
@@ -104,11 +107,9 @@
             this.dgvPartCounter.RowTemplate.Height = 21;
             this.dgvPartCounter.Size = new System.Drawing.Size(1088, 259);
             this.dgvPartCounter.TabIndex = 0;
-            // 
-            // timer
-            // 
-            this.timer.Interval = 10;
-            this.timer.Tick += new System.EventHandler(this.Timer_Tick);
+            this.dgvPartCounter.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DgvPartCounter_CellClick);
+            this.dgvPartCounter.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DgvPartCounter_CellContentClick);
+            this.dgvPartCounter.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.DgvPartCounter_CellMouseClick);
             // 
             // ClmPartNumber
             // 
@@ -207,6 +208,25 @@
             this.ClmSpacer.ReadOnly = true;
             this.ClmSpacer.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
+            // cmsMenu
+            // 
+            this.cmsMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.testToolStripMenuItem});
+            this.cmsMenu.Name = "cmsMenu";
+            this.cmsMenu.Size = new System.Drawing.Size(94, 26);
+            this.cmsMenu.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.CmsMenu_PreviewKeyDown);
+            // 
+            // testToolStripMenuItem
+            // 
+            this.testToolStripMenuItem.Name = "testToolStripMenuItem";
+            this.testToolStripMenuItem.Size = new System.Drawing.Size(93, 22);
+            this.testToolStripMenuItem.Text = "test";
+            // 
+            // timer
+            // 
+            this.timer.Interval = 10;
+            this.timer.Tick += new System.EventHandler(this.Timer_Tick);
+            // 
             // FrmPartCounter
             // 
             this.AllowDrop = true;
@@ -223,6 +243,7 @@
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.FrmPartCounter_FormClosed);
             this.DragOver += new System.Windows.Forms.DragEventHandler(this.FrmPartCounter_DragOver);
             ((System.ComponentModel.ISupportInitialize)(this.dgvPartCounter)).EndInit();
+            this.cmsMenu.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -242,5 +263,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn ClmNote;
         private System.Windows.Forms.DataGridViewTextBoxColumn ClmLength;
         private System.Windows.Forms.DataGridViewTextBoxColumn ClmSpacer;
+        private System.Windows.Forms.ContextMenuStrip cmsMenu;
+        private System.Windows.Forms.ToolStripMenuItem testToolStripMenuItem;
     }
 }

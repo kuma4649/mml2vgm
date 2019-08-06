@@ -1506,6 +1506,8 @@ namespace mml2vgmIDE
                 setting.location.RMain = new Rectangle(RestoreBounds.Location.X, RestoreBounds.Location.Y, RestoreBounds.Size.Width, RestoreBounds.Size.Height);
             }
 
+            frmPartCounter.Close();
+
             setting.Save();
         }
 

@@ -140,8 +140,7 @@ namespace mml2vgmIDE
 
             for (int i = 0; i < dgvPartCounter.Columns.Count; i++)
             {
-                dgvColumnInfo info = new dgvColumnInfo();
-
+                dgvColumnInfo info = (dgvColumnInfo)dgvPartCounter.Columns[i].Tag;
                 info.columnName = dgvPartCounter.Columns[i].Name;
                 info.displayIndex = dgvPartCounter.Columns[i].DisplayIndex;
                 info.size = dgvPartCounter.Columns[i].Width;
@@ -164,10 +163,90 @@ namespace mml2vgmIDE
                 dgvPartCounter.Columns[aryIndex[i].columnName].DisplayIndex = aryIndex[i].displayIndex;
                 dgvPartCounter.Columns[aryIndex[i].columnName].Width = Math.Max(aryIndex[i].size, 10);
                 dgvPartCounter.Columns[aryIndex[i].columnName].Visible = aryIndex[i].visible;
+                dgvPartCounter.Columns[aryIndex[i].columnName].Tag = aryIndex[i];
             }
 
             //spacerは常に最後にする
             dgvPartCounter.Columns["ClmSpacer"].DisplayIndex = dgvPartCounter.Columns.Count  - 1;
+        }
+
+        private void DgvPartCounter_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            
+        }
+
+        private void DgvPartCounter_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            
+        }
+
+        private void DgvPartCounter_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            if (e.Button != MouseButtons.Right) return;
+            if (e.RowIndex != -1) return;
+            if (setting == null || setting.location == null || setting.location.PartCounterClmInfo == null) return;
+
+            //メニューのアイテムを生成する
+            //  hide / show all / セパレータの追加
+            cmsMenu.Items.Clear();
+            string txt = dgvPartCounter.Columns[e.ColumnIndex].HeaderText;
+            if (!string.IsNullOrEmpty(txt))
+            {
+                cmsMenu.Items.Add(string.Format("Hide {0}", txt));
+                cmsMenu.Items[0].Tag = dgvPartCounter.Columns[e.ColumnIndex].Tag;
+                cmsMenu.Items[0].Click += MenuItem_Click;
+            }
+            cmsMenu.Items.Add("Show all");
+            cmsMenu.Items[cmsMenu.Items.Count - 1].Click += MenuItem_Click;
+            cmsMenu.Items.Add("-");
+
+            //  その他の列を全て追加する
+            foreach (DataGridViewColumn c in dgvPartCounter.Columns)
+            {
+                if (txt == c.HeaderText) continue;
+                if (string.IsNullOrEmpty(c.HeaderText)) continue;
+                if (c.Name == "ClmPartNumber") continue;
+                if (c.Name == "ClmIsSecondary") continue;
+
+                cmsMenu.Items.Add(c.HeaderText);
+                cmsMenu.Items[cmsMenu.Items.Count - 1].Tag = c.Tag;
+                cmsMenu.Items[cmsMenu.Items.Count - 1].Click += MenuItem_Click;
+                ((ToolStripMenuItem)cmsMenu.Items[cmsMenu.Items.Count - 1]).Checked = c.Visible;
+            }
+
+            cmsMenu.Show(Cursor.Position);
+
+        }
+
+        private void CmsMenu_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        {
+            if (e.KeyValue != 13) return;
+            foreach (ToolStripItem i in cmsMenu.Items)
+            {
+                if (!i.Selected) continue;
+                //MenuItem_Click(i, null);
+                break;
+            }
+        }
+
+        private void MenuItem_Click(object sender, EventArgs e)
+        {
+            ToolStripMenuItem i = (ToolStripMenuItem)sender;
+            foreach(DataGridViewColumn c in dgvPartCounter.Columns)
+            {
+                if (c.Tag != i.Tag) continue;
+                c.Visible = !c.Visible;
+                return;
+            }
+
+            //show all
+            foreach (DataGridViewColumn c in dgvPartCounter.Columns)
+            {
+                if (c.Name == "ClmPartNumber") continue;
+                if (c.Name == "ClmIsSecondary") continue;
+                c.Visible = true;
+                c.Width = Math.Max(c.Width, 10);
+            }
         }
 
     }
