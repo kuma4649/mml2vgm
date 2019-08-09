@@ -245,7 +245,8 @@ E10020=ToneDoubler cannot be used if chip is not OPN or OPM.
 E10021=Selecting undefined sound patch ({0}).
 E10022=This channel can't use so or sf command.
 E10023=This channel can't use mon or mof command.
-
+E10024=This PCM map No({0}) is not defined.
+E10025=This Note(o{0}{1} shift:{2}) is not defined.
 
 
 ;clsOPN.cs 11000

@@ -116,6 +116,26 @@
     YM2612X : 最大63色まで定義できます。  
 
 
+### PCM Map変更  
+-----------  
+
+- Command  
+    @  
+- Format  
+    @n  
+- 設定可能範囲  
+    n : 0 ～ 255  
+- Support chips  
+    - YM2612  
+    - YM2612X  
+    - YM2608(ADPCM)  
+    - HuC6280  
+- Remark  
+    PCM Mapを設定する  
+- Description  
+    PCMマッピングモードが有効時に、PCM Mapを変更します。  
+
+
 ### プリセット音色変更  
 -----------  
 - Command  

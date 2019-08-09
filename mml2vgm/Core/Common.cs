@@ -431,6 +431,7 @@ namespace Core
                 || typ == enmMMLType.Envelope
                 || typ == enmMMLType.Volume
                 || typ == enmMMLType.Note
+                || typ == enmMMLType.Pan
                 )
             {
                 return true;

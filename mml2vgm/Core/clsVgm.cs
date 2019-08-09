@@ -34,7 +34,7 @@ namespace Core
         public Dictionary<int, int[]> instENV = new Dictionary<int, int[]>();
         public Dictionary<int, clsPcm> instPCM = new Dictionary<int, clsPcm>();
         public List<clsPcmDatSeq> instPCMDatSeq = new List<clsPcmDatSeq>();
-        public Dictionary<int, int> instPCMMap = new Dictionary<int, int>();
+        public Dictionary<int, Dictionary<int, int>> instPCMMap = new Dictionary<int, Dictionary<int, int>>();
         public Dictionary<int, clsToneDoubler> instToneDoubler = new Dictionary<int, clsToneDoubler>();
         public Dictionary<int, byte[]> instWF = new Dictionary<int, byte[]>();
 
@@ -864,18 +864,37 @@ namespace Core
         /// </summary>
         private void definePCMMapModeSet(Line line, string[] vs)
         {
-            int oct = Common.ParseNumber(vs[0].Substring(1));
+            int map = Common.ParseNumber(vs[0].Substring(1));
+            map = Math.Min(Math.Max(map, 0), 255);
+            int oct = Common.ParseNumber(vs[1]);
             oct = Math.Min(Math.Max(oct, 1), 8);
-            int note = Common.ParseNumber(vs[1]);
+            int note = Common.ParseNumber(vs[2]);
             note = Math.Min(Math.Max(note, 0), 11);
-            int no = Common.ParseNumber(vs[2]);
-            no = Math.Min(Math.Max(no, 0), 62);
 
-            if (instPCMMap.ContainsKey(oct * 12 + note))
+            if (!instPCMMap.ContainsKey(map))
             {
-                instPCMMap.Remove(oct * 12 + note);
+                instPCMMap.Add(map, new Dictionary<int, int>());
             }
-            instPCMMap.Add(oct * 12 + note, no);
+
+            int i = 0;
+            while (i < vs.Length - 3)
+            {
+                int no;
+                if (string.IsNullOrEmpty(vs[3 + i]))
+                {
+                    i++;
+                    continue;
+                }
+                no = Common.ParseNumber(vs[3 + i]);
+                no = Math.Min(Math.Max(no, 0), 255);
+
+                if (instPCMMap[map].ContainsKey(oct * 12 + note + i))
+                {
+                    instPCMMap[map].Remove(oct * 12 + note + i);
+                }
+                instPCMMap[map].Add(oct * 12 + note + i, no);
+                i++;
+            }
         }
 
         private static void CheckEnvelopeVolumeRange(Line line, int[] env, int max, int min)

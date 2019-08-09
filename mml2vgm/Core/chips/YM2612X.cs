@@ -77,12 +77,21 @@ namespace Core
             {
                 int n = Const.NOTE.IndexOf(pw.noteCmd);
                 int f = pw.octaveNow * 12 + n + pw.shift + pw.keyShift;
-                if (parent.instPCMMap.ContainsKey(f))
+                if (parent.instPCMMap.ContainsKey(pw.pcmMapNo))
                 {
-                    pw.instrument = parent.instPCMMap[f];
+                    if (parent.instPCMMap[pw.pcmMapNo].ContainsKey(f))
+                    {
+                        pw.instrument = parent.instPCMMap[pw.pcmMapNo][f];
+                    }
+                    else
+                    {
+                        msgBox.setErrMsg(string.Format(msg.get("E10025"), pw.octaveNow, pw.noteCmd, pw.shift + pw.keyShift), mml.line.Lp);
+                        return;
+                    }
                 }
                 else
                 {
+                    msgBox.setErrMsg(string.Format(msg.get("E10024"), pw.pcmMapNo), mml.line.Lp);
                     return;
                 }
             }
@@ -250,6 +259,17 @@ namespace Core
             {
                 if (pw.pcm)
                 {
+
+                    if (pw.isPcmMap)
+                    {
+                        pw.pcmMapNo = n;
+                        if (!parent.instPCMMap.ContainsKey(n))
+                        {
+                            msgBox.setErrMsg(string.Format(msg.get("E10024"), n), mml.line.Lp);
+                        }
+                        return;
+                    }
+
                     pw.instrument = n;
                     SetDummyData(pw, mml);
                     if (!parent.instPCM.ContainsKey(n))

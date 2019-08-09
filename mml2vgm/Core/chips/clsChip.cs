@@ -522,6 +522,7 @@ namespace Core
 
         public virtual void SetDummyData(partWork pw, MML mml)
         {
+            //Console.WriteLine("SkipAddress:{0:x06} skip:{1:x06}", parent.dat.Count, parent.dummyCmdCounter);
             parent.OutData(mml, 0x2f, pw.port0, (byte)(pw.chip.IsSecondary ? 1 : 0));//0x2f:DummyChip (!!CAUTION!!)
             parent.dummyCmdCounter += 3;
         }

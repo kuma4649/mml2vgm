@@ -1018,6 +1018,20 @@
             <seealso cref="M:Sgry.Azuki.Document.ClearHistory"/>
             <exception cref="T:System.ArgumentOutOfRangeException"/>
         </member>
+        <member name="M:Sgry.Azuki.Document.GetLineIconIndex(System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="lineIndex"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Sgry.Azuki.Document.SetLineIconIndex(System.Int32,System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="lineIndex"></param>
+            <param name="lii"></param>
+        </member>
         <member name="P:Sgry.Azuki.Document.IsRecordingHistory">
             <summary>
             Gets or sets whether this document is recording edit actions or not.
@@ -2601,6 +2615,7 @@
             <param name="oldAnchorIndex">index of the selection anchor at when the replacement has occured</param>
             <param name="oldCaretIndex">index of the caret at when the replacement has occured</param>
             <param name="ldsUndoInfo">line dirty states before the replacement</param>
+            <param name="liiUndoInfo"></param>
         </member>
         <member name="M:Sgry.Azuki.EditAction.Undo">
             <summary>
@@ -4602,6 +4617,11 @@
             <seealso cref="T:Sgry.Azuki.LineDirtyState">LineDirtyState enum</seealso>
             <seealso cref="M:Sgry.Azuki.Document.GetLineDirtyState(System.Int32)">Document.GetLineDirtyState method</seealso>
         </member>
+        <member name="P:Sgry.Azuki.IUserInterface.ShowsIconBar">
+            <summary>
+            
+            </summary>
+        </member>
         <member name="P:Sgry.Azuki.IUserInterface.HighlightsCurrentLine">
             <summary>
             Gets or sets whether the current line would be drawn with underline or not.
@@ -5187,6 +5207,17 @@
             (Internal use only.) Invokes HScroll event.
             </summary>
         </member>
+        <member name="E:Sgry.Azuki.IUserInterface.IconBarClicked">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.IUserInterface.InvokeIconBarClicked(System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="clickedIndex"></param>
+        </member>
         <member name="M:Sgry.Azuki.IUserInterface.Scroll(System.Drawing.Rectangle,System.Int32,System.Int32)">
             <summary>
             Scrolls a portion of the window.
@@ -5263,6 +5294,13 @@
             <seealso cref="E:Sgry.Azuki.IUserInterface.LineDrawing">IUserInterface.LineDrawing event</seealso>
             <seealso cref="E:Sgry.Azuki.IUserInterface.LineDrawn">IUserInterface.LineDrawn event</seealso>
         </member>
+        <member name="T:Sgry.Azuki.IconBarClickedEventHandler">
+            <summary>
+            
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
         <member name="T:Sgry.Azuki.LineDrawEventArgs">
             <summary>
             Information about LineDrawing event or LineDrawn event.
@@ -5295,6 +5333,22 @@
             <summary>
             Gets or sets whether graphic of the entire line
             should be redrawn after the event or not.
+            </summary>
+        </member>
+        <member name="T:Sgry.Azuki.IconBarClickedEventArgs">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.IconBarClickedEventArgs.#ctor(System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="clickedIndex"></param>
+        </member>
+        <member name="P:Sgry.Azuki.IconBarClickedEventArgs.clickedIndex">
+            <summary>
+            
             </summary>
         </member>
         <member name="T:Sgry.Azuki.IWordProc">
@@ -5779,6 +5833,16 @@
             Fills a rectangle with background color.
             Note that right and bottom edge will also be painted.
             </summary>
+        </member>
+        <member name="M:Sgry.Azuki.IGraphics.DrawImage(System.Drawing.Image,System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="bmp"></param>
+            <param name="x"></param>
+            <param name="y"></param>
+            <param name="width"></param>
+            <param name="height"></param>
         </member>
         <member name="T:Sgry.Azuki.FontInfo">
             <summary>
@@ -6517,6 +6581,16 @@
             <seealso cref="T:Sgry.Azuki.LineDirtyState">LineDirtyState enum</seealso>
             <seealso cref="M:Sgry.Azuki.Document.GetLineDirtyState(System.Int32)">Document.GetLineDirtyState method</seealso>
         </member>
+        <member name="P:Sgry.Azuki.IView.ShowsIconBar">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.IView.IconBarImageList">
+            <summary>
+            
+            </summary>
+        </member>
         <member name="P:Sgry.Azuki.IView.DrawsSpace">
             <summary>
             Gets or sets whether to draw half-width space with special graphic or not.
@@ -6948,6 +7022,11 @@
             Gets X coordinate in client area of icon bar area.
             </summary>
         </member>
+        <member name="P:Sgry.Azuki.IView.IconBarWidth">
+            <summary>
+            
+            </summary>
+        </member>
         <member name="P:Sgry.Azuki.IView.XofLeftMargin">
             <summary>
             Gets X coordinate in client area of left margin.
@@ -7002,6 +7081,11 @@
             these two property are totally different.
             </para>
             </remarks>
+        </member>
+        <member name="P:Sgry.Azuki.IView.Silence">
+            <summary>
+            
+            </summary>
         </member>
         <member name="T:Sgry.Azuki.MouseCursor">
             <summary>
@@ -8146,6 +8230,21 @@
             <seealso cref="T:Sgry.Azuki.LineDirtyState">LineDirtyState enum</seealso>
             <seealso cref="M:Sgry.Azuki.Document.GetLineDirtyState(System.Int32)">Document.GetLineDirtyState method</seealso>
         </member>
+        <member name="P:Sgry.Azuki.WinForms.AzukiControl.ShowsIconBar">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.WinForms.AzukiControl.IconBarImageList">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Sgry.Azuki.WinForms.AzukiControl.Silence">
+            <summary>
+            
+            </summary>
+        </member>
         <member name="P:Sgry.Azuki.WinForms.AzukiControl.HighlightsCurrentLine">
             <summary>
             Gets or sets whether the current line would be drawn with underline or not.
@@ -8820,6 +8919,17 @@
             <summary>
             (Internal use only.) Invokes HScroll event.
             </summary>
+        </member>
+        <member name="E:Sgry.Azuki.WinForms.AzukiControl.IconBarClicked">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Sgry.Azuki.WinForms.AzukiControl.InvokeIconBarClicked(System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="clickedIndex"></param>
         </member>
         <member name="M:Sgry.Azuki.WinForms.AzukiControl.Scroll(System.Drawing.Rectangle,System.Int32,System.Int32)">
             <summary>

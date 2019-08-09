@@ -333,6 +333,15 @@ namespace Core
 
         }
 
+        public override void CmdPcmMapSw(partWork pw, MML mml)
+        {
+            bool sw = (bool)mml.args[0];
+            if (pw.Type == enmChannelType.FMPCM)
+            {
+                pw.isPcmMap = sw;
+            }
+        }
+
         public override void CmdInstrument(partWork pw, MML mml)
         {
             char type = (char)mml.args[0];
@@ -356,6 +365,16 @@ namespace Core
             {
                 if (pw.pcm)
                 {
+                    if (pw.isPcmMap)
+                    {
+                        pw.pcmMapNo = n;
+                        if (!parent.instPCMMap.ContainsKey(n))
+                        {
+                            msgBox.setErrMsg(string.Format(msg.get("E10024"), n), mml.line.Lp);
+                        }
+                        return;
+                    }
+
                     pw.instrument = n;
                     if (!parent.instPCM.ContainsKey(n))
                     {

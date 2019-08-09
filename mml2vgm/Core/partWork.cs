@@ -545,6 +545,8 @@ namespace Core
 
         private List<clsPos> LstPos = null;
 
+        public int pcmMapNo { get; set; } = 0;
+
         public void MakeLstPos()
         {
             if (pData == null)

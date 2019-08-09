@@ -1,7 +1,7 @@
 ﻿'{
 
 	TitleName   =
-	TitleNameJ  =PCMマッピングモードテスト(HuC6280)
+	TitleNameJ  =PCMマッピングモードテスト(OPNB)
 	GameName    =
 	GameNameJ   =
 	SystemName  =
@@ -18,16 +18,16 @@
 
 }
 
-'@ P 1,"wav\Guitar.wav"        , 8000 , 100,HuC6280
-'@ P 2,"wav\muteGuitar.wav"    , 8000 , 100,HuC6280
+'@ P 1,"..\wav\Guitar.wav"        , 8000 , 100,OPNB,0
+'@ P 2,"..\wav\muteGuitar.wav"    , 8000 , 100,YM2610B,0
 '@ PM 0 , 4,0 , 1,,2
 
 解説1
 0 , 4,0 , 1,,2   PCMMapNo0、オクターブ4の音符ドを@1に、ド#は未指定、レを@2に割り当てる
 
 
-'H1 T126m1
-'H1 o4l4Q4 mon @0 cdcd mof @0cdcd
+'T13 T126
+'T13 o4l4Q4 mon @0 cdcd mof cdcd
 
 解説2
 mon   PCMマッピングモード開始

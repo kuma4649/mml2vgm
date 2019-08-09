@@ -61,6 +61,7 @@ namespace mml2vgmIDE
             azukiControl.AllowDrop = true;
             azukiControl.DragOver += AzukiControl_DragOver;
             azukiControl.DragDrop += AzukiControl_DragDrop;
+            azukiControl.Silence = true;
 
             azukiControl.ColorScheme.ForeColor = Color.FromArgb(setting.ColorScheme.Azuki_ForeColor);
             azukiControl.ColorScheme.BackColor = Color.FromArgb(setting.ColorScheme.Azuki_BackColor);

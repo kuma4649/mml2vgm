@@ -370,6 +370,35 @@ namespace Core
             {
                 pw.keyOn = true;
                 pw.keyOff = false;
+
+                if (pw.isPcmMap)
+                {
+                    int n = Const.NOTE.IndexOf(pw.noteCmd);
+                    int f = pw.octaveNow * 12 + n + pw.shift + pw.keyShift;
+                    if (parent.instPCMMap.ContainsKey(pw.pcmMapNo))
+                    {
+                        if (parent.instPCMMap[pw.pcmMapNo].ContainsKey(f))
+                        {
+                            pw.instrument = parent.instPCMMap[pw.pcmMapNo][f];
+                            SetADPCMAAddress(
+                                mml,
+                                pw
+                                , (int)parent.instPCM[pw.instrument].stAdr
+                                , (int)parent.instPCM[pw.instrument].edAdr);
+                        }
+                        else
+                        {
+                            msgBox.setErrMsg(string.Format(msg.get("E10025"), pw.octaveNow, pw.noteCmd, pw.shift + pw.keyShift), mml.line.Lp);
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        msgBox.setErrMsg(string.Format(msg.get("E10024"), pw.pcmMapNo), mml.line.Lp);
+                        return;
+                    }
+                }
+
                 if (parent.instPCM[pw.instrument].status != enmPCMSTATUS.ERROR)
                 {
                     parent.instPCM[pw.instrument].status = enmPCMSTATUS.USED;
@@ -756,6 +785,15 @@ namespace Core
             SetDummyData(pw, mml);
         }
 
+        public override void CmdPcmMapSw(partWork pw, MML mml)
+        {
+            bool sw = (bool)mml.args[0];
+            if (pw.Type == enmChannelType.ADPCMA)
+            {
+                pw.isPcmMap = sw;
+            }
+        }
+
         public override void CmdInstrument(partWork pw, MML mml)
         {
             char type = (char)mml.args[0];
@@ -779,6 +817,16 @@ namespace Core
             {
                 if (pw.Type == enmChannelType.ADPCMA)
                 {
+                    if (pw.isPcmMap)
+                    {
+                        pw.pcmMapNo = n;
+                        if (!parent.instPCMMap.ContainsKey(n))
+                        {
+                            msgBox.setErrMsg(string.Format(msg.get("E10024"), n), mml.line.Lp);
+                        }
+                        return;
+                    }
+
                     n = Common.CheckRange(n, 0, 255);
                     if (!parent.instPCM.ContainsKey(n))
                     {

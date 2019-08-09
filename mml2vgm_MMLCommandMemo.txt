@@ -586,6 +586,7 @@ ebass3(from MUSIC LALF @70)
                 ofepp  fesabfesrpfes     fr     
 ----------------------------------------------------
 @n              -oooo-ooo-oooo--ooo-oooo-o-o  音色番号指定(0 - 255)
+@n              ---oo-----o-----------o-----  PCM Map番号指定(0 - 255)(PCMマッピングモードが有効の時のみ)
 @In             -------------------------o--  プリセット音色番号指定(1 - 15)
 @n              -----o---o----oo---o----o-o-  エンベロープ番号指定(0 - 255)
 @En             ------o---oo---oo----oooo-oo  エンベロープ番号指定(0 - 255)
@@ -923,31 +924,32 @@ b               -ooooooooooooooooooooooooooo  音符シ
     PとPDを併せて指定することも可能だが、お互いの都合を考慮しない。
     その為思わぬ場所にデータが上書きされていることがある。
 
-'@ PM Octave , Note , No
+'@ PM MapNo , Octave , Note , No...
     PCMマッピングモード定義
+	MapNo       PCM Map No(0-255)
     Octave      オクターブ(1-8)
     Note        ノート番号(0-11) 0:c 1:c+ ... 10:a+ 11:b
-    No          定義番号(0-62)
+    No...       定義番号(0-62) カンマ区切りで半音ごとに複数定義可能です。
 	XGM専用コマンド。指定のノートにPCMを割り当てます。同じ音程の定義は上書きされます。
 
   PCM使用可能音源毎のコマンド対応表
                                          PPPP                         
   名称             略称          タイプ   DIM Freq指定 ループ指定 備考
   ---------------------------------------------------------------------------------------------
-  YM2612           OPN2                  o--- 不可     不可       
+  YM2612           OPN2                  o--o 不可     不可       
   YM2612X          OPN2X                 o--o 不可     不可       XGM専用
   RF5C164          RF5C                  ooo- 可       可         StartAdr 8bit  EndAdr指定無し(ループ指定必須)
   RF5C164Secondary RF5CSecondary         ooo- 可       可         StartAdr 8bit  EndAdr指定無し(ループ指定必須)
   YM2608           OPNA          ADPCM   ooo- 可       不可       
   YM2608Secondary  OPNASecondary ADPCM   ooo- 可       不可       
-  YM2610B          OPNB          ADPCM-A ooo- 不可     不可       
-  YM2610BSecondary OPNBSecondary ADPCM-A ooo- 不可     不可       
+  YM2610B          OPNB          ADPCM-A oooo 不可     不可       
+  YM2610BSecondary OPNBSecondary ADPCM-A oooo 不可     不可       
   YM2610B          OPNB          ADPCM-B ooo- 可       不可       
   YM2610BSecondary OPNBSecondary ADPCM-B ooo- 可       不可       
   SegaPCM          SPCM                  ooo- 可       可         
   SegaPCMSecondary SPCMSecondary         ooo- 可       可         
-  HuC6280          HuC8                  o--- 不可     不可       
-  HuC6280Secondary HuC8Secondary         o--- 不可     不可       
+  HuC6280          HuC8                  o--o 不可     不可       
+  HuC6280Secondary HuC8Secondary         o--o 不可     不可       
   C140             C140                  ooo- 可       可         
   C140Secondary    C140Secondary         ooo- 可       可         
 

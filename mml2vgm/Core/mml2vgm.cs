@@ -219,22 +219,111 @@ namespace Core
         private void OutVgmFile(outDatum[] desBuf)
         {
             List<byte> lstBuf = new List<byte>();
-            int skipCount = 0;
-            foreach (outDatum od in desBuf)
+            int dmySkipCount = 0;
+            int nrmSkipCount = 0;
+            int vgmDataOffset
+                = desBuf[0x34].val
+                + desBuf[0x35].val * 0x100
+                + desBuf[0x36].val * 0x100_00
+                + desBuf[0x37].val * 0x100_00_00 + 0x34;
+            int skip = 0;
+            bool dataEndFlg = false;
+            //Console.WriteLine("--------");
+
+            for (int adr = 0; adr < desBuf.Length; adr++)
             {
+                outDatum od = desBuf[adr];
+                if (adr < vgmDataOffset)
+                {
+                    lstBuf.Add(od.val);
+                    continue;
+                }
+                if (dataEndFlg)
+                {
+                    lstBuf.Add(od.val);
+                    continue;
+                }
 
                 //ダミーコマンドをスキップする
-                if (skipCount > 0)
+                if (dmySkipCount > 0)
                 {
-                    skipCount--;
+                    dmySkipCount--;
+                    continue;
+                }
+                if (nrmSkipCount > 0)
+                {
+                    nrmSkipCount--;
+                    lstBuf.Add(od.val);
                     continue;
                 }
                 //TODO: Dummy Command
                 if (od.val == 0x2f //dummyChipコマンド　(第2引数：chipID 第３引数:isSecondary)
                     && Common.CheckDummyCommand(od.type))//ここで指定できるmmlコマンドは元々はChipに送信することのないコマンドのみ(さもないと、通常のコマンドのデータと見分けがつかなくなる可能性がある)
                 {
-                    skipCount = 2;
+                    //Console.WriteLine("SkipAddress:{0:x06} skip:{1:x06}", adr, skip);
+                    dmySkipCount = 2;
+                    skip += 3;
                     continue;
+                }
+                else
+                {
+                    if (od.val == 0x62 || od.val == 0x63 || (od.val >= 0x70 && od.val <= 0x8f))
+                    {
+                        nrmSkipCount = 0;
+                    }
+                    else if (od.val == 0x90 || od.val == 0x91 || od.val == 0x95)
+                    {
+                        nrmSkipCount = 4;
+                    }
+                    else if (od.val == 0x92)
+                    {
+                        nrmSkipCount = 5;
+                    }
+                    else if (od.val == 0x93)
+                    {
+                        nrmSkipCount = 10;
+                    }
+                    else if (od.val == 0x94)
+                    {
+                        nrmSkipCount = 1;
+                    }
+                    else if (od.val == 0x66)
+                    {
+                        nrmSkipCount = 0;
+                        dataEndFlg = true;
+                    }
+                    else if (od.val == 0x67)
+                    {
+                        nrmSkipCount =
+                            desBuf[adr + 3].val
+                            + desBuf[adr + 4].val * 0x100
+                            + desBuf[adr + 5].val * 0x100_00
+                            + desBuf[adr + 6].val * 0x100_00_00 + 0x2;
+                    }
+                    else if (od.val == 0x68)
+                    {
+                        nrmSkipCount = 11;
+                    }
+                    else if ((od.val >= 0x30 && od.val <= 0x3f) || od.val == 0x4f || od.val == 0x50)
+                    {
+                        nrmSkipCount = 1;
+                    }
+                    else if ((od.val >= 0x40 && od.val <= 0x4e) || (od.val >= 0x51 && od.val <= 0x5f) || od.val == 0x61)
+                    {
+                        nrmSkipCount = 2;
+                    }
+                    else if (od.val >= 0xa0 && od.val <= 0xbf)
+                    {
+                        nrmSkipCount = 2;
+                    }
+                    else if ((od.val >= 0xc0 && od.val <= 0xdf) || od.val == 0x64)
+                    {
+                        nrmSkipCount = 3;
+                    }
+                    else if (od.val >= 0xe0 && od.val <= 0xff)
+                    {
+                        nrmSkipCount = 4;
+                    }
                 }
 
                 lstBuf.Add(od.val);

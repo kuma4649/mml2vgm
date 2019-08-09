@@ -20,22 +20,21 @@
 
 }
 
-'@ P 1,"wav\Guitar.wav"        , 8000 , 100,OPN2X
-'@ P 2,"wav\muteGuitar.wav"    , 8000 , 100,OPN2X
-'@ PM 4 , 0 , 1
-'@ PM 4 , 2 , 2
+'@ P 1,"..\wav\Guitar.wav"        , 8000 , 100,OPN2X
+'@ P 2,"..\wav\muteGuitar.wav"    , 8000 , 100,OPN2X
+'@ PM 0 , 4,0 , 1,,2
 
 解説1
-4 , 0 , 1   オクターブ4の音符ドを@1にわりあてる
-4 , 2 , 2   オクターブ4の音符レを@2にわりあてる
+0 , 4,0 , 1,,2   PCMMapNo0、オクターブ4の音符ドを@1に、ド#は未指定、レを@2に割り当てる
 
 
 'E06 T126m1
-'E06 o4l4Q4 mon cdcd mof cdcd
+'E06 o4l4Q4 mon @0 cdcd mof cdcd
 
 解説2
 m1    先ずはPCMモードにする
 mon   PCMマッピングモード開始
+@0    PCM Map Noを0に設定
 cdcd  @1c@2c@1c@2cと同じ
 mof   PCMマッピングモード終了
 cdcd  @2ccccと同じ。音色はPCMマッピングモード最後の音色がセットされている

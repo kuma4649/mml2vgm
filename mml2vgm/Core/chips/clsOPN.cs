@@ -728,6 +728,29 @@ namespace Core
             }
 
 
+            if (pw.isPcmMap)
+            {
+                int nt = Const.NOTE.IndexOf(pw.noteCmd);
+                int f = pw.octaveNow * 12 + nt + pw.shift + pw.keyShift;
+                if (parent.instPCMMap.ContainsKey(pw.pcmMapNo))
+                {
+                    if (parent.instPCMMap[pw.pcmMapNo].ContainsKey(f))
+                    {
+                        pw.instrument = parent.instPCMMap[pw.pcmMapNo][f];
+                    }
+                    else
+                    {
+                        msgBox.setErrMsg(string.Format(msg.get("E10025"), pw.octaveNow, pw.noteCmd, pw.shift + pw.keyShift), mml.line.Lp);
+                        return;
+                    }
+                }
+                else
+                {
+                    msgBox.setErrMsg(string.Format(msg.get("E10024"), pw.pcmMapNo), mml.line.Lp);
+                    return;
+                }
+            }
+
             if (!parent.instPCM.ContainsKey(pw.instrument)) return;
 
             float m = Const.pcmMTbl[pw.pcmNote] * (float)Math.Pow(2, (pw.pcmOctave - 4));

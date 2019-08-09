@@ -295,6 +295,29 @@ namespace Core
             OutHuC6280Port(mml,pw.isSecondary, 0x4, data);
             OutHuC6280Port(mml,pw.isSecondary, 0x5, (byte)pw.huc6280Pan);
 
+            if (pw.isPcmMap)
+            {
+                int nt = Const.NOTE.IndexOf(pw.noteCmd);
+                int ff = pw.octaveNow * 12 + nt + pw.shift + pw.keyShift;
+                if (parent.instPCMMap.ContainsKey(pw.pcmMapNo))
+                {
+                    if (parent.instPCMMap[pw.pcmMapNo].ContainsKey(ff))
+                    {
+                        pw.instrument = parent.instPCMMap[pw.pcmMapNo][ff];
+                    }
+                    else
+                    {
+                        msgBox.setErrMsg(string.Format(msg.get("E10025"), pw.octaveNow, pw.noteCmd, pw.shift + pw.keyShift), mml.line.Lp);
+                        return;
+                    }
+                }
+                else
+                {
+                    msgBox.setErrMsg(string.Format(msg.get("E10024"), pw.pcmMapNo), mml.line.Lp);
+                    return;
+                }
+            }
+
             float m = Const.pcmMTbl[pw.pcmNote] * (float)Math.Pow(2, (pw.pcmOctave - 4));
             pw.pcmBaseFreqPerFreq = Information.VGM_SAMPLE_PER_SECOND / ((float)parent.instPCM[pw.instrument].freq * m);
             pw.pcmFreqCountBuffer = 0.0f;
@@ -640,6 +663,12 @@ namespace Core
                 p.huc6280Envelope = -1;
                 p.huc6280Pan = -1;
             }
+        }
+
+        public override void CmdPcmMapSw(partWork pw, MML mml)
+        {
+            bool sw = (bool)mml.args[0];
+            pw.isPcmMap = sw;
         }
 
         public override void CmdInstrument(partWork pw, MML mml)

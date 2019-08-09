@@ -18,8 +18,8 @@
 
 }
 
-'@ P 1,"wav\Guitar.wav"        , 8000 , 100,HuC6280
-'@ P 2,"wav\muteGuitar.wav"    , 8000 , 100,HuC6280
+'@ P 1,"..\wav\Guitar.wav"        , 8000 , 100,HuC6280
+'@ P 2,"..\wav\muteGuitar.wav"    , 8000 , 100,HuC6280
 '@ PM 0 , 4,0 , 1,,2
 
 解説1
