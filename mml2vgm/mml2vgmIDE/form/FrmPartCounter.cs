@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
+using mml2vgmIDE.MMLParameter;
 using WeifenLuo.WinFormsUI.Docking;
 
 namespace mml2vgmIDE
@@ -26,6 +27,77 @@ namespace mml2vgmIDE
             dgvPartCounter.ForeColor = Color.FromArgb(setting.ColorScheme.PartCounter_ForeColor);
             EnableDoubleBuffering(dgvPartCounter);
             SetDisplayIndex(setting.location.PartCounterClmInfo);
+
+            double r = 0;
+            double g = 0;
+            double b = 0;
+            double sr = 0;
+            double sg = 0;
+            double sb = 0;
+            double tr = 0;
+            double tg = 0;
+            double tb = 0;
+            double div = 0;
+            int cnt = 0;
+
+            for (int i = 0; i < 256; i++)
+            {
+                if (i == 0)
+                {
+                    r = 140.0;
+                    g = 120.0;
+                    b = 215.0;
+
+                    sr = r;
+                    sg = g;
+                    sb = b;
+                    tr = 80.0;
+                    tg = 80.0;
+                    tb = 160.0;
+
+                    div = 20.0;
+                    cnt = 20;
+                }
+                if (i == 80)
+                {
+                    sr = r;
+                    sg = g;
+                    sb = b;
+                    tr = 70.0;
+                    tg = 70.0;
+                    tb = 120.0;
+
+                    div = 60.0;
+                    cnt = 60;
+                }
+                if (i == 210)
+                {
+                    sr = r;
+                    sg = g;
+                    sb = b;
+                    tr = 40.0;
+                    tg = 40.0;
+                    tb = 80.0;
+
+                    div = 40.0;
+                    cnt = 40;
+                }
+
+                if (cnt > 0)
+                {
+                    r += (tr - sr) / div;
+                    g += (tg - sg) / div;
+                    b += (tb - sb) / div;
+                    cnt--;
+                }
+
+                Color c = Color.FromArgb(255
+                    , Math.Max(Math.Min((int)r,255),0)
+                    , Math.Max(Math.Min((int)g, 255), 0)
+                    , Math.Max(Math.Min((int)b, 255), 0)
+                    );
+                meterBrush[255 - i] = new SolidBrush(c);
+            }
         }
 
         public void ClearCounter()
@@ -89,7 +161,10 @@ namespace mml2vgmIDE
 
         private void FrmPartCounter_FormClosed(object sender, FormClosedEventArgs e)
         {
-
+            for(int i = 0; i < 256; i++)
+            {
+                meterBrush[i].Dispose();
+            }
 
         }
 
@@ -128,10 +203,45 @@ namespace mml2vgmIDE
                     dgvPartCounter.Rows[p].Cells["ClmPan"].Value = mmli.pan[r] == null ? "-" : mmli.pan[r];
                     dgvPartCounter.Rows[p].Cells["ClmNote"].Value = mmli.notecmd[r] == null ? "-" : mmli.notecmd[r];
                     dgvPartCounter.Rows[p].Cells["ClmLength"].Value = mmli.length[r] == null ? "-" : mmli.length[r];
+                    dgvPartCounter.Rows[p].Cells["ClmEnvSw"].Value = mmli.envSw[r] == null ? "-" : mmli.envSw[r];
+                    dgvPartCounter.Rows[p].Cells["ClmLfoSw"].Value = mmli.lfoSw[r] == null ? "-" : mmli.lfoSw[r];
+                    dgvPartCounter.Rows[p].Cells["ClmDetune"].Value = mmli.detune[r] == null ? "-" : mmli.detune[r].ToString();
+                    dgvPartCounter.Rows[p].Cells["ClmKeyShift"].Value = mmli.keyShift[r] == null ? "-" : mmli.keyShift[r].ToString();
+                    DrawMeter(dgvPartCounter.Rows[p].Cells["ClmMeter"], mmli, r);
                 }
             }
 
             dgvPartCounter.ResumeLayout();
+        }
+
+        private Brush[] meterBrush = new Brush[256];
+
+        private void DrawMeter(DataGridViewCell dataGridViewCell, Instrument mmli,int pn)
+        {
+            DataGridViewImageCell cell = (DataGridViewImageCell)dataGridViewCell;
+            int cw = cell.Size.Width;
+            int ch = cell.Size.Height;
+            int x = 2;
+            int y = (int)((ch - 4) / 6.0) + 2;
+            int p = mmli.keyOnMeter[pn] == null ? 0 : (int)mmli.keyOnMeter[pn];
+            int w = (int)((cw - 6) / 256.0 * p);
+            int h = (int)((ch - 4) / 6.0 * 4.0);
+
+            Bitmap canvas = new Bitmap(cw, ch);
+            using (Graphics g = Graphics.FromImage(canvas))
+            {
+                g.Clear(Color.Transparent);
+                g.FillRectangle(meterBrush[p], x, y, w, h);
+            }
+
+            //PictureBox1に表示する
+            cell.Value = canvas;
+
+            if (mmli.keyOnMeter[pn] != null)
+            {
+                mmli.keyOnMeter[pn] -= 4;
+                mmli.keyOnMeter[pn] = Math.Max((int)mmli.keyOnMeter[pn], 0);
+            }
         }
 
         private dgvColumnInfo[] getDisplayIndex()
@@ -141,6 +251,11 @@ namespace mml2vgmIDE
             for (int i = 0; i < dgvPartCounter.Columns.Count; i++)
             {
                 dgvColumnInfo info = (dgvColumnInfo)dgvPartCounter.Columns[i].Tag;
+                if (info == null)
+                {
+                    info = new dgvColumnInfo();
+                }
+
                 info.columnName = dgvPartCounter.Columns[i].Name;
                 info.displayIndex = dgvPartCounter.Columns[i].DisplayIndex;
                 info.size = dgvPartCounter.Columns[i].Width;
@@ -158,6 +273,7 @@ namespace mml2vgmIDE
 
             for (int i = 0; i < aryIndex.Length; i++)
             {
+                if (aryIndex[i] == null) continue;
                 if (!dgvPartCounter.Columns.Contains(aryIndex[i].columnName)) continue;
 
                 dgvPartCounter.Columns[aryIndex[i].columnName].DisplayIndex = aryIndex[i].displayIndex;

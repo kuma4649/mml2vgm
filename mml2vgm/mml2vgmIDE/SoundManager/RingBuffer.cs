@@ -50,9 +50,9 @@ namespace SoundManager
 
         public bool Enq(outDatum od, long Counter, Chip Chip, EnmDataType Type, int Address, int Data, object ExData)
         {
-            if (name != "") mml2vgmIDE.log.Write(
-                string.Format("[{0}]:Enqueue:Counter:{1}:Model:{2}:Device:{3}:Number:{4}:Type:{5}:Address:{6:x4}:Data:{7:x4}"
-                , name, Counter, Chip.Model, Chip.Device, Chip.Number, Type, Address, Data));
+            //if (name != "") mml2vgmIDE.log.Write(
+            //    string.Format("[{0}]:Enqueue:Counter:{1}:Model:{2}:Device:{3}:Number:{4}:Type:{5}:Address:{6:x4}:Data:{7:x4}"
+            //    , name, Counter, Chip.Model, Chip.Device, Chip.Number, Type, Address, Data));
 
             lock (lockObj)
             {
@@ -60,7 +60,7 @@ namespace SoundManager
                 {
                     if (!AutoExtend)
                     {
-                        return false;
+                        //return false;
                     }
                     //自動拡張
                     try

@@ -43,7 +43,7 @@ namespace mml2vgmIDE
                     Port = (byte)((chip.DstCommand & 0xFF00) >> 8);
                     Command = (byte)((chip.DstCommand & 0x00FF) >> 0);
                     Data = chip.Data[(chip.DataStart + chip.RealPos)];
-                    od = chip.od;
+                    od = null;// chip.od;
                     //if (model == enmModel.RealModel) log.Write(string.Format("{0:x} {1:x}", Data, chip.RealPos));
 
                     chip_reg_write(Counter, chip.DstChipType, chip.DstChipID, Port, Command, Data, od);

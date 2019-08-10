@@ -30,7 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
@@ -39,8 +39,13 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmPartCounter));
             this.dgvPartCounter = new System.Windows.Forms.DataGridView();
+            this.cmsMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.testToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.timer = new System.Windows.Forms.Timer(this.components);
             this.ClmPartNumber = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ClmIsSecondary = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.ClmPart = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -52,10 +57,12 @@
             this.ClmPan = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ClmNote = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ClmLength = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ClmEnvSw = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ClmLfoSw = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ClmDetune = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ClmKeyShift = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ClmMeter = new System.Windows.Forms.DataGridViewImageColumn();
             this.ClmSpacer = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cmsMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.testToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.timer = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.dgvPartCounter)).BeginInit();
             this.cmsMenu.SuspendLayout();
             this.SuspendLayout();
@@ -75,7 +82,7 @@
             dataGridViewCellStyle1.SelectionForeColor = System.Drawing.Color.White;
             dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
             this.dgvPartCounter.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
-            this.dgvPartCounter.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvPartCounter.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             this.dgvPartCounter.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.ClmPartNumber,
             this.ClmIsSecondary,
@@ -88,15 +95,20 @@
             this.ClmPan,
             this.ClmNote,
             this.ClmLength,
+            this.ClmEnvSw,
+            this.ClmLfoSw,
+            this.ClmDetune,
+            this.ClmKeyShift,
+            this.ClmMeter,
             this.ClmSpacer});
-            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle10.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle10.Font = new System.Drawing.Font("MS UI Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            dataGridViewCellStyle10.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle10.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(180)))));
-            dataGridViewCellStyle10.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle10.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvPartCounter.DefaultCellStyle = dataGridViewCellStyle10;
+            dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle12.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle12.Font = new System.Drawing.Font("MS UI Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            dataGridViewCellStyle12.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle12.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(180)))));
+            dataGridViewCellStyle12.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle12.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvPartCounter.DefaultCellStyle = dataGridViewCellStyle12;
             this.dgvPartCounter.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgvPartCounter.EnableHeadersVisualStyles = false;
             this.dgvPartCounter.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(180)))));
@@ -110,6 +122,25 @@
             this.dgvPartCounter.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DgvPartCounter_CellClick);
             this.dgvPartCounter.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DgvPartCounter_CellContentClick);
             this.dgvPartCounter.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.DgvPartCounter_CellMouseClick);
+            // 
+            // cmsMenu
+            // 
+            this.cmsMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.testToolStripMenuItem});
+            this.cmsMenu.Name = "cmsMenu";
+            this.cmsMenu.Size = new System.Drawing.Size(94, 26);
+            this.cmsMenu.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.CmsMenu_PreviewKeyDown);
+            // 
+            // testToolStripMenuItem
+            // 
+            this.testToolStripMenuItem.Name = "testToolStripMenuItem";
+            this.testToolStripMenuItem.Size = new System.Drawing.Size(93, 22);
+            this.testToolStripMenuItem.Text = "test";
+            // 
+            // timer
+            // 
+            this.timer.Interval = 10;
+            this.timer.Tick += new System.EventHandler(this.Timer_Tick);
             // 
             // ClmPartNumber
             // 
@@ -200,6 +231,40 @@
             this.ClmLength.Name = "ClmLength";
             this.ClmLength.ReadOnly = true;
             // 
+            // ClmEnvSw
+            // 
+            this.ClmEnvSw.HeaderText = "Env.Sw.";
+            this.ClmEnvSw.Name = "ClmEnvSw";
+            this.ClmEnvSw.ReadOnly = true;
+            // 
+            // ClmLfoSw
+            // 
+            this.ClmLfoSw.HeaderText = "LFO Sw.";
+            this.ClmLfoSw.Name = "ClmLfoSw";
+            this.ClmLfoSw.ReadOnly = true;
+            // 
+            // ClmDetune
+            // 
+            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.ClmDetune.DefaultCellStyle = dataGridViewCellStyle10;
+            this.ClmDetune.HeaderText = "Detune";
+            this.ClmDetune.Name = "ClmDetune";
+            this.ClmDetune.ReadOnly = true;
+            // 
+            // ClmKeyShift
+            // 
+            dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.ClmKeyShift.DefaultCellStyle = dataGridViewCellStyle11;
+            this.ClmKeyShift.HeaderText = "Key shift";
+            this.ClmKeyShift.Name = "ClmKeyShift";
+            this.ClmKeyShift.ReadOnly = true;
+            // 
+            // ClmMeter
+            // 
+            this.ClmMeter.HeaderText = "KeyOn";
+            this.ClmMeter.Name = "ClmMeter";
+            this.ClmMeter.ReadOnly = true;
+            // 
             // ClmSpacer
             // 
             this.ClmSpacer.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
@@ -207,25 +272,6 @@
             this.ClmSpacer.Name = "ClmSpacer";
             this.ClmSpacer.ReadOnly = true;
             this.ClmSpacer.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // cmsMenu
-            // 
-            this.cmsMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.testToolStripMenuItem});
-            this.cmsMenu.Name = "cmsMenu";
-            this.cmsMenu.Size = new System.Drawing.Size(94, 26);
-            this.cmsMenu.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.CmsMenu_PreviewKeyDown);
-            // 
-            // testToolStripMenuItem
-            // 
-            this.testToolStripMenuItem.Name = "testToolStripMenuItem";
-            this.testToolStripMenuItem.Size = new System.Drawing.Size(93, 22);
-            this.testToolStripMenuItem.Text = "test";
-            // 
-            // timer
-            // 
-            this.timer.Interval = 10;
-            this.timer.Tick += new System.EventHandler(this.Timer_Tick);
             // 
             // FrmPartCounter
             // 
@@ -251,6 +297,8 @@
         #endregion
         private System.Windows.Forms.DataGridView dgvPartCounter;
         private System.Windows.Forms.Timer timer;
+        private System.Windows.Forms.ContextMenuStrip cmsMenu;
+        private System.Windows.Forms.ToolStripMenuItem testToolStripMenuItem;
         private System.Windows.Forms.DataGridViewTextBoxColumn ClmPartNumber;
         private System.Windows.Forms.DataGridViewCheckBoxColumn ClmIsSecondary;
         private System.Windows.Forms.DataGridViewTextBoxColumn ClmPart;
@@ -262,8 +310,11 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn ClmPan;
         private System.Windows.Forms.DataGridViewTextBoxColumn ClmNote;
         private System.Windows.Forms.DataGridViewTextBoxColumn ClmLength;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ClmEnvSw;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ClmLfoSw;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ClmDetune;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ClmKeyShift;
+        private System.Windows.Forms.DataGridViewImageColumn ClmMeter;
         private System.Windows.Forms.DataGridViewTextBoxColumn ClmSpacer;
-        private System.Windows.Forms.ContextMenuStrip cmsMenu;
-        private System.Windows.Forms.ToolStripMenuItem testToolStripMenuItem;
     }
 }

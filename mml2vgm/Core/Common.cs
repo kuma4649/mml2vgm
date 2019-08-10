@@ -30,7 +30,7 @@ namespace Core
             return GetPCMDataFromFile(path, instPCM.fileName, instPCM.vol, out isRaw, out is16bit, out samplerate);
         }
 
-        public static byte[] GetPCMDataFromFile(string path, string fileName,int vol,out bool isRaw, out bool is16bit, out int samplerate)
+        public static byte[] GetPCMDataFromFile(string path, string fileName, int vol, out bool isRaw, out bool is16bit, out int samplerate)
         {
             string fnPcm = Path.Combine(path, fileName).Replace('\\', Path.DirectorySeparatorChar).Replace('/', Path.DirectorySeparatorChar);
 
@@ -193,7 +193,7 @@ namespace Core
             }
         }
 
-        public static void SetUInt32bit31(byte[] buf, int ptr, UInt32 value,bool sw=false)
+        public static void SetUInt32bit31(byte[] buf, int ptr, UInt32 value, bool sw = false)
         {
             buf[ptr + 0] = (byte)(value & 0xff);
             buf[ptr + 1] = (byte)((value & 0xff00) >> 8);
@@ -212,7 +212,7 @@ namespace Core
             return newBuf;
         }
 
-        public static List<string> DivParts(string parts,Dictionary<enmChipType,ClsChip[]> chips)
+        public static List<string> DivParts(string parts, Dictionary<enmChipType, ClsChip[]> chips)
         {
             List<string> ret = new List<string>();
             string a = "";
@@ -315,7 +315,7 @@ namespace Core
             desDat.Add((byte)(v >> 8));
         }
 
-        private static int GetChMax(string a, Dictionary<enmChipType,ClsChip[]> chips)
+        private static int GetChMax(string a, Dictionary<enmChipType, ClsChip[]> chips)
         {
             foreach (KeyValuePair<enmChipType, ClsChip[]> kvp in chips)
             {
@@ -432,6 +432,9 @@ namespace Core
                 || typ == enmMMLType.Volume
                 || typ == enmMMLType.Note
                 || typ == enmMMLType.Pan
+                || typ == enmMMLType.LfoSwitch
+                || typ == enmMMLType.Detune
+                || typ == enmMMLType.KeyShift
                 )
             {
                 return true;

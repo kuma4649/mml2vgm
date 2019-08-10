@@ -630,6 +630,7 @@ namespace Core
         {
             int n = (int)mml.args[0];
             pw.keyShift = Common.CheckRange(n, -128, 128);
+            SetDummyData(pw, mml);
         }
 
         public virtual void CmdAddressShift(partWork pw, MML mml)
@@ -763,13 +764,19 @@ namespace Core
             int n = (int)mml.args[1];
 
             //LFOの設定値をチェック
-            if (n != 0 && !CheckLFOParam(pw, (int)c,mml))
+            if (n != 0 && !CheckLFOParam(pw, (int)c, mml))
             {
                 return;
             }
 
             pw.lfo[c].sw = !(n == 0);
 
+            mml.args.Add(
+                (pw.lfo[0].sw ? "P" : "-")
+                + (pw.lfo[1].sw ? "Q" : "-")
+                + (pw.lfo[2].sw ? "R" : "-")
+                + (pw.lfo[3].sw ? "S" : "-"));
+            SetDummyData(pw, mml);
         }
 
 
@@ -798,6 +805,8 @@ namespace Core
                     }
                     break;
             }
+
+            SetDummyData(pw, mml);
             return;
         }
 
@@ -924,6 +933,7 @@ namespace Core
             int n = (int)mml.args[0];
             n = Common.CheckRange(n, -127, 127);
             pw.detune = n;
+            SetDummyData(pw, mml);
         }
 
 

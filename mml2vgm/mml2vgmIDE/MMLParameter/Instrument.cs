@@ -13,6 +13,12 @@ namespace mml2vgmIDE.MMLParameter
         public int?[] octave;
         public string[] length;
         public string[] pan;
+        public string[] envSw;
+        public string[] lfoSw;
+        public int?[] detune;
+        public int?[] keyShift;
+        public int?[] keyOnMeter;
+        public bool[] beforeTie;
 
         public Instrument(int n)
         {
@@ -23,6 +29,12 @@ namespace mml2vgmIDE.MMLParameter
             octave = new int?[n];
             length = new string[n];
             pan = new string[n];
+            envSw = new string[n];
+            lfoSw = new string[n];
+            detune = new int?[n];
+            keyShift = new int?[n];
+            keyOnMeter = new int?[n];
+            beforeTie = new bool[n];
         }
 
         public abstract void SetParameter(outDatum od, int cc);

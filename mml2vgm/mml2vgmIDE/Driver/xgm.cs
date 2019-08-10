@@ -411,7 +411,11 @@ namespace mml2vgmIDE
                     xgmpcm[i].isPlaying = false;
                     xgmpcm[i].data = 0;
                 }
-                if (xgmpcm[i].isPlaying) chipRegister.YM2612SetRegister(xgmpcm[i].od, Audio.DriverSeqCounter, 0, 0, -1, -1);
+                if (xgmpcm[i].isPlaying)
+                {
+                    //chipRegister.YM2612SetRegister(xgmpcm[i].od, Audio.DriverSeqCounter, 0, 0, -1, -1);
+                    chipRegister.YM2612SetRegister(null, Audio.DriverSeqCounter, 0, 0, -1, -1);
+                }
             }
 
             //if (cnt > 1)

@@ -641,6 +641,8 @@ namespace Core
 
         public void OutFmKeyOn(partWork pw,MML mml)
         {
+            SetDummyData(pw, mml);
+
             int n = (pw.chip is YM2203) ? 0 : 3;
 
             if (pw.chip is YM2612X && (pw.ch > 8 || pw.ch == 5) && pw.pcm)
