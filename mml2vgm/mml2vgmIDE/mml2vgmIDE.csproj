@@ -152,6 +152,12 @@
     <Compile Include="form\FrmMixer.Designer.cs">
       <DependentUpon>FrmMixer.cs</DependentUpon>
     </Compile>
+    <Compile Include="form\FrmSearchBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="form\FrmSearchBox.Designer.cs">
+      <DependentUpon>FrmSearchBox.cs</DependentUpon>
+    </Compile>
     <Compile Include="form\FrmSetting.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -281,6 +287,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="form\FrmMixer.resx">
       <DependentUpon>FrmMixer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="form\FrmSearchBox.ja-JP.resx">
+      <DependentUpon>FrmSearchBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="form\FrmSearchBox.resx">
+      <DependentUpon>FrmSearchBox.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="form\FrmSetting.resx">
       <DependentUpon>FrmSetting.cs</DependentUpon>

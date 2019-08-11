@@ -33,7 +33,7 @@ namespace mml2vgmIDE
             if (e.RowIndex != -1)
             {
                 dgvItem.Rows[e.RowIndex].Selected = true;
-                DockContent dc = (DockContent)parent.GetActiveDocument();
+                DockContent dc = (DockContent)parent.GetActiveDockContent();
                 Document d = null;
                 if (dc != null)
                 {

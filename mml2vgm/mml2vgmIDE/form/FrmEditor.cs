@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using Newtonsoft.Json;
 using Sgry.Azuki;
@@ -14,7 +15,19 @@ namespace mml2vgmIDE
 {
     public partial class FrmEditor : DockContent
     {
+        private int searchAnchorIndex;
+        private bool searchUseRegex;
+        private Regex searchRegex;
+        private string searchTextPattern = "";
+        private bool searchMatchCase;
+        public Document document = null;
+        public FrmSien frmSien = null;
+        //public int col = -1;
+        public AzukiControl azukiControl;
+
         private FrmMain _main;
+        private Setting setting;
+
         public FrmMain main
         {
             get
@@ -29,14 +42,11 @@ namespace mml2vgmIDE
                 main.SizeChanged += AzukiControl_CancelSien;
             }
         }
-        public Document document = null;
-        public FrmSien frmSien = null;
-        //public int col = -1;
-        public AzukiControl azukiControl;
 
         public FrmEditor(Setting setting)
         {
             InitializeComponent();
+            this.setting = setting;
 
             Sgry.Azuki.Highlighter.KeywordHighlighter keywordHighlighter = new Sgry.Azuki.Highlighter.KeywordHighlighter();
             keywordHighlighter.AddRegex("^[^'].*", false, CharClass.DocComment);
@@ -68,6 +78,8 @@ namespace mml2vgmIDE
             azukiControl.ColorScheme.IconBarBack = Color.FromArgb(setting.ColorScheme.Azuki_IconBarBack);
             azukiControl.ColorScheme.LineNumberBack = Color.FromArgb(setting.ColorScheme.Azuki_LineNumberBack_Normal);
             azukiControl.ColorScheme.LineNumberFore = Color.FromArgb(setting.ColorScheme.Azuki_LineNumberFore_Normal);
+            azukiControl.ColorScheme.SelectionBack = Color.FromArgb(setting.ColorScheme.Azuki_SelectionBack_Normal);
+            azukiControl.ColorScheme.SelectionFore = Color.FromArgb(setting.ColorScheme.Azuki_SelectionFore_Normal);
             azukiControl.ColorScheme.SetColor(CharClass.Keyword, Color.FromArgb(setting.ColorScheme.Azuki_Keyword), Color.Transparent);
             azukiControl.ColorScheme.SetColor(CharClass.Comment, Color.FromArgb(setting.ColorScheme.Azuki_Comment), Color.Transparent);
             azukiControl.ColorScheme.SetColor(CharClass.DocComment, Color.FromArgb(setting.ColorScheme.Azuki_DocComment), Color.Transparent);
@@ -82,6 +94,9 @@ namespace mml2vgmIDE
             azukiControl.SetKeyBind((uint)(Keys.Shift | Keys.Enter), ActionShiftEnter);
             azukiControl.SetKeyBind((uint)(Keys.Control | Keys.Divide), ActionComment);
             azukiControl.SetKeyBind((uint)(Keys.Control | Keys.OemQuestion), ActionComment);
+            azukiControl.SetKeyBind((uint)(Keys.Control | Keys.F), ActionFind);
+            azukiControl.SetKeyBind((uint)(Keys.F3), ActionFindNext);
+            azukiControl.SetKeyBind((uint)(Keys.Shift | Keys.F3), ActionFindPrevious);
 
             this.Controls.Add(azukiControl);
 
@@ -393,6 +408,153 @@ namespace mml2vgmIDE
             }
 
             azukiControl.SetSelection(st + a, st + a);
+        }
+
+        public void ActionFind(IUserInterface ui)
+        {
+            form.FrmSearchBox fsb = new form.FrmSearchBox(setting);
+            DialogResult res = fsb.ShowDialog();
+            if (res == DialogResult.OK)
+            {
+                searchTextPattern = fsb.tbPattern.Text;
+                ActionFindNext(ui);
+            }
+            else if (res == DialogResult.Yes)
+            {
+                searchTextPattern = fsb.tbPattern.Text;
+                ActionFindPrevious(ui);
+            }
+        }
+
+        public void ActionFindNext(IUserInterface ui)
+        {
+            if (searchTextPattern == "")
+            {
+                ActionFind(ui);
+                return;
+            }
+            //AzukiのAnnの検索処理を利用
+
+            Sgry.Azuki.Document azdoc = azukiControl.Document;
+            int startIndex;
+            TextSegment result;
+            Regex regex;
+
+            int s, e;
+            azdoc.GetSelection(out s, out e);
+            searchAnchorIndex = e + 1;
+
+            // determine where to start text search
+            if (0 <= searchAnchorIndex)
+                startIndex = searchAnchorIndex;
+            else
+                startIndex = Math.Max(azdoc.CaretIndex, azdoc.AnchorIndex);
+
+            // find
+            if (searchUseRegex)
+            {
+                // Regular expression search.
+                // get regex object from context
+                regex = searchRegex;
+                if (regex == null)
+                {
+                    // current text pattern was invalid as a regular expression.
+                    return;
+                }
+
+                // ensure that "RightToLeft" option of the regex object is NOT set
+                RegexOptions opt = regex.Options;
+                if ((opt & RegexOptions.RightToLeft) != 0)
+                {
+                    opt &= ~(RegexOptions.RightToLeft);
+                    regex = new Regex(regex.ToString(), opt);
+                    searchRegex = regex;
+                }
+                result = azdoc.FindNext(regex, startIndex, azdoc.Length);
+            }
+            else
+            {
+                // normal text pattern matching.
+                result = azdoc.FindNext(searchTextPattern, startIndex, azdoc.Length, searchMatchCase);
+            }
+
+            // select the result
+            if (result != null)
+            {
+                azukiControl.Document.SetSelection(result.Begin, result.End);
+                azukiControl.View.SetDesiredColumn();
+                azukiControl.ScrollToCaret();
+                searchAnchorIndex = result.End;
+            }
+            else
+            {
+                MessageBox.Show("見つかりません");
+            }
+        }
+
+        public void ActionFindPrevious(IUserInterface ui)
+        {
+            if (searchTextPattern == "")
+            {
+                ActionFind(ui);
+                return;
+            }
+
+            //AzukiのAnnの検索処理を利用
+
+            Sgry.Azuki.Document azdoc = azukiControl.Document;
+            int startIndex;
+            TextSegment result;
+            Regex regex;
+
+            int s, e;
+            azdoc.GetSelection(out s, out e);
+            searchAnchorIndex = s - 1;
+
+            // determine where to start text search
+            if (0 <= searchAnchorIndex)
+                startIndex = searchAnchorIndex;
+            else
+                startIndex = Math.Min(azdoc.CaretIndex, azdoc.AnchorIndex);
+
+            // find
+            if (searchUseRegex)
+            {
+                // Regular expression search.
+                // get regex object from context
+                regex = searchRegex;
+                if (regex == null)
+                {
+                    // current text pattern was invalid as a regular expression.
+                    return;
+                }
+
+                // ensure that "RightToLeft" option of the regex object is set
+                RegexOptions opt = searchRegex.Options;
+                if ((opt & RegexOptions.RightToLeft) == 0)
+                {
+                    opt |= RegexOptions.RightToLeft;
+                    searchRegex = new Regex(searchRegex.ToString(), opt);
+                }
+                result = azdoc.FindPrev(searchRegex, 0, startIndex);
+            }
+            else
+            {
+                // normal text pattern matching.
+                result = azdoc.FindPrev(searchTextPattern, 0, startIndex, searchMatchCase);
+            }
+
+            // select the result
+            if (result != null)
+            {
+                azukiControl.Document.SetSelection(result.End, result.Begin);
+                azukiControl.View.SetDesiredColumn();
+                azukiControl.ScrollToCaret();
+            }
+            else
+            {
+                MessageBox.Show("見つかりません");
+            }
         }
 
         protected override string GetPersistString()

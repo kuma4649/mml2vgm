@@ -1942,7 +1942,8 @@ namespace mml2vgmIDE
                                 ));
 
                             chipRegister.AY8910[i].Use = true;
-                            lstChips.Add(chip);
+
+                            if (chip.Instrument != null) lstChips.Add(chip);
                         }
                     }
 
@@ -1984,7 +1985,8 @@ namespace mml2vgmIDE
                                 ));
 
                             chipRegister.C140[i].Use = true;
-                            lstChips.Add(chip);
+
+                            if (chip.Instrument != null) lstChips.Add(chip);
                         }
                     }
 
@@ -2028,7 +2030,7 @@ namespace mml2vgmIDE
 
                             chipRegister.SEGAPCM[i].Use = true;
 
-                            lstChips.Add(chip);
+                            if (chip.Instrument != null) lstChips.Add(chip);
                         }
                     }
 
@@ -2071,7 +2073,8 @@ namespace mml2vgmIDE
                                 ));
 
                             chipRegister.SN76489[i].Use = true;
-                            lstChips.Add(chip);
+
+                            if (chip.Instrument != null) lstChips.Add(chip);
 
                         }
                     }
@@ -2184,7 +2187,7 @@ namespace mml2vgmIDE
                                 ));
 
                             chipRegister.YM2203[i].Use = true;
-                            lstChips.Add(chip);
+                            if (chip.Instrument != null) lstChips.Add(chip);
                         }
                     }
 
@@ -2226,7 +2229,7 @@ namespace mml2vgmIDE
                                 ));
 
                             chipRegister.YM2413[i].Use = true;
-                            lstChips.Add(chip);
+                            if (chip.Instrument != null) lstChips.Add(chip);
                         }
                     }
 
@@ -2266,7 +2269,7 @@ namespace mml2vgmIDE
                                 ));
 
                             chipRegister.YM2608[i].Use = true;
-                            lstChips.Add(chip);
+                            if (chip.Instrument != null) lstChips.Add(chip);
                         }
                     }
 
@@ -2307,7 +2310,7 @@ namespace mml2vgmIDE
                                 ));
 
                             chipRegister.YM2610[i].Use = true;
-                            lstChips.Add(chip);
+                            if (chip.Instrument != null) lstChips.Add(chip);
                         }
                     }
 
@@ -2333,7 +2336,8 @@ namespace mml2vgmIDE
                                 chip.Stop = ym2612.Stop;
                                 chip.Reset = ym2612.Reset;
                             }
-                            else if ((i == 0 && setting.YM2612Type.UseEmu2) || (i == 1 && setting.YM2612SType.UseEmu2))
+                            else if ((i == 0 && setting.YM2612Type.UseEmu2) 
+                                || (i == 1 && setting.YM2612SType.UseEmu2))
                             {
                                 if (ym3438 == null) ym3438 = new ym3438();
                                 chip.type = MDSound.MDSound.enmInstrumentType.YM3438;
@@ -2387,7 +2391,8 @@ namespace mml2vgmIDE
                                 , setting.nukedOPN2.EmuType));
 
                             chipRegister.YM2612[i].Use = true;
-                            lstChips.Add(chip);
+
+                            if (chip.Instrument != null) lstChips.Add(chip);
 
                         }
                     }
@@ -2413,7 +2418,7 @@ namespace mml2vgmIDE
 
                             hiyorimiDeviceFlag |= 0x2;
 
-                            lstChips.Add(chip);
+                            if (chip.Instrument != null) lstChips.Add(chip);
                             useChip.Add(i == 0 ? EnmChip.RF5C68 : EnmChip.S_RF5C68);
                         }
                     }
@@ -2456,7 +2461,7 @@ namespace mml2vgmIDE
                                 ));
 
                             chipRegister.RF5C164[i].Use = true;
-                            lstChips.Add(chip);
+                            if (chip.Instrument != null) lstChips.Add(chip);
                         }
                     }
 
@@ -2480,7 +2485,7 @@ namespace mml2vgmIDE
 
                         chipLED.PriPWM = 1;
 
-                        lstChips.Add(chip);
+                        if (chip.Instrument != null) lstChips.Add(chip);
                         useChip.Add(EnmChip.PWM);
                     }
 
@@ -2507,7 +2512,7 @@ namespace mml2vgmIDE
                             if (i == 0) chipLED.PriMPCM = 1;
                             else chipLED.SecMPCM = 1;
 
-                            lstChips.Add(chip);
+                            if (chip.Instrument != null) lstChips.Add(chip);
                             useChip.Add(i == 0 ? EnmChip.MultiPCM : EnmChip.S_MultiPCM);
                         }
                     }
@@ -2534,7 +2539,7 @@ namespace mml2vgmIDE
 
                         chipLED.PriOKI5 = 1;
 
-                        lstChips.Add(chip);
+                        if (chip.Instrument != null) lstChips.Add(chip);
                         useChip.Add(EnmChip.OKIM6258);
                     }
 
@@ -2562,7 +2567,7 @@ namespace mml2vgmIDE
                             if (i == 0) chipLED.PriOKI9 = 1;
                             else chipLED.SecOKI9 = 1;
 
-                            lstChips.Add(chip);
+                            if (chip.Instrument != null) lstChips.Add(chip);
                             useChip.Add(i == 0 ? EnmChip.OKIM6295 : EnmChip.S_OKIM6295);
                         }
                     }
@@ -2590,7 +2595,7 @@ namespace mml2vgmIDE
                             if (i == 0) chipLED.PriOPL2 = 1;
                             else chipLED.SecOPL2 = 1;
 
-                            lstChips.Add(chip);
+                            if (chip.Instrument != null) lstChips.Add(chip);
                             useChip.Add(i == 0 ? EnmChip.YM3812 : EnmChip.S_YM3812);
                         }
                     }
@@ -2618,7 +2623,7 @@ namespace mml2vgmIDE
                             if (i == 0) chipLED.PriOPL3 = 1;
                             else chipLED.SecOPL3 = 1;
 
-                            lstChips.Add(chip);
+                            if (chip.Instrument != null) lstChips.Add(chip);
                             useChip.Add(i == 0 ? EnmChip.YMF262 : EnmChip.S_YMF262);
                         }
                     }
@@ -2646,7 +2651,7 @@ namespace mml2vgmIDE
                             if (i == 0) chipLED.PriOPX = 1;
                             else chipLED.SecOPX = 1;
 
-                            lstChips.Add(chip);
+                            if (chip.Instrument != null) lstChips.Add(chip);
                             useChip.Add(i == 0 ? EnmChip.YMF271 : EnmChip.S_YMF271);
                         }
                     }
@@ -2674,7 +2679,7 @@ namespace mml2vgmIDE
                             if (i == 0) chipLED.PriOPL4 = 1;
                             else chipLED.SecOPL4 = 1;
 
-                            lstChips.Add(chip);
+                            if (chip.Instrument != null) lstChips.Add(chip);
                             useChip.Add(i == 0 ? EnmChip.YMF278B : EnmChip.S_YMF278B);
                         }
                     }
@@ -2702,7 +2707,7 @@ namespace mml2vgmIDE
                             if (i == 0) chipLED.PriYMZ = 1;
                             else chipLED.SecYMZ = 1;
 
-                            lstChips.Add(chip);
+                            if (chip.Instrument != null) lstChips.Add(chip);
                             useChip.Add(i == 0 ? EnmChip.YMZ280B : EnmChip.S_YMZ280B);
                         }
                     }
@@ -2744,7 +2749,7 @@ namespace mml2vgmIDE
                                 ));
 
                             chipRegister.HuC6280[i].Use = true;
-                            lstChips.Add(chip);
+                            if (chip.Instrument != null) lstChips.Add(chip);
                         }
                     }
 
@@ -2770,7 +2775,7 @@ namespace mml2vgmIDE
                         //else chipLED.SecHuC = 1;
                         chipLED.PriQsnd = 1;
 
-                        lstChips.Add(chip);
+                        if (chip.Instrument != null) lstChips.Add(chip);
                         useChip.Add(EnmChip.QSound);
                     }
 
@@ -2799,7 +2804,7 @@ namespace mml2vgmIDE
                             if (i == 0) chipLED.PriC352 = 1;
                             else chipLED.SecC352 = 1;
 
-                            lstChips.Add(chip);
+                            if (chip.Instrument != null) lstChips.Add(chip);
                             useChip.Add(i == 0 ? EnmChip.C352 : EnmChip.S_C352);
                         }
                     }
@@ -2826,7 +2831,7 @@ namespace mml2vgmIDE
                             if (i == 0) chipLED.PriGA20 = 1;
                             else chipLED.SecGA20 = 1;
 
-                            lstChips.Add(chip);
+                            if (chip.Instrument != null) lstChips.Add(chip);
                             useChip.Add(i == 0 ? EnmChip.GA20 : EnmChip.S_GA20);
                         }
                     }
@@ -2854,7 +2859,7 @@ namespace mml2vgmIDE
 
                             hiyorimiDeviceFlag |= 0x2;
 
-                            lstChips.Add(chip);
+                            if (chip.Instrument != null) lstChips.Add(chip);
                             useChip.Add(i == 0 ? EnmChip.K053260 : EnmChip.S_K053260);
                         }
                     }
@@ -2882,7 +2887,7 @@ namespace mml2vgmIDE
 
                             hiyorimiDeviceFlag |= 0x2;
 
-                            lstChips.Add(chip);
+                            if (chip.Instrument != null) lstChips.Add(chip);
                             useChip.Add(i == 0 ? EnmChip.K054539 : EnmChip.S_K054539);
                         }
                     }
@@ -2926,7 +2931,7 @@ namespace mml2vgmIDE
                                 ));
 
                             chipRegister.K051649[i].Use = true;
-                            lstChips.Add(chip);
+                            if (chip.Instrument != null) lstChips.Add(chip);
                         }
                     }
 
@@ -2953,7 +2958,7 @@ namespace mml2vgmIDE
 
                             hiyorimiDeviceFlag |= 0x2;
 
-                            lstChips.Add(chip);
+                            if (chip.Instrument != null) lstChips.Add(chip);
                             useChip.Add(i == 0 ? EnmChip.YM3526 : EnmChip.S_YM3526);
                         }
                     }
@@ -2981,7 +2986,7 @@ namespace mml2vgmIDE
 
                             hiyorimiDeviceFlag |= 0x2;
 
-                            lstChips.Add(chip);
+                            if (chip.Instrument != null) lstChips.Add(chip);
                             useChip.Add(i == 0 ? EnmChip.Y8950 : EnmChip.S_Y8950);
                         }
                     }
@@ -3009,7 +3014,7 @@ namespace mml2vgmIDE
 
                             hiyorimiDeviceFlag |= 0x2;
 
-                            lstChips.Add(chip);
+                            if (chip.Instrument != null) lstChips.Add(chip);
                             useChip.Add(i == 0 ? EnmChip.DMG : EnmChip.S_DMG);
                         }
                     }
@@ -3072,7 +3077,7 @@ namespace mml2vgmIDE
                             if (i == 0) chipLED.PriFDS = 1;
                             else chipLED.SecFDS = 1;
 
-                            lstChips.Add(chip);
+                            if (chip.Instrument != null) lstChips.Add(chip);
                             useChip.Add(i == 0 ? EnmChip.FDS : EnmChip.S_FDS);
 
 

@@ -239,7 +239,7 @@ namespace mml2vgmIDE
 
         public void TsmiSaveFile_Click(object sender, EventArgs e)
         {
-            DockContent dc = (DockContent)GetActiveDocument();
+            DockContent dc = (DockContent)GetActiveDockContent();
             Document d = null;
             if (dc != null)
             {
@@ -273,7 +273,7 @@ namespace mml2vgmIDE
 
         private void TsmiSaveAs_Click(object sender, EventArgs e)
         {
-            DockContent dc = (DockContent)GetActiveDocument();
+            DockContent dc = (DockContent)GetActiveDockContent();
             Document d = null;
             if (dc != null)
             {
@@ -326,7 +326,7 @@ namespace mml2vgmIDE
         {
             try
             {
-                DockContent dc = (DockContent)GetActiveDocument();
+                DockContent dc = (DockContent)GetActiveDockContent();
                 Document d = null;
                 if (dc != null)
                 {
@@ -416,34 +416,34 @@ namespace mml2vgmIDE
 
         private void TsmiUndo_Click(object sender, EventArgs e)
         {
-            DockContent dc = (DockContent)GetActiveDocument();
-            Document d = null;
-            if (dc != null)
-            {
-                if (dc.Tag is Document)
-                {
-                    d = (Document)dc.Tag;
-                }
-            }
-
+            Document d = GetActiveDocument();
             if (d != null) d.editor.azukiControl.Undo();
             UpdateControl();
         }
 
         private void TsmiRedo_Click(object sender, EventArgs e)
         {
-            DockContent dc = (DockContent)GetActiveDocument();
-            Document d = null;
-            if (dc != null)
-            {
-                if (dc.Tag is Document)
-                {
-                    d = (Document)dc.Tag;
-                }
-            }
-
+            Document d = GetActiveDocument();
             if (d != null) d.editor.azukiControl.Redo();
             UpdateControl();
+        }
+
+        private void TsmiFind_Click(object sender, EventArgs e)
+        {
+            Document d = GetActiveDocument();
+            if (d != null) d.editor.ActionFind(null);
+        }
+
+        private void TsmiFindNext_Click(object sender, EventArgs e)
+        {
+            Document d = GetActiveDocument();
+            if (d != null) d.editor.ActionFindNext(null);
+        }
+
+        private void TsmiFindPrevious_Click(object sender, EventArgs e)
+        {
+            Document d = GetActiveDocument();
+            if (d != null) d.editor.ActionFindPrevious(null);
         }
 
         private void TsmiShowPartCounter_Click(object sender, EventArgs e)
@@ -593,6 +593,11 @@ namespace mml2vgmIDE
         private void TssbSave_ButtonClick(object sender, EventArgs e)
         {
             TsmiSaveFile_Click(null, null);
+        }
+
+        private void TssbFind_ButtonClick(object sender, EventArgs e)
+        {
+            TsmiFindNext_Click(null, null);
         }
 
         private void TssbCompile_ButtonClick(object sender, EventArgs e)
@@ -771,7 +776,7 @@ namespace mml2vgmIDE
             OpenFile(fn);
         }
 
-        public IDockContent GetActiveDocument()
+        public IDockContent GetActiveDockContent()
         {
             IDockContent dc = null;
 
@@ -802,7 +807,7 @@ namespace mml2vgmIDE
 
         private void Compile(bool doPlay, bool isTrace, bool doSkip, bool doSkipStop,bool doExport,string[] text=null)
         {
-            IDockContent dc = GetActiveDocument();
+            IDockContent dc = GetActiveDockContent();
 
             if (text == null)
             {
@@ -1125,7 +1130,7 @@ namespace mml2vgmIDE
 
         public void UpdateControl()
         {
-            DockContent dc = (DockContent)GetActiveDocument();
+            DockContent dc = (DockContent)GetActiveDockContent();
             Document d = null;
             if (dc != null)
             {
@@ -1199,7 +1204,7 @@ namespace mml2vgmIDE
 
         public void UpdateFolderTree()
         {
-            DockContent dc = (DockContent)GetActiveDocument();
+            DockContent dc = (DockContent)GetActiveDockContent();
             Document d = null;
             if (dc != null)
             {
@@ -1515,7 +1520,7 @@ namespace mml2vgmIDE
         {
             try
             {
-                IDockContent dc = GetActiveDocument();
+                IDockContent dc = GetActiveDockContent();
                 Sgry.Azuki.WinForms.AzukiControl ac = null;
                 if (dc != null && (dc is FrmEditor))
                 {
@@ -1899,7 +1904,7 @@ namespace mml2vgmIDE
             }
 
 
-            IDockContent dcnt = GetActiveDocument();
+            IDockContent dcnt = GetActiveDockContent();
             if (dcnt == null) return;
             if (!(dcnt is FrmEditor)) return;
             FrmEditor fe = ((FrmEditor)dcnt);
@@ -2220,7 +2225,7 @@ namespace mml2vgmIDE
             MouseEventArgs mea = (MouseEventArgs)e;
             if (mea.Button == MouseButtons.Right) return;
 
-            DockContent dc = (DockContent)GetActiveDocument();
+            DockContent dc = (DockContent)GetActiveDockContent();
             Document d = null;
             if (dc != null)
             {
@@ -2250,16 +2255,7 @@ namespace mml2vgmIDE
         private ChannelInfo GetCurrentChannelInfo()
         {
             ChannelInfo chi = null;
-
-            DockContent dc = (DockContent)GetActiveDocument();
-            Document d = null;
-            if (dc != null)
-            {
-                if (dc.Tag is Document)
-                {
-                    d = (Document)dc.Tag;
-                }
-            }
+            Document d = GetActiveDocument();
 
             if (d == null)
             {
@@ -2289,6 +2285,21 @@ namespace mml2vgmIDE
 
 
             return chi;
+        }
+
+        private Document GetActiveDocument()
+        {
+            DockContent dc = (DockContent)GetActiveDockContent();
+            Document d = null;
+            if (dc != null)
+            {
+                if (dc.Tag is Document)
+                {
+                    d = (Document)dc.Tag;
+                }
+            }
+
+            return d;
         }
 
         private void dmyDisp(string dmy)

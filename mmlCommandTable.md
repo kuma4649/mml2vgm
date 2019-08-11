@@ -585,7 +585,7 @@
 	- YM2203(SSG) (B)  
 	- YM2151 (A)  
 	- SEGAPCM (A)  
-	- HuC6280 (B)  
+	- HuC6280 (C)  
 	- C140 (A)  
 	- AY8910 (B)  
 	- YM2413(FM) (B)  

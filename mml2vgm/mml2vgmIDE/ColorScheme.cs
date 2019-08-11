@@ -16,6 +16,8 @@ namespace mml2vgmIDE
         public int Azuki_IconBarBack = Color.FromArgb(70, 60, 90).ToArgb();
         public int Azuki_LineNumberBack_Normal = Color.FromArgb(40, 30, 60).ToArgb();
         public int Azuki_LineNumberFore_Normal = Color.FromArgb(80, 170, 200).ToArgb();
+        public int Azuki_SelectionBack_Normal = Color.FromArgb(120, 100, 90).ToArgb();
+        public int Azuki_SelectionFore_Normal = Color.FromArgb(220, 230, 250).ToArgb();
         public int Azuki_LineNumberBack_Trace = Color.FromArgb(150, 180, 60).ToArgb();
         public int Azuki_LineNumberFore_Trace = Color.FromArgb(20, 40, 10).ToArgb();
         public int Azuki_Keyword = Color.FromArgb(255, 190, 60).ToArgb();
@@ -28,6 +30,9 @@ namespace mml2vgmIDE
 
         public int ErrorList_ForeColor = Color.FromArgb(235, 235, 255).ToArgb();
         public int ErrorList_BackColor = Color.FromArgb(40, 30, 60).ToArgb();
+
+        public int SearchBox_ForeColor = Color.FromArgb(235, 235, 255).ToArgb();
+        public int SearchBox_BackColor = Color.FromArgb(40, 30, 60).ToArgb();
 
         public int Log_ForeColor = Color.FromArgb(235, 235, 255).ToArgb();
         public int Log_BackColor = Color.FromArgb(40, 30, 60).ToArgb();
@@ -50,6 +55,8 @@ namespace mml2vgmIDE
             ret.Azuki_IconBarBack = this.Azuki_IconBarBack;
             ret.Azuki_LineNumberBack_Normal = this.Azuki_LineNumberBack_Normal;
             ret.Azuki_LineNumberFore_Normal = this.Azuki_LineNumberFore_Normal;
+            ret.Azuki_SelectionBack_Normal = this.Azuki_SelectionBack_Normal;
+            ret.Azuki_SelectionFore_Normal = this.Azuki_SelectionFore_Normal;
             ret.Azuki_LineNumberBack_Trace = this.Azuki_LineNumberBack_Trace;
             ret.Azuki_LineNumberFore_Trace = this.Azuki_LineNumberFore_Trace;
             ret.StatusStripBack_Normal = this.StatusStripBack_Normal;
@@ -61,6 +68,9 @@ namespace mml2vgmIDE
 
             ret.ErrorList_ForeColor = this.ErrorList_ForeColor;
             ret.ErrorList_BackColor = this.ErrorList_BackColor;
+
+            ret.SearchBox_ForeColor = this.SearchBox_ForeColor;
+            ret.SearchBox_BackColor = this.SearchBox_BackColor;
 
             ret.Log_ForeColor = this.Log_ForeColor;
             ret.Log_BackColor = this.Log_BackColor;

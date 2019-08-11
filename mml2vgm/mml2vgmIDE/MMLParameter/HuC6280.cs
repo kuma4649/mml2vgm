@@ -13,7 +13,7 @@ namespace mml2vgmIDE.MMLParameter
         {
             for (int i = 0; i < 6; i++)
             {
-                vol[i] = 15;
+                vol[i] = 31;
                 beforeTie[i] = false;
             }
         }
@@ -55,7 +55,7 @@ namespace mml2vgmIDE.MMLParameter
                         {
                             if (vol[od.linePos.ch] != null)
                             {
-                                keyOnMeter[od.linePos.ch] = (int)(256.0 / 16.0 * vol[od.linePos.ch]);
+                                keyOnMeter[od.linePos.ch] = (int)(256.0 / 32.0 * vol[od.linePos.ch]);
                             }
                         }
                         beforeTie[od.linePos.ch] = nt.tieSw;

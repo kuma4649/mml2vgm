@@ -143,7 +143,7 @@ namespace mml2vgmIDE
                     Port = (byte)((chip.DstCommand & 0xFF00) >> 8);
                     Command = (byte)((chip.DstCommand & 0x00FF) >> 0);
                     Data = chip.Data[chip.DataStart + chip.RealPos];
-                    od = chip.od;
+                    od = null;//chip.od;
 
                     if (Port != 0xFF)   // Send Channel Select
                         chip_reg_write(Counter, chip.DstChipType, chip.DstChipID, 0x00, (byte)(Command >> 4), Port,od);

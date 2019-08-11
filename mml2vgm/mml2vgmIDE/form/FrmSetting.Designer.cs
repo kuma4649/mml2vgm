@@ -231,6 +231,7 @@
             this.lblOutputPath = new System.Windows.Forms.Label();
             this.tbMIDIOutputPath = new System.Windows.Forms.TextBox();
             this.tpMIDIKBD = new System.Windows.Forms.TabPage();
+            this.cbMIDIKbdAlwaysTop = new System.Windows.Forms.CheckBox();
             this.cbUseMIDIKeyboard = new System.Windows.Forms.CheckBox();
             this.gbMIDIKeyboard = new System.Windows.Forms.GroupBox();
             this.pictureBox8 = new System.Windows.Forms.PictureBox();
@@ -413,7 +414,6 @@
             this.cbUseLoopTimes = new System.Windows.Forms.CheckBox();
             this.tpOmake = new System.Windows.Forms.TabPage();
             this.cbInfiniteOfflineMode = new System.Windows.Forms.CheckBox();
-            this.fader1 = new NAudio.Gui.Fader();
             this.groupBox29 = new System.Windows.Forms.GroupBox();
             this.label36 = new System.Windows.Forms.Label();
             this.btFont = new System.Windows.Forms.Button();
@@ -438,7 +438,6 @@
             this.labelCompanyName = new System.Windows.Forms.Label();
             this.textBoxDescription = new System.Windows.Forms.TextBox();
             this.cbHiyorimiMode = new System.Windows.Forms.CheckBox();
-            this.cbMIDIKbdAlwaysTop = new System.Windows.Forms.CheckBox();
             this.gbWaveOut.SuspendLayout();
             this.gbAsioOut.SuspendLayout();
             this.gbWasapiOut.SuspendLayout();
@@ -2896,6 +2895,16 @@
             this.tpMIDIKBD.Text = "MIDI鍵盤";
             this.tpMIDIKBD.UseVisualStyleBackColor = true;
             // 
+            // cbMIDIKbdAlwaysTop
+            // 
+            this.cbMIDIKbdAlwaysTop.AutoSize = true;
+            this.cbMIDIKbdAlwaysTop.Location = new System.Drawing.Point(12, 64);
+            this.cbMIDIKbdAlwaysTop.Name = "cbMIDIKbdAlwaysTop";
+            this.cbMIDIKbdAlwaysTop.Size = new System.Drawing.Size(154, 16);
+            this.cbMIDIKbdAlwaysTop.TabIndex = 2;
+            this.cbMIDIKbdAlwaysTop.Text = "鍵盤を常に手前に表示する";
+            this.cbMIDIKbdAlwaysTop.UseVisualStyleBackColor = true;
+            // 
             // cbUseMIDIKeyboard
             // 
             this.cbUseMIDIKeyboard.AutoSize = true;
@@ -4859,7 +4868,6 @@
             // tpOmake
             // 
             this.tpOmake.Controls.Add(this.cbInfiniteOfflineMode);
-            this.tpOmake.Controls.Add(this.fader1);
             this.tpOmake.Controls.Add(this.groupBox29);
             this.tpOmake.Controls.Add(this.tbOpacity);
             this.tpOmake.Controls.Add(this.label52);
@@ -4883,18 +4891,6 @@
             this.cbInfiniteOfflineMode.TabIndex = 23;
             this.cbInfiniteOfflineMode.Text = "永続的にオフラインモード";
             this.cbInfiniteOfflineMode.UseVisualStyleBackColor = true;
-            // 
-            // fader1
-            // 
-            this.fader1.Location = new System.Drawing.Point(172, 295);
-            this.fader1.Maximum = 0;
-            this.fader1.Minimum = 0;
-            this.fader1.Name = "fader1";
-            this.fader1.Orientation = System.Windows.Forms.Orientation.Horizontal;
-            this.fader1.Size = new System.Drawing.Size(239, 35);
-            this.fader1.TabIndex = 22;
-            this.fader1.Text = "fader1";
-            this.fader1.Value = -2147483648;
             // 
             // groupBox29
             // 
@@ -5166,16 +5162,6 @@
             this.cbHiyorimiMode.Text = "日和見モード(出力タブ：\r\n遅延時間100ms以下の時、使用を推奨)";
             this.cbHiyorimiMode.UseVisualStyleBackColor = true;
             this.cbHiyorimiMode.Visible = false;
-            // 
-            // cbMIDIKbdAlwaysTop
-            // 
-            this.cbMIDIKbdAlwaysTop.AutoSize = true;
-            this.cbMIDIKbdAlwaysTop.Location = new System.Drawing.Point(12, 64);
-            this.cbMIDIKbdAlwaysTop.Name = "cbMIDIKbdAlwaysTop";
-            this.cbMIDIKbdAlwaysTop.Size = new System.Drawing.Size(154, 16);
-            this.cbMIDIKbdAlwaysTop.TabIndex = 2;
-            this.cbMIDIKbdAlwaysTop.Text = "鍵盤を常に手前に表示する";
-            this.cbMIDIKbdAlwaysTop.UseVisualStyleBackColor = true;
             // 
             // FrmSetting
             // 
@@ -5757,7 +5743,6 @@
         private System.Windows.Forms.Label lblFontName;
         private System.Windows.Forms.GroupBox groupBox29;
         private System.Windows.Forms.CheckBox cbInfiniteOfflineMode;
-        private NAudio.Gui.Fader fader1;
         private System.Windows.Forms.CheckBox cbMIDIKbdAlwaysTop;
     }
 }

@@ -752,7 +752,7 @@ namespace mml2vgmIDE
 
         private void StartRecording()
         {
-            DockContent dc = (DockContent)parent.GetActiveDocument();
+            DockContent dc = (DockContent)parent.GetActiveDockContent();
             Document d = null;
             if (dc != null)
             {

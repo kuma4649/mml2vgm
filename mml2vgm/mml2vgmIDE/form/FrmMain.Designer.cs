@@ -41,6 +41,7 @@
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.tssbOpen = new System.Windows.Forms.ToolStripSplitButton();
             this.tssbSave = new System.Windows.Forms.ToolStripSplitButton();
+            this.tssbFind = new System.Windows.Forms.ToolStripSplitButton();
             this.tssbCompile = new System.Windows.Forms.ToolStripSplitButton();
             this.tssbStop = new System.Windows.Forms.ToolStripSplitButton();
             this.tssbSlow = new System.Windows.Forms.ToolStripSplitButton();
@@ -62,6 +63,10 @@
             this.TsmiEdit = new System.Windows.Forms.ToolStripMenuItem();
             this.TsmiUndo = new System.Windows.Forms.ToolStripMenuItem();
             this.TsmiRedo = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+            this.TsmiFind = new System.Windows.Forms.ToolStripMenuItem();
+            this.TsmiFindNext = new System.Windows.Forms.ToolStripMenuItem();
+            this.TsmiFindPrevious = new System.Windows.Forms.ToolStripMenuItem();
             this.表示VToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.TsmiShowPartCounter = new System.Windows.Forms.ToolStripMenuItem();
             this.TsmiShowFolderTree = new System.Windows.Forms.ToolStripMenuItem();
@@ -118,6 +123,7 @@
             this.toolStripStatusLabel1,
             this.tssbOpen,
             this.tssbSave,
+            this.tssbFind,
             this.tssbCompile,
             this.tssbStop,
             this.tssbSlow,
@@ -173,6 +179,14 @@
             this.tssbSave.Image = global::mml2vgmIDE.Properties.Resources.F02;
             this.tssbSave.Name = "tssbSave";
             this.tssbSave.ButtonClick += new System.EventHandler(this.TssbSave_ButtonClick);
+            // 
+            // tssbFind
+            // 
+            resources.ApplyResources(this.tssbFind, "tssbFind");
+            this.tssbFind.DropDownButtonWidth = 0;
+            this.tssbFind.Image = global::mml2vgmIDE.Properties.Resources.F03;
+            this.tssbFind.Name = "tssbFind";
+            this.tssbFind.ButtonClick += new System.EventHandler(this.TssbFind_ButtonClick);
             // 
             // tssbCompile
             // 
@@ -312,7 +326,11 @@
             resources.ApplyResources(this.TsmiEdit, "TsmiEdit");
             this.TsmiEdit.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.TsmiUndo,
-            this.TsmiRedo});
+            this.TsmiRedo,
+            this.toolStripSeparator4,
+            this.TsmiFind,
+            this.TsmiFindNext,
+            this.TsmiFindPrevious});
             this.TsmiEdit.Name = "TsmiEdit";
             // 
             // TsmiUndo
@@ -326,6 +344,29 @@
             resources.ApplyResources(this.TsmiRedo, "TsmiRedo");
             this.TsmiRedo.Name = "TsmiRedo";
             this.TsmiRedo.Click += new System.EventHandler(this.TsmiRedo_Click);
+            // 
+            // toolStripSeparator4
+            // 
+            resources.ApplyResources(this.toolStripSeparator4, "toolStripSeparator4");
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            // 
+            // TsmiFind
+            // 
+            resources.ApplyResources(this.TsmiFind, "TsmiFind");
+            this.TsmiFind.Name = "TsmiFind";
+            this.TsmiFind.Click += new System.EventHandler(this.TsmiFind_Click);
+            // 
+            // TsmiFindNext
+            // 
+            resources.ApplyResources(this.TsmiFindNext, "TsmiFindNext");
+            this.TsmiFindNext.Name = "TsmiFindNext";
+            this.TsmiFindNext.Click += new System.EventHandler(this.TsmiFindNext_Click);
+            // 
+            // TsmiFindPrevious
+            // 
+            resources.ApplyResources(this.TsmiFindPrevious, "TsmiFindPrevious");
+            this.TsmiFindPrevious.Name = "TsmiFindPrevious";
+            this.TsmiFindPrevious.Click += new System.EventHandler(this.TsmiFindPrevious_Click);
             // 
             // 表示VToolStripMenuItem
             // 
@@ -591,6 +632,11 @@
         public System.Windows.Forms.ToolStripStatusLabel TsslLineCol;
         private System.Windows.Forms.ToolStripSplitButton tssbMIDIKbd;
         private System.Windows.Forms.ToolStripMenuItem TsmiShowLyrics;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
+        private System.Windows.Forms.ToolStripMenuItem TsmiFind;
+        private System.Windows.Forms.ToolStripMenuItem TsmiFindNext;
+        private System.Windows.Forms.ToolStripMenuItem TsmiFindPrevious;
+        private System.Windows.Forms.ToolStripSplitButton tssbFind;
     }
 }
 
