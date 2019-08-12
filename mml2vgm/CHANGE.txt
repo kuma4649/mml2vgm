@@ -1,5 +1,9 @@
 更新履歴
 
+TAG096 2019/08/12
+  Core/mml2vgm/mvc
+    ・QSoundに暫定対応(IDEはまだ)。
+
 TAG095 2019/08/11
   mml2vgmIDE
 	・エディターに検索機能追加

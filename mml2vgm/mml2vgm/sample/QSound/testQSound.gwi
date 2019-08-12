@@ -18,8 +18,8 @@
 
 }
 
-'@ P 1,"wav\Guitar.wav"        , 8000 , 100,QSound,14000
-'@ P 2,"wav\muteGuitar.wav"    , 8000 , 100,QSound
+'@ P 1,"..\wav\Guitar.wav"        , 8000 , 100,QSound
+'@ P 2,"..\wav\muteGuitar.wav"    , 8000 , 100,QSound
 
 
 'Q01 T126
@@ -27,4 +27,5 @@
 'Q01 o4l1v3000@1Q8p15  cdefgab
 'Q02 o4l1v500@1Q8r8p18cdefgab
 'Q01 D0o4l4q0p16@1cdefgab>>>c2_<<c&c2_<c^1^1
+
 

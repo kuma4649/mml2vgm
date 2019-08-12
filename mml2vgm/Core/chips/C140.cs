@@ -509,12 +509,11 @@ namespace Core
 
             if(pw.instrument==-1)
             {
-                msgBox.setErrMsg(msg.get("E09005"), new LinePos("-"));
+                LinePos lp = mml?.line?.Lp;
+                if (lp == null) lp = new LinePos("-");
+                msgBox.setErrMsg(msg.get("E09005"), lp);
                 return;
             }
-
-            //KeyOff
-            //OutC140KeyOff(pw);
 
             //Volume
             SetVolume(pw,mml);

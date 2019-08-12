@@ -26,6 +26,8 @@ namespace Core
         public C140[] c140 = null;
         public AY8910[] ay8910 = null;
         public K051649[] k051649 = null;
+        public QSound[] qsound = null;
+        public K053260[] k053260 = null;
 
         public Dictionary<enmChipType, ClsChip[]> chips;
 
@@ -74,6 +76,8 @@ namespace Core
             c140 = new C140[] { new C140(this, 0, "Y", stPath, false), new C140(this, 1, "Ys", stPath, true) };
             ay8910 = new AY8910[] { new AY8910(this, 0, "A", stPath, false), new AY8910(this, 1, "As", stPath, true) };
             k051649 = new K051649[] { new K051649(this, 0, "K", stPath, false), new K051649(this, 1, "Ks", stPath, true) };
+            qsound = new QSound[] { new QSound(this, 0, "Q", stPath, false), new QSound(this, 1, "Qs", stPath, true) };
+            k053260 = new K053260[] { new K053260(this, 0, "O", stPath, false), new K053260(this, 1, "Os", stPath, true) };
 
             chips.Add(enmChipType.CONDUCTOR, conductor);
             chips.Add(enmChipType.YM2612, ym2612);
@@ -90,6 +94,8 @@ namespace Core
             chips.Add(enmChipType.C140, c140);
             chips.Add(enmChipType.AY8910, ay8910);
             chips.Add(enmChipType.K051649, k051649);
+            chips.Add(enmChipType.QSound, qsound);
+            chips.Add(enmChipType.K053260, k053260);
 
             List<clsTD> lstTD = new List<clsTD>
             {
@@ -1797,6 +1803,7 @@ namespace Core
             long useAY8910 = 0;
             long useYM2413 = 0;
             long useK051649 = 0;
+            long useQSound = 0;
             long useYM2151_S = 0;
             long useYM2203_S = 0;
             long useYM2608_S = 0;
@@ -1839,6 +1846,8 @@ namespace Core
                 { useYM2413 += pw.clockCounter; if (i == 1) useYM2413_S += pw.clockCounter; }
                 foreach (partWork pw in k051649[i].lstPartWork)
                 { useK051649 += pw.clockCounter; if (i == 1) useK051649_S += pw.clockCounter; }
+                foreach (partWork pw in qsound[i].lstPartWork)
+                { useQSound += pw.clockCounter; }
             }
 
             if (info.Version >= 1.00f && useSN76489 != 0)
@@ -1904,6 +1913,10 @@ namespace Core
             if (info.Version >= 1.61f && useK051649 != 0)
             {
                 Common.SetLE32(dat, 0x9c, (uint)k051649[0].Frequency | (uint)(useK051649_S == 0 ? 0 : 0x40000000));
+            }
+            if (info.Version >= 1.61f && useQSound != 0)
+            {
+                Common.SetLE32(dat, 0xb4, (uint)qsound[0].Frequency);
             }
 
             //if (info.Version == 1.51f)

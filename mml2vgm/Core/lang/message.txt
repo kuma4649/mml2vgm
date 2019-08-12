@@ -342,6 +342,13 @@ E21000=Sound patch does not exist as PCM definition({0}).
 E21001=Selected Tone number({0}) is not for YM2612-XGM PCM data.
 
 
+;QSound.cs 22000
+E22000=defined loop address [{0}] is exceeding PCM data size. select between 0~{1}.
+E22001=This sound chip doesn't have instruments.
+E22002=ToneDoubler cannot be used if chip is not OPN or OPM.
+E22003=Tone number({0}) does not exist for PCM definition.
+E22004=Selected Tone number({0}) is not for QSound PCM data.
+E22005=Sound patch isn't selected.
 
 
 

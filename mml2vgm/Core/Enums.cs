@@ -50,7 +50,9 @@ namespace Core
         C140 = 11,
         AY8910 = 12,
         CONDUCTOR = 13,
-        K051649 = 14
+        K051649 = 14,
+        QSound = 15,
+        K053260 = 16
     }
 
     public enum enmPcmDefineType

@@ -53,6 +53,8 @@
     <Compile Include="chips\Conductor.cs" />
     <Compile Include="chips\HuC6280.cs" />
     <Compile Include="chips\K051649.cs" />
+    <Compile Include="chips\K053260.cs" />
+    <Compile Include="chips\QSound.cs" />
     <Compile Include="chips\RF5C164.cs" />
     <Compile Include="chips\segaPcm.cs" />
     <Compile Include="chips\SN76489.cs" />

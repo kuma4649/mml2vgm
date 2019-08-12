@@ -143,6 +143,9 @@
     <None Include="sample\K051649\testK051649_LFO_K052mode.gwi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="sample\QSound\testQSound.gwi">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="sample\SN76489\testDCSG.gwi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
