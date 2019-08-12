@@ -1804,6 +1804,7 @@ namespace Core
             long useYM2413 = 0;
             long useK051649 = 0;
             long useQSound = 0;
+            long useK053260 = 0;
             long useYM2151_S = 0;
             long useYM2203_S = 0;
             long useYM2608_S = 0;
@@ -1817,6 +1818,7 @@ namespace Core
             long useAY8910_S = 0;
             long useYM2413_S = 0;
             long useK051649_S = 0;
+            long useK053260_S = 0;
 
             for (int i = 0; i < 2; i++)
             {
@@ -1848,6 +1850,8 @@ namespace Core
                 { useK051649 += pw.clockCounter; if (i == 1) useK051649_S += pw.clockCounter; }
                 foreach (partWork pw in qsound[i].lstPartWork)
                 { useQSound += pw.clockCounter; }
+                foreach (partWork pw in k053260[i].lstPartWork)
+                { useK053260 += pw.clockCounter; if (i == 1) useK053260_S += pw.clockCounter; }
             }
 
             if (info.Version >= 1.00f && useSN76489 != 0)
@@ -1917,6 +1921,10 @@ namespace Core
             if (info.Version >= 1.61f && useQSound != 0)
             {
                 Common.SetLE32(dat, 0xb4, (uint)qsound[0].Frequency);
+            }
+            if (info.Version >= 1.61f && useK053260 != 0)
+            {
+                Common.SetLE32(dat, 0xac, (uint)k053260[0].Frequency);
             }
 
             //if (info.Version == 1.51f)

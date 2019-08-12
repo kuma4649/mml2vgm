@@ -21,9 +21,10 @@
 K053260のループはアドレスを指定することはできず、必ず最初に戻ります
 volume:0-127
 pan:0-7(3がCenter?)
+dpcmには未対応。(そのうち。。。)
 
-'@ P 1,"wav\Guitar.wav"        , 8000 , 100,K053260,1
-'@ P 2,"wav\muteGuitar.wav"    , 8000 , 100,K053260
+'@ P 1,"..\wav\Guitar.wav"        , 8000 , 100,K053260,1
+'@ P 2,"..\wav\muteGuitar.wav"    , 8000 , 100,K053260
 
 'O1 T126
 'O1 o4l4v40@1Q8 p0c p1c p2c  p3c  p4c p5c p6c p7c

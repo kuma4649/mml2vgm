@@ -351,4 +351,11 @@ E22004=Selected Tone number({0}) is not for QSound PCM data.
 E22005=Sound patch isn't selected.
 
 
+;K053260.cs 23000
+E23000=defined loop address [{0}] is exceeding PCM data size. select between 0~{1}.
+E23001=This sound chip doesn't have instruments.
+E23002=ToneDoubler cannot be used if chip is not OPN or OPM.
+E23003=Tone number({0}) does not exist for PCM definition.
+E23004=Selected Tone number({0}) is not for K053260 PCM data.
+E23005=Sound patch isn't selected.
 

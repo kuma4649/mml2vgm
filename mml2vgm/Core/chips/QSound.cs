@@ -86,6 +86,7 @@ namespace Core
                 List<byte> dBuf = new List<byte>();
                 if (is16bit)
                 {
+                    throw new NotImplementedException();
                 }
                 else
                 {
@@ -199,6 +200,7 @@ namespace Core
 
         public override void StorePcmRawData(clsPcmDatSeq pds, byte[] buf, bool isRaw, bool is16bit, int samplerate, params object[] option)
         {
+            throw new NotImplementedException();
         }
 
         public override string DispRegion(clsPcm pcm)
@@ -229,7 +231,7 @@ namespace Core
                 );
         }
 
-        public void OutQSoundKeyOff(MML mml, partWork pw)
+        private void OutQSoundKeyOff(MML mml, partWork pw)
         {
             byte adr = (byte)((pw.ch << 3) + 0x03);
             ushort data = 0;
@@ -240,7 +242,7 @@ namespace Core
                 );
         }
 
-        public void OutQSoundKeyOn(partWork pw, MML mml)
+        private void OutQSoundKeyOn(partWork pw, MML mml)
         {
             byte adr = 0;
             ushort data = 0;

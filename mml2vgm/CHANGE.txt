@@ -1,5 +1,9 @@
 更新履歴
 
+TAG097 2019/08/12 2nd
+  Core/mml2vgm/mvc
+    ・K053260に暫定対応(IDEはまだ)。
+
 TAG096 2019/08/12
   Core/mml2vgm/mvc
     ・QSoundに暫定対応(IDEはまだ)。

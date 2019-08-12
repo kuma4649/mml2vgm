@@ -136,6 +136,17 @@ ebass3(from MUSIC LALF @70)
            ・バンクに収まらない場合は次のバンクに格納し、収まらなかったバンクの方はPaddingされる。
            ・PCM全体のデータサイズが0x100000未満はSYSTEM2、それ以上はSYSTEM21として定義される。(219ASICは未対応)
            ・合計最大0x200000byteまで定義可能。
+         QSound
+           ・PCMは 8bit,mono,圧縮なし,unsignedのwavファイルであること。
+               mml2vgmは内部で8bitPCMとして扱われる。
+           ・一つのサンプルは最大65536byteまで。それ以上はカットされる。
+           ・バンクに収まらない場合は次のバンクに格納し、収まらなかったバンクの方はPaddingされる。
+         K053260
+           ・PCMは 8bit,mono,圧縮なし,unsignedのwavファイルであること。
+               mml2vgmは内部で8bitPCMとして扱われる。
+           ・一つのサンプルは最大65536byteまで。それ以上はカットされる。
+           ・バンクに収まらない場合は次のバンクに格納し、収まらなかったバンクの方はPaddingされる。
+           ・DPCM未対応
 
     ・波形メモリ音源の音色定義について
          HuC6280,K051649は例外的に定義行が複数行の定義も可能。(1行も可能)
@@ -223,6 +234,8 @@ ebass3(from MUSIC LALF @70)
   C140      C140            21390  24Ch(PCM  :24Ch)
   AY8910    AY10          1789750   3Ch(PSG  : 3Ch)
   YM2413    OPLL          3579545  14Ch(FM   : 9Ch  Rhythm:5Ch)
+  QSound    QSnd          4000000  16Ch(PCM  :16Ch)
+  K053260   K53           3579545   4Ch(PCM  : 4Ch  |  DPCM:4Ch)
   PWM       PWM          23011361   2Ch(PCM  : 2Ch)(T.B.D.)
   OKIM6258  OKI5          4000000   1Ch(ADPCM: 1Ch)(T.B.D.)
   OKIM6295  OKI9          8000000   4Ch(ADPCM: 4Ch)(T.B.D.)
@@ -387,6 +400,26 @@ ebass3(from MUSIC LALF @70)
   K3     K051649(WF音源)(Primary)        CH3
   K4     K051649(WF音源)(Primary)        CH4
   K5     K051649(WF音源)(Primary)        CH5
+  Q01    QSound(PCM音源)(Primary)        CH1
+  Q02    QSound(PCM音源)(Primary)        CH2
+  Q03    QSound(PCM音源)(Primary)        CH3
+  Q04    QSound(PCM音源)(Primary)        CH4
+  Q05    QSound(PCM音源)(Primary)        CH5
+  Q06    QSound(PCM音源)(Primary)        CH6
+  Q07    QSound(PCM音源)(Primary)        CH7
+  Q08    QSound(PCM音源)(Primary)        CH8
+  Q09    QSound(PCM音源)(Primary)        CH9
+  Q10    QSound(PCM音源)(Primary)        CH10
+  Q11    QSound(PCM音源)(Primary)        CH11
+  Q12    QSound(PCM音源)(Primary)        CH12
+  Q13    QSound(PCM音源)(Primary)        CH13
+  Q14    QSound(PCM音源)(Primary)        CH14
+  Q15    QSound(PCM音源)(Primary)        CH15
+  Q16    QSound(PCM音源)(Primary)        CH16
+  O1     K053260(PCM音源)(Primary)       CH1
+  O2     K053260(PCM音源)(Primary)       CH2
+  O3     K053260(PCM音源)(Primary)       CH3
+  O4     K053260(PCM音源)(Primary)       CH4
 
   Fs1    YM2612(FM音源)(Secondary)       CH1
   Fs2    YM2612(FM音源)(Secondary)       CH2
@@ -532,9 +565,13 @@ ebass3(from MUSIC LALF @70)
   Ks3    K051649(WF音源)(Secondary)      CH3
   Ks4    K051649(WF音源)(Secondary)      CH4
   Ks5    K051649(WF音源)(Secondary)      CH5
+  Os1    K053260(PCM音源)(Secondary)     CH1
+  Os2    K053260(PCM音源)(Secondary)     CH2
+  Os3    K053260(PCM音源)(Secondary)     CH3
+  Os4    K053260(PCM音源)(Secondary)     CH4
 
   -----------
-  計 300Ch
+  計 324Ch
 
 
 ■ MML内部
@@ -952,6 +989,9 @@ b               -ooooooooooooooooooooooooooo  音符シ
   HuC6280Secondary HuC8Secondary         o--o 不可     不可       
   C140             C140                  ooo- 可       可         
   C140Secondary    C140Secondary         ooo- 可       可         
+  QSound           QSnd                  o--- 可       可         QSoundはSecondary無し(vgmがDualChip非対応)
+  K053260          K53                   o--- 可       可         K53はループするとスタートアドレスに戻る
+  K053260Secondary K53Secondary          o--- 可       可         
 
 
   MUCOM88のADPCMを読み込む
