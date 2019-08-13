@@ -418,6 +418,8 @@ namespace mml2vgmIDE
 
             chipRegister.SetRealChipInfo(EnmDevice.HuC6280, setting.HuC6280Type, setting.HuC6280SType, setting.LatencyEmulation, setting.LatencySCCI);
             chipRegister.SetRealChipInfo(EnmDevice.K051649, setting.K051649Type, setting.K051649SType, setting.LatencyEmulation, setting.LatencySCCI);
+            chipRegister.SetRealChipInfo(EnmDevice.K053260, setting.K053260Type, setting.K053260SType, setting.LatencyEmulation, setting.LatencySCCI);
+            chipRegister.SetRealChipInfo(EnmDevice.QSound, setting.QSoundType, null, setting.LatencyEmulation, setting.LatencySCCI);
             chipRegister.SetRealChipInfo(EnmDevice.Y8950, setting.Y8950Type, setting.Y8950SType, setting.LatencyEmulation, setting.LatencySCCI);
             chipRegister.SetRealChipInfo(EnmDevice.YM3526, setting.YM3526Type, setting.YM3526SType, setting.LatencyEmulation, setting.LatencySCCI);
             chipRegister.SetRealChipInfo(EnmDevice.YMF262, setting.YMF262Type, setting.YMF262SType, setting.LatencyEmulation, setting.LatencySCCI);
@@ -478,6 +480,28 @@ namespace mml2vgmIDE
                 if (ret.Count == 0) continue;
             }
             chipRegister.SetRealChipInfo(EnmDevice.K051649, chipType[0], chipType[1], setting.LatencyEmulation, setting.LatencySCCI);
+
+            for (int i = 0; i < 2; i++)
+            {
+                chipType[i] = new Setting.ChipType();
+                if (!chipRegister.K053260[i].Use) continue;
+                chipRegister.K053260[i].Model = EnmModel.VirtualModel;
+                chipType[i].UseEmu = true;
+                chipType[i].UseScci = false;
+                if (ret.Count == 0) continue;
+            }
+            chipRegister.SetRealChipInfo(EnmDevice.K053260, chipType[0], chipType[1], setting.LatencyEmulation, setting.LatencySCCI);
+
+            for (int i = 0; i < 2; i++)
+            {
+                chipType[i] = new Setting.ChipType();
+                if (!chipRegister.QSound[i].Use) continue;
+                chipRegister.QSound[i].Model = EnmModel.VirtualModel;
+                chipType[i].UseEmu = true;
+                chipType[i].UseScci = false;
+                if (ret.Count == 0) continue;
+            }
+            chipRegister.SetRealChipInfo(EnmDevice.QSound, chipType[0], chipType[1], setting.LatencyEmulation, setting.LatencySCCI);
 
             for (int i = 0; i < 2; i++)
             {
@@ -2753,32 +2777,6 @@ namespace mml2vgmIDE
                         }
                     }
 
-                    if (vgmDriver.QSoundClockValue != 0)
-                    {
-                        MDSound.qsound qsound = new MDSound.qsound();
-                        chip = new MDSound.MDSound.Chip();
-                        chip.type = MDSound.MDSound.enmInstrumentType.QSound;
-                        chip.ID = (byte)0;
-                        chip.Instrument = qsound;
-                        chip.Update = qsound.Update;
-                        chip.Start = qsound.Start;
-                        chip.Stop = qsound.Stop;
-                        chip.Reset = qsound.Reset;
-                        chip.SamplingRate = (UInt32)Common.SampleRate;
-                        chip.Volume = setting.balance.QSoundVolume;
-                        chip.Clock = (((vgm)driver).QSoundClockValue);// & 0x7fffffff);
-                        chip.Option = null;
-
-                        hiyorimiDeviceFlag |= 0x2;
-
-                        //if (i == 0) chipLED.PriHuC = 1;
-                        //else chipLED.SecHuC = 1;
-                        chipLED.PriQsnd = 1;
-
-                        if (chip.Instrument != null) lstChips.Add(chip);
-                        useChip.Add(EnmChip.QSound);
-                    }
-
                     if (vgmDriver.C352ClockValue != 0)
                     {
                         MDSound.c352 c352 = new c352();
@@ -2836,62 +2834,6 @@ namespace mml2vgmIDE
                         }
                     }
 
-                    if (vgmDriver.K053260ClockValue != 0)
-                    {
-                        MDSound.K053260 k053260 = new MDSound.K053260();
-
-                        for (int i = 0; i < (((vgm)driver).K053260DualChipFlag ? 2 : 1); i++)
-                        {
-                            chip = new MDSound.MDSound.Chip();
-                            chip.type = MDSound.MDSound.enmInstrumentType.K053260;
-                            chip.ID = (byte)i;
-                            chip.Instrument = k053260;
-                            chip.Update = k053260.Update;
-                            chip.Start = k053260.Start;
-                            chip.Stop = k053260.Stop;
-                            chip.Reset = k053260.Reset;
-                            chip.SamplingRate = (UInt32)Common.SampleRate;
-                            chip.Volume = setting.balance.K053260Volume;
-                            chip.Clock = ((vgm)driver).K053260ClockValue;
-                            chip.Option = null;
-                            if (i == 0) chipLED.PriK053260 = 1;
-                            else chipLED.SecK053260 = 1;
-
-                            hiyorimiDeviceFlag |= 0x2;
-
-                            if (chip.Instrument != null) lstChips.Add(chip);
-                            useChip.Add(i == 0 ? EnmChip.K053260 : EnmChip.S_K053260);
-                        }
-                    }
-
-                    if (vgmDriver.K054539ClockValue != 0)
-                    {
-                        MDSound.K054539 k054539 = new MDSound.K054539();
-
-                        for (int i = 0; i < (((vgm)driver).K054539DualChipFlag ? 2 : 1); i++)
-                        {
-                            chip = new MDSound.MDSound.Chip();
-                            chip.type = MDSound.MDSound.enmInstrumentType.K054539;
-                            chip.ID = (byte)i;
-                            chip.Instrument = k054539;
-                            chip.Update = k054539.Update;
-                            chip.Start = k054539.Start;
-                            chip.Stop = k054539.Stop;
-                            chip.Reset = k054539.Reset;
-                            chip.SamplingRate = (UInt32)Common.SampleRate;
-                            chip.Volume = setting.balance.K054539Volume;
-                            chip.Clock = ((vgm)driver).K054539ClockValue;
-                            chip.Option = null;
-                            if (i == 0) chipLED.PriK054539 = 1;
-                            else chipLED.SecK054539 = 1;
-
-                            hiyorimiDeviceFlag |= 0x2;
-
-                            if (chip.Instrument != null) lstChips.Add(chip);
-                            useChip.Add(i == 0 ? EnmChip.K054539 : EnmChip.S_K054539);
-                        }
-                    }
-
                     if (vgmDriver.K051649ClockValue != 0)
                     {
                         MDSound.K051649 k051649 = new MDSound.K051649();
@@ -2933,6 +2875,109 @@ namespace mml2vgmIDE
                             chipRegister.K051649[i].Use = true;
                             if (chip.Instrument != null) lstChips.Add(chip);
                         }
+                    }
+
+                    if (vgmDriver.K053260ClockValue != 0)
+                    {
+                        MDSound.K053260 k053260 = new MDSound.K053260();
+
+                        for (int i = 0; i < (((vgm)driver).K053260DualChipFlag ? 2 : 1); i++)
+                        {
+                            chip = new MDSound.MDSound.Chip();
+                            chip.type = MDSound.MDSound.enmInstrumentType.K053260;
+                            chip.ID = (byte)i;
+                            chip.Instrument = k053260;
+                            chip.Update = k053260.Update;
+                            chip.Start = k053260.Start;
+                            chip.Stop = k053260.Stop;
+                            chip.Reset = k053260.Reset;
+                            chip.SamplingRate = (UInt32)Common.SampleRate;
+                            chip.Volume = setting.balance.K053260Volume;
+                            chip.Clock = ((vgm)driver).K053260ClockValue;
+                            chip.Option = null;
+
+                            hiyorimiDeviceFlag |= 0x2;
+
+                            if (i == 0)
+                            {
+                                chipLED.PriK053260 = 1;
+                                useChip.Add(EnmChip.K053260);
+                            }
+                            else
+                            {
+                                chipLED.SecK053260 = 1;
+                                useChip.Add(EnmChip.S_K053260);
+                            }
+
+                            log.Write(string.Format("Use K053260({0}) Clk:{1}"
+                                , (i == 0) ? "Pri" : "Sec"
+                                , chip.Clock
+                                ));
+
+                            chipRegister.K053260[i].Use = true;
+                            if (chip.Instrument != null) lstChips.Add(chip);
+                        }
+                    }
+
+                    if (vgmDriver.K054539ClockValue != 0)
+                    {
+                        MDSound.K054539 k054539 = new MDSound.K054539();
+
+                        for (int i = 0; i < (((vgm)driver).K054539DualChipFlag ? 2 : 1); i++)
+                        {
+                            chip = new MDSound.MDSound.Chip();
+                            chip.type = MDSound.MDSound.enmInstrumentType.K054539;
+                            chip.ID = (byte)i;
+                            chip.Instrument = k054539;
+                            chip.Update = k054539.Update;
+                            chip.Start = k054539.Start;
+                            chip.Stop = k054539.Stop;
+                            chip.Reset = k054539.Reset;
+                            chip.SamplingRate = (UInt32)Common.SampleRate;
+                            chip.Volume = setting.balance.K054539Volume;
+                            chip.Clock = ((vgm)driver).K054539ClockValue;
+                            chip.Option = null;
+                            if (i == 0) chipLED.PriK054539 = 1;
+                            else chipLED.SecK054539 = 1;
+
+                            hiyorimiDeviceFlag |= 0x2;
+
+                            if (chip.Instrument != null) lstChips.Add(chip);
+                            useChip.Add(i == 0 ? EnmChip.K054539 : EnmChip.S_K054539);
+                        }
+                    }
+
+                    if (vgmDriver.QSoundClockValue != 0)
+                    {
+                        //QSoundはDualChip非対応
+                        MDSound.qsound qsound = new MDSound.qsound();
+                        chip = new MDSound.MDSound.Chip();
+                        chip.type = MDSound.MDSound.enmInstrumentType.QSound;
+                        chip.ID = (byte)0;
+                        chip.Instrument = qsound;
+                        chip.Update = qsound.Update;
+                        chip.Start = qsound.Start;
+                        chip.Stop = qsound.Stop;
+                        chip.Reset = qsound.Reset;
+                        chip.SamplingRate = (UInt32)Common.SampleRate;
+                        chip.Volume = setting.balance.QSoundVolume;
+                        chip.Clock = (((vgm)driver).QSoundClockValue);// & 0x7fffffff);
+                        chip.Option = null;
+
+                        hiyorimiDeviceFlag |= 0x2;
+
+                        //if (i == 0) chipLED.PriHuC = 1;
+                        //else chipLED.SecHuC = 1;
+                        chipLED.PriQsnd = 1;
+                        useChip.Add(EnmChip.QSound);
+
+                        log.Write(string.Format("Use QSound({0}) Clk:{1}"
+                            , "Pri"
+                            , chip.Clock
+                            ));
+
+                        chipRegister.QSound[0].Use = true;
+                        if (chip.Instrument != null) lstChips.Add(chip);
                     }
 
                     if (vgmDriver.YM3526ClockValue != 0)
@@ -3137,6 +3182,18 @@ namespace mml2vgmIDE
                         if (chipRegister.K051649[i].Model == EnmModel.RealModel) useReal = true;
                     }
 
+                    if (chipRegister.K053260[i].Use)
+                    {
+                        if (chipRegister.K053260[i].Model == EnmModel.VirtualModel) useEmu = true;
+                        if (chipRegister.K053260[i].Model == EnmModel.RealModel) useReal = true;
+                    }
+
+                    if (chipRegister.QSound[i].Use)
+                    {
+                        if (chipRegister.QSound[i].Model == EnmModel.VirtualModel) useEmu = true;
+                        if (chipRegister.QSound[i].Model == EnmModel.RealModel) useReal = true;
+                    }
+
                     if (chipRegister.RF5C164[i].Use)
                     {
                         if (chipRegister.RF5C164[i].Model == EnmModel.VirtualModel) useEmu = true;
@@ -3248,6 +3305,8 @@ namespace mml2vgmIDE
                     }
                     if (chipRegister.HuC6280[i].Use) chipRegister.HuC6280WriteClock((byte)i, (int)vgmDriver.HuC6280ClockValue);
                     if (chipRegister.K051649[i].Use) chipRegister.K051649WriteClock((byte)i, (int)vgmDriver.K051649ClockValue);
+                    if (chipRegister.K053260[i].Use) chipRegister.K053260WriteClock((byte)i, (int)vgmDriver.K053260ClockValue);
+                    if (chipRegister.QSound[i].Use) chipRegister.QSoundWriteClock((byte)i, (int)vgmDriver.QSoundClockValue);
                     if (chipRegister.RF5C164[i].Use) chipRegister.RF5C164WriteClock((byte)i, (int)vgmDriver.RF5C164ClockValue);
                     if (chipRegister.SEGAPCM[i].Use) chipRegister.SEGAPCMWriteClock((byte)i, (int)vgmDriver.SEGAPCMClockValue);
                     if (chipRegister.SN76489[i].Use) chipRegister.SN76489WriteClock((byte)i, (int)vgmDriver.SN76489ClockValue);
@@ -3978,6 +4037,8 @@ namespace mml2vgmIDE
                 if (chipRegister.C140[i].Use) chipRegister.C140SoftReset(counter, i);
                 if (chipRegister.HuC6280[i].Use) chipRegister.HuC6280SoftReset(counter, i);
                 if (chipRegister.K051649[i].Use) chipRegister.K051649SoftReset(counter, i);
+                if (chipRegister.K053260[i].Use) chipRegister.K053260SoftReset(counter, i);
+                if (chipRegister.QSound[i].Use) chipRegister.QSoundSoftReset(counter, i);
                 if (chipRegister.RF5C164[i].Use) chipRegister.RF5C164SoftReset(counter, i);
                 if (chipRegister.SEGAPCM[i].Use) chipRegister.SEGAPCMSoftReset(counter, i);
                 if (chipRegister.SN76489[i].Use) chipRegister.SN76489SoftReset(counter, i);
@@ -3999,6 +4060,8 @@ namespace mml2vgmIDE
                 if (chipRegister.C140[i].Use) data.AddRange(chipRegister.C140MakeSoftReset(i));
                 if (chipRegister.HuC6280[i].Use) data.AddRange(chipRegister.HuC6280MakeSoftReset(i));
                 if (chipRegister.K051649[i].Use) data.AddRange(chipRegister.K051649MakeSoftReset(i));
+                if (chipRegister.K053260[i].Use) data.AddRange(chipRegister.K053260MakeSoftReset(i));
+                if (chipRegister.QSound[i].Use) data.AddRange(chipRegister.QSoundMakeSoftReset(i));
                 if (chipRegister.RF5C164[i].Use) data.AddRange(chipRegister.RF5C164MakeSoftReset(i));
                 if (chipRegister.SEGAPCM[i].Use) data.AddRange(chipRegister.SEGAPCMMakeSoftReset(i));
                 if (chipRegister.SN76489[i].Use) data.AddRange(chipRegister.SN76489MakeSoftReset(i));
@@ -4022,6 +4085,8 @@ namespace mml2vgmIDE
                 if (chipRegister.C140[i].Use) data.AddRange(chipRegister.C140MakeSoftReset(i));
                 if (chipRegister.HuC6280[i].Use) data.AddRange(chipRegister.HuC6280MakeSoftReset(i));
                 if (chipRegister.K051649[i].Use) data.AddRange(chipRegister.K051649MakeSoftReset(i));
+                if (chipRegister.K053260[i].Use) data.AddRange(chipRegister.K053260MakeSoftReset(i));
+                if (chipRegister.QSound[i].Use) data.AddRange(chipRegister.QSoundMakeSoftReset(i));
                 if (chipRegister.RF5C164[i].Use) data.AddRange(chipRegister.RF5C164MakeSoftReset(i));
                 if (chipRegister.SEGAPCM[i].Use) data.AddRange(chipRegister.SEGAPCMMakeSoftReset(i));
                 if (chipRegister.SN76489[i].Use) data.AddRange(chipRegister.SN76489MakeSoftReset(i));
@@ -5904,6 +5969,16 @@ namespace mml2vgmIDE
             chipRegister.K051649SetMask(0, chipID, ch, true);
         }
 
+        public static void setK053260Mask(int chipID, int ch)
+        {
+            chipRegister.K053260SetMask(0, chipID, ch, true);
+        }
+
+        public static void setQSoundMask(int chipID, int ch)
+        {
+            chipRegister.QSoundSetMask(0, chipID, ch, true);
+        }
+
 
         public static void resetSN76489Mask(int chipID, int ch)
         {
@@ -6092,6 +6167,16 @@ namespace mml2vgmIDE
         public static void resetK051649Mask(int chipID, int ch)
         {
             chipRegister.K051649SetMask(0, chipID, ch, false);
+        }
+
+        public static void resetK053260Mask(int chipID, int ch)
+        {
+            chipRegister.K053260SetMask(0, chipID, ch, false);
+        }
+
+        public static void resetQSoundMask(int chipID, int ch)
+        {
+            chipRegister.QSoundSetMask(0, chipID, ch, false);
         }
 
         #endregion

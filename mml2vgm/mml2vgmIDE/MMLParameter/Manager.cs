@@ -11,6 +11,8 @@ namespace mml2vgmIDE.MMLParameter
         public Instrument[] C140;
         public Instrument[] HuC6280;
         public Instrument[] K051649;
+        public Instrument[] K053260;
+        public Instrument[] QSound;
         public Instrument[] RF5C164;
         public Instrument[] SN76489;
         public Instrument[] SegaPCM;
@@ -50,6 +52,14 @@ namespace mml2vgmIDE.MMLParameter
             K051649 = new K051649[] { new K051649(), new K051649() };
             dicInstAdd(K051649);
             Insts.Add(K051649[0].Name, K051649);
+
+            K053260 = new K053260[] { new K053260(), new K053260() };
+            dicInstAdd(K053260);
+            Insts.Add(K053260[0].Name, K053260);
+
+            QSound = new QSound[] { new QSound(), null };
+            dicInstAdd(QSound);
+            Insts.Add(QSound[0].Name, QSound);
 
             RF5C164 = new RF5C164[] { new RF5C164(), new RF5C164() };
             dicInstAdd(RF5C164);
@@ -111,7 +121,13 @@ namespace mml2vgmIDE.MMLParameter
         {
             Dictionary<int, Action<outDatum, int>> d
                 = new Dictionary<int, Action<outDatum, int>>();
-            for (int i = 0; i < inst.Length; i++) d.Add(i, inst[i].SetParameter);
+            for (int i = 0; i < inst.Length; i++)
+            {
+                if (inst[i] != null)
+                {
+                    d.Add(i, inst[i].SetParameter);
+                }
+            }
             dicInst.Add(inst[0].Name, d);
         }
 

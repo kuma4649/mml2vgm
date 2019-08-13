@@ -525,6 +525,7 @@ namespace Core
                     );
                 pw.beforeVolume = data;
             }
+            SetDummyData(pw, mml);
 
         }
 

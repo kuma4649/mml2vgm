@@ -127,6 +127,34 @@ namespace mml2vgmIDE
             }
         }
 
+        private ChipType _K053260Type = new ChipType();
+        public ChipType K053260Type
+        {
+            get
+            {
+                return _K053260Type;
+            }
+
+            set
+            {
+                _K053260Type = value;
+            }
+        }
+
+        private ChipType _QSoundType = new ChipType();
+        public ChipType QSoundType
+        {
+            get
+            {
+                return _QSoundType;
+            }
+
+            set
+            {
+                _QSoundType = value;
+            }
+        }
+
         private ChipType _YM2413SType = new ChipType();
         public ChipType YM2413SType
         {
@@ -418,6 +446,20 @@ namespace mml2vgmIDE
             set
             {
                 _K051649SType = value;
+            }
+        }
+
+        private ChipType _K053260SType = new ChipType();
+        public ChipType K053260SType
+        {
+            get
+            {
+                return _K053260SType;
+            }
+
+            set
+            {
+                _K053260SType = value;
             }
         }
 

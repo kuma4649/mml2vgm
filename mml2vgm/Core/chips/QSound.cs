@@ -58,7 +58,7 @@ namespace Core
         public override void InitPart(ref partWork pw)
         {
             pw.MaxVolume = 65535;
-            pw.volume = pw.MaxVolume;
+            pw.volume = 3000;// pw.MaxVolume;
             pw.panL = 16;
             pw.port0 = 0xc4;
         }
@@ -71,7 +71,7 @@ namespace Core
             {
                 partWork pw = lstPartWork[ch];
                 pw.MaxVolume = Ch[ch].MaxVolume;
-                pw.volume = pw.MaxVolume;
+                pw.volume = 3000;// pw.MaxVolume;
                 pw.panL = 16;
             }
 

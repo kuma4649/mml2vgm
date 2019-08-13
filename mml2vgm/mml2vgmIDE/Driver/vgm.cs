@@ -120,6 +120,9 @@ namespace mml2vgmIDE
         private byte[][] ym2610AdpcmA = new byte[2][] { null, null };
         private byte[][] ym2610AdpcmB = new byte[2][] { null, null };
 
+        private List<byte> pcmDat = new List<byte>();
+
+
 
         public override bool init(outDatum[] vgmBuf, ChipRegister chipRegister, EnmChip[] useChip,uint latency,uint waitTime)
         {
@@ -622,7 +625,14 @@ namespace mml2vgmIDE
 
         private void vcQSound(outDatum od)
         {
-            chipRegister.setQSoundRegister(0, vgmBuf[vgmAdr + 1].val, vgmBuf[vgmAdr + 2].val, vgmBuf[vgmAdr + 3].val);
+            //chipRegister.setQSoundRegister(0, vgmBuf[vgmAdr + 1].val, vgmBuf[vgmAdr + 2].val, vgmBuf[vgmAdr + 3].val);
+            chipRegister.QSoundSetRegister(
+                od,
+                Audio.DriverSeqCounter,
+                0,
+                vgmBuf[vgmAdr + 3].val, //adr(register)
+                vgmBuf[vgmAdr + 2].val + vgmBuf[vgmAdr + 1].val * 0x100//data
+                );
             vgmAdr += 4;
         }
 
@@ -808,8 +818,6 @@ namespace mml2vgmIDE
         {
             vgmAdr = (uint)vgmBuf.Length;
         }
-
-        private List<byte> pcmDat = new List<byte>();
 
         private void vcDataBlock(outDatum od)
         {
@@ -1031,7 +1039,7 @@ namespace mml2vgmIDE
                             //chipRegister.writeK053260PCMData(chipID, romSize, startAddress, bLen - 8, vgmBuf, vgmAdr + 15);
                             pcmDat.Clear();
                             for (uint i = vgmAdr + 15; i < vgmAdr + 15 + bLen - 8; i++) pcmDat.Add(vgmBuf[i].val);
-                            chipRegister.writeK053260PCMData(chipID, romSize, startAddress, bLen - 8, pcmDat.ToArray(), 0);
+                            chipRegister.K053260WritePCMData(od, Audio.DriverSeqCounter, chipID, romSize, startAddress, bLen - 8, pcmDat.ToArray(), 0);
                             //dumpData(model, "K053260_PCMData", vgmAdr + 15, bLen - 8);
                             break;
 
@@ -1040,7 +1048,7 @@ namespace mml2vgmIDE
                             //chipRegister.writeQSoundPCMData(chipID, romSize, startAddress, bLen - 8, vgmBuf, vgmAdr + 15);
                             pcmDat.Clear();
                             for (uint i = vgmAdr + 15; i < vgmAdr + 15 + bLen - 8; i++) pcmDat.Add(vgmBuf[i].val);
-                            chipRegister.writeQSoundPCMData(chipID, romSize, startAddress, bLen - 8, pcmDat.ToArray(), 0);
+                            chipRegister.QSoundWritePCMData(od, Audio.DriverSeqCounter, chipID, romSize, startAddress, bLen - 8, pcmDat.ToArray(), 0);
                             //dumpData(model, "QSound_PCMData", vgmAdr + 15, bLen - 8);
                             break;
 
@@ -1115,97 +1123,6 @@ namespace mml2vgmIDE
             }
 
         }
-
-        //private int dumpCounter = 0;
-        //private void dumpData(Chip Chip,string chipName, uint adr, uint len)
-        //{
-
-        //    if (Chip.Model == EnmModel.RealModel) return;
-        //    if (setting == null) return;
-        //    if (!setting.other.DumpSwitch) return;
-
-        //    try
-        //    {
-
-        //        string fn = System.IO.Path.Combine(setting.other.DumpPath, string.Format("{1}_{2}_{0:000}.bin", dumpCounter++, chipName, GD3.TrackName.Replace("*","").Replace("?","").Replace(" ","").Replace("\"", "").Replace("/", "")));
-        //        using (System.IO.FileStream fs = new System.IO.FileStream(fn, System.IO.FileMode.OpenOrCreate, System.IO.FileAccess.Write))
-        //        {
-        //            using (System.IO.BinaryWriter bw = new System.IO.BinaryWriter(fs))
-        //            {
-        //                bw.Write(vgmBuf, (int)adr, (int)len);
-        //            }
-        //        }
-        //    }
-        //    catch
-        //    {
-        //        //エラーは無視
-        //    }
-
-        //}
-
-        //private void dumpDataForSegaPCM( string chipName, uint adr, uint len)
-        //{
-        //    EnmModel model = EnmModel.VirtualModel;
-        //    if (model == EnmModel.RealModel) return;
-        //    if (setting == null) return;
-        //    if (!setting.other.DumpSwitch) return;
-
-        //    try
-        //    {
-        //        string dFn = System.IO.Path.Combine(setting.other.DumpPath, string.Format("{1}_{2}_{0:000}.wav", dumpCounter++, chipName, GD3.TrackName.Replace("*", "").Replace("?", "").Replace(" ", "").Replace("\"", "")));
-        //        List<byte> des = new List<byte>();
-
-        //        // 'RIFF'
-        //        des.Add((byte)'R'); des.Add((byte)'I'); des.Add((byte)'F'); des.Add((byte)'F');
-        //        // サイズ
-        //        //int fsize = src.Length + 36;
-        //        int fsize = (int)len + 36;
-        //        des.Add((byte)((fsize & 0xff) >> 0));
-        //        des.Add((byte)((fsize & 0xff00) >> 8));
-        //        des.Add((byte)((fsize & 0xff0000) >> 16));
-        //        des.Add((byte)((fsize & 0xff000000) >> 24));
-        //        // 'WAVE'
-        //        des.Add((byte)'W'); des.Add((byte)'A'); des.Add((byte)'V'); des.Add((byte)'E');
-        //        // 'fmt '
-        //        des.Add((byte)'f'); des.Add((byte)'m'); des.Add((byte)'t'); des.Add((byte)' ');
-        //        // サイズ(16)
-        //        des.Add(0x10); des.Add(0); des.Add(0); des.Add(0);
-        //        // フォーマット(1)
-        //        des.Add(0x01); des.Add(0x00);
-        //        // チャンネル数(mono)
-        //        des.Add(0x01); des.Add(0x00);
-        //        //サンプリング周波数(16KHz)
-        //        des.Add(0x80); des.Add(0x3e); des.Add(0); des.Add(0);
-        //        //平均データ割合(16K)
-        //        des.Add(0x80); des.Add(0x3e); des.Add(0); des.Add(0);
-        //        //ブロックサイズ(1)
-        //        des.Add(0x01); des.Add(0x00);
-        //        //ビット数(8bit)
-        //        des.Add(0x08); des.Add(0x00);
-
-        //        // 'data'
-        //        des.Add((byte)'d'); des.Add((byte)'a'); des.Add((byte)'t'); des.Add((byte)'a');
-        //        // サイズ(データサイズ)
-        //        des.Add((byte)((len & 0xff) >> 0));
-        //        des.Add((byte)((len & 0xff00) >> 8));
-        //        des.Add((byte)((len & 0xff0000) >> 16));
-        //        des.Add((byte)((len & 0xff000000) >> 24));
-
-        //        for (int i = 0; i < len; i++)
-        //        {
-        //            des.Add(vgmBuf[adr + i].val);
-        //        }
-
-        //        //出力
-        //        System.IO.File.WriteAllBytes(dFn, des.ToArray());
-
-        //    }
-        //    catch
-        //    {
-        //    }
-        //}
-
-
 
         private void vcPCMRamWrite(outDatum od)
         {
@@ -1474,9 +1391,9 @@ namespace mml2vgmIDE
         private void vcK053260(outDatum od)
         {
             byte id = (byte)((vgmBuf[vgmAdr + 1].val & 0x80) != 0 ? 1 : 0);
-            uint adr = (uint)(vgmBuf[vgmAdr + 1].val & 0x7f);
+            int adr = (int)(vgmBuf[vgmAdr + 1].val & 0x7f);
             byte data = vgmBuf[vgmAdr + 2].val;
-            chipRegister.writeK053260(id, adr, data);
+            chipRegister.K053260SetRegister(od, Audio.DriverSeqCounter, id, adr, data);
             vgmAdr += 3;
         }
 

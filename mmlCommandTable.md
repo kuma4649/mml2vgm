@@ -61,6 +61,10 @@
     Support type: PRESET FM 6Ch  
 - K051649  
     Support type: Wave Form 6Ch  
+- QSound  
+    Support type: PCM 16Ch  
+- K053260  
+    Support type: PCM/DPCM 4Ch  
 
 
 ## コマンド
@@ -107,6 +111,8 @@
     - C140  
     - YM2413(FM)  
     - K051649  
+    - QSound  
+    - K053260  
 - Remark  
     音色を設定する  
 - Description  
@@ -190,6 +196,8 @@
     - SEGAPCM  
     - HuC6280  
     - C140  
+    - QSound  
+    - K053260  
 - Remark  
     エンベロープ音色を設定する  
 - Description  
@@ -354,6 +362,8 @@
 	- YM2413(FM)  
 	- YM2413(RHYTHM)  
 	- K051649  
+    - QSound  
+    - K053260  
 - Remark  
     デフォルトとして使用される音の長さを指定する。  
 - Description  
@@ -411,6 +421,8 @@
 	- YM2413(FM)  
 	- YM2413(RHYTHM)  
 	- K051649  
+    - QSound  
+    - K053260  
 - Remark  
     デフォルトとして使用される音の長さをクロック単位で指定する。  
 - Description  
@@ -458,6 +470,8 @@
 	- AY8910  
 	- YM2413(FM)  
 	- K051649  
+    - QSound  
+    - K053260  
 - Remark  
     オクターブを指定する。  
 - Description  
@@ -500,6 +514,8 @@
 	- AY8910  
 	- YM2413(FM)  
 	- K051649  
+    - QSound  
+    - K053260  
 - Remark  
     現在を基準に、オクターブを上げたり下げる。  
 - Description  
@@ -544,6 +560,8 @@
 	- AY8910  
 	- YM2413(FM)  
 	- K051649  
+    - QSound  
+    - K053260  
 - Remark  
     音程を少しだけずらす。  
 - Description  
@@ -563,6 +581,7 @@
     n : 0～15  (B)  
     n : 0～31  (C)  
     n : 0～255 (D)  
+    n : 0～65535 (E)  
 - Support chips  
 	- YM2612 (A)  
 	- YM2612X (A)  
@@ -591,6 +610,8 @@
 	- YM2413(FM) (B)  
 	- YM2413(RHYTHM) (B)  
 	- K051649 (B)  
+    - QSound (E)  
+    - K053260 (A)  
 - Remark  
     ボリューム(音量)を設定する。  
 - Description  
@@ -611,6 +632,7 @@
     n : 0～15  (B)  
     n : 0～31  (C)  
     n : 0～255 (D)  
+    n : 0～65535 (E)  
 - Support chips  
 	- YM2612 (A)  
 	- YM2612X (A)  
@@ -639,6 +661,8 @@
 	- YM2413(FM) (B)  
 	- YM2413(RHYTHM) (B)  
 	- K051649 (B)  
+    - QSound (E)  
+    - K053260 (A)  
 - Remark  
     現在を基準に、音量を上げたり下げる。  
 - Description  
@@ -725,6 +749,8 @@
 	- YM2413(FM)  
 	- YM2413(RHYTHM)  
 	- K051649  
+    - QSound  
+    - K053260  
 - Remark  
     タイ。前後の音符をつなげる。(キーオフせずに次の音を発音する)  
 - Description  
@@ -768,6 +794,8 @@
 	- YM2413(FM)  
 	- YM2413(RHYTHM)  
 	- K051649  
+    - QSound  
+    - K053260  
 - Remark  
     音源にアドレスとデータを直接送信する。  
 - Description  
@@ -1224,6 +1252,8 @@
     - YM2413(FM)          T/Vに対応  
     - YM2413(RHYTHM)      T/Vに対応  
     - K051649             T/Vに対応  
+    - QSound              T/Vに対応  
+    - K053260             T/Vに対応  
 - Remark  
     LFOを設定し有効にする。  
 - Description  
@@ -1311,6 +1341,8 @@
     - YM2413(FM)  
     - YM2413(RHYTHM)  
     - K051649  
+    - QSound  
+    - K053260  
 - Remark  
     LFOのスイッチ  
 - Description  
@@ -1439,6 +1471,8 @@
     - YM2413(FM)  
     - YM2413(RHYTHM)  
     - K051649  
+    - QSound  
+    - K053260  
 - Remark  
     休符  
 - Description  
@@ -1486,6 +1520,8 @@
     - YM2413(FM)  
     - YM2413(RHYTHM)  
     - K051649  
+    - QSound  
+    - K053260  
 - Remark  
     歌詞  
 - Description  
@@ -1537,6 +1573,8 @@
     - YM2413(FM)  
     - YM2413(RHYTHM)  
     - K051649  
+    - QSound  
+    - K053260  
 - Remark  
     括ったコマンドを繰り返す  
 - Description  
@@ -1600,6 +1638,8 @@
     - YM2413(FM)  
     - YM2413(RHYTHM)  
     - K051649  
+    - QSound  
+    - K053260  
 - Remark  
     括ったノートコマンドを指定した長さで演奏する  
 - Description  
@@ -1639,6 +1679,8 @@
     - AY8910  
     - YM2413(RHYTHM)  
     - K051649  
+    - QSound  
+    - K053260  
 - Remark  
     エンベロープの開始(EON)、停止(EOF)  
 - Description  
@@ -1757,6 +1799,8 @@
     - YM2413(FM)  
     - YM2413(RHYTHM)  
     - K051649  
+    - QSound  
+    - K053260  
 - Remark  
     曲全体のループ位置指定  
 - Description  
@@ -1803,6 +1847,8 @@
     - YM2413(FM)  
     - YM2413(RHYTHM)  
     - K051649  
+    - QSound  
+    - K053260  
 - Remark  
     指定した位置まで演奏をスキップする。  
 - Description  
@@ -1851,6 +1897,8 @@
     - YM2413(FM)  
     - YM2413(RHYTHM)  
     - K051649  
+    - QSound  
+    - K053260  
 - Remark  
     ゲートタイム指定(クロック数で指定)  
 - Description  
@@ -1896,6 +1944,8 @@
     - YM2413(FM)  
     - YM2413(RHYTHM)  
     - K051649  
+    - QSound  
+    - K053260  
 - Remark  
     ゲートタイム指定(8段階の割合で指定)  
 - Description  
@@ -2088,6 +2138,8 @@
     - YM2413(FM)  
     - YM2413(RHYTHM)  
     - K051649  
+    - QSound  
+    - K053260  
 - Remark  
     テンポ  
 - Description  
@@ -2134,6 +2186,8 @@
     - YM2413(FM)  
     - YM2413(RHYTHM)  
     - K051649  
+    - QSound  
+    - K053260  
 - Remark  
     パートコンパイル停止  
 - Description  
@@ -2174,6 +2228,8 @@
     - AY8910  
     - YM2413(FM)  
     - K051649  
+    - QSound  
+    - K053260  
 - Remark  
     移調を設定する。絶対指定。  
 - Description  
@@ -2195,6 +2251,8 @@
     - RF5C164  
     - SEGAPCM  
     - C140  
+    - QSound  
+    - K053260  
 - Remark  
     A : PCMの再生開始位置を指定。絶対指定。  
     A+ / A- : PCMの再生開始位置を指定。相対指定。  
@@ -2214,22 +2272,28 @@
 - Format  
     pn  
 - 設定可能範囲  
-    n : 0 ～ 3 (0: 発音しない  1: 右  2: 左  3: 中央)  
+    n : 0 ～ 3 (0: 発音しない  1: 右  2: 左  3: 中央) (A)  
+    n : 0 ～ 7 (0～7: 右～左  3: 中央) (B)  
+    n : 0 ～ 32 (0～32: 右～左  15: 中央) (C)  
 - Support chips  
-    - YM2612  
-    - YM2612X  
-    - YM2612(6ChPCMmode)  
-    - YM2612X(6ChPCMmode)  
-    - YM2610B(FM)  
-    - YM2610B(ADPCM-A)  
-    - YM2610B(ADPCM-B)  
-    - YM2608(FM)  
-    - YM2608(RHYTHM)  
-    - YM2608(ADPCM)  
-    - YM2203(FM)  
-    - YM2151  
+    - YM2612 (A)  
+    - YM2612X (A)  
+    - YM2612(6ChPCMmode) (A)  
+    - YM2612X(6ChPCMmode) (A)  
+    - YM2610B(FM) (A)  
+    - YM2610B(ADPCM-A) (A)  
+    - YM2610B(ADPCM-B) (A)  
+    - YM2608(FM) (A)  
+    - YM2608(RHYTHM) (A)  
+    - YM2608(ADPCM) (A)  
+    - YM2203(FM) (A)  
+    - YM2151 (A)  
+    - QSound (C)  
+    - K053260 (B)  
 - Remark  
     パンを指定する。(0: 発音しない  1: 右  2: 左  3: 中央)  
+    (B),(C)は段階的に設定できます。  
+    (B)は左に一段階多いですが謎です。  
 - Description  
     パン(定位)を指定します。  
 
@@ -2332,6 +2396,8 @@
     - YM2413(FM)  
     - YM2413(RHYTHM)  
     - K051649  
+    - QSound  
+    - K053260  
 - Remark  
     エイリアスを設定する  
 - Description  
@@ -2383,6 +2449,8 @@
     - YM2413(FM)  
     - YM2413(RHYTHM)  
     - K051649  
+    - QSound  
+    - K053260  
 - Remark  
     音符を設定する  
 - Description  

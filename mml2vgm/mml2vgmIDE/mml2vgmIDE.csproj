@@ -228,7 +228,9 @@
     <Compile Include="MMLParameter\HuC6280.cs" />
     <Compile Include="MMLParameter\Instrument.cs" />
     <Compile Include="MMLParameter\K051649.cs" />
+    <Compile Include="MMLParameter\K053260.cs" />
     <Compile Include="MMLParameter\Manager.cs" />
+    <Compile Include="MMLParameter\QSound.cs" />
     <Compile Include="MMLParameter\RF5C164.cs" />
     <Compile Include="MMLParameter\SegaPCM.cs" />
     <Compile Include="MMLParameter\SN76489.cs" />
