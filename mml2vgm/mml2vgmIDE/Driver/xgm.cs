@@ -202,7 +202,7 @@ namespace mml2vgmIDE
                 Counter++;
                 vgmFrameCounter++;
                 Audio.DriverSeqCounter++;
-
+                
                 musicStep = Common.SampleRate / (isNTSC ? 60.0 : 50.0);
 
                 if (musicDownCounter <= 0.0)
@@ -395,7 +395,7 @@ namespace mml2vgmIDE
         private void oneFramePCM()
         {
             if (DACEnable == 0) return;
-
+            //return;
             short o = 0;
             int cnt = 0;
 
@@ -414,7 +414,7 @@ namespace mml2vgmIDE
                 if (xgmpcm[i].isPlaying)
                 {
                     //chipRegister.YM2612SetRegister(xgmpcm[i].od, Audio.DriverSeqCounter, 0, 0, -1, -1);
-                    chipRegister.YM2612SetRegister(null, Audio.DriverSeqCounter, 0, 0, -1, -1);
+                    //chipRegister.YM2612SetRegister(null, Audio.DriverSeqCounter, 0, 0, -1, -1);
                 }
             }
 
@@ -431,8 +431,8 @@ namespace mml2vgmIDE
             //{
             //    o = 0;
             //}
-            //Console.Write("{0} ", o);
-            chipRegister.YM2612SetRegister(null, Audio.DriverSeqCounter, 0, 0, 0x2a, o);
+            //Console.WriteLine("seq{0} dat{1}", Audio.DriverSeqCounter, o);
+            chipRegister.YM2612SetRegisterXGM(Audio.DriverSeqCounter, o);
         }
 
         public override GD3 getGD3Info(byte[] buf, uint vgmGd3)

@@ -2455,7 +2455,7 @@ namespace mml2vgmIDE
                 }
             }
 
-            private int _GimicOPNVolume = 0;
+            private int _GimicOPNVolume = 100;
             public int GimicOPNVolume
             {
                 get
@@ -2471,7 +2471,7 @@ namespace mml2vgmIDE
                 }
             }
 
-            private int _GimicOPNAVolume = 0;
+            private int _GimicOPNAVolume = 100;
             public int GimicOPNAVolume
             {
                 get

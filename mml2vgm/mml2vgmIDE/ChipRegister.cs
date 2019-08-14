@@ -734,6 +734,8 @@ namespace mml2vgmIDE
                 case EnmDevice.YM2612:
                     YM2612SetRegisterProcessing(ref Counter, ref Chip, ref Type, ref Address, ref Data, ref ExData);
                     break;
+                default:
+                    throw new ArgumentException();
             }
 
             return true;
@@ -791,6 +793,8 @@ namespace mml2vgmIDE
                 case EnmDevice.SN76489:
                     SN76489WriteRegisterControl(Chip, type, address, data, exData);
                     break;
+                default:
+                    throw new ArgumentException();
             }
         }
 
@@ -4518,7 +4522,7 @@ namespace mml2vgmIDE
                     }
                     else if (ctYM2612[Chip.Number].OnlyPCMEmulation)
                     {
-                        if (address == 0x2a || address == 0x2b)
+                        if (address == 0x2a || address == 0x2b || address==0x1b6)
                         {
                             if (mds == null) return;
                             if (ctYM2612[Chip.Number].UseEmu)
@@ -4534,8 +4538,12 @@ namespace mml2vgmIDE
                 }
                 if (Chip.Model == EnmModel.RealModel)
                 {
-                    if (scYM2612[Chip.Number] != null)
-                        scYM2612[Chip.Number].setRegister(address, data);
+                    if (address != -1 && data != -1)
+                    {
+                        if (scYM2612[Chip.Number] != null)
+                            scYM2612[Chip.Number].setRegister(address, data);
+                        //Console.WriteLine("{0:x02} {1:x02}", address, data);
+                    }
                 }
             }
             else if (type == EnmDataType.Block)
@@ -4570,7 +4578,10 @@ namespace mml2vgmIDE
         public void YM2612SetRegisterProcessing(ref long Counter, ref Chip Chip, ref EnmDataType Type, ref int Address, ref int dData, ref object ExData)
         {
             if (ctYM2612 == null) return;
-            if (Address == -1 && dData == -1) return;
+            if (Address == -1 && dData == -1)
+            {
+                return;
+            }
 
             if (Chip.Number == 0) chipLED.PriOPN2 = 2;
             else chipLED.SecOPN2 = 2;
@@ -4756,25 +4767,58 @@ namespace mml2vgmIDE
 
         }
 
-        public void YM2612SetRegister(outDatum od, long Counter,int ChipID, int dPort, int dAddr, int dData)
+        public void YM2612SetRegister(outDatum od, long Counter, int ChipID, int dPort, int dAddr, int dData)
         {
-            dummyChip.Model = YM2612[ChipID].Model; 
+            dummyChip.Model = YM2612[ChipID].Model;
             dummyChip.Delay = YM2612[ChipID].Delay;
             dummyChip.Device = YM2612[ChipID].Device;
             dummyChip.Number = YM2612[ChipID].Number;
             dummyChip.Use = YM2612[ChipID].Use;
 
-            if (dPort == 0x00 && (dAddr == 0x2a || dAddr == 0x2b) && ctYM2612[0].OnlyPCMEmulation)
+            if (ctYM2612[0].OnlyPCMEmulation)
             {
-                dummyChip.Model = EnmModel.VirtualModel;
+                if (dPort == 0x00)
+                {
+                    if (dAddr == 0x2a)
+                    {
+                        dummyChip.Model = EnmModel.VirtualModel;
+                    }
+                    else if (dAddr == 0x2b)
+                    {
+                        if ((dData & 0x80) != 0)
+                        {
+                            dummyChip.Model = EnmModel.VirtualModel;
+                        }
+                    }
+                }
+
+                if (dPort == 0x01)
+                {
+                    if (dAddr == 0xb6 && YM2612[ChipID].Model != EnmModel.VirtualModel)
+                    {
+                        enq(od, Counter, YM2612[ChipID], EnmDataType.Normal, dPort * 0x100 + dAddr, dData, null);
+                        dummyChip.Model = EnmModel.VirtualModel;
+                    }
+                }
             }
 
-            enq(od,Counter, dummyChip, EnmDataType.Normal, dPort * 0x100 + dAddr, dData, null);
+            enq(od, Counter, dummyChip, EnmDataType.Normal, dPort * 0x100 + dAddr, dData, null);
         }
 
         public void YM2612SetRegister(outDatum od, long Counter, int ChipID, PackData[] data)
         {
             enq(od,Counter, YM2612[ChipID], EnmDataType.Block, -1, -1, data);
+        }
+
+        public void YM2612SetRegisterXGM(long Counter, int dData)
+        {
+            dummyChip.Model = EnmModel.VirtualModel;
+            dummyChip.Delay = YM2612[0].Delay;
+            dummyChip.Device = YM2612[0].Device;
+            dummyChip.Number = YM2612[0].Number;
+            dummyChip.Use = YM2612[0].Use;
+
+            enq(null, Counter, dummyChip, EnmDataType.Normal, 0x2a, dData, null);
         }
 
         public void YM2612SoftReset(long Counter, int chipID)

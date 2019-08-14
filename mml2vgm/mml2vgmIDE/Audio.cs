@@ -70,22 +70,6 @@ namespace mml2vgmIDE
             return mds != null;
         }
 
-        //private static NAudioWrap naudioWrap;
-        //private static WaveWriter waveWriter = null;
-
-
-        //private static RSoundChip[] scAY8910 = new RSoundChip[2] { null, null };
-        //private static RSoundChip[] scYM2612 = new RSoundChip[2] { null, null };
-        //private static RSoundChip[] scSN76489 = new RSoundChip[2] { null, null };
-        //private static RSoundChip[] scYM2151 = new RSoundChip[2] { null, null };
-        //private static RSoundChip[] scYM2608 = new RSoundChip[2] { null, null };
-        //private static RSoundChip[] scYM2203 = new RSoundChip[2] { null, null };
-        //private static RSoundChip[] scYM2413 = new RSoundChip[2] { null, null };
-        //private static RSoundChip[] scYM2610 = new RSoundChip[2] { null, null };
-        //private static RSoundChip[] scYM2610EA = new RSoundChip[2] { null, null };
-        //private static RSoundChip[] scYM2610EB = new RSoundChip[2] { null, null };
-        //private static RSoundChip[] scC140 = new RSoundChip[2] { null, null };
-        //private static RSoundChip[] scSEGAPCM = new RSoundChip[2] { null, null };
         public static RealChip realChip;
         private static ChipRegister chipRegister = null;
         public static HashSet<EnmChip> useChip = new HashSet<EnmChip>();
@@ -135,23 +119,11 @@ namespace mml2vgmIDE
 
         private static int MasterVolume = 0;
         private static byte[] chips = new byte[256];
-        //private static string PlayingFileName;
-        //private static string PlayingArcFileName;
-        //private static int MidiMode = 0;
-        //private static int SongNo = 0;
-        //private static List<Tuple<string, byte[]>> ExtendFile = null;
         private static EnmFileFormat PlayingFileFormat;
 
         private static System.Diagnostics.Stopwatch stwh = System.Diagnostics.Stopwatch.StartNew();
         public static double ProcTimePer1Frame = 0;
 
-        //private static List<vstInfo2> vstPlugins = new List<vstInfo2>();
-        //private static List<vstInfo2> vstPluginsInst = new List<vstInfo2>();
-
-        //private static List<NAudio.Midi.MidiOut> midiOuts = new List<NAudio.Midi.MidiOut>();
-        //private static List<int> midiOutsType = new List<int>();
-        //private static List<vstInfo2> vstMidiOuts = new List<vstInfo2>();
-        //private static List<int> vstMidiOutsType = new List<int>();
         public static string errMsg = "";
         public static bool flgReinit = false;
         private static short[] bufVirtualFunction_MIDIKeyboard = null;
@@ -164,11 +136,6 @@ namespace mml2vgmIDE
         public static long EmuSeqCounter=0;
         public static Action<PackData> SetMMLTraceInfo = null;
 
-        //private static void SetMMLTraceInfo(PackData pack)
-        //{
-        //    if (Pack.od == null || Pack.od.linePos == null) return;
-        //}
-
 
 
         public static void Init(Setting setting)
@@ -176,46 +143,17 @@ namespace mml2vgmIDE
             log.ForcedWrite("Audio:Init:Begin");
 
             log.ForcedWrite("Audio:Init:STEP 01");
-            //naudioWrap = new NAudioWrap((int)Common.SampleRate, trdVgmVirtualFunction);
+
             NAudioWrap.Init((int)Common.SampleRate, trdVgmVirtualFunction);
             NAudioWrap.PlaybackStopped += NaudioWrap_PlaybackStopped;
 
 
-
             log.ForcedWrite("Audio:Init:STEP 02");
             Audio.setting = setting;
-          //  waveWriter = new WaveWriter(setting);
-
 
 
             log.ForcedWrite("Audio:Init:STEP 03");
             {
-                //log.ForcedWrite("Audio:Init:STEP 03:Init MDSound");
-                //if (mds == null)
-                //    mds = new MDSound.MDSound((UInt32)Common.SampleRate, samplingBuffer, null);
-                //else
-                //    mds.Init((UInt32)Common.SampleRate, samplingBuffer, null);
-
-                //log.ForcedWrite("Audio:Init:STEP 03:Init MDSound(OPN2 midi)");
-                //List<MDSound.MDSound.Chip> lstChips = new List<MDSound.MDSound.Chip>();
-                //MDSound.MDSound.Chip chip;
-                //ym2612 ym2612 = new ym2612();
-                //chip = new MDSound.MDSound.Chip();
-                //chip.type = MDSound.MDSound.enmInstrumentType.YM2612;
-                //chip.ID = (byte)0;
-                //chip.Instrument = ym2612;
-                //chip.Update = ym2612.Update;
-                //chip.Start = ym2612.Start;
-                //chip.Stop = ym2612.Stop;
-                //chip.Reset = ym2612.Reset;
-                //chip.SamplingRate = (UInt32)Common.SampleRate;
-                //chip.Volume = setting.balance.YM2612Volume;
-                //chip.Clock = 7670454;
-                //chip.Option = null;
-                //chipLED.PriOPN2 = 1;
-                //lstChips.Add(chip);
-                //if (mdsMIDI == null) mdsMIDI = new MDSound.MDSound((UInt32)Common.SampleRate, samplingBuffer, lstChips.ToArray());
-                //else mdsMIDI.Init((UInt32)Common.SampleRate, samplingBuffer, lstChips.ToArray());
             }
 
 
@@ -226,8 +164,6 @@ namespace mml2vgmIDE
 
                 chipRegister = new ChipRegister(setting, mds, realChip);
 
-                //RealChipManualDetect(setting);
-
                 chipRegister.initChipRegister(null);
             }
 
@@ -237,142 +173,6 @@ namespace mml2vgmIDE
             Paused = false;
             Stopped = true;
             fatalError = false;
-            //oneTimeReset = false;
-
-
-
-            //log.ForcedWrite("Audio:Init:STEP 06");
-            //{
-            //    log.ForcedWrite("Audio:Init:VST:STEP 01");
-            //    vstparse();
-            //    log.ForcedWrite("Audio:Init:VST:STEP 02"); //Load VST instrument
-            //                                               //複数のmidioutの設定から必要なVSTを絞り込む
-            //    Dictionary<string, int> dicVst = new Dictionary<string, int>();
-            //    if (setting.midiOut.lstMidiOutInfo != null)
-            //    {
-            //        foreach (midiOutInfo[] aryMoi in setting.midiOut.lstMidiOutInfo)
-            //        {
-            //            if (aryMoi == null) continue;
-            //            Dictionary<string, int> dicVst2 = new Dictionary<string, int>();
-            //            foreach (midiOutInfo moi in aryMoi)
-            //            {
-            //                if (!moi.isVST) continue;
-            //                if (dicVst2.ContainsKey(moi.fileName))
-            //                {
-            //                    dicVst2[moi.fileName]++;
-            //                    continue;
-            //                }
-            //                dicVst2.Add(moi.fileName, 1);
-            //            }
-
-            //            foreach (var kv in dicVst2)
-            //            {
-            //                if (dicVst.ContainsKey(kv.Key))
-            //                {
-            //                    if (dicVst[kv.Key] < kv.Value)
-            //                    {
-            //                        dicVst[kv.Key] = kv.Value;
-            //                    }
-            //                    continue;
-            //                }
-            //                dicVst.Add(kv.Key, kv.Value);
-            //            }
-            //        }
-            //    }
-            //    foreach (var kv in dicVst)
-            //    {
-            //        for (int i = 0; i < kv.Value; i++)
-            //        {
-            //            VstPluginContext ctx = OpenPlugin(kv.Key);
-            //            if (ctx == null) continue;
-
-            //            vstInfo2 vi = new vstInfo2();
-            //            vi.key = DateTime.Now.Ticks.ToString();
-            //            Thread.Sleep(1);
-            //            vi.vstPlugins = ctx;
-            //            vi.fileName = kv.Key;
-            //            vi.isInstrument = true;
-
-            //            ctx.PluginCommandStub.SetBlockSize(512);
-            //            ctx.PluginCommandStub.SetSampleRate(Common.SampleRate);
-            //            ctx.PluginCommandStub.MainsChanged(true);
-            //            ctx.PluginCommandStub.StartProcess();
-            //            vi.effectName = ctx.PluginCommandStub.GetEffectName();
-            //            vi.editor = true;
-
-            //            if (vi.editor)
-            //            {
-            //                frmVST dlg = new frmVST();
-            //                dlg.PluginCommandStub = ctx.PluginCommandStub;
-            //                dlg.Show(vi);
-            //                vi.vstPluginsForm = dlg;
-            //            }
-
-            //            vstPluginsInst.Add(vi);
-            //        }
-            //    }
-            //    if (setting.vst != null && setting.vst.VSTInfo != null)
-            //    {
-
-            //        log.ForcedWrite("Audio:Init:VST:STEP 03"); //Load VST Effect
-
-            //        for (int i = 0; i < setting.vst.VSTInfo.Length; i++)
-            //        {
-            //            if (setting.vst.VSTInfo[i] == null) continue;
-            //            VstPluginContext ctx = OpenPlugin(setting.vst.VSTInfo[i].fileName);
-            //            if (ctx == null) continue;
-
-            //            vstInfo2 vi = new vstInfo2();
-            //            vi.vstPlugins = ctx;
-            //            vi.fileName = setting.vst.VSTInfo[i].fileName;
-            //            vi.key = setting.vst.VSTInfo[i].key;
-
-            //            ctx.PluginCommandStub.SetBlockSize(512);
-            //            ctx.PluginCommandStub.SetSampleRate(Common.SampleRate / 1000.0f);
-            //            ctx.PluginCommandStub.MainsChanged(true);
-            //            ctx.PluginCommandStub.StartProcess();
-            //            vi.effectName = ctx.PluginCommandStub.GetEffectName();
-            //            vi.power = setting.vst.VSTInfo[i].power;
-            //            vi.editor = setting.vst.VSTInfo[i].editor;
-            //            vi.location = setting.vst.VSTInfo[i].location;
-            //            vi.param = setting.vst.VSTInfo[i].param;
-
-            //            if (vi.editor)
-            //            {
-            //                frmVST dlg = new frmVST();
-            //                dlg.PluginCommandStub = ctx.PluginCommandStub;
-            //                dlg.Show(vi);
-            //                vi.vstPluginsForm = dlg;
-            //            }
-
-            //            if (vi.param != null)
-            //            {
-            //                for (int p = 0; p < vi.param.Length; p++)
-            //                {
-            //                    ctx.PluginCommandStub.SetParameter(p, vi.param[p]);
-            //                }
-            //            }
-
-            //            vstPlugins.Add(vi);
-            //        }
-
-
-            //    }
-            //}
-
-
-
-            //log.ForcedWrite("Audio:Init:STEP 07");
-            //midi outをリリース
-            //ReleaseAllMIDIout();
-
-
-
-            //log.ForcedWrite("Audio:Init:STEP 08");
-            //midi out のインスタンスを作成
-            //MakeMIDIout(setting, 1);
-            //chipRegister.resetAllMIDIout();
-
 
 
             log.ForcedWrite("Audio:Init:STEP 09");
@@ -511,8 +311,6 @@ namespace mml2vgmIDE
                 chipType[i].UseEmu = true;
                 chipType[i].UseScci = false;
                 if (ret.Count == 0) continue;
-                //SearchRealChip(chipType, ret, i, EnmDevice.RF5C164, chipRegister.RF5C164[i], setting.AutoDetectModuleType == 0 ? 0 : 1);
-                //if (chipType[i].UseEmu) SearchRealChip(chipType, ret, i, EnmDevice.RF5C164, chipRegister.RF5C164[i], setting.AutoDetectModuleType == 0 ? 1 : 0);
             }
             chipRegister.SetRealChipInfo(EnmDevice.RF5C164, chipType[0], chipType[1], setting.LatencyEmulation, setting.LatencySCCI);
 
@@ -918,693 +716,31 @@ namespace mml2vgmIDE
             softReset(DriverSeqCounter);
         }
 
+        static long rPackCounter = 0;
+        static PackData rPack = new PackData();
+
         private static void RealChipAction(outDatum od, long Counter,Chip Chip, EnmDataType Type, int Address, int Data, object ExData)
         {
-            chipRegister.SendChipData(Counter, Chip, Type, Address, Data, ExData);
+
+            rPackCounter = Counter;
+            rPack.od = od;
+            rPack.Chip = Chip;
+            rPack.Type = Type;
+            rPack.Address = Address;
+            rPack.Data = Data;
+            rPack.ExData = ExData;
+            if (rPack.Address != -1 || rPack.Data != -1 || rPack.ExData != null)
+            {
+                chipRegister.SendChipData(rPackCounter, rPack.Chip, rPack.Type, rPack.Address, rPack.Data, rPack.ExData);
+            }
+            else
+            {
+                ;
+            }
+
+            SetMMLTraceInfo?.Invoke(rPack);
         }
 
-
-
-        //public static List<PlayList.music> getMusic(string file, byte[] buf, string zipFile = null, object entry = null)
-        //{
-        //    List<PlayList.music> musics = new List<PlayList.music>();
-        //    PlayList.music music = new PlayList.music();
-
-        //    music.format = EnmFileFormat.unknown;
-        //    music.fileName = file;
-        //    music.arcFileName = zipFile;
-        //    music.arcType = EnmArcType.unknown;
-        //    if (!string.IsNullOrEmpty(zipFile)) music.arcType = zipFile.ToLower().LastIndexOf(".zip") != -1 ? EnmArcType.ZIP : EnmArcType.LZH;
-        //    music.title = "unknown";
-        //    music.game = "unknown";
-        //    music.type = "-";
-
-        //    if (file.ToLower().LastIndexOf(".nrd") != -1)
-        //    {
-
-        //        music.format = EnmFileFormat.NRT;
-        //        uint index = 42;
-        //        GD3 gd3 = (new NRTDRV()).getGD3Info(buf, index);
-        //        music.title = gd3.TrackName;
-        //        music.titleJ = gd3.TrackNameJ;
-        //        music.game = gd3.GameName;
-        //        music.gameJ = gd3.GameNameJ;
-        //        music.composer = gd3.Composer;
-        //        music.composerJ = gd3.ComposerJ;
-        //        music.vgmby = gd3.VGMBy;
-
-        //        music.converted = gd3.Converted;
-        //        music.notes = gd3.Notes;
-
-        //    }
-        //    else if (file.ToLower().LastIndexOf(".mdr") != -1)
-        //    {
-
-        //        music.format = EnmFileFormat.MDR;
-        //        uint index = 0;
-        //        GD3 gd3 = (new Driver.MoonDriver.MoonDriver()).getGD3Info(buf, index);
-        //        music.title = gd3.TrackName == "" ? Path.GetFileName(file) : gd3.TrackName;
-        //        music.titleJ = gd3.TrackName == "" ? Path.GetFileName(file) : gd3.TrackNameJ;
-        //        music.game = gd3.GameName;
-        //        music.gameJ = gd3.GameNameJ;
-        //        music.composer = gd3.Composer;
-        //        music.composerJ = gd3.ComposerJ;
-        //        music.vgmby = gd3.VGMBy;
-
-        //        music.converted = gd3.Converted;
-        //        music.notes = gd3.Notes;
-
-        //    }
-        //    else if (file.ToLower().LastIndexOf(".mdx") != -1)
-        //    {
-
-        //        music.format = EnmFileFormat.MDX;
-        //        uint index = 0;
-        //        GD3 gd3 = (new Driver.MXDRV.MXDRV()).getGD3Info(buf, index);
-        //        music.title = gd3.TrackName == "" ? Path.GetFileName(file) : gd3.TrackName;
-        //        music.titleJ = gd3.TrackName == "" ? Path.GetFileName(file) : gd3.TrackNameJ;
-        //        music.game = gd3.GameName;
-        //        music.gameJ = gd3.GameNameJ;
-        //        music.composer = gd3.Composer;
-        //        music.composerJ = gd3.ComposerJ;
-        //        music.vgmby = gd3.VGMBy;
-
-        //        music.converted = gd3.Converted;
-        //        music.notes = gd3.Notes;
-
-        //    }
-        //    else if (file.ToLower().LastIndexOf(".mnd") != -1)
-        //    {
-
-        //        music.format = EnmFileFormat.MND;
-        //        uint index = 0;
-        //        GD3 gd3 = (new Driver.MNDRV.mndrv()).getGD3Info(buf, index);
-        //        music.title = gd3.TrackName == "" ? Path.GetFileName(file) : gd3.TrackName;
-        //        music.titleJ = gd3.TrackName == "" ? Path.GetFileName(file) : gd3.TrackNameJ;
-        //        music.game = gd3.GameName;
-        //        music.gameJ = gd3.GameNameJ;
-        //        music.composer = gd3.Composer;
-        //        music.composerJ = gd3.ComposerJ;
-        //        music.vgmby = gd3.VGMBy;
-
-        //        music.converted = gd3.Converted;
-        //        music.notes = gd3.Notes;
-
-        //    }
-        //    else if (file.ToLower().LastIndexOf(".mub") != -1)
-        //    {
-
-        //        music.format = EnmFileFormat.MUB;
-        //        uint index = 0;
-        //        GD3 gd3 = (new Driver.MUCOM88.MUCOM88()).getGD3Info(buf, index);
-        //        music.title = gd3.TrackName == "" ? Path.GetFileName(file) : gd3.TrackName;
-        //        music.titleJ = gd3.TrackName == "" ? Path.GetFileName(file) : gd3.TrackNameJ;
-        //        music.game = gd3.GameName;
-        //        music.gameJ = gd3.GameNameJ;
-        //        music.composer = gd3.Composer;
-        //        music.composerJ = gd3.ComposerJ;
-        //        music.vgmby = gd3.VGMBy;
-
-        //        music.converted = gd3.Converted;
-        //        music.notes = gd3.Notes;
-
-        //    }
-        //    else if (file.ToLower().LastIndexOf(".muc") != -1)
-        //    {
-
-        //        music.format = EnmFileFormat.MUC;
-        //        uint index = 0;
-        //        GD3 gd3 = (new Driver.MUCOM88.MUCOM88()).getGD3Info(buf, index);
-        //        music.title = gd3.TrackName == "" ? Path.GetFileName(file) : gd3.TrackName;
-        //        music.titleJ = gd3.TrackName == "" ? Path.GetFileName(file) : gd3.TrackNameJ;
-        //        music.game = gd3.GameName;
-        //        music.gameJ = gd3.GameNameJ;
-        //        music.composer = gd3.Composer;
-        //        music.composerJ = gd3.ComposerJ;
-        //        music.vgmby = gd3.VGMBy;
-
-        //        music.converted = gd3.Converted;
-        //        music.notes = gd3.Notes;
-
-        //    }
-        //    else if (file.ToLower().LastIndexOf(".xgm") != -1)
-        //    {
-        //        music.format = EnmFileFormat.XGM;
-        //        GD3 gd3 = new xgm().getGD3Info(buf, 0);
-        //        music.title = gd3.TrackName;
-        //        music.titleJ = gd3.TrackNameJ;
-        //        music.game = gd3.GameName;
-        //        music.gameJ = gd3.GameNameJ;
-        //        music.composer = gd3.Composer;
-        //        music.composerJ = gd3.ComposerJ;
-        //        music.vgmby = gd3.VGMBy;
-
-        //        music.converted = gd3.Converted;
-        //        music.notes = gd3.Notes;
-
-        //        if (music.title == "" && music.titleJ == "" && music.game == "" && music.gameJ == "" && music.composer == "" && music.composerJ == "")
-        //        {
-        //            music.title = string.Format("({0})", System.IO.Path.GetFileName(file));
-        //        }
-        //    }
-        //    else if (file.ToLower().LastIndexOf(".s98") != -1)
-        //    {
-        //        music.format = EnmFileFormat.S98;
-        //        GD3 gd3 = new S98().getGD3Info(buf, 0);
-        //        if (gd3 != null)
-        //        {
-        //            music.title = gd3.TrackName;
-        //            music.titleJ = gd3.TrackNameJ;
-        //            music.game = gd3.GameName;
-        //            music.gameJ = gd3.GameNameJ;
-        //            music.composer = gd3.Composer;
-        //            music.composerJ = gd3.ComposerJ;
-        //            music.vgmby = gd3.VGMBy;
-
-        //            music.converted = gd3.Converted;
-        //            music.notes = gd3.Notes;
-        //        }
-        //        else
-        //        {
-        //            music.title = string.Format("({0})", System.IO.Path.GetFileName(file));
-        //        }
-
-        //    }
-        //    else if (file.ToLower().LastIndexOf(".nsf") != -1)
-        //    {
-        //        nsf nsf = new nsf();
-        //        GD3 gd3 = nsf.getGD3Info(buf, 0);
-
-        //        if (gd3 != null)
-        //        {
-        //            for (int s = 0; s < nsf.songs; s++)
-        //            {
-        //                music = new PlayList.music();
-        //                music.format = EnmFileFormat.NSF;
-        //                music.fileName = file;
-        //                music.arcFileName = zipFile;
-        //                music.arcType = EnmArcType.unknown;
-        //                if (!string.IsNullOrEmpty(zipFile)) music.arcType = zipFile.ToLower().LastIndexOf(".zip") != -1 ? EnmArcType.ZIP : EnmArcType.LZH;
-        //                music.title = string.Format("{0} - Trk {1}", gd3.GameName, s + 1);
-        //                music.titleJ = string.Format("{0} - Trk {1}", gd3.GameNameJ, s + 1);
-        //                music.game = gd3.GameName;
-        //                music.gameJ = gd3.GameNameJ;
-        //                music.composer = gd3.Composer;
-        //                music.composerJ = gd3.ComposerJ;
-        //                music.vgmby = gd3.VGMBy;
-        //                music.converted = gd3.Converted;
-        //                music.notes = gd3.Notes;
-        //                music.songNo = s;
-
-        //                musics.Add(music);
-        //            }
-
-        //            return musics;
-        //        }
-        //        else
-        //        {
-        //            music.format = EnmFileFormat.NSF;
-        //            music.fileName = file;
-        //            music.arcFileName = zipFile;
-        //            music.game = "unknown";
-        //            music.type = "-";
-        //            music.title = string.Format("({0})", System.IO.Path.GetFileName(file));
-        //        }
-
-        //    }
-        //    else if (file.ToLower().LastIndexOf(".hes") != -1)
-        //    {
-        //        hes hes = new hes();
-        //        GD3 gd3 = hes.getGD3Info(buf, 0);
-
-        //        for (int s = 0; s < 256; s++)
-        //        {
-        //            music = new PlayList.music();
-        //            music.format = EnmFileFormat.HES;
-        //            music.fileName = file;
-        //            music.arcFileName = zipFile;
-        //            music.arcType = EnmArcType.unknown;
-        //            if (!string.IsNullOrEmpty(zipFile)) music.arcType = zipFile.ToLower().LastIndexOf(".zip") != -1 ? EnmArcType.ZIP : EnmArcType.LZH;
-        //            music.title = string.Format("{0} - Trk {1}", System.IO.Path.GetFileName(file), s + 1);
-        //            music.titleJ = string.Format("{0} - Trk {1}", System.IO.Path.GetFileName(file), s + 1);
-        //            music.game = "";
-        //            music.gameJ = "";
-        //            music.composer = "";
-        //            music.composerJ = "";
-        //            music.vgmby = "";
-        //            music.converted = "";
-        //            music.notes = "";
-        //            music.songNo = s;
-
-        //            musics.Add(music);
-        //        }
-
-        //        return musics;
-
-        //    }
-        //    else if (file.ToLower().LastIndexOf(".sid") != -1)
-        //    {
-        //        Driver.SID.sid sid = new Driver.SID.sid();
-        //        GD3 gd3 = sid.getGD3Info(buf, 0);
-
-        //        for (int s = 0; s < sid.songs; s++)
-        //        {
-        //            music = new PlayList.music();
-        //            music.format = EnmFileFormat.SID;
-        //            music.fileName = file;
-        //            music.arcFileName = zipFile;
-        //            music.arcType = EnmArcType.unknown;
-        //            if (!string.IsNullOrEmpty(zipFile)) music.arcType = zipFile.ToLower().LastIndexOf(".zip") != -1 ? EnmArcType.ZIP : EnmArcType.LZH;
-        //            music.title = string.Format("{0} - Trk {1}", gd3.TrackName, s + 1);
-        //            music.titleJ = string.Format("{0} - Trk {1}", gd3.TrackName, s + 1);
-        //            music.game = "";
-        //            music.gameJ = "";
-        //            music.composer = gd3.Composer;
-        //            music.composerJ = gd3.Composer;
-        //            music.vgmby = "";
-        //            music.converted = "";
-        //            music.notes = gd3.Notes;
-        //            music.songNo = s;
-
-        //            musics.Add(music);
-        //        }
-
-        //        return musics;
-
-        //    }
-        //    else if (file.ToLower().LastIndexOf(".mid") != -1)
-        //    {
-        //        music.format = EnmFileFormat.MID;
-        //        GD3 gd3 = new MID().getGD3Info(buf, 0);
-        //        if (gd3 != null)
-        //        {
-        //            music.title = gd3.TrackName;
-        //            music.titleJ = gd3.TrackNameJ;
-        //            music.game = gd3.GameName;
-        //            music.gameJ = gd3.GameNameJ;
-        //            music.composer = gd3.Composer;
-        //            music.composerJ = gd3.ComposerJ;
-        //            music.vgmby = gd3.VGMBy;
-
-        //            music.converted = gd3.Converted;
-        //            music.notes = gd3.Notes;
-        //        }
-        //        else
-        //        {
-        //            music.title = string.Format("({0})", System.IO.Path.GetFileName(file));
-        //        }
-
-        //        if (music.title == "" && music.titleJ == "")
-        //        {
-        //            music.title = string.Format("({0})", System.IO.Path.GetFileName(file));
-        //        }
-
-        //    }
-        //    else if (file.ToLower().LastIndexOf(".rcp") != -1)
-        //    {
-        //        music.format = EnmFileFormat.RCP;
-        //        GD3 gd3 = new RCP().getGD3Info(buf, 0);
-        //        if (gd3 != null)
-        //        {
-        //            music.title = gd3.TrackName;
-        //            music.titleJ = gd3.TrackNameJ;
-        //            music.game = gd3.GameName;
-        //            music.gameJ = gd3.GameNameJ;
-        //            music.composer = gd3.Composer;
-        //            music.composerJ = gd3.ComposerJ;
-        //            music.vgmby = gd3.VGMBy;
-
-        //            music.converted = gd3.Converted;
-        //            music.notes = gd3.Notes;
-        //        }
-        //        else
-        //        {
-        //            music.title = string.Format("({0})", System.IO.Path.GetFileName(file));
-        //        }
-
-        //        if (music.title == "" && music.titleJ == "")
-        //        {
-        //            music.title = string.Format("({0})", System.IO.Path.GetFileName(file));
-        //        }
-
-        //    }
-        //    else
-        //    {
-        //        if (buf.Length < 0x40)
-        //        {
-        //            musics.Add(music);
-        //            return musics;
-        //        }
-        //        if (Common.getLE32(buf, 0x00) != vgm.FCC_VGM)
-        //        {
-        //            //musics.Add(music);
-        //            //return musics;
-        //            //VGZかもしれないので確認する
-        //            try
-        //            {
-        //                int num;
-        //                buf = new byte[1024]; // 1Kbytesずつ処理する
-
-        //                if (entry == null || entry is ZipArchiveEntry)
-        //                {
-        //                    Stream inStream; // 入力ストリーム
-        //                    if (entry == null)
-        //                    {
-        //                        inStream = new FileStream(file, FileMode.Open, FileAccess.Read);
-        //                    }
-        //                    else
-        //                    {
-        //                        inStream = ((ZipArchiveEntry)entry).Open();
-        //                    }
-        //                    GZipStream decompStream // 解凍ストリーム
-        //                      = new GZipStream(
-        //                        inStream, // 入力元となるストリームを指定
-        //                        CompressionMode.Decompress); // 解凍（圧縮解除）を指定
-
-        //                    MemoryStream outStream // 出力ストリーム
-        //                      = new MemoryStream();
-
-        //                    using (inStream)
-        //                    using (outStream)
-        //                    using (decompStream)
-        //                    {
-        //                        while ((num = decompStream.Read(buf, 0, buf.Length)) > 0)
-        //                        {
-        //                            outStream.Write(buf, 0, num);
-        //                        }
-        //                    }
-
-        //                    buf = outStream.ToArray();
-        //                }
-        //                else
-        //                {
-        //                    UnlhaWrap.UnlhaCmd cmd = new UnlhaWrap.UnlhaCmd();
-        //                    buf = cmd.GetFileByte(((Tuple<string, string>)entry).Item1, ((Tuple<string, string>)entry).Item2);
-        //                }
-        //            }
-        //            catch
-        //            {
-        //                //vgzではなかった
-        //            }
-        //        }
-
-        //        if (Common.getLE32(buf, 0x00) != vgm.FCC_VGM)
-        //        {
-        //            musics.Add(music);
-        //            return musics;
-        //        }
-
-        //        music.format = EnmFileFormat.VGM;
-        //        uint version = Common.getLE32(buf, 0x08);
-        //        string Version = string.Format("{0}.{1}{2}", (version & 0xf00) / 0x100, (version & 0xf0) / 0x10, (version & 0xf));
-
-        //        uint vgmGd3 = Common.getLE32(buf, 0x14);
-        //        GD3 gd3 = new GD3();
-        //        if (vgmGd3 != 0)
-        //        {
-        //            uint vgmGd3Id = Common.getLE32(buf, vgmGd3 + 0x14);
-        //            if (vgmGd3Id != vgm.FCC_GD3)
-        //            {
-        //                musics.Add(music);
-        //                return musics;
-        //            }
-        //            gd3 = (new vgm()).getGD3Info(buf, vgmGd3);
-        //        }
-
-        //        uint TotalCounter = Common.getLE32(buf, 0x18);
-        //        uint vgmLoopOffset = Common.getLE32(buf, 0x1c);
-        //        uint LoopCounter = Common.getLE32(buf, 0x20);
-
-        //        music.title = gd3.TrackName;
-        //        music.titleJ = gd3.TrackNameJ;
-        //        music.game = gd3.GameName;
-        //        music.gameJ = gd3.GameNameJ;
-        //        music.composer = gd3.Composer;
-        //        music.composerJ = gd3.ComposerJ;
-        //        music.vgmby = gd3.VGMBy;
-
-        //        music.converted = gd3.Converted;
-        //        music.notes = gd3.Notes;
-
-        //        double sec = (double)TotalCounter / (double)Common.SampleRate;
-        //        int TCminutes = (int)(sec / 60);
-        //        sec -= TCminutes * 60;
-        //        int TCsecond = (int)sec;
-        //        sec -= TCsecond;
-        //        int TCmillisecond = (int)(sec * 100.0);
-        //        music.duration = string.Format("{0:D2}:{1:D2}:{2:D2}", TCminutes, TCsecond, TCmillisecond);
-        //    }
-
-        //    musics.Add(music);
-        //    return musics;
-        //}
-
-        //public static List<PlayList.music> getMusic(PlayList.music ms, byte[] buf, string zipFile = null)
-        //{
-        //    List<PlayList.music> musics = new List<PlayList.music>();
-        //    PlayList.music music = new PlayList.music();
-
-        //    music.format = EnmFileFormat.unknown;
-        //    music.fileName = ms.fileName;
-        //    music.arcFileName = zipFile;
-        //    music.title = "unknown";
-        //    music.game = "unknown";
-        //    music.type = "-";
-
-        //    if (ms.fileName.ToLower().LastIndexOf(".nrd") != -1)
-        //    {
-
-        //        music.format = EnmFileFormat.NRT;
-        //        uint index = 42;
-        //        GD3 gd3 = (new NRTDRV()).getGD3Info(buf, index);
-        //        music.title = gd3.TrackName;
-        //        music.titleJ = gd3.TrackNameJ;
-        //        music.game = gd3.GameName;
-        //        music.gameJ = gd3.GameNameJ;
-        //        music.composer = gd3.Composer;
-        //        music.composerJ = gd3.ComposerJ;
-        //        music.vgmby = gd3.VGMBy;
-
-        //        music.converted = gd3.Converted;
-        //        music.notes = gd3.Notes;
-
-        //    }
-        //    else if (ms.fileName.ToLower().LastIndexOf(".xgm") != -1)
-        //    {
-        //        music.format = EnmFileFormat.XGM;
-        //        GD3 gd3 = new xgm().getGD3Info(buf, 0);
-        //        music.title = gd3.TrackName;
-        //        music.titleJ = gd3.TrackNameJ;
-        //        music.game = gd3.GameName;
-        //        music.gameJ = gd3.GameNameJ;
-        //        music.composer = gd3.Composer;
-        //        music.composerJ = gd3.ComposerJ;
-        //        music.vgmby = gd3.VGMBy;
-
-        //        music.converted = gd3.Converted;
-        //        music.notes = gd3.Notes;
-
-        //        if (music.title == "" && music.titleJ == "" && music.game == "" && music.gameJ == "" && music.composer == "" && music.composerJ == "")
-        //        {
-        //            music.title = string.Format("({0})", System.IO.Path.GetFileName(ms.fileName));
-        //        }
-        //    }
-        //    else if (ms.fileName.ToLower().LastIndexOf(".s98") != -1)
-        //    {
-        //        music.format = EnmFileFormat.S98;
-        //        GD3 gd3 = new S98().getGD3Info(buf, 0);
-        //        if (gd3 != null)
-        //        {
-        //            music.title = gd3.TrackName;
-        //            music.titleJ = gd3.TrackNameJ;
-        //            music.game = gd3.GameName;
-        //            music.gameJ = gd3.GameNameJ;
-        //            music.composer = gd3.Composer;
-        //            music.composerJ = gd3.ComposerJ;
-        //            music.vgmby = gd3.VGMBy;
-
-        //            music.converted = gd3.Converted;
-        //            music.notes = gd3.Notes;
-        //        }
-        //        else
-        //        {
-        //            music.title = string.Format("({0})", System.IO.Path.GetFileName(ms.fileName));
-        //        }
-
-        //    }
-        //    else if (ms.fileName.ToLower().LastIndexOf(".nsf") != -1)
-        //    {
-        //        nsf nsf = new nsf();
-        //        GD3 gd3 = nsf.getGD3Info(buf, 0);
-
-        //        if (gd3 != null)
-        //        {
-        //            if (ms.songNo == -1)
-        //            {
-        //                for (int s = 0; s < nsf.songs; s++)
-        //                {
-        //                    music = new PlayList.music();
-        //                    music.format = EnmFileFormat.NSF;
-        //                    music.fileName = ms.fileName;
-        //                    music.arcFileName = zipFile;
-        //                    music.title = string.Format("{0} - Trk {1}", gd3.GameName, s);
-        //                    music.titleJ = string.Format("{0} - Trk {1}", gd3.GameNameJ, s);
-        //                    music.game = gd3.GameName;
-        //                    music.gameJ = gd3.GameNameJ;
-        //                    music.composer = gd3.Composer;
-        //                    music.composerJ = gd3.ComposerJ;
-        //                    music.vgmby = gd3.VGMBy;
-        //                    music.converted = gd3.Converted;
-        //                    music.notes = gd3.Notes;
-        //                    music.songNo = s;
-
-        //                    musics.Add(music);
-        //                }
-
-        //                return musics;
-
-        //            }
-        //            else
-        //            {
-        //                music.format = EnmFileFormat.NSF;
-        //                music.fileName = ms.fileName;
-        //                music.arcFileName = zipFile;
-        //                music.title = ms.title;
-        //                music.titleJ = ms.titleJ;
-        //                music.game = gd3.GameName;
-        //                music.gameJ = gd3.GameNameJ;
-        //                music.composer = gd3.Composer;
-        //                music.composerJ = gd3.ComposerJ;
-        //                music.vgmby = gd3.VGMBy;
-        //                music.converted = gd3.Converted;
-        //                music.notes = gd3.Notes;
-        //                music.songNo = ms.songNo;
-        //            }
-        //        }
-        //        else
-        //        {
-        //            music.format = EnmFileFormat.NSF;
-        //            music.fileName = ms.fileName;
-        //            music.arcFileName = zipFile;
-        //            music.game = "unknown";
-        //            music.type = "-";
-        //            music.title = string.Format("({0})", System.IO.Path.GetFileName(ms.fileName));
-        //        }
-
-        //    }
-        //    else if (ms.fileName.ToLower().LastIndexOf(".mid") != -1)
-        //    {
-        //        music.format = EnmFileFormat.MID;
-        //        GD3 gd3 = new MID().getGD3Info(buf, 0);
-        //        if (gd3 != null)
-        //        {
-        //            music.title = gd3.TrackName;
-        //            music.titleJ = gd3.TrackNameJ;
-        //            music.game = gd3.GameName;
-        //            music.gameJ = gd3.GameNameJ;
-        //            music.composer = gd3.Composer;
-        //            music.composerJ = gd3.ComposerJ;
-        //            music.vgmby = gd3.VGMBy;
-
-        //            music.converted = gd3.Converted;
-        //            music.notes = gd3.Notes;
-        //        }
-        //        else
-        //        {
-        //            music.title = string.Format("({0})", System.IO.Path.GetFileName(ms.fileName));
-        //        }
-
-        //        if (music.title == "" && music.titleJ == "")
-        //        {
-        //            music.title = string.Format("({0})", System.IO.Path.GetFileName(ms.fileName));
-        //        }
-
-        //    }
-        //    else if (ms.fileName.ToLower().LastIndexOf(".rcp") != -1)
-        //    {
-        //        music.format = EnmFileFormat.RCP;
-        //        GD3 gd3 = new RCP().getGD3Info(buf, 0);
-        //        if (gd3 != null)
-        //        {
-        //            music.title = gd3.TrackName;
-        //            music.titleJ = gd3.TrackNameJ;
-        //            music.game = gd3.GameName;
-        //            music.gameJ = gd3.GameNameJ;
-        //            music.composer = gd3.Composer;
-        //            music.composerJ = gd3.ComposerJ;
-        //            music.vgmby = gd3.VGMBy;
-
-        //            music.converted = gd3.Converted;
-        //            music.notes = gd3.Notes;
-        //        }
-        //        else
-        //        {
-        //            music.title = string.Format("({0})", System.IO.Path.GetFileName(ms.fileName));
-        //        }
-
-        //        if (music.title == "" && music.titleJ == "")
-        //        {
-        //            music.title = string.Format("({0})", System.IO.Path.GetFileName(ms.fileName));
-        //        }
-
-        //    }
-        //    else
-        //    {
-        //        if (buf.Length < 0x40)
-        //        {
-        //            musics.Add(music);
-        //            return musics;
-        //        }
-        //        if (Common.getLE32(buf, 0x00) != vgm.FCC_VGM)
-        //        {
-        //            musics.Add(music);
-        //            return musics;
-        //        }
-
-        //        music.format = EnmFileFormat.VGM;
-        //        uint version = Common.getLE32(buf, 0x08);
-        //        string Version = string.Format("{0}.{1}{2}", (version & 0xf00) / 0x100, (version & 0xf0) / 0x10, (version & 0xf));
-
-        //        uint vgmGd3 = Common.getLE32(buf, 0x14);
-        //        GD3 gd3 = new GD3();
-        //        if (vgmGd3 != 0)
-        //        {
-        //            uint vgmGd3Id = Common.getLE32(buf, vgmGd3 + 0x14);
-        //            if (vgmGd3Id != vgm.FCC_GD3)
-        //            {
-        //                musics.Add(music);
-        //                return musics;
-        //            }
-        //            gd3 = (new vgm()).getGD3Info(buf, vgmGd3);
-        //        }
-
-        //        uint TotalCounter = Common.getLE32(buf, 0x18);
-        //        uint vgmLoopOffset = Common.getLE32(buf, 0x1c);
-        //        uint LoopCounter = Common.getLE32(buf, 0x20);
-
-        //        music.title = gd3.TrackName;
-        //        music.titleJ = gd3.TrackNameJ;
-        //        music.game = gd3.GameName;
-        //        music.gameJ = gd3.GameNameJ;
-        //        music.composer = gd3.Composer;
-        //        music.composerJ = gd3.ComposerJ;
-        //        music.vgmby = gd3.VGMBy;
-
-        //        music.converted = gd3.Converted;
-        //        music.notes = gd3.Notes;
-
-        //        double sec = (double)TotalCounter / (double)Common.SampleRate;
-        //        int TCminutes = (int)(sec / 60);
-        //        sec -= TCminutes * 60;
-        //        int TCsecond = (int)sec;
-        //        sec -= TCsecond;
-        //        int TCmillisecond = (int)(sec * 100.0);
-        //        music.duration = string.Format("{0:D2}:{1:D2}:{2:D2}", TCminutes, TCsecond, TCmillisecond);
-        //    }
-
-        //    musics.Add(music);
-        //    return musics;
-        //}
 
         public static void RealChipClose()
         {
@@ -1720,11 +856,8 @@ namespace mml2vgmIDE
 
                 xgm xgmDriver = (xgm)driver;
 
-                //chipRegister.resetChips();
                 ResetFadeOutParam();
                 useChip.Clear();
-
-                //startTrdVgmReal();
 
                 List<MDSound.MDSound.Chip> lstChips = new List<MDSound.MDSound.Chip>();
 
@@ -1853,23 +986,14 @@ namespace mml2vgmIDE
                 chipRegister.SN76489WriteClock((byte)0, (int)xgmDriver.SN76489ClockValue);
                 chipRegister.YM2612WriteClock((byte)0, (int)xgmDriver.YM2612ClockValue);
 
-                //if (driverReal != null)
-                //{
-                //    if (!driverReal.init(vgmBuf, chipRegister, EnmModel.RealModel, new EnmChip[] { EnmChip.YM2612, EnmChip.SN76489 }
-                //        , (uint)(Common.SampleRate * setting.LatencySCCI / 1000)
-                //        , (uint)(Common.SampleRate * setting.outputDevice.WaitTime / 1000))) return false;
-                //}
                 //Play
 
                 PackData[] stopData = MakeSoftResetData();
                 sm.SetStopData(stopData);
 
                 Paused = false;
-                //oneTimeReset = false;
 
                 Thread.Sleep(100);
-
-                //Stopped = false;
 
                 log.Write("初期化完了");
 
@@ -3380,17 +2504,6 @@ namespace mml2vgmIDE
             fadeoutCounterDelta = 0.000004;
             vgmSpeed = 1;
 
-            //chipRegister.YM2203SetFadeoutVolume(0, 0);
-            //chipRegister.YM2203SetFadeoutVolume(1, 0);
-            //chipRegister.setFadeoutVolYM2608(0,0, 0);
-            //chipRegister.setFadeoutVolYM2608(0,1, 0);
-            //chipRegister.YM2151SetFadeoutVolume(0, 0);
-            //chipRegister.YM2151SetFadeoutVolume(1, 0);
-            //chipRegister.setFadeoutVolYM2612(0, 0);
-            //chipRegister.setFadeoutVolYM2612(1, 0);
-            //chipRegister.setFadeoutVolSN76489(0, 0);
-            //chipRegister.setFadeoutVolSN76489(1, 0);
-            //chipRegister.resetChips();
         }
 
         public static void ChangeChipSampleRate(MDSound.MDSound.Chip chip, int NewSmplRate)
@@ -3419,21 +2532,18 @@ namespace mml2vgmIDE
         {
             vgmSpeed = (vgmSpeed == 1) ? 4 : 1;
             sm.SetSpeed(vgmSpeed);
-            //driverReal.vgmSpeed = vgmSpeed;
         }
 
         public static void Slow()
         {
             vgmSpeed = (vgmSpeed == 1) ? 0.25 : 1;
             sm.SetSpeed(vgmSpeed);
-            //driverReal.vgmSpeed = vgmSpeed;
         }
 
         public static void ResetSlow()
         {
             vgmSpeed = 1;
             driver.vgmSpeed = vgmSpeed;
-            //driverReal.vgmSpeed = vgmSpeed;
         }
 
         public static void Pause()
@@ -3535,123 +2645,6 @@ namespace mml2vgmIDE
                 Stop(0);
                 NAudioWrap.Stop();
 
-                //midi outをリリース
-                //if (midiOuts.Count > 0)
-                //{
-                //    for (int i = 0; i < midiOuts.Count; i++)
-                //    {
-                //        if (midiOuts[i] != null)
-                //        {
-                //            try
-                //            {
-                //                //resetできない機種もある?
-                //                midiOuts[i].Reset();
-                //            }
-                //            catch { }
-                //            midiOuts[i].Close();
-                //            midiOuts[i] = null;
-                //        }
-                //    }
-                //    midiOuts.Clear();
-                //    midiOutsType.Clear();
-                //}
-
-                //if (vstMidiOuts.Count > 0)
-                //{
-                //    vstMidiOuts.Clear();
-                //    vstMidiOutsType.Clear();
-                //}
-
-                //setting.vst.VSTInfo = null;
-                //List<vstInfo> vstlst = new List<vstInfo>();
-
-                //for (int i = 0; i < vstPlugins.Count; i++)
-                //{
-                //    try
-                //    {
-                //        vstPlugins[i].vstPluginsForm.timer1.Enabled = false;
-                //        vstPlugins[i].location = vstPlugins[i].vstPluginsForm.Location;
-                //        vstPlugins[i].vstPluginsForm.Close();
-                //    }
-                //    catch { }
-
-                //    try
-                //    {
-                //        if (vstPlugins[i].vstPlugins != null)
-                //        {
-                //            vstPlugins[i].vstPlugins.PluginCommandStub.EditorClose();
-                //            vstPlugins[i].vstPlugins.PluginCommandStub.StopProcess();
-                //            vstPlugins[i].vstPlugins.PluginCommandStub.MainsChanged(false);
-                //            int pc = vstPlugins[i].vstPlugins.PluginInfo.ParameterCount;
-                //            List<float> plst = new List<float>();
-                //            for (int p = 0; p < pc; p++)
-                //            {
-                //                float v = vstPlugins[i].vstPlugins.PluginCommandStub.GetParameter(p);
-                //                plst.Add(v);
-                //            }
-                //            vstPlugins[i].param = plst.ToArray();
-                //            vstPlugins[i].vstPlugins.Dispose();
-                //        }
-                //    }
-                //    catch { }
-
-                //    vstInfo vi = new vstInfo();
-                //    vi.editor = vstPlugins[i].editor;
-                //    vi.fileName = vstPlugins[i].fileName;
-                //    vi.key = vstPlugins[i].key;
-                //    vi.effectName = vstPlugins[i].effectName;
-                //    vi.power = vstPlugins[i].power;
-                //    vi.location = vstPlugins[i].location;
-                //    vi.param = vstPlugins[i].param;
-
-                //    if (!vstPlugins[i].isInstrument) vstlst.Add(vi);
-                //}
-                //setting.vst.VSTInfo = vstlst.ToArray();
-
-
-                //for (int i = 0; i < vstPluginsInst.Count; i++)
-                //{
-                //    try
-                //    {
-                //        vstPluginsInst[i].vstPluginsForm.timer1.Enabled = false;
-                //        vstPluginsInst[i].location = vstPluginsInst[i].vstPluginsForm.Location;
-                //        vstPluginsInst[i].vstPluginsForm.Close();
-                //    }
-                //    catch { }
-
-                //    try
-                //    {
-                //        if (vstPluginsInst[i].vstPlugins != null)
-                //        {
-                //            vstPluginsInst[i].vstPlugins.PluginCommandStub.EditorClose();
-                //            vstPluginsInst[i].vstPlugins.PluginCommandStub.StopProcess();
-                //            vstPluginsInst[i].vstPlugins.PluginCommandStub.MainsChanged(false);
-                //            int pc = vstPluginsInst[i].vstPlugins.PluginInfo.ParameterCount;
-                //            List<float> plst = new List<float>();
-                //            for (int p = 0; p < pc; p++)
-                //            {
-                //                float v = vstPluginsInst[i].vstPlugins.PluginCommandStub.GetParameter(p);
-                //                plst.Add(v);
-                //            }
-                //            vstPluginsInst[i].param = plst.ToArray();
-                //            vstPluginsInst[i].vstPlugins.Dispose();
-                //        }
-                //    }
-                //    catch { }
-
-                //    vstInfo vi = new vstInfo();
-                //    vi.editor = vstPluginsInst[i].editor;
-                //    vi.fileName = vstPluginsInst[i].fileName;
-                //    vi.key = vstPluginsInst[i].key;
-                //    vi.effectName = vstPluginsInst[i].effectName;
-                //    vi.power = vstPluginsInst[i].power;
-                //    vi.location = vstPluginsInst[i].location;
-                //    vi.param = vstPluginsInst[i].param;
-
-                //}
-
-                //realChip.Close();
-
                 sm.Release();
             }
             catch (Exception ex)
@@ -3662,13 +2655,8 @@ namespace mml2vgmIDE
 
         public static long GetCounter()
         {
-            //if (driverVirtual == null && driverReal == null) return -1;
             if (driver == null) return -1;
 
-            //if (driverVirtual == null) return driverReal.Counter;
-            //if (driverReal == null) return driverVirtual.Counter;
-
-            //return driverVirtual.Counter > driverReal.Counter ? driverVirtual.Counter : driverReal.Counter;
             return sm.GetSeqCounter();
         }
 
@@ -3681,40 +2669,14 @@ namespace mml2vgmIDE
 
         public static long GetDriverCounter()
         {
-            //if (driverVirtual == null && driverReal == null) return -1;
             if (driver == null) return -1;
 
 
-            //if (driverVirtual == null)
-            //{
-            //    if (driverReal is NRTDRV) return ((NRTDRV)driverReal).work.TOTALCOUNT;
-            //    else if (driverReal is vgm) return ((vgm)driverReal).vgmFrameCounter;
-            //    else return 0;
-            //}
-            //if (driverReal == null)
-            //{
-            //if (driver is NRTDRV) return ((NRTDRV)driver).work.TOTALCOUNT;
-            //else
             if (driver is vgm)
             {
-                //return ((vgm)driver).vgmFrameCounter;
                 return sm.GetDataSenderBufferCounter();
             }
             else return 0;
-            //}
-
-            //if (driverVirtual is NRTDRV && driverReal is NRTDRV)
-            //{
-            //    return ((NRTDRV)driverVirtual).work.TOTALCOUNT > ((NRTDRV)driverReal).work.TOTALCOUNT ? ((NRTDRV)driverVirtual).work.TOTALCOUNT : ((NRTDRV)driverReal).work.TOTALCOUNT;
-            //}
-            //else if (driverVirtual is vgm && driverReal is vgm)
-            //{
-            //    return ((vgm)driverVirtual).vgmFrameCounter > ((vgm)driverReal).vgmFrameCounter ? ((vgm)driverVirtual).vgmFrameCounter : ((vgm)driverReal).vgmFrameCounter;
-            //}
-            //else
-            //{
-            //    return 0;
-            //}
         }
 
         public static long GetLoopCounter()
@@ -3820,10 +2782,6 @@ namespace mml2vgmIDE
             {
                 cnt = driver.vgmCurLoop;
             }
-            //if (driverReal != null)
-            //{
-            //    cnt = Math.Min(driverReal.vgmCurLoop, cnt);
-            //}
 
             return cnt;
         }
@@ -3831,11 +2789,9 @@ namespace mml2vgmIDE
         public static bool GetVGMStopped()
         {
             bool v;
-            //bool r;
 
             v = driver == null ? true : driver.Stopped;
-            //r = driverReal == null ? true : driverReal.Stopped;
-            return v;// && r;
+            return v;
         }
 
         public static bool GetIsDataBlock()
@@ -3876,158 +2832,6 @@ namespace mml2vgmIDE
                 catch { }
             }
         }
-
-        //private static void startTrdVgmReal()
-        //{
-        //    if (setting.outputDevice.DeviceType == Common.DEV_Null)
-        //    {
-        //        return;
-        //    }
-
-        //    trdClosed = false;
-        //    trdMain = new Thread(new ThreadStart(trdVgmRealFunction));
-        //    trdMain.Priority = ThreadPriority.Highest;
-        //    trdMain.IsBackground = true;
-        //    trdMain.Name = "trdVgmReal";
-        //    trdMain.Start();
-        //}
-
-        //private static void trdVgmRealFunction()
-        //{
-        //    double o = sw.ElapsedTicks / swFreq;
-        //    double step = 1 / (double)Common.SampleRate;
-
-        //    trdStopped = false;
-        //    try
-        //    {
-        //        while (!trdClosed)
-        //        {
-        //            Thread.Sleep(0);
-
-        //            double el1 = sw.ElapsedTicks / swFreq;
-        //            if (el1 - o < step) continue;
-        //            if (el1 - o >= step * Common.SampleRate / 100.0)//閾値10ms
-        //            {
-        //                do
-        //                {
-        //                    o += step;
-        //                } while (el1 - o >= step);
-        //            }
-        //            else
-        //            {
-        //                o += step;
-        //            }
-
-        //            if (Stopped || Paused)
-        //            {
-        //                if (realChip != null && !oneTimeReset)
-        //                {
-        //                    softReset(EnmModel.RealModel);
-        //                    oneTimeReset = true;
-        //                    chipRegister.resetAllMIDIout();
-        //                }
-        //                continue;
-        //            }
-        //            if (hiyorimiNecessary && driverVirtual.isDataBlock) { continue; }
-
-        //            if (vgmFadeout)
-        //            {
-        //                if (vgmRealFadeoutVol != 1000) vgmRealFadeoutVolWait--;
-        //                if (vgmRealFadeoutVolWait == 0)
-        //                {
-        //                    if (useChip.Contains(EnmChip.YM2151)) chipRegister.setFadeoutVolYM2151(0, vgmRealFadeoutVol);
-        //                    if (useChip.Contains(EnmChip.YM2203)) chipRegister.setFadeoutVolYM2203(0, vgmRealFadeoutVol);
-        //                    if (useChip.Contains(EnmChip.YM2608)) chipRegister.setFadeoutVolYM2608(0, vgmRealFadeoutVol);
-        //                    if (useChip.Contains(EnmChip.YM2610)) chipRegister.setFadeoutVolYM2610(0, vgmRealFadeoutVol);
-        //                    if (useChip.Contains(EnmChip.YM2612)) chipRegister.setFadeoutVolYM2612(0, vgmRealFadeoutVol);
-        //                    if (useChip.Contains(EnmChip.SN76489)) chipRegister.setFadeoutVolSN76489(0, vgmRealFadeoutVol);
-
-        //                    if (useChip.Contains(EnmChip.S_YM2151)) chipRegister.setFadeoutVolYM2151(1, vgmRealFadeoutVol);
-        //                    if (useChip.Contains(EnmChip.S_YM2203)) chipRegister.setFadeoutVolYM2203(1, vgmRealFadeoutVol);
-        //                    if (useChip.Contains(EnmChip.S_YM2608)) chipRegister.setFadeoutVolYM2608(1, vgmRealFadeoutVol);
-        //                    if (useChip.Contains(EnmChip.S_YM2610)) chipRegister.setFadeoutVolYM2610(1, vgmRealFadeoutVol);
-        //                    if (useChip.Contains(EnmChip.S_YM2612)) chipRegister.setFadeoutVolYM2612(1, vgmRealFadeoutVol);
-        //                    if (useChip.Contains(EnmChip.S_SN76489)) chipRegister.setFadeoutVolSN76489(1, vgmRealFadeoutVol);
-
-        //                    vgmRealFadeoutVol++;
-
-        //                    vgmRealFadeoutVol = Math.Min(127, vgmRealFadeoutVol);
-        //                    if (vgmRealFadeoutVol == 127)
-        //                    {
-        //                        if (realChip != null)
-        //                        {
-        //                            softReset(EnmModel.RealModel);
-        //                        }
-        //                        vgmRealFadeoutVolWait = 1000;
-        //                        chipRegister.resetAllMIDIout();
-        //                    }
-        //                    else
-        //                    {
-        //                        vgmRealFadeoutVolWait = 700 - vgmRealFadeoutVol * 2;
-        //                    }
-        //                }
-        //            }
-
-        //            if (hiyorimiNecessary)
-        //            {
-        //                //long v;
-        //                //v = driverReal.vgmFrameCounter - driverVirtual.vgmFrameCounter;
-        //                //long d = common.SampleRate * (setting.LatencySCCI - common.SampleRate * setting.LatencyEmulation) / 1000;
-        //                //long l = getLatency() / 4;
-
-        //                //int m = 0;
-        //                //if (d >= 0)
-        //                //{
-        //                //    if (v >= d - l && v <= d + l) m = 0;
-        //                //    else m = (v + d > l) ? 1 : 2;
-        //                //}
-        //                //else
-        //                //{
-        //                //    d = Math.Abs(common.SampleRate * ((uint)setting.LatencyEmulation - (uint)setting.LatencySCCI) / 1000);
-        //                //    if (v >= d - l && v <= d + l) m = 0;
-        //                //    else m = (v - d > l) ? 1 : 2;
-        //                //}
-
-        //                double dEMU = Common.SampleRate * setting.LatencyEmulation / 1000.0;
-        //                double dSCCI = Common.SampleRate * setting.LatencySCCI / 1000.0;
-        //                double abs = Math.Abs((driverReal.vgmFrameCounter - dSCCI) - (driverVirtual.vgmFrameCounter - dEMU));
-        //                int m = 0;
-        //                long l = getLatency() / 10;
-        //                if (abs >= l)
-        //                {
-        //                    m = ((driverReal.vgmFrameCounter - dSCCI) > (driverVirtual.vgmFrameCounter - dEMU)) ? 1 : 2;
-        //                }
-
-        //                switch (m)
-        //                {
-        //                    case 0: //x1
-        //                        driverReal.oneFrameProc();
-        //                        break;
-        //                    case 1: //x1/2
-        //                        hiyorimiEven++;
-        //                        if (hiyorimiEven > 1)
-        //                        {
-        //                            driverReal.oneFrameProc();
-        //                            hiyorimiEven = 0;
-        //                        }
-        //                        break;
-        //                    case 2: //x2
-        //                        driverReal.oneFrameProc();
-        //                        driverReal.oneFrameProc();
-        //                        break;
-        //                }
-        //            }
-        //            else
-        //            {
-        //                driverReal.oneFrameProc();
-        //            }
-        //        }
-        //    }
-        //    catch
-        //    {
-        //    }
-        //    trdStopped = true;
-        //}
 
         private static void softReset(long counter)
         {
@@ -4111,11 +2915,6 @@ namespace mml2vgmIDE
                 {
                     bufVirtualFunction_MIDIKeyboard = new short[sampleCount];
                 }
-                //mdsMIDI.Update(bufVirtualFunction_MIDIKeyboard, 0, sampleCount, null);
-                //for (int i = 0; i < sampleCount; i++)
-                //{
-                //    buffer[i + offset] += bufVirtualFunction_MIDIKeyboard[i];
-                //}
             }
             return cnt;
         }
@@ -4165,17 +2964,9 @@ namespace mml2vgmIDE
 
             try
             {
-                //stwh.Reset(); stwh.Start();
 
                 int i;
                 int cnt = 0;
-
-                //if (!sm.IsRunningAsync())
-                //{
-                //Stopped = true;
-                //}
-
-                //if (Stopped || Paused) return mds.Update(buffer, offset, sampleCount, null);
 
                 long bufCnt = sampleCount / 2;
                 long seqcnt = sm.GetSeqCounter();
@@ -4197,31 +2988,13 @@ namespace mml2vgmIDE
                     }
                 }
 
-                //スピードの調整をする場合は以下を有効にする(通常、調整なし)
-                {
-                    //EmuSeqCounterDelta = (seqcnt - EmuSeqCounter) / (double)bufCnt;
-                    //EmuSeqCounterDelta = Math.Max(Math.Min(EmuSeqCounterDelta, 2.0), 0.5);
-                    //RealSeqCounterDelta = 1.0 / EmuSeqCounterDelta;// (EmuSeqCounter- seqcnt) / (double)bufCnt;
-                    //RealSeqCounterDelta = Math.Max(Math.Min(RealSeqCounterDelta, 2.0), 0.5);
-                    //EmuSeqCounterDelta = 1.0;
-                    //sm.SetSpeed(RealSeqCounterDelta);
-                }
-
                 if (bufCnt > getLatency()*2)
                 {
                     ;
                 }
-                //EmuSeqCounter = Math.Max(EmuSeqCounter, 0);
-                //if (!sm.IsRunningAtEmuChipSender()) EmuSeqCounter = 0;
                 callcount = 0;
 
                 {
-                    //if (hiyorimiNecessary)// && driverReal.isDataBlock)
-                    //{
-                    //    mds.Update(buffer, offset, sampleCount, null);
-                    //    SetAudioDeviceSync();
-                    //    return sampleCount;
-                    //}
 
                     if (StepCounter > 0)
                     {
@@ -4241,14 +3014,6 @@ namespace mml2vgmIDE
                     cnt = mds.Update(buffer, offset, sampleCount, oneFrameEmuDataSend);// driverVirtual.oneFrameProc);
                     ProcTimePer1Frame = ((double)stwh.ElapsedMilliseconds / (sampleCount + 1) * 1000000.0);
                 }
-
-                //if (callcount > bufCnt)
-                //{
-                //    ;
-                //}
-
-                //VST
-                //if (vstPlugins.Count > 0 || vstPluginsInst.Count > 0) VST_Update(buffer, offset, sampleCount);
 
                 for (i = 0; i < sampleCount; i++)
                 {
@@ -4272,10 +3037,6 @@ namespace mml2vgmIDE
                     updateVisualVolume(buffer, offset);
                 }
 
-                //waveWriter.Write(buffer, offset, sampleCount);
-
-                ////1frame当たりの処理時間
-                //ProcTimePer1Frame = (int)((double)stwh.ElapsedMilliseconds / sampleCount * 1000000.0);
                 SetAudioDeviceSync();
                 return sampleCount;
 
@@ -4335,25 +3096,6 @@ namespace mml2vgmIDE
 
                 SetMMLTraceInfo?.Invoke(Pack);
 
-                ////XGM PCMデータ
-                //if (Pack.od == null && Pack.Address == 0x2a)
-                //{
-                //    log.Write(string.Format("Adr:{0:X} Dat:{1:X}", Pack.Address, Pack.Data));
-                //}
-
-                //if (Pack.od != null && Pack.od.linePos != null)
-                //{
-                //    log.Write(string.Format("{0} row:{1} col:{2} len:{3} chip:{4} ch:{5} part:{6}",
-                //        Pack.od.type,
-                //        Pack.od.linePos.row,
-                //        Pack.od.linePos.col,
-                //        Pack.od.linePos.length,
-                //        Pack.od.linePos.chip,
-                //        Pack.od.linePos.ch,
-                //        Pack.od.linePos.part
-                //        ));
-                //}
-                //log.Write(PackCounter.ToString());
             }
 
             while (EmuSeqCounterWDelta >= 1.0)
@@ -4532,8 +3274,6 @@ namespace mml2vgmIDE
         public static long getRealFrameCounter()
         {
             return -1;
-            //if (driverReal == null) return -1;
-            //return driverReal.vgmFrameCounter;
         }
 
         public static GD3 GetGD3()
@@ -4542,369 +3282,6 @@ namespace mml2vgmIDE
             return null;
         }
 
-        //private static VstPluginContext OpenPlugin(string pluginPath)
-        //{
-        //    try
-        //    {
-        //        HostCommandStub hostCmdStub = new HostCommandStub();
-        //        hostCmdStub.PluginCalled += new EventHandler<PluginCalledEventArgs>(HostCmdStub_PluginCalled);
-
-        //        VstPluginContext ctx = VstPluginContext.Create(pluginPath, hostCmdStub);
-
-        //        // add custom data to the context
-        //        ctx.Set("PluginPath", pluginPath);
-        //        ctx.Set("HostCmdStub", hostCmdStub);
-
-        //        // actually open the plugin itself
-        //        ctx.PluginCommandStub.Open();
-
-        //        return ctx;
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        log.ForcedWrite(e);
-        //        //MessageBox.Show(this, e.ToString(), Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
-        //    }
-
-        //    return null;
-        //}
-
-        //private static void ReleaseAllPlugins()
-        //{
-        //    foreach (vstInfo2 ctx in vstPlugins)
-        //    {
-        //        // dispose of all (unmanaged) resources
-        //        ctx.vstPlugins.Dispose();
-        //    }
-
-        //    vstPlugins.Clear();
-        //}
-
-        //private static void HostCmdStub_PluginCalled(object sender, PluginCalledEventArgs e)
-        //{
-        //    HostCommandStub hostCmdStub = (HostCommandStub)sender;
-
-        //    // can be null when called from inside the plugin main entry point.
-        //    if (hostCmdStub.PluginContext.PluginInfo != null)
-        //    {
-        //        Debug.WriteLine("Plugin " + hostCmdStub.PluginContext.PluginInfo.PluginID + " called:" + e.Message);
-        //    }
-        //    else
-        //    {
-        //        Debug.WriteLine("The loading Plugin called:" + e.Message);
-        //    }
-        //}
-
-
-
-        //private static void VST_Update(short[] buffer, int offset, int sampleCount)
-        //{
-        //    if (buffer == null || buffer.Length < 1 || sampleCount == 0) return;
-
-        //    try
-        //    {
-        //        //if (trdStopped) return;
-
-        //        int blockSize = sampleCount / 2;
-
-        //        for (int i = 0; i < vstPluginsInst.Count; i++)
-        //        {
-        //            vstInfo2 info2 = vstPluginsInst[i];
-        //            VstPluginContext PluginContext = info2.vstPlugins;
-        //            if (PluginContext == null) continue;
-        //            if (PluginContext.PluginCommandStub == null) continue;
-
-
-        //            int inputCount = info2.vstPlugins.PluginInfo.AudioInputCount;
-        //            int outputCount = info2.vstPlugins.PluginInfo.AudioOutputCount;
-
-        //            using (VstAudioBufferManager inputMgr = new VstAudioBufferManager(inputCount, blockSize))
-        //            {
-        //                using (VstAudioBufferManager outputMgr = new VstAudioBufferManager(outputCount, blockSize))
-        //                {
-        //                    VstAudioBuffer[] inputBuffers = inputMgr.ToArray();
-        //                    VstAudioBuffer[] outputBuffers = outputMgr.ToArray();
-
-        //                    if (inputCount != 0)
-        //                    {
-        //                        inputMgr.ClearBuffer(inputBuffers[0]);
-        //                        inputMgr.ClearBuffer(inputBuffers[1]);
-
-        //                        for (int j = 0; j < blockSize; j++)
-        //                        {
-        //                            // generate a value between -1.0 and 1.0
-        //                            inputBuffers[0][j] = buffer[j * 2 + offset + 0] / (float)short.MaxValue;
-        //                            inputBuffers[1][j] = buffer[j * 2 + offset + 1] / (float)short.MaxValue;
-        //                        }
-        //                    }
-
-        //                    outputMgr.ClearBuffer(outputBuffers[0]);
-        //                    outputMgr.ClearBuffer(outputBuffers[1]);
-
-        //                    PluginContext.PluginCommandStub.ProcessEvents(info2.lstEvent.ToArray());
-        //                    info2.lstEvent.Clear();
-
-
-        //                    PluginContext.PluginCommandStub.ProcessReplacing(inputBuffers, outputBuffers);
-
-        //                    for (int j = 0; j < blockSize; j++)
-        //                    {
-        //                        // generate a value between -1.0 and 1.0
-        //                        if (inputCount == 0)
-        //                        {
-        //                            buffer[j * 2 + offset + 0] += (short)(outputBuffers[0][j] * short.MaxValue);
-        //                            buffer[j * 2 + offset + 1] += (short)(outputBuffers[1][j] * short.MaxValue);
-        //                        }
-        //                        else
-        //                        {
-        //                            buffer[j * 2 + offset + 0] = (short)(outputBuffers[0][j] * short.MaxValue);
-        //                            buffer[j * 2 + offset + 1] = (short)(outputBuffers[1][j] * short.MaxValue);
-        //                        }
-        //                    }
-
-        //                }
-        //            }
-        //        }
-
-        //        for (int i = 0; i < vstPlugins.Count; i++)
-        //        {
-        //            vstInfo2 info2 = vstPlugins[i];
-        //            VstPluginContext PluginContext = info2.vstPlugins;
-        //            if (PluginContext == null) continue;
-        //            if (PluginContext.PluginCommandStub == null) continue;
-
-
-        //            int inputCount = info2.vstPlugins.PluginInfo.AudioInputCount;
-        //            int outputCount = info2.vstPlugins.PluginInfo.AudioOutputCount;
-
-        //            using (VstAudioBufferManager inputMgr = new VstAudioBufferManager(inputCount, blockSize))
-        //            {
-        //                using (VstAudioBufferManager outputMgr = new VstAudioBufferManager(outputCount, blockSize))
-        //                {
-        //                    VstAudioBuffer[] inputBuffers = inputMgr.ToArray();
-        //                    VstAudioBuffer[] outputBuffers = outputMgr.ToArray();
-
-        //                    if (inputCount != 0)
-        //                    {
-        //                        inputMgr.ClearBuffer(inputBuffers[0]);
-        //                        inputMgr.ClearBuffer(inputBuffers[1]);
-
-        //                        for (int j = 0; j < blockSize; j++)
-        //                        {
-        //                            // generate a value between -1.0 and 1.0
-        //                            inputBuffers[0][j] = buffer[j * 2 + offset + 0] / (float)short.MaxValue;
-        //                            inputBuffers[1][j] = buffer[j * 2 + offset + 1] / (float)short.MaxValue;
-        //                        }
-        //                    }
-
-        //                    outputMgr.ClearBuffer(outputBuffers[0]);
-        //                    outputMgr.ClearBuffer(outputBuffers[1]);
-
-        //                    PluginContext.PluginCommandStub.ProcessReplacing(inputBuffers, outputBuffers);
-
-        //                    for (int j = 0; j < blockSize; j++)
-        //                    {
-        //                        // generate a value between -1.0 and 1.0
-        //                        if (inputCount == 0)
-        //                        {
-        //                            buffer[j * 2 + offset + 0] += (short)(outputBuffers[0][j] * short.MaxValue);
-        //                            buffer[j * 2 + offset + 1] += (short)(outputBuffers[1][j] * short.MaxValue);
-        //                        }
-        //                        else
-        //                        {
-        //                            buffer[j * 2 + offset + 0] = (short)(outputBuffers[0][j] * short.MaxValue);
-        //                            buffer[j * 2 + offset + 1] = (short)(outputBuffers[1][j] * short.MaxValue);
-        //                        }
-        //                    }
-
-        //                }
-        //            }
-        //        }
-
-        //    }
-        //    catch { }
-        //}
-
-        //private static void vstparse()
-        //{
-        //    while (vstPluginsInst.Count > 0)
-        //    {
-        //        if (vstPluginsInst[0] != null)
-        //        {
-        //            if (vstPluginsInst[0].vstPlugins.PluginCommandStub != null) vstPluginsInst[0].vstPlugins.PluginCommandStub.EditorClose();
-        //            vstPluginsInst[0].vstPluginsForm.timer1.Enabled = false;
-        //            vstPluginsInst[0].location = vstPluginsInst[0].vstPluginsForm.Location;
-        //            vstPluginsInst[0].vstPluginsForm.Close();
-        //            if (vstPluginsInst[0].vstPlugins.PluginCommandStub != null) vstPluginsInst[0].vstPlugins.PluginCommandStub.StopProcess();
-        //            if (vstPluginsInst[0].vstPlugins.PluginCommandStub != null) vstPluginsInst[0].vstPlugins.PluginCommandStub.MainsChanged(false);
-        //            vstPluginsInst[0].vstPlugins.Dispose();
-        //        }
-
-        //        vstPluginsInst.RemoveAt(0);
-        //    }
-
-        //    while (vstPlugins.Count > 0)
-        //    {
-        //        if (vstPlugins[0] != null)
-        //        {
-        //            if (vstPlugins[0].vstPlugins.PluginCommandStub != null) vstPlugins[0].vstPlugins.PluginCommandStub.EditorClose();
-        //            vstPlugins[0].vstPluginsForm.timer1.Enabled = false;
-        //            vstPlugins[0].location = vstPlugins[0].vstPluginsForm.Location;
-        //            vstPlugins[0].vstPluginsForm.Close();
-        //            if (vstPlugins[0].vstPlugins.PluginCommandStub != null) vstPlugins[0].vstPlugins.PluginCommandStub.StopProcess();
-        //            if (vstPlugins[0].vstPlugins.PluginCommandStub != null) vstPlugins[0].vstPlugins.PluginCommandStub.MainsChanged(false);
-        //            vstPlugins[0].vstPlugins.Dispose();
-        //        }
-
-        //        vstPlugins.RemoveAt(0);
-        //    }
-        //}
-
-        //public static List<vstInfo2> getVSTInfos()
-        //{
-        //    return vstPlugins;
-        //}
-
-        //public static vstInfo getVSTInfo(string filename)
-        //{
-        //    VstPluginContext ctx = OpenPlugin(filename);
-        //    if (ctx == null) return null;
-
-        //    vstInfo ret = new vstInfo();
-        //    ret.effectName = ctx.PluginCommandStub.GetEffectName();
-        //    ret.productName = ctx.PluginCommandStub.GetProductString();
-        //    ret.vendorName = ctx.PluginCommandStub.GetVendorString();
-        //    ret.programName = ctx.PluginCommandStub.GetProgramName();
-        //    ret.fileName = filename;
-        //    ret.midiInputChannels = ctx.PluginCommandStub.GetNumberOfMidiInputChannels();
-        //    ret.midiOutputChannels = ctx.PluginCommandStub.GetNumberOfMidiOutputChannels();
-        //    ctx.PluginCommandStub.Close();
-
-        //    return ret;
-        //}
-
-        //public static bool addVSTeffect(string fileName)
-        //{
-        //    VstPluginContext ctx = OpenPlugin(fileName);
-        //    if (ctx == null) return false;
-
-        //    //Stop();
-
-        //    vstInfo2 vi = new vstInfo2();
-        //    vi.vstPlugins = ctx;
-        //    vi.fileName = fileName;
-        //    vi.key = DateTime.Now.Ticks.ToString();
-        //    Thread.Sleep(1);
-
-        //    ctx.PluginCommandStub.SetBlockSize(512);
-        //    ctx.PluginCommandStub.SetSampleRate(Common.SampleRate);
-        //    ctx.PluginCommandStub.MainsChanged(true);
-        //    ctx.PluginCommandStub.StartProcess();
-        //    vi.effectName = ctx.PluginCommandStub.GetEffectName();
-        //    vi.power = true;
-        //    ctx.PluginCommandStub.GetParameterProperties(0);
-
-
-        //    frmVST dlg = new frmVST();
-        //    dlg.PluginCommandStub = ctx.PluginCommandStub;
-        //    dlg.Show(vi);
-        //    vi.vstPluginsForm = dlg;
-        //    vi.editor = true;
-
-        //    vstPlugins.Add(vi);
-
-        //    List<vstInfo> lvi = new List<vstInfo>();
-        //    foreach (vstInfo2 vi2 in vstPlugins)
-        //    {
-        //        vstInfo v = new vstInfo();
-        //        v.editor = vi.editor;
-        //        v.effectName = vi.effectName;
-        //        v.fileName = vi.fileName;
-        //        v.key = vi.key;
-        //        v.location = vi.location;
-        //        v.midiInputChannels = vi.midiInputChannels;
-        //        v.midiOutputChannels = vi.midiOutputChannels;
-        //        v.param = vi.param;
-        //        v.power = vi.power;
-        //        v.productName = vi.productName;
-        //        v.programName = vi.programName;
-        //        v.vendorName = vi.vendorName;
-        //        lvi.Add(v);
-        //    }
-        //    setting.vst.VSTInfo = lvi.ToArray();
-
-        //    return true;
-        //}
-
-        //public static bool delVSTeffect(string key)
-        //{
-        //    if (key == "")
-        //    {
-        //        for (int i = 0; i < vstPlugins.Count; i++)
-        //        {
-        //            try
-        //            {
-        //                if (vstPlugins[i].vstPlugins != null)
-        //                {
-        //                    vstPlugins[i].vstPluginsForm.timer1.Enabled = false;
-        //                    vstPlugins[i].location = vstPlugins[i].vstPluginsForm.Location;
-        //                    vstPlugins[i].vstPluginsForm.Close();
-        //                    vstPlugins[i].vstPlugins.PluginCommandStub.EditorClose();
-        //                    vstPlugins[i].vstPlugins.PluginCommandStub.StopProcess();
-        //                    vstPlugins[i].vstPlugins.PluginCommandStub.MainsChanged(false);
-        //                    vstPlugins[i].vstPlugins.Dispose();
-        //                }
-        //            }
-        //            catch { }
-        //        }
-        //        vstPlugins.Clear();
-        //        setting.vst.VSTInfo = new vstInfo[0];
-        //    }
-        //    else
-        //    {
-        //        int ind = -1;
-        //        for (int i = 0; i < vstPlugins.Count; i++)
-        //        {
-        //            //if (vstPlugins[i].fileName == fileName)
-        //            if (vstPlugins[i].key == key)
-        //            {
-        //                ind = i;
-        //                break;
-        //            }
-        //        }
-
-        //        if (ind != -1)
-        //        {
-        //            try
-        //            {
-        //                if (vstPlugins[ind].vstPlugins != null)
-        //                {
-        //                    vstPlugins[ind].vstPluginsForm.timer1.Enabled = false;
-        //                    vstPlugins[ind].location = vstPlugins[ind].vstPluginsForm.Location;
-        //                    vstPlugins[ind].vstPluginsForm.Close();
-        //                    vstPlugins[ind].vstPlugins.PluginCommandStub.EditorClose();
-        //                    vstPlugins[ind].vstPlugins.PluginCommandStub.StopProcess();
-        //                    vstPlugins[ind].vstPlugins.PluginCommandStub.MainsChanged(false);
-        //                    vstPlugins[ind].vstPlugins.Dispose();
-        //                }
-        //            }
-        //            catch { }
-        //            vstPlugins.RemoveAt(ind);
-        //        }
-
-        //        List<vstInfo> nvst = new List<vstInfo>();
-        //        foreach (vstInfo vi in setting.vst.VSTInfo)
-        //        {
-        //            if (vi.key == key) continue;
-        //            nvst.Add(vi);
-        //        }
-        //        setting.vst.VSTInfo = nvst.ToArray();
-        //    }
-
-        //    return true;
-        //}
-
-
 
         #region MDSoundインターフェース
 
@@ -4912,11 +3289,6 @@ namespace mml2vgmIDE
         {
             return chipRegister.fmRegisterYM2612[chipID];
         }
-
-        //public static int[][] GetYM2612MIDIRegister()
-        //{
-        //    return mdsMIDI.ReadYM2612Register(0);
-        //}
 
         public static int[] GetYM2151Register(int chipID)
         {
@@ -4973,15 +3345,6 @@ namespace mml2vgmIDE
             return chipRegister.fmRegisterYMF278B[chipID];
         }
 
-        //public static int[] GetMoonDriverPCMKeyOn()
-        //{
-        //    if (driver is Driver.MoonDriver.MoonDriver)
-        //    {
-        //        if (driver != null) return ((Driver.MoonDriver.MoonDriver)driver).GetPCMKeyOn();
-        //    }
-        //    return null;
-        //}
-
         public static int[] GetPSGRegister(int chipID)
         {
             return chipRegister.SN76489Register[chipID];
@@ -5001,16 +3364,6 @@ namespace mml2vgmIDE
         {
             return mds.ReadHuC6280Status(chipID);
         }
-
-        //public static K051649.k051649_state GetK051649Register(int chipID)
-        //{
-        //    return mds.ReadK051649Status(chipID);
-        //}
-
-        //public static MIDIParam GetMIDIInfos(int chipID)
-        //{
-        //    return chipRegister.midiParams[chipID];
-        //}
 
         public static scd_pcm.pcm_chip_ GetRf5c164Register(int chipID)
         {
