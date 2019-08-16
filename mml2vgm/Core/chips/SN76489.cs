@@ -20,6 +20,8 @@ namespace Core
             _canUsePcm = false;
             _canUsePI = false;
             FNumTbl = _FNumTbl;
+            port0 = new byte[] { (byte)(isSecondary ? 0x30 : 0x50) };
+            port1 = new byte[] { (byte)(isSecondary ? 0x3f : 0x4f) };
 
             Frequency = 3579545;
 
@@ -64,9 +66,10 @@ namespace Core
         {
             pw.MaxVolume = 15;
             pw.volume = pw.MaxVolume;
-            pw.port0 = 0x50;
             pw.keyOn = false;
             pw.panL = 3;
+            pw.port0 = port0;
+            pw.port1 = port1;
         }
 
 
@@ -85,20 +88,18 @@ namespace Core
             return FNumTbl[0][f];
         }
 
-        public void OutGGPsgStereoPort(MML mml,bool isSecondary, byte data)
+        public void OutGGPsgStereoPort(MML mml, byte[] cmd, byte data)
         {
             parent.OutData(
-                mml,
-                (byte)(isSecondary ? 0x3f : 0x4f)
+                mml, cmd
                 , data
                 );
         }
 
-        public void OutPsgPort(MML mml,bool isSecondary, byte data)
+        public void OutPsgPort(MML mml, byte[] cmd, byte data)
         {
             parent.OutData(
-                mml,
-                (byte)(isSecondary ? 0x30 : 0x50)
+                mml, cmd
                 , data
                 );
         }
@@ -122,7 +123,7 @@ namespace Core
         {
 
             if (!pw.envelopeMode) pw.keyOn = false;
-            SetVolume(pw,mml);
+            SetVolume(pw, mml);
 
         }
 
@@ -184,10 +185,10 @@ namespace Core
                 pw.freq = f;
 
                 byte data = (byte)(0x80 + (pw.ch << 5) + (f & 0xf));
-                OutPsgPort(mml, pw.isSecondary, data);
+                OutPsgPort(mml, port0,  data);
 
                 data = (byte)((f & 0x3f0) >> 4);
-                OutPsgPort(mml, pw.isSecondary, data);
+                OutPsgPort(mml, port0, data);
             }
             else
             {
@@ -195,7 +196,7 @@ namespace Core
                 if (pw.freq == f) return;
                 pw.freq = f;
                 byte data = (byte)f;
-                OutPsgPort(mml, pw.isSecondary, data);
+                OutPsgPort(mml, port0,  data);
             }
 
         }
@@ -243,19 +244,19 @@ namespace Core
             if (pw.beforeVolume != vol)
             {
                 data = (byte)(0x80 + (pw.ch << 5) + 0x10 + (15 - vol));
-                OutPsgPort(mml,pw.isSecondary, data);
+                OutPsgPort(mml, port0,  data);
                 pw.beforeVolume = vol;
             }
         }
 
         public override void SetKeyOn(partWork pw, MML mml)
         {
-            OutPsgKeyOn(pw,mml);
+            OutPsgKeyOn(pw, mml);
         }
 
         public override void SetKeyOff(partWork pw, MML mml)
         {
-            OutPsgKeyOff(pw,mml);
+            OutPsgKeyOff(pw, mml);
         }
 
         public override void SetLfoAtKeyOn(partWork pw, MML mml)
@@ -295,7 +296,7 @@ namespace Core
             byte adr = (byte)mml.args[0];
             byte dat = (byte)mml.args[1];
 
-            OutPsgPort(mml,pw.isSecondary, dat);
+            OutPsgPort(mml, port0,  dat);
         }
 
         public override void CmdNoise(partWork pw, MML mml)
@@ -322,7 +323,7 @@ namespace Core
             }
             else
             {
-                SetKeyOff(pw,mml);
+                SetKeyOff(pw, mml);
             }
 
         }
@@ -344,7 +345,7 @@ namespace Core
                 return;
             }
 
-            n = SetEnvelopParamFromInstrument(pw, n,mml);
+            n = SetEnvelopParamFromInstrument(pw, n, mml);
             SetDummyData(pw, mml);
         }
 
@@ -368,7 +369,7 @@ namespace Core
             }
 
             if (beforePanData == dat) return;
-            OutGGPsgStereoPort(mml,IsSecondary, (byte)dat);
+            OutGGPsgStereoPort(mml, port1, (byte)dat);
             beforePanData = dat;
 
         }

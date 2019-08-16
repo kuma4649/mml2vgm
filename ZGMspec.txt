@@ -15,6 +15,21 @@ Header division.
 0x20 [Track 1 offset    ][Def Cnt ][Trk Cnt ][Extra Hdr ofs     ] ***  ***  ***  *** 
 0x30  ***  ***  ***  ***  ***  ***  ***  ***  ***  ***  ***  ***  ***  ***  ***  *** 
 
+  "ZGM " ident         4byte  ファイル識別子
+  EoF offset           4byte  ファイルの終端の位置(ファイルサイズ - 1)
+  Version              4byte  10
+  Total # samples      4byte  全てのトラックの内最長のトラックのサンプリング数
+  Loop # samples       4byte  未使用(ループ情報はトラック側で持つ)
+  Loop offset          4byte  未使用
+  GD3 offset           4byte  GD3 divisionの開始位置
+  Define offset        4byte  Define divisionの開始位置
+  Track 1 offset       4byte  Track divisionの開始位置(2以降のトラックはそのひとつ前のトラック情報から辿る)
+  Define count         2byte  Define divisionの個数(0含む)
+  Track count          2byte  Track divisionの個数(0含む)
+  Extra Header offset  4byte  未使用
+  0x2c～0x3fは予約領域(0埋め)
+
+
 
 Define division.
 　この区分には、演奏時に使用する音源の情報を記録する。
@@ -97,18 +112,41 @@ Chip Identify number
    0x000000E0 GA20                                1                 2  
  
  0x00010000 - 0x0001FFFF Chips
-   0x00000000 AY8910B                             1                 2  
-   0x00000001 YM2609                              4                 2  
+   0x00010000 ?                                   1                 2  
 
- 0x00020000 - 0x0002FFFF XG
+ 0x00020000 - 0x0002FFFF 妄想Chips
+   0x00020000 AY8910B                             1                 2  
+   0x00020001 YM2609                              4                 2  
 
- 0x00030000 - 0x0003FFFF GS
+ 0x00030000 - 0x0003FFFF XG音源
+   0x00030000 MU50                                1                 可変  
+   0x00030001 MU100                               1                 可変  
+   0x00030002 MU128                               1                 可変
+   0x00030003 MU1000                              1                 可変  
+   0x00030004 MU2000                              1                 可変  
+   0x00030005 MU1000EX                            1                 可変  
+   0x00030006 MU2000EX                            1                 可変  
 
- 0x00040000 - 0x0004FFFF GM
+ 0x00040000 - 0x0004FFFF LA/GS音源
+   0x00040000 MT-32                               1                 可変  
+   0x00040001 CM-64                               1                 可変  
+   0x00040002 SC-55                               1                 可変  
+   0x00040003 SC-55mkII                           1                 可変  
+   0x00040004 SC-88                               1                 可変  
+   0x00040005 SC-88Pro                            1                 可変  
+   0x00040006 SC-8820                             1                 可変  
+   0x00040007 SC-8850                             1                 可変  
+   0x00040008 SD-90                               1                 可変  
+   0x00040009 Integra-7                           1                 可変  
 
- 0x00050000 - 0x0005FFFF VSTi
+ 0x00050000 - 0x0005FFFF GM
+   0x00050000 General                             1                 可変  
 
- 0x00060000 - 0x0006FFFF Wave
+ 0x00060000 - 0x0006FFFF VSTi
+   0x00060000 General                             1                 可変  
+
+ 0x00070000 - 0x0007FFFF Wave
+   0x00070000 General                             1                 可変  
 
 
 
@@ -133,6 +171,7 @@ Chip Identify number
   0x06       	: end of sound data(VGM 0x66と同等)
   0x07 ...   	: data block(VGM 0x67と同等)
   0x08 ...   	: PCM RAM write(VGM 0x68と同等)
+  0x09 ...      : Host Application制御向けコマンド(解釈はアプリケーション依存)
   0x1n       	: wait n+1 samples(VGM 0x7nと同等)
   0x2n			: YM2612 port 0 address 2A write from the data bank.(VGM 0x8nと同等)
   0x30-0x35		: DAC Stream Control Write(VGM 0x90-0x95と同等)

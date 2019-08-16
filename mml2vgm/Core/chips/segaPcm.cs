@@ -21,6 +21,7 @@ namespace Core
             IsSecondary = isSecondary;
             dataType = 0x80;
             Frequency = 4026987;
+            port0 = new byte[] { 0xc0 };
             Interface = 0x00f8000d;
 
             Ch = new ClsChannel[ChMax];
@@ -35,14 +36,34 @@ namespace Core
             pcmDataInfo = new clsPcmDataInfo[] { new clsPcmDataInfo() };
             pcmDataInfo[0].totalBufPtr = 0L;
             pcmDataInfo[0].use = false;
-            if (!isSecondary)
+            if (parent.info.format == enmFormat.ZGM)
             {
-                pcmDataInfo[0].totalBuf = new byte[15] { 0x67, 0x66, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+                if (parent.ChipCommandSize == 2)
+                {
+                    if (!isSecondary)
+                        pcmDataInfo[0].totalBuf = new byte[] { 0x07, 0x00, 0x66, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+                    else
+                        pcmDataInfo[0].totalBuf = new byte[] { 0x07, 0x00, 0x66, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+                }
+                else
+                {
+                    if (!isSecondary)
+                        pcmDataInfo[0].totalBuf = new byte[] { 0x07, 0x66, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+                    else
+                        pcmDataInfo[0].totalBuf = new byte[] { 0x07, 0x66, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+                }
             }
             else
             {
-                pcmDataInfo[0].totalBuf = new byte[15] { 0x67, 0x66, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+                if (!isSecondary)
+                    pcmDataInfo[0].totalBuf = new byte[] { 0x67, 0x66, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+                else
+                    pcmDataInfo[0].totalBuf = new byte[] { 0x67, 0x66, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
             }
+
+            pcmDataInfo[0].totalHeaderLength = pcmDataInfo[0].totalBuf.Length;
+            pcmDataInfo[0].totalHeadrSizeOfDataPtr = (parent.ChipCommandSize == 2) ? 4 : 3;
+
 
             Envelope = new Function();
             Envelope.Max = 127;
@@ -54,7 +75,8 @@ namespace Core
         {
             pw.MaxVolume = 255;
             pw.volume = pw.MaxVolume;
-            pw.port0 = 0xc0;
+            pw.port0 = port0;
+            pw.port1 = port1;
         }
 
         public override void InitChip()
@@ -72,7 +94,7 @@ namespace Core
 
             if (IsSecondary)
             {
-                parent.dat[0x3b]=new outDatum(enmMMLType.unknown,null,null,(byte)(parent.dat[0x3b].val | 0x40));
+                parent.dat[0x3b] = new outDatum(enmMMLType.unknown, null, null, (byte)(parent.dat[0x3b].val | 0x40));
             }
         }
 
@@ -98,12 +120,12 @@ namespace Core
             return ((int)(64 * Const.pcmMTbl[n] * Math.Pow(2, (o - 3))) + 1);
         }
 
-        public void OutSegaPcmKeyOff(MML mml,partWork pw)
+        public void OutSegaPcmKeyOff(MML mml, partWork pw)
         {
             int adr = pw.ch * 8 + 0x86;
             byte d = (byte)(((pw.pcmBank & 0x3f) << 2) | (pw.pcmLoopAddress != -1 ? 0 : 2) | 1);
 
-            OutSegaPcmPort(mml,pw, adr, d);
+            OutSegaPcmPort(mml, port0, pw, adr, d);
         }
 
         public void OutSegaPcmKeyOn(partWork pw, MML mml)
@@ -112,10 +134,10 @@ namespace Core
             byte d = 0;
 
             //KeyOff
-            OutSegaPcmKeyOff(mml,pw);
+            OutSegaPcmKeyOff(mml, pw);
 
             //Volume
-            SetVolume(pw,mml);
+            SetVolume(pw, mml);
 
             //Address shift
             int stAdr = pw.pcmStartAddress + pw.addressShift;
@@ -124,12 +146,12 @@ namespace Core
             //StartAdr
             adr = pw.ch * 8 + 0x85;
             d = (byte)((stAdr & 0xff00) >> 8);
-            OutSegaPcmPort(mml,pw, adr, d);
+            OutSegaPcmPort(mml, port0, pw, adr, d);
 
             //StartAdr
             adr = pw.ch * 8 + 0x84;
             d = (byte)((stAdr & 0x00ff) >> 0);
-            OutSegaPcmPort(mml,pw, adr, d);
+            OutSegaPcmPort(mml, port0, pw, adr, d);
 
             if (pw.pcmLoopAddress != -1)
             {
@@ -138,12 +160,12 @@ namespace Core
                     //LoopAdr
                     adr = pw.ch * 8 + 0x05;
                     d = (byte)((pw.pcmLoopAddress & 0xff00) >> 8);
-                    OutSegaPcmPort(mml,pw, adr, d);
+                    OutSegaPcmPort(mml, port0, pw, adr, d);
 
                     //LoopAdr
                     adr = pw.ch * 8 + 0x04;
                     d = (byte)((pw.pcmLoopAddress & 0x00ff) >> 0);
-                    OutSegaPcmPort(mml,pw, adr, d);
+                    OutSegaPcmPort(mml, port0, pw, adr, d);
 
                     pw.beforepcmLoopAddress = pw.pcmLoopAddress;
                 }
@@ -155,13 +177,13 @@ namespace Core
                 adr = pw.ch * 8 + 0x06;
                 d = (byte)((pw.pcmEndAddress & 0xff00) >> 8);
                 d = (byte)((d != 0) ? (d - 1) : 0);
-                OutSegaPcmPort(mml,pw, adr, d);
+                OutSegaPcmPort(mml, port0, pw, adr, d);
                 pw.beforepcmEndAddress = pw.pcmEndAddress;
             }
 
             adr = pw.ch * 8 + 0x86;
             d = (byte)(((pw.pcmBank & 0x3f) << 2) | (pw.pcmLoopAddress != -1 ? 0 : 2) | 0);
-            OutSegaPcmPort(mml,pw, adr, d);
+            OutSegaPcmPort(mml, port0, pw, adr, d);
 
             if (parent.instPCM[pw.instrument].status != enmPCMSTATUS.ERROR)
             {
@@ -169,11 +191,10 @@ namespace Core
             }
         }
 
-        public void OutSegaPcmPort(MML mml,partWork pw, int adr, byte data)
+        public void OutSegaPcmPort(MML mml, byte[] cmd, partWork pw, int adr, byte data)
         {
             parent.OutData(
-                mml,
-                pw.port0
+                mml, cmd
                 , (byte)adr //ll
                 , (byte)(((adr & 0x7f00) >> 8) | (pw.isSecondary ? 0x80 : 0)) //hh
                 , data //dd
@@ -181,7 +202,7 @@ namespace Core
         }
 
 
-        public override void StorePcm(Dictionary<int, clsPcm> newDic, KeyValuePair<int, clsPcm> v, byte[] buf,bool is16bit,int samplerate, params object[] option)
+        public override void StorePcm(Dictionary<int, clsPcm> newDic, KeyValuePair<int, clsPcm> v, byte[] buf, bool is16bit, int samplerate, params object[] option)
         {
             clsPcmDataInfo pi = pcmDataInfo[0];
 
@@ -208,7 +229,7 @@ namespace Core
                 }
 
                 //パディング(空きが足りない場合はバンクをひとつ進める(0x10000)為、空きを全て埋める)
-                int fs = (pi.totalBuf.Length - 15) % 0x10000;
+                int fs = (pi.totalBuf.Length - pi.totalHeaderLength) % 0x10000;
                 if (size > 0x10000 - fs)
                 {
                     List<byte> n = pi.totalBuf.ToList();
@@ -240,14 +261,23 @@ namespace Core
                 Array.Copy(buf, 0, newBuf, pi.totalBuf.Length, buf.Length);
 
                 pi.totalBuf = newBuf;
-                Common.SetUInt32bit31(pi.totalBuf, 3, (UInt32)(pi.totalBuf.Length - 7), IsSecondary);
-                Common.SetUInt32bit31(pi.totalBuf, 7, (UInt32)(pi.totalBuf.Length - 7));
+                Common.SetUInt32bit31(
+                    pi.totalBuf
+                    , pi.totalHeadrSizeOfDataPtr
+                    , (UInt32)(pi.totalBuf.Length - (pi.totalHeadrSizeOfDataPtr + 4))
+                    , IsSecondary
+                    );
+                Common.SetUInt32bit31(
+                    pi.totalBuf
+                    , pi.totalHeadrSizeOfDataPtr + 4
+                    , (UInt32)(pi.totalBuf.Length - (pi.totalHeadrSizeOfDataPtr + 4 + 4 + 4))
+                    );
                 pi.use = true;
                 pcmDataEasy = pi.use ? pi.totalBuf : null;
             }
             catch
             {
-                pi.use= false;
+                pi.use = false;
                 newDic[v.Key].status = enmPCMSTATUS.ERROR;
             }
 
@@ -345,7 +375,7 @@ namespace Core
             int adr = pw.ch * 8 + 0x07;
             if (pw.beforeFNum != data)
             {
-                OutSegaPcmPort(mml,pw, adr, data);
+                OutSegaPcmPort(mml, port0, pw, adr, data);
                 pw.beforeFNum = data;
             }
 
@@ -386,7 +416,7 @@ namespace Core
             {
                 //Volume(Left)
                 int adr = pw.ch * 8 + 0x02;
-                OutSegaPcmPort(mml,pw, adr, (byte)vl);
+                OutSegaPcmPort(mml, port0, pw, adr, (byte)vl);
                 pw.beforeLVolume = vl;
             }
 
@@ -394,7 +424,7 @@ namespace Core
             {
                 //Volume(Right)
                 int adr = pw.ch * 8 + 0x03;
-                OutSegaPcmPort(mml,pw, adr, (byte)vr);
+                OutSegaPcmPort(mml, port0, pw, adr, (byte)vr);
                 pw.beforeRVolume = vr;
             }
         }
@@ -406,12 +436,12 @@ namespace Core
 
         public override void SetKeyOn(partWork pw, MML mml)
         {
-            OutSegaPcmKeyOn(pw,mml);
+            OutSegaPcmKeyOn(pw, mml);
         }
 
         public override void SetKeyOff(partWork pw, MML mml)
         {
-            OutSegaPcmKeyOff(mml,pw);
+            OutSegaPcmKeyOff(mml, pw);
         }
 
         public override void SetLfoAtKeyOn(partWork pw, MML mml)
@@ -432,12 +462,12 @@ namespace Core
 
                 if (pl.type == eLfoType.Vibrato)
                 {
-                    SetFNum(pw,mml);
+                    SetFNum(pw, mml);
                 }
                 if (pl.type == eLfoType.Tremolo)
                 {
                     pw.beforeVolume = -1;
-                    SetVolume(pw,mml);
+                    SetVolume(pw, mml);
                 }
             }
         }
@@ -460,7 +490,7 @@ namespace Core
             byte adr = (byte)mml.args[0];
             byte dat = (byte)mml.args[1];
 
-            OutSegaPcmPort(mml,pw, adr, dat);
+            OutSegaPcmPort(mml, port0, pw, adr, dat);
         }
 
         public override void CmdPan(partWork pw, MML mml)
@@ -497,7 +527,7 @@ namespace Core
 
             if (type == 'E')
             {
-                n = SetEnvelopParamFromInstrument(pw, n,mml);
+                n = SetEnvelopParamFromInstrument(pw, n, mml);
                 return;
             }
 

@@ -162,18 +162,18 @@ namespace Core
         }
 
 
-        public void OutOPNSetPanAMSPMS(MML mml,partWork pw, int pan, int ams, int pms)
+        public void OutOPNSetPanAMSPMS(MML mml, partWork pw, int pan, int ams, int pms)
         {
             //TODO: 効果音パートで指定されている場合の考慮不足
             int vch = pw.ch;
-            byte port = pw.ch > 2 ? pw.port1 : pw.port0;
+            byte[] port = pw.ch > 2 ? pw.port1 : pw.port0;
             vch = (byte)(vch > 2 ? vch - 3 : vch);
 
             pan = pan & 3;
             ams = ams & 7;
             pms = pms & 3;
 
-            parent.OutData(mml,port, (byte)(0xb4 + vch), (byte)((pan << 6) + (ams << 3) + pms));
+            parent.OutData(mml, port, (byte)(0xb4 + vch), (byte)((pan << 6) + (ams << 3) + pms));
         }
 
         public void OutOPNSetHardLfo(MML mml,partWork pw, bool sw, int lfoNum)
@@ -200,7 +200,7 @@ namespace Core
         public void OutFmSetFeedbackAlgorithm(MML mml,partWork pw, int fb, int alg)
         {
             int vch = pw.ch;
-            byte port = pw.ch > 2 ? pw.port1 : pw.port0;
+            byte[] port = pw.ch > 2 ? pw.port1 : pw.port0;
             vch = (byte)(vch > 2 ? vch - 3 : vch);
 
             fb &= 7;
@@ -212,7 +212,7 @@ namespace Core
         public void OutFmSetDtMl(MML mml, partWork pw, int ope, int dt, int ml)
         {
             int vch = pw.ch;
-            byte port = vch > 2 ? pw.port1 : pw.port0;
+            byte[] port = vch > 2 ? pw.port1 : pw.port0;
             vch = (byte)(vch > 2 ? vch - 3 : vch);
 
             ope = (ope == 1) ? 2 : ((ope == 2) ? 1 : ope);
@@ -224,7 +224,7 @@ namespace Core
 
         public void OutFmSetTl(MML mml,partWork pw, int ope, int tl)
         {
-            byte port = (pw.ch > 2 ? pw.port1 : pw.port0);
+            byte[] port = (pw.ch > 2 ? pw.port1 : pw.port0);
             int vch = (byte)(pw.ch > 2 ? pw.ch - 3 : pw.ch);
 
             ope = (ope == 1) ? 2 : ((ope == 2) ? 1 : ope);
@@ -236,7 +236,7 @@ namespace Core
         public void OutFmSetKsAr(MML mml,partWork pw, int ope, int ks, int ar)
         {
             int vch = pw.ch;
-            byte port = (pw.ch > 2 ? pw.port1 : pw.port0);
+            byte[] port = (pw.ch > 2 ? pw.port1 : pw.port0);
             vch = (byte)(vch > 2 ? vch - 3 : vch);
 
             ope = (ope == 1) ? 2 : ((ope == 2) ? 1 : ope);
@@ -249,7 +249,7 @@ namespace Core
         public void OutFmSetAmDr(MML mml,partWork pw, int ope, int am, int dr)
         {
             int vch = pw.ch;
-            byte port = (pw.ch > 2 ? pw.port1 : pw.port0);
+            byte[] port = (pw.ch > 2 ? pw.port1 : pw.port0);
             vch = (byte)(vch > 2 ? vch - 3 : vch);
 
             ope = (ope == 1) ? 2 : ((ope == 2) ? 1 : ope);
@@ -262,7 +262,7 @@ namespace Core
         public void OutFmSetSr(MML mml,partWork pw, int ope, int sr)
         {
             int vch = pw.ch;
-            byte port = pw.ch > 2 ? pw.port1 : pw.port0;
+            byte[] port = pw.ch > 2 ? pw.port1 : pw.port0;
             vch = (byte)(vch > 2 ? vch - 3 : vch);
 
             ope = (ope == 1) ? 2 : ((ope == 2) ? 1 : ope);
@@ -274,7 +274,7 @@ namespace Core
         public void OutFmSetSlRr(MML mml, partWork pw, int ope, int sl, int rr)
         {
             int vch = pw.ch;
-            byte port = pw.ch > 2 ? pw.port1 : pw.port0;
+            byte[] port = pw.ch > 2 ? pw.port1 : pw.port0;
             vch = (byte)(vch > 2 ? vch - 3 : vch);
 
             ope = (ope == 1) ? 2 : ((ope == 2) ? 1 : ope);
@@ -287,7 +287,7 @@ namespace Core
         public void OutFmSetSSGEG(MML mml,partWork pw, int ope, int n)
         {
             int vch = pw.ch;
-            byte port = pw.ch > 2 ? pw.port1 : pw.port0;
+            byte[] port = pw.ch > 2 ? pw.port1 : pw.port0;
             vch = (byte)(vch > 2 ? vch - 3 : vch);
 
             ope = (ope == 1) ? 2 : ((ope == 2) ? 1 : ope);
@@ -549,13 +549,18 @@ namespace Core
             }
             else
             {
+                byte[] cmd;
+                if (parent.info.format == enmFormat.ZGM)
+                {
+                    if (parent.ChipCommandSize == 2) cmd = new byte[] { 0x34, 0x00 };
+                    else cmd = new byte[] { 0x34 };
+                }
+                else cmd = new byte[] { 0x94 };
+
                 if (parent.info.format == enmFormat.VGM)
                 {
                     //Stop Stream
-                    parent.OutData(mml,
-                        0x94
-                        , (byte)pw.streamID
-                        );
+                    parent.OutData(mml, cmd, (byte)pw.streamID);
                 }
             }
 
@@ -630,7 +635,7 @@ namespace Core
                 {
                     if (pw.pcm) return;
 
-                    byte port = pw.ch > 2 ? pw.port1 : pw.port0;
+                    byte[] port = pw.ch > 2 ? pw.port1 : pw.port0;
                     byte vch = (byte)(pw.ch > 2 ? pw.ch - 3 : pw.ch);
 
                     parent.OutData(mml, port, (byte)(0xa4 + vch), (byte)((pw.freq & 0xff00) >> 8));
@@ -761,9 +766,15 @@ namespace Core
             long p = parent.instPCM[pw.instrument].stAdr;
             if (parent.info.Version == 1.51f)
             {
+                byte[] cmd;
+                if (parent.info.format == enmFormat.ZGM)
+                {
+                    if (parent.ChipCommandSize == 2) cmd = new byte[] { 0x40, 0x00 };
+                    else cmd = new byte[] { 0x40 };
+                }
+                else cmd = new byte[] { 0xe0 };
                 parent.OutData(
-                    mml,
-                    0xe0
+                    mml, cmd
                     , (byte)(p & 0xff)
                     , (byte)((p & 0xff00) / 0x100)
                     , (byte)((p & 0xff0000) / 0x10000)
@@ -786,21 +797,38 @@ namespace Core
                 if (w < 1) w = 1;
                 s = Math.Min(s, (long)(w * parent.info.samplesPerClock * f / 44100.0));
 
+                byte[] cmd;
                 if (!pw.streamSetup)
                 {
                     parent.newStreamID++;
                     pw.streamID = parent.newStreamID;
 
+                    if (parent.info.format == enmFormat.ZGM)
+                    {
+                        if (parent.ChipCommandSize == 2) cmd = new byte[] { 0x30, 0x00 };
+                        else cmd = new byte[] { 0x30 };
+                    }
+                    else cmd = new byte[] { 0x90 };
+
                     parent.OutData(
                         mml,
                         // setup stream control
-                        0x90
+                        cmd
                         , (byte)pw.streamID
                         , (byte)(0x02 + (pw.isSecondary ? 0x80 : 0x00))
                         , 0x00
                         , 0x2a
+                        );
+                    if (parent.info.format == enmFormat.ZGM)
+                    {
+                        if (parent.ChipCommandSize == 2) cmd = new byte[] { 0x31, 0x00 };
+                        else cmd = new byte[] { 0x31 };
+                    }
+                    else cmd = new byte[] { 0x91 };
+                    parent.OutData(
+                        mml
                         // set stream data
-                        , 0x91
+                        , cmd
                         , (byte)pw.streamID
                         , 0x00
                         , 0x01
@@ -812,10 +840,15 @@ namespace Core
 
                 if (pw.streamFreq != f)
                 {
+                    if (parent.info.format == enmFormat.ZGM)
+                    {
+                        if (parent.ChipCommandSize == 2) cmd = new byte[] { 0x32, 0x00 };
+                        else cmd = new byte[] { 0x32 };
+                    }
+                    else cmd = new byte[] { 0x92 };
                     //Set Stream Frequency
                     parent.OutData(
-                        mml,
-                        0x92
+                        mml, cmd
                         , (byte)pw.streamID
                         , (byte)(f & 0xff)
                         , (byte)((f & 0xff00) / 0x100)
@@ -826,10 +859,16 @@ namespace Core
                     pw.streamFreq = f;
                 }
 
+                if (parent.info.format == enmFormat.ZGM)
+                {
+                    if (parent.ChipCommandSize == 2) cmd = new byte[] { 0x33, 0x00 };
+                    else cmd = new byte[] { 0x33 };
+                }
+                else cmd = new byte[] { 0x93 };
                 //Start Stream
                 parent.OutData(
                     mml,
-                    0x93
+                    cmd
                     , (byte)pw.streamID
 
                     , (byte)(p & 0xff)
@@ -1070,7 +1109,7 @@ namespace Core
             else if (pw.Type == enmChannelType.FMOPN) ch = pw.ch;
             else return;
 
-            byte port = (ch > 2 ? pw.port1 : pw.port0);
+            byte[] port = (ch > 2 ? pw.port1 : pw.port0);
             int vch = ch;
             vch = (byte)(vch > 2 ? vch - 3 : vch);
 
@@ -1088,7 +1127,7 @@ namespace Core
             else if (pw.Type == enmChannelType.FMOPN) ch = pw.ch;
             else return;
 
-            byte port = (ch > 2 ? pw.port1 : pw.port0);
+            byte[] port = (ch > 2 ? pw.port1 : pw.port0);
             int vch = ch;
             vch = (byte)(vch > 2 ? vch - 3 : vch);
 

@@ -20,6 +20,7 @@ namespace Core
             IsSecondary = isSecondary;
 
             Frequency = 3579545;
+            port0 = new byte[] { 0xb9 };
 
             Ch = new ClsChannel[ChMax];
             SetPartToCh(Ch, initialPartName);
@@ -34,14 +35,28 @@ namespace Core
             pcmDataInfo[0].totalBufPtr = 0L;
             pcmDataInfo[0].use = false;
 
-            if (!isSecondary)
+            if (parent.info.format == enmFormat.ZGM)
             {
-                pcmDataInfo[0].totalBuf = new byte[7] { 0x67, 0x66, 0x05, 0x00, 0x00, 0x00, 0x00 };
+                if (parent.ChipCommandSize == 2)
+                {
+                    if (!isSecondary) pcmDataInfo[0].totalBuf = new byte[] { 0x07, 0x00, 0x66, 0x05, 0x00, 0x00, 0x00, 0x00 };
+                    else pcmDataInfo[0].totalBuf = new byte[] { 0x07, 0x00, 0x66, 0x05, 0x00, 0x00, 0x00, 0x00 };
+                }
+                else
+                {
+                    if (!isSecondary) pcmDataInfo[0].totalBuf = new byte[] { 0x07, 0x66, 0x05, 0x00, 0x00, 0x00, 0x00 };
+                    else pcmDataInfo[0].totalBuf = new byte[] { 0x07, 0x66, 0x05, 0x00, 0x00, 0x00, 0x00 };
+                }
             }
             else
             {
-                pcmDataInfo[0].totalBuf = new byte[7] { 0x67, 0x66, 0x05, 0x00, 0x00, 0x00, 0x00 };
+                if (!isSecondary) pcmDataInfo[0].totalBuf = new byte[] { 0x67, 0x66, 0x05, 0x00, 0x00, 0x00, 0x00 };
+                else pcmDataInfo[0].totalBuf = new byte[] { 0x67, 0x66, 0x05, 0x00, 0x00, 0x00, 0x00 };
             }
+
+            pcmDataInfo[0].totalHeaderLength = pcmDataInfo[0].totalBuf.Length;
+            pcmDataInfo[0].totalHeadrSizeOfDataPtr = (parent.ChipCommandSize == 2) ? 4 : 3;
+
 
             Envelope = new Function();
             Envelope.Max = 31;
@@ -55,11 +70,11 @@ namespace Core
 
             //MasterVolume(Max volume)
             TotalVolume = 0xff;
-            OutHuC6280Port(null,IsSecondary, 1, 0xff);
+            OutHuC6280Port(null, port0, 1, 0xff);
             //LFO freq 0
-            OutHuC6280Port(null, IsSecondary, 8, 0);
+            OutHuC6280Port(null, port0, 8, 0);
             //LFO ctrl 0
-            OutHuC6280Port(null, IsSecondary, 9, 0);
+            OutHuC6280Port(null, port0, 9, 0);
 
             SupportReversePartWork = true;
 
@@ -67,34 +82,34 @@ namespace Core
             {
                 SetHuC6280CurrentChannel(null, pw);
 
-                pw.port0 = 0xb9;
+                pw.port0 = port0;// 0xb9;
 
                 //freq( 0 )
                 pw.freq = 0;
-                OutHuC6280Port(null, IsSecondary, 2, 0);
-                OutHuC6280Port(null, IsSecondary, 3, 0);
+                OutHuC6280Port(null, port0, 2, 0);
+                OutHuC6280Port(null, port0, 3, 0);
 
                 pw.pcm = false;
 
                 //volume
                 byte data = (byte)(0x80 + (0 & 0x1f));
-                OutHuC6280Port(null, pw.isSecondary, 4, data);
+                OutHuC6280Port(null, port0, 4, data);
 
                 //pan
                 pw.panL = 0;
                 pw.panR = 0;
-                OutHuC6280Port(null, IsSecondary, 5, 0xff);
+                OutHuC6280Port(null, port0, 5, 0xff);
 
                 for (int j = 0; j < 32; j++)
                 {
-                    OutHuC6280Port(null, IsSecondary, 6, 0);
+                    OutHuC6280Port(null, port0, 6, 0);
                 }
 
                 if (pw.ch > 3)
                 {
                     //noise(Ch5,6 only)
                     pw.noise = 0x1f;
-                    OutHuC6280Port(null, IsSecondary, 7, 0x1f);
+                    OutHuC6280Port(null, port0, 7, 0x1f);
                 }
             }
         }
@@ -105,10 +120,12 @@ namespace Core
             pw.volume = pw.MaxVolume;
             pw.mixer = 0;
             pw.noise = 0;
+            pw.port0 = port0;
+            pw.port1 = port1;
         }
 
 
-        public override void StorePcm(Dictionary<int, clsPcm> newDic, KeyValuePair<int, clsPcm> v, byte[] buf,bool is16bit,int samplerate, params object[] option)
+        public override void StorePcm(Dictionary<int, clsPcm> newDic, KeyValuePair<int, clsPcm> v, byte[] buf, bool is16bit, int samplerate, params object[] option)
         {
             clsPcmDataInfo pi = pcmDataInfo[0];
 
@@ -154,13 +171,17 @@ namespace Core
                 pi.totalBuf = newBuf;
 
                 pi.use = true;
-                Common.SetUInt32bit31(pi.totalBuf, 3, (UInt32)(pi.totalBuf.Length - 7), IsSecondary);
+                Common.SetUInt32bit31(
+                    pi.totalBuf
+                    , pi.totalHeadrSizeOfDataPtr
+                    , (UInt32)(pi.totalBuf.Length - (pi.totalHeadrSizeOfDataPtr + 4))
+                    , IsSecondary);
                 pcmDataEasy = pi.use ? pi.totalBuf : null;
 
             }
             catch
             {
-                pi.use= false;
+                pi.use = false;
                 return;
             }
 
@@ -199,18 +220,18 @@ namespace Core
             return (int)(Frequency / 32.0f / 261.62f / (Const.pcmMTbl[n] * (float)Math.Pow(2, (o - 4))));
         }
 
-        public void SetHuC6280Envelope(MML mml,partWork pw, int volume)
+        public void SetHuC6280Envelope(MML mml, partWork pw, int volume)
         {
             if (pw.huc6280Envelope != volume)
             {
-                SetHuC6280CurrentChannel(mml,pw);
+                SetHuC6280CurrentChannel(mml, pw);
                 byte data = (byte)(0x80 + (volume & 0x1f));
-                OutHuC6280Port(mml,pw.isSecondary, 4, data);
+                OutHuC6280Port(mml, port0, 4, data);
                 pw.huc6280Envelope = volume;
             }
         }
 
-        public void SetHuC6280CurrentChannel(MML mml,partWork pw)
+        public void SetHuC6280CurrentChannel(MML mml, partWork pw)
         {
             byte pch = (byte)pw.ch;
             bool isSecondary = pw.isSecondary;
@@ -218,29 +239,29 @@ namespace Core
             if (CurrentChannel != pch)
             {
                 byte data = (byte)(pch & 0x7);
-                OutHuC6280Port(mml,isSecondary, 0x0, data);
+                OutHuC6280Port(mml, port0, 0x0, data);
                 CurrentChannel = pch;
             }
         }
 
-        public void SetHuC6280Pan(MML mml,partWork pw, int pan)
+        public void SetHuC6280Pan(MML mml, partWork pw, int pan)
         {
             if (pw.huc6280Pan != pan)
             {
-                SetHuC6280CurrentChannel(mml,pw);
+                SetHuC6280CurrentChannel(mml, pw);
                 byte data = (byte)(pan & 0xff);
-                OutHuC6280Port(mml,pw.isSecondary, 0x5, data);
+                OutHuC6280Port(mml, port0, 0x5, data);
                 pw.huc6280Pan = pan;
             }
         }
 
-        public void OutHuC6280Port(MML mml,bool isSecondary, byte adr, byte data)
+        public void OutHuC6280Port(MML mml, byte[] cmd, byte adr, byte data)
         {
             parent.OutData(
                 mml,
-                0xb9
-                , (byte)((isSecondary ? 0x80 : 0x00) + adr)
-                ,data);
+                cmd
+                , (byte)((IsSecondary ? 0x80 : 0x00) + adr)
+                , data);
         }
 
         public void OutHuC6280SetInstrument(partWork pw, MML mml, int n)
@@ -253,16 +274,16 @@ namespace Core
             }
 
             SetHuC6280CurrentChannel(mml, pw);
-            OutHuC6280Port(mml, pw.isSecondary, 4, (byte)(0x40 + pw.volume)); //WaveIndexReset(=0x40)
+            OutHuC6280Port(mml, port0, 4, (byte)(0x40 + pw.volume)); //WaveIndexReset(=0x40)
 
             for (int i = 1; i < parent.instWF[n].Length; i++) // 0 は音色番号が入っている為1からスタート
             {
-                OutHuC6280Port(mml, pw.isSecondary, 6, (byte)(parent.instWF[n][i] & 0x1f));
+                OutHuC6280Port(mml, port0, 6, (byte)(parent.instWF[n][i] & 0x1f));
             }
 
         }
 
-        public void OutHuC6280KeyOn(MML mml,partWork pw)
+        public void OutHuC6280KeyOn(MML mml, partWork pw)
         {
             int vol = pw.volume;
             if (pw.envelopeMode)
@@ -279,9 +300,9 @@ namespace Core
 
             if (!pw.pcm)
             {
-                SetHuC6280CurrentChannel(mml,pw);
-                OutHuC6280Port(mml,pw.isSecondary, 0x4, data);
-                OutHuC6280Port(mml,pw.isSecondary, 0x5, (byte)pw.huc6280Pan);
+                SetHuC6280CurrentChannel(mml, pw);
+                OutHuC6280Port(mml, port0, 0x4, data);
+                OutHuC6280Port(mml, port0, 0x5, (byte)pw.huc6280Pan);
                 return;
             }
 
@@ -290,10 +311,10 @@ namespace Core
                 return;
             }
 
-            SetHuC6280CurrentChannel(mml,pw);
+            SetHuC6280CurrentChannel(mml, pw);
             data |= 0x40;
-            OutHuC6280Port(mml,pw.isSecondary, 0x4, data);
-            OutHuC6280Port(mml,pw.isSecondary, 0x5, (byte)pw.huc6280Pan);
+            OutHuC6280Port(mml, port0, 0x4, data);
+            OutHuC6280Port(mml, port0, 0x5, (byte)pw.huc6280Pan);
 
             if (pw.isPcmMap)
             {
@@ -337,19 +358,26 @@ namespace Core
             if (w < 1) w = 1;
             s = Math.Min(s, (long)(w * parent.info.samplesPerClock * f / 44100.0));
 
+            byte[] cmd;
             if (!pw.streamSetup)
             {
                 parent.newStreamID++;
                 pw.streamID = parent.newStreamID;
+                if (parent.info.format == enmFormat.ZGM)
+                {
+                    if (parent.ChipCommandSize == 2) cmd = new byte[] { 0x30, 0x00 };
+                    else cmd = new byte[] { 0x30 };
+                }
+                else cmd = new byte[] { 0x90 };
                 parent.OutData(
                     mml,
                     // setup stream control
-                    0x90
+                    cmd
                     , (byte)pw.streamID
                     , (byte)(0x1b + (pw.isSecondary ? 0x80 : 0x00)) //0x1b HuC6280
                     , (byte)pw.ch
                     , (byte)(0x00 + 0x06)// 0x00 Select Channel 
-                    // set stream data
+                                         // set stream data
                     , 0x91
                     , (byte)pw.streamID
                     , 0x05 // Data BankID(0x05 HuC6280)
@@ -362,38 +390,50 @@ namespace Core
 
             if (pw.streamFreq != f)
             {
+                if (parent.info.format == enmFormat.ZGM)
+                {
+                    if (parent.ChipCommandSize == 2) cmd = new byte[] { 0x32, 0x00 };
+                    else cmd = new byte[] { 0x32 };
+                }
+                else cmd = new byte[] { 0x92 };
                 //Set Stream Frequency
                 parent.OutData(
                     mml,
-                    0x92
-                    ,(byte)pw.streamID
+                    cmd
+                    , (byte)pw.streamID
 
-                    ,(byte)(f & 0xff)
-                    ,(byte)((f & 0xff00) / 0x100)
-                    ,(byte)((f & 0xff0000) / 0x10000)
-                    ,(byte)((f & 0xff000000) / 0x10000)
+                    , (byte)(f & 0xff)
+                    , (byte)((f & 0xff00) / 0x100)
+                    , (byte)((f & 0xff0000) / 0x10000)
+                    , (byte)((f & 0xff000000) / 0x10000)
                     );
 
                 pw.streamFreq = f;
             }
 
+            if (parent.info.format == enmFormat.ZGM)
+            {
+                if (parent.ChipCommandSize == 2) cmd = new byte[] { 0x33, 0x00 };
+                else cmd = new byte[] { 0x33 };
+            }
+            else cmd = new byte[] { 0x93 };
             //Start Stream
             parent.OutData(
                 mml,
-                0x93
-                ,(byte)pw.streamID
+                cmd
+                , (byte)pw.streamID
 
-                ,(byte)(p & 0xff)
-                ,(byte)((p & 0xff00) / 0x100)
-                ,(byte)((p & 0xff0000) / 0x10000)
-                ,(byte)((p & 0xff000000) / 0x10000)
+                , (byte)(p & 0xff)
+                , (byte)((p & 0xff00) / 0x100)
+                , (byte)((p & 0xff0000) / 0x10000)
+                , (byte)((p & 0xff000000) / 0x10000)
 
-                ,0x01
+                , 0x01
 
-                ,(byte)(s & 0xff)
-                ,(byte)((s & 0xff00) / 0x100)
-                ,(byte)((s & 0xff0000) / 0x10000)
-                ,(byte)((s & 0xff000000) / 0x10000)
+                , (byte)(s & 0xff)
+                , (byte)((s & 0xff00) / 0x100)
+                , (byte)((s & 0xff0000) / 0x10000)
+                , (byte)((s & 0xff000000) / 0x10000)
                 );
 
             if (parent.instPCM[pw.instrument].status != enmPCMSTATUS.ERROR)
@@ -403,11 +443,11 @@ namespace Core
 
         }
 
-        public void OutHuC6280KeyOff(MML mml,partWork pw)
+        public void OutHuC6280KeyOff(MML mml, partWork pw)
         {
-            SetHuC6280CurrentChannel(mml,pw);
+            SetHuC6280CurrentChannel(mml, pw);
 
-            OutHuC6280Port(mml,pw.isSecondary, 0x4, 0x80);
+            OutHuC6280Port(mml, port0, 0x4, 0x80);
             //OutHuC6280Port(pw.isSecondary, 0x5, 0);
         }
 
@@ -437,9 +477,9 @@ namespace Core
 
             if (pw.freq == f) return;
 
-            SetHuC6280CurrentChannel(mml,pw);
-            if ((pw.freq & 0x0ff) != (f & 0x0ff)) OutHuC6280Port(mml,pw.isSecondary, 2, (byte)(f & 0xff));
-            if ((pw.freq & 0xf00) != (f & 0xf00)) OutHuC6280Port(mml,pw.isSecondary, 3, (byte)((f & 0xf00) >> 8));
+            SetHuC6280CurrentChannel(mml, pw);
+            if ((pw.freq & 0x0ff) != (f & 0x0ff)) OutHuC6280Port(mml, port0, 2, (byte)(f & 0xff));
+            if ((pw.freq & 0xf00) != (f & 0xf00)) OutHuC6280Port(mml, port0, 3, (byte)((f & 0xf00) >> 8));
             //OutHuC6280Port(pw.isSecondary, 2, (byte)(f & 0xff));
             //OutHuC6280Port(pw.isSecondary, 3, (byte)((f & 0xf00) >> 8));
 
@@ -449,13 +489,13 @@ namespace Core
 
         public override void SetKeyOn(partWork pw, MML mml)
         {
-            OutHuC6280KeyOn(mml,pw);
+            OutHuC6280KeyOn(mml, pw);
             pw.keyOn = true;
         }
 
         public override void SetKeyOff(partWork pw, MML mml)
         {
-            OutHuC6280KeyOff(mml,pw);
+            OutHuC6280KeyOff(mml, pw);
             pw.keyOn = false;
         }
 
@@ -472,7 +512,7 @@ namespace Core
             else
             {
                 //if (pw.keyOn)//ストリーム処理のbug?
-                    vol = pw.volume;
+                vol = pw.volume;
             }
 
             if (pw.envelopeMode)
@@ -500,7 +540,7 @@ namespace Core
             vol = Common.CheckRange(vol, 0, 31);
             if (pw.beforeVolume != vol)
             {
-                SetHuC6280Envelope(mml,pw, vol);
+                SetHuC6280Envelope(mml, pw, vol);
                 pw.beforeVolume = vol;
             }
         }
@@ -521,12 +561,12 @@ namespace Core
 
                 if (pl.type == eLfoType.Vibrato)
                 {
-                    SetFNum(pw,mml);
+                    SetFNum(pw, mml);
                 }
                 if (pl.type == eLfoType.Tremolo)
                 {
                     pw.beforeVolume = -1;
-                    SetVolume(pw,mml);
+                    SetVolume(pw, mml);
                 }
             }
         }
@@ -544,8 +584,8 @@ namespace Core
             if (pw.noise != n)
             {
                 pw.noise = n;
-                SetHuC6280CurrentChannel(mml,pw);
-                OutHuC6280Port(mml,pw.isSecondary, 7, (byte)((pw.mixer != 0 ? 0x80 : 0x00) + (pw.noise & 0x1f)));
+                SetHuC6280CurrentChannel(mml, pw);
+                OutHuC6280Port(mml, port0, 7, (byte)((pw.mixer != 0 ? 0x80 : 0x00) + (pw.noise & 0x1f)));
             }
         }
 
@@ -584,16 +624,16 @@ namespace Core
             {
                 if (n == 0)
                 {
-                    OutHuC6280Port(mml,pw.isSecondary, 9, 0); //disable
+                    OutHuC6280Port(mml, port0, 9, 0); //disable
                 }
                 else
                 {
-                    OutHuC6280Port(mml,pw.isSecondary, 9, (byte)pw.lfo[c].param[0]);
-                    OutHuC6280Port(mml,pw.isSecondary, 8, (byte)pw.lfo[c].param[1]);
-                    OutHuC6280Port(mml,pw.isSecondary, 0, 1);//CurrentChannel 2
+                    OutHuC6280Port(mml, port0, 9, (byte)pw.lfo[c].param[0]);
+                    OutHuC6280Port(mml, port0, 8, (byte)pw.lfo[c].param[1]);
+                    OutHuC6280Port(mml, port0, 0, 1);//CurrentChannel 2
                     CurrentChannel = 1;
-                    OutHuC6280Port(mml,pw.isSecondary, 2, (byte)(pw.lfo[c].param[2] & 0xff));
-                    OutHuC6280Port(mml,pw.isSecondary, 3, (byte)((pw.lfo[c].param[2] & 0xf00) >> 8));
+                    OutHuC6280Port(mml, port0, 2, (byte)(pw.lfo[c].param[2] & 0xff));
+                    OutHuC6280Port(mml, port0, 3, (byte)((pw.lfo[c].param[2] & 0xf00) >> 8));
                     lstPartWork[1].freq = pw.lfo[c].param[2];
                 }
             }
@@ -609,7 +649,7 @@ namespace Core
 
             OutHuC6280Port(
                 mml,
-                pw.isSecondary
+                port0
                 , 1
                 , (byte)TotalVolume
                 );
@@ -624,7 +664,7 @@ namespace Core
             r = Common.CheckRange(r, 0, 15);
             pw.pan.val = (l << 4) | r;
             //SetHuC6280CurrentChannel(pw);
-            SetHuC6280Pan(mml,pw, (int)pw.pan.val);
+            SetHuC6280Pan(mml, pw, (int)pw.pan.val);
         }
 
         public override void CmdMode(partWork pw, MML mml)
@@ -650,7 +690,7 @@ namespace Core
             byte adr = (byte)mml.args[0];
             byte dat = (byte)mml.args[1];
 
-            OutHuC6280Port(mml,pw.isSecondary, adr, dat);
+            OutHuC6280Port(mml, port0, adr, dat);
         }
 
         public override void CmdLoopExtProc(partWork p, MML mml)
@@ -690,7 +730,7 @@ namespace Core
 
             if (type == 'E')
             {
-                n = SetEnvelopParamFromInstrument(pw, n,mml);
+                n = SetEnvelopParamFromInstrument(pw, n, mml);
                 return;
             }
 
@@ -700,7 +740,7 @@ namespace Core
                 if (pw.instrument != n)
                 {
                     pw.instrument = n;
-                    ((HuC6280)pw.chip).OutHuC6280SetInstrument(pw,mml, n);
+                    ((HuC6280)pw.chip).OutHuC6280SetInstrument(pw, mml, n);
                 }
                 return;
             }
@@ -709,7 +749,7 @@ namespace Core
 
             if (!parent.instPCM.ContainsKey(n))
             {
-                msgBox.setErrMsg(string.Format(msg.get("E12005"), n),mml.line.Lp);
+                msgBox.setErrMsg(string.Format(msg.get("E12005"), n), mml.line.Lp);
                 return;
             }
 
@@ -730,8 +770,8 @@ namespace Core
             if (pw.mixer != n)
             {
                 pw.mixer = n;
-                SetHuC6280CurrentChannel(mml,pw);
-                OutHuC6280Port(mml,pw.isSecondary, 7, (byte)((pw.mixer != 0 ? 0x80 : 0x00) + (pw.noise & 0x1f)));
+                SetHuC6280CurrentChannel(mml, pw);
+                OutHuC6280Port(mml, port0, 7, (byte)((pw.mixer != 0 ? 0x80 : 0x00) + (pw.noise & 0x1f)));
             }
         }
 

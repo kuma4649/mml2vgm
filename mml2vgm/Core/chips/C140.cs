@@ -23,6 +23,7 @@ namespace Core
             IsSecondary = isSecondary;
 
             Frequency = 8000000;
+            port0 = new byte[] { 0xd4 };
             Interface = 0x0;//System2
 
             dataType = 0x8d;
@@ -39,12 +40,18 @@ namespace Core
             pcmDataInfo = new clsPcmDataInfo[] { new clsPcmDataInfo() };
             pcmDataInfo[0].totalBufPtr = 0L;
             pcmDataInfo[0].use = false;
-            pcmDataInfo[0].totalBuf = new byte[15] {
-                0x67, 0x66, 0x8D
-                , 0x00, 0x00, 0x00, 0x00 //size of data
-                , 0x00, 0x00, 0x00, 0x00 //size of the entire ROM
-                , 0x00, 0x00, 0x00, 0x00 //start address of data
-            };
+            if (parent.info.format == enmFormat.ZGM)
+            {
+                if (parent.ChipCommandSize == 2)
+                    pcmDataInfo[0].totalBuf = new byte[] { 0x07, 0x00, 0x66, 0x8D, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+                else
+                    pcmDataInfo[0].totalBuf = new byte[] { 0x07, 0x66, 0x8D, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+            }
+            else
+                pcmDataInfo[0].totalBuf = new byte[] { 0x67, 0x66, 0x8D, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+
+            pcmDataInfo[0].totalHeaderLength = pcmDataInfo[0].totalBuf.Length;
+            pcmDataInfo[0].totalHeadrSizeOfDataPtr = (parent.ChipCommandSize == 2) ? 4 : 3;
 
             Envelope = new Function();
             Envelope.Max = 255;
@@ -58,7 +65,7 @@ namespace Core
         {
             pw.MaxVolume = 255;
             pw.volume = pw.MaxVolume;
-            pw.port0 = 0xd4;
+            pw.port0 = port0;
         }
 
         public override void InitChip()
@@ -148,16 +155,14 @@ namespace Core
                 } while (true);
 
                 //パディング(空きが足りない場合はバンクをひとつ進める(0x10000)為、空きを全て埋める)
-                while (freeAdr > pi.totalBuf.Length - 15)
+                while (freeAdr > pi.totalBuf.Length - pi.totalHeaderLength)
                 {
-                    int fs = (pi.totalBuf.Length - 15) % 0x10000;
-                    //if (size > 0x10000 - fs)
-                    //{
+                    int fs = (pi.totalBuf.Length - pi.totalHeaderLength) % 0x10000;
+
                     List<byte> n = pi.totalBuf.ToList();
                     for (int i = 0; i < 0x10000 - fs; i++) n.Add(0x80);
                     pi.totalBuf = n.ToArray();
                     pi.totalBufPtr += 0x10000 - fs;
-                    //}
                 }
 
                 newDic.Add(
@@ -202,8 +207,17 @@ namespace Core
                     Array.Copy(buf, 0, pi.totalBuf, freeAdr, buf.Length);
                 }
 
-                Common.SetUInt32bit31(pi.totalBuf, 3, (UInt32)(pi.totalBuf.Length - 7), IsSecondary);
-                Common.SetUInt32bit31(pi.totalBuf, 7, (UInt32)(pi.totalBuf.Length - 0xf));
+                Common.SetUInt32bit31(
+                    pi.totalBuf
+                    , pi.totalHeadrSizeOfDataPtr
+                    , (UInt32)(pi.totalBuf.Length - (pi.totalHeadrSizeOfDataPtr + 4))
+                    , IsSecondary
+                    );//size of data ( totalHeadrSizeOfDataPtr:サイズ値を設定する位置 4:サイズ値の大きさ(4byte32bit) )
+                Common.SetUInt32bit31(
+                    pi.totalBuf
+                    , pi.totalHeadrSizeOfDataPtr + 4
+                    , (UInt32)(pi.totalBuf.Length - (pi.totalHeadrSizeOfDataPtr + 4 + 4 + 4))
+                    );//size of the entire ROM
                 pi.use = true;
                 pcmDataEasy = pi.use ? pi.totalBuf : null;
             }

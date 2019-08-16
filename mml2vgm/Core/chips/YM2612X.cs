@@ -21,6 +21,8 @@ namespace Core
             IsSecondary = isSecondary;
 
             Frequency = 7670454;
+            port0 = new byte[] { (byte)(isSecondary ? 0xa2 : 0x52) };
+            port1 = new byte[] { (byte)(isSecondary ? 0xa3 : 0x53) };
 
             Dictionary<string, List<double>> dic = MakeFNumTbl();
             if (dic != null)
@@ -63,8 +65,8 @@ namespace Core
             pw.slots = (byte)((pw.Type == enmChannelType.FMOPN || pw.ch == 2 || pw.ch == 5) ? 0xf : 0x0);
             pw.volume = 127;
             pw.MaxVolume = 127;
-            pw.port0 = (byte)(pw.isSecondary ? 0xa2 : 0x52);
-            pw.port1 = (byte)(pw.isSecondary ? 0xa3 : 0x53);
+            pw.port0 = port0;
+            pw.port1 = port1;
             pw.pcm = pw.ch > 9;
         }
 
@@ -107,9 +109,15 @@ namespace Core
             int ch = Math.Max(0, pw.ch - 8);
             int priority = 0;
 
+            byte[] cmd;
+            if (parent.info.format == enmFormat.ZGM)
+                cmd = new byte[] { 0x54, 0x00 };
+            else
+                cmd = new byte[] { 0x54 };
+
             parent.OutData(
                 mml,
-                0x54 // original vgm command : YM2151
+                cmd // original vgm command : YM2151
                 , (byte)(0x50 + ((priority & 0x3) << 2) + (ch & 0x3))
                 , (byte)id
                 );
@@ -134,9 +142,15 @@ namespace Core
             int ch = Math.Max(0, pw.ch - 8);
             int priority = 0;
 
+            byte[] cmd;
+            if (parent.info.format == enmFormat.ZGM)
+                cmd = new byte[] { 0x54, 0x00 };
+            else
+                cmd = new byte[] { 0x54 };
+
             parent.OutData(
                 mml,
-                0x54 // original vgm command : YM2151
+                cmd // original vgm command : YM2151
                 , (byte)(0x50 + ((priority & 0x3) << 2) + (ch & 0x3))
                 , (byte)id
                 );

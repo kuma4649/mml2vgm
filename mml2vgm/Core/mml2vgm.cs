@@ -153,37 +153,64 @@ namespace Core
                     return -1;
                 }
 
-                switch (desVGM.info.format)
+                if (desVGM.info.format != enmFormat.ZGM)
                 {
-                    case enmFormat.VGM:
-                        Disp(msg.get("I04006"));
-                        desBuf = desVGM.Vgm_getByteData(mmlAnalyze.mmlData);
-                        Disp(msg.get("I04007"));
-                        break;
-                    case enmFormat.XGM:
-                        Disp(msg.get("I04008"));
-                        desBuf = desVGM.Xgm_getByteData(mmlAnalyze.mmlData);
-                        Disp(msg.get("I04009"));
-                        break;
-                    default:
-                        break;
-                }
+                    switch (desVGM.info.format)
+                    {
+                        case enmFormat.VGM:
+                            Disp(msg.get("I04006"));
+                            desBuf = desVGM.Vgm_getByteData(mmlAnalyze.mmlData);
+                            Disp(msg.get("I04007"));
+                            break;
+                        case enmFormat.XGM:
+                            Disp(msg.get("I04008"));
+                            desBuf = desVGM.Xgm_getByteData(mmlAnalyze.mmlData);
+                            Disp(msg.get("I04009"));
+                            break;
+                        default:
+                            break;
+                    }
 
-                if (desBuf == null)
-                {
-                    msgBox.setErrMsg(string.Format(
-                        msg.get("E04004")
-                        , desVGM.linePos.row), desVGM.linePos);
-                    return -1;
-                }
+                    if (desBuf == null)
+                    {
+                        msgBox.setErrMsg(string.Format(
+                            msg.get("E04004")
+                            , desVGM.linePos.row), desVGM.linePos);
+                        return -1;
+                    }
 
-                if (outVgmFile && writeFileMode)
+                    if (outVgmFile && writeFileMode)
+                    {
+                        Disp(msg.get("I04021"));
+                        if (desVGM.info.format == enmFormat.VGM)
+                            OutVgmFile(desBuf);
+                        else
+                            OutXgmFile(desBuf);
+                    }
+
+                }
+                else
                 {
-                    Disp(msg.get("I04021"));
-                    if (desVGM.info.format == enmFormat.VGM)
-                        OutVgmFile(desBuf);
-                    else
-                        OutXgmFile(desBuf);
+
+                    Disp(msg.get("I04023"));
+                    ZGMmaker zmake = new ZGMmaker();
+                    desBuf = zmake.Build(desVGM);
+                    Disp(msg.get("I04024"));
+
+                    if (desBuf == null)
+                    {
+                        msgBox.setErrMsg(string.Format(
+                            msg.get("E04004")
+                            , desVGM.linePos.row), desVGM.linePos);
+                        return -1;
+                    }
+
+                    if (outVgmFile && writeFileMode)
+                    {
+                        Disp(msg.get("I04025"));
+                        zmake.OutFile(desBuf, desFn);
+                    }
+
                 }
 
                 if (outTraceInfoFile && writeFileMode)
@@ -196,7 +223,7 @@ namespace Core
 
                 FileInformation.loopCounter = desVGM.loopClock;
                 FileInformation.totalCounter = desVGM.lClock;
-                FileInformation.format =desVGM.info.format;
+                FileInformation.format = desVGM.info.format;
 
                 return 0;
             }

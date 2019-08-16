@@ -419,6 +419,12 @@ namespace Core
             desBuf[(int)adr + 3].val = (byte)(val >> 24);
         }
 
+        public static void SetLE16(List<outDatum> desBuf, uint adr, ushort val)
+        {
+            desBuf[(int)adr].val = (byte)val;
+            desBuf[(int)adr + 1].val = (byte)(val >> 8);
+        }
+
         public static bool CheckDummyCommand(enmMMLType typ)
         {
             if (typ == enmMMLType.Rest

@@ -48,6 +48,8 @@ namespace Core
             IsSecondary = isSecondary;
             dataType = 0x81;
             Frequency = 7987200;
+            port0 = new byte[] { (byte)(isSecondary ? 0xa6 : 0x56) };
+            port1 = new byte[] { (byte)(isSecondary ? 0xa7 : 0x57) };
 
             Dictionary<string, List<double>> dic = MakeFNumTbl();
             if (dic != null)
@@ -97,14 +99,33 @@ namespace Core
             pcmDataInfo = new clsPcmDataInfo[] { new clsPcmDataInfo()};
             pcmDataInfo[0].totalBufPtr = 0L;
             pcmDataInfo[0].use = false;
-            if (!isSecondary)
+            if (parent.info.format == enmFormat.ZGM)
             {
-                pcmDataInfo[0].totalBuf = new byte[15] { 0x67, 0x66, 0x81, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+                if (parent.ChipCommandSize == 2)
+                {
+                    if (!isSecondary)
+                        pcmDataInfo[0].totalBuf = new byte[] { 0x07,0x00, 0x66, 0x81, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+                    else
+                        pcmDataInfo[0].totalBuf = new byte[] { 0x07,0x00, 0x66, 0x81, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+                }
+                else
+                {
+                    if (!isSecondary)
+                        pcmDataInfo[0].totalBuf = new byte[] { 0x07, 0x66, 0x81, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+                    else
+                        pcmDataInfo[0].totalBuf = new byte[] { 0x07, 0x66, 0x81, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+                }
             }
             else
             {
-                pcmDataInfo[0].totalBuf = new byte[15] { 0x67, 0x66, 0x81, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+                if (!isSecondary)
+                    pcmDataInfo[0].totalBuf = new byte[] { 0x67, 0x66, 0x81, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+                else
+                    pcmDataInfo[0].totalBuf = new byte[] { 0x67, 0x66, 0x81, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
             }
+
+            pcmDataInfo[0].totalHeaderLength = pcmDataInfo[0].totalBuf.Length;
+            pcmDataInfo[0].totalHeadrSizeOfDataPtr = (parent.ChipCommandSize == 2) ? 4 : 3;
 
             Envelope = new Function();
             Envelope.Max = 255;
@@ -131,14 +152,14 @@ namespace Core
             }
 
             //Use OPNA mode
-            parent.OutData((MML)null, lstPartWork[0].port0, 0x29, 0x82);
-            parent.OutData((MML)null, lstPartWork[0].port1, 0x29, 0x82);
+            parent.OutData((MML)null, port0, 0x29, 0x82);
+            parent.OutData((MML)null, port1, 0x29, 0x82);
             //ADPCM Reset
-            parent.OutData((MML)null, lstPartWork[0].port1, 0x10, 0x17);
-            parent.OutData((MML)null, lstPartWork[0].port1, 0x10, 0x80);
-            parent.OutData((MML)null, lstPartWork[0].port1, 0x00, 0x80);
-            parent.OutData((MML)null, lstPartWork[0].port1, 0x01, 0xc0);
-            parent.OutData((MML)null, lstPartWork[0].port1, 0x00, 0x01);
+            parent.OutData((MML)null, port1, 0x10, 0x17);
+            parent.OutData((MML)null, port1, 0x10, 0x80);
+            parent.OutData((MML)null, port1, 0x00, 0x80);
+            parent.OutData((MML)null, port1, 0x01, 0xc0);
+            parent.OutData((MML)null, port1, 0x00, 0x01);
 
             foreach (partWork pw in lstPartWork)
             {
@@ -187,8 +208,9 @@ namespace Core
                 pw.MaxVolume = 255;
                 pw.volume = pw.MaxVolume;
             }
-            pw.port0 = (byte)(0x6 | (pw.isSecondary ? 0xa0 : 0x50));
-            pw.port1 = (byte)(0x7 | (pw.isSecondary ? 0xa0 : 0x50));
+
+            pw.port0 = port0;
+            pw.port1 = port1;
         }
 
 
@@ -196,15 +218,15 @@ namespace Core
         {
             if (pw.pcmStartAddress != startAdr)
             {
-                parent.OutData(mml, pw.port1, 0x02, (byte)((startAdr >> 2) & 0xff));
-                parent.OutData(mml, pw.port1, 0x03, (byte)((startAdr >> 10) & 0xff));
+                parent.OutData(mml, port1, 0x02, (byte)((startAdr >> 2) & 0xff));
+                parent.OutData(mml, port1, 0x03, (byte)((startAdr >> 10) & 0xff));
                 pw.pcmStartAddress = startAdr;
             }
 
             if (pw.pcmEndAddress != endAdr)
             {
-                parent.OutData(mml, pw.port1, 0x04, (byte)(((endAdr - 0x04) >> 2) & 0xff));
-                parent.OutData(mml, pw.port1, 0x05, (byte)(((endAdr - 0x04) >> 10) & 0xff));
+                parent.OutData(mml, port1, 0x04, (byte)(((endAdr - 0x04) >> 2) & 0xff));
+                parent.OutData(mml, port1, 0x05, (byte)(((endAdr - 0x04) >> 10) & 0xff));
                 pw.pcmEndAddress = endAdr;
             }
 
@@ -239,10 +261,10 @@ namespace Core
             byte data = 0;
 
             data = (byte)(f & 0xff);
-            parent.OutData(mml,pw.port1, 0x09, data);
+            parent.OutData(mml,port1, 0x09, data);
 
             data = (byte)((f & 0xff00) >> 8);
-            parent.OutData(mml,pw.port1, 0x0a, data);
+            parent.OutData(mml,port1, 0x0a, data);
         }
 
         public void SetAdpcmVolume(MML mml,partWork pw)
@@ -261,7 +283,7 @@ namespace Core
 
             if (pw.beforeVolume != vol)
             {
-                parent.OutData(mml,pw.port1, 0x0b, (byte)vol);
+                parent.OutData(mml,port1, 0x0b, (byte)vol);
                 pw.beforeVolume = pw.volume;
             }
         }
@@ -270,7 +292,7 @@ namespace Core
         {
             if (pw.pan.val != pan)
             {
-                parent.OutData(mml,pw.port1, 0x01, (byte)((pan & 0x3) << 6));
+                parent.OutData(mml,port1, 0x01, (byte)((pan & 0x3) << 6));
                 pw.pan.val = pan;
             }
         }
@@ -300,14 +322,14 @@ namespace Core
         {
 
             SetAdpcmVolume(mml,pw);
-            parent.OutData(mml,pw.port1, 0x00, 0xa0);
+            parent.OutData(mml,port1, 0x00, 0xa0);
 
         }
 
         public void OutAdpcmKeyOff(MML mml,partWork pw)
         {
 
-            parent.OutData(mml,pw.port1, 0x00, 0x01);
+            parent.OutData(mml,port1, 0x00, 0x01);
 
         }
 
@@ -461,8 +483,17 @@ namespace Core
 
                 pi.totalBuf = newBuf;
                 pi.use = true;
-                Common.SetUInt32bit31(pi.totalBuf, 3, (UInt32)(pi.totalBuf.Length - 7), IsSecondary);
-                Common.SetUInt32bit31(pi.totalBuf, 7, (UInt32)(pi.totalBuf.Length - 7));
+                Common.SetUInt32bit31(
+                    pi.totalBuf
+                    , pi.totalHeadrSizeOfDataPtr
+                    , (UInt32)(pi.totalBuf.Length - (pi.totalHeadrSizeOfDataPtr + 4))
+                    , IsSecondary
+                    );
+                Common.SetUInt32bit31(
+                    pi.totalBuf
+                    , pi.totalHeadrSizeOfDataPtr + 4
+                    , (UInt32)(pi.totalBuf.Length - (pi.totalHeadrSizeOfDataPtr + 4 + 4 + 4))
+                    );
                 pcmDataEasy = pi.use ? pi.totalBuf : null;
 
             }
@@ -498,13 +529,13 @@ namespace Core
             byte dat = (byte)mml.args[1];
 
             if (pw.Type == enmChannelType.FMOPN || pw.Type == enmChannelType.FMOPNex)
-                parent.OutData(mml, (pw.ch > 2 && pw.ch < 6) ? pw.port1 : pw.port0, adr, dat);
+                parent.OutData(mml, (pw.ch > 2 && pw.ch < 6) ? port1 : port0, adr, dat);
             else if (pw.Type == enmChannelType.SSG)
-                parent.OutData(mml, pw.port0, adr, dat);
+                parent.OutData(mml, port0, adr, dat);
             else if (pw.Type == enmChannelType.RHYTHM)
-                parent.OutData(mml, pw.port0, adr, dat);
+                parent.OutData(mml, port0, adr, dat);
             else if (pw.Type == enmChannelType.ADPCM)
-                parent.OutData(mml, pw.port1, adr, dat);
+                parent.OutData(mml, port1, adr, dat);
         }
 
         public override void CmdMPMS(partWork pw, MML mml)
@@ -697,7 +728,7 @@ namespace Core
                     //Rhythm Volume処理
                     if (pw.beforeVolume != pw.volume || !pw.pan.eq())
                     {
-                        parent.OutData(mml,pw.port0, (byte)(0x18 + (pw.ch - 12)), (byte)((byte)((pw.pan.val & 0x3) << 6) | (byte)(pw.volume & 0x1f)));
+                        parent.OutData(mml,port0, (byte)(0x18 + (pw.ch - 12)), (byte)((byte)((pw.pan.val & 0x3) << 6) | (byte)(pw.volume & 0x1f)));
                         pw.beforeVolume = pw.volume;
                         pw.pan.rst();
                     }
@@ -713,14 +744,14 @@ namespace Core
             if (0 != rhythm_KeyOff)
             {
                 byte data = (byte)(0x80 + rhythm_KeyOff);
-                parent.OutData(mml,lstPartWork[0].port0, 0x10, data);
+                parent.OutData(mml,port0, 0x10, data);
                 rhythm_KeyOff = 0;
             }
 
             //Rhythm TotalVolume処理
             if (rhythm_beforeTotalVolume != rhythm_TotalVolume)
             {
-                parent.OutData(mml,lstPartWork[0].port0, 0x11, (byte)(rhythm_TotalVolume & 0x3f));
+                parent.OutData(mml,port0, 0x11, (byte)(rhythm_TotalVolume & 0x3f));
                 rhythm_beforeTotalVolume = rhythm_TotalVolume;
             }
 
@@ -728,7 +759,7 @@ namespace Core
             if (0 != rhythm_KeyOn)
             {
                 byte data = (byte)(0x00 + rhythm_KeyOn);
-                parent.OutData(mml,lstPartWork[0].port0, 0x10, data);
+                parent.OutData(mml,port0, 0x10, data);
                 rhythm_KeyOn = 0;
             }
         }

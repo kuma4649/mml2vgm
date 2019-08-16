@@ -73,6 +73,7 @@
     <Compile Include="chips\EncAdpcmA.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="FileInformation.cs" />
+    <Compile Include="GD3maker.cs" />
     <Compile Include="Information.cs" />
     <Compile Include="Line.cs" />
     <Compile Include="LinePos.cs" />
@@ -87,6 +88,7 @@
     <Compile Include="outDatum.cs" />
     <Compile Include="partWork.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ZGMmaker.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fnum\FNUM_AY8910.txt">

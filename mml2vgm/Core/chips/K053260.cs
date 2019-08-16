@@ -9,10 +9,10 @@ namespace Core
     public class K053260 : ClsChip
     {
         public List<long> memoryMap = null;
-        private int beforeKeyON=-1;
-        private int beforeloopDpcm =-1;
-        private int beforePan12 =-1;
-        private int beforePan34 =-1;
+        private int beforeKeyON = -1;
+        private int beforeloopDpcm = -1;
+        private int beforePan12 = -1;
+        private int beforePan34 = -1;
 
         public K053260(ClsVgm parent, int chipID, string initialPartName, string stPath, bool isSecondary) : base(parent, chipID, initialPartName, stPath, isSecondary)
         {
@@ -23,7 +23,9 @@ namespace Core
             _canUsePcm = true;
             _canUsePI = false;
             IsSecondary = isSecondary;
+
             Frequency = 3_579_545;
+            port0 = new byte[] { 0xba };
 
             Ch = new ClsChannel[ChMax];
             SetPartToCh(Ch, initialPartName);
@@ -37,12 +39,39 @@ namespace Core
             pcmDataInfo = new clsPcmDataInfo[] { new clsPcmDataInfo() };
             pcmDataInfo[0].totalBufPtr = 0L;
             pcmDataInfo[0].use = false;
-            pcmDataInfo[0].totalBuf = new byte[15] {
-                0x67, 0x66, 0x8e
-                , 0x00, 0x00, 0x00, 0x00 //size of data
-                , 0x00, 0x00, 0x00, 0x00 //size of the entire ROM
-                , 0x00, 0x00, 0x00, 0x00 //start address of data
-            };
+            if (parent.info.format == enmFormat.ZGM)
+            {
+                if (parent.ChipCommandSize == 2)
+                {
+                    pcmDataInfo[0].totalBuf = new byte[] {
+                        0x07,0x00, 0x66, 0x8e
+                        , 0x00, 0x00, 0x00, 0x00 //size of data
+                        , 0x00, 0x00, 0x00, 0x00 //size of the entire ROM
+                        , 0x00, 0x00, 0x00, 0x00 //start address of data
+                    };
+                }
+                else
+                {
+                    pcmDataInfo[0].totalBuf = new byte[] {
+                        0x07, 0x66, 0x8e
+                        , 0x00, 0x00, 0x00, 0x00 //size of data
+                        , 0x00, 0x00, 0x00, 0x00 //size of the entire ROM
+                        , 0x00, 0x00, 0x00, 0x00 //start address of data
+                    };
+                }
+            }
+            else
+            {
+                pcmDataInfo[0].totalBuf = new byte[] {
+                    0x67, 0x66, 0x8e
+                    , 0x00, 0x00, 0x00, 0x00 //size of data
+                    , 0x00, 0x00, 0x00, 0x00 //size of the entire ROM
+                    , 0x00, 0x00, 0x00, 0x00 //start address of data
+                };
+            }
+
+            pcmDataInfo[0].totalHeaderLength = pcmDataInfo[0].totalBuf.Length;
+            pcmDataInfo[0].totalHeadrSizeOfDataPtr = (parent.ChipCommandSize == 2) ? 4 : 3;
 
             memoryMap = new List<long>();
         }
@@ -51,7 +80,8 @@ namespace Core
         {
             pw.MaxVolume = 255;
             pw.volume = pw.MaxVolume;
-            pw.port0 = 0xba;
+            pw.port0 = port0;
+            pw.port1 = port1;
         }
 
         private int[] n2f;
@@ -66,6 +96,7 @@ namespace Core
                 pw.MaxVolume = Ch[ch].MaxVolume;
                 pw.panL = 0x4;//Center
                 pw.volume = pw.MaxVolume;
+                pw.port0 = port0;
             }
 
             if (IsSecondary)
@@ -78,12 +109,12 @@ namespace Core
             beforePan12 = -1;
             beforePan34 = -1;
 
-            OutK053260Port(null, null, 0x2f, 3);
+            OutK053260Port(null, port0, null, 0x2f, 3);
 
             n2f = new int[8 * 12];
             int ind = 0;
             double dis = double.MaxValue;
-            for(int o = 0; o < 8; o++)
+            for (int o = 0; o < 8; o++)
             {
                 //Console.WriteLine("o:{0}", o);
                 for (int n = 0; n < 12; n++)
@@ -187,9 +218,9 @@ namespace Core
                 } while (true);
 
                 //パディング(空きが足りない場合はバンクをひとつ進める(0x10000)為、空きを全て埋める)
-                while (freeAdr > pi.totalBuf.Length - 15)
+                while (freeAdr > pi.totalBuf.Length - pi.totalHeaderLength)
                 {
-                    int fs = (pi.totalBuf.Length - 15) % 0x10000;
+                    int fs = (pi.totalBuf.Length - pi.totalHeaderLength) % 0x10000;
                     //if (size > 0x10000 - fs)
                     //{
                     List<byte> n = pi.totalBuf.ToList();
@@ -239,8 +270,17 @@ namespace Core
                     Array.Copy(buf, 0, pi.totalBuf, freeAdr, buf.Length);
                 }
 
-                Common.SetUInt32bit31(pi.totalBuf, 3, (UInt32)(pi.totalBuf.Length - 7), IsSecondary);
-                Common.SetUInt32bit31(pi.totalBuf, 7, (UInt32)(pi.totalBuf.Length - 0xf));
+                Common.SetUInt32bit31(
+                    pi.totalBuf
+                    , pi.totalHeadrSizeOfDataPtr
+                    , (UInt32)(pi.totalBuf.Length - (pi.totalHeadrSizeOfDataPtr + 4))
+                    , IsSecondary
+                    );
+                Common.SetUInt32bit31(
+                    pi.totalBuf
+                    , pi.totalHeadrSizeOfDataPtr + 4
+                    , (UInt32)(pi.totalBuf.Length - (pi.totalHeadrSizeOfDataPtr + 4 + 4 + 4))
+                    );
                 pi.use = true;
                 pcmDataEasy = pi.use ? pi.totalBuf : null;
             }
@@ -287,12 +327,12 @@ namespace Core
                 );
         }
 
-        private void OutK053260Port(MML mml, partWork pw, byte adr, byte data)
+        private void OutK053260Port(MML mml, byte[] cmd, partWork pw, byte adr, byte data)
         {
             parent.OutData(
                 mml
-                , 0xba
-                , adr
+                , cmd
+                , (byte)((IsSecondary ? 0x80 : 0x00) + adr)
                 , data
                 );
 
@@ -324,14 +364,14 @@ namespace Core
                 //StartAdr L
                 adr = (byte)((pw.ch + 1) * 8 + 0x04);
                 data = (byte)stAdr;
-                OutK053260Port(mml, pw
+                OutK053260Port(mml, port0, pw
                     , adr
                     , data
                     );
                 //StartAdr H
                 adr = (byte)((pw.ch + 1) * 8 + 0x05);
                 data = (byte)(stAdr >> 8);
-                OutK053260Port(mml, pw
+                OutK053260Port(mml, port0, pw
                     , adr
                     , data
                     );
@@ -344,14 +384,14 @@ namespace Core
                 //EndAdr L
                 adr = (byte)((pw.ch + 1) * 8 + 0x02);
                 data = (byte)pw.pcmEndAddress;
-                OutK053260Port(mml, pw
+                OutK053260Port(mml, port0, pw
                     , adr
                     , data
                     );
                 //EndAdr H
                 adr = (byte)((pw.ch + 1) * 8 + 0x03);
                 data = (byte)(pw.pcmEndAddress >> 8);
-                OutK053260Port(mml, pw
+                OutK053260Port(mml, port0, pw
                     , adr
                     , data
                     );
@@ -362,13 +402,13 @@ namespace Core
 
             //K053260のループはFlagです。trueのとき、StartAddressに戻ります
             //また、他のチャンネルと合わせて設定する必要があります。
-            
+
 
             if (pw.beforepcmBank != pw.pcmBank)
             {
                 adr = (byte)((pw.ch + 1) * 8 + 0x06);
                 data = (byte)(pw.pcmBank);
-                OutK053260Port(mml, pw
+                OutK053260Port(mml, port0, pw
                     , adr
                     , data
                     );
@@ -415,7 +455,7 @@ namespace Core
                     freq = (double)parent.instPCM[pw.instrument].freq;
                 }
 
-                return n2f[(o+1) * 12 + n];//0xe41;
+                return n2f[(o + 1) * 12 + n];//0xe41;
 
             }
             catch
@@ -456,11 +496,11 @@ namespace Core
             if (pw.beforeFNum != data)
             {
                 int adr = (pw.ch + 1) * 8 + 0x00;
-                OutK053260Port(mml, pw
+                OutK053260Port(mml, port0, pw
                     , (byte)adr
                     , (byte)data);
                 adr++;
-                OutK053260Port(mml, pw
+                OutK053260Port(mml, port0, pw
                     , (byte)adr
                     , (byte)((data & 0xf00) >> 8));
                 pw.beforeFNum = data;
@@ -519,7 +559,7 @@ namespace Core
             if (pw.beforeVolume != data)
             {
                 byte adr = (byte)((pw.ch + 1) * 8 + 0x07);
-                OutK053260Port(mml, pw
+                OutK053260Port(mml, port0, pw
                     , adr
                     , data
                     );
@@ -634,7 +674,7 @@ namespace Core
             byte adr = (byte)mml.args[0];
             byte dat = (byte)mml.args[1];
 
-            OutK053260Port(mml, pw, adr, dat);
+            OutK053260Port(mml, port0, pw, adr, dat);
         }
 
         public override void CmdLoopExtProc(partWork pw, MML mml)
@@ -658,7 +698,7 @@ namespace Core
             }
             if (beforeloopDpcm != v)
             {
-                OutK053260Port(mml, null, 0x2a, v);
+                OutK053260Port(mml, port0, null, 0x2a, v);
                 beforeloopDpcm = v;
             }
 
@@ -674,12 +714,12 @@ namespace Core
             }
             if (beforePan12 != v)
             {
-                OutK053260Port(mml, null, 0x2c, v);
+                OutK053260Port(mml, port0, null, 0x2c, v);
                 beforePan12 = v;
             }
             if (beforePan34 != w)
             {
-                OutK053260Port(mml, null, 0x2d, w);
+                OutK053260Port(mml, port0, null, 0x2d, w);
                 beforePan34 = w;
             }
 
@@ -697,7 +737,7 @@ namespace Core
             }
             if (beforeKeyON != v)
             {
-                OutK053260Port(mml, null, 0x28, v);
+                OutK053260Port(mml, port0, null, 0x28, v);
                 beforeKeyON = v;
             }
 

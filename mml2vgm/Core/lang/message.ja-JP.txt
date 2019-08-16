@@ -133,6 +133,9 @@ I04019=-- DATA BLOCK LIST --
 I04020=CHIP       PRI/SEC START(H) END(H)   LENGTH(H) STATUS
 I04021=VGZファイル出力
 I04022=TraceInfo(.ti)ファイル出力
+I04023= Start ZGM_GetByteData
+I04024= End   ZGM_GetByteData
+I04025=ZGMファイル出力
 
 E04000=ファイルが見つかりません。
 E04001=想定外のエラー　ソースファイル又はインクルードファイルの取得に失敗

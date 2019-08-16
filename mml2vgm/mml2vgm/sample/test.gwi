@@ -1,34 +1,33 @@
 ﻿'{
 
-	TitleName   =
-	TitleNameJ  =K053260 Test
-	GameName    =
-	GameNameJ   =
-	SystemName  =
-	SystemNameJ =
-	Composer    =
-	ComposerJ   =
-	ReleaseDate =2019/08/12
-	Converted   =
-	Notes       =
+	TitleName            =Opening
+	TitleNameJ           =オープニング
+	GameName             =ABC
+	GameNameJ            =あいう
+	SystemName           =Genesis
+	SystemNameJ          =メガドラ
+	Composer             =kuma
+	ComposerJ            =くま
+	ReleaseDate          =2345/01/23
+	Converted            =kuma
+	Notes                =テスト
 
-	ModeBeforeSend =All
-	ClockCount     =192
-	Octave-Rev     =FALSE
+	Format       =VGM
+	ClockCount   =192
 
 }
 
-K053260のループはアドレスを指定することはできず、必ず最初に戻ります
-volume:0-127
-pan:0-7(3がCenter?)
+BASS
+'@ F 001
+   AR  DR  SR  RR  SL  TL  KS  ML  DT 
+'@ 031,014,003,009,002,051,000,015,001
+'@ 031,017,003,007,005,028,000,002,007
+'@ 031,018,002,006,001,013,000,000,007
+'@ 031,018,003,006,001,000,000,002,003
+'@ 001,007
 
-'@ P 1,"wav\Guitar.wav"        , 8000 , 100,K053260,1
-'@ P 2,"wav\muteGuitar.wav"    , 8000 , 100,K053260
 
-'O1 T126
-'O1 o4l4v40@1Q8 p0c p1c p2c  p3c  p4c p5c p6c p7c
-'O1 D0o4l4q0p3@1cdefgab>>>c2_<<c&c2_<c^1^1
 
-ループが最初に戻るのが確認できる
-'O2 o5l1v50@1Q8r8p3cdefgab
+'F1 T90
+'F1 D0     @1 p3 o4 v113 l16 q8Lc4
 

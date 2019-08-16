@@ -30,6 +30,8 @@ namespace Core
             IsSecondary = isSecondary;
 
             Frequency = 7670454;
+            port0 = new byte[] { (byte)(0x2 | (isSecondary ? 0xa0 : 0x50)) };
+            port1 = new byte[] { (byte)(0x3 | (isSecondary ? 0xa0 : 0x50)) };
 
             Dictionary<string, List<double>> dic = MakeFNumTbl();
             if (dic != null)
@@ -58,9 +60,26 @@ namespace Core
             Ch[8].Type = enmChannelType.FMOPNex;
 
             pcmDataInfo = new clsPcmDataInfo[] { new clsPcmDataInfo() };
-            pcmDataInfo[0].totalBuf = new byte[7] { 0x67, 0x66, 0x00, 0x00, 0x00, 0x00, 0x00 };
             pcmDataInfo[0].totalBufPtr = 0L;
             pcmDataInfo[0].use = false;
+            if (parent.info.format == enmFormat.ZGM)
+            {
+                if (parent.ChipCommandSize == 2)
+                {
+                    pcmDataInfo[0].totalBuf = new byte[] { 0x07,0x00, 0x66, 0x00, 0x00, 0x00, 0x00, 0x00 };
+                }
+                else
+                {
+                    pcmDataInfo[0].totalBuf = new byte[] { 0x07, 0x66, 0x00, 0x00, 0x00, 0x00, 0x00 };
+                }
+            }
+            else
+            {
+                pcmDataInfo[0].totalBuf = new byte[] { 0x67, 0x66, 0x00, 0x00, 0x00, 0x00, 0x00 };
+            }
+
+            pcmDataInfo[0].totalHeaderLength = pcmDataInfo[0].totalBuf.Length;
+            pcmDataInfo[0].totalHeadrSizeOfDataPtr = (parent.ChipCommandSize == 2) ? 4 : 3;
 
         }
 
@@ -69,8 +88,8 @@ namespace Core
             pw.slots = (byte)(((pw.Type == enmChannelType.FMOPN || pw.Type == enmChannelType.FMPCM) || pw.ch == 2) ? 0xf : 0x0);
             pw.volume = 127;
             pw.MaxVolume = 127;
-            pw.port0 = (byte)(0x2 | (pw.isSecondary ? 0xa0 : 0x50));
-            pw.port1 = (byte)(0x3 | (pw.isSecondary ? 0xa0 : 0x50));
+            pw.port0 = port0;
+            pw.port1 = port1;
         }
 
         public override void InitChip()
@@ -112,7 +131,7 @@ namespace Core
         {
             parent.OutData(
                 mml,
-                pw.port0
+                port0
                 , 0x2b
                 , (byte)((sw ? 0x80 : 0))
                 );
@@ -191,7 +210,11 @@ namespace Core
                 Array.Copy(buf, 0, newBuf, pi.totalBuf.Length, buf.Length);
 
                 pi.totalBuf = newBuf;
-                Common.SetUInt32bit31(pi.totalBuf, 3, (UInt32)(pi.totalBuf.Length - 7), IsSecondary);
+                Common.SetUInt32bit31(
+                    pi.totalBuf
+                    , pi.totalHeadrSizeOfDataPtr
+                    , (UInt32)(pi.totalBuf.Length - (pi.totalHeadrSizeOfDataPtr + 4))
+                    , IsSecondary);
                 pi.use = true;
                 pcmDataEasy = pi.use ? pi.totalBuf : null;
             }
@@ -216,7 +239,7 @@ namespace Core
 
             byte adr = (byte)mml.args[0];
             byte dat = (byte)mml.args[1];
-            parent.OutData(mml, (pw.ch > 2 && pw.ch < 6) ? pw.port1 : pw.port0, adr, dat);
+            parent.OutData(mml, (pw.ch > 2 && pw.ch < 6) ? port1 : port0, adr, dat);
         }
 
         public override void CmdMPMS(partWork pw, MML mml)

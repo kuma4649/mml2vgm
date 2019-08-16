@@ -1405,6 +1405,7 @@ namespace Core
 
         public LinePos linePos { get; internal set; }
         public bool isRealTimeMode { get; set; }
+        public int ChipCommandSize { get; private set; }
 
         public outDatum[] Vgm_getByteData(Dictionary<string, List<MML>> mmlData)
         {
@@ -1434,166 +1435,17 @@ namespace Core
             long waitCounter = 0;
             do
             {
-                foreach (KeyValuePair<enmChipType, ClsChip[]> kvp in chips)
-                {
-                    foreach (ClsChip chip in kvp.Value)
-                    {
-                        log.Write(string.Format("Chip [{0}]", chip.Name));
-
-                        partWork pw;
-                        for (int i = 0; i < chip.lstPartWork.Count; i++)
-                        {
-                            pw = chip.lstPartWork[
-                                chip.ReversePartWork
-                                ? (chip.lstPartWork.Count - 1 - i)
-                                : i
-                                ];
-                            partWorkByteData(pw);
-                        }
-                        if (chip.SupportReversePartWork) chip.ReversePartWork = !chip.ReversePartWork;
-
-                        log.Write("channelを跨ぐコマンド向け処理");
-                        //未使用のパートの場合は処理を行わない
-                        if (!chip.use) continue;
-                        chip.MultiChannelCommand(null);
-                    }
-                }
+                log.Write("全パートコマンド解析");
+                AnalyzeAllPartCommand();
 
                 log.Write("全パートのうち次のコマンドまで一番近い値を求める");
-                waitCounter = long.MaxValue;
-                foreach (KeyValuePair<enmChipType, ClsChip[]> kvp in chips)
-                {
-                    foreach (ClsChip chip in kvp.Value)
-                    {
-                        for (int ch = 0; ch < chip.lstPartWork.Count; ch++)
-                        {
-
-                            partWork cpw = chip.lstPartWork[ch];
-
-                            if (!cpw.chip.use) continue;
-
-                            //note
-                            if (cpw.waitKeyOnCounter > 0)
-                            {
-                                waitCounter = Math.Min(waitCounter, cpw.waitKeyOnCounter);
-                            }
-                            else if (cpw.waitCounter > 0)
-                            {
-                                waitCounter = Math.Min(waitCounter, cpw.waitCounter);
-                            }
-
-                            //bend
-                            if (cpw.bendWaitCounter != -1)
-                            {
-                                waitCounter = Math.Min(waitCounter, cpw.bendWaitCounter);
-                            }
-
-                            //lfoとenvelopeは音長によるウエイトカウントが存在する場合のみ対象にする。(さもないと、曲のループ直前の効果を出せない)
-                            if (waitCounter > 0)
-                            {
-                                //lfo
-                                for (int lfo = 0; lfo < 4; lfo++)
-                                {
-                                    if (!cpw.lfo[lfo].sw) continue;
-                                    if (cpw.lfo[lfo].waitCounter == -1) continue;
-
-                                    waitCounter = Math.Min(waitCounter, cpw.lfo[lfo].waitCounter);
-                                }
-
-                                //envelope
-                                if (cpw.envelopeMode && cpw.envIndex != -1)
-                                {
-                                    waitCounter = Math.Min(waitCounter, cpw.envCounter);
-                                }
-                            }
-
-                            //pcm
-                            if (cpw.pcmWaitKeyOnCounter > 0)
-                            {
-                                waitCounter = Math.Min(waitCounter, cpw.pcmWaitKeyOnCounter);
-                            }
-
-                        }
-
-                    }
-                }
+                waitCounter = ComputeAllPartDistance();
 
                 log.Write("全パートのwaitcounterを減らす");
-                if (waitCounter != long.MaxValue)
-                {
-
-                    // waitcounterを減らす
-
-                    foreach (KeyValuePair<enmChipType, ClsChip[]> kvp in chips)
-                    {
-                        foreach (ClsChip chip in kvp.Value)
-                        {
-                            foreach (partWork pw in chip.lstPartWork)
-                            {
-
-                                if (pw.waitKeyOnCounter > 0) pw.waitKeyOnCounter -= waitCounter;
-
-                                if (pw.waitCounter > 0) pw.waitCounter -= waitCounter;
-
-                                if (pw.bendWaitCounter > 0) pw.bendWaitCounter -= waitCounter;
-
-                                for (int lfo = 0; lfo < 4; lfo++)
-                                {
-                                    if (!pw.lfo[lfo].sw) continue;
-                                    if (pw.lfo[lfo].waitCounter == -1) continue;
-
-                                    if (pw.lfo[lfo].waitCounter > 0)
-                                    {
-                                        pw.lfo[lfo].waitCounter -= waitCounter;
-                                        if (pw.lfo[lfo].waitCounter < 0) pw.lfo[lfo].waitCounter = 0;
-                                    }
-                                }
-
-                                if (pw.pcmWaitKeyOnCounter > 0)
-                                {
-                                    pw.pcmWaitKeyOnCounter -= waitCounter;
-                                }
-
-                                if (pw.envelopeMode && pw.envIndex != -1)
-                                {
-                                    pw.envCounter -= (int)waitCounter;
-                                }
-                            }
-                        }
-                    }
-
-                    // wait発行
-
-                    lClock += waitCounter;
-                    dSample += (long)(info.samplesPerClock * waitCounter);
-
-                    if (jumpCommandCounter == 0 && !useSkipPlayCommand)
-                    {
-                        if (ym2612[0].lstPartWork[5].pcmWaitKeyOnCounter <= 0)//== -1)
-                        {
-                            OutWaitNSamples((long)(info.samplesPerClock * waitCounter));
-                        }
-                        else
-                        {
-                            OutWaitNSamplesWithPCMSending(ym2612[0].lstPartWork[5], waitCounter);
-                        }
-                    }
-                }
+                DecAllPartWaitCounter(waitCounter);
 
                 log.Write("終了パートのカウント");
-                endChannel = 0;
-                foreach (KeyValuePair<enmChipType, ClsChip[]> kvp in chips)
-                {
-                    foreach (ClsChip chip in kvp.Value)
-                    {
-                        foreach (partWork pw in chip.lstPartWork)
-                        {
-                            if (!pw.chip.use) endChannel++;
-                            else if (pw.dataEnd && pw.waitCounter < 1) endChannel++;
-                            else if (loopOffset != -1 && pw.dataEnd && pw.envIndex == 3) endChannel++;
-                        }
-                    }
-                }
+                endChannel = CountUpEndPart();
 
             } while (endChannel < totalChannel);
 
@@ -1609,6 +1461,182 @@ namespace Core
 
             return dat.ToArray();
         }
+
+        public int CountUpEndPart()
+        {
+            int endChannel = 0;
+            foreach (KeyValuePair<enmChipType, ClsChip[]> kvp in chips)
+            {
+                foreach (ClsChip chip in kvp.Value)
+                {
+                    foreach (partWork pw in chip.lstPartWork)
+                    {
+                        if (!pw.chip.use) endChannel++;
+                        else if (pw.dataEnd && pw.waitCounter < 1) endChannel++;
+                        else if (loopOffset != -1 && pw.dataEnd && pw.envIndex == 3) endChannel++;
+                    }
+                }
+            }
+
+            return endChannel;
+        }
+
+        public void DecAllPartWaitCounter(long waitCounter)
+        {
+            if (waitCounter != long.MaxValue)
+            {
+
+                // waitcounterを減らす
+
+                foreach (KeyValuePair<enmChipType, ClsChip[]> kvp in chips)
+                {
+                    foreach (ClsChip chip in kvp.Value)
+                    {
+                        foreach (partWork pw in chip.lstPartWork)
+                        {
+
+                            if (pw.waitKeyOnCounter > 0) pw.waitKeyOnCounter -= waitCounter;
+
+                            if (pw.waitCounter > 0) pw.waitCounter -= waitCounter;
+
+                            if (pw.bendWaitCounter > 0) pw.bendWaitCounter -= waitCounter;
+
+                            for (int lfo = 0; lfo < 4; lfo++)
+                            {
+                                if (!pw.lfo[lfo].sw) continue;
+                                if (pw.lfo[lfo].waitCounter == -1) continue;
+
+                                if (pw.lfo[lfo].waitCounter > 0)
+                                {
+                                    pw.lfo[lfo].waitCounter -= waitCounter;
+                                    if (pw.lfo[lfo].waitCounter < 0) pw.lfo[lfo].waitCounter = 0;
+                                }
+                            }
+
+                            if (pw.pcmWaitKeyOnCounter > 0)
+                            {
+                                pw.pcmWaitKeyOnCounter -= waitCounter;
+                            }
+
+                            if (pw.envelopeMode && pw.envIndex != -1)
+                            {
+                                pw.envCounter -= (int)waitCounter;
+                            }
+                        }
+                    }
+                }
+
+                // wait発行
+
+                lClock += waitCounter;
+                dSample += (long)(info.samplesPerClock * waitCounter);
+
+                if (jumpCommandCounter == 0 && !useSkipPlayCommand)
+                {
+                    if (ym2612[0].lstPartWork[5].pcmWaitKeyOnCounter <= 0)//== -1)
+                    {
+                        OutWaitNSamples((long)(info.samplesPerClock * waitCounter));
+                    }
+                    else
+                    {
+                        OutWaitNSamplesWithPCMSending(ym2612[0].lstPartWork[5], waitCounter);
+                    }
+                }
+            }
+        }
+
+        public long ComputeAllPartDistance()
+        {
+            long waitCounter = long.MaxValue;
+            foreach (KeyValuePair<enmChipType, ClsChip[]> kvp in chips)
+            {
+                foreach (ClsChip chip in kvp.Value)
+                {
+                    for (int ch = 0; ch < chip.lstPartWork.Count; ch++)
+                    {
+
+                        partWork cpw = chip.lstPartWork[ch];
+
+                        if (!cpw.chip.use) continue;
+
+                        //note
+                        if (cpw.waitKeyOnCounter > 0)
+                        {
+                            waitCounter = Math.Min(waitCounter, cpw.waitKeyOnCounter);
+                        }
+                        else if (cpw.waitCounter > 0)
+                        {
+                            waitCounter = Math.Min(waitCounter, cpw.waitCounter);
+                        }
+
+                        //bend
+                        if (cpw.bendWaitCounter != -1)
+                        {
+                            waitCounter = Math.Min(waitCounter, cpw.bendWaitCounter);
+                        }
+
+                        //lfoとenvelopeは音長によるウエイトカウントが存在する場合のみ対象にする。(さもないと、曲のループ直前の効果を出せない)
+                        if (waitCounter > 0)
+                        {
+                            //lfo
+                            for (int lfo = 0; lfo < 4; lfo++)
+                            {
+                                if (!cpw.lfo[lfo].sw) continue;
+                                if (cpw.lfo[lfo].waitCounter == -1) continue;
+
+                                waitCounter = Math.Min(waitCounter, cpw.lfo[lfo].waitCounter);
+                            }
+
+                            //envelope
+                            if (cpw.envelopeMode && cpw.envIndex != -1)
+                            {
+                                waitCounter = Math.Min(waitCounter, cpw.envCounter);
+                            }
+                        }
+
+                        //pcm
+                        if (cpw.pcmWaitKeyOnCounter > 0)
+                        {
+                            waitCounter = Math.Min(waitCounter, cpw.pcmWaitKeyOnCounter);
+                        }
+
+                    }
+
+                }
+            }
+
+            return waitCounter;
+        }
+
+        public void AnalyzeAllPartCommand()
+        {
+            foreach (KeyValuePair<enmChipType, ClsChip[]> kvp in chips)
+            {
+                foreach (ClsChip chip in kvp.Value)
+                {
+                    //未使用のパートの場合は処理を行わない
+                    if (!chip.use) continue;
+
+                    log.Write(string.Format("Chip [{0}]", chip.Name));
+
+                    for (int i = 0; i < chip.lstPartWork.Count; i++)
+                    {
+                        partWork pw = chip.lstPartWork[
+                            chip.ReversePartWork
+                            ? (chip.lstPartWork.Count - 1 - i)
+                            : i
+                            ];
+                        partWorkByteData(pw);
+                    }
+                    if (chip.SupportReversePartWork) chip.ReversePartWork = !chip.ReversePartWork;
+
+                    log.Write("channelを跨ぐコマンド向け処理");
+                    chip.MultiChannelCommand(null);
+                }
+            }
+        }
+
+
 
         public void partWorkByteData(partWork pw)
         {
@@ -1694,7 +1722,7 @@ namespace Core
             if (info.Version <= 1.50f)
             {
                 //length 0x40
-                for (int i = 0; i < 0x40; i++) OutData((MML)null, Const.hDat[i]);
+                for (int i = 0; i < 0x40; i++) OutData((MML)null, null, Const.hDat[i]);
             }
             else
             {
@@ -1728,7 +1756,14 @@ namespace Core
             byte[] v;
 
             //end of data
-            OutData((MML)null, 0x66);
+            byte[] cmd;
+            if (info.format == enmFormat.ZGM)
+            {
+                if (ChipCommandSize == 2) cmd = new byte[] { 0x06, 0x00 };
+                else cmd = new byte[] { 0x06 };
+            }
+            else cmd = new byte[] { 0x66 };
+            OutData((MML)null, cmd);
 
             //Version
             int vs = (int)(info.Version * 100);
@@ -1772,7 +1807,8 @@ namespace Core
 
             int p = dat.Count + 12;
 
-            MakeGD3(dat);
+            GD3maker gd3 = new GD3maker();
+            gd3.make(dat, info, lyric);
 
             //EoF offset
             v = DivInt2ByteAry(dat.Count - 0x4 - (int)dummyCmdCounter);
@@ -1945,83 +1981,6 @@ namespace Core
 
         }
 
-        private void MakeGD3(List<outDatum> dat)
-        {
-            //'Gd3 '
-            dat.Add(new outDatum(enmMMLType.unknown, null, null, 0x47));
-            dat.Add(new outDatum(enmMMLType.unknown, null, null, 0x64));
-            dat.Add(new outDatum(enmMMLType.unknown, null, null, 0x33));
-            dat.Add(new outDatum(enmMMLType.unknown, null, null, 0x20));
-
-            //GD3 Version
-            dat.Add(new outDatum(enmMMLType.unknown, null, null, 0x00));
-            dat.Add(new outDatum(enmMMLType.unknown, null, null, 0x01));
-            dat.Add(new outDatum(enmMMLType.unknown, null, null, 0x00));
-            dat.Add(new outDatum(enmMMLType.unknown, null, null, 0x00));
-
-            //GD3 Length(dummy)
-            dat.Add(new outDatum(enmMMLType.unknown, null, null, 0x00));
-            dat.Add(new outDatum(enmMMLType.unknown, null, null, 0x00));
-            dat.Add(new outDatum(enmMMLType.unknown, null, null, 0x00));
-            dat.Add(new outDatum(enmMMLType.unknown, null, null, 0x00));
-
-            //TrackName
-            foreach (byte b in Encoding.Unicode.GetBytes(info.TitleName)) dat.Add(new outDatum(enmMMLType.unknown, null, null, b));
-            dat.Add(new outDatum(enmMMLType.unknown, null, null, 0x00));
-            dat.Add(new outDatum(enmMMLType.unknown, null, null, 0x00));
-            foreach (byte b in Encoding.Unicode.GetBytes(info.TitleNameJ)) dat.Add(new outDatum(enmMMLType.unknown, null, null, b));
-            dat.Add(new outDatum(enmMMLType.unknown, null, null, 0x00));
-            dat.Add(new outDatum(enmMMLType.unknown, null, null, 0x00));
-
-            //GameName
-            foreach (byte b in Encoding.Unicode.GetBytes(info.GameName)) dat.Add(new outDatum(enmMMLType.unknown, null, null, b));
-            dat.Add(new outDatum(enmMMLType.unknown, null, null, 0x00));
-            dat.Add(new outDatum(enmMMLType.unknown, null, null, 0x00));
-            foreach (byte b in Encoding.Unicode.GetBytes(info.GameNameJ)) dat.Add(new outDatum(enmMMLType.unknown, null, null, b));
-            dat.Add(new outDatum(enmMMLType.unknown, null, null, 0x00));
-            dat.Add(new outDatum(enmMMLType.unknown, null, null, 0x00));
-
-            //SystemName
-            foreach (byte b in Encoding.Unicode.GetBytes(info.SystemName)) dat.Add(new outDatum(enmMMLType.unknown, null, null, b));
-            dat.Add(new outDatum(enmMMLType.unknown, null, null, 0x00));
-            dat.Add(new outDatum(enmMMLType.unknown, null, null, 0x00));
-            foreach (byte b in Encoding.Unicode.GetBytes(info.SystemNameJ)) dat.Add(new outDatum(enmMMLType.unknown, null, null, b));
-            dat.Add(new outDatum(enmMMLType.unknown, null, null, 0x00));
-            dat.Add(new outDatum(enmMMLType.unknown, null, null, 0x00));
-
-            //Composer
-            foreach (byte b in Encoding.Unicode.GetBytes(info.Composer)) dat.Add(new outDatum(enmMMLType.unknown, null, null, b));
-            dat.Add(new outDatum(enmMMLType.unknown, null, null, 0x00));
-            dat.Add(new outDatum(enmMMLType.unknown, null, null, 0x00));
-            foreach (byte b in Encoding.Unicode.GetBytes(info.ComposerJ)) dat.Add(new outDatum(enmMMLType.unknown, null, null, b));
-            dat.Add(new outDatum(enmMMLType.unknown, null, null, 0x00));
-            dat.Add(new outDatum(enmMMLType.unknown, null, null, 0x00));
-
-            //ReleaseDate
-            foreach (byte b in Encoding.Unicode.GetBytes(info.ReleaseDate)) dat.Add(new outDatum(enmMMLType.unknown, null, null, b));
-            dat.Add(new outDatum(enmMMLType.unknown, null, null, 0x00));
-            dat.Add(new outDatum(enmMMLType.unknown, null, null, 0x00));
-
-            //Converted
-            foreach (byte b in Encoding.Unicode.GetBytes(info.Converted)) dat.Add(new outDatum(enmMMLType.unknown, null, null, b));
-            dat.Add(new outDatum(enmMMLType.unknown, null, null, 0x00));
-            dat.Add(new outDatum(enmMMLType.unknown, null, null, 0x00));
-
-            //Notes
-            foreach (byte b in Encoding.Unicode.GetBytes(info.Notes)) dat.Add(new outDatum(enmMMLType.unknown, null, null, b));
-            dat.Add(new outDatum(enmMMLType.unknown, null, null, 0x00));
-            dat.Add(new outDatum(enmMMLType.unknown, null, null, 0x00));
-
-            //歌詞
-            if (lyric != "")
-            {
-                foreach (byte b in Encoding.Unicode.GetBytes(lyric)) dat.Add(new outDatum(enmMMLType.unknown, null, null, b));
-                dat.Add(new outDatum(enmMMLType.unknown, null, null, 0x00));
-                dat.Add(new outDatum(enmMMLType.unknown, null, null, 0x00));
-            }
-        }
-
-
         public outDatum[] Xgm_getByteData(Dictionary<string, List<MML>> mmlData)
         {
 
@@ -2072,7 +2031,7 @@ namespace Core
                 waitCounter = Xgm_procCheckMinimumWaitCounter();
 
                 log.Write("KeyOn情報をかき出し");
-                foreach (outDatum dat in xgmKeyOnData) OutData(dat, 0x52, 0x28, dat.val);
+                foreach (outDatum dat in xgmKeyOnData) OutData(dat, null, 0x52, 0x28, dat.val);
 
                 log.Write("全パートのwaitcounterを減らす");
                 if (waitCounter != long.MaxValue)
@@ -2233,7 +2192,8 @@ namespace Core
             }
 
             //$0108 + SLEN + MLEN GD3 tags
-            MakeGD3(xdat);
+            GD3maker gd3 = new GD3maker();
+            gd3.make(xdat, info, lyric);
 
             dat = xdat;
         }
@@ -3155,8 +3115,62 @@ namespace Core
             };
         }
 
-        public void OutData(MML mml, params byte[] data)
+        //public void OutData(MML mml, params byte[] data)
+        //{
+        //    foreach (byte d in data)
+        //    {
+        //        outDatum od = new outDatum();
+        //        od.val = d;
+        //        if (mml != null)
+        //        {
+        //            od.type = mml.type;
+        //            od.args = mml.args;
+        //            if (mml.line != null && mml.line.Lp != null)
+        //            {
+        //                od.linePos = new LinePos(
+        //                    mml.line.Lp.fullPath,
+        //                    mml.line.Lp.row,
+        //                    mml.line.Lp.col,
+        //                    mml.line.Lp.length,
+        //                    mml.line.Lp.part,
+        //                    mml.line.Lp.chip,
+        //                    mml.line.Lp.isSecondary,
+        //                    mml.line.Lp.ch);
+        //            }
+        //        }
+        //        dat.Add(od);
+        //    }
+        //}
+
+        public void OutData(MML mml, byte[] cmd, params byte[] data)
         {
+            if (cmd != null && cmd.Length > 0)
+            {
+                foreach (byte d in cmd)
+                {
+                    outDatum od = new outDatum();
+                    od.val = d;
+                    if (mml != null)
+                    {
+                        od.type = mml.type;
+                        od.args = mml.args;
+                        if (mml.line != null && mml.line.Lp != null)
+                        {
+                            od.linePos = new LinePos(
+                                mml.line.Lp.fullPath,
+                                mml.line.Lp.row,
+                                mml.line.Lp.col,
+                                mml.line.Lp.length,
+                                mml.line.Lp.part,
+                                mml.line.Lp.chip,
+                                mml.line.Lp.isSecondary,
+                                mml.line.Lp.ch);
+                        }
+                    }
+                    dat.Add(od);
+                }
+            }
+
             foreach (byte d in data)
             {
                 outDatum od = new outDatum();
@@ -3182,8 +3196,59 @@ namespace Core
             }
         }
 
-        public void OutData(outDatum od, params byte[] data)
+        //public void OutData(outDatum od, params byte[] data)
+        //{
+        //    foreach (byte d in data)
+        //    {
+        //        outDatum o = new outDatum();
+        //        o.val = d;
+        //        if (od != null)
+        //        {
+        //            o.type = od.type;
+        //            if (od.linePos != null)
+        //            {
+        //                o.linePos = new LinePos(
+        //                    od.linePos.fullPath,
+        //                    od.linePos.row,
+        //                    od.linePos.col,
+        //                    od.linePos.length,
+        //                    od.linePos.part,
+        //                    od.linePos.chip,
+        //                    od.linePos.isSecondary,
+        //                    od.linePos.ch);
+        //            }
+        //        }
+        //        dat.Add(o);
+        //    }
+        //}
+
+        public void OutData(outDatum od, byte[] cmd, params byte[] data)
         {
+            if (cmd != null && cmd.Length > 0)
+            {
+                foreach (byte d in data)
+                {
+                    outDatum o = new outDatum();
+                    o.val = d;
+                    if (od != null)
+                    {
+                        o.type = od.type;
+                        if (od.linePos != null)
+                        {
+                            o.linePos = new LinePos(
+                                od.linePos.fullPath,
+                                od.linePos.row,
+                                od.linePos.col,
+                                od.linePos.length,
+                                od.linePos.part,
+                                od.linePos.chip,
+                                od.linePos.isSecondary,
+                                od.linePos.ch);
+                        }
+                    }
+                    dat.Add(o);
+                }
+            }
             foreach (byte d in data)
             {
                 outDatum o = new outDatum();
@@ -3211,27 +3276,24 @@ namespace Core
         private void OutWaitNSamples(long n)
         {
             long m = n;
+            byte[] cmd;
+            if (info.format == enmFormat.ZGM)
+            {
+                if (ChipCommandSize == 2) cmd = new byte[] { 0x01, 0x00 };
+                else cmd = new byte[] { 0x01 };
+            }
+            else cmd = new byte[] { 0x61 };
 
             while (m > 0)
             {
                 if (m > 0xffff)
                 {
-                    OutData(
-                        (MML)null,
-                        0x61,
-                        (byte)0xff,
-                        (byte)0xff
-                        );
+                    OutData((MML)null, cmd, (byte)0xff, (byte)0xff);
                     m -= 0xffff;
                 }
                 else
                 {
-                    OutData(
-                        (MML)null,
-                        0x61,
-                        (byte)(m & 0xff),
-                        (byte)((m & 0xff00) >> 8)
-                        );
+                    OutData((MML)null, cmd, (byte)(m & 0xff), (byte)((m & 0xff00) >> 8));
                     m = 0L;
                 }
             }
@@ -3239,17 +3301,33 @@ namespace Core
 
         private void OutWait735Samples(int repeatCount)
         {
+            byte[] cmd;
+            if (info.format == enmFormat.ZGM)
+            {
+                if (ChipCommandSize == 2) cmd = new byte[] { 0x02, 0x00 };
+                else cmd = new byte[] { 0x02 };
+            }
+            else cmd = new byte[] { 0x62 };
+
             for (int i = 0; i < repeatCount; i++)
             {
-                OutData((MML)null,0x62);
+                OutData((MML)null, cmd);
             }
         }
 
         private void OutWait882Samples(int repeatCount)
         {
+            byte[] cmd;
+            if (info.format == enmFormat.ZGM)
+            {
+                if (ChipCommandSize == 2) cmd = new byte[] { 0x03, 0x00 };
+                else cmd = new byte[] { 0x03 };
+            }
+            else cmd = new byte[] { 0x63 };
+
             for (int i = 0; i < repeatCount; i++)
             {
-                OutData((MML)null,0x63);
+                OutData((MML)null, cmd);
             }
         }
 
@@ -3273,7 +3351,14 @@ namespace Core
                 if (cpw.pcmSizeCounter > 0)
                 {
                     cpw.pcmSizeCounter--;
-                    OutData((MML)null, (byte)(0x80 + f));
+                    byte[] cmd;
+                    if (info.format == enmFormat.ZGM)
+                    {
+                        if (ChipCommandSize == 2) cmd = new byte[] { (byte)(0x80 + f), 0x00 };
+                        else cmd = new byte[] { (byte)(0x20 + f) };
+                    }
+                    else cmd = new byte[] { (byte)(0x80 + f) };
+                    OutData((MML)null, cmd);
                 }
                 else
                 {

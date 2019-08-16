@@ -35,7 +35,7 @@ namespace Core
         {
             pw.volume = 15;
             pw.MaxVolume = 15;
-            pw.port0 = 0;
+            pw.port0 = new byte[] { 0 };
         }
 
         public override void InitChip()

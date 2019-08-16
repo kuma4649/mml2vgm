@@ -130,6 +130,9 @@ I04019=-- DATA BLOCK LIST --
 I04020=CHIP       PRI/SEC START(H) END(H)   LENGTH(H) STATUS
 I04021=Write VGZ file.
 I04022=Write TraceInfo(.ti) file.
+I04023= Start ZGM_GetByteData
+I04024= End   ZGM_GetByteData
+I04025=Write ZGM file.
 
 E04000=File not found.
 E04001=Unexpected Error: Failed to get source file.

@@ -114,8 +114,8 @@ namespace Core
         public clsPcmDataInfo[] pcmDataInfo;
         public byte[] pcmDataEasy = null;
         public List<byte[]> pcmDataDirect = new List<byte[]>();
-
-
+        protected byte[] port0;
+        protected byte[] port1;
 
         public ClsChip(ClsVgm parent, int chipID, string initialPartName, string stPath, bool isSecondary)
         {
@@ -126,6 +126,19 @@ namespace Core
             MakeFNumTbl();
         }
 
+        public void SetCommand(int cmdNo)
+        {
+            if (parent.ChipCommandSize == 2)
+            {
+                port0 = new byte[] {
+                    (byte)cmdNo,
+                    (byte)(cmdNo>>8)
+                };
+            }
+            else port0 = new byte[] {
+                    (byte)cmdNo,
+            };
+        }
 
         protected Dictionary<string, List<double>> MakeFNumTbl()
         {
@@ -522,8 +535,16 @@ namespace Core
 
         public virtual void SetDummyData(partWork pw, MML mml)
         {
+            byte[] cmd;
+            if (pw.chip.parent.info.format == enmFormat.ZGM)
+            {
+                if (pw.chip.parent.ChipCommandSize == 2) cmd = new byte[] { 0x09, 0x00, pw.port0[0], pw.port0[1] };
+                else cmd = new byte[] { 0x09, pw.port0[0] };
+            }
+            else cmd = new byte[] { 0x2f, pw.port0[0] };
+
             //Console.WriteLine("SkipAddress:{0:x06} skip:{1:x06}", parent.dat.Count, parent.dummyCmdCounter);
-            parent.OutData(mml, 0x2f, pw.port0, (byte)(pw.chip.IsSecondary ? 1 : 0));//0x2f:DummyChip (!!CAUTION!!)
+            parent.OutData(mml, cmd , (byte)(pw.chip.IsSecondary ? 1 : 0));//0x2f:DummyChip (!!CAUTION!!)
             parent.dummyCmdCounter += 3;
         }
 
@@ -614,7 +635,7 @@ namespace Core
         public virtual void CmdTempo(partWork pw, MML mml)
         {
             parent.info.tempo = (int)mml.args[0];
-            if (parent.info.format == enmFormat.VGM)
+            if (parent.info.format == enmFormat.VGM|| parent.info.format == enmFormat.ZGM)
             {
                 parent.info.samplesPerClock = Information.VGM_SAMPLE_PER_SECOND * 60.0 * 4.0 / (parent.info.tempo * parent.info.clockCount);
             }
@@ -985,7 +1006,7 @@ namespace Core
 
             if (parent.info.format == enmFormat.XGM)
             {
-                parent.OutData(mml, 0x7e);
+                parent.OutData(mml, null, 0x7e);
             }
 
             foreach (KeyValuePair<enmChipType, ClsChip[]> kvp in parent.chips)
@@ -1302,6 +1323,8 @@ namespace Core
     public class clsPcmDataInfo
     {
         public byte[] totalBuf;
+        public int totalHeaderLength;
+        public int totalHeadrSizeOfDataPtr;
         public long totalBufPtr;
         public bool use;
     }
