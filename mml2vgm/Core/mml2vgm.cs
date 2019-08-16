@@ -325,7 +325,7 @@ namespace Core
                             desBuf[adr + 3].val
                             + desBuf[adr + 4].val * 0x100
                             + desBuf[adr + 5].val * 0x100_00
-                            + desBuf[adr + 6].val * 0x100_00_00 + 0x2;
+                            + desBuf[adr + 6].val * 0x100_00_00 + 0x7 - 1;
                     }
                     else if (od.val == 0x68)
                     {
@@ -350,6 +350,10 @@ namespace Core
                     else if (od.val >= 0xe0 && od.val <= 0xff)
                     {
                         nrmSkipCount = 4;
+                    }
+                    else
+                    {
+                        throw new ArgumentException(string.Format("Unknown command {0:x02}",od.val));
                     }
                 }
 

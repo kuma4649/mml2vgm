@@ -441,6 +441,7 @@ namespace Core
                 || typ == enmMMLType.LfoSwitch
                 || typ == enmMMLType.Detune
                 || typ == enmMMLType.KeyShift
+                || typ == enmMMLType.unknown
                 )
             {
                 return true;

@@ -331,7 +331,7 @@ namespace Core
             {
                 //LoopAdr
                 adr = (byte)((pw.ch << 3) + 0x04);
-                data = (ushort)(pw.pcmLoopAddress == -1 ? 0 : pw.pcmLoopAddress);
+                data = (ushort)(pw.pcmLoopAddress == -1 ? 0 : (pw.pcmEndAddress- pw.pcmLoopAddress));
                 OutQSoundPort(mml, port0, pw
                     , adr
                     , (ushort)data
@@ -447,8 +447,8 @@ namespace Core
                     4000000.0
                     * Const.pcmMTbl[n]
                     * Math.Pow(2, o)
-                    * (8000.0 / freq)
-                    / Frequency 
+                    * (freq / 8000.0)
+                    / Frequency
                     * 166.0 //div
                     );
 
