@@ -21,7 +21,7 @@ namespace Core
             IsSecondary = isSecondary;
             dataType = 0x80;
             Frequency = 4026987;
-            port0 = new byte[] { 0xc0 };
+            port =new byte[][] { new byte[] { 0xc0 } };
             Interface = 0x00f8000d;
 
             Ch = new ClsChannel[ChMax];
@@ -71,12 +71,11 @@ namespace Core
 
         }
 
-        public override void InitPart(ref partWork pw)
+        public override void InitPart(partWork pw)
         {
             pw.MaxVolume = 255;
             pw.volume = pw.MaxVolume;
-            pw.port0 = port0;
-            pw.port1 = port1;
+            pw.port = port;
         }
 
         public override void InitChip()
@@ -125,7 +124,7 @@ namespace Core
             int adr = pw.ch * 8 + 0x86;
             byte d = (byte)(((pw.pcmBank & 0x3f) << 2) | (pw.pcmLoopAddress != -1 ? 0 : 2) | 1);
 
-            OutSegaPcmPort(mml, port0, pw, adr, d);
+            OutSegaPcmPort(mml, port[0], pw, adr, d);
         }
 
         public void OutSegaPcmKeyOn(partWork pw, MML mml)
@@ -146,12 +145,12 @@ namespace Core
             //StartAdr
             adr = pw.ch * 8 + 0x85;
             d = (byte)((stAdr & 0xff00) >> 8);
-            OutSegaPcmPort(mml, port0, pw, adr, d);
+            OutSegaPcmPort(mml, port[0], pw, adr, d);
 
             //StartAdr
             adr = pw.ch * 8 + 0x84;
             d = (byte)((stAdr & 0x00ff) >> 0);
-            OutSegaPcmPort(mml, port0, pw, adr, d);
+            OutSegaPcmPort(mml, port[0], pw, adr, d);
 
             if (pw.pcmLoopAddress != -1)
             {
@@ -160,12 +159,12 @@ namespace Core
                     //LoopAdr
                     adr = pw.ch * 8 + 0x05;
                     d = (byte)((pw.pcmLoopAddress & 0xff00) >> 8);
-                    OutSegaPcmPort(mml, port0, pw, adr, d);
+                    OutSegaPcmPort(mml, port[0], pw, adr, d);
 
                     //LoopAdr
                     adr = pw.ch * 8 + 0x04;
                     d = (byte)((pw.pcmLoopAddress & 0x00ff) >> 0);
-                    OutSegaPcmPort(mml, port0, pw, adr, d);
+                    OutSegaPcmPort(mml, port[0], pw, adr, d);
 
                     pw.beforepcmLoopAddress = pw.pcmLoopAddress;
                 }
@@ -177,13 +176,13 @@ namespace Core
                 adr = pw.ch * 8 + 0x06;
                 d = (byte)((pw.pcmEndAddress & 0xff00) >> 8);
                 d = (byte)((d != 0) ? (d - 1) : 0);
-                OutSegaPcmPort(mml, port0, pw, adr, d);
+                OutSegaPcmPort(mml, port[0], pw, adr, d);
                 pw.beforepcmEndAddress = pw.pcmEndAddress;
             }
 
             adr = pw.ch * 8 + 0x86;
             d = (byte)(((pw.pcmBank & 0x3f) << 2) | (pw.pcmLoopAddress != -1 ? 0 : 2) | 0);
-            OutSegaPcmPort(mml, port0, pw, adr, d);
+            OutSegaPcmPort(mml, port[0], pw, adr, d);
 
             if (parent.instPCM[pw.instrument].status != enmPCMSTATUS.ERROR)
             {
@@ -375,7 +374,7 @@ namespace Core
             int adr = pw.ch * 8 + 0x07;
             if (pw.beforeFNum != data)
             {
-                OutSegaPcmPort(mml, port0, pw, adr, data);
+                OutSegaPcmPort(mml, port[0], pw, adr, data);
                 pw.beforeFNum = data;
             }
 
@@ -416,7 +415,7 @@ namespace Core
             {
                 //Volume(Left)
                 int adr = pw.ch * 8 + 0x02;
-                OutSegaPcmPort(mml, port0, pw, adr, (byte)vl);
+                OutSegaPcmPort(mml, port[0], pw, adr, (byte)vl);
                 pw.beforeLVolume = vl;
             }
 
@@ -424,7 +423,7 @@ namespace Core
             {
                 //Volume(Right)
                 int adr = pw.ch * 8 + 0x03;
-                OutSegaPcmPort(mml, port0, pw, adr, (byte)vr);
+                OutSegaPcmPort(mml, port[0], pw, adr, (byte)vr);
                 pw.beforeRVolume = vr;
             }
         }
@@ -490,7 +489,7 @@ namespace Core
             byte adr = (byte)mml.args[0];
             byte dat = (byte)mml.args[1];
 
-            OutSegaPcmPort(mml, port0, pw, adr, dat);
+            OutSegaPcmPort(mml, port[0], pw, adr, dat);
         }
 
         public override void CmdPan(partWork pw, MML mml)

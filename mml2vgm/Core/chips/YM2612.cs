@@ -30,8 +30,10 @@ namespace Core
             IsSecondary = isSecondary;
 
             Frequency = 7670454;
-            port0 = new byte[] { (byte)(0x2 | (isSecondary ? 0xa0 : 0x50)) };
-            port1 = new byte[] { (byte)(0x3 | (isSecondary ? 0xa0 : 0x50)) };
+            port = new byte[][]{
+                new byte[] { (byte)(0x2 | (isSecondary ? 0xa0 : 0x50)) }
+                , new byte[] { (byte)(0x3 | (isSecondary ? 0xa0 : 0x50)) }
+            };
 
             Dictionary<string, List<double>> dic = MakeFNumTbl();
             if (dic != null)
@@ -83,13 +85,12 @@ namespace Core
 
         }
 
-        public override void InitPart(ref partWork pw)
+        public override void InitPart(partWork pw)
         {
             pw.slots = (byte)(((pw.Type == enmChannelType.FMOPN || pw.Type == enmChannelType.FMPCM) || pw.ch == 2) ? 0xf : 0x0);
             pw.volume = 127;
             pw.MaxVolume = 127;
-            pw.port0 = port0;
-            pw.port1 = port1;
+            pw.port = port;
         }
 
         public override void InitChip()
@@ -131,7 +132,7 @@ namespace Core
         {
             parent.OutData(
                 mml,
-                port0
+                port[0]
                 , 0x2b
                 , (byte)((sw ? 0x80 : 0))
                 );
@@ -239,7 +240,7 @@ namespace Core
 
             byte adr = (byte)mml.args[0];
             byte dat = (byte)mml.args[1];
-            parent.OutData(mml, (pw.ch > 2 && pw.ch < 6) ? port1 : port0, adr, dat);
+            parent.OutData(mml, (pw.ch > 2 && pw.ch < 6) ? port[1] : port[0], adr, dat);
         }
 
         public override void CmdMPMS(partWork pw, MML mml)

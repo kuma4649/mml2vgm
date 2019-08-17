@@ -20,8 +20,10 @@ namespace Core
             _canUsePcm = false;
             _canUsePI = false;
             FNumTbl = _FNumTbl;
-            port0 = new byte[] { (byte)(isSecondary ? 0x30 : 0x50) };
-            port1 = new byte[] { (byte)(isSecondary ? 0x3f : 0x4f) };
+            port =new byte[][]{
+                new byte[] { (byte)(isSecondary ? 0x30 : 0x50) }
+                , new byte[] { (byte)(isSecondary ? 0x3f : 0x4f) }
+            };
 
             Frequency = 3579545;
 
@@ -62,14 +64,13 @@ namespace Core
             OutAllKeyOff();
         }
 
-        public override void InitPart(ref partWork pw)
+        public override void InitPart(partWork pw)
         {
             pw.MaxVolume = 15;
             pw.volume = pw.MaxVolume;
             pw.keyOn = false;
             pw.panL = 3;
-            pw.port0 = port0;
-            pw.port1 = port1;
+            pw.port = port;
         }
 
 
@@ -185,10 +186,10 @@ namespace Core
                 pw.freq = f;
 
                 byte data = (byte)(0x80 + (pw.ch << 5) + (f & 0xf));
-                OutPsgPort(mml, port0,  data);
+                OutPsgPort(mml, port[0],  data);
 
                 data = (byte)((f & 0x3f0) >> 4);
-                OutPsgPort(mml, port0, data);
+                OutPsgPort(mml, port[0], data);
             }
             else
             {
@@ -196,7 +197,7 @@ namespace Core
                 if (pw.freq == f) return;
                 pw.freq = f;
                 byte data = (byte)f;
-                OutPsgPort(mml, port0,  data);
+                OutPsgPort(mml, port[0],  data);
             }
 
         }
@@ -244,7 +245,7 @@ namespace Core
             if (pw.beforeVolume != vol)
             {
                 data = (byte)(0x80 + (pw.ch << 5) + 0x10 + (15 - vol));
-                OutPsgPort(mml, port0,  data);
+                OutPsgPort(mml, port[0],  data);
                 pw.beforeVolume = vol;
             }
         }
@@ -296,7 +297,7 @@ namespace Core
             byte adr = (byte)mml.args[0];
             byte dat = (byte)mml.args[1];
 
-            OutPsgPort(mml, port0,  dat);
+            OutPsgPort(mml, port[0],  dat);
         }
 
         public override void CmdNoise(partWork pw, MML mml)
@@ -369,7 +370,7 @@ namespace Core
             }
 
             if (beforePanData == dat) return;
-            OutGGPsgStereoPort(mml, port1, (byte)dat);
+            OutGGPsgStereoPort(mml, port[1], (byte)dat);
             beforePanData = dat;
 
         }

@@ -20,7 +20,7 @@ namespace Core
             IsSecondary = isSecondary;
 
             Frequency = 3579545;
-            port0 = new byte[] { 0xb9 };
+            port = new byte[][] { new byte[] { 0xb9 } };
 
             Ch = new ClsChannel[ChMax];
             SetPartToCh(Ch, initialPartName);
@@ -70,11 +70,11 @@ namespace Core
 
             //MasterVolume(Max volume)
             TotalVolume = 0xff;
-            OutHuC6280Port(null, port0, 1, 0xff);
+            OutHuC6280Port(null, port[0], 1, 0xff);
             //LFO freq 0
-            OutHuC6280Port(null, port0, 8, 0);
+            OutHuC6280Port(null, port[0], 8, 0);
             //LFO ctrl 0
-            OutHuC6280Port(null, port0, 9, 0);
+            OutHuC6280Port(null, port[0], 9, 0);
 
             SupportReversePartWork = true;
 
@@ -82,46 +82,45 @@ namespace Core
             {
                 SetHuC6280CurrentChannel(null, pw);
 
-                pw.port0 = port0;// 0xb9;
+                pw.port = port;// 0xb9;
 
                 //freq( 0 )
                 pw.freq = 0;
-                OutHuC6280Port(null, port0, 2, 0);
-                OutHuC6280Port(null, port0, 3, 0);
+                OutHuC6280Port(null, port[0], 2, 0);
+                OutHuC6280Port(null, port[0], 3, 0);
 
                 pw.pcm = false;
 
                 //volume
                 byte data = (byte)(0x80 + (0 & 0x1f));
-                OutHuC6280Port(null, port0, 4, data);
+                OutHuC6280Port(null, port[0], 4, data);
 
                 //pan
                 pw.panL = 0;
                 pw.panR = 0;
-                OutHuC6280Port(null, port0, 5, 0xff);
+                OutHuC6280Port(null, port[0], 5, 0xff);
 
                 for (int j = 0; j < 32; j++)
                 {
-                    OutHuC6280Port(null, port0, 6, 0);
+                    OutHuC6280Port(null, port[0], 6, 0);
                 }
 
                 if (pw.ch > 3)
                 {
                     //noise(Ch5,6 only)
                     pw.noise = 0x1f;
-                    OutHuC6280Port(null, port0, 7, 0x1f);
+                    OutHuC6280Port(null, port[0], 7, 0x1f);
                 }
             }
         }
 
-        public override void InitPart(ref partWork pw)
+        public override void InitPart(partWork pw)
         {
             pw.MaxVolume = 31;
             pw.volume = pw.MaxVolume;
             pw.mixer = 0;
             pw.noise = 0;
-            pw.port0 = port0;
-            pw.port1 = port1;
+            pw.port = port;
         }
 
 
@@ -226,7 +225,7 @@ namespace Core
             {
                 SetHuC6280CurrentChannel(mml, pw);
                 byte data = (byte)(0x80 + (volume & 0x1f));
-                OutHuC6280Port(mml, port0, 4, data);
+                OutHuC6280Port(mml, port[0], 4, data);
                 pw.huc6280Envelope = volume;
             }
         }
@@ -239,7 +238,7 @@ namespace Core
             if (CurrentChannel != pch)
             {
                 byte data = (byte)(pch & 0x7);
-                OutHuC6280Port(mml, port0, 0x0, data);
+                OutHuC6280Port(mml, port[0], 0x0, data);
                 CurrentChannel = pch;
             }
         }
@@ -250,7 +249,7 @@ namespace Core
             {
                 SetHuC6280CurrentChannel(mml, pw);
                 byte data = (byte)(pan & 0xff);
-                OutHuC6280Port(mml, port0, 0x5, data);
+                OutHuC6280Port(mml, port[0], 0x5, data);
                 pw.huc6280Pan = pan;
             }
         }
@@ -274,11 +273,11 @@ namespace Core
             }
 
             SetHuC6280CurrentChannel(mml, pw);
-            OutHuC6280Port(mml, port0, 4, (byte)(0x40 + pw.volume)); //WaveIndexReset(=0x40)
+            OutHuC6280Port(mml, port[0], 4, (byte)(0x40 + pw.volume)); //WaveIndexReset(=0x40)
 
             for (int i = 1; i < parent.instWF[n].Length; i++) // 0 は音色番号が入っている為1からスタート
             {
-                OutHuC6280Port(mml, port0, 6, (byte)(parent.instWF[n][i] & 0x1f));
+                OutHuC6280Port(mml, port[0], 6, (byte)(parent.instWF[n][i] & 0x1f));
             }
 
         }
@@ -301,8 +300,8 @@ namespace Core
             if (!pw.pcm)
             {
                 SetHuC6280CurrentChannel(mml, pw);
-                OutHuC6280Port(mml, port0, 0x4, data);
-                OutHuC6280Port(mml, port0, 0x5, (byte)pw.huc6280Pan);
+                OutHuC6280Port(mml, port[0], 0x4, data);
+                OutHuC6280Port(mml, port[0], 0x5, (byte)pw.huc6280Pan);
                 return;
             }
 
@@ -313,8 +312,8 @@ namespace Core
 
             SetHuC6280CurrentChannel(mml, pw);
             data |= 0x40;
-            OutHuC6280Port(mml, port0, 0x4, data);
-            OutHuC6280Port(mml, port0, 0x5, (byte)pw.huc6280Pan);
+            OutHuC6280Port(mml, port[0], 0x4, data);
+            OutHuC6280Port(mml, port[0], 0x5, (byte)pw.huc6280Pan);
 
             if (pw.isPcmMap)
             {
@@ -447,7 +446,7 @@ namespace Core
         {
             SetHuC6280CurrentChannel(mml, pw);
 
-            OutHuC6280Port(mml, port0, 0x4, 0x80);
+            OutHuC6280Port(mml, port[0], 0x4, 0x80);
             //OutHuC6280Port(pw.isSecondary, 0x5, 0);
         }
 
@@ -478,8 +477,8 @@ namespace Core
             if (pw.freq == f) return;
 
             SetHuC6280CurrentChannel(mml, pw);
-            if ((pw.freq & 0x0ff) != (f & 0x0ff)) OutHuC6280Port(mml, port0, 2, (byte)(f & 0xff));
-            if ((pw.freq & 0xf00) != (f & 0xf00)) OutHuC6280Port(mml, port0, 3, (byte)((f & 0xf00) >> 8));
+            if ((pw.freq & 0x0ff) != (f & 0x0ff)) OutHuC6280Port(mml, port[0], 2, (byte)(f & 0xff));
+            if ((pw.freq & 0xf00) != (f & 0xf00)) OutHuC6280Port(mml, port[0], 3, (byte)((f & 0xf00) >> 8));
             //OutHuC6280Port(pw.isSecondary, 2, (byte)(f & 0xff));
             //OutHuC6280Port(pw.isSecondary, 3, (byte)((f & 0xf00) >> 8));
 
@@ -585,7 +584,7 @@ namespace Core
             {
                 pw.noise = n;
                 SetHuC6280CurrentChannel(mml, pw);
-                OutHuC6280Port(mml, port0, 7, (byte)((pw.mixer != 0 ? 0x80 : 0x00) + (pw.noise & 0x1f)));
+                OutHuC6280Port(mml, port[0], 7, (byte)((pw.mixer != 0 ? 0x80 : 0x00) + (pw.noise & 0x1f)));
             }
         }
 
@@ -624,16 +623,16 @@ namespace Core
             {
                 if (n == 0)
                 {
-                    OutHuC6280Port(mml, port0, 9, 0); //disable
+                    OutHuC6280Port(mml, port[0], 9, 0); //disable
                 }
                 else
                 {
-                    OutHuC6280Port(mml, port0, 9, (byte)pw.lfo[c].param[0]);
-                    OutHuC6280Port(mml, port0, 8, (byte)pw.lfo[c].param[1]);
-                    OutHuC6280Port(mml, port0, 0, 1);//CurrentChannel 2
+                    OutHuC6280Port(mml, port[0], 9, (byte)pw.lfo[c].param[0]);
+                    OutHuC6280Port(mml, port[0], 8, (byte)pw.lfo[c].param[1]);
+                    OutHuC6280Port(mml, port[0], 0, 1);//CurrentChannel 2
                     CurrentChannel = 1;
-                    OutHuC6280Port(mml, port0, 2, (byte)(pw.lfo[c].param[2] & 0xff));
-                    OutHuC6280Port(mml, port0, 3, (byte)((pw.lfo[c].param[2] & 0xf00) >> 8));
+                    OutHuC6280Port(mml, port[0], 2, (byte)(pw.lfo[c].param[2] & 0xff));
+                    OutHuC6280Port(mml, port[0], 3, (byte)((pw.lfo[c].param[2] & 0xf00) >> 8));
                     lstPartWork[1].freq = pw.lfo[c].param[2];
                 }
             }
@@ -649,7 +648,7 @@ namespace Core
 
             OutHuC6280Port(
                 mml,
-                port0
+                port[0]
                 , 1
                 , (byte)TotalVolume
                 );
@@ -690,7 +689,7 @@ namespace Core
             byte adr = (byte)mml.args[0];
             byte dat = (byte)mml.args[1];
 
-            OutHuC6280Port(mml, port0, adr, dat);
+            OutHuC6280Port(mml, port[0], adr, dat);
         }
 
         public override void CmdLoopExtProc(partWork p, MML mml)
@@ -771,7 +770,7 @@ namespace Core
             {
                 pw.mixer = n;
                 SetHuC6280CurrentChannel(mml, pw);
-                OutHuC6280Port(mml, port0, 7, (byte)((pw.mixer != 0 ? 0x80 : 0x00) + (pw.noise & 0x1f)));
+                OutHuC6280Port(mml, port[0], 7, (byte)((pw.mixer != 0 ? 0x80 : 0x00) + (pw.noise & 0x1f)));
             }
         }
 

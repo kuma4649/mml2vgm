@@ -23,7 +23,7 @@ namespace Core
             IsSecondary = isSecondary;
 
             Frequency = 8000000;
-            port0 = new byte[] { 0xd4 };
+            port = new byte[][] { new byte[] { 0xd4 } };
             Interface = 0x0;//System2
 
             dataType = 0x8d;
@@ -61,11 +61,11 @@ namespace Core
             memoryMap = new List<long>();
         }
 
-        public override void InitPart(ref partWork pw)
+        public override void InitPart(partWork pw)
         {
             pw.MaxVolume = 255;
             pw.volume = pw.MaxVolume;
-            pw.port0 = port0;
+            pw.port = port;
         }
 
         public override void InitChip()
@@ -498,7 +498,7 @@ namespace Core
         {
             parent.OutData(
                 mml,
-                pw.port0
+                pw.port[0]
                 , (byte)(port | (IsSecondary ? 0x80 : 0))
                 , adr
                 , data

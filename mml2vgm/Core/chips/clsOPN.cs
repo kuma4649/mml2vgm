@@ -30,9 +30,9 @@ namespace Core
             SetSsgVolume(pw, mml);
             if (pw.HardEnvelopeSw)
             {
-                parent.OutData(mml,pw.port0, 0x0d, (byte)(pw.HardEnvelopeType & 0xf));
+                parent.OutData(mml,pw.port[0], 0x0d, (byte)(pw.HardEnvelopeType & 0xf));
             }
-            parent.OutData(mml,pw.port0, 0x07, data);
+            parent.OutData(mml,pw.port[0], 0x07, data);
 
             MML vmml = new MML();
             vmml.type = enmMMLType.Volume;
@@ -53,9 +53,9 @@ namespace Core
             data = (byte)(((ClsOPN)pw.chip).SSGKeyOn | (n << pch));
             ((ClsOPN)pw.chip).SSGKeyOn = data;
 
-            parent.OutData(mml, pw.port0, (byte)(0x08 + pch), 0);
+            parent.OutData(mml, pw.port[0], (byte)(0x08 + pch), 0);
             pw.beforeVolume = -1;
-            parent.OutData(mml, pw.port0, 0x07, data);
+            parent.OutData(mml, pw.port[0], 0x07, data);
 
         }
 
@@ -86,7 +86,7 @@ namespace Core
 
             if (pw.beforeVolume != vol)
             {
-                parent.OutData(mml, pw.port0, (byte)(0x08 + pch), (byte)vol);
+                parent.OutData(mml, pw.port[0], (byte)(0x08 + pch), (byte)vol);
                 //pw.beforeVolume = pw.volume;
                 pw.beforeVolume = vol;
             }
@@ -94,7 +94,7 @@ namespace Core
 
         public void OutSsgNoise(MML mml,partWork pw, int n)
         {
-            parent.OutData(mml, pw.port0, 0x06, (byte)(n & 0x1f));
+            parent.OutData(mml, pw.port[0], 0x06, (byte)(n & 0x1f));
         }
 
         public void SetSsgFNum(partWork pw,MML mml)
@@ -140,10 +140,10 @@ namespace Core
             int n = (pw.chip is YM2203) ? 6 : 9;
 
             data = (byte)(f & 0xff);
-            parent.OutData(mml,pw.port0, (byte)(0 + (pw.ch - n) * 2), data);
+            parent.OutData(mml,pw.port[0], (byte)(0 + (pw.ch - n) * 2), data);
 
             data = (byte)((f & 0xf00) >> 8);
-            parent.OutData(mml,pw.port0, (byte)(1 + (pw.ch - n) * 2), data);
+            parent.OutData(mml,pw.port[0], (byte)(1 + (pw.ch - n) * 2), data);
         }
 
         public int GetSsgFNum(partWork pw,MML mml, int octave, char noteCmd, int shift)
@@ -166,7 +166,7 @@ namespace Core
         {
             //TODO: 効果音パートで指定されている場合の考慮不足
             int vch = pw.ch;
-            byte[] port = pw.ch > 2 ? pw.port1 : pw.port0;
+            byte[] port = pw.ch > 2 ? pw.port[1] : pw.port[0];
             vch = (byte)(vch > 2 ? vch - 3 : vch);
 
             pan = pan & 3;
@@ -180,7 +180,7 @@ namespace Core
         {
             parent.OutData(
                 mml,
-                pw.port0
+                pw.port[0]
                 , 0x22
                 , (byte)((lfoNum & 7) + (sw ? 8 : 0))
                 );
@@ -191,7 +191,7 @@ namespace Core
             // ignore Timer ^^;
             parent.OutData(
                 mml,
-                pw.port0
+                pw.port[0]
                 , 0x27
                 , (byte)((sw ? 0x40 : 0))
                 );
@@ -200,7 +200,7 @@ namespace Core
         public void OutFmSetFeedbackAlgorithm(MML mml,partWork pw, int fb, int alg)
         {
             int vch = pw.ch;
-            byte[] port = pw.ch > 2 ? pw.port1 : pw.port0;
+            byte[] port = pw.ch > 2 ? pw.port[1] : pw.port[0];
             vch = (byte)(vch > 2 ? vch - 3 : vch);
 
             fb &= 7;
@@ -212,7 +212,7 @@ namespace Core
         public void OutFmSetDtMl(MML mml, partWork pw, int ope, int dt, int ml)
         {
             int vch = pw.ch;
-            byte[] port = vch > 2 ? pw.port1 : pw.port0;
+            byte[] port = vch > 2 ? pw.port[1] : pw.port[0];
             vch = (byte)(vch > 2 ? vch - 3 : vch);
 
             ope = (ope == 1) ? 2 : ((ope == 2) ? 1 : ope);
@@ -224,7 +224,7 @@ namespace Core
 
         public void OutFmSetTl(MML mml,partWork pw, int ope, int tl)
         {
-            byte[] port = (pw.ch > 2 ? pw.port1 : pw.port0);
+            byte[] port = (pw.ch > 2 ? pw.port[1] : pw.port[0]);
             int vch = (byte)(pw.ch > 2 ? pw.ch - 3 : pw.ch);
 
             ope = (ope == 1) ? 2 : ((ope == 2) ? 1 : ope);
@@ -236,7 +236,7 @@ namespace Core
         public void OutFmSetKsAr(MML mml,partWork pw, int ope, int ks, int ar)
         {
             int vch = pw.ch;
-            byte[] port = (pw.ch > 2 ? pw.port1 : pw.port0);
+            byte[] port = (pw.ch > 2 ? pw.port[1] : pw.port[0]);
             vch = (byte)(vch > 2 ? vch - 3 : vch);
 
             ope = (ope == 1) ? 2 : ((ope == 2) ? 1 : ope);
@@ -249,7 +249,7 @@ namespace Core
         public void OutFmSetAmDr(MML mml,partWork pw, int ope, int am, int dr)
         {
             int vch = pw.ch;
-            byte[] port = (pw.ch > 2 ? pw.port1 : pw.port0);
+            byte[] port = (pw.ch > 2 ? pw.port[1] : pw.port[0]);
             vch = (byte)(vch > 2 ? vch - 3 : vch);
 
             ope = (ope == 1) ? 2 : ((ope == 2) ? 1 : ope);
@@ -262,7 +262,7 @@ namespace Core
         public void OutFmSetSr(MML mml,partWork pw, int ope, int sr)
         {
             int vch = pw.ch;
-            byte[] port = pw.ch > 2 ? pw.port1 : pw.port0;
+            byte[] port = pw.ch > 2 ? pw.port[1] : pw.port[0];
             vch = (byte)(vch > 2 ? vch - 3 : vch);
 
             ope = (ope == 1) ? 2 : ((ope == 2) ? 1 : ope);
@@ -274,7 +274,7 @@ namespace Core
         public void OutFmSetSlRr(MML mml, partWork pw, int ope, int sl, int rr)
         {
             int vch = pw.ch;
-            byte[] port = pw.ch > 2 ? pw.port1 : pw.port0;
+            byte[] port = pw.ch > 2 ? pw.port[1] : pw.port[0];
             vch = (byte)(vch > 2 ? vch - 3 : vch);
 
             ope = (ope == 1) ? 2 : ((ope == 2) ? 1 : ope);
@@ -287,7 +287,7 @@ namespace Core
         public void OutFmSetSSGEG(MML mml,partWork pw, int ope, int n)
         {
             int vch = pw.ch;
-            byte[] port = pw.ch > 2 ? pw.port1 : pw.port0;
+            byte[] port = pw.ch > 2 ? pw.port[1] : pw.port[0];
             vch = (byte)(vch > 2 ? vch - 3 : vch);
 
             ope = (ope == 1) ? 2 : ((ope == 2) ? 1 : ope);
@@ -368,13 +368,13 @@ namespace Core
             ope &= 3;
             if (ope == 0)
             {
-                parent.OutData(mml,pw.port0, 0xa6, (byte)(((num & 0x700) >> 8) + (((octave - 1) & 0x7) << 3)));
-                parent.OutData(mml,pw.port0, 0xa2, (byte)(num & 0xff));
+                parent.OutData(mml,pw.port[0], 0xa6, (byte)(((num & 0x700) >> 8) + (((octave - 1) & 0x7) << 3)));
+                parent.OutData(mml,pw.port[0], 0xa2, (byte)(num & 0xff));
             }
             else
             {
-                parent.OutData(mml,pw.port0, (byte)(0xac + ope), (byte)(((num & 0x700) >> 8) + (((octave - 1) & 0x7) << 3)));
-                parent.OutData(mml,pw.port0, (byte)(0xa8 + ope), (byte)(num & 0xff));
+                parent.OutData(mml,pw.port[0], (byte)(0xac + ope), (byte)(((num & 0x700) >> 8) + (((octave - 1) & 0x7) << 3)));
+                parent.OutData(mml,pw.port[0], (byte)(0xa8 + ope), (byte)(num & 0xff));
             }
         }
 
@@ -527,7 +527,7 @@ namespace Core
                         | (pw.chip.lstPartWork[n + 4].Ch3SpecialModeKeyOn ? pw.chip.lstPartWork[n + 4].slots : 0x0)
                         | (pw.chip.lstPartWork[n + 5].Ch3SpecialModeKeyOn ? pw.chip.lstPartWork[n + 5].slots : 0x0);
 
-                    parent.OutData(mml, pw.port0, 0x28, (byte)((slot << 4) + 2));
+                    parent.OutData(mml, pw.port[0], 0x28, (byte)((slot << 4) + 2));
                 }
                 else
                 {
@@ -535,7 +535,7 @@ namespace Core
                     {
                         byte vch = (byte)((pw.ch > 2) ? pw.ch + 1 : pw.ch);
                         //key off
-                        parent.OutData(mml, pw.port0, 0x28, (byte)(0x00 + (vch & 7)));
+                        parent.OutData(mml, pw.port[0], 0x28, (byte)(0x00 + (vch & 7)));
                     }
                 }
 
@@ -598,26 +598,26 @@ namespace Core
                 if ((pw.slots & 8) != 0)
                 {
                     int f = pw.freq + pw.slotDetune[3];
-                    parent.OutData(mml, pw.port0, (byte)0xa6, (byte)((f & 0xff00) >> 8));
-                    parent.OutData(mml, pw.port0, (byte)0xa2, (byte)(f & 0xff));
+                    parent.OutData(mml, pw.port[0], (byte)0xa6, (byte)((f & 0xff00) >> 8));
+                    parent.OutData(mml, pw.port[0], (byte)0xa2, (byte)(f & 0xff));
                 }
                 if ((pw.slots & 4) != 0)
                 {
                     int f = pw.freq + pw.slotDetune[2];
-                    parent.OutData(mml, pw.port0, (byte)0xac, (byte)((f & 0xff00) >> 8));
-                    parent.OutData(mml, pw.port0, (byte)0xa8, (byte)(f & 0xff));
+                    parent.OutData(mml, pw.port[0], (byte)0xac, (byte)((f & 0xff00) >> 8));
+                    parent.OutData(mml, pw.port[0], (byte)0xa8, (byte)(f & 0xff));
                 }
                 if ((pw.slots & 1) != 0)
                 {
                     int f = pw.freq + pw.slotDetune[0];
-                    parent.OutData(mml, pw.port0, (byte)0xad, (byte)((f & 0xff00) >> 8));
-                    parent.OutData(mml, pw.port0, (byte)0xa9, (byte)(f & 0xff));
+                    parent.OutData(mml, pw.port[0], (byte)0xad, (byte)((f & 0xff00) >> 8));
+                    parent.OutData(mml, pw.port[0], (byte)0xa9, (byte)(f & 0xff));
                 }
                 if ((pw.slots & 2) != 0)
                 {
                     int f = pw.freq + pw.slotDetune[1];
-                    parent.OutData(mml, pw.port0, (byte)0xae, (byte)((f & 0xff00) >> 8));
-                    parent.OutData(mml, pw.port0, (byte)0xaa, (byte)(f & 0xff));
+                    parent.OutData(mml, pw.port[0], (byte)0xae, (byte)((f & 0xff00) >> 8));
+                    parent.OutData(mml, pw.port[0], (byte)0xaa, (byte)(f & 0xff));
                 }
             }
             else
@@ -635,7 +635,7 @@ namespace Core
                 {
                     if (pw.pcm) return;
 
-                    byte[] port = pw.ch > 2 ? pw.port1 : pw.port0;
+                    byte[] port = pw.ch > 2 ? pw.port[1] : pw.port[0];
                     byte vch = (byte)(pw.ch > 2 ? pw.ch - 3 : pw.ch);
 
                     parent.OutData(mml, port, (byte)(0xa4 + vch), (byte)((pw.freq & 0xff00) >> 8));
@@ -692,7 +692,7 @@ namespace Core
                     }
                     else
                     {
-                        parent.OutData(mml,pw.port0, 0x28, (byte)((slot << 4) + 2));
+                        parent.OutData(mml,pw.port[0], 0x28, (byte)((slot << 4) + 2));
                     }
                 }
                 else
@@ -726,7 +726,7 @@ namespace Core
                         else
                         {
                             //key on
-                            parent.OutData(mml,pw.port0, 0x28, (byte)((pw.slots << 4) + (vch & 7)));
+                            parent.OutData(mml,pw.port[0], 0x28, (byte)((pw.slots << 4) + (vch & 7)));
                         }
                     }
                 }
@@ -1109,7 +1109,7 @@ namespace Core
             else if (pw.Type == enmChannelType.FMOPN) ch = pw.ch;
             else return;
 
-            byte[] port = (ch > 2 ? pw.port1 : pw.port0);
+            byte[] port = (ch > 2 ? pw.port[1] : pw.port[0]);
             int vch = ch;
             vch = (byte)(vch > 2 ? vch - 3 : vch);
 
@@ -1127,7 +1127,7 @@ namespace Core
             else if (pw.Type == enmChannelType.FMOPN) ch = pw.ch;
             else return;
 
-            byte[] port = (ch > 2 ? pw.port1 : pw.port0);
+            byte[] port = (ch > 2 ? pw.port[1] : pw.port[0]);
             int vch = ch;
             vch = (byte)(vch > 2 ? vch - 3 : vch);
 
@@ -1351,8 +1351,8 @@ namespace Core
                     n = (int)mml.args[1];
                     if (pw.HardEnvelopeSpeed != n)
                     {
-                        parent.OutData(mml, pw.port0, 0x0b, (byte)(n & 0xff));
-                        parent.OutData(mml, pw.port0, 0x0c, (byte)((n >> 8) & 0xff));
+                        parent.OutData(mml, pw.port[0], 0x0b, (byte)(n & 0xff));
+                        parent.OutData(mml, pw.port[0], 0x0c, (byte)((n >> 8) & 0xff));
                         pw.HardEnvelopeSpeed = n;
                     }
                     break;
@@ -1366,7 +1366,7 @@ namespace Core
                     n = (int)mml.args[1];
                     if (pw.HardEnvelopeType != n)
                     {
-                        parent.OutData(mml, pw.port0, 0x0d, (byte)(n & 0xf));
+                        parent.OutData(mml, pw.port[0], 0x0d, (byte)(n & 0xf));
                         pw.HardEnvelopeType = n;
                     }
                     break;

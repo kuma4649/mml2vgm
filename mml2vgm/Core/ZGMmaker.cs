@@ -30,6 +30,21 @@ namespace Core
             ,0,0,0,0 //+0x3c: reserve
         };
 
+        private byte[] DefineTemp = new byte[]
+        {
+            0x44,0x65,0x66 //'Def'
+            ,14 // Length 1byte
+            ,0,0,0,0 // Chip Identify number	4byte
+            ,0,0//Chip Command number	2byte	
+            ,0,0,0,0//Clock					4byte
+        };
+
+        private byte[] TrackTemp = new byte[]
+        {
+            0x54,0x72,0x6b //'Trk'
+            ,0,0,0,0 // Length 4byte
+        };
+
         private uint TotalSamples = 0;
         private uint GD3Offset;
         private List<DefineInfo> define;
@@ -37,8 +52,9 @@ namespace Core
         private ClsVgm mmlInfo;
         private object[] tblChipIdentifyNumber = new object[]
         {
-              new object[]{ "SN76489" , 0x0000000c , 1 , 1 , new byte[] { 0,0,0,0 } }
-            , new object[]{ "YM2612"  , 0x0000002c , 2 , 2 , null }
+            //              ChipName    Ident        Port  CmdLen  Option
+              new object[]{ "SN76489" , 0x0000000c , 1   , 1     , new byte[] { 0,0,0,0 } }
+            , new object[]{ "YM2612"  , 0x0000002c , 2   , 2     , null }
         };
         private Dictionary<string, object[]> dicChipIdentifyNumber;
         private int ChipCommandSize = 1;
@@ -64,7 +80,6 @@ namespace Core
             makeAndOutHeaderDiv();
             makeDefineDiv();
             makeTrackDiv();
-            outDefineAndTrackDiv();
             makeAndOutExtraDiv();
             makeAndOutGD3Div();
             makeFooterDiv();
@@ -123,14 +138,71 @@ namespace Core
                     DefineInfo di = new DefineInfo();
                     di.chip = chip;
                     di.chipIdentNo = (uint)(int)dicChipIdentifyNumber[chip.Name][1];
-                    di.commandNo = cmdNo++;
+                    di.commandNo = cmdNo;
+                    chip.port = new byte[(int)dicChipIdentifyNumber[chip.Name][2]][];
+                    for (int i = 0; i < (int)dicChipIdentifyNumber[chip.Name][2]; i++)
+                    {
+                        chip.port[i] = new byte[] { (byte)cmdNo, (byte)(cmdNo >> 8) };
+                        cmdNo++;
+                    }
                     di.clock = chip.Frequency;
+                    if (dicChipIdentifyNumber[chip.Name][4] != null)
+                    {
+                        di.option = new byte[((byte[])dicChipIdentifyNumber[chip.Name][4]).Length];
+                        for (int i = 0; i < ((byte[])dicChipIdentifyNumber[chip.Name][4]).Length; i++)
+                        {
+                            di.option[i] = ((byte[])dicChipIdentifyNumber[chip.Name][4])[i];
+                        }
+                    }
                     define.Add(di);
+
+                    for (int i = 0; i < chip.lstPartWork.Count; i++)
+                    {
+                        chip.InitPart(chip.lstPartWork[i]);
+                    }
                 }
             }
 
             ChipCommandSize = cmdNo < 0x100 ? 1 : 2;
+            mmlInfo.ChipCommandSize = ChipCommandSize;
+            if (ChipCommandSize == 1)
+            {
+                foreach (KeyValuePair<enmChipType, ClsChip[]> kvp in mmlInfo.chips)
+                {
+                    foreach (ClsChip chip in kvp.Value)
+                    {
+                        if (!chip.use) continue;
+                        for (int i = 0; i < chip.port.Length; i++)
+                        {
+                            chip.port[i] = new byte[] { chip.port[i][0] };
+                        }
+                    }
+                }
+            }
 
+            foreach (DefineInfo di in define)
+            {
+                int pos = mmlInfo.dat.Count;
+                di.offset = pos;
+                foreach (byte b in DefineTemp)
+                {
+                    outDatum dt = new outDatum(enmMMLType.unknown, null, null, b);
+                    mmlInfo.dat.Add(dt);
+                }
+
+                mmlInfo.dat[pos + 0x03].val = (byte)(di.length + (di.option != null ? di.option.Length : 0));
+                Common.SetLE32(mmlInfo.dat, (uint)(pos + 0x04), (uint)(di.chipIdentNo));
+                Common.SetLE16(mmlInfo.dat, (uint)(pos + 0x08), (ushort)(di.chip.port[0][0] + (di.chip.port[0].Length > 1 ? di.chip.port[0][1] : 0) * 256));
+                Common.SetLE32(mmlInfo.dat, (uint)(pos + 0x0a), (uint)(di.clock));
+                if (di.option != null)
+                {
+                    foreach (byte b in di.option)
+                    {
+                        outDatum dt = new outDatum(enmMMLType.unknown, null, null, b);
+                        mmlInfo.dat.Add(dt);
+                    }
+                }
+            }
         }
 
         private void makeTrackDiv()
@@ -140,6 +212,16 @@ namespace Core
             long waitCounter = 0;
             int endChannel = 0;
             int totalChannel = 0;
+
+            TrackInfo ti = new TrackInfo();
+            ti.offset = mmlInfo.dat.Count;
+            track.Add(ti);
+
+            foreach (byte b in TrackTemp)
+            {
+                outDatum dt = new outDatum(enmMMLType.unknown, null, null, b);
+                mmlInfo.dat.Add(dt);
+            }
 
             foreach (KeyValuePair<enmChipType, ClsChip[]> kvp in mmlInfo.chips)
                 foreach (ClsChip chip in kvp.Value)
@@ -167,18 +249,8 @@ namespace Core
                 mmlInfo.lClock -= waitCounter;
                 mmlInfo.dSample -= (long)(mmlInfo.info.samplesPerClock * waitCounter);
             }
-        }
 
-        /// <summary>
-        /// Define divとTrackDivを出力する
-        /// 
-        /// 処理してみないと必要なDefの数とバイト長がわからない為、
-        /// makeDefineDivとmakeTrackDivで予め処理したものを
-        /// ここで確定値として出力する
-        /// </summary>
-        private void outDefineAndTrackDiv()
-        {
-
+            Common.SetLE32(mmlInfo.dat, (uint)(ti.offset + 0x03), (uint)(mmlInfo.dat.Count - ti.offset));
         }
 
         private void makeAndOutExtraDiv()

@@ -31,11 +31,11 @@ namespace Core
 
         }
 
-        public override void InitPart(ref partWork pw)
+        public override void InitPart(partWork pw)
         {
             pw.volume = 15;
             pw.MaxVolume = 15;
-            pw.port0 = new byte[] { 0 };
+            pw.port = new byte[][] { new byte[] { 0 } };
         }
 
         public override void InitChip()

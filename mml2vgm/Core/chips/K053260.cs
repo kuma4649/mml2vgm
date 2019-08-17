@@ -25,7 +25,7 @@ namespace Core
             IsSecondary = isSecondary;
 
             Frequency = 3_579_545;
-            port0 = new byte[] { 0xba };
+            port =new byte[][] { new byte[] { 0xba } };
 
             Ch = new ClsChannel[ChMax];
             SetPartToCh(Ch, initialPartName);
@@ -76,12 +76,11 @@ namespace Core
             memoryMap = new List<long>();
         }
 
-        public override void InitPart(ref partWork pw)
+        public override void InitPart(partWork pw)
         {
             pw.MaxVolume = 255;
             pw.volume = pw.MaxVolume;
-            pw.port0 = port0;
-            pw.port1 = port1;
+            pw.port = port;
         }
 
         private int[] n2f;
@@ -96,7 +95,7 @@ namespace Core
                 pw.MaxVolume = Ch[ch].MaxVolume;
                 pw.panL = 0x4;//Center
                 pw.volume = pw.MaxVolume;
-                pw.port0 = port0;
+                pw.port = port;
             }
 
             if (IsSecondary)
@@ -109,7 +108,7 @@ namespace Core
             beforePan12 = -1;
             beforePan34 = -1;
 
-            OutK053260Port(null, port0, null, 0x2f, 3);
+            OutK053260Port(null, port[0], null, 0x2f, 3);
 
             n2f = new int[8 * 12];
             int ind = 0;
@@ -364,14 +363,14 @@ namespace Core
                 //StartAdr L
                 adr = (byte)((pw.ch + 1) * 8 + 0x04);
                 data = (byte)stAdr;
-                OutK053260Port(mml, port0, pw
+                OutK053260Port(mml, port[0], pw
                     , adr
                     , data
                     );
                 //StartAdr H
                 adr = (byte)((pw.ch + 1) * 8 + 0x05);
                 data = (byte)(stAdr >> 8);
-                OutK053260Port(mml, port0, pw
+                OutK053260Port(mml, port[0], pw
                     , adr
                     , data
                     );
@@ -384,14 +383,14 @@ namespace Core
                 //EndAdr L
                 adr = (byte)((pw.ch + 1) * 8 + 0x02);
                 data = (byte)pw.pcmEndAddress;
-                OutK053260Port(mml, port0, pw
+                OutK053260Port(mml, port[0], pw
                     , adr
                     , data
                     );
                 //EndAdr H
                 adr = (byte)((pw.ch + 1) * 8 + 0x03);
                 data = (byte)(pw.pcmEndAddress >> 8);
-                OutK053260Port(mml, port0, pw
+                OutK053260Port(mml, port[0], pw
                     , adr
                     , data
                     );
@@ -408,7 +407,7 @@ namespace Core
             {
                 adr = (byte)((pw.ch + 1) * 8 + 0x06);
                 data = (byte)(pw.pcmBank);
-                OutK053260Port(mml, port0, pw
+                OutK053260Port(mml, port[0], pw
                     , adr
                     , data
                     );
@@ -496,11 +495,11 @@ namespace Core
             if (pw.beforeFNum != data)
             {
                 int adr = (pw.ch + 1) * 8 + 0x00;
-                OutK053260Port(mml, port0, pw
+                OutK053260Port(mml, port[0], pw
                     , (byte)adr
                     , (byte)data);
                 adr++;
-                OutK053260Port(mml, port0, pw
+                OutK053260Port(mml, port[0], pw
                     , (byte)adr
                     , (byte)((data & 0xf00) >> 8));
                 pw.beforeFNum = data;
@@ -559,7 +558,7 @@ namespace Core
             if (pw.beforeVolume != data)
             {
                 byte adr = (byte)((pw.ch + 1) * 8 + 0x07);
-                OutK053260Port(mml, port0, pw
+                OutK053260Port(mml, port[0], pw
                     , adr
                     , data
                     );
@@ -674,7 +673,7 @@ namespace Core
             byte adr = (byte)mml.args[0];
             byte dat = (byte)mml.args[1];
 
-            OutK053260Port(mml, port0, pw, adr, dat);
+            OutK053260Port(mml, port[0], pw, adr, dat);
         }
 
         public override void CmdLoopExtProc(partWork pw, MML mml)
@@ -698,7 +697,7 @@ namespace Core
             }
             if (beforeloopDpcm != v)
             {
-                OutK053260Port(mml, port0, null, 0x2a, v);
+                OutK053260Port(mml, port[0], null, 0x2a, v);
                 beforeloopDpcm = v;
             }
 
@@ -714,12 +713,12 @@ namespace Core
             }
             if (beforePan12 != v)
             {
-                OutK053260Port(mml, port0, null, 0x2c, v);
+                OutK053260Port(mml, port[0], null, 0x2c, v);
                 beforePan12 = v;
             }
             if (beforePan34 != w)
             {
-                OutK053260Port(mml, port0, null, 0x2d, w);
+                OutK053260Port(mml, port[0], null, 0x2d, w);
                 beforePan34 = w;
             }
 
@@ -737,7 +736,7 @@ namespace Core
             }
             if (beforeKeyON != v)
             {
-                OutK053260Port(mml, port0, null, 0x28, v);
+                OutK053260Port(mml, port[0], null, 0x28, v);
                 beforeKeyON = v;
             }
 

@@ -34,7 +34,7 @@ namespace Core
             IsSecondary = isSecondary;
 
             Frequency = 1789750;
-            port0 = new byte[] { 0xa0 };
+            port = new byte[][] { new byte[] { 0xa0 } };
 
             Dictionary<string, List<double>> dic = MakeFNumTbl();
             if (dic != null)
@@ -63,12 +63,11 @@ namespace Core
 
         }
 
-        public override void InitPart(ref partWork pw)
+        public override void InitPart(partWork pw)
         {
             pw.volume = 15;
             pw.MaxVolume = 15;
-            pw.port0 = port0;
-            pw.port1 = port1;
+            pw.port = port;
 
         }
 
@@ -78,7 +77,7 @@ namespace Core
 
             for (int ch = 0; ch < 3; ch++)
             {
-                OutSsgKeyOff(null,lstPartWork[ch]);
+                OutSsgKeyOff(null, lstPartWork[ch]);
                 lstPartWork[ch].volume = 0;
             }
 
@@ -88,7 +87,7 @@ namespace Core
             }
         }
 
-        public void OutSsgKeyOn(MML mml,partWork pw)
+        public void OutSsgKeyOn(MML mml, partWork pw)
         {
             byte pch = (byte)pw.ch;
             int n = (pw.mixer & 0x1) + ((pw.mixer & 0x2) << 2);
@@ -98,15 +97,15 @@ namespace Core
             data &= (byte)(~(n << pch));
             SSGKeyOn = data;
 
-            SetSsgVolume(mml,pw);
+            SetSsgVolume(mml, pw);
             if (pw.HardEnvelopeSw)
             {
-                parent.OutData(mml, port0, 0x0d, (byte)(pw.HardEnvelopeType & 0xf));
+                parent.OutData(mml, port[0], 0x0d, (byte)(pw.HardEnvelopeType & 0xf));
             }
-            parent.OutData(mml,port0, 0x07, data);
+            parent.OutData(mml, port[0], 0x07, data);
         }
 
-        public void OutSsgKeyOff(MML mml,partWork pw)
+        public void OutSsgKeyOff(MML mml, partWork pw)
         {
             byte pch = (byte)pw.ch;
             int n = 9;
@@ -115,9 +114,9 @@ namespace Core
             data = (byte)(SSGKeyOn | (n << pch));
             SSGKeyOn = data;
 
-            parent.OutData(mml,port0, (byte)(0x08 + pch), 0);
+            parent.OutData(mml, port[0], (byte)(0x08 + pch), 0);
             pw.beforeVolume = -1;
-            parent.OutData(mml,port0, 0x07, data);
+            parent.OutData(mml, port[0], 0x07, data);
         }
 
         public void SetSsgVolume(MML mml, partWork pw)
@@ -146,20 +145,20 @@ namespace Core
 
             if (pw.beforeVolume != vol)
             {
-                parent.OutData(mml, port0, (byte)(0x08 + pch), (byte)vol);
+                parent.OutData(mml, port[0], (byte)(0x08 + pch), (byte)vol);
                 //pw.beforeVolume = pw.volume;
                 pw.beforeVolume = vol;
             }
         }
 
-        public void OutSsgNoise(MML mml,partWork pw, int n)
+        public void OutSsgNoise(MML mml, partWork pw, int n)
         {
-            parent.OutData(mml,port0, 0x06, (byte)(n & 0x1f));
+            parent.OutData(mml, port[0], 0x06, (byte)(n & 0x1f));
         }
 
         public void SetSsgFNum(partWork pw, MML mml)
         {
-            int f = GetSsgFNum(pw,mml, pw.octaveNow, pw.noteCmd, pw.shift + pw.keyShift);//
+            int f = GetSsgFNum(pw, mml, pw.octaveNow, pw.noteCmd, pw.shift + pw.keyShift);//
             if (pw.bendWaitCounter != -1)
             {
                 f = pw.bendFnum;
@@ -186,10 +185,10 @@ namespace Core
             byte data = 0;
 
             data = (byte)(f & 0xff);
-            parent.OutData(mml,port0, (byte)(0 + pw.ch * 2), data);
+            parent.OutData(mml, port[0], (byte)(0 + pw.ch * 2), data);
 
             data = (byte)((f & 0xf00) >> 8);
-            parent.OutData(mml,port0, (byte)(1 + pw.ch * 2), data);
+            parent.OutData(mml, port[0], (byte)(1 + pw.ch * 2), data);
         }
 
         public int GetSsgFNum(partWork pw, MML mml, int octave, char noteCmd, int shift)
@@ -207,30 +206,30 @@ namespace Core
             return FNumTbl[0][f];
         }
 
-        public override int GetFNum(partWork pw,MML mml, int octave, char cmd, int shift)
+        public override int GetFNum(partWork pw, MML mml, int octave, char cmd, int shift)
         {
-            return GetSsgFNum(pw,mml, octave, cmd, shift);
+            return GetSsgFNum(pw, mml, octave, cmd, shift);
         }
 
 
         public override void SetFNum(partWork pw, MML mml)
         {
-            SetSsgFNum(pw,mml);
+            SetSsgFNum(pw, mml);
         }
 
         public override void SetKeyOn(partWork pw, MML mml)
         {
-            OutSsgKeyOn(mml,pw);
+            OutSsgKeyOn(mml, pw);
         }
 
         public override void SetKeyOff(partWork pw, MML mml)
         {
-            OutSsgKeyOff(mml,pw);
+            OutSsgKeyOff(mml, pw);
         }
 
         public override void SetVolume(partWork pw, MML mml)
         {
-            SetSsgVolume(mml,pw);
+            SetSsgVolume(mml, pw);
         }
 
         public override void SetToneDoubler(partWork pw)
@@ -260,12 +259,12 @@ namespace Core
 
                 if (pl.type == eLfoType.Vibrato)
                 {
-                    SetSsgFNum(pw,mml);
+                    SetSsgFNum(pw, mml);
                 }
 
                 if (pl.type == eLfoType.Tremolo)
                 {
-                    SetSsgVolume(mml,pw);
+                    SetSsgVolume(mml, pw);
                 }
 
             }
@@ -312,7 +311,7 @@ namespace Core
             int n = (int)mml.args[0];
             n = Common.CheckRange(n, 0, 31);
             pw.chip.lstPartWork[0].noise = n;//Chipの1Chに保存
-            OutSsgNoise(mml,pw, n);
+            OutSsgNoise(mml, pw, n);
         }
 
         public override void CmdHardEnvelope(partWork pw, MML mml)
@@ -326,8 +325,8 @@ namespace Core
                     n = (int)mml.args[1];
                     if (pw.HardEnvelopeSpeed != n)
                     {
-                        parent.OutData(mml,port0, 0x0b, (byte)(n & 0xff));
-                        parent.OutData(mml,port0, 0x0c, (byte)((n >> 8) & 0xff));
+                        parent.OutData(mml, port[0], 0x0b, (byte)(n & 0xff));
+                        parent.OutData(mml, port[0], 0x0c, (byte)((n >> 8) & 0xff));
                         pw.HardEnvelopeSpeed = n;
                     }
                     break;
@@ -341,7 +340,7 @@ namespace Core
                     n = (int)mml.args[1];
                     if (pw.HardEnvelopeType != n)
                     {
-                        parent.OutData(mml,port0, 0x0d, (byte)(n & 0xf));
+                        parent.OutData(mml, port[0], 0x0d, (byte)(n & 0xf));
                         pw.HardEnvelopeType = n;
                     }
                     break;
@@ -355,7 +354,7 @@ namespace Core
             int adr = (int)mml.args[0];
             byte dat = (byte)mml.args[1];
 
-            parent.OutData(mml,port0, (byte)adr, (byte)dat);
+            parent.OutData(mml, port[0], (byte)adr, (byte)dat);
         }
 
         public override void CmdLoopExtProc(partWork pw, MML mml)

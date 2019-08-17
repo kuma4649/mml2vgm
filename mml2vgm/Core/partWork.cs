@@ -385,8 +385,7 @@ namespace Core
 
         public enmChannelType Type;
         public int MaxVolume = 0;
-        public byte[] port0 = null;
-        public byte[] port1 = null;
+        public byte[][] port = null;
         public int ams = 0;
         public int fms = 0;
         public int pms = 0;

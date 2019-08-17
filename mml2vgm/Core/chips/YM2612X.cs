@@ -21,8 +21,10 @@ namespace Core
             IsSecondary = isSecondary;
 
             Frequency = 7670454;
-            port0 = new byte[] { (byte)(isSecondary ? 0xa2 : 0x52) };
-            port1 = new byte[] { (byte)(isSecondary ? 0xa3 : 0x53) };
+            port = new byte[][]{
+                new byte[] { (byte)(isSecondary ? 0xa2 : 0x52) }
+                , new byte[] { (byte)(isSecondary ? 0xa3 : 0x53) }
+            };
 
             Dictionary<string, List<double>> dic = MakeFNumTbl();
             if (dic != null)
@@ -60,13 +62,12 @@ namespace Core
 
         }
 
-        public override void InitPart(ref partWork pw)
+        public override void InitPart(partWork pw)
         {
             pw.slots = (byte)((pw.Type == enmChannelType.FMOPN || pw.ch == 2 || pw.ch == 5) ? 0xf : 0x0);
             pw.volume = 127;
             pw.MaxVolume = 127;
-            pw.port0 = port0;
-            pw.port1 = port1;
+            pw.port = port;
             pw.pcm = pw.ch > 9;
         }
 

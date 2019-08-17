@@ -26,7 +26,7 @@ namespace Core
             _canUsePcm = false;
 
             Frequency = 3579545;
-            port0 = new byte[] { (byte)(isSecondary ? 0xa1 : 0x51) };
+            port =new byte[][] { new byte[] { (byte)(isSecondary ? 0xa1 : 0x51) } };
 
             Dictionary<string, List<double>> dic = MakeFNumTbl();
             if (dic != null)
@@ -55,15 +55,14 @@ namespace Core
 
         }
 
-        public override void InitPart(ref partWork pw)
+        public override void InitPart(partWork pw)
         {
             pw.beforeVolume = (pw.Type == enmChannelType.FMOPL) ? 15 : -1;
             pw.volume = 15;
             pw.MaxVolume = 15;
             pw.beforeEnvInstrument = 0;
             pw.envInstrument = 0;
-            pw.port0 = port0;
-            pw.port1 = port1;
+            pw.port = port;
             pw.mixer = 0;
             pw.noise = 0;
         }
@@ -88,7 +87,7 @@ namespace Core
         {
             parent.OutData(
                 mml,
-                port0
+                port[0]
                 , (byte)(adr & 1)
                 , (byte)((AM ? 0x80 : 0) + (VIB ? 0x40 : 0) + (EG ? 0x20 : 0) + (KS ? 0x10 : 0) + (mul & 0xf))
                 );
@@ -97,12 +96,12 @@ namespace Core
         public void outYM2413AllKeyOff(MML mml, partWork pw)
         {
             //Rhythm Off
-            parent.OutData(mml, port0, 0x0e, 0);
+            parent.OutData(mml, port[0], 0x0e, 0);
             for (byte adr = 0; adr < 9; adr++)
             {
                 //Ch Off
-                parent.OutData(mml, port0, (byte)(0x20 + adr), 0);
-                parent.OutData(mml, port0, (byte)(0x30 + adr), 0);
+                parent.OutData(mml, port[0], (byte)(0x20 + adr), 0);
+                parent.OutData(mml, port[0], (byte)(0x30 + adr), 0);
             }
         }
 
@@ -123,7 +122,7 @@ namespace Core
                 case 1: // R)R only
                     for (int ope = 0; ope < 2; ope++)
                     {
-                        parent.OutData(mml, port0, (byte)(0x6 + ope), (byte)((
+                        parent.OutData(mml, port[0], (byte)(0x6 + ope), (byte)((
                             (0 & 0xf) << 4) //SL
                             | (15 & 0xf) // RR
                             ));
@@ -139,20 +138,20 @@ namespace Core
                             , false //KS
                             , 0 //MT
                             );
-                        parent.OutData(mml, port0, (byte)(0x4 + ope), (byte)((
+                        parent.OutData(mml, port[0], (byte)(0x4 + ope), (byte)((
                             (15 & 0xf) << 4) //AR
                             | (15 & 0xf) // DR
                             ));
-                        parent.OutData(mml, port0, (byte)(0x6 + ope), (byte)((
+                        parent.OutData(mml, port[0], (byte)(0x6 + ope), (byte)((
                             (0 & 0xf) << 4) //SL
                             | (15 & 0xf) // RR
                             ));
                     }
-                    parent.OutData(mml, port0, (byte)(0x2), (byte)(
+                    parent.OutData(mml, port[0], (byte)(0x2), (byte)(
                         (0 << 6)  //KL(M)
                         | (0 & 0x3f) //TL
                         ));
-                    parent.OutData(mml, port0, (byte)(0x3), (byte)((
+                    parent.OutData(mml, port[0], (byte)(0x3), (byte)((
                         (3 & 0x3) << 6) //KL(C)
                         | (0) // DT(M)
                         | (0) // DT(C)
@@ -170,20 +169,20 @@ namespace Core
                     , parent.instFM[n][ope * 11 + 10] != 0 //KS
                     , parent.instFM[n][ope * 11 + 6] & 0xf //MT
                     );
-                parent.OutData(mml, port0, (byte)(0x4 + ope), (byte)((
+                parent.OutData(mml, port[0], (byte)(0x4 + ope), (byte)((
                     (parent.instFM[n][ope * 11 + 1] & 0xf) << 4) //AR
                     | (parent.instFM[n][ope * 11 + 2] & 0xf) // DR
                     ));
-                parent.OutData(mml, port0, (byte)(0x6 + ope), (byte)((
+                parent.OutData(mml, port[0], (byte)(0x6 + ope), (byte)((
                     (parent.instFM[n][ope * 11 + 3] & 0xf) << 4) //SL
                     | (parent.instFM[n][ope * 11 + 4] & 0xf) // RR
                     ));
             }
-            parent.OutData(mml, port0, (byte)(0x2), (byte)((
+            parent.OutData(mml, port[0], (byte)(0x2), (byte)((
                 (parent.instFM[n][0 * 11 + 5] & 0x3) << 6)  //KL(M)
                 | (parent.instFM[n][23] & 0x3f) //TL
                 ));
-            parent.OutData(mml, port0, (byte)(0x3), (byte)((
+            parent.OutData(mml, port[0], (byte)(0x3), (byte)((
                 (parent.instFM[n][1 * 11 + 5] & 0x3) << 6) //KL(C)
                 | (parent.instFM[n][0 * 11 + 11] != 0 ? 0x08 : 0) // DT(M)
                 | (parent.instFM[n][1 * 11 + 11] != 0 ? 0x10 : 0) // DT(C)
@@ -429,7 +428,7 @@ namespace Core
         {
             byte adr = (byte)mml.args[0];
             byte dat = (byte)mml.args[1];
-            parent.OutData(mml, port0, adr, dat);
+            parent.OutData(mml, port[0], adr, dat);
         }
 
         public override void CmdLoopExtProc(partWork pw, MML mml)
@@ -453,7 +452,7 @@ namespace Core
                         pw.beforeEnvInstrument = pw.envInstrument;
                         pw.beforeVolume = pw.volume;
 
-                        parent.OutData(mml, port0
+                        parent.OutData(mml, port[0]
                             , (byte)(0x30 + pw.ch)
                             , (byte)(((pw.envInstrument << 4) & 0xf0) | ((15 - pw.volume) & 0xf))
                             );
@@ -462,7 +461,7 @@ namespace Core
                     if (pw.keyOff)
                     {
                         pw.keyOff = false;
-                        parent.OutData(mml, port0
+                        parent.OutData(mml, port[0]
                             , (byte)(0x20 + pw.ch)
                             , (byte)(
                                 ((pw.freq >> 8) & 0xf)
@@ -474,8 +473,8 @@ namespace Core
                     {
                         pw.beforeFNum = pw.freq | (pw.keyOn ? 0x1000 : 0x0000);
 
-                        parent.OutData(mml, port0, (byte)(0x10 + pw.ch), (byte)pw.freq);
-                        parent.OutData(mml, port0
+                        parent.OutData(mml, port[0], (byte)(0x10 + pw.ch), (byte)pw.freq);
+                        parent.OutData(mml, port[0]
                             , (byte)(0x20 + pw.ch)
                             , (byte)(
                                 ((pw.freq >> 8) & 0xf)
@@ -509,7 +508,7 @@ namespace Core
                     | (lstPartWork[13].keyOn ? (lstPartWork[13].keyOff ? 0 : 0x01) : 0)
                     );
                 lstPartWork[9].rhythmKeyOnData = dat;
-                parent.OutData(mml, port0, 0x0e, dat);
+                parent.OutData(mml, port[0], 0x0e, dat);
 
                 lstPartWork[9].keyOff = false;
                 lstPartWork[10].keyOff = false;
@@ -530,7 +529,7 @@ namespace Core
             if (lstPartWork[9].rhythmKeyOnData != dat)
             {
                 lstPartWork[9].rhythmKeyOnData = dat;
-                parent.OutData(mml, port0, 0x0e, dat);
+                parent.OutData(mml, port[0], 0x0e, dat);
             }
 
 
@@ -540,8 +539,8 @@ namespace Core
             {
                 p0.beforeFNum = p0.freq;
 
-                parent.OutData(mml, port0, (byte)0x16, (byte)p0.freq);
-                parent.OutData(mml, port0
+                parent.OutData(mml, port[0], (byte)0x16, (byte)p0.freq);
+                parent.OutData(mml, port[0]
                     , (byte)0x26
                     , (byte)((p0.freq >> 8) & 0xf)
                     );
@@ -565,8 +564,8 @@ namespace Core
 
                 if (p0.beforeFNum != -1)
                 {
-                    parent.OutData(mml, port0, (byte)0x17, (byte)p0.beforeFNum);
-                    parent.OutData(mml, port0
+                    parent.OutData(mml, port[0], (byte)0x17, (byte)p0.beforeFNum);
+                    parent.OutData(mml, port[0]
                         , (byte)0x27
                         , (byte)((p0.beforeFNum >> 8) & 0xf)
                         );
@@ -591,8 +590,8 @@ namespace Core
 
                 if (p0.beforeFNum != -1)
                 {
-                    parent.OutData(mml, port0, (byte)0x18, (byte)p0.beforeFNum);
-                    parent.OutData(mml, port0
+                    parent.OutData(mml, port[0], (byte)0x18, (byte)p0.beforeFNum);
+                    parent.OutData(mml, port[0]
                         , (byte)0x28
                         , (byte)((p0.beforeFNum >> 8) & 0xf)
                         );
@@ -605,7 +604,7 @@ namespace Core
             if (p0.beforeVolume != p0.volume)
             {
                 p0.beforeVolume = p0.volume;
-                parent.OutData(mml, port0, 0x36, (byte)(15 - (p0.volume & 0xf)));
+                parent.OutData(mml, port[0], 0x36, (byte)(15 - (p0.volume & 0xf)));
             }
             p0 = lstPartWork[10];
             p1 = lstPartWork[13];
@@ -613,7 +612,7 @@ namespace Core
             {
                 p0.beforeVolume = p0.volume;
                 p1.beforeVolume = p1.volume;
-                parent.OutData(mml, port0, 0x37, (byte)((15 - (p0.volume & 0xf)) | ((15 - (p1.volume & 0xf)) << 4)));
+                parent.OutData(mml, port[0], 0x37, (byte)((15 - (p0.volume & 0xf)) | ((15 - (p1.volume & 0xf)) << 4)));
             }
             p0 = lstPartWork[12];
             p1 = lstPartWork[11];
@@ -621,7 +620,7 @@ namespace Core
             {
                 p0.beforeVolume = p0.volume;
                 p1.beforeVolume = p1.volume;
-                parent.OutData(mml, port0, 0x38, (byte)((15 - (p0.volume & 0xf)) | ((15 - (p1.volume & 0xf)) << 4)));
+                parent.OutData(mml, port[0], 0x38, (byte)((15 - (p0.volume & 0xf)) | ((15 - (p1.volume & 0xf)) << 4)));
             }
 
 

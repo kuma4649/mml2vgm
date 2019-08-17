@@ -114,8 +114,7 @@ namespace Core
         public clsPcmDataInfo[] pcmDataInfo;
         public byte[] pcmDataEasy = null;
         public List<byte[]> pcmDataDirect = new List<byte[]>();
-        protected byte[] port0;
-        protected byte[] port1;
+        public byte[][] port;
 
         public ClsChip(ClsVgm parent, int chipID, string initialPartName, string stPath, bool isSecondary)
         {
@@ -128,16 +127,16 @@ namespace Core
 
         public void SetCommand(int cmdNo)
         {
-            if (parent.ChipCommandSize == 2)
-            {
-                port0 = new byte[] {
-                    (byte)cmdNo,
-                    (byte)(cmdNo>>8)
-                };
-            }
-            else port0 = new byte[] {
-                    (byte)cmdNo,
-            };
+            //if (parent.ChipCommandSize == 2)
+            //{
+            //    port0 = new byte[] {
+            //        (byte)cmdNo,
+            //        (byte)(cmdNo>>8)
+            //    };
+            //}
+            //else port0 = new byte[] {
+            //        (byte)cmdNo,
+            //};
         }
 
         protected Dictionary<string, List<double>> MakeFNumTbl()
@@ -413,7 +412,7 @@ namespace Core
             throw new NotImplementedException("継承先で要実装");
         }
 
-        public virtual void InitPart(ref partWork pw)
+        public virtual void InitPart(partWork pw)
         {
             throw new NotImplementedException("継承先で要実装");
         }
@@ -538,10 +537,10 @@ namespace Core
             byte[] cmd;
             if (pw.chip.parent.info.format == enmFormat.ZGM)
             {
-                if (pw.chip.parent.ChipCommandSize == 2) cmd = new byte[] { 0x09, 0x00, pw.port0[0], pw.port0[1] };
-                else cmd = new byte[] { 0x09, pw.port0[0] };
+                if (pw.chip.parent.ChipCommandSize == 2) cmd = new byte[] { 0x09, 0x00, pw.port[0][0], pw.port[0][1] };
+                else cmd = new byte[] { 0x09, pw.port[0][0] };
             }
-            else cmd = new byte[] { 0x2f, pw.port0[0] };
+            else cmd = new byte[] { 0x2f, pw.port[0][0] };
 
             //Console.WriteLine("SkipAddress:{0:x06} skip:{1:x06}", parent.dat.Count, parent.dummyCmdCounter);
             parent.OutData(mml, cmd , (byte)(pw.chip.IsSecondary ? 1 : 0));//0x2f:DummyChip (!!CAUTION!!)

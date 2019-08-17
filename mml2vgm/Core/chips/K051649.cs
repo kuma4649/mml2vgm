@@ -22,7 +22,7 @@ namespace Core
             IsSecondary = isSecondary;
 
             Frequency = 1789772;
-            port0 = new byte[] { 0xd2 };
+            port =new byte[][] { new byte[] { 0xd2 } };
 
             Dictionary<string, List<double>> dic = MakeFNumTbl();
             if (dic != null)
@@ -59,25 +59,25 @@ namespace Core
             //isK052539 = false;
 
             //keyOnOff : 0
-            OutK051649Port(null,port0,IsSecondary, 3, 0, 0);
+            OutK051649Port(null,port[0],IsSecondary, 3, 0, 0);
             keyOnStatus = 0;
             keyOnStatusOld = 0;
 
             for (int i = 0; i < _ChMax; i++)
             {
                 //freq : 0
-                OutK051649Port(null, port0, IsSecondary, 1, (byte)(i * 2 + 0), 0);
-                OutK051649Port(null, port0, IsSecondary, 1, (byte)(i * 2 + 1), 0);
+                OutK051649Port(null, port[0], IsSecondary, 1, (byte)(i * 2 + 0), 0);
+                OutK051649Port(null, port[0], IsSecondary, 1, (byte)(i * 2 + 1), 0);
 
                 //volume : 0
-                OutK051649Port(null, port0, IsSecondary, 2, (byte)i, 0);
+                OutK051649Port(null, port[0], IsSecondary, 2, (byte)i, 0);
 
                 //WaveForm : all 0
                 if (parent.info.isK052539 || i < 4) //K051の場合は4Ch分の初期化を行う
                 {
                     for (int j = 0; j < 32; j++)
                     {
-                        OutK051649Port(null, port0, IsSecondary, (byte)(parent.info.isK052539 ? 4 : 0), (byte)(i * 32 + j), 0);
+                        OutK051649Port(null, port[0], IsSecondary, (byte)(parent.info.isK052539 ? 4 : 0), (byte)(i * 32 + j), 0);
                     }
                 }
             }
@@ -88,7 +88,7 @@ namespace Core
             }
         }
 
-        public override void InitPart(ref partWork pw)
+        public override void InitPart(partWork pw)
         {
             pw.FNum = 0;
             pw.beforeFNum = -1;
@@ -97,8 +97,7 @@ namespace Core
             pw.beforeLVolume = -1;
             pw.beforeEnvInstrument = -1;
             pw.keyOn = false;
-            pw.port0 = port0;
-            pw.port1 = port1;
+            pw.port = port;
         }
 
         public void OutK051649Port(MML mml, byte[] cmd, bool isSecondary, byte port, byte adr, byte data)
@@ -126,7 +125,7 @@ namespace Core
                 if (!parent.info.isK052539 && ch == 4) ch = 3;
 
                 OutK051649Port(
-                    mml,port0,
+                    mml,port[0],
                     pw.isSecondary
                     , (byte)(parent.info.isK052539 ? 4 : 0)
                     , (byte)(ch * 32 + i - 1)
@@ -155,10 +154,10 @@ namespace Core
                 if (pw.beforeFNum != pw.FNum)
                 {
                     byte data = (byte)pw.FNum;
-                    OutK051649Port(mml, port0, IsSecondary, 1, (byte)(0 + pw.ch * 2), data);
+                    OutK051649Port(mml, port[0], IsSecondary, 1, (byte)(0 + pw.ch * 2), data);
 
                     data = (byte)((pw.FNum & 0xf00) >> 8);
-                    OutK051649Port(mml, port0, IsSecondary, 1, (byte)(1 + pw.ch * 2), data);
+                    OutK051649Port(mml, port[0], IsSecondary, 1, (byte)(1 + pw.ch * 2), data);
                     pw.beforeFNum = pw.FNum;
                 }
 
@@ -179,7 +178,7 @@ namespace Core
             //keyonoff
             if (keyOnStatus != keyOnStatusOld)
             {
-                OutK051649Port(mml, port0, IsSecondary, 3, 0, keyOnStatus);
+                OutK051649Port(mml, port[0], IsSecondary, 3, 0, keyOnStatus);
                 keyOnStatusOld = keyOnStatus;
             }
 
@@ -223,7 +222,7 @@ namespace Core
 
             if (pw.beforeVolume != vol)
             {
-                OutK051649Port(mml, port0, IsSecondary, 2, (byte)pw.ch, (byte)vol);
+                OutK051649Port(mml, port[0], IsSecondary, 2, (byte)pw.ch, (byte)vol);
                 pw.beforeVolume = vol;
             }
         }
@@ -327,7 +326,7 @@ namespace Core
             byte adr = (byte)mml.args[0];
             byte dat = (byte)mml.args[1];
 
-            OutK051649Port(mml, port0, pw.isSecondary, port, adr, dat);
+            OutK051649Port(mml, this.port[0], pw.isSecondary, port, adr, dat);
         }
 
         public override void CmdLoopExtProc(partWork p, MML mml)

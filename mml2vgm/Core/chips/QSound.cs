@@ -33,7 +33,7 @@ namespace Core
             IsSecondary = isSecondary;//QSound はDualChip非対応
 
             Frequency = 4_000_000;//4MHz
-            port0 = new byte[] { 0xc4 };
+            port = new byte[][] { new byte[] { 0xc4 } };
 
             Ch = new ClsChannel[ChMax];
             SetPartToCh(Ch, initialPartName);
@@ -84,13 +84,12 @@ namespace Core
             memoryMap = new List<long>();
         }
 
-        public override void InitPart(ref partWork pw)
+        public override void InitPart(partWork pw)
         {
             pw.MaxVolume = 65535;
             pw.volume = 3000;// pw.MaxVolume;
             pw.panL = 16;
-            pw.port0 = port0;
-            pw.port1 = port1;
+            pw.port = port;
         }
 
         public override void InitChip()
@@ -275,7 +274,7 @@ namespace Core
             byte adr = (byte)((pw.ch << 3) + 0x03);
             ushort data = 0;
 
-            OutQSoundPort(mml,port0, pw
+            OutQSoundPort(mml,port[0], pw
                 , adr
                 , (ushort)data
                 );
@@ -306,7 +305,7 @@ namespace Core
                 //StartAdr
                 adr = (byte)((pw.ch << 3) + 0x01);
                 data = (ushort)stAdr;
-                OutQSoundPort(mml, port0, pw
+                OutQSoundPort(mml, port[0], pw
                     , adr
                     , (ushort)data
                     );
@@ -319,7 +318,7 @@ namespace Core
                 //EndAdr
                 adr = (byte)((pw.ch << 3) + 0x05);
                 data = (ushort)pw.pcmEndAddress;
-                OutQSoundPort(mml, port0, pw
+                OutQSoundPort(mml, port[0], pw
                     , adr
                     , (ushort)data
                     );
@@ -332,7 +331,7 @@ namespace Core
                 //LoopAdr
                 adr = (byte)((pw.ch << 3) + 0x04);
                 data = (ushort)(pw.pcmLoopAddress == -1 ? 0 : (pw.pcmEndAddress- pw.pcmLoopAddress));
-                OutQSoundPort(mml, port0, pw
+                OutQSoundPort(mml, port[0], pw
                     , adr
                     , (ushort)data
                     );
@@ -345,7 +344,7 @@ namespace Core
                 int bch = (pw.ch + 1) & 0xf;
                 adr = (byte)((bch << 3) + 0x00);
                 data = (ushort)(pw.pcmBank);
-                OutQSoundPort(mml, port0, pw
+                OutQSoundPort(mml, port[0], pw
                     , adr
                     , (ushort)data
                     );
@@ -361,7 +360,7 @@ namespace Core
                 parent.instPCM[pw.instrument].status = enmPCMSTATUS.USED;
             }
 
-            OutQSoundPort(mml, port0, pw
+            OutQSoundPort(mml, port[0], pw
                 , adr
                 , (ushort)data
                 );
@@ -398,7 +397,7 @@ namespace Core
             if (pw.beforeFNum != data)
             {
                 byte adr = (byte)((pw.ch << 3) + 0x02);
-                OutQSoundPort(mml, port0, pw
+                OutQSoundPort(mml, port[0], pw
                     , adr
                     , (ushort)data
                     );
@@ -500,7 +499,7 @@ namespace Core
             if (pw.beforeVolume != data)
             {
                 byte adr = (byte)((pw.ch << 3) + 0x06);
-                OutQSoundPort(mml,port0, pw
+                OutQSoundPort(mml,port[0], pw
                     , adr
                     , (ushort)data
                     );
@@ -554,7 +553,7 @@ namespace Core
             pw.panL = (32 - p);
 
             byte adr = (byte)(pw.ch + 0x80);
-            OutQSoundPort(mml,port0, pw
+            OutQSoundPort(mml,port[0], pw
                 , adr
                 , (ushort)(pw.panL + 0x110)
                 );
@@ -619,7 +618,7 @@ namespace Core
             byte adr = (byte)mml.args[0];
             ushort dat = (ushort)mml.args[1];
 
-            OutQSoundPort(mml, port0, pw, adr, dat);
+            OutQSoundPort(mml, port[0], pw, adr, dat);
         }
 
         public override void CmdLoopExtProc(partWork pw, MML mml)

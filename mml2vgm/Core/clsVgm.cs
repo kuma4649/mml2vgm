@@ -1405,7 +1405,7 @@ namespace Core
 
         public LinePos linePos { get; internal set; }
         public bool isRealTimeMode { get; set; }
-        public int ChipCommandSize { get; private set; }
+        public int ChipCommandSize { get; set; }
 
         public outDatum[] Vgm_getByteData(Dictionary<string, List<MML>> mmlData)
         {
@@ -3056,7 +3056,7 @@ namespace Core
                         pw.slots = 0;
                         pw.volume = 32767;
 
-                        chip.InitPart(ref pw);
+                        chip.InitPart(pw);
 
                         pw.PartName = chip.Ch[i].Name;
                         pw.waitKeyOnCounter = -1;

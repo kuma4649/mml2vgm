@@ -41,7 +41,7 @@ namespace Core
             FNumTbl = _FNumTbl;
 
             Frequency = 3993600;// 7987200/2;
-            port0 = new byte[] { (byte)(isSecondary ? 0xa5 : 0x55) };
+            port =new byte[][] { new byte[] { (byte)(isSecondary ? 0xa5 : 0x55) } };
 
             Dictionary<string, List<double>> dic = MakeFNumTbl();
             if (dic != null)
@@ -85,7 +85,7 @@ namespace Core
 
         }
 
-        public override void InitPart(ref partWork pw)
+        public override void InitPart(partWork pw)
         {
             pw.slots = (byte)((pw.Type == enmChannelType.FMOPN || pw.ch == 2) ? 0xf : 0x0);
             pw.volume = 127;
@@ -97,8 +97,7 @@ namespace Core
                 pw.volume = pw.MaxVolume;
             }
 
-            pw.port0 = port0;
-            pw.port1 = port1;
+            pw.port = port;
         }
 
         public override void InitChip()
@@ -165,9 +164,9 @@ namespace Core
             data = (byte)(((YM2203)pw.chip).SSGKeyOn | (n << pch));
             ((YM2203)pw.chip).SSGKeyOn = data;
 
-            parent.OutData(mml,port0, (byte)(0x08 + pch), 0);
+            parent.OutData(mml,port[0], (byte)(0x08 + pch), 0);
             pw.beforeVolume = -1;
-            parent.OutData(mml,port0, 0x07, data);
+            parent.OutData(mml,port[0], 0x07, data);
         }
 
 
@@ -209,7 +208,7 @@ namespace Core
             byte adr = (byte)mml.args[0];
             byte dat = (byte)mml.args[1];
 
-            parent.OutData(mml,port0, adr, dat);
+            parent.OutData(mml,port[0], adr, dat);
         }
 
         public override void CmdInstrument(partWork pw, MML mml)

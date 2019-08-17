@@ -24,7 +24,7 @@ namespace Core
             dataType = 0xc1;
 
             Frequency = 12500000;
-            port0 = new byte[] { 0xb1 };
+            port =new byte[][] { new byte[] { 0xb1 } };
 
             Ch = new ClsChannel[ChMax];
             SetPartToCh(Ch, initialPartName);
@@ -145,14 +145,10 @@ namespace Core
                 //RF5C164のPCMブロックの前に通常コマンドが存在するため書き換える
                 if(parent.info.format== enmFormat.ZGM)
                 {
+                    pi.totalBuf[0] = port[0][0];
                     if (parent.ChipCommandSize == 2)
                     {
-                        pi.totalBuf[0] = port0[0];
-                        pi.totalBuf[1] = port0[1];
-                    }
-                    else
-                    {
-                        pi.totalBuf[0] = port0[0];
+                        pi.totalBuf[1] = port[0][1];
                     }
                 }
 
@@ -192,12 +188,11 @@ namespace Core
             SupportReversePartWork = true;
         }
 
-        public override void InitPart(ref partWork pw)
+        public override void InitPart(partWork pw)
         {
             pw.MaxVolume = 255;
             pw.volume = pw.MaxVolume;
-            pw.port0 = port0;
-            pw.port1 = port1;
+            pw.port = port;
         }
 
 
@@ -228,7 +223,7 @@ namespace Core
             {
                 SetRf5c164CurrentChannel(mml,pw);
                 byte data = (byte)(volume & 0xff);
-                OutRf5c164Port(mml,port0,pw.isSecondary, 0x0, data);
+                OutRf5c164Port(mml,port[0],pw.isSecondary, 0x0, data);
                 pw.rf5c164Envelope = volume;
             }
         }
@@ -239,7 +234,7 @@ namespace Core
             {
                 SetRf5c164CurrentChannel(mml,pw);
                 byte data = (byte)(pan & 0xff);
-                OutRf5c164Port(mml, port0, pw.isSecondary, 0x1, data);
+                OutRf5c164Port(mml, port[0], pw.isSecondary, 0x1, data);
                 pw.rf5c164Pan = pan;
             }
         }
@@ -253,7 +248,7 @@ namespace Core
             if (CurrentChannel != pch)
             {
                 byte data = (byte)(0xc0 + pch);
-                OutRf5c164Port(mml, port0, isSecondary, 0x7, data);
+                OutRf5c164Port(mml, port[0], isSecondary, 0x7, data);
                 CurrentChannel = pch;
             }
         }
@@ -265,9 +260,9 @@ namespace Core
                 SetRf5c164CurrentChannel(mml,pw);
 
                 byte data = (byte)(f & 0xff);
-                OutRf5c164Port(mml, port0, pw.isSecondary, 0x2, data);
+                OutRf5c164Port(mml, port[0], pw.isSecondary, 0x2, data);
                 data = (byte)((f >> 8) & 0xff);
-                OutRf5c164Port(mml, port0, pw.isSecondary, 0x3, data);
+                OutRf5c164Port(mml, port[0], pw.isSecondary, 0x3, data);
                 pw.rf5c164AddressIncrement = f;
             }
         }
@@ -283,7 +278,7 @@ namespace Core
             {
                 SetRf5c164CurrentChannel(mml,pw);
                 byte data = (byte)(stAdr >> 8);
-                OutRf5c164Port(mml, port0, pw.isSecondary, 0x6, data);
+                OutRf5c164Port(mml, port[0], pw.isSecondary, 0x6, data);
                 //pw.pcmStartAddress = stAdr;
             }
         }
@@ -294,9 +289,9 @@ namespace Core
             {
                 SetRf5c164CurrentChannel(mml,pw);
                 byte data = (byte)(adr >> 8);
-                OutRf5c164Port(mml, port0, pw.isSecondary, 0x5, data);
+                OutRf5c164Port(mml, port[0], pw.isSecondary, 0x5, data);
                 data = (byte)adr;
-                OutRf5c164Port(mml, port0, pw.isSecondary, 0x4, data);
+                OutRf5c164Port(mml, port[0], pw.isSecondary, 0x4, data);
                 pw.pcmLoopAddress = adr;
             }
         }
@@ -307,7 +302,7 @@ namespace Core
             SetRf5c164SampleStartAddress(mml,pw);
             KeyOn |= (byte)(1 << pw.ch);
             byte data = (byte)(~KeyOn);
-            OutRf5c164Port(mml, port0, pw.isSecondary, 0x8, data);
+            OutRf5c164Port(mml, port[0], pw.isSecondary, 0x8, data);
             if (parent.instPCM[pw.instrument].status != enmPCMSTATUS.ERROR)
             {
                 parent.instPCM[pw.instrument].status = enmPCMSTATUS.USED;
@@ -318,7 +313,7 @@ namespace Core
         {
             KeyOn &= (byte)(~(1 << pw.ch));
             byte data = (byte)(~KeyOn);
-            OutRf5c164Port(mml, port0, pw.isSecondary, 0x8, data);
+            OutRf5c164Port(mml, port[0], pw.isSecondary, 0x8, data);
         }
 
         public void OutRf5c164Port(MML mml,byte[] cmd,bool isSecondary, byte adr, byte data)
@@ -545,7 +540,7 @@ namespace Core
             byte adr = (byte)mml.args[0];
             byte dat = (byte)mml.args[1];
 
-            OutRf5c164Port(mml, port0, pw.isSecondary, adr, dat);
+            OutRf5c164Port(mml, port[0], pw.isSecondary, adr, dat);
         }
 
         public override void CmdPan(partWork pw, MML mml)
