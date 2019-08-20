@@ -114,6 +114,7 @@
     <Compile Include="Driver\baseDriver.cs" />
     <Compile Include="Driver\vgm.cs" />
     <Compile Include="Driver\xgm.cs" />
+    <Compile Include="Driver\zgm.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="form\ChannelInfo.cs" />
     <Compile Include="form\frmDebug.cs">

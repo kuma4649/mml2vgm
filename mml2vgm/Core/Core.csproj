@@ -88,6 +88,7 @@
     <Compile Include="outDatum.cs" />
     <Compile Include="partWork.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SourceParser.cs" />
     <Compile Include="ZGMmaker.cs" />
   </ItemGroup>
   <ItemGroup>

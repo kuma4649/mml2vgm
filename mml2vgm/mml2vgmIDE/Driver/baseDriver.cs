@@ -37,6 +37,7 @@ namespace mml2vgmIDE
         public abstract void oneFrameProc();
         public abstract GD3 getGD3Info(byte[] buf, uint vgmGd3);
 
+
         public void SetYM2151Hosei(SoundManager.Chip chip, float YM2151ClockValue)
         {
             chip.Hosei = 0;

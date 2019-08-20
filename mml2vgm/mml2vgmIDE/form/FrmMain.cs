@@ -1006,6 +1006,7 @@ namespace mml2vgmIDE
                 {
                     foreach (ClsChip chip in kvp.Value)
                     {
+                        if (chip == null) continue;
                         List<partWork> pw = chip.lstPartWork;
                         for (int i = 0; i < pw.Count; i++)
                         {
@@ -1101,16 +1102,21 @@ namespace mml2vgmIDE
 
                             uint LoopOffset = (uint)mv.desVGM.dummyCmdLoopOffset - 0x1c;
                             Common.SetLE32(mv.desBuf, 0x1c, LoopOffset);
+
+                            InitPlayer(EnmFileFormat.VGM, mv.desBuf);
                         }
-                        else
+                        else if (mv.desVGM.info.format == enmFormat.XGM)
                         {
                             //uint LoopOffserAddress = (uint)mv.desVGM.dummyCmdLoopOffsetAddress;
                             //uint LoopOffset = (uint)mv.desVGM.dummyCmdLoopOffset;
                             //Common.SetLE24(mv.desBuf, (uint)(mv.desVGM.dummyCmdLoopOffsetAddress + 1), LoopOffset);
+
+                            InitPlayer(EnmFileFormat.XGM, mv.desBuf);
                         }
-                        InitPlayer(
-                            mv.desVGM.info.format == enmFormat.VGM ? EnmFileFormat.VGM : EnmFileFormat.XGM,
-                            mv.desBuf);
+                        else
+                        {
+                            InitPlayer(EnmFileFormat.ZGM, mv.desBuf);
+                        }
                     }
                     catch (Exception)
                     {

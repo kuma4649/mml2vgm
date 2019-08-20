@@ -10,23 +10,23 @@ Header division.
 　この区分には、ZGMの基本情報を記録する。
 
       00   01   02   03   04   05   06   07   08   09   0A   0B   0C   0D   0E   0F
-0x00 ["ZGM " ident      ][EoF offset        ][Version           ][Total # samples   ]
-0x10 [Loop # samples    ][Loop offset       ][GD3 offset        ][Define offset     ]
-0x20 [Track 1 offset    ][Def Cnt ][Trk Cnt ][Extra Hdr ofs     ] ***  ***  ***  *** 
+0x00 ["ZGM " ident      ][EoF address       ][Version           ][Total # samples   ]
+0x10 [Loop # samples    ][Loop offset       ][GD3 address       ][Define address    ]
+0x20 [Track 1 address   ][Def Cnt ][Trk Cnt ][Extra Hdr adr     ] ***  ***  ***  *** 
 0x30  ***  ***  ***  ***  ***  ***  ***  ***  ***  ***  ***  ***  ***  ***  ***  *** 
 
   "ZGM " ident         4byte  ファイル識別子
-  EoF offset           4byte  ファイルの終端の位置(ファイルサイズ - 1)
+  EoF address          4byte  ファイルの終端の位置(ファイルサイズ - 1)
   Version              4byte  10
   Total # samples      4byte  全てのトラックの内最長のトラックのサンプリング数
   Loop # samples       4byte  未使用(ループ情報はトラック側で持つ)
   Loop offset          4byte  未使用
-  GD3 offset           4byte  GD3 divisionの開始位置
-  Define offset        4byte  Define divisionの開始位置
-  Track 1 offset       4byte  Track divisionの開始位置(2以降のトラックはそのひとつ前のトラック情報から辿る)
+  GD3 address          4byte  GD3 divisionの開始位置
+  Define address       4byte  Define divisionの開始位置
+  Track 1 address      4byte  Track divisionの開始位置(2以降のトラックはそのひとつ前のトラック情報から辿る)
   Define count         2byte  Define divisionの個数(0含む)
   Track count          2byte  Track divisionの個数(0含む)
-  Extra Header offset  4byte  未使用
+  Extra Header address 4byte  未使用
   0x2c～0x3fは予約領域(0埋め)
 
 
@@ -41,13 +41,14 @@ Define division.
   Def					3byte				区別するための文字
   Length				1byte				この定義の大きさ。通常(Optionの定義が不要な場合)は14byteになる。
   Chip Identify number	4byte				後述。音源Chip毎に割り当てられた数値を記録する。
+  											同じChip Identify numberで複数回定義可能。
+  											(これによって複数個の同じChipを使用した演奏ができる。)
   Chip Command number	2byte				コマンドに割り当てる0x80～0xFFFFまでの値を記録する。
   											複数のポートを使用する音源の場合は連続で割り当てられる。
+											Chip毎にユニークである必要がある。
   											例
   											　YM2608のChip Command Numberに0x188を設定すると
   											　実際は0x188と0x189が割り当てられる。
-  											同じChip Identify number、同じChip Command numberを複数回定義可能。
-  											(これによって複数個のChipを使用した演奏や異なるChipに同じコマンドを送信できる。)
   Clock					4byte				チップのクロックを設定する。VGMと同じ。
   Option				0～(Length-10)byte	省略可能。Optionが必要な音源の場合に設定する。
 
@@ -56,11 +57,12 @@ Track division.
 　この区分には、演奏時に音源に送信するデータや制御系コマンドを設定する。
 　使用するトラックの数だけ定義する。※現バージョンでは1トラックのみの対応。
 
- ["Trk"(3 byte)][Length(4 byte)][Data(Length byte)]
+ ["Trk"(3 byte)][Length(4 byte)][LoopAddress(4 byte)][Data(Length byte)]
  x Track Count
 
   Trk					3byte				区別するための文字。
   Length				4byte				この定義の大きさ。
+  LoopAddress			4byte				ループアドレス(ループしない時は-1(0xffffffff))
   Data					Length byte			音源に送信するデータや制御系コマンドを設定する。
 
 
@@ -69,7 +71,7 @@ Chip Identify number
 
    番号       音源名                       ポート数  コマンド長(byte)  オプション
  0x00000000 - 0x000000FF VGM Chips
-   0x0000000C SN76489                             1                 1  Option [SN FB ][SNW][SF]
+   0x0000000C SN76489                             2                 1  Option [SN FB ][SNW][SF]   2番目のポートはGGのステレオポート
    0x00000010 YM2413                              1                 2  
    0x0000002C YM2612                              2                 2  
    0x00000030 YM2151                              1                 2  
@@ -163,19 +165,81 @@ Chip Identify number
   2byteで使用できる音源群のコマンドは0x0080～0xFFFFになる。
 
 
-制御系コマンド
-  0x01 nn nn 	: Wait n samples.(VGM 0x61と同等)
-  0x02       	: wait 735 samples.(VGM 0x62と同等)
-  0x03       	: wait 882 samples.(VGM 0x63と同等)
-  0x04 cc nn nn	: override length of 0x02/0x03(VGM 0x64と同等)
-  0x06       	: end of sound data(VGM 0x66と同等)
-  0x07 ...   	: data block(VGM 0x67と同等)
-  0x08 ...   	: PCM RAM write(VGM 0x68と同等)
-  0x09 ...      : Host Application制御向けコマンド(解釈はアプリケーション依存)
-  0x1n       	: wait n+1 samples(VGM 0x7nと同等)
-  0x2n			: YM2612 port 0 address 2A write from the data bank.(VGM 0x8nと同等)
-  0x30-0x35		: DAC Stream Control Write(VGM 0x90-0x95と同等)
-  0x40 dddddddd	: seek to offset dddddddd(VGM 0xE0と同等)
+制御系コマンド(コマンドサイズが2byteの場合は0x00を追加)
+  0x01 (0x00) nn nn 	: Wait n samples.(VGM 0x61と同等)
+  0x02 (0x00)       	: wait 735 samples.(VGM 0x62と同等)
+  0x03 (0x00)       	: wait 882 samples.(VGM 0x63と同等)
+  0x04 (0x00) cc nn nn	: override length of 0x02/0x03(VGM 0x64と同等)
+  0x06 (0x00)       	: end of sound data(VGM 0x66と同等)
+  0x07 (0x00) ...   	: data block
+                            0x07 cc tt ss ss ss ss (data)
+                          where:
+                            0x07 = ZGM command
+                            cc   = Chip Command Number
+                                   (コマンドのサイズにあわせる。)
+                            tt   = data type
+                                   音源ごとに異なるtypeが割り当てられる。(see chip data type)
+                            ss ss ss ss (32 bits) = size of data, in bytes
+  0x08 (0x00) ...   	: PCM RAM write(VGM 0x68と同等)
+                            0x08 cc oo oo oo oo dd dd dd dd ss ss ss ss
+                          where:
+                            0x08 = ZGM command
+                            cc   = Chip Command Number
+                                   (コマンドのサイズにあわせる。)
+                            oo oo oo oo (32 bits) = read offset in data block
+                            dd dd dd dd (32 bits) = write offset in chip's ram (affected by chip's registers)
+                            ss ss ss ss (32 bits) = size of data, in bytes
+                            Since size can't be zero, a size of 0 bytes means 0x01_0000_0000 bytes.
+  0x09 (0x00) ...       : Host Application制御向けコマンド(解釈はアプリケーション依存)
+  0x1n (0x00)       	: wait n+1 samples(VGM 0x7nと同等)
+  0x2n (0x00)			: YM2612 port 0 address 2A write from the data bank.(VGM 0x8nと同等)
+  0x30-0x35 (0x00)		: DAC Stream Control Write(VGM 0x90-0x95と同等)
+                          Setup Stream Control:
+                            0x30 ss tt pp cc
+				          where:
+				            tt   = Chip Command Number
+                                   (コマンドのサイズにあわせる。)
+  0x40 (0x00) dddddddd	: seek to offset dddddddd(VGM 0xE0と同等)
 
 
+chip data type
+  YM2612
+  PWM 
+  OKIM6258
+  HuC6280
+   0x00 = data of recorded streams (uncompressed)
+   0x01 = data of recorded streams (compressed)
+
+  RF5C68
+  RF5C164 
+  SCSP
+  NES APU
+   0x00 = data of recorded streams (uncompressed)
+   0x01 = data of recorded streams (compressed)
+   0x02 = RAM write
+
+  Sega PCM ROM data
+  YM2608 DELTA-T ROM data
+  YMF278B ROM data
+  YMF271 ROM data
+  YMZ280B ROM data
+  YMF278B RAM data
+  Y8950 DELTA-T ROM data
+  MultiPCM ROM data
+  uPD7759 ROM data
+  OKIM6295 ROM data
+  K054539 ROM data
+  C140 ROM data
+  K053260 ROM data
+  Q-Sound ROM data
+  ES5506 ROM data
+  X1-010 ROM data
+  C352 ROM data
+  GA20 ROM data
+  ES5503 RAM write
+   0x00 = ROM/RAM data
+
+  YM2610
+   0x00 = ADPCM ROM data(ADPCM-A)
+   0x01 = DELTA-T ROM data(ADPCM-B)
 

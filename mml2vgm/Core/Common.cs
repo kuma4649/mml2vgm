@@ -321,6 +321,8 @@ namespace Core
             {
                 foreach (ClsChip chip in kvp.Value)
                 {
+                    if (chip == null) continue;
+
                     if (chip.Ch[0].Name.Substring(0, 2) == a)
                     {
                         return chip.ChMax;

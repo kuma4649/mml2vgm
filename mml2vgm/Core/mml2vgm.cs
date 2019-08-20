@@ -123,7 +123,14 @@ namespace Core
                 }
 
                 Disp(msg.get("I04003"));
-                desVGM = new ClsVgm(stPath);
+                //ざっくりくわけ
+                SourceParser sp = new SourceParser();
+                sp.Parse(src);
+                //さっくり曲情報を取得
+                Information info = new Information();
+                info.AddInformation(sp.lnInformation, null);
+
+                desVGM = new ClsVgm(stPath, sp, info);
                 desVGM.doSkip = doSkip;
                 desVGM.doSkipStop = doSkipStop;
                 desVGM.caretPoint = caretPoint;
@@ -826,12 +833,15 @@ namespace Core
                 Disp(msg.get("I04013"));
                 Disp("");
                 Disp("");
-                if (desVGM.c140[0].pcmDataEasy != null)
-                    Disp(string.Format(msg.get("I04014")
-                        , ((C140)desVGM.c140[0]).isSystem2 ? "" : "1"));
-                if (desVGM.c140[1].pcmDataEasy != null)
-                    Disp(string.Format(msg.get("I04015")
-                        , ((C140)desVGM.c140[1]).isSystem2 ? "" : "1"));
+                if (desVGM.c140 != null)
+                {
+                    if (desVGM.c140[0] != null && desVGM.c140[0].pcmDataEasy != null)
+                        Disp(string.Format(msg.get("I04014")
+                            , ((C140)desVGM.c140[0]).isSystem2 ? "" : "1"));
+                    if (desVGM.c140[1] != null && desVGM.c140[1].pcmDataEasy != null)
+                        Disp(string.Format(msg.get("I04015")
+                            , ((C140)desVGM.c140[1]).isSystem2 ? "" : "1"));
+                }
                 Disp("");
 
                 Disp(msg.get("I04016"));
@@ -860,6 +870,8 @@ namespace Core
 
         private string DispPCMRegion(ClsChip c)
         {
+            if (c == null) return "";
+
             if (c.chipType != enmChipType.YM2610B)
             {
                 if (c.pcmDataEasy == null && c.pcmDataDirect.Count == 0) return "";
@@ -902,6 +914,8 @@ namespace Core
             YM2610B opnb;
             string region = "";
             long tl = 0;
+
+            if (c == null) return "";
 
             if (c.chipType != enmChipType.YM2610B)
             {

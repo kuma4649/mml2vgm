@@ -66,7 +66,7 @@ namespace Core
         public int modeBeforeSend = 0;
 
 
-        public int AddInformation(List<Line> lstLine, Dictionary<enmChipType, ClsChip[]> chips)
+        public void AddInformation(List<Line> lstLine, Dictionary<enmChipType, ClsChip[]> chips)
         {
             foreach (Line ln in lstLine)
             {
@@ -111,9 +111,9 @@ namespace Core
                     else if (wrd == XGMBASEFRAME) SetXgmBaseFrame(val);
                     else if (wrd == OCTAVEREV) SetOctaveRev(val);
                     else if (wrd == ISK052539) SetIsK052539(val);
-                    else if (wrd == FORCEDMONOPARTYM2612) SetMonoPart(val, chips);
+                    else if (wrd == FORCEDMONOPARTYM2612 && chips != null) SetMonoPart(val, chips);
                     else if (wrd == MODEBEFORESEND) SetModeBeforeSend(val);
-                    else
+                    else if(chips!=null)
                     {
                         foreach (ClsChip[] aryChip in chips.Values)
                         {
@@ -153,7 +153,7 @@ namespace Core
                     msgBox.setWrnMsg(string.Format(msg.get("E03000"), ln.Txt), ln.Lp);
                 }
             }
-            return 0;
+
         }
 
         private void SetMonoPart(string val, Dictionary<enmChipType,ClsChip[]> chips)

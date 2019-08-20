@@ -91,6 +91,8 @@ namespace Core
             }
         }
 
+        public string PartName { get; set; }
+
         public bool SupportReversePartWork = false;
         public bool ReversePartWork = false;
 
@@ -122,6 +124,8 @@ namespace Core
             this._ChipID = chipID;
             this.stPath = stPath;
             this.IsSecondary = IsSecondary;
+            this.PartName = initialPartName;
+
             MakeFNumTbl();
         }
 
@@ -1012,6 +1016,8 @@ namespace Core
             {
                 foreach (ClsChip chip in kvp.Value)
                 {
+                    if (chip == null) continue;
+
                     foreach (partWork p in chip.lstPartWork)
                     {
                         p.reqFreqReset = true;

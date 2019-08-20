@@ -43,6 +43,7 @@ namespace Core
         {
             0x54,0x72,0x6b //'Trk'
             ,0,0,0,0 // Length 4byte
+            ,255,255,255,255 //LoopAddress 4byte
         };
 
         private uint TotalSamples = 0;
@@ -50,10 +51,10 @@ namespace Core
         private List<DefineInfo> define;
         private List<TrackInfo> track;
         private ClsVgm mmlInfo;
-        private object[] tblChipIdentifyNumber = new object[]
+        public static object[] tblChipIdentifyNumber = new object[]
         {
             //              ChipName    Ident        Port  CmdLen  Option
-              new object[]{ "SN76489" , 0x0000000c , 1   , 1     , new byte[] { 0,0,0,0 } }
+              new object[]{ "SN76489" , 0x0000000c , 2   , 1     , new byte[] { 0,0,0,0 } }
             , new object[]{ "YM2612"  , 0x0000002c , 2   , 2     , null }
         };
         private Dictionary<string, object[]> dicChipIdentifyNumber;
@@ -251,6 +252,7 @@ namespace Core
             }
 
             Common.SetLE32(mmlInfo.dat, (uint)(ti.offset + 0x03), (uint)(mmlInfo.dat.Count - ti.offset));
+            Common.SetLE32(mmlInfo.dat, (uint)(ti.offset + 0x07), (uint)(mmlInfo.dummyCmdLoopOffset));
         }
 
         private void makeAndOutExtraDiv()

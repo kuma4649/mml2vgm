@@ -31,6 +31,8 @@ namespace Core
             {
                 foreach (ClsChip chip in kvp.Value)
                 {
+                    if (chip == null) continue;
+
                     if (!chip.use) continue;
 
                     foreach (partWork pw in chip.lstPartWork)

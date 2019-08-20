@@ -68,11 +68,21 @@ namespace Core
             {
                 if (parent.ChipCommandSize == 2)
                 {
-                    pcmDataInfo[0].totalBuf = new byte[] { 0x07,0x00, 0x66, 0x00, 0x00, 0x00, 0x00, 0x00 };
+                    pcmDataInfo[0].totalBuf = new byte[] {
+                        0x07 , 0x00 ,          // data block
+                        0x00 , 0x00 ,          // Chip Command Number
+                        0x00 ,                 // data type
+                        0x00, 0x00, 0x00, 0x00 // size of data
+                    };
                 }
                 else
                 {
-                    pcmDataInfo[0].totalBuf = new byte[] { 0x07, 0x66, 0x00, 0x00, 0x00, 0x00, 0x00 };
+                    pcmDataInfo[0].totalBuf = new byte[] {
+                        0x07 ,                 // data block
+                        0x00 ,                 // Chip Command Number
+                        0x00 ,                 // data type
+                        0x00, 0x00, 0x00, 0x00 // size of data
+                    };
                 }
             }
             else

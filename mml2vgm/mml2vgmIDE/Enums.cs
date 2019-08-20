@@ -213,7 +213,8 @@ namespace mml2vgmIDE
         MDX = 14,
         MND = 15,
         MUB = 16,
-        MUC = 17
+        MUC = 17,
+        ZGM = 18
     }
 
     public enum SendMode : int
