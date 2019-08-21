@@ -26,20 +26,20 @@
 '@ 004,000
 
       FileName , ChipName      , SrcStartAdr , DesStartAdr , Length , Option
-@ PD "BD.wav" , C140          ,             , $001000  
-@ PD "BD.wav" , C140Secondary ,             , $001000  
-@ PD "BD.wav" , OPNB          ,             , $001000  
-@ PD "BD.wav" , OPNB          ,             , $001000     ,        , 1
-@ PD "BD.wav" ,               ,             , $001000     ,        , 1
-@ PD "BD.wav" , OPNA          ,             , $001000     ,        , 
-@ PD "BD.wav" , OPLL          ,             , $001000     ,        , 
-@ PD "BD.wav" , OPN           ,             , $001000     ,        , 
-@ PD "BD.wav" , OPM           ,             , $001000     ,        , 
-@ PD "BD.wav" , AY10          ,             , $001000     ,        , 
-@ PD "BD.wav" , DCSG          ,             , $001000     ,        , 
-@ PD "BD.wav" , HuC8          ,             , $001000     ,        , 
-@ PD "SD.wav" , RF5C          ,             , $001000     ,        , 
-@ PD "BD.wav" , SPCM          ,             , $001000     ,        , 
+@ PD "..\wav\BD.wav" , C140          ,             , $001000  
+@ PD "..\wav\BD.wav" , C140Secondary ,             , $001000  
+@ PD "..\wav\BD.wav" , OPNB          ,             , $001000  
+@ PD "..\wav\BD.wav" , OPNB          ,             , $001000     ,        , 1
+@ PD "..\wav\BD.wav" ,               ,             , $001000     ,        , 1
+@ PD "..\wav\BD.wav" , OPNA          ,             , $001000     ,        , 
+@ PD "..\wav\BD.wav" , OPLL          ,             , $001000     ,        , 
+@ PD "..\wav\BD.wav" , OPN           ,             , $001000     ,        , 
+@ PD "..\wav\BD.wav" , OPM           ,             , $001000     ,        , 
+@ PD "..\wav\BD.wav" , AY10          ,             , $001000     ,        , 
+@ PD "..\wav\BD.wav" , DCSG          ,             , $001000     ,        , 
+@ PD "..\wav\BD.wav" , HuC8          ,             , $001000     ,        , 
+@ PD "..\wav\SD.wav" , RF5C          ,             , $001000     ,        , 
+@ PD "..\wav\BD.wav" , SPCM          ,             , $001000     ,        , 
 
       No , ChipName      , BaseFreq , StartAdr , EndAdr  , LoopAdr , Option
 @ PI  1 , C140          ,          ,  $001000 , $001910 ,          
@@ -58,24 +58,24 @@
 @ PI 24 , SPCM          ,          ,  $001000 , $001800 , $001400 ,
 
       No , FileName , BaseFreq , Volume , ChipName      , Option
-@ P   0 , "SD.wav" ,          ,        , C140
-@ P   3 , "SD.wav" ,          ,        , C140Secondary
-@ P   4 , "SD.wav" ,          ,        , OPNB          
-@ P   7 , "SD.wav" ,          ,        , OPNB          , 1
-@ P   8 , "SD.wav" ,          ,        ,               , 
-@ P   9 , "SD.wav" ,          ,        , OPN2Secondary , 
-@ P  10 , "SD.wav" ,          ,        , OPN2X         , 
-@ P  11 , "SD.wav" ,          ,        , OPN2X         , 
-@ P  12 , "SD.wav" ,          ,        , OPNA          , 
-@ P  14 , "SD.wav" ,          ,        , OPLL          , 
-@ P  15 , "SD.wav" ,          ,        , OPN           , 
-@ P  16 , "SD.wav" ,          ,        , OPM           , 
-@ P  17 , "SD.wav" ,          ,        , AY10          , 
-@ P  18 , "SD.wav" ,          ,        , DCSG          , 
-@ P  19 , "SD.wav" ,          ,        , HuC8          , 
-@ P  21 , "SD.wav" ,          ,        , RF5C          , 
-'@ P  23 , "SD.wav" ,          ,        , SPCM          , 
-'@ P  25 , "SD.wav" ,          ,        , SPCM          , $000020
+@ P   0 , "..\wav\SD.wav" ,          ,        , C140
+@ P   3 , "..\wav\SD.wav" ,          ,        , C140Secondary
+@ P   4 , "..\wav\SD.wav" ,          ,        , OPNB          
+@ P   7 , "..\wav\SD.wav" ,          ,        , OPNB          , 1
+@ P   8 , "..\wav\SD.wav" ,          ,        ,               , 
+@ P   9 , "..\wav\SD.wav" ,          ,        , OPN2Secondary , 
+@ P  10 , "..\wav\SD.wav" ,          ,        , OPN2X         , 
+@ P  11 , "..\wav\SD.wav" ,          ,        , OPN2X         , 
+@ P  12 , "..\wav\SD.wav" ,          ,        , OPNA          , 
+@ P  14 , "..\wav\SD.wav" ,          ,        , OPLL          , 
+@ P  15 , "..\wav\SD.wav" ,          ,        , OPN           , 
+@ P  16 , "..\wav\SD.wav" ,          ,        , OPM           , 
+@ P  17 , "..\wav\SD.wav" ,          ,        , AY10          , 
+@ P  18 , "..\wav\SD.wav" ,          ,        , DCSG          , 
+@ P  19 , "..\wav\SD.wav" ,          ,        , HuC8          , 
+@ P  21 , "..\wav\SD.wav" ,          ,        , RF5C          , 
+'@ P  23 , "..\wav\SD.wav" ,          ,        , SPCM          , 
+'@ P  25 , "..\wav\SD.wav" ,          ,        , SPCM          , $000020
 
 C140
 Y01 T126

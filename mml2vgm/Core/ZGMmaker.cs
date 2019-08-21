@@ -132,6 +132,7 @@ namespace Core
             {
                 foreach (ClsChip chip in kvp.Value)
                 {
+                    if (chip == null) continue;
                     if (!chip.use) continue;
                     if (!dicChipIdentifyNumber.ContainsKey(chip.Name)) continue;
 
@@ -226,7 +227,10 @@ namespace Core
 
             foreach (KeyValuePair<enmChipType, ClsChip[]> kvp in mmlInfo.chips)
                 foreach (ClsChip chip in kvp.Value)
+                {
+                    if (chip == null) continue;
                     totalChannel += chip.ChMax;
+                }
 
             do
             {

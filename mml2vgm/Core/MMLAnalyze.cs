@@ -1219,11 +1219,14 @@ namespace Core
             {
                 if (!directFlg)
                 {
-                    if ((int)info.clockCount % n != 0)
+                    if (n != 0)
                     {
-                        msgBox.setWrnMsg(string.Format(msg.get("E05023"), n), mml.line.Lp);
+                        if ((int)info.clockCount % n != 0)
+                        {
+                            msgBox.setWrnMsg(string.Format(msg.get("E05023"), n), mml.line.Lp);
+                        }
+                        n = (int)info.clockCount / n;
                     }
-                    n = (int)info.clockCount / n;
                 }
                 else
                 {
@@ -1724,6 +1727,7 @@ namespace Core
             note.length = toneDoublerNote.length;
             note.tDblOctave = toneDoublerMML;
 
+            if (pw.mmlData[pos].args == null) pw.mmlData[pos].args = new List<object>();
             pw.mmlData[pos].args.Add(toneDoublerMML);
         }
 

@@ -43,14 +43,14 @@
 
 'F1 T90
 
-'F3 EON EX1 @0 D0 v100 p3 o5 l8 q0 cdefedcrefgagfercrcrcrcrl16ccddeeffl8edcrrrrrrrrrrrrrrrrrrrrrrg>cr
-'F7     EX2    D0 v100    o5 l8 q0 rrrrrrrrcdefedcrefgagfercrcrcrcrl16ccddeeffl8edcrrrrrrrrrrrrrrrrr
-'F8     EX3    D0 v100    o5 l8 q0 rrrrrrrrrrrrrrrrcdefedcrefgagfercrcrcrcrl16ccddeeffl8edcrrrrrrrrr
-'F9     EX4    D0 v100    o5 l8 q0 rrrrrrrrrrrrrrrrrrrrrrrrcdefedcrefgagfercrcrcrcrl16ccddeeffl8edcr
+'F3 EXON EX1 @0 D0 v110 p3 o5 l8 q0 cdefedcrefgagfercrcrcrcrl16ccddeeffl8edcrrrrrrrrrrrrrrrrrrrrrrg>cr
+'F7 EXON EX2    D0 v110    o5 l8 q0 rrrrrrrrcdefedcrefgagfercrcrcrcrl16ccddeeffl8edcrrrrrrrrrrrrrrrrr
+'F8 EXON EX3    D0 v110    o5 l8 q0 rrrrrrrrrrrrrrrrcdefedcrefgagfercrcrcrcrl16ccddeeffl8edcrrrrrrrrr
+'F9 EXON EX4    D0 v110    o5 l8 q0 rrrrrrrrrrrrrrrrrrrrrrrrcdefedcrefgagfercrcrcrcrl16ccddeeffl8edcr
 
-F3 @110 EX12 D0 v100 p3 o4 l8 q0 cdefedcrefgagfercrcrcrcrl16ccddeeffl8edcrrrrrrrrr
-F7      EX34 D0 v100    o4 l8 q0 rrrrrrrrcdefedcrefgagfercrcrcrcrl16ccddeeffl8edcr
+F3 @110 EXON EX12 D0 v100 p3 o4 l8 q0 cdefedcrefgagfercrcrcrcrl16ccddeeffl8edcrrrrrrrrr
+F7      EXON EX34 D0 v100    o4 l8 q0 rrrrrrrrcdefedcrefgagfercrcrcrcrl16ccddeeffl8edcr
 
-F3 EON EX1 @0 D0 v110 p3 o5 l8 q0 cdefedcrefgagfercrcrcrcrl16ccddeeffl8edcr
-F7     EX2    D2 v090    o5 l8 q0 r16cdefedcrefgagfercrcrcrcrl16ccddeeffl8edcr
-F8     EX3    D4 v080    o5 l8 q0 r  cdefedcrefgagfercrcrcrcrl16ccddeeffl8edcr
+F3 EXON EX1 @0 D0 v110 p3 o5 l8 q0 cdefedcrefgagfercrcrcrcrl16ccddeeffl8edcr
+F7 EXON EX2    D2 v090    o5 l8 q0 r16cdefedcrefgagfercrcrcrcrl16ccddeeffl8edcr
+F8 EXON EX3    D4 v080    o5 l8 q0 r  cdefedcrefgagfercrcrcrcrl16ccddeeffl8edcr

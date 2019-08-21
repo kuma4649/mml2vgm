@@ -13,6 +13,7 @@ namespace mml2vgmIDE
 {
     public partial class FrmLyrics : WeifenLuo.WinFormsUI.Docking.DockContent
     {
+        public Action parentUpdate = null;
         public Setting setting = null;
         public List<Tuple<int, int, string>> lyrics = null;
         public int lyricsIndex = 0;
@@ -39,6 +40,7 @@ namespace mml2vgmIDE
         {
             e.Cancel = true;
             this.Hide();
+            parentUpdate?.Invoke();
         }
 
         private void RichTextBox1_GotFocus(object sender, EventArgs e)

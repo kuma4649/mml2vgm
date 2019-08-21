@@ -82,19 +82,19 @@ X2 r1r1r1r1r1r1r1r1r1r1r1r1r1r1r1r1
 'X2 f+4 a+4. f+rr>c+4<ba4 rrr
 'X2 f+4 a+4 rg+rg+&g+1
 
-'X1 o3l8v120
-'X1 f+0a+4 a+0>d+4.< f+0a+rr > c+0f4 < b0>d+< a0>c+4< rrr
-'X1 f+0a+4 g+0>d+4<r f+0a+r d+0g+&d+0g+1
-'X1 f+0a+4 a+0>d+4.< f+0a+rr > c+0f4 < b0>d+< a0>c+4< rrr
-'X1 f+0a+4 a+0>d+4<r g+0>c+r< g+0>d+&<g+0>d+1
+X1 o3l8v120
+X1 f+0a+4 a+0>d+4.< f+0a+rr > c+0f4 < b0>d+< a0>c+4< rrr
+X1 f+0a+4 g+0>d+4<r f+0a+r d+0g+&d+0g+1
+X1 f+0a+4 a+0>d+4.< f+0a+rr > c+0f4 < b0>d+< a0>c+4< rrr
+X1 f+0a+4 a+0>d+4<r g+0>c+r< g+0>d+&<g+0>d+1
 
-'N1 r1r1r1r1
-'N1 r1r1r1r1
-'N1 r1r1r1r1
-'N1 r1r1r1r1
-'N1 o3l8v120@1l8
-'N1 f+0a+4 a+0>d+4.< f+0a+rr > c+0f4 < b0>d+< a0>c+4< rrr
-'N1 f+0a+4 g+0>d+4<r f+0a+r d+0g+&d+0g+1
-'N1 f+0a+4 a+0>d+4.< f+0a+rr > c+0f4 < b0>d+< a0>c+4< rrr
-'N1 f+0a+4 a+0>d+4<r g+0>c+r< g+0>d+&<g+0>d+1
+N1 r1r1r1r1
+N1 r1r1r1r1
+N1 r1r1r1r1
+N1 r1r1r1r1
+N1 o3l8v120@1l8
+N1 f+0a+4 a+0>d+4.< f+0a+rr > c+0f4 < b0>d+< a0>c+4< rrr
+N1 f+0a+4 g+0>d+4<r f+0a+r d+0g+&d+0g+1
+N1 f+0a+4 a+0>d+4.< f+0a+rr > c+0f4 < b0>d+< a0>c+4< rrr
+N1 f+0a+4 a+0>d+4<r g+0>c+r< g+0>d+&<g+0>d+1
 

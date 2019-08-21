@@ -140,6 +140,7 @@ namespace Core
 
         public void outYM2203AllKeyOff(ClsChip chip)
         {
+            if (chip == null) return;
 
             foreach (partWork pw in chip.lstPartWork)
             {

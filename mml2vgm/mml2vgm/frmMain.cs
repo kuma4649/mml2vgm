@@ -114,6 +114,7 @@ namespace mml2vgm
                 {
                     foreach (ClsChip chip in kvp.Value)
                     {
+                        if (chip == null) continue;
                         List<partWork> pw = chip.lstPartWork;
                         for (int i = 0; i < pw.Count; i++)
                         {

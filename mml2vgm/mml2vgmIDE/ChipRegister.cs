@@ -734,6 +734,9 @@ namespace mml2vgmIDE
                 case EnmDevice.YM2612:
                     YM2612SetRegisterProcessing(ref Counter, ref Chip, ref Type, ref Address, ref Data, ref ExData);
                     break;
+                case EnmDevice.None:
+                    //Dummy Command
+                    break;
                 default:
                     throw new ArgumentException();
             }
@@ -792,6 +795,9 @@ namespace mml2vgmIDE
                     break;
                 case EnmDevice.SN76489:
                     SN76489WriteRegisterControl(Chip, type, address, data, exData);
+                    break;
+                case EnmDevice.None:
+                    //Dummy Command
                     break;
                 default:
                     throw new ArgumentException();

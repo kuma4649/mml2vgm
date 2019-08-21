@@ -341,7 +341,7 @@ namespace Core
 
             if (pw.beforepcmBank != pw.pcmBank)
             {
-                int bch = (pw.ch + 1) & 0xf;
+                int bch = (pw.ch - 1) & 0xf;
                 adr = (byte)((bch << 3) + 0x00);
                 data = (ushort)(pw.pcmBank);
                 OutQSoundPort(mml, port[0], pw
@@ -417,18 +417,13 @@ namespace Core
             {
                 int o = octave - 1;
                 int n = Const.NOTE.IndexOf(noteCmd) + shift;
-                if (n >= 0)
+
+                o += n / 12;
+                n %= 12;
+                if (n < 0)
                 {
-                    o += n / 12;
-                    o = Common.CheckRange(o, 0, 7);
-                    n %= 12;
-                }
-                else
-                {
-                    o += n / 12 - 1;
-                    o = Common.CheckRange(o, 0, 7);
-                    n %= 12;
-                    if (n < 0) { n += 12; }
+                    n += 12;
+                    o = Common.CheckRange(--o, 0, 7);
                 }
 
                 if (pw.instrument < 0 || !parent.instPCM.ContainsKey(pw.instrument))

@@ -30,11 +30,11 @@ ST = ボリュームの変化量
 
 'S1 T90
 
-S1 D0 v15 o4 l8 q0 v1cv2dv3ev4fv5ev6dv7crv8ev9fv10gv11av12gv13fv14e
-S2 D1 v15 o4 l8 q0 v1cv2dv3ev4fv5ev6dv7crv8ev9fv10gv11av12gv13fv14e
+'S1 D0 v15 o4 l8 q0 v1cv2dv3ev4fv5ev6dv7crv8ev9fv10gv11av12gv13fv14e
+'S2 D1 v15 o4 l8 q0 v1cv2dv3ev4fv5ev6dv7crv8ev9fv10gv11av12gv13fv14e
 
-'S1 D0
-'S2 D1
-'S1 [cd/e]3f
+S1 D0
+S2 D1
+S1 [cd/e]3f
 
-S12 v15 EON @0 o4 l8 Q7 v15cdefedcrefgagferv2crv6crv10crv14crv15l16ccddeeffl8edcr EOF cdefedcr
+'S12 v15 EON @0 o4 l8 Q7 v15cdefedcrefgagferv2crv6crv10crv14crv15l16ccddeeffl8edcr EOF cdefedcr

@@ -198,24 +198,36 @@ namespace Core
             CurrentChannel = 255;
         }
 
+        public override int GetFNum(partWork pw, MML mml, int octave, char cmd, int shift)
+        {
+            return GetHuC6280Freq(octave, cmd, shift);
+        }
 
-        public int GetHuC6280Freq(int octave, char noteCmd, int shift)
+        private int GetHuC6280Freq(int octave, char noteCmd, int shift)
         {
             int o = octave;
             int n = Const.NOTE.IndexOf(noteCmd) + shift;
-            if (n >= 0)
+
+            o += n / 12;
+            n %= 12;
+            if (n < 0)
             {
-                o += n / 12;
-                o = Common.CheckRange(o, 1, 8);
-                n %= 12;
+                n += 12;
+                o = Common.CheckRange(--o, 1, 8);
             }
-            else
-            {
-                o += n / 12 - 1;
-                o = Common.CheckRange(o, 1, 8);
-                n %= 12;
-                if (n < 0) { n += 12; }
-            }
+            //if (n >= 0)
+            //{
+            //    o += n / 12;
+            //    o = Common.CheckRange(o, 1, 8);
+            //    n %= 12;
+            //}
+            //else
+            //{
+            //    o += n / 12 - 1;
+            //    o = Common.CheckRange(o, 1, 8);
+            //    n %= 12;
+            //    if (n < 0) { n += 12; }
+            //}
             return (int)(Frequency / 32.0f / 261.62f / (Const.pcmMTbl[n] * (float)Math.Pow(2, (o - 4))));
         }
 

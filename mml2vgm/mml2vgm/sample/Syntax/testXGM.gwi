@@ -28,15 +28,15 @@
 '@ 031,015,009,007,003,000,000,002,003,001,000
 '@ 004,007
 
-@ P 0,"BD.wav",8000,100,OPN2X
-@ P 1,"SD.wav",8000,100,OPN2X
-@ P 2,"HC.wav",8000,100,OPN2X
-@ P 3,"HO.wav",8000,100,OPN2X
+@ P 0,"..\wav\BD.wav",8000,100,OPN2X
+@ P 1,"..\wav\SD.wav",8000,100,OPN2X
+@ P 2,"..\wav\HC.wav",8000,100,OPN2X
+@ P 3,"..\wav\HO.wav",8000,100,OPN2X
 
-'@ P 0,"BD_8bit14000.wav",8000,80,OPN2X
-'@ P 1,"SD_8bit14000Hz.wav",8000,80,OPN2X
-'@ P 2,"HC.wav",8000,10,OPN2X
-'@ P 3,"HO.wav",8000,10,OPN2X
+'@ P 0,"..\wav\BD_8bit14000.wav",8000,80,OPN2X
+'@ P 1,"..\wav\SD_8bit14000Hz.wav",8000,80,OPN2X
+'@ P 2,"..\wav\HC.wav",8000,10,OPN2X
+'@ P 3,"..\wav\HO.wav",8000,10,OPN2X
 
      No,SV,AR,DR,SL,SR,RR,ST,Chip
 '@ E  0,15, 0, 0,15, 8, 1, 4

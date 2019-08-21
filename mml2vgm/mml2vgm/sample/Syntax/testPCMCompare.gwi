@@ -32,9 +32,9 @@ Z01 MST0,1,10,100,0c1
 
 Z01 @2@E0 EON c2d2e2 EOF c2d2e2
 
-'@ P 1,"Guitar.wav",8000,100,rf5c164
-'@ P 2,"Guitar.wav",8000,100,ym2610B,1
-'@ P 3,"Guitar.wav",8000,100,segapcm
+'@ P 1,"..\wav\Guitar.wav",8000,100,rf5c164
+'@ P 2,"..\wav\Guitar.wav",8000,100,ym2610B,1
+'@ P 3,"..\wav\Guitar.wav",8000,100,segapcm
 
 'R1 @1o3c4d4e4f4r1r1c4d4e4f4
 'T19 @2o4r1c4d4e4f4r1c4d4e4f4

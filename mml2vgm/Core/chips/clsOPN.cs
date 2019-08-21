@@ -949,19 +949,28 @@ namespace Core
         {
             int o = octave;
             int n = Const.NOTE.IndexOf(noteCmd) + shift;
-            if (n >= 0)
+
+            o += n / 12;
+            n %= 12;
+            if (n < 0)
             {
-                o += n / 12;
-                o = Common.CheckRange(o, 1, 8);
-                n %= 12;
+                n += 12;
+                o = Common.CheckRange(--o, 1, 8);
             }
-            else
-            {
-                o += n / 12 - ((n % 12 == 0) ? 0 : 1);
-                o = Common.CheckRange(o, 1, 8);
-                n %= 12;
-                if (n < 0) { n += 12; }
-            }
+
+            //if (n >= 0)
+            //{
+            //    o += n / 12;
+            //    o = Common.CheckRange(o, 1, 8);
+            //    n %= 12;
+            //}
+            //else
+            //{
+            //    o += n / 12 - ((n % 12 == 0) ? 0 : 1);
+            //    o = Common.CheckRange(o, 1, 8);
+            //    n %= 12;
+            //    if (n < 0) { n += 12; }
+            //}
 
             int f = ftbl[n];
 

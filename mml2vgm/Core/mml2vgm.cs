@@ -669,29 +669,41 @@ namespace Core
                             continue;
                         }
 
-                        desVGM.chips[v.chip][v.isSecondary ? 1 : 0]
-                            .StorePcm(
-                            newDic
-                            , new KeyValuePair<int, clsPcm>(pds.No, v)
-                            , buf
-                            , is16bit
-                            , samplerate);
+                        if (desVGM.chips.ContainsKey(v.chip))
+                        {
+                            desVGM.chips[v.chip][v.isSecondary ? 1 : 0]
+                                .StorePcm(
+                                newDic
+                                , new KeyValuePair<int, clsPcm>(pds.No, v)
+                                , buf
+                                , is16bit
+                                , samplerate);
+                        }
 
                         if (v.chip != enmChipType.YM2610B)
                         {
-                            pds.DatEndAdr = (int)desVGM.chips[v.chip][v.isSecondary ? 1 : 0].pcmDataEasy.Length - 16;
+                            if (desVGM.chips != null && desVGM.chips.ContainsKey(v.chip) && desVGM.chips[v.chip] != null)
+                            {
+                                pds.DatEndAdr = (int)desVGM.chips[v.chip][v.isSecondary ? 1 : 0].pcmDataEasy.Length - 16;
+                            }
                         }
                         else
                         {
                             if (pds.DatLoopAdr == 0)
                             {
                                 //ADPCM-A
-                                pds.DatEndAdr = (int)((YM2610B)desVGM.chips[v.chip][v.isSecondary ? 1 : 0]).pcmDataEasyA.Length - 16;
+                                if (desVGM.chips != null && desVGM.chips.ContainsKey(v.chip) && desVGM.chips[v.chip] != null)
+                                {
+                                    pds.DatEndAdr = (int)((YM2610B)desVGM.chips[v.chip][v.isSecondary ? 1 : 0]).pcmDataEasyA.Length - 16;
+                                }
                             }
                             else
                             {
                                 //ADPCM-B
-                                pds.DatEndAdr = (int)((YM2610B)desVGM.chips[v.chip][v.isSecondary ? 1 : 0]).pcmDataEasyB.Length - 16;
+                                if (desVGM.chips != null && desVGM.chips.ContainsKey(v.chip) && desVGM.chips[v.chip] != null)
+                                {
+                                    pds.DatEndAdr = (int)((YM2610B)desVGM.chips[v.chip][v.isSecondary ? 1 : 0]).pcmDataEasyB.Length - 16;
+                                }
                             }
 
                         }
@@ -979,6 +991,8 @@ namespace Core
                     if (pds.type == enmPcmDefineType.Easy) continue;
                     if (pds.chip != c.chipType) continue;
                     if (pds.isSecondary != c.IsSecondary) continue;
+                    if (desVGM.chips[pds.chip] == null) continue;
+                    if (desVGM.chips[pds.chip][0] == null) continue;
                     if (!desVGM.chips[pds.chip][0].CanUsePICommand()) continue;
 
                     region += string.Format("{0,-10} {1,-7} ${2,-7:X6} ${3,-7:X6} ${4,-7:X6}  {5}\r\n"

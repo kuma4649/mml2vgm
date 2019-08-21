@@ -124,6 +124,7 @@
             this.Name = "FrmErrorList";
             this.Text = "Error list";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FrmErrorList_FormClosing);
+            this.Load += new System.EventHandler(this.FrmErrorList_Load);
             this.DragOver += new System.Windows.Forms.DragEventHandler(this.FrmErrorList_DragOver);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);

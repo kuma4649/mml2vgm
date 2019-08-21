@@ -1433,6 +1433,7 @@ namespace mml2vgmIDE
             frmFolderTree.parentDeleteFile = DeleteFile;
             frmErrorList.parentUpdate = UpdateControl;
             frmErrorList.parentJumpDocument = JumpDocument;
+            frmLyrics.parentUpdate = UpdateControl;
 
             statusStrip1.BackColor = Color.FromArgb(setting.ColorScheme.StatusStripBack_Normal);
 

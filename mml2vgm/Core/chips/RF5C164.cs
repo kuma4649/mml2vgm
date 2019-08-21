@@ -196,23 +196,31 @@ namespace Core
         }
 
 
-        public int GetRf5c164PcmNote(int octave, char noteCmd, int shift)
+        private int GetRf5c164PcmNote(int octave, char noteCmd, int shift)
         {
             int o = octave;
             int n = Const.NOTE.IndexOf(noteCmd) + shift;
-            if (n >= 0)
+
+            o += n / 12;
+            n %= 12;
+            if (n < 0)
             {
-                o += n / 12;
-                o = Common.CheckRange(o, 1, 8);
-                n %= 12;
+                n += 12;
+                o = Common.CheckRange(--o, 1, 8);
             }
-            else
-            {
-                o += n / 12 - 1;
-                o = Common.CheckRange(o, 1, 8);
-                n %= 12;
-                if (n < 0) { n += 12; }
-            }
+            //if (n >= 0)
+            //{
+            //    o += n / 12;
+            //    o = Common.CheckRange(o, 1, 8);
+            //    n %= 12;
+            //}
+            //else
+            //{
+            //    o += n / 12 - 1;
+            //    o = Common.CheckRange(o, 1, 8);
+            //    n %= 12;
+            //    if (n < 0) { n += 12; }
+            //}
 
             return (int)(0x0400 * Const.pcmMTbl[n] * Math.Pow(2, (o - 4)));
         }

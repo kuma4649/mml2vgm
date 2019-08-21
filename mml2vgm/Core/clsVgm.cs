@@ -803,10 +803,13 @@ namespace Core
                 }
             }
 
-            if (!chips[ChipName][0].CanUsePICommand())
+            if (chips[ChipName] != null)
             {
-                msgBox.setWrnMsg(string.Format(msg.get("E10018"), chips[ChipName][0].Name), line.Lp);
-                return;
+                if (!chips[ChipName][0].CanUsePICommand())
+                {
+                    msgBox.setWrnMsg(string.Format(msg.get("E10018"), chips[ChipName][0].Name), line.Lp);
+                    return;
+                }
             }
 
             int BaseFreq;
@@ -2002,8 +2005,10 @@ namespace Core
             if (info.Version >= 1.61f && useC140 != 0)
             {
                 Common.SetLE32(dat, 0xa8, (uint)c140[0].Frequency | (uint)(useC140_S == 0 ? 0 : 0x40000000));
-                dat[0x96] = new outDatum(enmMMLType.unknown, null, null,
-                    (byte)((!c140[0].isSystem2 || !c140[1].isSystem2) ? 1 : 0));
+                if ((c140[0] != null && !c140[0].isSystem2) || (c140[1] != null && !c140[1].isSystem2))
+                    dat[0x96] = new outDatum(enmMMLType.unknown, null, null, (byte)1);
+                else
+                    dat[0x96] = new outDatum(enmMMLType.unknown, null, null, (byte)0);
             }
             if (info.Version >= 1.51f && useAY8910 != 0)
             {
@@ -2271,6 +2276,8 @@ namespace Core
 
         private void Xgm_procChip(ClsChip chip)
         {
+            if (chip == null) throw new ArgumentNullException();
+
             foreach (partWork pw in chip.lstPartWork)
             {
                 log.Write("KeyOff");

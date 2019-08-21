@@ -119,6 +119,7 @@ namespace Core
                         {
                             foreach (ClsChip chip in aryChip)
                             {
+                                if (chip == null) continue;
                                 bool flg = false;
                                 if (wrd == PARTNAME + chip.Name + IDName[chip.ChipID]) flg = true;
                                 if (wrd == PARTNAME + chip.ShortName + IDName[chip.ChipID]) flg = true;
@@ -133,6 +134,7 @@ namespace Core
                                     {
                                         foreach (ClsChip cp in ac)
                                         {
+                                            if (cp == null) continue;
                                             if (cp.Ch[0].Name.IndexOf((val + " ").Substring(0, 2)) != 0)
                                                 continue;
                                             foreach (ClsChannel cch in cp.Ch)

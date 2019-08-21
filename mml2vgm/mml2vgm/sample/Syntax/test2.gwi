@@ -54,10 +54,10 @@ Chip= チップの種類。省略時はSN76489として定義される(SN76489/R
 @ P 5,"TM.wav",8000,100
 @ P 6,"TL.wav",8000,120
 
-'@ P 1,"SD.wav",8000,100,Rf5c164
-'@ P 3,"TM.wav",8000,100
-'@ P 4,"TM.wav",8000,100,Rf5c164
-'@ P 5,"str.wav",8000,100,Rf5c164,1400
+'@ P 1,"..\wav\SD.wav",8000,100,Rf5c164
+'@ P 3,"..\wav\TM.wav",8000,100
+'@ P 4,"..\wav\TM.wav",8000,100,Rf5c164
+'@ P 5,"..\wav\str.wav",8000,100,Rf5c164,1400
 
 F56 @110v120q0l8o7p1T$80SS0
 F5 c
@@ -75,9 +75,9 @@ S3 o4v0 c2_>>>c
 S4 v15w7c2
 S4 v15EON@0w4ccrcw5crcrw6crcrw7cccc
 
-R1 T60q0p15,15o4r4<@4c4r4c4v10c4v50c4v100c4v150c4v200c4v255c4  p15,8c4p8,15c4p15,15c4>
-R1 <v255[c16(32]8v255l16 D0c D20c D40c D60c D80c D100c D0 Q8c4Q4c4Q1c4q0
-R1 @1o3[cdefgab>]5[bagfedc<]8o3l32v255c&v10c&v255c4  D0c&D40c&D80c4D0c4
+'R1 T60q0p15,15o4r4<@4c4r4c4v10c4v50c4v100c4v150c4v200c4v255c4  p15,8c4p8,15c4p15,15c4>
+'R1 <v255[c16(32]8v255l16 D0c D20c D40c D60c D80c D100c D0 Q8c4Q4c4Q1c4q0
+'R1 @1o3[cdefgab>]5[bagfedc<]8o3l32v255c&v10c&v255c4  D0c&D40c&D80c4D0c4
 F6 m1r4r4@3c4c4
 
 R1 @5o3v255p15, 8l32    [c&(4]64
@@ -96,10 +96,10 @@ R3 @5o2v205p13,10l1D2r16@E1EOF
 R4 @5o2v205p10,13l1D2r16@E1EON
 R13 c4d4e4f4g4a4b1&b1
 R24 r4r4r4r4r4r4r4c4d4e4f4g4a4b1&b1
-'R5 @0o3v255p15,15l4[@4c4@1c4]4
+R5 @0o3v255p15,15l4[@4c4@1c4]4
 
 
-'R2 @5o2v255p15,15l1@E1EONc_>>c&c_<c
-'R2 @5o2v255p15,15l1@E1EON MSV48,2,12,24,0SS1c1&c1
-'R2 @5o2v255p15,15l1@E1EON MST48,2,12,24,0SS1c1&c1
+R2 @5o2v255p15,15l1@E1EONc_>>c&c_<c
+R2 @5o2v255p15,15l1@E1EON MSV48,2,12,24,0SS1c1&c1
+R2 @5o2v255p15,15l1@E1EON MST48,2,12,24,0SS1c1&c1
 
