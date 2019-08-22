@@ -825,6 +825,8 @@ namespace mml2vgmIDE
 
         private bool _InfiniteOfflineMode = false;
         public bool InfiniteOfflineMode { get => _InfiniteOfflineMode; set => _InfiniteOfflineMode = value; }
+        public bool unuseRealChip { get; set; }
+
         public bool OfflineMode = false;
 
         [Serializable]
@@ -3607,6 +3609,7 @@ namespace mml2vgmIDE
         {
             Setting setting = new Setting();
             setting.outputDevice = this.outputDevice.Copy();
+            setting.unuseRealChip = this.unuseRealChip;
 
             setting.AY8910Type = this.AY8910Type.Copy();
             setting.YM2151Type = this.YM2151Type.Copy();

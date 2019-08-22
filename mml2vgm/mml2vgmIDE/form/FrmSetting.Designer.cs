@@ -48,6 +48,7 @@
             this.cmbDirectSoundDevice = new System.Windows.Forms.ComboBox();
             this.tcSetting = new System.Windows.Forms.TabControl();
             this.tpOutput = new System.Windows.Forms.TabPage();
+            this.cbUseRealChip = new System.Windows.Forms.CheckBox();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage11 = new System.Windows.Forms.TabPage();
             this.rbSPPCM = new System.Windows.Forms.RadioButton();
@@ -548,7 +549,7 @@
             // btnOK
             // 
             this.btnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnOK.Location = new System.Drawing.Point(296, 406);
+            this.btnOK.Location = new System.Drawing.Point(296, 435);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(75, 23);
             this.btnOK.TabIndex = 0;
@@ -560,7 +561,7 @@
             // 
             this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(377, 406);
+            this.btnCancel.Location = new System.Drawing.Point(377, 435);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 1;
@@ -758,31 +759,44 @@
             this.tcSetting.Location = new System.Drawing.Point(1, 3);
             this.tcSetting.Name = "tcSetting";
             this.tcSetting.SelectedIndex = 0;
-            this.tcSetting.Size = new System.Drawing.Size(451, 397);
+            this.tcSetting.Size = new System.Drawing.Size(451, 426);
             this.tcSetting.TabIndex = 2;
             // 
             // tpOutput
             // 
+            this.tpOutput.Controls.Add(this.cbUseRealChip);
             this.tpOutput.Controls.Add(this.tabControl1);
             this.tpOutput.Location = new System.Drawing.Point(4, 22);
             this.tpOutput.Name = "tpOutput";
             this.tpOutput.Padding = new System.Windows.Forms.Padding(3);
-            this.tpOutput.Size = new System.Drawing.Size(443, 371);
+            this.tpOutput.Size = new System.Drawing.Size(443, 400);
             this.tpOutput.TabIndex = 0;
             this.tpOutput.Text = "出力";
             this.tpOutput.UseVisualStyleBackColor = true;
             // 
+            // cbUseRealChip
+            // 
+            this.cbUseRealChip.AutoSize = true;
+            this.cbUseRealChip.Location = new System.Drawing.Point(6, 6);
+            this.cbUseRealChip.Name = "cbUseRealChip";
+            this.cbUseRealChip.Size = new System.Drawing.Size(249, 16);
+            this.cbUseRealChip.TabIndex = 8;
+            this.cbUseRealChip.Text = "C86ctl/SCCIを使用しない(再起動が必要です)";
+            this.cbUseRealChip.UseVisualStyleBackColor = true;
+            // 
             // tabControl1
             // 
+            this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControl1.Controls.Add(this.tabPage11);
             this.tabControl1.Controls.Add(this.tabPage12);
             this.tabControl1.Controls.Add(this.tabPage13);
-            this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.HotTrack = true;
-            this.tabControl1.Location = new System.Drawing.Point(3, 3);
+            this.tabControl1.Location = new System.Drawing.Point(3, 30);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(437, 365);
+            this.tabControl1.Size = new System.Drawing.Size(437, 367);
             this.tabControl1.TabIndex = 7;
             // 
             // tabPage11
@@ -808,7 +822,7 @@
             this.tabPage11.Location = new System.Drawing.Point(4, 22);
             this.tabPage11.Name = "tabPage11";
             this.tabPage11.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage11.Size = new System.Drawing.Size(429, 339);
+            this.tabPage11.Size = new System.Drawing.Size(429, 341);
             this.tabPage11.TabIndex = 0;
             this.tabPage11.Text = "Emulation";
             this.tabPage11.UseVisualStyleBackColor = true;
@@ -1002,7 +1016,7 @@
             this.tabPage12.Location = new System.Drawing.Point(4, 22);
             this.tabPage12.Name = "tabPage12";
             this.tabPage12.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage12.Size = new System.Drawing.Size(429, 339);
+            this.tabPage12.Size = new System.Drawing.Size(429, 341);
             this.tabPage12.TabIndex = 1;
             this.tabPage12.Text = "実音源";
             this.tabPage12.UseVisualStyleBackColor = true;
@@ -1016,7 +1030,7 @@
             this.groupBox27.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox27.Location = new System.Drawing.Point(3, 3);
             this.groupBox27.Name = "groupBox27";
-            this.groupBox27.Size = new System.Drawing.Size(423, 333);
+            this.groupBox27.Size = new System.Drawing.Size(423, 335);
             this.groupBox27.TabIndex = 9;
             this.groupBox27.TabStop = false;
             this.groupBox27.Text = "音源の割り当て";
@@ -1085,7 +1099,7 @@
             this.groupBox1.Controls.Add(this.ucSI);
             this.groupBox1.Location = new System.Drawing.Point(6, 71);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(411, 256);
+            this.groupBox1.Size = new System.Drawing.Size(411, 258);
             this.groupBox1.TabIndex = 8;
             this.groupBox1.TabStop = false;
             // 
@@ -1097,7 +1111,7 @@
             this.ucSI.AutoScroll = true;
             this.ucSI.Location = new System.Drawing.Point(3, 18);
             this.ucSI.Name = "ucSI";
-            this.ucSI.Size = new System.Drawing.Size(405, 235);
+            this.ucSI.Size = new System.Drawing.Size(405, 237);
             this.ucSI.TabIndex = 7;
             // 
             // tabPage13
@@ -1105,7 +1119,7 @@
             this.tabPage13.Controls.Add(this.splitContainer1);
             this.tabPage13.Location = new System.Drawing.Point(4, 22);
             this.tabPage13.Name = "tabPage13";
-            this.tabPage13.Size = new System.Drawing.Size(429, 339);
+            this.tabPage13.Size = new System.Drawing.Size(429, 341);
             this.tabPage13.TabIndex = 2;
             this.tabPage13.Text = "MIDI";
             this.tabPage13.UseVisualStyleBackColor = true;
@@ -1129,7 +1143,7 @@
             this.splitContainer1.Panel2.Controls.Add(this.label18);
             this.splitContainer1.Panel2.Controls.Add(this.btnAddMIDIout);
             this.splitContainer1.Panel2.Controls.Add(this.btnSubMIDIout);
-            this.splitContainer1.Size = new System.Drawing.Size(429, 339);
+            this.splitContainer1.Size = new System.Drawing.Size(429, 341);
             this.splitContainer1.SplitterDistance = 136;
             this.splitContainer1.TabIndex = 6;
             // 
@@ -1217,7 +1231,7 @@
             this.tbcMIDIoutList.Location = new System.Drawing.Point(3, 31);
             this.tbcMIDIoutList.Name = "tbcMIDIoutList";
             this.tbcMIDIoutList.SelectedIndex = 0;
-            this.tbcMIDIoutList.Size = new System.Drawing.Size(422, 165);
+            this.tbcMIDIoutList.Size = new System.Drawing.Size(422, 167);
             this.tbcMIDIoutList.TabIndex = 4;
             // 
             // tabPage1
@@ -1228,7 +1242,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(414, 139);
+            this.tabPage1.Size = new System.Drawing.Size(414, 141);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Tag = "0";
             this.tabPage1.Text = "A";
@@ -1258,7 +1272,7 @@
             this.dgvMIDIoutListA.RowHeadersVisible = false;
             this.dgvMIDIoutListA.RowTemplate.Height = 21;
             this.dgvMIDIoutListA.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvMIDIoutListA.Size = new System.Drawing.Size(384, 134);
+            this.dgvMIDIoutListA.Size = new System.Drawing.Size(384, 136);
             this.dgvMIDIoutListA.TabIndex = 1;
             // 
             // dataGridViewTextBoxColumn1
@@ -1349,7 +1363,7 @@
             // btnDOWN_A
             // 
             this.btnDOWN_A.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnDOWN_A.Location = new System.Drawing.Point(390, 76);
+            this.btnDOWN_A.Location = new System.Drawing.Point(390, 78);
             this.btnDOWN_A.Name = "btnDOWN_A";
             this.btnDOWN_A.Size = new System.Drawing.Size(22, 58);
             this.btnDOWN_A.TabIndex = 3;
@@ -1365,7 +1379,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(414, 139);
+            this.tabPage2.Size = new System.Drawing.Size(414, 141);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Tag = "1";
             this.tabPage2.Text = "B";
@@ -1386,7 +1400,7 @@
             this.dgvMIDIoutListB.RowHeadersVisible = false;
             this.dgvMIDIoutListB.RowTemplate.Height = 21;
             this.dgvMIDIoutListB.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvMIDIoutListB.Size = new System.Drawing.Size(384, 134);
+            this.dgvMIDIoutListB.Size = new System.Drawing.Size(384, 152);
             this.dgvMIDIoutListB.TabIndex = 7;
             // 
             // btnUP_B
@@ -1403,7 +1417,7 @@
             // btnDOWN_B
             // 
             this.btnDOWN_B.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnDOWN_B.Location = new System.Drawing.Point(390, 76);
+            this.btnDOWN_B.Location = new System.Drawing.Point(390, 94);
             this.btnDOWN_B.Name = "btnDOWN_B";
             this.btnDOWN_B.Size = new System.Drawing.Size(22, 58);
             this.btnDOWN_B.TabIndex = 6;
@@ -1418,7 +1432,7 @@
             this.tabPage3.Controls.Add(this.btnDOWN_C);
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Size = new System.Drawing.Size(414, 139);
+            this.tabPage3.Size = new System.Drawing.Size(414, 141);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Tag = "2";
             this.tabPage3.Text = "C";
@@ -1439,7 +1453,7 @@
             this.dgvMIDIoutListC.RowHeadersVisible = false;
             this.dgvMIDIoutListC.RowTemplate.Height = 21;
             this.dgvMIDIoutListC.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvMIDIoutListC.Size = new System.Drawing.Size(384, 134);
+            this.dgvMIDIoutListC.Size = new System.Drawing.Size(384, 152);
             this.dgvMIDIoutListC.TabIndex = 7;
             // 
             // btnUP_C
@@ -1456,7 +1470,7 @@
             // btnDOWN_C
             // 
             this.btnDOWN_C.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnDOWN_C.Location = new System.Drawing.Point(390, 76);
+            this.btnDOWN_C.Location = new System.Drawing.Point(390, 94);
             this.btnDOWN_C.Name = "btnDOWN_C";
             this.btnDOWN_C.Size = new System.Drawing.Size(22, 58);
             this.btnDOWN_C.TabIndex = 6;
@@ -1471,7 +1485,7 @@
             this.tabPage4.Controls.Add(this.btnDOWN_D);
             this.tabPage4.Location = new System.Drawing.Point(4, 22);
             this.tabPage4.Name = "tabPage4";
-            this.tabPage4.Size = new System.Drawing.Size(414, 139);
+            this.tabPage4.Size = new System.Drawing.Size(414, 141);
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Tag = "3";
             this.tabPage4.Text = "D";
@@ -1492,7 +1506,7 @@
             this.dgvMIDIoutListD.RowHeadersVisible = false;
             this.dgvMIDIoutListD.RowTemplate.Height = 21;
             this.dgvMIDIoutListD.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvMIDIoutListD.Size = new System.Drawing.Size(384, 134);
+            this.dgvMIDIoutListD.Size = new System.Drawing.Size(384, 152);
             this.dgvMIDIoutListD.TabIndex = 7;
             // 
             // btnUP_D
@@ -1509,7 +1523,7 @@
             // btnDOWN_D
             // 
             this.btnDOWN_D.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnDOWN_D.Location = new System.Drawing.Point(390, 76);
+            this.btnDOWN_D.Location = new System.Drawing.Point(390, 94);
             this.btnDOWN_D.Name = "btnDOWN_D";
             this.btnDOWN_D.Size = new System.Drawing.Size(22, 58);
             this.btnDOWN_D.TabIndex = 6;
@@ -1524,7 +1538,7 @@
             this.tabPage5.Controls.Add(this.btnDOWN_E);
             this.tabPage5.Location = new System.Drawing.Point(4, 22);
             this.tabPage5.Name = "tabPage5";
-            this.tabPage5.Size = new System.Drawing.Size(414, 139);
+            this.tabPage5.Size = new System.Drawing.Size(414, 141);
             this.tabPage5.TabIndex = 4;
             this.tabPage5.Tag = "4";
             this.tabPage5.Text = "E";
@@ -1545,7 +1559,7 @@
             this.dgvMIDIoutListE.RowHeadersVisible = false;
             this.dgvMIDIoutListE.RowTemplate.Height = 21;
             this.dgvMIDIoutListE.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvMIDIoutListE.Size = new System.Drawing.Size(384, 134);
+            this.dgvMIDIoutListE.Size = new System.Drawing.Size(384, 152);
             this.dgvMIDIoutListE.TabIndex = 7;
             // 
             // btnUP_E
@@ -1562,7 +1576,7 @@
             // btnDOWN_E
             // 
             this.btnDOWN_E.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnDOWN_E.Location = new System.Drawing.Point(390, 76);
+            this.btnDOWN_E.Location = new System.Drawing.Point(390, 94);
             this.btnDOWN_E.Name = "btnDOWN_E";
             this.btnDOWN_E.Size = new System.Drawing.Size(22, 58);
             this.btnDOWN_E.TabIndex = 6;
@@ -1577,7 +1591,7 @@
             this.tabPage6.Controls.Add(this.btnDOWN_F);
             this.tabPage6.Location = new System.Drawing.Point(4, 22);
             this.tabPage6.Name = "tabPage6";
-            this.tabPage6.Size = new System.Drawing.Size(414, 139);
+            this.tabPage6.Size = new System.Drawing.Size(414, 141);
             this.tabPage6.TabIndex = 5;
             this.tabPage6.Tag = "5";
             this.tabPage6.Text = "F";
@@ -1598,7 +1612,7 @@
             this.dgvMIDIoutListF.RowHeadersVisible = false;
             this.dgvMIDIoutListF.RowTemplate.Height = 21;
             this.dgvMIDIoutListF.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvMIDIoutListF.Size = new System.Drawing.Size(384, 134);
+            this.dgvMIDIoutListF.Size = new System.Drawing.Size(384, 152);
             this.dgvMIDIoutListF.TabIndex = 7;
             // 
             // btnUP_F
@@ -1615,7 +1629,7 @@
             // btnDOWN_F
             // 
             this.btnDOWN_F.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnDOWN_F.Location = new System.Drawing.Point(390, 76);
+            this.btnDOWN_F.Location = new System.Drawing.Point(390, 94);
             this.btnDOWN_F.Name = "btnDOWN_F";
             this.btnDOWN_F.Size = new System.Drawing.Size(22, 58);
             this.btnDOWN_F.TabIndex = 6;
@@ -1630,7 +1644,7 @@
             this.tabPage7.Controls.Add(this.btnDOWN_G);
             this.tabPage7.Location = new System.Drawing.Point(4, 22);
             this.tabPage7.Name = "tabPage7";
-            this.tabPage7.Size = new System.Drawing.Size(414, 139);
+            this.tabPage7.Size = new System.Drawing.Size(414, 141);
             this.tabPage7.TabIndex = 6;
             this.tabPage7.Tag = "6";
             this.tabPage7.Text = "G";
@@ -1651,7 +1665,7 @@
             this.dgvMIDIoutListG.RowHeadersVisible = false;
             this.dgvMIDIoutListG.RowTemplate.Height = 21;
             this.dgvMIDIoutListG.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvMIDIoutListG.Size = new System.Drawing.Size(384, 134);
+            this.dgvMIDIoutListG.Size = new System.Drawing.Size(384, 152);
             this.dgvMIDIoutListG.TabIndex = 7;
             // 
             // btnUP_G
@@ -1668,7 +1682,7 @@
             // btnDOWN_G
             // 
             this.btnDOWN_G.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnDOWN_G.Location = new System.Drawing.Point(390, 76);
+            this.btnDOWN_G.Location = new System.Drawing.Point(390, 94);
             this.btnDOWN_G.Name = "btnDOWN_G";
             this.btnDOWN_G.Size = new System.Drawing.Size(22, 58);
             this.btnDOWN_G.TabIndex = 6;
@@ -1683,7 +1697,7 @@
             this.tabPage8.Controls.Add(this.btnDOWN_H);
             this.tabPage8.Location = new System.Drawing.Point(4, 22);
             this.tabPage8.Name = "tabPage8";
-            this.tabPage8.Size = new System.Drawing.Size(414, 139);
+            this.tabPage8.Size = new System.Drawing.Size(414, 141);
             this.tabPage8.TabIndex = 7;
             this.tabPage8.Tag = "7";
             this.tabPage8.Text = "H";
@@ -1704,7 +1718,7 @@
             this.dgvMIDIoutListH.RowHeadersVisible = false;
             this.dgvMIDIoutListH.RowTemplate.Height = 21;
             this.dgvMIDIoutListH.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvMIDIoutListH.Size = new System.Drawing.Size(384, 134);
+            this.dgvMIDIoutListH.Size = new System.Drawing.Size(384, 152);
             this.dgvMIDIoutListH.TabIndex = 7;
             // 
             // btnUP_H
@@ -1721,7 +1735,7 @@
             // btnDOWN_H
             // 
             this.btnDOWN_H.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnDOWN_H.Location = new System.Drawing.Point(390, 76);
+            this.btnDOWN_H.Location = new System.Drawing.Point(390, 94);
             this.btnDOWN_H.Name = "btnDOWN_H";
             this.btnDOWN_H.Size = new System.Drawing.Size(22, 58);
             this.btnDOWN_H.TabIndex = 6;
@@ -1736,7 +1750,7 @@
             this.tabPage9.Controls.Add(this.btnDOWN_I);
             this.tabPage9.Location = new System.Drawing.Point(4, 22);
             this.tabPage9.Name = "tabPage9";
-            this.tabPage9.Size = new System.Drawing.Size(414, 139);
+            this.tabPage9.Size = new System.Drawing.Size(414, 141);
             this.tabPage9.TabIndex = 8;
             this.tabPage9.Tag = "8";
             this.tabPage9.Text = "I";
@@ -1757,7 +1771,7 @@
             this.dgvMIDIoutListI.RowHeadersVisible = false;
             this.dgvMIDIoutListI.RowTemplate.Height = 21;
             this.dgvMIDIoutListI.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvMIDIoutListI.Size = new System.Drawing.Size(384, 134);
+            this.dgvMIDIoutListI.Size = new System.Drawing.Size(384, 152);
             this.dgvMIDIoutListI.TabIndex = 7;
             // 
             // btnUP_I
@@ -1774,7 +1788,7 @@
             // btnDOWN_I
             // 
             this.btnDOWN_I.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnDOWN_I.Location = new System.Drawing.Point(390, 76);
+            this.btnDOWN_I.Location = new System.Drawing.Point(390, 94);
             this.btnDOWN_I.Name = "btnDOWN_I";
             this.btnDOWN_I.Size = new System.Drawing.Size(22, 58);
             this.btnDOWN_I.TabIndex = 6;
@@ -1789,7 +1803,7 @@
             this.tabPage10.Controls.Add(this.btnDOWN_J);
             this.tabPage10.Location = new System.Drawing.Point(4, 22);
             this.tabPage10.Name = "tabPage10";
-            this.tabPage10.Size = new System.Drawing.Size(414, 139);
+            this.tabPage10.Size = new System.Drawing.Size(414, 141);
             this.tabPage10.TabIndex = 9;
             this.tabPage10.Tag = "9";
             this.tabPage10.Text = "J";
@@ -1810,7 +1824,7 @@
             this.dgvMIDIoutListJ.RowHeadersVisible = false;
             this.dgvMIDIoutListJ.RowTemplate.Height = 21;
             this.dgvMIDIoutListJ.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvMIDIoutListJ.Size = new System.Drawing.Size(384, 134);
+            this.dgvMIDIoutListJ.Size = new System.Drawing.Size(384, 152);
             this.dgvMIDIoutListJ.TabIndex = 7;
             // 
             // button17
@@ -1827,7 +1841,7 @@
             // btnDOWN_J
             // 
             this.btnDOWN_J.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnDOWN_J.Location = new System.Drawing.Point(390, 76);
+            this.btnDOWN_J.Location = new System.Drawing.Point(390, 94);
             this.btnDOWN_J.Name = "btnDOWN_J";
             this.btnDOWN_J.Size = new System.Drawing.Size(22, 58);
             this.btnDOWN_J.TabIndex = 6;
@@ -1879,7 +1893,7 @@
             this.tpNuked.Controls.Add(this.tabControl2);
             this.tpNuked.Location = new System.Drawing.Point(4, 22);
             this.tpNuked.Name = "tpNuked";
-            this.tpNuked.Size = new System.Drawing.Size(443, 371);
+            this.tpNuked.Size = new System.Drawing.Size(443, 400);
             this.tpNuked.TabIndex = 14;
             this.tpNuked.Text = "チップ別";
             this.tpNuked.UseVisualStyleBackColor = true;
@@ -1892,7 +1906,7 @@
             this.tabControl2.Location = new System.Drawing.Point(0, 0);
             this.tabControl2.Name = "tabControl2";
             this.tabControl2.SelectedIndex = 0;
-            this.tabControl2.Size = new System.Drawing.Size(443, 371);
+            this.tabControl2.Size = new System.Drawing.Size(443, 400);
             this.tabControl2.TabIndex = 1;
             // 
             // tabPage14
@@ -1901,7 +1915,7 @@
             this.tabPage14.Location = new System.Drawing.Point(4, 22);
             this.tabPage14.Name = "tabPage14";
             this.tabPage14.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage14.Size = new System.Drawing.Size(435, 345);
+            this.tabPage14.Size = new System.Drawing.Size(435, 374);
             this.tabPage14.TabIndex = 0;
             this.tabPage14.Text = "Nuked-OPN2";
             this.tabPage14.UseVisualStyleBackColor = true;
@@ -1980,7 +1994,7 @@
             this.tpNSF.Controls.Add(this.tabControl3);
             this.tpNSF.Location = new System.Drawing.Point(4, 22);
             this.tpNSF.Name = "tpNSF";
-            this.tpNSF.Size = new System.Drawing.Size(443, 371);
+            this.tpNSF.Size = new System.Drawing.Size(443, 400);
             this.tpNSF.TabIndex = 9;
             this.tpNSF.Text = "ファイル別";
             this.tpNSF.UseVisualStyleBackColor = true;
@@ -1996,7 +2010,7 @@
             this.tabControl3.Multiline = true;
             this.tabControl3.Name = "tabControl3";
             this.tabControl3.SelectedIndex = 0;
-            this.tabControl3.Size = new System.Drawing.Size(443, 371);
+            this.tabControl3.Size = new System.Drawing.Size(443, 400);
             this.tabControl3.TabIndex = 9;
             // 
             // tabPage15
@@ -2009,7 +2023,7 @@
             this.tabPage15.Location = new System.Drawing.Point(4, 22);
             this.tabPage15.Name = "tabPage15";
             this.tabPage15.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage15.Size = new System.Drawing.Size(435, 345);
+            this.tabPage15.Size = new System.Drawing.Size(435, 374);
             this.tabPage15.TabIndex = 0;
             this.tabPage15.Text = ".NSF";
             this.tabPage15.UseVisualStyleBackColor = true;
@@ -2284,7 +2298,7 @@
             this.tabPage16.Location = new System.Drawing.Point(4, 22);
             this.tabPage16.Name = "tabPage16";
             this.tabPage16.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage16.Size = new System.Drawing.Size(435, 345);
+            this.tabPage16.Size = new System.Drawing.Size(435, 374);
             this.tabPage16.TabIndex = 1;
             this.tabPage16.Text = ".SID";
             this.tabPage16.UseVisualStyleBackColor = true;
@@ -2511,7 +2525,7 @@
             this.tabPage17.Controls.Add(this.groupBox15);
             this.tabPage17.Location = new System.Drawing.Point(4, 22);
             this.tabPage17.Name = "tabPage17";
-            this.tabPage17.Size = new System.Drawing.Size(435, 345);
+            this.tabPage17.Size = new System.Drawing.Size(435, 374);
             this.tabPage17.TabIndex = 2;
             this.tabPage17.Text = ".MID/.RCP";
             this.tabPage17.UseVisualStyleBackColor = true;
@@ -2636,7 +2650,7 @@
             this.tpMIDIExp.Controls.Add(this.gbMIDIExport);
             this.tpMIDIExp.Location = new System.Drawing.Point(4, 22);
             this.tpMIDIExp.Name = "tpMIDIExp";
-            this.tpMIDIExp.Size = new System.Drawing.Size(443, 371);
+            this.tpMIDIExp.Size = new System.Drawing.Size(443, 400);
             this.tpMIDIExp.TabIndex = 6;
             this.tpMIDIExp.Text = "MIDIExport";
             this.tpMIDIExp.UseVisualStyleBackColor = true;
@@ -2666,7 +2680,7 @@
             this.gbMIDIExport.Controls.Add(this.tbMIDIOutputPath);
             this.gbMIDIExport.Location = new System.Drawing.Point(7, 3);
             this.gbMIDIExport.Name = "gbMIDIExport";
-            this.gbMIDIExport.Size = new System.Drawing.Size(433, 365);
+            this.gbMIDIExport.Size = new System.Drawing.Size(433, 394);
             this.gbMIDIExport.TabIndex = 0;
             this.gbMIDIExport.TabStop = false;
             // 
@@ -2890,7 +2904,7 @@
             this.tpMIDIKBD.Controls.Add(this.gbMIDIKeyboard);
             this.tpMIDIKBD.Location = new System.Drawing.Point(4, 22);
             this.tpMIDIKBD.Name = "tpMIDIKBD";
-            this.tpMIDIKBD.Size = new System.Drawing.Size(443, 371);
+            this.tpMIDIKBD.Size = new System.Drawing.Size(443, 400);
             this.tpMIDIKBD.TabIndex = 5;
             this.tpMIDIKBD.Text = "MIDI鍵盤";
             this.tpMIDIKBD.UseVisualStyleBackColor = true;
@@ -2950,7 +2964,7 @@
             this.gbMIDIKeyboard.Enabled = false;
             this.gbMIDIKeyboard.Location = new System.Drawing.Point(3, 6);
             this.gbMIDIKeyboard.Name = "gbMIDIKeyboard";
-            this.gbMIDIKeyboard.Size = new System.Drawing.Size(437, 47);
+            this.gbMIDIKeyboard.Size = new System.Drawing.Size(437, 76);
             this.gbMIDIKeyboard.TabIndex = 0;
             this.gbMIDIKeyboard.TabStop = false;
             // 
@@ -3406,7 +3420,7 @@
             this.tpKeyBoard.Controls.Add(this.cbNextWin);
             this.tpKeyBoard.Location = new System.Drawing.Point(4, 22);
             this.tpKeyBoard.Name = "tpKeyBoard";
-            this.tpKeyBoard.Size = new System.Drawing.Size(443, 371);
+            this.tpKeyBoard.Size = new System.Drawing.Size(443, 400);
             this.tpKeyBoard.TabIndex = 13;
             this.tpKeyBoard.Text = "キーボード";
             this.tpKeyBoard.UseVisualStyleBackColor = true;
@@ -4253,7 +4267,7 @@
             this.tpBalance.Controls.Add(this.groupBox18);
             this.tpBalance.Location = new System.Drawing.Point(4, 22);
             this.tpBalance.Name = "tpBalance";
-            this.tpBalance.Size = new System.Drawing.Size(443, 371);
+            this.tpBalance.Size = new System.Drawing.Size(443, 400);
             this.tpBalance.TabIndex = 12;
             this.tpBalance.Text = "ミキサーバランス";
             this.tpBalance.UseVisualStyleBackColor = true;
@@ -4494,7 +4508,7 @@
             this.tpOther.Controls.Add(this.cbUseLoopTimes);
             this.tpOther.Location = new System.Drawing.Point(4, 22);
             this.tpOther.Name = "tpOther";
-            this.tpOther.Size = new System.Drawing.Size(443, 371);
+            this.tpOther.Size = new System.Drawing.Size(443, 400);
             this.tpOther.TabIndex = 2;
             this.tpOther.Text = "Other";
             this.tpOther.UseVisualStyleBackColor = true;
@@ -4877,7 +4891,7 @@
             this.tpOmake.Controls.Add(this.groupBox5);
             this.tpOmake.Location = new System.Drawing.Point(4, 22);
             this.tpOmake.Name = "tpOmake";
-            this.tpOmake.Size = new System.Drawing.Size(443, 371);
+            this.tpOmake.Size = new System.Drawing.Size(443, 400);
             this.tpOmake.TabIndex = 7;
             this.tpOmake.Text = "おまけ";
             this.tpOmake.UseVisualStyleBackColor = true;
@@ -5049,7 +5063,7 @@
             this.tpAbout.Location = new System.Drawing.Point(4, 22);
             this.tpAbout.Name = "tpAbout";
             this.tpAbout.Padding = new System.Windows.Forms.Padding(3);
-            this.tpAbout.Size = new System.Drawing.Size(443, 371);
+            this.tpAbout.Size = new System.Drawing.Size(443, 400);
             this.tpAbout.TabIndex = 1;
             this.tpAbout.Text = "About";
             this.tpAbout.UseVisualStyleBackColor = true;
@@ -5075,7 +5089,7 @@
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 8.070175F));
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 53.33333F));
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 8.421053F));
-            this.tableLayoutPanel.Size = new System.Drawing.Size(437, 365);
+            this.tableLayoutPanel.Size = new System.Drawing.Size(437, 394);
             this.tableLayoutPanel.TabIndex = 1;
             // 
             // logoPictureBox
@@ -5085,7 +5099,7 @@
             this.logoPictureBox.Location = new System.Drawing.Point(3, 3);
             this.logoPictureBox.Name = "logoPictureBox";
             this.tableLayoutPanel.SetRowSpan(this.logoPictureBox, 6);
-            this.logoPictureBox.Size = new System.Drawing.Size(138, 359);
+            this.logoPictureBox.Size = new System.Drawing.Size(138, 388);
             this.logoPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.logoPictureBox.TabIndex = 12;
             this.logoPictureBox.TabStop = false;
@@ -5105,7 +5119,7 @@
             // labelVersion
             // 
             this.labelVersion.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.labelVersion.Location = new System.Drawing.Point(150, 36);
+            this.labelVersion.Location = new System.Drawing.Point(150, 39);
             this.labelVersion.Margin = new System.Windows.Forms.Padding(6, 0, 3, 0);
             this.labelVersion.MaximumSize = new System.Drawing.Size(0, 16);
             this.labelVersion.Name = "labelVersion";
@@ -5117,7 +5131,7 @@
             // labelCopyright
             // 
             this.labelCopyright.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.labelCopyright.Location = new System.Drawing.Point(150, 72);
+            this.labelCopyright.Location = new System.Drawing.Point(150, 78);
             this.labelCopyright.Margin = new System.Windows.Forms.Padding(6, 0, 3, 0);
             this.labelCopyright.MaximumSize = new System.Drawing.Size(0, 16);
             this.labelCopyright.Name = "labelCopyright";
@@ -5129,7 +5143,7 @@
             // labelCompanyName
             // 
             this.labelCompanyName.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.labelCompanyName.Location = new System.Drawing.Point(150, 108);
+            this.labelCompanyName.Location = new System.Drawing.Point(150, 117);
             this.labelCompanyName.Margin = new System.Windows.Forms.Padding(6, 0, 3, 0);
             this.labelCompanyName.MaximumSize = new System.Drawing.Size(0, 16);
             this.labelCompanyName.Name = "labelCompanyName";
@@ -5141,13 +5155,13 @@
             // textBoxDescription
             // 
             this.textBoxDescription.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBoxDescription.Location = new System.Drawing.Point(150, 140);
+            this.textBoxDescription.Location = new System.Drawing.Point(150, 151);
             this.textBoxDescription.Margin = new System.Windows.Forms.Padding(6, 3, 3, 3);
             this.textBoxDescription.Multiline = true;
             this.textBoxDescription.Name = "textBoxDescription";
             this.textBoxDescription.ReadOnly = true;
             this.textBoxDescription.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.textBoxDescription.Size = new System.Drawing.Size(284, 189);
+            this.textBoxDescription.Size = new System.Drawing.Size(284, 204);
             this.textBoxDescription.TabIndex = 23;
             this.textBoxDescription.TabStop = false;
             this.textBoxDescription.Text = "説明";
@@ -5155,7 +5169,7 @@
             // cbHiyorimiMode
             // 
             this.cbHiyorimiMode.AutoSize = true;
-            this.cbHiyorimiMode.Location = new System.Drawing.Point(8, 410);
+            this.cbHiyorimiMode.Location = new System.Drawing.Point(8, 435);
             this.cbHiyorimiMode.Name = "cbHiyorimiMode";
             this.cbHiyorimiMode.Size = new System.Drawing.Size(220, 28);
             this.cbHiyorimiMode.TabIndex = 6;
@@ -5168,7 +5182,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(464, 441);
+            this.ClientSize = new System.Drawing.Size(464, 470);
             this.Controls.Add(this.cbHiyorimiMode);
             this.Controls.Add(this.tcSetting);
             this.Controls.Add(this.btnCancel);
@@ -5187,6 +5201,7 @@
             this.gbDirectSound.ResumeLayout(false);
             this.tcSetting.ResumeLayout(false);
             this.tpOutput.ResumeLayout(false);
+            this.tpOutput.PerformLayout();
             this.tabControl1.ResumeLayout(false);
             this.tabPage11.ResumeLayout(false);
             this.tabPage11.PerformLayout();
@@ -5744,5 +5759,6 @@
         private System.Windows.Forms.GroupBox groupBox29;
         private System.Windows.Forms.CheckBox cbInfiniteOfflineMode;
         private System.Windows.Forms.CheckBox cbMIDIKbdAlwaysTop;
+        private System.Windows.Forms.CheckBox cbUseRealChip;
     }
 }

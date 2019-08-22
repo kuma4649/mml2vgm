@@ -160,7 +160,7 @@ namespace mml2vgmIDE
 
             log.ForcedWrite("Audio:Init:STEP 04");
             {
-                if (realChip == null) realChip = new RealChip();
+                if (realChip == null) realChip = new RealChip(!setting.unuseRealChip);
 
                 chipRegister = new ChipRegister(setting, mds, realChip);
 

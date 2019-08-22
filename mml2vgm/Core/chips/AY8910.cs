@@ -351,7 +351,7 @@ namespace Core
         {
             if (mml.args[0] is string) return;
 
-            int adr = (int)mml.args[0];
+            int adr = (byte)mml.args[0];
             byte dat = (byte)mml.args[1];
 
             parent.OutData(mml, port[0], (byte)adr, (byte)dat);

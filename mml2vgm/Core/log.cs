@@ -123,7 +123,10 @@ namespace Core
                     if (File.Exists(path)) File.Delete(path);
                 }
                 Encoding sjisEnc = Encoding.GetEncoding("Shift_JIS");
-                writer = new StreamWriter(path, true, sjisEnc);
+                if (writer == null)
+                {
+                    writer = new StreamWriter(path, true, sjisEnc);
+                }
             }
             catch
             {

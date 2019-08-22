@@ -180,9 +180,12 @@ namespace Core
 
                     if (desBuf == null)
                     {
-                        msgBox.setErrMsg(string.Format(
-                            msg.get("E04004")
-                            , desVGM.linePos.row), desVGM.linePos);
+                        if (desVGM.linePos != null)
+                        {
+                            msgBox.setErrMsg(string.Format(
+                                msg.get("E04004")
+                                , desVGM.linePos.row), desVGM.linePos);
+                        }
                         return -1;
                     }
 

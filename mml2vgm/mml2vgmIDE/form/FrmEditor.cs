@@ -575,7 +575,7 @@ namespace mml2vgmIDE
 
         private void acDown(IUserInterface ui)
         {
-            if (frmSien.Opacity == 0.0)
+            if (!frmSien.GetOpacity())
             {
                 return;
             }
@@ -644,14 +644,14 @@ namespace mml2vgmIDE
             {
                 Point r = azukiControl.PointToScreen(new Point(ciP.X, ciP.Y + azukiControl.LineHeight));
                 frmSien.Location = new Point(r.X, r.Y);
-                frmSien.Opacity = 1.0;
+                frmSien.SetOpacity(true);
                 frmSien.update();
                 frmSien.dgvItem.Rows[0].Selected = false;
                 frmSien.selRow = -1;
             }
             else
             {
-                frmSien.Opacity = 0.0;
+                frmSien.SetOpacity(false);
             }
         }
 
@@ -662,7 +662,7 @@ namespace mml2vgmIDE
                 main.FrmMain_KeyDown(sender, e);
             }
 
-            if (frmSien.Opacity == 0.0)
+            if (!frmSien.GetOpacity())
             {
                 e.SuppressKeyPress = false;
                 return;
@@ -680,7 +680,7 @@ namespace mml2vgmIDE
                 case Keys.Up:
                     if (frmSien.dgvItem.Rows.Count > -1) frmSien.selRow--;
                     if (frmSien.selRow < 0)
-                        frmSien.Opacity = 0.0;
+                        frmSien.SetOpacity(false);
                     else
                     {
                         frmSien.dgvItem.Rows[frmSien.selRow].Selected = true;
@@ -689,7 +689,7 @@ namespace mml2vgmIDE
                     break;
                 case Keys.Enter:
                 case Keys.Tab:
-                    frmSien.Opacity = 0.0;
+                    frmSien.SetOpacity(false);
                     if (frmSien.dgvItem.SelectedRows.Count == 1)
                     {
                         int ci = azukiControl.CaretIndex;
@@ -707,7 +707,7 @@ namespace mml2vgmIDE
                 case Keys.Home:
                 case Keys.End:
                 case Keys.Escape:
-                    frmSien.Opacity = 0.0;
+                    frmSien.SetOpacity(false);
                     break;
                 default:
                     e.SuppressKeyPress = false;
@@ -718,7 +718,7 @@ namespace mml2vgmIDE
         private void AzukiControl_CancelSien(object sender, EventArgs e)
         {
             if (frmSien == null) return;
-            frmSien.Opacity = 0.0;
+            frmSien.SetOpacity(false);
         }
 
         private void FrmEditor_Shown(object sender, EventArgs e)

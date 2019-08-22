@@ -2055,6 +2055,7 @@ namespace Core
 
         public outDatum[] Xgm_getByteData(Dictionary<string, List<MML>> mmlData)
         {
+            if (ym2612x == null || ym2612x[0] == null) return null;
 
             //PartInit();
 
@@ -2149,6 +2150,7 @@ namespace Core
 
         private void Xgm_makeHeader()
         {
+            if (ym2612x == null || ym2612x[0] == null) return;
 
             //Header
             foreach (byte b in Const.xhDat)

@@ -188,6 +188,8 @@ namespace mml2vgmIDE
 
             //設定内容をコントロールへ適用
 
+            cbUseRealChip.Checked = setting.unuseRealChip;
+
             switch (setting.outputDevice.DeviceType)
             {
                 case 0:
@@ -891,6 +893,8 @@ namespace mml2vgmIDE
             if (!CheckSetting()) return;
 
             int i = 0;
+
+            setting.unuseRealChip = cbUseRealChip.Checked;
 
             setting.outputDevice.DeviceType = Common.DEV_WaveOut;
             if (rbWaveOut.Checked) setting.outputDevice.DeviceType = Common.DEV_WaveOut;

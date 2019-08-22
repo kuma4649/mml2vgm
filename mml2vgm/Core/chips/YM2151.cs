@@ -530,6 +530,11 @@ namespace Core
             }
         }
 
+        public override int GetToneDoublerShift(partWork pw, int octave, char noteCmd, int shift)
+        {
+            return 0;
+        }
+
         public override void SetToneDoubler(partWork pw)
         {
         }

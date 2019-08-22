@@ -27,6 +27,14 @@ namespace mml2vgmIDE
             ss = new SienSearch(System.IO.Path.Combine(Common.GetApplicationFolder(), "mmlSien.json"));
             this.setting = setting;
         }
+        protected override bool ShowWithoutActivation
+        {
+            get
+            {
+                Console.WriteLine("*");
+                return true;
+            }
+        }
 
         private void dgvItem_CellClick(object sender, DataGridViewCellEventArgs e)
         {
@@ -52,7 +60,7 @@ namespace mml2vgmIDE
                 }
             }
 
-            this.Opacity = 0.0;
+            this.SetOpacity(false);
             parent.Activate();
         }
 
@@ -78,12 +86,12 @@ namespace mml2vgmIDE
 
             if (found == null || found.Count < 1)
             {
-                Opacity = 0.0;
+                this.SetOpacity(false); 
                 selRow = -1;
                 return;
             }
 
-            Opacity = 1.0;
+            this.SetOpacity(true);
 
             bool isFirst = true;
             foreach (SienItem si in found)
@@ -112,6 +120,24 @@ namespace mml2vgmIDE
             update();
         }
 
+        /// <summary>
+        /// 0.0 非表示
+        /// 1.0 表示
+        /// </summary>
+        /// <param name="sw"></param>
+        public void SetOpacity(bool sw)
+        {
+            this.Opacity = sw ? 1.0 : 0.0;
+
+            //this.Visible = sw;
+            
+        }
+
+        public bool GetOpacity()
+        {
+            return Opacity==1.0;
+            //return Visible;
+        }
 
         private void GetInstrument(SienItem si, bool isFirst)
         {

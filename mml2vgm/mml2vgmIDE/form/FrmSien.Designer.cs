@@ -76,10 +76,9 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "FrmSien";
-            this.Opacity = 0D;
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
-            this.Text = "Form1";
+            this.Text = "FrmSien(Do not touch me)";
             this.TopMost = true;
             this.Load += new System.EventHandler(this.FrmSien_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgvItem)).EndInit();

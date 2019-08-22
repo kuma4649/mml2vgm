@@ -38,9 +38,14 @@ namespace mml2vgmIDE
 
         #endregion
 
-        public RealChip() 
+        public RealChip(bool sw) 
         {
             log.ForcedWrite("RealChip:Ctr:STEP 00(Start)");
+            if (!sw)
+            {
+                log.ForcedWrite("RealChip:Not Initialize(user)");
+                return;
+            }
 
             int n = 0;
             try
