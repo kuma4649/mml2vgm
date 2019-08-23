@@ -173,6 +173,8 @@ namespace Core
                 {
                     foreach (ClsChip chip in kvp.Value)
                     {
+                        if (chip == null) continue;
+
                         if (!chip.use) continue;
                         for (int i = 0; i < chip.port.Length; i++)
                         {

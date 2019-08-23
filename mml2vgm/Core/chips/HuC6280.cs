@@ -762,6 +762,16 @@ namespace Core
                 return;
             }
 
+            if (pw.isPcmMap)
+            {
+                pw.pcmMapNo = n;
+                if (!parent.instPCMMap.ContainsKey(n))
+                {
+                    msgBox.setErrMsg(string.Format(msg.get("E10024"), n), mml.line.Lp);
+                }
+                return;
+            }
+
             if (pw.instrument == n) return;
 
             if (!parent.instPCM.ContainsKey(n))

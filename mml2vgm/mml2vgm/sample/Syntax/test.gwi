@@ -18,7 +18,7 @@
 
 (frame/clock) = 60Hz * (60 * 4) / ClockCount / tempo
 
-
+予め、mucom88の音色データとPCMデータを同じフォルダーにコピーしておいてください。
 '@ MUCOM88 1,"voice.dat"
 '@ TFI 0,"test.tfi"
 '@ MUCOM88ADPCM 0,"mucompcm.bin"

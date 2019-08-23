@@ -25,7 +25,7 @@
    ALG FB
 '@ 004,000
 
-      FileName , ChipName      , SrcStartAdr , DesStartAdr , Length , Option
+      FileName       , ChipName      , SrcStartAdr , DesStartAdr , Length , Option
 @ PD "..\wav\BD.wav" , C140          ,             , $001000  
 @ PD "..\wav\BD.wav" , C140Secondary ,             , $001000  
 @ PD "..\wav\BD.wav" , OPNB          ,             , $001000  

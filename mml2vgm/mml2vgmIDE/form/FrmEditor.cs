@@ -718,7 +718,7 @@ namespace mml2vgmIDE
         private void AzukiControl_CancelSien(object sender, EventArgs e)
         {
             if (frmSien == null) return;
-            frmSien.SetOpacity(false);
+            if (frmSien.GetOpacity()) frmSien.SetOpacity(false);
         }
 
         private void FrmEditor_Shown(object sender, EventArgs e)

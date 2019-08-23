@@ -448,7 +448,7 @@ namespace Core
             else if (pw.Type == enmChannelType.ADPCMB)
             {
                 OutAdpcmBKeyOn(mml, pw);
-                if (parent.instPCM[pw.instrument].status != enmPCMSTATUS.ERROR)
+                if (pw.instrument!=-1 && parent.instPCM[pw.instrument].status != enmPCMSTATUS.ERROR)
                 {
                     parent.instPCM[pw.instrument].status = enmPCMSTATUS.USED;
                 }

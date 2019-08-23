@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Security.Permissions;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -20,6 +21,8 @@ namespace mml2vgmIDE
         private SienSearch ss;
         public int selRow = -1;
         private Dictionary<string, string[]> instCache = new Dictionary<string, string[]>();
+        private int tw;
+        private int th;
 
         public FrmSien(Setting setting)
         {
@@ -27,12 +30,43 @@ namespace mml2vgmIDE
             ss = new SienSearch(System.IO.Path.Combine(Common.GetApplicationFolder(), "mmlSien.json"));
             this.setting = setting;
         }
+
         protected override bool ShowWithoutActivation
         {
             get
             {
-                Console.WriteLine("*");
+                //Console.WriteLine("*");
                 return true;
+            }
+        }
+
+        protected override CreateParams CreateParams
+        {
+            [SecurityPermission(SecurityAction.Demand,
+                Flags = SecurityPermissionFlag.UnmanagedCode)]
+            get
+            {
+                const int WS_EX_TOOLWINDOW = 0x80;
+                const long WS_POPUP = 0x80000000L;
+                const int WS_VISIBLE = 0x10000000;
+                const int WS_SYSMENU = 0x80000;
+                const int WS_MAXIMIZEBOX = 0x10000;
+
+                CreateParams cp = base.CreateParams;
+                cp.ExStyle = WS_EX_TOOLWINDOW;
+                cp.Style = unchecked((int)WS_POPUP) |
+                    WS_VISIBLE | WS_SYSMENU | WS_MAXIMIZEBOX;
+
+                if (this.Width != 0)
+                {
+                    tw = this.Width;
+                    th = this.Height;
+                }
+
+                cp.Width = 0;
+                cp.Height = 0;
+
+                return cp;
             }
         }
 
@@ -127,15 +161,30 @@ namespace mml2vgmIDE
         /// <param name="sw"></param>
         public void SetOpacity(bool sw)
         {
-            this.Opacity = sw ? 1.0 : 0.0;
-
+            //this.Opacity = sw ? 1.0 : 0.0;
             //this.Visible = sw;
-            
+
+            if (sw)
+            {
+                this.Width =  tw;
+                this.Height = th;
+            }
+            else
+            {
+                //tw=this.Width;
+                //th=this.Height;
+                this.Width = 0;
+                this.Height = 0;
+                this.TopMost = true;
+                if (parent != null) parent.Activate();
+                //this.TopMost = false;
+            }
         }
 
         public bool GetOpacity()
         {
-            return Opacity==1.0;
+            return this.Width != 0;
+            //return Opacity==1.0;
             //return Visible;
         }
 

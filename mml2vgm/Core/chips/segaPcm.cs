@@ -192,7 +192,7 @@ namespace Core
             d = (byte)(((pw.pcmBank & 0x3f) << 2) | (pw.pcmLoopAddress != -1 ? 0 : 2) | 0);
             OutSegaPcmPort(mml, port[0], pw, adr, d);
 
-            if (parent.instPCM[pw.instrument].status != enmPCMSTATUS.ERROR)
+            if (pw.instrument!=-1 && parent.instPCM[pw.instrument].status != enmPCMSTATUS.ERROR)
             {
                 parent.instPCM[pw.instrument].status = enmPCMSTATUS.USED;
             }

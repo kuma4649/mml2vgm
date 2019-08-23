@@ -26,6 +26,7 @@ namespace Core
             };
 
             Frequency = 3579545;
+            this.IsSecondary = isSecondary;
 
             Dictionary<string, List<double>> dic = MakeFNumTbl();
             if (dic != null)
