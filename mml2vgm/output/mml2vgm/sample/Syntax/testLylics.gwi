@@ -1,0 +1,25 @@
+﻿'{
+
+	TitleName    =Conductor Test
+	TitleNameJ   =
+	GameName     =
+	GameNameJ    =
+	SystemName   =
+	SystemNameJ  =
+	Composer     =
+	ComposerJ    =
+	ReleaseDate  =2018/11/02
+	Converted    =
+	Notes        =
+
+	Format       =VGM
+	ClockCount   =192
+}
+
+'Cn1 T190l4
+'Cn1 "ちょ" "ちょう" "ちょうちょ" r "ちょうちょ ちょ" "ちょうちょ ちょう" "ちょうちょ ちょうちょ" r
+'Cn1 "菜" "菜の" "菜の葉" "菜の葉に" "菜の葉に止" "菜の葉に止ま" "菜の葉に止まれ" r
+
+'A1 o4l4v15Q6
+'A1 geerfddr
+'A1 cdefgggr

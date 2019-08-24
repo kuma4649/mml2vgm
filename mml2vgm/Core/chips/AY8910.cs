@@ -234,7 +234,7 @@ namespace Core
             SetSsgVolume(mml, pw);
         }
 
-        public override void SetToneDoubler(partWork pw)
+        public override void SetToneDoubler(partWork pw, MML mml)
         {
         }
 

@@ -444,6 +444,7 @@ namespace Core
                 || typ == enmMMLType.Detune
                 || typ == enmMMLType.KeyShift
                 || typ == enmMMLType.unknown
+                || typ == enmMMLType.Lyric
                 )
             {
                 return true;

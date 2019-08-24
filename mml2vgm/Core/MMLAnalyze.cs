@@ -302,6 +302,7 @@ namespace Core
                 mml.line = pw.getLine();
                 mml.column = pw.getPos();
                 pw.mmlData.Add(mml);
+                swToneDoubler = false;
             }
         }
 

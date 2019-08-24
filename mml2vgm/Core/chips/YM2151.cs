@@ -534,11 +534,158 @@ namespace Core
 
         public override int GetToneDoublerShift(partWork pw, int octave, char noteCmd, int shift)
         {
-            return 0;
+            int i = pw.instrument;
+            if (pw.TdA == -1)
+            {
+                return 0;
+            }
+
+            int TdB = octave * 12 + Const.NOTE.IndexOf(noteCmd) + shift;
+            int s = pw.TdA - TdB;
+            int us = Math.Abs(s);
+            int n = pw.toneDoubler;
+            if (us >= parent.instToneDoubler[n].lstTD.Count)
+            {
+                return 0;
+            }
+
+            return ((s < 0) ? s : 0) + parent.instToneDoubler[n].lstTD[us].KeyShift;
         }
 
-        public override void SetToneDoubler(partWork pw)
+        public override void SetToneDoubler(partWork pw,MML mml)
         {
+            int i = pw.instrument;
+            if (i < 0) return;
+
+            pw.toneDoublerKeyShift = 0;
+            byte[] instFM = parent.instFM[i];
+            if (instFM == null || instFM.Length < 1) return;
+            Note note = (Note)mml.args[0];
+
+            if (pw.TdA == -1)
+            {
+                //resetToneDoubler
+                //ML
+                if (pw.op1ml != instFM[0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8])
+                {
+                    ((YM2151)pw.chip).OutSetDtMl(mml,pw, 0, instFM[0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 9], instFM[0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8]);
+                    pw.op1ml = instFM[0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
+                }
+                if (pw.op2ml != instFM[1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8])
+                {
+                    ((YM2151)pw.chip).OutSetDtMl(mml, pw, 1, instFM[1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 9], instFM[1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8]);
+                    pw.op2ml = instFM[1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
+                }
+                if (pw.op3ml != instFM[2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8])
+                {
+                    ((YM2151)pw.chip).OutSetDtMl(mml, pw, 2, instFM[2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 9], instFM[2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8]);
+                    pw.op3ml = instFM[2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
+                }
+                if (pw.op4ml != instFM[3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8])
+                {
+                    ((YM2151)pw.chip).OutSetDtMl(mml, pw, 3, instFM[3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 9], instFM[3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8]);
+                    pw.op4ml = instFM[3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
+                }
+                //DT2
+                if (pw.op1dt2 != instFM[0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 10])
+                {
+                    ((YM2151)pw.chip).OutSetDt2Sr(mml, pw, 0, instFM[0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 10], instFM[0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 3]);
+                    pw.op1dt2 = instFM[0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 10];
+                }
+                if (pw.op2dt2 != instFM[1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 10])
+                {
+                    ((YM2151)pw.chip).OutSetDt2Sr(mml, pw, 1, instFM[1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 10], instFM[1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 3]);
+                    pw.op2dt2 = instFM[1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 10];
+                }
+                if (pw.op3dt2 != instFM[2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 10])
+                {
+                    ((YM2151)pw.chip).OutSetDt2Sr(mml, pw, 2, instFM[2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 10], instFM[2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 3]);
+                    pw.op3dt2 = instFM[2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 10];
+                }
+                if (pw.op4dt2 != instFM[3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 10])
+                {
+                    ((YM2151)pw.chip).OutSetDt2Sr(mml, pw, 3, instFM[3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 10], instFM[3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 3]);
+                    pw.op4dt2 = instFM[3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 10];
+                }
+            }
+            else
+            {
+                //setToneDoubler
+                int oct = pw.octaveNow;
+                foreach(MML octMml in note.tDblOctave)
+                {
+                    switch (octMml.type)
+                    {
+                        case enmMMLType.Octave:
+                            oct = 0;
+                            break;
+                        case enmMMLType.OctaveUp:
+                            oct++;
+                            break;
+                        case enmMMLType.OctaveDown:
+                            oct--;
+                            break;
+                    }
+                }
+                oct = Common.CheckRange(oct, 1, 8);
+                pw.octaveNew = oct;
+                int TdB = oct * 12 + Const.NOTE.IndexOf(note.tDblCmd) + note.tDblShift + pw.keyShift;
+                int s = TdB - pw.TdA;// - TdB;
+                int us = Math.Abs(s);
+                int n = pw.toneDoubler;
+                clsToneDoubler instToneDoubler = parent.instToneDoubler[n];
+                if (us >= instToneDoubler.lstTD.Count)
+                {
+                    return;
+                }
+
+                pw.toneDoublerKeyShift = ((s < 0) ? s : 0) + instToneDoubler.lstTD[us].KeyShift;
+
+                //ML
+                if (pw.op1ml != instToneDoubler.lstTD[us].OP1ML)
+                {
+                    ((YM2151)pw.chip).OutSetDtMl(mml,pw, 0, instFM[0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 9], instToneDoubler.lstTD[us].OP1ML);
+                    pw.op1ml = instToneDoubler.lstTD[us].OP1ML;
+                }
+                if (pw.op2ml != instToneDoubler.lstTD[us].OP2ML)
+                {
+                    ((YM2151)pw.chip).OutSetDtMl(mml, pw, 1, instFM[1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 9], instToneDoubler.lstTD[us].OP2ML);
+                    pw.op2ml = instToneDoubler.lstTD[us].OP2ML;
+                }
+                if (pw.op3ml != instToneDoubler.lstTD[us].OP3ML)
+                {
+                    ((YM2151)pw.chip).OutSetDtMl(mml, pw, 2, instFM[2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 9], instToneDoubler.lstTD[us].OP3ML);
+                    pw.op3ml = instToneDoubler.lstTD[us].OP3ML;
+                }
+                if (pw.op4ml != instToneDoubler.lstTD[us].OP4ML)
+                {
+                    ((YM2151)pw.chip).OutSetDtMl(mml, pw, 3, instFM[3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 9], instToneDoubler.lstTD[us].OP4ML);
+                    pw.op4ml = instToneDoubler.lstTD[us].OP4ML;
+                }
+                //DT2
+                if (pw.op1dt2 != instToneDoubler.lstTD[us].OP1DT2)
+                {
+                    ((YM2151)pw.chip).OutSetDt2Sr(mml, pw, 0, instToneDoubler.lstTD[us].OP1DT2, instFM[0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 3]);
+                    pw.op1dt2 = instToneDoubler.lstTD[us].OP1DT2;
+                }
+                if (pw.op2dt2 != instToneDoubler.lstTD[us].OP2DT2)
+                {
+                    ((YM2151)pw.chip).OutSetDt2Sr(mml, pw, 1, instToneDoubler.lstTD[us].OP2DT2, instFM[1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 3]);
+                    pw.op2dt2 = instToneDoubler.lstTD[us].OP2DT2;
+                }
+                if (pw.op3dt2 != instToneDoubler.lstTD[us].OP3DT2)
+                {
+                    ((YM2151)pw.chip).OutSetDt2Sr(mml, pw, 2, instToneDoubler.lstTD[us].OP3DT2, instFM[2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 3]);
+                    pw.op3dt2 = instToneDoubler.lstTD[us].OP3DT2;
+                }
+                if (pw.op4dt2 != instToneDoubler.lstTD[us].OP4DT2)
+                {
+                    ((YM2151)pw.chip).OutSetDt2Sr(mml, pw, 3, instToneDoubler.lstTD[us].OP4DT2, instFM[3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 3]);
+                    pw.op4dt2 = instToneDoubler.lstTD[us].OP4DT2;
+                }
+
+                //pw.TdA = -1;
+            }
         }
 
 

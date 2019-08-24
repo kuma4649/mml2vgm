@@ -1,0 +1,41 @@
+﻿'{
+
+	TitleName            =C140 Test
+	TitleNameJ           =C140 テスト
+	GameName             =
+	GameNameJ            =
+	SystemName           =
+	SystemNameJ          =
+	Composer             =
+	ComposerJ            =
+	ReleaseDate          =2018/10/10
+	Converted            =
+	Notes                =
+
+	ClockCount   =192
+
+}
+
+
+     No, SV, AR, DR, SL, SR, RR, ST, ChipName
+'@ E  1, 15,  0,120,  7,100,  4,  1, C140
+'@ E  2, 15,  0, 40,  7,100,  4,  2, C140
+'@ E  3, 15,  0,  3, 13,  7,  1,  2, C140
+'@ E  4, 15,  0,  2, 14,  1,  1,  2, C140
+'@ E  5, 15,  0,  5, 13,  3,  1,  3, C140
+'@ E  6, 15,  0,  8, 13,  5,  1,  3, C140
+
+'@ P 0,"..\wav\muteGuitar.wav"    , 4000 , 100 , C140
+'@ P 1,"..\wav\Guitar.wav"        , 8000 , 100 , C140 , 14000
+'@ P 2,"..\wav\BD_16bit16000.wav" ,      , 100 , C140
+
+'Y01 T126
+
+Y01-03 !
+
+Y01 D0o4l4v125@0cdefgab>c1^1^1
+'Y01 D0o4l4q0p255,255v255@1cdefgab>>>c2_<<c&c2_<c^1^1
+'Y01 D0o1l4q0p255,255v255@1[cdefgab>]7
+'Y01 o4p0,255c4p16,255c4p32,255c4p48,255c4p64,255c4p80,255c4p96,255c4p112,255c4p128,255c4
+'Y01 o4p144,255c4p160,255c4p176,255c4p192,255c4p208,255c4p224,255c4p240,255c4p255,255c4
+Y01 D0o4l4v125@2cdefgab>c1^1^1

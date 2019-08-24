@@ -16,10 +16,10 @@ namespace mml2vgmIDE
     public partial class FrmEditor : DockContent
     {
         private int searchAnchorIndex;
-        private bool searchUseRegex;
+        private bool searchUseRegex=false;
         private Regex searchRegex;
         private string searchTextPattern = "";
-        private bool searchMatchCase;
+        private bool searchMatchCase=false;
         public Document document = null;
         public FrmSien frmSien = null;
         //public int col = -1;

@@ -3228,6 +3228,11 @@ namespace Core
                     }
                     pw.mmlPos++;
                     break;
+                case enmMMLType.ToneDoubler:
+                    log.Write("ToneDoubler");
+                    //pw.chip.CmdToneDoubler(pw, mml);
+                    pw.mmlPos++;
+                    break;
                 default:
                     msgBox.setErrMsg(string.Format(msg.get("E01016")
                         , mml.type)

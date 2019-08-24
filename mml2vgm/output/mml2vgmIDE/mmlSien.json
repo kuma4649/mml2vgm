@@ -1,0 +1,304 @@
+{
+  "list": [
+    {
+      "sienType": 0,
+      "nextAnchor": 5,
+      "nextCaret": 8,
+      "pattern": "'@ L ",
+      "patternType": "Z",
+      "title": "'@ OPL FM音色定義　テンプレート",
+      "description": "OPL(YM2413)系FM音色定義のテンプレートを挿入します。",
+      "content": "'@ L 000\r\n   AR DR SL RR KL MT AM VB EG KR DT\r\n'@ 00 00 00 00 00 00 00 00 00 00 00\r\n'@ 00 00 00 00 00 00 00 00 00 00 00\r\n   TL FB\r\n'@ 00 00\r\n"
+    },
+    {
+      "sienType": 0,
+      "nextAnchor": 5,
+      "nextCaret": 8,
+      "pattern": "'@ N ",
+      "patternType": "Z",
+      "title": "'@ OPN FM音色定義　テンプレート",
+      "description": "OPN(YM2203)系FM音色定義のテンプレートを挿入します。",
+      "content": "'@ N 000\r\n   AR DR SR RR SL TL  KS ML DT AM SSGEG\r\n'@ 00 00 00 00 00 000 00 00 00 00 00\r\n'@ 00 00 00 00 00 000 00 00 00 00 00\r\n'@ 00 00 00 00 00 000 00 00 00 00 00\r\n'@ 00 00 00 00 00 000 00 00 00 00 00\r\n   AL FB\r\n'@ 00 00\r\n"
+    },
+    {
+      "sienType": 0,
+      "nextAnchor": 5,
+      "nextCaret": 8,
+      "pattern": "'@ M ",
+      "patternType": "Z",
+      "title": "'@ OPM FM音色定義　テンプレート",
+      "description": "OPM(YM2151)系FM音色定義のテンプレートを挿入します。",
+      "content": "'@ M 000\r\n   AR DR SR RR SL TL  KS ML DT1 DT2 AME\r\n'@ 00 00 00 00 00 000 00 00 00  00  00\r\n'@ 00 00 00 00 00 000 00 00 00  00  00\r\n'@ 00 00 00 00 00 000 00 00 00  00  00\r\n'@ 00 00 00 00 00 000 00 00 00  00  00\r\n   AL FB\r\n'@ 00 00\r\n"
+    },
+    {
+      "sienType": 0,
+      "nextAnchor": 78,
+      "nextCaret": 81,
+      "pattern": "'@ P ",
+      "patternType": "Z",
+      "title": "'@ PCM音色定義　テンプレート",
+      "description": "PCM音色定義のテンプレートを挿入します。",
+      "content": "     No  , \"FileName\" , [BaseFreq] , Volume ( , [ChipName] , [Option] )\r\n'@ P 000 , \"XXXX.wav\" ,       8000 ,    100\r\n"
+    },
+    {
+      "sienType": 0,
+      "nextAnchor": 14,
+      "nextCaret": 17,
+      "pattern": "'@ H ",
+      "patternType": "Z",
+      "title": "'@ 波形メモリ音色定義　テンプレート",
+      "description": "波形メモリ音色定義のテンプレートを挿入します。",
+      "content": "     No\r\n'@ H 000\r\n     +0  +1  +2  +3  +4  +5  +6  +7\r\n'@   000 000 000 000 000 000 000 000\r\n'@   000 000 000 000 000 000 000 000\r\n'@   000 000 000 000 000 000 000 000\r\n'@   000 000 000 000 000 000 000 000\r\n"
+    },
+    {
+      "sienType": 0,
+      "nextAnchor": 60,
+      "nextCaret": 63,
+      "pattern": "'@ E ",
+      "patternType": "Z",
+      "title": "'@ エンベロープ定義　テンプレート",
+      "description": "エンベロープ定義のテンプレートを挿入します。",
+      "content": "     No , SV , AR , DR , SL , SR , RR , ST , ChipName\r\n'@ E 000, 000, 000, 000, 000, 000, 000, 000\r\n"
+    },
+    {
+      "sienType": 0,
+      "nextAnchor": 14,
+      "nextCaret": 14,
+      "pattern": "'@ MUCOM88 0,",
+      "patternType": "Z",
+      "title": "'@ MUCOM88音色ファイル取り込み",
+      "description": "MUCOM88形式のFM音源音色ファイルを取り込みます。",
+      "content": "'@ MUCOM88 0,\""
+    },
+    {
+      "sienType": 0,
+      "nextAnchor": 7,
+      "nextCaret": 7,
+      "pattern": "'@ TFI ",
+      "patternType": "Z",
+      "title": "'@ TFI音色ファイル取り込み",
+      "description": "TFI形式のFM音源音色ファイルを取り込みます。",
+      "content": "'@ TFI "
+    },
+    {
+      "sienType": 0,
+      "nextAnchor": 16,
+      "nextCaret": 16,
+      "pattern": "'@ MUCOM88ADPCM ",
+      "patternType": "Z",
+      "title": "'@ MUCOM88 ADPCMファイル取り込み",
+      "description": "MUCOM88形式のADPCMファイルを取り込みます。",
+      "content": "'@ MUCOM88ADPCM "
+    },
+    {
+      "sienType": 0,
+      "nextAnchor": 1,
+      "nextCaret": 1,
+      "pattern": "y",
+      "patternType": "B",
+      "title": "yn1,n2 レジスタ直接書き込み(n1=Address n2=Data)",
+      "description": "",
+      "content": "y"
+    },
+    {
+      "sienType": 0,
+      "nextAnchor": 6,
+      "nextCaret": 6,
+      "pattern": "yDTML",
+      "patternType": "B",
+      "title": "yDTML,op,n DT,MLレジスタ直接書き込み(op=OP(1 - 4) n=データ)",
+      "description": "",
+      "content": "yDTML,"
+    },
+    {
+      "sienType": 0,
+      "nextAnchor": 4,
+      "nextCaret": 4,
+      "pattern": "yTL",
+      "patternType": "B",
+      "title": "yTL,op,n TLレジスタ直接書き込み(op=OP(1 - 4) n=データ)",
+      "description": "",
+      "content": "yTL,"
+    },
+    {
+      "sienType": 0,
+      "nextAnchor": 6,
+      "nextCaret": 6,
+      "pattern": "yKSAR",
+      "patternType": "B",
+      "title": "yKSAR,op,n KS,ARレジスタ直接書き込み(op=OP(1 - 4) n=データ)",
+      "description": "",
+      "content": "yKSAR,"
+    },
+    {
+      "sienType": 0,
+      "nextAnchor": 6,
+      "nextCaret": 6,
+      "pattern": "yAMDR,",
+      "patternType": "B",
+      "title": "yAMDR,op,n",
+      "description": "",
+      "content": "yAMDR,"
+    },
+    {
+      "sienType": 0,
+      "nextAnchor": 4,
+      "nextCaret": 4,
+      "pattern": "ySR,",
+      "patternType": "B",
+      "title": "ySR,op,n",
+      "description": "",
+      "content": "ySR,"
+    },
+    {
+      "sienType": 0,
+      "nextAnchor": 6,
+      "nextCaret": 6,
+      "pattern": "ySLRR,",
+      "patternType": "B",
+      "title": "ySLRR,op,n",
+      "description": "",
+      "content": "ySLRR,"
+    },
+    {
+      "sienType": 0,
+      "nextAnchor": 5,
+      "nextCaret": 5,
+      "pattern": "ySSG,",
+      "patternType": "B",
+      "title": "ySSG,op,n",
+      "description": "",
+      "content": "ySSG,"
+    },
+    {
+      "sienType": 0,
+      "nextAnchor": 6,
+      "nextCaret": 6,
+      "pattern": "yFBAL,",
+      "patternType": "B",
+      "title": "yFBAL,op,n",
+      "description": "",
+      "content": "yFBAL,"
+    },
+    {
+      "sienType": 1,
+      "nextAnchor": 0,
+      "nextCaret": 0,
+      "pattern": "'@ N ",
+      "patternType": "B",
+      "title": "'@ OPN {0}",
+      "description": "VAL-SOUND様からFM音色を参照します。",
+      "content": "'(from VAL-SOUND)','http://valsound.fc2web.com/fmindex/data/bass01.html','Shift_JIS','//body/tt','a','pre'"
+    },
+    {
+      "sienType": 1,
+      "nextAnchor": 0,
+      "nextCaret": 0,
+      "pattern": "'@ N ",
+      "patternType": "B",
+      "title": "'@ OPN {0}",
+      "description": "VAL-SOUND様からFM音色を参照します。",
+      "content": "'(from VAL-SOUND)','http://valsound.fc2web.com/fmindex/data/bell01.html','Shift_JIS','//body/tt','a','pre'"
+    },
+    {
+      "sienType": 1,
+      "nextAnchor": 0,
+      "nextCaret": 0,
+      "pattern": "'@ N ",
+      "patternType": "B",
+      "title": "'@ OPN {0}",
+      "description": "VAL-SOUND様からFM音色を参照します。",
+      "content": "'(from VAL-SOUND)','http://valsound.fc2web.com/fmindex/data/brass01.html','Shift_JIS','//body','a','pre'"
+    },
+    {
+      "sienType": 1,
+      "nextAnchor": 0,
+      "nextCaret": 0,
+      "pattern": "'@ N ",
+      "patternType": "B",
+      "title": "'@ OPN {0}",
+      "description": "VAL-SOUND様からFM音色を参照します。",
+      "content": "'(from VAL-SOUND)','http://valsound.fc2web.com/fmindex/data/guitar01.html','Shift_JIS','//body','a','pre'"
+    },
+    {
+      "sienType": 1,
+      "nextAnchor": 0,
+      "nextCaret": 0,
+      "pattern": "'@ N ",
+      "patternType": "B",
+      "title": "'@ OPN {0}",
+      "description": "VAL-SOUND様からFM音色を参照します。",
+      "content": "'(from VAL-SOUND)','http://valsound.fc2web.com/fmindex/data/lead01.html','Shift_JIS','//body/tt','a','pre'"
+    },
+    {
+      "sienType": 1,
+      "nextAnchor": 0,
+      "nextCaret": 0,
+      "pattern": "'@ N ",
+      "patternType": "B",
+      "title": "'@ OPN {0}",
+      "description": "VAL-SOUND様からFM音色を参照します。",
+      "content": "'(from VAL-SOUND)','http://valsound.fc2web.com/fmindex/data/percus01.html','Shift_JIS','//body/tt','a','pre'"
+    },
+    {
+      "sienType": 1,
+      "nextAnchor": 0,
+      "nextCaret": 0,
+      "pattern": "'@ N ",
+      "patternType": "B",
+      "title": "'@ OPN {0}",
+      "description": "VAL-SOUND様からFM音色を参照します。",
+      "content": "'(from VAL-SOUND)','http://valsound.fc2web.com/fmindex/data/piano01.html','Shift_JIS','//body/tt','a','pre'"
+    },
+    {
+      "sienType": 1,
+      "nextAnchor": 0,
+      "nextCaret": 0,
+      "pattern": "'@ N ",
+      "patternType": "B",
+      "title": "'@ OPN {0}",
+      "description": "VAL-SOUND様からFM音色を参照します。",
+      "content": "'(from VAL-SOUND)','http://valsound.fc2web.com/fmindex/data/se01.html','Shift_JIS','//body','a','pre'"
+    },
+    {
+      "sienType": 1,
+      "nextAnchor": 0,
+      "nextCaret": 0,
+      "pattern": "'@ N ",
+      "patternType": "B",
+      "title": "'@ OPN {0}",
+      "description": "VAL-SOUND様からFM音色を参照します。",
+      "content": "'(from VAL-SOUND)','http://valsound.fc2web.com/fmindex/data/specal01.html','Shift_JIS','//body/tt','a','pre'"
+    },
+    {
+      "sienType": 1,
+      "nextAnchor": 0,
+      "nextCaret": 0,
+      "pattern": "'@ N ",
+      "patternType": "B",
+      "title": "'@ OPN {0}",
+      "description": "VAL-SOUND様からFM音色を参照します。",
+      "content": "'(from VAL-SOUND)','http://valsound.fc2web.com/fmindex/data/strpad01.html','Shift_JIS','//body/tt','a','pre'"
+    },
+    {
+      "sienType": 1,
+      "nextAnchor": 0,
+      "nextCaret": 0,
+      "pattern": "'@ N ",
+      "patternType": "B",
+      "title": "'@ OPN {0}",
+      "description": "VAL-SOUND様からFM音色を参照します。",
+      "content": "'(from VAL-SOUND)','http://valsound.fc2web.com/fmindex/data/wind01.html','Shift_JIS','//body/tt','a','pre'"
+    },
+    {
+      "sienType": 1,
+      "nextAnchor": 0,
+      "nextCaret": 0,
+      "pattern": "'@ N ",
+      "patternType": "B",
+      "title": "'@ OPN {0}",
+      "description": "VAL-SOUND様からFM音色を参照します。",
+      "content": "'(from VAL-SOUND)','http://valsound.fc2web.com/fmindex/data/world01.html','Shift_JIS','//body/tt','a','pre'"
+    }
+  ]
+}

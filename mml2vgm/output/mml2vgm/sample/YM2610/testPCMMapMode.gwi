@@ -1,0 +1,40 @@
+﻿'{
+
+	TitleName   =
+	TitleNameJ  =PCMマッピングモードテスト(OPNB)
+	GameName    =
+	GameNameJ   =
+	SystemName  =
+	SystemNameJ =
+	Composer    =
+	ComposerJ   =
+	ReleaseDate =2019/08/09
+	Converted   =
+	Notes       =
+
+	ModeBeforeSend =All
+	ClockCount     =192
+	Octave-Rev     =FALSE
+
+}
+
+'@ P 1,"..\wav\Guitar.wav"        , 8000 , 100,OPNB,0
+'@ P 2,"..\wav\muteGuitar.wav"    , 8000 , 100,YM2610B,0
+'@ PM 0 , 4,0 , 1,,2
+
+解説1
+0 , 4,0 , 1,,2   PCMMapNo0、オクターブ4の音符ドを@1に、ド#は未指定、レを@2に割り当てる
+
+
+'T13 T126
+'T13 o4l4Q4 mon @0 cdcd mof cdcd
+
+解説2
+mon   PCMマッピングモード開始
+@0    PCM Map Noを0に設定
+cdcd  @1c@2c@1c@2cと同じ
+mof   PCMマッピングモード終了
+cdcd  @2ccccと同じ。音色はPCMマッピングモード最後の音色がセットされている
+
+
+

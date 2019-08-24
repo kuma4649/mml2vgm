@@ -1101,13 +1101,126 @@ namespace Core
             }
         }
 
-        public override void SetToneDoubler(partWork pw)
+        public override void SetToneDoubler(partWork pw, MML mml)
         {
+            if (pw.Type != enmChannelType.FMOPN && pw.ch != 2)
+            {
+                return;
+            }
+
+            int i = pw.instrument;
+            if (i < 0) return;
+
+            pw.toneDoublerKeyShift = 0;
+            byte[] instFM = parent.instFM[i];
+            if (instFM == null || instFM.Length < 1) return;
+            Note note = (Note)mml.args[0];
+
+            if (pw.TdA == -1)
+            {
+                //resetToneDoubler
+                if (pw.op1ml != instFM[0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8])
+                {
+                    OutFmSetDtMl(mml, pw, 0, instFM[0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 9], instFM[0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8]);
+                    pw.op1ml = instFM[0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
+                }
+                if (pw.op2ml != instFM[1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8])
+                {
+                    OutFmSetDtMl(mml, pw, 1, instFM[1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 9], instFM[1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8]);
+                    pw.op2ml = instFM[1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
+                }
+                if (pw.op3ml != instFM[2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8])
+                {
+                    OutFmSetDtMl(mml, pw, 2, instFM[2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 9], instFM[2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8]);
+                    pw.op3ml = instFM[2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
+                }
+                if (pw.op4ml != instFM[3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8])
+                {
+                    OutFmSetDtMl(mml, pw, 3, instFM[3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 9], instFM[3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8]);
+                    pw.op4ml = instFM[3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
+                }
+            }
+            else
+            {
+                //setToneDoubler
+                int oct = pw.octaveNow;
+                foreach (MML octMml in note.tDblOctave)
+                {
+                    switch (octMml.type)
+                    {
+                        case enmMMLType.Octave:
+                            oct = 0;
+                            break;
+                        case enmMMLType.OctaveUp:
+                            oct++;
+                            break;
+                        case enmMMLType.OctaveDown:
+                            oct--;
+                            break;
+                    }
+                }
+                oct = Common.CheckRange(oct, 1, 8);
+                pw.octaveNew = oct;
+                int TdB = oct * 12 + Const.NOTE.IndexOf(note.tDblCmd) + note.tDblShift + pw.keyShift;
+                int s = TdB - pw.TdA;// - TdB;
+                int us = Math.Abs(s);
+                int n = pw.toneDoubler;
+                clsToneDoubler instToneDoubler = parent.instToneDoubler[n];
+                if (us >= instToneDoubler.lstTD.Count)
+                {
+                    return;
+                }
+
+                pw.toneDoublerKeyShift = ((s < 0) ? s : 0) + instToneDoubler.lstTD[us].KeyShift;
+
+                if (pw.op1ml != instToneDoubler.lstTD[us].OP1ML)
+                {
+                    OutFmSetDtMl(mml, pw, 0, instFM[0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 9], instToneDoubler.lstTD[us].OP1ML);
+                    pw.op1ml = instToneDoubler.lstTD[us].OP1ML;
+                }
+                if (pw.op2ml != instToneDoubler.lstTD[us].OP2ML)
+                {
+                    OutFmSetDtMl(mml, pw, 1, instFM[1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 9], instToneDoubler.lstTD[us].OP2ML);
+                    pw.op2ml = instToneDoubler.lstTD[us].OP2ML;
+                }
+                if (pw.op3ml != instToneDoubler.lstTD[us].OP3ML)
+                {
+                    OutFmSetDtMl(mml, pw, 2, instFM[2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 9], instToneDoubler.lstTD[us].OP3ML);
+                    pw.op3ml = instToneDoubler.lstTD[us].OP3ML;
+                }
+                if (pw.op4ml != instToneDoubler.lstTD[us].OP4ML)
+                {
+                    OutFmSetDtMl(mml, pw, 3, instFM[3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 9], instToneDoubler.lstTD[us].OP4ML);
+                    pw.op4ml = instToneDoubler.lstTD[us].OP4ML;
+                }
+
+                //pw.TdA = -1;
+            }
         }
 
         public override int GetToneDoublerShift(partWork pw, int octave, char noteCmd, int shift)
         {
-            return 0;
+            if (pw.Type != enmChannelType.FMOPN && pw.ch != 2)
+            {
+                return 0;
+            }
+
+            int i = pw.instrument;
+            if (pw.TdA == -1)
+            {
+                return 0;
+            }
+
+            int TdB = octave * 12 + Const.NOTE.IndexOf(noteCmd) + shift;
+            int s = pw.TdA - TdB;
+            int us = Math.Abs(s);
+            int n = pw.toneDoubler;
+            if (us >= parent.instToneDoubler[n].lstTD.Count)
+            {
+                return 0;
+            }
+
+            return ((s < 0) ? s : 0) + parent.instToneDoubler[n].lstTD[us].KeyShift;
         }
 
 

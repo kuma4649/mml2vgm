@@ -7,6 +7,7 @@ namespace mml2vgmIDE.MMLParameter
 {
     public class Manager
     {
+        public Instrument[] Conductor;
         public Instrument[] AY8910;
         public Instrument[] C140;
         public Instrument[] HuC6280;
@@ -36,6 +37,10 @@ namespace mml2vgmIDE.MMLParameter
         {
             dicInst.Clear();
             Insts = new Dictionary<string, Instrument[]>();
+
+            Conductor = new Conductor[] { new Conductor(), null };
+            dicInstAdd(Conductor);
+            Insts.Add(Conductor[0].Name, Conductor);
 
             AY8910 = new AY8910[] { new AY8910(), new AY8910() };
             dicInstAdd(AY8910);

@@ -481,7 +481,7 @@ namespace Core
             }
         }
 
-        public override void SetToneDoubler(partWork pw)
+        public override void SetToneDoubler(partWork pw, MML mml)
         {
             //実装不要
         }

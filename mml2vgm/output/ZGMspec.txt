@@ -1,0 +1,245 @@
+はじめに。
+
+　このテキストはZGMのファイル仕様を示したものである。
+　ZGMはVGMの仕様を真似し、一部拡張したものである。
+　このテキストに記されていない仕様についてはVGMと同じである。
+　ZGMで使用されるバイトオーダーの基本はLittleEndianである。
+
+
+Header division.
+　この区分には、ZGMの基本情報を記録する。
+
+      00   01   02   03   04   05   06   07   08   09   0A   0B   0C   0D   0E   0F
+0x00 ["ZGM " ident      ][EoF address       ][Version           ][Total # samples   ]
+0x10 [Loop # samples    ][Loop offset       ][GD3 address       ][Define address    ]
+0x20 [Track 1 address   ][Def Cnt ][Trk Cnt ][Extra Hdr adr     ] ***  ***  ***  *** 
+0x30  ***  ***  ***  ***  ***  ***  ***  ***  ***  ***  ***  ***  ***  ***  ***  *** 
+
+  "ZGM " ident         4byte  ファイル識別子
+  EoF address          4byte  ファイルの終端の位置(ファイルサイズ - 1)
+  Version              4byte  10
+  Total # samples      4byte  全てのトラックの内最長のトラックのサンプリング数
+  Loop # samples       4byte  未使用(ループ情報はトラック側で持つ)
+  Loop offset          4byte  未使用
+  GD3 address          4byte  GD3 divisionの開始位置
+  Define address       4byte  Define divisionの開始位置
+  Track 1 address      4byte  Track divisionの開始位置(2以降のトラックはそのひとつ前のトラック情報から辿る)
+  Define count         2byte  Define divisionの個数(0含む)
+  Track count          2byte  Track divisionの個数(0含む)
+  Extra Header address 4byte  未使用
+  0x2c～0x3fは予約領域(0埋め)
+
+
+
+Define division.
+　この区分には、演奏時に使用する音源の情報を記録する。
+　使用する音源の数だけ定義する。
+
+ ["Def"][Length][Chip Identify number][Chip Command number][Clock][Option] 
+ x Define Count
+
+  Def					3byte				区別するための文字
+  Length				1byte				この定義の大きさ。通常(Optionの定義が不要な場合)は14byteになる。
+  Chip Identify number	4byte				後述。音源Chip毎に割り当てられた数値を記録する。
+  											同じChip Identify numberで複数回定義可能。
+  											(これによって複数個の同じChipを使用した演奏ができる。)
+  Chip Command number	2byte				コマンドに割り当てる0x80～0xFFFFまでの値を記録する。
+  											複数のポートを使用する音源の場合は連続で割り当てられる。
+											Chip毎にユニークである必要がある。
+  											例
+  											　YM2608のChip Command Numberに0x188を設定すると
+  											　実際は0x188と0x189が割り当てられる。
+  Clock					4byte				チップのクロックを設定する。VGMと同じ。
+  Option				0～(Length-10)byte	省略可能。Optionが必要な音源の場合に設定する。
+
+
+Track division.
+　この区分には、演奏時に音源に送信するデータや制御系コマンドを設定する。
+　使用するトラックの数だけ定義する。※現バージョンでは1トラックのみの対応。
+
+ ["Trk"(3 byte)][Length(4 byte)][LoopAddress(4 byte)][Data(Length byte)]
+ x Track Count
+
+  Trk					3byte				区別するための文字。
+  Length				4byte				この定義の大きさ。
+  LoopAddress			4byte				ループアドレス(ループしない時は-1(0xffffffff))
+  Data					Length byte			音源に送信するデータや制御系コマンドを設定する。
+
+
+Chip Identify number
+　Define divisionで使用する音源の識別番号のリスト。
+
+   番号       音源名                       ポート数  コマンド長(byte)  オプション
+ 0x00000000 - 0x000000FF VGM Chips
+   0x0000000C SN76489                             2                 1  Option [SN FB ][SNW][SF]   2番目のポートはGGのステレオポート
+   0x00000010 YM2413                              1                 2  
+   0x0000002C YM2612                              2                 2  
+   0x00000030 YM2151                              1                 2  
+   0x00000038 Sega PCM                            1                 3  Option [SPCM Interface ]
+   0x00000040 RF5C68                              1                 3  
+   0x00000044 YM2203                              1                 2  
+   0x00000048 YM2608                              2                 2  
+   0x0000004C YM2610/YM2610B                      2                 2  
+   0x00000050 YM3812                              1                 2  
+   0x00000054 YM3526                              1                 2  
+   0x00000058 Y8950                               1                 2  
+   0x0000005C YMF262                              2                 2  
+   0x00000060 YMF278B                             1                 3  
+   0x00000064 YMF271                              1                 3  
+   0x00000068 YMZ280B                             1                 2  
+   0x0000006C RF5C164                             1                 2  
+   0x00000070 PWM                                 1                 2  
+   0x00000074 AY8910                              1                 2  Option [AYT][AY Flags  ]
+   0x00000080 GameBoy DMG                         1                 2  
+   0x00000084 NES APU                             1                 2  
+   0x00000088 MultiPCM                            1                 2  
+   0x0000008C uPD7759                             1                 2  
+   0x00000090 OKIM6258                            1                 2  Option [OF]
+   0x00000098 OKIM6295                            1                 2  
+   0x0000009C K051649                             ?                 ?  
+   0x000000A0 K054539                             1                 3  Option [KF]
+   0x000000A4 HuC6280                             1                 2  
+   0x000000A8 C140                                1                 3  Option [CF]
+   0x000000AC K053260                             1                 2  
+   0x000000B0 Pokey                               1                 2  
+   0x000000B4 QSound                              1                 3  
+   0x000000B8 SCSP                                1                 3  
+   0x000000C0 WonderSwan                          1                 3  
+   0x000000C4 Virtual Boy VSU                     1                 3  
+   0x000000C8 SAA1099                             1                 2  
+   0x000000CC ES5503                              1                 3  Option [EC]
+   0x000000D0 ES5505/ES5506                       1                 3  Option [EC]
+   0x000000D8 X1-010                              1                 3  
+   0x000000DC C352                                1                 4  Option [CD]
+   0x000000E0 GA20                                1                 2  
+ 
+ 0x00010000 - 0x0001FFFF Chips
+   0x00010000 ?                                   1                 2  
+
+ 0x00020000 - 0x0002FFFF 妄想Chips
+   0x00020000 AY8910B                             1                 2  
+   0x00020001 YM2609                              4                 2  
+
+ 0x00030000 - 0x0003FFFF XG音源
+   0x00030000 MU50                                1                 可変  
+   0x00030001 MU100                               1                 可変  
+   0x00030002 MU128                               1                 可変
+   0x00030003 MU1000                              1                 可変  
+   0x00030004 MU2000                              1                 可変  
+   0x00030005 MU1000EX                            1                 可変  
+   0x00030006 MU2000EX                            1                 可変  
+
+ 0x00040000 - 0x0004FFFF LA/GS音源
+   0x00040000 MT-32                               1                 可変  
+   0x00040001 CM-64                               1                 可変  
+   0x00040002 SC-55                               1                 可変  
+   0x00040003 SC-55mkII                           1                 可変  
+   0x00040004 SC-88                               1                 可変  
+   0x00040005 SC-88Pro                            1                 可変  
+   0x00040006 SC-8820                             1                 可変  
+   0x00040007 SC-8850                             1                 可変  
+   0x00040008 SD-90                               1                 可変  
+   0x00040009 Integra-7                           1                 可変  
+
+ 0x00050000 - 0x0005FFFF GM
+   0x00050000 General                             1                 可変  
+
+ 0x00060000 - 0x0006FFFF VSTi
+   0x00060000 General                             1                 可変  
+
+ 0x00070000 - 0x0007FFFF Wave
+   0x00070000 General                             1                 可変  
+
+
+
+*Track DivisionのDataに音源群に送信するコマンド又は制御系のコマンドを記録する。
+
+
+*コマンドは1byteまたは2byteで記録する。
+  DefineDivisionの全ての定義で0x100未満のコマンドを定義している場合は1byte。
+  DefineDivisionの一つ以上の定義で0x100以上のコマンドを定義すると2byte。(Little endian)
+
+
+*制御系コマンドは0x00～0x7Fまでを予約する。
+  よって1byteで使用できる音源群のコマンドは0x80～0xFFになる。
+  2byteで使用できる音源群のコマンドは0x0080～0xFFFFになる。
+
+
+制御系コマンド(コマンドサイズが2byteの場合は0x00を追加)
+  0x01 (0x00) nn nn 	: Wait n samples.(VGM 0x61と同等)
+  0x02 (0x00)       	: wait 735 samples.(VGM 0x62と同等)
+  0x03 (0x00)       	: wait 882 samples.(VGM 0x63と同等)
+  0x04 (0x00) cc nn nn	: override length of 0x02/0x03(VGM 0x64と同等)
+  0x06 (0x00)       	: end of sound data(VGM 0x66と同等)
+  0x07 (0x00) ...   	: data block
+                            0x07 cc tt ss ss ss ss (data)
+                          where:
+                            0x07 = ZGM command
+                            cc   = Chip Command Number
+                                   (コマンドのサイズにあわせる。)
+                            tt   = data type
+                                   音源ごとに異なるtypeが割り当てられる。(see chip data type)
+                            ss ss ss ss (32 bits) = size of data, in bytes
+  0x08 (0x00) ...   	: PCM RAM write(VGM 0x68と同等)
+                            0x08 cc oo oo oo oo dd dd dd dd ss ss ss ss
+                          where:
+                            0x08 = ZGM command
+                            cc   = Chip Command Number
+                                   (コマンドのサイズにあわせる。)
+                            oo oo oo oo (32 bits) = read offset in data block
+                            dd dd dd dd (32 bits) = write offset in chip's ram (affected by chip's registers)
+                            ss ss ss ss (32 bits) = size of data, in bytes
+                            Since size can't be zero, a size of 0 bytes means 0x01_0000_0000 bytes.
+  0x09 (0x00) ...       : Host Application制御向けコマンド(解釈はアプリケーション依存)
+  0x1n (0x00)       	: wait n+1 samples(VGM 0x7nと同等)
+  0x2n (0x00)			: YM2612 port 0 address 2A write from the data bank.(VGM 0x8nと同等)
+  0x30-0x35 (0x00)		: DAC Stream Control Write(VGM 0x90-0x95と同等)
+                          Setup Stream Control:
+                            0x30 ss tt pp cc
+				          where:
+				            tt   = Chip Command Number
+                                   (コマンドのサイズにあわせる。)
+  0x40 (0x00) dddddddd	: seek to offset dddddddd(VGM 0xE0と同等)
+
+
+chip data type
+  YM2612
+  PWM 
+  OKIM6258
+  HuC6280
+   0x00 = data of recorded streams (uncompressed)
+   0x01 = data of recorded streams (compressed)
+
+  RF5C68
+  RF5C164 
+  SCSP
+  NES APU
+   0x00 = data of recorded streams (uncompressed)
+   0x01 = data of recorded streams (compressed)
+   0x02 = RAM write
+
+  Sega PCM ROM data
+  YM2608 DELTA-T ROM data
+  YMF278B ROM data
+  YMF271 ROM data
+  YMZ280B ROM data
+  YMF278B RAM data
+  Y8950 DELTA-T ROM data
+  MultiPCM ROM data
+  uPD7759 ROM data
+  OKIM6295 ROM data
+  K054539 ROM data
+  C140 ROM data
+  K053260 ROM data
+  Q-Sound ROM data
+  ES5506 ROM data
+  X1-010 ROM data
+  C352 ROM data
+  GA20 ROM data
+  ES5503 RAM write
+   0x00 = ROM/RAM data
+
+  YM2610
+   0x00 = ADPCM ROM data(ADPCM-A)
+   0x01 = DELTA-T ROM data(ADPCM-B)
+

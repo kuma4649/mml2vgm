@@ -511,7 +511,7 @@ namespace Core
             throw new NotImplementedException("継承先で要実装");
         }
 
-        public virtual void SetToneDoubler(partWork pw)
+        public virtual void SetToneDoubler(partWork pw, MML mml)
         {
             throw new NotImplementedException("継承先で要実装");
         }
@@ -1216,7 +1216,18 @@ namespace Core
             pw.tie = note.tieSw;
 
             //Tone Doubler
-            SetToneDoubler(pw);
+            if (note.tDblSw)
+            {
+                SetToneDoubler(pw, mml);
+            }
+            else
+            {
+                if (pw.TdA != -1)
+                {
+                    pw.TdA = -1;
+                    SetToneDoubler(pw, mml);
+                }
+            }
 
             //発音周波数
             if (pw.bendWaitCounter != -1)
@@ -1307,6 +1318,7 @@ namespace Core
             pw.tie = false;
 
             pw.clockCounter += pw.waitCounter;
+            SetDummyData(pw, mml);
         }
 
         public virtual void CmdBend(partWork pw,MML mml)

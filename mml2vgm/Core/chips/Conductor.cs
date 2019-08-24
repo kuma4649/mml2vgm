@@ -65,7 +65,7 @@ namespace Core
             return 0;
         }
 
-        public override void SetToneDoubler(partWork pw)
+        public override void SetToneDoubler(partWork pw, MML mml)
         {
         }
 

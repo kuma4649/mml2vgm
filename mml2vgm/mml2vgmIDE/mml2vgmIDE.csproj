@@ -226,6 +226,7 @@
     <Compile Include="MDChipParams.cs" />
     <Compile Include="MMLParameter\AY8910.cs" />
     <Compile Include="MMLParameter\C140.cs" />
+    <Compile Include="MMLParameter\Conductor.cs" />
     <Compile Include="MMLParameter\HuC6280.cs" />
     <Compile Include="MMLParameter\Instrument.cs" />
     <Compile Include="MMLParameter\K051649.cs" />
@@ -462,7 +463,19 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
+    <PostBuildEvent>xcopy $(TargetDir)*.* $(SolutionDir)output\mml2vgmIDE /D /S /R /Y /I /K
+copy /Y $(SolutionDir)\CHANGE.txt $(SolutionDir)output
+copy /Y $(SolutionDir)\IDE.txt $(SolutionDir)output
+copy /Y $(SolutionDir)\Script.txt $(SolutionDir)output
+copy /Y $(SolutionDir)\..\LICENSE.txt $(SolutionDir)output
+copy /Y $(SolutionDir)\..\mml2vgm_MMLCommandMemo.txt $(SolutionDir)output
+copy /Y $(SolutionDir)\..\mmlCommandTable.md $(SolutionDir)output
+copy /Y $(SolutionDir)\..\README.md $(SolutionDir)output
+copy /Y $(SolutionDir)\..\ZGMspec.txt $(SolutionDir)output
+del /Q $(SolutionDir)output\mml2vgmIDE\*.pdb
+del /Q $(SolutionDir)output\mml2vgmIDE\*.config
+del /Q $(SolutionDir)output\mml2vgm\*.config
+del /Q $(SolutionDir)output\bin.zip
+</PostBuildEvent>
   </PropertyGroup>
 </Project>
