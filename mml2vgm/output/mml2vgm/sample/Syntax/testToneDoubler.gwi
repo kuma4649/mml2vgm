@@ -37,6 +37,7 @@ Z01 c4c4c4c4
    ALG FB
 '@ 004,000
 
+初期値と同じものをを敢えて再定義。(本来は不要)
 '@ TD 0
    (Multiple)       (Detune2)
    OP1 OP2 OP3 OP4  OP1 OP2 OP3 OP4 (KeyShift)
@@ -71,22 +72,22 @@ X1 c0e1
 X1 o4 a1_b c0a1_b c1_b a0c1_b cccc
 X2 r1r1r1r1r1r1r1r1r1r1r1r1r1r1r1r1
 
-'X1 o3l8v113
-'X1 a+4>d+4.<a+rr>f4d+c+4<rrr
-'X1 a+4>d+4<ra+rg+&g+1
-'X1 a+4>d+4.<a+rr>f4d+c+4<rrr
-'X1 a+4>d+4 rc+rd+&d+1
-'X2 o3l8v113
-'X2 f+4 a+4. f+rr>c+4<ba4 rrr
-'X2 f+4 g+4 rf+rd+&d+1 
-'X2 f+4 a+4. f+rr>c+4<ba4 rrr
-'X2 f+4 a+4 rg+rg+&g+1
+X1 o3l8v113
+X1 a+4>d+4.<a+rr>f4d+c+4<rrr
+X1 a+4>d+4<ra+rg+&g+1
+X1 a+4>d+4.<a+rr>f4d+c+4<rrr
+X1 a+4>d+4 rc+rd+&d+1
+X2 o3l8v113
+X2 f+4 a+4. f+rr>c+4<ba4 rrr
+X2 f+4 g+4 rf+rd+&d+1 
+X2 f+4 a+4. f+rr>c+4<ba4 rrr
+X2 f+4 a+4 rg+rg+&g+1
 
-X1 o3l8v120
-X1 f+0a+4 a+0>d+4.< f+0a+rr > c+0f4 < b0>d+< a0>c+4< rrr
-X1 f+0a+4 g+0>d+4<r f+0a+r d+0g+&d+0g+1
-X1 f+0a+4 a+0>d+4.< f+0a+rr > c+0f4 < b0>d+< a0>c+4< rrr
-X1 f+0a+4 a+0>d+4<r g+0>c+r< g+0>d+&<g+0>d+1
+'X1 o3l8v120
+'X1 f+0a+4 a+0>d+4.< f+0a+rr > c+0f4 < b0>d+< a0>c+4< rrr
+'X1 f+0a+4 g+0>d+4<r f+0a+r d+0g+&d+0g+1
+'X1 f+0a+4 a+0>d+4.< f+0a+rr > c+0f4 < b0>d+< a0>c+4< rrr
+'X1 f+0a+4 a+0>d+4<r g+0>c+r< g+0>d+&<g+0>d+1
 
 N1 r1r1r1r1
 N1 r1r1r1r1

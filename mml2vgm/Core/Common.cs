@@ -145,6 +145,13 @@ namespace Core
                     else
                     {
                         p += 4;
+
+                        if (p > buf.Length - 4)
+                        {
+                            p = fSize + 8;
+                            break;
+                        }
+
                         int size = buf[p + 0] + buf[p + 1] * 0x100 + buf[p + 2] * 0x10000 + buf[p + 3] * 0x1000000;
                         p += 4;
 

@@ -474,6 +474,7 @@ copy /Y $(SolutionDir)\..\README.md $(SolutionDir)output
 copy /Y $(SolutionDir)\..\ZGMspec.txt $(SolutionDir)output
 del /Q $(SolutionDir)output\mml2vgmIDE\*.pdb
 del /Q $(SolutionDir)output\mml2vgmIDE\*.config
+del /Q $(SolutionDir)output\mml2vgmIDE\*.wav
 del /Q $(SolutionDir)output\mml2vgm\*.config
 del /Q $(SolutionDir)output\bin.zip
 </PostBuildEvent>
