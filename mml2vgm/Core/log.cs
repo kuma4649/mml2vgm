@@ -136,7 +136,11 @@ namespace Core
 
         public static void Close()
         {
-            if (writer != null) writer.Close();
+            if (writer != null)
+            {
+                writer.Close();
+                writer = null;
+            }
         }
 
         public static string AssemblyTitle

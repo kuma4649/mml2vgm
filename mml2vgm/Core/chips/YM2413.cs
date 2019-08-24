@@ -28,6 +28,8 @@ namespace Core
             Frequency = 3579545;
             port =new byte[][] { new byte[] { (byte)(isSecondary ? 0xa1 : 0x51) } };
 
+            if (string.IsNullOrEmpty(initialPartName)) return;
+
             Dictionary<string, List<double>> dic = MakeFNumTbl();
             if (dic != null)
             {

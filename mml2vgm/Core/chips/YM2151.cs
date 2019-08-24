@@ -19,6 +19,8 @@ namespace Core
             Frequency = 3579545;
             port = new byte[][] { new byte[] { (byte)(isSecondary ? 0xa4 : 0x54) } };
 
+            if (string.IsNullOrEmpty(initialPartName)) return;
+
             MakeFNumTbl();
             Ch = new ClsChannel[ChMax];
             SetPartToCh(Ch, initialPartName);

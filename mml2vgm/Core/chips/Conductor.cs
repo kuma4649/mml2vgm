@@ -20,6 +20,8 @@ namespace Core
 
             Frequency = 44100;
 
+            if (string.IsNullOrEmpty(initialPartName)) return;
+
             Ch = new ClsChannel[ChMax];
             SetPartToCh(Ch, initialPartName);
             foreach (ClsChannel ch in Ch)

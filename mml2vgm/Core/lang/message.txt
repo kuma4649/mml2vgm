@@ -66,7 +66,7 @@ E0100=Failed to launch player.
 ;clsVgm.cs 01000
 E01000=Ignoring data on undefined part ({0}).
 E01001=Recieved empty sound patch definition.
-E01002=Selected undefined ChipName or chip({0}) can't use PCM.
+E01002=Selected undefined/unuse ChipName or chip can't use PCM.({0})
 E01003=Illegal PCM sound patch definition line.
 E01004=Selected unsupported chip of the envelope. / Defined the unused chip envelope.
 E01005=Illegal Envelope definition line.

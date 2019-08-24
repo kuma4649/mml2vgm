@@ -58,6 +58,8 @@ namespace Core
                 , new byte[] { (byte)(isSecondary ? 0xa9 : 0x59) }
             };
 
+            if (string.IsNullOrEmpty(initialPartName)) return;
+
             Dictionary<string, List<double>> dic = MakeFNumTbl();
             if (dic != null)
             {

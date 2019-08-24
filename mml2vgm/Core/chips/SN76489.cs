@@ -28,6 +28,12 @@ namespace Core
             Frequency = 3579545;
             this.IsSecondary = isSecondary;
 
+            Envelope = new Function();
+            Envelope.Max = 15;
+            Envelope.Min = 0;
+
+            if (string.IsNullOrEmpty(initialPartName)) return;
+
             Dictionary<string, List<double>> dic = MakeFNumTbl();
             if (dic != null)
             {
@@ -48,9 +54,6 @@ namespace Core
             }
             Ch[3].Type = enmChannelType.DCSGNOISE;
 
-            Envelope = new Function();
-            Envelope.Max = 15;
-            Envelope.Min = 0;
 
         }
 

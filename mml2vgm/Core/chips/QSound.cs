@@ -35,6 +35,8 @@ namespace Core
             Frequency = 4_000_000;//4MHz
             port = new byte[][] { new byte[] { 0xc4 } };
 
+            if (string.IsNullOrEmpty(initialPartName)) return;
+
             Ch = new ClsChannel[ChMax];
             SetPartToCh(Ch, initialPartName);
             foreach (ClsChannel ch in Ch)

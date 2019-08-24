@@ -24,6 +24,8 @@ namespace Core
             port =new byte[][] { new byte[] { 0xc0 } };
             Interface = 0x00f8000d;
 
+            if (string.IsNullOrEmpty(initialPartName)) return;
+
             Ch = new ClsChannel[ChMax];
             SetPartToCh(Ch, initialPartName);
             foreach (ClsChannel ch in Ch)

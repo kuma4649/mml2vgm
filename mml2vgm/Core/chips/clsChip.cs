@@ -145,6 +145,7 @@ namespace Core
 
         protected Dictionary<string, List<double>> MakeFNumTbl()
         {
+            if (string.IsNullOrEmpty(Name)) return null;
             //for (int i = 0; i < noteTbl.Length; i++)
             //{
             //    FNumTbl[0][i] = (int)(Math.Round(((144.0 * noteTbl[i] * Math.Pow(2.0, 20) / Frequency) / Math.Pow(2.0, (4 - 1))), MidpointRounding.AwayFromZero));

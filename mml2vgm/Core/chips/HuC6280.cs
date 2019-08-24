@@ -22,6 +22,8 @@ namespace Core
             Frequency = 3579545;
             port = new byte[][] { new byte[] { 0xb9 } };
 
+            if (string.IsNullOrEmpty(initialPartName)) return;
+
             Ch = new ClsChannel[ChMax];
             SetPartToCh(Ch, initialPartName);
             foreach (ClsChannel ch in Ch)
