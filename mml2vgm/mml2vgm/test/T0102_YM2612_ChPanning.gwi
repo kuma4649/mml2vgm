@@ -1,0 +1,47 @@
+﻿'{
+
+	TitleName   =YM2612 OPNB Pan Test
+	TitleNameJ  =YM2612 OPNBパンテスト
+	GameName    =Game Name
+	GameNameJ   =ゲームタイトル
+	SystemName  =Sega Genesis
+	SystemNameJ =Sega Mega Drive
+	Composer    =kuma
+	ComposerJ   =くま
+	ReleaseDate =2018/01/31
+	Converted   =Converted
+	Notes       =ノート　メモ　追加情報　備考
+
+    Format        =VGM
+    ClockCount    =192
+    Octave-Rev   =FALSE
+    ForcedMonoPartYM2612
+
+}
+
+
+
+'@ M 111
+   AR  DR  SR  RR  SL  TL  KS  ML  DT1 DT2 AME
+'@ 031,020,007,007,002,020,000,001,003,000,000
+'@ 031,020,011,007,002,024,000,004,003,000,000
+'@ 031,016,021,006,015,024,001,014,003,000,000
+'@ 031,020,007,007,002,024,000,001,007,000,000
+   ALG FB
+'@ 007,000
+
+'@ F 110
+   AR  DR  SR  RR  SL  TL  KS  ML  DT
+'@ 031,000,000,000,000,033,000,004,007
+'@ 018,015,009,007,003,009,000,004,007
+'@ 031,000,000,000,000,024,000,002,003
+'@ 031,015,009,007,003,000,000,002,003
+'@ 004,007
+
+
+'F1 T120
+
+'F1  Q8@110v100l4o4 p1crr @111l8D1 o5p2eb>p3e< ep1b>e< p3eb>p2e< ep3b>e< p1eb>p3e<b
+'F2  Q8@110v100l4o4 p2rcr @111l8D-1o5p2eb>p3e< ep1b>e< p3eb>p2e< ep3b>e< p1eb>p3e<b
+'F3  Q8@110v100l4o4 p3rrc @111l8D0 o6p2eb>p3e< ep1b>e< p3eb>p2e< ep3b>e< p1eb>p3e<b
+

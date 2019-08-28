@@ -1,0 +1,28 @@
+﻿'{
+
+	TitleName    =MUCOM88voice.datインポートテスト
+	TitleNameJ   =MUCOM88voice.datインポートテスト
+	GameName     =
+	GameNameJ    =
+	SystemName   =
+	SystemNameJ  =
+	Composer     =
+	ComposerJ    =
+	ReleaseDate  =2019/01/15
+	Converted    =
+	Notes        =
+
+	Format       =VGM
+	ClockCount   =192
+}
+
+(frame/clock) = 60Hz * (60 * 4) / ClockCount / tempo
+
+予め、mucom88の音色データとPCMデータを同じフォルダーにコピーしておいてください。
+'@ MUCOM88 1,"voice.dat"
+'@ TFI 0,"test.tfi"
+'@ MUCOM88ADPCM 0,"mucompcm.bin"
+
+'F6 T126
+'F6 m1@1o4c4@2d4@3e4
+

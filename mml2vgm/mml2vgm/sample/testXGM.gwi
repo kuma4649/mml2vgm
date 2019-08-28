@@ -1,0 +1,89 @@
+﻿'{
+
+	TitleName    =XGM Test
+	TitleNameJ   =XGM テスト
+	GameName     =
+	GameNameJ    =
+	SystemName   =
+	SystemNameJ  =
+	Composer     =
+	ComposerJ    =
+	ReleaseDate  =2017/04/09
+	Converted    =
+	Notes        =
+
+	Format       =XGM
+	XGMBaseFrame =NTSC
+	ClockCount   =128
+	Octave-Rev   =TRUE
+}
+
+(frame/clock) = 60Hz * (60 * 4) / ClockCount / tempo
+
+'@ M 110
+   AR  DR  SR  RR  SL  TL  KS  ML  DT  AM  SSG-EG
+'@ 031,000,000,000,000,033,000,004,007,001,000
+'@ 018,015,009,007,003,009,000,004,007,001,000
+'@ 031,000,000,000,000,024,000,002,003,001,000
+'@ 031,015,009,007,003,000,000,002,003,001,000
+'@ 004,007
+
+@ P 0,"wav\BD.wav",8000,100,OPN2X
+@ P 1,"wav\SD.wav",8000,100,OPN2X
+@ P 2,"wav\HC.wav",8000,100,OPN2X
+@ P 3,"wav\HO.wav",8000,100,OPN2X
+
+'@ P 0,"wav\BD_8bit14000.wav",8000,80,OPN2X
+'@ P 1,"wav\SD_8bit14000Hz.wav",8000,80,OPN2X
+'@ P 2,"wav\HC.wav",8000,10,OPN2X
+'@ P 3,"wav\HO.wav",8000,10,OPN2X
+
+     No,SV,AR,DR,SL,SR,RR,ST,Chip
+@ E  0,15, 0, 0,15, 8, 1, 4
+
+E01-03 T100@110D0v120p3o4l8
+E02    (9 rD-3p3
+E03    (18r4D3p1
+E01-03 g4b4>d4c<ba4gf+d2e4g4f+4gf+e2ea>ce<r2f+32g32a2~16
+
+S1    T60v15D0 EON@0o4l4  [c_edefgab>c<]
+S2        v13D-1EON@0o4l4r8[c_edefgab>c<]
+
+
+'@ M 000
+   AR  DR  SR  RR  SL  TL  KS  ML  DT  AM  SSG-EG
+'@ 031,012,012,015,015,020,000,001,000,000,000
+'@ 031,012,012,015,015,020,000,001,000,000,000
+'@ 031,012,012,015,015,020,000,001,000,000,000
+'@ 031,012,012,015,015,020,000,001,000,000,000
+'@ 007,000
+
+'@ F 110
+   AR  DR  SR  RR  SL  TL  KS  ML  DT
+'@ 031,000,000,000,000,033,000,004,007
+'@ 018,015,009,007,003,009,000,004,007
+'@ 031,000,000,000,000,024,000,002,003
+'@ 031,015,009,007,003,000,000,002,003
+'@ 004,007
+
+
+E03 EON EX1 @0 D0 v100 p3 o5 l8 q0 cdefedcrefgagfercrcrcrcrl16ccddeeffl8edcrrrrrrrrrrrrrrrrrrrrrrg>cr
+E07     EX2    D0 v100    o5 l8 q0 rrrrrrrrcdefedcrefgagfercrcrcrcrl16ccddeeffl8edcrrrrrrrrrrrrrrrrr
+E08     EX3    D0 v100    o5 l8 q0 rrrrrrrrrrrrrrrrcdefedcrefgagfercrcrcrcrl16ccddeeffl8edcrrrrrrrrr
+E09     EX4    D0 v100    o5 l8 q0 rrrrrrrrrrrrrrrrrrrrrrrrcdefedcrefgagfercrcrcrcrl16ccddeeffl8edcr
+
+E03 EON @110 EX12 D0 v120 p3 o4 l8 q0 cdefedcrefgagfercrcrcrcrl16ccddeeffl8edcrrrrrrrrr
+E07          EX34 D0 v120    o4 l8 q0 rrrrrrrrcdefedcrefgagfercrcrcrcrl16ccddeeffl8edcr
+
+E03 EON EX1 @0 D0 v110 p3 o5 l8 q0 cdefedcrefgagfercrcrcrcrl16ccddeeffl8edcr
+E07     EX2    D2 v090    o5 l8 q0 r16cdefedcrefgagfercrcrcrcrl16ccddeeffl8edcr
+E08     EX3    D4 v080    o5 l8 q0 r  cdefedcrefgagfercrcrcrcrl16ccddeeffl8edcr
+
+E06 m1@0c4c4c4c4 yDTML,1,10
+E10 m1@1r4c4r4c4
+E11 @2c8c8c8c8c8c8
+E12 @3r8c8r8c8r8c8
+
+E03 @0l4c^^
+E01 @110cdefgab>c
+'E01 @110o4v110{c4>c+c4}4

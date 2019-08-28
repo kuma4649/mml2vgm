@@ -1,0 +1,68 @@
+﻿'{
+
+	TitleName   =HuC6280 Test
+	TitleNameJ  =HuC6280 Test
+	GameName    =
+	GameNameJ   =
+	SystemName  =
+	SystemNameJ =
+	Composer    =
+	ComposerJ   =
+	ReleaseDate =2017/04/09
+	Converted   =
+	Notes       =
+
+	ClockCount  =192
+
+}
+
+     No,
+'@ H  0,
+   +0 +1 +2 +3 +4 +5 +6 +7
+'@ 00,15,23,27,29,30,30,31
+'@ 31,30,28,24,18,10,00,00
+'@ 31,31,31,31,31,31,31,31
+'@ 00,00,00,00,00,00,00,00
+
+     No,
+'@ H  1,
+   +0 +1 +2 +3 +4 +5 +6 +7
+'@ 16,17,18,19,20,25,30,31
+'@ 31,31,31,31,31,31,31,31
+'@ 31,31,31,31,31,31,31,31
+'@ 31,31,31,31,16,08,00,08
+
+     No,SV,AR,DR,SL,SR,RR,ST,ChipName
+'@ E  0,31, 0, 1,27,10, 6, 1,HuC6280
+'@ E  1,31, 0, 1,10, 1, 1, 1,HuC6280
+
+'@ P 0,"..\wav\SD.wav",8000,100,HuC6280
+'@ P 1,"..\wav\HC.wav",8000,100,HuC6280
+
+TotalVolume
+'H1  V11,11
+
+Tone Test
+H1  D0v31
+H2  D1v24r16
+H1 @0p15,15o4Q7c4d4e4f4g4a4b4r1
+H21 @1p15,15o4q0 EON @E0c2r2@E1@0d2r2e2r2 EOF
+
+Noise Test
+H6 Q7P1v31EON@E1w0p1,15c4w8p15,15c4w16c4w24c4w31p15,1c4
+
+PCM Test
+H2 m0v31@1p15,15o4q0 EOF @E0c2r2@E1@0d2r2e2r2 EOF
+H2 m1@0p1,15v31c4v15c4@1p15,15v31c4v15c4
+H2 m0v31@1p15,15o4q0 EON @E0c2r2@E1@0d2r2e2r2 EOF
+
+y cmd Test
+H1 @0p15,15Q7o4 c1y1,$22c1
+
+LFO Test
+'H1 MST4,1,2,6,0 SS1@0p15,15o4q0c1
+'H1 MSV4,2,6,48,0 SS1@0p15,15o4q0c1
+'H1 l2MSH1,40,910SS1@0cdeSS0cde
+'H2 @1v0p0,0
+
+
