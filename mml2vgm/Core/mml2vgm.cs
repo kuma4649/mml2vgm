@@ -126,11 +126,8 @@ namespace Core
                 //ざっくりくわけ
                 SourceParser sp = new SourceParser();
                 sp.Parse(src);
-                //さっくり曲情報を取得
-                Information info = new Information();
-                info.AddInformation(sp.lnInformation, null);
 
-                desVGM = new ClsVgm(stPath, sp, info);
+                desVGM = new ClsVgm(stPath, sp);
                 desVGM.doSkip = doSkip;
                 desVGM.doSkipStop = doSkipStop;
                 desVGM.caretPoint = caretPoint;
@@ -853,9 +850,12 @@ namespace Core
                     if (desVGM.c140[0] != null && desVGM.c140[0].pcmDataEasy != null)
                         Disp(string.Format(msg.get("I04014")
                             , ((C140)desVGM.c140[0]).isSystem2 ? "" : "1"));
-                    if (desVGM.c140[1] != null && desVGM.c140[1].pcmDataEasy != null)
-                        Disp(string.Format(msg.get("I04015")
-                            , ((C140)desVGM.c140[1]).isSystem2 ? "" : "1"));
+                    if (desVGM.c140.Length > 1)
+                    {
+                        if (desVGM.c140[1] != null && desVGM.c140[1].pcmDataEasy != null)
+                            Disp(string.Format(msg.get("I04015")
+                                , ((C140)desVGM.c140[1]).isSystem2 ? "" : "1"));
+                    }
                 }
                 Disp("");
 

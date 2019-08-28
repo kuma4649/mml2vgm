@@ -113,42 +113,6 @@ namespace Core
                     else if (wrd == ISK052539) SetIsK052539(val);
                     else if (wrd == FORCEDMONOPARTYM2612 && chips != null) SetMonoPart(val, chips);
                     else if (wrd == MODEBEFORESEND) SetModeBeforeSend(val);
-                    else if(chips!=null)
-                    {
-                        foreach (ClsChip[] aryChip in chips.Values)
-                        {
-                            foreach (ClsChip chip in aryChip)
-                            {
-                                if (chip == null) continue;
-                                bool flg = false;
-                                if (wrd == PARTNAME + chip.Name + IDName[chip.ChipID]) flg = true;
-                                if (wrd == PARTNAME + chip.ShortName + IDName[chip.ChipID]) flg = true;
-                                if (chip.ChipID == 0)
-                                {
-                                    if (wrd == PARTNAME + chip.Name) flg = true;
-                                    if (wrd == PARTNAME + chip.ShortName) flg = true;
-                                }
-                                if (flg)
-                                {
-                                    foreach (ClsChip[] ac in chips.Values)
-                                    {
-                                        foreach (ClsChip cp in ac)
-                                        {
-                                            if (cp == null) continue;
-                                            if (cp.Ch[0].Name.IndexOf((val + " ").Substring(0, 2)) != 0)
-                                                continue;
-                                            foreach (ClsChannel cch in cp.Ch)
-                                            {
-                                                cch.Name = "";
-                                            }
-                                        }
-                                    }
-
-                                    chip.SetPartToCh(chip.Ch, val);
-                                }
-                            }
-                        }
-                    }
                 }
                 catch
                 {

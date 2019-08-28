@@ -813,7 +813,7 @@ namespace mml2vgmIDE
             }
             else if( PlayingFileFormat== EnmFileFormat.ZGM)
             {
-                driver = new zgm();
+                driver = new Driver.ZGM.zgm();
                 driver.setting = setting;
 
                 ret = zgmPlay(setting);
@@ -1022,7 +1022,7 @@ namespace mml2vgmIDE
 
                 if (vgmBuf == null || setting == null) return false;
 
-                zgm zgmDriver = (zgm)driver;
+                Driver.ZGM.zgm zgmDriver = (Driver.ZGM.zgm)driver;
 
                 ResetFadeOutParam();
                 useChip.Clear();
@@ -1390,7 +1390,7 @@ namespace mml2vgmIDE
                     if (zgmDriver.YM2608ClockValue != 0)
                     {
                         MDSound.ym2608 ym2608 = new MDSound.ym2608();
-                        for (int i = 0; i < (zgmDriver.YM2608DualChipFlag ? 2 : 1); i++)
+                        for (int i = 0; i < 1; i++)
                         {
                             chip = new MDSound.MDSound.Chip();
                             chip.type = MDSound.MDSound.enmInstrumentType.YM2608;
@@ -1473,7 +1473,7 @@ namespace mml2vgmIDE
                         MDSound.ym2612 ym2612 = null;
                         MDSound.ym3438 ym3438 = null;
 
-                        for (int i = 0; i < (((zgm)driver).YM2612DualChipFlag ? 2 : 1); i++)
+                        for (int i = 0; i < 1; i++)
                         {
                             //MDSound.ym2612 ym2612 = new MDSound.ym2612();
                             chip = new MDSound.MDSound.Chip();
@@ -1522,7 +1522,7 @@ namespace mml2vgmIDE
 
                             chip.SamplingRate = (UInt32)Common.SampleRate;
                             chip.Volume = setting.balance.YM2612Volume;
-                            chip.Clock = ((zgm)driver).YM2612ClockValue;
+                            chip.Clock = ((Driver.ZGM.zgm)driver).YM2612ClockValue;
                             chip.Option = null;
 
                             hiyorimiDeviceFlag |= (setting.YM2612Type.UseScci) ? 0x1 : 0x2;

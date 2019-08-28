@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace mml2vgmIDE
+namespace mml2vgmIDE.Driver.ZGM
 {
     public class zgm : baseDriver
     {
@@ -64,45 +64,15 @@ namespace mml2vgmIDE
         public uint NESClockValue;
         public uint MultiPCMClockValue;
 
-        public bool YM2612DualChipFlag;
-        public bool YM2151DualChipFlag;
-        public bool YM2203DualChipFlag;
-        public bool YM2608DualChipFlag;
-        public bool YM2610DualChipFlag;
-        public bool YM3812DualChipFlag;
-        public bool YM3526DualChipFlag;
-        public bool Y8950DualChipFlag;
-        public bool YMF262DualChipFlag;
-        public bool YMF271DualChipFlag;
-        public bool YMF278BDualChipFlag;
-        public bool YMZ280BDualChipFlag;
-        public bool OKIM6295DualChipFlag;
-        public bool SN76489DualChipFlag;
-        public bool SEGAPCMDualChipFlag;
-        public bool RF5C68DualChipFlag;
-        public bool RF5C164DualChipFlag;
-        public bool AY8910DualChipFlag;
-        public bool YM2413DualChipFlag;
-        public bool HuC6280DualChipFlag;
-        public bool C140DualChipFlag;
-        public bool C352DualChipFlag;
-        public bool GA20DualChipFlag;
-        public bool K053260DualChipFlag;
-        public bool K054539DualChipFlag;
-        public bool K051649DualChipFlag;
-        public bool DMGDualChipFlag;
-        public bool NESDualChipFlag;
-        public bool MultiPCMDualChipFlag;
-
         public dacControl dacControl = new dacControl();
         public bool isPcmRAMWrite = false;
         public bool useChipYM2612Ch6 = false;
         //public Setting setting = null;
 
+        public delegate void RefAction<T1, T2>(T1 arg1, ref T2 arg2);
+        private Dictionary<int, RefAction<outDatum, uint>> vgmCmdTbl = new Dictionary<int, RefAction<outDatum, uint>>();
 
-        private Dictionary<int, Action<outDatum>> vgmCmdTbl = new Dictionary<int, Action<outDatum>>();
-
-        private List<string> chips = null;
+        public List<ZgmChip.ZgmChip> chips = null;
 
         private uint vgmAdr;
         //private int vgmWait;
@@ -162,6 +132,8 @@ namespace mml2vgmIDE
             setCommands();
 
             Stopped = false;
+
+            //要るのかな?
             useChipYM2612Ch6 = false;
             foreach (EnmChip uc in useChip)
             {
@@ -171,6 +143,7 @@ namespace mml2vgmIDE
                     break;
                 }
             }
+
             return true;
         }
 
@@ -228,13 +201,13 @@ namespace mml2vgmIDE
 
                 if (vgmCmdTbl.ContainsKey(cmd.val))
                 {
-                    //Console.WriteLine("{0:X05} : {1:X02} ", vgmAdr, vgmBuf[vgmAdr].val);
-                    vgmCmdTbl[cmd.val](cmd);
+                    Console.WriteLine("{0:X05} : {1:X02} ", vgmAdr, vgmBuf[vgmAdr].val);
+                    vgmCmdTbl[cmd.val](cmd, ref vgmAdr);
                 }
                 else
                 {
                     //わからんコマンド
-                    //Console.WriteLine("unknown command: Adr:{0:X} Dat:{1:X}", vgmAdr, vgmBuf[vgmAdr].val);
+                    Console.WriteLine("unknown command: Adr:{0:X} Dat:{1:X}", vgmAdr, vgmBuf[vgmAdr].val);
                     vgmAdr++;
                 }
 
@@ -260,65 +233,6 @@ namespace mml2vgmIDE
         private void setCommands()
         {
 
-            //for (int i = 0; i < vgmCmdTbl.Length; i++) vgmCmdTbl[i] = null;
-
-            //vgmCmdTbl[0x2f] = vcDummyChip;
-            //vgmCmdTbl[0x30] = vcPSG;
-            //vgmCmdTbl[0x31] = vcDummy1Ope;
-            //vgmCmdTbl[0x32] = vcDummy1Ope;
-            //vgmCmdTbl[0x33] = vcDummy1Ope;
-            //vgmCmdTbl[0x34] = vcDummy1Ope;
-            //vgmCmdTbl[0x35] = vcDummy1Ope;
-            //vgmCmdTbl[0x36] = vcDummy1Ope;
-            //vgmCmdTbl[0x37] = vcDummy1Ope;
-
-            //vgmCmdTbl[0x38] = vcDummy1Ope;
-            //vgmCmdTbl[0x39] = vcDummy1Ope;
-            //vgmCmdTbl[0x3a] = vcDummy1Ope;
-            //vgmCmdTbl[0x3b] = vcDummy1Ope;
-            //vgmCmdTbl[0x3c] = vcDummy1Ope;
-            //vgmCmdTbl[0x3d] = vcDummy1Ope;
-            //vgmCmdTbl[0x3e] = vcDummy1Ope;
-            //vgmCmdTbl[0x3f] = vcGGPSGPort06;
-
-            //vgmCmdTbl[0x40] = vcDummy2Ope;
-            //vgmCmdTbl[0x41] = vcDummy2Ope;
-            //vgmCmdTbl[0x42] = vcDummy2Ope;
-            //vgmCmdTbl[0x43] = vcDummy2Ope;
-            //vgmCmdTbl[0x44] = vcDummy2Ope;
-            //vgmCmdTbl[0x45] = vcDummy2Ope;
-            //vgmCmdTbl[0x46] = vcDummy2Ope;
-            //vgmCmdTbl[0x47] = vcDummy2Ope;
-
-            //vgmCmdTbl[0x48] = vcDummy2Ope;
-            //vgmCmdTbl[0x49] = vcDummy2Ope;
-            //vgmCmdTbl[0x4a] = vcDummy2Ope;
-            //vgmCmdTbl[0x4b] = vcDummy2Ope;
-            //vgmCmdTbl[0x4c] = vcDummy2Ope;
-            //vgmCmdTbl[0x4d] = vcDummy2Ope;
-            //vgmCmdTbl[0x4e] = vcDummy2Ope;
-
-            //vgmCmdTbl[0x4f] = vcGGPSGPort06;
-            //vgmCmdTbl[0x50] = vcPSG;
-
-            //vgmCmdTbl[0x51] = vcYM2413;
-            //vgmCmdTbl[0x52] = vcYM2612Port0;
-            //vgmCmdTbl[0x53] = vcYM2612Port1;
-
-            //vgmCmdTbl[0x54] = vcYM2151;
-            //vgmCmdTbl[0x55] = vcYM2203;
-            //vgmCmdTbl[0x56] = vcYM2608Port0;
-            //vgmCmdTbl[0x57] = vcYM2608Port1;
-
-            //vgmCmdTbl[0x58] = vcYM2610Port0;
-            //vgmCmdTbl[0x59] = vcYM2610Port1;
-            //vgmCmdTbl[0x5a] = vcYM3812;
-            //vgmCmdTbl[0x5b] = vcYM3526;
-            //vgmCmdTbl[0x5c] = vcY8950;
-            //vgmCmdTbl[0x5d] = vcYMZ280B;
-            //vgmCmdTbl[0x5e] = vcYMF262Port0;
-            //vgmCmdTbl[0x5f] = vcYMF262Port1;
-
             vgmCmdTbl.Add(0x01, vcWaitNSamples);
             vgmCmdTbl.Add(0x02, vcWait735Samples);
             vgmCmdTbl.Add(0x03, vcWait882Samples);
@@ -337,7 +251,7 @@ namespace mml2vgmIDE
             vgmCmdTbl.Add(0x15, vcWaitN1Samples);
             vgmCmdTbl.Add(0x16, vcWaitN1Samples);
             vgmCmdTbl.Add(0x17, vcWaitN1Samples);
-                              
+
             vgmCmdTbl.Add(0x18, vcWaitN1Samples);
             vgmCmdTbl.Add(0x19, vcWaitN1Samples);
             vgmCmdTbl.Add(0x1a, vcWaitN1Samples);
@@ -355,7 +269,7 @@ namespace mml2vgmIDE
             vgmCmdTbl.Add(0x25, vcWaitNSamplesAndSendYM26120x2a);
             vgmCmdTbl.Add(0x26, vcWaitNSamplesAndSendYM26120x2a);
             vgmCmdTbl.Add(0x27, vcWaitNSamplesAndSendYM26120x2a);
-                                                               
+
             vgmCmdTbl.Add(0x28, vcWaitNSamplesAndSendYM26120x2a);
             vgmCmdTbl.Add(0x29, vcWaitNSamplesAndSendYM26120x2a);
             vgmCmdTbl.Add(0x2a, vcWaitNSamplesAndSendYM26120x2a);
@@ -372,145 +286,14 @@ namespace mml2vgmIDE
             vgmCmdTbl.Add(0x34, vcStopStream);
             vgmCmdTbl.Add(0x35, vcStartStreamFastCall);
 
-            //vgmCmdTbl[0xa0] = vcAY8910;
-            //vgmCmdTbl[0xa1] = vcYM2413;
-            //vgmCmdTbl[0xa2] = vcYM2612Port0;
-            //vgmCmdTbl[0xa3] = vcYM2612Port1;
-            //vgmCmdTbl[0xa4] = vcYM2151;
-            //vgmCmdTbl[0xa5] = vcYM2203;
-            //vgmCmdTbl[0xa6] = vcYM2608Port0;
-            //vgmCmdTbl[0xa7] = vcYM2608Port1;
-
-            //vgmCmdTbl[0xa8] = vcYM2610Port0;
-            //vgmCmdTbl[0xa9] = vcYM2610Port1;
-            //vgmCmdTbl[0xaa] = vcYM3812;
-            //vgmCmdTbl[0xab] = vcDummy2Ope;
-            //vgmCmdTbl[0xac] = vcY8950;
-            //vgmCmdTbl[0xad] = vcYMZ280B;
-            //vgmCmdTbl[0xae] = vcYMF262Port0;
-            //vgmCmdTbl[0xaf] = vcYMF262Port1;
-
-            //vgmCmdTbl[0xb0] = vcRf5c68;
-            //vgmCmdTbl[0xc1] = vcRf5c68MemoryWrite;
-            //vgmCmdTbl[0xb1] = vcRf5c164;
-            //vgmCmdTbl[0xc2] = vcRf5c164MemoryWrite;
-
-            //vgmCmdTbl[0xb2] = vcPWM;
-            //vgmCmdTbl[0xb3] = vcDMG;
-            //vgmCmdTbl[0xb4] = vcNES;
-            //vgmCmdTbl[0xb5] = vcMultiPCM;
-            //vgmCmdTbl[0xb6] = vcDummy2Ope;
-            //vgmCmdTbl[0xb7] = vcOKIM6258;
-
-            //vgmCmdTbl[0xb8] = vcOKIM6295;
-            //vgmCmdTbl[0xb9] = vcHuC6280;
-            //vgmCmdTbl[0xba] = vcK053260;
-            //vgmCmdTbl[0xbb] = vcDummy2Ope;
-            //vgmCmdTbl[0xbc] = vcDummy2Ope;
-            //vgmCmdTbl[0xbd] = vcDummy2Ope;
-            //vgmCmdTbl[0xbe] = vcDummy2Ope;
-            //vgmCmdTbl[0xbf] = vcGA20;
-
-            //vgmCmdTbl[0xc0] = vcSEGAPCM;
-            //vgmCmdTbl[0xc3] = vcMultiPCMSetBank;
-            //vgmCmdTbl[0xc4] = vcQSound;
-            //vgmCmdTbl[0xc5] = vcDummy3Ope;
-            //vgmCmdTbl[0xc6] = vcDummy3Ope;
-            //vgmCmdTbl[0xc7] = vcDummy3Ope;
-
-            //vgmCmdTbl[0xc8] = vcDummy3Ope;
-            //vgmCmdTbl[0xc9] = vcDummy3Ope;
-            //vgmCmdTbl[0xca] = vcDummy3Ope;
-            //vgmCmdTbl[0xcb] = vcDummy3Ope;
-            //vgmCmdTbl[0xcc] = vcDummy3Ope;
-            //vgmCmdTbl[0xcd] = vcDummy3Ope;
-            //vgmCmdTbl[0xce] = vcDummy3Ope;
-            //vgmCmdTbl[0xcf] = vcDummy3Ope;
-
-            //vgmCmdTbl[0xd0] = vcYMF278B;
-            //vgmCmdTbl[0xd1] = vcYMF271;
-            //vgmCmdTbl[0xd2] = vcK051649;
-            //vgmCmdTbl[0xd3] = vcK054539;
-            //vgmCmdTbl[0xd4] = vcC140;
-            //vgmCmdTbl[0xd5] = vcDummy3Ope;
-            //vgmCmdTbl[0xd6] = vcDummy3Ope;
-            //vgmCmdTbl[0xd7] = vcDummy3Ope;
-
-            //vgmCmdTbl[0xd8] = vcDummy3Ope;
-            //vgmCmdTbl[0xd9] = vcDummy3Ope;
-            //vgmCmdTbl[0xda] = vcDummy3Ope;
-            //vgmCmdTbl[0xdb] = vcDummy3Ope;
-            //vgmCmdTbl[0xdc] = vcDummy3Ope;
-            //vgmCmdTbl[0xdd] = vcDummy3Ope;
-            //vgmCmdTbl[0xde] = vcDummy3Ope;
-            //vgmCmdTbl[0xdf] = vcDummy3Ope;
-
             vgmCmdTbl.Add(0x40, vcSeekToOffsetInPCMDataBank);
-            //vgmCmdTbl[0xe1] = vcC352;
-            //vgmCmdTbl[0xe2] = vcDummy4Ope;
-            //vgmCmdTbl[0xe3] = vcDummy4Ope;
-            //vgmCmdTbl[0xe4] = vcDummy4Ope;
-            //vgmCmdTbl[0xe5] = vcDummy4Ope;
-            //vgmCmdTbl[0xe6] = vcDummy4Ope;
-            //vgmCmdTbl[0xe7] = vcDummy4Ope;
-
-            //vgmCmdTbl[0xe8] = vcDummy4Ope;
-            //vgmCmdTbl[0xe9] = vcDummy4Ope;
-            //vgmCmdTbl[0xea] = vcDummy4Ope;
-            //vgmCmdTbl[0xeb] = vcDummy4Ope;
-            //vgmCmdTbl[0xec] = vcDummy4Ope;
-            //vgmCmdTbl[0xed] = vcDummy4Ope;
-            //vgmCmdTbl[0xee] = vcDummy4Ope;
-            //vgmCmdTbl[0xef] = vcDummy4Ope;
-
-            //vgmCmdTbl[0xf0] = vcDummy4Ope;
-            //vgmCmdTbl[0xf1] = vcDummy4Ope;
-            //vgmCmdTbl[0xf2] = vcDummy4Ope;
-            //vgmCmdTbl[0xf3] = vcDummy4Ope;
-            //vgmCmdTbl[0xf4] = vcDummy4Ope;
-            //vgmCmdTbl[0xf5] = vcDummy4Ope;
-            //vgmCmdTbl[0xf6] = vcDummy4Ope;
-            //vgmCmdTbl[0xf7] = vcDummy4Ope;
-
-            //vgmCmdTbl[0xf8] = vcDummy4Ope;
-            //vgmCmdTbl[0xf9] = vcDummy4Ope;
-            //vgmCmdTbl[0xfa] = vcDummy4Ope;
-            //vgmCmdTbl[0xfb] = vcDummy4Ope;
-            //vgmCmdTbl[0xfc] = vcDummy4Ope;
-            //vgmCmdTbl[0xfd] = vcDummy4Ope;
-            //vgmCmdTbl[0xfe] = vcDummy4Ope;
-            //vgmCmdTbl[0xff] = vcDummy4Ope;
 
         }
 
-        private void vcDummyChip(outDatum od)
+        private void vcDummyChip(outDatum od, ref uint vgmAdr)
         {
             chipRegister.writeDummyChip(od, Audio.DriverSeqCounter, vgmBuf[vgmAdr + 1].val, vgmBuf[vgmAdr + 2].val);
             vgmAdr += 3;
-        }
-
-        private void vcDummy1Ope(outDatum od)
-        {
-            //Console.Write("({0:X02}:{1:X02})", vgmBuf[vgmAdr], vgmBuf[vgmAdr + 1]);
-            vgmAdr += 2;
-        }
-
-        private void vcDummy2Ope(outDatum od)
-        {
-            //Console.Write("({0:X02}:{1:X02}:{2:X02})", vgmBuf[vgmAdr], vgmBuf[vgmAdr + 1], vgmBuf[vgmAdr + 2]);
-            vgmAdr += 3;
-        }
-
-        private void vcDummy3Ope(outDatum od)
-        {
-            //Console.Write("({0:X02}:{1:X02}:{2:X02}:{3:X02})", vgmBuf[vgmAdr], vgmBuf[vgmAdr + 1], vgmBuf[vgmAdr + 2], vgmBuf[vgmAdr + 3]);
-            vgmAdr += 4;
-        }
-
-        private void vcDummy4Ope(outDatum od)
-        {
-            //Console.WriteLine("unknown command:Adr:{0:X}({1:X02}:{2:X02}:{3:X02}:{4:X02}:{5:X02})",vgmAdr, vgmBuf[vgmAdr], vgmBuf[vgmAdr + 1], vgmBuf[vgmAdr + 2], vgmBuf[vgmAdr + 3], vgmBuf[vgmAdr + 4]);
-            vgmAdr += 5;
         }
 
         private void vcGGPSGPort06(outDatum od)
@@ -530,31 +313,6 @@ namespace mml2vgmIDE
             chipRegister.AY8910SetRegister(od, Audio.DriverSeqCounter, (vgmBuf[vgmAdr + 1].val & 0x80) == 0 ? 0 : 1, vgmBuf[vgmAdr + 1].val & 0x7f, vgmBuf[vgmAdr + 2].val);
             //chipRegister.setAY8910Register(0, vgmBuf[vgmAdr + 1], vgmBuf[vgmAdr + 2], model);
             vgmAdr += 3;
-        }
-
-        private void vcDMG(outDatum od)
-        {
-            chipRegister.setDMGRegister((vgmBuf[vgmAdr + 1].val & 0x80) == 0 ? 0 : 1, vgmBuf[vgmAdr + 1].val & 0x7f, vgmBuf[vgmAdr + 2].val);
-            //chipRegister.setAY8910Register(0, vgmBuf[vgmAdr + 1], vgmBuf[vgmAdr + 2], model);
-            vgmAdr += 3;
-        }
-
-        private void vcNES(outDatum od)
-        {
-            chipRegister.setNESRegister((vgmBuf[vgmAdr + 1].val & 0x80) == 0 ? 0 : 1, vgmBuf[vgmAdr + 1].val & 0x7f, vgmBuf[vgmAdr + 2].val);
-            vgmAdr += 3;
-        }
-
-        private void vcMultiPCM(outDatum od)
-        {
-            chipRegister.setMultiPCMRegister((vgmBuf[vgmAdr + 1].val & 0x80) == 0 ? 0 : 1, vgmBuf[vgmAdr + 1].val & 0x7f, vgmBuf[vgmAdr + 2].val);
-            vgmAdr += 3;
-        }
-
-        private void vcMultiPCMSetBank(outDatum od)
-        {
-            chipRegister.setMultiPCMSetBank((vgmBuf[vgmAdr + 1].val & 0x80) == 0 ? 0 : 1, vgmBuf[vgmAdr + 1].val & 0x7f, vgmBuf[vgmAdr + 2].val + vgmBuf[vgmAdr + 3].val * 0x100);
-            vgmAdr += 4;
         }
 
         private void vcQSound(outDatum od)
@@ -585,24 +343,6 @@ namespace mml2vgmIDE
         private void vcHuC6280(outDatum od)
         {
             chipRegister.HuC6280SetRegister(od, Audio.DriverSeqCounter, (vgmBuf[vgmAdr + 1].val & 0x80) == 0 ? 0 : 1, vgmBuf[vgmAdr + 1].val & 0x7f, vgmBuf[vgmAdr + 2].val);
-            vgmAdr += 3;
-        }
-
-        private void vcGA20(outDatum od)
-        {
-            chipRegister.setGA20Register((vgmBuf[vgmAdr + 1].val & 0x80) == 0 ? 0 : 1, vgmBuf[vgmAdr + 1].val & 0x7f, vgmBuf[vgmAdr + 2].val);
-            vgmAdr += 3;
-        }
-
-        private void vcYM2612Port0(outDatum od)
-        {
-            chipRegister.YM2612SetRegister(od, Audio.DriverSeqCounter, 0, 0, vgmBuf[vgmAdr + 1].val, vgmBuf[vgmAdr + 2].val);//,  vgmFrameCounter);
-            vgmAdr += 3;
-        }
-
-        private void vcYM2612Port1(outDatum od)
-        {
-            chipRegister.YM2612SetRegister(od, Audio.DriverSeqCounter, 0, 1, vgmBuf[vgmAdr + 1].val, vgmBuf[vgmAdr + 2].val);//,  vgmFrameCounter);
             vgmAdr += 3;
         }
 
@@ -638,80 +378,16 @@ namespace mml2vgmIDE
             vgmAdr += 3;
         }
 
-        private void vcYMF262Port0(outDatum od)
-        {
-            chipRegister.setYMF262Register((vgmBuf[vgmAdr].val & 0x80) == 0 ? 0 : 1, 0, vgmBuf[vgmAdr + 1].val, vgmBuf[vgmAdr + 2].val);
-            vgmAdr += 3;
-        }
-
-        private void vcYMF262Port1(outDatum od)
-        {
-            int adr = vgmBuf[vgmAdr + 1].val;
-            int dat = vgmBuf[vgmAdr + 2].val;
-            chipRegister.setYMF262Register((vgmBuf[vgmAdr].val & 0x80) == 0 ? 0 : 1, 1, adr, dat);
-            vgmAdr += 3;
-        }
-
         private void vcYM3526(outDatum od)
         {
             chipRegister.setYM3526Register((vgmBuf[vgmAdr].val & 0x80) == 0 ? 0 : 1, vgmBuf[vgmAdr + 1].val, vgmBuf[vgmAdr + 2].val);
             vgmAdr += 3;
         }
 
-        private void vcY8950(outDatum od)
-        {
-            chipRegister.setY8950Register((vgmBuf[vgmAdr].val & 0x80) == 0 ? 0 : 1, vgmBuf[vgmAdr + 1].val, vgmBuf[vgmAdr + 2].val);
-            vgmAdr += 3;
-        }
-
-        private void vcYMZ280B(outDatum od)
-        {
-            chipRegister.setYMZ280BRegister((vgmBuf[vgmAdr].val & 0x80) == 0 ? 0 : 1, vgmBuf[vgmAdr + 1].val, vgmBuf[vgmAdr + 2].val);
-            vgmAdr += 3;
-        }
-
-        private void vcYMF271(outDatum od)
-        {
-            chipRegister.setYMF271Register(
-                (vgmBuf[vgmAdr + 1].val & 0x80) == 0 ? 0 : 1
-                , vgmBuf[vgmAdr + 1].val & 0x7f
-                , vgmBuf[vgmAdr + 2].val
-                , vgmBuf[vgmAdr + 3].val
-                );
-            vgmAdr += 4;
-        }
-
-        private void vcYMF278B(outDatum od)
-        {
-            chipRegister.setYMF278BRegister(
-                (vgmBuf[vgmAdr + 1].val & 0x80) == 0 ? 0 : 1
-                , vgmBuf[vgmAdr + 1].val & 0x7f
-                , vgmBuf[vgmAdr + 2].val
-                , vgmBuf[vgmAdr + 3].val
-                );
-            //Console.WriteLine("fm:{0:x02}:{1:x02}:{2:x02}:", vgmBuf[vgmAdr + 1].val & 0x7f
-            //, vgmBuf[vgmAdr + 2].val
-            //, vgmBuf[vgmAdr + 3].val
-            //);
-            vgmAdr += 4;
-        }
-
         private void vcYM2151(outDatum od)
         {
             chipRegister.YM2151SetRegister(od, Audio.DriverSeqCounter, (vgmBuf[vgmAdr].val & 0x80) == 0 ? 0 : 1, vgmBuf[vgmAdr + 1].val, vgmBuf[vgmAdr + 2].val);
             //, (vgmBuf[vgmAdr].val & 0x80) == 0 ? YM2151Hosei[0].val : YM2151Hosei[1].val, vgmFrameCounter);
-            vgmAdr += 3;
-        }
-
-        private void vcOKIM6258(outDatum od)
-        {
-            chipRegister.writeOKIM6258(0, (byte)(vgmBuf[vgmAdr + 0x01].val & 0x7F), vgmBuf[vgmAdr + 0x02].val);
-            vgmAdr += 3;
-        }
-
-        private void vcOKIM6295(outDatum od)
-        {
-            chipRegister.writeOKIM6295((byte)((vgmBuf[vgmAdr + 0x01].val & 0x80) == 0 ? 0 : 1), (byte)(vgmBuf[vgmAdr + 0x01].val & 0x7F), vgmBuf[vgmAdr + 0x02].val);
             vgmAdr += 3;
         }
 
@@ -722,43 +398,43 @@ namespace mml2vgmIDE
             vgmAdr += 4;
         }
 
-        private void vcWaitNSamples(outDatum od)
+        private void vcWaitNSamples(outDatum od,ref uint vgmAdr)
         {
             //vgmWait += (int)getLE16(vgmAdr + 1);
-            Audio.DriverSeqCounter += (int)getLE16(vgmAdr + 1);
+            Audio.DriverSeqCounter += (int)Common.getLE16(vgmBuf, vgmAdr + 1);
             vgmAdr += 3;
         }
 
-        private void vcWait735Samples(outDatum od)
+        private void vcWait735Samples(outDatum od, ref uint vgmAdr)
         {
             //vgmWait += 735;
             Audio.DriverSeqCounter += 735;
             vgmAdr++;
         }
 
-        private void vcWait882Samples(outDatum od)
+        private void vcWait882Samples(outDatum od, ref uint vgmAdr)
         {
             //vgmWait += 882;
             Audio.DriverSeqCounter += 882;
             vgmAdr++;
         }
 
-        private void vcOverrideLength(outDatum od)
+        private void vcOverrideLength(outDatum od, ref uint vgmAdr)
         {
             vgmAdr += 4;
         }
 
-        private void vcEndOfSoundData(outDatum od)
+        private void vcEndOfSoundData(outDatum od, ref uint vgmAdr)
         {
             vgmAdr = (uint)vgmBuf.Length;
         }
 
-        private void vcDataBlock(outDatum od)
+        private void vcDataBlock(outDatum od, ref uint vgmAdr)
         {
 
             uint bAdr = vgmAdr + 7;
             byte bType = vgmBuf[vgmAdr + 2].val;
-            uint bLen = getLE32(vgmAdr + 3);
+            uint bLen = Common.getLE32(vgmBuf, vgmAdr + 3);
             byte chipID = 0;
             if ((bLen & 0x80000000) != 0)
             {
@@ -774,8 +450,8 @@ namespace mml2vgmIDE
                     vgmAdr += (uint)bLen + 7;
                     break;
                 case 0x80:
-                    uint romSize = getLE32(vgmAdr + 7);
-                    uint startAddress = getLE32(vgmAdr + 0x0B);
+                    uint romSize = Common.getLE32(vgmBuf, vgmAdr + 7);
+                    uint startAddress = Common.getLE32(vgmBuf, vgmAdr + 0x0B);
                     switch (bType)
                     {
                         case 0x80:
@@ -840,7 +516,7 @@ namespace mml2vgmIDE
                             //chipRegister.setYM2608Register(0x1, 0x00, 0x00, model);
                             //chipRegister.setYM2608Register(0x1, 0x10, 0x80, model);
 
-                            Chip dummyChip = new Chip();
+                            SoundManager.Chip dummyChip = new SoundManager.Chip();
 
                             dummyChip.Model = chipRegister.YM2608[chipID].Model;
                             dummyChip.Delay = chipRegister.YM2608[chipID].Delay;
@@ -1007,12 +683,12 @@ namespace mml2vgmIDE
                     vgmAdr += (uint)bLen + 7;
                     break;
                 case 0xc0:
-                    uint stAdr = getLE16(vgmAdr + 7);
+                    uint stAdr = Common.getLE16(vgmBuf, vgmAdr + 7);
                     uint dataSize = bLen - 2;
                     uint ROMData = vgmAdr + 9;
                     if ((bType & 0x20) != 0)
                     {
-                        stAdr = getLE32(vgmAdr + 7);
+                        stAdr = Common.getLE32(vgmBuf, vgmAdr + 7);
                         dataSize = bLen - 4;
                         ROMData = vgmAdr + 11;
                     }
@@ -1058,16 +734,16 @@ namespace mml2vgmIDE
 
         }
 
-        private void vcPCMRamWrite(outDatum od)
+        private void vcPCMRamWrite(outDatum od, ref uint vgmAdr)
         {
 
             isPcmRAMWrite = true;
 
             byte bType = (byte)(vgmBuf[vgmAdr + 2].val & 0x7f);
             //CurrentChip = (vgmBuf[vgmAdr + 2].val & 0x80)>>7;
-            uint bReadOffset = getLE24(vgmAdr + 3);
-            uint bWriteOffset = getLE24(vgmAdr + 6);
-            uint bSize = getLE24(vgmAdr + 9);
+            uint bReadOffset = Common.getLE24(vgmBuf, vgmAdr + 3);
+            uint bWriteOffset = Common.getLE24(vgmBuf, vgmAdr + 6);
+            uint bSize = Common.getLE24(vgmBuf, vgmAdr + 9);
             if (bSize == 0) bSize = 0x1000000;
             uint? pcmAdr = GetPCMAddressFromPCMBank(bType, bReadOffset);
             if (pcmAdr != null)
@@ -1088,14 +764,14 @@ namespace mml2vgmIDE
 
         }
 
-        private void vcWaitN1Samples(outDatum od)
+        private void vcWaitN1Samples(outDatum od, ref uint vgmAdr)
         {
             //vgmWait += (int)(vgmBuf[vgmAdr].val - 0x6f);
             Audio.DriverSeqCounter += (int)(vgmBuf[vgmAdr].val - 0x6f);
             vgmAdr++;
         }
 
-        private void vcWaitNSamplesAndSendYM26120x2a(outDatum od)
+        private void vcWaitNSamplesAndSendYM26120x2a(outDatum od, ref uint vgmAdr)
         {
             byte dat = GetDACFromPCMBank();
 
@@ -1109,7 +785,7 @@ namespace mml2vgmIDE
             vgmAdr++;
         }
 
-        private void vcSetupStreamControl(outDatum od)
+        private void vcSetupStreamControl(outDatum od, ref uint vgmAdr)
         {
             //if (model != enmModel.VirtualModel)
             //{
@@ -1139,7 +815,7 @@ namespace mml2vgmIDE
             vgmAdr += 5;
         }
 
-        private void vcSetStreamData(outDatum od)
+        private void vcSetStreamData(outDatum od, ref uint vgmAdr)
         {
             //if (model != enmModel.VirtualModel)
             //{
@@ -1165,7 +841,7 @@ namespace mml2vgmIDE
             vgmAdr += 5;
         }
 
-        private void vcSetStreamFrequency(outDatum od)
+        private void vcSetStreamFrequency(outDatum od, ref uint vgmAdr)
         {
             //if (model != enmModel.VirtualModel)
             //{
@@ -1179,13 +855,13 @@ namespace mml2vgmIDE
                 vgmAdr += 0x06;
                 return;
             }
-            uint TempLng = getLE32(vgmAdr + 2);
+            uint TempLng = Common.getLE32(vgmBuf, vgmAdr + 2);
             //Last95Freq = TempLng;
             dacControl.set_frequency(si, TempLng);
             vgmAdr += 6;
         }
 
-        private void vcStartStream(outDatum od)
+        private void vcStartStream(outDatum od, ref uint vgmAdr)
         {
             //if (model != enmModel.VirtualModel)
             //{
@@ -1199,16 +875,16 @@ namespace mml2vgmIDE
                 vgmAdr += 0x08;
                 return;
             }
-            uint DataStart = getLE32(vgmAdr + 2);
+            uint DataStart = Common.getLE32(vgmBuf, vgmAdr + 2);
             //Last95Drum = 0xFFFF;
             byte TempByt = vgmBuf[vgmAdr + 6].val;
-            uint DataLen = getLE32(vgmAdr + 7);
+            uint DataLen = Common.getLE32(vgmBuf, vgmAdr + 7);
             dacControl.start(si, DataStart, TempByt, DataLen, od);
             vgmAdr += 0x0B;
 
         }
 
-        private void vcStopStream(outDatum od)
+        private void vcStopStream(outDatum od, ref uint vgmAdr)
         {
             //if (model != enmModel.VirtualModel)
             //{
@@ -1235,7 +911,7 @@ namespace mml2vgmIDE
             vgmAdr += 0x02;
         }
 
-        private void vcStartStreamFastCall(outDatum od)
+        private void vcStartStreamFastCall(outDatum od, ref uint vgmAdr)
         {
             //if (model != enmModel.VirtualModel)
             //{
@@ -1251,7 +927,7 @@ namespace mml2vgmIDE
                 return;
             }
             VGM_PCM_BANK TempPCM = PCMBank[DacCtrl[CurChip].Bank];
-            uint TempSht = getLE16(vgmAdr + 2);
+            uint TempSht = Common.getLE16(vgmBuf, vgmAdr + 2);
             //Last95Drum = TempSht;
             //Last95Max = TempPCM->BankCount;
             if (TempSht >= TempPCM.BankCount)
@@ -1266,9 +942,9 @@ namespace mml2vgmIDE
 
         }
 
-        private void vcSeekToOffsetInPCMDataBank(outDatum od)
+        private void vcSeekToOffsetInPCMDataBank(outDatum od, ref uint vgmAdr)
         {
-            PCMBank[0x00].DataPos = getLE32(vgmAdr + 1);
+            PCMBank[0x00].DataPos = Common.getLE32(vgmBuf, vgmAdr + 1);
             vgmAdr += 5;
         }
 
@@ -1282,7 +958,7 @@ namespace mml2vgmIDE
 
         private void vcRf5c68MemoryWrite(outDatum od)
         {
-            uint offset = getLE16(vgmAdr + 1);
+            uint offset = Common.getLE16(vgmBuf, vgmAdr + 1);
             chipRegister.writeRF5C68MemW(0, offset, vgmBuf[vgmAdr + 3].val);
             vgmAdr += 4;
         }
@@ -1297,17 +973,9 @@ namespace mml2vgmIDE
 
         private void vcRf5c164MemoryWrite(outDatum od)
         {
-            uint offset = getLE16(vgmAdr + 1);
+            uint offset = Common.getLE16(vgmBuf, vgmAdr + 1);
             chipRegister.writeRF5C164MemW(od, Audio.DriverSeqCounter, 0, offset, vgmBuf[vgmAdr + 3].val);
             vgmAdr += 4;
-        }
-
-        private void vcPWM(outDatum od)
-        {
-            byte cmd = (byte)((vgmBuf[vgmAdr + 1].val & 0xf0) >> 4);
-            uint data = (uint)((vgmBuf[vgmAdr + 1].val & 0xf) * 0x100 + vgmBuf[vgmAdr + 2].val);
-            chipRegister.writePWM(0, cmd, data);
-            vgmAdr += 3;
         }
 
         private void vcK051649(outDatum od)
@@ -1331,15 +999,6 @@ namespace mml2vgmIDE
             vgmAdr += 3;
         }
 
-        private void vcK054539(outDatum od)
-        {
-            byte id = (byte)((vgmBuf[vgmAdr + 1].val & 0x80) != 0 ? 1 : 0);
-            uint adr = (uint)((vgmBuf[vgmAdr + 1].val & 0x7f) * 0x100 + (vgmBuf[vgmAdr + 2].val & 0xff));
-            byte data = vgmBuf[vgmAdr + 3].val;
-            chipRegister.writeK054539(id, adr, data);
-            vgmAdr += 4;
-        }
-
         private void vcC140(outDatum od)
         {
             byte id = (byte)((vgmBuf[vgmAdr + 1].val & 0x80) != 0 ? 1 : 0);
@@ -1349,39 +1008,29 @@ namespace mml2vgmIDE
             vgmAdr += 4;
         }
 
-        private void vcC352(outDatum od)
-        {
-            byte id = (byte)((vgmBuf[vgmAdr + 1].val & 0x80) != 0 ? 1 : 0);
-            uint adr = (uint)((vgmBuf[vgmAdr + 1].val & 0x7f) * 0x100 + (vgmBuf[vgmAdr + 2].val & 0xff));
-            uint data = (uint)((vgmBuf[vgmAdr + 3].val & 0xff) * 0x100 + (vgmBuf[vgmAdr + 4].val & 0xff));
+        //private UInt32 getLE16(UInt32 adr)
+        //{
+        //    UInt32 dat;
+        //    dat = (UInt32)vgmBuf[adr].val + (UInt32)vgmBuf[adr + 1].val * 0x100;
 
-            chipRegister.writeC352(id, adr, data);
-            vgmAdr += 5;
-        }
+        //    return dat;
+        //}
 
-        private UInt32 getLE16(UInt32 adr)
-        {
-            UInt32 dat;
-            dat = (UInt32)vgmBuf[adr].val + (UInt32)vgmBuf[adr + 1].val * 0x100;
+        //private UInt32 getLE24(UInt32 adr)
+        //{
+        //    UInt32 dat;
+        //    dat = (UInt32)vgmBuf[adr].val + (UInt32)vgmBuf[adr + 1].val * 0x100 + (UInt32)vgmBuf[adr + 2].val * 0x10000;
 
-            return dat;
-        }
+        //    return dat;
+        //}
 
-        private UInt32 getLE24(UInt32 adr)
-        {
-            UInt32 dat;
-            dat = (UInt32)vgmBuf[adr].val + (UInt32)vgmBuf[adr + 1].val * 0x100 + (UInt32)vgmBuf[adr + 2].val * 0x10000;
+        //private UInt32 getLE32(UInt32 adr)
+        //{
+        //    UInt32 dat;
+        //    dat = (UInt32)vgmBuf[adr].val + (UInt32)vgmBuf[adr + 1].val * 0x100 + (UInt32)vgmBuf[adr + 2].val * 0x10000 + (UInt32)vgmBuf[adr + 3].val * 0x1000000;
 
-            return dat;
-        }
-
-        private UInt32 getLE32(UInt32 adr)
-        {
-            UInt32 dat;
-            dat = (UInt32)vgmBuf[adr].val + (UInt32)vgmBuf[adr + 1].val * 0x100 + (UInt32)vgmBuf[adr + 2].val * 0x10000 + (UInt32)vgmBuf[adr + 3].val * 0x1000000;
-
-            return dat;
-        }
+        //    return dat;
+        //}
 
 
         private void AddPCMData(byte Type, uint DataSize, uint Adr)
@@ -1418,7 +1067,7 @@ namespace mml2vgmIDE
             if ((Type & 0x40) == 0)
                 BankSize = DataSize;
             else
-                BankSize = getLE32(Adr + 1);// ReadLE32(&Data[0x01]);
+                BankSize = Common.getLE32(vgmBuf, Adr + 1);// ReadLE32(&Data[0x01]);
 
             byte[] newData = new byte[TempPCM.DataSize + BankSize];
             if (TempPCM.Data != null && TempPCM.Data.Length > 0)
@@ -1506,7 +1155,7 @@ namespace mml2vgmIDE
             //	Time = GetTickCount();
             //#endif
             ComprType = vgmBuf[Adr + 0].val;
-            Bank.DataSize = getLE32(Adr + 1);
+            Bank.DataSize = Common.getLE32(vgmBuf, Adr + 1);
 
             switch (ComprType)
             {
@@ -1514,7 +1163,7 @@ namespace mml2vgmIDE
                     BitDec = vgmBuf[Adr + 5].val;
                     BitCmp = vgmBuf[Adr + 6].val;
                     CmpSubType = vgmBuf[Adr + 7].val;
-                    AddVal = getLE16(Adr + 8);
+                    AddVal = Common.getLE16(vgmBuf, Adr + 8);
 
                     if (CmpSubType == 0x02)
                     {
@@ -1621,7 +1270,7 @@ namespace mml2vgmIDE
                 case 0x01:  // Delta-PCM
                     BitDec = vgmBuf[Adr + 5].val;// Data[0x05].val;
                     BitCmp = vgmBuf[Adr + 6].val;// Data[0x06].val;
-                    OutVal = getLE16(Adr + 8);// ReadLE16(&Data[0x08]);
+                    OutVal = Common.getLE16(vgmBuf, Adr + 8);// ReadLE16(&Data[0x08]);
 
                     Ent1B = 0;// (UINT8*)PCMTbl.Entries;
                     Ent2B = 0;// (UINT16*)PCMTbl.Entries;
@@ -1724,7 +1373,7 @@ namespace mml2vgmIDE
             PCMTbl.CmpSubType = vgmBuf[Adr + 1].val;// Data[0x01].val;
             PCMTbl.BitDec = vgmBuf[Adr + 2].val;// Data[0x02].val;
             PCMTbl.BitCmp = vgmBuf[Adr + 3].val;// Data[0x03].val;
-            PCMTbl.EntryCount = getLE16(Adr + 4);// ReadLE16(&Data[0x04].val);
+            PCMTbl.EntryCount = Common.getLE16(vgmBuf, Adr + 4);// ReadLE16(&Data[0x04].val);
 
             ValSize = (byte)((PCMTbl.BitDec + 7) / 8);
             TblSize = PCMTbl.EntryCount * ValSize;
@@ -1784,7 +1433,7 @@ namespace mml2vgmIDE
 
         protected bool getInformationHeader()
         {
-            chips = new List<string>();
+            chips = new List<ZgmChip.ZgmChip>();
             UsedChips = "";
 
             SN76489ClockValue = 0;
@@ -1815,117 +1464,91 @@ namespace mml2vgmIDE
 
             //ヘッダーから情報取得
 
-            uint zgm = getLE32(0x00);
+            uint zgm = Common.getLE32(vgmBuf, 0x00);
             if (zgm != FCC_ZGM) return false;
 
-            vgmEof = getLE32(0x04);
+            vgmEof = Common.getLE32(vgmBuf, 0x04);
 
-            uint version = getLE32(0x08);
+            uint version = Common.getLE32(vgmBuf, 0x08);
             //バージョンチェック
             if (version < 10) return false;
             Version = string.Format("{0}.{1}{2}", (version & 0xf00) / 0x100, (version & 0xf0) / 0x10, (version & 0xf));
 
-            TotalCounter = getLE32(0x0c);
+            TotalCounter = Common.getLE32(vgmBuf, 0x0c);
             if (TotalCounter < 0) return false;
-            vgmLoopOffset = getLE32(0x14);
-            LoopCounter = getLE32(0x10);
+            vgmLoopOffset = Common.getLE32(vgmBuf, 0x14);
+            LoopCounter = Common.getLE32(vgmBuf, 0x10);
 
-            uint defineAddress = getLE32(0x1c);
-            uint defineCount = getLE16(0x24);
+            uint defineAddress = Common.getLE32(vgmBuf, 0x1c);
+            uint defineCount = Common.getLE16(vgmBuf, 0x24);
             //音源定義数チェック
             if (defineCount < 1) return false;
 
-            uint trackAddress = getLE32(0x20);
-            uint trackCounter = getLE16(0x26);
+            uint trackAddress = Common.getLE32(vgmBuf, 0x20);
+            uint trackCounter = Common.getLE16(vgmBuf, 0x26);
             vgmDataOffset = trackAddress + 11;
             //トラック数チェック
             if (trackCounter != 1) return false;
-            uint fcc = getLE24(trackAddress);
+            uint fcc = Common.getLE24(vgmBuf, trackAddress);
             if (fcc != FCC_TRK) return false;
-            uint trackLength = getLE32(trackAddress + 3);
-            vgmLoopOffset = (int)getLE32(trackAddress + 7);
+            uint trackLength = Common.getLE32(vgmBuf, trackAddress + 3);
+            vgmLoopOffset = (int)Common.getLE32(vgmBuf, trackAddress + 7);
             if (vgmLoopOffset != -1) LoopCounter = 1;
             vgmEof = (uint)(trackAddress + trackLength);
 
             uint pos = defineAddress;
+
             for (int i = 0; i < defineCount; i++)
             {
-                fcc = getLE24(pos);
-
+                fcc = Common.getLE24(vgmBuf, pos);
                 if (fcc != FCC_DEF) return false;
-                Core.DefineInfo di = new DefineInfo();
-                di.length = vgmBuf[pos + 0x03].val;
-                di.chipIdentNo = getLE32(pos + 0x4);
-                di.commandNo = (int)getLE16(pos + 0x8);
-                di.clock = (int)getLE32(pos + 0xa);
-                di.option = null;
-                if (di.length > 14)
-                {
-                    di.option = new byte[di.length - 14];
-                    for (int j = 0; j < di.length - 14; j++)
-                    {
-                        di.option[j] = vgmBuf[pos + 0x0e + j].val;
-                    }
-                }
-
-                if (tblSetClock == null) makeTable();
-                foreach (Tuple<uint, Action<DefineInfo>> a in tblSetClock)
-                {
-                    if (di.chipIdentNo != a.Item1) continue;
-                    a.Item2(di);
-                }
+                ZgmChip.ZgmChip chip = (new ZgmChip.ChipFactory()).Create(Common.getLE32(vgmBuf, pos + 0x4), chipRegister, setting, vgmBuf);
+                chip.Setup(ref pos, ref vgmCmdTbl);
+                chips.Add(chip);
             }
 
-            foreach (string chip in chips)
-            {
-                UsedChips += chip + " , ";
-            }
-            if (UsedChips.Length > 2)
-            {
-                UsedChips = UsedChips.Substring(0, UsedChips.Length - 3);
-            }
+            UsedChips = GetUsedChipsString(chips);
 
-            uint vgmGd3 = getLE32(0x18);
-            if (vgmGd3 != 0)
+            try
             {
-                uint vgmGd3Id = getLE32(vgmGd3);
-                if (vgmGd3Id != FCC_GD3) return false;
-                GD3 = getGD3Info(vgmBuf, vgmGd3);
+                GD3 = getGD3Info(vgmBuf);
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                return false;
             }
 
             return true;
         }
 
-        private Tuple<uint, Action<DefineInfo>>[] tblSetClock = null;
-
-        private void makeTable()
+        /// <summary>
+        /// 使用チップを列挙した文字列を得る。
+        /// (同じチップはカウントされ"x9"のように個数でまとめる。)
+        /// </summary>
+        private string GetUsedChipsString(List<ZgmChip.ZgmChip> chips)
         {
-            tblSetClock = new Tuple<uint, Action<DefineInfo>>[]
+            //同じチップの数をそれぞれ集計する
+            Dictionary<string, int> c = new Dictionary<string, int>();
+            foreach (ZgmChip.ZgmChip chip in chips)
             {
-                new Tuple<uint, Action<DefineInfo>>( 0x0000000c , SetChipClockSN76489) //SN76489
-                ,new Tuple<uint, Action<DefineInfo>>( 0x0000002c , SetChipClockYM2612) //YM2612
-            };
+                if (c.ContainsKey(chip.name)) c[chip.name]++;
+                else c.Add(chip.name, 1);
+            }
+            List<string> cc = new List<string>();
+            foreach(string k in c.Keys)
+            {
+                cc.Add(k + (c[k] < 2 ? "" : string.Format(" x{0}", c[k])));
+            }
+
+            return string.Join(" , ", cc);
         }
 
-        private void SetChipClockSN76489(DefineInfo di)
+        public GD3 getGD3Info(outDatum[] buf)
         {
-            SN76489ClockValue = (uint)di.clock;
-            chips.Add("SN76489");
-            vgmCmdTbl.Add(di.commandNo, vcPSG);
-            vgmCmdTbl.Add(di.commandNo + 1, vcGGPSGPort06);
-        }
-
-        private void SetChipClockYM2612(DefineInfo di)
-        {
-            YM2612ClockValue = (uint)di.clock;
-            chips.Add("YM2612");
-            vgmCmdTbl.Add(di.commandNo, vcYM2612Port0);
-            vgmCmdTbl.Add(di.commandNo + 1, vcYM2612Port1);
-        }
-
-
-        public GD3 getGD3Info(outDatum[] buf, uint vgmGd3)
-        {
+            uint vgmGd3 = Common.getLE32(vgmBuf, 0x18);
+            if (vgmGd3 == 0) return null;
+            uint vgmGd3Id = Common.getLE32(vgmBuf, vgmGd3);
+            if (vgmGd3Id != FCC_GD3) throw new ArgumentOutOfRangeException();
 
             uint adr = vgmGd3 + 12;// + 0x14;
             GD3 = Common.getGD3Info(buf, adr);

@@ -58,14 +58,14 @@ namespace Core
         public SourceParser sp = null;
         public Information info = null;
 
-        public ClsVgm(string stPath, SourceParser sp, Information info)
+        public ClsVgm(string stPath, SourceParser sp)
         {
             this.sp = sp;
-            this.info = info;// new Information();
+            this.info = sp.info;// new Information();
 
             chips = new Dictionary<enmChipType, ClsChip[]>();
 
-            Tuple<string, string, List<string>> n;
+            Tuple<string, string, List<string>, int[]> n;
 
             List<Conductor> lstCONDUCTOR = new List<Conductor>();
             n = sp.dicChipPartName[enmChipType.CONDUCTOR];

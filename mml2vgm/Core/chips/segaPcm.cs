@@ -259,7 +259,7 @@ namespace Core
                         , pi.totalBufPtr
                         , pi.totalBufPtr + size
                         , size
-                        , pi.totalBufPtr + v.Value.loopAdr
+                        , v.Value.loopAdr==-1 ? -1 : (pi.totalBufPtr + v.Value.loopAdr)
                         , is16bit
                         , samplerate)
                     );
@@ -559,7 +559,7 @@ namespace Core
             pw.instrument = n;
             pw.pcmStartAddress = (int)parent.instPCM[n].stAdr;
             pw.pcmEndAddress = (int)parent.instPCM[n].edAdr;
-            pw.pcmLoopAddress = parent.instPCM[n].loopAdr == 0 ? -1 : (int)parent.instPCM[n].loopAdr;
+            pw.pcmLoopAddress = (int)parent.instPCM[n].loopAdr;// == 0 ? -1 : (int)parent.instPCM[n].loopAdr;
             pw.pcmBank = (int)((parent.instPCM[n].stAdr >> 16) << 1);
             SetDummyData(pw, mml);
         }

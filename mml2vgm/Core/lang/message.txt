@@ -362,3 +362,9 @@ E23003=Tone number({0}) does not exist for PCM definition.
 E23004=Selected Tone number({0}) is not for K053260 PCM data.
 E23005=Sound patch isn't selected.
 
+
+;SourceParcer.cs 24000
+E24000=The number of definitions per sound chip has exceeded the allowable number.(Format:{0} Max:{1} Specify:{2})
+E24001=A definition of sound chip({1}) that cannot be used in the {0} format.
+
+

@@ -106,6 +106,9 @@
     <Compile Include="Audio.cs" />
     <Compile Include="ChipLEDs.cs" />
     <Compile Include="ChipRegister.cs" />
+    <Compile Include="Driver\ZGM\ZgmChip\ZgmChip.cs" />
+    <Compile Include="Driver\ZGM\ZgmChip\ChipFactory.cs" />
+    <Compile Include="Driver\ZGM\ZgmChip\YM2612.cs" />
     <Compile Include="ColorScheme.cs" />
     <Compile Include="Common.cs" />
     <Compile Include="dacControl.cs" />
@@ -114,7 +117,7 @@
     <Compile Include="Driver\baseDriver.cs" />
     <Compile Include="Driver\vgm.cs" />
     <Compile Include="Driver\xgm.cs" />
-    <Compile Include="Driver\zgm.cs" />
+    <Compile Include="Driver\ZGM\zgm.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="form\ChannelInfo.cs" />
     <Compile Include="form\frmDebug.cs">
@@ -463,20 +466,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy $(TargetDir)*.* $(SolutionDir)output\mml2vgmIDE /D /S /R /Y /I /K
-copy /Y $(SolutionDir)\CHANGE.txt $(SolutionDir)output
-copy /Y $(SolutionDir)\IDE.txt $(SolutionDir)output
-copy /Y $(SolutionDir)\Script.txt $(SolutionDir)output
-copy /Y $(SolutionDir)\..\LICENSE.txt $(SolutionDir)output
-copy /Y $(SolutionDir)\..\mml2vgm_MMLCommandMemo.txt $(SolutionDir)output
-copy /Y $(SolutionDir)\..\mmlCommandTable.md $(SolutionDir)output
-copy /Y $(SolutionDir)\..\README.md $(SolutionDir)output
-copy /Y $(SolutionDir)\..\ZGMspec.txt $(SolutionDir)output
-del /Q $(SolutionDir)output\mml2vgmIDE\*.pdb
-del /Q $(SolutionDir)output\mml2vgmIDE\*.config
-del /Q $(SolutionDir)output\mml2vgmIDE\*.wav
-del /Q $(SolutionDir)output\mml2vgm\*.config
-del /Q $(SolutionDir)output\bin.zip
-</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
 </Project>

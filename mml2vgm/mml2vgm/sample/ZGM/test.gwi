@@ -30,6 +30,5 @@ BASS
 
 
 'A1 T90
-'A1 D0 @1 p3 o4 v113 l16 q8Lc4
-'B1 D0 @1 p3 o4 v113 l16 q8 e4
+'A1 D0     @1 p3 o4 v113 l16 q8Lc4
 

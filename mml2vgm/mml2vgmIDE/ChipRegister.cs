@@ -357,22 +357,22 @@ namespace mml2vgmIDE
 
 
 
-        public Chip[] AY8910 = new Chip[] { new Chip(), new Chip() };
-        public Chip[] C140 = new Chip[] { new Chip(), new Chip() };
-        public Chip MIDI = new Chip();
-        public Chip[] HuC6280 = new Chip[] { new Chip(), new Chip() };
-        public Chip[] K051649 = new Chip[] { new Chip(), new Chip() };
-        public Chip[] RF5C164 = new Chip[] { new Chip(), new Chip() };
-        public Chip[] SEGAPCM = new Chip[] { new Chip(), new Chip() };
-        public Chip[] SN76489 = new Chip[] { new Chip(), new Chip() };
-        public Chip[] YM2151 = new Chip[] { new Chip(), new Chip() };
-        public Chip[] YM2203 = new Chip[] { new Chip(), new Chip() };
-        public Chip[] YM2413 = new Chip[] { new Chip(), new Chip() };
-        public Chip[] YM2608 = new Chip[] { new Chip(), new Chip() };
-        public Chip[] YM2610 = new Chip[] { new Chip(), new Chip() };
-        public Chip[] YM2612 = new Chip[] { new Chip(), new Chip() };
-        public Chip[] QSound = new Chip[] { new Chip(), new Chip() };
-        public Chip[] K053260 = new Chip[] { new Chip(), new Chip() };
+        public List<Chip> AY8910  = new List<Chip>();
+        public List<Chip> C140    = new List<Chip>();
+        public List<Chip> MIDI    = new List<Chip>();
+        public List<Chip> HuC6280 = new List<Chip>();
+        public List<Chip> K051649 = new List<Chip>();
+        public List<Chip> RF5C164 = new List<Chip>();
+        public List<Chip> SEGAPCM = new List<Chip>();
+        public List<Chip> SN76489 = new List<Chip>();
+        public List<Chip> YM2151  = new List<Chip>();
+        public List<Chip> YM2203  = new List<Chip>();
+        public List<Chip> YM2413  = new List<Chip>();
+        public List<Chip> YM2608  = new List<Chip>();
+        public List<Chip> YM2610  = new List<Chip>();
+        public List<Chip> YM2612  = new List<Chip>();
+        public List<Chip> QSound  = new List<Chip>();
+        public List<Chip> K053260 = new List<Chip>();
 
 
 
@@ -407,6 +407,7 @@ namespace mml2vgmIDE
                     {
                         scAY8910[i] = realChip.GetRealChip(ctAY8910[i]);
                         if (scAY8910[i] != null) scAY8910[i].init();
+                        if (AY8910.Count < i + 1) AY8910.Add(new Chip());
                         AY8910[i].Model = ctAY8910[i].UseEmu ? EnmModel.VirtualModel : EnmModel.RealModel;
                         AY8910[i].Delay = (AY8910[i].Model == EnmModel.VirtualModel ? LEmu : LReal);
                     }
@@ -417,6 +418,7 @@ namespace mml2vgmIDE
                     {
                         scC140[i] = realChip.GetRealChip(ctC140[i]);
                         if (scC140[i] != null) scC140[i].init();
+                        if (C140.Count < i + 1) C140.Add(new Chip());
                         C140[i].Model = ctC140[i].UseEmu ? EnmModel.VirtualModel : EnmModel.RealModel;
                         C140[i].Delay = (C140[i].Model == EnmModel.VirtualModel ? LEmu : LReal);
                     }
@@ -427,6 +429,7 @@ namespace mml2vgmIDE
                     {
                         scHuC6280[i] = null;
                         if (scHuC6280[i] != null) scHuC6280[i].init();
+                        if (HuC6280.Count < i + 1) HuC6280.Add(new Chip());
                         HuC6280[i].Model = ctHuC6280[i].UseEmu ? EnmModel.VirtualModel : EnmModel.RealModel;
                         HuC6280[i].Delay = (HuC6280[i].Model == EnmModel.VirtualModel ? LEmu : LReal);
                     }
@@ -437,6 +440,7 @@ namespace mml2vgmIDE
                     {
                         scK051649[i] = null;
                         if (scK051649[i] != null) scK051649[i].init();
+                        if (K051649.Count < i + 1) K051649.Add(new Chip());
                         K051649[i].Model = ctK051649[i].UseEmu ? EnmModel.VirtualModel : EnmModel.RealModel;
                         K051649[i].Delay = (K051649[i].Model == EnmModel.VirtualModel ? LEmu : LReal);
                     }
@@ -447,6 +451,7 @@ namespace mml2vgmIDE
                     {
                         scK053260[i] = null;
                         if (scK053260[i] != null) scK053260[i].init();
+                        if (K053260.Count < i + 1) K053260.Add(new Chip());
                         K053260[i].Model = ctK053260[i].UseEmu ? EnmModel.VirtualModel : EnmModel.RealModel;
                         K053260[i].Delay = (K053260[i].Model == EnmModel.VirtualModel ? LEmu : LReal);
                     }
@@ -459,6 +464,7 @@ namespace mml2vgmIDE
                         if (scQSound[i] != null) scQSound[i].init();
                         if (ctQSound[i] != null)
                         {
+                            if (QSound.Count < i + 1) QSound.Add(new Chip());
                             QSound[i].Model = ctQSound[i].UseEmu ? EnmModel.VirtualModel : EnmModel.RealModel;
                             QSound[i].Delay = (QSound[i].Model == EnmModel.VirtualModel ? LEmu : LReal);
                         }
@@ -470,6 +476,7 @@ namespace mml2vgmIDE
                     {
                         scRF5C164[i] = null;
                         if (scRF5C164[i] != null) scRF5C164[i].init();
+                        if (RF5C164.Count < i + 1) RF5C164.Add(new Chip());
                         RF5C164[i].Model = ctRF5C164[i].UseEmu ? EnmModel.VirtualModel : EnmModel.RealModel;
                         RF5C164[i].Delay = (RF5C164[i].Model == EnmModel.VirtualModel ? LEmu : LReal);
                     }
@@ -480,6 +487,7 @@ namespace mml2vgmIDE
                     {
                         scSEGAPCM[i] = realChip.GetRealChip(ctSEGAPCM[i]);
                         if (scSEGAPCM[i] != null) scSEGAPCM[i].init();
+                        if (SEGAPCM.Count < i + 1) SEGAPCM.Add(new Chip());
                         SEGAPCM[i].Model = ctSEGAPCM[i].UseEmu ? EnmModel.VirtualModel : EnmModel.RealModel;
                         SEGAPCM[i].Delay = (SEGAPCM[i].Model == EnmModel.VirtualModel ? LEmu : LReal);
                     }
@@ -490,6 +498,7 @@ namespace mml2vgmIDE
                     {
                         scSN76489[i] = realChip.GetRealChip(ctSN76489[i]);
                         if (scSN76489[i] != null) scSN76489[i].init();
+                        if (SN76489.Count < i + 1) SN76489.Add(new Chip());
                         SN76489[i].Model = ctSN76489[i].UseEmu ? EnmModel.VirtualModel : EnmModel.RealModel;
                         SN76489[i].Delay = (SN76489[i].Model == EnmModel.VirtualModel ? LEmu : LReal);
                     }
@@ -500,6 +509,7 @@ namespace mml2vgmIDE
                     {
                         scYM2151[i] = realChip.GetRealChip(ctYM2151[i]);
                         if (scYM2151[i] != null) scYM2151[i].init();
+                        if (YM2151.Count < i + 1) YM2151.Add(new Chip());
                         YM2151[i].Model = (ctYM2151[i].UseEmu || ctYM2151[i].UseEmu2 || ctYM2151[i].UseEmu3) ? EnmModel.VirtualModel : EnmModel.RealModel;
                         YM2151[i].Delay = (YM2151[i].Model == EnmModel.VirtualModel ? LEmu : LReal);
                     }
@@ -510,6 +520,7 @@ namespace mml2vgmIDE
                     {
                         scYM2203[i] = realChip.GetRealChip(ctYM2203[i]);
                         if (scYM2203[i] != null) scYM2203[i].init();
+                        if (YM2203.Count < i + 1) YM2203.Add(new Chip());
                         YM2203[i].Model = ctYM2203[i].UseEmu ? EnmModel.VirtualModel : EnmModel.RealModel;
                         YM2203[i].Delay = (YM2203[i].Model == EnmModel.VirtualModel ? LEmu : LReal);
                     }
@@ -520,6 +531,7 @@ namespace mml2vgmIDE
                     {
                         scYM2413[i] = realChip.GetRealChip(ctYM2413[i]);
                         if (scYM2413[i] != null) scYM2413[i].init();
+                        if (YM2413.Count < i + 1) YM2413.Add(new Chip());
                         YM2413[i].Model = ctYM2413[i].UseEmu ? EnmModel.VirtualModel : EnmModel.RealModel;
                         YM2413[i].Delay = (YM2413[i].Model == EnmModel.VirtualModel ? LEmu : LReal);
                     }
@@ -530,6 +542,7 @@ namespace mml2vgmIDE
                     {
                         scYM2608[i] = realChip.GetRealChip(ctYM2608[i]);
                         if (scYM2608[i] != null) scYM2608[i].init();
+                        if (YM2608.Count < i + 1) YM2608.Add(new Chip());
                         YM2608[i].Model = ctYM2608[i].UseEmu ? EnmModel.VirtualModel : EnmModel.RealModel;
                         YM2608[i].Delay = (YM2608[i].Model == EnmModel.VirtualModel ? LEmu : LReal);
                     }
@@ -544,6 +557,7 @@ namespace mml2vgmIDE
                         if (scYM2610EA[i] != null) scYM2610EA[i].init();
                         scYM2610EB[i] = realChip.GetRealChip(ctYM2610[i], 2);
                         if (scYM2610EB[i] != null) scYM2610EB[i].init();
+                        if (YM2610.Count < i + 1) YM2610.Add(new Chip());
                         YM2610[i].Model = ctYM2610[i].UseEmu ? EnmModel.VirtualModel : EnmModel.RealModel;
                         YM2610[i].Delay = (YM2610[i].Model == EnmModel.VirtualModel ? LEmu : LReal);
                     }
@@ -554,6 +568,7 @@ namespace mml2vgmIDE
                     {
                         scYM2612[i] = realChip.GetRealChip(ctYM2612[i]);
                         if (scYM2612[i] != null) scYM2612[i].init();
+                        if (YM2612.Count < i + 1) YM2612.Add(new Chip());
                         YM2612[i].Model = ctYM2612[i].UseScci ? EnmModel.RealModel : EnmModel.VirtualModel;
                         YM2612[i].Delay = (YM2612[i].Model == EnmModel.VirtualModel ? LEmu : LReal);
                     }
@@ -585,90 +600,105 @@ namespace mml2vgmIDE
         {
             for (int i = 0; i < 2; i++)
             {
+                if (AY8910.Count < i + 1) AY8910.Add(new Chip());
                 AY8910[i].Use = false;
                 AY8910[i].Model = EnmModel.None;
                 AY8910[i].Device = EnmDevice.AY8910;
                 AY8910[i].Number = i;
                 AY8910[i].Hosei = 0;
 
+                if (C140.Count < i + 1) C140.Add(new Chip());
                 C140[i].Use = false;
                 C140[i].Model = EnmModel.None;
                 C140[i].Device = EnmDevice.C140;
                 C140[i].Number = i;
                 C140[i].Hosei = 0;
 
+                if (HuC6280.Count < i + 1) HuC6280.Add(new Chip());
                 HuC6280[i].Use = false;
                 HuC6280[i].Model = EnmModel.None;
                 HuC6280[i].Device = EnmDevice.HuC6280;
                 HuC6280[i].Number = i;
                 HuC6280[i].Hosei = 0;
 
+                if (K051649.Count < i + 1) K051649.Add(new Chip());
                 K051649[i].Use = false;
                 K051649[i].Model = EnmModel.None;
                 K051649[i].Device = EnmDevice.K051649;
                 K051649[i].Number = i;
                 K051649[i].Hosei = 0;
 
+                if (K053260.Count < i + 1) K053260.Add(new Chip());
                 K053260[i].Use = false;
                 K053260[i].Model = EnmModel.None;
                 K053260[i].Device = EnmDevice.K053260;
                 K053260[i].Number = i;
                 K053260[i].Hosei = 0;
 
+                if (QSound.Count < i + 1) QSound.Add(new Chip());
                 QSound[i].Use = false;
                 QSound[i].Model = EnmModel.None;
                 QSound[i].Device = EnmDevice.QSound;
                 QSound[i].Number = i;
                 QSound[i].Hosei = 0;
 
+                if (RF5C164.Count < i + 1) RF5C164.Add(new Chip());
                 RF5C164[i].Use = false;
                 RF5C164[i].Model = EnmModel.None;
                 RF5C164[i].Device = EnmDevice.RF5C164;
                 RF5C164[i].Number = i;
                 RF5C164[i].Hosei = 0;
 
+                if (SEGAPCM.Count < i + 1) SEGAPCM.Add(new Chip());
                 SEGAPCM[i].Use = false;
                 SEGAPCM[i].Model = EnmModel.None;
                 SEGAPCM[i].Device = EnmDevice.SegaPCM;
                 SEGAPCM[i].Number = i;
                 SEGAPCM[i].Hosei = 0;
 
+                if (YM2151.Count < i + 1) YM2151.Add(new Chip());
                 YM2151[i].Use = false;
                 YM2151[i].Model = EnmModel.None;
                 YM2151[i].Device = EnmDevice.YM2151;
                 YM2151[i].Number = i;
                 YM2151[i].Hosei = 0;
 
+                if (YM2203.Count < i + 1) YM2203.Add(new Chip());
                 YM2203[i].Use = false;
                 YM2203[i].Model = EnmModel.None;
                 YM2203[i].Device = EnmDevice.YM2203;
                 YM2203[i].Number = i;
                 YM2203[i].Hosei = 0;
 
+                if (YM2413.Count < i + 1) YM2413.Add(new Chip());
                 YM2413[i].Use = false;
                 YM2413[i].Model = EnmModel.None;
                 YM2413[i].Device = EnmDevice.YM2413;
                 YM2413[i].Number = i;
                 YM2413[i].Hosei = 0;
 
+                if (YM2608.Count < i + 1) YM2608.Add(new Chip());
                 YM2608[i].Use = false;
                 YM2608[i].Model = EnmModel.None;
                 YM2608[i].Device = EnmDevice.YM2608;
                 YM2608[i].Number = i;
                 YM2608[i].Hosei = 0;
 
+                if (YM2610.Count < i + 1) YM2610.Add(new Chip());
                 YM2610[i].Use = false;
                 YM2610[i].Model = EnmModel.None;
                 YM2610[i].Device = EnmDevice.YM2610;
                 YM2610[i].Number = i;
                 YM2610[i].Hosei = 0;
 
+                if (YM2612.Count < i + 1) YM2612.Add(new Chip());
                 YM2612[i].Use = false;
                 YM2612[i].Model = EnmModel.None;
                 YM2612[i].Device = EnmDevice.YM2612;
                 YM2612[i].Number = i;
                 YM2612[i].Hosei = 0;
 
+                if (SN76489.Count < i + 1) SN76489.Add(new Chip());
                 SN76489[i].Use = false;
                 SN76489[i].Model = EnmModel.None;
                 SN76489[i].Device = EnmDevice.SN76489;
@@ -676,11 +706,12 @@ namespace mml2vgmIDE
                 SN76489[i].Hosei = 0;
             }
 
-            MIDI.Use = false;
-            MIDI.Model = EnmModel.None;
-            MIDI.Device = EnmDevice.MIDIGM;
-            MIDI.Number = 0;
-            MIDI.Hosei = 0;
+            if (MIDI.Count < 1) MIDI.Add(new Chip());
+            MIDI[0].Use = false;
+            MIDI[0].Model = EnmModel.None;
+            MIDI[0].Device = EnmDevice.MIDIGM;
+            MIDI[0].Number = 0;
+            MIDI[0].Hosei = 0;
         }
 
         public bool ProcessingData(ref outDatum od, ref long Counter, ref Chip Chip, ref EnmDataType Type, ref int Address, ref int Data, ref object ExData)
@@ -1121,13 +1152,13 @@ namespace mml2vgmIDE
 
         public void sendMIDIout(long Counter,int chipID, byte cmd, byte prm1, byte prm2)//, int deltaFrames = 0)
         {
-            if (MIDI.Model == EnmModel.RealModel)
+            if (MIDI[0].Model == EnmModel.RealModel)
             {
                 if (midiOuts == null) return;
                 if (chipID >= midiOuts.Count) return;
                 if (midiOuts[chipID] == null) return;
 
-                enq(null,Counter, MIDI, EnmDataType.Block, chipID, -1, new byte[] { cmd, prm1, prm2 });
+                enq(null,Counter, MIDI[0], EnmDataType.Block, chipID, -1, new byte[] { cmd, prm1, prm2 });
                 //midiOuts[chipID].SendBuffer(data);
                 //if (chipID < midiParams.Length) midiParams[chipID].SendBuffer(data);
                 return;
@@ -1163,13 +1194,13 @@ namespace mml2vgmIDE
 
         public void sendMIDIout(long Counter,int chipID, byte cmd, byte prm1)//, int deltaFrames = 0)
         {
-            if (MIDI.Model == EnmModel.RealModel)
+            if (MIDI[0].Model == EnmModel.RealModel)
             {
                 if (midiOuts == null) return;
                 if (chipID >= midiOuts.Count) return;
                 if (midiOuts[chipID] == null) return;
 
-                enq(null,Counter, MIDI, EnmDataType.Block, chipID, -1, new byte[] { cmd, prm1 });
+                enq(null,Counter, MIDI[0], EnmDataType.Block, chipID, -1, new byte[] { cmd, prm1 });
                 //midiOuts[chipID].SendBuffer(data);
                 //if (chipID < midiParams.Length) midiParams[chipID].SendBuffer(data);
                 return;
@@ -1205,13 +1236,13 @@ namespace mml2vgmIDE
 
         public void sendMIDIout(long Counter,int chipID, byte[] data)
         {
-            if (MIDI.Model == EnmModel.RealModel)
+            if (MIDI[0].Model == EnmModel.RealModel)
             {
                 if (midiOuts == null) return;
                 if (chipID >= midiOuts.Count) return;
                 if (midiOuts[chipID] == null) return;
 
-                enq(null,Counter, MIDI, EnmDataType.Block, chipID, -1, data);
+                enq(null,Counter, MIDI[0], EnmDataType.Block, chipID, -1, data);
                 //midiOuts[chipID].SendBuffer(data);
                 //if (chipID < midiParams.Length) midiParams[chipID].SendBuffer(data);
                 return;
@@ -1561,7 +1592,7 @@ namespace mml2vgmIDE
 
         public void AY8910SetFadeoutVolume(long Counter, int v)
         {
-            for (int i = 0; i < AY8910.Length; i++)
+            for (int i = 0; i < AY8910.Count; i++)
             {
                 if (!AY8910[i].Use) continue;
                 if (AY8910[i].Model == EnmModel.VirtualModel) continue;
@@ -1800,7 +1831,7 @@ namespace mml2vgmIDE
 
         public void C140SetFadeoutVolume(long Counter, int v)
         {
-            for (int i = 0; i < C140.Length; i++)
+            for (int i = 0; i < C140.Count; i++)
             {
                 if (!C140[i].Use) continue;
                 if (C140[i].Model == EnmModel.VirtualModel) continue;
@@ -1905,7 +1936,7 @@ namespace mml2vgmIDE
 
         public void HuC6280SetFadeoutVolume(long Counter, int v)
         {
-            for (int i = 0; i < HuC6280.Length; i++)
+            for (int i = 0; i < HuC6280.Count; i++)
             {
                 if (!HuC6280[i].Use) continue;
                 if (HuC6280[i].Model == EnmModel.VirtualModel) continue;
@@ -2046,7 +2077,7 @@ namespace mml2vgmIDE
 
         public void K051649SetFadeoutVolume(long Counter, int v)
         {
-            for (int i = 0; i < K051649.Length; i++)
+            for (int i = 0; i < K051649.Count; i++)
             {
                 if (!K051649[i].Use) continue;
                 if (K051649[i].Model == EnmModel.VirtualModel) continue;
@@ -2173,7 +2204,7 @@ namespace mml2vgmIDE
 
         public void K053260SetFadeoutVolume(long Counter, int v)
         {
-            for (int i = 0; i < K053260.Length; i++)
+            for (int i = 0; i < K053260.Count; i++)
             {
                 if (!K053260[i].Use) continue;
                 if (K053260[i].Model == EnmModel.VirtualModel) continue;
@@ -2306,7 +2337,7 @@ namespace mml2vgmIDE
 
         public void QSoundSetFadeoutVolume(long Counter, int v)
         {
-            for (int i = 0; i < QSound.Length; i++)
+            for (int i = 0; i < QSound.Count; i++)
             {
                 if (!QSound[i].Use) continue;
                 if (QSound[i].Model == EnmModel.VirtualModel) continue;
@@ -2488,7 +2519,7 @@ namespace mml2vgmIDE
 
         public void RF5C164SetFadeoutVolume(long Counter, int v)
         {
-            for (int i = 0; i < RF5C164.Length; i++)
+            for (int i = 0; i < RF5C164.Count; i++)
             {
                 if (!RF5C164[i].Use) continue;
                 if (RF5C164[i].Model == EnmModel.VirtualModel) continue;
@@ -2823,7 +2854,7 @@ namespace mml2vgmIDE
 
         public void YM2151SetFadeoutVolume(long Counter, int v)
         {
-            for (int i = 0; i < YM2151.Length; i++)
+            for (int i = 0; i < YM2151.Count; i++)
             {
                 if (!YM2151[i].Use) continue;
                 if (YM2151[i].Model == EnmModel.VirtualModel) continue;
@@ -3140,7 +3171,7 @@ namespace mml2vgmIDE
 
         public void YM2203SetFadeoutVolume(long Counter, int v)
         {
-            for (int i = 0; i < YM2203.Length; i++)
+            for (int i = 0; i < YM2203.Count; i++)
             {
                 if (!YM2203[i].Use) continue;
                 if (YM2203[i].Model == EnmModel.VirtualModel) continue;
@@ -3352,7 +3383,7 @@ namespace mml2vgmIDE
 
         public void YM2413SetFadeoutVolume(long Counter, int v)
         {
-            for (int i = 0; i < YM2413.Length; i++)
+            for (int i = 0; i < YM2413.Count; i++)
             {
                 if (!YM2413[i].Use) continue;
                 if (YM2413[i].Model == EnmModel.VirtualModel) continue;
@@ -3786,7 +3817,7 @@ namespace mml2vgmIDE
 
         public void YM2608SetFadeoutVolume(long Counter, int v)
         {
-            for (int i = 0; i < YM2608.Length; i++)
+            for (int i = 0; i < YM2608.Count; i++)
             {
                 if (!YM2608[i].Use) continue;
                 if (YM2608[i].Model == EnmModel.VirtualModel) continue;
@@ -4457,7 +4488,7 @@ namespace mml2vgmIDE
 
         public void YM2610SetFadeoutVolume(long Counter, int v)
         {
-            for (int i = 0; i < YM2610.Length; i++)
+            for (int i = 0; i < YM2610.Count; i++)
             {
                 if (!YM2610[i].Use) continue;
                 if (YM2610[i].Model == EnmModel.VirtualModel) continue;
@@ -4860,7 +4891,7 @@ namespace mml2vgmIDE
 
         public void YM2612SetFadeoutVolume(long Counter, int v)
         {
-            for (int i = 0; i < YM2612.Length; i++)
+            for (int i = 0; i < YM2612.Count; i++)
             {
                 if (!YM2612[i].Use) continue;
                 if (YM2612[i].Model == EnmModel.VirtualModel) continue;
@@ -5173,7 +5204,7 @@ namespace mml2vgmIDE
 
         public void SEGAPCMSetFadeoutVolume(long Counter, int v)
         {
-            for (int i = 0; i < SEGAPCM.Length; i++)
+            for (int i = 0; i < SEGAPCM.Count; i++)
             {
                 if (!SEGAPCM[i].Use) continue;
                 if (SEGAPCM[i].Model == EnmModel.VirtualModel) continue;
@@ -5364,7 +5395,7 @@ namespace mml2vgmIDE
 
         public void SN76489SetFadeoutVolume(long Counter, int v)
         {
-            for (int i = 0; i < SN76489.Length; i++)
+            for (int i = 0; i < SN76489.Count; i++)
             {
                 if (!SN76489[i].Use) continue;
                 if (SN76489[i].Model == EnmModel.VirtualModel) continue;

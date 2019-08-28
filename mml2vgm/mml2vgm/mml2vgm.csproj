@@ -215,7 +215,7 @@
     <None Include="sample\YM2610\testPCMMapMode.gwi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="sample\YM2612X\testPCMMapMode.gwi">
+    <None Include="sample\XGM\YM2612X\testPCMMapMode.gwi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="sample\YM2151\testYM2151.gwi">
@@ -248,6 +248,9 @@
     <None Include="sample\YM2612\testPCMMapMode.gwi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="sample\ZGM\test.gwi">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Content Include="res\icon1.png" />
@@ -278,8 +281,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy $(TargetDir)*.* $(SolutionDir)output\mml2vgm /D /S /R /Y /I /K
-del /Q $(SolutionDir)output\mml2vgm\*.pdb
+    <PostBuildEvent>
 </PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
