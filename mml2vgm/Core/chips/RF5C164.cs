@@ -12,7 +12,7 @@ namespace Core
         public byte KeyOn = 0x0;
         public byte CurrentChannel = 0xff;
 
-        public RF5C164(ClsVgm parent, int chipID, string initialPartName, string stPath, bool isSecondary) : base(parent, chipID, initialPartName, stPath, isSecondary)
+        public RF5C164(ClsVgm parent, int chipID, string initialPartName, string stPath, int isSecondary) : base(parent, chipID, initialPartName, stPath, isSecondary)
         {
             _chipType = enmChipType.RF5C164;
             _Name = "RF5C164";
@@ -43,7 +43,7 @@ namespace Core
             {
                 if (parent.ChipCommandSize == 2)
                 {
-                    if (!isSecondary)
+                    if (isSecondary==0)
                         pcmDataInfo[0].totalBuf = new byte[] {
                             0xb1, 0x00, 0x07, 0x00//通常コマンド
                             , 0x07, 0x00, 0x66, 0xc1
@@ -58,7 +58,7 @@ namespace Core
                 }
                 else
                 {
-                    if (!isSecondary)
+                    if (isSecondary==0)
                         pcmDataInfo[0].totalBuf = new byte[] {
                             0xb1, 0x07, 0x00//通常コマンド
                             , 0x07, 0x66, 0xc1
@@ -74,7 +74,7 @@ namespace Core
             }
             else
             {
-                if (!isSecondary)
+                if (isSecondary==0)
                     pcmDataInfo[0].totalBuf = new byte[] {
                         0xb1, 0x07, 0x00//通常コマンド
                         , 0x67, 0x66, 0xc1
@@ -141,7 +141,7 @@ namespace Core
                     pi.totalBuf
                     , pi.totalHeadrSizeOfDataPtr + (parent.ChipCommandSize==2 ? 4 : 3)//通常コマンド分を他のチップと比べて余計に加算する
                     , (UInt32)(pi.totalBuf.Length - (pi.totalHeadrSizeOfDataPtr + 4 + (parent.ChipCommandSize == 2 ? 4 : 3)))//通常コマンド分を他のチップと比べて余計に加算する
-                    , IsSecondary
+                    , IsSecondary!=0
                     );
 
                 //RF5C164のPCMブロックの前に通常コマンドが存在するため書き換える
@@ -182,7 +182,7 @@ namespace Core
                 SetRf5c164Envelope(null,pw, 0xff);
             }
 
-            if (IsSecondary)
+            if (IsSecondary!=0)
             {
                 parent.dat[0x6f] = new outDatum(enmMMLType.unknown, null, null, (byte)(parent.dat[0x6f].val | 0x40));
             }
@@ -252,7 +252,7 @@ namespace Core
         public void SetRf5c164CurrentChannel(MML mml,partWork pw)
         {
             byte pch = (byte)pw.ch;
-            bool isSecondary = pw.isSecondary;
+            int isSecondary = pw.isSecondary;
             int chipID = pw.chip.ChipID;
 
             if (CurrentChannel != pch)
@@ -326,12 +326,12 @@ namespace Core
             OutRf5c164Port(mml, port[0], pw.isSecondary, 0x8, data);
         }
 
-        public void OutRf5c164Port(MML mml,byte[] cmd,bool isSecondary, byte adr, byte data)
+        public void OutRf5c164Port(MML mml,byte[] cmd,int isSecondary, byte adr, byte data)
         {
             parent.OutData(
                 mml,
                 cmd
-                , (byte)((adr & 0x7f) | (isSecondary ? 0x80 : 0x00))
+                , (byte)((adr & 0x7f) | (isSecondary!=0 ? 0x80 : 0x00))
                 , data
                 );
         }
@@ -566,7 +566,7 @@ namespace Core
 
         public override void CmdLoopExtProc(partWork p, MML mml)
         {
-            if (p.chip is RF5C164 && parent.rf5c164[p.isSecondary ? 1 : 0].use)
+            if (p.chip is RF5C164 && parent.rf5c164[p.isSecondary ].use)
             {
                 //rf5c164の設定済み周波数値を初期化(ループ時に直前の周波数を引き継いでしまうケースがあるため)
                 p.rf5c164AddressIncrement = -1;
@@ -643,7 +643,7 @@ namespace Core
         {
             return string.Format("{0,-10} {1,-7} {2,-5:D3} {3,-4:D2} ${4,-7:X4} N/A      ${5,-7:X4} ${6,-7:X4}  NONE {7}\r\n"
                 , Name //0
-                , pcm.isSecondary ? "SEC" : "PRI" //1
+                , pcm.isSecondary!=0 ? "SEC" : "PRI" //1
                 , pcm.num //2
                 , pcm.stAdr >> 16 //3
                 , pcm.stAdr & 0xffff //4

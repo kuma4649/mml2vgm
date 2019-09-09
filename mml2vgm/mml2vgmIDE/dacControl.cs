@@ -1,4 +1,5 @@
 ﻿using Core;
+using mml2vgmIDE.Driver.ZGM;
 using NScci;
 using System;
 
@@ -18,6 +19,7 @@ namespace mml2vgmIDE
         public ChipRegister chipRegister = null;
         public EnmModel model = EnmModel.VirtualModel;
 
+        public zgm driver { get; internal set; }
 
         public void sendCommand(long Counter,dac_control chip)
         {
@@ -280,6 +282,51 @@ namespace mml2vgmIDE
         public void setup_chip(byte ChipID, byte ChType, byte ChNum, uint Command)
         {
             dac_control chip = DACData[ChipID];
+
+            chip.DstChipType = ChType; // TypeID (e.g. 0x02 for YM2612)
+            chip.DstChipID = ChNum;    // chip number (to send commands to 1st or 2nd chip)
+            chip.DstCommand = Command; // Port and Command (would be 0x02A for YM2612)
+
+            switch (chip.DstChipType)
+            {
+                case 0x00:  // SN76496
+                    if ((chip.DstCommand & 0x0010) > 0)
+                        chip.CmdSize = 0x01;   // Volume Write
+                    else
+                        chip.CmdSize = 0x02;   // Frequency Write
+                    break;
+                case 0x02:  // YM2612
+                    chip.CmdSize = 0x01;
+                    break;
+                case 0x11:  // PWM
+                case 0x1F:  // QSound
+                    chip.CmdSize = 0x02;
+                    break;
+                default:
+                    chip.CmdSize = 0x01;
+                    break;
+            }
+            chip.DataStep = (byte)(chip.CmdSize * chip.StepSize);
+
+            return;
+        }
+
+        public void setup_chipZGM(byte StreamID, int ChipID, uint Command)
+        {
+            dac_control chip = DACData[StreamID];
+            byte ChType = 0x2;
+            byte ChNum = 0x0;
+            foreach(Driver.ZGM.ZgmChip.ZgmChip zchip in driver.chips)
+            {
+                if (zchip.defineInfo.commandNo != ChipID) continue;
+
+                if(zchip is Driver.ZGM.ZgmChip.YM2612)
+                {
+                    ChType = 0x2;
+                }
+                ChNum = (byte)zchip.Index;
+                break;
+            }
 
             chip.DstChipType = ChType; // TypeID (e.g. 0x02 for YM2612)
             chip.DstChipID = ChNum;    // chip number (to send commands to 1st or 2nd chip)

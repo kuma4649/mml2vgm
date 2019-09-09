@@ -23,7 +23,7 @@ namespace Core
 
         public byte SSGKeyOn = 0x3f;
 
-        public AY8910(ClsVgm parent, int chipID, string initialPartName, string stPath, bool isSecondary) : base(parent, chipID, initialPartName, stPath, isSecondary)
+        public AY8910(ClsVgm parent, int chipID, string initialPartName, string stPath, int isSecondary) : base(parent, chipID, initialPartName, stPath, isSecondary)
         {
             _chipType = enmChipType.AY8910;
             _Name = "AY8910";

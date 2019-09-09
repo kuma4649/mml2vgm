@@ -1,12 +1,12 @@
 echo mml2vgm
 
 del /Q .\output\*.*
-xcopy .\mml2vgm\bin\Release\*.* .\output\mml2vgm /R /Y /I /K
+xcopy .\mml2vgm\bin\Release\*.* .\output\mml2vgm /E /R /Y /I /K
 del /Q .\output\mml2vgm\*.pdb
 
-xcopy .\mvc\bin\Release\*.* .\output\mml2vgm  /R /Y /I /K
+xcopy .\mvc\bin\Release\*.* .\output\mml2vgm /E /R /Y /I /K
 
-xcopy .\mml2vgmIDE\bin\Release\*.* .\output\mml2vgmIDE /R /Y /I /K
+xcopy .\mml2vgmIDE\bin\Release\*.* .\output\mml2vgmIDE /E /R /Y /I /K
 copy /Y .\CHANGE.txt .\output
 copy /Y .\IDE.txt .\output
 copy /Y .\Script.txt .\output

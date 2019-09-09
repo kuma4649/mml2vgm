@@ -59,7 +59,7 @@ namespace Core
         /// <summary>
         /// Secondary Chipか
         /// </summary>
-        public bool isSecondary = false;
+        public int isSecondary = 0;
         
         /// <summary>
         /// 割り当てられた音源のチャンネル番号
@@ -1072,7 +1072,7 @@ namespace Core
     public class clsPcm
     {
         public enmChipType chip = enmChipType.YM2612;
-        public bool isSecondary = false;
+        public int isSecondary = 0;
         public int num = 0;
         public int seqNum = 0;
         public double xgmMaxSampleCount = 0;
@@ -1091,7 +1091,7 @@ namespace Core
         public clsPcm(int num
             ,int seqNum
             ,enmChipType chip
-            ,bool isSecondary
+            ,int isSecondary
             ,string fileName
             ,int freq
             ,int vol 
@@ -1129,7 +1129,7 @@ namespace Core
         public int BaseFreq = 8000;
         public int Volume = 100;
         public enmChipType chip = enmChipType.YM2612;
-        public bool isSecondary = false;
+        public int isSecondary = 0;
         public object[] Option = null;
         public int SrcStartAdr = 0;
         public int DesStartAdr = 0;
@@ -1145,7 +1145,7 @@ namespace Core
             , int BaseFreq
             , int Volume
             , enmChipType chip
-            , bool isSecondary
+            , int isSecondary
             , int LoopAdr)
         {
             this.type = type;
@@ -1162,7 +1162,7 @@ namespace Core
             enmPcmDefineType type
             , string FileName
             , enmChipType chip
-            , bool isSecondary
+            , int isSecondary
             , int SrcStartAdr
             , int DesStartAdr
             , int Length
@@ -1194,7 +1194,7 @@ namespace Core
             enmPcmDefineType type
             , int No
             , enmChipType chip
-            , bool isSecondary
+            , int isSecondary
             , int BaseFreq
             , int DatStartAdr
             , int DatEndAdr

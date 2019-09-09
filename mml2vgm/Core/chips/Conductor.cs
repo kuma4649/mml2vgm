@@ -8,7 +8,7 @@ namespace Core
 {
     public class Conductor : ClsChip
     {
-        public Conductor(ClsVgm parent, int chipID, string initialPartName, string stPath, bool isSecondary) : base(parent, chipID, initialPartName, stPath, isSecondary)
+        public Conductor(ClsVgm parent, int chipID, string initialPartName, string stPath, int isSecondary) : base(parent, chipID, initialPartName, stPath, isSecondary)
         {
             _chipType = enmChipType.CONDUCTOR;
             _Name = "CONDUCTOR";

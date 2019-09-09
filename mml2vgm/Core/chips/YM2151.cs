@@ -8,7 +8,7 @@ namespace Core
 {
     public class YM2151 : ClsChip
     {
-        public YM2151(ClsVgm parent, int chipID, string initialPartName, string stPath, bool isSecondary) : base(parent, chipID, initialPartName, stPath, isSecondary)
+        public YM2151(ClsVgm parent, int chipID, string initialPartName, string stPath,int isSecondary) : base(parent, chipID, initialPartName, stPath, isSecondary)
         {
 
             _Name = "YM2151";
@@ -17,7 +17,7 @@ namespace Core
             _canUsePcm = false;
 
             Frequency = 3579545;
-            port = new byte[][] { new byte[] { (byte)(isSecondary ? 0xa4 : 0x54) } };
+            port = new byte[][] { new byte[] { (byte)(isSecondary!=0 ? 0xa4 : 0x54) } };
 
             if (string.IsNullOrEmpty(initialPartName)) return;
 
@@ -61,7 +61,7 @@ namespace Core
 
             }
 
-            if (IsSecondary)
+            if (IsSecondary!=0)
             {
                 parent.dat[0x33] = new outDatum(enmMMLType.unknown, null, null, (byte)(parent.dat[0x33].val | 0x40));//use Secondary
             }

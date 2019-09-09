@@ -13,10 +13,8 @@
 	Notes       =
 
 	以下はデフォルト値を再設定しています。(つまりデフォルトを使用するだけなら再設定の必要はありません)
-	PartYM2612    =F1-6
-	PartYM2612Ch3 =F3,F7-9
-	PartYM2612Ch6 =F6
-	PartSN76489   =S1-4
+	PartYM2612    =F
+	PartSN76489   =S
 	ClockCount    =192
 	FmF-Num       =289,2af,2d8,303,331,362,395,3cc,405,443,484,4c8
 	PsgF-Num1     =357,327,2fa,2cf,2a7,281,25d,23b,21b,1fc,1e0,1c5

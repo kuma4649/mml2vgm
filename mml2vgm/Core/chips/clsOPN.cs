@@ -11,7 +11,7 @@ namespace Core
         public byte SSGKeyOn = 0x3f;
 
 
-        public ClsOPN(ClsVgm parent, int chipID, string initialPartName, string stPath, bool isSecondary) : base(parent, chipID, initialPartName, stPath, isSecondary)
+        public ClsOPN(ClsVgm parent, int chipID, string initialPartName, string stPath, int isSecondary) : base(parent, chipID, initialPartName, stPath, isSecondary)
         {
         }
 
@@ -683,6 +683,7 @@ namespace Core
                                     mml.line.Lp.length,
                                     mml.line.Lp.part,
                                     mml.line.Lp.chip,
+                                    mml.line.Lp.chipIndex,
                                     mml.line.Lp.isSecondary,
                                     mml.line.Lp.ch);
                             }
@@ -716,6 +717,7 @@ namespace Core
                                         mml.line.Lp.length,
                                         mml.line.Lp.part,
                                         mml.line.Lp.chip,
+                                        mml.line.Lp.chipIndex,
                                         mml.line.Lp.isSecondary,
                                         mml.line.Lp.ch);
                                 }
@@ -805,17 +807,28 @@ namespace Core
 
                     if (parent.info.format == enmFormat.ZGM)
                     {
-                        if (parent.ChipCommandSize == 2) cmd = new byte[] { 0x30, 0x00 };
-                        else cmd = new byte[] { 0x30 };
+                        if (parent.ChipCommandSize == 2) cmd = new byte[] {
+                            0x30, 0x00
+                            , (byte)pw.streamID
+                            , (byte)pw.chip.ChipID
+                            , (byte)(pw.chip.ChipID >> 8)
+                        };
+                        else cmd = new byte[] {
+                            0x30
+                            , (byte)pw.streamID
+                            , (byte)pw.chip.ChipID
+                        };
                     }
-                    else cmd = new byte[] { 0x90 };
+                    else cmd = new byte[] {
+                        0x90
+                        , (byte)pw.streamID
+                        , (byte)(0x02 + (pw.isSecondary!=0 ? 0x80 : 0x00))
+                    };
 
                     parent.OutData(
                         mml,
                         // setup stream control
                         cmd
-                        , (byte)pw.streamID
-                        , (byte)(0x02 + (pw.isSecondary ? 0x80 : 0x00))
                         , 0x00
                         , 0x2a
                         );

@@ -12,7 +12,7 @@ namespace Core
         };
         private int beforePanData = -1;
 
-        public SN76489(ClsVgm parent, int chipID, string initialPartName, string stPath, bool isSecondary) : base(parent, chipID, initialPartName, stPath, isSecondary)
+        public SN76489(ClsVgm parent, int chipID, string initialPartName, string stPath, int isSecondary) : base(parent, chipID, initialPartName, stPath, isSecondary)
         {
             _Name = "SN76489";
             _ShortName = "DCSG";
@@ -21,8 +21,8 @@ namespace Core
             _canUsePI = false;
             FNumTbl = _FNumTbl;
             port =new byte[][]{
-                new byte[] { (byte)(isSecondary ? 0x30 : 0x50) }
-                , new byte[] { (byte)(isSecondary ? 0x3f : 0x4f) }
+                new byte[] { (byte)(isSecondary!=0 ? 0x30 : 0x50) }
+                , new byte[] { (byte)(isSecondary!=0 ? 0x3f : 0x4f) }
             };
 
             Frequency = 3579545;
@@ -60,7 +60,7 @@ namespace Core
         public override void InitChip()
         {
             if (!use) return;
-            if (IsSecondary)
+            if (IsSecondary!=0)
             {
                 parent.dat[0x0f] = new outDatum(enmMMLType.unknown, null, null, (byte)(parent.dat[0x0f].val | 0x40));
             }

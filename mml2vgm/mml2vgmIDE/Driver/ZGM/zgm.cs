@@ -72,7 +72,7 @@ namespace mml2vgmIDE.Driver.ZGM
         public delegate void RefAction<T1, T2>(T1 arg1, ref T2 arg2);
         private Dictionary<int, RefAction<outDatum, uint>> vgmCmdTbl = new Dictionary<int, RefAction<outDatum, uint>>();
 
-        public List<ZgmChip.ZgmChip> chips = null;
+        public List<Chip> chips = null;
 
         private uint vgmAdr;
         //private int vgmWait;
@@ -93,8 +93,7 @@ namespace mml2vgmIDE.Driver.ZGM
         private byte[][] ym2610AdpcmB = new byte[2][] { null, null };
 
         private List<byte> pcmDat = new List<byte>();
-
-
+        private int chipCommandSize=1;
 
         public override bool init(outDatum[] vgmBuf, ChipRegister chipRegister, EnmChip[] useChip, uint latency, uint waitTime)
         {
@@ -110,6 +109,8 @@ namespace mml2vgmIDE.Driver.ZGM
             ym2610AdpcmB = new byte[2][] { null, null };
 
             if (!getInformationHeader()) return false;
+
+            chipRegister.ZgmSetup(chips);
 
             vgmAdr = (uint)vgmDataOffset;
             //vgmWait = 0;
@@ -129,7 +130,15 @@ namespace mml2vgmIDE.Driver.ZGM
                 DacCtrl[CurChip].Enable = false;
             }
 
-            setCommands();
+            try
+            {
+                setCommands();
+            }
+            catch (Exception e)
+            {
+                log.Write(e.StackTrace);
+                return false;
+            }
 
             Stopped = false;
 
@@ -201,7 +210,7 @@ namespace mml2vgmIDE.Driver.ZGM
 
                 if (vgmCmdTbl.ContainsKey(cmd.val))
                 {
-                    Console.WriteLine("{0:X05} : {1:X02} ", vgmAdr, vgmBuf[vgmAdr].val);
+                    //Console.WriteLine("{0:X05} : {1:X02} {2:X02} {3:X02}", vgmAdr, vgmBuf[vgmAdr].val, vgmBuf[vgmAdr + 1].val, vgmBuf[vgmAdr + 2].val);
                     vgmCmdTbl[cmd.val](cmd, ref vgmAdr);
                 }
                 else
@@ -292,7 +301,7 @@ namespace mml2vgmIDE.Driver.ZGM
 
         private void vcDummyChip(outDatum od, ref uint vgmAdr)
         {
-            chipRegister.writeDummyChip(od, Audio.DriverSeqCounter, vgmBuf[vgmAdr + 1].val, vgmBuf[vgmAdr + 2].val);
+            chipRegister.writeDummyChipZGM(od, Audio.DriverSeqCounter, vgmBuf[vgmAdr + 1].val, vgmBuf[vgmAdr + 2].val);
             vgmAdr += 3;
         }
 
@@ -767,7 +776,7 @@ namespace mml2vgmIDE.Driver.ZGM
         private void vcWaitN1Samples(outDatum od, ref uint vgmAdr)
         {
             //vgmWait += (int)(vgmBuf[vgmAdr].val - 0x6f);
-            Audio.DriverSeqCounter += (int)(vgmBuf[vgmAdr].val - 0x6f);
+            Audio.DriverSeqCounter += (int)(vgmBuf[vgmAdr].val - 0x0f);
             vgmAdr++;
         }
 
@@ -779,7 +788,7 @@ namespace mml2vgmIDE.Driver.ZGM
             //log.Write(Audio.DriverSeqCounter.ToString());
 
             //vgmWait += (int)(vgmBuf[vgmAdr].val - 0x80);
-            Audio.DriverSeqCounter += (int)(vgmBuf[vgmAdr].val - 0x80);
+            Audio.DriverSeqCounter += (int)(vgmBuf[vgmAdr].val - 0x20);
 
 
             vgmAdr++;
@@ -787,16 +796,13 @@ namespace mml2vgmIDE.Driver.ZGM
 
         private void vcSetupStreamControl(outDatum od, ref uint vgmAdr)
         {
-            //if (model != enmModel.VirtualModel)
-            //{
-            //    vgmAdr += 5;
-            //    return;
-            //}
-
-            byte si = vgmBuf[vgmAdr + 1].val;
+            int pos = 1;
+            byte si = vgmBuf[vgmAdr + pos].val;//streamID
+            pos++;
             if (si == 0xff)
             {
                 vgmAdr += 5;
+                if (chipCommandSize == 2) vgmAdr++;
                 return;
             }
             if (!DacCtrl[si].Enable)
@@ -807,12 +813,21 @@ namespace mml2vgmIDE.Driver.ZGM
                 DacCtrlUsg[DacCtrlUsed] = si;
                 DacCtrlUsed++;
             }
-            byte chipId = vgmBuf[vgmAdr + 2].val;
-            byte port = vgmBuf[vgmAdr + 3].val;
-            byte cmd = vgmBuf[vgmAdr + 4].val;
 
-            dacControl.setup_chip(si, (byte)(chipId & 0x7F), (byte)((chipId & 0x80) >> 7), (uint)(port * 0x100 + cmd));
-            vgmAdr += 5;
+            int chipId = vgmBuf[vgmAdr + pos].val;
+            pos++;
+            if (chipCommandSize == 2)
+            {
+                chipId += vgmBuf[vgmAdr + pos].val*0x100;
+                pos++;
+            }
+            byte port = vgmBuf[vgmAdr + pos].val;
+            pos++;
+            byte cmd = vgmBuf[vgmAdr + pos].val;
+            pos++;
+
+            dacControl.setup_chipZGM(si, chipId, (uint)(port * 0x100 + cmd));
+            vgmAdr += (uint)pos;
         }
 
         private void vcSetStreamData(outDatum od, ref uint vgmAdr)
@@ -1007,31 +1022,6 @@ namespace mml2vgmIDE.Driver.ZGM
             chipRegister.C140SetRegister(od, Audio.DriverSeqCounter, id, adr, data);
             vgmAdr += 4;
         }
-
-        //private UInt32 getLE16(UInt32 adr)
-        //{
-        //    UInt32 dat;
-        //    dat = (UInt32)vgmBuf[adr].val + (UInt32)vgmBuf[adr + 1].val * 0x100;
-
-        //    return dat;
-        //}
-
-        //private UInt32 getLE24(UInt32 adr)
-        //{
-        //    UInt32 dat;
-        //    dat = (UInt32)vgmBuf[adr].val + (UInt32)vgmBuf[adr + 1].val * 0x100 + (UInt32)vgmBuf[adr + 2].val * 0x10000;
-
-        //    return dat;
-        //}
-
-        //private UInt32 getLE32(UInt32 adr)
-        //{
-        //    UInt32 dat;
-        //    dat = (UInt32)vgmBuf[adr].val + (UInt32)vgmBuf[adr + 1].val * 0x100 + (UInt32)vgmBuf[adr + 2].val * 0x10000 + (UInt32)vgmBuf[adr + 3].val * 0x1000000;
-
-        //    return dat;
-        //}
-
 
         private void AddPCMData(byte Type, uint DataSize, uint Adr)
         {
@@ -1433,7 +1423,7 @@ namespace mml2vgmIDE.Driver.ZGM
 
         protected bool getInformationHeader()
         {
-            chips = new List<ZgmChip.ZgmChip>();
+            chips = new List<Chip>();
             UsedChips = "";
 
             SN76489ClockValue = 0;
@@ -1484,6 +1474,8 @@ namespace mml2vgmIDE.Driver.ZGM
             //音源定義数チェック
             if (defineCount < 1) return false;
 
+            chipCommandSize = (defineCount > 128) ? 2 : 1;
+
             uint trackAddress = Common.getLE32(vgmBuf, 0x20);
             uint trackCounter = Common.getLE16(vgmBuf, 0x26);
             vgmDataOffset = trackAddress + 11;
@@ -1493,17 +1485,22 @@ namespace mml2vgmIDE.Driver.ZGM
             if (fcc != FCC_TRK) return false;
             uint trackLength = Common.getLE32(vgmBuf, trackAddress + 3);
             vgmLoopOffset = (int)Common.getLE32(vgmBuf, trackAddress + 7);
-            if (vgmLoopOffset != -1) LoopCounter = 1;
+            if (vgmLoopOffset != 0) LoopCounter = 1;
             vgmEof = (uint)(trackAddress + trackLength);
 
             uint pos = defineAddress;
 
+            Dictionary<string, int> chipCount = new Dictionary<string, int>();
             for (int i = 0; i < defineCount; i++)
             {
                 fcc = Common.getLE24(vgmBuf, pos);
                 if (fcc != FCC_DEF) return false;
                 ZgmChip.ZgmChip chip = (new ZgmChip.ChipFactory()).Create(Common.getLE32(vgmBuf, pos + 0x4), chipRegister, setting, vgmBuf);
-                chip.Setup(ref pos, ref vgmCmdTbl);
+
+                if (!chipCount.ContainsKey(chip.name)) chipCount.Add(chip.name, -1);
+                chipCount[chip.name]++;
+
+                chip.Setup(chipCount[chip.name], ref pos, ref vgmCmdTbl);
                 chips.Add(chip);
             }
 
@@ -1525,7 +1522,7 @@ namespace mml2vgmIDE.Driver.ZGM
         /// 使用チップを列挙した文字列を得る。
         /// (同じチップはカウントされ"x9"のように個数でまとめる。)
         /// </summary>
-        private string GetUsedChipsString(List<ZgmChip.ZgmChip> chips)
+        private string GetUsedChipsString(List<Chip> chips)
         {
             //同じチップの数をそれぞれ集計する
             Dictionary<string, int> c = new Dictionary<string, int>();

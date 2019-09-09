@@ -10,7 +10,7 @@ namespace Core
     {
         public int Interface = 0;
 
-        public segaPcm(ClsVgm parent, int chipID, string initialPartName, string stPath, bool isSecondary) : base(parent, chipID, initialPartName, stPath, isSecondary)
+        public segaPcm(ClsVgm parent, int chipID, string initialPartName, string stPath, int isSecondary) : base(parent, chipID, initialPartName, stPath, isSecondary)
         {
             _chipType = enmChipType.SEGAPCM;
             _Name = "SEGAPCM";
@@ -42,14 +42,14 @@ namespace Core
             {
                 if (parent.ChipCommandSize == 2)
                 {
-                    if (!isSecondary)
+                    if (isSecondary==0)
                         pcmDataInfo[0].totalBuf = new byte[] { 0x07, 0x00, 0x66, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
                     else
                         pcmDataInfo[0].totalBuf = new byte[] { 0x07, 0x00, 0x66, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
                 }
                 else
                 {
-                    if (!isSecondary)
+                    if (isSecondary==0)
                         pcmDataInfo[0].totalBuf = new byte[] { 0x07, 0x66, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
                     else
                         pcmDataInfo[0].totalBuf = new byte[] { 0x07, 0x66, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
@@ -57,7 +57,7 @@ namespace Core
             }
             else
             {
-                if (!isSecondary)
+                if (isSecondary==0)
                     pcmDataInfo[0].totalBuf = new byte[] { 0x67, 0x66, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
                 else
                     pcmDataInfo[0].totalBuf = new byte[] { 0x67, 0x66, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
@@ -93,7 +93,7 @@ namespace Core
                 pw.volume = pw.MaxVolume;
             }
 
-            if (IsSecondary)
+            if (IsSecondary!=0)
             {
                 parent.dat[0x3b] = new outDatum(enmMMLType.unknown, null, null, (byte)(parent.dat[0x3b].val | 0x40));
             }
@@ -205,7 +205,7 @@ namespace Core
             parent.OutData(
                 mml, cmd
                 , (byte)adr //ll
-                , (byte)(((adr & 0x7f00) >> 8) | (pw.isSecondary ? 0x80 : 0)) //hh
+                , (byte)(((adr & 0x7f00) >> 8) | (pw.isSecondary!=0 ? 0x80 : 0)) //hh
                 , data //dd
                 );
         }
@@ -274,7 +274,7 @@ namespace Core
                     pi.totalBuf
                     , pi.totalHeadrSizeOfDataPtr
                     , (UInt32)(pi.totalBuf.Length - (pi.totalHeadrSizeOfDataPtr + 4))
-                    , IsSecondary
+                    , IsSecondary!=0
                     );
                 Common.SetUInt32bit31(
                     pi.totalBuf
@@ -572,7 +572,7 @@ namespace Core
         {
             return string.Format("{0,-10} {1,-7} {2,-5:D3} {3,-4:D2} ${4,-7:X4} ${5,-7:X4} {6} ${7,-7:X4}  {8,4} {9}\r\n"
                 , Name //0
-                , pcm.isSecondary ? "SEC" : "PRI" //1
+                , pcm.isSecondary!=0 ? "SEC" : "PRI" //1
                 , pcm.num //2
                 , pcm.stAdr >> 16 //3
                 , pcm.stAdr & 0xffff //4

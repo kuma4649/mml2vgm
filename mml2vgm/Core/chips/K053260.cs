@@ -14,7 +14,7 @@ namespace Core
         private int beforePan12 = -1;
         private int beforePan34 = -1;
 
-        public K053260(ClsVgm parent, int chipID, string initialPartName, string stPath, bool isSecondary) : base(parent, chipID, initialPartName, stPath, isSecondary)
+        public K053260(ClsVgm parent, int chipID, string initialPartName, string stPath, int isSecondary) : base(parent, chipID, initialPartName, stPath, isSecondary)
         {
             _chipType = enmChipType.K053260;
             _Name = "K053260";
@@ -100,7 +100,7 @@ namespace Core
                 pw.port = port;
             }
 
-            if (IsSecondary)
+            if (IsSecondary!=0)
             {
                 parent.dat[0xaf] = new outDatum(enmMMLType.unknown, null, null, (byte)(parent.dat[0xaf].val | 0x40));
             }
@@ -275,7 +275,7 @@ namespace Core
                     pi.totalBuf
                     , pi.totalHeadrSizeOfDataPtr
                     , (UInt32)(pi.totalBuf.Length - (pi.totalHeadrSizeOfDataPtr + 4))
-                    , IsSecondary
+                    , IsSecondary!=0
                     );
                 Common.SetUInt32bit31(
                     pi.totalBuf
@@ -316,7 +316,7 @@ namespace Core
 
             return string.Format("{0,-10} {1,-7} {2,-5:D3} {3,-4:D2} ${4,-7:X4} ${5,-7:X4} {6} ${7,-7:X4}  {8,4} {9}\r\n"
                 , Name //0
-                , pcm.isSecondary ? "SEC" : "PRI" //1
+                , pcm.isSecondary!=0 ? "SEC" : "PRI" //1
                 , pcm.num //2
                 , pcm.stAdr >> 16 //3
                 , pcm.stAdr & 0xffff //4
@@ -333,7 +333,7 @@ namespace Core
             parent.OutData(
                 mml
                 , cmd
-                , (byte)((IsSecondary ? 0x80 : 0x00) + adr)
+                , (byte)((IsSecondary!=0 ? 0x80 : 0x00) + adr)
                 , data
                 );
 

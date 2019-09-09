@@ -11,7 +11,7 @@ namespace Core
         private byte keyOnStatus = 0;
         private byte keyOnStatusOld = 0;
 
-        public K051649(ClsVgm parent, int chipID, string initialPartName, string stPath, bool isSecondary) : base(parent, chipID, initialPartName, stPath, isSecondary)
+        public K051649(ClsVgm parent, int chipID, string initialPartName, string stPath, int isSecondary) : base(parent, chipID, initialPartName, stPath, isSecondary)
         {
             _chipType = enmChipType.K051649;
             _Name = "K051649";
@@ -102,12 +102,12 @@ namespace Core
             pw.port = port;
         }
 
-        public void OutK051649Port(MML mml, byte[] cmd, bool isSecondary, byte port, byte adr, byte data)
+        public void OutK051649Port(MML mml, byte[] cmd, int isSecondary, byte port, byte adr, byte data)
         {
             parent.OutData(
                 mml,
                 cmd
-                , (byte)((isSecondary ? 0x80 : 0x00) + port)
+                , (byte)((isSecondary!=0 ? 0x80 : 0x00) + port)
                 , adr
                 , data);
         }

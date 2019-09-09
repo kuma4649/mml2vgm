@@ -1,4 +1,5 @@
 ﻿using Core;
+using System.Collections.Generic;
 
 namespace mml2vgmIDE.MMLParameter
 {
@@ -6,6 +7,7 @@ namespace mml2vgmIDE.MMLParameter
     {
         public abstract string Name { get; }
 
+        public int ChCount;
         public string[] inst;
         public int?[] envelope;
         public string[] notecmd;
@@ -20,8 +22,13 @@ namespace mml2vgmIDE.MMLParameter
         public int?[] keyOnMeter;
         public bool[] beforeTie;
 
+        public Queue<outDatum>[] TraceInfo;
+        public outDatum[] TraceInfoOld;
+        public bool isTrace;
+
         public Instrument(int n)
         {
+            ChCount = n;
             inst = new string[n];
             envelope = new int?[n];
             notecmd = new string[n];
@@ -35,10 +42,13 @@ namespace mml2vgmIDE.MMLParameter
             keyShift = new int?[n];
             keyOnMeter = new int?[n];
             beforeTie = new bool[n];
+
+            TraceInfo = new Queue<outDatum>[n];
+            for (int i = 0; i < n; i++) TraceInfo[i] = new Queue<outDatum>();
+            TraceInfoOld = new outDatum[n];
         }
 
         public abstract void SetParameter(outDatum od, int cc);
-
     }
 
 }

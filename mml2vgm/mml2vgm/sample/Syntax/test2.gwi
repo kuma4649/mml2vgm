@@ -13,12 +13,10 @@
 	Notes       =
 
 	以下はデフォルト値を再設定しています。(つまりデフォルトを使用するだけなら再設定の必要はありません)
-	PartYM2612    =F1-6
-	PartYM2612Ch3 =F3,F7-9
-	PartYM2612Ch6 =F6
-	ForcedMonoPartYM2612 =F6
-	PartSN76489   =S1-4
-	PartRf5c164   =R1-9
+	PartYM2612    =F
+	ForcedMonoPartYM2612 =F
+	PartSN76489   =S
+	PartRf5c164   =R
 	ClockCount    =192
     FmF-Num       =289,2af,2d8,303,331,362,395,3cc,405,443,484,4c8
 

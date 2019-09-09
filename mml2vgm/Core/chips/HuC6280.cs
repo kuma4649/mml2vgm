@@ -9,7 +9,7 @@ namespace Core
         public int TotalVolume = 15;
         public int MAXTotalVolume = 15;
 
-        public HuC6280(ClsVgm parent, int chipID, string initialPartName, string stPath, bool isSecondary) : base(parent, chipID, initialPartName, stPath, isSecondary)
+        public HuC6280(ClsVgm parent, int chipID, string initialPartName, string stPath, int isSecondary) : base(parent, chipID, initialPartName, stPath, isSecondary)
         {
             _chipType = enmChipType.HuC6280;
             _Name = "HuC6280";
@@ -41,18 +41,18 @@ namespace Core
             {
                 if (parent.ChipCommandSize == 2)
                 {
-                    if (!isSecondary) pcmDataInfo[0].totalBuf = new byte[] { 0x07, 0x00, 0x66, 0x05, 0x00, 0x00, 0x00, 0x00 };
+                    if (isSecondary==0) pcmDataInfo[0].totalBuf = new byte[] { 0x07, 0x00, 0x66, 0x05, 0x00, 0x00, 0x00, 0x00 };
                     else pcmDataInfo[0].totalBuf = new byte[] { 0x07, 0x00, 0x66, 0x05, 0x00, 0x00, 0x00, 0x00 };
                 }
                 else
                 {
-                    if (!isSecondary) pcmDataInfo[0].totalBuf = new byte[] { 0x07, 0x66, 0x05, 0x00, 0x00, 0x00, 0x00 };
+                    if (isSecondary==0) pcmDataInfo[0].totalBuf = new byte[] { 0x07, 0x66, 0x05, 0x00, 0x00, 0x00, 0x00 };
                     else pcmDataInfo[0].totalBuf = new byte[] { 0x07, 0x66, 0x05, 0x00, 0x00, 0x00, 0x00 };
                 }
             }
             else
             {
-                if (!isSecondary) pcmDataInfo[0].totalBuf = new byte[] { 0x67, 0x66, 0x05, 0x00, 0x00, 0x00, 0x00 };
+                if (isSecondary==0) pcmDataInfo[0].totalBuf = new byte[] { 0x67, 0x66, 0x05, 0x00, 0x00, 0x00, 0x00 };
                 else pcmDataInfo[0].totalBuf = new byte[] { 0x67, 0x66, 0x05, 0x00, 0x00, 0x00, 0x00 };
             }
 
@@ -150,7 +150,7 @@ namespace Core
                         v.Value.num
                         , v.Value.seqNum
                         , v.Value.chip
-                        , false
+                        , 0
                         , v.Value.fileName
                         , v.Value.freq != -1 ? v.Value.freq : samplerate
                         , v.Value.vol
@@ -176,7 +176,7 @@ namespace Core
                     pi.totalBuf
                     , pi.totalHeadrSizeOfDataPtr
                     , (UInt32)(pi.totalBuf.Length - (pi.totalHeadrSizeOfDataPtr + 4))
-                    , IsSecondary);
+                    , IsSecondary!=0);
                 pcmDataEasy = pi.use ? pi.totalBuf : null;
 
             }
@@ -247,7 +247,7 @@ namespace Core
         public void SetHuC6280CurrentChannel(MML mml, partWork pw)
         {
             byte pch = (byte)pw.ch;
-            bool isSecondary = pw.isSecondary;
+            int isSecondary = pw.isSecondary;
 
             if (CurrentChannel != pch)
             {
@@ -273,7 +273,7 @@ namespace Core
             parent.OutData(
                 mml,
                 cmd
-                , (byte)((IsSecondary ? 0x80 : 0x00) + adr)
+                , (byte)((IsSecondary!=0 ? 0x80 : 0x00) + adr)
                 , data);
         }
 
@@ -387,7 +387,7 @@ namespace Core
                     // setup stream control
                     cmd
                     , (byte)pw.streamID
-                    , (byte)(0x1b + (pw.isSecondary ? 0x80 : 0x00)) //0x1b HuC6280
+                    , (byte)(0x1b + (pw.isSecondary!=0 ? 0x80 : 0x00)) //0x1b HuC6280
                     , (byte)pw.ch
                     , (byte)(0x00 + 0x06)// 0x00 Select Channel 
                                          // set stream data
@@ -714,9 +714,9 @@ namespace Core
 
         public override void CmdLoopExtProc(partWork p, MML mml)
         {
-            if (p.chip is HuC6280 && parent.huc6280[p.isSecondary ? 1 : 0].use)
+            if (p.chip is HuC6280 && parent.huc6280[p.isSecondary].use)
             {
-                parent.huc6280[p.isSecondary ? 1 : 0].CurrentChannel = 255;
+                parent.huc6280[p.isSecondary].CurrentChannel = 255;
                 //setHuC6280CurrentChannel(pw);
                 p.beforeFNum = -1;
                 p.huc6280Envelope = -1;
@@ -808,7 +808,7 @@ namespace Core
         {
             return string.Format("{0,-10} {1,-7} {2,-5:D3} N/A  ${3,-7:X6} ${4,-7:X6} N/A      ${5,-7:X6}  NONE {6}\r\n"
                 , Name
-                , pcm.isSecondary ? "SEC" : "PRI"
+                , pcm.isSecondary!=0 ? "SEC" : "PRI"
                 , pcm.num
                 , pcm.stAdr & 0xffffff
                 , pcm.edAdr & 0xffffff

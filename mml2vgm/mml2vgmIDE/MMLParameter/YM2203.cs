@@ -21,6 +21,8 @@ namespace mml2vgmIDE.MMLParameter
 
         public override void SetParameter(outDatum od, int cc)
         {
+            if (isTrace) TraceInfo[od.linePos.ch].Enqueue(od);
+
             int n;
             string s;
 

@@ -111,10 +111,11 @@ namespace mml2vgmIDE
             r.CreateCells(dgvPartCounter);
 
             r.Cells[dgvPartCounter.Columns["ClmPartNumber"].Index].Value = cells[0];
-            r.Cells[dgvPartCounter.Columns["ClmIsSecondary"].Index].Value = cells[1];
-            r.Cells[dgvPartCounter.Columns["ClmPart"].Index].Value = cells[2];
-            r.Cells[dgvPartCounter.Columns["ClmChip"].Index].Value = cells[3];
-            r.Cells[dgvPartCounter.Columns["ClmCOunter"].Index].Value = cells[4];
+            r.Cells[dgvPartCounter.Columns["ClmChipIndex"].Index].Value = cells[1];
+            r.Cells[dgvPartCounter.Columns["ClmChipNumber"].Index].Value = cells[2];
+            r.Cells[dgvPartCounter.Columns["ClmPart"].Index].Value = cells[3];
+            r.Cells[dgvPartCounter.Columns["ClmChip"].Index].Value = cells[4];
+            r.Cells[dgvPartCounter.Columns["ClmCOunter"].Index].Value = cells[5];
 
             dgvPartCounter.Rows.Add(r);
         }
@@ -191,23 +192,27 @@ namespace mml2vgmIDE
             {
                 string chip = (string)dgvPartCounter.Rows[p].Cells["ClmChip"].Value;
                 int r = (int)dgvPartCounter.Rows[p].Cells["ClmPartNumber"].Value - 1;
-                int isSecondary = ((bool)dgvPartCounter.Rows[p].Cells["ClmIsSecondary"].Value ? 1 : 0);
+                int chipIndex = (int)dgvPartCounter.Rows[p].Cells["ClmChipIndex"].Value;
+                int isSecondary = (int)dgvPartCounter.Rows[p].Cells["ClmChipNumber"].Value;
 
                 if (mmlParams.Insts.ContainsKey(chip))
                 {
-                    MMLParameter.Instrument mmli = mmlParams.Insts[chip][isSecondary];
+                    if (mmlParams.Insts[chip].ContainsKey(chipIndex) && mmlParams.Insts[chip][chipIndex].ContainsKey(isSecondary))
+                    {
+                        MMLParameter.Instrument mmli = mmlParams.Insts[chip][chipIndex][isSecondary];
 
-                    dgvPartCounter.Rows[p].Cells["ClmInstrument"].Value = mmli.inst[r] == null ? "-" : mmli.inst[r].ToString();
-                    dgvPartCounter.Rows[p].Cells["ClmEnvelope"].Value = mmli.envelope[r] == null ? "-" : mmli.envelope[r].ToString();
-                    dgvPartCounter.Rows[p].Cells["ClmVolume"].Value = mmli.vol[r] == null ? "-" : mmli.vol[r].ToString();
-                    dgvPartCounter.Rows[p].Cells["ClmPan"].Value = mmli.pan[r] == null ? "-" : mmli.pan[r];
-                    dgvPartCounter.Rows[p].Cells["ClmNote"].Value = mmli.notecmd[r] == null ? "-" : mmli.notecmd[r];
-                    dgvPartCounter.Rows[p].Cells["ClmLength"].Value = mmli.length[r] == null ? "-" : mmli.length[r];
-                    dgvPartCounter.Rows[p].Cells["ClmEnvSw"].Value = mmli.envSw[r] == null ? "-" : mmli.envSw[r];
-                    dgvPartCounter.Rows[p].Cells["ClmLfoSw"].Value = mmli.lfoSw[r] == null ? "-" : mmli.lfoSw[r];
-                    dgvPartCounter.Rows[p].Cells["ClmDetune"].Value = mmli.detune[r] == null ? "-" : mmli.detune[r].ToString();
-                    dgvPartCounter.Rows[p].Cells["ClmKeyShift"].Value = mmli.keyShift[r] == null ? "-" : mmli.keyShift[r].ToString();
-                    DrawMeter(dgvPartCounter.Rows[p].Cells["ClmMeter"], mmli, r);
+                        dgvPartCounter.Rows[p].Cells["ClmInstrument"].Value = mmli.inst[r] == null ? "-" : mmli.inst[r].ToString();
+                        dgvPartCounter.Rows[p].Cells["ClmEnvelope"].Value = mmli.envelope[r] == null ? "-" : mmli.envelope[r].ToString();
+                        dgvPartCounter.Rows[p].Cells["ClmVolume"].Value = mmli.vol[r] == null ? "-" : mmli.vol[r].ToString();
+                        dgvPartCounter.Rows[p].Cells["ClmPan"].Value = mmli.pan[r] == null ? "-" : mmli.pan[r];
+                        dgvPartCounter.Rows[p].Cells["ClmNote"].Value = mmli.notecmd[r] == null ? "-" : mmli.notecmd[r];
+                        dgvPartCounter.Rows[p].Cells["ClmLength"].Value = mmli.length[r] == null ? "-" : mmli.length[r];
+                        dgvPartCounter.Rows[p].Cells["ClmEnvSw"].Value = mmli.envSw[r] == null ? "-" : mmli.envSw[r];
+                        dgvPartCounter.Rows[p].Cells["ClmLfoSw"].Value = mmli.lfoSw[r] == null ? "-" : mmli.lfoSw[r];
+                        dgvPartCounter.Rows[p].Cells["ClmDetune"].Value = mmli.detune[r] == null ? "-" : mmli.detune[r].ToString();
+                        dgvPartCounter.Rows[p].Cells["ClmKeyShift"].Value = mmli.keyShift[r] == null ? "-" : mmli.keyShift[r].ToString();
+                        DrawMeter(dgvPartCounter.Rows[p].Cells["ClmMeter"], mmli, r);
+                    }
                 }
             }
 
@@ -321,6 +326,8 @@ namespace mml2vgmIDE
             {
                 if (txt == c.HeaderText) continue;
                 if (string.IsNullOrEmpty(c.HeaderText)) continue;
+                if (c.Name == "ClmChipIndex") continue;
+                if (c.Name == "ClmChipNumber") continue;
                 if (c.Name == "ClmPartNumber") continue;
                 if (c.Name == "ClmIsSecondary") continue;
 
@@ -358,6 +365,8 @@ namespace mml2vgmIDE
             //show all
             foreach (DataGridViewColumn c in dgvPartCounter.Columns)
             {
+                if (c.Name == "ClmChipIndex") continue;
+                if (c.Name == "ClmChipNumber") continue;
                 if (c.Name == "ClmPartNumber") continue;
                 if (c.Name == "ClmIsSecondary") continue;
                 c.Visible = true;

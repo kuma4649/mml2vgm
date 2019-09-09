@@ -195,10 +195,11 @@ Chip Identify number
   0x2n (0x00)			: YM2612 port 0 address 2A write from the data bank.(VGM 0x8nと同等)
   0x30-0x35 (0x00)		: DAC Stream Control Write(VGM 0x90-0x95と同等)
                           Setup Stream Control:
-                            0x30 ss tt pp cc
+                            0x30 ss tt pp cc(command size: 1)
+							0x30 0x00 ss tt tt pp cc(command size: 2)
 				          where:
-				            tt   = Chip Command Number
-                                   (コマンドのサイズにあわせる。)
+						    ss = StreamID(連番)
+				            tt = Chip Command number
   0x40 (0x00) dddddddd	: seek to offset dddddddd(VGM 0xE0と同等)
 
 

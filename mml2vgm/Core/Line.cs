@@ -19,7 +19,7 @@ namespace Core
 
         public Line Copy()
         {
-            LinePos lp = new LinePos(this.Lp.fullPath, this.Lp.row, this.Lp.col, this.Lp.length, this.Lp.part, this.Lp.chip, this.Lp.isSecondary, this.Lp.ch);
+            LinePos lp = new LinePos(this.Lp.fullPath, this.Lp.row, this.Lp.col, this.Lp.length, this.Lp.part, this.Lp.chip, this.Lp.chipIndex, this.Lp.isSecondary, this.Lp.ch);
             Line l = new Line(lp, this.Txt);
             return l;
         }

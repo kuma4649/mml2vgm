@@ -50,29 +50,6 @@ namespace mml2vgmIDE
         private bool shift = false;
         private ChannelInfo defaultChannelInfo = null;
 
-        private Queue<outDatum>[] TraceInfo_C140 = new Queue<outDatum>[48];
-        private outDatum[] TraceInfo_C140old = new outDatum[48];
-        private Queue<outDatum>[] TraceInfo_HuC6280 = new Queue<outDatum>[6];
-        private outDatum[] TraceInfo_HuC6280old = new outDatum[6];
-        private Queue<outDatum>[] TraceInfo_K051649 = new Queue<outDatum>[10];
-        private outDatum[] TraceInfo_K051649old = new outDatum[10];
-        private Queue<outDatum>[] TraceInfo_RF5C164 = new Queue<outDatum>[16];
-        private outDatum[] TraceInfo_RF5C164old = new outDatum[16];
-        private Queue<outDatum>[] TraceInfo_SegaPCM = new Queue<outDatum>[32];
-        private outDatum[] TraceInfo_SegaPCMold = new outDatum[32];
-        private Queue<outDatum>[] TraceInfo_SN76489 = new Queue<outDatum>[8];
-        private outDatum[] TraceInfo_SN76489old = new outDatum[8];
-        private Queue<outDatum>[] TraceInfo_YM2151 = new Queue<outDatum>[16];
-        private outDatum[] TraceInfo_YM2151old = new outDatum[16];
-        private Queue<outDatum>[] TraceInfo_YM2203 = new Queue<outDatum>[18];
-        private outDatum[] TraceInfo_YM2203old = new outDatum[18];
-        private Queue<outDatum>[] TraceInfo_YM2608 = new Queue<outDatum>[38];
-        private outDatum[] TraceInfo_YM2608old = new outDatum[38];
-        private Queue<outDatum>[] TraceInfo_YM2610B = new Queue<outDatum>[38];
-        private outDatum[] TraceInfo_YM2610Bold = new outDatum[38];
-        private Queue<outDatum>[] TraceInfo_YM2612 = new Queue<outDatum>[24];
-        private outDatum[] TraceInfo_YM2612old = new outDatum[24];
-
         private object traceInfoLockObj = new object();
         private bool traceInfoSw = false;
         private string wrkPath = "";
@@ -1002,7 +979,7 @@ namespace mml2vgmIDE
 
             if (isSuccess)
             {
-                Object[] cells = new object[5];
+                Object[] cells = new object[6];
 
                 foreach (KeyValuePair<enmChipType, ClsChip[]> kvp in mv.desVGM.chips)
                 {
@@ -1015,10 +992,11 @@ namespace mml2vgmIDE
                             if (pw[i].clockCounter == 0) continue;
 
                             cells[0] = int.Parse(pw[i].PartName.Substring(2, 2));
-                            cells[1] = pw[i].isSecondary;
-                            cells[2] = pw[i].PartName.Substring(0, 2).Replace(" ", "") + int.Parse(pw[i].PartName.Substring(2, 2)).ToString();
-                            cells[3] = pw[i].chip.Name;//.ToUpper();
-                            cells[4] = pw[i].clockCounter;
+                            cells[1] = chip.ChipID;//ChipIndex
+                            cells[2] = pw[i].isSecondary;//ChipNumber
+                            cells[3] = pw[i].PartName.Substring(0, 2).Replace(" ", "") + int.Parse(pw[i].PartName.Substring(2, 2)).ToString();
+                            cells[4] = pw[i].chip.Name;//.ToUpper();
+                            cells[5] = pw[i].clockCounter;
                             frmPartCounter.AddPartCounter(cells);
                         }
 
@@ -1370,7 +1348,7 @@ namespace mml2vgmIDE
             log.ForcedWrite("起動時のAudio初期化処理開始");
             //Audio.Init(setting);
 
-            Audio.SetMMLTraceInfo = SetMMLTraceInfo;
+            //Audio.SetMMLTraceInfo = SetMMLTraceInfo;
 
             log.ForcedWrite("デバッグウィンドウ起動");
             log.debug = setting.Debug_DispFrameCounter;
@@ -1447,7 +1425,6 @@ namespace mml2vgmIDE
 
             statusStrip1.BackColor = Color.FromArgb(setting.ColorScheme.StatusStripBack_Normal);
 
-            ClearAllTraceInfo();
         }
 
         private IDockContent GetDockContentFromPersistString(string persistString)
@@ -1588,12 +1565,11 @@ namespace mml2vgmIDE
 
                 frmLyrics.update();
                 frmPartCounter.Stop();
-                Audio.mmlParams.Init();
+                Audio.mmlParams.Init(isTrace);
                 frmPartCounter.Start(Audio.mmlParams);
 
                 if (isTrace && ac != null)
                 {
-                    ClearAllTraceInfo();
                     ac.ColorScheme.LineNumberBack = Color.FromArgb(setting.ColorScheme.Azuki_LineNumberBack_Trace);
                     ac.ColorScheme.LineNumberFore = Color.FromArgb(setting.ColorScheme.Azuki_LineNumberFore_Trace);
                     statusStrip1.BackColor = Color.FromArgb(setting.ColorScheme.StatusStripBack_Trace);
@@ -1615,65 +1591,6 @@ namespace mml2vgmIDE
             }
 
             return true;
-        }
-
-        private void ClearAllTraceInfo()
-        {
-            for (int i = 0; i < TraceInfo_C140.Length; i++)
-            {
-                TraceInfo_C140[i] = new Queue<outDatum>();
-                TraceInfo_C140old[i] = null;
-            }
-            for (int i = 0; i < TraceInfo_HuC6280.Length; i++)
-            {
-                TraceInfo_HuC6280[i] = new Queue<outDatum>();
-                TraceInfo_HuC6280old[i] = null;
-            }
-            for (int i = 0; i < TraceInfo_K051649.Length; i++)
-            {
-                TraceInfo_K051649[i] = new Queue<outDatum>();
-                TraceInfo_K051649old[i] = null;
-            }
-            for (int i = 0; i < TraceInfo_RF5C164.Length; i++)
-            {
-                TraceInfo_RF5C164[i] = new Queue<outDatum>();
-                TraceInfo_RF5C164old[i] = null;
-            }
-            for (int i = 0; i < TraceInfo_SegaPCM.Length; i++)
-            {
-                TraceInfo_SegaPCM[i] = new Queue<outDatum>();
-                TraceInfo_SegaPCMold[i] = null;
-            }
-            for (int i = 0; i < TraceInfo_SN76489.Length; i++)
-            {
-                TraceInfo_SN76489[i] = new Queue<outDatum>();
-                TraceInfo_SN76489old[i] = null;
-            }
-            for (int i = 0; i < TraceInfo_YM2151.Length; i++)
-            {
-                TraceInfo_YM2151[i] = new Queue<outDatum>();
-                TraceInfo_YM2151old[i] = null;
-            }
-            for (int i = 0; i < TraceInfo_YM2203.Length; i++)
-            {
-                TraceInfo_YM2203[i] = new Queue<outDatum>();
-                TraceInfo_YM2203old[i] = null;
-            }
-            for (int i = 0; i < TraceInfo_YM2608.Length; i++)
-            {
-                TraceInfo_YM2608[i] = new Queue<outDatum>();
-                TraceInfo_YM2608old[i] = null;
-            }
-            for (int i = 0; i < TraceInfo_YM2610B.Length; i++)
-            {
-                TraceInfo_YM2610B[i] = new Queue<outDatum>();
-                TraceInfo_YM2610Bold[i] = null;
-            }
-            for (int i = 0; i < TraceInfo_YM2612.Length; i++)
-            {
-                TraceInfo_YM2612[i] = new Queue<outDatum>();
-                TraceInfo_YM2612old[i] = null;
-            }
         }
 
         private void playdata()
@@ -1762,99 +1679,6 @@ namespace mml2vgmIDE
             Audio.Slow();
         }
 
-        private void SetMMLTraceInfo(PackData pd)
-        {
-            if (!isTrace) return;
-            if (pd == null) return;
-            if (pd.od == null) return;
-            if (pd.od.linePos == null) return;
-            
-            outDatum od = pd.od;
-
-            switch (pd.od.linePos.chip)//.Chip.Device)
-            {
-                case "YM2151":
-                    lock (traceInfoLockObj)
-                    {
-                        TraceInfo_YM2151[od.linePos.ch + od.linePos.isSecondary * 8].Enqueue(od);
-                    }
-                    break;
-                case "YM2203":
-                    lock (traceInfoLockObj)
-                    {
-                        TraceInfo_YM2203[od.linePos.ch + od.linePos.isSecondary * 9].Enqueue(od);
-                    }
-                    break;
-                case "YM2608":
-                    lock (traceInfoLockObj)
-                    {
-                        TraceInfo_YM2608[od.linePos.ch + od.linePos.isSecondary * 19].Enqueue(od);
-                    }
-                    break;
-                case "YM2610B":
-                    lock (traceInfoLockObj)
-                    {
-                        TraceInfo_YM2610B[od.linePos.ch + od.linePos.isSecondary * 19].Enqueue(od);
-                    }
-                    break;
-                case "YM2612":
-                case "YM2612X":
-                    lock (traceInfoLockObj)
-                    {
-                        TraceInfo_YM2612[od.linePos.ch + od.linePos.isSecondary * 12].Enqueue(od);
-                    }
-                    break;
-                case "SN76489":
-                    lock (traceInfoLockObj)
-                    {
-                        TraceInfo_SN76489[od.linePos.ch + od.linePos.isSecondary * 4].Enqueue(od);
-                    }
-                    break;
-                case "HuC6280":
-                    lock (traceInfoLockObj)
-                    {
-                        TraceInfo_HuC6280[od.linePos.ch + od.linePos.isSecondary * 6].Enqueue(od);
-                    }
-                    break;
-                case "RF5C164":
-                    lock (traceInfoLockObj)
-                    {
-                        //if(od.type == enmMMLType.Note && od.linePos.ch == 0)
-                        //{
-                        //    Console.WriteLine("in {0}", ((Core.Note)od.args[0]).cmd);
-                        //}
-                        TraceInfo_RF5C164[od.linePos.ch + od.linePos.isSecondary * 8].Enqueue(od);
-                    }
-                    break;
-                case "C140":
-                    lock (traceInfoLockObj)
-                    {
-                        TraceInfo_C140[od.linePos.ch + od.linePos.isSecondary * 24].Enqueue(od);
-                    }
-                    break;
-                case "SEGAPCM":
-                    lock (traceInfoLockObj)
-                    {
-                        TraceInfo_SegaPCM[od.linePos.ch + od.linePos.isSecondary * 16].Enqueue(od);
-                    }
-                    break;
-                case "K051649":
-                    lock (traceInfoLockObj)
-                    {
-                        TraceInfo_K051649[od.linePos.ch + od.linePos.isSecondary * 5].Enqueue(od);
-                    }
-                    break;
-                default:
-                    //if (pd.od.linePos.chip != "")
-                        //Console.WriteLine(pd.od.linePos.chip);
-                    break;
-            }
-            //int i, c;
-            //ac.GetLineColumnIndexFromCharIndex(od.linePos.col,out i,out c);
-            //Console.WriteLine("{0} {1}", i, c);
-            //ac.Document.Mark(od.linePos.col, od.linePos.col + od.linePos.length, 1);
-        }
-
         private void Timer_Tick(object sender, EventArgs e)
         {
             UpdateTraceInfo();
@@ -1930,70 +1754,20 @@ namespace mml2vgmIDE
 
             try
             {
-                for (int ch = 0; ch < 16; ch++)
+                foreach (string instName in Audio.mmlParams.Insts.Keys)
                 {
-                    bool ret = MarkUpTraceInfo(TraceInfo_YM2151, TraceInfo_YM2151old, ch, fe, ac);
-                    if (ret) refresh = ret;
-                }
-
-                for (int ch = 0; ch < 18; ch++)
-                {
-                    bool ret = MarkUpTraceInfo(TraceInfo_YM2203, TraceInfo_YM2203old, ch, fe, ac);
-                    if (ret) refresh = ret;
-                }
-
-                for (int ch = 0; ch < 38; ch++)
-                {
-                    bool ret = MarkUpTraceInfo(TraceInfo_YM2608, TraceInfo_YM2608old, ch, fe, ac);
-                    if (ret) refresh = ret;
-                }
-
-                for (int ch = 0; ch < 38; ch++)
-                {
-                    bool ret = MarkUpTraceInfo(TraceInfo_YM2610B, TraceInfo_YM2610Bold, ch, fe, ac);
-                    if (ret) refresh = ret;
-                }
-
-                for (int ch = 0; ch < 24; ch++)
-                {
-                    bool ret = MarkUpTraceInfo(TraceInfo_YM2612, TraceInfo_YM2612old, ch, fe, ac);
-                    if (ret) refresh = ret;
-                }
-
-                for (int ch = 0; ch < 8; ch++)
-                {
-                    bool ret = MarkUpTraceInfo(TraceInfo_SN76489, TraceInfo_SN76489old, ch, fe, ac);
-                    if (ret) refresh = ret;
-                }
-
-                for (int ch = 0; ch < 6; ch++)
-                {
-                    bool ret = MarkUpTraceInfo(TraceInfo_HuC6280, TraceInfo_HuC6280old, ch, fe, ac);
-                    if (ret) refresh = ret;
-                }
-
-                for (int ch = 0; ch < 16; ch++)
-                {
-                    bool ret = MarkUpTraceInfo(TraceInfo_RF5C164, TraceInfo_RF5C164old, ch, fe, ac);
-                    if (ret) refresh = ret;
-                }
-
-                for (int ch = 0; ch < 48; ch++)
-                {
-                    bool ret = MarkUpTraceInfo(TraceInfo_C140, TraceInfo_C140old, ch, fe, ac);
-                    if (ret) refresh = ret;
-                }
-
-                for (int ch = 0; ch < 32; ch++)
-                {
-                    bool ret = MarkUpTraceInfo(TraceInfo_SegaPCM, TraceInfo_SegaPCMold, ch, fe, ac);
-                    if (ret) refresh = ret;
-                }
-
-                for (int ch = 0; ch < 5 * 2; ch++)
-                {
-                    bool ret = MarkUpTraceInfo(TraceInfo_K051649, TraceInfo_K051649old, ch, fe, ac);
-                    if (ret) refresh = ret;
+                    foreach (int chipIndex in Audio.mmlParams.Insts[instName].Keys)
+                    {
+                        foreach (int chipNumber in Audio.mmlParams.Insts[instName][chipIndex].Keys)
+                        {
+                            MMLParameter.Instrument i = Audio.mmlParams.Insts[instName][chipIndex][chipNumber];
+                            for (int ch = 0; ch < i.ChCount; ch++)
+                            {
+                                bool ret = MarkUpTraceInfo(i.TraceInfo, i.TraceInfoOld, ch, fe, ac);
+                                if (ret) refresh = ret;
+                            }
+                        }
+                    }
                 }
 
                 if (refresh)

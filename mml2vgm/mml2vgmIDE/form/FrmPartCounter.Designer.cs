@@ -46,8 +46,9 @@
             this.cmsMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.testToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.timer = new System.Windows.Forms.Timer(this.components);
+            this.ClmChipIndex = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ClmChipNumber = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ClmPartNumber = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ClmIsSecondary = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.ClmPart = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ClmChip = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ClmCounter = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -84,8 +85,9 @@
             this.dgvPartCounter.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.dgvPartCounter.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             this.dgvPartCounter.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.ClmChipIndex,
+            this.ClmChipNumber,
             this.ClmPartNumber,
-            this.ClmIsSecondary,
             this.ClmPart,
             this.ClmChip,
             this.ClmCounter,
@@ -142,17 +144,20 @@
             this.timer.Interval = 10;
             this.timer.Tick += new System.EventHandler(this.Timer_Tick);
             // 
+            // ClmChipIndex
+            // 
+            this.ClmChipIndex.HeaderText = "ChipIndex";
+            this.ClmChipIndex.Name = "ClmChipIndex";
+            // 
+            // ClmChipNumber
+            // 
+            this.ClmChipNumber.HeaderText = "ChipNumber";
+            this.ClmChipNumber.Name = "ClmChipNumber";
+            // 
             // ClmPartNumber
             // 
             this.ClmPartNumber.HeaderText = "PartNumber";
             this.ClmPartNumber.Name = "ClmPartNumber";
-            this.ClmPartNumber.Visible = false;
-            // 
-            // ClmIsSecondary
-            // 
-            this.ClmIsSecondary.HeaderText = "IsSecondary";
-            this.ClmIsSecondary.Name = "ClmIsSecondary";
-            this.ClmIsSecondary.Visible = false;
             // 
             // ClmPart
             // 
@@ -299,8 +304,9 @@
         private System.Windows.Forms.Timer timer;
         private System.Windows.Forms.ContextMenuStrip cmsMenu;
         private System.Windows.Forms.ToolStripMenuItem testToolStripMenuItem;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ClmChipIndex;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ClmChipNumber;
         private System.Windows.Forms.DataGridViewTextBoxColumn ClmPartNumber;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn ClmIsSecondary;
         private System.Windows.Forms.DataGridViewTextBoxColumn ClmPart;
         private System.Windows.Forms.DataGridViewTextBoxColumn ClmChip;
         private System.Windows.Forms.DataGridViewTextBoxColumn ClmCounter;

@@ -160,85 +160,85 @@ namespace Core
             ClsChip cp;
 
             //default
-            cp = new Conductor(null, 0, null, null, false);
+            cp = new Conductor(null, 0, null, null, 0);
             cpn.Add(enmChipType.CONDUCTOR, new Tuple<string, string, List<string>, int[]>(cp.Name, cp.ShortName, new List<string>(new string[] { "Cn" }), new int[] { 1, 1, 1 }));
 
-            cp = new YM2151(null, 0, null, null, false);
+            cp = new YM2151(null, 0, null, null, 0);
             cpn.Add(enmChipType.YM2151, new Tuple<string, string, List<string>, int[]>(cp.Name, cp.ShortName, new List<string>(
                 info.format == enmFormat.VGM ? new string[] { "X", "Xs" } : (info.format == enmFormat.XGM ? new string[] { } : new string[] { "X", "Xs" })
                 ), new int[] { 2, 0, -1 }));
 
-            cp = new YM2203(null, 0, null, null, false);
+            cp = new YM2203(null, 0, null, null, 0);
             cpn.Add(enmChipType.YM2203, new Tuple<string, string, List<string>, int[]>(cp.Name, cp.ShortName, new List<string>(
                 info.format == enmFormat.VGM ? new string[] { "N", "Ns" } : (info.format == enmFormat.XGM ? new string[] { } : new string[] { "N", "Ns" })
                 ), new int[] { 2, 0, -1 }));
 
-            cp = new YM2608(null, 0, null, null, false);
+            cp = new YM2608(null, 0, null, null, 0);
             cpn.Add(enmChipType.YM2608, new Tuple<string, string, List<string>, int[]>(cp.Name, cp.ShortName, new List<string>(
                 info.format == enmFormat.VGM ? new string[] { "P", "Ps" } : (info.format == enmFormat.XGM ? new string[] { } : new string[] { "P", "Ps" })
                 ), new int[] { 2, 0, -1 }));
 
-            cp = new YM2610B(null, 0, null, null, false);
+            cp = new YM2610B(null, 0, null, null, 0);
             cpn.Add(enmChipType.YM2610B, new Tuple<string, string, List<string>, int[]>(cp.Name, cp.ShortName, new List<string>(
                 info.format == enmFormat.VGM ? new string[] { "T", "Ts" } : (info.format == enmFormat.XGM ? new string[] { } : new string[] { "T", "Ts" })
                 ), new int[] { 2, 0, -1 }));
 
-            cp = new YM2612(null, 0, null, null, false);
+            cp = new YM2612(null, 0, null, null, 0);
             cpn.Add(enmChipType.YM2612, new Tuple<string, string, List<string>, int[]>(cp.Name, cp.ShortName, new List<string>(
                 info.format == enmFormat.VGM ? new string[] { "F", "Fs" } : (info.format == enmFormat.XGM ? new string[] { } : new string[] { "F", "Fs" })
                 ), new int[] { 2, 0, -1 }));
 
-            cp = new SN76489(null, 0, null, null, false);
+            cp = new SN76489(null, 0, null, null, 0);
             cpn.Add(enmChipType.SN76489, new Tuple<string, string, List<string>, int[]>(cp.Name, cp.ShortName, new List<string>(
-                info.format == enmFormat.VGM ? new string[] { "S", "Ss" } : (info.format == enmFormat.XGM ? new string[] { } : new string[] { "S", "Ss" })
-                ), new int[] { 2, 0, -1 }));
+                info.format == enmFormat.VGM ? new string[] { "S", "Ss" } : (info.format == enmFormat.XGM ? new string[] { "S" } : new string[] { "S", "Ss" })
+                ), new int[] { 2, 1, -1 }));
 
-            cp = new RF5C164(null, 0, null, null, false);
+            cp = new RF5C164(null, 0, null, null, 0);
             cpn.Add(enmChipType.RF5C164, new Tuple<string, string, List<string>, int[]>(cp.Name, cp.ShortName, new List<string>(
                 info.format == enmFormat.VGM ? new string[] { "R", "Rs" } : (info.format == enmFormat.XGM ? new string[] { } : new string[] { "R", "Rs" })
                 ), new int[] { 2, 0, -1 }));
 
-            cp = new segaPcm(null, 0, null, null, false);
+            cp = new segaPcm(null, 0, null, null, 0);
             cpn.Add(enmChipType.SEGAPCM, new Tuple<string, string, List<string>, int[]>(cp.Name, cp.ShortName, new List<string>(
                 info.format == enmFormat.VGM ? new string[] { "Z", "Zs" } : (info.format == enmFormat.XGM ? new string[] { } : new string[] { "Z", "Zs" })
                 ), new int[] { 2, 0, -1 }));
 
-            cp = new HuC6280(null, 0, null, null, false);
+            cp = new HuC6280(null, 0, null, null, 0);
             cpn.Add(enmChipType.HuC6280, new Tuple<string, string, List<string>, int[]>(cp.Name, cp.ShortName, new List<string>(
                 info.format == enmFormat.VGM ? new string[] { "H", "Hs" } : (info.format == enmFormat.XGM ? new string[] { } : new string[] { "H", "Hs" })
                 ), new int[] { 2, 0, -1 }));
 
-            cp = new YM2612X(null, 0, null, null, false);
+            cp = new YM2612X(null, 0, null, null, 0);
             cpn.Add(enmChipType.YM2612X, new Tuple<string, string, List<string>, int[]>(cp.Name, cp.ShortName, new List<string>(
                 info.format == enmFormat.VGM ? new string[] { } : (info.format == enmFormat.XGM ? new string[] { "E" } : new string[] { })
                 ), new int[] { 0, 1, 0 }));
 
-            cp = new YM2413(null, 0, null, null, false);
+            cp = new YM2413(null, 0, null, null, 0);
             cpn.Add(enmChipType.YM2413, new Tuple<string, string, List<string>, int[]>(cp.Name, cp.ShortName, new List<string>(
                 info.format == enmFormat.VGM ? new string[] { "L", "Ls" } : (info.format == enmFormat.XGM ? new string[] { } : new string[] { "L", "Ls" })
                 ), new int[] { 2, 0, -1 }));
 
-            cp = new C140(null, 0, null, null, false);
+            cp = new C140(null, 0, null, null, 0);
             cpn.Add(enmChipType.C140, new Tuple<string, string, List<string>, int[]>(cp.Name, cp.ShortName, new List<string>(
                 info.format == enmFormat.VGM ? new string[] { "Y", "Ys" } : (info.format == enmFormat.XGM ? new string[] { } : new string[] { "Y", "Ys" })
                 ), new int[] { 2, 0, -1 }));
 
-            cp = new AY8910(null, 0, null, null, false);
+            cp = new AY8910(null, 0, null, null, 0);
             cpn.Add(enmChipType.AY8910, new Tuple<string, string, List<string>, int[]>(cp.Name, cp.ShortName, new List<string>(
                 info.format == enmFormat.VGM ? new string[] { "A", "As" } : (info.format == enmFormat.XGM ? new string[] { } : new string[] { "A", "As" })
                 ), new int[] { 2, 0, -1 }));
 
-            cp = new K051649(null, 0, null, null, false);
+            cp = new K051649(null, 0, null, null, 0);
             cpn.Add(enmChipType.K051649, new Tuple<string, string, List<string>, int[]>(cp.Name, cp.ShortName, new List<string>(
                 info.format == enmFormat.VGM ? new string[] { "K", "Ks" } : (info.format == enmFormat.XGM ? new string[] { } : new string[] { "K", "Ks" })
                 ), new int[] { 2, 0, -1 }));
 
-            cp = new QSound(null, 0, null, null, false);
+            cp = new QSound(null, 0, null, null, 0);
             cpn.Add(enmChipType.QSound, new Tuple<string, string, List<string>, int[]>(cp.Name, cp.ShortName, new List<string>(
                 info.format == enmFormat.VGM ? new string[] { "Q", "Qs" } : (info.format == enmFormat.XGM ? new string[] { } : new string[] { "Q", "Qs" })
                 ), new int[] { 2, 0, -1 }));
 
-            cp = new K053260(null, 0, null, null, false);
+            cp = new K053260(null, 0, null, null, 0);
             cpn.Add(enmChipType.K053260, new Tuple<string, string, List<string>, int[]>(cp.Name, cp.ShortName, new List<string>(
                 info.format == enmFormat.VGM ? new string[] { "O", "Os" } : (info.format == enmFormat.XGM ? new string[] { } : new string[] { "O", "Os" })
                 ), new int[] { 2, 0, -1 }));

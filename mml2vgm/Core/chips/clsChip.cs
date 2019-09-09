@@ -48,6 +48,11 @@ namespace Core
             {
                 return _ChipID;
             }
+
+            set
+            {
+                _ChipID = value;
+            }
         }
 
         public bool CanUsePcm
@@ -78,7 +83,7 @@ namespace Core
         }
         protected bool _canUsePI = false;
 
-        public bool IsSecondary
+        public int IsSecondary
         {
             get
             {
@@ -96,7 +101,7 @@ namespace Core
         public bool SupportReversePartWork = false;
         public bool ReversePartWork = false;
 
-        protected bool _IsSecondary = false;
+        protected int _IsSecondary = 0;
 
         public Function Envelope = null;
 
@@ -118,12 +123,12 @@ namespace Core
         public List<byte[]> pcmDataDirect = new List<byte[]>();
         public byte[][] port;
 
-        public ClsChip(ClsVgm parent, int chipID, string initialPartName, string stPath, bool isSecondary)
+        public ClsChip(ClsVgm parent, int chipID, string initialPartName, string stPath, int isSecondary)
         {
             this.parent = parent;
             this._ChipID = chipID;
             this.stPath = stPath;
-            this.IsSecondary = IsSecondary;
+            this.IsSecondary = isSecondary;
             this.PartName = initialPartName;
 
             MakeFNumTbl();
@@ -449,13 +454,46 @@ namespace Core
             if (!use) return;
 
             int maxSize = 0;
+            int ptr = 7 + (parent.ChipCommandSize == 2 ? 2 : 0);
+
+            if(parent.info.format== enmFormat.ZGM)
+            {
+                if (port.Length < 1) return;
+
+                if (parent.ChipCommandSize != 2)
+                {
+                    if (port[0].Length < 1) return;
+
+                    if (pcmDataEasy != null && pcmDataEasy.Length > 1) pcmDataEasy[1] = port[0][0];
+                    for(int i = 0; i < pcmDataDirect.Count; i++)
+                    {
+                        pcmDataDirect[i][1] = port[0][0];
+                    }
+                }
+                else
+                {
+                    if (port[0].Length < 2) return;
+
+                    if (pcmDataEasy != null && pcmDataEasy.Length > 3)
+                    {
+                        pcmDataEasy[2] = port[0][0];
+                        pcmDataEasy[3] = port[0][1];
+                    }
+                    for (int i = 0; i < pcmDataDirect.Count; i++)
+                    {
+                        pcmDataDirect[i][2] = port[0][0];
+                        pcmDataDirect[i][3] = port[0][1];
+                    }
+                }
+            }
+
             if (pcmDataEasy != null && pcmDataEasy.Length > 0)
             {
                 maxSize =
-                    pcmDataEasy[7]
-                    + (pcmDataEasy[8] << 8)
-                    + (pcmDataEasy[9] << 16)
-                    + (pcmDataEasy[10] << 24);
+                    pcmDataEasy[ptr]
+                    + (pcmDataEasy[ptr + 1] << 8)
+                    + (pcmDataEasy[ptr + 2] << 16)
+                    + (pcmDataEasy[ptr + 3] << 24);
             }
             if (pcmDataDirect.Count > 0)
             {
@@ -464,20 +502,20 @@ namespace Core
                     if (dat != null && dat.Length > 0)
                     {
                         int size =
-                            dat[7]
-                            + (dat[8] << 8)
-                            + (dat[9] << 16)
-                            + (dat[10] << 24);
+                            dat[ptr]
+                            + (dat[ptr + 1] << 8)
+                            + (dat[ptr + 2] << 16)
+                            + (dat[ptr + 3] << 24);
                         if (maxSize < size) maxSize = size;
                     }
                 }
             }
             if (pcmDataEasy != null && pcmDataEasy.Length > 0)
             {
-                pcmDataEasy[7] = (byte)maxSize;
-                pcmDataEasy[8] = (byte)(maxSize >> 8);
-                pcmDataEasy[9] = (byte)(maxSize >> 16);
-                pcmDataEasy[10] = (byte)(maxSize >> 24);
+                pcmDataEasy[ptr] = (byte)maxSize;
+                pcmDataEasy[ptr + 1] = (byte)(maxSize >> 8);
+                pcmDataEasy[ptr + 2] = (byte)(maxSize >> 16);
+                pcmDataEasy[ptr + 3] = (byte)(maxSize >> 24);
             }
             if (pcmDataDirect.Count > 0)
             {
@@ -485,10 +523,10 @@ namespace Core
                 {
                     if (dat != null && dat.Length > 0)
                     {
-                        dat[7] = (byte)maxSize;
-                        dat[8] = (byte)(maxSize >> 8);
-                        dat[9] = (byte)(maxSize >> 16);
-                        dat[10] = (byte)(maxSize >> 24);
+                        dat[ptr] = (byte)maxSize;
+                        dat[ptr + 1] = (byte)(maxSize >> 8);
+                        dat[ptr + 2] = (byte)(maxSize >> 16);
+                        dat[ptr + 3] = (byte)(maxSize >> 24);
                     }
                 }
             }
@@ -542,14 +580,27 @@ namespace Core
             byte[] cmd;
             if (pw.chip.parent.info.format == enmFormat.ZGM)
             {
-                if (pw.chip.parent.ChipCommandSize == 2) cmd = new byte[] { 0x09, 0x00, pw.port[0][0], pw.port[0][1] };
-                else cmd = new byte[] { 0x09, pw.port[0][0] };
-            }
-            else cmd = new byte[] { 0x2f, pw.port[0][0] };
+                if (pw.chip.parent.ChipCommandSize == 2)
+                {
+                    cmd = new byte[] { 0x09, 0x00, pw.port[0][0], pw.port[0][1] };
+                    parent.dummyCmdCounter += 4;
+                }
+                else
+                {
+                    cmd = new byte[] { 0x09, pw.port[0][0] };
+                    parent.dummyCmdCounter += 3;
+                }
 
-            //Console.WriteLine("SkipAddress:{0:x06} skip:{1:x06}", parent.dat.Count, parent.dummyCmdCounter);
-            parent.OutData(mml, cmd , (byte)(pw.chip.IsSecondary ? 1 : 0));//0x2f:DummyChip (!!CAUTION!!)
-            parent.dummyCmdCounter += 3;
+                //Console.WriteLine("SkipAddress:{0:x06} skip:{1:x06}", parent.dat.Count, parent.dummyCmdCounter);
+                parent.OutData(mml, cmd, (byte)(pw.chip.IsSecondary));//0x09(zgm):DummyChip (!!CAUTION!!)
+            }
+            else
+            {
+                cmd = new byte[] { 0x2f, pw.port[0][0] };
+                parent.OutData(mml, cmd, (byte)(pw.chip.IsSecondary));//0x2f(vgm/xgm):DummyChip (!!CAUTION!!)
+                parent.dummyCmdCounter += 3;
+            }
+
         }
 
         public virtual void SetKeyOn(partWork pw, MML mml)

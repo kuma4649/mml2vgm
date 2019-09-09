@@ -161,24 +161,21 @@ namespace mml2vgmIDE
         /// <param name="sw"></param>
         public void SetOpacity(bool sw)
         {
-            //this.Opacity = sw ? 1.0 : 0.0;
-            //this.Visible = sw;
-
             if (sw)
             {
-                this.Width =  tw;
+                this.Width = tw;
                 this.Height = th;
+                return;
             }
-            else
-            {
-                //tw=this.Width;
-                //th=this.Height;
-                this.Width = 0;
-                this.Height = 0;
-                this.TopMost = true;
-                if (parent != null) parent.Activate();
-                //this.TopMost = false;
-            }
+
+            //既に非表示の状態の場合は何もせずに戻る
+            //(フォーカスが切り替わるときちらつきが発生してしまう為)
+            if (this.Width == 0) return;
+
+            this.Width = 0;
+            this.Height = 0;
+            this.TopMost = true;
+            if (parent != null) parent.Activate();
         }
 
         public bool GetOpacity()

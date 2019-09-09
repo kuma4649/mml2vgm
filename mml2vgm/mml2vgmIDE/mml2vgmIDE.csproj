@@ -232,6 +232,7 @@
     <Compile Include="MMLParameter\Conductor.cs" />
     <Compile Include="MMLParameter\HuC6280.cs" />
     <Compile Include="MMLParameter\Instrument.cs" />
+    <Compile Include="MMLParameter\InstrumentFactory.cs" />
     <Compile Include="MMLParameter\K051649.cs" />
     <Compile Include="MMLParameter\K053260.cs" />
     <Compile Include="MMLParameter\Manager.cs" />

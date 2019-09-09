@@ -12,11 +12,24 @@
 	Converted            =kuma
 	Notes                =テスト
 
-	Format       =ZGM
-	ClockCount   =192
-    PartYM2612            =A , B , C
+	Format               =ZGM
+	ClockCount           =192
+	PartYM2612           =A , B , C
 
 }
+
+
+A1 T120
+A1 D0  @1 p3 o4 v120 l16 q8 L c2
+A2 D3  @1 p3 o4 v120 l16 q8   c2
+A3 D-3 @1 p3 o4 v120 l16 q8   c2
+B1 D0  @1 p3 o4 v113 l16 q8   e4e4
+B2 D3  @1 p3 o4 v113 l16 q8   e4e4
+B3 D-3 @1 p3 o4 v113 l16 q8   e4e4
+C1 D0  @1 p3 o4 v113 l16 q8   g8g8g8g8
+C2 D3  @1 p3 o4 v113 l16 q8   g8g8g8g8
+C3 D-3 @1 p3 o4 v113 l16 q8   g8g8g8g8
+
 
 BASS
 '@ F 001
@@ -27,9 +40,15 @@ BASS
 '@ 031,018,003,006,001,000,000,002,003
 '@ 001,007
 
+'@ P 1,".\wav\Guitar.wav"        , 8000 , 100,A
+'@ P 2,".\wav\Guitar.wav"        , 8000 , 100,B
+'@ P 3,".\wav\Guitar.wav"        , 8000 , 100,C
+'@ P 4,".\wav\muteGuitar.wav"        , 8000 , 100,A
+'@ P 5,".\wav\SD.wav"        , 8000 , 100,B
+'@ P 6,".\wav\muteGuitar.wav"        , 8000 , 100,C
 
-
-'A1 T90
-'A1 D0 @1 p3 o4 v113 l16 q8Lc4
-'B1 D0 @1 p3 o4 v113 l16 q8 e4
+'A6 T120
+'A6 D0 m1 @1 p3 o4 v120 l16 q8 r2c2
+'B6 D0 m1 @5 p3 o4 v120 l16 q8 c2@5c4c4c4c4c4c4c4
+'C6 D0 m1 @3 p3 o4 v120 l16 q8 r2r2c2
 

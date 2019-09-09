@@ -9,7 +9,7 @@ namespace Core
     public class YM2612X : YM2612
     {
 
-        public YM2612X(ClsVgm parent, int chipID, string initialPartName, string stPath, bool isSecondary) : base(parent, chipID, initialPartName, stPath, isSecondary)
+        public YM2612X(ClsVgm parent, int chipID, string initialPartName, string stPath, int isSecondary) : base(parent, chipID, initialPartName, stPath, isSecondary)
         {
             _chipType = enmChipType.YM2612X;
             _Name = "YM2612X";
@@ -22,8 +22,8 @@ namespace Core
 
             Frequency = 7670454;
             port = new byte[][]{
-                new byte[] { (byte)(isSecondary ? 0xa2 : 0x52) }
-                , new byte[] { (byte)(isSecondary ? 0xa3 : 0x53) }
+                new byte[] { (byte)(isSecondary!=0 ? 0xa2 : 0x52) }
+                , new byte[] { (byte)(isSecondary!=0 ? 0xa3 : 0x53) }
             };
 
             if (string.IsNullOrEmpty(initialPartName)) return;
@@ -191,7 +191,7 @@ namespace Core
                     v.Value.num
                     , v.Value.seqNum
                     , v.Value.chip
-                    , false
+                    , 0
                     , v.Value.fileName
                     , v.Value.freq != -1 ? v.Value.freq : samplerate
                     , v.Value.vol

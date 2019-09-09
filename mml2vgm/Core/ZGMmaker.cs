@@ -141,6 +141,7 @@ namespace Core
                     di.chip = chip;
                     di.chipIdentNo = (uint)(int)dicChipIdentifyNumber[chip.Name][1];
                     di.commandNo = cmdNo;
+                    chip.ChipID = di.commandNo;
                     chip.port = new byte[(int)dicChipIdentifyNumber[chip.Name][2]][];
                     for (int i = 0; i < (int)dicChipIdentifyNumber[chip.Name][2]; i++)
                     {
@@ -157,6 +158,7 @@ namespace Core
                         }
                     }
                     define.Add(di);
+
 
                     for (int i = 0; i < chip.lstPartWork.Count; i++)
                     {
@@ -225,6 +227,27 @@ namespace Core
             {
                 outDatum dt = new outDatum(enmMMLType.unknown, null, null, b);
                 mmlInfo.dat.Add(dt);
+            }
+
+            //PCM Data block
+            foreach (KeyValuePair<enmChipType, ClsChip[]> kvp in mmlInfo.chips)
+            {
+                foreach (ClsChip chip in kvp.Value)
+                {
+                    if (chip == null) continue;
+
+                    chip.SetPCMDataBlock(null);
+                }
+            }
+
+            //Set Initialize data
+            foreach (KeyValuePair<enmChipType, ClsChip[]> kvp in mmlInfo.chips)
+            {
+                foreach (ClsChip chip in kvp.Value)
+                {
+                    if (chip == null) continue;
+                    chip.InitChip();
+                }
             }
 
             foreach (KeyValuePair<enmChipType, ClsChip[]> kvp in mmlInfo.chips)

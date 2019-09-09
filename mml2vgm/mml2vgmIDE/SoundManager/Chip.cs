@@ -13,6 +13,7 @@ namespace SoundManager
         public long Delay;
         public EnmModel Model;
         public EnmDevice Device;
+        public int Index;
         public int Number;
         public int Hosei;
 
@@ -24,6 +25,7 @@ namespace SoundManager
             this.Delay = chip.Delay;
             this.Model = chip.Model;
             this.Device = chip.Device;
+            this.Index = chip.Index;
             this.Number = chip.Number;
             this.Hosei = chip.Hosei;
         }

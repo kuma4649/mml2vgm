@@ -7,105 +7,57 @@ namespace mml2vgmIDE.MMLParameter
 {
     public class Manager
     {
-        public Instrument[] Conductor;
-        public Instrument[] AY8910;
-        public Instrument[] C140;
-        public Instrument[] HuC6280;
-        public Instrument[] K051649;
-        public Instrument[] K053260;
-        public Instrument[] QSound;
-        public Instrument[] RF5C164;
-        public Instrument[] SN76489;
-        public Instrument[] SegaPCM;
-        public Instrument[] YM2151;
-        public Instrument[] YM2203;
-        public Instrument[] YM2413;
-        public Instrument[] YM2608;
-        public Instrument[] YM2610B;
-        public Instrument[] YM2612;
-        public Instrument[] YM2612X;
-        public Dictionary<string, Instrument[]> Insts;
+        public List<Instrument> Conductor=new List<Instrument>();
+        public List<Instrument> AY8910=new List<Instrument>();
+        public List<Instrument> C140 = new List<Instrument>();
+        public List<Instrument> HuC6280 = new List<Instrument>();
+        public List<Instrument> K051649 = new List<Instrument>();
+        public List<Instrument> K053260 = new List<Instrument>();
+        public List<Instrument> QSound = new List<Instrument>();
+        public List<Instrument> RF5C164 = new List<Instrument>();
+        public List<Instrument> SN76489 = new List<Instrument>();
+        public List<Instrument> SegaPCM = new List<Instrument>();
+        public List<Instrument> YM2151 = new List<Instrument>();
+        public List<Instrument> YM2203 = new List<Instrument>();
+        public List<Instrument> YM2413 = new List<Instrument>();
+        public List<Instrument> YM2608 = new List<Instrument>();
+        public List<Instrument> YM2610B = new List<Instrument>();
+        public List<Instrument> YM2612 = new List<Instrument>();
+        public List<Instrument> YM2612X = new List<Instrument>();
+        public Dictionary<string, Dictionary<int, Dictionary<int, Instrument>>> Insts;
 
-        private Dictionary<string, Dictionary<int, Action<outDatum, int>>> dicInst
-            = new Dictionary<string, Dictionary<int, Action<outDatum, int>>>();
+        private Dictionary<string,Dictionary<int, Dictionary<int, Action<outDatum, int>>>> dicInst
+            = new Dictionary<string,Dictionary<int, Dictionary<int, Action<outDatum, int>>>>();
+        private bool isTrace = false;
 
         public Manager()
         {
         }
 
-        public void Init()
+        public void Init(bool isTrace)
         {
+            this.isTrace = isTrace;
+
             dicInst.Clear();
-            Insts = new Dictionary<string, Instrument[]>();
+            Insts = new Dictionary<string, Dictionary<int, Dictionary<int, Instrument>>>();
 
-            Conductor = new Conductor[] { new Conductor(), null };
-            dicInstAdd(Conductor);
-            Insts.Add(Conductor[0].Name, Conductor);
-
-            AY8910 = new AY8910[] { new AY8910(), new AY8910() };
-            dicInstAdd(AY8910);
-            Insts.Add(AY8910[0].Name, AY8910);
-
-            C140 = new C140[] { new C140(), new C140() };
-            dicInstAdd(C140);
-            Insts.Add(C140[0].Name, C140);
-
-            HuC6280 = new HuC6280[] { new HuC6280(), new HuC6280() };
-            dicInstAdd(HuC6280);
-            Insts.Add(HuC6280[0].Name, HuC6280);
-
-            K051649 = new K051649[] { new K051649(), new K051649() };
-            dicInstAdd(K051649);
-            Insts.Add(K051649[0].Name, K051649);
-
-            K053260 = new K053260[] { new K053260(), new K053260() };
-            dicInstAdd(K053260);
-            Insts.Add(K053260[0].Name, K053260);
-
-            QSound = new QSound[] { new QSound(), null };
-            dicInstAdd(QSound);
-            Insts.Add(QSound[0].Name, QSound);
-
-            RF5C164 = new RF5C164[] { new RF5C164(), new RF5C164() };
-            dicInstAdd(RF5C164);
-            Insts.Add(RF5C164[0].Name, RF5C164);
-
-            SN76489 = new SN76489[] { new SN76489(), new SN76489() };
-            dicInstAdd(SN76489);
-            Insts.Add(SN76489[0].Name, SN76489);
-
-            SegaPCM = new SegaPCM[] { new SegaPCM(), new SegaPCM() };
-            dicInstAdd(SegaPCM);
-            Insts.Add(SegaPCM[0].Name, SegaPCM);
-
-            YM2151 = new YM2151[] { new YM2151(), new YM2151() };
-            dicInstAdd(YM2151);
-            Insts.Add(YM2151[0].Name, YM2151);
-
-            YM2203 = new YM2203[] { new YM2203(), new YM2203() };
-            dicInstAdd(YM2203);
-            Insts.Add(YM2203[0].Name, YM2203);
-
-            YM2413 = new YM2413[] { new YM2413(), new YM2413() };
-            dicInstAdd(YM2413);
-            Insts.Add(YM2413[0].Name, YM2413);
-
-            YM2608 = new YM2608[] { new YM2608(), new YM2608() };
-            dicInstAdd(YM2608);
-            Insts.Add(YM2608[0].Name, YM2608);
-
-            YM2610B = new YM2610B[] { new YM2610B(), new YM2610B() };
-            dicInstAdd(YM2610B);
-            Insts.Add(YM2610B[0].Name, YM2610B);
-
-            YM2612 = new YM2612[] { new YM2612(), new YM2612() };
-            dicInstAdd(YM2612);
-            Insts.Add(YM2612[0].Name, YM2612);
-
-            YM2612X = new YM2612X[] { new YM2612X(), new YM2612X() };
-            dicInstAdd(YM2612X);
-            Insts.Add(YM2612X[0].Name, YM2612X);
-
+            Conductor.Clear();
+            AY8910.Clear();
+            C140.Clear();
+            HuC6280.Clear();
+            K051649.Clear();
+            K053260.Clear();
+            QSound.Clear();
+            RF5C164.Clear();
+            SN76489.Clear();
+            SegaPCM.Clear();
+            YM2151.Clear();
+            YM2203.Clear();
+            YM2413.Clear();
+            YM2608.Clear();
+            YM2610B.Clear();
+            YM2612.Clear();
+            YM2612X.Clear();
         }
 
         public bool SetMMLParameter(ref outDatum od, ref long Counter, ref Chip Chip, ref EnmDataType Type, ref int Address, ref int Data, ref object ExData)
@@ -115,25 +67,189 @@ namespace mml2vgmIDE.MMLParameter
                 return true;
             }
 
+            if (!dicInst.ContainsKey(od.linePos.chip) 
+                || !dicInst[od.linePos.chip].ContainsKey(od.linePos.chipIndex)
+                || !dicInst[od.linePos.chip][od.linePos.chipIndex].ContainsKey(od.linePos.isSecondary))
+            {
+                switch (od.linePos.chip)
+                {
+                    case "AY8910":
+                        AY8910 ay891 = new AY8910();
+                        AY8910.Add(ay891);
+                        dicInstAdd(ay891, od.linePos.chipIndex, od.linePos.isSecondary);
+                        instsAdd(ay891, od.linePos.chipIndex, od.linePos.isSecondary);
+                        ay891.isTrace = isTrace;
+                        break;
+                    case "C140":
+                        C140 c140= new C140();
+                        C140.Add(c140);
+                        dicInstAdd(c140, od.linePos.chipIndex, od.linePos.isSecondary);
+                        instsAdd(c140, od.linePos.chipIndex, od.linePos.isSecondary);
+                        c140.isTrace = isTrace;
+                        break;
+                    case "CONDUCTOR":
+                        Conductor con = new Conductor();
+                        Conductor.Add(con);
+                        dicInstAdd(con, od.linePos.chipIndex, od.linePos.isSecondary);
+                        instsAdd(con, od.linePos.chipIndex, od.linePos.isSecondary);
+                        con.isTrace = isTrace;
+                        break;
+                    case "HuC6280":
+                        HuC6280 huc = new HuC6280();
+                        HuC6280.Add(huc);
+                        dicInstAdd(huc, od.linePos.chipIndex, od.linePos.isSecondary);
+                        instsAdd(huc, od.linePos.chipIndex, od.linePos.isSecondary);
+                        huc.isTrace = isTrace;
+                        break;
+                    case "K051649":
+                        K051649 k51 = new K051649();
+                        K051649.Add(k51);
+                        dicInstAdd(k51, od.linePos.chipIndex, od.linePos.isSecondary);
+                        instsAdd(k51, od.linePos.chipIndex, od.linePos.isSecondary);
+                        k51.isTrace = isTrace;
+                        break;
+                    case "K053260":
+                        K053260 k53 = new K053260();
+                        K053260.Add(k53);
+                        dicInstAdd(k53, od.linePos.chipIndex, od.linePos.isSecondary);
+                        instsAdd(k53, od.linePos.chipIndex, od.linePos.isSecondary);
+                        k53.isTrace = isTrace;
+                        break;
+                    case "QSound":
+                        QSound qsnd = new QSound();
+                        QSound.Add(qsnd);
+                        dicInstAdd(qsnd, od.linePos.chipIndex, od.linePos.isSecondary);
+                        instsAdd(qsnd, od.linePos.chipIndex, od.linePos.isSecondary);
+                        qsnd.isTrace = isTrace;
+                        break;
+                    case "RF5C164":
+                        RF5C164 rf5c = new RF5C164();
+                        RF5C164.Add(rf5c);
+                        dicInstAdd(rf5c, od.linePos.chipIndex, od.linePos.isSecondary);
+                        instsAdd(rf5c, od.linePos.chipIndex, od.linePos.isSecondary);
+                        rf5c.isTrace = isTrace;
+                        break;
+                    case "SEGAPCM":
+                        SegaPCM spcm = new SegaPCM();
+                        SegaPCM.Add(spcm);
+                        dicInstAdd(spcm, od.linePos.chipIndex, od.linePos.isSecondary);
+                        instsAdd(spcm, od.linePos.chipIndex, od.linePos.isSecondary);
+                        spcm.isTrace = isTrace;
+                        break;
+                    case "SN76489":
+                        SN76489 dcsg = new SN76489();
+                        SN76489.Add(dcsg);
+                        dicInstAdd(dcsg, od.linePos.chipIndex, od.linePos.isSecondary);
+                        instsAdd(dcsg, od.linePos.chipIndex, od.linePos.isSecondary);
+                        dcsg.isTrace = isTrace;
+                        break;
+                    case "YM2151":
+                        YM2151 opm = new YM2151();
+                        YM2151.Add(opm);
+                        dicInstAdd(opm, od.linePos.chipIndex, od.linePos.isSecondary);
+                        instsAdd(opm, od.linePos.chipIndex, od.linePos.isSecondary);
+                        opm.isTrace = isTrace;
+                        break;
+                    case "YM2203":
+                        YM2203 opn = new YM2203();
+                        YM2203.Add(opn);
+                        dicInstAdd(opn, od.linePos.chipIndex, od.linePos.isSecondary);
+                        instsAdd(opn, od.linePos.chipIndex, od.linePos.isSecondary);
+                        opn.isTrace = isTrace;
+                        break;
+                    case "YM2413":
+                        YM2413 opll = new YM2413();
+                        YM2413.Add(opll);
+                        dicInstAdd(opll, od.linePos.chipIndex, od.linePos.isSecondary);
+                        instsAdd(opll, od.linePos.chipIndex, od.linePos.isSecondary);
+                        opll.isTrace = isTrace;
+                        break;
+                    case "YM2608":
+                        YM2608 opna = new YM2608();
+                        YM2608.Add(opna);
+                        dicInstAdd(opna, od.linePos.chipIndex, od.linePos.isSecondary);
+                        instsAdd(opna, od.linePos.chipIndex, od.linePos.isSecondary);
+                        opna.isTrace = isTrace;
+                        break;
+                    case "YM2610B":
+                        YM2610B opnb = new YM2610B();
+                        YM2610B.Add(opnb);
+                        dicInstAdd(opnb, od.linePos.chipIndex, od.linePos.isSecondary);
+                        instsAdd(opnb, od.linePos.chipIndex, od.linePos.isSecondary);
+                        opnb.isTrace = isTrace;
+                        break;
+                    case "YM2612":
+                        YM2612 opn2 = new YM2612();
+                        YM2612.Add(opn2);
+                        dicInstAdd(opn2, od.linePos.chipIndex, od.linePos.isSecondary);
+                        instsAdd(opn2, od.linePos.chipIndex, od.linePos.isSecondary);
+                        opn2.isTrace = isTrace;
+                        break;
+                    case "YM2612X":
+                        YM2612X opn2x = new YM2612X();
+                        YM2612X.Add(opn2x);
+                        dicInstAdd(opn2x, od.linePos.chipIndex, od.linePos.isSecondary);
+                        instsAdd(opn2x, od.linePos.chipIndex, od.linePos.isSecondary);
+                        opn2x.isTrace = isTrace;
+                        break;
+                }
+            }
+
             int cc = Audio.sm != null ? Audio.sm.CurrentClockCount : 0;
-            if(dicInst.ContainsKey(od.linePos.chip))
-                dicInst[od.linePos.chip][od.linePos.isSecondary](od, cc);
+            dicInst[od.linePos.chip][od.linePos.chipIndex][od.linePos.isSecondary](od, cc);
 
             return true;
         }
 
-        private void dicInstAdd(Instrument[] inst)
+        private void dicInstAdd(Instrument inst, int index, int number)
         {
-            Dictionary<int, Action<outDatum, int>> d
-                = new Dictionary<int, Action<outDatum, int>>();
-            for (int i = 0; i < inst.Length; i++)
+            if (inst == null) return;
+
+            if (!dicInst.ContainsKey(inst.Name))
             {
-                if (inst[i] != null)
-                {
-                    d.Add(i, inst[i].SetParameter);
-                }
+                Dictionary<int, Dictionary<int, Action<outDatum, int>>> a = new Dictionary<int, Dictionary<int, Action<outDatum, int>>>();
+                dicInst.Add(inst.Name, a);
+
+                a.Add(index, new Dictionary<int, Action<outDatum, int>>());
+                a[index].Add(number, inst.SetParameter);
+
+                return;
             }
-            dicInst.Add(inst[0].Name, d);
+
+            if (!dicInst[inst.Name].ContainsKey(index))
+            {
+                Dictionary<int, Dictionary<int, Action<outDatum, int>>> a = dicInst[inst.Name];
+                a.Add(index, new Dictionary<int, Action<outDatum, int>>());
+                a[index].Add(number, inst.SetParameter);
+
+                return;
+            }
+
+            if (!dicInst[inst.Name][index].ContainsKey(number))
+            {
+                Dictionary<int, Action<outDatum, int>> a = dicInst[inst.Name][index];
+                a.Add(number, inst.SetParameter);
+
+                return;
+            }
+
+            dicInst[inst.Name][index].Add(number, inst.SetParameter);
+        }
+        private void instsAdd(Instrument inst, int index, int number)
+        {
+
+            if (!Insts.ContainsKey(inst.Name))
+            {
+                Insts.Add(inst.Name, new Dictionary<int, Dictionary<int, Instrument>>());
+            }
+            if (!Insts[inst.Name].ContainsKey(index))
+            {
+                Insts[inst.Name].Add(index, new Dictionary<int, Instrument>());
+            }
+            if (!Insts[inst.Name][index].ContainsKey(number))
+            {
+                Insts[inst.Name][index].Add(number, inst);
+            }
         }
 
 

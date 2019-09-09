@@ -18,7 +18,7 @@ namespace Core
         public const string FMF_NUM = "FMF-NUM";
 
 
-        public YM2612(ClsVgm parent, int chipID, string initialPartName, string stPath, bool isSecondary) : base(parent, chipID, initialPartName, stPath, isSecondary)
+        public YM2612(ClsVgm parent, int chipID, string initialPartName, string stPath, int isSecondary) : base(parent, chipID, initialPartName, stPath, isSecondary)
         {
             _chipType = enmChipType.YM2612;
             _Name = "YM2612";
@@ -31,8 +31,8 @@ namespace Core
 
             Frequency = 7670454;
             port = new byte[][]{
-                new byte[] { (byte)(0x2 | (isSecondary ? 0xa0 : 0x50)) }
-                , new byte[] { (byte)(0x3 | (isSecondary ? 0xa0 : 0x50)) }
+                new byte[] { (byte)(0x2 | (isSecondary!=0 ? 0xa0 : 0x50)) }
+                , new byte[] { (byte)(0x3 | (isSecondary!=0 ? 0xa0 : 0x50)) }
             };
 
             if (string.IsNullOrEmpty(initialPartName)) return;
@@ -93,7 +93,7 @@ namespace Core
             }
 
             pcmDataInfo[0].totalHeaderLength = pcmDataInfo[0].totalBuf.Length;
-            pcmDataInfo[0].totalHeadrSizeOfDataPtr = (parent.ChipCommandSize == 2) ? 4 : 3;
+            pcmDataInfo[0].totalHeadrSizeOfDataPtr = (parent.ChipCommandSize == 2) ? 5 : 3;
 
         }
 
@@ -132,7 +132,7 @@ namespace Core
                 }
             }
 
-            if (ChipID != 0)
+            if (ChipID != 0 && parent.info.format!= enmFormat.ZGM)
             {
                 parent.dat[0x2f]=new outDatum(enmMMLType.unknown,null,null,(byte)(parent.dat[0x2f].val | 0x40));
             }
@@ -206,7 +206,7 @@ namespace Core
                         v.Value.num
                         , v.Value.seqNum
                         , v.Value.chip
-                        , false
+                        , 0
                         , v.Value.fileName
                         , v.Value.freq != -1 ? v.Value.freq : samplerate
                         , v.Value.vol
@@ -227,7 +227,7 @@ namespace Core
                     pi.totalBuf
                     , pi.totalHeadrSizeOfDataPtr
                     , (UInt32)(pi.totalBuf.Length - (pi.totalHeadrSizeOfDataPtr + 4))
-                    , IsSecondary);
+                    , IsSecondary!=0);
                 pi.use = true;
                 pcmDataEasy = pi.use ? pi.totalBuf : null;
             }
@@ -468,7 +468,7 @@ namespace Core
         {
             return string.Format("{0,-10} {1,-7} {2,-5:D3} N/A  ${3,-7:X6} ${4,-7:X6} N/A      ${5,-7:X6}  NONE {6}\r\n"
                 , Name
-                , pcm.isSecondary ? "SEC" : "PRI"
+                , pcm.isSecondary!=0 ? "SEC" : "PRI"
                 , pcm.num
                 , pcm.stAdr & 0xffffff
                 , pcm.edAdr & 0xffffff
