@@ -1,11 +1,11 @@
 ﻿'{
 
-	TitleName            =Opening
-	TitleNameJ           =オープニング
-	GameName             =ABC
-	GameNameJ            =あいう
-	SystemName           =Genesis
-	SystemNameJ          =メガドラ
+	TitleName            =test YM2609 
+	TitleNameJ           =YM2609テスト
+	GameName             =
+	GameNameJ            =
+	SystemName           =Virtual chip
+	SystemNameJ          =妄想音源
 	Composer             =kuma
 	ComposerJ            =くま
 	ReleaseDate          =2345/01/23
@@ -14,21 +14,8 @@
 
 	Format               =ZGM
 	ClockCount           =192
-	PartYM2612           =A , B , C
 
 }
-
-
-A1 T120
-A1 D0  @1 p3 o4 v120 l16 q8 L c2
-A2 D3  @1 p3 o4 v120 l16 q8   c2
-A3 D-3 @1 p3 o4 v120 l16 q8   c2
-B1 D0  @1 p3 o4 v113 l16 q8   e4e4
-B2 D3  @1 p3 o4 v113 l16 q8   e4e4
-B3 D-3 @1 p3 o4 v113 l16 q8   e4e4
-C1 D0  @1 p3 o4 v113 l16 q8   g8g8g8g8
-C2 D3  @1 p3 o4 v113 l16 q8   g8g8g8g8
-C3 D-3 @1 p3 o4 v113 l16 q8   g8g8g8g8
 
 
 BASS
@@ -40,15 +27,30 @@ BASS
 '@ 031,018,003,006,001,000,000,002,003
 '@ 001,007
 
-'@ P 1,".\wav\Guitar.wav"        , 8000 , 100,A
-'@ P 2,".\wav\Guitar.wav"        , 8000 , 100,B
-'@ P 3,".\wav\Guitar.wav"        , 8000 , 100,C
-'@ P 4,".\wav\muteGuitar.wav"        , 8000 , 100,A
-'@ P 5,".\wav\SD.wav"        , 8000 , 100,B
-'@ P 6,".\wav\muteGuitar.wav"        , 8000 , 100,C
+'U01 T120
+U07 D0 @1 p3 o4 v120 l8 q8 c
+U01 D0 @1 p3 o4 v120 l8 q8 c r r r r r r r r r r r 
+U02 D0 @1 p3 o4 v120 l8 q8 r c+r r r r r r r r r r 
+U03 D0 @1 p3 o4 v120 l8 q8 r r d r r r r r r r r r 
+U04 D0 @1 p3 o4 v120 l8 q8 r r r d+r r r r r r r r 
+U05 D0 @1 p3 o4 v120 l8 q8 r r r r e r r r r r r r 
+U06 D0 @1 p3 o4 v120 l8 q8 r r r r r f r r r r r r 
+U07 D0 @1 p3 o4 v120 l8 q8 r r r r r r f+r r r r r 
+U08 D0 @1 p3 o4 v120 l8 q8 r r r r r r r g r r r r 
+U09 D0 @1 p3 o4 v120 l8 q8 r r r r r r r r g+r r r 
+U10 D0 @1 p3 o4 v120 l8 q8 r r r r r r r r r a r r 
+U11 D0 @1 p3 o4 v120 l8 q8 r r r r r r r r r r a+r 
+U12 D0 @1 p3 o4 v120 l8 q8 r r r r r r r r r r r b 
 
-'A6 T120
-'A6 D0 m1 @1 p3 o4 v120 l16 q8 r2c2
-'B6 D0 m1 @5 p3 o4 v120 l16 q8 c2@5c4c4c4c4c4c4c4
-'C6 D0 m1 @3 p3 o4 v120 l16 q8 r2r2c2
-
+'U19 o4 v15 l8 q8 c r r r r r r r r r r r 
+'U20 o4 v15 l8 q8 r c+r r r r r r r r r r 
+'U21 o4 v15 l8 q8 r r d r r r r r r r r r 
+'U22 o4 v15 l8 q8 r r r d+r r r r r r r r 
+'U23 o4 v15 l8 q8 r r r r e r r r r r r r 
+'U24 o4 v15 l8 q8 r r r r r f r r r r r r 
+'U25 o4 v15 l8 q8 r r r r r r f+r r r r r 
+'U26 o4 v15 l8 q8 r r r r r r r g r r r r 
+'U27 o4 v15 l8 q8 r r r r r r r r g+r r r 
+'U28 o4 v15 l8 q8 r r r r r r r r r a r r 
+'U29 o4 v15 l8 q8 r r r r r r r r r r a+r 
+'U30 o4 v15 l8 q8 r r r r r r r r r r r b 

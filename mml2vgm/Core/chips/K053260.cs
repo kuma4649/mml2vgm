@@ -565,7 +565,7 @@ namespace Core
                 vol += pw.lfo[lfo].value + pw.lfo[lfo].param[6];
             }
 
-            byte data = (byte)(vol & 0x7f);
+            byte data = (byte)Common.CheckRange(vol, 0, 127);
             if (pw.beforeVolume != data)
             {
                 byte adr = (byte)((pw.ch + 1) * 8 + 0x07);

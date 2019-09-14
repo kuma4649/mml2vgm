@@ -106,6 +106,8 @@
     <Compile Include="Audio.cs" />
     <Compile Include="ChipLEDs.cs" />
     <Compile Include="ChipRegister.cs" />
+    <Compile Include="Driver\ZGM\ZgmChip\SN76489.cs" />
+    <Compile Include="Driver\ZGM\ZgmChip\YM2609.cs" />
     <Compile Include="Driver\ZGM\ZgmChip\ZgmChip.cs" />
     <Compile Include="Driver\ZGM\ZgmChip\ChipFactory.cs" />
     <Compile Include="Driver\ZGM\ZgmChip\YM2612.cs" />
@@ -244,6 +246,7 @@
     <Compile Include="MMLParameter\YM2203.cs" />
     <Compile Include="MMLParameter\YM2413.cs" />
     <Compile Include="MMLParameter\YM2608.cs" />
+    <Compile Include="MMLParameter\YM2609.cs" />
     <Compile Include="MMLParameter\YM2610B.cs" />
     <Compile Include="MMLParameter\YM2612.cs" />
     <Compile Include="MMLParameter\YM2612X.cs" />

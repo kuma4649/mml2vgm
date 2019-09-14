@@ -231,6 +231,7 @@ namespace mml2vgmIDE
             int p = mmli.keyOnMeter[pn] == null ? 0 : (int)mmli.keyOnMeter[pn];
             int w = (int)((cw - 6) / 256.0 * p);
             int h = (int)((ch - 4) / 6.0 * 4.0);
+            p = Common.Range(p, 0, meterBrush.Length - 1);
 
             Bitmap canvas = new Bitmap(cw, ch);
             using (Graphics g = Graphics.FromImage(canvas))

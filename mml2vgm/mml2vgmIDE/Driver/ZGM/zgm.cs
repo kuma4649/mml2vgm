@@ -40,6 +40,7 @@ namespace mml2vgmIDE.Driver.ZGM
         public int SEGAPCMInterface = 0;
         public uint YM2151ClockValue;
         public uint YM2608ClockValue;
+        public uint YM2609ClockValue;
         public uint YM2203ClockValue;
         public uint YM2610ClockValue;
         public uint YM3812ClockValue;
@@ -1432,6 +1433,7 @@ namespace mml2vgmIDE.Driver.ZGM
             SEGAPCMClockValue = 0;
             YM2203ClockValue = 0;
             YM2608ClockValue = 0;
+            YM2609ClockValue = 0;
             YM2610ClockValue = 0;
             YM3812ClockValue = 0;
             YMF262ClockValue = 0;

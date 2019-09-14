@@ -492,7 +492,7 @@ namespace Core
                 vol += pw.lfo[lfo].value + pw.lfo[lfo].param[6];
             }
 
-            int data = vol & 0xffff;
+            int data = Common.CheckRange(vol, 0, 65535);
             if (pw.beforeVolume != data)
             {
                 byte adr = (byte)((pw.ch << 3) + 0x06);

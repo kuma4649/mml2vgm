@@ -178,6 +178,11 @@ namespace Core
                 info.format == enmFormat.VGM ? new string[] { "P", "Ps" } : (info.format == enmFormat.XGM ? new string[] { } : new string[] { "P", "Ps" })
                 ), new int[] { 2, 0, -1 }));
 
+            cp = new YM2609(null, 0, null, null, 0);
+            cpn.Add(enmChipType.YM2609, new Tuple<string, string, List<string>, int[]>(cp.Name, cp.ShortName, new List<string>(
+                info.format == enmFormat.VGM ? new string[] { } : (info.format == enmFormat.XGM ? new string[] { } : new string[] { "U", "Us" })
+                ), new int[] { 0, 0, -1 }));
+
             cp = new YM2610B(null, 0, null, null, 0);
             cpn.Add(enmChipType.YM2610B, new Tuple<string, string, List<string>, int[]>(cp.Name, cp.ShortName, new List<string>(
                 info.format == enmFormat.VGM ? new string[] { "T", "Ts" } : (info.format == enmFormat.XGM ? new string[] { } : new string[] { "T", "Ts" })

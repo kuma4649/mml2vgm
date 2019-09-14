@@ -13,10 +13,10 @@ namespace mml2vgmIDE.Driver.ZGM.ZgmChip
         {
             switch (chipIdentNo)
             {
-                case 0x0000_000c:
-                    return new YM2612(chipRegister, setting, vgmBuf);
                 case 0x0000_002c:
                     return new YM2612(chipRegister, setting, vgmBuf);
+                case 0x0002_0001:
+                    return new YM2609(chipRegister, setting, vgmBuf);
                 default:
                     throw new ArgumentException();
             }

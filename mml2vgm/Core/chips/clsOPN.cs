@@ -8,7 +8,7 @@ namespace Core
 {
     public class ClsOPN : ClsChip
     {
-        public byte SSGKeyOn = 0x3f;
+        public byte[] SSGKeyOn = new byte[] { 0x3f, 0x3f, 0x3f, 0x3f };
 
 
         public ClsOPN(ClsVgm parent, int chipID, string initialPartName, string stPath, int isSecondary) : base(parent, chipID, initialPartName, stPath, isSecondary)
@@ -18,21 +18,27 @@ namespace Core
 
         public void OutSsgKeyOn(partWork pw,MML mml)
         {
-            int m = (pw.chip is YM2203) ? 0 : 3;
-            byte pch = (byte)(pw.ch - (m + 6));
+            int port;
+            int adr;
+            int vch;
+            GetPortVchSsg(pw, out port, out adr, out vch);
+            int p = port;
+            if (adr == 0x10)
+                p++;
+
             int n = (pw.mixer & 0x1) + ((pw.mixer & 0x2) << 2);
             byte data = 0;
 
-            data = (byte)(((ClsOPN)pw.chip).SSGKeyOn | (9 << pch));
-            data &= (byte)(~(n << pch));
-            ((ClsOPN)pw.chip).SSGKeyOn = data;
+            data = (byte)(((ClsOPN)pw.chip).SSGKeyOn[p] | (9 << vch));
+            data &= (byte)(~(n << vch));
+            ((ClsOPN)pw.chip).SSGKeyOn[p] = data;
 
             SetSsgVolume(pw, mml);
             if (pw.HardEnvelopeSw)
             {
-                parent.OutData(mml,pw.port[0], 0x0d, (byte)(pw.HardEnvelopeType & 0xf));
+                parent.OutData(mml, pw.port[port], (byte)(adr + 0x0d), (byte)(pw.HardEnvelopeType & 0xf));
             }
-            parent.OutData(mml,pw.port[0], 0x07, data);
+            parent.OutData(mml, pw.port[port], (byte)(adr + 0x07), data);
 
             MML vmml = new MML();
             vmml.type = enmMMLType.Volume;
@@ -45,24 +51,35 @@ namespace Core
 
         public void OutSsgKeyOff(MML mml, partWork pw)
         {
-            int m = (pw.chip is YM2203) ? 0 : 3;
-            byte pch = (byte)(pw.ch - (m + 6));
+            int port;
+            int adr;
+            int vch;
+            GetPortVchSsg(pw, out port, out adr, out vch);
+            int p = port;
+            if (adr == 0x10)
+                p++;
+
             int n = 9;
             byte data = 0;
 
-            data = (byte)(((ClsOPN)pw.chip).SSGKeyOn | (n << pch));
-            ((ClsOPN)pw.chip).SSGKeyOn = data;
+            data = (byte)(((ClsOPN)pw.chip).SSGKeyOn[p] | (n << vch));
+            ((ClsOPN)pw.chip).SSGKeyOn[p] = data;
 
-            parent.OutData(mml, pw.port[0], (byte)(0x08 + pch), 0);
+            parent.OutData(mml, pw.port[port], (byte)(adr + 0x08 + vch), 0);
             pw.beforeVolume = -1;
-            parent.OutData(mml, pw.port[0], 0x07, data);
+            parent.OutData(mml, pw.port[port], (byte)(adr + 0x07), data);
 
         }
 
-        public void SetSsgVolume(partWork pw,MML mml)
+        public void SetSsgVolume(partWork pw, MML mml)
         {
-            int m = (pw.chip is YM2203) ? 0 : 3;
-            byte pch = (byte)(pw.ch - (m + 6));
+            int port;
+            int adr;
+            int vch;
+            GetPortVchSsg(pw, out port, out adr, out vch);
+            int p = port;
+            if (adr == 0x10)
+                p++;
 
             int vol = pw.volume;
             if (pw.envelopeMode)
@@ -83,18 +100,26 @@ namespace Core
             }
 
             vol = Common.CheckRange(vol, 0, 15) + (pw.HardEnvelopeSw ? 0x10 : 0x00);
+            if ((((ClsOPN)pw.chip).SSGKeyOn[p] & (9 << vch)) == (9 << vch))
+            {
+                vol = 0;
+            }
 
             if (pw.beforeVolume != vol)
             {
-                parent.OutData(mml, pw.port[0], (byte)(0x08 + pch), (byte)vol);
-                //pw.beforeVolume = pw.volume;
+                parent.OutData(mml, pw.port[port], (byte)(adr + 0x08 + vch), (byte)vol);
                 pw.beforeVolume = vol;
             }
         }
 
         public void OutSsgNoise(MML mml,partWork pw, int n)
         {
-            parent.OutData(mml, pw.port[0], 0x06, (byte)(n & 0x1f));
+            int port;
+            int adr;
+            int vch;//ノイズ設定はch未使用
+            GetPortVchSsg(pw, out port, out adr, out vch);
+
+            parent.OutData(mml, pw.port[port], (byte)(adr + 0x06), (byte)(n & 0x1f));
         }
 
         public void SetSsgFNum(partWork pw,MML mml)
@@ -136,14 +161,18 @@ namespace Core
 
             pw.freq = f;
 
+            int port;
+            int adr;
+            int vch;
+            GetPortVchSsg(pw, out port, out adr, out vch);
+
             byte data = 0;
-            int n = (pw.chip is YM2203) ? 6 : 9;
 
             data = (byte)(f & 0xff);
-            parent.OutData(mml,pw.port[0], (byte)(0 + (pw.ch - n) * 2), data);
+            parent.OutData(mml,pw.port[port], (byte)(adr + 0 + vch * 2), data);
 
             data = (byte)((f & 0xf00) >> 8);
-            parent.OutData(mml,pw.port[0], (byte)(1 + (pw.ch - n) * 2), data);
+            parent.OutData(mml,pw.port[port], (byte)(adr + 1 + vch * 2), data);
         }
 
         public int GetSsgFNum(partWork pw,MML mml, int octave, char noteCmd, int shift)
@@ -165,9 +194,9 @@ namespace Core
         public void OutOPNSetPanAMSPMS(MML mml, partWork pw, int pan, int ams, int pms)
         {
             //TODO: 効果音パートで指定されている場合の考慮不足
-            int vch = pw.ch;
-            byte[] port = pw.ch > 2 ? pw.port[1] : pw.port[0];
-            vch = (byte)(vch > 2 ? vch - 3 : vch);
+            int vch;
+            byte[] port;
+            GetPortVch(pw, out port, out vch);
 
             pan = pan & 3;
             ams = ams & 7;
@@ -199,9 +228,9 @@ namespace Core
 
         public void OutFmSetFeedbackAlgorithm(MML mml,partWork pw, int fb, int alg)
         {
-            int vch = pw.ch;
-            byte[] port = pw.ch > 2 ? pw.port[1] : pw.port[0];
-            vch = (byte)(vch > 2 ? vch - 3 : vch);
+            int vch;
+            byte[] port;
+            GetPortVch(pw, out port, out vch);
 
             fb &= 7;
             alg &= 7;
@@ -211,9 +240,9 @@ namespace Core
 
         public void OutFmSetDtMl(MML mml, partWork pw, int ope, int dt, int ml)
         {
-            int vch = pw.ch;
-            byte[] port = vch > 2 ? pw.port[1] : pw.port[0];
-            vch = (byte)(vch > 2 ? vch - 3 : vch);
+            int vch;
+            byte[] port;
+            GetPortVch(pw, out port, out vch);
 
             ope = (ope == 1) ? 2 : ((ope == 2) ? 1 : ope);
             dt &= 7;
@@ -224,8 +253,9 @@ namespace Core
 
         public void OutFmSetTl(MML mml,partWork pw, int ope, int tl)
         {
-            byte[] port = (pw.ch > 2 ? pw.port[1] : pw.port[0]);
-            int vch = (byte)(pw.ch > 2 ? pw.ch - 3 : pw.ch);
+            int vch;
+            byte[] port;
+            GetPortVch(pw, out port, out vch);
 
             ope = (ope == 1) ? 2 : ((ope == 2) ? 1 : ope);
             tl &= 0x7f;
@@ -235,9 +265,9 @@ namespace Core
 
         public void OutFmSetKsAr(MML mml,partWork pw, int ope, int ks, int ar)
         {
-            int vch = pw.ch;
-            byte[] port = (pw.ch > 2 ? pw.port[1] : pw.port[0]);
-            vch = (byte)(vch > 2 ? vch - 3 : vch);
+            int vch;
+            byte[] port;
+            GetPortVch(pw, out port, out vch);
 
             ope = (ope == 1) ? 2 : ((ope == 2) ? 1 : ope);
             ks &= 3;
@@ -248,9 +278,9 @@ namespace Core
 
         public void OutFmSetAmDr(MML mml,partWork pw, int ope, int am, int dr)
         {
-            int vch = pw.ch;
-            byte[] port = (pw.ch > 2 ? pw.port[1] : pw.port[0]);
-            vch = (byte)(vch > 2 ? vch - 3 : vch);
+            int vch;
+            byte[] port;
+            GetPortVch(pw, out port, out vch);
 
             ope = (ope == 1) ? 2 : ((ope == 2) ? 1 : ope);
             am &= 1;
@@ -261,9 +291,9 @@ namespace Core
 
         public void OutFmSetSr(MML mml,partWork pw, int ope, int sr)
         {
-            int vch = pw.ch;
-            byte[] port = pw.ch > 2 ? pw.port[1] : pw.port[0];
-            vch = (byte)(vch > 2 ? vch - 3 : vch);
+            int vch;
+            byte[] port;
+            GetPortVch(pw, out port, out vch);
 
             ope = (ope == 1) ? 2 : ((ope == 2) ? 1 : ope);
             sr &= 31;
@@ -273,9 +303,9 @@ namespace Core
 
         public void OutFmSetSlRr(MML mml, partWork pw, int ope, int sl, int rr)
         {
-            int vch = pw.ch;
-            byte[] port = pw.ch > 2 ? pw.port[1] : pw.port[0];
-            vch = (byte)(vch > 2 ? vch - 3 : vch);
+            int vch;
+            byte[] port;
+            GetPortVch(pw, out port, out vch);
 
             ope = (ope == 1) ? 2 : ((ope == 2) ? 1 : ope);
             sl &= 15;
@@ -284,11 +314,60 @@ namespace Core
             parent.OutData(mml, port, (byte)(0x80 + vch + ope * 4), (byte)((sl << 4) + rr));
         }
 
+        private void GetPortVch(partWork pw, out byte[] port, out int vch)
+        {
+            if (!(pw.chip is YM2609))
+            {
+                port = pw.ch > 2 ? pw.port[1] : pw.port[0];
+                vch = (byte)(pw.ch > 2 ? pw.ch - 3 : pw.ch);
+            }
+            else
+            {
+                port = pw.ch < 3 ? pw.port[0] : (pw.ch < 6 ? pw.port[1] : (pw.ch < 9 ? pw.port[2] : pw.port[3]));
+                vch = (byte)(pw.ch < 3 ? pw.ch : (pw.ch < 6 ? (pw.ch - 3) : (pw.ch < 9 ? (pw.ch - 6) : (pw.ch - 9))));
+            }
+        }
+
+        private void GetPortVchSsg(partWork pw, out int port, out int adr, out int vch)
+        {
+            int m = (pw.chip is YM2203) ? 0 : 3;
+            vch = (byte)(pw.ch - (m + 6));
+            port = 0;
+            adr = 0;
+
+            if (!(pw.chip is YM2609)) return;
+
+            if (pw.ch >= 18 && pw.ch <= 20)
+            {
+                port = 0;
+                vch = (byte)(pw.ch - 18);
+                adr = 0;
+            }
+            else if (pw.ch >= 21 && pw.ch <= 23)
+            {
+                port = 1;
+                vch = (byte)(pw.ch - 21);
+                adr = 0x20;
+            }
+            else if (pw.ch >= 24 && pw.ch <= 26)
+            {
+                port = 2;
+                vch = (byte)(pw.ch - 24);
+                adr = 0;
+            }
+            else if (pw.ch >= 27 && pw.ch <= 29)
+            {
+                port = 2;
+                vch = (byte)(pw.ch - 27);
+                adr = 0x10;
+            }
+        }
+
         public void OutFmSetSSGEG(MML mml,partWork pw, int ope, int n)
         {
-            int vch = pw.ch;
-            byte[] port = pw.ch > 2 ? pw.port[1] : pw.port[0];
-            vch = (byte)(vch > 2 ? vch - 3 : vch);
+            int vch;
+            byte[] port;
+            GetPortVch(pw, out port, out vch);
 
             ope = (ope == 1) ? 2 : ((ope == 2) ? 1 : ope);
             n &= 15;
@@ -341,10 +420,24 @@ namespace Core
             }
 
             partWork vpw = pw;
-            int m = (pw.chip is YM2203) ? 0 : 3;
-            if (pw.chip.lstPartWork[2].Ch3SpecialMode && pw.ch >= m + 3 && pw.ch < m + 6)
+            if (!(pw.chip is YM2609))
             {
-                vpw = pw.chip.lstPartWork[2];
+                int m = (pw.chip is YM2203) ? 0 : 3;
+                if (pw.chip.lstPartWork[2].Ch3SpecialMode && pw.ch >= m + 3 && pw.ch < m + 6)
+                {
+                    vpw = pw.chip.lstPartWork[2];
+                }
+            }
+            else
+            {
+                if (pw.chip.lstPartWork[2].Ch3SpecialMode && pw.ch >= 12 && pw.ch < 15)
+                {
+                    vpw = pw.chip.lstPartWork[2];
+                }
+                if (pw.chip.lstPartWork[8].Ch3SpecialMode && pw.ch >= 15 && pw.ch < 18)
+                {
+                    vpw = pw.chip.lstPartWork[8];
+                }
             }
 
             MML vmml = new MML();
@@ -405,7 +498,14 @@ namespace Core
 
             int m = (pw.chip is YM2203) ? 0 : 3;
 
-            if (pw.ch >= m + 3 && pw.ch < m + 6)
+            if (
+                ((pw.chip is YM2203) && pw.ch >= 3 && pw.ch < 6)
+                || ((pw.chip is YM2608) && pw.ch >= 6 && pw.ch < 9)
+                || ((pw.chip is YM2609) && pw.ch >= 12 && pw.ch < 18)
+                || ((pw.chip is YM2610B) && pw.ch >= 6 && pw.ch < 9)
+                || ((pw.chip is YM2612) && pw.ch >= 6 && pw.ch < 9)
+                || ((pw.chip is YM2612X) && pw.ch >= 6 && pw.ch < 9)
+                )
             {
                 msgBox.setWrnMsg(msg.get("E11002"), mml.line.Lp);
                 return;
@@ -487,9 +587,23 @@ namespace Core
             }
 
             partWork vpw = pw;
-            if (pw.chip.lstPartWork[2].Ch3SpecialMode && pw.ch >= m + 3 && pw.ch < m + 6)
+            if (!(pw.chip is YM2609))
             {
-                vpw = pw.chip.lstPartWork[2];
+                if (pw.chip.lstPartWork[2].Ch3SpecialMode && pw.ch >= m + 3 && pw.ch < m + 6)
+                {
+                    vpw = pw.chip.lstPartWork[2];
+                }
+            }
+            else
+            {
+                if (pw.chip.lstPartWork[2].Ch3SpecialMode && pw.ch >= 12 && pw.ch < 15)
+                {
+                    vpw = pw.chip.lstPartWork[2];
+                }
+                if (pw.chip.lstPartWork[8].Ch3SpecialMode && pw.ch >= 15 && pw.ch < 18)
+                {
+                    vpw = pw.chip.lstPartWork[8];
+                }
             }
 
             //ch3以外の拡張チャンネルでも音色設定できるようになったら以下を有効に
@@ -518,27 +632,70 @@ namespace Core
 
             if (!pw.pcm)
             {
-                if (pw.chip.lstPartWork[2].Ch3SpecialMode && pw.Type == enmChannelType.FMOPNex)
+                if (!(pw.chip is YM2609))
                 {
-                    pw.Ch3SpecialModeKeyOn = false;
+                    if (pw.chip.lstPartWork[2].Ch3SpecialMode && pw.Type == enmChannelType.FMOPNex)
+                    {
+                        pw.Ch3SpecialModeKeyOn = false;
 
-                    int slot = (pw.chip.lstPartWork[2].Ch3SpecialModeKeyOn ? pw.chip.lstPartWork[2].slots : 0x0)
-                        | (pw.chip.lstPartWork[n + 3].Ch3SpecialModeKeyOn ? pw.chip.lstPartWork[n + 3].slots : 0x0)
-                        | (pw.chip.lstPartWork[n + 4].Ch3SpecialModeKeyOn ? pw.chip.lstPartWork[n + 4].slots : 0x0)
-                        | (pw.chip.lstPartWork[n + 5].Ch3SpecialModeKeyOn ? pw.chip.lstPartWork[n + 5].slots : 0x0);
+                        int slot = (pw.chip.lstPartWork[2].Ch3SpecialModeKeyOn ? pw.chip.lstPartWork[2].slots : 0x0)
+                            | (pw.chip.lstPartWork[n + 3].Ch3SpecialModeKeyOn ? pw.chip.lstPartWork[n + 3].slots : 0x0)
+                            | (pw.chip.lstPartWork[n + 4].Ch3SpecialModeKeyOn ? pw.chip.lstPartWork[n + 4].slots : 0x0)
+                            | (pw.chip.lstPartWork[n + 5].Ch3SpecialModeKeyOn ? pw.chip.lstPartWork[n + 5].slots : 0x0);
 
-                    parent.OutData(mml, pw.port[0], 0x28, (byte)((slot << 4) + 2));
+                        parent.OutData(mml, pw.port[0], 0x28, (byte)((slot << 4) + 2));
+                    }
+                    else
+                    {
+                        if (pw.ch >= 0 && pw.ch < n + 3)
+                        {
+                            byte vch = (byte)((pw.ch > 2) ? pw.ch + 1 : pw.ch);
+                            //key off
+                            parent.OutData(mml, pw.port[0], 0x28, (byte)(0x00 + (vch & 7)));
+                        }
+                    }
                 }
                 else
                 {
-                    if (pw.ch >= 0 && pw.ch < n + 3)
+                    if ((pw.ch == 2 || pw.ch == 12 || pw.ch == 13 || pw.ch == 14) && pw.chip.lstPartWork[2].Ch3SpecialMode)
                     {
-                        byte vch = (byte)((pw.ch > 2) ? pw.ch + 1 : pw.ch);
-                        //key off
-                        parent.OutData(mml, pw.port[0], 0x28, (byte)(0x00 + (vch & 7)));
+                        pw.Ch3SpecialModeKeyOn = false;
+
+                        int slot = (pw.chip.lstPartWork[2].Ch3SpecialModeKeyOn ? pw.chip.lstPartWork[2].slots : 0x0)
+                            | (pw.chip.lstPartWork[12].Ch3SpecialModeKeyOn ? pw.chip.lstPartWork[12].slots : 0x0)
+                            | (pw.chip.lstPartWork[13].Ch3SpecialModeKeyOn ? pw.chip.lstPartWork[13].slots : 0x0)
+                            | (pw.chip.lstPartWork[14].Ch3SpecialModeKeyOn ? pw.chip.lstPartWork[14].slots : 0x0);
+
+                        parent.OutData(mml, pw.port[0], 0x28, (byte)((slot << 4) + 2));
+                    }
+                    else if ((pw.ch == 8 || pw.ch == 15 || pw.ch == 16 || pw.ch == 17) && pw.chip.lstPartWork[8].Ch3SpecialMode)
+                    {
+                        pw.Ch3SpecialModeKeyOn = false;
+
+                        int slot = (pw.chip.lstPartWork[8].Ch3SpecialModeKeyOn ? pw.chip.lstPartWork[8].slots : 0x0)
+                            | (pw.chip.lstPartWork[15].Ch3SpecialModeKeyOn ? pw.chip.lstPartWork[15].slots : 0x0)
+                            | (pw.chip.lstPartWork[16].Ch3SpecialModeKeyOn ? pw.chip.lstPartWork[16].slots : 0x0)
+                            | (pw.chip.lstPartWork[17].Ch3SpecialModeKeyOn ? pw.chip.lstPartWork[17].slots : 0x0);
+
+                        parent.OutData(mml, pw.port[2], 0x28, (byte)((slot << 4) + 2));
+                    }
+                    else
+                    {
+                        if (pw.ch >= 0 && pw.ch < 6)
+                        {
+                            byte vch = (byte)((pw.ch > 2) ? pw.ch + 1 : pw.ch);
+                            //key off
+                            parent.OutData(mml, pw.port[0], 0x28, (byte)(0x00 + (vch & 7)));
+                        }
+                        else if (pw.ch >= 6 && pw.ch < 12)
+                        {
+                            byte vch = (byte)(pw.ch - 6);
+                            vch = (byte)(((vch > 2) ? (vch + 1) : vch));
+                            //key off
+                            parent.OutData(mml, pw.port[2], 0x28, (byte)(0x00 + (vch & 7)));
+                        }
                     }
                 }
-
                 return;
             }
 
@@ -572,7 +729,8 @@ namespace Core
 
             foreach (partWork pw in lstPartWork)
             {
-                if (pw.ch > 5) continue;
+                if (!(pw.chip is YM2609)) { if (pw.ch > 5) continue; }
+                else if (pw.ch > 11) continue;
 
                 OutFmKeyOff(pw, null);
                 OutFmSetTl(null, pw, 0, 127);
@@ -622,10 +780,22 @@ namespace Core
             }
             else
             {
-                int n = (pw.chip is YM2203) ? 0 : 3;
-                if (pw.ch >= n + 3 && pw.ch < n + 6)
+                int n;
+                if (!(pw.chip is YM2609))
                 {
-                    return;
+                    n = (pw.chip is YM2203) ? 0 : 3;
+                    if (pw.ch >= n + 3 && pw.ch < n + 6)
+                    {
+                        return;
+                    }
+                }
+                else
+                {
+                    n = 9;
+                    if (pw.ch >= 12 && pw.ch < 18)
+                    {
+                        return;
+                    }
                 }
                 if ((pw.chip is YM2612X) && pw.ch >= 9 && pw.ch <= 11)
                 {
@@ -635,8 +805,9 @@ namespace Core
                 {
                     if (pw.pcm) return;
 
-                    byte[] port = pw.ch > 2 ? pw.port[1] : pw.port[0];
-                    byte vch = (byte)(pw.ch > 2 ? pw.ch - 3 : pw.ch);
+                    int vch;
+                    byte[] port;
+                    GetPortVch(pw, out port, out vch);
 
                     parent.OutData(mml, port, (byte)(0xa4 + vch), (byte)((pw.freq & 0xff00) >> 8));
                     parent.OutData(mml, port, (byte)(0xa0 + vch), (byte)(pw.freq & 0xff));
@@ -658,53 +829,21 @@ namespace Core
 
             if (!pw.pcm)
             {
-                if (pw.chip.lstPartWork[2].Ch3SpecialMode && pw.Type == enmChannelType.FMOPNex)
+                if (!(pw.chip is YM2609))
                 {
-                    pw.Ch3SpecialModeKeyOn = true;
-
-                    int slot = (pw.chip.lstPartWork[2].Ch3SpecialModeKeyOn ? pw.chip.lstPartWork[2].slots : 0x0)
-                        | (pw.chip.lstPartWork[n + 3].Ch3SpecialModeKeyOn ? pw.chip.lstPartWork[n + 3].slots : 0x0)
-                        | (pw.chip.lstPartWork[n + 4].Ch3SpecialModeKeyOn ? pw.chip.lstPartWork[n + 4].slots : 0x0)
-                        | (pw.chip.lstPartWork[n + 5].Ch3SpecialModeKeyOn ? pw.chip.lstPartWork[n + 5].slots : 0x0);
-
-                    if (pw.chip is YM2612X)
+                    if (pw.chip.lstPartWork[2].Ch3SpecialMode && pw.Type == enmChannelType.FMOPNex)
                     {
-                        outDatum od = new outDatum();
-                        od.val = (byte)((slot << 4) +2);
-                        if (mml != null)
-                        {
-                            od.type = mml.type;
-                            if (mml.line != null && mml.line.Lp != null)
-                            {
-                                od.linePos = new LinePos(
-                                    mml.line.Lp.fullPath,
-                                    mml.line.Lp.row,
-                                    mml.line.Lp.col,
-                                    mml.line.Lp.length,
-                                    mml.line.Lp.part,
-                                    mml.line.Lp.chip,
-                                    mml.line.Lp.chipIndex,
-                                    mml.line.Lp.isSecondary,
-                                    mml.line.Lp.ch);
-                            }
-                        }
+                        pw.Ch3SpecialModeKeyOn = true;
 
-                        parent.xgmKeyOnData.Add(od);
-                    }
-                    else
-                    {
-                        parent.OutData(mml,pw.port[0], 0x28, (byte)((slot << 4) + 2));
-                    }
-                }
-                else
-                {
-                    if (pw.ch >= 0 && pw.ch < n + 3)
-                    {
-                        byte vch = (byte)((pw.ch > 2) ? pw.ch + 1 : pw.ch);
+                        int slot = (pw.chip.lstPartWork[2].Ch3SpecialModeKeyOn ? pw.chip.lstPartWork[2].slots : 0x0)
+                            | (pw.chip.lstPartWork[n + 3].Ch3SpecialModeKeyOn ? pw.chip.lstPartWork[n + 3].slots : 0x0)
+                            | (pw.chip.lstPartWork[n + 4].Ch3SpecialModeKeyOn ? pw.chip.lstPartWork[n + 4].slots : 0x0)
+                            | (pw.chip.lstPartWork[n + 5].Ch3SpecialModeKeyOn ? pw.chip.lstPartWork[n + 5].slots : 0x0);
+
                         if (pw.chip is YM2612X)
                         {
                             outDatum od = new outDatum();
-                            od.val = (byte)((pw.slots << 4) + (vch & 7));
+                            od.val = (byte)((slot << 4) + 2);
                             if (mml != null)
                             {
                                 od.type = mml.type;
@@ -727,8 +866,84 @@ namespace Core
                         }
                         else
                         {
+                            parent.OutData(mml, pw.port[0], 0x28, (byte)((slot << 4) + 2));
+                        }
+                    }
+                    else
+                    {
+                        if (pw.ch >= 0 && pw.ch < n + 3)
+                        {
+                            byte vch = (byte)((pw.ch > 2) ? pw.ch + 1 : pw.ch);
+                            if (pw.chip is YM2612X)
+                            {
+                                outDatum od = new outDatum();
+                                od.val = (byte)((pw.slots << 4) + (vch & 7));
+                                if (mml != null)
+                                {
+                                    od.type = mml.type;
+                                    if (mml.line != null && mml.line.Lp != null)
+                                    {
+                                        od.linePos = new LinePos(
+                                            mml.line.Lp.fullPath,
+                                            mml.line.Lp.row,
+                                            mml.line.Lp.col,
+                                            mml.line.Lp.length,
+                                            mml.line.Lp.part,
+                                            mml.line.Lp.chip,
+                                            mml.line.Lp.chipIndex,
+                                            mml.line.Lp.isSecondary,
+                                            mml.line.Lp.ch);
+                                    }
+                                }
+
+                                parent.xgmKeyOnData.Add(od);
+                            }
+                            else
+                            {
+                                //key on
+                                parent.OutData(mml, pw.port[0], 0x28, (byte)((pw.slots << 4) + (vch & 7)));
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    if ((pw.ch == 2 || pw.ch == 12 || pw.ch == 13 || pw.ch == 14) && pw.chip.lstPartWork[2].Ch3SpecialMode)
+                    {
+                        pw.Ch3SpecialModeKeyOn = true;
+
+                        int slot = (pw.chip.lstPartWork[2].Ch3SpecialModeKeyOn ? pw.chip.lstPartWork[2].slots : 0x0)
+                            | (pw.chip.lstPartWork[12].Ch3SpecialModeKeyOn ? pw.chip.lstPartWork[12].slots : 0x0)
+                            | (pw.chip.lstPartWork[13].Ch3SpecialModeKeyOn ? pw.chip.lstPartWork[13].slots : 0x0)
+                            | (pw.chip.lstPartWork[14].Ch3SpecialModeKeyOn ? pw.chip.lstPartWork[14].slots : 0x0);
+
+                        parent.OutData(mml, pw.port[0], 0x28, (byte)((slot << 4) + 2));
+                    }
+                    else if ((pw.ch == 8 || pw.ch == 15 || pw.ch == 16 || pw.ch == 17) && pw.chip.lstPartWork[8].Ch3SpecialMode)
+                    {
+                        pw.Ch3SpecialModeKeyOn = true;
+
+                        int slot = (pw.chip.lstPartWork[8].Ch3SpecialModeKeyOn ? pw.chip.lstPartWork[8].slots : 0x0)
+                            | (pw.chip.lstPartWork[15].Ch3SpecialModeKeyOn ? pw.chip.lstPartWork[15].slots : 0x0)
+                            | (pw.chip.lstPartWork[16].Ch3SpecialModeKeyOn ? pw.chip.lstPartWork[16].slots : 0x0)
+                            | (pw.chip.lstPartWork[17].Ch3SpecialModeKeyOn ? pw.chip.lstPartWork[17].slots : 0x0);
+
+                        parent.OutData(mml, pw.port[2], 0x28, (byte)((slot << 4) + 2));
+                    }
+                    else
+                    {
+                        if (pw.ch >= 0 && pw.ch < 6)
+                        {
+                            byte vch = (byte)((pw.ch > 2) ? pw.ch + 1 : pw.ch);
                             //key on
-                            parent.OutData(mml,pw.port[0], 0x28, (byte)((pw.slots << 4) + (vch & 7)));
+                            parent.OutData(mml, pw.port[0], 0x28, (byte)((pw.slots << 4) + (vch & 7)));
+                        }
+                        else if (pw.ch >= 6 && pw.ch < 12)
+                        {
+                            byte vch = (byte)(pw.ch - 6);
+                            vch = (byte)(((vch > 2) ? (vch + 1) : vch));
+                            //key on
+                            parent.OutData(mml, pw.port[2], 0x28, (byte)((pw.slots << 4) + (vch & 7)));
                         }
                     }
                 }
@@ -1244,9 +1459,9 @@ namespace Core
             else if (pw.Type == enmChannelType.FMOPN) ch = pw.ch;
             else return;
 
-            byte[] port = (ch > 2 ? pw.port[1] : pw.port[0]);
-            int vch = ch;
-            vch = (byte)(vch > 2 ? vch - 3 : vch);
+            int vch;
+            byte[] port;
+            GetPortVch(pw, out port, out vch);
 
             op = (byte)(op == 1 ? 2 : (op == 2 ? 1 : op));
 
@@ -1262,9 +1477,9 @@ namespace Core
             else if (pw.Type == enmChannelType.FMOPN) ch = pw.ch;
             else return;
 
-            byte[] port = (ch > 2 ? pw.port[1] : pw.port[0]);
-            int vch = ch;
-            vch = (byte)(vch > 2 ? vch - 3 : vch);
+            int vch;
+            byte[] port;
+            GetPortVch(pw, out port, out vch);
 
             byte adr = (byte)(0xb0 + vch);
 
@@ -1286,7 +1501,17 @@ namespace Core
         {
             int n = (int)mml.args[0];
             n = Common.CheckRange(n, 0, 31);
-            pw.chip.lstPartWork[0].noise = n;//Chipの1Chに保存
+
+            int ch = 0;
+            if (pw.chip is YM2609)
+            {
+                if (pw.ch >= 18 && pw.ch <= 20) ch = 18;
+                if (pw.ch >= 21 && pw.ch <= 23) ch = 21;
+                if (pw.ch >= 24 && pw.ch <= 26) ch = 24;
+                if (pw.ch >= 27 && pw.ch <= 29) ch = 27;
+            }
+
+            pw.chip.lstPartWork[ ch ].noise = n;//各SSGChの1Chに保存
             ((ClsOPN)pw.chip).OutSsgNoise(mml,pw, n);
         }
 
@@ -1480,14 +1705,19 @@ namespace Core
             string cmd = (string)mml.args[0];
             int n = 0;
 
+            int port;
+            int adr;
+            int vch;
+            GetPortVchSsg(pw, out port, out adr, out vch);
+
             switch (cmd)
             {
                 case "EH":
                     n = (int)mml.args[1];
                     if (pw.HardEnvelopeSpeed != n)
                     {
-                        parent.OutData(mml, pw.port[0], 0x0b, (byte)(n & 0xff));
-                        parent.OutData(mml, pw.port[0], 0x0c, (byte)((n >> 8) & 0xff));
+                        parent.OutData(mml, pw.port[port], (byte)(adr + 0x0b), (byte)(n & 0xff));
+                        parent.OutData(mml, pw.port[port], (byte)(adr + 0x0c), (byte)((n >> 8) & 0xff));
                         pw.HardEnvelopeSpeed = n;
                     }
                     break;
@@ -1501,7 +1731,7 @@ namespace Core
                     n = (int)mml.args[1];
                     if (pw.HardEnvelopeType != n)
                     {
-                        parent.OutData(mml, pw.port[0], 0x0d, (byte)(n & 0xf));
+                        parent.OutData(mml, pw.port[port], (byte)(adr + 0x0d), (byte)(n & 0xf));
                         pw.HardEnvelopeType = n;
                     }
                     break;

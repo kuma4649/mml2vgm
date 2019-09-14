@@ -21,6 +21,7 @@ namespace mml2vgmIDE.MMLParameter
         public List<Instrument> YM2203 = new List<Instrument>();
         public List<Instrument> YM2413 = new List<Instrument>();
         public List<Instrument> YM2608 = new List<Instrument>();
+        public List<Instrument> YM2609 = new List<Instrument>();
         public List<Instrument> YM2610B = new List<Instrument>();
         public List<Instrument> YM2612 = new List<Instrument>();
         public List<Instrument> YM2612X = new List<Instrument>();
@@ -55,6 +56,7 @@ namespace mml2vgmIDE.MMLParameter
             YM2203.Clear();
             YM2413.Clear();
             YM2608.Clear();
+            YM2609.Clear();
             YM2610B.Clear();
             YM2612.Clear();
             YM2612X.Clear();
@@ -170,6 +172,13 @@ namespace mml2vgmIDE.MMLParameter
                         dicInstAdd(opna, od.linePos.chipIndex, od.linePos.isSecondary);
                         instsAdd(opna, od.linePos.chipIndex, od.linePos.isSecondary);
                         opna.isTrace = isTrace;
+                        break;
+                    case "YM2609":
+                        YM2609 opna2 = new YM2609();
+                        YM2609.Add(opna2);
+                        dicInstAdd(opna2, od.linePos.chipIndex, od.linePos.isSecondary);
+                        instsAdd(opna2, od.linePos.chipIndex, od.linePos.isSecondary);
+                        opna2.isTrace = isTrace;
                         break;
                     case "YM2610B":
                         YM2610B opnb = new YM2610B();

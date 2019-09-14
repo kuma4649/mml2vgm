@@ -680,14 +680,35 @@ namespace Core
                                 , samplerate);
                         }
 
-                        if (v.chip != enmChipType.YM2610B)
+                        if (v.chip == enmChipType.YM2609)
                         {
-                            if (desVGM.chips != null && desVGM.chips.ContainsKey(v.chip) && desVGM.chips[v.chip] != null)
+                            if (pds.DatLoopAdr == 0)
                             {
-                                pds.DatEndAdr = (int)desVGM.chips[v.chip][v.isSecondary ].pcmDataEasy.Length - 16;
+                                //ADPCM-A
+                                if (desVGM.chips != null && desVGM.chips.ContainsKey(v.chip) && desVGM.chips[v.chip] != null)
+                                {
+                                    pds.DatEndAdr = (int)((YM2609)desVGM.chips[v.chip][v.isSecondary]).pcmDataEasyA.Length - 16;
+                                }
                             }
+                            else if (pds.DatLoopAdr == 1)
+                            {
+                                //ADPCM-B
+                                if (desVGM.chips != null && desVGM.chips.ContainsKey(v.chip) && desVGM.chips[v.chip] != null)
+                                {
+                                    pds.DatEndAdr = (int)((YM2609)desVGM.chips[v.chip][v.isSecondary]).pcmDataEasyB.Length - 16;
+                                }
+                            }
+                            else 
+                            {
+                                //ADPCM-C
+                                if (desVGM.chips != null && desVGM.chips.ContainsKey(v.chip) && desVGM.chips[v.chip] != null)
+                                {
+                                    pds.DatEndAdr = (int)((YM2609)desVGM.chips[v.chip][v.isSecondary]).pcmDataEasyC.Length - 16;
+                                }
+                            }
+
                         }
-                        else
+                        else if (v.chip == enmChipType.YM2610B)
                         {
                             if (pds.DatLoopAdr == 0)
                             {
@@ -706,6 +727,13 @@ namespace Core
                                 }
                             }
 
+                        }
+                        else
+                        {
+                            if (desVGM.chips != null && desVGM.chips.ContainsKey(v.chip) && desVGM.chips[v.chip] != null)
+                            {
+                                pds.DatEndAdr = (int)desVGM.chips[v.chip][v.isSecondary].pcmDataEasy.Length - 16;
+                            }
                         }
                         break;
                     case enmPcmDefineType.Mucom88:
@@ -887,18 +915,29 @@ namespace Core
         {
             if (c == null) return "";
 
-            if (c.chipType != enmChipType.YM2610B)
+            if (c.chipType == enmChipType.YM2609)
             {
-                if (c.pcmDataEasy == null && c.pcmDataDirect.Count == 0) return "";
+                YM2609 opna2 = (YM2609)c;
+                if (opna2.pcmDataEasyA == null
+                    && opna2.pcmDataEasyB == null
+                    && opna2.pcmDataEasyC == null
+                    && opna2.pcmDataDirectA.Count == 0
+                    && opna2.pcmDataDirectB.Count == 0
+                    && opna2.pcmDataDirectC.Count == 0
+                    ) return "";
             }
-            else
+            else if (c.chipType == enmChipType.YM2610B)
             {
                 YM2610B opnb = (YM2610B)c;
-                if (opnb.pcmDataEasyA == null 
+                if (opnb.pcmDataEasyA == null
                     && opnb.pcmDataEasyB == null
                     && opnb.pcmDataDirectA.Count == 0
                     && opnb.pcmDataDirectB.Count == 0
                     ) return "";
+            }
+            else
+            {
+                if (c.pcmDataEasy == null && c.pcmDataDirect.Count == 0) return "";
             }
 
             string region = "";
@@ -926,30 +965,63 @@ namespace Core
 
         private string DispPCMRegionDataBlock(ClsChip c)
         {
+            YM2609 opna2;
             YM2610B opnb;
             string region = "";
             long tl = 0;
 
             if (c == null) return "";
 
-            if (c.chipType != enmChipType.YM2610B)
+            if (c.chipType == enmChipType.YM2609)
             {
-                if (c.pcmDataEasy == null && c.pcmDataDirect.Count == 0) return "";
+                opna2 = (YM2609)c;
+                if (opna2.pcmDataEasyA == null
+                    && opna2.pcmDataEasyB == null
+                    && opna2.pcmDataEasyC == null
+                    && opna2.pcmDataDirectA.Count == 0
+                    && opna2.pcmDataDirectB.Count == 0
+                    && opna2.pcmDataDirectC.Count == 0
+                    ) return "";
 
-                if (c.pcmDataEasy != null)
+                if (opna2.pcmDataEasyA != null)
                 {
                     region += string.Format("{0,-10} {1,-7} ${2,-7:X6} ${3,-7:X6} ${4,-7:X6}  {5}\r\n"
-                        , c.Name
-                        , c.IsSecondary!=0 ? "SEC" : "PRI"
+                        , opna2.Name + "_A"
+                        , opna2.IsSecondary != 0 ? "SEC" : "PRI"
                         , 0
-                        , c.pcmDataEasy.Length - 1
-                        , c.pcmDataEasy.Length
+                        , opna2.pcmDataEasyA.Length - 1
+                        , opna2.pcmDataEasyA.Length
                         , "AUTO"
                         );
-                    tl += c.pcmDataEasy.Length;
+                    tl += opna2.pcmDataEasyA.Length;
                 }
+                if (opna2.pcmDataEasyB != null)
+                {
+                    region += string.Format("{0,-10} {1,-7} ${2,-7:X6} ${3,-7:X6} ${4,-7:X6}  {5}\r\n"
+                        , opna2.Name + "_B"
+                        , opna2.IsSecondary != 0 ? "SEC" : "PRI"
+                        , 0
+                        , opna2.pcmDataEasyB.Length - 1
+                        , opna2.pcmDataEasyB.Length
+                        , "AUTO"
+                        );
+                    tl += opna2.pcmDataEasyB.Length;
+                }
+                if (opna2.pcmDataEasyC != null)
+                {
+                    region += string.Format("{0,-10} {1,-7} ${2,-7:X6} ${3,-7:X6} ${4,-7:X6}  {5}\r\n"
+                        , opna2.Name + "_C"
+                        , opna2.IsSecondary != 0 ? "SEC" : "PRI"
+                        , 0
+                        , opna2.pcmDataEasyC.Length - 1
+                        , opna2.pcmDataEasyC.Length
+                        , "AUTO"
+                        );
+                    tl += opna2.pcmDataEasyC.Length;
+                }
+
             }
-            else
+            else if (c.chipType == enmChipType.YM2610B)
             {
                 opnb = (YM2610B)c;
                 if (opnb.pcmDataEasyA == null
@@ -961,8 +1033,8 @@ namespace Core
                 if (opnb.pcmDataEasyA != null)
                 {
                     region += string.Format("{0,-10} {1,-7} ${2,-7:X6} ${3,-7:X6} ${4,-7:X6}  {5}\r\n"
-                        , opnb.Name+"_A"
-                        , opnb.IsSecondary!=0 ? "SEC" : "PRI"
+                        , opnb.Name + "_A"
+                        , opnb.IsSecondary != 0 ? "SEC" : "PRI"
                         , 0
                         , opnb.pcmDataEasyA.Length - 1
                         , opnb.pcmDataEasyA.Length
@@ -973,8 +1045,8 @@ namespace Core
                 if (opnb.pcmDataEasyB != null)
                 {
                     region += string.Format("{0,-10} {1,-7} ${2,-7:X6} ${3,-7:X6} ${4,-7:X6}  {5}\r\n"
-                        , opnb.Name+"_B"
-                        , opnb.IsSecondary!=0 ? "SEC" : "PRI"
+                        , opnb.Name + "_B"
+                        , opnb.IsSecondary != 0 ? "SEC" : "PRI"
                         , 0
                         , opnb.pcmDataEasyB.Length - 1
                         , opnb.pcmDataEasyB.Length
@@ -983,6 +1055,23 @@ namespace Core
                     tl += opnb.pcmDataEasyB.Length;
                 }
 
+            }
+            else
+            {
+                if (c.pcmDataEasy == null && c.pcmDataDirect.Count == 0) return "";
+
+                if (c.pcmDataEasy != null)
+                {
+                    region += string.Format("{0,-10} {1,-7} ${2,-7:X6} ${3,-7:X6} ${4,-7:X6}  {5}\r\n"
+                        , c.Name
+                        , c.IsSecondary != 0 ? "SEC" : "PRI"
+                        , 0
+                        , c.pcmDataEasy.Length - 1
+                        , c.pcmDataEasy.Length
+                        , "AUTO"
+                        );
+                    tl += c.pcmDataEasy.Length;
+                }
             }
 
 

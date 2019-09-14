@@ -1,4 +1,10 @@
 更新履歴
+TAG112 2019/09/14
+  Core
+    ・QSound / K053260 エンベロープ処理にバグがあり使用すると常に最大音量で鳴っていたのを修正
+  Core / mml2vgmIDE
+    ・zgm 妄想音源YM2609対応中(FMとSSGのみ)
+
 TAG111 2019/09/10
   Core / mml2vgmIDE
     ・zgmに対応(但しYM2612のみ)

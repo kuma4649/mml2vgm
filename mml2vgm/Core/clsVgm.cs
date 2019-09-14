@@ -15,6 +15,7 @@ namespace Core
         public YM2151[] ym2151 = null;
         public YM2203[] ym2203 = null;
         public YM2608[] ym2608 = null;
+        public YM2609[] ym2609 = null;
         public YM2610B[] ym2610b = null;
         public YM2612[] ym2612 = null;
         public SN76489[] sn76489 = null;
@@ -65,245 +66,259 @@ namespace Core
 
             chips = new Dictionary<enmChipType, ClsChip[]>();
 
-                Tuple<string, string, List<string>, int[]> n;
+            Tuple<string, string, List<string>, int[]> n;
 
-                List<Conductor> lstCONDUCTOR = new List<Conductor>();
-                n = sp.dicChipPartName[enmChipType.CONDUCTOR];
-                for (int i = 0; i < n.Item3.Count; i++)
-                {
-                    if (string.IsNullOrEmpty(n.Item3[i])) continue;
+            List<Conductor> lstCONDUCTOR = new List<Conductor>();
+            n = sp.dicChipPartName[enmChipType.CONDUCTOR];
+            for (int i = 0; i < n.Item3.Count; i++)
+            {
+                if (string.IsNullOrEmpty(n.Item3[i])) continue;
                 if (sp.lnChipPartName.Contains(n.Item3[i]))
                     lstCONDUCTOR.Add(new Conductor(this, i, n.Item3[i], stPath, (info.format == enmFormat.ZGM ? 0 : i)));
-                }
-                if (lstCONDUCTOR.Count > 0)
-                {
-                    conductor = lstCONDUCTOR.ToArray();
-                    chips.Add(enmChipType.CONDUCTOR, conductor);
-                }
+            }
+            if (lstCONDUCTOR.Count > 0)
+            {
+                conductor = lstCONDUCTOR.ToArray();
+                chips.Add(enmChipType.CONDUCTOR, conductor);
+            }
 
-                List<YM2151> lstYM2151 = new List<YM2151>();
-                n = sp.dicChipPartName[enmChipType.YM2151];
-                for (int i = 0; i < n.Item3.Count; i++)
-                {
-                    if (string.IsNullOrEmpty(n.Item3[i])) continue;
-                    if (sp.lnChipPartName.Contains(n.Item3[i]))
-                        lstYM2151.Add(new YM2151(this, i, n.Item3[i], stPath, (info.format == enmFormat.ZGM ? 0 : i)));
-                }
-                if (lstYM2151.Count > 0)
-                {
-                    ym2151 = lstYM2151.ToArray();
-                    chips.Add(enmChipType.YM2151, ym2151);
-                }
+            List<YM2151> lstYM2151 = new List<YM2151>();
+            n = sp.dicChipPartName[enmChipType.YM2151];
+            for (int i = 0; i < n.Item3.Count; i++)
+            {
+                if (string.IsNullOrEmpty(n.Item3[i])) continue;
+                if (sp.lnChipPartName.Contains(n.Item3[i]))
+                    lstYM2151.Add(new YM2151(this, i, n.Item3[i], stPath, (info.format == enmFormat.ZGM ? 0 : i)));
+            }
+            if (lstYM2151.Count > 0)
+            {
+                ym2151 = lstYM2151.ToArray();
+                chips.Add(enmChipType.YM2151, ym2151);
+            }
 
-                List<YM2203> lstYM2203 = new List<YM2203>();
-                n = sp.dicChipPartName[enmChipType.YM2203];
-                for (int i = 0; i < n.Item3.Count; i++)
-                {
-                    if (string.IsNullOrEmpty(n.Item3[i])) continue;
-                    if (sp.lnChipPartName.Contains(n.Item3[i]))
-                        lstYM2203.Add(new YM2203(this, i, n.Item3[i], stPath, (info.format == enmFormat.ZGM ? 0 : i)));
-                }
-                if (lstYM2203.Count > 0)
-                {
-                    ym2203 = lstYM2203.ToArray();
-                    chips.Add(enmChipType.YM2203, ym2203);
-                }
+            List<YM2203> lstYM2203 = new List<YM2203>();
+            n = sp.dicChipPartName[enmChipType.YM2203];
+            for (int i = 0; i < n.Item3.Count; i++)
+            {
+                if (string.IsNullOrEmpty(n.Item3[i])) continue;
+                if (sp.lnChipPartName.Contains(n.Item3[i]))
+                    lstYM2203.Add(new YM2203(this, i, n.Item3[i], stPath, (info.format == enmFormat.ZGM ? 0 : i)));
+            }
+            if (lstYM2203.Count > 0)
+            {
+                ym2203 = lstYM2203.ToArray();
+                chips.Add(enmChipType.YM2203, ym2203);
+            }
 
-                List<YM2608> lstYM2608 = new List<YM2608>();
-                n = sp.dicChipPartName[enmChipType.YM2608];
-                for (int i = 0; i < n.Item3.Count; i++)
-                {
-                    if (string.IsNullOrEmpty(n.Item3[i])) continue;
-                    if (sp.lnChipPartName.Contains(n.Item3[i]))
-                        lstYM2608.Add(new YM2608(this, i, n.Item3[i], stPath, (info.format == enmFormat.ZGM ? 0 : i)));
-                }
-                if (lstYM2608.Count > 0)
-                {
-                    ym2608 = lstYM2608.ToArray();
-                    chips.Add(enmChipType.YM2608, ym2608);
-                }
+            List<YM2608> lstYM2608 = new List<YM2608>();
+            n = sp.dicChipPartName[enmChipType.YM2608];
+            for (int i = 0; i < n.Item3.Count; i++)
+            {
+                if (string.IsNullOrEmpty(n.Item3[i])) continue;
+                if (sp.lnChipPartName.Contains(n.Item3[i]))
+                    lstYM2608.Add(new YM2608(this, i, n.Item3[i], stPath, (info.format == enmFormat.ZGM ? 0 : i)));
+            }
+            if (lstYM2608.Count > 0)
+            {
+                ym2608 = lstYM2608.ToArray();
+                chips.Add(enmChipType.YM2608, ym2608);
+            }
 
-                List<YM2610B> lstYM2610B = new List<YM2610B>();
-                n = sp.dicChipPartName[enmChipType.YM2610B];
-                for (int i = 0; i < n.Item3.Count; i++)
-                {
-                    if (string.IsNullOrEmpty(n.Item3[i])) continue;
-                    if (sp.lnChipPartName.Contains(n.Item3[i]))
-                        lstYM2610B.Add(new YM2610B(this, i, n.Item3[i], stPath, (info.format == enmFormat.ZGM ? 0 : i)));
-                }
-                if (lstYM2610B.Count > 0)
-                {
-                    ym2610b = lstYM2610B.ToArray();
-                    chips.Add(enmChipType.YM2610B, ym2610b);
-                }
+            List<YM2609> lstYM2609 = new List<YM2609>();
+            n = sp.dicChipPartName[enmChipType.YM2609];
+            for (int i = 0; i < n.Item3.Count; i++)
+            {
+                if (string.IsNullOrEmpty(n.Item3[i])) continue;
+                if (sp.lnChipPartName.Contains(n.Item3[i]))
+                    lstYM2609.Add(new YM2609(this, i, n.Item3[i], stPath, (info.format == enmFormat.ZGM ? 0 : i)));
+            }
+            if (lstYM2609.Count > 0)
+            {
+                ym2609 = lstYM2609.ToArray();
+                chips.Add(enmChipType.YM2609, ym2609);
+            }
 
-                List<YM2612> lstYM2612 = new List<YM2612>();
-                n = sp.dicChipPartName[enmChipType.YM2612];
-                for (int i = 0; i < n.Item3.Count; i++)
-                {
-                    if (string.IsNullOrEmpty(n.Item3[i])) continue;
-                    if (sp.lnChipPartName.Contains(n.Item3[i]))
-                        lstYM2612.Add(new YM2612(this, i, n.Item3[i], stPath, (info.format == enmFormat.ZGM ? 0 : i)));
-                }
-                if (lstYM2612.Count > 0)
-                {
-                    ym2612 = lstYM2612.ToArray();
-                    chips.Add(enmChipType.YM2612, ym2612);
-                }
+            List<YM2610B> lstYM2610B = new List<YM2610B>();
+            n = sp.dicChipPartName[enmChipType.YM2610B];
+            for (int i = 0; i < n.Item3.Count; i++)
+            {
+                if (string.IsNullOrEmpty(n.Item3[i])) continue;
+                if (sp.lnChipPartName.Contains(n.Item3[i]))
+                    lstYM2610B.Add(new YM2610B(this, i, n.Item3[i], stPath, (info.format == enmFormat.ZGM ? 0 : i)));
+            }
+            if (lstYM2610B.Count > 0)
+            {
+                ym2610b = lstYM2610B.ToArray();
+                chips.Add(enmChipType.YM2610B, ym2610b);
+            }
 
-                List<SN76489> lstSN76489 = new List<SN76489>();
-                n = sp.dicChipPartName[enmChipType.SN76489];
-                for (int i = 0; i < n.Item3.Count; i++)
-                {
-                    if (string.IsNullOrEmpty(n.Item3[i])) continue;
-                    if (sp.lnChipPartName.Contains(n.Item3[i]))
-                        lstSN76489.Add(new SN76489(this, i, n.Item3[i], stPath, (info.format == enmFormat.ZGM ? 0 : i)));
-                }
-                if (lstSN76489.Count > 0)
-                {
-                    sn76489 = lstSN76489.ToArray();
-                    chips.Add(enmChipType.SN76489, sn76489);
-                }
+            List<YM2612> lstYM2612 = new List<YM2612>();
+            n = sp.dicChipPartName[enmChipType.YM2612];
+            for (int i = 0; i < n.Item3.Count; i++)
+            {
+                if (string.IsNullOrEmpty(n.Item3[i])) continue;
+                if (sp.lnChipPartName.Contains(n.Item3[i]))
+                    lstYM2612.Add(new YM2612(this, i, n.Item3[i], stPath, (info.format == enmFormat.ZGM ? 0 : i)));
+            }
+            if (lstYM2612.Count > 0)
+            {
+                ym2612 = lstYM2612.ToArray();
+                chips.Add(enmChipType.YM2612, ym2612);
+            }
 
-                List<RF5C164> lstRF5C164 = new List<RF5C164>();
-                n = sp.dicChipPartName[enmChipType.RF5C164];
-                for (int i = 0; i < n.Item3.Count; i++)
-                {
-                    if (string.IsNullOrEmpty(n.Item3[i])) continue;
-                    if (sp.lnChipPartName.Contains(n.Item3[i]))
-                        lstRF5C164.Add(new RF5C164(this, i, n.Item3[i], stPath, (info.format == enmFormat.ZGM ? 0 : i)));
-                }
-                if (lstRF5C164.Count > 0)
-                {
-                    rf5c164 = lstRF5C164.ToArray();
-                    chips.Add(enmChipType.RF5C164, rf5c164);
-                }
+            List<SN76489> lstSN76489 = new List<SN76489>();
+            n = sp.dicChipPartName[enmChipType.SN76489];
+            for (int i = 0; i < n.Item3.Count; i++)
+            {
+                if (string.IsNullOrEmpty(n.Item3[i])) continue;
+                if (sp.lnChipPartName.Contains(n.Item3[i]))
+                    lstSN76489.Add(new SN76489(this, i, n.Item3[i], stPath, (info.format == enmFormat.ZGM ? 0 : i)));
+            }
+            if (lstSN76489.Count > 0)
+            {
+                sn76489 = lstSN76489.ToArray();
+                chips.Add(enmChipType.SN76489, sn76489);
+            }
 
-                List<segaPcm> lstSEGAPCM = new List<segaPcm>();
-                n = sp.dicChipPartName[enmChipType.SEGAPCM];
-                for (int i = 0; i < n.Item3.Count; i++)
-                {
-                    if (string.IsNullOrEmpty(n.Item3[i])) continue;
-                    if (sp.lnChipPartName.Contains(n.Item3[i]))
-                        lstSEGAPCM.Add(new segaPcm(this, i, n.Item3[i], stPath, (info.format == enmFormat.ZGM ? 0 : i)));
-                }
-                if (lstSEGAPCM.Count > 0)
-                {
-                    segapcm = lstSEGAPCM.ToArray();
-                    chips.Add(enmChipType.SEGAPCM, segapcm);
-                }
+            List<RF5C164> lstRF5C164 = new List<RF5C164>();
+            n = sp.dicChipPartName[enmChipType.RF5C164];
+            for (int i = 0; i < n.Item3.Count; i++)
+            {
+                if (string.IsNullOrEmpty(n.Item3[i])) continue;
+                if (sp.lnChipPartName.Contains(n.Item3[i]))
+                    lstRF5C164.Add(new RF5C164(this, i, n.Item3[i], stPath, (info.format == enmFormat.ZGM ? 0 : i)));
+            }
+            if (lstRF5C164.Count > 0)
+            {
+                rf5c164 = lstRF5C164.ToArray();
+                chips.Add(enmChipType.RF5C164, rf5c164);
+            }
 
-                List<HuC6280> lstHuC6280 = new List<HuC6280>();
-                n = sp.dicChipPartName[enmChipType.HuC6280];
-                for (int i = 0; i < n.Item3.Count; i++)
-                {
-                    if (string.IsNullOrEmpty(n.Item3[i])) continue;
-                    if (sp.lnChipPartName.Contains(n.Item3[i]))
-                        lstHuC6280.Add(new HuC6280(this, i, n.Item3[i], stPath, (info.format == enmFormat.ZGM ? 0 : i)));
-                }
-                if (lstHuC6280.Count > 0)
-                {
-                    huc6280 = lstHuC6280.ToArray();
-                    chips.Add(enmChipType.HuC6280, huc6280);
-                }
+            List<segaPcm> lstSEGAPCM = new List<segaPcm>();
+            n = sp.dicChipPartName[enmChipType.SEGAPCM];
+            for (int i = 0; i < n.Item3.Count; i++)
+            {
+                if (string.IsNullOrEmpty(n.Item3[i])) continue;
+                if (sp.lnChipPartName.Contains(n.Item3[i]))
+                    lstSEGAPCM.Add(new segaPcm(this, i, n.Item3[i], stPath, (info.format == enmFormat.ZGM ? 0 : i)));
+            }
+            if (lstSEGAPCM.Count > 0)
+            {
+                segapcm = lstSEGAPCM.ToArray();
+                chips.Add(enmChipType.SEGAPCM, segapcm);
+            }
 
-                List<YM2612X> lstYM2612X = new List<YM2612X>();
-                n = sp.dicChipPartName[enmChipType.YM2612X];
-                for (int i = 0; i < n.Item3.Count; i++)
-                {
-                    if (string.IsNullOrEmpty(n.Item3[i])) continue;
-                    if (sp.lnChipPartName.Contains(n.Item3[i]))
-                        lstYM2612X.Add(new YM2612X(this, i, n.Item3[i], stPath, (info.format == enmFormat.ZGM ? 0 : i)));
-                }
-                if (lstYM2612X.Count > 0)
-                {
-                    ym2612x = lstYM2612X.ToArray();
-                    chips.Add(enmChipType.YM2612X, ym2612x);
-                }
+            List<HuC6280> lstHuC6280 = new List<HuC6280>();
+            n = sp.dicChipPartName[enmChipType.HuC6280];
+            for (int i = 0; i < n.Item3.Count; i++)
+            {
+                if (string.IsNullOrEmpty(n.Item3[i])) continue;
+                if (sp.lnChipPartName.Contains(n.Item3[i]))
+                    lstHuC6280.Add(new HuC6280(this, i, n.Item3[i], stPath, (info.format == enmFormat.ZGM ? 0 : i)));
+            }
+            if (lstHuC6280.Count > 0)
+            {
+                huc6280 = lstHuC6280.ToArray();
+                chips.Add(enmChipType.HuC6280, huc6280);
+            }
 
-                List<YM2413> lstYM2413 = new List<YM2413>();
-                n = sp.dicChipPartName[enmChipType.YM2413];
-                for (int i = 0; i < n.Item3.Count; i++)
-                {
-                    if (string.IsNullOrEmpty(n.Item3[i])) continue;
-                    if (sp.lnChipPartName.Contains(n.Item3[i]))
-                        lstYM2413.Add(new YM2413(this, i, n.Item3[i], stPath, (info.format == enmFormat.ZGM ? 0 : i)));
-                }
-                if (lstYM2413.Count > 0)
-                {
-                    ym2413 = lstYM2413.ToArray();
-                    chips.Add(enmChipType.YM2413, ym2413);
-                }
+            List<YM2612X> lstYM2612X = new List<YM2612X>();
+            n = sp.dicChipPartName[enmChipType.YM2612X];
+            for (int i = 0; i < n.Item3.Count; i++)
+            {
+                if (string.IsNullOrEmpty(n.Item3[i])) continue;
+                if (sp.lnChipPartName.Contains(n.Item3[i]))
+                    lstYM2612X.Add(new YM2612X(this, i, n.Item3[i], stPath, (info.format == enmFormat.ZGM ? 0 : i)));
+            }
+            if (lstYM2612X.Count > 0)
+            {
+                ym2612x = lstYM2612X.ToArray();
+                chips.Add(enmChipType.YM2612X, ym2612x);
+            }
 
-                List<C140> lstC140 = new List<C140>();
-                n = sp.dicChipPartName[enmChipType.C140];
-                for (int i = 0; i < n.Item3.Count; i++)
-                {
-                    if (string.IsNullOrEmpty(n.Item3[i])) continue;
-                    if (sp.lnChipPartName.Contains(n.Item3[i]))
-                        lstC140.Add(new C140(this, i, n.Item3[i], stPath, (info.format == enmFormat.ZGM ? 0 : i)));
-                }
-                if (lstC140.Count > 0)
-                {
-                    c140 = lstC140.ToArray();
-                    chips.Add(enmChipType.C140, c140);
-                }
+            List<YM2413> lstYM2413 = new List<YM2413>();
+            n = sp.dicChipPartName[enmChipType.YM2413];
+            for (int i = 0; i < n.Item3.Count; i++)
+            {
+                if (string.IsNullOrEmpty(n.Item3[i])) continue;
+                if (sp.lnChipPartName.Contains(n.Item3[i]))
+                    lstYM2413.Add(new YM2413(this, i, n.Item3[i], stPath, (info.format == enmFormat.ZGM ? 0 : i)));
+            }
+            if (lstYM2413.Count > 0)
+            {
+                ym2413 = lstYM2413.ToArray();
+                chips.Add(enmChipType.YM2413, ym2413);
+            }
 
-                List<AY8910> lstAY8910 = new List<AY8910>();
-                n = sp.dicChipPartName[enmChipType.AY8910];
-                for (int i = 0; i < n.Item3.Count; i++)
-                {
-                    if (string.IsNullOrEmpty(n.Item3[i])) continue;
-                    if (sp.lnChipPartName.Contains(n.Item3[i]))
-                        lstAY8910.Add(new AY8910(this, i, n.Item3[i], stPath, (info.format == enmFormat.ZGM ? 0 : i)));
-                }
-                if (lstAY8910.Count > 0)
-                {
-                    ay8910 = lstAY8910.ToArray();
-                    chips.Add(enmChipType.AY8910, ay8910);
-                }
+            List<C140> lstC140 = new List<C140>();
+            n = sp.dicChipPartName[enmChipType.C140];
+            for (int i = 0; i < n.Item3.Count; i++)
+            {
+                if (string.IsNullOrEmpty(n.Item3[i])) continue;
+                if (sp.lnChipPartName.Contains(n.Item3[i]))
+                    lstC140.Add(new C140(this, i, n.Item3[i], stPath, (info.format == enmFormat.ZGM ? 0 : i)));
+            }
+            if (lstC140.Count > 0)
+            {
+                c140 = lstC140.ToArray();
+                chips.Add(enmChipType.C140, c140);
+            }
 
-                List<K051649> lstK051649 = new List<K051649>();
-                n = sp.dicChipPartName[enmChipType.K051649];
-                for (int i = 0; i < n.Item3.Count; i++)
-                {
-                    if (string.IsNullOrEmpty(n.Item3[i])) continue;
-                    if (sp.lnChipPartName.Contains(n.Item3[i]))
-                        lstK051649.Add(new K051649(this, i, n.Item3[i], stPath, (info.format == enmFormat.ZGM ? 0 : i)));
-                }
-                if (lstK051649.Count > 0)
-                {
-                    k051649 = lstK051649.ToArray();
-                    chips.Add(enmChipType.K051649, k051649);
-                }
+            List<AY8910> lstAY8910 = new List<AY8910>();
+            n = sp.dicChipPartName[enmChipType.AY8910];
+            for (int i = 0; i < n.Item3.Count; i++)
+            {
+                if (string.IsNullOrEmpty(n.Item3[i])) continue;
+                if (sp.lnChipPartName.Contains(n.Item3[i]))
+                    lstAY8910.Add(new AY8910(this, i, n.Item3[i], stPath, (info.format == enmFormat.ZGM ? 0 : i)));
+            }
+            if (lstAY8910.Count > 0)
+            {
+                ay8910 = lstAY8910.ToArray();
+                chips.Add(enmChipType.AY8910, ay8910);
+            }
 
-                List<QSound> lstQSound = new List<QSound>();
-                n = sp.dicChipPartName[enmChipType.QSound];
-                for (int i = 0; i < n.Item3.Count; i++)
-                {
-                    if (string.IsNullOrEmpty(n.Item3[i])) continue;
-                    if (sp.lnChipPartName.Contains(n.Item3[i]))
-                        lstQSound.Add(new QSound(this, i, n.Item3[i], stPath, (info.format == enmFormat.ZGM ? 0 : i)));
-                }
-                if (lstQSound.Count > 0)
-                {
-                    qsound = lstQSound.ToArray();
-                    chips.Add(enmChipType.QSound, qsound);
-                }
+            List<K051649> lstK051649 = new List<K051649>();
+            n = sp.dicChipPartName[enmChipType.K051649];
+            for (int i = 0; i < n.Item3.Count; i++)
+            {
+                if (string.IsNullOrEmpty(n.Item3[i])) continue;
+                if (sp.lnChipPartName.Contains(n.Item3[i]))
+                    lstK051649.Add(new K051649(this, i, n.Item3[i], stPath, (info.format == enmFormat.ZGM ? 0 : i)));
+            }
+            if (lstK051649.Count > 0)
+            {
+                k051649 = lstK051649.ToArray();
+                chips.Add(enmChipType.K051649, k051649);
+            }
 
-                List<K053260> lstK053260 = new List<K053260>();
-                n = sp.dicChipPartName[enmChipType.K053260];
-                for (int i = 0; i < n.Item3.Count; i++)
-                {
-                    if (string.IsNullOrEmpty(n.Item3[i])) continue;
-                    if (sp.lnChipPartName.Contains(n.Item3[i]))
-                        lstK053260.Add(new K053260(this, i, n.Item3[i], stPath, (info.format == enmFormat.ZGM ? 0 : i)));
-                }
-                if (lstK053260.Count > 0)
-                {
-                    k053260 = lstK053260.ToArray();
-                    chips.Add(enmChipType.K053260, k053260);
-                }
+            List<QSound> lstQSound = new List<QSound>();
+            n = sp.dicChipPartName[enmChipType.QSound];
+            for (int i = 0; i < n.Item3.Count; i++)
+            {
+                if (string.IsNullOrEmpty(n.Item3[i])) continue;
+                if (sp.lnChipPartName.Contains(n.Item3[i]))
+                    lstQSound.Add(new QSound(this, i, n.Item3[i], stPath, (info.format == enmFormat.ZGM ? 0 : i)));
+            }
+            if (lstQSound.Count > 0)
+            {
+                qsound = lstQSound.ToArray();
+                chips.Add(enmChipType.QSound, qsound);
+            }
+
+            List<K053260> lstK053260 = new List<K053260>();
+            n = sp.dicChipPartName[enmChipType.K053260];
+            for (int i = 0; i < n.Item3.Count; i++)
+            {
+                if (string.IsNullOrEmpty(n.Item3[i])) continue;
+                if (sp.lnChipPartName.Contains(n.Item3[i]))
+                    lstK053260.Add(new K053260(this, i, n.Item3[i], stPath, (info.format == enmFormat.ZGM ? 0 : i)));
+            }
+            if (lstK053260.Count > 0)
+            {
+                k053260 = lstK053260.ToArray();
+                chips.Add(enmChipType.K053260, k053260);
+            }
 
             List<clsTD> lstTD = new List<clsTD>
             {
@@ -2168,6 +2183,9 @@ namespace Core
                 YM2608 y = ym2608[0] != null ? ym2608[0] : ym2608[1];
                 Common.SetLE32(dat, 0x48, (uint)y.Frequency | (uint)(useYM2608_S == 0 ? 0 : 0x40000000));
             }
+
+            //YM2609 はVGMに未対応
+
             if (info.Version >= 1.51f && useYM2610B != 0)
             {
                 YM2610B y = ym2610b[0] != null ? ym2610b[0] : ym2610b[1];
@@ -3447,6 +3465,8 @@ namespace Core
                         }
                     }
                     dat.Add(od);
+
+                    Console.Write("{0:x02} :",d);
                 }
             }
 
@@ -3473,7 +3493,10 @@ namespace Core
                     }
                 }
                 dat.Add(od);
+                Console.Write("{0:x02} :", d);
             }
+
+            Console.WriteLine("");
         }
 
         //public void OutData(outDatum od, params byte[] data)

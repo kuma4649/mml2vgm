@@ -164,8 +164,8 @@ namespace Core
             int n = 9;
             byte data = 0;
 
-            data = (byte)(((YM2203)pw.chip).SSGKeyOn | (n << pch));
-            ((YM2203)pw.chip).SSGKeyOn = data;
+            data = (byte)(((YM2203)pw.chip).SSGKeyOn[0] | (n << pch));
+            ((YM2203)pw.chip).SSGKeyOn[0] = data;
 
             parent.OutData(mml,port[0], (byte)(0x08 + pch), 0);
             pw.beforeVolume = -1;

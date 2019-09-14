@@ -54,8 +54,11 @@ namespace Core
         public static object[] tblChipIdentifyNumber = new object[]
         {
             //              ChipName    Ident        Port  CmdLen  Option
-              new object[]{ "SN76489" , 0x0000000c , 2   , 1     , new byte[] { 0,0,0,0 } }
-            , new object[]{ "YM2612"  , 0x0000002c , 2   , 2     , null }
+            // 0x00000000 - 0x000000FF VGM Chips
+              new object[]{ "SN76489" , 0x0000_000c , 2   , 1     , new byte[] { 0,0,0,0 } }
+            , new object[]{ "YM2612"  , 0x0000_002c , 2   , 2     , null }
+            // 0x00020000 - 0x0002FFFF 妄想Chips
+            , new object[]{ "YM2609"  , 0x0002_0001 , 4   , 2     , null }
         };
         private Dictionary<string, object[]> dicChipIdentifyNumber;
         private int ChipCommandSize = 1;

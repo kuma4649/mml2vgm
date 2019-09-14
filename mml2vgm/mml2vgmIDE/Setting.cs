@@ -183,6 +183,20 @@ namespace mml2vgmIDE
             }
         }
 
+        private ChipType _YM2609Type = new ChipType();
+        public ChipType YM2609Type
+        {
+            get
+            {
+                return _YM2609Type;
+            }
+
+            set
+            {
+                _YM2609Type = value;
+            }
+        }
+
         private ChipType _YM2610Type = new ChipType();
         public ChipType YM2610Type
         {
@@ -320,6 +334,20 @@ namespace mml2vgmIDE
             set
             {
                 _YM2608SType = value;
+            }
+        }
+
+        private ChipType _YM2609SType = new ChipType();
+        public ChipType YM2609SType
+        {
+            get
+            {
+                return _YM2609SType;
+            }
+
+            set
+            {
+                _YM2609SType = value;
             }
         }
 
@@ -1670,6 +1698,22 @@ namespace mml2vgmIDE
                 {
                     _MasterVolume = value;
                     if (_MasterVolume > 20 || _MasterVolume < -192) _MasterVolume = 0;
+                }
+            }
+
+            private int _YM2609Volume = 0;
+            public int YM2609Volume
+            {
+                get
+                {
+                    if (_YM2609Volume > 20 || _YM2609Volume < -192) _YM2609Volume = 0;
+                    return _YM2609Volume;
+                }
+
+                set
+                {
+                    _YM2609Volume = value;
+                    if (_YM2609Volume > 20 || _YM2609Volume < -192) _YM2609Volume = 0;
                 }
             }
 

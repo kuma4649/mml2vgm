@@ -39,6 +39,7 @@ namespace mml2vgmIDE
         private Setting.ChipType[] ctYM2203 = new Setting.ChipType[2] { null, null };
         private Setting.ChipType[] ctYM2413 = new Setting.ChipType[2] { null, null };
         private Setting.ChipType[] ctYM2608 = new Setting.ChipType[2] { null, null };
+        private Setting.ChipType[] ctYM2609 = new Setting.ChipType[2] { null, null };
         private Setting.ChipType[] ctYM2610 = new Setting.ChipType[2] { null, null };
         private Setting.ChipType[] ctYM2612 = new Setting.ChipType[2] { null, null };
         private Setting.ChipType[] ctYM3526 = new Setting.ChipType[2] { null, null };
@@ -61,7 +62,8 @@ namespace mml2vgmIDE
         private RSoundChip[] scYM2203 = new RSoundChip[2] { null, null };
         private RSoundChip[] scYM2413 = new RSoundChip[2] { null, null };
         private RSoundChip[] scYM2612 =   new RSoundChip[2] { null, null };
-        private RSoundChip[] scYM2608 =   new RSoundChip[2] { null, null };
+        private RSoundChip[] scYM2608 = new RSoundChip[2] { null, null };
+        private RSoundChip[] scYM2609 = new RSoundChip[2] { null, null };
         private RSoundChip[] scYM2610 =   new RSoundChip[2] { null, null };
         private RSoundChip[] scYM2610EA = new RSoundChip[2] { null, null };
         private RSoundChip[] scYM2610EB = new RSoundChip[2] { null, null };
@@ -369,6 +371,7 @@ namespace mml2vgmIDE
         public List<Chip> YM2203  = new List<Chip>();
         public List<Chip> YM2413  = new List<Chip>();
         public List<Chip> YM2608  = new List<Chip>();
+        public List<Chip> YM2609  = new List<Chip>();
         public List<Chip> YM2610  = new List<Chip>();
         public List<Chip> YM2612  = new List<Chip>();
         public List<Chip> QSound  = new List<Chip>();
@@ -547,6 +550,25 @@ namespace mml2vgmIDE
                         YM2608[i].Delay = (YM2608[i].Model == EnmModel.VirtualModel ? LEmu : LReal);
                     }
                     break;
+                case EnmDevice.YM2609:
+                    ctYM2609 = new Setting.ChipType[] { chipTypeP, chipTypeS };
+                    for (int i = 0; i < YM2609.Count; i++)
+                    {
+                        if (i < 2)
+                        {
+                            scYM2609[i] = realChip.GetRealChip(ctYM2609[i]);
+                            if (scYM2609[i] != null) scYM2609[i].init();
+                            if (YM2609.Count < i + 1) YM2609.Add(new Chip());
+                            YM2609[i].Model = ctYM2609[i].UseEmu ? EnmModel.VirtualModel : EnmModel.RealModel;
+                            YM2609[i].Delay = (YM2609[i].Model == EnmModel.VirtualModel ? LEmu : LReal);
+                        }
+                        else
+                        {
+                            YM2609[i].Model = EnmModel.VirtualModel;
+                            YM2609[i].Delay = LEmu;
+                        }
+                    }
+                    break;
                 case EnmDevice.YM2610:
                     ctYM2610 = new Setting.ChipType[] { chipTypeP, chipTypeS };
                     for (int i = 0; i < 2; i++)
@@ -711,6 +733,13 @@ namespace mml2vgmIDE
                 YM2608[i].Number = i;
                 YM2608[i].Hosei = 0;
 
+                if (YM2609.Count < i + 1) YM2609.Add(new Chip());
+                YM2609[i].Use = false;
+                YM2609[i].Model = EnmModel.None;
+                YM2609[i].Device = EnmDevice.YM2609;
+                YM2609[i].Number = i;
+                YM2609[i].Hosei = 0;
+
                 if (YM2610.Count < i + 1) YM2610.Add(new Chip());
                 YM2610[i].Use = false;
                 YM2610[i].Model = EnmModel.None;
@@ -744,10 +773,12 @@ namespace mml2vgmIDE
         public void ZgmSetup(List<Chip> chips)
         {
 
+            YM2609.Clear();
             YM2612.Clear();
 
             foreach (Chip c in chips)
             {
+                if (c is Driver.ZGM.ZgmChip.YM2609) YM2609.Add(c);
                 if (c is Driver.ZGM.ZgmChip.YM2612) YM2612.Add(c);
             }
         }
@@ -796,6 +827,9 @@ namespace mml2vgmIDE
                     break;
                 case EnmDevice.YM2608:
                     YM2608SetRegisterProcessing(ref Counter, ref Chip, ref Type, ref Address, ref Data, ref ExData);
+                    break;
+                case EnmDevice.YM2609:
+                    YM2609SetRegisterProcessing(ref Counter, ref Chip, ref Type, ref Address, ref Data, ref ExData);
                     break;
                 case EnmDevice.YM2610:
                     YM2610SetRegisterProcessing(ref Counter, ref Chip, ref Type, ref Address, ref Data, ref ExData);
@@ -855,6 +889,9 @@ namespace mml2vgmIDE
                     break;
                 case EnmDevice.YM2608:
                     YM2608WriteRegisterControl(Chip, type, address, data, exData);
+                    break;
+                case EnmDevice.YM2609:
+                    YM2609WriteRegisterControl(Chip, type, address, data, exData);
                     break;
                 case EnmDevice.YM2610:
                     YM2610WriteRegisterControl(Chip, type, address, data, exData);
@@ -1457,7 +1494,12 @@ namespace mml2vgmIDE
         {
             dicChipCmdNo.Clear();
 
-            foreach(Driver.ZGM.ZgmChip.ZgmChip c in YM2612)
+            foreach (Driver.ZGM.ZgmChip.ZgmChip c in YM2609)
+            {
+                dicChipCmdNo.Add(c.defineInfo.commandNo, c);
+            }
+
+            foreach (Driver.ZGM.ZgmChip.ZgmChip c in YM2612)
             {
                 dicChipCmdNo.Add(c.defineInfo.commandNo, c);
             }
@@ -4589,6 +4631,89 @@ namespace mml2vgmIDE
             if (scYM2610 != null && scYM2610[chipID] != null)
             {
                 scYM2610[chipID].setSSGVolume((byte)vol);
+            }
+        }
+
+        #endregion
+
+
+
+        #region YM2609(OPNA2)
+
+        private void YM2609WriteRegisterControl(Chip Chip, EnmDataType type, int address, int data, object exData)
+        {
+            if (type == EnmDataType.Normal)
+            {
+                if (Chip.Model == EnmModel.VirtualModel)
+                {
+                    if (!ctYM2609[Chip.Number].UseScci && ctYM2609[Chip.Number].UseEmu)
+                    {
+                        mds.WriteYM2609((byte)Chip.Number, (byte)(address >> 8), (byte)address, (byte)data);
+                        //Console.WriteLine("{0:x02} : {1:x02} : {2:x02} : {3:x02}", (byte)Chip.Number, (byte)(address >> 8), (byte)address, (byte)data);
+                    }
+                }
+                if (Chip.Model == EnmModel.RealModel)
+                {
+                }
+            }
+            else if (type == EnmDataType.Block)
+            {
+                Audio.sm.SetInterrupt();
+
+                try
+                {
+                    if (exData == null) return;
+
+                    PackData[] pdata = (PackData[])exData;
+                    if (Chip.Model == EnmModel.VirtualModel)
+                    {
+                        log.Write("Sending YM2609(Emu) ADPCM");
+                        foreach (PackData dat in pdata)
+                            mds.WriteYM2609((byte)dat.Chip.Number, (byte)(dat.Address >> 8), (byte)dat.Address, (byte)dat.Data);
+                    }
+                    if (Chip.Model == EnmModel.RealModel)
+                    {
+                    }
+                }
+                finally
+                {
+                    Audio.sm.ResetInterrupt();
+                }
+            }
+        }
+
+        public void YM2609SetRegisterProcessing(ref long Counter, ref Chip Chip, ref EnmDataType Type, ref int Address, ref int dData, ref object ExData)
+        {
+            if (ctYM2609 == null) return;
+            if (Address == -1 && dData == -1) return;
+
+            if (Chip.Number == 0) chipLED.PriOPNA = 2;
+            else chipLED.SecOPNA = 2;
+
+        }
+
+        public void YM2609SetRegister(outDatum od, long Counter, int ChipID, int dPort, int dAddr, int dData)
+        {
+            dummyChip.Model = YM2609[ChipID].Model;
+            dummyChip.Delay = YM2609[ChipID].Delay;
+            dummyChip.Device = YM2609[ChipID].Device;
+            dummyChip.Number = YM2609[ChipID].Number;
+            dummyChip.Use = YM2609[ChipID].Use;
+
+            int address = dPort * 0x100 + dAddr;
+            if ((address >= 0x100 && address <= 0x110) && ctYM2609[0].OnlyPCMEmulation)
+            {
+                dummyChip.Model = EnmModel.VirtualModel;
+            }
+
+            enq(od, Counter, dummyChip, EnmDataType.Normal, dPort * 0x100 + dAddr, dData, null);
+        }
+
+        public void YM2609WriteClock(byte chipID, int clock)
+        {
+            if (scYM2609 != null && scYM2609[chipID] != null)
+            {
+                scYM2609[chipID].dClock = scYM2609[chipID].SetMasterClock((uint)clock);
             }
         }
 
