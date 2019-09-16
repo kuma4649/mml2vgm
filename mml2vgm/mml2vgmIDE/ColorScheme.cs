@@ -18,6 +18,8 @@ namespace mml2vgmIDE
         public int Azuki_LineNumberFore_Normal = Color.FromArgb(80, 170, 200).ToArgb();
         public int Azuki_SelectionBack_Normal = Color.FromArgb(120, 100, 90).ToArgb();
         public int Azuki_SelectionFore_Normal = Color.FromArgb(220, 230, 250).ToArgb();
+        public int Azuki_MatchedBracketBack_Normal = Color.FromArgb(120, 80, 90).ToArgb();
+        public int Azuki_MatchedBracketFore_Normal = Color.FromArgb(250, 230, 220).ToArgb();
         public int Azuki_LineNumberBack_Trace = Color.FromArgb(150, 180, 60).ToArgb();
         public int Azuki_LineNumberFore_Trace = Color.FromArgb(20, 40, 10).ToArgb();
         public int Azuki_Keyword = Color.FromArgb(255, 190, 60).ToArgb();

@@ -28,7 +28,8 @@ BASS
 '@ 001,007
 
 'U01 T120
-U07 D0 @1 p3 o4 v120 l8 q8 c
+
+FM
 U01 D0 @1 p3 o4 v120 l8 q8 c r r r r r r r r r r r 
 U02 D0 @1 p3 o4 v120 l8 q8 r c+r r r r r r r r r r 
 U03 D0 @1 p3 o4 v120 l8 q8 r r d r r r r r r r r r 
@@ -42,15 +43,25 @@ U10 D0 @1 p3 o4 v120 l8 q8 r r r r r r r r r a r r
 U11 D0 @1 p3 o4 v120 l8 q8 r r r r r r r r r r a+r 
 U12 D0 @1 p3 o4 v120 l8 q8 r r r r r r r r r r r b 
 
-'U19 o4 v15 l8 q8 c r r r r r r r r r r r 
-'U20 o4 v15 l8 q8 r c+r r r r r r r r r r 
-'U21 o4 v15 l8 q8 r r d r r r r r r r r r 
-'U22 o4 v15 l8 q8 r r r d+r r r r r r r r 
-'U23 o4 v15 l8 q8 r r r r e r r r r r r r 
-'U24 o4 v15 l8 q8 r r r r r f r r r r r r 
-'U25 o4 v15 l8 q8 r r r r r r f+r r r r r 
-'U26 o4 v15 l8 q8 r r r r r r r g r r r r 
-'U27 o4 v15 l8 q8 r r r r r r r r g+r r r 
-'U28 o4 v15 l8 q8 r r r r r r r r r a r r 
-'U29 o4 v15 l8 q8 r r r r r r r r r r a+r 
-'U30 o4 v15 l8 q8 r r r r r r r r r r r b 
+SSG
+U19 o4 v15 l8 q8 c r r r r r r r r r r r 
+U20 o4 v15 l8 q8 r c+r r r r r r r r r r 
+U21 o4 v15 l8 q8 r r d r r r r r r r r r 
+U22 o4 v15 l8 q8 r r r d+r r r r r r r r 
+U23 o4 v15 l8 q8 r r r r e r r r r r r r 
+U24 o4 v15 l8 q8 r r r r r f r r r r r r 
+U25 o4 v15 l8 q8 r r r r r r f+r r r r r 
+U26 o4 v15 l8 q8 r r r r r r r g r r r r 
+U27 o4 v15 l8 q8 r r r r r r r r g+r r r 
+U28 o4 v15 l8 q8 r r r r r r r r r a r r 
+U29 o4 v15 l8 q8 r r r r r r r r r r a+r 
+U30 o4 v15 l8 q8 r r r r r r r r r r r b 
+
+リズム
+'U31 p3V50l4v31[ccc8c8c ]
+'U32 p1   l4v31[rcr   c ]
+'U33 p2   l4v31[c (7c)7 ]4
+'U34 p2   l8v31[cccccccc]
+'U35 p1   l8v31[rrrrrrrc]
+'U36 p3   l8v31[rcrcrcrc]
+

@@ -172,7 +172,7 @@ namespace Core
                 {
                     int fs = (pi.totalBuf.Length - pi.totalHeaderLength) % 0x10000;
                     List<byte> n = pi.totalBuf.ToList();
-                    for (int i = 0; i < 0x10000 - fs; i++) n.Add(0x80);
+                    for (int i = 0; i < 0x10000 - fs; i++) n.Add(0x00);
                     pi.totalBuf = n.ToArray();
                     pi.totalBufPtr += 0x10000 - fs;
                 }
@@ -214,7 +214,7 @@ namespace Core
                 }
                 else
                 {
-                    Array.Copy(buf, 0, pi.totalBuf, freeAdr, buf.Length);
+                    Array.Copy(buf, 0, pi.totalBuf, freeAdr+ pi.totalHeaderLength, buf.Length);
                 }
 
                 Common.SetUInt32bit31(

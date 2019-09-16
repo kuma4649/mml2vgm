@@ -268,7 +268,7 @@ namespace Core
                 }
                 else
                 {
-                    Array.Copy(buf, 0, pi.totalBuf, freeAdr, buf.Length);
+                    Array.Copy(buf, 0, pi.totalBuf, freeAdr+pi.totalHeaderLength, buf.Length);
                 }
 
                 Common.SetUInt32bit31(
@@ -380,24 +380,28 @@ namespace Core
                 pw.beforepcmStartAddress = stAdr;
             }
 
-            if (pw.beforepcmEndAddress != pw.pcmEndAddress)
+            //K053260は終了アドレスではなくサイズを指定する
+            //また、K053260はバンクをまたぐ演奏が可能(但しサイズは65534まで)
+            //TODO:よって現在、パディングを行っているが不要かもしれない。
+            int size = pw.pcmEndAddress - pw.pcmStartAddress + 1;
+            if (pw.beforepcmEndAddress != size)
             {
                 //EndAdr L
                 adr = (byte)((pw.ch + 1) * 8 + 0x02);
-                data = (byte)pw.pcmEndAddress;
+                data = (byte)size;
                 OutK053260Port(mml, port[0], pw
                     , adr
                     , data
                     );
                 //EndAdr H
                 adr = (byte)((pw.ch + 1) * 8 + 0x03);
-                data = (byte)(pw.pcmEndAddress >> 8);
+                data = (byte)(size >> 8);
                 OutK053260Port(mml, port[0], pw
                     , adr
                     , data
                     );
 
-                pw.beforepcmEndAddress = pw.pcmEndAddress;
+                pw.beforepcmEndAddress = size;
             }
 
 

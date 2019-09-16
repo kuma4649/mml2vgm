@@ -80,10 +80,13 @@ namespace mml2vgmIDE
             azukiControl.ColorScheme.LineNumberFore = Color.FromArgb(setting.ColorScheme.Azuki_LineNumberFore_Normal);
             azukiControl.ColorScheme.SelectionBack = Color.FromArgb(setting.ColorScheme.Azuki_SelectionBack_Normal);
             azukiControl.ColorScheme.SelectionFore = Color.FromArgb(setting.ColorScheme.Azuki_SelectionFore_Normal);
+            azukiControl.ColorScheme.MatchedBracketBack = Color.FromArgb(setting.ColorScheme.Azuki_MatchedBracketBack_Normal);
+            azukiControl.ColorScheme.MatchedBracketFore = Color.FromArgb(setting.ColorScheme.Azuki_MatchedBracketFore_Normal);
             azukiControl.ColorScheme.SetColor(CharClass.Keyword, Color.FromArgb(setting.ColorScheme.Azuki_Keyword), Color.Transparent);
             azukiControl.ColorScheme.SetColor(CharClass.Comment, Color.FromArgb(setting.ColorScheme.Azuki_Comment), Color.Transparent);
             azukiControl.ColorScheme.SetColor(CharClass.DocComment, Color.FromArgb(setting.ColorScheme.Azuki_DocComment), Color.Transparent);
             azukiControl.ColorScheme.SetColor(CharClass.Number, Color.FromArgb(setting.ColorScheme.Azuki_Number), Color.Transparent);
+            azukiControl.ColorScheme.SetColor(CharClass.Delimiter, Color.FromArgb(setting.ColorScheme.Azuki_Number), Color.Transparent);
 
             MarkingInfo info = new MarkingInfo(1, "TraceInfo");
             Marking.Register(info);

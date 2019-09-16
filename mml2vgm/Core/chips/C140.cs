@@ -134,7 +134,7 @@ namespace Core
 
                 //空いているBankを探す
                 int freeBank = 0;
-                int freeAdr = 0;
+                int freeAdr =  0;
                 do
                 {
                     if (memoryMap.Count < freeBank + 1)
@@ -162,7 +162,7 @@ namespace Core
                     int fs = (pi.totalBuf.Length - pi.totalHeaderLength) % 0x10000;
 
                     List<byte> n = pi.totalBuf.ToList();
-                    for (int i = 0; i < 0x10000 - fs; i++) n.Add(0x80);
+                    for (int i = 0; i < 0x10000 - fs; i++) n.Add(0x00);
                     pi.totalBuf = n.ToArray();
                     pi.totalBufPtr += 0x10000 - fs;
                 }
@@ -206,7 +206,7 @@ namespace Core
                 }
                 else
                 {
-                    Array.Copy(buf, 0, pi.totalBuf, freeAdr, buf.Length);
+                    Array.Copy(buf, 0, pi.totalBuf, freeAdr + pi.totalHeaderLength, buf.Length);
                 }
 
                 Common.SetUInt32bit31(
@@ -229,6 +229,14 @@ namespace Core
                 newDic[v.Key].status = enmPCMSTATUS.ERROR;
             }
 
+            //for(int i = 0; i < pi.totalBuf.Length; i++)
+            //{
+            //    if (i % 16 == 0)
+            //    {
+            //        Console.Write("\r\n{0:x06}::", i);
+            //    }
+            //    Console.Write("{0:x02} ", pi.totalBuf[i]);
+            //}
         }
 
         public override void StorePcmRawData(clsPcmDatSeq pds, byte[] buf, bool isRaw, bool is16bit, int samplerate, params object[] option)
@@ -556,16 +564,17 @@ namespace Core
 
             if (pw.beforepcmEndAddress != pw.pcmEndAddress)
             {
+                int eAdr = pw.pcmEndAddress;
                 //EndAdr H
                 adr = pw.ch * 16 + 0x08;
-                data = (byte)((pw.pcmEndAddress & 0xff00) >> 8);
+                data = (byte)((eAdr & 0xff00) >> 8);
                 OutC140Port(mml,pw
                     , (byte)(adr >> 8)
                     , (byte)adr
                     , data);
                 //EndAdr L
                 adr = pw.ch * 16 + 0x09;
-                data = (byte)((pw.pcmEndAddress & 0x00ff) >> 0);
+                data = (byte)((eAdr & 0x00ff) >> 0);
                 OutC140Port(mml,pw
                     , (byte)(adr >> 8)
                     , (byte)adr
