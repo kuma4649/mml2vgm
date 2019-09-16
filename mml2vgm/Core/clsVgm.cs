@@ -585,7 +585,8 @@ namespace Core
                 fn = fn.Replace('\\', Path.DirectorySeparatorChar).Replace('/', Path.DirectorySeparatorChar);
                 if (!File.Exists(fn))
                 {
-                    fn = Path.Combine(line.Lp.path, fn);
+                    //fn = Path.Combine(line.Lp.path, fn);
+                    fn = Path.Combine(wrkPath, fn);
                     fn = fn.Replace('\\', Path.DirectorySeparatorChar).Replace('/', Path.DirectorySeparatorChar);
                 }
 
@@ -630,7 +631,8 @@ namespace Core
                 fn = fn.Replace('\\', Path.DirectorySeparatorChar).Replace('/', Path.DirectorySeparatorChar);
                 if (!File.Exists(fn))
                 {
-                    fn = Path.Combine(line.Lp.path, fn);
+                    //fn = Path.Combine(line.Lp.path, fn);
+                    fn = Path.Combine(wrkPath, fn);
                     fn = fn.Replace('\\', Path.DirectorySeparatorChar).Replace('/', Path.DirectorySeparatorChar);
                 }
 
@@ -692,8 +694,13 @@ namespace Core
                 int num = Common.ParseNumber(vs[0]);
                 string fn = vs[1].Trim().Trim('"');
                 byte[] buf;
-                fn = Path.Combine(line.Lp.path, fn);
                 fn = fn.Replace('\\', Path.DirectorySeparatorChar).Replace('/', Path.DirectorySeparatorChar);
+                if (!File.Exists(fn))
+                {
+                    //fn = Path.Combine(line.Lp.path, fn);
+                    fn = Path.Combine(wrkPath, fn);
+                    fn = fn.Replace('\\', Path.DirectorySeparatorChar).Replace('/', Path.DirectorySeparatorChar);
+                }
                 buf = File.ReadAllBytes(fn);
 
                 if (instFM.ContainsKey(num))
@@ -706,7 +713,7 @@ namespace Core
             }
             catch
             {
-                msgBox.setWrnMsg(msg.get("E01018"), line.Lp);
+                msgBox.setWrnMsg(msg.get("E01021"), line.Lp);
             }
         }
 
@@ -1620,6 +1627,7 @@ namespace Core
         public LinePos linePos { get; internal set; }
         public bool isRealTimeMode { get; set; }
         public int ChipCommandSize { get; set; }
+        public string wrkPath { get; internal set; }
 
         public outDatum[] Vgm_getByteData(Dictionary<string, List<MML>> mmlData)
         {
@@ -3466,7 +3474,7 @@ namespace Core
                     }
                     dat.Add(od);
 
-                    Console.Write("{0:x02} :",d);
+                    //Console.Write("{0:x02} :",d);
                 }
             }
 
@@ -3493,10 +3501,10 @@ namespace Core
                     }
                 }
                 dat.Add(od);
-                Console.Write("{0:x02} :", d);
+                //Console.Write("{0:x02} :", d);
             }
 
-            Console.WriteLine("");
+            //Console.WriteLine("");
         }
 
         //public void OutData(outDatum od, params byte[] data)

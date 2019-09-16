@@ -131,6 +131,7 @@ namespace Core
                 desVGM.doSkip = doSkip;
                 desVGM.doSkipStop = doSkipStop;
                 desVGM.caretPoint = caretPoint;
+                desVGM.wrkPath = wrkPath;
                 if (desVGM.Analyze(src) != 0)
                 {
                     msgBox.setErrMsg(string.Format(

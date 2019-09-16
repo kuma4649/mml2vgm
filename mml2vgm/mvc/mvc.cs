@@ -165,31 +165,31 @@ namespace mvc
 
                 if (mv.desVGM.ym2608 != null)
                 {
-                    if (mv.desVGM.ym2608[0].pcmDataEasy != null) Console.WriteLine(string.Format(msg.get("I0020"), mv.desVGM.ym2608[0].pcmDataEasy.Length - 15));
-                    if (mv.desVGM.ym2608[1].pcmDataEasy != null) Console.WriteLine(string.Format(msg.get("I0021"), mv.desVGM.ym2608[1].pcmDataEasy.Length - 15));
+                    if (mv.desVGM.ym2608.Length > 0 && mv.desVGM.ym2608[0].pcmDataEasy != null) Console.WriteLine(string.Format(msg.get("I0020"), mv.desVGM.ym2608[0].pcmDataEasy.Length - 15));
+                    if (mv.desVGM.ym2608.Length > 1 && mv.desVGM.ym2608[1].pcmDataEasy != null) Console.WriteLine(string.Format(msg.get("I0021"), mv.desVGM.ym2608[1].pcmDataEasy.Length - 15));
                 }
                 if (mv.desVGM.ym2610b != null)
                 {
-                    if (mv.desVGM.ym2610b[0].pcmDataEasyA != null) Console.WriteLine(string.Format(msg.get("I0022"), mv.desVGM.ym2610b[0].pcmDataEasyA.Length - 15));
-                    if (mv.desVGM.ym2610b[0].pcmDataEasyB != null) Console.WriteLine(string.Format(msg.get("I0023"), mv.desVGM.ym2610b[0].pcmDataEasyB.Length - 15));
-                    if (mv.desVGM.ym2610b[1].pcmDataEasyA != null) Console.WriteLine(string.Format(msg.get("I0024"), mv.desVGM.ym2610b[1].pcmDataEasyA.Length - 15));
-                    if (mv.desVGM.ym2610b[1].pcmDataEasyB != null) Console.WriteLine(string.Format(msg.get("I0025"), mv.desVGM.ym2610b[1].pcmDataEasyB.Length - 15));
+                    if (mv.desVGM.ym2610b.Length > 0 && mv.desVGM.ym2610b[0].pcmDataEasyA != null) Console.WriteLine(string.Format(msg.get("I0022"), mv.desVGM.ym2610b[0].pcmDataEasyA.Length - 15));
+                    if (mv.desVGM.ym2610b.Length > 0 && mv.desVGM.ym2610b[0].pcmDataEasyB != null) Console.WriteLine(string.Format(msg.get("I0023"), mv.desVGM.ym2610b[0].pcmDataEasyB.Length - 15));
+                    if (mv.desVGM.ym2610b.Length > 1 && mv.desVGM.ym2610b[1].pcmDataEasyA != null) Console.WriteLine(string.Format(msg.get("I0024"), mv.desVGM.ym2610b[1].pcmDataEasyA.Length - 15));
+                    if (mv.desVGM.ym2610b.Length > 1 && mv.desVGM.ym2610b[1].pcmDataEasyB != null) Console.WriteLine(string.Format(msg.get("I0025"), mv.desVGM.ym2610b[1].pcmDataEasyB.Length - 15));
                 }
                 //if (mv.desVGM.segapcm[0].pcmData != null) Console.WriteLine(string.Format(" PCM Data size(SEGAPCM)  : {0} byte", mv.desVGM.segapcm[0].pcmData.Length - 15));
                 //if (mv.desVGM.segapcm[1].pcmData != null) Console.WriteLine(string.Format(" PCM Data size(SEGAPCMSecondary)  : {0} byte", mv.desVGM.segapcm[1].pcmData.Length - 15));
                 if (mv.desVGM.ym2612 != null)
                 {
-                    if (mv.desVGM.ym2612[0].pcmDataEasy != null) Console.WriteLine(string.Format(msg.get("I0026"), mv.desVGM.ym2612[0].pcmDataEasy.Length));
+                    if (mv.desVGM.ym2612.Length > 0 && mv.desVGM.ym2612[0].pcmDataEasy != null) Console.WriteLine(string.Format(msg.get("I0026"), mv.desVGM.ym2612[0].pcmDataEasy.Length));
                 }
                 if (mv.desVGM.rf5c164 != null)
                 {
-                    if (mv.desVGM.rf5c164[0].pcmDataEasy != null) Console.WriteLine(string.Format(msg.get("I0027"), mv.desVGM.rf5c164[0].pcmDataEasy.Length - 12));
-                    if (mv.desVGM.rf5c164[1].pcmDataEasy != null) Console.WriteLine(string.Format(msg.get("I0028"), mv.desVGM.rf5c164[1].pcmDataEasy.Length - 12));
+                    if (mv.desVGM.rf5c164.Length > 0 && mv.desVGM.rf5c164[0].pcmDataEasy != null) Console.WriteLine(string.Format(msg.get("I0027"), mv.desVGM.rf5c164[0].pcmDataEasy.Length - 12));
+                    if (mv.desVGM.rf5c164.Length > 1 && mv.desVGM.rf5c164[1].pcmDataEasy != null) Console.WriteLine(string.Format(msg.get("I0028"), mv.desVGM.rf5c164[1].pcmDataEasy.Length - 12));
                 }
                 if (mv.desVGM.huc6280 != null)
                 {
-                    if (mv.desVGM.huc6280[0].pcmDataEasy != null) Console.WriteLine(string.Format(msg.get("I0029"), mv.desVGM.huc6280[0].pcmDataEasy.Length));
-                    if (mv.desVGM.huc6280[1].pcmDataEasy != null) Console.WriteLine(string.Format(msg.get("I0030"), mv.desVGM.huc6280[1].pcmDataEasy.Length));
+                    if (mv.desVGM.huc6280.Length > 0 && mv.desVGM.huc6280[0].pcmDataEasy != null) Console.WriteLine(string.Format(msg.get("I0029"), mv.desVGM.huc6280[0].pcmDataEasy.Length));
+                    if (mv.desVGM.huc6280.Length > 1 && mv.desVGM.huc6280[1].pcmDataEasy != null) Console.WriteLine(string.Format(msg.get("I0030"), mv.desVGM.huc6280[1].pcmDataEasy.Length));
                 }
             }
 
