@@ -67,17 +67,17 @@ U30 o4 v15 l8 q8 r r r r r r r r r r r b
 
 ADPCM
      @ filename               Hz   Vol Chip   type(0:ADPCM-A 1:ADPCM-B 2:ADPCM-C)
-'@ P 1,".\wav\Guitar.wav"    ,8000,100,YM2609,0
-'@ P 2,".\wav\SD.wav"        ,8000,100,YM2609,0
-'@ P 3,".\wav\muteGuitar.wav",8000,100,YM2609,0
+'@ P 1,"..\wav\Guitar.wav"    ,8000,100,YM2609,0
+'@ P 2,"..\wav\SD.wav"        ,8000,100,YM2609,0
+'@ P 3,"..\wav\muteGuitar.wav",8000,100,YM2609,0
 
-'@ P 4,".\wav\Guitar.wav"    ,8000,100,YM2609,1
-'@ P 5,".\wav\SD.wav"        ,8000,100,YM2609,1
-'@ P 6,".\wav\muteGuitar.wav",8000,100,YM2609,1
+'@ P 4,"..\wav\Guitar.wav"    ,8000,100,YM2609,1
+'@ P 5,"..\wav\SD.wav"        ,8000,100,YM2609,1
+'@ P 6,"..\wav\muteGuitar.wav",8000,100,YM2609,1
 
-'@ P 7,".\wav\Guitar.wav"    ,8000,100,YM2609,2
-'@ P 8,".\wav\SD.wav"        ,8000,100,YM2609,2
-'@ P 9,".\wav\muteGuitar.wav",8000,100,YM2609,2
+'@ P 7,"..\wav\Guitar.wav"    ,8000,100,YM2609,2
+'@ P 8,"..\wav\SD.wav"        ,8000,100,YM2609,2
+'@ P 9,"..\wav\muteGuitar.wav",8000,100,YM2609,2
 
 'U37 o4l4p3q0v80@1 crrfrrb>r<
 'U38 o4l4p3q0v80@4 rdrrgrr>c<

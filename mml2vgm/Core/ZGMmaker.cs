@@ -174,6 +174,7 @@ namespace Core
             mmlInfo.ChipCommandSize = ChipCommandSize;
             if (ChipCommandSize == 1)
             {
+                //コマンドサイズが1byteの時はポートの配列を1byteに定義しなおす
                 foreach (KeyValuePair<enmChipType, ClsChip[]> kvp in mmlInfo.chips)
                 {
                     foreach (ClsChip chip in kvp.Value)

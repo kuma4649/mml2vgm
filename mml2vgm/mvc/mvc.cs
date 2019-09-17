@@ -168,6 +168,15 @@ namespace mvc
                     if (mv.desVGM.ym2608.Length > 0 && mv.desVGM.ym2608[0].pcmDataEasy != null) Console.WriteLine(string.Format(msg.get("I0020"), mv.desVGM.ym2608[0].pcmDataEasy.Length - 15));
                     if (mv.desVGM.ym2608.Length > 1 && mv.desVGM.ym2608[1].pcmDataEasy != null) Console.WriteLine(string.Format(msg.get("I0021"), mv.desVGM.ym2608[1].pcmDataEasy.Length - 15));
                 }
+                if (mv.desVGM.ym2609 != null)
+                {
+                    if (mv.desVGM.ym2609.Length > 0 && mv.desVGM.ym2609[0].pcmDataEasyA != null) Console.WriteLine(string.Format(msg.get("I0031"), mv.desVGM.ym2609[0].pcmDataEasyA.Length - 15));
+                    if (mv.desVGM.ym2609.Length > 0 && mv.desVGM.ym2609[0].pcmDataEasyB != null) Console.WriteLine(string.Format(msg.get("I0032"), mv.desVGM.ym2609[0].pcmDataEasyB.Length - 15));
+                    if (mv.desVGM.ym2609.Length > 0 && mv.desVGM.ym2609[0].pcmDataEasyC != null) Console.WriteLine(string.Format(msg.get("I0033"), mv.desVGM.ym2609[0].pcmDataEasyC.Length - 15));
+                    if (mv.desVGM.ym2609.Length > 1 && mv.desVGM.ym2609[1].pcmDataEasyA != null) Console.WriteLine(string.Format(msg.get("I0034"), mv.desVGM.ym2609[1].pcmDataEasyA.Length - 15));
+                    if (mv.desVGM.ym2609.Length > 1 && mv.desVGM.ym2609[1].pcmDataEasyB != null) Console.WriteLine(string.Format(msg.get("I0035"), mv.desVGM.ym2609[1].pcmDataEasyB.Length - 15));
+                    if (mv.desVGM.ym2609.Length > 1 && mv.desVGM.ym2609[1].pcmDataEasyC != null) Console.WriteLine(string.Format(msg.get("I0036"), mv.desVGM.ym2609[1].pcmDataEasyC.Length - 15));
+                }
                 if (mv.desVGM.ym2610b != null)
                 {
                     if (mv.desVGM.ym2610b.Length > 0 && mv.desVGM.ym2610b[0].pcmDataEasyA != null) Console.WriteLine(string.Format(msg.get("I0022"), mv.desVGM.ym2610b[0].pcmDataEasyA.Length - 15));

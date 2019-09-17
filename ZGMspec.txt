@@ -244,3 +244,7 @@ chip data type
    0x00 = ADPCM ROM data(ADPCM-A)
    0x01 = DELTA-T ROM data(ADPCM-B)
 
+  YM2609
+   0x00 = ADPCM ROM data(ADPCM-A)
+   0x01 = ADPCM ROM data(ADPCM-B)
+   0x02 = ADPCM ROM data(ADPCM-C)

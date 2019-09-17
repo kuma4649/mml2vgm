@@ -27,6 +27,12 @@ I0027= PCM Data size(RF5C164) : ({0}/65535) bytes
 I0028= PCM Data size(RF5C164Secondary) : ({0}/65535) bytes
 I0029= PCM Data size(HuC6280)  : {0} bytes
 I0030= PCM Data size(HuC6280Secondary)  : {0} bytes
+I0031= ADPCM-A Data size(YM2609)  : ({0}/262143) byte
+I0032= ADPCM-B Data size(YM2609)  : ({0}/16777215) byte
+I0033= ADPCM-C Data size(YM2609)  : ({0}/16777215) byte
+I0034= ADPCM-A Data size(YM2609Secondary)  : ({0}/262143) byte
+I0035= ADPCM-B Data size(YM2609Secondary)  : ({0}/16777215) byte
+I0036= ADPCM-C Data size(YM2609Secondary)  : ({0}/16777215) byte
 I0050=\r\nFinished.\r\n
 
 

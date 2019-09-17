@@ -1488,7 +1488,7 @@ namespace mml2vgmIDE
             enq(od, Counter, dicChipCmdNo[v], EnmDataType.None, -1, -1, null);
         }
 
-        private Dictionary<int, Driver.ZGM.ZgmChip.ZgmChip> dicChipCmdNo = new Dictionary<int, Driver.ZGM.ZgmChip.ZgmChip>();
+        public Dictionary<int, Driver.ZGM.ZgmChip.ZgmChip> dicChipCmdNo = new Dictionary<int, Driver.ZGM.ZgmChip.ZgmChip>();
 
         public void SetupDicChipCmdNo()
         {
@@ -4667,7 +4667,7 @@ namespace mml2vgmIDE
                     PackData[] pdata = (PackData[])exData;
                     if (Chip.Model == EnmModel.VirtualModel)
                     {
-                        log.Write("Sending YM2609(Emu) ADPCM");
+                        //log.Write("Sending YM2609(Emu) ADPCM");
                         foreach (PackData dat in pdata)
                             mds.WriteYM2609((byte)dat.Chip.Number, (byte)(dat.Address >> 8), (byte)dat.Address, (byte)dat.Data);
                     }
@@ -4707,6 +4707,10 @@ namespace mml2vgmIDE
             }
 
             enq(od, Counter, dummyChip, EnmDataType.Normal, dPort * 0x100 + dAddr, dData, null);
+        }
+        public void YM2609SetRegister(outDatum od, long Counter, Chip chip, PackData[] data)
+        {
+            enq(od, Counter, chip, EnmDataType.Block, -1, -1, data);
         }
 
         public void YM2609WriteClock(byte chipID, int clock)

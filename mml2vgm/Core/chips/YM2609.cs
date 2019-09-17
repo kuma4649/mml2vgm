@@ -105,33 +105,45 @@ namespace Core
             Ch[37].Type = enmChannelType.ADPCMB;
             Ch[38].Type = enmChannelType.ADPCMB;
 
-            pcmDataInfo = new clsPcmDataInfo[] { new clsPcmDataInfo() };
+            pcmDataInfo = new clsPcmDataInfo[] { new clsPcmDataInfo(), new clsPcmDataInfo(), new clsPcmDataInfo() };
             pcmDataInfo[0].totalBufPtr = 0L;
             pcmDataInfo[0].use = false;
+            pcmDataInfo[1].totalBufPtr = 0L;
+            pcmDataInfo[1].use = false;
+            pcmDataInfo[2].totalBufPtr = 0L;
+            pcmDataInfo[2].use = false;
+
             if (parent.info.format == enmFormat.ZGM)
             {
                 if (parent.ChipCommandSize == 2)
                 {
-                    if (isSecondary == 0)
-                        pcmDataInfo[0].totalBuf = new byte[] { 0x07, 0x00, 0x66, 0x81, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
-                    else
-                        pcmDataInfo[0].totalBuf = new byte[] { 0x07, 0x00, 0x66, 0x81, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+                    //                                     cmdL  cmdH  ccL   ccH   tt    size1 2     3     4
+                    pcmDataInfo[0].totalBuf = new byte[] { 0x07, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+                    pcmDataInfo[1].totalBuf = new byte[] { 0x07, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+                    pcmDataInfo[2].totalBuf = new byte[] { 0x07, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
                 }
                 else
                 {
-                    if (isSecondary == 0)
-                        pcmDataInfo[0].totalBuf = new byte[] { 0x07, 0x66, 0x81, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
-                    else
-                        pcmDataInfo[0].totalBuf = new byte[] { 0x07, 0x66, 0x81, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+                    //                                     cmd   cc    tt    size1 2     3     4
+                    pcmDataInfo[0].totalBuf = new byte[] { 0x07, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+                    pcmDataInfo[1].totalBuf = new byte[] { 0x07, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+                    pcmDataInfo[2].totalBuf = new byte[] { 0x07, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
                 }
             }
             else
             {
+                //ZGM以外は使用できない
                 pcmDataInfo[0].totalBuf = null;
+                pcmDataInfo[1].totalBuf = null;
+                pcmDataInfo[2].totalBuf = null;
             }
 
             pcmDataInfo[0].totalHeaderLength = pcmDataInfo[0].totalBuf.Length;
-            pcmDataInfo[0].totalHeadrSizeOfDataPtr = (parent.ChipCommandSize == 2) ? 4 : 3;
+            pcmDataInfo[0].totalHeadrSizeOfDataPtr = (parent.ChipCommandSize == 2) ? 5 : 3;
+            pcmDataInfo[1].totalHeaderLength = pcmDataInfo[1].totalBuf.Length;
+            pcmDataInfo[1].totalHeadrSizeOfDataPtr = (parent.ChipCommandSize == 2) ? 5 : 3;
+            pcmDataInfo[2].totalHeaderLength = pcmDataInfo[2].totalBuf.Length;
+            pcmDataInfo[2].totalHeadrSizeOfDataPtr = (parent.ChipCommandSize == 2) ? 5 : 3;
 
             Envelope = new Function();
             Envelope.Max = 255;
@@ -252,15 +264,15 @@ namespace Core
 
             if (pw.pcmStartAddress != startAdr)
             {
-                parent.OutData(mml, port[p], (byte)(0x02 + v), (byte)((startAdr >> 2) & 0xff));
-                parent.OutData(mml, port[p], (byte)(0x03 + v), (byte)((startAdr >> 10) & 0xff));
+                parent.OutData(mml, port[p], (byte)(0x02 + v), (byte)((startAdr >> (2 + (p == 1 ? 0 : 3))) & 0xff));
+                parent.OutData(mml, port[p], (byte)(0x03 + v), (byte)((startAdr >> (10 + (p == 1 ? 0 : 3))) & 0xff));
                 pw.pcmStartAddress = startAdr;
             }
 
             if (pw.pcmEndAddress != endAdr)
             {
-                parent.OutData(mml, port[p], (byte)(0x04 + v), (byte)(((endAdr - 0x04) >> 2) & 0xff));
-                parent.OutData(mml, port[p], (byte)(0x05 + v), (byte)(((endAdr - 0x04) >> 10) & 0xff));
+                parent.OutData(mml, port[p], (byte)(0x04 + v), (byte)(((endAdr - 0x04) >> (2 + (p == 1 ? 0 : 3))) & 0xff));
+                parent.OutData(mml, port[p], (byte)(0x05 + v), (byte)(((endAdr - 0x04) >> (10 + (p == 1 ? 0 : 3))) & 0xff));
                 pw.pcmEndAddress = endAdr;
             }
         }
@@ -487,16 +499,26 @@ namespace Core
 
         public override void StorePcm(Dictionary<int, clsPcm> newDic, KeyValuePair<int, clsPcm> v, byte[] buf, bool is16bit, int samplerate, params object[] option)
         {
-            clsPcmDataInfo pi = pcmDataInfo[0];
+            int aCh = (int)v.Value.loopAdr;
+            aCh = Common.CheckRange(aCh, 0, 2);
+            clsPcmDataInfo pi = pcmDataInfo[aCh];
 
             try
             {
                 EncAdpcmA ea = new EncAdpcmA();
-                buf = ea.YM_ADPCM_B_Encode(buf, is16bit, false);
-                long size = buf.Length;
+                switch (v.Value.loopAdr)
+                {
+                    case 0:
+                        buf = ea.YM_ADPCM_B_Encode(buf, is16bit, false);
+                        break;
+                    case 1:
+                    case 2:
+                        buf = ea.YM_ADPCM_B_Encode(buf, is16bit, true);
+                        break;
+                }
 
-                byte[] newBuf;
-                newBuf = new byte[size];
+                long size = buf.Length;
+                byte[] newBuf = new byte[size];
                 Array.Copy(buf, newBuf, size);
                 buf = newBuf;
                 long tSize = size;
@@ -514,7 +536,7 @@ namespace Core
                         , pi.totalBufPtr
                         , pi.totalBufPtr + size - 1
                         , size
-                        , -1
+                        , aCh
                         , is16bit
                         , samplerate)
                     );
@@ -530,14 +552,16 @@ namespace Core
                     pi.totalBuf
                     , pi.totalHeadrSizeOfDataPtr
                     , (UInt32)(pi.totalBuf.Length - (pi.totalHeadrSizeOfDataPtr + 4))
-                    , IsSecondary != 0
+                    , false
                     );
                 Common.SetUInt32bit31(
                     pi.totalBuf
                     , pi.totalHeadrSizeOfDataPtr + 4
                     , (UInt32)(pi.totalBuf.Length - (pi.totalHeadrSizeOfDataPtr + 4 + 4 + 4))
                     );
-                pcmDataEasy = pi.use ? pi.totalBuf : null;
+                pcmDataEasyA = pcmDataInfo[0].totalBuf;
+                pcmDataEasyB = pcmDataInfo[1].totalBuf;
+                pcmDataEasyC = pcmDataInfo[2].totalBuf;
 
             }
             catch
@@ -561,6 +585,80 @@ namespace Core
 
         }
 
+        public override void SetPCMDataBlock(MML mml)
+        {
+            //if (!CanUsePcm) return;
+            if (!use) return;
+
+            SetPCMDataBlock_AB(mml, pcmDataEasyA, pcmDataDirectA);
+            SetPCMDataBlock_AB(mml, pcmDataEasyB, pcmDataDirectB);
+            SetPCMDataBlock_AB(mml, pcmDataEasyC, pcmDataDirectC);
+        }
+
+        private void SetPCMDataBlock_AB(MML mml, byte[] pcmDataEasy, List<byte[]> pcmDataDirect)
+        {
+            int sizePtr = 7 + ((parent.ChipCommandSize != 2) ? 0 : 2);
+            int maxSize = 0;
+            if (pcmDataEasy != null && pcmDataEasy.Length > 0)
+            {
+                pcmDataEasy[1] = (byte)ChipID;
+                if (parent.ChipCommandSize == 2) pcmDataEasy[2] = (byte)(ChipID >> 8);
+
+                maxSize =
+                    pcmDataEasy[sizePtr+0]
+                    + (pcmDataEasy[sizePtr+1] << 8)
+                    + (pcmDataEasy[sizePtr+2] << 16)
+                    + (pcmDataEasy[sizePtr+3] << 24);
+            }
+            if (pcmDataDirect.Count > 0)
+            {
+                foreach (byte[] dat in pcmDataDirect)
+                {
+                    if (dat != null && dat.Length > 0)
+                    {
+                        dat[1] = (byte)ChipID;
+                        if (parent.ChipCommandSize == 2) dat[2] = (byte)(ChipID >> 8);
+                        int size =
+                            dat[sizePtr+0]
+                            + (dat[sizePtr+1] << 8)
+                            + (dat[sizePtr+2] << 16)
+                            + (dat[sizePtr+3] << 24);
+                        if (maxSize < size) maxSize = size;
+                    }
+                }
+            }
+            if (pcmDataEasy != null && pcmDataEasy.Length > 0)
+            {
+                pcmDataEasy[sizePtr+0] = (byte)maxSize;
+                pcmDataEasy[sizePtr+1] = (byte)(maxSize >> 8);
+                pcmDataEasy[sizePtr+2] = (byte)(maxSize >> 16);
+                pcmDataEasy[sizePtr+3] = (byte)(maxSize >> 24);
+            }
+            if (pcmDataDirect.Count > 0)
+            {
+                foreach (byte[] dat in pcmDataDirect)
+                {
+                    if (dat != null && dat.Length > 0)
+                    {
+                        dat[sizePtr+0] = (byte)maxSize;
+                        dat[sizePtr + 1] = (byte)(maxSize >> 8);
+                        dat[sizePtr + 2] = (byte)(maxSize >> 16);
+                        dat[sizePtr + 3] = (byte)(maxSize >> 24);
+                    }
+                }
+            }
+
+            if (pcmDataEasy != null && pcmDataEasy.Length > 15)
+                parent.OutData(mml, null, pcmDataEasy);
+
+            if (pcmDataDirect.Count < 1) return;
+
+            foreach (byte[] dat in pcmDataDirect)
+            {
+                if (dat != null && dat.Length > 0)
+                    parent.OutData(mml, null, dat);
+            }
+        }
 
         public override void CmdY(partWork pw, MML mml)
         {
@@ -748,7 +846,7 @@ namespace Core
 
             if (type == 'n')
             {
-                if (pw.Type == enmChannelType.ADPCM)
+                if (pw.Type == enmChannelType.ADPCMA || pw.Type== enmChannelType.ADPCMB)
                 {
                     n = Common.CheckRange(n, 0, 255);
                     if (!parent.instPCM.ContainsKey(n))
@@ -757,7 +855,7 @@ namespace Core
                     }
                     else
                     {
-                        if (parent.instPCM[n].chip != enmChipType.YM2608)
+                        if (parent.instPCM[n].chip != enmChipType.YM2609)
                         {
                             msgBox.setErrMsg(string.Format(msg.get("E18005"), n), mml.line.Lp);
                         }
