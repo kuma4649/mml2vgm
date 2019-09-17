@@ -105,6 +105,12 @@ namespace Core
                 vol = 0;
             }
 
+            if(pw.chip is YM2609)
+            {
+                int pan = (int)(pw.pan.val == null ? 0 : pw.pan.val);
+                vol |= pan << 6;
+            }
+
             if (pw.beforeVolume != vol)
             {
                 parent.OutData(mml, pw.port[port], (byte)(adr + 0x08 + vch), (byte)vol);
@@ -328,7 +334,7 @@ namespace Core
             }
         }
 
-        private void GetPortVchSsg(partWork pw, out int port, out int adr, out int vch)
+        protected void GetPortVchSsg(partWork pw, out int port, out int adr, out int vch)
         {
             int m = (pw.chip is YM2203) ? 0 : 3;
             vch = (byte)(pw.ch - (m + 6));

@@ -545,6 +545,9 @@ namespace Core
         private List<clsPos> LstPos = null;
 
         public int pcmMapNo { get; set; } = 0;
+        public int dutyCycle { get; set; } = 0;
+        public int oldDutyCycle { get; set; } = -1;
+        public int oldFreq { get; set; } = -1;
 
         public void MakeLstPos()
         {

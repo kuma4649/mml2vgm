@@ -1,4 +1,9 @@
 更新履歴
+TAG116 2019/09/18
+  Core / mml2vgmIDE
+    ・zgm 妄想音源YM2609対応中
+	  SSG Panpot,DutyCycleの切り替えに対応
+
 TAG115 2019/09/17
   Core / mml2vgmIDE
     ・zgm 妄想音源YM2609対応中

@@ -406,6 +406,48 @@ namespace Core
             }
         }
 
+        public new void SetSsgFNum(partWork pw, MML mml)
+        {
+            int f = -pw.detune;
+            for (int lfo = 0; lfo < 4; lfo++)
+            {
+                if (!pw.lfo[lfo].sw)
+                {
+                    continue;
+                }
+                if (pw.lfo[lfo].type != eLfoType.Vibrato)
+                {
+                    continue;
+                }
+                f -= pw.lfo[lfo].value + pw.lfo[lfo].param[6];
+            }
+
+            if (pw.octaveNow < 1)
+            {
+                f <<= -pw.octaveNow;
+            }
+            else
+            {
+                f >>= pw.octaveNow - 1;
+            }
+
+            if (pw.bendWaitCounter != -1)
+            {
+                f += pw.bendFnum;
+            }
+            else
+            {
+                f += GetSsgFNum(pw, mml, pw.octaveNow, pw.noteCmd, pw.shift + pw.keyShift);//
+            }
+
+            f = Common.CheckRange(f, 0, 0xfff);
+            //if (pw.freq == f && pw.dutyCycle == pw.oldDutyCycle) return;
+
+            pw.freq = f;
+            //pw.oldDutyCycle = pw.dutyCycle;
+
+        }
+
         public override void SetKeyOn(partWork pw, MML mml)
         {
             if (pw.ch < 18)
@@ -817,10 +859,15 @@ namespace Core
                 n = Common.CheckRange(n, 0, 3);
                 pw.pan.val = n;
             }
-            else if (pw.Type == enmChannelType.ADPCM)
+            else if (pw.Type == enmChannelType.ADPCMA || pw.Type == enmChannelType.ADPCMB)
             {
                 n = Common.CheckRange(n, 0, 3);
                 ((YM2608)pw.chip).SetAdpcmPan(mml, pw, n);
+            }
+            else if (pw.Type == enmChannelType.SSG)
+            {
+                n = Common.CheckRange(n, 0, 3);
+                pw.pan.val = n;
             }
             SetDummyData(pw, mml);
         }
@@ -846,7 +893,7 @@ namespace Core
 
             if (type == 'n')
             {
-                if (pw.Type == enmChannelType.ADPCMA || pw.Type== enmChannelType.ADPCMB)
+                if (pw.Type == enmChannelType.ADPCMA || pw.Type == enmChannelType.ADPCMB)
                 {
                     n = Common.CheckRange(n, 0, 255);
                     if (!parent.instPCM.ContainsKey(n))
@@ -876,6 +923,17 @@ namespace Core
                 }
             }
 
+            if (type == 'I')
+            {
+                if (pw.Type == enmChannelType.SSG)
+                {
+                    n = Common.CheckRange(n, 0, 9);
+                    pw.dutyCycle = n;
+                    return;
+                }
+            }
+
+
             base.CmdInstrument(pw, mml);
         }
 
@@ -899,6 +957,29 @@ namespace Core
                     pw.keyOn = false;
                     rhythm_KeyOff |= (byte)(pw.keyOff ? (1 << (pw.ch - 30)) : 0);
                     pw.keyOff = false;
+                }
+
+                if (pw.Type == enmChannelType.SSG)
+                {
+                    //reg 00 - 05
+                    if (pw.freq != pw.oldFreq || pw.dutyCycle != pw.oldDutyCycle)
+                    {
+                        pw.oldFreq = pw.freq;
+                        pw.oldDutyCycle = pw.dutyCycle;
+
+                        int port;
+                        int adr;
+                        int vch;
+                        GetPortVchSsg(pw, out port, out adr, out vch);
+
+                        byte data = 0;
+
+                        data = (byte)(pw.freq & 0xff);
+                        parent.OutData(mml, pw.port[port], (byte)(adr + 0 + vch * 2), data);
+
+                        data = (byte)(((pw.freq & 0xf00) >> 8) | ((pw.dutyCycle & 0xf) << 4));
+                        parent.OutData(mml, pw.port[port], (byte)(adr + 1 + vch * 2), data);
+                    }
                 }
             }
 
