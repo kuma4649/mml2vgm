@@ -334,12 +334,16 @@ namespace mml2vgmIDE
                 {
                     fn = fn.Substring(0, fn.Length - 1);
                 }
-                sfd.FileName = Path.GetFileNameWithoutExtension(fn) + (FileInformation.format == enmFormat.VGM ? ".vgm" : ".xgm");
+                sfd.FileName = Path.GetFileNameWithoutExtension(fn) + (FileInformation.format == enmFormat.VGM ? ".vgm" : (FileInformation.format == enmFormat.XGM ? ".xgm" : ".zgm"));
                 sfd.InitialDirectory = Path.GetDirectoryName(fn);
                 sfd.Filter = "vgmファイル(*.vgm)|*.vgm|すべてのファイル(*.*)|*.*";
                 if (FileInformation.format == enmFormat.XGM)
                 {
                     sfd.Filter = "xgmファイル(*.xgm)|*.xgm|すべてのファイル(*.*)|*.*";
+                }
+                else if (FileInformation.format == enmFormat.ZGM)
+                {
+                    sfd.Filter = "zgmファイル(*.zgm)|*.zgm|すべてのファイル(*.*)|*.*";
                 }
                 sfd.Title = "エクスポート";
                 sfd.RestoreDirectory = true;
@@ -350,13 +354,13 @@ namespace mml2vgmIDE
                 fn = sfd.FileName;
                 if (Path.GetExtension(fn) == "")
                 {
-                    fn = Path.GetFileNameWithoutExtension(fn) + (FileInformation.format == enmFormat.VGM ? ".vgm" : ".xgm");
+                    fn = Path.GetFileNameWithoutExtension(fn) + (FileInformation.format == enmFormat.VGM ? ".vgm" : (FileInformation.format == enmFormat.XGM ? ".xgm" : ".zgm"));
                 }
 
                 string sf = Path.Combine(
                     Common.GetApplicationDataFolder(true)
                     , "temp"
-                    , Path.GetFileNameWithoutExtension(Path.GetFileName(d.gwiFullPath)) + (FileInformation.format == enmFormat.VGM ? ".vgm" : ".xgm")
+                    , Path.GetFileNameWithoutExtension(Path.GetFileName(d.gwiFullPath)) + (FileInformation.format == enmFormat.VGM ? ".vgm" : (FileInformation.format == enmFormat.XGM ? ".xgm" : ".zgm"))
                     );
                 File.Copy(sf, fn, File.Exists(fn));
             }

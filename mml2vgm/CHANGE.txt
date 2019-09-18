@@ -1,4 +1,11 @@
 更新履歴
+TAG117 2019/09/18 2nd
+  Core / mml2vgmIDE
+    ・zgm 妄想音源YM2609対応中
+	  ADPCM 5段階Panpotに対応
+  mml2vgmIDE
+    ・zgmファイルエクスポートができなかったのを修正
+
 TAG116 2019/09/18
   Core / mml2vgmIDE
     ・zgm 妄想音源YM2609対応中

@@ -212,7 +212,10 @@
     <None Include="sample\Syntax\testFMSecondary.gwi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="sample\YM2609\test.gwi">
+    <None Include="sample\YM2609\testADPCM_Pan.gwi">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="sample\YM2609\testAll.gwi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="sample\YM2610\testPCMMapMode.gwi">

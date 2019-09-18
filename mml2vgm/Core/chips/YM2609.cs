@@ -337,14 +337,24 @@ namespace Core
             }
         }
 
-        public void SetAdpcmPan(MML mml, partWork pw, int pan)
+        public void SetAdpcmPan(MML mml, partWork pw, int panL, int panR)
         {
-            if (pw.pan.val != pan)
+            panL = Common.CheckRange(panL, 0, 4);
+            panR = Common.CheckRange(panR, 0, 4);
+
+            if (pw.panL != panL || pw.panR != panR)
             {
-                int p = pw.ch == 36 ? 1 : 3;
-                int v = pw.ch != 38 ? 0x00 : 0x11;
-                parent.OutData(mml, port[p], (byte)(0x01 + v), (byte)((pan & 0x3) << 6));
-                pw.pan.val = pan;
+                int port = pw.ch == 36 ? 1 : 3;
+                int adr = pw.ch != 38 ? 0x00 : 0x11;
+
+                int v = (panL != 0 ? 0x80 : 00)| (panR != 0 ? 0x40 : 00);
+                parent.OutData(mml, base.port[port], (byte)(0x01 + adr), (byte)v);
+
+                v = (((4 - panL) & 0x3) << 6) | (((4 - panR) & 0x3) << 4);
+                parent.OutData(mml, base.port[port], (byte)(0x07 + adr), (byte)v);
+
+                pw.panL = panL;
+                pw.panR = panR;
             }
         }
 
@@ -861,8 +871,10 @@ namespace Core
             }
             else if (pw.Type == enmChannelType.ADPCMA || pw.Type == enmChannelType.ADPCMB)
             {
-                n = Common.CheckRange(n, 0, 3);
-                ((YM2608)pw.chip).SetAdpcmPan(mml, pw, n);
+                int pl = Common.CheckRange(n, 0, 4);
+                n = mml.args.Count < 2 ? 0 : (int)mml.args[1];
+                int pr = Common.CheckRange(n, 0, 4);
+                ((YM2609)pw.chip).SetAdpcmPan(mml, pw, pl, pr);
             }
             else if (pw.Type == enmChannelType.SSG)
             {
