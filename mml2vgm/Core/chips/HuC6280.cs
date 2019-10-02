@@ -94,7 +94,7 @@ namespace Core
                 pw.pcm = false;
 
                 //volume
-                byte data = (byte)(0x80 + (0 & 0x1f));
+                byte data = (byte)(0x00 + (0 & 0x1f));
                 OutHuC6280Port(null, port[0], 4, data);
 
                 //pan
@@ -238,7 +238,8 @@ namespace Core
             if (pw.huc6280Envelope != volume)
             {
                 SetHuC6280CurrentChannel(mml, pw);
-                byte data = (byte)(0x80 + (volume & 0x1f));
+                if (!pw.keyOn) volume = 0;
+                byte data = (byte)((volume != 0 ? 0x80 : 0) + (volume & 0x1f));
                 OutHuC6280Port(mml, port[0], 4, data);
                 pw.huc6280Envelope = volume;
             }
@@ -309,7 +310,7 @@ namespace Core
             }
             if (vol > 31) vol = 31;
             if (vol < 0) vol = 0;
-            byte data = (byte)(0x80 + vol);
+            byte data = (byte)(((vol > 0) ? 0x80 : 0x00) + vol);
 
             if (!pw.pcm)
             {

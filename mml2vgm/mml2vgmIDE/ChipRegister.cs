@@ -2056,7 +2056,7 @@ namespace mml2vgmIDE
             for (i = 0; i < 6; i++)
             {
                 data.Add(new PackData(null, HuC6280[chipID], EnmDataType.Normal, 0x00, i, null));
-                data.Add(new PackData(null, HuC6280[chipID], EnmDataType.Normal, 0x04, 0x80, null));
+                data.Add(new PackData(null, HuC6280[chipID], EnmDataType.Normal, 0x04, 0x00, null));
             }
             data.Add(new PackData(null, HuC6280[chipID], EnmDataType.Normal, 0x01, 0x00, null));//TotalVolume0
 
