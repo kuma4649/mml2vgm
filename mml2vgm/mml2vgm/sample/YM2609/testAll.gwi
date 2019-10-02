@@ -79,7 +79,7 @@ ADPCM
 '@ P 8,"..\wav\SD.wav"        ,8000,100,YM2609,2
 '@ P 9,"..\wav\muteGuitar.wav",8000,100,YM2609,2
 
-'U37 o4l4p3q0v80@1 crrfrrb>r<
-'U38 o4l4p3q0v80@4 rdrrgrr>c<
-'U39 o4l4p3q0v80@7 rrerrar>r<
+'U37 o4l4p4,4q0v80@1 crrfrrb>r<
+'U38 o4l4p4,4q0v80@4 rdrrgrr>c<
+'U39 o4l4p4,4q0v80@7 rrerrar>r<
 

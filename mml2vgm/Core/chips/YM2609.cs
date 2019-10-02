@@ -402,7 +402,9 @@ namespace Core
         public override void SetFNum(partWork pw, MML mml)
         {
             if (pw.ch < 18)
+            {
                 SetFmFNum(pw, mml);
+            }
             else if (pw.Type == enmChannelType.SSG)
             {
                 SetSsgFNum(pw, mml);
@@ -410,10 +412,138 @@ namespace Core
             else if (pw.Type == enmChannelType.RHYTHM)
             {
             }
-            else if (pw.Type == enmChannelType.ADPCMA|| pw.Type == enmChannelType.ADPCMB)
+            else if (pw.Type == enmChannelType.ADPCMA || pw.Type == enmChannelType.ADPCMB)
             {
                 SetAdpcmFNum(mml, pw);
             }
+        }
+
+        public new void SetFmFNum(partWork pw, MML mml)
+        {
+            if (pw.noteCmd == (char)0)
+                return;
+
+            int[] ftbl = pw.chip.FNumTbl[0];
+
+            int f = GetFmFNum(ftbl, pw.octaveNow, pw.noteCmd, pw.shift + pw.keyShift + pw.toneDoublerKeyShift);//
+            if (pw.bendWaitCounter != -1)
+            {
+                f = pw.bendFnum;
+            }
+            int o = (f & 0xf000) / 0x1000;
+            f &= 0xfff;
+
+            f = f + pw.detune;
+            for (int lfo = 0; lfo < 4; lfo++)
+            {
+                if (!pw.lfo[lfo].sw || pw.lfo[lfo].type != eLfoType.Vibrato)
+                    continue;
+
+                f += pw.lfo[lfo].value + pw.lfo[lfo].param[6];
+            }
+
+            while (f < ftbl[0])
+            {
+                if (o == 1)
+                    break;
+                o--;
+                f = ftbl[0] * 2 - (ftbl[0] - f);
+            }
+
+            while (f >= ftbl[0] * 2)
+            {
+                if (o == 8)
+                    break;
+                o++;
+                f = f - ftbl[0] * 2 + ftbl[0];
+            }
+
+            pw.freq = Common.CheckRange(f, 0, 0x7ff) | (Common.CheckRange(o - 1, 0, 7) << (8 + 3));
+
+        }
+
+        public void OutFmSetPanLFnum(partWork pw, MML mml)
+        {
+            pw.oldFreq = pw.freq;
+            pw.beforePanL = pw.panL;
+
+            int portEx = -1;
+            if ((pw.ch == 2 || pw.ch == 12 || pw.ch == 13 || pw.ch == 14) && pw.chip.lstPartWork[2].Ch3SpecialMode)
+                portEx = 0;
+            else if ((pw.ch == 8 || pw.ch == 15 || pw.ch == 16 || pw.ch == 17) && pw.chip.lstPartWork[8].Ch3SpecialMode)
+                portEx = 2;
+
+            if (portEx != -1)
+            {
+                if ((pw.slots & 8) != 0)
+                {
+                    int f = pw.freq + pw.slotDetune[3];
+                    parent.OutData(mml, pw.port[portEx], (byte)0xa6, (byte)((f & 0x3f00) >> 8));
+                    parent.OutData(mml, pw.port[portEx], (byte)0xa2, (byte)(f & 0xff));
+                }
+                if ((pw.slots & 4) != 0)
+                {
+                    int f = pw.freq + pw.slotDetune[2];
+                    parent.OutData(mml, pw.port[portEx], (byte)0xac, (byte)((f & 0x3f00) >> 8));
+                    parent.OutData(mml, pw.port[portEx], (byte)0xa8, (byte)(f & 0xff));
+                }
+                if ((pw.slots & 1) != 0)
+                {
+                    int f = pw.freq + pw.slotDetune[0];
+                    parent.OutData(mml, pw.port[portEx], (byte)0xad, (byte)((f & 0x3f00) >> 8));
+                    parent.OutData(mml, pw.port[portEx], (byte)0xa9, (byte)(f & 0xff));
+                }
+                if ((pw.slots & 2) != 0)
+                {
+                    int f = pw.freq + pw.slotDetune[1];
+                    parent.OutData(mml, pw.port[portEx], (byte)0xae, (byte)((f & 0x3f00) >> 8));
+                    parent.OutData(mml, pw.port[portEx], (byte)0xaa, (byte)(f & 0xff));
+                }
+            }
+            else
+            {
+                if (pw.ch >= 12 && pw.ch < 18)
+                {
+                    return;
+                }
+
+                int vch;
+                byte[] port;
+                GetPortVch(pw, out port, out vch);
+
+                parent.OutData(mml, port, (byte)(0xa4 + vch), (byte)(((pw.freq & 0x3f00) >> 8) | (((4 - pw.panL) & 0x3) << 6)));
+                parent.OutData(mml, port, (byte)(0xa0 + vch), (byte)(pw.freq & 0xff));
+            }
+        }
+
+        public void OutFmSetPanRFeedbackAlgorithm(MML mml, partWork pw)
+        {
+            int vch;
+            byte[] port;
+            GetPortVch(pw, out port, out vch);
+
+            pw.feedBack &= 7;
+            pw.algo &= 7;
+            pw.beforeFeedBack = pw.feedBack;
+            pw.beforeAlgo = pw.algo;
+            pw.beforePanR = pw.panR;
+
+            parent.OutData(mml, port, (byte)(0xb0 + vch), (byte)((((4 - pw.panR) & 0x3) << 6) | (pw.feedBack << 3) | pw.algo));
+        }
+
+        public void OutOPNSetPanAmsAcPms(MML mml, partWork pw)
+        {
+            //TODO: 効果音パートで指定されている場合の考慮不足
+            int vch;
+            byte[] port;
+            GetPortVch(pw, out port, out vch);
+
+            pw.beforePan.val = pw.pan.val;
+            pw.beforeAms = pw.ams;
+            pw.beforeAlgConstSw = pw.algConstSw;
+            pw.beforePms = pw.pms;
+
+            parent.OutData(mml, port, (byte)(0xb4 + vch), (byte)((pw.pan.val << 6) + (pw.ams << 3) + (pw.algConstSw << 2) + pw.pms));
         }
 
         public new void SetSsgFNum(partWork pw, MML mml)
@@ -499,9 +629,19 @@ namespace Core
 
         public override void SetVolume(partWork pw, MML mml)
         {
-            base.SetVolume(pw, mml);
-
-            if (pw.Type == enmChannelType.RHYTHM)
+            if (pw.Type == enmChannelType.FMOPN
+                || pw.Type == enmChannelType.FMOPNex //効果音モード対応チャンネル
+                || (pw.Type == enmChannelType.FMPCM && !pw.pcm) //OPN2PCMチャンネル
+                || (pw.Type == enmChannelType.FMPCMex && !pw.pcm) //OPN2XPCMチャンネル
+                )
+            {
+                SetFmVolumeM(pw, mml);
+            }
+            else if (pw.Type == enmChannelType.SSG)
+            {
+                SetSsgVolume(pw, mml);
+            }
+            else if (pw.Type == enmChannelType.RHYTHM)
             {
             }
             else if (pw.Type == enmChannelType.ADPCMA || pw.Type == enmChannelType.ADPCMB)
@@ -509,6 +649,34 @@ namespace Core
                 SetAdpcmVolume(mml, pw);
             }
         }
+
+        public void SetFmVolumeM(partWork pw, MML mml)
+        {
+            int vol = pw.volume;
+
+            for (int lfo = 0; lfo < 4; lfo++)
+            {
+                if (!pw.lfo[lfo].sw)
+                {
+                    continue;
+                }
+                if (pw.lfo[lfo].type != eLfoType.Tremolo)
+                {
+                    continue;
+                }
+                vol += pw.lfo[lfo].value + pw.lfo[lfo].param[6];
+            }
+
+            if (pw.beforeVolume != vol)
+            {
+                if (parent.instFM.ContainsKey(pw.instrument))
+                {
+                    OutFmSetVolumeM(pw, mml, vol, pw.instrument);
+                    pw.beforeVolume = vol;
+                }
+            }
+        }
+
 
         public override void SetLfoAtKeyOn(partWork pw, MML mml)
         {
@@ -860,9 +1028,13 @@ namespace Core
             int n = (int)mml.args[0];
             if (pw.Type == enmChannelType.FMOPN || pw.Type == enmChannelType.FMOPNex)
             {
-                n = Common.CheckRange(n, 0, 3);
-                pw.pan.val = n;
-                ((ClsOPN)pw.chip).OutOPNSetPanAMSPMS(mml, pw, n, pw.ams, pw.fms);
+                pw.panL = Common.CheckRange(n, 0, 4);
+                n = mml.args.Count < 2 ? 0 : (int)mml.args[1];
+                pw.panR = Common.CheckRange(n, 0, 4);
+                pw.pan.val = (pw.panL != 0 ? 2 : 0) | (pw.panR != 0 ? 1 : 0);
+
+                //pw.pan.val = n;
+                //((ClsOPN)pw.chip).OutOPNSetPanAMSPMS(mml, pw, n, pw.ams, pw.fms);
             }
             else if (pw.Type == enmChannelType.RHYTHM)
             {
@@ -946,7 +1118,277 @@ namespace Core
             }
 
 
-            base.CmdInstrument(pw, mml);
+            if (type == 'I')
+            {
+                msgBox.setErrMsg(msg.get("E11003"), mml.line.Lp);
+                return;
+            }
+
+            if (type == 'T')
+            {
+                n = Common.CheckRange(n, 0, 255);
+                pw.toneDoubler = n;
+                return;
+            }
+
+            if (type == 'E')
+            {
+                SetEnvelopParamFromInstrument(pw, n, mml);
+                return;
+            }
+
+            if (pw.Type == enmChannelType.SSG)
+            {
+                SetEnvelopParamFromInstrument(pw, n, mml);
+                return;
+            }
+
+            n = Common.CheckRange(n, 0, 255);
+            if (pw.instrument == n) return;
+            pw.instrument = n;
+            OutFmSetInstrument(pw, mml, n, pw.volume, type);
+        }
+
+        public void OutFmSetWtLDtMl(MML mml, partWork pw, int ope,int wt, int dt, int ml)
+        {
+            int vch;
+            byte[] port;
+            GetPortVch(pw, out port, out vch);
+
+            ope = (ope == 1) ? 2 : ((ope == 2) ? 1 : ope);
+            wt &= 1;
+            dt &= 7;
+            ml &= 15;
+
+            parent.OutData(mml, port, (byte)(0x30 + vch + ope * 4), (byte)((wt << 7) | (dt << 4) | ml));
+        }
+
+        public void OutFmSetWtHTl(MML mml, partWork pw, int ope,int wt, int tl)
+        {
+            int vch;
+            byte[] port;
+            GetPortVch(pw, out port, out vch);
+
+            ope = (ope == 1) ? 2 : ((ope == 2) ? 1 : ope);
+            wt &= 2;
+            tl &= 0x7f;
+
+            parent.OutData(mml, port, (byte)(0x40 + vch + ope * 4), (byte)((wt << 6) | tl));
+        }
+
+        public void OutFmSetAmDt2Dr(MML mml, partWork pw, int ope, int am,int dt2, int dr)
+        {
+            int vch;
+            byte[] port;
+            GetPortVch(pw, out port, out vch);
+
+            ope = (ope == 1) ? 2 : ((ope == 2) ? 1 : ope);
+            am &= 1;
+            dt2 &= 3;
+            dr &= 31;
+
+            parent.OutData(mml, port, (byte)(0x60 + vch + ope * 4), (byte)((am << 7) | (dt2 << 5) | dr));
+        }
+
+        public new void OutFmSetInstrument(partWork pw, MML mml, int n, int vol, char typeBeforeSend)
+        {
+            int modeBeforeSend = parent.info.modeBeforeSend;
+            if (typeBeforeSend == 'n' || typeBeforeSend == 'N' || typeBeforeSend == 'R' || typeBeforeSend == 'A')
+            {
+                if (typeBeforeSend == 'N')
+                {
+                    modeBeforeSend = 0;
+                }
+                else if (typeBeforeSend == 'R')
+                {
+                    modeBeforeSend = 1;
+                }
+                else if (typeBeforeSend == 'A')
+                {
+                    modeBeforeSend = 2;
+                }
+            }
+
+            if (!parent.instFM.ContainsKey(n))
+            {
+                msgBox.setWrnMsg(string.Format(msg.get("E11001"), n), mml.line.Lp);
+                return;
+            }
+
+            int m = 3;
+
+            if (pw.ch >= 12 && pw.ch < 18)
+            {
+                msgBox.setWrnMsg(msg.get("E11002"), mml.line.Lp);
+                return;
+            }
+
+            switch (modeBeforeSend)
+            {
+                case 0: // N)one
+                    break;
+                case 1: // R)R only
+                    for (int ope = 0; ope < 4; ope++) ((ClsOPN)pw.chip).OutFmSetSlRr(mml, pw, ope, 0, 15);
+                    break;
+                case 2: // A)ll
+                    for (int ope = 0; ope < 4; ope++)
+                    {
+                        OutFmSetWtLDtMl(mml, pw, ope, 0, 0, 0);
+                        ((ClsOPN)pw.chip).OutFmSetKsAr(mml, pw, ope, 3, 31);
+                        OutFmSetAmDt2Dr(mml, pw, ope, 1, 0, 31);
+                        ((ClsOPN)pw.chip).OutFmSetSr(mml, pw, ope, 31);
+                        ((ClsOPN)pw.chip).OutFmSetSlRr(mml, pw, ope, 0, 15);
+                        ((ClsOPN)pw.chip).OutFmSetSSGEG(mml, pw, ope, 0);
+                    }
+                    pw.feedBack = 7;
+                    pw.algo = 7;
+                    OutFmSetPanRFeedbackAlgorithm(mml, pw);
+                    break;
+            }
+
+
+            for (int ope = 0; ope < 4; ope++)
+            {
+                //ch3以外の拡張チャンネルでも音色設定できるようにする場合はslotの様子もみてセットすること
+                OutFmSetWtLDtMl(mml, pw, ope, 0, parent.instFM[n][ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 9], parent.instFM[n][ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 8]);
+                ((ClsOPN)pw.chip).OutFmSetKsAr(mml, pw, ope, parent.instFM[n][ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 7], parent.instFM[n][ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 1]);
+                OutFmSetAmDt2Dr(mml, pw, ope, parent.instFM[n][ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 10], 0, parent.instFM[n][ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 2]);
+                ((ClsOPN)pw.chip).OutFmSetSr(mml, pw, ope, parent.instFM[n][ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 3]);
+                ((ClsOPN)pw.chip).OutFmSetSlRr(mml, pw, ope, parent.instFM[n][ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 5], parent.instFM[n][ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 4]);
+                ((ClsOPN)pw.chip).OutFmSetSSGEG(mml, pw, ope, parent.instFM[n][ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 11]);
+            }
+
+            //ch3以外の拡張チャンネルでも音色設定できるようにする場合はslotの様子もみてセットすること
+            pw.op1ml = parent.instFM[n][0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
+            pw.op2ml = parent.instFM[n][1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
+            pw.op3ml = parent.instFM[n][2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
+            pw.op4ml = parent.instFM[n][3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
+            //ch3以外の拡張チャンネルでも音色設定できるようにする場合はslotの様子もみてセットすること
+            pw.op1dt2 = 0;
+            pw.op2dt2 = 0;
+            pw.op3dt2 = 0;
+            pw.op4dt2 = 0;
+
+            pw.feedBack = parent.instFM[n][46];
+            pw.algo = parent.instFM[n][45] & 0x7;
+            OutFmSetPanRFeedbackAlgorithm(mml, pw);
+
+            int[] op = new int[4] {
+                parent.instFM[n][0*Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
+                , parent.instFM[n][1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
+                , parent.instFM[n][2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
+                , parent.instFM[n][3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
+            };
+            int[][] algs = new int[8][]
+            {
+                new int[4] { 1,1,1,0}
+                ,new int[4] { 1,1,1,0}
+                ,new int[4] { 1,1,1,0}
+                ,new int[4] { 1,1,1,0}
+                ,new int[4] { 1,0,1,0}
+                ,new int[4] { 1,0,0,0}
+                ,new int[4] { 1,0,0,0}
+                ,new int[4] { 0,0,0,0}
+            };
+
+            for (int i = 0; i < 4; i++)
+            {
+                //ch3以外の拡張チャンネルでも音色設定できるようになったら以下を有効に
+                if (algs[pw.algo][i] == 0)// || (pw.slots & (1 << i)) == 0)
+                {
+                    op[i] = -1;
+                    continue;
+                }
+                op[i] = Common.CheckRange(op[i], 0, 127);
+            }
+
+            partWork vpw = pw;
+            if (pw.chip.lstPartWork[2].Ch3SpecialMode && pw.ch >= 12 && pw.ch < 15)
+            {
+                vpw = pw.chip.lstPartWork[2];
+            }
+
+            if (pw.chip.lstPartWork[8].Ch3SpecialMode && pw.ch >= 15 && pw.ch < 18)
+            {
+                vpw = pw.chip.lstPartWork[8];
+            }
+
+            //ch3以外の拡張チャンネルでも音色設定できるようになったら以下を有効に
+            //if ((pw.slots & 1) != 0 && op[0] != -1) ((ClsOPN)pw.chip).OutFmSetTl(vpw, 0, op[0]);
+            //if ((pw.slots & 2) != 0 && op[1] != -1) ((ClsOPN)pw.chip).OutFmSetTl(vpw, 1, op[1]);
+            //if ((pw.slots & 4) != 0 && op[2] != -1) ((ClsOPN)pw.chip).OutFmSetTl(vpw, 2, op[2]);
+            //if ((pw.slots & 8) != 0 && op[3] != -1) ((ClsOPN)pw.chip).OutFmSetTl(vpw, 3, op[3]);
+            if (op[0] != -1) OutFmSetWtHTl(mml, vpw, 0, 0, op[0]);
+            if (op[1] != -1) OutFmSetWtHTl(mml, vpw, 1, 0, op[1]);
+            if (op[2] != -1) OutFmSetWtHTl(mml, vpw, 2, 0, op[2]);
+            if (op[3] != -1) OutFmSetWtHTl(mml, vpw, 3, 0, op[3]);
+
+            OutFmSetVolumeM(pw, mml, vol, n);
+
+        }
+
+        public void OutFmSetVolumeM(partWork pw, MML mml, int vol, int n)
+        {
+            if (!parent.instFM.ContainsKey(n))
+            {
+                msgBox.setWrnMsg(string.Format(msg.get("E11000"), n), mml.line.Lp);
+                return;
+            }
+
+            int alg = parent.instFM[n][45] & 0x7;
+            int[] ope = new int[4] {
+                parent.instFM[n][0*Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
+                , parent.instFM[n][1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
+                , parent.instFM[n][2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
+                , parent.instFM[n][3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
+            };
+            int[][] algs = new int[8][]
+            {
+                new int[4] { 0,0,0,1}
+                ,new int[4] { 0,0,0,1}
+                ,new int[4] { 0,0,0,1}
+                ,new int[4] { 0,0,0,1}
+                ,new int[4] { 0,1,0,1}
+                ,new int[4] { 0,1,1,1}
+                ,new int[4] { 0,1,1,1}
+                ,new int[4] { 1,1,1,1}
+            };
+
+            for (int i = 0; i < 4; i++)
+            {
+                if (algs[alg][i] == 0 || (pw.slots & (1 << i)) == 0)
+                {
+                    ope[i] = -1;
+                    continue;
+                }
+                ope[i] = ope[i] + (127 - vol);
+                ope[i] = Common.CheckRange(ope[i], 0, 127);
+            }
+
+            partWork vpw = pw;
+            if (pw.chip.lstPartWork[2].Ch3SpecialMode && pw.ch >= 12 && pw.ch < 15)
+            {
+                vpw = pw.chip.lstPartWork[2];
+            }
+            if (pw.chip.lstPartWork[8].Ch3SpecialMode && pw.ch >= 15 && pw.ch < 18)
+            {
+                vpw = pw.chip.lstPartWork[8];
+            }
+
+            MML vmml = new MML();
+            vmml.args = new List<object>();
+            vmml.args.Add(vol);
+            vmml.type = enmMMLType.Volume;
+            if (mml != null)
+                vmml.line = mml.line;
+            if ((pw.slots & 1) != 0 && ope[0] != -1) OutFmSetWtHTl(vmml, vpw, 0, 0, ope[0]);
+            if ((pw.slots & 2) != 0 && ope[1] != -1) OutFmSetWtHTl(vmml, vpw, 1, 0, ope[1]);
+            if ((pw.slots & 4) != 0 && ope[2] != -1) OutFmSetWtHTl(vmml, vpw, 2, 0, ope[2]);
+            if ((pw.slots & 8) != 0 && ope[3] != -1) OutFmSetWtHTl(vmml, vpw, 3, 0, ope[3]);
+            //if ((pw.slots & 1) != 0 ) ((ClsOPN)pw.chip).OutFmSetTl(vpw, 0, ope[0]);
+            //if ((pw.slots & 2) != 0 ) ((ClsOPN)pw.chip).OutFmSetTl(vpw, 1, ope[1]);
+            //if ((pw.slots & 4) != 0 ) ((ClsOPN)pw.chip).OutFmSetTl(vpw, 2, ope[2]);
+            //if ((pw.slots & 8) != 0 ) ((ClsOPN)pw.chip).OutFmSetTl(vpw, 3, ope[3]);
         }
 
         public override void MultiChannelCommand(MML mml)
@@ -970,30 +1412,17 @@ namespace Core
                     rhythm_KeyOff |= (byte)(pw.keyOff ? (1 << (pw.ch - 30)) : 0);
                     pw.keyOff = false;
                 }
-
-                if (pw.Type == enmChannelType.SSG)
+                else if (pw.Type == enmChannelType.SSG)
                 {
-                    //reg 00 - 05
-                    if (pw.freq != pw.oldFreq || pw.dutyCycle != pw.oldDutyCycle)
-                    {
-                        pw.oldFreq = pw.freq;
-                        pw.oldDutyCycle = pw.dutyCycle;
-
-                        int port;
-                        int adr;
-                        int vch;
-                        GetPortVchSsg(pw, out port, out adr, out vch);
-
-                        byte data = 0;
-
-                        data = (byte)(pw.freq & 0xff);
-                        parent.OutData(mml, pw.port[port], (byte)(adr + 0 + vch * 2), data);
-
-                        data = (byte)(((pw.freq & 0xf00) >> 8) | ((pw.dutyCycle & 0xf) << 4));
-                        parent.OutData(mml, pw.port[port], (byte)(adr + 1 + vch * 2), data);
-                    }
+                    MultiChannelCommand_SSG(mml, pw);
+                }
+                else if (pw.Type == enmChannelType.FMOPN || pw.Type == enmChannelType.FMOPNex)
+                {
+                    MultiChannelCommand_FM(mml, pw);
                 }
             }
+
+            //チャンネルを跨ぐデータ向け処理
 
             //Rhythm KeyOff処理
             if (0 != rhythm_KeyOff)
@@ -1016,6 +1445,57 @@ namespace Core
                 byte data = (byte)(0x00 + rhythm_KeyOn);
                 parent.OutData(mml, port[0], 0x10, data);
                 rhythm_KeyOn = 0;
+            }
+
+            log.Write("KeyOn情報をかき出し");
+            int vch;
+            byte[] p;
+            GetPortVch(lstPartWork[0], out p, out vch);
+            foreach (outDatum dat in opna20x028KeyOnData) parent.OutData(dat, p, 0x28, dat.val);
+            GetPortVch(lstPartWork[6], out p, out vch);
+            foreach (outDatum dat in opna20x228KeyOnData) parent.OutData(dat, p, 0x28, dat.val);
+            opna20x028KeyOnData.Clear();
+            opna20x228KeyOnData.Clear();
+        }
+
+        public List<outDatum> opna20x028KeyOnData = new List<outDatum>();
+        public List<outDatum> opna20x228KeyOnData = new List<outDatum>();
+
+        private void MultiChannelCommand_SSG(MML mml, partWork pw)
+        {
+            int port;
+            int adr;
+            int vch;
+            GetPortVchSsg(pw, out port, out adr, out vch);
+
+            //reg 00 - 05
+            if (pw.freq != pw.oldFreq || pw.dutyCycle != pw.oldDutyCycle)
+            {
+                pw.oldFreq = pw.freq;
+                pw.oldDutyCycle = pw.dutyCycle;
+
+                byte data = (byte)(pw.freq & 0xff);
+                parent.OutData(mml, pw.port[port], (byte)(adr + 0 + vch * 2), data);
+
+                data = (byte)(((pw.freq & 0xf00) >> 8) | ((pw.dutyCycle & 0xf) << 4));
+                parent.OutData(mml, pw.port[port], (byte)(adr + 1 + vch * 2), data);
+            }
+
+        }
+
+        private void MultiChannelCommand_FM(MML mml, partWork pw)
+        {
+            //FNum l
+            //panL Block FNum h
+            if (pw.panL != pw.beforePanL || pw.freq != pw.oldFreq)
+                OutFmSetPanLFnum(pw, mml);
+
+            if (pw.ch < 12)
+            {
+                if (pw.panR != pw.beforePanR || pw.feedBack != pw.beforeFeedBack || pw.algo != pw.beforeAlgo)
+                    OutFmSetPanRFeedbackAlgorithm(mml, pw);
+                if (pw.pan.val != pw.beforePan.val || pw.ams != pw.beforeAms || pw.algConstSw != pw.beforeAlgConstSw || pw.pms != pw.beforePms)
+                    OutOPNSetPanAmsAcPms(mml, pw);
             }
         }
 

@@ -332,6 +332,72 @@ namespace mml2vgm
             stopWatch();
         }
 
+        private void FrmMain_DragEnter(object sender, DragEventArgs e)
+        {
+            if (!e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                e.Effect = DragDropEffects.None;
+                return;
+            }
+
+            string[] fileNames = (string[])e.Data.GetData(DataFormats.FileDrop, false);
+            foreach (string fn in fileNames)
+            {
+                string ext = Path.GetExtension(fn).ToLower();
+                if (ext == ".gwi") continue;
+                e.Effect = DragDropEffects.None;
+
+                return;
+            }
+
+            e.Effect = DragDropEffects.Copy;
+        }
+
+        private void FrmMain_DragDrop(object sender, DragEventArgs e)
+        {
+            string[] fileNames = (string[])e.Data.GetData(DataFormats.FileDrop, false);
+            foreach (string fn in fileNames)
+            {
+                string ext = Path.GetExtension(fn).ToLower();
+                if (ext == ".gwi") continue;
+
+                if (fileNames.Length < 1)
+                    MessageBox.Show(msg.get("E0101"));
+                else
+                    MessageBox.Show(msg.get("E0102"));
+
+                return;
+            }
+
+            List<string> fs = new List<string>();
+            fs.Add("");//dummy;
+            fs.AddRange(fileNames);
+            args = fs.ToArray();
+
+            tsbCompile_Click(null, null);
+        }
+
+        private void FrmMain_KeyDown(object sender, KeyEventArgs e)
+        {
+            switch (e.KeyCode)
+            {
+                case Keys.F1:
+                    tsbOpen_Click(null, null);
+                    break;
+                //case Keys.F2:
+                //break;
+                //case Keys.S:
+                //break;
+                case Keys.F5:
+                    tsbCompile_Click(null, null);
+                    break;
+                default:
+                    //↓KeyData確認用
+                    //log.Write(string.Format("動作未定義のキー：{0}",e.KeyData));
+                    break;
+            }
+        }
+
     }
 
 }

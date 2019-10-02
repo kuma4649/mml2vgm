@@ -3537,7 +3537,7 @@ namespace Core
         {
             if (cmd != null && cmd.Length > 0)
             {
-                foreach (byte d in data)
+                foreach (byte d in cmd)
                 {
                     outDatum o = new outDatum();
                     o.val = d;
@@ -3559,6 +3559,7 @@ namespace Core
                         }
                     }
                     dat.Add(o);
+                    //Console.Write("{0:x02} :", d);
                 }
             }
             foreach (byte d in data)
@@ -3583,7 +3584,9 @@ namespace Core
                     }
                 }
                 dat.Add(o);
+                //Console.Write("{0:x02} :", d);
             }
+            //Console.WriteLine("");
         }
 
         private void OutWaitNSamples(long n)

@@ -44,8 +44,15 @@ namespace mml2vgmIDE.MMLParameter
                         vol[od.linePos.ch] = (int)od.args[0];
                     break;
                 case enmMMLType.Pan:
-                    n = (int)od.args[0];
-                    pan[od.linePos.ch] = n == 0 ? "-" : (n == 1 ? "Right" : (n == 2 ? "Left" : "Center"));
+                    if (od.args.Count == 1)
+                    {
+                        n = (int)od.args[0];
+                        pan[od.linePos.ch] = n == 0 ? "-" : (n == 1 ? "Right" : (n == 2 ? "Left" : "Center"));
+                    }
+                    else
+                    {
+                        pan[od.linePos.ch] = string.Format("L{0} R{1}", (int)od.args[0], (int)od.args[1]);
+                    }
                     break;
                 case enmMMLType.Octave:
                     octave[od.linePos.ch] = (int)od.args[0];

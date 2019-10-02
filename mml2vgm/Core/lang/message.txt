@@ -67,6 +67,9 @@ I0125= PCM Data size(HuC6280Secondary)      : {0} bytes\r\n
 I0126=\r\nFinished.\r\n\r\n
 
 E0100=Failed to launch player.
+E0101=The acceptable text files must have a .gwi extension.
+E0102=The dropped file contains files that do not have a .gwi extension.
+
 
 
 ;clsVgm.cs 01000

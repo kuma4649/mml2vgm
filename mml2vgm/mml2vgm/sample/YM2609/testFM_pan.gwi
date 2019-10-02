@@ -1,0 +1,46 @@
+﻿'{
+
+	TitleName            =test YM2609 
+	TitleNameJ           =YM2609テスト
+	GameName             =
+	GameNameJ            =
+	SystemName           =Virtual chip
+	SystemNameJ          =妄想音源
+	Composer             =kuma
+	ComposerJ            =くま
+	ReleaseDate          =2345/01/23
+	Converted            =kuma
+	Notes                =FMテスト
+
+	Format               =ZGM
+	ClockCount           =192
+
+}
+
+
+
+BASS
+'@ F 001
+   AR  DR  SR  RR  SL  TL  KS  ML  DT 
+'@ 031,014,003,009,002,051,000,015,001
+'@ 031,017,003,007,005,028,000,002,007
+'@ 031,018,002,006,001,013,000,000,007
+'@ 031,018,003,006,001,000,000,002,003
+'@ 001,007
+
+'U01 T120
+
+FM
+U10 D0 @1 p4,4 o4 v120 l8 q8 c
+'U01 D0 @1 p0,4 o4 v120 l8 q8 c r r r r r r r r r r r 
+'U02 D0 @1 p1,4 o4 v120 l8 q8 r c+r r r r r r r r r r 
+'U03 D0 @1 p2,4 o4 v120 l8 q8 r r d r r r r r r r r r 
+'U04 D0 @1 p3,4 o4 v120 l8 q8 r r r d+r r r r r r r r 
+'U05 D0 @1 p4,4 o4 v120 l8 q8 r r r r e r r r r r r r 
+'U06 D0 @1 p4,3 o4 v120 l8 q8 r r r r r f r r r r r r 
+'U07 D0 @1 p4,2 o4 v120 l8 q8 r r r r r r f+r r r r r 
+'U08 D0 @1 p4,1 o4 v120 l8 q8 r r r r r r r g r r r r 
+'U09 D0 @1 p4,0 o4 v120 l8 q8 r r r r r r r r g+r r r 
+U10 D0 @1 p2,4 o4 v120 l8 q8 r r r r r r r r r a r r 
+U11 D0 @1 p4,2 o4 v120 l8 q8 r r r r r r r r r r a+r 
+U12 D0 @1 p4,4 o4 v120 l8 q8 r r r r r r r r r r r b 

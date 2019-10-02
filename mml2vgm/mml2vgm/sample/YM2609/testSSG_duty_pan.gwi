@@ -1,0 +1,54 @@
+﻿'{
+
+	TitleName            =test YM2609 
+	TitleNameJ           =YM2609テスト
+	GameName             =
+	GameNameJ            =
+	SystemName           =Virtual chip
+	SystemNameJ          =妄想音源
+	Composer             =kuma
+	ComposerJ            =くま
+	ReleaseDate          =2345/01/23
+	Converted            =kuma
+	Notes                =SSGテスト
+
+	Format               =ZGM
+	ClockCount           =192
+
+}
+
+
+
+'U01 T120
+
+SSG
+    @I Duty cycle
+        7:1/8 6:2/8 5:3/8 4:4/8 3:5/8 2:6/8 1:7/8 duty. 0:8/8 Pure square wave.(default)
+        8:Triangle Wave  9:Saw Wave
+
+All
+'U19 o3 v15 l4 q8 p1 @I0 c @I1 c @I2 c p3 @I3 c @I4 c p2 @I5 c @I6 c @I7 c p3 @I8 c @I9 c
+'U20-25 l4rrrrrrrrrr
+
+duty 4/8
+'U19 o5v13 l16 @I4q1 p3
+'U19 ccc<a+a+a+>c+c+c+ccc<a+a+>cc ccc<a+a+a+g+g+g+a+a+a+g+g+a+a+>
+'U20-25 r1r1
+
+Triangle
+'U19 o4v13 l1 @I8 p3
+'U19 gf+fe
+'U20-25 l1rrrr
+
+SuperSaw
+'U19-25 o4 v10 l8 @I9 q1 p3
+'U19    D-40 p1 (2
+'U20    D-20 p3 (1
+'U21    D-10 p3
+'U22    D0   p3
+'U23    D10  p3
+'U24    D20  p3 (1
+'U25    D40  p2 (2
+'U19-25 e.e.e e.e.d e.e.e d.e.f
+
+

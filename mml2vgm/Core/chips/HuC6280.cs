@@ -460,7 +460,7 @@ namespace Core
         {
             SetHuC6280CurrentChannel(mml, pw);
 
-            OutHuC6280Port(mml, port[0], 0x4, 0x80);
+            OutHuC6280Port(mml, port[0], 0x4, 0x00);
             //OutHuC6280Port(pw.isSecondary, 0x5, 0);
         }
 

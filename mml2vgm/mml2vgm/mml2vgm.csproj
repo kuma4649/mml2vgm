@@ -212,6 +212,15 @@
     <None Include="sample\Syntax\testFMSecondary.gwi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="sample\YM2609\sinetable.gwi">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="sample\YM2609\testFM_pan.gwi">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="sample\YM2609\testSSG_duty_pan.gwi">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="sample\YM2609\testADPCM_Pan.gwi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

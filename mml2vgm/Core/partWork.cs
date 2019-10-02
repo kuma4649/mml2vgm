@@ -126,6 +126,7 @@ namespace Core
         //public int pan = 3;
         //public int beforePan = -1;
         public dint pan = new dint(3);
+        public dint beforePan = new dint(3);
 
         /// <summary>
         /// 拡張パン(Left)
@@ -133,7 +134,8 @@ namespace Core
         /// <remarks>
         /// ボリュームが左右別管理の音源向け
         /// </remarks>
-        public int panL = -1;
+        public int panL = 0;
+        public int beforePanL = -1;
 
         /// <summary>
         /// 拡張パン(Right)
@@ -141,7 +143,8 @@ namespace Core
         /// <remarks>
         /// ボリュームが左右別管理の音源向け
         /// </remarks>
-        public int panR = -1;
+        public int panR = 0;
+        public int beforePanR = -1;
 
         /// <summary>
         /// 拡張ボリューム(Left)before
@@ -386,12 +389,22 @@ namespace Core
         public enmChannelType Type;
         public int MaxVolume = 0;
         public byte[][] port = null;
+
+        public int feedBack = 0;
+        public int beforeFeedBack = -1;
+        public int algo = 0;
+        public int beforeAlgo = -1;
+        public int algConstSw = 0;
+        public int beforeAlgConstSw = -1;
         public int ams = 0;
+        public int beforeAms = -1;
         public int fms = 0;
+        public int beforeFms = -1;
         public int pms = 0;
+        public int beforePms = -1;
+
         public bool hardLfoSw = false;
         public int hardLfoNum = 0;
-
         public int hardLfoFreq = 0;
         public int hardLfoPMD = 0;
         public int hardLfoAMD = 0;

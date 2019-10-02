@@ -71,7 +71,7 @@ namespace Core
 
         }
 
-        public void SetSsgVolume(partWork pw, MML mml)
+        public virtual void SetSsgVolume(partWork pw, MML mml)
         {
             int port;
             int adr;
@@ -105,10 +105,10 @@ namespace Core
                 vol = 0;
             }
 
-            if(pw.chip is YM2609)
+            if (pw.chip is YM2609)
             {
                 int pan = (int)(pw.pan.val == null ? 0 : pw.pan.val);
-                vol |= pan << 6;
+                vol |= (byte)(pan << 6);
             }
 
             if (pw.beforeVolume != vol)
@@ -232,7 +232,7 @@ namespace Core
                 );
         }
 
-        public void OutFmSetFeedbackAlgorithm(MML mml,partWork pw, int fb, int alg)
+        public void OutFmSetFeedbackAlgorithm(MML mml, partWork pw, int fb, int alg)
         {
             int vch;
             byte[] port;
@@ -241,7 +241,7 @@ namespace Core
             fb &= 7;
             alg &= 7;
 
-            parent.OutData(mml,port, (byte)(0xb0 + vch), (byte)((fb << 3) + alg));
+            parent.OutData(mml, port, (byte)(0xb0 + vch), (byte)((fb << 3) + alg));
         }
 
         public void OutFmSetDtMl(MML mml, partWork pw, int ope, int dt, int ml)
@@ -320,7 +320,7 @@ namespace Core
             parent.OutData(mml, port, (byte)(0x80 + vch + ope * 4), (byte)((sl << 4) + rr));
         }
 
-        private void GetPortVch(partWork pw, out byte[] port, out int vch)
+        protected void GetPortVch(partWork pw, out byte[] port, out int vch)
         {
             if (!(pw.chip is YM2609))
             {
@@ -329,8 +329,39 @@ namespace Core
             }
             else
             {
-                port = pw.ch < 3 ? pw.port[0] : (pw.ch < 6 ? pw.port[1] : (pw.ch < 9 ? pw.port[2] : pw.port[3]));
-                vch = (byte)(pw.ch < 3 ? pw.ch : (pw.ch < 6 ? (pw.ch - 3) : (pw.ch < 9 ? (pw.ch - 6) : (pw.ch - 9))));
+                port = 
+                    pw.ch < 3 ? 
+                    pw.port[0] :
+                    (pw.ch < 6 ? 
+                        pw.port[1] : 
+                        (pw.ch < 9 ? 
+                            pw.port[2] :
+                            (pw.ch < 12 ?
+                                pw.port[3] :
+                                (pw.ch < 15 ?
+                                    pw.port[0] :
+                                    pw.port[2]
+                                )
+                            )
+                        )
+                    );
+                vch = (byte)(
+                    pw.ch < 3 ? 
+                    pw.ch : 
+                    (pw.ch < 6 ?
+                        (pw.ch - 3) : 
+                        (pw.ch < 9 ?
+                            (pw.ch - 6) :
+                            (pw.ch < 12 ?
+                                (pw.ch - 9) :
+                                (pw.ch < 15 ?
+                                    2 :
+                                    2
+                                )
+                            )
+                        )
+                    )
+                );
             }
         }
 
@@ -672,7 +703,26 @@ namespace Core
                             | (pw.chip.lstPartWork[13].Ch3SpecialModeKeyOn ? pw.chip.lstPartWork[13].slots : 0x0)
                             | (pw.chip.lstPartWork[14].Ch3SpecialModeKeyOn ? pw.chip.lstPartWork[14].slots : 0x0);
 
-                        parent.OutData(mml, pw.port[0], 0x28, (byte)((slot << 4) + 2));
+                        outDatum od = new outDatum();
+                        od.val = (byte)((pw.slots << 4) + 2);
+                        if (mml != null)
+                        {
+                            od.type = mml.type;
+                            if (mml.line != null && mml.line.Lp != null)
+                            {
+                                od.linePos = new LinePos(
+                                    mml.line.Lp.fullPath,
+                                    mml.line.Lp.row,
+                                    mml.line.Lp.col,
+                                    mml.line.Lp.length,
+                                    mml.line.Lp.part,
+                                    mml.line.Lp.chip,
+                                    mml.line.Lp.chipIndex,
+                                    mml.line.Lp.isSecondary,
+                                    mml.line.Lp.ch);
+                            }
+                        }
+                        ((YM2609)pw.chip).opna20x028KeyOnData.Add(od);
                     }
                     else if ((pw.ch == 8 || pw.ch == 15 || pw.ch == 16 || pw.ch == 17) && pw.chip.lstPartWork[8].Ch3SpecialMode)
                     {
@@ -683,7 +733,26 @@ namespace Core
                             | (pw.chip.lstPartWork[16].Ch3SpecialModeKeyOn ? pw.chip.lstPartWork[16].slots : 0x0)
                             | (pw.chip.lstPartWork[17].Ch3SpecialModeKeyOn ? pw.chip.lstPartWork[17].slots : 0x0);
 
-                        parent.OutData(mml, pw.port[2], 0x28, (byte)((slot << 4) + 2));
+                        outDatum od = new outDatum();
+                        od.val = (byte)((pw.slots << 4) + 2);
+                        if (mml != null)
+                        {
+                            od.type = mml.type;
+                            if (mml.line != null && mml.line.Lp != null)
+                            {
+                                od.linePos = new LinePos(
+                                    mml.line.Lp.fullPath,
+                                    mml.line.Lp.row,
+                                    mml.line.Lp.col,
+                                    mml.line.Lp.length,
+                                    mml.line.Lp.part,
+                                    mml.line.Lp.chip,
+                                    mml.line.Lp.chipIndex,
+                                    mml.line.Lp.isSecondary,
+                                    mml.line.Lp.ch);
+                            }
+                        }
+                        ((YM2609)pw.chip).opna20x228KeyOnData.Add(od);
                     }
                     else
                     {
@@ -691,14 +760,52 @@ namespace Core
                         {
                             byte vch = (byte)((pw.ch > 2) ? pw.ch + 1 : pw.ch);
                             //key off
-                            parent.OutData(mml, pw.port[0], 0x28, (byte)(0x00 + (vch & 7)));
+                            outDatum od = new outDatum();
+                            od.val = (byte)(0x00 + (vch & 7));
+                            if (mml != null)
+                            {
+                                od.type = mml.type;
+                                if (mml.line != null && mml.line.Lp != null)
+                                {
+                                    od.linePos = new LinePos(
+                                        mml.line.Lp.fullPath,
+                                        mml.line.Lp.row,
+                                        mml.line.Lp.col,
+                                        mml.line.Lp.length,
+                                        mml.line.Lp.part,
+                                        mml.line.Lp.chip,
+                                        mml.line.Lp.chipIndex,
+                                        mml.line.Lp.isSecondary,
+                                        mml.line.Lp.ch);
+                                }
+                            }
+                            ((YM2609)pw.chip).opna20x028KeyOnData.Add(od);
                         }
                         else if (pw.ch >= 6 && pw.ch < 12)
                         {
                             byte vch = (byte)(pw.ch - 6);
                             vch = (byte)(((vch > 2) ? (vch + 1) : vch));
                             //key off
-                            parent.OutData(mml, pw.port[2], 0x28, (byte)(0x00 + (vch & 7)));
+                            outDatum od = new outDatum();
+                            od.val = (byte)(0 + (vch & 7));
+                            if (mml != null)
+                            {
+                                od.type = mml.type;
+                                if (mml.line != null && mml.line.Lp != null)
+                                {
+                                    od.linePos = new LinePos(
+                                        mml.line.Lp.fullPath,
+                                        mml.line.Lp.row,
+                                        mml.line.Lp.col,
+                                        mml.line.Lp.length,
+                                        mml.line.Lp.part,
+                                        mml.line.Lp.chip,
+                                        mml.line.Lp.chipIndex,
+                                        mml.line.Lp.isSecondary,
+                                        mml.line.Lp.ch);
+                                }
+                            }
+                            ((YM2609)pw.chip).opna20x228KeyOnData.Add(od);
                         }
                     }
                 }
@@ -762,26 +869,26 @@ namespace Core
                 if ((pw.slots & 8) != 0)
                 {
                     int f = pw.freq + pw.slotDetune[3];
-                    parent.OutData(mml, pw.port[0], (byte)0xa6, (byte)((f & 0xff00) >> 8));
-                    parent.OutData(mml, pw.port[0], (byte)0xa2, (byte)(f & 0xff));
+                    parent.OutData(mml, pw.port[0], (byte)0xa6, (byte)(f >> 8));
+                    parent.OutData(mml, pw.port[0], (byte)0xa2, (byte)f);
                 }
                 if ((pw.slots & 4) != 0)
                 {
                     int f = pw.freq + pw.slotDetune[2];
-                    parent.OutData(mml, pw.port[0], (byte)0xac, (byte)((f & 0xff00) >> 8));
-                    parent.OutData(mml, pw.port[0], (byte)0xa8, (byte)(f & 0xff));
+                    parent.OutData(mml, pw.port[0], (byte)0xac, (byte)(f >> 8));
+                    parent.OutData(mml, pw.port[0], (byte)0xa8, (byte)f);
                 }
                 if ((pw.slots & 1) != 0)
                 {
                     int f = pw.freq + pw.slotDetune[0];
-                    parent.OutData(mml, pw.port[0], (byte)0xad, (byte)((f & 0xff00) >> 8));
-                    parent.OutData(mml, pw.port[0], (byte)0xa9, (byte)(f & 0xff));
+                    parent.OutData(mml, pw.port[0], (byte)0xad, (byte)(f >> 8));
+                    parent.OutData(mml, pw.port[0], (byte)0xa9, (byte)f);
                 }
                 if ((pw.slots & 2) != 0)
                 {
                     int f = pw.freq + pw.slotDetune[1];
-                    parent.OutData(mml, pw.port[0], (byte)0xae, (byte)((f & 0xff00) >> 8));
-                    parent.OutData(mml, pw.port[0], (byte)0xaa, (byte)(f & 0xff));
+                    parent.OutData(mml, pw.port[0], (byte)0xae, (byte)(f >> 8));
+                    parent.OutData(mml, pw.port[0], (byte)0xaa, (byte)f);
                 }
             }
             else
@@ -923,7 +1030,27 @@ namespace Core
                             | (pw.chip.lstPartWork[13].Ch3SpecialModeKeyOn ? pw.chip.lstPartWork[13].slots : 0x0)
                             | (pw.chip.lstPartWork[14].Ch3SpecialModeKeyOn ? pw.chip.lstPartWork[14].slots : 0x0);
 
-                        parent.OutData(mml, pw.port[0], 0x28, (byte)((slot << 4) + 2));
+                        outDatum od = new outDatum();
+                        od.val = (byte)((pw.slots << 4) + 2);
+                        if (mml != null)
+                        {
+                            od.type = mml.type;
+                            if (mml.line != null && mml.line.Lp != null)
+                            {
+                                od.linePos = new LinePos(
+                                    mml.line.Lp.fullPath,
+                                    mml.line.Lp.row,
+                                    mml.line.Lp.col,
+                                    mml.line.Lp.length,
+                                    mml.line.Lp.part,
+                                    mml.line.Lp.chip,
+                                    mml.line.Lp.chipIndex,
+                                    mml.line.Lp.isSecondary,
+                                    mml.line.Lp.ch);
+                            }
+                        }
+                        ((YM2609)pw.chip).opna20x028KeyOnData.Add(od);
+
                     }
                     else if ((pw.ch == 8 || pw.ch == 15 || pw.ch == 16 || pw.ch == 17) && pw.chip.lstPartWork[8].Ch3SpecialMode)
                     {
@@ -934,7 +1061,26 @@ namespace Core
                             | (pw.chip.lstPartWork[16].Ch3SpecialModeKeyOn ? pw.chip.lstPartWork[16].slots : 0x0)
                             | (pw.chip.lstPartWork[17].Ch3SpecialModeKeyOn ? pw.chip.lstPartWork[17].slots : 0x0);
 
-                        parent.OutData(mml, pw.port[2], 0x28, (byte)((slot << 4) + 2));
+                        outDatum od = new outDatum();
+                        od.val = (byte)((pw.slots << 4) + 2);
+                        if (mml != null)
+                        {
+                            od.type = mml.type;
+                            if (mml.line != null && mml.line.Lp != null)
+                            {
+                                od.linePos = new LinePos(
+                                    mml.line.Lp.fullPath,
+                                    mml.line.Lp.row,
+                                    mml.line.Lp.col,
+                                    mml.line.Lp.length,
+                                    mml.line.Lp.part,
+                                    mml.line.Lp.chip,
+                                    mml.line.Lp.chipIndex,
+                                    mml.line.Lp.isSecondary,
+                                    mml.line.Lp.ch);
+                            }
+                        }
+                        ((YM2609)pw.chip).opna20x228KeyOnData.Add(od);
                     }
                     else
                     {
@@ -942,14 +1088,52 @@ namespace Core
                         {
                             byte vch = (byte)((pw.ch > 2) ? pw.ch + 1 : pw.ch);
                             //key on
-                            parent.OutData(mml, pw.port[0], 0x28, (byte)((pw.slots << 4) + (vch & 7)));
+                            outDatum od = new outDatum();
+                            od.val = (byte)((pw.slots << 4) + (vch & 7));
+                            if (mml != null)
+                            {
+                                od.type = mml.type;
+                                if (mml.line != null && mml.line.Lp != null)
+                                {
+                                    od.linePos = new LinePos(
+                                        mml.line.Lp.fullPath,
+                                        mml.line.Lp.row,
+                                        mml.line.Lp.col,
+                                        mml.line.Lp.length,
+                                        mml.line.Lp.part,
+                                        mml.line.Lp.chip,
+                                        mml.line.Lp.chipIndex,
+                                        mml.line.Lp.isSecondary,
+                                        mml.line.Lp.ch);
+                                }
+                            }
+                            ((YM2609)pw.chip).opna20x028KeyOnData.Add(od);
                         }
                         else if (pw.ch >= 6 && pw.ch < 12)
                         {
                             byte vch = (byte)(pw.ch - 6);
                             vch = (byte)(((vch > 2) ? (vch + 1) : vch));
                             //key on
-                            parent.OutData(mml, pw.port[2], 0x28, (byte)((pw.slots << 4) + (vch & 7)));
+                            outDatum od = new outDatum();
+                            od.val = (byte)((pw.slots << 4) + (vch & 7));
+                            if (mml != null)
+                            {
+                                od.type = mml.type;
+                                if (mml.line != null && mml.line.Lp != null)
+                                {
+                                    od.linePos = new LinePos(
+                                        mml.line.Lp.fullPath,
+                                        mml.line.Lp.row,
+                                        mml.line.Lp.col,
+                                        mml.line.Lp.length,
+                                        mml.line.Lp.part,
+                                        mml.line.Lp.chip,
+                                        mml.line.Lp.chipIndex,
+                                        mml.line.Lp.isSecondary,
+                                        mml.line.Lp.ch);
+                                }
+                            }
+                            ((YM2609)pw.chip).opna20x228KeyOnData.Add(od);
                         }
                     }
                 }
