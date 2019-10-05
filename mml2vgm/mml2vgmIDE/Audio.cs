@@ -3229,6 +3229,7 @@ namespace mml2vgmIDE
             for (int i = 0; i < chipRegister.YM2203.Count; i++) if (chipRegister.YM2203[i].Use) chipRegister.YM2203SoftReset(counter, i);
             for (int i = 0; i < chipRegister.YM2413.Count; i++) if (chipRegister.YM2413[i].Use) chipRegister.YM2413SoftReset(counter, i);
             for (int i = 0; i < chipRegister.YM2608.Count; i++) if (chipRegister.YM2608[i].Use) chipRegister.YM2608SoftReset(counter, i);
+            for (int i = 0; i < chipRegister.YM2609.Count; i++) if (chipRegister.YM2609[i].Use) chipRegister.YM2609SoftReset(counter, i);
             for (int i = 0; i < chipRegister.YM2610.Count; i++) if (chipRegister.YM2610[i].Use) chipRegister.YM2610SoftReset(counter, i);
             for (int i = 0; i < chipRegister.YM2612.Count; i++) if (chipRegister.YM2612[i].Use) chipRegister.YM2612SoftReset(counter, i);
         }
@@ -3248,7 +3249,8 @@ namespace mml2vgmIDE
             for (int i = 0; i < chipRegister.YM2151.Count; i++)  if (chipRegister.YM2151[i].Use) data.AddRange(chipRegister.YM2151MakeSoftReset(i));
             for (int i = 0; i < chipRegister.YM2203.Count; i++)  if (chipRegister.YM2203[i].Use) data.AddRange(chipRegister.YM2203MakeSoftReset(i));
             for (int i = 0; i < chipRegister.YM2413.Count; i++)  if (chipRegister.YM2413[i].Use) data.AddRange(chipRegister.YM2413MakeSoftReset(i));
-            for (int i = 0; i < chipRegister.YM2608.Count; i++)  if (chipRegister.YM2608[i].Use) data.AddRange(chipRegister.YM2608MakeSoftReset(i));
+            for (int i = 0; i < chipRegister.YM2608.Count; i++) if (chipRegister.YM2608[i].Use) data.AddRange(chipRegister.YM2608MakeSoftReset(i));
+            for (int i = 0; i < chipRegister.YM2609.Count; i++) if (chipRegister.YM2609[i].Use) data.AddRange(chipRegister.YM2609MakeSoftReset(i));
             for (int i = 0; i < chipRegister.YM2610.Count; i++)  if (chipRegister.YM2610[i].Use) data.AddRange(chipRegister.YM2610MakeSoftReset(i));
             for (int i = 0; i < chipRegister.YM2612.Count; i++)  if (chipRegister.YM2612[i].Use) data.AddRange(chipRegister.YM2612MakeSoftReset(i));
 
@@ -3272,6 +3274,7 @@ namespace mml2vgmIDE
             for (int i = 0; i < chipRegister.YM2203.Count; i++) if (chipRegister.YM2203[i].Use) data.AddRange(chipRegister.YM2203MakeSoftReset(i));
             for (int i = 0; i < chipRegister.YM2413.Count; i++) if (chipRegister.YM2413[i].Use) data.AddRange(chipRegister.YM2413MakeSoftReset(i));
             for (int i = 0; i < chipRegister.YM2608.Count; i++) if (chipRegister.YM2608[i].Use) data.AddRange(chipRegister.YM2608MakeSoftReset(i));
+            for (int i = 0; i < chipRegister.YM2609.Count; i++) if (chipRegister.YM2609[i].Use) data.AddRange(chipRegister.YM2609MakeSoftReset(i));
             for (int i = 0; i < chipRegister.YM2610.Count; i++) if (chipRegister.YM2610[i].Use) data.AddRange(chipRegister.YM2610MakeSoftReset(i));
             for (int i = 0; i < chipRegister.YM2612.Count; i++) if (chipRegister.YM2612[i].Use) data.AddRange(chipRegister.YM2612MakeSoftResetKeyOffOnly(i));
 

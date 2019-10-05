@@ -40,6 +40,7 @@ namespace Core
         public Dictionary<int, Dictionary<int, int>> instPCMMap = new Dictionary<int, Dictionary<int, int>>();
         public Dictionary<int, clsToneDoubler> instToneDoubler = new Dictionary<int, clsToneDoubler>();
         public Dictionary<int, byte[]> instWF = new Dictionary<int, byte[]>();
+        public Dictionary<int, ushort[]> instOPNA2WF = new Dictionary<int, ushort[]>();
 
         public Dictionary<string, List<Line>> partData = new Dictionary<string, List<Line>>();
         public Dictionary<string, Line> aliesData = new Dictionary<string, Line>();
@@ -50,6 +51,8 @@ namespace Core
         private List<int> toneDoublerBufCache = new List<int>();
         private int wfInstrumentCounter = -1;
         private byte[] wfInstrumentBufCache = null;
+        private int opna2wfInstrumentCounter = -1;
+        private ushort[] opna2WfInstrumentBufCache = null;
         public bool doSkip = false;
         public bool doSkipStop = false;
         public Point caretPoint = Point.Empty;
@@ -453,6 +456,14 @@ namespace Core
 
             }
 
+            // opna2 WaveFormの音色を定義中の場合
+            if (opna2wfInstrumentCounter != -1)
+            {
+
+                return SetOPNA2WfInstrument(line);
+
+            }
+
             char t = buf.ToUpper()[0];
             if (toneDoublerCounter != -1)
             {
@@ -561,6 +572,11 @@ namespace Core
                     SetWfInstrument(line);
                     return 0;
 
+                case 'W':
+                    opna2WfInstrumentBufCache = new ushort[Const.OPNA2_WF_INSTRUMENT_SIZE];
+                    opna2wfInstrumentCounter = 0;
+                    SetOPNA2WfInstrument(line);
+                    return 0;
             }
 
             // ToneDoublerを定義中の場合
@@ -1368,6 +1384,32 @@ namespace Core
             return 0;
         }
 
+        private int SetOPNA2WfInstrument(Line line)
+        {
+
+            try
+            {
+                opna2wfInstrumentCounter = GetNums2(opna2WfInstrumentBufCache, opna2wfInstrumentCounter, line.Txt.Substring(1).TrimStart());
+
+                if (opna2wfInstrumentCounter == opna2WfInstrumentBufCache.Length)
+                {
+                    if (instOPNA2WF.ContainsKey(opna2WfInstrumentBufCache[0]))
+                    {
+                        instOPNA2WF.Remove(opna2WfInstrumentBufCache[0]);
+                    }
+                    instOPNA2WF.Add(opna2WfInstrumentBufCache[0], opna2WfInstrumentBufCache);
+
+                    opna2wfInstrumentCounter = -1;
+                }
+            }
+            catch
+            {
+                msgBox.setErrMsg(msg.get("E01013"), line.Lp);
+            }
+
+            return 0;
+        }
+
         private int GetNums(byte[] aryBuf,int aryIndex, string vals)
         {
             string n = "";
@@ -1417,6 +1459,62 @@ namespace Core
                 if (int.TryParse(n, out i))
                 {
                     aryBuf[aryIndex] = (byte)(i & 0xff);
+                    aryIndex++;
+                    n = "";
+                }
+            }
+
+            return aryIndex;
+        }
+        private int GetNums2(ushort[] aryBuf, int aryIndex, string vals)
+        {
+            string n = "";
+            string h = "";
+            int hc = -1;
+            int i = 0;
+
+            foreach (char c in vals)
+            {
+                if (c == '$')
+                {
+                    hc = 0;
+                    continue;
+                }
+
+                if (hc > -1 && ((c >= '0' && c <= '9') || (c >= 'A' && c <= 'F')))
+                {
+                    h += c;
+                    hc++;
+                    if (hc == 4)
+                    {
+                        i = int.Parse(h, System.Globalization.NumberStyles.HexNumber);
+                        aryBuf[aryIndex] = (ushort)(i & 0xffff);
+                        aryIndex++;
+                        h = "";
+                        hc = -1;
+                    }
+                    continue;
+                }
+
+                if ((c >= '0' && c <= '9') || c == '-')
+                {
+                    n = n + c.ToString();
+                    continue;
+                }
+
+                if (int.TryParse(n, out i))
+                {
+                    aryBuf[aryIndex] = (ushort)(i & 0xffff);
+                    aryIndex++;
+                    n = "";
+                }
+            }
+
+            if (!string.IsNullOrEmpty(n))
+            {
+                if (int.TryParse(n, out i))
+                {
+                    aryBuf[aryIndex] = (ushort)(i & 0xffff);
                     aryIndex++;
                     n = "";
                 }

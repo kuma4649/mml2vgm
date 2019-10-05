@@ -891,6 +891,21 @@ b               -ooooooooooooooooooooooooooooo  音符シ
 '@ AR DR SL RR KL MT AM VB EG KR DT
 '@ TL FB
 
+  定義パターン5
+    "A"を指定した音色を妄想音源YM2609(OPNA2)で使用すると以下のように解釈される。
+	 DT2 DeTune2   OPNA2はDT2を使用可
+	 FB  Feed Back OPNA2はop毎に使用可
+	 WT  WaveType  OPNA2はop毎に基本波形(Ch毎)を選択できる(0～3)。更に波形は@Wコマンドで割り当てる。
+	 ALL ALg Link  OPNA2はアルゴリズムを編集できる(0～15)。op毎に親となるopをbitで選択。自分が選択される又は誰も選択しない場合、キャリアとなる。
+	               bit3:Op4  bit2:Op3  bit1:Op2  bit0:Op1
+	 AL  ALg       -1 を設定するとOPNA2は上記のALLでアルゴリズムを編集できるモードになる。
+'@ A No
+'@ AR DR SR RR SL TL KS ML DT1 DT2 AM SSGEG FB WT ALL
+'@ AR DR SR RR SL TL KS ML DT1 DT2 AM SSGEG FB WT ALL
+'@ AR DR SR RR SL TL KS ML DT1 DT2 AM SSGEG FB WT ALL
+'@ AR DR SR RR SL TL KS ML DT1 DT2 AM SSGEG FB WT ALL
+'@ AL
+
 
   MUCOM88の音色を読み込む
 　filenameの音色データファイルを読み込み、 NUM で指定した番号から定義を行う。

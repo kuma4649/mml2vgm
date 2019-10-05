@@ -33,7 +33,7 @@ namespace mml2vgmIDE.MMLParameter
                     }
                     else
                     {
-                        inst[od.linePos.ch] = od.args[1].ToString();
+                        inst[od.linePos.ch] = od.args[1]!=null ? od.args[1].ToString() : "(null)";
                     }
                     break;
                 //case enmMMLType.Envelope:

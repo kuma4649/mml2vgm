@@ -741,7 +741,26 @@ namespace Core
         }
 
         /// <summary>
+        /// タブと空白は読み飛ばす
+        /// </summary>
+        /// <returns>飛ばした文字数</returns>
+        public int skipTabSpace()
+        {
+            int cnt = 0;
+            while (getChar() == ' ' || getChar() == '\t')
+            {
+                incPos();
+                cnt++;
+            }
+            return cnt;
+        }
+
+
+        /// <summary>
         /// 解析位置から数値を取得する。
+        /// タブと空白は読み飛ばす。
+        /// +-符号を取得する(ない場合は正とする)
+        /// 16進数($hh:2文字必ずいる)読み取り可。
         /// </summary>
         /// <param name="num">取得した数値が返却される</param>
         /// <returns>数値取得成功したかどうか</returns>
@@ -751,24 +770,16 @@ namespace Core
             string n = "";
             int ret = -1;
 
-            //タブと空白は読み飛ばす
-            while (getChar() == ' ' || getChar() == '\t')
-            {
-                incPos();
-            }
+            skipTabSpace();
 
-            //符号を取得する(ない場合は正とする)
+            //+-符号を取得する(ない場合は正とする)
             if (getChar() == '-' || getChar() == '+')
             {
                 n = getChar().ToString();
                 incPos();
             }
 
-            //タブと空白は読み飛ばす
-            while (getChar() == ' ' || getChar() == '\t')
-            {
-                incPos();
-            }
+            skipTabSpace();
 
             //１６進数指定されているか
             if (getChar() != '$')
@@ -832,12 +843,7 @@ namespace Core
             string n = "";
             int ret = -1;
 
-            //タブと空白は読み飛ばす
-            while (getChar() == ' ' || getChar() == '\t')
-            {
-                incPos();
-                col++;
-            }
+            col += skipTabSpace();
 
             //符号を取得する(ない場合は正とする)
             if (getChar() == '-' || getChar() == '+')
@@ -847,12 +853,7 @@ namespace Core
                 col++;
             }
 
-            //タブと空白は読み飛ばす
-            while (getChar() == ' ' || getChar() == '\t')
-            {
-                incPos();
-                col++;
-            }
+            col += skipTabSpace();
 
             //１６進数指定されているか
             if (getChar() != '$')
@@ -919,11 +920,7 @@ namespace Core
 
             flg = false;
 
-            //タブと空白は読み飛ばす
-            while (getChar() == ' ' || getChar() == '\t')
-            {
-                incPos();
-            }
+            skipTabSpace();
 
             //クロック直接指定
             if (getChar() == '#')
@@ -941,12 +938,7 @@ namespace Core
             flg = false;
             col = 0;
 
-            //タブと空白は読み飛ばす
-            while (getChar() == ' ' || getChar() == '\t')
-            {
-                incPos();
-                col++;
-            }
+            col += skipTabSpace();
 
             //クロック直接指定
             if (getChar() == '#')

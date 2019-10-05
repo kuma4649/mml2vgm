@@ -14,6 +14,7 @@ namespace Core
         public const int INSTRUMENT_OPERATOR_SIZE = 9;
         public const int INSTRUMENT_M_OPERATOR_SIZE = 11;
         public const int WF_INSTRUMENT_SIZE = 33;
+        public const int OPNA2_WF_INSTRUMENT_SIZE = 1024+1;
 
         public const string NOTE = "c_d_ef_g_a_b";
 

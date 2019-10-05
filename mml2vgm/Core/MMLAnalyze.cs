@@ -329,65 +329,86 @@ namespace Core
 
             mml.type = enmMMLType.Instrument;
             mml.args = new List<object>();
+            char a = pw.getChar();
 
-            //@Tn
-            if (pw.getChar() == 'T')
+            switch (a)
             {
-                //tone doubler
-                mml.args.Add('T');
-                pw.incPos();
-            }
-            //@En
-            else if (pw.getChar() == 'E')
-            {
-                //Envelope
-                mml.args.Add('E');
-                pw.incPos();
-            }
-            //@In
-            else if (pw.getChar() == 'I')
-            {
-                //Instrument(プリセット音色)
-                mml.args.Add('I');
-                pw.incPos();
-            }
-            //@Nn
-            else if (pw.getChar() == 'N')
-            {
-                //None(音色設定直前に何もしない)
-                mml.args.Add('N');
-                pw.incPos();
-            }
-            //@Rn
-            else if (pw.getChar() == 'R')
-            {
-                //RR(音色設定直前にRR=15をセットする)
-                mml.args.Add('R');
-                pw.incPos();
-            }
-            //@An
-            else if (pw.getChar() == 'A')
-            {
-                //All send(音色設定直前に消音向け音色をセットする)
-                mml.args.Add('A');
-                pw.incPos();
-            }
-            else
-            {
-                //normal
-                mml.args.Add('n');
+                case 'T':                    //@Tn
+                    //tone doubler
+                    mml.args.Add('T');
+                    pw.incPos();
+                    break;
+                case 'E':                    //@En
+                    //Envelope
+                    mml.args.Add('E');
+                    pw.incPos();
+                    break;
+                case 'I':                    //@In
+                    //Instrument(プリセット音色)
+                    mml.args.Add('I');
+                    pw.incPos();
+                    break;
+                case 'N':                    //@Nn
+                    //None(音色設定直前に何もしない)
+                    mml.args.Add('N');
+                    pw.incPos();
+                    break;
+                case 'R':                    //@Rn
+                    //RR(音色設定直前にRR=15をセットする)
+                    mml.args.Add('R');
+                    pw.incPos();
+                    break;
+                case 'A':                    //@An
+                    //All send(音色設定直前に消音向け音色をセットする)
+                    mml.args.Add('A');
+                    pw.incPos();
+                    break;
+                case 'W':                    //@Wn,n,n,n
+                    //波形データ(OPNA2専用)
+                    mml.args.Add('W');
+                    pw.incPos();
+                    break;
+                default:                     //normal
+                    mml.args.Add('n');
+                    break;
             }
 
-            //@n
-
-            if (!pw.getNum(out n))
+            //数値取得
+            if (a != 'W')
             {
-                msgBox.setErrMsg(msg.get("E05002"), mml.line.Lp);
-                n = 0;
+                if (!pw.getNum(out n))
+                {
+                    msgBox.setErrMsg(msg.get("E05002"), mml.line.Lp);
+                    n = 0;
+                }
+                n = Common.CheckRange(n, 0, 0xffff);
+                mml.args.Add(n);
+                return;
             }
-            n = Common.CheckRange(n, 0, 255);
-            mml.args.Add(n);
 
+            //数値複数取得
+            while (true)
+            {
+                if (pw.getChar() == 'r')
+                {
+                    pw.incPos();
+                    mml.args.Add("reset");
+                }
+                else if (pw.getNum(out n))
+                {
+                    n = Common.CheckRange(n, 0, 4);
+                    mml.args.Add(n);
+                }
+                else
+                {
+                    mml.args.Add(null);
+                }
+
+                pw.skipTabSpace();
+
+                if (pw.getChar() != ',') break;
+                pw.incPos();
+            }
         }
 
         private void CmdVolume(partWork pw, MML mml)
@@ -419,6 +440,8 @@ namespace Core
                 n = 0;
             }
             mml.args.Add(n);
+
+            pw.skipTabSpace();
 
             if (pw.getChar() == ',')
             {
@@ -559,6 +582,8 @@ namespace Core
             mml.type = enmMMLType.Pan;
             mml.args = new List<object>();
             mml.args.Add(n);
+
+            pw.skipTabSpace();
 
             if (pw.getChar() == ',')
             {
@@ -984,7 +1009,7 @@ namespace Core
                     return;
                 }
 
-                while (pw.getChar() == '\t' || pw.getChar() == ' ') { pw.incPos(); }
+                pw.skipTabSpace();
 
             } while (pw.getChar() == ',');
 
@@ -1247,7 +1272,7 @@ namespace Core
             else
             {
                 note.length = (int)pw.length;
-
+                pw.skipTabSpace();
                 //Tone Doubler','指定の場合はここで解析終了
                 if (pw.getChar() == ',')
                 {

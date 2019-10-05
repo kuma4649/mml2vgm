@@ -1059,7 +1059,7 @@ namespace Core
         public override void CmdInstrument(partWork pw, MML mml)
         {
             char type = (char)mml.args[0];
-            int n = (int)mml.args[1];
+            int n = (type == 'W') ? -1 : (int)mml.args[1];
 
             if (type == 'n' || type == 'N' || type == 'R' || type == 'A')
             {
@@ -1137,6 +1137,12 @@ namespace Core
                 return;
             }
 
+            if (type == 'W')
+            {
+                SetWaveTableFromInstrument(pw, mml);
+                return;
+            }
+
             if (pw.Type == enmChannelType.SSG)
             {
                 SetEnvelopParamFromInstrument(pw, n, mml);
@@ -1147,6 +1153,63 @@ namespace Core
             if (pw.instrument == n) return;
             pw.instrument = n;
             OutFmSetInstrument(pw, mml, n, pw.volume, type);
+        }
+
+        public void SetWaveTableFromInstrument(partWork pw, MML mml)
+        {
+            int p = 0;
+            foreach(object o in mml.args)
+            {
+                p++;
+                if (p == 1 || o == null)
+                {
+                    if (p == 5) break;
+                    continue;
+                }
+
+                OutFmSetWaveTable(mml, pw, p - 2, o);
+
+                if (p == 5) break;
+            }
+
+            SetDummyData(pw, mml);
+        }
+
+        public void OutFmSetWaveTable(MML mml, partWork pw, int ope, object prm)
+        {
+            int vch;
+            byte[] port;
+            GetPortVch(pw.chip.lstPartWork[0], out port, out vch);
+            vch = pw.ch;
+            int n = 0;
+            bool reset = false;
+            if (prm is string)
+            {
+                reset = true;
+            }
+            else
+            {
+                n = (int)prm;
+            }
+
+            //データを流し込みますよ？宣言を送信
+            parent.OutData(mml, port, 0x2b, (byte)((vch << 4) | ((reset ? 1 : 0) << 2) | (ope & 0x3)));
+
+            //実はリセット宣言だった　又は流し込むデータなんてなかった場合は処理終了
+            if (reset || !parent.instOPNA2WF.ContainsKey(n)) return;
+
+            //データの流し込みいくよー
+            ushort[] wd = parent.instOPNA2WF[n];
+            for (n = 0; n < wd.Length; n++)
+            {
+                if (n == 0) continue;
+
+                short s = (short)wd[n];
+                ushort d = (ushort)((4095 - Math.Abs(s)) * 2 + (s < 0 ? 1 : 0));
+                parent.OutData(mml, port, 0x2c, (byte)d);
+                parent.OutData(mml, port, 0x2c, (byte)(d >> 8));
+
+            }
         }
 
         public void OutFmSetWtLDtMl(MML mml, partWork pw, int ope,int wt, int dt, int ml)
