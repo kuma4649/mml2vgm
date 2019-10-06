@@ -39,6 +39,18 @@
     Support type: PRESET FIXED ADPCM 6Ch  
 - YM2608(ADPCM)  
     Support type: ADPCM 1Ch  
+- YM2609(FM)  
+    Support type: FM 12Ch  
+- YM2609(Ch3 Ex)  
+    Support type: FM Ch3Extend mode  
+- YM2609(Ch9 Ex)  
+    Support type: FM Ch9Extend mode  
+- YM2609(SSG)  
+    Support type: PSG 12Ch(sine/square/triangle/saw wave)  
+- YM2609(RHYTHM)  
+    Support type: PRESET FIXED ADPCM 6Ch  
+- YM2609(ADPCM)  
+    Support type: ADPCM 3Ch  
 - YM2203(FM)  
     Support type: FM 3Ch  
 - YM2203(Ch3 Ex)  
@@ -103,6 +115,9 @@
     - YM2608(FM)  
     - YM2608(Ch3 Ex)  
     - YM2608(ADPCM)  
+    - YM2609(FM)  
+    - YM2609(Ch3 Ex)  
+    - YM2609(ADPCM)  
     - YM2203(FM)  
     - YM2203(Ch3 Ex)  
     - YM2151  
@@ -140,6 +155,7 @@
     PCM Mapを設定する  
 - Description  
     PCMマッピングモードが有効時に、PCM Mapを変更します。  
+    無効時(デフォルト)は、通常のPCMの音色を変更します。  
 
 
 ### プリセット音色変更  
@@ -158,6 +174,31 @@
     音源がもつ固有の音色を設定します。  
 
 
+### duty比変更  
+-----------  
+- Command  
+    @I  
+- Format  
+    @In  
+- 設定可能範囲  
+    n : 0 ～ 9  
+- Support chips
+    - YM2609(SSG)  
+- Remark  
+    duty比、或いは波形を設定する  
+- Description  
+    0:8/8 Pure square wave.
+    1:7/8
+    2:6/8
+    3:5/8
+    4:4/8
+    5:3/8
+    6:2/8
+    7:1/8
+    8:Triangle Wave
+    9:Saw Wave
+
+
 ### エンベロープ変更1  
 -----------  
 - Command  
@@ -170,6 +211,7 @@
     - SN76489  
     - YM2610B(SSG)  
     - YM2608(SSG)  
+    - YM2609(SSG)  
     - YM2203(SSG)  
     - AY8910  
 - Remark  
@@ -193,6 +235,8 @@
     - YM2610B(ADPCM-B)  
     - YM2608(RHYTHM)  
     - YM2608(ADPCM)  
+    - YM2609(RHYTHM)  
+    - YM2609(ADPCM)  
     - SEGAPCM  
     - HuC6280  
     - C140  
@@ -223,6 +267,9 @@
 	- YM2610B(Ch3 Ex)  
 	- YM2608(FM)  
 	- YM2608(Ch3 Ex)  
+	- YM2609(FM)  
+	- YM2609(Ch3 Ex)  
+	- YM2609(Ch9 Ex)  
 	- YM2203(FM)  
 	- YM2203(Ch3 Ex)  
 	- YM2151  
@@ -251,6 +298,9 @@
 	- YM2610B(Ch3 Ex)  
 	- YM2608(FM)  
 	- YM2608(Ch3 Ex)  
+	- YM2609(FM)  
+	- YM2609(Ch3 Ex)  
+	- YM2609(Ch9 Ex)  
 	- YM2203(FM)  
 	- YM2203(Ch3 Ex)  
 	- YM2151  
@@ -280,6 +330,9 @@
 	- YM2610B(Ch3 Ex)  
 	- YM2608(FM)  
 	- YM2608(Ch3 Ex)  
+	- YM2609(FM)  
+	- YM2609(Ch3 Ex)  
+	- YM2609(Ch9 Ex)  
 	- YM2203(FM)  
 	- YM2203(Ch3 Ex)  
 	- YM2151  
@@ -310,6 +363,9 @@
 	- YM2610B(Ch3 Ex)  
 	- YM2608(FM)  
 	- YM2608(Ch3 Ex)  
+	- YM2609(FM)  
+	- YM2609(Ch3 Ex)  
+	- YM2609(Ch9 Ex)  
 	- YM2203(FM)  
 	- YM2203(Ch3 Ex)  
 	- YM2151  
@@ -351,6 +407,12 @@
 	- YM2608(SSG)  
 	- YM2608(RHYTHM)  
 	- YM2608(ADPCM)  
+	- YM2609(FM)  
+	- YM2609(Ch3 Ex)  
+	- YM2609(Ch9 Ex)  
+	- YM2609(SSG)  
+	- YM2609(RHYTHM)  
+	- YM2609(ADPCM)  
 	- YM2203(FM)  
 	- YM2203(Ch3 Ex)  
 	- YM2203(SSG)  
@@ -410,6 +472,12 @@
 	- YM2608(SSG)  
 	- YM2608(RHYTHM)  
 	- YM2608(ADPCM)  
+	- YM2609(FM)  
+	- YM2609(Ch3 Ex)  
+	- YM2609(Ch9 Ex)  
+	- YM2609(SSG)  
+	- YM2609(RHYTHM)  
+	- YM2609(ADPCM)  
 	- YM2203(FM)  
 	- YM2203(Ch3 Ex)  
 	- YM2203(SSG)  
@@ -460,6 +528,12 @@
 	- YM2608(Ch3 Ex)  
 	- YM2608(SSG)  
 	- YM2608(ADPCM)  
+	- YM2609(FM)  
+	- YM2609(Ch3 Ex)  
+	- YM2609(Ch9 Ex)  
+	- YM2609(SSG)  
+	- YM2609(RHYTHM)  
+	- YM2609(ADPCM)  
 	- YM2203(FM)  
 	- YM2203(Ch3 Ex)  
 	- YM2203(SSG)  
@@ -504,6 +578,12 @@
 	- YM2608(Ch3 Ex)  
 	- YM2608(SSG)  
 	- YM2608(ADPCM)  
+	- YM2609(FM)  
+	- YM2609(Ch3 Ex)  
+	- YM2609(Ch9 Ex)  
+	- YM2609(SSG)  
+	- YM2609(RHYTHM)  
+	- YM2609(ADPCM)  
 	- YM2203(FM)  
 	- YM2203(Ch3 Ex)  
 	- YM2203(SSG)  
@@ -550,6 +630,12 @@
 	- YM2608(Ch3 Ex)  
 	- YM2608(SSG)  
 	- YM2608(ADPCM)  
+	- YM2609(FM)  
+	- YM2609(Ch3 Ex)  
+	- YM2609(Ch9 Ex)  
+	- YM2609(SSG)  
+	- YM2609(RHYTHM)  
+	- YM2609(ADPCM)  
 	- YM2203(FM)  
 	- YM2203(Ch3 Ex)  
 	- YM2203(SSG)  
@@ -599,6 +685,12 @@
 	- YM2608(SSG) (B)  
 	- YM2608(RHYTHM) (C)  
 	- YM2608(ADPCM) (D)  
+	- YM2609(FM) (A)  
+	- YM2609(Ch3 Ex) (A)  
+	- YM2609(Ch9 Ex) (A)  
+	- YM2609(SSG) (B)  
+	- YM2609(RHYTHM) (C)  
+	- YM2609(ADPCM) (D)  
 	- YM2203(FM) (A)  
 	- YM2203(Ch3 Ex) (A)  
 	- YM2203(SSG) (B)  
@@ -650,6 +742,12 @@
 	- YM2608(SSG) (B)  
 	- YM2608(RHYTHM) (C)  
 	- YM2608(ADPCM) (D)  
+	- YM2609(FM) (A)  
+	- YM2609(Ch3 Ex) (A)  
+	- YM2609(Ch9 Ex) (A)  
+	- YM2609(SSG) (B)  
+	- YM2609(RHYTHM) (C)  
+	- YM2609(ADPCM) (D)  
 	- YM2203(FM) (A)  
 	- YM2203(Ch3 Ex) (A)  
 	- YM2203(SSG) (B)  
@@ -684,6 +782,7 @@
 - Support chips  
 	- YM2610B(ADPCM-A)  
 	- YM2608(RHYTHM)  
+	- YM2609(RHYTHM)  
 - Remark  
     ADPCM-A/RHYTHM全体のボリューム(音量)を設定する。  
 - Description  
@@ -738,6 +837,12 @@
 	- YM2608(SSG)  
 	- YM2608(RHYTHM)  
 	- YM2608(ADPCM)  
+	- YM2609(FM)  
+	- YM2609(Ch3 Ex)  
+	- YM2609(Ch9 Ex)  
+	- YM2609(SSG)  
+	- YM2609(RHYTHM)  
+	- YM2609(ADPCM)  
 	- YM2203(FM)  
 	- YM2203(Ch3 Ex)  
 	- YM2203(SSG)  
@@ -783,6 +888,12 @@
 	- YM2608(SSG)  
 	- YM2608(RHYTHM)  
 	- YM2608(ADPCM)  
+	- YM2609(FM)  
+	- YM2609(Ch3 Ex)  
+	- YM2609(Ch9 Ex)  
+	- YM2609(SSG)  
+	- YM2609(RHYTHM)  
+	- YM2609(ADPCM)  
 	- YM2203(FM)  
 	- YM2203(Ch3 Ex)  
 	- YM2203(SSG)  
@@ -822,6 +933,9 @@
     - YM2610B(Ch3 Ex)  
     - YM2608(FM)  
     - YM2608(Ch3 Ex)  
+	- YM2609(FM)  
+	- YM2609(Ch3 Ex)  
+	- YM2609(Ch9 Ex)  
     - YM2203(FM)  
     - YM2203(Ch3 Ex)  
 - Remark  
@@ -851,6 +965,9 @@
     - YM2610B(Ch3 Ex)  
     - YM2608(FM)  
     - YM2608(Ch3 Ex)  
+	- YM2609(FM)  
+	- YM2609(Ch3 Ex)  
+	- YM2609(Ch9 Ex)  
     - YM2203(FM)  
     - YM2203(Ch3 Ex)  
 - Remark  
@@ -880,6 +997,9 @@
     - YM2610B(Ch3 Ex)  
     - YM2608(FM)  
     - YM2608(Ch3 Ex)  
+	- YM2609(FM)  
+	- YM2609(Ch3 Ex)  
+	- YM2609(Ch9 Ex)  
     - YM2203(FM)  
     - YM2203(Ch3 Ex)  
 - Remark  
@@ -909,6 +1029,9 @@
     - YM2610B(Ch3 Ex)  
     - YM2608(FM)  
     - YM2608(Ch3 Ex)  
+	- YM2609(FM)  
+	- YM2609(Ch3 Ex)  
+	- YM2609(Ch9 Ex)  
     - YM2203(FM)  
     - YM2203(Ch3 Ex)  
 - Remark  
@@ -938,6 +1061,9 @@
     - YM2610B(Ch3 Ex)  
     - YM2608(FM)  
     - YM2608(Ch3 Ex)  
+	- YM2609(FM)  
+	- YM2609(Ch3 Ex)  
+	- YM2609(Ch9 Ex)  
     - YM2203(FM)  
     - YM2203(Ch3 Ex)  
 - Remark  
@@ -967,6 +1093,9 @@
     - YM2610B(Ch3 Ex)  
     - YM2608(FM)  
     - YM2608(Ch3 Ex)  
+	- YM2609(FM)  
+	- YM2609(Ch3 Ex)  
+	- YM2609(Ch9 Ex)  
     - YM2203(FM)  
     - YM2203(Ch3 Ex)  
 - Remark  
@@ -996,6 +1125,9 @@
     - YM2610B(Ch3 Ex)  
     - YM2608(FM)  
     - YM2608(Ch3 Ex)  
+	- YM2609(FM)  
+	- YM2609(Ch3 Ex)  
+	- YM2609(Ch9 Ex)  
     - YM2203(FM)  
     - YM2203(Ch3 Ex)  
 - Remark  
@@ -1024,6 +1156,9 @@
     - YM2610B(Ch3 Ex)  
     - YM2608(FM)  
     - YM2608(Ch3 Ex)  
+	- YM2609(FM)  
+	- YM2609(Ch3 Ex)  
+	- YM2609(Ch9 Ex)  
     - YM2203(FM)  
     - YM2203(Ch3 Ex)  
 - Remark  
@@ -1241,6 +1376,12 @@
     - YM2608(SSG)         T/Vに対応  
     - YM2608(RHYTHM)      Tに対応  
     - YM2608(ADPCM)       T/Vに対応  
+    - YM2609(FM)          T/V/Hに対応  
+    - YM2609(Ch3 Ex)      T/V/Hに対応  
+    - YM2609(Ch9 Ex)      T/V/Hに対応  
+    - YM2609(SSG)         T/Vに対応  
+    - YM2609(RHYTHM)      Tに対応  
+    - YM2609(ADPCM)       T/Vに対応  
     - YM2203(FM)          T/V/Hに対応  
     - YM2203(Ch3 Ex)      T/V/Hに対応  
     - YM2203(SSG)         T/Vに対応  
@@ -1330,6 +1471,12 @@
     - YM2608(SSG)  
     - YM2608(RHYTHM)  
     - YM2608(ADPCM)  
+    - YM2609(FM)  
+    - YM2609(Ch3 Ex)  
+    - YM2609(Ch9 Ex)  
+    - YM2609(SSG)  
+    - YM2609(RHYTHM)  
+    - YM2609(ADPCM)  
     - YM2203(FM)  
     - YM2203(Ch3 Ex)  
     - YM2203(SSG)  
@@ -1367,6 +1514,9 @@
     - YM2610B(Ch3 Ex)  
     - YM2608(FM)  
     - YM2608(Ch3 Ex)  
+    - YM2609(FM)  
+    - YM2609(Ch3 Ex)  
+    - YM2609(Ch9 Ex)  
     - YM2203(FM)  
     - YM2203(Ch3 Ex)  
 - Remark  
@@ -1408,6 +1558,9 @@
     - YM2610B(Ch3 Ex)  
     - YM2608(FM)  
     - YM2608(Ch3 Ex)  
+    - YM2609(FM)  
+    - YM2609(Ch3 Ex)  
+    - YM2609(Ch9 Ex)  
     - YM2203(FM)  
     - YM2203(Ch3 Ex)  
 - Remark  
@@ -1460,6 +1613,12 @@
     - YM2608(SSG)  
     - YM2608(RHYTHM)  
     - YM2608(ADPCM)  
+    - YM2609(FM)  
+    - YM2609(Ch3 Ex)  
+    - YM2609(Ch9 Ex)  
+    - YM2609(SSG)  
+    - YM2609(RHYTHM)  
+    - YM2609(ADPCM)  
     - YM2203(FM)  
     - YM2203(Ch3 Ex)  
     - YM2203(SSG)  
@@ -1509,6 +1668,12 @@
     - YM2608(SSG)  
     - YM2608(RHYTHM)  
     - YM2608(ADPCM)  
+    - YM2609(FM)  
+    - YM2609(Ch3 Ex)  
+    - YM2609(Ch9 Ex)  
+    - YM2609(SSG)  
+    - YM2609(RHYTHM)  
+    - YM2609(ADPCM)  
     - YM2203(FM)  
     - YM2203(Ch3 Ex)  
     - YM2203(SSG)  
@@ -1562,6 +1727,12 @@
     - YM2608(SSG)  
     - YM2608(RHYTHM)  
     - YM2608(ADPCM)  
+    - YM2609(FM)  
+    - YM2609(Ch3 Ex)  
+    - YM2609(Ch9 Ex)  
+    - YM2609(SSG)  
+    - YM2609(RHYTHM)  
+    - YM2609(ADPCM)  
     - YM2203(FM)  
     - YM2203(Ch3 Ex)  
     - YM2203(SSG)  
@@ -1627,6 +1798,12 @@
     - YM2608(SSG)  
     - YM2608(RHYTHM)  
     - YM2608(ADPCM)  
+    - YM2609(FM)  
+    - YM2609(Ch3 Ex)  
+    - YM2609(Ch9 Ex)  
+    - YM2609(SSG)  
+    - YM2609(RHYTHM)  
+    - YM2609(ADPCM)  
     - YM2203(FM)  
     - YM2203(Ch3 Ex)  
     - YM2203(SSG)  
@@ -1672,6 +1849,9 @@
     - YM2608(SSG)  
     - YM2608(RHYTHM)  
     - YM2608(ADPCM)  
+    - YM2609(SSG)  
+    - YM2609(RHYTHM)  
+    - YM2609(ADPCM)  
     - YM2203(SSG)  
     - SEGAPCM  
     - HuC6280  
@@ -1702,6 +1882,7 @@
 - Support chips  
     - YM2610B(SSG)  
     - YM2608(SSG)  
+    - YM2609(SSG)  
     - YM2203(SSG)  
     - AY8910  
 - Remark  
@@ -1729,6 +1910,8 @@
     - YM2612X(Ch3 Ex)  
     - YM2610B(Ch3 Ex)  
     - YM2608(Ch3 Ex)  
+    - YM2609(Ch3 Ex)  
+    - YM2609(Ch9 Ex)  
     - YM2203(Ch3 Ex)  
 - Remark  
     効果音モードの開始(EXON)、停止(EXOF)、割り当て(EX)  
@@ -1753,6 +1936,8 @@
     - YM2612X(Ch3 Ex)  
     - YM2610B(Ch3 Ex)  
     - YM2608(Ch3 Ex)  
+    - YM2609(Ch3 Ex)  
+    - YM2609(Ch9 Ex)  
     - YM2203(Ch3 Ex)  
 - Remark  
     効果音モードのスロットディチューン  
@@ -1788,6 +1973,12 @@
     - YM2608(SSG)  
     - YM2608(RHYTHM)  
     - YM2608(ADPCM)  
+    - YM2609(FM)  
+    - YM2609(Ch3 Ex)  
+    - YM2609(Ch9 Ex)  
+    - YM2609(SSG)  
+    - YM2609(RHYTHM)  
+    - YM2609(ADPCM)  
     - YM2203(FM)  
     - YM2203(Ch3 Ex)  
     - YM2203(SSG)  
@@ -1836,6 +2027,12 @@
     - YM2608(SSG)  
     - YM2608(RHYTHM)  
     - YM2608(ADPCM)  
+    - YM2609(FM)  
+    - YM2609(Ch3 Ex)  
+    - YM2609(Ch9 Ex)  
+    - YM2609(SSG)  
+    - YM2609(RHYTHM)  
+    - YM2609(ADPCM)  
     - YM2203(FM)  
     - YM2203(Ch3 Ex)  
     - YM2203(SSG)  
@@ -1886,6 +2083,12 @@
     - YM2608(SSG)  
     - YM2608(RHYTHM)  
     - YM2608(ADPCM)  
+    - YM2609(FM)  
+    - YM2609(Ch3 Ex)  
+    - YM2609(Ch9 Ex)  
+    - YM2609(SSG)  
+    - YM2609(RHYTHM)  
+    - YM2609(ADPCM)  
     - YM2203(FM)  
     - YM2203(Ch3 Ex)  
     - YM2203(SSG)  
@@ -1933,6 +2136,12 @@
     - YM2608(SSG)  
     - YM2608(RHYTHM)  
     - YM2608(ADPCM)  
+    - YM2609(FM)  
+    - YM2609(Ch3 Ex)  
+    - YM2609(Ch9 Ex)  
+    - YM2609(SSG)  
+    - YM2609(RHYTHM)  
+    - YM2609(ADPCM)  
     - YM2203(FM)  
     - YM2203(Ch3 Ex)  
     - YM2203(SSG)  
@@ -1980,6 +2189,7 @@
 - Support chips  
     - YM2610B(SSG)  
     - YM2608(SSG)  
+    - YM2609(SSG)  
     - YM2203(SSG)  
     - YM2151  
     - HuC6280  
@@ -2001,6 +2211,7 @@
 - Support chips  
     - YM2610B(SSG)  
     - YM2608(SSG)  
+    - YM2609(SSG)  
     - YM2203(SSG)  
     - AY8910  
 - Remark  
@@ -2127,6 +2338,12 @@
     - YM2608(SSG)  
     - YM2608(RHYTHM)  
     - YM2608(ADPCM)  
+    - YM2609(FM)  
+    - YM2609(Ch3 Ex)  
+    - YM2609(Ch9 Ex)  
+    - YM2609(SSG)  
+    - YM2609(RHYTHM)  
+    - YM2609(ADPCM)  
     - YM2203(FM)  
     - YM2203(Ch3 Ex)  
     - YM2203(SSG)  
@@ -2175,6 +2392,12 @@
     - YM2608(SSG)  
     - YM2608(RHYTHM)  
     - YM2608(ADPCM)  
+    - YM2609(FM)  
+    - YM2609(Ch3 Ex)  
+    - YM2609(Ch9 Ex)  
+    - YM2609(SSG)  
+    - YM2609(RHYTHM)  
+    - YM2609(ADPCM)  
     - YM2203(FM)  
     - YM2203(Ch3 Ex)  
     - YM2203(SSG)  
@@ -2218,6 +2441,11 @@
     - YM2608(Ch3 Ex)  
     - YM2608(SSG)  
     - YM2608(ADPCM)  
+    - YM2609(FM)  
+    - YM2609(Ch3 Ex)  
+    - YM2609(Ch9 Ex)  
+    - YM2609(SSG)  
+    - YM2609(ADPCM)  
     - YM2203(FM)  
     - YM2203(Ch3 Ex)  
     - YM2203(SSG)  
@@ -2286,6 +2514,8 @@
     - YM2608(FM) (A)  
     - YM2608(RHYTHM) (A)  
     - YM2608(ADPCM) (A)  
+    - YM2609(SSG) (A)  
+    - YM2609(RHYTHM) (A)  
     - YM2203(FM) (A)  
     - YM2151 (A)  
     - QSound (C)  
@@ -2331,6 +2561,25 @@
     - C140  
 - Remark  
     パンを指定する。n1,n2(0 ～ 127)  
+- Description  
+    パン(定位)を指定します。  
+    左右の音量を必ず指定する必要があります。  
+
+
+### パン4  
+-----------  
+- Command  
+    p  
+- Format  
+    pn1,n2  
+- 設定可能範囲  
+    n1 : 0 ～ 4 (左)  
+    n2 : 0 ～ 4 (右)  
+- Support chips  
+    - YM2609(FM)  
+    - YM2609(ADPCM)  
+- Remark  
+    パンを指定する。n1,n2(0 ～ 4)  
 - Description  
     パン(定位)を指定します。  
     左右の音量を必ず指定する必要があります。  
@@ -2385,6 +2634,12 @@
     - YM2608(SSG)  
     - YM2608(RHYTHM)  
     - YM2608(ADPCM)  
+    - YM2609(FM)  
+    - YM2609(Ch3 Ex)  
+    - YM2609(Ch9 Ex)  
+    - YM2609(SSG)  
+    - YM2609(RHYTHM)  
+    - YM2609(ADPCM)  
     - YM2203(FM)  
     - YM2203(Ch3 Ex)  
     - YM2203(SSG)  
@@ -2438,6 +2693,12 @@
     - YM2608(SSG)  
     - YM2608(RHYTHM)  
     - YM2608(ADPCM)  
+    - YM2609(FM)  
+    - YM2609(Ch3 Ex)  
+    - YM2609(Ch9 Ex)  
+    - YM2609(SSG)  
+    - YM2609(RHYTHM)  
+    - YM2609(ADPCM)  
     - YM2203(FM)  
     - YM2203(Ch3 Ex)  
     - YM2203(SSG)  
@@ -2532,7 +2793,7 @@
 
 5. 符点  
     - 装飾コマンド  
-    .　　
+    .  
 
     - Description  
     省略可能です。  

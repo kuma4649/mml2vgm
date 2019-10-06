@@ -500,6 +500,12 @@ namespace Core
                     SetInstrument(line);
                     return 0;
 
+                case 'A':
+                    instrumentBufCache = new byte[Const.OPNA2_INSTRUMENT_SIZE];
+                    instrumentCounter = 0;
+                    SetInstrument(line);
+                    return 0;
+
                 case 'P':
                     definePCMInstrument(line);
                     return 0;
@@ -1336,9 +1342,14 @@ namespace Core
                         //M
                         instFM.Add(instrumentBufCache[0], instrumentBufCache);
                     }
-                    else if(instrumentBufCache.Length == Const.OPL_INSTRUMENT_SIZE)
+                    else if (instrumentBufCache.Length == Const.OPL_INSTRUMENT_SIZE)
                     {
                         //OPL
+                        instFM.Add(instrumentBufCache[0], instrumentBufCache);
+                    }
+                    else if (instrumentBufCache.Length == Const.OPNA2_INSTRUMENT_SIZE)
+                    {
+                        //OPNA2
                         instFM.Add(instrumentBufCache[0], instrumentBufCache);
                     }
                     else

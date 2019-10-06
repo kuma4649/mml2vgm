@@ -1115,11 +1115,7 @@ namespace Core
                     pw.dutyCycle = n;
                     return;
                 }
-            }
 
-
-            if (type == 'I')
-            {
                 msgBox.setErrMsg(msg.get("E11003"), mml.line.Lp);
                 return;
             }
@@ -1253,6 +1249,32 @@ namespace Core
             parent.OutData(mml, port, (byte)(0x60 + vch + ope * 4), (byte)((am << 7) | (dt2 << 5) | dr));
         }
 
+        public void OutFmSetFbSr(MML mml, partWork pw, int ope,int fb, int sr)
+        {
+            int vch;
+            byte[] port;
+            GetPortVch(pw, out port, out vch);
+
+            ope = (ope == 1) ? 2 : ((ope == 2) ? 1 : ope);
+            fb &= 7;
+            sr &= 31;
+
+            parent.OutData(mml, port, (byte)(0x70 + vch + ope * 4), (byte)((fb << 5) | sr));
+        }
+
+        public void OutFmSetALGLinkSSGEG(MML mml, partWork pw, int ope,int all, int ssg)
+        {
+            int vch;
+            byte[] port;
+            GetPortVch(pw, out port, out vch);
+
+            ope = (ope == 1) ? 2 : ((ope == 2) ? 1 : ope);
+            all &= 15;
+            ssg &= 15;
+
+            parent.OutData(mml, port, (byte)(0x90 + vch + ope * 4), (byte)((all << 4) | ssg));
+        }
+
         public new void OutFmSetInstrument(partWork pw, MML mml, int n, int vol, char typeBeforeSend)
         {
             int modeBeforeSend = parent.info.modeBeforeSend;
@@ -1309,11 +1331,19 @@ namespace Core
                     break;
             }
 
+            if (parent.instFM[n].Length == Const.OPNA2_INSTRUMENT_SIZE)
+            {
+                OutFmSetInstrumentOPNA(pw, mml, n, vol);
+                return;
+            }
 
             for (int ope = 0; ope < 4; ope++)
             {
                 //ch3以外の拡張チャンネルでも音色設定できるようにする場合はslotの様子もみてセットすること
-                OutFmSetWtLDtMl(mml, pw, ope, 0, parent.instFM[n][ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 9], parent.instFM[n][ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 8]);
+                OutFmSetWtLDtMl(mml, pw, ope
+                    , 0
+                    , parent.instFM[n][ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 1 + 8] // 8 : DT1
+                    , parent.instFM[n][ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 1 + 7]); // 7 : ML
                 ((ClsOPN)pw.chip).OutFmSetKsAr(mml, pw, ope, parent.instFM[n][ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 7], parent.instFM[n][ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 1]);
                 OutFmSetAmDt2Dr(mml, pw, ope, parent.instFM[n][ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 10], 0, parent.instFM[n][ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 2]);
                 ((ClsOPN)pw.chip).OutFmSetSr(mml, pw, ope, parent.instFM[n][ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 3]);
@@ -1390,6 +1420,131 @@ namespace Core
 
         }
 
+        private void OutFmSetInstrumentOPNA(partWork pw, MML mml, int n, int vol)
+        {
+            for (int ope = 0; ope < 4; ope++)
+            {
+                //ch3以外の拡張チャンネルでも音色設定できるようにする場合はslotの様子もみてセットすること
+                OutFmSetWtLDtMl(mml, pw, ope
+                    , parent.instFM[n][ope * 15 + 1 + 13] // 13 : WT  1 : No  15 : OPE Size
+                    , parent.instFM[n][ope * 15 + 1 + 8] // 8 : DT1
+                    , parent.instFM[n][ope * 15 + 1 + 7]); // 7 : ML
+
+                ((ClsOPN)pw.chip).OutFmSetKsAr(mml, pw, ope
+                    , parent.instFM[n][ope * 15 + 1 + 6] // 6 : KS
+                    , parent.instFM[n][ope * 15 + 1 + 0] // 0 : AR
+                    );
+                OutFmSetAmDt2Dr(mml, pw, ope
+                    , parent.instFM[n][ope * 15 + 1 + 10] // 10 : AM
+                    , parent.instFM[n][ope * 15 + 1 + 9] // 9 : DT2
+                    , parent.instFM[n][ope * 15 + 1 + 1] // 1 : DR
+                    );
+                OutFmSetFbSr(mml, pw, ope
+                    , parent.instFM[n][ope * 15 + 1 + 12] // 12 : FB
+                    , parent.instFM[n][ope * 15 + 1 + 2] //2 : SR
+                    );
+                ((ClsOPN)pw.chip).OutFmSetSlRr(mml, pw, ope
+                    , parent.instFM[n][ope * 15 + 1 + 4] // 4 : SL
+                    , parent.instFM[n][ope * 15 + 1 + 3] // 3 : RR
+                    );
+                OutFmSetALGLinkSSGEG(mml, pw, ope
+                    , parent.instFM[n][ope * 15 + 1 + 14] // 14 : ALG Link
+                    , parent.instFM[n][ope * 15 + 1 + 11] // 11 : SSG-EG
+                    );
+            }
+
+            //ch3以外の拡張チャンネルでも音色設定できるようにする場合はslotの様子もみてセットすること
+            pw.op1ml = parent.instFM[n][0 * 15 + 1 + 7];// 7 : ML
+            pw.op2ml = parent.instFM[n][1 * 15 + 1 + 7];// 7 : ML
+            pw.op3ml = parent.instFM[n][2 * 15 + 1 + 7];// 7 : ML
+            pw.op4ml = parent.instFM[n][3 * 15 + 1 + 7];// 7 : ML
+            //ch3以外の拡張チャンネルでも音色設定できるようにする場合はslotの様子もみてセットすること
+            pw.op1dt2 = parent.instFM[n][0 * 15 + 1 + 9];// 9 : DT2
+            pw.op2dt2 = parent.instFM[n][1 * 15 + 1 + 9];// 9 : DT2
+            pw.op3dt2 = parent.instFM[n][2 * 15 + 1 + 9];// 9 : DT2
+            pw.op4dt2 = parent.instFM[n][3 * 15 + 1 + 9];// 9 : DT2
+
+            pw.feedBack = parent.instFM[n][1 + 12] & 7;
+            pw.algo = parent.instFM[n][61] == 0xff ? 8 : (parent.instFM[n][61] & 0x7);
+            OutFmSetPanRFeedbackAlgorithm(mml, pw);
+
+            int[] op = new int[4] {
+                parent.instFM[n][0 * 15 + 1 + 5]// 5 : TL
+                , parent.instFM[n][1 * 15 + 1 + 5]// 5 : TL
+                , parent.instFM[n][2 * 15 + 1 + 5]// 5 : TL
+                , parent.instFM[n][3 * 15 + 1 + 5]// 5 : TL
+            };
+
+            int[][] algs = new int[9][]
+            {
+                new int[4] { 1 , 1 , 1 , 0 }
+                ,new int[4] { 1 , 1 , 1 , 0 }
+                ,new int[4] { 1 , 1 , 1 , 0 }
+                ,new int[4] { 1 , 1 , 1 , 0 }
+                ,new int[4] { 1 , 0 , 1 , 0 }
+                ,new int[4] { 1 , 0 , 0 , 0 }
+                ,new int[4] { 1 , 0 , 0 , 0 }
+                ,new int[4] { 0 , 0 , 0 , 0 }
+                ,new int[4] { 0 , 0 , 0 , 0 } // ALG Link向け
+            };
+
+            if (pw.algo == 8)
+            {
+                algs = GetVolumeOpe(algs, parent.instFM[n], true);
+            }
+
+            for (int i = 0; i < 4; i++)
+            {
+                //ch3以外の拡張チャンネルでも音色設定できるようになったら以下を有効に
+                if (algs[pw.algo][i] == 0)// || (pw.slots & (1 << i)) == 0)
+                {
+                    op[i] = -1;
+                    continue;
+                }
+                op[i] = Common.CheckRange(op[i], 0, 127);
+            }
+
+            partWork vpw = pw;
+            if (pw.chip.lstPartWork[2].Ch3SpecialMode && pw.ch >= 12 && pw.ch < 15)
+            {
+                vpw = pw.chip.lstPartWork[2];
+            }
+
+            if (pw.chip.lstPartWork[8].Ch3SpecialMode && pw.ch >= 15 && pw.ch < 18)
+            {
+                vpw = pw.chip.lstPartWork[8];
+            }
+
+            if (op[0] != -1) OutFmSetWtHTl(mml, vpw, 0, 0, op[0]);
+            if (op[1] != -1) OutFmSetWtHTl(mml, vpw, 1, 0, op[1]);
+            if (op[2] != -1) OutFmSetWtHTl(mml, vpw, 2, 0, op[2]);
+            if (op[3] != -1) OutFmSetWtHTl(mml, vpw, 3, 0, op[3]);
+
+            OutFmSetVolumeM(pw, mml, vol, n);
+
+        }
+
+        private int[][] GetVolumeOpe(int[][] algs, byte[] inst,bool reverse)
+        {
+            byte[] a = new byte[]{
+                    inst[0 * 15 + 1 + 14]// 14 : ALG Link
+                    ,inst[1 * 15 + 1 + 14]// 14 : ALG Link
+                    ,inst[2 * 15 + 1 + 14]// 14 : ALG Link
+                    ,inst[3 * 15 + 1 + 14]// 14 : ALG Link
+                };
+
+            for (int ope = 0; ope < 4; ope++)
+            {
+                for(int i = 0; i < 4; i++)
+                    if ((a[i] & (1 << i)) != 0) a[i] = 0; //自分が設定されている場合はキャリア
+                
+                algs[8][ope] = (((a[0] | a[1] | a[2] | a[3]) & (1 << ope)) == 0) ? 1 : 0;//自分を親とするopeが一つもないかチェック
+                if (reverse) algs[8][ope] = algs[8][ope] == 0 ? 1 : 0;//リバース指定の場合は数値を入れ替える
+            }
+
+            return algs;
+        }
+
         public void OutFmSetVolumeM(partWork pw, MML mml, int vol, int n)
         {
             if (!parent.instFM.ContainsKey(n))
@@ -1398,14 +1553,30 @@ namespace Core
                 return;
             }
 
-            int alg = parent.instFM[n][45] & 0x7;
-            int[] ope = new int[4] {
-                parent.instFM[n][0*Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
-                , parent.instFM[n][1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
-                , parent.instFM[n][2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
-                , parent.instFM[n][3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
-            };
-            int[][] algs = new int[8][]
+            int alg;
+            int[] ope;
+            if (parent.instFM[n].Length == Const.OPNA2_INSTRUMENT_SIZE)
+            {
+                alg = parent.instFM[n][61] == 0xff ? 8 : (parent.instFM[n][61] & 0x7);
+                ope = new int[4] {
+                    parent.instFM[n][0 * 15 + 1 + 5]// 5 : TL
+                    , parent.instFM[n][1 * 15 + 1 + 5]// 5 : TL
+                    , parent.instFM[n][2 * 15 + 1 + 5]// 5 : TL
+                    , parent.instFM[n][3 * 15 + 1 + 5]// 5 : TL
+                };
+            }
+            else
+            {
+                alg = parent.instFM[n][45] & 0x7;
+                ope = new int[4] {
+                    parent.instFM[n][0*Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
+                    , parent.instFM[n][1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
+                    , parent.instFM[n][2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
+                    , parent.instFM[n][3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
+                };
+            }
+
+            int[][] algs = new int[9][]
             {
                 new int[4] { 0,0,0,1}
                 ,new int[4] { 0,0,0,1}
@@ -1415,7 +1586,13 @@ namespace Core
                 ,new int[4] { 0,1,1,1}
                 ,new int[4] { 0,1,1,1}
                 ,new int[4] { 1,1,1,1}
+                ,new int[4] { 0 , 0 , 0 , 0 } // ALG Link向け
             };
+
+            if (alg == 8)
+            {
+                algs = GetVolumeOpe(algs, parent.instFM[n], false);
+            }
 
             for (int i = 0; i < 4; i++)
             {
