@@ -30,7 +30,8 @@ namespace Core
         ADPCMA,
         ADPCMB,
         WaveForm,
-        FMPCMex
+        FMPCMex,
+        MIDI
     }
 
     public enum enmChipType : int
@@ -53,7 +54,8 @@ namespace Core
         K051649 = 14,
         QSound = 15,
         K053260 = 16,
-        YM2609 = 17
+        YM2609 = 17,
+        MIDI_GM=18
     }
 
     public enum enmPcmDefineType

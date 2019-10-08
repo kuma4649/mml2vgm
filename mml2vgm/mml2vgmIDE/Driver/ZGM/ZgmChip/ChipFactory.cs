@@ -17,6 +17,8 @@ namespace mml2vgmIDE.Driver.ZGM.ZgmChip
                     return new YM2612(chipRegister, setting, vgmBuf);
                 case 0x0002_0001:
                     return new YM2609(chipRegister, setting, vgmBuf);
+                case 0x0005_0000:
+                    return new MidiGM(chipRegister, setting, vgmBuf);
                 default:
                     throw new ArgumentException();
             }

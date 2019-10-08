@@ -120,6 +120,7 @@ namespace mml2vgmIDE
         private static int MasterVolume = 0;
         private static byte[] chips = new byte[256];
         private static EnmFileFormat PlayingFileFormat;
+        private static int MidiMode = 0;
 
         private static System.Diagnostics.Stopwatch stwh = System.Diagnostics.Stopwatch.StartNew();
         public static double ProcTimePer1Frame = 0;
@@ -128,6 +129,9 @@ namespace mml2vgmIDE
         public static bool flgReinit = false;
         private static short[] bufVirtualFunction_MIDIKeyboard = null;
         private static byte[] mmc5regs = new byte[10];
+
+        private static List<NAudio.Midi.MidiOut> midiOuts = new List<NAudio.Midi.MidiOut>();
+        private static List<int> midiOutsType = new List<int>();
 
         public static SoundManager.SoundManager sm = null;
         private static Enq enq;
@@ -234,7 +238,7 @@ namespace mml2vgmIDE
             Setting.ChipType[] chipType = new Setting.ChipType[2];
             List<Setting.ChipType> ret = realChip.GetRealChipList();
 
-            for (int i = 0; i < 2; i++)
+            for (int i = 0; i < chipRegister.AY8910.Count; i++)
             {
                 chipType[i] = new Setting.ChipType();
                 if (!chipRegister.AY8910[i].Use) continue;
@@ -247,7 +251,7 @@ namespace mml2vgmIDE
             }
             chipRegister.SetRealChipInfo(EnmDevice.AY8910, chipType[0], chipType[1], setting.LatencyEmulation, setting.LatencySCCI);
 
-            for (int i = 0; i < 2; i++)
+            for (int i = 0; i < chipRegister.C140.Count; i++)
             {
                 chipType[i] = new Setting.ChipType();
                 if (!chipRegister.C140[i].Use) continue;
@@ -260,7 +264,7 @@ namespace mml2vgmIDE
             }
             chipRegister.SetRealChipInfo(EnmDevice.C140, chipType[0], chipType[1], setting.LatencyEmulation, setting.LatencySCCI);
 
-            for (int i = 0; i < 2; i++)
+            for (int i = 0; i < chipRegister.HuC6280.Count; i++)
             {
                 chipType[i] = new Setting.ChipType();
                 if (!chipRegister.HuC6280[i].Use) continue;
@@ -271,7 +275,7 @@ namespace mml2vgmIDE
             }
             chipRegister.SetRealChipInfo(EnmDevice.HuC6280, chipType[0], chipType[1], setting.LatencyEmulation, setting.LatencySCCI);
 
-            for (int i = 0; i < 2; i++)
+            for (int i = 0; i < chipRegister.K051649.Count; i++)
             {
                 chipType[i] = new Setting.ChipType();
                 if (!chipRegister.K051649[i].Use) continue;
@@ -282,7 +286,7 @@ namespace mml2vgmIDE
             }
             chipRegister.SetRealChipInfo(EnmDevice.K051649, chipType[0], chipType[1], setting.LatencyEmulation, setting.LatencySCCI);
 
-            for (int i = 0; i < 2; i++)
+            for (int i = 0; i < chipRegister.K053260.Count; i++)
             {
                 chipType[i] = new Setting.ChipType();
                 if (!chipRegister.K053260[i].Use) continue;
@@ -293,7 +297,7 @@ namespace mml2vgmIDE
             }
             chipRegister.SetRealChipInfo(EnmDevice.K053260, chipType[0], chipType[1], setting.LatencyEmulation, setting.LatencySCCI);
 
-            for (int i = 0; i < 2; i++)
+            for (int i = 0; i < chipRegister.QSound.Count; i++)
             {
                 chipType[i] = new Setting.ChipType();
                 if (!chipRegister.QSound[i].Use) continue;
@@ -304,7 +308,7 @@ namespace mml2vgmIDE
             }
             chipRegister.SetRealChipInfo(EnmDevice.QSound, chipType[0], chipType[1], setting.LatencyEmulation, setting.LatencySCCI);
 
-            for (int i = 0; i < 2; i++)
+            for (int i = 0; i < chipRegister.RF5C164.Count; i++)
             {
                 chipType[i] = new Setting.ChipType();
                 if (!chipRegister.RF5C164[i].Use) continue;
@@ -315,7 +319,7 @@ namespace mml2vgmIDE
             }
             chipRegister.SetRealChipInfo(EnmDevice.RF5C164, chipType[0], chipType[1], setting.LatencyEmulation, setting.LatencySCCI);
 
-            for (int i = 0; i < 2; i++)
+            for (int i = 0; i < chipRegister.SEGAPCM.Count; i++)
             {
                 chipType[i] = new Setting.ChipType();
                 if (!chipRegister.SEGAPCM[i].Use) continue;
@@ -328,7 +332,7 @@ namespace mml2vgmIDE
             }
             chipRegister.SetRealChipInfo(EnmDevice.SegaPCM, chipType[0], chipType[1], setting.LatencyEmulation, setting.LatencySCCI);
 
-            for (int i = 0; i < 2; i++)
+            for (int i = 0; i < chipRegister.SN76489.Count; i++)
             {
                 chipType[i] = new Setting.ChipType();
                 if (!chipRegister.SN76489[i].Use) continue;
@@ -341,7 +345,7 @@ namespace mml2vgmIDE
             }
             chipRegister.SetRealChipInfo(EnmDevice.SN76489, chipType[0], chipType[1], setting.LatencyEmulation, setting.LatencySCCI);
 
-            for (int i = 0; i < 2; i++)
+            for (int i = 0; i < chipRegister.YM2151.Count; i++)
             {
                 chipType[i] = new Setting.ChipType();
                 if (!chipRegister.YM2151[i].Use) continue;
@@ -356,7 +360,7 @@ namespace mml2vgmIDE
             }
             chipRegister.SetRealChipInfo(EnmDevice.YM2151, chipType[0], chipType[1], setting.LatencyEmulation, setting.LatencySCCI);
 
-            for (int i = 0; i < 2; i++)
+            for (int i = 0; i < chipRegister.YM2203.Count; i++)
             {
                 chipType[i] = new Setting.ChipType();
                 if (!chipRegister.YM2203[i].Use) continue;
@@ -369,7 +373,7 @@ namespace mml2vgmIDE
             }
             chipRegister.SetRealChipInfo(EnmDevice.YM2203, chipType[0], chipType[1], setting.LatencyEmulation, setting.LatencySCCI);
 
-            for (int i = 0; i < 2; i++)
+            for (int i = 0; i < chipRegister.YM2413.Count; i++)
             {
                 chipType[i] = new Setting.ChipType();
                 if (!chipRegister.YM2413[i].Use) continue;
@@ -382,7 +386,7 @@ namespace mml2vgmIDE
             }
             chipRegister.SetRealChipInfo(EnmDevice.YM2413, chipType[0], chipType[1], setting.LatencyEmulation, setting.LatencySCCI);
 
-            for (int i = 0; i < 2; i++)
+            for (int i = 0; i < chipRegister.YM2608.Count; i++)
             {
                 chipType[i] = new Setting.ChipType();
                 if (!chipRegister.YM2608[i].Use) continue;
@@ -395,7 +399,7 @@ namespace mml2vgmIDE
             }
             chipRegister.SetRealChipInfo(EnmDevice.YM2608, chipType[0], chipType[1], setting.LatencyEmulation, setting.LatencySCCI);
 
-            for (int i = 0; i < 2; i++)
+            for (int i = 0; i < chipRegister.YM2609.Count; i++)
             {
                 chipType[i] = new Setting.ChipType();
                 if (!chipRegister.YM2609[i].Use) continue;
@@ -408,7 +412,7 @@ namespace mml2vgmIDE
             }
             chipRegister.SetRealChipInfo(EnmDevice.YM2609, chipType[0], chipType[1], setting.LatencyEmulation, setting.LatencySCCI);
 
-            for (int i = 0; i < 2; i++)
+            for (int i = 0; i < chipRegister.YM2610.Count; i++)
             {
                 chipType[i] = new Setting.ChipType();
                 if (!chipRegister.YM2610[i].Use) continue;
@@ -421,7 +425,7 @@ namespace mml2vgmIDE
             }
             chipRegister.SetRealChipInfo(EnmDevice.YM2610, chipType[0], chipType[1], setting.LatencyEmulation, setting.LatencySCCI);
 
-            for (int i = 0; i < 2; i++)
+            for (int i = 0; i < chipRegister.YM2612.Count; i++)
             {
                 chipType[i] = new Setting.ChipType();
                 if (!chipRegister.YM2612[i].Use) continue;
@@ -1161,6 +1165,43 @@ namespace mml2vgmIDE
                         chipRegister.YM2612[zCnt].Use = true;
                     }
 
+                    zCnt = -1;
+                    foreach (Driver.ZGM.ZgmChip.ZgmChip zchip in zgmDriver.chips)
+                    {
+                        if (!(zchip is Driver.ZGM.ZgmChip.MidiGM)) continue;
+
+                        zCnt++;
+                        //chip = new MDSound.MDSound.Chip();
+                        //chip.ID = (byte)0;//ZGMでは常に0
+                        //MidiGM midiGM = new MidiGM();
+                        //chip.type = MDSound.MDSound.enmInstrumentType.GeneralMIDI;
+                        //chip.Instrument = midiGM;
+                        //chip.Update = midiGM.Update;
+                        //chip.Start = midiGM.Start;
+                        //chip.Stop = midiGM.Stop;
+                        //chip.Reset = midiGM.Reset;
+                        //chip.SamplingRate = (UInt32)Common.SampleRate;
+                        //chip.Volume = 0;
+                        //chip.Clock = (uint)zchip.defineInfo.clock;
+                        //chip.Option = null;
+                        //lstChips.Add(chip);
+
+                        hiyorimiDeviceFlag |= 0x2;
+
+                        log.Write(string.Format("Use GeneralMIDI(#{0})"
+                            , zCnt
+                            ));
+
+                        chipRegister.MIDI[zCnt].Use = true;
+                        chipRegister.MIDI[zCnt].Model = EnmModel.RealModel;
+                        chipRegister.MIDI[zCnt].Device = EnmDevice.MIDIGM;
+                    }
+                    if (zCnt >= 0)
+                    {
+                        ReleaseAllMIDIout();
+                        MakeMIDIout(setting, MidiMode);
+                        chipRegister.setMIDIout(setting.midiOut.lstMidiOutInfo[MidiMode], midiOuts, midiOutsType);
+                    }
                 }
 
 
@@ -1321,6 +1362,13 @@ namespace mml2vgmIDE
                         useReal = true;
                     }
                     break;
+                }
+
+                foreach(Chip c in chipRegister.MIDI)
+                {
+                    if (!c.Use) continue;
+                    if (c.Model == EnmModel.VirtualModel) useEmu = true;
+                    if (c.Model == EnmModel.RealModel) useReal = true;
                 }
 
 
@@ -2860,6 +2908,70 @@ namespace mml2vgmIDE
             {
                 log.ForcedWrite(ex);
                 return false;
+            }
+
+        }
+
+        private static void MakeMIDIout(Setting setting, int m)
+        {
+            if (setting.midiOut.lstMidiOutInfo == null || setting.midiOut.lstMidiOutInfo.Count < 1) return;
+            if (setting.midiOut.lstMidiOutInfo[m] == null || setting.midiOut.lstMidiOutInfo[m].Length < 1) return;
+
+            for (int i = 0; i < setting.midiOut.lstMidiOutInfo[m].Length; i++)
+            {
+                int n = -1;
+                int t = 0;
+                NAudio.Midi.MidiOut mo = null;
+
+                for (int j = 0; j < NAudio.Midi.MidiOut.NumberOfDevices; j++)
+                {
+                    if (setting.midiOut.lstMidiOutInfo[m][i].name != NAudio.Midi.MidiOut.DeviceInfo(j).ProductName) continue;
+
+                    n = j;
+                    t = setting.midiOut.lstMidiOutInfo[m][i].type;
+                    break;
+                }
+
+                if (n != -1)
+                {
+                    try
+                    {
+                        mo = new NAudio.Midi.MidiOut(n);
+                    }
+                    catch
+                    {
+                        mo = null;
+                    }
+                }
+
+                if (mo != null)
+                {
+                    midiOuts.Add(mo);
+                    midiOutsType.Add(t);
+                }
+            }
+        }
+
+        private static void ReleaseAllMIDIout()
+        {
+            if (midiOuts.Count > 0)
+            {
+                for (int i = 0; i < midiOuts.Count; i++)
+                {
+                    if (midiOuts[i] != null)
+                    {
+                        try
+                        {
+                            //resetできない機種もある?
+                            midiOuts[i].Reset();
+                        }
+                        catch { }
+                        midiOuts[i].Close();
+                        midiOuts[i] = null;
+                    }
+                }
+                midiOuts.Clear();
+                midiOutsType.Clear();
             }
 
         }

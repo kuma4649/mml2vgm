@@ -146,6 +146,9 @@
     <None Include="sample\K053260\testK053260.gwi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="sample\MidiGM\testGM.gwi">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="sample\QSound\testQSound.gwi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

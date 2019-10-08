@@ -16,9 +16,9 @@ namespace mml2vgmIDE
     {
 
         private MDSound.MDSound mds = null;
-        //private midiOutInfo[] midiOutInfos = null;
+        private midiOutInfo[] midiOutInfos = null;
         private List<NAudio.Midi.MidiOut> midiOuts = null;
-        //private List<int> midiOutsType = null;
+        private List<int> midiOutsType = null;
         //private List<vstInfo2> vstMidiOuts = null;
         //private List<int> vstMidiOutsType = null;
 
@@ -329,7 +329,7 @@ namespace mml2vgmIDE
         public byte[][] pcmRegisterSEGAPCM = new byte[2][] { null, null };
         public bool[][] pcmKeyOnSEGAPCM = new bool[2][] { null, null };
 
-        //public MIDIParam[] midiParams = new MIDIParam[] { null, null };
+        public MIDIParam[] midiParams = new MIDIParam[] { null, null };
 
         public nes_bank nes_bank = null;
         public nes_mem nes_mem = null;
@@ -775,11 +775,13 @@ namespace mml2vgmIDE
 
             YM2609.Clear();
             YM2612.Clear();
+            MIDI.Clear();
 
             foreach (Chip c in chips)
             {
                 if (c is Driver.ZGM.ZgmChip.YM2609) YM2609.Add(c);
                 if (c is Driver.ZGM.ZgmChip.YM2612) YM2612.Add(c);
+                if (c is Driver.ZGM.ZgmChip.MidiGM) MIDI.Add(c);
             }
         }
 
@@ -1094,7 +1096,7 @@ namespace mml2vgmIDE
                 pcmRegisterSEGAPCM[chipID] = new byte[0x200];
                 pcmKeyOnSEGAPCM[chipID] = new bool[16];
 
-                //midiParams[chipID] = new MIDIParam();
+                midiParams[chipID] = new MIDIParam();
 
                 AY8910NowFadeoutVol[chipID] = 0;
                 C140NowFadeoutVol[chipID] = 0;
@@ -1500,6 +1502,11 @@ namespace mml2vgmIDE
             }
 
             foreach (Driver.ZGM.ZgmChip.ZgmChip c in YM2612)
+            {
+                dicChipCmdNo.Add(c.defineInfo.commandNo, c);
+            }
+
+            foreach (Driver.ZGM.ZgmChip.ZgmChip c in MIDI)
             {
                 dicChipCmdNo.Add(c.defineInfo.commandNo, c);
             }
@@ -6968,6 +6975,36 @@ namespace mml2vgmIDE
         }
 
 
+        public void setMIDIout(midiOutInfo[] midiOutInfos, List<NAudio.Midi.MidiOut> midiOuts, List<int> midiOutsType)
+        {
+            this.midiOutInfos = null;
+            if (midiOutInfos != null && midiOutInfos.Length > 0)
+            {
+                this.midiOutInfos = new midiOutInfo[midiOutInfos.Length];
+                for (int i = 0; i < midiOutInfos.Length; i++)
+                {
+                    this.midiOutInfos[i] = new midiOutInfo();
+                    this.midiOutInfos[i].beforeSendType = midiOutInfos[i].beforeSendType;
+                    this.midiOutInfos[i].fileName = midiOutInfos[i].fileName;
+                    this.midiOutInfos[i].id = midiOutInfos[i].id;
+                    this.midiOutInfos[i].isVST = midiOutInfos[i].isVST;
+                    this.midiOutInfos[i].manufacturer = midiOutInfos[i].manufacturer;
+                    this.midiOutInfos[i].name = midiOutInfos[i].name;
+                    this.midiOutInfos[i].type = midiOutInfos[i].type;
+                    this.midiOutInfos[i].vendor = midiOutInfos[i].vendor;
+                }
+            }
+            this.midiOuts = midiOuts;
+            this.midiOutsType = midiOutsType;
+
+            if (midiParams == null && midiParams.Length < 1) return;
+            if (midiOutsType == null) return;
+            if (midiOuts == null) return;
+
+            if (midiOutsType.Count > 0) midiParams[0].MIDIModule = Math.Min(midiOutsType[0], 2);
+            if (midiOutsType.Count > 1) midiParams[1].MIDIModule = Math.Min(midiOutsType[1], 2);
+
+        }
 
     }
 

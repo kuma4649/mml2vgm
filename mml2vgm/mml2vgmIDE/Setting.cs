@@ -785,19 +785,19 @@ namespace mml2vgmIDE
         //    }
         //}
 
-        //private MidiOut _midiOut = new MidiOut();
-        //public MidiOut midiOut
-        //{
-        //    get
-        //    {
-        //        return _midiOut;
-        //    }
+        private MidiOut _midiOut = new MidiOut();
+        public MidiOut midiOut
+        {
+            get
+            {
+                return _midiOut;
+            }
 
-        //    set
-        //    {
-        //        _midiOut = value;
-        //    }
-        //}
+            set
+            {
+                _midiOut = value;
+            }
+        }
 
         //private NSF _nsf = new NSF();
         //public NSF nsf
@@ -3262,48 +3262,48 @@ namespace mml2vgmIDE
 
         //}
 
-        //[Serializable]
-        //public class MidiOut
-        //{
-        //    private string _GMReset = "30:F0,7E,7F,09,01,F7";
-        //    public string GMReset { get => _GMReset; set => _GMReset = value; }
+        [Serializable]
+        public class MidiOut
+        {
+            private string _GMReset = "30:F0,7E,7F,09,01,F7";
+            public string GMReset { get => _GMReset; set => _GMReset = value; }
 
-        //    private string _XGReset = "30:F0,43,10,4C,00,00,7E,00,F7";
-        //    public string XGReset { get => _XGReset; set => _XGReset = value; }
+            private string _XGReset = "30:F0,43,10,4C,00,00,7E,00,F7";
+            public string XGReset { get => _XGReset; set => _XGReset = value; }
 
-        //    private string _GSReset = "30:F0,41,10,42,12,40,00,7F,00,41,F7";
-        //    public string GSReset { get => _GSReset; set => _GSReset = value; }
+            private string _GSReset = "30:F0,41,10,42,12,40,00,7F,00,41,F7";
+            public string GSReset { get => _GSReset; set => _GSReset = value; }
 
-        //    private string _Custom = "";
-        //    public string Custom { get => _Custom; set => _Custom = value; }
+            private string _Custom = "";
+            public string Custom { get => _Custom; set => _Custom = value; }
 
-        //    private List<midiOutInfo[]> _lstMidiOutInfo = null;
-        //    public List<midiOutInfo[]> lstMidiOutInfo
-        //    {
-        //        get
-        //        {
-        //            return _lstMidiOutInfo;
-        //        }
-        //        set
-        //        {
-        //            _lstMidiOutInfo = value;
-        //        }
-        //    }
+            private List<midiOutInfo[]> _lstMidiOutInfo = null;
+            public List<midiOutInfo[]> lstMidiOutInfo
+            {
+                get
+                {
+                    return _lstMidiOutInfo;
+                }
+                set
+                {
+                    _lstMidiOutInfo = value;
+                }
+            }
 
-        //    public MidiOut Copy()
-        //    {
-        //        MidiOut MidiOut = new MidiOut();
+            public MidiOut Copy()
+            {
+                MidiOut MidiOut = new MidiOut();
 
-        //        MidiOut.GMReset = this.GMReset;
-        //        MidiOut.XGReset = this.XGReset;
-        //        MidiOut.GSReset = this.GSReset;
-        //        MidiOut.Custom = this.Custom;
-        //        MidiOut.lstMidiOutInfo = this.lstMidiOutInfo;
+                MidiOut.GMReset = this.GMReset;
+                MidiOut.XGReset = this.XGReset;
+                MidiOut.GSReset = this.GSReset;
+                MidiOut.Custom = this.Custom;
+                MidiOut.lstMidiOutInfo = this.lstMidiOutInfo;
 
-        //        return MidiOut;
-        //    }
+                return MidiOut;
+            }
 
-        //}
+        }
 
         [Serializable]
         public class NSF
@@ -3689,7 +3689,7 @@ namespace mml2vgmIDE
             setting.midiExport = this.midiExport.Copy();
             setting.midiKbd = this.midiKbd.Copy();
             //setting.vst = this.vst.Copy();
-            //setting.midiOut = this.midiOut.Copy();
+            setting.midiOut = this.midiOut.Copy();
             //setting.nsf = this.nsf.Copy();
             //setting.sid = this.sid.Copy();
             setting.nukedOPN2 = this.nukedOPN2.Copy();

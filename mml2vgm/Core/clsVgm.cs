@@ -29,6 +29,7 @@ namespace Core
         public K051649[] k051649 = null;
         public QSound[] qsound = null;
         public K053260[] k053260 = null;
+        public MidiGM[] midiGM = null;
 
         public Dictionary<enmChipType, ClsChip[]> chips;
 
@@ -321,6 +322,20 @@ namespace Core
             {
                 k053260 = lstK053260.ToArray();
                 chips.Add(enmChipType.K053260, k053260);
+            }
+
+            List<MidiGM> lstMidiGM = new List<MidiGM>();
+            n = sp.dicChipPartName[enmChipType.MIDI_GM];
+            for (int i = 0; i < n.Item3.Count; i++)
+            {
+                if (string.IsNullOrEmpty(n.Item3[i])) continue;
+                if (sp.lnChipPartName.Contains(n.Item3[i]))
+                    lstMidiGM.Add(new MidiGM(this, i, n.Item3[i], stPath, (info.format == enmFormat.ZGM ? 0 : i)));
+            }
+            if (lstMidiGM.Count > 0)
+            {
+                midiGM = lstMidiGM.ToArray();
+                chips.Add(enmChipType.MIDI_GM, midiGM);
             }
 
             List<clsTD> lstTD = new List<clsTD>

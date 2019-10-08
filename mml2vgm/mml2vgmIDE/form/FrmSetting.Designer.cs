@@ -1851,6 +1851,7 @@
             // 
             // btnAddVST
             // 
+            this.btnAddVST.Enabled = false;
             this.btnAddVST.Location = new System.Drawing.Point(263, 4);
             this.btnAddVST.Name = "btnAddVST";
             this.btnAddVST.Size = new System.Drawing.Size(75, 23);
@@ -1996,7 +1997,7 @@
             this.tpNSF.Name = "tpNSF";
             this.tpNSF.Size = new System.Drawing.Size(443, 400);
             this.tpNSF.TabIndex = 9;
-            this.tpNSF.Text = "ファイル別";
+            this.tpNSF.Text = "MIDI詳細";
             this.tpNSF.UseVisualStyleBackColor = true;
             // 
             // tabControl3
@@ -2527,7 +2528,7 @@
             this.tabPage17.Name = "tabPage17";
             this.tabPage17.Size = new System.Drawing.Size(435, 374);
             this.tabPage17.TabIndex = 2;
-            this.tabPage17.Text = ".MID/.RCP";
+            this.tabPage17.Text = "Resetコマンド";
             this.tabPage17.UseVisualStyleBackColor = true;
             // 
             // groupBox15

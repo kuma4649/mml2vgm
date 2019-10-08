@@ -248,6 +248,11 @@ namespace Core
                 info.format == enmFormat.VGM ? new string[] { "O", "Os" } : (info.format == enmFormat.XGM ? new string[] { } : new string[] { "O", "Os" })
                 ), new int[] { 2, 0, -1 }));
 
+            cp = new MidiGM(null, 0, null, null, 0);
+            cpn.Add(enmChipType.MIDI_GM, new Tuple<string, string, List<string>, int[]>(cp.Name, cp.ShortName, new List<string>(
+                info.format == enmFormat.VGM ? new string[] { } : (info.format == enmFormat.XGM ? new string[] { } : new string[] { "B", "Bs" })
+                ), new int[] { 0, 0, -1 }));
+
             //パート名定義文を解析し、デフォルト設定を書き換える
             foreach (Line ln in lnInformation)
             {

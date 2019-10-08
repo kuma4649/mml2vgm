@@ -25,6 +25,7 @@ namespace mml2vgmIDE.MMLParameter
         public List<Instrument> YM2610B = new List<Instrument>();
         public List<Instrument> YM2612 = new List<Instrument>();
         public List<Instrument> YM2612X = new List<Instrument>();
+        public List<Instrument> GeneralMIDI = new List<Instrument>();
         public Dictionary<string, Dictionary<int, Dictionary<int, Instrument>>> Insts;
 
         private Dictionary<string,Dictionary<int, Dictionary<int, Action<outDatum, int>>>> dicInst
@@ -200,6 +201,13 @@ namespace mml2vgmIDE.MMLParameter
                         dicInstAdd(opn2x, od.linePos.chipIndex, od.linePos.isSecondary);
                         instsAdd(opn2x, od.linePos.chipIndex, od.linePos.isSecondary);
                         opn2x.isTrace = isTrace;
+                        break;
+                    case "GeneralMIDI":
+                        GeneralMIDI gmidi = new GeneralMIDI();
+                        GeneralMIDI.Add(gmidi);
+                        dicInstAdd(gmidi, od.linePos.chipIndex, od.linePos.isSecondary);
+                        instsAdd(gmidi, od.linePos.chipIndex, od.linePos.isSecondary);
+                        gmidi.isTrace = isTrace;
                         break;
                 }
             }

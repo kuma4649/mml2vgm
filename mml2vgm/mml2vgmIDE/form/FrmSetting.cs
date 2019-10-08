@@ -30,8 +30,10 @@ namespace mml2vgmIDE
             };
 
             Init();
-            tabControl1.TabPages.Remove(tabPage13);
-            tcSetting.TabPages.Remove(tpNSF);
+            //tabControl1.TabPages.Remove(tabPage13);
+            //tcSetting.TabPages.Remove(tpNSF);
+            tabControl3.TabPages.Remove(tabPage15);
+            tabControl3.TabPages.Remove(tabPage16);
             tcSetting.TabPages.Remove(tpMIDIExp);
             //tcSetting.TabPages.Remove(tpMIDIKBD);
             tcSetting.TabPages.Remove(tpKeyBoard);
@@ -512,87 +514,87 @@ namespace mml2vgmIDE
             tbCCStop.Text = setting.midiKbd.MidiCtrl_Stop == -1 ? "" : setting.midiKbd.MidiCtrl_Stop.ToString();
 
 
-            //if (setting.midiOut.lstMidiOutInfo != null && setting.midiOut.lstMidiOutInfo.Count > 0)
-            //{
-            //    for (int i = 0; i < setting.midiOut.lstMidiOutInfo.Count; i++)
-            //    {
-            //        dgv[i].Rows.Clear();
-            //        HashSet<int> midioutNotFound = new HashSet<int>();
-            //        if (setting.midiOut.lstMidiOutInfo[i] != null && setting.midiOut.lstMidiOutInfo[i].Length > 0)
-            //        {
-            //            for (int j = 0; j < setting.midiOut.lstMidiOutInfo[i].Length; j++)
-            //            {
-            //                midiOutInfo moi = setting.midiOut.lstMidiOutInfo[i][j];
-            //                int found = -999;
-            //                for (int k = 0; k < NAudio.Midi.MidiOut.NumberOfDevices; k++)
-            //                {
-            //                    NAudio.Midi.MidiOutCapabilities moc = NAudio.Midi.MidiOut.DeviceInfo(k);
-            //                    if (moi.name == moc.ProductName)
-            //                    {
-            //                        midioutNotFound.Add(k);
-            //                        found = k;
-            //                        break;
-            //                    }
-            //                }
+            if (setting.midiOut.lstMidiOutInfo != null && setting.midiOut.lstMidiOutInfo.Count > 0)
+            {
+                for (int i = 0; i < setting.midiOut.lstMidiOutInfo.Count; i++)
+                {
+                    dgv[i].Rows.Clear();
+                    HashSet<int> midioutNotFound = new HashSet<int>();
+                    if (setting.midiOut.lstMidiOutInfo[i] != null && setting.midiOut.lstMidiOutInfo[i].Length > 0)
+                    {
+                        for (int j = 0; j < setting.midiOut.lstMidiOutInfo[i].Length; j++)
+                        {
+                            midiOutInfo moi = setting.midiOut.lstMidiOutInfo[i][j];
+                            int found = -999;
+                            for (int k = 0; k < NAudio.Midi.MidiOut.NumberOfDevices; k++)
+                            {
+                                NAudio.Midi.MidiOutCapabilities moc = NAudio.Midi.MidiOut.DeviceInfo(k);
+                                if (moi.name == moc.ProductName)
+                                {
+                                    midioutNotFound.Add(k);
+                                    found = k;
+                                    break;
+                                }
+                            }
 
-            //                moi.id = found;
+                            moi.id = found;
 
-            //                string stype = "GM";
-            //                switch (moi.type)
-            //                {
-            //                    case 1:
-            //                        stype = "XG";
-            //                        break;
-            //                    case 2:
-            //                        stype = "GS";
-            //                        break;
-            //                    case 3:
-            //                        stype = "LA";
-            //                        break;
-            //                    case 4:
-            //                        stype = "GS(SC-55_1)";
-            //                        break;
-            //                    case 5:
-            //                        stype = "GS(SC-55_2)";
-            //                        break;
-            //                }
+                            string stype = "GM";
+                            switch (moi.type)
+                            {
+                                case 1:
+                                    stype = "XG";
+                                    break;
+                                case 2:
+                                    stype = "GS";
+                                    break;
+                                case 3:
+                                    stype = "LA";
+                                    break;
+                                case 4:
+                                    stype = "GS(SC-55_1)";
+                                    break;
+                                case 5:
+                                    stype = "GS(SC-55_2)";
+                                    break;
+                            }
 
-            //                string sbeforeSend = "None";
-            //                switch (moi.beforeSendType)
-            //                {
-            //                    case 1:
-            //                        sbeforeSend = "GM Reset";
-            //                        break;
-            //                    case 2:
-            //                        sbeforeSend = "XG Reset";
-            //                        break;
-            //                    case 3:
-            //                        sbeforeSend = "GS Reset";
-            //                        break;
-            //                    case 4:
-            //                        sbeforeSend = "Custom";
-            //                        break;
-            //                }
+                            string sbeforeSend = "None";
+                            switch (moi.beforeSendType)
+                            {
+                                case 1:
+                                    sbeforeSend = "GM Reset";
+                                    break;
+                                case 2:
+                                    sbeforeSend = "XG Reset";
+                                    break;
+                                case 3:
+                                    sbeforeSend = "GS Reset";
+                                    break;
+                                case 4:
+                                    sbeforeSend = "Custom";
+                                    break;
+                            }
 
-            //                dgv[i].Rows.Add(
-            //                    moi.id
-            //                    , moi.isVST
-            //                    , moi.fileName
-            //                    , moi.name
-            //                    , stype
-            //                    , sbeforeSend
-            //                    , moi.isVST ? moi.vendor : (moi.manufacturer != -1 ? ((NAudio.Manufacturers)moi.manufacturer).ToString() : "Unknown")
-            //                    );
+                            dgv[i].Rows.Add(
+                                moi.id
+                                , moi.isVST
+                                , moi.fileName
+                                , moi.name
+                                , stype
+                                , sbeforeSend
+                                , moi.isVST ? moi.vendor : (moi.manufacturer != -1 ? ((NAudio.Manufacturers)moi.manufacturer).ToString() : "Unknown")
+                                );
 
-            //            }
-            //        }
-            //    }
-            //}
+                        }
+                    }
+                }
+            }
 
-            //tbBeforeSend_GMReset.Text = setting.midiOut.GMReset;
-            //tbBeforeSend_XGReset.Text = setting.midiOut.XGReset;
-            //tbBeforeSend_GSReset.Text = setting.midiOut.GSReset;
-            //tbBeforeSend_Custom.Text = setting.midiOut.Custom;
+            tbBeforeSend_GMReset.Text = setting.midiOut.GMReset;
+            tbBeforeSend_XGReset.Text = setting.midiOut.XGReset;
+            tbBeforeSend_GSReset.Text = setting.midiOut.GSReset;
+            tbBeforeSend_Custom.Text = setting.midiOut.Custom;
 
             dgvMIDIoutPallet.Rows.Clear();
             for (int i = 0; i < NAudio.Midi.MidiOut.NumberOfDevices; i++)
@@ -1446,103 +1448,103 @@ namespace mml2vgmIDE
             setting.midiExport.UseYM2151Export = cbMIDIYM2151.Checked;
             setting.midiExport.UseYM2612Export = cbMIDIYM2612.Checked;
 
-            //setting.midiOut.lstMidiOutInfo = new List<midiOutInfo[]>();
+            setting.midiOut.lstMidiOutInfo = new List<midiOutInfo[]>();
 
-            //foreach (DataGridView d in dgv)
-            //{
-            //    if (d.Rows.Count > 0)
-            //    {
-            //        //List<midiOutInfo> lstMoi = new List<midiOutInfo>();
-            //        for (i = 0; i < d.Rows.Count; i++)
-            //        {
-            //            //midiOutInfo moi = new midiOutInfo();
-            //            //moi.id = (int)d.Rows[i].Cells[0].Value;
-            //            //moi.isVST = (bool)d.Rows[i].Cells[1].Value;
-            //            //moi.fileName = (string)d.Rows[i].Cells[2].Value;
-            //            //moi.name = (string)d.Rows[i].Cells[3].Value;
-            //            string stype = (string)d.Rows[i].Cells[4].Value;
-            //            //GM / XG / GS / LA / GS(SC - 55_1) / GS(SC - 55_2)
-            //        //    moi.type = 0;
-            //        //    if (stype == "XG") moi.type = 1;
-            //        //    if (stype == "GS") moi.type = 2;
-            //        //    if (stype == "LA") moi.type = 3;
-            //        //    if (stype == "GS(SC - 55_1)") moi.type = 4;
-            //        //    if (stype == "GS(SC - 55_2)") moi.type = 5;
-            //        //    string sbeforeSend = (string)d.Rows[i].Cells[5].Value;
-            //        //    moi.beforeSendType = 0;
-            //        //    if (sbeforeSend == "GM Reset") moi.beforeSendType = 1;
-            //        //    if (sbeforeSend == "XG Reset") moi.beforeSendType = 2;
-            //        //    if (sbeforeSend == "GS Reset") moi.beforeSendType = 3;
-            //        //    if (sbeforeSend == "Custom") moi.beforeSendType = 4;
+            foreach (DataGridView d in dgv)
+            {
+                if (d.Rows.Count > 0)
+                {
+                    List<midiOutInfo> lstMoi = new List<midiOutInfo>();
+                    for (i = 0; i < d.Rows.Count; i++)
+                    {
+                        midiOutInfo moi = new midiOutInfo();
+                        moi.id = (int)d.Rows[i].Cells[0].Value;
+                        moi.isVST = (bool)d.Rows[i].Cells[1].Value;
+                        moi.fileName = (string)d.Rows[i].Cells[2].Value;
+                        moi.name = (string)d.Rows[i].Cells[3].Value;
+                        string stype = (string)d.Rows[i].Cells[4].Value;
+                        //GM / XG / GS / LA / GS(SC - 55_1) / GS(SC - 55_2)
+                        moi.type = 0;
+                        if (stype == "XG") moi.type = 1;
+                        if (stype == "GS") moi.type = 2;
+                        if (stype == "LA") moi.type = 3;
+                        if (stype == "GS(SC - 55_1)") moi.type = 4;
+                        if (stype == "GS(SC - 55_2)") moi.type = 5;
+                        string sbeforeSend = (string)d.Rows[i].Cells[5].Value;
+                        moi.beforeSendType = 0;
+                        if (sbeforeSend == "GM Reset") moi.beforeSendType = 1;
+                        if (sbeforeSend == "XG Reset") moi.beforeSendType = 2;
+                        if (sbeforeSend == "GS Reset") moi.beforeSendType = 3;
+                        if (sbeforeSend == "Custom") moi.beforeSendType = 4;
 
-            //        //    string mn = (string)d.Rows[i].Cells[6].Value;
-            //        //    if (moi.isVST)
-            //        //    {
-            //        //        moi.vendor = mn;
-            //        //        moi.manufacturer = -1;
-            //        //    }
-            //        //    else
-            //        //    {
-            //        //        moi.vendor = "";
-            //        //        moi.manufacturer = (mn==null || mn == "Unknown") ? -1 : (int)(Enum.Parse(typeof(NAudio.Manufacturers), mn));
-            //        //    }
+                        string mn = (string)d.Rows[i].Cells[6].Value;
+                        if (moi.isVST)
+                        {
+                            moi.vendor = mn;
+                            moi.manufacturer = -1;
+                        }
+                        else
+                        {
+                            moi.vendor = "";
+                            moi.manufacturer = (mn == null || mn == "Unknown") ? -1 : (int)(Enum.Parse(typeof(NAudio.Manufacturers), mn));
+                        }
 
-            //        //    lstMoi.Add(moi);
-            //        //}
-            //        //setting.midiOut.lstMidiOutInfo.Add(lstMoi.ToArray());
-            //    }
-            //    else
-            //    {
-            //        setting.midiOut.lstMidiOutInfo.Add(null);
-            //    }
-            //}
+                        lstMoi.Add(moi);
+                    }
+                    setting.midiOut.lstMidiOutInfo.Add(lstMoi.ToArray());
+                }
+                else
+                    {
+                        setting.midiOut.lstMidiOutInfo.Add(null);
+                    }
+                }
 
-            //setting.midiOut.GMReset= tbBeforeSend_GMReset.Text;
-            //setting.midiOut.XGReset = tbBeforeSend_XGReset.Text;
-            //setting.midiOut.GSReset = tbBeforeSend_GSReset.Text;
-            //setting.midiOut.Custom = tbBeforeSend_Custom.Text;
+                setting.midiOut.GMReset = tbBeforeSend_GMReset.Text;
+                setting.midiOut.XGReset = tbBeforeSend_XGReset.Text;
+                setting.midiOut.GSReset = tbBeforeSend_GSReset.Text;
+                setting.midiOut.Custom = tbBeforeSend_Custom.Text;
 
-            //setting.nsf.NESUnmuteOnReset = cbNFSNes_UnmuteOnReset.Checked;
-            //setting.nsf.NESNonLinearMixer = cbNFSNes_NonLinearMixer.Checked;
-            //setting.nsf.NESPhaseRefresh = cbNFSNes_PhaseRefresh.Checked;
-            //setting.nsf.NESDutySwap = cbNFSNes_DutySwap.Checked;
+                //setting.nsf.NESUnmuteOnReset = cbNFSNes_UnmuteOnReset.Checked;
+                //setting.nsf.NESNonLinearMixer = cbNFSNes_NonLinearMixer.Checked;
+                //setting.nsf.NESPhaseRefresh = cbNFSNes_PhaseRefresh.Checked;
+                //setting.nsf.NESDutySwap = cbNFSNes_DutySwap.Checked;
 
-            //if (int.TryParse(tbNSFFds_LPF.Text, out i)) setting.nsf.FDSLpf = Math.Min(Math.Max(i, 0), 99999);
-            //setting.nsf.FDS4085Reset = cbNFSFds_4085Reset.Checked;
-            //setting.nsf.FDSWriteDisable8000 = cbNSFFDSWriteDisable8000.Checked;
+                //if (int.TryParse(tbNSFFds_LPF.Text, out i)) setting.nsf.FDSLpf = Math.Min(Math.Max(i, 0), 99999);
+                //setting.nsf.FDS4085Reset = cbNFSFds_4085Reset.Checked;
+                //setting.nsf.FDSWriteDisable8000 = cbNSFFDSWriteDisable8000.Checked;
 
-            //setting.nsf.DMCUnmuteOnReset = cbNSFDmc_UnmuteOnReset.Checked;
-            //setting.nsf.DMCNonLinearMixer = cbNSFDmc_NonLinearMixer.Checked;
-            //setting.nsf.DMCEnable4011 = cbNSFDmc_Enable4011.Checked;
-            //setting.nsf.DMCEnablePnoise = cbNSFDmc_EnablePNoise.Checked;
-            //setting.nsf.DMCDPCMAntiClick = cbNSFDmc_DPCMAntiClick.Checked;
-            //setting.nsf.DMCRandomizeNoise = cbNSFDmc_RandomizeNoise.Checked;
-            //setting.nsf.DMCTRImute = cbNSFDmc_TriMute.Checked;
-            //setting.nsf.DMCTRINull = cbNSFDmc_TriNull.Checked;
+                //setting.nsf.DMCUnmuteOnReset = cbNSFDmc_UnmuteOnReset.Checked;
+                //setting.nsf.DMCNonLinearMixer = cbNSFDmc_NonLinearMixer.Checked;
+                //setting.nsf.DMCEnable4011 = cbNSFDmc_Enable4011.Checked;
+                //setting.nsf.DMCEnablePnoise = cbNSFDmc_EnablePNoise.Checked;
+                //setting.nsf.DMCDPCMAntiClick = cbNSFDmc_DPCMAntiClick.Checked;
+                //setting.nsf.DMCRandomizeNoise = cbNSFDmc_RandomizeNoise.Checked;
+                //setting.nsf.DMCTRImute = cbNSFDmc_TriMute.Checked;
+                //setting.nsf.DMCTRINull = cbNSFDmc_TriNull.Checked;
 
-            //setting.nsf.MMC5NonLinearMixer = cbNSFMmc5_NonLinearMixer.Checked;
-            //setting.nsf.MMC5PhaseRefresh = cbNSFMmc5_PhaseRefresh.Checked;
+                //setting.nsf.MMC5NonLinearMixer = cbNSFMmc5_NonLinearMixer.Checked;
+                //setting.nsf.MMC5PhaseRefresh = cbNSFMmc5_PhaseRefresh.Checked;
 
-            //setting.nsf.N160Serial = cbNSFN160_Serial.Checked;
+                //setting.nsf.N160Serial = cbNSFN160_Serial.Checked;
 
-            //setting.sid = new Setting.SID();
-            //setting.sid.RomKernalPath = tbSIDKernal.Text;
-            //setting.sid.RomBasicPath = tbSIDBasic.Text;
-            //setting.sid.RomCharacterPath = tbSIDCharacter.Text;
-            //if (rdSIDQ1.Checked) setting.sid.Quality = 0;
-            //if (rdSIDQ2.Checked) setting.sid.Quality = 1;
-            //if (rdSIDQ3.Checked) setting.sid.Quality = 2;
-            //if (rdSIDQ4.Checked) setting.sid.Quality = 3;
-            //try
-            //{
-            //    setting.sid.OutputBufferSize = Math.Min(Math.Max(int.Parse(tbSIDOutputBufferSize.Text), 100), 999999);
-            //}
-            //catch
-            //{
-            //    setting.sid.OutputBufferSize = 5000;
-            //}
+                //setting.sid = new Setting.SID();
+                //setting.sid.RomKernalPath = tbSIDKernal.Text;
+                //setting.sid.RomBasicPath = tbSIDBasic.Text;
+                //setting.sid.RomCharacterPath = tbSIDCharacter.Text;
+                //if (rdSIDQ1.Checked) setting.sid.Quality = 0;
+                //if (rdSIDQ2.Checked) setting.sid.Quality = 1;
+                //if (rdSIDQ3.Checked) setting.sid.Quality = 2;
+                //if (rdSIDQ4.Checked) setting.sid.Quality = 3;
+                //try
+                //{
+                //    setting.sid.OutputBufferSize = Math.Min(Math.Max(int.Parse(tbSIDOutputBufferSize.Text), 100), 999999);
+                //}
+                //catch
+                //{
+                //    setting.sid.OutputBufferSize = 5000;
+                //}
 
-            setting.nukedOPN2 = new Setting.NukedOPN2();
+                setting.nukedOPN2 = new Setting.NukedOPN2();
             if (rbNukedOPN2OptionYM2612.Checked) setting.nukedOPN2.EmuType = 2;
             if (rbNukedOPN2OptionASIC.Checked) setting.nukedOPN2.EmuType = 1;
             if (rbNukedOPN2OptionDiscrete.Checked) setting.nukedOPN2.EmuType = 0;
