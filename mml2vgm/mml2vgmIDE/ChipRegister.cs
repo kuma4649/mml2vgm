@@ -839,6 +839,9 @@ namespace mml2vgmIDE
                 case EnmDevice.YM2612:
                     YM2612SetRegisterProcessing(ref Counter, ref Chip, ref Type, ref Address, ref Data, ref ExData);
                     break;
+                case EnmDevice.MIDIGM:
+                    MidiGMSetRegisterProcessing(ref Counter, ref Chip, ref Type, ref Address, ref Data, ref ExData);
+                    break;
                 case EnmDevice.None:
                     //Dummy Command
                     break;
@@ -860,7 +863,7 @@ namespace mml2vgmIDE
                     C140WriteRegisterControl(Chip, type, address, data, exData);
                     break;
                 case EnmDevice.MIDIGM:
-                    //MIDIWriteRegisterControl(Chip, type, address, data, exData);
+                    MidiGMWriteRegisterControl(Chip, type, address, data, exData);
                     break;
                 case EnmDevice.HuC6280:
                     HuC6280WriteRegisterControl(Chip, type, address, data, exData);
@@ -5801,6 +5804,114 @@ namespace mml2vgmIDE
             {
                 scSN76489[chipID].setRegister(-1, (int)(wait * (ctSN76489[chipID].UseWaitBoost ? 2.0 : 1.0)));
             }
+        }
+
+        #endregion
+
+
+
+        #region MIDI
+
+        private void MidiGMWriteRegisterControl(Chip Chip, EnmDataType type, int address, int data, object exData)
+        {
+            if (type == EnmDataType.Normal)
+            {
+                if (Chip.Model == EnmModel.VirtualModel)
+                {
+                }
+                if (Chip.Model == EnmModel.RealModel)
+                {
+                    int num = address;
+                    if (midiOuts == null) return;
+                    if (num >= midiOuts.Count) return;
+                    if (midiOuts[num] == null) return;
+
+                    midiOuts[num].SendBuffer((byte[])exData);
+                    if (num < midiParams.Length) midiParams[num].SendBuffer((byte[])exData);
+                    return;
+                }
+            }
+            else if (type == EnmDataType.Block)
+            {
+                Audio.sm.SetInterrupt();
+
+                try
+                {
+                    if (exData == null) return;
+
+                    if (data == -1)
+                    {
+                        PackData[] pdata = (PackData[])exData;
+                        if (Chip.Model == EnmModel.VirtualModel)
+                        {
+                        }
+                        if (Chip.Model == EnmModel.RealModel)
+                        {
+                            if (scC140[Chip.Number] != null)
+                            {
+                                foreach (PackData dat in pdata)
+                                    scC140[Chip.Number].setRegister(dat.Address, dat.Data);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (Chip.Model == EnmModel.VirtualModel)
+                        {
+
+                        }
+                        else
+                        {
+                            if (scC140 != null && scC140[Chip.Number] != null)
+                            {
+                                // スタートアドレス設定
+                                scC140[Chip.Number].setRegister(0x10000, (byte)((uint)((object[])exData)[1]));
+                                scC140[Chip.Number].setRegister(0x10001, (byte)((uint)((object[])exData)[1] >> 8));
+                                scC140[Chip.Number].setRegister(0x10002, (byte)((uint)((object[])exData)[1] >> 16));
+                                // データ転送
+                                for (int cnt = 0; cnt < (uint)((object[])exData)[2]; cnt++)
+                                {
+                                    scC140[Chip.Number].setRegister(0x10004, ((byte[])((object[])exData)[3])[(uint)((object[])exData)[4] + cnt]);
+                                }
+                                //scC140[chipID].setRegister(0x10006, (int)ROMSize);
+
+                                realChip.SendData();
+                            }
+                        }
+                    }
+                }
+                finally
+                {
+                    Audio.sm.ResetInterrupt();
+                }
+            }
+        }
+
+        public void MidiGMSetRegisterProcessing(ref long Counter, ref Chip Chip, ref EnmDataType Type, ref int Address, ref int dData, ref object ExData)
+        {
+            if (Chip.Number == 0) chipLED.PriMID = 2;
+            else chipLED.SecMID = 2;
+
+            if (Chip.Model == EnmModel.VirtualModel)
+            {
+            }
+
+            if (Chip.Model == EnmModel.RealModel)
+            {
+            }
+
+        }
+
+        public void MIDISetRegister(outDatum od, long Counter, int ChipID, int dPort, byte[] dData)
+        {
+            dummyChip.Model = MIDI[ChipID].Model;
+            dummyChip.Delay = MIDI[ChipID].Delay;
+            dummyChip.Device = MIDI[ChipID].Device;
+            dummyChip.Index = MIDI[ChipID].Index;
+            dummyChip.Number = MIDI[ChipID].Number;
+            dummyChip.Use = MIDI[ChipID].Use;
+
+            enq(od, Counter, dummyChip, EnmDataType.Normal, dPort, 0, dData);
         }
 
         #endregion

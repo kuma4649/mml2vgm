@@ -160,9 +160,9 @@ namespace Core
                     log.Write(" pan");
                     CmdPan(pw, mml);
                     break;
-                case 'D': // Detune
-                    log.Write("Detune");
-                    CmdDetune(pw, mml);
+                case 'D': // Detune / ダイレクトモード
+                    log.Write("Detune / DirectMode");
+                    CmdDetuneDirectMode(pw, mml);
                     break;
                 case 'm': // pcm mode / pcm mapMode Sw
                     log.Write("pcm mode / pcm mapMode Sw");
@@ -596,18 +596,63 @@ namespace Core
             }
         }
 
-        private void CmdDetune(partWork pw, MML mml)
+        private void CmdDetuneDirectMode(partWork pw, MML mml)
         {
             int n;
             pw.incPos();
-            if (!pw.getNum(out n))
+
+            if (pw.getChar() == 'O')
             {
-                msgBox.setErrMsg(msg.get("E05011"), mml.line.Lp);
-                n = 0;
+                //Direct Mode ?
+
+                pw.incPos();
+                if (pw.getChar() == 'N')
+                {
+                    //directMode ON
+                    mml.type = enmMMLType.DirectMode;
+                    mml.args = new List<object>();
+                    mml.args.Add(true);
+                    pw.incPos();
+                    char vt=pw.getChar();
+                    if (vt == 'V' || vt == 'T')
+                    {
+                        mml.args.Add(vt);
+                        pw.incPos();
+                    }
+                }
+                else if (pw.getChar() == 'F')
+                {
+                    //directMode OFF
+                    mml.type = enmMMLType.DirectMode;
+                    mml.args = new List<object>();
+                    mml.args.Add(false);
+                    pw.incPos();
+                    char vt = pw.getChar();
+                    if (vt == 'V' || vt == 'T')
+                    {
+                        mml.args.Add(vt);
+                        pw.incPos();
+                    }
+                }
+                else
+                {
+                    msgBox.setErrMsg(msg.get("E05054"), mml.line.Lp);
+                }
             }
-            mml.type = enmMMLType.Detune;
-            mml.args = new List<object>();
-            mml.args.Add(n);
+            else
+            {
+                //Detune 
+
+                if (!pw.getNum(out n))
+                {
+                    msgBox.setErrMsg(msg.get("E05011"), mml.line.Lp);
+                    n = 0;
+                }
+
+                mml.type = enmMMLType.Detune;
+                mml.args = new List<object>();
+                mml.args.Add(n);
+            }
         }
 
         private void CmdMode(partWork pw, MML mml)

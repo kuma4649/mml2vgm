@@ -32,6 +32,7 @@ namespace Core
         LengthClock,    // #
         Pan,            // p
         Detune,         // D
+        DirectMode,     // DON DOF
         PcmMode,        // m
         PcmMap,         // mon mof
         Gatetime,       // q

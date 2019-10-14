@@ -266,6 +266,9 @@
     <None Include="sample\YM2612\testPCMMapMode.gwi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="sample\ZGM\testYM2612_MIDI_SYNC.gwi">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="sample\ZGM\testYM2612_FM.gwi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

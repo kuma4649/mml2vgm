@@ -121,12 +121,19 @@ namespace Core
         public int volume = 127;
 
         /// <summary>
+        /// expression
+        /// </summary>
+        public int expression = 127;
+
+        /// <summary>
         /// pコマンドで設定されている音の定位(1:R 2:L 3:C)
         /// </summary>
         //public int pan = 3;
         //public int beforePan = -1;
         public dint pan = new dint(3);
         public dint beforePan = new dint(3);
+
+        public bool[] tblNoteOn = null;
 
         /// <summary>
         /// 拡張パン(Left)
@@ -293,6 +300,8 @@ namespace Core
         /// </summary>
         public int beforeVolume = -1;
 
+        public int beforeExpression = -1;
+
         /// <summary>
         /// 効果音モード
         /// </summary>
@@ -388,6 +397,7 @@ namespace Core
 
         public enmChannelType Type;
         public int MaxVolume = 0;
+        public int MaxExpression = 0;
         public byte[][] port = null;
 
         public int feedBack = 0;
@@ -561,6 +571,16 @@ namespace Core
         public int dutyCycle { get; set; } = 0;
         public int oldDutyCycle { get; set; } = -1;
         public int oldFreq { get; set; } = -1;
+
+        public bool directModeVib { get; set; }
+        public bool directModeTre { get; set; }
+        public int pitchBend { get; set; } = 0;
+        public int tieBend { get; set; } = 0;
+        public int portaBend { get; set; } = 0;
+        public int lfoBend { get; set; } = 0;
+        public int bendStartOctave { get; set; } = 0;
+        public char bendStartNote { get; set; } = 'c';
+        public int bendStartShift { get; set; } = 0;
 
         public void MakeLstPos()
         {

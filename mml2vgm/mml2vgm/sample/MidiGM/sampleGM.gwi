@@ -1,0 +1,37 @@
+﻿'{
+
+	TitleName            =test GM 
+	TitleNameJ           =GMテスト
+	GameName             =
+	GameNameJ            =
+	SystemName           =MIDI
+	SystemNameJ          =MIDI
+	Composer             =kuma
+	ComposerJ            =くま
+	ReleaseDate          =2345/01/23
+	Converted            =kuma
+	Notes                =MIDI全般テスト
+
+	Format               =ZGM
+	ClockCount           =192
+
+}
+
+
+
+'B01 T110
+
+'B01-05 r4
+
+All
+'B02 o5 @5  V110 l8 q1 v80 g+2f+2e4 r d+&d+2    c+2. (20 q2c+q1d+ )20 e2d+1.
+'B03 o5 @5  V110 l8 q1 v50 e2 d+2c+4r<b& b2 (10 a1                )10 b2b1.
+'B04 o4 @5  V110 l8 q1 v60 e2 d+2c+4r<b& b2 (10 a1                )10 b2b1.
+
+'B05 o5 @80 V110 l8 q1 v80 
+       お   か  え  り   な       さい   あ
+'B05 )5g+4(5a4q0b4q1a4 q8g+4. (5q1e&e4rq4c+
+        たたかな      し あ  わ せ
+'B05  q2c+d+eq1e&e4.r eq2d+q1e)5f+&f+2.r4
+
+

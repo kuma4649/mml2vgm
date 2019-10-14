@@ -88,14 +88,6 @@
             this.tbcMIDIoutList = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.dgvMIDIoutListA = new System.Windows.Forms.DataGridView();
-            this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.clmIsVST = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.clmFileName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.clmType = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.ClmBeforeSend = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.dataGridViewTextBoxColumn3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridViewTextBoxColumn4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.btnUP_A = new System.Windows.Forms.Button();
             this.btnDOWN_A = new System.Windows.Forms.Button();
             this.tabPage2 = new System.Windows.Forms.TabPage();
@@ -110,30 +102,6 @@
             this.dgvMIDIoutListD = new System.Windows.Forms.DataGridView();
             this.btnUP_D = new System.Windows.Forms.Button();
             this.btnDOWN_D = new System.Windows.Forms.Button();
-            this.tabPage5 = new System.Windows.Forms.TabPage();
-            this.dgvMIDIoutListE = new System.Windows.Forms.DataGridView();
-            this.btnUP_E = new System.Windows.Forms.Button();
-            this.btnDOWN_E = new System.Windows.Forms.Button();
-            this.tabPage6 = new System.Windows.Forms.TabPage();
-            this.dgvMIDIoutListF = new System.Windows.Forms.DataGridView();
-            this.btnUP_F = new System.Windows.Forms.Button();
-            this.btnDOWN_F = new System.Windows.Forms.Button();
-            this.tabPage7 = new System.Windows.Forms.TabPage();
-            this.dgvMIDIoutListG = new System.Windows.Forms.DataGridView();
-            this.btnUP_G = new System.Windows.Forms.Button();
-            this.btnDOWN_G = new System.Windows.Forms.Button();
-            this.tabPage8 = new System.Windows.Forms.TabPage();
-            this.dgvMIDIoutListH = new System.Windows.Forms.DataGridView();
-            this.btnUP_H = new System.Windows.Forms.Button();
-            this.btnDOWN_H = new System.Windows.Forms.Button();
-            this.tabPage9 = new System.Windows.Forms.TabPage();
-            this.dgvMIDIoutListI = new System.Windows.Forms.DataGridView();
-            this.btnUP_I = new System.Windows.Forms.Button();
-            this.btnDOWN_I = new System.Windows.Forms.Button();
-            this.tabPage10 = new System.Windows.Forms.TabPage();
-            this.dgvMIDIoutListJ = new System.Windows.Forms.DataGridView();
-            this.button17 = new System.Windows.Forms.Button();
-            this.btnDOWN_J = new System.Windows.Forms.Button();
             this.btnAddVST = new System.Windows.Forms.Button();
             this.label18 = new System.Windows.Forms.Label();
             this.btnAddMIDIout = new System.Windows.Forms.Button();
@@ -439,6 +407,14 @@
             this.labelCompanyName = new System.Windows.Forms.Label();
             this.textBoxDescription = new System.Windows.Forms.TextBox();
             this.cbHiyorimiMode = new System.Windows.Forms.CheckBox();
+            this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.clmIsVST = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.clmFileName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.clmType = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.ClmBeforeSend = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.dataGridViewTextBoxColumn3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.gbWaveOut.SuspendLayout();
             this.gbAsioOut.SuspendLayout();
             this.gbWasapiOut.SuspendLayout();
@@ -468,18 +444,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgvMIDIoutListC)).BeginInit();
             this.tabPage4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvMIDIoutListD)).BeginInit();
-            this.tabPage5.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvMIDIoutListE)).BeginInit();
-            this.tabPage6.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvMIDIoutListF)).BeginInit();
-            this.tabPage7.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvMIDIoutListG)).BeginInit();
-            this.tabPage8.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvMIDIoutListH)).BeginInit();
-            this.tabPage9.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvMIDIoutListI)).BeginInit();
-            this.tabPage10.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvMIDIoutListJ)).BeginInit();
             this.tpNuked.SuspendLayout();
             this.tabControl2.SuspendLayout();
             this.tabPage14.SuspendLayout();
@@ -1222,12 +1186,6 @@
             this.tbcMIDIoutList.Controls.Add(this.tabPage2);
             this.tbcMIDIoutList.Controls.Add(this.tabPage3);
             this.tbcMIDIoutList.Controls.Add(this.tabPage4);
-            this.tbcMIDIoutList.Controls.Add(this.tabPage5);
-            this.tbcMIDIoutList.Controls.Add(this.tabPage6);
-            this.tbcMIDIoutList.Controls.Add(this.tabPage7);
-            this.tbcMIDIoutList.Controls.Add(this.tabPage8);
-            this.tbcMIDIoutList.Controls.Add(this.tabPage9);
-            this.tbcMIDIoutList.Controls.Add(this.tabPage10);
             this.tbcMIDIoutList.Location = new System.Drawing.Point(3, 31);
             this.tbcMIDIoutList.Name = "tbcMIDIoutList";
             this.tbcMIDIoutList.SelectedIndex = 0;
@@ -1245,7 +1203,7 @@
             this.tabPage1.Size = new System.Drawing.Size(414, 141);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Tag = "0";
-            this.tabPage1.Text = "A";
+            this.tabPage1.Text = "GM";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
             // dgvMIDIoutListA
@@ -1274,80 +1232,6 @@
             this.dgvMIDIoutListA.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvMIDIoutListA.Size = new System.Drawing.Size(384, 136);
             this.dgvMIDIoutListA.TabIndex = 1;
-            // 
-            // dataGridViewTextBoxColumn1
-            // 
-            this.dataGridViewTextBoxColumn1.Frozen = true;
-            this.dataGridViewTextBoxColumn1.HeaderText = "ID";
-            this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
-            this.dataGridViewTextBoxColumn1.ReadOnly = true;
-            this.dataGridViewTextBoxColumn1.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.dataGridViewTextBoxColumn1.Visible = false;
-            this.dataGridViewTextBoxColumn1.Width = 40;
-            // 
-            // clmIsVST
-            // 
-            this.clmIsVST.HeaderText = "IsVST";
-            this.clmIsVST.Name = "clmIsVST";
-            this.clmIsVST.Visible = false;
-            // 
-            // clmFileName
-            // 
-            this.clmFileName.HeaderText = "fileName";
-            this.clmFileName.Name = "clmFileName";
-            this.clmFileName.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.clmFileName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.clmFileName.Visible = false;
-            // 
-            // dataGridViewTextBoxColumn2
-            // 
-            this.dataGridViewTextBoxColumn2.HeaderText = "Device Name";
-            this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
-            this.dataGridViewTextBoxColumn2.ReadOnly = true;
-            this.dataGridViewTextBoxColumn2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.dataGridViewTextBoxColumn2.Width = 180;
-            // 
-            // clmType
-            // 
-            this.clmType.HeaderText = "Type";
-            this.clmType.Items.AddRange(new object[] {
-            "GM",
-            "XG",
-            "GS",
-            "LA",
-            "GS(SC-55_1)",
-            "GS(SC-55_2)"});
-            this.clmType.Name = "clmType";
-            this.clmType.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.clmType.Width = 70;
-            // 
-            // ClmBeforeSend
-            // 
-            this.ClmBeforeSend.HeaderText = "Before Send";
-            this.ClmBeforeSend.Items.AddRange(new object[] {
-            "None",
-            "GM Reset",
-            "XG Reset",
-            "GS Reset",
-            "Custom"});
-            this.ClmBeforeSend.Name = "ClmBeforeSend";
-            this.ClmBeforeSend.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.ClmBeforeSend.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            // 
-            // dataGridViewTextBoxColumn3
-            // 
-            this.dataGridViewTextBoxColumn3.HeaderText = "Manufacturer";
-            this.dataGridViewTextBoxColumn3.Name = "dataGridViewTextBoxColumn3";
-            this.dataGridViewTextBoxColumn3.ReadOnly = true;
-            this.dataGridViewTextBoxColumn3.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // dataGridViewTextBoxColumn4
-            // 
-            this.dataGridViewTextBoxColumn4.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.dataGridViewTextBoxColumn4.HeaderText = "";
-            this.dataGridViewTextBoxColumn4.Name = "dataGridViewTextBoxColumn4";
-            this.dataGridViewTextBoxColumn4.ReadOnly = true;
-            this.dataGridViewTextBoxColumn4.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // btnUP_A
             // 
@@ -1382,7 +1266,7 @@
             this.tabPage2.Size = new System.Drawing.Size(414, 141);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Tag = "1";
-            this.tabPage2.Text = "B";
+            this.tabPage2.Text = "GS";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
             // dgvMIDIoutListB
@@ -1435,7 +1319,7 @@
             this.tabPage3.Size = new System.Drawing.Size(414, 141);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Tag = "2";
-            this.tabPage3.Text = "C";
+            this.tabPage3.Text = "XG";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
             // dgvMIDIoutListC
@@ -1488,7 +1372,7 @@
             this.tabPage4.Size = new System.Drawing.Size(414, 141);
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Tag = "3";
-            this.tabPage4.Text = "D";
+            this.tabPage4.Text = "VSTi";
             this.tabPage4.UseVisualStyleBackColor = true;
             // 
             // dgvMIDIoutListD
@@ -1530,324 +1414,6 @@
             this.btnDOWN_D.Text = "↓";
             this.btnDOWN_D.UseVisualStyleBackColor = true;
             this.btnDOWN_D.Click += new System.EventHandler(this.btnDOWN_Click);
-            // 
-            // tabPage5
-            // 
-            this.tabPage5.Controls.Add(this.dgvMIDIoutListE);
-            this.tabPage5.Controls.Add(this.btnUP_E);
-            this.tabPage5.Controls.Add(this.btnDOWN_E);
-            this.tabPage5.Location = new System.Drawing.Point(4, 22);
-            this.tabPage5.Name = "tabPage5";
-            this.tabPage5.Size = new System.Drawing.Size(414, 141);
-            this.tabPage5.TabIndex = 4;
-            this.tabPage5.Tag = "4";
-            this.tabPage5.Text = "E";
-            this.tabPage5.UseVisualStyleBackColor = true;
-            // 
-            // dgvMIDIoutListE
-            // 
-            this.dgvMIDIoutListE.AllowUserToAddRows = false;
-            this.dgvMIDIoutListE.AllowUserToDeleteRows = false;
-            this.dgvMIDIoutListE.AllowUserToResizeRows = false;
-            this.dgvMIDIoutListE.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.dgvMIDIoutListE.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvMIDIoutListE.Location = new System.Drawing.Point(0, 0);
-            this.dgvMIDIoutListE.MultiSelect = false;
-            this.dgvMIDIoutListE.Name = "dgvMIDIoutListE";
-            this.dgvMIDIoutListE.RowHeadersVisible = false;
-            this.dgvMIDIoutListE.RowTemplate.Height = 21;
-            this.dgvMIDIoutListE.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvMIDIoutListE.Size = new System.Drawing.Size(384, 152);
-            this.dgvMIDIoutListE.TabIndex = 7;
-            // 
-            // btnUP_E
-            // 
-            this.btnUP_E.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnUP_E.Location = new System.Drawing.Point(390, 0);
-            this.btnUP_E.Name = "btnUP_E";
-            this.btnUP_E.Size = new System.Drawing.Size(22, 58);
-            this.btnUP_E.TabIndex = 5;
-            this.btnUP_E.Text = "↑";
-            this.btnUP_E.UseVisualStyleBackColor = true;
-            this.btnUP_E.Click += new System.EventHandler(this.btnUP_Click);
-            // 
-            // btnDOWN_E
-            // 
-            this.btnDOWN_E.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnDOWN_E.Location = new System.Drawing.Point(390, 94);
-            this.btnDOWN_E.Name = "btnDOWN_E";
-            this.btnDOWN_E.Size = new System.Drawing.Size(22, 58);
-            this.btnDOWN_E.TabIndex = 6;
-            this.btnDOWN_E.Text = "↓";
-            this.btnDOWN_E.UseVisualStyleBackColor = true;
-            this.btnDOWN_E.Click += new System.EventHandler(this.btnDOWN_Click);
-            // 
-            // tabPage6
-            // 
-            this.tabPage6.Controls.Add(this.dgvMIDIoutListF);
-            this.tabPage6.Controls.Add(this.btnUP_F);
-            this.tabPage6.Controls.Add(this.btnDOWN_F);
-            this.tabPage6.Location = new System.Drawing.Point(4, 22);
-            this.tabPage6.Name = "tabPage6";
-            this.tabPage6.Size = new System.Drawing.Size(414, 141);
-            this.tabPage6.TabIndex = 5;
-            this.tabPage6.Tag = "5";
-            this.tabPage6.Text = "F";
-            this.tabPage6.UseVisualStyleBackColor = true;
-            // 
-            // dgvMIDIoutListF
-            // 
-            this.dgvMIDIoutListF.AllowUserToAddRows = false;
-            this.dgvMIDIoutListF.AllowUserToDeleteRows = false;
-            this.dgvMIDIoutListF.AllowUserToResizeRows = false;
-            this.dgvMIDIoutListF.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.dgvMIDIoutListF.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvMIDIoutListF.Location = new System.Drawing.Point(0, 0);
-            this.dgvMIDIoutListF.MultiSelect = false;
-            this.dgvMIDIoutListF.Name = "dgvMIDIoutListF";
-            this.dgvMIDIoutListF.RowHeadersVisible = false;
-            this.dgvMIDIoutListF.RowTemplate.Height = 21;
-            this.dgvMIDIoutListF.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvMIDIoutListF.Size = new System.Drawing.Size(384, 152);
-            this.dgvMIDIoutListF.TabIndex = 7;
-            // 
-            // btnUP_F
-            // 
-            this.btnUP_F.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnUP_F.Location = new System.Drawing.Point(390, 0);
-            this.btnUP_F.Name = "btnUP_F";
-            this.btnUP_F.Size = new System.Drawing.Size(22, 58);
-            this.btnUP_F.TabIndex = 5;
-            this.btnUP_F.Text = "↑";
-            this.btnUP_F.UseVisualStyleBackColor = true;
-            this.btnUP_F.Click += new System.EventHandler(this.btnUP_Click);
-            // 
-            // btnDOWN_F
-            // 
-            this.btnDOWN_F.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnDOWN_F.Location = new System.Drawing.Point(390, 94);
-            this.btnDOWN_F.Name = "btnDOWN_F";
-            this.btnDOWN_F.Size = new System.Drawing.Size(22, 58);
-            this.btnDOWN_F.TabIndex = 6;
-            this.btnDOWN_F.Text = "↓";
-            this.btnDOWN_F.UseVisualStyleBackColor = true;
-            this.btnDOWN_F.Click += new System.EventHandler(this.btnDOWN_Click);
-            // 
-            // tabPage7
-            // 
-            this.tabPage7.Controls.Add(this.dgvMIDIoutListG);
-            this.tabPage7.Controls.Add(this.btnUP_G);
-            this.tabPage7.Controls.Add(this.btnDOWN_G);
-            this.tabPage7.Location = new System.Drawing.Point(4, 22);
-            this.tabPage7.Name = "tabPage7";
-            this.tabPage7.Size = new System.Drawing.Size(414, 141);
-            this.tabPage7.TabIndex = 6;
-            this.tabPage7.Tag = "6";
-            this.tabPage7.Text = "G";
-            this.tabPage7.UseVisualStyleBackColor = true;
-            // 
-            // dgvMIDIoutListG
-            // 
-            this.dgvMIDIoutListG.AllowUserToAddRows = false;
-            this.dgvMIDIoutListG.AllowUserToDeleteRows = false;
-            this.dgvMIDIoutListG.AllowUserToResizeRows = false;
-            this.dgvMIDIoutListG.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.dgvMIDIoutListG.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvMIDIoutListG.Location = new System.Drawing.Point(0, 0);
-            this.dgvMIDIoutListG.MultiSelect = false;
-            this.dgvMIDIoutListG.Name = "dgvMIDIoutListG";
-            this.dgvMIDIoutListG.RowHeadersVisible = false;
-            this.dgvMIDIoutListG.RowTemplate.Height = 21;
-            this.dgvMIDIoutListG.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvMIDIoutListG.Size = new System.Drawing.Size(384, 152);
-            this.dgvMIDIoutListG.TabIndex = 7;
-            // 
-            // btnUP_G
-            // 
-            this.btnUP_G.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnUP_G.Location = new System.Drawing.Point(390, 0);
-            this.btnUP_G.Name = "btnUP_G";
-            this.btnUP_G.Size = new System.Drawing.Size(22, 58);
-            this.btnUP_G.TabIndex = 5;
-            this.btnUP_G.Text = "↑";
-            this.btnUP_G.UseVisualStyleBackColor = true;
-            this.btnUP_G.Click += new System.EventHandler(this.btnUP_Click);
-            // 
-            // btnDOWN_G
-            // 
-            this.btnDOWN_G.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnDOWN_G.Location = new System.Drawing.Point(390, 94);
-            this.btnDOWN_G.Name = "btnDOWN_G";
-            this.btnDOWN_G.Size = new System.Drawing.Size(22, 58);
-            this.btnDOWN_G.TabIndex = 6;
-            this.btnDOWN_G.Text = "↓";
-            this.btnDOWN_G.UseVisualStyleBackColor = true;
-            this.btnDOWN_G.Click += new System.EventHandler(this.btnDOWN_Click);
-            // 
-            // tabPage8
-            // 
-            this.tabPage8.Controls.Add(this.dgvMIDIoutListH);
-            this.tabPage8.Controls.Add(this.btnUP_H);
-            this.tabPage8.Controls.Add(this.btnDOWN_H);
-            this.tabPage8.Location = new System.Drawing.Point(4, 22);
-            this.tabPage8.Name = "tabPage8";
-            this.tabPage8.Size = new System.Drawing.Size(414, 141);
-            this.tabPage8.TabIndex = 7;
-            this.tabPage8.Tag = "7";
-            this.tabPage8.Text = "H";
-            this.tabPage8.UseVisualStyleBackColor = true;
-            // 
-            // dgvMIDIoutListH
-            // 
-            this.dgvMIDIoutListH.AllowUserToAddRows = false;
-            this.dgvMIDIoutListH.AllowUserToDeleteRows = false;
-            this.dgvMIDIoutListH.AllowUserToResizeRows = false;
-            this.dgvMIDIoutListH.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.dgvMIDIoutListH.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvMIDIoutListH.Location = new System.Drawing.Point(0, 0);
-            this.dgvMIDIoutListH.MultiSelect = false;
-            this.dgvMIDIoutListH.Name = "dgvMIDIoutListH";
-            this.dgvMIDIoutListH.RowHeadersVisible = false;
-            this.dgvMIDIoutListH.RowTemplate.Height = 21;
-            this.dgvMIDIoutListH.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvMIDIoutListH.Size = new System.Drawing.Size(384, 152);
-            this.dgvMIDIoutListH.TabIndex = 7;
-            // 
-            // btnUP_H
-            // 
-            this.btnUP_H.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnUP_H.Location = new System.Drawing.Point(390, 0);
-            this.btnUP_H.Name = "btnUP_H";
-            this.btnUP_H.Size = new System.Drawing.Size(22, 58);
-            this.btnUP_H.TabIndex = 5;
-            this.btnUP_H.Text = "↑";
-            this.btnUP_H.UseVisualStyleBackColor = true;
-            this.btnUP_H.Click += new System.EventHandler(this.btnUP_Click);
-            // 
-            // btnDOWN_H
-            // 
-            this.btnDOWN_H.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnDOWN_H.Location = new System.Drawing.Point(390, 94);
-            this.btnDOWN_H.Name = "btnDOWN_H";
-            this.btnDOWN_H.Size = new System.Drawing.Size(22, 58);
-            this.btnDOWN_H.TabIndex = 6;
-            this.btnDOWN_H.Text = "↓";
-            this.btnDOWN_H.UseVisualStyleBackColor = true;
-            this.btnDOWN_H.Click += new System.EventHandler(this.btnDOWN_Click);
-            // 
-            // tabPage9
-            // 
-            this.tabPage9.Controls.Add(this.dgvMIDIoutListI);
-            this.tabPage9.Controls.Add(this.btnUP_I);
-            this.tabPage9.Controls.Add(this.btnDOWN_I);
-            this.tabPage9.Location = new System.Drawing.Point(4, 22);
-            this.tabPage9.Name = "tabPage9";
-            this.tabPage9.Size = new System.Drawing.Size(414, 141);
-            this.tabPage9.TabIndex = 8;
-            this.tabPage9.Tag = "8";
-            this.tabPage9.Text = "I";
-            this.tabPage9.UseVisualStyleBackColor = true;
-            // 
-            // dgvMIDIoutListI
-            // 
-            this.dgvMIDIoutListI.AllowUserToAddRows = false;
-            this.dgvMIDIoutListI.AllowUserToDeleteRows = false;
-            this.dgvMIDIoutListI.AllowUserToResizeRows = false;
-            this.dgvMIDIoutListI.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.dgvMIDIoutListI.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvMIDIoutListI.Location = new System.Drawing.Point(0, 0);
-            this.dgvMIDIoutListI.MultiSelect = false;
-            this.dgvMIDIoutListI.Name = "dgvMIDIoutListI";
-            this.dgvMIDIoutListI.RowHeadersVisible = false;
-            this.dgvMIDIoutListI.RowTemplate.Height = 21;
-            this.dgvMIDIoutListI.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvMIDIoutListI.Size = new System.Drawing.Size(384, 152);
-            this.dgvMIDIoutListI.TabIndex = 7;
-            // 
-            // btnUP_I
-            // 
-            this.btnUP_I.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnUP_I.Location = new System.Drawing.Point(390, 0);
-            this.btnUP_I.Name = "btnUP_I";
-            this.btnUP_I.Size = new System.Drawing.Size(22, 58);
-            this.btnUP_I.TabIndex = 5;
-            this.btnUP_I.Text = "↑";
-            this.btnUP_I.UseVisualStyleBackColor = true;
-            this.btnUP_I.Click += new System.EventHandler(this.btnUP_Click);
-            // 
-            // btnDOWN_I
-            // 
-            this.btnDOWN_I.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnDOWN_I.Location = new System.Drawing.Point(390, 94);
-            this.btnDOWN_I.Name = "btnDOWN_I";
-            this.btnDOWN_I.Size = new System.Drawing.Size(22, 58);
-            this.btnDOWN_I.TabIndex = 6;
-            this.btnDOWN_I.Text = "↓";
-            this.btnDOWN_I.UseVisualStyleBackColor = true;
-            this.btnDOWN_I.Click += new System.EventHandler(this.btnDOWN_Click);
-            // 
-            // tabPage10
-            // 
-            this.tabPage10.Controls.Add(this.dgvMIDIoutListJ);
-            this.tabPage10.Controls.Add(this.button17);
-            this.tabPage10.Controls.Add(this.btnDOWN_J);
-            this.tabPage10.Location = new System.Drawing.Point(4, 22);
-            this.tabPage10.Name = "tabPage10";
-            this.tabPage10.Size = new System.Drawing.Size(414, 141);
-            this.tabPage10.TabIndex = 9;
-            this.tabPage10.Tag = "9";
-            this.tabPage10.Text = "J";
-            this.tabPage10.UseVisualStyleBackColor = true;
-            // 
-            // dgvMIDIoutListJ
-            // 
-            this.dgvMIDIoutListJ.AllowUserToAddRows = false;
-            this.dgvMIDIoutListJ.AllowUserToDeleteRows = false;
-            this.dgvMIDIoutListJ.AllowUserToResizeRows = false;
-            this.dgvMIDIoutListJ.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.dgvMIDIoutListJ.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvMIDIoutListJ.Location = new System.Drawing.Point(0, 0);
-            this.dgvMIDIoutListJ.MultiSelect = false;
-            this.dgvMIDIoutListJ.Name = "dgvMIDIoutListJ";
-            this.dgvMIDIoutListJ.RowHeadersVisible = false;
-            this.dgvMIDIoutListJ.RowTemplate.Height = 21;
-            this.dgvMIDIoutListJ.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvMIDIoutListJ.Size = new System.Drawing.Size(384, 152);
-            this.dgvMIDIoutListJ.TabIndex = 7;
-            // 
-            // button17
-            // 
-            this.button17.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button17.Location = new System.Drawing.Point(390, 0);
-            this.button17.Name = "button17";
-            this.button17.Size = new System.Drawing.Size(22, 58);
-            this.button17.TabIndex = 5;
-            this.button17.Text = "↑";
-            this.button17.UseVisualStyleBackColor = true;
-            this.button17.Click += new System.EventHandler(this.btnUP_Click);
-            // 
-            // btnDOWN_J
-            // 
-            this.btnDOWN_J.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnDOWN_J.Location = new System.Drawing.Point(390, 94);
-            this.btnDOWN_J.Name = "btnDOWN_J";
-            this.btnDOWN_J.Size = new System.Drawing.Size(22, 58);
-            this.btnDOWN_J.TabIndex = 6;
-            this.btnDOWN_J.Text = "↓";
-            this.btnDOWN_J.UseVisualStyleBackColor = true;
-            this.btnDOWN_J.Click += new System.EventHandler(this.btnDOWN_Click);
             // 
             // btnAddVST
             // 
@@ -5178,6 +4744,75 @@
             this.cbHiyorimiMode.UseVisualStyleBackColor = true;
             this.cbHiyorimiMode.Visible = false;
             // 
+            // dataGridViewTextBoxColumn1
+            // 
+            this.dataGridViewTextBoxColumn1.Frozen = true;
+            this.dataGridViewTextBoxColumn1.HeaderText = "ID";
+            this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
+            this.dataGridViewTextBoxColumn1.ReadOnly = true;
+            this.dataGridViewTextBoxColumn1.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.dataGridViewTextBoxColumn1.Visible = false;
+            this.dataGridViewTextBoxColumn1.Width = 40;
+            // 
+            // clmIsVST
+            // 
+            this.clmIsVST.HeaderText = "IsVST";
+            this.clmIsVST.Name = "clmIsVST";
+            this.clmIsVST.Visible = false;
+            // 
+            // clmFileName
+            // 
+            this.clmFileName.HeaderText = "fileName";
+            this.clmFileName.Name = "clmFileName";
+            this.clmFileName.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.clmFileName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.clmFileName.Visible = false;
+            // 
+            // dataGridViewTextBoxColumn2
+            // 
+            this.dataGridViewTextBoxColumn2.HeaderText = "Device Name";
+            this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
+            this.dataGridViewTextBoxColumn2.ReadOnly = true;
+            this.dataGridViewTextBoxColumn2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.dataGridViewTextBoxColumn2.Width = 180;
+            // 
+            // clmType
+            // 
+            this.clmType.HeaderText = "Type";
+            this.clmType.Items.AddRange(new object[] {
+            "GM"});
+            this.clmType.Name = "clmType";
+            this.clmType.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.clmType.Width = 70;
+            // 
+            // ClmBeforeSend
+            // 
+            this.ClmBeforeSend.HeaderText = "Before Send";
+            this.ClmBeforeSend.Items.AddRange(new object[] {
+            "None",
+            "GM Reset",
+            "XG Reset",
+            "GS Reset",
+            "Custom"});
+            this.ClmBeforeSend.Name = "ClmBeforeSend";
+            this.ClmBeforeSend.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.ClmBeforeSend.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            // 
+            // dataGridViewTextBoxColumn3
+            // 
+            this.dataGridViewTextBoxColumn3.HeaderText = "Manufacturer";
+            this.dataGridViewTextBoxColumn3.Name = "dataGridViewTextBoxColumn3";
+            this.dataGridViewTextBoxColumn3.ReadOnly = true;
+            this.dataGridViewTextBoxColumn3.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // dataGridViewTextBoxColumn4
+            // 
+            this.dataGridViewTextBoxColumn4.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.dataGridViewTextBoxColumn4.HeaderText = "";
+            this.dataGridViewTextBoxColumn4.Name = "dataGridViewTextBoxColumn4";
+            this.dataGridViewTextBoxColumn4.ReadOnly = true;
+            this.dataGridViewTextBoxColumn4.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
             // FrmSetting
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -5232,18 +4867,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgvMIDIoutListC)).EndInit();
             this.tabPage4.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgvMIDIoutListD)).EndInit();
-            this.tabPage5.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dgvMIDIoutListE)).EndInit();
-            this.tabPage6.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dgvMIDIoutListF)).EndInit();
-            this.tabPage7.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dgvMIDIoutListG)).EndInit();
-            this.tabPage8.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dgvMIDIoutListH)).EndInit();
-            this.tabPage9.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dgvMIDIoutListI)).EndInit();
-            this.tabPage10.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dgvMIDIoutListJ)).EndInit();
             this.tpNuked.ResumeLayout(false);
             this.tabControl2.ResumeLayout(false);
             this.tabPage14.ResumeLayout(false);
@@ -5512,34 +5135,10 @@
         private System.Windows.Forms.Button btnDOWN_C;
         private System.Windows.Forms.Button btnUP_D;
         private System.Windows.Forms.Button btnDOWN_D;
-        private System.Windows.Forms.TabPage tabPage5;
-        private System.Windows.Forms.Button btnUP_E;
-        private System.Windows.Forms.Button btnDOWN_E;
-        private System.Windows.Forms.TabPage tabPage6;
-        private System.Windows.Forms.Button btnUP_F;
-        private System.Windows.Forms.Button btnDOWN_F;
-        private System.Windows.Forms.TabPage tabPage7;
-        private System.Windows.Forms.Button btnUP_G;
-        private System.Windows.Forms.Button btnDOWN_G;
-        private System.Windows.Forms.TabPage tabPage8;
-        private System.Windows.Forms.Button btnUP_H;
-        private System.Windows.Forms.Button btnDOWN_H;
-        private System.Windows.Forms.TabPage tabPage9;
-        private System.Windows.Forms.Button btnUP_I;
-        private System.Windows.Forms.Button btnDOWN_I;
-        private System.Windows.Forms.TabPage tabPage10;
-        private System.Windows.Forms.Button button17;
-        private System.Windows.Forms.Button btnDOWN_J;
         private System.Windows.Forms.Button btnAddVST;
         private System.Windows.Forms.DataGridView dgvMIDIoutListB;
         private System.Windows.Forms.DataGridView dgvMIDIoutListC;
         private System.Windows.Forms.DataGridView dgvMIDIoutListD;
-        private System.Windows.Forms.DataGridView dgvMIDIoutListE;
-        private System.Windows.Forms.DataGridView dgvMIDIoutListF;
-        private System.Windows.Forms.DataGridView dgvMIDIoutListG;
-        private System.Windows.Forms.DataGridView dgvMIDIoutListH;
-        private System.Windows.Forms.DataGridView dgvMIDIoutListI;
-        private System.Windows.Forms.DataGridView dgvMIDIoutListJ;
         private System.Windows.Forms.TabPage tpNSF;
         private System.Windows.Forms.GroupBox groupBox8;
         private System.Windows.Forms.CheckBox cbNSFFDSWriteDisable8000;
@@ -5597,14 +5196,6 @@
         private System.Windows.Forms.Label label33;
         private System.Windows.Forms.TextBox tbBeforeSend_GMReset;
         private System.Windows.Forms.Label label31;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn clmIsVST;
-        private System.Windows.Forms.DataGridViewTextBoxColumn clmFileName;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
-        private System.Windows.Forms.DataGridViewComboBoxColumn clmType;
-        private System.Windows.Forms.DataGridViewComboBoxColumn ClmBeforeSend;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn3;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn4;
         private System.Windows.Forms.Label label35;
         private System.Windows.Forms.RadioButton rbSPPCM;
         private System.Windows.Forms.GroupBox groupBox16;
@@ -5761,5 +5352,13 @@
         private System.Windows.Forms.CheckBox cbInfiniteOfflineMode;
         private System.Windows.Forms.CheckBox cbMIDIKbdAlwaysTop;
         private System.Windows.Forms.CheckBox cbUseRealChip;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn clmIsVST;
+        private System.Windows.Forms.DataGridViewTextBoxColumn clmFileName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
+        private System.Windows.Forms.DataGridViewComboBoxColumn clmType;
+        private System.Windows.Forms.DataGridViewComboBoxColumn ClmBeforeSend;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn3;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn4;
     }
 }

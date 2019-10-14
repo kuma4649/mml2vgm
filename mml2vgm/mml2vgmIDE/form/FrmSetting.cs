@@ -25,8 +25,7 @@ namespace mml2vgmIDE
             InitializeComponent();
 
             dgv = new DataGridView[] {
-                dgvMIDIoutListA,dgvMIDIoutListB,dgvMIDIoutListC,dgvMIDIoutListD,dgvMIDIoutListE
-                ,dgvMIDIoutListF,dgvMIDIoutListG,dgvMIDIoutListH,dgvMIDIoutListI,dgvMIDIoutListJ
+                dgvMIDIoutListA,dgvMIDIoutListB,dgvMIDIoutListC,dgvMIDIoutListD
             };
 
             Init();
@@ -40,6 +39,9 @@ namespace mml2vgmIDE
             tcSetting.TabPages.Remove(tpBalance);
             tcSetting.TabPages.Remove(tpOther);
             tcSetting.TabPages.Remove(tpAbout);
+            tbcMIDIoutList.TabPages.Remove(tabPage2);
+            tbcMIDIoutList.TabPages.Remove(tabPage3);
+            tbcMIDIoutList.TabPages.Remove(tabPage4);
         }
 
         public void Init()
@@ -181,12 +183,6 @@ namespace mml2vgmIDE
             copyFromMIDIoutListA(dgvMIDIoutListB);
             copyFromMIDIoutListA(dgvMIDIoutListC);
             copyFromMIDIoutListA(dgvMIDIoutListD);
-            copyFromMIDIoutListA(dgvMIDIoutListE);
-            copyFromMIDIoutListA(dgvMIDIoutListF);
-            copyFromMIDIoutListA(dgvMIDIoutListG);
-            copyFromMIDIoutListA(dgvMIDIoutListH);
-            copyFromMIDIoutListA(dgvMIDIoutListI);
-            copyFromMIDIoutListA(dgvMIDIoutListJ);
 
             //設定内容をコントロールへ適用
 
@@ -516,7 +512,7 @@ namespace mml2vgmIDE
 
             if (setting.midiOut.lstMidiOutInfo != null && setting.midiOut.lstMidiOutInfo.Count > 0)
             {
-                for (int i = 0; i < setting.midiOut.lstMidiOutInfo.Count; i++)
+                for (int i = 0; i <4;i++)// setting.midiOut.lstMidiOutInfo.Count; i++)
                 {
                     dgv[i].Rows.Clear();
                     HashSet<int> midioutNotFound = new HashSet<int>();
@@ -540,24 +536,24 @@ namespace mml2vgmIDE
                             moi.id = found;
 
                             string stype = "GM";
-                            switch (moi.type)
-                            {
-                                case 1:
-                                    stype = "XG";
-                                    break;
-                                case 2:
-                                    stype = "GS";
-                                    break;
-                                case 3:
-                                    stype = "LA";
-                                    break;
-                                case 4:
-                                    stype = "GS(SC-55_1)";
-                                    break;
-                                case 5:
-                                    stype = "GS(SC-55_2)";
-                                    break;
-                            }
+                            //switch (moi.type)
+                            //{
+                            //    case 1:
+                            //        stype = "XG";
+                            //        break;
+                            //    case 2:
+                            //        stype = "GS";
+                            //        break;
+                            //    case 3:
+                            //        stype = "LA";
+                            //        break;
+                            //    case 4:
+                            //        stype = "GS(SC-55_1)";
+                            //        break;
+                            //    case 5:
+                            //        stype = "GS(SC-55_2)";
+                            //        break;
+                            //}
 
                             string sbeforeSend = "None";
                             switch (moi.beforeSendType)

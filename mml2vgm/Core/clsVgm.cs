@@ -3086,6 +3086,8 @@ namespace Core
                 else
                 {
                     pw.bendWaitCounter = -1;
+                    //midi向け
+                    pw.tieBend = pw.bendFnum;
                 }
             }
         }
@@ -3306,6 +3308,11 @@ namespace Core
                 case enmMMLType.Detune:
                     log.Write("Detune");
                     pw.chip.CmdDetune(pw, mml);
+                    pw.mmlPos++;
+                    break;
+                case enmMMLType.DirectMode:
+                    log.Write("DirectMode");
+                    pw.chip.CmdDirectMode(pw, mml);
                     pw.mmlPos++;
                     break;
                 case enmMMLType.Renpu:

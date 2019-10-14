@@ -346,6 +346,15 @@ namespace Core
                     , pw.octaveNow
                     , note.cmd
                     , note.shift);
+
+                //midi向け
+                if (!pw.beforeTie)
+                {
+                    pw.bendStartNote = note.cmd;
+                    pw.bendStartOctave = pw.octaveNow;
+                    pw.bendStartShift = pw.shift;
+                }
+
                 for (int i = 0; i < Math.Abs(delta); i++)
                 {
                     bf += wait;
@@ -895,7 +904,7 @@ namespace Core
 
         public virtual void CmdTotalVolume(partWork pw, MML mml)
         {
-            msgBox.setErrMsg(msg.get("E10007")
+            msgBox.setErrMsg(msg.get("E10026")
                     , mml.line.Lp);
         }
 
@@ -1012,6 +1021,11 @@ namespace Core
             SetDummyData(pw, mml);
         }
 
+        public virtual void CmdDirectMode(partWork pw, MML mml)
+        {
+            msgBox.setErrMsg(msg.get("E10027")
+                    , mml.line.Lp);
+        }
 
         public virtual void CmdGatetime(partWork pw, MML mml)
         {
@@ -1299,6 +1313,9 @@ namespace Core
                 //pw.freq = -1;
                 //発音周波数の決定
                 SetFNum(pw,mml);
+                //midiむけ
+                if(pw.bendWaitCounter==-1)
+                    ResetTieBend(pw, mml);
                 if (!pw.chip.parent.useSkipPlayCommand)
                 {
                     SetKeyOn(pw, mml);
@@ -1311,6 +1328,7 @@ namespace Core
                 //発音周波数の決定
                 SetDummyData(pw, mml);
                 SetFNum(pw,mml);
+                SetTieBend(pw,mml);
                 SetVolume(pw, mml);
             }
 
@@ -1322,6 +1340,14 @@ namespace Core
             if (pw.waitKeyOnCounter < 1) pw.waitKeyOnCounter = 1;
 
             pw.clockCounter += pw.waitCounter;
+        }
+
+        protected virtual void ResetTieBend(partWork pw, MML mml)
+        {
+        }
+
+        protected virtual void SetTieBend(partWork pw, MML mml)
+        {
         }
 
         public virtual void CmdRest(partWork pw, MML mml)

@@ -210,6 +210,7 @@ E05050='{' or '}' missing in sound or meta definiton.
 E05051=Failed to parse 'so' or 'sf' command.
 E05052=Illegal number defined as 'A' configuration.
 E05053=Unknown command ('mo?') defined.
+E05054=Unknown command ('DO?') defined.
 
 
 ;partWork.cs 06000
@@ -260,6 +261,8 @@ E10022=This channel can't use so or sf command.
 E10023=This channel can't use mon or mof command.
 E10024=This PCM map No({0}) is not defined.
 E10025=This Note(o{0}{1} shift:{2}) is not defined.
+E10026=This channel can't use V command.
+E10027=This channel can't use DOF or DON command.
 
 
 ;clsOPN.cs 11000
@@ -377,4 +380,7 @@ E23005=Sound patch isn't selected.
 E24000=The number of definitions per sound chip has exceeded the allowable number.(Format:{0} Max:{1} Specify:{2})
 E24001=A definition of sound chip({1}) that cannot be used in the {0} format.
 
+
+;MidiGM.cs 25000
+W25000=The target of DirectMode ('V', 'T') is not specified.
 
