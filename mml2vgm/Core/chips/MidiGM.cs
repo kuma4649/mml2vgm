@@ -71,6 +71,18 @@ namespace Core
             pw.pitchBend = 0;
         }
 
+        public override void CmdMIDICh(partWork pw, MML mml)
+        {
+            int ch = (int)mml.args[0];
+            pw.ch = ch & 0xf;
+        }
+
+        public override void CmdVelocity(partWork pw, MML mml)
+        {
+            int vel = (int)mml.args[0];
+            pw.velocity = vel & 0x7f;
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -253,7 +265,7 @@ namespace Core
             mn.pw = pw;
             mn.mml = mml;
             mn.noteNumber = noteNum;
-            mn.velocity = 127;
+            mn.velocity = (byte)(n.velocity==-1 ? pw.velocity : n.velocity);
             noteOns.Add(mn);
         }
 

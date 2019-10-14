@@ -30,5 +30,6 @@ namespace Core
         public int tDblShift = 0;
         public List<MML> tDblOctave;
 
+        public int velocity = -1;
     }
 }

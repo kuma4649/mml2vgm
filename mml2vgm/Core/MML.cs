@@ -53,6 +53,7 @@ namespace Core
         NoiseToneMixer, // P
         KeyShift,       // K
         AddressShift,   // A
+        MIDICh,         // CH
         Note,           // c d e f g a b
         Rest,           // r
         RestNoWork,     // R
@@ -64,6 +65,7 @@ namespace Core
         Lyric,          // "
         SusOnOff,       // so sf
         JumpPoint,      // J
+        Velocity,       // U
         SkipPlay        // caret位置からの演奏のための特殊コマンド
     }
 }

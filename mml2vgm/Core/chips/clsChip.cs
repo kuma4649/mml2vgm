@@ -727,6 +727,18 @@ namespace Core
             if (pw.addressShift < 0) pw.addressShift = 0;
         }
 
+        public virtual void CmdMIDICh(partWork pw, MML mml)
+        {
+            msgBox.setErrMsg(msg.get("E10028")
+                    , mml.line.Lp);
+        }
+
+        public virtual void CmdVelocity(partWork pw, MML mml)
+        {
+            msgBox.setErrMsg(msg.get("E10029")
+                    , mml.line.Lp);
+        }
+
         public virtual void CmdNoise(partWork pw, MML mml)
         {
             msgBox.setErrMsg(msg.get("E10002")

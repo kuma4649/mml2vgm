@@ -581,6 +581,7 @@ namespace Core
         public int bendStartOctave { get; set; } = 0;
         public char bendStartNote { get; set; } = 'c';
         public int bendStartShift { get; set; } = 0;
+        public int velocity { get; set; } = 110;
 
         public void MakeLstPos()
         {

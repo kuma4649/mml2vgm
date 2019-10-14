@@ -112,25 +112,9 @@ namespace Core
                     mml.type = enmMMLType.CompileSkip;
                     mml.args = null;
                     break;
-                case 'T': // tempo
-                    log.Write(" tempo");
-                    CmdTempo(pw, mml);
-                    break;
                 case '@': // instrument
                     log.Write("instrument");
                     CmdInstrument(pw, mml);
-                    break;
-                case 'v': // volume
-                    log.Write("volume");
-                    CmdVolume(pw, mml);
-                    break;
-                case 'V': // totalVolume(Adpcm-A / Rhythm)
-                    log.Write("totalVolume(Adpcm-A / Rhythm)");
-                    CmdTotalVolume(pw, mml);
-                    break;
-                case 'o': // octave
-                    log.Write("octave");
-                    CmdOctave(pw, mml);
                     break;
                 case '>': // octave Up
                     log.Write("octave Up");
@@ -148,45 +132,9 @@ namespace Core
                     log.Write("volume Down");
                     CmdVolumeDown(pw, mml);
                     break;
-                case 'l': // length
-                    log.Write("length");
-                    CmdLength(pw, mml);
-                    break;
                 case '#': // length(clock)
                     log.Write("length(clock)");
                     CmdClockLength(pw, mml);
-                    break;
-                case 'p': // pan
-                    log.Write(" pan");
-                    CmdPan(pw, mml);
-                    break;
-                case 'D': // Detune / ダイレクトモード
-                    log.Write("Detune / DirectMode");
-                    CmdDetuneDirectMode(pw, mml);
-                    break;
-                case 'm': // pcm mode / pcm mapMode Sw
-                    log.Write("pcm mode / pcm mapMode Sw");
-                    CmdMode(pw, mml);
-                    break;
-                case 'q': // gatetime
-                    log.Write(" gatetime q");
-                    CmdGatetime(pw, mml);
-                    break;
-                case 'Q': // gatetime
-                    log.Write("gatetime Q");
-                    CmdGatetime2(pw, mml);
-                    break;
-                case 'E': // envelope / extendChannel
-                    log.Write("envelope / extendChannel");
-                    CmdE(pw, mml);
-                    break;
-                case 'L': // loop point
-                    log.Write(" loop point");
-                    CmdLoop(pw, mml);
-                    break;
-                case 'J': // Jump point
-                    log.Write("Jump point");
-                    CmdJump(pw, mml);
                     break;
                 case '[': // repeat
                     log.Write("repeat [");
@@ -208,52 +156,6 @@ namespace Core
                     log.Write("repeat /");
                     CmdRepeatExit(pw, mml);
                     break;
-                case 'M': // lfo
-                    log.Write("lfo");
-                    CmdLfo(pw, mml);
-                    break;
-                case 'S': // lfo switch
-                    log.Write(" lfo switch");
-                    CmdLfoSwitch(pw, mml);
-                    break;
-                case 'y': // y
-                    log.Write(" y");
-                    CmdY(pw, mml);
-                    break;
-                case 'w': // noise
-                    log.Write("noise");
-                    CmdNoise(pw, mml);
-                    break;
-                case 'P': // noise or tone mixer
-                    log.Write("noise or tone mixer");
-                    CmdMixer(pw, mml);
-                    break;
-                case 'K': // key shift
-                    log.Write("key shift");
-                    CmdKeyShift(pw, mml);
-                    break;
-                case 's': // sus ON/OFF
-                    log.Write("sus ON/OFF");
-                    CmdSusOnOff(pw, mml);
-                    break;
-                case 'c':
-                case 'd':
-                case 'e':
-                case 'f':
-                case 'g':
-                case 'a':
-                case 'b':
-                    log.Write(string.Format("note {0}", cmd));
-                    CmdNote(pw, cmd, mml);
-                    break;
-                case 'r':
-                    log.Write("rest");
-                    CmdRest(pw, mml);
-                    break;
-                case 'R':
-                    log.Write("restNoWork");
-                    CmdRestNoWork(pw, mml);
-                    break;
                 case '"':
                     log.Write("lylic");
                     CmdLyric(pw, mml);
@@ -274,10 +176,122 @@ namespace Core
                     log.Write("tie minus clock");
                     CmdTieMC(pw, mml);
                     break;
+
+
                 case 'A': // Address shift
                     log.Write("Address shift");
                     CmdAddressShift(pw, mml);
                     break;
+                case 'C': //MIDI Ch
+                    log.Write("MIDI Ch");
+                    CmdMIDICh(pw, mml);
+                    break;
+                case 'D': // Detune / ダイレクトモード
+                    log.Write("Detune / DirectMode");
+                    CmdDetuneDirectMode(pw, mml);
+                    break;
+                case 'E': // envelope / extendChannel
+                    log.Write("envelope / extendChannel");
+                    CmdE(pw, mml);
+                    break;
+                case 'J': // Jump point
+                    log.Write("Jump point");
+                    CmdJump(pw, mml);
+                    break;
+                case 'K': // key shift
+                    log.Write("key shift");
+                    CmdKeyShift(pw, mml);
+                    break;
+                case 'l': // length
+                    log.Write("length");
+                    CmdLength(pw, mml);
+                    break;
+                case 'L': // loop point
+                    log.Write(" loop point");
+                    CmdLoop(pw, mml);
+                    break;
+                case 'm': // pcm mode / pcm mapMode Sw
+                    log.Write("pcm mode / pcm mapMode Sw");
+                    CmdMode(pw, mml);
+                    break;
+                case 'M': // lfo
+                    log.Write("lfo");
+                    CmdLfo(pw, mml);
+                    break;
+                case 'o': // octave
+                    log.Write("octave");
+                    CmdOctave(pw, mml);
+                    break;
+                case 'p': // pan
+                    log.Write(" pan");
+                    CmdPan(pw, mml);
+                    break;
+                case 'P': // noise or tone mixer
+                    log.Write("noise or tone mixer");
+                    CmdMixer(pw, mml);
+                    break;
+                case 'q': // gatetime
+                    log.Write(" gatetime q");
+                    CmdGatetime(pw, mml);
+                    break;
+                case 'Q': // gatetime
+                    log.Write("gatetime Q");
+                    CmdGatetime2(pw, mml);
+                    break;
+                case 's': // sus ON/OFF
+                    log.Write("sus ON/OFF");
+                    CmdSusOnOff(pw, mml);
+                    break;
+                case 'S': // lfo switch
+                    log.Write(" lfo switch");
+                    CmdLfoSwitch(pw, mml);
+                    break;
+                case 'T': // tempo
+                    log.Write(" tempo");
+                    CmdTempo(pw, mml);
+                    break;
+                case 'U': // velocity
+                    log.Write("velocity");
+                    CmdVelocity(pw, mml);
+                    break;
+                case 'v': // volume
+                    log.Write("volume");
+                    CmdVolume(pw, mml);
+                    break;
+                case 'V': // totalVolume(Adpcm-A / Rhythm)
+                    log.Write("totalVolume(Adpcm-A / Rhythm)");
+                    CmdTotalVolume(pw, mml);
+                    break;
+                case 'w': // noise
+                    log.Write("noise");
+                    CmdNoise(pw, mml);
+                    break;
+                case 'y': // y
+                    log.Write(" y");
+                    CmdY(pw, mml);
+                    break;
+
+
+                case 'c':
+                case 'd':
+                case 'e':
+                case 'f':
+                case 'g':
+                case 'a':
+                case 'b':
+                    log.Write(string.Format("note {0}", cmd));
+                    CmdNote(pw, cmd, mml);
+                    break;
+                case 'r':
+                    log.Write("rest");
+                    CmdRest(pw, mml);
+                    break;
+                case 'R':
+                    log.Write("restNoWork");
+                    CmdRestNoWork(pw, mml);
+                    break;
+
+
                 default:
                     msgBox.setErrMsg(string.Format(msg.get("E05000"), cmd), mml.line.Lp);
                     pw.incPos();
@@ -320,6 +334,21 @@ namespace Core
             mml.args = new List<object>();
             mml.args.Add(n);
             mml.args.Add((int)desVGM.info.clockCount);
+        }
+
+        private void CmdVelocity(partWork pw, MML mml)
+        {
+            pw.incPos();
+            if (!pw.getNum(out int n))
+            {
+                msgBox.setErrMsg(msg.get("E05056"), mml.line.Lp);
+                return;
+            }
+            n = Common.CheckRange(n, 0, 127);
+
+            mml.type = enmMMLType.Velocity;
+            mml.args = new List<object>();
+            mml.args.Add(n);
         }
 
         private void CmdInstrument(partWork pw, MML mml)
@@ -1258,6 +1287,43 @@ namespace Core
             mml.args.Add(n);
         }
 
+        /// <summary>
+        /// MIDI CH
+        /// </summary>
+        /// <remarks>
+        /// コマンド
+        ///   CHn
+        /// パラメーター
+        ///   n  :  1～16
+        /// 内容
+        ///   パートに割り当てるMIDI Channelを設定する
+        /// </remarks>
+        private void CmdMIDICh(partWork pw, MML mml)
+        {
+            int n = -1;
+
+            pw.incPos();
+
+            if (pw.getChar() != 'H')
+            {
+                msgBox.setErrMsg(msg.get("E05055"), mml.line.Lp);
+                return;
+            }
+
+            pw.incPos();
+
+            if (!pw.getNum(out n))
+            {
+                msgBox.setErrMsg(msg.get("E05055"), mml.line.Lp);
+                return;
+            }
+            n = Common.CheckRange(n, 1, 16) - 1;//0-15に変換
+
+            mml.type = enmMMLType.MIDICh;
+            mml.args = new List<object>();
+            mml.args.Add(n);
+        }
+
         private void CmdNote(partWork pw, char cmd, MML mml)
         {
             pw.incPos();
@@ -1318,13 +1384,23 @@ namespace Core
             {
                 note.length = (int)pw.length;
                 pw.skipTabSpace();
-                //Tone Doubler','指定の場合はここで解析終了
                 if (pw.getChar() == ',')
                 {
                     pw.incPos();
-                    mml.line.Lp.length++;
-                    swToneDoubler = true;
-                    return;
+                    pw.skipTabSpace();
+                    if (!pw.getNum(out n))
+                    {
+                        //Tone Doubler','指定の場合はここで解析終了
+                        //ToneDoublerは数値ではないはず
+                        mml.line.Lp.length++;
+                        swToneDoubler = true;
+                        return;
+                    }
+                    else
+                    {
+                        note.velocity = Common.CheckRange(n, 0, 127);
+                        return;
+                    }
                 }
             }
 
@@ -1345,6 +1421,16 @@ namespace Core
             }
             note.length += futen;
 
+            pw.skipTabSpace();
+            if (pw.getChar() == ',')
+            {
+                pw.incPos();
+                pw.skipTabSpace();
+                if (pw.getNum(out n))
+                {
+                    note.velocity = Common.CheckRange(n, 0, 127);
+                }
+            }
         }
 
         private void CmdRest(partWork pw, MML mml)

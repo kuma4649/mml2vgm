@@ -1,4 +1,11 @@
 更新履歴
+TAG124 2019/10/15
+  Core / mml2vgmIDE
+    ・zgm GeneralMIDI対応中
+	  チャンネル設定コマンド(CH)追加
+	  ベロシティ設定コマンド(U)追加
+	  ノートの書式にベロシティ設定追加
+
 TAG123 2019/10/14
   Core / mml2vgmIDE
     ・zgm GeneralMIDI対応中
@@ -6,6 +13,7 @@ TAG123 2019/10/14
 	  ポルタメント実装
 	  ディチューン実装
 	  タイ(スラー)実装
+
 TAG117 2019/09/18 2nd
   Core / mml2vgmIDE
     ・zgm 妄想音源YM2609対応中

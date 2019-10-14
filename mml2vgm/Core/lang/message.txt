@@ -211,6 +211,8 @@ E05051=Failed to parse 'so' or 'sf' command.
 E05052=Illegal number defined as 'A' configuration.
 E05053=Unknown command ('mo?') defined.
 E05054=Unknown command ('DO?') defined.
+E05055=Failed to parse 'CH' command.
+E05056=Failed to parse 'U' command.
 
 
 ;partWork.cs 06000
@@ -263,6 +265,8 @@ E10024=This PCM map No({0}) is not defined.
 E10025=This Note(o{0}{1} shift:{2}) is not defined.
 E10026=This channel can't use V command.
 E10027=This channel can't use DOF or DON command.
+E10028=This channel can't use CH command.
+E10029=This channel can't use U command.
 
 
 ;clsOPN.cs 11000
