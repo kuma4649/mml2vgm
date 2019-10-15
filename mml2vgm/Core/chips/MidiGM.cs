@@ -63,6 +63,7 @@ namespace Core
         {
             pw.volume = 127;
             pw.expression = 127;
+            pw.beforeExpression = -1;
             pw.MaxVolume = 127;
             pw.MaxExpression = 127;
             pw.tblNoteOn = new bool[128];
@@ -83,6 +84,13 @@ namespace Core
             pw.velocity = vel & 0x7f;
         }
 
+        public override void CmdPan(partWork pw, MML mml)
+        {
+            int pan = (int)mml.args[0];
+            pw.panL = pan & 0x7f;
+            OutMidiControlChange(pw, mml, enmControlChange.Panpot, (byte)pw.panL);
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -90,7 +98,7 @@ namespace Core
         {
             bool sw = (bool)mml.args[0];
             int vt = 0;
-            if (mml.args.Count != 2 || ((char)mml.args[1] != 'V' && (char)mml.args[1] == 'T'))
+            if (mml.args.Count != 2 || ((char)mml.args[1] != 'V' && (char)mml.args[1] != 'T'))
             {
                 msgBox.setWrnMsg(msg.get("W25000"), mml.line.Lp);
                 return;
@@ -181,7 +189,14 @@ namespace Core
 
         public override void CmdInstrument(partWork pw, MML mml)
         {
+            char type = (char)mml.args[0];
             int n = (int)mml.args[1];
+
+            if (type == 'E')
+            {
+                n = SetEnvelopParamFromInstrument(pw, n, mml);
+                return;
+            }
             n = Common.CheckRange(n, 0, 127);
             pw.instrument = n;
 
@@ -207,13 +222,65 @@ namespace Core
 
         public override void SetVolume(partWork pw, MML mml)
         {
-            if (pw.beforeExpression == pw.expression) return;
-            pw.beforeExpression = pw.expression;
-            OutMidiControlChange(pw, mml, enmControlChange.Expression, (byte)pw.expression);
+            //if (pw.beforeExpression == pw.expression) return;
+            //pw.beforeExpression = pw.expression;
+            //OutMidiControlChange(pw, mml, enmControlChange.Expression, (byte)pw.expression);
+
+            int vol = pw.expression;
+
+            //if (pw.keyOn)
+            {
+                if (pw.envelopeMode)
+                {
+                    vol = 0;
+                    if (pw.envIndex != -1)
+                    {
+                        vol = pw.envVolume - (127 - pw.expression);
+                    }
+                }
+
+                for (int lfo = 0; lfo < 4; lfo++)
+                {
+                    if (!pw.lfo[lfo].sw) continue;
+                    if (pw.lfo[lfo].type != eLfoType.Tremolo) continue;
+
+                    vol += pw.lfo[lfo].value + pw.lfo[lfo].param[6];
+                }
+            }
+            //else
+            {
+                //vol = 0;
+            }
+
+            vol = Common.CheckRange(vol, 0, 127);
+
+            if (pw.beforeExpression != vol)
+            {
+                if (!pw.directModeTre)
+                {
+                    OutMidiControlChange(pw, mml, enmControlChange.Expression, (byte)vol);
+                }
+                pw.beforeExpression = vol;
+            }
         }
 
         public override void SetLfoAtKeyOn(partWork pw, MML mml)
         {
+            for (int lfo = 0; lfo < 4; lfo++)
+            {
+                clsLfo pl = pw.lfo[lfo];
+                if (!pl.sw)
+                    continue;
+
+                if (pl.param[5] != 1)
+                    continue;
+
+                pl.isEnd = false;
+                pl.value = (pl.param[0] == 0) ? pl.param[6] : 0;//ディレイ中は振幅補正は適用されない
+                pl.waitCounter = pl.param[0];
+                pl.direction = pl.param[2] < 0 ? -1 : 1;
+
+            }
         }
 
         public int GetNoteNum(int octave, char noteCmd, int shift)
@@ -359,6 +426,19 @@ namespace Core
             //コマンドを跨ぐデータ向け処理
             foreach (partWork pw in lstPartWork)
             {
+                pw.lfoBend = 0;
+                for (int lfo = 0; lfo < 4; lfo++)
+                {
+                    if (!pw.lfo[lfo].sw)
+                    {
+                        continue;
+                    }
+                    if (pw.lfo[lfo].type != eLfoType.Vibrato)
+                    {
+                        continue;
+                    }
+                    pw.lfoBend += pw.lfo[lfo].value + pw.lfo[lfo].param[6];
+                }
 
                 if (pw.pitchBend != (pw.bendWaitCounter==-1 ? pw.tieBend :0)+ pw.portaBend + pw.lfoBend + pw.detune)
                 {
@@ -369,6 +449,17 @@ namespace Core
                         OutMidiPitchBend(pw, mml, (byte)(pb / 128), (byte)(pb % 128));
                     }
                 }
+
+                //int exp = Common.CheckRange(pw.expression + pw.envExpression + pw.lfoExpression, 0, 127);
+                //if (pw.beforeExpression != exp)
+                //{
+                //    pw.beforeExpression = exp;
+
+                //    if (!pw.directModeTre)
+                //    {
+                //        OutMidiControlChange(pw, mml, enmControlChange.Expression, (byte)exp);
+                //    }
+                //}
 
             }
 

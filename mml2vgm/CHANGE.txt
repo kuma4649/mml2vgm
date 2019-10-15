@@ -1,4 +1,11 @@
 更新履歴
+TAG125 2019/10/16
+  Core / mml2vgmIDE
+    ・zgm GeneralMIDI対応中
+	  LFO機能対応
+	  パンポット対応
+	  エンベロープ対応
+
 TAG124 2019/10/15
   Core / mml2vgmIDE
     ・zgm GeneralMIDI対応中
