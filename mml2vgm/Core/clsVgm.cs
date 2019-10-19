@@ -42,6 +42,7 @@ namespace Core
         public Dictionary<int, clsToneDoubler> instToneDoubler = new Dictionary<int, clsToneDoubler>();
         public Dictionary<int, byte[]> instWF = new Dictionary<int, byte[]>();
         public Dictionary<int, ushort[]> instOPNA2WF = new Dictionary<int, ushort[]>();
+        public Dictionary<int, byte[]> midiSysEx = new Dictionary<int, byte[]>();
 
         public Dictionary<string, List<Line>> partData = new Dictionary<string, List<Line>>();
         public Dictionary<string, Line> aliesData = new Dictionary<string, Line>();
@@ -57,6 +58,7 @@ namespace Core
         public bool doSkip = false;
         public bool doSkipStop = false;
         public Point caretPoint = Point.Empty;
+        private int midiSysExCounter = -1;
 
         public int newStreamID = -1;
 
@@ -390,6 +392,13 @@ namespace Core
                 SetInstToneDoubler();
             }
 
+            // 定義中のMidiSysExがあればここで定義完了
+            if (midiSysExCounter != -1)
+            {
+                midiSysExCounter = -1;
+                SetMidiSysEx();
+            }
+
             // チェック1定義されていない名称を使用したパートが存在するか
 
             foreach (string p in partData.Keys)
@@ -482,10 +491,21 @@ namespace Core
             char t = buf.ToUpper()[0];
             if (toneDoublerCounter != -1)
             {
-                if (t == 'F' || t == 'N' || t == 'M' || t == 'L' || t == 'P' || t == 'E' || t == 'T' || t == 'H')
+                //他の定義が現れたらtoneDoublerの定義は終了
+                if (t == 'F' || t == 'N' || t == 'M' || t == 'L' || t == 'P' || t == 'E' || t == 'T' || t == 'H' || t == 'W' || t == 'S')
                 {
                     toneDoublerCounter = -1;
                     SetInstToneDoubler();
+                }
+            }
+
+            if (midiSysExCounter != -1)
+            {
+                //他の定義が現れたらSysExの定義は終了
+                if (t == 'F' || t == 'N' || t == 'M' || t == 'L' || t == 'P' || t == 'E' || t == 'T' || t == 'H' || t == 'W' || t == 'S')
+                {
+                    midiSysExCounter = -1;
+                    SetMidiSysEx();
                 }
             }
 
@@ -598,12 +618,22 @@ namespace Core
                     opna2wfInstrumentCounter = 0;
                     SetOPNA2WfInstrument(line);
                     return 0;
+
+                case 'S':
+                    midiSysExCounter = 0;
+                    StoreMidiSysExBuffer(line);
+                    return 0;
             }
 
             // ToneDoublerを定義中の場合
             if (toneDoublerCounter != -1)
             {
                 return StoreToneDoublerBuffer(buf.ToUpper(), line);
+            }
+
+            if (midiSysExCounter != -1)
+            {
+                return StoreMidiSysExBuffer(line);
             }
 
             return 0;
@@ -1492,6 +1522,7 @@ namespace Core
 
             return aryIndex;
         }
+
         private int GetNums2(ushort[] aryBuf, int aryIndex, string vals)
         {
             string n = "";
@@ -1547,6 +1578,65 @@ namespace Core
             }
 
             return aryIndex;
+        }
+
+        private List<byte> GetNums(int ptr, string vals)
+        {
+            List<byte> lstBuf = new List<byte>();
+            string n = "";
+            string h = "";
+            int hc = -1;
+            int i = 0;
+            int p = 0;
+
+            foreach (char c in vals)
+            {
+                p++;
+                if (p <= ptr) continue;
+
+                if (c == '$')
+                {
+                    hc = 0;
+                    continue;
+                }
+
+                if (hc > -1 && ((c >= '0' && c <= '9') || (c >= 'A' && c <= 'F')))
+                {
+                    h += c;
+                    hc++;
+                    if (hc == 2)
+                    {
+                        i = int.Parse(h, System.Globalization.NumberStyles.HexNumber);
+                        lstBuf.Add((byte)(i & 0xff));
+                        h = "";
+                        hc = -1;
+                    }
+                    continue;
+                }
+
+                if ((c >= '0' && c <= '9') || c == '-')
+                {
+                    n = n + c.ToString();
+                    continue;
+                }
+
+                if (int.TryParse(n, out i))
+                {
+                    lstBuf.Add((byte)(i & 0xff));
+                    n = "";
+                }
+            }
+
+            if (!string.IsNullOrEmpty(n))
+            {
+                if (int.TryParse(n, out i))
+                {
+                    lstBuf.Add((byte)(i & 0xff));
+                    n = "";
+                }
+            }
+
+            return lstBuf;
         }
 
         private int StoreToneDoublerBuffer(string vals, Line line)
@@ -1650,6 +1740,41 @@ namespace Core
             instToneDoubler.Add(num, toneDoubler);
             toneDoublerBufCache.Clear();
             toneDoublerCounter = -1;
+        }
+
+        private int StoreMidiSysExBuffer(Line line)
+        {
+            try
+            {
+                List<byte> buf = null;
+                if (midiSysExCounter == 0)
+                {
+                    buf = GetNums(line.Txt.IndexOf('S') + 1, line.Txt);
+                    midiSysExCounter = buf[0] + 1;
+                    if (midiSysEx.ContainsKey(buf[0]))
+                    {
+                        midiSysEx.Remove(buf[0]);
+                    }
+                    midiSysEx.Add(buf[0], buf.ToArray());
+                }
+                else
+                {
+                    buf = GetNums(line.Txt.IndexOf('@') + 1, line.Txt);
+                    List<byte> ebuf = midiSysEx[midiSysExCounter - 1].ToList();
+                    ebuf.AddRange(buf);
+                    midiSysEx.Remove(midiSysExCounter - 1);
+                    midiSysEx.Add(midiSysExCounter - 1, ebuf.ToArray());
+                }
+            }
+            catch { }
+
+            return 0;
+        }
+
+
+        private void SetMidiSysEx()
+        {
+            midiSysExCounter = -1;
         }
 
         private byte[] ConvertFtoM(byte[] instrumentBufCache)

@@ -198,7 +198,7 @@ namespace Core
         }
 
 
-        private int GetRf5c164PcmNote(int octave, char noteCmd, int shift)
+        private int GetRf5c164PcmNote(partWork pw, int octave, char noteCmd, int shift)
         {
             int o = octave;
             int n = Const.NOTE.IndexOf(noteCmd) + shift;
@@ -210,21 +210,31 @@ namespace Core
                 n += 12;
                 o = Common.CheckRange(--o, 1, 8);
             }
-            //if (n >= 0)
-            //{
-            //    o += n / 12;
-            //    o = Common.CheckRange(o, 1, 8);
-            //    n %= 12;
-            //}
-            //else
-            //{
-            //    o += n / 12 - 1;
-            //    o = Common.CheckRange(o, 1, 8);
-            //    n %= 12;
-            //    if (n < 0) { n += 12; }
-            //}
 
-            return (int)(0x0400 * Const.pcmMTbl[n] * Math.Pow(2, (o - 4)));
+            if (pw.instrument < 0 || !parent.instPCM.ContainsKey(pw.instrument))
+            {
+                return 0;
+            }
+
+            if (parent.instPCM[pw.instrument].freq == -1)
+            {
+                return ((int)(
+                    0x0400
+                    * Const.pcmMTbl[n]
+                    * Math.Pow(2, (o - 4))
+                    * ((double)parent.instPCM[pw.instrument].samplerate / 8000.0)
+                    ));
+            }
+            else
+            {
+                return ((int)(
+                    0x0400
+                    * Const.pcmMTbl[n]
+                    * Math.Pow(2, (o - 4))
+                    * ((double)parent.instPCM[pw.instrument].freq / 8000.0)
+                    ));
+            }
+
         }
 
         public void SetRf5c164Envelope(MML mml,partWork pw, int volume)
@@ -461,7 +471,7 @@ namespace Core
 
         public override int GetFNum(partWork pw, MML mml, int octave, char cmd, int shift)
         {
-            return GetRf5c164PcmNote(octave, cmd, shift);
+            return GetRf5c164PcmNote(pw, octave, cmd, shift);
         }
 
         public override void SetFNum(partWork pw, MML mml)

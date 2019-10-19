@@ -5841,16 +5841,27 @@ namespace mml2vgmIDE
 
                     if (data == -1)
                     {
-                        PackData[] pdata = (PackData[])exData;
-                        if (Chip.Model == EnmModel.VirtualModel)
+                        if (exData is byte[])
                         {
+                            byte[] pdata = (byte[])exData;
+                            if (Chip.Model == EnmModel.VirtualModel)
+                            {
+                            }
+                            if (Chip.Model == EnmModel.RealModel)
+                            {
+                                midiOuts[address].SendBuffer((byte[])exData);
+                            }
                         }
-                        if (Chip.Model == EnmModel.RealModel)
+                        else if(exData is PackData[])
                         {
-                            if (scC140[Chip.Number] != null)
+                            PackData[] pdata = (PackData[])exData;
+                            if (Chip.Model == EnmModel.VirtualModel)
+                            {
+                            }
+                            if (Chip.Model == EnmModel.RealModel)
                             {
                                 foreach (PackData dat in pdata)
-                                    scC140[Chip.Number].setRegister(dat.Address, dat.Data);
+                                    midiOuts[dat.Chip.Number].SendBuffer((byte[])dat.ExData);
                             }
                         }
                     }
@@ -5862,21 +5873,21 @@ namespace mml2vgmIDE
                         }
                         else
                         {
-                            if (scC140 != null && scC140[Chip.Number] != null)
-                            {
+                            //if (scC140 != null && scC140[Chip.Number] != null)
+                            //{
                                 // スタートアドレス設定
-                                scC140[Chip.Number].setRegister(0x10000, (byte)((uint)((object[])exData)[1]));
-                                scC140[Chip.Number].setRegister(0x10001, (byte)((uint)((object[])exData)[1] >> 8));
-                                scC140[Chip.Number].setRegister(0x10002, (byte)((uint)((object[])exData)[1] >> 16));
+                                //scC140[Chip.Number].setRegister(0x10000, (byte)((uint)((object[])exData)[1]));
+                                //scC140[Chip.Number].setRegister(0x10001, (byte)((uint)((object[])exData)[1] >> 8));
+                                //scC140[Chip.Number].setRegister(0x10002, (byte)((uint)((object[])exData)[1] >> 16));
                                 // データ転送
-                                for (int cnt = 0; cnt < (uint)((object[])exData)[2]; cnt++)
-                                {
-                                    scC140[Chip.Number].setRegister(0x10004, ((byte[])((object[])exData)[3])[(uint)((object[])exData)[4] + cnt]);
-                                }
+                                //for (int cnt = 0; cnt < (uint)((object[])exData)[2]; cnt++)
+                                //{
+                                    //scC140[Chip.Number].setRegister(0x10004, ((byte[])((object[])exData)[3])[(uint)((object[])exData)[4] + cnt]);
+                                //}
                                 //scC140[chipID].setRegister(0x10006, (int)ROMSize);
 
-                                realChip.SendData();
-                            }
+                                //realChip.SendData();
+                            //}
                         }
                     }
                 }
@@ -5912,6 +5923,32 @@ namespace mml2vgmIDE
             dummyChip.Use = MIDI[ChipID].Use;
 
             enq(od, Counter, dummyChip, EnmDataType.Normal, dPort, 0, dData);
+        }
+
+        public void MIDISetRegister(outDatum od, long Counter, Chip chip, PackData[] data)
+        {
+            enq(od, Counter, chip, EnmDataType.Block, -1, -1, data);
+        }
+
+        public void MIDISoftReset(long Counter, int chipID)
+        {
+            List<PackData> data = MIDIMakeSoftReset(chipID);
+            MIDISetRegister(null, Counter, MIDI[chipID], data.ToArray());
+        }
+
+        public List<PackData> MIDIMakeSoftReset(int chipID)
+        {
+            List<PackData> data = new List<PackData>();
+
+            //vol off
+            data.Add(new PackData(null, MIDI[chipID], EnmDataType.Block, chipID, -1, new byte[] {
+                0xb0, 0x78, 0x00,  0xb1, 0x78, 0x0,  0xb2, 0x78, 0x0,  0xb3, 0x78, 0x0,
+                0xb4, 0x78, 0x00,  0xb5, 0x78, 0x0,  0xb6, 0x78, 0x0,  0xb7, 0x78, 0x0,
+                0xb8, 0x78, 0x00,  0xb9, 0x78, 0x0,  0xba, 0x78, 0x0,  0xbb, 0x78, 0x0,
+                0xbc, 0x78, 0x00,  0xbd, 0x78, 0x0,  0xbe, 0x78, 0x0,  0xbf, 0x78, 0x0
+            }));
+
+            return data;
         }
 
         #endregion

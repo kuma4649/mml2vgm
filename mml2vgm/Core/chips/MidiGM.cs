@@ -197,6 +197,12 @@ namespace Core
                 n = SetEnvelopParamFromInstrument(pw, n, mml);
                 return;
             }
+            else if (type == 'S')
+            {
+                SendSysEx(pw, mml, n);
+                return;
+            }
+
             n = Common.CheckRange(n, 0, 127);
             pw.instrument = n;
 
@@ -208,6 +214,55 @@ namespace Core
             SetDummyData(pw, vmml);
 
             OutMidiProgramChange(pw, mml, (byte)pw.instrument);
+        }
+
+        private void SendSysEx(partWork pw, MML mml, int n)
+        {
+            if (!parent.midiSysEx.ContainsKey(n)) return;
+
+            byte[] data = parent.midiSysEx[n];
+            if (data == null || data.Length < 1) return;
+
+            List<byte> dat = new List<byte>();
+            int c = 0;
+            foreach (object o in data)
+            {
+                c++;
+                if (c == 1) continue;
+
+                dat.Add((byte)o);
+                if (dat.Count == 255)
+                {
+                    dat.Insert(0, 255);
+                    parent.OutData(mml, pw.port[0], dat.ToArray());
+                    dat.Clear();
+                }
+            }
+
+            if (dat.Count == 0) return;
+
+            dat.Insert(0, (byte)dat.Count);
+            parent.OutData(mml, pw.port[0], dat.ToArray());
+        }
+
+        public override void CmdY(partWork pw, MML mml)
+        {
+            List<byte> dat = new List<byte>();
+            foreach (object o in mml.args)
+            {
+                dat.Add((byte)o);
+                if (dat.Count == 255)
+                {
+                    dat.Insert(0, 255);
+                    parent.OutData(mml, pw.port[0], dat.ToArray());
+                    dat.Clear();
+                }
+            }
+
+            if (dat.Count == 0) return;
+
+            dat.Insert(0, (byte)dat.Count);
+            parent.OutData(mml, pw.port[0], dat.ToArray());
         }
 
 

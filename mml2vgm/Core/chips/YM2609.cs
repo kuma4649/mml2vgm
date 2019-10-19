@@ -1300,7 +1300,7 @@ namespace Core
                 return;
             }
 
-            int m = 3;
+            //int m = 3;
 
             if (pw.ch >= 12 && pw.ch < 18)
             {

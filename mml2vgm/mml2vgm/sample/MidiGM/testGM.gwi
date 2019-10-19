@@ -17,12 +17,20 @@
 
 }
 
-     No,SV,AR,DR,SL,SR,RR,ST
-'@ E  0,60, 1, 1, 1, 1, 0, 3 , GM
+
+     GM1 ON
+'@ S   0
+'@     $F0,$7E,$7F,$09,$01,$F7
+
+
+     No, SV,AR,DR,SL,SR,RR,ST
+'@ E   0,60, 1, 1, 1, 1, 0, 3 , GM
 
 
 'B01 T110
-'B01 o5 @5  V127 l8 q1 v127 r4U127
+GM1 ON 送信(注意：これによりピッチベンドセンシビリティその他は初期値に戻る)
+'B01 @S0r2
+'B01 o5 @17  V127 l8 q1 v127 r4U127
 'B01 p6c p30c p60c p64c p68c p98c p121cp64
 エンベロープテスト
 'B01 @E0 EON c1 EOF c1
@@ -32,7 +40,7 @@
 'B01 c1c1 SS0
 'B01 DONT c1c1 SS0 DOFT
 ポルタメント、スラー複合テスト
-'B01 c4&d4&e4_g&g4a4
+'B01 DOFV c4&d4&e4_g&g4a4
 音程LFOテスト1(三角
 'B01 MSV48,1,40,400,0
 'B01 a1

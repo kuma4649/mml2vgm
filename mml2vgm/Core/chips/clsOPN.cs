@@ -1816,11 +1816,18 @@ namespace Core
                     foreach (partWork p in pw.chip.lstPartWork) {
                         if (p.Type == enmChannelType.FMOPNex)
                         {
-                            if (p.ch != 2) p.slots = 0;
-                            else p.slots = p.slots4OP;
                             p.beforeVolume = -1;
                             p.beforeFNum = -1;
                             p.freq = -1;
+
+                            if (p.ch != 2 && p.ch != 8) // 2 -> Ch3   8 -> OPNA2のCh9のこと
+                                p.slots = 0;
+                            else
+                            {
+                                p.slots = p.slots4OP;
+                                SetKeyOff(p, mml);
+                            }
+
                             //SetFmFNum(p);
                         }
                     }

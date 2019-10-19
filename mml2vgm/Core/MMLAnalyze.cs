@@ -397,6 +397,11 @@ namespace Core
                     mml.args.Add('W');
                     pw.incPos();
                     break;
+                case 'S':                    //@Sn
+                    //SysEx(MIDI系専用)
+                    mml.args.Add('S');
+                    pw.incPos();
+                    break;
                 default:                     //normal
                     mml.args.Add('n');
                     break;
@@ -1135,7 +1140,6 @@ namespace Core
         private void CmdY(partWork pw,MML mml)
         {
             int n = -1;
-            byte adr = 0;
             byte dat = 0;
             byte op = 0;
             pw.incPos();
@@ -1193,20 +1197,21 @@ namespace Core
                 return;
             }
 
-            if (pw.getNum(out n))
-            {
-                adr = (byte)(n & 0xff);
-            }
-            pw.incPos();
-            if (pw.getNum(out n))
-            {
-                dat = (byte)(n & 0xff);
-            }
-
             mml.type = enmMMLType.Y;
             mml.args = new List<object>();
-            mml.args.Add(adr);
-            mml.args.Add(dat);
+            do
+            {
+                if (!pw.getNum(out n)) break;
+
+                dat = (byte)(n & 0xff);
+                mml.args.Add(dat);
+                pw.skipTabSpace();
+
+                if (pw.getChar() != ',') break;
+
+                pw.incPos();
+            } while (true);
+
         }
 
         private void CmdNoise(partWork pw, MML mml)
