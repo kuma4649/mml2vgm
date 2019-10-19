@@ -530,7 +530,7 @@ namespace Core
             {
                 LinePos lp = mml?.line?.Lp;
                 if (lp == null) lp = new LinePos("-");
-                msgBox.setErrMsg(msg.get("E09005"), lp);
+                msgBox.setErrMsg(msg.get("E10030"), lp);
                 return;
             }
 

@@ -1803,11 +1803,38 @@ namespace Core
                 lClock -= waitCounter;
                 dSample -= (long)(info.samplesPerClock * waitCounter);
             }
+            if (loopClock == -1)
+            {
+                AllKeyOffEnv();
+            }
 
             log.Write("フッター情報の作成");
             MakeFooter();
 
             return dat.ToArray();
+        }
+
+        private void AllKeyOffEnv()
+        {
+            foreach (KeyValuePair<enmChipType, ClsChip[]> kvp in chips)
+            {
+                foreach (ClsChip chip in kvp.Value)
+                {
+                    if (chip == null) continue;
+                    for (int i = 0; i < chip.lstPartWork.Count; i++)
+                    {
+                        partWork pw = chip.lstPartWork[
+                            chip.ReversePartWork
+                            ? (chip.lstPartWork.Count - 1 - i)
+                            : i
+                            ];
+                        if (pw.envIndex != -1)
+                        {
+                            chip.SetKeyOff(pw, null);
+                        }
+                    }
+                }
+            }
         }
 
         public int CountUpEndPart()
@@ -2472,6 +2499,10 @@ namespace Core
             {
                 lClock -= waitCounter;
                 dSample -= (long)(info.samplesPerClock * waitCounter);
+            }
+            if (loopClock == -1)
+            {
+                AllKeyOffEnv();
             }
 
             log.Write("VGMデータをXGMへコンバート");
@@ -3178,7 +3209,9 @@ namespace Core
                 switch (pw.envIndex)
                 {
                     case 0: //AR phase
+                        //System.Diagnostics.Debug.Write("eAR");
                         pw.envVolume += pw.envelope[7]; // vol += ST
+                        //System.Diagnostics.Debug.Write(string.Format(":{0}", pw.envVolume));
                         if (pw.envVolume >= maxValue)
                         {
                             pw.envVolume = maxValue;
@@ -3189,7 +3222,9 @@ namespace Core
                         pw.envCounter = pw.envelope[2]; // AR
                         break;
                     case 1: //DR phase
+                        //System.Diagnostics.Debug.Write("eDR");
                         pw.envVolume -= pw.envelope[7]; // vol -= ST
+                        //System.Diagnostics.Debug.Write(string.Format(":{0}", pw.envVolume));
                         if (pw.envVolume <= pw.envelope[4]) // vol <= SL
                         {
                             pw.envVolume = pw.envelope[4];
@@ -3200,7 +3235,9 @@ namespace Core
                         pw.envCounter = pw.envelope[3]; // DR
                         break;
                     case 2: //SR phase
+                        //System.Diagnostics.Debug.Write("eSR");
                         pw.envVolume -= pw.envelope[7]; // vol -= ST
+                        //System.Diagnostics.Debug.Write(string.Format(":{0}", pw.envVolume));
                         if (pw.envVolume <= 0) // vol <= 0
                         {
                             pw.envVolume = 0;
@@ -3211,7 +3248,9 @@ namespace Core
                         pw.envCounter = pw.envelope[5]; // SR
                         break;
                     case 3: //RR phase
+                        //System.Diagnostics.Debug.Write("eRR");
                         pw.envVolume -= pw.envelope[7]; // vol -= ST
+                        //System.Diagnostics.Debug.Write(string.Format(":{0}", pw.envVolume));
                         if (pw.envVolume <= 0) // vol <= 0
                         {
                             pw.envVolume = 0;

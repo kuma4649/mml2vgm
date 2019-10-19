@@ -313,6 +313,14 @@ namespace Core
             KeyOn |= (byte)(1 << pw.ch);
             byte data = (byte)(~KeyOn);
             OutRf5c164Port(mml, port[0], pw.isSecondary, 0x8, data);
+            if (!parent.instPCM.ContainsKey(pw.instrument))
+            {
+                if(pw.instrument==-1)
+                    msgBox.setErrMsg(msg.get("E10030"), mml.line.Lp);
+                else
+                    msgBox.setErrMsg(string.Format(msg.get("E10021"), pw.instrument), mml.line.Lp);
+                return;
+            }
             if (parent.instPCM[pw.instrument].status != enmPCMSTATUS.ERROR)
             {
                 parent.instPCM[pw.instrument].status = enmPCMSTATUS.USED;
@@ -425,7 +433,7 @@ namespace Core
                 vol = 0;
                 if (pw.envIndex != -1)
                 {
-                    vol = pw.envVolume - (255 - pw.volume);
+                    vol = pw.envVolume - (pw.MaxVolume - pw.volume);
                 }
             }
 

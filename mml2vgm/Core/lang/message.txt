@@ -233,7 +233,6 @@ E09001=This sound chip doesn't have instruments.
 E09002=ToneDoubler cannot be used if chip is not OPN or OPM.
 E09003=Tone number({0}) does not exist for PCM definition.
 E09004=Selected Tone number({0}) is not for C140 PCM data.
-E09005=Sound patch isn't selected.
 
 
 ;clsChip.cs 10000
@@ -267,6 +266,7 @@ E10026=This channel can't use V command.
 E10027=This channel can't use DOF or DON command.
 E10028=This channel can't use CH command.
 E10029=This channel can't use U command.
+E10030=Sound patch isn't selected.
 
 
 ;clsOPN.cs 11000

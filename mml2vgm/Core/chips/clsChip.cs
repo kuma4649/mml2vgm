@@ -641,6 +641,9 @@ namespace Core
                 return;
             }
 
+            //System.Diagnostics.Debug.WriteLine("");
+            //System.Diagnostics.Debug.WriteLine("EnvKeyOn");
+
             pw.envIndex = 0;
             pw.envCounter = 0;
             int maxValue = pw.MaxVolume;// (pw.envelope[8] == (int)enmChipType.RF5C164) ? 255 : 15;
@@ -650,40 +653,52 @@ namespace Core
                 switch (pw.envIndex)
                 {
                     case 0: // AR phase
+                        //System.Diagnostics.Debug.Write("EnvAR");
                         pw.envCounter = pw.envelope[2];
                         if (pw.envelope[2] > 0 && pw.envelope[1] < maxValue)
                         {
                             pw.envVolume = pw.envelope[1];
+                            //System.Diagnostics.Debug.Write(string.Format(":{0}",pw.envVolume));
                         }
                         else
                         {
                             pw.envVolume = maxValue;
                             pw.envIndex++;
+                            //System.Diagnostics.Debug.Write(string.Format(":next", pw.envVolume));
                         }
+                        //System.Diagnostics.Debug.WriteLine("");
                         break;
                     case 1: // DR phase
+                        //System.Diagnostics.Debug.Write("EnvDR");
                         pw.envCounter = pw.envelope[3];
                         if (pw.envelope[3] > 0 && pw.envelope[4] < maxValue)
                         {
                             pw.envVolume = maxValue;
+                            //System.Diagnostics.Debug.Write(string.Format(":{0}", pw.envVolume));
                         }
                         else
                         {
                             pw.envVolume = pw.envelope[4];
                             pw.envIndex++;
+                            //System.Diagnostics.Debug.Write(string.Format(":next", pw.envVolume));
                         }
+                        //System.Diagnostics.Debug.WriteLine("");
                         break;
                     case 2: // SR phase
+                        //System.Diagnostics.Debug.Write("EnvSR");
                         pw.envCounter = pw.envelope[5];
                         if (pw.envelope[5] > 0 && pw.envelope[4] != 0)
                         {
                             pw.envVolume = pw.envelope[4];
+                            //System.Diagnostics.Debug.Write(string.Format(":{0}", pw.envVolume));
                         }
                         else
                         {
                             pw.envVolume = 0;
                             pw.envIndex = -1;
+                            //System.Diagnostics.Debug.Write(string.Format(":end", pw.envVolume));
                         }
+                        //System.Diagnostics.Debug.WriteLine("");
                         break;
                 }
             }
@@ -1318,6 +1333,10 @@ namespace Core
             //タイ指定では無い場合はキーオンする
             if (!pw.beforeTie)
             {
+                if (pw.envIndex != -1)
+                {
+                    SetKeyOff(pw, mml);
+                }
                 SetEnvelopeAtKeyOn(pw,mml);
                 SetLfoAtKeyOn(pw, mml);
                 SetVolume(pw, mml);
