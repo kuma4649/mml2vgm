@@ -195,6 +195,12 @@ namespace mml2vgmIDE
 
         }
 
+        public void SetMusicInterruptTimer(MusicInterruptTimer m)
+        {
+            if (sm == null) return;
+            sm.SetMusicInterruptTimer(m);
+        }
+
         internal static Chip GetChip(EnmChip chipType)
         {
             switch (chipType)
@@ -807,6 +813,7 @@ namespace mml2vgmIDE
 
             sm.SetSpeed(1.0);
             vgmSpeed = 1.0;
+            sm.SetMusicInterruptTimer(setting.musicInterruptTimer);
 
             //スレッドなどの準備など(?)で演奏開始時にテンポが乱れることがあるため念のため待つ。
             DriverSeqCounter = sm.GetDriverSeqCounterDelay();

@@ -1291,37 +1291,44 @@ namespace mml2vgmIDE
 
         private void JumpDocument(string fn, long ln, bool wantFocus)
         {
-            foreach (DockContent dc in dpMain.Documents)
+            try
             {
-                if (Path.GetFileName(((Document)dc.Tag).gwiFullPath) != fn)
+                foreach (DockContent dc in dpMain.Documents)
                 {
-                    continue;
-                }
+                    if (Path.GetFileName(((Document)dc.Tag).gwiFullPath) != fn)
+                    {
+                        continue;
+                    }
 
-                Application.DoEvents();
-                Sgry.Azuki.Document d = ((Document)dc.Tag).editor.azukiControl.Document;
-                Sgry.Azuki.IView v = ((Document)dc.Tag).editor.azukiControl.View;
-                if (ln > 1)
-                {
-                    int anc = d.GetLineHeadIndex((int)(ln - 1));
-                    int caret = d.GetLineHeadIndex((int)ln) - 2;//改行前までを選択する
-                    int ancM = d.GetLineHeadIndex((int)(ln - 2));
-                    anc = Math.Max(anc, 0);
-                    ancM = Math.Max(ancM, 0);
-                    caret = Math.Max(anc, caret);
-                    v.ScrollPos = v.GetVirPosFromIndex(ancM);//1行手前を画面の最上部になるようスクロールさせる。
-                    v.Scroll(1);//scroll barの表示を更新させるため
-                    v.Scroll(-1);//scroll barの表示を更新させるため
+                    Application.DoEvents();
+                    Sgry.Azuki.Document d = ((Document)dc.Tag).editor.azukiControl.Document;
+                    Sgry.Azuki.IView v = ((Document)dc.Tag).editor.azukiControl.View;
+                    if (ln > 1)
+                    {
+                        int anc = d.GetLineHeadIndex((int)(ln - 1));
+                        int caret = d.GetLineHeadIndex((int)ln) - 2;//改行前までを選択する
+                        int ancM = d.GetLineHeadIndex((int)(ln - 2));
+                        anc = Math.Max(anc, 0);
+                        ancM = Math.Max(ancM, 0);
+                        caret = Math.Max(anc, caret);
+                        v.ScrollPos = v.GetVirPosFromIndex(ancM);//1行手前を画面の最上部になるようスクロールさせる。
+                        v.Scroll(1);//scroll barの表示を更新させるため
+                        v.Scroll(-1);//scroll barの表示を更新させるため
 
-                    d.SetSelection(anc, caret);
-                }
-                else
-                {
-                    v.ScrollPos = v.GetVirPosFromIndex(0);//1行手前を画面の最上部になるようスクロールさせる。
-                    d.SetSelection(0, 0);
-                }
+                        d.SetSelection(anc, caret);
+                    }
+                    else
+                    {
+                        v.ScrollPos = v.GetVirPosFromIndex(0);//1行手前を画面の最上部になるようスクロールさせる。
+                        d.SetSelection(0, 0);
+                    }
 
-                if (wantFocus) ((Document)dc.Tag).editor.azukiControl.Focus();
+                    if (wantFocus) ((Document)dc.Tag).editor.azukiControl.Focus();
+                }
+            }
+            catch (Exception e)
+            {
+                log.ForcedWrite(e);
             }
         }
 
@@ -1356,12 +1363,13 @@ namespace mml2vgmIDE
 
             log.ForcedWrite("デバッグウィンドウ起動");
             log.debug = setting.Debug_DispFrameCounter;
+            if (frmDebug != null)
+            {
+                frmDebug.force = true;
+                frmDebug.Close();
+            }
             if (setting.Debug_DispFrameCounter)
             {
-                if (frmDebug != null)
-                {
-                    frmDebug.Close();
-                }
                 frmDebug = new frmDebug();
                 frmDebug.Show();
             }
@@ -1468,12 +1476,13 @@ namespace mml2vgmIDE
 
             log.ForcedWrite("Audio初期化処理完了");
             log.debug = setting.Debug_DispFrameCounter;
+            if (frmDebug != null)
+            {
+                frmDebug.force = true;
+                frmDebug.Close();
+            }
             if (setting.Debug_DispFrameCounter)
             {
-                if (frmDebug != null)
-                {
-                    frmDebug.Close();
-                }
                 frmDebug = new frmDebug();
                 frmDebug.Show();
             }

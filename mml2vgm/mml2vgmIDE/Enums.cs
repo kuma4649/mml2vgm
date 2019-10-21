@@ -161,4 +161,11 @@ namespace mml2vgmIDE
         RealTime = 2,
         Both = 3
     }
+
+    public enum MusicInterruptTimer
+    {
+        StopWatch,
+        DateTime,
+        QueryPerformanceCounter
+    }
 }

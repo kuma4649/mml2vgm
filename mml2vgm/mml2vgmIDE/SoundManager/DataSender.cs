@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 using System.Threading;
 using Core;
 using mml2vgmIDE;
@@ -31,6 +32,7 @@ namespace SoundManager
         private long EmuDelay = 0;
         private long RealDelay = 0;
         private bool reqSendStopData;
+        private MusicInterruptTimer musicInterruptTimer = MusicInterruptTimer.StopWatch;
 
         public DataSender(
             Enq EmuEnq
@@ -73,11 +75,56 @@ namespace SoundManager
             }
         }
 
+        public void SetMusicInterruptTimer(MusicInterruptTimer m)
+        {
+            musicInterruptTimer = m;
+        }
+
+        public MusicInterruptTimer GetMusicInterruptTimer()
+        {
+            return musicInterruptTimer;
+        }
+
         public long GetSeqCounter()
         {
             lock (lockObj)
             {
                 return SeqCounter;
+            }
+        }
+
+        private long processOverFlowCounter=0;
+        private double process1_Lap;
+        private double process2_Lap;
+        private int skipframe = 1;
+        public long GetProcessOverFlowCounter()
+        {
+            lock (lockObj)
+            {
+                return processOverFlowCounter;
+            }
+        }
+
+        public double GetProcess1Lap()
+        {
+            lock (lockObj)
+            {
+                return process1_Lap;
+            }
+        }
+        public double GetProcess2Lap()
+        {
+            lock (lockObj)
+            {
+                return process2_Lap;
+            }
+        }
+
+        public int GetSkipFrame()
+        {
+            lock (lockObj)
+            {
+                return skipframe;
             }
         }
 
@@ -159,9 +206,26 @@ namespace SoundManager
 
                     lock (lockObj) isRunning = true;
 
-                    double o = sw.ElapsedTicks / swFreq;
                     double step = 1 / (double)Frq;
                     SeqCounter = Def_SeqCounter;
+                    processOverFlowCounter = 0;
+                    ISpeedCount spdc;
+                    switch (musicInterruptTimer)
+                    {
+                        case MusicInterruptTimer.StopWatch:
+                        default:
+                            spdc = new TimeCountByStopWatch();
+                            break;
+                        case MusicInterruptTimer.DateTime:
+                            spdc = new TimeCountByDateTime();
+                            break;
+                        case MusicInterruptTimer.QueryPerformanceCounter:
+                            spdc = new TimeCountByPerformanceCounter();
+                            break;
+                    }
+                    spdc.Start();
+
+                    double o = spdc.ElapsedMilliSec();// sw.ElapsedTicks / swFreq;
 
                     while (true)
                     {
@@ -170,145 +234,161 @@ namespace SoundManager
                         if (unmount) return;
                         Thread.Sleep(0);
 
-                        double el1 = sw.ElapsedTicks / swFreq;
+                        double el1 = spdc.ElapsedMilliSec();// sw.ElapsedTicks / swFreq;
                         if (el1 - o < step) continue;
-                        if (el1 - o >= step * Frq / 100.0)//閾値10ms
+                        if (el1 - o >= step * Frq / 1.0)//閾値1000ms
                         {
-                            do
-                            {
-                                o += step;
-                            } while (el1 - o >= step);
+                            processOverFlowCounter++;
+                            o = el1 - step;
+                            //do
+                            //{
+                            //    o += step;
+                            //} while (el1 - o >= step);
                         }
-                        else
+                        //else
+                        //{
+                            //o += step;
+                        //}
+
+                        skipframe = Math.Min((int)((el1 - o) / step), 500);
+
+                        for (int skipf = 0; skipf < skipframe ; skipf++)
                         {
                             o += step;
-                        }
 
-                        {
-                            //待ち合わせ割り込み
-                            if (parent.GetInterrupt())
+                            double lapPtr = spdc.ElapsedMilliSec();
+
                             {
-                                //Thread.Sleep(0);
-                                continue;
-                            }
-
-                            SeqSpeed += SeqSpeedDelta;
-                            while (SeqSpeed >= 1.0)
-                            {
-                                SeqCounter++;
-                                SeqSpeed -= 1.0;
-                            }
-
-                            if (SeqCounter < 0) continue;
-
-                            //イベント実施
-                            OnDataSeqFrq(SeqCounter);
-
-                            //if (parent.Mode == SendMode.Both)
-                            //{
-                                //throw new ArgumentOutOfRangeException("演奏時は両モード同時指定できません");
-                            //}
-                            if ((parent.Mode & SendMode.MML) == SendMode.MML)
-                            {
-                                if (ringBuffer.GetDataSize() == 0)
+                                //待ち合わせ割り込み
+                                if (parent.GetInterrupt())
                                 {
-                                    if (!parent.IsRunningAtDataMaker())
+                                    //Thread.Sleep(0);
+                                    continue;
+                                }
+
+                                SeqSpeed += SeqSpeedDelta;
+                                while (SeqSpeed >= 1.0)
+                                {
+                                    SeqCounter++;
+                                    SeqSpeed -= 1.0;
+                                }
+
+                                if (SeqCounter < 0) continue;
+
+                                //イベント実施
+                                OnDataSeqFrq(SeqCounter);
+
+                                //if (parent.Mode == SendMode.Both)
+                                //{
+                                //throw new ArgumentOutOfRangeException("演奏時は両モード同時指定できません");
+                                //}
+                                if ((parent.Mode & SendMode.MML) == SendMode.MML)
+                                {
+                                    if (ringBuffer.GetDataSize() == 0)
                                     {
-                                        parent.ResetMode(SendMode.MML);
-                                        if ((parent.Mode & SendMode.RealTime) != SendMode.RealTime)
-                                            break;
+                                        if (!parent.IsRunningAtDataMaker())
+                                        {
+                                            parent.ResetMode(SendMode.MML);
+                                            if ((parent.Mode & SendMode.RealTime) != SendMode.RealTime)
+                                                break;
+                                        }
+                                        continue;
+                                    }
+                                }
+                                if ((parent.Mode & SendMode.RealTime) == SendMode.RealTime)
+                                {
+                                    if (reqSendStopData)
+                                    {
+                                        reqSendStopData = false;
+                                        if (SendStopData() == -1) return;
+                                    }
+                                }
+                                if (parent.Mode == SendMode.none)
+                                {
+                                    //モード指定がnoneの場合はループを抜ける
+                                    break;
+                                }
+                            }
+
+                            process1_Lap = spdc.ElapsedMilliSec() - lapPtr;
+                            lapPtr = spdc.ElapsedMilliSec();
+
+                            //dataが貯まってます！
+                            while (SeqCounter >= ringBuffer.LookUpCounter())
+                            {
+                                if (unmount) return;
+                                if (!ringBuffer.Deq(ref od, ref Counter, ref Chip, ref Type, ref Address, ref Data, ref ExData))
+                                {
+                                    break;
+                                }
+
+                                //パラメーターセット
+                                SetMMLParameter?.Invoke(ref od, ref Counter, ref Chip, ref Type, ref Address, ref Data, ref ExData);
+
+                                //データ加工
+                                ProcessingData?.Invoke(ref od, ref Counter, ref Chip, ref Type, ref Address, ref Data, ref ExData);
+
+
+                                if (od != null && od.type == enmMMLType.Tempo)
+                                {
+                                    parent.CurrentTempo = (int)od.args[0];
+                                    parent.CurrentClockCount = (int)od.args[1];
+                                    continue;
+                                }
+
+                                if (od != null && od.type == enmMMLType.Length)
+                                {
+                                    if (od.linePos.chip == parent.CurrentChip
+                                        && od.linePos.ch == parent.CurrentCh - 1)
+                                    {
+                                        parent.CurrentNoteLength = (int)od.args[0];
                                     }
                                     continue;
                                 }
-                            }
-                            if ((parent.Mode & SendMode.RealTime) == SendMode.RealTime)
-                            {
-                                if (reqSendStopData)
+
+                                //振り分けてEnqueue
+                                if (Chip.Model == EnmModel.VirtualModel)
                                 {
-                                    reqSendStopData = false;
-                                    if (SendStopData() == -1) return;
-                                }
-                            }
-                            if (parent.Mode == SendMode.none)
-                            {
-                                //モード指定がnoneの場合はループを抜ける
-                                break;
-                            }
-                        }
-
-                        //dataが貯まってます！
-                        while (SeqCounter >= ringBuffer.LookUpCounter())
-                        {
-                            if (unmount) return;
-                            if (!ringBuffer.Deq(ref od, ref Counter, ref Chip, ref Type, ref Address, ref Data, ref ExData))
-                            {
-                                break;
-                            }
-
-                            //パラメーターセット
-                            SetMMLParameter?.Invoke(ref od, ref Counter, ref Chip, ref Type, ref Address, ref Data, ref ExData);
-
-                            //データ加工
-                            ProcessingData?.Invoke(ref od, ref Counter, ref Chip, ref Type, ref Address, ref Data, ref ExData);
-
-
-                            if (od != null && od.type == enmMMLType.Tempo)
-                            {
-                                parent.CurrentTempo = (int)od.args[0];
-                                parent.CurrentClockCount = (int)od.args[1];
-                                continue;
-                            }
-
-                            if (od != null && od.type == enmMMLType.Length)
-                            {
-                                if (od.linePos.chip == parent.CurrentChip
-                                    && od.linePos.ch == parent.CurrentCh - 1)
-                                {
-                                    parent.CurrentNoteLength = (int)od.args[0];
-                                }
-                                continue;
-                            }
-
-                            //振り分けてEnqueue
-                            if (Chip.Model == EnmModel.VirtualModel)
-                            {
-                                while (!EmuEnq(od, Counter, Chip, Type, Address, Data, ExData))
-                                {
-                                    if (!Start)
+                                    while (!EmuEnq(od, Counter, Chip, Type, Address, Data, ExData))
                                     {
-                                        break;
+                                        if (!Start)
+                                        {
+                                            break;
+                                        }
+                                        if (unmount) return;
+                                        Thread.Sleep(0);
                                     }
-                                    if (unmount) return;
-                                    Thread.Sleep(0);
                                 }
-                            }
-                            else if (Chip.Model == EnmModel.RealModel)
-                            {
-                                while (!RealEnq(od, Counter, Chip, Type, Address, Data, ExData))
+                                else if (Chip.Model == EnmModel.RealModel)
                                 {
-                                    if (!Start)
+                                    while (!RealEnq(od, Counter, Chip, Type, Address, Data, ExData))
                                     {
-                                        break;
+                                        if (!Start)
+                                        {
+                                            break;
+                                        }
+                                        if (unmount) return;
+                                        Thread.Sleep(0);
                                     }
-                                    if (unmount) return;
-                                    Thread.Sleep(0);
                                 }
-                            }
-                            else
-                            {
-                                //演奏制御処理
-                                switch (Type)
+                                else
                                 {
-                                    case EnmDataType.Normal:
-                                        break;
-                                    case EnmDataType.FadeOut:
-                                        parent.SetFadeOut();
-                                        break;
-                                    case EnmDataType.Loop:
-                                        parent.CountUpLoopCounter();
-                                        break;
+                                    //演奏制御処理
+                                    switch (Type)
+                                    {
+                                        case EnmDataType.Normal:
+                                            break;
+                                        case EnmDataType.FadeOut:
+                                            parent.SetFadeOut();
+                                            break;
+                                        case EnmDataType.Loop:
+                                            parent.CountUpLoopCounter();
+                                            break;
+                                    }
                                 }
                             }
+
+                            process2_Lap = spdc.ElapsedMilliSec() - lapPtr;
                         }
                     }
 
@@ -400,4 +480,71 @@ namespace SoundManager
         }
     }
 
+
+
+
+    //↓参考にしたもの：
+    //https://tocsworld.wordpress.com/2014/03/03/cでの処理時間計測いろいろ/
+
+    public interface ISpeedCount
+    {
+        void Start();
+        double ElapsedMilliSec();
+    }
+
+    public class TimeCountByStopWatch : ISpeedCount
+    {
+        private Stopwatch stopWatch;
+        public void Start()
+        {
+            stopWatch = Stopwatch.StartNew();
+        }
+
+        public double ElapsedMilliSec()
+        {
+            //stopWatch.Stop();
+            return (double)stopWatch.ElapsedTicks/Stopwatch.Frequency;
+        }
+
+    }
+
+    public class TimeCountByDateTime : ISpeedCount
+    {
+        private DateTime startDate;
+        public void Start()
+        {
+            startDate = DateTime.Now;
+        }
+
+        public double ElapsedMilliSec()
+        {
+            DateTime endDate = DateTime.Now;
+            TimeSpan diff = endDate - startDate;
+            return diff.Duration().Ticks / 10000000.0;
+        }
+
+    }
+
+    public class TimeCountByPerformanceCounter : ISpeedCount
+    {
+        [DllImport("kernel32.dll")]
+        static extern bool QueryPerformanceCounter(ref long lpPerformanceCount);
+        [DllImport("kernel32.dll")]
+        static extern bool QueryPerformanceFrequency(ref long lpFrequency);
+
+        private long startCounter;
+        public void Start()
+        {
+            QueryPerformanceCounter(ref startCounter);
+        }
+
+        public double ElapsedMilliSec()
+        {
+            long stopCounter = 0;
+            QueryPerformanceCounter(ref stopCounter);
+            long frequency = 0;
+            QueryPerformanceFrequency(ref frequency);
+            return (double)(stopCounter - startCounter) / frequency;
+        }
+    }
 }

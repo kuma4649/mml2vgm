@@ -88,6 +88,14 @@
             this.tbcMIDIoutList = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.dgvMIDIoutListA = new System.Windows.Forms.DataGridView();
+            this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.clmIsVST = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.clmFileName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.clmType = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.ClmBeforeSend = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.dataGridViewTextBoxColumn3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.btnUP_A = new System.Windows.Forms.Button();
             this.btnDOWN_A = new System.Windows.Forms.Button();
             this.tabPage2 = new System.Windows.Forms.TabPage();
@@ -407,14 +415,10 @@
             this.labelCompanyName = new System.Windows.Forms.Label();
             this.textBoxDescription = new System.Windows.Forms.TextBox();
             this.cbHiyorimiMode = new System.Windows.Forms.CheckBox();
-            this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.clmIsVST = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.clmFileName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.clmType = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.ClmBeforeSend = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.dataGridViewTextBoxColumn3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridViewTextBoxColumn4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.groupBox30 = new System.Windows.Forms.GroupBox();
+            this.rbStopWatch = new System.Windows.Forms.RadioButton();
+            this.rbDateTime = new System.Windows.Forms.RadioButton();
+            this.rbQueryPerformanceCounter = new System.Windows.Forms.RadioButton();
             this.gbWaveOut.SuspendLayout();
             this.gbAsioOut.SuspendLayout();
             this.gbWasapiOut.SuspendLayout();
@@ -508,6 +512,7 @@
             this.tpAbout.SuspendLayout();
             this.tableLayoutPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.logoPictureBox)).BeginInit();
+            this.groupBox30.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnOK
@@ -1232,6 +1237,75 @@
             this.dgvMIDIoutListA.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvMIDIoutListA.Size = new System.Drawing.Size(384, 136);
             this.dgvMIDIoutListA.TabIndex = 1;
+            // 
+            // dataGridViewTextBoxColumn1
+            // 
+            this.dataGridViewTextBoxColumn1.Frozen = true;
+            this.dataGridViewTextBoxColumn1.HeaderText = "ID";
+            this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
+            this.dataGridViewTextBoxColumn1.ReadOnly = true;
+            this.dataGridViewTextBoxColumn1.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.dataGridViewTextBoxColumn1.Visible = false;
+            this.dataGridViewTextBoxColumn1.Width = 40;
+            // 
+            // clmIsVST
+            // 
+            this.clmIsVST.HeaderText = "IsVST";
+            this.clmIsVST.Name = "clmIsVST";
+            this.clmIsVST.Visible = false;
+            // 
+            // clmFileName
+            // 
+            this.clmFileName.HeaderText = "fileName";
+            this.clmFileName.Name = "clmFileName";
+            this.clmFileName.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.clmFileName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.clmFileName.Visible = false;
+            // 
+            // dataGridViewTextBoxColumn2
+            // 
+            this.dataGridViewTextBoxColumn2.HeaderText = "Device Name";
+            this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
+            this.dataGridViewTextBoxColumn2.ReadOnly = true;
+            this.dataGridViewTextBoxColumn2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.dataGridViewTextBoxColumn2.Width = 180;
+            // 
+            // clmType
+            // 
+            this.clmType.HeaderText = "Type";
+            this.clmType.Items.AddRange(new object[] {
+            "GM"});
+            this.clmType.Name = "clmType";
+            this.clmType.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.clmType.Width = 70;
+            // 
+            // ClmBeforeSend
+            // 
+            this.ClmBeforeSend.HeaderText = "Before Send";
+            this.ClmBeforeSend.Items.AddRange(new object[] {
+            "None",
+            "GM Reset",
+            "XG Reset",
+            "GS Reset",
+            "Custom"});
+            this.ClmBeforeSend.Name = "ClmBeforeSend";
+            this.ClmBeforeSend.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.ClmBeforeSend.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            // 
+            // dataGridViewTextBoxColumn3
+            // 
+            this.dataGridViewTextBoxColumn3.HeaderText = "Manufacturer";
+            this.dataGridViewTextBoxColumn3.Name = "dataGridViewTextBoxColumn3";
+            this.dataGridViewTextBoxColumn3.ReadOnly = true;
+            this.dataGridViewTextBoxColumn3.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // dataGridViewTextBoxColumn4
+            // 
+            this.dataGridViewTextBoxColumn4.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.dataGridViewTextBoxColumn4.HeaderText = "";
+            this.dataGridViewTextBoxColumn4.Name = "dataGridViewTextBoxColumn4";
+            this.dataGridViewTextBoxColumn4.ReadOnly = true;
+            this.dataGridViewTextBoxColumn4.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // btnUP_A
             // 
@@ -4448,6 +4522,7 @@
             // 
             // tpOmake
             // 
+            this.tpOmake.Controls.Add(this.groupBox30);
             this.tpOmake.Controls.Add(this.cbInfiniteOfflineMode);
             this.tpOmake.Controls.Add(this.groupBox29);
             this.tpOmake.Controls.Add(this.tbOpacity);
@@ -4744,74 +4819,49 @@
             this.cbHiyorimiMode.UseVisualStyleBackColor = true;
             this.cbHiyorimiMode.Visible = false;
             // 
-            // dataGridViewTextBoxColumn1
+            // groupBox30
             // 
-            this.dataGridViewTextBoxColumn1.Frozen = true;
-            this.dataGridViewTextBoxColumn1.HeaderText = "ID";
-            this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
-            this.dataGridViewTextBoxColumn1.ReadOnly = true;
-            this.dataGridViewTextBoxColumn1.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.dataGridViewTextBoxColumn1.Visible = false;
-            this.dataGridViewTextBoxColumn1.Width = 40;
+            this.groupBox30.Controls.Add(this.rbQueryPerformanceCounter);
+            this.groupBox30.Controls.Add(this.rbDateTime);
+            this.groupBox30.Controls.Add(this.rbStopWatch);
+            this.groupBox30.Location = new System.Drawing.Point(7, 245);
+            this.groupBox30.Name = "groupBox30";
+            this.groupBox30.Size = new System.Drawing.Size(236, 85);
+            this.groupBox30.TabIndex = 24;
+            this.groupBox30.TabStop = false;
+            this.groupBox30.Text = "Music Interrupt Timer";
             // 
-            // clmIsVST
+            // rbStopWatch
             // 
-            this.clmIsVST.HeaderText = "IsVST";
-            this.clmIsVST.Name = "clmIsVST";
-            this.clmIsVST.Visible = false;
+            this.rbStopWatch.AutoSize = true;
+            this.rbStopWatch.Checked = true;
+            this.rbStopWatch.Location = new System.Drawing.Point(6, 18);
+            this.rbStopWatch.Name = "rbStopWatch";
+            this.rbStopWatch.Size = new System.Drawing.Size(137, 16);
+            this.rbStopWatch.TabIndex = 0;
+            this.rbStopWatch.TabStop = true;
+            this.rbStopWatch.Text = "Stopwatch(C#) default";
+            this.rbStopWatch.UseVisualStyleBackColor = true;
             // 
-            // clmFileName
+            // rbDateTime
             // 
-            this.clmFileName.HeaderText = "fileName";
-            this.clmFileName.Name = "clmFileName";
-            this.clmFileName.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.clmFileName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.clmFileName.Visible = false;
+            this.rbDateTime.AutoSize = true;
+            this.rbDateTime.Location = new System.Drawing.Point(6, 40);
+            this.rbDateTime.Name = "rbDateTime";
+            this.rbDateTime.Size = new System.Drawing.Size(94, 16);
+            this.rbDateTime.TabIndex = 1;
+            this.rbDateTime.Text = "DateTime(C#)";
+            this.rbDateTime.UseVisualStyleBackColor = true;
             // 
-            // dataGridViewTextBoxColumn2
+            // rbQueryPerformanceCounter
             // 
-            this.dataGridViewTextBoxColumn2.HeaderText = "Device Name";
-            this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
-            this.dataGridViewTextBoxColumn2.ReadOnly = true;
-            this.dataGridViewTextBoxColumn2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.dataGridViewTextBoxColumn2.Width = 180;
-            // 
-            // clmType
-            // 
-            this.clmType.HeaderText = "Type";
-            this.clmType.Items.AddRange(new object[] {
-            "GM"});
-            this.clmType.Name = "clmType";
-            this.clmType.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.clmType.Width = 70;
-            // 
-            // ClmBeforeSend
-            // 
-            this.ClmBeforeSend.HeaderText = "Before Send";
-            this.ClmBeforeSend.Items.AddRange(new object[] {
-            "None",
-            "GM Reset",
-            "XG Reset",
-            "GS Reset",
-            "Custom"});
-            this.ClmBeforeSend.Name = "ClmBeforeSend";
-            this.ClmBeforeSend.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.ClmBeforeSend.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            // 
-            // dataGridViewTextBoxColumn3
-            // 
-            this.dataGridViewTextBoxColumn3.HeaderText = "Manufacturer";
-            this.dataGridViewTextBoxColumn3.Name = "dataGridViewTextBoxColumn3";
-            this.dataGridViewTextBoxColumn3.ReadOnly = true;
-            this.dataGridViewTextBoxColumn3.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // dataGridViewTextBoxColumn4
-            // 
-            this.dataGridViewTextBoxColumn4.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.dataGridViewTextBoxColumn4.HeaderText = "";
-            this.dataGridViewTextBoxColumn4.Name = "dataGridViewTextBoxColumn4";
-            this.dataGridViewTextBoxColumn4.ReadOnly = true;
-            this.dataGridViewTextBoxColumn4.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.rbQueryPerformanceCounter.AutoSize = true;
+            this.rbQueryPerformanceCounter.Location = new System.Drawing.Point(6, 62);
+            this.rbQueryPerformanceCounter.Name = "rbQueryPerformanceCounter";
+            this.rbQueryPerformanceCounter.Size = new System.Drawing.Size(213, 16);
+            this.rbQueryPerformanceCounter.TabIndex = 2;
+            this.rbQueryPerformanceCounter.Text = "QueryPerformanceCounter(Win32API)";
+            this.rbQueryPerformanceCounter.UseVisualStyleBackColor = true;
             // 
             // FrmSetting
             // 
@@ -4966,6 +5016,8 @@
             this.tableLayoutPanel.ResumeLayout(false);
             this.tableLayoutPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.logoPictureBox)).EndInit();
+            this.groupBox30.ResumeLayout(false);
+            this.groupBox30.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -5360,5 +5412,9 @@
         private System.Windows.Forms.DataGridViewComboBoxColumn ClmBeforeSend;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn3;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn4;
+        private System.Windows.Forms.GroupBox groupBox30;
+        private System.Windows.Forms.RadioButton rbQueryPerformanceCounter;
+        private System.Windows.Forms.RadioButton rbDateTime;
+        private System.Windows.Forms.RadioButton rbStopWatch;
     }
 }

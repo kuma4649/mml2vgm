@@ -105,6 +105,16 @@ namespace SoundManager
             realChipSender.Mount();
         }
 
+        public void SetMusicInterruptTimer(MusicInterruptTimer m)
+        {
+            if (dataSender == null) return;
+            dataSender.SetMusicInterruptTimer(m);
+        }
+        public MusicInterruptTimer GetMusicInterruptTimer()
+        {
+            return dataSender.GetMusicInterruptTimer();
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -391,6 +401,29 @@ namespace SoundManager
         {
             if (realChipSender == null) return 0;
             return realChipSender.GetRingBufferSize();
+        }
+
+        public long GetProcessOverFlowCounter()
+        {
+            if (dataSender == null) return 0;
+            return dataSender.GetProcessOverFlowCounter();
+        }
+
+        public double GetProcess1Lap()
+        {
+            if (dataSender == null) return 0;
+            return dataSender.GetProcess1Lap();
+        }
+
+        public double GetProcess2Lap()
+        {
+            if (dataSender == null) return 0;
+            return dataSender.GetProcess2Lap();
+        }
+        public int GetSkipFrame()
+        {
+            if (dataSender == null) return 0;
+            return dataSender.GetSkipFrame();
         }
 
         #region IDisposable Support

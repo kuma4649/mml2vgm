@@ -2372,55 +2372,56 @@ namespace Core
             {
                 if (ym2151!= null && ym2151.Length > i && ym2151[i] != null)
                     foreach (partWork pw in ym2151[i].lstPartWork)
-                    { useYM2151 += pw.clockCounter; if (i == 1) useYM2151_S += pw.clockCounter; }
+                    { useYM2151 += pw.clockCounter; if (ym2151[i].ChipID == 1) useYM2151_S += pw.clockCounter; }
 
                 if (ym2203 != null && ym2203.Length > i && ym2203[i] != null)
                     foreach (partWork pw in ym2203[i].lstPartWork)
-                    { useYM2203 += pw.clockCounter; if (i == 1) useYM2203_S += pw.clockCounter; }
+                    { useYM2203 += pw.clockCounter; if (ym2203[i].ChipID == 1) useYM2203_S += pw.clockCounter; }
+                    
 
                 if (ym2608 != null && ym2608.Length > i && ym2608[i] != null)
                     foreach (partWork pw in ym2608[i].lstPartWork)
-                    { useYM2608 += pw.clockCounter; if (i == 1) useYM2608_S += pw.clockCounter; }
+                    { useYM2608 += pw.clockCounter; if (ym2608[i].ChipID == 1) useYM2608_S += pw.clockCounter; }
 
                 if (ym2610b != null && ym2610b.Length > i && ym2610b[i] != null)
                     foreach (partWork pw in ym2610b[i].lstPartWork)
-                    { useYM2610B += pw.clockCounter; if (i == 1) useYM2610B_S += pw.clockCounter; }
+                    { useYM2610B += pw.clockCounter; if (ym2610b[i].ChipID == 1) useYM2610B_S += pw.clockCounter; }
 
                 if (ym2612 != null && ym2612.Length>i && ym2612[i] != null)
                     foreach (partWork pw in ym2612[i].lstPartWork)
-                    { useYM2612 += pw.clockCounter; if (i == 1) useYM2612_S += pw.clockCounter; }
+                    { useYM2612 += pw.clockCounter; if (ym2612[i].ChipID == 1) useYM2612_S += pw.clockCounter; }
 
                 if (sn76489 != null && sn76489.Length > i && sn76489[i] != null)
                     foreach (partWork pw in sn76489[i].lstPartWork)
-                    { useSN76489 += pw.clockCounter; if (i == 1) useSN76489_S += pw.clockCounter; }
+                    { useSN76489 += pw.clockCounter; if (sn76489[i].ChipID == 1) useSN76489_S += pw.clockCounter; }
 
                 if (rf5c164 != null && rf5c164.Length > i && rf5c164[i] != null)
                     foreach (partWork pw in rf5c164[i].lstPartWork)
-                    { useRf5c164 += pw.clockCounter; if (i == 1) useRf5c164_S += pw.clockCounter; }
+                    { useRf5c164 += pw.clockCounter; if (rf5c164[i].ChipID == 1) useRf5c164_S += pw.clockCounter; }
 
                 if (segapcm != null && segapcm.Length > i && segapcm[i] != null)
                     foreach (partWork pw in segapcm[i].lstPartWork)
-                    { useSegaPcm += pw.clockCounter; if (i == 1) useSegaPcm_S += pw.clockCounter; }
+                    { useSegaPcm += pw.clockCounter; if (segapcm[i].ChipID == 1) useSegaPcm_S += pw.clockCounter; }
 
                 if (huc6280 != null && huc6280.Length > i && huc6280[i] != null)
                     foreach (partWork pw in huc6280[i].lstPartWork)
-                    { useHuC6280 += pw.clockCounter; if (i == 1) useHuC6280_S += pw.clockCounter; }
+                    { useHuC6280 += pw.clockCounter; if (huc6280[i].ChipID == 1) useHuC6280_S += pw.clockCounter; }
 
                 if (c140 != null && c140.Length > i && c140[i] != null)
                     foreach (partWork pw in c140[i].lstPartWork)
-                    { useC140 += pw.clockCounter; if (i == 1) useC140_S += pw.clockCounter; }
+                    { useC140 += pw.clockCounter; if (c140[i].ChipID == 1) useC140_S += pw.clockCounter; }
 
                 if (ay8910 != null && ay8910.Length > i && ay8910[i] != null)
                     foreach (partWork pw in ay8910[i].lstPartWork)
-                    { useAY8910 += pw.clockCounter; if (i == 1) useAY8910_S += pw.clockCounter; }
+                    { useAY8910 += pw.clockCounter; if (ay8910[i].ChipID == 1) useAY8910_S += pw.clockCounter; }
 
                 if (ym2413 != null && ym2413.Length > i && ym2413[i] != null)
                     foreach (partWork pw in ym2413[i].lstPartWork)
-                    { useYM2413 += pw.clockCounter; if (i == 1) useYM2413_S += pw.clockCounter; }
+                    { useYM2413 += pw.clockCounter; if (ym2413[i].ChipID == 1) useYM2413_S += pw.clockCounter; }
 
                 if (k051649 != null && k051649.Length > i && k051649[i] != null)
                     foreach (partWork pw in k051649[i].lstPartWork)
-                    { useK051649 += pw.clockCounter; if (i == 1) useK051649_S += pw.clockCounter; }
+                    { useK051649 += pw.clockCounter; if (k051649[i].ChipID == 1) useK051649_S += pw.clockCounter; }
 
                 if (qsound != null && qsound.Length > i && qsound[i] != null)
                     foreach (partWork pw in qsound[i].lstPartWork)
@@ -2428,7 +2429,7 @@ namespace Core
 
                 if (k053260 != null && k053260.Length > i && k053260[i] != null)
                     foreach (partWork pw in k053260[i].lstPartWork)
-                    { useK053260 += pw.clockCounter; if (i == 1) useK053260_S += pw.clockCounter; }
+                    { useK053260 += pw.clockCounter; if (k053260[i].ChipID == 1) useK053260_S += pw.clockCounter; }
             }
 
             if (info.Version >= 1.00f && useSN76489 != 0)

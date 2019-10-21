@@ -48,6 +48,11 @@ namespace mml2vgmIDE
             lblDataSenderBufferSize.Text = Audio.sm.GetDataSenderBufferSize().ToString();
             lblEmuChipSenderBufferSize.Text = Audio.sm.GetEmuChipSenderBufferSize().ToString();
             lblRealChipSenderBufferSize.Text = Audio.sm.GetRealChipSenderBufferSize().ToString();
+            lblMusicInterruptTimer.Text = Audio.sm.GetMusicInterruptTimer().ToString();
+            lblProcessOverflowCounter.Text = Audio.sm.GetProcessOverFlowCounter().ToString();
+            lblProcess1Lap.Text = Audio.sm.GetProcess1Lap().ToString();
+            lblProcess2Lap.Text = Audio.sm.GetProcess2Lap().ToString();
+            lblSkipFrame.Text = Audio.sm.GetSkipFrame().ToString();
 
             lblDataMakerIsRunning.Text = Audio.sm.IsRunningAtDataMaker() ? "Running" : "Stop";
             lblDataSenderIsRunning.Text = Audio.sm.IsRunningAtDataSender() ? "Running" : "Stop";
@@ -78,5 +83,14 @@ namespace mml2vgmIDE
             }
         }
 
+        public bool force = false;
+        private void frmDebug_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (!force)
+            {
+                MessageBox.Show("Oops! Can't close !");
+                e.Cancel = true;
+            }
+        }
     }
 }

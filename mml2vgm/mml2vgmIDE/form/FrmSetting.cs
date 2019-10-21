@@ -735,6 +735,20 @@ namespace mml2vgmIDE
             btNextClr.Enabled = (lblNextKey.Text != "(None)" && !string.IsNullOrEmpty(lblNextKey.Text));
 
             cbInfiniteOfflineMode.Checked = setting.InfiniteOfflineMode;
+
+            switch (setting.musicInterruptTimer)
+            {
+                case MusicInterruptTimer.StopWatch:
+                default:
+                    rbStopWatch.Checked = true;
+                    break;
+                case MusicInterruptTimer.DateTime:
+                    rbDateTime.Checked = true;
+                    break;
+                case MusicInterruptTimer.QueryPerformanceCounter:
+                    rbQueryPerformanceCounter.Checked = true;
+                    break;
+            }
         }
 
         private void SetSCCICombo(EnmRealChipType scciType, ComboBox cmbP, RadioButton rbP, ComboBox cmbS, RadioButton rbS)
@@ -1607,6 +1621,10 @@ namespace mml2vgmIDE
 
             setting.InfiniteOfflineMode = cbInfiniteOfflineMode.Checked;
             if (cbInfiniteOfflineMode.Checked) setting.OfflineMode = true;
+
+            if (rbStopWatch.Checked) setting.musicInterruptTimer = MusicInterruptTimer.StopWatch;
+            if (rbDateTime.Checked) setting.musicInterruptTimer = MusicInterruptTimer.DateTime;
+            if (rbQueryPerformanceCounter.Checked) setting.musicInterruptTimer = MusicInterruptTimer.QueryPerformanceCounter;
 
             this.DialogResult = DialogResult.OK;
             this.Close();

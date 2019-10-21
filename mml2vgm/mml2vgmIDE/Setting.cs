@@ -854,6 +854,7 @@ namespace mml2vgmIDE
         private bool _InfiniteOfflineMode = false;
         public bool InfiniteOfflineMode { get => _InfiniteOfflineMode; set => _InfiniteOfflineMode = value; }
         public bool unuseRealChip { get; set; }
+        public MusicInterruptTimer musicInterruptTimer { get; set; } = MusicInterruptTimer.StopWatch;
 
         public bool OfflineMode = false;
 
@@ -3684,6 +3685,7 @@ namespace mml2vgmIDE
             setting.LatencySCCI = this.LatencySCCI;
             setting.Debug_DispFrameCounter = this.Debug_DispFrameCounter;
             setting.HiyorimiMode = this.HiyorimiMode;
+            setting.musicInterruptTimer = this.musicInterruptTimer;
             //setting.location = this.location.Copy();
             setting.dockingState = this.dockingState;
             setting.midiExport = this.midiExport.Copy();

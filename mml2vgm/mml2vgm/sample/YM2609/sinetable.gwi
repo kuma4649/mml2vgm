@@ -235,16 +235,16 @@
 '@ 031,000,000,015,000,000,000,002,000
 '@ 007,000
 
-'U01 T120
-'U01 D0p4,4 o4 v120 l2 q0 @1 
+'Us01 T120
+'Us01 D0p4,4 o4 v120 l2 q0 @1 
 WaveType 0 に 0 (sine波)を割り当て
-'U01 @W0 c 
+'Us01 @W0 c 
 WaveType 0 に 1 (50%矩形波)を割り当て
-'U01 @W1 c
+'Us01 @W1 c
 WaveType 0 に 2 (12.5%矩形波)を割り当て
-'U01 @W2 c
+'Us01 @W2 c
 WaveType 0 を r)eset (sine波)
-'U01 @Wr c
+'Us01 @Wr c
 
 U02 D0p0,4 o4 v120 l2 q8  @1 
 WaveType 0 に 0 (sine波)を割り当て
