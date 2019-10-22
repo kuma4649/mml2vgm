@@ -204,6 +204,7 @@ namespace Core
                         if (chip == null) continue;
 
                         if (!chip.use) continue;
+                        if (chip.port == null) continue;
                         for (int i = 0; i < chip.port.Length; i++)
                         {
                             chip.port[i] = new byte[] { chip.port[i][0] };

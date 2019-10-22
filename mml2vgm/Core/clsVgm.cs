@@ -3601,6 +3601,11 @@ namespace Core
                     pw.chip.CmdMIDICh(pw, mml);
                     pw.mmlPos++;
                     break;
+                case enmMMLType.MIDIControlChange:
+                    log.Write("MIDIControlChange");
+                    pw.chip.CmdMIDIControlChange(pw, mml);
+                    pw.mmlPos++;
+                    break;
                 case enmMMLType.Velocity:
                     log.Write("Velocity");
                     pw.chip.CmdVelocity(pw, mml);

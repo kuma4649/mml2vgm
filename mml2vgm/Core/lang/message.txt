@@ -213,6 +213,7 @@ E05053=Unknown command ('mo?') defined.
 E05054=Unknown command ('DO?') defined.
 E05055=Failed to parse 'CH' command.
 E05056=Failed to parse 'U' command.
+E05057=Failed to parse 'CC' command.
 
 
 ;partWork.cs 06000
@@ -267,6 +268,7 @@ E10027=This channel can't use DOF or DON command.
 E10028=This channel can't use CH command.
 E10029=This channel can't use U command.
 E10030=Sound patch isn't selected.
+E10031=This channel can't use CC command.
 
 
 ;clsOPN.cs 11000

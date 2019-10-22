@@ -1559,6 +1559,7 @@ namespace mml2vgmIDE.Driver.ZGM
                 fcc = Common.getLE24(vgmBuf, pos);
                 if (fcc != FCC_DEF) return false;
                 ZgmChip.ZgmChip chip = (new ZgmChip.ChipFactory()).Create(Common.getLE32(vgmBuf, pos + 0x4), chipRegister, setting, vgmBuf);
+                if (chip == null) return false;//non support
 
                 if (!chipCount.ContainsKey(chip.name)) chipCount.Add(chip.name, -1);
                 chipCount[chip.name]++;

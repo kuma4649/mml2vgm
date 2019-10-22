@@ -1309,24 +1309,61 @@ namespace Core
 
             pw.incPos();
 
-            if (pw.getChar() != 'H')
+            if (pw.getChar() == 'H')
+            {
+                pw.incPos();
+
+                if (!pw.getNum(out n))
+                {
+                    msgBox.setErrMsg(msg.get("E05055"), mml.line.Lp);
+                    return;
+                }
+                n = Common.CheckRange(n, 1, 16) - 1;//0-15に変換
+
+                mml.type = enmMMLType.MIDICh;
+                mml.args = new List<object>();
+                mml.args.Add(n);
+            }
+            else if (pw.getChar() == 'C')
+            {
+                mml.type = enmMMLType.MIDIControlChange;
+                mml.args = new List<object>();
+
+                pw.incPos();
+                pw.skipTabSpace();
+
+                if (!pw.getNum(out n))
+                {
+                    mml.type = enmMMLType.unknown;
+                    msgBox.setErrMsg(msg.get("E05057"), mml.line.Lp);
+                    return;
+                }
+                mml.args.Add(n);
+
+                pw.skipTabSpace();
+                if (pw.getChar() != ',')
+                {
+                    mml.type = enmMMLType.unknown;
+                    msgBox.setErrMsg(msg.get("E05057"), mml.line.Lp);
+                    return;
+                }
+                pw.incPos();
+                pw.skipTabSpace();
+
+                if (!pw.getNum(out n))
+                {
+                    mml.type = enmMMLType.unknown;
+                    msgBox.setErrMsg(msg.get("E05057"), mml.line.Lp);
+                    return;
+                }
+                mml.args.Add(n);
+
+            }
+            else
             {
                 msgBox.setErrMsg(msg.get("E05055"), mml.line.Lp);
                 return;
             }
-
-            pw.incPos();
-
-            if (!pw.getNum(out n))
-            {
-                msgBox.setErrMsg(msg.get("E05055"), mml.line.Lp);
-                return;
-            }
-            n = Common.CheckRange(n, 1, 16) - 1;//0-15に変換
-
-            mml.type = enmMMLType.MIDICh;
-            mml.args = new List<object>();
-            mml.args.Add(n);
         }
 
         private void CmdNote(partWork pw, char cmd, MML mml)

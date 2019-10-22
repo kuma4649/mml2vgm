@@ -114,7 +114,7 @@ Chip Identify number
    0x000000E0 GA20                                1                 2  
  
  0x00010000 - 0x0001FFFF Chips
-   0x00010000 ?                                   1                 2  
+   0x00010000 Conductor                           1                 2  
 
  0x00020000 - 0x0002FFFF –Ï‘zChips
    0x00020000 AY8910B                             1                 2  

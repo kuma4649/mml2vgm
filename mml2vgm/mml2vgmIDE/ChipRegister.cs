@@ -1490,6 +1490,8 @@ namespace mml2vgmIDE
         public void writeDummyChipZGM(outDatum od, long Counter, byte v1, byte v2)
         {
             int v = v1 + v2 * 256;
+            if (!dicChipCmdNo.ContainsKey(v)) return;
+
             enq(od, Counter, dicChipCmdNo[v], EnmDataType.None, -1, -1, null);
         }
 

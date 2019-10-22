@@ -2634,6 +2634,7 @@ namespace mml2vgmIDE
 
             private Rectangle _RMixer = Rectangle.Empty;
             public Rectangle RMixer { get => _RMixer; set => _RMixer = value; }
+            public bool ShowMixer { get; set; } = false;
 
             private Rectangle _RMIDIKbd = Rectangle.Empty;
             public Rectangle RMIDIKbd { get => _RMIDIKbd; set => _RMIDIKbd = value; }
@@ -2652,6 +2653,7 @@ namespace mml2vgmIDE
                 Location.RMixer = this.RMixer;
                 Location.RMIDIKbd = this.RMIDIKbd;
                 Location.PartCounterClmInfo = this.PartCounterClmInfo;
+                Location.ShowMixer = this.ShowMixer;
 
                 return Location;
             }

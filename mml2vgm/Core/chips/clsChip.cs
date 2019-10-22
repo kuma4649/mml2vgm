@@ -748,6 +748,12 @@ namespace Core
                     , mml.line.Lp);
         }
 
+        public virtual void CmdMIDIControlChange(partWork pw, MML mml)
+        {
+            msgBox.setErrMsg(msg.get("E10031")
+                    , mml.line.Lp);
+        }
+
         public virtual void CmdVelocity(partWork pw, MML mml)
         {
             msgBox.setErrMsg(msg.get("E10029")

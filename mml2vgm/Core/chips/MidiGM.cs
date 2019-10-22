@@ -78,6 +78,14 @@ namespace Core
             pw.ch = ch & 0xf;
         }
 
+        public override void CmdMIDIControlChange(partWork pw,MML mml)
+        {
+            int ctrl = (int)mml.args[0];
+            int data = (int)mml.args[1];
+
+            parent.OutData(mml, pw.port[0], 3, (byte)(0xb0 + (pw.ch & 0xf)), (byte)(ctrl & 0x7f), (byte)(data & 0x7f));
+        }
+
         public override void CmdVelocity(partWork pw, MML mml)
         {
             int vel = (int)mml.args[0];
@@ -187,6 +195,10 @@ namespace Core
             SetDummyData(pw, vmml);
         }
 
+        public override void CmdLoopExtProc(partWork pw, MML mml)
+        {
+        }
+
         public override void CmdInstrument(partWork pw, MML mml)
         {
             char type = (char)mml.args[0];
@@ -216,6 +228,27 @@ namespace Core
             OutMidiProgramChange(pw, mml, (byte)pw.instrument);
         }
 
+        public override void CmdY(partWork pw, MML mml)
+        {
+            List<byte> dat = new List<byte>();
+            foreach (object o in mml.args)
+            {
+                dat.Add((byte)o);
+                if (dat.Count == 255)
+                {
+                    dat.Insert(0, 255);
+                    parent.OutData(mml, pw.port[0], dat.ToArray());
+                    dat.Clear();
+                }
+            }
+
+            if (dat.Count == 0) return;
+
+            dat.Insert(0, (byte)dat.Count);
+            parent.OutData(mml, pw.port[0], dat.ToArray());
+        }
+
+
         private void SendSysEx(partWork pw, MML mml, int n)
         {
             if (!parent.midiSysEx.ContainsKey(n)) return;
@@ -244,27 +277,6 @@ namespace Core
             dat.Insert(0, (byte)dat.Count);
             parent.OutData(mml, pw.port[0], dat.ToArray());
         }
-
-        public override void CmdY(partWork pw, MML mml)
-        {
-            List<byte> dat = new List<byte>();
-            foreach (object o in mml.args)
-            {
-                dat.Add((byte)o);
-                if (dat.Count == 255)
-                {
-                    dat.Insert(0, 255);
-                    parent.OutData(mml, pw.port[0], dat.ToArray());
-                    dat.Clear();
-                }
-            }
-
-            if (dat.Count == 0) return;
-
-            dat.Insert(0, (byte)dat.Count);
-            parent.OutData(mml, pw.port[0], dat.ToArray());
-        }
-
 
         public override void SetFNum(partWork pw, MML mml)
         {
@@ -362,13 +374,11 @@ namespace Core
             pw.bendStartShift = pw.shift;
         }
 
-        string notes = "ccddeffggaab";
-
         protected override void SetTieBend(partWork pw, MML mml)
         {
             if (pw.bendWaitCounter == -1)
             {
-                int n = (pw.octaveNew * 12 + notes.IndexOf(pw.noteCmd) + pw.shift) - (pw.bendStartOctave * 12 + notes.IndexOf(pw.bendStartNote) + pw.bendStartShift);
+                int n = (pw.octaveNew * 12 + Const.NOTE.IndexOf(pw.noteCmd) + pw.shift) - (pw.bendStartOctave * 12 + Const.NOTE.IndexOf(pw.bendStartNote) + pw.bendStartShift);
                 pw.tieBend = 8192 / 24 * n;
             }
         }
@@ -419,7 +429,7 @@ namespace Core
 
         public override int GetFNum(partWork pw, MML mml, int octave, char cmd, int shift)
         {
-            int n = (octave * 12 + notes.IndexOf(cmd) + shift) - (pw.bendStartOctave * 12 + notes.IndexOf(pw.bendStartNote) + pw.bendStartShift);
+            int n = (octave * 12 + Const.NOTE.IndexOf(cmd) + shift) - (pw.bendStartOctave * 12 + Const.NOTE.IndexOf(pw.bendStartNote) + pw.bendStartShift);
             return 8192 / 24 * n;
         }
 

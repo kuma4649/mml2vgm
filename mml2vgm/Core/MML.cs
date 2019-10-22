@@ -54,6 +54,7 @@ namespace Core
         KeyShift,       // K
         AddressShift,   // A
         MIDICh,         // CH
+        MIDIControlChange, // CC
         Note,           // c d e f g a b
         Rest,           // r
         RestNoWork,     // R

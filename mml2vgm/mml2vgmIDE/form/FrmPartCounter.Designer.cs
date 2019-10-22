@@ -43,9 +43,6 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmPartCounter));
             this.dgvPartCounter = new System.Windows.Forms.DataGridView();
-            this.cmsMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.testToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.timer = new System.Windows.Forms.Timer(this.components);
             this.ClmChipIndex = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ClmChipNumber = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ClmPartNumber = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -64,6 +61,9 @@
             this.ClmKeyShift = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ClmMeter = new System.Windows.Forms.DataGridViewImageColumn();
             this.ClmSpacer = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cmsMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.testToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.timer = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.dgvPartCounter)).BeginInit();
             this.cmsMenu.SuspendLayout();
             this.SuspendLayout();
@@ -112,10 +112,12 @@
             dataGridViewCellStyle12.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.dgvPartCounter.DefaultCellStyle = dataGridViewCellStyle12;
             this.dgvPartCounter.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dgvPartCounter.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
             this.dgvPartCounter.EnableHeadersVisualStyles = false;
             this.dgvPartCounter.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(180)))));
             this.dgvPartCounter.Location = new System.Drawing.Point(0, 0);
             this.dgvPartCounter.Name = "dgvPartCounter";
+            this.dgvPartCounter.ReadOnly = true;
             this.dgvPartCounter.RowHeadersVisible = false;
             this.dgvPartCounter.RowTemplate.DefaultCellStyle.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.dgvPartCounter.RowTemplate.Height = 21;
@@ -125,39 +127,23 @@
             this.dgvPartCounter.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DgvPartCounter_CellContentClick);
             this.dgvPartCounter.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.DgvPartCounter_CellMouseClick);
             // 
-            // cmsMenu
-            // 
-            this.cmsMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.testToolStripMenuItem});
-            this.cmsMenu.Name = "cmsMenu";
-            this.cmsMenu.Size = new System.Drawing.Size(94, 26);
-            this.cmsMenu.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.CmsMenu_PreviewKeyDown);
-            // 
-            // testToolStripMenuItem
-            // 
-            this.testToolStripMenuItem.Name = "testToolStripMenuItem";
-            this.testToolStripMenuItem.Size = new System.Drawing.Size(93, 22);
-            this.testToolStripMenuItem.Text = "test";
-            // 
-            // timer
-            // 
-            this.timer.Interval = 10;
-            this.timer.Tick += new System.EventHandler(this.Timer_Tick);
-            // 
             // ClmChipIndex
             // 
             this.ClmChipIndex.HeaderText = "ChipIndex";
             this.ClmChipIndex.Name = "ClmChipIndex";
+            this.ClmChipIndex.ReadOnly = true;
             // 
             // ClmChipNumber
             // 
             this.ClmChipNumber.HeaderText = "ChipNumber";
             this.ClmChipNumber.Name = "ClmChipNumber";
+            this.ClmChipNumber.ReadOnly = true;
             // 
             // ClmPartNumber
             // 
             this.ClmPartNumber.HeaderText = "PartNumber";
             this.ClmPartNumber.Name = "ClmPartNumber";
+            this.ClmPartNumber.ReadOnly = true;
             // 
             // ClmPart
             // 
@@ -277,6 +263,25 @@
             this.ClmSpacer.Name = "ClmSpacer";
             this.ClmSpacer.ReadOnly = true;
             this.ClmSpacer.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // cmsMenu
+            // 
+            this.cmsMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.testToolStripMenuItem});
+            this.cmsMenu.Name = "cmsMenu";
+            this.cmsMenu.Size = new System.Drawing.Size(94, 26);
+            this.cmsMenu.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.CmsMenu_PreviewKeyDown);
+            // 
+            // testToolStripMenuItem
+            // 
+            this.testToolStripMenuItem.Name = "testToolStripMenuItem";
+            this.testToolStripMenuItem.Size = new System.Drawing.Size(93, 22);
+            this.testToolStripMenuItem.Text = "test";
+            // 
+            // timer
+            // 
+            this.timer.Interval = 10;
+            this.timer.Tick += new System.EventHandler(this.Timer_Tick);
             // 
             // FrmPartCounter
             // 

@@ -472,12 +472,16 @@ namespace mml2vgmIDE
             if (frmMixer == null)
             {
                 frmMixer = new FrmMixer(this, 1, newParam.mixer);
+                frmMixer.Location = new Point(setting.location.RMixer.X, setting.location.RMixer.Y);
                 frmMixer.Show();
+                setting.location.ShowMixer = true;
             }
             else
             {
+                setting.location.RMixer = new Rectangle(frmMixer.Location.X, frmMixer.Location.Y, 0, 0);
                 frmMixer.Close();
                 frmMixer = null;
+                setting.location.ShowMixer = false;
             }
 
             TsmiShowMixer.Checked = frmMixer != null;
@@ -546,6 +550,7 @@ namespace mml2vgmIDE
                 return;
             }
 
+            stop();
             flgReinit = true;
             Reinit(frmSetting.setting);
         }
@@ -789,6 +794,8 @@ namespace mml2vgmIDE
         private void Compile(bool doPlay, bool isTrace, bool doSkip, bool doSkipStop,bool doExport,string[] text=null)
         {
             if (Compiling) return;
+            
+            stop();
 
             IDockContent dc = GetActiveDockContent();
 
@@ -1517,6 +1524,10 @@ namespace mml2vgmIDE
             {
                 setting.location.RMain = new Rectangle(RestoreBounds.Location.X, RestoreBounds.Location.Y, RestoreBounds.Size.Width, RestoreBounds.Size.Height);
             }
+            if (setting.location.ShowMixer)
+            {
+                setting.location.RMixer = new Rectangle(frmMixer.Location.X, frmMixer.Location.Y, 0,0);
+            }
 
             frmPartCounter.Close();
 
@@ -1926,6 +1937,19 @@ namespace mml2vgmIDE
                 this.Size = new Size(setting.location.RMain.Width, setting.location.RMain.Height);
             }
             this.Opacity = setting.other.Opacity / 100.0;
+
+            if(setting.location.RMixer!=System.Drawing.Rectangle.Empty)
+            {
+                if (setting.location.ShowMixer)
+                {
+                    frmMixer = new FrmMixer(this, 1, newParam.mixer);
+                    frmMixer.Location = new Point(setting.location.RMixer.X, setting.location.RMixer.Y);
+                    frmMixer.Show();
+                    frmMixer.isClosed = false;
+                    setting.location.ShowMixer = true;
+                    TsmiShowMixer.Checked = (frmMixer != null);
+                }
+            }
 
             UpdateGwiFileHistory();
 

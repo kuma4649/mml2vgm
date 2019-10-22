@@ -96,6 +96,7 @@ namespace mml2vgmIDE
             {
                 parent.setting.location.RMixer = new Rectangle(RestoreBounds.Location.X, RestoreBounds.Location.Y, 0, 0);
             }
+            parent.setting.location.ShowMixer = false;
             isClosed = true;
         }
 
