@@ -12,6 +12,8 @@ namespace mml2vgmIDE.MMLParameter
         public int?[] envelope;
         public string[] notecmd;
         public int?[] vol;
+        public int?[] expression;
+        public int?[] velocity;
         public int?[] octave;
         public string[] length;
         public string[] pan;
@@ -33,6 +35,8 @@ namespace mml2vgmIDE.MMLParameter
             envelope = new int?[n];
             notecmd = new string[n];
             vol = new int?[n];
+            expression = new int?[n];
+            velocity = new int?[n];
             octave = new int?[n];
             length = new string[n];
             pan = new string[n];

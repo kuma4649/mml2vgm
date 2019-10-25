@@ -16,6 +16,8 @@ namespace mml2vgmIDE
         public Action parentUpdate = null;
         private MMLParameter.Manager mmlParams = null;
         private Setting setting = null;
+        private Brush[] meterBrush = new Brush[256];
+
 
         public FrmPartCounter(Setting setting)
         {
@@ -204,6 +206,8 @@ namespace mml2vgmIDE
                         dgvPartCounter.Rows[p].Cells["ClmInstrument"].Value = mmli.inst[r] == null ? "-" : mmli.inst[r].ToString();
                         dgvPartCounter.Rows[p].Cells["ClmEnvelope"].Value = mmli.envelope[r] == null ? "-" : mmli.envelope[r].ToString();
                         dgvPartCounter.Rows[p].Cells["ClmVolume"].Value = mmli.vol[r] == null ? "-" : mmli.vol[r].ToString();
+                        dgvPartCounter.Rows[p].Cells["ClmExpression"].Value = mmli.expression[r] == null ? "-" : mmli.expression[r].ToString();
+                        dgvPartCounter.Rows[p].Cells["ClmVelocity"].Value = mmli.velocity[r] == null ? "-" : mmli.velocity[r].ToString();
                         dgvPartCounter.Rows[p].Cells["ClmPan"].Value = mmli.pan[r] == null ? "-" : mmli.pan[r];
                         dgvPartCounter.Rows[p].Cells["ClmNote"].Value = mmli.notecmd[r] == null ? "-" : mmli.notecmd[r];
                         dgvPartCounter.Rows[p].Cells["ClmLength"].Value = mmli.length[r] == null ? "-" : mmli.length[r];
@@ -218,8 +222,6 @@ namespace mml2vgmIDE
 
             dgvPartCounter.ResumeLayout();
         }
-
-        private Brush[] meterBrush = new Brush[256];
 
         private void DrawMeter(DataGridViewCell dataGridViewCell, Instrument mmli,int pn)
         {

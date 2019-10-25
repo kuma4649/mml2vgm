@@ -874,6 +874,13 @@ namespace Core
                 pw.lfo[c].waitCounter = -1;
                 pw.lfo[c].direction = 0;
             }
+
+            mml.args.Add(
+                (pw.lfo[0].sw ? "P" : "-")
+                + (pw.lfo[1].sw ? "Q" : "-")
+                + (pw.lfo[2].sw ? "R" : "-")
+                + (pw.lfo[3].sw ? "S" : "-"));
+            SetDummyData(pw, mml);
         }
 
         public virtual void CmdLfoSwitch(partWork pw, MML mml)

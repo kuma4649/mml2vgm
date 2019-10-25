@@ -90,6 +90,13 @@ namespace Core
         {
             int vel = (int)mml.args[0];
             pw.velocity = vel & 0x7f;
+
+            MML vmml = new MML();
+            vmml.type = enmMMLType.Velocity;
+            vmml.args = new List<object>();
+            vmml.args.Add(pw.velocity);
+            vmml.line = mml.line;
+            SetDummyData(pw, vmml);
         }
 
         public override void CmdPan(partWork pw, MML mml)

@@ -30,7 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle14 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
@@ -41,9 +41,16 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle13 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmPartCounter));
             this.dgvPartCounter = new System.Windows.Forms.DataGridView();
+            this.cmsMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.testToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.timer = new System.Windows.Forms.Timer(this.components);
             this.ClmChipIndex = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ClmExpression = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ClmVelocity = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ClmChipNumber = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ClmPartNumber = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ClmPart = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -61,9 +68,6 @@
             this.ClmKeyShift = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ClmMeter = new System.Windows.Forms.DataGridViewImageColumn();
             this.ClmSpacer = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cmsMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.testToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.timer = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.dgvPartCounter)).BeginInit();
             this.cmsMenu.SuspendLayout();
             this.SuspendLayout();
@@ -86,6 +90,8 @@
             this.dgvPartCounter.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             this.dgvPartCounter.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.ClmChipIndex,
+            this.ClmExpression,
+            this.ClmVelocity,
             this.ClmChipNumber,
             this.ClmPartNumber,
             this.ClmPart,
@@ -103,14 +109,14 @@
             this.ClmKeyShift,
             this.ClmMeter,
             this.ClmSpacer});
-            dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle12.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle12.Font = new System.Drawing.Font("MS UI Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            dataGridViewCellStyle12.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle12.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(180)))));
-            dataGridViewCellStyle12.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle12.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvPartCounter.DefaultCellStyle = dataGridViewCellStyle12;
+            dataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle14.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle14.Font = new System.Drawing.Font("MS UI Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            dataGridViewCellStyle14.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle14.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(180)))));
+            dataGridViewCellStyle14.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle14.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvPartCounter.DefaultCellStyle = dataGridViewCellStyle14;
             this.dgvPartCounter.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgvPartCounter.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
             this.dgvPartCounter.EnableHeadersVisualStyles = false;
@@ -126,143 +132,6 @@
             this.dgvPartCounter.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DgvPartCounter_CellClick);
             this.dgvPartCounter.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DgvPartCounter_CellContentClick);
             this.dgvPartCounter.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.DgvPartCounter_CellMouseClick);
-            // 
-            // ClmChipIndex
-            // 
-            this.ClmChipIndex.HeaderText = "ChipIndex";
-            this.ClmChipIndex.Name = "ClmChipIndex";
-            this.ClmChipIndex.ReadOnly = true;
-            // 
-            // ClmChipNumber
-            // 
-            this.ClmChipNumber.HeaderText = "ChipNumber";
-            this.ClmChipNumber.Name = "ClmChipNumber";
-            this.ClmChipNumber.ReadOnly = true;
-            // 
-            // ClmPartNumber
-            // 
-            this.ClmPartNumber.HeaderText = "PartNumber";
-            this.ClmPartNumber.Name = "ClmPartNumber";
-            this.ClmPartNumber.ReadOnly = true;
-            // 
-            // ClmPart
-            // 
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ClmPart.DefaultCellStyle = dataGridViewCellStyle2;
-            this.ClmPart.HeaderText = "Part";
-            this.ClmPart.Name = "ClmPart";
-            this.ClmPart.ReadOnly = true;
-            this.ClmPart.Width = 50;
-            // 
-            // ClmChip
-            // 
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ClmChip.DefaultCellStyle = dataGridViewCellStyle3;
-            this.ClmChip.HeaderText = "Chip";
-            this.ClmChip.Name = "ClmChip";
-            this.ClmChip.ReadOnly = true;
-            // 
-            // ClmCounter
-            // 
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle4.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ClmCounter.DefaultCellStyle = dataGridViewCellStyle4;
-            this.ClmCounter.HeaderText = "Counter";
-            this.ClmCounter.Name = "ClmCounter";
-            this.ClmCounter.ReadOnly = true;
-            // 
-            // ClmInstrument
-            // 
-            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle5.Font = new System.Drawing.Font("Consolas", 9F);
-            this.ClmInstrument.DefaultCellStyle = dataGridViewCellStyle5;
-            this.ClmInstrument.HeaderText = "Instrument";
-            this.ClmInstrument.Name = "ClmInstrument";
-            this.ClmInstrument.ReadOnly = true;
-            // 
-            // ClmEnvelope
-            // 
-            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle6.Font = new System.Drawing.Font("Consolas", 9F);
-            this.ClmEnvelope.DefaultCellStyle = dataGridViewCellStyle6;
-            this.ClmEnvelope.HeaderText = "Envelope";
-            this.ClmEnvelope.Name = "ClmEnvelope";
-            this.ClmEnvelope.ReadOnly = true;
-            // 
-            // ClmVolume
-            // 
-            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle7.Font = new System.Drawing.Font("Consolas", 9F);
-            this.ClmVolume.DefaultCellStyle = dataGridViewCellStyle7;
-            this.ClmVolume.HeaderText = "Volume";
-            this.ClmVolume.Name = "ClmVolume";
-            this.ClmVolume.ReadOnly = true;
-            // 
-            // ClmPan
-            // 
-            this.ClmPan.HeaderText = "Pan";
-            this.ClmPan.Name = "ClmPan";
-            this.ClmPan.ReadOnly = true;
-            // 
-            // ClmNote
-            // 
-            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle8.Font = new System.Drawing.Font("Consolas", 9F);
-            this.ClmNote.DefaultCellStyle = dataGridViewCellStyle8;
-            this.ClmNote.HeaderText = "Note";
-            this.ClmNote.Name = "ClmNote";
-            this.ClmNote.ReadOnly = true;
-            // 
-            // ClmLength
-            // 
-            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle9.Font = new System.Drawing.Font("Consolas", 9F);
-            this.ClmLength.DefaultCellStyle = dataGridViewCellStyle9;
-            this.ClmLength.HeaderText = "Length(#)";
-            this.ClmLength.Name = "ClmLength";
-            this.ClmLength.ReadOnly = true;
-            // 
-            // ClmEnvSw
-            // 
-            this.ClmEnvSw.HeaderText = "Env.Sw.";
-            this.ClmEnvSw.Name = "ClmEnvSw";
-            this.ClmEnvSw.ReadOnly = true;
-            // 
-            // ClmLfoSw
-            // 
-            this.ClmLfoSw.HeaderText = "LFO Sw.";
-            this.ClmLfoSw.Name = "ClmLfoSw";
-            this.ClmLfoSw.ReadOnly = true;
-            // 
-            // ClmDetune
-            // 
-            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.ClmDetune.DefaultCellStyle = dataGridViewCellStyle10;
-            this.ClmDetune.HeaderText = "Detune";
-            this.ClmDetune.Name = "ClmDetune";
-            this.ClmDetune.ReadOnly = true;
-            // 
-            // ClmKeyShift
-            // 
-            dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.ClmKeyShift.DefaultCellStyle = dataGridViewCellStyle11;
-            this.ClmKeyShift.HeaderText = "Key shift";
-            this.ClmKeyShift.Name = "ClmKeyShift";
-            this.ClmKeyShift.ReadOnly = true;
-            // 
-            // ClmMeter
-            // 
-            this.ClmMeter.HeaderText = "KeyOn";
-            this.ClmMeter.Name = "ClmMeter";
-            this.ClmMeter.ReadOnly = true;
-            // 
-            // ClmSpacer
-            // 
-            this.ClmSpacer.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.ClmSpacer.HeaderText = "";
-            this.ClmSpacer.Name = "ClmSpacer";
-            this.ClmSpacer.ReadOnly = true;
-            this.ClmSpacer.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // cmsMenu
             // 
@@ -282,6 +151,161 @@
             // 
             this.timer.Interval = 10;
             this.timer.Tick += new System.EventHandler(this.Timer_Tick);
+            // 
+            // ClmChipIndex
+            // 
+            this.ClmChipIndex.HeaderText = "ChipIndex";
+            this.ClmChipIndex.Name = "ClmChipIndex";
+            this.ClmChipIndex.ReadOnly = true;
+            // 
+            // ClmExpression
+            // 
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ClmExpression.DefaultCellStyle = dataGridViewCellStyle2;
+            this.ClmExpression.HeaderText = "Expression";
+            this.ClmExpression.Name = "ClmExpression";
+            this.ClmExpression.ReadOnly = true;
+            // 
+            // ClmVelocity
+            // 
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ClmVelocity.DefaultCellStyle = dataGridViewCellStyle3;
+            this.ClmVelocity.HeaderText = "Velocity";
+            this.ClmVelocity.Name = "ClmVelocity";
+            this.ClmVelocity.ReadOnly = true;
+            // 
+            // ClmChipNumber
+            // 
+            this.ClmChipNumber.HeaderText = "ChipNumber";
+            this.ClmChipNumber.Name = "ClmChipNumber";
+            this.ClmChipNumber.ReadOnly = true;
+            // 
+            // ClmPartNumber
+            // 
+            this.ClmPartNumber.HeaderText = "PartNumber";
+            this.ClmPartNumber.Name = "ClmPartNumber";
+            this.ClmPartNumber.ReadOnly = true;
+            // 
+            // ClmPart
+            // 
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ClmPart.DefaultCellStyle = dataGridViewCellStyle4;
+            this.ClmPart.HeaderText = "Part";
+            this.ClmPart.Name = "ClmPart";
+            this.ClmPart.ReadOnly = true;
+            this.ClmPart.Width = 50;
+            // 
+            // ClmChip
+            // 
+            dataGridViewCellStyle5.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ClmChip.DefaultCellStyle = dataGridViewCellStyle5;
+            this.ClmChip.HeaderText = "Chip";
+            this.ClmChip.Name = "ClmChip";
+            this.ClmChip.ReadOnly = true;
+            // 
+            // ClmCounter
+            // 
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle6.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ClmCounter.DefaultCellStyle = dataGridViewCellStyle6;
+            this.ClmCounter.HeaderText = "Counter";
+            this.ClmCounter.Name = "ClmCounter";
+            this.ClmCounter.ReadOnly = true;
+            // 
+            // ClmInstrument
+            // 
+            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle7.Font = new System.Drawing.Font("Consolas", 9F);
+            this.ClmInstrument.DefaultCellStyle = dataGridViewCellStyle7;
+            this.ClmInstrument.HeaderText = "Instrument";
+            this.ClmInstrument.Name = "ClmInstrument";
+            this.ClmInstrument.ReadOnly = true;
+            // 
+            // ClmEnvelope
+            // 
+            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle8.Font = new System.Drawing.Font("Consolas", 9F);
+            this.ClmEnvelope.DefaultCellStyle = dataGridViewCellStyle8;
+            this.ClmEnvelope.HeaderText = "Envelope";
+            this.ClmEnvelope.Name = "ClmEnvelope";
+            this.ClmEnvelope.ReadOnly = true;
+            // 
+            // ClmVolume
+            // 
+            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle9.Font = new System.Drawing.Font("Consolas", 9F);
+            this.ClmVolume.DefaultCellStyle = dataGridViewCellStyle9;
+            this.ClmVolume.HeaderText = "Volume";
+            this.ClmVolume.Name = "ClmVolume";
+            this.ClmVolume.ReadOnly = true;
+            // 
+            // ClmPan
+            // 
+            this.ClmPan.HeaderText = "Pan";
+            this.ClmPan.Name = "ClmPan";
+            this.ClmPan.ReadOnly = true;
+            // 
+            // ClmNote
+            // 
+            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle10.Font = new System.Drawing.Font("Consolas", 9F);
+            this.ClmNote.DefaultCellStyle = dataGridViewCellStyle10;
+            this.ClmNote.HeaderText = "Note";
+            this.ClmNote.Name = "ClmNote";
+            this.ClmNote.ReadOnly = true;
+            // 
+            // ClmLength
+            // 
+            dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle11.Font = new System.Drawing.Font("Consolas", 9F);
+            this.ClmLength.DefaultCellStyle = dataGridViewCellStyle11;
+            this.ClmLength.HeaderText = "Length(#)";
+            this.ClmLength.Name = "ClmLength";
+            this.ClmLength.ReadOnly = true;
+            // 
+            // ClmEnvSw
+            // 
+            this.ClmEnvSw.HeaderText = "Env.Sw.";
+            this.ClmEnvSw.Name = "ClmEnvSw";
+            this.ClmEnvSw.ReadOnly = true;
+            // 
+            // ClmLfoSw
+            // 
+            this.ClmLfoSw.HeaderText = "LFO Sw.";
+            this.ClmLfoSw.Name = "ClmLfoSw";
+            this.ClmLfoSw.ReadOnly = true;
+            // 
+            // ClmDetune
+            // 
+            dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.ClmDetune.DefaultCellStyle = dataGridViewCellStyle12;
+            this.ClmDetune.HeaderText = "Detune";
+            this.ClmDetune.Name = "ClmDetune";
+            this.ClmDetune.ReadOnly = true;
+            // 
+            // ClmKeyShift
+            // 
+            dataGridViewCellStyle13.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.ClmKeyShift.DefaultCellStyle = dataGridViewCellStyle13;
+            this.ClmKeyShift.HeaderText = "Key shift";
+            this.ClmKeyShift.Name = "ClmKeyShift";
+            this.ClmKeyShift.ReadOnly = true;
+            // 
+            // ClmMeter
+            // 
+            this.ClmMeter.HeaderText = "KeyOn";
+            this.ClmMeter.Name = "ClmMeter";
+            this.ClmMeter.ReadOnly = true;
+            // 
+            // ClmSpacer
+            // 
+            this.ClmSpacer.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.ClmSpacer.HeaderText = "";
+            this.ClmSpacer.Name = "ClmSpacer";
+            this.ClmSpacer.ReadOnly = true;
+            this.ClmSpacer.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // FrmPartCounter
             // 
@@ -310,6 +334,8 @@
         private System.Windows.Forms.ContextMenuStrip cmsMenu;
         private System.Windows.Forms.ToolStripMenuItem testToolStripMenuItem;
         private System.Windows.Forms.DataGridViewTextBoxColumn ClmChipIndex;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ClmExpression;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ClmVelocity;
         private System.Windows.Forms.DataGridViewTextBoxColumn ClmChipNumber;
         private System.Windows.Forms.DataGridViewTextBoxColumn ClmPartNumber;
         private System.Windows.Forms.DataGridViewTextBoxColumn ClmPart;

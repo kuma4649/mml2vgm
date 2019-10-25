@@ -1,4 +1,8 @@
 更新履歴
+TAG130 2019/10/25
+  IDE
+    ・PartCounter MIDIの各種情報表示、Expression、Velocityの追加
+
 TAG129 2019/10/23
   Core
     ・MIDI:CCコマンド(コントロールチェンジ)を追加
