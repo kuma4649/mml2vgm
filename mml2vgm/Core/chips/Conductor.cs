@@ -19,6 +19,9 @@ namespace Core
             IsSecondary = isSecondary;
 
             Frequency = 44100;
+            port = new byte[][]{
+                new byte[] { 0x00 }
+            };
 
             if (string.IsNullOrEmpty(initialPartName)) return;
 
@@ -37,7 +40,7 @@ namespace Core
         {
             pw.volume = 15;
             pw.MaxVolume = 15;
-            pw.port = new byte[][] { new byte[] { 0 } };
+            pw.port = port;
         }
 
         public override void InitChip()

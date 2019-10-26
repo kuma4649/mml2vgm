@@ -1,4 +1,10 @@
 更新履歴
+TAG132 2019/10/26 2nd
+  Core
+    ・Conductor の対応
+  IDE
+    ・Conductor の対応
+
 TAG131 2019/10/26
   Core
     ・変数名など調整。参照先にも影響あり。

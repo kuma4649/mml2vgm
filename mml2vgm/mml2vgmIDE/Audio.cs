@@ -3196,7 +3196,7 @@ namespace mml2vgmIDE
             if (driver == null) return -1;
 
 
-            if (driver is vgm)
+            if (driver is vgm || driver is Driver.ZGM.zgm)
             {
                 return sm.GetDataSenderBufferCounter();
             }

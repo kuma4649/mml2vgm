@@ -1844,7 +1844,7 @@ namespace mml2vgmIDE
                 outDatum odo = odos[ch];
                 if (od != null
                     && od != odo
-                    && (od.type == enmMMLType.Note || od.type == enmMMLType.Rest)
+                    && (od.type == enmMMLType.Note || od.type == enmMMLType.Rest || od.type == enmMMLType.Lyric)
                     && (
                         (odo != null && od.linePos.col != odo.linePos.col)
                         || odo == null
@@ -1861,14 +1861,14 @@ namespace mml2vgmIDE
                         {
                             try
                             {
-                                ac.Document.Unmark(odo.linePos.col, odo.linePos.col + odo.linePos.length, 1);
+                                ac.Document.Unmark(odo.linePos.col, odo.linePos.col + Math.Max(odo.linePos.length, 1), 1);
                             }
                             catch
                             {
                                 ;//何もしない
                             }
                         }
-                        ac.Document.Mark(od.linePos.col, od.linePos.col + od.linePos.length, 1);
+                        ac.Document.Mark(od.linePos.col, od.linePos.col + Math.Max(od.linePos.length,1), 1);
                         odos[ch] = od;
                     }
                     flg = true;
