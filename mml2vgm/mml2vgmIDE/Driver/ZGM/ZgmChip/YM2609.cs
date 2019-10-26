@@ -17,9 +17,9 @@ namespace mml2vgmIDE.Driver.ZGM.ZgmChip
             this.vgmBuf = vgmBuf;
 
             Use = true;
-            Device = EnmDevice.YM2609;
+            Device = EnmZGMDevice.YM2609;
             name = "YM2609";
-            Model = EnmModel.None;
+            Model = EnmVRModel.None;
             Number = 0;
             Hosei = 0;
         }

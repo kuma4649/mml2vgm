@@ -29,6 +29,14 @@ namespace mml2vgmIDE
             dgvPartCounter.ForeColor = Color.FromArgb(setting.ColorScheme.PartCounter_ForeColor);
             EnableDoubleBuffering(dgvPartCounter);
             SetDisplayIndex(setting.location.PartCounterClmInfo);
+            foreach (DataGridViewColumn c in dgvPartCounter.Columns)
+            {
+                if (
+                    c.Name == "ClmChipIndex"
+                    || c.Name == "ClmChipNumber"
+                    || c.Name == "ClmPartNumber"
+                    || c.Name == "ClmIsSecondary") c.Visible = false;
+            }
 
             double r = 0;
             double g = 0;
@@ -277,7 +285,11 @@ namespace mml2vgmIDE
 
         private void SetDisplayIndex(dgvColumnInfo[] aryIndex)
         {
-            if (aryIndex == null || aryIndex.Length < 1) return;
+            if (aryIndex == null || aryIndex.Length < 1)
+            {
+                setting.location.PartCounterClmInfo = getDisplayIndex();
+                aryIndex = setting.location.PartCounterClmInfo;
+            }
 
             for (int i = 0; i < aryIndex.Length; i++)
             {
@@ -308,7 +320,11 @@ namespace mml2vgmIDE
         {
             if (e.Button != MouseButtons.Right) return;
             if (e.RowIndex != -1) return;
-            if (setting == null || setting.location == null || setting.location.PartCounterClmInfo == null) return;
+            if (setting == null || setting.location == null) return;
+            if( setting.location.PartCounterClmInfo == null)
+            {
+                setting.location.PartCounterClmInfo = getDisplayIndex();
+            }
 
             //メニューのアイテムを生成する
             //  hide / show all / セパレータの追加

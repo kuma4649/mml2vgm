@@ -12,8 +12,8 @@ namespace SoundManager
     {
         public bool Use;
         public long Delay;
-        public EnmModel Model;
-        public EnmDevice Device;
+        public EnmVRModel Model;
+        public EnmZGMDevice Device;
         public int Index;
         public int Number;
         public int Hosei;

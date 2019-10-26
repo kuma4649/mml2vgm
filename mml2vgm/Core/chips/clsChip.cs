@@ -809,7 +809,11 @@ namespace Core
             pw.lfo[c].sw = false;
             pw.lfo[c].isEnd = true;
             pw.lfo[c].param = new List<int>();
-            for (int i = 2; i < mml.args.Count; i++) pw.lfo[c].param.Add((int)mml.args[i]);
+            for (int i = 2; i < mml.args.Count; i++)
+            {
+                if(mml.args[i] is int)
+                pw.lfo[c].param.Add((int)mml.args[i]);
+            }
 
             if (pw.lfo[c].type == eLfoType.Tremolo || pw.lfo[c].type == eLfoType.Vibrato)
             {

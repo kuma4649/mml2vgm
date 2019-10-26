@@ -53,34 +53,36 @@ namespace Core
         private ClsVgm mmlInfo;
         public static object[] tblChipIdentifyNumber = new object[]
         {
-            //              ChipName           Ident         Port  CmdLen  Option
+            //              ChipName           Ident                    Port  CmdLen  Option
             // 0x00000000 - 0x000000FF VGM Chips
-              new object[]{ "SN76489"        , 0x0000_000c , 2   , 1     , new byte[] { 0,0,0,0 } }
-            , new object[]{ "YM2413"         , 0x0000_0010 , 1   , 2     , null }
-            , new object[]{ "YM2612"         , 0x0000_002c , 2   , 2     , null }
-            , new object[]{ "YM2151"         , 0x0000_0030 , 1   , 2     , null }
-            , new object[]{ "Sega PCM"       , 0x0000_0038 , 1   , 3     , new byte[] { 0,0,0,0 } }
-            , new object[]{ "RF5C68"         , 0x0000_0040 , 1   , 3     , null }
-            , new object[]{ "YM2203"         , 0x0000_0044 , 1   , 2     , null }
-            , new object[]{ "YM2608"         , 0x0000_0048 , 2   , 2     , null }
-            , new object[]{ "YM2610/YM2610B" , 0x0000_004C , 2   , 2     , null }
-            , new object[]{ "K051649"        , 0x0000_009C , 1   , 2     , null }
-            , new object[]{ "K054539"        , 0x0000_00A0 , 1   , 3     , new byte[] { 0 } }
-            , new object[]{ "HuC6280"        , 0x0000_00A4 , 1   , 2     , null }
-            , new object[]{ "C140"           , 0x0000_00A8 , 1   , 2     , new byte[] { 0 } }
+              new object[]{ "SN76489"        , EnmZGMDevice.SN76489   , 2   , 1     , new byte[] { 0,0,0,0 } }
+            , new object[]{ "YM2413"         , EnmZGMDevice.YM2413    , 1   , 2     , null }
+            , new object[]{ "YM2612"         , EnmZGMDevice.YM2612    , 2   , 2     , null }
+            , new object[]{ "YM2151"         , EnmZGMDevice.YM2151    , 1   , 2     , null }
+            , new object[]{ "Sega PCM"       , EnmZGMDevice.SegaPCM   , 1   , 3     , new byte[] { 0,0,0,0 } }
+            , new object[]{ "RF5C68"         , EnmZGMDevice.RF5C68    , 1   , 3     , null }
+            , new object[]{ "YM2203"         , EnmZGMDevice.YM2203    , 1   , 2     , null }
+            , new object[]{ "YM2608"         , EnmZGMDevice.YM2608    , 2   , 2     , null }
+            , new object[]{ "YM2610/YM2610B" , EnmZGMDevice.YM2610    , 2   , 2     , null }
+            , new object[]{ "K051649"        , EnmZGMDevice.K051649   , 1   , 2     , null }
+            , new object[]{ "K054539"        , EnmZGMDevice.K054539   , 1   , 3     , new byte[] { 0 } }
+            , new object[]{ "HuC6280"        , EnmZGMDevice.HuC6280   , 1   , 2     , null }
+            , new object[]{ "C140"           , EnmZGMDevice.C140      , 1   , 2     , new byte[] { 0 } }
+            // 0x00010000 - 0x0001FFFF 妄想Chips
+            , new object[]{ "CONDUCTOR"      , EnmZGMDevice.Conductor , 1   , 2     , null }
             // 0x00020000 - 0x0002FFFF 妄想Chips
-            , new object[]{ "AY8910B"        , 0x0002_0000 , 1   , 2     , null }
-            , new object[]{ "YM2609"         , 0x0002_0001 , 4   , 2     , null }
+            , new object[]{ "AY8910B"        , EnmZGMDevice.AY8910B   , 1   , 2     , null }
+            , new object[]{ "YM2609"         , EnmZGMDevice.YM2609    , 4   , 2     , null }
             // 0x00030000 - 0x0003FFFF XG音源
-            , new object[]{ "MU50"           , 0x0003_0000 , 1   , -1    , null }
+            , new object[]{ "MU50"           , EnmZGMDevice.MU50      , 1   , -1    , null }
             // 0x00040000 - 0x0004FFFF LA/GS音源
-            , new object[]{ "MT-32"          , 0x0004_0000 , 1   , -1    , null }
+            , new object[]{ "MT-32"          , EnmZGMDevice.MT32      , 1   , -1    , null }
             // 0x00050000 - 0x0005FFFF GM
-            , new object[]{ "GeneralMIDI"    , 0x0005_0000 , 1   , -1    , null }
+            , new object[]{ "GeneralMIDI"    , EnmZGMDevice.MIDIGM    , 1   , -1    , null }
             // 0x00060000 - 0x0006FFFF VSTi
-            , new object[]{ "VOPMex"         , 0x0006_0000 , 1   , -1    , null }
+            , new object[]{ "VOPMex"         , EnmZGMDevice.VOPMex    , 1   , -1    , null }
             // 0x00070000 - 0x0007FFFF Wave
-            , new object[]{ "Raw Wave"       , 0x0007_0000 , 1   , -1    , null }
+            , new object[]{ "Raw Wave"       , EnmZGMDevice.Wave      , 1   , -1    , null }
         };
         private Dictionary<string, object[]> dicChipIdentifyNumber;
         private int ChipCommandSize = 1;

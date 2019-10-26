@@ -914,11 +914,11 @@ namespace mml2vgmIDE
                             dummyChip.Number = chipRegister.YM2608[chipID].Number;
                             dummyChip.Use = chipRegister.YM2608[chipID].Use;
 
-                            if (chipRegister.YM2608[chipID].Model == EnmModel.RealModel)
+                            if (chipRegister.YM2608[chipID].Model == EnmVRModel.RealModel)
                             {
                                 if (setting.YM2608Type.OnlyPCMEmulation)
                                 {
-                                    dummyChip.Model = EnmModel.VirtualModel;
+                                    dummyChip.Model = EnmVRModel.VirtualModel;
                                 }
                                 else
                                 {

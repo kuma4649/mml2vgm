@@ -106,6 +106,7 @@
     <Compile Include="Audio.cs" />
     <Compile Include="ChipLEDs.cs" />
     <Compile Include="ChipRegister.cs" />
+    <Compile Include="Driver\ZGM\ZgmChip\Conductor.cs" />
     <Compile Include="Driver\ZGM\ZgmChip\MidiGM.cs" />
     <Compile Include="Driver\ZGM\ZgmChip\SN76489.cs" />
     <Compile Include="Driver\ZGM\ZgmChip\YM2609.cs" />

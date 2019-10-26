@@ -55,7 +55,8 @@ namespace mml2vgmIDE.Driver.ZGM.ZgmChip
                 case 0x0000_00D8: return null;// X1-010           
                 case 0x0000_00DC: return null;// C352             
                 case 0x0000_00E0: return null;// GA20             
-                case 0x0001_0000: return null;// Conductor        
+                case 0x0001_0000: 
+                    return new Conductor(chipRegister, setting, vgmBuf); 
                 case 0x0002_0001:
                     return new YM2609(chipRegister, setting, vgmBuf);
                 case 0x0003_0000: return null;// XG MU50             

@@ -17,7 +17,7 @@ namespace mml2vgmIDE
         private const int MAX_CHIPS = 0xFF;
         private dac_control[] DACData = new dac_control[MAX_CHIPS];
         public ChipRegister chipRegister = null;
-        public EnmModel model = EnmModel.VirtualModel;
+        public EnmVRModel model = EnmVRModel.VirtualModel;
 
         public zgm driver { get; internal set; }
 
@@ -499,7 +499,7 @@ namespace mml2vgmIDE
                     chipRegister.writePWM(ChipID, Port, (uint)((Offset << 8) | (Data << 0)));
                     break;
                 case 0x17:  // OKIM6258
-                    if (model == EnmModel.VirtualModel) //System.Console.Write("[DAC]");
+                    if (model == EnmVRModel.VirtualModel) //System.Console.Write("[DAC]");
                         chipRegister.writeOKIM6258(ChipID, Offset, Data);
                     break;
                 case 0x1b:  // HuC6280

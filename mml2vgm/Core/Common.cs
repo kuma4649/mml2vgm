@@ -452,6 +452,7 @@ namespace Core
                 || typ == enmMMLType.KeyShift
                 || typ == enmMMLType.unknown
                 || typ == enmMMLType.Lyric
+                || typ == enmMMLType.Lfo
                 )
             {
                 return true;

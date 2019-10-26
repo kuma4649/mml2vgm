@@ -203,6 +203,7 @@ namespace mml2vgmIDE.Driver.ZGM
                     else
                     {
                         vgmAnalyze = false;
+                        vgmAdr = (uint)vgmBuf.Length;
                         return;
                     }
                 }

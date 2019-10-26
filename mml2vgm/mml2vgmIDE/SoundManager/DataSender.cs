@@ -155,7 +155,7 @@ namespace SoundManager
                 foreach (PackData dat in startData)
                 {
                     //振り分けてEnqueue
-                    if (dat.Chip.Model == EnmModel.VirtualModel)
+                    if (dat.Chip.Model == EnmVRModel.VirtualModel)
                         while (!EmuEnq(dat.od, 0, dat.Chip, dat.Type, dat.Address, dat.Data, null)) Thread.Sleep(1);
                     else
                         while (!RealEnq(dat.od, 0, dat.Chip, dat.Type, dat.Address, dat.Data, null)) Thread.Sleep(1);
@@ -173,13 +173,13 @@ namespace SoundManager
 
             switch (Chip.Model)
             {
-                case EnmModel.None:
+                case EnmVRModel.None:
                     return ringBuffer.Enq(od, Counter, Chip, Type, Address, Data, ExData);
 
-                case EnmModel.VirtualModel:
+                case EnmVRModel.VirtualModel:
                     return ringBuffer.Enq(od, Counter + EmuDelay, Chip, Type, Address, Data, ExData);
 
-                case EnmModel.RealModel:
+                case EnmVRModel.RealModel:
                     return ringBuffer.Enq(od, Counter + RealDelay, Chip, Type, Address, Data, ExData);
 
             }
@@ -347,7 +347,7 @@ namespace SoundManager
                                 }
 
                                 //振り分けてEnqueue
-                                if (Chip.Model == EnmModel.VirtualModel)
+                                if (Chip.Model == EnmVRModel.VirtualModel)
                                 {
                                     while (!EmuEnq(od, Counter, Chip, Type, Address, Data, ExData))
                                     {
@@ -359,7 +359,7 @@ namespace SoundManager
                                         Thread.Sleep(0);
                                     }
                                 }
-                                else if (Chip.Model == EnmModel.RealModel)
+                                else if (Chip.Model == EnmVRModel.RealModel)
                                 {
                                     while (!RealEnq(od, Counter, Chip, Type, Address, Data, ExData))
                                     {
@@ -390,6 +390,13 @@ namespace SoundManager
 
                             process2_Lap = spdc.ElapsedMilliSec() - lapPtr;
                         }
+
+                        if (parent.Mode == SendMode.none)
+                        {
+                            //モード指定がnoneの場合はループを抜ける
+                            break;
+                        }
+
                     }
 
                     if (SendStopData() == -1) return;
@@ -430,7 +437,7 @@ namespace SoundManager
                 ProcessingData?.Invoke(ref dat.od, ref SeqCounter, ref dat.Chip, ref dat.Type, ref dat.Address, ref dat.Data, ref dat.ExData);
 
                 //振り分けてEnqueue
-                if (dat.Chip.Model == EnmModel.VirtualModel)
+                if (dat.Chip.Model == EnmVRModel.VirtualModel)
                 {
                     if (parent.IsRunningAtEmuChipSender())
                     {
@@ -445,7 +452,7 @@ namespace SoundManager
                         }
                     }
                 }
-                else if (dat.Chip.Model == EnmModel.RealModel)
+                else if (dat.Chip.Model == EnmVRModel.RealModel)
                 {
                     if (parent.IsRunningAtRealChipSender())
                     {

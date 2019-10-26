@@ -7,17 +7,18 @@ using System.Threading.Tasks;
 
 namespace mml2vgmIDE.Driver.ZGM.ZgmChip
 {
-    public class MidiGM:ZgmChip
+    public class Conductor : ZgmChip
     {
-        public MidiGM(ChipRegister chipRegister, Setting setting, outDatum[] vgmBuf)
+
+        public Conductor(ChipRegister chipRegister, Setting setting, outDatum[] vgmBuf)
         {
             this.chipRegister = chipRegister;
             this.setting = setting;
             this.vgmBuf = vgmBuf;
 
             Use = true;
-            Device = EnmZGMDevice.MIDIGM;
-            name = "GeneralMIDI";
+            Device = EnmZGMDevice.Conductor;
+            name = "CONDUCTOR";
             Model = EnmVRModel.None;
             Number = 0;
             Hosei = 0;
@@ -28,17 +29,13 @@ namespace mml2vgmIDE.Driver.ZGM.ZgmChip
             base.Setup(chipIndex, ref dataPos, ref cmdTable);
 
             if (cmdTable.ContainsKey(defineInfo.commandNo)) cmdTable.Remove(defineInfo.commandNo);
-            cmdTable.Add(defineInfo.commandNo, SendPort);
+            cmdTable.Add(defineInfo.commandNo, SendPort0);
 
         }
 
-        private void SendPort(outDatum od, ref uint vgmAdr)
+        private void SendPort0(outDatum od, ref uint vgmAdr)
         {
-            int len = (int)(vgmBuf[vgmAdr + 1].val);
-            byte[] dat = new byte[len];
-            for (int i = 0; i < len; i++) dat[i] = (byte)(vgmBuf[vgmAdr + 2 + i].val);
-            chipRegister.MIDISetRegister(od, Audio.DriverSeqCounter, Index, 0, dat);
-            vgmAdr += (uint)(len + 2);
+            vgmAdr += 3;
         }
 
     }

@@ -30,7 +30,7 @@ namespace mml2vgmIDE
     , FadeOut
     }
 
-    public enum EnmModel
+    public enum EnmVRModel
     {
         None
         , VirtualModel
