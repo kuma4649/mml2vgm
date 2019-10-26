@@ -247,10 +247,10 @@ namespace SoundManager
                         }
                         //else
                         //{
-                            //o += step;
+                        //o += step;
                         //}
 
-                        skipframe = Math.Min((int)((el1 - o) / step), 500);
+                        skipframe = Math.Max(Math.Min((int)((el1 - o) / step), 500), 1);
 
                         for (int skipf = 0; skipf < skipframe ; skipf++)
                         {

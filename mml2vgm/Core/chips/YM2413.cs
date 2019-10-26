@@ -77,7 +77,7 @@ namespace Core
             //FM Off
             outYM2413AllKeyOff(null, lstPartWork[0]);
 
-            if (ChipID != 0)
+            if (ChipID != 0 && parent.info.format != enmFormat.ZGM)
             {
                 parent.dat[0x13] = new outDatum(enmMMLType.unknown, null, null, (byte)(parent.dat[0x13].val | 0x40));//use Secondary(YM2413 OPLL)
             }

@@ -132,7 +132,7 @@ namespace Core
 
             }
 
-            if (ChipID != 0)
+            if (ChipID != 0 && parent.info.format != enmFormat.ZGM)
             {
                 parent.dat[0x47] = new outDatum(enmMMLType.unknown, null, null, (byte)(parent.dat[0x47].val | 0x40));//use Secondary
             }

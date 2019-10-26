@@ -1536,6 +1536,8 @@ namespace mml2vgmIDE
 
         public bool InitPlayer(EnmFileFormat format, outDatum[] srcBuf)
         {
+            if (srcBuf == null) return false;
+
             try
             {
                 IDockContent dc = GetActiveDockContent();

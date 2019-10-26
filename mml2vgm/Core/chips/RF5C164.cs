@@ -182,7 +182,7 @@ namespace Core
                 SetRf5c164Envelope(null,pw, 0xff);
             }
 
-            if (IsSecondary!=0)
+            if (ChipID!= 0 && parent.info.format != enmFormat.ZGM)
             {
                 parent.dat[0x6f] = new outDatum(enmMMLType.unknown, null, null, (byte)(parent.dat[0x6f].val | 0x40));
             }

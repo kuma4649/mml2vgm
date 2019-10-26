@@ -1,0 +1,41 @@
+﻿'{
+
+	TitleName   =PSG sample
+	TitleNameJ  =PSGサンプル
+	GameName    =none
+	GameNameJ   =none
+	SystemName  =Sega Genesis
+	SystemNameJ =Sega MegaDrive
+	Composer    =kuma
+	ComposerJ   =kuma
+	ReleaseDate =2015/11/22
+	Converted   =
+	Notes       =
+
+	Format       =ZGM
+	ClockCount    =192
+
+}
+
+No = 定義番号
+SV = キーオン時のボリューム(0 - 15まで)
+AR = 次にボリュームを+STするまでのクロック数。(最大ボリューム(15)になるまで発音ボリュームを+STする処理を繰り返す。)
+DR = 次にボリュームを-STするまでのクロック数。(SLになるまで発音ボリュームを-STする処理を繰り返す。)
+SL = 最大ボリューム後の減衰ボリューム(0 - 15まで)
+SR = 次にボリュームを-STするまでのクロック数。(ボリュームがSLに到達後、0になるまで発音ボリュームを-STする処理を繰り返す。)
+RR = キーオフ後、次にボリュームを-STするまでのクロック数。(0になるまで発音ボリュームを-STする処理を繰り返す。)
+ST = ボリュームの変化量
+
+     No,SV,AR,DR,SL,SR,RR,ST
+'@ E  0, 0, 0, 5, 8, 5, 1, 1
+
+'S1 T90
+
+'S1 D0 v15 o4 l8 q0 v1cv2dv3ev4fv5ev6dv7crv8ev9fv10gv11av12gv13fv14e
+'S2 D1 v15 o4 l8 q0 v1cv2dv3ev4fv5ev6dv7crv8ev9fv10gv11av12gv13fv14e
+
+S1 D0
+S2 D1
+S1 [cd/e]3f
+
+'S12 v15 EON @0 o4 l8 Q7 v15cdefedcrefgagferv2crv6crv10crv14crv15l16ccddeeffl8edcr EOF cdefedcr

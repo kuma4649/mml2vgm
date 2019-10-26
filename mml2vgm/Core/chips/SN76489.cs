@@ -60,7 +60,7 @@ namespace Core
         public override void InitChip()
         {
             if (!use) return;
-            if (IsSecondary!=0)
+            if (ChipID!= 0 && parent.info.format != enmFormat.ZGM)
             {
                 parent.dat[0x0f] = new outDatum(enmMMLType.unknown, null, null, (byte)(parent.dat[0x0f].val | 0x40));
             }

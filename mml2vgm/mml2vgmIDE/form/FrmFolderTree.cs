@@ -432,8 +432,11 @@ namespace mml2vgmIDE
         {
             if (string.IsNullOrEmpty(basePath)) return;
             refreshRemoveCheck(tvFolderTree.Nodes);
-            if (tvFolderTree.Nodes.Count > 0) refreshAddCheck(tvFolderTree.Nodes[0]);
-            refreshFilter(tvFolderTree.Nodes[0].Nodes);
+            if (tvFolderTree.Nodes.Count > 0)
+            {
+                refreshAddCheck(tvFolderTree.Nodes[0]);
+                refreshFilter(tvFolderTree.Nodes[0].Nodes);
+            }
             tvFolderTree.Sort();
         }
 

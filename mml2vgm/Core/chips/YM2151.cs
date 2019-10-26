@@ -61,7 +61,7 @@ namespace Core
 
             }
 
-            if (IsSecondary!=0)
+            if (ChipID!= 0 && parent.info.format != enmFormat.ZGM)
             {
                 parent.dat[0x33] = new outDatum(enmMMLType.unknown, null, null, (byte)(parent.dat[0x33].val | 0x40));//use Secondary
             }

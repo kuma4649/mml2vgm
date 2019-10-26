@@ -109,6 +109,7 @@
     <Compile Include="Driver\ZGM\ZgmChip\Conductor.cs" />
     <Compile Include="Driver\ZGM\ZgmChip\MidiGM.cs" />
     <Compile Include="Driver\ZGM\ZgmChip\SN76489.cs" />
+    <Compile Include="Driver\ZGM\ZgmChip\YM2203.cs" />
     <Compile Include="Driver\ZGM\ZgmChip\YM2609.cs" />
     <Compile Include="Driver\ZGM\ZgmChip\ZgmChip.cs" />
     <Compile Include="Driver\ZGM\ZgmChip\ChipFactory.cs" />

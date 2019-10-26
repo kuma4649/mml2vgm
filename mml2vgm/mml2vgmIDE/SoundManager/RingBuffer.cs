@@ -95,10 +95,12 @@ namespace SoundManager
 
                 CntPackData lastPos = enqPos.prev;
                 //サーチ
+                long bufCounter = buf.Count + 1;
                 srcPos = enqPos.prev;
-                while (Counter < srcPos.Counter && srcPos != deqPos)
+                while (Counter < srcPos.Counter && srcPos != deqPos && bufCounter>0)
                 {
                     srcPos = srcPos.prev;
+                    bufCounter--;
                 }
 
                 if (Counter < srcPos.Counter && srcPos == deqPos)

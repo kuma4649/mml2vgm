@@ -13,14 +13,13 @@ namespace mml2vgmIDE.Driver.ZGM.ZgmChip
         {
             switch (chipIdentNo)
             {
-                case 0x0000_000C: return null;// SN76489          
+                case 0x0000_000C: return new SN76489(chipRegister, setting, vgmBuf);
                 case 0x0000_0010: return null;// YM2413           
-                case 0x0000_002c:
-                    return new YM2612(chipRegister, setting, vgmBuf);
+                case 0x0000_002c: return new YM2612(chipRegister, setting, vgmBuf);
                 case 0x0000_0030: return null;// YM2151           
                 case 0x0000_0038: return null;// Sega PCM         
                 case 0x0000_0040: return null;// RF5C68           
-                case 0x0000_0044: return null;// YM2203           
+                case 0x0000_0044: return new YM2203(chipRegister, setting, vgmBuf);
                 case 0x0000_0048: return null;// YM2608           
                 case 0x0000_004C: return null;// YM2610/YM2610B   
                 case 0x0000_0050: return null;// YM3812           

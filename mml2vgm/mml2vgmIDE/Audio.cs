@@ -1128,6 +1128,37 @@ namespace mml2vgmIDE
                     zCnt = -1;
                     foreach (Driver.ZGM.ZgmChip.ZgmChip zchip in zgmDriver.chips)
                     {
+                        if (!(zchip is Driver.ZGM.ZgmChip.YM2203)) continue;
+
+                        zCnt++;
+                        chip = new MDSound.MDSound.Chip();
+                        chip.ID = (byte)0;//ZGMでは常に0
+                        ym2203 ym2203 = new ym2203();
+                        chip.type = MDSound.MDSound.enmInstrumentType.YM2203;
+                        chip.Instrument = ym2203;
+                        chip.Update = ym2203.Update;
+                        chip.Start = ym2203.Start;
+                        chip.Stop = ym2203.Stop;
+                        chip.Reset = ym2203.Reset;
+                        chip.SamplingRate = (UInt32)Common.SampleRate;
+                        chip.Volume = setting.balance.YM2203Volume;
+                        chip.Clock = (uint)zchip.defineInfo.clock;
+                        chip.Option = null;
+                        lstChips.Add(chip);
+
+                        hiyorimiDeviceFlag |= 0x2;
+
+                        log.Write(string.Format("Use OPN(#{0}) Clk:{1}"
+                            , zCnt
+                            , chip.Clock
+                            ));
+
+                        chipRegister.YM2203[zCnt].Use = true;
+                    }
+
+                    zCnt = -1;
+                    foreach (Driver.ZGM.ZgmChip.ZgmChip zchip in zgmDriver.chips)
+                    {
                         if (!(zchip is Driver.ZGM.ZgmChip.YM2609)) continue;
 
                         zCnt++;
@@ -1338,6 +1369,14 @@ namespace mml2vgmIDE
                 {
                     if (!c.Use) continue;
                     useEmu = true;
+                    break;
+                }
+
+                foreach (Chip c in chipRegister.SN76489)
+                {
+                    if (!c.Use) continue;
+                    if (c.Model == EnmVRModel.VirtualModel) useEmu = true;
+                    if (c.Model == EnmVRModel.RealModel) useReal = true;
                     break;
                 }
 

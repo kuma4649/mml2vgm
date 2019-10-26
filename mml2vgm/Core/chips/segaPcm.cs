@@ -93,7 +93,7 @@ namespace Core
                 pw.volume = pw.MaxVolume;
             }
 
-            if (IsSecondary!=0)
+            if (ChipID!= 0 && parent.info.format != enmFormat.ZGM)
             {
                 parent.dat[0x3b] = new outDatum(enmMMLType.unknown, null, null, (byte)(parent.dat[0x3b].val | 0x40));
             }

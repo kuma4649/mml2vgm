@@ -208,10 +208,13 @@ namespace Core
                 }
             }
 
-            parent.dat[0x4f] = new outDatum(enmMMLType.unknown, null, null, (byte)(parent.dat[0x4f].val | 0x80));//YM2610B
-            if (IsSecondary!=0)
+            if (parent.info.format != enmFormat.ZGM)
             {
-                parent.dat[0x4f] = new outDatum(enmMMLType.unknown, null, null, (byte)(parent.dat[0x4f].val | 0x40));//use Secondary
+                parent.dat[0x4f] = new outDatum(enmMMLType.unknown, null, null, (byte)(parent.dat[0x4f].val | 0x80));//YM2610B
+                if (IsSecondary != 0)
+                {
+                    parent.dat[0x4f] = new outDatum(enmMMLType.unknown, null, null, (byte)(parent.dat[0x4f].val | 0x40));//use Secondary
+                }
             }
         }
 

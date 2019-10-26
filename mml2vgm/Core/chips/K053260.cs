@@ -100,7 +100,7 @@ namespace Core
                 pw.port = port;
             }
 
-            if (IsSecondary!=0)
+            if (ChipID != 0 && parent.info.format != enmFormat.ZGM)
             {
                 parent.dat[0xaf] = new outDatum(enmMMLType.unknown, null, null, (byte)(parent.dat[0xaf].val | 0x40));
             }
