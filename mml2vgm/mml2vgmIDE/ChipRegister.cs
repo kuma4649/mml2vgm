@@ -5009,25 +5009,25 @@ namespace mml2vgmIDE
             }
 
             // RHYTHM
-            data.Add(new PackData(null, YM2608[chipID], EnmDataType.Normal, 0x10, 0xBF, null)); // 強制発音停止
-            data.Add(new PackData(null, YM2608[chipID], EnmDataType.Normal, 0x11, 0x00, null)); // Total Level
-            data.Add(new PackData(null, YM2608[chipID], EnmDataType.Normal, 0x18, 0x00, null)); // BD音量
-            data.Add(new PackData(null, YM2608[chipID], EnmDataType.Normal, 0x19, 0x00, null)); // SD音量
-            data.Add(new PackData(null, YM2608[chipID], EnmDataType.Normal, 0x1A, 0x00, null)); // CYM音量
-            data.Add(new PackData(null, YM2608[chipID], EnmDataType.Normal, 0x1B, 0x00, null)); // HH音量
-            data.Add(new PackData(null, YM2608[chipID], EnmDataType.Normal, 0x1C, 0x00, null)); // TOM音量
-            data.Add(new PackData(null, YM2608[chipID], EnmDataType.Normal, 0x1D, 0x00, null)); // RIM音量
+            data.Add(new PackData(null, YM2609[chipID], EnmDataType.Normal, 0x10, 0xBF, null)); // 強制発音停止
+            data.Add(new PackData(null, YM2609[chipID], EnmDataType.Normal, 0x11, 0x00, null)); // Total Level
+            data.Add(new PackData(null, YM2609[chipID], EnmDataType.Normal, 0x18, 0x00, null)); // BD音量
+            data.Add(new PackData(null, YM2609[chipID], EnmDataType.Normal, 0x19, 0x00, null)); // SD音量
+            data.Add(new PackData(null, YM2609[chipID], EnmDataType.Normal, 0x1A, 0x00, null)); // CYM音量
+            data.Add(new PackData(null, YM2609[chipID], EnmDataType.Normal, 0x1B, 0x00, null)); // HH音量
+            data.Add(new PackData(null, YM2609[chipID], EnmDataType.Normal, 0x1C, 0x00, null)); // TOM音量
+            data.Add(new PackData(null, YM2609[chipID], EnmDataType.Normal, 0x1D, 0x00, null)); // RIM音量
 
             // ADPCM              
-            data.Add(new PackData(null, YM2608[chipID], EnmDataType.Normal, 0x100 + 0x00, 0x21, null)); // ADPCMリセット
-            data.Add(new PackData(null, YM2608[chipID], EnmDataType.Normal, 0x100 + 0x01, 0x06, null)); // ADPCM消音
-            data.Add(new PackData(null, YM2608[chipID], EnmDataType.Normal, 0x100 + 0x10, 0x9C, null)); // FLAGリセット        
-            data.Add(new PackData(null, YM2608[chipID], EnmDataType.Normal, 0x300 + 0x00, 0x21, null)); // ADPCMリセット
-            data.Add(new PackData(null, YM2608[chipID], EnmDataType.Normal, 0x300 + 0x01, 0x06, null)); // ADPCM消音
-            data.Add(new PackData(null, YM2608[chipID], EnmDataType.Normal, 0x300 + 0x10, 0x9C, null)); // FLAGリセット        
-            data.Add(new PackData(null, YM2608[chipID], EnmDataType.Normal, 0x311 + 0x00, 0x21, null)); // ADPCMリセット
-            data.Add(new PackData(null, YM2608[chipID], EnmDataType.Normal, 0x311 + 0x01, 0x06, null)); // ADPCM消音
-            data.Add(new PackData(null, YM2608[chipID], EnmDataType.Normal, 0x311 + 0x10, 0x9C, null)); // FLAGリセット        
+            data.Add(new PackData(null, YM2609[chipID], EnmDataType.Normal, 0x100 + 0x00, 0x21, null)); // ADPCMリセット
+            data.Add(new PackData(null, YM2609[chipID], EnmDataType.Normal, 0x100 + 0x01, 0x06, null)); // ADPCM消音
+            data.Add(new PackData(null, YM2609[chipID], EnmDataType.Normal, 0x100 + 0x10, 0x9C, null)); // FLAGリセット        
+            data.Add(new PackData(null, YM2609[chipID], EnmDataType.Normal, 0x300 + 0x00, 0x21, null)); // ADPCMリセット
+            data.Add(new PackData(null, YM2609[chipID], EnmDataType.Normal, 0x300 + 0x01, 0x06, null)); // ADPCM消音
+            data.Add(new PackData(null, YM2609[chipID], EnmDataType.Normal, 0x300 + 0x10, 0x9C, null)); // FLAGリセット        
+            data.Add(new PackData(null, YM2609[chipID], EnmDataType.Normal, 0x311 + 0x00, 0x21, null)); // ADPCMリセット
+            data.Add(new PackData(null, YM2609[chipID], EnmDataType.Normal, 0x311 + 0x01, 0x06, null)); // ADPCM消音
+            data.Add(new PackData(null, YM2609[chipID], EnmDataType.Normal, 0x311 + 0x10, 0x9C, null)); // FLAGリセット        
 
             return data;
         }
