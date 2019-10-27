@@ -1,0 +1,81 @@
+﻿'{
+
+	TitleName   =
+	TitleNameJ  =色々テスト
+	GameName    =
+	GameNameJ   =
+	SystemName  =
+	SystemNameJ =
+	Composer    =
+	ComposerJ   =
+	ReleaseDate =2016/12/18
+	Converted   =
+	Notes       =
+
+	Format       =ZGM
+	ClockCount  =192
+
+}
+
+'@ M 110
+   AR  DR  SR  RR  SL  TL  KS  ML  DT  AM  SSG-EG
+'@ 031,000,000,000,000,033,000,004,007,001,000
+'@ 018,015,009,007,003,009,000,004,007,001,000
+'@ 031,000,000,000,000,024,000,002,003,001,000
+'@ 031,015,009,007,003,000,000,002,003,001,000
+'@ 004,007
+
+'T01-06,Ts01-06 @110v105q0l8o4
+'T01 T160
+
+'T01  [ crrr> rrrr> rrrr> crrr> r<rrr r<rrr c<rrr r<rrr < rr>rr ar>rr rr>rr rr>rr arr<r rrr<r rrr<r arr<r > ]
+'T02  [ rdrr> rrrr> rrrr> rdrr> r<rrr r<rrr r<grr r<rrr < rr>rr rb>rr rr>rr rr>rr rer<r rrr<r rrr<r rer<r > ]
+'T03  [ rrer> rrrr> rrrr> rrer> r<rrr r<rrr r<rer r<rrr < rr>rr rr>cr rr>rr rr>rr rrc<r rrr<r rrr<r rrc<r > ]
+'T04  [ rrrg> rrrr> rrrr> rrrg> r<rrr r<rrr r<rrd r<rrr < rr>rr rr>re rr>rr rr>rr rrr<b rrr<r rrr<r rrr<b > ]
+'T05  [ rrrr> crrr> rrrr> rrrr> c<rrr r<rrr r<rrr c<rrr < rr>rr rr>rr ar>rr rr>rr rrr<r arr<r rrr<r rrr<r > ]
+'T06  [ rrrr> rdrr> rrrr> rrrr> r<grr r<rrr r<rrr r<grr < rr>rr rr>rr rb>rr rr>rr rrr<r rer<r rrr<r rrr<r > ]
+'Ts01 [ rrrr> rrer> rrrr> rrrr> r<rer r<rrr r<rrr r<rer < rr>rr rr>rr rr>cr rr>rr rrr<r rrc<r rrr<r rrr<r > ]
+'Ts02 [ rrrr> rrrg> rrrr> rrrr> r<rrd r<rrr r<rrr r<rrd < rr>rr rr>rr rr>re rr>rr rrr<r rrr<b rrr<r rrr<r > ]
+'Ts03 [ rrrr> rrrr> crrr> rrrr> r<rrr c<rrr r<rrr r<rrr < ar>rr rr>rr rr>rr ar>rr rrr<r rrr<r arr<r rrr<r > ]
+'Ts04 [ rrrr> rrrr> rdrr> rrrr> r<rrr r<grr r<rrr r<rrr < rb>rr rr>rr rr>rr rb>rr rrr<r rrr<r rer<r rrr<r > ]
+'Ts05 [ rrrr> rrrr> rrer> rrrr> r<rrr r<rer r<rrr r<rrr < rr>cr rr>rr rr>rr rr>cr rrr<r rrr<r rrc<r rrr<r > ]
+'Ts06 [ rrrr> rrrr> rrrg> rrrr> r<rrr r<rrd r<rrr r<rrr < rr>re rr>rr rr>rr rr>re rrr<r rrr<r rrr<b rrr<r > ]
+
+'T01   < fr>rr rrr>r rrr>r frr>r rr<rr rr<rr fr<rr r<rrr  rrr>r gr>rr rr>rr rrr>r grr<r rr<rr <rrr<r gr<rr > 
+'T02   < rg>rr rrr>r rrr>r rgr>r rr<rr rr<rr rc<rr r<rrr  rrr>r ra>rr rr>rr rrr>r rdr<r rr<rr <rrr<r rd<rr > 
+'T03   < rra>r rrr>r rrr>r rra>r rr<rr rr<rr rr<ar r<rrr  rrr>r rrb>r rr>rr rrr>r rr<br rr<rr <rrr<r rr<br > 
+'T04   < rrr>c rrr>r rrr>r rrr>c rr<rr rr<rr rr<rg r<rrr  rrr>r rrr>d rr>rr rrr>r rr<rg rr<rr <rrr<r rr<rg > 
+'T05   < rrr>r frr>r rrr>r rrrr> fr<rr rr<rr rr<rr fr<rr  rrr>r rrr>r gr>rr rrr>r rr<rr dr<rr <rrr<r rr<rr > 
+'T06   < rrr>r rgr>r rrr>r rrrr> rc<rr rr<rr rr<rr rc<rr  rrr>r rrr>r ra>rr rrr>r rr<rr r<brr <rrr<r rr<rr > 
+'Ts01  < rrr>r rra>r rrr>r rrrr> rr<ar rr<rr rr<rr rr<ar  rrr>r rrr>r rrb>r rrr>r rr<rr rr<gr <rrr<r rr<rr > 
+'Ts02  < rrr>r rrr>c rrr>r rrrr> rr<rg rr<rr rr<rr rr<rg  rrr>r rrr>r rrr>d rrr>r rr<rr rr<rd <rrr<r rr<rr > 
+'Ts03  < rrr>r rrr>r frr>r rrrr> rr<rr fr<rr rr<rr r<rrr  grr>r rrr>r rrr>r grr>r rr<rr rr<rr <brr<r rr<rr > 
+'Ts04  < rrr>r rrr>r rgr>r rrrr> rr<rr rc<rr rr<rr r<rrr  rar>r rrr>r rrr>r rar>r rr<rr rr<rr <rgr<r rr<rr > 
+'Ts05  < rrr>r rrr>r rra>r rrrr> rr<rr rr<ar rr<rr r<rrr  rrb>r rrr>r rrr>r rrb>r rr<rr rr<rr <rrd<r rr<rr > 
+'Ts06  < rrr>r rrr>r rrr>c rrrr> rr<rr rr<rg rr<rr r<rrr  rrr>d rrr>r rrr>r rrr>d rr<rr rr<rr <rrr<b rr<rr > 
+
+'T01  g+r>rr rr>rr  rr>rr  g+r>rr rr<rr  rr<rr  crr<r  <rr<rr>
+'T02  ra+>rr rr>rr  rr>rr  ra+>rr rr<rr  rr<rr  r<g+rr <rr<rr>
+'T03  rr>cr  rr>rr  rr>rr  rr>cr  rr<rr  rr<rr  r<rd+r <rr<rr>
+'T04  rr>rd+ rr>rr  rr>rr  rr>rd+ rr<rr  rr<rr  r<rrc  <rr<rr>
+'T05  rr>rr  g+r>rr rr>rr  rr>rr  g+r<rr rr<rr  r<rrr  <g+r<rr>
+'T06  rr>rr  ra+>rr rr>rr  rr>rr  rd+<rr rr<rr  r<rrr  <rd+<rr>
+'Ts01 rr>rr  rr>cr  rr>rr  rr>rr  rrc<r  rr<rr  r<rrr  <rrc<r>
+'Ts02 rr>rr  rr>rd+ rr>rr  rr>rr  rrr<g+ rr<rr  r<rrr  <rrr<g+>
+'Ts03 rr>rr  rr>rr  g+r>rr rr>rr  rrr<r  d+r<rr r<rrr  <rrr<r>
+'Ts04 rr>rr  rr>rr  ra+>rr rr>rr  rrr<r  rc<rr  r<rrr  <rrr<r>
+'Ts05 rr>rr  rr>rr  rr>cr  rr>rr  rrr<r  rr<g+r r<rrr  <rrr<r>
+'Ts06 rr>rr  rr>rr  rr>rd+ rr>rr  rrr<r  rr<rd+ r<rrr  <rrr<r>
+
+'T01  a+>rrr r>rrr  rr>rr  a+r>rr rr<rr  rr<rr  d<rrr  <rrr<r
+'T02  r>crr  r>rrr  rr>rr  r>crr  rr<rr  rr<rr  r<a+rr <rrr<r
+'T03  r>rdr  r>rrr  rr>rr  r>rdr  rr<rr  rr<rr  r<rfr  <rrr<r
+'T04  r>rrf  r>rrr  rr>rr  r>rrf  rr<rr  rr<rr  r<rrd  <rrr<r
+'T05  r>rrr  a+>rrr rr>rr  rr>rr  a+r<rr rr<rr  r<rrr  T150<a+rr<r
+'T06  r>rrr  r>crr  rr>rr  rr>rr  rf<rr  rr<rr  r<rrr  <rT140f<rr
+'Ts01 r>rrr  r>rdr  rr>rr  rr>rr  rrd<r  rr<rr  r<rrr  <rrT130d<r
+'Ts02 r>rrr  r>rrf  rr>rr  rr>rr  rrr<a+ rr<rr  r<rrr  <rrr<T120a+
+'Ts03 r>rrr  r>rrr  a+r>rr rr>rr  rrr<r  fr<rr  r<rrr  <rrr<r
+'Ts04 r>rrr  r>rrr  r>crr  rr>rr  rrr<r  rd<rr  r<rrr  <rrr<r
+'Ts05 r>rrr  r>rrr  r>rdr  rr>rr  rrr<r  rr<a+r r<rrr  <rrr<r
+'Ts06 r>rrr  r>rrr  r>rrf  rr>rr  rrr<r  rr<rf  r<rrr  <rrr<r

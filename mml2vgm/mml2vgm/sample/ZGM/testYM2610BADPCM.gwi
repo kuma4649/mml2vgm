@@ -1,0 +1,36 @@
+﻿'{
+
+	TitleName   =
+	TitleNameJ  =色々テスト
+	GameName    =
+	GameNameJ   =
+	SystemName  =
+	SystemNameJ =
+	Composer    =
+	ComposerJ   =
+	ReleaseDate =2016/12/18
+	Converted   =
+	Notes       =
+
+	Format       =ZGM
+	ClockCount  =192
+
+}
+
+
+'@ P 0,"..\wav\SD_16bit18500Hz.wav",8000,100,YM2610B,0
+'@ P 1,"..\wav\BD_16bit16000.wav",8000,100,YM2610B,0
+'@ P 2,"..\wav\Guitar.wav",8000,100,YM2610B,1
+
+'T13 T160
+'T13 @1q0p3V63v31[@1c4@0c4@1c8c8@0c4]2
+
+T19 @2o4l4p3q0v155cdefgab>c
+
+
+
+   E No, SV, AR, DR, SL, SR, RR, ST, ChipName
+'@ E  1, 14,  1,  1, 10, 10,  2,  1, OPNB
+
+T10 EON@1     v12 q2l8o5D0
+T10 d+g+f+g+ d+g+f+    v12 EOFQ4 a+g+a+f+ d+f+a+g+ a+g+a+f+

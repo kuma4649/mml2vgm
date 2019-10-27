@@ -831,18 +831,40 @@ namespace mml2vgmIDE
         public void ZgmSetup(List<Chip> chips)
         {
             CONDUCTOR.Clear();
+            C140.Clear();
+            HuC6280.Clear();
+            K051649.Clear();
+            K053260.Clear();
+            QSound.Clear();
+            RF5C164.Clear();
+            SEGAPCM.Clear();
             SN76489.Clear();
+            YM2151.Clear();
             YM2203.Clear();
+            YM2413.Clear();
+            YM2608.Clear();
             YM2609.Clear();
+            YM2610.Clear();
             YM2612.Clear();
             MIDI.Clear();
 
             foreach (Chip c in chips)
             {
                 if (c is Driver.ZGM.ZgmChip.Conductor) CONDUCTOR.Add(c);
+                if (c is Driver.ZGM.ZgmChip.C140) C140.Add(c);
+                if (c is Driver.ZGM.ZgmChip.HuC6280) HuC6280.Add(c);
+                if (c is Driver.ZGM.ZgmChip.K051649) K051649.Add(c);
+                if (c is Driver.ZGM.ZgmChip.K053260) K053260.Add(c);
+                if (c is Driver.ZGM.ZgmChip.QSound) QSound.Add(c);
+                if (c is Driver.ZGM.ZgmChip.RF5C164) RF5C164.Add(c);
+                if (c is Driver.ZGM.ZgmChip.SEGAPCM) SEGAPCM.Add(c);
                 if (c is Driver.ZGM.ZgmChip.SN76489) SN76489.Add(c);
+                if (c is Driver.ZGM.ZgmChip.YM2151) YM2151.Add(c);
                 if (c is Driver.ZGM.ZgmChip.YM2203) YM2203.Add(c);
+                if (c is Driver.ZGM.ZgmChip.YM2413) YM2413.Add(c);
+                if (c is Driver.ZGM.ZgmChip.YM2608) YM2608.Add(c);
                 if (c is Driver.ZGM.ZgmChip.YM2609) YM2609.Add(c);
+                if (c is Driver.ZGM.ZgmChip.YM2610) YM2610.Add(c);
                 if (c is Driver.ZGM.ZgmChip.YM2612) YM2612.Add(c);
                 if (c is Driver.ZGM.ZgmChip.MidiGM) MIDI.Add(c);
             }
@@ -1569,12 +1591,72 @@ namespace mml2vgmIDE
                 dicChipCmdNo.Add(c.defineInfo.commandNo, c);
             }
 
+            foreach (Driver.ZGM.ZgmChip.ZgmChip c in C140)
+            {
+                dicChipCmdNo.Add(c.defineInfo.commandNo, c);
+            }
+
+            foreach (Driver.ZGM.ZgmChip.ZgmChip c in HuC6280)
+            {
+                dicChipCmdNo.Add(c.defineInfo.commandNo, c);
+            }
+
+            foreach (Driver.ZGM.ZgmChip.ZgmChip c in K051649)
+            {
+                dicChipCmdNo.Add(c.defineInfo.commandNo, c);
+            }
+
+            foreach (Driver.ZGM.ZgmChip.ZgmChip c in K053260)
+            {
+                dicChipCmdNo.Add(c.defineInfo.commandNo, c);
+            }
+
+            foreach (Driver.ZGM.ZgmChip.ZgmChip c in QSound)
+            {
+                dicChipCmdNo.Add(c.defineInfo.commandNo, c);
+            }
+
+            foreach (Driver.ZGM.ZgmChip.ZgmChip c in RF5C164)
+            {
+                dicChipCmdNo.Add(c.defineInfo.commandNo, c);
+            }
+
+            foreach (Driver.ZGM.ZgmChip.ZgmChip c in SEGAPCM)
+            {
+                dicChipCmdNo.Add(c.defineInfo.commandNo, c);
+            }
+
             foreach (Driver.ZGM.ZgmChip.ZgmChip c in SN76489)
             {
                 dicChipCmdNo.Add(c.defineInfo.commandNo, c);
             }
 
+            foreach (Driver.ZGM.ZgmChip.ZgmChip c in YM2151)
+            {
+                dicChipCmdNo.Add(c.defineInfo.commandNo, c);
+            }
+
+            foreach (Driver.ZGM.ZgmChip.ZgmChip c in YM2203)
+            {
+                dicChipCmdNo.Add(c.defineInfo.commandNo, c);
+            }
+
+            foreach (Driver.ZGM.ZgmChip.ZgmChip c in YM2413)
+            {
+                dicChipCmdNo.Add(c.defineInfo.commandNo, c);
+            }
+
+            foreach (Driver.ZGM.ZgmChip.ZgmChip c in YM2608)
+            {
+                dicChipCmdNo.Add(c.defineInfo.commandNo, c);
+            }
+
             foreach (Driver.ZGM.ZgmChip.ZgmChip c in YM2609)
+            {
+                dicChipCmdNo.Add(c.defineInfo.commandNo, c);
+            }
+
+            foreach (Driver.ZGM.ZgmChip.ZgmChip c in YM2610)
             {
                 dicChipCmdNo.Add(c.defineInfo.commandNo, c);
             }

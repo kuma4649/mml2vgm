@@ -1077,8 +1077,258 @@ namespace mml2vgmIDE
                 log.Write("使用チップの調査");
                 {
 
-                    int zCnt = -1;
+                    int zCnt;
 
+                    zCnt = -1;
+                    foreach (Driver.ZGM.ZgmChip.ZgmChip zchip in zgmDriver.chips)
+                    {
+                        if (!(zchip is Driver.ZGM.ZgmChip.Conductor)) continue;
+
+                        zCnt++;
+
+                        hiyorimiDeviceFlag |= 0x2;
+
+                        log.Write("Use Conductor");
+
+                        chipRegister.CONDUCTOR[zCnt].Use = true;
+                        chipRegister.CONDUCTOR[zCnt].Model = EnmVRModel.VirtualModel;
+                        chipRegister.CONDUCTOR[zCnt].Device = EnmZGMDevice.Conductor;
+                    }
+
+                    zCnt = -1;
+                    foreach (Driver.ZGM.ZgmChip.ZgmChip zchip in zgmDriver.chips)
+                    {
+                        if (!(zchip is Driver.ZGM.ZgmChip.C140)) continue;
+
+                        zCnt++;
+                        c140 c140 = new c140();
+                        chip = new MDSound.MDSound.Chip();
+                        chip.type = MDSound.MDSound.enmInstrumentType.C140;
+                        chip.ID = (byte)0;//ZGMでは常に0
+                        chip.Instrument = c140;
+                        chip.Update = c140.Update;
+                        chip.Start = c140.Start;
+                        chip.Stop = c140.Stop;
+                        chip.Reset = c140.Reset;
+                        chip.SamplingRate = (UInt32)Common.SampleRate;
+                        chip.Volume = setting.balance.C140Volume;
+                        chip.Clock = (uint)zchip.defineInfo.clock;
+                        chip.Option = new object[1] {
+                             (int)zchip.defineInfo.option[0]
+                        };
+                        lstChips.Add(chip);
+
+                        hiyorimiDeviceFlag |= (setting.C140Type.UseScci) ? 0x1 : 0x2;
+
+                        log.Write(string.Format("Use C140(#{0}) Clk:{1}"
+                            , zCnt
+                            , chip.Clock
+                            ));
+
+                        chipRegister.C140[zCnt].Use = true;
+                        chipRegister.C140[zCnt].Model = EnmVRModel.VirtualModel;
+                        chipRegister.C140[zCnt].Device = EnmZGMDevice.C140;
+                    }
+
+                    zCnt = -1;
+                    foreach (Driver.ZGM.ZgmChip.ZgmChip zchip in zgmDriver.chips)
+                    {
+                        if (!(zchip is Driver.ZGM.ZgmChip.HuC6280)) continue;
+
+                        zCnt++;
+                        Ootake_PSG huC6280 = new Ootake_PSG();
+                        chip = new MDSound.MDSound.Chip();
+                        chip.type = MDSound.MDSound.enmInstrumentType.HuC6280;
+                        chip.ID = (byte)0;//ZGMでは常に0
+                        chip.Instrument = huC6280;
+                        chip.Update = huC6280.Update;
+                        chip.Start = huC6280.Start;
+                        chip.Stop = huC6280.Stop;
+                        chip.Reset = huC6280.Reset;
+                        chip.SamplingRate = (UInt32)Common.SampleRate;
+                        chip.Volume = setting.balance.C140Volume;
+                        chip.Clock = (uint)zchip.defineInfo.clock;
+                        chip.Option = null;
+                        lstChips.Add(chip);
+
+                        hiyorimiDeviceFlag |= (setting.HuC6280Type.UseScci) ? 0x1 : 0x2;
+
+                        log.Write(string.Format("Use HuC6280(#{0}) Clk:{1}"
+                            , zCnt
+                            , chip.Clock
+                            ));
+
+                        chipRegister.HuC6280[zCnt].Use = true;
+                        chipRegister.HuC6280[zCnt].Model = EnmVRModel.VirtualModel;
+                        chipRegister.HuC6280[zCnt].Device = EnmZGMDevice.HuC6280;
+                    }
+
+                    zCnt = -1;
+                    foreach (Driver.ZGM.ZgmChip.ZgmChip zchip in zgmDriver.chips)
+                    {
+                        if (!(zchip is Driver.ZGM.ZgmChip.K051649)) continue;
+
+                        zCnt++;
+                        MDSound.K051649 k051649 = new MDSound.K051649();
+                        chip = new MDSound.MDSound.Chip();
+                        chip.type = MDSound.MDSound.enmInstrumentType.K051649;
+                        chip.ID = (byte)0;//ZGMでは常に0
+                        chip.Instrument = k051649;
+                        chip.Update = k051649.Update;
+                        chip.Start = k051649.Start;
+                        chip.Stop = k051649.Stop;
+                        chip.Reset = k051649.Reset;
+                        chip.SamplingRate = (UInt32)Common.SampleRate;
+                        chip.Volume = setting.balance.K051649Volume;
+                        chip.Clock = (uint)zchip.defineInfo.clock;
+                        chip.Option = null;
+                        lstChips.Add(chip);
+
+                        hiyorimiDeviceFlag |= (setting.K051649Type.UseScci) ? 0x1 : 0x2;
+
+                        log.Write(string.Format("Use K051649(#{0}) Clk:{1}"
+                            , zCnt
+                            , chip.Clock
+                            ));
+
+                        chipRegister.K051649[zCnt].Use = true;
+                        chipRegister.K051649[zCnt].Model = EnmVRModel.VirtualModel;
+                        chipRegister.K051649[zCnt].Device = EnmZGMDevice.K051649;
+                    }
+
+                    zCnt = -1;
+                    foreach (Driver.ZGM.ZgmChip.ZgmChip zchip in zgmDriver.chips)
+                    {
+                        if (!(zchip is Driver.ZGM.ZgmChip.K053260)) continue;
+
+                        zCnt++;
+                        MDSound.K053260 k053260 = new MDSound.K053260();
+                        chip = new MDSound.MDSound.Chip();
+                        chip.type = MDSound.MDSound.enmInstrumentType.K053260;
+                        chip.ID = (byte)0;//ZGMでは常に0
+                        chip.Instrument = k053260;
+                        chip.Update = k053260.Update;
+                        chip.Start = k053260.Start;
+                        chip.Stop = k053260.Stop;
+                        chip.Reset = k053260.Reset;
+                        chip.SamplingRate = (UInt32)Common.SampleRate;
+                        chip.Volume = setting.balance.K053260Volume;
+                        chip.Clock = (uint)zchip.defineInfo.clock;
+                        chip.Option = null;
+                        lstChips.Add(chip);
+
+                        hiyorimiDeviceFlag |= (setting.K053260Type.UseScci) ? 0x1 : 0x2;
+
+                        log.Write(string.Format("Use K053260(#{0}) Clk:{1}"
+                            , zCnt
+                            , chip.Clock
+                            ));
+
+                        chipRegister.K053260[zCnt].Use = true;
+                        chipRegister.K053260[zCnt].Model = EnmVRModel.VirtualModel;
+                        chipRegister.K053260[zCnt].Device = EnmZGMDevice.K053260;
+                    }
+
+                    zCnt = -1;
+                    foreach (Driver.ZGM.ZgmChip.ZgmChip zchip in zgmDriver.chips)
+                    {
+                        if (!(zchip is Driver.ZGM.ZgmChip.QSound)) continue;
+
+                        zCnt++;
+                        MDSound.qsound qsound = new MDSound.qsound();
+                        chip = new MDSound.MDSound.Chip();
+                        chip.type = MDSound.MDSound.enmInstrumentType.QSound;
+                        chip.ID = (byte)0;//ZGMでは常に0
+                        chip.Instrument = qsound;
+                        chip.Update = qsound.Update;
+                        chip.Start = qsound.Start;
+                        chip.Stop = qsound.Stop;
+                        chip.Reset = qsound.Reset;
+                        chip.SamplingRate = (UInt32)Common.SampleRate;
+                        chip.Volume = setting.balance.QSoundVolume;
+                        chip.Clock = (uint)zchip.defineInfo.clock;
+                        chip.Option = null;
+                        lstChips.Add(chip);
+
+                        hiyorimiDeviceFlag |= (setting.QSoundType.UseScci) ? 0x1 : 0x2;
+
+                        log.Write(string.Format("Use QSound(#{0}) Clk:{1}"
+                            , zCnt
+                            , chip.Clock
+                            ));
+
+                        chipRegister.QSound[zCnt].Use = true;
+                        chipRegister.QSound[zCnt].Model = EnmVRModel.VirtualModel;
+                        chipRegister.QSound[zCnt].Device = EnmZGMDevice.QSound;
+                    }
+
+                    zCnt = -1;
+                    foreach (Driver.ZGM.ZgmChip.ZgmChip zchip in zgmDriver.chips)
+                    {
+                        if (!(zchip is Driver.ZGM.ZgmChip.RF5C164)) continue;
+
+                        zCnt++;
+                        MDSound.scd_pcm rf5c164 = new MDSound.scd_pcm();
+                        chip = new MDSound.MDSound.Chip();
+                        chip.type = MDSound.MDSound.enmInstrumentType.RF5C164;
+                        chip.ID = (byte)0;//ZGMでは常に0
+                        chip.Instrument = rf5c164;
+                        chip.Update = rf5c164.Update;
+                        chip.Start = rf5c164.Start;
+                        chip.Stop = rf5c164.Stop;
+                        chip.Reset = rf5c164.Reset;
+                        chip.SamplingRate = (UInt32)Common.SampleRate;
+                        chip.Volume = setting.balance.RF5C164Volume;
+                        chip.Clock = (uint)zchip.defineInfo.clock;
+                        chip.Option = null;
+                        lstChips.Add(chip);
+
+                        hiyorimiDeviceFlag |= (setting.QSoundType.UseScci) ? 0x1 : 0x2;
+
+                        log.Write(string.Format("Use RF5C164(#{0}) Clk:{1}"
+                            , zCnt
+                            , chip.Clock
+                            ));
+
+                        chipRegister.RF5C164[zCnt].Use = true;
+                        chipRegister.RF5C164[zCnt].Model = EnmVRModel.VirtualModel;
+                        chipRegister.RF5C164[zCnt].Device = EnmZGMDevice.RF5C164;
+                    }
+
+                    zCnt = -1;
+                    foreach (Driver.ZGM.ZgmChip.ZgmChip zchip in zgmDriver.chips)
+                    {
+                        if (!(zchip is Driver.ZGM.ZgmChip.SEGAPCM)) continue;
+
+                        zCnt++;
+                        MDSound.segapcm segapcm = new MDSound.segapcm();
+                        chip = new MDSound.MDSound.Chip();
+                        chip.type = MDSound.MDSound.enmInstrumentType.SEGAPCM;
+                        chip.ID = (byte)0;//ZGMでは常に0
+                        chip.Instrument = segapcm;
+                        chip.Update = segapcm.Update;
+                        chip.Start = segapcm.Start;
+                        chip.Stop = segapcm.Stop;
+                        chip.Reset = segapcm.Reset;
+                        chip.SamplingRate = (UInt32)Common.SampleRate;
+                        chip.Volume = setting.balance.SEGAPCMVolume;
+                        chip.Clock = (uint)zchip.defineInfo.clock;
+                        chip.Option = new object[1] { (int)zchip.defineInfo.option[0] };
+                        lstChips.Add(chip);
+
+                        hiyorimiDeviceFlag |= (setting.QSoundType.UseScci) ? 0x1 : 0x2;
+
+                        log.Write(string.Format("Use SEGAPCM(#{0}) Clk:{1}"
+                            , zCnt
+                            , chip.Clock
+                            ));
+
+                        chipRegister.SEGAPCM[zCnt].Use = true;
+                        chipRegister.SEGAPCM[zCnt].Model = EnmVRModel.VirtualModel;
+                        chipRegister.SEGAPCM[zCnt].Device = EnmZGMDevice.SegaPCM;
+                    }
+
+                    zCnt = -1;
                     foreach (Driver.ZGM.ZgmChip.ZgmChip zchip in zgmDriver.chips)
                     {
                         if (!(zchip is Driver.ZGM.ZgmChip.SN76489)) continue;
@@ -1107,22 +1357,45 @@ namespace mml2vgmIDE
                             ));
 
                         chipRegister.SN76489[zCnt].Use = true;
+                        chipRegister.SN76489[zCnt].Model = EnmVRModel.VirtualModel;
+                        chipRegister.SN76489[zCnt].Device = EnmZGMDevice.SN76489;
                     }
 
                     zCnt = -1;
                     foreach (Driver.ZGM.ZgmChip.ZgmChip zchip in zgmDriver.chips)
                     {
-                        if (!(zchip is Driver.ZGM.ZgmChip.Conductor)) continue;
+                        if (!(zchip is Driver.ZGM.ZgmChip.YM2151)) continue;
 
                         zCnt++;
+                        chip = new MDSound.MDSound.Chip();
+                        chip.ID = (byte)0;//ZGMでは常に0
+                        MDSound.Instrument ym2151=null;
+                        if (setting.YM2151Type.UseEmu) ym2151 = new ym2151();
+                        else if (setting.YM2151Type.UseEmu2) ym2151 = new ym2151_mame();
+                        else if (setting.YM2151Type.UseEmu3) ym2151 = new ym2151_x68sound();
+
+                        chip.type = MDSound.MDSound.enmInstrumentType.YM2151;
+                        chip.Instrument = ym2151;
+                        chip.Update = ym2151.Update;
+                        chip.Start = ym2151.Start;
+                        chip.Stop = ym2151.Stop;
+                        chip.Reset = ym2151.Reset;
+                        chip.SamplingRate = (UInt32)Common.SampleRate;
+                        chip.Volume = setting.balance.YM2151Volume;
+                        chip.Clock = (uint)zchip.defineInfo.clock;
+                        chip.Option = null;
+                        lstChips.Add(chip);
 
                         hiyorimiDeviceFlag |= 0x2;
 
-                        log.Write("Use Conductor");
+                        log.Write(string.Format("Use OPM(#{0}) Clk:{1}"
+                            , zCnt
+                            , chip.Clock
+                            ));
 
-                        chipRegister.CONDUCTOR[zCnt].Use = true;
-                        chipRegister.CONDUCTOR[zCnt].Model = EnmVRModel.VirtualModel;
-                        chipRegister.CONDUCTOR[zCnt].Device = EnmZGMDevice.Conductor;
+                        chipRegister.YM2151[zCnt].Use = true;
+                        chipRegister.YM2151[zCnt].Model = EnmVRModel.VirtualModel;
+                        chipRegister.YM2151[zCnt].Device = EnmZGMDevice.YM2151;
                     }
 
                     zCnt = -1;
@@ -1154,6 +1427,74 @@ namespace mml2vgmIDE
                             ));
 
                         chipRegister.YM2203[zCnt].Use = true;
+                        chipRegister.YM2203[zCnt].Model = EnmVRModel.VirtualModel;
+                        chipRegister.YM2203[zCnt].Device = EnmZGMDevice.YM2203;
+                    }
+
+                    zCnt = -1;
+                    foreach (Driver.ZGM.ZgmChip.ZgmChip zchip in zgmDriver.chips)
+                    {
+                        if (!(zchip is Driver.ZGM.ZgmChip.YM2413)) continue;
+
+                        zCnt++;
+                        chip = new MDSound.MDSound.Chip();
+                        chip.ID = (byte)0;//ZGMでは常に0
+                        ym2413 ym2413 = new ym2413();
+                        chip.type = MDSound.MDSound.enmInstrumentType.YM2413;
+                        chip.Instrument = ym2413;
+                        chip.Update = ym2413.Update;
+                        chip.Start = ym2413.Start;
+                        chip.Stop = ym2413.Stop;
+                        chip.Reset = ym2413.Reset;
+                        chip.SamplingRate = (UInt32)Common.SampleRate;
+                        chip.Volume = setting.balance.YM2413Volume;
+                        chip.Clock = (uint)zchip.defineInfo.clock;
+                        chip.Option = null;
+                        lstChips.Add(chip);
+
+                        hiyorimiDeviceFlag |= 0x2;
+
+                        log.Write(string.Format("Use OPLL(#{0}) Clk:{1}"
+                            , zCnt
+                            , chip.Clock
+                            ));
+
+                        chipRegister.YM2413[zCnt].Use = true;
+                        chipRegister.YM2413[zCnt].Model = EnmVRModel.VirtualModel;
+                        chipRegister.YM2413[zCnt].Device = EnmZGMDevice.YM2413;
+                    }
+
+                    zCnt = -1;
+                    foreach (Driver.ZGM.ZgmChip.ZgmChip zchip in zgmDriver.chips)
+                    {
+                        if (!(zchip is Driver.ZGM.ZgmChip.YM2608)) continue;
+
+                        zCnt++;
+                        chip = new MDSound.MDSound.Chip();
+                        chip.ID = (byte)0;//ZGMでは常に0
+                        ym2608 ym2608 = new ym2608();
+                        chip.type = MDSound.MDSound.enmInstrumentType.YM2608;
+                        chip.Instrument = ym2608;
+                        chip.Update = ym2608.Update;
+                        chip.Start = ym2608.Start;
+                        chip.Stop = ym2608.Stop;
+                        chip.Reset = ym2608.Reset;
+                        chip.SamplingRate = (UInt32)Common.SampleRate;
+                        chip.Volume = setting.balance.YM2608Volume;
+                        chip.Clock = (uint)zchip.defineInfo.clock;
+                        chip.Option = null;
+                        lstChips.Add(chip);
+
+                        hiyorimiDeviceFlag |= 0x2;
+
+                        log.Write(string.Format("Use OPNA(#{0}) Clk:{1}"
+                            , zCnt
+                            , chip.Clock
+                            ));
+
+                        chipRegister.YM2608[zCnt].Use = true;
+                        chipRegister.YM2608[zCnt].Model = EnmVRModel.VirtualModel;
+                        chipRegister.YM2608[zCnt].Device = EnmZGMDevice.YM2608;
                     }
 
                     zCnt = -1;
@@ -1185,6 +1526,41 @@ namespace mml2vgmIDE
                             ));
 
                         chipRegister.YM2609[zCnt].Use = true;
+                        chipRegister.YM2609[zCnt].Model = EnmVRModel.VirtualModel;
+                        chipRegister.YM2609[zCnt].Device = EnmZGMDevice.YM2609;
+                    }
+
+                    zCnt = -1;
+                    foreach (Driver.ZGM.ZgmChip.ZgmChip zchip in zgmDriver.chips)
+                    {
+                        if (!(zchip is Driver.ZGM.ZgmChip.YM2610)) continue;
+
+                        zCnt++;
+                        chip = new MDSound.MDSound.Chip();
+                        chip.ID = (byte)0;//ZGMでは常に0
+                        ym2610 ym2610 = new ym2610();
+                        chip.type = MDSound.MDSound.enmInstrumentType.YM2610;
+                        chip.Instrument = ym2610;
+                        chip.Update = ym2610.Update;
+                        chip.Start = ym2610.Start;
+                        chip.Stop = ym2610.Stop;
+                        chip.Reset = ym2610.Reset;
+                        chip.SamplingRate = (UInt32)Common.SampleRate;
+                        chip.Volume = setting.balance.YM2610Volume;
+                        chip.Clock = (uint)zchip.defineInfo.clock;
+                        chip.Option = null;
+                        lstChips.Add(chip);
+
+                        hiyorimiDeviceFlag |= 0x2;
+
+                        log.Write(string.Format("Use OPNB(#{0}) Clk:{1}"
+                            , zCnt
+                            , chip.Clock
+                            ));
+
+                        chipRegister.YM2610[zCnt].Use = true;
+                        chipRegister.YM2610[zCnt].Model = EnmVRModel.VirtualModel;
+                        chipRegister.YM2610[zCnt].Device = EnmZGMDevice.YM2610;
                     }
 
                     zCnt = -1;
@@ -1217,6 +1593,8 @@ namespace mml2vgmIDE
                             , setting.nukedOPN2.EmuType));
 
                         chipRegister.YM2612[zCnt].Use = true;
+                        chipRegister.YM2612[zCnt].Model = EnmVRModel.VirtualModel;
+                        chipRegister.YM2612[zCnt].Device = EnmZGMDevice.YM2612;
                     }
 
                     zCnt = -1;
@@ -1285,84 +1663,6 @@ namespace mml2vgmIDE
                     RealChipAutoDetect(setting);
                 }
 
-                //for (int i = 0; i < 2; i++)
-                //{
-                //    if (chipRegister.AY8910[i].Use)
-                //    {
-                //        if (chipRegister.AY8910[i].Model == EnmModel.VirtualModel) useEmu = true;
-                //        if (chipRegister.AY8910[i].Model == EnmModel.RealModel) useReal = true;
-                //    }
-
-                //    if (chipRegister.C140[i].Use)
-                //    {
-                //        if (chipRegister.C140[i].Model == EnmModel.VirtualModel) useEmu = true;
-                //        if (chipRegister.C140[i].Model == EnmModel.RealModel) useReal = true;
-                //    }
-
-                //    if (chipRegister.HuC6280[i].Use)
-                //    {
-                //        if (chipRegister.HuC6280[i].Model == EnmModel.VirtualModel) useEmu = true;
-                //        if (chipRegister.HuC6280[i].Model == EnmModel.RealModel) useReal = true;
-                //    }
-
-                //    if (chipRegister.K051649[i].Use)
-                //    {
-                //        if (chipRegister.K051649[i].Model == EnmModel.VirtualModel) useEmu = true;
-                //        if (chipRegister.K051649[i].Model == EnmModel.RealModel) useReal = true;
-                //    }
-
-                //    if (chipRegister.K053260[i].Use)
-                //    {
-                //        if (chipRegister.K053260[i].Model == EnmModel.VirtualModel) useEmu = true;
-                //        if (chipRegister.K053260[i].Model == EnmModel.RealModel) useReal = true;
-                //    }
-
-                //    if (chipRegister.QSound[i].Use)
-                //    {
-                //        if (chipRegister.QSound[i].Model == EnmModel.VirtualModel) useEmu = true;
-                //        if (chipRegister.QSound[i].Model == EnmModel.RealModel) useReal = true;
-                //    }
-
-                //    if (chipRegister.RF5C164[i].Use)
-                //    {
-                //        if (chipRegister.RF5C164[i].Model == EnmModel.VirtualModel) useEmu = true;
-                //        if (chipRegister.RF5C164[i].Model == EnmModel.RealModel) useReal = true;
-                //    }
-
-                //    if (chipRegister.SEGAPCM[i].Use)
-                //    {
-                //        if (chipRegister.SEGAPCM[i].Model == EnmModel.VirtualModel) useEmu = true;
-                //        if (chipRegister.SEGAPCM[i].Model == EnmModel.RealModel) useReal = true;
-                //    }
-
-                //    if (chipRegister.SN76489[i].Use)
-                //    {
-                //        if (chipRegister.SN76489[i].Model == EnmModel.VirtualModel) useEmu = true;
-                //        if (chipRegister.SN76489[i].Model == EnmModel.RealModel) useReal = true;
-                //    }
-
-                //    if (chipRegister.YM2151[i].Use)
-                //    {
-                //        if (chipRegister.YM2151[i].Model == EnmModel.VirtualModel) useEmu = true;
-                //        if (chipRegister.YM2151[i].Model == EnmModel.RealModel)
-                //        {
-                //            if (setting.YM2151Type.SoundLocation != -1)//GIMIC以外(SCCIの場合)
-                //            {
-                //                driver.SetYM2151Hosei(chipRegister.YM2151[i], zgmDriver.YM2151ClockValue);
-                //            }
-                //            useReal = true;
-                //        }
-                //    }
-
-                //    if (chipRegister.YM2413[i].Use)
-                //    {
-                //        if (chipRegister.YM2413[i].Model == EnmModel.VirtualModel) useEmu = true;
-                //        if (chipRegister.YM2413[i].Model == EnmModel.RealModel) useReal = true;
-                //    }
-
-                //}
-
-
                 log.Write("使用音源のタイプ調査 ＆ Volume設定");
 
                 foreach (Chip c in chipRegister.CONDUCTOR)
@@ -1372,11 +1672,84 @@ namespace mml2vgmIDE
                     break;
                 }
 
+                foreach (Chip c in chipRegister.C140)
+                {
+                    if (!c.Use) continue;
+                    if (c.Model == EnmVRModel.VirtualModel) useEmu = true;
+                    if (c.Model == EnmVRModel.RealModel) useReal = true;
+                    SetC140Volume(true, setting.balance.C140Volume);
+                    break;
+                }
+
+                foreach (Chip c in chipRegister.HuC6280)
+                {
+                    if (!c.Use) continue;
+                    if (c.Model == EnmVRModel.VirtualModel) useEmu = true;
+                    if (c.Model == EnmVRModel.RealModel) useReal = true;
+                    SetHuC6280Volume(true, setting.balance.HuC6280Volume);
+                    break;
+                }
+
+                foreach (Chip c in chipRegister.K051649)
+                {
+                    if (!c.Use) continue;
+                    if (c.Model == EnmVRModel.VirtualModel) useEmu = true;
+                    if (c.Model == EnmVRModel.RealModel) useReal = true;
+                    SetK051649Volume(true, setting.balance.K051649Volume);
+                    break;
+                }
+
+                foreach (Chip c in chipRegister.K053260)
+                {
+                    if (!c.Use) continue;
+                    if (c.Model == EnmVRModel.VirtualModel) useEmu = true;
+                    if (c.Model == EnmVRModel.RealModel) useReal = true;
+                    SetK053260Volume(true, setting.balance.K053260Volume);
+                    break;
+                }
+
+                foreach (Chip c in chipRegister.QSound)
+                {
+                    if (!c.Use) continue;
+                    if (c.Model == EnmVRModel.VirtualModel) useEmu = true;
+                    if (c.Model == EnmVRModel.RealModel) useReal = true;
+                    SetQSoundVolume(true, setting.balance.QSoundVolume);
+                    break;
+                }
+
+                foreach (Chip c in chipRegister.RF5C164)
+                {
+                    if (!c.Use) continue;
+                    if (c.Model == EnmVRModel.VirtualModel) useEmu = true;
+                    if (c.Model == EnmVRModel.RealModel) useReal = true;
+                    SetRF5C164Volume(true, setting.balance.RF5C164Volume);
+                    break;
+                }
+
+                foreach (Chip c in chipRegister.SEGAPCM)
+                {
+                    if (!c.Use) continue;
+                    if (c.Model == EnmVRModel.VirtualModel) useEmu = true;
+                    if (c.Model == EnmVRModel.RealModel) useReal = true;
+                    SetSegaPCMVolume(true, setting.balance.SEGAPCMVolume);
+                    break;
+                }
+
                 foreach (Chip c in chipRegister.SN76489)
                 {
                     if (!c.Use) continue;
                     if (c.Model == EnmVRModel.VirtualModel) useEmu = true;
                     if (c.Model == EnmVRModel.RealModel) useReal = true;
+                    SetSN76489Volume(true, setting.balance.SN76489Volume);
+                    break;
+                }
+
+                foreach (Chip c in chipRegister.YM2151)
+                {
+                    if (!c.Use) continue;
+                    if (c.Model == EnmVRModel.VirtualModel) useEmu = true;
+                    if (c.Model == EnmVRModel.RealModel) useReal = true;
+                    SetYM2151Volume(true, setting.balance.YM2151Volume);
                     break;
                 }
 
@@ -1387,6 +1760,15 @@ namespace mml2vgmIDE
                     if (c.Model == EnmVRModel.RealModel) useReal = true;
                     SetYM2203FMVolume(true, setting.balance.YM2203FMVolume);
                     SetYM2203PSGVolume(true, setting.balance.YM2203PSGVolume);
+                    break;
+                }
+
+                foreach (Chip c in chipRegister.YM2413)
+                {
+                    if (!c.Use) continue;
+                    if (c.Model == EnmVRModel.VirtualModel) useEmu = true;
+                    if (c.Model == EnmVRModel.RealModel) useReal = true;
+                    SetYM2413Volume(true, setting.balance.YM2413Volume);
                     break;
                 }
 
@@ -1463,6 +1845,7 @@ namespace mml2vgmIDE
                 for (int i = 0; i < chipRegister.YM2413.Count; i++) if (chipRegister.YM2413[i].Use) chipRegister.YM2413WriteClock((byte)i, (int)zgmDriver.YM2413ClockValue);
                 for (int i = 0; i < chipRegister.YM2608.Count; i++) if (chipRegister.YM2608[i].Use) chipRegister.YM2608WriteClock((byte)i, (int)zgmDriver.YM2608ClockValue);
                 for (int i = 0; i < chipRegister.YM2609.Count; i++) if (chipRegister.YM2609[i].Use) chipRegister.YM2609WriteClock((byte)i, (int)zgmDriver.YM2609ClockValue);
+                for (int i = 0; i < chipRegister.YM2610.Count; i++) if (chipRegister.YM2610[i].Use) chipRegister.YM2610WriteClock((byte)i, (int)zgmDriver.YM2610ClockValue);
                 for (int i = 0; i < chipRegister.YM2612.Count; i++) if (chipRegister.YM2612[i].Use) chipRegister.YM2612WriteClock((byte)i, (int)zgmDriver.YM2612ClockValue);
 
 

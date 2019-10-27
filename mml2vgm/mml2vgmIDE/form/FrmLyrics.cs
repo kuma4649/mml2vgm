@@ -156,7 +156,7 @@ namespace mml2vgmIDE
             if (this.Height < 1) return;
 
             Font oldfont = rtbLyrics.Font;
-            rtbLyrics.Font = new Font(rtbLyrics.Font.OriginalFontName, this.Height / 2, FontStyle.Bold);
+            rtbLyrics.Font = new Font(rtbLyrics.Font.OriginalFontName, Math.Max(this.Height / 2, 1), FontStyle.Bold);
             try
             {
                 oldfont.Dispose();

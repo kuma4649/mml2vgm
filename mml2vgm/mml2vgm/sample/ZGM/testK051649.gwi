@@ -1,0 +1,25 @@
+﻿'{
+	TitleNameJ   =K051649のテスト
+	TitleName   =K051649 Test 	
+	
+	Octave-Rev  =TRUE
+	Notes = FROG FROG
+	Format       =ZGM
+}
+
+'@ H  0,
+   +0 +1 +2 +3 +4 +5 +6 +7
+'@ $00,$F8,$F0,$E8,$E0,$D8,$D0,$C8
+'@ $C0,$B8,$B0,$A8,$A0,$98,$90,$88
+'@ $80,$78,$70,$68,$60,$58,$50,$48
+'@ $40,$38,$30,$28,$20,$18,$10,$08
+
+
+'Cn1 T120
+
+'K1 @0 l4 o4 v13q4
+'K1 cdef edcr efga gfer crcr crcr l8 ccddeeff l4 edcr
+
+
+'K2 @0 l4 o4 v6q4D1
+'K2 r8cdef edcr efga gfer crcr crcr l8 ccddeeff l4 edcr8

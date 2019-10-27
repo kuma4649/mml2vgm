@@ -521,127 +521,129 @@ namespace mml2vgmIDE.Driver.ZGM
                     //dumpData(dummyChip, "YM2609_ADPCM", vgmAdr + 15, bLen - 8);
                     vgmAdr += (uint)bLen + 7;
                     break;
-                //case 0x80:
-                //    uint romSize = Common.getLE32(vgmBuf, vgmAdr + 7);
-                //    uint startAddress = Common.getLE32(vgmBuf, vgmAdr + 0x0B);
-                //    switch (bType)
-                //    {
-                //        case 0x80:
-                //            //SEGA PCM
-                //            //chipRegister.SEGAPCMWritePCMData(Audio.DriverSeqCounter, chipID, romSize, startAddress, bLen - 8, vgmBuf, vgmAdr + 15);
-                //            pcmDat.Clear();
-                //            for (uint i = vgmAdr + 15; i < vgmAdr + 15 + bLen - 8; i++) pcmDat.Add(vgmBuf[i].val);
-                //            chipRegister.SEGAPCMWritePCMData(od, Audio.DriverSeqCounter, chipID, romSize, startAddress, bLen - 8, pcmDat.ToArray(), 0);
-                //            //dumpDataForSegaPCM("SEGAPCM_PCMData", vgmAdr + 15, bLen - 8);
-                //            break;
-                //        case 0x81:
+                case Driver.ZGM.ZgmChip.SEGAPCM _:// 0x80:
+                    uint segapcm_romSize = Common.getLE32(vgmBuf, vgmAdr + 7);
+                    uint segapcm_startAddress = Common.getLE32(vgmBuf, vgmAdr + 0x0B);
+                    pcmDat.Clear();
+                    for (uint i = 0; i < bLen - 8; i++) pcmDat.Add(vgmBuf[vgmAdr + 15 + i].val);
+                    chipRegister.SEGAPCMWritePCMData(od, Audio.DriverSeqCounter, (byte)chip.Index, segapcm_romSize, segapcm_startAddress, (uint)pcmDat.Count, pcmDat.ToArray(), 0);
+                    vgmAdr += (uint)bLen + 7;
+                    break;
+                case Driver.ZGM.ZgmChip.YM2608 _:
+                    uint opna_romSize = Common.getLE32(vgmBuf, vgmAdr + 7);
+                    uint opna_startAddress = Common.getLE32(vgmBuf, vgmAdr + 0x0B);
+                    List<PackData> opna_data = new List<PackData>
+                            {
+                                new PackData(null,chipRegister.YM2608[chip.Index],0,0x100+ 0x00, 0x20,null),
+                                new PackData(null,chipRegister.YM2608[chip.Index],0,0x100+ 0x00, 0x21,null),
+                                new PackData(null,chipRegister.YM2608[chip.Index],0,0x100+ 0x00, 0x00,null),
+                                                                      
+                                new PackData(null,chipRegister.YM2608[chip.Index],0,0x100+ 0x10, 0x00,null),
+                                new PackData(null,chipRegister.YM2608[chip.Index],0,0x100+ 0x10, 0x80,null),
+                                                                      
+                                new PackData(null,chipRegister.YM2608[chip.Index],0,0x100+ 0x00, 0x61,null),
+                                new PackData(null,chipRegister.YM2608[chip.Index],0,0x100+ 0x00, 0x68,null),
+                                new PackData(null,chipRegister.YM2608[chip.Index],0,0x100+ 0x01, 0x00,null),
+                                                                      
+                                new PackData(null,chipRegister.YM2608[chip.Index],0,0x100+ 0x02, (byte)(opna_startAddress >> 2),null),
+                                new PackData(null,chipRegister.YM2608[chip.Index],0,0x100+ 0x03, (byte)(opna_startAddress >> 10),null),
+                                new PackData(null,chipRegister.YM2608[chip.Index],0,0x100+ 0x04, 0xff,null),
+                                new PackData(null,chipRegister.YM2608[chip.Index],0,0x100+ 0x05, 0xff,null),
+                                new PackData(null,chipRegister.YM2608[chip.Index],0,0x100+ 0x0c, 0xff,null),
+                                new PackData(null,chipRegister.YM2608[chip.Index],0,0x100+ 0x0d, 0xff,null)
+                            };
 
-                //            // YM2608
-                //            List<PackData> data = new List<PackData>
-                //            {
-                //                new PackData(null,chipRegister.YM2608[chipID],0,0x100+ 0x00, 0x20,null),
-                //                new PackData(null,chipRegister.YM2608[chipID],0,0x100+ 0x00, 0x21,null),
-                //                new PackData(null,chipRegister.YM2608[chipID],0,0x100+ 0x00, 0x00,null),
+                    // データ転送
+                    for (int cnt = 0; cnt < bLen - 8; cnt++)
+                    {
+                        opna_data.Add(new PackData(null, chipRegister.YM2608[chip.Index], 0, 0x100 + 0x08, vgmBuf[vgmAdr + 15 + cnt].val, null));
+                    }
+                    opna_data.Add(new PackData(null, chipRegister.YM2608[chip.Index], 0, 0x100 + 0x00, 0x00, null));
+                    opna_data.Add(new PackData(null, chipRegister.YM2608[chip.Index], 0, 0x100 + 0x10, 0x80, null));
 
-                //                new PackData(null,chipRegister.YM2608[chipID],0,0x100+ 0x10, 0x00,null),
-                //                new PackData(null,chipRegister.YM2608[chipID],0,0x100+ 0x10, 0x80,null),
+                    //chipRegister.setYM2608Register(0x1, 0x10, 0x13, model);
+                    //chipRegister.setYM2608Register(0x1, 0x10, 0x80, model);
+                    //chipRegister.setYM2608Register(0x1, 0x00, 0x60, model);
+                    //chipRegister.setYM2608Register(0x1, 0x01, 0x00, model);
 
-                //                new PackData(null,chipRegister.YM2608[chipID],0,0x100+ 0x00, 0x61,null),
-                //                new PackData(null,chipRegister.YM2608[chipID],0,0x100+ 0x00, 0x68,null),
-                //                new PackData(null,chipRegister.YM2608[chipID],0,0x100+ 0x01, 0x00,null),
+                    //chipRegister.setYM2608Register(0x1, 0x02, (int)((startAddress >> 2) & 0xff), model);
+                    //chipRegister.setYM2608Register(0x1, 0x03, (int)((startAddress >> 10) & 0xff), model);
+                    //chipRegister.setYM2608Register(0x1, 0x04, (int)(((startAddress + bLen - 8) >> 2) & 0xff), model);
+                    //chipRegister.setYM2608Register(0x1, 0x05, (int)(((startAddress + bLen - 8) >> 10) & 0xff), model);
+                    //chipRegister.setYM2608Register(0x1, 0x0c, 0xff, model);
+                    //chipRegister.setYM2608Register(0x1, 0x0d, 0xff, model);
 
-                //                new PackData(null,chipRegister.YM2608[chipID],0,0x100+ 0x02, (byte)(startAddress >> 2),null),
-                //                new PackData(null,chipRegister.YM2608[chipID],0,0x100+ 0x03, (byte)(startAddress >> 10),null),
-                //                new PackData(null,chipRegister.YM2608[chipID],0,0x100+ 0x04, 0xff,null),
-                //                new PackData(null,chipRegister.YM2608[chipID],0,0x100+ 0x05, 0xff,null),
-                //                new PackData(null,chipRegister.YM2608[chipID],0,0x100+ 0x0c, 0xff,null),
-                //                new PackData(null,chipRegister.YM2608[chipID],0,0x100+ 0x0d, 0xff,null)
-                //            };
+                    //for (int cnt = 0; cnt < bLen - 8; cnt++)
+                    //{
+                    //    chipRegister.setYM2608Register(0x1, 0x08, vgmBuf[vgmAdr + 15 + cnt].val, model);
+                    //    chipRegister.setYM2608Register(0x1, 0x10, 0x1b, model);
+                    //    chipRegister.setYM2608Register(0x1, 0x10, 0x13, model);
+                    //}
 
-                //            // データ転送
-                //            for (int cnt = 0; cnt < bLen - 8; cnt++)
-                //            {
-                //                data.Add(new PackData(null, chipRegister.YM2608[chipID], 0, 0x100 + 0x08, vgmBuf[vgmAdr + 15 + cnt].val, null));
-                //            }
-                //            data.Add(new PackData(null, chipRegister.YM2608[chipID], 0, 0x100 + 0x00, 0x00, null));
-                //            data.Add(new PackData(null, chipRegister.YM2608[chipID], 0, 0x100 + 0x10, 0x80, null));
+                    //chipRegister.setYM2608Register(0x1, 0x00, 0x00, model);
+                    //chipRegister.setYM2608Register(0x1, 0x10, 0x80, model);
 
-                //            //chipRegister.setYM2608Register(0x1, 0x10, 0x13, model);
-                //            //chipRegister.setYM2608Register(0x1, 0x10, 0x80, model);
-                //            //chipRegister.setYM2608Register(0x1, 0x00, 0x60, model);
-                //            //chipRegister.setYM2608Register(0x1, 0x01, 0x00, model);
+                    SoundManager.Chip opna_dummyChip = new SoundManager.Chip();
 
-                //            //chipRegister.setYM2608Register(0x1, 0x02, (int)((startAddress >> 2) & 0xff), model);
-                //            //chipRegister.setYM2608Register(0x1, 0x03, (int)((startAddress >> 10) & 0xff), model);
-                //            //chipRegister.setYM2608Register(0x1, 0x04, (int)(((startAddress + bLen - 8) >> 2) & 0xff), model);
-                //            //chipRegister.setYM2608Register(0x1, 0x05, (int)(((startAddress + bLen - 8) >> 10) & 0xff), model);
-                //            //chipRegister.setYM2608Register(0x1, 0x0c, 0xff, model);
-                //            //chipRegister.setYM2608Register(0x1, 0x0d, 0xff, model);
+                    opna_dummyChip.Model = chipRegister.YM2608[chip.Index].Model;
+                    opna_dummyChip.Delay = chipRegister.YM2608[chip.Index].Delay;
+                    opna_dummyChip.Device = chipRegister.YM2608[chip.Index].Device;
+                    opna_dummyChip.Number = chipRegister.YM2608[chip.Index].Number;
+                    opna_dummyChip.Use = chipRegister.YM2608[chip.Index].Use;
 
-                //            //for (int cnt = 0; cnt < bLen - 8; cnt++)
-                //            //{
-                //            //    chipRegister.setYM2608Register(0x1, 0x08, vgmBuf[vgmAdr + 15 + cnt].val, model);
-                //            //    chipRegister.setYM2608Register(0x1, 0x10, 0x1b, model);
-                //            //    chipRegister.setYM2608Register(0x1, 0x10, 0x13, model);
-                //            //}
+                    if (chipRegister.YM2608[chip.Index].Model == EnmVRModel.RealModel)
+                    {
+                        if (setting.YM2608Type.OnlyPCMEmulation)
+                        {
+                            opna_dummyChip.Model = EnmVRModel.VirtualModel;
+                        }
+                        else
+                        {
+                            Audio.DriverSeqCounter += (long)(bLen * 1.5);
+                        }
+                    }
 
-                //            //chipRegister.setYM2608Register(0x1, 0x00, 0x00, model);
-                //            //chipRegister.setYM2608Register(0x1, 0x10, 0x80, model);
+                    chipRegister.YM2608SetRegister(od, Audio.DriverSeqCounter, opna_dummyChip, opna_data.ToArray());
 
-                //            SoundManager.Chip dummyChip = new SoundManager.Chip();
+                    //dumpData(dummyChip, "YM2608_ADPCM", vgmAdr + 15, bLen - 8);
+                    vgmAdr += (uint)bLen + 7;
+                    break;
 
-                //            dummyChip.Model = chipRegister.YM2608[chipID].Model;
-                //            dummyChip.Delay = chipRegister.YM2608[chipID].Delay;
-                //            dummyChip.Device = chipRegister.YM2608[chipID].Device;
-                //            dummyChip.Number = chipRegister.YM2608[chipID].Number;
-                //            dummyChip.Use = chipRegister.YM2608[chipID].Use;
-
-                //            if (chipRegister.YM2608[chipID].Model == EnmModel.RealModel)
-                //            {
-                //                if (setting.YM2608Type.OnlyPCMEmulation)
-                //                {
-                //                    dummyChip.Model = EnmModel.VirtualModel;
-                //                }
-                //                else
-                //                {
-                //                    Audio.DriverSeqCounter += (long)(bLen * 1.5);
-                //                }
-                //            }
-
-                //            chipRegister.YM2608SetRegister(od, Audio.DriverSeqCounter, dummyChip, data.ToArray());
-
-                //            //dumpData(dummyChip, "YM2608_ADPCM", vgmAdr + 15, bLen - 8);
-                //            break;
-
-                //        case 0x82:
-                //            if (ym2610AdpcmA[chipID] == null || ym2610AdpcmA[chipID].Length != romSize) ym2610AdpcmA[chipID] = new byte[romSize];
-                //            if (ym2610AdpcmA[chipID].Length > 0)
-                //            {
-                //                for (int cnt = 0; cnt < bLen - 8; cnt++)
-                //                {
-                //                    ym2610AdpcmA[chipID][startAddress + cnt] = vgmBuf[vgmAdr + 15 + cnt].val;
-                //                }
-                //                //if (model == EnmModel.VirtualModel) 
-                //                chipRegister.YM2610WriteSetAdpcmA(od, Audio.DriverSeqCounter, chipID, ym2610AdpcmA[chipID]);
-                //                //else chipRegister.WriteYM2610_SetAdpcmA(chipID, model, (int)startAddress, (int)(bLen - 8), vgmBuf, (int)(vgmAdr + 15));
-                //                //dumpData(chipRegister.YM2610[chipID], "YM2610_ADPCMA", vgmAdr + 15, bLen - 8);
-                //            }
-                //            break;
-                //        case 0x83:
-                //            if (ym2610AdpcmB[chipID] == null || ym2610AdpcmB[chipID].Length != romSize) ym2610AdpcmB[chipID] = new byte[romSize];
-                //            if (ym2610AdpcmB[chipID].Length > 0)
-                //            {
-                //                for (int cnt = 0; cnt < bLen - 8; cnt++)
-                //                {
-                //                    ym2610AdpcmB[chipID][startAddress + cnt] = vgmBuf[vgmAdr + 15 + cnt].val;
-                //                }
-                //                //if (model == EnmModel.VirtualModel)
-                //                chipRegister.YM2610WriteSetAdpcmB(od, Audio.DriverSeqCounter, chipID, ym2610AdpcmB[chipID]);
-                //                //else chipRegister.WriteYM2610_SetAdpcmB(chipID, model, (int)startAddress, (int)(bLen - 8), vgmBuf, (int)(vgmAdr + 15));
-                //                //dumpData(chipRegister.YM2610[chipID], "YM2610_ADPCMB", vgmAdr + 15, bLen - 8);
-                //            }
-                //            break;
-
+                case Driver.ZGM.ZgmChip.YM2610 _:
+                    uint opnb_romSize = Common.getLE32(vgmBuf, vgmAdr + 7);
+                    uint opnb_startAddress = Common.getLE32(vgmBuf, vgmAdr + 0x0B);
+                    if (bType == 0x82)
+                    {
+                        if (ym2610AdpcmA[chip.Index] == null || ym2610AdpcmA[chip.Index].Length != opnb_romSize) ym2610AdpcmA[chip.Index] = new byte[opnb_romSize];
+                        if (ym2610AdpcmA[chip.Index].Length > 0)
+                        {
+                            for (int cnt = 0; cnt < bLen - 8; cnt++)
+                            {
+                                ym2610AdpcmA[chip.Index][opnb_startAddress + cnt] = vgmBuf[vgmAdr + 15 + cnt].val;
+                            }
+                            //if (model == EnmModel.VirtualModel) 
+                            chipRegister.YM2610WriteSetAdpcmA(od, Audio.DriverSeqCounter, chip.Index, ym2610AdpcmA[chip.Index]);
+                            //else chipRegister.WriteYM2610_SetAdpcmA(chipID, model, (int)startAddress, (int)(bLen - 8), vgmBuf, (int)(vgmAdr + 15));
+                            //dumpData(chipRegister.YM2610[chipID], "YM2610_ADPCMA", vgmAdr + 15, bLen - 8);
+                        }
+                    }
+                    else if (bType == 0x83)
+                    {
+                        if (ym2610AdpcmB[chip.Index] == null || ym2610AdpcmB[chip.Index].Length != opnb_romSize) ym2610AdpcmB[chip.Index] = new byte[opnb_romSize];
+                        if (ym2610AdpcmB[chip.Index].Length > 0)
+                        {
+                            for (int cnt = 0; cnt < bLen - 8; cnt++)
+                            {
+                                ym2610AdpcmB[chip.Index][opnb_startAddress + cnt] = vgmBuf[vgmAdr + 15 + cnt].val;
+                            }
+                            //if (model == EnmModel.VirtualModel)
+                            chipRegister.YM2610WriteSetAdpcmB(od, Audio.DriverSeqCounter, chip.Index, ym2610AdpcmB[chip.Index]);
+                            //else chipRegister.WriteYM2610_SetAdpcmB(chipID, model, (int)startAddress, (int)(bLen - 8), vgmBuf, (int)(vgmAdr + 15));
+                            //dumpData(chipRegister.YM2610[chipID], "YM2610_ADPCMB", vgmAdr + 15, bLen - 8);
+                        }
+                    }
+                    vgmAdr += (uint)bLen + 7;
+                    break;
                 //        case 0x84:
                 //            // YMF278B
                 //            //chipRegister.writeYMF278BPCMData(chipID, romSize, startAddress, bLen - 8, vgmBuf, vgmAdr + 15);
@@ -705,16 +707,18 @@ namespace mml2vgmIDE.Driver.ZGM
                 //            //dumpData(model, "K054539_PCMData", vgmAdr + 15, bLen - 8);
                 //            break;
 
-                //        case 0x8d:
+                case Driver.ZGM.ZgmChip.C140 _:
 
-                //            // C140
+                    // C140
 
-                //            //chipRegister.C140WritePCMData(Audio.DriverSeqCounter, chipID, romSize, startAddress, bLen - 8, vgmBuf, vgmAdr + 15);
-                //            pcmDat.Clear();
-                //            for (uint i = vgmAdr + 15; i < vgmAdr + 15 + bLen - 8; i++) pcmDat.Add(vgmBuf[i].val);
-                //            chipRegister.C140WritePCMData(od, Audio.DriverSeqCounter, chipID, romSize, startAddress, bLen - 8, pcmDat.ToArray(), 0);
-                //            //dumpData(model, "C140_PCMData", vgmAdr + 15, bLen - 8);
-                //            break;
+                    //chipRegister.C140WritePCMData(Audio.DriverSeqCounter, chipID, romSize, startAddress, bLen - 8, vgmBuf, vgmAdr + 15);
+                    uint c140_romSize = Common.getLE32(vgmBuf, vgmAdr + 7);
+                    uint c140_startAddress = Common.getLE32(vgmBuf, vgmAdr + 0x0B);
+                    pcmDat.Clear();
+                    for (uint i = 0; i < bLen - 8; i++) pcmDat.Add(vgmBuf[vgmAdr + 15 + i].val);
+                    chipRegister.C140WritePCMData(od, Audio.DriverSeqCounter, (byte)chip.Index, c140_romSize, c140_startAddress, (uint)pcmDat.Count, pcmDat.ToArray(), 0);
+                    vgmAdr += (uint)bLen + 7;
+                    break;
 
                 //        case 0x8e:
                 //            // K053260

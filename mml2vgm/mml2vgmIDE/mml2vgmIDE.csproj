@@ -106,6 +106,17 @@
     <Compile Include="Audio.cs" />
     <Compile Include="ChipLEDs.cs" />
     <Compile Include="ChipRegister.cs" />
+    <Compile Include="Driver\ZGM\ZgmChip\C140.cs" />
+    <Compile Include="Driver\ZGM\ZgmChip\HuC6280.cs" />
+    <Compile Include="Driver\ZGM\ZgmChip\K051649.cs" />
+    <Compile Include="Driver\ZGM\ZgmChip\K053260.cs" />
+    <Compile Include="Driver\ZGM\ZgmChip\QSound.cs" />
+    <Compile Include="Driver\ZGM\ZgmChip\RF5C164.cs" />
+    <Compile Include="Driver\ZGM\ZgmChip\SEGAPCM.cs" />
+    <Compile Include="Driver\ZGM\ZgmChip\YM2151.cs" />
+    <Compile Include="Driver\ZGM\ZgmChip\YM2413.cs" />
+    <Compile Include="Driver\ZGM\ZgmChip\YM2608.cs" />
+    <Compile Include="Driver\ZGM\ZgmChip\YM2610.cs" />
     <Compile Include="Driver\ZGM\ZgmChip\Conductor.cs" />
     <Compile Include="Driver\ZGM\ZgmChip\MidiGM.cs" />
     <Compile Include="Driver\ZGM\ZgmChip\SN76489.cs" />

@@ -514,6 +514,38 @@ namespace Core
         private void SetPCMDataBlock_AB(MML mml, byte[] pcmDataEasy, List<byte[]> pcmDataDirect)
         {
             int maxSize = 0;
+
+            if (parent.info.format == enmFormat.ZGM)
+            {
+                if (port.Length < 1) return;
+
+                if (parent.ChipCommandSize != 2)
+                {
+                    if (port[0].Length < 1) return;
+
+                    if (pcmDataEasy != null && pcmDataEasy.Length > 1) pcmDataEasy[1] = port[0][0];
+                    for (int i = 0; i < pcmDataDirect.Count; i++)
+                    {
+                        pcmDataDirect[i][1] = port[0][0];
+                    }
+                }
+                else
+                {
+                    if (port[0].Length < 2) return;
+
+                    if (pcmDataEasy != null && pcmDataEasy.Length > 3)
+                    {
+                        pcmDataEasy[2] = port[0][0];
+                        pcmDataEasy[3] = port[0][1];
+                    }
+                    for (int i = 0; i < pcmDataDirect.Count; i++)
+                    {
+                        pcmDataDirect[i][2] = port[0][0];
+                        pcmDataDirect[i][3] = port[0][1];
+                    }
+                }
+            }
+
             if (pcmDataEasy != null && pcmDataEasy.Length > 0)
             {
                 maxSize =

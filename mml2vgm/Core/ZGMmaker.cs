@@ -59,13 +59,14 @@ namespace Core
             , new object[]{ "YM2413"         , EnmZGMDevice.YM2413    , 1   , 2     , null }
             , new object[]{ "YM2612"         , EnmZGMDevice.YM2612    , 2   , 2     , null }
             , new object[]{ "YM2151"         , EnmZGMDevice.YM2151    , 1   , 2     , null }
-            , new object[]{ "Sega PCM"       , EnmZGMDevice.SegaPCM   , 1   , 3     , new byte[] { 0,0,0,0 } }
+            , new object[]{ "QSound"         , EnmZGMDevice.QSound    , 1   , 3     , null }
             , new object[]{ "RF5C68"         , EnmZGMDevice.RF5C68    , 1   , 3     , null }
+            , new object[]{ "SEGAPCM"        , EnmZGMDevice.SegaPCM   , 1   , 3     , new byte[] { 0,0,0,0 } }
             , new object[]{ "YM2203"         , EnmZGMDevice.YM2203    , 1   , 2     , null }
             , new object[]{ "YM2608"         , EnmZGMDevice.YM2608    , 2   , 2     , null }
-            , new object[]{ "YM2610/YM2610B" , EnmZGMDevice.YM2610    , 2   , 2     , null }
+            , new object[]{ "YM2610B"        , EnmZGMDevice.YM2610    , 2   , 2     , null }
             , new object[]{ "K051649"        , EnmZGMDevice.K051649   , 1   , 2     , null }
-            , new object[]{ "K054539"        , EnmZGMDevice.K054539   , 1   , 3     , new byte[] { 0 } }
+            , new object[]{ "K053260"        , EnmZGMDevice.K053260   , 1   , 3     , new byte[] { 0 } }
             , new object[]{ "HuC6280"        , EnmZGMDevice.HuC6280   , 1   , 2     , null }
             , new object[]{ "C140"           , EnmZGMDevice.C140      , 1   , 2     , new byte[] { 0 } }
             // 0x00010000 - 0x0001FFFF 妄想Chips
