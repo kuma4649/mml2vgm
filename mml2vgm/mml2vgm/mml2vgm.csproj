@@ -266,6 +266,20 @@
     <None Include="sample\YM2612\testPCMMapMode.gwi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="sample\ZGM\testC140.gwi" />
+    <None Include="sample\ZGM\testDCSG.gwi" />
+    <None Include="sample\ZGM\testHuC6280.gwi" />
+    <None Include="sample\ZGM\testK051649.gwi" />
+    <None Include="sample\ZGM\testK053260.gwi" />
+    <None Include="sample\ZGM\testLylics.gwi" />
+    <None Include="sample\ZGM\testOPLLcase2.gwi" />
+    <None Include="sample\ZGM\testQSound.gwi" />
+    <None Include="sample\ZGM\testSEGAPCM.gwi" />
+    <None Include="sample\ZGM\testYM2151.gwi" />
+    <None Include="sample\ZGM\testYM2203.gwi" />
+    <None Include="sample\ZGM\testYM2608.gwi" />
+    <None Include="sample\ZGM\testYM2610BADPCM.gwi" />
+    <None Include="sample\ZGM\testYM2610BFM.gwi" />
     <None Include="sample\ZGM\testYM2612_MIDI_SYNC.gwi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

@@ -1512,7 +1512,7 @@ namespace mml2vgmIDE
                         chip.Start = ym2609.Start;
                         chip.Stop = ym2609.Stop;
                         chip.Reset = ym2609.Reset;
-                        chip.SamplingRate = (UInt32)Common.SampleRate;
+                        chip.SamplingRate = (UInt32)(Common.SampleRate/(zCnt+1));
                         chip.Volume = setting.balance.YM2609Volume;
                         chip.Clock = (uint)zchip.defineInfo.clock;
                         chip.Option = null;
