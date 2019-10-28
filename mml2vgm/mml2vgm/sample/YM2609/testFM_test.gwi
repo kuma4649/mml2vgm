@@ -14,6 +14,7 @@
 
 	Format               =ZGM
 	ClockCount           =192
+	PartYM2609   =A , B , C
 
 }
 
@@ -42,8 +43,9 @@ ALG Link 利用 ( ope1 -+
 '@ 255
 
 
-'U01 T120
+'A01 T120
 
 FM
-'U01 D0 @1 p0,4 o4 v120 l8 q8 c r
-'Us01 
+'A01 D0 @1 p0,4 o4 v120 l8 q8 c1 r
+'B01 D0 @1 p0,4 o4 v120 l8 q8 e1 r
+'C01 D0 @1 p0,4 o4 v120 l8 q8 g1 r

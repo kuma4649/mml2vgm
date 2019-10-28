@@ -2193,7 +2193,7 @@ namespace mml2vgmIDE
 
         public void HuC6280WriteClock(byte chipID, int clock)
         {
-            if (scHuC6280 != null && scHuC6280[chipID] != null)
+            if (scHuC6280 != null && scHuC6280.Length > chipID && scHuC6280[chipID] != null)
             {
                 scHuC6280[chipID].dClock = scHuC6280[chipID].SetMasterClock((uint)clock);
             }
@@ -2334,7 +2334,7 @@ namespace mml2vgmIDE
 
         public void K051649WriteClock(byte chipID, int clock)
         {
-            if (scK051649 != null && scK051649[chipID] != null)
+            if (scK051649 != null && scK051649.Length > chipID && scK051649[chipID] != null)
             {
                 scK051649[chipID].dClock = scK051649[chipID].SetMasterClock((uint)clock);
             }
@@ -2461,7 +2461,7 @@ namespace mml2vgmIDE
 
         public void K053260WriteClock(byte chipID, int clock)
         {
-            if (scK053260 != null && scK053260[chipID] != null)
+            if (scK053260 != null && scK053260.Length > chipID && scK053260[chipID] != null)
             {
                 scK053260[chipID].dClock = scK053260[chipID].SetMasterClock((uint)clock);
             }
@@ -2594,7 +2594,7 @@ namespace mml2vgmIDE
 
         public void QSoundWriteClock(byte chipID, int clock)
         {
-            if (scQSound != null && scQSound[chipID] != null)
+            if (scQSound != null && scQSound.Length > chipID && scQSound[chipID] != null)
             {
                 scQSound[chipID].dClock = scQSound[chipID].SetMasterClock((uint)clock);
             }
@@ -2775,7 +2775,7 @@ namespace mml2vgmIDE
 
         public void RF5C164WriteClock(byte chipID, int clock)
         {
-            if (scRF5C164 != null && scRF5C164[chipID] != null)
+            if (scRF5C164 != null && scRF5C164.Length > chipID && scRF5C164[chipID] != null)
             {
                 scRF5C164[chipID].dClock = scRF5C164[chipID].SetMasterClock((uint)clock);
                 scRF5C164[chipID].mul = (double)scRF5C164[chipID].dClock / (double)clock;
@@ -3111,7 +3111,7 @@ namespace mml2vgmIDE
 
         public void YM2151WriteClock(byte chipID, int clock)
         {
-            if (scYM2151 != null && scYM2151[chipID] != null)
+            if (scYM2151 != null && scYM2151.Length > chipID && scYM2151[chipID] != null)
             {
                 scYM2151[chipID].dClock = scYM2151[chipID].SetMasterClock((uint)clock);
             }
@@ -3419,7 +3419,7 @@ namespace mml2vgmIDE
 
         public void YM2203WriteClock(byte chipID, int clock)
         {
-            if (scYM2203 != null && scYM2203[chipID] != null)
+            if (scYM2203 != null && scYM2203.Length > chipID && scYM2203[chipID] != null)
             {
                 if (scYM2203[chipID] is RC86ctlSoundChip)
                 {
@@ -3640,7 +3640,7 @@ namespace mml2vgmIDE
 
         public void YM2413WriteClock(byte chipID, int clock)
         {
-            if (scYM2413 != null && scYM2413[chipID] != null)
+            if (scYM2413 != null && scYM2413.Length > chipID && scYM2413[chipID] != null)
             {
                 scYM2413[chipID].dClock = scYM2413[chipID].SetMasterClock((uint)clock);
             }
@@ -4075,7 +4075,7 @@ namespace mml2vgmIDE
 
         public void YM2608WriteClock(byte chipID, int clock)
         {
-            if (scYM2608 != null && scYM2608[chipID] != null)
+            if (scYM2608 != null && scYM2608.Length > chipID && scYM2608[chipID] != null)
             {
                 scYM2608[chipID].dClock = scYM2608[chipID].SetMasterClock((uint)clock);
             }
@@ -4749,7 +4749,7 @@ namespace mml2vgmIDE
 
         public void YM2610WriteClock(byte chipID, int clock)
         {
-            if (scYM2610 != null && scYM2610[chipID] != null)
+            if (scYM2610 != null && scYM2610.Length > chipID && scYM2610[chipID] != null)
             {
                 scYM2610[chipID].dClock = scYM2610[chipID].SetMasterClock((uint)clock);
             }
@@ -4888,7 +4888,7 @@ namespace mml2vgmIDE
 
         public void YM2609WriteClock(byte chipID, int clock)
         {
-            if (scYM2609 != null && scYM2609[chipID] != null)
+            if (scYM2609 != null && scYM2609.Length>chipID && scYM2609[chipID] != null)
             {
                 scYM2609[chipID].dClock = scYM2609[chipID].SetMasterClock((uint)clock);
             }
@@ -5696,7 +5696,7 @@ namespace mml2vgmIDE
 
         public void SEGAPCMWriteClock(byte chipID, int clock)
         {
-            if (scSEGAPCM != null && scSEGAPCM[chipID] != null)
+            if (scSEGAPCM != null && scSEGAPCM.Length > chipID && scSEGAPCM[chipID] != null)
             {
                 scSEGAPCM[chipID].setRegister(0x10005, (int)clock);
                 scSEGAPCM[chipID].dClock = scSEGAPCM[chipID].SetMasterClock((uint)clock);
@@ -5889,7 +5889,7 @@ namespace mml2vgmIDE
 
         public void SN76489WriteClock(byte chipID, int clock)
         {
-            if (scSN76489 != null && scSN76489[chipID] != null)
+            if (scSN76489 != null && scSN76489.Length > chipID && scSN76489[chipID] != null)
             {
                 scSN76489[chipID].dClock = scSN76489[chipID].SetMasterClock((uint)clock);
             }
