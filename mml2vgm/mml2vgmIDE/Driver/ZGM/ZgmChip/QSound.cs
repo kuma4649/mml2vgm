@@ -34,8 +34,11 @@ namespace mml2vgmIDE.Driver.ZGM.ZgmChip
 
         private void SendPort0(outDatum od, ref uint vgmAdr)
         {
-            chipRegister.QSoundSetRegister(od, Audio.DriverSeqCounter, Index, vgmBuf[vgmAdr + 1].val, vgmBuf[vgmAdr + 2].val);
-            vgmAdr += 3;
+            chipRegister.QSoundSetRegister(od, Audio.DriverSeqCounter, Index
+                , vgmBuf[vgmAdr + 3].val //address
+                , (vgmBuf[vgmAdr + 1].val << 8) | vgmBuf[vgmAdr + 2].val // data
+                );
+            vgmAdr += 4;
         }
 
     }

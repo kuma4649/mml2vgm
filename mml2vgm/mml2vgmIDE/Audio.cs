@@ -1214,7 +1214,9 @@ namespace mml2vgmIDE
                         chip.SamplingRate = (UInt32)Common.SampleRate;
                         chip.Volume = setting.balance.K053260Volume;
                         chip.Clock = (uint)zchip.defineInfo.clock;
-                        chip.Option = null;
+                        chip.Option = new object[1] {
+                             (int)zchip.defineInfo.option[0]
+                        };
                         lstChips.Add(chip);
 
                         hiyorimiDeviceFlag |= (setting.K053260Type.UseScci) ? 0x1 : 0x2;

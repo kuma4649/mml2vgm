@@ -45,14 +45,14 @@ namespace Core
                 {
                     if (isSecondary==0)
                         pcmDataInfo[0].totalBuf = new byte[] {
-                            0xb1, 0x00, 0x07, 0x00//通常コマンド
-                            , 0x07, 0x00, 0x66, 0xc1
+                            0xb1, 0x00, 0x07, 0x00,//通常コマンド
+                            0x07, 0x00, 0x66, 0xc1
                             , 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
                         };
                     else
                         pcmDataInfo[0].totalBuf = new byte[] {
-                            0xb1,0x00, 0x87, 0x00//通常コマンド
-                            , 0x07, 0x00, 0x66, 0xc1
+                            0xb1,0x00, 0x87, 0x00,//通常コマンド
+                            0x07, 0x00, 0x66, 0xc1
                             , 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
                     };
                 }
@@ -418,6 +418,46 @@ namespace Core
         {
             if (!CanUsePcm) return;
             if (!use) return;
+
+            if (parent.info.format == enmFormat.ZGM)
+            {
+                if (port.Length < 1) return;
+
+                if (parent.ChipCommandSize != 2)
+                {
+                    if (port[0].Length < 1) return;
+
+                    if (pcmDataEasy != null && pcmDataEasy.Length > 1)
+                    {
+                        pcmDataEasy[0] = port[0][0];
+                        pcmDataEasy[4] = port[0][0];
+                    }
+                    for (int i = 0; i < pcmDataDirect.Count; i++)
+                    {
+                        pcmDataDirect[i][0] = port[0][0];
+                        pcmDataDirect[i][4] = port[0][0];
+                    }
+                }
+                else
+                {
+                    if (port[0].Length < 2) return;
+
+                    if (pcmDataEasy != null && pcmDataEasy.Length > 3)
+                    {
+                        pcmDataEasy[0] = port[0][0];
+                        pcmDataEasy[1] = port[0][1];
+                        pcmDataEasy[5] = port[0][0];
+                        pcmDataEasy[6] = port[0][1];
+                    }
+                    for (int i = 0; i < pcmDataDirect.Count; i++)
+                    {
+                        pcmDataDirect[i][0] = port[0][0];
+                        pcmDataDirect[i][1] = port[0][1];
+                        pcmDataDirect[i][5] = port[0][0];
+                        pcmDataDirect[i][6] = port[0][1];
+                    }
+                }
+            }
 
             if (pcmDataEasy != null && pcmDataEasy.Length > 0)
                 parent.OutData(mml,pcmDataEasy);

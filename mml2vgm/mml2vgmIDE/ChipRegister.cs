@@ -2530,7 +2530,11 @@ namespace mml2vgmIDE
                         if (Chip.Model == EnmVRModel.VirtualModel)
                         {
                             foreach (PackData dat in pdata)
-                                mds.WriteQSound(Chip.Index, (byte)dat.Chip.Number, (byte)dat.Address, (byte)dat.Data);
+                            {
+                                mds.WriteQSound(Chip.Index, (byte)dat.Chip.Number, 0, (byte)(dat.Data >> 8));
+                                mds.WriteQSound(Chip.Index, (byte)dat.Chip.Number, 1, (byte)dat.Data);
+                                mds.WriteQSound(Chip.Index, (byte)dat.Chip.Number, 2, (byte)dat.Address);
+                            }
                         }
                         if (Chip.Model == EnmVRModel.RealModel)
                         {

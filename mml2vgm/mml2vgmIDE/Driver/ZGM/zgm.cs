@@ -708,10 +708,6 @@ namespace mml2vgmIDE.Driver.ZGM
                 //            break;
 
                 case Driver.ZGM.ZgmChip.C140 _:
-
-                    // C140
-
-                    //chipRegister.C140WritePCMData(Audio.DriverSeqCounter, chipID, romSize, startAddress, bLen - 8, vgmBuf, vgmAdr + 15);
                     uint c140_romSize = Common.getLE32(vgmBuf, vgmAdr + 7);
                     uint c140_startAddress = Common.getLE32(vgmBuf, vgmAdr + 0x0B);
                     pcmDat.Clear();
@@ -720,23 +716,38 @@ namespace mml2vgmIDE.Driver.ZGM
                     vgmAdr += (uint)bLen + 7;
                     break;
 
-                //        case 0x8e:
-                //            // K053260
-                //            //chipRegister.writeK053260PCMData(chipID, romSize, startAddress, bLen - 8, vgmBuf, vgmAdr + 15);
-                //            pcmDat.Clear();
-                //            for (uint i = vgmAdr + 15; i < vgmAdr + 15 + bLen - 8; i++) pcmDat.Add(vgmBuf[i].val);
-                //            chipRegister.K053260WritePCMData(od, Audio.DriverSeqCounter, chipID, romSize, startAddress, bLen - 8, pcmDat.ToArray(), 0);
-                //            //dumpData(model, "K053260_PCMData", vgmAdr + 15, bLen - 8);
-                //            break;
+                case Driver.ZGM.ZgmChip.K053260 _:
+                    uint K053260_romSize = Common.getLE32(vgmBuf, vgmAdr + 7);
+                    uint K053260_startAddress = Common.getLE32(vgmBuf, vgmAdr + 0x0B);
+                    pcmDat.Clear();
+                    for (uint i = 0; i < bLen - 8; i++) pcmDat.Add(vgmBuf[vgmAdr + 15 + i].val);
+                    chipRegister.K053260WritePCMData(od, Audio.DriverSeqCounter, (byte)chip.Index, K053260_romSize, K053260_startAddress, (uint)pcmDat.Count, pcmDat.ToArray(), 0);
+                    vgmAdr += (uint)bLen + 7;
+                    break;
 
-                //        case 0x8f:
-                //            // QSound
-                //            //chipRegister.writeQSoundPCMData(chipID, romSize, startAddress, bLen - 8, vgmBuf, vgmAdr + 15);
-                //            pcmDat.Clear();
-                //            for (uint i = vgmAdr + 15; i < vgmAdr + 15 + bLen - 8; i++) pcmDat.Add(vgmBuf[i].val);
-                //            chipRegister.QSoundWritePCMData(od, Audio.DriverSeqCounter, chipID, romSize, startAddress, bLen - 8, pcmDat.ToArray(), 0);
-                //            //dumpData(model, "QSound_PCMData", vgmAdr + 15, bLen - 8);
-                //            break;
+                case Driver.ZGM.ZgmChip.QSound _:
+                    uint QSound_romSize = Common.getLE32(vgmBuf, vgmAdr + 7);
+                    uint QSound_startAddress = Common.getLE32(vgmBuf, vgmAdr + 0x0B);
+                    pcmDat.Clear();
+                    for (uint i = 0; i < bLen - 8; i++) pcmDat.Add(vgmBuf[vgmAdr + 15 + i].val);
+                    chipRegister.QSoundWritePCMData(od, Audio.DriverSeqCounter, (byte)chip.Index, QSound_romSize, QSound_startAddress, (uint)pcmDat.Count, pcmDat.ToArray(), 0);
+                    vgmAdr += (uint)bLen + 7;
+                    //            // QSound
+                    //            //chipRegister.writeQSoundPCMData(chipID, romSize, startAddress, bLen - 8, vgmBuf, vgmAdr + 15);
+                    //            pcmDat.Clear();
+                    //            for (uint i = vgmAdr + 15; i < vgmAdr + 15 + bLen - 8; i++) pcmDat.Add(vgmBuf[i].val);
+                    //            chipRegister.QSoundWritePCMData(od, Audio.DriverSeqCounter, chipID, romSize, startAddress, bLen - 8, pcmDat.ToArray(), 0);
+                    //            //dumpData(model, "QSound_PCMData", vgmAdr + 15, bLen - 8);
+                    break;
+
+                case Driver.ZGM.ZgmChip.RF5C164 _:
+                    uint RF5C164_romSize = Common.getLE32(vgmBuf, vgmAdr + 7);
+                    uint RF5C164_startAddress = Common.getLE32(vgmBuf, vgmAdr + 0x0B);
+                    pcmDat.Clear();
+                    for (uint i = 0; i < bLen - 8; i++) pcmDat.Add(vgmBuf[vgmAdr + 15 + i].val);
+                    chipRegister.RF5C164WritePCMData(od, Audio.DriverSeqCounter, (byte)chip.Index, RF5C164_startAddress, (uint)pcmDat.Count, pcmDat.ToArray(), 0);
+                    vgmAdr += (uint)bLen + 7;
+                    break;
 
                 //        case 0x92:
                 //            // C352

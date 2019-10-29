@@ -60,7 +60,7 @@ namespace Core
             , new object[]{ "YM2612"         , EnmZGMDevice.YM2612    , 2   , 2     , null }
             , new object[]{ "YM2151"         , EnmZGMDevice.YM2151    , 1   , 2     , null }
             , new object[]{ "QSound"         , EnmZGMDevice.QSound    , 1   , 3     , null }
-            , new object[]{ "RF5C68"         , EnmZGMDevice.RF5C68    , 1   , 3     , null }
+            , new object[]{ "RF5C164"        , EnmZGMDevice.RF5C164   , 1   , 3     , null }
             , new object[]{ "SEGAPCM"        , EnmZGMDevice.SegaPCM   , 1   , 3     , new byte[] { 0,0,0,0 } }
             , new object[]{ "YM2203"         , EnmZGMDevice.YM2203    , 1   , 2     , null }
             , new object[]{ "YM2608"         , EnmZGMDevice.YM2608    , 2   , 2     , null }
