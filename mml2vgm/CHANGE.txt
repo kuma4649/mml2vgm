@@ -1,4 +1,8 @@
 更新履歴
+TAG139 2019/11/1
+  IDE
+    ・YM2612 Hard LFOの不具合修正
+
 TAG138 2019/10/30
   IDE
     ・zgm K053260 QSound RF5C164 対応

@@ -205,10 +205,10 @@ namespace Core
             GetPortVch(pw, out port, out vch);
 
             pan = pan & 3;
-            ams = ams & 7;
-            pms = pms & 3;
+            ams = ams & 3;
+            pms = pms & 7;
 
-            parent.OutData(mml, port, (byte)(0xb4 + vch), (byte)((pan << 6) + (ams << 3) + pms));
+            parent.OutData(mml, port, (byte)(0xb4 + vch), (byte)((pan << 6) + (ams << 4) + pms));
         }
 
         public void OutOPNSetHardLfo(MML mml,partWork pw, bool sw, int lfoNum)

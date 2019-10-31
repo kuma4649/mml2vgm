@@ -3269,8 +3269,8 @@ namespace Core
                 {
                     if ((cpw.chip is YM2612) || (cpw.chip is YM2612X))
                     {
-                        cpw.ams = pl.param[3];
                         cpw.fms = pl.param[2];
+                        cpw.ams = pl.param[3];
                         ((ClsOPN)cpw.chip).OutOPNSetPanAMSPMS(null, cpw, (int)cpw.pan.val, cpw.ams, cpw.fms);
                         cpw.chip.lstPartWork[0].hardLfoSw = true;
                         cpw.chip.lstPartWork[0].hardLfoNum = pl.param[1];

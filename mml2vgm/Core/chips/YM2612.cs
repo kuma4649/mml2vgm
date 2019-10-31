@@ -326,7 +326,12 @@ namespace Core
             {
                 if (pw.lfo[c].param[4] == 0)
                 {
-                    ((ClsOPN)pw.chip).OutOPNSetHardLfo(mml, pw, (n == 0) ? false : true, pw.lfo[c].param[1]);
+                    pw.fms = (n == 0) ? 0 : pw.lfo[c].param[2];
+                    pw.ams = (n == 0) ? 0 : pw.lfo[c].param[3];
+                    ((ClsOPN)pw.chip).OutOPNSetPanAMSPMS(mml, pw, (int)pw.pan.val, pw.ams, pw.fms);
+                    pw.chip.lstPartWork[0].hardLfoSw = (n != 0);
+                    pw.chip.lstPartWork[0].hardLfoNum = pw.lfo[c].param[1];
+                    ((ClsOPN)pw.chip).OutOPNSetHardLfo(null, pw, pw.hardLfoSw, pw.hardLfoNum);
                 }
                 else
                 {
@@ -438,7 +443,8 @@ namespace Core
                 clsLfo pl = pw.lfo[lfo];
                 if (!pl.sw)
                     continue;
-
+                if (pl.type == eLfoType.Hardware)
+                    continue;
                 if (pl.param[5] != 1)
                     continue;
 
