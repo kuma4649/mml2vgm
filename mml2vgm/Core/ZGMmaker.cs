@@ -176,7 +176,10 @@ namespace Core
                         chip.port[i] = new byte[] { (byte)cmdNo, (byte)(cmdNo >> 8) };
                         cmdNo++;
                     }
+
                     di.clock = chip.Frequency;
+                    if (chip is YM2610B) di.clock = (int)(di.clock | 0x8000_0000);
+
                     if (dicChipIdentifyNumber[chip.Name][4] != null)
                     {
                         di.option = new byte[((byte[])dicChipIdentifyNumber[chip.Name][4]).Length];

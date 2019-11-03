@@ -2474,7 +2474,7 @@ namespace Core
             if (info.Version >= 1.51f && useYM2610B != 0)
             {
                 YM2610B y = ym2610b[0] != null ? ym2610b[0] : ym2610b[1];
-                Common.SetLE32(dat, 0x4c, (uint)y.Frequency | (uint)(useYM2610B_S == 0 ? 0 : 0x40000000));
+                Common.SetLE32(dat, 0x4c, (uint)y.Frequency | (uint)(useYM2610B_S == 0 ? 0x8000_0000 : 0xc000_0000));// bit31: YM2610Bモード
             }
             if (info.Version >= 1.51f && useRf5c164 != 0)
             {
