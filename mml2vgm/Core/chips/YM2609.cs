@@ -929,7 +929,7 @@ namespace Core
             }
 
             int n = (int)mml.args[1];
-            n = Common.CheckRange(n, 0, 3);
+            n = Common.CheckRange(n, 0, 7);
             pw.pms = n;
             ((ClsOPN)pw.chip).OutOPNSetPanAMSPMS(
                 mml,
@@ -948,7 +948,7 @@ namespace Core
             }
 
             int n = (int)mml.args[1];
-            n = Common.CheckRange(n, 0, 7);
+            n = Common.CheckRange(n, 0, 3);
             pw.ams = n;
             ((ClsOPN)pw.chip).OutOPNSetPanAMSPMS(
                 mml,
@@ -961,6 +961,11 @@ namespace Core
         public override void CmdLfo(partWork pw, MML mml)
         {
             base.CmdLfo(pw, mml);
+
+            if (mml.args[0] is string)
+            {
+                return;
+            }
 
             int c = (char)mml.args[0] - 'P';
             if (pw.lfo[c].type == eLfoType.Hardware)
@@ -1006,7 +1011,12 @@ namespace Core
                 {
                     if (pw.lfo[c].param[4] == 0)
                     {
-                        ((ClsOPN)pw.chip).OutOPNSetHardLfo(mml, pw, (n == 0) ? false : true, pw.lfo[c].param[1]);
+                        pw.fms = (n == 0) ? 0 : pw.lfo[c].param[2];
+                        pw.ams = (n == 0) ? 0 : pw.lfo[c].param[3];
+                        ((ClsOPN)pw.chip).OutOPNSetPanAMSPMS(mml, pw, (int)pw.pan.val, pw.ams, pw.fms);
+                        pw.chip.lstPartWork[0].hardLfoSw = (n != 0);
+                        pw.chip.lstPartWork[0].hardLfoNum = pw.lfo[c].param[1];
+                        ((ClsOPN)pw.chip).OutOPNSetHardLfo(null, pw, pw.chip.lstPartWork[0].hardLfoSw, pw.chip.lstPartWork[0].hardLfoNum);
                     }
                     else
                     {

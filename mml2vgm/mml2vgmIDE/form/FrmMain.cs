@@ -228,7 +228,15 @@ namespace mml2vgmIDE
 
             if (d == null) return;
 
-            File.WriteAllText(d.gwiFullPath, d.editor.azukiControl.Text, Encoding.UTF8);
+            try
+            {
+                File.WriteAllText(d.gwiFullPath, d.editor.azukiControl.Text, Encoding.UTF8);
+            }
+            catch(System.IO.IOException ioe)
+            {
+                MessageBox.Show(string.Format("Occured exception.\r\nMessage:\r\n{0}",ioe.Message),"Saving failed.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
             AddGwiFileHistory(d.gwiFullPath);
             UpdateGwiFileHistory();
 

@@ -1,4 +1,8 @@
 更新履歴
+TAG141 2019/11/4 2nd
+  Core
+    ・OPN2 OPNA OPNB OPNA2 HardwareLFOを更に動作修正。
+
 TAG140 2019/11/4
   Core
     ・YM2610B YM2610Bフラグをセットしていなかった(YM2610状態)のを修正。

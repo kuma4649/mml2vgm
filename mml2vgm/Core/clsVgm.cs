@@ -3267,16 +3267,17 @@ namespace Core
 
                 if (pl.type == eLfoType.Hardware)
                 {
-                    if ((cpw.chip is YM2612) || (cpw.chip is YM2612X))
-                    {
-                        cpw.fms = pl.param[2];
-                        cpw.ams = pl.param[3];
-                        ((ClsOPN)cpw.chip).OutOPNSetPanAMSPMS(null, cpw, (int)cpw.pan.val, cpw.ams, cpw.fms);
-                        cpw.chip.lstPartWork[0].hardLfoSw = true;
-                        cpw.chip.lstPartWork[0].hardLfoNum = pl.param[1];
-                        ((ClsOPN)cpw.chip).OutOPNSetHardLfo(null, cpw, cpw.hardLfoSw, cpw.hardLfoNum);
-                        pl.waitCounter = -1;
-                    }
+                    //if ((cpw.chip is YM2612) || (cpw.chip is YM2612X))
+                    //{
+                        //cpw.fms = pl.param[2];
+                        //cpw.ams = pl.param[3];
+                        //((ClsOPN)cpw.chip).OutOPNSetPanAMSPMS(null, cpw, (int)cpw.pan.val, cpw.ams, cpw.fms);
+                        //cpw.chip.lstPartWork[0].hardLfoSw = true;
+                        //cpw.chip.lstPartWork[0].hardLfoNum = pl.param[1];
+                        //((ClsOPN)cpw.chip).OutOPNSetHardLfo(null, cpw, cpw.chip.lstPartWork[0].hardLfoSw, cpw.chip.lstPartWork[0].hardLfoNum);
+                        //pl.waitCounter = -1;
+                    //}
+                    pl.waitCounter = -1;
                     continue;
                 }
 
