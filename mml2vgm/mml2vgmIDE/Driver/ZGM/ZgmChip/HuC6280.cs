@@ -9,7 +9,7 @@ namespace mml2vgmIDE.Driver.ZGM.ZgmChip
 {
     public class HuC6280 : ZgmChip
     {
-        public HuC6280(ChipRegister chipRegister, Setting setting, outDatum[] vgmBuf)
+        public HuC6280(ChipRegister chipRegister, Setting setting, outDatum[] vgmBuf):base(6)
         {
             this.chipRegister = chipRegister;
             this.setting = setting;

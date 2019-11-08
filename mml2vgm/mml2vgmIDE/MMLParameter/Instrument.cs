@@ -27,8 +27,9 @@ namespace mml2vgmIDE.MMLParameter
         public Queue<outDatum>[] TraceInfo;
         public outDatum[] TraceInfoOld;
         public bool isTrace;
+        public SoundManager.Chip chip;
 
-        public Instrument(int n)
+        public Instrument(int n, SoundManager.Chip chip)
         {
             ChCount = n;
             inst = new string[n];
@@ -50,9 +51,19 @@ namespace mml2vgmIDE.MMLParameter
             TraceInfo = new Queue<outDatum>[n];
             for (int i = 0; i < n; i++) TraceInfo[i] = new Queue<outDatum>();
             TraceInfoOld = new outDatum[n];
+            this.chip = chip;
         }
 
         public abstract void SetParameter(outDatum od, int cc);
+        
+        public void SetMute(int ch, bool flg)
+        {
+            if (chip == null) return;
+            if (chip.ChMasks == null) return;
+            if (ch < 0 || ch >= chip.ChMasks.Length) return;
+            chip.ChMasks[ch] = flg;
+        }
+
     }
 
 }

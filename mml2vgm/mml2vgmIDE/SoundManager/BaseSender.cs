@@ -7,7 +7,7 @@ namespace SoundManager
     {
         protected outDatum od = null;
         protected long Counter = 0;
-        protected Chip Chip = new Chip();
+        protected Chip Chip = new Chip(1);
         protected EnmDataType Type = 0;
         protected int Address = 0;
         protected int Data = 0;

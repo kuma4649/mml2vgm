@@ -350,7 +350,7 @@ namespace mml2vgmIDE
         /// <summary>
         /// ワーク用Chip(Chipはインスタンスの中身だけやりとりされる)
         /// </summary>
-        private Chip dummyChip = new Chip();
+        private Chip dummyChip = new Chip(1);
 
         private int volF = 1;
         //private MIDIExport midiExport = null;
@@ -415,7 +415,7 @@ namespace mml2vgmIDE
 
                         scAY8910[i] = realChip.GetRealChip(ctAY8910[i]);
                         if (scAY8910[i] != null) scAY8910[i].init();
-                        if (AY8910.Count < i + 1) AY8910.Add(new Chip());
+                        if (AY8910.Count < i + 1) AY8910.Add(new Chip(3));
                         AY8910[i].Model = ctAY8910[i].UseEmu ? EnmVRModel.VirtualModel : EnmVRModel.RealModel;
                         AY8910[i].Delay = (AY8910[i].Model == EnmVRModel.VirtualModel ? LEmu : LReal);
                     }
@@ -430,7 +430,7 @@ namespace mml2vgmIDE
 
                         scC140[i] = realChip.GetRealChip(ctC140[i]);
                         if (scC140[i] != null) scC140[i].init();
-                        if (C140.Count < i + 1) C140.Add(new Chip());
+                        if (C140.Count < i + 1) C140.Add(new Chip(24));
                         C140[i].Model = ctC140[i].UseEmu ? EnmVRModel.VirtualModel : EnmVRModel.RealModel;
                         C140[i].Delay = (C140[i].Model == EnmVRModel.VirtualModel ? LEmu : LReal);
                     }
@@ -445,7 +445,7 @@ namespace mml2vgmIDE
 
                         scHuC6280[i] = null;
                         if (scHuC6280[i] != null) scHuC6280[i].init();
-                        if (HuC6280.Count < i + 1) HuC6280.Add(new Chip());
+                        if (HuC6280.Count < i + 1) HuC6280.Add(new Chip(6));
                         HuC6280[i].Model = ctHuC6280[i].UseEmu ? EnmVRModel.VirtualModel : EnmVRModel.RealModel;
                         HuC6280[i].Delay = (HuC6280[i].Model == EnmVRModel.VirtualModel ? LEmu : LReal);
                     }
@@ -460,7 +460,7 @@ namespace mml2vgmIDE
 
                         scK051649[i] = null;
                         if (scK051649[i] != null) scK051649[i].init();
-                        if (K051649.Count < i + 1) K051649.Add(new Chip());
+                        if (K051649.Count < i + 1) K051649.Add(new Chip(5));
                         K051649[i].Model = ctK051649[i].UseEmu ? EnmVRModel.VirtualModel : EnmVRModel.RealModel;
                         K051649[i].Delay = (K051649[i].Model == EnmVRModel.VirtualModel ? LEmu : LReal);
                     }
@@ -475,7 +475,7 @@ namespace mml2vgmIDE
 
                         scK053260[i] = null;
                         if (scK053260[i] != null) scK053260[i].init();
-                        if (K053260.Count < i + 1) K053260.Add(new Chip());
+                        if (K053260.Count < i + 1) K053260.Add(new Chip(4));
                         K053260[i].Model = ctK053260[i].UseEmu ? EnmVRModel.VirtualModel : EnmVRModel.RealModel;
                         K053260[i].Delay = (K053260[i].Model == EnmVRModel.VirtualModel ? LEmu : LReal);
                     }
@@ -492,7 +492,7 @@ namespace mml2vgmIDE
                         if (scQSound[i] != null) scQSound[i].init();
                         if (ctQSound[i] != null)
                         {
-                            if (QSound.Count < i + 1) QSound.Add(new Chip());
+                            if (QSound.Count < i + 1) QSound.Add(new Chip(16));
                             QSound[i].Model = ctQSound[i].UseEmu ? EnmVRModel.VirtualModel : EnmVRModel.RealModel;
                             QSound[i].Delay = (QSound[i].Model == EnmVRModel.VirtualModel ? LEmu : LReal);
                         }
@@ -508,7 +508,7 @@ namespace mml2vgmIDE
 
                         scRF5C164[i] = null;
                         if (scRF5C164[i] != null) scRF5C164[i].init();
-                        if (RF5C164.Count < i + 1) RF5C164.Add(new Chip());
+                        if (RF5C164.Count < i + 1) RF5C164.Add(new Chip(8));
                         RF5C164[i].Model = ctRF5C164[i].UseEmu ? EnmVRModel.VirtualModel : EnmVRModel.RealModel;
                         RF5C164[i].Delay = (RF5C164[i].Model == EnmVRModel.VirtualModel ? LEmu : LReal);
                     }
@@ -523,7 +523,7 @@ namespace mml2vgmIDE
 
                         scSEGAPCM[i] = realChip.GetRealChip(ctSEGAPCM[i]);
                         if (scSEGAPCM[i] != null) scSEGAPCM[i].init();
-                        if (SEGAPCM.Count < i + 1) SEGAPCM.Add(new Chip());
+                        if (SEGAPCM.Count < i + 1) SEGAPCM.Add(new Chip(16));
                         SEGAPCM[i].Model = ctSEGAPCM[i].UseEmu ? EnmVRModel.VirtualModel : EnmVRModel.RealModel;
                         SEGAPCM[i].Delay = (SEGAPCM[i].Model == EnmVRModel.VirtualModel ? LEmu : LReal);
                     }
@@ -538,7 +538,7 @@ namespace mml2vgmIDE
 
                         scSN76489[i] = realChip.GetRealChip(ctSN76489[i]);
                         if (scSN76489[i] != null) scSN76489[i].init();
-                        if (SN76489.Count < i + 1) SN76489.Add(new Chip());
+                        if (SN76489.Count < i + 1) SN76489.Add(new Chip(4));
                         SN76489[i].Model = ctSN76489[i].UseEmu ? EnmVRModel.VirtualModel : EnmVRModel.RealModel;
                         SN76489[i].Delay = (SN76489[i].Model == EnmVRModel.VirtualModel ? LEmu : LReal);
                     }
@@ -553,7 +553,7 @@ namespace mml2vgmIDE
 
                         scYM2151[i] = realChip.GetRealChip(ctYM2151[i]);
                         if (scYM2151[i] != null) scYM2151[i].init();
-                        if (YM2151.Count < i + 1) YM2151.Add(new Chip());
+                        if (YM2151.Count < i + 1) YM2151.Add(new Chip(8));
                         YM2151[i].Model = (ctYM2151[i].UseEmu || ctYM2151[i].UseEmu2 || ctYM2151[i].UseEmu3) ? EnmVRModel.VirtualModel : EnmVRModel.RealModel;
                         YM2151[i].Delay = (YM2151[i].Model == EnmVRModel.VirtualModel ? LEmu : LReal);
                     }
@@ -568,7 +568,7 @@ namespace mml2vgmIDE
 
                         scYM2203[i] = realChip.GetRealChip(ctYM2203[i]);
                         if (scYM2203[i] != null) scYM2203[i].init();
-                        if (YM2203.Count < i + 1) YM2203.Add(new Chip());
+                        if (YM2203.Count < i + 1) YM2203.Add(new Chip(9));
                         YM2203[i].Model = ctYM2203[i].UseEmu ? EnmVRModel.VirtualModel : EnmVRModel.RealModel;
                         YM2203[i].Delay = (YM2203[i].Model == EnmVRModel.VirtualModel ? LEmu : LReal);
 
@@ -584,7 +584,7 @@ namespace mml2vgmIDE
 
                         scYM2413[i] = realChip.GetRealChip(ctYM2413[i]);
                         if (scYM2413[i] != null) scYM2413[i].init();
-                        if (YM2413.Count < i + 1) YM2413.Add(new Chip());
+                        if (YM2413.Count < i + 1) YM2413.Add(new Chip(14));
                         YM2413[i].Model = ctYM2413[i].UseEmu ? EnmVRModel.VirtualModel : EnmVRModel.RealModel;
                         YM2413[i].Delay = (YM2413[i].Model == EnmVRModel.VirtualModel ? LEmu : LReal);
                     }
@@ -599,7 +599,7 @@ namespace mml2vgmIDE
 
                         scYM2608[i] = realChip.GetRealChip(ctYM2608[i]);
                         if (scYM2608[i] != null) scYM2608[i].init();
-                        if (YM2608.Count < i + 1) YM2608.Add(new Chip());
+                        if (YM2608.Count < i + 1) YM2608.Add(new Chip(6+3+3+6+1));
                         YM2608[i].Model = ctYM2608[i].UseEmu ? EnmVRModel.VirtualModel : EnmVRModel.RealModel;
                         YM2608[i].Delay = (YM2608[i].Model == EnmVRModel.VirtualModel ? LEmu : LReal);
                     }
@@ -614,7 +614,7 @@ namespace mml2vgmIDE
 
                         scYM2609[i] = realChip.GetRealChip(ctYM2609[i]);
                         if (scYM2609[i] != null) scYM2609[i].init();
-                        if (YM2609.Count < i + 1) YM2609.Add(new Chip());
+                        if (YM2609.Count < i + 1) YM2609.Add(new Chip(12+6+12+6+3));
                         YM2609[i].Model = ctYM2609[i].UseEmu ? EnmVRModel.VirtualModel : EnmVRModel.RealModel;
                         YM2609[i].Delay = (YM2609[i].Model == EnmVRModel.VirtualModel ? LEmu : LReal);
                     }
@@ -633,7 +633,7 @@ namespace mml2vgmIDE
                         if (scYM2610EA[i] != null) scYM2610EA[i].init();
                         scYM2610EB[i] = realChip.GetRealChip(ctYM2610[i], 2);
                         if (scYM2610EB[i] != null) scYM2610EB[i].init();
-                        if (YM2610.Count < i + 1) YM2610.Add(new Chip());
+                        if (YM2610.Count < i + 1) YM2610.Add(new Chip(6+3+3+6+1));
                         YM2610[i].Model = ctYM2610[i].UseEmu ? EnmVRModel.VirtualModel : EnmVRModel.RealModel;
                         YM2610[i].Delay = (YM2610[i].Model == EnmVRModel.VirtualModel ? LEmu : LReal);
                     }
@@ -648,7 +648,7 @@ namespace mml2vgmIDE
 
                         scYM2612[i] = realChip.GetRealChip(ctYM2612[i]);
                         if (scYM2612[i] != null) scYM2612[i].init();
-                        if (YM2612.Count < i + 1) YM2612.Add(new Chip());
+                        if (YM2612.Count < i + 1) YM2612.Add(new Chip(6 + 3));
                         YM2612[i].Model = ctYM2612[i].UseScci ? EnmVRModel.RealModel : EnmVRModel.VirtualModel;
                         YM2612[i].Delay = (YM2612[i].Model == EnmVRModel.VirtualModel ? LEmu : LReal);
                     }
@@ -700,119 +700,119 @@ namespace mml2vgmIDE
             
             for (int i = 0; i < 2; i++)
             {
-                if (CONDUCTOR.Count < i + 1) CONDUCTOR.Add(new Chip());
+                if (CONDUCTOR.Count < i + 1) CONDUCTOR.Add(new Chip(2));
                 CONDUCTOR[i].Use = false;
                 CONDUCTOR[i].Model = EnmVRModel.None;
                 CONDUCTOR[i].Device = EnmZGMDevice.Conductor;
                 CONDUCTOR[i].Number = i;
                 CONDUCTOR[i].Hosei = 0;
 
-                if (AY8910.Count < i + 1) AY8910.Add(new Chip());
+                if (AY8910.Count < i + 1) AY8910.Add(new Chip(3));
                 AY8910[i].Use = false;
                 AY8910[i].Model = EnmVRModel.None;
                 AY8910[i].Device = EnmZGMDevice.AY8910;
                 AY8910[i].Number = i;
                 AY8910[i].Hosei = 0;
 
-                if (C140.Count < i + 1) C140.Add(new Chip());
+                if (C140.Count < i + 1) C140.Add(new Chip(24));
                 C140[i].Use = false;
                 C140[i].Model = EnmVRModel.None;
                 C140[i].Device = EnmZGMDevice.C140;
                 C140[i].Number = i;
                 C140[i].Hosei = 0;
 
-                if (HuC6280.Count < i + 1) HuC6280.Add(new Chip());
+                if (HuC6280.Count < i + 1) HuC6280.Add(new Chip(6));
                 HuC6280[i].Use = false;
                 HuC6280[i].Model = EnmVRModel.None;
                 HuC6280[i].Device = EnmZGMDevice.HuC6280;
                 HuC6280[i].Number = i;
                 HuC6280[i].Hosei = 0;
 
-                if (K051649.Count < i + 1) K051649.Add(new Chip());
+                if (K051649.Count < i + 1) K051649.Add(new Chip(5));
                 K051649[i].Use = false;
                 K051649[i].Model = EnmVRModel.None;
                 K051649[i].Device = EnmZGMDevice.K051649;
                 K051649[i].Number = i;
                 K051649[i].Hosei = 0;
 
-                if (K053260.Count < i + 1) K053260.Add(new Chip());
+                if (K053260.Count < i + 1) K053260.Add(new Chip(4));
                 K053260[i].Use = false;
                 K053260[i].Model = EnmVRModel.None;
                 K053260[i].Device = EnmZGMDevice.K053260;
                 K053260[i].Number = i;
                 K053260[i].Hosei = 0;
 
-                if (QSound.Count < i + 1) QSound.Add(new Chip());
+                if (QSound.Count < i + 1) QSound.Add(new Chip(16));
                 QSound[i].Use = false;
                 QSound[i].Model = EnmVRModel.None;
                 QSound[i].Device = EnmZGMDevice.QSound;
                 QSound[i].Number = i;
                 QSound[i].Hosei = 0;
 
-                if (RF5C164.Count < i + 1) RF5C164.Add(new Chip());
+                if (RF5C164.Count < i + 1) RF5C164.Add(new Chip(8));
                 RF5C164[i].Use = false;
                 RF5C164[i].Model = EnmVRModel.None;
                 RF5C164[i].Device = EnmZGMDevice.RF5C164;
                 RF5C164[i].Number = i;
                 RF5C164[i].Hosei = 0;
 
-                if (SEGAPCM.Count < i + 1) SEGAPCM.Add(new Chip());
+                if (SEGAPCM.Count < i + 1) SEGAPCM.Add(new Chip(16));
                 SEGAPCM[i].Use = false;
                 SEGAPCM[i].Model = EnmVRModel.None;
                 SEGAPCM[i].Device = EnmZGMDevice.SegaPCM;
                 SEGAPCM[i].Number = i;
                 SEGAPCM[i].Hosei = 0;
 
-                if (YM2151.Count < i + 1) YM2151.Add(new Chip());
+                if (YM2151.Count < i + 1) YM2151.Add(new Chip(8));
                 YM2151[i].Use = false;
                 YM2151[i].Model = EnmVRModel.None;
                 YM2151[i].Device = EnmZGMDevice.YM2151;
                 YM2151[i].Number = i;
                 YM2151[i].Hosei = 0;
 
-                if (YM2203.Count < i + 1) YM2203.Add(new Chip());
+                if (YM2203.Count < i + 1) YM2203.Add(new Chip(9));
                 YM2203[i].Use = false;
                 YM2203[i].Model = EnmVRModel.None;
                 YM2203[i].Device = EnmZGMDevice.YM2203;
                 YM2203[i].Number = i;
                 YM2203[i].Hosei = 0;
 
-                if (YM2413.Count < i + 1) YM2413.Add(new Chip());
+                if (YM2413.Count < i + 1) YM2413.Add(new Chip(14));
                 YM2413[i].Use = false;
                 YM2413[i].Model = EnmVRModel.None;
                 YM2413[i].Device = EnmZGMDevice.YM2413;
                 YM2413[i].Number = i;
                 YM2413[i].Hosei = 0;
 
-                if (YM2608.Count < i + 1) YM2608.Add(new Chip());
+                if (YM2608.Count < i + 1) YM2608.Add(new Chip(6+3+3+6+1));
                 YM2608[i].Use = false;
                 YM2608[i].Model = EnmVRModel.None;
                 YM2608[i].Device = EnmZGMDevice.YM2608;
                 YM2608[i].Number = i;
                 YM2608[i].Hosei = 0;
 
-                if (YM2609.Count < i + 1) YM2609.Add(new Chip());
+                if (YM2609.Count < i + 1) YM2609.Add(new Chip(12+6+12+6+3));
                 YM2609[i].Use = false;
                 YM2609[i].Model = EnmVRModel.None;
                 YM2609[i].Device = EnmZGMDevice.YM2609;
                 YM2609[i].Number = i;
                 YM2609[i].Hosei = 0;
 
-                if (YM2610.Count < i + 1) YM2610.Add(new Chip());
+                if (YM2610.Count < i + 1) YM2610.Add(new Chip(6+3+3+6+1));
                 YM2610[i].Use = false;
                 YM2610[i].Model = EnmVRModel.None;
                 YM2610[i].Device = EnmZGMDevice.YM2610;
                 YM2610[i].Number = i;
                 YM2610[i].Hosei = 0;
 
-                if (YM2612.Count < i + 1) YM2612.Add(new Chip());
+                if (YM2612.Count < i + 1) YM2612.Add(new Chip(6+3));
                 YM2612[i].Use = false;
                 YM2612[i].Model = EnmVRModel.None;
                 YM2612[i].Device = EnmZGMDevice.YM2612;
                 YM2612[i].Number = i;
                 YM2612[i].Hosei = 0;
 
-                if (SN76489.Count < i + 1) SN76489.Add(new Chip());
+                if (SN76489.Count < i + 1) SN76489.Add(new Chip(4));
                 SN76489[i].Use = false;
                 SN76489[i].Model = EnmVRModel.None;
                 SN76489[i].Device = EnmZGMDevice.SN76489;
@@ -820,7 +820,7 @@ namespace mml2vgmIDE
                 SN76489[i].Hosei = 0;
             }
 
-            if (MIDI.Count < 1) MIDI.Add(new Chip());
+            if (MIDI.Count < 1) MIDI.Add(new Chip(100));
             MIDI[0].Use = false;
             MIDI[0].Model = EnmVRModel.None;
             MIDI[0].Device = EnmZGMDevice.MIDIGM;
@@ -916,7 +916,7 @@ namespace mml2vgmIDE
                     YM2608SetRegisterProcessing(ref Counter, ref Chip, ref Type, ref Address, ref Data, ref ExData);
                     break;
                 case EnmZGMDevice.YM2609:
-                    YM2609SetRegisterProcessing(ref Counter, ref Chip, ref Type, ref Address, ref Data, ref ExData);
+                    YM2609SetRegisterProcessing(ref od, ref Counter, ref Chip, ref Type, ref Address, ref Data, ref ExData);
                     break;
                 case EnmZGMDevice.YM2610:
                     YM2610SetRegisterProcessing(ref Counter, ref Chip, ref Type, ref Address, ref Data, ref ExData);
@@ -3919,12 +3919,7 @@ namespace mml2vgmIDE
 
         public void YM2608SetRegister(outDatum od, long Counter, int ChipID, int dPort, int dAddr, int dData)
         {
-            dummyChip.Model = YM2608[ChipID].Model;
-            dummyChip.Delay = YM2608[ChipID].Delay;
-            dummyChip.Device = YM2608[ChipID].Device;
-            dummyChip.Index = YM2608[ChipID].Index;
-            dummyChip.Number = YM2608[ChipID].Number;
-            dummyChip.Use = YM2608[ChipID].Use;
+            dummyChip.Move(YM2608[ChipID]);
 
             int address = dPort * 0x100 + dAddr;
             if ((address >= 0x100 && address <= 0x110) && ctYM2608[0].OnlyPCMEmulation)
@@ -4556,12 +4551,7 @@ namespace mml2vgmIDE
 
         public void YM2610SetRegister(outDatum od, long Counter, int ChipID, int dPort, int dAddr, int dData)
         {
-            dummyChip.Model = YM2610[ChipID].Model;
-            dummyChip.Delay = YM2610[ChipID].Delay;
-            dummyChip.Device = YM2610[ChipID].Device;
-            dummyChip.Index = YM2610[ChipID].Index;
-            dummyChip.Number = YM2610[ChipID].Number;
-            dummyChip.Use = YM2610[ChipID].Use;
+            dummyChip.Move(YM2610[ChipID]);
 
             int address = dPort * 0x100 + dAddr;
             if ((
@@ -4585,12 +4575,7 @@ namespace mml2vgmIDE
 
         public void YM2610WriteSetAdpcmA(outDatum od, long Counter,int ChipID, byte[] ym2610AdpcmA)
         {
-            dummyChip.Model = YM2610[ChipID].Model;
-            dummyChip.Delay = YM2610[ChipID].Delay;
-            dummyChip.Device = YM2610[ChipID].Device;
-            dummyChip.Index = YM2610[ChipID].Index;
-            dummyChip.Number = YM2610[ChipID].Number;
-            dummyChip.Use = YM2610[ChipID].Use;
+            dummyChip.Move(YM2610[ChipID]);
             
             if (ctYM2610[0].OnlyPCMEmulation)
             {
@@ -4603,12 +4588,8 @@ namespace mml2vgmIDE
 
         public void YM2610WriteSetAdpcmB(outDatum od, long Counter, int ChipID, byte[] ym2610AdpcmB)
         {
-            dummyChip.Model = YM2610[ChipID].Model;
-            dummyChip.Delay = YM2610[ChipID].Delay;
-            dummyChip.Device = YM2610[ChipID].Device;
-            dummyChip.Index = YM2610[ChipID].Index;
-            dummyChip.Number = YM2610[ChipID].Number;
-            dummyChip.Use = YM2610[ChipID].Use;
+            dummyChip.Move(YM2610[ChipID]);
+
             if (ctYM2610[0].OnlyPCMEmulation)
             {
                 dummyChip.Model = EnmVRModel.VirtualModel;
@@ -4857,7 +4838,7 @@ namespace mml2vgmIDE
             }
         }
 
-        public void YM2609SetRegisterProcessing(ref long Counter, ref Chip Chip, ref EnmDataType Type, ref int Address, ref int dData, ref object ExData)
+        public void YM2609SetRegisterProcessing(ref outDatum od, ref long Counter, ref Chip Chip, ref EnmDataType Type, ref int Address, ref int dData, ref object ExData)
         {
             if (ctYM2609 == null) return;
             if (Address == -1 && dData == -1) return;
@@ -4865,16 +4846,88 @@ namespace mml2vgmIDE
             if (Chip.Number == 0) chipLED.PriOPNA = 2;
             else chipLED.SecOPNA = 2;
 
+            if (Type != EnmDataType.Normal) return;
+
+            int ch = -1;
+
+            //FM ch<18
+            if (Address == 0x28 || Address == 0x228)
+            {
+                ch = dData & 0x3;
+                ch += ((dData & 0x4) == 0) ? 0 : 3;
+                ch += (Address == 0x228) ? 9 : 0;
+
+                if (Chip.ChMasks[ch]) dData &= 0xf;
+            }
+
+            //SSG ch<30
+            int adl = Address & 0x00f;
+            if (adl == 8 || adl == 9 || adl == 10)
+            {
+                int adr = Address & 0x3f0;
+
+                //SSG1
+                if (adr == 0x000)
+                {
+                    ch = adl - 8 + 18 + 0;
+                    if (Chip.ChMasks[ch])
+                        dData = 0;
+                }
+                //SSG2
+                else if (adr == 0x120)
+                {
+                    ch = adl - 8 + 18 + 3;
+                    if (Chip.ChMasks[ch]) dData = 0;
+                }
+                //SSG3
+                else if (adr == 0x200)
+                {
+                    ch = adl - 8 + 18 + 6;
+                    if (Chip.ChMasks[ch]) dData = 0;
+                }
+                //SSG4
+                else if (adr == 0x210)
+                {
+                    ch = adl - 8 + 18 + 9;
+                    if (Chip.ChMasks[ch]) dData = 0;
+                }
+            }
+
+            //リズム ch<36
+            if (Address == 0x10)
+            {
+                byte mask = 0x80;
+                for (int i = 0; i < 6; i++)
+                {
+                    mask |= (byte)((Chip.ChMasks[i + 30] ? 0 : 1) << i);
+                }
+
+                dData &= mask;
+            }
+
+            //ADPCM1 ch=36
+            if (Address == 0x100)
+            {
+                if (Chip.ChMasks[36]) dData &= 0x7f;
+            }
+
+            //ADPCM2 ch=37
+            if (Address == 0x300)
+            {
+                if (Chip.ChMasks[37]) dData &= 0x7f;
+            }
+            //ADPCM3 ch=38
+            if (Address == 0x311)
+            {
+                if (Chip.ChMasks[38]) dData &= 0x7f;
+            }
+            //18+12+6+3
+
         }
 
         public void YM2609SetRegister(outDatum od, long Counter, int ChipID, int dPort, int dAddr, int dData)
         {
-            dummyChip.Model = YM2609[ChipID].Model;
-            dummyChip.Delay = YM2609[ChipID].Delay;
-            dummyChip.Device = YM2609[ChipID].Device;
-            dummyChip.Index = YM2609[ChipID].Index;
-            dummyChip.Number = YM2609[ChipID].Number;
-            dummyChip.Use = YM2609[ChipID].Use;
+            dummyChip.Move(YM2609[ChipID]);
 
             int address = dPort * 0x100 + dAddr;
             if ((address >= 0x100 && address <= 0x110) && ctYM2609[0].OnlyPCMEmulation)
@@ -5314,12 +5367,7 @@ namespace mml2vgmIDE
 
         public void YM2612SetRegister(outDatum od, long Counter, int ChipID, int dPort, int dAddr, int dData)
         {
-            dummyChip.Model = YM2612[ChipID].Model;
-            dummyChip.Delay = YM2612[ChipID].Delay;
-            dummyChip.Device = YM2612[ChipID].Device;
-            dummyChip.Index = YM2612[ChipID].Index;
-            dummyChip.Number = YM2612[ChipID].Number;
-            dummyChip.Use = YM2612[ChipID].Use;
+            dummyChip.Move(YM2612[ChipID]);
 
             if (ctYM2612[0].OnlyPCMEmulation)
             {
@@ -5358,11 +5406,8 @@ namespace mml2vgmIDE
 
         public void YM2612SetRegisterXGM(long Counter, int dData)
         {
+            dummyChip.Move(YM2612[0]);
             dummyChip.Model = EnmVRModel.VirtualModel;
-            dummyChip.Delay = YM2612[0].Delay;
-            dummyChip.Device = YM2612[0].Device;
-            dummyChip.Number = YM2612[0].Number;
-            dummyChip.Use = YM2612[0].Use;
 
             enq(null, Counter, dummyChip, EnmDataType.Normal, 0x2a, dData, null);
         }
@@ -6086,12 +6131,7 @@ namespace mml2vgmIDE
 
         public void MIDISetRegister(outDatum od, long Counter, int ChipID, int dPort, byte[] dData)
         {
-            dummyChip.Model = MIDI[ChipID].Model;
-            dummyChip.Delay = MIDI[ChipID].Delay;
-            dummyChip.Device = MIDI[ChipID].Device;
-            dummyChip.Index = MIDI[ChipID].Index;
-            dummyChip.Number = MIDI[ChipID].Number;
-            dummyChip.Use = MIDI[ChipID].Use;
+            dummyChip.Move(MIDI[ChipID]);
 
             enq(od, Counter, dummyChip, EnmDataType.Normal, dPort, 0, dData);
         }

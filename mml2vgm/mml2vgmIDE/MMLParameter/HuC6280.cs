@@ -9,7 +9,7 @@ namespace mml2vgmIDE.MMLParameter
 {
     public class HuC6280 : Instrument
     {
-        public HuC6280() : base(6)
+        public HuC6280(SoundManager.Chip chip) : base(6,chip)
         {
             for (int i = 0; i < 6; i++)
             {

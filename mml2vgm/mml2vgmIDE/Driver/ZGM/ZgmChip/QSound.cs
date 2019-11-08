@@ -9,7 +9,7 @@ namespace mml2vgmIDE.Driver.ZGM.ZgmChip
 {
     public class QSound : ZgmChip
     {
-        public QSound(ChipRegister chipRegister, Setting setting, outDatum[] vgmBuf)
+        public QSound(ChipRegister chipRegister, Setting setting, outDatum[] vgmBuf):base(16)
         {
             this.chipRegister = chipRegister;
             this.setting = setting;

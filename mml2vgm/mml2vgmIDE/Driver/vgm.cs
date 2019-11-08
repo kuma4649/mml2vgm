@@ -906,13 +906,8 @@ namespace mml2vgmIDE
                             //chipRegister.setYM2608Register(0x1, 0x00, 0x00, model);
                             //chipRegister.setYM2608Register(0x1, 0x10, 0x80, model);
 
-                            Chip dummyChip = new Chip();
-
-                            dummyChip.Model = chipRegister.YM2608[chipID].Model;
-                            dummyChip.Delay = chipRegister.YM2608[chipID].Delay;
-                            dummyChip.Device = chipRegister.YM2608[chipID].Device;
-                            dummyChip.Number = chipRegister.YM2608[chipID].Number;
-                            dummyChip.Use = chipRegister.YM2608[chipID].Use;
+                            Chip dummyChip = new Chip(1);
+                            dummyChip.Move(chipRegister.YM2608[chipID]);
 
                             if (chipRegister.YM2608[chipID].Model == EnmVRModel.RealModel)
                             {

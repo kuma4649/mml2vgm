@@ -9,7 +9,7 @@ namespace mml2vgmIDE.MMLParameter
 {
     public class K053260 : Instrument
     {
-        public K053260() : base(4)
+        public K053260(SoundManager.Chip chip) : base(4,chip)
         {
             for (int i = 0; i < 4; i++)
             {

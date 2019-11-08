@@ -18,6 +18,26 @@ namespace SoundManager
         public int Number;
         public int Hosei;
 
+        private object lockobj = new object();
+        private bool[] _ChMasks = null;
+        public bool[] ChMasks
+        {
+            set
+            {
+                lock (lockobj) { _ChMasks = value; }
+            }
+            get
+            {
+                lock (lockobj) { return _ChMasks; }
+            }
+        }
+
+        public Chip(int Ch)
+        {
+            ChMasks = new bool[Ch];
+        }
+
+
         public void Move(Chip chip)
         {
             if (chip == null) return;
@@ -29,6 +49,7 @@ namespace SoundManager
             this.Index = chip.Index;
             this.Number = chip.Number;
             this.Hosei = chip.Hosei;
+            this.ChMasks = chip.ChMasks;
         }
     }
 }

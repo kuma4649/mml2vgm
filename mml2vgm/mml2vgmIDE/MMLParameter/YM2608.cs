@@ -6,7 +6,7 @@ namespace mml2vgmIDE.MMLParameter
 {
     public class YM2608 : Instrument
     {
-        public YM2608() : base(19)
+        public YM2608(SoundManager.Chip chip) : base(19,chip)
         {
             for (int i = 0; i < 19; i++)
             {

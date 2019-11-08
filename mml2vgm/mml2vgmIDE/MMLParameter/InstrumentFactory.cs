@@ -13,7 +13,7 @@ namespace mml2vgmIDE.MMLParameter
             switch (name)
             {
                 case "YM2612":
-                    return new YM2612();
+                    //return new YM2612();
                 default:
                     throw new ArgumentException();
             }

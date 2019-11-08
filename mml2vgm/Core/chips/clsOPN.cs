@@ -1567,7 +1567,7 @@ namespace Core
                     switch (octMml.type)
                     {
                         case enmMMLType.Octave:
-                            oct = 0;
+                            oct = (int)octMml.args[0];
                             break;
                         case enmMMLType.OctaveUp:
                             oct++;

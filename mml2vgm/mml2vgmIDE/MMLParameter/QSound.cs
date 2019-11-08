@@ -9,7 +9,7 @@ namespace mml2vgmIDE.MMLParameter
 {
     public class QSound : Instrument
     {
-        public QSound() : base(16)
+        public QSound(SoundManager.Chip chip) : base(16,chip)
         {
             for (int i = 0; i < 16; i++)
             {

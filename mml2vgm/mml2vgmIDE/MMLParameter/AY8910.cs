@@ -9,7 +9,7 @@ namespace mml2vgmIDE.MMLParameter
 {
     public class AY8910 : Instrument
     {
-        public AY8910() : base(3)
+        public AY8910(SoundManager.Chip chip) : base(3,chip)
         {
             for (int i = 0; i < 3; i++)
             {

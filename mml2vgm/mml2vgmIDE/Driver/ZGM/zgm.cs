@@ -508,13 +508,8 @@ namespace mml2vgmIDE.Driver.ZGM
                     data.Add(new PackData(null, chipRegister.YM2609[chip.Index], 0, adpcmAdr + 0x00, 0x00, null));
                     data.Add(new PackData(null, chipRegister.YM2609[chip.Index], 0, adpcmAdr + 0x10, 0x80, null));
 
-                    SoundManager.Chip dummyChip = new SoundManager.Chip();
-
-                    dummyChip.Model = chipRegister.YM2609[chip.Index].Model;
-                    dummyChip.Delay = chipRegister.YM2609[chip.Index].Delay;
-                    dummyChip.Device = chipRegister.YM2609[chip.Index].Device;
-                    dummyChip.Number = chipRegister.YM2609[chip.Index].Number;
-                    dummyChip.Use = chipRegister.YM2609[chip.Index].Use;
+                    SoundManager.Chip dummyChip = new SoundManager.Chip(1);
+                    dummyChip.Move(chipRegister.YM2609[chip.Index]);
 
                     chipRegister.YM2609SetRegister(od, Audio.DriverSeqCounter, dummyChip, data.ToArray());
 
@@ -583,7 +578,7 @@ namespace mml2vgmIDE.Driver.ZGM
                     //chipRegister.setYM2608Register(0x1, 0x00, 0x00, model);
                     //chipRegister.setYM2608Register(0x1, 0x10, 0x80, model);
 
-                    SoundManager.Chip opna_dummyChip = new SoundManager.Chip();
+                    SoundManager.Chip opna_dummyChip = new SoundManager.Chip(1);
 
                     opna_dummyChip.Model = chipRegister.YM2608[chip.Index].Model;
                     opna_dummyChip.Delay = chipRegister.YM2608[chip.Index].Delay;

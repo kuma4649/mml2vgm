@@ -10,7 +10,7 @@ namespace mml2vgmIDE.MMLParameter
     public class Conductor : Instrument
     {
 
-        public Conductor() : base(2)
+        public Conductor(SoundManager.Chip chip) : base(2,chip)
         {
             for (int i = 0; i < 2; i++)
             {

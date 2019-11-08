@@ -9,7 +9,7 @@ namespace mml2vgmIDE.MMLParameter
 {
     public class YM2203 : Instrument
     {
-        public YM2203() : base(9)
+        public YM2203(SoundManager.Chip chip) : base(9,chip)
         {
             for (int i = 0; i < 9; i++)
             {

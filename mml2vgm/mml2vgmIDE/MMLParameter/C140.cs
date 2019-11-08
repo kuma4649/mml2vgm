@@ -9,7 +9,7 @@ namespace mml2vgmIDE.MMLParameter
 {
     public class C140 : Instrument
     {
-        public C140() : base(24)
+        public C140(SoundManager.Chip chip) : base(24,chip)
         {
             for (int i = 0; i < 24; i++)
             {

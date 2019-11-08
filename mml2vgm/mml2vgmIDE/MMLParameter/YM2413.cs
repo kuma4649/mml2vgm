@@ -9,7 +9,7 @@ namespace mml2vgmIDE.MMLParameter
 {
     public class YM2413 : Instrument
     {
-        public YM2413():base(14)
+        public YM2413(SoundManager.Chip chip) :base(14,chip)
         {
             for (int i = 0; i < 14; i++)
             {

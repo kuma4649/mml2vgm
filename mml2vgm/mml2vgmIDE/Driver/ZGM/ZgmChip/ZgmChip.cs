@@ -16,7 +16,11 @@ namespace mml2vgmIDE.Driver.ZGM.ZgmChip
         public string name;
         public Core.DefineInfo defineInfo;
 
-        public virtual void Setup(int chipIndex,ref uint dataPos, ref Dictionary<int,Driver.ZGM.zgm.RefAction<outDatum, uint>> cmdTable)
+        public ZgmChip(int ch) : base(ch)
+        {
+        }
+
+        public virtual void Setup(int chipIndex, ref uint dataPos, ref Dictionary<int, Driver.ZGM.zgm.RefAction<outDatum, uint>> cmdTable)
         {
             this.Index = chipIndex;
             defineInfo = new Core.DefineInfo();

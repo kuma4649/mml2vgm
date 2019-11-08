@@ -71,7 +71,7 @@ namespace mml2vgmIDE
         }
 
         public static RealChip realChip;
-        private static ChipRegister chipRegister = null;
+        public static ChipRegister chipRegister = null;
         public static HashSet<EnmChip> useChip = new HashSet<EnmChip>();
 
 

@@ -9,7 +9,7 @@ namespace mml2vgmIDE.Driver.ZGM.ZgmChip
 {
     public class K051649 : ZgmChip
     {
-        public K051649(ChipRegister chipRegister, Setting setting, outDatum[] vgmBuf)
+        public K051649(ChipRegister chipRegister, Setting setting, outDatum[] vgmBuf):base(5)
         {
             this.chipRegister = chipRegister;
             this.setting = setting;

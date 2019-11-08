@@ -12,7 +12,7 @@ namespace SoundManager
         /// <summary>
         /// Emuチップ / 実チップ
         /// </summary>
-        public Chip Chip=new Chip();
+        public Chip Chip=new Chip(1);
 
         /// <summary>
         /// データの種類

@@ -10,7 +10,7 @@ namespace mml2vgmIDE.Driver.ZGM.ZgmChip
     public class Conductor : ZgmChip
     {
 
-        public Conductor(ChipRegister chipRegister, Setting setting, outDatum[] vgmBuf)
+        public Conductor(ChipRegister chipRegister, Setting setting, outDatum[] vgmBuf) : base(2)
         {
             this.chipRegister = chipRegister;
             this.setting = setting;

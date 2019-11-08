@@ -9,7 +9,7 @@ namespace mml2vgmIDE.Driver.ZGM.ZgmChip
 {
     public class YM2203:ZgmChip
     {
-        public YM2203(ChipRegister chipRegister, Setting setting, outDatum[] vgmBuf)
+        public YM2203(ChipRegister chipRegister, Setting setting, outDatum[] vgmBuf):base(9)
         {
             this.chipRegister = chipRegister;
             this.setting = setting;
