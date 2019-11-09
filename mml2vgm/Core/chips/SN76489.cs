@@ -12,7 +12,7 @@ namespace Core
         };
         private int beforePanData = -1;
 
-        public SN76489(ClsVgm parent, int chipID, string initialPartName, string stPath, int isSecondary) : base(parent, chipID, initialPartName, stPath, isSecondary)
+        public SN76489(ClsVgm parent, int chipID, string initialPartName, string stPath, int chipNumber) : base(parent, chipID, initialPartName, stPath, chipNumber)
         {
             _Name = "SN76489";
             _ShortName = "DCSG";
@@ -21,12 +21,12 @@ namespace Core
             _canUsePI = false;
             FNumTbl = _FNumTbl;
             port =new byte[][]{
-                new byte[] { (byte)(isSecondary!=0 ? 0x30 : 0x50) }
-                , new byte[] { (byte)(isSecondary!=0 ? 0x3f : 0x4f) }
+                new byte[] { (byte)(chipNumber!=0 ? 0x30 : 0x50) }
+                , new byte[] { (byte)(chipNumber!=0 ? 0x3f : 0x4f) }
             };
 
             Frequency = 3579545;
-            this.IsSecondary = isSecondary;
+            this.ChipNumber = chipNumber;
 
             Envelope = new Function();
             Envelope.Max = 15;
@@ -50,7 +50,7 @@ namespace Core
             foreach (ClsChannel ch in Ch)
             {
                 ch.Type = enmChannelType.DCSG;
-                ch.isSecondary = chipID == 1;
+                ch.chipNumber = chipID == 1;
             }
             Ch[3].Type = enmChannelType.DCSGNOISE;
 

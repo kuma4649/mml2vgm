@@ -8,7 +8,7 @@ namespace Core
 {
     public class Conductor : ClsChip
     {
-        public Conductor(ClsVgm parent, int chipID, string initialPartName, string stPath, int isSecondary) : base(parent, chipID, initialPartName, stPath, isSecondary)
+        public Conductor(ClsVgm parent, int chipID, string initialPartName, string stPath, int chipNumber) : base(parent, chipID, initialPartName, stPath, chipNumber)
         {
             _chipType = enmChipType.CONDUCTOR;
             _Name = "CONDUCTOR";
@@ -16,7 +16,7 @@ namespace Core
             _ChMax = 2;
             _canUsePcm = false;
             _canUsePI = false;
-            IsSecondary = isSecondary;
+            ChipNumber = chipNumber;
 
             Frequency = 44100;
             port = new byte[][]{
@@ -30,7 +30,7 @@ namespace Core
             foreach (ClsChannel ch in Ch)
             {
                 ch.Type = enmChannelType.SSG;
-                ch.isSecondary = chipID == 1;
+                ch.chipNumber = chipID == 1;
                 ch.MaxVolume = 15;
             }
 

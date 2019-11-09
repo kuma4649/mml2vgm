@@ -18,7 +18,7 @@ namespace Core
         public const string FMF_NUM = "FMF-NUM";
 
 
-        public YM2612(ClsVgm parent, int chipID, string initialPartName, string stPath, int isSecondary) : base(parent, chipID, initialPartName, stPath, isSecondary)
+        public YM2612(ClsVgm parent, int chipID, string initialPartName, string stPath, int chipNumber) : base(parent, chipID, initialPartName, stPath, chipNumber)
         {
             _chipType = enmChipType.YM2612;
             _Name = "YM2612";
@@ -27,12 +27,12 @@ namespace Core
             _canUsePcm = true;
             _canUsePI = false;
             FNumTbl = _FNumTbl;
-            IsSecondary = isSecondary;
+            ChipNumber = chipNumber;
 
             Frequency = 7670454;
             port = new byte[][]{
-                new byte[] { (byte)(0x2 | (isSecondary!=0 ? 0xa0 : 0x50)) }
-                , new byte[] { (byte)(0x3 | (isSecondary!=0 ? 0xa0 : 0x50)) }
+                new byte[] { (byte)(0x2 | (chipNumber!=0 ? 0xa0 : 0x50)) }
+                , new byte[] { (byte)(0x3 | (chipNumber!=0 ? 0xa0 : 0x50)) }
             };
 
             if (string.IsNullOrEmpty(initialPartName)) return;
@@ -54,7 +54,7 @@ namespace Core
             foreach (ClsChannel ch in Ch)
             {
                 ch.Type = enmChannelType.FMOPN;
-                ch.isSecondary = chipID == 1;
+                ch.chipNumber = chipID == 1;
             }
 
             Ch[2].Type = enmChannelType.FMOPNex;
@@ -227,7 +227,7 @@ namespace Core
                     pi.totalBuf
                     , pi.totalHeadrSizeOfDataPtr
                     , (UInt32)(pi.totalBuf.Length - (pi.totalHeadrSizeOfDataPtr + 4))
-                    , IsSecondary!=0);
+                    , ChipNumber!=0);
                 pi.use = true;
                 pcmDataEasy = pi.use ? pi.totalBuf : null;
             }
@@ -479,7 +479,7 @@ namespace Core
         {
             return string.Format("{0,-10} {1,-7} {2,-5:D3} N/A  ${3,-7:X6} ${4,-7:X6} N/A      ${5,-7:X6}  NONE {6}\r\n"
                 , Name
-                , pcm.isSecondary!=0 ? "SEC" : "PRI"
+                , pcm.chipNumber!=0 ? "SEC" : "PRI"
                 , pcm.num
                 , pcm.stAdr & 0xffffff
                 , pcm.edAdr & 0xffffff

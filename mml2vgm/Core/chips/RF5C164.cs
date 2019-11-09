@@ -12,7 +12,7 @@ namespace Core
         public byte KeyOn = 0x0;
         public byte CurrentChannel = 0xff;
 
-        public RF5C164(ClsVgm parent, int chipID, string initialPartName, string stPath, int isSecondary) : base(parent, chipID, initialPartName, stPath, isSecondary)
+        public RF5C164(ClsVgm parent, int chipID, string initialPartName, string stPath, int chipNumber) : base(parent, chipID, initialPartName, stPath, chipNumber)
         {
             _chipType = enmChipType.RF5C164;
             _Name = "RF5C164";
@@ -20,7 +20,7 @@ namespace Core
             _ChMax = 8;
             _canUsePcm = true;
             _canUsePI = true;
-            IsSecondary = isSecondary;
+            ChipNumber = chipNumber;
             dataType = 0xc1;
 
             Frequency = 12500000;
@@ -33,7 +33,7 @@ namespace Core
             foreach (ClsChannel ch in Ch)
             {
                 ch.Type = enmChannelType.PCM;
-                ch.isSecondary = chipID == 1;
+                ch.chipNumber = chipID == 1;
             }
 
             pcmDataInfo = new clsPcmDataInfo[] { new clsPcmDataInfo() };
@@ -43,7 +43,7 @@ namespace Core
             {
                 if (parent.ChipCommandSize == 2)
                 {
-                    if (isSecondary==0)
+                    if (chipNumber==0)
                         pcmDataInfo[0].totalBuf = new byte[] {
                             0xb1, 0x00, 0x07, 0x00,//通常コマンド
                             0x07, 0x00, 0x66, 0xc1
@@ -58,7 +58,7 @@ namespace Core
                 }
                 else
                 {
-                    if (isSecondary==0)
+                    if (chipNumber==0)
                         pcmDataInfo[0].totalBuf = new byte[] {
                             0xb1, 0x07, 0x00//通常コマンド
                             , 0x07, 0x66, 0xc1
@@ -74,7 +74,7 @@ namespace Core
             }
             else
             {
-                if (isSecondary==0)
+                if (chipNumber==0)
                     pcmDataInfo[0].totalBuf = new byte[] {
                         0xb1, 0x07, 0x00//通常コマンド
                         , 0x67, 0x66, 0xc1
@@ -117,7 +117,7 @@ namespace Core
                     v.Key
                     , new clsPcm(
                         v.Value.num, v.Value.seqNum, v.Value.chip
-                        , v.Value.isSecondary
+                        , v.Value.chipNumber
                         , v.Value.fileName
                         , v.Value.freq
                         , v.Value.vol
@@ -141,7 +141,7 @@ namespace Core
                     pi.totalBuf
                     , pi.totalHeadrSizeOfDataPtr + (parent.ChipCommandSize==2 ? 4 : 3)//通常コマンド分を他のチップと比べて余計に加算する
                     , (UInt32)(pi.totalBuf.Length - (pi.totalHeadrSizeOfDataPtr + 4 + (parent.ChipCommandSize == 2 ? 4 : 3)))//通常コマンド分を他のチップと比べて余計に加算する
-                    , IsSecondary!=0
+                    , ChipNumber!=0
                     );
 
                 //RF5C164のPCMブロックの前に通常コマンドが存在するため書き換える
@@ -243,7 +243,7 @@ namespace Core
             {
                 SetRf5c164CurrentChannel(mml,pw);
                 byte data = (byte)(volume & 0xff);
-                OutRf5c164Port(mml,port[0],pw.isSecondary, 0x0, data);
+                OutRf5c164Port(mml,port[0],pw.chipNumber, 0x0, data);
                 pw.rf5c164Envelope = volume;
             }
         }
@@ -254,7 +254,7 @@ namespace Core
             {
                 SetRf5c164CurrentChannel(mml,pw);
                 byte data = (byte)(pan & 0xff);
-                OutRf5c164Port(mml, port[0], pw.isSecondary, 0x1, data);
+                OutRf5c164Port(mml, port[0], pw.chipNumber, 0x1, data);
                 pw.rf5c164Pan = pan;
             }
         }
@@ -262,13 +262,13 @@ namespace Core
         public void SetRf5c164CurrentChannel(MML mml,partWork pw)
         {
             byte pch = (byte)pw.ch;
-            int isSecondary = pw.isSecondary;
+            int chipNumber = pw.chipNumber;
             int chipID = pw.chip.ChipID;
 
             if (CurrentChannel != pch)
             {
                 byte data = (byte)(0xc0 + pch);
-                OutRf5c164Port(mml, port[0], isSecondary, 0x7, data);
+                OutRf5c164Port(mml, port[0], chipNumber, 0x7, data);
                 CurrentChannel = pch;
             }
         }
@@ -280,9 +280,9 @@ namespace Core
                 SetRf5c164CurrentChannel(mml,pw);
 
                 byte data = (byte)(f & 0xff);
-                OutRf5c164Port(mml, port[0], pw.isSecondary, 0x2, data);
+                OutRf5c164Port(mml, port[0], pw.chipNumber, 0x2, data);
                 data = (byte)((f >> 8) & 0xff);
-                OutRf5c164Port(mml, port[0], pw.isSecondary, 0x3, data);
+                OutRf5c164Port(mml, port[0], pw.chipNumber, 0x3, data);
                 pw.rf5c164AddressIncrement = f;
             }
         }
@@ -298,7 +298,7 @@ namespace Core
             {
                 SetRf5c164CurrentChannel(mml,pw);
                 byte data = (byte)(stAdr >> 8);
-                OutRf5c164Port(mml, port[0], pw.isSecondary, 0x6, data);
+                OutRf5c164Port(mml, port[0], pw.chipNumber, 0x6, data);
                 //pw.pcmStartAddress = stAdr;
             }
         }
@@ -309,9 +309,9 @@ namespace Core
             {
                 SetRf5c164CurrentChannel(mml,pw);
                 byte data = (byte)(adr >> 8);
-                OutRf5c164Port(mml, port[0], pw.isSecondary, 0x5, data);
+                OutRf5c164Port(mml, port[0], pw.chipNumber, 0x5, data);
                 data = (byte)adr;
-                OutRf5c164Port(mml, port[0], pw.isSecondary, 0x4, data);
+                OutRf5c164Port(mml, port[0], pw.chipNumber, 0x4, data);
                 pw.pcmLoopAddress = adr;
             }
         }
@@ -322,7 +322,7 @@ namespace Core
             SetRf5c164SampleStartAddress(mml,pw);
             KeyOn |= (byte)(1 << pw.ch);
             byte data = (byte)(~KeyOn);
-            OutRf5c164Port(mml, port[0], pw.isSecondary, 0x8, data);
+            OutRf5c164Port(mml, port[0], pw.chipNumber, 0x8, data);
             if (!parent.instPCM.ContainsKey(pw.instrument))
             {
                 if(pw.instrument==-1)
@@ -341,15 +341,15 @@ namespace Core
         {
             KeyOn &= (byte)(~(1 << pw.ch));
             byte data = (byte)(~KeyOn);
-            OutRf5c164Port(mml, port[0], pw.isSecondary, 0x8, data);
+            OutRf5c164Port(mml, port[0], pw.chipNumber, 0x8, data);
         }
 
-        public void OutRf5c164Port(MML mml,byte[] cmd,int isSecondary, byte adr, byte data)
+        public void OutRf5c164Port(MML mml,byte[] cmd,int chipNumber, byte adr, byte data)
         {
             parent.OutData(
                 mml,
                 cmd
-                , (byte)((adr & 0x7f) | (isSecondary!=0 ? 0x80 : 0x00))
+                , (byte)((adr & 0x7f) | (chipNumber!=0 ? 0x80 : 0x00))
                 , data
                 );
         }
@@ -608,7 +608,7 @@ namespace Core
             byte adr = (byte)mml.args[0];
             byte dat = (byte)mml.args[1];
 
-            OutRf5c164Port(mml, port[0], pw.isSecondary, adr, dat);
+            OutRf5c164Port(mml, port[0], pw.chipNumber, adr, dat);
         }
 
         public override void CmdPan(partWork pw, MML mml)
@@ -624,7 +624,7 @@ namespace Core
 
         public override void CmdLoopExtProc(partWork p, MML mml)
         {
-            if (p.chip is RF5C164 && parent.rf5c164[p.isSecondary ].use)
+            if (p.chip is RF5C164 && parent.rf5c164[p.chipNumber ].use)
             {
                 //rf5c164の設定済み周波数値を初期化(ループ時に直前の周波数を引き継いでしまうケースがあるため)
                 p.rf5c164AddressIncrement = -1;
@@ -701,7 +701,7 @@ namespace Core
         {
             return string.Format("{0,-10} {1,-7} {2,-5:D3} {3,-4:D2} ${4,-7:X4} N/A      ${5,-7:X4} ${6,-7:X4}  NONE {7}\r\n"
                 , Name //0
-                , pcm.isSecondary!=0 ? "SEC" : "PRI" //1
+                , pcm.chipNumber!=0 ? "SEC" : "PRI" //1
                 , pcm.num //2
                 , pcm.stAdr >> 16 //3
                 , pcm.stAdr & 0xffff //4

@@ -1012,7 +1012,7 @@ namespace mml2vgmIDE
 
                             cells[0] = int.Parse(pw[i].PartName.Substring(2, 2));
                             cells[1] = chip.ChipID;//ChipIndex
-                            cells[2] = pw[i].isSecondary;//ChipNumber
+                            cells[2] = pw[i].chipNumber;//ChipNumber
                             cells[3] = pw[i].PartName.Substring(0, 2).Replace(" ", "") + int.Parse(pw[i].PartName.Substring(2, 2)).ToString();
                             cells[4] = pw[i].chip.Name;//.ToUpper();
                             cells[5] = pw[i].clockCounter;

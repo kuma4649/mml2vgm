@@ -23,7 +23,7 @@ namespace Core
 
         public byte SSGKeyOn = 0x3f;
 
-        public AY8910(ClsVgm parent, int chipID, string initialPartName, string stPath, int isSecondary) : base(parent, chipID, initialPartName, stPath, isSecondary)
+        public AY8910(ClsVgm parent, int chipID, string initialPartName, string stPath, int chipNumber) : base(parent, chipID, initialPartName, stPath, chipNumber)
         {
             _chipType = enmChipType.AY8910;
             _Name = "AY8910";
@@ -31,7 +31,7 @@ namespace Core
             _ChMax = 3;
             _canUsePcm = false;
             _canUsePI = false;
-            IsSecondary = isSecondary;
+            ChipNumber = chipNumber;
 
             Frequency = 1789750;
             port = new byte[][] { new byte[] { 0xa0 } };
@@ -55,7 +55,7 @@ namespace Core
             foreach (ClsChannel ch in Ch)
             {
                 ch.Type = enmChannelType.SSG;
-                ch.isSecondary = chipID == 1;
+                ch.chipNumber = chipID == 1;
                 ch.MaxVolume = 15;
             }
 

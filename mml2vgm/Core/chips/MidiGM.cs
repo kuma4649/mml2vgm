@@ -11,7 +11,7 @@ namespace Core
         private List<MIDINote> noteOns = new List<MIDINote>();
         private List<MIDINote> noteOffs = new List<MIDINote>();
 
-        public MidiGM(ClsVgm parent, int chipID, string initialPartName, string stPath, int isSecondary) : base(parent, chipID, initialPartName, stPath, isSecondary)
+        public MidiGM(ClsVgm parent, int chipID, string initialPartName, string stPath, int chipNumber) : base(parent, chipID, initialPartName, stPath, chipNumber)
         {
             _chipType = enmChipType.MIDI_GM;
             _Name = "GeneralMIDI";
@@ -19,7 +19,7 @@ namespace Core
             _ChMax = 99;
             _canUsePcm = false;
             _canUsePI = false;
-            IsSecondary = isSecondary;
+            ChipNumber = chipNumber;
 
             Frequency = 0;
             port = new byte[][] { new byte[] { 0x00 } };
@@ -32,7 +32,7 @@ namespace Core
             foreach (ClsChannel ch in Ch)
             {
                 ch.Type = enmChannelType.MIDI;
-                ch.isSecondary = chipID == 1;
+                ch.chipNumber = chipID == 1;
                 ch.MaxVolume = 127;
             }
 

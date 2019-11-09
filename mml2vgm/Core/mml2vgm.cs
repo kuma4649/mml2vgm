@@ -292,7 +292,7 @@ namespace Core
                     continue;
                 }
                 //TODO: Dummy Command
-                if (od.val == 0x2f //dummyChipコマンド　(第2引数：chipID 第３引数:isSecondary)
+                if (od.val == 0x2f //dummyChipコマンド　(第2引数：chipID 第３引数:chipNumber)
                     && Common.CheckDummyCommand(od.type))//ここで指定できるmmlコマンドは元々はChipに送信することのないコマンドのみ(さもないと、通常のコマンドのデータと見分けがつかなくなる可能性がある)
                 {
                     //Console.WriteLine("SkipAddress:{0:x06} skip:{1:x06}", adr, skip);
@@ -438,7 +438,7 @@ namespace Core
                         //Console.WriteLine("OPN2 pcm command {0:x} adr:{1:x}", H | L, i - 1);
                         lstBuf.Add(desBuf[i++].val);
                         break;
-                    case 0x60://dummyChipコマンド　(第2引数：chipID 第３引数:isSecondary)
+                    case 0x60://dummyChipコマンド　(第2引数：chipID 第３引数:chipNumber)
                         //TODO: Dummy Command
                         //Console.WriteLine("dummy command {0:x} adr:{1:x}", H | L, i - 1);
                         if (Common.CheckDummyCommand(od.type))//ここで指定できるmmlコマンドは元々はChipに送信することのないコマンドのみ(さもないと、通常のコマンドのデータと見分けがつかなくなる可能性がある)
@@ -539,7 +539,7 @@ namespace Core
                         , od.linePos.col
                         , od.linePos.length
                         , od.linePos.chip
-                        , od.linePos.isSecondary
+                        , od.linePos.chipNumber
                         , od.linePos.part
                         , od.linePos.ch
                         , od.type
@@ -640,7 +640,7 @@ namespace Core
                             pds.No
                             , pcmDataSeqNum++
                             , pds.chip
-                            , pds.isSecondary
+                            , pds.chipNumber
                             , pds.FileName
                             , pds.BaseFreq
                             , pds.Volume
@@ -662,7 +662,7 @@ namespace Core
                             continue;
                         }
 
-                        if (desVGM.info.format == enmFormat.XGM && v.isSecondary!=0)
+                        if (desVGM.info.format == enmFormat.XGM && v.chipNumber!=0)
                         {
                             msgBox.setErrMsg(string.Format(
                                 msg.get("E01017")
@@ -672,7 +672,7 @@ namespace Core
 
                         if (desVGM.chips.ContainsKey(v.chip))
                         {
-                            desVGM.chips[v.chip][v.isSecondary]
+                            desVGM.chips[v.chip][v.chipNumber]
                                 .StorePcm(
                                 newDic
                                 , new KeyValuePair<int, clsPcm>(pds.No, v)
@@ -688,7 +688,7 @@ namespace Core
                                 //ADPCM-A
                                 if (desVGM.chips != null && desVGM.chips.ContainsKey(v.chip) && desVGM.chips[v.chip] != null)
                                 {
-                                    pds.DatEndAdr = (int)((YM2609)desVGM.chips[v.chip][v.isSecondary]).pcmDataEasyA.Length - 16;
+                                    pds.DatEndAdr = (int)((YM2609)desVGM.chips[v.chip][v.chipNumber]).pcmDataEasyA.Length - 16;
                                 }
                             }
                             else if (pds.DatLoopAdr == 1)
@@ -696,7 +696,7 @@ namespace Core
                                 //ADPCM-B
                                 if (desVGM.chips != null && desVGM.chips.ContainsKey(v.chip) && desVGM.chips[v.chip] != null)
                                 {
-                                    pds.DatEndAdr = (int)((YM2609)desVGM.chips[v.chip][v.isSecondary]).pcmDataEasyB.Length - 16;
+                                    pds.DatEndAdr = (int)((YM2609)desVGM.chips[v.chip][v.chipNumber]).pcmDataEasyB.Length - 16;
                                 }
                             }
                             else 
@@ -704,7 +704,7 @@ namespace Core
                                 //ADPCM-C
                                 if (desVGM.chips != null && desVGM.chips.ContainsKey(v.chip) && desVGM.chips[v.chip] != null)
                                 {
-                                    pds.DatEndAdr = (int)((YM2609)desVGM.chips[v.chip][v.isSecondary]).pcmDataEasyC.Length - 16;
+                                    pds.DatEndAdr = (int)((YM2609)desVGM.chips[v.chip][v.chipNumber]).pcmDataEasyC.Length - 16;
                                 }
                             }
 
@@ -716,7 +716,7 @@ namespace Core
                                 //ADPCM-A
                                 if (desVGM.chips != null && desVGM.chips.ContainsKey(v.chip) && desVGM.chips[v.chip] != null)
                                 {
-                                    pds.DatEndAdr = (int)((YM2610B)desVGM.chips[v.chip][v.isSecondary]).pcmDataEasyA.Length - 16;
+                                    pds.DatEndAdr = (int)((YM2610B)desVGM.chips[v.chip][v.chipNumber]).pcmDataEasyA.Length - 16;
                                 }
                             }
                             else
@@ -724,7 +724,7 @@ namespace Core
                                 //ADPCM-B
                                 if (desVGM.chips != null && desVGM.chips.ContainsKey(v.chip) && desVGM.chips[v.chip] != null)
                                 {
-                                    pds.DatEndAdr = (int)((YM2610B)desVGM.chips[v.chip][v.isSecondary]).pcmDataEasyB.Length - 16;
+                                    pds.DatEndAdr = (int)((YM2610B)desVGM.chips[v.chip][v.chipNumber]).pcmDataEasyB.Length - 16;
                                 }
                             }
 
@@ -733,7 +733,7 @@ namespace Core
                         {
                             if (desVGM.chips != null && desVGM.chips.ContainsKey(v.chip) && desVGM.chips[v.chip] != null)
                             {
-                                pds.DatEndAdr = (int)desVGM.chips[v.chip][v.isSecondary].pcmDataEasy.Length - 16;
+                                pds.DatEndAdr = (int)desVGM.chips[v.chip][v.chipNumber].pcmDataEasy.Length - 16;
                             }
                         }
                         break;
@@ -746,7 +746,7 @@ namespace Core
                             pds.No
                             , pcmDataSeqNum++
                             , pds.chip
-                            , pds.isSecondary
+                            , pds.chipNumber
                             , pds.FileName
                             , pds.BaseFreq
                             , pds.Volume
@@ -780,7 +780,7 @@ namespace Core
                             continue;
                         }
 
-                        if (desVGM.info.format == enmFormat.XGM && v.isSecondary!=0)
+                        if (desVGM.info.format == enmFormat.XGM && v.chipNumber!=0)
                         {
                             msgBox.setErrMsg(string.Format(
                                 msg.get("E01017")
@@ -788,7 +788,7 @@ namespace Core
                             continue;
                         }
 
-                        desVGM.chips[v.chip][v.isSecondary]
+                        desVGM.chips[v.chip][v.chipNumber]
                             .StorePcm(
                             newDic
                             , new KeyValuePair<int, clsPcm>(pds.No, v)
@@ -807,7 +807,7 @@ namespace Core
                                 , pds.FileName), new LinePos(pds.FileName));
                             continue;
                         }
-                        desVGM.chips[pds.chip][pds.isSecondary ]
+                        desVGM.chips[pds.chip][pds.chipNumber ]
                             .StorePcmRawData(
                             pds
                             , buf
@@ -816,7 +816,7 @@ namespace Core
                             , samplerate);
                         break;
                     case enmPcmDefineType.Set:
-                        //if(!desVGM.chips[pds.chip][pds.isSecondary ? 1 : 0].StorePcmCheck())
+                        //if(!desVGM.chips[pds.chip][pds.chipNumber ? 1 : 0].StorePcmCheck())
                         //{
                         //    return;
                         //}
@@ -828,7 +828,7 @@ namespace Core
                             pds.No
                             , pcmDataSeqNum++
                             , pds.chip
-                            , pds.isSecondary
+                            , pds.chipNumber
                             , ""
                             , pds.BaseFreq
                             , 100
@@ -947,7 +947,7 @@ namespace Core
             {
                 if (!desVGM.instPCM.ContainsKey(i)) continue;
                 if (desVGM.instPCM[i].chip != c.chipType) continue;
-                if (desVGM.instPCM[i].isSecondary != c.IsSecondary) continue;
+                if (desVGM.instPCM[i].chipNumber != c.ChipNumber) continue;
 
                 region += c.DispRegion(desVGM.instPCM[i]);
 
@@ -988,7 +988,7 @@ namespace Core
                 {
                     region += string.Format("{0,-10} {1,-7} ${2,-7:X6} ${3,-7:X6} ${4,-7:X6}  {5}\r\n"
                         , opna2.Name + "_A"
-                        , opna2.IsSecondary != 0 ? "SEC" : "PRI"
+                        , opna2.ChipNumber != 0 ? "SEC" : "PRI"
                         , 0
                         , opna2.pcmDataEasyA.Length - 1
                         , opna2.pcmDataEasyA.Length
@@ -1000,7 +1000,7 @@ namespace Core
                 {
                     region += string.Format("{0,-10} {1,-7} ${2,-7:X6} ${3,-7:X6} ${4,-7:X6}  {5}\r\n"
                         , opna2.Name + "_B"
-                        , opna2.IsSecondary != 0 ? "SEC" : "PRI"
+                        , opna2.ChipNumber != 0 ? "SEC" : "PRI"
                         , 0
                         , opna2.pcmDataEasyB.Length - 1
                         , opna2.pcmDataEasyB.Length
@@ -1012,7 +1012,7 @@ namespace Core
                 {
                     region += string.Format("{0,-10} {1,-7} ${2,-7:X6} ${3,-7:X6} ${4,-7:X6}  {5}\r\n"
                         , opna2.Name + "_C"
-                        , opna2.IsSecondary != 0 ? "SEC" : "PRI"
+                        , opna2.ChipNumber != 0 ? "SEC" : "PRI"
                         , 0
                         , opna2.pcmDataEasyC.Length - 1
                         , opna2.pcmDataEasyC.Length
@@ -1035,7 +1035,7 @@ namespace Core
                 {
                     region += string.Format("{0,-10} {1,-7} ${2,-7:X6} ${3,-7:X6} ${4,-7:X6}  {5}\r\n"
                         , opnb.Name + "_A"
-                        , opnb.IsSecondary != 0 ? "SEC" : "PRI"
+                        , opnb.ChipNumber != 0 ? "SEC" : "PRI"
                         , 0
                         , opnb.pcmDataEasyA.Length - 1
                         , opnb.pcmDataEasyA.Length
@@ -1047,7 +1047,7 @@ namespace Core
                 {
                     region += string.Format("{0,-10} {1,-7} ${2,-7:X6} ${3,-7:X6} ${4,-7:X6}  {5}\r\n"
                         , opnb.Name + "_B"
-                        , opnb.IsSecondary != 0 ? "SEC" : "PRI"
+                        , opnb.ChipNumber != 0 ? "SEC" : "PRI"
                         , 0
                         , opnb.pcmDataEasyB.Length - 1
                         , opnb.pcmDataEasyB.Length
@@ -1065,7 +1065,7 @@ namespace Core
                 {
                     region += string.Format("{0,-10} {1,-7} ${2,-7:X6} ${3,-7:X6} ${4,-7:X6}  {5}\r\n"
                         , c.Name
-                        , c.IsSecondary != 0 ? "SEC" : "PRI"
+                        , c.ChipNumber != 0 ? "SEC" : "PRI"
                         , 0
                         , c.pcmDataEasy.Length - 1
                         , c.pcmDataEasy.Length
@@ -1083,14 +1083,14 @@ namespace Core
                     if (pds.type == enmPcmDefineType.Set) continue;
                     if (pds.type == enmPcmDefineType.Easy) continue;
                     if (pds.chip != c.chipType) continue;
-                    if (pds.isSecondary != c.IsSecondary) continue;
+                    if (pds.chipNumber != c.ChipNumber) continue;
                     if (desVGM.chips[pds.chip] == null) continue;
                     if (desVGM.chips[pds.chip][0] == null) continue;
                     if (!desVGM.chips[pds.chip][0].CanUsePICommand()) continue;
 
                     region += string.Format("{0,-10} {1,-7} ${2,-7:X6} ${3,-7:X6} ${4,-7:X6}  {5}\r\n"
                         , c.Name
-                        , pds.isSecondary!=0 ? "SEC" : "PRI"
+                        , pds.chipNumber!=0 ? "SEC" : "PRI"
                         , pds.DatStartAdr
                         , pds.DatEndAdr
                         , pds.DatEndAdr - pds.DatStartAdr + 1

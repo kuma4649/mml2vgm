@@ -30,7 +30,7 @@ namespace Core
             //}
         };
 
-        public YM2203(ClsVgm parent,int chipID, string initialPartName, string stPath, int isSecondary) : base(parent, chipID, initialPartName, stPath, isSecondary)
+        public YM2203(ClsVgm parent,int chipID, string initialPartName, string stPath, int chipNumber) : base(parent, chipID, initialPartName, stPath, chipNumber)
         {
 
             _Name = "YM2203";
@@ -41,7 +41,7 @@ namespace Core
             FNumTbl = _FNumTbl;
 
             Frequency = 3993600;// 7987200/2;
-            port =new byte[][] { new byte[] { (byte)(isSecondary!=0 ? 0xa5 : 0x55) } };
+            port =new byte[][] { new byte[] { (byte)(chipNumber!=0 ? 0xa5 : 0x55) } };
 
             if (string.IsNullOrEmpty(initialPartName)) return;
 
@@ -69,7 +69,7 @@ namespace Core
             foreach (ClsChannel ch in Ch)
             {
                 ch.Type = enmChannelType.FMOPN;
-                ch.isSecondary = chipID == 1;
+                ch.chipNumber = chipID == 1;
             }
 
             Ch[2].Type = enmChannelType.FMOPNex;

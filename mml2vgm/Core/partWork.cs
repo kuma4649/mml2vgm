@@ -59,7 +59,7 @@ namespace Core
         /// <summary>
         /// Secondary Chipか
         /// </summary>
-        public int isSecondary = 0;
+        public int chipNumber = 0;
         
         /// <summary>
         /// 割り当てられた音源のチャンネル番号
@@ -1101,7 +1101,7 @@ namespace Core
     public class clsPcm
     {
         public enmChipType chip = enmChipType.YM2612;
-        public int isSecondary = 0;
+        public int chipNumber = 0;
         public int num = 0;
         public int seqNum = 0;
         public double xgmMaxSampleCount = 0;
@@ -1120,7 +1120,7 @@ namespace Core
         public clsPcm(int num
             ,int seqNum
             ,enmChipType chip
-            ,int isSecondary
+            ,int chipNumber
             ,string fileName
             ,int freq
             ,int vol 
@@ -1135,7 +1135,7 @@ namespace Core
             this.num = num;
             this.seqNum = seqNum;
             this.chip = chip;
-            this.isSecondary = isSecondary;
+            this.chipNumber = chipNumber;
             this.fileName = fileName;
             this.freq = freq;
             this.vol = vol;
@@ -1158,7 +1158,7 @@ namespace Core
         public int BaseFreq = 8000;
         public int Volume = 100;
         public enmChipType chip = enmChipType.YM2612;
-        public int isSecondary = 0;
+        public int chipNumber = 0;
         public object[] Option = null;
         public int SrcStartAdr = 0;
         public int DesStartAdr = 0;
@@ -1174,7 +1174,7 @@ namespace Core
             , int BaseFreq
             , int Volume
             , enmChipType chip
-            , int isSecondary
+            , int chipNumber
             , int LoopAdr)
         {
             this.type = type;
@@ -1183,7 +1183,7 @@ namespace Core
             this.BaseFreq = BaseFreq;
             this.Volume = Volume;
             this.chip = chip;
-            this.isSecondary = isSecondary;
+            this.chipNumber = chipNumber;
             this.DatLoopAdr = LoopAdr;
         }
 
@@ -1191,7 +1191,7 @@ namespace Core
             enmPcmDefineType type
             , string FileName
             , enmChipType chip
-            , int isSecondary
+            , int chipNumber
             , int SrcStartAdr
             , int DesStartAdr
             , int Length
@@ -1200,7 +1200,7 @@ namespace Core
             this.type = type;
             this.FileName = FileName;
             this.chip = chip;
-            this.isSecondary = isSecondary;
+            this.chipNumber = chipNumber;
             this.SrcStartAdr = SrcStartAdr;
             this.DesStartAdr = DesStartAdr;
             this.SrcLength = Length;
@@ -1223,7 +1223,7 @@ namespace Core
             enmPcmDefineType type
             , int No
             , enmChipType chip
-            , int isSecondary
+            , int chipNumber
             , int BaseFreq
             , int DatStartAdr
             , int DatEndAdr
@@ -1233,7 +1233,7 @@ namespace Core
             this.type = type;
             this.No = No;
             this.chip = chip;
-            this.isSecondary = isSecondary;
+            this.chipNumber = chipNumber;
             this.BaseFreq = BaseFreq;
             this.DatStartAdr = DatStartAdr;
             this.DatEndAdr = DatEndAdr;

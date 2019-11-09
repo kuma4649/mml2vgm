@@ -371,7 +371,7 @@ namespace Core
             byte[] dmy = new byte[length];
             Array.Copy(data, pds.SrcStartAdr, dmy, 0, length);
 
-            Common.Add32bits(desDat, (uint)(length + 8) | (pds.isSecondary!=0 ? 0x8000_0000 : 0x0000_0000));//size of data, in bytes
+            Common.Add32bits(desDat, (uint)(length + 8) | (pds.chipNumber!=0 ? 0x8000_0000 : 0x0000_0000));//size of data, in bytes
             Common.Add32bits(desDat, (uint)(pds.DesStartAdr + length));//size of the entire ROM
             Common.Add32bits(desDat, (uint)pds.DesStartAdr);//start address of data
 
@@ -401,7 +401,7 @@ namespace Core
             byte[] dmy = new byte[length];
             Array.Copy(data, pds.SrcStartAdr, dmy, 0, length);
 
-            Common.Add32bits(desDat, (uint)(length + 2) | (pds.isSecondary!=0 ? 0x8000_0000 : 0x0000_0000));//size of data, in bytes
+            Common.Add32bits(desDat, (uint)(length + 2) | (pds.chipNumber!=0 ? 0x8000_0000 : 0x0000_0000));//size of data, in bytes
             Common.Add16bits(desDat, (uint)pds.DesStartAdr);//start address of data
 
             desDat.AddRange(dmy);

@@ -11,7 +11,7 @@ namespace Core
         public byte[] SSGKeyOn = new byte[] { 0x3f, 0x3f, 0x3f, 0x3f };
 
 
-        public ClsOPN(ClsVgm parent, int chipID, string initialPartName, string stPath, int isSecondary) : base(parent, chipID, initialPartName, stPath, isSecondary)
+        public ClsOPN(ClsVgm parent, int chipID, string initialPartName, string stPath, int chipNumber) : base(parent, chipID, initialPartName, stPath, chipNumber)
         {
         }
 
@@ -718,7 +718,7 @@ namespace Core
                                     mml.line.Lp.part,
                                     mml.line.Lp.chip,
                                     mml.line.Lp.chipIndex,
-                                    mml.line.Lp.isSecondary,
+                                    mml.line.Lp.chipNumber,
                                     mml.line.Lp.ch);
                             }
                         }
@@ -748,7 +748,7 @@ namespace Core
                                     mml.line.Lp.part,
                                     mml.line.Lp.chip,
                                     mml.line.Lp.chipIndex,
-                                    mml.line.Lp.isSecondary,
+                                    mml.line.Lp.chipNumber,
                                     mml.line.Lp.ch);
                             }
                         }
@@ -775,7 +775,7 @@ namespace Core
                                         mml.line.Lp.part,
                                         mml.line.Lp.chip,
                                         mml.line.Lp.chipIndex,
-                                        mml.line.Lp.isSecondary,
+                                        mml.line.Lp.chipNumber,
                                         mml.line.Lp.ch);
                                 }
                             }
@@ -801,7 +801,7 @@ namespace Core
                                         mml.line.Lp.part,
                                         mml.line.Lp.chip,
                                         mml.line.Lp.chipIndex,
-                                        mml.line.Lp.isSecondary,
+                                        mml.line.Lp.chipNumber,
                                         mml.line.Lp.ch);
                                 }
                             }
@@ -970,7 +970,7 @@ namespace Core
                                         mml.line.Lp.part,
                                         mml.line.Lp.chip,
                                         mml.line.Lp.chipIndex,
-                                        mml.line.Lp.isSecondary,
+                                        mml.line.Lp.chipNumber,
                                         mml.line.Lp.ch);
                                 }
                             }
@@ -1004,7 +1004,7 @@ namespace Core
                                             mml.line.Lp.part,
                                             mml.line.Lp.chip,
                                             mml.line.Lp.chipIndex,
-                                            mml.line.Lp.isSecondary,
+                                            mml.line.Lp.chipNumber,
                                             mml.line.Lp.ch);
                                     }
                                 }
@@ -1045,7 +1045,7 @@ namespace Core
                                     mml.line.Lp.part,
                                     mml.line.Lp.chip,
                                     mml.line.Lp.chipIndex,
-                                    mml.line.Lp.isSecondary,
+                                    mml.line.Lp.chipNumber,
                                     mml.line.Lp.ch);
                             }
                         }
@@ -1076,7 +1076,7 @@ namespace Core
                                     mml.line.Lp.part,
                                     mml.line.Lp.chip,
                                     mml.line.Lp.chipIndex,
-                                    mml.line.Lp.isSecondary,
+                                    mml.line.Lp.chipNumber,
                                     mml.line.Lp.ch);
                             }
                         }
@@ -1103,7 +1103,7 @@ namespace Core
                                         mml.line.Lp.part,
                                         mml.line.Lp.chip,
                                         mml.line.Lp.chipIndex,
-                                        mml.line.Lp.isSecondary,
+                                        mml.line.Lp.chipNumber,
                                         mml.line.Lp.ch);
                                 }
                             }
@@ -1129,7 +1129,7 @@ namespace Core
                                         mml.line.Lp.part,
                                         mml.line.Lp.chip,
                                         mml.line.Lp.chipIndex,
-                                        mml.line.Lp.isSecondary,
+                                        mml.line.Lp.chipNumber,
                                         mml.line.Lp.ch);
                                 }
                             }
@@ -1227,7 +1227,7 @@ namespace Core
                     else cmd = new byte[] {
                         0x90
                         , (byte)pw.streamID
-                        , (byte)(0x02 + (pw.isSecondary!=0 ? 0x80 : 0x00))
+                        , (byte)(0x02 + (pw.chipNumber!=0 ? 0x80 : 0x00))
                     };
 
                     parent.OutData(

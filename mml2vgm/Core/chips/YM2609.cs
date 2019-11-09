@@ -43,7 +43,7 @@ namespace Core
         public byte rhythm_KeyOn = 0;
         public byte rhythm_KeyOff = 0;
 
-        public YM2609(ClsVgm parent, int chipID, string initialPartName, string stPath, int isSecondary) : base(parent, chipID, initialPartName, stPath, isSecondary)
+        public YM2609(ClsVgm parent, int chipID, string initialPartName, string stPath, int chipNumber) : base(parent, chipID, initialPartName, stPath, chipNumber)
         {
             _chipType = enmChipType.YM2609;
             _Name = "YM2609";
@@ -52,7 +52,7 @@ namespace Core
             _canUsePcm = true;
             _canUsePI = true;
             FNumTbl = _FNumTbl;
-            IsSecondary = isSecondary;
+            ChipNumber = chipNumber;
             dataType = 0x81;
             Frequency = 7987200;
             port = new byte[][]{
@@ -88,7 +88,7 @@ namespace Core
             foreach (ClsChannel ch in Ch)
             {
                 ch.Type = enmChannelType.FMOPN;
-                ch.isSecondary = chipID == 1;
+                ch.chipNumber = chipID == 1;
             }
 
             Ch[2].Type = enmChannelType.FMOPNex;//ch:3
@@ -749,7 +749,7 @@ namespace Core
                     , new clsPcm(
                         v.Value.num
                         , v.Value.seqNum, v.Value.chip
-                        , v.Value.isSecondary
+                        , v.Value.chipNumber
                         , v.Value.fileName
                         , v.Value.freq
                         , v.Value.vol
@@ -1753,7 +1753,7 @@ namespace Core
         {
             return string.Format("{0,-10} {1,-7} {2,-5:D3} N/A  ${3,-7:X6} ${4,-7:X6} N/A      ${5,-7:X6}  NONE {6}\r\n"
                 , Name
-                , pcm.isSecondary != 0 ? "SEC" : "PRI"
+                , pcm.chipNumber != 0 ? "SEC" : "PRI"
                 , pcm.num
                 , pcm.stAdr & 0xffffff
                 , pcm.edAdr & 0xffffff

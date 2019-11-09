@@ -9,7 +9,7 @@ namespace Core
     public class YM2612X : YM2612
     {
 
-        public YM2612X(ClsVgm parent, int chipID, string initialPartName, string stPath, int isSecondary) : base(parent, chipID, initialPartName, stPath, isSecondary)
+        public YM2612X(ClsVgm parent, int chipID, string initialPartName, string stPath, int chipNumber) : base(parent, chipID, initialPartName, stPath, chipNumber)
         {
             _chipType = enmChipType.YM2612X;
             _Name = "YM2612X";
@@ -18,12 +18,12 @@ namespace Core
             _canUsePcm = true;
             _canUsePI = false;
             FNumTbl = _FNumTbl;
-            IsSecondary = isSecondary;
+            ChipNumber = chipNumber;
 
             Frequency = 7670454;
             port = new byte[][]{
-                new byte[] { (byte)(isSecondary!=0 ? 0xa2 : 0x52) }
-                , new byte[] { (byte)(isSecondary!=0 ? 0xa3 : 0x53) }
+                new byte[] { (byte)(chipNumber!=0 ? 0xa2 : 0x52) }
+                , new byte[] { (byte)(chipNumber!=0 ? 0xa3 : 0x53) }
             };
 
             if (string.IsNullOrEmpty(initialPartName)) return;
@@ -45,7 +45,7 @@ namespace Core
             foreach (ClsChannel ch in Ch)
             {
                 ch.Type = enmChannelType.FMOPN;
-                ch.isSecondary = chipID == 1;
+                ch.chipNumber = chipID == 1;
             }
 
             Ch[2].Type = enmChannelType.FMOPNex;

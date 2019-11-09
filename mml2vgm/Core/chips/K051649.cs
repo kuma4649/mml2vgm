@@ -11,7 +11,7 @@ namespace Core
         private byte keyOnStatus = 0;
         private byte keyOnStatusOld = 0;
 
-        public K051649(ClsVgm parent, int chipID, string initialPartName, string stPath, int isSecondary) : base(parent, chipID, initialPartName, stPath, isSecondary)
+        public K051649(ClsVgm parent, int chipID, string initialPartName, string stPath, int chipNumber) : base(parent, chipID, initialPartName, stPath, chipNumber)
         {
             _chipType = enmChipType.K051649;
             _Name = "K051649";
@@ -19,7 +19,7 @@ namespace Core
             _ChMax = 5;
             _canUsePcm = false;
             _canUsePI = false;
-            IsSecondary = isSecondary;
+            ChipNumber = chipNumber;
 
             Frequency = 1789772;
             port =new byte[][] { new byte[] { 0xd2 } };
@@ -43,7 +43,7 @@ namespace Core
             foreach (ClsChannel ch in Ch)
             {
                 ch.Type = enmChannelType.WaveForm;
-                ch.isSecondary = chipID == 1;
+                ch.chipNumber = chipID == 1;
                 ch.MaxVolume = 15;
             }
 
@@ -61,25 +61,25 @@ namespace Core
             //isK052539 = false;
 
             //keyOnOff : 0
-            OutK051649Port(null,port[0],IsSecondary, 3, 0, 0);
+            OutK051649Port(null,port[0],ChipNumber, 3, 0, 0);
             keyOnStatus = 0;
             keyOnStatusOld = 0;
 
             for (int i = 0; i < _ChMax; i++)
             {
                 //freq : 0
-                OutK051649Port(null, port[0], IsSecondary, 1, (byte)(i * 2 + 0), 0);
-                OutK051649Port(null, port[0], IsSecondary, 1, (byte)(i * 2 + 1), 0);
+                OutK051649Port(null, port[0], ChipNumber, 1, (byte)(i * 2 + 0), 0);
+                OutK051649Port(null, port[0], ChipNumber, 1, (byte)(i * 2 + 1), 0);
 
                 //volume : 0
-                OutK051649Port(null, port[0], IsSecondary, 2, (byte)i, 0);
+                OutK051649Port(null, port[0], ChipNumber, 2, (byte)i, 0);
 
                 //WaveForm : all 0
                 if (parent.info.isK052539 || i < 4) //K051の場合は4Ch分の初期化を行う
                 {
                     for (int j = 0; j < 32; j++)
                     {
-                        OutK051649Port(null, port[0], IsSecondary, (byte)(parent.info.isK052539 ? 4 : 0), (byte)(i * 32 + j), 0);
+                        OutK051649Port(null, port[0], ChipNumber, (byte)(parent.info.isK052539 ? 4 : 0), (byte)(i * 32 + j), 0);
                     }
                 }
             }
@@ -102,12 +102,12 @@ namespace Core
             pw.port = port;
         }
 
-        public void OutK051649Port(MML mml, byte[] cmd, int isSecondary, byte port, byte adr, byte data)
+        public void OutK051649Port(MML mml, byte[] cmd, int chipNumber, byte port, byte adr, byte data)
         {
             parent.OutData(
                 mml,
                 cmd
-                , (byte)((isSecondary!=0 ? 0x80 : 0x00) + port)
+                , (byte)((chipNumber!=0 ? 0x80 : 0x00) + port)
                 , adr
                 , data);
         }
@@ -128,7 +128,7 @@ namespace Core
 
                 OutK051649Port(
                     mml,port[0],
-                    pw.isSecondary
+                    pw.chipNumber
                     , (byte)(parent.info.isK052539 ? 4 : 0)
                     , (byte)(ch * 32 + i - 1)
                     , parent.instWF[n][i]);
@@ -156,10 +156,10 @@ namespace Core
                 if (pw.beforeFNum != pw.FNum)
                 {
                     byte data = (byte)pw.FNum;
-                    OutK051649Port(mml, port[0], IsSecondary, 1, (byte)(0 + pw.ch * 2), data);
+                    OutK051649Port(mml, port[0], ChipNumber, 1, (byte)(0 + pw.ch * 2), data);
 
                     data = (byte)((pw.FNum & 0xf00) >> 8);
-                    OutK051649Port(mml, port[0], IsSecondary, 1, (byte)(1 + pw.ch * 2), data);
+                    OutK051649Port(mml, port[0], ChipNumber, 1, (byte)(1 + pw.ch * 2), data);
                     pw.beforeFNum = pw.FNum;
                 }
 
@@ -180,7 +180,7 @@ namespace Core
             //keyonoff
             if (keyOnStatus != keyOnStatusOld)
             {
-                OutK051649Port(mml, port[0], IsSecondary, 3, 0, keyOnStatus);
+                OutK051649Port(mml, port[0], ChipNumber, 3, 0, keyOnStatus);
                 keyOnStatusOld = keyOnStatus;
             }
 
@@ -224,7 +224,7 @@ namespace Core
 
             if (pw.beforeVolume != vol)
             {
-                OutK051649Port(mml, port[0], IsSecondary, 2, (byte)pw.ch, (byte)vol);
+                OutK051649Port(mml, port[0], ChipNumber, 2, (byte)pw.ch, (byte)vol);
                 pw.beforeVolume = vol;
             }
         }
@@ -334,7 +334,7 @@ namespace Core
             byte adr = (byte)mml.args[0];
             byte dat = (byte)mml.args[1];
 
-            OutK051649Port(mml, this.port[0], pw.isSecondary, port, adr, dat);
+            OutK051649Port(mml, this.port[0], pw.chipNumber, port, adr, dat);
         }
 
         public override void CmdLoopExtProc(partWork p, MML mml)

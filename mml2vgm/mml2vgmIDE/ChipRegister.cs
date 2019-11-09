@@ -1508,7 +1508,7 @@ namespace mml2vgmIDE
 
 
 
-        public void writeDummyChip(outDatum od, long Counter, byte chipID, byte isSecondary)
+        public void writeDummyChip(outDatum od, long Counter, byte chipID, byte chipNumber)
         {
             switch (chipID)
             {
@@ -1516,58 +1516,58 @@ namespace mml2vgmIDE
                     enq(od, Counter, null, EnmDataType.Normal, -1, -1, null);
                     break;
                 case 0xa0:
-                    enq(od, Counter, AY8910[isSecondary], EnmDataType.Normal, -1, -1, null);
+                    enq(od, Counter, AY8910[chipNumber], EnmDataType.Normal, -1, -1, null);
                     break;
                 case 0x30:
                 case 0x3f:
                 case 0x4f:
                 case 0x50:
-                    enq(od, Counter, SN76489[isSecondary], EnmDataType.Normal, -1, -1, null);
+                    enq(od, Counter, SN76489[chipNumber], EnmDataType.Normal, -1, -1, null);
                     break;
                 case 0x51:
                 case 0xa1:
-                    enq(od, Counter, YM2413[isSecondary], EnmDataType.Normal, -1, -1, null);
+                    enq(od, Counter, YM2413[chipNumber], EnmDataType.Normal, -1, -1, null);
                     break;
                 case 0x52:
                 case 0xa2:
-                    enq(od, Counter, YM2612[isSecondary], EnmDataType.Normal, -1, -1, null);
+                    enq(od, Counter, YM2612[chipNumber], EnmDataType.Normal, -1, -1, null);
                     break;
                 case 0x54:
                 case 0xa4:
-                    enq(od, Counter, YM2151[isSecondary], EnmDataType.Normal, -1, -1, null);
+                    enq(od, Counter, YM2151[chipNumber], EnmDataType.Normal, -1, -1, null);
                     break;
                 case 0x55:
                 case 0xa5:
-                    enq(od, Counter, YM2203[isSecondary], EnmDataType.Normal, -1, -1, null);
+                    enq(od, Counter, YM2203[chipNumber], EnmDataType.Normal, -1, -1, null);
                     break;
                 case 0x56:
                 case 0xa6:
-                    enq(od, Counter, YM2608[isSecondary], EnmDataType.Normal, -1, -1, null);
+                    enq(od, Counter, YM2608[chipNumber], EnmDataType.Normal, -1, -1, null);
                     break;
                 case 0x58:
                 case 0xa8:
-                    enq(od, Counter, YM2610[isSecondary], EnmDataType.Normal, -1, -1, null);
+                    enq(od, Counter, YM2610[chipNumber], EnmDataType.Normal, -1, -1, null);
                     break;
                 case 0xb1:
-                    enq(od, Counter, RF5C164[isSecondary], EnmDataType.Normal, -1, -1, null);
+                    enq(od, Counter, RF5C164[chipNumber], EnmDataType.Normal, -1, -1, null);
                     break;
                 case 0xb9:
-                    enq(od, Counter, HuC6280[isSecondary], EnmDataType.Normal, -1, -1, null);
+                    enq(od, Counter, HuC6280[chipNumber], EnmDataType.Normal, -1, -1, null);
                     break;
                 case 0xc0:
-                    enq(od, Counter, SEGAPCM[isSecondary], EnmDataType.Normal, -1, -1, null);
+                    enq(od, Counter, SEGAPCM[chipNumber], EnmDataType.Normal, -1, -1, null);
                     break;
                 case 0xd2:
-                    enq(od, Counter, K051649[isSecondary], EnmDataType.Normal, -1, -1, null);
+                    enq(od, Counter, K051649[chipNumber], EnmDataType.Normal, -1, -1, null);
                     break;
                 case 0xba:
-                    enq(od, Counter, K053260[isSecondary], EnmDataType.Normal, -1, -1, null);
+                    enq(od, Counter, K053260[chipNumber], EnmDataType.Normal, -1, -1, null);
                     break;
                 case 0xc4:
-                    enq(od, Counter, QSound[isSecondary], EnmDataType.Normal, -1, -1, null);
+                    enq(od, Counter, QSound[chipNumber], EnmDataType.Normal, -1, -1, null);
                     break;
                 case 0xd4:
-                    enq(od, Counter, C140[isSecondary], EnmDataType.Normal, -1, -1, null);
+                    enq(od, Counter, C140[chipNumber], EnmDataType.Normal, -1, -1, null);
                     break;
             }
         }

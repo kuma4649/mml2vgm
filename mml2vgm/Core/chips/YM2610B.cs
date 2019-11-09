@@ -41,7 +41,7 @@ namespace Core
         public byte adpcmA_KeyOn = 0;
         public byte adpcmA_KeyOff = 0;
 
-        public YM2610B(ClsVgm parent, int chipID, string initialPartName, string stPath, int isSecondary) : base(parent, chipID, initialPartName, stPath, isSecondary)
+        public YM2610B(ClsVgm parent, int chipID, string initialPartName, string stPath, int chipNumber) : base(parent, chipID, initialPartName, stPath, chipNumber)
         {
             _chipType = enmChipType.YM2610B;
             _Name = "YM2610B";
@@ -50,12 +50,12 @@ namespace Core
             _canUsePcm = true;
             _canUsePI = true;
             FNumTbl = _FNumTbl;
-            IsSecondary = isSecondary;
+            ChipNumber = chipNumber;
             dataType = 0x82;
             Frequency = 8000000;
             port = new byte[][]{
-                new byte[] { (byte)(isSecondary!=0 ? 0xa8 : 0x58) }
-                , new byte[] { (byte)(isSecondary!=0 ? 0xa9 : 0x59) }
+                new byte[] { (byte)(chipNumber!=0 ? 0xa8 : 0x58) }
+                , new byte[] { (byte)(chipNumber!=0 ? 0xa9 : 0x59) }
             };
 
             if (string.IsNullOrEmpty(initialPartName)) return;
@@ -84,7 +84,7 @@ namespace Core
             foreach (ClsChannel ch in Ch)
             {
                 ch.Type = enmChannelType.FMOPN;
-                ch.isSecondary = chipID == 1;
+                ch.chipNumber = chipID == 1;
             }
 
             Ch[2].Type = enmChannelType.FMOPNex;
@@ -114,7 +114,7 @@ namespace Core
             {
                 if (parent.ChipCommandSize == 2)
                 {
-                    if (isSecondary==0)
+                    if (chipNumber==0)
                     {
                         pcmDataInfo[0].totalBuf = new byte[] { 0x07, 0x00, 0x66, 0x82, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
                         pcmDataInfo[1].totalBuf = new byte[] { 0x07, 0x00, 0x66, 0x83, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
@@ -127,7 +127,7 @@ namespace Core
                 }
                 else
                 {
-                    if (isSecondary==0)
+                    if (chipNumber==0)
                     {
                         pcmDataInfo[0].totalBuf = new byte[] { 0x07, 0x66, 0x82, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
                         pcmDataInfo[1].totalBuf = new byte[] { 0x07, 0x66, 0x83, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
@@ -141,7 +141,7 @@ namespace Core
             }
             else
             {
-                if (isSecondary==0)
+                if (chipNumber==0)
                 {
                     pcmDataInfo[0].totalBuf = new byte[] { 0x67, 0x66, 0x82, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
                     pcmDataInfo[1].totalBuf = new byte[] { 0x67, 0x66, 0x83, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
@@ -211,7 +211,7 @@ namespace Core
             if (parent.info.format != enmFormat.ZGM)
             {
                 parent.dat[0x4f] = new outDatum(enmMMLType.unknown, null, null, (byte)(parent.dat[0x4f].val | 0x80));//YM2610B
-                if (IsSecondary != 0)
+                if (ChipNumber != 0)
                 {
                     parent.dat[0x4f] = new outDatum(enmMMLType.unknown, null, null, (byte)(parent.dat[0x4f].val | 0x40));//use Secondary
                 }
@@ -663,7 +663,7 @@ namespace Core
                     , new clsPcm(
                         v.Value.num
                         , v.Value.seqNum, v.Value.chip
-                        , v.Value.isSecondary
+                        , v.Value.chipNumber
                         , v.Value.fileName
                         , v.Value.freq
                         , v.Value.vol
@@ -685,7 +685,7 @@ namespace Core
                     pi.totalBuf
                     , pi.totalHeadrSizeOfDataPtr
                     , (UInt32)(pi.totalBuf.Length - (pi.totalHeadrSizeOfDataPtr + 4))
-                    , IsSecondary!=0
+                    , ChipNumber!=0
                     );
                 Common.SetUInt32bit31(
                     pi.totalBuf
@@ -1032,7 +1032,7 @@ namespace Core
         {
             return string.Format("{0,-10} {1,-7} {2,-5:D3} N/A  ${3,-7:X6} ${4,-7:X6} N/A      ${5,-7:X6}  NONE {6}\r\n"
                 , Name + (pcm.loopAdr == 0 ? "_A" : "_B")
-                , pcm.isSecondary!=0 ? "SEC" : "PRI"
+                , pcm.chipNumber!=0 ? "SEC" : "PRI"
                 , pcm.num
                 , pcm.stAdr & 0xffffff
                 , pcm.edAdr & 0xffffff

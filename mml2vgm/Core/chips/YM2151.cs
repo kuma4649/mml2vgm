@@ -8,7 +8,7 @@ namespace Core
 {
     public class YM2151 : ClsChip
     {
-        public YM2151(ClsVgm parent, int chipID, string initialPartName, string stPath,int isSecondary) : base(parent, chipID, initialPartName, stPath, isSecondary)
+        public YM2151(ClsVgm parent, int chipID, string initialPartName, string stPath,int chipNumber) : base(parent, chipID, initialPartName, stPath, chipNumber)
         {
 
             _Name = "YM2151";
@@ -17,7 +17,7 @@ namespace Core
             _canUsePcm = false;
 
             Frequency = 3579545;
-            port = new byte[][] { new byte[] { (byte)(isSecondary!=0 ? 0xa4 : 0x54) } };
+            port = new byte[][] { new byte[] { (byte)(chipNumber!=0 ? 0xa4 : 0x54) } };
 
             if (string.IsNullOrEmpty(initialPartName)) return;
 
@@ -27,7 +27,7 @@ namespace Core
             foreach (ClsChannel ch in Ch)
             {
                 ch.Type = enmChannelType.FMOPM;
-                ch.isSecondary = chipID == 1;
+                ch.chipNumber = chipID == 1;
             }
 
         }
@@ -617,7 +617,7 @@ namespace Core
                     switch (octMml.type)
                     {
                         case enmMMLType.Octave:
-                            oct = 0;
+                            oct = (int)octMml.args[0];
                             break;
                         case enmMMLType.OctaveUp:
                             oct++;

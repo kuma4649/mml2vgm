@@ -15,7 +15,7 @@ namespace Core
         public string part = "";
         public string chip = "";
         public int chipIndex = 0;
-        public int isSecondary = 0;
+        public int chipNumber = 0;
         public int ch = -1;
 
         public string path
@@ -34,7 +34,7 @@ namespace Core
             }
         }
 
-        public LinePos(string fullPath, int row = -1, int col = -1, int length = -1, string part = "", string chip = "", int chipIndex = 0, int isSecondary = 0, int ch = -1)
+        public LinePos(string fullPath, int row = -1, int col = -1, int length = -1, string part = "", string chip = "", int chipIndex = 0, int chipNumber = 0, int ch = -1)
         {
             this.fullPath = fullPath;
             this.row = row;
@@ -43,7 +43,7 @@ namespace Core
             this.part = part;
             this.chip = chip;
             this.chipIndex = chipIndex;
-            this.isSecondary = isSecondary;
+            this.chipNumber = chipNumber;
             this.ch = ch;
         }
     }

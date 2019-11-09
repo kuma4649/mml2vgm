@@ -12,7 +12,7 @@ namespace Core
         public bool isSystem2 = true;
         public List<long> memoryMap = null;
 
-        public C140(ClsVgm parent, int chipID, string initialPartName, string stPath, int isSecondary) : base(parent, chipID, initialPartName, stPath, isSecondary)
+        public C140(ClsVgm parent, int chipID, string initialPartName, string stPath, int chipNumber) : base(parent, chipID, initialPartName, stPath, chipNumber)
         {
             _chipType = enmChipType.C140;
             _Name = "C140";
@@ -20,7 +20,7 @@ namespace Core
             _ChMax = 24;
             _canUsePcm = true;
             _canUsePI = true;
-            IsSecondary = isSecondary;
+            ChipNumber = chipNumber;
 
             Frequency = 8000000;
             port = new byte[][] { new byte[] { 0xd4 } };
@@ -35,7 +35,7 @@ namespace Core
             foreach (ClsChannel ch in Ch)
             {
                 ch.Type = enmChannelType.PCM;
-                ch.isSecondary = chipID == 1;
+                ch.chipNumber = chipID == 1;
                 ch.MaxVolume = 255;
             }
 
@@ -83,7 +83,7 @@ namespace Core
                 pw.volume = pw.MaxVolume;
             }
 
-            if (IsSecondary!=0)
+            if (ChipNumber!=0)
             {
                 parent.dat[0xab] = new outDatum(enmMMLType.unknown, null, null, (byte)(parent.dat[0xab].val | 0x40));
             }
@@ -172,7 +172,7 @@ namespace Core
                     , new clsPcm(
                         v.Value.num
                         , v.Value.seqNum, v.Value.chip
-                        , v.Value.isSecondary
+                        , v.Value.chipNumber
                         , v.Value.fileName
                         , v.Value.freq
                         , v.Value.vol
@@ -213,7 +213,7 @@ namespace Core
                     pi.totalBuf
                     , pi.totalHeadrSizeOfDataPtr
                     , (UInt32)(pi.totalBuf.Length - (pi.totalHeadrSizeOfDataPtr + 4))
-                    , IsSecondary!=0
+                    , ChipNumber!=0
                     );//size of data ( totalHeadrSizeOfDataPtr:サイズ値を設定する位置 4:サイズ値の大きさ(4byte32bit) )
                 Common.SetUInt32bit31(
                     pi.totalBuf
@@ -504,7 +504,7 @@ namespace Core
             parent.OutData(
                 mml,
                 pw.port[0]
-                , (byte)(port | (IsSecondary!=0 ? 0x80 : 0))
+                , (byte)(port | (ChipNumber!=0 ? 0x80 : 0))
                 , adr
                 , data
                 );
@@ -881,7 +881,7 @@ namespace Core
         {
             return string.Format("{0,-10} {1,-7} {2,-5:D3} {3,-4:D2} ${4,-7:X4} ${5,-7:X4} {6} ${7,-7:X4}  {8,4} {9}\r\n"
                 , Name //0
-                , pcm.isSecondary!=0 ? "SEC" : "PRI" //1
+                , pcm.chipNumber!=0 ? "SEC" : "PRI" //1
                 , pcm.num //2
                 , pcm.stAdr >> 16 //3
                 , pcm.stAdr & 0xffff //4

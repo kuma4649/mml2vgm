@@ -83,25 +83,25 @@ namespace Core
         }
         protected bool _canUsePI = false;
 
-        public int IsSecondary
+        public int ChipNumber
         {
             get
             {
-                return _IsSecondary;
+                return _ChipNumber;
             }
 
             set
             {
-                _IsSecondary = value;
+                _ChipNumber = value;
             }
         }
+        protected int _ChipNumber = 0;
 
         public string PartName { get; set; }
 
         public bool SupportReversePartWork = false;
         public bool ReversePartWork = false;
 
-        protected int _IsSecondary = 0;
 
         public Function Envelope = null;
 
@@ -123,12 +123,12 @@ namespace Core
         public List<byte[]> pcmDataDirect = new List<byte[]>();
         public byte[][] port;
 
-        public ClsChip(ClsVgm parent, int chipID, string initialPartName, string stPath, int isSecondary)
+        public ClsChip(ClsVgm parent, int chipID, string initialPartName, string stPath, int chipNumber)
         {
             this.parent = parent;
             this._ChipID = chipID;
             this.stPath = stPath;
-            this.IsSecondary = isSecondary;
+            this.ChipNumber = chipNumber;
             this.PartName = initialPartName;
 
             MakeFNumTbl();
@@ -601,12 +601,12 @@ namespace Core
                 }
 
                 //Console.WriteLine("SkipAddress:{0:x06} skip:{1:x06}", parent.dat.Count, parent.dummyCmdCounter);
-                parent.OutData(mml, cmd, (byte)(pw.chip.IsSecondary));//0x09(zgm):DummyChip (!!CAUTION!!)
+                parent.OutData(mml, cmd, (byte)(pw.chip.ChipNumber));//0x09(zgm):DummyChip (!!CAUTION!!)
             }
             else
             {
                 cmd = new byte[] { 0x2f, pw.port[0][0] };
-                parent.OutData(mml, cmd, (byte)(pw.chip.IsSecondary));//0x2f(vgm/xgm):DummyChip (!!CAUTION!!)
+                parent.OutData(mml, cmd, (byte)(pw.chip.ChipNumber));//0x2f(vgm/xgm):DummyChip (!!CAUTION!!)
                 parent.dummyCmdCounter += 3;
             }
 
@@ -1476,7 +1476,7 @@ namespace Core
     {
         public string Name;
         public enmChannelType Type;
-        public bool isSecondary;
+        public bool chipNumber;
         public int MaxVolume;
     }
 

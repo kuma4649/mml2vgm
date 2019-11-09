@@ -31,11 +31,13 @@ namespace mml2vgmIDE
             SetDisplayIndex(setting.location.PartCounterClmInfo);
             foreach (DataGridViewColumn c in dgvPartCounter.Columns)
             {
+                //c.Visible = true;
+                //continue;
                 if (
                     c.Name == "ClmChipIndex"
                     || c.Name == "ClmChipNumber"
                     || c.Name == "ClmPartNumber"
-                    || c.Name == "ClmIsSecondary"
+                    || c.Name == "ClmchipNumber"
                     || c.Name == "ClmPush"
                     ) c.Visible = false;
             }
@@ -114,8 +116,29 @@ namespace mml2vgmIDE
 
         public void ClearCounter()
         {
+            CacheMuteSolo();
+
             dgvPartCounter.Rows.Clear();
-            SoloMode = false;
+            //SoloMode = false;
+        }
+
+        private List<Tuple<string, int, int, int, bool, bool>> lstCacheMuteSolo = new List<Tuple<string, int, int, int, bool, bool>>();
+
+        private void CacheMuteSolo()
+        {
+            lstCacheMuteSolo.Clear();
+            foreach(DataGridViewRow r in dgvPartCounter.Rows)
+            {
+                Tuple<string, int, int, int, bool, bool> t = new Tuple<string, int, int, int, bool, bool>(
+                    (string)r.Cells[dgvPartCounter.Columns["ClmChip"].Index].Value
+                    , (int)r.Cells[dgvPartCounter.Columns["ClmChipIndex"].Index].Value
+                    , (int)r.Cells[dgvPartCounter.Columns["ClmChipNumber"].Index].Value
+                    , (int)r.Cells[dgvPartCounter.Columns["ClmPartNumber"].Index].Value
+                    , (bool)(r.Cells[dgvPartCounter.Columns["ClmMute"].Index].Value == null ? false : ((string)r.Cells[dgvPartCounter.Columns["ClmMute"].Index].Value=="M"))
+                    , (bool)(r.Cells[dgvPartCounter.Columns["ClmPush"].Index].Value == null ? false : ((string)r.Cells[dgvPartCounter.Columns["ClmPush"].Index].Value=="M"))
+                    );
+                lstCacheMuteSolo.Add(t);
+            }
         }
 
         public void AddPartCounter(object[] cells)
@@ -129,6 +152,33 @@ namespace mml2vgmIDE
             r.Cells[dgvPartCounter.Columns["ClmPart"].Index].Value = cells[3];
             r.Cells[dgvPartCounter.Columns["ClmChip"].Index].Value = cells[4];
             r.Cells[dgvPartCounter.Columns["ClmCOunter"].Index].Value = cells[5];
+
+
+            //mute状態を復帰する
+            bool fnd = false;
+            foreach (Tuple<string, int, int, int, bool, bool> l in lstCacheMuteSolo)
+            {
+                if (l.Item1 != (string)cells[4]
+                    || l.Item2 != (int)cells[1]
+                    || l.Item3 != (int)cells[2]
+                    || l.Item4 != (int)cells[0])
+                    continue;
+
+                r.Cells[dgvPartCounter.Columns["ClmMute"].Index].Value = (bool)l.Item5 ? "M" : "";
+                r.Cells[dgvPartCounter.Columns["ClmPush"].Index].Value = (bool)l.Item6 ? "M" : "";
+                if (SoloMode) r.Cells[dgvPartCounter.Columns["ClmSolo"].Index].Value = (!(bool)l.Item5) ? "S" : "";
+                else r.Cells[dgvPartCounter.Columns["ClmSolo"].Index].Value = "";
+                fnd = true;
+                break;
+            }
+            //見つからない場合は初期値をセット
+            if (!fnd)
+            {
+                r.Cells[dgvPartCounter.Columns["ClmMute"].Index].Value = "";
+                r.Cells[dgvPartCounter.Columns["ClmSolo"].Index].Value = SoloMode ? "S" : "";
+                r.Cells[dgvPartCounter.Columns["ClmPush"].Index].Value = "";
+            }
+
 
             dgvPartCounter.Rows.Add(r);
         }
@@ -206,12 +256,12 @@ namespace mml2vgmIDE
                 string chip = (string)dgvPartCounter.Rows[p].Cells["ClmChip"].Value;
                 int r = (int)dgvPartCounter.Rows[p].Cells["ClmPartNumber"].Value - 1;
                 int chipIndex = (int)dgvPartCounter.Rows[p].Cells["ClmChipIndex"].Value;
-                int isSecondary = (int)dgvPartCounter.Rows[p].Cells["ClmChipNumber"].Value;
+                int chipNumber = (int)dgvPartCounter.Rows[p].Cells["ClmChipNumber"].Value;
 
                 if (!mmlParams.Insts.ContainsKey(chip)) continue;
-                if (!mmlParams.Insts[chip].ContainsKey(chipIndex) || !mmlParams.Insts[chip][chipIndex].ContainsKey(isSecondary)) continue;
+                if (!mmlParams.Insts[chip].ContainsKey(chipIndex) || !mmlParams.Insts[chip][chipIndex].ContainsKey(chipNumber)) continue;
 
-                MMLParameter.Instrument mmli = mmlParams.Insts[chip][chipIndex][isSecondary];
+                MMLParameter.Instrument mmli = mmlParams.Insts[chip][chipIndex][chipNumber];
 
                 dgvPartCounter.Rows[p].Cells["ClmInstrument"].Value = mmli.inst[r] == null ? "-" : mmli.inst[r].ToString();
                 dgvPartCounter.Rows[p].Cells["ClmEnvelope"].Value = mmli.envelope[r] == null ? "-" : mmli.envelope[r].ToString();
@@ -460,7 +510,7 @@ namespace mml2vgmIDE
                 if (c.Name == "ClmChipIndex") continue;
                 if (c.Name == "ClmChipNumber") continue;
                 if (c.Name == "ClmPartNumber") continue;
-                if (c.Name == "ClmIsSecondary") continue;
+                if (c.Name == "ClmchipNumber") continue;
 
                 cmsMenu.Items.Add(c.HeaderText);
                 cmsMenu.Items[cmsMenu.Items.Count - 1].Tag = c.Tag;
@@ -499,7 +549,7 @@ namespace mml2vgmIDE
                 if (c.Name == "ClmChipIndex") continue;
                 if (c.Name == "ClmChipNumber") continue;
                 if (c.Name == "ClmPartNumber") continue;
-                if (c.Name == "ClmIsSecondary") continue;
+                if (c.Name == "ClmchipNumber") continue;
                 c.Visible = true;
                 c.Width = Math.Max(c.Width, 10);
             }

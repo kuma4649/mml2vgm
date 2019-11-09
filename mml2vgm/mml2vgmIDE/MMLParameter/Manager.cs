@@ -72,9 +72,10 @@ namespace mml2vgmIDE.MMLParameter
 
             if (!dicInst.ContainsKey(od.linePos.chip) 
                 || !dicInst[od.linePos.chip].ContainsKey(od.linePos.chipIndex)
-                || !dicInst[od.linePos.chip][od.linePos.chipIndex].ContainsKey(od.linePos.isSecondary))
+                || !dicInst[od.linePos.chip][od.linePos.chipIndex].ContainsKey(od.linePos.chipNumber))
             {
                 Chip chip = null;
+                int chipIndex = 0;
                 switch (od.linePos.chip)
                 {
                     case "AY8910":
@@ -84,10 +85,16 @@ namespace mml2vgmIDE.MMLParameter
                         {
                             chip = Audio.chipRegister.AY8910[od.linePos.chipIndex];
                         }
+                        if (chip == null && od.linePos.chipIndex >= 0x80)
+                        {
+                            Driver.ZGM.ZgmChip.ZgmChip zChip = Audio.chipRegister.dicChipCmdNo[od.linePos.chipIndex];
+                            chip = Audio.chipRegister.AY8910[zChip.Index];
+                            chipIndex = zChip.Index;
+                        }
                         AY8910 ay891 = new AY8910(chip);
                         AY8910.Add(ay891);
-                        dicInstAdd(ay891, od.linePos.chipIndex, od.linePos.isSecondary);
-                        instsAdd(ay891, od.linePos.chipIndex, od.linePos.isSecondary);
+                        dicInstAdd(ay891, od.linePos.chipIndex, od.linePos.chipNumber);
+                        instsAdd(ay891, od.linePos.chipIndex, od.linePos.chipNumber);
                         ay891.isTrace = isTrace;
                         break;
                     case "C140":
@@ -97,17 +104,23 @@ namespace mml2vgmIDE.MMLParameter
                         {
                             chip = Audio.chipRegister.C140[od.linePos.chipIndex];
                         }
+                        if (chip == null && od.linePos.chipIndex >= 0x80)
+                        {
+                            Driver.ZGM.ZgmChip.ZgmChip zChip = Audio.chipRegister.dicChipCmdNo[od.linePos.chipIndex];
+                            chip = Audio.chipRegister.C140[zChip.Index];
+                            chipIndex = zChip.Index;
+                        }
                         C140 c140 = new C140(chip);
                         C140.Add(c140);
-                        dicInstAdd(c140, od.linePos.chipIndex, od.linePos.isSecondary);
-                        instsAdd(c140, od.linePos.chipIndex, od.linePos.isSecondary);
+                        dicInstAdd(c140, od.linePos.chipIndex, od.linePos.chipNumber);
+                        instsAdd(c140, od.linePos.chipIndex, od.linePos.chipNumber);
                         c140.isTrace = isTrace;
                         break;
                     case "CONDUCTOR":
                         Conductor con = new Conductor(chip);
                         Conductor.Add(con);
-                        dicInstAdd(con, od.linePos.chipIndex, od.linePos.isSecondary);
-                        instsAdd(con, od.linePos.chipIndex, od.linePos.isSecondary);
+                        dicInstAdd(con, od.linePos.chipIndex, od.linePos.chipNumber);
+                        instsAdd(con, od.linePos.chipIndex, od.linePos.chipNumber);
                         con.isTrace = isTrace;
                         break;
                     case "HuC6280":
@@ -117,10 +130,16 @@ namespace mml2vgmIDE.MMLParameter
                         {
                             chip = Audio.chipRegister.HuC6280[od.linePos.chipIndex];
                         }
+                        if (chip == null && od.linePos.chipIndex >= 0x80)
+                        {
+                            Driver.ZGM.ZgmChip.ZgmChip zChip = Audio.chipRegister.dicChipCmdNo[od.linePos.chipIndex];
+                            chip = Audio.chipRegister.HuC6280[zChip.Index];
+                            chipIndex = zChip.Index;
+                        }
                         HuC6280 huc = new HuC6280(chip);
                         HuC6280.Add(huc);
-                        dicInstAdd(huc, od.linePos.chipIndex, od.linePos.isSecondary);
-                        instsAdd(huc, od.linePos.chipIndex, od.linePos.isSecondary);
+                        dicInstAdd(huc, od.linePos.chipIndex, od.linePos.chipNumber);
+                        instsAdd(huc, od.linePos.chipIndex, od.linePos.chipNumber);
                         huc.isTrace = isTrace;
                         break;
                     case "K051649":
@@ -130,10 +149,16 @@ namespace mml2vgmIDE.MMLParameter
                         {
                             chip = Audio.chipRegister.K051649[od.linePos.chipIndex];
                         }
+                        if (chip == null && od.linePos.chipIndex >= 0x80)
+                        {
+                            Driver.ZGM.ZgmChip.ZgmChip zChip = Audio.chipRegister.dicChipCmdNo[od.linePos.chipIndex];
+                            chip = Audio.chipRegister.K051649[zChip.Index];
+                            chipIndex = zChip.Index;
+                        }
                         K051649 k51 = new K051649(chip);
                         K051649.Add(k51);
-                        dicInstAdd(k51, od.linePos.chipIndex, od.linePos.isSecondary);
-                        instsAdd(k51, od.linePos.chipIndex, od.linePos.isSecondary);
+                        dicInstAdd(k51, od.linePos.chipIndex, od.linePos.chipNumber);
+                        instsAdd(k51, od.linePos.chipIndex, od.linePos.chipNumber);
                         k51.isTrace = isTrace;
                         break;
                     case "K053260":
@@ -143,10 +168,16 @@ namespace mml2vgmIDE.MMLParameter
                         {
                             chip = Audio.chipRegister.K053260[od.linePos.chipIndex];
                         }
+                        if (chip == null && od.linePos.chipIndex >= 0x80)
+                        {
+                            Driver.ZGM.ZgmChip.ZgmChip zChip = Audio.chipRegister.dicChipCmdNo[od.linePos.chipIndex];
+                            chip = Audio.chipRegister.K053260[zChip.Index];
+                            chipIndex = zChip.Index;
+                        }
                         K053260 k53 = new K053260(chip);
                         K053260.Add(k53);
-                        dicInstAdd(k53, od.linePos.chipIndex, od.linePos.isSecondary);
-                        instsAdd(k53, od.linePos.chipIndex, od.linePos.isSecondary);
+                        dicInstAdd(k53, od.linePos.chipIndex, od.linePos.chipNumber);
+                        instsAdd(k53, od.linePos.chipIndex, od.linePos.chipNumber);
                         k53.isTrace = isTrace;
                         break;
                     case "QSound":
@@ -156,10 +187,16 @@ namespace mml2vgmIDE.MMLParameter
                         {
                             chip = Audio.chipRegister.QSound[od.linePos.chipIndex];
                         }
+                        if (chip == null && od.linePos.chipIndex >= 0x80)
+                        {
+                            Driver.ZGM.ZgmChip.ZgmChip zChip = Audio.chipRegister.dicChipCmdNo[od.linePos.chipIndex];
+                            chip = Audio.chipRegister.QSound[zChip.Index];
+                            chipIndex = zChip.Index;
+                        }
                         QSound qsnd = new QSound(chip);
                         QSound.Add(qsnd);
-                        dicInstAdd(qsnd, od.linePos.chipIndex, od.linePos.isSecondary);
-                        instsAdd(qsnd, od.linePos.chipIndex, od.linePos.isSecondary);
+                        dicInstAdd(qsnd, od.linePos.chipIndex, od.linePos.chipNumber);
+                        instsAdd(qsnd, od.linePos.chipIndex, od.linePos.chipNumber);
                         qsnd.isTrace = isTrace;
                         break;
                     case "RF5C164":
@@ -169,10 +206,16 @@ namespace mml2vgmIDE.MMLParameter
                         {
                             chip = Audio.chipRegister.RF5C164[od.linePos.chipIndex];
                         }
+                        if (chip == null && od.linePos.chipIndex >= 0x80)
+                        {
+                            Driver.ZGM.ZgmChip.ZgmChip zChip = Audio.chipRegister.dicChipCmdNo[od.linePos.chipIndex];
+                            chip = Audio.chipRegister.RF5C164[zChip.Index];
+                            chipIndex = zChip.Index;
+                        }
                         RF5C164 rf5c = new RF5C164(chip);
                         RF5C164.Add(rf5c);
-                        dicInstAdd(rf5c, od.linePos.chipIndex, od.linePos.isSecondary);
-                        instsAdd(rf5c, od.linePos.chipIndex, od.linePos.isSecondary);
+                        dicInstAdd(rf5c, od.linePos.chipIndex, od.linePos.chipNumber);
+                        instsAdd(rf5c, od.linePos.chipIndex, od.linePos.chipNumber);
                         rf5c.isTrace = isTrace;
                         break;
                     case "SEGAPCM":
@@ -182,10 +225,16 @@ namespace mml2vgmIDE.MMLParameter
                         {
                             chip = Audio.chipRegister.SEGAPCM[od.linePos.chipIndex];
                         }
+                        if (chip == null && od.linePos.chipIndex >= 0x80)
+                        {
+                            Driver.ZGM.ZgmChip.ZgmChip zChip = Audio.chipRegister.dicChipCmdNo[od.linePos.chipIndex];
+                            chip = Audio.chipRegister.SEGAPCM[zChip.Index];
+                            chipIndex = zChip.Index;
+                        }
                         SegaPCM spcm = new SegaPCM(chip);
                         SegaPCM.Add(spcm);
-                        dicInstAdd(spcm, od.linePos.chipIndex, od.linePos.isSecondary);
-                        instsAdd(spcm, od.linePos.chipIndex, od.linePos.isSecondary);
+                        dicInstAdd(spcm, od.linePos.chipIndex, od.linePos.chipNumber);
+                        instsAdd(spcm, od.linePos.chipIndex, od.linePos.chipNumber);
                         spcm.isTrace = isTrace;
                         break;
                     case "SN76489":
@@ -195,10 +244,16 @@ namespace mml2vgmIDE.MMLParameter
                         {
                             chip = Audio.chipRegister.SN76489[od.linePos.chipIndex];
                         }
+                        if (chip == null && od.linePos.chipIndex >= 0x80)
+                        {
+                            Driver.ZGM.ZgmChip.ZgmChip zChip = Audio.chipRegister.dicChipCmdNo[od.linePos.chipIndex];
+                            chip = Audio.chipRegister.SN76489[zChip.Index];
+                            chipIndex = zChip.Index;
+                        }
                         SN76489 dcsg = new SN76489(chip);
                         SN76489.Add(dcsg);
-                        dicInstAdd(dcsg, od.linePos.chipIndex, od.linePos.isSecondary);
-                        instsAdd(dcsg, od.linePos.chipIndex, od.linePos.isSecondary);
+                        dicInstAdd(dcsg, od.linePos.chipIndex, od.linePos.chipNumber);
+                        instsAdd(dcsg, od.linePos.chipIndex, od.linePos.chipNumber);
                         dcsg.isTrace = isTrace;
                         break;
                     case "YM2151":
@@ -208,10 +263,16 @@ namespace mml2vgmIDE.MMLParameter
                         {
                             chip = Audio.chipRegister.YM2151[od.linePos.chipIndex];
                         }
+                        if (chip == null && od.linePos.chipIndex >= 0x80)
+                        {
+                            Driver.ZGM.ZgmChip.ZgmChip zChip = Audio.chipRegister.dicChipCmdNo[od.linePos.chipIndex];
+                            chip = Audio.chipRegister.YM2151[zChip.Index];
+                            chipIndex = zChip.Index;
+                        }
                         YM2151 opm = new YM2151(chip);
                         YM2151.Add(opm);
-                        dicInstAdd(opm, od.linePos.chipIndex, od.linePos.isSecondary);
-                        instsAdd(opm, od.linePos.chipIndex, od.linePos.isSecondary);
+                        dicInstAdd(opm, od.linePos.chipIndex, od.linePos.chipNumber);
+                        instsAdd(opm, od.linePos.chipIndex, od.linePos.chipNumber);
                         opm.isTrace = isTrace;
                         break;
                     case "YM2203":
@@ -221,10 +282,16 @@ namespace mml2vgmIDE.MMLParameter
                         {
                             chip = Audio.chipRegister.YM2203[od.linePos.chipIndex];
                         }
+                        if (chip == null && od.linePos.chipIndex >= 0x80)
+                        {
+                            Driver.ZGM.ZgmChip.ZgmChip zChip = Audio.chipRegister.dicChipCmdNo[od.linePos.chipIndex];
+                            chip = Audio.chipRegister.YM2203[zChip.Index];
+                            chipIndex = zChip.Index;
+                        }
                         YM2203 opn = new YM2203(chip);
                         YM2203.Add(opn);
-                        dicInstAdd(opn, od.linePos.chipIndex, od.linePos.isSecondary);
-                        instsAdd(opn, od.linePos.chipIndex, od.linePos.isSecondary);
+                        dicInstAdd(opn, od.linePos.chipIndex, od.linePos.chipNumber);
+                        instsAdd(opn, od.linePos.chipIndex, od.linePos.chipNumber);
                         opn.isTrace = isTrace;
                         break;
                     case "YM2413":
@@ -234,10 +301,16 @@ namespace mml2vgmIDE.MMLParameter
                         {
                             chip = Audio.chipRegister.YM2413[od.linePos.chipIndex];
                         }
+                        if (chip == null && od.linePos.chipIndex >= 0x80)
+                        {
+                            Driver.ZGM.ZgmChip.ZgmChip zChip = Audio.chipRegister.dicChipCmdNo[od.linePos.chipIndex];
+                            chip = Audio.chipRegister.YM2413[zChip.Index];
+                            chipIndex = zChip.Index;
+                        }
                         YM2413 opll = new YM2413(chip);
                         YM2413.Add(opll);
-                        dicInstAdd(opll, od.linePos.chipIndex, od.linePos.isSecondary);
-                        instsAdd(opll, od.linePos.chipIndex, od.linePos.isSecondary);
+                        dicInstAdd(opll, od.linePos.chipIndex, od.linePos.chipNumber);
+                        instsAdd(opll, od.linePos.chipIndex, od.linePos.chipNumber);
                         opll.isTrace = isTrace;
                         break;
                     case "YM2608":
@@ -247,23 +320,36 @@ namespace mml2vgmIDE.MMLParameter
                         {
                             chip = Audio.chipRegister.YM2608[od.linePos.chipIndex];
                         }
+                        if (chip == null && od.linePos.chipIndex >= 0x80)
+                        {
+                            Driver.ZGM.ZgmChip.ZgmChip zChip = Audio.chipRegister.dicChipCmdNo[od.linePos.chipIndex];
+                            chip = Audio.chipRegister.YM2608[zChip.Index];
+                            chipIndex = zChip.Index;
+                        }
                         YM2608 opna = new YM2608(chip);
                         YM2608.Add(opna);
-                        dicInstAdd(opna, od.linePos.chipIndex, od.linePos.isSecondary);
-                        instsAdd(opna, od.linePos.chipIndex, od.linePos.isSecondary);
+                        dicInstAdd(opna, od.linePos.chipIndex, od.linePos.chipNumber);
+                        instsAdd(opna, od.linePos.chipIndex, od.linePos.chipNumber);
                         opna.isTrace = isTrace;
                         break;
                     case "YM2609":
                         if (Audio.chipRegister != null
                             && Audio.chipRegister.YM2609 != null
-                            && od.linePos.chipIndex-0x80 < Audio.chipRegister.YM2609.Count)
+                            && od.linePos.chipIndex < Audio.chipRegister.YM2609.Count)
                         {
-                            chip = Audio.chipRegister.YM2609[od.linePos.chipIndex-0x80];
+                            chip = Audio.chipRegister.YM2609[od.linePos.chipIndex];
+                            chipIndex = od.linePos.chipIndex;
+                        }
+                        if(chip==null && od.linePos.chipIndex >= 0x80)
+                        {
+                            Driver.ZGM.ZgmChip.ZgmChip zChip = Audio.chipRegister.dicChipCmdNo[od.linePos.chipIndex];
+                            chip = Audio.chipRegister.YM2609[zChip.Index];
+                            chipIndex = zChip.Index;
                         }
                         YM2609 opna2 = new YM2609(chip);
                         YM2609.Add(opna2);
-                        dicInstAdd(opna2, od.linePos.chipIndex, od.linePos.isSecondary);
-                        instsAdd(opna2, od.linePos.chipIndex, od.linePos.isSecondary);
+                        dicInstAdd(opna2, od.linePos.chipIndex, od.linePos.chipNumber);
+                        instsAdd(opna2, od.linePos.chipIndex, od.linePos.chipNumber);
                         opna2.isTrace = isTrace;
                         break;
                     case "YM2610B":
@@ -273,10 +359,16 @@ namespace mml2vgmIDE.MMLParameter
                         {
                             chip = Audio.chipRegister.YM2610[od.linePos.chipIndex];
                         }
+                        if (chip == null && od.linePos.chipIndex >= 0x80)
+                        {
+                            Driver.ZGM.ZgmChip.ZgmChip zChip = Audio.chipRegister.dicChipCmdNo[od.linePos.chipIndex];
+                            chip = Audio.chipRegister.YM2610[zChip.Index];
+                            chipIndex = zChip.Index;
+                        }
                         YM2610B opnb = new YM2610B(chip);
                         YM2610B.Add(opnb);
-                        dicInstAdd(opnb, od.linePos.chipIndex, od.linePos.isSecondary);
-                        instsAdd(opnb, od.linePos.chipIndex, od.linePos.isSecondary);
+                        dicInstAdd(opnb, od.linePos.chipIndex, od.linePos.chipNumber);
+                        instsAdd(opnb, od.linePos.chipIndex, od.linePos.chipNumber);
                         opnb.isTrace = isTrace;
                         break;
                     case "YM2612":
@@ -286,10 +378,16 @@ namespace mml2vgmIDE.MMLParameter
                         {
                             chip = Audio.chipRegister.YM2612[od.linePos.chipIndex];
                         }
+                        if (chip == null && od.linePos.chipIndex >= 0x80)
+                        {
+                            Driver.ZGM.ZgmChip.ZgmChip zChip = Audio.chipRegister.dicChipCmdNo[od.linePos.chipIndex];
+                            chip = Audio.chipRegister.YM2612[zChip.Index];
+                            chipIndex = zChip.Index;
+                        }
                         YM2612 opn2 = new YM2612(chip);
                         YM2612.Add(opn2);
-                        dicInstAdd(opn2, od.linePos.chipIndex, od.linePos.isSecondary);
-                        instsAdd(opn2, od.linePos.chipIndex, od.linePos.isSecondary);
+                        dicInstAdd(opn2, od.linePos.chipIndex, od.linePos.chipNumber);
+                        instsAdd(opn2, od.linePos.chipIndex, od.linePos.chipNumber);
                         opn2.isTrace = isTrace;
                         break;
                     case "YM2612X":
@@ -299,10 +397,16 @@ namespace mml2vgmIDE.MMLParameter
                         {
                             chip = Audio.chipRegister.YM2612[od.linePos.chipIndex];
                         }
+                        if (chip == null && od.linePos.chipIndex >= 0x80)
+                        {
+                            Driver.ZGM.ZgmChip.ZgmChip zChip = Audio.chipRegister.dicChipCmdNo[od.linePos.chipIndex];
+                            chip = Audio.chipRegister.YM2612[zChip.Index];
+                            chipIndex = zChip.Index;
+                        }
                         YM2612X opn2x = new YM2612X(chip);
                         YM2612X.Add(opn2x);
-                        dicInstAdd(opn2x, od.linePos.chipIndex, od.linePos.isSecondary);
-                        instsAdd(opn2x, od.linePos.chipIndex, od.linePos.isSecondary);
+                        dicInstAdd(opn2x, od.linePos.chipIndex, od.linePos.chipNumber);
+                        instsAdd(opn2x, od.linePos.chipIndex, od.linePos.chipNumber);
                         opn2x.isTrace = isTrace;
                         break;
                     case "GeneralMIDI":
@@ -312,17 +416,23 @@ namespace mml2vgmIDE.MMLParameter
                         {
                             chip = Audio.chipRegister.MIDI[od.linePos.chipIndex];
                         }
+                        if (chip == null && od.linePos.chipIndex >= 0x80)
+                        {
+                            Driver.ZGM.ZgmChip.ZgmChip zChip = Audio.chipRegister.dicChipCmdNo[od.linePos.chipIndex];
+                            chip = Audio.chipRegister.MIDI[zChip.Index];
+                            chipIndex = zChip.Index;
+                        }
                         GeneralMIDI gmidi = new GeneralMIDI(chip);
                         GeneralMIDI.Add(gmidi);
-                        dicInstAdd(gmidi, od.linePos.chipIndex, od.linePos.isSecondary);
-                        instsAdd(gmidi, od.linePos.chipIndex, od.linePos.isSecondary);
+                        dicInstAdd(gmidi, od.linePos.chipIndex, od.linePos.chipNumber);
+                        instsAdd(gmidi, od.linePos.chipIndex, od.linePos.chipNumber);
                         gmidi.isTrace = isTrace;
                         break;
                 }
             }
 
             int cc = Audio.sm != null ? Audio.sm.CurrentClockCount : 0;
-            dicInst[od.linePos.chip][od.linePos.chipIndex][od.linePos.isSecondary](od, cc);
+            dicInst[od.linePos.chip][od.linePos.chipIndex][od.linePos.chipNumber](od, cc);
 
             return true;
         }

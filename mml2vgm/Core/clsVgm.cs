@@ -877,11 +877,11 @@ namespace Core
                 vol = 100;
             }
 
-            int isSecondary = 0;
+            int chipNumber = 0;
 
             if (vs.Length > 4)
             {
-                enmChip = GetChipTypeForPCM(line, vs[4], out isSecondary);
+                enmChip = GetChipTypeForPCM(line, vs[4], out chipNumber);
                 if (enmChip == enmChipType.None) return;
             }
 
@@ -920,7 +920,7 @@ namespace Core
                 , fq
                 , vol
                 , enmChip
-                , isSecondary
+                , chipNumber
                 , lp
                 ));
 
@@ -928,7 +928,7 @@ namespace Core
             //{
             //    instPCM.Remove(num);
             //}
-            //instPCM.Add(num, new clsPcm(num, pcmDataSeqNum++, enmChip, isSecondary, fn, fq, vol, 0, 0, 0, lp, false, 8000));
+            //instPCM.Add(num, new clsPcm(num, pcmDataSeqNum++, enmChip, chipNumber, fn, fq, vol, 0, 0, 0, lp, false, 8000));
         }
 
         /// <summary>
@@ -938,7 +938,7 @@ namespace Core
         {
 
             string FileName = vs[0].Substring(1).Trim().Trim('"');
-            enmChipType ChipName = GetChipTypeForPCM(line, vs[1], out int isSecondary);
+            enmChipType ChipName = GetChipTypeForPCM(line, vs[1], out int chipNumber);
 
             if (info.format == enmFormat.XGM)
             {
@@ -975,7 +975,7 @@ namespace Core
                 enmPcmDefineType.RawData
                 , FileName
                 , ChipName
-                , isSecondary
+                , chipNumber
                 , SrcStartAdr
                 , DesStartAdr
                 , Length
@@ -990,7 +990,7 @@ namespace Core
         private void definePCMInstrumentSet(Line line, string[] vs)
         {
             int num = Common.ParseNumber(vs[0].Substring(1));
-            enmChipType ChipName = GetChipTypeForPCM(line, vs[1], out int isSecondary);
+            enmChipType ChipName = GetChipTypeForPCM(line, vs[1], out int chipNumber);
             if (ChipName == enmChipType.None) return;
 
             if (info.format == enmFormat.XGM)
@@ -1080,7 +1080,7 @@ namespace Core
                 enmPcmDefineType.Set
                 , num
                 , ChipName
-                , isSecondary
+                , chipNumber
                 , BaseFreq
                 , StartAdr
                 , EndAdr
@@ -1148,21 +1148,21 @@ namespace Core
         }
 
 
-        private enmChipType GetChipTypeForPCM(Line line, string strChip, out int isSecondary)
+        private enmChipType GetChipTypeForPCM(Line line, string strChip, out int chipNumber)
         {
             enmChipType enmChip = enmChipType.YM2612;
             string chipName = strChip.Trim().ToUpper();
-            isSecondary = 0;
+            chipNumber = 0;
             if (chipName == "") return enmChipType.YM2612;
 
             if (chipName.IndexOf(Information.PRIMARY) >= 0)
             {
-                isSecondary = 0;
+                chipNumber = 0;
                 chipName = chipName.Replace(Information.PRIMARY, "");
             }
             else if (chipName.IndexOf(Information.SECONDARY) >= 0)
             {
-                isSecondary = 1;
+                chipNumber = 1;
                 chipName = chipName.Replace(Information.SECONDARY, "");
             }
 
@@ -1307,7 +1307,7 @@ namespace Core
                 line.Lp.part,
                 line.Lp.chip,
                 line.Lp.chipIndex,
-                line.Lp.isSecondary,
+                line.Lp.chipNumber,
                 line.Lp.ch), line.Txt);
             l.Lp.col = buf.IndexOfAny(new char[] { ' ', '\t' }) + 3;
             aliesData.Add(name, l);
@@ -1357,7 +1357,7 @@ namespace Core
                     line.Lp.part,
                     line.Lp.chip,
                     line.Lp.chipIndex,
-                    line.Lp.isSecondary,
+                    line.Lp.chipNumber,
                     line.Lp.ch), line.Txt);
                 l.Lp.col = i + 1;
                 partData[p].Add(l);
@@ -2210,7 +2210,7 @@ namespace Core
                     MML mml = pw.mmlData[pw.mmlPos];
                     mml.line.Lp.ch = pw.ch;
                     mml.line.Lp.chipIndex = pw.chip.ChipID;
-                    mml.line.Lp.isSecondary = pw.isSecondary;
+                    mml.line.Lp.chipNumber = pw.chipNumber;
                     mml.line.Lp.chip = pw.chip.Name;
                     int c = mml.line.Txt.IndexOfAny(new char[] { ' ', '\t' });
                     //c += mml.line.Txt.Substring(c).Length - mml.line.Txt.Substring(c).TrimStart().Length;
@@ -2814,7 +2814,7 @@ namespace Core
                         MML mml = pw.mmlData[pw.mmlPos];
                         mml.line.Lp.ch = pw.ch;
                         mml.line.Lp.chipIndex = pw.chip.ChipID;
-                        mml.line.Lp.isSecondary = pw.isSecondary;
+                        mml.line.Lp.chipNumber = pw.chipNumber;
                         mml.line.Lp.chip = pw.chip.Name;
                         int c = mml.line.Txt.IndexOfAny(new char[] { ' ', '\t' });
                         //c += mml.line.Txt.Substring(c).Length - mml.line.Txt.Substring(c).TrimStart().Length;
@@ -3147,7 +3147,7 @@ namespace Core
                     case 0x2f: 
                         //TODO: Dummy Command
                         //dummyコマンドの除去はmml2vgm.cs:OutXgmFileで行う。
-                        if (cmd.val == 0x2f //dummyChipコマンド　(第2引数：chipID 第３引数:isSecondary)
+                        if (cmd.val == 0x2f //dummyChipコマンド　(第2引数：chipID 第３引数:chipNumber)
                             && Common.CheckDummyCommand(cmd.type))//ここで指定できるmmlコマンドは元々はChipに送信することのないコマンドのみ(さもないと、通常のコマンドのデータと見分けがつかなくなる可能性がある)
                         {
                             src[ptr].val = 0x60;//XGM向けダミーコマンド
@@ -3657,7 +3657,7 @@ namespace Core
                         partWork pw = new partWork()
                         {
                             chip = chip,
-                            isSecondary = ((info.format != enmFormat.ZGM && chip.ChipID == 1) ? 1 : 0),
+                            chipNumber = ((info.format != enmFormat.ZGM && chip.ChipID == 1) ? 1 : 0),
                             ch = i// + 1;
                         };
 
@@ -3750,7 +3750,7 @@ namespace Core
         //                    mml.line.Lp.length,
         //                    mml.line.Lp.part,
         //                    mml.line.Lp.chip,
-        //                    mml.line.Lp.isSecondary,
+        //                    mml.line.Lp.chipNumber,
         //                    mml.line.Lp.ch);
         //            }
         //        }
@@ -3780,7 +3780,7 @@ namespace Core
                                 mml.line.Lp.part,
                                 mml.line.Lp.chip,
                                 mml.line.Lp.chipIndex,
-                                mml.line.Lp.isSecondary,
+                                mml.line.Lp.chipNumber,
                                 mml.line.Lp.ch);
                         }
                     }
@@ -3808,7 +3808,7 @@ namespace Core
                             mml.line.Lp.part,
                             mml.line.Lp.chip,
                             mml.line.Lp.chipIndex,
-                            mml.line.Lp.isSecondary,
+                            mml.line.Lp.chipNumber,
                             mml.line.Lp.ch);
                     }
                 }
@@ -3837,7 +3837,7 @@ namespace Core
         //                    od.linePos.length,
         //                    od.linePos.part,
         //                    od.linePos.chip,
-        //                    od.linePos.isSecondary,
+        //                    od.linePos.chipNumber,
         //                    od.linePos.ch);
         //            }
         //        }
@@ -3866,7 +3866,7 @@ namespace Core
                                 od.linePos.part,
                                 od.linePos.chip,
                                 od.linePos.chipIndex,
-                                od.linePos.isSecondary,
+                                od.linePos.chipNumber,
                                 od.linePos.ch);
                         }
                     }
@@ -3891,7 +3891,7 @@ namespace Core
                             od.linePos.part,
                             od.linePos.chip,
                             od.linePos.chipIndex,
-                            od.linePos.isSecondary,
+                            od.linePos.chipNumber,
                             od.linePos.ch);
                     }
                 }
