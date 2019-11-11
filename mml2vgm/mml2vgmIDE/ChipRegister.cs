@@ -680,20 +680,9 @@ namespace mml2vgmIDE
         {
 
             CONDUCTOR.Clear();
-            AY8910.Clear();
-            C140   .Clear();
-            HuC6280.Clear();
-            K051649.Clear();
-            K053260.Clear();
-            QSound .Clear();
-            RF5C164.Clear();
+            //QSound .Clear();
+            //RF5C164.Clear();
             SEGAPCM.Clear();
-            //YM2151 .Clear();
-            //YM2203 .Clear();
-            //YM2413 .Clear();
-            //YM2608 .Clear();
-            //YM2610 .Clear();
-            //YM2612 .Clear();
             SN76489.Clear();
             MIDI.Clear();
 
@@ -1739,7 +1728,7 @@ namespace mml2vgmIDE
             {
                 int d = AY8910NowFadeoutVol[Chip.Number];// >> 3;
                 dData = Math.Max(dData - d, 0);
-                dData = AY8910MaskPSGCh[Chip.Number][dAddr - 0x08] ? 0 : dData;
+                dData = Chip.ChMasks[dAddr - 0x08] ? 0 : dData;
             }
 
             if (AY8910[Chip.Number].Model == EnmVRModel.RealModel && scAY8910[Chip.Number].mul != 1.0)
@@ -1983,6 +1972,7 @@ namespace mml2vgmIDE
                             {
                                 pcmKeyOnC140[Chip.Number][ch] = true;
                             }
+                            if (Chip.ChMasks[ch]) dData &= 0x7f;
                             break;
                     }
                 }
@@ -2165,6 +2155,15 @@ namespace mml2vgmIDE
             if (Chip.Number == 0) chipLED.PriHuC = 2;
             else chipLED.SecHuC = 2;
 
+            int reg = Address & 0xf;
+            if (reg == 0)
+            {
+                Chip.currentCh = dData & 0x7;
+            }
+            else if(reg==4)
+            {
+                if (Chip.ChMasks[Chip.currentCh]) dData &= 0x7f;
+            }
         }
 
         public void HuC6280SetRegister(outDatum od, long Counter, int chipID, int dAddr, int dData)
@@ -2296,6 +2295,19 @@ namespace mml2vgmIDE
             if (Chip.Number == 0) chipLED.PriK051649 = 2;
             else chipLED.SecK051649 = 2;
 
+            if ((Address & 1) == 1)
+            {
+                if ((Address >> 1) == 0x03)
+                {
+                    dData = 
+                        (Chip.ChMasks[0] ? 0 : (dData & 1))
+                        | (Chip.ChMasks[1] ? 0 : (dData & 2))
+                        | (Chip.ChMasks[2] ? 0 : (dData & 4))
+                        | (Chip.ChMasks[3] ? 0 : (dData & 8))
+                        | (Chip.ChMasks[4] ? 0 : (dData & 16))
+                        ;
+                }
+            }
         }
 
         public void K051649SetRegister(outDatum od, long Counter, int chipID, int dAddr, int dData)
@@ -2426,6 +2438,15 @@ namespace mml2vgmIDE
             if (Chip.Number == 0) chipLED.PriK053260 = 2;
             else chipLED.SecK053260 = 2;
 
+            if (Address == 0x28)
+            {
+                dData =
+                    (Chip.ChMasks[0] ? 0 : (dData & 1))
+                    | (Chip.ChMasks[1] ? 0 : (dData & 2))
+                    | (Chip.ChMasks[2] ? 0 : (dData & 4))
+                    | (Chip.ChMasks[3] ? 0 : (dData & 8))
+                    ;
+            }
         }
 
         public void K053260SetRegister(outDatum od, long Counter, int ChipID, int dAddr, int dData)
@@ -2563,6 +2584,14 @@ namespace mml2vgmIDE
 
             if (Chip.Number == 0) chipLED.PriQsnd = 2;
 
+            if (Address < 0x80)
+            {
+                if ((Address & 0x7) == 3)
+                {
+                    int ch = Address >> 3;
+                    dData = Chip.ChMasks[ch] ? 0 : dData;
+                }
+            }
         }
 
         public void QSoundSetRegister(outDatum od, long Counter, int ChipID, int dAddr, int dData)
@@ -2634,7 +2663,7 @@ namespace mml2vgmIDE
 
 
 
-        #region RF5C68
+        #region RF5C164
 
         public void writeRF5C68PCMData(byte chipid, uint stAdr, uint dataSize, byte[] vgmBuf, uint vgmAdr)
         {
@@ -2739,6 +2768,21 @@ namespace mml2vgmIDE
 
             if (Chip.Number == 0) chipLED.PriRF5C = 2;
             else chipLED.SecRF5C = 2;
+
+            if ((Address&0xf) == 8)
+            {
+                dData =
+                    ((Chip.ChMasks[0] ? 1 : (dData & 1))
+                    | (Chip.ChMasks[1] ? 2 : (dData & 2))
+                    | (Chip.ChMasks[2] ? 4 : (dData & 4))
+                    | (Chip.ChMasks[3] ? 8 : (dData & 8))
+
+                    | (Chip.ChMasks[4] ? 16 : (dData & 16))
+                    | (Chip.ChMasks[5] ? 32 : (dData & 32))
+                    | (Chip.ChMasks[6] ? 64 : (dData & 64))
+                    | (Chip.ChMasks[7] ? 128 : (dData & 128)))
+                    ;
+            }
 
         }
 

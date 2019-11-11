@@ -32,6 +32,8 @@ namespace SoundManager
             }
         }
 
+        public int currentCh { get; internal set; }
+
         public Chip(int Ch)
         {
             ChMasks = new bool[Ch];
