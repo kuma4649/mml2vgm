@@ -688,12 +688,12 @@ namespace mml2vgmIDE
             QSound .Clear();
             RF5C164.Clear();
             SEGAPCM.Clear();
-            YM2151 .Clear();
-            YM2203 .Clear();
-            YM2413 .Clear();
-            YM2608 .Clear();
-            YM2610 .Clear();
-            YM2612 .Clear();
+            //YM2151 .Clear();
+            //YM2203 .Clear();
+            //YM2413 .Clear();
+            //YM2608 .Clear();
+            //YM2610 .Clear();
+            //YM2612 .Clear();
             SN76489.Clear();
             MIDI.Clear();
 
@@ -3027,6 +3027,15 @@ namespace mml2vgmIDE
             //    }
             //}
 
+            if (dAddr == 0x08) //Key-On/Off
+            {
+                int ch = dData & 0x7;
+
+                if (Chip.ChMasks[ch])
+                {
+                    dData = ch;
+                }
+            }
         }
 
         public void YM2151SetRegister(outDatum od, long Counter, int ChipID, int dAddr, int dData)
@@ -3216,6 +3225,7 @@ namespace mml2vgmIDE
             else chipLED.SecOPN = 2;
 
             int dAddr = (Address & 0xff);
+            int ch;
 
             fmRegisterYM2203[Chip.Number][dAddr] = dData;
 
@@ -3223,7 +3233,7 @@ namespace mml2vgmIDE
             {
                 if (dAddr == 0x28)
                 {
-                    int ch = dData & 0x3;
+                    ch = dData & 0x3;
                     if (ch >= 0 && ch < 3)
                     {
                         if (ch != 2 || (fmRegisterYM2203[Chip.Number][0x27] & 0xc0) != 0x40)
@@ -3254,7 +3264,7 @@ namespace mml2vgmIDE
 
             if ((dAddr & 0xf0) == 0x40)//TL
             {
-                int ch = (dAddr & 0x3);
+                ch = (dAddr & 0x3);
                 if (ch != 3)
                 {
                     int al = fmRegisterYM2203[Chip.Number][0xb0 + ch] & 0x7;
@@ -3308,6 +3318,32 @@ namespace mml2vgmIDE
 
             //    scYM2203[Chip.Number].setRegister(dAddr, dData);
             //}
+
+            ch = -1;
+
+            //FM ch<6
+            if (Address == 0x28)
+            {
+                ch = dData & 0x3;
+
+                if (Chip.ChMasks[ch]) dData &= 0xf;
+            }
+
+            //SSG ch<9
+            int adl = Address & 0x00f;
+            if (adl == 8 || adl == 9 || adl == 10)
+            {
+                int adr = Address & 0x3f0;
+
+                //SSG1
+                if (adr == 0x000)
+                {
+                    ch = adl - 8 + 6 + 0;
+                    if (Chip.ChMasks[ch])
+                        dData = 0;
+                }
+            }
+
         }
 
         public void YM2203SetRegister(outDatum od, long Counter, int ChipID, int dAddr, int dData)
@@ -3525,6 +3561,7 @@ namespace mml2vgmIDE
             else chipLED.SecOPLL = 2;
 
             int dAddr = (Address & 0xff);
+            int ch;
 
             fmRegisterYM2413[Chip.Number][dAddr] = dData;
 
@@ -3532,7 +3569,7 @@ namespace mml2vgmIDE
             //{
             if (dAddr >= 0x20 && dAddr <= 0x28)
             {
-                int ch = dAddr - 0x20;
+                ch = dAddr - 0x20;
                 int k = dData & 0x10;
                 if (k == 0)
                 {
@@ -3564,11 +3601,11 @@ namespace mml2vgmIDE
                 }
 
                 dData = (dData & 0x20)
-                    | (maskFMChYM2413[Chip.Number][9] ? 0 : (dData & 0x10))
-                    | (maskFMChYM2413[Chip.Number][10] ? 0 : (dData & 0x08))
-                    | (maskFMChYM2413[Chip.Number][11] ? 0 : (dData & 0x04))
-                    | (maskFMChYM2413[Chip.Number][12] ? 0 : (dData & 0x02))
-                    | (maskFMChYM2413[Chip.Number][13] ? 0 : (dData & 0x01))
+                    | (Chip.ChMasks[9] ? 0 : (dData & 0x10))
+                    | (Chip.ChMasks[10] ? 0 : (dData & 0x08))
+                    | (Chip.ChMasks[11] ? 0 : (dData & 0x04))
+                    | (Chip.ChMasks[12] ? 0 : (dData & 0x02))
+                    | (Chip.ChMasks[13] ? 0 : (dData & 0x01))
                     ;
             }
 
@@ -3591,6 +3628,16 @@ namespace mml2vgmIDE
             //    if (scYM2413[Chip.Number] == null) return;
             //    scYM2413[Chip.Number].setRegister(dAddr, dData);
             //}
+
+            ch = -1;
+
+            //FM ch<18
+            if (dAddr >= 0x20 && dAddr <= 0x28)
+            {
+                ch = dAddr & 0xf;
+                if (Chip.ChMasks[ch]) dData &= 0xef;
+            }
+
         }
 
         public void YM2413SetRegister(outDatum od, long Counter, int ChipID, int dAddr, int dData)
@@ -3768,6 +3815,7 @@ namespace mml2vgmIDE
 
             int dPort = (Address >> 8) & 1;
             int dAddr = (Address & 0xff);
+            int ch;
 
             fmRegisterYM2608[Chip.Number][dPort][dAddr] = dData;
 
@@ -3782,7 +3830,7 @@ namespace mml2vgmIDE
             {
                 if (dPort == 0 && dAddr == 0x28)
                 {
-                    int ch = (dData & 0x3) + ((dData & 0x4) > 0 ? 3 : 0);
+                    ch = (dData & 0x3) + ((dData & 0x4) > 0 ? 3 : 0);
                     if (ch >= 0 && ch < 6)// && (dData & 0xf0) > 0)
                     {
                         if (ch != 2 || (fmRegisterYM2608[Chip.Number][0][0x27] & 0xc0) != 0x40)
@@ -3838,7 +3886,7 @@ namespace mml2vgmIDE
 
             if ((dAddr & 0xf0) == 0x40)//TL
             {
-                int ch = (dAddr & 0x3);
+                ch = (dAddr & 0x3);
                 if (ch != 3)
                 {
                     int al = fmRegisterYM2608[Chip.Number][dPort][0xb0 + ch] & 0x07;//AL
@@ -3914,6 +3962,51 @@ namespace mml2vgmIDE
 
 
             Address = dPort * 0x100 + dAddr;
+
+            ch = -1;
+
+            //FM ch<9
+            if (Address == 0x28)
+            {
+                ch = dData & 0x3;
+                ch += ((dData & 0x4) == 0) ? 0 : 3;
+                ch += (Address == 0x228) ? 9 : 0;
+
+                if (Chip.ChMasks[ch]) dData &= 0xf;
+            }
+
+            //SSG ch<12
+            int adl = Address & 0x00f;
+            if (adl == 8 || adl == 9 || adl == 10)
+            {
+                int adr = Address & 0x3f0;
+
+                //SSG1
+                if (adr == 0x000)
+                {
+                    ch = adl - 8 + 9 + 0;
+                    if (Chip.ChMasks[ch])
+                        dData = 0;
+                }
+            }
+
+            //リズム ch<18
+            if (Address == 0x10)
+            {
+                byte mask = 0x80;
+                for (int i = 0; i < 6; i++)
+                {
+                    mask |= (byte)((Chip.ChMasks[i + 12] ? 0 : 1) << i);
+                }
+
+                dData &= mask;
+            }
+
+            //ADPCM1 ch=18
+            if (Address == 0x100)
+            {
+                if (Chip.ChMasks[18]) dData &= 0x7f;
+            }
 
         }
 
@@ -4354,6 +4447,7 @@ namespace mml2vgmIDE
 
             int dPort = (Address >> 8) & 1;
             int dAddr = (Address & 0xff);
+            int ch;
 
             fmRegisterYM2610[Chip.Number][dPort][dAddr] = dData;
 
@@ -4362,7 +4456,7 @@ namespace mml2vgmIDE
                 //fmRegisterYM2610[dPort][dAddr] = dData;
                 if (dPort == 0 && dAddr == 0x28)
                 {
-                    int ch = (dData & 0x3) + ((dData & 0x4) > 0 ? 3 : 0);
+                    ch = (dData & 0x3) + ((dData & 0x4) > 0 ? 3 : 0);
                     if (ch >= 0 && ch < 6)// && (dData & 0xf0) > 0)
                     {
                         if (ch != 2 || (fmRegisterYM2610[Chip.Number ][0][0x27] & 0xc0) != 0x40)
@@ -4433,7 +4527,7 @@ namespace mml2vgmIDE
 
             if ((dAddr & 0xf0) == 0x40)//TL
             {
-                int ch = (dAddr & 0x3);
+                ch = (dAddr & 0x3);
                 if (ch != 3)
                 {
                     int al = fmRegisterYM2610[Chip.Number][dPort][0xb0 + ch] & 0x07;//AL
@@ -4546,6 +4640,51 @@ namespace mml2vgmIDE
             //        scYM2610EB[Chip.Number ].setRegister((dPort << 8) | dAddr | 0x10000, dData);
             //    }
             //}
+
+            ch = -1;
+
+            //FM ch<9
+            if (Address == 0x28)
+            {
+                ch = dData & 0x3;
+                ch += ((dData & 0x4) == 0) ? 0 : 3;
+                ch += (Address == 0x228) ? 9 : 0;
+
+                if (Chip.ChMasks[ch]) dData &= 0xf;
+            }
+
+            //SSG ch<12
+            int adl = Address & 0x00f;
+            if (adl == 8 || adl == 9 || adl == 10)
+            {
+                int adr = Address & 0x3f0;
+
+                //SSG1
+                if (adr == 0x000)
+                {
+                    ch = adl - 8 + 9 + 0;
+                    if (Chip.ChMasks[ch])
+                        dData = 0;
+                }
+            }
+
+            //ADPCM-A ch<18
+            if (Address == 0x100)
+            {
+                byte mask = 0x80;
+                for (int i = 0; i < 6; i++)
+                {
+                    mask |= (byte)((Chip.ChMasks[i + 12] ? 0 : 1) << i);
+                }
+
+                dData &= mask;
+            }
+
+            //ADPCM-B ch=18
+            if (Address == 0x010)
+            {
+                if (Chip.ChMasks[18]) dData &= 0x7f;
+            }
 
         }
 
@@ -5363,6 +5502,19 @@ namespace mml2vgmIDE
             //    //}
             //}
 
+            //FM ch<9
+            if (Address == 0x28)
+            {
+                int ch = dData & 0x3;
+                ch += ((dData & 0x4) == 0) ? 0 : 3;
+
+                if (Chip.ChMasks[ch]) dData &= 0xf;
+            }
+
+            if (dPort == 0 && dAddr == 0x2a)
+            {
+                if (Chip.ChMasks[5]) dData = 0x80;
+            }
         }
 
         public void YM2612SetRegister(outDatum od, long Counter, int ChipID, int dPort, int dAddr, int dData)

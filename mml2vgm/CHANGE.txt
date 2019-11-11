@@ -1,4 +1,8 @@
 更新履歴
+TAG144 2019/11/11
+  IDE
+    ・Mute/Solo機能の実装(OPM,OPN,OPN2,OPNA,OPNB,OPLL)
+
 TAG143 2019/11/9 2nd
   IDE
     ・Mute/Solo機能の実装(OPNA2のみ)
