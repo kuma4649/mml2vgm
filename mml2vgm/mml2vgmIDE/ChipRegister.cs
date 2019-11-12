@@ -680,11 +680,6 @@ namespace mml2vgmIDE
         {
 
             CONDUCTOR.Clear();
-            //QSound .Clear();
-            //RF5C164.Clear();
-            SEGAPCM.Clear();
-            SN76489.Clear();
-            MIDI.Clear();
 
             
             for (int i = 0; i < 2; i++)
@@ -5854,13 +5849,29 @@ namespace mml2vgmIDE
                 if ((Address & 0x87) == 0x86)
                 {
                     byte ch = (byte)((Address >> 3) & 0xf);
-                    if ((dData & 0x01) == 0) pcmKeyOnSEGAPCM[Chip.Number][ch] = true;
+                    if ((dData & 0x01) == 0)
+                    {
+                        pcmKeyOnSEGAPCM[Chip.Number][ch] = true;
+                    }
+                    if (Chip.ChMasks[ch]) dData &= 0xfe;
                 }
 
                 if (Address < 0x86 && ((Address & 0x03) == 2 || (Address & 0x03) == 3))
                 {
                     int d = SEGAPCMNowFadeoutVol[Chip.Number];// >> 3;
                     dData = Math.Max(dData - d, 0);
+                }
+            }
+
+            if (((Address-0x86) & 7) == 0)
+            {
+                int ch = (Address - 0x86) >> 3;
+                if (ch >= 0 && ch < 16)
+                {
+                    if (Chip.ChMasks[ch])
+                    {
+                        dData |= 1;//keyoff flg
+                    }
                 }
             }
 
@@ -6089,7 +6100,8 @@ namespace mml2vgmIDE
 
                 int v = dData & 0xf;
                 v = v + SN76489NowFadeoutVol[Chip.Number];
-                v += SN76489MaskCh[Chip.Number][(dData & 0x60) >> 5] ? 15 : 0;
+                //v += SN76489MaskCh[Chip.Number][(dData & 0x60) >> 5] ? 15 : 0;
+                v += Chip.ChMasks[(dData & 0x60) >> 5] ? 15 : 0;
                 v = Math.Min(v, 15);
                 dData = (dData & 0xf0) | v;
             }
@@ -6323,6 +6335,17 @@ namespace mml2vgmIDE
             {
             }
 
+            if (ExData != null && ExData is byte[] && ((byte[])ExData).Length==3)
+            {
+                if ((((byte[])ExData)[0] & 0xf0) == 0x90)
+                {
+                    int ch = ((byte[])ExData)[0] & 0xf;
+                    if (Chip.ChMasks[ch])
+                    {
+                        ((byte[])ExData)[2] = 0;
+                    }
+                }
+            }
         }
 
         public void MIDISetRegister(outDatum od, long Counter, int ChipID, int dPort, byte[] dData)
