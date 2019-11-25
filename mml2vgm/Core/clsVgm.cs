@@ -2084,19 +2084,22 @@ namespace Core
                         //lfoとenvelopeは音長によるウエイトカウントが存在する場合のみ対象にする。(さもないと、曲のループ直前の効果を出せない)
                         if (waitCounter > 0)
                         {
-                            //lfo
-                            for (int lfo = 0; lfo < 4; lfo++)
+                            if (!cpw.dataEnd && loopClock != 0)
                             {
-                                if (!cpw.lfo[lfo].sw) continue;
-                                if (cpw.lfo[lfo].waitCounter == -1) continue;
+                                //lfo
+                                for (int lfo = 0; lfo < 4; lfo++)
+                                {
+                                    if (!cpw.lfo[lfo].sw) continue;
+                                    if (cpw.lfo[lfo].waitCounter == -1) continue;
 
-                                waitCounter = Math.Min(waitCounter, cpw.lfo[lfo].waitCounter);
-                            }
+                                    waitCounter = Math.Min(waitCounter, cpw.lfo[lfo].waitCounter);
+                                }
 
-                            //envelope
-                            if (cpw.envelopeMode && cpw.envIndex != -1)
-                            {
-                                waitCounter = Math.Min(waitCounter, cpw.envCounter);
+                                //envelope
+                                if (cpw.envelopeMode && cpw.envIndex != -1)
+                                {
+                                    waitCounter = Math.Min(waitCounter, cpw.envCounter);
+                                }
                             }
                         }
 
@@ -2851,18 +2854,21 @@ namespace Core
                         //lfoとenvelopeは音長によるウエイトカウントが存在する場合のみ対象にする。(さもないと、曲のループ直前の効果を出せない)
                         if (cnt < 1) continue;
 
-                        //lfo
-                        for (int lfo = 0; lfo < 4; lfo++)
+                        if (!pw.dataEnd && loopClock != 0)
                         {
-                            if (!pw.lfo[lfo].sw) continue;
-                            if (pw.lfo[lfo].waitCounter == -1) continue;
+                            //lfo
+                            for (int lfo = 0; lfo < 4; lfo++)
+                            {
+                                if (!pw.lfo[lfo].sw) continue;
+                                if (pw.lfo[lfo].waitCounter == -1) continue;
 
-                            cnt = Math.Min(cnt, pw.lfo[lfo].waitCounter);
+                                cnt = Math.Min(cnt, pw.lfo[lfo].waitCounter);
+                            }
+
+                            //envelope
+                            if (!(pw.chip is SN76489)) continue;
+                            if (pw.envelopeMode && pw.envIndex != -1) cnt = Math.Min(cnt, pw.envCounter);
                         }
-
-                        //envelope
-                        if (!(pw.chip is SN76489)) continue;
-                        if (pw.envelopeMode && pw.envIndex != -1) cnt = Math.Min(cnt, pw.envCounter);
                     }
                 }
             }
