@@ -2084,7 +2084,7 @@ namespace Core
                         //lfoとenvelopeは音長によるウエイトカウントが存在する場合のみ対象にする。(さもないと、曲のループ直前の効果を出せない)
                         if (waitCounter > 0)
                         {
-                            if (!cpw.dataEnd && loopClock != 0)
+                            if (!cpw.dataEnd)
                             {
                                 //lfo
                                 for (int lfo = 0; lfo < 4; lfo++)
@@ -2854,7 +2854,7 @@ namespace Core
                         //lfoとenvelopeは音長によるウエイトカウントが存在する場合のみ対象にする。(さもないと、曲のループ直前の効果を出せない)
                         if (cnt < 1) continue;
 
-                        if (!pw.dataEnd && loopClock != 0)
+                        if (!pw.dataEnd)
                         {
                             //lfo
                             for (int lfo = 0; lfo < 4; lfo++)
