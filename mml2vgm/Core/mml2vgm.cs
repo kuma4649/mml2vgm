@@ -663,13 +663,9 @@ namespace Core
                         }
 
                         //pitch変換
-                        if (desVGM.info.format== enmFormat.XGM
-                            && pds.Option !=null
-                            && pds.Option.Length > 0
-                            && pds.Option[0] is int 
-                            && (int)pds.Option[0] != 36)
+                        if (desVGM.info.format== enmFormat.XGM)
                         {
-                            int fFreq = (int)pds.Option[0];
+                            int fFreq = (int)pds.DatLoopAdr;
                             //SOXで変換する
                             ConvertFreq(path, ref buf, pds.BaseFreq, ref fFreq);
                             pds.BaseFreq = fFreq;
@@ -869,7 +865,6 @@ namespace Core
         {
             try
             {
-                Disp(string.Format("SoXを使用し、ピッチの変換を行います。{0}Hz", srcFreq));
                 string path = Path.Combine(stPath, "sox\\sox.exe");
                 if (!File.Exists(path))
                 {
@@ -889,13 +884,15 @@ namespace Core
                     dstFreq = GetNoteNumToFreq(srcFreq, dstFreq);
                 }
 
+                Disp(string.Format("SoXを使用し、ピッチの変換を行います。{0}Hz", dstFreq));
+
                 if (srcFreq != dstFreq)
                 {
                     //SoXの起動
                     System.Diagnostics.ProcessStartInfo psi =
                         new System.Diagnostics.ProcessStartInfo();
                     psi.FileName = string.Format("\"{0}\"", path);
-                    psi.Arguments = string.Format("-e unsigned -b 8 -c 1 -r {0} \"{1}\" -r {2} \"{3}\"", srcFreq, tempPath, dstFreq, destPath);
+                    psi.Arguments = string.Format("-e unsigned -b 8 -c 1 -r {2} \"{1}\" -r {0} \"{3}\"", srcFreq, tempPath, dstFreq, destPath);
                     psi.CreateNoWindow = true;
                     System.Diagnostics.Process p = System.Diagnostics.Process.Start(psi);
                     p.WaitForExit();
