@@ -1096,6 +1096,9 @@ namespace Core
         /// </summary>
         public int direction = 0;
 
+        public int depthWaitCounter { get; internal set; }
+        public int depth { get; internal set; }
+        public int depthV2 { get; internal set; }
     }
 
     public class clsPcm

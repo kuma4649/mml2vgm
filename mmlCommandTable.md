@@ -1347,7 +1347,7 @@
 - Command  
     M  
 - Format  
-    Mx1x2n1,n2,n3,n4,n5,n6,n7  
+    Mx1x2n1,n2,n3,n4,n5,n6,n7,n8,n9  
 - 設定可能範囲  
     x1 : 識別子 P/Q/R/S(1パート当たり4種類定義、使用できる)  
     x2 : 種類 T/V/H(T:音量(トレモロ) V:音程(ビブラート) H:ハードウェア)  
@@ -1358,6 +1358,8 @@
     n5 : Type 0 ～ 4  
     n6 : Sw 0 ～ 1  
     n7 : Trans -32768 ～ 32767  
+    n8 : Depth speed 0 ～ 255  
+    n8 : Depth delta -32768 ～ 32767  
 - Support chips  
     - Conductor           未対応  
     - YM2612              T/V/Hに対応  
@@ -1423,6 +1425,10 @@
         - 位相。LFOの変化量に加算される。例えば矩形波指定のLFOでバッテリー効果を出すのに使用する。  
           例えば、eを発音した場合のLFOがdfdf...と繰り返すような場合2度分の位相を指定して
           egeg...と演奏させるイメージ。
+    - Depth speed  
+        - 指定した数だけDepth値に達成するとDepthDelta分だけDepth値が増えます。0の時は動作しません。  
+    - Depth delta  
+        - Depthが増える値。  
     - ハードウェアLFO  
         - ハードウェアLFOはSコマンドによる制御必須。  
           (Sコマンドによってパラメータが送信されるため)  
@@ -2178,6 +2184,22 @@
     ノイズモード指定  
 - Description  
     ノイズのモードを指定します。  
+
+
+### SN76489(DCSG)Ch3周波数直接指定  
+-----------  
+- Command  
+    wf  
+- Format  
+    wfn  
+- 設定可能範囲  
+    n : 0 ～ 1023  
+- Support chips  
+    - SN76489  
+- Remark  
+    SN76489(DCSG)Ch3周波数直接指定  
+- Description  
+    SN76489(DCSG)のCh3周波数を直接指定します。主にCh4のノイズの周波数設定用として使用します。  
 
 
 ### ノイズ周波数  

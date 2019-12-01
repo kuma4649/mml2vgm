@@ -766,6 +766,12 @@ namespace Core
                     , mml.line.Lp);
         }
 
+        public virtual void CmdDCSGCh3Freq(partWork pw, MML mml)
+        {
+            msgBox.setErrMsg(msg.get("E10032")
+                    , mml.line.Lp);
+        }
+
         public virtual void CmdSusOnOff(partWork pw, MML mml)
         {
             msgBox.setErrMsg(msg.get("E10022")
@@ -823,7 +829,7 @@ namespace Core
                     , mml.line.Lp);
                     return;
                 }
-                if (pw.lfo[c].param.Count > 7)
+                if (pw.lfo[c].param.Count > 9)
                 {
                     msgBox.setErrMsg(msg.get("E10006")
                     , mml.line.Lp);
@@ -863,12 +869,23 @@ namespace Core
                     pw.lfo[c].param.Add(0);
                 }
 
+                //DepthSpeed
+                if (pw.lfo[c].param.Count > 7) pw.lfo[c].param[7] = Common.CheckRange(pw.lfo[c].param[7], 0, 255);
+                else pw.lfo[c].param.Add(0);
+
+                //DepthDelta
+                if (pw.lfo[c].param.Count > 8) pw.lfo[c].param[8] = Common.CheckRange(pw.lfo[c].param[8], -32768, 32767);
+                else pw.lfo[c].param.Add(0);
+
                 pw.lfo[c].sw = true;
                 pw.lfo[c].isEnd = false;
                 pw.lfo[c].value = (pw.lfo[c].param[0] == 0) ? pw.lfo[c].param[6] : 0;//ディレイ中は振幅補正は適用されない
                 pw.lfo[c].waitCounter = pw.lfo[c].param[0];
                 pw.lfo[c].direction = pw.lfo[c].param[2] < 0 ? -1 : 1;
                 if (pw.lfo[c].param[4] == 2) pw.lfo[c].direction = -1; //矩形の場合は必ず-1(Val1から開始する)をセット
+                pw.lfo[c].depthWaitCounter = pw.lfo[c].param[7];
+                pw.lfo[c].depth = pw.lfo[c].param[3];
+                pw.lfo[c].depthV2 = pw.lfo[c].param[2];
             }
             else
             {
@@ -877,6 +894,9 @@ namespace Core
                 pw.lfo[c].value = 0;
                 pw.lfo[c].waitCounter = -1;
                 pw.lfo[c].direction = 0;
+                pw.lfo[c].depthWaitCounter = 0;
+                pw.lfo[c].depth = 0;
+                pw.lfo[c].depthV2 = 0;
             }
 
             mml.args.Add(

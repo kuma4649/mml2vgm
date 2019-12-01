@@ -894,23 +894,32 @@ namespace Core
                 }
             }
 
-            int lp = -1;
+            int opt = -1;
 
             if (vs.Length > 5)
             {
                 try
                 {
-                    lp = Common.ParseNumber(vs[5]);
+                    opt = Common.ParseNumber(vs[5]);
                 }
                 catch
                 {
-                    lp = -1;
+                    opt = -1;
                 }
             }
 
-            if (lp == -1 && enmChip == enmChipType.YM2610B)
+            //optionが未指定の場合の初期値を設定
+            if (opt == -1)
             {
-                lp = 0;
+                if (enmChip == enmChipType.YM2610B)
+                {
+                    opt = 0;
+                }
+
+                if (enmChip == enmChipType.YM2612X)
+                {
+                    opt = 36;
+                }
             }
 
             instPCMDatSeq.Add(new clsPcmDatSeq(
@@ -921,7 +930,7 @@ namespace Core
                 , vol
                 , enmChip
                 , chipNumber
-                , lp
+                , opt
                 ));
 
             //if (instPCM.ContainsKey(num))
@@ -3292,40 +3301,69 @@ namespace Core
                     case 0: //三角
                         pl.value += Math.Abs(pl.param[2]) * pl.direction;
                         pl.waitCounter = pl.param[1];
-                        if ((pl.direction > 0 && pl.value >= pl.param[3]) || (pl.direction < 0 && pl.value <= -pl.param[3]))
+                        if ((pl.direction > 0 && pl.value >= pl.depth) || (pl.direction < 0 && pl.value <= -pl.depth))
                         {
-                            pl.value = pl.param[3] * pl.direction;
+                            pl.value = pl.depth * pl.direction;
                             pl.direction = -pl.direction;
+                            procLfo_updateDepth(pl);
                         }
                         break;
                     case 1: //のこぎり
                         pl.value += Math.Abs(pl.param[2]) * pl.direction;
                         pl.waitCounter = pl.param[1];
-                        if ((pl.direction > 0 && pl.value >= pl.param[3]) || (pl.direction < 0 && pl.value <= -pl.param[3]))
+                        if ((pl.direction > 0 && pl.value >= pl.depth) || (pl.direction < 0 && pl.value <= -pl.depth))
                         {
-                            pl.value = -pl.param[3] * pl.direction;
+                            pl.value = -pl.depth * pl.direction;
+                            procLfo_updateDepth(pl);
                         }
                         break;
                     case 2: //矩形
-                        if (pl.direction < 0) pl.value = pl.param[2];
-                        else pl.value = pl.param[3];
+                        if (pl.direction < 0) pl.value = pl.depth;
+                        else pl.value = pl.depthV2;
                         pl.waitCounter = pl.param[1];
                         pl.direction = -pl.direction;
+                        if (pl.param[7] != 0)
+                        {
+                            pl.depthWaitCounter--;
+                            if (pl.depthWaitCounter == 0)
+                            {
+                                pl.depthWaitCounter = pl.param[7];
+                                pl.depth += (pl.param[2] >= pl.param[3]) ? pl.param[8] : (-pl.param[8]);
+                                pl.depth = Common.CheckRange(pl.depth, 0, 32767);
+                                pl.depthV2 += (pl.param[3] >= pl.param[2]) ? pl.param[8] : (-pl.param[8]);
+                                pl.depthV2 = Common.CheckRange(pl.depthV2, 0, 32767);
+                            }
+                        }
                         break;
                     case 3: //ワンショット
                         pl.value += Math.Abs(pl.param[2]) * pl.direction;
                         pl.waitCounter = pl.param[1];
-                        if ((pl.direction > 0 && pl.value >= pl.param[3]) || (pl.direction < 0 && pl.value <= -pl.param[3]))
+                        if ((pl.direction > 0 && pl.value >= pl.depth) || (pl.direction < 0 && pl.value <= -pl.depth))
                         {
                             pl.waitCounter = -1;
                         }
                         break;
                     case 4: //ランダム
-                        pl.value = rnd.Next(-pl.param[3], pl.param[3]);
+                        pl.value = rnd.Next(-pl.depth, pl.depth);
                         pl.waitCounter = pl.param[1];
+                        procLfo_updateDepth(pl);
                         break;
                 }
 
+            }
+        }
+
+        private static void procLfo_updateDepth(clsLfo pl)
+        {
+            if (pl.param[7] != 0)
+            {
+                pl.depthWaitCounter--;
+                if (pl.depthWaitCounter == 0)
+                {
+                    pl.depthWaitCounter = pl.param[7];
+                    pl.depth += pl.param[8];
+                    pl.depth = Common.CheckRange(pl.depth, 0, 32767);
+                }
             }
         }
 
@@ -3565,6 +3603,11 @@ namespace Core
                 case enmMMLType.Noise:
                     log.Write("Noise");
                     pw.chip.CmdNoise(pw, mml);
+                    pw.mmlPos++;
+                    break;
+                case enmMMLType.DCSGCh3Freq:
+                    log.Write("DCSGCh3Freq");
+                    pw.chip.CmdDCSGCh3Freq(pw, mml);
                     pw.mmlPos++;
                     break;
                 case enmMMLType.Bend:

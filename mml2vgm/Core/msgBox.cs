@@ -42,7 +42,14 @@ namespace Core
 
         public static void setWrnMsg(string msg, LinePos lp)
         {
-            wrnBox.Add(new msgInfo(lp.filename, lp.row, lp.col, lp.length, msg));
+            if (lp != null)
+            {
+                wrnBox.Add(new msgInfo(lp.filename, lp.row, lp.col, lp.length, msg));
+            }
+            else
+            {
+                wrnBox.Add(new msgInfo("-", -1, -1, -1, msg));
+            }
         }
 
         public static msgInfo[] getErr()

@@ -353,6 +353,9 @@ namespace Core
                 pl.value = (pl.param[0] == 0) ? pl.param[6] : 0;//ディレイ中は振幅補正は適用されない
                 pl.waitCounter = pl.param[0];
                 pl.direction = pl.param[2] < 0 ? -1 : 1;
+                pl.depthWaitCounter = pl.param[7];
+                pl.depth = pl.param[3];
+                pl.depthV2 = pl.param[2];
 
             }
         }

@@ -1219,6 +1219,24 @@ namespace Core
             int n = -1;
             pw.incPos();
 
+            char c = pw.getChar();
+            if (c == 'f')
+            {
+                pw.incPos();
+
+                if (!pw.getNum(out n))
+                {
+                    msgBox.setErrMsg(msg.get("E05058"), mml.line.Lp);
+                    return;
+
+                }
+
+                mml.type = enmMMLType.DCSGCh3Freq;
+                mml.args = new List<object>();
+                mml.args.Add(n);
+                return;
+            }
+
             if (!pw.getNum(out n))
             {
                 msgBox.setErrMsg(msg.get("E05033"), mml.line.Lp);

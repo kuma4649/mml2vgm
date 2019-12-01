@@ -67,6 +67,7 @@ namespace Core
         SusOnOff,       // so sf
         JumpPoint,      // J
         Velocity,       // U
-        SkipPlay        // caret位置からの演奏のための特殊コマンド
+        SkipPlay,       // caret位置からの演奏のための特殊コマンド
+        DCSGCh3Freq     // wf
     }
 }

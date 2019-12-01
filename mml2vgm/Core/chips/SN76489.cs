@@ -279,6 +279,9 @@ namespace Core
                 pl.value = (pl.param[0] == 0) ? pl.param[6] : 0;//ディレイ中は振幅補正は適用されない
                 pl.waitCounter = pl.param[0];
                 pl.direction = pl.param[2] < 0 ? -1 : 1;
+                pl.depthWaitCounter = pl.param[7];
+                pl.depth = pl.param[3];
+                pl.depthV2 = pl.param[2];
 
             }
         }
@@ -309,6 +312,18 @@ namespace Core
             int n = (int)mml.args[0];
             n = Common.CheckRange(n, 0, 7);
             pw.noise = n;
+        }
+
+        public override void CmdDCSGCh3Freq(partWork pw, MML mml)
+        {
+            int n = (int)mml.args[0];
+            n = Common.CheckRange(n, 0, 0x3ff);
+
+            byte data = (byte)(0xc0 + (n & 0xf));
+            OutPsgPort(mml, port[0], data);
+
+            data = (byte)(n >> 4);
+            OutPsgPort(mml, port[0], data);
         }
 
         public override void CmdLoopExtProc(partWork pw, MML mml)

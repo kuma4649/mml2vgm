@@ -662,6 +662,20 @@ namespace Core
                             continue;
                         }
 
+                        //pitch変換
+                        if (desVGM.info.format== enmFormat.XGM
+                            && pds.Option !=null
+                            && pds.Option.Length > 0
+                            && pds.Option[0] is int 
+                            && (int)pds.Option[0] != 36)
+                        {
+                            int fFreq = (int)pds.Option[0];
+                            //SOXで変換する
+                            ConvertFreq(path, ref buf, pds.BaseFreq, ref fFreq);
+                            pds.BaseFreq = fFreq;
+                            v.freq = fFreq;
+                        }
+
                         if (desVGM.info.format == enmFormat.XGM && v.chipNumber!=0)
                         {
                             msgBox.setErrMsg(string.Format(
@@ -849,6 +863,68 @@ namespace Core
 
             desVGM.instPCM = newDic;
 
+        }
+
+        private void ConvertFreq(string srcPath, ref byte[] buf, int srcFreq, ref int dstFreq)
+        {
+            try
+            {
+                Disp(string.Format("SoXを使用し、ピッチの変換を行います。{0}Hz", srcFreq));
+                string path = Path.Combine(stPath, "sox\\sox.exe");
+                if (!File.Exists(path))
+                {
+                    msgBox.setErrMsg(string.Format("SoXが見つかりませんでした.(検索場所:{0})", path), null);
+                    return;
+                }
+
+                //元ファイルの作成と出力先ファイルの削除
+                string tempPath = Path.Combine(srcPath, "soxTemp.raw");
+                File.Delete(tempPath);
+                File.WriteAllBytes(tempPath, buf);
+                string destPath = Path.Combine(srcPath, "soxTempDest.raw");
+                File.Delete(destPath);
+
+                if (dstFreq < 73)
+                {
+                    dstFreq = GetNoteNumToFreq(srcFreq, dstFreq);
+                }
+
+                if (srcFreq != dstFreq)
+                {
+                    //SoXの起動
+                    System.Diagnostics.ProcessStartInfo psi =
+                        new System.Diagnostics.ProcessStartInfo();
+                    psi.FileName = string.Format("\"{0}\"", path);
+                    psi.Arguments = string.Format("-e unsigned -b 8 -c 1 -r {0} \"{1}\" -r {2} \"{3}\"", srcFreq, tempPath, dstFreq, destPath);
+                    psi.CreateNoWindow = true;
+                    System.Diagnostics.Process p = System.Diagnostics.Process.Start(psi);
+                    p.WaitForExit();
+
+                    buf = File.ReadAllBytes(destPath);
+                }
+
+                //元ファイルと出力先ファイルの削除
+                File.Delete(tempPath);
+                File.Delete(destPath);
+            }
+            catch (Exception e)
+            {
+                msgBox.setErrMsg(string.Format(
+                    "SoXを使用した周波数変換処理で例外が発生しました.\r\nMessage:\r\n{0}\r\nStackTrace:\r\n{1}\r\n"
+                    , e.Message
+                    , e.StackTrace),null);
+            }
+        }
+
+        private int GetNoteNumToFreq(int srcFreq, int dstFreq)
+        {
+            if (dstFreq == 36) return srcFreq;
+
+            int oct = dstFreq / 12 - 3;
+            int n = dstFreq % 12;
+            double f = srcFreq * Const.pcmMTbl[n] * Math.Pow(2, oct);
+
+            return (int)f;
         }
 
         private void Result()
