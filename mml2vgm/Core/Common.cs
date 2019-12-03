@@ -460,5 +460,37 @@ namespace Core
 
             return false;
         }
+
+        public static bool CheckSoXVersion(string srcpath,Action<string> Disp)
+        {
+            try
+            {
+                string path = Path.Combine(srcpath, "sox\\sox.exe");
+                if (!File.Exists(path))
+                {
+                    return false;
+                }
+
+                //SoXの起動
+                System.Diagnostics.ProcessStartInfo psi =
+                    new System.Diagnostics.ProcessStartInfo();
+                psi.FileName = string.Format("\"{0}\"", path);
+                psi.Arguments = "--version";
+                psi.CreateNoWindow = true;
+                psi.UseShellExecute = false;
+                psi.RedirectStandardOutput = true;
+                System.Diagnostics.Process p = System.Diagnostics.Process.Start(psi);
+                p.WaitForExit();
+                Disp(p.StandardOutput.ReadToEnd().Replace("\r\r\n", "\n"));
+
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
     }
 }

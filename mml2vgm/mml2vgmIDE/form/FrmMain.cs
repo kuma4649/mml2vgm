@@ -148,6 +148,7 @@ namespace mml2vgmIDE
         private void Form1_Shown(object sender, EventArgs e)
         {
             UpdateControl();
+            Core.Common.CheckSoXVersion(System.Windows.Forms.Application.StartupPath, Disp);
         }
 
         private void FrmMain_FormClosing(object sender, FormClosingEventArgs e)

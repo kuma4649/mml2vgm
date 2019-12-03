@@ -959,11 +959,10 @@ b               -ooooooooooooooooooooooooooooo  音符シ
 	    ホームページ
  	      http://sox.sourceforge.net/
 	    プログラムのアーカイブへのリンク
-	      https://sourceforge.net/projects/sox/files/sox/12.17.5/sox12175.zip/download?use_mirror=jaist&download=
+		  https://sourceforge.net/projects/sox/files/sox/14.4.2/sox-14.4.2-win32.zip/download
 	    LICENSE
 	      GPL
       解凍したら、mml2vgmのプログラムがあるフォルダーに「sox」フォルダーを作成しその中にファイルをコピーする。
-	  尚、SoX起動時にウィンドウのフォーカスが移る為、場合によってはウィンドウが点滅するような症状がでますが仕様です。
       また、.gwiがある場所に以下のファイル名を作業用として使用します。上書きが行われ作業完了するとファイルを削除します。
         soxTemp.raw
 		soxTempDest.raw
