@@ -182,6 +182,9 @@
     <None Include="sample\Syntax\testConductor.gwi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="sample\Syntax\testLfoSwitching.gwi">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="sample\Syntax\testLylics.gwi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

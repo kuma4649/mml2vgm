@@ -477,6 +477,9 @@
     <None Include="Setup.gwi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <Content Include="Script\Sample\testCompile.py">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Script\SOX\sox.py">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

@@ -11,6 +11,7 @@ using System.Diagnostics;
 using Microsoft.Scripting.Hosting.Providers;
 using IronPython.Runtime;
 using System.Runtime.InteropServices;
+using Core;
 
 namespace mml2vgmIDE
 {
@@ -402,5 +403,17 @@ namespace mml2vgmIDE
             settingData.Remove(key);
         }
 
+        public string compile()
+        {
+            parent.Compile(false, false, false, false, true);
+            while (parent.Compiling) { System.Windows.Forms.Application.DoEvents(); }
+            string sf = Path.Combine(
+                Common.GetApplicationDataFolder(true)
+                , "temp"
+                , Path.GetFileNameWithoutExtension(Path.GetFileName(document.gwiFullPath)) 
+                + (FileInformation.format == enmFormat.VGM ? ".vgm" : (FileInformation.format == enmFormat.XGM ? ".xgm" : ".zgm"))
+                );
+            return (parent.isSuccess && msgBox.getErr().Length < 1) ? sf : "";
+        }
     }
 }

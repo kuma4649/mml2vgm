@@ -22,7 +22,7 @@ namespace mml2vgmIDE
         private string appName = "mml2vgmIDE";
         private List<Form> FormBox = new List<Form>();
         private List<Document> DocumentBox = new List<Document>();
-        private bool isSuccess = true;
+        public bool isSuccess = true;
         private string[] args;
         private Mml2vgm mv = null;
         private string title = "";
@@ -40,7 +40,7 @@ namespace mml2vgmIDE
         private bool doSkipStop = false;
         private bool doExport;
         private Point caretPoint = Point.Empty;
-        private bool Compiling = false;
+        public bool Compiling = false;
         private bool flgReinit = false;
         public const int WM_COPYDATA = 0x004A;
         public const int WM_PASTE = 0x0302;
@@ -800,7 +800,7 @@ namespace mml2vgmIDE
             return dc;
         }
 
-        private void Compile(bool doPlay, bool isTrace, bool doSkip, bool doSkipStop,bool doExport,string[] text=null)
+        public void Compile(bool doPlay, bool isTrace, bool doSkip, bool doSkipStop,bool doExport,string[] text=null)
         {
             if (Compiling) return;
             
@@ -1972,7 +1972,7 @@ namespace mml2vgmIDE
             }
 
             tsmiTreeView = new ToolStripMenuItem();
-            //GetScripts(tsmiScript, tsmiTreeView, Path.Combine(Common.GetApplicationFolder(), "Script"));
+            GetScripts(tsmiScript, tsmiTreeView, Path.Combine(Common.GetApplicationFolder(), "Script"));
 
         }
 
