@@ -129,7 +129,9 @@ mml2vgm , mvc , mml2vgmIDEはMITライセンスに準ずる物とします。LIC
  ・阿保 さん  
  ・Rerrah さん  
  ・ぼうきち さん  
- ・musicalman さん
+ ・musicalman さん  
+ ・欧場豪@マシㇼキ提督 さん  
+ ・SND-L/KSND(itoken) さん  
   
  ・XPCMK  
  ・FMP7  
