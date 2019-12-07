@@ -8,13 +8,15 @@ namespace Core
 {
     public class YM2612X : YM2612
     {
+        private int[] pcmKeyOnCh = new int[] { 0, 0, 0, 0 };
+        private int[] pcmKeyOnInstNum = new int[] { -1, -1, -1, -1 };
 
         public YM2612X(ClsVgm parent, int chipID, string initialPartName, string stPath, int chipNumber) : base(parent, chipID, initialPartName, stPath, chipNumber)
         {
             _chipType = enmChipType.YM2612X;
             _Name = "YM2612X";
             _ShortName = "OPN2X";
-            _ChMax = 12;
+            _ChMax = 6 + 3 + 3 + 4 + 4 + 4;//fm:6ch + fmex:3ch + fmpcm:3ch + fmpcm(overlay):12ch = total:24ch
             _canUsePcm = true;
             _canUsePI = false;
             FNumTbl = _FNumTbl;
@@ -53,18 +55,24 @@ namespace Core
             Ch[6].Type = enmChannelType.FMOPNex;
             Ch[7].Type = enmChannelType.FMOPNex;
             Ch[8].Type = enmChannelType.FMOPNex;
-            Ch[9].Type = enmChannelType.FMPCMex;
-            Ch[10].Type = enmChannelType.FMPCMex;
-            Ch[11].Type = enmChannelType.FMPCMex;
+            for (int i = 9; i < ChMax; i++)
+            {
+                Ch[i].Type = enmChannelType.FMPCMex;
+            }
 
             pcmDataInfo = new clsPcmDataInfo[] { new clsPcmDataInfo() };
             pcmDataInfo[0].totalBuf = new byte[0];
             pcmDataInfo[0].totalBufPtr = 0L;
             pcmDataInfo[0].use = false;
 
+            for (int i = 0; i < 4; i++)
+            {
+                pcmKeyOnCh[i] = 0;
+                pcmKeyOnInstNum[i] = -1;
+            }
         }
 
-        public override void InitPart(partWork pw)
+    public override void InitPart(partWork pw)
         {
             pw.slots = (byte)((pw.Type == enmChannelType.FMOPN || pw.ch == 2 || pw.ch == 5) ? 0xf : 0x0);
             pw.volume = 127;
@@ -112,6 +120,9 @@ namespace Core
             int ch = Math.Max(0, pw.ch - 8);
             int priority = 0;
 
+            pcmKeyOnCh[ch & 0x3] = pw.ch;
+            pcmKeyOnInstNum[ch & 0x3] = id;
+
             byte[] cmd;
             if (parent.info.format == enmFormat.ZGM)
                 cmd = new byte[] { 0x54, 0x00 };
@@ -150,6 +161,12 @@ namespace Core
                 cmd = new byte[] { 0x54, 0x00 };
             else
                 cmd = new byte[] { 0x54 };
+
+            if (pcmKeyOnCh[ch & 0x3] == pw.ch)
+            {
+                pcmKeyOnCh[ch & 0x3] = 0;
+                pcmKeyOnInstNum[ch & 0x3] = -1;
+            }
 
             parent.OutData(
                 mml,
@@ -225,9 +242,10 @@ namespace Core
             {
                 n = Common.CheckRange(n, 0, 1);
                 pw.chip.lstPartWork[5].pcm = (n == 1);
-                pw.chip.lstPartWork[9].pcm = (n == 1);
-                pw.chip.lstPartWork[10].pcm = (n == 1);
-                pw.chip.lstPartWork[11].pcm = (n == 1);
+                for (int i = 9; i < ChMax; i++)
+                {
+                    pw.chip.lstPartWork[i].pcm = (n == 1);
+                }
                 pw.freq = -1;//freqをリセット
                 pw.instrument = -1;
                 OutSetCh6PCMMode(

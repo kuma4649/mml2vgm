@@ -7,9 +7,9 @@ namespace mml2vgmIDE.MMLParameter
     public class YM2612X : Instrument
     {
 
-        public YM2612X(SoundManager.Chip chip) : base(12,chip)
+        public YM2612X(SoundManager.Chip chip) : base(24,chip)
         {
-            for(int i = 0; i < 12; i++)
+            for(int i = 0; i < 24; i++)
             {
                 vol[i] = 127;
                 beforeTie[i] = false;

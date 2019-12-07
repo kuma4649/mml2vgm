@@ -221,7 +221,7 @@ ebass3(from MUSIC LALF @70)
   名称      略称   初期周波数(Hz)  使用可能チャンネル数
   CONDUCTOR CON                 -   2Ch(mml2vgm動作指示向け特殊音源)
   YM2612    OPN2          7670454   9Ch(FM   : 6Ch  FMex: 3Ch  |  FM:5Ch FMex:3Ch PCM:1Ch)
-  YM2612X   OPN2X         7670454  12Ch(FM   : 6Ch  FMex: 3Ch  |  FM:5Ch FMex:3Ch PCM:4Ch)
+  YM2612X   OPN2X         7670454  24Ch(FM   : 6Ch  FMex: 3Ch  |  FM:5Ch FMex:3Ch PCM:4Ch PCM(overlay):12Ch)
   SN76489   DCSG          3579545   4Ch(PSG  : 4Ch)
   RF5C164   RF5C         12500000   8Ch(PCM  : 8Ch)
   YM2203    OPN           3993600   9Ch(FM   : 3Ch  FMex: 3Ch  SSG : 3Ch)
@@ -258,13 +258,25 @@ ebass3(from MUSIC LALF @70)
   E03    YM2612(FM音源)(XGM Only)        CH3/CH3Ex0
   E04    YM2612(FM音源)(XGM Only)        CH4
   E05    YM2612(FM音源)(XGM Only)        CH5
-  E06    YM2612(FM音源)(XGM Only)        CH6/CH6PCM0
+  E06    YM2612(FM音源)(XGM Only)        CH6/CH6PCM0(pcm ch1)
   E07    YM2612(FM音源)(XGM Only)        CH3Ex1
   E08    YM2612(FM音源)(XGM Only)        CH3Ex2
   E09    YM2612(FM音源)(XGM Only)        CH3Ex3
-  E10    YM2612(FM音源)(XGM Only)        CH6PCM1
-  E11    YM2612(FM音源)(XGM Only)        CH6PCM2
-  E12    YM2612(FM音源)(XGM Only)        CH6PCM3
+  E10    YM2612(FM音源)(XGM Only)        CH6PCM1(pcm ch2)
+  E11    YM2612(FM音源)(XGM Only)        CH6PCM2(pcm ch3)
+  E12    YM2612(FM音源)(XGM Only)        CH6PCM3(pcm ch4)
+  E13    YM2612(FM音源)(XGM Only)        CH6PCM4(pcm overlay ch1)
+  E14    YM2612(FM音源)(XGM Only)        CH6PCM5(pcm overlay ch2)
+  E15    YM2612(FM音源)(XGM Only)        CH6PCM6(pcm overlay ch3)
+  E16    YM2612(FM音源)(XGM Only)        CH6PCM7(pcm overlay ch4)
+  E17    YM2612(FM音源)(XGM Only)        CH6PCM8(pcm overlay ch1)
+  E18    YM2612(FM音源)(XGM Only)        CH6PCM9(pcm overlay ch2)
+  E19    YM2612(FM音源)(XGM Only)        CH6PCM10(pcm overlay ch3)
+  E20    YM2612(FM音源)(XGM Only)        CH6PCM11(pcm overlay ch4)
+  E21    YM2612(FM音源)(XGM Only)        CH6PCM12(pcm overlay ch1)
+  E22    YM2612(FM音源)(XGM Only)        CH6PCM13(pcm overlay ch2)
+  E23    YM2612(FM音源)(XGM Only)        CH6PCM14(pcm overlay ch3)
+  E24    YM2612(FM音源)(XGM Only)        CH6PCM15(pcm overlay ch4)
   S1     SN76489(SSG音源)(Primary/XGM)   CH1
   S2     SN76489(SSG音源)(Primary/XGM)   CH2
   S3     SN76489(SSG音源)(Primary/XGM)   CH3
@@ -571,7 +583,7 @@ ebass3(from MUSIC LALF @70)
   Os4    K053260(PCM音源)(Secondary)     CH4
 
   -----------
-  計 324Ch
+  計 300Ch over
 
 
 ■ MML内部
