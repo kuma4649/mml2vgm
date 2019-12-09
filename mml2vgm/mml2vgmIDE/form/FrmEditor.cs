@@ -16,8 +16,9 @@ namespace mml2vgmIDE
     public partial class FrmEditor : DockContent
     {
         private int searchAnchorIndex;
-        private bool searchUseRegex=false;
+        //private bool searchUseRegex=false;
         private Regex searchRegex;
+        private string anchorTextPattern = "//";
         private string searchTextPattern = "";
         private bool searchMatchCase=false;
         public Document document = null;
@@ -98,6 +99,8 @@ namespace mml2vgmIDE
             azukiControl.SetKeyBind((uint)(Keys.Control | Keys.Divide), ActionComment);
             azukiControl.SetKeyBind((uint)(Keys.Control | Keys.OemQuestion), ActionComment);
             azukiControl.SetKeyBind((uint)(Keys.Control | Keys.F), ActionFind);
+            azukiControl.SetKeyBind((uint)(Keys.Control | Keys.PageDown), ActionJumpAnchorNext);
+            azukiControl.SetKeyBind((uint)(Keys.Control | Keys.PageUp), ActionJumpAnchorPrevious);
             azukiControl.SetKeyBind((uint)(Keys.F3), ActionFindNext);
             azukiControl.SetKeyBind((uint)(Keys.Shift | Keys.F3), ActionFindPrevious);
 
@@ -429,6 +432,44 @@ namespace mml2vgmIDE
             }
         }
 
+        public void ActionJumpAnchorNext(IUserInterface ui)
+        {
+            if (anchorTextPattern == "")
+            {
+                return;
+            }
+            //searchRegex = new Regex(anchorTextPattern);
+            string line = null;
+            do
+            {
+                SearchFindNext(anchorTextPattern, false);
+                int ci = azukiControl.CaretIndex;
+                int st = azukiControl.GetLineHeadIndexFromCharIndex(ci);
+                int li = azukiControl.GetLineIndexFromCharIndex(ci);
+                line = azukiControl.GetTextInRange(st, ci);
+                if (line == null || line.Length < 1) return;
+            } while (line != null && line.Substring(0, anchorTextPattern.Length) != anchorTextPattern);
+        }
+
+        public void ActionJumpAnchorPrevious(IUserInterface ui)
+        {
+            if (anchorTextPattern == "")
+            {
+                return;
+            }
+            //searchRegex = new Regex(anchorTextPattern);
+            string line = null;
+            do
+            {
+                SearchFindPrevious(anchorTextPattern, false);
+                int ci = azukiControl.CaretIndex;
+                int st = azukiControl.GetLineHeadIndexFromCharIndex(ci);
+                int li = azukiControl.GetLineIndexFromCharIndex(ci);
+                line = azukiControl.GetTextInRange(st, ci);
+                if (line == null || line.Length < 1) return;
+            } while (line != null && line.Substring(0, anchorTextPattern.Length) != anchorTextPattern);
+        }
+
         public void ActionFindNext(IUserInterface ui)
         {
             if (searchTextPattern == "")
@@ -436,6 +477,24 @@ namespace mml2vgmIDE
                 ActionFind(ui);
                 return;
             }
+
+            searchRegex = null;
+            SearchFindNext(searchTextPattern,false);
+        }
+
+        public void ActionFindPrevious(IUserInterface ui)
+        {
+            if (searchTextPattern == "")
+            {
+                ActionFind(ui);
+                return;
+            }
+            searchRegex = null;
+            SearchFindPrevious(searchTextPattern, false);
+        }
+
+        public void SearchFindNext(string sTextPtn, bool searchUseRegex)
+        {
             //AzukiのAnnの検索処理を利用
 
             Sgry.Azuki.Document azdoc = azukiControl.Document;
@@ -478,7 +537,10 @@ namespace mml2vgmIDE
             else
             {
                 // normal text pattern matching.
-                result = azdoc.FindNext(searchTextPattern, startIndex, azdoc.Length, searchMatchCase);
+                if (startIndex < azdoc.Length)
+                    result = azdoc.FindNext(sTextPtn, startIndex, azdoc.Length, searchMatchCase);
+                else
+                    result = null;
             }
 
             // select the result
@@ -495,13 +557,8 @@ namespace mml2vgmIDE
             }
         }
 
-        public void ActionFindPrevious(IUserInterface ui)
+        public void SearchFindPrevious(string sTextPtn,bool searchUseRegex)
         {
-            if (searchTextPattern == "")
-            {
-                ActionFind(ui);
-                return;
-            }
 
             //AzukiのAnnの検索処理を利用
 
@@ -544,7 +601,7 @@ namespace mml2vgmIDE
             else
             {
                 // normal text pattern matching.
-                result = azdoc.FindPrev(searchTextPattern, 0, startIndex, searchMatchCase);
+                result = azdoc.FindPrev(sTextPtn, 0, startIndex, searchMatchCase);
             }
 
             // select the result

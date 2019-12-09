@@ -1929,6 +1929,8 @@ namespace mml2vgmIDE
             tssbStop.Visible = visible;
             tssbSlow.Visible = visible;
             tssbFast.Visible = visible;
+            tssbFind.Visible = visible;
+            tssbMIDIKbd.Visible = visible;
 
             tssbOpen.DisplayStyle = style;
             tssbSave.DisplayStyle = style;
@@ -1937,6 +1939,8 @@ namespace mml2vgmIDE
             tssbStop.DisplayStyle = style;
             tssbSlow.DisplayStyle = style;
             tssbFast.DisplayStyle = style;
+            tssbFind.DisplayStyle = style;
+            tssbMIDIKbd.DisplayStyle = style;
         }
 
         private void FrmMain_Load(object sender, EventArgs e)
