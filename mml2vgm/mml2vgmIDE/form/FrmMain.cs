@@ -149,6 +149,7 @@ namespace mml2vgmIDE
         {
             UpdateControl();
             Core.Common.CheckSoXVersion(System.Windows.Forms.Application.StartupPath, Disp);
+            OpenLatestFile();
         }
 
         private void FrmMain_FormClosing(object sender, FormClosingEventArgs e)
@@ -763,6 +764,27 @@ namespace mml2vgmIDE
                 tsmi.Click += Tsmi_Click;
                 tsmiGwiFileHistory.DropDownItems.Add(tsmi);
             }
+        }
+
+        private void OpenLatestFile()
+        {
+            string lastFn = "";
+            if (setting.other.GwiFileHistory == null) return;
+            foreach (string fn in setting.other.GwiFileHistory)
+            {
+                if (string.IsNullOrEmpty(fn))
+                    continue;
+                lastFn = fn;
+                if (File.Exists(fn))
+                    break;
+            }
+            if (string.IsNullOrEmpty(lastFn)) return;
+
+            try
+            {
+                OpenFile(lastFn);
+            }
+            catch { }
         }
 
         private void Tsmi_Click(object sender, EventArgs e)

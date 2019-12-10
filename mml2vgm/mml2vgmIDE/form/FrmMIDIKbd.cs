@@ -69,23 +69,29 @@ namespace mml2vgmIDE
 
         public FrmMIDIKbd(FrmMain frm, int zoom, MDChipParams.MIDIKbd newParam)
         {
-            parent = frm;
-            this.zoom = zoom;
-            this.setting = parent.setting;
-            keyPress = new bool[kbdTbl.Length];
-            if (setting.midiKbd.Octave == 0) setting.midiKbd.Octave = 4;
-            SoundManager = Audio.sm;
-            SoundManager.AddDataSeqFrqEvent(OnDataSeqFrq);
-            SoundManager.CurrentChip = "YM2612";
-            SoundManager.CurrentCh = 1;
+            try
+            {
+                parent = frm;
+                this.zoom = zoom;
+                this.setting = parent.setting;
+                keyPress = new bool[kbdTbl.Length];
+                if (setting.midiKbd.Octave == 0) setting.midiKbd.Octave = 4;
+                SoundManager = Audio.sm;
+                SoundManager.AddDataSeqFrqEvent(OnDataSeqFrq);
+                SoundManager.CurrentChip = "YM2612";
+                SoundManager.CurrentCh = 1;
 
-            InitializeComponent();
+                InitializeComponent();
 
-            this.newParam = newParam;
-            frameBuffer.Add(pbScreen, Properties.Resources.planeMIDIKB, null, zoom);
-            DrawBuff.screenInitMixer(frameBuffer);
-            update();
-            Init();
+                this.newParam = newParam;
+                frameBuffer.Add(pbScreen, Properties.Resources.planeMIDIKB, null, zoom);
+                DrawBuff.screenInitMixer(frameBuffer);
+                update();
+                Init();
+            }catch
+            {
+
+            }
         }
 
         protected override bool ShowWithoutActivation

@@ -42,6 +42,16 @@
     },
     {
       "sienType": 0,
+      "nextAnchor": 92,
+      "nextCaret": 95,
+      "pattern": "'@ PM ",
+      "patternType": "Z",
+      "title": "'@ PCMマップ定義　テンプレート",
+      "description": "PCMマッピングモード向けマップ定義のテンプレートを挿入します。",
+      "content": "     MapNo     o4c から  c   c+   d   d+    e    f    f+    g     g+     a     a+    b\r\n'@ PM 000  ,    4,0,     0,   ,    ,   ,     ,    ,    ,     ,     ,      ,      ,\r\n"
+    },
+    {
+      "sienType": 0,
       "nextAnchor": 14,
       "nextCaret": 17,
       "pattern": "'@ H ",
