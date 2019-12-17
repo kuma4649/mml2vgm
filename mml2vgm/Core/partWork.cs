@@ -103,6 +103,8 @@ namespace Core
 
         public int octaveNew = 4;
 
+        public int latestOctave = 4;
+
         public int TdA = -1;
         public int op1ml = -1;
         public int op2ml = -1;
@@ -119,6 +121,8 @@ namespace Core
         /// vコマンドで設定されている音量
         /// </summary>
         public int volume = 127;
+
+        public int latestVolume = 127;
 
         /// <summary>
         /// expression

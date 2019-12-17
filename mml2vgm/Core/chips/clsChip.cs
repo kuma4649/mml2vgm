@@ -974,8 +974,10 @@ namespace Core
 
         public virtual void CmdVolume(partWork pw, MML mml)
         {
-            int n = (int)mml.args[0];
+            int n;
+            n = (mml.args != null && mml.args.Count > 0) ? (int)mml.args[0] : pw.latestVolume;
             pw.volume = Common.CheckRange(n, 0, pw.MaxVolume);
+            pw.latestVolume = n;
 
             MML vmml = new MML();
             vmml.type = enmMMLType.Volume;
@@ -1019,9 +1021,10 @@ namespace Core
 
         public virtual void CmdOctave(partWork pw, MML mml)
         {
-            int n = (int)mml.args[0];
-            n = Common.CheckRange(n, 1, 8);
-            pw.octaveNew = n;
+            int n;
+            n = (mml.args != null && mml.args.Count > 0) ? (int)mml.args[0] : pw.latestOctave;
+            pw.octaveNew = Common.CheckRange(n, 1, 8);
+            pw.latestOctave = n;
 
             SetDummyData(pw, mml);
         }

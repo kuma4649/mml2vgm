@@ -1847,14 +1847,6 @@ namespace Core
         public override void CmdVolume(partWork pw, MML mml)
         {
             base.CmdVolume(pw, mml);
-            //if (pw.Type == enmChannelType.FMOPN || pw.Type == enmChannelType.FMOPNex)
-            //{
-            //    SetFmVolume(pw);
-            //}
-            //if (pw.Type == enmChannelType.SSG)
-            //{
-            //    SetSsgVolume(pw);
-            //}
         }
 
         public override void CmdY(partWork pw, MML mml)

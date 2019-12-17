@@ -447,18 +447,18 @@ namespace Core
 
         private void CmdVolume(partWork pw, MML mml)
         {
-            int n;
             pw.incPos();
             mml.type = enmMMLType.Volume;
-            mml.args = new List<object>();
-
-            if (!pw.getNum(out n))
+            if (pw.getNum(out int n))
             {
-                msgBox.setErrMsg(msg.get("E05003"), mml.line.Lp);
-                n = (int)(pw.MaxVolume * 0.9);
+                n = Common.CheckRange(n, 0, pw.MaxVolume);
+                mml.args = new List<object>();
+                mml.args.Add(n);
             }
-            n = Common.CheckRange(n, 0, pw.MaxVolume);
-            mml.args.Add(n);
+            else
+            {
+                mml.args = null;
+            }
         }
 
         private void CmdTotalVolume(partWork pw, MML mml)
@@ -493,16 +493,17 @@ namespace Core
         private void CmdOctave(partWork pw, MML mml)
         {
             pw.incPos();
-            if (!pw.getNum(out int n))
-            {
-                msgBox.setErrMsg(msg.get("E05005"), mml.line.Lp);
-                n = 110;
-            }
-            n = Common.CheckRange(n, 1, 8);
-
             mml.type = enmMMLType.Octave;
-            mml.args = new List<object>();
-            mml.args.Add(n);
+            if (pw.getNum(out int n))
+            {
+                n = Common.CheckRange(n, 1, 8);
+                mml.args = new List<object>();
+                mml.args.Add(n);
+            }
+            else
+            {
+                mml.args = null;
+            }
         }
 
         private void CmdOctaveUp(partWork pw, MML mml)

@@ -160,7 +160,9 @@ namespace Core
         /// <param name="mml"></param>
         public override void CmdVolume(partWork pw, MML mml)
         {
-            int n = (int)mml.args[0];
+            int n;
+            n = (mml.args != null && mml.args.Count > 0) ? (int)mml.args[0] : pw.latestVolume;
+            pw.latestVolume = n;
             pw.expression = Common.CheckRange(n, 0, pw.MaxExpression);
 
             MML vmml = new MML();
