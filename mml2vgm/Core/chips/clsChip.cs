@@ -1026,7 +1026,12 @@ namespace Core
             pw.octaveNew = Common.CheckRange(n, 1, 8);
             pw.latestOctave = n;
 
-            SetDummyData(pw, mml);
+            MML vmml = new MML();
+            vmml.type = enmMMLType.Octave;
+            vmml.args = new List<object>();
+            vmml.args.Add(pw.octaveNew);
+            vmml.line = mml.line;
+            SetDummyData(pw, vmml);
         }
 
         public virtual void CmdOctaveUp(partWork pw, MML mml)

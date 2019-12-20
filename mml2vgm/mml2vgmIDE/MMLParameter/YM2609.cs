@@ -55,7 +55,10 @@ namespace mml2vgmIDE.MMLParameter
                     }
                     break;
                 case enmMMLType.Octave:
-                    octave[od.linePos.ch] = (int)od.args[0];
+                    if (od.args != null && od.args.Count > 0)
+                    {
+                        octave[od.linePos.ch] = (int)od.args[0];
+                    }
                     break;
                 case enmMMLType.OctaveDown:
                     octave[od.linePos.ch]--;
