@@ -895,6 +895,7 @@ namespace mml2vgmIDE
 
                 ResetFadeOutParam();
                 useChip.Clear();
+                chipRegister.ClearChipParam();
 
                 List<MDSound.MDSound.Chip> lstChips = new List<MDSound.MDSound.Chip>();
 
