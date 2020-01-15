@@ -1923,20 +1923,26 @@ namespace Core
                 log.Write("全パートのうち次のコマンドまで一番近い値を求める");
                 waitCounter = ComputeAllPartDistance();
 
-                log.Write("全パートのwaitcounterを減らす");
-                DecAllPartWaitCounter(waitCounter);
+                //log.Write("全パートのwaitcounterを減らす");
+                //DecAllPartWaitCounter(waitCounter);
 
                 log.Write("終了パートのカウント");
                 endChannel = CountUpEndPart();
 
+                if (endChannel < totalChannel)
+                {
+                    log.Write("全パートのwaitcounterを減らす");
+                    DecAllPartWaitCounter(waitCounter);
+                }
+
             } while (endChannel < totalChannel);
 
             //残カット
-            if (loopClock != -1 && waitCounter > 0 && waitCounter != long.MaxValue)
-            {
-                lClock -= waitCounter;
-                dSample -= (long)(info.samplesPerClock * waitCounter);
-            }
+            //if (loopClock != -1 && waitCounter > 0 && waitCounter != long.MaxValue)
+            //{
+            //    lClock -= waitCounter;
+            //    dSample -= (long)(info.samplesPerClock * waitCounter);
+            //}
             if (loopClock == -1)
             {
                 AllKeyOffEnv();
@@ -2093,7 +2099,7 @@ namespace Core
                         //lfoとenvelopeは音長によるウエイトカウントが存在する場合のみ対象にする。(さもないと、曲のループ直前の効果を出せない)
                         if (waitCounter > 0)
                         {
-                            if (!cpw.dataEnd)
+                            //if (!cpw.dataEnd)
                             {
                                 //lfo
                                 for (int lfo = 0; lfo < 4; lfo++)
@@ -2608,12 +2614,12 @@ namespace Core
                 log.Write("KeyOn情報をかき出し");
                 foreach (outDatum dat in xgmKeyOnData) OutData(dat, null, 0x52, 0x28, dat.val);
 
-                log.Write("全パートのwaitcounterを減らす");
-                if (waitCounter != long.MaxValue)
-                {
-                    //wait処理
-                    Xgm_procWait(waitCounter);
-                }
+                //log.Write("全パートのwaitcounterを減らす");
+                //if (waitCounter != long.MaxValue)
+                //{
+                //    //wait処理
+                //    Xgm_procWait(waitCounter);
+                //}
 
                 log.Write("終了パートのカウント");
                 endChannel = 0;
@@ -2625,19 +2631,38 @@ namespace Core
 
                         foreach (partWork pw in chip.lstPartWork)
                         {
-                            if (!pw.chip.use) endChannel++;
-                            else if (pw.dataEnd && pw.waitCounter < 1) endChannel++;
-                            else if (loopOffset != -1 && pw.dataEnd && pw.envIndex == 3) endChannel++;
+                            if (!pw.chip.use) 
+                                endChannel++;
+                            else if (pw.dataEnd) {
+                                if (pw.waitCounter < 1) 
+                                    endChannel++;
+                                else if (loopOffset != -1)
+                                {
+                                    if ((pw.envIndex == 3 || pw.envIndex == -1))
+                                        endChannel++;
+                                    //else if (loopOffset != -1 && pw.dataEnd) endChannel++;
+                                }
+                            }
                         }
                     }
                 }
 
+                log.Write("全パートのwaitcounterを減らす");
+                if (waitCounter != long.MaxValue && endChannel < totalChannel)
+                {
+                    //wait処理
+                    Xgm_procWait(waitCounter);
+                }
+
             } while (endChannel < totalChannel);//全てのチャンネルが終了していない場合はループする
-            if (loopClock != -1 && waitCounter > 0)
-            {
-                lClock -= waitCounter;
-                dSample -= (long)(info.samplesPerClock * waitCounter);
-            }
+            //if (loopClock != -1)
+            //{
+            //    if (waitCounter > 0)
+            //    {
+            //        lClock -= waitCounter;
+            //        dSample -= (long)(info.samplesPerClock * waitCounter);
+            //    }
+            //}
             if (loopClock == -1)
             {
                 AllKeyOffEnv();
@@ -2863,7 +2888,7 @@ namespace Core
                         //lfoとenvelopeは音長によるウエイトカウントが存在する場合のみ対象にする。(さもないと、曲のループ直前の効果を出せない)
                         if (cnt < 1) continue;
 
-                        if (!pw.dataEnd)
+                        //if (!pw.dataEnd) //ここを有効にするとデータ読み取り終了後即エンベロープ処理をしなくなってしまう
                         {
                             //lfo
                             for (int lfo = 0; lfo < 4; lfo++)

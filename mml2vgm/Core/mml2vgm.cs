@@ -863,6 +863,13 @@ namespace Core
 
         private void ConvertFreq(string srcPath, ref byte[] buf, int srcFreq, ref int dstFreq)
         {
+            if (dstFreq < 73)
+            {
+                dstFreq = GetNoteNumToFreq(srcFreq, dstFreq);
+            }
+
+            if (srcFreq == dstFreq) return;
+
             try
             {
                 string path = Path.Combine(stPath, "sox\\sox.exe");
@@ -879,31 +886,22 @@ namespace Core
                 string destPath = Path.Combine(srcPath, "soxTempDest.raw");
                 File.Delete(destPath);
 
-                if (dstFreq < 73)
-                {
-                    dstFreq = GetNoteNumToFreq(srcFreq, dstFreq);
-                }
-
                 Disp(string.Format("SoXを使用し、ピッチの変換を行います。{0}Hz", dstFreq));
 
-                if (srcFreq != dstFreq)
-                {
-                    //SoXの起動
-                    System.Diagnostics.ProcessStartInfo psi =
-                        new System.Diagnostics.ProcessStartInfo();
-                    psi.FileName = string.Format("\"{0}\"", path);
-                    psi.Arguments = string.Format("-e unsigned -b 8 -c 1 -r {2} \"{1}\" -r {0} \"{3}\"", srcFreq, tempPath, dstFreq, destPath);
-                    psi.CreateNoWindow = true;
-                    psi.UseShellExecute = false;
-                    psi.RedirectStandardOutput = true;
+                //SoXの起動
+                System.Diagnostics.ProcessStartInfo psi =
+                    new System.Diagnostics.ProcessStartInfo();
+                psi.FileName = string.Format("\"{0}\"", path);
+                psi.Arguments = string.Format("-D -e unsigned -b 8 -c 1 -r {2} \"{1}\" -r {0} \"{3}\"", srcFreq, tempPath, dstFreq, destPath);
+                psi.CreateNoWindow = true;
+                psi.UseShellExecute = false;
+                psi.RedirectStandardOutput = true;
 #if DEBUG
-                    Disp(string.Format("{0} {1}", psi.FileName, psi.Arguments));
+                Disp(string.Format("{0} {1}", psi.FileName, psi.Arguments));
 #endif
-                    System.Diagnostics.Process p = System.Diagnostics.Process.Start(psi);
-                    p.WaitForExit();
-
-                    buf = File.ReadAllBytes(destPath);
-                }
+                System.Diagnostics.Process p = System.Diagnostics.Process.Start(psi);
+                p.WaitForExit();
+                buf = File.ReadAllBytes(destPath);
 
                 //元ファイルと出力先ファイルの削除
                 File.Delete(tempPath);
@@ -914,7 +912,7 @@ namespace Core
                 msgBox.setErrMsg(string.Format(
                     "SoXを使用した周波数変換処理で例外が発生しました.\r\nMessage:\r\n{0}\r\nStackTrace:\r\n{1}\r\n"
                     , e.Message
-                    , e.StackTrace),null);
+                    , e.StackTrace), null);
             }
         }
 

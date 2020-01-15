@@ -1359,15 +1359,15 @@
     n6 : Sw 0 ～ 1  
     n7 : Trans -32768 ～ 32767  
     n8 : Depth speed 0 ～ 255  
-    n8 : Depth delta -32768 ～ 32767  
+    n9 : Depth delta -32768 ～ 32767  
 - Support chips  
     - Conductor           未対応  
     - YM2612              T/V/Hに対応  
     - YM2612X             T/V/Hに対応  
     - YM2612(Ch3 Ex)      T/V/Hに対応  
     - YM2612X(Ch3 Ex)     T/V/Hに対応  
-    - YM2612(6ChPCMmode)  未対応  
-    - YM2612X(6ChPCMmode) 未対応  
+    - YM2612(Ch6PCMmode)  未対応  
+    - YM2612X(Ch6PCMmode) 未対応  
     - SN76489             T/Vに対応  
     - RF5C164             T/Vに対応  
     - YM2610B(FM)         T/V/Hに対応  

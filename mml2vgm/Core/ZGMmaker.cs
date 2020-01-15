@@ -298,20 +298,26 @@ namespace Core
                 log.Write("全パートのうち次のコマンドまで一番近い値を求める");
                 waitCounter = mmlInfo.ComputeAllPartDistance();
 
-                log.Write("全パートのwaitcounterを減らす");
-                mmlInfo.DecAllPartWaitCounter(waitCounter);
+                //log.Write("全パートのwaitcounterを減らす");
+                //mmlInfo.DecAllPartWaitCounter(waitCounter);
 
                 log.Write("終了パートのカウント");
                 endChannel = mmlInfo.CountUpEndPart();
-                
+
+                if (endChannel < totalChannel)
+                {
+                    log.Write("全パートのwaitcounterを減らす");
+                    mmlInfo.DecAllPartWaitCounter(waitCounter);
+                }
+
             } while (endChannel < totalChannel);
 
             //残カット
-            if (mmlInfo.loopClock != -1 && waitCounter > 0 && waitCounter != long.MaxValue)
-            {
-                mmlInfo.lClock -= waitCounter;
-                mmlInfo.dSample -= (long)(mmlInfo.info.samplesPerClock * waitCounter);
-            }
+            //if (mmlInfo.loopClock != -1 && waitCounter > 0 && waitCounter != long.MaxValue)
+            //{
+            //    mmlInfo.lClock -= waitCounter;
+            //    mmlInfo.dSample -= (long)(mmlInfo.info.samplesPerClock * waitCounter);
+            //}
 
             Common.SetLE32(mmlInfo.dat, (uint)(ti.offset + 0x03), (uint)(mmlInfo.dat.Count - ti.offset));
             Common.SetLE32(mmlInfo.dat, (uint)(ti.offset + 0x07), (uint)(mmlInfo.dummyCmdLoopOffset));
