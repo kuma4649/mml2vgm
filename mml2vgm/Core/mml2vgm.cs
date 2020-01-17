@@ -872,7 +872,7 @@ namespace Core
 
             try
             {
-                string path = Path.Combine(stPath, "sox\\sox.exe");
+                string path = Common.SearchSoxPath(stPath, "sox", "sox.exe", "sox");
                 if (!File.Exists(path))
                 {
                     msgBox.setErrMsg(string.Format("SoXが見つかりませんでした.(検索場所:{0})", path), null);
@@ -915,6 +915,7 @@ namespace Core
                     , e.StackTrace), null);
             }
         }
+
 
         private int GetNoteNumToFreq(int srcFreq, int dstFreq)
         {

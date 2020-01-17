@@ -465,7 +465,7 @@ namespace Core
         {
             try
             {
-                string path = Path.Combine(srcpath, "sox\\sox.exe");
+                string path = SearchSoxPath(srcpath, "sox", "sox.exe", "sox");
                 if (!File.Exists(path))
                 {
                     return false;
@@ -490,6 +490,65 @@ namespace Core
             }
 
             return true;
+        }
+
+        public static string SearchSoxPath(string currentPath, string folder1, string filenameW, string filenameU)
+        {
+            //先ずはカレントにあるかチェックする
+
+            string path = Path.Combine(currentPath, folder1, filenameW);
+            if (File.Exists(path)) return path;
+            path = Path.Combine(currentPath, filenameW);
+            if (File.Exists(path)) return path;
+
+            path = Path.Combine(currentPath, folder1, filenameU);
+            if (File.Exists(path)) return path;
+            path = Path.Combine(currentPath, filenameU);
+            if (File.Exists(path)) return path;
+
+
+
+            string ePath = Environment.GetEnvironmentVariable("path");
+            string ret = "";
+
+            string[] suggeste = ePath.Split(new string[] { ";" }, StringSplitOptions.RemoveEmptyEntries);
+            foreach (string s in suggeste)
+            {
+                path = Path.Combine(s, folder1, filenameW);
+                if (File.Exists(path))
+                {
+                    ret = path;
+                    break;
+                }
+                path = Path.Combine(s, filenameW);
+                if (File.Exists(path))
+                {
+                    ret = path;
+                    break;
+                }
+            }
+
+            if (ret != "") return ret;
+
+            ePath = Environment.GetEnvironmentVariable("PATH");
+            suggeste = ePath.Split(new string[] { ":" }, StringSplitOptions.RemoveEmptyEntries);
+            foreach (string s in suggeste)
+            {
+                path = Path.Combine(s, folder1, filenameU);
+                if (File.Exists(path))
+                {
+                    ret = path;
+                    break;
+                }
+                path = Path.Combine(s, filenameU);
+                if (File.Exists(path))
+                {
+                    ret = path;
+                    break;
+                }
+            }
+
+            return ret;
         }
 
     }
