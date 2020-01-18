@@ -468,6 +468,7 @@ namespace mml2vgmIDE
             int chipIndex = (int)r.Cells["ClmChipIndex"].Value;
             int chipNumber = (int)r.Cells["ClmChipNumber"].Value;
 
+            if (mmlParams == null) return;
             if (!mmlParams.Insts.ContainsKey(chip)) return;
             if (!mmlParams.Insts[chip].ContainsKey(chipIndex) || !mmlParams.Insts[chip][chipIndex].ContainsKey(chipNumber)) return;
 

@@ -975,6 +975,7 @@ b               -ooooooooooooooooooooooooooooo  音符シ
 	    LICENSE
 	      GPL
       解凍したら、mml2vgmのプログラムがあるフォルダーに「sox」フォルダーを作成しその中にファイルをコピーする。
+      見つからない場合は、TAG161より環境変数PATHの値を参照し探すようになりました。
       また、.gwiがある場所に以下のファイル名を作業用として使用します。上書きが行われ作業完了するとファイルを削除します。
         soxTemp.raw
 		soxTempDest.raw

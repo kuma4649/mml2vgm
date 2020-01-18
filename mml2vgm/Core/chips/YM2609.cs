@@ -1764,5 +1764,14 @@ namespace Core
                 , pcm.status.ToString()
                 );
         }
+
+        public override void CmdLoopExtProc(partWork pw, MML mml)
+        {
+            if (pw.Type == enmChannelType.FMOPN || pw.Type == enmChannelType.FMOPNex)
+            {
+                pw.pan.val = (pw.panL != 0 ? 2 : 0) | (pw.panR != 0 ? 1 : 0);
+            }
+        }
+
     }
 }
