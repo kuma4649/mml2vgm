@@ -644,14 +644,14 @@ namespace Core
             }
 
             //ch3以外の拡張チャンネルでも音色設定できるようになったら以下を有効に
-            //if ((pw.slots & 1) != 0 && op[0] != -1) ((ClsOPN)pw.chip).OutFmSetTl(vpw, 0, op[0]);
-            //if ((pw.slots & 2) != 0 && op[1] != -1) ((ClsOPN)pw.chip).OutFmSetTl(vpw, 1, op[1]);
-            //if ((pw.slots & 4) != 0 && op[2] != -1) ((ClsOPN)pw.chip).OutFmSetTl(vpw, 2, op[2]);
-            //if ((pw.slots & 8) != 0 && op[3] != -1) ((ClsOPN)pw.chip).OutFmSetTl(vpw, 3, op[3]);
-            if (op[0] != -1) ((ClsOPN)pw.chip).OutFmSetTl(mml, vpw, 0, op[0]);
-            if (op[1] != -1) ((ClsOPN)pw.chip).OutFmSetTl(mml, vpw, 1, op[1]);
-            if (op[2] != -1) ((ClsOPN)pw.chip).OutFmSetTl(mml, vpw, 2, op[2]);
-            if (op[3] != -1) ((ClsOPN)pw.chip).OutFmSetTl(mml, vpw, 3, op[3]);
+            if ((pw.slots & 1) != 0 && op[0] != -1) ((ClsOPN)pw.chip).OutFmSetTl(mml, vpw, 0, op[0]);
+            if ((pw.slots & 2) != 0 && op[1] != -1) ((ClsOPN)pw.chip).OutFmSetTl(mml, vpw, 1, op[1]);
+            if ((pw.slots & 4) != 0 && op[2] != -1) ((ClsOPN)pw.chip).OutFmSetTl(mml, vpw, 2, op[2]);
+            if ((pw.slots & 8) != 0 && op[3] != -1) ((ClsOPN)pw.chip).OutFmSetTl(mml, vpw, 3, op[3]);
+            //if (op[0] != -1) ((ClsOPN)pw.chip).OutFmSetTl(mml, vpw, 0, op[0]);
+            //if (op[1] != -1) ((ClsOPN)pw.chip).OutFmSetTl(mml, vpw, 1, op[1]);
+            //if (op[2] != -1) ((ClsOPN)pw.chip).OutFmSetTl(mml, vpw, 2, op[2]);
+            //if (op[3] != -1) ((ClsOPN)pw.chip).OutFmSetTl(mml, vpw, 3, op[3]);
 
             OutFmSetVolume(pw, mml, vol, n);
 
@@ -1823,7 +1823,7 @@ namespace Core
                             p.beforeFNum = -1;
                             p.freq = -1;
 
-                            if (p.ch != 2 && p.ch != 8) // 2 -> Ch3   8 -> OPNA2のCh9のこと
+                            if (p.ch != 2 && (p.chip.chipType!=enmChipType.YM2609 || p.ch != 8)) // 2 -> Ch3   8 -> OPNA2のCh9のこと
                                 p.slots = 0;
                             else
                             {

@@ -2,7 +2,7 @@
 元ネタ: MUSIC LALF MMLコマンドメモ
 
 
-■ .vgm/.xgmファイル作成手順
+■ .vgm/.xgm/.zgmファイル作成手順
 
   1. 元になるMMLファイルを作成する。
    (1) mml2vgmでは拡張子を便宜上.gwiとする。(以下MMLファイルのことを.gwiと略す。)
@@ -27,7 +27,7 @@
   又は、エラー無く無事に.vgmファイルが.gwiと同じフォルダーに生成される。
   (曲情報定義でxgmを指定すれば.xgmファイルが生成される。)
   
-  4. 手頃なvgm/xgmプレイヤーで試聴する。IDEの場合はF5キーを押すことで再生する。
+  4. 手頃なvgm/xgm/zgmプレイヤーで試聴する。IDEの場合はF5キーを押すことで再生する。
   修正が必要であれば1から繰り返す。
   
   5. 完成！悦に入る。
@@ -64,7 +64,7 @@
   (2) 音色定義部
     ・FM音源向け、PCM音源、波形メモリ音源向けの音色を定義する。PSG音源は除く。
     ・FM音源の音色定義は例外的に定義行が複数行要り、決められた順序で定義が必要。
-        例)
+       例)
 ebass3(from MUSIC LALF @70)
 '@ F 070
    AR  DR  SR  RR  SL  TL  KS  ML  DT
@@ -84,6 +84,15 @@ ebass3(from MUSIC LALF @70)
            ・8KHzがo4c(オクターブ4のドの音)として再生される。
            ・4byte毎にPaddingされる。
            ・合計256Kbyteまで定義可能。
+         YM2609 ADPCM1/2/3
+           ・PCMは16bit,mono,圧縮なし,signedのwavファイルであること。
+               mml2vgmは内部でADPCMに変換する。
+           ・8bitも読み込めるが16bitに変換される。
+           ・8KHzがo4c(オクターブ4のドの音)として再生される。
+           ・4byte毎にPaddingされる。(ADPCM1)
+           ・256byte毎にPaddingされる。(ADPCM2/3)
+           ・合計256Kbyteまで定義可能。(ADPCM1)
+           ・合計16Mbyteまで定義可能。(ADPCM2/3)
          YM2610B ADPCM-A
            ・PCMは18.5KHz,16bit,mono,圧縮なし,signedのwavファイルであること。
                mml2vgmは内部でADPCMに変換する。
@@ -224,21 +233,22 @@ ebass3(from MUSIC LALF @70)
   YM2612X   OPN2X         7670454  24Ch(FM   : 6Ch  FMex: 3Ch  |  FM:5Ch FMex:3Ch PCM:4Ch PCM(overlay):12Ch)
   SN76489   DCSG          3579545   4Ch(PSG  : 4Ch)
   RF5C164   RF5C         12500000   8Ch(PCM  : 8Ch)
-  YM2203    OPN           3993600   9Ch(FM   : 3Ch  FMex: 3Ch  SSG : 3Ch)
-  YM2608    OPNA          7987200  19Ch(FM   : 6Ch  FMex: 3Ch  SSG : 3Ch  Rhythm : 6Ch  ADPCM  : 1Ch)
-  YM2610B   OPNB          8000000  19Ch(FM   : 6Ch  FMex: 3Ch  SSG : 3Ch  ADPCM-A: 6Ch  ADPCM-B: 1Ch)
-  YM2151    OPM           3579545   8Ch(FM   : 8Ch)
-  SegaPCM   SPCM          4000000  16Ch(PCM  :16Ch)
-  HuC6280   HuC8          3579545   6Ch(WF   : 6Ch)
-  K051649   SCC           1789772   5Ch(WF   : 5Ch)
-  C140      C140            21390  24Ch(PCM  :24Ch)
-  AY8910    AY10          1789750   3Ch(PSG  : 3Ch)
-  YM2413    OPLL          3579545  14Ch(FM   : 9Ch  Rhythm:5Ch)
-  QSound    QSnd          4000000  16Ch(PCM  :16Ch)
-  K053260   K53           3579545   4Ch(PCM  : 4Ch  |  DPCM:4Ch)
-  PWM       PWM          23011361   2Ch(PCM  : 2Ch)(T.B.D.)
-  OKIM6258  OKI5          4000000   1Ch(ADPCM: 1Ch)(T.B.D.)
-  OKIM6295  OKI9          8000000   4Ch(ADPCM: 4Ch)(T.B.D.)
+  YM2203    OPN           3993600   9Ch(FM   :  3Ch  FMex: 3Ch  SSG :  3Ch)
+  YM2608    OPNA          7987200  19Ch(FM   :  6Ch  FMex: 3Ch  SSG :  3Ch  Rhythm : 6Ch  ADPCM  : 1Ch)
+  YM2609    OPNA2         7987200  39Ch(FM   : 12Ch  FMex: 6Ch  SSG : 12Ch  Rhythm : 6Ch  ADPCM  : 3Ch)
+  YM2610B   OPNB          8000000  19Ch(FM   :  6Ch  FMex: 3Ch  SSG :  3Ch  ADPCM-A: 6Ch  ADPCM-B: 1Ch)
+  YM2151    OPM           3579545   8Ch(FM   :  8Ch)
+  SegaPCM   SPCM          4000000  16Ch(PCM  : 16Ch)
+  HuC6280   HuC8          3579545   6Ch(WF   :  6Ch)
+  K051649   SCC           1789772   5Ch(WF   :  5Ch)
+  C140      C140            21390  24Ch(PCM  : 24Ch)
+  AY8910    AY10          1789750   3Ch(PSG  :  3Ch)
+  YM2413    OPLL          3579545  14Ch(FM   :  9Ch  Rhythm:5Ch)
+  QSound    QSnd          4000000  16Ch(PCM  : 16Ch)
+  K053260   K53           3579545   4Ch(PCM  :  4Ch  |  DPCM:4Ch)
+  PWM       PWM          23011361   2Ch(PCM  :  2Ch)(T.B.D.)
+  OKIM6258  OKI5          4000000   1Ch(ADPCM:  1Ch)(T.B.D.)
+  OKIM6295  OKI9          8000000   4Ch(ADPCM:  4Ch)(T.B.D.)
 
 
 ■ パート割り(初期値)
@@ -961,6 +971,7 @@ b               -ooooooooooooooooooooooooooooo  音符シ
 				YM2612X : 36をo4cとして0～72の範囲で音程を変換し定義する。
 				          73以上を指定すると14000を既定の周波数として音程を変換し定義する。
 						  この機能を利用するにはSoXが必要。
+                YM2609  : 0,1,2がそれぞれADPCM1,2,3として定義される
     P を使用すると、mml2vgmはPCMデータを音量などを加工した後、メモリに順番に配置する。
     Bankの機能が存在するChipの場合は、パディングなどを行いその制約に沿った配置を行う。
     また、音色定義も合わせて行われ、加工後のデータを基準にStartAdr、EndAdrが設定される。
@@ -975,8 +986,9 @@ b               -ooooooooooooooooooooooooooooo  音符シ
 	    LICENSE
 	      GPL
       解凍したら、mml2vgmのプログラムがあるフォルダーに「sox」フォルダーを作成しその中にファイルをコピーする。
-      見つからない場合は、TAG161より環境変数PATHの値を参照し探すようになりました。
-      また、.gwiがある場所に以下のファイル名を作業用として使用します。上書きが行われ作業完了するとファイルを削除します。
+      見つからない場合は環境変数PATHの値を参照し探す(TAG161より)。
+      また、.gwiがある場所に以下のファイル名を作業用として使用する。上書きが行われ作業完了するとファイルを削除する。
+      (そのため、同名のファイルを使わないようにお願いします。)
         soxTemp.raw
 		soxTempDest.raw
 
@@ -1050,20 +1062,23 @@ b               -ooooooooooooooooooooooooooooo  音符シ
                                          PPPP                         
   名称             略称          タイプ   DIM Freq指定 ループ指定 備考
   ---------------------------------------------------------------------------------------------
-  YM2612           OPN2                  o--o 不可     不可       
+  YM2612           OPN2                  o--T 不可     不可       
   YM2612X          OPN2X                 o--o 不可     不可       XGM専用
   RF5C164          RF5C                  ooo- 可       可         StartAdr 8bit  EndAdr指定無し(ループ指定必須)
   RF5C164Secondary RF5CSecondary         ooo- 可       可         StartAdr 8bit  EndAdr指定無し(ループ指定必須)
   YM2608           OPNA          ADPCM   ooo- 可       不可       
   YM2608Secondary  OPNASecondary ADPCM   ooo- 可       不可       
-  YM2610B          OPNB          ADPCM-A oooo 不可     不可       
-  YM2610BSecondary OPNBSecondary ADPCM-A oooo 不可     不可       
+  YM2609           OPNA2         ADPCM1  ooo- 可       不可       
+  YM2609           OPNA2         ADPCM2  ooo- 可       不可       
+  YM2609           OPNA2         ADPCM3  ooo- 可       不可       
+  YM2610B          OPNB          ADPCM-A oooT 不可     不可       
+  YM2610BSecondary OPNBSecondary ADPCM-A oooT 不可     不可       
   YM2610B          OPNB          ADPCM-B ooo- 可       不可       
   YM2610BSecondary OPNBSecondary ADPCM-B ooo- 可       不可       
   SegaPCM          SPCM                  ooo- 可       可         
   SegaPCMSecondary SPCMSecondary         ooo- 可       可         
-  HuC6280          HuC8                  o--o 不可     不可       
-  HuC6280Secondary HuC8Secondary         o--o 不可     不可       
+  HuC6280          HuC8                  o--T 不可     不可       
+  HuC6280Secondary HuC8Secondary         o--T 不可     不可       
   C140             C140                  ooo- 可       可         
   C140Secondary    C140Secondary         ooo- 可       可         
   QSound           QSnd                  o--- 可       可         QSoundはSecondary無し(vgmがDualChip非対応)
@@ -1233,6 +1248,7 @@ FM1Chで指定の音程2音を同時に出力することを主な目的とし�
           PartRF5C164                     =R
           PartYM2203                      =N
           PartYM2608                      =P
+          PartYM2609                      =U
           PartYM2610B                     =T
           PartYM2151                      =X
           PartYM3526                      =L
@@ -1273,7 +1289,7 @@ FM1Chで指定の音程2音を同時に出力することを主な目的とし�
         出力するファイル形式を指定する。
         VGM  デフォルト。VGM形式。多彩な音源を扱えるフォーマット
         XGM  XGM形式。MegaDrive(Genesis)向けフォーマット。ソフトウェアによる4chPCM再生が強力。
-        ZGM  ZGM形式。(T.B.D.)VGM形式を拡張し、仮想音源、MIDIやWAVも扱えるフォーマット(の予定)
+        ZGM  ZGM形式。VGM形式を拡張し、仮想音源、MIDIやWAV(TBD)も扱えるフォーマット
     
     分解能指定
       ClockCount              =クロックカウント値
