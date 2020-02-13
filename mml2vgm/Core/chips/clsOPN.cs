@@ -644,16 +644,50 @@ namespace Core
             }
 
             //ch3以外の拡張チャンネルでも音色設定できるようになったら以下を有効に
-            if ((pw.slots & 1) != 0 && op[0] != -1) ((ClsOPN)pw.chip).OutFmSetTl(mml, vpw, 0, op[0]);
-            if ((pw.slots & 2) != 0 && op[1] != -1) ((ClsOPN)pw.chip).OutFmSetTl(mml, vpw, 1, op[1]);
-            if ((pw.slots & 4) != 0 && op[2] != -1) ((ClsOPN)pw.chip).OutFmSetTl(mml, vpw, 2, op[2]);
-            if ((pw.slots & 8) != 0 && op[3] != -1) ((ClsOPN)pw.chip).OutFmSetTl(mml, vpw, 3, op[3]);
-            //if (op[0] != -1) ((ClsOPN)pw.chip).OutFmSetTl(mml, vpw, 0, op[0]);
-            //if (op[1] != -1) ((ClsOPN)pw.chip).OutFmSetTl(mml, vpw, 1, op[1]);
-            //if (op[2] != -1) ((ClsOPN)pw.chip).OutFmSetTl(mml, vpw, 2, op[2]);
-            //if (op[3] != -1) ((ClsOPN)pw.chip).OutFmSetTl(mml, vpw, 3, op[3]);
+            //if ((pw.slots & 1) != 0 && op[0] != -1) ((ClsOPN)pw.chip).OutFmSetTl(mml, vpw, 0, op[0]);
+            //if ((pw.slots & 2) != 0 && op[1] != -1) ((ClsOPN)pw.chip).OutFmSetTl(mml, vpw, 1, op[1]);
+            //if ((pw.slots & 4) != 0 && op[2] != -1) ((ClsOPN)pw.chip).OutFmSetTl(mml, vpw, 2, op[2]);
+            //if ((pw.slots & 8) != 0 && op[3] != -1) ((ClsOPN)pw.chip).OutFmSetTl(mml, vpw, 3, op[3]);
+            if (op[0] != -1) ((ClsOPN)pw.chip).OutFmSetTl(mml, vpw, 0, op[0]);
+            if (op[1] != -1) ((ClsOPN)pw.chip).OutFmSetTl(mml, vpw, 1, op[1]);
+            if (op[2] != -1) ((ClsOPN)pw.chip).OutFmSetTl(mml, vpw, 2, op[2]);
+            if (op[3] != -1) ((ClsOPN)pw.chip).OutFmSetTl(mml, vpw, 3, op[3]);
+
+
+            //音量を再セットする
 
             OutFmSetVolume(pw, mml, vol, n);
+
+            //拡張チャンネルの場合は他の拡張チャンネルも音量を再セットする
+            if (pw.Type == enmChannelType.FMOPNex)
+            {
+                if (!(pw.chip is YM2609))
+                {
+                    if (pw.ch != 2) OutFmSetVolume(pw.chip.lstPartWork[2], mml, pw.chip.lstPartWork[2].volume, n);
+                    if (pw.ch != m + 3) OutFmSetVolume(pw.chip.lstPartWork[m + 3], mml, pw.chip.lstPartWork[m + 3].volume, n);
+                    if (pw.ch != m + 4) OutFmSetVolume(pw.chip.lstPartWork[m + 4], mml, pw.chip.lstPartWork[m + 4].volume, n);
+                    if (pw.ch != m + 5) OutFmSetVolume(pw.chip.lstPartWork[m + 5], mml, pw.chip.lstPartWork[m + 5].volume, n);
+                }
+                else
+                {
+                    if (pw.ch == 2 || pw.ch == 12 || pw.ch == 13 || pw.ch == 14)
+                    {
+                        //YM2609 ch3 || ch13 || ch14 || ch15
+                        if (pw.ch != 2) OutFmSetVolume(pw.chip.lstPartWork[2], mml, pw.chip.lstPartWork[2].volume, n);
+                        if (pw.ch != 12) OutFmSetVolume(pw.chip.lstPartWork[12], mml, pw.chip.lstPartWork[12].volume, n);
+                        if (pw.ch != 13) OutFmSetVolume(pw.chip.lstPartWork[13], mml, pw.chip.lstPartWork[13].volume, n);
+                        if (pw.ch != 14) OutFmSetVolume(pw.chip.lstPartWork[14], mml, pw.chip.lstPartWork[14].volume, n);
+                    }
+                    else
+                    {
+                        //YM2609 ch9 || ch16 || ch17 || ch18
+                        if (pw.ch != 8) OutFmSetVolume(pw.chip.lstPartWork[8], mml, pw.chip.lstPartWork[8].volume, n);
+                        if (pw.ch != 15) OutFmSetVolume(pw.chip.lstPartWork[15], mml, pw.chip.lstPartWork[15].volume, n);
+                        if (pw.ch != 16) OutFmSetVolume(pw.chip.lstPartWork[16], mml, pw.chip.lstPartWork[16].volume, n);
+                        if (pw.ch != 17) OutFmSetVolume(pw.chip.lstPartWork[17], mml, pw.chip.lstPartWork[17].volume, n);
+                    }
+                }
+            }
 
         }
 
