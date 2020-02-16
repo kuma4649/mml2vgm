@@ -1550,7 +1550,7 @@ namespace mml2vgmIDE
                         chip.Reset = ym2610.Reset;
                         chip.SamplingRate = (UInt32)Common.SampleRate;
                         chip.Volume = setting.balance.YM2610Volume;
-                        chip.Clock = (uint)zchip.defineInfo.clock;
+                        chip.Clock = (uint)zchip.defineInfo.clock & 0x7fff_ffff;
                         chip.Option = null;
                         lstChips.Add(chip);
 

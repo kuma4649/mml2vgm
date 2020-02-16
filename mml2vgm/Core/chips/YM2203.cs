@@ -225,9 +225,9 @@ namespace Core
                 {
                     pw.instrument = n;
                     lstPartWork[2].instrument = n;
-                    lstPartWork[6].instrument = n;
-                    lstPartWork[7].instrument = n;
-                    lstPartWork[8].instrument = n;
+                    lstPartWork[3].instrument = n;
+                    lstPartWork[4].instrument = n;
+                    lstPartWork[5].instrument = n;
                     OutFmSetInstrument(pw,mml, n, pw.volume, type);
                     return;
                 }

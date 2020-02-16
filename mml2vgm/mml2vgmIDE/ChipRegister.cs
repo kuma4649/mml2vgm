@@ -4292,6 +4292,7 @@ namespace mml2vgmIDE
                 {
                     if (!ctYM2610[Chip.Number].UseScci && ctYM2610[Chip.Number].UseEmu)
                     {
+                        //Console.WriteLine("I:{0:x2} N:{1:x2} A:{2:x4} D:{3:X2}", Chip.Index, (byte)Chip.Number, address, (byte)data);
                         mds.WriteYM2610(Chip.Index, (byte)Chip.Number, (byte)(address >> 8), (byte)address, (byte)data);
                     }
                     else if (ctYM2610[Chip.Number].OnlyPCMEmulation)
@@ -4395,7 +4396,10 @@ namespace mml2vgmIDE
                         if (Chip.Model == EnmVRModel.VirtualModel)
                         {
                             foreach (PackData dat in pdata)
-                                mds.WriteYM2610(dat.Chip.Index,(byte)dat.Chip.Number, (byte)(dat.Address >> 8), (byte)dat.Address, (byte)dat.Data);
+                            {
+                                //Console.WriteLine("I:{0:x2} N:{1:x2} A:{2:x4} D:{3:X2}", dat.Chip.Index, (byte)dat.Chip.Number, dat.Address, (byte)dat.Data);
+                                mds.WriteYM2610(dat.Chip.Index, (byte)dat.Chip.Number, (byte)(dat.Address >> 8), (byte)dat.Address, (byte)dat.Data);
+                            }
                         }
                         if (Chip.Model == EnmVRModel.RealModel)
                         {
@@ -4729,6 +4733,7 @@ namespace mml2vgmIDE
 
         public void YM2610SetRegister(outDatum od, long Counter, int ChipID, int dPort, int dAddr, int dData)
         {
+            //Console.WriteLine("P:{0:x2} A:{1:x2} D:{2:x2}",dPort,dAddr,dData);
             dummyChip.Move(YM2610[ChipID]);
 
             int address = dPort * 0x100 + dAddr;

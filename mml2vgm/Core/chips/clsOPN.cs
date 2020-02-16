@@ -223,10 +223,18 @@ namespace Core
 
         public void OutOPNSetCh3SpecialMode(MML mml,partWork pw, bool sw)
         {
+            byte[] port = pw.port[0];
+            if(pw.chip.chipType== enmChipType.YM2609)
+            {
+                if (pw.ch == 8 || pw.ch == 15 || pw.ch == 16 || pw.ch == 17)
+                {
+                    port = pw.port[2];
+                }
+            }
             // ignore Timer ^^;
             parent.OutData(
                 mml,
-                pw.port[0]
+                port
                 , 0x27
                 , (byte)((sw ? 0x40 : 0))
                 );
@@ -738,7 +746,7 @@ namespace Core
                             | (pw.chip.lstPartWork[14].Ch3SpecialModeKeyOn ? pw.chip.lstPartWork[14].slots : 0x0);
 
                         outDatum od = new outDatum();
-                        od.val = (byte)((pw.slots << 4) + 2);
+                        od.val = (byte)((slot << 4) + 2);
                         if (mml != null)
                         {
                             od.type = mml.type;
@@ -768,7 +776,7 @@ namespace Core
                             | (pw.chip.lstPartWork[17].Ch3SpecialModeKeyOn ? pw.chip.lstPartWork[17].slots : 0x0);
 
                         outDatum od = new outDatum();
-                        od.val = (byte)((pw.slots << 4) + 2);
+                        od.val = (byte)((slot << 4) + 2);
                         if (mml != null)
                         {
                             od.type = mml.type;
@@ -1065,7 +1073,7 @@ namespace Core
                             | (pw.chip.lstPartWork[14].Ch3SpecialModeKeyOn ? pw.chip.lstPartWork[14].slots : 0x0);
 
                         outDatum od = new outDatum();
-                        od.val = (byte)((pw.slots << 4) + 2);
+                        od.val = (byte)((slot << 4) + 2);
                         if (mml != null)
                         {
                             od.type = mml.type;
@@ -1096,7 +1104,7 @@ namespace Core
                             | (pw.chip.lstPartWork[17].Ch3SpecialModeKeyOn ? pw.chip.lstPartWork[17].slots : 0x0);
 
                         outDatum od = new outDatum();
-                        od.val = (byte)((pw.slots << 4) + 2);
+                        od.val = (byte)((slot << 4) + 2);
                         if (mml != null)
                         {
                             od.type = mml.type;
@@ -1829,7 +1837,11 @@ namespace Core
                     if (res != 0)
                     {
                         pw.slotsEX = res;
-                        if (pw.Ch3SpecialMode) pw.slots = pw.slotsEX;
+                        if (pw.Ch3SpecialMode)
+                        {
+                            pw.slots = pw.slotsEX;
+                            pw.beforeVolume = -1;
+                        }
                     }
                     break;
                 case "EXON":
@@ -1837,13 +1849,25 @@ namespace Core
                     ((ClsOPN)pw.chip).OutOPNSetCh3SpecialMode(mml,pw, true);
                     foreach (partWork p in pw.chip.lstPartWork)
                     {
+                        if(pw.chip.chipType== enmChipType.YM2609)
+                        {
+                            if (pw.ch == 2 || pw.ch == 12 || pw.ch == 13 || pw.ch == 14)
+                                if (p.ch == 8 || p.ch == 15 || p.ch == 16 || p.ch == 17)
+                                    continue;
+
+                            if (pw.ch == 8 || pw.ch == 15 || pw.ch == 16 || pw.ch == 17)
+                                if (p.ch == 2 || p.ch == 12 || p.ch == 13 || p.ch == 14)
+                                    continue;
+                        }
+
                         if (p.Type == enmChannelType.FMOPNex)
                         {
                             p.slots = p.slotsEX;
                             p.beforeVolume = -1;
                             p.beforeFNum = -1;
-                            p.freq = -1;
-                            //SetFmFNum(p);
+                            //p.freq = -1;
+                            p.oldFreq = -1;
+                            //SetFmFNum(p,mml);
                         }
                     }
                     break;

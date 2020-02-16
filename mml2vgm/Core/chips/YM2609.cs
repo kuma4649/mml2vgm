@@ -458,7 +458,9 @@ namespace Core
                 f = f - ftbl[0] * 2 + ftbl[0];
             }
 
-            pw.freq = Common.CheckRange(f, 0, 0x7ff) | (Common.CheckRange(o - 1, 0, 7) << (8 + 3));
+            f = Common.CheckRange(f, 0, 0x7ff);
+            OutFmSetFnum(pw, mml, o, f);
+            //pw.freq = Common.CheckRange(f, 0, 0x7ff) | (Common.CheckRange(o - 1, 0, 7) << (8 + 3));
 
         }
 
@@ -475,25 +477,25 @@ namespace Core
 
             if (portEx != -1)
             {
-                if ((pw.slots & 8) != 0)
+                if ((pw.slots & 8) != 0 && pw.freq != -1)
                 {
                     int f = pw.freq + pw.slotDetune[3];
                     parent.OutData(mml, pw.port[portEx], (byte)0xa6, (byte)((f & 0x3f00) >> 8));
                     parent.OutData(mml, pw.port[portEx], (byte)0xa2, (byte)(f & 0xff));
                 }
-                if ((pw.slots & 4) != 0)
+                if ((pw.slots & 4) != 0 && pw.freq != -1)
                 {
                     int f = pw.freq + pw.slotDetune[2];
                     parent.OutData(mml, pw.port[portEx], (byte)0xac, (byte)((f & 0x3f00) >> 8));
                     parent.OutData(mml, pw.port[portEx], (byte)0xa8, (byte)(f & 0xff));
                 }
-                if ((pw.slots & 1) != 0)
+                if ((pw.slots & 1) != 0 && pw.freq != -1)
                 {
                     int f = pw.freq + pw.slotDetune[0];
                     parent.OutData(mml, pw.port[portEx], (byte)0xad, (byte)((f & 0x3f00) >> 8));
                     parent.OutData(mml, pw.port[portEx], (byte)0xa9, (byte)(f & 0xff));
                 }
-                if ((pw.slots & 2) != 0)
+                if ((pw.slots & 2) != 0 && pw.freq != -1)
                 {
                     int f = pw.freq + pw.slotDetune[1];
                     parent.OutData(mml, pw.port[portEx], (byte)0xae, (byte)((f & 0x3f00) >> 8));
@@ -511,8 +513,11 @@ namespace Core
                 byte[] port;
                 GetPortVch(pw, out port, out vch);
 
-                parent.OutData(mml, port, (byte)(0xa4 + vch), (byte)(((pw.freq & 0x3f00) >> 8) | (((4 - pw.panL) & 0x3) << 6)));
-                parent.OutData(mml, port, (byte)(0xa0 + vch), (byte)(pw.freq & 0xff));
+                if (pw.freq != -1)
+                {
+                    parent.OutData(mml, port, (byte)(0xa4 + vch), (byte)(((pw.freq & 0x3f00) >> 8) | (((4 - pw.panL) & 0x3) << 6)));
+                    parent.OutData(mml, port, (byte)(0xa0 + vch), (byte)(pw.freq & 0xff));
+                }
             }
         }
 
@@ -1079,10 +1084,20 @@ namespace Core
                 if (pw.Type == enmChannelType.FMOPNex)
                 {
                     pw.instrument = n;
-                    lstPartWork[2].instrument = n;
-                    lstPartWork[12].instrument = n;
-                    lstPartWork[13].instrument = n;
-                    lstPartWork[14].instrument = n;
+                    if (pw.ch == 2 || pw.ch == 12 || pw.ch == 13 || pw.ch == 14)
+                    {
+                        lstPartWork[2].instrument = n;
+                        lstPartWork[12].instrument = n;
+                        lstPartWork[13].instrument = n;
+                        lstPartWork[14].instrument = n;
+                    }
+                    else
+                    {
+                        lstPartWork[8].instrument = n;
+                        lstPartWork[15].instrument = n;
+                        lstPartWork[16].instrument = n;
+                        lstPartWork[17].instrument = n;
+                    }
                     OutFmSetInstrument(pw, mml, n, pw.volume, type);
                     return;
                 }
@@ -1431,6 +1446,26 @@ namespace Core
 
             OutFmSetVolumeM(pw, mml, vol, n);
 
+            //拡張チャンネルの場合は他の拡張チャンネルも音量を再セットする
+            if (pw.Type == enmChannelType.FMOPNex)
+            {
+                if (pw.ch == 2 || pw.ch == 12 || pw.ch == 13 || pw.ch == 14)
+                {
+                    //YM2609 ch3 || ch13 || ch14 || ch15
+                    if (pw.ch != 2) OutFmSetVolumeM(pw.chip.lstPartWork[2], mml, pw.chip.lstPartWork[2].volume, n);
+                    if (pw.ch != 12) OutFmSetVolumeM(pw.chip.lstPartWork[12], mml, pw.chip.lstPartWork[12].volume, n);
+                    if (pw.ch != 13) OutFmSetVolumeM(pw.chip.lstPartWork[13], mml, pw.chip.lstPartWork[13].volume, n);
+                    if (pw.ch != 14) OutFmSetVolumeM(pw.chip.lstPartWork[14], mml, pw.chip.lstPartWork[14].volume, n);
+                }
+                else
+                {
+                    //YM2609 ch9 || ch16 || ch17 || ch18
+                    if (pw.ch != 8) OutFmSetVolumeM(pw.chip.lstPartWork[8], mml, pw.chip.lstPartWork[8].volume, n);
+                    if (pw.ch != 15) OutFmSetVolumeM(pw.chip.lstPartWork[15], mml, pw.chip.lstPartWork[15].volume, n);
+                    if (pw.ch != 16) OutFmSetVolumeM(pw.chip.lstPartWork[16], mml, pw.chip.lstPartWork[16].volume, n);
+                    if (pw.ch != 17) OutFmSetVolumeM(pw.chip.lstPartWork[17], mml, pw.chip.lstPartWork[17].volume, n);
+                }
+            }
         }
 
         private void OutFmSetInstrumentOPNA(partWork pw, MML mml, int n, int vol)
