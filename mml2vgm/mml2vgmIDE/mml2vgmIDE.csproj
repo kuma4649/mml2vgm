@@ -267,6 +267,7 @@
     <Compile Include="MMLParameter\YM2610B.cs" />
     <Compile Include="MMLParameter\YM2612.cs" />
     <Compile Include="MMLParameter\YM2612X.cs" />
+    <Compile Include="mucomManager.cs" />
     <Compile Include="NAudioWrap.cs" />
     <Compile Include="NullOut.cs" />
     <Compile Include="Program.cs" />

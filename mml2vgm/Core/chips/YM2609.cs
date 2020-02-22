@@ -459,8 +459,8 @@ namespace Core
             }
 
             f = Common.CheckRange(f, 0, 0x7ff);
-            OutFmSetFnum(pw, mml, o, f);
-            //pw.freq = Common.CheckRange(f, 0, 0x7ff) | (Common.CheckRange(o - 1, 0, 7) << (8 + 3));
+            //OutFmSetFnum(pw, mml, o, f);
+            pw.freq = Common.CheckRange(f, 0, 0x7ff) | (Common.CheckRange(o - 1, 0, 7) << (8 + 3));
 
         }
 
@@ -1805,6 +1805,8 @@ namespace Core
             if (pw.Type == enmChannelType.FMOPN || pw.Type == enmChannelType.FMOPNex)
             {
                 pw.pan.val = (pw.panL != 0 ? 2 : 0) | (pw.panR != 0 ? 1 : 0);
+                pw.beforePanL = -1;
+                pw.beforePanR = -1;
             }
         }
 

@@ -14,6 +14,7 @@ using Core;
 using System.Diagnostics;
 using SoundManager;
 using System.Runtime.InteropServices;
+using System.Reflection;
 
 namespace mml2vgmIDE
 {
@@ -49,6 +50,7 @@ namespace mml2vgmIDE
         private bool ctrl = false;
         private bool shift = false;
         private ChannelInfo defaultChannelInfo = null;
+        private mucomManager mucom = null;
 
         private object traceInfoLockObj = new object();
         private bool traceInfoSw = false;
@@ -149,7 +151,29 @@ namespace mml2vgmIDE
         {
             UpdateControl();
             Core.Common.CheckSoXVersion(System.Windows.Forms.Application.StartupPath, Disp);
+            CheckAndLoadMucomDotNET(System.Windows.Forms.Application.StartupPath, Disp);
             OpenLatestFile();
+        }
+
+        private void CheckAndLoadMucomDotNET(string startupPath, Action<string> disp)
+        {
+            if (!File.Exists(Path.Combine(startupPath, "mucomDotNETCommon.dll"))) return;
+            if (!File.Exists(Path.Combine(startupPath, "mucomDotNETCompiler.dll"))) return;
+            if (!File.Exists(Path.Combine(startupPath, "mucomDotNETDriver.dll"))) return;
+
+            try
+            {
+                Assembly comp = Assembly.LoadFrom(Path.Combine(startupPath, "mucomDotNETCompiler.dll"));
+                Assembly driv = Assembly.LoadFrom(Path.Combine(startupPath, "mucomDotNETDriver.dll"));
+                disp("mucomDotNETを読み込みました");
+
+                mucom = new mucomManager(comp,driv);
+            }
+            catch
+            {
+                disp("mucomDotNETの読み込みに失敗しました");
+                mucom = null;
+            }
         }
 
         private void FrmMain_FormClosing(object sender, FormClosingEventArgs e)
