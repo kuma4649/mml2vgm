@@ -39,6 +39,7 @@ namespace mml2vgmIDE
         public static int clockYMF278B = 0;
         public static MDSound.MDSound mdsMIDI = null;
         public static Manager mmlParams = new Manager();
+        public static mucomManager mucomManager = null;
 
         private static object lockObj = new object();
         private static bool _fatalError = false;
@@ -99,7 +100,8 @@ namespace mml2vgmIDE
 
         private static outDatum[] vgmBuf = null;
         private static double vgmSpeed;
-
+        private static mucomDotNET.Interface.MubDat[] mubBuf = null;
+        private static string mubWorkPath;
         public static double fadeoutCounter;
         public static double fadeoutCounterEmu;
         private static double fadeoutCounterDelta;
@@ -664,6 +666,13 @@ namespace mml2vgmIDE
             vgmBuf = srcBuf;
         }
 
+        public static void SetVGMBuffer(EnmFileFormat format, mucomDotNET.Interface.MubDat[] srcBuf,string wrkPath)
+        {
+            PlayingFileFormat = format;
+            mubBuf = srcBuf;
+            mubWorkPath = wrkPath;
+        }
+
         private static void SoundManagerMount()
         {
             sm = new SoundManager.SoundManager();
@@ -856,6 +865,17 @@ namespace mml2vgmIDE
                 ((vgm)driver).dacControl.model = EnmVRModel.VirtualModel;
 
                 ret = vgmPlay(setting);
+            }
+            else if(PlayingFileFormat== EnmFileFormat.MUB)
+            {
+                driver = new mucomMub();
+                driver.setting = setting;
+
+                ret = mubPlay(setting);
+            }
+            else
+            {
+                ret = false;
             }
 
             if (!ret) return false;
@@ -3357,6 +3377,115 @@ namespace mml2vgmIDE
                 //Stopped = false;
 
                 log.Write("初期化完了");
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                log.ForcedWrite(ex);
+                return false;
+            }
+
+        }
+
+        public static bool mubPlay(Setting setting)
+        {
+
+            try
+            {
+
+                if (mubBuf == null || setting == null) return false;
+
+                mucomMub mubDriver = (mucomMub)driver;
+
+                ResetFadeOutParam();
+                useChip.Clear();
+                chipRegister.ClearChipParam();
+
+                List<MDSound.MDSound.Chip> lstChips = new List<MDSound.MDSound.Chip>();
+
+                MDSound.MDSound.Chip chip;
+
+                hiyorimiNecessary = setting.HiyorimiMode;
+
+                chipLED = new ChipLEDs();
+
+                MasterVolume = setting.balance.MasterVolume;
+
+                chip = new MDSound.MDSound.Chip();
+                chip.ID = (byte)0;
+                MDSound.ym2608 ym2608 = null;
+
+                if (setting.YM2608Type.UseEmu)
+                {
+                    if (ym2608 == null) ym2608 = new ym2608();
+                    chip.type = MDSound.MDSound.enmInstrumentType.YM2608;
+                    chip.Instrument = ym2608;
+                    chip.Update = ym2608.Update;
+                    chip.Start = ym2608.Start;
+                    chip.Stop = ym2608.Stop;
+                    chip.Reset = ym2608.Reset;
+                }
+
+                chip.SamplingRate = (UInt32)Common.SampleRate;
+                chip.Volume = setting.balance.YM2608Volume;
+                chip.Clock = (uint)mubDriver.YM2608ClockValue;
+                chip.Option = null;
+                chipLED.PriOPN2 = 1;
+                chipRegister.YM2608[0].Use = true;
+                lstChips.Add(chip);
+                useChip.Add(EnmChip.YM2608);
+
+                if (hiyorimiNecessary) hiyorimiNecessary = true;
+                else hiyorimiNecessary = false;
+
+                log.Write("MDSound 初期化");
+
+                if (mds == null)
+                    mds = new MDSound.MDSound((UInt32)Common.SampleRate, samplingBuffer, lstChips.ToArray());
+                else
+                    mds.Init((UInt32)Common.SampleRate, samplingBuffer, lstChips.ToArray());
+
+                log.Write("ChipRegister 初期化");
+                chipRegister.SetMDSound(mds);
+                chipRegister.initChipRegister(lstChips.ToArray());
+
+                if (setting.IsManualDetect)
+                {
+                    RealChipManualDetect(setting);
+                }
+                else
+                {
+                    RealChipAutoDetect(setting);
+                }
+
+                if (chipRegister.YM2608[0].Model == EnmVRModel.VirtualModel) useEmu = true;
+                if (chipRegister.YM2608[0].Model == EnmVRModel.RealModel) useReal = true;
+
+                if (!mubDriver.init(mubBuf, mubWorkPath, mucomManager, chipRegister, new EnmChip[] { EnmChip.YM2608 }
+                    , (uint)(Common.SampleRate * setting.LatencyEmulation / 1000)
+                    , (uint)(Common.SampleRate * setting.outputDevice.WaitTime / 1000))) return false;
+
+                log.Write("Volume 設定");
+
+                SetYM2608Volume(true, setting.balance.YM2608Volume);
+
+                log.Write("Clock 設定");
+
+                chipRegister.YM2608WriteClock((byte)0, (int)mubDriver.YM2608ClockValue);
+
+                //Play
+
+                PackData[] stopData = MakeSoftResetData();
+                sm.SetStopData(stopData);
+
+                Paused = false;
+
+                Thread.Sleep(100);
+
+                log.Write("初期化完了");
+
+
 
                 return true;
             }

@@ -3766,6 +3766,7 @@ namespace mml2vgmIDE
                 {
                     if (!ctYM2608[Chip.Number].UseScci && ctYM2608[Chip.Number].UseEmu)
                     {
+                        //Console.WriteLine("FM P{2} Out:Adr[{0:x02}] val[{1:x02}]", (byte)address, (byte)data, (byte)(address >> 8));
                         mds.WriteYM2608(Chip.Index, (byte)Chip.Number, (byte)(address >> 8), (byte)address, (byte)data);
                     }
                     else if (ctYM2610[Chip.Number].OnlyPCMEmulation)

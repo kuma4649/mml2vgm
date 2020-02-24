@@ -42,8 +42,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AutoExtendList.cs" />
+    <Compile Include="CompilerInfo.cs" />
     <Compile Include="iCompiler.cs" />
     <Compile Include="iDriver.cs" />
+    <Compile Include="Log.cs" />
+    <Compile Include="LogLevel.cs" />
+    <Compile Include="message.cs" />
     <Compile Include="MubDat.cs" />
     <Compile Include="MUCInfo.cs" />
     <Compile Include="OPNAData.cs" />

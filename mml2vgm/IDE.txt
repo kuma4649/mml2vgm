@@ -4,9 +4,9 @@
  エディターやコンパイラー、プレイヤーを
  ひとまとめに、簡単、お手軽に使用できるようにしたものです。
 
- mml2vgmIDEはmucom88 Windowsをお手本に作られています。
+ mml2vgmIDEはmucom88 Windowsやmuap98をお手本に作られています。
  また、テキストエディターのエンジンにazukiを使用しております。
- どちらもすばらしいプログラムです。
+ どれもすばらしいプログラムです。
  ご興味を持たれましたら是非使用してみることをお勧めします。
  そのほかにもmml2vgmは様々なプログラムを利用したり色々な方のご協力をいただいております。
  本当にありがとうございます。
@@ -17,6 +17,7 @@
  ・muap98を連想させる演奏トレース機能。
  ・スクリプトによる柔軟な(?)拡張性。
  ・GIMICとSCCIによる実チップ演奏に対応。
+ ・mucomDotNETをコピーすることによりmucからmubファイルを作成することも可能。(TBD)
 
 [クイックスタート]
   １.mml2vgmIDE.exeをダブルクリックしプログラムを起動する。
@@ -39,6 +40,14 @@
       Git : バージョン管理ツール
       SoX : 音声ファイル加工ツール
             SoXは一部のPCMの周波数変換処理が必要な場合も使用します。
+    ・mml2vgmIDEフォルダーにmucomDotNETのdllを配置することでmucomのデータ作成が可能です。
+    　以下のファイルをコピーしてください。
+        mucomDotNETCommon.dll
+        mucomDotNETCompiler.dll
+        mucomDotNETDriver.dll
+        lang\mucomDotNETmessage.ja-JP.txt
+        lang\mucomDotNETmessage.txt
+       (mucomDotNETInterface.dllは同梱していますのでコピー不要です)
 
   起動
     ・mml2vgmIDE.exeをダブルクリックしプログラムを起動します。

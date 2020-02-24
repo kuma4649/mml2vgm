@@ -406,7 +406,7 @@ namespace mml2vgmIDE
         public string compile()
         {
             parent.Compile(false, false, false, false, true);
-            while (parent.Compiling) { System.Windows.Forms.Application.DoEvents(); }
+            while (parent.Compiling!=0) { System.Windows.Forms.Application.DoEvents(); }
             string sf = Path.Combine(
                 Common.GetApplicationDataFolder(true)
                 , "temp"

@@ -41,7 +41,7 @@ namespace mml2vgmIDE
         private bool doSkipStop = false;
         private bool doExport;
         private Point caretPoint = Point.Empty;
-        public bool Compiling = false;
+        public int Compiling = 0;
         private bool flgReinit = false;
         public const int WM_COPYDATA = 0x004A;
         public const int WM_PASTE = 0x0302;
@@ -51,6 +51,7 @@ namespace mml2vgmIDE
         private bool shift = false;
         private ChannelInfo defaultChannelInfo = null;
         private mucomManager mucom = null;
+        private mucomDotNET.Interface.MubDat[] mubData = null;
 
         private object traceInfoLockObj = new object();
         private bool traceInfoSw = false;
@@ -157,22 +158,33 @@ namespace mml2vgmIDE
 
         private void CheckAndLoadMucomDotNET(string startupPath, Action<string> disp)
         {
-            if (!File.Exists(Path.Combine(startupPath, "mucomDotNETCommon.dll"))) return;
-            if (!File.Exists(Path.Combine(startupPath, "mucomDotNETCompiler.dll"))) return;
-            if (!File.Exists(Path.Combine(startupPath, "mucomDotNETDriver.dll"))) return;
+            string mes = "";
+            if (!File.Exists(Path.Combine(startupPath, "mucomDotNETCommon.dll"))) mes += "'mucomDotNETCommon.dll' not found.\r\n";
+            if (!File.Exists(Path.Combine(startupPath, "mucomDotNETCompiler.dll"))) mes += "'mucomDotNETCompiler.dll' not found.\r\n";
+            if (!File.Exists(Path.Combine(startupPath, "mucomDotNETDriver.dll"))) mes += "'mucomDotNETDriver.dll' not found.\r\n";
+            if (!File.Exists(Path.Combine(startupPath, "lang\\mucomDotNETmessage.ja-JP.txt"))) mes += "'lang\\mucomDotNETmessage.ja-JP.txt' not found.\r\n";
+            if (!File.Exists(Path.Combine(startupPath, "lang\\mucomDotNETmessage.txt"))) mes += "'lang\\mucomDotNETmessage.txt' not found.\r\n";
+            if (mes != "")
+            {
+                disp(mes);
+                return;
+            }
 
             try
             {
                 Assembly comp = Assembly.LoadFrom(Path.Combine(startupPath, "mucomDotNETCompiler.dll"));
                 Assembly driv = Assembly.LoadFrom(Path.Combine(startupPath, "mucomDotNETDriver.dll"));
-                disp("mucomDotNETを読み込みました");
+                mucom = new mucomManager(comp,driv,disp);
+                Audio.mucomManager = mucom;
 
-                mucom = new mucomManager(comp,driv);
+                disp("mucomDotNETを読み込みました");
+                //mucom.compile("D:\\bootcamp\\FM音源\\data\\MUC\\mucom88win_yk2mml181225\\BARE2_MML\\bare03.muc");
             }
             catch
             {
                 disp("mucomDotNETの読み込みに失敗しました");
                 mucom = null;
+                Audio.mucomManager = null;
             }
         }
 
@@ -223,7 +235,7 @@ namespace mml2vgmIDE
         {
             OpenFileDialog ofd = new OpenFileDialog();
 
-            ofd.Filter = "gwiファイル(*.gwi)|*.gwi|すべてのファイル(*.*)|*.*";
+            ofd.Filter = "gwiファイル(*.gwi)|*.gwi|mucファイル(*.muc)|*.muc|すべてのファイル(*.*)|*.*";
             ofd.Title = "ファイルを開く";
             ofd.RestoreDirectory = true;
 
@@ -350,7 +362,7 @@ namespace mml2vgmIDE
                 if (d == null) return;
 
                 Compile(false, false, false, false, true);
-                while (Compiling) { Application.DoEvents(); }//待ち合わせ
+                while (Compiling!=0) { Application.DoEvents(); }//待ち合わせ
 
                 if (msgBox.getErr().Length > 0)
                 {
@@ -567,7 +579,7 @@ namespace mml2vgmIDE
             file = File.ReadAllText(file);
             string[] text = file.Split(new string[] { "\r\n" }, StringSplitOptions.None);
             Compile(true, false, false, false, false, text);
-            while (Compiling)
+            while (Compiling!=0)
             {
                 Thread.Sleep(0);
                 Application.DoEvents();
@@ -848,7 +860,7 @@ namespace mml2vgmIDE
 
         public void Compile(bool doPlay, bool isTrace, bool doSkip, bool doSkipStop,bool doExport,string[] text=null)
         {
-            if (Compiling) return;
+            if (Compiling != 0) return;
             
             stop();
 
@@ -862,7 +874,12 @@ namespace mml2vgmIDE
 
                 string tempPath = Path.Combine(Common.GetApplicationDataFolder(true), "temp", Path.GetFileName(((Document)((FrmEditor)dc).Tag).gwiFullPath));
                 title = Path.GetFileName(Path.GetFileName(((Document)((FrmEditor)dc).Tag).gwiFullPath));
-                //File.WriteAllText(tempPath, text);
+
+                if (Path.GetExtension(tempPath) == ".muc")
+                {
+                    File.WriteAllText(tempPath, ((FrmEditor)dc).azukiControl.Text, Encoding.GetEncoding(932));
+                }
+
                 args = new string[2];
                 args[1] = tempPath;
                 wrkPath = Path.GetDirectoryName(((Document)((FrmEditor)dc).Tag).gwiFullPath);
@@ -920,7 +937,7 @@ namespace mml2vgmIDE
 
             Thread trdStartCompile = new Thread(new ThreadStart(startCompile));
             trdStartCompile.Start();
-            Compiling = true;
+            Compiling = 1;
         }
 
         private void startCompile()
@@ -929,7 +946,6 @@ namespace mml2vgmIDE
             Core.log.Write("start compile thread");
 
             Action dmy = updateTitle;
-            string stPath = System.Windows.Forms.Application.StartupPath;
 
             //for (int i = 1; i < args.Length; i++)
             //{
@@ -952,8 +968,30 @@ namespace mml2vgmIDE
             //desfn = Path.ChangeExtension(arg, Properties.Resources.ExtensionVGZ);
             //}
 
+            string ext = Path.GetExtension(args[1]);
+            switch (ext)
+            {
+                case ".gwi":
+                    Compiling |= 2;
+                    startCompileGWI();
+                    break;
+                case ".muc":
+                    if (mucom == null)
+                    {
+                        MessageBox.Show("Not found mucomDotNET.", "error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                    Compiling |= 4;
+                    startCompileMUC();
+                    break;
+            }
+        }
+
+        private void startCompileGWI()
+        { 
             Core.log.Write("Call mml2vgm core");
 
+            string stPath = System.Windows.Forms.Application.StartupPath;
             if (!doExport)
             {
                 mv = new Mml2vgm(activeMMLTextLines, args[1], null, stPath, Disp, wrkPath, false);
@@ -976,7 +1014,34 @@ namespace mml2vgmIDE
 
             Core.log.Write("Disp Result");
 
-            dmy = finishedCompile;
+            Action dmy = finishedCompile;
+            this.Invoke(dmy);
+
+            Core.log.Write("end compile thread");
+            Core.log.Close();
+        }
+
+        private void startCompileMUC()
+        {
+            Core.log.Write("Call mucomDotNET compiler");
+
+            string stPath = System.Windows.Forms.Application.StartupPath;
+
+            try
+            {
+                mubData = mucom.compile(args[1], wrkPath);
+            }
+            catch
+            {
+                isSuccess = false;
+            }
+
+            Core.log.Write("Return mucomDotNET compiler");
+            //}
+
+            Core.log.Write("Disp Result");
+
+            Action dmy = finishedCompile;
             this.Invoke(dmy);
 
             Core.log.Write("end compile thread");
@@ -1035,6 +1100,19 @@ namespace mml2vgmIDE
 
         private void finishedCompile()
         {
+            if ((Compiling & 2) != 0)
+            {
+                finishedCompileGWI();
+            }
+            else
+            {
+                finishedCompileMUC();
+            }
+        }
+
+        private void finishedCompileGWI()
+        { 
+
             if (mv == null)
             {
                 if (frmLog != null && !frmLog.IsDisposed) frmLog.tbLog.AppendText(msg.get("I0105"));
@@ -1072,62 +1150,45 @@ namespace mml2vgmIDE
 
             frmLog.tbLog.AppendText(msg.get("I0107"));
 
-            foreach (msgInfo mes in msgBox.getErr())
-            {
-                frmErrorList.dataGridView1.Rows.Add("Error", mes.filename, mes.line == -1 ? "-" : (mes.line + 1).ToString(), mes.body);
-                //frmConsole.textBox1.AppendText(string.Format(msg.get("I0109"), mes));
-            }
+                foreach (msgInfo mes in msgBox.getErr())
+                {
+                    frmErrorList.dataGridView1.Rows.Add("Error", mes.filename, mes.line == -1 ? "-" : (mes.line + 1).ToString(), mes.body);
+                    //frmConsole.textBox1.AppendText(string.Format(msg.get("I0109"), mes));
+                }
 
-            foreach (msgInfo mes in msgBox.getWrn())
-            {
-                frmErrorList.dataGridView1.Rows.Add("Warning", mes.filename, mes.line == -1 ? "-" : (mes.line + 1).ToString(), mes.body);
-                //frmConsole.textBox1.AppendText(string.Format(msg.get("I0108"), mes));
-            }
+                foreach (msgInfo mes in msgBox.getWrn())
+                {
+                    frmErrorList.dataGridView1.Rows.Add("Warning", mes.filename, mes.line == -1 ? "-" : (mes.line + 1).ToString(), mes.body);
+                    //frmConsole.textBox1.AppendText(string.Format(msg.get("I0108"), mes));
+                }
 
-            frmLog.tbLog.AppendText("\r\n");
-            frmLog.tbLog.AppendText(string.Format(msg.get("I0110"), msgBox.getErr().Length, msgBox.getWrn().Length));
+                frmLog.tbLog.AppendText("\r\n");
+                frmLog.tbLog.AppendText(string.Format(msg.get("I0110"), msgBox.getErr().Length, msgBox.getWrn().Length));
 
-            if (mv.desVGM.loopSamples != -1)
-            {
-                frmLog.tbLog.AppendText(string.Format(msg.get("I0111"), mv.desVGM.loopClock));
+                if (mv.desVGM.loopSamples != -1)
+                {
+                    frmLog.tbLog.AppendText(string.Format(msg.get("I0111"), mv.desVGM.loopClock));
+                    if (mv.desVGM.info.format == enmFormat.VGM)
+                        frmLog.tbLog.AppendText(string.Format(msg.get("I0112")
+                            , mv.desVGM.loopSamples
+                            , mv.desVGM.loopSamples / 44100L));
+                    else
+                        frmLog.tbLog.AppendText(string.Format(msg.get("I0112")
+                            , mv.desVGM.loopSamples
+                            , mv.desVGM.loopSamples / (mv.desVGM.info.xgmSamplesPerSecond)));
+                }
+
+                frmLog.tbLog.AppendText(string.Format(msg.get("I0113"), mv.desVGM.lClock));
                 if (mv.desVGM.info.format == enmFormat.VGM)
-                    frmLog.tbLog.AppendText(string.Format(msg.get("I0112")
-                        , mv.desVGM.loopSamples
-                        , mv.desVGM.loopSamples / 44100L));
+                    frmLog.tbLog.AppendText(string.Format(msg.get("I0114")
+                        , mv.desVGM.dSample
+                        , mv.desVGM.dSample / 44100L));
                 else
-                    frmLog.tbLog.AppendText(string.Format(msg.get("I0112")
-                        , mv.desVGM.loopSamples
-                        , mv.desVGM.loopSamples / (mv.desVGM.info.xgmSamplesPerSecond)));
-            }
-
-            frmLog.tbLog.AppendText(string.Format(msg.get("I0113"), mv.desVGM.lClock));
-            if (mv.desVGM.info.format == enmFormat.VGM)
-                frmLog.tbLog.AppendText(string.Format(msg.get("I0114")
-                    , mv.desVGM.dSample
-                    , mv.desVGM.dSample / 44100L));
-            else
-                frmLog.tbLog.AppendText(string.Format(msg.get("I0114")
-                    , mv.desVGM.dSample
-                    , mv.desVGM.dSample / (mv.desVGM.info.xgmSamplesPerSecond)));
-
-            //if (mv.desVGM.ym2608[0].pcmDataEasy != null) textBox1.AppendText(string.Format(msg.get("I0115"), mv.desVGM.ym2608[0].pcmDataEasy.Length - 15));
-            //if (mv.desVGM.ym2608[1].pcmDataEasy != null) textBox1.AppendText(string.Format(msg.get("I0116"), mv.desVGM.ym2608[1].pcmDataEasy.Length - 15));
-            //if (mv.desVGM.ym2610b[0].pcmDataEasyA != null) textBox1.AppendText(string.Format(msg.get("I0117"), mv.desVGM.ym2610b[0].pcmDataEasyA.Length-15));
-            //if (mv.desVGM.ym2610b[0].pcmDataEasyB != null) textBox1.AppendText(string.Format(msg.get("I0118"), mv.desVGM.ym2610b[0].pcmDataEasyB.Length-15));
-            //if (mv.desVGM.ym2610b[1].pcmDataEasyA != null) textBox1.AppendText(string.Format(msg.get("I0119"), mv.desVGM.ym2610b[1].pcmDataEasyA.Length - 15));
-            //if (mv.desVGM.ym2610b[1].pcmDataEasyB != null) textBox1.AppendText(string.Format(msg.get("I0120"), mv.desVGM.ym2610b[1].pcmDataEasyB.Length - 15));
-            //if (mv.desVGM.segapcm[0].pcmData != null) textBox1.AppendText(string.Format(" PCM Data size(SEGAPCM)  : {0} byte\r\n", mv.desVGM.segapcm[0].pcmData.Length - 15));
-            //if (mv.desVGM.segapcm[1].pcmData != null) textBox1.AppendText(string.Format(" PCM Data size(SEGAPCMSecondary)  : {0} byte\r\n", mv.desVGM.segapcm[1].pcmData.Length - 15));
-            //if (mv.desVGM.ym2612[0].pcmDataEasy != null) textBox1.AppendText(string.Format(msg.get("I0121"), mv.desVGM.ym2612[0].pcmDataEasy.Length));
-            //if (mv.desVGM.rf5c164[0].pcmDataEasy != null) textBox1.AppendText(string.Format(msg.get("I0122"), mv.desVGM.rf5c164[0].pcmDataEasy.Length-12));
-            //if (mv.desVGM.rf5c164[1].pcmDataEasy != null) textBox1.AppendText(string.Format(msg.get("I0123"), mv.desVGM.rf5c164[1].pcmDataEasy.Length-12));
-            //if (mv.desVGM.huc6280[0].pcmDataEasy != null) textBox1.AppendText(string.Format(msg.get("I0124"), mv.desVGM.huc6280[0].pcmDataEasy.Length));
-            //if (mv.desVGM.huc6280[1].pcmDataEasy != null) textBox1.AppendText(string.Format(msg.get("I0125"), mv.desVGM.huc6280[1].pcmDataEasy.Length));
-
+                    frmLog.tbLog.AppendText(string.Format(msg.get("I0114")
+                        , mv.desVGM.dSample
+                        , mv.desVGM.dSample / (mv.desVGM.info.xgmSamplesPerSecond)));
 
             frmLog.tbLog.AppendText(msg.get("I0126"));
-            //this.toolStrip1.Enabled = true;
-            //this.tsslMessage.Text = msg.get("I0106");
 
             if (isSuccess)
             {
@@ -1171,7 +1232,63 @@ namespace mml2vgmIDE
                 }
             }
 
-            Compiling = false;
+            Compiling = 0;
+            UpdateControl();
+        }
+
+        private void finishedCompileMUC()
+        {
+            mucomDotNET.Interface.CompilerInfo ci = mucom.GetCompilerInfo();
+            if (isSuccess)
+            {
+                Object[] cells = new object[6];
+
+                for (int i = 0; i < 11; i++)
+                {
+                    //if (pw[i].clockCounter == 0) continue;
+
+                    cells[0] = 0;
+                    cells[1] = 0;//ChipIndex
+                    cells[2] = 0;//ChipNumber
+                    cells[3] = ((char)('A' + i)).ToString();
+                    cells[4] = "YM2608";//.ToUpper();
+                    cells[5] = ci.totalCount[i];
+                    frmPartCounter.AddPartCounter(cells);
+                }
+            }
+
+            //frmLog.tbLog.AppendText(msg.get("I0107"));
+
+            foreach (Tuple<int,int,string> mes in ci.errorList)
+            {
+                frmErrorList.dataGridView1.Rows.Add("Error", "-"
+                    , mes.Item1 == -1 ? "-" : (mes.Item1 + 1).ToString()
+                    , mes.Item3);
+            }
+
+            foreach (Tuple<int, int, string> mes in ci.warningList)
+            {
+                frmErrorList.dataGridView1.Rows.Add("Warning", "-"
+                    , mes.Item1 == -1 ? "-" : (mes.Item1 + 1).ToString()
+                    , mes.Item3);
+            }
+
+            if (isSuccess)
+            {
+                if (doPlay && ci.errorList.Count < 1)
+                {
+                    try
+                    {
+                        InitPlayer(EnmFileFormat.MUB, mubData);
+                    }
+                    catch 
+                    {
+                        MessageBox.Show(msg.get("E0100"), "mml2vgm", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
+
+            Compiling = 0;
             UpdateControl();
         }
 
@@ -1663,6 +1780,100 @@ namespace mml2vgmIDE
             {
                 log.ForcedWrite(ex);
                 srcBuf = null;
+                MessageBox.Show(
+                    string.Format("ファイルの読み込みに失敗しました。\r\nメッセージ={0}", ex.Message),
+                    "TinyMDPlayer",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+                return false;
+            }
+
+            return true;
+        }
+
+        public bool InitPlayer(EnmFileFormat format, mucomDotNET.Interface.MubDat[] mubdata)
+        {
+            if (mucom == null) return false;
+            if (mubdata == null || mubdata.Length < 1) return false;
+
+            try
+            {
+                IDockContent dc = GetActiveDockContent();
+                Sgry.Azuki.WinForms.AzukiControl ac = null;
+                if (dc != null && (dc is FrmEditor))
+                {
+                    ac = ((FrmEditor)dc).azukiControl;
+                }
+
+
+                if (Audio.flgReinit) flgReinit = true;
+                if (setting.other.InitAlways) flgReinit = true;
+                //Reinit(setting);
+
+
+                //rowとcolをazuki向けlinePosに変換する
+                if (ac != null)
+                {
+                    foreach (mucomDotNET.Interface.MubDat od in mubData)
+                    {
+                        if (od == null) continue;
+                        if (od.row == null || od.col == null) continue;
+                        if (od.row == -1 || od.col == -1) continue;
+
+                        od.col = ac.GetCharIndexFromLineColumnIndex((int)od.row, (int)od.col);
+                    }
+                }
+
+
+                if (Audio.isPaused)
+                {
+                    Audio.Pause();
+                }
+
+                //List<byte> dmy = new List<byte>();
+                //foreach(mucomDotNET.Interface.MubDat md in mubdata)
+                //{
+                //    dmy.Add(md.dat);
+                //}
+                //File.WriteAllBytes("c:\\temp\\test.mub",dmy.ToArray());
+
+                Audio.SetVGMBuffer(format, mubData, wrkPath);
+
+                for (int i = 0; i < 100; i++)
+                {
+                    Thread.Sleep(1);
+                    Application.DoEvents();
+                }
+
+                if (mubData != null)
+                {
+                    playdata();
+                    if (Audio.errMsg != "")
+                    {
+                        stop();
+                        return false;
+                    }
+                }
+
+                frmLyrics.update();
+                frmPartCounter.Stop();
+                Audio.mmlParams.Init(isTrace);
+                frmPartCounter.Start(Audio.mmlParams);
+
+                if (isTrace && ac != null)
+                {
+                    ac.ColorScheme.LineNumberBack = Color.FromArgb(setting.ColorScheme.Azuki_LineNumberBack_Trace);
+                    ac.ColorScheme.LineNumberFore = Color.FromArgb(setting.ColorScheme.Azuki_LineNumberFore_Trace);
+                    statusStrip1.BackColor = Color.FromArgb(setting.ColorScheme.StatusStripBack_Trace);
+                    ac.Refresh();
+                    traceInfoSw = true;
+                    ac.IsReadOnly = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                log.ForcedWrite(ex);
+                mubData = null;
                 MessageBox.Show(
                     string.Format("ファイルの読み込みに失敗しました。\r\nメッセージ={0}", ex.Message),
                     "TinyMDPlayer",
@@ -2168,7 +2379,7 @@ namespace mml2vgmIDE
             if (!Audio.sm.IsRunningAtDataMaker())
             {
                 Compile(true, false, true, true, false);
-                while (Compiling)
+                while (Compiling!=0)
                 {
                     Thread.Sleep(0);
                     Application.DoEvents();

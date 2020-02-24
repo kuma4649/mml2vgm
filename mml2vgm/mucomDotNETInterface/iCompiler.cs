@@ -12,11 +12,15 @@ namespace mucomDotNET.Interface
 
         void Init();
 
-        MubDat[] StartToMubDat(string arg);
+        MubDat[] StartToMubDat(string srcPath);
+
+        MubDat[] StartToMubDat(string srcPath,string wrkPath);
 
         byte[] Start(string arg);
 
         MUCInfo GetMUCInfo(byte[] buf);
+
+        CompilerInfo GetCompilerInfo();
 
     }
 }
