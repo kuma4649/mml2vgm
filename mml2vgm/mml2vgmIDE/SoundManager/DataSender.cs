@@ -5,6 +5,7 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using Core;
 using mml2vgmIDE;
+using musicDriverInterface;
 
 namespace SoundManager
 {

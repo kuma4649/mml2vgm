@@ -72,9 +72,14 @@
     <Reference Include="Microsoft.Scripting.Metadata, Version=1.2.2.0, Culture=neutral, PublicKeyToken=7f709c5b713576e1, processorArchitecture=MSIL">
       <HintPath>..\packages\DynamicLanguageRuntime.1.2.2\lib\net45\Microsoft.Scripting.Metadata.dll</HintPath>
     </Reference>
+    <Reference Include="musicDriverInterface, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>.\musicDriverInterface.dll</HintPath>
+    </Reference>
     <Reference Include="NAudio, Version=1.9.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\NAudio.1.9.0\lib\net35\NAudio.dll</HintPath>
     </Reference>
+    <Reference Include="netstandard" />
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -402,10 +407,6 @@
       <Project>{de6679f5-4d0f-40ff-934f-cdf9bd260698}</Project>
       <Name>CustomControl</Name>
     </ProjectReference>
-    <ProjectReference Include="..\mucomDotNETInterface\Interface.csproj">
-      <Project>{0a400c69-6347-4b84-a3a0-11bf81e6c623}</Project>
-      <Name>Interface</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="CommandReference.txt">
@@ -416,6 +417,22 @@
     <Content Include="c86ctl.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="lang\mucomDotNETmessage.ja-JP.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="lang\mucomDotNETmessage.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="mucomDotNETCommon.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="mucomDotNETCompiler.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="mucomDotNETDriver.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="musicDriverInterface.dll" />
     <Content Include="RealChipCtlWrap.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -494,6 +511,7 @@
     </Content>
     <Content Include="Feli48.ico" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>

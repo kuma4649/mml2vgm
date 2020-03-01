@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Core;
 using SoundManager;
+using musicDriverInterface;
 
 namespace mml2vgmIDE.MMLParameter
 {

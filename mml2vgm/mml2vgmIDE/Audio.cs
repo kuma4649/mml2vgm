@@ -100,7 +100,7 @@ namespace mml2vgmIDE
 
         private static outDatum[] vgmBuf = null;
         private static double vgmSpeed;
-        private static mucomDotNET.Interface.MubDat[] mubBuf = null;
+        private static musicDriverInterface.MmlDatum[] mubBuf = null;
         private static string mubWorkPath;
         public static double fadeoutCounter;
         public static double fadeoutCounterEmu;
@@ -666,7 +666,7 @@ namespace mml2vgmIDE
             vgmBuf = srcBuf;
         }
 
-        public static void SetVGMBuffer(EnmFileFormat format, mucomDotNET.Interface.MubDat[] srcBuf,string wrkPath)
+        public static void SetVGMBuffer(EnmFileFormat format, musicDriverInterface.MmlDatum[] srcBuf,string wrkPath)
         {
             PlayingFileFormat = format;
             mubBuf = srcBuf;

@@ -1,4 +1,9 @@
 更新履歴
+TAG168 2020/03/01
+  IDE
+    ・mucomDotNETを同梱。
+    ・mucomDotNETのトレース機能を暫定実装。
+     
 TAG167 2020/02/24
   IDE
     ・mucomDotNETのdllを使用したコンパイルと再生に暫定対応。

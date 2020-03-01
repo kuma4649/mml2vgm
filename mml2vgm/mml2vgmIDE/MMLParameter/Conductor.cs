@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Core;
+using musicDriverInterface;
 
 namespace mml2vgmIDE.MMLParameter
 {

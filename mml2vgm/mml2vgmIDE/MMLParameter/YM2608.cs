@@ -1,6 +1,7 @@
 ﻿using Core;
 using System;
 using System.Linq;
+using musicDriverInterface;
 
 namespace mml2vgmIDE.MMLParameter
 {
@@ -81,9 +82,12 @@ namespace mml2vgmIDE.MMLParameter
                     }
                     break;
                 case enmMMLType.Rest:
-                    Core.Rest rs = (Core.Rest)od.args[0];
-                    notecmd[od.linePos.ch] = "r";
-                    length[od.linePos.ch] = string.Format("{0:0.##}(#{1:d})", 1.0 * cc / rs.length, rs.length);
+                    if (od.args != null)
+                    {
+                        Core.Rest rs = (Core.Rest)od.args[0];
+                        notecmd[od.linePos.ch] = "r";
+                        length[od.linePos.ch] = string.Format("{0:0.##}(#{1:d})", 1.0 * cc / rs.length, rs.length);
+                    }
                     break;
                 case enmMMLType.Envelope:
                     s = (string)od.args[0];

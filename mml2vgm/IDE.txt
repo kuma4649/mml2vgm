@@ -17,7 +17,7 @@
  ・muap98を連想させる演奏トレース機能。
  ・スクリプトによる柔軟な(?)拡張性。
  ・GIMICとSCCIによる実チップ演奏に対応。
- ・mucomDotNETをコピーすることによりmucからmubファイルを作成することも可能。(TBD)
+ ・mucomDotNETを使用しmucからmubファイルを作成することが可能。
 
 [クイックスタート]
   １.mml2vgmIDE.exeをダブルクリックしプログラムを起動する。
@@ -40,14 +40,6 @@
       Git : バージョン管理ツール
       SoX : 音声ファイル加工ツール
             SoXは一部のPCMの周波数変換処理が必要な場合も使用します。
-    ・mml2vgmIDEフォルダーにmucomDotNETのdllを配置することでmucomのデータ作成が可能です。
-    　以下のファイルをコピーしてください。
-        mucomDotNETCommon.dll
-        mucomDotNETCompiler.dll
-        mucomDotNETDriver.dll
-        lang\mucomDotNETmessage.ja-JP.txt
-        lang\mucomDotNETmessage.txt
-       (mucomDotNETInterface.dllは同梱していますのでコピー不要です)
 
   起動
     ・mml2vgmIDE.exeをダブルクリックしプログラムを起動します。

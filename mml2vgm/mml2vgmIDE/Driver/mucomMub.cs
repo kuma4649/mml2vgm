@@ -10,7 +10,7 @@ namespace mml2vgmIDE
     public class mucomMub : baseDriver
     {
         public uint YM2608ClockValue { get; internal set; } = 7987200;
-        private mucomDotNET.Interface.MubDat[] mubBuf = null;
+        private musicDriverInterface.MmlDatum[] mubBuf = null;
         private mucomManager mm = null;
         bool initPhase = true;
         List<SoundManager.PackData> pd = new List<SoundManager.PackData>();
@@ -41,7 +41,7 @@ namespace mml2vgmIDE
             count++;
         }
 
-        public bool init(mucomDotNET.Interface.MubDat[] mubBuf,string workPath, mucomManager mucomManager, ChipRegister chipRegister, EnmChip[] useChip, uint latency, uint waitTime)
+        public bool init(musicDriverInterface.MmlDatum[] mubBuf,string workPath, mucomManager mucomManager, ChipRegister chipRegister, EnmChip[] useChip, uint latency, uint waitTime)
         {
             if (mucomManager == null) return false;
 
@@ -79,13 +79,24 @@ namespace mml2vgmIDE
             return;
         }
 
-        private void OPNAWrite(mucomDotNET.Interface.OPNAData dat)
+        private void OPNAWrite(musicDriverInterface.ChipDatum dat)
         {
             //Log.WriteLine(LogLevel.TRACE, string.Format("FM P{2} Out:Adr[{0:x02}] val[{1:x02}]", (int)dat.address, (int)dat.data, dat.port));
             //Console.WriteLine("FM P{2} Out:Adr[{0:x02}] val[{1:x02}]", (int)dat.address, (int)dat.data, dat.port);
             outDatum od = null;
             if (dat.addtionalData != null)
             {
+                if(dat.addtionalData is musicDriverInterface.MmlDatum)
+                {
+                    musicDriverInterface.MmlDatum md = (musicDriverInterface.MmlDatum)dat.addtionalData;
+                    od = new outDatum(md.type, md.args, md.linePos, (byte)md.dat);
+                }
+                
+            }
+
+            if (od != null && od.linePos != null)
+            {
+                Console.WriteLine("{0}", od.linePos.col);
             }
 
             //chipRegister.YM2608SetRegister(od, (long)dat.time, 0, dat.port, dat.address, dat.data);
@@ -93,7 +104,7 @@ namespace mml2vgmIDE
         }
 
 
-        private void OPNAInitialWrite(mucomDotNET.Interface.OPNAData dat)
+        private void OPNAInitialWrite(musicDriverInterface.ChipDatum dat)
         {
             if (!initPhase)
             {

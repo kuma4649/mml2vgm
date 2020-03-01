@@ -3,7 +3,7 @@
   
 [概要]  
  このツールは、ユーザーが作成したMMLファイルを元にVGM/XGMファイルを作成します。  
- IDEではmucomDotNETを入れることによりmubファイルを作成可能です。  
+ IDEではmucomDotNETを使用しmubファイルを作成可能です。  
  IDEについては、IDE.txtを参照してください。  
  スクリプトについては、各々のスクリプトに付属の説明をご覧ください。  
  スクリプト作成については、Script.txtを参照してください。  
@@ -111,6 +111,22 @@ mml2vgm , mvc , mml2vgmIDEはMITライセンスに準ずる物とします。LIC
   
   ・DockPanel Suite  
     MIT License  
+  
+  ・mucomDotNET  
+    CC BY-NC-SA 4.0  
+
+  ・musicDriverInterface  
+    MIT License  
+
+  ・RealChipCtlWrap  
+    MIT License  
+
+  ・SCCI  
+     ?  
+
+  ・c86ctl  
+    BSD 3-Clause  
+    
   
   
 [SpecialThanks]  

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using mucomDotNET.Interface;
+using musicDriverInterface;
 
 namespace mml2vgmIDE
 {
@@ -26,12 +26,12 @@ namespace mml2vgmIDE
                 this.disp = disp;
 
                 var info = asmCompiler.GetType("mucomDotNET.Compiler.Compiler");
-                this.compiler = Activator.CreateInstance(info) as iCompiler;
+                this.compiler = Activator.CreateInstance(info, new object[] { null }) as iCompiler;
 
                 info = asmDriver.GetType("mucomDotNET.Driver.Driver");
-                this.driver = Activator.CreateInstance(info) as iDriver;
+                this.driver = Activator.CreateInstance(info, new object[] { null }) as iDriver;
 
-                Log.writeLine = WriteLog;
+                //Log.writeLine = WriteLog;
 
                 if (this.compiler == null || this.driver == null)
                 {
@@ -58,31 +58,40 @@ namespace mml2vgmIDE
             driver.Rendering();
         }
 
-        private void WriteLog(LogLevel arg1, string arg2)
-        {
-            disp?.Invoke(arg2);
-        }
+        //private void WriteLog(LogLevel arg1, string arg2)
+        //{
+            //disp?.Invoke(arg2);
+        //}
 
         public void InitDriver(
             string fileName
-            , Action<OPNAData> oPNAWrite
+            , Action<ChipDatum> oPNAWrite
             , Action<long, int> oPNAWaitSend
             , bool notSoundBoard2
-            , MubDat[] mubBuf
+            , musicDriverInterface.MmlDatum[] mubBuf
             , bool isLoadADPCM
             , bool loadADPCMOnly)
         {
-            driver.Init(fileName, oPNAWrite, oPNAWaitSend, notSoundBoard2, mubBuf, isLoadADPCM, loadADPCMOnly);
+            driver.Init(
+                fileName
+                , oPNAWrite
+                , oPNAWaitSend
+                , mubBuf
+                , new object[] {
+                      notSoundBoard2
+                    , isLoadADPCM
+                    , loadADPCMOnly
+                });
         }
 
         public void MSTART(int v)
         {
-            driver.MSTART(v);
+            driver.MusicSTART(v);
         }
 
         public void MSTOP()
         {
-            driver.MSTOP();
+            driver.MusicSTOP();
         }
 
         public void StartRendering(int sampleRate, int yM2608ClockValue)
@@ -90,12 +99,12 @@ namespace mml2vgmIDE
             driver.StartRendering(sampleRate, yM2608ClockValue);
         }
 
-        public MubDat[] compile(string srcMUCFullPath, string wrkMUCFullPath)
+        public MmlDatum[] compile(string srcMUCFullPath, string wrkMUCFullPath)
         {
             if (!ok) return null;
 
             compiler.Init();
-            MubDat[] ret = compiler.StartToMubDat(srcMUCFullPath, wrkMUCFullPath);
+            MmlDatum[] ret = compiler.StartToMmlData(srcMUCFullPath, wrkMUCFullPath, null);
 
             return ret;
         }

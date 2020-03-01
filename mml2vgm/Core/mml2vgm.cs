@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Drawing;
+using musicDriverInterface;
 
 namespace Core
 {

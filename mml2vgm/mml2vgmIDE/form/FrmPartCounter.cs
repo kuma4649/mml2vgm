@@ -255,6 +255,7 @@ namespace mml2vgmIDE
             {
                 string chip = (string)dgvPartCounter.Rows[p].Cells["ClmChip"].Value;
                 int r = (int)dgvPartCounter.Rows[p].Cells["ClmPartNumber"].Value - 1;
+                if (r < 0) continue;
                 int chipIndex = (int)dgvPartCounter.Rows[p].Cells["ClmChipIndex"].Value;
                 int chipNumber = (int)dgvPartCounter.Rows[p].Cells["ClmChipNumber"].Value;
 

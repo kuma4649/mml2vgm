@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Core</RootNamespace>
     <AssemblyName>Core</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -35,6 +36,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>.\MDSound.dll</HintPath>
     </Reference>
+    <Reference Include="musicDriverInterface">
+      <HintPath>..\mml2vgmIDE\musicDriverInterface.dll</HintPath>
+    </Reference>
+    <Reference Include="netstandard" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -78,7 +83,6 @@
     <Compile Include="GD3maker.cs" />
     <Compile Include="Information.cs" />
     <Compile Include="Line.cs" />
-    <Compile Include="LinePos.cs" />
     <Compile Include="log.cs" />
     <Compile Include="message.cs" />
     <Compile Include="MML.cs" />

@@ -15,6 +15,7 @@ using System.Diagnostics;
 using SoundManager;
 using System.Runtime.InteropServices;
 using System.Reflection;
+using musicDriverInterface;
 
 namespace mml2vgmIDE
 {
@@ -51,7 +52,7 @@ namespace mml2vgmIDE
         private bool shift = false;
         private ChannelInfo defaultChannelInfo = null;
         private mucomManager mucom = null;
-        private mucomDotNET.Interface.MubDat[] mubData = null;
+        private musicDriverInterface.MmlDatum[] mubData = null;
 
         private object traceInfoLockObj = new object();
         private bool traceInfoSw = false;
@@ -235,7 +236,7 @@ namespace mml2vgmIDE
         {
             OpenFileDialog ofd = new OpenFileDialog();
 
-            ofd.Filter = "gwiファイル(*.gwi)|*.gwi|mucファイル(*.muc)|*.muc|すべてのファイル(*.*)|*.*";
+            ofd.Filter = "全てのサポートファイル(*.gwi;*.muc)|*.gwi;*.muc|gwiファイル(*.gwi)|*.gwi|mucファイル(*.muc)|*.muc|すべてのファイル(*.*)|*.*";
             ofd.Title = "ファイルを開く";
             ofd.RestoreDirectory = true;
 
@@ -728,7 +729,7 @@ namespace mml2vgmIDE
 
         private void OpenFile(string fileName)
         {
-            Document dc = new Document(setting);
+            Document dc = new Document(setting, Path.GetExtension(fileName).ToLower() == ".muc");
             if (fileName != "") dc.InitOpen(fileName);
             dc.editor.Show(dpMain, DockState.Document);
             dc.editor.main = this;
@@ -746,7 +747,7 @@ namespace mml2vgmIDE
 
         private void ImportFile(string fileName)
         {
-            Document dc = new Document(setting);
+            Document dc = new Document(setting, false);
             if (fileName != "") dc.InitOpen(fileName);
             dc.editor.Show(dpMain, DockState.Document);
             dc.editor.main = this;
@@ -1238,7 +1239,7 @@ namespace mml2vgmIDE
 
         private void finishedCompileMUC()
         {
-            mucomDotNET.Interface.CompilerInfo ci = mucom.GetCompilerInfo();
+            musicDriverInterface.CompilerInfo ci = mucom.GetCompilerInfo();
             if (isSuccess)
             {
                 Object[] cells = new object[6];
@@ -1791,7 +1792,7 @@ namespace mml2vgmIDE
             return true;
         }
 
-        public bool InitPlayer(EnmFileFormat format, mucomDotNET.Interface.MubDat[] mubdata)
+        public bool InitPlayer(EnmFileFormat format, musicDriverInterface.MmlDatum[] mubdata)
         {
             if (mucom == null) return false;
             if (mubdata == null || mubdata.Length < 1) return false;
@@ -1814,13 +1815,16 @@ namespace mml2vgmIDE
                 //rowとcolをazuki向けlinePosに変換する
                 if (ac != null)
                 {
-                    foreach (mucomDotNET.Interface.MubDat od in mubData)
+                    foreach (musicDriverInterface.MmlDatum od in mubData)
                     {
                         if (od == null) continue;
-                        if (od.row == null || od.col == null) continue;
-                        if (od.row == -1 || od.col == -1) continue;
+                        if (od.linePos == null) continue;
+                        if (od.linePos.row == -1 || od.linePos.col == -1) continue;
 
-                        od.col = ac.GetCharIndexFromLineColumnIndex((int)od.row, (int)od.col);
+                        od.linePos.col = ac.GetCharIndexFromLineColumnIndex(
+                            (int)(od.linePos.row - 1)
+                            , (int)(od.linePos.col - 1)
+                            );
                     }
                 }
 

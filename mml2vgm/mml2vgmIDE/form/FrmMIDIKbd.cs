@@ -13,6 +13,7 @@ using NAudio.Midi;
 using Sgry.Azuki.WinForms;
 using SoundManager;
 using WeifenLuo.WinFormsUI.Docking;
+using musicDriverInterface;
 
 namespace mml2vgmIDE
 {
