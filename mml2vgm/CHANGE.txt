@@ -1,4 +1,8 @@
 更新履歴
+TAG169 2020/03/02
+  ・ソリューションの整理。
+  ・mucomDotNETを同梱。
+
 TAG168 2020/03/01
   IDE
     ・mucomDotNETを同梱。
