@@ -361,6 +361,15 @@ namespace mml2vgmIDE
                 }
 
                 if (d == null) return;
+                
+                if (Path.GetExtension(d.gwiFullPath).ToLower() == ".muc")
+                {
+                    MessageBox.Show("mucのエクスポート処理は今のところサポートしておりません。",
+                        "エラー発生",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
+                    return;
+                }
 
                 Compile(false, false, false, false, true);
                 while (Compiling!=0) { Application.DoEvents(); }//待ち合わせ
@@ -1033,6 +1042,11 @@ namespace mml2vgmIDE
                 mubData = mucom.compile(args[1], wrkPath);
             }
             catch
+            {
+                isSuccess = false;
+            }
+
+            if (mubData == null)
             {
                 isSuccess = false;
             }

@@ -157,6 +157,12 @@ E0510='@='Illegal format on SSG preset rewrite command.
 E0511='@='Illegal value on SSG preset rewrite command.
 E0512='E'Illegal format on Software Envelope command.
 E0513='E'Illegal value on Software Envelope command.
+E0514='MT'Illegal value1 on Software LFO command.(value1={0} range:0-15)
+E0515='MT'Illegal value2 on Software LFO command.(value2={0} range:0-255)
+E0516='KD'KeyOn Delay command
+E0517='KD'Illegal value on KeyOn Delay command.(value:{0})
+E0518='KD'Illegal value on KeyOn Delay command.(value:{0})
+E0519=Not found voice data file.Check TAG define.
 
 ;Program.cs 0600
 E0600=I want arguments(.muc File) please?

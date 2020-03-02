@@ -104,8 +104,8 @@ namespace mml2vgmIDE
             if (!ok) return null;
 
             compiler.Init();
-            MmlDatum[] ret = compiler.StartToMmlData(srcMUCFullPath, wrkMUCFullPath, null);
-
+            MmlDatum[] ret;
+            ret = compiler.StartToMmlData(srcMUCFullPath, wrkMUCFullPath, disp);
             return ret;
         }
 
