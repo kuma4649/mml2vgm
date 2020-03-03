@@ -1430,6 +1430,12 @@ namespace mml2vgmIDE
                         continue;
                     }
 
+                    if (Path.GetExtension(filename).ToLower() == ".muc")
+                    {
+                        OpenFile(filename);
+                        continue;
+                    }
+
                     if (Path.GetExtension(filename).ToLower() == ".wav")
                     {
                         if (player != null)
