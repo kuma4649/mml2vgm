@@ -2145,30 +2145,33 @@ namespace mml2vgmIDE
                         (odo != null && od.linePos.col != odo.linePos.col)
                         || odo == null
                     )
-                    && (fe.Text == od.linePos.srcMMLID || fe.Text == od.linePos.srcMMLID + "*")
                 )
                 {
-                    int i, c;
-                    ac.GetLineColumnIndexFromCharIndex(od.linePos.col, out i, out c);
-                    //log.Write(string.Format("{0} {1}", i, c));
-                    lock (traceInfoLockObj)
+                    string odfn = Path.GetFileName(od.linePos.srcMMLID);
+                    if (fe.Text == odfn || fe.Text == odfn + "*")
                     {
-                        if (odo != null)
+                        int i, c;
+                        ac.GetLineColumnIndexFromCharIndex(od.linePos.col, out i, out c);
+                        //log.Write(string.Format("{0} {1}", i, c));
+                        lock (traceInfoLockObj)
                         {
-                            try
+                            if (odo != null)
                             {
-                                ac.Document.Unmark(odo.linePos.col, odo.linePos.col + Math.Max(odo.linePos.length, 1), 1);
+                                try
+                                {
+                                    ac.Document.Unmark(odo.linePos.col, odo.linePos.col + Math.Max(odo.linePos.length, 1), 1);
+                                }
+                                catch
+                                {
+                                    ;//何もしない
+                                }
                             }
-                            catch
-                            {
-                                ;//何もしない
-                            }
+                            ac.Document.Mark(od.linePos.col, od.linePos.col + Math.Max(od.linePos.length, 1), 1);
+                            odos[ch] = od;
                         }
-                        ac.Document.Mark(od.linePos.col, od.linePos.col + Math.Max(od.linePos.length,1), 1);
-                        odos[ch] = od;
+                        flg = true;
+                        continue;
                     }
-                    flg = true;
-                    continue;
                 }
                 if (od != null && od.type == enmMMLType.Tempo)
                 {
