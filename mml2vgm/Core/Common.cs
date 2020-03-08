@@ -485,7 +485,7 @@ namespace Core
                 Disp(p.StandardOutput.ReadToEnd().Replace("\r\r\n", "\n"));
 
             }
-            catch (Exception e)
+            catch //(Exception e)
             {
                 return false;
             }

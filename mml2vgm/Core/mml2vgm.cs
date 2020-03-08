@@ -535,7 +535,7 @@ namespace Core
                 {
                     buf.Add(string.Format(
                         "File:[{0}] Row:[{1}] Col:[{2}] Len:[{3}] Chip:[{4}] Secondary:[{5}] Part:[{6}] Ch:[{7}] MMLType:[{8}] Val:[{9:X2}]"
-                        , od.linePos.filename
+                        , od.linePos.srcMMLID
                         , od.linePos.row
                         , od.linePos.col
                         , od.linePos.length

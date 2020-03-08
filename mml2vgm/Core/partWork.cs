@@ -477,9 +477,9 @@ namespace Core
         {
             if (pos.alies == "")
             {
-                return pData[pos.row].Lp.filename;
+                return pData[pos.row].Lp.srcMMLID;
             }
-            return aData[pos.alies].Lp.filename;
+            return aData[pos.alies].Lp.srcMMLID;
         }
 
         /// <summary>

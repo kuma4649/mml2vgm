@@ -61,13 +61,13 @@ namespace Core
             dat.Add(new outDatum(enmMMLType.unknown, null, null, 0x00));
             dat.Add(new outDatum(enmMMLType.unknown, null, null, 0x00));
 
-            //ReleaseDate
-            foreach (byte b in Encoding.Unicode.GetBytes(info.ReleaseDate)) dat.Add(new outDatum(enmMMLType.unknown, null, null, b));
+            //Converted
+            foreach (byte b in Encoding.Unicode.GetBytes(info.Converted)) dat.Add(new outDatum(enmMMLType.unknown, null, null, b));
             dat.Add(new outDatum(enmMMLType.unknown, null, null, 0x00));
             dat.Add(new outDatum(enmMMLType.unknown, null, null, 0x00));
 
-            //Converted
-            foreach (byte b in Encoding.Unicode.GetBytes(info.Converted)) dat.Add(new outDatum(enmMMLType.unknown, null, null, b));
+            //ReleaseDate
+            foreach (byte b in Encoding.Unicode.GetBytes(info.ReleaseDate)) dat.Add(new outDatum(enmMMLType.unknown, null, null, b));
             dat.Add(new outDatum(enmMMLType.unknown, null, null, 0x00));
             dat.Add(new outDatum(enmMMLType.unknown, null, null, 0x00));
 

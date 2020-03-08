@@ -2145,7 +2145,7 @@ namespace mml2vgmIDE
                         (odo != null && od.linePos.col != odo.linePos.col)
                         || odo == null
                     )
-                    && (fe.Text == od.linePos.filename || fe.Text == od.linePos.filename + "*")
+                    && (fe.Text == od.linePos.srcMMLID || fe.Text == od.linePos.srcMMLID + "*")
                 )
                 {
                     int i, c;

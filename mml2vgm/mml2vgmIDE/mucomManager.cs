@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -16,6 +17,8 @@ namespace mml2vgmIDE
         private iDriver driver = null;
         private bool ok = false;
         private Action<string> disp = null;
+
+        public string wrkMUCFullPath { get; private set; }
 
         public mucomManager(Assembly compiler, Assembly driver, Action<string> disp)
         {
@@ -103,10 +106,34 @@ namespace mml2vgmIDE
         {
             if (!ok) return null;
 
+            this.wrkMUCFullPath = wrkMUCFullPath;
             compiler.Init();
             MmlDatum[] ret;
-            ret = compiler.StartToMmlData(srcMUCFullPath, wrkMUCFullPath, disp);
+            musicDriverInterface.Log.writeMethod = disp;
+            using (FileStream sourceMML = new FileStream(srcMUCFullPath, FileMode.Open, FileAccess.Read, FileShare.Read))
+                ret = compiler.Compile(sourceMML, appendFileReaderCallback);// wrkMUCFullPath, disp);
             return ret;
+        }
+
+        private Stream appendFileReaderCallback(string arg)
+        {
+
+            string fn = Path.Combine(
+                wrkMUCFullPath// Path.GetDirectoryName(wrkMUCFullPath)
+                , arg
+                );
+
+            FileStream strm;
+            try
+            {
+                strm = new FileStream(fn, FileMode.Open, FileAccess.Read, FileShare.Read);
+            }
+            catch (IOException)
+            {
+                strm = null;
+            }
+
+            return strm;
         }
 
         public CompilerInfo GetCompilerInfo()

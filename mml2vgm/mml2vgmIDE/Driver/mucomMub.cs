@@ -94,10 +94,10 @@ namespace mml2vgmIDE
                 
             }
 
-            if (od != null && od.linePos != null)
-            {
-                Console.WriteLine("{0}", od.linePos.col);
-            }
+            //if (od != null && od.linePos != null)
+            //{
+                //Console.WriteLine("{0}", od.linePos.col);
+            //}
 
             //chipRegister.YM2608SetRegister(od, (long)dat.time, 0, dat.port, dat.address, dat.data);
             chipRegister.YM2608SetRegister(od, count, 0, dat.port, dat.address, dat.data);

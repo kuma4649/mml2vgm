@@ -1310,7 +1310,7 @@ namespace Core
                 aliesData.Remove(name);
             }
             Line l = new Line(new LinePos(
-                line.Lp.fullPath,
+                line.Lp.srcMMLID,
                 line.Lp.row,
                 line.Lp.col,
                 line.Lp.length,
@@ -1360,7 +1360,7 @@ namespace Core
                     partData.Add(p, new List<Line>());
                 }
                 Line l = new Line(new LinePos(
-                    line.Lp.fullPath,
+                    line.Lp.srcMMLID,
                     line.Lp.row,
                     line.Lp.col,
                     line.Lp.length,
@@ -3848,7 +3848,7 @@ namespace Core
                         if (mml.line != null && mml.line.Lp != null)
                         {
                             od.linePos = new LinePos(
-                                mml.line.Lp.fullPath,
+                                mml.line.Lp.srcMMLID,
                                 mml.line.Lp.row,
                                 mml.line.Lp.col,
                                 mml.line.Lp.length,
@@ -3876,7 +3876,7 @@ namespace Core
                     if (mml.line != null && mml.line.Lp != null)
                     {
                         od.linePos = new LinePos(
-                            mml.line.Lp.fullPath,
+                            mml.line.Lp.srcMMLID,
                             mml.line.Lp.row,
                             mml.line.Lp.col,
                             mml.line.Lp.length,
@@ -3934,7 +3934,7 @@ namespace Core
                         if (od.linePos != null)
                         {
                             o.linePos = new LinePos(
-                                od.linePos.fullPath,
+                                od.linePos.srcMMLID,
                                 od.linePos.row,
                                 od.linePos.col,
                                 od.linePos.length,
@@ -3959,7 +3959,7 @@ namespace Core
                     if (od.linePos != null)
                     {
                         o.linePos = new LinePos(
-                            od.linePos.fullPath,
+                            od.linePos.srcMMLID,
                             od.linePos.row,
                             od.linePos.col,
                             od.linePos.length,
