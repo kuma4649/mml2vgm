@@ -2401,6 +2401,8 @@ namespace Core
             long useYM2413_S = 0;
             long useK051649_S = 0;
             long useK053260_S = 0;
+            long useYMF262 = 0;
+            long useYMF262_S = 0;
 
             for (int i = 0; i < 2; i++)
             {
@@ -2452,6 +2454,10 @@ namespace Core
                 if (ym2413 != null && ym2413.Length > i && ym2413[i] != null)
                     foreach (partWork pw in ym2413[i].lstPartWork)
                     { useYM2413 += pw.clockCounter; if (ym2413[i].ChipID == 1) useYM2413_S += pw.clockCounter; }
+
+                if(ymf262 != null && ymf262.Length > i && ymf262[i] != null)
+                    foreach (partWork pw in ymf262[i].lstPartWork)
+                    { useYMF262 += pw.clockCounter; if (ymf262[i].ChipID == 1) useYMF262_S += pw.clockCounter; }
 
                 if (k051649 != null && k051649.Length > i && k051649[i] != null)
                     foreach (partWork pw in k051649[i].lstPartWork)
@@ -2542,6 +2548,11 @@ namespace Core
             {
                 YM2413 y = ym2413[0] != null ? ym2413[0] : ym2413[1];
                 Common.SetLE32(dat, 0x10, (uint)y.Frequency | (uint)(useYM2413_S == 0 ? 0 : 0x40000000));
+            }
+            if (info.Version >= 1.51f && useYMF262 != 0)
+            {
+                YMF262 u = ymf262[0] != null ? ymf262[0] : ymf262[1];
+                Common.SetLE32(dat, 0x5c, (uint)u.Frequency | (uint)(useYMF262_S == 0 ? 0 : 0x40000000));
             }
             if (info.Version >= 1.61f && useK051649 != 0)
             {

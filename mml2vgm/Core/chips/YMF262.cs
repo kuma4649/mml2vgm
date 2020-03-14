@@ -7,12 +7,21 @@ using musicDriverInterface;
 
 namespace Core
 {
+    /* MEMO From Chroma
+     * VGM 0x5E -> Port0
+     * VGM 0x5F -> Port1
+     * OPL3にするには0x5F 05 01と送ってOPL3のNEWフラグをセットする必要がある。
+     * 
+     * 
+    */
+
+
     public class YMF262 : ClsChip
     {
         protected int[][] _FNumTbl = new int[1][] {
             //new int[13]
             new int[] {
-            // OPLL(FM) : Fnum = 9 * 2^(22-B) * ftone / M       ftone:Hz M:MasterClock B:Block
+            // OPL3(FM) : Fnum = ftone*(2**19)/(M/288)/(2**B-1)       ftone:Hz M:MasterClock B:Block
             //   c    c+     d    d+     e     f    f+     g    g+     a    a+     b    >c
              0x0ac,0x0b5,0x0c0,0x0cc,0x0d8,0x0e5,0x0f2,0x101,0x110,0x120,0x131,0x143,0x0ac*2
             }
@@ -23,10 +32,10 @@ namespace Core
 
             _Name = "YMF262";
             _ShortName = "OPL3";
-            _ChMax = 14; // FM 9ch + Rhythm 5ch
+            _ChMax = 18; // FM 9ch + Rhythm 5ch
             _canUsePcm = false;
 
-            Frequency = 3579545;
+            Frequency = 14318180;
             port =new byte[][] { new byte[] { (byte)(chipNumber!=0 ? 0xa1 : 0x51) } };
 
             if (string.IsNullOrEmpty(initialPartName)) return;
