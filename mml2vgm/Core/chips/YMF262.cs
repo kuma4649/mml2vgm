@@ -92,20 +92,23 @@ namespace Core
             //FM Off
             outYMF262AllKeyOff(null, lstPartWork[0]);
 
-            if (ChipID != 0 && parent.info.format != enmFormat.ZGM)
+            /*
+             * if (ChipID != 0 && parent.info.format != enmFormat.ZGM)
             {
                 parent.dat[0x13] = new outDatum(enmMMLType.unknown, null, null, (byte)(parent.dat[0x13].val | 0x40));//use Secondary(YM2413 OPLL)
             }
+            */
 
         }
 
 
         public void outYMF262SetAdr00_01(MML mml, partWork pw, byte adr, bool AM, bool VIB, bool EG, bool KS, int mul)
         {
+            // 0x20
             parent.OutData(
                 mml,
                 port[0]
-                , (byte)(adr & 1)
+                , adr
                 , (byte)((AM ? 0x80 : 0) + (VIB ? 0x40 : 0) + (EG ? 0x20 : 0) + (KS ? 0x10 : 0) + (mul & 0xf))
                 );
         }
@@ -115,7 +118,7 @@ namespace Core
             
             //Rhythm Off
             //parent.OutData(mml, port[0], 0x0e, 0);
-
+            // Probably wise to reset Rhythm mode.
             for (byte adr = 0; adr <= 8; adr++)
             {
                 //Ch Off
@@ -124,16 +127,47 @@ namespace Core
             }
         }
 
+        public (byte,byte) ChnToBaseReg(int chn)
+        {
+            byte carrier = 0x20, modulator = 0x23;
+            if (chn > 9) chn -= 9; // A1=LでもA1=Hでもいっしょ。
+
+            if(chn <= 3)
+            {
+                carrier += (byte)chn;
+                modulator += (byte)chn;
+            } else if(chn <= 6)
+            {
+                carrier += 8;
+                modulator += 8;
+
+                carrier += (byte)(chn-3);
+                modulator += (byte)(chn-3);
+            } else if(chn <= 9)
+            {
+                carrier += 16;
+                modulator += 16;
+
+                carrier += (byte)(chn - 6);
+                modulator += (byte)(chn - 6);
+            }
+            
+            return (carrier, modulator);
+        }
+
+
         public void outYMF262SetInstrument(partWork pw, MML mml, int n, int modeBeforeSend)
         {
             pw.instrument = n;
+            // TODO: 7,8,9chはRYMなので変換必須。
+            // TODO: 4opモード時の変換。
 
             if (!parent.instFM.ContainsKey(n))
             {
                 msgBox.setWrnMsg(string.Format(msg.get("E17000"), n), mml.line.Lp);
                 return;
             }
-
+            /*
             switch (modeBeforeSend)
             {
                 case 0: // N)one
@@ -177,37 +211,37 @@ namespace Core
                         | (7 & 0x07) //FB
                         ));
                     break;
-            }
+            }*/
 
             for (byte ope = 0; ope < 2; ope++)
             {
-                outYMF262SetAdr00_01(mml, pw, ope
+                byte targetBaseReg = ope == 0 ? ChnToBaseReg(pw.ch).Item1 : ChnToBaseReg(pw.ch).Item2;
+
+                outYMF262SetAdr00_01(mml, pw, targetBaseReg
                     , parent.instFM[n][ope * 11 + 7] != 0 //AM
                     , parent.instFM[n][ope * 11 + 8] != 0 //VIB
                     , parent.instFM[n][ope * 11 + 9] != 0 //EG
                     , parent.instFM[n][ope * 11 + 10] != 0 //KS
                     , parent.instFM[n][ope * 11 + 6] & 0xf //MT
                     );
-                parent.OutData(mml, port[0], (byte)(0x4 + ope), (byte)((
+                parent.OutData(mml, port[0], (byte)(targetBaseReg + 0x40), (byte)((
                     (parent.instFM[n][ope * 11 + 1] & 0xf) << 4) //AR
                     | (parent.instFM[n][ope * 11 + 2] & 0xf) // DR
                     ));
-                parent.OutData(mml, port[0], (byte)(0x6 + ope), (byte)((
+                parent.OutData(mml, port[0], (byte)(targetBaseReg + 0x60), (byte)((
                     (parent.instFM[n][ope * 11 + 3] & 0xf) << 4) //SL
                     | (parent.instFM[n][ope * 11 + 4] & 0xf) // RR
                     ));
-            }
-            parent.OutData(mml, port[0], (byte)(0x2), (byte)((
-                (parent.instFM[n][0 * 11 + 5] & 0x3) << 6)  //KL(M)
-                | (parent.instFM[n][23] & 0x3f) //TL
-                ));
-            parent.OutData(mml, port[0], (byte)(0x3), (byte)((
-                (parent.instFM[n][1 * 11 + 5] & 0x3) << 6) //KL(C)
-                | (parent.instFM[n][0 * 11 + 11] != 0 ? 0x08 : 0) // DT(M)
-                | (parent.instFM[n][1 * 11 + 11] != 0 ? 0x10 : 0) // DT(C)
-                | (parent.instFM[n][24] & 0x07) //FB
-                ));
 
+                parent.OutData(mml, port[0], (byte)(targetBaseReg + 0x20), (byte)((
+                    (parent.instFM[n][0 * 11 + 5] & 0x3) << 6)  //KL(M)
+                    | (parent.instFM[n][23] & 0x3f) //TL
+                    ));
+            }
+                parent.OutData(mml, port[0], (byte)(pw.ch%8+0xC0), (byte)((
+                    (parent.instFM[n][24] & 0x07)<<1 //FB
+                    )));
+            
             pw.op1ml = parent.instFM[n][0 * 11 + 5];
             pw.op2ml = parent.instFM[n][1 * 11 + 5];
             pw.op1dt2 = 0;
