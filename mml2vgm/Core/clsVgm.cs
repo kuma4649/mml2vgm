@@ -25,6 +25,7 @@ namespace Core
         public HuC6280[] huc6280 = null;
         public YM2612X[] ym2612x = null;
         public YM2413[] ym2413 = null;
+        public YMF262[] ymf262 = null;
         public C140[] c140 = null;
         public AY8910[] ay8910 = null;
         public K051649[] k051649 = null;
@@ -255,6 +256,20 @@ namespace Core
             {
                 ym2413 = lstYM2413.ToArray();
                 chips.Add(enmChipType.YM2413, ym2413);
+            }
+
+            List<YMF262> lstYMF262 = new List<YMF262>();
+            n = sp.dicChipPartName[enmChipType.YMF262];
+            for (int i = 0; i < n.Item3.Count; i++)
+            {
+                if (string.IsNullOrEmpty(n.Item3[i])) continue;
+                if (sp.lnChipPartName.Contains(n.Item3[i]))
+                    lstYMF262.Add(new YMF262(this, i, n.Item3[i], stPath, (info.format == enmFormat.ZGM ? 0 : i)));
+            }
+            if (lstYMF262.Count > 0)
+            {
+                ymf262 = lstYMF262.ToArray();
+                chips.Add(enmChipType.YMF262, ymf262);
             }
 
             List<C140> lstC140 = new List<C140>();
