@@ -55,8 +55,8 @@ namespace Core
         QSound = 15,
         K053260 = 16,
         YM2609 = 17,
-        YMF262 = 18,
-        MIDI_GM=19
+        MIDI_GM = 18,
+        YMF262 = 19
     }
 
     public enum EnmZGMDevice : int
