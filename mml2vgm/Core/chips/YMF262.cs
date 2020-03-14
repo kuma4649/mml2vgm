@@ -36,7 +36,7 @@ namespace Core
             _canUsePcm = false;
 
             Frequency = 14318180;
-            port =new byte[][] { new byte[] { (byte)(chipNumber!=0 ? 0xa1 : 0x51) } };
+            port =new byte[][] { new byte[] { (byte)(chipNumber!=0 ? 0xae : 0x5e) }, new byte[] { (byte){ chipNumber!=0? 0xaf : 0x5f} } };
 
             if (string.IsNullOrEmpty(initialPartName)) return;
 
