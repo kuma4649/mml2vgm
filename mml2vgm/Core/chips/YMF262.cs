@@ -32,11 +32,16 @@ namespace Core
 
             _Name = "YMF262";
             _ShortName = "OPL3";
-            _ChMax = 18; // FM 9ch + Rhythm 5ch
+            _ChMax = 18; 
+            // OPL2 mode = 9*2 2op
+            // OPL3 mode (all 2op) = 18 2op channel
+            // OPL3 Rhythm Mode = 15*4op + 3 rhythm channel
+            // OPL3 4op = 1-4, 2-5, 3-6, 10-13, 11-14, 12-15,(6*4op) 6*2op
+            // OPL3 All mode = (4op mode) + 7,8,9(RYM) 3 2op channel
             _canUsePcm = false;
 
             Frequency = 14318180;
-            port =new byte[][] { new byte[] { (byte)(chipNumber!=0 ? 0xae : 0x5e) }, new byte[] { (byte){ chipNumber!=0? 0xaf : 0x5f} } };
+            port =new byte[][] { new byte[] { (byte)(chipNumber!=0 ? 0xae : 0x5e) }, new byte[] { (byte)( chipNumber!=0? 0xaf : 0x5f ) } };
 
             if (string.IsNullOrEmpty(initialPartName)) return;
 
@@ -107,13 +112,15 @@ namespace Core
 
         public void outYMF262AllKeyOff(MML mml, partWork pw)
         {
+            
             //Rhythm Off
-            parent.OutData(mml, port[0], 0x0e, 0);
-            for (byte adr = 0; adr < 9; adr++)
+            //parent.OutData(mml, port[0], 0x0e, 0);
+
+            for (byte adr = 0; adr <= 8; adr++)
             {
                 //Ch Off
-                parent.OutData(mml, port[0], (byte)(0x20 + adr), 0);
-                parent.OutData(mml, port[0], (byte)(0x30 + adr), 0);
+                parent.OutData(mml, port[0], (byte)(0xB0 + adr), 0);
+                parent.OutData(mml, port[1], (byte)(0xB0 + adr), 0);
             }
         }
 
