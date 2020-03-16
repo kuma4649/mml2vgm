@@ -25,6 +25,7 @@ namespace mml2vgmIDE
         public FrmSien frmSien = null;
         //public int col = -1;
         public AzukiControl azukiControl;
+        public bool forceClose = false;
 
         private FrmMain _main;
         private Setting setting;
@@ -745,7 +746,7 @@ namespace mml2vgmIDE
         {
             if (e.CloseReason == CloseReason.UserClosing)
             {
-                if (document.isNew || document.edit)
+                if(!forceClose && (document.isNew || document.edit))
                 {
                     DialogResult res = MessageBox.Show("保存せずにファイルを閉じますか？"
                         , "ファイル保存確認"
@@ -758,6 +759,7 @@ namespace mml2vgmIDE
                     }
                 }
 
+                forceClose = false;
                 main.RemoveForm(this);
                 main.RemoveDocument(document);
 

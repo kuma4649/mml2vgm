@@ -15,6 +15,7 @@ namespace mml2vgmIDE
         bool initPhase = true;
         List<SoundManager.PackData> pd = new List<SoundManager.PackData>();
         private SoundManager.Chip chipYM2608;
+        private string filename = "";
 
         public override GD3 getGD3Info(byte[] buf, uint vgmGd3)
         {
@@ -41,7 +42,12 @@ namespace mml2vgmIDE
             count++;
         }
 
-        public bool init(musicDriverInterface.MmlDatum[] mubBuf,string workPath, mucomManager mucomManager, ChipRegister chipRegister, EnmChip[] useChip, uint latency, uint waitTime)
+        public bool init(musicDriverInterface.MmlDatum[] mubBuf,string workPath, mucomManager mucomManager, ChipRegister chipRegister
+            , EnmChip[] useChip
+            , uint latency
+            , uint waitTime
+            , string fn
+            )
         {
             if (mucomManager == null) return false;
 
@@ -53,6 +59,7 @@ namespace mml2vgmIDE
             this.waitTime = waitTime;
             this.mm = mucomManager;
             chipYM2608 = chipRegister.YM2608[0];
+            filename = fn;
 
             Counter = 0;
             TotalCounter = 0;
@@ -89,6 +96,7 @@ namespace mml2vgmIDE
                 if(dat.addtionalData is musicDriverInterface.MmlDatum)
                 {
                     musicDriverInterface.MmlDatum md = (musicDriverInterface.MmlDatum)dat.addtionalData;
+                    if (md.linePos != null) md.linePos.srcMMLID = filename;
                     od = new outDatum(md.type, md.args, md.linePos, (byte)md.dat);
                 }
                 

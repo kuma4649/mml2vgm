@@ -719,6 +719,16 @@ namespace mml2vgmIDE
                 case Keys.F12:
                     TsmiShowMIDIKbd_Click(null, null);
                     break;
+                case Keys.W:
+                    if (ctrl)
+                    {
+                        IDockContent dc = GetActiveDockContent();
+                        if (dc == null) return;
+                        if (!(dc is FrmEditor)) return;
+                        if (shift) ((FrmEditor)dc).forceClose = true;
+                        ((FrmEditor)dc).Close();
+                    }
+                    break;
                 default:
                     //↓KeyData確認用
                     //log.Write(string.Format("動作未定義のキー：{0}",e.KeyData));
@@ -1825,7 +1835,7 @@ namespace mml2vgmIDE
                 {
                     ac = ((FrmEditor)dc).azukiControl;
                 }
-
+                string fn=((FrmEditor)dc).document.gwiFullPath;
 
                 if (Audio.flgReinit) flgReinit = true;
                 if (setting.other.InitAlways) flgReinit = true;
@@ -1861,7 +1871,7 @@ namespace mml2vgmIDE
                 //}
                 //File.WriteAllBytes("c:\\temp\\test.mub",dmy.ToArray());
 
-                Audio.SetVGMBuffer(format, mubData, wrkPath);
+                Audio.SetVGMBuffer(format, mubData, wrkPath, fn);
 
                 for (int i = 0; i < 100; i++)
                 {

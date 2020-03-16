@@ -11,6 +11,15 @@ namespace mml2vgmIDE
 {
     public class Document
     {
+        public enum EnmCompileStatus
+        {
+            None,
+            NeedCompile,
+            Compiling,
+            Success,
+            Failed
+        }
+
         public string gwiFullPath = "";
         public string[] errBox = null;
         public string[] wrnBox = null;
@@ -18,6 +27,11 @@ namespace mml2vgmIDE
         public FrmEditor editor = null;
         public bool isNew = false;
         public bool edit = false;
+
+        public EnmCompileStatus compileStatus = EnmCompileStatus.None;
+        public EnmMmlFileFormat srcFileFormat = EnmMmlFileFormat.unknown;
+        public EnmFileFormat dstFileFormat = EnmFileFormat.unknown;
+        public object compiledData = null;
 
         public Document(Setting setting,bool isMUC)
         {
@@ -29,19 +43,16 @@ namespace mml2vgmIDE
             editor.Text = Path.GetFileName(gwiFullPath + "*");
             string filename = Path.Combine(System.Windows.Forms.Application.StartupPath, "Template.gwi");
             editor.azukiControl.Text = "";
-            try
-            {
-                editor.azukiControl.Text = File.ReadAllText(filename);
-            }
-            catch
-            {
-                ;
-            }
+            try { editor.azukiControl.Text = File.ReadAllText(filename); } catch {; }
             editor.azukiControl.ClearHistory();
             editor.Tag = this;
             editor.azukiControl.Tag = this;
             isNew = true;
             edit = false;
+            compileStatus = EnmCompileStatus.None;
+            srcFileFormat = EnmMmlFileFormat.GWI;
+            dstFileFormat = EnmFileFormat.unknown;
+            compiledData = null;
         }
 
         public bool InitOpen(string fullPath)
@@ -61,10 +72,12 @@ namespace mml2vgmIDE
             switch (Path.GetExtension(fullPath))
             {
                 case ".muc":
+                    srcFileFormat = EnmMmlFileFormat.MUC;
                     editor.azukiControl.Text = File.ReadAllText(fullPath,Encoding.GetEncoding(932));
                     break;
                 case ".gwi":
                 default:
+                    srcFileFormat = EnmMmlFileFormat.GWI;
                     editor.azukiControl.Text = File.ReadAllText(fullPath);
                     break;
             }
@@ -73,6 +86,10 @@ namespace mml2vgmIDE
             editor.azukiControl.Tag = this;
             isNew = false;
             edit = false;
+
+            compileStatus = EnmCompileStatus.NeedCompile;
+            dstFileFormat = EnmFileFormat.unknown;
+            compiledData = null;
 
             return true;
         }
