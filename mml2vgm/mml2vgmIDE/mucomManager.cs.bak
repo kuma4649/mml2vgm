@@ -13,22 +13,19 @@ namespace mml2vgmIDE
     {
         private Assembly asmCompiler = null;
         private Assembly asmDriver = null;
-        private Assembly asmPreprocessor = null;
         private iCompiler compiler = null;
         private iDriver driver = null;
-        private iPreprocessor preprocessor = null;
         private bool ok = false;
         private Action<string> disp = null;
 
         public string wrkMUCFullPath { get; private set; }
 
-        public mucomManager(Assembly compiler, Assembly driver, Assembly preprocessor, Action<string> disp)
+        public mucomManager(Assembly compiler, Assembly driver, Action<string> disp)
         {
             try
             {
                 asmCompiler = compiler;
                 asmDriver = driver;
-                asmPreprocessor = preprocessor;
                 this.disp = disp;
 
                 var info = asmCompiler.GetType("mucomDotNET.Compiler.Compiler");
@@ -37,12 +34,9 @@ namespace mml2vgmIDE
                 info = asmDriver.GetType("mucomDotNET.Driver.Driver");
                 this.driver = Activator.CreateInstance(info, new object[] { null }) as iDriver;
 
-                info = asmPreprocessor.GetType("M98DotNETcore.M98");
-                this.preprocessor = Activator.CreateInstance(info, new object[] { null }) as iPreprocessor;
-
                 //Log.writeLine = WriteLog;
 
-                if (this.compiler == null || this.driver == null || this.preprocessor == null)
+                if (this.compiler == null || this.driver == null)
                 {
                     throw new Exception("インスタンスの生成に失敗しました。");
                 }
@@ -54,10 +48,8 @@ namespace mml2vgmIDE
             {
                 asmCompiler = null;
                 asmDriver = null;
-                asmPreprocessor = null;
                 this.compiler = null;
                 this.driver = null;
-                this.preprocessor = null;
                 ok = false;
                 throw;
             }
@@ -148,25 +140,6 @@ namespace mml2vgmIDE
         {
             if (!ok) return null;
             return compiler.GetCompilerInfo();
-        }
-
-        public string preprocess(string src)
-        {
-            musicDriverInterface.Log.writeMethod = disp;
-            disp("M98 を開始");
-
-            byte[] sbAry = Encoding.GetEncoding(932).GetBytes(src);
-            string ret;
-
-            using (MemoryStream sourceMML = new MemoryStream(sbAry))
-            using (MemoryStream destMML = new MemoryStream())
-            {
-                preprocessor.Preprocess(sourceMML, destMML, appendFileReaderCallback);
-                ret = Encoding.GetEncoding(932).GetString(destMML.GetBuffer());
-            }
-
-            disp("M98 を完了");
-            return ret;
         }
     }
 }

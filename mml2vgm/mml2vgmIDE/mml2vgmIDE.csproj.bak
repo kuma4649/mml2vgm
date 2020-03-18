@@ -423,9 +423,6 @@
     <Content Include="lang\mucomDotNETmessage.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="M98DotNETcore.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="mucomDotNETCommon.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

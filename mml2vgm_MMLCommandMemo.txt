@@ -913,9 +913,9 @@ b               -ooooooooooooooooooooooooooooo  音符シ
 '@ AL FB
 
   定義パターン4
-    "L"を指定した音色をYM2413(OPLL)で使用すると以下のように解釈される。
+    "LL"を指定した音色をYM2413(OPLL)で使用すると以下のように解釈される。
 
-'@ L No
+'@ LL No
 '@ AR DR SL RR KL MT AM VB EG KR DT
 '@ AR DR SL RR KL MT AM VB EG KR DT
 '@ TL FB

@@ -154,6 +154,13 @@ namespace mml2vgmIDE
         ZGM = 18
     }
 
+    public enum EnmMmlFileFormat : int
+    {
+        unknown = 0,
+        GWI = 1,
+        MUC = 2
+    }
+
     public enum SendMode : int
     {
         none = 0,

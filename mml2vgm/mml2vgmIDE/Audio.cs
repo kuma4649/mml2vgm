@@ -102,6 +102,7 @@ namespace mml2vgmIDE
         private static double vgmSpeed;
         private static musicDriverInterface.MmlDatum[] mubBuf = null;
         private static string mubWorkPath;
+        private static string mubFileName;
         public static double fadeoutCounter;
         public static double fadeoutCounterEmu;
         private static double fadeoutCounterDelta;
@@ -666,11 +667,12 @@ namespace mml2vgmIDE
             vgmBuf = srcBuf;
         }
 
-        public static void SetVGMBuffer(EnmFileFormat format, musicDriverInterface.MmlDatum[] srcBuf,string wrkPath)
+        public static void SetVGMBuffer(EnmFileFormat format, musicDriverInterface.MmlDatum[] srcBuf,string wrkPath,string mubFileName)
         {
             PlayingFileFormat = format;
             mubBuf = srcBuf;
             mubWorkPath = wrkPath;
+            Audio.mubFileName = mubFileName;
         }
 
         private static void SoundManagerMount()
@@ -3464,7 +3466,11 @@ namespace mml2vgmIDE
 
                 if (!mubDriver.init(mubBuf, mubWorkPath, mucomManager, chipRegister, new EnmChip[] { EnmChip.YM2608 }
                     , (uint)(Common.SampleRate * setting.LatencyEmulation / 1000)
-                    , (uint)(Common.SampleRate * setting.outputDevice.WaitTime / 1000))) return false;
+                    , (uint)(Common.SampleRate * setting.outputDevice.WaitTime / 1000)
+                    ,mubFileName
+                    )
+                    
+                    ) return false;
 
                 log.Write("Volume 設定");
 

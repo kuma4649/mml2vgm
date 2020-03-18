@@ -2,8 +2,8 @@
 メガドライブ他向けVGM/XGM/ZGMファイル作成ツール  
   
 [概要]  
- このツールは、ユーザーが作成したMMLファイルを元にVGM/XGMファイルを作成します。  
- IDEではmucomDotNETを使用しmubファイルを作成可能です。  
+ このツールは、ユーザーが作成したMMLファイルを元にVGM/XGM/ZGMファイルを作成します。  
+ IDEでは更にmucomDotNET/M98DotNETを使用しmubファイルを作成したりランダムな曲を生成したりすることが可能です。  
  IDEについては、IDE.txtを参照してください。  
  スクリプトについては、各々のスクリプトに付属の説明をご覧ください。  
  スクリプト作成については、Script.txtを参照してください。  
@@ -42,6 +42,14 @@
  [ZGM]  
  ・VGMを拡張したフォーマットです。  
  ・YM2609やMIDI音源など使用することができます。  
+  
+[MMLコマンドの説明]  
+ ・VGM/XGM/ZGM  
+   mmlCommandTable.mdを参照してください。  
+ ・muc(mucom88)  
+   mucom88の公式ページを参照してください。  
+ ・M98  
+   m98コマンドリファレンス.pdfを参照してください。  
   
 [必要な環境]  
  ・Windows7以降のOSがインストールされたPC。私はWindows10Home(x64)を使用しています。  
@@ -115,6 +123,9 @@ mml2vgm , mvc , mml2vgmIDEはMITライセンスに準ずる物とします。LIC
   ・mucomDotNET  
     CC BY-NC-SA 4.0  
 
+  ・M98DotNET  
+    CC BY-NC-SA 4.0  
+
   ・musicDriverInterface  
     MIT License  
 
@@ -150,6 +161,7 @@ mml2vgm , mvc , mml2vgmIDEはMITライセンスに準ずる物とします。LIC
  ・musicalman さん  
  ・欧場豪@マシㇼキ提督 さん  
  ・SND-L/KSND(itoken) さん  
+ ・古代 さんはじめオープンMUCOMのみなさん  
   
  ・XPCMK  
  ・FMP7  
