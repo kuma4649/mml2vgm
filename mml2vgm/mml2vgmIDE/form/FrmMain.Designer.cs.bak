@@ -94,7 +94,6 @@
             this.TsmiReference = new System.Windows.Forms.ToolStripMenuItem();
             this.TsmiAbout = new System.Windows.Forms.ToolStripMenuItem();
             this.timer = new System.Windows.Forms.Timer(this.components);
-            this.tssbM98 = new System.Windows.Forms.ToolStripSplitButton();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -125,7 +124,6 @@
             this.tssbSave,
             this.tssbFind,
             this.tssbCompile,
-            this.tssbM98,
             this.tssbStop,
             this.tssbSlow,
             this.tssbFast,
@@ -551,14 +549,6 @@
             this.timer.Interval = 16;
             this.timer.Tick += new System.EventHandler(this.Timer_Tick);
             // 
-            // tssbM98
-            // 
-            this.tssbM98.DropDownButtonWidth = 0;
-            this.tssbM98.Image = global::mml2vgmIDE.Properties.Resources.F06;
-            resources.ApplyResources(this.tssbM98, "tssbM98");
-            this.tssbM98.Name = "tssbM98";
-            this.tssbM98.ButtonClick += new System.EventHandler(this.tssbM98_ButtonClick);
-            // 
             // FrmMain
             // 
             resources.ApplyResources(this, "$this");
@@ -648,7 +638,6 @@
         private System.Windows.Forms.ToolStripMenuItem TsmiFindNext;
         private System.Windows.Forms.ToolStripMenuItem TsmiFindPrevious;
         private System.Windows.Forms.ToolStripSplitButton tssbFind;
-        private System.Windows.Forms.ToolStripSplitButton tssbM98;
     }
 }
 

@@ -90,24 +90,6 @@ namespace mml2vgmIDE
             compileStatus = EnmCompileStatus.NeedCompile;
             dstFileFormat = EnmFileFormat.unknown;
             compiledData = null;
-            return true;
-        }
-
-        public bool InitOpen(string fullPath,string context)
-        {
-            fullPath = fullPath.Replace('\\', Path.DirectorySeparatorChar).Replace('/', Path.DirectorySeparatorChar);
-
-            gwiFullPath = fullPath;
-            errBox = null;
-            wrnBox = null;
-            InitFolderTree();
-            editor.Text = Path.GetFileName(fullPath);
-            editor.azukiControl.Text = context;
-            editor.azukiControl.ClearHistory();
-            editor.Tag = this;
-            editor.azukiControl.Tag = this;
-            isNew = true;
-            edit = true;
 
             return true;
         }

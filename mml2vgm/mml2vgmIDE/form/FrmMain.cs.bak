@@ -53,7 +53,6 @@ namespace mml2vgmIDE
         private ChannelInfo defaultChannelInfo = null;
         private mucomManager mucom = null;
         private musicDriverInterface.MmlDatum[] mubData = null;
-        private string m98ResultMucString = null;
 
         private object traceInfoLockObj = new object();
         private bool traceInfoSw = false;
@@ -63,7 +62,6 @@ namespace mml2vgmIDE
         public Setting setting;
         private ToolStripMenuItem tsmiTreeView = null;
         public IDockContent activeDocument;
-        private int m98Count = 0;
 
 
 
@@ -177,8 +175,7 @@ namespace mml2vgmIDE
             {
                 Assembly comp = Assembly.LoadFrom(Path.Combine(startupPath, "mucomDotNETCompiler.dll"));
                 Assembly driv = Assembly.LoadFrom(Path.Combine(startupPath, "mucomDotNETDriver.dll"));
-                Assembly pprc = Assembly.LoadFrom(Path.Combine(startupPath, "M98DotNETcore.dll"));
-                mucom = new mucomManager(comp, driv, pprc, disp);
+                mucom = new mucomManager(comp,driv,disp);
                 Audio.mucomManager = mucom;
 
                 disp("mucomDotNETを読み込みました");
@@ -651,11 +648,6 @@ namespace mml2vgmIDE
             //TsmiCompileAndPlay_Click(null, null);
         }
 
-        private void tssbM98_ButtonClick(object sender, EventArgs e)
-        {
-            M98Preprocess();
-        }
-
         private void TssbStop_ButtonClick(object sender, EventArgs e)
         {
             stop();
@@ -713,10 +705,7 @@ namespace mml2vgmIDE
                     }
                     break;
                 case Keys.F5:
-                    Compile(true, ctrl, shift, false, false);
-                    break;
-                case Keys.F6:
-                    M98Preprocess();
+                    Compile(true, ctrl, shift, false,false);
                     break;
                 case Keys.F9:
                     stop();
@@ -740,7 +729,6 @@ namespace mml2vgmIDE
                         ((FrmEditor)dc).Close();
                     }
                     break;
-
                 default:
                     //↓KeyData確認用
                     //log.Write(string.Format("動作未定義のキー：{0}",e.KeyData));
@@ -890,51 +878,6 @@ namespace mml2vgmIDE
             return dc;
         }
 
-        public void M98Preprocess()
-        {
-            if (Compiling != 0) return;
-            //stop();
-
-            IDockContent dc = GetActiveDockContent();
-            if (dc == null) return;
-            if (!(dc is FrmEditor)) return;
-            activeMMLTextLines = new string[1] { ((FrmEditor)dc).azukiControl.Text };
-            string tempPath = Path.Combine(Common.GetApplicationDataFolder(true), "temp", Path.GetFileName(((Document)((FrmEditor)dc).Tag).gwiFullPath));
-            if (Path.GetExtension(tempPath) != ".muc")
-            {
-                MessageBox.Show(".mucファイルのみです!");
-                return;
-            }
-            if (mucom == null)
-            {
-                MessageBox.Show("Not found M98DotNET.", "error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-            title = Path.GetFileName(Path.GetFileName(((Document)((FrmEditor)dc).Tag).gwiFullPath));
-
-            args = new string[2];
-            args[1] = tempPath;
-            wrkPath = Path.GetDirectoryName(((Document)((FrmEditor)dc).Tag).gwiFullPath);
-
-            traceInfoSw = false;
-            Sgry.Azuki.WinForms.AzukiControl ac = null;
-            ac = ((FrmEditor)dc).azukiControl;
-            ac.ColorScheme.LineNumberBack = Color.FromArgb(setting.ColorScheme.Azuki_LineNumberBack_Normal);
-            ac.ColorScheme.LineNumberFore = Color.FromArgb(setting.ColorScheme.Azuki_LineNumberFore_Normal);
-            statusStrip1.BackColor = Color.FromArgb(setting.ColorScheme.StatusStripBack_Normal);
-            ac.Document.Unmark(0, ac.Text.Length, 1);
-            ac.IsReadOnly = false;
-            ac.Refresh();
-
-            isSuccess = true;
-            frmPartCounter.ClearCounter();
-            frmErrorList.dataGridView1.Rows.Clear();
-
-            Thread trdStartPreprocess = new Thread(new ThreadStart(startPreprocess));
-            trdStartPreprocess.Start();
-            Compiling = 1;//フラグはコンパイルと共有
-        }
-
         public void Compile(bool doPlay, bool isTrace, bool doSkip, bool doSkipStop,bool doExport,string[] text=null)
         {
             if (Compiling != 0) return;
@@ -954,12 +897,6 @@ namespace mml2vgmIDE
 
                 if (Path.GetExtension(tempPath) == ".muc")
                 {
-                    if (mucom == null)
-                    {
-                        MessageBox.Show("Not found mucomDotNET.", "error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        return;
-                    }
-
                     File.WriteAllText(tempPath, ((FrmEditor)dc).azukiControl.Text, Encoding.GetEncoding(932));
                 }
 
@@ -1021,86 +958,6 @@ namespace mml2vgmIDE
             Thread trdStartCompile = new Thread(new ThreadStart(startCompile));
             trdStartCompile.Start();
             Compiling = 1;
-        }
-
-        private void startPreprocess()
-        {
-            Core.log.Open();
-            Core.log.Write("start preprocess thread");
-            Action dmy = updateTitle;
-            this.Invoke(dmy);
-            Core.log.Write(string.Format("  preprocess at [{0}]", title));
-            msgBox.clear();
-
-            Compiling |= 8;
-
-            Core.log.Write("Call M98DotNET preprocessor");
-
-            string stPath = System.Windows.Forms.Application.StartupPath;
-
-            try
-            {
-                m98ResultMucString = mucom.preprocess(activeMMLTextLines[0]);
-            }
-            catch (ApplicationException)
-            {
-                isSuccess = false;
-            }
-            catch (Exception e)
-            {
-                Disp(string.Format("Message:\r\n{0}\r\nStackTrace:\r\n{1}\r\n", e.Message,e.StackTrace));
-                isSuccess = false;
-            }
-
-            if (string.IsNullOrEmpty(m98ResultMucString))
-            {
-                isSuccess = false;
-            }
-
-            Core.log.Write("Return M98DotNET preprocessor");
-            Core.log.Write("Disp Result");
-
-            dmy = finishedPreprocess;
-            this.Invoke(dmy);
-
-            Core.log.Write("end preprocess thread");
-            Core.log.Close();
-
-        }
-
-        private void finishedPreprocess()
-        {
-            if (isSuccess)
-            {
-                IDockContent idc = GetActiveDockContent();
-                if (idc == null) return;
-                if (!(idc is FrmEditor)) return;
-
-                string fileName = ((Document)((FrmEditor)idc).Tag).gwiFullPath;
-                fileName = Path.Combine(
-                    Path.GetDirectoryName(fileName)
-                    , Path.GetFileNameWithoutExtension(fileName) 
-                    + string.Format("_{0}", m98Count++) + ".muc"
-                    );
-                title = Path.GetFileName(Path.GetFileName(fileName));
-                Document dc = new Document(setting, true);
-                dc.InitOpen(fileName, m98ResultMucString);
-                dc.editor.Show(dpMain, DockState.Document);
-                dc.editor.main = this;
-                dc.editor.document = dc;
-
-                frmFolderTree.tvFolderTree.Nodes.Clear();
-                frmFolderTree.tvFolderTree.Nodes.Add(dc.gwiTree);
-                frmFolderTree.basePath = Path.GetDirectoryName(dc.gwiFullPath);
-
-                FormBox.Add(dc.editor);
-                DocumentBox.Add(dc);
-                //AddGwiFileHistory(fileName);
-                //UpdateGwiFileHistory();
-            }
-
-            Compiling = 0;
-            UpdateControl();
         }
 
         private void startCompile()
