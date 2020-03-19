@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -29,6 +30,9 @@ namespace mml2vgmIDE
 
             this.setting = setting;
             rtbLyrics.GotFocus += RichTextBox1_GotFocus;
+
+            Common.SetDoubleBuffered(rtbLyrics);
+
         }
 
         protected override string GetPersistString()

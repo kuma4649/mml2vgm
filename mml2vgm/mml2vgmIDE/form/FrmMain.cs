@@ -178,7 +178,7 @@ namespace mml2vgmIDE
                 Assembly comp = Assembly.LoadFrom(Path.Combine(startupPath, "mucomDotNETCompiler.dll"));
                 Assembly driv = Assembly.LoadFrom(Path.Combine(startupPath, "mucomDotNETDriver.dll"));
                 Assembly pprc = Assembly.LoadFrom(Path.Combine(startupPath, "M98DotNETcore.dll"));
-                mucom = new mucomManager(comp, driv, pprc, disp);
+                mucom = new mucomManager(comp, driv, pprc, disp, setting);
                 Audio.mucomManager = mucom;
 
                 disp("mucomDotNETを読み込みました");
@@ -893,6 +893,8 @@ namespace mml2vgmIDE
         public void M98Preprocess()
         {
             if (Compiling != 0) return;
+
+            frmLog.ClearLog();
             //stop();
 
             IDockContent dc = GetActiveDockContent();
@@ -938,7 +940,8 @@ namespace mml2vgmIDE
         public void Compile(bool doPlay, bool isTrace, bool doSkip, bool doSkipStop,bool doExport,string[] text=null)
         {
             if (Compiling != 0) return;
-            
+
+            frmLog.ClearLog();
             stop();
 
             IDockContent dc = GetActiveDockContent();

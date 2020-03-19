@@ -37,6 +37,8 @@ namespace mml2vgmIDE
 
             dockPanel.Theme.ApplyTo(cmsMenu);
             dockPanel.Theme.ApplyTo(toolStrip1);
+
+            Common.SetDoubleBuffered(tvFolderTree);
         }
 
         private void FrmFolderTree_FormClosing(object sender, FormClosingEventArgs e)

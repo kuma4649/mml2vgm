@@ -390,6 +390,10 @@
             this.cbAutoOpen = new System.Windows.Forms.CheckBox();
             this.cbUseLoopTimes = new System.Windows.Forms.CheckBox();
             this.tpOmake = new System.Windows.Forms.TabPage();
+            this.groupBox30 = new System.Windows.Forms.GroupBox();
+            this.rbQueryPerformanceCounter = new System.Windows.Forms.RadioButton();
+            this.rbDateTime = new System.Windows.Forms.RadioButton();
+            this.rbStopWatch = new System.Windows.Forms.RadioButton();
             this.cbInfiniteOfflineMode = new System.Windows.Forms.CheckBox();
             this.groupBox29 = new System.Windows.Forms.GroupBox();
             this.label36 = new System.Windows.Forms.Label();
@@ -415,10 +419,11 @@
             this.labelCompanyName = new System.Windows.Forms.Label();
             this.textBoxDescription = new System.Windows.Forms.TextBox();
             this.cbHiyorimiMode = new System.Windows.Forms.CheckBox();
-            this.groupBox30 = new System.Windows.Forms.GroupBox();
-            this.rbStopWatch = new System.Windows.Forms.RadioButton();
-            this.rbDateTime = new System.Windows.Forms.RadioButton();
-            this.rbQueryPerformanceCounter = new System.Windows.Forms.RadioButton();
+            this.cbLogWarning = new System.Windows.Forms.CheckBox();
+            this.rbLoglevelINFO = new System.Windows.Forms.RadioButton();
+            this.rbLoglevelTRACE = new System.Windows.Forms.RadioButton();
+            this.rbLoglevelDEBUG = new System.Windows.Forms.RadioButton();
+            this.groupBox31 = new System.Windows.Forms.GroupBox();
             this.gbWaveOut.SuspendLayout();
             this.gbAsioOut.SuspendLayout();
             this.gbWasapiOut.SuspendLayout();
@@ -506,13 +511,14 @@
             this.gbWav.SuspendLayout();
             this.gbDump.SuspendLayout();
             this.tpOmake.SuspendLayout();
+            this.groupBox30.SuspendLayout();
             this.groupBox29.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tbOpacity)).BeginInit();
             this.groupBox5.SuspendLayout();
             this.tpAbout.SuspendLayout();
             this.tableLayoutPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.logoPictureBox)).BeginInit();
-            this.groupBox30.SuspendLayout();
+            this.groupBox31.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnOK
@@ -4522,6 +4528,7 @@
             // 
             // tpOmake
             // 
+            this.tpOmake.Controls.Add(this.groupBox31);
             this.tpOmake.Controls.Add(this.groupBox30);
             this.tpOmake.Controls.Add(this.cbInfiniteOfflineMode);
             this.tpOmake.Controls.Add(this.groupBox29);
@@ -4537,6 +4544,50 @@
             this.tpOmake.TabIndex = 7;
             this.tpOmake.Text = "おまけ";
             this.tpOmake.UseVisualStyleBackColor = true;
+            // 
+            // groupBox30
+            // 
+            this.groupBox30.Controls.Add(this.rbQueryPerformanceCounter);
+            this.groupBox30.Controls.Add(this.rbDateTime);
+            this.groupBox30.Controls.Add(this.rbStopWatch);
+            this.groupBox30.Location = new System.Drawing.Point(7, 245);
+            this.groupBox30.Name = "groupBox30";
+            this.groupBox30.Size = new System.Drawing.Size(236, 85);
+            this.groupBox30.TabIndex = 24;
+            this.groupBox30.TabStop = false;
+            this.groupBox30.Text = "Music Interrupt Timer";
+            // 
+            // rbQueryPerformanceCounter
+            // 
+            this.rbQueryPerformanceCounter.AutoSize = true;
+            this.rbQueryPerformanceCounter.Location = new System.Drawing.Point(6, 62);
+            this.rbQueryPerformanceCounter.Name = "rbQueryPerformanceCounter";
+            this.rbQueryPerformanceCounter.Size = new System.Drawing.Size(213, 16);
+            this.rbQueryPerformanceCounter.TabIndex = 2;
+            this.rbQueryPerformanceCounter.Text = "QueryPerformanceCounter(Win32API)";
+            this.rbQueryPerformanceCounter.UseVisualStyleBackColor = true;
+            // 
+            // rbDateTime
+            // 
+            this.rbDateTime.AutoSize = true;
+            this.rbDateTime.Location = new System.Drawing.Point(6, 40);
+            this.rbDateTime.Name = "rbDateTime";
+            this.rbDateTime.Size = new System.Drawing.Size(94, 16);
+            this.rbDateTime.TabIndex = 1;
+            this.rbDateTime.Text = "DateTime(C#)";
+            this.rbDateTime.UseVisualStyleBackColor = true;
+            // 
+            // rbStopWatch
+            // 
+            this.rbStopWatch.AutoSize = true;
+            this.rbStopWatch.Checked = true;
+            this.rbStopWatch.Location = new System.Drawing.Point(6, 18);
+            this.rbStopWatch.Name = "rbStopWatch";
+            this.rbStopWatch.Size = new System.Drawing.Size(137, 16);
+            this.rbStopWatch.TabIndex = 0;
+            this.rbStopWatch.TabStop = true;
+            this.rbStopWatch.Text = "Stopwatch(C#) default";
+            this.rbStopWatch.UseVisualStyleBackColor = true;
             // 
             // cbInfiniteOfflineMode
             // 
@@ -4653,7 +4704,7 @@
             // label14
             // 
             this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(7, 59);
+            this.label14.Location = new System.Drawing.Point(7, 379);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(61, 12);
             this.label14.TabIndex = 19;
@@ -4662,7 +4713,7 @@
             // 
             // btVST
             // 
-            this.btVST.Location = new System.Drawing.Point(417, 54);
+            this.btVST.Location = new System.Drawing.Point(417, 374);
             this.btVST.Name = "btVST";
             this.btVST.Size = new System.Drawing.Size(23, 23);
             this.btVST.TabIndex = 18;
@@ -4673,7 +4724,7 @@
             // 
             // tbVST
             // 
-            this.tbVST.Location = new System.Drawing.Point(88, 56);
+            this.tbVST.Location = new System.Drawing.Point(88, 376);
             this.tbVST.Name = "tbVST";
             this.tbVST.Size = new System.Drawing.Size(323, 19);
             this.tbVST.TabIndex = 17;
@@ -4681,10 +4732,11 @@
             // 
             // groupBox5
             // 
+            this.groupBox5.Controls.Add(this.cbLogWarning);
             this.groupBox5.Controls.Add(this.cbDispFrameCounter);
             this.groupBox5.Location = new System.Drawing.Point(7, 3);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(184, 37);
+            this.groupBox5.Size = new System.Drawing.Size(178, 72);
             this.groupBox5.TabIndex = 3;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Debug Mode";
@@ -4819,49 +4871,59 @@
             this.cbHiyorimiMode.UseVisualStyleBackColor = true;
             this.cbHiyorimiMode.Visible = false;
             // 
-            // groupBox30
+            // cbLogWarning
             // 
-            this.groupBox30.Controls.Add(this.rbQueryPerformanceCounter);
-            this.groupBox30.Controls.Add(this.rbDateTime);
-            this.groupBox30.Controls.Add(this.rbStopWatch);
-            this.groupBox30.Location = new System.Drawing.Point(7, 245);
-            this.groupBox30.Name = "groupBox30";
-            this.groupBox30.Size = new System.Drawing.Size(236, 85);
-            this.groupBox30.TabIndex = 24;
-            this.groupBox30.TabStop = false;
-            this.groupBox30.Text = "Music Interrupt Timer";
+            this.cbLogWarning.AutoSize = true;
+            this.cbLogWarning.Location = new System.Drawing.Point(6, 39);
+            this.cbLogWarning.Name = "cbLogWarning";
+            this.cbLogWarning.Size = new System.Drawing.Size(143, 16);
+            this.cbLogWarning.TabIndex = 2;
+            this.cbLogWarning.Text = "ログにWarningを出力する";
+            this.cbLogWarning.UseVisualStyleBackColor = true;
             // 
-            // rbStopWatch
+            // rbLoglevelINFO
             // 
-            this.rbStopWatch.AutoSize = true;
-            this.rbStopWatch.Checked = true;
-            this.rbStopWatch.Location = new System.Drawing.Point(6, 18);
-            this.rbStopWatch.Name = "rbStopWatch";
-            this.rbStopWatch.Size = new System.Drawing.Size(137, 16);
-            this.rbStopWatch.TabIndex = 0;
-            this.rbStopWatch.TabStop = true;
-            this.rbStopWatch.Text = "Stopwatch(C#) default";
-            this.rbStopWatch.UseVisualStyleBackColor = true;
+            this.rbLoglevelINFO.AutoSize = true;
+            this.rbLoglevelINFO.Checked = true;
+            this.rbLoglevelINFO.Location = new System.Drawing.Point(11, 16);
+            this.rbLoglevelINFO.Name = "rbLoglevelINFO";
+            this.rbLoglevelINFO.Size = new System.Drawing.Size(49, 16);
+            this.rbLoglevelINFO.TabIndex = 3;
+            this.rbLoglevelINFO.TabStop = true;
+            this.rbLoglevelINFO.Text = "INFO";
+            this.rbLoglevelINFO.UseVisualStyleBackColor = true;
             // 
-            // rbDateTime
+            // rbLoglevelTRACE
             // 
-            this.rbDateTime.AutoSize = true;
-            this.rbDateTime.Location = new System.Drawing.Point(6, 40);
-            this.rbDateTime.Name = "rbDateTime";
-            this.rbDateTime.Size = new System.Drawing.Size(94, 16);
-            this.rbDateTime.TabIndex = 1;
-            this.rbDateTime.Text = "DateTime(C#)";
-            this.rbDateTime.UseVisualStyleBackColor = true;
+            this.rbLoglevelTRACE.AutoSize = true;
+            this.rbLoglevelTRACE.Location = new System.Drawing.Point(134, 16);
+            this.rbLoglevelTRACE.Name = "rbLoglevelTRACE";
+            this.rbLoglevelTRACE.Size = new System.Drawing.Size(61, 16);
+            this.rbLoglevelTRACE.TabIndex = 3;
+            this.rbLoglevelTRACE.Text = "TRACE";
+            this.rbLoglevelTRACE.UseVisualStyleBackColor = true;
             // 
-            // rbQueryPerformanceCounter
+            // rbLoglevelDEBUG
             // 
-            this.rbQueryPerformanceCounter.AutoSize = true;
-            this.rbQueryPerformanceCounter.Location = new System.Drawing.Point(6, 62);
-            this.rbQueryPerformanceCounter.Name = "rbQueryPerformanceCounter";
-            this.rbQueryPerformanceCounter.Size = new System.Drawing.Size(213, 16);
-            this.rbQueryPerformanceCounter.TabIndex = 2;
-            this.rbQueryPerformanceCounter.Text = "QueryPerformanceCounter(Win32API)";
-            this.rbQueryPerformanceCounter.UseVisualStyleBackColor = true;
+            this.rbLoglevelDEBUG.AutoSize = true;
+            this.rbLoglevelDEBUG.Location = new System.Drawing.Point(66, 16);
+            this.rbLoglevelDEBUG.Name = "rbLoglevelDEBUG";
+            this.rbLoglevelDEBUG.Size = new System.Drawing.Size(62, 16);
+            this.rbLoglevelDEBUG.TabIndex = 3;
+            this.rbLoglevelDEBUG.Text = "DEBUG";
+            this.rbLoglevelDEBUG.UseVisualStyleBackColor = true;
+            // 
+            // groupBox31
+            // 
+            this.groupBox31.Controls.Add(this.rbLoglevelINFO);
+            this.groupBox31.Controls.Add(this.rbLoglevelDEBUG);
+            this.groupBox31.Controls.Add(this.rbLoglevelTRACE);
+            this.groupBox31.Location = new System.Drawing.Point(192, 3);
+            this.groupBox31.Name = "groupBox31";
+            this.groupBox31.Size = new System.Drawing.Size(243, 72);
+            this.groupBox31.TabIndex = 25;
+            this.groupBox31.TabStop = false;
+            this.groupBox31.Text = "Log level";
             // 
             // FrmSetting
             // 
@@ -5007,6 +5069,8 @@
             this.gbDump.PerformLayout();
             this.tpOmake.ResumeLayout(false);
             this.tpOmake.PerformLayout();
+            this.groupBox30.ResumeLayout(false);
+            this.groupBox30.PerformLayout();
             this.groupBox29.ResumeLayout(false);
             this.groupBox29.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tbOpacity)).EndInit();
@@ -5016,8 +5080,8 @@
             this.tableLayoutPanel.ResumeLayout(false);
             this.tableLayoutPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.logoPictureBox)).EndInit();
-            this.groupBox30.ResumeLayout(false);
-            this.groupBox30.PerformLayout();
+            this.groupBox31.ResumeLayout(false);
+            this.groupBox31.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -5416,5 +5480,10 @@
         private System.Windows.Forms.RadioButton rbQueryPerformanceCounter;
         private System.Windows.Forms.RadioButton rbDateTime;
         private System.Windows.Forms.RadioButton rbStopWatch;
+        private System.Windows.Forms.GroupBox groupBox31;
+        private System.Windows.Forms.RadioButton rbLoglevelINFO;
+        private System.Windows.Forms.RadioButton rbLoglevelDEBUG;
+        private System.Windows.Forms.RadioButton rbLoglevelTRACE;
+        private System.Windows.Forms.CheckBox cbLogWarning;
     }
 }

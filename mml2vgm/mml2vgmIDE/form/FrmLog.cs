@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
@@ -19,6 +20,14 @@ namespace mml2vgmIDE
             this.tbLog.BackColor = Color.FromArgb(setting.ColorScheme.Log_BackColor);
             this.tbLog.ForeColor = Color.FromArgb(setting.ColorScheme.Log_ForeColor);
             theme.ApplyTo(toolStrip1);
+
+            Common.SetDoubleBuffered(this);
+            Common.SetDoubleBuffered(tbLog);
+        }
+
+        public void ClearLog()
+        {
+            tbLog.Clear();
         }
 
         protected override string GetPersistString()
@@ -38,14 +47,9 @@ namespace mml2vgmIDE
             e.Effect = DragDropEffects.None;
         }
 
-        private void TbLog_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
         private void TsbClearLog_Click(object sender, EventArgs e)
         {
-            tbLog.Clear();
+            ClearLog();
         }
     }
 }

@@ -19,10 +19,11 @@ namespace mml2vgmIDE
         private iPreprocessor preprocessor = null;
         private bool ok = false;
         private Action<string> disp = null;
+        private Setting setting = null;
 
         public string wrkMUCFullPath { get; private set; }
 
-        public mucomManager(Assembly compiler, Assembly driver, Assembly preprocessor, Action<string> disp)
+        public mucomManager(Assembly compiler, Assembly driver, Assembly preprocessor, Action<string> disp,Setting setting)
         {
             try
             {
@@ -30,6 +31,7 @@ namespace mml2vgmIDE
                 asmDriver = driver;
                 asmPreprocessor = preprocessor;
                 this.disp = disp;
+                this.setting = setting;
 
                 var info = asmCompiler.GetType("mucomDotNET.Compiler.Compiler");
                 this.compiler = Activator.CreateInstance(info, new object[] { null }) as iCompiler;
@@ -118,6 +120,14 @@ namespace mml2vgmIDE
             compiler.Init();
             MmlDatum[] ret;
             musicDriverInterface.Log.writeMethod = disp;
+            musicDriverInterface.Log.off = 0;
+            if (!setting.other.LogWarning)
+            {
+                musicDriverInterface.Log.off = (int)musicDriverInterface.LogLevel.WARNING;
+            }
+            if (setting.other.LogLevel == (int)LogLevel.INFO) musicDriverInterface.Log.level = LogLevel.INFO;
+            else if (setting.other.LogLevel == (int)LogLevel.DEBUG) musicDriverInterface.Log.level = LogLevel.DEBUG;
+            else if (setting.other.LogLevel == (int)LogLevel.TRACE) musicDriverInterface.Log.level = LogLevel.TRACE;
             using (FileStream sourceMML = new FileStream(srcMUCFullPath, FileMode.Open, FileAccess.Read, FileShare.Read))
                 ret = compiler.Compile(sourceMML, appendFileReaderCallback);// wrkMUCFullPath, disp);
             return ret;
