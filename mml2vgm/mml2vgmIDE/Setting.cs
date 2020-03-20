@@ -1650,6 +1650,8 @@ namespace mml2vgmIDE
             private string[] _GwiFileHistory = null;
             public string[] GwiFileHistory { get => _GwiFileHistory; set => _GwiFileHistory = value; }
 
+            public bool LogWarning { get; set; } = false;
+            public int LogLevel { get; set; } = 8;//8:INFO
 
             public Other Copy()
             {
@@ -1677,6 +1679,8 @@ namespace mml2vgmIDE
                 other.TextFontSize = this.TextFontSize;
                 other.TextFontStyle = this.TextFontStyle;
                 other.GwiFileHistory = this.GwiFileHistory;
+                other.LogWarning = this.LogWarning;
+                other.LogLevel = this.LogLevel;
 
                 return other;
             }

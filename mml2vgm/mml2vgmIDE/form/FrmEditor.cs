@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
@@ -51,6 +52,9 @@ namespace mml2vgmIDE
             this.setting = setting;
             if (!isMUC) setHighlighterVGMZGMZGM();
             else setHighlighterMUC();
+
+            Common.SetDoubleBuffered(this);
+            Common.SetDoubleBuffered(azukiControl);
         }
 
         private void setHighlighterVGMZGMZGM()

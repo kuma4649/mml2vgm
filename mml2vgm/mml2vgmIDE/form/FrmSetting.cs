@@ -488,6 +488,10 @@ namespace mml2vgmIDE
             lblFontName.Text=setting.other.TextFontName;
             lblFontSize.Text = setting.other.TextFontSize.ToString();
             lblFontStyle.Text = setting.other.TextFontStyle.ToString();
+            cbLogWarning.Checked = setting.other.LogWarning;
+            rbLoglevelINFO.Checked = setting.other.LogLevel == 8;
+            rbLoglevelDEBUG.Checked = setting.other.LogLevel == 16;
+            rbLoglevelTRACE.Checked = setting.other.LogLevel == 32;
 
             cbUseMIDIExport.Checked = setting.midiExport.UseMIDIExport;
             gbMIDIExport.Enabled = cbUseMIDIExport.Checked;
@@ -1450,6 +1454,11 @@ namespace mml2vgmIDE
 
             setting.Debug_DispFrameCounter = cbDispFrameCounter.Checked;
             setting.HiyorimiMode = cbHiyorimiMode.Checked;
+
+            setting.other.LogWarning = cbLogWarning.Checked;
+            if(rbLoglevelINFO.Checked) setting.other.LogLevel = 8;
+            else if(rbLoglevelDEBUG.Checked) setting.other.LogLevel = 16;
+            else if(rbLoglevelTRACE.Checked) setting.other.LogLevel = 32;
 
             setting.midiExport.UseMIDIExport=cbUseMIDIExport.Checked;
             setting.midiExport.ExportPath = tbMIDIOutputPath.Text;

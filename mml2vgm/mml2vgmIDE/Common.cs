@@ -22,7 +22,17 @@ namespace mml2vgmIDE
         public static Int32 SampleRate = 44100;
         public static string settingFilePath = "";
 
-        public static string AssemblyTitle
+        public static void SetDoubleBuffered(Control control) 
+        {
+            control.GetType().InvokeMember(
+               "DoubleBuffered",
+               BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.SetProperty,
+               null,
+               control,
+               new object[] { true });
+        }
+
+public static string AssemblyTitle
         {
             get
             {
