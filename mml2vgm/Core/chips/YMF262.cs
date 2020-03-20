@@ -15,6 +15,12 @@ namespace Core
      * 
     */
 
+    /*
+        '@ L No
+        '@ AR DR SL RR KSL TL MT AM VIB EGT KSR WS
+        '@ AR DR SL RR KSL TL MT AM VIB EGT KSR WS
+        '@ CNT FB
+    */
 
     public class YMF262 : ClsChip
     {
@@ -99,7 +105,7 @@ namespace Core
             }
             */
 
-        }
+}
 
 
         public void outYMF262SetAdr00_01(MML mml, partWork pw, byte adr, bool AM, bool VIB, bool EG, bool KS, int mul)
@@ -218,32 +224,33 @@ namespace Core
                 byte targetBaseReg = ope == 0 ? ChnToBaseReg(pw.ch).Item1 : ChnToBaseReg(pw.ch).Item2;
 
                 outYMF262SetAdr00_01(mml, pw, targetBaseReg
-                    , parent.instFM[n][ope * 11 + 7] != 0 //AM
-                    , parent.instFM[n][ope * 11 + 8] != 0 //VIB
-                    , parent.instFM[n][ope * 11 + 9] != 0 //EG
-                    , parent.instFM[n][ope * 11 + 10] != 0 //KS
-                    , parent.instFM[n][ope * 11 + 6] & 0xf //MT
+                    , parent.instFM[n][ope * 12 + 8] != 0 //AM
+                    , parent.instFM[n][ope * 12 + 9] != 0 //VIB
+                    , parent.instFM[n][ope * 12 + 10] != 0 //EG
+                    , parent.instFM[n][ope * 12 + 11] != 0 //KS
+                    , parent.instFM[n][ope * 12 + 6] & 0xf //MT
                     );
                 parent.OutData(mml, port[0], (byte)(targetBaseReg + 0x40), (byte)((
-                    (parent.instFM[n][ope * 11 + 1] & 0xf) << 4) //AR
-                    | (parent.instFM[n][ope * 11 + 2] & 0xf) // DR
+                    (parent.instFM[n][ope * 12 + 1] & 0xf) << 4) //AR
+                    | (parent.instFM[n][ope * 12 + 2] & 0xf) // DR
                     ));
                 parent.OutData(mml, port[0], (byte)(targetBaseReg + 0x60), (byte)((
-                    (parent.instFM[n][ope * 11 + 3] & 0xf) << 4) //SL
-                    | (parent.instFM[n][ope * 11 + 4] & 0xf) // RR
+                    (parent.instFM[n][ope * 12 + 3] & 0xf) << 4) //SL
+                    | (parent.instFM[n][ope * 12 + 4] & 0xf) // RR
                     ));
 
                 parent.OutData(mml, port[0], (byte)(targetBaseReg + 0x20), (byte)((
-                    (parent.instFM[n][0 * 11 + 5] & 0x3) << 6)  //KL(M)
-                    | (parent.instFM[n][23] & 0x3f) //TL
+                    (parent.instFM[n][ope * 12 + 5] & 0x3) << 6)  //KL(M)
+                    | (parent.instFM[n][ope*12+6] & 0x3f) //TL
                     ));
             }
                 parent.OutData(mml, port[0], (byte)(pw.ch%8+0xC0), (byte)((
-                    (parent.instFM[n][24] & 0x07)<<1 //FB
+                    (parent.instFM[n][26] & 0x07)<<1
+                    | parent.instFM[n][25] & 0x01
                     )));
             
-            pw.op1ml = parent.instFM[n][0 * 11 + 5];
-            pw.op2ml = parent.instFM[n][1 * 11 + 5];
+            pw.op1ml = parent.instFM[n][0 * 11 + 7];
+            pw.op2ml = parent.instFM[n][1 * 11 + 7];
             pw.op1dt2 = 0;
             pw.op2dt2 = 0;
 
@@ -467,7 +474,7 @@ namespace Core
             {
                 modeBeforeSend = 2;
             }
-
+            
             outYMF262SetInstrument(pw, mml, n, modeBeforeSend); //音色のセット
             pw.envInstrument = 0;
             //outYM2413SetInstVol(pw, 0, pw.volume); //INSTを0にセット

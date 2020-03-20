@@ -111,6 +111,9 @@
     <Content Include="fnum\FNUM_YM2203.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="fnum\FNUM_YMF262.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="fnum\FNUM_YM2413.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

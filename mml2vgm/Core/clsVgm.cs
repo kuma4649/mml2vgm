@@ -1421,6 +1421,10 @@ namespace Core
                         //OPL
                         instFM.Add(instrumentBufCache[0], instrumentBufCache);
                     }
+                    else if(instrumentBufCache.Length == Const.OPL3_INSTRUMENT_SIZE)
+                    {
+                        instFM.Add(instrumentBufCache[0], instrumentBufCache);
+                    }
                     else if (instrumentBufCache.Length == Const.OPNA2_INSTRUMENT_SIZE)
                     {
                         //OPNA2
