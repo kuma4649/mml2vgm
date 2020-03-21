@@ -5034,12 +5034,15 @@ namespace mml2vgmIDE
 
             int ch = -1;
 
+            // FMch:0-12
+            // FMexch:13-18
+
             //FM ch<18
             if (Address == 0x28 || Address == 0x228)
             {
                 ch = dData & 0x3;
                 ch += ((dData & 0x4) == 0) ? 0 : 3;
-                ch += (Address == 0x228) ? 9 : 0;
+                ch += (Address == 0x228) ? 6 : 0;
 
                 if (Chip.ChMasks[ch]) dData &= 0xf;
             }

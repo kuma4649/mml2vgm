@@ -1413,12 +1413,12 @@ namespace mml2vgmIDE
             if (isSuccess)
             {
                 Object[] cells = new object[6];
-
+                int[] pn = new int[] { 1, 2, 3, 10, 11, 12, 13, 4, 5, 6, 19 };
                 for (int i = 0; i < 11; i++)
                 {
                     //if (pw[i].clockCounter == 0) continue;
 
-                    cells[0] = 0;
+                    cells[0] = pn[i];//PartNumber
                     cells[1] = 0;//ChipIndex
                     cells[2] = 0;//ChipNumber
                     cells[3] = ((char)('A' + i)).ToString();
