@@ -851,6 +851,15 @@ namespace mml2vgmIDE
             }
             else if( PlayingFileFormat== EnmFileFormat.ZGM)
             {
+
+                //zgmはchipの再定義が必須の為、初期化を行うとmask情報も初期化されてしまう。
+                //その為いったん退避しておく
+                List<Chip> maskChips = null;
+                if (driver != null && (driver is Driver.ZGM.zgm) && ((Driver.ZGM.zgm)driver).chips != null) 
+                {
+                    maskChips = ((Driver.ZGM.zgm)driver).chips;
+                }
+
                 driver = new Driver.ZGM.zgm();
                 driver.setting = setting;
                 ((Driver.ZGM.zgm)driver).dacControl.chipRegister = chipRegister;
@@ -858,6 +867,22 @@ namespace mml2vgmIDE
                 ((Driver.ZGM.zgm)driver).dacControl.driver = ((Driver.ZGM.zgm)driver);
 
                 ret = zgmPlay(setting);
+
+                //mask情報の復帰
+                if(ret && maskChips != null)
+                {
+                    foreach(Chip chip in ((Driver.ZGM.zgm)driver).chips)
+                    {
+                        foreach (Chip mchip in maskChips)
+                        {
+                            if (chip.Device != mchip.Device) continue;
+                            if (chip.Index != mchip.Index) continue;
+                            if (chip.Number != mchip.Number) continue;
+
+                            chip.ChMasks = mchip.ChMasks;
+                        }
+                    }
+                }
             }
             else if (PlayingFileFormat == EnmFileFormat.VGM)
             {

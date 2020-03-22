@@ -478,6 +478,12 @@ namespace mml2vgmIDE
             bool mute = (string)r.Cells["ClmMute"].Value == "M";
 
             mmli.SetMute(pn, mute);
+
+            //特殊処理：mucの場合はリズムは一括で制御
+            if (pn == 12 && (string)r.Cells["ClmPart"].Value == "G")
+            {
+                for (int i = 0; i < 5; i++) mmli.SetMute(i + 13, mute);
+            }
         }
 
         private void DgvPartCounter_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
