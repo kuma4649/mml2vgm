@@ -1,4 +1,14 @@
 更新履歴
+TAG178 2020/03/22
+  Core
+    ・volume-revタグを実装
+  IDE
+    ・muc保存時にUTFで保存していた為S-JISに修正
+    ・partCounterウィンドウ
+      loopCounterを追加
+      mucの一部のパラメータ表示対応
+        loopCounter,Instrument,Envelope,Volume,Note,Length,KeyOn
+
 TAG177 2020/03/21
   IDE
     ・mucでもmute/soloができるようにした

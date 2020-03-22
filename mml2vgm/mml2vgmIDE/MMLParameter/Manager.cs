@@ -32,14 +32,16 @@ namespace mml2vgmIDE.MMLParameter
         private Dictionary<string,Dictionary<int, Dictionary<int, Action<outDatum, int>>>> dicInst
             = new Dictionary<string,Dictionary<int, Dictionary<int, Action<outDatum, int>>>>();
         private bool isTrace = false;
+        private bool isMub = false;
 
         public Manager()
         {
         }
 
-        public void Init(bool isTrace)
+        public void Init(bool isTrace,bool isMub)
         {
             this.isTrace = isTrace;
+            this.isMub = isMub;
 
             dicInst.Clear();
             Insts = new Dictionary<string, Dictionary<int, Dictionary<int, Instrument>>>();
@@ -328,6 +330,7 @@ namespace mml2vgmIDE.MMLParameter
                             chipIndex = zChip.Index;
                         }
                         YM2608 opna = new YM2608(chip);
+                        opna.isMub = isMub;
                         YM2608.Add(opna);
                         dicInstAdd(opna, od.linePos.chipIndex, od.linePos.chipNumber);
                         instsAdd(opna, od.linePos.chipIndex, od.linePos.chipNumber);

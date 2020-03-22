@@ -177,6 +177,12 @@ namespace Core
 
         public override void CmdVolumeUp(partWork pw, MML mml)
         {
+            if (parent.info.volumeRev)
+            {
+                CmdVolumeDown(pw, mml);
+                return;
+            }
+
             int n = (int)mml.args[0];
             n = Common.CheckRange(n, 1, pw.MaxExpression);
             pw.expression += n;
@@ -192,6 +198,12 @@ namespace Core
 
         public override void CmdVolumeDown(partWork pw, MML mml)
         {
+            if (parent.info.volumeRev)
+            {
+                CmdVolumeUp(pw, mml);
+                return;
+            }
+
             int n = (int)mml.args[0];
             n = Common.CheckRange(n, 1, pw.MaxExpression);
             pw.expression -= n;

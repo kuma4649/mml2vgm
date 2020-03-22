@@ -15,6 +15,7 @@ copy /Y .\..\mml2vgm_MMLCommandMemo.txt .\output
 copy /Y .\..\mmlCommandTable.md .\output
 copy /Y .\..\README.md .\output
 copy /Y .\..\ZGMspec.txt .\output
+copy /Y .\..\m98コマンド・リファレンス.pdf .\output
 del /Q .\output\mml2vgmIDE\*.pdb
 del /Q .\output\mml2vgmIDE\*.config
 del /Q .\output\mml2vgmIDE\*.wav

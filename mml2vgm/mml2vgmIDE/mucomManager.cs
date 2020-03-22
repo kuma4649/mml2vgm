@@ -118,6 +118,8 @@ namespace mml2vgmIDE
 
             this.wrkMUCFullPath = wrkMUCFullPath;
             compiler.Init();
+            compiler.SetCompileSwitch("IDE");
+
             MmlDatum[] ret;
             musicDriverInterface.Log.writeMethod = disp;
             musicDriverInterface.Log.off = 0;

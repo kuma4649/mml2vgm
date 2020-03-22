@@ -23,6 +23,7 @@ namespace mml2vgmIDE.MMLParameter
         public int?[] keyShift;
         public int?[] keyOnMeter;
         public bool[] beforeTie;
+        public int[] clockCounter;
 
         public Queue<outDatum>[] TraceInfo;
         public outDatum[] TraceInfoOld;
@@ -47,9 +48,14 @@ namespace mml2vgmIDE.MMLParameter
             keyShift = new int?[n];
             keyOnMeter = new int?[n];
             beforeTie = new bool[n];
+            clockCounter = new int[n];
 
             TraceInfo = new Queue<outDatum>[n];
-            for (int i = 0; i < n; i++) TraceInfo[i] = new Queue<outDatum>();
+            for (int i = 0; i < n; i++)
+            {
+                TraceInfo[i] = new Queue<outDatum>();
+                clockCounter[i] = 1;
+            }
             TraceInfoOld = new outDatum[n];
             this.chip = chip;
         }

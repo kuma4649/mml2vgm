@@ -95,16 +95,16 @@ mml2vgm , mvc , mml2vgmIDEはMITライセンスに準ずる物とします。LIC
   ・EncAdpcmA.cs  参考元：https://wiki.neogeodev.org/index.php?title=ADPCM_codecs  
   
   
-以下のソフトウェアをライブラリとして動的リンクし使用しています。  
+以下のソフトウェアをライブラリとして動的・静的にリンクし使用しています。  
 これらのソースは各著作者が著作権を持ちます。  
 ライセンスに関しては、各ドキュメントを参照してください。  
 
-  ・MDSound  
+  ・MDSound /動的リンク  
     LGPL  
   
   以下、mml2vgmIDEのみ使用  
   
-  ・NAudio  
+  ・NAudio /動的リンク  
     ms-pl  
   
   ・Azukiエディター  
@@ -114,28 +114,40 @@ mml2vgm , mvc , mml2vgmIDEはMITライセンスに準ずる物とします。LIC
   ・IronPython  
     Apache License,Ver.2.0  
   
-  ・Json.NET  
+  ・NewtonsoftJson.NET  
     MIT License  
   
   ・DockPanel Suite  
     MIT License  
   
-  ・mucomDotNET  
+  ・DockPanel Suite.ThemeVS2015  
+    MIT License  
+  
+  ・DynamicLanguageRuntime  
+    Apache License 2.0  
+  
+  ・HtmlAgilityPack  
+    MIT License  
+  
+  ・IronPython  
+    Apache License 2.0  
+  
+  ・mucomDotNET /動的リンク  
     CC BY-NC-SA 4.0  
 
-  ・M98DotNET  
+  ・M98DotNET /動的リンク  
     CC BY-NC-SA 4.0  
 
-  ・musicDriverInterface  
+  ・musicDriverInterface /動的リンク  
     MIT License  
 
-  ・RealChipCtlWrap  
+  ・RealChipCtlWrap /動的リンク  
     MIT License  
 
-  ・SCCI  
+  ・SCCI /動的リンク  
      ?  
 
-  ・c86ctl  
+  ・c86ctl /動的リンク  
     BSD 3-Clause  
     
   

@@ -14,6 +14,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		CHANGE.txt = CHANGE.txt
 		IDE.txt = IDE.txt
 		..\LICENSE.txt = ..\LICENSE.txt
+		..\m98コマンド・リファレンス.pdf = ..\m98コマンド・リファレンス.pdf
 		makeZip.bat = makeZip.bat
 		..\mml2vgm_MMLCommandMemo.txt = ..\mml2vgm_MMLCommandMemo.txt
 		..\mmlCommandTable.md = ..\mmlCommandTable.md
