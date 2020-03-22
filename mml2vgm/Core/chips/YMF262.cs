@@ -228,7 +228,7 @@ namespace Core
                     , parent.instFM[n][ope * 12 + 9] != 0 //VIB
                     , parent.instFM[n][ope * 12 + 10] != 0 //EG
                     , parent.instFM[n][ope * 12 + 11] != 0 //KS
-                    , parent.instFM[n][ope * 12 + 6] & 0xf //MT
+                    , parent.instFM[n][ope * 12 + 7] & 0xf //MT
                     );
                 parent.OutData(mml, port[0], (byte)(targetBaseReg + 0x40), (byte)((
                     (parent.instFM[n][ope * 12 + 1] & 0xf) << 4) //AR
@@ -520,19 +520,19 @@ namespace Core
                         pw.beforeEnvInstrument = pw.envInstrument;
                         pw.beforeVolume = pw.volume;
 
-                        parent.OutData(mml, port[0]
+                        /*parent.OutData(mml, port[0]
                             , (byte)(0x30 + pw.ch)
                             , (byte)(((pw.envInstrument << 4) & 0xf0) | ((15 - pw.volume) & 0xf))
-                            );
+                            );*/
                     }
 
                     if (pw.keyOff)
                     {
                         pw.keyOff = false;
                         parent.OutData(mml, port[0]
-                            , (byte)(0x20 + pw.ch)
+                            , (byte)(0xB0 + pw.ch)
                             , (byte)(
-                                ((pw.freq >> 8) & 0xf)
+                                ((pw.freq >> 8) & 0x1f)
                               )
                             );
                     }
@@ -541,20 +541,20 @@ namespace Core
                     {
                         pw.beforeFNum = pw.freq | (pw.keyOn ? 0x1000 : 0x0000);
 
-                        parent.OutData(mml, port[0], (byte)(0x10 + pw.ch), (byte)pw.freq);
+                        parent.OutData(mml, port[0], (byte)(0xa0 + pw.ch), (byte)pw.freq);
                         parent.OutData(mml, port[0]
-                            , (byte)(0x20 + pw.ch)
+                            , (byte)(0xB0 + pw.ch)
                             , (byte)(
-                                ((pw.freq >> 8) & 0xf)
-                                | (pw.keyOn ? 0x10 : 0x00)
-                                | (pw.sus ? 0x20 : 0x00)
+                                ((pw.freq >> 8) & 0x1f)
+                                | (pw.keyOn ? 0x20 : 0x00)
+                                //| (pw.sus ? 0x20 : 0x00)
                               )
                             );
                     }
                 }
 
             }
-
+/*
             if (!lstPartWork[9].rhythmMode) return;
 
             partWork p0, p1;
@@ -691,8 +691,9 @@ namespace Core
                 parent.OutData(mml, port[0], 0x38, (byte)((15 - (p0.volume & 0xf)) | ((15 - (p1.volume & 0xf)) << 4)));
             }
 
-
+    */
         }
+        
 
     }
 }
