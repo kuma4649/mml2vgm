@@ -991,15 +991,9 @@ namespace Core
 
         public virtual void CmdVolumeUp(partWork pw, MML mml)
         {
-            if (parent.info.volumeRev)
-            {
-                CmdVolumeDown(pw, mml);
-                return;
-            }
-
             int n = (int)mml.args[0];
             n = Common.CheckRange(n, 1, pw.MaxVolume);
-            pw.volume += n;
+            pw.volume += parent.info.volumeRev ? -n : n;
             pw.volume = Common.CheckRange(pw.volume, 0, pw.MaxVolume);
 
             MML vmml = new MML();
@@ -1012,15 +1006,9 @@ namespace Core
 
         public virtual void CmdVolumeDown(partWork pw, MML mml)
         {
-            if (parent.info.volumeRev)
-            {
-                CmdVolumeUp(pw, mml);
-                return;
-            }
-
             int n = (int)mml.args[0];
             n = Common.CheckRange(n, 1, pw.MaxVolume);
-            pw.volume -= n;
+            pw.volume -= parent.info.volumeRev ? -n : n;
             pw.volume = Common.CheckRange(pw.volume, 0, pw.MaxVolume);
 
             MML vmml = new MML();

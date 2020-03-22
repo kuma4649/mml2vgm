@@ -932,7 +932,7 @@ namespace mml2vgmIDE
             ac.Refresh();
 
             isSuccess = true;
-            frmPartCounter.ClearCounter();
+            //frmPartCounter.ClearCounter();
             frmErrorList.dataGridView1.Rows.Clear();
 
             Thread trdStartPreprocess = new Thread(new ThreadStart(startPreprocess));
