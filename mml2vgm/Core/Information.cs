@@ -38,8 +38,8 @@ namespace Core
         public const long DEFAULT_CLOCK_COUNT = 192L;
         public const long DEFAULT_SAMPLES_PER_CLOCK = VGM_SAMPLE_PER_SECOND * 60 * 4 / (DEFAULT_TEMPO * DEFAULT_CLOCK_COUNT);
         public const long VGM_SAMPLE_PER_SECOND = 44100L;
-        public const long XGM_DEFAULT_CLOCK_COUNT = 120L;
-        public const long XGM_DEFAULT_SAMPLES_PER_CLOCK = 60 * 60 * 4 / (DEFAULT_TEMPO * XGM_DEFAULT_CLOCK_COUNT);
+        public const long XGM_DEFAULT_CLOCK_COUNT = 192L;
+        public const double XGM_DEFAULT_SAMPLES_PER_CLOCK = 60.0 * 60 * 4 / (DEFAULT_TEMPO * XGM_DEFAULT_CLOCK_COUNT);
 
 
 
@@ -146,6 +146,7 @@ namespace Core
                     tempo = DEFAULT_TEMPO;
                     clockCount = XGM_DEFAULT_CLOCK_COUNT;
                     samplesPerClock = XGM_DEFAULT_SAMPLES_PER_CLOCK;
+                    //samplesPerClock = xgmSamplesPerSecond * 60.0 * 4.0 / (tempo * clockCount);
                     break;
                 case "ZGM":
                     format = enmFormat.ZGM;
