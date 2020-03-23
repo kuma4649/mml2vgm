@@ -4060,8 +4060,13 @@ namespace mml2vgmIDE
                 dummyChip.Model = EnmVRModel.VirtualModel;
             }
 
-            enq(od,Counter, dummyChip, EnmDataType.Normal, dPort * 0x100 + dAddr, dData, null);
-            //enq(Counter, YM2608[ChipID], EnmDataType.Normal, dPort * 0x100 + dAddr, dData, null);
+            if(dPort==-1 && dAddr == -1 && dData == -1)
+            {
+                //ダミーデータ(演奏情報だけ流したい時向け)
+                enq(od, Counter, dummyChip, EnmDataType.Normal, -1, -1, null);
+            }
+            else
+                enq(od,Counter, dummyChip, EnmDataType.Normal, dPort * 0x100 + dAddr, dData, null);
         }
 
         public void YM2608SetRegister(outDatum od, long Counter, Chip chip, PackData[] data)

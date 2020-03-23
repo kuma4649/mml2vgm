@@ -21,6 +21,7 @@ namespace mml2vgmIDE
         }
 
         public string gwiFullPath = "";
+        public string parentFullPath = "";
         public string[] errBox = null;
         public string[] wrnBox = null;
         public TreeNode gwiTree = null;

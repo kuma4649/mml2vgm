@@ -272,24 +272,29 @@ namespace mml2vgmIDE
 
             try
             {
-                File.WriteAllText(d.gwiFullPath, d.editor.azukiControl.Text, Encoding.UTF8);
+                if (d.srcFileFormat == EnmMmlFileFormat.GWI)
+                    File.WriteAllText(d.gwiFullPath, d.editor.azukiControl.Text, Encoding.UTF8);
+                else if (d.srcFileFormat == EnmMmlFileFormat.MUC)
+                    File.WriteAllText(d.gwiFullPath, d.editor.azukiControl.Text, Encoding.GetEncoding(932));
+
+                d.parentFullPath = "";
+                AddGwiFileHistory(d.gwiFullPath);
+                UpdateGwiFileHistory();
+
+                d.edit = false;
+                d.editor.azukiControl.ClearHistory();
+                if (d.editor.Text.Length > 0 && d.editor.Text[d.editor.Text.Length - 1] == '*')
+                {
+                    d.editor.Text = d.editor.Text.Substring(0, d.editor.Text.Length - 1);
+                }
+                d.isNew = false;
+                UpdateControl();
             }
-            catch(System.IO.IOException ioe)
+            catch (System.IO.IOException ioe)
             {
                 MessageBox.Show(string.Format("Occured exception.\r\nMessage:\r\n{0}",ioe.Message),"Saving failed.", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
-            AddGwiFileHistory(d.gwiFullPath);
-            UpdateGwiFileHistory();
-
-            d.edit = false;
-            d.editor.azukiControl.ClearHistory();
-            if (d.editor.Text.Length > 0 && d.editor.Text[d.editor.Text.Length - 1] == '*')
-            {
-                d.editor.Text = d.editor.Text.Substring(0, d.editor.Text.Length - 1);
-            }
-            d.isNew = false;
-            UpdateControl();
         }
 
         public void refreshFolderTreeView()
@@ -330,6 +335,7 @@ namespace mml2vgmIDE
             fn = Path.Combine(Path.GetDirectoryName(fn), sfd.FileName);
             d.editor.Text = Path.GetFileName(sfd.FileName);
             d.gwiFullPath = fn;
+            d.parentFullPath = "";
             TsmiSaveFile_Click(null, null);
         }
 
@@ -929,7 +935,7 @@ namespace mml2vgmIDE
             ac.Refresh();
 
             isSuccess = true;
-            frmPartCounter.ClearCounter();
+            //frmPartCounter.ClearCounter();
             frmErrorList.dataGridView1.Rows.Clear();
 
             Thread trdStartPreprocess = new Thread(new ThreadStart(startPreprocess));
@@ -1079,7 +1085,20 @@ namespace mml2vgmIDE
                 if (idc == null) return;
                 if (!(idc is FrmEditor)) return;
 
-                string fileName = ((Document)((FrmEditor)idc).Tag).gwiFullPath;
+                string fileName;
+                string parentFullPath;
+
+                if (((Document)((FrmEditor)idc).Tag).parentFullPath == "")
+                {
+                    fileName = ((Document)((FrmEditor)idc).Tag).gwiFullPath;
+                    parentFullPath = fileName;
+                }
+                else
+                {
+                    fileName = ((Document)((FrmEditor)idc).Tag).parentFullPath;
+                    parentFullPath = ((Document)((FrmEditor)idc).Tag).parentFullPath;
+                }
+
                 fileName = Path.Combine(
                     Path.GetDirectoryName(fileName)
                     , Path.GetFileNameWithoutExtension(fileName) 
@@ -1091,6 +1110,7 @@ namespace mml2vgmIDE
                 dc.editor.Show(dpMain, DockState.Document);
                 dc.editor.main = this;
                 dc.editor.document = dc;
+                dc.parentFullPath = parentFullPath;
 
                 frmFolderTree.tvFolderTree.Nodes.Clear();
                 frmFolderTree.tvFolderTree.Nodes.Add(dc.gwiTree);
@@ -1294,7 +1314,7 @@ namespace mml2vgmIDE
 
             if (isSuccess)
             {
-                Object[] cells = new object[6];
+                Object[] cells = new object[7];
 
                 foreach (KeyValuePair<enmChipType, ClsChip[]> kvp in mv.desVGM.chips)
                 {
@@ -1312,6 +1332,7 @@ namespace mml2vgmIDE
                             cells[3] = pw[i].PartName.Substring(0, 2).Replace(" ", "") + int.Parse(pw[i].PartName.Substring(2, 2)).ToString();
                             cells[4] = pw[i].chip.Name;//.ToUpper();
                             cells[5] = pw[i].clockCounter;
+                            cells[6] = "-";
                             frmPartCounter.AddPartCounter(cells);
                         }
 
@@ -1412,7 +1433,7 @@ namespace mml2vgmIDE
             musicDriverInterface.CompilerInfo ci = mucom.GetCompilerInfo();
             if (isSuccess)
             {
-                Object[] cells = new object[6];
+                Object[] cells = new object[7];
                 int[] pn = new int[] { 1, 2, 3, 10, 11, 12, 13, 4, 5, 6, 19 };
                 for (int i = 0; i < 11; i++)
                 {
@@ -1424,6 +1445,7 @@ namespace mml2vgmIDE
                     cells[3] = ((char)('A' + i)).ToString();
                     cells[4] = "YM2608";//.ToUpper();
                     cells[5] = ci.totalCount[i];
+                    cells[6] = ci.loopCount[i];
                     frmPartCounter.AddPartCounter(cells);
                 }
             }
@@ -1940,7 +1962,7 @@ namespace mml2vgmIDE
 
                 frmLyrics.update();
                 frmPartCounter.Stop();
-                Audio.mmlParams.Init(isTrace);
+                Audio.mmlParams.Init(isTrace, false);
                 frmPartCounter.Start(Audio.mmlParams);
 
                 if (isTrace && ac != null)
@@ -2037,7 +2059,7 @@ namespace mml2vgmIDE
 
                 frmLyrics.update();
                 frmPartCounter.Stop();
-                Audio.mmlParams.Init(isTrace);
+                Audio.mmlParams.Init(isTrace,true);
                 frmPartCounter.Start(Audio.mmlParams);
 
                 if (isTrace && ac != null)

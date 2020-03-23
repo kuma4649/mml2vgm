@@ -27,6 +27,7 @@ namespace Core
         public const string FORMAT = "FORMAT";
         public const string XGMBASEFRAME = "XGMBASEFRAME";
         public const string OCTAVEREV = "OCTAVE-REV";
+        public const string VOLUMEREV = "VOLUME-REV";
         public const string ISK052539 = "ISK052539";
         public const string PRIMARY = "PRIMARY";
         public const string SECONDARY = "SECONDARY";
@@ -62,6 +63,7 @@ namespace Core
         public double samplesPerClock = DEFAULT_SAMPLES_PER_CLOCK;
         public long xgmSamplesPerSecond = 60L;
         public bool octaveRev = false;
+        public bool volumeRev = false;
         public bool isK052539 = false;
         public int modeBeforeSend = 0;
 
@@ -110,6 +112,7 @@ namespace Core
                     else if (wrd == FORMAT) SetFormat(val);
                     else if (wrd == XGMBASEFRAME) SetXgmBaseFrame(val);
                     else if (wrd == OCTAVEREV) SetOctaveRev(val);
+                    else if (wrd == VOLUMEREV) SetVolumeRev(val);
                     else if (wrd == ISK052539) SetIsK052539(val);
                     else if (wrd == FORCEDMONOPARTYM2612 && chips != null) SetMonoPart(val, chips);
                     else if (wrd == MODEBEFORESEND) SetModeBeforeSend(val);
@@ -183,6 +186,26 @@ namespace Core
                 case "N":
                 default:
                     octaveRev = false;
+                    break;
+            }
+        }
+
+        private void SetVolumeRev(string val)
+        {
+            switch (val.ToUpper())
+            {
+                case "TRUE":
+                case "1":
+                case "YES":
+                case "Y":
+                    volumeRev = true;
+                    break;
+                case "FALSE":
+                case "0":
+                case "NO":
+                case "N":
+                default:
+                    volumeRev = false;
                     break;
             }
         }

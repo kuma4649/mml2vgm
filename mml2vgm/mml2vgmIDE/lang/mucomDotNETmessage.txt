@@ -14,7 +14,7 @@
 E0000=Exception message:\r\n{0}\r\nException stacktrace:\r\n{1}\r\n
 
 ;compiler.cs 0100
-E0100=Hmm, Error has been occured on compile. (Error on Line {0})
+E0100=Hmm, Error has been occured on compile. (Error on row:{0} col:{1})
 
 ;msub.cs 0200
 E0200=Sound data exceeded maximum capacity(64k).

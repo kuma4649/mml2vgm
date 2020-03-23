@@ -179,7 +179,7 @@ namespace Core
         {
             int n = (int)mml.args[0];
             n = Common.CheckRange(n, 1, pw.MaxExpression);
-            pw.expression += n;
+            pw.expression += parent.info.volumeRev ? -n : n;
             pw.expression = Common.CheckRange(pw.expression, 0, pw.MaxExpression);
 
             MML vmml = new MML();
@@ -194,7 +194,7 @@ namespace Core
         {
             int n = (int)mml.args[0];
             n = Common.CheckRange(n, 1, pw.MaxExpression);
-            pw.expression -= n;
+            pw.expression -= parent.info.volumeRev ? -n : n;
             pw.expression = Common.CheckRange(pw.expression, 0, pw.MaxExpression);
 
             MML vmml = new MML();

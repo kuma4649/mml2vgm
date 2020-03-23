@@ -152,6 +152,7 @@ namespace mml2vgmIDE
             r.Cells[dgvPartCounter.Columns["ClmPart"].Index].Value = cells[3];
             r.Cells[dgvPartCounter.Columns["ClmChip"].Index].Value = cells[4];
             r.Cells[dgvPartCounter.Columns["ClmCOunter"].Index].Value = cells[5];
+            r.Cells[dgvPartCounter.Columns["ClmLoopCounter"].Index].Value = cells[6];
 
 
             //mute状態を復帰する

@@ -993,7 +993,7 @@ namespace Core
         {
             int n = (int)mml.args[0];
             n = Common.CheckRange(n, 1, pw.MaxVolume);
-            pw.volume += n;
+            pw.volume += parent.info.volumeRev ? -n : n;
             pw.volume = Common.CheckRange(pw.volume, 0, pw.MaxVolume);
 
             MML vmml = new MML();
@@ -1008,7 +1008,7 @@ namespace Core
         {
             int n = (int)mml.args[0];
             n = Common.CheckRange(n, 1, pw.MaxVolume);
-            pw.volume -= n;
+            pw.volume -= parent.info.volumeRev ? -n : n;
             pw.volume = Common.CheckRange(pw.volume, 0, pw.MaxVolume);
 
             MML vmml = new MML();
