@@ -29,7 +29,7 @@ namespace Core
             new int[] {
             // OPL3(FM) : Fnum = ftone*(2**19)/(M/288)/(2**B-1)       ftone:Hz M:MasterClock B:Block
             //   c    c+     d    d+     e     f    f+     g    g+     a    a+     b    >c
-             0x0ac,0x0b5,0x0c0,0x0cc,0x0d8,0x0e5,0x0f2,0x101,0x110,0x120,0x131,0x143,0x0ac*2
+             0x158,0x16a,0x180,0x198,0x1b0,0x1ca,0x1e4,0x202,0x220,0x240,0x262,0x286,0x2b0
             }
         };
 
@@ -95,9 +95,12 @@ namespace Core
 
             if (!use) return;
 
+            parent.OutData((MML)null, port[0], 0x05, 0x01);
+
             //FM Off
             outYMF262AllKeyOff(null, lstPartWork[0]);
 
+            
             /*
              * if (ChipID != 0 && parent.info.format != enmFormat.ZGM)
             {
@@ -270,7 +273,7 @@ namespace Core
         public void OutFmSetFnum(partWork pw, int octave, int num)
         {
             int freq;
-            freq = (int)((num & 0x1ff) | (((octave - 1) & 0x7) << 9));
+            freq = (int)((num & 0x3ff) | (((octave - 1) & 0x7) << 10));
             pw.freq = freq;
         }
 
@@ -311,7 +314,7 @@ namespace Core
                     break;
                 }
                 o--;
-                f = ftbl[0] * 2 - (ftbl[0] - f);
+                f = ftbl[0] * 4 - (ftbl[0] - f);
             }
             while (f >= ftbl[0] * 2)
             {
@@ -320,7 +323,7 @@ namespace Core
                     break;
                 }
                 o++;
-                f = f - ftbl[0] * 2 + ftbl[0];
+                f = f - ftbl[0] * 4 + ftbl[0];
             }
             f = Common.CheckRange(f, 0, 0x7ff);
             OutFmSetFnum(pw, o, f);
@@ -541,9 +544,9 @@ namespace Core
                     {
                         pw.beforeFNum = pw.freq | (pw.keyOn ? 0x1000 : 0x0000);
 
-                        parent.OutData(mml, port[0], (byte)(0xa0 + pw.ch), (byte)pw.freq);
+                        parent.OutData(mml, port[0], (byte)(0xa0 + pw.ch%8), (byte)pw.freq);
                         parent.OutData(mml, port[0]
-                            , (byte)(0xB0 + pw.ch)
+                            , (byte)(0xB0 + pw.ch%8)
                             , (byte)(
                                 ((pw.freq >> 8) & 0x1f)
                                 | (pw.keyOn ? 0x20 : 0x00)
