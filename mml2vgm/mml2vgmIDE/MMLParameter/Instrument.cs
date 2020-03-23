@@ -54,7 +54,7 @@ namespace mml2vgmIDE.MMLParameter
             for (int i = 0; i < n; i++)
             {
                 TraceInfo[i] = new Queue<outDatum>();
-                clockCounter[i] = 1;
+                clockCounter[i] = 128;
             }
             TraceInfoOld = new outDatum[n];
             this.chip = chip;

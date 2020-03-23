@@ -28,21 +28,20 @@ namespace mml2vgmIDE.MMLParameter
             if (ch >= 3 && ch <= 5) return ch + 6;//SSG1-3ch
             if (ch == 6) return 12;//りずむ
             if (ch >= 7 && ch <= 9) return ch - 4;//FM4-6ch
-            if (ch == 10) ch = 18;//adpcm
+            if (ch == 10) return 18;//adpcm
 
             return ch;
         }
 
         public override void SetParameter(outDatum od, int cc)
         {
-            int ch = isMub ? GetChNumFromMucChNum(od.linePos.ch) : od.linePos.ch;
-
-            if (isTrace) TraceInfo[ch].Enqueue(od);
-
             int n;
             string s;
             try
             {
+                int ch = isMub ? GetChNumFromMucChNum(od.linePos.ch) : od.linePos.ch;
+
+                if (isTrace) TraceInfo[ch].Enqueue(od);
 
                 switch (od.type)
                 {
@@ -121,9 +120,9 @@ namespace mml2vgmIDE.MMLParameter
                             if (vol[ch] != null)
                             {
                                 keyOnMeter[ch] = (int)(256.0 / (
-                                    od.linePos.part == "FM" ? 16 : (
-                                    od.linePos.part == "SSG" ? 16 : (
-                                    od.linePos.part == "RHYTHM" ? 64 : 256
+                                    od.linePos.part == "FM" ? 15 : (
+                                    od.linePos.part == "SSG" ? 15 : (
+                                    od.linePos.part == "RHYTHM" ? 63 : 255
                                     ))) * vol[ch]);
                             }
                         }

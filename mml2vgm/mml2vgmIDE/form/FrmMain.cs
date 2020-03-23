@@ -276,23 +276,25 @@ namespace mml2vgmIDE
                     File.WriteAllText(d.gwiFullPath, d.editor.azukiControl.Text, Encoding.UTF8);
                 else if (d.srcFileFormat == EnmMmlFileFormat.MUC)
                     File.WriteAllText(d.gwiFullPath, d.editor.azukiControl.Text, Encoding.GetEncoding(932));
+
+                d.parentFullPath = "";
+                AddGwiFileHistory(d.gwiFullPath);
+                UpdateGwiFileHistory();
+
+                d.edit = false;
+                d.editor.azukiControl.ClearHistory();
+                if (d.editor.Text.Length > 0 && d.editor.Text[d.editor.Text.Length - 1] == '*')
+                {
+                    d.editor.Text = d.editor.Text.Substring(0, d.editor.Text.Length - 1);
+                }
+                d.isNew = false;
+                UpdateControl();
             }
             catch (System.IO.IOException ioe)
             {
                 MessageBox.Show(string.Format("Occured exception.\r\nMessage:\r\n{0}",ioe.Message),"Saving failed.", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
-            AddGwiFileHistory(d.gwiFullPath);
-            UpdateGwiFileHistory();
-
-            d.edit = false;
-            d.editor.azukiControl.ClearHistory();
-            if (d.editor.Text.Length > 0 && d.editor.Text[d.editor.Text.Length - 1] == '*')
-            {
-                d.editor.Text = d.editor.Text.Substring(0, d.editor.Text.Length - 1);
-            }
-            d.isNew = false;
-            UpdateControl();
         }
 
         public void refreshFolderTreeView()
@@ -333,6 +335,7 @@ namespace mml2vgmIDE
             fn = Path.Combine(Path.GetDirectoryName(fn), sfd.FileName);
             d.editor.Text = Path.GetFileName(sfd.FileName);
             d.gwiFullPath = fn;
+            d.parentFullPath = "";
             TsmiSaveFile_Click(null, null);
         }
 
@@ -1082,7 +1085,20 @@ namespace mml2vgmIDE
                 if (idc == null) return;
                 if (!(idc is FrmEditor)) return;
 
-                string fileName = ((Document)((FrmEditor)idc).Tag).gwiFullPath;
+                string fileName;
+                string parentFullPath;
+
+                if (((Document)((FrmEditor)idc).Tag).parentFullPath == "")
+                {
+                    fileName = ((Document)((FrmEditor)idc).Tag).gwiFullPath;
+                    parentFullPath = fileName;
+                }
+                else
+                {
+                    fileName = ((Document)((FrmEditor)idc).Tag).parentFullPath;
+                    parentFullPath = ((Document)((FrmEditor)idc).Tag).parentFullPath;
+                }
+
                 fileName = Path.Combine(
                     Path.GetDirectoryName(fileName)
                     , Path.GetFileNameWithoutExtension(fileName) 
@@ -1094,6 +1110,7 @@ namespace mml2vgmIDE
                 dc.editor.Show(dpMain, DockState.Document);
                 dc.editor.main = this;
                 dc.editor.document = dc;
+                dc.parentFullPath = parentFullPath;
 
                 frmFolderTree.tvFolderTree.Nodes.Clear();
                 frmFolderTree.tvFolderTree.Nodes.Add(dc.gwiTree);
