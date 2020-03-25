@@ -501,14 +501,32 @@ namespace mml2vgmIDE
             DialogResult res = fsb.ShowDialog();
             if (res == DialogResult.OK)
             {
-                searchTextPattern = fsb.tbPattern.Text;
+                searchTextPattern = fsb.cmbPattern.Text;
+                AddSearchWordHistory(searchTextPattern);
                 ActionFindNext(ui);
             }
             else if (res == DialogResult.Yes)
             {
-                searchTextPattern = fsb.tbPattern.Text;
+                searchTextPattern = fsb.cmbPattern.Text;
+                AddSearchWordHistory(searchTextPattern);
                 ActionFindPrevious(ui);
             }
+        }
+
+        private void AddSearchWordHistory(string searchTextPattern)
+        {
+            if (setting.other.SearchWordHistory.Contains(searchTextPattern))
+            {
+                setting.other.SearchWordHistory.Remove(searchTextPattern);
+            }
+
+            setting.other.SearchWordHistory.Insert(0, searchTextPattern);
+
+            while (setting.other.SearchWordHistory.Count > 100)
+            {
+                setting.other.SearchWordHistory.RemoveAt(100);
+            }
+
         }
 
         public void ActionJumpAnchorNext(IUserInterface ui)

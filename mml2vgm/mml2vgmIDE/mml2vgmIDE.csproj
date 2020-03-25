@@ -111,6 +111,7 @@
     <Compile Include="Audio.cs" />
     <Compile Include="ChipLEDs.cs" />
     <Compile Include="ChipRegister.cs" />
+    <Compile Include="CompileManager.cs" />
     <Compile Include="Driver\mucomMub.cs" />
     <Compile Include="Driver\ZGM\ZgmChip\C140.cs" />
     <Compile Include="Driver\ZGM\ZgmChip\HuC6280.cs" />
@@ -311,6 +312,9 @@
     <EmbeddedResource Include="form\FrmMain.ja-JP.resx">
       <DependentUpon>FrmMain.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="form\FrmMain.ja.resx">
+      <DependentUpon>FrmMain.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="form\FrmMain.zh-Hant.resx">
       <DependentUpon>FrmMain.cs</DependentUpon>
     </EmbeddedResource>
@@ -440,6 +444,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Resource\ClearLog.png" />
+    <None Include="Resource\Comp48.ico" />
     <Content Include="Resource\Filter.png" />
     <Content Include="Resource\planeMIDIKB.png" />
     <Content Include="Resource\planeMixer.png" />

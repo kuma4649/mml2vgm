@@ -225,6 +225,16 @@ namespace mml2vgmIDE.Properties {
         }
         
         /// <summary>
+        ///   (アイコン) に類似した型 System.Drawing.Icon のローカライズされたリソースを検索します。
+        /// </summary>
+        internal static System.Drawing.Icon Comp48 {
+            get {
+                object obj = ResourceManager.GetObject("Comp48", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
         /// </summary>
         internal static System.Drawing.Bitmap Error {
@@ -378,6 +388,16 @@ namespace mml2vgmIDE.Properties {
             get {
                 object obj = ResourceManager.GetObject("F12", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   (アイコン) に類似した型 System.Drawing.Icon のローカライズされたリソースを検索します。
+        /// </summary>
+        internal static System.Drawing.Icon Feli48 {
+            get {
+                object obj = ResourceManager.GetObject("Feli48", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
             }
         }
         

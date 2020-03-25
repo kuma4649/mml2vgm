@@ -119,7 +119,7 @@
   </resheader>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="toolStripStatusLabel1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>128, 17</value>
+    <value>39, 17</value>
   </data>
   <data name="tssbOpen.Size" type="System.Drawing.Size, System.Drawing">
     <value>63, 20</value>
@@ -137,9 +137,15 @@
     <value>次を検索</value>
   </data>
   <data name="tssbCompile.Size" type="System.Drawing.Size, System.Drawing">
-    <value>68, 20</value>
+    <value>90, 20</value>
   </data>
   <data name="tssbCompile.Text" xml:space="preserve">
+    <value>コンパイル</value>
+  </data>
+  <data name="tssbPlay.Size" type="System.Drawing.Size, System.Drawing">
+    <value>68, 20</value>
+  </data>
+  <data name="tssbPlay.Text" xml:space="preserve">
     <value>再生</value>
   </data>
   <data name="tssbStop.Text" xml:space="preserve">

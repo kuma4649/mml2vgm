@@ -54,6 +54,7 @@ namespace mml2vgmIDE
         private mucomManager mucom = null;
         private musicDriverInterface.MmlDatum[] mubData = null;
         private string m98ResultMucString = null;
+        private CompileManager compileManager = null;
 
         private object traceInfoLockObj = new object();
         private bool traceInfoSw = false;
@@ -84,6 +85,7 @@ namespace mml2vgmIDE
 
             DrawBuff.Init();
             //Init();
+            compileManager = new CompileManager(Disp);
         }
 
         public void windowsMessage(ref Message m)
@@ -651,7 +653,7 @@ namespace mml2vgmIDE
             TsmiFindNext_Click(null, null);
         }
 
-        private void TssbCompile_ButtonClick(object sender, EventArgs e)
+        private void TssbPlay_ButtonClick(object sender, EventArgs e)
         {
             Compile(true, ctrl, shift, false, false);
             //TsmiCompileAndPlay_Click(null, null);
@@ -677,10 +679,10 @@ namespace mml2vgmIDE
             slow();
         }
 
-        private void TssbPlay_ButtonClick(object sender, EventArgs e)
-        {
-            TsmiCompileAndTracePlay_Click(null, null);
-        }
+        //private void TssbPlay_ButtonClick(object sender, EventArgs e)
+        //{
+            //TsmiCompileAndTracePlay_Click(null, null);
+        //}
 
         private void TssbSkipPlay_ButtonClick(object sender, EventArgs e)
         {
@@ -696,7 +698,7 @@ namespace mml2vgmIDE
         {
             ctrl = (e.KeyData & Keys.Control) == Keys.Control;
             shift = (e.KeyData & Keys.Shift) == Keys.Shift;
-            tssbCompile.Text = (ctrl ? "トレース+" : "") + (shift ? "スキップ+" : "") + "再生";
+            tssbPlay.Text = (ctrl ? "トレース+" : "") + (shift ? "スキップ+" : "") + "再生";
 
             switch (e.KeyCode)
             {
@@ -717,6 +719,9 @@ namespace mml2vgmIDE
                     {
                         TsmiSaveFile_Click(null, null);
                     }
+                    break;
+                case Keys.F4:
+                    Comp();
                     break;
                 case Keys.F5:
                     Compile(true, ctrl, shift, false, false);
@@ -759,7 +764,7 @@ namespace mml2vgmIDE
 
             ctrl = (e.KeyData & Keys.Control) == Keys.Control;
             shift = (e.KeyData & Keys.Shift) == Keys.Shift;
-            tssbCompile.Text = (ctrl ? "トレース+" : "") + (shift ? "スキップ+" : "") + "再生";
+            tssbPlay.Text = (ctrl ? "トレース+" : "") + (shift ? "スキップ+" : "") + "再生";
 
         }
 
@@ -1302,7 +1307,7 @@ namespace mml2vgmIDE
         }
 
         private void finishedCompileGWI()
-        { 
+        {
 
             if (mv == null)
             {
@@ -1342,43 +1347,43 @@ namespace mml2vgmIDE
 
             frmLog.tbLog.AppendText(msg.get("I0107"));
 
-                foreach (msgInfo mes in msgBox.getErr())
-                {
-                    frmErrorList.dataGridView1.Rows.Add("Error", mes.filename, mes.line == -1 ? "-" : (mes.line + 1).ToString(), mes.body);
-                    //frmConsole.textBox1.AppendText(string.Format(msg.get("I0109"), mes));
-                }
+            foreach (msgInfo mes in msgBox.getErr())
+            {
+                frmErrorList.dataGridView1.Rows.Add("Error", mes.filename, mes.line == -1 ? "-" : (mes.line + 1).ToString(), mes.body);
+                //frmConsole.textBox1.AppendText(string.Format(msg.get("I0109"), mes));
+            }
 
-                foreach (msgInfo mes in msgBox.getWrn())
-                {
-                    frmErrorList.dataGridView1.Rows.Add("Warning", mes.filename, mes.line == -1 ? "-" : (mes.line + 1).ToString(), mes.body);
-                    //frmConsole.textBox1.AppendText(string.Format(msg.get("I0108"), mes));
-                }
+            foreach (msgInfo mes in msgBox.getWrn())
+            {
+                frmErrorList.dataGridView1.Rows.Add("Warning", mes.filename, mes.line == -1 ? "-" : (mes.line + 1).ToString(), mes.body);
+                //frmConsole.textBox1.AppendText(string.Format(msg.get("I0108"), mes));
+            }
 
-                frmLog.tbLog.AppendText("\r\n");
-                frmLog.tbLog.AppendText(string.Format(msg.get("I0110"), msgBox.getErr().Length, msgBox.getWrn().Length));
+            frmLog.tbLog.AppendText("\r\n");
+            frmLog.tbLog.AppendText(string.Format(msg.get("I0110"), msgBox.getErr().Length, msgBox.getWrn().Length));
 
-                if (mv.desVGM.loopSamples != -1)
-                {
-                    frmLog.tbLog.AppendText(string.Format(msg.get("I0111"), mv.desVGM.loopClock));
-                    if (mv.desVGM.info.format == enmFormat.VGM)
-                        frmLog.tbLog.AppendText(string.Format(msg.get("I0112")
-                            , mv.desVGM.loopSamples
-                            , mv.desVGM.loopSamples / 44100L));
-                    else
-                        frmLog.tbLog.AppendText(string.Format(msg.get("I0112")
-                            , mv.desVGM.loopSamples
-                            , mv.desVGM.loopSamples / (mv.desVGM.info.xgmSamplesPerSecond)));
-                }
-
-                frmLog.tbLog.AppendText(string.Format(msg.get("I0113"), mv.desVGM.lClock));
+            if (mv.desVGM.loopSamples != -1)
+            {
+                frmLog.tbLog.AppendText(string.Format(msg.get("I0111"), mv.desVGM.loopClock));
                 if (mv.desVGM.info.format == enmFormat.VGM)
-                    frmLog.tbLog.AppendText(string.Format(msg.get("I0114")
-                        , mv.desVGM.dSample
-                        , mv.desVGM.dSample / 44100L));
+                    frmLog.tbLog.AppendText(string.Format(msg.get("I0112")
+                        , mv.desVGM.loopSamples
+                        , mv.desVGM.loopSamples / 44100L));
                 else
-                    frmLog.tbLog.AppendText(string.Format(msg.get("I0114")
-                        , mv.desVGM.dSample
-                        , mv.desVGM.dSample / (mv.desVGM.info.xgmSamplesPerSecond)));
+                    frmLog.tbLog.AppendText(string.Format(msg.get("I0112")
+                        , mv.desVGM.loopSamples
+                        , mv.desVGM.loopSamples / (mv.desVGM.info.xgmSamplesPerSecond)));
+            }
+
+            frmLog.tbLog.AppendText(string.Format(msg.get("I0113"), mv.desVGM.lClock));
+            if (mv.desVGM.info.format == enmFormat.VGM)
+                frmLog.tbLog.AppendText(string.Format(msg.get("I0114")
+                    , mv.desVGM.dSample
+                    , mv.desVGM.dSample / 44100L));
+            else
+                frmLog.tbLog.AppendText(string.Format(msg.get("I0114")
+                    , mv.desVGM.dSample
+                    , mv.desVGM.dSample / (mv.desVGM.info.xgmSamplesPerSecond)));
 
             frmLog.tbLog.AppendText(msg.get("I0126"));
 
@@ -2390,7 +2395,7 @@ namespace mml2vgmIDE
         {
             tssbOpen.Visible = visible;
             tssbSave.Visible = visible;
-            tssbCompile.Visible = visible;
+            tssbPlay.Visible = visible;
             //tssbTracePlay.Visible = visible;
             tssbStop.Visible = visible;
             tssbSlow.Visible = visible;
@@ -2400,7 +2405,7 @@ namespace mml2vgmIDE
 
             tssbOpen.DisplayStyle = style;
             tssbSave.DisplayStyle = style;
-            tssbCompile.DisplayStyle = style;
+            tssbPlay.DisplayStyle = style;
             //tssbTracePlay.DisplayStyle = style;
             tssbStop.DisplayStyle = style;
             tssbSlow.DisplayStyle = style;
@@ -2660,5 +2665,17 @@ namespace mml2vgmIDE
             }
         }
 
+        private void tssbCompile_ButtonClick_1(object sender, EventArgs e)
+        {
+            Comp();
+        }
+
+        private void Comp()
+        {
+            IDockContent dc = GetActiveDockContent();
+            if (dc == null) return;
+            if (!(dc is FrmEditor)) return;
+            compileManager.RequestCompile(((FrmEditor)dc).document, ((FrmEditor)dc).azukiControl.Text + "");
+        }
     }
 }

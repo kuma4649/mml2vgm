@@ -1652,6 +1652,7 @@ namespace mml2vgmIDE
 
             public bool LogWarning { get; set; } = false;
             public int LogLevel { get; set; } = 8;//8:INFO
+            public List<string> SearchWordHistory { get; set; }
 
             public Other Copy()
             {
