@@ -69,12 +69,13 @@ namespace Core
             Ch = new ClsChannel[ChMax];
             SetPartToCh(Ch, initialPartName);
             int i = 0;
+            /*
             foreach (ClsChannel ch in Ch)
             {
-                ch.Type = i < 9 ? enmChannelType.FMOPL : enmChannelType.RHYTHM;
+                ch.Type = i < 18 ? enmChannelType.FMOPL : enmChannelType.RHYTHM;
                 ch.chipNumber = chipID == 1;
                 i++;
-            }
+            }*/
 
         }
 
@@ -95,7 +96,7 @@ namespace Core
 
             if (!use) return;
 
-            parent.OutData((MML)null, port[0], 0x05, 0x01);
+            parent.OutData((MML)null, port[1], 0x05, 0x01);
 
             //FM Off
             outYMF262AllKeyOff(null, lstPartWork[0]);
@@ -116,7 +117,7 @@ namespace Core
             // 0x20
             parent.OutData(
                 mml,
-                port[0]
+                getPortFromCh(pw.ch)
                 , adr
                 , (byte)((AM ? 0x80 : 0) + (VIB ? 0x40 : 0) + (EG ? 0x20 : 0) + (KS ? 0x10 : 0) + (mul & 0xf))
                 );
@@ -138,32 +139,48 @@ namespace Core
 
         public (byte,byte) ChnToBaseReg(int chn)
         {
+            Console.Write("Enter ChnToBaseReg: Ch{0}",chn+1);
             byte carrier = 0x20, modulator = 0x23;
-            if (chn > 9) chn -= 9; // A1=LでもA1=Hでもいっしょ。
+            if (chn >= 9) chn -= 9; // A1=LでもA1=Hでもいっしょ。
 
-            if(chn <= 3)
+            if(chn < 3)
             {
+                Console.Write(" {0} P1\n",chn);
                 carrier += (byte)chn;
                 modulator += (byte)chn;
-            } else if(chn <= 6)
+            } else if(chn < 6)
             {
-                carrier += 8;
-                modulator += 8;
+                Console.Write(" {0} P2\n",chn);
+                carrier = 0x28;
+                modulator = 0x2B;
 
-                carrier += (byte)(chn-3);
-                modulator += (byte)(chn-3);
-            } else if(chn <= 9)
+                carrier += (byte)(chn%3);
+                modulator += (byte)(chn%3);
+            } else if(chn < 9)
             {
-                carrier += 16;
-                modulator += 16;
+                Console.Write(" {0} P3\n",chn);
+                carrier = 0x30;
+                modulator = 0x33;
 
-                carrier += (byte)(chn - 6);
-                modulator += (byte)(chn - 6);
+                carrier += (byte)(chn%3);
+                modulator += (byte)(chn%3);
             }
-            
+            Console.WriteLine("C{0:X}h M{1:X}h", carrier, modulator);
+
             return (carrier, modulator);
         }
 
+        public byte[] getPortFromCh(int ch)
+        {
+
+            if (ch >= 9)
+            {
+                //Console.WriteLine("getPortFromCh port1");
+                return port[1];
+            }
+            //Console.WriteLine("getPortFromCh port0");
+            return port[0];
+        }
 
         public void outYMF262SetInstrument(partWork pw, MML mml, int n, int modeBeforeSend)
         {
@@ -233,23 +250,24 @@ namespace Core
                     , parent.instFM[n][ope * 12 + 11] != 0 //KS
                     , parent.instFM[n][ope * 12 + 7] & 0xf //MT
                     );
-                parent.OutData(mml, port[0], (byte)(targetBaseReg + 0x40), (byte)((
+                parent.OutData(mml, getPortFromCh(pw.ch), (byte)(targetBaseReg + 0x40), (byte)((
                     (parent.instFM[n][ope * 12 + 1] & 0xf) << 4) //AR
                     | (parent.instFM[n][ope * 12 + 2] & 0xf) // DR
                     ));
-                parent.OutData(mml, port[0], (byte)(targetBaseReg + 0x60), (byte)((
+                parent.OutData(mml, getPortFromCh(pw.ch), (byte)(targetBaseReg + 0x60), (byte)((
                     (parent.instFM[n][ope * 12 + 3] & 0xf) << 4) //SL
                     | (parent.instFM[n][ope * 12 + 4] & 0xf) // RR
                     ));
 
-                parent.OutData(mml, port[0], (byte)(targetBaseReg + 0x20), (byte)((
+                parent.OutData(mml, getPortFromCh(pw.ch), (byte)(targetBaseReg + 0x20), (byte)((
                     (parent.instFM[n][ope * 12 + 5] & 0x3) << 6)  //KL(M)
                     | (parent.instFM[n][ope*12+6] & 0x3f) //TL
                     ));
             }
-                parent.OutData(mml, port[0], (byte)(pw.ch%8+0xC0), (byte)((
+                parent.OutData(mml, getPortFromCh(pw.ch), (byte)(pw.ch%9+0xC0), (byte)((
                     (parent.instFM[n][26] & 0x07)<<1
                     | parent.instFM[n][25] & 0x01
+                    | 0x30 // PAN
                     )));
             
             pw.op1ml = parent.instFM[n][0 * 11 + 7];
@@ -499,7 +517,7 @@ namespace Core
         {
             byte adr = (byte)mml.args[0];
             byte dat = (byte)mml.args[1];
-            parent.OutData(mml, port[0], adr, dat);
+            parent.OutData(mml, getPortFromCh(pw.ch), adr, dat);
         }
 
         public override void CmdLoopExtProc(partWork pw, MML mml)
@@ -516,8 +534,8 @@ namespace Core
         {
             foreach (partWork pw in lstPartWork)
             {
-                if (pw.Type == enmChannelType.FMOPL)
-                {
+                //if (pw.Type == enmChannelType.FMOPL)
+                //{
                     if (pw.beforeEnvInstrument != pw.envInstrument || pw.beforeVolume != pw.volume)
                     {
                         pw.beforeEnvInstrument = pw.envInstrument;
@@ -532,8 +550,8 @@ namespace Core
                     if (pw.keyOff)
                     {
                         pw.keyOff = false;
-                        parent.OutData(mml, port[0]
-                            , (byte)(0xB0 + pw.ch)
+                        parent.OutData(mml, getPortFromCh(pw.ch)
+                            , (byte)(0xB0 + pw.ch%9)
                             , (byte)(
                                 ((pw.freq >> 8) & 0x1f)
                               )
@@ -544,9 +562,9 @@ namespace Core
                     {
                         pw.beforeFNum = pw.freq | (pw.keyOn ? 0x1000 : 0x0000);
 
-                        parent.OutData(mml, port[0], (byte)(0xa0 + pw.ch%8), (byte)pw.freq);
-                        parent.OutData(mml, port[0]
-                            , (byte)(0xB0 + pw.ch%8)
+                        parent.OutData(mml, getPortFromCh(pw.ch), (byte)(0xa0 + pw.ch%9), (byte)pw.freq);
+                        parent.OutData(mml, getPortFromCh(pw.ch)
+                            , (byte)(0xB0 + pw.ch%9)
                             , (byte)(
                                 ((pw.freq >> 8) & 0x1f)
                                 | (pw.keyOn ? 0x20 : 0x00)
@@ -554,7 +572,7 @@ namespace Core
                               )
                             );
                     }
-                }
+                //}
 
             }
 /*
