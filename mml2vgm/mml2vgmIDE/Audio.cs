@@ -3512,7 +3512,7 @@ namespace mml2vgmIDE
 
                 Paused = false;
 
-                Thread.Sleep(100);
+                //Thread.Sleep(100);
 
                 log.Write("初期化完了");
 

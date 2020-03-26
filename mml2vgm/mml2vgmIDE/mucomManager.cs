@@ -135,6 +135,32 @@ namespace mml2vgmIDE
             return ret;
         }
 
+        public MmlDatum[] compileFromSrcText(string srcText, string wrkMUCFullPath)
+        {
+            if (!ok) return null;
+
+            this.wrkMUCFullPath = wrkMUCFullPath;
+            compiler.Init();
+            compiler.SetCompileSwitch("IDE");
+
+            MmlDatum[] ret;
+            musicDriverInterface.Log.writeMethod = disp;
+            musicDriverInterface.Log.off = 0;
+            if (!setting.other.LogWarning)
+            {
+                musicDriverInterface.Log.off = (int)musicDriverInterface.LogLevel.WARNING;
+            }
+            if (setting.other.LogLevel == (int)LogLevel.INFO) musicDriverInterface.Log.level = LogLevel.INFO;
+            else if (setting.other.LogLevel == (int)LogLevel.DEBUG) musicDriverInterface.Log.level = LogLevel.DEBUG;
+            else if (setting.other.LogLevel == (int)LogLevel.TRACE) musicDriverInterface.Log.level = LogLevel.TRACE;
+
+            byte[] src = Encoding.GetEncoding(932).GetBytes(srcText);
+            using (MemoryStream sourceMML = new MemoryStream(src))
+                ret = compiler.Compile(sourceMML, appendFileReaderCallback);// wrkMUCFullPath, disp);
+            return ret;
+        }
+
+
         private Stream appendFileReaderCallback(string arg)
         {
 

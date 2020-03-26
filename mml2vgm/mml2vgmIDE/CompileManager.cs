@@ -48,10 +48,12 @@ namespace mml2vgmIDE
             }
         }
         private Action<string> disp = null;
+        private mucomManager mucom = null;
 
-        public CompileManager(Action<string> disp)
+        public CompileManager(Action<string> disp,mucomManager mucom)
         {
             this.disp = disp;
+            this.mucom = mucom;
         }
 
         public void RequestCompile(Document doc, string srcText)
@@ -115,8 +117,62 @@ namespace mml2vgmIDE
                     Compile_GWI(qi);
                     break;
                 case ".muc":
+                    Compile_MUC(qi);
                     break;
             }
+
+        }
+
+        private void Compile_MUC(queItem qi)
+        {
+            if (mucom == null)
+            {
+                qi.doc.compileStatus = Document.EnmCompileStatus.Success;
+                return;
+            }
+
+            string tempPath = Path.Combine(Common.GetApplicationDataFolder(true), "temp", Path.GetFileName(qi.doc.gwiFullPath));
+            string wrkPath = Path.GetDirectoryName(qi.doc.gwiFullPath);
+            msgBox.clear();
+            musicDriverInterface.MmlDatum[] mubData = null;
+            bool isSuccess = true;
+
+            try
+            {
+                mubData = mucom.compileFromSrcText(qi.srcText, wrkPath);
+            }
+            catch
+            {
+                isSuccess = false;
+            }
+            if (mubData == null) isSuccess = false;
+
+            qi.doc.compiledData = mubData;
+            qi.doc.compileStatus = isSuccess ? Document.EnmCompileStatus.Success : Document.EnmCompileStatus.Failed;
+
+            musicDriverInterface.CompilerInfo ci = mucom.GetCompilerInfo();
+
+            List<msgInfo> lstMsgInfo = new List<msgInfo>();
+            if (ci != null && ci.errorList != null)
+            {
+                foreach (Tuple<int, int, string> mes in ci.errorList)
+                {
+                    msgInfo mi = new msgInfo("", mes.Item1, mes.Item2, 0, mes.Item3);
+                    lstMsgInfo.Add(mi);
+                }
+            }
+            qi.doc.errBox = lstMsgInfo.ToArray();
+
+            lstMsgInfo.Clear();
+            if (ci != null && ci.warningList != null)
+            {
+                foreach (Tuple<int, int, string> mes in ci.warningList)
+                {
+                    msgInfo mi = new msgInfo("", mes.Item1, mes.Item2, 0, mes.Item3);
+                    lstMsgInfo.Add(mi);
+                }
+            }
+            qi.doc.wrnBox = lstMsgInfo.ToArray();
 
         }
 

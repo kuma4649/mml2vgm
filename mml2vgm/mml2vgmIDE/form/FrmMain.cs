@@ -50,6 +50,7 @@ namespace mml2vgmIDE
         private MDChipParams newParam = new MDChipParams();
         private bool ctrl = false;
         private bool shift = false;
+        private bool alt = false;
         private ChannelInfo defaultChannelInfo = null;
         private mucomManager mucom = null;
         private musicDriverInterface.MmlDatum[] mubData = null;
@@ -85,7 +86,6 @@ namespace mml2vgmIDE
 
             DrawBuff.Init();
             //Init();
-            compileManager = new CompileManager(Disp);
         }
 
         public void windowsMessage(ref Message m)
@@ -158,6 +158,7 @@ namespace mml2vgmIDE
             UpdateControl();
             Core.Common.CheckSoXVersion(System.Windows.Forms.Application.StartupPath, Disp);
             CheckAndLoadMucomDotNET(System.Windows.Forms.Application.StartupPath, Disp);
+            compileManager = new CompileManager(Disp, mucom);
             OpenLatestFile();
         }
 
@@ -698,6 +699,7 @@ namespace mml2vgmIDE
         {
             ctrl = (e.KeyData & Keys.Control) == Keys.Control;
             shift = (e.KeyData & Keys.Shift) == Keys.Shift;
+            alt = (e.KeyData & Keys.Alt) == Keys.Alt;
             tssbPlay.Text = (ctrl ? "トレース+" : "") + (shift ? "スキップ+" : "") + "再生";
 
             switch (e.KeyCode)
@@ -751,10 +753,58 @@ namespace mml2vgmIDE
                         ((FrmEditor)dc).Close();
                     }
                     break;
+                case Keys.D1:
+                    if (ctrl) frmPartCounter.ClickSOLO(0);
+                    else if (alt) frmPartCounter.ClickMUTE(0);
+                    break;
+                case Keys.D2:
+                    if (ctrl) frmPartCounter.ClickSOLO(1);
+                    else if (alt) frmPartCounter.ClickMUTE(1);
+                    break;
+                case Keys.D3:
+                    if (ctrl) frmPartCounter.ClickSOLO(2);
+                    else if (alt) frmPartCounter.ClickMUTE(2);
+                    break;
+                case Keys.D4:
+                    if (ctrl) frmPartCounter.ClickSOLO(3);
+                    else if (alt) frmPartCounter.ClickMUTE(3);
+                    break;
+                case Keys.D5:
+                    if (ctrl) frmPartCounter.ClickSOLO(4);
+                    else if (alt) frmPartCounter.ClickMUTE(4);
+                    break;
+                case Keys.D6:
+                    if (ctrl) frmPartCounter.ClickSOLO(5);
+                    else if (alt) frmPartCounter.ClickMUTE(5);
+                    break;
+                case Keys.D7:
+                    if (ctrl) frmPartCounter.ClickSOLO(6);
+                    else if (alt) frmPartCounter.ClickMUTE(6);
+                    break;
+                case Keys.D8:
+                    if (ctrl) frmPartCounter.ClickSOLO(7);
+                    else if (alt) frmPartCounter.ClickMUTE(7);
+                    break;
+                case Keys.D9:
+                    if (ctrl) frmPartCounter.ClickSOLO(8);
+                    else if (alt) frmPartCounter.ClickMUTE(8);
+                    break;
+                case Keys.D0:
+                    if (ctrl) frmPartCounter.ClickSOLO(9);
+                    else if (alt) frmPartCounter.ClickMUTE(9);
+                    break;
+                case Keys.OemMinus://0のとなりの-キー
+                    if (ctrl) frmPartCounter.ClickSOLO(10);
+                    else if (alt) frmPartCounter.ClickMUTE(10);
+                    break;
+                case Keys.Oem5://bsのとなりの\キー
+                    if (ctrl) frmPartCounter.ClickSOLO(-1);
+                    else if (alt) frmPartCounter.ClickMUTE(-1);
+                    break;
 
                 default:
                     //↓KeyData確認用
-                    //log.Write(string.Format("動作未定義のキー：{0}",e.KeyData));
+                    log.Write(string.Format("動作未定義のキー：{0}",e.KeyData));
                     break;
             }
         }
@@ -974,7 +1024,8 @@ namespace mml2vgmIDE
                         return;
                     }
 
-                    File.WriteAllText(tempPath, ((FrmEditor)dc).azukiControl.Text, Encoding.GetEncoding(932));
+                    activeMMLTextLines = new string[] { ((FrmEditor)dc).azukiControl.Text };
+                    //File.WriteAllText(tempPath, ((FrmEditor)dc).azukiControl.Text, Encoding.GetEncoding(932));
                 }
 
                 args = new string[2];
@@ -1153,12 +1204,6 @@ namespace mml2vgmIDE
 
             msgBox.clear();
 
-            //string desfn = Path.ChangeExtension(arg, Properties.Resources.ExtensionVGM);
-            //if (tsbToVGZ.Checked)
-            //{
-            //desfn = Path.ChangeExtension(arg, Properties.Resources.ExtensionVGZ);
-            //}
-
             string ext = Path.GetExtension(args[1]);
             switch (ext)
             {
@@ -1220,7 +1265,7 @@ namespace mml2vgmIDE
 
             try
             {
-                mubData = mucom.compile(args[1], wrkPath);
+                mubData = mucom.compileFromSrcText(activeMMLTextLines[0], wrkPath);
             }
             catch
             {
@@ -1949,7 +1994,7 @@ namespace mml2vgmIDE
 
                 Audio.SetVGMBuffer(format, srcBuf);
 
-                for (int i = 0; i < 100; i++)
+                //for (int i = 0; i < 100; i++)
                 {
                     Thread.Sleep(1);
                     Application.DoEvents();
@@ -2046,7 +2091,7 @@ namespace mml2vgmIDE
 
                 Audio.SetVGMBuffer(format, mubData, wrkPath, fn);
 
-                for (int i = 0; i < 100; i++)
+                //for (int i = 0; i < 100; i++)
                 {
                     Thread.Sleep(1);
                     Application.DoEvents();

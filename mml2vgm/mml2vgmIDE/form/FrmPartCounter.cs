@@ -375,7 +375,7 @@ namespace mml2vgmIDE
             ClickMUTE(e.RowIndex);
         }
 
-        private void ClickSOLO(int rowIndex)
+        public void ClickSOLO(int rowIndex)
         {
             if (rowIndex < 0)
             {
@@ -390,6 +390,8 @@ namespace mml2vgmIDE
                 SoloMode = false;
                 return;
             }
+
+            if (dgvPartCounter.Rows.Count < rowIndex + 1) return;
 
             bool nowSolo = (string)dgvPartCounter.Rows[rowIndex].Cells["ClmSolo"].Value == "S";
             //SOLOモードではなく、SOLOではない場合はチェックを行う
@@ -421,7 +423,7 @@ namespace mml2vgmIDE
             }
         }
 
-        private void ClickMUTE(int rowIndex)
+        public void ClickMUTE(int rowIndex)
         {
             if (rowIndex < 0)
             {
@@ -434,6 +436,8 @@ namespace mml2vgmIDE
                 }
                 return;
             }
+
+            if (dgvPartCounter.Rows.Count < rowIndex + 1) return;
 
             bool nowMute = (string)dgvPartCounter.Rows[rowIndex].Cells["ClmMute"].Value == "M";
             dgvPartCounter.Rows[rowIndex].Cells["ClmMute"].Value = nowMute ? "" : "M";
