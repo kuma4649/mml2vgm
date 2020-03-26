@@ -1006,6 +1006,7 @@ namespace mml2vgmIDE
             stop();
 
             IDockContent dc = GetActiveDockContent();
+            bool isMuc = false;
 
             if (text == null)
             {
@@ -1025,7 +1026,7 @@ namespace mml2vgmIDE
                     }
 
                     activeMMLTextLines = new string[] { ((FrmEditor)dc).azukiControl.Text };
-                    //File.WriteAllText(tempPath, ((FrmEditor)dc).azukiControl.Text, Encoding.GetEncoding(932));
+                    isMuc = true;
                 }
 
                 args = new string[2];
@@ -1071,13 +1072,21 @@ namespace mml2vgmIDE
                     int row, col;
                     ac.GetLineColumnIndexFromCharIndex(ci, out row, out col);
                     caretPoint = new Point(col, row);
+                    if (isMuc)
+                    {
+                        caretPoint.Y++;
+                    }
                     int st = ac.GetLineHeadIndexFromCharIndex(ci);
                     int li = ac.GetLineIndexFromCharIndex(ci);
                     //int ed = st + ac.GetLineLength(li);
                     string line = ac.GetTextInRange(st, ci);
                     if (line == null || line.Length < 1) doSkip = false;
                     //先頭の文字が'ではないときは既存の動作
-                    else if (line[0] != '\'') doSkip = false;
+                    else
+                    {
+                        if (!isMuc && line[0] != '\'') doSkip = false;
+                        if (isMuc && (line[0] < 'A' || line[0] > 'K')) doSkip = false;
+                    }
                 }
             }
             frmPartCounter.ClearCounter();
@@ -1265,7 +1274,7 @@ namespace mml2vgmIDE
 
             try
             {
-                mubData = mucom.compileFromSrcText(activeMMLTextLines[0], wrkPath);
+                mubData = mucom.compileFromSrcText(activeMMLTextLines[0], wrkPath, doSkip ? caretPoint : Point.Empty);
             }
             catch
             {

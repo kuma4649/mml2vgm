@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -135,13 +136,17 @@ namespace mml2vgmIDE
             return ret;
         }
 
-        public MmlDatum[] compileFromSrcText(string srcText, string wrkMUCFullPath)
+        public MmlDatum[] compileFromSrcText(string srcText, string wrkMUCFullPath, Point poi)
         {
             if (!ok) return null;
 
             this.wrkMUCFullPath = wrkMUCFullPath;
             compiler.Init();
             compiler.SetCompileSwitch("IDE");
+            if(poi!=Point.Empty)
+            {
+                compiler.SetCompileSwitch(string.Format("SkipPoint=R{0}:C{1}", poi.Y, poi.X));
+            }
 
             MmlDatum[] ret;
             musicDriverInterface.Log.writeMethod = disp;

@@ -1,6 +1,7 @@
 ﻿using Core;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -139,7 +140,7 @@ namespace mml2vgmIDE
 
             try
             {
-                mubData = mucom.compileFromSrcText(qi.srcText, wrkPath);
+                mubData = mucom.compileFromSrcText(qi.srcText, wrkPath, Point.Empty);
             }
             catch
             {
