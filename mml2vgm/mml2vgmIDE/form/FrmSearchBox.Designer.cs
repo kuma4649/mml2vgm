@@ -30,20 +30,15 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmSearchBox));
             this.label1 = new System.Windows.Forms.Label();
-            this.tbPattern = new System.Windows.Forms.TextBox();
             this.btnPrevious = new System.Windows.Forms.Button();
             this.btnNext = new System.Windows.Forms.Button();
+            this.cmbPattern = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // label1
             // 
             resources.ApplyResources(this.label1, "label1");
             this.label1.Name = "label1";
-            // 
-            // tbPattern
-            // 
-            resources.ApplyResources(this.tbPattern, "tbPattern");
-            this.tbPattern.Name = "tbPattern";
             // 
             // btnPrevious
             // 
@@ -59,15 +54,22 @@
             this.btnNext.UseVisualStyleBackColor = true;
             this.btnNext.Click += new System.EventHandler(this.BtnNext_Click);
             // 
+            // cmbPattern
+            // 
+            resources.ApplyResources(this.cmbPattern, "cmbPattern");
+            this.cmbPattern.FormattingEnabled = true;
+            this.cmbPattern.Name = "cmbPattern";
+            this.cmbPattern.KeyDown += new System.Windows.Forms.KeyEventHandler(this.cmbPattern_KeyDown);
+            // 
             // FrmSearchBox
             // 
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.cmbPattern);
             this.Controls.Add(this.btnNext);
             this.Controls.Add(this.btnPrevious);
-            this.Controls.Add(this.tbPattern);
             this.Controls.Add(this.label1);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
             this.Name = "FrmSearchBox";
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -79,6 +81,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button btnPrevious;
         private System.Windows.Forms.Button btnNext;
-        public System.Windows.Forms.TextBox tbPattern;
+        public System.Windows.Forms.ComboBox cmbPattern;
     }
 }

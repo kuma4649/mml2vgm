@@ -2613,7 +2613,7 @@ namespace Core
                 foreach (ClsChip chip in kvp.Value)
                 {
                     if (chip == null) continue;
-                    if (chip.ShortName != "OPN2X" && chip.ShortName != "DCSG")
+                    if (chip.ShortName != "CON" && chip.ShortName != "OPN2X" && chip.ShortName != "DCSG")
                     {
                         foreach (partWork pw in chip.lstPartWork) pw.chip.use = false;
                     }
@@ -2986,6 +2986,7 @@ namespace Core
                 //Console.WriteLine("pw.ch{0} lclock{1}", ym2612x[0].lstPartWork[0].clockCounter, lClock);
 
                 sampleB += info.samplesPerClock * cnt;
+                //Console.WriteLine("samplesPerClock{0}", info.samplesPerClock);
                 OutWaitNSamples((long)(sampleB));
                 sampleB -= (long)sampleB;
             }

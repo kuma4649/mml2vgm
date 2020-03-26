@@ -43,6 +43,8 @@
             this.tssbSave = new System.Windows.Forms.ToolStripSplitButton();
             this.tssbFind = new System.Windows.Forms.ToolStripSplitButton();
             this.tssbCompile = new System.Windows.Forms.ToolStripSplitButton();
+            this.tssbPlay = new System.Windows.Forms.ToolStripSplitButton();
+            this.tssbM98 = new System.Windows.Forms.ToolStripSplitButton();
             this.tssbStop = new System.Windows.Forms.ToolStripSplitButton();
             this.tssbSlow = new System.Windows.Forms.ToolStripSplitButton();
             this.tssbFast = new System.Windows.Forms.ToolStripSplitButton();
@@ -94,7 +96,6 @@
             this.TsmiReference = new System.Windows.Forms.ToolStripMenuItem();
             this.TsmiAbout = new System.Windows.Forms.ToolStripMenuItem();
             this.timer = new System.Windows.Forms.Timer(this.components);
-            this.tssbM98 = new System.Windows.Forms.ToolStripSplitButton();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -125,6 +126,7 @@
             this.tssbSave,
             this.tssbFind,
             this.tssbCompile,
+            this.tssbPlay,
             this.tssbM98,
             this.tssbStop,
             this.tssbSlow,
@@ -193,10 +195,26 @@
             // tssbCompile
             // 
             this.tssbCompile.DropDownButtonWidth = 0;
-            this.tssbCompile.Image = global::mml2vgmIDE.Properties.Resources.F05;
+            this.tssbCompile.Image = global::mml2vgmIDE.Properties.Resources.F04;
             resources.ApplyResources(this.tssbCompile, "tssbCompile");
             this.tssbCompile.Name = "tssbCompile";
-            this.tssbCompile.ButtonClick += new System.EventHandler(this.TssbCompile_ButtonClick);
+            this.tssbCompile.ButtonClick += new System.EventHandler(this.tssbCompile_ButtonClick_1);
+            // 
+            // tssbPlay
+            // 
+            this.tssbPlay.DropDownButtonWidth = 0;
+            this.tssbPlay.Image = global::mml2vgmIDE.Properties.Resources.F05;
+            resources.ApplyResources(this.tssbPlay, "tssbPlay");
+            this.tssbPlay.Name = "tssbPlay";
+            this.tssbPlay.ButtonClick += new System.EventHandler(this.TssbPlay_ButtonClick);
+            // 
+            // tssbM98
+            // 
+            this.tssbM98.DropDownButtonWidth = 0;
+            this.tssbM98.Image = global::mml2vgmIDE.Properties.Resources.F06;
+            resources.ApplyResources(this.tssbM98, "tssbM98");
+            this.tssbM98.Name = "tssbM98";
+            this.tssbM98.ButtonClick += new System.EventHandler(this.tssbM98_ButtonClick);
             // 
             // tssbStop
             // 
@@ -551,14 +569,6 @@
             this.timer.Interval = 16;
             this.timer.Tick += new System.EventHandler(this.Timer_Tick);
             // 
-            // tssbM98
-            // 
-            this.tssbM98.DropDownButtonWidth = 0;
-            this.tssbM98.Image = global::mml2vgmIDE.Properties.Resources.F06;
-            resources.ApplyResources(this.tssbM98, "tssbM98");
-            this.tssbM98.Name = "tssbM98";
-            this.tssbM98.ButtonClick += new System.EventHandler(this.tssbM98_ButtonClick);
-            // 
             // FrmMain
             // 
             resources.ApplyResources(this, "$this");
@@ -612,7 +622,7 @@
         private System.Windows.Forms.ToolStripMenuItem TsmiReference;
         private System.Windows.Forms.ToolStripSplitButton tssbOpen;
         private System.Windows.Forms.ToolStripSplitButton tssbSave;
-        private System.Windows.Forms.ToolStripSplitButton tssbCompile;
+        private System.Windows.Forms.ToolStripSplitButton tssbPlay;
         private System.Windows.Forms.ToolStripStatusLabel tsslCompileError;
         private System.Windows.Forms.ToolStripSplitButton tssbSlow;
         private System.Windows.Forms.ToolStripSplitButton tssbFast;
@@ -649,6 +659,7 @@
         private System.Windows.Forms.ToolStripMenuItem TsmiFindPrevious;
         private System.Windows.Forms.ToolStripSplitButton tssbFind;
         private System.Windows.Forms.ToolStripSplitButton tssbM98;
+        private System.Windows.Forms.ToolStripSplitButton tssbCompile;
     }
 }
 

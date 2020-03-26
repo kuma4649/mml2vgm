@@ -17,13 +17,14 @@ namespace mml2vgmIDE
             NeedCompile,
             Compiling,
             Success,
-            Failed
+            Failed,
+            ReqCompile
         }
 
         public string gwiFullPath = "";
         public string parentFullPath = "";
-        public string[] errBox = null;
-        public string[] wrnBox = null;
+        public msgInfo[] errBox = null;
+        public msgInfo[] wrnBox = null;
         public TreeNode gwiTree = null;
         public FrmEditor editor = null;
         public bool isNew = false;
