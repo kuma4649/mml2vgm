@@ -15,11 +15,22 @@ namespace Core
      * 
     */
 
-    /*
+    /* 2op
         '@ L No
         '@ AR DR SL RR KSL TL MT AM VIB EGT KSR WS
         '@ AR DR SL RR KSL TL MT AM VIB EGT KSR WS
         '@ CNT FB
+
+        
+    */
+
+    /*
+        4op
+        1,2,3 -> 4,5,6
+        10,11,12 -> 13,14,15
+
+        Rythm 7,8,9
+        2op ONLY: 16,17,18
     */
 
     public class YMF262 : ClsChip
