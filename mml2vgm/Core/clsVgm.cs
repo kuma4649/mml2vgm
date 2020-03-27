@@ -1853,9 +1853,9 @@ namespace Core
 
         private Random rnd = new Random();
 
-        public int jumpCommandCounter = 0;
-        public bool useJumpCommand = false;
-        public bool useSkipPlayCommand = false;
+        //public int jumpCommandCounter = 0;
+        //public bool useJumpCommand = false;
+        //public bool useSkipPlayCommand = false;
 
         /// <summary>
         /// ダミーコマンドの総バイト数
@@ -1882,20 +1882,22 @@ namespace Core
         /// </summary>
         public long dummyCmdLoopSamples = 0;
         public long dummyCmdLoopOffsetAddress=0;
+        private double bSample;
 
         public LinePos linePos { get; internal set; }
         public bool isRealTimeMode { get; set; }
         public int ChipCommandSize { get; set; }
         public string wrkPath { get; internal set; }
+        public long jumpPointClock { get; set; } = -1;
 
         public outDatum[] Vgm_getByteData(Dictionary<string, List<MML>> mmlData)
         {
             //スキップ再生の指定がある場合は、キャレット位置まで(SkipPlayコマンドが来るまで)ウェイトの発行をしない。
-            if (doSkip)
-            {
-                useSkipPlayCommand = true;
-            }
-
+            //if (doSkip)
+            //{
+            //useSkipPlayCommand = true;
+            //}
+            jumpPointClock = -1;
             dat = new List<outDatum>();
 
             log.Write("ヘッダー情報作成");
@@ -2050,18 +2052,18 @@ namespace Core
 
                 lClock += waitCounter;
                 dSample += (long)(info.samplesPerClock * waitCounter);
+                bSample += info.samplesPerClock * waitCounter - (double)(long)(info.samplesPerClock * waitCounter);
+                dSample += (long)bSample;
+                bSample -= (long)bSample;
 
-                if (jumpCommandCounter == 0 && !useSkipPlayCommand)
+                bool flg = false;
+                if (ym2612 != null && ym2612[0] != null)
                 {
-                    bool flg = false;
-                    if (ym2612 != null && ym2612[0] != null)
-                    {
-                        if (ym2612[0].lstPartWork[5].pcmWaitKeyOnCounter > 0) flg = true;
-                    }
-
-                    if (flg) OutWaitNSamplesWithPCMSending(ym2612[0].lstPartWork[5], waitCounter); 
-                    else OutWaitNSamples((long)(info.samplesPerClock * waitCounter));
+                    if (ym2612[0].lstPartWork[5].pcmWaitKeyOnCounter > 0) flg = true;
                 }
+
+                if (flg) OutWaitNSamplesWithPCMSending(ym2612[0].lstPartWork[5], waitCounter);
+                else OutWaitNSamples((long)(info.samplesPerClock * waitCounter));
             }
         }
 
@@ -2205,10 +2207,10 @@ namespace Core
                 return;
             }
 
-            if(doSkipStop && !useSkipPlayCommand)
-            {
-                pw.dataEnd = true;
-            }
+            //if(doSkipStop && !useSkipPlayCommand)
+            //{
+                //pw.dataEnd = true;
+            //}
 
             log.Write("パートのデータがない場合は何もしないで次へ");
             if (pw.mmlData == null || pw.mmlData.Count < 1)
@@ -2319,7 +2321,7 @@ namespace Core
             dat[0x1a] = new outDatum(enmMMLType.unknown, null, null, v[2]);
             dat[0x1b] = new outDatum(enmMMLType.unknown, null, null, v[3]);
 
-            if (loopOffset != -1 && (!doSkip && !useJumpCommand)) //!(doSkip && doSkipStop) スキップ時又はJコマンド使用時は　Lコマンドループしない
+            if (loopOffset != -1)
             {
                 //Loop offset
                 v = DivInt2ByteAry((int)(loopOffset - 0x1c));
@@ -2564,10 +2566,11 @@ namespace Core
         {
             if (ym2612x == null || ym2612x[0] == null) return null;
 
-            if (doSkip)
-            {
-                useSkipPlayCommand = true;
-            }
+            //if (doSkip)
+            //{
+            //useSkipPlayCommand = true;
+            //}
+            jumpPointClock = -1;
 
             dat = new List<outDatum>();
             xdat = new List<outDatum>();
@@ -2947,18 +2950,19 @@ namespace Core
                 }
             }
 
-            if (jumpCommandCounter == 0 && !useSkipPlayCommand)
-            {
-                // wait発行
-                lClock += cnt;
-                dSample += (long)(info.samplesPerClock * cnt);
-                //Console.WriteLine("pw.ch{0} lclock{1}", ym2612x[0].lstPartWork[0].clockCounter, lClock);
+            //if (jumpCommandCounter == 0 && !useSkipPlayCommand)
+            //{
+            // wait発行
+            lClock += cnt;
+            //dSample += (long)(info.samplesPerClock * cnt);
+            //Console.WriteLine("pw.ch{0} lclock{1}", ym2612x[0].lstPartWork[0].clockCounter, lClock);
 
-                sampleB += info.samplesPerClock * cnt;
-                //Console.WriteLine("samplesPerClock{0}", info.samplesPerClock);
-                OutWaitNSamples((long)(sampleB));
-                sampleB -= (long)sampleB;
-            }
+            sampleB += info.samplesPerClock * cnt;
+            //Console.WriteLine("samplesPerClock{0}", info.samplesPerClock);
+            OutWaitNSamples((long)(sampleB));
+            dSample += (long)sampleB;
+            sampleB -= (long)sampleB;
+            //}
         }
 
         private List<outDatum> ConvertVGMtoXGM(List<outDatum> src)
@@ -3657,8 +3661,9 @@ namespace Core
                     break;
                 case enmMMLType.JumpPoint:
                     log.Write("JumpPoint");
-                    jumpCommandCounter--;
-                    if (jumpCommandCounter < 0) jumpCommandCounter = 0;
+                    jumpPointClock = (long)dSample;// lClock;
+                    //jumpCommandCounter--;
+                    //if (jumpCommandCounter < 0) jumpCommandCounter = 0;
                     pw.mmlPos++;
                     break;
                 case enmMMLType.NoiseToneMixer:
@@ -3698,11 +3703,13 @@ namespace Core
                     break;
                 case enmMMLType.SkipPlay:
                     log.Write("SkipPlay");
-                    useSkipPlayCommand = false;
-                    if (doSkipStop)
-                    {
-                        pw.dataEnd = true;
-                    }
+                    jumpPointClock = (long)dSample;
+                    //jumpPointClock=lClock;
+                    //useSkipPlayCommand = false;
+                    //if (doSkipStop)
+                    //{
+                    //pw.dataEnd = true;
+                    //}
                     pw.mmlPos++;
                     break;
                 case enmMMLType.ToneDoubler:

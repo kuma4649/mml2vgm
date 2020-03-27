@@ -203,7 +203,7 @@ namespace Core
 
                     Disp(msg.get("I04023"));
                     ZGMmaker zmake = new ZGMmaker();
-                    desVGM.useSkipPlayCommand = doSkip;
+                    desVGM.jumpPointClock = -1;
                     desBuf = zmake.Build(desVGM);
                     Disp(msg.get("I04024"));
 

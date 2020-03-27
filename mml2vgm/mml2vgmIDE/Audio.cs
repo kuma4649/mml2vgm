@@ -99,6 +99,7 @@ namespace mml2vgmIDE
         private static double swFreq = Stopwatch.Frequency;
 
         private static outDatum[] vgmBuf = null;
+        private static long jumpPointClock;
         private static double vgmSpeed;
         private static musicDriverInterface.MmlDatum[] mubBuf = null;
         private static string mubWorkPath;
@@ -661,10 +662,11 @@ namespace mml2vgmIDE
             return EnmRealModel.unknown;
         }
 
-        public static void SetVGMBuffer(EnmFileFormat format, outDatum[] srcBuf)
+        public static void SetVGMBuffer(EnmFileFormat format, outDatum[] srcBuf,long jumpPointClock)
         {
             PlayingFileFormat = format;
             vgmBuf = srcBuf;
+            Audio.jumpPointClock = jumpPointClock;
         }
 
         public static void SetVGMBuffer(EnmFileFormat format, musicDriverInterface.MmlDatum[] srcBuf,string wrkPath,string mubFileName)
@@ -956,7 +958,9 @@ namespace mml2vgmIDE
 
                 if (!driver.init(vgmBuf, chipRegister, new EnmChip[] { EnmChip.YM2612, EnmChip.SN76489 }
                     , (uint)(Common.SampleRate * setting.LatencyEmulation / 1000)
-                    , (uint)(Common.SampleRate * setting.outputDevice.WaitTime / 1000))) return false;
+                    , (uint)(Common.SampleRate * setting.outputDevice.WaitTime / 1000)
+                    , jumpPointClock
+                    )) return false;
 
                 chip = new MDSound.MDSound.Chip();
                 chip.ID = (byte)0;
@@ -1114,7 +1118,9 @@ namespace mml2vgmIDE
                     , chipRegister
                     , new EnmChip[] { EnmChip.YM2203 }// usechip.ToArray()
                     , (uint)(Common.SampleRate * setting.LatencyEmulation / 1000)
-                    , (uint)(Common.SampleRate * setting.outputDevice.WaitTime / 1000)))
+                    , (uint)(Common.SampleRate * setting.outputDevice.WaitTime / 1000)
+                    ,jumpPointClock
+                    ))
                     return false;
 
                 hiyorimiNecessary = setting.HiyorimiMode;
@@ -1966,10 +1972,12 @@ namespace mml2vgmIDE
 
                 if (!driver.init(vgmBuf
                     , chipRegister
-                    
+
                     , new EnmChip[] { EnmChip.YM2203 }// usechip.ToArray()
                     , (uint)(Common.SampleRate * setting.LatencyEmulation / 1000)
-                    , (uint)(Common.SampleRate * setting.outputDevice.WaitTime / 1000)))
+                    , (uint)(Common.SampleRate * setting.outputDevice.WaitTime / 1000)
+                    , jumpPointClock
+                    ))
                     return false;
 
                 hiyorimiNecessary = setting.HiyorimiMode;

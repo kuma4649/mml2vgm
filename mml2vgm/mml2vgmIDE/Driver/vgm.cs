@@ -124,14 +124,14 @@ namespace mml2vgmIDE
 
 
 
-        public override bool init(outDatum[] vgmBuf, ChipRegister chipRegister, EnmChip[] useChip,uint latency,uint waitTime)
+        public override bool init(outDatum[] vgmBuf, ChipRegister chipRegister, EnmChip[] useChip,uint latency,uint waitTime,long jumpPointClock)
         {
             this.vgmBuf = vgmBuf;
             this.chipRegister = chipRegister;
             this.useChip = useChip;
             this.latency = latency;
             this.waitTime = waitTime;
-
+            this.jumpPointClock = jumpPointClock;
             //dumpCounter = 0;
 
             ym2610AdpcmA = new byte[2][] { null, null };
@@ -790,22 +790,40 @@ namespace mml2vgmIDE
 
         private void vcWaitNSamples(outDatum od)
         {
-            //vgmWait += (int)getLE16(vgmAdr + 1);
-            Audio.DriverSeqCounter += (int)getLE16(vgmAdr + 1);
+            if (jumpPointClock < 0)
+            {
+                Audio.DriverSeqCounter += (int)getLE16(vgmAdr + 1);
+            }
+            else
+            {
+                jumpPointClock -= (int)getLE16(vgmAdr + 1);
+            }
             vgmAdr += 3;
         }
 
         private void vcWait735Samples(outDatum od)
         {
-            //vgmWait += 735;
-            Audio.DriverSeqCounter += 735;
+            if (jumpPointClock < 0)
+            {
+                Audio.DriverSeqCounter += 735;
+            }
+            else
+            {
+                jumpPointClock -= 735;
+            }
             vgmAdr++;
         }
 
         private void vcWait882Samples(outDatum od)
         {
-            //vgmWait += 882;
-            Audio.DriverSeqCounter += 882;
+            if (jumpPointClock < 0)
+            {
+                Audio.DriverSeqCounter += 882;
+            }
+            else
+            {
+                jumpPointClock -= 882;
+            }
             vgmAdr++;
         }
 
@@ -1151,8 +1169,14 @@ namespace mml2vgmIDE
 
         private void vcWaitN1Samples(outDatum od)
         {
-            //vgmWait += (int)(vgmBuf[vgmAdr].val - 0x6f);
-            Audio.DriverSeqCounter += (int)(vgmBuf[vgmAdr].val - 0x6f);
+            if (jumpPointClock < 0)
+            {
+                Audio.DriverSeqCounter += (int)(vgmBuf[vgmAdr].val - 0x6f); 
+            }
+            else
+            {
+                jumpPointClock -= (int)(vgmBuf[vgmAdr].val - 0x6f);
+            }
             vgmAdr++;
         }
 
@@ -1163,8 +1187,14 @@ namespace mml2vgmIDE
             chipRegister.YM2612SetRegister(od, Audio.DriverSeqCounter, 0, 0, 0x2a, dat);
             //log.Write(Audio.DriverSeqCounter.ToString());
 
-            //vgmWait += (int)(vgmBuf[vgmAdr].val - 0x80);
-            Audio.DriverSeqCounter += (int)(vgmBuf[vgmAdr].val - 0x80);
+            if (jumpPointClock < 0)
+            {
+                Audio.DriverSeqCounter += (int)(vgmBuf[vgmAdr].val - 0x80);
+            }
+            else
+            {
+                jumpPointClock -= (int)(vgmBuf[vgmAdr].val - 0x80);
+            }
 
 
             vgmAdr++;

@@ -34,7 +34,7 @@ namespace mml2vgmIDE
         private uint gd3InfoStartAddr = 0;
 
 
-        public override bool init(outDatum[] xgmBuf, ChipRegister chipRegister, EnmChip[] useChip, uint latency, uint waitTime)
+        public override bool init(outDatum[] xgmBuf, ChipRegister chipRegister, EnmChip[] useChip, uint latency, uint waitTime, long jumpPointClock)
         {
 
             this.vgmBuf = xgmBuf;
@@ -42,6 +42,7 @@ namespace mml2vgmIDE
             this.useChip = useChip;
             this.latency = latency;
             this.waitTime = waitTime;
+            this.jumpPointClock = jumpPointClock;
 
             Counter = 0;
             TotalCounter = 0;
@@ -64,7 +65,7 @@ namespace mml2vgmIDE
             musicPtr = musicDataBlockAddr;
             xgmpcm= new XGMPCM[] { new XGMPCM(), new XGMPCM(), new XGMPCM(), new XGMPCM() };
             DACEnable = 0;
-
+            //this.jumpPointClock *= Common.SampleRate / (isNTSC ? 60 : 50);
             return true;
         }
 
@@ -237,7 +238,11 @@ namespace mml2vgmIDE
                 outDatum cmd = vgmBuf[musicPtr++].Copy();
 
                 //wait
-                if (cmd.val == 0) break;
+                if (cmd.val == 0)
+                {
+                    if (jumpPointClock < 0) break;
+                    jumpPointClock--;//= (long)musicStep;
+                }
 
                 //loop command
                 if (cmd.val == 0x7e)

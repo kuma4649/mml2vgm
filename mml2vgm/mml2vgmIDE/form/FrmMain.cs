@@ -694,6 +694,16 @@ namespace mml2vgmIDE
         {
             TsmiShowMIDIKbd_Click(null, null);
         }
+        protected override bool ProcessCmdKey(ref System.Windows.Forms.Message msg, System.Windows.Forms.Keys keyData)
+        {
+            if (keyData == (System.Windows.Forms.Keys.OemMinus | System.Windows.Forms.Keys.Alt))
+            {
+                frmPartCounter.ClickMUTE(10);
+                return true;
+            }
+
+            return base.ProcessCmdKey(ref msg, keyData);
+        }
 
         public void FrmMain_KeyDown(object sender, KeyEventArgs e)
         {
@@ -794,8 +804,10 @@ namespace mml2vgmIDE
                     else if (alt) frmPartCounter.ClickMUTE(9);
                     break;
                 case Keys.OemMinus://0のとなりの-キー
-                    if (ctrl) frmPartCounter.ClickSOLO(10);
-                    else if (alt) frmPartCounter.ClickMUTE(10);
+                    if (ctrl)
+                    {
+                        frmPartCounter.ClickSOLO(10);
+                    }
                     break;
                 case Keys.Oem5://bsのとなりの\キー
                     if (ctrl) frmPartCounter.ClickSOLO(-1);
@@ -1461,7 +1473,7 @@ namespace mml2vgmIDE
                             uint LoopOffset = (uint)mv.desVGM.dummyCmdLoopOffset - 0x1c;
                             Common.SetLE32(mv.desBuf, 0x1c, LoopOffset);
 
-                            InitPlayer(EnmFileFormat.VGM, mv.desBuf);
+                            InitPlayer(EnmFileFormat.VGM, mv.desBuf, mv.desVGM.jumpPointClock);
                         }
                         else if (mv.desVGM.info.format == enmFormat.XGM)
                         {
@@ -1469,11 +1481,11 @@ namespace mml2vgmIDE
                             //uint LoopOffset = (uint)mv.desVGM.dummyCmdLoopOffset;
                             //Common.SetLE24(mv.desBuf, (uint)(mv.desVGM.dummyCmdLoopOffsetAddress + 1), LoopOffset);
 
-                            InitPlayer(EnmFileFormat.XGM, mv.desBuf);
+                            InitPlayer(EnmFileFormat.XGM, mv.desBuf, mv.desVGM.jumpPointClock);
                         }
                         else
                         {
-                            InitPlayer(EnmFileFormat.ZGM, mv.desBuf);
+                            InitPlayer(EnmFileFormat.ZGM, mv.desBuf, mv.desVGM.jumpPointClock);
                         }
                     }
                     catch (Exception)
@@ -1964,7 +1976,7 @@ namespace mml2vgmIDE
             setting.Save();
         }
 
-        public bool InitPlayer(EnmFileFormat format, outDatum[] srcBuf)
+        public bool InitPlayer(EnmFileFormat format, outDatum[] srcBuf,long jumpPointClock)
         {
             if (srcBuf == null) return false;
 
@@ -2001,7 +2013,7 @@ namespace mml2vgmIDE
                     Audio.Pause();
                 }
 
-                Audio.SetVGMBuffer(format, srcBuf);
+                Audio.SetVGMBuffer(format, srcBuf, jumpPointClock);
 
                 //for (int i = 0; i < 100; i++)
                 {

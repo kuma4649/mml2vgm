@@ -22,7 +22,7 @@ namespace Core
             desVGM.PartInit();
             this.chips = desVGM.chips;
             this.info = desVGM.info;
-            desVGM.jumpCommandCounter = 0;
+            //desVGM.jumpCommandCounter = 0;
             this.desVGM = desVGM;
         }
 
@@ -79,6 +79,7 @@ namespace Core
         public bool doSkip;
         public Point caretPoint;
         private bool SkipFlg = false;
+        private List<partWork> caretPointChannels = new List<partWork>();
 
         public LinePos linePos { get; internal set; }
 
@@ -88,7 +89,15 @@ namespace Core
             mml.line = pw.getLine();
             mml.column = pw.pos.col + 1;// pw.getPos();
 
-            if (!SkipFlg && caretPoint.Y == mml.line.Lp.row && caretPoint.X <= mml.line.Lp.col+mml.column-1)
+            if(caretPoint.Y == mml.line.Lp.row)
+            {
+                if (!caretPointChannels.Contains(pw)) caretPointChannels.Add(pw);
+            }
+
+            if (!SkipFlg && (
+                (caretPoint.Y == mml.line.Lp.row && caretPoint.X <= mml.line.Lp.col+mml.column-1)
+                || (caretPoint.Y<mml.line.Lp.row && caretPointChannels.Contains(pw))
+                ))
             {
                 MML m = new MML();
                 m.type = enmMMLType.SkipPlay;
@@ -938,8 +947,8 @@ namespace Core
             pw.incPos();
             mml.type = enmMMLType.JumpPoint;
             mml.args = null;
-            desVGM.jumpCommandCounter++;
-            desVGM.useJumpCommand = true;
+            //desVGM.jumpCommandCounter++;
+            //desVGM.useJumpCommand = true;
         }
 
         private void CmdRepeatStart(partWork pw,MML mml)
