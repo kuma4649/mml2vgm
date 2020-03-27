@@ -2564,7 +2564,10 @@ namespace Core
         {
             if (ym2612x == null || ym2612x[0] == null) return null;
 
-            //PartInit();
+            if (doSkip)
+            {
+                useSkipPlayCommand = true;
+            }
 
             dat = new List<outDatum>();
             xdat = new List<outDatum>();
@@ -2944,7 +2947,7 @@ namespace Core
                 }
             }
 
-            if (jumpCommandCounter == 0)
+            if (jumpCommandCounter == 0 && !useSkipPlayCommand)
             {
                 // wait発行
                 lClock += cnt;
