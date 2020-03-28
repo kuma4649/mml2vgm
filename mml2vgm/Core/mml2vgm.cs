@@ -204,6 +204,7 @@ namespace Core
                     Disp(msg.get("I04023"));
                     ZGMmaker zmake = new ZGMmaker();
                     desVGM.jumpPointClock = -1;
+                    desVGM.jumpChannels = new List<Tuple<enmChipType, int>>();
                     desBuf = zmake.Build(desVGM);
                     Disp(msg.get("I04024"));
 

@@ -1500,6 +1500,8 @@ namespace mml2vgmIDE
             UpdateControl();
         }
 
+        private musicDriverInterface.CompilerInfo mubCompilerInfo = null;
+
         private void finishedCompileMUC()
         {
             musicDriverInterface.CompilerInfo ci = mucom.GetCompilerInfo();
@@ -1524,7 +1526,7 @@ namespace mml2vgmIDE
 
             //frmLog.tbLog.AppendText(msg.get("I0107"));
 
-            foreach (Tuple<int,int,string> mes in ci.errorList)
+            foreach (Tuple<int, int, string> mes in ci.errorList)
             {
                 frmErrorList.dataGridView1.Rows.Add("Error", "-"
                     , mes.Item1 == -1 ? "-" : (mes.Item1 + 1).ToString()
@@ -1540,21 +1542,41 @@ namespace mml2vgmIDE
 
             if (isSuccess)
             {
+                mubCompilerInfo = ci;
+
                 if (doPlay && ci.errorList.Count < 1)
                 {
                     try
                     {
                         InitPlayer(EnmFileFormat.MUB, mubData);
                     }
-                    catch 
+                    catch
                     {
                         MessageBox.Show(msg.get("E0100"), "mml2vgm", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
+
             }
 
             Compiling = 0;
             UpdateControl();
+        }
+
+        private delegate void SafeCallDelegate();
+        private void jumpSoloMode()
+        {
+            if (this.InvokeRequired)
+            {
+                var d = new SafeCallDelegate(jumpSoloMode);
+                this.Invoke(d);
+            }
+
+            if (mubCompilerInfo == null) return;
+            if (!tsmiJumpSoloMode.Checked) return;
+            if (mubCompilerInfo.jumpChannel == null) return;
+
+            frmPartCounter.ClickSOLO(-1);
+            frmPartCounter.ClickSOLO(mubCompilerInfo.jumpChannel[0]);
         }
 
         private void DpMain_ActiveDocumentChanged(object sender, EventArgs e)
@@ -1628,12 +1650,12 @@ namespace mml2vgmIDE
                 msgBox.getWrn().Length
                 );
             tsslCompileStatus.Text = string.Format(
-                "TCnt:{0} LCnt:{1}",
+                "TC:{0} LC:{1}",
                 FileInformation.totalCounter,
                 FileInformation.loopCounter == -1 ? "-" : FileInformation.loopCounter.ToString()
                 );
 
-
+            tsslJumpSoloMode.Visible = tsmiJumpSoloMode.Checked;
         }
 
         public void UpdateFolderTree()
@@ -2143,6 +2165,7 @@ namespace mml2vgmIDE
                     traceInfoSw = true;
                     ac.IsReadOnly = true;
                 }
+
             }
             catch (Exception ex)
             {
@@ -2171,7 +2194,7 @@ namespace mml2vgmIDE
                 Audio.Stop(0);
                 ResumeNormalModeDisp();
 
-                if (!Audio.Play(setting, doSkipStop))
+                if (!Audio.Play(setting, doSkipStop,jumpSoloMode))
                 {
                     try
                     {
@@ -2743,6 +2766,11 @@ namespace mml2vgmIDE
             if (dc == null) return;
             if (!(dc is FrmEditor)) return;
             compileManager.RequestCompile(((FrmEditor)dc).document, ((FrmEditor)dc).azukiControl.Text + "");
+        }
+
+        private void tsmiJumpSoloMode_Click(object sender, EventArgs e)
+        {
+            UpdateControl();
         }
     }
 }

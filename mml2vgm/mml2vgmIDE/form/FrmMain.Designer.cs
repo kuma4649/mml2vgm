@@ -88,6 +88,8 @@
             this.TsmiCompileAndSkipPlay = new System.Windows.Forms.ToolStripMenuItem();
             this.TsmiAllCompile = new System.Windows.Forms.ToolStripMenuItem();
             this.TsmiCompile = new System.Windows.Forms.ToolStripMenuItem();
+            this.featureToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiJumpSoloMode = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiScript = new System.Windows.Forms.ToolStripMenuItem();
             this.ツールTToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiOption = new System.Windows.Forms.ToolStripMenuItem();
@@ -96,6 +98,7 @@
             this.TsmiReference = new System.Windows.Forms.ToolStripMenuItem();
             this.TsmiAbout = new System.Windows.Forms.ToolStripMenuItem();
             this.timer = new System.Windows.Forms.Timer(this.components);
+            this.tsslJumpSoloMode = new System.Windows.Forms.ToolStripStatusLabel();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -121,6 +124,7 @@
             this.tsslCompileWarning,
             this.tsslCompileStatus,
             this.TsslLineCol,
+            this.tsslJumpSoloMode,
             this.toolStripStatusLabel1,
             this.tssbOpen,
             this.tssbSave,
@@ -255,6 +259,7 @@
             this.TsmiEdit,
             this.表示VToolStripMenuItem,
             this.コンパイルCToolStripMenuItem,
+            this.featureToolStripMenuItem,
             this.tsmiScript,
             this.ツールTToolStripMenuItem,
             this.TsmiHelp});
@@ -518,6 +523,20 @@
             resources.ApplyResources(this.TsmiCompile, "TsmiCompile");
             this.TsmiCompile.Click += new System.EventHandler(this.TsmiCompile_Click);
             // 
+            // featureToolStripMenuItem
+            // 
+            this.featureToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmiJumpSoloMode});
+            this.featureToolStripMenuItem.Name = "featureToolStripMenuItem";
+            resources.ApplyResources(this.featureToolStripMenuItem, "featureToolStripMenuItem");
+            // 
+            // tsmiJumpSoloMode
+            // 
+            this.tsmiJumpSoloMode.CheckOnClick = true;
+            this.tsmiJumpSoloMode.Name = "tsmiJumpSoloMode";
+            resources.ApplyResources(this.tsmiJumpSoloMode, "tsmiJumpSoloMode");
+            this.tsmiJumpSoloMode.Click += new System.EventHandler(this.tsmiJumpSoloMode_Click);
+            // 
             // tsmiScript
             // 
             this.tsmiScript.Name = "tsmiScript";
@@ -568,6 +587,11 @@
             this.timer.Enabled = true;
             this.timer.Interval = 16;
             this.timer.Tick += new System.EventHandler(this.Timer_Tick);
+            // 
+            // tsslJumpSoloMode
+            // 
+            this.tsslJumpSoloMode.Name = "tsslJumpSoloMode";
+            resources.ApplyResources(this.tsslJumpSoloMode, "tsslJumpSoloMode");
             // 
             // FrmMain
             // 
@@ -660,6 +684,9 @@
         private System.Windows.Forms.ToolStripSplitButton tssbFind;
         private System.Windows.Forms.ToolStripSplitButton tssbM98;
         private System.Windows.Forms.ToolStripSplitButton tssbCompile;
+        private System.Windows.Forms.ToolStripMenuItem featureToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem tsmiJumpSoloMode;
+        private System.Windows.Forms.ToolStripStatusLabel tsslJumpSoloMode;
     }
 }
 

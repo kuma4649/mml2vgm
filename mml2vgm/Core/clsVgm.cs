@@ -1889,6 +1889,7 @@ namespace Core
         public int ChipCommandSize { get; set; }
         public string wrkPath { get; internal set; }
         public long jumpPointClock { get; set; } = -1;
+        public List<Tuple<enmChipType,int>> jumpChannels = new List<Tuple<enmChipType, int>>();
 
         public outDatum[] Vgm_getByteData(Dictionary<string, List<MML>> mmlData)
         {
@@ -1898,6 +1899,7 @@ namespace Core
             //useSkipPlayCommand = true;
             //}
             jumpPointClock = -1;
+            jumpChannels = new List<Tuple<enmChipType, int>>();
             dat = new List<outDatum>();
 
             log.Write("ヘッダー情報作成");
@@ -2571,6 +2573,7 @@ namespace Core
             //useSkipPlayCommand = true;
             //}
             jumpPointClock = -1;
+            jumpChannels = new List<Tuple<enmChipType, int>>();
 
             dat = new List<outDatum>();
             xdat = new List<outDatum>();
@@ -3662,8 +3665,8 @@ namespace Core
                 case enmMMLType.JumpPoint:
                     log.Write("JumpPoint");
                     jumpPointClock = (long)dSample;// lClock;
-                    //jumpCommandCounter--;
-                    //if (jumpCommandCounter < 0) jumpCommandCounter = 0;
+                    jumpChannels.Add(new Tuple<enmChipType, int>(pw.chip.chipType, pw.ch));
+
                     pw.mmlPos++;
                     break;
                 case enmMMLType.NoiseToneMixer:
@@ -3704,12 +3707,8 @@ namespace Core
                 case enmMMLType.SkipPlay:
                     log.Write("SkipPlay");
                     jumpPointClock = (long)dSample;
-                    //jumpPointClock=lClock;
-                    //useSkipPlayCommand = false;
-                    //if (doSkipStop)
-                    //{
-                    //pw.dataEnd = true;
-                    //}
+                    jumpChannels.Add(new Tuple<enmChipType, int>(pw.chip.chipType, pw.ch));
+
                     pw.mmlPos++;
                     break;
                 case enmMMLType.ToneDoubler:

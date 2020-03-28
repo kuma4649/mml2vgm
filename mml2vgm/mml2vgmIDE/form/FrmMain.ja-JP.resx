@@ -119,7 +119,7 @@
   </resheader>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="toolStripStatusLabel1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>39, 17</value>
+    <value>171, 17</value>
   </data>
   <data name="tssbOpen.Size" type="System.Drawing.Size, System.Drawing">
     <value>63, 20</value>
@@ -384,6 +384,15 @@
   </data>
   <data name="コンパイルCToolStripMenuItem.Text" xml:space="preserve">
     <value>コンパイル(&amp;C)</value>
+  </data>
+  <data name="jumpSoloModeToolStripMenuItem.Text" xml:space="preserve">
+    <value>ジャンプソロ モード</value>
+  </data>
+  <data name="featureToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>57, 20</value>
+  </data>
+  <data name="featureToolStripMenuItem.Text" xml:space="preserve">
+    <value>機能(&amp;a)</value>
   </data>
   <data name="tsmiScript.Size" type="System.Drawing.Size, System.Drawing">
     <value>76, 20</value>

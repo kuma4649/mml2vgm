@@ -809,7 +809,7 @@ namespace mml2vgmIDE
             return NAudioWrap.getAsioLatency();
         }
 
-        public static bool Play(Setting setting,bool doSkipStop=false)
+        public static bool Play(Setting setting,bool doSkipStop=false,Action startedOnceMethod=null)
         {
             bool ret = false;
 
@@ -923,11 +923,14 @@ namespace mml2vgmIDE
             {
             }
 
+            Audio.startedOnceMethod = startedOnceMethod;
+
             EmuSeqCounter = 0;
             Stopped = false;
 
             if (!useEmu) sm.RequestStopAtEmuChipSender();
             if (!useReal) sm.RequestStopAtRealChipSender();
+
 
             return ret;
         }
@@ -4025,6 +4028,12 @@ namespace mml2vgmIDE
 
         public static int trdVgmVirtualFunction(short[] buffer, int offset, int sampleCount)
         {
+            if (startedOnceMethod != null)
+            {
+                startedOnceMethod();
+                startedOnceMethod = null;
+            }
+
             int cnt = trdVgmVirtualMainFunction(buffer, offset, sampleCount);
 
             if (setting.midiKbd.UseMIDIKeyboard)
@@ -4177,6 +4186,7 @@ namespace mml2vgmIDE
         private static bool useEmu;
         private static bool useReal;
         public static int EmuSampleCount;
+        private static Action startedOnceMethod = null;
 
         private static void oneFrameEmuDataSend()
         {
