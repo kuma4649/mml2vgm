@@ -1076,6 +1076,7 @@ namespace mml2vgmIDE
             this.doSkipStop = doSkipStop;
             this.doExport = doExport;
             //スキップ再生の場合はカレットの位置を取得する
+            caretPoint = Point.Empty;
             if (doSkip)
             {
                 if (ac != null)
