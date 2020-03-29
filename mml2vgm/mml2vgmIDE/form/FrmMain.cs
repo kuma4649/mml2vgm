@@ -1551,7 +1551,7 @@ namespace mml2vgmIDE
             {
                 mubCompilerInfo = ci;
 
-                if (ci.jumpChannel != null)
+                if (ci.jumpChannel != null && jumpSoloModeSw)
                 {
                     for (int i = 0; i < 11; i++)
                     {
