@@ -1,4 +1,11 @@
 更新履歴
+TAG189 2020/03/29
+  IDE
+    ・mucのみ。 JumpSoloModeを廃止。
+    JumpSoloを再生時に指定できるように機能修正。
+    [Alt]を押しながら[F5]でJコマンドのあるパート、或いはキャレットのあるパートがSoloになります。
+    戻したい時はSolo解除([Ctrl]+[￥])をしてください。
+
 TAG188 2020/03/28 3rd
   IDE
     ・mucのみ。 JumpSoloModeを実装。

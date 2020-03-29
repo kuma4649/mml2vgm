@@ -113,7 +113,8 @@ namespace mml2vgmIDE
             azukiControl.SetKeyBind((uint)(Keys.Control | Keys.PageUp), ActionJumpAnchorPrevious);
             azukiControl.SetKeyBind((uint)(Keys.F3), ActionFindNext);
             azukiControl.SetKeyBind((uint)(Keys.Shift | Keys.F3), ActionFindPrevious);
-            azukiControl.SetKeyBind((uint)(Keys.Alt | Keys.OemMinus), ActionDummy);
+            //azukiControl.SetKeyBind((uint)(Keys.Alt | Keys.OemMinus), ActionDummy);
+            //azukiControl.SetKeyBind((uint)(Keys.Alt | Keys.F5), ActionDummy);
 
             this.Controls.Add(azukiControl);
 
@@ -183,6 +184,8 @@ namespace mml2vgmIDE
             azukiControl.SetKeyBind((uint)(Keys.Control | Keys.PageUp), ActionJumpAnchorPrevious);
             azukiControl.SetKeyBind((uint)(Keys.F3), ActionFindNext);
             azukiControl.SetKeyBind((uint)(Keys.Shift | Keys.F3), ActionFindPrevious);
+            //azukiControl.SetKeyBind((uint)(Keys.Alt | Keys.OemMinus), ActionDummy);
+            //azukiControl.SetKeyBind((uint)(Keys.Alt | Keys.F5), ActionDummy);
 
             this.Controls.Add(azukiControl);
 

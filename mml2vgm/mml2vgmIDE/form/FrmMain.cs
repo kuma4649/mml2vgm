@@ -51,6 +51,7 @@ namespace mml2vgmIDE
         private bool ctrl = false;
         private bool shift = false;
         private bool alt = false;
+        //private bool beforeAlt = false;
         private ChannelInfo defaultChannelInfo = null;
         private mucomManager mucom = null;
         private musicDriverInterface.MmlDatum[] mubData = null;
@@ -66,6 +67,8 @@ namespace mml2vgmIDE
         private ToolStripMenuItem tsmiTreeView = null;
         public IDockContent activeDocument;
         private int m98Count = 0;
+        private musicDriverInterface.CompilerInfo mubCompilerInfo = null;
+        private bool jumpSoloModeSw = false;
 
 
 
@@ -696,6 +699,8 @@ namespace mml2vgmIDE
         }
         protected override bool ProcessCmdKey(ref System.Windows.Forms.Message msg, System.Windows.Forms.Keys keyData)
         {
+            log.Write(string.Format("2動作未定義のキー：{0}", keyData));
+
             if (keyData == (System.Windows.Forms.Keys.OemMinus | System.Windows.Forms.Keys.Alt))
             {
                 frmPartCounter.ClickMUTE(10);
@@ -710,7 +715,9 @@ namespace mml2vgmIDE
             ctrl = (e.KeyData & Keys.Control) == Keys.Control;
             shift = (e.KeyData & Keys.Shift) == Keys.Shift;
             alt = (e.KeyData & Keys.Alt) == Keys.Alt;
-            tssbPlay.Text = (ctrl ? "トレース+" : "") + (shift ? "スキップ+" : "") + "再生";
+            tssbPlay.Text = (ctrl ? "トレース+" : "") + (shift ? "スキップ+" : "") + (alt ? "Jソロ+" : "") + "再生";
+
+            log.Write(string.Format("動作未定義のキー：{0}", e.KeyData));
 
             switch (e.KeyCode)
             {
@@ -736,6 +743,7 @@ namespace mml2vgmIDE
                     Comp();
                     break;
                 case Keys.F5:
+                    jumpSoloModeSw = alt;//nVidia Geforce ExperienceがインストールされているとAlt+F5が検知できない
                     Compile(true, ctrl, shift, false, false);
                     break;
                 case Keys.F6:
@@ -1500,7 +1508,6 @@ namespace mml2vgmIDE
             UpdateControl();
         }
 
-        private musicDriverInterface.CompilerInfo mubCompilerInfo = null;
 
         private void finishedCompileMUC()
         {
@@ -1544,6 +1551,51 @@ namespace mml2vgmIDE
             {
                 mubCompilerInfo = ci;
 
+                if (ci.jumpChannel != null)
+                {
+                    for (int i = 0; i < 11; i++)
+                    {
+                        bool solo = false;
+                        if (i == ci.jumpChannel[0]) solo = true;
+
+                        int ch = i;
+                        if (i < 2)//FM 1-2
+                        {
+                            Audio.chipRegister.YM2608[0].ChMasks[ch] = !solo;
+                        }
+                        else if (i == 2)//FM 3
+                        {
+                            Audio.chipRegister.YM2608[0].ChMasks[2] = !solo;
+                            Audio.chipRegister.YM2608[0].ChMasks[6] = !solo;
+                            Audio.chipRegister.YM2608[0].ChMasks[7] = !solo;
+                            Audio.chipRegister.YM2608[0].ChMasks[8] = !solo;
+                        }
+                        else if (i < 6)//SSG
+                        {
+                            ch = i + 6;
+                            Audio.chipRegister.YM2608[0].ChMasks[ch] = !solo;
+                        }
+                        else if (i == 6)//Rhythm
+                        {
+                            Audio.chipRegister.YM2608[0].ChMasks[12] = !solo;
+                            Audio.chipRegister.YM2608[0].ChMasks[13] = !solo;
+                            Audio.chipRegister.YM2608[0].ChMasks[14] = !solo;
+                            Audio.chipRegister.YM2608[0].ChMasks[15] = !solo;
+                            Audio.chipRegister.YM2608[0].ChMasks[16] = !solo;
+                            Audio.chipRegister.YM2608[0].ChMasks[17] = !solo;
+                        }
+                        else if (i < 10)
+                        {
+                            ch = i - 4;
+                            Audio.chipRegister.YM2608[0].ChMasks[ch] = !solo;
+                        }
+                        else
+                        {
+                            Audio.chipRegister.YM2608[0].ChMasks[18] = !solo;
+                        }
+                    }
+                }
+
                 if (doPlay && ci.errorList.Count < 1)
                 {
                     try
@@ -1572,10 +1624,11 @@ namespace mml2vgmIDE
             }
 
             if (mubCompilerInfo == null) return;
-            if (!tsmiJumpSoloMode.Checked) return;
+            if (!jumpSoloModeSw) return;
             if (mubCompilerInfo.jumpChannel == null) return;
 
             frmPartCounter.ClickSOLO(-1);
+            frmPartCounter.ClickMUTE(-1);
             frmPartCounter.ClickSOLO(mubCompilerInfo.jumpChannel[0]);
         }
 
@@ -1655,7 +1708,7 @@ namespace mml2vgmIDE
                 FileInformation.loopCounter == -1 ? "-" : FileInformation.loopCounter.ToString()
                 );
 
-            tsslJumpSoloMode.Visible = tsmiJumpSoloMode.Checked;
+            //tsslJumpSoloMode.Visible = tsmiJumpSoloMode.Checked;
         }
 
         public void UpdateFolderTree()
@@ -2768,9 +2821,9 @@ namespace mml2vgmIDE
             compileManager.RequestCompile(((FrmEditor)dc).document, ((FrmEditor)dc).azukiControl.Text + "");
         }
 
-        private void tsmiJumpSoloMode_Click(object sender, EventArgs e)
-        {
-            UpdateControl();
-        }
+        //private void tsmiJumpSoloMode_Click(object sender, EventArgs e)
+        //{
+            //UpdateControl();
+        //}
     }
 }

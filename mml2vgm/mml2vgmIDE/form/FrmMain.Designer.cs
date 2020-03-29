@@ -38,6 +38,7 @@
             this.tsslCompileWarning = new System.Windows.Forms.ToolStripStatusLabel();
             this.tsslCompileStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.TsslLineCol = new System.Windows.Forms.ToolStripStatusLabel();
+            this.tsslJumpSoloMode = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.tssbOpen = new System.Windows.Forms.ToolStripSplitButton();
             this.tssbSave = new System.Windows.Forms.ToolStripSplitButton();
@@ -98,7 +99,6 @@
             this.TsmiReference = new System.Windows.Forms.ToolStripMenuItem();
             this.TsmiAbout = new System.Windows.Forms.ToolStripMenuItem();
             this.timer = new System.Windows.Forms.Timer(this.components);
-            this.tsslJumpSoloMode = new System.Windows.Forms.ToolStripStatusLabel();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -165,6 +165,11 @@
             // 
             this.TsslLineCol.Name = "TsslLineCol";
             resources.ApplyResources(this.TsslLineCol, "TsslLineCol");
+            // 
+            // tsslJumpSoloMode
+            // 
+            this.tsslJumpSoloMode.Name = "tsslJumpSoloMode";
+            resources.ApplyResources(this.tsslJumpSoloMode, "tsslJumpSoloMode");
             // 
             // toolStripStatusLabel1
             // 
@@ -535,7 +540,7 @@
             this.tsmiJumpSoloMode.CheckOnClick = true;
             this.tsmiJumpSoloMode.Name = "tsmiJumpSoloMode";
             resources.ApplyResources(this.tsmiJumpSoloMode, "tsmiJumpSoloMode");
-            this.tsmiJumpSoloMode.Click += new System.EventHandler(this.tsmiJumpSoloMode_Click);
+            //this.tsmiJumpSoloMode.Click += new System.EventHandler(this.tsmiJumpSoloMode_Click);
             // 
             // tsmiScript
             // 
@@ -587,11 +592,6 @@
             this.timer.Enabled = true;
             this.timer.Interval = 16;
             this.timer.Tick += new System.EventHandler(this.Timer_Tick);
-            // 
-            // tsslJumpSoloMode
-            // 
-            this.tsslJumpSoloMode.Name = "tsslJumpSoloMode";
-            resources.ApplyResources(this.tsslJumpSoloMode, "tsslJumpSoloMode");
             // 
             // FrmMain
             // 

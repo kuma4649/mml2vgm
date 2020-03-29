@@ -201,6 +201,9 @@
   <data name="tsslJumpSoloMode.Text" xml:space="preserve">
     <value>[JS]</value>
   </data>
+  <data name="tsslJumpSoloMode.Visible" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
   <data name="toolStripStatusLabel1.Font" type="System.Drawing.Font, System.Drawing">
     <value>Consolas, 9pt, style=Bold</value>
   </data>
@@ -364,13 +367,13 @@
     <value>488, 17</value>
   </metadata>
   <data name="TsmiNew.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
+    <value>174, 22</value>
   </data>
   <data name="TsmiNew.Text" xml:space="preserve">
     <value>&amp;New</value>
   </data>
   <data name="TsmiOpenFile.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
+    <value>174, 22</value>
   </data>
   <data name="TsmiOpenFile.Text" xml:space="preserve">
     <value>&amp;Open file</value>
@@ -379,13 +382,13 @@
     <value>False</value>
   </data>
   <data name="TsmiOpenFolder.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
+    <value>174, 22</value>
   </data>
   <data name="TsmiOpenFolder.Text" xml:space="preserve">
     <value>open &amp;Folder</value>
   </data>
   <data name="tsmiGwiFileHistory.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
+    <value>174, 22</value>
   </data>
   <data name="tsmiGwiFileHistory.Text" xml:space="preserve">
     <value>Recently Used Files</value>
@@ -394,7 +397,7 @@
     <value>False</value>
   </data>
   <data name="TsmiSaveFile.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
+    <value>174, 22</value>
   </data>
   <data name="TsmiSaveFile.Text" xml:space="preserve">
     <value>&amp;Save</value>
@@ -403,16 +406,16 @@
     <value>False</value>
   </data>
   <data name="TsmiSaveAs.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
+    <value>174, 22</value>
   </data>
   <data name="TsmiSaveAs.Text" xml:space="preserve">
     <value>Save &amp;As</value>
   </data>
   <data name="toolStripSeparator2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>177, 6</value>
+    <value>171, 6</value>
   </data>
   <data name="tsmiImport.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
+    <value>174, 22</value>
   </data>
   <data name="tsmiImport.Text" xml:space="preserve">
     <value>Import</value>
@@ -421,16 +424,16 @@
     <value>False</value>
   </data>
   <data name="tsmiExport.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
+    <value>174, 22</value>
   </data>
   <data name="tsmiExport.Text" xml:space="preserve">
     <value>Export</value>
   </data>
   <data name="toolStripSeparator1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>177, 6</value>
+    <value>171, 6</value>
   </data>
   <data name="TsmiExit.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
+    <value>174, 22</value>
   </data>
   <data name="TsmiExit.Text" xml:space="preserve">
     <value>&amp;Exit</value>
@@ -636,6 +639,9 @@
   <data name="featureToolStripMenuItem.Text" xml:space="preserve">
     <value>Fe&amp;ature</value>
   </data>
+  <data name="featureToolStripMenuItem.Visible" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
   <data name="tsmiScript.Size" type="System.Drawing.Size, System.Drawing">
     <value>49, 20</value>
   </data>
@@ -821,6 +827,12 @@
     <value>TsslLineCol</value>
   </data>
   <data name="&gt;&gt;TsslLineCol.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tsslJumpSoloMode.Name" xml:space="preserve">
+    <value>tsslJumpSoloMode</value>
+  </data>
+  <data name="&gt;&gt;tsslJumpSoloMode.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;toolStripStatusLabel1.Name" xml:space="preserve">
@@ -1176,12 +1188,6 @@
   </data>
   <data name="&gt;&gt;timer.Type" xml:space="preserve">
     <value>System.Windows.Forms.Timer, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tsslJumpSoloMode.Name" xml:space="preserve">
-    <value>tsslJumpSoloMode</value>
-  </data>
-  <data name="&gt;&gt;tsslJumpSoloMode.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">
     <value>FrmMain</value>
