@@ -126,7 +126,7 @@
     <value>0, 23</value>
   </data>
   <data name="dpMain.Size" type="System.Drawing.Size, System.Drawing">
-    <value>942, 406</value>
+    <value>1014, 517</value>
   </data>
   <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="dpMain.TabIndex" type="System.Int32, mscorlib">
@@ -195,11 +195,20 @@
   <data name="TsslLineCol.Text" xml:space="preserve">
     <value>Line:- Col:-</value>
   </data>
+  <data name="tsslJumpSoloMode.Size" type="System.Drawing.Size, System.Drawing">
+    <value>25, 17</value>
+  </data>
+  <data name="tsslJumpSoloMode.Text" xml:space="preserve">
+    <value>[JS]</value>
+  </data>
+  <data name="tsslJumpSoloMode.Visible" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
   <data name="toolStripStatusLabel1.Font" type="System.Drawing.Font, System.Drawing">
     <value>Consolas, 9pt, style=Bold</value>
   </data>
   <data name="toolStripStatusLabel1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>75, 17</value>
+    <value>28, 17</value>
   </data>
   <data name="toolStripStatusLabel1.Text" xml:space="preserve">
     <value> </value>
@@ -331,10 +340,10 @@
     <value>Keyboard</value>
   </data>
   <data name="statusStrip1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 428</value>
+    <value>0, 539</value>
   </data>
   <data name="statusStrip1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>942, 22</value>
+    <value>1014, 22</value>
   </data>
   <data name="statusStrip1.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
@@ -618,6 +627,21 @@
   <data name="コンパイルCToolStripMenuItem.Text" xml:space="preserve">
     <value>&amp;Compile</value>
   </data>
+  <data name="tsmiJumpSoloMode.Size" type="System.Drawing.Size, System.Drawing">
+    <value>180, 22</value>
+  </data>
+  <data name="tsmiJumpSoloMode.Text" xml:space="preserve">
+    <value>Jump solo Mode</value>
+  </data>
+  <data name="featureToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>58, 20</value>
+  </data>
+  <data name="featureToolStripMenuItem.Text" xml:space="preserve">
+    <value>Fe&amp;ature</value>
+  </data>
+  <data name="featureToolStripMenuItem.Visible" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
   <data name="tsmiScript.Size" type="System.Drawing.Size, System.Drawing">
     <value>49, 20</value>
   </data>
@@ -664,7 +688,7 @@
     <value>0, 0</value>
   </data>
   <data name="menuStrip1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>942, 24</value>
+    <value>1014, 24</value>
   </data>
   <data name="menuStrip1.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -694,7 +718,7 @@
     <value>6, 12</value>
   </data>
   <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
-    <value>942, 450</value>
+    <value>1014, 561</value>
   </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -803,6 +827,12 @@
     <value>TsslLineCol</value>
   </data>
   <data name="&gt;&gt;TsslLineCol.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tsslJumpSoloMode.Name" xml:space="preserve">
+    <value>tsslJumpSoloMode</value>
+  </data>
+  <data name="&gt;&gt;tsslJumpSoloMode.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;toolStripStatusLabel1.Name" xml:space="preserve">
@@ -1097,6 +1127,18 @@
     <value>TsmiCompile</value>
   </data>
   <data name="&gt;&gt;TsmiCompile.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;featureToolStripMenuItem.Name" xml:space="preserve">
+    <value>featureToolStripMenuItem</value>
+  </data>
+  <data name="&gt;&gt;featureToolStripMenuItem.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tsmiJumpSoloMode.Name" xml:space="preserve">
+    <value>tsmiJumpSoloMode</value>
+  </data>
+  <data name="&gt;&gt;tsmiJumpSoloMode.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;tsmiScript.Name" xml:space="preserve">

@@ -22,7 +22,7 @@ namespace mml2vgmIDE
             throw new NotImplementedException();
         }
 
-        public override bool init(outDatum[] vgmBuf, ChipRegister chipRegister, EnmChip[] useChip, uint latency, uint waitTime)
+        public override bool init(outDatum[] vgmBuf, ChipRegister chipRegister, EnmChip[] useChip, uint latency, uint waitTime,long jumpPointClock)
         {
             throw new NotImplementedException();
         }

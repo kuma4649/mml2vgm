@@ -1393,10 +1393,10 @@ namespace Core
                 //midiむけ
                 if(pw.bendWaitCounter==-1)
                     ResetTieBend(pw, mml);
-                if (!pw.chip.parent.useSkipPlayCommand)
-                {
+                //if (!pw.chip.parent.useSkipPlayCommand)
+                //{
                     SetKeyOn(pw, mml);
-                }
+                //}
             }
             else
             {

@@ -22,6 +22,7 @@ namespace mml2vgmIDE
         public string Version = "";
         public string UsedChips = "";
         public int vstDelta = 0;
+        public long jumpPointClock = -1;
 
         public int[] YM2151Hosei = new int[2] { 0, 0 };
 
@@ -33,7 +34,7 @@ namespace mml2vgmIDE
 
         public string errMsg { get; internal set; }
 
-        public abstract bool init(outDatum[] vgmBuf, ChipRegister chipRegister, EnmChip[] useChip, uint latency, uint waitTime);
+        public abstract bool init(outDatum[] vgmBuf, ChipRegister chipRegister, EnmChip[] useChip, uint latency, uint waitTime,long jumpPointClock);
         public abstract void oneFrameProc();
         public abstract GD3 getGD3Info(byte[] buf, uint vgmGd3);
 

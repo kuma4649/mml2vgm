@@ -38,6 +38,7 @@
             this.tsslCompileWarning = new System.Windows.Forms.ToolStripStatusLabel();
             this.tsslCompileStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.TsslLineCol = new System.Windows.Forms.ToolStripStatusLabel();
+            this.tsslJumpSoloMode = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.tssbOpen = new System.Windows.Forms.ToolStripSplitButton();
             this.tssbSave = new System.Windows.Forms.ToolStripSplitButton();
@@ -88,6 +89,8 @@
             this.TsmiCompileAndSkipPlay = new System.Windows.Forms.ToolStripMenuItem();
             this.TsmiAllCompile = new System.Windows.Forms.ToolStripMenuItem();
             this.TsmiCompile = new System.Windows.Forms.ToolStripMenuItem();
+            this.featureToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiJumpSoloMode = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiScript = new System.Windows.Forms.ToolStripMenuItem();
             this.ツールTToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiOption = new System.Windows.Forms.ToolStripMenuItem();
@@ -121,6 +124,7 @@
             this.tsslCompileWarning,
             this.tsslCompileStatus,
             this.TsslLineCol,
+            this.tsslJumpSoloMode,
             this.toolStripStatusLabel1,
             this.tssbOpen,
             this.tssbSave,
@@ -161,6 +165,11 @@
             // 
             this.TsslLineCol.Name = "TsslLineCol";
             resources.ApplyResources(this.TsslLineCol, "TsslLineCol");
+            // 
+            // tsslJumpSoloMode
+            // 
+            this.tsslJumpSoloMode.Name = "tsslJumpSoloMode";
+            resources.ApplyResources(this.tsslJumpSoloMode, "tsslJumpSoloMode");
             // 
             // toolStripStatusLabel1
             // 
@@ -255,6 +264,7 @@
             this.TsmiEdit,
             this.表示VToolStripMenuItem,
             this.コンパイルCToolStripMenuItem,
+            this.featureToolStripMenuItem,
             this.tsmiScript,
             this.ツールTToolStripMenuItem,
             this.TsmiHelp});
@@ -518,6 +528,20 @@
             resources.ApplyResources(this.TsmiCompile, "TsmiCompile");
             this.TsmiCompile.Click += new System.EventHandler(this.TsmiCompile_Click);
             // 
+            // featureToolStripMenuItem
+            // 
+            this.featureToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmiJumpSoloMode});
+            this.featureToolStripMenuItem.Name = "featureToolStripMenuItem";
+            resources.ApplyResources(this.featureToolStripMenuItem, "featureToolStripMenuItem");
+            // 
+            // tsmiJumpSoloMode
+            // 
+            this.tsmiJumpSoloMode.CheckOnClick = true;
+            this.tsmiJumpSoloMode.Name = "tsmiJumpSoloMode";
+            resources.ApplyResources(this.tsmiJumpSoloMode, "tsmiJumpSoloMode");
+            //this.tsmiJumpSoloMode.Click += new System.EventHandler(this.tsmiJumpSoloMode_Click);
+            // 
             // tsmiScript
             // 
             this.tsmiScript.Name = "tsmiScript";
@@ -660,6 +684,9 @@
         private System.Windows.Forms.ToolStripSplitButton tssbFind;
         private System.Windows.Forms.ToolStripSplitButton tssbM98;
         private System.Windows.Forms.ToolStripSplitButton tssbCompile;
+        private System.Windows.Forms.ToolStripMenuItem featureToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem tsmiJumpSoloMode;
+        private System.Windows.Forms.ToolStripStatusLabel tsslJumpSoloMode;
     }
 }
 

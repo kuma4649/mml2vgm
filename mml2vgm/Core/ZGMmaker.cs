@@ -89,6 +89,8 @@ namespace Core
         private Dictionary<string, object[]> dicChipIdentifyNumber;
         private int ChipCommandSize = 1;
 
+        public bool useSkipPlayCommand { get; private set; } = false;
+
         public ZGMmaker()
         {
             dicChipIdentifyNumber = new Dictionary<string, object[]>();

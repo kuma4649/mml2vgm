@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -134,6 +135,36 @@ namespace mml2vgmIDE
                 ret = compiler.Compile(sourceMML, appendFileReaderCallback);// wrkMUCFullPath, disp);
             return ret;
         }
+
+        public MmlDatum[] compileFromSrcText(string srcText, string wrkMUCFullPath, Point poi)
+        {
+            if (!ok) return null;
+
+            this.wrkMUCFullPath = wrkMUCFullPath;
+            compiler.Init();
+            compiler.SetCompileSwitch("IDE");
+            if(poi!=Point.Empty)
+            {
+                compiler.SetCompileSwitch(string.Format("SkipPoint=R{0}:C{1}", poi.Y, poi.X));
+            }
+
+            MmlDatum[] ret;
+            musicDriverInterface.Log.writeMethod = disp;
+            musicDriverInterface.Log.off = 0;
+            if (!setting.other.LogWarning)
+            {
+                musicDriverInterface.Log.off = (int)musicDriverInterface.LogLevel.WARNING;
+            }
+            if (setting.other.LogLevel == (int)LogLevel.INFO) musicDriverInterface.Log.level = LogLevel.INFO;
+            else if (setting.other.LogLevel == (int)LogLevel.DEBUG) musicDriverInterface.Log.level = LogLevel.DEBUG;
+            else if (setting.other.LogLevel == (int)LogLevel.TRACE) musicDriverInterface.Log.level = LogLevel.TRACE;
+
+            byte[] src = Encoding.GetEncoding(932).GetBytes(srcText);
+            using (MemoryStream sourceMML = new MemoryStream(src))
+                ret = compiler.Compile(sourceMML, appendFileReaderCallback);// wrkMUCFullPath, disp);
+            return ret;
+        }
+
 
         private Stream appendFileReaderCallback(string arg)
         {
