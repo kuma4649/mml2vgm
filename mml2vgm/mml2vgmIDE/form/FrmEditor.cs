@@ -235,7 +235,9 @@ namespace mml2vgmIDE
                 return;
             }
 
-            string basePath = System.IO.Path.GetDirectoryName(this.document.gwiFullPath) + "\\";
+            string path1 = System.IO.Path.GetDirectoryName(this.document.gwiFullPath);
+            path1 = string.IsNullOrEmpty(path1) ? this.document.gwiFullPath : path1;
+            string basePath = path1 + "\\";
             if (source.IndexOf(basePath) == 0)
             {
                 source = source.Substring(basePath.Length);

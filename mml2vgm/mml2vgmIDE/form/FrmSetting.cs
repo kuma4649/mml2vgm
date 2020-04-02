@@ -35,7 +35,7 @@ namespace mml2vgmIDE
             tabControl3.TabPages.Remove(tabPage16);
             tcSetting.TabPages.Remove(tpMIDIExp);
             //tcSetting.TabPages.Remove(tpMIDIKBD);
-            tcSetting.TabPages.Remove(tpKeyBoard);
+            //tcSetting.TabPages.Remove(tpKeyBoard);
             tcSetting.TabPages.Remove(tpBalance);
             tcSetting.TabPages.Remove(tpOther);
             tcSetting.TabPages.Remove(tpAbout);
@@ -485,7 +485,7 @@ namespace mml2vgmIDE
             cbInitAlways.Checked = setting.other.InitAlways;
             cbEmptyPlayList.Checked = setting.other.EmptyPlayList;
             tbOpacity.Value = setting.other.Opacity;
-            lblFontName.Text=setting.other.TextFontName;
+            lblFontName.Text = setting.other.TextFontName;
             lblFontSize.Text = setting.other.TextFontSize.ToString();
             lblFontStyle.Text = setting.other.TextFontStyle.ToString();
             cbLogWarning.Checked = setting.other.LogWarning;
@@ -516,7 +516,7 @@ namespace mml2vgmIDE
 
             if (setting.midiOut.lstMidiOutInfo != null && setting.midiOut.lstMidiOutInfo.Count > 0)
             {
-                for (int i = 0; i <4;i++)// setting.midiOut.lstMidiOutInfo.Count; i++)
+                for (int i = 0; i < 4; i++)// setting.midiOut.lstMidiOutInfo.Count; i++)
                 {
                     dgv[i].Rows.Clear();
                     HashSet<int> midioutNotFound = new HashSet<int>();
@@ -630,26 +630,6 @@ namespace mml2vgmIDE
 
             //cbNSFN160_Serial.Checked = setting.nsf.N160Serial;
 
-            //tbSIDKernal.Text = setting.sid.RomKernalPath;
-            //tbSIDBasic.Text = setting.sid.RomBasicPath;
-            //tbSIDCharacter.Text = setting.sid.RomCharacterPath;
-            //switch (setting.sid.Quality)
-            //{
-            //    case 0:
-            //        rdSIDQ1.Checked = true;
-            //        break;
-            //    case 1:
-            //        rdSIDQ2.Checked = true;
-            //        break;
-            //    case 2:
-            //        rdSIDQ3.Checked = true;
-            //        break;
-            //    case 3:
-            //        rdSIDQ4.Checked = true;
-            //        break;
-            //}
-            //tbSIDOutputBufferSize.Text = setting.sid.OutputBufferSize.ToString();
-
             switch (setting.nukedOPN2.EmuType)
             {
                 case 0:
@@ -679,64 +659,6 @@ namespace mml2vgmIDE
             rbAutoBalanceSamePositionAsSongData.Checked = setting.autoBalance.SamePositionAsSongData;
             rbAutoBalanceNotSamePositionAsSongData.Checked = !setting.autoBalance.SamePositionAsSongData;
 
-            cbUseKeyBoardHook.Checked = setting.keyBoardHook.UseKeyBoardHook;
-            gbUseKeyBoardHook.Enabled = setting.keyBoardHook.UseKeyBoardHook;
-
-            cbStopShift.Checked = setting.keyBoardHook.Stop.Shift;
-            cbStopCtrl.Checked = setting.keyBoardHook.Stop.Ctrl;
-            cbStopWin.Checked = setting.keyBoardHook.Stop.Win;
-            cbStopAlt.Checked = setting.keyBoardHook.Stop.Alt;
-            lblStopKey.Text = setting.keyBoardHook.Stop.Key;
-            btStopClr.Enabled = (lblStopKey.Text != "(None)" && !string.IsNullOrEmpty(lblStopKey.Text));
-
-            cbPauseShift.Checked = setting.keyBoardHook.Pause.Shift;
-            cbPauseCtrl.Checked = setting.keyBoardHook.Pause.Ctrl;
-            cbPauseWin.Checked = setting.keyBoardHook.Pause.Win;
-            cbPauseAlt.Checked = setting.keyBoardHook.Pause.Alt;
-            lblPauseKey.Text = setting.keyBoardHook.Pause.Key;
-            btPauseClr.Enabled = (lblPauseKey.Text != "(None)" && !string.IsNullOrEmpty(lblPauseKey.Text));
-
-            cbFadeoutShift.Checked = setting.keyBoardHook.Fadeout.Shift;
-            cbFadeoutCtrl.Checked = setting.keyBoardHook.Fadeout.Ctrl;
-            cbFadeoutWin.Checked = setting.keyBoardHook.Fadeout.Win;
-            cbFadeoutAlt.Checked = setting.keyBoardHook.Fadeout.Alt;
-            lblFadeoutKey.Text = setting.keyBoardHook.Fadeout.Key;
-            btFadeoutClr.Enabled = (lblFadeoutKey.Text != "(None)" && !string.IsNullOrEmpty(lblFadeoutKey.Text));
-
-            cbPrevShift.Checked = setting.keyBoardHook.Prev.Shift;
-            cbPrevCtrl.Checked = setting.keyBoardHook.Prev.Ctrl;
-            cbPrevWin.Checked = setting.keyBoardHook.Prev.Win;
-            cbPrevAlt.Checked = setting.keyBoardHook.Prev.Alt;
-            lblPrevKey.Text = setting.keyBoardHook.Prev.Key;
-            btPrevClr.Enabled = (lblPrevKey.Text != "(None)" && !string.IsNullOrEmpty(lblPrevKey.Text));
-
-            cbSlowShift.Checked = setting.keyBoardHook.Slow.Shift;
-            cbSlowCtrl.Checked = setting.keyBoardHook.Slow.Ctrl;
-            cbSlowWin.Checked = setting.keyBoardHook.Slow.Win;
-            cbSlowAlt.Checked = setting.keyBoardHook.Slow.Alt;
-            lblSlowKey.Text = setting.keyBoardHook.Slow.Key;
-            btSlowClr.Enabled = (lblSlowKey.Text != "(None)" && !string.IsNullOrEmpty(lblSlowKey.Text));
-
-            cbPlayShift.Checked = setting.keyBoardHook.Play.Shift;
-            cbPlayCtrl.Checked = setting.keyBoardHook.Play.Ctrl;
-            cbPlayWin.Checked = setting.keyBoardHook.Play.Win;
-            cbPlayAlt.Checked = setting.keyBoardHook.Play.Alt;
-            lblPlayKey.Text = setting.keyBoardHook.Play.Key;
-            btPlayClr.Enabled = (lblPlayKey.Text != "(None)" && !string.IsNullOrEmpty(lblPlayKey.Text));
-
-            cbFastShift.Checked = setting.keyBoardHook.Fast.Shift;
-            cbFastCtrl.Checked = setting.keyBoardHook.Fast.Ctrl;
-            cbFastWin.Checked = setting.keyBoardHook.Fast.Win;
-            cbFastAlt.Checked = setting.keyBoardHook.Fast.Alt;
-            lblFastKey.Text = setting.keyBoardHook.Fast.Key;
-            btFastClr.Enabled = (lblFastKey.Text != "(None)" && !string.IsNullOrEmpty(lblFastKey.Text));
-
-            cbNextShift.Checked = setting.keyBoardHook.Next.Shift;
-            cbNextCtrl.Checked = setting.keyBoardHook.Next.Ctrl;
-            cbNextWin.Checked = setting.keyBoardHook.Next.Win;
-            cbNextAlt.Checked = setting.keyBoardHook.Next.Alt;
-            lblNextKey.Text = setting.keyBoardHook.Next.Key;
-            btNextClr.Enabled = (lblNextKey.Text != "(None)" && !string.IsNullOrEmpty(lblNextKey.Text));
 
             cbInfiniteOfflineMode.Checked = setting.InfiniteOfflineMode;
 
@@ -753,6 +675,33 @@ namespace mml2vgmIDE
                     rbQueryPerformanceCounter.Checked = true;
                     break;
             }
+
+            //ShortCutKey
+            initializeDgvShortCutKey();
+        }
+
+        private void initializeDgvShortCutKey()
+        {
+            dgvShortCutKey.SuspendLayout();
+            dgvShortCutKey.Rows.Clear();
+
+            for (int n = 0; n < setting.shortCutKey.Info.Length; n++)
+            {
+                if (setting.shortCutKey.Info[n].number < 0) continue;
+
+                dgvShortCutKey.Rows.Add();
+                DataGridViewRow row = dgvShortCutKey.Rows[dgvShortCutKey.Rows.Count - 1];
+                row.Cells["clmNumber"].Value = setting.shortCutKey.Info[n].number;
+                row.Cells["clmFunc"].Value = setting.shortCutKey.Info[n].func;
+                row.Cells["clmShift"].Value = setting.shortCutKey.Info[n].shift;
+                row.Cells["clmCtrl"].Value = setting.shortCutKey.Info[n].ctrl;
+                row.Cells["clmAlt"].Value = setting.shortCutKey.Info[n].alt;
+                row.Cells["clmKey"].Value = string.IsNullOrEmpty(setting.shortCutKey.Info[n].key) ? "(none)" : setting.shortCutKey.Info[n].key;
+                row.Cells["clmSet"].Value = "Set";
+                row.Cells["clmClr"].Value = "Clr";
+            }
+
+            dgvShortCutKey.ResumeLayout();
         }
 
         private void SetSCCICombo(EnmRealChipType scciType, ComboBox cmbP, RadioButton rbP, ComboBox cmbS, RadioButton rbS)
@@ -1577,56 +1526,11 @@ namespace mml2vgmIDE
             setting.autoBalance.SaveSongBalance = rbAutoBalanceSaveSongBalance.Checked;
             setting.autoBalance.SamePositionAsSongData= rbAutoBalanceSamePositionAsSongData.Checked;
 
-
-            setting.keyBoardHook.UseKeyBoardHook = cbUseKeyBoardHook.Checked;
-
-            setting.keyBoardHook.Stop.Shift = cbStopShift.Checked;
-            setting.keyBoardHook.Stop.Ctrl = cbStopCtrl.Checked;
-            setting.keyBoardHook.Stop.Win = cbStopWin.Checked;
-            setting.keyBoardHook.Stop.Alt = cbStopAlt.Checked;
-            setting.keyBoardHook.Stop.Key = string.IsNullOrEmpty(lblStopKey.Text) ? "(None)" : lblStopKey.Text;
-
-            setting.keyBoardHook.Pause.Shift = cbPauseShift.Checked;
-            setting.keyBoardHook.Pause.Ctrl = cbPauseCtrl.Checked;
-            setting.keyBoardHook.Pause.Win = cbPauseWin.Checked;
-            setting.keyBoardHook.Pause.Alt = cbPauseAlt.Checked;
-            setting.keyBoardHook.Pause.Key = string.IsNullOrEmpty(lblPauseKey.Text) ? "(None)" : lblPauseKey.Text;
-
-            setting.keyBoardHook.Fadeout.Shift = cbFadeoutShift.Checked;
-            setting.keyBoardHook.Fadeout.Ctrl = cbFadeoutCtrl.Checked;
-            setting.keyBoardHook.Fadeout.Win = cbFadeoutWin.Checked;
-            setting.keyBoardHook.Fadeout.Alt = cbFadeoutAlt.Checked;
-            setting.keyBoardHook.Fadeout.Key = string.IsNullOrEmpty(lblFadeoutKey.Text) ? "(None)" : lblFadeoutKey.Text;
-
-            setting.keyBoardHook.Prev.Shift = cbPrevShift.Checked;
-            setting.keyBoardHook.Prev.Ctrl = cbPrevCtrl.Checked;
-            setting.keyBoardHook.Prev.Win = cbPrevWin.Checked;
-            setting.keyBoardHook.Prev.Alt = cbPrevAlt.Checked;
-            setting.keyBoardHook.Prev.Key = string.IsNullOrEmpty(lblPrevKey.Text) ? "(None)" : lblPrevKey.Text;
-
-            setting.keyBoardHook.Slow.Shift = cbSlowShift.Checked;
-            setting.keyBoardHook.Slow.Ctrl = cbSlowCtrl.Checked;
-            setting.keyBoardHook.Slow.Win = cbSlowWin.Checked;
-            setting.keyBoardHook.Slow.Alt = cbSlowAlt.Checked;
-            setting.keyBoardHook.Slow.Key = string.IsNullOrEmpty(lblSlowKey.Text) ? "(None)" : lblSlowKey.Text;
-
-            setting.keyBoardHook.Play.Shift = cbPlayShift.Checked;
-            setting.keyBoardHook.Play.Ctrl = cbPlayCtrl.Checked;
-            setting.keyBoardHook.Play.Win = cbPlayWin.Checked;
-            setting.keyBoardHook.Play.Alt = cbPlayAlt.Checked;
-            setting.keyBoardHook.Play.Key = string.IsNullOrEmpty(lblPlayKey.Text) ? "(None)" : lblPlayKey.Text;
-
-            setting.keyBoardHook.Fast.Shift = cbFastShift.Checked;
-            setting.keyBoardHook.Fast.Ctrl = cbFastCtrl.Checked;
-            setting.keyBoardHook.Fast.Win = cbFastWin.Checked;
-            setting.keyBoardHook.Fast.Alt = cbFastAlt.Checked;
-            setting.keyBoardHook.Fast.Key = string.IsNullOrEmpty(lblFastKey.Text) ? "(None)" : lblFastKey.Text;
-
-            setting.keyBoardHook.Next.Shift = cbNextShift.Checked;
-            setting.keyBoardHook.Next.Ctrl = cbNextCtrl.Checked;
-            setting.keyBoardHook.Next.Win = cbNextWin.Checked;
-            setting.keyBoardHook.Next.Alt = cbNextAlt.Checked;
-            setting.keyBoardHook.Next.Key = string.IsNullOrEmpty(lblNextKey.Text) ? "(None)" : lblNextKey.Text;
+            //setting.keyBoardHook.Stop.Shift = cbStopShift.Checked;
+            //setting.keyBoardHook.Stop.Ctrl = cbStopCtrl.Checked;
+            //setting.keyBoardHook.Stop.Win = cbStopWin.Checked;
+            //setting.keyBoardHook.Stop.Alt = cbStopAlt.Checked;
+            //setting.keyBoardHook.Stop.Key = string.IsNullOrEmpty(lblStopKey.Text) ? "(None)" : lblStopKey.Text;
 
             setting.InfiniteOfflineMode = cbInfiniteOfflineMode.Checked;
             if (cbInfiniteOfflineMode.Checked) setting.OfflineMode = true;
@@ -1634,6 +1538,22 @@ namespace mml2vgmIDE
             if (rbStopWatch.Checked) setting.musicInterruptTimer = MusicInterruptTimer.StopWatch;
             if (rbDateTime.Checked) setting.musicInterruptTimer = MusicInterruptTimer.DateTime;
             if (rbQueryPerformanceCounter.Checked) setting.musicInterruptTimer = MusicInterruptTimer.QueryPerformanceCounter;
+
+            setting.shortCutKey.Info = new Setting.ShortCutKey.ShortCutKeyInfo[dgvShortCutKey.Rows.Count];
+            i = 0;
+            foreach(DataGridViewRow row in dgvShortCutKey.Rows)
+            {
+                Setting.ShortCutKey.ShortCutKeyInfo scki = new Setting.ShortCutKey.ShortCutKeyInfo(
+                    (int)row.Cells["clmNumber"].Value,
+                    (string)row.Cells["clmFunc"].Value,
+                    (bool)row.Cells["clmShift"].Value,
+                    (bool)row.Cells["clmCtrl"].Value,
+                    (bool)row.Cells["clmAlt"].Value,
+                    row.Cells["clmKey"].Value.ToString()
+                    );
+                setting.shortCutKey.Info[i++] = scki;
+            }
+
 
             this.DialogResult = DialogResult.OK;
             this.Close();
@@ -2199,223 +2119,26 @@ namespace mml2vgmIDE
 
         private void cbUseKeyBoardHook_CheckedChanged(object sender, EventArgs e)
         {
-            gbUseKeyBoardHook.Enabled = cbUseKeyBoardHook.Checked;
         }
 
         private void btStopClr_Click(object sender, EventArgs e)
         {
-            lblStopKey.Text = "(None)";
-            btStopClr.Enabled = false;
+            //lblStopKey.Text = "(None)";
+            //btStopClr.Enabled = false;
         }
 
-        private void btPauseClr_Click(object sender, EventArgs e)
-        {
-            lblPauseKey.Text = "(None)";
-            btPauseClr.Enabled = false;
-        }
-
-        private void btFadeoutClr_Click(object sender, EventArgs e)
-        {
-            lblFadeoutKey.Text = "(None)";
-            btFadeoutClr.Enabled = false;
-        }
-
-        private void btPrevClr_Click(object sender, EventArgs e)
-        {
-            lblPrevKey.Text = "(None)";
-            btPrevClr.Enabled = false;
-        }
-
-        private void btSlowClr_Click(object sender, EventArgs e)
-        {
-            lblSlowKey.Text = "(None)";
-            btSlowClr.Enabled = false;
-        }
-
-        private void btPlayClr_Click(object sender, EventArgs e)
-        {
-            lblPlayKey.Text = "(None)";
-            btPlayClr.Enabled = false;
-        }
-
-        private void btFastClr_Click(object sender, EventArgs e)
-        {
-            lblFastKey.Text = "(None)";
-            btFastClr.Enabled = false;
-        }
-
-        private void btNextClr_Click(object sender, EventArgs e)
-        {
-            lblNextKey.Text = "(None)";
-            btNextClr.Enabled = false;
-        }
-
-        private void btStopSet_Click(object sender, EventArgs e)
-        {
-
-            lblKey = lblStopKey;
-            btSet = btStopSet;
-            btClr = btStopClr;
-            btOK = btnOK;
-            btStopSet.Enabled = false;
-            btnOK.Enabled = false;
-            lblKey.Text = "入力待ち";
-            lblKey.ForeColor = System.Drawing.Color.Red;
-
-            lblNotice = lblKeyBoardHookNotice;
-            lblKeyBoardHookNotice.Visible = true;
-
-            //frmMain.keyHookMeth = keyHookMeth;
-
-        }
-
-        private void btPauseSet_Click(object sender, EventArgs e)
-        {
-            lblKey = lblPauseKey;
-            btSet = btPauseSet;
-            btOK = btnOK;
-            btClr = btPauseClr;
-            btPauseSet.Enabled = false;
-            btnOK.Enabled = false;
-            lblKey.Text = "入力待ち";
-            lblKey.ForeColor = System.Drawing.Color.Red;
-
-            lblNotice = lblKeyBoardHookNotice;
-            lblKeyBoardHookNotice.Visible = true;
-
-            //frmMain.keyHookMeth = keyHookMeth;
-
-        }
-
-        private void btFadeoutSet_Click(object sender, EventArgs e)
-        {
-            lblKey = lblFadeoutKey;
-            btSet = btFadeoutSet;
-            btClr = btFadeoutClr;
-            btOK = btnOK;
-            btFadeoutSet.Enabled = false;
-            btnOK.Enabled = false;
-            lblKey.Text = "入力待ち";
-            lblKey.ForeColor = System.Drawing.Color.Red;
-
-            lblNotice = lblKeyBoardHookNotice;
-            lblKeyBoardHookNotice.Visible = true;
-
-            //frmMain.keyHookMeth = keyHookMeth;
-        }
-
-        private void btPrevSet_Click(object sender, EventArgs e)
-        {
-            lblKey = lblPrevKey;
-            btSet = btPrevSet;
-            btClr = btPrevClr;
-            btOK = btnOK;
-            btPrevSet.Enabled = false;
-            btnOK.Enabled = false;
-            lblKey.Text = "入力待ち";
-            lblKey.ForeColor = System.Drawing.Color.Red;
-
-            lblNotice = lblKeyBoardHookNotice;
-            lblKeyBoardHookNotice.Visible = true;
-
-            //frmMain.keyHookMeth = keyHookMeth;
-        }
-
-        private void btSlowSet_Click(object sender, EventArgs e)
-        {
-            lblKey = lblSlowKey;
-            btSet = btSlowSet;
-            btClr = btSlowClr;
-            btOK = btnOK;
-            btSlowSet.Enabled = false;
-            btnOK.Enabled = false;
-            lblKey.Text = "入力待ち";
-            lblKey.ForeColor = System.Drawing.Color.Red;
-
-            lblNotice = lblKeyBoardHookNotice;
-            lblKeyBoardHookNotice.Visible = true;
-
-            //frmMain.keyHookMeth = keyHookMeth;
-        }
-
-        private void btPlaySet_Click(object sender, EventArgs e)
-        {
-            lblKey = lblPlayKey;
-            btSet = btPlaySet;
-            btClr = btPlayClr;
-            btOK = btnOK;
-            btPlaySet.Enabled = false;
-            btnOK.Enabled = false;
-            lblKey.Text = "入力待ち";
-            lblKey.ForeColor = System.Drawing.Color.Red;
-
-            lblNotice = lblKeyBoardHookNotice;
-            lblKeyBoardHookNotice.Visible = true;
-
-            //frmMain.keyHookMeth = keyHookMeth;
-        }
-
-        private void btFastSet_Click(object sender, EventArgs e)
-        {
-            lblKey = lblFastKey;
-            btSet = btFastSet;
-            btClr = btFastClr;
-            btOK = btnOK;
-            btFastSet.Enabled = false;
-            btnOK.Enabled = false;
-            lblKey.Text = "入力待ち";
-            lblKey.ForeColor = System.Drawing.Color.Red;
-
-            lblNotice = lblKeyBoardHookNotice;
-            lblKeyBoardHookNotice.Visible = true;
-
-            //frmMain.keyHookMeth = keyHookMeth;
-        }
-
-        private void btNextSet_Click(object sender, EventArgs e)
-        {
-            lblKey = lblNextKey;
-            btSet = btNextSet;
-            btClr = btNextClr;
-            btOK = btnOK;
-            btNextSet.Enabled = false;
-            btnOK.Enabled = false;
-            lblKey.Text = "入力待ち";
-            lblKey.ForeColor = System.Drawing.Color.Red;
-
-            lblNotice = lblKeyBoardHookNotice;
-            lblKeyBoardHookNotice.Visible = true;
-
-            //frmMain.keyHookMeth = keyHookMeth;
-        }
 
         public static Label lblKey = null;
         public static Label lblNotice = null;
         public static Button btSet = null;
         public static Button btClr = null;
         public static Button btOK = null;
-        //public static void keyHookMeth(HongliangSoft.Utilities.Gui.KeyboardHookedEventArgs e)
-        //{
-        //    if (e.UpDown != HongliangSoft.Utilities.Gui.KeyboardUpDown.Up) return;
-
-        //    lblKey.ForeColor = System.Drawing.SystemColors.ControlText;
-        //    lblKey.Text= e.KeyCode.ToString();
-        //    lblNotice.Visible = false;
-
-        //    //frmMain.keyHookMeth = null;
-        //    btSet.Enabled = true;
-        //    btOK.Enabled = true;
-        //    btClr.Enabled = true;
-
-        //}
+        private int waitShortCutKey;
 
         private void frmSetting_FormClosed(object sender, FormClosedEventArgs e)
         {
 
-            //if (frmMain.keyHookMeth == keyHookMeth)
-            {
-                //frmMain.keyHookMeth = null;
-            }
+
 
         }
 
@@ -2444,6 +2167,57 @@ namespace mml2vgmIDE
                 lblFontStyle.Font = fd.Font;
 
             }
+        }
+
+        private void dgvShortCutKey_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.ColumnIndex < 0) return;
+            if (e.RowIndex < 0) return;
+
+            if (dgvShortCutKey.Columns[e.ColumnIndex].Name == "clmSet")
+            {
+                btnOK.Enabled = false;
+                dgvShortCutKey.Rows[e.RowIndex].Selected = true;
+                lblSKKey.Text = "割り当てるキーを入力してください";
+                lblSKKey.ForeColor = System.Drawing.Color.Red;
+                waitShortCutKey = e.RowIndex;
+            }
+
+            if (dgvShortCutKey.Columns[e.ColumnIndex].Name == "clmClr")
+            {
+                if (waitShortCutKey != -1)
+                {
+                    dgvShortCutKey.Rows[waitShortCutKey].Cells["clmKey"].Value = "(none)";
+                    btnOK.Enabled = true;
+                    lblSKKey.Text = "";
+                    waitShortCutKey = -1;
+                }
+            }
+
+        }
+
+        protected override bool ProcessCmdKey(ref System.Windows.Forms.Message msg, System.Windows.Forms.Keys keyData)
+        {
+            if (waitShortCutKey == -1) return base.ProcessCmdKey(ref msg, keyData);
+
+            dgvShortCutKey.Rows[waitShortCutKey].Cells["clmKey"].Value = keyData;
+            lblSKKey.Text = "";
+            waitShortCutKey = -1;
+            btnOK.Enabled = true;
+
+            return base.ProcessCmdKey(ref msg, keyData);
+        }
+
+        private void btnInitializeShortCutKey_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show(
+                "ショートカットキーの設定を初期状態に戻します。"
+                , "初期化前確認"
+                , MessageBoxButtons.OKCancel, MessageBoxIcon.Question) != DialogResult.OK) return;
+
+            setting.shortCutKey = null;
+            Setting.CheckShortCutKey(setting);
+            initializeDgvShortCutKey();
         }
     }
 

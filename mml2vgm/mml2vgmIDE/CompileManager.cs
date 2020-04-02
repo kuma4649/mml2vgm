@@ -133,7 +133,9 @@ namespace mml2vgmIDE
             }
 
             string tempPath = Path.Combine(Common.GetApplicationDataFolder(true), "temp", Path.GetFileName(qi.doc.gwiFullPath));
-            string wrkPath = Path.GetDirectoryName(qi.doc.gwiFullPath);
+            string path1 = Path.GetDirectoryName(qi.doc.gwiFullPath);
+            path1 = string.IsNullOrEmpty(path1) ? qi.doc.gwiFullPath : path1;
+            string wrkPath = path1;
             msgBox.clear();
             musicDriverInterface.MmlDatum[] mubData = null;
             bool isSuccess = true;
@@ -183,7 +185,9 @@ namespace mml2vgmIDE
             string stPath = System.Windows.Forms.Application.StartupPath;
             string[] activeMMLTextLines = qi.srcText.Split(new string[] { "\r\n" }, StringSplitOptions.None);
             string tempPath = Path.Combine(Common.GetApplicationDataFolder(true), "temp", Path.GetFileName(qi.doc.gwiFullPath));
-            string wrkPath = Path.GetDirectoryName(qi.doc.gwiFullPath);
+            string path1 = Path.GetDirectoryName(qi.doc.gwiFullPath);
+            path1 = string.IsNullOrEmpty(path1) ? qi.doc.gwiFullPath : path1;
+            string wrkPath = path1;
             msgBox.clear();
 
             Mml2vgm mv = new Mml2vgm(activeMMLTextLines, tempPath, null, stPath, disp, wrkPath, false);

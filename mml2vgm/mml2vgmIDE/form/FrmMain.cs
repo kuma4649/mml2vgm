@@ -330,7 +330,9 @@ namespace mml2vgmIDE
                 fn = fn.Substring(0, fn.Length - 1);
             }
             sfd.FileName = Path.GetFileName(fn);
-            sfd.InitialDirectory = Path.GetDirectoryName(fn);
+            string path1 = System.IO.Path.GetDirectoryName(fn);
+            path1 = string.IsNullOrEmpty(path1) ? fn : path1;
+            sfd.InitialDirectory = path1;
             sfd.Filter = "gwiファイル(*.gwi)|*.gwi|すべてのファイル(*.*)|*.*";
             sfd.Title = "名前を付けて保存";
             sfd.RestoreDirectory = true;
@@ -338,7 +340,7 @@ namespace mml2vgmIDE
             {
                 return;
             }
-            fn = Path.Combine(Path.GetDirectoryName(fn), sfd.FileName);
+            fn = Path.Combine(path1, sfd.FileName);
             d.editor.Text = Path.GetFileName(sfd.FileName);
             d.gwiFullPath = fn;
             d.parentFullPath = "";
@@ -406,7 +408,9 @@ namespace mml2vgmIDE
                     fn = fn.Substring(0, fn.Length - 1);
                 }
                 sfd.FileName = Path.GetFileNameWithoutExtension(fn) + (FileInformation.format == enmFormat.VGM ? ".vgm" : (FileInformation.format == enmFormat.XGM ? ".xgm" : ".zgm"));
-                sfd.InitialDirectory = Path.GetDirectoryName(fn);
+                string path1 = System.IO.Path.GetDirectoryName(fn);
+                path1 = string.IsNullOrEmpty(path1) ? fn : path1;
+                sfd.InitialDirectory = path1;
                 sfd.Filter = "vgmファイル(*.vgm)|*.vgm|すべてのファイル(*.*)|*.*";
                 if (FileInformation.format == enmFormat.XGM)
                 {
@@ -697,6 +701,7 @@ namespace mml2vgmIDE
         {
             TsmiShowMIDIKbd_Click(null, null);
         }
+
         protected override bool ProcessCmdKey(ref System.Windows.Forms.Message msg, System.Windows.Forms.Keys keyData)
         {
             log.Write(string.Format("2動作未定義のキー：{0}", keyData));
@@ -849,7 +854,9 @@ namespace mml2vgmIDE
 
             frmFolderTree.tvFolderTree.Nodes.Clear();
             frmFolderTree.tvFolderTree.Nodes.Add(dc.gwiTree);
-            frmFolderTree.basePath = Path.GetDirectoryName(dc.gwiFullPath);
+            string path1 = Path.GetDirectoryName(dc.gwiFullPath);
+            path1 = string.IsNullOrEmpty(path1) ? dc.gwiFullPath : path1;
+            frmFolderTree.basePath = path1;
 
             FormBox.Add(dc.editor);
             DocumentBox.Add(dc);
@@ -867,7 +874,9 @@ namespace mml2vgmIDE
 
             frmFolderTree.tvFolderTree.Nodes.Clear();
             frmFolderTree.tvFolderTree.Nodes.Add(dc.gwiTree);
-            frmFolderTree.basePath = Path.GetDirectoryName(dc.gwiFullPath);
+            string path1 = System.IO.Path.GetDirectoryName(dc.gwiFullPath);
+            path1 = string.IsNullOrEmpty(path1) ? dc.gwiFullPath : path1;
+            frmFolderTree.basePath = path1;
 
             FormBox.Add(dc.editor);
             DocumentBox.Add(dc);
@@ -997,7 +1006,9 @@ namespace mml2vgmIDE
 
             args = new string[2];
             args[1] = tempPath;
-            wrkPath = Path.GetDirectoryName(((Document)((FrmEditor)dc).Tag).gwiFullPath);
+            string path1 = System.IO.Path.GetDirectoryName(((Document)((FrmEditor)dc).Tag).gwiFullPath);
+            path1 = string.IsNullOrEmpty(path1) ? ((Document)((FrmEditor)dc).Tag).gwiFullPath : path1;
+            wrkPath = path1;
 
             traceInfoSw = false;
             Sgry.Azuki.WinForms.AzukiControl ac = null;
@@ -1051,7 +1062,9 @@ namespace mml2vgmIDE
 
                 args = new string[2];
                 args[1] = tempPath;
-                wrkPath = Path.GetDirectoryName(((Document)((FrmEditor)dc).Tag).gwiFullPath);
+                string path1 = System.IO.Path.GetDirectoryName(((Document)((FrmEditor)dc).Tag).gwiFullPath);
+                path1 = string.IsNullOrEmpty(path1) ? ((Document)((FrmEditor)dc).Tag).gwiFullPath : path1;
+                wrkPath = path1;
             }
             else
             {
@@ -1185,8 +1198,10 @@ namespace mml2vgmIDE
                     parentFullPath = ((Document)((FrmEditor)idc).Tag).parentFullPath;
                 }
 
+                string path1 = System.IO.Path.GetDirectoryName(fileName);
+                path1 = string.IsNullOrEmpty(path1) ? fileName : path1;
                 fileName = Path.Combine(
-                    Path.GetDirectoryName(fileName)
+                    path1
                     , Path.GetFileNameWithoutExtension(fileName) 
                     + string.Format("_{0}", m98Count++) + ".muc"
                     );
@@ -1200,7 +1215,9 @@ namespace mml2vgmIDE
 
                 frmFolderTree.tvFolderTree.Nodes.Clear();
                 frmFolderTree.tvFolderTree.Nodes.Add(dc.gwiTree);
-                frmFolderTree.basePath = Path.GetDirectoryName(dc.gwiFullPath);
+                path1 = System.IO.Path.GetDirectoryName(dc.gwiFullPath);
+                path1 = string.IsNullOrEmpty(path1) ? dc.gwiFullPath : path1;
+                frmFolderTree.basePath = path1;
 
                 FormBox.Add(dc.editor);
                 DocumentBox.Add(dc);
@@ -1670,7 +1687,9 @@ namespace mml2vgmIDE
 
                 if (frmFolderTree.tvFolderTree.Nodes.Count == 0 || frmFolderTree.tvFolderTree.Nodes[0] != d.gwiTree) 
                 {
-                    frmFolderTree.basePath = Path.GetDirectoryName(d.gwiFullPath);
+                    string path1 = System.IO.Path.GetDirectoryName(d.gwiFullPath);
+                    path1 = string.IsNullOrEmpty(path1) ? d.gwiFullPath : path1;
+                    frmFolderTree.basePath = path1;
                     frmFolderTree.tvFolderTree.Nodes.Clear();
                     frmFolderTree.tvFolderTree.Nodes.Add(d.gwiTree);
                     frmFolderTree.refresh();
@@ -1743,7 +1762,7 @@ namespace mml2vgmIDE
 
                 try
                 {
-                    if (filename.Length < 1) continue;
+                    if (string.IsNullOrEmpty( filename)) continue;
                     if (filename[filename.Length - 1] == '\\')
                     {
                         continue;

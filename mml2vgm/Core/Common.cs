@@ -552,5 +552,28 @@ namespace Core
             return ret;
         }
 
+        public static string GetDirectoryName(string path)
+        {
+            string pt = Path.GetDirectoryName(path);
+            pt = string.IsNullOrEmpty(pt) ? path : pt;
+
+            return pt;
+        }
+
+        public static string PathCombine(params string[] paths)
+        {
+            //末尾の/を抜いたベースパス(もっぱらドライブ名)を取得する
+            string bpt = Path.GetPathRoot(paths[0]);
+            if (bpt.Length > 0)
+            {
+                while (bpt[bpt.Length - 1] == Path.DirectorySeparatorChar) bpt = bpt.Substring(0, bpt.Length - 1);
+            }
+
+            //パスを結合後、ベースパス(もっぱらドライブ名)が頭にない場合は追加する
+            string pt = Path.Combine(paths);
+            pt = (pt.IndexOf(bpt) == 0) ? pt : (bpt + pt);
+
+            return pt;
+        }
     }
 }

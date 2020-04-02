@@ -540,7 +540,6 @@
             this.tsmiJumpSoloMode.CheckOnClick = true;
             this.tsmiJumpSoloMode.Name = "tsmiJumpSoloMode";
             resources.ApplyResources(this.tsmiJumpSoloMode, "tsmiJumpSoloMode");
-            //this.tsmiJumpSoloMode.Click += new System.EventHandler(this.tsmiJumpSoloMode_Click);
             // 
             // tsmiScript
             // 

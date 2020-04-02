@@ -208,7 +208,7 @@
     <value>Consolas, 9pt, style=Bold</value>
   </data>
   <data name="toolStripStatusLabel1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>28, 17</value>
+    <value>147, 17</value>
   </data>
   <data name="toolStripStatusLabel1.Text" xml:space="preserve">
     <value> </value>
@@ -338,6 +338,9 @@
   </data>
   <data name="tssbMIDIKbd.Text" xml:space="preserve">
     <value>Keyboard</value>
+  </data>
+  <data name="tssbMIDIKbd.Visible" type="System.Boolean, mscorlib">
+    <value>False</value>
   </data>
   <data name="statusStrip1.Location" type="System.Drawing.Point, System.Drawing">
     <value>0, 539</value>
@@ -505,49 +508,52 @@
     <value>&amp;Edit</value>
   </data>
   <data name="TsmiShowPartCounter.Size" type="System.Drawing.Size, System.Drawing">
-    <value>164, 22</value>
+    <value>180, 22</value>
   </data>
   <data name="TsmiShowPartCounter.Text" xml:space="preserve">
     <value>Part Counter</value>
   </data>
   <data name="TsmiShowFolderTree.Size" type="System.Drawing.Size, System.Drawing">
-    <value>164, 22</value>
+    <value>180, 22</value>
   </data>
   <data name="TsmiShowFolderTree.Text" xml:space="preserve">
     <value>Folder Tree</value>
   </data>
   <data name="TsmiShowErrorList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>164, 22</value>
+    <value>180, 22</value>
   </data>
   <data name="TsmiShowErrorList.Text" xml:space="preserve">
     <value>Error List</value>
   </data>
   <data name="TsmiShowLog.Size" type="System.Drawing.Size, System.Drawing">
-    <value>164, 22</value>
+    <value>180, 22</value>
   </data>
   <data name="TsmiShowLog.Text" xml:space="preserve">
     <value>Log</value>
   </data>
   <data name="TsmiShowLyrics.Size" type="System.Drawing.Size, System.Drawing">
-    <value>164, 22</value>
+    <value>180, 22</value>
   </data>
   <data name="TsmiShowLyrics.Text" xml:space="preserve">
     <value>Lyric</value>
   </data>
   <data name="TsmiShowMixer.Size" type="System.Drawing.Size, System.Drawing">
-    <value>164, 22</value>
+    <value>180, 22</value>
   </data>
   <data name="TsmiShowMixer.Text" xml:space="preserve">
     <value>Instrument Mixer</value>
   </data>
   <data name="TsmiShowMIDIKbd.Size" type="System.Drawing.Size, System.Drawing">
-    <value>164, 22</value>
+    <value>180, 22</value>
   </data>
   <data name="TsmiShowMIDIKbd.Text" xml:space="preserve">
     <value>MIDI Keyboard</value>
   </data>
+  <data name="TsmiShowMIDIKbd.Visible" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
   <data name="toolStripSeparator3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>161, 6</value>
+    <value>177, 6</value>
   </data>
   <data name="TsmiFncHide.Size" type="System.Drawing.Size, System.Drawing">
     <value>157, 22</value>
@@ -568,7 +574,7 @@
     <value>Button and Text</value>
   </data>
   <data name="TsmiFunctionKey.Size" type="System.Drawing.Size, System.Drawing">
-    <value>164, 22</value>
+    <value>180, 22</value>
   </data>
   <data name="TsmiFunctionKey.Text" xml:space="preserve">
     <value>Function Key</value>
@@ -628,7 +634,7 @@
     <value>&amp;Compile</value>
   </data>
   <data name="tsmiJumpSoloMode.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
+    <value>161, 22</value>
   </data>
   <data name="tsmiJumpSoloMode.Text" xml:space="preserve">
     <value>Jump solo Mode</value>

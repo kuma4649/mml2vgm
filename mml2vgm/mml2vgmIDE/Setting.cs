@@ -845,6 +845,11 @@ namespace mml2vgmIDE
         public AutoBalance autoBalance {
             get => _autoBalance; set => _autoBalance = value;
         }
+
+        private Setting.ShortCutKey _shortCutKey = null;
+        public Setting.ShortCutKey shortCutKey { get => _shortCutKey; set => _shortCutKey = value; }
+
+
         public KeyBoardHook keyBoardHook { get => _keyBoardHook; set => _keyBoardHook = value; }
         public ColorScheme ColorScheme { get => _colorScheme; set => _colorScheme = value; }
         private KeyBoardHook _keyBoardHook = new KeyBoardHook();
@@ -3709,6 +3714,7 @@ namespace mml2vgmIDE
             setting.AutoDetectModuleType = this.AutoDetectModuleType;
             setting.ColorScheme = this.ColorScheme.Copy();
             setting.InfiniteOfflineMode = this.InfiniteOfflineMode;
+            setting.shortCutKey = (this.shortCutKey != null) ? this.shortCutKey.Copy() : null;
 
             return setting;
         }
@@ -3730,9 +3736,11 @@ namespace mml2vgmIDE
             try
             {
                 string fn = Properties.Resources.cntSettingFileName;
-                if (System.IO.File.Exists(System.IO.Path.Combine(System.IO.Path.GetDirectoryName(Application.ExecutablePath), fn)))
+                string path1 = System.IO.Path.GetDirectoryName(Application.ExecutablePath);
+                path1 = string.IsNullOrEmpty(path1) ? Application.ExecutablePath : path1;
+                if (System.IO.File.Exists(System.IO.Path.Combine(path1, fn)))
                 {
-                    Common.settingFilePath = System.IO.Path.GetDirectoryName(Application.ExecutablePath);
+                    Common.settingFilePath = path1;
                 }
                 else
                 {
@@ -3745,6 +3753,7 @@ namespace mml2vgmIDE
                 if (!File.Exists(fullPath)) {
                     Setting s=new Setting();
                     s.OfflineMode = s.InfiniteOfflineMode;
+                    CheckShortCutKey(s);
                     return s;
                 }
                 XmlSerializer serializer = new XmlSerializer(typeof(Setting), typeof(Setting).GetNestedTypes());
@@ -3752,6 +3761,7 @@ namespace mml2vgmIDE
                 {
                     Setting s= (Setting)serializer.Deserialize(sr);
                     s.OfflineMode = s.InfiniteOfflineMode;
+                    CheckShortCutKey(s);
                     return s;
                 }
             }
@@ -3760,10 +3770,168 @@ namespace mml2vgmIDE
                 log.ForcedWrite(ex);
                 Setting s = new Setting();
                 s.OfflineMode = s.InfiniteOfflineMode;
+                CheckShortCutKey(s);
                 return s;
             }
         }
 
+        public static void CheckShortCutKey(Setting setting)
+        {
+            if (setting.shortCutKey != null) return;
+
+            Setting.ShortCutKey.ShortCutKeyInfo[] aryShortcutKeyDefault = new Setting.ShortCutKey.ShortCutKeyInfo[]
+            {
+                new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.FileOpen,"開く",false,false,false,"F1")
+                ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.FileSave,"保存",false,false,false,"F2")
+                ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.SearchNext,"次を検索",false,false,false,"F3")
+                ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Compile,"コンパイル",false,false,false,"F4")
+                ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Play,"再生",false,false,false,"F5")
+                ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.SkipPlay,"スキップ+再生",true,false,false,"F5")
+                ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.TracePlay,"トレース+再生",false,true,false,"F5")
+                ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.SkipTracePlay,"スキップ+トレース+再生",true,true,false,"F5")
+                ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.JsoloPlay,"Jソロ+再生",false,false,true,"F5")
+                ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.SkipJsoloPlay,"スキップ+Jソロ+再生",true,false,true,"F5")
+                ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.TraceJsoloPlay,"トレース+Jソロ+再生",false,true,true,"F5")
+                ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.SkipTraceJsoloPlay,"スキップ+トレース+Jソロ+再生",true,true,true,"F5")
+                ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.M98,"M98",false,false,false,"F6")
+                ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Stop,"停止",false,false,false,"F9")
+                ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Slow,"スロー",false,false,false,"F10")
+                ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Fastx4,"4倍速",false,false,false,"F11")
+                ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Kbd,"鍵盤",false,false,false,"F12")
+
+                ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Ch01Solo,"Ch01 Solo ",false,true,false,"D1")
+                ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Ch02Solo,"Ch02 Solo ",false,true,false,"D2")
+                ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Ch03Solo,"Ch03 Solo ",false,true,false,"D3")
+                ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Ch04Solo,"Ch04 Solo ",false,true,false,"D4")
+                ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Ch05Solo,"Ch05 Solo ",false,true,false,"D5")
+                ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Ch06Solo,"Ch06 Solo ",false,true,false,"D6")
+                ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Ch07Solo,"Ch07 Solo ",false,true,false,"D7")
+                ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Ch08Solo,"Ch08 Solo ",false,true,false,"D8")
+                ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Ch09Solo,"Ch09 Solo ",false,true,false,"D9")
+                ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Ch10Solo,"Ch10 Solo ",false,true,false,"D0")
+                ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Ch11Solo,"Ch11 Solo ",false,true,false,"OemMinus")
+                ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.ResetSolo,"Reset Solo",false,true,false,"Oem5")
+
+                ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Ch01Mute,"Ch01 Mute ",false,false,true,"D1")
+                ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Ch02Mute,"Ch02 Mute ",false,false,true,"D2")
+                ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Ch03Mute,"Ch03 Mute ",false,false,true,"D3")
+                ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Ch04Mute,"Ch04 Mute ",false,false,true,"D4")
+                ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Ch05Mute,"Ch05 Mute ",false,false,true,"D5")
+                ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Ch06Mute,"Ch06 Mute ",false,false,true,"D6")
+                ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Ch07Mute,"Ch07 Mute ",false,false,true,"D7")
+                ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Ch08Mute,"Ch08 Mute ",false,false,true,"D8")
+                ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Ch09Mute,"Ch09 Mute ",false,false,true,"D9")
+                ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Ch10Mute,"Ch10 Mute ",false,false,true,"D0")
+                ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Ch11Mute,"Ch11 Mute ",false,false,true,"OemMinus")
+                ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.ResetMute,"Reset Mute",false,false,true,"Oem5")
+            };
+
+
+            setting.shortCutKey = new Setting.ShortCutKey();
+            setting.shortCutKey.Info = new Setting.ShortCutKey.ShortCutKeyInfo[aryShortcutKeyDefault.Length];
+            for (int i = 0; i < aryShortcutKeyDefault.Length; i++)
+            {
+                setting.shortCutKey.Info[i] = aryShortcutKeyDefault[i].Copy();
+            }
+
+        }
+
+        [Serializable]
+        public class ShortCutKey
+        {
+            private ShortCutKeyInfo[] _Info = null;
+            public ShortCutKeyInfo[] Info { get => _Info; set => _Info = value; }
+
+            [Serializable]
+            public class ShortCutKeyInfo
+            {
+                public int number = -1;
+                public string func = "";
+                public bool shift = false;
+                public bool ctrl = false;
+                public bool alt = false;
+                public string key = "";
+
+                public ShortCutKeyInfo()
+                {
+                }
+
+                public ShortCutKeyInfo(int number, string func, bool shift, bool ctrl, bool alt, string key)
+                {
+                    this.number = number;
+                    this.func = func;
+                    this.shift = shift;
+                    this.ctrl = ctrl;
+                    this.alt = alt;
+                    this.key = key;
+                }
+
+                public ShortCutKeyInfo Copy()
+                {
+                    ShortCutKeyInfo ret = new ShortCutKeyInfo(number, func, shift, ctrl, alt, key);
+                    return ret;
+                }
+
+            }
+
+            public enum enmContent : int
+            {
+                FileOpen = 0,
+                FileSave = 10,
+                SearchNext=20,
+                Compile=30,
+                Play=40,
+                SkipPlay=41,
+                TracePlay=42,
+                SkipTracePlay=43,
+                JsoloPlay=44,
+                SkipJsoloPlay = 45,
+                TraceJsoloPlay = 46,
+                SkipTraceJsoloPlay = 47,
+                M98=50,
+                Stop=80,
+                Slow=90,
+                Fastx4=100,
+                Kbd=-110,
+                Ch01Solo = 200,
+                Ch02Solo = 210,
+                Ch03Solo = 220,
+                Ch04Solo = 230,
+                Ch05Solo = 240,
+                Ch06Solo = 250,
+                Ch07Solo = 260,
+                Ch08Solo = 270,
+                Ch09Solo = 280,
+                Ch10Solo = 290,
+                Ch11Solo = 300,
+                ResetSolo = 310,
+                Ch01Mute = 320,
+                Ch02Mute = 330,
+                Ch03Mute = 340,
+                Ch04Mute = 350,
+                Ch05Mute = 360,
+                Ch06Mute = 370,
+                Ch07Mute = 380,
+                Ch08Mute = 390,
+                Ch09Mute = 400,
+                Ch10Mute = 410,
+                Ch11Mute = 420,
+                ResetMute = 430,
+            };
+
+            public ShortCutKey Copy()
+            {
+                ShortCutKey ret = new ShortCutKey();
+                ret.Info = new ShortCutKeyInfo[this.Info.Length];
+                int i = 0;
+                foreach(ShortCutKeyInfo inf in this.Info)
+                {
+                    ret.Info[i++] = inf.Copy();
+                }
+
+                return ret;
+            }
+        }
     }
 
 }
