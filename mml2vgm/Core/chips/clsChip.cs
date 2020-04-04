@@ -366,11 +366,11 @@ namespace Core
                         , out int a
                         , pw.octaveNow
                         , note.cmd
-                        , note.shift + (i + 0) * Math.Sign(delta)
+                        , note.shift + (i + 0) * Math.Sign(delta) + pw.keyShift + pw.toneDoublerKeyShift
                         , out int b
                         , pw.octaveNow
                         , note.cmd
-                        , note.shift + (i + 1) * Math.Sign(delta)
+                        , note.shift + (i + 1) * Math.Sign(delta) + pw.keyShift + pw.toneDoublerKeyShift
                         , delta
                         );
 

@@ -37,7 +37,7 @@ namespace mml2vgmIDE
         private FrmMixer frmMixer = null;
         private FrmMIDIKbd frmMIDIKbd = null;
         private bool doPlay = false;
-        private bool isTrace = false;
+        public bool isTrace = false;
         private bool doSkip = false;
         private bool doSkipStop = false;
         private bool doExport;

@@ -12,6 +12,7 @@
 
 ;common
 E0000=Exception message:\r\n{0}\r\nException stacktrace:\r\n{1}\r\n
+E0001=従来の書式が既に使われていて自動でmucomDotNET形式に移行できませんでした。Driverタグを使用してmucomDotNETを予め宣言してください。
 
 ;compiler.cs 0100
 E0100=Hmm, Error has been occured on compile. (Error on row:{0} col:{1})

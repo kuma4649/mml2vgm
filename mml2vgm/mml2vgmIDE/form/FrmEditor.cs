@@ -341,6 +341,8 @@ namespace mml2vgmIDE
 
         public void ActionComment(IUserInterface ui)
         {
+            if (main.isTrace) return;
+
             int b;
             int e;
             azukiControl.GetSelection(out b, out e);

@@ -254,6 +254,7 @@
             this.cmbMIDIIN = new System.Windows.Forms.ComboBox();
             this.label5 = new System.Windows.Forms.Label();
             this.tpKeyBoard = new System.Windows.Forms.TabPage();
+            this.btnInitializeShortCutKey = new System.Windows.Forms.Button();
             this.lblSKKey = new System.Windows.Forms.Label();
             this.dgvShortCutKey = new System.Windows.Forms.DataGridView();
             this.clmNumber = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -355,7 +356,6 @@
             this.labelCompanyName = new System.Windows.Forms.Label();
             this.textBoxDescription = new System.Windows.Forms.TextBox();
             this.cbHiyorimiMode = new System.Windows.Forms.CheckBox();
-            this.btnInitializeShortCutKey = new System.Windows.Forms.Button();
             this.gbWaveOut.SuspendLayout();
             this.gbAsioOut.SuspendLayout();
             this.gbWasapiOut.SuspendLayout();
@@ -2988,6 +2988,17 @@
             this.tpKeyBoard.Text = "ショートカットキー";
             this.tpKeyBoard.UseVisualStyleBackColor = true;
             // 
+            // btnInitializeShortCutKey
+            // 
+            this.btnInitializeShortCutKey.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnInitializeShortCutKey.Location = new System.Drawing.Point(336, 369);
+            this.btnInitializeShortCutKey.Name = "btnInitializeShortCutKey";
+            this.btnInitializeShortCutKey.Size = new System.Drawing.Size(104, 23);
+            this.btnInitializeShortCutKey.TabIndex = 31;
+            this.btnInitializeShortCutKey.Text = "初期状態に戻す";
+            this.btnInitializeShortCutKey.UseVisualStyleBackColor = true;
+            this.btnInitializeShortCutKey.Click += new System.EventHandler(this.btnInitializeShortCutKey_Click);
+            // 
             // lblSKKey
             // 
             this.lblSKKey.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
@@ -4110,16 +4121,6 @@
             this.cbHiyorimiMode.Text = "日和見モード(出力タブ：\r\n遅延時間100ms以下の時、使用を推奨)";
             this.cbHiyorimiMode.UseVisualStyleBackColor = true;
             this.cbHiyorimiMode.Visible = false;
-            // 
-            // btnInitializeShortCutKey
-            // 
-            this.btnInitializeShortCutKey.Location = new System.Drawing.Point(336, 369);
-            this.btnInitializeShortCutKey.Name = "btnInitializeShortCutKey";
-            this.btnInitializeShortCutKey.Size = new System.Drawing.Size(104, 23);
-            this.btnInitializeShortCutKey.TabIndex = 31;
-            this.btnInitializeShortCutKey.Text = "初期状態に戻す";
-            this.btnInitializeShortCutKey.UseVisualStyleBackColor = true;
-            this.btnInitializeShortCutKey.Click += new System.EventHandler(this.btnInitializeShortCutKey_Click);
             // 
             // FrmSetting
             // 
