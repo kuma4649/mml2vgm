@@ -596,7 +596,7 @@ l#n             oooooooooooooooooooooooooooo  デフォルト音長指定(クロ
 on              -ooo-ooooo-oooo-ooooo-o-oo-o  オクターブ絶対指定(1 - 8)(実際に発音される音は可能な音域のみ)
 on              ---o------------------------  オクターブ絶対指定(3 - 5)(実際に発音される音は可能な音域のみ)
 on              ---------------------o-o----  オクターブ絶対指定(2 - 5)(実際に発音される音は可能な音域のみ)
-Dn              -ooo-ooooo-oooo-oooooooooo-o  ディチューン (範囲未チェック)相対指定のみ
+Dn              -ooo-ooooo-oooo-oooooooooo-o  ディチューン (範囲未チェック)絶対指定のみ
 vn              -oo----oo---oo---oo-oo-o----  音量絶対指定(Y/E/Tf/Te/Pf/Pe/Nf/Ne/Z/Y: 0 - 127)
 vn              -----o---o----o----o--o-oooo  音量絶対指定(S/Ts/Ps/H/Ns/Lf/Lr/K: 0 - 15)
 vn              ------o----o----o-----------  音量絶対指定(R/Tb/Pp: 0 - 255)

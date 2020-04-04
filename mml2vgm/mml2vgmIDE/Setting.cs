@@ -3775,65 +3775,134 @@ namespace mml2vgmIDE
             }
         }
 
+        public static Setting.ShortCutKey.ShortCutKeyInfo[] aryShortcutKeyDefault = new Setting.ShortCutKey.ShortCutKeyInfo[]
+        {
+            //ShortCutKeyInfo(int number, string func, bool shift, bool ctrl, bool alt, string key)
+            new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.FileOpen,"開く",false,false,false,"F1")
+            ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.FileOpen+1,"開く",false,true,false,"O")
+            ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.FileSave,"保存",false,false,false,"F2")
+            ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.FileSave+1,"保存",false,true,false,"S")
+            ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Search,"検索",false,true,false,"F")
+            ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.SearchNext,"次を検索",false,false,false,"F3")
+            ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.SearchPrev,"前を検索",true,false,false,"F3")
+            ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Compile,"コンパイル",false,false,false,"F4")
+            ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Play,"再生",false,false,false,"F5")
+            ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.SkipPlay,"スキップ+再生",true,false,false,"F5")
+            ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.TracePlay,"トレース+再生",false,true,false,"F5")
+            ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.SkipTracePlay,"スキップ+トレース+再生",true,true,false,"F5")
+            ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.JsoloPlay,"Jソロ+再生",false,false,true,"F5")
+            ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.SkipJsoloPlay,"スキップ+Jソロ+再生",true,false,true,"F5")
+            ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.TraceJsoloPlay,"トレース+Jソロ+再生",false,true,true,"F5")
+            ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.SkipTraceJsoloPlay,"スキップ+トレース+Jソロ+再生",true,true,true,"F5")
+            ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.M98,"M98",false,false,false,"F6")
+            ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Stop,"停止",false,false,false,"F9")
+            ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Slow,"スロー",false,false,false,"F10")
+            ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Fastx4,"4倍速",false,false,false,"F11")
+            ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Kbd,"鍵盤",false,false,false,"F12")
+            ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.CloseTab,"タブを閉じる",false,true,false,"W")
+            ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.CloseTabForce,"強制的にタブを閉じる",true,true,false,"W")
+            ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.JumpAnchorNext,"次の//まで飛ぶ",false,true,false,"Next")
+            ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.JumpAnchorPrev,"前の//まで飛ぶ",false,true,false,"PageUp")
+            ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.CommentOnOff,"コメント化する/しない",false,true,false,"Divide")
+            ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.CommentOnOff+1,"コメント化する/しない",false,true,false,"OemQuestion")
+            ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.PartEnter,"改行時にパート情報自動挿入",true,false,false,"Return")
+            ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Home,"キャレットをホームポジション/パート情報後に移動",false,false,false,"Home")
+
+            ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Ch01Solo,"Ch01 Solo ",false,true,false,"D1")
+            ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Ch02Solo,"Ch02 Solo ",false,true,false,"D2")
+            ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Ch03Solo,"Ch03 Solo ",false,true,false,"D3")
+            ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Ch04Solo,"Ch04 Solo ",false,true,false,"D4")
+            ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Ch05Solo,"Ch05 Solo ",false,true,false,"D5")
+            ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Ch06Solo,"Ch06 Solo ",false,true,false,"D6")
+            ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Ch07Solo,"Ch07 Solo ",false,true,false,"D7")
+            ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Ch08Solo,"Ch08 Solo ",false,true,false,"D8")
+            ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Ch09Solo,"Ch09 Solo ",false,true,false,"D9")
+            ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Ch10Solo,"Ch10 Solo ",false,true,false,"D0")
+            ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Ch11Solo,"Ch11 Solo ",false,true,false,"OemMinus")
+            ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.ResetSolo,"Reset Solo",false,true,false,"Oem5")
+
+            ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Ch01Mute,"Ch01 Mute ",false,false,true,"D1")
+            ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Ch02Mute,"Ch02 Mute ",false,false,true,"D2")
+            ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Ch03Mute,"Ch03 Mute ",false,false,true,"D3")
+            ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Ch04Mute,"Ch04 Mute ",false,false,true,"D4")
+            ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Ch05Mute,"Ch05 Mute ",false,false,true,"D5")
+            ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Ch06Mute,"Ch06 Mute ",false,false,true,"D6")
+            ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Ch07Mute,"Ch07 Mute ",false,false,true,"D7")
+            ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Ch08Mute,"Ch08 Mute ",false,false,true,"D8")
+            ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Ch09Mute,"Ch09 Mute ",false,false,true,"D9")
+            ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Ch10Mute,"Ch10 Mute ",false,false,true,"D0")
+            ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Ch11Mute,"Ch11 Mute ",false,false,true,"OemMinus")
+            ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.ResetMute,"Reset Mute",false,false,true,"Oem5")
+        };
+
+
         public static void CheckShortCutKey(Setting setting)
         {
-            if (setting.shortCutKey != null) return;
-
-            Setting.ShortCutKey.ShortCutKeyInfo[] aryShortcutKeyDefault = new Setting.ShortCutKey.ShortCutKeyInfo[]
+            if (setting.shortCutKey != null)
             {
-                new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.FileOpen,"開く",false,false,false,"F1")
-                ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.FileSave,"保存",false,false,false,"F2")
-                ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.SearchNext,"次を検索",false,false,false,"F3")
-                ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Compile,"コンパイル",false,false,false,"F4")
-                ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Play,"再生",false,false,false,"F5")
-                ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.SkipPlay,"スキップ+再生",true,false,false,"F5")
-                ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.TracePlay,"トレース+再生",false,true,false,"F5")
-                ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.SkipTracePlay,"スキップ+トレース+再生",true,true,false,"F5")
-                ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.JsoloPlay,"Jソロ+再生",false,false,true,"F5")
-                ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.SkipJsoloPlay,"スキップ+Jソロ+再生",true,false,true,"F5")
-                ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.TraceJsoloPlay,"トレース+Jソロ+再生",false,true,true,"F5")
-                ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.SkipTraceJsoloPlay,"スキップ+トレース+Jソロ+再生",true,true,true,"F5")
-                ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.M98,"M98",false,false,false,"F6")
-                ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Stop,"停止",false,false,false,"F9")
-                ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Slow,"スロー",false,false,false,"F10")
-                ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Fastx4,"4倍速",false,false,false,"F11")
-                ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Kbd,"鍵盤",false,false,false,"F12")
+                if (CheckShortCutKeyStep2(setting)) return;
+            }
 
-                ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Ch01Solo,"Ch01 Solo ",false,true,false,"D1")
-                ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Ch02Solo,"Ch02 Solo ",false,true,false,"D2")
-                ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Ch03Solo,"Ch03 Solo ",false,true,false,"D3")
-                ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Ch04Solo,"Ch04 Solo ",false,true,false,"D4")
-                ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Ch05Solo,"Ch05 Solo ",false,true,false,"D5")
-                ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Ch06Solo,"Ch06 Solo ",false,true,false,"D6")
-                ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Ch07Solo,"Ch07 Solo ",false,true,false,"D7")
-                ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Ch08Solo,"Ch08 Solo ",false,true,false,"D8")
-                ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Ch09Solo,"Ch09 Solo ",false,true,false,"D9")
-                ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Ch10Solo,"Ch10 Solo ",false,true,false,"D0")
-                ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Ch11Solo,"Ch11 Solo ",false,true,false,"OemMinus")
-                ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.ResetSolo,"Reset Solo",false,true,false,"Oem5")
-
-                ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Ch01Mute,"Ch01 Mute ",false,false,true,"D1")
-                ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Ch02Mute,"Ch02 Mute ",false,false,true,"D2")
-                ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Ch03Mute,"Ch03 Mute ",false,false,true,"D3")
-                ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Ch04Mute,"Ch04 Mute ",false,false,true,"D4")
-                ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Ch05Mute,"Ch05 Mute ",false,false,true,"D5")
-                ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Ch06Mute,"Ch06 Mute ",false,false,true,"D6")
-                ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Ch07Mute,"Ch07 Mute ",false,false,true,"D7")
-                ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Ch08Mute,"Ch08 Mute ",false,false,true,"D8")
-                ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Ch09Mute,"Ch09 Mute ",false,false,true,"D9")
-                ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Ch10Mute,"Ch10 Mute ",false,false,true,"D0")
-                ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Ch11Mute,"Ch11 Mute ",false,false,true,"OemMinus")
-                ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.ResetMute,"Reset Mute",false,false,true,"Oem5")
-            };
-
-
+            //定義が全くない場合は初期設定を設定する
             setting.shortCutKey = new Setting.ShortCutKey();
             setting.shortCutKey.Info = new Setting.ShortCutKey.ShortCutKeyInfo[aryShortcutKeyDefault.Length];
             for (int i = 0; i < aryShortcutKeyDefault.Length; i++)
             {
                 setting.shortCutKey.Info[i] = aryShortcutKeyDefault[i].Copy();
             }
+        }
 
+        public static bool CheckShortCutKeyStep2(Setting setting)
+        {
+            //ショートカットキー設定に既存の設定を上書きして、新たな設定を作る
+            ShortCutKey.ShortCutKeyInfo[] newAry = new ShortCutKey.ShortCutKeyInfo[aryShortcutKeyDefault.Length];
+            for (int i = 0; i < aryShortcutKeyDefault.Length; i++)
+            {
+                newAry[i] = aryShortcutKeyDefault[i].Copy();
+                for (int j = 0; j < setting.shortCutKey.Info.Length; j++)
+                {
+                    if (newAry[i].number != setting.shortCutKey.Info[j].number) continue;
+                    newAry[i] = setting.shortCutKey.Info[j].Copy();
+                    break;
+                }
+            }
+
+            //重複が無いか確認する
+            bool duplicate = false;
+            for (int i = 0; i < newAry.Length; i++)
+            {
+                for (int j = 0; j < newAry.Length; j++)
+                {
+                    if (i == j) continue;
+
+                    if (newAry[i].alt != newAry[j].alt) continue;
+                    if (newAry[i].shift != newAry[j].shift) continue;
+                    if (newAry[i].ctrl != newAry[j].ctrl) continue;
+                    if (newAry[i].key.ToString() != newAry[j].key.ToString()) continue;
+
+                    duplicate = true;
+                    break;
+                }
+            }
+
+            //重複がない場合は問題なし
+            if (!duplicate)
+            {
+                setting.shortCutKey.Info = newAry;
+                return true;
+            }
+
+            DialogResult res = MessageBox.Show(@"ショートカットキーの設定に重複があることを検出しました。
+「はい」:設定を初期化して起動する。(推奨)
+「いいえ」:このまま起動する", "起動時チェック処理", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+
+            if (res == DialogResult.Yes)
+            {
+                setting.shortCutKey.Info = null;
+                return false;
+            }
+
+            return true;
         }
 
         [Serializable]
@@ -3877,46 +3946,56 @@ namespace mml2vgmIDE
             public enum enmContent : int
             {
                 FileOpen = 0,
-                FileSave = 10,
-                SearchNext=20,
-                Compile=30,
-                Play=40,
-                SkipPlay=41,
-                TracePlay=42,
-                SkipTracePlay=43,
-                JsoloPlay=44,
-                SkipJsoloPlay = 45,
-                TraceJsoloPlay = 46,
-                SkipTraceJsoloPlay = 47,
-                M98=50,
-                Stop=80,
-                Slow=90,
-                Fastx4=100,
-                Kbd=-110,
-                Ch01Solo = 200,
-                Ch02Solo = 210,
-                Ch03Solo = 220,
-                Ch04Solo = 230,
-                Ch05Solo = 240,
-                Ch06Solo = 250,
-                Ch07Solo = 260,
-                Ch08Solo = 270,
-                Ch09Solo = 280,
-                Ch10Solo = 290,
-                Ch11Solo = 300,
-                ResetSolo = 310,
-                Ch01Mute = 320,
-                Ch02Mute = 330,
-                Ch03Mute = 340,
-                Ch04Mute = 350,
-                Ch05Mute = 360,
-                Ch06Mute = 370,
-                Ch07Mute = 380,
-                Ch08Mute = 390,
-                Ch09Mute = 400,
-                Ch10Mute = 410,
-                Ch11Mute = 420,
-                ResetMute = 430,
+                FileSave = 100,
+                Search = 200,
+                SearchNext = 210,
+                SearchPrev = 220,
+                JumpAnchorNext = 230,
+                JumpAnchorPrev = 240,
+                Compile = 300,
+                Play = 400,
+                SkipPlay = 410,
+                TracePlay = 420,
+                SkipTracePlay = 430,
+                JsoloPlay = 440,
+                SkipJsoloPlay = 450,
+                TraceJsoloPlay = 460,
+                SkipTraceJsoloPlay = 470,
+                M98 = 500,
+                Stop = 800,
+                Slow = 900,
+                Fastx4 = 1000,
+                Kbd = -1100,
+                CloseTab = 1200,
+                CloseTabForce = 1210,
+                CommentOnOff=1220,
+                PartEnter=1230,
+                Home=1240,
+
+                Ch01Solo = 2000,
+                Ch02Solo = 2100,
+                Ch03Solo = 2200,
+                Ch04Solo = 2300,
+                Ch05Solo = 2400,
+                Ch06Solo = 2500,
+                Ch07Solo = 2600,
+                Ch08Solo = 2700,
+                Ch09Solo = 2800,
+                Ch10Solo = 2900,
+                Ch11Solo = 3000,
+                ResetSolo = 3100,
+                Ch01Mute = 3200,
+                Ch02Mute = 3300,
+                Ch03Mute = 3400,
+                Ch04Mute = 3500,
+                Ch05Mute = 3600,
+                Ch06Mute = 3700,
+                Ch07Mute = 3800,
+                Ch08Mute = 3900,
+                Ch09Mute = 4000,
+                Ch10Mute = 4100,
+                Ch11Mute = 4200,
+                ResetMute = 4300,
             };
 
             public ShortCutKey Copy()

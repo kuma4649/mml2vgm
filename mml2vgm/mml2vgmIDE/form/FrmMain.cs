@@ -51,6 +51,12 @@ namespace mml2vgmIDE
         private bool ctrl = false;
         private bool shift = false;
         private bool alt = false;
+
+        public bool SendProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            return ProcessCmdKey(ref msg, keyData);
+        }
+
         //private bool beforeAlt = false;
         private ChannelInfo defaultChannelInfo = null;
         private mucomManager mucom = null;
@@ -706,10 +712,218 @@ namespace mml2vgmIDE
         {
             log.Write(string.Format("2動作未定義のキー：{0}", keyData));
 
+            ctrl = (keyData & Keys.Control) == Keys.Control;
+            shift = (keyData & Keys.Shift) == Keys.Shift;
+            alt = (keyData & Keys.Alt) == Keys.Alt;
+
             if (keyData == (System.Windows.Forms.Keys.OemMinus | System.Windows.Forms.Keys.Alt))
             {
                 frmPartCounter.ClickMUTE(10);
                 return true;
+            }
+
+            for (int i = 0; i < setting.shortCutKey.Info.Length; i++)
+            {
+                if (setting.shortCutKey.Info[i].shift != ((keyData & Keys.Shift) == Keys.Shift)) continue;
+                if (setting.shortCutKey.Info[i].ctrl != ((keyData & Keys.Control) == Keys.Control)) continue;
+                if (setting.shortCutKey.Info[i].alt != ((keyData & Keys.Alt) == Keys.Alt)) continue;
+                Keys k = keyData & ~Keys.Shift;
+                k = k & ~Keys.Control;
+                k = k & ~Keys.Alt;
+                if (setting.shortCutKey.Info[i].key != k.ToString()) continue;
+
+                Document doc;
+
+                switch (setting.shortCutKey.Info[i].number- (setting.shortCutKey.Info[i].number%10))
+                {
+                    case (int)Setting.ShortCutKey.enmContent.FileOpen:
+                        TsmiFileOpen_Click(null, null);
+                        return true;
+                    case (int)Setting.ShortCutKey.enmContent.FileSave:
+                        TsmiSaveFile_Click(null, null);
+                        return true;
+                    case (int)Setting.ShortCutKey.enmContent.Search:
+                        doc = GetActiveDocument();
+                        if (doc != null) doc.editor.ActionFind(null);
+                        return true;
+                    case (int)Setting.ShortCutKey.enmContent.SearchNext:
+                        doc = GetActiveDocument();
+                        if (doc != null) doc.editor.ActionFindNext(null);
+                        return true;
+                    case (int)Setting.ShortCutKey.enmContent.SearchPrev:
+                        doc = GetActiveDocument();
+                        if (doc != null) doc.editor.ActionFindPrevious(null);
+                        return true;
+                    case (int)Setting.ShortCutKey.enmContent.JumpAnchorNext:
+                        doc = GetActiveDocument();
+                        if (doc != null) doc.editor.ActionJumpAnchorNext(null);
+                        return true;
+                    case (int)Setting.ShortCutKey.enmContent.JumpAnchorPrev:
+                        doc = GetActiveDocument();
+                        if (doc != null) doc.editor.ActionJumpAnchorPrevious(null);
+                        return true;
+                    case (int)Setting.ShortCutKey.enmContent.Compile:
+                        Comp();
+                        return true;
+                    case (int)Setting.ShortCutKey.enmContent.M98:
+                        M98Preprocess();
+                        return true;
+                    case (int)Setting.ShortCutKey.enmContent.Stop:
+                        stop();
+                        return true;
+                    case (int)Setting.ShortCutKey.enmContent.Slow:
+                        slow();
+                        return true;
+                    case (int)Setting.ShortCutKey.enmContent.Fastx4:
+                        ff();
+                        return true;
+                    case (int)Setting.ShortCutKey.enmContent.Kbd:
+                        TsmiShowMIDIKbd_Click(null, null);
+                        return true;
+                    case (int)Setting.ShortCutKey.enmContent.CloseTab:
+                        IDockContent dc1 = GetActiveDockContent();
+                        if (dc1 == null) break;
+                        if (!(dc1 is FrmEditor)) break;
+                        ((FrmEditor)dc1).Close();
+                        return true;
+                    case (int)Setting.ShortCutKey.enmContent.CloseTabForce:
+                        IDockContent dc2 = GetActiveDockContent();
+                        if (dc2 == null) break;
+                        if (!(dc2 is FrmEditor)) break;
+                        ((FrmEditor)dc2).forceClose = true;
+                        ((FrmEditor)dc2).Close();
+                        return true;
+
+                    case (int)Setting.ShortCutKey.enmContent.CommentOnOff:
+                        doc = GetActiveDocument();
+                        if (doc != null) doc.editor.ActionComment(null);
+                        return true;
+                    case (int)Setting.ShortCutKey.enmContent.PartEnter:
+                        doc = GetActiveDocument();
+                        if (doc != null) doc.editor.ActionShiftEnter(null);
+                        return true;
+                    case (int)Setting.ShortCutKey.enmContent.Home:
+                        doc = GetActiveDocument();
+                        if (doc != null) doc.editor.ActionHome(null);
+                        return true;
+
+                    case (int)Setting.ShortCutKey.enmContent.Ch01Solo:
+                        frmPartCounter.ClickSOLO(0);
+                        return true;
+                    case (int)Setting.ShortCutKey.enmContent.Ch02Solo:
+                        frmPartCounter.ClickSOLO(1);
+                        return true;
+                    case (int)Setting.ShortCutKey.enmContent.Ch03Solo:
+                        frmPartCounter.ClickSOLO(2);
+                        return true;
+                    case (int)Setting.ShortCutKey.enmContent.Ch04Solo:
+                        frmPartCounter.ClickSOLO(3);
+                        return true;
+                    case (int)Setting.ShortCutKey.enmContent.Ch05Solo:
+                        frmPartCounter.ClickSOLO(4);
+                        return true;
+                    case (int)Setting.ShortCutKey.enmContent.Ch06Solo:
+                        frmPartCounter.ClickSOLO(5);
+                        return true;
+                    case (int)Setting.ShortCutKey.enmContent.Ch07Solo:
+                        frmPartCounter.ClickSOLO(6);
+                        return true;
+                    case (int)Setting.ShortCutKey.enmContent.Ch08Solo:
+                        frmPartCounter.ClickSOLO(7);
+                        return true;
+                    case (int)Setting.ShortCutKey.enmContent.Ch09Solo:
+                        frmPartCounter.ClickSOLO(8);
+                        return true;
+                    case (int)Setting.ShortCutKey.enmContent.Ch10Solo:
+                        frmPartCounter.ClickSOLO(9);
+                        return true;
+                    case (int)Setting.ShortCutKey.enmContent.Ch11Solo:
+                        frmPartCounter.ClickSOLO(10);
+                        return true;
+                    case (int)Setting.ShortCutKey.enmContent.ResetSolo:
+                        frmPartCounter.ClickSOLO(-1);
+                        return true;
+                    case (int)Setting.ShortCutKey.enmContent.Ch01Mute:
+                        frmPartCounter.ClickMUTE(0);
+                        return true;
+                    case (int)Setting.ShortCutKey.enmContent.Ch02Mute:
+                        frmPartCounter.ClickMUTE(1);
+                        return true;
+                    case (int)Setting.ShortCutKey.enmContent.Ch03Mute:
+                        frmPartCounter.ClickMUTE(2);
+                        return true;
+                    case (int)Setting.ShortCutKey.enmContent.Ch04Mute:
+                        frmPartCounter.ClickMUTE(3);
+                        return true;
+                    case (int)Setting.ShortCutKey.enmContent.Ch05Mute:
+                        frmPartCounter.ClickMUTE(4);
+                        return true;
+                    case (int)Setting.ShortCutKey.enmContent.Ch06Mute:
+                        frmPartCounter.ClickMUTE(5);
+                        return true;
+                    case (int)Setting.ShortCutKey.enmContent.Ch07Mute:
+                        frmPartCounter.ClickMUTE(6);
+                        return true;
+                    case (int)Setting.ShortCutKey.enmContent.Ch08Mute:
+                        frmPartCounter.ClickMUTE(7);
+                        return true;
+                    case (int)Setting.ShortCutKey.enmContent.Ch09Mute:
+                        frmPartCounter.ClickMUTE(8);
+                        return true;
+                    case (int)Setting.ShortCutKey.enmContent.Ch10Mute:
+                        frmPartCounter.ClickMUTE(9);
+                        return true;
+                    case (int)Setting.ShortCutKey.enmContent.Ch11Mute:
+                        frmPartCounter.ClickMUTE(10);
+                        return true;
+                    case (int)Setting.ShortCutKey.enmContent.ResetMute:
+                        frmPartCounter.ClickMUTE(-1);
+                        return true;
+
+                    case (int)Setting.ShortCutKey.enmContent.Play:
+                        jumpSoloModeSw = false;
+                        //      doPlay isTrace doSkip
+                        Compile(  true,  false, false, false, false);
+                        return true;
+                    case (int)Setting.ShortCutKey.enmContent.JsoloPlay:
+                        jumpSoloModeSw = true;
+                        //      doPlay isTrace doSkip
+                        //Compile(true, false, false, false, false);
+                        Compile(true, false, true, false, false);
+                        return true;
+                    case (int)Setting.ShortCutKey.enmContent.SkipJsoloPlay:
+                        jumpSoloModeSw = true;
+                        //      doPlay isTrace doSkip
+                        Compile(true, false, true, false, false);
+                        return true;
+                    case (int)Setting.ShortCutKey.enmContent.SkipPlay:
+                        jumpSoloModeSw = false;
+                        //      doPlay isTrace doSkip
+                        Compile(true, false, true, false, false);
+                        return true;
+                    case (int)Setting.ShortCutKey.enmContent.SkipTraceJsoloPlay:
+                        jumpSoloModeSw = true;
+                        //      doPlay isTrace doSkip
+                        Compile(true, true, true, false, false);
+                        return true;
+                    case (int)Setting.ShortCutKey.enmContent.SkipTracePlay:
+                        jumpSoloModeSw = false;
+                        //      doPlay isTrace doSkip
+                        Compile(true, true, true, false, false);
+                        return true;
+                    case (int)Setting.ShortCutKey.enmContent.TraceJsoloPlay:
+                        jumpSoloModeSw = true;
+                        //      doPlay isTrace doSkip
+                        //Compile(true, true, false, false, false);
+                        Compile(true, true, true, false, false);
+                        return true;
+                    case (int)Setting.ShortCutKey.enmContent.TracePlay:
+                        jumpSoloModeSw = false;
+                        //      doPlay isTrace doSkip
+                        Compile(true, true, false, false, false);
+                        return true;
+
+                }
             }
 
             return base.ProcessCmdKey(ref msg, keyData);
@@ -726,107 +940,10 @@ namespace mml2vgmIDE
 
             switch (e.KeyCode)
             {
-                case Keys.F1:
-                    TsmiFileOpen_Click(null, null);
-                    break;
-                case Keys.O:
-                    if ((e.Modifiers & Keys.Control) == Keys.Control)
-                    {
-                        TsmiFileOpen_Click(null, null);
-                    }
-                    break;
-                case Keys.F2:
-                    TsmiSaveFile_Click(null, null);
-                    break;
-                case Keys.S:
-                    if ((e.Modifiers & Keys.Control) == Keys.Control)
-                    {
-                        TsmiSaveFile_Click(null, null);
-                    }
-                    break;
-                case Keys.F4:
-                    Comp();
-                    break;
-                case Keys.F5:
-                    jumpSoloModeSw = alt;//nVidia Geforce ExperienceがインストールされているとAlt+F5が検知できない
-                    Compile(true, ctrl, shift, false, false);
-                    break;
-                case Keys.F6:
-                    M98Preprocess();
-                    break;
-                case Keys.F9:
-                    stop();
-                    break;
-                case Keys.F10:
-                    slow();
-                    break;
-                case Keys.F11:
-                    ff();
-                    break;
-                case Keys.F12:
-                    TsmiShowMIDIKbd_Click(null, null);
-                    break;
-                case Keys.W:
-                    if (ctrl)
-                    {
-                        IDockContent dc = GetActiveDockContent();
-                        if (dc == null) return;
-                        if (!(dc is FrmEditor)) return;
-                        if (shift) ((FrmEditor)dc).forceClose = true;
-                        ((FrmEditor)dc).Close();
-                    }
-                    break;
-                case Keys.D1:
-                    if (ctrl) frmPartCounter.ClickSOLO(0);
-                    else if (alt) frmPartCounter.ClickMUTE(0);
-                    break;
-                case Keys.D2:
-                    if (ctrl) frmPartCounter.ClickSOLO(1);
-                    else if (alt) frmPartCounter.ClickMUTE(1);
-                    break;
-                case Keys.D3:
-                    if (ctrl) frmPartCounter.ClickSOLO(2);
-                    else if (alt) frmPartCounter.ClickMUTE(2);
-                    break;
-                case Keys.D4:
-                    if (ctrl) frmPartCounter.ClickSOLO(3);
-                    else if (alt) frmPartCounter.ClickMUTE(3);
-                    break;
-                case Keys.D5:
-                    if (ctrl) frmPartCounter.ClickSOLO(4);
-                    else if (alt) frmPartCounter.ClickMUTE(4);
-                    break;
-                case Keys.D6:
-                    if (ctrl) frmPartCounter.ClickSOLO(5);
-                    else if (alt) frmPartCounter.ClickMUTE(5);
-                    break;
-                case Keys.D7:
-                    if (ctrl) frmPartCounter.ClickSOLO(6);
-                    else if (alt) frmPartCounter.ClickMUTE(6);
-                    break;
-                case Keys.D8:
-                    if (ctrl) frmPartCounter.ClickSOLO(7);
-                    else if (alt) frmPartCounter.ClickMUTE(7);
-                    break;
-                case Keys.D9:
-                    if (ctrl) frmPartCounter.ClickSOLO(8);
-                    else if (alt) frmPartCounter.ClickMUTE(8);
-                    break;
-                case Keys.D0:
-                    if (ctrl) frmPartCounter.ClickSOLO(9);
-                    else if (alt) frmPartCounter.ClickMUTE(9);
-                    break;
-                case Keys.OemMinus://0のとなりの-キー
-                    if (ctrl)
-                    {
-                        frmPartCounter.ClickSOLO(10);
-                    }
-                    break;
-                case Keys.Oem5://bsのとなりの\キー
-                    if (ctrl) frmPartCounter.ClickSOLO(-1);
-                    else if (alt) frmPartCounter.ClickMUTE(-1);
-                    break;
-
+                //case Keys.F5:
+                //    jumpSoloModeSw = alt;//nVidia Geforce ExperienceがインストールされているとAlt+F5が検知できない
+                //    Compile(true, ctrl, shift, false, false);
+                //    break;
                 default:
                     //↓KeyData確認用
                     log.Write(string.Format("動作未定義のキー：{0}",e.KeyData));

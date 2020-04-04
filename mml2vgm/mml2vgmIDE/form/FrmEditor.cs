@@ -39,7 +39,7 @@ namespace mml2vgmIDE
             }
             set
             {
-                frmSien.parent = value;
+                //frmSien.parent = value;
                 _main = value;
                 main.LocationChanged += AzukiControl_CancelSien;
                 main.SizeChanged += AzukiControl_CancelSien;
@@ -55,6 +55,10 @@ namespace mml2vgmIDE
 
             Common.SetDoubleBuffered(this);
             Common.SetDoubleBuffered(azukiControl);
+        }
+        protected override bool ProcessCmdKey(ref System.Windows.Forms.Message msg, System.Windows.Forms.Keys keyData)
+        {
+            return main.SendProcessCmdKey(ref msg, keyData);
         }
 
         private void setHighlighterVGMZGMZGM()
@@ -104,23 +108,11 @@ namespace mml2vgmIDE
             TextDecoration dec = new BgColorTextDecoration(Color.DarkGoldenrod);
             azukiControl.ColorScheme.SetMarkingDecoration(1, dec);
 
-            azukiControl.SetKeyBind(Keys.Home, ActionHome);
-            azukiControl.SetKeyBind((uint)(Keys.Shift | Keys.Enter), ActionShiftEnter);
-            azukiControl.SetKeyBind((uint)(Keys.Control | Keys.Divide), ActionComment);
-            azukiControl.SetKeyBind((uint)(Keys.Control | Keys.OemQuestion), ActionComment);
-            azukiControl.SetKeyBind((uint)(Keys.Control | Keys.F), ActionFind);
-            azukiControl.SetKeyBind((uint)(Keys.Control | Keys.PageDown), ActionJumpAnchorNext);
-            azukiControl.SetKeyBind((uint)(Keys.Control | Keys.PageUp), ActionJumpAnchorPrevious);
-            azukiControl.SetKeyBind((uint)(Keys.F3), ActionFindNext);
-            azukiControl.SetKeyBind((uint)(Keys.Shift | Keys.F3), ActionFindPrevious);
-            //azukiControl.SetKeyBind((uint)(Keys.Alt | Keys.OemMinus), ActionDummy);
-            //azukiControl.SetKeyBind((uint)(Keys.Alt | Keys.F5), ActionDummy);
-
             this.Controls.Add(azukiControl);
 
-            frmSien = new FrmSien(setting);
-            frmSien.parent = main;
-            frmSien.Show();
+            //frmSien = new FrmSien(setting);
+            //frmSien.parent = main;
+            //frmSien.Show();
         }
 
         private void setHighlighterMUC()
@@ -175,23 +167,11 @@ namespace mml2vgmIDE
             TextDecoration dec = new BgColorTextDecoration(Color.DarkGoldenrod);
             azukiControl.ColorScheme.SetMarkingDecoration(1, dec);
 
-            azukiControl.SetKeyBind(Keys.Home, ActionHome);
-            azukiControl.SetKeyBind((uint)(Keys.Shift | Keys.Enter), ActionShiftEnter);
-            azukiControl.SetKeyBind((uint)(Keys.Control | Keys.Divide), ActionComment);
-            azukiControl.SetKeyBind((uint)(Keys.Control | Keys.OemQuestion), ActionComment);
-            azukiControl.SetKeyBind((uint)(Keys.Control | Keys.F), ActionFind);
-            azukiControl.SetKeyBind((uint)(Keys.Control | Keys.PageDown), ActionJumpAnchorNext);
-            azukiControl.SetKeyBind((uint)(Keys.Control | Keys.PageUp), ActionJumpAnchorPrevious);
-            azukiControl.SetKeyBind((uint)(Keys.F3), ActionFindNext);
-            azukiControl.SetKeyBind((uint)(Keys.Shift | Keys.F3), ActionFindPrevious);
-            //azukiControl.SetKeyBind((uint)(Keys.Alt | Keys.OemMinus), ActionDummy);
-            //azukiControl.SetKeyBind((uint)(Keys.Alt | Keys.F5), ActionDummy);
-
             this.Controls.Add(azukiControl);
 
-            frmSien = new FrmSien(setting);
-            frmSien.parent = main;
-            frmSien.Show();
+            //frmSien = new FrmSien(setting);
+            //frmSien.parent = main;
+            //frmSien.Show();
         }
 
         private void AzukiControl_DragDrop(object sender, DragEventArgs e)
@@ -359,7 +339,7 @@ namespace mml2vgmIDE
             if (main != null) main.TsslLineCol.Text = string.Format("Line:{0} Col:{1}", row + 1, col + 1);
         }
 
-        private void ActionComment(IUserInterface ui)
+        public void ActionComment(IUserInterface ui)
         {
             int b;
             int e;
@@ -405,7 +385,7 @@ namespace mml2vgmIDE
             azukiControl.SetSelection(st, st+line.Length);
         }
 
-        private void ActionShiftEnter(IUserInterface ui)
+        public void ActionShiftEnter(IUserInterface ui)
         {
             int ci = azukiControl.CaretIndex;
             int st = azukiControl.GetLineHeadIndexFromCharIndex(ci);
@@ -449,7 +429,7 @@ namespace mml2vgmIDE
             azukiControl.Document.Replace("\r\n" + line.Substring(0, a));
         }
 
-        private void ActionHome(IUserInterface ui)
+        public void ActionHome(IUserInterface ui)
         {
             int ci = azukiControl.CaretIndex;
             int st = azukiControl.GetLineHeadIndexFromCharIndex(ci);
@@ -545,7 +525,7 @@ namespace mml2vgmIDE
             string line = null;
             do
             {
-                SearchFindNext(anchorTextPattern, false);
+                if (!SearchFindNext(anchorTextPattern, false)) break;
                 int ci = azukiControl.CaretIndex;
                 int st = azukiControl.GetLineHeadIndexFromCharIndex(ci);
                 int li = azukiControl.GetLineIndexFromCharIndex(ci);
@@ -564,7 +544,7 @@ namespace mml2vgmIDE
             string line = null;
             do
             {
-                SearchFindPrevious(anchorTextPattern, false);
+                if (!SearchFindPrevious(anchorTextPattern, false)) break;
                 int ci = azukiControl.CaretIndex;
                 int st = azukiControl.GetLineHeadIndexFromCharIndex(ci);
                 int li = azukiControl.GetLineIndexFromCharIndex(ci);
@@ -600,7 +580,7 @@ namespace mml2vgmIDE
             ;
         }
 
-        public void SearchFindNext(string sTextPtn, bool searchUseRegex)
+        public bool SearchFindNext(string sTextPtn, bool searchUseRegex)
         {
             //AzukiのAnnの検索処理を利用
 
@@ -628,7 +608,7 @@ namespace mml2vgmIDE
                 if (regex == null)
                 {
                     // current text pattern was invalid as a regular expression.
-                    return;
+                    return false;
                 }
 
                 // ensure that "RightToLeft" option of the regex object is NOT set
@@ -661,10 +641,13 @@ namespace mml2vgmIDE
             else
             {
                 MessageBox.Show("見つかりません");
+                return false;
             }
+
+            return true;
         }
 
-        public void SearchFindPrevious(string sTextPtn,bool searchUseRegex)
+        public bool SearchFindPrevious(string sTextPtn,bool searchUseRegex)
         {
 
             //AzukiのAnnの検索処理を利用
@@ -693,7 +676,7 @@ namespace mml2vgmIDE
                 if (regex == null)
                 {
                     // current text pattern was invalid as a regular expression.
-                    return;
+                    return false;
                 }
 
                 // ensure that "RightToLeft" option of the regex object is set
@@ -721,7 +704,10 @@ namespace mml2vgmIDE
             else
             {
                 MessageBox.Show("見つかりません");
+                return false;
             }
+
+            return true;
         }
 
         protected override string GetPersistString()
@@ -771,7 +757,7 @@ namespace mml2vgmIDE
             Point ciP = azukiControl.GetPositionFromIndex(Math.Max(ci - 1, 0));
             ciP = azukiControl.PointToScreen(new Point(ciP.X, ciP.Y + azukiControl.LineHeight));
             string line = azukiControl.GetTextInRange(st, ci).TrimStart();
-            if (line != "" && line[0] == '\'')
+            if (line != "" && line[0] == '\'' && frmSien!=null)
             {
                 frmSien.selRow = -1;
                 frmSien.Request(line, ciP);
@@ -828,6 +814,12 @@ namespace mml2vgmIDE
             if (this.DockState== DockState.Float)
             {
                 main.FrmMain_KeyDown(sender, e);
+            }
+
+            if (frmSien == null)
+            {
+                e.SuppressKeyPress = false;
+                return;
             }
 
             if (!frmSien.GetOpacity())

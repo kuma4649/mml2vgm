@@ -702,6 +702,7 @@ namespace mml2vgmIDE
             }
 
             dgvShortCutKey.ResumeLayout();
+            updateDgvShortCutKeyControl();
         }
 
         private void SetSCCICombo(EnmRealChipType scciType, ComboBox cmbP, RadioButton rbP, ComboBox cmbS, RadioButton rbS)
@@ -2133,7 +2134,7 @@ namespace mml2vgmIDE
         public static Button btSet = null;
         public static Button btClr = null;
         public static Button btOK = null;
-        private int waitShortCutKey;
+        private int waitShortCutKey=-1;
 
         private void frmSetting_FormClosed(object sender, FormClosedEventArgs e)
         {
@@ -2174,6 +2175,11 @@ namespace mml2vgmIDE
             if (e.ColumnIndex < 0) return;
             if (e.RowIndex < 0) return;
 
+            if (dgvShortCutKey.Columns[e.ColumnIndex].Name == "clmShift"
+                || dgvShortCutKey.Columns[e.ColumnIndex].Name == "clmCtrl"
+                || dgvShortCutKey.Columns[e.ColumnIndex].Name == "clmAlt")
+                updateDgvShortCutKeyControl();
+
             if (dgvShortCutKey.Columns[e.ColumnIndex].Name == "clmSet")
             {
                 btnOK.Enabled = false;
@@ -2204,8 +2210,13 @@ namespace mml2vgmIDE
             lblSKKey.Text = "";
             waitShortCutKey = -1;
             btnOK.Enabled = true;
+            updateDgvShortCutKeyControl();
+            
+            ////キー設定中のESC押下時はウィンドウを閉じないようにする
+            //if (keyData == Keys.Escape) return true;
 
-            return base.ProcessCmdKey(ref msg, keyData);
+            //return base.ProcessCmdKey(ref msg, keyData);
+            return true;
         }
 
         private void btnInitializeShortCutKey_Click(object sender, EventArgs e)
@@ -2219,6 +2230,48 @@ namespace mml2vgmIDE
             Setting.CheckShortCutKey(setting);
             initializeDgvShortCutKey();
         }
+
+        private void updateDgvShortCutKeyControl()
+        {
+            dgvShortCutKey.EndEdit();
+
+            dgvShortCutKey.SuspendLayout();
+
+            //キー設定の重複を調べる
+            for (int rowIndex = 0; rowIndex < dgvShortCutKey.RowCount; rowIndex++)
+                SetBackColorDgvShortCutKeyControl(rowIndex, System.Drawing.Color.Empty);
+            for (int dIndex = 0; dIndex < dgvShortCutKey.RowCount; dIndex++)
+            {
+                DataGridViewRow dRow = dgvShortCutKey.Rows[dIndex];
+
+                for (int sIndex = 0; sIndex < dgvShortCutKey.RowCount; sIndex++)
+                {
+                    if (sIndex == dIndex) continue;
+
+                    DataGridViewRow sRow = dgvShortCutKey.Rows[sIndex];
+                    if (sRow.Cells["clmKey"].Value.ToString() != dRow.Cells["clmKey"].Value.ToString()) continue;
+                    if ((bool)sRow.Cells["clmShift"].Value != (bool)dRow.Cells["clmShift"].Value) continue;
+                    if ((bool)sRow.Cells["clmCtrl"].Value != (bool)dRow.Cells["clmCtrl"].Value) continue;
+                    if ((bool)sRow.Cells["clmAlt"].Value != (bool)dRow.Cells["clmAlt"].Value) continue;
+
+                    SetBackColorDgvShortCutKeyControl(sIndex, System.Drawing.Color.Pink);
+                    SetBackColorDgvShortCutKeyControl(dIndex, System.Drawing.Color.Pink);
+                }
+            }
+
+            dgvShortCutKey.ResumeLayout();
+        }
+
+        private void SetBackColorDgvShortCutKeyControl(int index,System.Drawing.Color color)
+        {
+            DataGridViewRow sRow = dgvShortCutKey.Rows[index];
+            sRow.Cells["clmFunc"].Style.BackColor = color;
+            sRow.Cells["clmKey"].Style.BackColor = color;
+            sRow.Cells["clmShift"].Style.BackColor = color;
+            sRow.Cells["clmCtrl"].Style.BackColor = color;
+            sRow.Cells["clmAlt"].Style.BackColor = color;
+        }
+
     }
 
 
