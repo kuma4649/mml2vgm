@@ -54,7 +54,6 @@
             this.Activated += new System.EventHandler(this.FrmEditor_Activated);
             this.Deactivate += new System.EventHandler(this.FrmEditor_Deactivate);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FrmEditor_FormClosing);
-            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.FrmEditor_FormClosed);
             this.Shown += new System.EventHandler(this.FrmEditor_Shown);
             this.ResumeLayout(false);
 

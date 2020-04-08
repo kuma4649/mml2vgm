@@ -661,6 +661,7 @@ namespace mml2vgmIDE
 
 
             cbInfiniteOfflineMode.Checked = setting.InfiniteOfflineMode;
+            cbUseSIen.Checked = setting.UseSien;
 
             switch (setting.musicInterruptTimer)
             {
@@ -1535,6 +1536,7 @@ namespace mml2vgmIDE
 
             setting.InfiniteOfflineMode = cbInfiniteOfflineMode.Checked;
             if (cbInfiniteOfflineMode.Checked) setting.OfflineMode = true;
+            setting.UseSien = cbUseSIen.Checked;
 
             if (rbStopWatch.Checked) setting.musicInterruptTimer = MusicInterruptTimer.StopWatch;
             if (rbDateTime.Checked) setting.musicInterruptTimer = MusicInterruptTimer.DateTime;

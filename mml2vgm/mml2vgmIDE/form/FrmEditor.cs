@@ -39,7 +39,7 @@ namespace mml2vgmIDE
             }
             set
             {
-                //frmSien.parent = value;
+                frmSien.parent = value;
                 _main = value;
                 main.LocationChanged += AzukiControl_CancelSien;
                 main.SizeChanged += AzukiControl_CancelSien;
@@ -110,9 +110,9 @@ namespace mml2vgmIDE
 
             this.Controls.Add(azukiControl);
 
-            //frmSien = new FrmSien(setting);
-            //frmSien.parent = main;
-            //frmSien.Show();
+            frmSien = new FrmSien(setting);
+            frmSien.parent = main;
+            frmSien.Show();
         }
 
         private void setHighlighterMUC()
@@ -169,9 +169,9 @@ namespace mml2vgmIDE
 
             this.Controls.Add(azukiControl);
 
-            //frmSien = new FrmSien(setting);
-            //frmSien.parent = main;
-            //frmSien.Show();
+            frmSien = new FrmSien(setting);
+            frmSien.parent = main;
+            frmSien.Show();
         }
 
         private void AzukiControl_DragDrop(object sender, DragEventArgs e)
@@ -783,6 +783,7 @@ namespace mml2vgmIDE
                     }
                 }
 
+                this.frmSien.Close();
                 forceClose = false;
                 main.RemoveForm(this);
                 main.RemoveDocument(document);
@@ -790,13 +791,9 @@ namespace mml2vgmIDE
             }
         }
 
-        private void FrmEditor_FormClosed(object sender, FormClosedEventArgs e)
-        {
-        }
-
         private void Hokan(string line,Point ciP)
         {
-            if (line == "\'@")
+            if (line == "\'@" && setting.UseSien)
             {
                 Point r = azukiControl.PointToScreen(new Point(ciP.X, ciP.Y + azukiControl.LineHeight));
                 frmSien.Location = new Point(r.X, r.Y);
@@ -856,10 +853,20 @@ namespace mml2vgmIDE
                     {
                         int ci = azukiControl.CaretIndex;
                         SienItem si = (SienItem)frmSien.dgvItem.Rows[frmSien.dgvItem.SelectedRows[0].Index].Tag;
-                        azukiControl.Document.Replace(
-                            si.content,
-                            ci - si.foundCnt,
-                            ci);
+                        if (si.sienType == 2)
+                        {
+                            azukiControl.Document.Replace(
+                                (document.srcFileFormat == EnmMmlFileFormat.GWI) ? si.content : ConvertMucFromGwiOPN(si.content),
+                                ci - si.foundCnt,
+                                ci);
+                        }
+                        else
+                        {
+                            azukiControl.Document.Replace(
+                                si.content,
+                                ci - si.foundCnt,
+                                ci);
+                        }
 
                         azukiControl.SetSelection(ci - si.foundCnt + si.nextAnchor, ci - si.foundCnt + si.nextCaret);
                     }
@@ -874,6 +881,29 @@ namespace mml2vgmIDE
                 default:
                     e.SuppressKeyPress = false;
                     break;
+            }
+        }
+
+        private string ConvertMucFromGwiOPN(string content)
+        {
+            try
+            {
+                string[] ops = content.Split(new string[] { "\r\n" }, StringSplitOptions.None);
+                string ret = string.Format(
+                    "  @001:{{\r\n  {5} {6}\r\n  {0}\r\n  {1}\r\n  {2}\r\n  {3} \"{4}\"}}\r\n"
+                    , ops[3].Substring(3)
+                    , ops[4].Substring(3)
+                    , ops[5].Substring(3)
+                    , ops[6].Substring(3)
+                    , ops[0].Trim().Substring(0, 8)
+                    , ops[8].Substring(3).Trim().Split(' ')[1]
+                    , ops[8].Substring(3).Trim().Split(' ')[0]
+                    );
+                return ret;
+            }
+            catch
+            {
+                return "";
             }
         }
 

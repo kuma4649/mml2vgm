@@ -858,6 +858,10 @@ namespace mml2vgmIDE
 
         private bool _InfiniteOfflineMode = false;
         public bool InfiniteOfflineMode { get => _InfiniteOfflineMode; set => _InfiniteOfflineMode = value; }
+
+        private bool _UseSien = true;
+        public bool UseSien { get => _UseSien; set => _UseSien = value; }
+
         public bool unuseRealChip { get; set; }
         public MusicInterruptTimer musicInterruptTimer { get; set; } = MusicInterruptTimer.StopWatch;
 
@@ -3714,6 +3718,7 @@ namespace mml2vgmIDE
             setting.AutoDetectModuleType = this.AutoDetectModuleType;
             setting.ColorScheme = this.ColorScheme.Copy();
             setting.InfiniteOfflineMode = this.InfiniteOfflineMode;
+            setting.UseSien = this.UseSien;
             setting.shortCutKey = (this.shortCutKey != null) ? this.shortCutKey.Copy() : null;
 
             return setting;

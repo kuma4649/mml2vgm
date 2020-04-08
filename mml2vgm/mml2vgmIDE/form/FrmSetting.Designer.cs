@@ -76,7 +76,6 @@
             this.rbSCCIDetect = new System.Windows.Forms.RadioButton();
             this.rbC86ctlDetect = new System.Windows.Forms.RadioButton();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.ucSI = new mml2vgmIDE.ucSettingInstruments();
             this.tabPage13 = new System.Windows.Forms.TabPage();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.label16 = new System.Windows.Forms.Label();
@@ -356,6 +355,8 @@
             this.labelCompanyName = new System.Windows.Forms.Label();
             this.textBoxDescription = new System.Windows.Forms.TextBox();
             this.cbHiyorimiMode = new System.Windows.Forms.CheckBox();
+            this.ucSI = new mml2vgmIDE.ucSettingInstruments();
+            this.cbUseSIen = new System.Windows.Forms.CheckBox();
             this.gbWaveOut.SuspendLayout();
             this.gbAsioOut.SuspendLayout();
             this.gbWasapiOut.SuspendLayout();
@@ -1001,17 +1002,6 @@
             this.groupBox1.Size = new System.Drawing.Size(411, 258);
             this.groupBox1.TabIndex = 8;
             this.groupBox1.TabStop = false;
-            // 
-            // ucSI
-            // 
-            this.ucSI.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.ucSI.AutoScroll = true;
-            this.ucSI.Location = new System.Drawing.Point(3, 18);
-            this.ucSI.Name = "ucSI";
-            this.ucSI.Size = new System.Drawing.Size(405, 237);
-            this.ucSI.TabIndex = 7;
             // 
             // tabPage13
             // 
@@ -3727,6 +3717,7 @@
             // 
             this.tpOmake.Controls.Add(this.groupBox31);
             this.tpOmake.Controls.Add(this.groupBox30);
+            this.tpOmake.Controls.Add(this.cbUseSIen);
             this.tpOmake.Controls.Add(this.cbInfiniteOfflineMode);
             this.tpOmake.Controls.Add(this.groupBox29);
             this.tpOmake.Controls.Add(this.tbOpacity);
@@ -4121,6 +4112,27 @@
             this.cbHiyorimiMode.Text = "日和見モード(出力タブ：\r\n遅延時間100ms以下の時、使用を推奨)";
             this.cbHiyorimiMode.UseVisualStyleBackColor = true;
             this.cbHiyorimiMode.Visible = false;
+            // 
+            // ucSI
+            // 
+            this.ucSI.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.ucSI.AutoScroll = true;
+            this.ucSI.Location = new System.Drawing.Point(3, 18);
+            this.ucSI.Name = "ucSI";
+            this.ucSI.Size = new System.Drawing.Size(405, 237);
+            this.ucSI.TabIndex = 7;
+            // 
+            // cbUseSIen
+            // 
+            this.cbUseSIen.AutoSize = true;
+            this.cbUseSIen.Location = new System.Drawing.Point(162, 223);
+            this.cbUseSIen.Name = "cbUseSIen";
+            this.cbUseSIen.Size = new System.Drawing.Size(148, 16);
+            this.cbUseSIen.TabIndex = 23;
+            this.cbUseSIen.Text = "入力支援機能を使用する";
+            this.cbUseSIen.UseVisualStyleBackColor = true;
             // 
             // FrmSetting
             // 
@@ -4604,5 +4616,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn clmKBDSpacer;
         private System.Windows.Forms.Label lblSKKey;
         private System.Windows.Forms.Button btnInitializeShortCutKey;
+        private System.Windows.Forms.CheckBox cbUseSIen;
     }
 }
