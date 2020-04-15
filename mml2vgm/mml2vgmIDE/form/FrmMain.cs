@@ -1528,6 +1528,7 @@ namespace mml2vgmIDE
 
             if (isSuccess)
             {
+                frmPartCounter.ClearCounter();
                 Object[] cells = new object[7];
 
                 foreach (KeyValuePair<enmChipType, ClsChip[]> kvp in mv.desVGM.chips)
@@ -1648,6 +1649,7 @@ namespace mml2vgmIDE
             musicDriverInterface.CompilerInfo ci = mucom.GetCompilerInfo();
             if (isSuccess)
             {
+                frmPartCounter.ClearCounter();
                 Object[] cells = new object[7];
                 int[] pn = new int[] { 1, 2, 3, 10, 11, 12, 13, 4, 5, 6, 19 };
                 for (int i = 0; i < 11; i++)
@@ -2955,11 +2957,35 @@ namespace mml2vgmIDE
             if (dc == null) return;
             if (!(dc is FrmEditor)) return;
             compileManager.RequestCompile(((FrmEditor)dc).document, ((FrmEditor)dc).azukiControl.Text + "");
+            compileManager.RequestPlayBack(((FrmEditor)dc).document, cbPlayBack);
+        }
+
+        private void cbPlayBack(CompileManager.queItem qi)
+        {
+            if (InvokeRequired)
+            {
+                this.Invoke(new Action<CompileManager.queItem>(cbPlayBack), new object[] { qi });
+                return;
+            }
+
+            if (qi.doc.dstFileFormat == EnmFileFormat.MUB)
+            {
+                mubData =(musicDriverInterface.MmlDatum[])qi.doc.compiledData;
+                doPlay = true;
+                finishedCompileMUC();
+            }
+            else
+            {
+                mv = (Mml2vgm)qi.doc.compiledData;
+                doPlay = true;
+                args = new string[2] { qi.doc.gwiFullPath, "" };
+                finishedCompileGWI();
+            }
         }
 
         //private void tsmiJumpSoloMode_Click(object sender, EventArgs e)
         //{
-            //UpdateControl();
+        //UpdateControl();
         //}
     }
 }

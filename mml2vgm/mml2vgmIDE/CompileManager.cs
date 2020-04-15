@@ -23,13 +23,15 @@ namespace mml2vgmIDE
             public Document doc;
             public string srcText;
             public object param;
-            private enmCompileCommand compile;
+            //private enmCompileCommand compile;
+            public Action<queItem> callPlayBack;
 
-            public queItem(enmCompileCommand compile, Document doc, string srcText, object param)
+            public queItem(enmCompileCommand compile, Document doc, string srcText, Action<queItem> callPlayBack = null, object param = null)
             {
-                this.compile = compile;
+                this.cmd = compile;
                 this.doc = doc;
                 this.srcText = srcText;
+                this.callPlayBack = callPlayBack;
                 this.param = param;
             }
         }
@@ -68,6 +70,15 @@ namespace mml2vgmIDE
             KickRunner();
         }
 
+        public void RequestPlayBack(Document doc, Action<queItem> callPlayBack)
+        {
+            if (doc == null) return;
+            queCompile.Enqueue(new queItem(enmCompileCommand.play, doc, null, callPlayBack, null));
+
+            KickRunner();
+        }
+
+
         private void KickRunner()
         {
             if (runner != null) return;
@@ -96,7 +107,7 @@ namespace mml2vgmIDE
                     case enmCompileCommand.play:
                         if (qi.doc == null) break;
                         if (qi.doc.compileStatus != Document.EnmCompileStatus.Success) break;
-                        Play(qi);
+                        qi.callPlayBack?.Invoke(qi);
                         break;
                 }
             }
@@ -104,9 +115,7 @@ namespace mml2vgmIDE
             runner = null;
         }
 
-        private void Play(queItem qi)
-        {
-        }
+
 
         private void Compile(queItem qi)
         {
@@ -152,6 +161,7 @@ namespace mml2vgmIDE
 
             qi.doc.compiledData = mubData;
             qi.doc.compileStatus = isSuccess ? Document.EnmCompileStatus.Success : Document.EnmCompileStatus.Failed;
+            qi.doc.dstFileFormat = EnmFileFormat.MUB;
 
             musicDriverInterface.CompilerInfo ci = mucom.GetCompilerInfo();
 
@@ -232,7 +242,7 @@ namespace mml2vgmIDE
                     : (mv.desVGM.info.format == enmFormat.XGM
                     ? EnmFileFormat.XGM
                     : EnmFileFormat.ZGM);
-                qi.doc.compiledData = mv.desBuf;
+                qi.doc.compiledData = mv;
                 qi.doc.compileStatus = Document.EnmCompileStatus.Success;
             }
             else

@@ -1043,7 +1043,7 @@ namespace Core
             MML vmml = new MML();
             vmml.type = enmMMLType.Octave;
             vmml.args = new List<object>();
-            vmml.args.Add(pw.octaveNow);
+            vmml.args.Add(pw.octaveNew);
             vmml.line = mml.line;
             SetDummyData(pw, vmml);
         }
@@ -1056,7 +1056,7 @@ namespace Core
             MML vmml = new MML();
             vmml.type = enmMMLType.Octave;
             vmml.args = new List<object>();
-            vmml.args.Add(pw.octaveNow);
+            vmml.args.Add(pw.octaveNew);
             vmml.line = mml.line;
             SetDummyData(pw, vmml);
         }
