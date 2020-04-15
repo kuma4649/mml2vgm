@@ -1,4 +1,8 @@
 更新履歴
+TAG198 2020/04/16
+  IDE
+    ・mucomDotNET TAG049の取り込みのみ
+
 TAG197 2020/04/15 3rd
   Core
     ・vgm/xgm ReleaseとConverted(VGMBy)のタグが逆だったのを修正
