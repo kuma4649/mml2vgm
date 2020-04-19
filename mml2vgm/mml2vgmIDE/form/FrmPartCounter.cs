@@ -122,20 +122,21 @@ namespace mml2vgmIDE
             //SoloMode = false;
         }
 
-        private List<Tuple<string, int, int, int, bool, bool>> lstCacheMuteSolo = new List<Tuple<string, int, int, int, bool, bool>>();
+        private List<Tuple<string, int, int, int, bool, bool, bool>> lstCacheMuteSolo = new List<Tuple<string, int, int, int, bool, bool, bool>>();
 
         private void CacheMuteSolo()
         {
             lstCacheMuteSolo.Clear();
             foreach(DataGridViewRow r in dgvPartCounter.Rows)
             {
-                Tuple<string, int, int, int, bool, bool> t = new Tuple<string, int, int, int, bool, bool>(
+                Tuple<string, int, int, int, bool, bool, bool> t = new Tuple<string, int, int, int, bool, bool, bool>(
                     (string)r.Cells[dgvPartCounter.Columns["ClmChip"].Index].Value
                     , (int)r.Cells[dgvPartCounter.Columns["ClmChipIndex"].Index].Value
                     , (int)r.Cells[dgvPartCounter.Columns["ClmChipNumber"].Index].Value
                     , (int)r.Cells[dgvPartCounter.Columns["ClmPartNumber"].Index].Value
                     , (bool)(r.Cells[dgvPartCounter.Columns["ClmMute"].Index].Value == null ? false : ((string)r.Cells[dgvPartCounter.Columns["ClmMute"].Index].Value=="M"))
-                    , (bool)(r.Cells[dgvPartCounter.Columns["ClmPush"].Index].Value == null ? false : ((string)r.Cells[dgvPartCounter.Columns["ClmPush"].Index].Value=="M"))
+                    , (bool)(r.Cells[dgvPartCounter.Columns["ClmPush"].Index].Value == null ? false : ((string)r.Cells[dgvPartCounter.Columns["ClmPush"].Index].Value == "M"))
+                    , (bool)(r.Cells[dgvPartCounter.Columns["ClmSolo"].Index].Value == null ? false : ((string)r.Cells[dgvPartCounter.Columns["ClmSolo"].Index].Value == "S"))
                     );
                 lstCacheMuteSolo.Add(t);
             }
@@ -157,7 +158,7 @@ namespace mml2vgmIDE
 
             //mute状態を復帰する
             bool fnd = false;
-            foreach (Tuple<string, int, int, int, bool, bool> l in lstCacheMuteSolo)
+            foreach (Tuple<string, int, int, int, bool, bool, bool> l in lstCacheMuteSolo)
             {
                 if (l.Item1 != (string)cells[4]
                     || l.Item2 != (int)cells[1]
@@ -167,16 +168,18 @@ namespace mml2vgmIDE
 
                 r.Cells[dgvPartCounter.Columns["ClmMute"].Index].Value = (bool)l.Item5 ? "M" : "";
                 r.Cells[dgvPartCounter.Columns["ClmPush"].Index].Value = (bool)l.Item6 ? "M" : "";
-                if (SoloMode) r.Cells[dgvPartCounter.Columns["ClmSolo"].Index].Value = (!(bool)l.Item5) ? "S" : "";
-                else r.Cells[dgvPartCounter.Columns["ClmSolo"].Index].Value = "";
+                r.Cells[dgvPartCounter.Columns["ClmSolo"].Index].Value = (bool)l.Item7 ? "S" : "";
+                //if (SoloMode) r.Cells[dgvPartCounter.Columns["ClmSolo"].Index].Value = (!(bool)l.Item5) ? "S" : "";
+                //else r.Cells[dgvPartCounter.Columns["ClmSolo"].Index].Value = "";
                 fnd = true;
                 break;
             }
             //見つからない場合は初期値をセット
             if (!fnd)
             {
+                SoloMode = false;
                 r.Cells[dgvPartCounter.Columns["ClmMute"].Index].Value = "";
-                r.Cells[dgvPartCounter.Columns["ClmSolo"].Index].Value = SoloMode ? "S" : "";
+                r.Cells[dgvPartCounter.Columns["ClmSolo"].Index].Value = "";// SoloMode ? "S" : "";
                 r.Cells[dgvPartCounter.Columns["ClmPush"].Index].Value = "";
             }
 

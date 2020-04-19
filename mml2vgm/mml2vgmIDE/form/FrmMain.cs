@@ -1240,7 +1240,9 @@ namespace mml2vgmIDE
                     }
                 }
             }
-            frmPartCounter.ClearCounter();
+
+            //frmPartCounter.ClearCounter();//ここではパート表示をクリアしない。コンパイル終了時(成功時)にクリアするため
+
             frmErrorList.dataGridView1.Rows.Clear();
 
             Thread trdStartCompile = new Thread(new ThreadStart(startCompile));
