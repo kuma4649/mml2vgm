@@ -3716,6 +3716,11 @@ namespace Core
                     //pw.chip.CmdToneDoubler(pw, mml);
                     pw.mmlPos++;
                     break;
+                case enmMMLType.RelativeVolumeSetting:
+                    log.Write("RelativeVolumeSetting");
+                    pw.chip.CmdRelativeVolumeSetting(pw, mml);
+                    pw.mmlPos++;
+                    break;
                 default:
                     msgBox.setErrMsg(string.Format(msg.get("E01016")
                         , mml.type)

@@ -412,6 +412,10 @@ namespace Core
                     mml.args.Add('S');
                     pw.incPos();
                     break;
+                case 'v':                    //@vn
+                    mml.type = enmMMLType.RelativeVolumeSetting;
+                    pw.incPos();
+                    break;
                 default:                     //normal
                     mml.args.Add('n');
                     break;
@@ -422,7 +426,8 @@ namespace Core
             {
                 if (!pw.getNum(out n))
                 {
-                    msgBox.setErrMsg(msg.get("E05002"), mml.line.Lp);
+                    if (mml.type == enmMMLType.Instrument) msgBox.setErrMsg(msg.get("E05002"), mml.line.Lp);
+                    else msgBox.setErrMsg(msg.get("E05003"), mml.line.Lp);
                     n = 0;
                 }
                 n = Common.CheckRange(n, 0, 0xffff);
@@ -536,9 +541,13 @@ namespace Core
             pw.incPos();
             if (!pw.getNum(out n))
             {
-                msgBox.setErrMsg(msg.get("E05006"), mml.line.Lp);
+                mml.type = enmMMLType.VolumeUp;
+                mml.args = new List<object>();
+                mml.args.Add(null);
+                //msgBox.setErrMsg(msg.get("E05006"), mml.line.Lp);
                 return;
             }
+            n = Common.CheckRange(n, 1, pw.MaxVolume);
             mml.type = enmMMLType.VolumeUp;
             mml.args = new List<object>();
             mml.args.Add(n);
@@ -550,8 +559,12 @@ namespace Core
             pw.incPos();
             if (!pw.getNum(out int n))
             {
-                msgBox.setErrMsg(msg.get("E05007"), mml.line.Lp);
-                n = 10;
+                mml.type = enmMMLType.VolumeDown;
+                mml.args = new List<object>();
+                mml.args.Add(null);
+                return;
+                //msgBox.setErrMsg(msg.get("E05007"), mml.line.Lp);
+                //n = 10;
             }
             n = Common.CheckRange(n, 1, pw.MaxVolume);
             mml.type = enmMMLType.VolumeDown;

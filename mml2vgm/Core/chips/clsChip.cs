@@ -991,7 +991,14 @@ namespace Core
 
         public virtual void CmdVolumeUp(partWork pw, MML mml)
         {
-            int n = (int)mml.args[0];
+            int n = 1;
+            if (mml.args[0] == null)
+            {
+                n = GetDefaultRelativeVolume(pw, mml);
+            }
+            else
+                n = (int)mml.args[0];
+
             n = Common.CheckRange(n, 1, pw.MaxVolume);
             pw.volume += parent.info.volumeRev ? -n : n;
             pw.volume = Common.CheckRange(pw.volume, 0, pw.MaxVolume);
@@ -1006,7 +1013,14 @@ namespace Core
 
         public virtual void CmdVolumeDown(partWork pw, MML mml)
         {
-            int n = (int)mml.args[0];
+            int n = 1;
+            if (mml.args[0] == null)
+            {
+                n = GetDefaultRelativeVolume(pw, mml);
+            }
+            else
+                n = (int)mml.args[0];
+
             n = Common.CheckRange(n, 1, pw.MaxVolume);
             pw.volume -= parent.info.volumeRev ? -n : n;
             pw.volume = Common.CheckRange(pw.volume, 0, pw.MaxVolume);
@@ -1019,6 +1033,15 @@ namespace Core
             SetDummyData(pw, vmml);
         }
 
+        public virtual int GetDefaultRelativeVolume(partWork pw, MML mml)
+        {
+            return 1;
+        }
+
+        public virtual void CmdRelativeVolumeSetting(partWork pw, MML mml)
+        {
+            ;//
+        }
 
         public virtual void CmdOctave(partWork pw, MML mml)
         {
