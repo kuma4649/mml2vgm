@@ -34,21 +34,7 @@ namespace mml2vgmIDE
                 this.disp = disp;
                 this.setting = setting;
 
-                var info = asmCompiler.GetType("mucomDotNET.Compiler.Compiler");
-                this.compiler = Activator.CreateInstance(info, new object[] { null }) as iCompiler;
-
-                info = asmDriver.GetType("mucomDotNET.Driver.Driver");
-                this.driver = Activator.CreateInstance(info, new object[] { null }) as iDriver;
-
-                info = asmPreprocessor.GetType("M98DotNETcore.M98");
-                this.preprocessor = Activator.CreateInstance(info, new object[] { null }) as iPreprocessor;
-
-                //Log.writeLine = WriteLog;
-
-                if (this.compiler == null || this.driver == null || this.preprocessor == null)
-                {
-                    throw new Exception("インスタンスの生成に失敗しました。");
-                }
+                makeInstance();
 
                 ok = true;
 
@@ -65,6 +51,25 @@ namespace mml2vgmIDE
                 throw;
             }
 
+        }
+
+        private void makeInstance()
+        {
+            var info = asmCompiler.GetType("mucomDotNET.Compiler.Compiler");
+            this.compiler = Activator.CreateInstance(info, new object[] { null }) as iCompiler;
+
+            info = asmDriver.GetType("mucomDotNET.Driver.Driver");
+            this.driver = Activator.CreateInstance(info, new object[] { null }) as iDriver;
+
+            info = asmPreprocessor.GetType("M98DotNETcore.M98");
+            this.preprocessor = Activator.CreateInstance(info, new object[] { null }) as iPreprocessor;
+
+            //Log.writeLine = WriteLog;
+
+            if (this.compiler == null || this.driver == null || this.preprocessor == null)
+            {
+                throw new Exception("インスタンスの生成に失敗しました。");
+            }
         }
 
         public void Rendering()

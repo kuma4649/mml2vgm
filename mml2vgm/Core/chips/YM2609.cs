@@ -895,38 +895,50 @@ namespace Core
 
             if (mml.args[0] is string) return;
 
-            byte adr = (byte)mml.args[0];
-            byte dat = (byte)mml.args[1];
-            int p = 0;
+            if (mml.args.Count == 2)
+            {
+                byte adr = (byte)mml.args[0];
+                byte dat = (byte)mml.args[1];
+                int p = 0;
 
-            if (pw.ch < 3)//FM1-3
-                p = 0;
-            else if (pw.ch < 6)//FM4-6
-                p = 1;
-            else if (pw.ch < 9)//FM7-9
-                p = 2;
-            else if (pw.ch < 12)//FM10-12
-                p = 3;
-            else if (pw.ch < 15)//FMex13-15
-                p = 0;
-            else if (pw.ch < 18)//FMex15-18
-                p = 2;
-            else if (pw.ch < 21)//SSG1-3
-                p = 0;
-            else if (pw.ch < 24)//SSG4-6
-                p = 1;
-            else if (pw.ch < 30)//SSG7-12
-                p = 2;
-            else if (pw.ch < 36)//Rhythm1-6
-                p = 0;
-            else if (pw.ch == 36)//ADPCM1
-                p = 1;
-            else if (pw.ch == 37)//ADPCM2
-                p = 3;
-            else if (pw.ch == 38)//ADPCM3
-                p = 3;
+                if (pw.ch < 3)//FM1-3
+                    p = 0;
+                else if (pw.ch < 6)//FM4-6
+                    p = 1;
+                else if (pw.ch < 9)//FM7-9
+                    p = 2;
+                else if (pw.ch < 12)//FM10-12
+                    p = 3;
+                else if (pw.ch < 15)//FMex13-15
+                    p = 0;
+                else if (pw.ch < 18)//FMex15-18
+                    p = 2;
+                else if (pw.ch < 21)//SSG1-3
+                    p = 0;
+                else if (pw.ch < 24)//SSG4-6
+                    p = 1;
+                else if (pw.ch < 30)//SSG7-12
+                    p = 2;
+                else if (pw.ch < 36)//Rhythm1-6
+                    p = 0;
+                else if (pw.ch == 36)//ADPCM1
+                    p = 1;
+                else if (pw.ch == 37)//ADPCM2
+                    p = 3;
+                else if (pw.ch == 38)//ADPCM3
+                    p = 3;
 
-            parent.OutData(mml, port[p] , adr, dat);
+                parent.OutData(mml, port[p], adr, dat);
+            }
+            else
+            {
+                byte prt = (byte)mml.args[0];
+                byte adr = (byte)mml.args[1];
+                byte dat = (byte)mml.args[2];
+
+                parent.OutData(mml,port[prt&3], adr, dat);
+
+            }
         }
 
         public override void CmdMPMS(partWork pw, MML mml)
