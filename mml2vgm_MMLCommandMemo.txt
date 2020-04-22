@@ -92,7 +92,14 @@ ebass3(from MUSIC LALF @70)
            ・4byte毎にPaddingされる。(ADPCM1)
            ・256byte毎にPaddingされる。(ADPCM2/3)
            ・合計256Kbyteまで定義可能。(ADPCM1)
-           ・合計16Mbyteまで定義可能。(ADPCM2/3)
+           ・それぞれ合計16Mbyteまで定義可能。(ADPCM2/3)
+         YM2609B ADPCM-A
+           ・PCMは18.5KHz,16bit,mono,圧縮なし,signedのwavファイルであること。
+               mml2vgmは内部でADPCMに変換する。
+           ・8bitも読み込めるが16bitに変換される。
+           ・18.5KHz固定で再生される。
+           ・256byte毎にPaddingされる。
+           ・合計16Mbyteまで定義可能。(ADPCM1/2/3とは別)
          YM2610B ADPCM-A
            ・PCMは18.5KHz,16bit,mono,圧縮なし,signedのwavファイルであること。
                mml2vgmは内部でADPCMに変換する。
@@ -229,13 +236,13 @@ ebass3(from MUSIC LALF @70)
 ■ 使用可能な音源
   名称      略称   初期周波数(Hz)  使用可能チャンネル数
   CONDUCTOR CON                 -   2Ch(mml2vgm動作指示向け特殊音源)
-  YM2612    OPN2          7670454   9Ch(FM   : 6Ch  FMex: 3Ch  |  FM:5Ch FMex:3Ch PCM:1Ch)
-  YM2612X   OPN2X         7670454  24Ch(FM   : 6Ch  FMex: 3Ch  |  FM:5Ch FMex:3Ch PCM:4Ch PCM(overlay):12Ch)
-  SN76489   DCSG          3579545   4Ch(PSG  : 4Ch)
-  RF5C164   RF5C         12500000   8Ch(PCM  : 8Ch)
+  YM2612    OPN2          7670454   9Ch(FM   :  6Ch  FMex: 3Ch  |  FM:5Ch FMex:3Ch PCM:1Ch)
+  YM2612X   OPN2X         7670454  24Ch(FM   :  6Ch  FMex: 3Ch  |  FM:5Ch FMex:3Ch PCM:4Ch PCM(overlay):12Ch)
+  SN76489   DCSG          3579545   4Ch(PSG  :  4Ch)
+  RF5C164   RF5C         12500000   8Ch(PCM  :  8Ch)
   YM2203    OPN           3993600   9Ch(FM   :  3Ch  FMex: 3Ch  SSG :  3Ch)
   YM2608    OPNA          7987200  19Ch(FM   :  6Ch  FMex: 3Ch  SSG :  3Ch  Rhythm : 6Ch  ADPCM  : 1Ch)
-  YM2609    OPNA2         7987200  39Ch(FM   : 12Ch  FMex: 6Ch  SSG : 12Ch  Rhythm : 6Ch  ADPCM  : 3Ch)
+  YM2609    OPNA2         7987200  45Ch(FM   : 12Ch  FMex: 6Ch  SSG : 12Ch  Rhythm : 6Ch  ADPCM1/2/3 : 3Ch  ADPCM-A : 6Ch)
   YM2610B   OPNB          8000000  19Ch(FM   :  6Ch  FMex: 3Ch  SSG :  3Ch  ADPCM-A: 6Ch  ADPCM-B: 1Ch)
   YM2151    OPM           3579545   8Ch(FM   :  8Ch)
   SegaPCM   SPCM          4000000  16Ch(PCM  : 16Ch)
@@ -337,6 +344,51 @@ ebass3(from MUSIC LALF @70)
   P17    YM2608(RHYTHM音源)(Primary)     CH5
   P18    YM2608(RHYTHM音源)(Primary)     CH6
   P19    YM2608(ADPCM音源)(Primary)      CH1
+  U01    YM2609(FM音源)(Primary)         CH1
+  U02    YM2609(FM音源)(Primary)         CH2
+  U03    YM2609(FM音源)(Primary)         CH3/CH3Ex0
+  U04    YM2609(FM音源)(Primary)         CH4
+  U05    YM2609(FM音源)(Primary)         CH5
+  U06    YM2609(FM音源)(Primary)         CH6
+  U07    YM2609(FM音源)(Primary)         CH7
+  U08    YM2609(FM音源)(Primary)         CH8
+  U09    YM2609(FM音源)(Primary)         CH9/CH3Ex0
+  U10    YM2609(FM音源)(Primary)         CH10
+  U11    YM2609(FM音源)(Primary)         CH11
+  U12    YM2609(FM音源)(Primary)         CH12
+  U13    YM2609(FM音源)(Primary)         CH3Ex1
+  U14    YM2609(FM音源)(Primary)         CH3Ex2
+  U15    YM2609(FM音源)(Primary)         CH3Ex3
+  U16    YM2609(FM音源)(Primary)         CH9Ex1
+  U17    YM2609(FM音源)(Primary)         CH9Ex2
+  U18    YM2609(FM音源)(Primary)         CH9Ex3
+  U19    YM2609(SSG1音源)(Primary)       CH1
+  U20    YM2609(SSG1音源)(Primary)       CH2
+  U21    YM2609(SSG1音源)(Primary)       CH3
+  U22    YM2609(SSG2音源)(Primary)       CH1
+  U23    YM2609(SSG2音源)(Primary)       CH2
+  U24    YM2609(SSG2音源)(Primary)       CH3
+  U25    YM2609(SSG3音源)(Primary)       CH1
+  U26    YM2609(SSG3音源)(Primary)       CH2
+  U27    YM2609(SSG3音源)(Primary)       CH3
+  U28    YM2609(SSG4音源)(Primary)       CH1
+  U29    YM2609(SSG4音源)(Primary)       CH2
+  U30    YM2609(SSG4音源)(Primary)       CH3
+  U31    YM2609(RHYTHM音源)(Primary)     CH1
+  U32    YM2609(RHYTHM音源)(Primary)     CH2
+  U33    YM2609(RHYTHM音源)(Primary)     CH3
+  U34    YM2609(RHYTHM音源)(Primary)     CH4
+  U35    YM2609(RHYTHM音源)(Primary)     CH5
+  U36    YM2609(RHYTHM音源)(Primary)     CH6
+  U37    YM2609(ADPCM1音源)(Primary)     CH1
+  U38    YM2609(ADPCM2音源)(Primary)     CH1
+  U39    YM2609(ADPCM3音源)(Primary)     CH1
+  U40    YM2609(ADPCMA音源)(Primary)     CH1
+  U41    YM2609(ADPCMA音源)(Primary)     CH2
+  U42    YM2609(ADPCMA音源)(Primary)     CH3
+  U43    YM2609(ADPCMA音源)(Primary)     CH4
+  U44    YM2609(ADPCMA音源)(Primary)     CH5
+  U45    YM2609(ADPCMA音源)(Primary)     CH6
   N1     YM2203(FM音源)(Primary)         CH1
   N2     YM2203(FM音源)(Primary)         CH2
   N3     YM2203(FM音源)(Primary)         CH3/CH3Ex0
@@ -593,7 +645,7 @@ ebass3(from MUSIC LALF @70)
   Os4    K053260(PCM音源)(Secondary)     CH4
 
   -----------
-  計 300Ch over
+  計 345Ch over
 
 
 ■ MML内部
@@ -618,13 +670,13 @@ ebass3(from MUSIC LALF @70)
   Tf YM2610B(FM)
   Te YM2610B(FM3ChEx)
   Ts YM2610B(SSG)
-  Ta YM2610B(ADPCM-A)
+  Ta YM2610B/09(ADPCM-A)
   Tb YM2610B(ADPCM-B)
-  Pf YM2608(FM)
-  Pe YM2608(FM3ChEx)
-  Ps YM2608(SSG)
-  Pr YM2608(RHYTHM)
-  Pp YM2608(ADPCM)
+  Pf YM2608/09(FM)
+  Pe YM2608/09(FM3ChEx)
+  Ps YM2608/09(SSG)
+  Pr YM2608/09(RHYTHM)
+  Pp YM2608/09(ADPCM)
   Nf YM2203(FM)
   Ne YM2203(FM3ChEx)
   Ns YM2203(SSG)
@@ -971,7 +1023,7 @@ b               -ooooooooooooooooooooooooooooo  音符シ
 				YM2612X : 36をo4cとして0～72の範囲で音程を変換し定義する。
 				          73以上を指定すると14000を既定の周波数として音程を変換し定義する。
 						  この機能を利用するにはSoXが必要。
-                YM2609  : 0,1,2がそれぞれADPCM1,2,3として定義される
+                YM2609  : 0,1,2,3がそれぞれADPCM1,2,3,Aとして定義される
     P を使用すると、mml2vgmはPCMデータを音量などを加工した後、メモリに順番に配置する。
     Bankの機能が存在するChipの場合は、パディングなどを行いその制約に沿った配置を行う。
     また、音色定義も合わせて行われ、加工後のデータを基準にStartAdr、EndAdrが設定される。
@@ -1335,7 +1387,7 @@ FM1Chで指定の音程2音を同時に出力することを主な目的とし�
 
 
 ■ OPN系音源に存在するEXチャンネルについて
-    OPN,OPN2,OPNA,OPNBは、効果音モードを利用してCH3を最大4分割して演奏することが可能です。
+    OPN,OPN2,OPNA,OPNB,OPNA2は、効果音モードを利用してCH3/CH9を最大4分割して演奏することが可能です。
     
     OPN系は1CH当たり4オペレータのFM音源です。
     通常のCHは周波数を1CH毎にしか設定できないのですが、

@@ -5009,15 +5009,25 @@ namespace mml2vgmIDE
                 {
                     if (exData == null) return;
 
-                    PackData[] pdata = (PackData[])exData;
-                    if (Chip.Model == EnmVRModel.VirtualModel)
+                    if (exData is PackData[])
                     {
-                        //log.Write("Sending YM2609(Emu) ADPCM");
-                        foreach (PackData dat in pdata)
-                            mds.WriteYM2609(dat.Chip.Index, (byte)dat.Chip.Number, (byte)(dat.Address >> 8), (byte)dat.Address, (byte)dat.Data);
+                        PackData[] pdata = (PackData[])exData;
+                        if (Chip.Model == EnmVRModel.VirtualModel)
+                        {
+                            //log.Write("Sending YM2609(Emu) ADPCM");
+                            foreach (PackData dat in pdata)
+                                mds.WriteYM2609(dat.Chip.Index, (byte)dat.Chip.Number, (byte)(dat.Address >> 8), (byte)dat.Address, (byte)dat.Data);
+                        }
+                        if (Chip.Model == EnmVRModel.RealModel)
+                        {
+                        }
+                        return;
                     }
-                    if (Chip.Model == EnmVRModel.RealModel)
+                    byte[] adpcmData = (byte[])exData;
+                    log.Write(string.Format("Sending YM2609(Emu) ADPCM-{0}", (data == -1) ? "A" : "B"));
+                    if (data == -1)
                     {
+                        mds.WriteYM2609_SetAdpcmA(Chip.Index, (byte)Chip.Number, adpcmData);
                     }
                 }
                 finally
@@ -5284,6 +5294,19 @@ namespace mml2vgmIDE
             data.Add(new PackData(null, YM2609[chipID], EnmDataType.Normal, 0x311 + 0x10, 0x9C, null)); // FLAGリセット        
 
             return data;
+        }
+
+        public void YM2609WriteSetAdpcmA(outDatum od, long Counter, int ChipID, byte[] ym2609AdpcmA)
+        {
+            dummyChip.Move(YM2609[ChipID]);
+
+            if (ctYM2609[0].OnlyPCMEmulation)
+            {
+                dummyChip.Model = EnmVRModel.VirtualModel;
+            }
+
+            enq(od, Counter, dummyChip, EnmDataType.Block, -1, -1, ym2609AdpcmA);
+
         }
 
         #endregion

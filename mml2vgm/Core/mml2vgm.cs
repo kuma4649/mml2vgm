@@ -1002,9 +1002,11 @@ namespace Core
                 if (opna2.pcmDataEasyA == null
                     && opna2.pcmDataEasyB == null
                     && opna2.pcmDataEasyC == null
+                    && opna2.pcmDataEasyD == null
                     && opna2.pcmDataDirectA.Count == 0
                     && opna2.pcmDataDirectB.Count == 0
                     && opna2.pcmDataDirectC.Count == 0
+                    && opna2.pcmDataDirect.Count == 0
                     ) return "";
             }
             else if (c.chipType == enmChipType.YM2610B)
@@ -1059,9 +1061,11 @@ namespace Core
                 if (opna2.pcmDataEasyA == null
                     && opna2.pcmDataEasyB == null
                     && opna2.pcmDataEasyC == null
+                    && opna2.pcmDataEasyD == null
                     && opna2.pcmDataDirectA.Count == 0
                     && opna2.pcmDataDirectB.Count == 0
                     && opna2.pcmDataDirectC.Count == 0
+                    && opna2.pcmDataDirect.Count == 0
                     ) return "";
 
                 if (opna2.pcmDataEasyA != null)
@@ -1099,6 +1103,18 @@ namespace Core
                         , "AUTO"
                         );
                     tl += opna2.pcmDataEasyC.Length;
+                }
+                if (opna2.pcmDataEasyD != null)
+                {
+                    region += string.Format("{0,-10} {1,-7} ${2,-7:X6} ${3,-7:X6} ${4,-7:X6}  {5}\r\n"
+                        , opna2.Name + "_D"
+                        , opna2.ChipNumber != 0 ? "SEC" : "PRI"
+                        , 0
+                        , opna2.pcmDataEasyD.Length - 1
+                        , opna2.pcmDataEasyD.Length
+                        , "AUTO"
+                        );
+                    tl += opna2.pcmDataEasyD.Length;
                 }
 
             }

@@ -1,4 +1,8 @@
 更新履歴
+TAG202 2020/04/23
+  Core OPNA2
+    ・ADPCM-Aの6チャンネル追加(sample:testADPCM_Pan.gwi)
+
 TAG201 2020/04/21
   Core OPNA2のみ
     ・yコマンドでポートも指定できるように修正
