@@ -298,4 +298,16 @@
   <data name="Feli48" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resource\Feli48.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="lblF5_JSolo" xml:space="preserve">
+    <value>JSolo+</value>
+  </data>
+  <data name="lblF5_Play" xml:space="preserve">
+    <value>Play</value>
+  </data>
+  <data name="lblF5_Skip" xml:space="preserve">
+    <value>Skip+</value>
+  </data>
+  <data name="lblF5_Trace" xml:space="preserve">
+    <value>Trace+</value>
+  </data>
 </root>

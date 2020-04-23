@@ -539,9 +539,15 @@ namespace mml2vgmIDE
                     {
                         TreeNode ttn = tn.Nodes[i++];
                         string fpath = Path.Combine(path1, Path.GetFullPath(ttn.FullPath));
-                        if (fi.FullName == fpath)
+                        if (fi.FullName.ToUpper() == fpath.ToUpper())
                         {
                             flg = true;
+                            if (fi.FullName != fpath)
+                            {
+                                tn.Nodes.Remove(ttn);
+                                flg = false;
+                            }
+                            break;
                         }
                     }
                     if (!flg)

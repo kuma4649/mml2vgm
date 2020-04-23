@@ -280,6 +280,10 @@ namespace Core
                     log.Write(" y");
                     CmdY(pw, mml);
                     break;
+                case 'X': // Effect
+                    log.Write(" Effect");
+                    CmdEffect(pw, mml);
+                    break;
 
 
                 case 'c':
@@ -1145,7 +1149,7 @@ namespace Core
             mml.args.Add(n);
         }
 
-        private void CmdSusOnOff(partWork pw,MML mml)
+        private void CmdSusOnOff(partWork pw, MML mml)
         {
             pw.incPos();
             char c = pw.getChar();
@@ -1159,6 +1163,63 @@ namespace Core
             mml.type = enmMMLType.SusOnOff;
             mml.args = new List<object>();
             mml.args.Add(c);
+        }
+
+        private void CmdEffect(partWork pw, MML mml)
+        {
+            pw.incPos();
+            pw.skipTabSpace();
+
+            char c = pw.getChar();
+            if (c != 'R')
+            {
+                msgBox.setErrMsg(msg.get("E05059"), mml.line.Lp);
+                return;
+            }
+
+            pw.incPos();
+            c = pw.getChar();
+            if (c != 'v')
+            {
+                msgBox.setErrMsg(msg.get("E05059"), mml.line.Lp);
+                return;
+            }
+
+            mml.type = enmMMLType.Effect;
+            mml.args = new List<object>();
+            mml.args.Add("Rv");
+
+            pw.incPos();
+            pw.skipTabSpace();
+
+            c = pw.getChar();
+            if (c != 'D' && c != 'S')
+            {
+                msgBox.setErrMsg(msg.get("E05059"), mml.line.Lp);
+                return;
+            }
+
+            mml.args.Add(c);
+
+            int n = -1;
+            pw.incPos();
+            pw.skipTabSpace();
+            if (!pw.getNum(out n))
+            {
+                msgBox.setErrMsg(msg.get("E05059"), mml.line.Lp);
+                return;
+            }
+
+            if (c == 'D')
+            {
+                n = Common.CheckRange(n, 0, 127);
+            }
+            else
+            {
+                n = Common.CheckRange(n, 0, 15);
+            }
+            mml.args.Add(n);
+
         }
 
         private void CmdY(partWork pw,MML mml)

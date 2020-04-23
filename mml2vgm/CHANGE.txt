@@ -1,4 +1,11 @@
 更新履歴
+TAG203 2020/04/23 2nd
+  Core OPNA2
+    ・XRvD , XRvSコマンド実装
+  IDE
+    ・再生ボタンの英語表記追加
+    ・ツリービューの表示バグ修正
+
 TAG202 2020/04/23
   Core OPNA2
     ・ADPCM-Aの6チャンネル追加(sample:testADPCM_Pan.gwi)

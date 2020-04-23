@@ -215,6 +215,7 @@ E05055=Failed to parse 'CH' command.
 E05056=Failed to parse 'U' command.
 E05057=Failed to parse 'CC' command.
 E05058=Invalid number defined as 'wf' command.
+E05059=Failed to parse 'X' command.
 
 
 ;partWork.cs 06000
@@ -271,6 +272,7 @@ E10029=This channel can't use U command.
 E10030=Sound patch isn't selected.
 E10031=This channel can't use CC command.
 E10032=This channel can't use wf command.
+E10033=This channel can't use X command.
 
 
 ;clsOPN.cs 11000

@@ -312,12 +312,6 @@
     <EmbeddedResource Include="form\FrmMain.ja-JP.resx">
       <DependentUpon>FrmMain.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="form\FrmMain.ja.resx">
-      <DependentUpon>FrmMain.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="form\FrmMain.zh-Hant.resx">
-      <DependentUpon>FrmMain.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="form\FrmMIDIKbd.resx">
       <DependentUpon>FrmMIDIKbd.cs</DependentUpon>
     </EmbeddedResource>
@@ -363,6 +357,7 @@
     <EmbeddedResource Include="form\ucSettingInstruments.resx">
       <DependentUpon>ucSettingInstruments.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.ja-JP.resx" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

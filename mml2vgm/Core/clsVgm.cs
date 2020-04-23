@@ -3704,6 +3704,11 @@ namespace Core
                     pw.chip.CmdSusOnOff(pw, mml);
                     pw.mmlPos++;
                     break;
+                case enmMMLType.Effect:
+                    log.Write("Effect");
+                    pw.chip.CmdEffect(pw, mml);
+                    pw.mmlPos++;
+                    break;
                 case enmMMLType.SkipPlay:
                     log.Write("SkipPlay");
                     jumpPointClock = (long)dSample;

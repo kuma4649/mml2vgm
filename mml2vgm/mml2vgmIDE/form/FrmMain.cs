@@ -934,9 +934,10 @@ namespace mml2vgmIDE
             ctrl = (e.KeyData & Keys.Control) == Keys.Control;
             shift = (e.KeyData & Keys.Shift) == Keys.Shift;
             alt = (e.KeyData & Keys.Alt) == Keys.Alt;
-            tssbPlay.Text = (ctrl ? "トレース+" : "") + (shift ? "スキップ+" : "") + (alt ? "Jソロ+" : "") + "再生";
-
-            log.Write(string.Format("動作未定義のキー：{0}", e.KeyData));
+            tssbPlay.Text = (ctrl ? Properties.Resources.lblF5_Trace : "") 
+                + (shift ? Properties.Resources.lblF5_Skip : "") 
+                + (alt ? Properties.Resources.lblF5_JSolo : "") 
+                + Properties.Resources.lblF5_Play;
 
             switch (e.KeyCode)
             {
@@ -946,7 +947,7 @@ namespace mml2vgmIDE
                 //    break;
                 default:
                     //↓KeyData確認用
-                    log.Write(string.Format("動作未定義のキー：{0}",e.KeyData));
+                    //log.Write(string.Format("動作未定義のキー：{0}",e.KeyData));
                     break;
             }
         }
@@ -956,7 +957,11 @@ namespace mml2vgmIDE
 
             ctrl = (e.KeyData & Keys.Control) == Keys.Control;
             shift = (e.KeyData & Keys.Shift) == Keys.Shift;
-            tssbPlay.Text = (ctrl ? "トレース+" : "") + (shift ? "スキップ+" : "") + "再生";
+            alt = (e.KeyData & Keys.Alt) == Keys.Alt;
+            tssbPlay.Text = (ctrl ? Properties.Resources.lblF5_Trace : "")
+                + (shift ? Properties.Resources.lblF5_Skip : "")
+                + (alt ? Properties.Resources.lblF5_JSolo : "")
+                + Properties.Resources.lblF5_Play;
 
         }
 

@@ -779,6 +779,12 @@ namespace Core
                     , mml.line.Lp);
         }
 
+        public virtual void CmdEffect(partWork pw, MML mml)
+        {
+            msgBox.setErrMsg(msg.get("E10033")
+                    , mml.line.Lp);
+        }
+
 
         public virtual void CmdMPMS(partWork pw, MML mml)
         {

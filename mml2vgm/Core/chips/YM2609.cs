@@ -1284,6 +1284,46 @@ namespace Core
             OutFmSetInstrument(pw, mml, n, pw.volume, type);
         }
 
+        public override void CmdEffect(partWork pw, MML mml)
+        {
+            if (mml.args.Count == 3)
+            {
+                if ((string)mml.args[0] == "Rv")
+                {
+                    //Reverb
+                    switch ((char)mml.args[1])
+                    {
+                        case 'D':
+                            int v = (int)mml.args[2];
+                            parent.OutData(mml, port[3], 0x22, (byte)v);
+                            break;
+                        case 'S':
+                            byte ch = (byte)pw.ch;
+                            if (ch < 12)
+                            {
+                                ;
+                            }
+                            else if (ch < 15)
+                            {
+                                ch = 2;
+                            }
+                            else if (ch < 18)
+                            {
+                                ch = 8;
+                            }
+                            else
+                            {
+                                ch = (byte)(ch - 18 + 12);
+                            }
+                            int sl = (int)mml.args[2];
+                            parent.OutData(mml, port[3], 0x23, ch);
+                            parent.OutData(mml, port[3], 0x24, (byte)sl);
+                            break;
+                    }
+                }
+            }
+        }
+
         public void SetWaveTableFromInstrument(partWork pw, MML mml)
         {
             int p = 0;
