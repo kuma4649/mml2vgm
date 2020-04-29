@@ -2566,7 +2566,9 @@ namespace Core
 
         public outDatum[] Xgm_getByteData(Dictionary<string, List<MML>> mmlData)
         {
-            if (ym2612x == null || ym2612x[0] == null) return null;
+            if ((ym2612x == null || ym2612x[0] == null)
+                &&(sn76489 == null || sn76489[0] == null)
+                ) return null;
 
             //if (doSkip)
             //{
@@ -2689,7 +2691,7 @@ namespace Core
 
         private void Xgm_makeHeader()
         {
-            if (ym2612x == null || ym2612x[0] == null) return;
+            if ((ym2612x == null || ym2612x[0] == null) && (sn76489 == null || sn76489[0] == null)) return;
 
             //Header
             foreach (byte b in Const.xhDat)
@@ -2699,29 +2701,31 @@ namespace Core
 
             //FM音源を初期化
 
-            ym2612x[0].OutOPNSetHardLfo(null,ym2612x[0].lstPartWork[0], false, 0);
-            ym2612x[0].OutOPNSetCh3SpecialMode(null,ym2612x[0].lstPartWork[0], false);
-            ym2612x[0].OutSetCh6PCMMode(null,ym2612x[0].lstPartWork[0], false);
-            ym2612x[0].OutFmAllKeyOff();
-
-            foreach (partWork pw in ym2612x[0].lstPartWork)
+            if (ym2612x != null && ym2612x[0] != null)
             {
-                if (pw.ch == 0)
-                {
-                    pw.hardLfoSw = false;
-                    pw.hardLfoNum = 0;
-                    ym2612x[0].OutOPNSetHardLfo(null,pw, pw.hardLfoSw, pw.hardLfoNum);
-                }
+                ym2612x[0].OutOPNSetHardLfo(null, ym2612x[0].lstPartWork[0], false, 0);
+                ym2612x[0].OutOPNSetCh3SpecialMode(null, ym2612x[0].lstPartWork[0], false);
+                ym2612x[0].OutSetCh6PCMMode(null, ym2612x[0].lstPartWork[0], false);
+                ym2612x[0].OutFmAllKeyOff();
 
-                if (pw.ch < 6)
+                foreach (partWork pw in ym2612x[0].lstPartWork)
                 {
-                    pw.pan.val = 3;
-                    pw.ams = 0;
-                    pw.fms = 0;
-                    if (!pw.dataEnd) ym2612x[0].OutOPNSetPanAMSPMS(null,pw, 3, 0, 0);
+                    if (pw.ch == 0)
+                    {
+                        pw.hardLfoSw = false;
+                        pw.hardLfoNum = 0;
+                        ym2612x[0].OutOPNSetHardLfo(null, pw, pw.hardLfoSw, pw.hardLfoNum);
+                    }
+
+                    if (pw.ch < 6)
+                    {
+                        pw.pan.val = 3;
+                        pw.ams = 0;
+                        pw.fms = 0;
+                        if (!pw.dataEnd) ym2612x[0].OutOPNSetPanAMSPMS(null, pw, 3, 0, 0);
+                    }
                 }
             }
-
         }
 
         private void Xgm_makeFooter()
@@ -2753,7 +2757,7 @@ namespace Core
             }
 
             //$0100               Sample data bloc size / 256
-            if (ym2612x[0].pcmDataEasy != null)
+            if (ym2612x != null && ym2612x[0] != null && ym2612x[0].pcmDataEasy != null)
             {
                 xdat[0x100] = new outDatum(enmMMLType.unknown, null, null, (byte)((ptr / 256) & 0xff));
                 xdat[0x101] = new outDatum(enmMMLType.unknown, null, null, (byte)(((ptr / 256) & 0xff00) >> 8));
@@ -2768,7 +2772,7 @@ namespace Core
             xdat[0x103] = new outDatum(enmMMLType.unknown, null, null, (byte)(xdat[0x103].val | (byte)(info.xgmSamplesPerSecond == 50 ? 1 : 0)));
 
             //$0104               Sample data block
-            if (ym2612x[0].pcmDataEasy != null)
+            if (ym2612x != null && ym2612x[0] != null && ym2612x[0].pcmDataEasy != null)
             {
                 foreach (clsPcm p in instPCM.Values)
                 {
