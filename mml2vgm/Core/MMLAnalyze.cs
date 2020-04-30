@@ -1171,14 +1171,24 @@ namespace Core
             pw.skipTabSpace();
 
             char c = pw.getChar();
-            if (c != 'R')
+            if (c == 'R')
             {
-                msgBox.setErrMsg(msg.get("E05059"), mml.line.Lp);
+                CmdEffectReverb(pw, mml);
+                return;
+            }
+            else if (c == 'D')
+            {
+                CmdEffectDistortion(pw, mml);
                 return;
             }
 
+            msgBox.setErrMsg(msg.get("E05059"), mml.line.Lp);
+        }
+
+        private void CmdEffectReverb(partWork pw, MML mml)
+        {
             pw.incPos();
-            c = pw.getChar();
+            char c = pw.getChar();
             if (c != 'v')
             {
                 msgBox.setErrMsg(msg.get("E05059"), mml.line.Lp);
@@ -1217,6 +1227,61 @@ namespace Core
             else
             {
                 n = Common.CheckRange(n, 0, 15);
+            }
+            mml.args.Add(n);
+
+        }
+
+        private void CmdEffectDistortion(partWork pw, MML mml)
+        {
+            pw.incPos();
+            char c = pw.getChar();
+            if (c != 's')
+            {
+                msgBox.setErrMsg(msg.get("E05059"), mml.line.Lp);
+                return;
+            }
+
+            mml.type = enmMMLType.Effect;
+            mml.args = new List<object>();
+            mml.args.Add("Ds");
+
+            pw.incPos();
+            pw.skipTabSpace();
+
+            c = pw.getChar();
+            if (c != 'C' && c != 'G' && c != 'V' && c != 'S')
+            {
+                msgBox.setErrMsg(msg.get("E05059"), mml.line.Lp);
+                return;
+            }
+
+            mml.args.Add(c);
+
+            int n = -1;
+            pw.incPos();
+            pw.skipTabSpace();
+            if (!pw.getNum(out n))
+            {
+                msgBox.setErrMsg(msg.get("E05059"), mml.line.Lp);
+                return;
+            }
+
+            if (c == 'S')//switch
+            {
+                n = Common.CheckRange(n, 0, 1);
+            }
+            else if (c == 'V')//volume
+            {
+                n = Common.CheckRange(n, 0, 127);
+            }
+            else if (c == 'G')//gain
+            {
+                n = Common.CheckRange(n, 0, 127);
+            }
+            else if (c == 'C')//cutoff
+            {
+                n = Common.CheckRange(n, 0, 127);
             }
             mml.args.Add(n);
 

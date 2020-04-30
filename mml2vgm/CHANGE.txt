@@ -1,4 +1,8 @@
 更新履歴
+TAG205 2020/04/30
+  Core OPNA2
+    ・XDsS , XDsV , XDsG , XDsC コマンド実装
+
 TAG204 2020/04/29
   Core XGM
     ・DCSGのみのデータが作成できなかったのを修正

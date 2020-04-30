@@ -586,6 +586,8 @@ namespace Core
         public char bendStartNote { get; set; } = 'c';
         public int bendStartShift { get; set; } = 0;
         public int velocity { get; set; } = 110;
+        public int effectDistortionSwitch { get; internal set; } = 0;
+        public int effectDistortionVolume { get; internal set; } = 32;
 
         public void MakeLstPos()
         {

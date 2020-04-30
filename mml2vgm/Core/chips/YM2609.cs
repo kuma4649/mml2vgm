@@ -1321,6 +1321,49 @@ namespace Core
                             break;
                     }
                 }
+                else if ((string)mml.args[0] == "Ds")
+                {
+                    int v = (int)mml.args[2];
+                    byte ch = (byte)pw.ch;
+                    if (ch < 12)
+                    {
+                        ;
+                    }
+                    else if (ch < 15)
+                    {
+                        ch = 2;
+                    }
+                    else if (ch < 18)
+                    {
+                        ch = 8;
+                    }
+                    else
+                    {
+                        ch = (byte)(ch - 18 + 12);
+                    }
+                    //Distortion
+                    switch ((char)mml.args[1]) 
+                    {
+                        case 'S'://switch
+                            pw.effectDistortionSwitch = v * 0x80;
+                            parent.OutData(mml, port[3], 0x23, ch);
+                            parent.OutData(mml, port[3], 0x25, (byte)(pw.effectDistortionSwitch + pw.effectDistortionVolume));
+                            break;
+                        case 'V'://volume
+                            pw.effectDistortionVolume = v & 0x7f;
+                            parent.OutData(mml, port[3], 0x23, ch);
+                            parent.OutData(mml, port[3], 0x25, (byte)(pw.effectDistortionSwitch + pw.effectDistortionVolume));
+                            break;
+                        case 'G'://gain
+                            parent.OutData(mml, port[3], 0x23, ch);
+                            parent.OutData(mml, port[3], 0x26, (byte)(v & 0x7f));
+                            break;
+                        case 'C'://CutOff
+                            parent.OutData(mml, port[3], 0x23, ch);
+                            parent.OutData(mml, port[3], 0x27, (byte)(v & 0x7f));
+                            break;
+                    }
+                }
             }
         }
 
