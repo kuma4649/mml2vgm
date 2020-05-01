@@ -2169,6 +2169,7 @@ namespace mml2vgmIDE
 
         public void Finish()
         {
+            this.Visible = false;
             log.ForcedWrite("終了処理開始");
             log.ForcedWrite("frmMain_FormClosing:STEP 00");
 
@@ -2193,7 +2194,7 @@ namespace mml2vgmIDE
             }
 
             frmPartCounter.Close();
-
+            
             setting.Save();
         }
 

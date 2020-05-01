@@ -204,6 +204,10 @@ namespace Core
             int vch;
             byte[] port;
             GetPortVch(pw, out port, out vch);
+            if (pw.chip is YM2612X && pw.ch > 8 && pw.ch<12)
+            {
+                vch = 2;
+            }
 
             pan = pan & 3;
             ams = ams & 3;
