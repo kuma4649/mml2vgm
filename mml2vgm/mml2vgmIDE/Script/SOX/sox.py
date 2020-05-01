@@ -60,13 +60,13 @@ class Mml2vgmScript:
                 # -b       8bit
                 # -c 1     mono
                 # -r 14k   rate 14KHz
-                args = bas + ext + " -b 8 -r 8k -c 1 " + bas + "_8k" + ext
+                args = "\"" + bas + ext + "\" -b 8 -r 8k -c 1 \"" + bas + "_8k" + ext + "\""
             elif index==2:
-                args = bas + ext + " -r 14k -e signed-integer -c 1 " + bas + "_14k" + ext
+                args = "\"" + bas + ext + "\" -r 14k -e signed-integer -c 1 \"" + bas + "_14k" + ext + "\""
             elif index==3:
-                args = bas + ext + " -r 16k -e signed-integer -c 1 " + bas + "_16k" + ext
+                args = "\"" + bas + ext + "\" -r 16k -e signed-integer -c 1 \"" + bas + "_16k" + ext + "\""
             elif index==4:
-                args = bas + ext + " -r 18500 -e signed-integer -c 1 " + bas + "_18500" + ext
+                args = "\"" + bas + ext + "\" -r 18500 -e signed-integer -c 1 \"" + bas + "_18500" + ext + "\""
 
         
             ret = Mml2vgmInfo.runCommand(gt, args, True)
