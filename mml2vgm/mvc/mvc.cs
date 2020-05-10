@@ -73,7 +73,7 @@ namespace mvc
                 srcFn += ".gwi";
             }
 
-            string path1 = System.IO.Path.GetDirectoryName(srcFn);
+            string path1 = System.IO.Path.GetDirectoryName(Path.Combine(System.Environment.CurrentDirectory, srcFn));
             path1 = string.IsNullOrEmpty(path1) ? srcFn : path1;
 
             if (args.Length > cnt)

@@ -509,7 +509,7 @@ namespace Core
             byte[] buf = new byte[1024];
 
             MemoryStream inStream = new MemoryStream(bufs);
-            FileStream outStream = new FileStream(desFn, FileMode.Create);
+            FileStream outStream = new FileStream(desFn, FileMode.Create,FileAccess.Write);
             GZipStream compStream = new GZipStream(outStream, CompressionMode.Compress);
 
             try
