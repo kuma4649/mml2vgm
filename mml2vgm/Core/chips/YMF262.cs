@@ -138,7 +138,7 @@ namespace Core
         {
 
             //Rhythm Off
-            //parent.OutData(mml, port[0], 0x0e, 0);
+            parent.OutData(mml, port[0], 0xBD, 0);
             // Probably wise to reset Rhythm mode.
             for (byte adr = 0; adr <= 8; adr++)
             {
@@ -325,7 +325,7 @@ namespace Core
             int o = (f & 0xf000) / 0x1000;
             f &= 0xfff;
 
-            f = f + pw.detune;
+            f += pw.detune;
             for (int lfo = 0; lfo < 4; lfo++)
             {
                 if (!pw.lfo[lfo].sw)
@@ -517,12 +517,14 @@ namespace Core
 
         public override void CmdMode(partWork pw, MML mml)
         {
+            Console.WriteLine("CmdMode()");
             int n = (int)mml.args[0];
+            pw.chip.lstPartWork[7].rhythmMode = (n != 0);
+            pw.chip.lstPartWork[8].rhythmMode = (n != 0);
             pw.chip.lstPartWork[9].rhythmMode = (n != 0);
-            pw.chip.lstPartWork[10].rhythmMode = (n != 0);
-            pw.chip.lstPartWork[11].rhythmMode = (n != 0);
-            pw.chip.lstPartWork[12].rhythmMode = (n != 0);
-            pw.chip.lstPartWork[13].rhythmMode = (n != 0);
+            //pw.chip.lstPartWork[12].rhythmMode = (n != 0);
+            //pw.chip.lstPartWork[13].rhythmMode = (n != 0);
+            
 
         }
 
