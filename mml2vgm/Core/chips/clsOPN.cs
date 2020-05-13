@@ -10,7 +10,7 @@ namespace Core
     public class ClsOPN : ClsChip
     {
         public byte[] SSGKeyOn = new byte[] { 0x3f, 0x3f, 0x3f, 0x3f };
-
+        public Dictionary<int, int> relVol = new Dictionary<int, int>();
 
         public ClsOPN(ClsVgm parent, int chipID, string initialPartName, string stPath, int chipNumber) : base(parent, chipID, initialPartName, stPath, chipNumber)
         {
@@ -204,6 +204,10 @@ namespace Core
             int vch;
             byte[] port;
             GetPortVch(pw, out port, out vch);
+            if (pw.chip is YM2612X && pw.ch > 8 && pw.ch<12)
+            {
+                vch = 2;
+            }
 
             pan = pan & 3;
             ams = ams & 3;
@@ -1907,6 +1911,22 @@ namespace Core
         {
             base.CmdVolume(pw, mml);
         }
+
+        public override void CmdRelativeVolumeSetting(partWork pw, MML mml)
+        {
+            if (relVol.ContainsKey(pw.ch))
+                relVol.Remove(pw.ch);
+
+            relVol.Add(pw.ch, (int)mml.args[0]);
+        }
+
+        public override int GetDefaultRelativeVolume(partWork pw, MML mml)
+        {
+            if (relVol.ContainsKey(pw.ch)) return relVol[pw.ch];
+
+            return 1;
+        }
+
 
         public override void CmdY(partWork pw, MML mml)
         {

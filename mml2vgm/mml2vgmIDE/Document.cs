@@ -116,11 +116,13 @@ namespace mml2vgmIDE
 
         private void InitFolderTree()
         {
-            TreeNode tn = new TreeNode(Path.GetFileName(Path.GetDirectoryName(gwiFullPath)),1,1);
+            string path1 = Path.GetDirectoryName(gwiFullPath);
+            path1 = string.IsNullOrEmpty(path1) ? gwiFullPath : path1;
+            TreeNode tn = new TreeNode(path1,1,1);
             gwiTree = tn;
             tn.Expand();
             TreeNode ts = new TreeNode();
-            DirectoryInfo dm = new DirectoryInfo(Path.GetDirectoryName(gwiFullPath));
+            DirectoryInfo dm = new DirectoryInfo(path1);
 
             try
             {

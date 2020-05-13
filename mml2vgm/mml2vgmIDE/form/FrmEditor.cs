@@ -56,12 +56,16 @@ namespace mml2vgmIDE
             Common.SetDoubleBuffered(this);
             Common.SetDoubleBuffered(azukiControl);
         }
+        protected override bool ProcessCmdKey(ref System.Windows.Forms.Message msg, System.Windows.Forms.Keys keyData)
+        {
+            return main.SendProcessCmdKey(ref msg, keyData);
+        }
 
         private void setHighlighterVGMZGMZGM()
         { 
             Sgry.Azuki.Highlighter.KeywordHighlighter keywordHighlighter = new Sgry.Azuki.Highlighter.KeywordHighlighter();
             keywordHighlighter.AddRegex("^[^'].*", false, CharClass.DocComment);
-            keywordHighlighter.AddRegex("^'[A-Za-z0-9\\-\\,]+ ", CharClass.Keyword);
+            keywordHighlighter.AddRegex("^'[A-Za-z0-9\\-\\,\\+]+ ", CharClass.Keyword);
             keywordHighlighter.AddRegex("^'@ ", CharClass.Keyword);
             keywordHighlighter.AddRegex("^'%\\S+ ", CharClass.Keyword);
             keywordHighlighter.AddEnclosure("'{", "}", CharClass.Comment, true);
@@ -103,18 +107,6 @@ namespace mml2vgmIDE
             Marking.Register(info);
             TextDecoration dec = new BgColorTextDecoration(Color.DarkGoldenrod);
             azukiControl.ColorScheme.SetMarkingDecoration(1, dec);
-
-            azukiControl.SetKeyBind(Keys.Home, ActionHome);
-            azukiControl.SetKeyBind((uint)(Keys.Shift | Keys.Enter), ActionShiftEnter);
-            azukiControl.SetKeyBind((uint)(Keys.Control | Keys.Divide), ActionComment);
-            azukiControl.SetKeyBind((uint)(Keys.Control | Keys.OemQuestion), ActionComment);
-            azukiControl.SetKeyBind((uint)(Keys.Control | Keys.F), ActionFind);
-            azukiControl.SetKeyBind((uint)(Keys.Control | Keys.PageDown), ActionJumpAnchorNext);
-            azukiControl.SetKeyBind((uint)(Keys.Control | Keys.PageUp), ActionJumpAnchorPrevious);
-            azukiControl.SetKeyBind((uint)(Keys.F3), ActionFindNext);
-            azukiControl.SetKeyBind((uint)(Keys.Shift | Keys.F3), ActionFindPrevious);
-            //azukiControl.SetKeyBind((uint)(Keys.Alt | Keys.OemMinus), ActionDummy);
-            //azukiControl.SetKeyBind((uint)(Keys.Alt | Keys.F5), ActionDummy);
 
             this.Controls.Add(azukiControl);
 
@@ -175,18 +167,6 @@ namespace mml2vgmIDE
             TextDecoration dec = new BgColorTextDecoration(Color.DarkGoldenrod);
             azukiControl.ColorScheme.SetMarkingDecoration(1, dec);
 
-            azukiControl.SetKeyBind(Keys.Home, ActionHome);
-            azukiControl.SetKeyBind((uint)(Keys.Shift | Keys.Enter), ActionShiftEnter);
-            azukiControl.SetKeyBind((uint)(Keys.Control | Keys.Divide), ActionComment);
-            azukiControl.SetKeyBind((uint)(Keys.Control | Keys.OemQuestion), ActionComment);
-            azukiControl.SetKeyBind((uint)(Keys.Control | Keys.F), ActionFind);
-            azukiControl.SetKeyBind((uint)(Keys.Control | Keys.PageDown), ActionJumpAnchorNext);
-            azukiControl.SetKeyBind((uint)(Keys.Control | Keys.PageUp), ActionJumpAnchorPrevious);
-            azukiControl.SetKeyBind((uint)(Keys.F3), ActionFindNext);
-            azukiControl.SetKeyBind((uint)(Keys.Shift | Keys.F3), ActionFindPrevious);
-            //azukiControl.SetKeyBind((uint)(Keys.Alt | Keys.OemMinus), ActionDummy);
-            //azukiControl.SetKeyBind((uint)(Keys.Alt | Keys.F5), ActionDummy);
-
             this.Controls.Add(azukiControl);
 
             frmSien = new FrmSien(setting);
@@ -235,7 +215,9 @@ namespace mml2vgmIDE
                 return;
             }
 
-            string basePath = System.IO.Path.GetDirectoryName(this.document.gwiFullPath) + "\\";
+            string path1 = System.IO.Path.GetDirectoryName(this.document.gwiFullPath);
+            path1 = string.IsNullOrEmpty(path1) ? this.document.gwiFullPath : path1;
+            string basePath = path1 + "\\";
             if (source.IndexOf(basePath) == 0)
             {
                 source = source.Substring(basePath.Length);
@@ -357,8 +339,10 @@ namespace mml2vgmIDE
             if (main != null) main.TsslLineCol.Text = string.Format("Line:{0} Col:{1}", row + 1, col + 1);
         }
 
-        private void ActionComment(IUserInterface ui)
+        public void ActionComment(IUserInterface ui)
         {
+            if (main.isTrace) return;
+
             int b;
             int e;
             azukiControl.GetSelection(out b, out e);
@@ -403,7 +387,7 @@ namespace mml2vgmIDE
             azukiControl.SetSelection(st, st+line.Length);
         }
 
-        private void ActionShiftEnter(IUserInterface ui)
+        public void ActionShiftEnter(IUserInterface ui)
         {
             int ci = azukiControl.CaretIndex;
             int st = azukiControl.GetLineHeadIndexFromCharIndex(ci);
@@ -447,7 +431,7 @@ namespace mml2vgmIDE
             azukiControl.Document.Replace("\r\n" + line.Substring(0, a));
         }
 
-        private void ActionHome(IUserInterface ui)
+        public void ActionHome(IUserInterface ui)
         {
             int ci = azukiControl.CaretIndex;
             int st = azukiControl.GetLineHeadIndexFromCharIndex(ci);
@@ -543,7 +527,7 @@ namespace mml2vgmIDE
             string line = null;
             do
             {
-                SearchFindNext(anchorTextPattern, false);
+                if (!SearchFindNext(anchorTextPattern, false)) break;
                 int ci = azukiControl.CaretIndex;
                 int st = azukiControl.GetLineHeadIndexFromCharIndex(ci);
                 int li = azukiControl.GetLineIndexFromCharIndex(ci);
@@ -562,7 +546,7 @@ namespace mml2vgmIDE
             string line = null;
             do
             {
-                SearchFindPrevious(anchorTextPattern, false);
+                if (!SearchFindPrevious(anchorTextPattern, false)) break;
                 int ci = azukiControl.CaretIndex;
                 int st = azukiControl.GetLineHeadIndexFromCharIndex(ci);
                 int li = azukiControl.GetLineIndexFromCharIndex(ci);
@@ -598,7 +582,7 @@ namespace mml2vgmIDE
             ;
         }
 
-        public void SearchFindNext(string sTextPtn, bool searchUseRegex)
+        public bool SearchFindNext(string sTextPtn, bool searchUseRegex)
         {
             //AzukiのAnnの検索処理を利用
 
@@ -626,7 +610,7 @@ namespace mml2vgmIDE
                 if (regex == null)
                 {
                     // current text pattern was invalid as a regular expression.
-                    return;
+                    return false;
                 }
 
                 // ensure that "RightToLeft" option of the regex object is NOT set
@@ -659,10 +643,13 @@ namespace mml2vgmIDE
             else
             {
                 MessageBox.Show("見つかりません");
+                return false;
             }
+
+            return true;
         }
 
-        public void SearchFindPrevious(string sTextPtn,bool searchUseRegex)
+        public bool SearchFindPrevious(string sTextPtn,bool searchUseRegex)
         {
 
             //AzukiのAnnの検索処理を利用
@@ -691,7 +678,7 @@ namespace mml2vgmIDE
                 if (regex == null)
                 {
                     // current text pattern was invalid as a regular expression.
-                    return;
+                    return false;
                 }
 
                 // ensure that "RightToLeft" option of the regex object is set
@@ -719,7 +706,10 @@ namespace mml2vgmIDE
             else
             {
                 MessageBox.Show("見つかりません");
+                return false;
             }
+
+            return true;
         }
 
         protected override string GetPersistString()
@@ -769,7 +759,7 @@ namespace mml2vgmIDE
             Point ciP = azukiControl.GetPositionFromIndex(Math.Max(ci - 1, 0));
             ciP = azukiControl.PointToScreen(new Point(ciP.X, ciP.Y + azukiControl.LineHeight));
             string line = azukiControl.GetTextInRange(st, ci).TrimStart();
-            if (line != "" && line[0] == '\'')
+            if (line != "" && line[0] == '\'' && frmSien!=null)
             {
                 frmSien.selRow = -1;
                 frmSien.Request(line, ciP);
@@ -793,6 +783,7 @@ namespace mml2vgmIDE
                     }
                 }
 
+                this.frmSien.Close();
                 forceClose = false;
                 main.RemoveForm(this);
                 main.RemoveDocument(document);
@@ -800,13 +791,9 @@ namespace mml2vgmIDE
             }
         }
 
-        private void FrmEditor_FormClosed(object sender, FormClosedEventArgs e)
-        {
-        }
-
         private void Hokan(string line,Point ciP)
         {
-            if (line == "\'@")
+            if (line == "\'@" && setting.UseSien)
             {
                 Point r = azukiControl.PointToScreen(new Point(ciP.X, ciP.Y + azukiControl.LineHeight));
                 frmSien.Location = new Point(r.X, r.Y);
@@ -826,6 +813,12 @@ namespace mml2vgmIDE
             if (this.DockState== DockState.Float)
             {
                 main.FrmMain_KeyDown(sender, e);
+            }
+
+            if (frmSien == null)
+            {
+                e.SuppressKeyPress = false;
+                return;
             }
 
             if (!frmSien.GetOpacity())
@@ -860,10 +853,20 @@ namespace mml2vgmIDE
                     {
                         int ci = azukiControl.CaretIndex;
                         SienItem si = (SienItem)frmSien.dgvItem.Rows[frmSien.dgvItem.SelectedRows[0].Index].Tag;
-                        azukiControl.Document.Replace(
-                            si.content,
-                            ci - si.foundCnt,
-                            ci);
+                        if (si.sienType == 2)
+                        {
+                            azukiControl.Document.Replace(
+                                (document.srcFileFormat == EnmMmlFileFormat.GWI) ? si.content : ConvertMucFromGwiOPN(si.content),
+                                ci - si.foundCnt,
+                                ci);
+                        }
+                        else
+                        {
+                            azukiControl.Document.Replace(
+                                si.content,
+                                ci - si.foundCnt,
+                                ci);
+                        }
 
                         azukiControl.SetSelection(ci - si.foundCnt + si.nextAnchor, ci - si.foundCnt + si.nextCaret);
                     }
@@ -878,6 +881,29 @@ namespace mml2vgmIDE
                 default:
                     e.SuppressKeyPress = false;
                     break;
+            }
+        }
+
+        private string ConvertMucFromGwiOPN(string content)
+        {
+            try
+            {
+                string[] ops = content.Split(new string[] { "\r\n" }, StringSplitOptions.None);
+                string ret = string.Format(
+                    "  @001:{{\r\n  {5} {6}\r\n  {0}\r\n  {1}\r\n  {2}\r\n  {3} \"{4}\"}}\r\n"
+                    , ops[3].Substring(3)
+                    , ops[4].Substring(3)
+                    , ops[5].Substring(3)
+                    , ops[6].Substring(3)
+                    , ops[0].Trim().Substring(0, 8)
+                    , ops[8].Substring(3).Trim().Split(' ')[1]
+                    , ops[8].Substring(3).Trim().Split(' ')[0]
+                    );
+                return ret;
+            }
+            catch
+            {
+                return "";
             }
         }
 

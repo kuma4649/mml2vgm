@@ -7,11 +7,11 @@ namespace mml2vgmIDE.MMLParameter
 {
     public class YM2609 : Instrument
     {
-        public YM2609(SoundManager.Chip chip) : base(12+6+12+6+3,chip)
+        public YM2609(SoundManager.Chip chip) : base(12+6+12+6+3+6,chip)
         {
-            for (int i = 0; i < 39; i++)
+            for (int i = 0; i < 45; i++)
             {
-                vol[i] = i < 18 ? 127 : (i < 30 ? 15 : (i < 36 ? 31 : 255));
+                vol[i] = i < 18 ? 127 : (i < 30 ? 15 : (i < 36 ? 31 : (i < 39 ? 255 : 31)));
                 beforeTie[i] = false;
             }
         }

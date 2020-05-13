@@ -56,7 +56,9 @@ namespace mml2vgmIDE
                 TreeNode ts;
 
                 // 展開するノードのフルパスを取得
-                string fullpath = Path.Combine(Path.GetDirectoryName(basePath), node.FullPath);
+                string path1 = Path.GetDirectoryName(basePath);
+                path1 = string.IsNullOrEmpty(path1) ? basePath : path1;
+                string fullpath = Path.Combine(path1, Path.GetFullPath(node.FullPath));
                 node.Nodes.Clear();
 
                 DirectoryInfo dm = new DirectoryInfo(fullpath);
@@ -332,7 +334,9 @@ namespace mml2vgmIDE
                             ? fileOrFolder.Substring(0, fileOrFolder.Length - 1)
                             : fileOrFolder;
                         string folder = Path.GetFileName(tmp);
-                        string targetPath = Path.Combine(Path.GetDirectoryName(basePath), target.FullPath, folder);
+                        string path1 = Path.GetDirectoryName(basePath);
+                        path1 = string.IsNullOrEmpty(path1) ? basePath : path1;
+                        string targetPath = Path.Combine(path1, Path.GetFullPath(target.FullPath), folder);
 
                         CopyDirectory(fileOrFolder, targetPath);
 
@@ -342,7 +346,9 @@ namespace mml2vgmIDE
                     {
                         // file
                         string file = Path.GetFileName(fileOrFolder);
-                        string targetPath = Path.Combine(Path.GetDirectoryName(basePath), target.FullPath, file);
+                        string path1 = Path.GetDirectoryName(basePath);
+                        path1 = string.IsNullOrEmpty(path1) ? basePath : path1;
+                        string targetPath = Path.Combine(path1, Path.GetFullPath(target.FullPath), file);
 
                         if (File.Exists(targetPath))
                         {
@@ -447,36 +453,48 @@ namespace mml2vgmIDE
             int i = 0;
             while (i < nodes.Count)
             {
-                TreeNode tn = nodes[i++];
-                if (tn.Nodes.Count > 0 && tn.Nodes[0].Text != "!dmy")
+                try
                 {
-                    refreshRemoveCheck(tn.Nodes);
-                }
-                string fullpath = Path.Combine(Path.GetDirectoryName(basePath), tn.FullPath);
-                if (tn.ImageIndex == 1)
-                {
-                    //folder
-                    if (!Directory.Exists(fullpath))
+                    TreeNode tn = nodes[i++];
+                    if (tn.Nodes.Count > 0 && tn.Nodes[0].Text != "!dmy")
                     {
-                        nodes.Remove(tn);
-                        i--;
+                        refreshRemoveCheck(tn.Nodes);
+                    }
+                    string path1 = Path.GetDirectoryName(basePath);
+                    path1 = string.IsNullOrEmpty(path1) ? basePath : path1;
+                    string fullpath = Path.Combine(path1, Path.GetFullPath(tn.FullPath));
+                    if (tn.ImageIndex == 1)
+                    {
+                        //folder
+                        if (!Directory.Exists(fullpath))
+                        {
+                            nodes.Remove(tn);
+                            i--;
+                        }
+                    }
+                    else
+                    {
+                        //file
+                        if (!File.Exists(fullpath))
+                        {
+                            nodes.Remove(tn);
+                            i--;
+                        }
                     }
                 }
-                else
+                catch
                 {
-                    //file
-                    if (!File.Exists(fullpath))
-                    {
-                        nodes.Remove(tn);
-                        i--;
-                    }
+                    ;
                 }
             }
         }
 
         private void refreshAddCheck(TreeNode tn)
         {
-            string fullpath = Path.Combine(Path.GetDirectoryName(basePath), tn.FullPath);
+            string path1 = Path.GetDirectoryName(basePath);
+            path1 = string.IsNullOrEmpty(path1) ? basePath : path1;
+
+            string fullpath = Path.Combine(path1, Path.GetFullPath(tn.FullPath));
             DirectoryInfo dm = new DirectoryInfo(fullpath);
             TreeNode ts;
 
@@ -500,7 +518,7 @@ namespace mml2vgmIDE
 
                         }
 
-                        string fpath = Path.Combine(Path.GetDirectoryName(basePath), ttn.FullPath);
+                        string fpath = Path.Combine(path1,Path.GetFullPath( ttn.FullPath));
                         if (ds.FullName == fpath)
                         {
                             flg = true;
@@ -520,10 +538,16 @@ namespace mml2vgmIDE
                     while (i < tn.Nodes.Count)
                     {
                         TreeNode ttn = tn.Nodes[i++];
-                        string fpath = Path.Combine(Path.GetDirectoryName(basePath), ttn.FullPath);
-                        if (fi.FullName == fpath)
+                        string fpath = Path.Combine(path1, Path.GetFullPath(ttn.FullPath));
+                        if (fi.FullName.ToUpper() == fpath.ToUpper())
                         {
                             flg = true;
+                            if (fi.FullName != fpath)
+                            {
+                                tn.Nodes.Remove(ttn);
+                                flg = false;
+                            }
+                            break;
                         }
                     }
                     if (!flg)
@@ -640,7 +664,7 @@ namespace mml2vgmIDE
                 }
                 if (!tn.Checked && !tn.IsSelected) continue;
 
-                string fullpath = System.IO.Path.Combine(Path.GetDirectoryName(basePath), tn.FullPath);
+                string fullpath = Core.Common.PathCombine(Core.Common.GetDirectoryName(basePath), Path.GetFullPath(tn.FullPath));
                 lstFullPath.Add(fullpath);
             }
         }
@@ -655,7 +679,7 @@ namespace mml2vgmIDE
                     continue;
                 }
                 if (!tn.Checked) continue;
-                lstFullPathExt.Add(Path.GetExtension(tn.FullPath));
+                lstFullPathExt.Add(Path.GetExtension(Path.GetFullPath(tn.FullPath)));
             }
         }
 

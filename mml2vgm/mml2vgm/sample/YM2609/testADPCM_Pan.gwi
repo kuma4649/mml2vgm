@@ -22,21 +22,27 @@
 'U01 T120
 
 ADPCM
-     @ filename               Hz   Vol Chip   type(0:ADPCM1 1:ADPCM2 2:ADPCM3)
-'@ P 1,"..\wav\Guitar.wav"    ,8000,100,YM2609,0
-'@ P 2,"..\wav\SD.wav"        ,8000,100,YM2609,0
-'@ P 3,"..\wav\muteGuitar.wav",8000,100,YM2609,0
+      @   filename                Hz   Vol Chip   type(0:ADPCM1 1:ADPCM2 2:ADPCM3 3:ADPCM-A)
+@ P  1 , "..\wav\Guitar.wav"    ,8000,100,YM2609,0
+@ P  2 , "..\wav\SD.wav"        ,8000,100,YM2609,0
+@ P  3 , "..\wav\muteGuitar.wav",8000,100,YM2609,0
 
-'@ P 4,"..\wav\Guitar.wav"    ,8000,100,YM2609,1
-'@ P 5,"..\wav\SD.wav"        ,8000,100,YM2609,1
-'@ P 6,"..\wav\muteGuitar.wav",8000,100,YM2609,1
+@ P  4 , "..\wav\Guitar.wav"    ,8000,100,YM2609,1
+@ P  5 , "..\wav\SD.wav"        ,8000,100,YM2609,1
+@ P  6 , "..\wav\muteGuitar.wav",8000,100,YM2609,1
 
-'@ P 7,"..\wav\Guitar.wav"    ,8000,100,YM2609,2
-'@ P 8,"..\wav\SD.wav"        ,8000,100,YM2609,2
-'@ P 9,"..\wav\muteGuitar.wav",8000,100,YM2609,2
+@ P  7 , "..\wav\Guitar.wav"    ,8000,100,YM2609,2
+@ P  8 , "..\wav\SD.wav"        ,8000,100,YM2609,2
+@ P  9 , "..\wav\muteGuitar.wav",8000,100,YM2609,2
 
-'U37 o4l4p4,4q0v80@1 p0,4c p1,4d p2,4e p3,4f p4,4g p4,3a p4,2b >p4,1c p4,0d <
-'U38 o4l4p1,4q0v40@5 ccccccccc
-'U39 o4l4p4,1q0v60@9 ccccccccc
+'@ P 10 , "..\wav\Guitar.wav"        ,    ,100,YM2609,3
+'@ P 11 , "..\wav\SD_16bit18500.wav" ,    ,100,YM2609,3
 
+U37 o4l4p4,4q0v80@1 p0,4c p1,4d p2,4e p3,4f p4,4g p4,3a p4,2b >p4,1c p4,0d <
+U38 o4l4p1,4q0v40@5 ccccccccc
+U39 o4l4p4,1q0v60@9 ccccccccc
+'U40 @10l8q0v20p0,0c
+'U40 @10l8q0v20p0,1cp0,2cp0,3cp0,4cr
+'U41 @10l8q14v31rrrrrrp1,0cp2,0cp3,0cp4,0cr
+'U42 @11l8q0v31rrrrrrrrrrrrccp2,2ccr
 

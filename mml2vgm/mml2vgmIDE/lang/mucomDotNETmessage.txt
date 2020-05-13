@@ -12,6 +12,7 @@
 
 ;common
 E0000=Exception message:\r\n{0}\r\nException stacktrace:\r\n{1}\r\n
+E0001=従来の書式が既に使われていて自動でmucomDotNET形式に移行できませんでした。Driverタグを使用してmucomDotNETを予め宣言してください。
 
 ;compiler.cs 0100
 E0100=Hmm, Error has been occured on compile. (Error on row:{0} col:{1})
@@ -149,7 +150,7 @@ E0501=Analysis of the duration failed.The value is invalid.
 E0502=Analysis of the duration failed.The read value exceeds the value specified by 'C'.(value:{0})
 E0503=Analysis of the duration failed.As a result of calculating the dot, the range was exceeded.(value:{0})
 E0504='S'Hardware envelope command
-E0505='S'Hardware envelope command value exceeding range(0~7).
+E0505='S'Hardware envelope command value exceeding range(0~15).
 E0506='m'Hardware envelope speed command
 E0507='m'Hardware envelope speed command value exceeding range(0~65535).
 E0508=SSG Patch number exceeding range(0~7).(value:{0})
@@ -174,6 +175,8 @@ E0526=Exceeds the range (1 to {0}) that can be specified for the weight value of
 
 ;Program.cs 0600
 E0600=I want arguments(.muc File) please?
+E0601=.muc file({0}) could not be found.
+I0600=mucomDotNETConsole Command line Compiler\r\n                                      By kuma\r\n\r\nUsage:\r\nmucomDotNET [-xml] [-LOGLEVEL=FATAL|ERROR|WARNING|INFO|DEBUG|TRACE] [-OFFLOG=WARNING] mucFile[.muc]\r\n\r\nOption\r\n    -xml       Outputs an XML file.\r\n-LOGLEVEL  Specify the log level to be displayed at compile time (Default:INFO)\r\n    -OFFLOG    WARNING to display\r\nParameter\r\n    mucFile\r\nPlease specify the MUC file.\r\n        If you omit the extension, .muc will be completed.\r\n
 
 ;compiler.cs 0700
 E0700=The buffer (65535byte) that can be used per part has been exceeded.(Used buffer by the channel: Ch.{0}: {1}byte)

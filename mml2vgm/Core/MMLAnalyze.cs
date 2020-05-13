@@ -280,6 +280,10 @@ namespace Core
                     log.Write(" y");
                     CmdY(pw, mml);
                     break;
+                case 'X': // Effect
+                    log.Write(" Effect");
+                    CmdEffect(pw, mml);
+                    break;
 
 
                 case 'c':
@@ -412,6 +416,10 @@ namespace Core
                     mml.args.Add('S');
                     pw.incPos();
                     break;
+                case 'v':                    //@vn
+                    mml.type = enmMMLType.RelativeVolumeSetting;
+                    pw.incPos();
+                    break;
                 default:                     //normal
                     mml.args.Add('n');
                     break;
@@ -422,7 +430,8 @@ namespace Core
             {
                 if (!pw.getNum(out n))
                 {
-                    msgBox.setErrMsg(msg.get("E05002"), mml.line.Lp);
+                    if (mml.type == enmMMLType.Instrument) msgBox.setErrMsg(msg.get("E05002"), mml.line.Lp);
+                    else msgBox.setErrMsg(msg.get("E05003"), mml.line.Lp);
                     n = 0;
                 }
                 n = Common.CheckRange(n, 0, 0xffff);
@@ -536,9 +545,13 @@ namespace Core
             pw.incPos();
             if (!pw.getNum(out n))
             {
-                msgBox.setErrMsg(msg.get("E05006"), mml.line.Lp);
+                mml.type = enmMMLType.VolumeUp;
+                mml.args = new List<object>();
+                mml.args.Add(null);
+                //msgBox.setErrMsg(msg.get("E05006"), mml.line.Lp);
                 return;
             }
+            n = Common.CheckRange(n, 1, pw.MaxVolume);
             mml.type = enmMMLType.VolumeUp;
             mml.args = new List<object>();
             mml.args.Add(n);
@@ -550,8 +563,12 @@ namespace Core
             pw.incPos();
             if (!pw.getNum(out int n))
             {
-                msgBox.setErrMsg(msg.get("E05007"), mml.line.Lp);
-                n = 10;
+                mml.type = enmMMLType.VolumeDown;
+                mml.args = new List<object>();
+                mml.args.Add(null);
+                return;
+                //msgBox.setErrMsg(msg.get("E05007"), mml.line.Lp);
+                //n = 10;
             }
             n = Common.CheckRange(n, 1, pw.MaxVolume);
             mml.type = enmMMLType.VolumeDown;
@@ -1132,7 +1149,7 @@ namespace Core
             mml.args.Add(n);
         }
 
-        private void CmdSusOnOff(partWork pw,MML mml)
+        private void CmdSusOnOff(partWork pw, MML mml)
         {
             pw.incPos();
             char c = pw.getChar();
@@ -1146,6 +1163,128 @@ namespace Core
             mml.type = enmMMLType.SusOnOff;
             mml.args = new List<object>();
             mml.args.Add(c);
+        }
+
+        private void CmdEffect(partWork pw, MML mml)
+        {
+            pw.incPos();
+            pw.skipTabSpace();
+
+            char c = pw.getChar();
+            if (c == 'R')
+            {
+                CmdEffectReverb(pw, mml);
+                return;
+            }
+            else if (c == 'D')
+            {
+                CmdEffectDistortion(pw, mml);
+                return;
+            }
+
+            msgBox.setErrMsg(msg.get("E05059"), mml.line.Lp);
+        }
+
+        private void CmdEffectReverb(partWork pw, MML mml)
+        {
+            pw.incPos();
+            char c = pw.getChar();
+            if (c != 'v')
+            {
+                msgBox.setErrMsg(msg.get("E05059"), mml.line.Lp);
+                return;
+            }
+
+            mml.type = enmMMLType.Effect;
+            mml.args = new List<object>();
+            mml.args.Add("Rv");
+
+            pw.incPos();
+            pw.skipTabSpace();
+
+            c = pw.getChar();
+            if (c != 'D' && c != 'S')
+            {
+                msgBox.setErrMsg(msg.get("E05059"), mml.line.Lp);
+                return;
+            }
+
+            mml.args.Add(c);
+
+            int n = -1;
+            pw.incPos();
+            pw.skipTabSpace();
+            if (!pw.getNum(out n))
+            {
+                msgBox.setErrMsg(msg.get("E05059"), mml.line.Lp);
+                return;
+            }
+
+            if (c == 'D')
+            {
+                n = Common.CheckRange(n, 0, 127);
+            }
+            else
+            {
+                n = Common.CheckRange(n, 0, 15);
+            }
+            mml.args.Add(n);
+
+        }
+
+        private void CmdEffectDistortion(partWork pw, MML mml)
+        {
+            pw.incPos();
+            char c = pw.getChar();
+            if (c != 's')
+            {
+                msgBox.setErrMsg(msg.get("E05059"), mml.line.Lp);
+                return;
+            }
+
+            mml.type = enmMMLType.Effect;
+            mml.args = new List<object>();
+            mml.args.Add("Ds");
+
+            pw.incPos();
+            pw.skipTabSpace();
+
+            c = pw.getChar();
+            if (c != 'C' && c != 'G' && c != 'V' && c != 'S')
+            {
+                msgBox.setErrMsg(msg.get("E05059"), mml.line.Lp);
+                return;
+            }
+
+            mml.args.Add(c);
+
+            int n = -1;
+            pw.incPos();
+            pw.skipTabSpace();
+            if (!pw.getNum(out n))
+            {
+                msgBox.setErrMsg(msg.get("E05059"), mml.line.Lp);
+                return;
+            }
+
+            if (c == 'S')//switch
+            {
+                n = Common.CheckRange(n, 0, 1);
+            }
+            else if (c == 'V')//volume
+            {
+                n = Common.CheckRange(n, 0, 127);
+            }
+            else if (c == 'G')//gain
+            {
+                n = Common.CheckRange(n, 0, 127);
+            }
+            else if (c == 'C')//cutoff
+            {
+                n = Common.CheckRange(n, 0, 127);
+            }
+            mml.args.Add(n);
+
         }
 
         private void CmdY(partWork pw,MML mml)

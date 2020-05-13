@@ -125,7 +125,7 @@ namespace mml2vgmIDE
                 return;
             }
 
-            this.SetOpacity(true);
+            this.SetOpacity(setting.UseSien);
 
             bool isFirst = true;
             foreach (SienItem si in found)
@@ -236,7 +236,7 @@ namespace mml2vgmIDE
                     ssi.nextCaret = si.nextCaret;
                     ssi.pattern = si.pattern;
                     ssi.patternType = si.patternType;
-                    ssi.sienType = ssi.sienType;
+                    ssi.sienType = si.sienType + 1;
 
                     dgvItem.Rows.Add(
                         ssi.title,

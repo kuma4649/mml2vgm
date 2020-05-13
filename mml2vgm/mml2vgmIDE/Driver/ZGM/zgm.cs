@@ -90,6 +90,7 @@ namespace mml2vgmIDE.Driver.ZGM
         private byte[] DacCtrlUsg = new byte[0xFF];
         private DACCTRL_DATA[] DacCtrl = new DACCTRL_DATA[0xFF];
 
+        private byte[][] ym2609AdpcmA = new byte[2][] { null, null };
         private byte[][] ym2610AdpcmA = new byte[2][] { null, null };
         private byte[][] ym2610AdpcmB = new byte[2][] { null, null };
 
@@ -499,6 +500,21 @@ namespace mml2vgmIDE.Driver.ZGM
                     {
                         adpcmAdr = 0x311;
                     }
+                    else if(bType==3)
+                    {
+                        if (ym2609AdpcmA[chip.Index] == null || ym2609AdpcmA[chip.Index].Length != romSize) ym2609AdpcmA[chip.Index] = new byte[romSize];
+                        if (ym2609AdpcmA[chip.Index].Length > 0)
+                        {
+                            for (int cnt = 0; cnt < bLen - 8; cnt++)
+                            {
+                                ym2609AdpcmA[chip.Index][startAddress + cnt] = vgmBuf[vgmAdr + 15 + cnt].val;
+                            }
+                            chipRegister.YM2609WriteSetAdpcmA(od, Audio.DriverSeqCounter, chip.Index, ym2609AdpcmA[chip.Index]);
+                        }
+                        vgmAdr += (uint)bLen + 7;
+                        break;
+                    }
+
                     List<PackData> data = new List<PackData>
                     {
                         new PackData(null,chipRegister.YM2609[chip.Index],0,adpcmAdr+ 0x00, 0x20,null),

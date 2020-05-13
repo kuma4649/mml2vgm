@@ -432,6 +432,42 @@ namespace mml2vgmIDE.Properties {
         }
         
         /// <summary>
+        ///   JSolo+ に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string lblF5_JSolo {
+            get {
+                return ResourceManager.GetString("lblF5_JSolo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Play に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string lblF5_Play {
+            get {
+                return ResourceManager.GetString("lblF5_Play", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Skip+ に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string lblF5_Skip {
+            get {
+                return ResourceManager.GetString("lblF5_Skip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Trace+ に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string lblF5_Trace {
+            get {
+                return ResourceManager.GetString("lblF5_Trace", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
         /// </summary>
         internal static System.Drawing.Bitmap LineCursor {

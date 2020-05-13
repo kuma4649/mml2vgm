@@ -73,16 +73,19 @@ namespace mvc
                 srcFn += ".gwi";
             }
 
+            string path1 = System.IO.Path.GetDirectoryName(Path.Combine(System.Environment.CurrentDirectory, srcFn));
+            path1 = string.IsNullOrEmpty(path1) ? srcFn : path1;
+
             if (args.Length > cnt)
             {
                 desFn = args[cnt];
             }
             else
             {
-                desFn = Path.Combine(Path.GetDirectoryName(srcFn), Path.GetFileNameWithoutExtension(srcFn) + ".vgm");
+                desFn = Path.Combine(path1, Path.GetFileNameWithoutExtension(srcFn) + ".vgm");
             }
 
-            desTiFn = Path.Combine(Path.GetDirectoryName(srcFn), Path.GetFileNameWithoutExtension(srcFn) + ".ti");
+            desTiFn = Path.Combine(path1, Path.GetFileNameWithoutExtension(srcFn) + ".ti");
 
             Core.log.debug = false;
             Core.log.Open();
@@ -90,6 +93,7 @@ namespace mvc
 
             Assembly myAssembly = Assembly.GetEntryAssembly();
             string path = System.IO.Path.GetDirectoryName(myAssembly.Location);
+            path = string.IsNullOrEmpty(path1) ? myAssembly.Location : path;
 
             Mml2vgm mv = new Mml2vgm(srcFn, desFn, path, Disp);
             mv.outVgmFile = outVgmFile;

@@ -12,52 +12,30 @@ namespace mml2vgmIDE
 {
     public class mucomManager
     {
-        private Assembly asmCompiler = null;
-        private Assembly asmDriver = null;
-        private Assembly asmPreprocessor = null;
         private iCompiler compiler = null;
         private iDriver driver = null;
         private iPreprocessor preprocessor = null;
         private bool ok = false;
         private Action<string> disp = null;
         private Setting setting = null;
+        private InstanceMarker im = null;
 
         public string wrkMUCFullPath { get; private set; }
 
-        public mucomManager(Assembly compiler, Assembly driver, Assembly preprocessor, Action<string> disp,Setting setting)
+        public mucomManager(string compilerPath, string driverPath, string preprocessorPath, Action<string> disp,Setting setting)
         {
             try
             {
-                asmCompiler = compiler;
-                asmDriver = driver;
-                asmPreprocessor = preprocessor;
                 this.disp = disp;
                 this.setting = setting;
 
-                var info = asmCompiler.GetType("mucomDotNET.Compiler.Compiler");
-                this.compiler = Activator.CreateInstance(info, new object[] { null }) as iCompiler;
-
-                info = asmDriver.GetType("mucomDotNET.Driver.Driver");
-                this.driver = Activator.CreateInstance(info, new object[] { null }) as iDriver;
-
-                info = asmPreprocessor.GetType("M98DotNETcore.M98");
-                this.preprocessor = Activator.CreateInstance(info, new object[] { null }) as iPreprocessor;
-
-                //Log.writeLine = WriteLog;
-
-                if (this.compiler == null || this.driver == null || this.preprocessor == null)
-                {
-                    throw new Exception("インスタンスの生成に失敗しました。");
-                }
+                makeInstance(compilerPath, driverPath, preprocessorPath);
 
                 ok = true;
 
             }
             catch
             {
-                asmCompiler = null;
-                asmDriver = null;
-                asmPreprocessor = null;
                 this.compiler = null;
                 this.driver = null;
                 this.preprocessor = null;
@@ -65,6 +43,23 @@ namespace mml2vgmIDE
                 throw;
             }
 
+        }
+
+        private void makeInstance(string compilerPath, string driverPath, string preprocessorPath)
+        {
+            im = new InstanceMarker();
+            im.LoadCompilerDll(compilerPath);
+            im.LoadDriverDll(driverPath);
+            im.LoadPreprocessorDll(preprocessorPath);
+
+            compiler = im.GetCompiler("mucomDotNET.Compiler.Compiler");
+            driver = im.GetDriver("mucomDotNET.Driver.Driver");
+            preprocessor = im.GetPreprocessor("M98DotNETcore.M98");
+
+            if (compiler == null || driver == null || preprocessor == null)
+            {
+                throw new Exception("インスタンスの生成に失敗しました。");
+            }
         }
 
         public void Rendering()

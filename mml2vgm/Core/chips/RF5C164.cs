@@ -113,6 +113,7 @@ namespace Core
 
                 buf = Encode(buf, false);
                 size = buf.Length;
+                //long tSize = size - 1;
 
                 newDic.Add(
                     v.Key
@@ -380,24 +381,23 @@ namespace Core
 
             for (int i = 0; i < tSize; i++)
             {
-                if (buf[i] != 0xff)
+                //調整
+                if (buf[i] >= 0x80)
                 {
-                    if (buf[i] >= 0x80)
-                    {
-                        buf[i] = buf[i];
-                    }
-                    else
-                    {
-                        buf[i] = (byte)(0x80 - buf[i]);
-                    }
+                    buf[i] = buf[i];
+                }
+                else
+                {
+                    buf[i] = (byte)(0x80 - buf[i]);
                 }
 
-                if (buf[i] == 0xff)
+                if (buf[i] == 0xff)//調整の結果0xffの場合は0xfeにしてループポイント回避
                 {
                     buf[i] = 0xfe;
                 }
             }
             buf[tSize - 1] = 0xff;
+            //buf[buf.Length-1] = 0xff;
 
             return buf;
         }
@@ -692,7 +692,7 @@ namespace Core
             pw.beforepcmStartAddress = -1;
             pw.pcmStartAddress = (int)parent.instPCM[n].stAdr;
             SetRf5c164SampleStartAddress(mml,pw);
-            SetRf5c164LoopAddress(mml,pw, (int)(parent.instPCM[n].loopAdr));
+            SetRf5c164LoopAddress(mml, pw, (int)(parent.instPCM[n].loopAdr + 2));
 
         }
 

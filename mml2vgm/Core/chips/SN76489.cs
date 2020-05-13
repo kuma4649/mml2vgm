@@ -116,6 +116,7 @@ namespace Core
             pw.keyOn = true;
             SetFNum(pw, mml);
             SetVolume(pw, mml);
+            SetDummyData(pw, mml);
 
             MML vmml = new MML();
             vmml.type = enmMMLType.Volume;
@@ -123,6 +124,7 @@ namespace Core
             vmml.args.Add(pw.volume);
             vmml.line = mml.line;
             SetDummyData(pw, vmml);
+            
         }
 
         public void OutPsgKeyOff(partWork pw, MML mml)

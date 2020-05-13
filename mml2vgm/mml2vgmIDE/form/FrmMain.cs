@@ -37,7 +37,7 @@ namespace mml2vgmIDE
         private FrmMixer frmMixer = null;
         private FrmMIDIKbd frmMIDIKbd = null;
         private bool doPlay = false;
-        private bool isTrace = false;
+        public bool isTrace = false;
         private bool doSkip = false;
         private bool doSkipStop = false;
         private bool doExport;
@@ -51,6 +51,12 @@ namespace mml2vgmIDE
         private bool ctrl = false;
         private bool shift = false;
         private bool alt = false;
+
+        public bool SendProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            return ProcessCmdKey(ref msg, keyData);
+        }
+
         //private bool beforeAlt = false;
         private ChannelInfo defaultChannelInfo = null;
         private mucomManager mucom = null;
@@ -181,14 +187,14 @@ namespace mml2vgmIDE
 
             try
             {
-                Assembly comp = Assembly.LoadFrom(Path.Combine(startupPath, "mucomDotNETCompiler.dll"));
-                Assembly driv = Assembly.LoadFrom(Path.Combine(startupPath, "mucomDotNETDriver.dll"));
-                Assembly pprc = Assembly.LoadFrom(Path.Combine(startupPath, "M98DotNETcore.dll"));
-                mucom = new mucomManager(comp, driv, pprc, disp, setting);
+                mucom = new mucomManager(
+                    Path.Combine(startupPath, "mucomDotNETCompiler.dll"),
+                    Path.Combine(startupPath, "mucomDotNETDriver.dll"),
+                    Path.Combine(startupPath, "M98DotNETcore.dll"),
+                    disp, setting);
                 Audio.mucomManager = mucom;
 
                 disp("mucomDotNETを読み込みました");
-                //mucom.compile("D:\\bootcamp\\FM音源\\data\\MUC\\mucom88win_yk2mml181225\\BARE2_MML\\bare03.muc");
             }
             catch
             {
@@ -330,7 +336,9 @@ namespace mml2vgmIDE
                 fn = fn.Substring(0, fn.Length - 1);
             }
             sfd.FileName = Path.GetFileName(fn);
-            sfd.InitialDirectory = Path.GetDirectoryName(fn);
+            string path1 = System.IO.Path.GetDirectoryName(fn);
+            path1 = string.IsNullOrEmpty(path1) ? fn : path1;
+            sfd.InitialDirectory = path1;
             sfd.Filter = "gwiファイル(*.gwi)|*.gwi|すべてのファイル(*.*)|*.*";
             sfd.Title = "名前を付けて保存";
             sfd.RestoreDirectory = true;
@@ -338,7 +346,7 @@ namespace mml2vgmIDE
             {
                 return;
             }
-            fn = Path.Combine(Path.GetDirectoryName(fn), sfd.FileName);
+            fn = Path.Combine(path1, sfd.FileName);
             d.editor.Text = Path.GetFileName(sfd.FileName);
             d.gwiFullPath = fn;
             d.parentFullPath = "";
@@ -406,7 +414,9 @@ namespace mml2vgmIDE
                     fn = fn.Substring(0, fn.Length - 1);
                 }
                 sfd.FileName = Path.GetFileNameWithoutExtension(fn) + (FileInformation.format == enmFormat.VGM ? ".vgm" : (FileInformation.format == enmFormat.XGM ? ".xgm" : ".zgm"));
-                sfd.InitialDirectory = Path.GetDirectoryName(fn);
+                string path1 = System.IO.Path.GetDirectoryName(fn);
+                path1 = string.IsNullOrEmpty(path1) ? fn : path1;
+                sfd.InitialDirectory = path1;
                 sfd.Filter = "vgmファイル(*.vgm)|*.vgm|すべてのファイル(*.*)|*.*";
                 if (FileInformation.format == enmFormat.XGM)
                 {
@@ -628,12 +638,26 @@ namespace mml2vgmIDE
 
         private void TsmiTutorial_Click(object sender, EventArgs e)
         {
-            Process.Start("Tutorial.txt");
+            try
+            {
+                Process.Start("Tutorial.txt");
+            }
+            catch
+            {
+                MessageBox.Show("Failed to open the file.", "error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void TsmiReference_Click(object sender, EventArgs e)
         {
-            Process.Start("CommandReference.txt");
+            try
+            {
+                Process.Start("mml2vgm_MMLCommandMemo.txt");
+            }
+            catch
+            {
+                MessageBox.Show("Failed to open the file.", "error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void TsmiAbout_Click(object sender, EventArgs e)
@@ -697,14 +721,223 @@ namespace mml2vgmIDE
         {
             TsmiShowMIDIKbd_Click(null, null);
         }
+
         protected override bool ProcessCmdKey(ref System.Windows.Forms.Message msg, System.Windows.Forms.Keys keyData)
         {
             log.Write(string.Format("2動作未定義のキー：{0}", keyData));
+
+            ctrl = (keyData & Keys.Control) == Keys.Control;
+            shift = (keyData & Keys.Shift) == Keys.Shift;
+            alt = (keyData & Keys.Alt) == Keys.Alt;
 
             if (keyData == (System.Windows.Forms.Keys.OemMinus | System.Windows.Forms.Keys.Alt))
             {
                 frmPartCounter.ClickMUTE(10);
                 return true;
+            }
+
+            for (int i = 0; i < setting.shortCutKey.Info.Length; i++)
+            {
+                if (setting.shortCutKey.Info[i].shift != ((keyData & Keys.Shift) == Keys.Shift)) continue;
+                if (setting.shortCutKey.Info[i].ctrl != ((keyData & Keys.Control) == Keys.Control)) continue;
+                if (setting.shortCutKey.Info[i].alt != ((keyData & Keys.Alt) == Keys.Alt)) continue;
+                Keys k = keyData & ~Keys.Shift;
+                k = k & ~Keys.Control;
+                k = k & ~Keys.Alt;
+                if (setting.shortCutKey.Info[i].key != k.ToString()) continue;
+
+                Document doc;
+
+                switch (setting.shortCutKey.Info[i].number- (setting.shortCutKey.Info[i].number%10))
+                {
+                    case (int)Setting.ShortCutKey.enmContent.FileOpen:
+                        TsmiFileOpen_Click(null, null);
+                        return true;
+                    case (int)Setting.ShortCutKey.enmContent.FileSave:
+                        TsmiSaveFile_Click(null, null);
+                        return true;
+                    case (int)Setting.ShortCutKey.enmContent.Search:
+                        doc = GetActiveDocument();
+                        if (doc != null) doc.editor.ActionFind(null);
+                        return true;
+                    case (int)Setting.ShortCutKey.enmContent.SearchNext:
+                        doc = GetActiveDocument();
+                        if (doc != null) doc.editor.ActionFindNext(null);
+                        return true;
+                    case (int)Setting.ShortCutKey.enmContent.SearchPrev:
+                        doc = GetActiveDocument();
+                        if (doc != null) doc.editor.ActionFindPrevious(null);
+                        return true;
+                    case (int)Setting.ShortCutKey.enmContent.JumpAnchorNext:
+                        doc = GetActiveDocument();
+                        if (doc != null) doc.editor.ActionJumpAnchorNext(null);
+                        return true;
+                    case (int)Setting.ShortCutKey.enmContent.JumpAnchorPrev:
+                        doc = GetActiveDocument();
+                        if (doc != null) doc.editor.ActionJumpAnchorPrevious(null);
+                        return true;
+                    case (int)Setting.ShortCutKey.enmContent.Compile:
+                        Comp();
+                        return true;
+                    case (int)Setting.ShortCutKey.enmContent.M98:
+                        M98Preprocess();
+                        return true;
+                    case (int)Setting.ShortCutKey.enmContent.Stop:
+                        stop();
+                        return true;
+                    case (int)Setting.ShortCutKey.enmContent.Slow:
+                        slow();
+                        return true;
+                    case (int)Setting.ShortCutKey.enmContent.Fastx4:
+                        ff();
+                        return true;
+                    case (int)Setting.ShortCutKey.enmContent.Kbd:
+                        TsmiShowMIDIKbd_Click(null, null);
+                        return true;
+                    case (int)Setting.ShortCutKey.enmContent.CloseTab:
+                        IDockContent dc1 = GetActiveDockContent();
+                        if (dc1 == null) break;
+                        if (!(dc1 is FrmEditor)) break;
+                        ((FrmEditor)dc1).Close();
+                        return true;
+                    case (int)Setting.ShortCutKey.enmContent.CloseTabForce:
+                        IDockContent dc2 = GetActiveDockContent();
+                        if (dc2 == null) break;
+                        if (!(dc2 is FrmEditor)) break;
+                        ((FrmEditor)dc2).forceClose = true;
+                        ((FrmEditor)dc2).Close();
+                        return true;
+
+                    case (int)Setting.ShortCutKey.enmContent.CommentOnOff:
+                        doc = GetActiveDocument();
+                        if (doc != null) doc.editor.ActionComment(null);
+                        return true;
+                    case (int)Setting.ShortCutKey.enmContent.PartEnter:
+                        doc = GetActiveDocument();
+                        if (doc != null) doc.editor.ActionShiftEnter(null);
+                        return true;
+                    case (int)Setting.ShortCutKey.enmContent.Home:
+                        doc = GetActiveDocument();
+                        if (doc != null) doc.editor.ActionHome(null);
+                        return true;
+
+                    case (int)Setting.ShortCutKey.enmContent.Ch01Solo:
+                        frmPartCounter.ClickSOLO(0);
+                        return true;
+                    case (int)Setting.ShortCutKey.enmContent.Ch02Solo:
+                        frmPartCounter.ClickSOLO(1);
+                        return true;
+                    case (int)Setting.ShortCutKey.enmContent.Ch03Solo:
+                        frmPartCounter.ClickSOLO(2);
+                        return true;
+                    case (int)Setting.ShortCutKey.enmContent.Ch04Solo:
+                        frmPartCounter.ClickSOLO(3);
+                        return true;
+                    case (int)Setting.ShortCutKey.enmContent.Ch05Solo:
+                        frmPartCounter.ClickSOLO(4);
+                        return true;
+                    case (int)Setting.ShortCutKey.enmContent.Ch06Solo:
+                        frmPartCounter.ClickSOLO(5);
+                        return true;
+                    case (int)Setting.ShortCutKey.enmContent.Ch07Solo:
+                        frmPartCounter.ClickSOLO(6);
+                        return true;
+                    case (int)Setting.ShortCutKey.enmContent.Ch08Solo:
+                        frmPartCounter.ClickSOLO(7);
+                        return true;
+                    case (int)Setting.ShortCutKey.enmContent.Ch09Solo:
+                        frmPartCounter.ClickSOLO(8);
+                        return true;
+                    case (int)Setting.ShortCutKey.enmContent.Ch10Solo:
+                        frmPartCounter.ClickSOLO(9);
+                        return true;
+                    case (int)Setting.ShortCutKey.enmContent.Ch11Solo:
+                        frmPartCounter.ClickSOLO(10);
+                        return true;
+                    case (int)Setting.ShortCutKey.enmContent.ResetSolo:
+                        frmPartCounter.ClickSOLO(-1);
+                        return true;
+                    case (int)Setting.ShortCutKey.enmContent.Ch01Mute:
+                        frmPartCounter.ClickMUTE(0);
+                        return true;
+                    case (int)Setting.ShortCutKey.enmContent.Ch02Mute:
+                        frmPartCounter.ClickMUTE(1);
+                        return true;
+                    case (int)Setting.ShortCutKey.enmContent.Ch03Mute:
+                        frmPartCounter.ClickMUTE(2);
+                        return true;
+                    case (int)Setting.ShortCutKey.enmContent.Ch04Mute:
+                        frmPartCounter.ClickMUTE(3);
+                        return true;
+                    case (int)Setting.ShortCutKey.enmContent.Ch05Mute:
+                        frmPartCounter.ClickMUTE(4);
+                        return true;
+                    case (int)Setting.ShortCutKey.enmContent.Ch06Mute:
+                        frmPartCounter.ClickMUTE(5);
+                        return true;
+                    case (int)Setting.ShortCutKey.enmContent.Ch07Mute:
+                        frmPartCounter.ClickMUTE(6);
+                        return true;
+                    case (int)Setting.ShortCutKey.enmContent.Ch08Mute:
+                        frmPartCounter.ClickMUTE(7);
+                        return true;
+                    case (int)Setting.ShortCutKey.enmContent.Ch09Mute:
+                        frmPartCounter.ClickMUTE(8);
+                        return true;
+                    case (int)Setting.ShortCutKey.enmContent.Ch10Mute:
+                        frmPartCounter.ClickMUTE(9);
+                        return true;
+                    case (int)Setting.ShortCutKey.enmContent.Ch11Mute:
+                        frmPartCounter.ClickMUTE(10);
+                        return true;
+                    case (int)Setting.ShortCutKey.enmContent.ResetMute:
+                        frmPartCounter.ClickMUTE(-1);
+                        return true;
+
+                    case (int)Setting.ShortCutKey.enmContent.Play:
+                        jumpSoloModeSw = false;
+                        //      doPlay isTrace doSkip
+                        Compile(  true,  false, false, false, false);
+                        return true;
+                    case (int)Setting.ShortCutKey.enmContent.JsoloPlay:
+                        jumpSoloModeSw = true;
+                        //      doPlay isTrace doSkip
+                        //Compile(true, false, false, false, false);
+                        Compile(true, false, true, false, false);
+                        return true;
+                    case (int)Setting.ShortCutKey.enmContent.SkipJsoloPlay:
+                        jumpSoloModeSw = true;
+                        //      doPlay isTrace doSkip
+                        Compile(true, false, true, false, false);
+                        return true;
+                    case (int)Setting.ShortCutKey.enmContent.SkipPlay:
+                        jumpSoloModeSw = false;
+                        //      doPlay isTrace doSkip
+                        Compile(true, false, true, false, false);
+                        return true;
+                    case (int)Setting.ShortCutKey.enmContent.SkipTraceJsoloPlay:
+                        jumpSoloModeSw = true;
+                        //      doPlay isTrace doSkip
+                        Compile(true, true, true, false, false);
+                        return true;
+                    case (int)Setting.ShortCutKey.enmContent.SkipTracePlay:
+                        jumpSoloModeSw = false;
+                        //      doPlay isTrace doSkip
+                        Compile(true, true, true, false, false);
+                        return true;
+                    case (int)Setting.ShortCutKey.enmContent.TraceJsoloPlay:
+                        jumpSoloModeSw = true;
+                        //      doPlay isTrace doSkip
+                        //Compile(true, true, false, false, false);
+                        Compile(true, true, true, false, false);
+                        return true;
+                    case (int)Setting.ShortCutKey.enmContent.TracePlay:
+                        jumpSoloModeSw = false;
+                        //      doPlay isTrace doSkip
+                        Compile(true, true, false, false, false);
+                        return true;
+
+                }
             }
 
             return base.ProcessCmdKey(ref msg, keyData);
@@ -715,116 +948,20 @@ namespace mml2vgmIDE
             ctrl = (e.KeyData & Keys.Control) == Keys.Control;
             shift = (e.KeyData & Keys.Shift) == Keys.Shift;
             alt = (e.KeyData & Keys.Alt) == Keys.Alt;
-            tssbPlay.Text = (ctrl ? "トレース+" : "") + (shift ? "スキップ+" : "") + (alt ? "Jソロ+" : "") + "再生";
-
-            log.Write(string.Format("動作未定義のキー：{0}", e.KeyData));
+            tssbPlay.Text = (ctrl ? Properties.Resources.lblF5_Trace : "") 
+                + (shift ? Properties.Resources.lblF5_Skip : "") 
+                + (alt ? Properties.Resources.lblF5_JSolo : "") 
+                + Properties.Resources.lblF5_Play;
 
             switch (e.KeyCode)
             {
-                case Keys.F1:
-                    TsmiFileOpen_Click(null, null);
-                    break;
-                case Keys.O:
-                    if ((e.Modifiers & Keys.Control) == Keys.Control)
-                    {
-                        TsmiFileOpen_Click(null, null);
-                    }
-                    break;
-                case Keys.F2:
-                    TsmiSaveFile_Click(null, null);
-                    break;
-                case Keys.S:
-                    if ((e.Modifiers & Keys.Control) == Keys.Control)
-                    {
-                        TsmiSaveFile_Click(null, null);
-                    }
-                    break;
-                case Keys.F4:
-                    Comp();
-                    break;
-                case Keys.F5:
-                    jumpSoloModeSw = alt;//nVidia Geforce ExperienceがインストールされているとAlt+F5が検知できない
-                    Compile(true, ctrl, shift, false, false);
-                    break;
-                case Keys.F6:
-                    M98Preprocess();
-                    break;
-                case Keys.F9:
-                    stop();
-                    break;
-                case Keys.F10:
-                    slow();
-                    break;
-                case Keys.F11:
-                    ff();
-                    break;
-                case Keys.F12:
-                    TsmiShowMIDIKbd_Click(null, null);
-                    break;
-                case Keys.W:
-                    if (ctrl)
-                    {
-                        IDockContent dc = GetActiveDockContent();
-                        if (dc == null) return;
-                        if (!(dc is FrmEditor)) return;
-                        if (shift) ((FrmEditor)dc).forceClose = true;
-                        ((FrmEditor)dc).Close();
-                    }
-                    break;
-                case Keys.D1:
-                    if (ctrl) frmPartCounter.ClickSOLO(0);
-                    else if (alt) frmPartCounter.ClickMUTE(0);
-                    break;
-                case Keys.D2:
-                    if (ctrl) frmPartCounter.ClickSOLO(1);
-                    else if (alt) frmPartCounter.ClickMUTE(1);
-                    break;
-                case Keys.D3:
-                    if (ctrl) frmPartCounter.ClickSOLO(2);
-                    else if (alt) frmPartCounter.ClickMUTE(2);
-                    break;
-                case Keys.D4:
-                    if (ctrl) frmPartCounter.ClickSOLO(3);
-                    else if (alt) frmPartCounter.ClickMUTE(3);
-                    break;
-                case Keys.D5:
-                    if (ctrl) frmPartCounter.ClickSOLO(4);
-                    else if (alt) frmPartCounter.ClickMUTE(4);
-                    break;
-                case Keys.D6:
-                    if (ctrl) frmPartCounter.ClickSOLO(5);
-                    else if (alt) frmPartCounter.ClickMUTE(5);
-                    break;
-                case Keys.D7:
-                    if (ctrl) frmPartCounter.ClickSOLO(6);
-                    else if (alt) frmPartCounter.ClickMUTE(6);
-                    break;
-                case Keys.D8:
-                    if (ctrl) frmPartCounter.ClickSOLO(7);
-                    else if (alt) frmPartCounter.ClickMUTE(7);
-                    break;
-                case Keys.D9:
-                    if (ctrl) frmPartCounter.ClickSOLO(8);
-                    else if (alt) frmPartCounter.ClickMUTE(8);
-                    break;
-                case Keys.D0:
-                    if (ctrl) frmPartCounter.ClickSOLO(9);
-                    else if (alt) frmPartCounter.ClickMUTE(9);
-                    break;
-                case Keys.OemMinus://0のとなりの-キー
-                    if (ctrl)
-                    {
-                        frmPartCounter.ClickSOLO(10);
-                    }
-                    break;
-                case Keys.Oem5://bsのとなりの\キー
-                    if (ctrl) frmPartCounter.ClickSOLO(-1);
-                    else if (alt) frmPartCounter.ClickMUTE(-1);
-                    break;
-
+                //case Keys.F5:
+                //    jumpSoloModeSw = alt;//nVidia Geforce ExperienceがインストールされているとAlt+F5が検知できない
+                //    Compile(true, ctrl, shift, false, false);
+                //    break;
                 default:
                     //↓KeyData確認用
-                    log.Write(string.Format("動作未定義のキー：{0}",e.KeyData));
+                    //log.Write(string.Format("動作未定義のキー：{0}",e.KeyData));
                     break;
             }
         }
@@ -834,7 +971,11 @@ namespace mml2vgmIDE
 
             ctrl = (e.KeyData & Keys.Control) == Keys.Control;
             shift = (e.KeyData & Keys.Shift) == Keys.Shift;
-            tssbPlay.Text = (ctrl ? "トレース+" : "") + (shift ? "スキップ+" : "") + "再生";
+            alt = (e.KeyData & Keys.Alt) == Keys.Alt;
+            tssbPlay.Text = (ctrl ? Properties.Resources.lblF5_Trace : "")
+                + (shift ? Properties.Resources.lblF5_Skip : "")
+                + (alt ? Properties.Resources.lblF5_JSolo : "")
+                + Properties.Resources.lblF5_Play;
 
         }
 
@@ -849,7 +990,9 @@ namespace mml2vgmIDE
 
             frmFolderTree.tvFolderTree.Nodes.Clear();
             frmFolderTree.tvFolderTree.Nodes.Add(dc.gwiTree);
-            frmFolderTree.basePath = Path.GetDirectoryName(dc.gwiFullPath);
+            string path1 = Path.GetDirectoryName(dc.gwiFullPath);
+            path1 = string.IsNullOrEmpty(path1) ? dc.gwiFullPath : path1;
+            frmFolderTree.basePath = path1;
 
             FormBox.Add(dc.editor);
             DocumentBox.Add(dc);
@@ -867,7 +1010,9 @@ namespace mml2vgmIDE
 
             frmFolderTree.tvFolderTree.Nodes.Clear();
             frmFolderTree.tvFolderTree.Nodes.Add(dc.gwiTree);
-            frmFolderTree.basePath = Path.GetDirectoryName(dc.gwiFullPath);
+            string path1 = System.IO.Path.GetDirectoryName(dc.gwiFullPath);
+            path1 = string.IsNullOrEmpty(path1) ? dc.gwiFullPath : path1;
+            frmFolderTree.basePath = path1;
 
             FormBox.Add(dc.editor);
             DocumentBox.Add(dc);
@@ -997,7 +1142,9 @@ namespace mml2vgmIDE
 
             args = new string[2];
             args[1] = tempPath;
-            wrkPath = Path.GetDirectoryName(((Document)((FrmEditor)dc).Tag).gwiFullPath);
+            string path1 = System.IO.Path.GetDirectoryName(((Document)((FrmEditor)dc).Tag).gwiFullPath);
+            path1 = string.IsNullOrEmpty(path1) ? ((Document)((FrmEditor)dc).Tag).gwiFullPath : path1;
+            wrkPath = path1;
 
             traceInfoSw = false;
             Sgry.Azuki.WinForms.AzukiControl ac = null;
@@ -1051,7 +1198,9 @@ namespace mml2vgmIDE
 
                 args = new string[2];
                 args[1] = tempPath;
-                wrkPath = Path.GetDirectoryName(((Document)((FrmEditor)dc).Tag).gwiFullPath);
+                string path1 = System.IO.Path.GetDirectoryName(((Document)((FrmEditor)dc).Tag).gwiFullPath);
+                path1 = string.IsNullOrEmpty(path1) ? ((Document)((FrmEditor)dc).Tag).gwiFullPath : path1;
+                wrkPath = path1;
             }
             else
             {
@@ -1110,7 +1259,9 @@ namespace mml2vgmIDE
                     }
                 }
             }
-            frmPartCounter.ClearCounter();
+
+            //frmPartCounter.ClearCounter();//ここではパート表示をクリアしない。コンパイル終了時(成功時)にクリアするため
+
             frmErrorList.dataGridView1.Rows.Clear();
 
             Thread trdStartCompile = new Thread(new ThreadStart(startCompile));
@@ -1185,8 +1336,10 @@ namespace mml2vgmIDE
                     parentFullPath = ((Document)((FrmEditor)idc).Tag).parentFullPath;
                 }
 
+                string path1 = System.IO.Path.GetDirectoryName(fileName);
+                path1 = string.IsNullOrEmpty(path1) ? fileName : path1;
                 fileName = Path.Combine(
-                    Path.GetDirectoryName(fileName)
+                    path1
                     , Path.GetFileNameWithoutExtension(fileName) 
                     + string.Format("_{0}", m98Count++) + ".muc"
                     );
@@ -1200,7 +1353,9 @@ namespace mml2vgmIDE
 
                 frmFolderTree.tvFolderTree.Nodes.Clear();
                 frmFolderTree.tvFolderTree.Nodes.Add(dc.gwiTree);
-                frmFolderTree.basePath = Path.GetDirectoryName(dc.gwiFullPath);
+                path1 = System.IO.Path.GetDirectoryName(dc.gwiFullPath);
+                path1 = string.IsNullOrEmpty(path1) ? dc.gwiFullPath : path1;
+                frmFolderTree.basePath = path1;
 
                 FormBox.Add(dc.editor);
                 DocumentBox.Add(dc);
@@ -1394,6 +1549,7 @@ namespace mml2vgmIDE
 
             if (isSuccess)
             {
+                frmPartCounter.ClearCounter();
                 Object[] cells = new object[7];
 
                 foreach (KeyValuePair<enmChipType, ClsChip[]> kvp in mv.desVGM.chips)
@@ -1514,6 +1670,7 @@ namespace mml2vgmIDE
             musicDriverInterface.CompilerInfo ci = mucom.GetCompilerInfo();
             if (isSuccess)
             {
+                frmPartCounter.ClearCounter();
                 Object[] cells = new object[7];
                 int[] pn = new int[] { 1, 2, 3, 10, 11, 12, 13, 4, 5, 6, 19 };
                 for (int i = 0; i < 11; i++)
@@ -1670,7 +1827,9 @@ namespace mml2vgmIDE
 
                 if (frmFolderTree.tvFolderTree.Nodes.Count == 0 || frmFolderTree.tvFolderTree.Nodes[0] != d.gwiTree) 
                 {
-                    frmFolderTree.basePath = Path.GetDirectoryName(d.gwiFullPath);
+                    string path1 = System.IO.Path.GetDirectoryName(d.gwiFullPath);
+                    path1 = string.IsNullOrEmpty(path1) ? d.gwiFullPath : path1;
+                    frmFolderTree.basePath = path1;
                     frmFolderTree.tvFolderTree.Nodes.Clear();
                     frmFolderTree.tvFolderTree.Nodes.Add(d.gwiTree);
                     frmFolderTree.refresh();
@@ -1743,7 +1902,7 @@ namespace mml2vgmIDE
 
                 try
                 {
-                    if (filename.Length < 1) continue;
+                    if (string.IsNullOrEmpty( filename)) continue;
                     if (filename[filename.Length - 1] == '\\')
                     {
                         continue;
@@ -2024,6 +2183,7 @@ namespace mml2vgmIDE
 
         public void Finish()
         {
+            this.Visible = false;
             log.ForcedWrite("終了処理開始");
             log.ForcedWrite("frmMain_FormClosing:STEP 00");
 
@@ -2048,7 +2208,7 @@ namespace mml2vgmIDE
             }
 
             frmPartCounter.Close();
-
+            
             setting.Save();
         }
 
@@ -2819,11 +2979,35 @@ namespace mml2vgmIDE
             if (dc == null) return;
             if (!(dc is FrmEditor)) return;
             compileManager.RequestCompile(((FrmEditor)dc).document, ((FrmEditor)dc).azukiControl.Text + "");
+            compileManager.RequestPlayBack(((FrmEditor)dc).document, cbPlayBack);
+        }
+
+        private void cbPlayBack(CompileManager.queItem qi)
+        {
+            if (InvokeRequired)
+            {
+                this.Invoke(new Action<CompileManager.queItem>(cbPlayBack), new object[] { qi });
+                return;
+            }
+
+            if (qi.doc.dstFileFormat == EnmFileFormat.MUB)
+            {
+                mubData =(musicDriverInterface.MmlDatum[])qi.doc.compiledData;
+                doPlay = true;
+                finishedCompileMUC();
+            }
+            else
+            {
+                mv = (Mml2vgm)qi.doc.compiledData;
+                doPlay = true;
+                args = new string[2] { qi.doc.gwiFullPath, "" };
+                finishedCompileGWI();
+            }
         }
 
         //private void tsmiJumpSoloMode_Click(object sender, EventArgs e)
         //{
-            //UpdateControl();
+        //UpdateControl();
         //}
     }
 }

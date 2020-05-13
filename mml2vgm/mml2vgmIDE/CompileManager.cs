@@ -23,13 +23,15 @@ namespace mml2vgmIDE
             public Document doc;
             public string srcText;
             public object param;
-            private enmCompileCommand compile;
+            //private enmCompileCommand compile;
+            public Action<queItem> callPlayBack;
 
-            public queItem(enmCompileCommand compile, Document doc, string srcText, object param)
+            public queItem(enmCompileCommand compile, Document doc, string srcText, Action<queItem> callPlayBack = null, object param = null)
             {
-                this.compile = compile;
+                this.cmd = compile;
                 this.doc = doc;
                 this.srcText = srcText;
+                this.callPlayBack = callPlayBack;
                 this.param = param;
             }
         }
@@ -68,6 +70,15 @@ namespace mml2vgmIDE
             KickRunner();
         }
 
+        public void RequestPlayBack(Document doc, Action<queItem> callPlayBack)
+        {
+            if (doc == null) return;
+            queCompile.Enqueue(new queItem(enmCompileCommand.play, doc, null, callPlayBack, null));
+
+            KickRunner();
+        }
+
+
         private void KickRunner()
         {
             if (runner != null) return;
@@ -96,7 +107,7 @@ namespace mml2vgmIDE
                     case enmCompileCommand.play:
                         if (qi.doc == null) break;
                         if (qi.doc.compileStatus != Document.EnmCompileStatus.Success) break;
-                        Play(qi);
+                        qi.callPlayBack?.Invoke(qi);
                         break;
                 }
             }
@@ -104,9 +115,7 @@ namespace mml2vgmIDE
             runner = null;
         }
 
-        private void Play(queItem qi)
-        {
-        }
+
 
         private void Compile(queItem qi)
         {
@@ -133,7 +142,9 @@ namespace mml2vgmIDE
             }
 
             string tempPath = Path.Combine(Common.GetApplicationDataFolder(true), "temp", Path.GetFileName(qi.doc.gwiFullPath));
-            string wrkPath = Path.GetDirectoryName(qi.doc.gwiFullPath);
+            string path1 = Path.GetDirectoryName(qi.doc.gwiFullPath);
+            path1 = string.IsNullOrEmpty(path1) ? qi.doc.gwiFullPath : path1;
+            string wrkPath = path1;
             msgBox.clear();
             musicDriverInterface.MmlDatum[] mubData = null;
             bool isSuccess = true;
@@ -150,6 +161,7 @@ namespace mml2vgmIDE
 
             qi.doc.compiledData = mubData;
             qi.doc.compileStatus = isSuccess ? Document.EnmCompileStatus.Success : Document.EnmCompileStatus.Failed;
+            qi.doc.dstFileFormat = EnmFileFormat.MUB;
 
             musicDriverInterface.CompilerInfo ci = mucom.GetCompilerInfo();
 
@@ -183,7 +195,9 @@ namespace mml2vgmIDE
             string stPath = System.Windows.Forms.Application.StartupPath;
             string[] activeMMLTextLines = qi.srcText.Split(new string[] { "\r\n" }, StringSplitOptions.None);
             string tempPath = Path.Combine(Common.GetApplicationDataFolder(true), "temp", Path.GetFileName(qi.doc.gwiFullPath));
-            string wrkPath = Path.GetDirectoryName(qi.doc.gwiFullPath);
+            string path1 = Path.GetDirectoryName(qi.doc.gwiFullPath);
+            path1 = string.IsNullOrEmpty(path1) ? qi.doc.gwiFullPath : path1;
+            string wrkPath = path1;
             msgBox.clear();
 
             Mml2vgm mv = new Mml2vgm(activeMMLTextLines, tempPath, null, stPath, disp, wrkPath, false);
@@ -228,7 +242,7 @@ namespace mml2vgmIDE
                     : (mv.desVGM.info.format == enmFormat.XGM
                     ? EnmFileFormat.XGM
                     : EnmFileFormat.ZGM);
-                qi.doc.compiledData = mv.desBuf;
+                qi.doc.compiledData = mv;
                 qi.doc.compileStatus = Document.EnmCompileStatus.Success;
             }
             else

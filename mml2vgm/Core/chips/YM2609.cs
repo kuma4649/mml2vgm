@@ -34,6 +34,7 @@ namespace Core
         public byte[] pcmDataEasyA = null;
         public byte[] pcmDataEasyB = null;
         public byte[] pcmDataEasyC = null;
+        public byte[] pcmDataEasyD = null;
         public List<byte[]> pcmDataDirectA = new List<byte[]>();
         public List<byte[]> pcmDataDirectB = new List<byte[]>();
         public List<byte[]> pcmDataDirectC = new List<byte[]>();
@@ -44,12 +45,18 @@ namespace Core
         public byte rhythm_KeyOn = 0;
         public byte rhythm_KeyOff = 0;
 
+        public int adpcma_TotalVolume = 63;
+        public int adpcma_beforeTotalVolume = -1;
+        public int adpcma_MAXTotalVolume = 63;
+        public byte adpcma_KeyOn = 0;
+        public byte adpcma_KeyOff = 0;
+
         public YM2609(ClsVgm parent, int chipID, string initialPartName, string stPath, int chipNumber) : base(parent, chipID, initialPartName, stPath, chipNumber)
         {
             _chipType = enmChipType.YM2609;
             _Name = "YM2609";
             _ShortName = "OPNA2";
-            _ChMax = 12 + 6 + 12 + 6 + 3;//FM:12ch FMex:6ch SSG:12ch Rhythm:6ch ADPCM:3ch
+            _ChMax = 12 + 6 + 12 + 6 + 3 + 6;//FM:12ch FMex:6ch SSG:12ch Rhythm:6ch ADPCM:3ch ADPCM-A:6ch
             _canUsePcm = true;
             _canUsePI = true;
             FNumTbl = _FNumTbl;
@@ -100,19 +107,21 @@ namespace Core
                 Ch[18 + i].Type = enmChannelType.SSG;
                 Ch[24 + i].Type = enmChannelType.SSG;
                 Ch[30 + i].Type = enmChannelType.RHYTHM;
+                Ch[39 + i].Type = enmChannelType.ADPCM;
             }
 
             Ch[36].Type = enmChannelType.ADPCMA;
             Ch[37].Type = enmChannelType.ADPCMB;
             Ch[38].Type = enmChannelType.ADPCMB;
 
-            pcmDataInfo = new clsPcmDataInfo[] { new clsPcmDataInfo(), new clsPcmDataInfo(), new clsPcmDataInfo() };
-            pcmDataInfo[0].totalBufPtr = 0L;
-            pcmDataInfo[0].use = false;
-            pcmDataInfo[1].totalBufPtr = 0L;
-            pcmDataInfo[1].use = false;
-            pcmDataInfo[2].totalBufPtr = 0L;
-            pcmDataInfo[2].use = false;
+            pcmDataInfo = new clsPcmDataInfo[] {
+                new clsPcmDataInfo(), new clsPcmDataInfo(),
+                new clsPcmDataInfo(), new clsPcmDataInfo() };
+            for (int i = 0; i < 4; i++)
+            {
+                pcmDataInfo[i].totalBufPtr = 0L;
+                pcmDataInfo[i].use = false;
+            }
 
             if (parent.info.format == enmFormat.ZGM)
             {
@@ -122,6 +131,7 @@ namespace Core
                     pcmDataInfo[0].totalBuf = new byte[] { 0x07, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
                     pcmDataInfo[1].totalBuf = new byte[] { 0x07, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
                     pcmDataInfo[2].totalBuf = new byte[] { 0x07, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+                    pcmDataInfo[3].totalBuf = new byte[] { 0x07, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
                 }
                 else
                 {
@@ -129,6 +139,7 @@ namespace Core
                     pcmDataInfo[0].totalBuf = new byte[] { 0x07, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
                     pcmDataInfo[1].totalBuf = new byte[] { 0x07, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
                     pcmDataInfo[2].totalBuf = new byte[] { 0x07, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+                    pcmDataInfo[3].totalBuf = new byte[] { 0x07, 0x00, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
                 }
             }
             else
@@ -137,6 +148,7 @@ namespace Core
                 pcmDataInfo[0].totalBuf = null;
                 pcmDataInfo[1].totalBuf = null;
                 pcmDataInfo[2].totalBuf = null;
+                pcmDataInfo[3].totalBuf = null;
             }
 
             pcmDataInfo[0].totalHeaderLength = pcmDataInfo[0].totalBuf.Length;
@@ -145,6 +157,8 @@ namespace Core
             pcmDataInfo[1].totalHeadrSizeOfDataPtr = (parent.ChipCommandSize == 2) ? 5 : 3;
             pcmDataInfo[2].totalHeaderLength = pcmDataInfo[2].totalBuf.Length;
             pcmDataInfo[2].totalHeadrSizeOfDataPtr = (parent.ChipCommandSize == 2) ? 5 : 3;
+            pcmDataInfo[3].totalHeaderLength = pcmDataInfo[3].totalBuf.Length;
+            pcmDataInfo[3].totalHeadrSizeOfDataPtr = (parent.ChipCommandSize == 2) ? 5 : 3;
 
             Envelope = new Function();
             Envelope.Max = 255;
@@ -253,6 +267,11 @@ namespace Core
                 pw.MaxVolume = 255;
                 pw.volume = pw.MaxVolume;
             }
+            else if (pw.Type == enmChannelType.ADPCM)
+            {
+                pw.MaxVolume = 31;//5bit
+                pw.volume = pw.MaxVolume;
+            }
 
             pw.port = port;
         }
@@ -276,6 +295,27 @@ namespace Core
                 parent.OutData(mml, port[p], (byte)(0x05 + v), (byte)(((endAdr - 0x04) >> (10 + (p == 1 ? 0 : 3))) & 0xff));
                 pw.pcmEndAddress = endAdr;
             }
+        }
+
+        public void SetADPCMAAddress(MML mml, partWork pw, int startAdr, int endAdr)
+        {
+
+            parent.OutData(mml, port[1], 0x13, (byte)(pw.ch - 39));
+
+            if (pw.pcmStartAddress != startAdr)
+            {
+                parent.OutData(mml, port[1], 0x16, (byte)((startAdr >> 8) & 0xff));
+                parent.OutData(mml, port[1], 0x16, (byte)((startAdr >> 16) & 0xff));
+                pw.pcmStartAddress = startAdr;
+            }
+
+            if (pw.pcmEndAddress != endAdr)
+            {
+                parent.OutData(mml, port[1], 0x17, (byte)(((endAdr - 0x100) >> 8) & 0xff));
+                parent.OutData(mml, port[1], 0x17, (byte)(((endAdr - 0x100) >> 16) & 0xff));
+                pw.pcmEndAddress = endAdr;
+            }
+
         }
 
         public void SetAdpcmFNum(MML mml, partWork pw)
@@ -608,6 +648,12 @@ namespace Core
                 pw.keyOff = false;
                 SetDummyData(pw, mml);
             }
+            else if (pw.Type == enmChannelType.ADPCM)
+            {
+                pw.keyOn = true;
+                pw.keyOff = false;
+                SetDummyData(pw, mml);
+            }
             else if (pw.Type == enmChannelType.ADPCMA ||pw.Type == enmChannelType.ADPCMB)
             {
                 OutAdpcmKeyOn(mml, pw);
@@ -623,6 +669,11 @@ namespace Core
                 OutSsgKeyOff(mml, pw);
             }
             else if (pw.Type == enmChannelType.RHYTHM)
+            {
+                pw.keyOn = false;
+                pw.keyOff = true;
+            }
+            else if (pw.Type == enmChannelType.ADPCM)
             {
                 pw.keyOn = false;
                 pw.keyOff = true;
@@ -729,7 +780,7 @@ namespace Core
         public override void StorePcm(Dictionary<int, clsPcm> newDic, KeyValuePair<int, clsPcm> v, byte[] buf, bool is16bit, int samplerate, params object[] option)
         {
             int aCh = (int)v.Value.loopAdr;
-            aCh = Common.CheckRange(aCh, 0, 2);
+            aCh = Common.CheckRange(aCh, 0, 3);
             clsPcmDataInfo pi = pcmDataInfo[aCh];
 
             try
@@ -743,6 +794,9 @@ namespace Core
                     case 1:
                     case 2:
                         buf = ea.YM_ADPCM_B_Encode(buf, is16bit, true);
+                        break;
+                    case 3:
+                        buf = ea.YM_ADPCM_A_Encode(buf, is16bit);
                         break;
                 }
 
@@ -791,6 +845,7 @@ namespace Core
                 pcmDataEasyA = pcmDataInfo[0].totalBuf;
                 pcmDataEasyB = pcmDataInfo[1].totalBuf;
                 pcmDataEasyC = pcmDataInfo[2].totalBuf;
+                pcmDataEasyD = pcmDataInfo[3].totalBuf;
 
             }
             catch
@@ -807,10 +862,24 @@ namespace Core
                 //Rawファイルは何もしない
                 //Wavファイルはエンコ
                 EncAdpcmA ea = new EncAdpcmA();
-                buf = ea.YM_ADPCM_B_Encode(buf, is16bit, true);
+                switch(pds.DatLoopAdr)
+                {
+                    case 0:
+                        buf = ea.YM_ADPCM_B_Encode(buf, is16bit, false);
+                        base.pcmDataDirect.Add(Common.MakePCMDataBlock((byte)dataType, pds, buf));
+                        break;
+                    case 1:
+                    case 2:
+                        buf = ea.YM_ADPCM_B_Encode(buf, is16bit, true);
+                        base.pcmDataDirect.Add(Common.MakePCMDataBlock((byte)dataType, pds, buf));
+                        break;
+                    case 3:
+                        buf = ea.YM_ADPCM_A_Encode(buf, is16bit);
+                        pcmDataDirectA.Add(Common.MakePCMDataBlock((byte)dataType, pds, buf));
+                        break;
+                }
             }
 
-            pcmDataDirect.Add(Common.MakePCMDataBlock((byte)dataType, pds, buf));
 
         }
 
@@ -822,6 +891,7 @@ namespace Core
             SetPCMDataBlock_AB(mml, pcmDataEasyA, pcmDataDirectA);
             SetPCMDataBlock_AB(mml, pcmDataEasyB, pcmDataDirectB);
             SetPCMDataBlock_AB(mml, pcmDataEasyC, pcmDataDirectC);
+            SetPCMDataBlock_AB(mml, pcmDataEasyD, pcmDataDirect);
         }
 
         private void SetPCMDataBlock_AB(MML mml, byte[] pcmDataEasy, List<byte[]> pcmDataDirect)
@@ -895,38 +965,50 @@ namespace Core
 
             if (mml.args[0] is string) return;
 
-            byte adr = (byte)mml.args[0];
-            byte dat = (byte)mml.args[1];
-            int p = 0;
+            if (mml.args.Count == 2)
+            {
+                byte adr = (byte)mml.args[0];
+                byte dat = (byte)mml.args[1];
+                int p = 0;
 
-            if (pw.ch < 3)//FM1-3
-                p = 0;
-            else if (pw.ch < 6)//FM4-6
-                p = 1;
-            else if (pw.ch < 9)//FM7-9
-                p = 2;
-            else if (pw.ch < 12)//FM10-12
-                p = 3;
-            else if (pw.ch < 15)//FMex13-15
-                p = 0;
-            else if (pw.ch < 18)//FMex15-18
-                p = 2;
-            else if (pw.ch < 21)//SSG1-3
-                p = 0;
-            else if (pw.ch < 24)//SSG4-6
-                p = 1;
-            else if (pw.ch < 30)//SSG7-12
-                p = 2;
-            else if (pw.ch < 36)//Rhythm1-6
-                p = 0;
-            else if (pw.ch == 36)//ADPCM1
-                p = 1;
-            else if (pw.ch == 37)//ADPCM2
-                p = 3;
-            else if (pw.ch == 38)//ADPCM3
-                p = 3;
+                if (pw.ch < 3)//FM1-3
+                    p = 0;
+                else if (pw.ch < 6)//FM4-6
+                    p = 1;
+                else if (pw.ch < 9)//FM7-9
+                    p = 2;
+                else if (pw.ch < 12)//FM10-12
+                    p = 3;
+                else if (pw.ch < 15)//FMex13-15
+                    p = 0;
+                else if (pw.ch < 18)//FMex15-18
+                    p = 2;
+                else if (pw.ch < 21)//SSG1-3
+                    p = 0;
+                else if (pw.ch < 24)//SSG4-6
+                    p = 1;
+                else if (pw.ch < 30)//SSG7-12
+                    p = 2;
+                else if (pw.ch < 36)//Rhythm1-6
+                    p = 0;
+                else if (pw.ch == 36)//ADPCM1
+                    p = 1;
+                else if (pw.ch == 37)//ADPCM2
+                    p = 3;
+                else if (pw.ch == 38)//ADPCM3
+                    p = 3;
 
-            parent.OutData(mml, port[p] , adr, dat);
+                parent.OutData(mml, port[p], adr, dat);
+            }
+            else
+            {
+                byte prt = (byte)mml.args[0];
+                byte adr = (byte)mml.args[1];
+                byte dat = (byte)mml.args[2];
+
+                parent.OutData(mml,port[prt&3], adr, dat);
+
+            }
         }
 
         public override void CmdMPMS(partWork pw, MML mml)
@@ -1067,6 +1149,17 @@ namespace Core
                 int pr = Common.CheckRange(n, 0, 4);
                 ((YM2609)pw.chip).SetAdpcmPan(mml, pw, pl, pr);
             }
+            else if (pw.Type == enmChannelType.ADPCM)
+            {
+                pw.panL = Common.CheckRange(n, 0, 4);
+                n = mml.args.Count < 2 ? 0 : (int)mml.args[1];
+                pw.panR =  Common.CheckRange(n, 0, 4);
+
+                pw.pan.val = (pw.panL != 0 ? 2 : 0) | (pw.panR != 0 ? 1 : 0);
+
+                pw.panL = pw.panL < 1 ? 0 : (4 - pw.panL);
+                pw.panR = pw.panR < 1 ? 0 : (4 - pw.panR);
+            }
             else if (pw.Type == enmChannelType.SSG)
             {
                 n = Common.CheckRange(n, 0, 3);
@@ -1106,7 +1199,7 @@ namespace Core
 
             if (type == 'n')
             {
-                if (pw.Type == enmChannelType.ADPCMA || pw.Type == enmChannelType.ADPCMB)
+                if (pw.Type == enmChannelType.ADPCMA || pw.Type == enmChannelType.ADPCMB || pw.Type == enmChannelType.ADPCM)
                 {
                     n = Common.CheckRange(n, 0, 255);
                     if (!parent.instPCM.ContainsKey(n))
@@ -1120,11 +1213,22 @@ namespace Core
                             msgBox.setErrMsg(string.Format(msg.get("E18005"), n), mml.line.Lp);
                         }
                         pw.instrument = n;
-                        SetADPCMAddress(
-                            mml,
-                            pw
-                            , (int)parent.instPCM[n].stAdr
-                            , (int)parent.instPCM[n].edAdr);
+                        if (pw.Type != enmChannelType.ADPCM)
+                        {
+                            SetADPCMAddress(
+                                mml,
+                                pw
+                                , (int)parent.instPCM[n].stAdr
+                                , (int)parent.instPCM[n].edAdr);
+                        }
+                        else
+                        {
+                            SetADPCMAAddress(
+                                mml,
+                                pw
+                                , (int)parent.instPCM[n].stAdr
+                                , (int)parent.instPCM[n].edAdr);
+                        }
                     }
                     return;
                 }
@@ -1178,6 +1282,89 @@ namespace Core
             if (pw.instrument == n) return;
             pw.instrument = n;
             OutFmSetInstrument(pw, mml, n, pw.volume, type);
+        }
+
+        public override void CmdEffect(partWork pw, MML mml)
+        {
+            if (mml.args.Count == 3)
+            {
+                if ((string)mml.args[0] == "Rv")
+                {
+                    //Reverb
+                    switch ((char)mml.args[1])
+                    {
+                        case 'D':
+                            int v = (int)mml.args[2];
+                            parent.OutData(mml, port[3], 0x22, (byte)v);
+                            break;
+                        case 'S':
+                            byte ch = (byte)pw.ch;
+                            if (ch < 12)
+                            {
+                                ;
+                            }
+                            else if (ch < 15)
+                            {
+                                ch = 2;
+                            }
+                            else if (ch < 18)
+                            {
+                                ch = 8;
+                            }
+                            else
+                            {
+                                ch = (byte)(ch - 18 + 12);
+                            }
+                            int sl = (int)mml.args[2];
+                            parent.OutData(mml, port[3], 0x23, ch);
+                            parent.OutData(mml, port[3], 0x24, (byte)sl);
+                            break;
+                    }
+                }
+                else if ((string)mml.args[0] == "Ds")
+                {
+                    int v = (int)mml.args[2];
+                    byte ch = (byte)pw.ch;
+                    if (ch < 12)
+                    {
+                        ;
+                    }
+                    else if (ch < 15)
+                    {
+                        ch = 2;
+                    }
+                    else if (ch < 18)
+                    {
+                        ch = 8;
+                    }
+                    else
+                    {
+                        ch = (byte)(ch - 18 + 12);
+                    }
+                    //Distortion
+                    switch ((char)mml.args[1]) 
+                    {
+                        case 'S'://switch
+                            pw.effectDistortionSwitch = v * 0x80;
+                            parent.OutData(mml, port[3], 0x23, ch);
+                            parent.OutData(mml, port[3], 0x25, (byte)(pw.effectDistortionSwitch + pw.effectDistortionVolume));
+                            break;
+                        case 'V'://volume
+                            pw.effectDistortionVolume = v & 0x7f;
+                            parent.OutData(mml, port[3], 0x23, ch);
+                            parent.OutData(mml, port[3], 0x25, (byte)(pw.effectDistortionSwitch + pw.effectDistortionVolume));
+                            break;
+                        case 'G'://gain
+                            parent.OutData(mml, port[3], 0x23, ch);
+                            parent.OutData(mml, port[3], 0x26, (byte)(v & 0x7f));
+                            break;
+                        case 'C'://CutOff
+                            parent.OutData(mml, port[3], 0x23, ch);
+                            parent.OutData(mml, port[3], 0x27, (byte)(v & 0x7f));
+                            break;
+                    }
+                }
+            }
         }
 
         public void SetWaveTableFromInstrument(partWork pw, MML mml)
@@ -1701,6 +1888,35 @@ namespace Core
                     rhythm_KeyOff |= (byte)(pw.keyOff ? (1 << (pw.ch - 30)) : 0);
                     pw.keyOff = false;
                 }
+                else if (pw.Type == enmChannelType.ADPCM)
+                {
+                    //ADPCM-A Volume処理
+                    if (pw.beforeVolume != pw.volume)
+                    {
+                        parent.OutData(mml, port[1], (byte)0x13, (byte)(pw.ch - 39));
+                        parent.OutData(mml, port[1], (byte)0x14, (byte)(pw.volume & 0x1f));
+                        pw.beforeVolume = pw.volume;
+                    }
+
+                    if (pw.pan.val != pw.beforePan.val || pw.panR != pw.beforePanR || pw.panL != pw.beforePanL)
+                    {
+                        parent.OutData(mml, port[1], (byte)0x13, (byte)(pw.ch - 39));
+                        parent.OutData(mml, port[1], (byte)0x15, (byte)(
+                            ((pw.pan.val & 2) << 6)
+                            | ((pw.panL & 3) << 5)
+                            | ((pw.pan.val & 1) << 4)
+                            | ((pw.panR & 3) << 2)
+                            ));
+                        pw.beforePan.val = pw.pan.val;
+                        pw.beforePanR = pw.panR;
+                        pw.beforePanL = pw.panL;
+                    }
+
+                    adpcma_KeyOn |= (byte)(pw.keyOn ? (1 << (pw.ch - 39)) : 0);
+                    pw.keyOn = false;
+                    adpcma_KeyOff |= (byte)(pw.keyOff ? (1 << (pw.ch - 39)) : 0);
+                    pw.keyOff = false;
+                }
                 else if (pw.Type == enmChannelType.SSG)
                 {
                     MultiChannelCommand_SSG(mml, pw);
@@ -1734,6 +1950,29 @@ namespace Core
                 byte data = (byte)(0x00 + rhythm_KeyOn);
                 parent.OutData(mml, port[0], 0x10, data);
                 rhythm_KeyOn = 0;
+            }
+
+            //adpcma KeyOff処理
+            if (0 != adpcma_KeyOff)
+            {
+                byte data = (byte)(0x80 + adpcma_KeyOff);
+                parent.OutData(mml, port[1], 0x11, data);
+                adpcma_KeyOff = 0;
+            }
+
+            //adpcma TotalVolume処理
+            if (adpcma_beforeTotalVolume != adpcma_TotalVolume)
+            {
+                parent.OutData(mml, port[1], 0x12, (byte)(adpcma_TotalVolume & 0x3f));
+                adpcma_beforeTotalVolume = adpcma_TotalVolume;
+            }
+
+            //adpcma KeyOn処理
+            if (0 != adpcma_KeyOn)
+            {
+                byte data = (byte)(0x00 + adpcma_KeyOn);
+                parent.OutData(mml, port[1], 0x11, data);
+                adpcma_KeyOn = 0;
             }
 
             log.Write("KeyOn情報をかき出し");

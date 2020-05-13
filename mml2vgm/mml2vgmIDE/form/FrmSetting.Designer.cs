@@ -76,7 +76,6 @@
             this.rbSCCIDetect = new System.Windows.Forms.RadioButton();
             this.rbC86ctlDetect = new System.Windows.Forms.RadioButton();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.ucSI = new mml2vgmIDE.ucSettingInstruments();
             this.tabPage13 = new System.Windows.Forms.TabPage();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.label16 = new System.Windows.Forms.Label();
@@ -254,86 +253,18 @@
             this.cmbMIDIIN = new System.Windows.Forms.ComboBox();
             this.label5 = new System.Windows.Forms.Label();
             this.tpKeyBoard = new System.Windows.Forms.TabPage();
-            this.cbUseKeyBoardHook = new System.Windows.Forms.CheckBox();
-            this.gbUseKeyBoardHook = new System.Windows.Forms.GroupBox();
-            this.lblKeyBoardHookNotice = new System.Windows.Forms.Label();
-            this.btNextClr = new System.Windows.Forms.Button();
-            this.btPrevClr = new System.Windows.Forms.Button();
-            this.btPlayClr = new System.Windows.Forms.Button();
-            this.btPauseClr = new System.Windows.Forms.Button();
-            this.btFastClr = new System.Windows.Forms.Button();
-            this.btFadeoutClr = new System.Windows.Forms.Button();
-            this.btSlowClr = new System.Windows.Forms.Button();
-            this.btStopClr = new System.Windows.Forms.Button();
-            this.btNextSet = new System.Windows.Forms.Button();
-            this.btPrevSet = new System.Windows.Forms.Button();
-            this.btPlaySet = new System.Windows.Forms.Button();
-            this.btPauseSet = new System.Windows.Forms.Button();
-            this.btFastSet = new System.Windows.Forms.Button();
-            this.btFadeoutSet = new System.Windows.Forms.Button();
-            this.btSlowSet = new System.Windows.Forms.Button();
-            this.btStopSet = new System.Windows.Forms.Button();
-            this.label50 = new System.Windows.Forms.Label();
-            this.lblNextKey = new System.Windows.Forms.Label();
-            this.lblFastKey = new System.Windows.Forms.Label();
-            this.lblPlayKey = new System.Windows.Forms.Label();
-            this.lblSlowKey = new System.Windows.Forms.Label();
-            this.lblPrevKey = new System.Windows.Forms.Label();
-            this.lblFadeoutKey = new System.Windows.Forms.Label();
-            this.lblPauseKey = new System.Windows.Forms.Label();
-            this.lblStopKey = new System.Windows.Forms.Label();
-            this.pictureBox14 = new System.Windows.Forms.PictureBox();
-            this.pictureBox17 = new System.Windows.Forms.PictureBox();
-            this.cbNextAlt = new System.Windows.Forms.CheckBox();
-            this.pictureBox16 = new System.Windows.Forms.PictureBox();
-            this.cbFastAlt = new System.Windows.Forms.CheckBox();
-            this.pictureBox15 = new System.Windows.Forms.PictureBox();
-            this.cbPlayAlt = new System.Windows.Forms.CheckBox();
-            this.pictureBox13 = new System.Windows.Forms.PictureBox();
-            this.cbSlowAlt = new System.Windows.Forms.CheckBox();
-            this.pictureBox12 = new System.Windows.Forms.PictureBox();
-            this.cbPrevAlt = new System.Windows.Forms.CheckBox();
-            this.pictureBox11 = new System.Windows.Forms.PictureBox();
-            this.cbFadeoutAlt = new System.Windows.Forms.CheckBox();
-            this.pictureBox10 = new System.Windows.Forms.PictureBox();
-            this.cbPauseAlt = new System.Windows.Forms.CheckBox();
-            this.label37 = new System.Windows.Forms.Label();
-            this.cbStopAlt = new System.Windows.Forms.CheckBox();
-            this.label45 = new System.Windows.Forms.Label();
-            this.label46 = new System.Windows.Forms.Label();
-            this.label48 = new System.Windows.Forms.Label();
-            this.label38 = new System.Windows.Forms.Label();
-            this.label39 = new System.Windows.Forms.Label();
-            this.label40 = new System.Windows.Forms.Label();
-            this.label41 = new System.Windows.Forms.Label();
-            this.label42 = new System.Windows.Forms.Label();
-            this.cbNextCtrl = new System.Windows.Forms.CheckBox();
-            this.label43 = new System.Windows.Forms.Label();
-            this.cbFastCtrl = new System.Windows.Forms.CheckBox();
-            this.label44 = new System.Windows.Forms.Label();
-            this.cbPlayCtrl = new System.Windows.Forms.CheckBox();
-            this.cbStopShift = new System.Windows.Forms.CheckBox();
-            this.cbSlowCtrl = new System.Windows.Forms.CheckBox();
-            this.cbPauseShift = new System.Windows.Forms.CheckBox();
-            this.cbPrevCtrl = new System.Windows.Forms.CheckBox();
-            this.cbFadeoutShift = new System.Windows.Forms.CheckBox();
-            this.cbFadeoutCtrl = new System.Windows.Forms.CheckBox();
-            this.cbPrevShift = new System.Windows.Forms.CheckBox();
-            this.cbPauseCtrl = new System.Windows.Forms.CheckBox();
-            this.cbSlowShift = new System.Windows.Forms.CheckBox();
-            this.cbStopCtrl = new System.Windows.Forms.CheckBox();
-            this.cbPlayShift = new System.Windows.Forms.CheckBox();
-            this.cbNextShift = new System.Windows.Forms.CheckBox();
-            this.cbFastShift = new System.Windows.Forms.CheckBox();
-            this.label47 = new System.Windows.Forms.Label();
-            this.cbStopWin = new System.Windows.Forms.CheckBox();
-            this.cbPauseWin = new System.Windows.Forms.CheckBox();
-            this.cbFadeoutWin = new System.Windows.Forms.CheckBox();
-            this.cbPrevWin = new System.Windows.Forms.CheckBox();
-            this.cbSlowWin = new System.Windows.Forms.CheckBox();
-            this.cbPlayWin = new System.Windows.Forms.CheckBox();
-            this.cbFastWin = new System.Windows.Forms.CheckBox();
-            this.cbNextWin = new System.Windows.Forms.CheckBox();
+            this.btnInitializeShortCutKey = new System.Windows.Forms.Button();
+            this.lblSKKey = new System.Windows.Forms.Label();
+            this.dgvShortCutKey = new System.Windows.Forms.DataGridView();
+            this.clmNumber = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.clmFunc = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.clmShift = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.clmCtrl = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.clmAlt = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.clmKey = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.clmSet = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.clmClr = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.clmKBDSpacer = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tpBalance = new System.Windows.Forms.TabPage();
             this.groupBox25 = new System.Windows.Forms.GroupBox();
             this.rbAutoBalanceNotSamePositionAsSongData = new System.Windows.Forms.RadioButton();
@@ -390,6 +321,10 @@
             this.cbAutoOpen = new System.Windows.Forms.CheckBox();
             this.cbUseLoopTimes = new System.Windows.Forms.CheckBox();
             this.tpOmake = new System.Windows.Forms.TabPage();
+            this.groupBox31 = new System.Windows.Forms.GroupBox();
+            this.rbLoglevelINFO = new System.Windows.Forms.RadioButton();
+            this.rbLoglevelDEBUG = new System.Windows.Forms.RadioButton();
+            this.rbLoglevelTRACE = new System.Windows.Forms.RadioButton();
             this.groupBox30 = new System.Windows.Forms.GroupBox();
             this.rbQueryPerformanceCounter = new System.Windows.Forms.RadioButton();
             this.rbDateTime = new System.Windows.Forms.RadioButton();
@@ -409,6 +344,7 @@
             this.btVST = new System.Windows.Forms.Button();
             this.tbVST = new System.Windows.Forms.TextBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.cbLogWarning = new System.Windows.Forms.CheckBox();
             this.cbDispFrameCounter = new System.Windows.Forms.CheckBox();
             this.tpAbout = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
@@ -419,11 +355,8 @@
             this.labelCompanyName = new System.Windows.Forms.Label();
             this.textBoxDescription = new System.Windows.Forms.TextBox();
             this.cbHiyorimiMode = new System.Windows.Forms.CheckBox();
-            this.cbLogWarning = new System.Windows.Forms.CheckBox();
-            this.rbLoglevelINFO = new System.Windows.Forms.RadioButton();
-            this.rbLoglevelTRACE = new System.Windows.Forms.RadioButton();
-            this.rbLoglevelDEBUG = new System.Windows.Forms.RadioButton();
-            this.groupBox31 = new System.Windows.Forms.GroupBox();
+            this.ucSI = new mml2vgmIDE.ucSettingInstruments();
+            this.cbUseSIen = new System.Windows.Forms.CheckBox();
             this.gbWaveOut.SuspendLayout();
             this.gbAsioOut.SuspendLayout();
             this.gbWasapiOut.SuspendLayout();
@@ -487,15 +420,7 @@
             this.groupBox7.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.tpKeyBoard.SuspendLayout();
-            this.gbUseKeyBoardHook.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox14)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox17)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox16)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox15)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox13)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox12)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox11)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox10)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvShortCutKey)).BeginInit();
             this.tpBalance.SuspendLayout();
             this.groupBox25.SuspendLayout();
             this.groupBox18.SuspendLayout();
@@ -511,6 +436,7 @@
             this.gbWav.SuspendLayout();
             this.gbDump.SuspendLayout();
             this.tpOmake.SuspendLayout();
+            this.groupBox31.SuspendLayout();
             this.groupBox30.SuspendLayout();
             this.groupBox29.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tbOpacity)).BeginInit();
@@ -518,7 +444,6 @@
             this.tpAbout.SuspendLayout();
             this.tableLayoutPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.logoPictureBox)).BeginInit();
-            this.groupBox31.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnOK
@@ -1077,17 +1002,6 @@
             this.groupBox1.Size = new System.Drawing.Size(411, 258);
             this.groupBox1.TabIndex = 8;
             this.groupBox1.TabStop = false;
-            // 
-            // ucSI
-            // 
-            this.ucSI.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.ucSI.AutoScroll = true;
-            this.ucSI.Location = new System.Drawing.Point(3, 18);
-            this.ucSI.Name = "ucSI";
-            this.ucSI.Size = new System.Drawing.Size(405, 237);
-            this.ucSI.TabIndex = 7;
             // 
             // tabPage13
             // 
@@ -3054,858 +2968,131 @@
             // 
             // tpKeyBoard
             // 
-            this.tpKeyBoard.Controls.Add(this.cbUseKeyBoardHook);
-            this.tpKeyBoard.Controls.Add(this.gbUseKeyBoardHook);
-            this.tpKeyBoard.Controls.Add(this.label47);
-            this.tpKeyBoard.Controls.Add(this.cbStopWin);
-            this.tpKeyBoard.Controls.Add(this.cbPauseWin);
-            this.tpKeyBoard.Controls.Add(this.cbFadeoutWin);
-            this.tpKeyBoard.Controls.Add(this.cbPrevWin);
-            this.tpKeyBoard.Controls.Add(this.cbSlowWin);
-            this.tpKeyBoard.Controls.Add(this.cbPlayWin);
-            this.tpKeyBoard.Controls.Add(this.cbFastWin);
-            this.tpKeyBoard.Controls.Add(this.cbNextWin);
+            this.tpKeyBoard.Controls.Add(this.btnInitializeShortCutKey);
+            this.tpKeyBoard.Controls.Add(this.lblSKKey);
+            this.tpKeyBoard.Controls.Add(this.dgvShortCutKey);
             this.tpKeyBoard.Location = new System.Drawing.Point(4, 22);
             this.tpKeyBoard.Name = "tpKeyBoard";
             this.tpKeyBoard.Size = new System.Drawing.Size(443, 400);
             this.tpKeyBoard.TabIndex = 13;
-            this.tpKeyBoard.Text = "キーボード";
+            this.tpKeyBoard.Text = "ショートカットキー";
             this.tpKeyBoard.UseVisualStyleBackColor = true;
             // 
-            // cbUseKeyBoardHook
+            // btnInitializeShortCutKey
             // 
-            this.cbUseKeyBoardHook.AutoSize = true;
-            this.cbUseKeyBoardHook.Location = new System.Drawing.Point(18, 3);
-            this.cbUseKeyBoardHook.Name = "cbUseKeyBoardHook";
-            this.cbUseKeyBoardHook.Size = new System.Drawing.Size(124, 16);
-            this.cbUseKeyBoardHook.TabIndex = 27;
-            this.cbUseKeyBoardHook.Text = "キーボードフックを使う";
-            this.cbUseKeyBoardHook.UseVisualStyleBackColor = true;
-            this.cbUseKeyBoardHook.CheckedChanged += new System.EventHandler(this.cbUseKeyBoardHook_CheckedChanged);
+            this.btnInitializeShortCutKey.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnInitializeShortCutKey.Location = new System.Drawing.Point(336, 369);
+            this.btnInitializeShortCutKey.Name = "btnInitializeShortCutKey";
+            this.btnInitializeShortCutKey.Size = new System.Drawing.Size(104, 23);
+            this.btnInitializeShortCutKey.TabIndex = 31;
+            this.btnInitializeShortCutKey.Text = "初期状態に戻す";
+            this.btnInitializeShortCutKey.UseVisualStyleBackColor = true;
+            this.btnInitializeShortCutKey.Click += new System.EventHandler(this.btnInitializeShortCutKey_Click);
             // 
-            // gbUseKeyBoardHook
+            // lblSKKey
             // 
-            this.gbUseKeyBoardHook.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.lblSKKey.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.lblSKKey.AutoSize = true;
+            this.lblSKKey.Location = new System.Drawing.Point(42, 374);
+            this.lblSKKey.Name = "lblSKKey";
+            this.lblSKKey.Size = new System.Drawing.Size(0, 12);
+            this.lblSKKey.TabIndex = 30;
+            // 
+            // dgvShortCutKey
+            // 
+            this.dgvShortCutKey.AllowUserToAddRows = false;
+            this.dgvShortCutKey.AllowUserToDeleteRows = false;
+            this.dgvShortCutKey.AllowUserToOrderColumns = true;
+            this.dgvShortCutKey.AllowUserToResizeRows = false;
+            this.dgvShortCutKey.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.gbUseKeyBoardHook.Controls.Add(this.lblKeyBoardHookNotice);
-            this.gbUseKeyBoardHook.Controls.Add(this.btNextClr);
-            this.gbUseKeyBoardHook.Controls.Add(this.btPrevClr);
-            this.gbUseKeyBoardHook.Controls.Add(this.btPlayClr);
-            this.gbUseKeyBoardHook.Controls.Add(this.btPauseClr);
-            this.gbUseKeyBoardHook.Controls.Add(this.btFastClr);
-            this.gbUseKeyBoardHook.Controls.Add(this.btFadeoutClr);
-            this.gbUseKeyBoardHook.Controls.Add(this.btSlowClr);
-            this.gbUseKeyBoardHook.Controls.Add(this.btStopClr);
-            this.gbUseKeyBoardHook.Controls.Add(this.btNextSet);
-            this.gbUseKeyBoardHook.Controls.Add(this.btPrevSet);
-            this.gbUseKeyBoardHook.Controls.Add(this.btPlaySet);
-            this.gbUseKeyBoardHook.Controls.Add(this.btPauseSet);
-            this.gbUseKeyBoardHook.Controls.Add(this.btFastSet);
-            this.gbUseKeyBoardHook.Controls.Add(this.btFadeoutSet);
-            this.gbUseKeyBoardHook.Controls.Add(this.btSlowSet);
-            this.gbUseKeyBoardHook.Controls.Add(this.btStopSet);
-            this.gbUseKeyBoardHook.Controls.Add(this.label50);
-            this.gbUseKeyBoardHook.Controls.Add(this.lblNextKey);
-            this.gbUseKeyBoardHook.Controls.Add(this.lblFastKey);
-            this.gbUseKeyBoardHook.Controls.Add(this.lblPlayKey);
-            this.gbUseKeyBoardHook.Controls.Add(this.lblSlowKey);
-            this.gbUseKeyBoardHook.Controls.Add(this.lblPrevKey);
-            this.gbUseKeyBoardHook.Controls.Add(this.lblFadeoutKey);
-            this.gbUseKeyBoardHook.Controls.Add(this.lblPauseKey);
-            this.gbUseKeyBoardHook.Controls.Add(this.lblStopKey);
-            this.gbUseKeyBoardHook.Controls.Add(this.pictureBox14);
-            this.gbUseKeyBoardHook.Controls.Add(this.pictureBox17);
-            this.gbUseKeyBoardHook.Controls.Add(this.cbNextAlt);
-            this.gbUseKeyBoardHook.Controls.Add(this.pictureBox16);
-            this.gbUseKeyBoardHook.Controls.Add(this.cbFastAlt);
-            this.gbUseKeyBoardHook.Controls.Add(this.pictureBox15);
-            this.gbUseKeyBoardHook.Controls.Add(this.cbPlayAlt);
-            this.gbUseKeyBoardHook.Controls.Add(this.pictureBox13);
-            this.gbUseKeyBoardHook.Controls.Add(this.cbSlowAlt);
-            this.gbUseKeyBoardHook.Controls.Add(this.pictureBox12);
-            this.gbUseKeyBoardHook.Controls.Add(this.cbPrevAlt);
-            this.gbUseKeyBoardHook.Controls.Add(this.pictureBox11);
-            this.gbUseKeyBoardHook.Controls.Add(this.cbFadeoutAlt);
-            this.gbUseKeyBoardHook.Controls.Add(this.pictureBox10);
-            this.gbUseKeyBoardHook.Controls.Add(this.cbPauseAlt);
-            this.gbUseKeyBoardHook.Controls.Add(this.label37);
-            this.gbUseKeyBoardHook.Controls.Add(this.cbStopAlt);
-            this.gbUseKeyBoardHook.Controls.Add(this.label45);
-            this.gbUseKeyBoardHook.Controls.Add(this.label46);
-            this.gbUseKeyBoardHook.Controls.Add(this.label48);
-            this.gbUseKeyBoardHook.Controls.Add(this.label38);
-            this.gbUseKeyBoardHook.Controls.Add(this.label39);
-            this.gbUseKeyBoardHook.Controls.Add(this.label40);
-            this.gbUseKeyBoardHook.Controls.Add(this.label41);
-            this.gbUseKeyBoardHook.Controls.Add(this.label42);
-            this.gbUseKeyBoardHook.Controls.Add(this.cbNextCtrl);
-            this.gbUseKeyBoardHook.Controls.Add(this.label43);
-            this.gbUseKeyBoardHook.Controls.Add(this.cbFastCtrl);
-            this.gbUseKeyBoardHook.Controls.Add(this.label44);
-            this.gbUseKeyBoardHook.Controls.Add(this.cbPlayCtrl);
-            this.gbUseKeyBoardHook.Controls.Add(this.cbStopShift);
-            this.gbUseKeyBoardHook.Controls.Add(this.cbSlowCtrl);
-            this.gbUseKeyBoardHook.Controls.Add(this.cbPauseShift);
-            this.gbUseKeyBoardHook.Controls.Add(this.cbPrevCtrl);
-            this.gbUseKeyBoardHook.Controls.Add(this.cbFadeoutShift);
-            this.gbUseKeyBoardHook.Controls.Add(this.cbFadeoutCtrl);
-            this.gbUseKeyBoardHook.Controls.Add(this.cbPrevShift);
-            this.gbUseKeyBoardHook.Controls.Add(this.cbPauseCtrl);
-            this.gbUseKeyBoardHook.Controls.Add(this.cbSlowShift);
-            this.gbUseKeyBoardHook.Controls.Add(this.cbStopCtrl);
-            this.gbUseKeyBoardHook.Controls.Add(this.cbPlayShift);
-            this.gbUseKeyBoardHook.Controls.Add(this.cbNextShift);
-            this.gbUseKeyBoardHook.Controls.Add(this.cbFastShift);
-            this.gbUseKeyBoardHook.Location = new System.Drawing.Point(7, 3);
-            this.gbUseKeyBoardHook.Name = "gbUseKeyBoardHook";
-            this.gbUseKeyBoardHook.Size = new System.Drawing.Size(433, 305);
-            this.gbUseKeyBoardHook.TabIndex = 28;
-            this.gbUseKeyBoardHook.TabStop = false;
-            // 
-            // lblKeyBoardHookNotice
-            // 
-            this.lblKeyBoardHookNotice.AutoSize = true;
-            this.lblKeyBoardHookNotice.ForeColor = System.Drawing.Color.Red;
-            this.lblKeyBoardHookNotice.Location = new System.Drawing.Point(6, 277);
-            this.lblKeyBoardHookNotice.Name = "lblKeyBoardHookNotice";
-            this.lblKeyBoardHookNotice.Size = new System.Drawing.Size(169, 12);
-            this.lblKeyBoardHookNotice.TabIndex = 30;
-            this.lblKeyBoardHookNotice.Text = "設定したいキーを入力してください。";
-            this.lblKeyBoardHookNotice.Visible = false;
-            // 
-            // btNextClr
-            // 
-            this.btNextClr.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btNextClr.Location = new System.Drawing.Point(391, 243);
-            this.btNextClr.Name = "btNextClr";
-            this.btNextClr.Size = new System.Drawing.Size(36, 23);
-            this.btNextClr.TabIndex = 29;
-            this.btNextClr.Text = "Clr";
-            this.btNextClr.UseVisualStyleBackColor = true;
-            this.btNextClr.Click += new System.EventHandler(this.btNextClr_Click);
-            // 
-            // btPrevClr
-            // 
-            this.btPrevClr.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btPrevClr.Location = new System.Drawing.Point(391, 127);
-            this.btPrevClr.Name = "btPrevClr";
-            this.btPrevClr.Size = new System.Drawing.Size(36, 23);
-            this.btPrevClr.TabIndex = 29;
-            this.btPrevClr.Text = "Clr";
-            this.btPrevClr.UseVisualStyleBackColor = true;
-            this.btPrevClr.Click += new System.EventHandler(this.btPrevClr_Click);
-            // 
-            // btPlayClr
-            // 
-            this.btPlayClr.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btPlayClr.Location = new System.Drawing.Point(391, 185);
-            this.btPlayClr.Name = "btPlayClr";
-            this.btPlayClr.Size = new System.Drawing.Size(36, 23);
-            this.btPlayClr.TabIndex = 29;
-            this.btPlayClr.Text = "Clr";
-            this.btPlayClr.UseVisualStyleBackColor = true;
-            this.btPlayClr.Click += new System.EventHandler(this.btPlayClr_Click);
-            // 
-            // btPauseClr
-            // 
-            this.btPauseClr.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btPauseClr.Location = new System.Drawing.Point(391, 69);
-            this.btPauseClr.Name = "btPauseClr";
-            this.btPauseClr.Size = new System.Drawing.Size(36, 23);
-            this.btPauseClr.TabIndex = 29;
-            this.btPauseClr.Text = "Clr";
-            this.btPauseClr.UseVisualStyleBackColor = true;
-            this.btPauseClr.Click += new System.EventHandler(this.btPauseClr_Click);
-            // 
-            // btFastClr
-            // 
-            this.btFastClr.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btFastClr.Location = new System.Drawing.Point(391, 214);
-            this.btFastClr.Name = "btFastClr";
-            this.btFastClr.Size = new System.Drawing.Size(36, 23);
-            this.btFastClr.TabIndex = 29;
-            this.btFastClr.Text = "Clr";
-            this.btFastClr.UseVisualStyleBackColor = true;
-            this.btFastClr.Click += new System.EventHandler(this.btFastClr_Click);
-            // 
-            // btFadeoutClr
-            // 
-            this.btFadeoutClr.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btFadeoutClr.Location = new System.Drawing.Point(391, 98);
-            this.btFadeoutClr.Name = "btFadeoutClr";
-            this.btFadeoutClr.Size = new System.Drawing.Size(36, 23);
-            this.btFadeoutClr.TabIndex = 29;
-            this.btFadeoutClr.Text = "Clr";
-            this.btFadeoutClr.UseVisualStyleBackColor = true;
-            this.btFadeoutClr.Click += new System.EventHandler(this.btFadeoutClr_Click);
-            // 
-            // btSlowClr
-            // 
-            this.btSlowClr.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btSlowClr.Location = new System.Drawing.Point(391, 156);
-            this.btSlowClr.Name = "btSlowClr";
-            this.btSlowClr.Size = new System.Drawing.Size(36, 23);
-            this.btSlowClr.TabIndex = 29;
-            this.btSlowClr.Text = "Clr";
-            this.btSlowClr.UseVisualStyleBackColor = true;
-            this.btSlowClr.Click += new System.EventHandler(this.btSlowClr_Click);
-            // 
-            // btStopClr
-            // 
-            this.btStopClr.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btStopClr.Location = new System.Drawing.Point(391, 40);
-            this.btStopClr.Name = "btStopClr";
-            this.btStopClr.Size = new System.Drawing.Size(36, 23);
-            this.btStopClr.TabIndex = 29;
-            this.btStopClr.Text = "Clr";
-            this.btStopClr.UseVisualStyleBackColor = true;
-            this.btStopClr.Click += new System.EventHandler(this.btStopClr_Click);
-            // 
-            // btNextSet
-            // 
-            this.btNextSet.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btNextSet.Location = new System.Drawing.Point(349, 243);
-            this.btNextSet.Name = "btNextSet";
-            this.btNextSet.Size = new System.Drawing.Size(36, 23);
-            this.btNextSet.TabIndex = 29;
-            this.btNextSet.Text = "Set";
-            this.btNextSet.UseVisualStyleBackColor = true;
-            this.btNextSet.Click += new System.EventHandler(this.btNextSet_Click);
-            // 
-            // btPrevSet
-            // 
-            this.btPrevSet.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btPrevSet.Location = new System.Drawing.Point(349, 127);
-            this.btPrevSet.Name = "btPrevSet";
-            this.btPrevSet.Size = new System.Drawing.Size(36, 23);
-            this.btPrevSet.TabIndex = 29;
-            this.btPrevSet.Text = "Set";
-            this.btPrevSet.UseVisualStyleBackColor = true;
-            this.btPrevSet.Click += new System.EventHandler(this.btPrevSet_Click);
-            // 
-            // btPlaySet
-            // 
-            this.btPlaySet.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btPlaySet.Location = new System.Drawing.Point(349, 185);
-            this.btPlaySet.Name = "btPlaySet";
-            this.btPlaySet.Size = new System.Drawing.Size(36, 23);
-            this.btPlaySet.TabIndex = 29;
-            this.btPlaySet.Text = "Set";
-            this.btPlaySet.UseVisualStyleBackColor = true;
-            this.btPlaySet.Click += new System.EventHandler(this.btPlaySet_Click);
-            // 
-            // btPauseSet
-            // 
-            this.btPauseSet.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btPauseSet.Location = new System.Drawing.Point(349, 69);
-            this.btPauseSet.Name = "btPauseSet";
-            this.btPauseSet.Size = new System.Drawing.Size(36, 23);
-            this.btPauseSet.TabIndex = 29;
-            this.btPauseSet.Text = "Set";
-            this.btPauseSet.UseVisualStyleBackColor = true;
-            this.btPauseSet.Click += new System.EventHandler(this.btPauseSet_Click);
-            // 
-            // btFastSet
-            // 
-            this.btFastSet.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btFastSet.Location = new System.Drawing.Point(349, 214);
-            this.btFastSet.Name = "btFastSet";
-            this.btFastSet.Size = new System.Drawing.Size(36, 23);
-            this.btFastSet.TabIndex = 29;
-            this.btFastSet.Text = "Set";
-            this.btFastSet.UseVisualStyleBackColor = true;
-            this.btFastSet.Click += new System.EventHandler(this.btFastSet_Click);
-            // 
-            // btFadeoutSet
-            // 
-            this.btFadeoutSet.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btFadeoutSet.Location = new System.Drawing.Point(349, 98);
-            this.btFadeoutSet.Name = "btFadeoutSet";
-            this.btFadeoutSet.Size = new System.Drawing.Size(36, 23);
-            this.btFadeoutSet.TabIndex = 29;
-            this.btFadeoutSet.Text = "Set";
-            this.btFadeoutSet.UseVisualStyleBackColor = true;
-            this.btFadeoutSet.Click += new System.EventHandler(this.btFadeoutSet_Click);
-            // 
-            // btSlowSet
-            // 
-            this.btSlowSet.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btSlowSet.Location = new System.Drawing.Point(349, 156);
-            this.btSlowSet.Name = "btSlowSet";
-            this.btSlowSet.Size = new System.Drawing.Size(36, 23);
-            this.btSlowSet.TabIndex = 29;
-            this.btSlowSet.Text = "Set";
-            this.btSlowSet.UseVisualStyleBackColor = true;
-            this.btSlowSet.Click += new System.EventHandler(this.btSlowSet_Click);
-            // 
-            // btStopSet
-            // 
-            this.btStopSet.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btStopSet.Location = new System.Drawing.Point(349, 40);
-            this.btStopSet.Name = "btStopSet";
-            this.btStopSet.Size = new System.Drawing.Size(36, 23);
-            this.btStopSet.TabIndex = 29;
-            this.btStopSet.Text = "Set";
-            this.btStopSet.UseVisualStyleBackColor = true;
-            this.btStopSet.Click += new System.EventHandler(this.btStopSet_Click);
-            // 
-            // label50
-            // 
-            this.label50.AutoSize = true;
-            this.label50.Location = new System.Drawing.Point(240, 24);
-            this.label50.Name = "label50";
-            this.label50.Size = new System.Drawing.Size(24, 12);
-            this.label50.TabIndex = 28;
-            this.label50.Text = "Key";
-            // 
-            // lblNextKey
-            // 
-            this.lblNextKey.AutoSize = true;
-            this.lblNextKey.Location = new System.Drawing.Point(240, 248);
-            this.lblNextKey.Name = "lblNextKey";
-            this.lblNextKey.Size = new System.Drawing.Size(39, 12);
-            this.lblNextKey.TabIndex = 28;
-            this.lblNextKey.Text = "(None)";
-            // 
-            // lblFastKey
-            // 
-            this.lblFastKey.AutoSize = true;
-            this.lblFastKey.Location = new System.Drawing.Point(240, 219);
-            this.lblFastKey.Name = "lblFastKey";
-            this.lblFastKey.Size = new System.Drawing.Size(39, 12);
-            this.lblFastKey.TabIndex = 28;
-            this.lblFastKey.Text = "(None)";
-            // 
-            // lblPlayKey
-            // 
-            this.lblPlayKey.AutoSize = true;
-            this.lblPlayKey.Location = new System.Drawing.Point(240, 190);
-            this.lblPlayKey.Name = "lblPlayKey";
-            this.lblPlayKey.Size = new System.Drawing.Size(39, 12);
-            this.lblPlayKey.TabIndex = 28;
-            this.lblPlayKey.Text = "(None)";
-            // 
-            // lblSlowKey
-            // 
-            this.lblSlowKey.AutoSize = true;
-            this.lblSlowKey.Location = new System.Drawing.Point(240, 161);
-            this.lblSlowKey.Name = "lblSlowKey";
-            this.lblSlowKey.Size = new System.Drawing.Size(39, 12);
-            this.lblSlowKey.TabIndex = 28;
-            this.lblSlowKey.Text = "(None)";
-            // 
-            // lblPrevKey
-            // 
-            this.lblPrevKey.AutoSize = true;
-            this.lblPrevKey.Location = new System.Drawing.Point(240, 132);
-            this.lblPrevKey.Name = "lblPrevKey";
-            this.lblPrevKey.Size = new System.Drawing.Size(39, 12);
-            this.lblPrevKey.TabIndex = 28;
-            this.lblPrevKey.Text = "(None)";
-            // 
-            // lblFadeoutKey
-            // 
-            this.lblFadeoutKey.AutoSize = true;
-            this.lblFadeoutKey.Location = new System.Drawing.Point(240, 103);
-            this.lblFadeoutKey.Name = "lblFadeoutKey";
-            this.lblFadeoutKey.Size = new System.Drawing.Size(39, 12);
-            this.lblFadeoutKey.TabIndex = 28;
-            this.lblFadeoutKey.Text = "(None)";
-            // 
-            // lblPauseKey
-            // 
-            this.lblPauseKey.AutoSize = true;
-            this.lblPauseKey.Location = new System.Drawing.Point(240, 74);
-            this.lblPauseKey.Name = "lblPauseKey";
-            this.lblPauseKey.Size = new System.Drawing.Size(39, 12);
-            this.lblPauseKey.TabIndex = 28;
-            this.lblPauseKey.Text = "(None)";
-            // 
-            // lblStopKey
-            // 
-            this.lblStopKey.AutoSize = true;
-            this.lblStopKey.Location = new System.Drawing.Point(240, 45);
-            this.lblStopKey.Name = "lblStopKey";
-            this.lblStopKey.Size = new System.Drawing.Size(39, 12);
-            this.lblStopKey.TabIndex = 28;
-            this.lblStopKey.Text = "(None)";
-            // 
-            // pictureBox14
-            // 
-            this.pictureBox14.Image = global::mml2vgmIDE.Properties.Resources.ccStop;
-            this.pictureBox14.Location = new System.Drawing.Point(4, 41);
-            this.pictureBox14.Name = "pictureBox14";
-            this.pictureBox14.Size = new System.Drawing.Size(16, 16);
-            this.pictureBox14.TabIndex = 22;
-            this.pictureBox14.TabStop = false;
-            // 
-            // pictureBox17
-            // 
-            this.pictureBox17.Image = global::mml2vgmIDE.Properties.Resources.ccFadeout;
-            this.pictureBox17.Location = new System.Drawing.Point(4, 99);
-            this.pictureBox17.Name = "pictureBox17";
-            this.pictureBox17.Size = new System.Drawing.Size(16, 16);
-            this.pictureBox17.TabIndex = 25;
-            this.pictureBox17.TabStop = false;
-            // 
-            // cbNextAlt
-            // 
-            this.cbNextAlt.AutoSize = true;
-            this.cbNextAlt.Location = new System.Drawing.Point(201, 246);
-            this.cbNextAlt.Name = "cbNextAlt";
-            this.cbNextAlt.Size = new System.Drawing.Size(15, 14);
-            this.cbNextAlt.TabIndex = 27;
-            this.cbNextAlt.UseVisualStyleBackColor = true;
-            // 
-            // pictureBox16
-            // 
-            this.pictureBox16.Image = global::mml2vgmIDE.Properties.Resources.ccPrevious;
-            this.pictureBox16.Location = new System.Drawing.Point(4, 128);
-            this.pictureBox16.Name = "pictureBox16";
-            this.pictureBox16.Size = new System.Drawing.Size(16, 16);
-            this.pictureBox16.TabIndex = 24;
-            this.pictureBox16.TabStop = false;
-            // 
-            // cbFastAlt
-            // 
-            this.cbFastAlt.AutoSize = true;
-            this.cbFastAlt.Location = new System.Drawing.Point(201, 219);
-            this.cbFastAlt.Name = "cbFastAlt";
-            this.cbFastAlt.Size = new System.Drawing.Size(15, 14);
-            this.cbFastAlt.TabIndex = 27;
-            this.cbFastAlt.UseVisualStyleBackColor = true;
-            // 
-            // pictureBox15
-            // 
-            this.pictureBox15.Image = global::mml2vgmIDE.Properties.Resources.ccPause;
-            this.pictureBox15.Location = new System.Drawing.Point(4, 70);
-            this.pictureBox15.Name = "pictureBox15";
-            this.pictureBox15.Size = new System.Drawing.Size(16, 16);
-            this.pictureBox15.TabIndex = 23;
-            this.pictureBox15.TabStop = false;
-            // 
-            // cbPlayAlt
-            // 
-            this.cbPlayAlt.AutoSize = true;
-            this.cbPlayAlt.Location = new System.Drawing.Point(201, 190);
-            this.cbPlayAlt.Name = "cbPlayAlt";
-            this.cbPlayAlt.Size = new System.Drawing.Size(15, 14);
-            this.cbPlayAlt.TabIndex = 27;
-            this.cbPlayAlt.UseVisualStyleBackColor = true;
-            // 
-            // pictureBox13
-            // 
-            this.pictureBox13.Image = global::mml2vgmIDE.Properties.Resources.ccSlow;
-            this.pictureBox13.Location = new System.Drawing.Point(4, 157);
-            this.pictureBox13.Name = "pictureBox13";
-            this.pictureBox13.Size = new System.Drawing.Size(16, 16);
-            this.pictureBox13.TabIndex = 21;
-            this.pictureBox13.TabStop = false;
-            // 
-            // cbSlowAlt
-            // 
-            this.cbSlowAlt.AutoSize = true;
-            this.cbSlowAlt.Location = new System.Drawing.Point(201, 161);
-            this.cbSlowAlt.Name = "cbSlowAlt";
-            this.cbSlowAlt.Size = new System.Drawing.Size(15, 14);
-            this.cbSlowAlt.TabIndex = 27;
-            this.cbSlowAlt.UseVisualStyleBackColor = true;
-            // 
-            // pictureBox12
-            // 
-            this.pictureBox12.Image = global::mml2vgmIDE.Properties.Resources.ccPlay;
-            this.pictureBox12.Location = new System.Drawing.Point(4, 186);
-            this.pictureBox12.Name = "pictureBox12";
-            this.pictureBox12.Size = new System.Drawing.Size(16, 16);
-            this.pictureBox12.TabIndex = 20;
-            this.pictureBox12.TabStop = false;
-            // 
-            // cbPrevAlt
-            // 
-            this.cbPrevAlt.AutoSize = true;
-            this.cbPrevAlt.Location = new System.Drawing.Point(201, 132);
-            this.cbPrevAlt.Name = "cbPrevAlt";
-            this.cbPrevAlt.Size = new System.Drawing.Size(15, 14);
-            this.cbPrevAlt.TabIndex = 27;
-            this.cbPrevAlt.UseVisualStyleBackColor = true;
-            // 
-            // pictureBox11
-            // 
-            this.pictureBox11.Image = global::mml2vgmIDE.Properties.Resources.ccFast;
-            this.pictureBox11.Location = new System.Drawing.Point(4, 215);
-            this.pictureBox11.Name = "pictureBox11";
-            this.pictureBox11.Size = new System.Drawing.Size(16, 16);
-            this.pictureBox11.TabIndex = 19;
-            this.pictureBox11.TabStop = false;
-            // 
-            // cbFadeoutAlt
-            // 
-            this.cbFadeoutAlt.AutoSize = true;
-            this.cbFadeoutAlt.Location = new System.Drawing.Point(201, 103);
-            this.cbFadeoutAlt.Name = "cbFadeoutAlt";
-            this.cbFadeoutAlt.Size = new System.Drawing.Size(15, 14);
-            this.cbFadeoutAlt.TabIndex = 27;
-            this.cbFadeoutAlt.UseVisualStyleBackColor = true;
-            // 
-            // pictureBox10
-            // 
-            this.pictureBox10.Image = global::mml2vgmIDE.Properties.Resources.ccNext;
-            this.pictureBox10.Location = new System.Drawing.Point(4, 242);
-            this.pictureBox10.Name = "pictureBox10";
-            this.pictureBox10.Size = new System.Drawing.Size(16, 16);
-            this.pictureBox10.TabIndex = 18;
-            this.pictureBox10.TabStop = false;
-            // 
-            // cbPauseAlt
-            // 
-            this.cbPauseAlt.AutoSize = true;
-            this.cbPauseAlt.Location = new System.Drawing.Point(201, 74);
-            this.cbPauseAlt.Name = "cbPauseAlt";
-            this.cbPauseAlt.Size = new System.Drawing.Size(15, 14);
-            this.cbPauseAlt.TabIndex = 27;
-            this.cbPauseAlt.UseVisualStyleBackColor = true;
-            // 
-            // label37
-            // 
-            this.label37.AutoSize = true;
-            this.label37.Location = new System.Drawing.Point(26, 45);
-            this.label37.Name = "label37";
-            this.label37.Size = new System.Drawing.Size(29, 12);
-            this.label37.TabIndex = 26;
-            this.label37.Text = "停止";
-            // 
-            // cbStopAlt
-            // 
-            this.cbStopAlt.AutoSize = true;
-            this.cbStopAlt.Location = new System.Drawing.Point(201, 45);
-            this.cbStopAlt.Name = "cbStopAlt";
-            this.cbStopAlt.Size = new System.Drawing.Size(15, 14);
-            this.cbStopAlt.TabIndex = 27;
-            this.cbStopAlt.UseVisualStyleBackColor = true;
-            // 
-            // label45
-            // 
-            this.label45.AutoSize = true;
-            this.label45.Location = new System.Drawing.Point(127, 24);
-            this.label45.Name = "label45";
-            this.label45.Size = new System.Drawing.Size(29, 12);
-            this.label45.TabIndex = 26;
-            this.label45.Text = "Shift";
-            // 
-            // label46
-            // 
-            this.label46.AutoSize = true;
-            this.label46.Location = new System.Drawing.Point(163, 24);
-            this.label46.Name = "label46";
-            this.label46.Size = new System.Drawing.Size(24, 12);
-            this.label46.TabIndex = 26;
-            this.label46.Text = "Ctrl";
-            // 
-            // label48
-            // 
-            this.label48.AutoSize = true;
-            this.label48.Location = new System.Drawing.Point(199, 24);
-            this.label48.Name = "label48";
-            this.label48.Size = new System.Drawing.Size(20, 12);
-            this.label48.TabIndex = 26;
-            this.label48.Text = "Alt";
-            // 
-            // label38
-            // 
-            this.label38.AutoSize = true;
-            this.label38.Location = new System.Drawing.Point(26, 74);
-            this.label38.Name = "label38";
-            this.label38.Size = new System.Drawing.Size(53, 12);
-            this.label38.TabIndex = 26;
-            this.label38.Text = "一時停止";
-            // 
-            // label39
-            // 
-            this.label39.AutoSize = true;
-            this.label39.Location = new System.Drawing.Point(26, 103);
-            this.label39.Name = "label39";
-            this.label39.Size = new System.Drawing.Size(65, 12);
-            this.label39.TabIndex = 26;
-            this.label39.Text = "フェードアウト";
-            // 
-            // label40
-            // 
-            this.label40.AutoSize = true;
-            this.label40.Location = new System.Drawing.Point(26, 132);
-            this.label40.Name = "label40";
-            this.label40.Size = new System.Drawing.Size(29, 12);
-            this.label40.TabIndex = 26;
-            this.label40.Text = "前曲";
-            // 
-            // label41
-            // 
-            this.label41.AutoSize = true;
-            this.label41.Location = new System.Drawing.Point(26, 161);
-            this.label41.Name = "label41";
-            this.label41.Size = new System.Drawing.Size(57, 12);
-            this.label41.TabIndex = 26;
-            this.label41.Text = "スロー再生";
-            // 
-            // label42
-            // 
-            this.label42.AutoSize = true;
-            this.label42.Location = new System.Drawing.Point(26, 190);
-            this.label42.Name = "label42";
-            this.label42.Size = new System.Drawing.Size(29, 12);
-            this.label42.TabIndex = 26;
-            this.label42.Text = "再生";
-            // 
-            // cbNextCtrl
-            // 
-            this.cbNextCtrl.AutoSize = true;
-            this.cbNextCtrl.Location = new System.Drawing.Point(165, 246);
-            this.cbNextCtrl.Name = "cbNextCtrl";
-            this.cbNextCtrl.Size = new System.Drawing.Size(15, 14);
-            this.cbNextCtrl.TabIndex = 27;
-            this.cbNextCtrl.UseVisualStyleBackColor = true;
-            // 
-            // label43
-            // 
-            this.label43.AutoSize = true;
-            this.label43.Location = new System.Drawing.Point(26, 219);
-            this.label43.Name = "label43";
-            this.label43.Size = new System.Drawing.Size(59, 12);
-            this.label43.TabIndex = 26;
-            this.label43.Text = "3倍速再生";
-            // 
-            // cbFastCtrl
-            // 
-            this.cbFastCtrl.AutoSize = true;
-            this.cbFastCtrl.Location = new System.Drawing.Point(165, 219);
-            this.cbFastCtrl.Name = "cbFastCtrl";
-            this.cbFastCtrl.Size = new System.Drawing.Size(15, 14);
-            this.cbFastCtrl.TabIndex = 27;
-            this.cbFastCtrl.UseVisualStyleBackColor = true;
-            // 
-            // label44
-            // 
-            this.label44.AutoSize = true;
-            this.label44.Location = new System.Drawing.Point(26, 246);
-            this.label44.Name = "label44";
-            this.label44.Size = new System.Drawing.Size(29, 12);
-            this.label44.TabIndex = 26;
-            this.label44.Text = "次曲";
-            // 
-            // cbPlayCtrl
-            // 
-            this.cbPlayCtrl.AutoSize = true;
-            this.cbPlayCtrl.Location = new System.Drawing.Point(165, 190);
-            this.cbPlayCtrl.Name = "cbPlayCtrl";
-            this.cbPlayCtrl.Size = new System.Drawing.Size(15, 14);
-            this.cbPlayCtrl.TabIndex = 27;
-            this.cbPlayCtrl.UseVisualStyleBackColor = true;
-            // 
-            // cbStopShift
-            // 
-            this.cbStopShift.AutoSize = true;
-            this.cbStopShift.Location = new System.Drawing.Point(129, 45);
-            this.cbStopShift.Name = "cbStopShift";
-            this.cbStopShift.Size = new System.Drawing.Size(15, 14);
-            this.cbStopShift.TabIndex = 27;
-            this.cbStopShift.UseVisualStyleBackColor = true;
-            // 
-            // cbSlowCtrl
-            // 
-            this.cbSlowCtrl.AutoSize = true;
-            this.cbSlowCtrl.Location = new System.Drawing.Point(165, 161);
-            this.cbSlowCtrl.Name = "cbSlowCtrl";
-            this.cbSlowCtrl.Size = new System.Drawing.Size(15, 14);
-            this.cbSlowCtrl.TabIndex = 27;
-            this.cbSlowCtrl.UseVisualStyleBackColor = true;
-            // 
-            // cbPauseShift
-            // 
-            this.cbPauseShift.AutoSize = true;
-            this.cbPauseShift.Location = new System.Drawing.Point(129, 74);
-            this.cbPauseShift.Name = "cbPauseShift";
-            this.cbPauseShift.Size = new System.Drawing.Size(15, 14);
-            this.cbPauseShift.TabIndex = 27;
-            this.cbPauseShift.UseVisualStyleBackColor = true;
-            // 
-            // cbPrevCtrl
-            // 
-            this.cbPrevCtrl.AutoSize = true;
-            this.cbPrevCtrl.Location = new System.Drawing.Point(165, 132);
-            this.cbPrevCtrl.Name = "cbPrevCtrl";
-            this.cbPrevCtrl.Size = new System.Drawing.Size(15, 14);
-            this.cbPrevCtrl.TabIndex = 27;
-            this.cbPrevCtrl.UseVisualStyleBackColor = true;
-            // 
-            // cbFadeoutShift
-            // 
-            this.cbFadeoutShift.AutoSize = true;
-            this.cbFadeoutShift.Location = new System.Drawing.Point(129, 103);
-            this.cbFadeoutShift.Name = "cbFadeoutShift";
-            this.cbFadeoutShift.Size = new System.Drawing.Size(15, 14);
-            this.cbFadeoutShift.TabIndex = 27;
-            this.cbFadeoutShift.UseVisualStyleBackColor = true;
-            // 
-            // cbFadeoutCtrl
-            // 
-            this.cbFadeoutCtrl.AutoSize = true;
-            this.cbFadeoutCtrl.Location = new System.Drawing.Point(165, 103);
-            this.cbFadeoutCtrl.Name = "cbFadeoutCtrl";
-            this.cbFadeoutCtrl.Size = new System.Drawing.Size(15, 14);
-            this.cbFadeoutCtrl.TabIndex = 27;
-            this.cbFadeoutCtrl.UseVisualStyleBackColor = true;
-            // 
-            // cbPrevShift
-            // 
-            this.cbPrevShift.AutoSize = true;
-            this.cbPrevShift.Location = new System.Drawing.Point(129, 132);
-            this.cbPrevShift.Name = "cbPrevShift";
-            this.cbPrevShift.Size = new System.Drawing.Size(15, 14);
-            this.cbPrevShift.TabIndex = 27;
-            this.cbPrevShift.UseVisualStyleBackColor = true;
-            // 
-            // cbPauseCtrl
-            // 
-            this.cbPauseCtrl.AutoSize = true;
-            this.cbPauseCtrl.Location = new System.Drawing.Point(165, 74);
-            this.cbPauseCtrl.Name = "cbPauseCtrl";
-            this.cbPauseCtrl.Size = new System.Drawing.Size(15, 14);
-            this.cbPauseCtrl.TabIndex = 27;
-            this.cbPauseCtrl.UseVisualStyleBackColor = true;
-            // 
-            // cbSlowShift
-            // 
-            this.cbSlowShift.AutoSize = true;
-            this.cbSlowShift.Location = new System.Drawing.Point(129, 161);
-            this.cbSlowShift.Name = "cbSlowShift";
-            this.cbSlowShift.Size = new System.Drawing.Size(15, 14);
-            this.cbSlowShift.TabIndex = 27;
-            this.cbSlowShift.UseVisualStyleBackColor = true;
-            // 
-            // cbStopCtrl
-            // 
-            this.cbStopCtrl.AutoSize = true;
-            this.cbStopCtrl.Location = new System.Drawing.Point(165, 45);
-            this.cbStopCtrl.Name = "cbStopCtrl";
-            this.cbStopCtrl.Size = new System.Drawing.Size(15, 14);
-            this.cbStopCtrl.TabIndex = 27;
-            this.cbStopCtrl.UseVisualStyleBackColor = true;
-            // 
-            // cbPlayShift
-            // 
-            this.cbPlayShift.AutoSize = true;
-            this.cbPlayShift.Location = new System.Drawing.Point(129, 190);
-            this.cbPlayShift.Name = "cbPlayShift";
-            this.cbPlayShift.Size = new System.Drawing.Size(15, 14);
-            this.cbPlayShift.TabIndex = 27;
-            this.cbPlayShift.UseVisualStyleBackColor = true;
-            // 
-            // cbNextShift
-            // 
-            this.cbNextShift.AutoSize = true;
-            this.cbNextShift.Location = new System.Drawing.Point(129, 246);
-            this.cbNextShift.Name = "cbNextShift";
-            this.cbNextShift.Size = new System.Drawing.Size(15, 14);
-            this.cbNextShift.TabIndex = 27;
-            this.cbNextShift.UseVisualStyleBackColor = true;
-            // 
-            // cbFastShift
-            // 
-            this.cbFastShift.AutoSize = true;
-            this.cbFastShift.Location = new System.Drawing.Point(129, 219);
-            this.cbFastShift.Name = "cbFastShift";
-            this.cbFastShift.Size = new System.Drawing.Size(15, 14);
-            this.cbFastShift.TabIndex = 27;
-            this.cbFastShift.UseVisualStyleBackColor = true;
-            // 
-            // label47
-            // 
-            this.label47.AutoSize = true;
-            this.label47.Location = new System.Drawing.Point(63, 311);
-            this.label47.Name = "label47";
-            this.label47.Size = new System.Drawing.Size(23, 12);
-            this.label47.TabIndex = 26;
-            this.label47.Text = "Win";
-            this.label47.Visible = false;
-            // 
-            // cbStopWin
-            // 
-            this.cbStopWin.AutoSize = true;
-            this.cbStopWin.Location = new System.Drawing.Point(92, 309);
-            this.cbStopWin.Name = "cbStopWin";
-            this.cbStopWin.Size = new System.Drawing.Size(15, 14);
-            this.cbStopWin.TabIndex = 27;
-            this.cbStopWin.UseVisualStyleBackColor = true;
-            this.cbStopWin.Visible = false;
-            // 
-            // cbPauseWin
-            // 
-            this.cbPauseWin.AutoSize = true;
-            this.cbPauseWin.Location = new System.Drawing.Point(113, 309);
-            this.cbPauseWin.Name = "cbPauseWin";
-            this.cbPauseWin.Size = new System.Drawing.Size(15, 14);
-            this.cbPauseWin.TabIndex = 27;
-            this.cbPauseWin.UseVisualStyleBackColor = true;
-            this.cbPauseWin.Visible = false;
-            // 
-            // cbFadeoutWin
-            // 
-            this.cbFadeoutWin.AutoSize = true;
-            this.cbFadeoutWin.Location = new System.Drawing.Point(134, 309);
-            this.cbFadeoutWin.Name = "cbFadeoutWin";
-            this.cbFadeoutWin.Size = new System.Drawing.Size(15, 14);
-            this.cbFadeoutWin.TabIndex = 27;
-            this.cbFadeoutWin.UseVisualStyleBackColor = true;
-            this.cbFadeoutWin.Visible = false;
-            // 
-            // cbPrevWin
-            // 
-            this.cbPrevWin.AutoSize = true;
-            this.cbPrevWin.Location = new System.Drawing.Point(155, 309);
-            this.cbPrevWin.Name = "cbPrevWin";
-            this.cbPrevWin.Size = new System.Drawing.Size(15, 14);
-            this.cbPrevWin.TabIndex = 27;
-            this.cbPrevWin.UseVisualStyleBackColor = true;
-            this.cbPrevWin.Visible = false;
-            // 
-            // cbSlowWin
-            // 
-            this.cbSlowWin.AutoSize = true;
-            this.cbSlowWin.Location = new System.Drawing.Point(176, 309);
-            this.cbSlowWin.Name = "cbSlowWin";
-            this.cbSlowWin.Size = new System.Drawing.Size(15, 14);
-            this.cbSlowWin.TabIndex = 27;
-            this.cbSlowWin.UseVisualStyleBackColor = true;
-            this.cbSlowWin.Visible = false;
-            // 
-            // cbPlayWin
-            // 
-            this.cbPlayWin.AutoSize = true;
-            this.cbPlayWin.Location = new System.Drawing.Point(197, 309);
-            this.cbPlayWin.Name = "cbPlayWin";
-            this.cbPlayWin.Size = new System.Drawing.Size(15, 14);
-            this.cbPlayWin.TabIndex = 27;
-            this.cbPlayWin.UseVisualStyleBackColor = true;
-            this.cbPlayWin.Visible = false;
-            // 
-            // cbFastWin
-            // 
-            this.cbFastWin.AutoSize = true;
-            this.cbFastWin.Location = new System.Drawing.Point(218, 309);
-            this.cbFastWin.Name = "cbFastWin";
-            this.cbFastWin.Size = new System.Drawing.Size(15, 14);
-            this.cbFastWin.TabIndex = 27;
-            this.cbFastWin.UseVisualStyleBackColor = true;
-            this.cbFastWin.Visible = false;
-            // 
-            // cbNextWin
-            // 
-            this.cbNextWin.AutoSize = true;
-            this.cbNextWin.Location = new System.Drawing.Point(239, 309);
-            this.cbNextWin.Name = "cbNextWin";
-            this.cbNextWin.Size = new System.Drawing.Size(15, 14);
-            this.cbNextWin.TabIndex = 27;
-            this.cbNextWin.UseVisualStyleBackColor = true;
-            this.cbNextWin.Visible = false;
+            this.dgvShortCutKey.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvShortCutKey.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.clmNumber,
+            this.clmFunc,
+            this.clmShift,
+            this.clmCtrl,
+            this.clmAlt,
+            this.clmKey,
+            this.clmSet,
+            this.clmClr,
+            this.clmKBDSpacer});
+            this.dgvShortCutKey.Location = new System.Drawing.Point(3, 3);
+            this.dgvShortCutKey.MultiSelect = false;
+            this.dgvShortCutKey.Name = "dgvShortCutKey";
+            this.dgvShortCutKey.RowHeadersVisible = false;
+            this.dgvShortCutKey.RowTemplate.Height = 21;
+            this.dgvShortCutKey.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgvShortCutKey.Size = new System.Drawing.Size(437, 353);
+            this.dgvShortCutKey.TabIndex = 29;
+            this.dgvShortCutKey.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvShortCutKey_CellContentClick);
+            // 
+            // clmNumber
+            // 
+            this.clmNumber.HeaderText = "Number";
+            this.clmNumber.Name = "clmNumber";
+            this.clmNumber.Visible = false;
+            // 
+            // clmFunc
+            // 
+            this.clmFunc.HeaderText = "機能";
+            this.clmFunc.Name = "clmFunc";
+            this.clmFunc.ReadOnly = true;
+            this.clmFunc.Width = 150;
+            // 
+            // clmShift
+            // 
+            this.clmShift.HeaderText = "Shift";
+            this.clmShift.Name = "clmShift";
+            this.clmShift.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.clmShift.Width = 40;
+            // 
+            // clmCtrl
+            // 
+            this.clmCtrl.HeaderText = "Ctrl";
+            this.clmCtrl.Name = "clmCtrl";
+            this.clmCtrl.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.clmCtrl.Width = 40;
+            // 
+            // clmAlt
+            // 
+            this.clmAlt.HeaderText = "Alt";
+            this.clmAlt.Name = "clmAlt";
+            this.clmAlt.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.clmAlt.Width = 40;
+            // 
+            // clmKey
+            // 
+            this.clmKey.HeaderText = "Key";
+            this.clmKey.Name = "clmKey";
+            this.clmKey.ReadOnly = true;
+            this.clmKey.Width = 50;
+            // 
+            // clmSet
+            // 
+            this.clmSet.HeaderText = "Set";
+            this.clmSet.Name = "clmSet";
+            this.clmSet.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.clmSet.Text = "Set";
+            this.clmSet.Width = 40;
+            // 
+            // clmClr
+            // 
+            this.clmClr.HeaderText = "Clr";
+            this.clmClr.Name = "clmClr";
+            this.clmClr.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.clmClr.Text = "Clr";
+            this.clmClr.Width = 40;
+            // 
+            // clmKBDSpacer
+            // 
+            this.clmKBDSpacer.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.clmKBDSpacer.HeaderText = "";
+            this.clmKBDSpacer.Name = "clmKBDSpacer";
+            this.clmKBDSpacer.ReadOnly = true;
+            this.clmKBDSpacer.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.clmKBDSpacer.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // tpBalance
             // 
@@ -4530,6 +3717,7 @@
             // 
             this.tpOmake.Controls.Add(this.groupBox31);
             this.tpOmake.Controls.Add(this.groupBox30);
+            this.tpOmake.Controls.Add(this.cbUseSIen);
             this.tpOmake.Controls.Add(this.cbInfiniteOfflineMode);
             this.tpOmake.Controls.Add(this.groupBox29);
             this.tpOmake.Controls.Add(this.tbOpacity);
@@ -4544,6 +3732,50 @@
             this.tpOmake.TabIndex = 7;
             this.tpOmake.Text = "おまけ";
             this.tpOmake.UseVisualStyleBackColor = true;
+            // 
+            // groupBox31
+            // 
+            this.groupBox31.Controls.Add(this.rbLoglevelINFO);
+            this.groupBox31.Controls.Add(this.rbLoglevelDEBUG);
+            this.groupBox31.Controls.Add(this.rbLoglevelTRACE);
+            this.groupBox31.Location = new System.Drawing.Point(192, 3);
+            this.groupBox31.Name = "groupBox31";
+            this.groupBox31.Size = new System.Drawing.Size(243, 72);
+            this.groupBox31.TabIndex = 25;
+            this.groupBox31.TabStop = false;
+            this.groupBox31.Text = "Log level";
+            // 
+            // rbLoglevelINFO
+            // 
+            this.rbLoglevelINFO.AutoSize = true;
+            this.rbLoglevelINFO.Checked = true;
+            this.rbLoglevelINFO.Location = new System.Drawing.Point(11, 16);
+            this.rbLoglevelINFO.Name = "rbLoglevelINFO";
+            this.rbLoglevelINFO.Size = new System.Drawing.Size(49, 16);
+            this.rbLoglevelINFO.TabIndex = 3;
+            this.rbLoglevelINFO.TabStop = true;
+            this.rbLoglevelINFO.Text = "INFO";
+            this.rbLoglevelINFO.UseVisualStyleBackColor = true;
+            // 
+            // rbLoglevelDEBUG
+            // 
+            this.rbLoglevelDEBUG.AutoSize = true;
+            this.rbLoglevelDEBUG.Location = new System.Drawing.Point(66, 16);
+            this.rbLoglevelDEBUG.Name = "rbLoglevelDEBUG";
+            this.rbLoglevelDEBUG.Size = new System.Drawing.Size(62, 16);
+            this.rbLoglevelDEBUG.TabIndex = 3;
+            this.rbLoglevelDEBUG.Text = "DEBUG";
+            this.rbLoglevelDEBUG.UseVisualStyleBackColor = true;
+            // 
+            // rbLoglevelTRACE
+            // 
+            this.rbLoglevelTRACE.AutoSize = true;
+            this.rbLoglevelTRACE.Location = new System.Drawing.Point(134, 16);
+            this.rbLoglevelTRACE.Name = "rbLoglevelTRACE";
+            this.rbLoglevelTRACE.Size = new System.Drawing.Size(61, 16);
+            this.rbLoglevelTRACE.TabIndex = 3;
+            this.rbLoglevelTRACE.Text = "TRACE";
+            this.rbLoglevelTRACE.UseVisualStyleBackColor = true;
             // 
             // groupBox30
             // 
@@ -4741,6 +3973,16 @@
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Debug Mode";
             // 
+            // cbLogWarning
+            // 
+            this.cbLogWarning.AutoSize = true;
+            this.cbLogWarning.Location = new System.Drawing.Point(6, 39);
+            this.cbLogWarning.Name = "cbLogWarning";
+            this.cbLogWarning.Size = new System.Drawing.Size(143, 16);
+            this.cbLogWarning.TabIndex = 2;
+            this.cbLogWarning.Text = "ログにWarningを出力する";
+            this.cbLogWarning.UseVisualStyleBackColor = true;
+            // 
             // cbDispFrameCounter
             // 
             this.cbDispFrameCounter.AutoSize = true;
@@ -4871,59 +4113,26 @@
             this.cbHiyorimiMode.UseVisualStyleBackColor = true;
             this.cbHiyorimiMode.Visible = false;
             // 
-            // cbLogWarning
+            // ucSI
             // 
-            this.cbLogWarning.AutoSize = true;
-            this.cbLogWarning.Location = new System.Drawing.Point(6, 39);
-            this.cbLogWarning.Name = "cbLogWarning";
-            this.cbLogWarning.Size = new System.Drawing.Size(143, 16);
-            this.cbLogWarning.TabIndex = 2;
-            this.cbLogWarning.Text = "ログにWarningを出力する";
-            this.cbLogWarning.UseVisualStyleBackColor = true;
+            this.ucSI.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.ucSI.AutoScroll = true;
+            this.ucSI.Location = new System.Drawing.Point(3, 18);
+            this.ucSI.Name = "ucSI";
+            this.ucSI.Size = new System.Drawing.Size(405, 237);
+            this.ucSI.TabIndex = 7;
             // 
-            // rbLoglevelINFO
+            // cbUseSIen
             // 
-            this.rbLoglevelINFO.AutoSize = true;
-            this.rbLoglevelINFO.Checked = true;
-            this.rbLoglevelINFO.Location = new System.Drawing.Point(11, 16);
-            this.rbLoglevelINFO.Name = "rbLoglevelINFO";
-            this.rbLoglevelINFO.Size = new System.Drawing.Size(49, 16);
-            this.rbLoglevelINFO.TabIndex = 3;
-            this.rbLoglevelINFO.TabStop = true;
-            this.rbLoglevelINFO.Text = "INFO";
-            this.rbLoglevelINFO.UseVisualStyleBackColor = true;
-            // 
-            // rbLoglevelTRACE
-            // 
-            this.rbLoglevelTRACE.AutoSize = true;
-            this.rbLoglevelTRACE.Location = new System.Drawing.Point(134, 16);
-            this.rbLoglevelTRACE.Name = "rbLoglevelTRACE";
-            this.rbLoglevelTRACE.Size = new System.Drawing.Size(61, 16);
-            this.rbLoglevelTRACE.TabIndex = 3;
-            this.rbLoglevelTRACE.Text = "TRACE";
-            this.rbLoglevelTRACE.UseVisualStyleBackColor = true;
-            // 
-            // rbLoglevelDEBUG
-            // 
-            this.rbLoglevelDEBUG.AutoSize = true;
-            this.rbLoglevelDEBUG.Location = new System.Drawing.Point(66, 16);
-            this.rbLoglevelDEBUG.Name = "rbLoglevelDEBUG";
-            this.rbLoglevelDEBUG.Size = new System.Drawing.Size(62, 16);
-            this.rbLoglevelDEBUG.TabIndex = 3;
-            this.rbLoglevelDEBUG.Text = "DEBUG";
-            this.rbLoglevelDEBUG.UseVisualStyleBackColor = true;
-            // 
-            // groupBox31
-            // 
-            this.groupBox31.Controls.Add(this.rbLoglevelINFO);
-            this.groupBox31.Controls.Add(this.rbLoglevelDEBUG);
-            this.groupBox31.Controls.Add(this.rbLoglevelTRACE);
-            this.groupBox31.Location = new System.Drawing.Point(192, 3);
-            this.groupBox31.Name = "groupBox31";
-            this.groupBox31.Size = new System.Drawing.Size(243, 72);
-            this.groupBox31.TabIndex = 25;
-            this.groupBox31.TabStop = false;
-            this.groupBox31.Text = "Log level";
+            this.cbUseSIen.AutoSize = true;
+            this.cbUseSIen.Location = new System.Drawing.Point(162, 223);
+            this.cbUseSIen.Name = "cbUseSIen";
+            this.cbUseSIen.Size = new System.Drawing.Size(148, 16);
+            this.cbUseSIen.TabIndex = 23;
+            this.cbUseSIen.Text = "入力支援機能を使用する";
+            this.cbUseSIen.UseVisualStyleBackColor = true;
             // 
             // FrmSetting
             // 
@@ -5032,16 +4241,7 @@
             this.groupBox2.PerformLayout();
             this.tpKeyBoard.ResumeLayout(false);
             this.tpKeyBoard.PerformLayout();
-            this.gbUseKeyBoardHook.ResumeLayout(false);
-            this.gbUseKeyBoardHook.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox14)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox17)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox16)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox15)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox13)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox12)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox11)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox10)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvShortCutKey)).EndInit();
             this.tpBalance.ResumeLayout(false);
             this.tpBalance.PerformLayout();
             this.groupBox25.ResumeLayout(false);
@@ -5069,6 +4269,8 @@
             this.gbDump.PerformLayout();
             this.tpOmake.ResumeLayout(false);
             this.tpOmake.PerformLayout();
+            this.groupBox31.ResumeLayout(false);
+            this.groupBox31.PerformLayout();
             this.groupBox30.ResumeLayout(false);
             this.groupBox30.PerformLayout();
             this.groupBox29.ResumeLayout(false);
@@ -5080,8 +4282,6 @@
             this.tableLayoutPanel.ResumeLayout(false);
             this.tableLayoutPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.logoPictureBox)).EndInit();
-            this.groupBox31.ResumeLayout(false);
-            this.groupBox31.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -5344,87 +4544,6 @@
         private System.Windows.Forms.GroupBox groupBox25;
         private System.Windows.Forms.RadioButton rbAutoBalanceNotSamePositionAsSongData;
         private System.Windows.Forms.TabPage tpKeyBoard;
-        private System.Windows.Forms.PictureBox pictureBox10;
-        private System.Windows.Forms.PictureBox pictureBox11;
-        private System.Windows.Forms.PictureBox pictureBox12;
-        private System.Windows.Forms.PictureBox pictureBox13;
-        private System.Windows.Forms.PictureBox pictureBox14;
-        private System.Windows.Forms.PictureBox pictureBox15;
-        private System.Windows.Forms.PictureBox pictureBox16;
-        private System.Windows.Forms.PictureBox pictureBox17;
-        private System.Windows.Forms.CheckBox cbUseKeyBoardHook;
-        private System.Windows.Forms.GroupBox gbUseKeyBoardHook;
-        private System.Windows.Forms.Button btPrevClr;
-        private System.Windows.Forms.Button btPauseClr;
-        private System.Windows.Forms.Button btFadeoutClr;
-        private System.Windows.Forms.Button btStopClr;
-        private System.Windows.Forms.Button btNextSet;
-        private System.Windows.Forms.Button btPrevSet;
-        private System.Windows.Forms.Button btPlaySet;
-        private System.Windows.Forms.Button btPauseSet;
-        private System.Windows.Forms.Button btFastSet;
-        private System.Windows.Forms.Button btFadeoutSet;
-        private System.Windows.Forms.Button btSlowSet;
-        private System.Windows.Forms.Button btStopSet;
-        private System.Windows.Forms.Label label50;
-        private System.Windows.Forms.Label lblNextKey;
-        private System.Windows.Forms.Label lblFastKey;
-        private System.Windows.Forms.Label lblPlayKey;
-        private System.Windows.Forms.Label lblSlowKey;
-        private System.Windows.Forms.Label lblPrevKey;
-        private System.Windows.Forms.Label lblFadeoutKey;
-        private System.Windows.Forms.Label lblPauseKey;
-        private System.Windows.Forms.Label lblStopKey;
-        private System.Windows.Forms.CheckBox cbNextAlt;
-        private System.Windows.Forms.CheckBox cbFastAlt;
-        private System.Windows.Forms.CheckBox cbPlayAlt;
-        private System.Windows.Forms.CheckBox cbSlowAlt;
-        private System.Windows.Forms.CheckBox cbPrevAlt;
-        private System.Windows.Forms.CheckBox cbFadeoutAlt;
-        private System.Windows.Forms.CheckBox cbPauseAlt;
-        private System.Windows.Forms.Label label37;
-        private System.Windows.Forms.CheckBox cbStopAlt;
-        private System.Windows.Forms.Label label45;
-        private System.Windows.Forms.CheckBox cbNextWin;
-        private System.Windows.Forms.Label label46;
-        private System.Windows.Forms.CheckBox cbFastWin;
-        private System.Windows.Forms.Label label47;
-        private System.Windows.Forms.CheckBox cbPlayWin;
-        private System.Windows.Forms.Label label48;
-        private System.Windows.Forms.CheckBox cbSlowWin;
-        private System.Windows.Forms.Label label38;
-        private System.Windows.Forms.CheckBox cbPrevWin;
-        private System.Windows.Forms.Label label39;
-        private System.Windows.Forms.CheckBox cbFadeoutWin;
-        private System.Windows.Forms.Label label40;
-        private System.Windows.Forms.CheckBox cbPauseWin;
-        private System.Windows.Forms.Label label41;
-        private System.Windows.Forms.CheckBox cbStopWin;
-        private System.Windows.Forms.Label label42;
-        private System.Windows.Forms.CheckBox cbNextCtrl;
-        private System.Windows.Forms.Label label43;
-        private System.Windows.Forms.CheckBox cbFastCtrl;
-        private System.Windows.Forms.Label label44;
-        private System.Windows.Forms.CheckBox cbPlayCtrl;
-        private System.Windows.Forms.CheckBox cbStopShift;
-        private System.Windows.Forms.CheckBox cbSlowCtrl;
-        private System.Windows.Forms.CheckBox cbPauseShift;
-        private System.Windows.Forms.CheckBox cbPrevCtrl;
-        private System.Windows.Forms.CheckBox cbFadeoutShift;
-        private System.Windows.Forms.CheckBox cbFadeoutCtrl;
-        private System.Windows.Forms.CheckBox cbPrevShift;
-        private System.Windows.Forms.CheckBox cbPauseCtrl;
-        private System.Windows.Forms.CheckBox cbSlowShift;
-        private System.Windows.Forms.CheckBox cbStopCtrl;
-        private System.Windows.Forms.CheckBox cbPlayShift;
-        private System.Windows.Forms.CheckBox cbNextShift;
-        private System.Windows.Forms.CheckBox cbFastShift;
-        private System.Windows.Forms.Button btNextClr;
-        private System.Windows.Forms.Button btPlayClr;
-        private System.Windows.Forms.Button btFastClr;
-        private System.Windows.Forms.Button btSlowClr;
-        //private ucSettingInstruments ucSettingInstruments1;
-        private System.Windows.Forms.Label lblKeyBoardHookNotice;
         private System.Windows.Forms.RadioButton rbNullDevice;
         private System.Windows.Forms.TextBox tbSIDOutputBufferSize;
         private System.Windows.Forms.Label label49;
@@ -5485,5 +4604,18 @@
         private System.Windows.Forms.RadioButton rbLoglevelDEBUG;
         private System.Windows.Forms.RadioButton rbLoglevelTRACE;
         private System.Windows.Forms.CheckBox cbLogWarning;
+        private System.Windows.Forms.DataGridView dgvShortCutKey;
+        private System.Windows.Forms.DataGridViewTextBoxColumn clmNumber;
+        private System.Windows.Forms.DataGridViewTextBoxColumn clmFunc;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn clmShift;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn clmCtrl;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn clmAlt;
+        private System.Windows.Forms.DataGridViewTextBoxColumn clmKey;
+        private System.Windows.Forms.DataGridViewButtonColumn clmSet;
+        private System.Windows.Forms.DataGridViewButtonColumn clmClr;
+        private System.Windows.Forms.DataGridViewTextBoxColumn clmKBDSpacer;
+        private System.Windows.Forms.Label lblSKKey;
+        private System.Windows.Forms.Button btnInitializeShortCutKey;
+        private System.Windows.Forms.CheckBox cbUseSIen;
     }
 }
