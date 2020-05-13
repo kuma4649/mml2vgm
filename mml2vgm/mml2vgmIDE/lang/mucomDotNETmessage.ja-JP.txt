@@ -170,6 +170,8 @@ E0527='S'スロットディチューンは既に従来のフォーマットが�
 
 ;Program.cs 0600
 E0600=引数(.mucファイル)欲しいよぉ
+E0601=.mucファイル({0})が見つかりませんでした。
+I0600=mucomDotNETConsole コマンドライン版コンパイラ\r\n                                      By kuma\r\n\r\nUsage:\r\n    mucomDotNET [-xml] [-LOGLEVEL=FATAL|ERROR|WARNING|INFO|DEBUG|TRACE] [-OFFLOG=WARNING] mucFile[.muc]\r\n\r\nOption\r\n    -xml       xmlファイルを出力する。\r\n    -LOGLEVEL  コンパイル時に表示するログレベルを指定する(Default:INFO)\r\n    -OFFLOG    WARNINGを表示する\r\nParameter\r\n    mucFile\r\n        mucファイルを指定してください。\r\n        拡張子を省略すると.mucが補完されます。\r\n
 
 ;compiler.cs 0700
 E0700=１パート辺りに使用できるバッファ(65535byte)を超えました。(該当チャンネル使用バッファ: Ch.{0}: {1}byte)

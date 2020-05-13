@@ -2,7 +2,7 @@
 元ネタ: MUSIC LALF MMLコマンドメモ
 
 
-■ .vgm/.xgmファイル作成手順
+■ .vgm/.xgm/.zgmファイル作成手順
 
   1. 元になるMMLファイルを作成する。
    (1) mml2vgmでは拡張子を便宜上.gwiとする。(以下MMLファイルのことを.gwiと略す。)
@@ -18,11 +18,17 @@
   (コンパイル対象のファイルを指定する)
   vgz変換が可能。(vgmのみ)
   
+  2-C. mml2vgmIDE.exeを使用する場合
+  エクスプローラーなどから、mml2vgmIDE.exeを実行する。
+  mml統合環境を提供する。内蔵しているテキストエディタで.gwiを編集可能。
+  プレイヤも内蔵している為、テストプレイも可能。
+  
   3. コンパイルが実行され、エラーやワーニング、例外が表示される。
   又は、エラー無く無事に.vgmファイルが.gwiと同じフォルダーに生成される。
   (曲情報定義でxgmを指定すれば.xgmファイルが生成される。)
   
-  4. 手頃なvgm/xgmプレイヤーで試聴する。修正が必要であれば1から繰り返す。
+  4. 手頃なvgm/xgm/zgmプレイヤーで試聴する。IDEの場合はF5キーを押すことで再生する。
+  修正が必要であれば1から繰り返す。
   
   5. 完成！悦に入る。
   xgmの場合はこの後SGDK使って、レッツメガドライブプログラミング!
@@ -58,7 +64,7 @@
   (2) 音色定義部
     ・FM音源向け、PCM音源、波形メモリ音源向けの音色を定義する。PSG音源は除く。
     ・FM音源の音色定義は例外的に定義行が複数行要り、決められた順序で定義が必要。
-        例)
+       例)
 ebass3(from MUSIC LALF @70)
 '@ F 070
    AR  DR  SR  RR  SL  TL  KS  ML  DT
@@ -78,6 +84,22 @@ ebass3(from MUSIC LALF @70)
            ・8KHzがo4c(オクターブ4のドの音)として再生される。
            ・4byte毎にPaddingされる。
            ・合計256Kbyteまで定義可能。
+         YM2609 ADPCM1/2/3
+           ・PCMは16bit,mono,圧縮なし,signedのwavファイルであること。
+               mml2vgmは内部でADPCMに変換する。
+           ・8bitも読み込めるが16bitに変換される。
+           ・8KHzがo4c(オクターブ4のドの音)として再生される。
+           ・4byte毎にPaddingされる。(ADPCM1)
+           ・256byte毎にPaddingされる。(ADPCM2/3)
+           ・合計256Kbyteまで定義可能。(ADPCM1)
+           ・それぞれ合計16Mbyteまで定義可能。(ADPCM2/3)
+         YM2609B ADPCM-A
+           ・PCMは18.5KHz,16bit,mono,圧縮なし,signedのwavファイルであること。
+               mml2vgmは内部でADPCMに変換する。
+           ・8bitも読み込めるが16bitに変換される。
+           ・18.5KHz固定で再生される。
+           ・256byte毎にPaddingされる。
+           ・合計16Mbyteまで定義可能。(ADPCM1/2/3とは別)
          YM2610B ADPCM-A
            ・PCMは18.5KHz,16bit,mono,圧縮なし,signedのwavファイルであること。
                mml2vgmは内部でADPCMに変換する。
@@ -130,6 +152,17 @@ ebass3(from MUSIC LALF @70)
            ・バンクに収まらない場合は次のバンクに格納し、収まらなかったバンクの方はPaddingされる。
            ・PCM全体のデータサイズが0x100000未満はSYSTEM2、それ以上はSYSTEM21として定義される。(219ASICは未対応)
            ・合計最大0x200000byteまで定義可能。
+         QSound
+           ・PCMは 8bit,mono,圧縮なし,unsignedのwavファイルであること。
+               mml2vgmは内部で8bitPCMとして扱われる。
+           ・一つのサンプルは最大65536byteまで。それ以上はカットされる。
+           ・バンクに収まらない場合は次のバンクに格納し、収まらなかったバンクの方はPaddingされる。
+         K053260
+           ・PCMは 8bit,mono,圧縮なし,unsignedのwavファイルであること。
+               mml2vgmは内部で8bitPCMとして扱われる。
+           ・一つのサンプルは最大65536byteまで。それ以上はカットされる。
+           ・バンクに収まらない場合は次のバンクに格納し、収まらなかったバンクの方はPaddingされる。
+           ・DPCM未対応
 
     ・波形メモリ音源の音色定義について
          HuC6280,K051649は例外的に定義行が複数行の定義も可能。(1行も可能)
@@ -166,7 +199,7 @@ ebass3(from MUSIC LALF @70)
           二文字目(27文字)
             (無) a b c d e f g h i j k l m n o p q r s t u v w x y z
           26 x 27 = 702種類指定可能
-          例
+          例)
             「A」、「B」、「Ac」、「Bz」等々
         
         チャンネル番号
@@ -175,11 +208,11 @@ ebass3(from MUSIC LALF @70)
           10チャンネル未満の音源は1文字、それ以上持つ音源の場合は2文字で指定することが必須である。
           また、チャンネルは1から開始される。(0チャンネルの指定はできない)
           99チャンネル分指定可能
-          例
+          例)
             「1」、「2」、「01」、「03」、「15」、「99」等々
         
         「,」でパート名を列挙することも可能。
-          例
+          例)
             「F1,A2,Aa4,C24」
         10チャンネル未満の音源で「F12」などと指定すると「F1」と「F2」を指定することができる。
         10チャンネル以上の音源で「F12」とすると「F12」を指定することを意味する。
@@ -195,31 +228,34 @@ ebass3(from MUSIC LALF @70)
     ・書式
     「'+ "ファイル名"」
       ファイル名
-        インクルード(取り込む)するファイル名を指定します。
-        フルパスで指定します。
-        ファイル名のみの場合は.gwiファイルと同じ場所のファイルを指定したことになります。
+        インクルード(取り込む)するファイル名を指定。
+        フルパスで指定する。
+        ファイル名のみの場合は.gwiファイルと同じ場所のファイルを指定したことになる。
         
 
 ■ 使用可能な音源
   名称      略称   初期周波数(Hz)  使用可能チャンネル数
   CONDUCTOR CON                 -   2Ch(mml2vgm動作指示向け特殊音源)
-  YM2612    OPN2          7670454   9Ch(FM   : 6Ch  FMex: 3Ch  |  FM:5Ch FMex:3Ch PCM:1Ch)
-  YM2612X   OPN2X         7670454  12Ch(FM   : 6Ch  FMex: 3Ch  |  FM:5Ch FMex:3Ch PCM:4Ch)
-  SN76489   DCSG          3579545   4Ch(PSG  : 4Ch)
-  RF5C164   RF5C         12500000   8Ch(PCM  : 8Ch)
-  YM2203    OPN           3993600   9Ch(FM   : 3Ch  FMex: 3Ch  SSG : 3Ch)
-  YM2608    OPNA          7987200  19Ch(FM   : 6Ch  FMex: 3Ch  SSG : 3Ch  Rhythm : 6Ch  ADPCM  : 1Ch)
-  YM2610B   OPNB          8000000  19Ch(FM   : 6Ch  FMex: 3Ch  SSG : 3Ch  ADPCM-A: 6Ch  ADPCM-B: 1Ch)
-  YM2151    OPM           3579545   8Ch(FM   : 8Ch)
-  SegaPCM   SPCM          4000000  16Ch(PCM  :16Ch)
-  HuC6280   HuC8          3579545   6Ch(WF   : 6Ch)
-  K051649   SCC           1789772   5Ch(WF   : 5Ch)
-  C140      C140            21390  24Ch(PCM  :24Ch)
-  AY8910    AY10          1789750   3Ch(PSG  : 3Ch)
-  YM2413    OPLL          3579545  14Ch(FM   : 9Ch  Rhythm:5Ch)
-  PWM       PWM          23011361   2Ch(PCM  : 2Ch)(T.B.D.)
-  OKIM6258  OKI5          4000000   1Ch(ADPCM: 1Ch)(T.B.D.)
-  OKIM6295  OKI9          8000000   4Ch(ADPCM: 4Ch)(T.B.D.)
+  YM2612    OPN2          7670454   9Ch(FM   :  6Ch  FMex: 3Ch  |  FM:5Ch FMex:3Ch PCM:1Ch)
+  YM2612X   OPN2X         7670454  24Ch(FM   :  6Ch  FMex: 3Ch  |  FM:5Ch FMex:3Ch PCM:4Ch PCM(overlay):12Ch)
+  SN76489   DCSG          3579545   4Ch(PSG  :  4Ch)
+  RF5C164   RF5C         12500000   8Ch(PCM  :  8Ch)
+  YM2203    OPN           3993600   9Ch(FM   :  3Ch  FMex: 3Ch  SSG :  3Ch)
+  YM2608    OPNA          7987200  19Ch(FM   :  6Ch  FMex: 3Ch  SSG :  3Ch  Rhythm : 6Ch  ADPCM  : 1Ch)
+  YM2609    OPNA2         7987200  45Ch(FM   : 12Ch  FMex: 6Ch  SSG : 12Ch  Rhythm : 6Ch  ADPCM1/2/3 : 3Ch  ADPCM-A : 6Ch)
+  YM2610B   OPNB          8000000  19Ch(FM   :  6Ch  FMex: 3Ch  SSG :  3Ch  ADPCM-A: 6Ch  ADPCM-B: 1Ch)
+  YM2151    OPM           3579545   8Ch(FM   :  8Ch)
+  SegaPCM   SPCM          4000000  16Ch(PCM  : 16Ch)
+  HuC6280   HuC8          3579545   6Ch(WF   :  6Ch)
+  K051649   SCC           1789772   5Ch(WF   :  5Ch)
+  C140      C140            21390  24Ch(PCM  : 24Ch)
+  AY8910    AY10          1789750   3Ch(PSG  :  3Ch)
+  YM2413    OPLL          3579545  14Ch(FM   :  9Ch  Rhythm:5Ch)
+  QSound    QSnd          4000000  16Ch(PCM  : 16Ch)
+  K053260   K53           3579545   4Ch(PCM  :  4Ch  |  DPCM:4Ch)
+  PWM       PWM          23011361   2Ch(PCM  :  2Ch)(T.B.D.)
+  OKIM6258  OKI5          4000000   1Ch(ADPCM:  1Ch)(T.B.D.)
+  OKIM6295  OKI9          8000000   4Ch(ADPCM:  4Ch)(T.B.D.)
 
 
 ■ パート割り(初期値)
@@ -239,13 +275,25 @@ ebass3(from MUSIC LALF @70)
   E03    YM2612(FM音源)(XGM Only)        CH3/CH3Ex0
   E04    YM2612(FM音源)(XGM Only)        CH4
   E05    YM2612(FM音源)(XGM Only)        CH5
-  E06    YM2612(FM音源)(XGM Only)        CH6/CH6PCM0
+  E06    YM2612(FM音源)(XGM Only)        CH6/CH6PCM0(pcm ch1)
   E07    YM2612(FM音源)(XGM Only)        CH3Ex1
   E08    YM2612(FM音源)(XGM Only)        CH3Ex2
   E09    YM2612(FM音源)(XGM Only)        CH3Ex3
-  E10    YM2612(FM音源)(XGM Only)        CH6PCM1
-  E11    YM2612(FM音源)(XGM Only)        CH6PCM2
-  E12    YM2612(FM音源)(XGM Only)        CH6PCM3
+  E10    YM2612(FM音源)(XGM Only)        CH6PCM1(pcm ch2)
+  E11    YM2612(FM音源)(XGM Only)        CH6PCM2(pcm ch3)
+  E12    YM2612(FM音源)(XGM Only)        CH6PCM3(pcm ch4)
+  E13    YM2612(FM音源)(XGM Only)        CH6PCM4(pcm overlay ch1)
+  E14    YM2612(FM音源)(XGM Only)        CH6PCM5(pcm overlay ch2)
+  E15    YM2612(FM音源)(XGM Only)        CH6PCM6(pcm overlay ch3)
+  E16    YM2612(FM音源)(XGM Only)        CH6PCM7(pcm overlay ch4)
+  E17    YM2612(FM音源)(XGM Only)        CH6PCM8(pcm overlay ch1)
+  E18    YM2612(FM音源)(XGM Only)        CH6PCM9(pcm overlay ch2)
+  E19    YM2612(FM音源)(XGM Only)        CH6PCM10(pcm overlay ch3)
+  E20    YM2612(FM音源)(XGM Only)        CH6PCM11(pcm overlay ch4)
+  E21    YM2612(FM音源)(XGM Only)        CH6PCM12(pcm overlay ch1)
+  E22    YM2612(FM音源)(XGM Only)        CH6PCM13(pcm overlay ch2)
+  E23    YM2612(FM音源)(XGM Only)        CH6PCM14(pcm overlay ch3)
+  E24    YM2612(FM音源)(XGM Only)        CH6PCM15(pcm overlay ch4)
   S1     SN76489(SSG音源)(Primary/XGM)   CH1
   S2     SN76489(SSG音源)(Primary/XGM)   CH2
   S3     SN76489(SSG音源)(Primary/XGM)   CH3
@@ -296,6 +344,51 @@ ebass3(from MUSIC LALF @70)
   P17    YM2608(RHYTHM音源)(Primary)     CH5
   P18    YM2608(RHYTHM音源)(Primary)     CH6
   P19    YM2608(ADPCM音源)(Primary)      CH1
+  U01    YM2609(FM音源)(Primary)         CH1
+  U02    YM2609(FM音源)(Primary)         CH2
+  U03    YM2609(FM音源)(Primary)         CH3/CH3Ex0
+  U04    YM2609(FM音源)(Primary)         CH4
+  U05    YM2609(FM音源)(Primary)         CH5
+  U06    YM2609(FM音源)(Primary)         CH6
+  U07    YM2609(FM音源)(Primary)         CH7
+  U08    YM2609(FM音源)(Primary)         CH8
+  U09    YM2609(FM音源)(Primary)         CH9/CH3Ex0
+  U10    YM2609(FM音源)(Primary)         CH10
+  U11    YM2609(FM音源)(Primary)         CH11
+  U12    YM2609(FM音源)(Primary)         CH12
+  U13    YM2609(FM音源)(Primary)         CH3Ex1
+  U14    YM2609(FM音源)(Primary)         CH3Ex2
+  U15    YM2609(FM音源)(Primary)         CH3Ex3
+  U16    YM2609(FM音源)(Primary)         CH9Ex1
+  U17    YM2609(FM音源)(Primary)         CH9Ex2
+  U18    YM2609(FM音源)(Primary)         CH9Ex3
+  U19    YM2609(SSG1音源)(Primary)       CH1
+  U20    YM2609(SSG1音源)(Primary)       CH2
+  U21    YM2609(SSG1音源)(Primary)       CH3
+  U22    YM2609(SSG2音源)(Primary)       CH1
+  U23    YM2609(SSG2音源)(Primary)       CH2
+  U24    YM2609(SSG2音源)(Primary)       CH3
+  U25    YM2609(SSG3音源)(Primary)       CH1
+  U26    YM2609(SSG3音源)(Primary)       CH2
+  U27    YM2609(SSG3音源)(Primary)       CH3
+  U28    YM2609(SSG4音源)(Primary)       CH1
+  U29    YM2609(SSG4音源)(Primary)       CH2
+  U30    YM2609(SSG4音源)(Primary)       CH3
+  U31    YM2609(RHYTHM音源)(Primary)     CH1
+  U32    YM2609(RHYTHM音源)(Primary)     CH2
+  U33    YM2609(RHYTHM音源)(Primary)     CH3
+  U34    YM2609(RHYTHM音源)(Primary)     CH4
+  U35    YM2609(RHYTHM音源)(Primary)     CH5
+  U36    YM2609(RHYTHM音源)(Primary)     CH6
+  U37    YM2609(ADPCM1音源)(Primary)     CH1
+  U38    YM2609(ADPCM2音源)(Primary)     CH1
+  U39    YM2609(ADPCM3音源)(Primary)     CH1
+  U40    YM2609(ADPCMA音源)(Primary)     CH1
+  U41    YM2609(ADPCMA音源)(Primary)     CH2
+  U42    YM2609(ADPCMA音源)(Primary)     CH3
+  U43    YM2609(ADPCMA音源)(Primary)     CH4
+  U44    YM2609(ADPCMA音源)(Primary)     CH5
+  U45    YM2609(ADPCMA音源)(Primary)     CH6
   N1     YM2203(FM音源)(Primary)         CH1
   N2     YM2203(FM音源)(Primary)         CH2
   N3     YM2203(FM音源)(Primary)         CH3/CH3Ex0
@@ -381,6 +474,26 @@ ebass3(from MUSIC LALF @70)
   K3     K051649(WF音源)(Primary)        CH3
   K4     K051649(WF音源)(Primary)        CH4
   K5     K051649(WF音源)(Primary)        CH5
+  Q01    QSound(PCM音源)(Primary)        CH1
+  Q02    QSound(PCM音源)(Primary)        CH2
+  Q03    QSound(PCM音源)(Primary)        CH3
+  Q04    QSound(PCM音源)(Primary)        CH4
+  Q05    QSound(PCM音源)(Primary)        CH5
+  Q06    QSound(PCM音源)(Primary)        CH6
+  Q07    QSound(PCM音源)(Primary)        CH7
+  Q08    QSound(PCM音源)(Primary)        CH8
+  Q09    QSound(PCM音源)(Primary)        CH9
+  Q10    QSound(PCM音源)(Primary)        CH10
+  Q11    QSound(PCM音源)(Primary)        CH11
+  Q12    QSound(PCM音源)(Primary)        CH12
+  Q13    QSound(PCM音源)(Primary)        CH13
+  Q14    QSound(PCM音源)(Primary)        CH14
+  Q15    QSound(PCM音源)(Primary)        CH15
+  Q16    QSound(PCM音源)(Primary)        CH16
+  O1     K053260(PCM音源)(Primary)       CH1
+  O2     K053260(PCM音源)(Primary)       CH2
+  O3     K053260(PCM音源)(Primary)       CH3
+  O4     K053260(PCM音源)(Primary)       CH4
 
   Fs1    YM2612(FM音源)(Secondary)       CH1
   Fs2    YM2612(FM音源)(Secondary)       CH2
@@ -526,9 +639,13 @@ ebass3(from MUSIC LALF @70)
   Ks3    K051649(WF音源)(Secondary)      CH3
   Ks4    K051649(WF音源)(Secondary)      CH4
   Ks5    K051649(WF音源)(Secondary)      CH5
+  Os1    K053260(PCM音源)(Secondary)     CH1
+  Os2    K053260(PCM音源)(Secondary)     CH2
+  Os3    K053260(PCM音源)(Secondary)     CH3
+  Os4    K053260(PCM音源)(Secondary)     CH4
 
   -----------
-  計 300Ch
+  計 345Ch over
 
 
 ■ MML内部
@@ -538,7 +655,7 @@ ebass3(from MUSIC LALF @70)
      $を付けると16進数と認識し、つづく2文字を1byteの数値として認識する。必ず2文字、0～Fで記述すること。
      数値は-2147483648 ～ 2147483647まで認識するが
      実際に機能として成り立つかはコマンドやチャンネルによる。
- ・コマンド中のxは文字を表す。xxxは複数文字を表す(改行や区切り文字までを認識する、多分。)。
+ ・コマンド中のxは文字を表す。xxxは複数文字を表す(改行や区切り文字までを認識する)。
  ・nやxの後の数字は何個目のn(或いはx)かを示している。
 
 
@@ -553,13 +670,13 @@ ebass3(from MUSIC LALF @70)
   Tf YM2610B(FM)
   Te YM2610B(FM3ChEx)
   Ts YM2610B(SSG)
-  Ta YM2610B(ADPCM-A)
+  Ta YM2610B/09(ADPCM-A)
   Tb YM2610B(ADPCM-B)
-  Pf YM2608(FM)
-  Pe YM2608(FM3ChEx)
-  Ps YM2608(SSG)
-  Pr YM2608(RHYTHM)
-  Pp YM2608(ADPCM)
+  Pf YM2608/09(FM)
+  Pe YM2608/09(FM3ChEx)
+  Ps YM2608/09(SSG)
+  Pr YM2608/09(RHYTHM)
+  Pp YM2608/09(ADPCM)
   Nf YM2203(FM)
   Ne YM2203(FM3ChEx)
   Ns YM2203(SSG)
@@ -571,191 +688,238 @@ ebass3(from MUSIC LALF @70)
   Lf YM2413(FM)
   Lr YM2413(RHYTHM)
   K  K051649
+  Q  QSound
+  K3 K053260
   
   o 対応
   - 非対応
   * 未実装
 
-コマンド        CFFFESRTTTTTPPPPPNNNXZHYALLK  内容
-                ofepp  fesabfesrpfes     fr     
+コマンド        CFFFESRTTTTTPPPPPNNNXZHYALLKQK  内容
+                ofepp  fesabfesrpfes     fr  3   
 ----------------------------------------------------
-@n              -oooo-ooo-oooo--ooo-oooo-o-o  音色番号指定(0 - 255)
-@In             -------------------------o--  プリセット音色番号指定(1 - 15)
-@n              -----o---o----oo---o----o-o-  エンベロープ番号指定(0 - 255)
-@En             ------o---oo---oo----oooo-oo  エンベロープ番号指定(0 - 255)
-@Tn             -oo----oo---oo---oo-o-------  Tone Doubler番号指定(0 - 255)
-@Nn             -oo----oo---oo---oo-o-------  FMの音色を設定直前、何もしない(Default)
-@Rn             -oo----oo---oo---oo-o-------  FMの音色を設定直前、消音の為にRR(ReleaseRate)に15をセットする
-@An             -oo----oo---oo---oo-o-------  FMの音色を設定直前、消音の為の特別な音色をセットする
-                                              ※@N,@R,@Aコマンドは、FM音色切り替え時のノイズ発生や
-                                              エンベロープ再現不良を抑えるために用意した機能。
-                                              実際のチップによる演奏の場合を想定していて、
-                                              エミュレーションによる演奏の場合は効果が薄い。
-ln              oooooooooooooooooooooooooooo  デフォルト音長指定
-l#n             oooooooooooooooooooooooooooo  デフォルト音長指定(クロック値指定)
-on              -ooo-ooooo-oooo-ooooo-o-oo-o  オクターブ絶対指定(1 - 8)(実際に発音される音は可能な音域のみ)
-on              ---o------------------------  オクターブ絶対指定(3 - 5)(実際に発音される音は可能な音域のみ)
-on              ---------------------o-o----  オクターブ絶対指定(2 - 5)(実際に発音される音は可能な音域のみ)
-Dn              -ooo-ooooo-oooo-oooooooooo-o  ディチューン (範囲未チェック)絶対指定のみ
-vn              -oo----oo---oo---oo-oo-o----  音量絶対指定(Y/E/Tf/Te/Pf/Pe/Nf/Ne/Z/Y: 0 - 127)
-vn              -----o---o----o----o--o-oooo  音量絶対指定(S/Ts/Ps/H/Ns/Lf/Lr/K: 0 - 15)
-vn              ------o----o----o-----------  音量絶対指定(R/Tb/Pp: 0 - 255)
-vn              ----------o----o------------  音量絶対指定(Ta/Pr: 0-31)
-Vn              ----------o----o------------  ADPCM-A/RHYTHM全体の音量絶対指定(0-63)
-Vn1,n2          ----------------------o-----  マスターボリュームの音量絶対指定(n1: 左 0 - 15  n2: 右 0 - 15 )
->               -ooo-ooooo-oooo-oooooooooo-o  オクターブ相対指定(上げ)
-<               -ooo-ooooo-oooo-oooooooooo-o  オクターブ相対指定(下げ)
-)n              -oo----oo---oo---oo-oo-o----  音量相対指定(上げ)(Y/E/Tf/Te/Pf/Pe/Nf/Ne/Z/Y: 0 - 127)
-)n              -----o---o----o----o--o-oooo  音量相対指定(上げ)(S/Ts/Ps/Ns/H/Lf/Lr/K: 0 - 15)
-)n              ------o----o----o-----------  音量相対指定(上げ)(R/Tb/Pp: 0 - 255)
-)n              ----------o----o------------  音量相対指定(上げ)(Ta/Pr: 0-31)
-(n              -oo----oo---oo---oo-oo-o----  音量相対指定(下げ)(Y/E/Tf/Te/Pf/Pe/Nf/Ne/Z/Y: 0 - 127)
-(n              -----o---o----o----o--o-oooo  音量相対指定(下げ)(S/Ts/Ps/Ns/Lf/Lr/K: 0 - 15)
-(n              ------o----o----o-----------  音量相対指定(下げ)(R/Tb/Pp: 0 - 255)
-(n              ----------o----o------------  音量相対指定(下げ)(Ta/Pr: 0-31)
-&               oooooooooooooooooooooooooooo  タイ(但し、音符の装飾扱いなので音符の直後に指定する必要あり)
-yn1,n2          -ooo-ooooooooooooooooooooooo  レジスタ直接書き込み(n1=レジスタ番号 n2=データ)ポートはそのChによる。
-yDTML,n1,n2     -ooo---oo---oo---oo---------  DT,MLレジスタ直接書き込み(n1=OP(1 - 4) n2=データ)ポートはそのChによる。
-yTL,n1,n2       -ooo---oo---oo---oo---------  TLレジスタ直接書き込み(n1=OP(1 - 4) n2=データ)ポートはそのChによる。
-yKSAR,n1,n2     -ooo---oo---oo---oo---------  KS,ARレジスタ直接書き込み(n1=OP(1 - 4) n2=データ)ポートはそのChによる。
-yAMDR,n1,n2     -ooo---oo---oo---oo---------  AM,DRレジスタ直接書き込み(n1=OP(1 - 4) n2=データ)ポートはそのChによる。
-ySR,n1,n2       -ooo---oo---oo---oo---------  SRレジスタ直接書き込み(n1=OP(1 - 4) n2=データ)ポートはそのChによる。
-ySLRR,n1,n2     -ooo---oo---oo---oo---------  SL,RRレジスタ直接書き込み(n1=OP(1 - 4) n2=データ)ポートはそのChによる。
-ySSG,n1,n2      -ooo---oo---oo---oo---------  SSG-EGレジスタ直接書き込み(n1=OP(1 - 4) n2=データ)ポートはそのChによる。
-yFBAL,n1        -ooo---oo---oo---oo---------  FB,ALレジスタ直接書き込み(n1=データ)ポートはそのChによる。
-yPANFBAL,n1     --------------------o-------  PAN,FB,ALレジスタ直接書き込み(n1=データ)ポートはそのChによる。
-yPANFLCON,n1    --------------------o-------  同上
-yPMSAMS,n1      --------------------o-------  PMS,AMSレジスタ直接書き込み(n1=データ)ポートはそのChによる。
-yDTML,n1,n2     --------------------o-------  DT1,MLレジスタ直接書き込み(n1=OP(1 - 4) n2=データ)ポートはそのChによる。
-yDTMUL,n1,n2    --------------------o-------  同上
-yDT1ML,n1,n2    --------------------o-------  同上
-yDT1MUL,n1,n2   --------------------o-------  同上
-yTL,n1,n2       --------------------o-------  TLレジスタ直接書き込み(n1=OP(1 - 4) n2=データ)ポートはそのChによる。
-yKSAR,n1,n2     --------------------o-------  KS,ARレジスタ直接書き込み(n1=OP(1 - 4) n2=データ)ポートはそのChによる。
-yAMDR,n1,n2     --------------------o-------  AM,DRレジスタ直接書き込み(n1=OP(1 - 4) n2=データ)ポートはそのChによる。
-yAMED1R,n1,n2   --------------------o-------  同上
-yDT2SR,n1,n2    --------------------o-------  DT2,SRレジスタ直接書き込み(n1=OP(1 - 4) n2=データ)ポートはそのChによる。
-yDT2D2R,n1,n2   --------------------o-------  同上
-ySLRR,n1,n2     --------------------o-------  SL,RRレジスタ直接書き込み(n1=OP(1 - 4) n2=データ)ポートはそのChによる。
-yD1LRR,n1,n2    --------------------o-------  同上
-Mx1x2n,...      -oo--ooooooooooooooooooooooo  LFO(
-                                               x1:P/Q/R/S          識別子(1パート当たり4種類定義、使用できる)
-                                               x2:T/V/H            T:音量
-                                                                   V:音程(Ta/Pr不可)
-                                                                   H:ハードウェアLFO
-                                               n...:パラメーター   
-                                              )基本的にはFMPと同じで以下の書式。
-                                                Delay,Speed,Delta,Depth,Type,Sw,Trans
-                                              Type2(矩形波)のみ以下の書式になる。
-                                              Val1とVal2は最大値と最小値(逆の並びも可)でVal1,Val2と交互に切り替わる。
-                                                Delay,Speed,Val1 ,Val2 ,Type,Sw,Trans
-                                              ハードウェアLFO
-                                                ハードウェアLFOはSコマンドによる制御必須。
-                                                (Sコマンドによってパラメータが送信されるため)
-                                                OPN系(YM2203除く)
-                                                        : Mx1Hn1,n2,n3,n4
-                                                            n1:Delay(無視されます)TBD
-                                                            n2:Freq(0 - 7)
-                                                            n3:PMS(0 - 7)
-                                                            n4:AMS(0 - 3)
-                                                            n5:Switch(0必須)TBD
-                                                OPM     : Mx1Hn1,n2,n3,n4,n5
-                                                            n1:LFO波形(0 - 3)
-                                                            n2:LFRQ(0 - 255)
-                                                            n3:PMD(0 - 127)
-                                                            n4:AMD(0 - 127)
-                                                            n5:LFO RESET(SYNC)(0 - 1)
-                                                HuC6280 : Mx1Hn1,n2,n3
-                                                            n1:Control(n= 0(Disable),1-3(Ch2波形加算))
-                                                            n2:Freq(n= 0-255)
-                                                            n3:Ch2Freq(n= 0-4095)
-MAMSn           -oo----oo---oo---oo---------  AMS値 音量LFO感度(0-7)
-MAMSn           --------------------o-------  AMS値 音量LFO感度(0-3)
-MPMSn           -oo----oo---oo---oo---------  PMS値 音程LFO感度(0-3)
-MPMSn           --------------------o-------  PMS値 音程LFO感度(0-7)
-Sx1n            -oo--ooooooooooooooooooooooo  LFOスイッチ(x1: P/Q/R/S  n: 0(OFF)/1(ON))
-rn              oooooooooooooooooooooooooooo  休符
-"xxx"n          oooooooooooooooooooooooooooo  歌詞
-[               oooooooooooooooooooooooooooo  ループ開始位置
-]n              oooooooooooooooooooooooooooo  ループ終了位置
-{               oooooooooooooooooooooooooooo  連符開始位置
-}               oooooooooooooooooooooooooooo  連符終了位置
-/               oooooooooooooooooooooooooooo  ループ脱出位置指定
-EON             -----oo--ooo--ooo--o-oooo-oo  エンベロープの開始
-EOF             -----oo--ooo--ooo--o-oooo-oo  エンベロープの停止
-EHON            ---------o----o----o----o---  ハードウェアエンベロープの開始
-EHOF            ---------o----o----o----o---  ハードウェアエンベロープの停止
-EHTn            ---------o----o----o----o---  ハードウェアエンベロープタイプ
-EHn             ---------o----o----o----o---  ハードウェアエンベロープ周波数
-EXON            -oo----oo---oo---oo---------  効果音モードの開始
-EXOF            -oo----oo---oo---oo---------  効果音モードの停止
-EXn             -oo----oo---oo---oo---------  効果音モードのスロット割り当て(使用するスロットを列挙する)
-EXDn1,n2,n3,n4  -oo----oo---oo---oo---------  効果音モードのスロットディチューン。
-                -                               n1～n4はそれぞれOP1～OP4までのディチューン値。
-L               oooooooooooooooooooooooooooo  曲全体のループ位置指定(曲者です)
-J               oooooooooooooooooooooooooooo  指定した位置まで演奏をスキップする。複数指定した場合は最後のJが有効になる
-qn              -ooo-ooooooooooooooooooooooo  ゲートタイム指定(クロック数で指定。音長分のクロック数からn引いた分が
-                                              発音する長さになる。)
-Qn              -ooo-ooooooooooooooooooooooo  ゲートタイム割合指定(1 - 8)
-wn              -----o----------------------  ノイズモード指定(0 - 7)
-wn              ---------o----o----oo-o-o---  ノイズ周波数
-Pn              ---------o----o----o----o---  1:トーン 2:ノイズ 3:トーン＆ノイズ
-Pn              --------------------o-o-----  ノイズ 0:OFF 1:ON
-mn              -oooo-----------------------  YM2612PCMモード指定(0: 停止  1: 開始) 6Ch only
-mn              ----------------------o-----  HuC6280PCMモード指定(0: 停止  1: 開始)チャンネルごとに指定
-mn              -------------------------oo-  YM2413Rhythmモード指定(0: 停止  1: 開始)
-Tn              oooooooooooooooooooooooooooo  テンポ(1 - 1200)
-!               oooooooooooooooooooooooooooo  このパートのこれ以降をコンパイルしない(発音しない)
-Kn              -ooo-ooooo-oooo-oooooooooo-o  移調絶対指定 ( -12 - +12 )
-An              ------o--------------o-o----  PCMの再生開始位置を停止方向へnbyteずらす。
-                                              (最小：再生開始位置　最大：停止位置-1byte)
-A+n             ------o--------------o-o----  Aの相対指定版。開始位置を停止方向へ現在の値からnbyteずらす。
-A-n             ------o--------------o-o----  Aの相対指定版。開始位置を再生方向へ現在の値からnbyteずらす。
-#n(廃止)        ----------------------------  音長をクロック値で指定(lコマンドの後に#でクロック指定してください)
-pn              -o-oo--o--ooo--ooo--o-------  パン (0: 発音しない  1: 右  2: 左  3: 中央)
-pn1,n2          ------o---------------o-----  パン (n1: 左 0 - 15  n2: 右 0 - 15 )
-pn1,n2          ---------------------o-o----  パン (n1: 左 0 - 127 n2: 右 0 - 127)
-so              -------------------------oo-  サスティンON
-sf              -------------------------oo-  サスティンOFF
-%xxx            oooooooooooooooooooooooooooo  エイリアス展開
+@n              -oooo-ooo-oooo--ooo-oooo-o-ooo  音色番号指定(0 - 255)
+@n              ---oo-----o-----------o-------  PCM Map番号指定(0 - 255)(PCMマッピングモードが有効の時のみ)
+@In             -------------------------o----  プリセット音色番号指定(1 - 15)
+@n              -----o---o----oo---o----o-o---  エンベロープ番号指定(0 - 255)
+@En             ------o---oo---oo----oooo-oooo  エンベロープ番号指定(0 - 255)
+@Tn             -oo----oo---oo---oo-o---------  Tone Doubler番号指定(0 - 255)
+@Nn             -oo----oo---oo---oo-o---------  FMの音色を設定直前、何もしない(Default)
+@Rn             -oo----oo---oo---oo-o---------  FMの音色を設定直前、消音の為にRR(ReleaseRate)に15をセットする
+@An             -oo----oo---oo---oo-o---------  FMの音色を設定直前、消音の為の特別な音色をセットする
+                                                ※@N,@R,@Aコマンドは、FM音色切り替え時のノイズ発生や
+                                                エンベロープ再現不良を抑えるために用意した機能。
+                                                実際のチップによる演奏の場合を想定していて、
+                                                エミュレーションによる演奏の場合は効果が薄い。
+ln              oooooooooooooooooooooooooooooo  デフォルト音長指定
+l#n             oooooooooooooooooooooooooooooo  デフォルト音長指定(クロック値指定)
+on              -ooo-ooooo-oooo-ooooo-o-oo-ooo  オクターブ絶対指定(1 - 8)(実際に発音される音は可能な音域のみ)
+on              ---o--------------------------  オクターブ絶対指定(3 - 5)(実際に発音される音は可能な音域のみ)
+on              ---------------------o-o------  オクターブ絶対指定(2 - 5)(実際に発音される音は可能な音域のみ)
+Dn              -ooo-ooooo-oooo-oooooooooo-ooo  ディチューン (範囲未チェック)絶対指定のみ
+vn              -oo----oo---oo---oo-oo-o-----o  音量絶対指定(Y/E/Tf/Te/Pf/Pe/Nf/Ne/Z/Y/K3: 0 - 127)
+vn              -----o---o----o----o----oooo--  音量絶対指定(S/Ts/Ps/Ns/Lf/Lr/K: 0 - 15)
+vn              ------o----o----o-------------  音量絶対指定(R/Tb/Pp: 0 - 255)
+vn              ----------o----o------o-------  音量絶対指定(Ta/Pr/H: 0-31)
+vn              ----------------------------o-  音量絶対指定(Q: 0-65535)
+Vn              ----------o----o--------------  ADPCM-A/RHYTHM全体の音量絶対指定(0-63)
+Vn1,n2          ----------------------o-------  マスターボリュームの音量絶対指定(n1: 左 0 - 15  n2: 右 0 - 15 )
+>               -ooo-ooooo-oooo-oooooooooo-ooo  オクターブ相対指定(上げ)
+<               -ooo-ooooo-oooo-oooooooooo-ooo  オクターブ相対指定(下げ)
+)n              -oo----oo---oo---oo-oo-o-----o  音量相対指定(上げ)(Y/E/Tf/Te/Pf/Pe/Nf/Ne/Z/Y/K3: 0 - 127)
+)n              -----o---o----o----o--o-oooo--  音量相対指定(上げ)(S/Ts/Ps/Ns/H/Lf/Lr/K: 0 - 15)
+)n              ------o----o----o-------------  音量相対指定(上げ)(R/Tb/Pp: 0 - 255)
+)n              ----------o----o--------------  音量相対指定(上げ)(Ta/Pr: 0-31)
+)n              ----------------------------o-  音量相対指定(上げ)(Q: 0-65535)
+(n              -oo----oo---oo---oo-oo-o-----o  音量相対指定(下げ)(Y/E/Tf/Te/Pf/Pe/Nf/Ne/Z/Y/K3: 0 - 127)
+(n              -----o---o----o----o--o-oooo--  音量相対指定(下げ)(S/Ts/Ps/Ns/Lf/Lr/K: 0 - 15)
+(n              ------o----o----o-------------  音量相対指定(下げ)(R/Tb/Pp: 0 - 255)
+(n              ----------o----o--------------  音量相対指定(下げ)(Ta/Pr: 0-31)
+(n              ----------------------------o-  音量相対指定(下げ)(Q: 0-65535)
+&               oooooooooooooooooooooooooooooo  タイ(但し、音符の装飾扱いなので音符の直後に指定する必要あり)
+yn1,n2          -ooo-ooooooooooooooooooooooooo  レジスタ直接書き込み(n1=レジスタ番号 n2=データ)ポートはそのChによる。
+yDTML,n1,n2     -ooo---oo---oo---oo-----------  DT,MLレジスタ直接書き込み(n1=OP(1 - 4) n2=データ)ポートはそのChによる。
+yTL,n1,n2       -ooo---oo---oo---oo-----------  TLレジスタ直接書き込み(n1=OP(1 - 4) n2=データ)ポートはそのChによる。
+yKSAR,n1,n2     -ooo---oo---oo---oo-----------  KS,ARレジスタ直接書き込み(n1=OP(1 - 4) n2=データ)ポートはそのChによる。
+yAMDR,n1,n2     -ooo---oo---oo---oo-----------  AM,DRレジスタ直接書き込み(n1=OP(1 - 4) n2=データ)ポートはそのChによる。
+ySR,n1,n2       -ooo---oo---oo---oo-----------  SRレジスタ直接書き込み(n1=OP(1 - 4) n2=データ)ポートはそのChによる。
+ySLRR,n1,n2     -ooo---oo---oo---oo-----------  SL,RRレジスタ直接書き込み(n1=OP(1 - 4) n2=データ)ポートはそのChによる。
+ySSG,n1,n2      -ooo---oo---oo---oo-----------  SSG-EGレジスタ直接書き込み(n1=OP(1 - 4) n2=データ)ポートはそのChによる。
+yFBAL,n1        -ooo---oo---oo---oo-----------  FB,ALレジスタ直接書き込み(n1=データ)ポートはそのChによる。
+yPANFBAL,n1     --------------------o---------  PAN,FB,ALレジスタ直接書き込み(n1=データ)ポートはそのChによる。
+yPANFLCON,n1    --------------------o---------  同上
+yPMSAMS,n1      --------------------o---------  PMS,AMSレジスタ直接書き込み(n1=データ)ポートはそのChによる。
+yDTML,n1,n2     --------------------o---------  DT1,MLレジスタ直接書き込み(n1=OP(1 - 4) n2=データ)ポートはそのChによる。
+yDTMUL,n1,n2    --------------------o---------  同上
+yDT1ML,n1,n2    --------------------o---------  同上
+yDT1MUL,n1,n2   --------------------o---------  同上
+yTL,n1,n2       --------------------o---------  TLレジスタ直接書き込み(n1=OP(1 - 4) n2=データ)ポートはそのChによる。
+yKSAR,n1,n2     --------------------o---------  KS,ARレジスタ直接書き込み(n1=OP(1 - 4) n2=データ)ポートはそのChによる。
+yAMDR,n1,n2     --------------------o---------  AM,DRレジスタ直接書き込み(n1=OP(1 - 4) n2=データ)ポートはそのChによる。
+yAMED1R,n1,n2   --------------------o---------  同上
+yDT2SR,n1,n2    --------------------o---------  DT2,SRレジスタ直接書き込み(n1=OP(1 - 4) n2=データ)ポートはそのChによる。
+yDT2D2R,n1,n2   --------------------o---------  同上
+ySLRR,n1,n2     --------------------o---------  SL,RRレジスタ直接書き込み(n1=OP(1 - 4) n2=データ)ポートはそのChによる。
+yD1LRR,n1,n2    --------------------o---------  同上
+Mx1x2n,...      -oo--ooooooooooooooooooooooooo  LFO(
+                                                 x1:P/Q/R/S          識別子(1パート当たり4種類定義、使用できる)
+                                                 x2:T/V/H            T:音量
+                                                                     V:音程(Ta/Pr不可)
+                                                                     H:ハードウェアLFO
+                                                 n...:パラメーター   
+                                                )基本的にはFMPと同じで以下の書式。
+                                                  Delay,Speed,Delta,Depth,Type,Sw,Trans,DepthSpeed,DepthDelta
+												範囲：
+											      Delay      0 ～ clock counter(必須)
+												  Speed      1 ～ 255(必須)
+                                                  Delta      -32768 ～ 32767(必須)
+                                                  Depth      0 ～ 32767(必須)
+                                                  Type       0/1/3/4(default:0)
+                                                  Sw         0 ～ 1(default:1)
+                                                  Trans      -32768 ～ 32767(default:0)
+                                                  DepthSpeed 0 ～ 255(default:0)
+                                                  DepthDelta -32768 ～ 32767(default:0)
+                                                Type2(矩形波)のみ以下の書式になる。
+                                                Val1とVal2は最大値と最小値(逆の並びも可)でVal1,Val2と交互に切り替わる。
+                                                  Delay,Speed,Val1 ,Val2 ,Type,Sw,Trans
+											    範囲：
+											      Delay      0 ～ clock counter(必須)
+												  Speed      1 ～ 255(必須)
+												  Val1       -32768 ～ 32767(必須)
+												  Val2       -32768 ～ 32767(必須)
+												  Type       2
+												  Sw         0 ～ 1(default:1)
+												  Trans      -32768 ～ 32767(default:0)
+                                                  DepthSpeed 0 ～ 255(default:0)
+                                                  DepthDelta -32768 ～ 32767(default:0)
+											    設定項目説明
+											      Delay      発音してからLFOの効果が開始されるまでの時間をクロック数で指定する。
+												  Speed      LFOの1処理あたりの変化速度をクロック数で指定する。1が一番早い変化。
+												  Delta      LFOの1処理あたりの変化量を指定する。音程或いは音量に毎度この値が加算(減算)される。
+												  Depth      LFOの最大の変化量を指定する。上記Deltaを加算した結果変化量がこの値に達した場合に減算に変わる。
+												  Type       LFOの波形を指定する。
+                                                             0:三角波
+                                                             1:のこぎり波
+                                                             2:矩形波
+                                                             3:ワンショット
+                                                             4:ランダム
+										  	      Sw         スイッチ。0を指定すると動作しない。よって1固定。Sコマンドの値とは別管理。
+										 	  	  Trans      位相。LFOの変化量に加算される。例えば矩形波指定のLFOでバッテリー効果を出すのに使用する。
+									  			             例えば、eを発音した場合のLFOがdfdf...と繰り返すような場合2度分の位相を指定してegeg...と演奏させるイメージ。
+                                                  DepthSpeed 指定した数だけDepth値に達成するとDepthDelta分だけDepth値が増えます。0の時は動作しません。
+                                                  DepthDelta Depthが増える値。
+                                                ハードウェアLFO
+                                                  ハードウェアLFOはSコマンドによる制御必須。
+                                                  (Sコマンドによってパラメータが送信されるため)
+                                                  OPN系(YM2203除く)
+                                                          : Mx1Hn1,n2,n3,n4
+                                                              n1:Delay(無視されます)TBD
+                                                              n2:Freq(0 - 7)
+                                                              n3:PMS(0 - 7)
+                                                              n4:AMS(0 - 3)
+                                                              n5:Switch(0必須)TBD
+                                                  OPM     : Mx1Hn1,n2,n3,n4,n5
+                                                              n1:LFO波形(0 - 3)
+                                                              n2:LFRQ(0 - 255)
+                                                              n3:PMD(0 - 127)
+                                                              n4:AMD(0 - 127)
+                                                              n5:LFO RESET(SYNC)(0 - 1)
+                                                  HuC6280 : Mx1Hn1,n2,n3
+                                                              n1:Control(n= 0(Disable),1-3(Ch2波形加算))
+                                                              n2:Freq(n= 0-255)
+                                                              n3:Ch2Freq(n= 0-4095)
+MAMSn           -oo----oo---oo---oo-----------  AMS値 音量LFO感度(0-7)
+MAMSn           --------------------o---------  AMS値 音量LFO感度(0-3)
+MPMSn           -oo----oo---oo---oo-----------  PMS値 音程LFO感度(0-3)
+MPMSn           --------------------o---------  PMS値 音程LFO感度(0-7)
+Sx1n            -oo--ooooooooooooooooooooooooo  LFOスイッチ(x1: P/Q/R/S  n: 0(OFF)/1(ON))
+rn              oooooooooooooooooooooooooooooo  休符
+"xxx"n          oooooooooooooooooooooooooooooo  歌詞
+[               oooooooooooooooooooooooooooooo  ループ開始位置
+]n              oooooooooooooooooooooooooooooo  ループ終了位置
+{               oooooooooooooooooooooooooooooo  連符開始位置
+}               oooooooooooooooooooooooooooooo  連符終了位置
+/               oooooooooooooooooooooooooooooo  ループ脱出位置指定
+EON             -----oo--ooo--ooo--o-oooo-oooo  エンベロープの開始
+EOF             -----oo--ooo--ooo--o-oooo-oooo  エンベロープの停止
+EHON            ---------o----o----o----o-----  ハードウェアエンベロープの開始
+EHOF            ---------o----o----o----o-----  ハードウェアエンベロープの停止
+EHTn            ---------o----o----o----o-----  ハードウェアエンベロープタイプ
+EHn             ---------o----o----o----o-----  ハードウェアエンベロープ周波数
+EXON            -oo----oo---oo---oo-----------  効果音モードの開始
+EXOF            -oo----oo---oo---oo-----------  効果音モードの停止
+EXn             -oo----oo---oo---oo-----------  効果音モードのスロット割り当て(使用するスロットを列挙する)
+EXDn1,n2,n3,n4  -oo----oo---oo---oo-----------  効果音モードのスロットディチューン。
+                                                  n1～n4はそれぞれOP1～OP4までのディチューン値。
+L               oooooooooooooooooooooooooooooo  曲全体のループ位置指定(曲者です)
+J               oooooooooooooooooooooooooooooo  指定した位置まで演奏をスキップする。複数指定した場合は最後のJが有効になる
+qn              -ooo-ooooooooooooooooooooooooo  ゲートタイム指定(クロック数で指定。音長分のクロック数からn引いた分が
+                                                発音する長さになる。)
+Qn              -ooo-ooooooooooooooooooooooooo  ゲートタイム割合指定(1 - 8)
+wn              -----o------------------------  ノイズモード指定(0 - 7)
+wfn             -----o------------------------  DCSG Ch3周波数直接指定(0 - 1023)
+wn              ---------o----o----oo-o-o-----  ノイズ周波数
+Pn              ---------o----o----o----o-----  1:トーン 2:ノイズ 3:トーン＆ノイズ
+Pn              --------------------o-o-------  ノイズ 0:OFF 1:ON
+mn              -oooo-------------------------  YM2612PCMモード指定(0: 停止  1: 開始) 6Ch only
+mon             ----o-------------------------  PCMマッピングモードをONにする。音色が音符コマンドによって切り替わる。 XGM pcm Ch. Only
+mof             ----o-------------------------  PCMマッピングモードをOFFにする。 XGM pcm Ch. Only
+mn              ----------------------o-------  HuC6280PCMモード指定(0: 停止  1: 開始)チャンネルごとに指定
+mn              -------------------------oo---  YM2413Rhythmモード指定(0: 停止  1: 開始)
+Tn              oooooooooooooooooooooooooooooo  テンポ(1 - 1200)
+!               oooooooooooooooooooooooooooooo  このパートのこれ以降をコンパイルしない(発音しない)
+Kn              -ooo-ooooo-oooo-oooooooooo-ooo  移調絶対指定 ( -12 - +12 )
+An              ------o--------------o-o----oo  PCMの再生開始位置を停止方向へnbyteずらす。
+                                                  (最小：再生開始位置　最大：停止位置-1byte)
+A+n             ------o--------------o-o----oo  Aの相対指定版。開始位置を停止方向へ現在の値からnbyteずらす。
+A-n             ------o--------------o-o----oo  Aの相対指定版。開始位置を再生方向へ現在の値からnbyteずらす。
+#n(廃止)        ------------------------------  音長をクロック値で指定(lコマンドの後に#でクロック指定してください)
+pn              -o-oo--o--ooo--ooo--o---------  パン (0: 発音しない  1: 右  2: 左  3: 中央)
+pn              ----------------------------o-  パン (0～32: 右～左  15: 中央)
+pn              -----------------------------o  パン (0～7: 右～左  3: 中央)
+pn1,n2          ------o---------------o-------  パン (n1: 左 0 - 15  n2: 右 0 - 15 )
+pn1,n2          ---------------------o-o------  パン (n1: 左 0 - 127 n2: 右 0 - 127)
+so              -------------------------oo---  サスティンON
+sf              -------------------------oo---  サスティンOFF
+%xxx            oooooooooooooooooooooooooooooo  エイリアス展開
                  
-c               -ooooooooooooooooooooooooooo  音符ド
-d               -ooooooooooooooooooooooooooo  音符レ
-e               -ooooooooooooooooooooooooooo  音符ミ
-f               -ooooooooooooooooooooooooooo  音符ファ
-g               -ooooooooooooooooooooooooooo  音符ソ
-a               -ooooooooooooooooooooooooooo  音符ラ
-b               -ooooooooooooooooooooooooooo  音符シ
-    +           -ooooooooooooooooooooooooooo  半音上げる
-    -           -ooooooooooooooooooooooooooo  半音下げる
-    n           -ooooooooooooooooooooooooooo  音長(FMのみ0を指定するとToneDoublerモードになる)
-    #n          -ooooooooooooooooooooooooooo  クロック指定音長(FMのみ0を指定するとToneDoublerモードになる)
-    .           -ooooooooooooooooooooooooooo  符点
-    _           -oo--ooooo-oooo-oooooooooooo  ベンド
-        音符    -oo--ooooo-oooo-oooooooooooo  音符(c-b)
-        o       -oo--ooooo-oooo-oooooooooooo  オクターブ
-        >       -oo--ooooo-oooo-oooooooooooo  オクターブ相対指定(上げ)
-        <       -oo--ooooo-oooo-oooooooooooo  オクターブ相対指定(下げ)
-    &n          oooooooooooooooooooooooooooo  タイ(n: 音長 音長分だけ発音を追加する。
-                                              音長を指定しない場合はキーオフせずに次の音符とつなげる)
-    &#n         oooooooooooooooooooooooooooo  タイ(#n:  クロック指定音長 音長分だけ発音を追加する。
-                                              音長を指定しない場合はキーオフせずに次の音符とつなげる)
-    ~n          oooooooooooooooooooooooooooo  タイの逆(n: 音長 音長分だけ発音を削る。)
-    ~#n         oooooooooooooooooooooooooooo  タイの逆(#n:  クロック指定音長 音長分だけ発音を削る。)
-    ,           -oo----oo---oo---oo-o-------  Tone Doublerモード
-                                              音符指定の後に0或いは,を指定するとTone Doublerモードになる。
-                                              この時指定した音符をAとする。
-                                              もう一度音符を指定するとTone Doublerが発動する。
-                                              この時指定した音符をBとする。
-                                              Tone Doublerが発動するとAとBの音程差が計算され、
-                                              それに対応するMLとDT2が各オペレーター(スロット)にセットされる。
-                                              MLとDT2は@Tコマンドで指定されたTone Doublerの定義値が参照される。
-                                              キーオフするとTone Doublerモードは解除される。
-                                              この時本来のMLとDT2に戻る。
-                                              音程差が定義行数を超える場合は、定義行数に収まるまで音程差を-12する。
-                                              音程差がマイナスの場合は0とする。
-                                              Tone Doubler時のベンドは音符Bを起点とする。
-                                              OPN系ではDT2は無視される。
+c               -ooooooooooooooooooooooooooooo  音符ド
+d               -ooooooooooooooooooooooooooooo  音符レ
+e               -ooooooooooooooooooooooooooooo  音符ミ
+f               -ooooooooooooooooooooooooooooo  音符ファ
+g               -ooooooooooooooooooooooooooooo  音符ソ
+a               -ooooooooooooooooooooooooooooo  音符ラ
+b               -ooooooooooooooooooooooooooooo  音符シ
+    +           -ooooooooooooooooooooooooooooo  半音上げる
+    -           -ooooooooooooooooooooooooooooo  半音下げる
+    n           -ooooooooooooooooooooooooooooo  音長(FMのみ0を指定するとToneDoublerモードになる)
+    #n          -ooooooooooooooooooooooooooooo  クロック指定音長(FMのみ0を指定するとToneDoublerモードになる)
+    .           -ooooooooooooooooooooooooooooo  符点
+    _           -oo--ooooo-oooo-oooooooooooooo  ベンド
+        音符    -oo--ooooo-oooo-oooooooooooooo  音符(c-b)
+        o       -oo--ooooo-oooo-oooooooooooooo  オクターブ
+        >       -oo--ooooo-oooo-oooooooooooooo  オクターブ相対指定(上げ)
+        <       -oo--ooooo-oooo-oooooooooooooo  オクターブ相対指定(下げ)
+    &n          oooooooooooooooooooooooooooooo  タイ(n: 音長 音長分だけ発音を追加する。
+                                                音長を指定しない場合はキーオフせずに次の音符とつなげる)
+    &#n         oooooooooooooooooooooooooooooo  タイ(#n:  クロック指定音長 音長分だけ発音を追加する。
+                                                音長を指定しない場合はキーオフせずに次の音符とつなげる)
+    ~n          oooooooooooooooooooooooooooooo  タイの逆(n: 音長 音長分だけ発音を削る。)
+    ~#n         oooooooooooooooooooooooooooooo  タイの逆(#n:  クロック指定音長 音長分だけ発音を削る。)
+    ,           -oo----oo---oo---oo-o---------  Tone Doublerモード
+                                                  音符指定の後に0或いは,を指定するとTone Doublerモードになる。
+                                                  この時指定した音符をAとする。
+                                                  もう一度音符を指定するとTone Doublerが発動する。
+                                                  この時指定した音符をBとする。
+                                                  Tone Doublerが発動するとAとBの音程差が計算され、
+                                                  それに対応するMLとDT2が各オペレーター(スロット)にセットされる。
+                                                  MLとDT2は@Tコマンドで指定されたTone Doublerの定義値が参照される。
+                                                  キーオフするとTone Doublerモードは解除される。
+                                                  この時本来のMLとDT2に戻る。
+                                                  音程差が定義行数を超える場合は、定義行数に収まるまで音程差を-12する。
+                                                  音程差がマイナスの場合は0とする。
+                                                  Tone Doubler時のベンドは音符Bを起点とする。
+                                                  OPN系ではDT2は無視される。
 
 
 ■ 音色定義
@@ -801,12 +965,27 @@ b               -ooooooooooooooooooooooooooo  音符シ
 '@ AL FB
 
   定義パターン4
-    "L"を指定した音色をYM2413(OPLL)で使用すると以下のように解釈される。
+    "LL"を指定した音色をYM2413(OPLL)で使用すると以下のように解釈される。
 
-'@ L No
+'@ LL No
 '@ AR DR SL RR KL MT AM VB EG KR DT
 '@ AR DR SL RR KL MT AM VB EG KR DT
 '@ TL FB
+
+  定義パターン5
+    "A"を指定した音色を妄想音源YM2609(OPNA2)で使用すると以下のように解釈される。
+	 DT2 DeTune2   OPNA2はDT2を使用可
+	 FB  Feed Back OPNA2はop毎に使用可
+	 WT  WaveType  OPNA2はop毎に基本波形(Ch毎)を選択できる(0～3)。更に波形は@Wコマンドで割り当てる。
+	 ALL ALg Link  OPNA2はアルゴリズムを編集できる(0～15)。op毎に親となるopをbitで選択。自分が選択される又は誰も選択しない場合、キャリアとなる。
+	               bit3:Op4  bit2:Op3  bit1:Op2  bit0:Op1
+	 AL  ALg       -1 を設定するとOPNA2は上記のALLでアルゴリズムを編集できるモードになる。
+'@ A No
+'@ AR DR SR RR SL TL KS ML DT1 DT2 AM SSGEG FB WT ALL
+'@ AR DR SR RR SL TL KS ML DT1 DT2 AM SSGEG FB WT ALL
+'@ AR DR SR RR SL TL KS ML DT1 DT2 AM SSGEG FB WT ALL
+'@ AR DR SR RR SL TL KS ML DT1 DT2 AM SSGEG FB WT ALL
+'@ AL
 
 
   MUCOM88の音色を読み込む
@@ -841,9 +1020,47 @@ b               -ooooooooooooooooooooooooooo  音符シ
                 RF5C164 : ループポイント。ループ再生位置をサンプル数で指定。
                 C140    : ループポイント。ループ再生位置をサンプル数で指定。
                 SegaPCM : ループポイント。ループ再生位置をサンプル数で指定。
+				YM2612X : 36をo4cとして0～72の範囲で音程を変換し定義する。
+				          73以上を指定すると14000を既定の周波数として音程を変換し定義する。
+						  この機能を利用するにはSoXが必要。
+                YM2609  : 0,1,2,3がそれぞれADPCM1,2,3,Aとして定義される
     P を使用すると、mml2vgmはPCMデータを音量などを加工した後、メモリに順番に配置する。
     Bankの機能が存在するChipの場合は、パディングなどを行いその制約に沿った配置を行う。
     また、音色定義も合わせて行われ、加工後のデータを基準にStartAdr、EndAdrが設定される。
+
+	YM2612X(XGM)で使用するSoXについて
+	  SoXはコマンドラインによるPCMデータ変換ツール。
+	  SoX
+	    ホームページ
+ 	      http://sox.sourceforge.net/
+	    プログラムのアーカイブへのリンク
+		  https://sourceforge.net/projects/sox/files/sox/14.4.2/sox-14.4.2-win32.zip/download
+	    LICENSE
+	      GPL
+      解凍したら、mml2vgmのプログラムがあるフォルダーに「sox」フォルダーを作成しその中にファイルをコピーする。
+      見つからない場合は環境変数PATHの値を参照し探す(TAG161より)。
+      また、.gwiがある場所に以下のファイル名を作業用として使用する。上書きが行われ作業完了するとファイルを削除する。
+      (そのため、同名のファイルを使わないようにお願いします。)
+        soxTemp.raw
+		soxTempDest.raw
+
+      周波数変更機能仕様例)
+        14KHzのGuitarがo4cの音の時、以下のように定義すると１オクターブ分のPCMが変換されながら定義される。
+	    (後述のPCMマッピングモード併用)
+          '@ P  1 , "Guitar.wav" , 14000 , 100 , OPN2X , 36
+          '@ P  2 , "Guitar.wav" , 14000 , 100 , OPN2X , 37
+          '@ P  3 , "Guitar.wav" , 14000 , 100 , OPN2X , 38
+          '@ P  4 , "Guitar.wav" , 14000 , 100 , OPN2X , 39
+          '@ P  5 , "Guitar.wav" , 14000 , 100 , OPN2X , 40
+          '@ P  6 , "Guitar.wav" , 14000 , 100 , OPN2X , 41
+          '@ P  7 , "Guitar.wav" , 14000 , 100 , OPN2X , 42
+          '@ P  8 , "Guitar.wav" , 14000 , 100 , OPN2X , 43
+          '@ P  9 , "Guitar.wav" , 14000 , 100 , OPN2X , 44
+          '@ P 10 , "Guitar.wav" , 14000 , 100 , OPN2X , 45
+          '@ P 11 , "Guitar.wav" , 14000 , 100 , OPN2X , 46
+          '@ P 12 , "Guitar.wav" , 14000 , 100 , OPN2X , 47
+          '@ P 13 , "Guitar.wav" , 14000 , 100 , OPN2X , 48
+          '@ PM 0 , 4,0 , 1,2,3,4,5,6,7,8,9,10,11,12,13
 
 '@ PD "FileName" , ChipName , [SrcStartAdr] , [DesStartAdr] , [Length] , [Option]
     玄人向け
@@ -885,27 +1102,40 @@ b               -ooooooooooooooooooooooooooo  音符シ
     PとPDを併せて指定することも可能だが、お互いの都合を考慮しない。
     その為思わぬ場所にデータが上書きされていることがある。
 
+'@ PM MapNo , Octave , Note , No...
+    PCMマッピングモード定義
+	MapNo       PCM Map No(0-255)
+    Octave      オクターブ(1-8)
+    Note        ノート番号(0-11) 0:c 1:c+ ... 10:a+ 11:b
+    No...       定義番号(0-62) カンマ区切りで半音ごとに複数定義可能です。
+	XGM専用コマンド。指定のノートにPCMを割り当てます。同じ音程の定義は上書きされます。
 
   PCM使用可能音源毎のコマンド対応表
-                                         PPP                         
-  名称             略称          タイプ   DI Freq指定 ループ指定 備考
+                                         PPPP                         
+  名称             略称          タイプ   DIM Freq指定 ループ指定 備考
   ---------------------------------------------------------------------------------------------
-  YM2612           OPN2                  o-- 不可     不可       
-  YM2612X          OPN2X                 o-- 不可     不可       XGM専用
-  RF5C164          RF5C                  ooo 可       可         StartAdr 8bit  EndAdr指定無し(ループ指定必須)
-  RF5C164Secondary RF5CSecondary         ooo 可       可         StartAdr 8bit  EndAdr指定無し(ループ指定必須)
-  YM2608           OPNA          ADPCM   ooo 可       不可       
-  YM2608Secondary  OPNASecondary ADPCM   ooo 可       不可       
-  YM2610B          OPNB          ADPCM-A ooo 不可     不可       
-  YM2610BSecondary OPNBSecondary ADPCM-A ooo 不可     不可       
-  YM2610B          OPNB          ADPCM-B ooo 可       不可       
-  YM2610BSecondary OPNBSecondary ADPCM-B ooo 可       不可       
-  SegaPCM          SPCM                  ooo 可       可         
-  SegaPCMSecondary SPCMSecondary         ooo 可       可         
-  HuC6280          HuC8                  o-- 不可     不可       
-  HuC6280Secondary HuC8Secondary         o-- 不可     不可       
-  C140             C140                  ooo 可       可         
-  C140Secondary    C140Secondary         ooo 可       可         
+  YM2612           OPN2                  o--T 不可     不可       
+  YM2612X          OPN2X                 o--o 不可     不可       XGM専用
+  RF5C164          RF5C                  ooo- 可       可         StartAdr 8bit  EndAdr指定無し(ループ指定必須)
+  RF5C164Secondary RF5CSecondary         ooo- 可       可         StartAdr 8bit  EndAdr指定無し(ループ指定必須)
+  YM2608           OPNA          ADPCM   ooo- 可       不可       
+  YM2608Secondary  OPNASecondary ADPCM   ooo- 可       不可       
+  YM2609           OPNA2         ADPCM1  ooo- 可       不可       
+  YM2609           OPNA2         ADPCM2  ooo- 可       不可       
+  YM2609           OPNA2         ADPCM3  ooo- 可       不可       
+  YM2610B          OPNB          ADPCM-A oooT 不可     不可       
+  YM2610BSecondary OPNBSecondary ADPCM-A oooT 不可     不可       
+  YM2610B          OPNB          ADPCM-B ooo- 可       不可       
+  YM2610BSecondary OPNBSecondary ADPCM-B ooo- 可       不可       
+  SegaPCM          SPCM                  ooo- 可       可         
+  SegaPCMSecondary SPCMSecondary         ooo- 可       可         
+  HuC6280          HuC8                  o--T 不可     不可       
+  HuC6280Secondary HuC8Secondary         o--T 不可     不可       
+  C140             C140                  ooo- 可       可         
+  C140Secondary    C140Secondary         ooo- 可       可         
+  QSound           QSnd                  o--- 可       可         QSoundはSecondary無し(vgmがDualChip非対応)
+  K053260          K53                   o--- 可       可         K53はループするとスタートアドレスに戻る
+  K053260Secondary K53Secondary          o--- 可       可         
 
 
   MUCOM88のADPCMを読み込む
@@ -1052,11 +1282,17 @@ FM1Chで指定の音程2音を同時に出力することを主な目的とし�
     メモ
       Notes        =メモ
     
+    バージョン
+      Version      =1.00|1.01|1.10|1.50|1.51|1.60|1.61|1.70|1.71
+        vgmファイルのバージョンを指定する。指定しない場合は1.71になる。
+    
     パート名定義
       Part(音源の名称|略称)[Primary|Secondary]   (A - Zz まで)  [周波数]
         音源は名称或いは略称を必ず指定する。
         Primaryは省略可能。Secondaryを指定する場合は省略不可能。
         周波数は省略可能。その場合初期値が使用される。Primaryの値が優先で使用される。(T.B.D.)
+        Primaryの定義文にて,(カンマ)区切りでパート名を列挙することにより連続で定義することも可能。
+        (主にZGM向け。)
         
         定義済み
           PartYM2612                      =F
@@ -1064,6 +1300,7 @@ FM1Chで指定の音程2音を同時に出力することを主な目的とし�
           PartRF5C164                     =R
           PartYM2203                      =N
           PartYM2608                      =P
+          PartYM2609                      =U
           PartYM2610B                     =T
           PartYM2151                      =X
           PartYM3526                      =L
@@ -1074,6 +1311,8 @@ FM1Chで指定の音程2音を同時に出力することを主な目的とし�
           PartAY8910                      =A
           PartYM2413                      =L
           PartK051649                     =K
+          PartQSound                      =Q
+          PartK053260                     =O
           PartYM2612Secondary             =Fs
           PartSN76489Secondary            =Ss
           PartRF5C164Secondary            =Rs
@@ -1088,6 +1327,7 @@ FM1Chで指定の音程2音を同時に出力することを主な目的とし�
           PartAY8910Secondary             =As
           PartYM2413Secondary             =Ls
           PartK051649Secondary            =Ks
+          PartK053260Secondary            =Os
           
           (T.B.D.)PartPWM                 =G
           (T.B.D.)PartOKIM6258            =O
@@ -1101,7 +1341,7 @@ FM1Chで指定の音程2音を同時に出力することを主な目的とし�
         出力するファイル形式を指定する。
         VGM  デフォルト。VGM形式。多彩な音源を扱えるフォーマット
         XGM  XGM形式。MegaDrive(Genesis)向けフォーマット。ソフトウェアによる4chPCM再生が強力。
-        ZGM  ZGM形式。(T.B.D.)VGM形式を拡張し、仮想音源、MIDIやWAVも扱えるフォーマット(の予定)
+        ZGM  ZGM形式。VGM形式を拡張し、仮想音源、MIDIやWAV(TBD)も扱えるフォーマット
     
     分解能指定
       ClockCount              =クロックカウント値
@@ -1147,7 +1387,7 @@ FM1Chで指定の音程2音を同時に出力することを主な目的とし�
 
 
 ■ OPN系音源に存在するEXチャンネルについて
-    OPN,OPN2,OPNA,OPNBは、効果音モードを利用してCH3を最大4分割して演奏することが可能です。
+    OPN,OPN2,OPNA,OPNB,OPNA2は、効果音モードを利用してCH3/CH9を最大4分割して演奏することが可能です。
     
     OPN系は1CH当たり4オペレータのFM音源です。
     通常のCHは周波数を1CH毎にしか設定できないのですが、

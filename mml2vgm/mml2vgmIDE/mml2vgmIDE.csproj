@@ -408,9 +408,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="CommandReference.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="Azuki.dll" />
     <Content Include="Azuki.xml" />
     <Content Include="c86ctl.dll">

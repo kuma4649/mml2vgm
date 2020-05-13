@@ -187,14 +187,14 @@ namespace mml2vgmIDE
 
             try
             {
-                Assembly comp = Assembly.LoadFrom(Path.Combine(startupPath, "mucomDotNETCompiler.dll"));
-                Assembly driv = Assembly.LoadFrom(Path.Combine(startupPath, "mucomDotNETDriver.dll"));
-                Assembly pprc = Assembly.LoadFrom(Path.Combine(startupPath, "M98DotNETcore.dll"));
-                mucom = new mucomManager(comp, driv, pprc, disp, setting);
+                mucom = new mucomManager(
+                    Path.Combine(startupPath, "mucomDotNETCompiler.dll"),
+                    Path.Combine(startupPath, "mucomDotNETDriver.dll"),
+                    Path.Combine(startupPath, "M98DotNETcore.dll"),
+                    disp, setting);
                 Audio.mucomManager = mucom;
 
                 disp("mucomDotNETを読み込みました");
-                //mucom.compile("D:\\bootcamp\\FM音源\\data\\MUC\\mucom88win_yk2mml181225\\BARE2_MML\\bare03.muc");
             }
             catch
             {
@@ -638,12 +638,26 @@ namespace mml2vgmIDE
 
         private void TsmiTutorial_Click(object sender, EventArgs e)
         {
-            Process.Start("Tutorial.txt");
+            try
+            {
+                Process.Start("Tutorial.txt");
+            }
+            catch
+            {
+                MessageBox.Show("Failed to open the file.", "error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void TsmiReference_Click(object sender, EventArgs e)
         {
-            Process.Start("CommandReference.txt");
+            try
+            {
+                Process.Start("mml2vgm_MMLCommandMemo.txt");
+            }
+            catch
+            {
+                MessageBox.Show("Failed to open the file.", "error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void TsmiAbout_Click(object sender, EventArgs e)

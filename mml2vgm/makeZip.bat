@@ -12,6 +12,7 @@ copy /Y .\IDE.txt .\output
 copy /Y .\Script.txt .\output
 copy /Y .\..\LICENSE.txt .\output
 copy /Y .\..\mml2vgm_MMLCommandMemo.txt .\output
+copy /Y .\..\mml2vgm_MMLCommandMemo.txt .\output\mml2vgmIDE
 copy /Y .\..\mmlCommandTable.md .\output
 copy /Y .\..\README.md .\output
 copy /Y .\..\ZGMspec.txt .\output
