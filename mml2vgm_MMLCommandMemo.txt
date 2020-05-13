@@ -973,6 +973,14 @@ b               -ooooooooooooooooooooooooooooo  音符シ
 '@ TL FB
 
   定義パターン5
+    "L"を指定した音色をYMF262(OPL3)で使用すると以下のように解釈される。
+
+'@ L No
+'@ AR DR SL RR KSL TL MT AM VIB EGT KSR WS
+'@ AR DR SL RR KSL TL MT AM VIB EGT KSR WS
+'@ CNT FB
+
+  定義パターン6
     "A"を指定した音色を妄想音源YM2609(OPNA2)で使用すると以下のように解釈される。
 	 DT2 DeTune2   OPNA2はDT2を使用可
 	 FB  Feed Back OPNA2はop毎に使用可

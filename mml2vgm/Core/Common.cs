@@ -12,18 +12,9 @@ namespace Core
     {
         public static int CheckRange(int n, int min, int max)
         {
-            int r = n;
-
-            if (n < min)
-            {
-                r = min;
-            }
-            if (n > max)
-            {
-                r = max;
-            }
-
-            return r;
+            if (n < min) return min;
+            if (n > max) return max;
+            return n;
         }
 
         public static byte[] GetPCMDataFromFile(string path, clsPcm instPCM, out bool isRaw, out bool is16bit, out int samplerate)

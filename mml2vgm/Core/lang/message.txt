@@ -394,3 +394,7 @@ E24001=A definition of sound chip({1}) that cannot be used in the {0} format.
 ;MidiGM.cs 25000
 W25000=The target of DirectMode ('V', 'T') is not specified.
 
+;YMF262.cs 26000
+E26000=Specified 4operator sound patch on 2operator channel.
+E26001=Specified 2operator sound patch on 4operator channel.
+W26002=Specified command that's only for 4operator channel. Will be ignored.

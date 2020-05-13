@@ -25,6 +25,7 @@ namespace Core
         public HuC6280[] huc6280 = null;
         public YM2612X[] ym2612x = null;
         public YM2413[] ym2413 = null;
+        public YMF262[] ymf262 = null;
         public C140[] c140 = null;
         public AY8910[] ay8910 = null;
         public K051649[] k051649 = null;
@@ -255,6 +256,20 @@ namespace Core
             {
                 ym2413 = lstYM2413.ToArray();
                 chips.Add(enmChipType.YM2413, ym2413);
+            }
+
+            List<YMF262> lstYMF262 = new List<YMF262>();
+            n = sp.dicChipPartName[enmChipType.YMF262];
+            for (int i = 0; i < n.Item3.Count; i++)
+            {
+                if (string.IsNullOrEmpty(n.Item3[i])) continue;
+                if (sp.lnChipPartName.Contains(n.Item3[i]))
+                    lstYMF262.Add(new YMF262(this, i, n.Item3[i], stPath, (info.format == enmFormat.ZGM ? 0 : i)));
+            }
+            if (lstYMF262.Count > 0)
+            {
+                ymf262 = lstYMF262.ToArray();
+                chips.Add(enmChipType.YMF262, ymf262);
             }
 
             List<C140> lstC140 = new List<C140>();
@@ -531,7 +546,11 @@ namespace Core
                     return 0;
 
                 case 'L':
-                    instrumentBufCache = new byte[Const.OPL_INSTRUMENT_SIZE];
+                    string val = buf.ToUpper();
+                    if (val.Length > 1 && val[1] == 'L')
+                        instrumentBufCache = new byte[Const.OPLL_INSTRUMENT_SIZE];
+                    else
+                        instrumentBufCache = new byte[Const.OPL3_INSTRUMENT_SIZE];
                     instrumentCounter = 0;
                     SetInstrument(line);
                     return 0;
@@ -1397,9 +1416,13 @@ namespace Core
                         //M
                         instFM.Add(instrumentBufCache[0], instrumentBufCache);
                     }
-                    else if (instrumentBufCache.Length == Const.OPL_INSTRUMENT_SIZE)
+                    else if (instrumentBufCache.Length == Const.OPLL_INSTRUMENT_SIZE)
                     {
                         //OPL
+                        instFM.Add(instrumentBufCache[0], instrumentBufCache);
+                    }
+                    else if(instrumentBufCache.Length == Const.OPL3_INSTRUMENT_SIZE)
+                    {
                         instFM.Add(instrumentBufCache[0], instrumentBufCache);
                     }
                     else if (instrumentBufCache.Length == Const.OPNA2_INSTRUMENT_SIZE)
@@ -2390,6 +2413,8 @@ namespace Core
             long useYM2413_S = 0;
             long useK051649_S = 0;
             long useK053260_S = 0;
+            long useYMF262 = 0;
+            long useYMF262_S = 0;
 
             for (int i = 0; i < 2; i++)
             {
@@ -2441,6 +2466,10 @@ namespace Core
                 if (ym2413 != null && ym2413.Length > i && ym2413[i] != null)
                     foreach (partWork pw in ym2413[i].lstPartWork)
                     { useYM2413 += pw.clockCounter; if (ym2413[i].ChipID == 1) useYM2413_S += pw.clockCounter; }
+
+                if(ymf262 != null && ymf262.Length > i && ymf262[i] != null)
+                    foreach (partWork pw in ymf262[i].lstPartWork)
+                    { useYMF262 += pw.clockCounter; if (ymf262[i].ChipID == 1) useYMF262_S += pw.clockCounter; }
 
                 if (k051649 != null && k051649.Length > i && k051649[i] != null)
                     foreach (partWork pw in k051649[i].lstPartWork)
@@ -2531,6 +2560,11 @@ namespace Core
             {
                 YM2413 y = ym2413[0] != null ? ym2413[0] : ym2413[1];
                 Common.SetLE32(dat, 0x10, (uint)y.Frequency | (uint)(useYM2413_S == 0 ? 0 : 0x40000000));
+            }
+            if (info.Version >= 1.51f && useYMF262 != 0)
+            {
+                YMF262 u = ymf262[0] != null ? ymf262[0] : ymf262[1];
+                Common.SetLE32(dat, 0x5c, (uint)u.Frequency | (uint)(useYMF262_S == 0 ? 0 : 0x40000000));
             }
             if (info.Version >= 1.61f && useK051649 != 0)
             {
