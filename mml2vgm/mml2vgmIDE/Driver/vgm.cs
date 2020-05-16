@@ -706,7 +706,7 @@ namespace mml2vgmIDE
 
         private void vcYMF262Port0(outDatum od)
         {
-            chipRegister.setYMF262Register((vgmBuf[vgmAdr].val & 0x80) == 0 ? 0 : 1, 0, vgmBuf[vgmAdr + 1].val, vgmBuf[vgmAdr + 2].val);
+            chipRegister.YMF262SetRegister(od, Audio.DriverSeqCounter, (vgmBuf[vgmAdr].val & 0x80) == 0 ? 0 : 1, 0, vgmBuf[vgmAdr + 1].val, vgmBuf[vgmAdr + 2].val);
             vgmAdr += 3;
         }
 
@@ -714,7 +714,7 @@ namespace mml2vgmIDE
         {
             int adr = vgmBuf[vgmAdr + 1].val;
             int dat = vgmBuf[vgmAdr + 2].val;
-            chipRegister.setYMF262Register((vgmBuf[vgmAdr].val & 0x80) == 0 ? 0 : 1, 1, adr, dat);
+            chipRegister.YMF262SetRegister(od, Audio.DriverSeqCounter, (vgmBuf[vgmAdr].val & 0x80) == 0 ? 0 : 1, 1, adr, dat);
             vgmAdr += 3;
         }
 

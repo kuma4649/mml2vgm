@@ -21,6 +21,7 @@ namespace mml2vgmIDE.MMLParameter
         public List<Instrument> YM2151 = new List<Instrument>();
         public List<Instrument> YM2203 = new List<Instrument>();
         public List<Instrument> YM2413 = new List<Instrument>();
+        public List<Instrument> YMF262 = new List<Instrument>();
         public List<Instrument> YM2608 = new List<Instrument>();
         public List<Instrument> YM2609 = new List<Instrument>();
         public List<Instrument> YM2610B = new List<Instrument>();
@@ -59,6 +60,7 @@ namespace mml2vgmIDE.MMLParameter
             YM2151.Clear();
             YM2203.Clear();
             YM2413.Clear();
+            YMF262.Clear();
             YM2608.Clear();
             YM2609.Clear();
             YM2610B.Clear();
@@ -315,6 +317,25 @@ namespace mml2vgmIDE.MMLParameter
                         dicInstAdd(opll, od.linePos.chipIndex, od.linePos.chipNumber);
                         instsAdd(opll, od.linePos.chipIndex, od.linePos.chipNumber);
                         opll.isTrace = isTrace;
+                        break;
+                    case "YMF262":
+                        if (Audio.chipRegister != null
+                            && Audio.chipRegister.YMF262 != null
+                            && od.linePos.chipIndex < Audio.chipRegister.YMF262.Count)
+                        {
+                            chip = Audio.chipRegister.YMF262[od.linePos.chipIndex];
+                        }
+                        if (chip == null && od.linePos.chipIndex >= 0x80)
+                        {
+                            Driver.ZGM.ZgmChip.ZgmChip zChip = Audio.chipRegister.dicChipCmdNo[od.linePos.chipIndex];
+                            chip = Audio.chipRegister.YMF262[zChip.Index];
+                            chipIndex = zChip.Index;
+                        }
+                        YMF262 opl3 = new YMF262(chip);
+                        YMF262.Add(opl3);
+                        dicInstAdd(opl3, od.linePos.chipIndex, od.linePos.chipNumber);
+                        instsAdd(opl3, od.linePos.chipIndex, od.linePos.chipNumber);
+                        opl3.isTrace = isTrace;
                         break;
                     case "YM2608":
                         if (Audio.chipRegister != null

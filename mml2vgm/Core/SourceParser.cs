@@ -225,7 +225,7 @@ namespace Core
 
             cp = new YMF262(null, 0, null, null, 0);
             cpn.Add(enmChipType.YMF262, new Tuple<string, string, List<string>, int[]>(cp.Name, cp.ShortName, new List<string>(
-                info.format == enmFormat.VGM ? new string[] { "U", "Us" } : (info.format == enmFormat.XGM ? new string[] { } : new string[] { "U", "Us" })
+                info.format == enmFormat.VGM ? new string[] { "D", "Ds" } : (info.format == enmFormat.XGM ? new string[] { } : new string[] { "D", "Ds" })
                 ), new int[] { 2, 0, -1 }));
 
             cp = new C140(null, 0, null, null, 0);

@@ -724,7 +724,7 @@ namespace mml2vgmIDE
 
         protected override bool ProcessCmdKey(ref System.Windows.Forms.Message msg, System.Windows.Forms.Keys keyData)
         {
-            log.Write(string.Format("2動作未定義のキー：{0}", keyData));
+            //log.Write(string.Format("2動作未定義のキー：{0}", keyData));
 
             ctrl = (keyData & Keys.Control) == Keys.Control;
             shift = (keyData & Keys.Shift) == Keys.Shift;
@@ -953,17 +953,17 @@ namespace mml2vgmIDE
                 + (alt ? Properties.Resources.lblF5_JSolo : "") 
                 + Properties.Resources.lblF5_Play;
 
-            switch (e.KeyCode)
-            {
-                //case Keys.F5:
-                //    jumpSoloModeSw = alt;//nVidia Geforce ExperienceがインストールされているとAlt+F5が検知できない
-                //    Compile(true, ctrl, shift, false, false);
-                //    break;
-                default:
-                    //↓KeyData確認用
-                    //log.Write(string.Format("動作未定義のキー：{0}",e.KeyData));
-                    break;
-            }
+            //switch (e.KeyCode)
+            //{
+            //    //case Keys.F5:
+            //    //    jumpSoloModeSw = alt;//nVidia Geforce ExperienceがインストールされているとAlt+F5が検知できない
+            //    //    Compile(true, ctrl, shift, false, false);
+            //    //    break;
+            //    default:
+            //        //↓KeyData確認用
+            //        //log.Write(string.Format("動作未定義のキー：{0}",e.KeyData));
+            //        break;
+            //}
         }
 
         private void FrmMain_KeyUp(object sender, KeyEventArgs e)

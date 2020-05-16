@@ -209,6 +209,30 @@ namespace Core
         //        , (byte)((pw.envInstrument << 4) | (15 - pw.volume))
         //        );
         //}
+        public override void GetFNumAtoB(partWork pw, MML mml
+            , out int a, int aOctaveNow, char aCmd, int aShift
+            , out int b, int bOctaveNow, char bCmd, int bShift
+            , int dir)
+        {
+            a = GetFNum(pw, mml, aOctaveNow, aCmd, aShift);
+            b = GetFNum(pw, mml, bOctaveNow, bCmd, bShift);
+
+            int oa = (a & 0x0e00) >> 9;
+            int ob = (b & 0x0e00) >> 9;
+            if (oa != ob)
+            {
+                if ((a & 0x1ff) == FNumTbl[0][0])
+                {
+                    oa += Math.Sign(ob - oa);
+                    a = (a & 0x1ff) * 2 + (oa << 9);
+                }
+                else if ((b & 0x1ff) == FNumTbl[0][0])
+                {
+                    ob += Math.Sign(oa - ob);
+                    b = (b & 0x1ff) * ((dir > 0) ? 2 : 1) + (ob << 9);
+                }
+            }
+        }
 
         public void OutFmSetFnum(partWork pw, int octave, int num)
         {
@@ -231,8 +255,8 @@ namespace Core
             {
                 f = pw.bendFnum;
             }
-            int o = (f & 0xf000) / 0x1000;
-            f &= 0xfff;
+            int o = (f & 0x0e00) / 0x0200;
+            f &= 0x1ff;
 
             f = f + pw.detune;
             for (int lfo = 0; lfo < 4; lfo++)
@@ -265,7 +289,7 @@ namespace Core
                 o++;
                 f = f - ftbl[0] * 2 + ftbl[0];
             }
-            f = Common.CheckRange(f, 0, 0x7ff);
+            f = Common.CheckRange(f, 0, 0x1ff);
             OutFmSetFnum(pw, o, f);
         }
 
@@ -297,7 +321,7 @@ namespace Core
 
             int f = ftbl[n];
 
-            return (f & 0xfff) + (o & 0xf) * 0x1000;
+            return (f & 0x1ff) + (o & 0x7) * 0x0200;
         }
 
         public void SetFmVolume(partWork pw, MML mml)

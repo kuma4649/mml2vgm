@@ -99,6 +99,8 @@ namespace Core
         protected int _ChipNumber = 0;
 
         public string PartName { get; set; }
+        public byte rhythmStatus { get; internal set; } = 0;
+        public byte beforeRhythmStatus { get; internal set; } = 0xff;
 
         public bool SupportReversePartWork = false;
         public bool ReversePartWork = false;

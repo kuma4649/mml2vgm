@@ -65,9 +65,9 @@ namespace mml2vgmIDE
         { 
             Sgry.Azuki.Highlighter.KeywordHighlighter keywordHighlighter = new Sgry.Azuki.Highlighter.KeywordHighlighter();
             keywordHighlighter.AddRegex("^[^'].*", false, CharClass.DocComment);
-            keywordHighlighter.AddRegex("^'[A-Za-z0-9\\-\\,\\+]+ ", CharClass.Keyword);
-            keywordHighlighter.AddRegex("^'@ ", CharClass.Keyword);
-            keywordHighlighter.AddRegex("^'%\\S+ ", CharClass.Keyword);
+            keywordHighlighter.AddRegex("^'[A-Za-z0-9\\-\\,\\+]+[ |\\t]", CharClass.Keyword);
+            keywordHighlighter.AddRegex("^'@[ |\\t]", CharClass.Keyword);
+            keywordHighlighter.AddRegex("^'%\\S+[ |\\t]", CharClass.Keyword);
             keywordHighlighter.AddEnclosure("'{", "}", CharClass.Comment, true);
             azukiControl = new AzukiControl();
             azukiControl.Font = new Font(setting.other.TextFontName, setting.other.TextFontSize, setting.other.TextFontStyle);
@@ -119,11 +119,11 @@ namespace mml2vgmIDE
         {
             Sgry.Azuki.Highlighter.KeywordHighlighter keywordHighlighter = new Sgry.Azuki.Highlighter.KeywordHighlighter();
             //keywordHighlighter.AddRegex("^.*", false, CharClass.DocComment);
-            keywordHighlighter.AddRegex("^[A-Z]+ ", CharClass.Keyword);
-            keywordHighlighter.AddRegex("^#[A-Za-z0-9]* ", CharClass.Keyword);
+            keywordHighlighter.AddRegex("^[A-Z]+[ |\\t]", CharClass.Keyword);
+            keywordHighlighter.AddRegex("^#[A-Za-z0-9]*[ |\\t]", CharClass.Keyword);
             keywordHighlighter.AddRegex("^#\\S*\\*", CharClass.Keyword);
             keywordHighlighter.AddRegex("^'@", CharClass.Keyword);
-            keywordHighlighter.AddRegex("^'%\\S+ ", CharClass.Keyword);
+            keywordHighlighter.AddRegex("^'%\\S+[ |\\t]", CharClass.Keyword);
             keywordHighlighter.AddRegex("^\\{ .*", CharClass.DocComment);
             keywordHighlighter.AddRegex("^\\}.*", CharClass.DocComment);
             keywordHighlighter.AddRegex("\\;.*", CharClass.Comment);
