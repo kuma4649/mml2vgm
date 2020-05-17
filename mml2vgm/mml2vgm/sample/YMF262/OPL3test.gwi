@@ -1,0 +1,83 @@
+﻿'{
+
+	TitleName   = YMF262(OPL3) test
+	TitleNameJ  =
+	GameName    =
+	GameNameJ   =
+	SystemName  =
+	SystemNameJ =
+	Composer    =
+	ComposerJ   =
+	ReleaseDate =
+	Converted   =
+	Notes       =
+
+}
+
+
+'@ L 1
+   AR  DR  SL  RR  KSL TL  MT  AM  VIB EGT KSR WS
+'@ 015 005 006 002 000 010 001 000 001 000 000 002
+'@ 015 000 015 006 000 000 003 000 000 000 000 000
+   CNT FB
+'@ 000 006
+
+'@ L 2
+   AR  DR  SL  RR  KSL TL  MT  AM  VIB EGT KSR WS BD
+'@ 014 010 014 010 000 000 000 000 000 000 000 000
+'@ 015 004 001 007 000 000 000 000 000 000 000 000
+   CNT FB
+'@ 000 000
+
+'@ L 3
+   AR  DR  SL  RR  KSL TL  MT  AM  VIB EGT KSR WS  HH
+'@ 015 014 001 008 000 014 000 000 000 000 000 000
+   AR  DR  SL  RR  KSL TL  MT  AM  VIB EGT KSR WS  SD
+'@ 015 007 015 006 000 000 003 000 000 001 000 000
+   CNT FB
+'@ 000 000
+
+'@ L 4
+   AR  DR  SL  RR  KSL TL  MT  AM  VIB EGT KSR WS TOM
+'@ 015 006 010 006 000 000 001 000 000 000 000 000
+   AR  DR  SL  RR  KSL TL  MT  AM  VIB EGT KSR WS CYM
+'@ 015 003 000 006 000 022 011 000 000 000 000 000
+@ 000 000 000 000 000 063 000 000 000 000 000 000
+   CNT FB
+'@ 001 000
+
+'@ L4 5
+   AR  DR  SL  RR  KSL TL  MT  AM  VIB EGT KSR WS
+'@ 009 004 006 007 000 059 002 000 000 001 000 000
+'@ 009 002 000 007 000 034 002 000 000 001 000 000
+'@ 009 003 000 007 000 054 004 000 000 001 000 000
+'@ 009 006 000 009 000 015 001 000 000 001 000 000
+   CN1 CN2 FB
+'@ 001 000 007
+
+
+'Cn1 T120
+Cn1 L
+
+
+'D0110 m1@5v63l8o4q1
+'D0211 m1@5v54l8o4q1 D0r16
+'D0312 m1@5v51l8o4q1 D0r
+'D10-12 >>>(11
+'D01-03,D10-12 cdefedcr efgagfer crcrcrcr l16ccddeeff l8edcr
+
+D09     r1
+D0809   r1
+D070809 r1 m0@1 o5l8p3q1v50 cdefedcr efgagfer crcrcrcr l16ccddeeff l8edcr
+
+BD
+'D19 m1@2v55 o3l8p3q1 [c4rr ccrr]4
+SD
+'D20   @3v55 o3l8p3q1 [rrc4 rrc4]4
+TOM
+'D21   @4v60 o3l8p3q1 [rrrb rrrg]4
+CYM
+'D22   @4v60 o3l8p3q1 [c4r4 c4r4]4
+HH
+'D23   @3v60 o3l8p3q1 [cccc cccc]4
+

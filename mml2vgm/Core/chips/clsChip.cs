@@ -101,6 +101,8 @@ namespace Core
         public string PartName { get; set; }
         public byte rhythmStatus { get; internal set; } = 0;
         public byte beforeRhythmStatus { get; internal set; } = 0xff;
+        public int connectionSel { get; internal set; } = 0;
+        public int beforeConnectionSel { get; internal set; } = -1;
 
         public bool SupportReversePartWork = false;
         public bool ReversePartWork = false;

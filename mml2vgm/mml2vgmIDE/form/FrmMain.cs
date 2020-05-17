@@ -2186,6 +2186,8 @@ namespace mml2vgmIDE
             this.Visible = false;
             log.ForcedWrite("終了処理開始");
             log.ForcedWrite("frmMain_FormClosing:STEP 00");
+            
+            timer.Enabled = false;
 
             Audio.Close();
             Audio.RealChipClose();

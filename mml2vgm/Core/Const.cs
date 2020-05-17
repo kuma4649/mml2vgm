@@ -9,10 +9,11 @@ namespace Core
     public static class Const
     {
 
-        public const int INSTRUMENT_SIZE = 39 + 8;
-        public const int OPLL_INSTRUMENT_SIZE = 11 + 11 + 2 + 1;
-        public const int OPL3_INSTRUMENT_SIZE = 12 + 12 + 2 + 1;
-        public const int OPNA2_INSTRUMENT_SIZE = 1 + 15 + 15 + 15 + 15 + 1;
+        public const int INSTRUMENT_SIZE = 39 + 8;//47
+        public const int OPLL_INSTRUMENT_SIZE = 11 + 11 + 2 + 1;//25
+        public const int OPL3_INSTRUMENT_SIZE = 12 + 12 + 2 + 1;//27
+        public const int OPL_OP4_INSTRUMENT_SIZE = 12 + 12 + 12 + 12 + 3 + 1;//52
+        public const int OPNA2_INSTRUMENT_SIZE = 1 + 15 + 15 + 15 + 15 + 1;//62
         public const int INSTRUMENT_OPERATOR_SIZE = 9;
         public const int INSTRUMENT_M_OPERATOR_SIZE = 11;
         public const int WF_INSTRUMENT_SIZE = 33;

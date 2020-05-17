@@ -549,6 +549,11 @@ namespace Core
                     string val = buf.ToUpper();
                     if (val.Length > 1 && val[1] == 'L')
                         instrumentBufCache = new byte[Const.OPLL_INSTRUMENT_SIZE];
+                    if (val.Length > 1 && val[1] == '4')
+                    {
+                        instrumentBufCache = new byte[Const.OPL_OP4_INSTRUMENT_SIZE];
+                        line.Txt = val.Substring(2);
+                    }
                     else
                         instrumentBufCache = new byte[Const.OPL3_INSTRUMENT_SIZE];
                     instrumentCounter = 0;
@@ -1421,7 +1426,11 @@ namespace Core
                         //OPL
                         instFM.Add(instrumentBufCache[0], instrumentBufCache);
                     }
-                    else if(instrumentBufCache.Length == Const.OPL3_INSTRUMENT_SIZE)
+                    else if (instrumentBufCache.Length == Const.OPL3_INSTRUMENT_SIZE)
+                    {
+                        instFM.Add(instrumentBufCache[0], instrumentBufCache);
+                    }
+                    else if (instrumentBufCache.Length == Const.OPL_OP4_INSTRUMENT_SIZE)
                     {
                         instFM.Add(instrumentBufCache[0], instrumentBufCache);
                     }
