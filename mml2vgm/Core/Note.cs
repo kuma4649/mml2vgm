@@ -31,5 +31,6 @@ namespace Core
         public List<MML> tDblOctave;
 
         public int velocity = -1;
+        public bool chordSw = false;
     }
 }

@@ -105,7 +105,7 @@ namespace mml2vgmIDE
 
         public void StartRendering(int sampleRate, int yM2608ClockValue)
         {
-            driver.StartRendering(sampleRate, yM2608ClockValue);
+            driver.StartRendering(sampleRate, new Tuple<string, int>[] { new Tuple<string, int>("YM2608", yM2608ClockValue) });
         }
 
         public MmlDatum[] compile(string srcMUCFullPath, string wrkMUCFullPath)

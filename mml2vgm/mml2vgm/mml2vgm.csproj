@@ -150,7 +150,9 @@
     <None Include="sample\MidiGM\testGM.gwi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="sample\YMF262\OPL3test.gwi" />
+    <None Include="sample\YMF262\OPL3test.gwi">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="sample\QSound\testQSound.gwi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

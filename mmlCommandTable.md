@@ -59,6 +59,10 @@
     Support type: PSG 3Ch(sine wave)  
 - YM2151  
     Support type: FM 8Ch  
+- YMF262(FM)  
+    Support type: FM 18Ch  
+- YMF262(RHYTHM)  
+    Support type: RHYTHM 5Ch  
 - SEGAPCM  
     Support type: PCM 8Ch  
 - HuC6280  
@@ -126,6 +130,8 @@
     - YM2203(FM)  
     - YM2203(Ch3 Ex)  
     - YM2151  
+    - YMF262(FM)  
+    - YMF262(RHYTHM)  
     - SEGAPCM  
     - HuC6280  
     - C140  
@@ -138,6 +144,7 @@
 - Description  
     音源の音色を変更します。  
     FM / Ch3Ex / WaveForm : FM音源の音色テーブルを参照します。  
+                            (YMF262のRHYTHMもFM音源の音色テーブルを参照します。)  
     PCM / ADPCM           : PCM音源の音色テーブルを参照します。  
     YM2612X(PCM)          : 最大63色まで定義できます。  
 
@@ -2914,6 +2921,59 @@
 - Description  
     定義済みのエイリアスを設定します。  
     定義した内容を演奏後、戻ります。  
+
+
+### コメントアウト  
+-----------  
+- Command  
+    ;  
+- Format  
+    ;  
+- 設定可能範囲  
+    無し  
+- Support chips  
+    - Conductor  
+    - YM2612  
+    - YM2612X  
+    - YM2612(Ch3 Ex)  
+    - YM2612X(Ch3 Ex)  
+    - YM2612(6ChPCMmode)  
+    - YM2612X(6ChPCMmode)  
+    - SN76489  
+    - RF5C164  
+    - YM2610B(FM)  
+    - YM2610B(Ch3 Ex)  
+    - YM2610B(SSG)  
+    - YM2610B(ADPCM-A)  
+    - YM2610B(ADPCM-B)  
+    - YM2608(FM)  
+    - YM2608(Ch3 Ex)  
+    - YM2608(SSG)  
+    - YM2608(RHYTHM)  
+    - YM2608(ADPCM)  
+    - YM2609(FM)  
+    - YM2609(Ch3 Ex)  
+    - YM2609(Ch9 Ex)  
+    - YM2609(SSG)  
+    - YM2609(RHYTHM)  
+    - YM2609(ADPCM)  
+    - YM2203(FM)  
+    - YM2203(Ch3 Ex)  
+    - YM2203(SSG)  
+    - YM2151  
+    - SEGAPCM  
+    - HuC6280  
+    - C140  
+    - AY8910  
+    - YM2413(FM)  
+    - YM2413(RHYTHM)  
+    - K051649  
+    - QSound  
+    - K053260  
+- Remark  
+    このコマンド以降から行末までをコメントアウトする  
+- Description  
+    このコマンド以降から行末までを無視し、次の行に移ります。  
 
 
 ### 音符  

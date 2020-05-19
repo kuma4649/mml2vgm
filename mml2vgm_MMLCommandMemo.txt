@@ -245,6 +245,7 @@ ebass3(from MUSIC LALF @70)
   YM2609    OPNA2         7987200  45Ch(FM   : 12Ch  FMex: 6Ch  SSG : 12Ch  Rhythm : 6Ch  ADPCM1/2/3 : 3Ch  ADPCM-A : 6Ch)
   YM2610B   OPNB          8000000  19Ch(FM   :  6Ch  FMex: 3Ch  SSG :  3Ch  ADPCM-A: 6Ch  ADPCM-B: 1Ch)
   YM2151    OPM           3579545   8Ch(FM   :  8Ch)
+  YMF262    OPL3         14318180  23Ch(FM   : 18Ch  Rhythm : 5Ch)
   SegaPCM   SPCM          4000000  16Ch(PCM  : 16Ch)
   HuC6280   HuC8          3579545   6Ch(WF   :  6Ch)
   K051649   SCC           1789772   5Ch(WF   :  5Ch)
@@ -406,6 +407,29 @@ ebass3(from MUSIC LALF @70)
   X6     YM2151(FM音源)(Primary)         CH6
   X7     YM2151(FM音源)(Primary)         CH7
   X8     YM2151(FM音源)(Primary)         CH8
+  D01    YMF262(FM音源)(Primary)         CH1(2OP | 4OP)
+  D02    YMF262(FM音源)(Primary)         CH2(2OP | 4OP)
+  D03    YMF262(FM音源)(Primary)         CH3(2OP | 4OP)
+  D04    YMF262(FM音源)(Primary)         CH4(2OP | CH1が4OP時は使用不可)
+  D05    YMF262(FM音源)(Primary)         CH5(2OP | CH2が4OP時は使用不可)
+  D06    YMF262(FM音源)(Primary)         CH6(2OP | CH3が4OP時は使用不可)
+  D07    YMF262(FM音源)(Primary)         CH7(2OP only | RHYTHM使用時は使用不可)
+  D08    YMF262(FM音源)(Primary)         CH8(2OP only | RHYTHM使用時は使用不可)
+  D09    YMF262(FM音源)(Primary)         CH9(2OP only | RHYTHM使用時は使用不可)
+  D10    YMF262(FM音源)(Primary)         CH10(2OP | 4OP)
+  D11    YMF262(FM音源)(Primary)         CH11(2OP | 4OP)
+  D12    YMF262(FM音源)(Primary)         CH12(2OP | 4OP)
+  D13    YMF262(FM音源)(Primary)         CH13(2OP | CH10が4OP時は使用不可)
+  D14    YMF262(FM音源)(Primary)         CH14(2OP | CH11が4OP時は使用不可)
+  D15    YMF262(FM音源)(Primary)         CH15(2OP | CH12が4OP時は使用不可)
+  D16    YMF262(FM音源)(Primary)         CH16(2OP only)
+  D17    YMF262(FM音源)(Primary)         CH17(2OP only)
+  D18    YMF262(FM音源)(Primary)         CH18(2OP only)
+  D19    YMF262(RHYTHM)(Primary)         CH7(BD)
+  D20    YMF262(RHYTHM)(Primary)         CH8(SD)
+  D21    YMF262(RHYTHM)(Primary)         CH9(TOM)
+  D22    YMF262(RHYTHM)(Primary)         CH9(CYM)
+  D23    YMF262(RHYTHM)(Primary)         CH8(HH)
   Z01    SegaPCM(PCM音源)(Primary)       CH1
   Z02    SegaPCM(PCM音源)(Primary)       CH2
   Z03    SegaPCM(PCM音源)(Primary)       CH3
@@ -882,6 +906,7 @@ pn1,n2          ---------------------o-o------  パン (n1: 左 0 - 127 n2: 右 
 so              -------------------------oo---  サスティンON
 sf              -------------------------oo---  サスティンOFF
 %xxx            oooooooooooooooooooooooooooooo  エイリアス展開
+;               oooooooooooooooooooooooooooooo  コメントアウト 行末まで無視する
                  
 c               -ooooooooooooooooooooooooooooo  音符ド
 d               -ooooooooooooooooooooooooooooo  音符レ
@@ -981,6 +1006,16 @@ b               -ooooooooooooooooooooooooooooo  音符シ
 '@ CNT FB
 
   定義パターン6
+    "L4"を指定した音色をYMF262(OPL3)で使用すると以下のように解釈される。
+
+'@ L No
+'@ AR DR SL RR KSL TL MT AM VIB EGT KSR WS
+'@ AR DR SL RR KSL TL MT AM VIB EGT KSR WS
+'@ AR DR SL RR KSL TL MT AM VIB EGT KSR WS
+'@ AR DR SL RR KSL TL MT AM VIB EGT KSR WS
+'@ CNT1 CNT2 FB
+
+  定義パターン7
     "A"を指定した音色を妄想音源YM2609(OPNA2)で使用すると以下のように解釈される。
 	 DT2 DeTune2   OPNA2はDT2を使用可
 	 FB  Feed Back OPNA2はop毎に使用可
@@ -1312,6 +1347,7 @@ FM1Chで指定の音程2音を同時に出力することを主な目的とし�
           PartYM2610B                     =T
           PartYM2151                      =X
           PartYM3526                      =L
+          PartYMF262                      =D
           PartSegaPCM                     =Z
           PartHuC6280                     =H
           PartYM2612X                     =E(XGM専用)

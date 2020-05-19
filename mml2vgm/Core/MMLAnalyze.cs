@@ -304,7 +304,10 @@ namespace Core
                     log.Write("restNoWork");
                     CmdRestNoWork(pw, mml);
                     break;
-
+                case ';':
+                    log.Write("comment out");
+                    CmdCommentout(pw, mml);
+                    break;
 
                 default:
                     msgBox.setErrMsg(string.Format(msg.get("E05000"), cmd), mml.line.Lp);
@@ -1632,6 +1635,8 @@ namespace Core
             note.length += futen;
 
             pw.skipTabSpace();
+
+            //ベロシティ解析
             if (pw.getChar() == ',')
             {
                 pw.incPos();
@@ -1641,6 +1646,29 @@ namespace Core
                     note.velocity = Common.CheckRange(n, 0, 127);
                 }
             }
+
+            pw.skipTabSpace();
+
+            //和音装飾解析
+            if (pw.getChar() == ':')
+            {
+                pw.incPos();
+                pw.skipTabSpace();
+
+                note.chordSw = true;
+            }
+        }
+
+        private void CmdCommentout(partWork pw, MML mml)
+        {
+
+            int row = pw.pos.row;
+            string alies = pw.pos.alies;
+            do
+            {
+                pw.incPos();
+            } while (row == pw.pos.row && alies == pw.pos.alies);
+
         }
 
         private void CmdRest(partWork pw, MML mml)
