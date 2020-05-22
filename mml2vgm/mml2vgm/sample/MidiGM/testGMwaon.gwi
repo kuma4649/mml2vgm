@@ -1,0 +1,40 @@
+﻿'{
+
+	TitleName            =test GM waon(chord)
+	TitleNameJ           =GM和音テスト
+	GameName             =
+	GameNameJ            =
+	SystemName           =MIDI
+	SystemNameJ          =MIDI
+	Composer             =kuma
+	ComposerJ            =くま
+	ReleaseDate          =2345/01/23
+	Converted            =kuma
+	Notes                =MIDI全般テスト
+
+	Format               =ZGM
+	ClockCount           =192
+
+}
+
+
+     GM1 ON
+'@ S   0
+'@     $F0,$7E,$7F,$09,$01,$F7
+
+
+     No, SV,AR,DR,SL,SR,RR,ST
+'@ E   0,60, 1, 1, 1, 1, 0, 3 , GM
+
+
+'B01 T110
+GM1 ON 送信(注意：これによりピッチベンドセンシビリティその他は初期値に戻る)
+'B01 @S0r2
+'B01 o5 @0  V127 l8 v127 r4U127 q0
+
+
+ 「:」コマンドをつけるとウエイトせずに次のコマンドに移ります
+'B01 [ c2:efga / e2:baga ] 
+'B01 g2:b>cd<b
+ 注意!! 「:」コマンドは音符コマンドの装飾になります
+'B01 >c2:<e2:g2 

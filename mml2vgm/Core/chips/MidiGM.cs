@@ -9,8 +9,6 @@ namespace Core
 {
     public class MidiGM : ClsChip
     {
-        private List<MIDINote> noteOns = new List<MIDINote>();
-        private List<MIDINote> noteOffs = new List<MIDINote>();
 
         public MidiGM(ClsVgm parent, int chipID, string initialPartName, string stPath, int chipNumber) : base(parent, chipID, initialPartName, stPath, chipNumber)
         {
@@ -411,24 +409,32 @@ namespace Core
             mn.mml = mml;
             mn.noteNumber = noteNum;
             mn.velocity = (byte)(n.velocity==-1 ? pw.velocity : n.velocity);
-            noteOns.Add(mn);
+            mn.length = n.length;
+            mn.beforeKeyon = null;
+            mn.Keyon = true;
+            pw.noteOns[noteNum] = mn;
         }
 
         public override void SetKeyOff(partWork pw, MML mml)
         {
-            for (byte i = 0; i < pw.tblNoteOn.Length; i++)
-            {
-                if (!pw.tblNoteOn[i]) continue;
-                pw.tblNoteOn[i] = false;
+            return;
 
-                //MIDINote mn = new MIDINote();
-                //mn.pw = pw;
-                //mn.mml = mml;
-                //mn.noteNumber = i;
-                //mn.velocity = 0;
-                //noteOffs.Add(mn);
-                OutMidiNoteOn(pw, mml, i, 0);
-            }
+            //for (byte i = 0; i < pw.tblNoteOn.Length; i++)
+            //{
+            //    if (!pw.tblNoteOn[i]) continue;
+            //    pw.tblNoteOn[i] = false;
+
+            //    pw.noteOns[i].Keyon = false;
+            //    pw.noteOns[i].length = 0;
+
+            //    //MIDINote mn = new MIDINote();
+            //    //mn.pw = pw;
+            //    //mn.mml = mml;
+            //    //mn.noteNumber = i;
+            //    //mn.velocity = 0;
+            //    //noteOffs.Add(mn);
+            //    //OutMidiNoteOn(pw, mml, i, 0);
+            //}
         }
 
         public override int GetToneDoublerShift(partWork pw, int octave, char noteCmd, int shift)
@@ -539,19 +545,21 @@ namespace Core
                 //    }
                 //}
 
+                log.Write("KeyOn情報をかき出し");
+                foreach (MIDINote n in pw.noteOns)
+                {
+                    if (n == null) continue;
+                    if (n.beforeKeyon != n.Keyon)
+                    {
+                        if (n.Keyon)
+                            OutMidiNoteOn(n.pw, n.mml, n.noteNumber, n.velocity);
+                        else
+                            OutMidiNoteOff(n.pw, n.mml, n.noteNumber, n.velocity);
+                        n.beforeKeyon = n.Keyon;
+                    }
+                }
             }
 
-            log.Write("KeyOn情報をかき出し");
-            foreach (MIDINote n in noteOns) OutMidiNoteOn(n.pw, n.mml, n.noteNumber, n.velocity);
-            noteOns.Clear();
-        }
-
-        public class MIDINote
-        {
-            public partWork pw { get; internal set; }
-            public MML mml { get; internal set; }
-            public byte noteNumber { get; internal set; }
-            public byte velocity { get; internal set; }
         }
 
         public enum enmControlChange : byte

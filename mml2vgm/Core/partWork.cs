@@ -429,6 +429,8 @@ namespace Core
         public bool renpuFlg = false;
         public List<int> lstRenpuLength = null;
 
+        public MIDINote[] noteOns = new MIDINote[128];
+
         /// <summary>
         /// パート情報をリセットする
         /// </summary>
@@ -589,6 +591,10 @@ namespace Core
         public int effectDistortionSwitch { get; internal set; } = 0;
         public int effectDistortionVolume { get; internal set; } = 32;
         public bool isOp4Mode { get; internal set; } = false;
+
+
+
+
 
         public void MakeLstPos()
         {
@@ -1106,6 +1112,7 @@ namespace Core
         public int depthWaitCounter { get; internal set; }
         public int depth { get; internal set; }
         public int depthV2 { get; internal set; }
+
     }
 
     public class clsPcm
@@ -1288,6 +1295,17 @@ namespace Core
             OP4DT2 = op4dt2;
             KeyShift = keyshift;
         }
+    }
+
+    public class MIDINote
+    {
+        public partWork pw { get; internal set; }
+        public MML mml { get; internal set; }
+        public byte noteNumber { get; internal set; }
+        public byte velocity { get; internal set; }
+        public long length { get; internal set; }
+        public bool? beforeKeyon { get; internal set; } = null;
+        public bool Keyon { get; internal set; } = false;
     }
 
 }

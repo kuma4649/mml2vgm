@@ -2078,6 +2078,13 @@ namespace Core
                             {
                                 pw.envCounter -= (int)waitCounter;
                             }
+
+                            for(int i = 0; i<pw.noteOns.Length; i++)
+                            {
+                                if (pw.noteOns[i] == null) continue;
+                                if (pw.noteOns[i].length < 1) continue;
+                                pw.noteOns[i].length -= waitCounter;
+                            }
                         }
                     }
                 }
@@ -2161,6 +2168,14 @@ namespace Core
                             waitCounter = Math.Min(waitCounter, cpw.pcmWaitKeyOnCounter);
                         }
 
+                        //MIDINoteOns
+                        for(int i=0;i<cpw.noteOns.Length;i++)
+                        {
+                            if (cpw.noteOns[i] == null) continue;
+                            if (cpw.noteOns[i].length < 1) continue;
+
+                            waitCounter = Math.Min(waitCounter, cpw.noteOns[i].length);
+                        }
                     }
 
                 }
@@ -2223,6 +2238,8 @@ namespace Core
 
             log.Write("Envelope");
             ProcEnvelope(pw);
+
+            ProcMidiNoteOff(pw);
 
             pw.chip.SetFNum(pw,null);
             pw.chip.SetVolume(pw,null);
@@ -3448,6 +3465,18 @@ namespace Core
                     pl.depth += pl.param[8];
                     pl.depth = Common.CheckRange(pl.depth, 0, 32767);
                 }
+            }
+        }
+
+        private void ProcMidiNoteOff(partWork pw)
+        {
+            for(int i = 0; i<pw.noteOns.Length; i++)
+            {
+                if (pw.noteOns[i] == null) continue;
+                if (pw.noteOns[i].length > 0) continue;
+                if (!pw.noteOns[i].Keyon) continue;
+
+                pw.noteOns[i].Keyon = false;
             }
         }
 

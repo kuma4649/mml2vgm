@@ -1663,11 +1663,13 @@ namespace Core
         {
 
             int row = pw.pos.row;
+            char ch;
             string alies = pw.pos.alies;
             do
             {
                 pw.incPos();
-            } while (row == pw.pos.row && alies == pw.pos.alies);
+                ch = pw.getChar();
+            } while ((row == pw.pos.row && alies == pw.pos.alies) && ch!=(char)0);
 
         }
 

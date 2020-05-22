@@ -1416,19 +1416,19 @@ namespace Core
                 {
                     SetKeyOff(pw, mml);
                 }
-                SetEnvelopeAtKeyOn(pw,mml);
+                SetEnvelopeAtKeyOn(pw, mml);
                 SetLfoAtKeyOn(pw, mml);
                 SetVolume(pw, mml);
                 //強制設定
                 //pw.freq = -1;
                 //発音周波数の決定
-                SetFNum(pw,mml);
+                SetFNum(pw, mml);
                 //midiむけ
-                if(pw.bendWaitCounter==-1)
+                if (pw.bendWaitCounter == -1)
                     ResetTieBend(pw, mml);
                 //if (!pw.chip.parent.useSkipPlayCommand)
                 //{
-                    SetKeyOn(pw, mml);
+                SetKeyOn(pw, mml);
                 //}
             }
             else
@@ -1437,8 +1437,8 @@ namespace Core
                 //pw.freq = -1;
                 //発音周波数の決定
                 SetDummyData(pw, mml);
-                SetFNum(pw,mml);
-                SetTieBend(pw,mml);
+                SetFNum(pw, mml);
+                SetTieBend(pw, mml);
                 SetVolume(pw, mml);
             }
 
@@ -1448,6 +1448,8 @@ namespace Core
             else
                 pw.waitKeyOnCounter = pw.waitCounter - pw.gatetime;
             if (pw.waitKeyOnCounter < 1) pw.waitKeyOnCounter = 1;
+
+            if (note.chordSw) pw.waitCounter = 0;
 
             pw.clockCounter += pw.waitCounter;
         }
