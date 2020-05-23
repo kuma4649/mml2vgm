@@ -3476,7 +3476,7 @@ namespace Core
                 if (pw.noteOns[i].length > 0) continue;
                 if (!pw.noteOns[i].Keyon) continue;
 
-                pw.noteOns[i].Keyon = false;
+                if (pw.noteOns[i].length != -1) pw.noteOns[i].Keyon = false;
             }
         }
 

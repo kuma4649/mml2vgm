@@ -1563,6 +1563,7 @@ namespace Core
             int n = -1;
             bool directFlg = false;
             int col = 0;
+            bool veloCheckSkip = false;
 
             //数値の解析
             if (pw.getNumNoteLength(out n, out directFlg,out col))
@@ -1612,7 +1613,7 @@ namespace Core
                     else
                     {
                         note.velocity = Common.CheckRange(n, 0, 127);
-                        return;
+                        veloCheckSkip = true;
                     }
                 }
             }
@@ -1637,7 +1638,7 @@ namespace Core
             pw.skipTabSpace();
 
             //ベロシティ解析
-            if (pw.getChar() == ',')
+            if (!veloCheckSkip && pw.getChar() == ',')
             {
                 pw.incPos();
                 pw.skipTabSpace();

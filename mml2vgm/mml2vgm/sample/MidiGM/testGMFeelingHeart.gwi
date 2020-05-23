@@ -1,0 +1,71 @@
+﻿'{
+
+	TitleName            =test GM waon(chord)
+	TitleNameJ           =GM和音テスト
+	GameName             =
+	GameNameJ            =
+	SystemName           =MIDI
+	SystemNameJ          =MIDI
+	Composer             =kuma
+	ComposerJ            =くま
+	ReleaseDate          =2345/01/23
+	Converted            =kuma
+	Notes                =MIDI全般テスト
+
+	Format               =ZGM
+	ClockCount           =192
+
+}
+
+
+     GM1 ON
+'@ S   0
+'@     $F0,$7E,$7F,$09,$01,$F7
+
+
+     No, SV,AR,DR,SL,SR,RR,ST
+'@ E   0,60, 1, 1, 1, 1, 0, 3 , GM
+
+
+'B01 T117
+GM1 ON 送信(注意：これによりピッチベンドセンシビリティその他は初期値に戻る)
+'B01 @S0
+'B01-30 r4
+
+
+
+ Pad
+'B06 CH6 @89o6l1V110v60q0U90p45
+'B06 <g+:>c+:e:g+:b:>c+,80< [ <g+:b:>e:g+:b,80 ]3
+'B06 <g+:>c+:e:g+:b:>c+,80< <g+:b:>e:g+:b,80 <g+:b:>e:g+:b,80 r1
+
+ Base
+'B09 CH9 @34o3l8V120v120U100p63Q8DOFV
+'B09 a1 g+2.^8<Q4b8 Q8>f+2<Q8b4&b4_>e< Q8e2.f+g+
+'B09 a4.eaa4ag+4b>c < a16_>c+&c+16<
+'B09 c+g+>c+< f+4f+.f+16Q4g+Q8g+aQ7a+ rQ4bQ8b&b_<b>rQ4bQ8b4
+
+ Syn.Brass
+'B08 CH8 @62o5l8V110v100U80p75
+'B08 r4 Q4e:g+,100 Q7c+4:f+4,100 Q4c+:f+,100  Q4e:g+,100 Q7<b4:>e4,100 Q4<b:>e,100
+'B08    Q4e:g+,100 Q7c+4:f+4,100 Q4c+:f+,100  Q7c+:e,100 Q4d+:f+,100
+'B08 Q7e4:g+4,100 Q4e:g+,100 Q7 d+4:f+4,100 d+4:f+4,100 d+4.:f+4.,100 Q4d+:f+,100 Q7e2:^8g+2,100^8
+'B08 r4 Q4e:g+,100 Q7c+4:f+4,100 Q4c+:f+,100  Q4e:g+,100 Q7<b4:>e4,100 Q4<b:>e,100
+'B08    Q4e:g+,100 Q7c+4:f+4,100 Q4c+:f+,100  Q7c+:e,100 <b:>d+,100
+'B08    Q7<a4:>e4,100 <a4:>e4,100 <b.:>d+.:f+.,100 <a.:>e.,100 <b:>d+:f+,100
+'B08 [ r Q4d+:b,100 d+4:b4,100 ]
+
+ Drums
+ HHC HHO
+'B20 CH10@1V120V110U80p64l8
+'B20 o3 [f+2f+2] f+4.f+f+2 r2 f+4f+f+  f+,80:>c+,110<[f+]30a+
+
+ BD
+'B21 CH10o3U120l8
+'B21 r1r1r1r2c4c4                      [c4r4ccr4 ]3 c2c2
+
+ SD TOM
+'B22 CH10o3l8U110
+'B22 r1r1r1r2re64e16.,80^64 r16e16f    [r4e4r4e4]3 ree e32[e32,80]3 reee:f
+
+

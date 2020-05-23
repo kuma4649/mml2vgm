@@ -399,9 +399,15 @@ namespace Core
             Note n = (Note)mml.args[0];
             byte noteNum;
             if (pw.bendWaitCounter == -1)
+            {
                 noteNum = (byte)GetNoteNum(pw.octaveNew, n.cmd, n.shift + pw.keyShift);
+                if (!pw.beforeTie) pw.beforeBendNoteNum = -1;
+            }
             else
+            {
                 noteNum = (byte)GetNoteNum(pw.bendStartOctave, pw.bendStartNote, pw.bendStartShift + pw.keyShift);
+                pw.beforeBendNoteNum = noteNum;
+            }
             pw.tblNoteOn[noteNum] = true;
 
             MIDINote mn = new MIDINote();
@@ -409,8 +415,17 @@ namespace Core
             mn.mml = mml;
             mn.noteNumber = noteNum;
             mn.velocity = (byte)(n.velocity==-1 ? pw.velocity : n.velocity);
-            mn.length = n.length;
+            mn.length = pw.tie ? -1 : pw.waitKeyOnCounter;
             mn.beforeKeyon = null;
+            if (pw.beforeTie)
+            {
+                mn.beforeKeyon = true;
+                if (pw.beforeBendNoteNum != -1)
+                {
+                    noteNum = (byte)pw.beforeBendNoteNum;
+                    mn.noteNumber = noteNum;
+                }
+            }
             mn.Keyon = true;
             pw.noteOns[noteNum] = mn;
         }

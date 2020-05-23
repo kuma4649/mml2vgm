@@ -1409,6 +1409,13 @@ namespace Core
                 pw.shift = pw.bendShift;
             }
 
+            //gateTimeの決定
+            if (pw.gatetimePmode)
+                pw.waitKeyOnCounter = pw.waitCounter * pw.gatetime / 8L;
+            else
+                pw.waitKeyOnCounter = pw.waitCounter - pw.gatetime;
+            if (pw.waitKeyOnCounter < 1) pw.waitKeyOnCounter = 1;
+
             //タイ指定では無い場合はキーオンする
             if (!pw.beforeTie)
             {
@@ -1440,14 +1447,12 @@ namespace Core
                 SetFNum(pw, mml);
                 SetTieBend(pw, mml);
                 SetVolume(pw, mml);
-            }
 
-            //gateTimeの決定
-            if (pw.gatetimePmode)
-                pw.waitKeyOnCounter = pw.waitCounter * pw.gatetime / 8L;
-            else
-                pw.waitKeyOnCounter = pw.waitCounter - pw.gatetime;
-            if (pw.waitKeyOnCounter < 1) pw.waitKeyOnCounter = 1;
+                if(pw.Type== enmChannelType.MIDI)
+                {
+                    SetKeyOn(pw, mml);
+                }
+            }
 
             if (note.chordSw) pw.waitCounter = 0;
 

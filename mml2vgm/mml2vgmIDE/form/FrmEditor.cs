@@ -68,6 +68,7 @@ namespace mml2vgmIDE
             keywordHighlighter.AddRegex("^'[A-Za-z0-9\\-\\,\\+]+[ |\\t]", CharClass.Keyword);
             keywordHighlighter.AddRegex("^'@[ |\\t]", CharClass.Keyword);
             keywordHighlighter.AddRegex("^'%\\S+[ |\\t]", CharClass.Keyword);
+            keywordHighlighter.AddRegex(";.*", CharClass.DocComment);
             keywordHighlighter.AddEnclosure("'{", "}", CharClass.Comment, true);
             azukiControl = new AzukiControl();
             azukiControl.Font = new Font(setting.other.TextFontName, setting.other.TextFontSize, setting.other.TextFontStyle);
