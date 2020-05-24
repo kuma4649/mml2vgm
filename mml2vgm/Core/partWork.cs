@@ -60,11 +60,13 @@ namespace Core
         /// Secondary Chipか
         /// </summary>
         public int chipNumber = 0;
-        
+
         /// <summary>
         /// 割り当てられた音源のチャンネル番号
         /// </summary>
         public int ch = 0;
+
+        public int MIDIch = 0;
 
         /// <summary>
         /// 未加工のf-num

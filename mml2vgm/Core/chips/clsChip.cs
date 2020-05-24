@@ -1429,6 +1429,7 @@ namespace Core
                 //強制設定
                 //pw.freq = -1;
                 //発音周波数の決定
+                SetDummyData(pw, mml);
                 SetFNum(pw, mml);
                 //midiむけ
                 if (pw.bendWaitCounter == -1)

@@ -22,6 +22,7 @@ namespace mml2vgmIDE.MMLParameter
         public int?[] detune;
         public int?[] keyShift;
         public int?[] keyOnMeter;
+        public int?[] MIDIch;
         public bool[] beforeTie;
         public int[] clockCounter;
 
@@ -49,6 +50,7 @@ namespace mml2vgmIDE.MMLParameter
             keyOnMeter = new int?[n];
             beforeTie = new bool[n];
             clockCounter = new int[n];
+            MIDIch = new int?[n];
 
             TraceInfo = new Queue<outDatum>[n];
             for (int i = 0; i < n; i++)

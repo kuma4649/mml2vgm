@@ -127,6 +127,10 @@ namespace mml2vgmIDE.MMLParameter
                     n = (int)od.args[0];
                     keyShift[od.linePos.ch] = n;
                     break;
+                case enmMMLType.MIDICh:
+                    n = (int)od.args[0];
+                    MIDIch[od.linePos.ch] = n + 1;
+                    break;
             }
         }
     }

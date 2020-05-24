@@ -69,12 +69,20 @@ namespace Core
             pw.directModeVib = false;
             pw.directModeTre = false;
             pw.pitchBend = 0;
+            pw.MIDIch = pw.ch % 16;
         }
 
         public override void CmdMIDICh(partWork pw, MML mml)
         {
             int ch = (int)mml.args[0];
-            pw.ch = ch & 0xf;
+            pw.MIDIch = ch & 0xf;
+
+            MML vmml = new MML();
+            vmml.type = enmMMLType.MIDICh;
+            vmml.args = new List<object>();
+            vmml.args.Add(pw.MIDIch);
+            vmml.line = mml.line;
+            SetDummyData(pw, vmml);
         }
 
         public override void CmdMIDIControlChange(partWork pw,MML mml)
@@ -82,7 +90,7 @@ namespace Core
             int ctrl = (int)mml.args[0];
             int data = (int)mml.args[1];
 
-            parent.OutData(mml, pw.port[0], 3, (byte)(0xb0 + (pw.ch & 0xf)), (byte)(ctrl & 0x7f), (byte)(data & 0x7f));
+            parent.OutData(mml, pw.port[0], 3, (byte)(0xb0 + pw.MIDIch), (byte)(ctrl & 0x7f), (byte)(data & 0x7f));
         }
 
         public override void CmdVelocity(partWork pw, MML mml)
@@ -481,37 +489,37 @@ namespace Core
 
         private void OutMidiNoteOff(partWork pw, MML mml, byte noteNumber, byte velocity)
         {
-            parent.OutData(mml, pw.port[0], 3, (byte)(0x80 + (pw.ch & 0xf)), (byte)(noteNumber & 0x7f), (byte)(velocity & 0x7f));
+            parent.OutData(mml, pw.port[0], 3, (byte)(0x80 + pw.MIDIch), (byte)(noteNumber & 0x7f), (byte)(velocity & 0x7f));
         }
 
         private void OutMidiNoteOn(partWork pw, MML mml, byte noteNumber, byte velocity)
         {
-            parent.OutData(mml, pw.port[0], 3, (byte)(0x90 + (pw.ch & 0xf)), (byte)(noteNumber & 0x7f), (byte)(velocity & 0x7f));
+            parent.OutData(mml, pw.port[0], 3, (byte)(0x90 + pw.MIDIch), (byte)(noteNumber & 0x7f), (byte)(velocity & 0x7f));
         }
 
         private void OutMidiPolyKeyPress(partWork pw, MML mml, byte noteNumber, byte press)
         {
-            parent.OutData(mml, pw.port[0], 3, (byte)(0xa0 + (pw.ch & 0xf)), (byte)(noteNumber & 0x7f), (byte)(press & 0x7f));
+            parent.OutData(mml, pw.port[0], 3, (byte)(0xa0 + pw.MIDIch), (byte)(noteNumber & 0x7f), (byte)(press & 0x7f));
         }
 
         private void OutMidiControlChange(partWork pw, MML mml, enmControlChange ctrl, byte data)
         {
-            parent.OutData(mml, pw.port[0], 3, (byte)(0xb0 + (pw.ch & 0xf)), (byte)ctrl, (byte)(data & 0x7f));
+            parent.OutData(mml, pw.port[0], 3, (byte)(0xb0 + pw.MIDIch), (byte)ctrl, (byte)(data & 0x7f));
         }
 
         private void OutMidiProgramChange(partWork pw, MML mml, byte programNumber)
         {
-            parent.OutData(mml, pw.port[0], 2, (byte)(0xc0 + (pw.ch & 0xf)), programNumber);//, (byte)0);
+            parent.OutData(mml, pw.port[0], 2, (byte)(0xc0 + pw.MIDIch), programNumber);//, (byte)0);
         }
 
         private void OutMidiChannelPress(partWork pw, MML mml, byte press)
         {
-            parent.OutData(mml, pw.port[0], 3, (byte)(0xd0 + (pw.ch & 0xf)), press, (byte)0);
+            parent.OutData(mml, pw.port[0], 3, (byte)(0xd0 + pw.MIDIch), press, (byte)0);
         }
 
         private void OutMidiPitchBend(partWork pw, MML mml, byte msb, byte lsb)
         {
-            parent.OutData(mml, pw.port[0], 3, (byte)(0xe0 + (pw.ch & 0xf)), (byte)(lsb & 0x7f), (byte)(msb & 0x7f));
+            parent.OutData(mml, pw.port[0], 3, (byte)(0xe0 + pw.MIDIch), (byte)(lsb & 0x7f), (byte)(msb & 0x7f));
         }
 
         private void OutMidi(partWork pw, MML mml)
@@ -567,9 +575,9 @@ namespace Core
                     if (n.beforeKeyon != n.Keyon)
                     {
                         if (n.Keyon)
-                            OutMidiNoteOn(n.pw, n.mml, n.noteNumber, n.velocity);
+                            OutMidiNoteOn(n.pw, null , n.noteNumber, n.velocity);//mmlはわたさない
                         else
-                            OutMidiNoteOff(n.pw, n.mml, n.noteNumber, n.velocity);
+                            OutMidiNoteOff(n.pw, null , n.noteNumber, n.velocity);//mmlはわたさない
                         n.beforeKeyon = n.Keyon;
                     }
                 }
