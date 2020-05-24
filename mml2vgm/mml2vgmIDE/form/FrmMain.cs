@@ -196,9 +196,11 @@ namespace mml2vgmIDE
 
                 disp("mucomDotNETを読み込みました");
             }
-            catch
+            catch (Exception ex)
             {
                 disp("mucomDotNETの読み込みに失敗しました");
+                disp(string.Format("message:\r\n{0}\r\nstacktrace:\r\n{1}\r\n", ex.Message, ex.StackTrace));
+                disp(string.Format("startuppath:\r\n{0}\r\n", startupPath));
                 mucom = null;
                 Audio.mucomManager = null;
             }
