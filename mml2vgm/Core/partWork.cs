@@ -530,6 +530,11 @@ namespace Core
             setPos(pos.tCol - 1);
         }
 
+        public void decPos(int n)
+        {
+            setPos(pos.tCol - n);
+        }
+
         /// <summary>
         /// 指定された文字数だけ読み出し、文字列を生成する
         /// </summary>

@@ -1537,6 +1537,145 @@ namespace Core
             }
         }
 
+        //private void CmdNote(partWork pw, char cmd, MML mml)
+        //{
+        //    pw.incPos();
+        //    mml.line.Lp.length = 1;
+        //    mml.type = enmMMLType.Note;
+        //    mml.args = new List<object>();
+        //    Note note = new Note();
+        //    mml.args.Add(note);
+        //    note.cmd = cmd;
+
+        //    //+ -の解析
+        //    int shift = 0;
+        //    while (pw.getChar() == '+' || pw.getChar() == '-')
+        //    {
+        //        if (pw.getChar() == '+')
+        //            shift++;
+        //        else
+        //            shift--;
+        //        pw.incPos();
+        //        mml.line.Lp.length++;
+        //    }
+        //    note.shift = shift;
+
+        //    int n = -1;
+        //    bool directFlg = false;
+        //    int col = 0;
+        //    bool veloCheckSkip = false;
+
+        //    //数値の解析
+        //    if (pw.getNumNoteLength(out n, out directFlg,out col))
+        //    {
+        //        if (!directFlg)
+        //        {
+        //            if (n != 0)
+        //            {
+        //                if ((int)info.clockCount % n != 0)
+        //                {
+        //                    msgBox.setWrnMsg(string.Format(msg.get("E05023"), n), mml.line.Lp);
+        //                }
+        //                n = (int)info.clockCount / n;
+        //            }
+        //        }
+        //        else
+        //        {
+        //            n = Common.CheckRange(n, 1, 65535);
+        //        }
+
+        //        note.length = n;
+        //        mml.line.Lp.length += col;
+
+        //        //ToneDoubler'0'指定の場合はここで解析終了
+        //        if (n == 0)
+        //        {
+        //            swToneDoubler = true;
+        //            return;
+        //        }
+        //    }
+        //    else
+        //    {
+        //        note.length = (int)pw.length;
+        //        pw.skipTabSpace();
+        //        if (pw.getChar() == ',')
+        //        {
+        //            pw.incPos();
+        //            pw.skipTabSpace();
+        //            if (!pw.getNum(out n))
+        //            {
+        //                //Tone Doubler','指定の場合はここで解析終了
+        //                //ToneDoublerは数値ではないはず
+        //                mml.line.Lp.length++;
+        //                swToneDoubler = true;
+        //                return;
+        //            }
+        //            else
+        //            {
+        //                note.velocity = Common.CheckRange(n, 0, 127);
+        //                veloCheckSkip = true;
+        //            }
+        //        }
+        //    }
+
+        //    //.の解析
+        //    int futen = 0;
+        //    int fn = note.length;
+        //    while (pw.getChar() == '.')
+        //    {
+        //        if (fn % 2 != 0)
+        //        {
+        //            msgBox.setWrnMsg(msg.get("E05036")
+        //                , mml.line.Lp);
+        //        }
+        //        fn = fn / 2;
+        //        futen += fn;
+        //        pw.incPos();
+        //        mml.line.Lp.length++;
+        //    }
+        //    note.length += futen;
+
+        //    pw.skipTabSpace();
+
+        //    //ベロシティ解析
+        //    if (!veloCheckSkip && pw.getChar() == ',')
+        //    {
+        //        pw.incPos();
+        //        pw.skipTabSpace();
+        //        if (pw.getNum(out n))
+        //        {
+        //            note.velocity = Common.CheckRange(n, 0, 127);
+        //        }
+        //    }
+
+        //    pw.skipTabSpace();
+
+        //    //和音装飾解析
+        //    if (pw.getChar() == ':')
+        //    {
+        //        pw.incPos();
+        //        pw.skipTabSpace();
+
+        //        note.chordSw = true;
+        //    }
+        //}
+
+        //
+        //  c + 0 99 .. ^99 &99 ~99 ,99 :
+        //  1 2 3  4  5   6   7   8 9   10
+        //
+        // 1... c d e f g a b 音符
+        // 2... + -           半音上げる/下げる(複数可能) 
+        // 3... 0             ToneDoubler
+        // 4... n             音長($は16進 #はクロック表記 #$は16進のクロック表記)
+        // 5... .             符点(複数可能)
+        // 6... ^n..          音長を加算($は16進 #はクロック表記 #$は16進のクロック表記)符点も可能
+        // 7... &n..          音長を加算($は16進 #はクロック表記 #$は16進のクロック表記)符点も可能
+        // 8... ~n..          音長を減算($は16進 #はクロック表記 #$は16進のクロック表記)符点も可能
+        //  6,7,8 は複数繰り返し指定可能。順番も自由
+        // 9... ,c            コンマの後が音符ならばToneDoubler
+        //                    数値の場合はベロシティ
+        //10... :             和音指定(ウエイトキャンセル)
         private void CmdNote(partWork pw, char cmd, MML mml)
         {
             pw.incPos();
@@ -1546,6 +1685,8 @@ namespace Core
             Note note = new Note();
             mml.args.Add(note);
             note.cmd = cmd;
+
+            pw.skipTabSpace();
 
             //+ -の解析
             int shift = 0;
@@ -1560,13 +1701,12 @@ namespace Core
             }
             note.shift = shift;
 
-            int n = -1;
-            bool directFlg = false;
-            int col = 0;
-            bool veloCheckSkip = false;
+            int n;// = -1;
+            bool directFlg;// = false;
+            int col;// = 0;
 
             //数値の解析
-            if (pw.getNumNoteLength(out n, out directFlg,out col))
+            if (pw.getNumNoteLength(out n, out directFlg, out col))
             {
                 if (!directFlg)
                 {
@@ -1596,53 +1736,85 @@ namespace Core
             }
             else
             {
+
+                //数値未指定の場合はlコマンドでの設定値を使用する
                 note.length = (int)pw.length;
+
                 pw.skipTabSpace();
-                if (pw.getChar() == ',')
-                {
-                    pw.incPos();
-                    pw.skipTabSpace();
-                    if (!pw.getNum(out n))
-                    {
-                        //Tone Doubler','指定の場合はここで解析終了
-                        //ToneDoublerは数値ではないはず
-                        mml.line.Lp.length++;
-                        swToneDoubler = true;
-                        return;
-                    }
-                    else
-                    {
-                        note.velocity = Common.CheckRange(n, 0, 127);
-                        veloCheckSkip = true;
-                    }
-                }
+
             }
 
             //.の解析
-            int futen = 0;
-            int fn = note.length;
-            while (pw.getChar() == '.')
-            {
-                if (fn % 2 != 0)
-                {
-                    msgBox.setWrnMsg(msg.get("E05036")
-                        , mml.line.Lp);
-                }
-                fn = fn / 2;
-                futen += fn;
-                pw.incPos();
-                mml.line.Lp.length++;
-            }
-            note.length += futen;
+            note.length += CountFuten(pw, mml, note.length);
 
             pw.skipTabSpace();
 
-            //ベロシティ解析
-            if (!veloCheckSkip && pw.getChar() == ',')
+            //& ^ ~ コマンドの解析
+            int len = 0;
+            while (pw.getChar() == '&' || pw.getChar() == '^' || pw.getChar() == '~')
+            {
+                char ch = pw.getChar();
+                pw.incPos();
+                if (ch == '&')
+                {
+                    int oldPos = pw.getPos();
+                    if (pw.getNumNoteLength(out n, out directFlg))
+                    {
+                        if (!directFlg)
+                        {
+                            if ((int)info.clockCount % n != 0)
+                            {
+                                msgBox.setWrnMsg(string.Format(msg.get("E05023")
+                                    , n), mml.line.Lp);
+                            }
+                            n = (int)info.clockCount / n;
+                        }
+                        else
+                        {
+                            n = Common.CheckRange(n, 1, 65535);
+                        }
+                    }
+                    else
+                    {
+                        int nowPos = pw.getPos();
+                        pw.decPos(1 + nowPos - oldPos);
+                        break;
+                    }
+                    n += CountFuten(pw, mml, n);
+
+                }
+                else if (ch == '^')
+                {
+                    GetLength(pw, mml, out n);
+                }
+                else if (ch == '~')
+                {
+                    GetLength(pw, mml, out n);
+                    n = -n;
+                }
+
+                len += n;
+            }
+
+            note.length += len;
+            note.addLength = len;
+            pw.skipTabSpace();
+            //
+
+            //,はToneDoublerかベロシティのどちらか。
+            if (pw.getChar() == ',')
             {
                 pw.incPos();
                 pw.skipTabSpace();
-                if (pw.getNum(out n))
+                if (!pw.getNum(out n))
+                {
+                    //Tone Doubler','指定の場合はここで解析終了
+                    //ToneDoublerは数値ではないはず
+                    mml.line.Lp.length++;
+                    swToneDoubler = true;
+                    return;
+                }
+                else
                 {
                     note.velocity = Common.CheckRange(n, 0, 127);
                 }
@@ -1658,6 +1830,52 @@ namespace Core
 
                 note.chordSw = true;
             }
+        }
+
+        private void GetLength(partWork pw, MML mml, out int n)
+        {
+            if (pw.getNumNoteLength(out n, out bool directFlg))
+            {
+                if (!directFlg)
+                {
+                    if ((int)info.clockCount % n != 0)
+                    {
+                        msgBox.setWrnMsg(string.Format(msg.get("E05023")
+                            , n), mml.line.Lp);
+                    }
+                    n = (int)info.clockCount / n;
+                }
+                else
+                {
+                    n = Common.CheckRange(n, 1, 65535);
+                }
+            }
+            else
+            {
+                //数値未指定の場合はlコマンドでの設定値を使用する
+                n = (int)pw.length;
+            }
+            n += CountFuten(pw, mml, n);
+        }
+
+        private int CountFuten(partWork pw,MML mml,int noteLength)
+        {
+            int futen = 0;
+            int fn = noteLength;
+            while (pw.getChar() == '.')
+            {
+                if (fn % 2 != 0)
+                {
+                    msgBox.setWrnMsg(msg.get("E05036")
+                        , mml.line.Lp);
+                }
+                fn = fn / 2;
+                futen += fn;
+                pw.incPos();
+                mml.line.Lp.length++;
+            }
+
+            return futen;
         }
 
         private void CmdCommentout(partWork pw, MML mml)
@@ -1933,45 +2151,7 @@ namespace Core
             pw.incPos();
             mml.type = enmMMLType.TiePC;
 
-            //数値の解析
-            bool directFlg = false;
-            if (pw.getNumNoteLength(out n, out directFlg))
-            {
-                if (!directFlg)
-                {
-                    if ((int)info.clockCount % n != 0)
-                    {
-                        msgBox.setWrnMsg(string.Format(msg.get("E05023")
-                            , n), mml.line.Lp);
-                    }
-                    n = (int)info.clockCount / n;
-                }
-                else
-                {
-                    n = Common.CheckRange(n, 1, 65535);
-                }
-
-            }
-            else
-            {
-                n = 0;
-            }
-
-            //.の解析
-            int futen = 0;
-            int fn = n;
-            while (pw.getChar() == '.')
-            {
-                if (fn % 2 != 0)
-                {
-                    msgBox.setWrnMsg(msg.get("E05036")
-                        , mml.line.Lp);
-                }
-                fn = fn / 2;
-                futen += fn;
-                pw.incPos();
-            }
-            n += futen;
+            GetLength(pw, mml, out n);
 
             mml.args = new List<object>();
             mml.args.Add(n);
@@ -1983,45 +2163,7 @@ namespace Core
             pw.incPos();
             mml.type = enmMMLType.TieMC;
 
-            //数値の解析
-            bool directFlg = false;
-            if (pw.getNumNoteLength(out n, out directFlg))
-            {
-                if (!directFlg)
-                {
-                    if ((int)info.clockCount % n != 0)
-                    {
-                        msgBox.setWrnMsg(string.Format(msg.get("E05023")
-                            , n), mml.line.Lp);
-                    }
-                    n = (int)info.clockCount / n;
-                }
-                else
-                {
-                    n = Common.CheckRange(n, 1, 65535);
-                }
-
-            }
-            else
-            {
-                n = 0;
-            }
-
-            //.の解析
-            int futen = 0;
-            int fn = n;
-            while (pw.getChar() == '.')
-            {
-                if (fn % 2 != 0)
-                {
-                    msgBox.setWrnMsg(msg.get("E05036")
-                        , mml.line.Lp);
-                }
-                fn = fn / 2;
-                futen += fn;
-                pw.incPos();
-            }
-            n += futen;
+            GetLength(pw, mml, out n);
 
             mml.args = new List<object>();
             mml.args.Add(n);
@@ -2163,8 +2305,16 @@ namespace Core
                 {
                     case enmMMLType.Note:
                         bendNote = (Note)pw.mmlData[i].args[0];
-                        pw.mmlData.RemoveAt(i);
-                        i--;
+                        if (bendNote.addLength != 0)
+                        {
+                            pw.mmlData[i].type = enmMMLType.TiePC;
+                            pw.mmlData[i].args = new List<object>();
+                            pw.mmlData[i].args.Add(bendNote.addLength);
+                        }
+                        else
+                        {
+                            pw.mmlData.RemoveAt(i);
+                        }
                         goto loop_exit;
                     case enmMMLType.Octave:
                     case enmMMLType.OctaveUp:

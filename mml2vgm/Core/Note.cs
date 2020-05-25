@@ -32,5 +32,7 @@ namespace Core
 
         public int velocity = -1;
         public bool chordSw = false;
+
+        public int addLength { get; internal set; } = 0;
     }
 }
