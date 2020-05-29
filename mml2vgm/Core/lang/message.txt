@@ -398,3 +398,14 @@ W25000=The target of DirectMode ('V', 'T') is not specified.
 E26000=Specified 4operator sound patch({0}) on 2operator channel.
 E26001=Specified 2operator sound patch({0}) on 4operator channel.
 W26002=Specified command that's only for 4operator channel. Will be ignored.
+
+
+
+;C352.cs 27000
+E27000=defined loop address [{0}] is exceeding PCM data size. select between 0~{1}.
+E27001=This sound chip doesn't have instruments.
+E27002=ToneDoubler cannot be used if chip is not OPN or OPM.
+E27003=Tone number({0}) does not exist for PCM definition.
+E27004=Selected Tone number({0}) is not for C352 PCM data.
+
+

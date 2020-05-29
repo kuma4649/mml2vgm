@@ -1,0 +1,23 @@
+﻿'{
+
+	TitleName   =
+	TitleNameJ  =
+	GameName    =
+	GameNameJ   =
+	SystemName  =
+	SystemNameJ =
+	Composer    =
+	ComposerJ   =
+	ReleaseDate =
+	Converted   =
+	Notes       =
+
+}
+
+'@ P 0,"..\wav\Guitar.wav"        , 8000 , 100 , C352 , 14000
+
+'Cn1 T120
+Cn1 L
+
+'G01 @0[c1&c1]10
+

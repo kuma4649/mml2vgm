@@ -53,6 +53,7 @@
   <ItemGroup>
     <Compile Include="chips\AY8910.cs" />
     <Compile Include="chips\C140.cs" />
+    <Compile Include="chips\C352.cs" />
     <Compile Include="chips\clsChip.cs" />
     <Compile Include="chips\clsOPN.cs" />
     <Compile Include="chips\Conductor.cs" />

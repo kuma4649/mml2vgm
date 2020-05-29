@@ -132,6 +132,9 @@
     <None Include="sample\C140\testC140.gwi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="sample\C352\testC352.gwi">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="sample\HuC6280\testHuC6280.gwi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

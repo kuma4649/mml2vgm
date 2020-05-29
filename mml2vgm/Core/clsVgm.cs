@@ -27,6 +27,7 @@ namespace Core
         public YM2413[] ym2413 = null;
         public YMF262[] ymf262 = null;
         public C140[] c140 = null;
+        public C352[] c352 = null;
         public AY8910[] ay8910 = null;
         public K051649[] k051649 = null;
         public QSound[] qsound = null;
@@ -284,6 +285,20 @@ namespace Core
             {
                 c140 = lstC140.ToArray();
                 chips.Add(enmChipType.C140, c140);
+            }
+
+            List<C352> lstC352 = new List<C352>();
+            n = sp.dicChipPartName[enmChipType.C352];
+            for (int i = 0; i < n.Item3.Count; i++)
+            {
+                if (string.IsNullOrEmpty(n.Item3[i])) continue;
+                if (sp.lnChipPartName.Contains(n.Item3[i]))
+                    lstC352.Add(new C352(this, i, n.Item3[i], stPath, (info.format == enmFormat.ZGM ? 0 : i)));
+            }
+            if (lstC352.Count > 0)
+            {
+                c352 = lstC352.ToArray();
+                chips.Add(enmChipType.C352, c352);
             }
 
             List<AY8910> lstAY8910 = new List<AY8910>();
@@ -2420,6 +2435,7 @@ namespace Core
             long useSegaPcm = 0;
             long useHuC6280 = 0;
             long useC140 = 0;
+            long useC352 = 0;
             long useAY8910 = 0;
             long useYM2413 = 0;
             long useK051649 = 0;
@@ -2435,6 +2451,7 @@ namespace Core
             long useSegaPcm_S = 0;
             long useHuC6280_S = 0;
             long useC140_S = 0;
+            long useC352_S = 0;
             long useAY8910_S = 0;
             long useYM2413_S = 0;
             long useK051649_S = 0;
@@ -2484,6 +2501,10 @@ namespace Core
                 if (c140 != null && c140.Length > i && c140[i] != null)
                     foreach (partWork pw in c140[i].lstPartWork)
                     { useC140 += pw.clockCounter; if (c140[i].ChipID == 1) useC140_S += pw.clockCounter; }
+
+                if (c352 != null && c352.Length > i && c352[i] != null)
+                    foreach (partWork pw in c352[i].lstPartWork)
+                    { useC352 += pw.clockCounter; if (c352[i].ChipID == 1) useC352_S += pw.clockCounter; }
 
                 if (ay8910 != null && ay8910.Length > i && ay8910[i] != null)
                     foreach (partWork pw in ay8910[i].lstPartWork)
@@ -2572,6 +2593,13 @@ namespace Core
                     dat[0x96] = new outDatum(enmMMLType.unknown, null, null, (byte)1);
                 else
                     dat[0x96] = new outDatum(enmMMLType.unknown, null, null, (byte)0);
+            }
+            if (info.Version >= 1.71f && useC352 != 0)
+            {
+                C352 c = c352[0] != null ? c352[0] : c352[1];
+                Common.SetLE32(dat, 0xdc, (uint)c.Frequency | (uint)(useC352_S == 0 ? 0 : 0x40000000));
+                if (c != null)
+                    dat[0xd6] = new outDatum(enmMMLType.unknown, null, null, (byte)0);
             }
             if (info.Version >= 1.51f && useAY8910 != 0)
             {

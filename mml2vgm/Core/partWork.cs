@@ -175,6 +175,9 @@ namespace Core
         /// </remarks>
         public int beforeRVolume = -1;
 
+        public int beforeRLVolume = -1;
+        public int beforeRRVolume = -1;
+
         /// <summary>
         /// @コマンドで設定されている音色
         /// </summary>
@@ -599,6 +602,10 @@ namespace Core
         public int effectDistortionVolume { get; internal set; } = 32;
         public bool isOp4Mode { get; internal set; } = false;
         public int beforeBendNoteNum { get; internal set; } = -1;
+        public int panRL { get; internal set; }
+        public int panRR { get; internal set; }
+        public int flag { get; internal set; }
+        public bool changeFlag { get; internal set; }
 
         public void MakeLstPos()
         {

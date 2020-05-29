@@ -274,6 +274,19 @@ namespace mml2vgmIDE
             }
             chipRegister.SetRealChipInfo(EnmZGMDevice.C140, chipType[0], chipType[1], setting.LatencyEmulation, setting.LatencySCCI);
 
+            for (int i = 0; i < chipRegister.C352.Count; i++)
+            {
+                chipType[i] = new Setting.ChipType();
+                if (!chipRegister.C352[i].Use) continue;
+                chipRegister.C352[i].Model = EnmVRModel.VirtualModel;
+                chipType[i].UseEmu = true;
+                chipType[i].UseScci = false;
+                if (ret.Count == 0) continue;
+                SearchRealChip(chipType, ret, i, EnmZGMDevice.C352, chipRegister.C352[i], setting.AutoDetectModuleType == 0 ? 0 : 1);
+                if (chipType[i].UseEmu) SearchRealChip(chipType, ret, i, EnmZGMDevice.C352, chipRegister.C352[i], setting.AutoDetectModuleType == 0 ? 1 : 0);
+            }
+            chipRegister.SetRealChipInfo(EnmZGMDevice.C352, chipType[0], chipType[1], setting.LatencyEmulation, setting.LatencySCCI);
+
             for (int i = 0; i < chipRegister.HuC6280.Count; i++)
             {
                 chipType[i] = new Setting.ChipType();
@@ -2892,11 +2905,26 @@ namespace mml2vgmIDE
                             c352.c352_set_options((byte)(((vgm)driver).C352ClockValue >> 31));
                             hiyorimiDeviceFlag |= 0x2;
 
-                            if (i == 0) chipLED.PriC352 = 1;
-                            else chipLED.SecC352 = 1;
+                            if (i == 0)
+                            {
+                                chipLED.PriC352 = 1;
+                                useChip.Add(EnmChip.C352);
+                            }
+                            else
+                            {
+                                chipLED.SecC352 = 1;
+                                useChip.Add(EnmChip.S_C352);
+                            }
+
+                            log.Write(string.Format("Use C352({0}) Clk:{1} Type:{2}"
+                                , (i == 0) ? "Pri" : "Sec"
+                                , chip.Clock
+                                , chip.Option[0]
+                                ));
+
+                            chipRegister.C352[i].Use = true;
 
                             if (chip.Instrument != null) lstChips.Add(chip);
-                            useChip.Add(i == 0 ? EnmChip.C352 : EnmChip.S_C352);
                         }
                     }
 
@@ -3261,6 +3289,12 @@ namespace mml2vgmIDE
                     {
                         if (chipRegister.C140[i].Model == EnmVRModel.VirtualModel) useEmu = true;
                         if (chipRegister.C140[i].Model == EnmVRModel.RealModel) useReal = true;
+                    }
+
+                    if (chipRegister.C352[i].Use)
+                    {
+                        if (chipRegister.C352[i].Model == EnmVRModel.VirtualModel) useEmu = true;
+                        if (chipRegister.C352[i].Model == EnmVRModel.RealModel) useReal = true;
                     }
 
                     if (chipRegister.HuC6280[i].Use)

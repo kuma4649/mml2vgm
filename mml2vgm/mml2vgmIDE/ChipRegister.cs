@@ -27,6 +27,7 @@ namespace mml2vgmIDE
 
         private Setting.ChipType[] ctAY8910 = new Setting.ChipType[2] { null, null };
         private Setting.ChipType[] ctC140 = new Setting.ChipType[2] { null, null };
+        private Setting.ChipType[] ctC352 = new Setting.ChipType[2] { null, null };
         private Setting.ChipType[] ctHuC6280 = new Setting.ChipType[2] { null, null };
         private Setting.ChipType[] ctK051649 = new Setting.ChipType[2] { null, null };
         private Setting.ChipType[] ctK053260 = new Setting.ChipType[2] { null, null };
@@ -51,6 +52,7 @@ namespace mml2vgmIDE
         private RealChip realChip = null;
         private RSoundChip[] scAY8910 = new RSoundChip[2] { null, null };
         private RSoundChip[] scC140 = new RSoundChip[2] { null, null };
+        private RSoundChip[] scC352 = new RSoundChip[2] { null, null };
         private RSoundChip[] scHuC6280 = new RSoundChip[2] { null, null };
         private RSoundChip[] scK051649 = new RSoundChip[2] { null, null };
         private RSoundChip[] scK053260 = new RSoundChip[2] { null, null };
@@ -361,7 +363,8 @@ namespace mml2vgmIDE
 
         public List<Chip> CONDUCTOR = new List<Chip>();
         public List<Chip> AY8910  = new List<Chip>();
-        public List<Chip> C140    = new List<Chip>();
+        public List<Chip> C140 = new List<Chip>();
+        public List<Chip> C352 = new List<Chip>();
         public List<Chip> MIDI    = new List<Chip>();
         public List<Chip> HuC6280 = new List<Chip>();
         public List<Chip> K051649 = new List<Chip>();
@@ -434,6 +437,21 @@ namespace mml2vgmIDE
                         if (C140.Count < i + 1) C140.Add(new Chip(24));
                         C140[i].Model = ctC140[i].UseEmu ? EnmVRModel.VirtualModel : EnmVRModel.RealModel;
                         C140[i].Delay = (C140[i].Model == EnmVRModel.VirtualModel ? LEmu : LReal);
+                    }
+                    break;
+                case EnmZGMDevice.C352:
+                    ctC352 = new Setting.ChipType[] { chipTypeP, chipTypeS };
+                    for (int i = 0; i < C352.Count; i++)
+                    {
+                        C352[i].Model = EnmVRModel.VirtualModel;
+                        C352[i].Delay = LEmu;
+                        if (i > 1) continue;
+
+                        scC352[i] = realChip.GetRealChip(ctC352[i]);
+                        if (scC352[i] != null) scC352[i].init();
+                        if (C352.Count < i + 1) C352.Add(new Chip(24));
+                        C352[i].Model = ctC352[i].UseEmu ? EnmVRModel.VirtualModel : EnmVRModel.RealModel;
+                        C352[i].Delay = (C352[i].Model == EnmVRModel.VirtualModel ? LEmu : LReal);
                     }
                     break;
                 case EnmZGMDevice.HuC6280:
@@ -688,6 +706,8 @@ namespace mml2vgmIDE
                 case EnmZGMDevice.YMZ280B:
                     ctYMZ280B = new Setting.ChipType[] { chipTypeP, chipTypeS };
                     break;
+                default:
+                    throw new NotImplementedException();
             }
 
         }
@@ -720,6 +740,13 @@ namespace mml2vgmIDE
                 C140[i].Device = EnmZGMDevice.C140;
                 C140[i].Number = i;
                 C140[i].Hosei = 0;
+
+                if (C352.Count < i + 1) C352.Add(new Chip(32));
+                C352[i].Use = false;
+                C352[i].Model = EnmVRModel.None;
+                C352[i].Device = EnmZGMDevice.C352;
+                C352[i].Number = i;
+                C352[i].Hosei = 0;
 
                 if (HuC6280.Count < i + 1) HuC6280.Add(new Chip(6));
                 HuC6280[i].Use = false;
@@ -7332,7 +7359,10 @@ namespace mml2vgmIDE
                 data &= 0xbfff;
             }
             if (model == EnmVRModel.VirtualModel)
+            {
                 mds.WriteC352(chipid, adr, data);
+                //Console.WriteLine("{0:x04} {1:x04}",adr,data);
+            }
         }
 
         public ushort[] readC352(byte chipid)

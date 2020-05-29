@@ -248,16 +248,16 @@ namespace Core
             }
 
             SetInstAtOneOpeWithoutKslTl(mml, opeNum,
-                inst[ope * 12 + 1 + 0],
-                inst[ope * 12 + 1 + 1],
-                inst[ope * 12 + 1 + 2],
-                inst[ope * 12 + 1 + 3],
-                inst[ope * 12 + 1 + 4],
-                inst[ope * 12 + 1 + 6],
-                inst[ope * 12 + 1 + 7],
-                inst[ope * 12 + 1 + 8],
-                inst[ope * 12 + 1 + 9],
-                inst[ope * 12 + 1 + 10]
+                inst[ope * 12 + 1 + 0],//AR
+                inst[ope * 12 + 1 + 1],//DR
+                inst[ope * 12 + 1 + 2],//SL
+                inst[ope * 12 + 1 + 3],//RR
+                inst[ope * 12 + 1 + 6],//MT
+                inst[ope * 12 + 1 + 7],//AM
+                inst[ope * 12 + 1 + 8],//VIB
+                inst[ope * 12 + 1 + 9],//EGT
+                inst[ope * 12 + 1 + 10],//KSR
+                inst[ope * 12 + 1 + 11]//WS
             );
 
             int cnt = inst[25];
@@ -295,7 +295,7 @@ namespace Core
                     for (byte ope = 0; ope < 2; ope++)
                     {
                         SetInstAtOneOpeWithoutKslTl(mml, (vch / 3 * 6) + (vch % 3) + ope * 3
-                            , 15, 15, 0, 15, 0, 0, 0, 0, 0, 0);
+                            , 15, 15, 0, 15, 0,  0, 0, 0, 0, 0);
                         parent.OutData(mml, port, (byte)(targetBaseReg + ope * 3 + 0x40)
                             , ((0 & 0x3) << 6) | 0x3f);  //KL(M) TL
                     }
@@ -311,12 +311,12 @@ namespace Core
                     inst[ope * 12 + 1 + 1],
                     inst[ope * 12 + 1 + 2],
                     inst[ope * 12 + 1 + 3],
-                    inst[ope * 12 + 1 + 4],
                     inst[ope * 12 + 1 + 6],
                     inst[ope * 12 + 1 + 7],
                     inst[ope * 12 + 1 + 8],
                     inst[ope * 12 + 1 + 9],
-                    inst[ope * 12 + 1 + 10]
+                    inst[ope * 12 + 1 + 10],
+                    inst[ope * 12 + 1 + 11]
                     );
             }
 
@@ -360,7 +360,7 @@ namespace Core
                     for (byte ope = 0; ope < 2; ope++)
                     {
                         SetInstAtOneOpeWithoutKslTl(mml, (vch / 3 * 6) + (vch % 3) + ope * 3
-                            , 15, 15, 0, 15, 0, 0, 0, 0, 0, 0);
+                            , 15, 15, 0, 15, 0, 0, 0,  0, 0, 0);
                         parent.OutData(mml, port, (byte)(targetBaseReg + ope * 3 + 0x40)
                             , ((0 & 0x3) << 6) | 0x3f);  //KL(M) TL
                     }
@@ -376,12 +376,12 @@ namespace Core
                     inst[ope * 12 + 1 + 1],
                     inst[ope * 12 + 1 + 2],
                     inst[ope * 12 + 1 + 3],
-                    inst[ope * 12 + 1 + 4],
                     inst[ope * 12 + 1 + 6],
                     inst[ope * 12 + 1 + 7],
                     inst[ope * 12 + 1 + 8],
                     inst[ope * 12 + 1 + 9],
-                    inst[ope * 12 + 1 + 10]
+                    inst[ope * 12 + 1 + 10],
+                    inst[ope * 12 + 1 + 11]
                     );
             }
 
@@ -432,20 +432,21 @@ namespace Core
             );
         }
 
-        public void SetInstAtOneOpeAmVibEgKsMl(MML mml, byte[] port, byte adr, int ks, int ml, int am, int vib, int eg)
+        public void SetInstAtOneOpeAmVibEgKsMl(MML mml, byte[] port, byte adr, int ml, int am, int vib, int eg, int kr)
         {
             // 0x20
             parent.OutData(
                 mml,
                 port,
                 adr,
-                 (byte)((am != 0 ? 0x80 : 0) + (vib != 0 ? 0x40 : 0) + (eg != 0 ? 0x20 : 0) + (ks != 0 ? 0x10 : 0) + (ml & 0xf))
+                 (byte)((am != 0 ? 0x80 : 0) + (vib != 0 ? 0x40 : 0) + (eg != 0 ? 0x20 : 0) + (kr != 0 ? 0x10 : 0) + (ml & 0xf))
                 );
         }
 
         private void SetInstAtOneOpeWithoutKslTl(MML mml, int opeNum,
             int ar, int dr, int sl, int rr,
-            int ks, int mt, int am, int vib, int eg, 
+            int mt, int am, int vib, int eg, 
+            int kr,
             int ws
             )
         {
@@ -464,7 +465,7 @@ namespace Core
 
             parent.OutData(mml, port, (byte)(0x80 + adr), (byte)(((sl & 0xf) << 4) | (rr & 0xf)));
             parent.OutData(mml, port, (byte)(0x60 + adr), (byte)(((ar & 0xf) << 4) | (dr & 0xf)));
-            SetInstAtOneOpeAmVibEgKsMl(mml, port, (byte)(0x20 + adr), ks, mt, am, vib, eg);
+            SetInstAtOneOpeAmVibEgKsMl(mml, port, (byte)(0x20 + adr), mt, am, vib, eg, kr);
             parent.OutData(mml, port, (byte)(0xe0 + adr), (byte)(ws & 0x7));
         }
 
@@ -527,7 +528,7 @@ namespace Core
                 f = f - ftbl[0] * 2;// + ftbl[0];
             }
             f = Common.CheckRange(f, 0, 0x3ff);
-            Console.WriteLine("o:{0} f:{1}",o,f);
+            //Console.WriteLine("o:{0} f:{1}",o,f);
             OutFmSetFnum(pw, o, f);
         }
 
