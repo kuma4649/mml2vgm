@@ -55,6 +55,7 @@
     <Compile Include="chips\C140.cs" />
     <Compile Include="chips\C352.cs" />
     <Compile Include="chips\clsChip.cs" />
+    <Compile Include="chips\clsOPL.cs" />
     <Compile Include="chips\clsOPN.cs" />
     <Compile Include="chips\Conductor.cs" />
     <Compile Include="chips\HuC6280.cs" />
@@ -67,6 +68,8 @@
     <Compile Include="chips\SN76489.cs" />
     <Compile Include="chips\YM2151.cs" />
     <Compile Include="chips\YM2203.cs" />
+    <Compile Include="chips\YM3526.cs" />
+    <Compile Include="chips\YM3812.cs" />
     <Compile Include="chips\YMF262.cs" />
     <Compile Include="chips\YM2413.cs" />
     <Compile Include="chips\YM2608.cs" />
@@ -110,6 +113,12 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="fnum\FNUM_YM2203.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="fnum\FNUM_YM3526.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="fnum\FNUM_YM3812.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="fnum\FNUM_YMF262.txt">

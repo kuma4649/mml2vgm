@@ -466,6 +466,11 @@ namespace Core
 
         }
 
+        public override int GetFNum(partWork pw, MML mml, int octave, char cmd, int shift)
+        {
+            return GetC352FNum(mml, pw, octave, cmd, shift);
+        }
+
         public override void SetKeyOn(partWork pw, MML mml)
         {
             pw.keyOn = true;
