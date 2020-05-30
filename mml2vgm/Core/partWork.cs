@@ -606,6 +606,7 @@ namespace Core
         public int panRR { get; internal set; }
         public int flag { get; internal set; }
         public bool changeFlag { get; internal set; }
+        public int C352flag { get; internal set; }
 
         public void MakeLstPos()
         {

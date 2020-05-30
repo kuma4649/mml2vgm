@@ -967,8 +967,8 @@ namespace Core
 
             if (mml.args.Count == 2)
             {
-                byte adr = (byte)mml.args[0];
-                byte dat = (byte)mml.args[1];
+                byte adr = (byte)(int)mml.args[0];
+                byte dat = (byte)(int)mml.args[1];
                 int p = 0;
 
                 if (pw.ch < 3)//FM1-3

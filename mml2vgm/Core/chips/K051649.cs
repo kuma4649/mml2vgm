@@ -335,8 +335,8 @@ namespace Core
             if (mml.args[0] is string) return;
 
             byte port = (byte)((int)mml.args[0] >> 8);
-            byte adr = (byte)mml.args[0];
-            byte dat = (byte)mml.args[1];
+            byte adr = (byte)(int)mml.args[0];
+            byte dat = (byte)(int)mml.args[1];
 
             OutK051649Port(mml, this.port[0], pw.chipNumber, port, adr, dat);
         }

@@ -11,6 +11,7 @@ namespace Core
     {
         private short[] mulaw_tab;
         public List<long> memoryMap = null;
+        private double C352Divider;
 
         public bool executeKeyonoff { get; private set; }
 
@@ -25,6 +26,8 @@ namespace Core
             ChipNumber = chipNumber;
 
             Frequency = 24192000;
+            C352Divider = 288.0;
+
             port = new byte[][] { new byte[] { 0xe1 } };
 
             dataType = 0x92;
@@ -37,7 +40,7 @@ namespace Core
             {
                 ch.Type = enmChannelType.PCM;
                 ch.chipNumber = chipID == 1;
-                ch.MaxVolume = 255;
+                ch.MaxVolume = 256;
             }
 
             pcmDataInfo = new clsPcmDataInfo[] { new clsPcmDataInfo() };
@@ -57,7 +60,7 @@ namespace Core
             pcmDataInfo[0].totalHeadrSizeOfDataPtr = (parent.ChipCommandSize == 2) ? 4 : 3;
 
             Envelope = new Function();
-            Envelope.Max = 255;
+            Envelope.Max = 256;
             Envelope.Min = 0;
 
             makeC352Table();
@@ -69,6 +72,7 @@ namespace Core
             pw.MaxVolume = 256;
             pw.volume = pw.MaxVolume;
             pw.port = port;
+            pw.C352flag = 0;
         }
 
         public override void InitChip()
@@ -88,7 +92,7 @@ namespace Core
 
             if (ChipNumber != 0)
             {
-                //C352はDualChip非サポート
+                //C352はDualChip非サポート?
                 //parent.dat[0xef] = new outDatum(enmMMLType.unknown, null, null, (byte)(parent.dat[0xef].val | 0x40));
             }
         }
@@ -111,7 +115,7 @@ namespace Core
                 if (is16bit)
                 {
                     //16bit signed Only
-                    buf = standbyPCM(buf, true, false);
+                    buf = standbyPCM(buf, true, true);
                 }
                 else
                 {
@@ -383,7 +387,7 @@ namespace Core
                 if (parent.instPCM[pw.instrument].freq == -1)
                 {
                     return ((int)(
-                        1.531931
+                        0x10000 / (Frequency / C352Divider)
                         * 8000.0
                         * Const.pcmMTbl[n]
                         * Math.Pow(2, (o - 3))
@@ -393,7 +397,7 @@ namespace Core
                 else
                 {
                     return ((int)(
-                        1.531931
+                        0x10000 / (Frequency / C352Divider)
                         * 8000.0
                         * Const.pcmMTbl[n]
                         * Math.Pow(2, (o - 3))
@@ -557,6 +561,7 @@ namespace Core
                 vol += pw.lfo[lfo].value + pw.lfo[lfo].param[6];
             }
 
+            vol = Common.CheckRange(vol, 0, 256);
             int vl = vol * pw.panL / pw.MaxVolume;
             int vr = vol * pw.panR / pw.MaxVolume;
             vl = Common.CheckRange(vl, 0, pw.MaxVolume);
@@ -622,6 +627,43 @@ namespace Core
             }
         }
 
+        public override void SetToneDoubler(partWork pw, MML mml)
+        {
+            //実装不要
+        }
+
+        public override int GetToneDoublerShift(partWork pw, int octave, char noteCmd, int shift)
+        {
+            return 0;
+        }
+
+
+
+        public override void CmdPan(partWork pw, MML mml)
+        {
+            if (mml.args.Count == 2 || mml.args.Count == 4)
+            {
+                int l = (int)mml.args[0];
+                int r = (int)mml.args[1];
+                l = Common.CheckRange(l, 0, 255);
+                r = Common.CheckRange(r, 0, 255);
+                pw.panL = l;
+                pw.panR = r;
+            }
+
+            if (mml.args.Count == 4)
+            {
+                int rl = (int)mml.args[2];
+                int rr = (int)mml.args[3];
+                rl = Common.CheckRange(rl, 0, 255);
+                rr = Common.CheckRange(rr, 0, 255);
+                pw.panRL = rl;
+                pw.panRR = rr;
+            }
+
+            SetDummyData(pw, mml);
+        }
+
         public override void CmdInstrument(partWork pw, MML mml)
         {
             char type = (char)mml.args[0];
@@ -672,16 +714,64 @@ namespace Core
 
         }
 
+        public override void CmdY(partWork pw, MML mml)
+        {
+            if (mml.args[0] is string) return;
+
+            int adr = (int)mml.args[0];
+            int dat = (int)mml.args[1];
+            if (adr != 1000)
+            {
+                OutC352Port(mml, pw, adr, dat);
+            }
+            else
+            {
+                pw.C352flag = dat;
+                pw.changeFlag = true;
+            }
+        }
+
+        public override void CmdDetune(partWork pw, MML mml)
+        {
+            int n = (int)mml.args[0];
+            n = Common.CheckRange(n, short.MinValue, short.MaxValue);
+            pw.detune = n;
+            SetDummyData(pw, mml);
+        }
+
+        public override void CmdLoopExtProc(partWork pw, MML mml)
+        {
+        }
+
+        public override void CmdNoise(partWork pw, MML mml)
+        {
+            int n = (int)mml.args[0];
+            n = Common.CheckRange(n, 0, 1);
+            pw.noise = n;
+            pw.changeFlag = true;
+        }
+
+        public override void CmdNoiseToneMixer(partWork pw, MML mml)
+        {
+            CmdNoise(pw, mml);
+        }
+
+
         public override void MultiChannelCommand(MML mml)
         {
             foreach (partWork pw in lstPartWork)
             {
+                if (pw.instrument == -1) continue;
                 if (!pw.changeFlag) continue;
                 pw.changeFlag = false;
 
                 int flag =
                     (pw.keyOn ? 0x4000 : 0x0000) |
-                    (pw.keyOff ? 0x2000 : 0x0000)
+                    (pw.keyOff ? 0x2000 : 0x0000) |
+                    (pw.noise != 0 ? 0x0010 : 0x0000) |
+                    (parent.instPCM[pw.instrument].is16bit ? 0x0008 : 0x0000) |
+                    (parent.instPCM[pw.instrument].loopAdr != -1 ? 0x0002 : 0x0000) |
+                    (pw.C352flag & 0xffff)
                     ;
 
                 OutC352Port(mml, pw, pw.ch * 8 + 3, flag);

@@ -10,7 +10,6 @@ namespace Core
     public class ClsOPN : ClsChip
     {
         public byte[] SSGKeyOn = new byte[] { 0x3f, 0x3f, 0x3f, 0x3f };
-        public Dictionary<int, int> relVol = new Dictionary<int, int>();
 
         public ClsOPN(ClsVgm parent, int chipID, string initialPartName, string stPath, int chipNumber) : base(parent, chipID, initialPartName, stPath, chipNumber)
         {
@@ -1932,8 +1931,8 @@ namespace Core
         {
             if (mml.args[0] is string toneparamName)
             {
-                byte op = (byte)mml.args[1];
-                byte dat = (byte)mml.args[2];
+                byte op = (byte)(int)mml.args[1];
+                byte dat = (byte)(int)mml.args[2];
 
                 switch (toneparamName)
                 {

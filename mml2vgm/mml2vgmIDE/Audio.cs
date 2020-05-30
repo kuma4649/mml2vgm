@@ -220,6 +220,7 @@ namespace mml2vgmIDE
         {
             chipRegister.SetRealChipInfo(EnmZGMDevice.AY8910, setting.AY8910Type, setting.AY8910SType, setting.LatencyEmulation, setting.LatencySCCI);
             chipRegister.SetRealChipInfo(EnmZGMDevice.C140, setting.C140Type, setting.C140SType, setting.LatencyEmulation, setting.LatencySCCI);
+            chipRegister.SetRealChipInfo(EnmZGMDevice.C352, setting.C352Type, setting.C352SType, setting.LatencyEmulation, setting.LatencySCCI);
             chipRegister.SetRealChipInfo(EnmZGMDevice.RF5C164, new Setting.ChipType(), new Setting.ChipType(), setting.LatencyEmulation, setting.LatencySCCI);
             chipRegister.SetRealChipInfo(EnmZGMDevice.SegaPCM, setting.SEGAPCMType, setting.SEGAPCMSType, setting.LatencyEmulation, setting.LatencySCCI);
             chipRegister.SetRealChipInfo(EnmZGMDevice.SN76489, setting.SN76489Type, setting.SN76489SType, setting.LatencyEmulation, setting.LatencySCCI);

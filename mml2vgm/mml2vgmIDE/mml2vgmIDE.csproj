@@ -254,6 +254,7 @@
     <Compile Include="MIDIParam.cs" />
     <Compile Include="MMLParameter\AY8910.cs" />
     <Compile Include="MMLParameter\C140.cs" />
+    <Compile Include="MMLParameter\C352.cs" />
     <Compile Include="MMLParameter\Conductor.cs" />
     <Compile Include="MMLParameter\GeneralMIDI.cs" />
     <Compile Include="MMLParameter\HuC6280.cs" />

@@ -532,8 +532,8 @@ namespace Core
 
             if (mml.args[0] is string) return;
 
-            byte adr = (byte)mml.args[0];
-            byte dat = (byte)mml.args[1];
+            byte adr = (byte)(int)mml.args[0];
+            byte dat = (byte)(int)mml.args[1];
 
             if (pw.Type == enmChannelType.FMOPN || pw.Type == enmChannelType.FMOPNex)
                 parent.OutData(mml, (pw.ch > 2 && pw.ch < 6) ? port[1] : port[0], adr, dat);

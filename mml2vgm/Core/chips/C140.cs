@@ -871,7 +871,7 @@ namespace Core
             if (mml.args[0] is string) return;
 
             int adr = (int)mml.args[0];
-            byte dat = (byte)mml.args[1];
+            byte dat = (byte)(int)mml.args[1];
 
             OutC140Port(mml, pw, (byte)(adr >> 8), (byte)adr, dat);
         }

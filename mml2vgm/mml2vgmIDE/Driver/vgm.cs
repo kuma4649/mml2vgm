@@ -1443,10 +1443,10 @@ namespace mml2vgmIDE
         private void vcC352(outDatum od)
         {
             byte id = (byte)((vgmBuf[vgmAdr + 1].val & 0x80) != 0 ? 1 : 0);
-            uint adr = (uint)((vgmBuf[vgmAdr + 1].val & 0x7f) * 0x100 + (vgmBuf[vgmAdr + 2].val & 0xff));
-            uint data = (uint)((vgmBuf[vgmAdr + 3].val & 0xff) * 0x100 + (vgmBuf[vgmAdr + 4].val & 0xff));
-            
-            chipRegister.writeC352(id, adr, data);
+            int adr = (int)((vgmBuf[vgmAdr + 1].val & 0x7f) * 0x100 + (vgmBuf[vgmAdr + 2].val & 0xff));
+            int data = (int)((vgmBuf[vgmAdr + 3].val & 0xff) * 0x100 + (vgmBuf[vgmAdr + 4].val & 0xff));
+
+            chipRegister.C352SetRegister(od, Audio.DriverSeqCounter, id, adr, data);
             vgmAdr += 5;
         }
 

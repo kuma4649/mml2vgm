@@ -127,6 +127,7 @@ namespace Core
         public byte[] pcmDataEasy = null;
         public List<byte[]> pcmDataDirect = new List<byte[]>();
         public byte[][] port;
+        public Dictionary<int, int> relVol = new Dictionary<int, int>();
 
         public ClsChip(ClsVgm parent, int chipID, string initialPartName, string stPath, int chipNumber)
         {
@@ -1045,12 +1046,16 @@ namespace Core
 
         public virtual int GetDefaultRelativeVolume(partWork pw, MML mml)
         {
+            if (relVol.ContainsKey(pw.ch)) return relVol[pw.ch];
             return 1;
         }
 
         public virtual void CmdRelativeVolumeSetting(partWork pw, MML mml)
         {
-            ;//
+            if (relVol.ContainsKey(pw.ch))
+                relVol.Remove(pw.ch);
+
+            relVol.Add(pw.ch, (int)mml.args[0]);
         }
 
         public virtual void CmdOctave(partWork pw, MML mml)

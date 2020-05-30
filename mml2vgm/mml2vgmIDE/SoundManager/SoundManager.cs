@@ -341,11 +341,14 @@ namespace SoundManager
 
         public bool IsRunningAsync()
         {
-            if (dataMaker != null) if (dataMaker.IsRunning()) return true;
-            if(dataSender!=null) if (dataSender.IsRunning()) return true;
+            if (dataMaker != null) if (dataMaker.IsRunning())
+                    return true;
+            if(dataSender!=null) if (dataSender.IsRunning())
+                    return true;
             if (emuChipSender != null) if (emuChipSender.IsRunning()) 
                     return true;
-            if (realChipSender != null) if (realChipSender.IsRunning()) return true;
+            if (realChipSender != null) if (realChipSender.IsRunning())
+                    return true;
 
             return false;
         }

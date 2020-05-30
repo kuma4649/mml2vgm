@@ -648,10 +648,11 @@ namespace Core
             mml.args = new List<object>();
             mml.args.Add(n);
 
-            pw.skipTabSpace();
-
-            if (pw.getChar() == ',')
+            for (int i = 0; i < 3; i++)
             {
+                pw.skipTabSpace();
+                if (pw.getChar() != ',') break;
+
                 pw.incPos();
                 if (!pw.getNum(out n))
                 {
@@ -1356,8 +1357,8 @@ namespace Core
             {
                 if (!pw.getNum(out n)) break;
 
-                dat = (byte)(n & 0xff);
-                mml.args.Add(dat);
+                //dat = (byte)(n & 0xff);
+                mml.args.Add(n);
                 pw.skipTabSpace();
 
                 if (pw.getChar() != ',') break;

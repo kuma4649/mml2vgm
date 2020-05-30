@@ -304,8 +304,8 @@ namespace Core
         {
             if (mml.args[0] is string) return;
 
-            byte adr = (byte)mml.args[0];
-            byte dat = (byte)mml.args[1];
+            byte adr = (byte)(int)mml.args[0];
+            byte dat = (byte)(int)mml.args[1];
 
             OutPsgPort(mml, port[0],  dat);
         }

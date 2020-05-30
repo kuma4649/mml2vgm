@@ -11,6 +11,7 @@ namespace mml2vgmIDE.MMLParameter
         public List<Instrument> Conductor=new List<Instrument>();
         public List<Instrument> AY8910=new List<Instrument>();
         public List<Instrument> C140 = new List<Instrument>();
+        public List<Instrument> C352 = new List<Instrument>();
         public List<Instrument> HuC6280 = new List<Instrument>();
         public List<Instrument> K051649 = new List<Instrument>();
         public List<Instrument> K053260 = new List<Instrument>();
@@ -120,6 +121,25 @@ namespace mml2vgmIDE.MMLParameter
                         dicInstAdd(c140, od.linePos.chipIndex, od.linePos.chipNumber);
                         instsAdd(c140, od.linePos.chipIndex, od.linePos.chipNumber);
                         c140.isTrace = isTrace;
+                        break;
+                    case "C352":
+                        if (Audio.chipRegister != null
+                            && Audio.chipRegister.C352 != null
+                            && od.linePos.chipIndex < Audio.chipRegister.C352.Count)
+                        {
+                            chip = Audio.chipRegister.C352[od.linePos.chipIndex];
+                        }
+                        if (chip == null && od.linePos.chipIndex >= 0x80)
+                        {
+                            Driver.ZGM.ZgmChip.ZgmChip zChip = Audio.chipRegister.dicChipCmdNo[od.linePos.chipIndex];
+                            chip = Audio.chipRegister.C352[zChip.Index];
+                            chipIndex = zChip.Index;
+                        }
+                        C352 c352 = new C352(chip);
+                        C352.Add(c352);
+                        dicInstAdd(c352, od.linePos.chipIndex, od.linePos.chipNumber);
+                        instsAdd(c352, od.linePos.chipIndex, od.linePos.chipNumber);
+                        c352.isTrace = isTrace;
                         break;
                     case "CONDUCTOR":
                         Conductor con = new Conductor(chip);

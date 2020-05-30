@@ -616,8 +616,8 @@ namespace Core
         {
             if (mml.args[0] is string) return;
 
-            byte adr = (byte)mml.args[0];
-            ushort dat = (ushort)mml.args[1];
+            byte adr = (byte)(int)mml.args[0];
+            ushort dat = (ushort)(int)mml.args[1];
 
             OutQSoundPort(mml, port[0], pw, adr, dat);
         }

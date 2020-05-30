@@ -249,7 +249,7 @@ namespace Core
             List<byte> dat = new List<byte>();
             foreach (object o in mml.args)
             {
-                dat.Add((byte)o);
+                dat.Add((byte)(int)o);
                 if (dat.Count == 255)
                 {
                     dat.Insert(0, 255);

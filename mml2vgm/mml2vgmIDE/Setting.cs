@@ -575,6 +575,34 @@ namespace mml2vgmIDE
             }
         }
 
+        private ChipType _C352Type = new ChipType();
+        public ChipType C352Type
+        {
+            get
+            {
+                return _C352Type;
+            }
+
+            set
+            {
+                _C352Type = value;
+            }
+        }
+
+        private ChipType _C352SType = new ChipType();
+        public ChipType C352SType
+        {
+            get
+            {
+                return _C352SType;
+            }
+
+            set
+            {
+                _C352SType = value;
+            }
+        }
+
         private ChipType _SEGAPCMType = new ChipType();
         public ChipType SEGAPCMType
         {

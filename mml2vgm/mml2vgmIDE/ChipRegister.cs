@@ -449,7 +449,7 @@ namespace mml2vgmIDE
 
                         scC352[i] = realChip.GetRealChip(ctC352[i]);
                         if (scC352[i] != null) scC352[i].init();
-                        if (C352.Count < i + 1) C352.Add(new Chip(24));
+                        if (C352.Count < i + 1) C352.Add(new Chip(32));
                         C352[i].Model = ctC352[i].UseEmu ? EnmVRModel.VirtualModel : EnmVRModel.RealModel;
                         C352[i].Delay = (C352[i].Model == EnmVRModel.VirtualModel ? LEmu : LReal);
                     }
@@ -916,6 +916,9 @@ namespace mml2vgmIDE
                 case EnmZGMDevice.C140:
                     C140SetRegisterProcessing(ref Counter, ref Chip, ref Type, ref Address, ref Data, ref ExData);
                     break;
+                case EnmZGMDevice.C352:
+                    C352SetRegisterProcessing(ref Counter, ref Chip, ref Type, ref Address, ref Data, ref ExData);
+                    break;
                 case EnmZGMDevice.HuC6280:
                     HuC6280SetRegisterProcessing(ref Counter, ref Chip, ref Type, ref Address, ref Data, ref ExData);
                     break;
@@ -983,6 +986,9 @@ namespace mml2vgmIDE
                     break;
                 case EnmZGMDevice.C140:
                     C140WriteRegisterControl(Chip, type, address, data, exData);
+                    break;
+                case EnmZGMDevice.C352:
+                    C352WriteRegisterControl(Chip, type, address, data, exData);
                     break;
                 case EnmZGMDevice.MIDIGM:
                     MidiGMWriteRegisterControl(Chip, type, address, data, exData);
@@ -2150,6 +2156,104 @@ namespace mml2vgmIDE
                     C140SetRegister(null,Counter, i, (c << 4) + 1, pcmRegisterC140[i][(c << 4) + 1]);
                 }
             }
+        }
+
+        #endregion
+
+
+
+        #region C352
+
+        private void C352WriteRegisterControl(Chip Chip, EnmDataType type, int address, int data, object exData)
+        {
+            if (type == EnmDataType.Normal)
+            {
+                if (Chip.Model == EnmVRModel.VirtualModel)
+                {
+                    if (!ctC352[Chip.Number].UseScci && ctC352[Chip.Number].UseEmu)
+                        mds.WriteC352(Chip.Index, (byte)Chip.Number, (uint)address, (uint)data);
+                }
+                if (Chip.Model == EnmVRModel.RealModel)
+                {
+                    if (scC352[Chip.Number] != null)
+                        scC352[Chip.Number].setRegister(address, data);
+                }
+            }
+            else if (type == EnmDataType.Block)
+            {
+                Audio.sm.SetInterrupt();
+
+                try
+                {
+                    if (exData == null) return;
+
+                    if (data == -1)
+                    {
+                        PackData[] pdata = (PackData[])exData;
+                        if (Chip.Model == EnmVRModel.VirtualModel)
+                        {
+                            foreach (PackData dat in pdata)
+                                mds.WriteC352(Chip.Index, (byte)Chip.Number, (uint)dat.Address, (byte)dat.Data);
+                        }
+                        if (Chip.Model == EnmVRModel.RealModel)
+                        {
+                            if (scC352[Chip.Number] != null)
+                            {
+                                foreach (PackData dat in pdata)
+                                    scC352[Chip.Number].setRegister(dat.Address, dat.Data);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (Chip.Model == EnmVRModel.VirtualModel)
+                            mds.WriteC352PCMData(Chip.Index, (byte)Chip.Number, (uint)((object[])exData)[0], (uint)((object[])exData)[1], (uint)((object[])exData)[2], (byte[])((object[])exData)[3], (uint)((object[])exData)[4]);
+                        // ROMSize, DataStart, DataLength, romdata, SrcStartAdr);
+                        else
+                        {
+                            if (scC352 != null && scC352[Chip.Number] != null)
+                            {
+                                // スタートアドレス設定
+                                scC352[Chip.Number].setRegister(0x10000, (byte)((uint)((object[])exData)[1]));
+                                scC352[Chip.Number].setRegister(0x10001, (byte)((uint)((object[])exData)[1] >> 8));
+                                scC352[Chip.Number].setRegister(0x10002, (byte)((uint)((object[])exData)[1] >> 16));
+                                // データ転送
+                                for (int cnt = 0; cnt < (uint)((object[])exData)[2]; cnt++)
+                                {
+                                    scC352[Chip.Number].setRegister(0x10004, ((byte[])((object[])exData)[3])[(uint)((object[])exData)[4] + cnt]);
+                                }
+                                //scC352[chipID].setRegister(0x10006, (int)ROMSize);
+
+                                realChip.SendData();
+                            }
+                        }
+                    }
+                }
+                finally
+                {
+                    Audio.sm.ResetInterrupt();
+                }
+            }
+        }
+
+        public void C352SetRegisterProcessing(ref long Counter, ref Chip Chip, ref EnmDataType Type, ref int Address, ref int dData, ref object ExData)
+        {
+            if (ctC352 == null) return;
+            if (Address == -1 && dData == -1) return;
+
+            if (Chip.Number == 0) chipLED.PriC352 = 2;
+            else chipLED.SecC352 = 2;
+
+        }
+
+        public void C352SetRegister(outDatum od, long Counter, int ChipID, int dAddr, int dData)
+        {
+            enq(od, Counter, C352[ChipID], EnmDataType.Normal, dAddr, dData, null);
+        }
+
+        public void C352SetRegister(outDatum od, long Counter, int ChipID, PackData[] data)
+        {
+            enq(od, Counter, C352[ChipID], EnmDataType.Block, -1, -1, data);
         }
 
         #endregion

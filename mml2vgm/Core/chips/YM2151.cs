@@ -844,9 +844,9 @@ namespace Core
         {
             if (mml.args[0] is string toneparamName)
             {
-                byte op = (byte)mml.args[1];
+                byte op = (byte)(int)mml.args[1];
                 op = (byte)(op == 1 ? 2 : (op == 2 ? 1 : op));
-                byte dat = (byte)mml.args[2];
+                byte dat = (byte)(int)mml.args[2];
 
                 switch (toneparamName)
                 {
