@@ -14,6 +14,7 @@
    他、対応音源  
 	AY8910  
 	C140  
+	C352  
 	HuC6280  
 	K051649  
 	K053260  
@@ -64,8 +65,8 @@
  ・音声を再生できるオーディオデバイスが必須。  
  そこそこ性能があるものが必要です。UMX250のおまけでついてたUCA222でも十分いけてました。  
  私はこれを使っていたのですが、壊れてしまったので今はUR22mkIIを使用しています。  
- ・もしあれば、SPFM Light＋YM2612＋YM2608＋YM2151＋SPPCM  
- ・もしあれば、GIMIC＋YM2608＋YM2151  
+ ・もしあれば、SPFM Light＋YM2612＋YM2608＋YM2151＋YMF262＋SPPCM  
+ ・もしあれば、GIMIC＋YM2608＋YM2151＋YMF262  
  ・YM2608のエミュレーション時、リズム音を鳴らすために以下の音声ファイルが必要です。  
  作成方法は申し訳ありませんがお任せします。  
       
@@ -190,6 +191,8 @@ mml2vgm , mvc , mml2vgmIDEはMITライセンスに準ずる物とします。LIC
  ・Dock Panel Suite  
  ・CodeWarrior  
  ・BambooTracker  
+ ・みゅあっぷ  
+ ・714MIDI  
   
  ・SGDKとは - nendo  
  ・FutureDriver  

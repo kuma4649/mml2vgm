@@ -69,6 +69,8 @@
     Support type: Wave Form 8Ch  
 - C140  
     Support type: PCM 24Ch  
+- C352  
+    Support type: PCM 32Ch  
 - AY8910  
     Support type: PSG 3Ch(sine wave)  
 - YM2413(FM)  
@@ -135,6 +137,7 @@
     - SEGAPCM  
     - HuC6280  
     - C140  
+    - C352  
     - YM2413(FM)  
     - K051649  
     - QSound  
@@ -252,6 +255,7 @@
     - SEGAPCM  
     - HuC6280  
     - C140  
+    - C352  
     - QSound  
     - K053260  
 - Remark  
@@ -432,6 +436,7 @@
 	- SEGAPCM  
 	- HuC6280  
 	- C140  
+	- C352  
 	- AY8910  
 	- YM2413(FM)  
 	- YM2413(RHYTHM)  
@@ -497,6 +502,7 @@
 	- SEGAPCM  
 	- HuC6280  
 	- C140  
+	- C352  
 	- AY8910  
 	- YM2413(FM)  
 	- YM2413(RHYTHM)  
@@ -553,6 +559,7 @@
 	- SEGAPCM  
 	- HuC6280  
 	- C140  
+	- C352  
 	- AY8910  
 	- YM2413(FM)  
 	- K051649  
@@ -603,6 +610,7 @@
 	- SEGAPCM  
 	- HuC6280  
 	- C140  
+	- C352  
 	- AY8910  
 	- YM2413(FM)  
 	- K051649  
@@ -655,6 +663,7 @@
 	- SEGAPCM  
 	- HuC6280  
 	- C140  
+	- C352  
 	- AY8910  
 	- YM2413(FM)  
 	- K051649  
@@ -680,6 +689,7 @@
     n : 0～31    (C)  
     n : 0～255   (D)  
     n : 0～65535 (E)  
+    n : 0～256   (F)  
 - Support chips  
 	- YM2612 (A)  
 	- YM2612X (A)  
@@ -710,6 +720,7 @@
 	- SEGAPCM (A)  
 	- HuC6280 (C)  
 	- C140 (A)  
+	- C352 (F)  
 	- AY8910 (B)  
 	- YM2413(FM) (B)  
 	- YM2413(RHYTHM) (B)  
@@ -736,6 +747,7 @@
     n : 0～31  (C)  
     n : 0～255 (D)  
     n : 0～65535 (E)  
+    n : 0～256 (F)  
 - Support chips  
 	- YM2612 (A)  
 	- YM2612X (A)  
@@ -766,6 +778,7 @@
 	- SEGAPCM (A)  
 	- HuC6280 (B)  
 	- C140 (A)  
+	- C352 (F)  
 	- AY8910 (B)  
 	- YM2413(FM) (B)  
 	- YM2413(RHYTHM) (B)  
@@ -861,6 +874,7 @@
 	- SEGAPCM  
 	- HuC6280  
 	- C140  
+	- C352  
 	- AY8910  
 	- YM2413(FM)  
 	- YM2413(RHYTHM)  
@@ -912,6 +926,7 @@
 	- SEGAPCM  
 	- HuC6280  
 	- C140  
+	- C352  
 	- AY8910  
 	- YM2413(FM)  
 	- YM2413(RHYTHM)  
@@ -1424,6 +1439,7 @@
     - SEGAPCM             T/Vに対応  
     - HuC6280             T/V/Hに対応  
     - C140                T/Vに対応  
+    - C352                T/Vに対応  
     - AY8910              T/Vに対応  
     - YM2413(FM)          T/Vに対応  
     - YM2413(RHYTHM)      T/Vに対応  
@@ -1523,6 +1539,7 @@
     - SEGAPCM  
     - HuC6280  
     - C140  
+    - C352  
     - AY8910  
     - YM2413(FM)  
     - YM2413(RHYTHM)  
@@ -1665,6 +1682,7 @@
     - SEGAPCM  
     - HuC6280  
     - C140  
+    - C352  
     - AY8910  
     - YM2413(FM)  
     - YM2413(RHYTHM)  
@@ -1720,6 +1738,7 @@
     - SEGAPCM  
     - HuC6280  
     - C140  
+    - C352  
     - AY8910  
     - YM2413(FM)  
     - YM2413(RHYTHM)  
@@ -1779,6 +1798,7 @@
     - SEGAPCM  
     - HuC6280  
     - C140  
+    - C352  
     - AY8910  
     - YM2413(FM)  
     - YM2413(RHYTHM)  
@@ -1850,6 +1870,7 @@
     - SEGAPCM  
     - HuC6280  
     - C140  
+    - C352  
     - AY8910  
     - YM2413(FM)  
     - YM2413(RHYTHM)  
@@ -1895,6 +1916,7 @@
     - SEGAPCM  
     - HuC6280  
     - C140  
+    - C352  
     - AY8910  
     - YM2413(RHYTHM)  
     - K051649  
@@ -2025,6 +2047,7 @@
     - SEGAPCM  
     - HuC6280  
     - C140  
+    - C352  
     - AY8910  
     - YM2413(FM)  
     - YM2413(RHYTHM)  
@@ -2079,6 +2102,7 @@
     - SEGAPCM  
     - HuC6280  
     - C140  
+    - C352  
     - AY8910  
     - YM2413(FM)  
     - YM2413(RHYTHM)  
@@ -2135,6 +2159,7 @@
     - SEGAPCM  
     - HuC6280  
     - C140  
+    - C352  
     - AY8910  
     - YM2413(FM)  
     - YM2413(RHYTHM)  
@@ -2188,6 +2213,7 @@
     - SEGAPCM  
     - HuC6280  
     - C140  
+    - C352  
     - AY8910  
     - YM2413(FM)  
     - YM2413(RHYTHM)  
@@ -2289,6 +2315,7 @@
 - Support chips  
     - YM2151  
     - HuC6280  
+    - C352  
 - Remark  
     ノイズスイッチ  
 - Description  
@@ -2406,6 +2433,7 @@
     - SEGAPCM  
     - HuC6280  
     - C140  
+    - C352  
     - AY8910  
     - YM2413(FM)  
     - YM2413(RHYTHM)  
@@ -2460,6 +2488,7 @@
     - SEGAPCM  
     - HuC6280  
     - C140  
+    - C352  
     - AY8910  
     - YM2413(FM)  
     - YM2413(RHYTHM)  
@@ -2508,6 +2537,7 @@
     - SEGAPCM  
     - HuC6280  
     - C140  
+    - C352  
     - AY8910  
     - YM2413(FM)  
     - K051649  
@@ -2534,6 +2564,7 @@
     - RF5C164  
     - SEGAPCM  
     - C140  
+    - C352  
     - QSound  
     - K053260  
 - Remark  
@@ -2638,6 +2669,28 @@
 - Description  
     パン(定位)を指定します。  
     左右の音量を必ず指定する必要があります。  
+
+
+### パン5  
+-----------  
+- Command  
+    p  
+- Format  
+    pn1,n2  
+    pn1,n2,n3,n4  
+- 設定可能範囲  
+    n1 : 0 ～ 255 (前左)  
+    n2 : 0 ～ 255 (前右)  
+    n3 : 0 ～ 255 (後左)  
+    n4 : 0 ～ 255 (後右)  
+- Support chips  
+    - C352  
+- Remark  
+    パンを指定する。n1,n2,n3,n4(0 ～ 255)  
+- Description  
+    パン(定位)を指定します。  
+    前の左右の音量を必ず指定する必要があります。  
+    後ろの左右の音量は省略可能です。  
 
 
 ### サスティン  
@@ -2910,6 +2963,7 @@
     - SEGAPCM  
     - HuC6280  
     - C140  
+    - C352  
     - AY8910  
     - YM2413(FM)  
     - YM2413(RHYTHM)  
@@ -2964,6 +3018,7 @@
     - SEGAPCM  
     - HuC6280  
     - C140  
+    - C352  
     - AY8910  
     - YM2413(FM)  
     - YM2413(RHYTHM)  
@@ -3022,6 +3077,7 @@
     - SEGAPCM  
     - HuC6280  
     - C140  
+    - C352  
     - AY8910  
     - YM2413(FM)  
     - YM2413(RHYTHM)  
@@ -3042,7 +3098,8 @@
 但しそれを可能にするために決まりが存在します。  
 
 - 各装飾の指定可能な順番  
-1.音符 > 2.シャープ > 3.ToneDoubler > 4.音長  > 5.符点 > 6.ベロシティ > 7.ベンド > 8.タイ  
+1.音符 > 2.シャープ > 3.ToneDoubler > 4.音長  > 5.符点  
+  > 6.ベロシティ > 7.ベンド > 8.タイ > 9.和音  
 
 1. 音符  
   前の項で説明済み  
@@ -3197,5 +3254,16 @@
     音程差がマイナスの場合は0とする。  
     Tone Doubler時のベンドは音符Bを起点とする。  
     OPN系ではDT2は無視される。  
+
+
+11. 和音  
+    - 装飾コマンド  
+    :  
+
+    - Description  
+    MIDI音源向け装飾コマンド。  
+    :を指定すると音符の長さ分の待ちをキャンセルする。  
+    キーオンとキーオフのタイミングはキャンセル対象外の為、  
+    結果的に次の音符と和音になる。  
 
 

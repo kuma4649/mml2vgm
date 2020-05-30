@@ -946,6 +946,7 @@ b               -ooooooooooooooooooooooooooooooo  音符シ
     Option      YM2610B : 0の場合ADPCM-A 1の場合ADPCM-Bとして定義される。
                 RF5C164 : ループポイント。ループ再生位置をサンプル数で指定。
                 C140    : ループポイント。ループ再生位置をサンプル数で指定。
+                C352    : ループポイント。ループ再生位置をサンプル数で指定。
                 SegaPCM : ループポイント。ループ再生位置をサンプル数で指定。
 				YM2612X : 36をo4cとして0～72の範囲で音程を変換し定義する。
 				          73以上を指定すると14000を既定の周波数として音程を変換し定義する。
@@ -1060,6 +1061,7 @@ b               -ooooooooooooooooooooooooooooooo  音符シ
   HuC6280Secondary HuC8Secondary         o--T 不可     不可       
   C140             C140                  ooo- 可       可         
   C140Secondary    C140Secondary         ooo- 可       可         
+  C352             C352                  o--- 可       可         
   QSound           QSnd                  o--- 可       可         QSoundはSecondary無し(vgmがDualChip非対応)
   K053260          K53                   o--- 可       可         K53はループするとスタートアドレスに戻る
   K053260Secondary K53Secondary          o--- 可       可         
@@ -1236,6 +1238,7 @@ FM1Chで指定の音程2音を同時に出力することを主な目的とし�
           PartHuC6280                     =H
           PartYM2612X                     =E(XGM専用)
           PartC140                        =Y
+          PartC352                        =G
           PartAY8910                      =A
           PartYM2413                      =L
           PartK051649                     =K

@@ -16,7 +16,7 @@
 
      No   Filename                                                          FileFreq   Volume   Chip   LoopPoint
 '@ P  0 , "..\wav\Guitar.wav"                                             ,     8000 ,    100 , C352 ,     14000
-'@ P  1 , "D:\bootcamp\FM音源\data\自作\pcmData\kashikoma_16bit_16kHz.wav" ,    16000 ,    100 , C352
+@ P  1 , "D:\bootcamp\FM音源\data\自作\pcmData\kashikoma_16bit_16kHz.wav" ,    16000 ,    100 , C352
 
      No,SV ,AR,DR,SL ,SR,RR,ST,ChipName
 '@ E  0,256, 0, 1,200,10, 1, 2,C352
@@ -26,16 +26,16 @@
 'Cn1 T60
 Cn1 L
 
-G01 @0o4cd
-G01 o4@0K0D0v250      c4 >    c4 <    c4
-G01 o4@0K0D0v100      c4 )100 c4 (100 c4
-G01 o4@0K0D0v100@v100 c4 )    c4 (    c4
-G01 o4@0K0D0v250      c4 &    c4 &    d4
-G01 @0MPV0,1,90,200SP1 c1 SP0
-G01 @0v150MPT0,1,10,60SP1 c1 SP0
-G01 @0v150l8Q8ccrc [{ccc}]
-G01 @0v150 EON @E0 c2c2 @E1 c2c2 @E2 c2c2 EOF c2c2 r4
-G01 P1EON@0v200@E1c4>c4<
+'G01 @0o4cd
+'G01 o4@0K0D0v250      c4 >    c4 <    c4
+'G01 o4@0K0D0v100      c4 )100 c4 (100 c4
+'G01 o4@0K0D0v100@v100 c4 )    c4 (    c4
+'G01 o4@0K0D0v250      c4 &    c4 &    d4
+'G01 @0MPV0,1,90,200SP1 c1 SP0
+'G01 @0v150MPT0,1,10,60SP1 c1 SP0
+'G01 @0v150l8Q8ccrc [{ccc}]
+'G01 @0v150 EON @E0 c2c2 @E1 c2c2 @E2 c2c2 EOF c2c2 r4
+'G01 P1EON@0v200@E1c4>c4<P0
 'G01 @0y1000,1v200c1
 G01 o4@1f+1^1
 G01 o5@1c1
