@@ -153,6 +153,12 @@
     <None Include="sample\MidiGM\testGM.gwi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="sample\YM3526\OPLtest.gwi">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="sample\YM3812\OPL2test.gwi">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="sample\YMF262\OPL3test.gwi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

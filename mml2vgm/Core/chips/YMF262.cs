@@ -35,14 +35,14 @@ namespace Core
 
     public class YMF262 : ClsOPL
     {
-        protected int[][] _FNumTbl = new int[1][] {
-            //new int[13]
-            new int[] {
-            // OPL3(FM) : Fnum = ftone*(2**19)/(M/288)/(2**B-1)       ftone:Hz M:MasterClock B:Block
-            //   c    c+     d    d+     e     f    f+     g    g+     a    a+     b    >c
-             0x158,0x16a,0x180,0x198,0x1b0,0x1ca,0x1e4,0x202,0x220,0x240,0x262,0x286,0x2b0
-            }
-        };
+        //protected int[][] _FNumTbl = new int[1][] {
+        //    //new int[13]
+        //    new int[] {
+        //    // OPL3(FM) : Fnum = ftone*(2**19)/(M/288)/(2**B-1)       ftone:Hz M:MasterClock B:Block
+        //    //   c    c+     d    d+     e     f    f+     g    g+     a    a+     b    >c
+        //     0x158,0x16a,0x180,0x198,0x1b0,0x1ca,0x1e4,0x202,0x220,0x240,0x262,0x286,0x2b0
+        //    }
+        //};
 
 
         public YMF262(ClsVgm parent, int chipID, string initialPartName, string stPath, int chipNumber) : base(parent, chipID, initialPartName, stPath, chipNumber)
@@ -80,7 +80,7 @@ namespace Core
 
             Ch = new ClsChannel[ChMax];
             SetPartToCh(Ch, initialPartName);
-            int i = 0;
+            //int i = 0;
             /*
             foreach (ClsChannel ch in Ch)
             {

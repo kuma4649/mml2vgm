@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Core.chips
+namespace Core
 {
     public class YM3812 : ClsOPL
     {

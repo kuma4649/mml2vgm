@@ -519,6 +519,34 @@ namespace mml2vgmIDE
             }
         }
 
+        private ChipType _YM3812Type = new ChipType();
+        public ChipType YM3812Type
+        {
+            get
+            {
+                return _YM3812Type;
+            }
+
+            set
+            {
+                _YM3812Type = value;
+            }
+        }
+
+        private ChipType _YM3812SType = new ChipType();
+        public ChipType YM3812SType
+        {
+            get
+            {
+                return _YM3812SType;
+            }
+
+            set
+            {
+                _YM3812SType = value;
+            }
+        }
+
         private ChipType _Y8950Type = new ChipType();
         public ChipType Y8950Type
         {

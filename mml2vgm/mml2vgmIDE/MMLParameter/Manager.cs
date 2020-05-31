@@ -22,6 +22,8 @@ namespace mml2vgmIDE.MMLParameter
         public List<Instrument> YM2151 = new List<Instrument>();
         public List<Instrument> YM2203 = new List<Instrument>();
         public List<Instrument> YM2413 = new List<Instrument>();
+        public List<Instrument> YM3526 = new List<Instrument>();
+        public List<Instrument> YM3812 = new List<Instrument>();
         public List<Instrument> YMF262 = new List<Instrument>();
         public List<Instrument> YM2608 = new List<Instrument>();
         public List<Instrument> YM2609 = new List<Instrument>();
@@ -61,6 +63,8 @@ namespace mml2vgmIDE.MMLParameter
             YM2151.Clear();
             YM2203.Clear();
             YM2413.Clear();
+            YM3526.Clear();
+            YM3812.Clear();
             YMF262.Clear();
             YM2608.Clear();
             YM2609.Clear();
@@ -337,6 +341,44 @@ namespace mml2vgmIDE.MMLParameter
                         dicInstAdd(opll, od.linePos.chipIndex, od.linePos.chipNumber);
                         instsAdd(opll, od.linePos.chipIndex, od.linePos.chipNumber);
                         opll.isTrace = isTrace;
+                        break;
+                    case "YM3526":
+                        if (Audio.chipRegister != null
+                            && Audio.chipRegister.YM3526 != null
+                            && od.linePos.chipIndex < Audio.chipRegister.YM3526.Count)
+                        {
+                            chip = Audio.chipRegister.YM3526[od.linePos.chipIndex];
+                        }
+                        if (chip == null && od.linePos.chipIndex >= 0x80)
+                        {
+                            Driver.ZGM.ZgmChip.ZgmChip zChip = Audio.chipRegister.dicChipCmdNo[od.linePos.chipIndex];
+                            chip = Audio.chipRegister.YM3526[zChip.Index];
+                            chipIndex = zChip.Index;
+                        }
+                        YM3526 opl = new YM3526(chip);
+                        YM3526.Add(opl);
+                        dicInstAdd(opl, od.linePos.chipIndex, od.linePos.chipNumber);
+                        instsAdd(opl, od.linePos.chipIndex, od.linePos.chipNumber);
+                        opl.isTrace = isTrace;
+                        break;
+                    case "YM3812":
+                        if (Audio.chipRegister != null
+                            && Audio.chipRegister.YM3812 != null
+                            && od.linePos.chipIndex < Audio.chipRegister.YM3812.Count)
+                        {
+                            chip = Audio.chipRegister.YM3812[od.linePos.chipIndex];
+                        }
+                        if (chip == null && od.linePos.chipIndex >= 0x80)
+                        {
+                            Driver.ZGM.ZgmChip.ZgmChip zChip = Audio.chipRegister.dicChipCmdNo[od.linePos.chipIndex];
+                            chip = Audio.chipRegister.YM3812[zChip.Index];
+                            chipIndex = zChip.Index;
+                        }
+                        YM3812 opl2 = new YM3812(chip);
+                        YM3812.Add(opl2);
+                        dicInstAdd(opl2, od.linePos.chipIndex, od.linePos.chipNumber);
+                        instsAdd(opl2, od.linePos.chipIndex, od.linePos.chipNumber);
+                        opl2.isTrace = isTrace;
                         break;
                     case "YMF262":
                         if (Audio.chipRegister != null

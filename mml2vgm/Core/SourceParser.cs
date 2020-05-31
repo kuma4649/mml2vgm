@@ -223,6 +223,16 @@ namespace Core
                 info.format == enmFormat.VGM ? new string[] { "L", "Ls" } : (info.format == enmFormat.XGM ? new string[] { } : new string[] { "L", "Ls" })
                 ), new int[] { 2, 0, -1 }));
 
+            cp = new YM3526(null, 0, null, null, 0);
+            cpn.Add(enmChipType.YM3526, new Tuple<string, string, List<string>, int[]>(cp.Name, cp.ShortName, new List<string>(
+                info.format == enmFormat.VGM ? new string[] { "I", "Is" } : (info.format == enmFormat.XGM ? new string[] { } : new string[] { "I", "Is" })
+                ), new int[] { 2, 0, -1 }));
+
+            cp = new YM3812(null, 0, null, null, 0);
+            cpn.Add(enmChipType.YM3812, new Tuple<string, string, List<string>, int[]>(cp.Name, cp.ShortName, new List<string>(
+                info.format == enmFormat.VGM ? new string[] { "J", "Js" } : (info.format == enmFormat.XGM ? new string[] { } : new string[] { "J", "Js" })
+                ), new int[] { 2, 0, -1 }));
+
             cp = new YMF262(null, 0, null, null, 0);
             cpn.Add(enmChipType.YMF262, new Tuple<string, string, List<string>, int[]>(cp.Name, cp.ShortName, new List<string>(
                 info.format == enmFormat.VGM ? new string[] { "D", "Ds" } : (info.format == enmFormat.XGM ? new string[] { } : new string[] { "D", "Ds" })

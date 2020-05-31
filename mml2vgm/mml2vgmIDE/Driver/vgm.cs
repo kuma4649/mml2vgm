@@ -644,7 +644,7 @@ namespace mml2vgmIDE
 
         private void vcYM3812(outDatum od)
         {
-            chipRegister.setYM3812Register((vgmBuf[vgmAdr].val & 0x80) == 0 ? 0 : 1, vgmBuf[vgmAdr + 1].val , vgmBuf[vgmAdr + 2].val);
+            chipRegister.YM3812SetRegister(od,Audio.DriverSeqCounter,(vgmBuf[vgmAdr].val & 0x80) == 0 ? 0 : 1, vgmBuf[vgmAdr + 1].val , vgmBuf[vgmAdr + 2].val);
             vgmAdr += 3;
         }
 
@@ -720,7 +720,7 @@ namespace mml2vgmIDE
 
         private void vcYM3526(outDatum od)
         {
-            chipRegister.setYM3526Register((vgmBuf[vgmAdr].val & 0x80) == 0 ? 0 : 1, vgmBuf[vgmAdr + 1].val, vgmBuf[vgmAdr + 2].val);
+            chipRegister.YM3526SetRegister(od,Audio.DriverSeqCounter,(vgmBuf[vgmAdr].val & 0x80) == 0 ? 0 : 1, vgmBuf[vgmAdr + 1].val, vgmBuf[vgmAdr + 2].val);
             vgmAdr += 3;
         }
 

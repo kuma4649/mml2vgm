@@ -132,7 +132,7 @@ namespace SoundManager
             if (realChipSender != null) realChipSender.Unmount();
         }
 
-        public void RequestStart(SendMode mode)
+        public void RequestStart(SendMode mode,bool useEmu ,bool useReal)
         {
             SetInterrupt();
             fadeOut = false;
@@ -157,8 +157,10 @@ namespace SoundManager
                 Application.DoEvents();
             }
 
-            emuChipSender.RequestStart();
-            realChipSender.RequestStart();
+            if(useEmu)
+                emuChipSender.RequestStart();
+            if (useReal)
+                realChipSender.RequestStart();
 
             ResetInterrupt();
         }

@@ -582,7 +582,7 @@ namespace mml2vgmIDE
                 {
                     if (Audio.sm.Mode == SendMode.none)
                     {
-                        Audio.sm.RequestStart(SendMode.RealTime);
+                        Audio.sm.RequestStart(SendMode.RealTime, true, true);
                     }
                     else
                     {

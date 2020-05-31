@@ -25,6 +25,8 @@ namespace Core
         public HuC6280[] huc6280 = null;
         public YM2612X[] ym2612x = null;
         public YM2413[] ym2413 = null;
+        public YM3526[] ym3526 = null;
+        public YM3812[] ym3812 = null;
         public YMF262[] ymf262 = null;
         public C140[] c140 = null;
         public C352[] c352 = null;
@@ -257,6 +259,34 @@ namespace Core
             {
                 ym2413 = lstYM2413.ToArray();
                 chips.Add(enmChipType.YM2413, ym2413);
+            }
+
+            List<YM3526> lstYM3526 = new List<YM3526>();
+            n = sp.dicChipPartName[enmChipType.YM3526];
+            for (int i = 0; i < n.Item3.Count; i++)
+            {
+                if (string.IsNullOrEmpty(n.Item3[i])) continue;
+                if (sp.lnChipPartName.Contains(n.Item3[i]))
+                    lstYM3526.Add(new YM3526(this, i, n.Item3[i], stPath, (info.format == enmFormat.ZGM ? 0 : i)));
+            }
+            if (lstYM3526.Count > 0)
+            {
+                ym3526 = lstYM3526.ToArray();
+                chips.Add(enmChipType.YM3526, ym3526);
+            }
+
+            List<YM3812> lstYM3812 = new List<YM3812>();
+            n = sp.dicChipPartName[enmChipType.YM3812];
+            for (int i = 0; i < n.Item3.Count; i++)
+            {
+                if (string.IsNullOrEmpty(n.Item3[i])) continue;
+                if (sp.lnChipPartName.Contains(n.Item3[i]))
+                    lstYM3812.Add(new YM3812(this, i, n.Item3[i], stPath, (info.format == enmFormat.ZGM ? 0 : i)));
+            }
+            if (lstYM3812.Count > 0)
+            {
+                ym3812 = lstYM3812.ToArray();
+                chips.Add(enmChipType.YM3812, ym3812);
             }
 
             List<YMF262> lstYMF262 = new List<YMF262>();
@@ -2456,6 +2486,10 @@ namespace Core
             long useYM2413_S = 0;
             long useK051649_S = 0;
             long useK053260_S = 0;
+            long useYM3526 = 0;
+            long useYM3526_S = 0;
+            long useYM3812 = 0;
+            long useYM3812_S = 0;
             long useYMF262 = 0;
             long useYMF262_S = 0;
 
@@ -2514,7 +2548,15 @@ namespace Core
                     foreach (partWork pw in ym2413[i].lstPartWork)
                     { useYM2413 += pw.clockCounter; if (ym2413[i].ChipID == 1) useYM2413_S += pw.clockCounter; }
 
-                if(ymf262 != null && ymf262.Length > i && ymf262[i] != null)
+                if (ym3526 != null && ym3526.Length > i && ym3526[i] != null)
+                    foreach (partWork pw in ym3526[i].lstPartWork)
+                    { useYM3526 += pw.clockCounter; if (ym3526[i].ChipID == 1) useYM3526_S += pw.clockCounter; }
+
+                if (ym3812 != null && ym3812.Length > i && ym3812[i] != null)
+                    foreach (partWork pw in ym3812[i].lstPartWork)
+                    { useYM3812 += pw.clockCounter; if (ym3812[i].ChipID == 1) useYM3812_S += pw.clockCounter; }
+
+                if (ymf262 != null && ymf262.Length > i && ymf262[i] != null)
                     foreach (partWork pw in ymf262[i].lstPartWork)
                     { useYMF262 += pw.clockCounter; if (ymf262[i].ChipID == 1) useYMF262_S += pw.clockCounter; }
 
@@ -2614,6 +2656,16 @@ namespace Core
             {
                 YM2413 y = ym2413[0] != null ? ym2413[0] : ym2413[1];
                 Common.SetLE32(dat, 0x10, (uint)y.Frequency | (uint)(useYM2413_S == 0 ? 0 : 0x40000000));
+            }
+            if (info.Version >= 1.51f && useYM3526 != 0)
+            {
+                YM3526 u = ym3526[0] != null ? ym3526[0] : ym3526[1];
+                Common.SetLE32(dat, 0x54, (uint)u.Frequency | (uint)(useYM3526_S == 0 ? 0 : 0x40000000));
+            }
+            if (info.Version >= 1.51f && useYM3812 != 0)
+            {
+                YM3812 u = ym3812[0] != null ? ym3812[0] : ym3812[1];
+                Common.SetLE32(dat, 0x50, (uint)u.Frequency | (uint)(useYM3812_S == 0 ? 0 : 0x40000000));
             }
             if (info.Version >= 1.51f && useYMF262 != 0)
             {
