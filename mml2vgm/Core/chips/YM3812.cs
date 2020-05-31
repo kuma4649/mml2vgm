@@ -43,6 +43,23 @@ namespace Core
 
         }
 
+        public override void InitChip()
+        {
+
+            if (!use) return;
+
+            //OPL2 mode enable
+            parent.OutData((MML)null, port[0], 0x01, 0x20);
+
+            //FM Off
+            outAllKeyOff(null, lstPartWork[0]);
+            rhythmStatus = 0x00;
+            beforeRhythmStatus = 0xff;
+            connectionSel = 0;
+            beforeConnectionSel = -1;
+
+        }
+
         public override void InitPart(partWork pw)
         {
             pw.beforeVolume = -1;

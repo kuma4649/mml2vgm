@@ -59,6 +59,14 @@
     Support type: PSG 3Ch(sine wave)  
 - YM2151  
     Support type: FM 8Ch  
+- YM3526(FM)  
+    Support type: FM 9Ch  
+- YM3526(RHYTHM)  
+    Support type: RHYTHM 5Ch  
+- YM3812(FM)  
+    Support type: FM 9Ch  
+- YM3812(RHYTHM)  
+    Support type: RHYTHM 5Ch  
 - YMF262(FM)  
     Support type: FM 18Ch  
 - YMF262(RHYTHM)  
@@ -132,6 +140,10 @@
     - YM2203(FM)  
     - YM2203(Ch3 Ex)  
     - YM2151  
+    - YM3526(FM)  
+    - YM3526(RHYTHM)  
+    - YM3812(FM)  
+    - YM3812(RHYTHM)  
     - YMF262(FM)  
     - YMF262(RHYTHM)  
     - SEGAPCM  
@@ -440,6 +452,12 @@
 	- AY8910  
 	- YM2413(FM)  
 	- YM2413(RHYTHM)  
+	- YM3526(FM)  
+	- YM3526(RHYTHM)  
+	- YM3812(FM)  
+	- YM3812(RHYTHM)  
+	- YMF262(FM)  
+	- YMF262(RHYTHM)  
 	- K051649  
     - QSound  
     - K053260  
@@ -506,6 +524,12 @@
 	- AY8910  
 	- YM2413(FM)  
 	- YM2413(RHYTHM)  
+	- YM3526(FM)  
+	- YM3526(RHYTHM)  
+	- YM3812(FM)  
+	- YM3812(RHYTHM)  
+	- YMF262(FM)  
+	- YMF262(RHYTHM)  
 	- K051649  
     - QSound  
     - K053260  
@@ -562,6 +586,12 @@
 	- C352  
 	- AY8910  
 	- YM2413(FM)  
+	- YM3526(FM)  
+	- YM3526(RHYTHM)  
+	- YM3812(FM)  
+	- YM3812(RHYTHM)  
+	- YMF262(FM)  
+	- YMF262(RHYTHM)  
 	- K051649  
     - QSound  
     - K053260  
@@ -613,6 +643,12 @@
 	- C352  
 	- AY8910  
 	- YM2413(FM)  
+	- YM3526(FM)  
+	- YM3526(RHYTHM)  
+	- YM3812(FM)  
+	- YM3812(RHYTHM)  
+	- YMF262(FM)  
+	- YMF262(RHYTHM)  
 	- K051649  
     - QSound  
     - K053260  
@@ -666,6 +702,12 @@
 	- C352  
 	- AY8910  
 	- YM2413(FM)  
+	- YM3526(FM)  
+	- YM3526(RHYTHM)  
+	- YM3812(FM)  
+	- YM3812(RHYTHM)  
+	- YMF262(FM)  
+	- YMF262(RHYTHM)  
 	- K051649  
     - QSound  
     - K053260  
@@ -724,6 +766,12 @@
 	- AY8910 (B)  
 	- YM2413(FM) (B)  
 	- YM2413(RHYTHM) (B)  
+	- YM3526(FM)  
+	- YM3526(RHYTHM)  
+	- YM3812(FM)  
+	- YM3812(RHYTHM)  
+	- YMF262(FM)  
+	- YMF262(RHYTHM)  
 	- K051649 (B)  
     - QSound (E)  
     - K053260 (A)  
@@ -782,6 +830,12 @@
 	- AY8910 (B)  
 	- YM2413(FM) (B)  
 	- YM2413(RHYTHM) (B)  
+	- YM3526(FM)  
+	- YM3526(RHYTHM)  
+	- YM3812(FM)  
+	- YM3812(RHYTHM)  
+	- YMF262(FM)  
+	- YMF262(RHYTHM)  
 	- K051649 (B)  
     - QSound (E)  
     - K053260 (A)  
@@ -878,6 +932,12 @@
 	- AY8910  
 	- YM2413(FM)  
 	- YM2413(RHYTHM)  
+	- YM3526(FM)  
+	- YM3526(RHYTHM)  
+	- YM3812(FM)  
+	- YM3812(RHYTHM)  
+	- YMF262(FM)  
+	- YMF262(RHYTHM)  
 	- K051649  
     - QSound  
     - K053260  
@@ -930,6 +990,12 @@
 	- AY8910  
 	- YM2413(FM)  
 	- YM2413(RHYTHM)  
+	- YM3526(FM)  
+	- YM3526(RHYTHM)  
+	- YM3812(FM)  
+	- YM3812(RHYTHM)  
+	- YMF262(FM)  
+	- YMF262(RHYTHM)  
 	- K051649  
     - QSound  
     - K053260  
@@ -1443,6 +1509,12 @@
     - AY8910              T/Vに対応  
     - YM2413(FM)          T/Vに対応  
     - YM2413(RHYTHM)      T/Vに対応  
+	- YM3526(FM)  
+	- YM3526(RHYTHM)  
+	- YM3812(FM)  
+	- YM3812(RHYTHM)  
+	- YMF262(FM)  
+	- YMF262(RHYTHM)  
     - K051649             T/Vに対応  
     - QSound              T/Vに対応  
     - K053260             T/Vに対応  
@@ -1543,6 +1615,12 @@
     - AY8910  
     - YM2413(FM)  
     - YM2413(RHYTHM)  
+	- YM3526(FM)  
+	- YM3526(RHYTHM)  
+	- YM3812(FM)  
+	- YM3812(RHYTHM)  
+	- YMF262(FM)  
+	- YMF262(RHYTHM)  
     - K051649  
     - QSound  
     - K053260  
@@ -1686,6 +1764,12 @@
     - AY8910  
     - YM2413(FM)  
     - YM2413(RHYTHM)  
+	- YM3526(FM)  
+	- YM3526(RHYTHM)  
+	- YM3812(FM)  
+	- YM3812(RHYTHM)  
+	- YMF262(FM)  
+	- YMF262(RHYTHM)  
     - K051649  
     - QSound  
     - K053260  
@@ -1742,6 +1826,12 @@
     - AY8910  
     - YM2413(FM)  
     - YM2413(RHYTHM)  
+	- YM3526(FM)  
+	- YM3526(RHYTHM)  
+	- YM3812(FM)  
+	- YM3812(RHYTHM)  
+	- YMF262(FM)  
+	- YMF262(RHYTHM)  
     - K051649  
     - QSound  
     - K053260  
@@ -1802,6 +1892,12 @@
     - AY8910  
     - YM2413(FM)  
     - YM2413(RHYTHM)  
+	- YM3526(FM)  
+	- YM3526(RHYTHM)  
+	- YM3812(FM)  
+	- YM3812(RHYTHM)  
+	- YMF262(FM)  
+	- YMF262(RHYTHM)  
     - K051649  
     - QSound  
     - K053260  
@@ -1874,6 +1970,12 @@
     - AY8910  
     - YM2413(FM)  
     - YM2413(RHYTHM)  
+	- YM3526(FM)  
+	- YM3526(RHYTHM)  
+	- YM3812(FM)  
+	- YM3812(RHYTHM)  
+	- YMF262(FM)  
+	- YMF262(RHYTHM)  
     - K051649  
     - QSound  
     - K053260  
@@ -1919,6 +2021,12 @@
     - C352  
     - AY8910  
     - YM2413(RHYTHM)  
+	- YM3526(FM)  
+	- YM3526(RHYTHM)  
+	- YM3812(FM)  
+	- YM3812(RHYTHM)  
+	- YMF262(FM)  
+	- YMF262(RHYTHM)  
     - K051649  
     - QSound  
     - K053260  
@@ -2051,6 +2159,12 @@
     - AY8910  
     - YM2413(FM)  
     - YM2413(RHYTHM)  
+	- YM3526(FM)  
+	- YM3526(RHYTHM)  
+	- YM3812(FM)  
+	- YM3812(RHYTHM)  
+	- YMF262(FM)  
+	- YMF262(RHYTHM)  
     - K051649  
     - QSound  
     - K053260  
@@ -2106,6 +2220,12 @@
     - AY8910  
     - YM2413(FM)  
     - YM2413(RHYTHM)  
+	- YM3526(FM)  
+	- YM3526(RHYTHM)  
+	- YM3812(FM)  
+	- YM3812(RHYTHM)  
+	- YMF262(FM)  
+	- YMF262(RHYTHM)  
     - K051649  
     - QSound  
     - K053260  
@@ -2163,6 +2283,12 @@
     - AY8910  
     - YM2413(FM)  
     - YM2413(RHYTHM)  
+	- YM3526(FM)  
+	- YM3526(RHYTHM)  
+	- YM3812(FM)  
+	- YM3812(RHYTHM)  
+	- YMF262(FM)  
+	- YMF262(RHYTHM)  
     - K051649  
     - QSound  
     - K053260  
@@ -2217,6 +2343,12 @@
     - AY8910  
     - YM2413(FM)  
     - YM2413(RHYTHM)  
+	- YM3526(FM)  
+	- YM3526(RHYTHM)  
+	- YM3812(FM)  
+	- YM3812(RHYTHM)  
+	- YMF262(FM)  
+	- YMF262(RHYTHM)  
     - K051649  
     - QSound  
     - K053260  
@@ -2384,6 +2516,9 @@
 - Support chips  
     - YM2413(FM)  
     - YM2413(RHYTHM)  
+	- YM3526(RHYTHM)  
+	- YM3812(RHYTHM)  
+	- YMF262(RHYTHM)  
 - Remark  
     Rhythmモードスイッチ  
 - Description  
@@ -2437,6 +2572,12 @@
     - AY8910  
     - YM2413(FM)  
     - YM2413(RHYTHM)  
+	- YM3526(FM)  
+	- YM3526(RHYTHM)  
+	- YM3812(FM)  
+	- YM3812(RHYTHM)  
+	- YMF262(FM)  
+	- YMF262(RHYTHM)  
     - K051649  
     - QSound  
     - K053260  
@@ -2492,6 +2633,12 @@
     - AY8910  
     - YM2413(FM)  
     - YM2413(RHYTHM)  
+	- YM3526(FM)  
+	- YM3526(RHYTHM)  
+	- YM3812(FM)  
+	- YM3812(RHYTHM)  
+	- YMF262(FM)  
+	- YMF262(RHYTHM)  
     - K051649  
     - QSound  
     - K053260  
@@ -2540,6 +2687,12 @@
     - C352  
     - AY8910  
     - YM2413(FM)  
+	- YM3526(FM)  
+	- YM3526(RHYTHM)  
+	- YM3812(FM)  
+	- YM3812(RHYTHM)  
+	- YMF262(FM)  
+	- YMF262(RHYTHM)  
     - K051649  
     - QSound  
     - K053260  
@@ -2604,6 +2757,8 @@
     - YM2609(RHYTHM) (A)  
     - YM2203(FM) (A)  
     - YM2151 (A)  
+	- YMF262(FM)  
+	- YMF262(RHYTHM)  
     - QSound (C)  
     - K053260 (B)  
 - Remark  
@@ -2967,6 +3122,12 @@
     - AY8910  
     - YM2413(FM)  
     - YM2413(RHYTHM)  
+	- YM3526(FM)  
+	- YM3526(RHYTHM)  
+	- YM3812(FM)  
+	- YM3812(RHYTHM)  
+	- YMF262(FM)  
+	- YMF262(RHYTHM)  
     - K051649  
     - QSound  
     - K053260  
@@ -3022,6 +3183,12 @@
     - AY8910  
     - YM2413(FM)  
     - YM2413(RHYTHM)  
+	- YM3526(FM)  
+	- YM3526(RHYTHM)  
+	- YM3812(FM)  
+	- YM3812(RHYTHM)  
+	- YMF262(FM)  
+	- YMF262(RHYTHM)  
     - K051649  
     - QSound  
     - K053260  
@@ -3081,6 +3248,12 @@
     - AY8910  
     - YM2413(FM)  
     - YM2413(RHYTHM)  
+	- YM3526(FM)  
+	- YM3526(RHYTHM)  
+	- YM3812(FM)  
+	- YM3812(RHYTHM)  
+	- YMF262(FM)  
+	- YMF262(RHYTHM)  
     - K051649  
     - QSound  
     - K053260  
