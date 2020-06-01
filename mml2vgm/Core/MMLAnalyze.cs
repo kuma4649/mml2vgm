@@ -1294,8 +1294,8 @@ namespace Core
         private void CmdY(partWork pw,MML mml)
         {
             int n = -1;
-            byte dat = 0;
-            byte op = 0;
+            int dat = 0;
+            int op = 0;
             pw.incPos();
 
             char c = pw.getChar();
