@@ -1002,9 +1002,9 @@ namespace Core
             }
             else
             {
-                byte prt = (byte)mml.args[0];
-                byte adr = (byte)mml.args[1];
-                byte dat = (byte)mml.args[2];
+                byte prt = (byte)(int)mml.args[0];
+                byte adr = (byte)(int)mml.args[1];
+                byte dat = (byte)(int)mml.args[2];
 
                 parent.OutData(mml,port[prt&3], adr, dat);
 
