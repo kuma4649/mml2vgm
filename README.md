@@ -179,6 +179,8 @@ mml2vgm , mvc , mml2vgmIDEはMITライセンスに準ずる物とします。LIC
  ・欧場豪@マシㇼキ提督 さん  
  ・SND-L/KSND(itoken) さん  
  ・古代 さんはじめオープンMUCOMのみなさん  
+ ・sdhizumi/S.Kudo さん  
+ ・Ian Karlsson さん  
   
  ・XPCMK  
  ・FMP7  

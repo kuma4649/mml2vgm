@@ -165,6 +165,7 @@ ebass3(from MUSIC LALF @70)
                mml2vgmは内部で8bitPCMとして扱われる。
            ・一つのサンプルは最大65536byteまで。それ以上はカットされる。
            ・バンクに収まらない場合は次のバンクに格納し、収まらなかったバンクの方はPaddingされる。
+           ・QSoundは必ずループを行う。よってデータの終端は無音状態にしなければならない(最低4byte)
          K053260
            ・PCMは 8bit,mono,圧縮なし,unsignedのwavファイルであること。
                mml2vgmは内部で8bitPCMとして扱われる。

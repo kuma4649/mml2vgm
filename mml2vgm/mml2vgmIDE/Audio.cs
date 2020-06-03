@@ -1350,9 +1350,9 @@ namespace mml2vgmIDE
                         if (!(zchip is Driver.ZGM.ZgmChip.QSound)) continue;
 
                         zCnt++;
-                        MDSound.qsound qsound = new MDSound.qsound();
+                        MDSound.Qsound_ctr qsound = new MDSound.Qsound_ctr();
                         chip = new MDSound.MDSound.Chip();
-                        chip.type = MDSound.MDSound.enmInstrumentType.QSound;
+                        chip.type = MDSound.MDSound.enmInstrumentType.QSoundCtr;
                         chip.ID = (byte)0;//ZGMでは常に0
                         chip.Instrument = qsound;
                         chip.Update = qsound.Update;
@@ -3155,9 +3155,9 @@ namespace mml2vgmIDE
                     if (vgmDriver.QSoundClockValue != 0)
                     {
                         //QSoundはDualChip非対応
-                        MDSound.qsound qsound = new MDSound.qsound();
+                        MDSound.Qsound_ctr qsound = new MDSound.Qsound_ctr();
                         chip = new MDSound.MDSound.Chip();
-                        chip.type = MDSound.MDSound.enmInstrumentType.QSound;
+                        chip.type = MDSound.MDSound.enmInstrumentType.QSoundCtr;
                         chip.ID = (byte)0;
                         chip.Instrument = qsound;
                         chip.Update = qsound.Update;
@@ -4512,7 +4512,7 @@ namespace mml2vgmIDE
             vol = mds.getK054539VisVolume();
             if (vol != null) visVolume.k054539 = (short)getMonoVolume(vol[0][0][0], vol[0][0][1], vol[1][0][0], vol[1][0][1]);
 
-            vol = mds.getQSoundVisVolume();
+            vol = mds.getQSoundCtrVisVolume();
             if (vol != null) visVolume.qSound = (short)getMonoVolume(vol[0][0][0], vol[0][0][1], vol[1][0][0], vol[1][0][1]);
 
             vol = mds.getGA20VisVolume();
@@ -5249,7 +5249,7 @@ namespace mml2vgmIDE
         {
             try
             {
-                mds.SetVolumeQSound(setting.balance.QSoundVolume
+                mds.SetVolumeQSoundCtr(setting.balance.QSoundVolume
                     = Common.Range((isAbs ? 0 : setting.balance.QSoundVolume) + volume, -192, 20));
             }
             catch { }

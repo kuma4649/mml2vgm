@@ -93,6 +93,7 @@ namespace Core
             pw.volume = 3000;// pw.MaxVolume;
             pw.panL = 16;
             pw.port = port;
+            pw.beforepcmLoopAddress = -1;
         }
 
         public override void InitChip()
@@ -274,8 +275,17 @@ namespace Core
 
         private void OutQSoundKeyOff(MML mml, partWork pw)
         {
-            byte adr = (byte)((pw.ch << 3) + 0x03);
-            ushort data = 0;
+            int bch = (pw.ch - 1) & 0xf;
+            byte adr = (byte)((bch << 3) + 0x00);
+            ushort data = (ushort)(pw.pcmBank);
+            OutQSoundPort(mml, port[0], pw
+                , adr
+                , (ushort)(data & 0x7fff)
+                );
+            pw.beforepcmBank = -1;
+
+            adr = (byte)((pw.ch << 3) + 0x03);
+            data = 0;
 
             OutQSoundPort(mml,port[0], pw
                 , adr
@@ -329,17 +339,20 @@ namespace Core
                 pw.beforepcmEndAddress = pw.pcmEndAddress;
             }
 
-            if (pw.beforepcmLoopAddress != pw.pcmLoopAddress)
+            if (pw.beforepcmLoopAddress != (pw.pcmEndAddress - pw.pcmLoopAddress) && pw.beforepcmLoopAddress!=4)
             {
                 //LoopAdr
                 adr = (byte)((pw.ch << 3) + 0x04);
-                data = (ushort)(pw.pcmLoopAddress == -1 ? 0 : (pw.pcmEndAddress- pw.pcmLoopAddress));
+                data = (ushort)(pw.pcmLoopAddress == -1
+                    ? 4 //QSoundはループがデフォ。(thanks Ian(@SuperCTR)さん)
+                    : (pw.pcmEndAddress- pw.pcmLoopAddress)
+                    );
                 OutQSoundPort(mml, port[0], pw
                     , adr
                     , (ushort)data
                     );
 
-                pw.beforepcmLoopAddress = pw.pcmLoopAddress;
+                pw.beforepcmLoopAddress = data;
             }
 
             if (pw.beforepcmBank != pw.pcmBank)
@@ -349,7 +362,7 @@ namespace Core
                 data = (ushort)(pw.pcmBank);
                 OutQSoundPort(mml, port[0], pw
                     , adr
-                    , (ushort)data
+                    , (ushort)(data | 0x8000)
                     );
 
                 pw.beforepcmBank = pw.pcmBank;
@@ -607,6 +620,7 @@ namespace Core
             pw.pcmStartAddress = (int)parent.instPCM[n].stAdr;
             pw.pcmEndAddress = (int)parent.instPCM[n].edAdr;
             pw.pcmLoopAddress = (int)parent.instPCM[n].loopAdr;
+            pw.beforepcmLoopAddress = -1;
             pw.pcmBank = (int)((parent.instPCM[n].stAdr >> 16));
             SetDummyData(pw, mml);
 

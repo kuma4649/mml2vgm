@@ -2744,9 +2744,9 @@ namespace mml2vgmIDE
                 {
                     if (!ctQSound[Chip.Number].UseScci)
                     {
-                        mds.WriteQSound(Chip.Index, (byte)Chip.Number, 0, (byte)(data >> 8));
-                        mds.WriteQSound(Chip.Index, (byte)Chip.Number, 1, (byte)data);
-                        mds.WriteQSound(Chip.Index, (byte)Chip.Number, 2, (byte)address);
+                        mds.WriteQSoundCtr(Chip.Index, (byte)Chip.Number, 0, (byte)(data >> 8));
+                        mds.WriteQSoundCtr(Chip.Index, (byte)Chip.Number, 1, (byte)data);
+                        mds.WriteQSoundCtr(Chip.Index, (byte)Chip.Number, 2, (byte)address);
                     }
                 }
                 if (Chip.Model == EnmVRModel.RealModel)
@@ -2768,9 +2768,9 @@ namespace mml2vgmIDE
                         {
                             foreach (PackData dat in pdata)
                             {
-                                mds.WriteQSound(Chip.Index, (byte)dat.Chip.Number, 0, (byte)(dat.Data >> 8));
-                                mds.WriteQSound(Chip.Index, (byte)dat.Chip.Number, 1, (byte)dat.Data);
-                                mds.WriteQSound(Chip.Index, (byte)dat.Chip.Number, 2, (byte)dat.Address);
+                                mds.WriteQSoundCtr(Chip.Index, (byte)dat.Chip.Number, 0, (byte)(dat.Data >> 8));
+                                mds.WriteQSoundCtr(Chip.Index, (byte)dat.Chip.Number, 1, (byte)dat.Data);
+                                mds.WriteQSoundCtr(Chip.Index, (byte)dat.Chip.Number, 2, (byte)dat.Address);
                             }
                         }
                         if (Chip.Model == EnmVRModel.RealModel)
@@ -2780,7 +2780,7 @@ namespace mml2vgmIDE
                     else
                     {
                         if (Chip.Model == EnmVRModel.VirtualModel)
-                            mds.WriteQSoundPCMData(Chip.Index, (byte)Chip.Number, (uint)((object[])exData)[0], (uint)((object[])exData)[1], (uint)((object[])exData)[2], (byte[])((object[])exData)[3], (uint)((object[])exData)[4]);
+                            mds.WriteQSoundCtrPCMData(Chip.Index, (byte)Chip.Number, (uint)((object[])exData)[0], (uint)((object[])exData)[1], (uint)((object[])exData)[2], (byte[])((object[])exData)[3], (uint)((object[])exData)[4]);
                         else
                         {
                         }
@@ -6915,9 +6915,9 @@ namespace mml2vgmIDE
 
             if (model == EnmVRModel.VirtualModel)
             {
-                mds.WriteQSound((byte)chipID, 0, mm);
-                mds.WriteQSound((byte)chipID, 1, ll);
-                mds.WriteQSound((byte)chipID, 2, rr);
+                mds.WriteQSoundCtr((byte)chipID, 0, mm);
+                mds.WriteQSoundCtr((byte)chipID, 1, ll);
+                mds.WriteQSoundCtr((byte)chipID, 2, rr);
             }
             else
             {
@@ -7799,7 +7799,7 @@ namespace mml2vgmIDE
             if (chipid == 0) chipLED.PriQsnd = 2;
 
             if (model == EnmVRModel.VirtualModel)
-                mds.WriteQSoundPCMData(chipid, ROMSize, DataStart, DataLength, romdata, SrcStartAdr);
+                mds.WriteQSoundCtrPCMData(chipid, ROMSize, DataStart, DataLength, romdata, SrcStartAdr);
         }
 
         public void writeC352(byte chipid, uint adr, uint data)

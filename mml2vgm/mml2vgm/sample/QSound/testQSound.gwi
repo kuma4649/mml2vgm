@@ -18,17 +18,20 @@
 
 }
 
+ ↓QSoundは必ずループを行う。よってデータの終端は無音状態にしなければならない(最低4byte)
 '@ P 1,"..\wav\muteGuitar.wav"    , 8000 , 100,QSound
-'@ P 2,"..\wav\Guitar.wav"        , 8000 , 100,QSound,1000
+ ↓はNGの例。終端が無音ではないpcmを指定すると音が出続ける状態になってしまう
+'@ P 2,"..\wav\Guitar.wav"        , 8000 , 100,QSound
+ ↓ループをさせたい場合は逆に終端が無音ではないpcmが望まれる
 '@ P 3,"..\wav\Guitar.wav"        , 8000 , 100,QSound,10000
-'@ P 4,"..\wav\Guitar.wav"        , 8000 , 100,QSound,10000
-'@ P 5,"..\wav\Guitar.wav"        , 8000 , 100,QSound,10000
-'@ P 6,"..\wav\Guitar.wav"        , 8000 , 100,QSound,10000
 
 
 'Q01 T126
 音量は最大4000位でやめといたほうがよさそう
-'Q01 o4l1v3000@2Q8p15  cdefgab
-'Q02 o4l1v500@2Q8r8p18cdefgab
-'Q01 D0o4l4q0p16@2cdefgab>>>c2_<<c&c2_<c^1^1
+'Q01 o4l1v3000@1Q8p15  c1^1
+'Q01 o4l1v3000@2Q8p15  c1^1
+'Q01 o4l1v3000@3Q8p15  c1^1
+'Q01 o4l1v3000@3Q8p15
+'Q01 defgab
+'Q01 D0o4l4q0p16cdefgab>>>c2_<<c&c2_<c^1^1
 
