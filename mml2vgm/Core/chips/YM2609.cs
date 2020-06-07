@@ -1284,10 +1284,51 @@ namespace Core
             OutFmSetInstrument(pw, mml, n, pw.volume, type);
         }
 
+        // mml2vgm                      : opna2 effect ch
+        // U01-12 FM     ch1-12 ( 0-11) : 0-11
+        // U13-15 FMch3ex  1-3  (12-14) : 2
+        // U16-18 FMch9ex  1-3  (15-17) : 8
+        // U19-30 PSG    ch1-12 (18-29) : 12-23
+        // U31-36 Rhythm ch1-6  (30-35) : 27-32
+        // U37    ADPCM0 ch1    (36)    : 24
+        // U38    ADPCM1 ch1    (37)    : 25
+        // U39    ADPCM2 ch1    (38)    : 26
+        // U40-45 ADPCMA ch1-6  (39-44) : 33-38
+
         public override void CmdEffect(partWork pw, MML mml)
         {
             if (mml.args.Count == 3)
             {
+                byte ch = (byte)pw.ch;
+                if (ch < 12)
+                {
+                    ;
+                }
+                else if (ch < 15)
+                {
+                    ch = 2;
+                }
+                else if (ch < 18)
+                {
+                    ch = 8;
+                }
+                else if (ch < 30)
+                {
+                    ch = (byte)(ch - 6);
+                }
+                else if (ch < 36)
+                {
+                    ch = (byte)(ch - 3);
+                }
+                else if (ch < 39)
+                {
+                    ch = (byte)(ch - 12);
+                }
+                else
+                {
+                    ch = (byte)(ch - 6);
+                }
+
                 if ((string)mml.args[0] == "Rv")
                 {
                     //Reverb
@@ -1298,23 +1339,6 @@ namespace Core
                             parent.OutData(mml, port[3], 0x22, (byte)v);
                             break;
                         case 'S':
-                            byte ch = (byte)pw.ch;
-                            if (ch < 12)
-                            {
-                                ;
-                            }
-                            else if (ch < 15)
-                            {
-                                ch = 2;
-                            }
-                            else if (ch < 18)
-                            {
-                                ch = 8;
-                            }
-                            else
-                            {
-                                ch = (byte)(ch - 18 + 12);
-                            }
                             int sl = (int)mml.args[2];
                             parent.OutData(mml, port[3], 0x23, ch);
                             parent.OutData(mml, port[3], 0x24, (byte)sl);
@@ -1324,23 +1348,6 @@ namespace Core
                 else if ((string)mml.args[0] == "Ds")
                 {
                     int v = (int)mml.args[2];
-                    byte ch = (byte)pw.ch;
-                    if (ch < 12)
-                    {
-                        ;
-                    }
-                    else if (ch < 15)
-                    {
-                        ch = 2;
-                    }
-                    else if (ch < 18)
-                    {
-                        ch = 8;
-                    }
-                    else
-                    {
-                        ch = (byte)(ch - 18 + 12);
-                    }
                     //Distortion
                     switch ((char)mml.args[1]) 
                     {
@@ -1873,7 +1880,7 @@ namespace Core
             //コマンドを跨ぐデータ向け処理
             foreach (partWork pw in lstPartWork)
             {
-                if (pw.Type == enmChannelType.RHYTHM)
+                if (pw.Type == enmChannelType.RHYTHM)//固定周波数ADPCM
                 {
                     //Rhythm Volume処理
                     if (pw.beforeVolume != pw.volume || !pw.pan.eq())
@@ -1888,7 +1895,7 @@ namespace Core
                     rhythm_KeyOff |= (byte)(pw.keyOff ? (1 << (pw.ch - 30)) : 0);
                     pw.keyOff = false;
                 }
-                else if (pw.Type == enmChannelType.ADPCM)
+                else if (pw.Type == enmChannelType.ADPCM)//固定周波数ADPCM
                 {
                     //ADPCM-A Volume処理
                     if (pw.beforeVolume != pw.volume)
