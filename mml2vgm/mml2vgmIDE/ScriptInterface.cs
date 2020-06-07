@@ -24,6 +24,7 @@ namespace mml2vgmIDE
 
         private static string[] GetScriptInfo(string path,int t)
         {
+           
             ScriptEngine engine=null;
             ScriptRuntime runtime = null;
 
@@ -65,6 +66,7 @@ namespace mml2vgmIDE
             finally
             {
                 runtime.Shutdown();
+                GC.Collect();
             }
             return new string[] { "" };// Path.GetFileName(path);
         }
@@ -118,6 +120,7 @@ namespace mml2vgmIDE
             finally
             {
                 runtime.Shutdown();
+                
             }
         }
 

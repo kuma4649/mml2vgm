@@ -2212,7 +2212,7 @@ namespace mml2vgmIDE
             }
 
             frmPartCounter.Close();
-            
+
             setting.Save();
         }
 
@@ -2870,7 +2870,9 @@ namespace mml2vgmIDE
             info.document = d;
             info.fileNamesFull = lstFullPath.ToArray();
 
+            string cd=Directory.GetCurrentDirectory();
             ScriptInterface.run(fn, info, tpl.Item1);
+            Directory.SetCurrentDirectory(cd);
         }
 
         private ChannelInfo GetCurrentChannelInfo()

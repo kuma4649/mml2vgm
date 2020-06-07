@@ -66,7 +66,7 @@ class Mml2vgmScript:
             elif index==3:
                 args = "\"" + bas + ext + "\" -r 16k -e signed-integer -c 1 \"" + bas + "_16k" + ext + "\""
             elif index==4:
-                args = "\"" + bas + ext + "\" -r 18500 -e signed-integer -c 1 \"" + bas + "_18500" + ext + "\""
+                args = "\"" + bas + ext + "\" -b 8 -r 18500 -c 1 \"" + bas + "_18500" + ext + "\""
 
         
             ret = Mml2vgmInfo.runCommand(gt, args, True)

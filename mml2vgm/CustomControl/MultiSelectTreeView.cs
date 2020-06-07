@@ -104,82 +104,86 @@ namespace CustomControl
 
         protected override void OnDrawNode(DrawTreeNodeEventArgs e)
         {
-            if (DrawMode != TreeViewDrawMode.OwnerDrawAll)
+            try
             {
-                base.OnDrawNode(e);
-                return;
-            }
-
-            if (e.Bounds.Width == 0 && e.Bounds.Height == 0) return;
-
-            if (backBmp == null)
-                backBmp = new Bitmap(e.Bounds.Width, e.Bounds.Height);
-            else if (backBmp.Width != e.Bounds.Width || backBmp.Height != e.Bounds.Height)
-            {
-                backBmp.Dispose();
-                backBmp = new Bitmap(e.Bounds.Width, e.Bounds.Height);
-            }
-
-            Rectangle bnd = new Rectangle(0, 0, e.Bounds.Width, e.Bounds.Height);
-            Graphics g = Graphics.FromImage(backBmp);
-
-            if ((e.State & TreeNodeStates.Selected) != 0)
-            {
-                if (brushSelectedNodeBack != null)
-                    g.FillRegion(brushSelectedNodeBack, new Region(bnd));
-            }
-            else if (e.Node.Checked)
-            {
-                if (brushCheckedNodeBack != null)
-                    g.FillRegion(brushCheckedNodeBack, new Region(bnd));
-            }
-            else if (((e.State & TreeNodeStates.Hot) != 0) || hoverNode == e.Node)
-            {
-                if (brushHotNodeBack != null)
-                    g.FillRegion(brushHotNodeBack, new Region(bnd));
-            }
-            else
-            {
-                if (brushNodeBack != null)
-                    g.FillRegion(brushNodeBack, new Region(bnd));
-            }
-
-            bool showIcon = (e.Node.ImageIndex >= 0);
-            int shift = e.Node.Level * Indent;
-            int shiftPM = 16;
-            int shiftPI = (showIcon ? 16 : 0);
-
-            if (brushFontColor != null)
-                g.DrawString(e.Node.Text, this.Font, brushFontColor
-                , new Rectangle(new Point(
-                    bnd.X + shift + shiftPM + shiftPI
-                    , bnd.Y + 0)
-                , bnd.Size));
-
-            if (e.Node.Nodes.Count > 0)
-            {
-                Bitmap bmp;
-                bmp = (e.Node.IsExpanded) ? Properties.Resources.Expand : Properties.Resources.Collapse;
-                bmp.MakeTransparent(Color.Black);
-                g.DrawImage(bmp, bnd.X + shift, bnd.Y, bnd.Height, bnd.Height);
-            }
-
-
-            if (showIcon)
-            {
-                if (this.ImageList != null
-                    && this.ImageList.Images != null
-                    && this.ImageList.Images.Count > e.Node.ImageIndex)
+                if (DrawMode != TreeViewDrawMode.OwnerDrawAll)
                 {
-                    g.DrawImage(this.ImageList.Images[e.Node.ImageIndex]
-                        , bnd.X + shift + shiftPM
-                        , bnd.Y
-                        , bnd.Height
-                        , bnd.Height);
+                    base.OnDrawNode(e);
+                    return;
                 }
-            }
 
-            e.Graphics.DrawImage(backBmp, e.Bounds.X, e.Bounds.Y);
+                if (e.Bounds.Width == 0 && e.Bounds.Height == 0) return;
+
+                if (backBmp == null)
+                    backBmp = new Bitmap(e.Bounds.Width, e.Bounds.Height);
+                else if (backBmp.Width != e.Bounds.Width || backBmp.Height != e.Bounds.Height)
+                {
+                    backBmp.Dispose();
+                    backBmp = new Bitmap(e.Bounds.Width, e.Bounds.Height);
+                }
+
+                Rectangle bnd = new Rectangle(0, 0, e.Bounds.Width, e.Bounds.Height);
+                Graphics g = Graphics.FromImage(backBmp);
+
+                if ((e.State & TreeNodeStates.Selected) != 0)
+                {
+                    if (brushSelectedNodeBack != null)
+                        g.FillRegion(brushSelectedNodeBack, new Region(bnd));
+                }
+                else if (e.Node.Checked)
+                {
+                    if (brushCheckedNodeBack != null)
+                        g.FillRegion(brushCheckedNodeBack, new Region(bnd));
+                }
+                else if (((e.State & TreeNodeStates.Hot) != 0) || hoverNode == e.Node)
+                {
+                    if (brushHotNodeBack != null)
+                        g.FillRegion(brushHotNodeBack, new Region(bnd));
+                }
+                else
+                {
+                    if (brushNodeBack != null)
+                        g.FillRegion(brushNodeBack, new Region(bnd));
+                }
+
+                bool showIcon = (e.Node.ImageIndex >= 0);
+                int shift = e.Node.Level * Indent;
+                int shiftPM = 16;
+                int shiftPI = (showIcon ? 16 : 0);
+
+                if (brushFontColor != null)
+                    g.DrawString(e.Node.Text, this.Font, brushFontColor
+                    , new Rectangle(new Point(
+                        bnd.X + shift + shiftPM + shiftPI
+                        , bnd.Y + 0)
+                    , bnd.Size));
+
+                if (e.Node.Nodes.Count > 0)
+                {
+                    Bitmap bmp;
+                    bmp = (e.Node.IsExpanded) ? Properties.Resources.Expand : Properties.Resources.Collapse;
+                    bmp.MakeTransparent(Color.Black);
+                    g.DrawImage(bmp, bnd.X + shift, bnd.Y, bnd.Height, bnd.Height);
+                }
+
+
+                if (showIcon)
+                {
+                    if (this.ImageList != null
+                        && this.ImageList.Images != null
+                        && this.ImageList.Images.Count > e.Node.ImageIndex)
+                    {
+                        g.DrawImage(this.ImageList.Images[e.Node.ImageIndex]
+                            , bnd.X + shift + shiftPM
+                            , bnd.Y
+                            , bnd.Height
+                            , bnd.Height);
+                    }
+                }
+
+                e.Graphics.DrawImage(backBmp, e.Bounds.X, e.Bounds.Y);
+            }
+            catch { }
         }
 
         protected override void OnNodeMouseClick(TreeNodeMouseClickEventArgs e)
