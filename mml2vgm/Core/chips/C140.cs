@@ -475,21 +475,28 @@ namespace Core
                 if (parent.instPCM[pw.instrument].freq == -1)
                 {
                     return ((int)(
-                        1.531931
+                        65536.0 / 2.0 / Frequency * 384
                         * 8000.0
                         * Const.pcmMTbl[n]
                         * Math.Pow(2, (o - 3))
-                        * ((double)parent.instPCM[pw.instrument].samplerate/8000.0)
+                        * ((double)parent.instPCM[pw.instrument].samplerate / 8000.0)
                         ));
                 }
                 else
                 {
+                    //return ((int)(
+                    //    1.531931
+                    //    * 8000.0
+                    //    * Const.pcmMTbl[n]
+                    //    * Math.Pow(2, (o - 3))
+                    //    * ((double)parent.instPCM[pw.instrument].freq / 8000.0)
+                    //    ));
                     return ((int)(
-                        1.531931
+                        65536.0 / 2.0 / Frequency * 384
                         * 8000.0
                         * Const.pcmMTbl[n]
                         * Math.Pow(2, (o - 3))
-                        * ((double)parent.instPCM[pw.instrument].freq/8000.0)
+                        * ((double)parent.instPCM[pw.instrument].freq / 8000.0)
                         ));
                 }
 
