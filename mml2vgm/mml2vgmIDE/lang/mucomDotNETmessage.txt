@@ -181,3 +181,4 @@ I0600=mucomDotNETConsole Command line Compiler\r\n                              
 ;compiler.cs 0700
 E0700=The buffer (65535byte) that can be used per part has been exceeded.(Used buffer by the channel: Ch.{0}: {1}byte)
 
+E9998=Driver error. Please specify mucomDotNET in #Driver tag to use the specified function.

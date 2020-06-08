@@ -138,6 +138,7 @@ namespace mml2vgmIDE
             this.wrkMUCFullPath = wrkMUCFullPath;
             compiler.Init();
             compiler.SetCompileSwitch("IDE");
+            
             if(poi!=Point.Empty)
             {
                 compiler.SetCompileSwitch(string.Format("SkipPoint=R{0}:C{1}", poi.Y, poi.X));

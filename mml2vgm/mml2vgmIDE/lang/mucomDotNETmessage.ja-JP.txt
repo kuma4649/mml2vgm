@@ -176,3 +176,4 @@ I0600=mucomDotNETConsole コマンドライン版コンパイラ\r\n            
 ;compiler.cs 0700
 E0700=１パート辺りに使用できるバッファ(65535byte)を超えました。(該当チャンネル使用バッファ: Ch.{0}: {1}byte)
 
+E9998=Driverエラー。指定の機能を使う場合は#DriverタグにmucomDotNETを指定してください

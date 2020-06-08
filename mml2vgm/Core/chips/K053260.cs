@@ -87,6 +87,7 @@ namespace Core
         }
 
         private int[] n2f;
+        private double currentBaseFreq;
 
         public override void InitChip()
         {
@@ -113,6 +114,12 @@ namespace Core
 
             OutK053260Port(null, port[0], null, 0x2f, 3);
 
+            currentBaseFreq = 8000.0;
+            MakeFreqTable(currentBaseFreq);
+        }
+
+        private void MakeFreqTable(double baseFreq)
+        { 
             n2f = new int[8 * 12];
             int ind = 0;
             double dis = double.MaxValue;
@@ -121,7 +128,7 @@ namespace Core
                 //Console.WriteLine("o:{0}", o);
                 for (int n = 0; n < 12; n++)
                 {
-                    double frq = 8000.0 * Const.pcmMTbl[n] * Math.Pow(2, (o - 4));
+                    double frq = baseFreq * Const.pcmMTbl[n] * Math.Pow(2, (o - 4));
                     double kfrq;
                     while (true)
                     {
@@ -445,20 +452,6 @@ namespace Core
                     o = Common.CheckRange(--o, 0, 7);
                 }
 
-                //if (n >= 0)
-                //{
-                //    o += n / 12;
-                //    o = Common.CheckRange(o, 0, 7);
-                //    n %= 12;
-                //}
-                //else
-                //{
-                //    o += n / 12 - 1;
-                //    o = Common.CheckRange(o, 0, 7);
-                //    n %= 12;
-                //    if (n < 0) { n += 12; }
-                //}
-
                 if (pw.instrument < 0 || !parent.instPCM.ContainsKey(pw.instrument))
                 {
                     return 0;
@@ -468,6 +461,12 @@ namespace Core
                 if (parent.instPCM[pw.instrument].freq != -1)
                 {
                     freq = (double)parent.instPCM[pw.instrument].freq;
+                }
+
+                if (currentBaseFreq != freq)
+                {
+                    MakeFreqTable(freq);
+                    currentBaseFreq = freq;
                 }
 
                 return n2f[(o + 1) * 12 + n];//0xe41;

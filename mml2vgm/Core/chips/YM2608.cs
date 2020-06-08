@@ -238,7 +238,7 @@ namespace Core
 
         public void SetAdpcmFNum(MML mml,partWork pw)
         {
-            int f = GetAdpcmFNum(pw.octaveNow, pw.noteCmd, pw.shift + pw.keyShift);//
+            int f = GetAdpcmFNum(pw,pw.octaveNow, pw.noteCmd, pw.shift + pw.keyShift);//
             if (pw.bendWaitCounter != -1)
             {
                 f = pw.bendFnum;
@@ -301,7 +301,7 @@ namespace Core
             }
         }
 
-        public int GetAdpcmFNum(int octave, char noteCmd, int shift)
+        public int GetAdpcmFNum(partWork pw,int octave, char noteCmd, int shift)
         {
             int o = octave - 1;
             int n = Const.NOTE.IndexOf(noteCmd) + shift;
@@ -319,7 +319,19 @@ namespace Core
                 if (n < 0) { n += 12; }
             }
 
-            return (int)(0x49ba * Const.pcmMTbl[n] * Math.Pow(2, (o - 4)));
+            double freq = 8000.0;
+            if (pw.instrument != -1)
+            {
+                freq = (double)parent.instPCM[pw.instrument].samplerate;
+                if (parent.instPCM[pw.instrument].freq != -1)
+                {
+                    freq = (double)parent.instPCM[pw.instrument].freq;
+                }
+            }
+
+            return (int)(
+                0x49ba * Const.pcmMTbl[n] * Math.Pow(2, (o - 4)) * (freq / 8000.0)
+                );
         }
 
         public void OutAdpcmKeyOn(MML mml,partWork pw)
