@@ -74,53 +74,53 @@ namespace Core
 
     public override void InitPart(partWork pw)
         {
-            pw.slots = (byte)((pw.Type == enmChannelType.FMOPN || pw.ch == 2 || pw.ch == 5) ? 0xf : 0x0);
-            pw.volume = 127;
-            pw.MaxVolume = 127;
-            pw.port = port;
-            pw.pcm = pw.ch > 9;
+            pw.pg[pw.cpg].slots = (byte)((pw.pg[pw.cpg].Type == enmChannelType.FMOPN || pw.pg[pw.cpg].ch == 2 || pw.pg[pw.cpg].ch == 5) ? 0xf : 0x0);
+            pw.pg[pw.cpg].volume = 127;
+            pw.pg[pw.cpg].MaxVolume = 127;
+            pw.pg[pw.cpg].port = port;
+            pw.pg[pw.cpg].pcm = pw.pg[pw.cpg].ch > 9;
         }
 
 
         public void OutYM2612XPcmKeyON(MML mml,partWork pw)
         {
-            if (pw.instrument >= 63) return;
+            if (pw.pg[pw.cpg].instrument >= 63) return;
 
-            if (pw.isPcmMap)
+            if (pw.pg[pw.cpg].isPcmMap)
             {
-                int n = Const.NOTE.IndexOf(pw.noteCmd);
-                int f = pw.octaveNow * 12 + n + pw.shift + pw.keyShift;
-                if (parent.instPCMMap.ContainsKey(pw.pcmMapNo))
+                int n = Const.NOTE.IndexOf(pw.pg[pw.cpg].noteCmd);
+                int f = pw.pg[pw.cpg].octaveNow * 12 + n + pw.pg[pw.cpg].shift + pw.pg[pw.cpg].keyShift;
+                if (parent.instPCMMap.ContainsKey(pw.pg[pw.cpg].pcmMapNo))
                 {
-                    if (parent.instPCMMap[pw.pcmMapNo].ContainsKey(f))
+                    if (parent.instPCMMap[pw.pg[pw.cpg].pcmMapNo].ContainsKey(f))
                     {
-                        pw.instrument = parent.instPCMMap[pw.pcmMapNo][f];
+                        pw.pg[pw.cpg].instrument = parent.instPCMMap[pw.pg[pw.cpg].pcmMapNo][f];
                     }
                     else
                     {
-                        msgBox.setErrMsg(string.Format(msg.get("E10025"), pw.octaveNow, pw.noteCmd, pw.shift + pw.keyShift), mml.line.Lp);
+                        msgBox.setErrMsg(string.Format(msg.get("E10025"), pw.pg[pw.cpg].octaveNow, pw.pg[pw.cpg].noteCmd, pw.pg[pw.cpg].shift + pw.pg[pw.cpg].keyShift), mml.line.Lp);
                         return;
                     }
                 }
                 else
                 {
-                    msgBox.setErrMsg(string.Format(msg.get("E10024"), pw.pcmMapNo), mml.line.Lp);
+                    msgBox.setErrMsg(string.Format(msg.get("E10024"), pw.pg[pw.cpg].pcmMapNo), mml.line.Lp);
                     return;
                 }
             }
 
-            if (!parent.instPCM.ContainsKey(pw.instrument))
+            if (!parent.instPCM.ContainsKey(pw.pg[pw.cpg].instrument))
             {
-                msgBox.setErrMsg(string.Format(msg.get("E21000"), pw.instrument), mml.line.Lp);
+                msgBox.setErrMsg(string.Format(msg.get("E21000"), pw.pg[pw.cpg].instrument), mml.line.Lp);
                 return;
             }
 
-            int id = parent.instPCM[pw.instrument].seqNum + 1;
+            int id = parent.instPCM[pw.pg[pw.cpg].instrument].seqNum + 1;
 
-            int ch = Math.Max(0, pw.ch - 8);
+            int ch = Math.Max(0, pw.pg[pw.cpg].ch - 8);
             int priority = 0;
 
-            pcmKeyOnCh[ch & 0x3] = pw.ch;
+            pcmKeyOnCh[ch & 0x3] = pw.pg[pw.cpg].ch;
             pcmKeyOnInstNum[ch & 0x3] = id;
 
             byte[] cmd;
@@ -139,12 +139,12 @@ namespace Core
             parent.info.samplesPerClock = parent.info.xgmSamplesPerSecond * 60.0 * 4.0 / (parent.info.tempo * parent.info.clockCount);
 
             //必要なサンプル数を算出し、保持しているサンプル数より大きい場合は更新
-            double m = pw.waitCounter * 60.0 * 4.0 / (parent.info.tempo * parent.info.clockCount) * 14000.0;//14000(Hz) = xgm sampling Rate
-            parent.instPCM[pw.instrument].xgmMaxSampleCount = Math.Max(parent.instPCM[pw.instrument].xgmMaxSampleCount, m);
+            double m = pw.pg[pw.cpg].waitCounter * 60.0 * 4.0 / (parent.info.tempo * parent.info.clockCount) * 14000.0;//14000(Hz) = xgm sampling Rate
+            parent.instPCM[pw.pg[pw.cpg].instrument].xgmMaxSampleCount = Math.Max(parent.instPCM[pw.pg[pw.cpg].instrument].xgmMaxSampleCount, m);
 
-            if (parent.instPCM[pw.instrument].status != enmPCMSTATUS.ERROR)
+            if (parent.instPCM[pw.pg[pw.cpg].instrument].status != enmPCMSTATUS.ERROR)
             {
-                parent.instPCM[pw.instrument].status = enmPCMSTATUS.USED;
+                parent.instPCM[pw.pg[pw.cpg].instrument].status = enmPCMSTATUS.USED;
             }
 
         }
@@ -153,7 +153,7 @@ namespace Core
         {
 
             int id = 0;
-            int ch = Math.Max(0, pw.ch - 8);
+            int ch = Math.Max(0, pw.pg[pw.cpg].ch - 8);
             int priority = 0;
 
             byte[] cmd;
@@ -162,7 +162,7 @@ namespace Core
             else
                 cmd = new byte[] { 0x54 };
 
-            if (pcmKeyOnCh[ch & 0x3] == pw.ch)
+            if (pcmKeyOnCh[ch & 0x3] == pw.pg[pw.cpg].ch)
             {
                 pcmKeyOnCh[ch & 0x3] = 0;
                 pcmKeyOnInstNum[ch & 0x3] = -1;
@@ -238,20 +238,20 @@ namespace Core
         public override void CmdMode(partWork pw, MML mml)
         {
             int n = (int)mml.args[0];
-            if (pw.Type == enmChannelType.FMPCMex)
+            if (pw.pg[pw.cpg].Type == enmChannelType.FMPCMex)
             {
                 n = Common.CheckRange(n, 0, 1);
-                pw.chip.lstPartWork[5].pcm = (n == 1);
+                pw.pg[pw.cpg].chip.lstPartWork[5].pg[lstPartWork[5].cpg].pcm = (n == 1);
                 for (int i = 9; i < ChMax; i++)
                 {
-                    pw.chip.lstPartWork[i].pcm = (n == 1);
+                    pw.pg[pw.cpg].chip.lstPartWork[i].pg[lstPartWork[i].cpg].pcm = (n == 1);
                 }
-                pw.freq = -1;//freqをリセット
-                pw.instrument = -1;
+                pw.pg[pw.cpg].freq = -1;//freqをリセット
+                pw.pg[pw.cpg].instrument = -1;
                 OutSetCh6PCMMode(
                     mml,
-                    pw.chip.lstPartWork[5]
-                    , pw.chip.lstPartWork[5].pcm
+                    pw.pg[pw.cpg].chip.lstPartWork[5]
+                    , pw.pg[pw.cpg].chip.lstPartWork[5].pg[lstPartWork[5].cpg].pcm
                     );
 
                 return;
@@ -264,9 +264,9 @@ namespace Core
         public override void CmdPcmMapSw(partWork pw, MML mml)
         {
             bool sw = (bool)mml.args[0];
-            if(pw.Type== enmChannelType.FMPCMex)
+            if(pw.pg[pw.cpg].Type== enmChannelType.FMPCMex)
             {
-                pw.isPcmMap = sw;
+                pw.pg[pw.cpg].isPcmMap = sw;
             }
         }
 
@@ -278,25 +278,25 @@ namespace Core
 
             if (type == 'n' || type == 'N' || type == 'R' || type == 'A')
             {
-                if (pw.Type == enmChannelType.FMOPNex)
+                if (pw.pg[pw.cpg].Type == enmChannelType.FMOPNex)
                 {
-                    lstPartWork[2].instrument = n;
-                    lstPartWork[6].instrument = n;
-                    lstPartWork[7].instrument = n;
-                    lstPartWork[8].instrument = n;
-                    OutFmSetInstrument(pw, mml, n, pw.volume, type);
+                    lstPartWork[2].pg[lstPartWork[2].cpg].instrument = n;
+                    lstPartWork[6].pg[lstPartWork[6].cpg].instrument = n;
+                    lstPartWork[7].pg[lstPartWork[7].cpg].instrument = n;
+                    lstPartWork[8].pg[lstPartWork[8].cpg].instrument = n;
+                    OutFmSetInstrument(pw, mml, n, pw.pg[pw.cpg].volume, type);
                     return;
                 }
             }
 
             if (type == 'n')
             {
-                if (pw.pcm)
+                if (pw.pg[pw.cpg].pcm)
                 {
 
-                    if (pw.isPcmMap)
+                    if (pw.pg[pw.cpg].isPcmMap)
                     {
-                        pw.pcmMapNo = n;
+                        pw.pg[pw.cpg].pcmMapNo = n;
                         if (!parent.instPCMMap.ContainsKey(n))
                         {
                             msgBox.setErrMsg(string.Format(msg.get("E10024"), n), mml.line.Lp);
@@ -304,7 +304,7 @@ namespace Core
                         return;
                     }
 
-                    pw.instrument = n;
+                    pw.pg[pw.cpg].instrument = n;
                     SetDummyData(pw, mml);
                     if (!parent.instPCM.ContainsKey(n))
                     {

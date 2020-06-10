@@ -175,8 +175,8 @@ namespace Core
                 partWork pw = lstPartWork[ch];
 
                 SetRf5c164CurrentChannel(null,pw);
-                pw.beforepcmStartAddress = -1;
-                pw.pcmStartAddress = 0;
+                pw.pg[pw.cpg].beforepcmStartAddress = -1;
+                pw.pg[pw.cpg].pcmStartAddress = 0;
                 SetRf5c164SampleStartAddress(null,pw);
                 SetRf5c164LoopAddress(null,pw, 0);
                 SetRf5c164AddressIncrement(null,pw, 0x400);
@@ -194,9 +194,9 @@ namespace Core
 
         public override void InitPart(partWork pw)
         {
-            pw.MaxVolume = 255;
-            pw.volume = pw.MaxVolume;
-            pw.port = port;
+            pw.pg[pw.cpg].MaxVolume = 255;
+            pw.pg[pw.cpg].volume = pw.pg[pw.cpg].MaxVolume;
+            pw.pg[pw.cpg].port = port;
         }
 
 
@@ -213,18 +213,18 @@ namespace Core
                 o = Common.CheckRange(--o, 1, 8);
             }
 
-            if (pw.instrument < 0 || !parent.instPCM.ContainsKey(pw.instrument))
+            if (pw.pg[pw.cpg].instrument < 0 || !parent.instPCM.ContainsKey(pw.pg[pw.cpg].instrument))
             {
                 return 0;
             }
 
-            if (parent.instPCM[pw.instrument].freq == -1)
+            if (parent.instPCM[pw.pg[pw.cpg].instrument].freq == -1)
             {
                 return ((int)(
                     0x0400
                     * Const.pcmMTbl[n]
                     * Math.Pow(2, (o - 4))
-                    * ((double)parent.instPCM[pw.instrument].samplerate / 8000.0)
+                    * ((double)parent.instPCM[pw.pg[pw.cpg].instrument].samplerate / 8000.0)
                     ));
             }
             else
@@ -233,7 +233,7 @@ namespace Core
                     0x0400
                     * Const.pcmMTbl[n]
                     * Math.Pow(2, (o - 4))
-                    * ((double)parent.instPCM[pw.instrument].freq / 8000.0)
+                    * ((double)parent.instPCM[pw.pg[pw.cpg].instrument].freq / 8000.0)
                     ));
             }
 
@@ -241,31 +241,31 @@ namespace Core
 
         public void SetRf5c164Envelope(MML mml,partWork pw, int volume)
         {
-            if (pw.rf5c164Envelope != volume)
+            if (pw.pg[pw.cpg].rf5c164Envelope != volume)
             {
                 SetRf5c164CurrentChannel(mml,pw);
                 byte data = (byte)(volume & 0xff);
-                OutRf5c164Port(mml,port[0],pw.chipNumber, 0x0, data);
-                pw.rf5c164Envelope = volume;
+                OutRf5c164Port(mml,port[0],pw.pg[pw.cpg].chipNumber, 0x0, data);
+                pw.pg[pw.cpg].rf5c164Envelope = volume;
             }
         }
 
         public void SetRf5c164Pan(MML mml,partWork pw, int pan)
         {
-            if (pw.rf5c164Pan != pan)
+            if (pw.pg[pw.cpg].rf5c164Pan != pan)
             {
                 SetRf5c164CurrentChannel(mml,pw);
                 byte data = (byte)(pan & 0xff);
-                OutRf5c164Port(mml, port[0], pw.chipNumber, 0x1, data);
-                pw.rf5c164Pan = pan;
+                OutRf5c164Port(mml, port[0], pw.pg[pw.cpg].chipNumber, 0x1, data);
+                pw.pg[pw.cpg].rf5c164Pan = pan;
             }
         }
 
         public void SetRf5c164CurrentChannel(MML mml,partWork pw)
         {
-            byte pch = (byte)pw.ch;
-            int chipNumber = pw.chipNumber;
-            int chipID = pw.chip.ChipID;
+            byte pch = (byte)pw.pg[pw.cpg].ch;
+            int chipNumber = pw.pg[pw.cpg].chipNumber;
+            int chipID = pw.pg[pw.cpg].chip.ChipID;
 
             if (CurrentChannel != pch)
             {
@@ -277,15 +277,15 @@ namespace Core
 
         public void SetRf5c164AddressIncrement(MML mml,partWork pw, int f)
         {
-            if (pw.rf5c164AddressIncrement != f)
+            if (pw.pg[pw.cpg].rf5c164AddressIncrement != f)
             {
                 SetRf5c164CurrentChannel(mml,pw);
 
                 byte data = (byte)(f & 0xff);
-                OutRf5c164Port(mml, port[0], pw.chipNumber, 0x2, data);
+                OutRf5c164Port(mml, port[0], pw.pg[pw.cpg].chipNumber, 0x2, data);
                 data = (byte)((f >> 8) & 0xff);
-                OutRf5c164Port(mml, port[0], pw.chipNumber, 0x3, data);
-                pw.rf5c164AddressIncrement = f;
+                OutRf5c164Port(mml, port[0], pw.pg[pw.cpg].chipNumber, 0x3, data);
+                pw.pg[pw.cpg].rf5c164AddressIncrement = f;
             }
         }
 
@@ -293,28 +293,28 @@ namespace Core
         {
 
             //Address shift
-            int stAdr = pw.pcmStartAddress + pw.addressShift;
-            //if (stAdr >= pw.pcmEndAddress) stAdr = pw.pcmEndAddress - 1;
+            int stAdr = pw.pg[pw.cpg].pcmStartAddress + pw.pg[pw.cpg].addressShift;
+            //if (stAdr >= pw.ppg[pw.cpgNum].pcmEndAddress) stAdr = pw.ppg[pw.cpgNum].pcmEndAddress - 1;
 
-            if (pw.beforepcmStartAddress != stAdr && stAdr>=0)
+            if (pw.pg[pw.cpg].beforepcmStartAddress != stAdr && stAdr>=0)
             {
                 SetRf5c164CurrentChannel(mml,pw);
                 byte data = (byte)(stAdr >> 8);
-                OutRf5c164Port(mml, port[0], pw.chipNumber, 0x6, data);
-                //pw.pcmStartAddress = stAdr;
+                OutRf5c164Port(mml, port[0], pw.pg[pw.cpg].chipNumber, 0x6, data);
+                //pw.ppg[pw.cpgNum].pcmStartAddress = stAdr;
             }
         }
 
         public void SetRf5c164LoopAddress(MML mml,partWork pw, int adr)
         {
-            if (pw.pcmLoopAddress != adr)
+            if (pw.pg[pw.cpg].pcmLoopAddress != adr)
             {
                 SetRf5c164CurrentChannel(mml,pw);
                 byte data = (byte)(adr >> 8);
-                OutRf5c164Port(mml, port[0], pw.chipNumber, 0x5, data);
+                OutRf5c164Port(mml, port[0], pw.pg[pw.cpg].chipNumber, 0x5, data);
                 data = (byte)adr;
-                OutRf5c164Port(mml, port[0], pw.chipNumber, 0x4, data);
-                pw.pcmLoopAddress = adr;
+                OutRf5c164Port(mml, port[0], pw.pg[pw.cpg].chipNumber, 0x4, data);
+                pw.pg[pw.cpg].pcmLoopAddress = adr;
             }
         }
 
@@ -322,28 +322,28 @@ namespace Core
         {
             if (parent.instPCM.Count < 1) return;
             SetRf5c164SampleStartAddress(mml,pw);
-            KeyOn |= (byte)(1 << pw.ch);
+            KeyOn |= (byte)(1 << pw.pg[pw.cpg].ch);
             byte data = (byte)(~KeyOn);
-            OutRf5c164Port(mml, port[0], pw.chipNumber, 0x8, data);
-            if (!parent.instPCM.ContainsKey(pw.instrument))
+            OutRf5c164Port(mml, port[0], pw.pg[pw.cpg].chipNumber, 0x8, data);
+            if (!parent.instPCM.ContainsKey(pw.pg[pw.cpg].instrument))
             {
-                if(pw.instrument==-1)
+                if(pw.pg[pw.cpg].instrument==-1)
                     msgBox.setErrMsg(msg.get("E10030"), mml.line.Lp);
                 else
-                    msgBox.setErrMsg(string.Format(msg.get("E10021"), pw.instrument), mml.line.Lp);
+                    msgBox.setErrMsg(string.Format(msg.get("E10021"), pw.pg[pw.cpg].instrument), mml.line.Lp);
                 return;
             }
-            if (parent.instPCM[pw.instrument].status != enmPCMSTATUS.ERROR)
+            if (parent.instPCM[pw.pg[pw.cpg].instrument].status != enmPCMSTATUS.ERROR)
             {
-                parent.instPCM[pw.instrument].status = enmPCMSTATUS.USED;
+                parent.instPCM[pw.pg[pw.cpg].instrument].status = enmPCMSTATUS.USED;
             }
         }
 
         public void OutRf5c164KeyOff(MML mml,partWork pw)
         {
-            KeyOn &= (byte)(~(1 << pw.ch));
+            KeyOn &= (byte)(~(1 << pw.pg[pw.cpg].ch));
             byte data = (byte)(~KeyOn);
-            OutRf5c164Port(mml, port[0], pw.chipNumber, 0x8, data);
+            OutRf5c164Port(mml, port[0], pw.pg[pw.cpg].chipNumber, 0x8, data);
         }
 
         public void OutRf5c164Port(MML mml,byte[] cmd,int chipNumber, byte adr, byte data)
@@ -477,36 +477,36 @@ namespace Core
 
         public override void SetVolume(partWork pw, MML mml)
         {
-            int vol = pw.volume;
+            int vol = pw.pg[pw.cpg].volume;
 
-            if (pw.envelopeMode)
+            if (pw.pg[pw.cpg].envelopeMode)
             {
                 vol = 0;
-                if (pw.envIndex != -1)
+                if (pw.pg[pw.cpg].envIndex != -1)
                 {
-                    vol = pw.envVolume - (pw.MaxVolume - pw.volume);
+                    vol = pw.pg[pw.cpg].envVolume - (pw.pg[pw.cpg].MaxVolume - pw.pg[pw.cpg].volume);
                 }
             }
 
             for (int lfo = 0; lfo < 4; lfo++)
             {
-                if (!pw.lfo[lfo].sw)
+                if (!pw.pg[pw.cpg].lfo[lfo].sw)
                 {
                     continue;
                 }
-                if (pw.lfo[lfo].type != eLfoType.Tremolo)
+                if (pw.pg[pw.cpg].lfo[lfo].type != eLfoType.Tremolo)
                 {
                     continue;
                 }
-                vol += pw.lfo[lfo].value + pw.lfo[lfo].param[6];
+                vol += pw.pg[pw.cpg].lfo[lfo].value + pw.pg[pw.cpg].lfo[lfo].param[6];
             }
 
             vol = Common.CheckRange(vol, 0, 255);
 
-            if (pw.beforeVolume != vol)
+            if (pw.pg[pw.cpg].beforeVolume != vol)
             {
                 SetRf5c164Envelope(mml,pw, vol);
-                pw.beforeVolume = vol;
+                pw.pg[pw.cpg].beforeVolume = vol;
             }
         }
 
@@ -517,28 +517,28 @@ namespace Core
 
         public override void SetFNum(partWork pw, MML mml)
         {
-            int f = GetFNum(pw,mml, pw.octaveNow, pw.noteCmd, pw.keyShift + pw.shift);//
+            int f = GetFNum(pw,mml, pw.pg[pw.cpg].octaveNow, pw.pg[pw.cpg].noteCmd, pw.pg[pw.cpg].keyShift + pw.pg[pw.cpg].shift);//
 
-            if (pw.bendWaitCounter != -1)
+            if (pw.pg[pw.cpg].bendWaitCounter != -1)
             {
-                f = pw.bendFnum;
+                f = pw.pg[pw.cpg].bendFnum;
             }
-            f = f + pw.detune;
+            f = f + pw.pg[pw.cpg].detune;
             for (int lfo = 0; lfo < 4; lfo++)
             {
-                if (!pw.lfo[lfo].sw)
+                if (!pw.pg[pw.cpg].lfo[lfo].sw)
                 {
                     continue;
                 }
-                if (pw.lfo[lfo].type != eLfoType.Vibrato)
+                if (pw.pg[pw.cpg].lfo[lfo].type != eLfoType.Vibrato)
                 {
                     continue;
                 }
-                f += pw.lfo[lfo].value + pw.lfo[lfo].param[6];
+                f += pw.pg[pw.cpg].lfo[lfo].value + pw.pg[pw.cpg].lfo[lfo].param[6];
             }
 
             f = Common.CheckRange(f, 0, 0xffff);
-            pw.freq = f;
+            pw.pg[pw.cpg].freq = f;
 
             //Address increment 再生スピードをセット
             SetRf5c164AddressIncrement(mml,pw, f);
@@ -557,7 +557,7 @@ namespace Core
             MML vmml = new MML();
             vmml.type = enmMMLType.Volume;
             vmml.args = new List<object>();
-            vmml.args.Add(pw.volume);
+            vmml.args.Add(pw.pg[pw.cpg].volume);
             vmml.line = mml.line;
             SetDummyData(pw, vmml);
 
@@ -567,7 +567,7 @@ namespace Core
         {
             for (int lfo = 0; lfo < 4; lfo++)
             {
-                clsLfo pl = pw.lfo[lfo];
+                clsLfo pl = pw.pg[pw.cpg].lfo[lfo];
                 if (!pl.sw)
                     continue;
 
@@ -588,7 +588,7 @@ namespace Core
                 }
                 if (pl.type == eLfoType.Tremolo)
                 {
-                    pw.beforeVolume = -1;
+                    pw.pg[pw.cpg].beforeVolume = -1;
                     SetVolume(pw,mml);
                 }
             }
@@ -612,7 +612,7 @@ namespace Core
             byte adr = (byte)(int)mml.args[0];
             byte dat = (byte)(int)mml.args[1];
 
-            OutRf5c164Port(mml, port[0], pw.chipNumber, adr, dat);
+            OutRf5c164Port(mml, port[0], pw.pg[pw.cpg].chipNumber, adr, dat);
         }
 
         public override void CmdPan(partWork pw, MML mml)
@@ -622,26 +622,26 @@ namespace Core
 
             l = Common.CheckRange(l, 0, 15);
             r = Common.CheckRange(r, 0, 15);
-            pw.pan.val = (r << 4) | l;
-            SetRf5c164Pan(mml,pw, (int)pw.pan.val);
+            pw.pg[pw.cpg].pan.val = (r << 4) | l;
+            SetRf5c164Pan(mml,pw, (int)pw.pg[pw.cpg].pan.val);
         }
 
         public override void CmdLoopExtProc(partWork p, MML mml)
         {
-            if (p.chip is RF5C164 && parent.rf5c164[p.chipNumber ].use)
+            if (p.pg[p.cpg].chip is RF5C164 && parent.rf5c164[p.pg[p.cpg].chipNumber ].use)
             {
                 //rf5c164の設定済み周波数値を初期化(ループ時に直前の周波数を引き継いでしまうケースがあるため)
-                p.rf5c164AddressIncrement = -1;
-                int n = p.instrument;
-                p.pcmStartAddress = -1;
-                p.pcmLoopAddress = -1;
-                p.freq = -1;
+                p.pg[p.cpg].rf5c164AddressIncrement = -1;
+                int n = p.pg[p.cpg].instrument;
+                p.pg[p.cpg].pcmStartAddress = -1;
+                p.pg[p.cpg].pcmLoopAddress = -1;
+                p.pg[p.cpg].freq = -1;
                 if (n != -1)
                 {
                     SetRf5c164CurrentChannel(mml,p);
                     SetFNum(p,mml);
-                    p.beforepcmStartAddress = -1;
-                    p.pcmStartAddress = (int)parent.instPCM[n].stAdr;
+                    p.pg[p.cpg].beforepcmStartAddress = -1;
+                    p.pg[p.cpg].pcmStartAddress = (int)parent.instPCM[n].stAdr;
                     SetRf5c164SampleStartAddress(mml,p);
                     SetRf5c164LoopAddress(
                         mml,
@@ -688,9 +688,9 @@ namespace Core
                 return;
             }
 
-            pw.instrument = n;
-            pw.beforepcmStartAddress = -1;
-            pw.pcmStartAddress = (int)parent.instPCM[n].stAdr;
+            pw.pg[pw.cpg].instrument = n;
+            pw.pg[pw.cpg].beforepcmStartAddress = -1;
+            pw.pg[pw.cpg].pcmStartAddress = (int)parent.instPCM[n].stAdr;
             SetRf5c164SampleStartAddress(mml,pw);
             SetRf5c164LoopAddress(mml, pw, (int)(parent.instPCM[n].loopAdr + 2));
 

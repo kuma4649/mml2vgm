@@ -44,21 +44,21 @@ namespace Core
 
             foreach (partWork pw in lstPartWork)
             {
-                if (pw.ch == 0)
+                if (pw.pg[pw.cpg].ch == 0)
                 {
-                    pw.hardLfoFreq = 0;
-                    pw.hardLfoPMD = 0;
-                    pw.hardLfoAMD = 0;
+                    pw.pg[pw.cpg].hardLfoFreq = 0;
+                    pw.pg[pw.cpg].hardLfoPMD = 0;
+                    pw.pg[pw.cpg].hardLfoAMD = 0;
 
                     //Reset Hard LFO
-                    OutSetHardLfoFreq(null,pw, pw.hardLfoFreq);
-                    OutSetHardLfoDepth(null,pw, false, pw.hardLfoAMD);
-                    OutSetHardLfoDepth(null,pw, true, pw.hardLfoPMD);
+                    OutSetHardLfoFreq(null,pw, pw.pg[pw.cpg].hardLfoFreq);
+                    OutSetHardLfoDepth(null,pw, false, pw.pg[pw.cpg].hardLfoAMD);
+                    OutSetHardLfoDepth(null,pw, true, pw.pg[pw.cpg].hardLfoPMD);
                 }
 
-                pw.ams = 0;
-                pw.pms = 0;
-                if (!pw.dataEnd) OutSetPMSAMS(null,pw, 0, 0);
+                pw.pg[pw.cpg].ams = 0;
+                pw.pg[pw.cpg].pms = 0;
+                if (!pw.pg[pw.cpg].dataEnd) OutSetPMSAMS(null,pw, 0, 0);
 
             }
 
@@ -70,12 +70,12 @@ namespace Core
 
         public override void InitPart(partWork pw)
         {
-            pw.slots = 0xf;
-            pw.volume = 127;
-            pw.MaxVolume = 127;
-            pw.port = port;
-            pw.mixer = 0;
-            pw.noise = 0;
+            pw.pg[pw.cpg].slots = 0xf;
+            pw.pg[pw.cpg].volume = 127;
+            pw.pg[pw.cpg].MaxVolume = 127;
+            pw.pg[pw.cpg].port = port;
+            pw.pg[pw.cpg].mixer = 0;
+            pw.pg[pw.cpg].noise = 0;
         }
 
 
@@ -84,8 +84,8 @@ namespace Core
             octave &= 0x7;
             note &= 0xf;
             note = note < 3 ? note : (note < 6 ? (note + 1) : (note < 9 ? (note + 2) : (note + 3)));
-            parent.OutData(mml, port[0], (byte)(0x28 + pw.ch), (byte)((octave << 4) | note));
-            parent.OutData(mml, port[0], (byte)(0x30 + pw.ch), (byte)(kf << 2));
+            parent.OutData(mml, port[0], (byte)(0x28 + pw.pg[pw.cpg].ch), (byte)((octave << 4) | note));
+            parent.OutData(mml, port[0], (byte)(0x30 + pw.pg[pw.cpg].ch), (byte)(kf << 2));
         }
 
         public void OutSetVolume(partWork pw, MML mml, int vol, int n)
@@ -118,7 +118,7 @@ namespace Core
             //int minV = 127;
             //for (int i = 0; i < 4; i++)
             //{
-            //    if (algs[alg][i] == 1 && (pw.slots & (1 << i)) != 0)
+            //    if (algs[alg][i] == 1 && (pw.ppg[pw.cpgNum].slots & (1 << i)) != 0)
             //    {
             //        minV = Math.Min(minV, ope[i]);
             //    }
@@ -126,7 +126,7 @@ namespace Core
 
             for (int i = 0; i < 4; i++)
             {
-                if (algs[alg][i] == 0 || (pw.slots & (1 << i)) == 0)
+                if (algs[alg][i] == 0 || (pw.pg[pw.cpg].slots & (1 << i)) == 0)
                 {
                     ope[i] = -1;
                     continue;
@@ -143,10 +143,10 @@ namespace Core
                 }
             }
 
-            if ((pw.slots & 1) != 0 && ope[0] != -1) OutSetTl(mml,pw, 0, ope[0]);
-            if ((pw.slots & 2) != 0 && ope[1] != -1) OutSetTl(mml,pw, 1, ope[1]);
-            if ((pw.slots & 4) != 0 && ope[2] != -1) OutSetTl(mml,pw, 2, ope[2]);
-            if ((pw.slots & 8) != 0 && ope[3] != -1) OutSetTl(mml,pw, 3, ope[3]);
+            if ((pw.pg[pw.cpg].slots & 1) != 0 && ope[0] != -1) OutSetTl(mml,pw, 0, ope[0]);
+            if ((pw.pg[pw.cpg].slots & 2) != 0 && ope[1] != -1) OutSetTl(mml,pw, 1, ope[1]);
+            if ((pw.pg[pw.cpg].slots & 4) != 0 && ope[2] != -1) OutSetTl(mml,pw, 2, ope[2]);
+            if ((pw.pg[pw.cpg].slots & 8) != 0 && ope[3] != -1) OutSetTl(mml,pw, 3, ope[3]);
         }
 
         public void OutSetTl(MML mml,partWork pw, int ope, int tl)
@@ -157,7 +157,7 @@ namespace Core
             parent.OutData(
                 mml,
                 port[0]
-                , (byte)(0x60 + pw.ch + ope * 8)
+                , (byte)(0x60 + pw.pg[pw.cpg].ch + ope * 8)
                 , (byte)tl
                 );
         }
@@ -187,7 +187,7 @@ namespace Core
             parent.OutData(
                 mml,
                 port[0]
-                , (byte)(0x38 + pw.ch)
+                , (byte)(0x38 + pw.pg[pw.cpg].ch)
                 , (byte)(((PMS & 0x7) << 4) | (AMS & 0x3))
                 );
         }
@@ -198,7 +198,7 @@ namespace Core
             fb &= 7;
             alg &= 7;
 
-            parent.OutData(mml,port[0], (byte)(0x20 + pw.ch), (byte)((pan << 6) | (fb << 3) | alg));
+            parent.OutData(mml,port[0], (byte)(0x20 + pw.pg[pw.cpg].ch), (byte)((pan << 6) | (fb << 3) | alg));
         }
 
         public void OutSetDtMl(MML mml,partWork pw, int ope, int dt, int ml)
@@ -207,7 +207,7 @@ namespace Core
             dt &= 7;
             ml &= 15;
 
-            parent.OutData(mml,port[0], (byte)(0x40 + pw.ch + ope * 8), (byte)((dt << 4) | ml));
+            parent.OutData(mml,port[0], (byte)(0x40 + pw.pg[pw.cpg].ch + ope * 8), (byte)((dt << 4) | ml));
         }
 
         public void OutSetKsAr(MML mml,partWork pw, int ope, int ks, int ar)
@@ -216,7 +216,7 @@ namespace Core
             ks &= 3;
             ar &= 31;
 
-            parent.OutData(mml,port[0], (byte)(0x80 + pw.ch + ope * 8), (byte)((ks << 6) | ar));
+            parent.OutData(mml,port[0], (byte)(0x80 + pw.pg[pw.cpg].ch + ope * 8), (byte)((ks << 6) | ar));
         }
 
         public void OutSetAmDr(MML mml,partWork pw, int ope, int am, int dr)
@@ -225,7 +225,7 @@ namespace Core
             am &= 1;
             dr &= 31;
 
-            parent.OutData(mml,port[0], (byte)(0xa0 + pw.ch + ope * 8), (byte)((am << 7) | dr));
+            parent.OutData(mml,port[0], (byte)(0xa0 + pw.pg[pw.cpg].ch + ope * 8), (byte)((am << 7) | dr));
         }
 
         public void OutSetDt2Sr(MML mml,partWork pw, int ope, int dt2, int sr)
@@ -234,7 +234,7 @@ namespace Core
             dt2 &= 3;
             sr &= 31;
 
-            parent.OutData(mml,port[0], (byte)(0xc0 + pw.ch + ope * 8), (byte)((dt2 << 6) | sr));
+            parent.OutData(mml,port[0], (byte)(0xc0 + pw.pg[pw.cpg].ch + ope * 8), (byte)((dt2 << 6) | sr));
         }
 
         public void OutSetSlRr(MML mml,partWork pw, int ope, int sl, int rr)
@@ -243,7 +243,7 @@ namespace Core
             sl &= 15;
             rr &= 15;
 
-            parent.OutData(mml,port[0], (byte)(0xe0 + pw.ch + ope * 8), (byte)((sl << 4) | rr));
+            parent.OutData(mml,port[0], (byte)(0xe0 + pw.pg[pw.cpg].ch + ope * 8), (byte)((sl << 4) | rr));
         }
 
         public void OutSetHardLfo(MML mml,partWork pw, bool sw, List<int> param)
@@ -289,7 +289,7 @@ namespace Core
                         OutSetDt2Sr(mml, pw, ope, 0, 31);
                         OutSetSlRr(mml, pw, ope, 0, 15);
                     }
-                    OutSetPanFeedbackAlgorithm(mml, pw, (int)pw.pan.val, 7, 7);
+                    OutSetPanFeedbackAlgorithm(mml, pw, (int)pw.pg[pw.cpg].pan.val, 7, 7);
                     break;
             }
 
@@ -303,16 +303,16 @@ namespace Core
                 OutSetSlRr(mml, pw, ope, parent.instFM[n][ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 5], parent.instFM[n][ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 4]);
 
             }
-            pw.op1ml = parent.instFM[n][0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
-            pw.op2ml = parent.instFM[n][1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
-            pw.op3ml = parent.instFM[n][2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
-            pw.op4ml = parent.instFM[n][3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
-            pw.op1dt2 = parent.instFM[n][0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 10];
-            pw.op2dt2 = parent.instFM[n][1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 10];
-            pw.op3dt2 = parent.instFM[n][2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 10];
-            pw.op4dt2 = parent.instFM[n][3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 10];
+            pw.pg[pw.cpg].op1ml = parent.instFM[n][0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
+            pw.pg[pw.cpg].op2ml = parent.instFM[n][1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
+            pw.pg[pw.cpg].op3ml = parent.instFM[n][2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
+            pw.pg[pw.cpg].op4ml = parent.instFM[n][3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
+            pw.pg[pw.cpg].op1dt2 = parent.instFM[n][0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 10];
+            pw.pg[pw.cpg].op2dt2 = parent.instFM[n][1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 10];
+            pw.pg[pw.cpg].op3dt2 = parent.instFM[n][2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 10];
+            pw.pg[pw.cpg].op4dt2 = parent.instFM[n][3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 10];
 
-            OutSetPanFeedbackAlgorithm(mml, pw, (int)pw.pan.val, parent.instFM[n][46], parent.instFM[n][45]);
+            OutSetPanFeedbackAlgorithm(mml, pw, (int)pw.pg[pw.cpg].pan.val, parent.instFM[n][46], parent.instFM[n][45]);
 
             int alg = parent.instFM[n][45] & 0x7;
             int[] op = new int[4] {
@@ -335,7 +335,7 @@ namespace Core
 
             for (int i = 0; i < 4; i++)
             {
-                if (algs[alg][i] == 0 || (pw.slots & (1 << i)) == 0)
+                if (algs[alg][i] == 0 || (pw.pg[pw.cpg].slots & (1 << i)) == 0)
                 {
                     op[i] = -1;
                     continue;
@@ -350,32 +350,32 @@ namespace Core
                 }
             }
 
-            if ((pw.slots & 1) != 0 && op[0] != -1) OutSetTl(mml, pw, 0, op[0]);
-            if ((pw.slots & 2) != 0 && op[1] != -1) OutSetTl(mml, pw, 1, op[1]);
-            if ((pw.slots & 4) != 0 && op[2] != -1) OutSetTl(mml, pw, 2, op[2]);
-            if ((pw.slots & 8) != 0 && op[3] != -1) OutSetTl(mml, pw, 3, op[3]);
+            if ((pw.pg[pw.cpg].slots & 1) != 0 && op[0] != -1) OutSetTl(mml, pw, 0, op[0]);
+            if ((pw.pg[pw.cpg].slots & 2) != 0 && op[1] != -1) OutSetTl(mml, pw, 1, op[1]);
+            if ((pw.pg[pw.cpg].slots & 4) != 0 && op[2] != -1) OutSetTl(mml, pw, 2, op[2]);
+            if ((pw.pg[pw.cpg].slots & 8) != 0 && op[3] != -1) OutSetTl(mml, pw, 3, op[3]);
 
-            ((YM2151)pw.chip).OutSetVolume(pw, mml, vol, n);
+            ((YM2151)pw.pg[pw.cpg].chip).OutSetVolume(pw, mml, vol, n);
 
         }
 
         public void OutKeyOn(MML mml,partWork pw)
         {
 
-            if (pw.ch == 7 && pw.mixer == 1)
+            if (pw.pg[pw.cpg].ch == 7 && pw.pg[pw.cpg].mixer == 1)
             {
-                parent.OutData(mml,port[0], 0x0f, (byte)((pw.mixer << 7) | (pw.noise & 0x1f)));
+                parent.OutData(mml,port[0], 0x0f, (byte)((pw.pg[pw.cpg].mixer << 7) | (pw.pg[pw.cpg].noise & 0x1f)));
             }
             //key on
-            parent.OutData(mml,port[0], 0x08, (byte)((pw.slots << 3) + pw.ch));
+            parent.OutData(mml,port[0], 0x08, (byte)((pw.pg[pw.cpg].slots << 3) + pw.pg[pw.cpg].ch));
         }
 
         public void OutKeyOff(MML mml,partWork pw)
         {
 
             //key off
-            parent.OutData(mml,port[0], 0x08, (byte)(0x00 + (pw.ch & 7)));
-            if (pw.ch == 7 && pw.mixer == 1)
+            parent.OutData(mml,port[0], 0x08, (byte)(0x00 + (pw.pg[pw.cpg].ch & 7)));
+            if (pw.pg[pw.cpg].ch == 7 && pw.pg[pw.cpg].mixer == 1)
             {
                 parent.OutData(mml,port[0], 0x0f, 0x00);
             }
@@ -387,7 +387,7 @@ namespace Core
 
             foreach (partWork pw in lstPartWork)
             {
-                if (pw.dataEnd) continue;
+                if (pw.pg[pw.cpg].dataEnd) continue;
 
                 OutKeyOff(null,pw);
                 OutSetTl(null,pw, 0, 127);
@@ -402,25 +402,25 @@ namespace Core
         public override void SetFNum(partWork pw, MML mml)
         {
 
-            int f = GetFNum(pw,mml,pw.octaveNow, pw.noteCmd, pw.shift + pw.keyShift + pw.toneDoublerKeyShift);//
+            int f = GetFNum(pw,mml,pw.pg[pw.cpg].octaveNow, pw.pg[pw.cpg].noteCmd, pw.pg[pw.cpg].shift + pw.pg[pw.cpg].keyShift + pw.pg[pw.cpg].toneDoublerKeyShift);//
 
-            if (pw.bendWaitCounter != -1)
+            if (pw.pg[pw.cpg].bendWaitCounter != -1)
             {
-                f = pw.bendFnum;
+                f = pw.pg[pw.cpg].bendFnum;
             }
 
-            f = f + pw.detune;
+            f = f + pw.pg[pw.cpg].detune;
             for (int lfo = 0; lfo < 4; lfo++)
             {
-                if (!pw.lfo[lfo].sw)
+                if (!pw.pg[pw.cpg].lfo[lfo].sw)
                 {
                     continue;
                 }
-                if (pw.lfo[lfo].type != eLfoType.Vibrato)
+                if (pw.pg[pw.cpg].lfo[lfo].type != eLfoType.Vibrato)
                 {
                     continue;
                 }
-                f += pw.lfo[lfo].value + pw.lfo[lfo].param[6];
+                f += pw.pg[pw.cpg].lfo[lfo].value + pw.pg[pw.cpg].lfo[lfo].param[6];
             }
 
             f = Common.CheckRange(f, 0, 9 * 12 * 64 - 1);
@@ -471,27 +471,27 @@ namespace Core
 
         public override void SetVolume(partWork pw, MML mml)
         {
-            int vol = pw.volume;
+            int vol = pw.pg[pw.cpg].volume;
 
             for (int lfo = 0; lfo < 4; lfo++)
             {
-                if (!pw.lfo[lfo].sw)
+                if (!pw.pg[pw.cpg].lfo[lfo].sw)
                 {
                     continue;
                 }
-                if (pw.lfo[lfo].type != eLfoType.Tremolo)
+                if (pw.pg[pw.cpg].lfo[lfo].type != eLfoType.Tremolo)
                 {
                     continue;
                 }
-                vol += pw.lfo[lfo].value + pw.lfo[lfo].param[6];
+                vol += pw.pg[pw.cpg].lfo[lfo].value + pw.pg[pw.cpg].lfo[lfo].param[6];
             }
 
-            if (pw.beforeVolume != vol)
+            if (pw.pg[pw.cpg].beforeVolume != vol)
             {
-                if (parent.instFM.ContainsKey(pw.instrument))
+                if (parent.instFM.ContainsKey(pw.pg[pw.cpg].instrument))
                 {
-                    OutSetVolume(pw,mml, vol, pw.instrument);
-                    pw.beforeVolume = vol;
+                    OutSetVolume(pw,mml, vol, pw.pg[pw.cpg].instrument);
+                    pw.pg[pw.cpg].beforeVolume = vol;
                 }
             }
         }
@@ -510,7 +510,7 @@ namespace Core
         {
             for (int lfo = 0; lfo < 4; lfo++)
             {
-                clsLfo pl = pw.lfo[lfo];
+                clsLfo pl = pw.pg[pw.cpg].lfo[lfo];
 
                 if (!pl.sw)
                     continue;
@@ -538,16 +538,16 @@ namespace Core
 
         public override int GetToneDoublerShift(partWork pw, int octave, char noteCmd, int shift)
         {
-            int i = pw.instrument;
-            if (pw.TdA == -1)
+            int i = pw.pg[pw.cpg].instrument;
+            if (pw.pg[pw.cpg].TdA == -1)
             {
                 return 0;
             }
 
             int TdB = octave * 12 + Const.NOTE.IndexOf(noteCmd) + shift;
-            int s = pw.TdA - TdB;
+            int s = pw.pg[pw.cpg].TdA - TdB;
             int us = Math.Abs(s);
-            int n = pw.toneDoubler;
+            int n = pw.pg[pw.cpg].toneDoubler;
             if (us >= parent.instToneDoubler[n].lstTD.Count)
             {
                 return 0;
@@ -558,64 +558,64 @@ namespace Core
 
         public override void SetToneDoubler(partWork pw,MML mml)
         {
-            int i = pw.instrument;
+            int i = pw.pg[pw.cpg].instrument;
             if (i < 0) return;
 
-            pw.toneDoublerKeyShift = 0;
+            pw.pg[pw.cpg].toneDoublerKeyShift = 0;
             byte[] instFM = parent.instFM[i];
             if (instFM == null || instFM.Length < 1) return;
             Note note = (Note)mml.args[0];
 
-            if (pw.TdA == -1)
+            if (pw.pg[pw.cpg].TdA == -1)
             {
                 //resetToneDoubler
                 //ML
-                if (pw.op1ml != instFM[0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8])
+                if (pw.pg[pw.cpg].op1ml != instFM[0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8])
                 {
-                    ((YM2151)pw.chip).OutSetDtMl(mml,pw, 0, instFM[0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 9], instFM[0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8]);
-                    pw.op1ml = instFM[0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
+                    ((YM2151)pw.pg[pw.cpg].chip).OutSetDtMl(mml,pw, 0, instFM[0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 9], instFM[0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8]);
+                    pw.pg[pw.cpg].op1ml = instFM[0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
                 }
-                if (pw.op2ml != instFM[1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8])
+                if (pw.pg[pw.cpg].op2ml != instFM[1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8])
                 {
-                    ((YM2151)pw.chip).OutSetDtMl(mml, pw, 1, instFM[1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 9], instFM[1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8]);
-                    pw.op2ml = instFM[1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
+                    ((YM2151)pw.pg[pw.cpg].chip).OutSetDtMl(mml, pw, 1, instFM[1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 9], instFM[1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8]);
+                    pw.pg[pw.cpg].op2ml = instFM[1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
                 }
-                if (pw.op3ml != instFM[2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8])
+                if (pw.pg[pw.cpg].op3ml != instFM[2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8])
                 {
-                    ((YM2151)pw.chip).OutSetDtMl(mml, pw, 2, instFM[2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 9], instFM[2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8]);
-                    pw.op3ml = instFM[2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
+                    ((YM2151)pw.pg[pw.cpg].chip).OutSetDtMl(mml, pw, 2, instFM[2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 9], instFM[2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8]);
+                    pw.pg[pw.cpg].op3ml = instFM[2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
                 }
-                if (pw.op4ml != instFM[3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8])
+                if (pw.pg[pw.cpg].op4ml != instFM[3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8])
                 {
-                    ((YM2151)pw.chip).OutSetDtMl(mml, pw, 3, instFM[3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 9], instFM[3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8]);
-                    pw.op4ml = instFM[3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
+                    ((YM2151)pw.pg[pw.cpg].chip).OutSetDtMl(mml, pw, 3, instFM[3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 9], instFM[3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8]);
+                    pw.pg[pw.cpg].op4ml = instFM[3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
                 }
                 //DT2
-                if (pw.op1dt2 != instFM[0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 10])
+                if (pw.pg[pw.cpg].op1dt2 != instFM[0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 10])
                 {
-                    ((YM2151)pw.chip).OutSetDt2Sr(mml, pw, 0, instFM[0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 10], instFM[0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 3]);
-                    pw.op1dt2 = instFM[0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 10];
+                    ((YM2151)pw.pg[pw.cpg].chip).OutSetDt2Sr(mml, pw, 0, instFM[0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 10], instFM[0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 3]);
+                    pw.pg[pw.cpg].op1dt2 = instFM[0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 10];
                 }
-                if (pw.op2dt2 != instFM[1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 10])
+                if (pw.pg[pw.cpg].op2dt2 != instFM[1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 10])
                 {
-                    ((YM2151)pw.chip).OutSetDt2Sr(mml, pw, 1, instFM[1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 10], instFM[1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 3]);
-                    pw.op2dt2 = instFM[1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 10];
+                    ((YM2151)pw.pg[pw.cpg].chip).OutSetDt2Sr(mml, pw, 1, instFM[1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 10], instFM[1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 3]);
+                    pw.pg[pw.cpg].op2dt2 = instFM[1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 10];
                 }
-                if (pw.op3dt2 != instFM[2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 10])
+                if (pw.pg[pw.cpg].op3dt2 != instFM[2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 10])
                 {
-                    ((YM2151)pw.chip).OutSetDt2Sr(mml, pw, 2, instFM[2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 10], instFM[2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 3]);
-                    pw.op3dt2 = instFM[2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 10];
+                    ((YM2151)pw.pg[pw.cpg].chip).OutSetDt2Sr(mml, pw, 2, instFM[2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 10], instFM[2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 3]);
+                    pw.pg[pw.cpg].op3dt2 = instFM[2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 10];
                 }
-                if (pw.op4dt2 != instFM[3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 10])
+                if (pw.pg[pw.cpg].op4dt2 != instFM[3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 10])
                 {
-                    ((YM2151)pw.chip).OutSetDt2Sr(mml, pw, 3, instFM[3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 10], instFM[3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 3]);
-                    pw.op4dt2 = instFM[3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 10];
+                    ((YM2151)pw.pg[pw.cpg].chip).OutSetDt2Sr(mml, pw, 3, instFM[3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 10], instFM[3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 3]);
+                    pw.pg[pw.cpg].op4dt2 = instFM[3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 10];
                 }
             }
             else
             {
                 //setToneDoubler
-                int oct = pw.octaveNow;
+                int oct = pw.pg[pw.cpg].octaveNow;
                 foreach(MML octMml in note.tDblOctave)
                 {
                     switch (octMml.type)
@@ -632,63 +632,63 @@ namespace Core
                     }
                 }
                 oct = Common.CheckRange(oct, 1, 8);
-                pw.octaveNew = oct;
-                int TdB = oct * 12 + Const.NOTE.IndexOf(note.tDblCmd) + note.tDblShift + pw.keyShift;
-                int s = TdB - pw.TdA;// - TdB;
+                pw.pg[pw.cpg].octaveNew = oct;
+                int TdB = oct * 12 + Const.NOTE.IndexOf(note.tDblCmd) + note.tDblShift + pw.pg[pw.cpg].keyShift;
+                int s = TdB - pw.pg[pw.cpg].TdA;// - TdB;
                 int us = Math.Abs(s);
-                int n = pw.toneDoubler;
+                int n = pw.pg[pw.cpg].toneDoubler;
                 clsToneDoubler instToneDoubler = parent.instToneDoubler[n];
                 if (us >= instToneDoubler.lstTD.Count)
                 {
                     return;
                 }
 
-                pw.toneDoublerKeyShift = ((s < 0) ? s : 0) + instToneDoubler.lstTD[us].KeyShift;
+                pw.pg[pw.cpg].toneDoublerKeyShift = ((s < 0) ? s : 0) + instToneDoubler.lstTD[us].KeyShift;
 
                 //ML
-                if (pw.op1ml != instToneDoubler.lstTD[us].OP1ML)
+                if (pw.pg[pw.cpg].op1ml != instToneDoubler.lstTD[us].OP1ML)
                 {
-                    ((YM2151)pw.chip).OutSetDtMl(mml,pw, 0, instFM[0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 9], instToneDoubler.lstTD[us].OP1ML);
-                    pw.op1ml = instToneDoubler.lstTD[us].OP1ML;
+                    ((YM2151)pw.pg[pw.cpg].chip).OutSetDtMl(mml,pw, 0, instFM[0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 9], instToneDoubler.lstTD[us].OP1ML);
+                    pw.pg[pw.cpg].op1ml = instToneDoubler.lstTD[us].OP1ML;
                 }
-                if (pw.op2ml != instToneDoubler.lstTD[us].OP2ML)
+                if (pw.pg[pw.cpg].op2ml != instToneDoubler.lstTD[us].OP2ML)
                 {
-                    ((YM2151)pw.chip).OutSetDtMl(mml, pw, 1, instFM[1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 9], instToneDoubler.lstTD[us].OP2ML);
-                    pw.op2ml = instToneDoubler.lstTD[us].OP2ML;
+                    ((YM2151)pw.pg[pw.cpg].chip).OutSetDtMl(mml, pw, 1, instFM[1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 9], instToneDoubler.lstTD[us].OP2ML);
+                    pw.pg[pw.cpg].op2ml = instToneDoubler.lstTD[us].OP2ML;
                 }
-                if (pw.op3ml != instToneDoubler.lstTD[us].OP3ML)
+                if (pw.pg[pw.cpg].op3ml != instToneDoubler.lstTD[us].OP3ML)
                 {
-                    ((YM2151)pw.chip).OutSetDtMl(mml, pw, 2, instFM[2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 9], instToneDoubler.lstTD[us].OP3ML);
-                    pw.op3ml = instToneDoubler.lstTD[us].OP3ML;
+                    ((YM2151)pw.pg[pw.cpg].chip).OutSetDtMl(mml, pw, 2, instFM[2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 9], instToneDoubler.lstTD[us].OP3ML);
+                    pw.pg[pw.cpg].op3ml = instToneDoubler.lstTD[us].OP3ML;
                 }
-                if (pw.op4ml != instToneDoubler.lstTD[us].OP4ML)
+                if (pw.pg[pw.cpg].op4ml != instToneDoubler.lstTD[us].OP4ML)
                 {
-                    ((YM2151)pw.chip).OutSetDtMl(mml, pw, 3, instFM[3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 9], instToneDoubler.lstTD[us].OP4ML);
-                    pw.op4ml = instToneDoubler.lstTD[us].OP4ML;
+                    ((YM2151)pw.pg[pw.cpg].chip).OutSetDtMl(mml, pw, 3, instFM[3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 9], instToneDoubler.lstTD[us].OP4ML);
+                    pw.pg[pw.cpg].op4ml = instToneDoubler.lstTD[us].OP4ML;
                 }
                 //DT2
-                if (pw.op1dt2 != instToneDoubler.lstTD[us].OP1DT2)
+                if (pw.pg[pw.cpg].op1dt2 != instToneDoubler.lstTD[us].OP1DT2)
                 {
-                    ((YM2151)pw.chip).OutSetDt2Sr(mml, pw, 0, instToneDoubler.lstTD[us].OP1DT2, instFM[0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 3]);
-                    pw.op1dt2 = instToneDoubler.lstTD[us].OP1DT2;
+                    ((YM2151)pw.pg[pw.cpg].chip).OutSetDt2Sr(mml, pw, 0, instToneDoubler.lstTD[us].OP1DT2, instFM[0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 3]);
+                    pw.pg[pw.cpg].op1dt2 = instToneDoubler.lstTD[us].OP1DT2;
                 }
-                if (pw.op2dt2 != instToneDoubler.lstTD[us].OP2DT2)
+                if (pw.pg[pw.cpg].op2dt2 != instToneDoubler.lstTD[us].OP2DT2)
                 {
-                    ((YM2151)pw.chip).OutSetDt2Sr(mml, pw, 1, instToneDoubler.lstTD[us].OP2DT2, instFM[1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 3]);
-                    pw.op2dt2 = instToneDoubler.lstTD[us].OP2DT2;
+                    ((YM2151)pw.pg[pw.cpg].chip).OutSetDt2Sr(mml, pw, 1, instToneDoubler.lstTD[us].OP2DT2, instFM[1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 3]);
+                    pw.pg[pw.cpg].op2dt2 = instToneDoubler.lstTD[us].OP2DT2;
                 }
-                if (pw.op3dt2 != instToneDoubler.lstTD[us].OP3DT2)
+                if (pw.pg[pw.cpg].op3dt2 != instToneDoubler.lstTD[us].OP3DT2)
                 {
-                    ((YM2151)pw.chip).OutSetDt2Sr(mml, pw, 2, instToneDoubler.lstTD[us].OP3DT2, instFM[2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 3]);
-                    pw.op3dt2 = instToneDoubler.lstTD[us].OP3DT2;
+                    ((YM2151)pw.pg[pw.cpg].chip).OutSetDt2Sr(mml, pw, 2, instToneDoubler.lstTD[us].OP3DT2, instFM[2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 3]);
+                    pw.pg[pw.cpg].op3dt2 = instToneDoubler.lstTD[us].OP3DT2;
                 }
-                if (pw.op4dt2 != instToneDoubler.lstTD[us].OP4DT2)
+                if (pw.pg[pw.cpg].op4dt2 != instToneDoubler.lstTD[us].OP4DT2)
                 {
-                    ((YM2151)pw.chip).OutSetDt2Sr(mml, pw, 3, instToneDoubler.lstTD[us].OP4DT2, instFM[3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 3]);
-                    pw.op4dt2 = instToneDoubler.lstTD[us].OP4DT2;
+                    ((YM2151)pw.pg[pw.cpg].chip).OutSetDt2Sr(mml, pw, 3, instToneDoubler.lstTD[us].OP4DT2, instFM[3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 3]);
+                    pw.pg[pw.cpg].op4dt2 = instToneDoubler.lstTD[us].OP4DT2;
                 }
 
-                //pw.TdA = -1;
+                //pw.ppg[pw.cpgNum].TdA = -1;
             }
         }
 
@@ -697,16 +697,16 @@ namespace Core
         {
             int n = (int)mml.args[0];
             n = Common.CheckRange(n, 0, 1);
-            pw.mixer = n;
+            pw.pg[pw.cpg].mixer = n;
         }
 
         public override void CmdNoise(partWork pw, MML mml)
         {
             int n = (int)mml.args[0];
             n = Common.CheckRange(n, 0, 31);
-            if (pw.noise != n)
+            if (pw.pg[pw.cpg].noise != n)
             {
-                pw.noise = n;
+                pw.pg[pw.cpg].noise = n;
             }
         }
 
@@ -714,16 +714,16 @@ namespace Core
         {
             int n = (int)mml.args[1];
             n = Common.CheckRange(n, 0, 7);
-            pw.pms = n;
-            ((YM2151)pw.chip).OutSetPMSAMS(mml,pw, pw.pms, pw.ams);
+            pw.pg[pw.cpg].pms = n;
+            ((YM2151)pw.pg[pw.cpg].chip).OutSetPMSAMS(mml,pw, pw.pg[pw.cpg].pms, pw.pg[pw.cpg].ams);
         }
 
         public override void CmdMAMS(partWork pw, MML mml)
         {
             int n = (int)mml.args[1];
             n = Common.CheckRange(n, 0, 3);
-            pw.ams = n;
-            ((YM2151)pw.chip).OutSetPMSAMS(mml,pw, pw.pms, pw.ams);
+            pw.pg[pw.cpg].ams = n;
+            ((YM2151)pw.pg[pw.cpg].chip).OutSetPMSAMS(mml,pw, pw.pg[pw.cpg].pms, pw.pg[pw.cpg].ams);
         }
 
         public override void CmdLfo(partWork pw, MML mml)
@@ -733,30 +733,30 @@ namespace Core
             if (mml.args[0] is string) return;
 
             int c = (char)mml.args[0] - 'P';
-            if (pw.lfo[c].type == eLfoType.Hardware)
+            if (pw.pg[pw.cpg].lfo[c].type == eLfoType.Hardware)
             {
-                if (pw.lfo[c].param.Count < 4)
+                if (pw.pg[pw.cpg].lfo[c].param.Count < 4)
                 {
                     msgBox.setErrMsg(msg.get("E16002"), mml.line.Lp);
                     return;
                 }
-                if (pw.lfo[c].param.Count > 5)
+                if (pw.pg[pw.cpg].lfo[c].param.Count > 5)
                 {
                     msgBox.setErrMsg(msg.get("E16003"), mml.line.Lp);
                     return;
                 }
 
-                pw.lfo[c].param[0] = Common.CheckRange(pw.lfo[c].param[0], 0, 3); //Type
-                pw.lfo[c].param[1] = Common.CheckRange(pw.lfo[c].param[1], 0, 255); //LFRQ
-                pw.lfo[c].param[2] = Common.CheckRange(pw.lfo[c].param[2], 0, 127); //PMD
-                pw.lfo[c].param[3] = Common.CheckRange(pw.lfo[c].param[3], 0, 127); //AMD
-                if (pw.lfo[c].param.Count == 5)
+                pw.pg[pw.cpg].lfo[c].param[0] = Common.CheckRange(pw.pg[pw.cpg].lfo[c].param[0], 0, 3); //Type
+                pw.pg[pw.cpg].lfo[c].param[1] = Common.CheckRange(pw.pg[pw.cpg].lfo[c].param[1], 0, 255); //LFRQ
+                pw.pg[pw.cpg].lfo[c].param[2] = Common.CheckRange(pw.pg[pw.cpg].lfo[c].param[2], 0, 127); //PMD
+                pw.pg[pw.cpg].lfo[c].param[3] = Common.CheckRange(pw.pg[pw.cpg].lfo[c].param[3], 0, 127); //AMD
+                if (pw.pg[pw.cpg].lfo[c].param.Count == 5)
                 {
-                    pw.lfo[c].param[4] = Common.CheckRange(pw.lfo[c].param[4], 0, 1);
+                    pw.pg[pw.cpg].lfo[c].param[4] = Common.CheckRange(pw.pg[pw.cpg].lfo[c].param[4], 0, 1);
                 }
                 else
                 {
-                    pw.lfo[c].param.Add(0);
+                    pw.pg[pw.cpg].lfo[c].param.Add(0);
                 }
             }
         }
@@ -767,9 +767,9 @@ namespace Core
 
             int c = (char)mml.args[0] - 'P';
             int n = (int)mml.args[1];
-            if (pw.lfo[c].type == eLfoType.Hardware)
+            if (pw.pg[pw.cpg].lfo[c].type == eLfoType.Hardware)
             {
-                ((YM2151)pw.chip).OutSetHardLfo(mml,pw, (n == 0) ? false : true, pw.lfo[c].param);
+                ((YM2151)pw.pg[pw.cpg].chip).OutSetHardLfo(mml,pw, (n == 0) ? false : true, pw.pg[pw.cpg].lfo[c].param);
             }
         }
 
@@ -777,20 +777,20 @@ namespace Core
         {
             int n = (int)mml.args[0];
             n = Common.CheckRange(n, 0, 3);
-            pw.pan.val = (n == 1) ? 2 : (n == 2 ? 1 : n);
-            if (pw.instrument < 0)
+            pw.pg[pw.cpg].pan.val = (n == 1) ? 2 : (n == 2 ? 1 : n);
+            if (pw.pg[pw.cpg].instrument < 0)
             {
                 msgBox.setErrMsg(msg.get("E16004")
                     , mml.line.Lp);
             }
             else
             {
-                ((YM2151)pw.chip).OutSetPanFeedbackAlgorithm(
+                ((YM2151)pw.pg[pw.cpg].chip).OutSetPanFeedbackAlgorithm(
                     mml,
                     pw
-                    , (int)pw.pan.val
-                    , parent.instFM[pw.instrument][46]
-                    , parent.instFM[pw.instrument][45]
+                    , (int)pw.pg[pw.cpg].pan.val
+                    , parent.instFM[pw.pg[pw.cpg].instrument][46]
+                    , parent.instFM[pw.pg[pw.cpg].instrument][45]
                     );
             }
         }
@@ -809,7 +809,7 @@ namespace Core
             if (type == 'T')
             {
                 n = Common.CheckRange(n, 0, 255);
-                pw.toneDoubler = n;
+                pw.pg[pw.cpg].toneDoubler = n;
                 return;
             }
 
@@ -820,9 +820,9 @@ namespace Core
             }
 
             n = Common.CheckRange(n, 0, 255);
-            if (pw.instrument == n) return;
+            if (pw.pg[pw.cpg].instrument == n) return;
 
-            pw.instrument = n;
+            pw.pg[pw.cpg].instrument = n;
             int modeBeforeSend = parent.info.modeBeforeSend;
             if (type == 'N')
             {
@@ -837,7 +837,7 @@ namespace Core
                 modeBeforeSend = 2;
             }
 
-            OutSetInstrument(pw,mml, n, pw.volume, modeBeforeSend);
+            OutSetInstrument(pw,mml, n, pw.pg[pw.cpg].volume, modeBeforeSend);
         }
 
         public override void CmdY(partWork pw, MML mml)
@@ -852,34 +852,34 @@ namespace Core
                 {
                     case "PANFBAL":
                     case "PANFLCON":
-                        parent.OutData(mml,port[0], (byte)(0x20 + pw.ch), dat);
+                        parent.OutData(mml,port[0], (byte)(0x20 + pw.pg[pw.cpg].ch), dat);
                         break;
                     case "PMSAMS":
-                        parent.OutData(mml, port[0], (byte)(0x38 + pw.ch), dat);
+                        parent.OutData(mml, port[0], (byte)(0x38 + pw.pg[pw.cpg].ch), dat);
                         break;
                     case "DTML":
                     case "DTMUL":
                     case "DT1ML":
                     case "DT1MUL":
-                        parent.OutData(mml, port[0], (byte)(0x40 + pw.ch + op * 8), dat);
+                        parent.OutData(mml, port[0], (byte)(0x40 + pw.pg[pw.cpg].ch + op * 8), dat);
                         break;
                     case "TL":
-                        parent.OutData(mml, port[0], (byte)(0x60 + pw.ch + op * 8), dat);
+                        parent.OutData(mml, port[0], (byte)(0x60 + pw.pg[pw.cpg].ch + op * 8), dat);
                         break;
                     case "KSAR":
-                        parent.OutData(mml, port[0], (byte)(0x80 + pw.ch + op * 8), dat);
+                        parent.OutData(mml, port[0], (byte)(0x80 + pw.pg[pw.cpg].ch + op * 8), dat);
                         break;
                     case "AMDR":
                     case "AMED1R":
-                        parent.OutData(mml, port[0], (byte)(0xa0 + pw.ch + op * 8), dat);
+                        parent.OutData(mml, port[0], (byte)(0xa0 + pw.pg[pw.cpg].ch + op * 8), dat);
                         break;
                     case "DT2SR":
                     case "DT2D2R":
-                        parent.OutData(mml, port[0], (byte)(0xc0 + pw.ch + op * 8), dat);
+                        parent.OutData(mml, port[0], (byte)(0xc0 + pw.pg[pw.cpg].ch + op * 8), dat);
                         break;
                     case "SLRR":
                     case "D1LRR":
-                        parent.OutData(mml, port[0], (byte)(0xe0 + pw.ch + op * 8), dat);
+                        parent.OutData(mml, port[0], (byte)(0xe0 + pw.pg[pw.cpg].ch + op * 8), dat);
                         break;
                 }
             }

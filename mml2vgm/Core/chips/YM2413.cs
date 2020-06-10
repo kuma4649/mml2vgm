@@ -60,14 +60,14 @@ namespace Core
 
         public override void InitPart(partWork pw)
         {
-            pw.beforeVolume = (pw.Type == enmChannelType.FMOPL) ? 15 : -1;
-            pw.volume = 15;
-            pw.MaxVolume = 15;
-            pw.beforeEnvInstrument = 0;
-            pw.envInstrument = 0;
-            pw.port = port;
-            pw.mixer = 0;
-            pw.noise = 0;
+            pw.pg[pw.cpg].beforeVolume = (pw.pg[pw.cpg].Type == enmChannelType.FMOPL) ? 15 : -1;
+            pw.pg[pw.cpg].volume = 15;
+            pw.pg[pw.cpg].MaxVolume = 15;
+            pw.pg[pw.cpg].beforeEnvInstrument = 0;
+            pw.pg[pw.cpg].envInstrument = 0;
+            pw.pg[pw.cpg].port = port;
+            pw.pg[pw.cpg].mixer = 0;
+            pw.pg[pw.cpg].noise = 0;
         }
 
         public override void InitChip()
@@ -110,7 +110,7 @@ namespace Core
 
         public void outYM2413SetInstrument(partWork pw, MML mml, int n, int modeBeforeSend)
         {
-            pw.instrument = n;
+            pw.pg[pw.cpg].instrument = n;
 
             if (!parent.instFM.ContainsKey(n))
             {
@@ -192,21 +192,21 @@ namespace Core
                 | (parent.instFM[n][24] & 0x07) //FB
                 ));
 
-            pw.op1ml = parent.instFM[n][0 * 11 + 5];
-            pw.op2ml = parent.instFM[n][1 * 11 + 5];
-            pw.op1dt2 = 0;
-            pw.op2dt2 = 0;
+            pw.pg[pw.cpg].op1ml = parent.instFM[n][0 * 11 + 5];
+            pw.pg[pw.cpg].op2ml = parent.instFM[n][1 * 11 + 5];
+            pw.pg[pw.cpg].op1dt2 = 0;
+            pw.pg[pw.cpg].op2dt2 = 0;
 
         }
 
         //public void outYM2413SetInstVol(partWork pw, int inst, int vol)
         //{
-        //    pw.envInstrument = inst & 0xf;
-        //    pw.volume = vol & 0xf;
+        //    pw.ppg[pw.cpgNum].envInstrument = inst & 0xf;
+        //    pw.ppg[pw.cpgNum].volume = vol & 0xf;
 
-        //    parent.OutData(pw.port0
-        //        , (byte)(0x30 + pw.ch)
-        //        , (byte)((pw.envInstrument << 4) | (15 - pw.volume))
+        //    parent.OutData(pw.ppg[pw.cpgNum].port0
+        //        , (byte)(0x30 + pw.ppg[pw.cpgNum].ch)
+        //        , (byte)((pw.ppg[pw.cpgNum].envInstrument << 4) | (15 - pw.ppg[pw.cpgNum].volume))
         //        );
         //}
         public override void GetFNumAtoB(partWork pw, MML mml
@@ -238,38 +238,38 @@ namespace Core
         {
             int freq;
             freq = (int)((num & 0x1ff) | (((octave - 1) & 0x7) << 9));
-            pw.freq = freq;
+            pw.pg[pw.cpg].freq = freq;
         }
 
         public void SetFmFNum(partWork pw, MML mml)
         {
-            if (pw.noteCmd == (char)0)
+            if (pw.pg[pw.cpg].noteCmd == (char)0)
             {
                 return;
             }
 
             int[] ftbl = FNumTbl[0];
 
-            int f = GetFmFNum(ftbl, pw.octaveNow, pw.noteCmd, pw.shift + pw.keyShift + pw.toneDoublerKeyShift);//
-            if (pw.bendWaitCounter != -1)
+            int f = GetFmFNum(ftbl, pw.pg[pw.cpg].octaveNow, pw.pg[pw.cpg].noteCmd, pw.pg[pw.cpg].shift + pw.pg[pw.cpg].keyShift + pw.pg[pw.cpg].toneDoublerKeyShift);//
+            if (pw.pg[pw.cpg].bendWaitCounter != -1)
             {
-                f = pw.bendFnum;
+                f = pw.pg[pw.cpg].bendFnum;
             }
             int o = (f & 0x0e00) / 0x0200;
             f &= 0x1ff;
 
-            f = f + pw.detune;
+            f = f + pw.pg[pw.cpg].detune;
             for (int lfo = 0; lfo < 4; lfo++)
             {
-                if (!pw.lfo[lfo].sw)
+                if (!pw.pg[pw.cpg].lfo[lfo].sw)
                 {
                     continue;
                 }
-                if (pw.lfo[lfo].type != eLfoType.Vibrato)
+                if (pw.pg[pw.cpg].lfo[lfo].type != eLfoType.Vibrato)
                 {
                     continue;
                 }
-                f += pw.lfo[lfo].value + pw.lfo[lfo].param[6];
+                f += pw.pg[pw.cpg].lfo[lfo].value + pw.pg[pw.cpg].lfo[lfo].param[6];
             }
             while (f < ftbl[0])
             {
@@ -326,28 +326,28 @@ namespace Core
 
         public void SetFmVolume(partWork pw, MML mml)
         {
-            int vol = pw.volume;
+            int vol = pw.pg[pw.cpg].volume;
 
             for (int lfo = 0; lfo < 4; lfo++)
             {
-                if (!pw.lfo[lfo].sw)
+                if (!pw.pg[pw.cpg].lfo[lfo].sw)
                 {
                     continue;
                 }
-                if (pw.lfo[lfo].type != eLfoType.Tremolo)
+                if (pw.pg[pw.cpg].lfo[lfo].type != eLfoType.Tremolo)
                 {
                     continue;
                 }
-                vol += pw.lfo[lfo].value + pw.lfo[lfo].param[6];
+                vol += pw.pg[pw.cpg].lfo[lfo].value + pw.pg[pw.cpg].lfo[lfo].param[6];
             }
 
-            //if (pw.beforeVolume != vol)
+            //if (pw.ppg[pw.cpgNum].beforeVolume != vol)
             //{
-            //if (parent.instFM.ContainsKey(pw.instrument))
+            //if (parent.instFM.ContainsKey(pw.ppg[pw.cpgNum].instrument))
             //{
-            pw.volume = vol;
-            //outYM2413SetInstVol(pw, pw.envInstrument, vol);
-            //pw.beforeVolume = vol;
+            pw.pg[pw.cpg].volume = vol;
+            //outYM2413SetInstVol(pw, pw.ppg[pw.cpgNum].envInstrument, vol);
+            //pw.ppg[pw.cpgNum].beforeVolume = vol;
             //}
             //}
         }
@@ -370,14 +370,14 @@ namespace Core
 
         public override void SetKeyOn(partWork pw, MML mml)
         {
-            pw.keyOn = true;
+            pw.pg[pw.cpg].keyOn = true;
             SetDummyData(pw, mml);
         }
 
         public override void SetKeyOff(partWork pw, MML mml)
         {
-            pw.keyOn = false;
-            pw.keyOff = true;
+            pw.pg[pw.cpg].keyOn = false;
+            pw.pg[pw.cpg].keyOff = true;
         }
 
         public override void SetLfoAtKeyOn(partWork pw, MML mml)
@@ -415,19 +415,19 @@ namespace Core
             if (type == 'I')
             {
                 n = Common.CheckRange(n, 1, 15);
-                if (pw.envInstrument != n)
+                if (pw.pg[pw.cpg].envInstrument != n)
                 {
-                    pw.envInstrument = n;
-                    //outYM2413SetInstVol(pw, n, pw.volume); //INSTをnにセット
+                    pw.pg[pw.cpg].envInstrument = n;
+                    //outYM2413SetInstVol(pw, n, pw.ppg[pw.cpgNum].volume); //INSTをnにセット
                 }
                 SetDummyData(pw, mml);
                 return;
             }
 
             n = Common.CheckRange(n, 0, 255);
-            if (pw.instrument == n) return;
+            if (pw.pg[pw.cpg].instrument == n) return;
 
-            pw.instrument = n;
+            pw.pg[pw.cpg].instrument = n;
             int modeBeforeSend = parent.info.modeBeforeSend;
             if (type == 'N')
             {
@@ -443,19 +443,19 @@ namespace Core
             }
 
             outYM2413SetInstrument(pw, mml, n, modeBeforeSend); //音色のセット
-            pw.envInstrument = 0;
-            //outYM2413SetInstVol(pw, 0, pw.volume); //INSTを0にセット
+            pw.pg[pw.cpg].envInstrument = 0;
+            //outYM2413SetInstVol(pw, 0, pw.ppg[pw.cpgNum].volume); //INSTを0にセット
 
         }
 
         public override void CmdMode(partWork pw, MML mml)
         {
             int n = (int)mml.args[0];
-            pw.chip.lstPartWork[9].rhythmMode = (n != 0);
-            pw.chip.lstPartWork[10].rhythmMode = (n != 0);
-            pw.chip.lstPartWork[11].rhythmMode = (n != 0);
-            pw.chip.lstPartWork[12].rhythmMode = (n != 0);
-            pw.chip.lstPartWork[13].rhythmMode = (n != 0);
+            pw.pg[pw.cpg].chip.lstPartWork[9].pg[lstPartWork[9].cpg].rhythmMode = (n != 0);
+            pw.pg[pw.cpg].chip.lstPartWork[10].pg[lstPartWork[10].cpg].rhythmMode = (n != 0);
+            pw.pg[pw.cpg].chip.lstPartWork[11].pg[lstPartWork[11].cpg].rhythmMode = (n != 0);
+            pw.pg[pw.cpg].chip.lstPartWork[12].pg[lstPartWork[12].cpg].rhythmMode = (n != 0);
+            pw.pg[pw.cpg].chip.lstPartWork[13].pg[lstPartWork[13].cpg].rhythmMode = (n != 0);
 
         }
 
@@ -473,48 +473,48 @@ namespace Core
         public override void CmdSusOnOff(partWork pw, MML mml)
         {
             char c = (char)mml.args[0];
-            pw.sus = (c == 'o');
+            pw.pg[pw.cpg].sus = (c == 'o');
         }
 
         public override void MultiChannelCommand(MML mml)
         {
             foreach (partWork pw in lstPartWork)
             {
-                if (pw.Type == enmChannelType.FMOPL)
+                if (pw.pg[pw.cpg].Type == enmChannelType.FMOPL)
                 {
-                    if (pw.beforeEnvInstrument != pw.envInstrument || pw.beforeVolume != pw.volume)
+                    if (pw.pg[pw.cpg].beforeEnvInstrument != pw.pg[pw.cpg].envInstrument || pw.pg[pw.cpg].beforeVolume != pw.pg[pw.cpg].volume)
                     {
-                        pw.beforeEnvInstrument = pw.envInstrument;
-                        pw.beforeVolume = pw.volume;
+                        pw.pg[pw.cpg].beforeEnvInstrument = pw.pg[pw.cpg].envInstrument;
+                        pw.pg[pw.cpg].beforeVolume = pw.pg[pw.cpg].volume;
 
                         parent.OutData(mml, port[0]
-                            , (byte)(0x30 + pw.ch)
-                            , (byte)(((pw.envInstrument << 4) & 0xf0) | ((15 - pw.volume) & 0xf))
+                            , (byte)(0x30 + pw.pg[pw.cpg].ch)
+                            , (byte)(((pw.pg[pw.cpg].envInstrument << 4) & 0xf0) | ((15 - pw.pg[pw.cpg].volume) & 0xf))
                             );
                     }
 
-                    if (pw.keyOff)
+                    if (pw.pg[pw.cpg].keyOff)
                     {
-                        pw.keyOff = false;
+                        pw.pg[pw.cpg].keyOff = false;
                         parent.OutData(mml, port[0]
-                            , (byte)(0x20 + pw.ch)
+                            , (byte)(0x20 + pw.pg[pw.cpg].ch)
                             , (byte)(
-                                ((pw.freq >> 8) & 0xf)
+                                ((pw.pg[pw.cpg].freq >> 8) & 0xf)
                               )
                             );
                     }
 
-                    if (pw.beforeFNum != (pw.freq | (pw.keyOn ? 0x1000 : 0x0000)))
+                    if (pw.pg[pw.cpg].beforeFNum != (pw.pg[pw.cpg].freq | (pw.pg[pw.cpg].keyOn ? 0x1000 : 0x0000)))
                     {
-                        pw.beforeFNum = pw.freq | (pw.keyOn ? 0x1000 : 0x0000);
+                        pw.pg[pw.cpg].beforeFNum = pw.pg[pw.cpg].freq | (pw.pg[pw.cpg].keyOn ? 0x1000 : 0x0000);
 
-                        parent.OutData(mml, port[0], (byte)(0x10 + pw.ch), (byte)pw.freq);
+                        parent.OutData(mml, port[0], (byte)(0x10 + pw.pg[pw.cpg].ch), (byte)pw.pg[pw.cpg].freq);
                         parent.OutData(mml, port[0]
-                            , (byte)(0x20 + pw.ch)
+                            , (byte)(0x20 + pw.pg[pw.cpg].ch)
                             , (byte)(
-                                ((pw.freq >> 8) & 0xf)
-                                | (pw.keyOn ? 0x10 : 0x00)
-                                | (pw.sus ? 0x20 : 0x00)
+                                ((pw.pg[pw.cpg].freq >> 8) & 0xf)
+                                | (pw.pg[pw.cpg].keyOn ? 0x10 : 0x00)
+                                | (pw.pg[pw.cpg].sus ? 0x20 : 0x00)
                               )
                             );
                     }
@@ -522,113 +522,113 @@ namespace Core
 
             }
 
-            if (!lstPartWork[9].rhythmMode) return;
+            if (!lstPartWork[9].pg[lstPartWork[9].cpg].rhythmMode) return;
 
             partWork p0, p1;
             byte dat;
             p0 = lstPartWork[9];
 
             //Key Off
-            if (lstPartWork[9].keyOff
-                || lstPartWork[10].keyOff
-                || lstPartWork[11].keyOff
-                || lstPartWork[12].keyOff
-                || lstPartWork[13].keyOff)
+            if (lstPartWork[9].pg[lstPartWork[9].cpg].keyOff
+                || lstPartWork[10].pg[lstPartWork[10].cpg].keyOff
+                || lstPartWork[11].pg[lstPartWork[11].cpg].keyOff
+                || lstPartWork[12].pg[lstPartWork[12].cpg].keyOff
+                || lstPartWork[13].pg[lstPartWork[13].cpg].keyOff)
             {
                 dat = (byte)(0x20
-                    | (lstPartWork[9].keyOn ? (lstPartWork[9].keyOff ? 0 : 0x10) : 0)
-                    | (lstPartWork[10].keyOn ? (lstPartWork[10].keyOff ? 0 : 0x08) : 0)
-                    | (lstPartWork[11].keyOn ? (lstPartWork[11].keyOff ? 0 : 0x04) : 0)
-                    | (lstPartWork[12].keyOn ? (lstPartWork[12].keyOff ? 0 : 0x02) : 0)
-                    | (lstPartWork[13].keyOn ? (lstPartWork[13].keyOff ? 0 : 0x01) : 0)
+                    | (lstPartWork[9].pg[lstPartWork[9].cpg].keyOn ? (lstPartWork[9].pg[lstPartWork[9].cpg].keyOff ? 0 : 0x10) : 0)
+                    | (lstPartWork[10].pg[lstPartWork[10].cpg].keyOn ? (lstPartWork[10].pg[lstPartWork[10].cpg].keyOff ? 0 : 0x08) : 0)
+                    | (lstPartWork[11].pg[lstPartWork[11].cpg].keyOn ? (lstPartWork[11].pg[lstPartWork[11].cpg].keyOff ? 0 : 0x04) : 0)
+                    | (lstPartWork[12].pg[lstPartWork[12].cpg].keyOn ? (lstPartWork[12].pg[lstPartWork[12].cpg].keyOff ? 0 : 0x02) : 0)
+                    | (lstPartWork[13].pg[lstPartWork[13].cpg].keyOn ? (lstPartWork[13].pg[lstPartWork[13].cpg].keyOff ? 0 : 0x01) : 0)
                     );
-                lstPartWork[9].rhythmKeyOnData = dat;
+                lstPartWork[9].pg[lstPartWork[9].cpg].rhythmKeyOnData = dat;
                 parent.OutData(mml, port[0], 0x0e, dat);
 
-                lstPartWork[9].keyOff = false;
-                lstPartWork[10].keyOff = false;
-                lstPartWork[11].keyOff = false;
-                lstPartWork[12].keyOff = false;
-                lstPartWork[13].keyOff = false;
+                lstPartWork[9].pg[lstPartWork[9].cpg].keyOff = false;
+                lstPartWork[10].pg[lstPartWork[10].cpg].keyOff = false;
+                lstPartWork[11].pg[lstPartWork[11].cpg].keyOff = false;
+                lstPartWork[12].pg[lstPartWork[12].cpg].keyOff = false;
+                lstPartWork[13].pg[lstPartWork[13].cpg].keyOff = false;
             }
 
 
             //Key On
             dat = (byte)(0x20
-                | (lstPartWork[9].keyOn ? 0x10 : 0)
-                | (lstPartWork[10].keyOn ? 0x08 : 0)
-                | (lstPartWork[11].keyOn ? 0x04 : 0)
-                | (lstPartWork[12].keyOn ? 0x02 : 0)
-                | (lstPartWork[13].keyOn ? 0x01 : 0)
+                | (lstPartWork[9].pg[lstPartWork[9].cpg].keyOn ? 0x10 : 0)
+                | (lstPartWork[10].pg[lstPartWork[10].cpg].keyOn ? 0x08 : 0)
+                | (lstPartWork[11].pg[lstPartWork[11].cpg].keyOn ? 0x04 : 0)
+                | (lstPartWork[12].pg[lstPartWork[12].cpg].keyOn ? 0x02 : 0)
+                | (lstPartWork[13].pg[lstPartWork[13].cpg].keyOn ? 0x01 : 0)
                 );
-            if (lstPartWork[9].rhythmKeyOnData != dat)
+            if (lstPartWork[9].pg[lstPartWork[9].cpg].rhythmKeyOnData != dat)
             {
-                lstPartWork[9].rhythmKeyOnData = dat;
+                lstPartWork[9].pg[lstPartWork[9].cpg].rhythmKeyOnData = dat;
                 parent.OutData(mml, port[0], 0x0e, dat);
             }
 
 
             //Freq
             p0 = lstPartWork[9];
-            if (p0.freq != -1 && p0.beforeFNum != p0.freq)
+            if (p0.pg[p0.cpg].freq != -1 && p0.pg[p0.cpg].beforeFNum != p0.pg[p0.cpg].freq)
             {
-                p0.beforeFNum = p0.freq;
+                p0.pg[p0.cpg].beforeFNum = p0.pg[p0.cpg].freq;
 
-                parent.OutData(mml, port[0], (byte)0x16, (byte)p0.freq);
+                parent.OutData(mml, port[0], (byte)0x16, (byte)p0.pg[p0.cpg].freq);
                 parent.OutData(mml, port[0]
                     , (byte)0x26
-                    , (byte)((p0.freq >> 8) & 0xf)
+                    , (byte)((p0.pg[p0.cpg].freq >> 8) & 0xf)
                     );
             }
 
             p0 = lstPartWork[10];
             p1 = lstPartWork[13];
-            if ((p0.freq != -1 && p0.beforeFNum != p0.freq)
-                || (p1.freq != -1 && p1.beforeFNum != p1.freq))
+            if ((p0.pg[p0.cpg].freq != -1 && p0.pg[p0.cpg].beforeFNum != p0.pg[p0.cpg].freq)
+                || (p1.pg[p1.cpg].freq != -1 && p1.pg[p1.cpg].beforeFNum != p1.pg[p1.cpg].freq))
             {
-                if (p1.freq != -1 && p1.beforeFNum != p1.freq)
+                if (p1.pg[p1.cpg].freq != -1 && p1.pg[p1.cpg].beforeFNum != p1.pg[p1.cpg].freq)
                 {
-                    p0.beforeFNum = p1.freq;
-                    p1.beforeFNum = p1.freq;
+                    p0.pg[p0.cpg].beforeFNum = p1.pg[p1.cpg].freq;
+                    p1.pg[p1.cpg].beforeFNum = p1.pg[p1.cpg].freq;
                 }
-                else if (p0.freq != -1 && p0.beforeFNum != p0.freq)
+                else if (p0.pg[p0.cpg].freq != -1 && p0.pg[p0.cpg].beforeFNum != p0.pg[p0.cpg].freq)
                 {
-                    p0.beforeFNum = p0.freq;
-                    p1.beforeFNum = p0.freq;
+                    p0.pg[p0.cpg].beforeFNum = p0.pg[p0.cpg].freq;
+                    p1.pg[p1.cpg].beforeFNum = p0.pg[p0.cpg].freq;
                 }
 
-                if (p0.beforeFNum != -1)
+                if (p0.pg[p0.cpg].beforeFNum != -1)
                 {
-                    parent.OutData(mml, port[0], (byte)0x17, (byte)p0.beforeFNum);
+                    parent.OutData(mml, port[0], (byte)0x17, (byte)p0.pg[p0.cpg].beforeFNum);
                     parent.OutData(mml, port[0]
                         , (byte)0x27
-                        , (byte)((p0.beforeFNum >> 8) & 0xf)
+                        , (byte)((p0.pg[p0.cpg].beforeFNum >> 8) & 0xf)
                         );
                 }
             }
 
             p0 = lstPartWork[12];
             p1 = lstPartWork[11];
-            if ((p0.freq != -1 && p0.beforeFNum != p0.freq)
-                || (p1.freq != -1 && p1.beforeFNum != p1.freq))
+            if ((p0.pg[p0.cpg].freq != -1 && p0.pg[p0.cpg].beforeFNum != p0.pg[p0.cpg].freq)
+                || (p1.pg[p1.cpg].freq != -1 && p1.pg[p1.cpg].beforeFNum != p1.pg[p1.cpg].freq))
             {
-                if (p1.freq != -1 && p1.beforeFNum != p1.freq)
+                if (p1.pg[p1.cpg].freq != -1 && p1.pg[p1.cpg].beforeFNum != p1.pg[p1.cpg].freq)
                 {
-                    p0.beforeFNum = p1.freq;
-                    p1.beforeFNum = p1.freq;
+                    p0.pg[p0.cpg].beforeFNum = p1.pg[p1.cpg].freq;
+                    p1.pg[p1.cpg].beforeFNum = p1.pg[p1.cpg].freq;
                 }
-                else if (p0.freq != -1 && p0.beforeFNum != p0.freq)
+                else if (p0.pg[p0.cpg].freq != -1 && p0.pg[p0.cpg].beforeFNum != p0.pg[p0.cpg].freq)
                 {
-                    p0.beforeFNum = p0.freq;
-                    p1.beforeFNum = p0.freq;
+                    p0.pg[p0.cpg].beforeFNum = p0.pg[p0.cpg].freq;
+                    p1.pg[p1.cpg].beforeFNum = p0.pg[p0.cpg].freq;
                 }
 
-                if (p0.beforeFNum != -1)
+                if (p0.pg[p0.cpg].beforeFNum != -1)
                 {
-                    parent.OutData(mml, port[0], (byte)0x18, (byte)p0.beforeFNum);
+                    parent.OutData(mml, port[0], (byte)0x18, (byte)p0.pg[p0.cpg].beforeFNum);
                     parent.OutData(mml, port[0]
                         , (byte)0x28
-                        , (byte)((p0.beforeFNum >> 8) & 0xf)
+                        , (byte)((p0.pg[p0.cpg].beforeFNum >> 8) & 0xf)
                         );
                 }
             }
@@ -636,26 +636,26 @@ namespace Core
 
             //Rhythm Volume
             p0 = lstPartWork[9];
-            if (p0.beforeVolume != p0.volume)
+            if (p0.pg[p0.cpg].beforeVolume != p0.pg[p0.cpg].volume)
             {
-                p0.beforeVolume = p0.volume;
-                parent.OutData(mml, port[0], 0x36, (byte)(15 - (p0.volume & 0xf)));
+                p0.pg[p0.cpg].beforeVolume = p0.pg[p0.cpg].volume;
+                parent.OutData(mml, port[0], 0x36, (byte)(15 - (p0.pg[p0.cpg].volume & 0xf)));
             }
             p0 = lstPartWork[10];
             p1 = lstPartWork[13];
-            if (p0.beforeVolume != p0.volume || p1.beforeVolume != p1.volume)
+            if (p0.pg[p0.cpg].beforeVolume != p0.pg[p0.cpg].volume || p1.pg[p1.cpg].beforeVolume != p1.pg[p1.cpg].volume)
             {
-                p0.beforeVolume = p0.volume;
-                p1.beforeVolume = p1.volume;
-                parent.OutData(mml, port[0], 0x37, (byte)((15 - (p0.volume & 0xf)) | ((15 - (p1.volume & 0xf)) << 4)));
+                p0.pg[p0.cpg].beforeVolume = p0.pg[p0.cpg].volume;
+                p1.pg[p1.cpg].beforeVolume = p1.pg[p1.cpg].volume;
+                parent.OutData(mml, port[0], 0x37, (byte)((15 - (p0.pg[p0.cpg].volume & 0xf)) | ((15 - (p1.pg[p1.cpg].volume & 0xf)) << 4)));
             }
             p0 = lstPartWork[12];
             p1 = lstPartWork[11];
-            if (p0.beforeVolume != p0.volume || p1.beforeVolume != p1.volume)
+            if (p0.pg[p0.cpg].beforeVolume != p0.pg[p0.cpg].volume || p1.pg[p1.cpg].beforeVolume != p1.pg[p1.cpg].volume)
             {
-                p0.beforeVolume = p0.volume;
-                p1.beforeVolume = p1.volume;
-                parent.OutData(mml, port[0], 0x38, (byte)((15 - (p0.volume & 0xf)) | ((15 - (p1.volume & 0xf)) << 4)));
+                p0.pg[p0.cpg].beforeVolume = p0.pg[p0.cpg].volume;
+                p1.pg[p1.cpg].beforeVolume = p1.pg[p1.cpg].volume;
+                parent.OutData(mml, port[0], 0x38, (byte)((15 - (p0.pg[p0.cpg].volume & 0xf)) | ((15 - (p1.pg[p1.cpg].volume & 0xf)) << 4)));
             }
 
 

@@ -62,18 +62,18 @@ namespace Core
 
         public override void InitPart(partWork pw)
         {
-            pw.beforeVolume = -1;
-            pw.volume = 60;
-            pw.MaxVolume = 63;
-            pw.beforeEnvInstrument = 0;
-            pw.envInstrument = 0;
-            pw.port = port;
-            pw.mixer = 0;
-            pw.noise = 0;
-            pw.pan.val = 3;
-            pw.Type = enmChannelType.FMOPL;
-            pw.isOp4Mode = false;
-            if (pw.ch > 8) pw.Type = enmChannelType.RHYTHM;
+            pw.pg[pw.cpg].beforeVolume = -1;
+            pw.pg[pw.cpg].volume = 60;
+            pw.pg[pw.cpg].MaxVolume = 63;
+            pw.pg[pw.cpg].beforeEnvInstrument = 0;
+            pw.pg[pw.cpg].envInstrument = 0;
+            pw.pg[pw.cpg].port = port;
+            pw.pg[pw.cpg].mixer = 0;
+            pw.pg[pw.cpg].noise = 0;
+            pw.pg[pw.cpg].pan.val = 3;
+            pw.pg[pw.cpg].Type = enmChannelType.FMOPL;
+            pw.pg[pw.cpg].isOp4Mode = false;
+            if (pw.pg[pw.cpg].ch > 8) pw.pg[pw.cpg].Type = enmChannelType.RHYTHM;
         }
 
         protected override void SetInstAtOneOpeWithoutKslTl(MML mml, int opeNum,

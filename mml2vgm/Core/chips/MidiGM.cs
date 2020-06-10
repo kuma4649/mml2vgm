@@ -49,7 +49,7 @@ namespace Core
             int i = 16;
             foreach (partWork pw in lstPartWork)
             {
-                pw.port = port;
+                pw.pg[pw.cpg].port = port;
                 if (i-- > 0)
                 {
                     ResetPitchBend(pw, null);
@@ -60,27 +60,27 @@ namespace Core
 
         public override void InitPart(partWork pw)
         {
-            pw.volume = 127;
-            pw.expression = 127;
-            pw.beforeExpression = -1;
-            pw.MaxVolume = 127;
-            pw.MaxExpression = 127;
-            pw.tblNoteOn = new bool[128];
-            pw.directModeVib = false;
-            pw.directModeTre = false;
-            pw.pitchBend = 0;
-            pw.MIDIch = pw.ch % 16;
+            pw.pg[pw.cpg].volume = 127;
+            pw.pg[pw.cpg].expression = 127;
+            pw.pg[pw.cpg].beforeExpression = -1;
+            pw.pg[pw.cpg].MaxVolume = 127;
+            pw.pg[pw.cpg].MaxExpression = 127;
+            pw.pg[pw.cpg].tblNoteOn = new bool[128];
+            pw.pg[pw.cpg].directModeVib = false;
+            pw.pg[pw.cpg].directModeTre = false;
+            pw.pg[pw.cpg].pitchBend = 0;
+            pw.pg[pw.cpg].MIDIch = pw.pg[pw.cpg].ch % 16;
         }
 
         public override void CmdMIDICh(partWork pw, MML mml)
         {
             int ch = (int)mml.args[0];
-            pw.MIDIch = ch & 0xf;
+            pw.pg[pw.cpg].MIDIch = ch & 0xf;
 
             MML vmml = new MML();
             vmml.type = enmMMLType.MIDICh;
             vmml.args = new List<object>();
-            vmml.args.Add(pw.MIDIch);
+            vmml.args.Add(pw.pg[pw.cpg].MIDIch);
             vmml.line = mml.line;
             SetDummyData(pw, vmml);
         }
@@ -90,18 +90,18 @@ namespace Core
             int ctrl = (int)mml.args[0];
             int data = (int)mml.args[1];
 
-            parent.OutData(mml, pw.port[0], 3, (byte)(0xb0 + pw.MIDIch), (byte)(ctrl & 0x7f), (byte)(data & 0x7f));
+            parent.OutData(mml, pw.pg[pw.cpg].port[0], 3, (byte)(0xb0 + pw.pg[pw.cpg].MIDIch), (byte)(ctrl & 0x7f), (byte)(data & 0x7f));
         }
 
         public override void CmdVelocity(partWork pw, MML mml)
         {
             int vel = (int)mml.args[0];
-            pw.velocity = vel & 0x7f;
+            pw.pg[pw.cpg].velocity = vel & 0x7f;
 
             MML vmml = new MML();
             vmml.type = enmMMLType.Velocity;
             vmml.args = new List<object>();
-            vmml.args.Add(pw.velocity);
+            vmml.args.Add(pw.pg[pw.cpg].velocity);
             vmml.line = mml.line;
             SetDummyData(pw, vmml);
         }
@@ -109,8 +109,8 @@ namespace Core
         public override void CmdPan(partWork pw, MML mml)
         {
             int pan = (int)mml.args[0];
-            pw.panL = pan & 0x7f;
-            OutMidiControlChange(pw, mml, enmControlChange.Panpot, (byte)pw.panL);
+            pw.pg[pw.cpg].panL = pan & 0x7f;
+            OutMidiControlChange(pw, mml, enmControlChange.Panpot, (byte)pw.pg[pw.cpg].panL);
         }
 
         /// <summary>
@@ -130,13 +130,13 @@ namespace Core
             if (vt == 0)
             {
                 //vib
-                pw.directModeVib = sw;
+                pw.pg[pw.cpg].directModeVib = sw;
                 ResetPitchBend(pw, mml);
             }
             else
             {
                 //tre
-                pw.directModeTre = sw;
+                pw.pg[pw.cpg].directModeTre = sw;
             }
         }
 
@@ -146,18 +146,18 @@ namespace Core
         public override void CmdTotalVolume(partWork pw, MML mml)
         {
             int n = (int)mml.args[0];
-            pw.volume = Common.CheckRange(n, 0, pw.MaxVolume);
+            pw.pg[pw.cpg].volume = Common.CheckRange(n, 0, pw.pg[pw.cpg].MaxVolume);
 
             MML vmml = new MML();
             vmml.type = enmMMLType.TotalVolume;
             vmml.args = new List<object>();
-            vmml.args.Add(pw.volume);
+            vmml.args.Add(pw.pg[pw.cpg].volume);
             vmml.line = mml.line;
             SetDummyData(pw, vmml);
 
-            if (pw.beforeVolume == pw.volume) return;
-            pw.beforeVolume = pw.volume;
-            OutMidiControlChange(pw, mml, enmControlChange.Volume, (byte)pw.volume);
+            if (pw.pg[pw.cpg].beforeVolume == pw.pg[pw.cpg].volume) return;
+            pw.pg[pw.cpg].beforeVolume = pw.pg[pw.cpg].volume;
+            OutMidiControlChange(pw, mml, enmControlChange.Volume, (byte)pw.pg[pw.cpg].volume);
         }
 
         /// <summary>
@@ -168,14 +168,14 @@ namespace Core
         public override void CmdVolume(partWork pw, MML mml)
         {
             int n;
-            n = (mml.args != null && mml.args.Count > 0) ? (int)mml.args[0] : pw.latestVolume;
-            pw.latestVolume = n;
-            pw.expression = Common.CheckRange(n, 0, pw.MaxExpression);
+            n = (mml.args != null && mml.args.Count > 0) ? (int)mml.args[0] : pw.pg[pw.cpg].latestVolume;
+            pw.pg[pw.cpg].latestVolume = n;
+            pw.pg[pw.cpg].expression = Common.CheckRange(n, 0, pw.pg[pw.cpg].MaxExpression);
 
             MML vmml = new MML();
             vmml.type = enmMMLType.Volume;
             vmml.args = new List<object>();
-            vmml.args.Add(pw.expression);
+            vmml.args.Add(pw.pg[pw.cpg].expression);
             vmml.line = mml.line;
             SetDummyData(pw, vmml);
 
@@ -184,14 +184,14 @@ namespace Core
         public override void CmdVolumeUp(partWork pw, MML mml)
         {
             int n = (int)mml.args[0];
-            n = Common.CheckRange(n, 1, pw.MaxExpression);
-            pw.expression += parent.info.volumeRev ? -n : n;
-            pw.expression = Common.CheckRange(pw.expression, 0, pw.MaxExpression);
+            n = Common.CheckRange(n, 1, pw.pg[pw.cpg].MaxExpression);
+            pw.pg[pw.cpg].expression += parent.info.volumeRev ? -n : n;
+            pw.pg[pw.cpg].expression = Common.CheckRange(pw.pg[pw.cpg].expression, 0, pw.pg[pw.cpg].MaxExpression);
 
             MML vmml = new MML();
             vmml.type = enmMMLType.Volume;
             vmml.args = new List<object>();
-            vmml.args.Add(pw.expression);
+            vmml.args.Add(pw.pg[pw.cpg].expression);
             vmml.line = mml.line;
             SetDummyData(pw, vmml);
         }
@@ -199,14 +199,14 @@ namespace Core
         public override void CmdVolumeDown(partWork pw, MML mml)
         {
             int n = (int)mml.args[0];
-            n = Common.CheckRange(n, 1, pw.MaxExpression);
-            pw.expression -= parent.info.volumeRev ? -n : n;
-            pw.expression = Common.CheckRange(pw.expression, 0, pw.MaxExpression);
+            n = Common.CheckRange(n, 1, pw.pg[pw.cpg].MaxExpression);
+            pw.pg[pw.cpg].expression -= parent.info.volumeRev ? -n : n;
+            pw.pg[pw.cpg].expression = Common.CheckRange(pw.pg[pw.cpg].expression, 0, pw.pg[pw.cpg].MaxExpression);
 
             MML vmml = new MML();
             vmml.type = enmMMLType.Volume;
             vmml.args = new List<object>();
-            vmml.args.Add(pw.expression);
+            vmml.args.Add(pw.pg[pw.cpg].expression);
             vmml.line = mml.line;
             SetDummyData(pw, vmml);
         }
@@ -232,16 +232,16 @@ namespace Core
             }
 
             n = Common.CheckRange(n, 0, 127);
-            pw.instrument = n;
+            pw.pg[pw.cpg].instrument = n;
 
             MML vmml = new MML();
             vmml.type = enmMMLType.Instrument;
             vmml.args = new List<object>();
-            vmml.args.Add(pw.instrument);
+            vmml.args.Add(pw.pg[pw.cpg].instrument);
             vmml.line = mml.line;
             SetDummyData(pw, vmml);
 
-            OutMidiProgramChange(pw, mml, (byte)pw.instrument);
+            OutMidiProgramChange(pw, mml, (byte)pw.pg[pw.cpg].instrument);
         }
 
         public override void CmdY(partWork pw, MML mml)
@@ -253,7 +253,7 @@ namespace Core
                 if (dat.Count == 255)
                 {
                     dat.Insert(0, 255);
-                    parent.OutData(mml, pw.port[0], dat.ToArray());
+                    parent.OutData(mml, pw.pg[pw.cpg].port[0], dat.ToArray());
                     dat.Clear();
                 }
             }
@@ -261,7 +261,7 @@ namespace Core
             if (dat.Count == 0) return;
 
             dat.Insert(0, (byte)dat.Count);
-            parent.OutData(mml, pw.port[0], dat.ToArray());
+            parent.OutData(mml, pw.pg[pw.cpg].port[0], dat.ToArray());
         }
 
 
@@ -283,7 +283,7 @@ namespace Core
                 if (dat.Count == 255)
                 {
                     dat.Insert(0, 255);
-                    parent.OutData(mml, pw.port[0], dat.ToArray());
+                    parent.OutData(mml, pw.pg[pw.cpg].port[0], dat.ToArray());
                     dat.Clear();
                 }
             }
@@ -291,43 +291,43 @@ namespace Core
             if (dat.Count == 0) return;
 
             dat.Insert(0, (byte)dat.Count);
-            parent.OutData(mml, pw.port[0], dat.ToArray());
+            parent.OutData(mml, pw.pg[pw.cpg].port[0], dat.ToArray());
         }
 
         public override void SetFNum(partWork pw, MML mml)
         {
-            pw.portaBend = 0;
-            if (pw.bendWaitCounter != -1)
+            pw.pg[pw.cpg].portaBend = 0;
+            if (pw.pg[pw.cpg].bendWaitCounter != -1)
             {
-                pw.portaBend = pw.bendFnum;
+                pw.pg[pw.cpg].portaBend = pw.pg[pw.cpg].bendFnum;
             }
         }
 
         public override void SetVolume(partWork pw, MML mml)
         {
-            //if (pw.beforeExpression == pw.expression) return;
-            //pw.beforeExpression = pw.expression;
-            //OutMidiControlChange(pw, mml, enmControlChange.Expression, (byte)pw.expression);
+            //if (pw.ppg[pw.cpgNum].beforeExpression == pw.ppg[pw.cpgNum].expression) return;
+            //pw.ppg[pw.cpgNum].beforeExpression = pw.ppg[pw.cpgNum].expression;
+            //OutMidiControlChange(pw, mml, enmControlChange.Expression, (byte)pw.ppg[pw.cpgNum].expression);
 
-            int vol = pw.expression;
+            int vol = pw.pg[pw.cpg].expression;
 
-            //if (pw.keyOn)
+            //if (pw.ppg[pw.cpgNum].keyOn)
             {
-                if (pw.envelopeMode)
+                if (pw.pg[pw.cpg].envelopeMode)
                 {
                     vol = 0;
-                    if (pw.envIndex != -1)
+                    if (pw.pg[pw.cpg].envIndex != -1)
                     {
-                        vol = pw.envVolume - (127 - pw.expression);
+                        vol = pw.pg[pw.cpg].envVolume - (127 - pw.pg[pw.cpg].expression);
                     }
                 }
 
                 for (int lfo = 0; lfo < 4; lfo++)
                 {
-                    if (!pw.lfo[lfo].sw) continue;
-                    if (pw.lfo[lfo].type != eLfoType.Tremolo) continue;
+                    if (!pw.pg[pw.cpg].lfo[lfo].sw) continue;
+                    if (pw.pg[pw.cpg].lfo[lfo].type != eLfoType.Tremolo) continue;
 
-                    vol += pw.lfo[lfo].value + pw.lfo[lfo].param[6];
+                    vol += pw.pg[pw.cpg].lfo[lfo].value + pw.pg[pw.cpg].lfo[lfo].param[6];
                 }
             }
             //else
@@ -337,13 +337,13 @@ namespace Core
 
             vol = Common.CheckRange(vol, 0, 127);
 
-            if (pw.beforeExpression != vol)
+            if (pw.pg[pw.cpg].beforeExpression != vol)
             {
-                if (!pw.directModeTre)
+                if (!pw.pg[pw.cpg].directModeTre)
                 {
                     OutMidiControlChange(pw, mml, enmControlChange.Expression, (byte)vol);
                 }
-                pw.beforeExpression = vol;
+                pw.pg[pw.cpg].beforeExpression = vol;
             }
         }
 
@@ -351,7 +351,7 @@ namespace Core
         {
             for (int lfo = 0; lfo < 4; lfo++)
             {
-                clsLfo pl = pw.lfo[lfo];
+                clsLfo pl = pw.pg[pw.cpg].lfo[lfo];
                 if (!pl.sw)
                     continue;
 
@@ -387,18 +387,18 @@ namespace Core
 
         protected override void ResetTieBend(partWork pw, MML mml)
         {
-            pw.tieBend = 0;
-            pw.bendStartOctave = pw.octaveNew;
-            pw.bendStartNote = pw.noteCmd;
-            pw.bendStartShift = pw.shift;
+            pw.pg[pw.cpg].tieBend = 0;
+            pw.pg[pw.cpg].bendStartOctave = pw.pg[pw.cpg].octaveNew;
+            pw.pg[pw.cpg].bendStartNote = pw.pg[pw.cpg].noteCmd;
+            pw.pg[pw.cpg].bendStartShift = pw.pg[pw.cpg].shift;
         }
 
         protected override void SetTieBend(partWork pw, MML mml)
         {
-            if (pw.bendWaitCounter == -1)
+            if (pw.pg[pw.cpg].bendWaitCounter == -1)
             {
-                int n = (pw.octaveNew * 12 + Const.NOTE.IndexOf(pw.noteCmd) + pw.shift) - (pw.bendStartOctave * 12 + Const.NOTE.IndexOf(pw.bendStartNote) + pw.bendStartShift);
-                pw.tieBend = 8192 / 24 * n;
+                int n = (pw.pg[pw.cpg].octaveNew * 12 + Const.NOTE.IndexOf(pw.pg[pw.cpg].noteCmd) + pw.pg[pw.cpg].shift) - (pw.pg[pw.cpg].bendStartOctave * 12 + Const.NOTE.IndexOf(pw.pg[pw.cpg].bendStartNote) + pw.pg[pw.cpg].bendStartShift);
+                pw.pg[pw.cpg].tieBend = 8192 / 24 * n;
             }
         }
 
@@ -406,49 +406,49 @@ namespace Core
         {
             Note n = (Note)mml.args[0];
             byte noteNum;
-            if (pw.bendWaitCounter == -1)
+            if (pw.pg[pw.cpg].bendWaitCounter == -1)
             {
-                noteNum = (byte)GetNoteNum(pw.octaveNew, n.cmd, n.shift + pw.keyShift);
-                if (!pw.beforeTie) pw.beforeBendNoteNum = -1;
+                noteNum = (byte)GetNoteNum(pw.pg[pw.cpg].octaveNew, n.cmd, n.shift + pw.pg[pw.cpg].keyShift);
+                if (!pw.pg[pw.cpg].beforeTie) pw.pg[pw.cpg].beforeBendNoteNum = -1;
             }
             else
             {
-                noteNum = (byte)GetNoteNum(pw.bendStartOctave, pw.bendStartNote, pw.bendStartShift + pw.keyShift);
-                pw.beforeBendNoteNum = noteNum;
+                noteNum = (byte)GetNoteNum(pw.pg[pw.cpg].bendStartOctave, pw.pg[pw.cpg].bendStartNote, pw.pg[pw.cpg].bendStartShift + pw.pg[pw.cpg].keyShift);
+                pw.pg[pw.cpg].beforeBendNoteNum = noteNum;
             }
-            pw.tblNoteOn[noteNum] = true;
+            pw.pg[pw.cpg].tblNoteOn[noteNum] = true;
 
             MIDINote mn = new MIDINote();
             mn.pw = pw;
             mn.mml = mml;
             mn.noteNumber = noteNum;
-            mn.velocity = (byte)(n.velocity==-1 ? pw.velocity : n.velocity);
-            mn.length = pw.tie ? -1 : pw.waitKeyOnCounter;
+            mn.velocity = (byte)(n.velocity==-1 ? pw.pg[pw.cpg].velocity : n.velocity);
+            mn.length = pw.pg[pw.cpg].tie ? -1 : pw.pg[pw.cpg].waitKeyOnCounter;
             mn.beforeKeyon = null;
-            if (pw.beforeTie)
+            if (pw.pg[pw.cpg].beforeTie)
             {
                 mn.beforeKeyon = true;
-                if (pw.beforeBendNoteNum != -1)
+                if (pw.pg[pw.cpg].beforeBendNoteNum != -1)
                 {
-                    noteNum = (byte)pw.beforeBendNoteNum;
+                    noteNum = (byte)pw.pg[pw.cpg].beforeBendNoteNum;
                     mn.noteNumber = noteNum;
                 }
             }
             mn.Keyon = true;
-            pw.noteOns[noteNum] = mn;
+            pw.pg[pw.cpg].noteOns[noteNum] = mn;
         }
 
         public override void SetKeyOff(partWork pw, MML mml)
         {
             return;
 
-            //for (byte i = 0; i < pw.tblNoteOn.Length; i++)
+            //for (byte i = 0; i < pw.ppg[pw.cpgNum].tblNoteOn.Length; i++)
             //{
-            //    if (!pw.tblNoteOn[i]) continue;
-            //    pw.tblNoteOn[i] = false;
+            //    if (!pw.ppg[pw.cpgNum].tblNoteOn[i]) continue;
+            //    pw.ppg[pw.cpgNum].tblNoteOn[i] = false;
 
-            //    pw.noteOns[i].Keyon = false;
-            //    pw.noteOns[i].length = 0;
+            //    pw.ppg[pw.cpgNum].noteOns[i].Keyon = false;
+            //    pw.ppg[pw.cpgNum].noteOns[i].length = 0;
 
             //    //MIDINote mn = new MIDINote();
             //    //mn.pw = pw;
@@ -471,7 +471,7 @@ namespace Core
 
         public override int GetFNum(partWork pw, MML mml, int octave, char cmd, int shift)
         {
-            int n = (octave * 12 + Const.NOTE.IndexOf(cmd) + shift) - (pw.bendStartOctave * 12 + Const.NOTE.IndexOf(pw.bendStartNote) + pw.bendStartShift);
+            int n = (octave * 12 + Const.NOTE.IndexOf(cmd) + shift) - (pw.pg[pw.cpg].bendStartOctave * 12 + Const.NOTE.IndexOf(pw.pg[pw.cpg].bendStartNote) + pw.pg[pw.cpg].bendStartShift);
             return 8192 / 24 * n;
         }
 
@@ -489,42 +489,42 @@ namespace Core
 
         private void OutMidiNoteOff(partWork pw, MML mml, byte noteNumber, byte velocity)
         {
-            parent.OutData(mml, pw.port[0], 3, (byte)(0x80 + pw.MIDIch), (byte)(noteNumber & 0x7f), (byte)(velocity & 0x7f));
+            parent.OutData(mml, pw.pg[pw.cpg].port[0], 3, (byte)(0x80 + pw.pg[pw.cpg].MIDIch), (byte)(noteNumber & 0x7f), (byte)(velocity & 0x7f));
         }
 
         private void OutMidiNoteOn(partWork pw, MML mml, byte noteNumber, byte velocity)
         {
-            parent.OutData(mml, pw.port[0], 3, (byte)(0x90 + pw.MIDIch), (byte)(noteNumber & 0x7f), (byte)(velocity & 0x7f));
+            parent.OutData(mml, pw.pg[pw.cpg].port[0], 3, (byte)(0x90 + pw.pg[pw.cpg].MIDIch), (byte)(noteNumber & 0x7f), (byte)(velocity & 0x7f));
         }
 
         private void OutMidiPolyKeyPress(partWork pw, MML mml, byte noteNumber, byte press)
         {
-            parent.OutData(mml, pw.port[0], 3, (byte)(0xa0 + pw.MIDIch), (byte)(noteNumber & 0x7f), (byte)(press & 0x7f));
+            parent.OutData(mml, pw.pg[pw.cpg].port[0], 3, (byte)(0xa0 + pw.pg[pw.cpg].MIDIch), (byte)(noteNumber & 0x7f), (byte)(press & 0x7f));
         }
 
         private void OutMidiControlChange(partWork pw, MML mml, enmControlChange ctrl, byte data)
         {
-            parent.OutData(mml, pw.port[0], 3, (byte)(0xb0 + pw.MIDIch), (byte)ctrl, (byte)(data & 0x7f));
+            parent.OutData(mml, pw.pg[pw.cpg].port[0], 3, (byte)(0xb0 + pw.pg[pw.cpg].MIDIch), (byte)ctrl, (byte)(data & 0x7f));
         }
 
         private void OutMidiProgramChange(partWork pw, MML mml, byte programNumber)
         {
-            parent.OutData(mml, pw.port[0], 2, (byte)(0xc0 + pw.MIDIch), programNumber);//, (byte)0);
+            parent.OutData(mml, pw.pg[pw.cpg].port[0], 2, (byte)(0xc0 + pw.pg[pw.cpg].MIDIch), programNumber);//, (byte)0);
         }
 
         private void OutMidiChannelPress(partWork pw, MML mml, byte press)
         {
-            parent.OutData(mml, pw.port[0], 3, (byte)(0xd0 + pw.MIDIch), press, (byte)0);
+            parent.OutData(mml, pw.pg[pw.cpg].port[0], 3, (byte)(0xd0 + pw.pg[pw.cpg].MIDIch), press, (byte)0);
         }
 
         private void OutMidiPitchBend(partWork pw, MML mml, byte msb, byte lsb)
         {
-            parent.OutData(mml, pw.port[0], 3, (byte)(0xe0 + pw.MIDIch), (byte)(lsb & 0x7f), (byte)(msb & 0x7f));
+            parent.OutData(mml, pw.pg[pw.cpg].port[0], 3, (byte)(0xe0 + pw.pg[pw.cpg].MIDIch), (byte)(lsb & 0x7f), (byte)(msb & 0x7f));
         }
 
         private void OutMidi(partWork pw, MML mml)
         {
-            //parent.OutData(mml, pw.port[0]);
+            //parent.OutData(mml, pw.ppg[pw.cpgNum].port[0]);
         }
 
         public override void MultiChannelCommand(MML mml)
@@ -533,43 +533,43 @@ namespace Core
             //コマンドを跨ぐデータ向け処理
             foreach (partWork pw in lstPartWork)
             {
-                pw.lfoBend = 0;
+                pw.pg[pw.cpg].lfoBend = 0;
                 for (int lfo = 0; lfo < 4; lfo++)
                 {
-                    if (!pw.lfo[lfo].sw)
+                    if (!pw.pg[pw.cpg].lfo[lfo].sw)
                     {
                         continue;
                     }
-                    if (pw.lfo[lfo].type != eLfoType.Vibrato)
+                    if (pw.pg[pw.cpg].lfo[lfo].type != eLfoType.Vibrato)
                     {
                         continue;
                     }
-                    pw.lfoBend += pw.lfo[lfo].value + pw.lfo[lfo].param[6];
+                    pw.pg[pw.cpg].lfoBend += pw.pg[pw.cpg].lfo[lfo].value + pw.pg[pw.cpg].lfo[lfo].param[6];
                 }
 
-                if (pw.pitchBend != (pw.bendWaitCounter==-1 ? pw.tieBend :0)+ pw.portaBend + pw.lfoBend + pw.detune)
+                if (pw.pg[pw.cpg].pitchBend != (pw.pg[pw.cpg].bendWaitCounter==-1 ? pw.pg[pw.cpg].tieBend :0)+ pw.pg[pw.cpg].portaBend + pw.pg[pw.cpg].lfoBend + pw.pg[pw.cpg].detune)
                 {
-                    pw.pitchBend = (pw.bendWaitCounter == -1 ? pw.tieBend : 0) + pw.portaBend + pw.lfoBend + pw.detune;
-                    if (!pw.directModeVib)
+                    pw.pg[pw.cpg].pitchBend = (pw.pg[pw.cpg].bendWaitCounter == -1 ? pw.pg[pw.cpg].tieBend : 0) + pw.pg[pw.cpg].portaBend + pw.pg[pw.cpg].lfoBend + pw.pg[pw.cpg].detune;
+                    if (!pw.pg[pw.cpg].directModeVib)
                     {
-                        int pb = (pw.pitchBend + 8192) & 0x3fff;
+                        int pb = (pw.pg[pw.cpg].pitchBend + 8192) & 0x3fff;
                         OutMidiPitchBend(pw, mml, (byte)(pb / 128), (byte)(pb % 128));
                     }
                 }
 
-                //int exp = Common.CheckRange(pw.expression + pw.envExpression + pw.lfoExpression, 0, 127);
-                //if (pw.beforeExpression != exp)
+                //int exp = Common.CheckRange(pw.ppg[pw.cpgNum].expression + pw.ppg[pw.cpgNum].envExpression + pw.ppg[pw.cpgNum].lfoExpression, 0, 127);
+                //if (pw.ppg[pw.cpgNum].beforeExpression != exp)
                 //{
-                //    pw.beforeExpression = exp;
+                //    pw.ppg[pw.cpgNum].beforeExpression = exp;
 
-                //    if (!pw.directModeTre)
+                //    if (!pw.ppg[pw.cpgNum].directModeTre)
                 //    {
                 //        OutMidiControlChange(pw, mml, enmControlChange.Expression, (byte)exp);
                 //    }
                 //}
 
                 log.Write("KeyOn情報をかき出し");
-                foreach (MIDINote n in pw.noteOns)
+                foreach (MIDINote n in pw.pg[pw.cpg].noteOns)
                 {
                     if (n == null) continue;
                     if (n.beforeKeyon != n.Keyon)

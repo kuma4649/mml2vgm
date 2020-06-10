@@ -26,24 +26,24 @@ namespace Core
             if (adr == 0x10)
                 p++;
 
-            int n = (pw.mixer & 0x1) + ((pw.mixer & 0x2) << 2);
+            int n = (pw.pg[pw.cpg].mixer & 0x1) + ((pw.pg[pw.cpg].mixer & 0x2) << 2);
             byte data = 0;
 
-            data = (byte)(((ClsOPN)pw.chip).SSGKeyOn[p] | (9 << vch));
+            data = (byte)(((ClsOPN)pw.pg[pw.cpg].chip).SSGKeyOn[p] | (9 << vch));
             data &= (byte)(~(n << vch));
-            ((ClsOPN)pw.chip).SSGKeyOn[p] = data;
+            ((ClsOPN)pw.pg[pw.cpg].chip).SSGKeyOn[p] = data;
 
             SetSsgVolume(pw, mml);
-            if (pw.HardEnvelopeSw)
+            if (pw.pg[pw.cpg].HardEnvelopeSw)
             {
-                parent.OutData(mml, pw.port[port], (byte)(adr + 0x0d), (byte)(pw.HardEnvelopeType & 0xf));
+                parent.OutData(mml, pw.pg[pw.cpg].port[port], (byte)(adr + 0x0d), (byte)(pw.pg[pw.cpg].HardEnvelopeType & 0xf));
             }
-            parent.OutData(mml, pw.port[port], (byte)(adr + 0x07), data);
+            parent.OutData(mml, pw.pg[pw.cpg].port[port], (byte)(adr + 0x07), data);
 
             MML vmml = new MML();
             vmml.type = enmMMLType.Volume;
             vmml.args = new List<object>();
-            vmml.args.Add(pw.volume);
+            vmml.args.Add(pw.pg[pw.cpg].volume);
             vmml.line = mml.line;
             SetDummyData(pw, vmml);
 
@@ -62,12 +62,12 @@ namespace Core
             int n = 9;
             byte data = 0;
 
-            data = (byte)(((ClsOPN)pw.chip).SSGKeyOn[p] | (n << vch));
-            ((ClsOPN)pw.chip).SSGKeyOn[p] = data;
+            data = (byte)(((ClsOPN)pw.pg[pw.cpg].chip).SSGKeyOn[p] | (n << vch));
+            ((ClsOPN)pw.pg[pw.cpg].chip).SSGKeyOn[p] = data;
 
-            parent.OutData(mml, pw.port[port], (byte)(adr + 0x08 + vch), 0);
-            pw.beforeVolume = -1;
-            parent.OutData(mml, pw.port[port], (byte)(adr + 0x07), data);
+            parent.OutData(mml, pw.pg[pw.cpg].port[port], (byte)(adr + 0x08 + vch), 0);
+            pw.pg[pw.cpg].beforeVolume = -1;
+            parent.OutData(mml, pw.pg[pw.cpg].port[port], (byte)(adr + 0x07), data);
 
         }
 
@@ -81,40 +81,40 @@ namespace Core
             if (adr == 0x10)
                 p++;
 
-            int vol = pw.volume;
-            if (pw.envelopeMode)
+            int vol = pw.pg[pw.cpg].volume;
+            if (pw.pg[pw.cpg].envelopeMode)
             {
                 vol = 0;
-                if (pw.envIndex != -1)
+                if (pw.pg[pw.cpg].envIndex != -1)
                 {
-                    vol = pw.volume - (15 - pw.envVolume);
+                    vol = pw.pg[pw.cpg].volume - (15 - pw.pg[pw.cpg].envVolume);
                 }
             }
 
             for (int lfo = 0; lfo < 4; lfo++)
             {
-                if (!pw.lfo[lfo].sw) continue;
-                if (pw.lfo[lfo].type != eLfoType.Tremolo) continue;
+                if (!pw.pg[pw.cpg].lfo[lfo].sw) continue;
+                if (pw.pg[pw.cpg].lfo[lfo].type != eLfoType.Tremolo) continue;
 
-                vol += pw.lfo[lfo].value + pw.lfo[lfo].param[6];
+                vol += pw.pg[pw.cpg].lfo[lfo].value + pw.pg[pw.cpg].lfo[lfo].param[6];
             }
 
-            vol = Common.CheckRange(vol, 0, 15) + (pw.HardEnvelopeSw ? 0x10 : 0x00);
-            if ((((ClsOPN)pw.chip).SSGKeyOn[p] & (9 << vch)) == (9 << vch))
+            vol = Common.CheckRange(vol, 0, 15) + (pw.pg[pw.cpg].HardEnvelopeSw ? 0x10 : 0x00);
+            if ((((ClsOPN)pw.pg[pw.cpg].chip).SSGKeyOn[p] & (9 << vch)) == (9 << vch))
             {
                 vol = 0;
             }
 
-            if (pw.chip is YM2609)
+            if (pw.pg[pw.cpg].chip is YM2609)
             {
-                int pan = (int)(pw.pan.val == null ? 0 : pw.pan.val);
+                int pan = (int)(pw.pg[pw.cpg].pan.val == null ? 0 : pw.pg[pw.cpg].pan.val);
                 vol |= (byte)(pan << 6);
             }
 
-            if (pw.beforeVolume != vol)
+            if (pw.pg[pw.cpg].beforeVolume != vol)
             {
-                parent.OutData(mml, pw.port[port], (byte)(adr + 0x08 + vch), (byte)vol);
-                pw.beforeVolume = vol;
+                parent.OutData(mml, pw.pg[pw.cpg].port[port], (byte)(adr + 0x08 + vch), (byte)vol);
+                pw.pg[pw.cpg].beforeVolume = vol;
             }
         }
 
@@ -125,47 +125,47 @@ namespace Core
             int vch;//ノイズ設定はch未使用
             GetPortVchSsg(pw, out port, out adr, out vch);
 
-            parent.OutData(mml, pw.port[port], (byte)(adr + 0x06), (byte)(n & 0x1f));
+            parent.OutData(mml, pw.pg[pw.cpg].port[port], (byte)(adr + 0x06), (byte)(n & 0x1f));
         }
 
         public void SetSsgFNum(partWork pw,MML mml)
         {
-            int f = - pw.detune;
+            int f = - pw.pg[pw.cpg].detune;
             for (int lfo = 0; lfo < 4; lfo++)
             {
-                if (!pw.lfo[lfo].sw)
+                if (!pw.pg[pw.cpg].lfo[lfo].sw)
                 {
                     continue;
                 }
-                if (pw.lfo[lfo].type != eLfoType.Vibrato)
+                if (pw.pg[pw.cpg].lfo[lfo].type != eLfoType.Vibrato)
                 {
                     continue;
                 }
-                f -= pw.lfo[lfo].value + pw.lfo[lfo].param[6];
+                f -= pw.pg[pw.cpg].lfo[lfo].value + pw.pg[pw.cpg].lfo[lfo].param[6];
             }
 
-            if (pw.octaveNow < 1)
+            if (pw.pg[pw.cpg].octaveNow < 1)
             {
-                f <<= -pw.octaveNow;
+                f <<= -pw.pg[pw.cpg].octaveNow;
             }
             else
             {
-                f >>= pw.octaveNow - 1;
+                f >>= pw.pg[pw.cpg].octaveNow - 1;
             }
 
-            if (pw.bendWaitCounter != -1)
+            if (pw.pg[pw.cpg].bendWaitCounter != -1)
             {
-                f += pw.bendFnum;
+                f += pw.pg[pw.cpg].bendFnum;
             }
             else
             {
-                f += GetSsgFNum(pw, mml, pw.octaveNow, pw.noteCmd, pw.shift + pw.keyShift);//
+                f += GetSsgFNum(pw, mml, pw.pg[pw.cpg].octaveNow, pw.pg[pw.cpg].noteCmd, pw.pg[pw.cpg].shift + pw.pg[pw.cpg].keyShift);//
             }
 
             f = Common.CheckRange(f, 0, 0xfff);
-            if (pw.freq == f) return;
+            if (pw.pg[pw.cpg].freq == f) return;
 
-            pw.freq = f;
+            pw.pg[pw.cpg].freq = f;
 
             int port;
             int adr;
@@ -175,10 +175,10 @@ namespace Core
             byte data = 0;
 
             data = (byte)(f & 0xff);
-            parent.OutData(mml,pw.port[port], (byte)(adr + 0 + vch * 2), data);
+            parent.OutData(mml,pw.pg[pw.cpg].port[port], (byte)(adr + 0 + vch * 2), data);
 
             data = (byte)((f & 0xf00) >> 8);
-            parent.OutData(mml,pw.port[port], (byte)(adr + 1 + vch * 2), data);
+            parent.OutData(mml,pw.pg[pw.cpg].port[port], (byte)(adr + 1 + vch * 2), data);
         }
 
         public int GetSsgFNum(partWork pw,MML mml, int octave, char noteCmd, int shift)
@@ -191,9 +191,9 @@ namespace Core
 
             int f = o * 12 + n;
             if (f < 0) f = 0;
-            if (f >= pw.chip.FNumTbl[1].Length) f = pw.chip.FNumTbl[1].Length - 1;
+            if (f >= pw.pg[pw.cpg].chip.FNumTbl[1].Length) f = pw.pg[pw.cpg].chip.FNumTbl[1].Length - 1;
 
-            return pw.chip.FNumTbl[1][f];
+            return pw.pg[pw.cpg].chip.FNumTbl[1][f];
         }
 
 
@@ -203,7 +203,7 @@ namespace Core
             int vch;
             byte[] port;
             GetPortVch(pw, out port, out vch);
-            if (pw.chip is YM2612X && pw.ch > 8 && pw.ch<12)
+            if (pw.pg[pw.cpg].chip is YM2612X && pw.pg[pw.cpg].ch > 8 && pw.pg[pw.cpg].ch<12)
             {
                 vch = 2;
             }
@@ -219,7 +219,7 @@ namespace Core
         {
             parent.OutData(
                 mml,
-                pw.port[0]
+                pw.pg[pw.cpg].port[0]
                 , 0x22
                 , (byte)((lfoNum & 7) + (sw ? 8 : 0))
                 );
@@ -227,12 +227,12 @@ namespace Core
 
         public void OutOPNSetCh3SpecialMode(MML mml,partWork pw, bool sw)
         {
-            byte[] port = pw.port[0];
-            if(pw.chip.chipType== enmChipType.YM2609)
+            byte[] port = pw.pg[pw.cpg].port[0];
+            if(pw.pg[pw.cpg].chip.chipType== enmChipType.YM2609)
             {
-                if (pw.ch == 8 || pw.ch == 15 || pw.ch == 16 || pw.ch == 17)
+                if (pw.pg[pw.cpg].ch == 8 || pw.pg[pw.cpg].ch == 15 || pw.pg[pw.cpg].ch == 16 || pw.pg[pw.cpg].ch == 17)
                 {
-                    port = pw.port[2];
+                    port = pw.pg[pw.cpg].port[2];
                 }
             }
             // ignore Timer ^^;
@@ -334,39 +334,39 @@ namespace Core
 
         protected void GetPortVch(partWork pw, out byte[] port, out int vch)
         {
-            if (!(pw.chip is YM2609))
+            if (!(pw.pg[pw.cpg].chip is YM2609))
             {
-                port = pw.ch > 2 ? pw.port[1] : pw.port[0];
-                vch = (byte)(pw.ch > 2 ? pw.ch - 3 : pw.ch);
+                port = pw.pg[pw.cpg].ch > 2 ? pw.pg[pw.cpg].port[1] : pw.pg[pw.cpg].port[0];
+                vch = (byte)(pw.pg[pw.cpg].ch > 2 ? pw.pg[pw.cpg].ch - 3 : pw.pg[pw.cpg].ch);
             }
             else
             {
                 port = 
-                    pw.ch < 3 ? 
-                    pw.port[0] :
-                    (pw.ch < 6 ? 
-                        pw.port[1] : 
-                        (pw.ch < 9 ? 
-                            pw.port[2] :
-                            (pw.ch < 12 ?
-                                pw.port[3] :
-                                (pw.ch < 15 ?
-                                    pw.port[0] :
-                                    pw.port[2]
+                    pw.pg[pw.cpg].ch < 3 ? 
+                    pw.pg[pw.cpg].port[0] :
+                    (pw.pg[pw.cpg].ch < 6 ? 
+                        pw.pg[pw.cpg].port[1] : 
+                        (pw.pg[pw.cpg].ch < 9 ? 
+                            pw.pg[pw.cpg].port[2] :
+                            (pw.pg[pw.cpg].ch < 12 ?
+                                pw.pg[pw.cpg].port[3] :
+                                (pw.pg[pw.cpg].ch < 15 ?
+                                    pw.pg[pw.cpg].port[0] :
+                                    pw.pg[pw.cpg].port[2]
                                 )
                             )
                         )
                     );
                 vch = (byte)(
-                    pw.ch < 3 ? 
-                    pw.ch : 
-                    (pw.ch < 6 ?
-                        (pw.ch - 3) : 
-                        (pw.ch < 9 ?
-                            (pw.ch - 6) :
-                            (pw.ch < 12 ?
-                                (pw.ch - 9) :
-                                (pw.ch < 15 ?
+                    pw.pg[pw.cpg].ch < 3 ? 
+                    pw.pg[pw.cpg].ch : 
+                    (pw.pg[pw.cpg].ch < 6 ?
+                        (pw.pg[pw.cpg].ch - 3) : 
+                        (pw.pg[pw.cpg].ch < 9 ?
+                            (pw.pg[pw.cpg].ch - 6) :
+                            (pw.pg[pw.cpg].ch < 12 ?
+                                (pw.pg[pw.cpg].ch - 9) :
+                                (pw.pg[pw.cpg].ch < 15 ?
                                     2 :
                                     2
                                 )
@@ -379,35 +379,35 @@ namespace Core
 
         protected void GetPortVchSsg(partWork pw, out int port, out int adr, out int vch)
         {
-            int m = (pw.chip is YM2203) ? 0 : 3;
-            vch = (byte)(pw.ch - (m + 6));
+            int m = (pw.pg[pw.cpg].chip is YM2203) ? 0 : 3;
+            vch = (byte)(pw.pg[pw.cpg].ch - (m + 6));
             port = 0;
             adr = 0;
 
-            if (!(pw.chip is YM2609)) return;
+            if (!(pw.pg[pw.cpg].chip is YM2609)) return;
 
-            if (pw.ch >= 18 && pw.ch <= 20)
+            if (pw.pg[pw.cpg].ch >= 18 && pw.pg[pw.cpg].ch <= 20)
             {
                 port = 0;
-                vch = (byte)(pw.ch - 18);
+                vch = (byte)(pw.pg[pw.cpg].ch - 18);
                 adr = 0;
             }
-            else if (pw.ch >= 21 && pw.ch <= 23)
+            else if (pw.pg[pw.cpg].ch >= 21 && pw.pg[pw.cpg].ch <= 23)
             {
                 port = 1;
-                vch = (byte)(pw.ch - 21);
+                vch = (byte)(pw.pg[pw.cpg].ch - 21);
                 adr = 0x20;
             }
-            else if (pw.ch >= 24 && pw.ch <= 26)
+            else if (pw.pg[pw.cpg].ch >= 24 && pw.pg[pw.cpg].ch <= 26)
             {
                 port = 2;
-                vch = (byte)(pw.ch - 24);
+                vch = (byte)(pw.pg[pw.cpg].ch - 24);
                 adr = 0;
             }
-            else if (pw.ch >= 27 && pw.ch <= 29)
+            else if (pw.pg[pw.cpg].ch >= 27 && pw.pg[pw.cpg].ch <= 29)
             {
                 port = 2;
-                vch = (byte)(pw.ch - 27);
+                vch = (byte)(pw.pg[pw.cpg].ch - 27);
                 adr = 0x10;
             }
         }
@@ -459,7 +459,7 @@ namespace Core
 
             for (int i = 0; i < 4; i++)
             {
-                if (algs[alg][i] == 0 || (pw.slots & (1 << i)) == 0)
+                if (algs[alg][i] == 0 || (pw.pg[pw.cpg].slots & (1 << i)) == 0)
                 {
                     ope[i] = -1;
                     continue;
@@ -469,23 +469,23 @@ namespace Core
             }
 
             partWork vpw = pw;
-            if (!(pw.chip is YM2609))
+            if (!(pw.pg[pw.cpg].chip is YM2609))
             {
-                int m = (pw.chip is YM2203) ? 0 : 3;
-                if (pw.chip.lstPartWork[2].Ch3SpecialMode && pw.ch >= m + 3 && pw.ch < m + 6)
+                int m = (pw.pg[pw.cpg].chip is YM2203) ? 0 : 3;
+                if (pw.pg[pw.cpg].chip.lstPartWork[2].pg[pw.cpg].Ch3SpecialMode && pw.pg[pw.cpg].ch >= m + 3 && pw.pg[pw.cpg].ch < m + 6)
                 {
-                    vpw = pw.chip.lstPartWork[2];
+                    vpw = pw.pg[pw.cpg].chip.lstPartWork[2];
                 }
             }
             else
             {
-                if (pw.chip.lstPartWork[2].Ch3SpecialMode && pw.ch >= 12 && pw.ch < 15)
+                if (pw.pg[pw.cpg].chip.lstPartWork[2].pg[pw.cpg].Ch3SpecialMode && pw.pg[pw.cpg].ch >= 12 && pw.pg[pw.cpg].ch < 15)
                 {
-                    vpw = pw.chip.lstPartWork[2];
+                    vpw = pw.pg[pw.cpg].chip.lstPartWork[2];
                 }
-                if (pw.chip.lstPartWork[8].Ch3SpecialMode && pw.ch >= 15 && pw.ch < 18)
+                if (pw.pg[pw.cpg].chip.lstPartWork[8].pg[pw.cpg].Ch3SpecialMode && pw.pg[pw.cpg].ch >= 15 && pw.pg[pw.cpg].ch < 18)
                 {
-                    vpw = pw.chip.lstPartWork[8];
+                    vpw = pw.pg[pw.cpg].chip.lstPartWork[8];
                 }
             }
 
@@ -495,14 +495,14 @@ namespace Core
             vmml.type = enmMMLType.Volume;
             if (mml != null)
                 vmml.line = mml.line;
-            if ((pw.slots & 1) != 0 && ope[0] != -1) ((ClsOPN)pw.chip).OutFmSetTl(vmml, vpw, 0, ope[0]);
-            if ((pw.slots & 2) != 0 && ope[1] != -1) ((ClsOPN)pw.chip).OutFmSetTl(vmml, vpw, 1, ope[1]);
-            if ((pw.slots & 4) != 0 && ope[2] != -1) ((ClsOPN)pw.chip).OutFmSetTl(vmml, vpw, 2, ope[2]);
-            if ((pw.slots & 8) != 0 && ope[3] != -1) ((ClsOPN)pw.chip).OutFmSetTl(vmml, vpw, 3, ope[3]);
-            //if ((pw.slots & 1) != 0 ) ((ClsOPN)pw.chip).OutFmSetTl(vpw, 0, ope[0]);
-            //if ((pw.slots & 2) != 0 ) ((ClsOPN)pw.chip).OutFmSetTl(vpw, 1, ope[1]);
-            //if ((pw.slots & 4) != 0 ) ((ClsOPN)pw.chip).OutFmSetTl(vpw, 2, ope[2]);
-            //if ((pw.slots & 8) != 0 ) ((ClsOPN)pw.chip).OutFmSetTl(vpw, 3, ope[3]);
+            if ((pw.pg[pw.cpg].slots & 1) != 0 && ope[0] != -1) ((ClsOPN)pw.pg[pw.cpg].chip).OutFmSetTl(vmml, vpw, 0, ope[0]);
+            if ((pw.pg[pw.cpg].slots & 2) != 0 && ope[1] != -1) ((ClsOPN)pw.pg[pw.cpg].chip).OutFmSetTl(vmml, vpw, 1, ope[1]);
+            if ((pw.pg[pw.cpg].slots & 4) != 0 && ope[2] != -1) ((ClsOPN)pw.pg[pw.cpg].chip).OutFmSetTl(vmml, vpw, 2, ope[2]);
+            if ((pw.pg[pw.cpg].slots & 8) != 0 && ope[3] != -1) ((ClsOPN)pw.pg[pw.cpg].chip).OutFmSetTl(vmml, vpw, 3, ope[3]);
+            //if ((pw.ppg[pw.cpgNum].slots & 1) != 0 ) ((ClsOPN)pw.ppg[pw.cpgNum].chip).OutFmSetTl(vpw, 0, ope[0]);
+            //if ((pw.ppg[pw.cpgNum].slots & 2) != 0 ) ((ClsOPN)pw.ppg[pw.cpgNum].chip).OutFmSetTl(vpw, 1, ope[1]);
+            //if ((pw.ppg[pw.cpgNum].slots & 4) != 0 ) ((ClsOPN)pw.ppg[pw.cpgNum].chip).OutFmSetTl(vpw, 2, ope[2]);
+            //if ((pw.ppg[pw.cpgNum].slots & 8) != 0 ) ((ClsOPN)pw.ppg[pw.cpgNum].chip).OutFmSetTl(vpw, 3, ope[3]);
         }
 
         public void OutFmCh3SpecialModeSetFnum(MML mml,partWork pw, byte ope, int octave, int num)
@@ -510,13 +510,13 @@ namespace Core
             ope &= 3;
             if (ope == 0)
             {
-                parent.OutData(mml,pw.port[0], 0xa6, (byte)(((num & 0x700) >> 8) + (((octave - 1) & 0x7) << 3)));
-                parent.OutData(mml,pw.port[0], 0xa2, (byte)(num & 0xff));
+                parent.OutData(mml,pw.pg[pw.cpg].port[0], 0xa6, (byte)(((num & 0x700) >> 8) + (((octave - 1) & 0x7) << 3)));
+                parent.OutData(mml,pw.pg[pw.cpg].port[0], 0xa2, (byte)(num & 0xff));
             }
             else
             {
-                parent.OutData(mml,pw.port[0], (byte)(0xac + ope), (byte)(((num & 0x700) >> 8) + (((octave - 1) & 0x7) << 3)));
-                parent.OutData(mml,pw.port[0], (byte)(0xa8 + ope), (byte)(num & 0xff));
+                parent.OutData(mml,pw.pg[pw.cpg].port[0], (byte)(0xac + ope), (byte)(((num & 0x700) >> 8) + (((octave - 1) & 0x7) << 3)));
+                parent.OutData(mml,pw.pg[pw.cpg].port[0], (byte)(0xa8 + ope), (byte)(num & 0xff));
             }
         }
 
@@ -545,15 +545,15 @@ namespace Core
                 return;
             }
 
-            int m = (pw.chip is YM2203) ? 0 : 3;
+            int m = (pw.pg[pw.cpg].chip is YM2203) ? 0 : 3;
 
             if (
-                ((pw.chip is YM2203) && pw.ch >= 3 && pw.ch < 6)
-                || ((pw.chip is YM2608) && pw.ch >= 6 && pw.ch < 9)
-                || ((pw.chip is YM2609) && pw.ch >= 12 && pw.ch < 18)
-                || ((pw.chip is YM2610B) && pw.ch >= 6 && pw.ch < 9)
-                || ((pw.chip is YM2612) && pw.ch >= 6 && pw.ch < 9)
-                || ((pw.chip is YM2612X) && pw.ch >= 6 && pw.ch < 9)
+                ((pw.pg[pw.cpg].chip is YM2203) && pw.pg[pw.cpg].ch >= 3 && pw.pg[pw.cpg].ch < 6)
+                || ((pw.pg[pw.cpg].chip is YM2608) && pw.pg[pw.cpg].ch >= 6 && pw.pg[pw.cpg].ch < 9)
+                || ((pw.pg[pw.cpg].chip is YM2609) && pw.pg[pw.cpg].ch >= 12 && pw.pg[pw.cpg].ch < 18)
+                || ((pw.pg[pw.cpg].chip is YM2610B) && pw.pg[pw.cpg].ch >= 6 && pw.pg[pw.cpg].ch < 9)
+                || ((pw.pg[pw.cpg].chip is YM2612) && pw.pg[pw.cpg].ch >= 6 && pw.pg[pw.cpg].ch < 9)
+                || ((pw.pg[pw.cpg].chip is YM2612X) && pw.pg[pw.cpg].ch >= 6 && pw.pg[pw.cpg].ch < 9)
                 )
             {
                 msgBox.setWrnMsg(msg.get("E11002"), mml.line.Lp);
@@ -565,19 +565,19 @@ namespace Core
                 case 0: // N)one
                     break;
                 case 1: // R)R only
-                    for (int ope = 0; ope < 4; ope++) ((ClsOPN)pw.chip).OutFmSetSlRr(mml, pw, ope, 0, 15);
+                    for (int ope = 0; ope < 4; ope++) ((ClsOPN)pw.pg[pw.cpg].chip).OutFmSetSlRr(mml, pw, ope, 0, 15);
                     break;
                 case 2: // A)ll
                     for (int ope = 0; ope < 4; ope++)
                     {
-                        ((ClsOPN)pw.chip).OutFmSetDtMl(mml, pw, ope, 0, 0);
-                        ((ClsOPN)pw.chip).OutFmSetKsAr(mml, pw, ope, 3, 31);
-                        ((ClsOPN)pw.chip).OutFmSetAmDr(mml, pw, ope, 1, 31);
-                        ((ClsOPN)pw.chip).OutFmSetSr(mml, pw, ope, 31);
-                        ((ClsOPN)pw.chip).OutFmSetSlRr(mml, pw, ope, 0, 15);
-                        ((ClsOPN)pw.chip).OutFmSetSSGEG(mml, pw, ope, 0);
+                        ((ClsOPN)pw.pg[pw.cpg].chip).OutFmSetDtMl(mml, pw, ope, 0, 0);
+                        ((ClsOPN)pw.pg[pw.cpg].chip).OutFmSetKsAr(mml, pw, ope, 3, 31);
+                        ((ClsOPN)pw.pg[pw.cpg].chip).OutFmSetAmDr(mml, pw, ope, 1, 31);
+                        ((ClsOPN)pw.pg[pw.cpg].chip).OutFmSetSr(mml, pw, ope, 31);
+                        ((ClsOPN)pw.pg[pw.cpg].chip).OutFmSetSlRr(mml, pw, ope, 0, 15);
+                        ((ClsOPN)pw.pg[pw.cpg].chip).OutFmSetSSGEG(mml, pw, ope, 0);
                     }
-                    ((ClsOPN)pw.chip).OutFmSetFeedbackAlgorithm(mml, pw, 7, 7);
+                    ((ClsOPN)pw.pg[pw.cpg].chip).OutFmSetFeedbackAlgorithm(mml, pw, 7, 7);
                     break;
             }
 
@@ -585,25 +585,25 @@ namespace Core
             for (int ope = 0; ope < 4; ope++)
             {
                 //ch3以外の拡張チャンネルでも音色設定できるようにする場合はslotの様子もみてセットすること
-                ((ClsOPN)pw.chip).OutFmSetDtMl(mml, pw, ope, parent.instFM[n][ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 9], parent.instFM[n][ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 8]);
-                ((ClsOPN)pw.chip).OutFmSetKsAr(mml, pw, ope, parent.instFM[n][ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 7], parent.instFM[n][ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 1]);
-                ((ClsOPN)pw.chip).OutFmSetAmDr(mml, pw, ope, parent.instFM[n][ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 10], parent.instFM[n][ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 2]);
-                ((ClsOPN)pw.chip).OutFmSetSr(mml, pw, ope, parent.instFM[n][ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 3]);
-                ((ClsOPN)pw.chip).OutFmSetSlRr(mml, pw, ope, parent.instFM[n][ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 5], parent.instFM[n][ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 4]);
-                ((ClsOPN)pw.chip).OutFmSetSSGEG(mml, pw, ope, parent.instFM[n][ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 11]);
+                ((ClsOPN)pw.pg[pw.cpg].chip).OutFmSetDtMl(mml, pw, ope, parent.instFM[n][ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 9], parent.instFM[n][ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 8]);
+                ((ClsOPN)pw.pg[pw.cpg].chip).OutFmSetKsAr(mml, pw, ope, parent.instFM[n][ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 7], parent.instFM[n][ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 1]);
+                ((ClsOPN)pw.pg[pw.cpg].chip).OutFmSetAmDr(mml, pw, ope, parent.instFM[n][ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 10], parent.instFM[n][ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 2]);
+                ((ClsOPN)pw.pg[pw.cpg].chip).OutFmSetSr(mml, pw, ope, parent.instFM[n][ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 3]);
+                ((ClsOPN)pw.pg[pw.cpg].chip).OutFmSetSlRr(mml, pw, ope, parent.instFM[n][ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 5], parent.instFM[n][ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 4]);
+                ((ClsOPN)pw.pg[pw.cpg].chip).OutFmSetSSGEG(mml, pw, ope, parent.instFM[n][ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 11]);
             }
             //ch3以外の拡張チャンネルでも音色設定できるようにする場合はslotの様子もみてセットすること
-            pw.op1ml = parent.instFM[n][0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
-            pw.op2ml = parent.instFM[n][1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
-            pw.op3ml = parent.instFM[n][2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
-            pw.op4ml = parent.instFM[n][3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
+            pw.pg[pw.cpg].op1ml = parent.instFM[n][0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
+            pw.pg[pw.cpg].op2ml = parent.instFM[n][1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
+            pw.pg[pw.cpg].op3ml = parent.instFM[n][2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
+            pw.pg[pw.cpg].op4ml = parent.instFM[n][3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
             //ch3以外の拡張チャンネルでも音色設定できるようにする場合はslotの様子もみてセットすること
-            pw.op1dt2 = 0;
-            pw.op2dt2 = 0;
-            pw.op3dt2 = 0;
-            pw.op4dt2 = 0;
+            pw.pg[pw.cpg].op1dt2 = 0;
+            pw.pg[pw.cpg].op2dt2 = 0;
+            pw.pg[pw.cpg].op3dt2 = 0;
+            pw.pg[pw.cpg].op4dt2 = 0;
 
-            ((ClsOPN)pw.chip).OutFmSetFeedbackAlgorithm(mml, pw, parent.instFM[n][46], parent.instFM[n][45]);
+            ((ClsOPN)pw.pg[pw.cpg].chip).OutFmSetFeedbackAlgorithm(mml, pw, parent.instFM[n][46], parent.instFM[n][45]);
 
             int alg = parent.instFM[n][45] & 0x7;
             int[] op = new int[4] {
@@ -627,7 +627,7 @@ namespace Core
             for (int i = 0; i < 4; i++)
             {
                 //ch3以外の拡張チャンネルでも音色設定できるようになったら以下を有効に
-                if (algs[alg][i] == 0)// || (pw.slots & (1 << i)) == 0)
+                if (algs[alg][i] == 0)// || (pw.ppg[pw.cpgNum].slots & (1 << i)) == 0)
                 {
                     op[i] = -1;
                     continue;
@@ -636,34 +636,34 @@ namespace Core
             }
 
             partWork vpw = pw;
-            if (!(pw.chip is YM2609))
+            if (!(pw.pg[pw.cpg].chip is YM2609))
             {
-                if (pw.chip.lstPartWork[2].Ch3SpecialMode && pw.ch >= m + 3 && pw.ch < m + 6)
+                if (pw.pg[pw.cpg].chip.lstPartWork[2].pg[pw.cpg].Ch3SpecialMode && pw.pg[pw.cpg].ch >= m + 3 && pw.pg[pw.cpg].ch < m + 6)
                 {
-                    vpw = pw.chip.lstPartWork[2];
+                    vpw = pw.pg[pw.cpg].chip.lstPartWork[2];
                 }
             }
             else
             {
-                if (pw.chip.lstPartWork[2].Ch3SpecialMode && pw.ch >= 12 && pw.ch < 15)
+                if (pw.pg[pw.cpg].chip.lstPartWork[2].pg[pw.cpg].Ch3SpecialMode && pw.pg[pw.cpg].ch >= 12 && pw.pg[pw.cpg].ch < 15)
                 {
-                    vpw = pw.chip.lstPartWork[2];
+                    vpw = pw.pg[pw.cpg].chip.lstPartWork[2];
                 }
-                if (pw.chip.lstPartWork[8].Ch3SpecialMode && pw.ch >= 15 && pw.ch < 18)
+                if (pw.pg[pw.cpg].chip.lstPartWork[8].pg[pw.cpg].Ch3SpecialMode && pw.pg[pw.cpg].ch >= 15 && pw.pg[pw.cpg].ch < 18)
                 {
-                    vpw = pw.chip.lstPartWork[8];
+                    vpw = pw.pg[pw.cpg].chip.lstPartWork[8];
                 }
             }
 
             //ch3以外の拡張チャンネルでも音色設定できるようになったら以下を有効に
-            //if ((pw.slots & 1) != 0 && op[0] != -1) ((ClsOPN)pw.chip).OutFmSetTl(mml, vpw, 0, op[0]);
-            //if ((pw.slots & 2) != 0 && op[1] != -1) ((ClsOPN)pw.chip).OutFmSetTl(mml, vpw, 1, op[1]);
-            //if ((pw.slots & 4) != 0 && op[2] != -1) ((ClsOPN)pw.chip).OutFmSetTl(mml, vpw, 2, op[2]);
-            //if ((pw.slots & 8) != 0 && op[3] != -1) ((ClsOPN)pw.chip).OutFmSetTl(mml, vpw, 3, op[3]);
-            if (op[0] != -1) ((ClsOPN)pw.chip).OutFmSetTl(mml, vpw, 0, op[0]);
-            if (op[1] != -1) ((ClsOPN)pw.chip).OutFmSetTl(mml, vpw, 1, op[1]);
-            if (op[2] != -1) ((ClsOPN)pw.chip).OutFmSetTl(mml, vpw, 2, op[2]);
-            if (op[3] != -1) ((ClsOPN)pw.chip).OutFmSetTl(mml, vpw, 3, op[3]);
+            //if ((pw.ppg[pw.cpgNum].slots & 1) != 0 && op[0] != -1) ((ClsOPN)pw.ppg[pw.cpgNum].chip).OutFmSetTl(mml, vpw, 0, op[0]);
+            //if ((pw.ppg[pw.cpgNum].slots & 2) != 0 && op[1] != -1) ((ClsOPN)pw.ppg[pw.cpgNum].chip).OutFmSetTl(mml, vpw, 1, op[1]);
+            //if ((pw.ppg[pw.cpgNum].slots & 4) != 0 && op[2] != -1) ((ClsOPN)pw.ppg[pw.cpgNum].chip).OutFmSetTl(mml, vpw, 2, op[2]);
+            //if ((pw.ppg[pw.cpgNum].slots & 8) != 0 && op[3] != -1) ((ClsOPN)pw.ppg[pw.cpgNum].chip).OutFmSetTl(mml, vpw, 3, op[3]);
+            if (op[0] != -1) ((ClsOPN)pw.pg[pw.cpg].chip).OutFmSetTl(mml, vpw, 0, op[0]);
+            if (op[1] != -1) ((ClsOPN)pw.pg[pw.cpg].chip).OutFmSetTl(mml, vpw, 1, op[1]);
+            if (op[2] != -1) ((ClsOPN)pw.pg[pw.cpg].chip).OutFmSetTl(mml, vpw, 2, op[2]);
+            if (op[3] != -1) ((ClsOPN)pw.pg[pw.cpg].chip).OutFmSetTl(mml, vpw, 3, op[3]);
 
 
             //音量を再セットする
@@ -671,32 +671,32 @@ namespace Core
             OutFmSetVolume(pw, mml, vol, n);
 
             //拡張チャンネルの場合は他の拡張チャンネルも音量を再セットする
-            if (pw.Type == enmChannelType.FMOPNex)
+            if (pw.pg[pw.cpg].Type == enmChannelType.FMOPNex)
             {
-                if (!(pw.chip is YM2609))
+                if (!(pw.pg[pw.cpg].chip is YM2609))
                 {
-                    if (pw.ch != 2) OutFmSetVolume(pw.chip.lstPartWork[2], mml, pw.chip.lstPartWork[2].volume, n);
-                    if (pw.ch != m + 3) OutFmSetVolume(pw.chip.lstPartWork[m + 3], mml, pw.chip.lstPartWork[m + 3].volume, n);
-                    if (pw.ch != m + 4) OutFmSetVolume(pw.chip.lstPartWork[m + 4], mml, pw.chip.lstPartWork[m + 4].volume, n);
-                    if (pw.ch != m + 5) OutFmSetVolume(pw.chip.lstPartWork[m + 5], mml, pw.chip.lstPartWork[m + 5].volume, n);
+                    if (pw.pg[pw.cpg].ch != 2) OutFmSetVolume(pw.pg[pw.cpg].chip.lstPartWork[2], mml, pw.pg[pw.cpg].chip.lstPartWork[2].pg[pw.cpg].volume, n);
+                    if (pw.pg[pw.cpg].ch != m + 3) OutFmSetVolume(pw.pg[pw.cpg].chip.lstPartWork[m + 3], mml, pw.pg[pw.cpg].chip.lstPartWork[m + 3].pg[pw.cpg].volume, n);
+                    if (pw.pg[pw.cpg].ch != m + 4) OutFmSetVolume(pw.pg[pw.cpg].chip.lstPartWork[m + 4], mml, pw.pg[pw.cpg].chip.lstPartWork[m + 4].pg[pw.cpg].volume, n);
+                    if (pw.pg[pw.cpg].ch != m + 5) OutFmSetVolume(pw.pg[pw.cpg].chip.lstPartWork[m + 5], mml, pw.pg[pw.cpg].chip.lstPartWork[m + 5].pg[pw.cpg].volume, n);
                 }
                 else
                 {
-                    if (pw.ch == 2 || pw.ch == 12 || pw.ch == 13 || pw.ch == 14)
+                    if (pw.pg[pw.cpg].ch == 2 || pw.pg[pw.cpg].ch == 12 || pw.pg[pw.cpg].ch == 13 || pw.pg[pw.cpg].ch == 14)
                     {
                         //YM2609 ch3 || ch13 || ch14 || ch15
-                        if (pw.ch != 2) OutFmSetVolume(pw.chip.lstPartWork[2], mml, pw.chip.lstPartWork[2].volume, n);
-                        if (pw.ch != 12) OutFmSetVolume(pw.chip.lstPartWork[12], mml, pw.chip.lstPartWork[12].volume, n);
-                        if (pw.ch != 13) OutFmSetVolume(pw.chip.lstPartWork[13], mml, pw.chip.lstPartWork[13].volume, n);
-                        if (pw.ch != 14) OutFmSetVolume(pw.chip.lstPartWork[14], mml, pw.chip.lstPartWork[14].volume, n);
+                        if (pw.pg[pw.cpg].ch != 2) OutFmSetVolume(pw.pg[pw.cpg].chip.lstPartWork[2], mml, pw.pg[pw.cpg].chip.lstPartWork[2].pg[pw.cpg].volume, n);
+                        if (pw.pg[pw.cpg].ch != 12) OutFmSetVolume(pw.pg[pw.cpg].chip.lstPartWork[12], mml, pw.pg[pw.cpg].chip.lstPartWork[12].pg[pw.cpg].volume, n);
+                        if (pw.pg[pw.cpg].ch != 13) OutFmSetVolume(pw.pg[pw.cpg].chip.lstPartWork[13], mml, pw.pg[pw.cpg].chip.lstPartWork[13].pg[pw.cpg].volume, n);
+                        if (pw.pg[pw.cpg].ch != 14) OutFmSetVolume(pw.pg[pw.cpg].chip.lstPartWork[14], mml, pw.pg[pw.cpg].chip.lstPartWork[14].pg[pw.cpg].volume, n);
                     }
                     else
                     {
                         //YM2609 ch9 || ch16 || ch17 || ch18
-                        if (pw.ch != 8) OutFmSetVolume(pw.chip.lstPartWork[8], mml, pw.chip.lstPartWork[8].volume, n);
-                        if (pw.ch != 15) OutFmSetVolume(pw.chip.lstPartWork[15], mml, pw.chip.lstPartWork[15].volume, n);
-                        if (pw.ch != 16) OutFmSetVolume(pw.chip.lstPartWork[16], mml, pw.chip.lstPartWork[16].volume, n);
-                        if (pw.ch != 17) OutFmSetVolume(pw.chip.lstPartWork[17], mml, pw.chip.lstPartWork[17].volume, n);
+                        if (pw.pg[pw.cpg].ch != 8) OutFmSetVolume(pw.pg[pw.cpg].chip.lstPartWork[8], mml, pw.pg[pw.cpg].chip.lstPartWork[8].pg[pw.cpg].volume, n);
+                        if (pw.pg[pw.cpg].ch != 15) OutFmSetVolume(pw.pg[pw.cpg].chip.lstPartWork[15], mml, pw.pg[pw.cpg].chip.lstPartWork[15].pg[pw.cpg].volume, n);
+                        if (pw.pg[pw.cpg].ch != 16) OutFmSetVolume(pw.pg[pw.cpg].chip.lstPartWork[16], mml, pw.pg[pw.cpg].chip.lstPartWork[16].pg[pw.cpg].volume, n);
+                        if (pw.pg[pw.cpg].ch != 17) OutFmSetVolume(pw.pg[pw.cpg].chip.lstPartWork[17], mml, pw.pg[pw.cpg].chip.lstPartWork[17].pg[pw.cpg].volume, n);
                     }
                 }
             }
@@ -705,49 +705,51 @@ namespace Core
 
         public void OutFmKeyOff(partWork pw, MML mml)
         {
-            int n = (pw.chip is YM2203) ? 0 : 3;
+            int n = (pw.pg[pw.cpg].chip is YM2203) ? 0 : 3;
 
-            if (pw.chip is YM2612X && (pw.ch > 8 || pw.ch == 5) && pw.pcm)
+            if (pw.pg[pw.cpg].chip is YM2612X && (pw.pg[pw.cpg].ch > 8 || pw.pg[pw.cpg].ch == 5) && pw.pg[pw.cpg].pcm)
             {
-                ((YM2612X)pw.chip).OutYM2612XPcmKeyOFF(mml, pw);
+                ((YM2612X)pw.pg[pw.cpg].chip).OutYM2612XPcmKeyOFF(mml, pw);
                 return;
             }
 
-            if (!pw.pcm)
+            if (!pw.pg[pw.cpg].pcm)
             {
-                if (!(pw.chip is YM2609))
+                if (!(pw.pg[pw.cpg].chip is YM2609))
                 {
-                    if (pw.chip.lstPartWork[2].Ch3SpecialMode && pw.Type == enmChannelType.FMOPNex)
+                    if (pw.pg[pw.cpg].chip.lstPartWork[2].pg[pw.cpg].Ch3SpecialMode && pw.pg[pw.cpg].Type == enmChannelType.FMOPNex)
                     {
-                        pw.Ch3SpecialModeKeyOn = false;
+                        pw.pg[pw.cpg].Ch3SpecialModeKeyOn = false;
 
-                        int slot = (pw.chip.lstPartWork[2].Ch3SpecialModeKeyOn ? pw.chip.lstPartWork[2].slots : 0x0)
-                            | (pw.chip.lstPartWork[n + 3].Ch3SpecialModeKeyOn ? pw.chip.lstPartWork[n + 3].slots : 0x0)
-                            | (pw.chip.lstPartWork[n + 4].Ch3SpecialModeKeyOn ? pw.chip.lstPartWork[n + 4].slots : 0x0)
-                            | (pw.chip.lstPartWork[n + 5].Ch3SpecialModeKeyOn ? pw.chip.lstPartWork[n + 5].slots : 0x0);
+                        int slot = (pw.pg[pw.cpg].chip.lstPartWork[2].pg[pw.cpg].Ch3SpecialModeKeyOn ? pw.pg[pw.cpg].chip.lstPartWork[2].pg[pw.cpg].slots : 0x0)
+                            | (pw.pg[pw.cpg].chip.lstPartWork[n + 3].pg[pw.cpg].Ch3SpecialModeKeyOn ? pw.pg[pw.cpg].chip.lstPartWork[n + 3].pg[pw.cpg].slots : 0x0)
+                            | (pw.pg[pw.cpg].chip.lstPartWork[n + 4].pg[pw.cpg].Ch3SpecialModeKeyOn ? pw.pg[pw.cpg].chip.lstPartWork[n + 4].pg[pw.cpg].slots : 0x0)
+                            | (pw.pg[pw.cpg].chip.lstPartWork[n + 5].pg[pw.cpg].Ch3SpecialModeKeyOn ? pw.pg[pw.cpg].chip.lstPartWork[n + 5].pg[pw.cpg].slots : 0x0);
 
-                        parent.OutData(mml, pw.port[0], 0x28, (byte)((slot << 4) + 2));
+                        parent.OutData(mml, pw.pg[pw.cpg].port[0], 0x28, (byte)((slot << 4) + 2));
                     }
                     else
                     {
-                        if (pw.ch >= 0 && pw.ch < n + 3)
+                        if (pw.pg[pw.cpg].ch >= 0 && pw.pg[pw.cpg].ch < n + 3)
                         {
-                            byte vch = (byte)((pw.ch > 2) ? pw.ch + 1 : pw.ch);
+                            byte vch = (byte)((pw.pg[pw.cpg].ch > 2) ? pw.pg[pw.cpg].ch + 1 : pw.pg[pw.cpg].ch);
                             //key off
-                            parent.OutData(mml, pw.port[0], 0x28, (byte)(0x00 + (vch & 7)));
+                            parent.OutData(mml, pw.pg[pw.cpg].port[0], 0x28, (byte)(0x00 + (vch & 7)));
                         }
                     }
                 }
                 else
                 {
-                    if ((pw.ch == 2 || pw.ch == 12 || pw.ch == 13 || pw.ch == 14) && pw.chip.lstPartWork[2].Ch3SpecialMode)
+                    if ((pw.pg[pw.cpg].ch == 2 || pw.pg[pw.cpg].ch == 12 
+                        || pw.pg[pw.cpg].ch == 13 || pw.pg[pw.cpg].ch == 14) 
+                        && pw.pg[pw.cpg].chip.lstPartWork[2].pg[pw.cpg].Ch3SpecialMode)
                     {
-                        pw.Ch3SpecialModeKeyOn = false;
+                        pw.pg[pw.cpg].Ch3SpecialModeKeyOn = false;
 
-                        int slot = (pw.chip.lstPartWork[2].Ch3SpecialModeKeyOn ? pw.chip.lstPartWork[2].slots : 0x0)
-                            | (pw.chip.lstPartWork[12].Ch3SpecialModeKeyOn ? pw.chip.lstPartWork[12].slots : 0x0)
-                            | (pw.chip.lstPartWork[13].Ch3SpecialModeKeyOn ? pw.chip.lstPartWork[13].slots : 0x0)
-                            | (pw.chip.lstPartWork[14].Ch3SpecialModeKeyOn ? pw.chip.lstPartWork[14].slots : 0x0);
+                        int slot = (pw.pg[pw.cpg].chip.lstPartWork[2].pg[pw.cpg].Ch3SpecialModeKeyOn ? pw.pg[pw.cpg].chip.lstPartWork[2].pg[pw.cpg].slots : 0x0)
+                            | (pw.pg[pw.cpg].chip.lstPartWork[12].pg[pw.cpg].Ch3SpecialModeKeyOn ? pw.pg[pw.cpg].chip.lstPartWork[12].pg[pw.cpg].slots : 0x0)
+                            | (pw.pg[pw.cpg].chip.lstPartWork[13].pg[pw.cpg].Ch3SpecialModeKeyOn ? pw.pg[pw.cpg].chip.lstPartWork[13].pg[pw.cpg].slots : 0x0)
+                            | (pw.pg[pw.cpg].chip.lstPartWork[14].pg[pw.cpg].Ch3SpecialModeKeyOn ? pw.pg[pw.cpg].chip.lstPartWork[14].pg[pw.cpg].slots : 0x0);
 
                         outDatum od = new outDatum();
                         od.val = (byte)((slot << 4) + 2);
@@ -768,16 +770,16 @@ namespace Core
                                     mml.line.Lp.ch);
                             }
                         }
-                        ((YM2609)pw.chip).opna20x028KeyOnData.Add(od);
+                        ((YM2609)pw.pg[pw.cpg].chip).opna20x028KeyOnData.Add(od);
                     }
-                    else if ((pw.ch == 8 || pw.ch == 15 || pw.ch == 16 || pw.ch == 17) && pw.chip.lstPartWork[8].Ch3SpecialMode)
+                    else if ((pw.pg[pw.cpg].ch == 8 || pw.pg[pw.cpg].ch == 15 || pw.pg[pw.cpg].ch == 16 || pw.pg[pw.cpg].ch == 17) && pw.pg[pw.cpg].chip.lstPartWork[8].pg[pw.cpg].Ch3SpecialMode)
                     {
-                        pw.Ch3SpecialModeKeyOn = false;
+                        pw.pg[pw.cpg].Ch3SpecialModeKeyOn = false;
 
-                        int slot = (pw.chip.lstPartWork[8].Ch3SpecialModeKeyOn ? pw.chip.lstPartWork[8].slots : 0x0)
-                            | (pw.chip.lstPartWork[15].Ch3SpecialModeKeyOn ? pw.chip.lstPartWork[15].slots : 0x0)
-                            | (pw.chip.lstPartWork[16].Ch3SpecialModeKeyOn ? pw.chip.lstPartWork[16].slots : 0x0)
-                            | (pw.chip.lstPartWork[17].Ch3SpecialModeKeyOn ? pw.chip.lstPartWork[17].slots : 0x0);
+                        int slot = (pw.pg[pw.cpg].chip.lstPartWork[8].pg[pw.cpg].Ch3SpecialModeKeyOn ? pw.pg[pw.cpg].chip.lstPartWork[8].pg[pw.cpg].slots : 0x0)
+                            | (pw.pg[pw.cpg].chip.lstPartWork[15].pg[pw.cpg].Ch3SpecialModeKeyOn ? pw.pg[pw.cpg].chip.lstPartWork[15].pg[pw.cpg].slots : 0x0)
+                            | (pw.pg[pw.cpg].chip.lstPartWork[16].pg[pw.cpg].Ch3SpecialModeKeyOn ? pw.pg[pw.cpg].chip.lstPartWork[16].pg[pw.cpg].slots : 0x0)
+                            | (pw.pg[pw.cpg].chip.lstPartWork[17].pg[pw.cpg].Ch3SpecialModeKeyOn ? pw.pg[pw.cpg].chip.lstPartWork[17].pg[pw.cpg].slots : 0x0);
 
                         outDatum od = new outDatum();
                         od.val = (byte)((slot << 4) + 2);
@@ -798,13 +800,13 @@ namespace Core
                                     mml.line.Lp.ch);
                             }
                         }
-                        ((YM2609)pw.chip).opna20x228KeyOnData.Add(od);
+                        ((YM2609)pw.pg[pw.cpg].chip).opna20x228KeyOnData.Add(od);
                     }
                     else
                     {
-                        if (pw.ch >= 0 && pw.ch < 6)
+                        if (pw.pg[pw.cpg].ch >= 0 && pw.pg[pw.cpg].ch < 6)
                         {
-                            byte vch = (byte)((pw.ch > 2) ? pw.ch + 1 : pw.ch);
+                            byte vch = (byte)((pw.pg[pw.cpg].ch > 2) ? pw.pg[pw.cpg].ch + 1 : pw.pg[pw.cpg].ch);
                             //key off
                             outDatum od = new outDatum();
                             od.val = (byte)(0x00 + (vch & 7));
@@ -825,11 +827,11 @@ namespace Core
                                         mml.line.Lp.ch);
                                 }
                             }
-                            ((YM2609)pw.chip).opna20x028KeyOnData.Add(od);
+                            ((YM2609)pw.pg[pw.cpg].chip).opna20x028KeyOnData.Add(od);
                         }
-                        else if (pw.ch >= 6 && pw.ch < 12)
+                        else if (pw.pg[pw.cpg].ch >= 6 && pw.pg[pw.cpg].ch < 12)
                         {
-                            byte vch = (byte)(pw.ch - 6);
+                            byte vch = (byte)(pw.pg[pw.cpg].ch - 6);
                             vch = (byte)(((vch > 2) ? (vch + 1) : vch));
                             //key off
                             outDatum od = new outDatum();
@@ -851,7 +853,7 @@ namespace Core
                                         mml.line.Lp.ch);
                                 }
                             }
-                            ((YM2609)pw.chip).opna20x228KeyOnData.Add(od);
+                            ((YM2609)pw.pg[pw.cpg].chip).opna20x228KeyOnData.Add(od);
                         }
                     }
                 }
@@ -876,11 +878,11 @@ namespace Core
                 if (parent.info.format == enmFormat.VGM)
                 {
                     //Stop Stream
-                    parent.OutData(mml, cmd, (byte)pw.streamID);
+                    parent.OutData(mml, cmd, (byte)pw.pg[pw.cpg].streamID);
                 }
             }
 
-            pw.pcmWaitKeyOnCounter = -1;
+            pw.pg[pw.cpg].pcmWaitKeyOnCounter = -1;
         }
 
         public void OutFmAllKeyOff()
@@ -888,8 +890,8 @@ namespace Core
 
             foreach (partWork pw in lstPartWork)
             {
-                if (!(pw.chip is YM2609)) { if (pw.ch > 5) continue; }
-                else if (pw.ch > 11) continue;
+                if (!(pw.pg[pw.cpg].chip is YM2609)) { if (pw.pg[pw.cpg].ch > 5) continue; }
+                else if (pw.pg[pw.cpg].ch > 11) continue;
 
                 OutFmKeyOff(pw, null);
                 OutFmSetTl(null, pw, 0, 127);
@@ -906,44 +908,44 @@ namespace Core
             freq = ((num & 0x700) >> 8) + (((octave - 1) & 0x7) << 3);
             freq = (freq << 8) + (num & 0xff);
 
-            if (freq == pw.freq) return;
+            if (freq == pw.pg[pw.cpg].freq) return;
 
-            pw.freq = freq;
+            pw.pg[pw.cpg].freq = freq;
 
-            if (pw.chip.lstPartWork[2].Ch3SpecialMode && pw.Type == enmChannelType.FMOPNex)
+            if (pw.pg[pw.cpg].chip.lstPartWork[2].pg[pw.cpg].Ch3SpecialMode && pw.pg[pw.cpg].Type == enmChannelType.FMOPNex)
             {
-                if ((pw.slots & 8) != 0)
+                if ((pw.pg[pw.cpg].slots & 8) != 0)
                 {
-                    int f = pw.freq + pw.slotDetune[3];
-                    parent.OutData(mml, pw.port[0], (byte)0xa6, (byte)(f >> 8));
-                    parent.OutData(mml, pw.port[0], (byte)0xa2, (byte)f);
+                    int f = pw.pg[pw.cpg].freq + pw.pg[pw.cpg].slotDetune[3];
+                    parent.OutData(mml, pw.pg[pw.cpg].port[0], (byte)0xa6, (byte)(f >> 8));
+                    parent.OutData(mml, pw.pg[pw.cpg].port[0], (byte)0xa2, (byte)f);
                 }
-                if ((pw.slots & 4) != 0)
+                if ((pw.pg[pw.cpg].slots & 4) != 0)
                 {
-                    int f = pw.freq + pw.slotDetune[2];
-                    parent.OutData(mml, pw.port[0], (byte)0xac, (byte)(f >> 8));
-                    parent.OutData(mml, pw.port[0], (byte)0xa8, (byte)f);
+                    int f = pw.pg[pw.cpg].freq + pw.pg[pw.cpg].slotDetune[2];
+                    parent.OutData(mml, pw.pg[pw.cpg].port[0], (byte)0xac, (byte)(f >> 8));
+                    parent.OutData(mml, pw.pg[pw.cpg].port[0], (byte)0xa8, (byte)f);
                 }
-                if ((pw.slots & 1) != 0)
+                if ((pw.pg[pw.cpg].slots & 1) != 0)
                 {
-                    int f = pw.freq + pw.slotDetune[0];
-                    parent.OutData(mml, pw.port[0], (byte)0xad, (byte)(f >> 8));
-                    parent.OutData(mml, pw.port[0], (byte)0xa9, (byte)f);
+                    int f = pw.pg[pw.cpg].freq + pw.pg[pw.cpg].slotDetune[0];
+                    parent.OutData(mml, pw.pg[pw.cpg].port[0], (byte)0xad, (byte)(f >> 8));
+                    parent.OutData(mml, pw.pg[pw.cpg].port[0], (byte)0xa9, (byte)f);
                 }
-                if ((pw.slots & 2) != 0)
+                if ((pw.pg[pw.cpg].slots & 2) != 0)
                 {
-                    int f = pw.freq + pw.slotDetune[1];
-                    parent.OutData(mml, pw.port[0], (byte)0xae, (byte)(f >> 8));
-                    parent.OutData(mml, pw.port[0], (byte)0xaa, (byte)f);
+                    int f = pw.pg[pw.cpg].freq + pw.pg[pw.cpg].slotDetune[1];
+                    parent.OutData(mml, pw.pg[pw.cpg].port[0], (byte)0xae, (byte)(f >> 8));
+                    parent.OutData(mml, pw.pg[pw.cpg].port[0], (byte)0xaa, (byte)f);
                 }
             }
             else
             {
                 int n;
-                if (!(pw.chip is YM2609))
+                if (!(pw.pg[pw.cpg].chip is YM2609))
                 {
-                    n = (pw.chip is YM2203) ? 0 : 3;
-                    if (pw.ch >= n + 3 && pw.ch < n + 6)
+                    n = (pw.pg[pw.cpg].chip is YM2203) ? 0 : 3;
+                    if (pw.pg[pw.cpg].ch >= n + 3 && pw.pg[pw.cpg].ch < n + 6)
                     {
                         return;
                     }
@@ -951,25 +953,25 @@ namespace Core
                 else
                 {
                     n = 9;
-                    if (pw.ch >= 12 && pw.ch < 18)
+                    if (pw.pg[pw.cpg].ch >= 12 && pw.pg[pw.cpg].ch < 18)
                     {
                         return;
                     }
                 }
-                if ((pw.chip is YM2612X) && pw.ch >= 9 && pw.ch <= 11)
+                if ((pw.pg[pw.cpg].chip is YM2612X) && pw.pg[pw.cpg].ch >= 9 && pw.pg[pw.cpg].ch <= 11)
                 {
                     return;
                 }
-                if (pw.ch < n + 3)
+                if (pw.pg[pw.cpg].ch < n + 3)
                 {
-                    if (pw.pcm) return;
+                    if (pw.pg[pw.cpg].pcm) return;
 
                     int vch;
                     byte[] port;
                     GetPortVch(pw, out port, out vch);
 
-                    parent.OutData(mml, port, (byte)(0xa4 + vch), (byte)((pw.freq & 0xff00) >> 8));
-                    parent.OutData(mml, port, (byte)(0xa0 + vch), (byte)(pw.freq & 0xff));
+                    parent.OutData(mml, port, (byte)(0xa4 + vch), (byte)((pw.pg[pw.cpg].freq & 0xff00) >> 8));
+                    parent.OutData(mml, port, (byte)(0xa0 + vch), (byte)(pw.pg[pw.cpg].freq & 0xff));
                 }
             }
         }
@@ -978,28 +980,28 @@ namespace Core
         {
             SetDummyData(pw, mml);
 
-            int n = (pw.chip is YM2203) ? 0 : 3;
+            int n = (pw.pg[pw.cpg].chip is YM2203) ? 0 : 3;
 
-            if (pw.chip is YM2612X && (pw.ch > 8 || pw.ch == 5) && pw.pcm)
+            if (pw.pg[pw.cpg].chip is YM2612X && (pw.pg[pw.cpg].ch > 8 || pw.pg[pw.cpg].ch == 5) && pw.pg[pw.cpg].pcm)
             {
-                ((YM2612X)pw.chip).OutYM2612XPcmKeyON(mml,pw);
+                ((YM2612X)pw.pg[pw.cpg].chip).OutYM2612XPcmKeyON(mml,pw);
                 return;
             }
 
-            if (!pw.pcm)
+            if (!pw.pg[pw.cpg].pcm)
             {
-                if (!(pw.chip is YM2609))
+                if (!(pw.pg[pw.cpg].chip is YM2609))
                 {
-                    if (pw.chip.lstPartWork[2].Ch3SpecialMode && pw.Type == enmChannelType.FMOPNex)
+                    if (pw.pg[pw.cpg].chip.lstPartWork[2].pg[pw.cpg].Ch3SpecialMode && pw.pg[pw.cpg].Type == enmChannelType.FMOPNex)
                     {
-                        pw.Ch3SpecialModeKeyOn = true;
+                        pw.pg[pw.cpg].Ch3SpecialModeKeyOn = true;
 
-                        int slot = (pw.chip.lstPartWork[2].Ch3SpecialModeKeyOn ? pw.chip.lstPartWork[2].slots : 0x0)
-                            | (pw.chip.lstPartWork[n + 3].Ch3SpecialModeKeyOn ? pw.chip.lstPartWork[n + 3].slots : 0x0)
-                            | (pw.chip.lstPartWork[n + 4].Ch3SpecialModeKeyOn ? pw.chip.lstPartWork[n + 4].slots : 0x0)
-                            | (pw.chip.lstPartWork[n + 5].Ch3SpecialModeKeyOn ? pw.chip.lstPartWork[n + 5].slots : 0x0);
+                        int slot = (pw.pg[pw.cpg].chip.lstPartWork[2].pg[pw.cpg].Ch3SpecialModeKeyOn ? pw.pg[pw.cpg].chip.lstPartWork[2].pg[pw.cpg].slots : 0x0)
+                            | (pw.pg[pw.cpg].chip.lstPartWork[n + 3].pg[pw.cpg].Ch3SpecialModeKeyOn ? pw.pg[pw.cpg].chip.lstPartWork[n + 3].pg[pw.cpg].slots : 0x0)
+                            | (pw.pg[pw.cpg].chip.lstPartWork[n + 4].pg[pw.cpg].Ch3SpecialModeKeyOn ? pw.pg[pw.cpg].chip.lstPartWork[n + 4].pg[pw.cpg].slots : 0x0)
+                            | (pw.pg[pw.cpg].chip.lstPartWork[n + 5].pg[pw.cpg].Ch3SpecialModeKeyOn ? pw.pg[pw.cpg].chip.lstPartWork[n + 5].pg[pw.cpg].slots : 0x0);
 
-                        if (pw.chip is YM2612X)
+                        if (pw.pg[pw.cpg].chip is YM2612X)
                         {
                             outDatum od = new outDatum();
                             od.val = (byte)((slot << 4) + 2);
@@ -1025,18 +1027,18 @@ namespace Core
                         }
                         else
                         {
-                            parent.OutData(mml, pw.port[0], 0x28, (byte)((slot << 4) + 2));
+                            parent.OutData(mml, pw.pg[pw.cpg].port[0], 0x28, (byte)((slot << 4) + 2));
                         }
                     }
                     else
                     {
-                        if (pw.ch >= 0 && pw.ch < n + 3)
+                        if (pw.pg[pw.cpg].ch >= 0 && pw.pg[pw.cpg].ch < n + 3)
                         {
-                            byte vch = (byte)((pw.ch > 2) ? pw.ch + 1 : pw.ch);
-                            if (pw.chip is YM2612X)
+                            byte vch = (byte)((pw.pg[pw.cpg].ch > 2) ? pw.pg[pw.cpg].ch + 1 : pw.pg[pw.cpg].ch);
+                            if (pw.pg[pw.cpg].chip is YM2612X)
                             {
                                 outDatum od = new outDatum();
-                                od.val = (byte)((pw.slots << 4) + (vch & 7));
+                                od.val = (byte)((pw.pg[pw.cpg].slots << 4) + (vch & 7));
                                 if (mml != null)
                                 {
                                     od.type = mml.type;
@@ -1060,21 +1062,21 @@ namespace Core
                             else
                             {
                                 //key on
-                                parent.OutData(mml, pw.port[0], 0x28, (byte)((pw.slots << 4) + (vch & 7)));
+                                parent.OutData(mml, pw.pg[pw.cpg].port[0], 0x28, (byte)((pw.pg[pw.cpg].slots << 4) + (vch & 7)));
                             }
                         }
                     }
                 }
                 else
                 {
-                    if ((pw.ch == 2 || pw.ch == 12 || pw.ch == 13 || pw.ch == 14) && pw.chip.lstPartWork[2].Ch3SpecialMode)
+                    if ((pw.pg[pw.cpg].ch == 2 || pw.pg[pw.cpg].ch == 12 || pw.pg[pw.cpg].ch == 13 || pw.pg[pw.cpg].ch == 14) && pw.pg[pw.cpg].chip.lstPartWork[2].pg[pw.cpg].Ch3SpecialMode)
                     {
-                        pw.Ch3SpecialModeKeyOn = true;
+                        pw.pg[pw.cpg].Ch3SpecialModeKeyOn = true;
 
-                        int slot = (pw.chip.lstPartWork[2].Ch3SpecialModeKeyOn ? pw.chip.lstPartWork[2].slots : 0x0)
-                            | (pw.chip.lstPartWork[12].Ch3SpecialModeKeyOn ? pw.chip.lstPartWork[12].slots : 0x0)
-                            | (pw.chip.lstPartWork[13].Ch3SpecialModeKeyOn ? pw.chip.lstPartWork[13].slots : 0x0)
-                            | (pw.chip.lstPartWork[14].Ch3SpecialModeKeyOn ? pw.chip.lstPartWork[14].slots : 0x0);
+                        int slot = (pw.pg[pw.cpg].chip.lstPartWork[2].pg[pw.cpg].Ch3SpecialModeKeyOn ? pw.pg[pw.cpg].chip.lstPartWork[2].pg[pw.cpg].slots : 0x0)
+                            | (pw.pg[pw.cpg].chip.lstPartWork[12].pg[pw.cpg].Ch3SpecialModeKeyOn ? pw.pg[pw.cpg].chip.lstPartWork[12].pg[pw.cpg].slots : 0x0)
+                            | (pw.pg[pw.cpg].chip.lstPartWork[13].pg[pw.cpg].Ch3SpecialModeKeyOn ? pw.pg[pw.cpg].chip.lstPartWork[13].pg[pw.cpg].slots : 0x0)
+                            | (pw.pg[pw.cpg].chip.lstPartWork[14].pg[pw.cpg].Ch3SpecialModeKeyOn ? pw.pg[pw.cpg].chip.lstPartWork[14].pg[pw.cpg].slots : 0x0);
 
                         outDatum od = new outDatum();
                         od.val = (byte)((slot << 4) + 2);
@@ -1095,17 +1097,17 @@ namespace Core
                                     mml.line.Lp.ch);
                             }
                         }
-                        ((YM2609)pw.chip).opna20x028KeyOnData.Add(od);
+                        ((YM2609)pw.pg[pw.cpg].chip).opna20x028KeyOnData.Add(od);
 
                     }
-                    else if ((pw.ch == 8 || pw.ch == 15 || pw.ch == 16 || pw.ch == 17) && pw.chip.lstPartWork[8].Ch3SpecialMode)
+                    else if ((pw.pg[pw.cpg].ch == 8 || pw.pg[pw.cpg].ch == 15 || pw.pg[pw.cpg].ch == 16 || pw.pg[pw.cpg].ch == 17) && pw.pg[pw.cpg].chip.lstPartWork[8].pg[pw.cpg].Ch3SpecialMode)
                     {
-                        pw.Ch3SpecialModeKeyOn = true;
+                        pw.pg[pw.cpg].Ch3SpecialModeKeyOn = true;
 
-                        int slot = (pw.chip.lstPartWork[8].Ch3SpecialModeKeyOn ? pw.chip.lstPartWork[8].slots : 0x0)
-                            | (pw.chip.lstPartWork[15].Ch3SpecialModeKeyOn ? pw.chip.lstPartWork[15].slots : 0x0)
-                            | (pw.chip.lstPartWork[16].Ch3SpecialModeKeyOn ? pw.chip.lstPartWork[16].slots : 0x0)
-                            | (pw.chip.lstPartWork[17].Ch3SpecialModeKeyOn ? pw.chip.lstPartWork[17].slots : 0x0);
+                        int slot = (pw.pg[pw.cpg].chip.lstPartWork[8].pg[pw.cpg].Ch3SpecialModeKeyOn ? pw.pg[pw.cpg].chip.lstPartWork[8].pg[pw.cpg].slots : 0x0)
+                            | (pw.pg[pw.cpg].chip.lstPartWork[15].pg[pw.cpg].Ch3SpecialModeKeyOn ? pw.pg[pw.cpg].chip.lstPartWork[15].pg[pw.cpg].slots : 0x0)
+                            | (pw.pg[pw.cpg].chip.lstPartWork[16].pg[pw.cpg].Ch3SpecialModeKeyOn ? pw.pg[pw.cpg].chip.lstPartWork[16].pg[pw.cpg].slots : 0x0)
+                            | (pw.pg[pw.cpg].chip.lstPartWork[17].pg[pw.cpg].Ch3SpecialModeKeyOn ? pw.pg[pw.cpg].chip.lstPartWork[17].pg[pw.cpg].slots : 0x0);
 
                         outDatum od = new outDatum();
                         od.val = (byte)((slot << 4) + 2);
@@ -1126,16 +1128,16 @@ namespace Core
                                     mml.line.Lp.ch);
                             }
                         }
-                        ((YM2609)pw.chip).opna20x228KeyOnData.Add(od);
+                        ((YM2609)pw.pg[pw.cpg].chip).opna20x228KeyOnData.Add(od);
                     }
                     else
                     {
-                        if (pw.ch >= 0 && pw.ch < 6)
+                        if (pw.pg[pw.cpg].ch >= 0 && pw.pg[pw.cpg].ch < 6)
                         {
-                            byte vch = (byte)((pw.ch > 2) ? pw.ch + 1 : pw.ch);
+                            byte vch = (byte)((pw.pg[pw.cpg].ch > 2) ? pw.pg[pw.cpg].ch + 1 : pw.pg[pw.cpg].ch);
                             //key on
                             outDatum od = new outDatum();
-                            od.val = (byte)((pw.slots << 4) + (vch & 7));
+                            od.val = (byte)((pw.pg[pw.cpg].slots << 4) + (vch & 7));
                             if (mml != null)
                             {
                                 od.type = mml.type;
@@ -1153,15 +1155,15 @@ namespace Core
                                         mml.line.Lp.ch);
                                 }
                             }
-                            ((YM2609)pw.chip).opna20x028KeyOnData.Add(od);
+                            ((YM2609)pw.pg[pw.cpg].chip).opna20x028KeyOnData.Add(od);
                         }
-                        else if (pw.ch >= 6 && pw.ch < 12)
+                        else if (pw.pg[pw.cpg].ch >= 6 && pw.pg[pw.cpg].ch < 12)
                         {
-                            byte vch = (byte)(pw.ch - 6);
+                            byte vch = (byte)(pw.pg[pw.cpg].ch - 6);
                             vch = (byte)(((vch > 2) ? (vch + 1) : vch));
                             //key on
                             outDatum od = new outDatum();
-                            od.val = (byte)((pw.slots << 4) + (vch & 7));
+                            od.val = (byte)((pw.pg[pw.cpg].slots << 4) + (vch & 7));
                             if (mml != null)
                             {
                                 od.type = mml.type;
@@ -1179,7 +1181,7 @@ namespace Core
                                         mml.line.Lp.ch);
                                 }
                             }
-                            ((YM2609)pw.chip).opna20x228KeyOnData.Add(od);
+                            ((YM2609)pw.pg[pw.cpg].chip).opna20x228KeyOnData.Add(od);
                         }
                     }
                 }
@@ -1188,35 +1190,35 @@ namespace Core
             }
 
 
-            if (pw.isPcmMap)
+            if (pw.pg[pw.cpg].isPcmMap)
             {
-                int nt = Const.NOTE.IndexOf(pw.noteCmd);
-                int f = pw.octaveNow * 12 + nt + pw.shift + pw.keyShift;
-                if (parent.instPCMMap.ContainsKey(pw.pcmMapNo))
+                int nt = Const.NOTE.IndexOf(pw.pg[pw.cpg].noteCmd);
+                int f = pw.pg[pw.cpg].octaveNow * 12 + nt + pw.pg[pw.cpg].shift + pw.pg[pw.cpg].keyShift;
+                if (parent.instPCMMap.ContainsKey(pw.pg[pw.cpg].pcmMapNo))
                 {
-                    if (parent.instPCMMap[pw.pcmMapNo].ContainsKey(f))
+                    if (parent.instPCMMap[pw.pg[pw.cpg].pcmMapNo].ContainsKey(f))
                     {
-                        pw.instrument = parent.instPCMMap[pw.pcmMapNo][f];
+                        pw.pg[pw.cpg].instrument = parent.instPCMMap[pw.pg[pw.cpg].pcmMapNo][f];
                     }
                     else
                     {
-                        msgBox.setErrMsg(string.Format(msg.get("E10025"), pw.octaveNow, pw.noteCmd, pw.shift + pw.keyShift), mml.line.Lp);
+                        msgBox.setErrMsg(string.Format(msg.get("E10025"), pw.pg[pw.cpg].octaveNow, pw.pg[pw.cpg].noteCmd, pw.pg[pw.cpg].shift + pw.pg[pw.cpg].keyShift), mml.line.Lp);
                         return;
                     }
                 }
                 else
                 {
-                    msgBox.setErrMsg(string.Format(msg.get("E10024"), pw.pcmMapNo), mml.line.Lp);
+                    msgBox.setErrMsg(string.Format(msg.get("E10024"), pw.pg[pw.cpg].pcmMapNo), mml.line.Lp);
                     return;
                 }
             }
 
-            if (!parent.instPCM.ContainsKey(pw.instrument)) return;
+            if (!parent.instPCM.ContainsKey(pw.pg[pw.cpg].instrument)) return;
 
-            float m = Const.pcmMTbl[pw.pcmNote] * (float)Math.Pow(2, (pw.pcmOctave - 4));
-            pw.pcmBaseFreqPerFreq = Information.VGM_SAMPLE_PER_SECOND / ((float)parent.instPCM[pw.instrument].freq * m);
-            pw.pcmFreqCountBuffer = 0.0f;
-            long p = parent.instPCM[pw.instrument].stAdr;
+            float m = Const.pcmMTbl[pw.pg[pw.cpg].pcmNote] * (float)Math.Pow(2, (pw.pg[pw.cpg].pcmOctave - 4));
+            pw.pg[pw.cpg].pcmBaseFreqPerFreq = Information.VGM_SAMPLE_PER_SECOND / ((float)parent.instPCM[pw.pg[pw.cpg].instrument].freq * m);
+            pw.pg[pw.cpg].pcmFreqCountBuffer = 0.0f;
+            long p = parent.instPCM[pw.pg[pw.cpg].instrument].stAdr;
             if (parent.info.Version == 1.51f)
             {
                 byte[] cmd;
@@ -1236,44 +1238,44 @@ namespace Core
             }
             else
             {
-                long s = parent.instPCM[pw.instrument].size;
-                long f = parent.instPCM[pw.instrument].freq;
+                long s = parent.instPCM[pw.pg[pw.cpg].instrument].size;
+                long f = parent.instPCM[pw.pg[pw.cpg].instrument].freq;
                 long w = 0;
-                if (pw.gatetimePmode)
+                if (pw.pg[pw.cpg].gatetimePmode)
                 {
-                    w = pw.waitCounter * pw.gatetime / 8L;
+                    w = pw.pg[pw.cpg].waitCounter * pw.pg[pw.cpg].gatetime / 8L;
                 }
                 else
                 {
-                    w = pw.waitCounter - pw.gatetime;
+                    w = pw.pg[pw.cpg].waitCounter - pw.pg[pw.cpg].gatetime;
                 }
                 if (w < 1) w = 1;
                 s = Math.Min(s, (long)(w * parent.info.samplesPerClock * f / 44100.0));
 
                 byte[] cmd;
-                if (!pw.streamSetup)
+                if (!pw.pg[pw.cpg].streamSetup)
                 {
                     parent.newStreamID++;
-                    pw.streamID = parent.newStreamID;
+                    pw.pg[pw.cpg].streamID = parent.newStreamID;
 
                     if (parent.info.format == enmFormat.ZGM)
                     {
                         if (parent.ChipCommandSize == 2) cmd = new byte[] {
                             0x30, 0x00
-                            , (byte)pw.streamID
-                            , (byte)pw.chip.ChipID
-                            , (byte)(pw.chip.ChipID >> 8)
+                            , (byte)pw.pg[pw.cpg].streamID
+                            , (byte)pw.pg[pw.cpg].chip.ChipID
+                            , (byte)(pw.pg[pw.cpg].chip.ChipID >> 8)
                         };
                         else cmd = new byte[] {
                             0x30
-                            , (byte)pw.streamID
-                            , (byte)pw.chip.ChipID
+                            , (byte)pw.pg[pw.cpg].streamID
+                            , (byte)pw.pg[pw.cpg].chip.ChipID
                         };
                     }
                     else cmd = new byte[] {
                         0x90
-                        , (byte)pw.streamID
-                        , (byte)(0x02 + (pw.chipNumber!=0 ? 0x80 : 0x00))
+                        , (byte)pw.pg[pw.cpg].streamID
+                        , (byte)(0x02 + (pw.pg[pw.cpg].chipNumber!=0 ? 0x80 : 0x00))
                     };
 
                     parent.OutData(
@@ -1293,16 +1295,16 @@ namespace Core
                         mml
                         // set stream data
                         , cmd
-                        , (byte)pw.streamID
+                        , (byte)pw.pg[pw.cpg].streamID
                         , 0x00
                         , 0x01
                         , 0x00
                         );
 
-                    pw.streamSetup = true;
+                    pw.pg[pw.cpg].streamSetup = true;
                 }
 
-                if (pw.streamFreq != f)
+                if (pw.pg[pw.cpg].streamFreq != f)
                 {
                     if (parent.info.format == enmFormat.ZGM)
                     {
@@ -1313,14 +1315,14 @@ namespace Core
                     //Set Stream Frequency
                     parent.OutData(
                         mml, cmd
-                        , (byte)pw.streamID
+                        , (byte)pw.pg[pw.cpg].streamID
                         , (byte)(f & 0xff)
                         , (byte)((f & 0xff00) / 0x100)
                         , (byte)((f & 0xff0000) / 0x10000)
                         , (byte)((f & 0xff000000) / 0x10000)
                         );
 
-                    pw.streamFreq = f;
+                    pw.pg[pw.cpg].streamFreq = f;
                 }
 
                 if (parent.info.format == enmFormat.ZGM)
@@ -1333,7 +1335,7 @@ namespace Core
                 parent.OutData(
                     mml,
                     cmd
-                    , (byte)pw.streamID
+                    , (byte)pw.pg[pw.cpg].streamID
 
                     , (byte)(p & 0xff)
                     , (byte)((p & 0xff00) / 0x100)
@@ -1349,9 +1351,9 @@ namespace Core
                     );
             }
 
-            if (parent.instPCM[pw.instrument].status != enmPCMSTATUS.ERROR)
+            if (parent.instPCM[pw.pg[pw.cpg].instrument].status != enmPCMSTATUS.ERROR)
             {
-                parent.instPCM[pw.instrument].status = enmPCMSTATUS.USED;
+                parent.instPCM[pw.pg[pw.cpg].instrument].status = enmPCMSTATUS.USED;
             }
 
         }
@@ -1359,33 +1361,33 @@ namespace Core
 
         public void SetFmFNum(partWork pw,MML mml)
         {
-            if (pw.noteCmd == (char)0)
+            if (pw.pg[pw.cpg].noteCmd == (char)0)
             {
                 return;
             }
 
-            int[] ftbl = pw.chip.FNumTbl[0];
+            int[] ftbl = pw.pg[pw.cpg].chip.FNumTbl[0];
 
-            int f = GetFmFNum(ftbl, pw.octaveNow, pw.noteCmd, pw.shift + pw.keyShift + pw.toneDoublerKeyShift);//
-            if (pw.bendWaitCounter != -1)
+            int f = GetFmFNum(ftbl, pw.pg[pw.cpg].octaveNow, pw.pg[pw.cpg].noteCmd, pw.pg[pw.cpg].shift + pw.pg[pw.cpg].keyShift + pw.pg[pw.cpg].toneDoublerKeyShift);//
+            if (pw.pg[pw.cpg].bendWaitCounter != -1)
             {
-                f = pw.bendFnum;
+                f = pw.pg[pw.cpg].bendFnum;
             }
             int o = (f & 0xf000) / 0x1000;
             f &= 0xfff;
 
-            f = f + pw.detune;
+            f = f + pw.pg[pw.cpg].detune;
             for (int lfo = 0; lfo < 4; lfo++)
             {
-                if (!pw.lfo[lfo].sw)
+                if (!pw.pg[pw.cpg].lfo[lfo].sw)
                 {
                     continue;
                 }
-                if (pw.lfo[lfo].type != eLfoType.Vibrato)
+                if (pw.pg[pw.cpg].lfo[lfo].type != eLfoType.Vibrato)
                 {
                     continue;
                 }
-                f += pw.lfo[lfo].value + pw.lfo[lfo].param[6];
+                f += pw.pg[pw.cpg].lfo[lfo].value + pw.pg[pw.cpg].lfo[lfo].param[6];
             }
             while (f < ftbl[0])
             {
@@ -1443,11 +1445,11 @@ namespace Core
 
         public override int GetFNum(partWork pw, MML mml, int octave, char cmd, int shift)
         {
-            if (pw.Type == enmChannelType.FMOPN || pw.Type == enmChannelType.FMOPNex)
+            if (pw.pg[pw.cpg].Type == enmChannelType.FMOPN || pw.pg[pw.cpg].Type == enmChannelType.FMOPNex)
             {
                 return GetFmFNum(FNumTbl[0], octave, cmd, shift);
             }
-            if (pw.Type == enmChannelType.SSG)
+            if (pw.pg[pw.cpg].Type == enmChannelType.SSG)
             {
                 return GetSsgFNum(pw, mml, octave, cmd, shift);
             }
@@ -1482,27 +1484,27 @@ namespace Core
 
         public void SetFmVolume(partWork pw,MML mml)
         {
-            int vol = pw.volume;
+            int vol = pw.pg[pw.cpg].volume;
 
             for (int lfo = 0; lfo < 4; lfo++)
             {
-                if (!pw.lfo[lfo].sw)
+                if (!pw.pg[pw.cpg].lfo[lfo].sw)
                 {
                     continue;
                 }
-                if (pw.lfo[lfo].type != eLfoType.Tremolo)
+                if (pw.pg[pw.cpg].lfo[lfo].type != eLfoType.Tremolo)
                 {
                     continue;
                 }
-                vol += pw.lfo[lfo].value + pw.lfo[lfo].param[6];
+                vol += pw.pg[pw.cpg].lfo[lfo].value + pw.pg[pw.cpg].lfo[lfo].param[6];
             }
 
-            if (pw.beforeVolume != vol)
+            if (pw.pg[pw.cpg].beforeVolume != vol)
             {
-                if (parent.instFM.ContainsKey(pw.instrument))
+                if (parent.instFM.ContainsKey(pw.pg[pw.cpg].instrument))
                 {
-                    OutFmSetVolume(pw, mml, vol, pw.instrument);
-                    pw.beforeVolume = vol;
+                    OutFmSetVolume(pw, mml, vol, pw.pg[pw.cpg].instrument);
+                    pw.pg[pw.cpg].beforeVolume = vol;
                 }
             }
         }
@@ -1512,15 +1514,15 @@ namespace Core
 
         public override void SetVolume(partWork pw, MML mml)
         {
-            if (pw.Type == enmChannelType.FMOPN
-                || pw.Type == enmChannelType.FMOPNex //効果音モード対応チャンネル
-                || (pw.Type == enmChannelType.FMPCM && !pw.pcm) //OPN2PCMチャンネル
-                || (pw.Type == enmChannelType.FMPCMex && !pw.pcm) //OPN2XPCMチャンネル
+            if (pw.pg[pw.cpg].Type == enmChannelType.FMOPN
+                || pw.pg[pw.cpg].Type == enmChannelType.FMOPNex //効果音モード対応チャンネル
+                || (pw.pg[pw.cpg].Type == enmChannelType.FMPCM && !pw.pg[pw.cpg].pcm) //OPN2PCMチャンネル
+                || (pw.pg[pw.cpg].Type == enmChannelType.FMPCMex && !pw.pg[pw.cpg].pcm) //OPN2XPCMチャンネル
                 )
             {
                 SetFmVolume(pw, mml);
             }
-            else if (pw.Type == enmChannelType.SSG)
+            else if (pw.pg[pw.cpg].Type == enmChannelType.SSG)
             {
                 SetSsgVolume(pw, mml);
             }
@@ -1530,7 +1532,7 @@ namespace Core
         {
             for (int lfo = 0; lfo < 4; lfo++)
             {
-                clsLfo pl = pw.lfo[lfo];
+                clsLfo pl = pw.pg[pw.cpg].lfo[lfo];
                 if (!pl.sw)
                     continue;
 
@@ -1547,21 +1549,21 @@ namespace Core
 
                 if (pl.type == eLfoType.Vibrato)
                 {
-                    if (pw.Type == enmChannelType.FMOPN
-                        || pw.Type == enmChannelType.FMOPNex)
+                    if (pw.pg[pw.cpg].Type == enmChannelType.FMOPN
+                        || pw.pg[pw.cpg].Type == enmChannelType.FMOPNex)
                         SetFmFNum(pw, mml);
-                    else if (pw.Type == enmChannelType.SSG)
+                    else if (pw.pg[pw.cpg].Type == enmChannelType.SSG)
                         SetSsgFNum(pw, mml);
 
                 }
 
                 if (pl.type == eLfoType.Tremolo)
                 {
-                    pw.beforeVolume = -1;
-                    if (pw.Type == enmChannelType.FMOPN
-                        || pw.Type == enmChannelType.FMOPNex)
+                    pw.pg[pw.cpg].beforeVolume = -1;
+                    if (pw.pg[pw.cpg].Type == enmChannelType.FMOPN
+                        || pw.pg[pw.cpg].Type == enmChannelType.FMOPNex)
                         SetFmVolume(pw, mml);
-                    else if (pw.Type == enmChannelType.SSG)
+                    else if (pw.pg[pw.cpg].Type == enmChannelType.SSG)
                         SetSsgVolume(pw, mml);
                 }
 
@@ -1570,47 +1572,47 @@ namespace Core
 
         public override void SetToneDoubler(partWork pw, MML mml)
         {
-            if (pw.Type != enmChannelType.FMOPN && pw.ch != 2)
+            if (pw.pg[pw.cpg].Type != enmChannelType.FMOPN && pw.pg[pw.cpg].ch != 2)
             {
                 return;
             }
 
-            int i = pw.instrument;
+            int i = pw.pg[pw.cpg].instrument;
             if (i < 0) return;
 
-            pw.toneDoublerKeyShift = 0;
+            pw.pg[pw.cpg].toneDoublerKeyShift = 0;
             byte[] instFM = parent.instFM[i];
             if (instFM == null || instFM.Length < 1) return;
             Note note = (Note)mml.args[0];
 
-            if (pw.TdA == -1)
+            if (pw.pg[pw.cpg].TdA == -1)
             {
                 //resetToneDoubler
-                if (pw.op1ml != instFM[0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8])
+                if (pw.pg[pw.cpg].op1ml != instFM[0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8])
                 {
                     OutFmSetDtMl(mml, pw, 0, instFM[0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 9], instFM[0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8]);
-                    pw.op1ml = instFM[0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
+                    pw.pg[pw.cpg].op1ml = instFM[0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
                 }
-                if (pw.op2ml != instFM[1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8])
+                if (pw.pg[pw.cpg].op2ml != instFM[1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8])
                 {
                     OutFmSetDtMl(mml, pw, 1, instFM[1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 9], instFM[1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8]);
-                    pw.op2ml = instFM[1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
+                    pw.pg[pw.cpg].op2ml = instFM[1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
                 }
-                if (pw.op3ml != instFM[2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8])
+                if (pw.pg[pw.cpg].op3ml != instFM[2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8])
                 {
                     OutFmSetDtMl(mml, pw, 2, instFM[2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 9], instFM[2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8]);
-                    pw.op3ml = instFM[2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
+                    pw.pg[pw.cpg].op3ml = instFM[2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
                 }
-                if (pw.op4ml != instFM[3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8])
+                if (pw.pg[pw.cpg].op4ml != instFM[3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8])
                 {
                     OutFmSetDtMl(mml, pw, 3, instFM[3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 9], instFM[3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8]);
-                    pw.op4ml = instFM[3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
+                    pw.pg[pw.cpg].op4ml = instFM[3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
                 }
             }
             else
             {
                 //setToneDoubler
-                int oct = pw.octaveNow;
+                int oct = pw.pg[pw.cpg].octaveNow;
                 foreach (MML octMml in note.tDblOctave)
                 {
                     switch (octMml.type)
@@ -1627,61 +1629,61 @@ namespace Core
                     }
                 }
                 oct = Common.CheckRange(oct, 1, 8);
-                pw.octaveNew = oct;
-                int TdB = oct * 12 + Const.NOTE.IndexOf(note.tDblCmd) + note.tDblShift + pw.keyShift;
-                int s = TdB - pw.TdA;// - TdB;
+                pw.pg[pw.cpg].octaveNew = oct;
+                int TdB = oct * 12 + Const.NOTE.IndexOf(note.tDblCmd) + note.tDblShift + pw.pg[pw.cpg].keyShift;
+                int s = TdB - pw.pg[pw.cpg].TdA;// - TdB;
                 int us = Math.Abs(s);
-                int n = pw.toneDoubler;
+                int n = pw.pg[pw.cpg].toneDoubler;
                 clsToneDoubler instToneDoubler = parent.instToneDoubler[n];
                 if (us >= instToneDoubler.lstTD.Count)
                 {
                     return;
                 }
 
-                pw.toneDoublerKeyShift = ((s < 0) ? s : 0) + instToneDoubler.lstTD[us].KeyShift;
+                pw.pg[pw.cpg].toneDoublerKeyShift = ((s < 0) ? s : 0) + instToneDoubler.lstTD[us].KeyShift;
 
-                if (pw.op1ml != instToneDoubler.lstTD[us].OP1ML)
+                if (pw.pg[pw.cpg].op1ml != instToneDoubler.lstTD[us].OP1ML)
                 {
                     OutFmSetDtMl(mml, pw, 0, instFM[0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 9], instToneDoubler.lstTD[us].OP1ML);
-                    pw.op1ml = instToneDoubler.lstTD[us].OP1ML;
+                    pw.pg[pw.cpg].op1ml = instToneDoubler.lstTD[us].OP1ML;
                 }
-                if (pw.op2ml != instToneDoubler.lstTD[us].OP2ML)
+                if (pw.pg[pw.cpg].op2ml != instToneDoubler.lstTD[us].OP2ML)
                 {
                     OutFmSetDtMl(mml, pw, 1, instFM[1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 9], instToneDoubler.lstTD[us].OP2ML);
-                    pw.op2ml = instToneDoubler.lstTD[us].OP2ML;
+                    pw.pg[pw.cpg].op2ml = instToneDoubler.lstTD[us].OP2ML;
                 }
-                if (pw.op3ml != instToneDoubler.lstTD[us].OP3ML)
+                if (pw.pg[pw.cpg].op3ml != instToneDoubler.lstTD[us].OP3ML)
                 {
                     OutFmSetDtMl(mml, pw, 2, instFM[2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 9], instToneDoubler.lstTD[us].OP3ML);
-                    pw.op3ml = instToneDoubler.lstTD[us].OP3ML;
+                    pw.pg[pw.cpg].op3ml = instToneDoubler.lstTD[us].OP3ML;
                 }
-                if (pw.op4ml != instToneDoubler.lstTD[us].OP4ML)
+                if (pw.pg[pw.cpg].op4ml != instToneDoubler.lstTD[us].OP4ML)
                 {
                     OutFmSetDtMl(mml, pw, 3, instFM[3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 9], instToneDoubler.lstTD[us].OP4ML);
-                    pw.op4ml = instToneDoubler.lstTD[us].OP4ML;
+                    pw.pg[pw.cpg].op4ml = instToneDoubler.lstTD[us].OP4ML;
                 }
 
-                //pw.TdA = -1;
+                //pw.ppg[pw.cpgNum].TdA = -1;
             }
         }
 
         public override int GetToneDoublerShift(partWork pw, int octave, char noteCmd, int shift)
         {
-            if (pw.Type != enmChannelType.FMOPN && pw.ch != 2)
+            if (pw.pg[pw.cpg].Type != enmChannelType.FMOPN && pw.pg[pw.cpg].ch != 2)
             {
                 return 0;
             }
 
-            int i = pw.instrument;
-            if (pw.TdA == -1)
+            int i = pw.pg[pw.cpg].instrument;
+            if (pw.pg[pw.cpg].TdA == -1)
             {
                 return 0;
             }
 
             int TdB = octave * 12 + Const.NOTE.IndexOf(noteCmd) + shift;
-            int s = pw.TdA - TdB;
+            int s = pw.pg[pw.cpg].TdA - TdB;
             int us = Math.Abs(s);
-            int n = pw.toneDoubler;
+            int n = pw.pg[pw.cpg].toneDoubler;
             if (us >= parent.instToneDoubler[n].lstTD.Count)
             {
                 return 0;
@@ -1694,8 +1696,8 @@ namespace Core
         private void CmdY_ToneParamOPN(MML mml,byte adr, partWork pw, byte op, byte dat)
         {
             int ch;
-            if (pw.Type == enmChannelType.FMOPNex) ch = 2;
-            else if (pw.Type == enmChannelType.FMOPN) ch = pw.ch;
+            if (pw.pg[pw.cpg].Type == enmChannelType.FMOPNex) ch = 2;
+            else if (pw.pg[pw.cpg].Type == enmChannelType.FMOPN) ch = pw.pg[pw.cpg].ch;
             else return;
 
             int vch;
@@ -1712,8 +1714,8 @@ namespace Core
         private void CmdY_ToneParamOPN_FBAL(MML mml,partWork pw, byte dat)
         {
             int ch;
-            if (pw.Type == enmChannelType.FMOPNex) ch = 2;
-            else if (pw.Type == enmChannelType.FMOPN) ch = pw.ch;
+            if (pw.pg[pw.cpg].Type == enmChannelType.FMOPNex) ch = 2;
+            else if (pw.pg[pw.cpg].Type == enmChannelType.FMOPN) ch = pw.pg[pw.cpg].ch;
             else return;
 
             int vch;
@@ -1728,11 +1730,11 @@ namespace Core
 
         public override void CmdNoiseToneMixer(partWork pw, MML mml)
         {
-            if (pw.Type == enmChannelType.SSG)
+            if (pw.pg[pw.cpg].Type == enmChannelType.SSG)
             {
                 int n = (int)mml.args[0];
                 n = Common.CheckRange(n, 0, 3);
-                pw.mixer = n;
+                pw.pg[pw.cpg].mixer = n;
             }
         }
 
@@ -1742,16 +1744,16 @@ namespace Core
             n = Common.CheckRange(n, 0, 31);
 
             int ch = 0;
-            if (pw.chip is YM2609)
+            if (pw.pg[pw.cpg].chip is YM2609)
             {
-                if (pw.ch >= 18 && pw.ch <= 20) ch = 18;
-                if (pw.ch >= 21 && pw.ch <= 23) ch = 21;
-                if (pw.ch >= 24 && pw.ch <= 26) ch = 24;
-                if (pw.ch >= 27 && pw.ch <= 29) ch = 27;
+                if (pw.pg[pw.cpg].ch >= 18 && pw.pg[pw.cpg].ch <= 20) ch = 18;
+                if (pw.pg[pw.cpg].ch >= 21 && pw.pg[pw.cpg].ch <= 23) ch = 21;
+                if (pw.pg[pw.cpg].ch >= 24 && pw.pg[pw.cpg].ch <= 26) ch = 24;
+                if (pw.pg[pw.cpg].ch >= 27 && pw.pg[pw.cpg].ch <= 29) ch = 27;
             }
 
-            pw.chip.lstPartWork[ ch ].noise = n;//各SSGChの1Chに保存
-            ((ClsOPN)pw.chip).OutSsgNoise(mml,pw, n);
+            pw.pg[pw.cpg].chip.lstPartWork[ ch ].pg[pw.cpg].noise = n;//各SSGChの1Chに保存
+            ((ClsOPN)pw.pg[pw.cpg].chip).OutSsgNoise(mml,pw, n);
         }
 
         public override void CmdInstrument(partWork pw, MML mml)
@@ -1768,7 +1770,7 @@ namespace Core
             if (type == 'T')
             {
                 n = Common.CheckRange(n, 0, 255);
-                pw.toneDoubler = n;
+                pw.pg[pw.cpg].toneDoubler = n;
                 return;
             }
 
@@ -1778,16 +1780,16 @@ namespace Core
                 return;
             }
 
-            if (pw.Type == enmChannelType.SSG)
+            if (pw.pg[pw.cpg].Type == enmChannelType.SSG)
             {
                 SetEnvelopParamFromInstrument(pw, n, mml);
                 return;
             }
 
             n = Common.CheckRange(n, 0, 255);
-            if (pw.instrument == n) return;
-            pw.instrument = n;
-            ((ClsOPN)pw.chip).OutFmSetInstrument(pw, mml, n, pw.volume, type);
+            if (pw.pg[pw.cpg].instrument == n) return;
+            pw.pg[pw.cpg].instrument = n;
+            ((ClsOPN)pw.pg[pw.cpg].chip).OutFmSetInstrument(pw, mml, n, pw.pg[pw.cpg].volume, type);
         }
 
         public override void CmdEnvelope(partWork pw, MML mml)
@@ -1808,9 +1810,9 @@ namespace Core
             switch (cmd)
             {
                 case "EOF":
-                    if (pw.Type == enmChannelType.SSG)
+                    if (pw.pg[pw.cpg].Type == enmChannelType.SSG)
                     {
-                        pw.beforeVolume = -1;
+                        pw.pg[pw.cpg].beforeVolume = -1;
                     }
                     break;
             }
@@ -1840,56 +1842,56 @@ namespace Core
                     }
                     if (res != 0)
                     {
-                        pw.slotsEX = res;
-                        if (pw.Ch3SpecialMode)
+                        pw.pg[pw.cpg].slotsEX = res;
+                        if (pw.pg[pw.cpg].Ch3SpecialMode)
                         {
-                            pw.slots = pw.slotsEX;
-                            pw.beforeVolume = -1;
+                            pw.pg[pw.cpg].slots = pw.pg[pw.cpg].slotsEX;
+                            pw.pg[pw.cpg].beforeVolume = -1;
                         }
                     }
                     break;
                 case "EXON":
-                    pw.Ch3SpecialMode = true;
-                    ((ClsOPN)pw.chip).OutOPNSetCh3SpecialMode(mml,pw, true);
-                    foreach (partWork p in pw.chip.lstPartWork)
+                    pw.pg[pw.cpg].Ch3SpecialMode = true;
+                    ((ClsOPN)pw.pg[pw.cpg].chip).OutOPNSetCh3SpecialMode(mml,pw, true);
+                    foreach (partWork p in pw.pg[pw.cpg].chip.lstPartWork)
                     {
-                        if(pw.chip.chipType== enmChipType.YM2609)
+                        if(pw.pg[pw.cpg].chip.chipType== enmChipType.YM2609)
                         {
-                            if (pw.ch == 2 || pw.ch == 12 || pw.ch == 13 || pw.ch == 14)
-                                if (p.ch == 8 || p.ch == 15 || p.ch == 16 || p.ch == 17)
+                            if (pw.pg[pw.cpg].ch == 2 || pw.pg[pw.cpg].ch == 12 || pw.pg[pw.cpg].ch == 13 || pw.pg[pw.cpg].ch == 14)
+                                if (p.pg[pw.cpg].ch == 8 || p.pg[pw.cpg].ch == 15 || p.pg[pw.cpg].ch == 16 || p.pg[pw.cpg].ch == 17)
                                     continue;
 
-                            if (pw.ch == 8 || pw.ch == 15 || pw.ch == 16 || pw.ch == 17)
-                                if (p.ch == 2 || p.ch == 12 || p.ch == 13 || p.ch == 14)
+                            if (pw.pg[pw.cpg].ch == 8 || pw.pg[pw.cpg].ch == 15 || pw.pg[pw.cpg].ch == 16 || pw.pg[pw.cpg].ch == 17)
+                                if (p.pg[pw.cpg].ch == 2 || p.pg[pw.cpg].ch == 12 || p.pg[pw.cpg].ch == 13 || p.pg[pw.cpg].ch == 14)
                                     continue;
                         }
 
-                        if (p.Type == enmChannelType.FMOPNex)
+                        if (p.pg[pw.cpg].Type == enmChannelType.FMOPNex)
                         {
-                            p.slots = p.slotsEX;
-                            p.beforeVolume = -1;
-                            p.beforeFNum = -1;
+                            p.pg[pw.cpg].slots = p.pg[pw.cpg].slotsEX;
+                            p.pg[pw.cpg].beforeVolume = -1;
+                            p.pg[pw.cpg].beforeFNum = -1;
                             //p.freq = -1;
-                            p.oldFreq = -1;
+                            p.pg[pw.cpg].oldFreq = -1;
                             //SetFmFNum(p,mml);
                         }
                     }
                     break;
                 case "EXOF":
-                    pw.Ch3SpecialMode = false;
-                    ((ClsOPN)pw.chip).OutOPNSetCh3SpecialMode(mml,pw, false);
-                    foreach (partWork p in pw.chip.lstPartWork) {
-                        if (p.Type == enmChannelType.FMOPNex)
+                    pw.pg[pw.cpg].Ch3SpecialMode = false;
+                    ((ClsOPN)pw.pg[pw.cpg].chip).OutOPNSetCh3SpecialMode(mml,pw, false);
+                    foreach (partWork p in pw.pg[pw.cpg].chip.lstPartWork) {
+                        if (p.pg[pw.cpg].Type == enmChannelType.FMOPNex)
                         {
-                            p.beforeVolume = -1;
-                            p.beforeFNum = -1;
-                            p.freq = -1;
+                            p.pg[pw.cpg].beforeVolume = -1;
+                            p.pg[pw.cpg].beforeFNum = -1;
+                            p.pg[pw.cpg].freq = -1;
 
-                            if (p.ch != 2 && (p.chip.chipType!=enmChipType.YM2609 || p.ch != 8)) // 2 -> Ch3   8 -> OPNA2のCh9のこと
-                                p.slots = 0;
+                            if (p.pg[pw.cpg].ch != 2 && (p.pg[pw.cpg].chip.chipType!=enmChipType.YM2609 || p.pg[pw.cpg].ch != 8)) // 2 -> Ch3   8 -> OPNA2のCh9のこと
+                                p.pg[pw.cpg].slots = 0;
                             else
                             {
-                                p.slots = p.slots4OP;
+                                p.pg[pw.cpg].slots = p.pg[pw.cpg].slots4OP;
                                 SetKeyOff(p, mml);
                             }
 
@@ -1898,10 +1900,10 @@ namespace Core
                     }
                     break;
                 case "EXD":
-                    pw.slotDetune[0] = (int)mml.args[1];
-                    pw.slotDetune[1] = (int)mml.args[2];
-                    pw.slotDetune[2] = (int)mml.args[3];
-                    pw.slotDetune[3] = (int)mml.args[4];
+                    pw.pg[pw.cpg].slotDetune[0] = (int)mml.args[1];
+                    pw.pg[pw.cpg].slotDetune[1] = (int)mml.args[2];
+                    pw.pg[pw.cpg].slotDetune[2] = (int)mml.args[3];
+                    pw.pg[pw.cpg].slotDetune[3] = (int)mml.args[4];
                     break;
             }
         }
@@ -1913,15 +1915,15 @@ namespace Core
 
         public override void CmdRelativeVolumeSetting(partWork pw, MML mml)
         {
-            if (relVol.ContainsKey(pw.ch))
-                relVol.Remove(pw.ch);
+            if (relVol.ContainsKey(pw.pg[pw.cpg].ch))
+                relVol.Remove(pw.pg[pw.cpg].ch);
 
-            relVol.Add(pw.ch, (int)mml.args[0]);
+            relVol.Add(pw.pg[pw.cpg].ch, (int)mml.args[0]);
         }
 
         public override int GetDefaultRelativeVolume(partWork pw, MML mml)
         {
-            if (relVol.ContainsKey(pw.ch)) return relVol[pw.ch];
+            if (relVol.ContainsKey(pw.pg[pw.cpg].ch)) return relVol[pw.pg[pw.cpg].ch];
 
             return 1;
         }
@@ -1970,7 +1972,7 @@ namespace Core
 
         public override void CmdHardEnvelope(partWork pw, MML mml)
         {
-            if (pw.Type != enmChannelType.SSG) return;
+            if (pw.pg[pw.cpg].Type != enmChannelType.SSG) return;
 
             string cmd = (string)mml.args[0];
             int n = 0;
@@ -1984,25 +1986,25 @@ namespace Core
             {
                 case "EH":
                     n = (int)mml.args[1];
-                    if (pw.HardEnvelopeSpeed != n)
+                    if (pw.pg[pw.cpg].HardEnvelopeSpeed != n)
                     {
-                        parent.OutData(mml, pw.port[port], (byte)(adr + 0x0b), (byte)(n & 0xff));
-                        parent.OutData(mml, pw.port[port], (byte)(adr + 0x0c), (byte)((n >> 8) & 0xff));
-                        pw.HardEnvelopeSpeed = n;
+                        parent.OutData(mml, pw.pg[pw.cpg].port[port], (byte)(adr + 0x0b), (byte)(n & 0xff));
+                        parent.OutData(mml, pw.pg[pw.cpg].port[port], (byte)(adr + 0x0c), (byte)((n >> 8) & 0xff));
+                        pw.pg[pw.cpg].HardEnvelopeSpeed = n;
                     }
                     break;
                 case "EHON":
-                    pw.HardEnvelopeSw = true;
+                    pw.pg[pw.cpg].HardEnvelopeSw = true;
                     break;
                 case "EHOF":
-                    pw.HardEnvelopeSw = false;
+                    pw.pg[pw.cpg].HardEnvelopeSw = false;
                     break;
                 case "EHT":
                     n = (int)mml.args[1];
-                    if (pw.HardEnvelopeType != n)
+                    if (pw.pg[pw.cpg].HardEnvelopeType != n)
                     {
-                        parent.OutData(mml, pw.port[port], (byte)(adr + 0x0d), (byte)(n & 0xf));
-                        pw.HardEnvelopeType = n;
+                        parent.OutData(mml, pw.pg[pw.cpg].port[port], (byte)(adr + 0x0d), (byte)(n & 0xf));
+                        pw.pg[pw.cpg].HardEnvelopeType = n;
                     }
                     break;
             }

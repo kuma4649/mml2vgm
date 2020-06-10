@@ -280,14 +280,14 @@ namespace Core
             }
             else
             {
-                if (pw.envInstrument != n)
+                if (pw.pg[pw.cpg].envInstrument != n)
                 {
-                    pw.envInstrument = n;
-                    pw.envIndex = -1;
-                    pw.envCounter = -1;
+                    pw.pg[pw.cpg].envInstrument = n;
+                    pw.pg[pw.cpg].envIndex = -1;
+                    pw.pg[pw.cpg].envCounter = -1;
                     for (int i = 0; i < parent.instENV[n].Length; i++)
                     {
-                        pw.envelope[i] = parent.instENV[n][i];
+                        pw.pg[pw.cpg].envelope[i] = parent.instENV[n][i];
                     }
                 }
             }
@@ -295,15 +295,15 @@ namespace Core
             return n;
         }
 
-        private int AnalyzeBend(partWork pw,MML mml, Note note, int ml)
+        private int AnalyzeBend(partWork pw,int page,MML mml, Note note, int ml)
         {
             int n = -1;
             int bendDelayCounter;
-            pw.octaveNow = pw.octaveNew;
-            pw.bendOctave = pw.octaveNow;
-            pw.bendNote = note.bendCmd;
-            pw.bendShift = note.bendShift;
-            pw.bendWaitCounter = -1;
+            pw.pg[pw.cpg].octaveNow = pw.pg[pw.cpg].octaveNew;
+            pw.pg[pw.cpg].bendOctave = pw.pg[pw.cpg].octaveNow;
+            pw.pg[pw.cpg].bendNote = note.bendCmd;
+            pw.pg[pw.cpg].bendShift = note.bendShift;
+            pw.pg[pw.cpg].bendWaitCounter = -1;
             bendDelayCounter = 0;//TODO: bendDelay
 
             for (int i = 0; i < note.bendOctave.Count; i++)
@@ -313,32 +313,32 @@ namespace Core
                     case enmMMLType.Octave:
                         n = (int)note.bendOctave[i].args[0];
                         n = Common.CheckRange(n, 1, 8);
-                        pw.bendOctave = n;
+                        pw.pg[pw.cpg].bendOctave = n;
                         break;
                     case enmMMLType.OctaveUp:
-                        pw.incPos();
-                        pw.bendOctave += parent.info.octaveRev ? -1 : 1;
-                        pw.bendOctave = Common.CheckRange(pw.bendOctave, 1, 8);
+                        pw.incPos(page);
+                        pw.pg[pw.cpg].bendOctave += parent.info.octaveRev ? -1 : 1;
+                        pw.pg[pw.cpg].bendOctave = Common.CheckRange(pw.pg[pw.cpg].bendOctave, 1, 8);
                         break;
                     case enmMMLType.OctaveDown:
-                        pw.incPos();
-                        pw.bendOctave += parent.info.octaveRev ? 1 : -1;
-                        pw.bendOctave = Common.CheckRange(pw.bendOctave, 1, 8);
+                        pw.incPos(page);
+                        pw.pg[pw.cpg].bendOctave += parent.info.octaveRev ? 1 : -1;
+                        pw.pg[pw.cpg].bendOctave = Common.CheckRange(pw.pg[pw.cpg].bendOctave, 1, 8);
                         break;
                 }
             }
 
             //音符の変化量
-            int ed = Const.NOTE.IndexOf(pw.bendNote) + 1 + (pw.bendOctave - 1) * 12 + pw.bendShift;
+            int ed = Const.NOTE.IndexOf(pw.pg[pw.cpg].bendNote) + 1 + (pw.pg[pw.cpg].bendOctave - 1) * 12 + pw.pg[pw.cpg].bendShift;
             ed = Common.CheckRange(ed, 0, 8 * 12 - 1);
-            int st = Const.NOTE.IndexOf(note.cmd) + 1 + (pw.octaveNow - 1) * 12 + note.shift;//
+            int st = Const.NOTE.IndexOf(note.cmd) + 1 + (pw.pg[pw.cpg].octaveNow - 1) * 12 + note.shift;//
             st = Common.CheckRange(st, 0, 8 * 12 - 1);
 
             int delta = ed - st;
             if (delta == 0 || bendDelayCounter == ml)
             {
-                pw.bendNote = 'r';
-                pw.bendWaitCounter = -1;
+                pw.pg[pw.cpg].bendNote = 'r';
+                pw.pg[pw.cpg].bendWaitCounter = -1;
             }
             else
             {
@@ -349,16 +349,16 @@ namespace Core
                 List<int> lstBend = new List<int>();
                 int toneDoublerShift = GetToneDoublerShift(
                     pw
-                    , pw.octaveNow
+                    , pw.pg[pw.cpg].octaveNow
                     , note.cmd
                     , note.shift);
 
                 //midi向け
-                if (!pw.beforeTie)
+                if (!pw.pg[pw.cpg].beforeTie)
                 {
-                    pw.bendStartNote = note.cmd;
-                    pw.bendStartOctave = pw.octaveNow;
-                    pw.bendStartShift = pw.shift;
+                    pw.pg[pw.cpg].bendStartNote = note.cmd;
+                    pw.pg[pw.cpg].bendStartOctave = pw.pg[pw.cpg].octaveNow;
+                    pw.pg[pw.cpg].bendStartShift = pw.pg[pw.cpg].shift;
                 }
 
                 for (int i = 0; i < Math.Abs(delta); i++)
@@ -369,13 +369,13 @@ namespace Core
                         pw
                         ,mml
                         , out int a
-                        , pw.octaveNow
+                        , pw.pg[pw.cpg].octaveNow
                         , note.cmd
-                        , note.shift + (i + 0) * Math.Sign(delta) + pw.keyShift + pw.toneDoublerKeyShift
+                        , note.shift + (i + 0) * Math.Sign(delta) + pw.pg[pw.cpg].keyShift + pw.pg[pw.cpg].toneDoublerKeyShift
                         , out int b
-                        , pw.octaveNow
+                        , pw.pg[pw.cpg].octaveNow
                         , note.cmd
-                        , note.shift + (i + 1) * Math.Sign(delta) + pw.keyShift + pw.toneDoublerKeyShift
+                        , note.shift + (i + 1) * Math.Sign(delta) + pw.pg[pw.cpg].keyShift + pw.pg[pw.cpg].toneDoublerKeyShift
                         , delta
                         );
 
@@ -405,14 +405,14 @@ namespace Core
                     of = f;
                     cnt = 1;
                 }
-                pw.bendList = new Stack<Tuple<int, int>>();
+                pw.pg[pw.cpg].bendList = new Stack<Tuple<int, int>>();
                 foreach (Tuple<int, int> lbt in lb)
                 {
-                    pw.bendList.Push(lbt);
+                    pw.pg[pw.cpg].bendList.Push(lbt);
                 }
-                Tuple<int, int> t = pw.bendList.Pop();
-                pw.bendFnum = t.Item1;
-                pw.bendWaitCounter = t.Item2;
+                Tuple<int, int> t = pw.pg[pw.cpg].bendList.Pop();
+                pw.pg[pw.cpg].bendFnum = t.Item1;
+                pw.pg[pw.cpg].bendWaitCounter = t.Item2;
             }
 
             return bendDelayCounter;
@@ -420,7 +420,7 @@ namespace Core
 
         private bool CheckLFOParam(partWork pw, int c, MML mml)
         {
-            if (pw.lfo[c].param == null)
+            if (pw.pg[pw.cpg].lfo[c].param == null)
             {
                 msgBox.setErrMsg(msg.get("E10001")
                     , mml.line.Lp);
@@ -593,26 +593,26 @@ namespace Core
         public virtual void SetDummyData(partWork pw, MML mml)
         {
             byte[] cmd;
-            if (pw.chip.parent.info.format == enmFormat.ZGM)
+            if (pw.pg[pw.cpg].chip.parent.info.format == enmFormat.ZGM)
             {
-                if (pw.chip.parent.ChipCommandSize == 2)
+                if (pw.pg[pw.cpg].chip.parent.ChipCommandSize == 2)
                 {
-                    cmd = new byte[] { 0x09, 0x00, pw.port[0][0], pw.port[0][1] };
+                    cmd = new byte[] { 0x09, 0x00, pw.pg[pw.cpg].port[0][0], pw.pg[pw.cpg].port[0][1] };
                     parent.dummyCmdCounter += 4;
                 }
                 else
                 {
-                    cmd = new byte[] { 0x09, pw.port[0][0] };
+                    cmd = new byte[] { 0x09, pw.pg[pw.cpg].port[0][0] };
                     parent.dummyCmdCounter += 3;
                 }
 
                 //Console.WriteLine("SkipAddress:{0:x06} skip:{1:x06}", parent.dat.Count, parent.dummyCmdCounter);
-                parent.OutData(mml, cmd, (byte)(pw.chip.ChipNumber));//0x09(zgm):DummyChip (!!CAUTION!!)
+                parent.OutData(mml, cmd, (byte)(pw.pg[pw.cpg].chip.ChipNumber));//0x09(zgm):DummyChip (!!CAUTION!!)
             }
             else
             {
-                cmd = new byte[] { 0x2f, pw.port[0][0] };
-                parent.OutData(mml, cmd, (byte)(pw.chip.ChipNumber));//0x2f(vgm/xgm):DummyChip (!!CAUTION!!)
+                cmd = new byte[] { 0x2f, pw.pg[pw.cpg].port[0][0] };
+                parent.OutData(mml, cmd, (byte)(pw.pg[pw.cpg].chip.ChipNumber));//0x2f(vgm/xgm):DummyChip (!!CAUTION!!)
                 parent.dummyCmdCounter += 3;
             }
 
@@ -640,69 +640,69 @@ namespace Core
 
         public virtual void SetEnvelopeAtKeyOn(partWork pw, MML mml)
         {
-            if (!pw.envelopeMode)
+            if (!pw.pg[pw.cpg].envelopeMode)
             {
-                pw.envVolume = 0;
-                pw.envIndex = -1;
+                pw.pg[pw.cpg].envVolume = 0;
+                pw.pg[pw.cpg].envIndex = -1;
                 return;
             }
 
             //System.Diagnostics.Debug.WriteLine("");
             //System.Diagnostics.Debug.WriteLine("EnvKeyOn");
 
-            pw.envIndex = 0;
-            pw.envCounter = 0;
-            int maxValue = pw.MaxVolume;// (pw.envelope[8] == (int)enmChipType.RF5C164) ? 255 : 15;
+            pw.pg[pw.cpg].envIndex = 0;
+            pw.pg[pw.cpg].envCounter = 0;
+            int maxValue = pw.pg[pw.cpg].MaxVolume;// (pw.ppg[pw.cpgNum].envelope[8] == (int)enmChipType.RF5C164) ? 255 : 15;
 
-            while (pw.envCounter == 0 && pw.envIndex != -1)
+            while (pw.pg[pw.cpg].envCounter == 0 && pw.pg[pw.cpg].envIndex != -1)
             {
-                switch (pw.envIndex)
+                switch (pw.pg[pw.cpg].envIndex)
                 {
                     case 0: // AR phase
                         //System.Diagnostics.Debug.Write("EnvAR");
-                        pw.envCounter = pw.envelope[2];
-                        if (pw.envelope[2] > 0 && pw.envelope[1] < maxValue)
+                        pw.pg[pw.cpg].envCounter = pw.pg[pw.cpg].envelope[2];
+                        if (pw.pg[pw.cpg].envelope[2] > 0 && pw.pg[pw.cpg].envelope[1] < maxValue)
                         {
-                            pw.envVolume = pw.envelope[1];
-                            //System.Diagnostics.Debug.Write(string.Format(":{0}",pw.envVolume));
+                            pw.pg[pw.cpg].envVolume = pw.pg[pw.cpg].envelope[1];
+                            //System.Diagnostics.Debug.Write(string.Format(":{0}",pw.ppg[pw.cpgNum].envVolume));
                         }
                         else
                         {
-                            pw.envVolume = maxValue;
-                            pw.envIndex++;
-                            //System.Diagnostics.Debug.Write(string.Format(":next", pw.envVolume));
+                            pw.pg[pw.cpg].envVolume = maxValue;
+                            pw.pg[pw.cpg].envIndex++;
+                            //System.Diagnostics.Debug.Write(string.Format(":next", pw.ppg[pw.cpgNum].envVolume));
                         }
                         //System.Diagnostics.Debug.WriteLine("");
                         break;
                     case 1: // DR phase
                         //System.Diagnostics.Debug.Write("EnvDR");
-                        pw.envCounter = pw.envelope[3];
-                        if (pw.envelope[3] > 0 && pw.envelope[4] < maxValue)
+                        pw.pg[pw.cpg].envCounter = pw.pg[pw.cpg].envelope[3];
+                        if (pw.pg[pw.cpg].envelope[3] > 0 && pw.pg[pw.cpg].envelope[4] < maxValue)
                         {
-                            pw.envVolume = maxValue;
-                            //System.Diagnostics.Debug.Write(string.Format(":{0}", pw.envVolume));
+                            pw.pg[pw.cpg].envVolume = maxValue;
+                            //System.Diagnostics.Debug.Write(string.Format(":{0}", pw.ppg[pw.cpgNum].envVolume));
                         }
                         else
                         {
-                            pw.envVolume = pw.envelope[4];
-                            pw.envIndex++;
-                            //System.Diagnostics.Debug.Write(string.Format(":next", pw.envVolume));
+                            pw.pg[pw.cpg].envVolume = pw.pg[pw.cpg].envelope[4];
+                            pw.pg[pw.cpg].envIndex++;
+                            //System.Diagnostics.Debug.Write(string.Format(":next", pw.ppg[pw.cpgNum].envVolume));
                         }
                         //System.Diagnostics.Debug.WriteLine("");
                         break;
                     case 2: // SR phase
                         //System.Diagnostics.Debug.Write("EnvSR");
-                        pw.envCounter = pw.envelope[5];
-                        if (pw.envelope[5] > 0 && pw.envelope[4] != 0)
+                        pw.pg[pw.cpg].envCounter = pw.pg[pw.cpg].envelope[5];
+                        if (pw.pg[pw.cpg].envelope[5] > 0 && pw.pg[pw.cpg].envelope[4] != 0)
                         {
-                            pw.envVolume = pw.envelope[4];
-                            //System.Diagnostics.Debug.Write(string.Format(":{0}", pw.envVolume));
+                            pw.pg[pw.cpg].envVolume = pw.pg[pw.cpg].envelope[4];
+                            //System.Diagnostics.Debug.Write(string.Format(":{0}", pw.ppg[pw.cpgNum].envVolume));
                         }
                         else
                         {
-                            pw.envVolume = 0;
-                            pw.envIndex = -1;
-                            //System.Diagnostics.Debug.Write(string.Format(":end", pw.envVolume));
+                            pw.pg[pw.cpg].envVolume = 0;
+                            pw.pg[pw.cpg].envIndex = -1;
+                            //System.Diagnostics.Debug.Write(string.Format(":end", pw.ppg[pw.cpgNum].envVolume));
                         }
                         //System.Diagnostics.Debug.WriteLine("");
                         break;
@@ -735,7 +735,7 @@ namespace Core
         public virtual void CmdKeyShift(partWork pw, MML mml)
         {
             int n = (int)mml.args[0];
-            pw.keyShift = Common.CheckRange(n, -128, 128);
+            pw.pg[pw.cpg].keyShift = Common.CheckRange(n, -128, 128);
             SetDummyData(pw, mml);
         }
 
@@ -744,8 +744,8 @@ namespace Core
             int sign = (int)mml.args[0];
             int n = (int)mml.args[1];
 
-            pw.addressShift = (sign == 0) ? n : (pw.addressShift + (n * sign));
-            if (pw.addressShift < 0) pw.addressShift = 0;
+            pw.pg[pw.cpg].addressShift = (sign == 0) ? n : (pw.pg[pw.cpg].addressShift + (n * sign));
+            if (pw.pg[pw.cpg].addressShift < 0) pw.pg[pw.cpg].addressShift = 0;
         }
 
         public virtual void CmdMIDICh(partWork pw, MML mml)
@@ -823,99 +823,99 @@ namespace Core
             eLfoType t = (char)mml.args[1] == 'T' ? eLfoType.Tremolo
                 : ((char)mml.args[1] == 'V' ? eLfoType.Vibrato : eLfoType.Hardware);
 
-            pw.lfo[c].type = t;
-            pw.lfo[c].sw = false;
-            pw.lfo[c].isEnd = true;
-            pw.lfo[c].param = new List<int>();
+            pw.pg[pw.cpg].lfo[c].type = t;
+            pw.pg[pw.cpg].lfo[c].sw = false;
+            pw.pg[pw.cpg].lfo[c].isEnd = true;
+            pw.pg[pw.cpg].lfo[c].param = new List<int>();
             for (int i = 2; i < mml.args.Count; i++)
             {
                 if(mml.args[i] is int)
-                pw.lfo[c].param.Add((int)mml.args[i]);
+                pw.pg[pw.cpg].lfo[c].param.Add((int)mml.args[i]);
             }
 
-            if (pw.lfo[c].type == eLfoType.Tremolo || pw.lfo[c].type == eLfoType.Vibrato)
+            if (pw.pg[pw.cpg].lfo[c].type == eLfoType.Tremolo || pw.pg[pw.cpg].lfo[c].type == eLfoType.Vibrato)
             {
-                if (pw.lfo[c].param.Count < 4)
+                if (pw.pg[pw.cpg].lfo[c].param.Count < 4)
                 {
                     msgBox.setErrMsg(msg.get("E10005")
                     , mml.line.Lp);
                     return;
                 }
-                if (pw.lfo[c].param.Count > 9)
+                if (pw.pg[pw.cpg].lfo[c].param.Count > 9)
                 {
                     msgBox.setErrMsg(msg.get("E10006")
                     , mml.line.Lp);
                     return;
                 }
 
-                pw.lfo[c].param[0] = Common.CheckRange(pw.lfo[c].param[0], 0, (int)parent.info.clockCount);
-                pw.lfo[c].param[1] = Common.CheckRange(pw.lfo[c].param[1], 1, 255);
-                pw.lfo[c].param[2] = Common.CheckRange(pw.lfo[c].param[2], -32768, 32767);
-                if (pw.lfo[c].param.Count > 4)
+                pw.pg[pw.cpg].lfo[c].param[0] = Common.CheckRange(pw.pg[pw.cpg].lfo[c].param[0], 0, (int)parent.info.clockCount);
+                pw.pg[pw.cpg].lfo[c].param[1] = Common.CheckRange(pw.pg[pw.cpg].lfo[c].param[1], 1, 255);
+                pw.pg[pw.cpg].lfo[c].param[2] = Common.CheckRange(pw.pg[pw.cpg].lfo[c].param[2], -32768, 32767);
+                if (pw.pg[pw.cpg].lfo[c].param.Count > 4)
                 {
-                    pw.lfo[c].param[4] = Common.CheckRange(pw.lfo[c].param[4], 0, 4);
+                    pw.pg[pw.cpg].lfo[c].param[4] = Common.CheckRange(pw.pg[pw.cpg].lfo[c].param[4], 0, 4);
                 }
                 else
                 {
-                    pw.lfo[c].param.Add(0);
+                    pw.pg[pw.cpg].lfo[c].param.Add(0);
                 }
 
-                if (pw.lfo[c].param[4] != 2) pw.lfo[c].param[3] = Math.Abs(Common.CheckRange(pw.lfo[c].param[3], 0, 32767));
-                else pw.lfo[c].param[3] = Common.CheckRange(pw.lfo[c].param[3], -32768, 32767);
+                if (pw.pg[pw.cpg].lfo[c].param[4] != 2) pw.pg[pw.cpg].lfo[c].param[3] = Math.Abs(Common.CheckRange(pw.pg[pw.cpg].lfo[c].param[3], 0, 32767));
+                else pw.pg[pw.cpg].lfo[c].param[3] = Common.CheckRange(pw.pg[pw.cpg].lfo[c].param[3], -32768, 32767);
 
-                if (pw.lfo[c].param.Count > 5)
+                if (pw.pg[pw.cpg].lfo[c].param.Count > 5)
                 {
-                    pw.lfo[c].param[5] = Common.CheckRange(pw.lfo[c].param[5], 0, 1);
+                    pw.pg[pw.cpg].lfo[c].param[5] = Common.CheckRange(pw.pg[pw.cpg].lfo[c].param[5], 0, 1);
                 }
                 else
                 {
-                    pw.lfo[c].param.Add(1);
+                    pw.pg[pw.cpg].lfo[c].param.Add(1);
                 }
-                if (pw.lfo[c].param.Count > 6)
+                if (pw.pg[pw.cpg].lfo[c].param.Count > 6)
                 {
-                    pw.lfo[c].param[6] = Common.CheckRange(pw.lfo[c].param[6], -32768, 32767);
-                    //if (pw.lfo[c].param[6] == 0) pw.lfo[c].param[6] = 1;
+                    pw.pg[pw.cpg].lfo[c].param[6] = Common.CheckRange(pw.pg[pw.cpg].lfo[c].param[6], -32768, 32767);
+                    //if (pw.ppg[pw.cpgNum].lfo[c].param[6] == 0) pw.ppg[pw.cpgNum].lfo[c].param[6] = 1;
                 }
                 else
                 {
-                    pw.lfo[c].param.Add(0);
+                    pw.pg[pw.cpg].lfo[c].param.Add(0);
                 }
 
                 //DepthSpeed
-                if (pw.lfo[c].param.Count > 7) pw.lfo[c].param[7] = Common.CheckRange(pw.lfo[c].param[7], 0, 255);
-                else pw.lfo[c].param.Add(0);
+                if (pw.pg[pw.cpg].lfo[c].param.Count > 7) pw.pg[pw.cpg].lfo[c].param[7] = Common.CheckRange(pw.pg[pw.cpg].lfo[c].param[7], 0, 255);
+                else pw.pg[pw.cpg].lfo[c].param.Add(0);
 
                 //DepthDelta
-                if (pw.lfo[c].param.Count > 8) pw.lfo[c].param[8] = Common.CheckRange(pw.lfo[c].param[8], -32768, 32767);
-                else pw.lfo[c].param.Add(0);
+                if (pw.pg[pw.cpg].lfo[c].param.Count > 8) pw.pg[pw.cpg].lfo[c].param[8] = Common.CheckRange(pw.pg[pw.cpg].lfo[c].param[8], -32768, 32767);
+                else pw.pg[pw.cpg].lfo[c].param.Add(0);
 
-                pw.lfo[c].sw = true;
-                pw.lfo[c].isEnd = false;
-                pw.lfo[c].value = (pw.lfo[c].param[0] == 0) ? pw.lfo[c].param[6] : 0;//ディレイ中は振幅補正は適用されない
-                pw.lfo[c].waitCounter = pw.lfo[c].param[0];
-                pw.lfo[c].direction = pw.lfo[c].param[2] < 0 ? -1 : 1;
-                if (pw.lfo[c].param[4] == 2) pw.lfo[c].direction = -1; //矩形の場合は必ず-1(Val1から開始する)をセット
-                pw.lfo[c].depthWaitCounter = pw.lfo[c].param[7];
-                pw.lfo[c].depth = pw.lfo[c].param[3];
-                pw.lfo[c].depthV2 = pw.lfo[c].param[2];
+                pw.pg[pw.cpg].lfo[c].sw = true;
+                pw.pg[pw.cpg].lfo[c].isEnd = false;
+                pw.pg[pw.cpg].lfo[c].value = (pw.pg[pw.cpg].lfo[c].param[0] == 0) ? pw.pg[pw.cpg].lfo[c].param[6] : 0;//ディレイ中は振幅補正は適用されない
+                pw.pg[pw.cpg].lfo[c].waitCounter = pw.pg[pw.cpg].lfo[c].param[0];
+                pw.pg[pw.cpg].lfo[c].direction = pw.pg[pw.cpg].lfo[c].param[2] < 0 ? -1 : 1;
+                if (pw.pg[pw.cpg].lfo[c].param[4] == 2) pw.pg[pw.cpg].lfo[c].direction = -1; //矩形の場合は必ず-1(Val1から開始する)をセット
+                pw.pg[pw.cpg].lfo[c].depthWaitCounter = pw.pg[pw.cpg].lfo[c].param[7];
+                pw.pg[pw.cpg].lfo[c].depth = pw.pg[pw.cpg].lfo[c].param[3];
+                pw.pg[pw.cpg].lfo[c].depthV2 = pw.pg[pw.cpg].lfo[c].param[2];
             }
             else
             {
-                pw.lfo[c].sw = true;
-                pw.lfo[c].isEnd = false;
-                pw.lfo[c].value = 0;
-                pw.lfo[c].waitCounter = -1;
-                pw.lfo[c].direction = 0;
-                pw.lfo[c].depthWaitCounter = 0;
-                pw.lfo[c].depth = 0;
-                pw.lfo[c].depthV2 = 0;
+                pw.pg[pw.cpg].lfo[c].sw = true;
+                pw.pg[pw.cpg].lfo[c].isEnd = false;
+                pw.pg[pw.cpg].lfo[c].value = 0;
+                pw.pg[pw.cpg].lfo[c].waitCounter = -1;
+                pw.pg[pw.cpg].lfo[c].direction = 0;
+                pw.pg[pw.cpg].lfo[c].depthWaitCounter = 0;
+                pw.pg[pw.cpg].lfo[c].depth = 0;
+                pw.pg[pw.cpg].lfo[c].depthV2 = 0;
             }
 
             mml.args.Add(
-                (pw.lfo[0].sw ? "P" : "-")
-                + (pw.lfo[1].sw ? "Q" : "-")
-                + (pw.lfo[2].sw ? "R" : "-")
-                + (pw.lfo[3].sw ? "S" : "-"));
+                (pw.pg[pw.cpg].lfo[0].sw ? "P" : "-")
+                + (pw.pg[pw.cpg].lfo[1].sw ? "Q" : "-")
+                + (pw.pg[pw.cpg].lfo[2].sw ? "R" : "-")
+                + (pw.pg[pw.cpg].lfo[3].sw ? "S" : "-"));
             SetDummyData(pw, mml);
         }
 
@@ -930,13 +930,13 @@ namespace Core
                 return;
             }
 
-            pw.lfo[c].sw = !(n == 0);
+            pw.pg[pw.cpg].lfo[c].sw = !(n == 0);
 
             mml.args.Add(
-                (pw.lfo[0].sw ? "P" : "-")
-                + (pw.lfo[1].sw ? "Q" : "-")
-                + (pw.lfo[2].sw ? "R" : "-")
-                + (pw.lfo[3].sw ? "S" : "-"));
+                (pw.pg[pw.cpg].lfo[0].sw ? "P" : "-")
+                + (pw.pg[pw.cpg].lfo[1].sw ? "Q" : "-")
+                + (pw.pg[pw.cpg].lfo[2].sw ? "R" : "-")
+                + (pw.pg[pw.cpg].lfo[3].sw ? "S" : "-"));
             SetDummyData(pw, mml);
         }
 
@@ -956,13 +956,13 @@ namespace Core
             switch (cmd)
             {
                 case "EON":
-                    pw.envelopeMode = true;
+                    pw.pg[pw.cpg].envelopeMode = true;
                     break;
                 case "EOF":
-                    pw.envelopeMode = false;
-                    if (pw.Type == enmChannelType.SSG)
+                    pw.pg[pw.cpg].envelopeMode = false;
+                    if (pw.pg[pw.cpg].Type == enmChannelType.SSG)
                     {
-                        pw.beforeVolume = -1;
+                        pw.pg[pw.cpg].beforeVolume = -1;
                     }
                     break;
             }
@@ -987,14 +987,14 @@ namespace Core
         public virtual void CmdVolume(partWork pw, MML mml)
         {
             int n;
-            n = (mml.args != null && mml.args.Count > 0) ? (int)mml.args[0] : pw.latestVolume;
-            pw.volume = Common.CheckRange(n, 0, pw.MaxVolume);
-            pw.latestVolume = n;
+            n = (mml.args != null && mml.args.Count > 0) ? (int)mml.args[0] : pw.pg[pw.cpg].latestVolume;
+            pw.pg[pw.cpg].volume = Common.CheckRange(n, 0, pw.pg[pw.cpg].MaxVolume);
+            pw.pg[pw.cpg].latestVolume = n;
 
             MML vmml = new MML();
             vmml.type = enmMMLType.Volume;
             vmml.args = new List<object>();
-            vmml.args.Add(pw.volume);
+            vmml.args.Add(pw.pg[pw.cpg].volume);
             vmml.line = mml.line;
             SetDummyData(pw, vmml);
 
@@ -1010,14 +1010,14 @@ namespace Core
             else
                 n = (int)mml.args[0];
 
-            n = Common.CheckRange(n, 1, pw.MaxVolume);
-            pw.volume += parent.info.volumeRev ? -n : n;
-            pw.volume = Common.CheckRange(pw.volume, 0, pw.MaxVolume);
+            n = Common.CheckRange(n, 1, pw.pg[pw.cpg].MaxVolume);
+            pw.pg[pw.cpg].volume += parent.info.volumeRev ? -n : n;
+            pw.pg[pw.cpg].volume = Common.CheckRange(pw.pg[pw.cpg].volume, 0, pw.pg[pw.cpg].MaxVolume);
 
             MML vmml = new MML();
             vmml.type = enmMMLType.Volume;
             vmml.args = new List<object>();
-            vmml.args.Add(pw.volume);
+            vmml.args.Add(pw.pg[pw.cpg].volume);
             vmml.line = mml.line;
             SetDummyData(pw, vmml);
         }
@@ -1032,69 +1032,69 @@ namespace Core
             else
                 n = (int)mml.args[0];
 
-            n = Common.CheckRange(n, 1, pw.MaxVolume);
-            pw.volume -= parent.info.volumeRev ? -n : n;
-            pw.volume = Common.CheckRange(pw.volume, 0, pw.MaxVolume);
+            n = Common.CheckRange(n, 1, pw.pg[pw.cpg].MaxVolume);
+            pw.pg[pw.cpg].volume -= parent.info.volumeRev ? -n : n;
+            pw.pg[pw.cpg].volume = Common.CheckRange(pw.pg[pw.cpg].volume, 0, pw.pg[pw.cpg].MaxVolume);
 
             MML vmml = new MML();
             vmml.type = enmMMLType.Volume;
             vmml.args = new List<object>();
-            vmml.args.Add(pw.volume);
+            vmml.args.Add(pw.pg[pw.cpg].volume);
             vmml.line = mml.line;
             SetDummyData(pw, vmml);
         }
 
         public virtual int GetDefaultRelativeVolume(partWork pw, MML mml)
         {
-            if (relVol.ContainsKey(pw.ch)) return relVol[pw.ch];
+            if (relVol.ContainsKey(pw.pg[pw.cpg].ch)) return relVol[pw.pg[pw.cpg].ch];
             return 1;
         }
 
         public virtual void CmdRelativeVolumeSetting(partWork pw, MML mml)
         {
-            if (relVol.ContainsKey(pw.ch))
-                relVol.Remove(pw.ch);
+            if (relVol.ContainsKey(pw.pg[pw.cpg].ch))
+                relVol.Remove(pw.pg[pw.cpg].ch);
 
-            relVol.Add(pw.ch, (int)mml.args[0]);
+            relVol.Add(pw.pg[pw.cpg].ch, (int)mml.args[0]);
         }
 
         public virtual void CmdOctave(partWork pw, MML mml)
         {
             int n;
-            n = (mml.args != null && mml.args.Count > 0) ? (int)mml.args[0] : pw.latestOctave;
-            pw.octaveNew = Common.CheckRange(n, 1, 8);
-            pw.latestOctave = n;
+            n = (mml.args != null && mml.args.Count > 0) ? (int)mml.args[0] : pw.pg[pw.cpg].latestOctave;
+            pw.pg[pw.cpg].octaveNew = Common.CheckRange(n, 1, 8);
+            pw.pg[pw.cpg].latestOctave = n;
 
             MML vmml = new MML();
             vmml.type = enmMMLType.Octave;
             vmml.args = new List<object>();
-            vmml.args.Add(pw.octaveNew);
+            vmml.args.Add(pw.pg[pw.cpg].octaveNew);
             vmml.line = mml.line;
             SetDummyData(pw, vmml);
         }
 
         public virtual void CmdOctaveUp(partWork pw, MML mml)
         {
-            pw.octaveNew += parent.info.octaveRev ? -1 : 1;
-            pw.octaveNew = Common.CheckRange(pw.octaveNew, 1, 8);
+            pw.pg[pw.cpg].octaveNew += parent.info.octaveRev ? -1 : 1;
+            pw.pg[pw.cpg].octaveNew = Common.CheckRange(pw.pg[pw.cpg].octaveNew, 1, 8);
 
             MML vmml = new MML();
             vmml.type = enmMMLType.Octave;
             vmml.args = new List<object>();
-            vmml.args.Add(pw.octaveNew);
+            vmml.args.Add(pw.pg[pw.cpg].octaveNew);
             vmml.line = mml.line;
             SetDummyData(pw, vmml);
         }
 
         public virtual void CmdOctaveDown(partWork pw, MML mml)
         {
-            pw.octaveNew += parent.info.octaveRev ? 1 : -1;
-            pw.octaveNew = Common.CheckRange(pw.octaveNew, 1, 8);
+            pw.pg[pw.cpg].octaveNew += parent.info.octaveRev ? 1 : -1;
+            pw.pg[pw.cpg].octaveNew = Common.CheckRange(pw.pg[pw.cpg].octaveNew, 1, 8);
 
             MML vmml = new MML();
             vmml.type = enmMMLType.Octave;
             vmml.args = new List<object>();
-            vmml.args.Add(pw.octaveNew);
+            vmml.args.Add(pw.pg[pw.cpg].octaveNew);
             vmml.line = mml.line;
             SetDummyData(pw, vmml);
         }
@@ -1104,7 +1104,7 @@ namespace Core
         {
             int n = (int)mml.args[0];
             n = Common.CheckRange(n, 1, 65535);
-            pw.length = n;
+            pw.pg[pw.cpg].length = n;
 
             SetDummyData(pw, mml);
         }
@@ -1113,7 +1113,7 @@ namespace Core
         {
             int n = (int)mml.args[0];
             n = Common.CheckRange(n, 1, 65535);
-            pw.length = n;
+            pw.pg[pw.cpg].length = n;
         }
 
 
@@ -1128,7 +1128,7 @@ namespace Core
         {
             int n = (int)mml.args[0];
             n = Common.CheckRange(n, -127, 127);
-            pw.detune = n;
+            pw.pg[pw.cpg].detune = n;
             SetDummyData(pw, mml);
         }
 
@@ -1142,16 +1142,16 @@ namespace Core
         {
             int n = (int)mml.args[0];
             n = Common.CheckRange(n, 0, 255);
-            pw.gatetime = n;
-            pw.gatetimePmode = false;
+            pw.pg[pw.cpg].gatetime = n;
+            pw.pg[pw.cpg].gatetimePmode = false;
         }
 
         public virtual void CmdGatetime2(partWork pw, MML mml)
         {
             int n = (int)mml.args[0];
             n = Common.CheckRange(n, 1, 8);
-            pw.gatetime = n;
-            pw.gatetimePmode = true;
+            pw.pg[pw.cpg].gatetime = n;
+            pw.pg[pw.cpg].gatetimePmode = true;
         }
 
 
@@ -1174,9 +1174,9 @@ namespace Core
         }
 
 
-        public void CmdLoop(partWork pw, MML mml)
+        public void CmdLoop(partWork pw,int page, MML mml)
         {
-            pw.incPos();
+            pw.incPos(page);
             parent.loopOffset = (long)parent.dat.Count - parent.dummyCmdCounter;
             parent.loopClock = (long)parent.lClock - parent.dummyCmdClock;
             parent.loopSamples = (long)parent.dSample - parent.dummyCmdSample;
@@ -1197,12 +1197,12 @@ namespace Core
 
                     foreach (partWork p in chip.lstPartWork)
                     {
-                        p.reqFreqReset = true;
-                        p.beforeLVolume = -1;
-                        p.beforeRVolume = -1;
-                        p.beforeVolume = -1;
-                        p.pan = new dint(3);
-                        p.beforeTie = false;
+                        p.pg[p.cpg].reqFreqReset = true;
+                        p.pg[p.cpg].beforeLVolume = -1;
+                        p.pg[p.cpg].beforeRVolume = -1;
+                        p.pg[p.cpg].beforeVolume = -1;
+                        p.pg[p.cpg].pan = new dint(3);
+                        p.pg[p.cpg].beforeTie = false;
                         
                         chip.CmdLoopExtProc(p,mml);
                     }
@@ -1234,17 +1234,17 @@ namespace Core
         {
             List<int> lstRenpuLength = new List<int>();
             int noteCount = (int)mml.args[0];
-            int len = (int)pw.length;
+            int len = (int)pw.pg[pw.cpg].length;
             if (mml.args.Count > 1)
             {
                 int n = (int)mml.args[1];
                 n = Common.CheckRange(n, 1, 65535);
                 len = n;
             }
-            if (pw.stackRenpu.Count > 0)
+            if (pw.pg[pw.cpg].stackRenpu.Count > 0)
             {
-                len = pw.stackRenpu.First().lstRenpuLength[0];
-                pw.stackRenpu.First().lstRenpuLength.RemoveAt(0);
+                len = pw.pg[pw.cpg].stackRenpu.First().lstRenpuLength[0];
+                pw.pg[pw.cpg].stackRenpu.First().lstRenpuLength.RemoveAt(0);
             }
             //TODO: ネストしている場合と、数値していないの場合
 
@@ -1265,23 +1265,23 @@ namespace Core
                 lstRenpuLength.Add(le);
             }
 
-            pw.renpuFlg = true;
+            pw.pg[pw.cpg].renpuFlg = true;
 
             clsRenpu rp = new clsRenpu();
             rp.lstRenpuLength = lstRenpuLength;
-            pw.stackRenpu.Push(rp);
+            pw.pg[pw.cpg].stackRenpu.Push(rp);
         }
 
         public virtual void CmdRenpuEnd(partWork pw, MML mml)
         {
             //popしない内からスタックが空の場合は何もしない。
-            if (pw.stackRenpu.Count == 0) return;
+            if (pw.pg[pw.cpg].stackRenpu.Count == 0) return;
 
-            pw.stackRenpu.Pop();
+            pw.pg[pw.cpg].stackRenpu.Pop();
 
-            if (pw.stackRenpu.Count == 0)
+            if (pw.pg[pw.cpg].stackRenpu.Count == 0)
             {
-                pw.renpuFlg = false;
+                pw.pg[pw.cpg].renpuFlg = false;
             }
 
         }
@@ -1310,7 +1310,7 @@ namespace Core
             wkCount--;
             if (wkCount > 0)
             {
-                pw.mmlPos=pos-1;
+                pw.pg[pw.cpg].mmlPos=pos-1;
                 mml.args[2] = wkCount;
             }
             else
@@ -1322,7 +1322,7 @@ namespace Core
         public virtual void CmdRepeatExit(partWork pw, MML mml)
         {
             int pos = (int)mml.args[0];
-            MML repeatEnd = pw.mmlData[pos];
+            MML repeatEnd = pw.pg[pw.cpg].mmlData[pos];
             int wkCount = (int)repeatEnd.args[0];
             if (repeatEnd.args.Count > 2)
             {
@@ -1332,23 +1332,23 @@ namespace Core
             //最終リピート中のみ]に飛ばす
             if (wkCount < 2)
             {
-                pw.mmlPos = pos-1;
+                pw.pg[pw.cpg].mmlPos = pos-1;
             }
         }
 
 
-        public virtual void CmdNote(partWork pw, MML mml)
+        public virtual void CmdNote(partWork pw,int page, MML mml)
         {
             Note note = (Note)mml.args[0];
             int ml = 0;
 
             if (note.tDblSw)
             {
-                pw.TdA = pw.octaveNew * 12
+                pw.pg[pw.cpg].TdA = pw.pg[pw.cpg].octaveNew * 12
                     + Const.NOTE.IndexOf(note.cmd)
                     + note.shift
-                    + pw.keyShift;
-                pw.octaveNow = pw.octaveNew;
+                    + pw.pg[pw.cpg].keyShift;
+                pw.pg[pw.cpg].octaveNow = pw.pg[pw.cpg].octaveNew;
             }
 
             ml = note.length;
@@ -1357,7 +1357,7 @@ namespace Core
             int bendDelayCounter = 0;
             if (note.bendSw)
             {
-                bendDelayCounter = AnalyzeBend(pw, mml, note, ml);
+                bendDelayCounter = AnalyzeBend(pw,page, mml, note, ml);
             }
 
 
@@ -1365,31 +1365,31 @@ namespace Core
             {
                 msgBox.setErrMsg(msg.get("E10013")
                     , mml.line.Lp);
-                ml = (int)pw.length;
+                ml = (int)pw.pg[pw.cpg].length;
             }
 
-            if (pw.renpuFlg)
+            if (pw.pg[pw.cpg].renpuFlg)
             {
-                if (pw.stackRenpu.Count > 0)
+                if (pw.pg[pw.cpg].stackRenpu.Count > 0)
                 {
-                    ml = pw.stackRenpu.First().lstRenpuLength[0];
-                    pw.stackRenpu.First().lstRenpuLength.RemoveAt(0);
+                    ml = pw.pg[pw.cpg].stackRenpu.First().lstRenpuLength[0];
+                    pw.pg[pw.cpg].stackRenpu.First().lstRenpuLength.RemoveAt(0);
                 }
             }
 
             //WaitClockの決定
-            pw.waitCounter = ml;
+            pw.pg[pw.cpg].waitCounter = ml;
 
-            if (pw.reqFreqReset)
+            if (pw.pg[pw.cpg].reqFreqReset)
             {
-                pw.freq = -1;
-                pw.reqFreqReset = false;
+                pw.pg[pw.cpg].freq = -1;
+                pw.pg[pw.cpg].reqFreqReset = false;
             }
 
-            pw.octaveNow = pw.octaveNew;
-            pw.noteCmd = note.cmd;
-            pw.shift = note.shift;
-            pw.tie = note.tieSw;
+            pw.pg[pw.cpg].octaveNow = pw.pg[pw.cpg].octaveNew;
+            pw.pg[pw.cpg].noteCmd = note.cmd;
+            pw.pg[pw.cpg].shift = note.shift;
+            pw.pg[pw.cpg].tie = note.tieSw;
 
             //Tone Doubler
             if (note.tDblSw)
@@ -1398,33 +1398,33 @@ namespace Core
             }
             else
             {
-                if (pw.TdA != -1)
+                if (pw.pg[pw.cpg].TdA != -1)
                 {
-                    pw.TdA = -1;
+                    pw.pg[pw.cpg].TdA = -1;
                     SetToneDoubler(pw, mml);
                 }
             }
 
             //発音周波数
-            if (pw.bendWaitCounter != -1)
+            if (pw.pg[pw.cpg].bendWaitCounter != -1)
             {
-                pw.octaveNew = pw.bendOctave;//
-                pw.octaveNow = pw.bendOctave;//
-                pw.noteCmd = pw.bendNote;
-                pw.shift = pw.bendShift;
+                pw.pg[pw.cpg].octaveNew = pw.pg[pw.cpg].bendOctave;//
+                pw.pg[pw.cpg].octaveNow = pw.pg[pw.cpg].bendOctave;//
+                pw.pg[pw.cpg].noteCmd = pw.pg[pw.cpg].bendNote;
+                pw.pg[pw.cpg].shift = pw.pg[pw.cpg].bendShift;
             }
 
             //gateTimeの決定
-            if (pw.gatetimePmode)
-                pw.waitKeyOnCounter = pw.waitCounter * pw.gatetime / 8L;
+            if (pw.pg[pw.cpg].gatetimePmode)
+                pw.pg[pw.cpg].waitKeyOnCounter = pw.pg[pw.cpg].waitCounter * pw.pg[pw.cpg].gatetime / 8L;
             else
-                pw.waitKeyOnCounter = pw.waitCounter - pw.gatetime;
-            if (pw.waitKeyOnCounter < 1) pw.waitKeyOnCounter = 1;
+                pw.pg[pw.cpg].waitKeyOnCounter = pw.pg[pw.cpg].waitCounter - pw.pg[pw.cpg].gatetime;
+            if (pw.pg[pw.cpg].waitKeyOnCounter < 1) pw.pg[pw.cpg].waitKeyOnCounter = 1;
 
             //タイ指定では無い場合はキーオンする
-            if (!pw.beforeTie)
+            if (!pw.pg[pw.cpg].beforeTie)
             {
-                if (pw.envIndex != -1)
+                if (pw.pg[pw.cpg].envIndex != -1)
                 {
                     SetKeyOff(pw, mml);
                 }
@@ -1432,14 +1432,14 @@ namespace Core
                 SetLfoAtKeyOn(pw, mml);
                 SetVolume(pw, mml);
                 //強制設定
-                //pw.freq = -1;
+                //pw.ppg[pw.cpgNum].freq = -1;
                 //発音周波数の決定
                 SetDummyData(pw, mml);
                 SetFNum(pw, mml);
                 //midiむけ
-                if (pw.bendWaitCounter == -1)
+                if (pw.pg[pw.cpg].bendWaitCounter == -1)
                     ResetTieBend(pw, mml);
-                //if (!pw.chip.parent.useSkipPlayCommand)
+                //if (!pw.ppg[pw.cpgNum].chip.parent.useSkipPlayCommand)
                 //{
                 SetKeyOn(pw, mml);
                 //}
@@ -1447,22 +1447,22 @@ namespace Core
             else
             {
                 //強制設定
-                //pw.freq = -1;
+                //pw.ppg[pw.cpgNum].freq = -1;
                 //発音周波数の決定
                 SetDummyData(pw, mml);
                 SetFNum(pw, mml);
                 SetTieBend(pw, mml);
                 SetVolume(pw, mml);
 
-                if(pw.Type== enmChannelType.MIDI)
+                if(pw.pg[pw.cpg].Type== enmChannelType.MIDI)
                 {
                     SetKeyOn(pw, mml);
                 }
             }
 
-            if (note.chordSw) pw.waitCounter = 0;
+            if (note.chordSw) pw.pg[pw.cpg].waitCounter = 0;
 
-            pw.clockCounter += pw.waitCounter;
+            pw.pg[pw.cpg].clockCounter += pw.pg[pw.cpg].waitCounter;
         }
 
         protected virtual void ResetTieBend(partWork pw, MML mml)
@@ -1484,18 +1484,18 @@ namespace Core
             {
                 msgBox.setErrMsg(msg.get("E10013")
                     , mml.line.Lp);
-                ml = (int)pw.length;
+                ml = (int)pw.pg[pw.cpg].length;
             }
 
             //WaitClockの決定
-            pw.waitCounter = ml;
+            pw.pg[pw.cpg].waitCounter = ml;
 
-            //pw.octaveNow = pw.octaveNew;
-            //pw.noteCmd = rest.cmd;
-            //pw.shift = 0;
-            pw.tie = false;
+            //pw.ppg[pw.cpgNum].octaveNow = pw.ppg[pw.cpgNum].octaveNew;
+            //pw.ppg[pw.cpgNum].noteCmd = rest.cmd;
+            //pw.ppg[pw.cpgNum].shift = 0;
+            pw.pg[pw.cpg].tie = false;
 
-            pw.clockCounter += pw.waitCounter;
+            pw.pg[pw.cpg].clockCounter += pw.pg[pw.cpg].waitCounter;
             SetDummyData(pw, mml);
         }
 
@@ -1508,16 +1508,16 @@ namespace Core
             {
                 msgBox.setErrMsg(msg.get("E10013")
                     , mml.line.Lp);
-                ml = (int)pw.length;
+                ml = (int)pw.pg[pw.cpg].length;
             }
 
             str = string.Format("[{0}]{1}", parent.dSample.ToString(), str);
             parent.lyric += str;
             //WaitClockの決定
-            pw.waitCounter = ml;
-            pw.tie = false;
+            pw.pg[pw.cpg].waitCounter = ml;
+            pw.pg[pw.cpg].tie = false;
 
-            pw.clockCounter += pw.waitCounter;
+            pw.pg[pw.cpg].clockCounter += pw.pg[pw.cpg].waitCounter;
             SetDummyData(pw, mml);
         }
 

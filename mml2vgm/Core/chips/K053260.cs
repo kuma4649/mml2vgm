@@ -81,9 +81,9 @@ namespace Core
 
         public override void InitPart(partWork pw)
         {
-            pw.MaxVolume = 255;
-            pw.volume = pw.MaxVolume;
-            pw.port = port;
+            pw.pg[pw.cpg].MaxVolume = 255;
+            pw.pg[pw.cpg].volume = pw.pg[pw.cpg].MaxVolume;
+            pw.pg[pw.cpg].port = port;
         }
 
         private int[] n2f;
@@ -96,10 +96,10 @@ namespace Core
             for (int ch = 0; ch < ChMax; ch++)
             {
                 partWork pw = lstPartWork[ch];
-                pw.MaxVolume = Ch[ch].MaxVolume;
-                pw.panL = 0x4;//Center
-                pw.volume = pw.MaxVolume;
-                pw.port = port;
+                pw.pg[pw.cpg].MaxVolume = Ch[ch].MaxVolume;
+                pw.pg[pw.cpg].panL = 0x4;//Center
+                pw.pg[pw.cpg].volume = pw.pg[pw.cpg].MaxVolume;
+                pw.pg[pw.cpg].port = port;
             }
 
             if (ChipID != 0 && parent.info.format != enmFormat.ZGM)
@@ -353,7 +353,7 @@ namespace Core
             byte adr = 0;
             byte data = 0;
 
-            if (pw.instrument == -1)
+            if (pw.pg[pw.cpg].instrument == -1)
             {
                 LinePos lp = mml?.line?.Lp;
                 if (lp == null) lp = new LinePos("-");
@@ -365,51 +365,51 @@ namespace Core
             SetVolume(pw, mml);
 
             //Address shift
-            int stAdr = pw.pcmStartAddress + pw.addressShift;
-            if (stAdr >= pw.pcmEndAddress) stAdr = pw.pcmEndAddress - 1;
+            int stAdr = pw.pg[pw.cpg].pcmStartAddress + pw.pg[pw.cpg].addressShift;
+            if (stAdr >= pw.pg[pw.cpg].pcmEndAddress) stAdr = pw.pg[pw.cpg].pcmEndAddress - 1;
 
-            if (pw.beforepcmStartAddress != stAdr)
+            if (pw.pg[pw.cpg].beforepcmStartAddress != stAdr)
             {
                 //StartAdr L
-                adr = (byte)((pw.ch + 1) * 8 + 0x04);
+                adr = (byte)((pw.pg[pw.cpg].ch + 1) * 8 + 0x04);
                 data = (byte)stAdr;
                 OutK053260Port(mml, port[0], pw
                     , adr
                     , data
                     );
                 //StartAdr H
-                adr = (byte)((pw.ch + 1) * 8 + 0x05);
+                adr = (byte)((pw.pg[pw.cpg].ch + 1) * 8 + 0x05);
                 data = (byte)(stAdr >> 8);
                 OutK053260Port(mml, port[0], pw
                     , adr
                     , data
                     );
 
-                pw.beforepcmStartAddress = stAdr;
+                pw.pg[pw.cpg].beforepcmStartAddress = stAdr;
             }
 
             //K053260は終了アドレスではなくサイズを指定する
             //また、K053260はバンクをまたぐ演奏が可能(但しサイズは65534まで)
             //TODO:よって現在、パディングを行っているが不要かもしれない。
-            int size = pw.pcmEndAddress - pw.pcmStartAddress + 1;
-            if (pw.beforepcmEndAddress != size)
+            int size = pw.pg[pw.cpg].pcmEndAddress - pw.pg[pw.cpg].pcmStartAddress + 1;
+            if (pw.pg[pw.cpg].beforepcmEndAddress != size)
             {
                 //EndAdr L
-                adr = (byte)((pw.ch + 1) * 8 + 0x02);
+                adr = (byte)((pw.pg[pw.cpg].ch + 1) * 8 + 0x02);
                 data = (byte)size;
                 OutK053260Port(mml, port[0], pw
                     , adr
                     , data
                     );
                 //EndAdr H
-                adr = (byte)((pw.ch + 1) * 8 + 0x03);
+                adr = (byte)((pw.pg[pw.cpg].ch + 1) * 8 + 0x03);
                 data = (byte)(size >> 8);
                 OutK053260Port(mml, port[0], pw
                     , adr
                     , data
                     );
 
-                pw.beforepcmEndAddress = size;
+                pw.pg[pw.cpg].beforepcmEndAddress = size;
             }
 
 
@@ -417,21 +417,21 @@ namespace Core
             //また、他のチャンネルと合わせて設定する必要があります。
 
 
-            if (pw.beforepcmBank != pw.pcmBank)
+            if (pw.pg[pw.cpg].beforepcmBank != pw.pg[pw.cpg].pcmBank)
             {
-                adr = (byte)((pw.ch + 1) * 8 + 0x06);
-                data = (byte)(pw.pcmBank);
+                adr = (byte)((pw.pg[pw.cpg].ch + 1) * 8 + 0x06);
+                data = (byte)(pw.pg[pw.cpg].pcmBank);
                 OutK053260Port(mml, port[0], pw
                     , adr
                     , data
                     );
 
-                pw.beforepcmBank = pw.pcmBank;
+                pw.pg[pw.cpg].beforepcmBank = pw.pg[pw.cpg].pcmBank;
             }
 
-            if (parent.instPCM[pw.instrument].status != enmPCMSTATUS.ERROR)
+            if (parent.instPCM[pw.pg[pw.cpg].instrument].status != enmPCMSTATUS.ERROR)
             {
-                parent.instPCM[pw.instrument].status = enmPCMSTATUS.USED;
+                parent.instPCM[pw.pg[pw.cpg].instrument].status = enmPCMSTATUS.USED;
             }
 
         }
@@ -452,15 +452,15 @@ namespace Core
                     o = Common.CheckRange(--o, 0, 7);
                 }
 
-                if (pw.instrument < 0 || !parent.instPCM.ContainsKey(pw.instrument))
+                if (pw.pg[pw.cpg].instrument < 0 || !parent.instPCM.ContainsKey(pw.pg[pw.cpg].instrument))
                 {
                     return 0;
                 }
 
-                double freq = (double)parent.instPCM[pw.instrument].samplerate;
-                if (parent.instPCM[pw.instrument].freq != -1)
+                double freq = (double)parent.instPCM[pw.pg[pw.cpg].instrument].samplerate;
+                if (parent.instPCM[pw.pg[pw.cpg].instrument].freq != -1)
                 {
-                    freq = (double)parent.instPCM[pw.instrument].freq;
+                    freq = (double)parent.instPCM[pw.pg[pw.cpg].instrument].freq;
                 }
 
                 if (currentBaseFreq != freq)
@@ -480,36 +480,36 @@ namespace Core
 
         public override void SetFNum(partWork pw, MML mml)
         {
-            int f = GetK053260FNum(mml, pw, pw.octaveNow, pw.noteCmd, pw.shift + pw.keyShift);//
-            if (pw.bendWaitCounter != -1)
+            int f = GetK053260FNum(mml, pw, pw.pg[pw.cpg].octaveNow, pw.pg[pw.cpg].noteCmd, pw.pg[pw.cpg].shift + pw.pg[pw.cpg].keyShift);//
+            if (pw.pg[pw.cpg].bendWaitCounter != -1)
             {
-                f = pw.bendFnum;
+                f = pw.pg[pw.cpg].bendFnum;
             }
-            f = f + pw.detune;
+            f = f + pw.pg[pw.cpg].detune;
             for (int lfo = 0; lfo < 4; lfo++)
             {
-                if (!pw.lfo[lfo].sw)
+                if (!pw.pg[pw.cpg].lfo[lfo].sw)
                 {
                     continue;
                 }
-                if (pw.lfo[lfo].type != eLfoType.Vibrato)
+                if (pw.pg[pw.cpg].lfo[lfo].type != eLfoType.Vibrato)
                 {
                     continue;
                 }
-                f += pw.lfo[lfo].value + pw.lfo[lfo].param[6];
+                f += pw.pg[pw.cpg].lfo[lfo].value + pw.pg[pw.cpg].lfo[lfo].param[6];
             }
 
             f = Common.CheckRange(f, 0, 0xfff);
-            if (pw.freq == f) return;
+            if (pw.pg[pw.cpg].freq == f) return;
 
-            pw.freq = f;
+            pw.pg[pw.cpg].freq = f;
 
 
             //Delta
             int data = f & 0xfff;
-            if (pw.beforeFNum != data)
+            if (pw.pg[pw.cpg].beforeFNum != data)
             {
-                int adr = (pw.ch + 1) * 8 + 0x00;
+                int adr = (pw.pg[pw.cpg].ch + 1) * 8 + 0x00;
                 OutK053260Port(mml, port[0], pw
                     , (byte)adr
                     , (byte)data);
@@ -517,7 +517,7 @@ namespace Core
                 OutK053260Port(mml, port[0], pw
                     , (byte)adr
                     , (byte)((data & 0xf00) >> 8));
-                pw.beforeFNum = data;
+                pw.pg[pw.cpg].beforeFNum = data;
             }
 
         }
@@ -530,54 +530,54 @@ namespace Core
         public override void SetKeyOn(partWork pw, MML mml)
         {
             OutK053260KeyOn(pw, mml);
-            pw.keyOn = true;
+            pw.pg[pw.cpg].keyOn = true;
             SetDummyData(pw, mml);
             UpdateKeyOn(mml);
         }
 
         public override void SetKeyOff(partWork pw, MML mml)
         {
-            pw.keyOn = false;
-            pw.keyOff = true;
+            pw.pg[pw.cpg].keyOn = false;
+            pw.pg[pw.cpg].keyOff = true;
             UpdateKeyOn(mml);
         }
 
         public override void SetVolume(partWork pw, MML mml)
         {
-            int vol = pw.volume;
+            int vol = pw.pg[pw.cpg].volume;
 
-            if (pw.envelopeMode)
+            if (pw.pg[pw.cpg].envelopeMode)
             {
                 vol = 0;
-                if (pw.envIndex != -1)
+                if (pw.pg[pw.cpg].envIndex != -1)
                 {
-                    vol = pw.envVolume - (pw.MaxVolume - pw.volume);
+                    vol = pw.pg[pw.cpg].envVolume - (pw.pg[pw.cpg].MaxVolume - pw.pg[pw.cpg].volume);
                 }
             }
-            //Console.WriteLine("{0} ", pw.envVolume);
+            //Console.WriteLine("{0} ", pw.ppg[pw.cpgNum].envVolume);
 
             for (int lfo = 0; lfo < 4; lfo++)
             {
-                if (!pw.lfo[lfo].sw)
+                if (!pw.pg[pw.cpg].lfo[lfo].sw)
                 {
                     continue;
                 }
-                if (pw.lfo[lfo].type != eLfoType.Tremolo)
+                if (pw.pg[pw.cpg].lfo[lfo].type != eLfoType.Tremolo)
                 {
                     continue;
                 }
-                vol += pw.lfo[lfo].value + pw.lfo[lfo].param[6];
+                vol += pw.pg[pw.cpg].lfo[lfo].value + pw.pg[pw.cpg].lfo[lfo].param[6];
             }
 
             byte data = (byte)Common.CheckRange(vol, 0, 127);
-            if (pw.beforeVolume != data)
+            if (pw.pg[pw.cpg].beforeVolume != data)
             {
-                byte adr = (byte)((pw.ch + 1) * 8 + 0x07);
+                byte adr = (byte)((pw.pg[pw.cpg].ch + 1) * 8 + 0x07);
                 OutK053260Port(mml, port[0], pw
                     , adr
                     , data
                     );
-                pw.beforeVolume = data;
+                pw.pg[pw.cpg].beforeVolume = data;
             }
             SetDummyData(pw, mml);
 
@@ -587,7 +587,7 @@ namespace Core
         {
             for (int lfo = 0; lfo < 4; lfo++)
             {
-                clsLfo pl = pw.lfo[lfo];
+                clsLfo pl = pw.pg[pw.cpg].lfo[lfo];
                 if (!pl.sw)
                     continue;
 
@@ -608,7 +608,7 @@ namespace Core
                 }
                 if (pl.type == eLfoType.Tremolo)
                 {
-                    pw.beforeVolume = -1;
+                    pw.pg[pw.cpg].beforeVolume = -1;
                     SetVolume(pw, mml);
                 }
             }
@@ -629,7 +629,7 @@ namespace Core
             int p = (int)mml.args[0];
 
             p = Common.CheckRange(p, 0, 7);
-            pw.panL = (7 - p);
+            pw.pg[pw.cpg].panL = (7 - p);
 
             SetDummyData(pw, mml);
         }
@@ -675,11 +675,11 @@ namespace Core
                 return;
             }
 
-            pw.instrument = n;
-            pw.pcmStartAddress = (int)parent.instPCM[n].stAdr;
-            pw.pcmEndAddress = (int)parent.instPCM[n].edAdr;
-            pw.pcmLoopAddress = (int)parent.instPCM[n].loopAdr;
-            pw.pcmBank = (int)((parent.instPCM[n].stAdr >> 16));
+            pw.pg[pw.cpg].instrument = n;
+            pw.pg[pw.cpg].pcmStartAddress = (int)parent.instPCM[n].stAdr;
+            pw.pg[pw.cpg].pcmEndAddress = (int)parent.instPCM[n].edAdr;
+            pw.pg[pw.cpg].pcmLoopAddress = (int)parent.instPCM[n].loopAdr;
+            pw.pg[pw.cpg].pcmBank = (int)((parent.instPCM[n].stAdr >> 16));
             SetDummyData(pw, mml);
 
         }
@@ -706,11 +706,11 @@ namespace Core
             v = 0;
             foreach (partWork pw in lstPartWork)
             {
-                v |= (byte)(pw.pcmLoopAddress != -1 ? (1 << pw.ch) : 0);
-                if (pw.instrument != -1
-                    && parent.instPCM.ContainsKey(pw.instrument))
+                v |= (byte)(pw.pg[pw.cpg].pcmLoopAddress != -1 ? (1 << pw.pg[pw.cpg].ch) : 0);
+                if (pw.pg[pw.cpg].instrument != -1
+                    && parent.instPCM.ContainsKey(pw.pg[pw.cpg].instrument))
                 {
-                    v |= (byte)((bool)parent.instPCM[pw.instrument].option[0] ? (16 << pw.ch) : 0);
+                    v |= (byte)((bool)parent.instPCM[pw.pg[pw.cpg].instrument].option[0] ? (16 << pw.pg[pw.cpg].ch) : 0);
                 }
             }
             if (beforeloopDpcm != v)
@@ -724,10 +724,10 @@ namespace Core
             w = 0;
             foreach (partWork pw in lstPartWork)
             {
-                if (pw.ch < 2)
-                    v |= (byte)((pw.panL & 0x7) << (pw.ch == 0 ? 0 : 3));
+                if (pw.pg[pw.cpg].ch < 2)
+                    v |= (byte)((pw.pg[pw.cpg].panL & 0x7) << (pw.pg[pw.cpg].ch == 0 ? 0 : 3));
                 else
-                    w |= (byte)((pw.panL & 0x7) << (pw.ch == 2 ? 0 : 3));
+                    w |= (byte)((pw.pg[pw.cpg].panL & 0x7) << (pw.pg[pw.cpg].ch == 2 ? 0 : 3));
             }
             if (beforePan12 != v)
             {
@@ -750,7 +750,7 @@ namespace Core
             byte v = 0;
             foreach (partWork pw in lstPartWork)
             {
-                v |= (byte)(pw.keyOn ? (1 << pw.ch) : 0);
+                v |= (byte)(pw.pg[pw.cpg].keyOn ? (1 << pw.pg[pw.cpg].ch) : 0);
             }
             if (beforeKeyON != v)
             {

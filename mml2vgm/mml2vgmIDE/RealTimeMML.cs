@@ -59,19 +59,19 @@ namespace mml2vgmIDE
         {
             foreach (Core.partWork pw in chip.lstPartWork)
             {
-                if (pw.waitKeyOnCounter > 0) pw.waitKeyOnCounter--;
-                if (pw.waitCounter > 0) pw.waitCounter--;
-                if (pw.bendWaitCounter > 0) pw.bendWaitCounter--;
-                if (pw.pcmWaitKeyOnCounter > 0) pw.pcmWaitKeyOnCounter--;
-                if (pw.envelopeMode && pw.envIndex != -1) pw.envCounter--;
+                if (pw.pg[0].waitKeyOnCounter > 0) pw.pg[0].waitKeyOnCounter--;
+                if (pw.pg[0].waitCounter > 0) pw.pg[0].waitCounter--;
+                if (pw.pg[0].bendWaitCounter > 0) pw.pg[0].bendWaitCounter--;
+                if (pw.pg[0].pcmWaitKeyOnCounter > 0) pw.pg[0].pcmWaitKeyOnCounter--;
+                if (pw.pg[0].envelopeMode && pw.pg[0].envIndex != -1) pw.pg[0].envCounter--;
                 for (int lfo = 0; lfo < 4; lfo++)
                 {
-                    if (!pw.lfo[lfo].sw) continue;
-                    if (pw.lfo[lfo].waitCounter == -1) continue;
-                    if (pw.lfo[lfo].waitCounter > 0)
+                    if (!pw.pg[0].lfo[lfo].sw) continue;
+                    if (pw.pg[0].lfo[lfo].waitCounter == -1) continue;
+                    if (pw.pg[0].lfo[lfo].waitCounter > 0)
                     {
-                        pw.lfo[lfo].waitCounter--;
-                        if (pw.lfo[lfo].waitCounter < 0) pw.lfo[lfo].waitCounter = 0;
+                        pw.pg[0].lfo[lfo].waitCounter--;
+                        if (pw.pg[0].lfo[lfo].waitCounter < 0) pw.pg[0].lfo[lfo].waitCounter = 0;
                     }
                 }
             }

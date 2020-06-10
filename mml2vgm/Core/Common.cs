@@ -211,13 +211,14 @@ namespace Core
             return newBuf;
         }
 
-        public static List<string> DivParts(string parts, Dictionary<enmChipType, ClsChip[]> chips)
+        public static List<string> DivParts(string parts, Dictionary<enmChipType, ClsChip[]> chips, out int ura)
         {
             List<string> ret = new List<string>();
             string a = "";
             int k = 1;
             int m = 0;
             string n0 = "";
+            ura = 0;
 
             try
             {
@@ -284,6 +285,11 @@ namespace Core
                             m = 0;
                             n0 = "";
                         }
+                    }
+                    else if (parts[i] == '_')
+                    {
+                        ura++;
+                        i++;
                     }
                     else
                     {

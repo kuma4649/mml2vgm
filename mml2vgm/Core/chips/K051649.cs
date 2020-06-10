@@ -93,14 +93,14 @@ namespace Core
 
         public override void InitPart(partWork pw)
         {
-            pw.FNum = 0;
-            pw.beforeFNum = -1;
-            pw.MaxVolume = 15;
-            pw.volume = pw.MaxVolume;
-            pw.beforeLVolume = -1;
-            pw.beforeEnvInstrument = -1;
-            pw.keyOn = false;
-            pw.port = port;
+            pw.pg[pw.cpg].FNum = 0;
+            pw.pg[pw.cpg].beforeFNum = -1;
+            pw.pg[pw.cpg].MaxVolume = 15;
+            pw.pg[pw.cpg].volume = pw.pg[pw.cpg].MaxVolume;
+            pw.pg[pw.cpg].beforeLVolume = -1;
+            pw.pg[pw.cpg].beforeEnvInstrument = -1;
+            pw.pg[pw.cpg].keyOn = false;
+            pw.pg[pw.cpg].port = port;
         }
 
         public void OutK051649Port(MML mml, byte[] cmd, int chipNumber, byte port, byte adr, byte data)
@@ -124,12 +124,12 @@ namespace Core
 
             for (int i = 1; i < parent.instWF[n].Length; i++) // 添え字0 は音色番号が入っている為1からスタート
             {
-                int ch = pw.ch;
+                int ch = pw.pg[pw.cpg].ch;
                 if (!parent.info.isK052539 && ch == 4) ch = 3;
 
                 OutK051649Port(
                     mml,port[0],
-                    pw.chipNumber
+                    pw.pg[pw.cpg].chipNumber
                     , (byte)(parent.info.isK052539 ? 4 : 0)
                     , (byte)(ch * 32 + i - 1)
                     , parent.instWF[n][i]);
@@ -154,27 +154,27 @@ namespace Core
                 partWork pw = lstPartWork[i];
 
                 //fnum
-                if (pw.beforeFNum != pw.FNum)
+                if (pw.pg[pw.cpg].beforeFNum != pw.pg[pw.cpg].FNum)
                 {
-                    byte data = (byte)pw.FNum;
-                    OutK051649Port(mml, port[0], ChipNumber, 1, (byte)(0 + pw.ch * 2), data);
+                    byte data = (byte)pw.pg[pw.cpg].FNum;
+                    OutK051649Port(mml, port[0], ChipNumber, 1, (byte)(0 + pw.pg[pw.cpg].ch * 2), data);
 
-                    data = (byte)((pw.FNum & 0xf00) >> 8);
-                    OutK051649Port(mml, port[0], ChipNumber, 1, (byte)(1 + pw.ch * 2), data);
-                    pw.beforeFNum = pw.FNum;
+                    data = (byte)((pw.pg[pw.cpg].FNum & 0xf00) >> 8);
+                    OutK051649Port(mml, port[0], ChipNumber, 1, (byte)(1 + pw.pg[pw.cpg].ch * 2), data);
+                    pw.pg[pw.cpg].beforeFNum = pw.pg[pw.cpg].FNum;
                 }
 
                 //volume
                 SetSsgVolume(mml,pw);
 
                 //keyonoff
-                if (pw.keyOn)
+                if (pw.pg[pw.cpg].keyOn)
                 {
-                    keyOnStatus |= (byte)(1 << pw.ch);
+                    keyOnStatus |= (byte)(1 << pw.pg[pw.cpg].ch);
                 }
                 else
                 {
-                    keyOnStatus &= (byte)~(1 << pw.ch);
+                    keyOnStatus &= (byte)~(1 << pw.pg[pw.cpg].ch);
                 }
             }
 
@@ -190,69 +190,69 @@ namespace Core
         public void OutSsgKeyOn(MML mml,partWork pw)
         {
             SetSsgVolume(mml,pw);
-            pw.keyOn = true;
+            pw.pg[pw.cpg].keyOn = true;
         }
 
         public void OutSsgKeyOff(MML mml,partWork pw)
         {
             SetSsgVolume(mml,pw);
-            pw.keyOn = false;
+            pw.pg[pw.cpg].keyOn = false;
         }
 
         public void SetSsgVolume(MML mml,partWork pw)
         {
-            byte pch = (byte)pw.ch;
+            byte pch = (byte)pw.pg[pw.cpg].ch;
 
-            int vol = pw.volume;
-            if (pw.envelopeMode)
+            int vol = pw.pg[pw.cpg].volume;
+            if (pw.pg[pw.cpg].envelopeMode)
             {
                 vol = 0;
-                if (pw.envIndex != -1)
+                if (pw.pg[pw.cpg].envIndex != -1)
                 {
-                    vol = pw.volume - (15 - pw.envVolume);
+                    vol = pw.pg[pw.cpg].volume - (15 - pw.pg[pw.cpg].envVolume);
                 }
             }
 
             for (int lfo = 0; lfo < 4; lfo++)
             {
-                if (!pw.lfo[lfo].sw) continue;
-                if (pw.lfo[lfo].type != eLfoType.Tremolo) continue;
+                if (!pw.pg[pw.cpg].lfo[lfo].sw) continue;
+                if (pw.pg[pw.cpg].lfo[lfo].type != eLfoType.Tremolo) continue;
 
-                vol += pw.lfo[lfo].value + pw.lfo[lfo].param[6];
+                vol += pw.pg[pw.cpg].lfo[lfo].value + pw.pg[pw.cpg].lfo[lfo].param[6];
             }
 
             vol = Common.CheckRange(vol, 0, 15);
 
-            if (pw.beforeVolume != vol)
+            if (pw.pg[pw.cpg].beforeVolume != vol)
             {
-                OutK051649Port(mml, port[0], ChipNumber, 2, (byte)pw.ch, (byte)vol);
-                pw.beforeVolume = vol;
+                OutK051649Port(mml, port[0], ChipNumber, 2, (byte)pw.pg[pw.cpg].ch, (byte)vol);
+                pw.pg[pw.cpg].beforeVolume = vol;
             }
         }
 
         public void SetSsgFNum(partWork pw)
         {
-            int f = GetSsgFNum(pw, pw.octaveNow, pw.noteCmd, pw.shift + pw.keyShift);//
-            if (pw.bendWaitCounter != -1)
+            int f = GetSsgFNum(pw, pw.pg[pw.cpg].octaveNow, pw.pg[pw.cpg].noteCmd, pw.pg[pw.cpg].shift + pw.pg[pw.cpg].keyShift);//
+            if (pw.pg[pw.cpg].bendWaitCounter != -1)
             {
-                f = pw.bendFnum;
+                f = pw.pg[pw.cpg].bendFnum;
             }
-            f = f + pw.detune;
+            f = f + pw.pg[pw.cpg].detune;
             for (int lfo = 0; lfo < 4; lfo++)
             {
-                if (!pw.lfo[lfo].sw)
+                if (!pw.pg[pw.cpg].lfo[lfo].sw)
                 {
                     continue;
                 }
-                if (pw.lfo[lfo].type != eLfoType.Vibrato)
+                if (pw.pg[pw.cpg].lfo[lfo].type != eLfoType.Vibrato)
                 {
                     continue;
                 }
-                f += pw.lfo[lfo].value + pw.lfo[lfo].param[6];
+                f += pw.pg[pw.cpg].lfo[lfo].value + pw.pg[pw.cpg].lfo[lfo].param[6];
             }
 
             f = Common.CheckRange(f, 0, 0xfff);
-            pw.FNum = f;
+            pw.pg[pw.cpg].FNum = f;
         }
 
         public int GetSsgFNum(partWork pw, int octave, char noteCmd, int shift)
@@ -301,7 +301,7 @@ namespace Core
         {
             for (int lfo = 0; lfo < 4; lfo++)
             {
-                clsLfo pl = pw.lfo[lfo];
+                clsLfo pl = pw.pg[pw.cpg].lfo[lfo];
                 if (!pl.sw)
                     continue;
 
@@ -338,14 +338,14 @@ namespace Core
             byte adr = (byte)(int)mml.args[0];
             byte dat = (byte)(int)mml.args[1];
 
-            OutK051649Port(mml, this.port[0], pw.chipNumber, port, adr, dat);
+            OutK051649Port(mml, this.port[0], pw.pg[pw.cpg].chipNumber, port, adr, dat);
         }
 
         public override void CmdLoopExtProc(partWork p, MML mml)
         {
-            if (p.chip is K051649 && p.chip.use)
+            if (p.pg[p.cpg].chip is K051649 && p.pg[p.cpg].chip.use)
             {
-                p.beforeFNum = -1;
+                p.pg[p.cpg].beforeFNum = -1;
             }
         }
 
@@ -373,10 +373,10 @@ namespace Core
             }
 
             n = Common.CheckRange(n, 0, 255);
-            if (pw.instrument != n)
+            if (pw.pg[pw.cpg].instrument != n)
             {
-                pw.instrument = n;
-                ((K051649)pw.chip).OutK051649SetInstrument(pw,mml, n);
+                pw.pg[pw.cpg].instrument = n;
+                ((K051649)pw.pg[pw.cpg].chip).OutK051649SetInstrument(pw,mml, n);
             }
 
         }

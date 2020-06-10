@@ -100,10 +100,10 @@ namespace Core
 
         public override void InitPart(partWork pw)
         {
-            pw.slots = (byte)(((pw.Type == enmChannelType.FMOPN || pw.Type == enmChannelType.FMPCM) || pw.ch == 2) ? 0xf : 0x0);
-            pw.volume = 127;
-            pw.MaxVolume = 127;
-            pw.port = port;
+            pw.pg[pw.cpg].slots = (byte)(((pw.pg[pw.cpg].Type == enmChannelType.FMOPN || pw.pg[pw.cpg].Type == enmChannelType.FMPCM) || pw.pg[pw.cpg].ch == 2) ? 0xf : 0x0);
+            pw.pg[pw.cpg].volume = 127;
+            pw.pg[pw.cpg].MaxVolume = 127;
+            pw.pg[pw.cpg].port = port;
         }
 
         public override void InitChip()
@@ -118,18 +118,18 @@ namespace Core
 
             foreach (partWork pw in lstPartWork)
             {
-                if (pw.ch == 0)
+                if (pw.pg[pw.cpg].ch == 0)
                 {
-                    pw.hardLfoSw = false;
-                    pw.hardLfoNum = 0;
+                    pw.pg[pw.cpg].hardLfoSw = false;
+                    pw.pg[pw.cpg].hardLfoNum = 0;
                 }
 
-                if (pw.ch < 6)
+                if (pw.pg[pw.cpg].ch < 6)
                 {
-                    pw.pan.val = 3;
-                    pw.ams = 0;
-                    pw.fms = 0;
-                    if (!pw.dataEnd) OutOPNSetPanAMSPMS(null, pw, 3, 0, 0);
+                    pw.pg[pw.cpg].pan.val = 3;
+                    pw.pg[pw.cpg].ams = 0;
+                    pw.pg[pw.cpg].fms = 0;
+                    if (!pw.pg[pw.cpg].dataEnd) OutOPNSetPanAMSPMS(null, pw, 3, 0, 0);
                 }
             }
 
@@ -153,9 +153,9 @@ namespace Core
 
         public void GetPcmNote(partWork pw)
         {
-            int shift = pw.shift + pw.keyShift;
-            int o = pw.octaveNow;//
-            int n = Const.NOTE.IndexOf(pw.noteCmd) + shift;
+            int shift = pw.pg[pw.cpg].shift + pw.pg[pw.cpg].keyShift;
+            int o = pw.pg[pw.cpg].octaveNow;//
+            int n = Const.NOTE.IndexOf(pw.pg[pw.cpg].noteCmd) + shift;
             if (n >= 0)
             {
                 o += n / 12;
@@ -170,8 +170,8 @@ namespace Core
                 if (n < 0) { n += 12; }
             }
 
-            pw.pcmOctave = o;
-            pw.pcmNote = n;
+            pw.pg[pw.cpg].pcmOctave = o;
+            pw.pg[pw.cpg].pcmNote = n;
         }
 
 
@@ -253,7 +253,7 @@ namespace Core
 
             byte adr = (byte)(int)mml.args[0];
             byte dat = (byte)(int)mml.args[1];
-            parent.OutData(mml, (pw.ch > 2 && pw.ch < 6) ? port[1] : port[0], adr, dat);
+            parent.OutData(mml, (pw.pg[pw.cpg].ch > 2 && pw.pg[pw.cpg].ch < 6) ? port[1] : port[0], adr, dat);
         }
 
         public override void CmdMPMS(partWork pw, MML mml)
@@ -261,13 +261,13 @@ namespace Core
 
             int n = (int)mml.args[1];
             n = Common.CheckRange(n, 0, 7);
-            pw.pms = n;
-            ((ClsOPN)pw.chip).OutOPNSetPanAMSPMS(
+            pw.pg[pw.cpg].pms = n;
+            ((ClsOPN)pw.pg[pw.cpg].chip).OutOPNSetPanAMSPMS(
                 mml,
                 pw
-                , (int)pw.pan.val
-                , pw.ams
-                , pw.pms);
+                , (int)pw.pg[pw.cpg].pan.val
+                , pw.pg[pw.cpg].ams
+                , pw.pg[pw.cpg].pms);
         }
 
         public override void CmdMAMS(partWork pw, MML mml)
@@ -275,13 +275,13 @@ namespace Core
 
             int n = (int)mml.args[1];
             n = Common.CheckRange(n, 0, 3);
-            pw.ams = n;
-            ((ClsOPN)pw.chip).OutOPNSetPanAMSPMS(
+            pw.pg[pw.cpg].ams = n;
+            ((ClsOPN)pw.pg[pw.cpg].chip).OutOPNSetPanAMSPMS(
                 mml,
                 pw
-                , (int)pw.pan.val
-                , pw.ams
-                , pw.pms);
+                , (int)pw.pg[pw.cpg].pan.val
+                , pw.pg[pw.cpg].ams
+                , pw.pg[pw.cpg].pms);
         }
 
         public override void CmdLfo(partWork pw, MML mml)
@@ -294,30 +294,30 @@ namespace Core
             }
 
             int c = (char)mml.args[0] - 'P';
-            if (pw.lfo[c].type == eLfoType.Hardware)
+            if (pw.pg[pw.cpg].lfo[c].type == eLfoType.Hardware)
             {
-                if (pw.lfo[c].param.Count < 4)
+                if (pw.pg[pw.cpg].lfo[c].param.Count < 4)
                 {
                     msgBox.setErrMsg(msg.get("E20000"), mml.line.Lp);
                     return;
                 }
-                if (pw.lfo[c].param.Count > 5)
+                if (pw.pg[pw.cpg].lfo[c].param.Count > 5)
                 {
                     msgBox.setErrMsg(msg.get("E20001"), mml.line.Lp);
                     return;
                 }
 
-                pw.lfo[c].param[0] = Common.CheckRange(pw.lfo[c].param[0], 0, (int)parent.info.clockCount);//Delay(無視)
-                pw.lfo[c].param[1] = Common.CheckRange(pw.lfo[c].param[1], 0, 7);//Freq
-                pw.lfo[c].param[2] = Common.CheckRange(pw.lfo[c].param[2], 0, 7);//PMS
-                pw.lfo[c].param[3] = Common.CheckRange(pw.lfo[c].param[3], 0, 3);//AMS
-                if (pw.lfo[c].param.Count == 5)
+                pw.pg[pw.cpg].lfo[c].param[0] = Common.CheckRange(pw.pg[pw.cpg].lfo[c].param[0], 0, (int)parent.info.clockCount);//Delay(無視)
+                pw.pg[pw.cpg].lfo[c].param[1] = Common.CheckRange(pw.pg[pw.cpg].lfo[c].param[1], 0, 7);//Freq
+                pw.pg[pw.cpg].lfo[c].param[2] = Common.CheckRange(pw.pg[pw.cpg].lfo[c].param[2], 0, 7);//PMS
+                pw.pg[pw.cpg].lfo[c].param[3] = Common.CheckRange(pw.pg[pw.cpg].lfo[c].param[3], 0, 3);//AMS
+                if (pw.pg[pw.cpg].lfo[c].param.Count == 5)
                 {
-                    pw.lfo[c].param[4] = Common.CheckRange(pw.lfo[c].param[4], 0, 1); //Switch
+                    pw.pg[pw.cpg].lfo[c].param[4] = Common.CheckRange(pw.pg[pw.cpg].lfo[c].param[4], 0, 1); //Switch
                 }
                 else
                 {
-                    pw.lfo[c].param.Add(1);
+                    pw.pg[pw.cpg].lfo[c].param.Add(1);
                 }
             }
         }
@@ -328,20 +328,20 @@ namespace Core
 
             int c = (char)mml.args[0] - 'P';
             int n = (int)mml.args[1];
-            if (pw.lfo[c].type == eLfoType.Hardware)
+            if (pw.pg[pw.cpg].lfo[c].type == eLfoType.Hardware)
             {
-                if (pw.lfo[c].param[4] == 0)
+                if (pw.pg[pw.cpg].lfo[c].param[4] == 0)
                 {
-                    pw.fms = (n == 0) ? 0 : pw.lfo[c].param[2];
-                    pw.ams = (n == 0) ? 0 : pw.lfo[c].param[3];
-                    ((ClsOPN)pw.chip).OutOPNSetPanAMSPMS(mml, pw, (int)pw.pan.val, pw.ams, pw.fms);
-                    pw.chip.lstPartWork[0].hardLfoSw = (n != 0);
-                    pw.chip.lstPartWork[0].hardLfoNum = pw.lfo[c].param[1];
-                    ((ClsOPN)pw.chip).OutOPNSetHardLfo(null, pw, pw.chip.lstPartWork[0].hardLfoSw, pw.chip.lstPartWork[0].hardLfoNum);
+                    pw.pg[pw.cpg].fms = (n == 0) ? 0 : pw.pg[pw.cpg].lfo[c].param[2];
+                    pw.pg[pw.cpg].ams = (n == 0) ? 0 : pw.pg[pw.cpg].lfo[c].param[3];
+                    ((ClsOPN)pw.pg[pw.cpg].chip).OutOPNSetPanAMSPMS(mml, pw, (int)pw.pg[pw.cpg].pan.val, pw.pg[pw.cpg].ams, pw.pg[pw.cpg].fms);
+                    pw.pg[pw.cpg].chip.lstPartWork[0].pg[lstPartWork[0].cpg].hardLfoSw = (n != 0);
+                    pw.pg[pw.cpg].chip.lstPartWork[0].pg[lstPartWork[0].cpg].hardLfoNum = pw.pg[pw.cpg].lfo[c].param[1];
+                    ((ClsOPN)pw.pg[pw.cpg].chip).OutOPNSetHardLfo(null, pw, pw.pg[pw.cpg].chip.lstPartWork[0].pg[lstPartWork[0].cpg].hardLfoSw, pw.pg[pw.cpg].chip.lstPartWork[0].pg[lstPartWork[0].cpg].hardLfoNum);
                 }
                 else
                 {
-                    ((ClsOPN)pw.chip).OutOPNSetHardLfo(mml, pw, false, pw.lfo[c].param[1]);
+                    ((ClsOPN)pw.pg[pw.cpg].chip).OutOPNSetHardLfo(mml, pw, false, pw.pg[pw.cpg].lfo[c].param[1]);
                 }
             }
         }
@@ -358,20 +358,20 @@ namespace Core
             }
 
             n = Common.CheckRange(n, 0, 3);
-            pw.pan.val = n;
-            ((ClsOPN)pw.chip).OutOPNSetPanAMSPMS(mml, pw, n, pw.ams, pw.fms);
+            pw.pg[pw.cpg].pan.val = n;
+            ((ClsOPN)pw.pg[pw.cpg].chip).OutOPNSetPanAMSPMS(mml, pw, n, pw.pg[pw.cpg].ams, pw.pg[pw.cpg].fms);
         }
 
         public override void CmdMode(partWork pw, MML mml)
         {
             int n = (int)mml.args[0];
-            if (pw.Type == enmChannelType.FMPCM)
+            if (pw.pg[pw.cpg].Type == enmChannelType.FMPCM)
             {
                 n = Common.CheckRange(n, 0, 1);
-                pw.pcm = (n == 1);
-                pw.freq = -1;//freqをリセット
-                pw.instrument = -1;
-                ((YM2612)(pw.chip)).OutSetCh6PCMMode(mml, pw, pw.pcm);
+                pw.pg[pw.cpg].pcm = (n == 1);
+                pw.pg[pw.cpg].freq = -1;//freqをリセット
+                pw.pg[pw.cpg].instrument = -1;
+                ((YM2612)(pw.pg[pw.cpg].chip)).OutSetCh6PCMMode(mml, pw, pw.pg[pw.cpg].pcm);
 
                 return;
             }
@@ -383,9 +383,9 @@ namespace Core
         public override void CmdPcmMapSw(partWork pw, MML mml)
         {
             bool sw = (bool)mml.args[0];
-            if (pw.Type == enmChannelType.FMPCM)
+            if (pw.pg[pw.cpg].Type == enmChannelType.FMPCM)
             {
-                pw.isPcmMap = sw;
+                pw.pg[pw.cpg].isPcmMap = sw;
             }
         }
 
@@ -396,25 +396,25 @@ namespace Core
 
             if (type == 'n' || type == 'N' || type == 'R' || type == 'A')
             {
-                if (pw.Type == enmChannelType.FMOPNex)
+                if (pw.pg[pw.cpg].Type == enmChannelType.FMOPNex)
                 {
-                    pw.instrument = n;
-                    lstPartWork[2].instrument = n;
-                    lstPartWork[6].instrument = n;
-                    lstPartWork[7].instrument = n;
-                    lstPartWork[8].instrument = n;
-                    OutFmSetInstrument(pw,mml, n, pw.volume, type);
+                    pw.pg[pw.cpg].instrument = n;
+                    lstPartWork[2].pg[lstPartWork[2].cpg].instrument = n;
+                    lstPartWork[6].pg[lstPartWork[6].cpg].instrument = n;
+                    lstPartWork[7].pg[lstPartWork[7].cpg].instrument = n;
+                    lstPartWork[8].pg[lstPartWork[8].cpg].instrument = n;
+                    OutFmSetInstrument(pw,mml, n, pw.pg[pw.cpg].volume, type);
                     return;
                 }
             }
 
             if (type == 'n')
             {
-                if (pw.pcm)
+                if (pw.pg[pw.cpg].pcm)
                 {
-                    if (pw.isPcmMap)
+                    if (pw.pg[pw.cpg].isPcmMap)
                     {
-                        pw.pcmMapNo = n;
+                        pw.pg[pw.cpg].pcmMapNo = n;
                         if (!parent.instPCMMap.ContainsKey(n))
                         {
                             msgBox.setErrMsg(string.Format(msg.get("E10024"), n), mml.line.Lp);
@@ -422,7 +422,7 @@ namespace Core
                         return;
                     }
 
-                    pw.instrument = n;
+                    pw.pg[pw.cpg].instrument = n;
                     if (!parent.instPCM.ContainsKey(n))
                     {
                         msgBox.setErrMsg(string.Format(msg.get("E20002"), n), mml.line.Lp);
@@ -446,7 +446,7 @@ namespace Core
         {
             for (int lfo = 0; lfo < 4; lfo++)
             {
-                clsLfo pl = pw.lfo[lfo];
+                clsLfo pl = pw.pg[pw.cpg].lfo[lfo];
                 if (!pl.sw)
                     continue;
                 if (pl.type == eLfoType.Hardware)
@@ -470,7 +470,7 @@ namespace Core
 
                 if (pl.type == eLfoType.Tremolo)
                 {
-                    pw.beforeVolume = -1;
+                    pw.pg[pw.cpg].beforeVolume = -1;
                     SetFmVolume(pw, mml);
 
                 }

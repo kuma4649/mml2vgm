@@ -71,11 +71,11 @@ namespace Core
 
         public override void InitPart(partWork pw)
         {
-            pw.MaxVolume = 15;
-            pw.volume = pw.MaxVolume;
-            pw.keyOn = false;
-            pw.panL = 3;
-            pw.port = port;
+            pw.pg[pw.cpg].MaxVolume = 15;
+            pw.pg[pw.cpg].volume = pw.pg[pw.cpg].MaxVolume;
+            pw.pg[pw.cpg].keyOn = false;
+            pw.pg[pw.cpg].panL = 3;
+            pw.pg[pw.cpg].port = port;
         }
 
 
@@ -113,7 +113,7 @@ namespace Core
         public void OutPsgKeyOn(partWork pw, MML mml)
         {
 
-            pw.keyOn = true;
+            pw.pg[pw.cpg].keyOn = true;
             SetFNum(pw, mml);
             SetVolume(pw, mml);
             SetDummyData(pw, mml);
@@ -121,7 +121,7 @@ namespace Core
             MML vmml = new MML();
             vmml.type = enmMMLType.Volume;
             vmml.args = new List<object>();
-            vmml.args.Add(pw.volume);
+            vmml.args.Add(pw.pg[pw.cpg].volume);
             vmml.line = mml.line;
             SetDummyData(pw, vmml);
             
@@ -130,7 +130,7 @@ namespace Core
         public void OutPsgKeyOff(partWork pw, MML mml)
         {
 
-            if (!pw.envelopeMode) pw.keyOn = false;
+            if (!pw.pg[pw.cpg].envelopeMode) pw.pg[pw.cpg].keyOn = false;
             SetVolume(pw, mml);
 
         }
@@ -140,10 +140,10 @@ namespace Core
 
             foreach (partWork pw in lstPartWork)
             {
-                pw.beforeFNum = -1;
-                pw.beforeVolume = -1;
+                pw.pg[pw.cpg].beforeFNum = -1;
+                pw.pg[pw.cpg].beforeVolume = -1;
 
-                pw.keyOn = false;
+                pw.pg[pw.cpg].keyOn = false;
                 OutPsgKeyOff(pw, null);
             }
 
@@ -152,47 +152,47 @@ namespace Core
 
         public override void SetFNum(partWork pw, MML mml)
         {
-            if (pw.Type != enmChannelType.DCSGNOISE)
+            if (pw.pg[pw.cpg].Type != enmChannelType.DCSGNOISE)
             {
-                int f = -pw.detune;
+                int f = -pw.pg[pw.cpg].detune;
 
                 for (int lfo = 0; lfo < 4; lfo++)
                 {
-                    if (!pw.lfo[lfo].sw)
+                    if (!pw.pg[pw.cpg].lfo[lfo].sw)
                     {
                         continue;
                     }
-                    if (pw.lfo[lfo].type != eLfoType.Vibrato)
+                    if (pw.pg[pw.cpg].lfo[lfo].type != eLfoType.Vibrato)
                     {
                         continue;
                     }
-                    f -= pw.lfo[lfo].value + pw.lfo[lfo].param[6];//param[6] : 位相
+                    f -= pw.pg[pw.cpg].lfo[lfo].value + pw.pg[pw.cpg].lfo[lfo].param[6];//param[6] : 位相
                 }
 
-                if (pw.octaveNow < 1)
+                if (pw.pg[pw.cpg].octaveNow < 1)
                 {
-                    f <<= -pw.octaveNow;
+                    f <<= -pw.pg[pw.cpg].octaveNow;
                 }
                 else
                 {
-                    f >>= pw.octaveNow - 1;
+                    f >>= pw.pg[pw.cpg].octaveNow - 1;
                 }
 
-                if (pw.bendWaitCounter != -1)
+                if (pw.pg[pw.cpg].bendWaitCounter != -1)
                 {
-                    f += pw.bendFnum;
+                    f += pw.pg[pw.cpg].bendFnum;
                 }
                 else
                 {
-                    f += GetDcsgFNum(pw.octaveNow, pw.noteCmd, pw.shift + pw.keyShift);//
+                    f += GetDcsgFNum(pw.pg[pw.cpg].octaveNow, pw.pg[pw.cpg].noteCmd, pw.pg[pw.cpg].shift + pw.pg[pw.cpg].keyShift);//
                 }
 
                 f = Common.CheckRange(f, 0, 0x3ff);
 
-                if (pw.freq == f) return;
-                pw.freq = f;
+                if (pw.pg[pw.cpg].freq == f) return;
+                pw.pg[pw.cpg].freq = f;
 
-                byte data = (byte)(0x80 + (pw.ch << 5) + (f & 0xf));
+                byte data = (byte)(0x80 + (pw.pg[pw.cpg].ch << 5) + (f & 0xf));
                 OutPsgPort(mml, port[0],  data);
 
                 data = (byte)((f & 0x3f0) >> 4);
@@ -200,9 +200,9 @@ namespace Core
             }
             else
             {
-                int f = 0xe0 + (pw.noise & 7);
-                if (pw.freq == f) return;
-                pw.freq = f;
+                int f = 0xe0 + (pw.pg[pw.cpg].noise & 7);
+                if (pw.pg[pw.cpg].freq == f) return;
+                pw.pg[pw.cpg].freq = f;
                 byte data = (byte)f;
                 OutPsgPort(mml, port[0],  data);
             }
@@ -217,29 +217,29 @@ namespace Core
         public override void SetVolume(partWork pw, MML mml)
         {
             byte data = 0;
-            int vol = pw.volume;
+            int vol = pw.pg[pw.cpg].volume;
 
-            if (pw.keyOn)
+            if (pw.pg[pw.cpg].keyOn)
             {
-                if (pw.envelopeMode)
+                if (pw.pg[pw.cpg].envelopeMode)
                 {
                     vol = 0;
-                    if (pw.envIndex != -1)
+                    if (pw.pg[pw.cpg].envIndex != -1)
                     {
-                        vol = pw.envVolume - (15 - pw.volume);
+                        vol = pw.pg[pw.cpg].envVolume - (15 - pw.pg[pw.cpg].volume);
                     }
                     else
                     {
-                        pw.keyOn = false;
+                        pw.pg[pw.cpg].keyOn = false;
                     }
                 }
 
                 for (int lfo = 0; lfo < 4; lfo++)
                 {
-                    if (!pw.lfo[lfo].sw) continue;
-                    if (pw.lfo[lfo].type != eLfoType.Tremolo) continue;
+                    if (!pw.pg[pw.cpg].lfo[lfo].sw) continue;
+                    if (pw.pg[pw.cpg].lfo[lfo].type != eLfoType.Tremolo) continue;
 
-                    vol += pw.lfo[lfo].value + pw.lfo[lfo].param[6];
+                    vol += pw.pg[pw.cpg].lfo[lfo].value + pw.pg[pw.cpg].lfo[lfo].param[6];
                 }
             }
             else
@@ -249,11 +249,11 @@ namespace Core
 
             vol = Common.CheckRange(vol, 0, 15);
 
-            if (pw.beforeVolume != vol)
+            if (pw.pg[pw.cpg].beforeVolume != vol)
             {
-                data = (byte)(0x80 + (pw.ch << 5) + 0x10 + (15 - vol));
+                data = (byte)(0x80 + (pw.pg[pw.cpg].ch << 5) + 0x10 + (15 - vol));
                 OutPsgPort(mml, port[0],  data);
-                pw.beforeVolume = vol;
+                pw.pg[pw.cpg].beforeVolume = vol;
             }
         }
 
@@ -271,7 +271,7 @@ namespace Core
         {
             for (int lfo = 0; lfo < 4; lfo++)
             {
-                clsLfo pl = pw.lfo[lfo];
+                clsLfo pl = pw.pg[pw.cpg].lfo[lfo];
                 if (!pl.sw)
                     continue;
 
@@ -314,7 +314,7 @@ namespace Core
         {
             int n = (int)mml.args[0];
             n = Common.CheckRange(n, 0, 7);
-            pw.noise = n;
+            pw.pg[pw.cpg].noise = n;
         }
 
         public override void CmdDCSGCh3Freq(partWork pw, MML mml)
@@ -337,11 +337,11 @@ namespace Core
         {
             base.CmdRest(pw, mml);
 
-            if (pw.envelopeMode)
+            if (pw.pg[pw.cpg].envelopeMode)
             {
-                if (pw.envIndex != -1)
+                if (pw.pg[pw.cpg].envIndex != -1)
                 {
-                    pw.envIndex = 3;
+                    pw.pg[pw.cpg].envIndex = 3;
                 }
             }
             else
@@ -377,7 +377,7 @@ namespace Core
             int l = (int)mml.args[0];
 
             l = Common.CheckRange(l, 0, 3);
-            pw.panL = l;
+            pw.pg[pw.cpg].panL = l;
         }
 
         public override void MultiChannelCommand(MML mml)
@@ -387,8 +387,8 @@ namespace Core
 
             foreach (partWork pw in lstPartWork)
             {
-                int p = pw.panL;
-                dat |= (((p & 2) == 0 ? 0x00 : 0x10) | ((p & 1) == 0 ? 0x00 : 0x01)) << pw.ch;
+                int p = pw.pg[pw.cpg].panL;
+                dat |= (((p & 2) == 0 ? 0x00 : 0x10) | ((p & 1) == 0 ? 0x00 : 0x01)) << pw.pg[pw.cpg].ch;
             }
 
             if (beforePanData == dat) return;

@@ -97,6 +97,7 @@
     <Compile Include="mucomADPCM2PCM.cs" />
     <Compile Include="Note.cs" />
     <Compile Include="outDatum.cs" />
+    <Compile Include="partPage.cs" />
     <Compile Include="partWork.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SourceParser.cs" />

@@ -38,9 +38,9 @@ namespace Core
 
         public override void InitPart(partWork pw)
         {
-            pw.volume = 15;
-            pw.MaxVolume = 15;
-            pw.port = port;
+            pw.pg[pw.cpg].volume = 15;
+            pw.pg[pw.cpg].MaxVolume = 15;
+            pw.pg[pw.cpg].port = port;
         }
 
         public override void InitChip()
@@ -49,7 +49,7 @@ namespace Core
 
             for (int ch = 0; ch < ChMax; ch++)
             {
-                lstPartWork[ch].volume = 0;
+                lstPartWork[ch].pg[lstPartWork[ch].cpg].volume = 0;
             }
 
         }

@@ -1562,14 +1562,14 @@ namespace mml2vgmIDE
                         List<partWork> pw = chip.lstPartWork;
                         for (int i = 0; i < pw.Count; i++)
                         {
-                            if (pw[i].clockCounter == 0) continue;
+                            if (pw[i].pg[0].clockCounter == 0) continue;
 
-                            cells[0] = int.Parse(pw[i].PartName.Substring(2, 2));
+                            cells[0] = int.Parse(pw[i].pg[0].PartName.Substring(2, 2));
                             cells[1] = chip.ChipID;//ChipIndex
-                            cells[2] = pw[i].chipNumber;//ChipNumber
-                            cells[3] = pw[i].PartName.Substring(0, 2).Replace(" ", "") + int.Parse(pw[i].PartName.Substring(2, 2)).ToString();
-                            cells[4] = pw[i].chip.Name;//.ToUpper();
-                            cells[5] = pw[i].clockCounter;
+                            cells[2] = pw[i].pg[0].chipNumber;//ChipNumber
+                            cells[3] = pw[i].pg[0].PartName.Substring(0, 2).Replace(" ", "") + int.Parse(pw[i].pg[0].PartName.Substring(2, 2)).ToString();
+                            cells[4] = pw[i].pg[0].chip.Name;//.ToUpper();
+                            cells[5] = pw[i].pg[0].clockCounter;
                             cells[6] = "-";
                             frmPartCounter.AddPartCounter(cells);
                         }

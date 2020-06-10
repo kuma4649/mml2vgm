@@ -66,9 +66,9 @@ namespace Core
 
         public override void InitPart(partWork pw)
         {
-            pw.MaxVolume = 255;
-            pw.volume = pw.MaxVolume;
-            pw.port = port;
+            pw.pg[pw.cpg].MaxVolume = 255;
+            pw.pg[pw.cpg].volume = pw.pg[pw.cpg].MaxVolume;
+            pw.pg[pw.cpg].port = port;
         }
 
         public override void InitChip()
@@ -78,10 +78,10 @@ namespace Core
             for (int ch = 0; ch < ChMax; ch++)
             {
                 partWork pw = lstPartWork[ch];
-                pw.MaxVolume = Ch[ch].MaxVolume;
-                pw.panL = 255;
-                pw.panR = 255;
-                pw.volume = pw.MaxVolume;
+                pw.pg[pw.cpg].MaxVolume = Ch[ch].MaxVolume;
+                pw.pg[pw.cpg].panL = 255;
+                pw.pg[pw.cpg].panR = 255;
+                pw.pg[pw.cpg].volume = pw.pg[pw.cpg].MaxVolume;
             }
 
             if (ChipNumber!=0)
@@ -467,19 +467,19 @@ namespace Core
                     o = Common.CheckRange(--o, 0, 7);
                 }
 
-                if (pw.instrument < 0 || !parent.instPCM.ContainsKey(pw.instrument))
+                if (pw.pg[pw.cpg].instrument < 0 || !parent.instPCM.ContainsKey(pw.pg[pw.cpg].instrument))
                 {
                     return 0;
                 }
 
-                if (parent.instPCM[pw.instrument].freq == -1)
+                if (parent.instPCM[pw.pg[pw.cpg].instrument].freq == -1)
                 {
                     return ((int)(
                         65536.0 / 2.0 / Frequency * 384
                         * 8000.0
                         * Const.pcmMTbl[n]
                         * Math.Pow(2, (o - 3))
-                        * ((double)parent.instPCM[pw.instrument].samplerate / 8000.0)
+                        * ((double)parent.instPCM[pw.pg[pw.cpg].instrument].samplerate / 8000.0)
                         ));
                 }
                 else
@@ -489,14 +489,14 @@ namespace Core
                     //    * 8000.0
                     //    * Const.pcmMTbl[n]
                     //    * Math.Pow(2, (o - 3))
-                    //    * ((double)parent.instPCM[pw.instrument].freq / 8000.0)
+                    //    * ((double)parent.instPCM[pw.ppg[pw.cpgNum].instrument].freq / 8000.0)
                     //    ));
                     return ((int)(
                         65536.0 / 2.0 / Frequency * 384
                         * 8000.0
                         * Const.pcmMTbl[n]
                         * Math.Pow(2, (o - 3))
-                        * ((double)parent.instPCM[pw.instrument].freq / 8000.0)
+                        * ((double)parent.instPCM[pw.pg[pw.cpg].instrument].freq / 8000.0)
                         ));
                 }
 
@@ -511,7 +511,7 @@ namespace Core
         {
             parent.OutData(
                 mml,
-                pw.port[0]
+                pw.pg[pw.cpg].port[0]
                 , (byte)(port | (ChipNumber!=0 ? 0x80 : 0))
                 , adr
                 , data
@@ -520,7 +520,7 @@ namespace Core
 
         public void OutC140KeyOff(MML mml, partWork pw)
         {
-            int adr = pw.ch * 16 + 0x05;
+            int adr = pw.pg[pw.cpg].ch * 16 + 0x05;
             byte data = 0x00;
 
             OutC140Port(mml, pw
@@ -534,7 +534,7 @@ namespace Core
             int adr = 0;
             byte data = 0;
 
-            if(pw.instrument==-1)
+            if(pw.pg[pw.cpg].instrument==-1)
             {
                 LinePos lp = mml?.line?.Lp;
                 if (lp == null) lp = new LinePos("-");
@@ -546,13 +546,13 @@ namespace Core
             SetVolume(pw,mml);
 
             //Address shift
-            int stAdr = pw.pcmStartAddress + pw.addressShift;
-            if (stAdr >= pw.pcmEndAddress) stAdr = pw.pcmEndAddress - 1;
+            int stAdr = pw.pg[pw.cpg].pcmStartAddress + pw.pg[pw.cpg].addressShift;
+            if (stAdr >= pw.pg[pw.cpg].pcmEndAddress) stAdr = pw.pg[pw.cpg].pcmEndAddress - 1;
 
-            if (pw.beforepcmStartAddress != stAdr)
+            if (pw.pg[pw.cpg].beforepcmStartAddress != stAdr)
             {
                 //StartAdr H
-                adr = pw.ch * 16 + 0x06;
+                adr = pw.pg[pw.cpg].ch * 16 + 0x06;
                 data = (byte)((stAdr & 0xff00) >> 8);
                 OutC140Port(mml,pw
                     , (byte)(adr >> 8)
@@ -560,90 +560,90 @@ namespace Core
                     , data);
 
                 //StartAdr L
-                adr = pw.ch * 16 + 0x07;
+                adr = pw.pg[pw.cpg].ch * 16 + 0x07;
                 data = (byte)((stAdr & 0x00ff) >> 0);
                 OutC140Port(mml,pw
                     , (byte)(adr >> 8)
                     , (byte)adr
                     , data);
 
-                pw.beforepcmStartAddress = stAdr;
+                pw.pg[pw.cpg].beforepcmStartAddress = stAdr;
             }
 
-            if (pw.beforepcmEndAddress != pw.pcmEndAddress)
+            if (pw.pg[pw.cpg].beforepcmEndAddress != pw.pg[pw.cpg].pcmEndAddress)
             {
-                int eAdr = pw.pcmEndAddress;
+                int eAdr = pw.pg[pw.cpg].pcmEndAddress;
                 //EndAdr H
-                adr = pw.ch * 16 + 0x08;
+                adr = pw.pg[pw.cpg].ch * 16 + 0x08;
                 data = (byte)((eAdr & 0xff00) >> 8);
                 OutC140Port(mml,pw
                     , (byte)(adr >> 8)
                     , (byte)adr
                     , data);
                 //EndAdr L
-                adr = pw.ch * 16 + 0x09;
+                adr = pw.pg[pw.cpg].ch * 16 + 0x09;
                 data = (byte)((eAdr & 0x00ff) >> 0);
                 OutC140Port(mml,pw
                     , (byte)(adr >> 8)
                     , (byte)adr
                     , data);
 
-                pw.beforepcmEndAddress = pw.pcmEndAddress;
+                pw.pg[pw.cpg].beforepcmEndAddress = pw.pg[pw.cpg].pcmEndAddress;
             }
 
-            if (pw.beforepcmLoopAddress != pw.pcmLoopAddress)
+            if (pw.pg[pw.cpg].beforepcmLoopAddress != pw.pg[pw.cpg].pcmLoopAddress)
             {
-                if (pw.pcmLoopAddress != -1)
+                if (pw.pg[pw.cpg].pcmLoopAddress != -1)
                 {
                     //LoopAdr H
-                    adr = pw.ch * 16 + 0x0a;
-                    data = (byte)((pw.pcmLoopAddress & 0xff00) >> 8);
+                    adr = pw.pg[pw.cpg].ch * 16 + 0x0a;
+                    data = (byte)((pw.pg[pw.cpg].pcmLoopAddress & 0xff00) >> 8);
                     OutC140Port(mml,pw
                         , (byte)(adr >> 8)
                         , (byte)adr
                         , data);
 
                     //LoopAdr L
-                    adr = pw.ch * 16 + 0x0b;
-                    data = (byte)((pw.pcmLoopAddress & 0x00ff) >> 0);
+                    adr = pw.pg[pw.cpg].ch * 16 + 0x0b;
+                    data = (byte)((pw.pg[pw.cpg].pcmLoopAddress & 0x00ff) >> 0);
                     OutC140Port(mml,pw
                         , (byte)(adr >> 8)
                         , (byte)adr
                         , data);
 
-                    pw.beforepcmLoopAddress = pw.pcmLoopAddress;
+                    pw.pg[pw.cpg].beforepcmLoopAddress = pw.pg[pw.cpg].pcmLoopAddress;
                 }
             }
 
-            if (pw.beforepcmBank != pw.pcmBank)
+            if (pw.pg[pw.cpg].beforepcmBank != pw.pg[pw.cpg].pcmBank)
             {
-                adr = pw.ch * 16 + 0x04;
-                data = (byte)((pw.pcmBank & 7) | (isSystem2 ? ((pw.pcmBank & 0x8) << 2) : ((pw.pcmBank & 0x18) << 1)));
+                adr = pw.pg[pw.cpg].ch * 16 + 0x04;
+                data = (byte)((pw.pg[pw.cpg].pcmBank & 7) | (isSystem2 ? ((pw.pg[pw.cpg].pcmBank & 0x8) << 2) : ((pw.pg[pw.cpg].pcmBank & 0x18) << 1)));
                 OutC140Port(mml,pw
                     , (byte)(adr >> 8)
                     , (byte)adr
                     , data);
 
-                pw.beforepcmBank = pw.pcmBank;
+                pw.pg[pw.cpg].beforepcmBank = pw.pg[pw.cpg].pcmBank;
             }
 
-            adr = pw.ch * 16 + 0x05;
+            adr = pw.pg[pw.cpg].ch * 16 + 0x05;
 
             bool is16bit = false;
-            if (pw.instrument >= 0 && parent.instPCM.ContainsKey(pw.instrument))
+            if (pw.pg[pw.cpg].instrument >= 0 && parent.instPCM.ContainsKey(pw.pg[pw.cpg].instrument))
             {
-                is16bit = (bool)parent.instPCM[pw.instrument].is16bit;
+                is16bit = (bool)parent.instPCM[pw.pg[pw.cpg].instrument].is16bit;
             }
 
-            if (parent.instPCM[pw.instrument].status != enmPCMSTATUS.ERROR)
+            if (parent.instPCM[pw.pg[pw.cpg].instrument].status != enmPCMSTATUS.ERROR)
             {
-                parent.instPCM[pw.instrument].status = enmPCMSTATUS.USED;
+                parent.instPCM[pw.pg[pw.cpg].instrument].status = enmPCMSTATUS.USED;
             }
 
             data = (byte)(
                   0x80 //KeyOn
                 | (is16bit ? 0x08 : 0x00) //CompPCM
-                | ((pw.pcmLoopAddress != -1) ? 0x10 : 0x00) //Loop
+                | ((pw.pg[pw.cpg].pcmLoopAddress != -1) ? 0x10 : 0x00) //Loop
                 );
             OutC140Port(mml,pw
                 , (byte)(adr >> 8)
@@ -654,36 +654,36 @@ namespace Core
 
         public override void SetFNum(partWork pw, MML mml)
         {
-            int f = GetC140FNum(mml, pw, pw.octaveNow, pw.noteCmd, pw.shift + pw.keyShift);//
-            if (pw.bendWaitCounter != -1)
+            int f = GetC140FNum(mml, pw, pw.pg[pw.cpg].octaveNow, pw.pg[pw.cpg].noteCmd, pw.pg[pw.cpg].shift + pw.pg[pw.cpg].keyShift);//
+            if (pw.pg[pw.cpg].bendWaitCounter != -1)
             {
-                f = pw.bendFnum;
+                f = pw.pg[pw.cpg].bendFnum;
             }
-            f = f + pw.detune;
+            f = f + pw.pg[pw.cpg].detune;
             for (int lfo = 0; lfo < 4; lfo++)
             {
-                if (!pw.lfo[lfo].sw)
+                if (!pw.pg[pw.cpg].lfo[lfo].sw)
                 {
                     continue;
                 }
-                if (pw.lfo[lfo].type != eLfoType.Vibrato)
+                if (pw.pg[pw.cpg].lfo[lfo].type != eLfoType.Vibrato)
                 {
                     continue;
                 }
-                f += pw.lfo[lfo].value + pw.lfo[lfo].param[6];
+                f += pw.pg[pw.cpg].lfo[lfo].value + pw.pg[pw.cpg].lfo[lfo].param[6];
             }
 
             f = Common.CheckRange(f, 0, 0xffff);
-            if (pw.freq == f) return;
+            if (pw.pg[pw.cpg].freq == f) return;
 
-            pw.freq = f;
+            pw.pg[pw.cpg].freq = f;
 
 
             //Delta
             int data = f & 0xffff;
-            if (pw.beforeFNum != data)
+            if (pw.pg[pw.cpg].beforeFNum != data)
             {
-                int adr = pw.ch * 16 + 0x02;
+                int adr = pw.pg[pw.cpg].ch * 16 + 0x02;
                 OutC140Port(mml, pw
                     , (byte)(adr >> 8)
                     , (byte)adr
@@ -693,7 +693,7 @@ namespace Core
                     , (byte)(adr >> 8)
                     , (byte)adr
                     , (byte)data);
-                pw.beforeFNum = data;
+                pw.pg[pw.cpg].beforeFNum = data;
             }
 
         }
@@ -715,56 +715,56 @@ namespace Core
 
         public override void SetVolume(partWork pw, MML mml)
         {
-            int vol = pw.volume;
+            int vol = pw.pg[pw.cpg].volume;
 
-            if (pw.envelopeMode)
+            if (pw.pg[pw.cpg].envelopeMode)
             {
                 vol = 0;
-                if (pw.envIndex != -1)
+                if (pw.pg[pw.cpg].envIndex != -1)
                 {
-                    vol = pw.envVolume - (pw.MaxVolume - pw.volume);
+                    vol = pw.pg[pw.cpg].envVolume - (pw.pg[pw.cpg].MaxVolume - pw.pg[pw.cpg].volume);
                 }
             }
-            //Console.WriteLine("{0} ", pw.envVolume);
+            //Console.WriteLine("{0} ", pw.ppg[pw.cpgNum].envVolume);
 
             for (int lfo = 0; lfo < 4; lfo++)
             {
-                if (!pw.lfo[lfo].sw)
+                if (!pw.pg[pw.cpg].lfo[lfo].sw)
                 {
                     continue;
                 }
-                if (pw.lfo[lfo].type != eLfoType.Tremolo)
+                if (pw.pg[pw.cpg].lfo[lfo].type != eLfoType.Tremolo)
                 {
                     continue;
                 }
-                vol += pw.lfo[lfo].value + pw.lfo[lfo].param[6];
+                vol += pw.pg[pw.cpg].lfo[lfo].value + pw.pg[pw.cpg].lfo[lfo].param[6];
             }
 
-            int vl = vol * pw.panL / pw.MaxVolume;
-            int vr = vol * pw.panR / pw.MaxVolume;
-            vl = Common.CheckRange(vl, 0, pw.MaxVolume);
-            vr = Common.CheckRange(vr, 0, pw.MaxVolume);
+            int vl = vol * pw.pg[pw.cpg].panL / pw.pg[pw.cpg].MaxVolume;
+            int vr = vol * pw.pg[pw.cpg].panR / pw.pg[pw.cpg].MaxVolume;
+            vl = Common.CheckRange(vl, 0, pw.pg[pw.cpg].MaxVolume);
+            vr = Common.CheckRange(vr, 0, pw.pg[pw.cpg].MaxVolume);
 
-            if (pw.beforeLVolume != vl)
+            if (pw.pg[pw.cpg].beforeLVolume != vl)
             {
                 //Volume(Left)
-                int adr = pw.ch * 16 + 0x01;
+                int adr = pw.pg[pw.cpg].ch * 16 + 0x01;
                 OutC140Port(mml,pw
                     , (byte)(adr >> 8)
                     , (byte)adr
                     , (byte)vl);
-                pw.beforeLVolume = vl;
+                pw.pg[pw.cpg].beforeLVolume = vl;
             }
 
-            if (pw.beforeRVolume != vr)
+            if (pw.pg[pw.cpg].beforeRVolume != vr)
             {
                 //Volume(Right)
-                int adr = pw.ch * 16 + 0x00;
+                int adr = pw.pg[pw.cpg].ch * 16 + 0x00;
                 OutC140Port(mml,pw
                     , (byte)(adr >> 8)
                     , (byte)adr
                     , (byte)vr);
-                pw.beforeRVolume = vr;
+                pw.pg[pw.cpg].beforeRVolume = vr;
             }
         }
 
@@ -772,7 +772,7 @@ namespace Core
         {
             for (int lfo = 0; lfo < 4; lfo++)
             {
-                clsLfo pl = pw.lfo[lfo];
+                clsLfo pl = pw.pg[pw.cpg].lfo[lfo];
                 if (!pl.sw)
                     continue;
 
@@ -793,7 +793,7 @@ namespace Core
                 }
                 if (pl.type == eLfoType.Tremolo)
                 {
-                    pw.beforeVolume = -1;
+                    pw.pg[pw.cpg].beforeVolume = -1;
                     SetVolume(pw,mml);
                 }
             }
@@ -817,8 +817,8 @@ namespace Core
 
             l = Common.CheckRange(l, 0, 255);
             r = Common.CheckRange(r, 0, 255);
-            pw.panL = l;
-            pw.panR = r;
+            pw.pg[pw.cpg].panL = l;
+            pw.pg[pw.cpg].panR = r;
 
             SetDummyData(pw, mml);
         }
@@ -864,11 +864,11 @@ namespace Core
                 return;
             }
 
-            pw.instrument = n;
-            pw.pcmStartAddress = (int)parent.instPCM[n].stAdr;
-            pw.pcmEndAddress = (int)parent.instPCM[n].edAdr;
-            pw.pcmLoopAddress = (int)parent.instPCM[n].loopAdr;
-            pw.pcmBank = (int)((parent.instPCM[n].stAdr >> 16));
+            pw.pg[pw.cpg].instrument = n;
+            pw.pg[pw.cpg].pcmStartAddress = (int)parent.instPCM[n].stAdr;
+            pw.pg[pw.cpg].pcmEndAddress = (int)parent.instPCM[n].edAdr;
+            pw.pg[pw.cpg].pcmLoopAddress = (int)parent.instPCM[n].loopAdr;
+            pw.pg[pw.cpg].pcmBank = (int)((parent.instPCM[n].stAdr >> 16));
             SetDummyData(pw, mml);
 
         }

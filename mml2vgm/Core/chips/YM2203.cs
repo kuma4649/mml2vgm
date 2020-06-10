@@ -90,17 +90,17 @@ namespace Core
 
         public override void InitPart(partWork pw)
         {
-            pw.slots = (byte)((pw.Type == enmChannelType.FMOPN || pw.ch == 2) ? 0xf : 0x0);
-            pw.volume = 127;
-            pw.MaxVolume = 127;
-            if (pw.Type == enmChannelType.SSG)
+            pw.pg[pw.cpg].slots = (byte)((pw.pg[pw.cpg].Type == enmChannelType.FMOPN || pw.pg[pw.cpg].ch == 2) ? 0xf : 0x0);
+            pw.pg[pw.cpg].volume = 127;
+            pw.pg[pw.cpg].MaxVolume = 127;
+            if (pw.pg[pw.cpg].Type == enmChannelType.SSG)
             {
-                //pw.volume = 32767;
-                pw.MaxVolume = 15;
-                pw.volume = pw.MaxVolume;
+                //pw.ppg[pw.cpgNum].volume = 32767;
+                pw.pg[pw.cpg].MaxVolume = 15;
+                pw.pg[pw.cpg].volume = pw.pg[pw.cpg].MaxVolume;
             }
 
-            pw.port = port;
+            pw.pg[pw.cpg].port = port;
         }
 
         public override void InitChip()
@@ -119,16 +119,16 @@ namespace Core
             for (int ch = 6; ch < 9; ch++)
             {
                 outYM2203SsgKeyOff(null,lstPartWork[ch]);
-                lstPartWork[ch].volume = 0;
+                lstPartWork[ch].pg[lstPartWork[ch].cpg].volume = 0;
             }
 
             foreach (partWork pw in lstPartWork)
             {
-                if (pw.ch == 0)
+                if (pw.pg[pw.cpg].ch == 0)
                 {
-                    pw.hardLfoSw = false;
-                    pw.hardLfoNum = 0;
-                    OutOPNSetHardLfo(null, pw, pw.hardLfoSw, pw.hardLfoNum);
+                    pw.pg[pw.cpg].hardLfoSw = false;
+                    pw.pg[pw.cpg].hardLfoNum = 0;
+                    OutOPNSetHardLfo(null, pw, pw.pg[pw.cpg].hardLfoSw, pw.pg[pw.cpg].hardLfoNum);
                 }
 
             }
@@ -147,8 +147,8 @@ namespace Core
 
             foreach (partWork pw in chip.lstPartWork)
             {
-                if (pw.dataEnd) continue;
-                if (pw.ch > 2) continue;
+                if (pw.pg[pw.cpg].dataEnd) continue;
+                if (pw.pg[pw.cpg].ch > 2) continue;
 
                 OutFmKeyOff(pw, null);
                 OutFmSetTl(null,pw, 0, 127);
@@ -161,24 +161,24 @@ namespace Core
 
         public void outYM2203SsgKeyOff(MML mml,partWork pw)
         {
-            byte pch = (byte)(pw.ch - 6);
+            byte pch = (byte)(pw.pg[pw.cpg].ch - 6);
             int n = 9;
             byte data = 0;
 
-            data = (byte)(((YM2203)pw.chip).SSGKeyOn[0] | (n << pch));
-            ((YM2203)pw.chip).SSGKeyOn[0] = data;
+            data = (byte)(((YM2203)pw.pg[pw.cpg].chip).SSGKeyOn[0] | (n << pch));
+            ((YM2203)pw.pg[pw.cpg].chip).SSGKeyOn[0] = data;
 
             parent.OutData(mml,port[0], (byte)(0x08 + pch), 0);
-            pw.beforeVolume = -1;
+            pw.pg[pw.cpg].beforeVolume = -1;
             parent.OutData(mml,port[0], 0x07, data);
         }
 
 
         public override void SetFNum(partWork pw, MML mml)
         {
-            if (pw.Type != enmChannelType.SSG)
+            if (pw.pg[pw.cpg].Type != enmChannelType.SSG)
                 SetFmFNum(pw,mml);
-            else if (pw.Type == enmChannelType.SSG)
+            else if (pw.pg[pw.cpg].Type == enmChannelType.SSG)
             {
                 SetSsgFNum(pw,mml);
             }
@@ -186,9 +186,9 @@ namespace Core
 
         public override void SetKeyOn(partWork pw, MML mml)
         {
-            if (pw.Type != enmChannelType.SSG)
+            if (pw.pg[pw.cpg].Type != enmChannelType.SSG)
                 OutFmKeyOn(pw,mml);
-            else if (pw.Type == enmChannelType.SSG)
+            else if (pw.pg[pw.cpg].Type == enmChannelType.SSG)
             {
                 OutSsgKeyOn(pw,mml);
             }
@@ -196,7 +196,7 @@ namespace Core
 
         public override void SetKeyOff(partWork pw, MML mml)
         {
-            if (pw.Type != enmChannelType.SSG)
+            if (pw.pg[pw.cpg].Type != enmChannelType.SSG)
                 OutFmKeyOff(pw,mml);
             else
                 OutSsgKeyOff(mml,pw);
@@ -222,14 +222,14 @@ namespace Core
 
             if (type == 'n' || type == 'N' || type == 'R' || type == 'A')
             {
-                if (pw.Type == enmChannelType.FMOPNex)
+                if (pw.pg[pw.cpg].Type == enmChannelType.FMOPNex)
                 {
-                    pw.instrument = n;
-                    lstPartWork[2].instrument = n;
-                    lstPartWork[3].instrument = n;
-                    lstPartWork[4].instrument = n;
-                    lstPartWork[5].instrument = n;
-                    OutFmSetInstrument(pw,mml, n, pw.volume, type);
+                    pw.pg[pw.cpg].instrument = n;
+                    lstPartWork[2].pg[lstPartWork[2].cpg].instrument = n;
+                    lstPartWork[3].pg[lstPartWork[3].cpg].instrument = n;
+                    lstPartWork[4].pg[lstPartWork[4].cpg].instrument = n;
+                    lstPartWork[5].pg[lstPartWork[5].cpg].instrument = n;
+                    OutFmSetInstrument(pw,mml, n, pw.pg[pw.cpg].volume, type);
                     return;
                 }
             }

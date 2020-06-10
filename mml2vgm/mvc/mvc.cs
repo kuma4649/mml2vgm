@@ -114,12 +114,12 @@ namespace mvc
                         List<partWork> pw = chip.lstPartWork;
                         for (int i = 0; i < pw.Count; i++)
                         {
-                            if (pw[i].clockCounter == 0) continue;
+                            if (pw[i].pg[0].clockCounter == 0) continue;
 
                             Console.WriteLine(string.Format(msg.get("I0002")
-                                , pw[i].PartName.Substring(0, 2).Replace(" ", "") + int.Parse(pw[i].PartName.Substring(2, 2)).ToString()
-                                , pw[i].chip.Name.ToUpper()
-                                , pw[i].clockCounter
+                                , pw[i].pg[0].PartName.Substring(0, 2).Replace(" ", "") + int.Parse(pw[i].pg[0].PartName.Substring(2, 2)).ToString()
+                                , pw[i].pg[0].chip.Name.ToUpper()
+                                , pw[i].pg[0].clockCounter
                             ));
                         }
                     }
