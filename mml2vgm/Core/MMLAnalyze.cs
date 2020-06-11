@@ -40,11 +40,17 @@ namespace Core
                     {
                         if (pw.pData == null) continue;
 
-                        Step1(pw, 0);//mml全体のフォーマット解析
-                        Step2(pw, 0);//toneDoubler,bend,tieコマンドの解析
-                        Step3(pw, 0);//リピート、連符コマンドの解析
+                        for (int pg = 0; pg < pw.pData.Count; pg++)
+                        {
+                            //ページ追加
+                            if (pg == pw.pg.Count) pw.pg.Add(new partPage());
 
-                        pw.pg[pw.cpg].dataEnd = false;
+                            Step1(pw, pg);//mml全体のフォーマット解析
+                            Step2(pw, pg);//toneDoubler,bend,tieコマンドの解析
+                            Step3(pw, pg);//リピート、連符コマンドの解析
+
+                            pw.pg[pg].dataEnd = false;
+                        }
                     }
                 }
             }

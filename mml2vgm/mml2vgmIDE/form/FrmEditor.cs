@@ -65,7 +65,7 @@ namespace mml2vgmIDE
         { 
             Sgry.Azuki.Highlighter.KeywordHighlighter keywordHighlighter = new Sgry.Azuki.Highlighter.KeywordHighlighter();
             keywordHighlighter.AddRegex("^[^'].*", false, CharClass.DocComment);
-            keywordHighlighter.AddRegex("^'[A-Za-z0-9\\-\\,\\+]+[ |\\t]", CharClass.Keyword);
+            keywordHighlighter.AddRegex("^'[A-Za-z0-9\\-\\,\\+]+_*[ |\\t]", CharClass.Keyword);
             keywordHighlighter.AddRegex("^'@[ |\\t]", CharClass.Keyword);
             keywordHighlighter.AddRegex("^'%\\S+[ |\\t]", CharClass.Keyword);
             keywordHighlighter.AddRegex(";.*", CharClass.DocComment);

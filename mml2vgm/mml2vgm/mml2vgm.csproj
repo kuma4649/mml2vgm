@@ -153,6 +153,9 @@
     <None Include="sample\MidiGM\testGM.gwi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="sample\Syntax\testPageFunction.gwi">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="sample\YM3526\OPLtest.gwi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

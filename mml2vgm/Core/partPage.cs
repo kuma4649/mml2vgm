@@ -445,5 +445,11 @@ namespace Core
         public bool changeFlag { get; internal set; }
         public int C352flag { get; internal set; }
 
+
+
+        public void sharedPageInitializer()
+        {
+
+        }
     }
 }
