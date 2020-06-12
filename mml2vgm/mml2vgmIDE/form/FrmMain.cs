@@ -168,7 +168,18 @@ namespace mml2vgmIDE
             Core.Common.CheckSoXVersion(System.Windows.Forms.Application.StartupPath, Disp);
             CheckAndLoadMucomDotNET(System.Windows.Forms.Application.StartupPath, Disp);
             compileManager = new CompileManager(Disp, mucom);
-            OpenLatestFile();
+
+            string[] args = Environment.GetCommandLineArgs();
+            //foreach (string ag in args) MessageBox.Show(ag);
+            string startFn = "";
+            if(args.Length>1 
+                && File.Exists(args[1]) 
+                && (Path.GetExtension(args[1]).ToLower() == ".gwi"|| Path.GetExtension(args[1]).ToLower() == ".muc"))
+            {
+                startFn = args[1];
+            }
+
+            OpenLatestFile(startFn);
         }
 
         private void CheckAndLoadMucomDotNET(string startupPath, Action<string> disp)
@@ -1062,8 +1073,14 @@ namespace mml2vgmIDE
             }
         }
 
-        private void OpenLatestFile()
+        private void OpenLatestFile(string startFn)
         {
+            if (!string.IsNullOrEmpty(startFn))
+            {
+                OpenFile(startFn);
+                return;
+            }
+
             string lastFn = "";
             if (setting.other.GwiFileHistory == null) return;
             foreach (string fn in setting.other.GwiFileHistory)
