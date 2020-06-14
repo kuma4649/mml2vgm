@@ -689,7 +689,7 @@ namespace mml2vgmIDE
 
                         scYM2609[i] = realChip.GetRealChip(ctYM2609[i]);
                         if (scYM2609[i] != null) scYM2609[i].init();
-                        if (YM2609.Count < i + 1) YM2609.Add(new Chip(12+6+12+6+3));
+                        if (YM2609.Count < i + 1) YM2609.Add(new Chip(12+6+12+6+3+6));
                         YM2609[i].Model = ctYM2609[i].UseEmu ? EnmVRModel.VirtualModel : EnmVRModel.RealModel;
                         YM2609[i].Delay = (YM2609[i].Model == EnmVRModel.VirtualModel ? LEmu : LReal);
                     }
@@ -874,7 +874,7 @@ namespace mml2vgmIDE
                 YM2608[i].Number = i;
                 YM2608[i].Hosei = 0;
 
-                if (YM2609.Count < i + 1) YM2609.Add(new Chip(12+6+12+6+3));
+                if (YM2609.Count < i + 1) YM2609.Add(new Chip(12+6+12+6+3+6));
                 YM2609[i].Use = false;
                 YM2609[i].Model = EnmVRModel.None;
                 YM2609[i].Device = EnmZGMDevice.YM2609;
@@ -5345,6 +5345,18 @@ namespace mml2vgmIDE
                 if (Chip.ChMasks[38]) dData &= 0x7f;
             }
             //18+12+6+3
+
+            //ADPCM-A ch=39, 40, 41, 42, 43, 44
+            if (Address == 0x111)
+            {
+                byte mask = 0x80;
+                for (int i = 0; i < 6; i++)
+                {
+                    mask |= (byte)((Chip.ChMasks[i + 39] ? 0 : 1) << i);
+                }
+
+                dData &= mask;
+            }
 
         }
 
