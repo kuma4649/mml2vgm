@@ -68,9 +68,9 @@ namespace Core
 
         public override void InitPart(partWork pw)
         {
-            pw.pg[pw.cpg].volume = 15;
-            pw.pg[pw.cpg].MaxVolume = 15;
-            pw.pg[pw.cpg].port = port;
+            pw.apg.volume = 15;
+            pw.apg.MaxVolume = 15;
+            pw.apg.port = port;
 
         }
 
@@ -80,8 +80,8 @@ namespace Core
 
             for (int ch = 0; ch < 3; ch++)
             {
-                OutSsgKeyOff(null, lstPartWork[ch]);
-                lstPartWork[ch].pg[lstPartWork[ch].cpg].volume = 0;
+                OutSsgKeyOff(null, lstPartWork[ch].cpg);
+                lstPartWork[ch].apg.volume = 0;
             }
 
             if (ChipID != 0)
@@ -90,27 +90,27 @@ namespace Core
             }
         }
 
-        public void OutSsgKeyOn(MML mml, partWork pw)
+        public void OutSsgKeyOn(MML mml, partPage page)
         {
-            byte pch = (byte)pw.pg[pw.cpg].ch;
-            int n = (pw.pg[pw.cpg].mixer & 0x1) + ((pw.pg[pw.cpg].mixer & 0x2) << 2);
+            byte pch = (byte)page.ch;
+            int n = (page.mixer & 0x1) + ((page.mixer & 0x2) << 2);
             byte data = 0;
 
             data = (byte)(SSGKeyOn | (9 << pch));
             data &= (byte)(~(n << pch));
             SSGKeyOn = data;
 
-            SetSsgVolume(mml, pw);
-            if (pw.pg[pw.cpg].HardEnvelopeSw)
+            SetSsgVolume(mml, page);
+            if (page.HardEnvelopeSw)
             {
-                parent.OutData(mml, port[0], 0x0d, (byte)(pw.pg[pw.cpg].HardEnvelopeType & 0xf));
+                parent.OutData(mml, port[0], 0x0d, (byte)(page.HardEnvelopeType & 0xf));
             }
             parent.OutData(mml, port[0], 0x07, data);
         }
 
-        public void OutSsgKeyOff(MML mml, partWork pw)
+        public void OutSsgKeyOff(MML mml, partPage page)
         {
-            byte pch = (byte)pw.pg[pw.cpg].ch;
+            byte pch = (byte)page.ch;
             int n = 9;
             byte data = 0;
 
@@ -118,83 +118,83 @@ namespace Core
             SSGKeyOn = data;
 
             parent.OutData(mml, port[0], (byte)(0x08 + pch), 0);
-            pw.pg[pw.cpg].beforeVolume = -1;
+            page.beforeVolume = -1;
             parent.OutData(mml, port[0], 0x07, data);
         }
 
-        public void SetSsgVolume(MML mml, partWork pw)
+        public void SetSsgVolume(MML mml, partPage page)
         {
-            byte pch = (byte)pw.pg[pw.cpg].ch;
+            byte pch = (byte)page.ch;
 
-            int vol = pw.pg[pw.cpg].volume;
-            if (pw.pg[pw.cpg].envelopeMode)
+            int vol = page.volume;
+            if (page.envelopeMode)
             {
                 vol = 0;
-                if (pw.pg[pw.cpg].envIndex != -1)
+                if (page.envIndex != -1)
                 {
-                    vol = pw.pg[pw.cpg].volume - (15 - pw.pg[pw.cpg].envVolume);
+                    vol = page.volume - (15 - page.envVolume);
                 }
             }
 
             for (int lfo = 0; lfo < 4; lfo++)
             {
-                if (!pw.pg[pw.cpg].lfo[lfo].sw) continue;
-                if (pw.pg[pw.cpg].lfo[lfo].type != eLfoType.Tremolo) continue;
+                if (!page.lfo[lfo].sw) continue;
+                if (page.lfo[lfo].type != eLfoType.Tremolo) continue;
 
-                vol += pw.pg[pw.cpg].lfo[lfo].value + pw.pg[pw.cpg].lfo[lfo].param[6];
+                vol += page.lfo[lfo].value + page.lfo[lfo].param[6];
             }
 
-            vol = Common.CheckRange(vol, 0, 15) + (pw.pg[pw.cpg].HardEnvelopeSw ? 0x10 : 0x00);
+            vol = Common.CheckRange(vol, 0, 15) + (page.HardEnvelopeSw ? 0x10 : 0x00);
 
-            if (pw.pg[pw.cpg].beforeVolume != vol)
+            if (page.beforeVolume != vol)
             {
                 parent.OutData(mml, port[0], (byte)(0x08 + pch), (byte)vol);
                 //pw.ppg[pw.cpgNum].beforeVolume = pw.ppg[pw.cpgNum].volume;
-                pw.pg[pw.cpg].beforeVolume = vol;
+                page.beforeVolume = vol;
             }
         }
 
-        public void OutSsgNoise(MML mml, partWork pw, int n)
+        public void OutSsgNoise(MML mml, partPage page, int n)
         {
             parent.OutData(mml, port[0], 0x06, (byte)(n & 0x1f));
         }
 
-        public void SetSsgFNum(partWork pw, MML mml)
+        public void SetSsgFNum(partPage page, MML mml)
         {
-            int f = GetSsgFNum(pw, mml, pw.pg[pw.cpg].octaveNow, pw.pg[pw.cpg].noteCmd, pw.pg[pw.cpg].shift + pw.pg[pw.cpg].keyShift);//
-            if (pw.pg[pw.cpg].bendWaitCounter != -1)
+            int f = GetSsgFNum(page, mml, page.octaveNow, page.noteCmd, page.shift + page.keyShift);//
+            if (page.bendWaitCounter != -1)
             {
-                f = pw.pg[pw.cpg].bendFnum;
+                f = page.bendFnum;
             }
-            f = f + pw.pg[pw.cpg].detune;
+            f = f + page.detune;
             for (int lfo = 0; lfo < 4; lfo++)
             {
-                if (!pw.pg[pw.cpg].lfo[lfo].sw)
+                if (!page.lfo[lfo].sw)
                 {
                     continue;
                 }
-                if (pw.pg[pw.cpg].lfo[lfo].type != eLfoType.Vibrato)
+                if (page.lfo[lfo].type != eLfoType.Vibrato)
                 {
                     continue;
                 }
-                f += pw.pg[pw.cpg].lfo[lfo].value + pw.pg[pw.cpg].lfo[lfo].param[6];
+                f += page.lfo[lfo].value + page.lfo[lfo].param[6];
             }
 
             f = Common.CheckRange(f, 0, 0xfff);
-            if (pw.pg[pw.cpg].freq == f) return;
+            if (page.freq == f) return;
 
-            pw.pg[pw.cpg].freq = f;
+            page.freq = f;
 
             byte data = 0;
 
             data = (byte)(f & 0xff);
-            parent.OutData(mml, port[0], (byte)(0 + pw.pg[pw.cpg].ch * 2), data);
+            parent.OutData(mml, port[0], (byte)(0 + page.ch * 2), data);
 
             data = (byte)((f & 0xf00) >> 8);
-            parent.OutData(mml, port[0], (byte)(1 + pw.pg[pw.cpg].ch * 2), data);
+            parent.OutData(mml, port[0], (byte)(1 + page.ch * 2), data);
         }
 
-        public int GetSsgFNum(partWork pw, MML mml, int octave, char noteCmd, int shift)
+        public int GetSsgFNum(partPage page, MML mml, int octave, char noteCmd, int shift)
         {
             int o = octave - 1;
             int n = Const.NOTE.IndexOf(noteCmd) + shift;
@@ -209,46 +209,46 @@ namespace Core
             return FNumTbl[0][f];
         }
 
-        public override int GetFNum(partWork pw, MML mml, int octave, char cmd, int shift)
+        public override int GetFNum(partPage page, MML mml, int octave, char cmd, int shift)
         {
-            return GetSsgFNum(pw, mml, octave, cmd, shift);
+            return GetSsgFNum(page, mml, octave, cmd, shift);
         }
 
 
-        public override void SetFNum(partWork pw, MML mml)
+        public override void SetFNum(partPage page, MML mml)
         {
-            SetSsgFNum(pw, mml);
+            SetSsgFNum(page, mml);
         }
 
-        public override void SetKeyOn(partWork pw, MML mml)
+        public override void SetKeyOn(partPage page, MML mml)
         {
-            OutSsgKeyOn(mml, pw);
+            OutSsgKeyOn(mml, page);
         }
 
-        public override void SetKeyOff(partWork pw, MML mml)
+        public override void SetKeyOff(partPage page, MML mml)
         {
-            OutSsgKeyOff(mml, pw);
+            OutSsgKeyOff(mml, page);
         }
 
-        public override void SetVolume(partWork pw, MML mml)
+        public override void SetVolume(partPage page, MML mml)
         {
-            SetSsgVolume(mml, pw);
+            SetSsgVolume(mml, page);
         }
 
-        public override void SetToneDoubler(partWork pw, MML mml)
+        public override void SetToneDoubler(partPage page, MML mml)
         {
         }
 
-        public override int GetToneDoublerShift(partWork pw, int octave, char noteCmd, int shift)
+        public override int GetToneDoublerShift(partPage page, int octave, char noteCmd, int shift)
         {
             return 0;
         }
 
-        public override void SetLfoAtKeyOn(partWork pw, MML mml)
+        public override void SetLfoAtKeyOn(partPage page, MML mml)
         {
             for (int lfo = 0; lfo < 4; lfo++)
             {
-                clsLfo pl = pw.pg[pw.cpg].lfo[lfo];
+                clsLfo pl = page.lfo[lfo];
                 if (!pl.sw)
                     continue;
 
@@ -265,18 +265,18 @@ namespace Core
 
                 if (pl.type == eLfoType.Vibrato)
                 {
-                    SetSsgFNum(pw, mml);
+                    SetSsgFNum(page, mml);
                 }
 
                 if (pl.type == eLfoType.Tremolo)
                 {
-                    SetSsgVolume(mml, pw);
+                    SetSsgVolume(mml, page);
                 }
 
             }
         }
 
-        public override void CmdInstrument(partWork pw, MML mml)
+        public override void CmdInstrument(partPage page, MML mml)
         {
             char type = (char)mml.args[0];
             int n = (int)mml.args[1];
@@ -297,30 +297,30 @@ namespace Core
 
             if (type == 'E')
             {
-                n = SetEnvelopParamFromInstrument(pw, n, mml);
+                n = SetEnvelopParamFromInstrument(page, n, mml);
                 return;
             }
 
-            SetEnvelopParamFromInstrument(pw, n, mml);
+            SetEnvelopParamFromInstrument(page, n, mml);
             return;
         }
 
-        public override void CmdNoiseToneMixer(partWork pw, MML mml)
+        public override void CmdNoiseToneMixer(partPage page, MML mml)
         {
             int n = (int)mml.args[0];
             n = Common.CheckRange(n, 0, 3);
-            pw.pg[pw.cpg].mixer = n;
+            page.mixer = n;
         }
 
-        public override void CmdNoise(partWork pw, MML mml)
+        public override void CmdNoise(partPage page, MML mml)
         {
             int n = (int)mml.args[0];
             n = Common.CheckRange(n, 0, 31);
-            pw.pg[pw.cpg].chip.lstPartWork[0].pg[lstPartWork[0].cpg].noise = n;//Chipの1Chに保存
-            OutSsgNoise(mml, pw, n);
+            page.chip.lstPartWork[0].cpg.noise = n;//Chipの1Chに保存
+            OutSsgNoise(mml, page, n);
         }
 
-        public override void CmdHardEnvelope(partWork pw, MML mml)
+        public override void CmdHardEnvelope(partPage page, MML mml)
         {
             string cmd = (string)mml.args[0];
             int n = 0;
@@ -329,31 +329,31 @@ namespace Core
             {
                 case "EH":
                     n = (int)mml.args[1];
-                    if (pw.pg[pw.cpg].HardEnvelopeSpeed != n)
+                    if (page.HardEnvelopeSpeed != n)
                     {
                         parent.OutData(mml, port[0], 0x0b, (byte)(n & 0xff));
                         parent.OutData(mml, port[0], 0x0c, (byte)((n >> 8) & 0xff));
-                        pw.pg[pw.cpg].HardEnvelopeSpeed = n;
+                        page.HardEnvelopeSpeed = n;
                     }
                     break;
                 case "EHON":
-                    pw.pg[pw.cpg].HardEnvelopeSw = true;
+                    page.HardEnvelopeSw = true;
                     break;
                 case "EHOF":
-                    pw.pg[pw.cpg].HardEnvelopeSw = false;
+                    page.HardEnvelopeSw = false;
                     break;
                 case "EHT":
                     n = (int)mml.args[1];
-                    if (pw.pg[pw.cpg].HardEnvelopeType != n)
+                    if (page.HardEnvelopeType != n)
                     {
                         parent.OutData(mml, port[0], 0x0d, (byte)(n & 0xf));
-                        pw.pg[pw.cpg].HardEnvelopeType = n;
+                        page.HardEnvelopeType = n;
                     }
                     break;
             }
         }
 
-        public override void CmdY(partWork pw, MML mml)
+        public override void CmdY(partPage page, MML mml)
         {
             if (mml.args[0] is string) return;
 
@@ -363,7 +363,7 @@ namespace Core
             parent.OutData(mml, port[0], (byte)adr, (byte)dat);
         }
 
-        public override void CmdLoopExtProc(partWork pw, MML mml)
+        public override void CmdLoopExtProc(partPage page, MML mml)
         {
         }
 

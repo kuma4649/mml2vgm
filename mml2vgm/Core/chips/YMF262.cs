@@ -93,18 +93,21 @@ namespace Core
 
         public override void InitPart(partWork pw)
         {
-            pw.pg[pw.cpg].beforeVolume = -1;
-            pw.pg[pw.cpg].volume = 60;
-            pw.pg[pw.cpg].MaxVolume = 63;
-            pw.pg[pw.cpg].beforeEnvInstrument = 0;
-            pw.pg[pw.cpg].envInstrument = 0;
-            pw.pg[pw.cpg].port = port;
-            pw.pg[pw.cpg].mixer = 0;
-            pw.pg[pw.cpg].noise = 0;
-            pw.pg[pw.cpg].pan.val = 3;
-            pw.pg[pw.cpg].Type = enmChannelType.FMOPL;
-            pw.pg[pw.cpg].isOp4Mode = false;
-            if (pw.pg[pw.cpg].ch > 17) pw.pg[pw.cpg].Type = enmChannelType.RHYTHM;
+            foreach (partPage page in pw.pg)
+            {
+                page.beforeVolume = -1;
+                page.volume = 60;
+                page.MaxVolume = 63;
+                page.beforeEnvInstrument = 0;
+                page.envInstrument = 0;
+                page.port = port;
+                page.mixer = 0;
+                page.noise = 0;
+                page.pan.val = 3;
+                page.Type = enmChannelType.FMOPL;
+                page.isOp4Mode = false;
+                if (page.ch > 17) page.Type = enmChannelType.RHYTHM;
+            }
         }
 
         public override void InitChip()
@@ -144,38 +147,38 @@ namespace Core
             }
         }
 
-        protected override void SetInstToRhythmChannel(partWork pw, MML mml, int n, int modeBeforeSend)
+        protected override void SetInstToRhythmChannel(partPage page, MML mml, int n, int modeBeforeSend)
         {
             if (rhythmStatus == 0) return;
 
-            if (pw.pg[pw.cpg].ch == 18)//BD
+            if (page.ch == 18)//BD
             {
                 int vch = 6;
-                SetInst2Operator(pw, mml, n, modeBeforeSend, vch);
+                SetInst2Operator(page, mml, n, modeBeforeSend, vch);
             }
-            else if (pw.pg[pw.cpg].ch == 19)//SD
+            else if (page.ch == 19)//SD
             {
                 int opeNum = 16;
-                SetInst1Operator(pw, mml, n, modeBeforeSend, opeNum);
+                SetInst1Operator(page, mml, n, modeBeforeSend, opeNum);
             }
-            else if (pw.pg[pw.cpg].ch == 20)//TOM
+            else if (page.ch == 20)//TOM
             {
                 int opeNum = 14;
-                SetInst1Operator(pw, mml, n, modeBeforeSend, opeNum);
+                SetInst1Operator(page, mml, n, modeBeforeSend, opeNum);
             }
-            else if (pw.pg[pw.cpg].ch == 21)//CYM
+            else if (page.ch == 21)//CYM
             {
                 int opeNum = 17;
-                SetInst1Operator(pw, mml, n, modeBeforeSend, opeNum);
+                SetInst1Operator(page, mml, n, modeBeforeSend, opeNum);
             }
-            else if (pw.pg[pw.cpg].ch == 22)//HH
+            else if (page.ch == 22)//HH
             {
                 int opeNum = 13;
-                SetInst1Operator(pw, mml, n, modeBeforeSend, opeNum);
+                SetInst1Operator(page, mml, n, modeBeforeSend, opeNum);
             }
         }
 
-        protected override void SetInst1Operator(partWork pw, MML mml, int n, int modeBeforeSend, int opeNum)
+        protected override void SetInst1Operator(partPage page, MML mml, int n, int modeBeforeSend, int opeNum)
         {
             byte[] inst = parent.instFM[n];
             int targetBaseReg = (opeNum / 6) * 8 + (opeNum % 6);
@@ -212,7 +215,7 @@ namespace Core
             );
 
             int cnt = inst[25];
-            if (cnt == 0 || pw.pg[pw.cpg].Type == enmChannelType.RHYTHM)
+            if (cnt == 0 || page.Type == enmChannelType.RHYTHM)
             {
                 if (ope == 0)
                 {
@@ -222,12 +225,12 @@ namespace Core
                 }
             }
 
-            SetInstAtChannelPanFbCnt(mml, (opeNum % 6) % 3 + (opeNum / 6) * 3, (int)pw.pg[pw.cpg].pan.val, inst[26], inst[25]);
+            SetInstAtChannelPanFbCnt(mml, (opeNum % 6) % 3 + (opeNum / 6) * 3, (int)page.pan.val, inst[26], inst[25]);
 
-            pw.pg[pw.cpg].beforeVolume = -1;
+            page.beforeVolume = -1;
         }
 
-        protected override void SetInst2Operator(partWork pw, MML mml, int n, int modeBeforeSend, int vch)
+        protected override void SetInst2Operator(partPage page, MML mml, int n, int modeBeforeSend, int vch)
         {
             byte[] inst = parent.instFM[n];
             byte targetBaseReg = ChnToBaseReg(vch);
@@ -281,14 +284,14 @@ namespace Core
                     , (byte)(((inst[12 * 0 + 5] & 0x3) << 6) | (inst[12 * 0 + 6] & 0x3f))); //KL(M) TL
             }
 
-            SetInstAtChannelPanFbCnt(mml, vch, (int)pw.pg[pw.cpg].pan.val, inst[26], inst[25]);
+            SetInstAtChannelPanFbCnt(mml, vch, (int)page.pan.val, inst[26], inst[25]);
 
-            pw.pg[pw.cpg].beforeVolume = -1;
+            page.beforeVolume = -1;
         }
 
-        protected override void SetInst4Operator(partWork pw, MML mml, int n, int modeBeforeSend, int vch)
+        protected override void SetInst4Operator(partPage page, MML mml, int n, int modeBeforeSend, int vch)
         {
-            if (!pw.pg[pw.cpg].isOp4Mode)
+            if (!page.isOp4Mode)
             {
                 msgBox.setErrMsg(string.Format(msg.get("E26000"), n), mml.line.Lp);
                 return;
@@ -362,15 +365,15 @@ namespace Core
                     , (byte)(((inst[12 * 2 + 5] & 0x3) << 6) | (inst[12 * 2 + 6] & 0x3f))); //KL(M) TL
 
 
-            SetInstAtChannelPanFbCnt(mml, vch, (int)pw.pg[pw.cpg].pan.val, inst[51], cnt1);
-            SetInstAtChannelPanFbCnt(mml, vch + 3, (int)pw.pg[pw.cpg].pan.val, inst[51], cnt2);
+            SetInstAtChannelPanFbCnt(mml, vch, (int)page.pan.val, inst[51], cnt1);
+            SetInstAtChannelPanFbCnt(mml, vch + 3, (int)page.pan.val, inst[51], cnt2);
 
-            pw.pg[pw.cpg].beforeVolume = -1;
+            page.beforeVolume = -1;
         }
 
         protected override void SetInstAtOneOpeWithoutKslTl(MML mml, int opeNum,
             int ar, int dr, int sl, int rr,
-            int mt, int am, int vib, int eg, 
+            int mt, int am, int vib, int eg,
             int kr,
             int ws
             )
@@ -401,83 +404,83 @@ namespace Core
 
 
 
-        public override void CmdMode(partWork pw, MML mml)
+        public override void CmdMode(partPage page, MML mml)
         {
             Console.WriteLine("CmdMode()");
 
             int n = (int)mml.args[0];
 
-            if ((pw.pg[pw.cpg].ch > 5 && pw.pg[pw.cpg].ch < 9) || pw.pg[pw.cpg].Type== enmChannelType.RHYTHM)
+            if ((page.ch > 5 && page.ch < 9) || page.Type == enmChannelType.RHYTHM)
             {
-                if (n == 0) pw.pg[pw.cpg].chip.rhythmStatus &= 0xdf;
-                else pw.pg[pw.cpg].chip.rhythmStatus |= 0x20;
+                if (n == 0) page.chip.rhythmStatus &= 0xdf;
+                else page.chip.rhythmStatus |= 0x20;
 
                 return;
             }
 
-            if(pw.pg[pw.cpg].Type== enmChannelType.FMOPL)
+            if (page.Type == enmChannelType.FMOPL)
             {
-                if((pw.pg[pw.cpg].ch >= 0 && pw.pg[pw.cpg].ch < 6)|| (pw.pg[pw.cpg].ch >= 9 && pw.pg[pw.cpg].ch < 15))
+                if ((page.ch >= 0 && page.ch < 6) || (page.ch >= 9 && page.ch < 15))
                 {
-                    int tch = (pw.pg[pw.cpg].ch % 9) % 3 + (pw.pg[pw.cpg].ch / 9) * 3;
+                    int tch = (page.ch % 9) % 3 + (page.ch / 9) * 3;
 
                     if (n == 0)
                     {
-                        pw.pg[pw.cpg].chip.connectionSel &= (~(1 << tch)) & 0x3f;
-                        
-                        tch += (pw.pg[pw.cpg].ch > 8 ? 6 : 0);
-                        pw.pg[pw.cpg].chip.lstPartWork[tch].pg[lstPartWork[tch].cpg].isOp4Mode = false;
-                        pw.pg[pw.cpg].chip.lstPartWork[tch + 3].pg[lstPartWork[tch+3].cpg].isOp4Mode = false;
+                        page.chip.connectionSel &= (~(1 << tch)) & 0x3f;
+
+                        tch += (page.ch > 8 ? 6 : 0);
+                        page.chip.lstPartWork[tch].cpg.isOp4Mode = false;
+                        page.chip.lstPartWork[tch + 3].cpg.isOp4Mode = false;
                     }
                     else
                     {
-                        pw.pg[pw.cpg].chip.connectionSel |= (1 << tch);
+                        page.chip.connectionSel |= (1 << tch);
 
-                        tch += (pw.pg[pw.cpg].ch > 8 ? 6 : 0);
-                        pw.pg[pw.cpg].chip.lstPartWork[tch].pg[lstPartWork[tch].cpg].isOp4Mode = true;
-                        pw.pg[pw.cpg].chip.lstPartWork[tch + 3].pg[lstPartWork[tch+3].cpg].isOp4Mode = true;
+                        tch += (page.ch > 8 ? 6 : 0);
+                        page.chip.lstPartWork[tch].cpg.isOp4Mode = true;
+                        page.chip.lstPartWork[tch + 3].cpg.isOp4Mode = true;
                     }
 
                 }
             }
         }
 
-        public override void CmdPan(partWork pw, MML mml)
+        public override void CmdPan(partPage page, MML mml)
         {
             int n = (int)mml.args[0];
             n = Common.CheckRange(n, 0, 3);
-            pw.pg[pw.cpg].pan.val = ((n & 1) << 1) | ((n & 2) >> 1);//LR反転
-            int vch = pw.pg[pw.cpg].ch;
+            page.pan.val = ((n & 1) << 1) | ((n & 2) >> 1);//LR反転
+            int vch = page.ch;
 
-            if (pw.pg[pw.cpg].Type == enmChannelType.RHYTHM)
+            if (page.Type == enmChannelType.RHYTHM)
             {
-                if (pw.pg[pw.cpg].ch == 18) vch = 6;
-                else if (pw.pg[pw.cpg].ch == 19) vch = 7;
-                else if (pw.pg[pw.cpg].ch == 20) vch = 8;
-                else if (pw.pg[pw.cpg].ch == 21) vch = 8;
-                else if (pw.pg[pw.cpg].ch == 22) vch = 7;
+                if (page.ch == 18) vch = 6;
+                else if (page.ch == 19) vch = 7;
+                else if (page.ch == 20) vch = 8;
+                else if (page.ch == 21) vch = 8;
+                else if (page.ch == 22) vch = 7;
             }
 
             byte[] port = getPortFromCh(vch);
 
             byte PanFbCnt = 0;
-            if (pw.pg[pw.cpg].instrument != -1)
+            if (page.instrument != -1)
             {
                 PanFbCnt = (byte)(
-                    (parent.instFM[pw.pg[pw.cpg].instrument][26] & 0x07) << 1
-                | parent.instFM[pw.pg[pw.cpg].instrument][25] & 0x01
+                    (parent.instFM[page.instrument][26] & 0x07) << 1
+                | parent.instFM[page.instrument][25] & 0x01
                 );
             }
 
             parent.OutData(mml, port, (byte)(vch % 9 + 0xC0), (byte)((
                 PanFbCnt
-                | (pw.pg[pw.cpg].pan.val * 0x10) // PAN
+                | (page.pan.val * 0x10) // PAN
                 )));
 
-            SetDummyData(pw, mml);
+            SetDummyData(page, mml);
         }
 
-        public override void CmdY(partWork pw, MML mml)
+        public override void CmdY(partPage page, MML mml)
         {
             if (mml.args[0] is string) return;
 
@@ -486,9 +489,9 @@ namespace Core
                 byte adr = (byte)(int)mml.args[0];
                 byte dat = (byte)(int)mml.args[1];
                 int p = 0;
-                if (pw.pg[pw.cpg].ch < 9)//FM1-9
+                if (page.ch < 9)//FM1-9
                     p = 0;
-                else if (pw.pg[pw.cpg].ch < 18)//FM10-18
+                else if (page.ch < 18)//FM10-18
                     p = 1;
                 else
                     p = 0;
@@ -517,247 +520,250 @@ namespace Core
 
             foreach (partWork pw in lstPartWork)
             {
-                if (pw.pg[pw.cpg].Type == enmChannelType.FMOPL)
+                foreach (partPage page in pw.pg)
                 {
-                    if (!pw.pg[pw.cpg].isOp4Mode)
+                    if (page.Type == enmChannelType.FMOPL)
                     {
-                        if (pw.pg[pw.cpg].beforeVolume != pw.pg[pw.cpg].volume && parent.instFM.ContainsKey(pw.pg[pw.cpg].instrument))
+                        if (!page.isOp4Mode)
                         {
-                            pw.pg[pw.cpg].beforeVolume = pw.pg[pw.cpg].volume;
-
-
-                            int cnt = parent.instFM[pw.pg[pw.cpg].instrument][25];
-                            if (cnt != 0)
+                            if (page.beforeVolume != page.volume && parent.instFM.ContainsKey(page.instrument))
                             {
-                                //OP1
+                                page.beforeVolume = page.volume;
+
+
+                                int cnt = parent.instFM[page.instrument][25];
+                                if (cnt != 0)
+                                {
+                                    //OP1
+                                    parent.OutData(
+                                        mml,
+                                        port[page.ch / 9],
+                                        (byte)(0x40 + ChnToBaseReg(page.ch) + 0),
+                                        (byte)(
+                                                ((parent.instFM[page.instrument][12 * 0 + 5] & 0x3) << 6)  //KL(M)
+                                                | Common.CheckRange(((parent.instFM[page.instrument][12 * 0 + 6] & 0x3f) + (63 - (page.volume & 0x3f))), 0, 63) //TL
+                                            )
+                                        );
+                                }
+                                //OP2
                                 parent.OutData(
                                     mml,
-                                    port[pw.pg[pw.cpg].ch / 9],
-                                    (byte)(0x40 + ChnToBaseReg(pw.pg[pw.cpg].ch) + 0),
+                                    port[page.ch / 9],
+                                    (byte)(0x40 + ChnToBaseReg(page.ch) + 3),
                                     (byte)(
-                                            ((parent.instFM[pw.pg[pw.cpg].instrument][12 * 0 + 5] & 0x3) << 6)  //KL(M)
-                                            | Common.CheckRange(((parent.instFM[pw.pg[pw.cpg].instrument][12 * 0 + 6] & 0x3f) + (63 - (pw.pg[pw.cpg].volume & 0x3f))), 0, 63) //TL
+                                            ((parent.instFM[page.instrument][12 * 1 + 5] & 0x3) << 6)  //KL(M)
+                                            | Common.CheckRange(((parent.instFM[page.instrument][12 * 1 + 6] & 0x3f) + (63 - (page.volume & 0x3f))), 0, 63) //TL
                                         )
                                     );
                             }
-                            //OP2
-                            parent.OutData(
-                                mml,
-                                port[pw.pg[pw.cpg].ch / 9],
-                                (byte)(0x40 + ChnToBaseReg(pw.pg[pw.cpg].ch) + 3),
-                                (byte)(
-                                        ((parent.instFM[pw.pg[pw.cpg].instrument][12 * 1 + 5] & 0x3) << 6)  //KL(M)
-                                        | Common.CheckRange(((parent.instFM[pw.pg[pw.cpg].instrument][12 * 1 + 6] & 0x3f) + (63 - (pw.pg[pw.cpg].volume & 0x3f))), 0, 63) //TL
-                                    )
-                                );
+
                         }
-
-                    }
-                    else
-                    {
-                        if ((pw.pg[pw.cpg].ch >= 3 && pw.pg[pw.cpg].ch <= 5) || (pw.pg[pw.cpg].ch >= 12 && pw.pg[pw.cpg].ch <= 14)) continue;
-
-                        if (pw.pg[pw.cpg].beforeVolume != pw.pg[pw.cpg].volume && parent.instFM.ContainsKey(pw.pg[pw.cpg].instrument))
+                        else
                         {
-                            pw.pg[pw.cpg].beforeVolume = pw.pg[pw.cpg].volume;
+                            if ((page.ch >= 3 && page.ch <= 5) || (page.ch >= 12 && page.ch <= 14)) continue;
 
-                            int cnt1 = parent.instFM[pw.pg[pw.cpg].instrument][49];
-                            int cnt2 = parent.instFM[pw.pg[pw.cpg].instrument][50];
-                            bool[] op = new bool[] { false, false, false, false };
-
-                            if (cnt1 == 0 && cnt2 == 0) { op[3] = true; }
-                            else if (cnt1 == 0 && cnt2 == 1) { op[1] = true; op[3] = true; }
-                            else if (cnt1 == 1 && cnt2 == 0) { op[0] = true; op[3] = true; }
-                            else if (cnt1 == 1 && cnt2 == 1) { op[0] = true; op[2] = true; op[3] = true; }
-
-                            for (int i = 0; i < 4; i++)
+                            if (page.beforeVolume != page.volume && parent.instFM.ContainsKey(page.instrument))
                             {
-                                if (!op[i]) continue;
-                                parent.OutData(mml, port[pw.pg[pw.cpg].ch / 9], (byte)(0x40 + ChnToBaseReg(pw.pg[pw.cpg].ch) + i * 3 + (i > 1 ? 2 : 0)),
-                                    (byte)(
-                                        ((parent.instFM[pw.pg[pw.cpg].instrument][12 * i + 5] & 0x3) << 6)  //KL(M)
-                                        | Common.CheckRange(((parent.instFM[pw.pg[pw.cpg].instrument][12 * i + 6] & 0x3f) + (63 - (pw.pg[pw.cpg].volume & 0x3f))), 0, 63) //TL
-                                    )
-                                );
-                            }
-                        }
-                    }
+                                page.beforeVolume = page.volume;
 
-                    if (pw.pg[pw.cpg].keyOff)
-                    {
-                        pw.pg[pw.cpg].keyOff = false;
-                        parent.OutData(mml, getPortFromCh(pw.pg[pw.cpg].ch)
-                            , (byte)(0xB0 + pw.pg[pw.cpg].ch % 9)
-                            , (byte)(
-                                ((pw.pg[pw.cpg].freq >> 8) & 0x1f)
-                              )
-                            );
-                    }
+                                int cnt1 = parent.instFM[page.instrument][49];
+                                int cnt2 = parent.instFM[page.instrument][50];
+                                bool[] op = new bool[] { false, false, false, false };
 
-                    if (pw.pg[pw.cpg].beforeFNum != (pw.pg[pw.cpg].freq | (pw.pg[pw.cpg].keyOn ? 0x4000 : 0x0000)))
-                    {
-                        pw.pg[pw.cpg].beforeFNum = pw.pg[pw.cpg].freq | (pw.pg[pw.cpg].keyOn ? 0x4000 : 0x0000);
-                        //Console.WriteLine("CalcPitch {0} {1}_{2}", pw.ppg[pw.cpgNum].freq, pw.ppg[pw.cpgNum].freq >> 8 & 0x1F, pw.ppg[pw.cpgNum].freq & 0xFF);
-                        parent.OutData(mml, getPortFromCh(pw.pg[pw.cpg].ch), (byte)(0xa0 + pw.pg[pw.cpg].ch % 9), (byte)pw.pg[pw.cpg].freq);
-                        parent.OutData(mml, getPortFromCh(pw.pg[pw.cpg].ch)
-                            , (byte)(0xB0 + pw.pg[pw.cpg].ch % 9)
-                            , (byte)(
-                                ((pw.pg[pw.cpg].freq >> 8) & 0x1f)
-                                | (pw.pg[pw.cpg].keyOn ? 0x20 : 0x00)
-                              )
-                            );
-                    }
-                }
+                                if (cnt1 == 0 && cnt2 == 0) { op[3] = true; }
+                                else if (cnt1 == 0 && cnt2 == 1) { op[1] = true; op[3] = true; }
+                                else if (cnt1 == 1 && cnt2 == 0) { op[0] = true; op[3] = true; }
+                                else if (cnt1 == 1 && cnt2 == 1) { op[0] = true; op[2] = true; op[3] = true; }
 
-                else if (pw.pg[pw.cpg].Type == enmChannelType.RHYTHM)
-                {
-                    if (pw.pg[pw.cpg].beforeVolume != pw.pg[pw.cpg].volume && parent.instFM.ContainsKey(pw.pg[pw.cpg].instrument))
-                    {
-                        pw.pg[pw.cpg].beforeVolume = pw.pg[pw.cpg].volume;
-
-                        if (pw.pg[pw.cpg].ch == 18)
-                        {
-                            int vch = 6;
-
-                            int cnt = parent.instFM[pw.pg[pw.cpg].instrument][25];
-                            if (cnt != 0)
-                            {
-                                //OP1
-                                parent.OutData(
-                                    mml,
-                                    port[vch / 9],
-                                    (byte)(0x40 + ChnToBaseReg(vch) + 0),
-                                    (byte)(
-                                            ((parent.instFM[pw.pg[pw.cpg].instrument][12 * 0 + 5] & 0x3) << 6)  //KL(M)
-                                            | Common.CheckRange(((parent.instFM[pw.pg[pw.cpg].instrument][12 * 0 + 6] & 0x3f) + (63 - (pw.pg[pw.cpg].volume & 0x3f))), 0, 63) //TL
+                                for (int i = 0; i < 4; i++)
+                                {
+                                    if (!op[i]) continue;
+                                    parent.OutData(mml, port[page.ch / 9], (byte)(0x40 + ChnToBaseReg(page.ch) + i * 3 + (i > 1 ? 2 : 0)),
+                                        (byte)(
+                                            ((parent.instFM[page.instrument][12 * i + 5] & 0x3) << 6)  //KL(M)
+                                            | Common.CheckRange(((parent.instFM[page.instrument][12 * i + 6] & 0x3f) + (63 - (page.volume & 0x3f))), 0, 63) //TL
                                         )
                                     );
+                                }
                             }
-                            //OP2
-                            parent.OutData(
-                                mml,
-                                port[vch / 9],
-                                (byte)(0x40 + ChnToBaseReg(vch) + 3),
-                                (byte)(
-                                        ((parent.instFM[pw.pg[pw.cpg].instrument][12 * 1 + 5] & 0x3) << 6)  //KL(M)
-                                        | Common.CheckRange(((parent.instFM[pw.pg[pw.cpg].instrument][12 * 1 + 6] & 0x3f) + (63 - (pw.pg[pw.cpg].volume & 0x3f))), 0, 63) //TL
-                                    )
+                        }
+
+                        if (page.keyOff)
+                        {
+                            page.keyOff = false;
+                            parent.OutData(mml, getPortFromCh(page.ch)
+                                , (byte)(0xB0 + page.ch % 9)
+                                , (byte)(
+                                    ((page.freq >> 8) & 0x1f)
+                                  )
                                 );
                         }
-                        else if (pw.pg[pw.cpg].ch == 19)
+
+                        if (page.beforeFNum != (page.freq | (page.keyOn ? 0x4000 : 0x0000)))
                         {
-                            int vch = 7;
-                            //OP2
-                            parent.OutData(
-                                mml,
-                                port[vch / 9],
-                                (byte)(0x40 + ChnToBaseReg(vch) + 3),
-                                (byte)(
-                                        ((parent.instFM[pw.pg[pw.cpg].instrument][12 * 1 + 5] & 0x3) << 6)  //KL(M)
-                                        | Common.CheckRange(((parent.instFM[pw.pg[pw.cpg].instrument][12 * 1 + 6] & 0x3f) + (63 - (pw.pg[pw.cpg].volume & 0x3f))), 0, 63) //TL
-                                    )
+                            page.beforeFNum = page.freq | (page.keyOn ? 0x4000 : 0x0000);
+                            //Console.WriteLine("CalcPitch {0} {1}_{2}", pw.ppg[pw.cpgNum].freq, pw.ppg[pw.cpgNum].freq >> 8 & 0x1F, pw.ppg[pw.cpgNum].freq & 0xFF);
+                            parent.OutData(mml, getPortFromCh(page.ch), (byte)(0xa0 + page.ch % 9), (byte)page.freq);
+                            parent.OutData(mml, getPortFromCh(page.ch)
+                                , (byte)(0xB0 + page.ch % 9)
+                                , (byte)(
+                                    ((page.freq >> 8) & 0x1f)
+                                    | (page.keyOn ? 0x20 : 0x00)
+                                  )
                                 );
                         }
-                        else if (pw.pg[pw.cpg].ch == 20)
+                    }
+
+                    else if (page.Type == enmChannelType.RHYTHM)
+                    {
+                        if (page.beforeVolume != page.volume && parent.instFM.ContainsKey(page.instrument))
                         {
-                            int vch = 8;
-                            //int cnt = parent.instFM[pw.ppg[pw.cpgNum].instrument][25];
-                            //if (cnt != 0)
+                            page.beforeVolume = page.volume;
+
+                            if (page.ch == 18)
                             {
-                                //OP1
+                                int vch = 6;
+
+                                int cnt = parent.instFM[page.instrument][25];
+                                if (cnt != 0)
+                                {
+                                    //OP1
+                                    parent.OutData(
+                                        mml,
+                                        port[vch / 9],
+                                        (byte)(0x40 + ChnToBaseReg(vch) + 0),
+                                        (byte)(
+                                                ((parent.instFM[page.instrument][12 * 0 + 5] & 0x3) << 6)  //KL(M)
+                                                | Common.CheckRange(((parent.instFM[page.instrument][12 * 0 + 6] & 0x3f) + (63 - (page.volume & 0x3f))), 0, 63) //TL
+                                            )
+                                        );
+                                }
+                                //OP2
                                 parent.OutData(
                                     mml,
                                     port[vch / 9],
-                                    (byte)(0x40 + ChnToBaseReg(vch) + 0),
+                                    (byte)(0x40 + ChnToBaseReg(vch) + 3),
                                     (byte)(
-                                            ((parent.instFM[pw.pg[pw.cpg].instrument][12 * 0 + 5] & 0x3) << 6)  //KL(M)
-                                            | Common.CheckRange(((parent.instFM[pw.pg[pw.cpg].instrument][12 * 0 + 6] & 0x3f) + (63 - (pw.pg[pw.cpg].volume & 0x3f))), 0, 63) //TL
+                                            ((parent.instFM[page.instrument][12 * 1 + 5] & 0x3) << 6)  //KL(M)
+                                            | Common.CheckRange(((parent.instFM[page.instrument][12 * 1 + 6] & 0x3f) + (63 - (page.volume & 0x3f))), 0, 63) //TL
                                         )
                                     );
                             }
-                        }
-                        else if (pw.pg[pw.cpg].ch == 21)
-                        {
-                            int vch = 8;
-                            //OP2
-                            parent.OutData(
-                                mml,
-                                port[vch / 9],
-                                (byte)(0x40 + ChnToBaseReg(vch) + 3),
-                                (byte)(
-                                        ((parent.instFM[pw.pg[pw.cpg].instrument][12 * 1 + 5] & 0x3) << 6)  //KL(M)
-                                        | Common.CheckRange(((parent.instFM[pw.pg[pw.cpg].instrument][12 * 1 + 6] & 0x3f) + (63 - (pw.pg[pw.cpg].volume & 0x3f))), 0, 63) //TL
-                                    )
-                                );
-                        }
-                        else if (pw.pg[pw.cpg].ch == 22)
-                        {
-                            int vch = 7;
-                            //int cnt = parent.instFM[pw.ppg[pw.cpgNum].instrument][25];
-                            //if (cnt != 0)
+                            else if (page.ch == 19)
                             {
-                                //OP1
+                                int vch = 7;
+                                //OP2
                                 parent.OutData(
                                     mml,
                                     port[vch / 9],
-                                    (byte)(0x40 + ChnToBaseReg(vch) + 0),
+                                    (byte)(0x40 + ChnToBaseReg(vch) + 3),
                                     (byte)(
-                                            ((parent.instFM[pw.pg[pw.cpg].instrument][12 * 0 + 5] & 0x3) << 6)  //KL(M)
-                                            | Common.CheckRange(((parent.instFM[pw.pg[pw.cpg].instrument][12 * 0 + 6] & 0x3f) + (63 - (pw.pg[pw.cpg].volume & 0x3f))), 0, 63) //TL
+                                            ((parent.instFM[page.instrument][12 * 1 + 5] & 0x3) << 6)  //KL(M)
+                                            | Common.CheckRange(((parent.instFM[page.instrument][12 * 1 + 6] & 0x3f) + (63 - (page.volume & 0x3f))), 0, 63) //TL
                                         )
                                     );
                             }
+                            else if (page.ch == 20)
+                            {
+                                int vch = 8;
+                                //int cnt = parent.instFM[pw.ppg[pw.cpgNum].instrument][25];
+                                //if (cnt != 0)
+                                {
+                                    //OP1
+                                    parent.OutData(
+                                        mml,
+                                        port[vch / 9],
+                                        (byte)(0x40 + ChnToBaseReg(vch) + 0),
+                                        (byte)(
+                                                ((parent.instFM[page.instrument][12 * 0 + 5] & 0x3) << 6)  //KL(M)
+                                                | Common.CheckRange(((parent.instFM[page.instrument][12 * 0 + 6] & 0x3f) + (63 - (page.volume & 0x3f))), 0, 63) //TL
+                                            )
+                                        );
+                                }
+                            }
+                            else if (page.ch == 21)
+                            {
+                                int vch = 8;
+                                //OP2
+                                parent.OutData(
+                                    mml,
+                                    port[vch / 9],
+                                    (byte)(0x40 + ChnToBaseReg(vch) + 3),
+                                    (byte)(
+                                            ((parent.instFM[page.instrument][12 * 1 + 5] & 0x3) << 6)  //KL(M)
+                                            | Common.CheckRange(((parent.instFM[page.instrument][12 * 1 + 6] & 0x3f) + (63 - (page.volume & 0x3f))), 0, 63) //TL
+                                        )
+                                    );
+                            }
+                            else if (page.ch == 22)
+                            {
+                                int vch = 7;
+                                //int cnt = parent.instFM[pw.ppg[pw.cpgNum].instrument][25];
+                                //if (cnt != 0)
+                                {
+                                    //OP1
+                                    parent.OutData(
+                                        mml,
+                                        port[vch / 9],
+                                        (byte)(0x40 + ChnToBaseReg(vch) + 0),
+                                        (byte)(
+                                                ((parent.instFM[page.instrument][12 * 0 + 5] & 0x3) << 6)  //KL(M)
+                                                | Common.CheckRange(((parent.instFM[page.instrument][12 * 0 + 6] & 0x3f) + (63 - (page.volume & 0x3f))), 0, 63) //TL
+                                            )
+                                        );
+                                }
+                            }
                         }
+
+                        if (page.beforeFNum != (page.freq | (page.keyOn ? 0x4000 : 0x0000)))
+                        {
+                            page.beforeFNum = page.freq | (page.keyOn ? 0x4000 : 0x0000);
+                            //Console.WriteLine("CalcPitch {0} {1}_{2}", pw.ppg[pw.cpgNum].freq, pw.ppg[pw.cpgNum].freq >> 8 & 0x1F, pw.ppg[pw.cpgNum].freq & 0xFF);
+
+                            int vch = 0;
+                            if (page.ch == 18)//bd
+                            {
+                                vch = 6;
+                            }
+                            else if (page.ch == 19)//sd
+                            {
+                                vch = 7;
+                            }
+                            else if (page.ch == 20)//tom
+                            {
+                                vch = 8;
+                            }
+                            else if (page.ch == 21)//CYM
+                            {
+                                vch = 8;
+                            }
+                            else if (page.ch == 22)//HH
+                            {
+                                vch = 7;
+                            }
+
+                            parent.OutData(mml, getPortFromCh(vch), (byte)(0xa0 + vch % 9), (byte)page.freq);
+                            parent.OutData(mml, getPortFromCh(vch)
+                                , (byte)(0xB0 + vch % 9)
+                                , (byte)(
+                                    ((page.freq >> 8) & 0x1f)
+                                  //| (pw.ppg[pw.cpgNum].keyOn ? 0x20 : 0x00)
+                                  )
+                                );
+                        }
+
                     }
-
-                    if (pw.pg[pw.cpg].beforeFNum != (pw.pg[pw.cpg].freq | (pw.pg[pw.cpg].keyOn ? 0x4000 : 0x0000)))
-                    {
-                        pw.pg[pw.cpg].beforeFNum = pw.pg[pw.cpg].freq | (pw.pg[pw.cpg].keyOn ? 0x4000 : 0x0000);
-                        //Console.WriteLine("CalcPitch {0} {1}_{2}", pw.ppg[pw.cpgNum].freq, pw.ppg[pw.cpgNum].freq >> 8 & 0x1F, pw.ppg[pw.cpgNum].freq & 0xFF);
-
-                        int vch = 0;
-                        if (pw.pg[pw.cpg].ch == 18)//bd
-                        {
-                            vch = 6;
-                        }
-                        else if (pw.pg[pw.cpg].ch == 19)//sd
-                        {
-                            vch = 7;
-                        }
-                        else if (pw.pg[pw.cpg].ch == 20)//tom
-                        {
-                            vch = 8;
-                        }
-                        else if (pw.pg[pw.cpg].ch == 21)//CYM
-                        {
-                            vch = 8;
-                        }
-                        else if (pw.pg[pw.cpg].ch == 22)//HH
-                        {
-                            vch = 7;
-                        }
-
-                        parent.OutData(mml, getPortFromCh(vch), (byte)(0xa0 + vch % 9), (byte)pw.pg[pw.cpg].freq);
-                        parent.OutData(mml, getPortFromCh(vch)
-                            , (byte)(0xB0 + vch % 9)
-                            , (byte)(
-                                ((pw.pg[pw.cpg].freq >> 8) & 0x1f)
-                                //| (pw.ppg[pw.cpgNum].keyOn ? 0x20 : 0x00)
-                              )
-                            );
-                    }
-
                 }
             }
 
 
             rhythmStatus &= 0xe0;
             rhythmStatus |= (byte)(
-                (lstPartWork[  18].pg[lstPartWork[18].cpg].keyOn ? 0x10 : 0x00)
-                | (lstPartWork[19].pg[lstPartWork[19].cpg].keyOn ? 0x08 : 0x00)
-                | (lstPartWork[20].pg[lstPartWork[20].cpg].keyOn ? 0x04 : 0x00)
-                | (lstPartWork[21].pg[lstPartWork[21].cpg].keyOn ? 0x02 : 0x00)
-                | (lstPartWork[22].pg[lstPartWork[22].cpg].keyOn ? 0x01 : 0x00)
+                (lstPartWork[18].cpg.keyOn ? 0x10 : 0x00)
+                | (lstPartWork[19].cpg.keyOn ? 0x08 : 0x00)
+                | (lstPartWork[20].cpg.keyOn ? 0x04 : 0x00)
+                | (lstPartWork[21].cpg.keyOn ? 0x02 : 0x00)
+                | (lstPartWork[22].cpg.keyOn ? 0x01 : 0x00)
                 );
 
             if (beforeRhythmStatus != rhythmStatus)

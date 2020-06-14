@@ -38,18 +38,29 @@ namespace Core
 
                     foreach (partWork pw in chip.lstPartWork)
                     {
-                        if (pw.pData == null) continue;
-
-                        for (int pg = 0; pg < pw.pData.Count; pg++)
+                        foreach (partPage page in pw.pg)
                         {
-                            //ページ追加
-                            if (pg == pw.pg.Count) pw.pg.Add(new partPage());
+                            if (page.pData == null)
+                            {
+                                page.dataEnd = true;
+                                continue;
+                            }
 
-                            Step1(pw, pg);//mml全体のフォーマット解析
-                            Step2(pw, pg);//toneDoubler,bend,tieコマンドの解析
-                            Step3(pw, pg);//リピート、連符コマンドの解析
+                            page.chip = chip;
+                            page.chipNumber = ((info.format != enmFormat.ZGM && chip.ChipID == 1) ? 1 : 0);
+                            page.ch = pw.pg[0].ch;
+                            pw.setPos(page, 0);
+                            page.PartName = pw.pg[0].PartName;
+                            page.waitKeyOnCounter = -1;
+                            page.waitCounter = 0;
+                            page.freq = -1;
 
-                            pw.pg[pg].dataEnd = false;
+                            Step1(pw, page);//mml全体のフォーマット解析
+                            Step2(page);//toneDoubler,bend,tieコマンドの解析
+                            Step3(page);//リピート、連符コマンドの解析
+
+                            page.dataEnd = false;
+
                         }
                     }
                 }
@@ -62,17 +73,17 @@ namespace Core
 
         #region step1
 
-        private void Step1(partWork pw, int page)
+        private void Step1(partWork pw, partPage page)
         {
             pw.resetPos(page);
-            pw.pg[page].dataEnd = false;
-            pw.pg[page].mmlData = new List<MML>();
+            page.dataEnd = false;
+            page.mmlData = new List<MML>();
             SkipFlg = false;
 
-            while (!pw.pg[page].dataEnd)
+            while (!page.dataEnd)
             {
                 char cmd = pw.getChar(page);
-                if (cmd == 0) pw.pg[page].dataEnd = true;
+                if (cmd == 0) page.dataEnd = true;
                 else
                 {
                     //lineNumber = pw.getLineNumber();
@@ -89,11 +100,11 @@ namespace Core
 
         public LinePos linePos { get; internal set; }
 
-        private void Commander(partWork pw, int page, char cmd)
+        private void Commander(partWork pw, partPage page, char cmd)
         {
             MML mml = new MML();
             mml.line = pw.getLine(page);
-            mml.column = pw.pg[page].pos.col + 1;// pw.getPos();
+            mml.column = page.pos.col + 1;// pw.getPos();
 
             if (caretPoint.Y == mml.line.Lp.row)
             {
@@ -109,7 +120,7 @@ namespace Core
                 m.type = enmMMLType.SkipPlay;
                 m.line = pw.getLine(page);
                 m.column = pw.getPos(page);
-                pw.pg[page].mmlData.Add(m);
+                page.mmlData.Add(m);
                 SkipFlg = true;
 
             }
@@ -124,171 +135,171 @@ namespace Core
                     break;
                 case '!': // CompileSkip
                     log.Write("CompileSkip");
-                    pw.pg[page].dataEnd = true;
+                    page.dataEnd = true;
                     mml.type = enmMMLType.CompileSkip;
                     mml.args = null;
                     break;
                 case '@': // instrument
                     log.Write("instrument");
-                    CmdInstrument(pw, mml, page);
+                    CmdInstrument(pw, page, mml);
                     break;
                 case '>': // octave Up
                     log.Write("octave Up");
-                    CmdOctaveUp(pw, mml, page);
+                    CmdOctaveUp(pw, page, mml);
                     break;
                 case '<': // octave Down
                     log.Write("octave Down");
-                    CmdOctaveDown(pw, mml, page);
+                    CmdOctaveDown(pw, page, mml);
                     break;
                 case ')': // volume Up
                     log.Write(" volume Up");
-                    CmdVolumeUp(pw, mml, page);
+                    CmdVolumeUp(pw, page, mml);
                     break;
                 case '(': // volume Down
                     log.Write("volume Down");
-                    CmdVolumeDown(pw, mml, page);
+                    CmdVolumeDown(pw, page, mml);
                     break;
                 case '#': // length(clock)
                     log.Write("length(clock)");
-                    CmdClockLength(pw, mml, page);
+                    CmdClockLength(pw, page, mml);
                     break;
                 case '[': // repeat
                     log.Write("repeat [");
-                    CmdRepeatStart(pw, mml, page);
+                    CmdRepeatStart(pw, page, mml);
                     break;
                 case ']': // repeat
                     log.Write("repeat ]");
-                    CmdRepeatEnd(pw, mml, page);
+                    CmdRepeatEnd(pw, page, mml);
                     break;
                 case '{': // renpu
                     log.Write("renpu {");
-                    CmdRenpuStart(pw, mml, page);
+                    CmdRenpuStart(pw, page, mml);
                     break;
                 case '}': // renpu
                     log.Write("renpu }");
-                    CmdRenpuEnd(pw, mml, page);
+                    CmdRenpuEnd(pw, page, mml);
                     break;
                 case '/': // repeat
                     log.Write("repeat /");
-                    CmdRepeatExit(pw, mml, page);
+                    CmdRepeatExit(pw, page, mml);
                     break;
                 case '"':
                     log.Write("lylic");
-                    CmdLyric(pw, mml, page);
+                    CmdLyric(pw, page, mml);
                     break;
                 case '_':
                     log.Write("bend");
-                    CmdBend(pw, mml, page);
+                    CmdBend(pw, page, mml);
                     break;
                 case '&':
                     log.Write("tie");
-                    CmdTie(pw, mml, page);
+                    CmdTie(pw, page, mml);
                     break;
                 case '^':
                     log.Write("tie plus clock");
-                    CmdTiePC(pw, mml, page);
+                    CmdTiePC(pw, page, mml);
                     break;
                 case '~':
                     log.Write("tie minus clock");
-                    CmdTieMC(pw, mml, page);
+                    CmdTieMC(pw, page, mml);
                     break;
 
 
                 case 'A': // Address shift
                     log.Write("Address shift");
-                    CmdAddressShift(pw, mml, page);
+                    CmdAddressShift(pw, page, mml);
                     break;
                 case 'C': //MIDI Ch
                     log.Write("MIDI Ch");
-                    CmdMIDICh(pw, mml, page);
+                    CmdMIDICh(pw, page, mml);
                     break;
                 case 'D': // Detune / ダイレクトモード
                     log.Write("Detune / DirectMode");
-                    CmdDetuneDirectMode(pw, mml, page);
+                    CmdDetuneDirectMode(pw, page, mml);
                     break;
                 case 'E': // envelope / extendChannel
                     log.Write("envelope / extendChannel");
-                    CmdE(pw, mml, page);
+                    CmdE(pw, page, mml);
                     break;
                 case 'J': // Jump point
                     log.Write("Jump point");
-                    CmdJump(pw, mml, page);
+                    CmdJump(pw, page, mml);
                     break;
                 case 'K': // key shift
                     log.Write("key shift");
-                    CmdKeyShift(pw, mml, page);
+                    CmdKeyShift(pw, page, mml);
                     break;
                 case 'l': // length
                     log.Write("length");
-                    CmdLength(pw, mml, page);
+                    CmdLength(pw, page, mml);
                     break;
                 case 'L': // loop point
                     log.Write(" loop point");
-                    CmdLoop(pw, mml, page);
+                    CmdLoop(pw, page, mml);
                     break;
                 case 'm': // pcm mode / pcm mapMode Sw
                     log.Write("pcm mode / pcm mapMode Sw");
-                    CmdMode(pw, mml, page);
+                    CmdMode(pw, page, mml);
                     break;
                 case 'M': // lfo
                     log.Write("lfo");
-                    CmdLfo(pw, mml, page);
+                    CmdLfo(pw, page, mml);
                     break;
                 case 'o': // octave
                     log.Write("octave");
-                    CmdOctave(pw, mml, page);
+                    CmdOctave(pw, page, mml);
                     break;
                 case 'p': // pan
                     log.Write(" pan");
-                    CmdPan(pw, mml, page);
+                    CmdPan(pw, page, mml);
                     break;
                 case 'P': // noise or tone mixer
                     log.Write("noise or tone mixer");
-                    CmdMixer(pw, mml, page);
+                    CmdMixer(pw, page, mml);
                     break;
                 case 'q': // gatetime
                     log.Write(" gatetime q");
-                    CmdGatetime(pw, mml, page);
+                    CmdGatetime(pw, page, mml);
                     break;
                 case 'Q': // gatetime
                     log.Write("gatetime Q");
-                    CmdGatetime2(pw, mml, page);
+                    CmdGatetime2(pw, page, mml);
                     break;
                 case 's': // sus ON/OFF
                     log.Write("sus ON/OFF");
-                    CmdSusOnOff(pw, mml, page);
+                    CmdSusOnOff(pw, page, mml);
                     break;
                 case 'S': // lfo switch
                     log.Write(" lfo switch");
-                    CmdLfoSwitch(pw, mml, page);
+                    CmdLfoSwitch(pw, page, mml);
                     break;
                 case 'T': // tempo
                     log.Write(" tempo");
-                    CmdTempo(pw, mml, page);
+                    CmdTempo(pw, page, mml);
                     break;
                 case 'U': // velocity
                     log.Write("velocity");
-                    CmdVelocity(pw, mml, page);
+                    CmdVelocity(pw, page, mml);
                     break;
                 case 'v': // volume
                     log.Write("volume");
-                    CmdVolume(pw, mml, page);
+                    CmdVolume(pw, page, mml);
                     break;
                 case 'V': // totalVolume(Adpcm-A / Rhythm)
                     log.Write("totalVolume(Adpcm-A / Rhythm)");
-                    CmdTotalVolume(pw, mml, page);
+                    CmdTotalVolume(pw, page, mml);
                     break;
                 case 'w': // noise
                     log.Write("noise");
-                    CmdNoise(pw, mml, page);
+                    CmdNoise(pw, page, mml);
                     break;
                 case 'y': // y
                     log.Write(" y");
-                    CmdY(pw, mml, page);
+                    CmdY(pw, page, mml);
                     break;
                 case 'X': // Effect
                     log.Write(" Effect");
-                    CmdEffect(pw, mml, page);
+                    CmdEffect(pw, page, mml);
                     break;
 
 
@@ -300,19 +311,19 @@ namespace Core
                 case 'a':
                 case 'b':
                     log.Write(string.Format("note {0}", cmd));
-                    CmdNote(pw, cmd, mml, page);
+                    CmdNote(pw, page, cmd, mml);
                     break;
                 case 'r':
                     log.Write("rest");
-                    CmdRest(pw, mml, page);
+                    CmdRest(pw, page, mml);
                     break;
                 case 'R':
                     log.Write("restNoWork");
-                    CmdRestNoWork(pw, mml, page);
+                    CmdRestNoWork(pw, page, mml);
                     break;
                 case ';':
                     log.Write("comment out");
-                    CmdCommentout(pw, mml, page);
+                    CmdCommentout(pw, page, mml);
                     break;
 
                 default:
@@ -325,12 +336,12 @@ namespace Core
 
             if (mml.type == enmMMLType.unknown) return;
 
-            if (!mmlData.ContainsKey(pw.pg[page].PartName))//この処理無意味っぽい
+            if (!mmlData.ContainsKey(page.PartName))//この処理無意味っぽい
             {//この処理無意味っぽい
-                mmlData.Add(pw.pg[page].PartName, new List<MML>());//この処理無意味っぽい(mmlData使ってない)
+                mmlData.Add(page.PartName, new List<MML>());//この処理無意味っぽい(mmlData使ってない)
             }//この処理無意味っぽい
 
-            pw.pg[page].mmlData.Add(mml);
+            page.mmlData.Add(mml);
 
             if (swToneDoubler)
             {
@@ -338,12 +349,12 @@ namespace Core
                 mml.type = enmMMLType.ToneDoubler;
                 mml.line = pw.getLine(page);
                 mml.column = pw.getPos(page);
-                pw.pg[page].mmlData.Add(mml);
+                page.mmlData.Add(mml);
                 swToneDoubler = false;
             }
         }
 
-        private void CmdTempo(partWork pw, MML mml, int page)
+        private void CmdTempo(partWork pw, partPage page, MML mml)
         {
             pw.incPos(page);
             if (!pw.getNum(page, out int n))
@@ -359,7 +370,7 @@ namespace Core
             mml.args.Add((int)desVGM.info.clockCount);
         }
 
-        private void CmdVelocity(partWork pw, MML mml, int page)
+        private void CmdVelocity(partWork pw, partPage page, MML mml)
         {
             pw.incPos(page);
             if (!pw.getNum(page, out int n))
@@ -374,7 +385,7 @@ namespace Core
             mml.args.Add(n);
         }
 
-        private void CmdInstrument(partWork pw, MML mml, int page)
+        private void CmdInstrument(partWork pw, partPage page, MML mml)
         {
             int n;
             pw.incPos(page);
@@ -473,13 +484,13 @@ namespace Core
             }
         }
 
-        private void CmdVolume(partWork pw, MML mml, int page)
+        private void CmdVolume(partWork pw, partPage page, MML mml)
         {
             pw.incPos(page);
             mml.type = enmMMLType.Volume;
             if (pw.getNum(page, out int n))
             {
-                n = Common.CheckRange(n, 0, pw.pg[page].MaxVolume);
+                n = Common.CheckRange(n, 0, page.MaxVolume);
                 mml.args = new List<object>();
                 mml.args.Add(n);
             }
@@ -489,7 +500,7 @@ namespace Core
             }
         }
 
-        private void CmdTotalVolume(partWork pw, MML mml, int page)
+        private void CmdTotalVolume(partWork pw, partPage page, MML mml)
         {
             int n;
             pw.incPos(page);
@@ -518,7 +529,7 @@ namespace Core
 
         }
 
-        private void CmdOctave(partWork pw, MML mml, int page)
+        private void CmdOctave(partWork pw, partPage page, MML mml)
         {
             pw.incPos(page);
             mml.type = enmMMLType.Octave;
@@ -534,21 +545,21 @@ namespace Core
             }
         }
 
-        private void CmdOctaveUp(partWork pw, MML mml, int page)
+        private void CmdOctaveUp(partWork pw, partPage page, MML mml)
         {
             pw.incPos(page);
             mml.type = enmMMLType.OctaveUp;
             mml.args = null;
         }
 
-        private void CmdOctaveDown(partWork pw, MML mml, int page)
+        private void CmdOctaveDown(partWork pw, partPage page, MML mml)
         {
             pw.incPos(page);
             mml.type = enmMMLType.OctaveDown;
             mml.args = null;
         }
 
-        private void CmdVolumeUp(partWork pw, MML mml, int page)
+        private void CmdVolumeUp(partWork pw, partPage page, MML mml)
         {
             int n;
             pw.incPos(page);
@@ -560,14 +571,14 @@ namespace Core
                 //msgBox.setErrMsg(msg.get("E05006"), mml.line.Lp);
                 return;
             }
-            n = Common.CheckRange(n, 1, pw.pg[page].MaxVolume);
+            n = Common.CheckRange(n, 1, page.MaxVolume);
             mml.type = enmMMLType.VolumeUp;
             mml.args = new List<object>();
             mml.args.Add(n);
 
         }
 
-        private void CmdVolumeDown(partWork pw, MML mml, int page)
+        private void CmdVolumeDown(partWork pw, partPage page, MML mml)
         {
             pw.incPos(page);
             if (!pw.getNum(page, out int n))
@@ -579,13 +590,13 @@ namespace Core
                 //msgBox.setErrMsg(msg.get("E05007"), mml.line.Lp);
                 //n = 10;
             }
-            n = Common.CheckRange(n, 1, pw.pg[page].MaxVolume);
+            n = Common.CheckRange(n, 1, page.MaxVolume);
             mml.type = enmMMLType.VolumeDown;
             mml.args = new List<object>();
             mml.args.Add(n);
         }
 
-        private void CmdLength(partWork pw, MML mml, int page)
+        private void CmdLength(partWork pw, partPage page, MML mml)
         {
             pw.incPos(page);
             //数値の解析
@@ -624,10 +635,10 @@ namespace Core
             mml.type = enmMMLType.Length;
             mml.args = new List<object>();
             mml.args.Add(n);
-            pw.pg[page].length = n;
+            page.length = n;
         }
 
-        private void CmdClockLength(partWork pw, MML mml, int page)
+        private void CmdClockLength(partWork pw, partPage page, MML mml)
         {
             pw.incPos(page);
             if (!pw.getNum(page, out int n))
@@ -641,7 +652,7 @@ namespace Core
             mml.args.Add(n);
         }
 
-        private void CmdPan(partWork pw, MML mml, int page)
+        private void CmdPan(partWork pw, partPage page, MML mml)
         {
             int n;
 
@@ -668,7 +679,7 @@ namespace Core
             }
         }
 
-        private void CmdDetuneDirectMode(partWork pw, MML mml, int page)
+        private void CmdDetuneDirectMode(partWork pw, partPage page, MML mml)
         {
             int n;
             pw.incPos(page);
@@ -727,7 +738,7 @@ namespace Core
             }
         }
 
-        private void CmdMode(partWork pw, MML mml, int page)
+        private void CmdMode(partWork pw, partPage page, MML mml)
         {
             int n;
             pw.incPos(page);
@@ -768,7 +779,7 @@ namespace Core
             }
         }
 
-        private void CmdGatetime(partWork pw, MML mml, int page)
+        private void CmdGatetime(partWork pw, partPage page, MML mml)
         {
             int n;
             pw.incPos(page);
@@ -783,7 +794,7 @@ namespace Core
             mml.args.Add(n);
         }
 
-        private void CmdGatetime2(partWork pw, MML mml, int page)
+        private void CmdGatetime2(partWork pw, partPage page, MML mml)
         {
             int n;
             pw.incPos(page);
@@ -798,7 +809,7 @@ namespace Core
             mml.args.Add(n);
         }
 
-        private void CmdE(partWork pw, MML mml, int page)
+        private void CmdE(partWork pw, partPage page, MML mml)
         {
             int n = -1;
             pw.incPos(page);
@@ -962,14 +973,14 @@ namespace Core
 
         }
 
-        private void CmdLoop(partWork pw, MML mml, int page)
+        private void CmdLoop(partWork pw, partPage page, MML mml)
         {
             pw.incPos(page);
             mml.type = enmMMLType.LoopPoint;
             mml.args = null;
         }
 
-        private void CmdJump(partWork pw, MML mml, int page)
+        private void CmdJump(partWork pw, partPage page, MML mml)
         {
             pw.incPos(page);
             mml.type = enmMMLType.JumpPoint;
@@ -978,14 +989,14 @@ namespace Core
             //desVGM.useJumpCommand = true;
         }
 
-        private void CmdRepeatStart(partWork pw, MML mml, int page)
+        private void CmdRepeatStart(partWork pw, partPage page, MML mml)
         {
             pw.incPos(page);
             mml.type = enmMMLType.Repeat;
             mml.args = null;
         }
 
-        private void CmdRepeatEnd(partWork pw, MML mml, int page)
+        private void CmdRepeatEnd(partWork pw, partPage page, MML mml)
         {
             pw.incPos(page);
             if (!pw.getNum(page, out int n))
@@ -998,14 +1009,14 @@ namespace Core
             mml.args.Add(n);
         }
 
-        private void CmdRenpuStart(partWork pw, MML mml, int page)
+        private void CmdRenpuStart(partWork pw, partPage page, MML mml)
         {
             pw.incPos(page);
             mml.type = enmMMLType.Renpu;
             mml.args = null;
         }
 
-        private void CmdRenpuEnd(partWork pw, MML mml, int page)
+        private void CmdRenpuEnd(partWork pw, partPage page, MML mml)
         {
             pw.incPos(page);
             mml.type = enmMMLType.RenpuEnd;
@@ -1030,14 +1041,14 @@ namespace Core
             }
         }
 
-        private void CmdRepeatExit(partWork pw, MML mml, int page)
+        private void CmdRepeatExit(partWork pw, partPage page, MML mml)
         {
             pw.incPos(page);
             mml.type = enmMMLType.RepertExit;
             mml.args = null;
         }
 
-        private void CmdLfo(partWork pw, MML mml, int page)
+        private void CmdLfo(partWork pw, partPage page, MML mml)
         {
             int n;
             pw.incPos(page);
@@ -1132,7 +1143,7 @@ namespace Core
 
         }
 
-        private void CmdLfoSwitch(partWork pw, MML mml, int page)
+        private void CmdLfoSwitch(partWork pw, partPage page, MML mml)
         {
 
             pw.incPos(page);
@@ -1159,7 +1170,7 @@ namespace Core
             mml.args.Add(n);
         }
 
-        private void CmdSusOnOff(partWork pw, MML mml, int page)
+        private void CmdSusOnOff(partWork pw, partPage page, MML mml)
         {
             pw.incPos(page);
             char c = pw.getChar(page);
@@ -1175,7 +1186,7 @@ namespace Core
             mml.args.Add(c);
         }
 
-        private void CmdEffect(partWork pw, MML mml, int page)
+        private void CmdEffect(partWork pw, partPage page, MML mml)
         {
             pw.incPos(page);
             pw.skipTabSpace(page);
@@ -1183,19 +1194,19 @@ namespace Core
             char c = pw.getChar(page);
             if (c == 'R')
             {
-                CmdEffectReverb(pw, mml, page);
+                CmdEffectReverb(pw, page, mml);
                 return;
             }
             else if (c == 'D')
             {
-                CmdEffectDistortion(pw, mml, page);
+                CmdEffectDistortion(pw, page, mml);
                 return;
             }
 
             msgBox.setErrMsg(msg.get("E05059"), mml.line.Lp);
         }
 
-        private void CmdEffectReverb(partWork pw, MML mml, int page)
+        private void CmdEffectReverb(partWork pw, partPage page, MML mml)
         {
             pw.incPos(page);
             char c = pw.getChar(page);
@@ -1242,7 +1253,7 @@ namespace Core
 
         }
 
-        private void CmdEffectDistortion(partWork pw, MML mml, int page)
+        private void CmdEffectDistortion(partWork pw, partPage page, MML mml)
         {
             pw.incPos(page);
             char c = pw.getChar(page);
@@ -1297,7 +1308,7 @@ namespace Core
 
         }
 
-        private void CmdY(partWork pw, MML mml, int page)
+        private void CmdY(partWork pw, partPage page, MML mml)
         {
             int n = -1;
             int dat = 0;
@@ -1374,7 +1385,7 @@ namespace Core
 
         }
 
-        private void CmdNoise(partWork pw, MML mml, int page)
+        private void CmdNoise(partWork pw, partPage page, MML mml)
         {
             int n = -1;
             pw.incPos(page);
@@ -1408,7 +1419,7 @@ namespace Core
             mml.args.Add(n);
         }
 
-        private void CmdMixer(partWork pw, MML mml, int page)
+        private void CmdMixer(partWork pw, partPage page, MML mml)
         {
             int n = -1;
             pw.incPos(page);
@@ -1425,7 +1436,7 @@ namespace Core
 
         }
 
-        private void CmdKeyShift(partWork pw, MML mml, int page)
+        private void CmdKeyShift(partWork pw, partPage page, MML mml)
         {
             int n = -1;
             pw.incPos(page);
@@ -1441,7 +1452,7 @@ namespace Core
             mml.args.Add(n);
         }
 
-        private void CmdAddressShift(partWork pw, MML mml, int page)
+        private void CmdAddressShift(partWork pw, partPage page, MML mml)
         {
             int n = -1;
             pw.incPos(page);
@@ -1481,7 +1492,7 @@ namespace Core
         /// 内容
         ///   パートに割り当てるMIDI Channelを設定する
         /// </remarks>
-        private void CmdMIDICh(partWork pw, MML mml, int page)
+        private void CmdMIDICh(partWork pw, partPage page, MML mml)
         {
             int n = -1;
 
@@ -1683,7 +1694,7 @@ namespace Core
         // 9... ,c            コンマの後が音符ならばToneDoubler
         //                    数値の場合はベロシティ
         //10... :             和音指定(ウエイトキャンセル)
-        private void CmdNote(partWork pw, char cmd, MML mml, int page)
+        private void CmdNote(partWork pw, partPage page, char cmd, MML mml)
         {
             pw.incPos(page);
             mml.line.Lp.length = 1;
@@ -1745,14 +1756,14 @@ namespace Core
             {
 
                 //数値未指定の場合はlコマンドでの設定値を使用する
-                note.length = (int)pw.pg[page].length;
+                note.length = (int)page.length;
 
                 pw.skipTabSpace(page);
 
             }
 
             //.の解析
-            note.length += CountFuten(pw, mml, note.length, page);
+            note.length += CountFuten(pw, page, mml, note.length);
 
             pw.skipTabSpace(page);
 
@@ -1788,16 +1799,16 @@ namespace Core
                         pw.decPos(page, nowPos - oldPos);
                         break;
                     }
-                    n += CountFuten(pw, mml, n, page);
+                    n += CountFuten(pw, page, mml, n);
 
                 }
                 else if (ch == '^')
                 {
-                    GetLength(pw, mml, out n, page);
+                    GetLength(pw, page, mml, out n);
                 }
                 else if (ch == '~')
                 {
-                    GetLength(pw, mml, out n, page);
+                    GetLength(pw, page, mml, out n);
                     n = -n;
                 }
 
@@ -1841,7 +1852,7 @@ namespace Core
 
         }
 
-        private void GetLength(partWork pw, MML mml, out int n, int page)
+        private void GetLength(partWork pw, partPage page, MML mml, out int n)
         {
             if (pw.getNumNoteLength(page, out n, out bool directFlg))
             {
@@ -1862,12 +1873,12 @@ namespace Core
             else
             {
                 //数値未指定の場合はlコマンドでの設定値を使用する
-                n = (int)pw.pg[page].length;
+                n = (int)page.length;
             }
-            n += CountFuten(pw, mml, n, page);
+            n += CountFuten(pw, page, mml, n);
         }
 
-        private int CountFuten(partWork pw, MML mml, int noteLength, int page)
+        private int CountFuten(partWork pw, partPage page, MML mml, int noteLength)
         {
             int futen = 0;
             int fn = noteLength;
@@ -1887,21 +1898,21 @@ namespace Core
             return futen;
         }
 
-        private void CmdCommentout(partWork pw, MML mml, int page)
+        private void CmdCommentout(partWork pw, partPage page, MML mml)
         {
 
-            int row = pw.pg[page].pos.row;
+            int row = page.pos.row;
             char ch;
-            string alies = pw.pg[page].pos.alies;
+            string alies = page.pos.alies;
             do
             {
                 pw.incPos(page);
                 ch = pw.getChar(page);
-            } while ((row == pw.pg[page].pos.row && alies == pw.pg[page].pos.alies) && ch != (char)0);
+            } while ((row == page.pos.row && alies == page.pos.alies) && ch != (char)0);
 
         }
 
-        private void CmdRest(partWork pw, MML mml, int page)
+        private void CmdRest(partWork pw, partPage page, MML mml)
         {
             pw.incPos(page);
             mml.line.Lp.length = 1;
@@ -1938,7 +1949,7 @@ namespace Core
             }
             else
             {
-                rest.length = (int)pw.pg[page].length;
+                rest.length = (int)page.length;
             }
 
             //.の解析
@@ -1960,7 +1971,7 @@ namespace Core
 
         }
 
-        private void CmdRestNoWork(partWork pw, MML mml, int page)
+        private void CmdRestNoWork(partWork pw, partPage page, MML mml)
         {
             pw.incPos(page);
             mml.line.Lp.length = 1;
@@ -2021,7 +2032,7 @@ namespace Core
 
         }
 
-        private void CmdLyric(partWork pw, MML mml, int page)
+        private void CmdLyric(partWork pw, partPage page, MML mml)
         {
             pw.incPos(page);
             mml.type = enmMMLType.Lyric;
@@ -2076,7 +2087,7 @@ namespace Core
             }
             else
             {
-                length = (int)pw.pg[page].length;
+                length = (int)page.length;
             }
 
             //.の解析
@@ -2097,14 +2108,14 @@ namespace Core
             mml.args.Add(length);
         }
 
-        private void CmdBend(partWork pw, MML mml, int page)
+        private void CmdBend(partWork pw, partPage page, MML mml)
         {
             pw.incPos(page);
             mml.type = enmMMLType.Bend;
             mml.args = null;
         }
 
-        private void CmdTie(partWork pw, MML mml, int page)
+        private void CmdTie(partWork pw, partPage page, MML mml)
         {
             pw.incPos(page);
 
@@ -2154,25 +2165,25 @@ namespace Core
             mml.args.Add(n);
         }
 
-        private void CmdTiePC(partWork pw, MML mml, int page)
+        private void CmdTiePC(partWork pw, partPage page, MML mml)
         {
             int n;
             pw.incPos(page);
             mml.type = enmMMLType.TiePC;
 
-            GetLength(pw, mml, out n, page);
+            GetLength(pw, page, mml, out n);
 
             mml.args = new List<object>();
             mml.args.Add(n);
         }
 
-        private void CmdTieMC(partWork pw, MML mml, int page)
+        private void CmdTieMC(partWork pw, partPage page, MML mml)
         {
             int n;
             pw.incPos(page);
             mml.type = enmMMLType.TieMC;
 
-            GetLength(pw, mml, out n, page);
+            GetLength(pw, page, mml, out n);
 
             mml.args = new List<object>();
             mml.args.Add(n);
@@ -2182,61 +2193,61 @@ namespace Core
 
         #region step2
 
-        private void Step2(partWork pw, int page)
+        private void Step2(partPage page)
         {
-            for (int i = 0; i < pw.pg[pw.cpg].mmlData.Count; i++)
+            for (int i = 0; i < page.mmlData.Count; i++)
             {
-                if (pw.pg[page].mmlData[i].type == enmMMLType.ToneDoubler)
+                if (page.mmlData[i].type == enmMMLType.ToneDoubler)
                 {
-                    step2_CmdToneDoubler(pw, page, i);
+                    step2_CmdToneDoubler(page, i);
                 }
             }
 
-            for (int i = 0; i < pw.pg[page].mmlData.Count; i++)
+            for (int i = 0; i < page.mmlData.Count; i++)
             {
-                if (pw.pg[page].mmlData[i].type == enmMMLType.Bend)
+                if (page.mmlData[i].type == enmMMLType.Bend)
                 {
-                    step2_CmdBend(pw, page, i);
+                    step2_CmdBend(page, i);
                 }
             }
 
-            for (int i = 0; i < pw.pg[page].mmlData.Count; i++)
+            for (int i = 0; i < page.mmlData.Count; i++)
             {
-                if (pw.pg[page].mmlData[i].type == enmMMLType.TiePC)
+                if (page.mmlData[i].type == enmMMLType.TiePC)
                 {
-                    step2_CmdTiePC(pw, page, i);
-                    pw.pg[page].mmlData.RemoveAt(i);
+                    step2_CmdTiePC(page, i);
+                    page.mmlData.RemoveAt(i);
                     i--;
                 }
-                if (pw.pg[page].mmlData[i].type == enmMMLType.TieMC)
+                if (page.mmlData[i].type == enmMMLType.TieMC)
                 {
-                    step2_CmdTieMC(pw, page, i);
-                    pw.pg[page].mmlData.RemoveAt(i);
+                    step2_CmdTieMC(page, i);
+                    page.mmlData.RemoveAt(i);
                     i--;
                 }
             }
 
-            for (int i = 0; i < pw.pg[page].mmlData.Count; i++)
+            for (int i = 0; i < page.mmlData.Count; i++)
             {
-                if (pw.pg[page].mmlData[i].type == enmMMLType.Tie)
+                if (page.mmlData[i].type == enmMMLType.Tie)
                 {
-                    step2_CmdTie(pw, page, i);
-                    pw.pg[page].mmlData.RemoveAt(i);
+                    step2_CmdTie(page, i);
+                    page.mmlData.RemoveAt(i);
                     i--;
                 }
             }
         }
 
-        private void step2_CmdToneDoubler(partWork pw, int page, int pos)
+        private void step2_CmdToneDoubler(partPage page, int pos)
         {
-            if (pos < 1 || pw.pg[page].mmlData[pos - 1].type != enmMMLType.Note)
+            if (pos < 1 || page.mmlData[pos - 1].type != enmMMLType.Note)
             {
                 msgBox.setErrMsg(msg.get("E05037")
-                , pw.pg[page].mmlData[pos].line.Lp);
+                , page.mmlData[pos].line.Lp);
                 return;
             }
 
-            Note note = (Note)pw.pg[page].mmlData[pos - 1].args[0];
+            Note note = (Note)page.mmlData[pos - 1].args[0];
 
             //直前の音符コマンドへToneDoublerコマンドが続くことを知らせる
             note.tDblSw = true;
@@ -2244,25 +2255,25 @@ namespace Core
             //直後の音符コマンドまでサーチ
             Note toneDoublerNote = null;
             List<MML> toneDoublerMML = new List<MML>();
-            for (int i = pos + 1; i < pw.pg[page].mmlData.Count; i++)
+            for (int i = pos + 1; i < page.mmlData.Count; i++)
             {
-                switch (pw.pg[page].mmlData[i].type)
+                switch (page.mmlData[i].type)
                 {
                     case enmMMLType.Note:
-                        toneDoublerNote = (Note)pw.pg[page].mmlData[i].args[0];
-                        pw.pg[page].mmlData.RemoveAt(i);
+                        toneDoublerNote = (Note)page.mmlData[i].args[0];
+                        page.mmlData.RemoveAt(i);
                         i--;
                         goto loop_exit;
                     case enmMMLType.Octave:
                     case enmMMLType.OctaveUp:
                     case enmMMLType.OctaveDown:
-                        toneDoublerMML.Add(pw.pg[page].mmlData[i]);
-                        pw.pg[page].mmlData.RemoveAt(i);
+                        toneDoublerMML.Add(page.mmlData[i]);
+                        page.mmlData.RemoveAt(i);
                         i--;
                         break;
                     default:
                         msgBox.setErrMsg(msg.get("E05038")
-                        , pw.pg[page].mmlData[i].line.Lp);
+                        , page.mmlData[i].line.Lp);
                         return;
                 }
             }
@@ -2276,31 +2287,31 @@ namespace Core
             note.length = toneDoublerNote.length;
             note.tDblOctave = toneDoublerMML;
 
-            if (pw.pg[page].mmlData[pos].args == null) pw.pg[page].mmlData[pos].args = new List<object>();
-            pw.pg[page].mmlData[pos].args.Add(toneDoublerMML);
+            if (page.mmlData[pos].args == null) page.mmlData[pos].args = new List<object>();
+            page.mmlData[pos].args.Add(toneDoublerMML);
         }
 
-        private void step2_CmdBend(partWork pw, int page, int pos)
+        private void step2_CmdBend(partPage page, int pos)
         {
             if (!(
                     (
                     pos > 0
-                    && pw.pg[page].mmlData[pos - 1].type == enmMMLType.Note
+                    && page.mmlData[pos - 1].type == enmMMLType.Note
                     )
                 ||
                     (
                     pos > 1
-                    && pw.pg[page].mmlData[pos - 1].type == enmMMLType.ToneDoubler
-                    && pw.pg[page].mmlData[pos - 2].type == enmMMLType.Note
+                    && page.mmlData[pos - 1].type == enmMMLType.ToneDoubler
+                    && page.mmlData[pos - 2].type == enmMMLType.Note
                     )
                 ))
             {
                 msgBox.setErrMsg(msg.get("E05039")
-                , pw.pg[page].mmlData[pos].line.Lp);
+                , page.mmlData[pos].line.Lp);
                 return;
             }
 
-            Note note = (Note)pw.pg[page].mmlData[pos - (pw.pg[page].mmlData[pos - 1].type == enmMMLType.Note ? 1 : 2)].args[0];
+            Note note = (Note)page.mmlData[pos - (page.mmlData[pos - 1].type == enmMMLType.Note ? 1 : 2)].args[0];
 
             //直前の音符コマンドへベンドコマンドが続くことを知らせる
             note.bendSw = true;
@@ -2308,33 +2319,33 @@ namespace Core
             //直後の音符コマンドまでサーチ
             Note bendNote = null;
             List<MML> bendMML = new List<MML>();
-            for (int i = pos + 1; i < pw.pg[page].mmlData.Count; i++)
+            for (int i = pos + 1; i < page.mmlData.Count; i++)
             {
-                switch (pw.pg[page].mmlData[i].type)
+                switch (page.mmlData[i].type)
                 {
                     case enmMMLType.Note:
-                        bendNote = (Note)pw.pg[page].mmlData[i].args[0];
+                        bendNote = (Note)page.mmlData[i].args[0];
                         if (bendNote.addLength != 0)
                         {
-                            pw.pg[page].mmlData[i].type = enmMMLType.TiePC;
-                            pw.pg[page].mmlData[i].args = new List<object>();
-                            pw.pg[page].mmlData[i].args.Add(bendNote.addLength);
+                            page.mmlData[i].type = enmMMLType.TiePC;
+                            page.mmlData[i].args = new List<object>();
+                            page.mmlData[i].args.Add(bendNote.addLength);
                         }
                         else
                         {
-                            pw.pg[page].mmlData.RemoveAt(i);
+                            page.mmlData.RemoveAt(i);
                         }
                         goto loop_exit;
                     case enmMMLType.Octave:
                     case enmMMLType.OctaveUp:
                     case enmMMLType.OctaveDown:
-                        bendMML.Add(pw.pg[page].mmlData[i]);
-                        pw.pg[page].mmlData.RemoveAt(i);
+                        bendMML.Add(page.mmlData[i]);
+                        page.mmlData.RemoveAt(i);
                         i--;
                         break;
                     default:
                         msgBox.setErrMsg(msg.get("E05040")
-                        , pw.pg[page].mmlData[i].line.Lp);
+                        , page.mmlData[i].line.Lp);
                         return;
                 }
             }
@@ -2348,18 +2359,18 @@ namespace Core
             //note.length = bendNote.length;
             //note.futen = bendNote.futen;
             note.bendOctave = bendMML;
-            pw.pg[page].mmlData[pos].args = new List<object>();
-            pw.pg[page].mmlData[pos].args.Add(bendMML);
+            page.mmlData[pos].args = new List<object>();
+            page.mmlData[pos].args.Add(bendMML);
         }
 
-        private void step2_CmdTiePC(partWork pw, int page, int pos)
+        private void step2_CmdTiePC(partPage page, int pos)
         {
             int nPos = 0;
 
             //遡ってnoteを探す
             for (int i = pos - 1; i > 0; i--)
             {
-                switch (pw.pg[page].mmlData[i].type)
+                switch (page.mmlData[i].type)
                 {
                     case enmMMLType.ToneDoubler:
                     case enmMMLType.Bend:
@@ -2371,28 +2382,28 @@ namespace Core
                         goto loop_exit;
                     default:
                         msgBox.setErrMsg(msg.get("E05041")
-                        , pw.pg[page].mmlData[pos].line.Lp);
+                        , page.mmlData[pos].line.Lp);
                         return;
                 }
             }
 
             msgBox.setErrMsg(msg.get("E05042")
-            , pw.pg[page].mmlData[pos].line.Lp);
+            , page.mmlData[pos].line.Lp);
             return;
         loop_exit:
 
-            Rest rest = (Rest)pw.pg[page].mmlData[nPos].args[0];//NoteはRestを継承している
-            rest.length += (int)pw.pg[page].mmlData[pos].args[0];
+            Rest rest = (Rest)page.mmlData[nPos].args[0];//NoteはRestを継承している
+            rest.length += (int)page.mmlData[pos].args[0];
         }
 
-        private void step2_CmdTieMC(partWork pw, int page, int pos)
+        private void step2_CmdTieMC(partPage page, int pos)
         {
             int nPos = 0;
 
             //遡ってnoteを探す
             for (int i = pos - 1; i > 0; i--)
             {
-                switch (pw.pg[page].mmlData[i].type)
+                switch (page.mmlData[i].type)
                 {
                     case enmMMLType.ToneDoubler:
                     case enmMMLType.Bend:
@@ -2404,28 +2415,28 @@ namespace Core
                         goto loop_exit;
                     default:
                         msgBox.setErrMsg(msg.get("E05043")
-                        , pw.pg[page].mmlData[pos].line.Lp);
+                        , page.mmlData[pos].line.Lp);
                         return;
                 }
             }
 
             msgBox.setErrMsg(msg.get("E05044")
-            , pw.pg[page].mmlData[pos].line.Lp);
+            , page.mmlData[pos].line.Lp);
             return;
         loop_exit:
 
-            Rest rest = (Rest)pw.pg[page].mmlData[nPos].args[0];//NoteはRestを継承している
-            rest.length -= (int)pw.pg[page].mmlData[pos].args[0];
+            Rest rest = (Rest)page.mmlData[nPos].args[0];//NoteはRestを継承している
+            rest.length -= (int)page.mmlData[pos].args[0];
         }
 
-        private void step2_CmdTie(partWork pw, int page, int pos)
+        private void step2_CmdTie(partPage page, int pos)
         {
             int nPos = 0;
 
             //遡ってnoteを探す
             for (int i = pos - 1; i > 0; i--)
             {
-                switch (pw.pg[page].mmlData[i].type)
+                switch (page.mmlData[i].type)
                 {
                     case enmMMLType.ToneDoubler:
                     case enmMMLType.Bend:
@@ -2435,18 +2446,18 @@ namespace Core
                         goto loop_exit;
                     default:
                         msgBox.setErrMsg(msg.get("E05045")
-                        , pw.pg[page].mmlData[pos].line.Lp);
+                        , page.mmlData[pos].line.Lp);
                         return;
                 }
             }
 
             msgBox.setErrMsg(msg.get("E05046")
-            , pw.pg[page].mmlData[pos].line.Lp);
+            , page.mmlData[pos].line.Lp);
             return;
         loop_exit:
 
             //直前の音符コマンドへ&コマンドが続くことを知らせる
-            Note note = (Note)pw.pg[page].mmlData[nPos].args[0];
+            Note note = (Note)page.mmlData[nPos].args[0];
             note.tieSw = true;
         }
 
@@ -2454,141 +2465,141 @@ namespace Core
 
         #region step3
 
-        private void Step3(partWork pw, int page)
+        private void Step3(partPage page)
         {
             //リピート処理向けスタックのクリア
-            pw.pg[page].stackRepeat.Clear();
-            pw.pg[page].stackRenpu.Clear();
+            page.stackRepeat.Clear();
+            page.stackRenpu.Clear();
 
-            for (int i = 0; i < pw.pg[page].mmlData.Count; i++)
+            for (int i = 0; i < page.mmlData.Count; i++)
             {
-                switch (pw.pg[page].mmlData[i].type)
+                switch (page.mmlData[i].type)
                 {
                     case enmMMLType.Repeat:
-                        step3_CmdRepeatStart(pw, page, i);
+                        step3_CmdRepeatStart(page, i);
                         break;
                     case enmMMLType.RepertExit:
-                        step3_CmdRepeatExit(pw, page, i);
+                        step3_CmdRepeatExit(page, i);
                         break;
                     case enmMMLType.RepeatEnd:
-                        step3_CmdRepeatEnd(pw, page, i);
+                        step3_CmdRepeatEnd(page, i);
                         break;
                     case enmMMLType.Renpu:
-                        step3_CmdRenpuStart(pw, page, i);
+                        step3_CmdRenpuStart(page, i);
                         break;
                     case enmMMLType.RenpuEnd:
-                        step3_CmdRenpuEnd(pw, page, i);
+                        step3_CmdRenpuEnd(page, i);
                         break;
                     case enmMMLType.Note:
                     case enmMMLType.Rest:
                     case enmMMLType.RestNoWork:
-                        step3_CmdNoteCount(pw, page, i);
+                        step3_CmdNoteCount(page, i);
                         break;
                 }
             }
         }
 
-        private void step3_CmdRepeatExit(partWork pw, int page, int pos)
+        private void step3_CmdRepeatExit(partPage page, int pos)
         {
             int nst = 0;
 
-            for (int searchPos = pos; searchPos < pw.pg[page].mmlData.Count; searchPos++)
+            for (int searchPos = pos; searchPos < page.mmlData.Count; searchPos++)
             {
-                if (pw.pg[page].mmlData[searchPos].type == enmMMLType.Repeat)
+                if (page.mmlData[searchPos].type == enmMMLType.Repeat)
                 {
                     nst++;
                     continue;
                 }
-                if (pw.pg[page].mmlData[searchPos].type != enmMMLType.RepeatEnd)
+                if (page.mmlData[searchPos].type != enmMMLType.RepeatEnd)
                 {
                     continue;
                 }
                 if (nst == 0)
                 {
-                    pw.pg[page].mmlData[pos].args = new List<object>();
-                    pw.pg[page].mmlData[pos].args.Add(searchPos);
+                    page.mmlData[pos].args = new List<object>();
+                    page.mmlData[pos].args.Add(searchPos);
                     return;
                 }
                 nst--;
             }
 
             msgBox.setWrnMsg(msg.get("E05047")
-                , pw.pg[page].mmlData[pos].line.Lp);
+                , page.mmlData[pos].line.Lp);
 
         }
 
-        private void step3_CmdRepeatEnd(partWork pw, int page, int pos)
+        private void step3_CmdRepeatEnd(partPage page, int pos)
         {
             try
             {
-                clsRepeat re = pw.pg[page].stackRepeat.Pop();
-                pw.pg[page].mmlData[pos].args.Add(re.pos);
+                clsRepeat re = page.stackRepeat.Pop();
+                page.mmlData[pos].args.Add(re.pos);
             }
             catch
             {
                 msgBox.setWrnMsg(msg.get("E05048")
-                , pw.pg[page].mmlData[pos].line.Lp);
+                , page.mmlData[pos].line.Lp);
             }
         }
 
-        private void step3_CmdRepeatStart(partWork pw, int page, int pos)
+        private void step3_CmdRepeatStart(partPage page, int pos)
         {
             clsRepeat rs = new clsRepeat()
             {
                 pos = pos,
                 repeatCount = -1//初期値
             };
-            pw.pg[page].stackRepeat.Push(rs);
+            page.stackRepeat.Push(rs);
         }
 
-        private void step3_CmdRenpuStart(partWork pw, int page, int pos)
+        private void step3_CmdRenpuStart(partPage page, int pos)
         {
             clsRenpu r = new clsRenpu();
             r.pos = pos;
-            r.repeatStackCount = pw.pg[page].stackRepeat.Count;
+            r.repeatStackCount = page.stackRepeat.Count;
             r.noteCount = 0;
-            r.mml = pw.pg[page].mmlData[pos];
-            pw.pg[page].stackRenpu.Push(r);
+            r.mml = page.mmlData[pos];
+            page.stackRenpu.Push(r);
         }
 
-        private void step3_CmdRenpuEnd(partWork pw, int page, int pos)
+        private void step3_CmdRenpuEnd(partPage page, int pos)
         {
             try
             {
-                clsRenpu r = pw.pg[page].stackRenpu.Pop();
+                clsRenpu r = page.stackRenpu.Pop();
                 r.mml.args = new List<object>();
                 r.mml.args.Add(r.noteCount);
-                if (pw.pg[page].mmlData[pos].args != null)
+                if (page.mmlData[pos].args != null)
                 {
-                    r.mml.args.Add(pw.pg[page].mmlData[pos].args[0]);//音長(クロック数)
+                    r.mml.args.Add(page.mmlData[pos].args[0]);//音長(クロック数)
                 }
 
-                if (r.repeatStackCount != pw.pg[page].stackRepeat.Count)
+                if (r.repeatStackCount != page.stackRepeat.Count)
                 {
                     msgBox.setWrnMsg(msg.get("E05049")
-                    , pw.pg[page].mmlData[pos].line.Lp);
+                    , page.mmlData[pos].line.Lp);
                 }
 
                 if (r.noteCount > 0)
                 {
-                    if (pw.pg[page].stackRenpu.Count > 0)
+                    if (page.stackRenpu.Count > 0)
                     {
-                        pw.pg[page].stackRenpu.First().noteCount++;
+                        page.stackRenpu.First().noteCount++;
                     }
                 }
             }
             catch
             {
                 msgBox.setWrnMsg(msg.get("E05050")
-                , pw.pg[page].mmlData[pos].line.Lp);
+                , page.mmlData[pos].line.Lp);
             }
         }
 
-        private void step3_CmdNoteCount(partWork pw, int page, int pos)
+        private void step3_CmdNoteCount(partPage page, int pos)
         {
-            if (pw.pg[page].stackRenpu.Count < 1) return;
+            if (page.stackRenpu.Count < 1) return;
 
-            pw.pg[page].stackRenpu.First().noteCount++;
+            page.stackRenpu.First().noteCount++;
         }
 
         #endregion

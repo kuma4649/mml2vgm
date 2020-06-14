@@ -10,11 +10,6 @@ namespace Core
     {
 
         /// <summary>
-        /// パートデータ
-        /// </summary>
-        public List<List<Line>> pData = null;
-
-        /// <summary>
         /// エイリアスデータ
         /// </summary>
         public Dictionary<string, Line> aData = null;
@@ -30,35 +25,40 @@ namespace Core
         public partPage spg = new partPage();
 
         /// <summary>
-        /// カレントページ番号
+        /// 現在作業中のページ(アクティブページ)
         /// </summary>
-        public int cpg = 0;
+        public partPage apg;
+
+        /// <summary>
+        /// 現在演奏権を持っているページ(カレントページ)
+        /// </summary>
+        public partPage cpg;
 
         /// <summary>
         /// パート情報をリセットする
         /// </summary>
-        public void resetPos(int page)
+        public void resetPos(partPage page)
         {
-            pg[page].pos = new clsPos();
-            pg[page].stackPos = new Stack<clsPos>();
+            page.pos = new clsPos();
+            page.stackPos = new Stack<clsPos>();
         }
 
         /// <summary>
         /// 解析位置を取得する
         /// </summary>
         /// <returns></returns>
-        public int getPos(int page)
+        public int getPos(partPage page)
         {
-            return pg[page].pos.tCol;
+            return page.pos.tCol;
         }
 
-        public Line getLine(int page)
+        public Line getLine(partPage page)
         {
-            if (pg[page].pos.alies == "")
+            if (page.pos.alies == "")
             {
-                return pData[page][pg[page].pos.row].Copy();
+                return page.pData[page.pos.row].Copy();
             }
-            return aData[pg[page].pos.alies].Copy();
+            return aData[page.pos.alies].Copy();
         }
 
         /// <summary>
@@ -69,7 +69,7 @@ namespace Core
         {
             if (pg[page].pos.alies == "")
             {
-                return pData[page][pg[page].pos.row].Lp.row;
+                return pg[page].pData[pg[page].pos.row].Lp.row;
             }
             return aData[pg[page].pos.alies].Lp.row;
         }
@@ -82,7 +82,7 @@ namespace Core
         {
             if (pg[page].pos.alies == "")
             {
-                return pData[page][pg[page].pos.row].Lp.srcMMLID;
+                return pg[page].pData[pg[page].pos.row].Lp.srcMMLID;
             }
             return aData[pg[page].pos.alies].Lp.srcMMLID;
         }
@@ -91,26 +91,26 @@ namespace Core
         /// 解析位置の文字を取得する
         /// </summary>
         /// <returns></returns>
-        public char getChar(int page)
+        public char getChar(partPage page)
         {
             //if (dataEnd) return (char)0;
 
             char ch;
-            if (pg[page].pos.alies == "")
+            if (page.pos.alies == "")
             {
-                if (pData[page][pg[page].pos.row].Txt.Length <= pg[page].pos.col + pData[page][pg[page].pos.row].Lp.col)
+                if (page.pData[page.pos.row].Txt.Length <= page.pos.col + page.pData[page.pos.row].Lp.col)
                 {
                     return (char)0;
                 }
-                ch = pData[page][pg[page].pos.row].Txt[pg[page].pos.col + pData[page][pg[page].pos.row].Lp.col];
+                ch = page.pData[page.pos.row].Txt[page.pos.col + page.pData[page.pos.row].Lp.col];
             }
             else
             {
-                if (aData[pg[page].pos.alies].Txt.Length <= pg[page].pos.col + aData[pg[page].pos.alies].Lp.col)
+                if (aData[page.pos.alies].Txt.Length <= page.pos.col + aData[page.pos.alies].Lp.col)
                 {
                     return (char)0;
                 }
-                ch = aData[pg[page].pos.alies].Txt[pg[page].pos.col + aData[pg[page].pos.alies].Lp.col];
+                ch = aData[page.pos.alies].Txt[page.pos.col + aData[page.pos.alies].Lp.col];
             }
             //Console.Write(ch);
             return ch;
@@ -119,22 +119,22 @@ namespace Core
         /// <summary>
         /// 解析位置を一つ進める(重い！)
         /// </summary>
-        public void incPos(int page)
+        public void incPos(partPage page)
         {
-            setPos(page, pg[page].pos.tCol + 1);
+            setPos(page,page.pos.tCol + 1);
         }
 
         /// <summary>
         /// 解析位置を一つ戻す(重い！)
         /// </summary>
-        public void decPos(int page)
+        public void decPos(partPage page)
         {
-            setPos(page, pg[page].pos.tCol - 1);
+            setPos(page, page.pos.tCol - 1);
         }
 
-        public void decPos(int page, int n)
+        public void decPos(partPage page, int n)
         {
-            setPos(page, pg[page].pos.tCol - n);
+            setPos(page, page.pos.tCol - n);
         }
 
         /// <summary>
@@ -142,7 +142,7 @@ namespace Core
         /// </summary>
         /// <param name="len">文字数</param>
         /// <returns>文字列</returns>
-        public string getString(int page, int len)
+        public string getString(partPage page, int len)
         {
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < len; i++)
@@ -157,25 +157,25 @@ namespace Core
         /// 解析位置を指定する
         /// </summary>
         /// <param name="tCol">解析位置</param>
-        public void setPos(int page, int tCol)
+        public void setPos(partPage page, int tCol)
         {
-            if (pData == null)
+            if (page.pData == null)
             {
                 return;
             }
 
-            if (pg[page].LstPos == null) MakeLstPos(page);
+            if (page.LstPos == null) MakeLstPos(page);
 
             int i = 0;
-            while (i != pg[page].LstPos.Count && tCol >= pg[page].LstPos[i].tCol)
+            while (i != page.LstPos.Count && tCol >= page.LstPos[i].tCol)
             {
                 i++;
             }
 
-            pg[page].pos.tCol = tCol;
-            pg[page].pos.alies = pg[page].LstPos[i - 1].alies;
-            pg[page].pos.col = pg[page].LstPos[i - 1].col + tCol - pg[page].LstPos[i - 1].tCol;
-            pg[page].pos.row = pg[page].LstPos[i - 1].row;
+            page.pos.tCol = tCol;
+            page.pos.alies = page.LstPos[i - 1].alies;
+            page.pos.col = page.LstPos[i - 1].col + tCol - page.LstPos[i - 1].tCol;
+            page.pos.row = page.LstPos[i - 1].row;
             return;
 
         }
@@ -207,9 +207,9 @@ namespace Core
         //public bool changeFlag { get; internal set; }
         //public int C352flag { get; internal set; }
 
-        public void MakeLstPos(int page)
+        public void MakeLstPos(partPage page)
         {
-            if (pData == null)
+            if (page.pData == null)
             {
                 return;
             }
@@ -220,8 +220,8 @@ namespace Core
             int pCol = 0;
             string aliesName = "";
 
-            pg[page].LstPos = new List<clsPos>();
-            pg[page].LstPos.Add(new clsPos());
+            page.LstPos = new List<clsPos>();
+            page.LstPos.Add(new clsPos());
             resetPos(page);
 
             while (true)
@@ -232,12 +232,12 @@ namespace Core
                 //読みだすデータの頭出し
                 if (aliesName == "")
                 {
-                    if (pData[page].Count == row)
+                    if (page.pData.Count == row)
                     {
                         return;
                     }
-                    data = pData[page][row].Txt;
-                    pCol = pData[page][row].Lp.col;
+                    data = page.pData[row].Txt;
+                    pCol = page.pData[row].Lp.col;
                 }
                 else
                 {
@@ -251,14 +251,14 @@ namespace Core
                     if (aliesName == "")
                     {
                         row++;
-                        if (pData[page].Count == row)
+                        if (page.pData.Count == row)
                         {
                             break;
                         }
                         else
                         {
-                            data = pData[page][row].Txt;
-                            pCol = pData[page][row].Lp.col;
+                            data = page.pData[row].Txt;
+                            pCol = page.pData[row].Lp.col;
                             col = 0;// pData[row].Lp.col;
 
                             clsPos p = new clsPos();
@@ -266,21 +266,21 @@ namespace Core
                             p.alies = "";
                             p.col = 0;
                             p.row = row;
-                            pg[page].LstPos.Add(p);
+                            page.LstPos.Add(p);
 
                             break;
                         }
                     }
                     else
                     {
-                        clsPos p = pg[page].stackPos.Pop();
+                        clsPos p = page.stackPos.Pop();
                         aliesName = p.alies;
                         col = p.col;
                         row = p.row;
                         if (aliesName == "")
                         {
-                            data = pData[page][row].Txt;
-                            pCol = pData[page][row].Lp.col;
+                            data = page.pData[row].Txt;
+                            pCol = page.pData[row].Lp.col;
                         }
                         else
                         {
@@ -289,7 +289,7 @@ namespace Core
                         }
 
                         p.tCol = tCol;
-                        pg[page].LstPos.Add(p);
+                        page.LstPos.Add(p);
                     }
                 }
 
@@ -305,7 +305,7 @@ namespace Core
                         p.alies = aliesName;
                         p.col = col + a.Length + 1;
                         p.row = row;
-                        pg[page].stackPos.Push(p);
+                        page.stackPos.Push(p);
 
                         data = aData[a].Txt;
                         pCol = aData[a].Lp.col;
@@ -318,12 +318,12 @@ namespace Core
                         p.alies = a;
                         p.col = 0;
                         p.row = 0;
-                        pg[page].LstPos.Add(p);
+                        page.LstPos.Add(p);
                     }
                     else
                     {
                         msgBox.setWrnMsg(msg.get("E06000")
-                            , (aliesName == "") ? pData[page][row].Lp : aData[aliesName].Lp
+                            , (aliesName == "") ? page.pData[row].Lp : aData[aliesName].Lp
                             );
                         col++;
                     }
@@ -339,14 +339,14 @@ namespace Core
                     if (aliesName == "")
                     {
                         row++;
-                        if (pData[page].Count == row)
+                        if (page.pData.Count == row)
                         {
                             break;
                         }
                         else
                         {
-                            data = pData[page][row].Txt;
-                            pCol = pData[page][row].Lp.col;
+                            data = page.pData[row].Txt;
+                            pCol = page.pData[row].Lp.col;
                             col = 0;
 
                             clsPos p = new clsPos();
@@ -354,21 +354,21 @@ namespace Core
                             p.alies = "";
                             p.col = 0;
                             p.row = row;
-                            pg[page].LstPos.Add(p);
+                            page.LstPos.Add(p);
 
                             break;
                         }
                     }
                     else
                     {
-                        clsPos p = pg[page].stackPos.Pop();
+                        clsPos p = page.stackPos.Pop();
                         aliesName = p.alies;
                         col = p.col;
                         row = p.row;
                         if (aliesName == "")
                         {
-                            data = pData[page][row].Txt;
-                            pCol = pData[page][row].Lp.col;
+                            data = page.pData[row].Txt;
+                            pCol = page.pData[row].Lp.col;
                         }
                         else
                         {
@@ -377,7 +377,7 @@ namespace Core
                         }
 
                         p.tCol = tCol;
-                        pg[page].LstPos.Add(p);
+                        page.LstPos.Add(p);
                     }
                 }
 
@@ -389,7 +389,7 @@ namespace Core
         /// タブと空白は読み飛ばす
         /// </summary>
         /// <returns>飛ばした文字数</returns>
-        public int skipTabSpace(int page)
+        public int skipTabSpace(partPage page)
         {
             int cnt = 0;
             while (getChar(page) == ' ' || getChar(page) == '\t')
@@ -409,7 +409,7 @@ namespace Core
         /// </summary>
         /// <param name="num">取得した数値が返却される</param>
         /// <returns>数値取得成功したかどうか</returns>
-        public bool getNum(int page, out int num)
+        public bool getNum(partPage page, out int num)
         {
 
             string n = "";
@@ -482,7 +482,7 @@ namespace Core
             return true;
         }
 
-        public bool getNum(int page, out int num, ref int col)
+        public bool getNum(partPage page, out int num, ref int col)
         {
 
             string n = "";
@@ -560,7 +560,7 @@ namespace Core
             return true;
         }
 
-        public bool getNumNoteLength(int page, out int num, out bool flg)
+        public bool getNumNoteLength(partPage page, out int num, out bool flg)
         {
 
             flg = false;
@@ -577,7 +577,7 @@ namespace Core
             return getNum(page, out num);
         }
 
-        public bool getNumNoteLength(int page, out int num, out bool flg, out int col)
+        public bool getNumNoteLength(partPage page, out int num, out bool flg, out int col)
         {
 
             flg = false;
@@ -915,7 +915,7 @@ namespace Core
 
     public class MIDINote
     {
-        public partWork pw { get; internal set; }
+        public partPage page { get; internal set; }
         public MML mml { get; internal set; }
         public byte noteNumber { get; internal set; }
         public byte velocity { get; internal set; }

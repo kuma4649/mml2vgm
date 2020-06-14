@@ -90,17 +90,20 @@ namespace Core
 
         public override void InitPart(partWork pw)
         {
-            pw.pg[pw.cpg].slots = (byte)((pw.pg[pw.cpg].Type == enmChannelType.FMOPN || pw.pg[pw.cpg].ch == 2) ? 0xf : 0x0);
-            pw.pg[pw.cpg].volume = 127;
-            pw.pg[pw.cpg].MaxVolume = 127;
-            if (pw.pg[pw.cpg].Type == enmChannelType.SSG)
+            foreach (partPage page in pw.pg)
             {
-                //pw.ppg[pw.cpgNum].volume = 32767;
-                pw.pg[pw.cpg].MaxVolume = 15;
-                pw.pg[pw.cpg].volume = pw.pg[pw.cpg].MaxVolume;
-            }
+                page.slots = (byte)((page.Type == enmChannelType.FMOPN || page.ch == 2) ? 0xf : 0x0);
+                page.volume = 127;
+                page.MaxVolume = 127;
+                if (page.Type == enmChannelType.SSG)
+                {
+                    //pw.ppg[pw.cpgNum].volume = 32767;
+                    page.MaxVolume = 15;
+                    page.volume = page.MaxVolume;
+                }
 
-            pw.pg[pw.cpg].port = port;
+                page.port = port;
+            }
         }
 
         public override void InitChip()
@@ -109,8 +112,8 @@ namespace Core
             if (!use) return;
 
             //initialize shared param
-            OutOPNSetHardLfo(null, lstPartWork[0], false, 0);
-            OutOPNSetCh3SpecialMode(null, lstPartWork[0], false);
+            OutOPNSetHardLfo(null, lstPartWork[0].cpg, false, 0);
+            OutOPNSetCh3SpecialMode(null, lstPartWork[0].cpg, false);
 
             //FM Off
             outYM2203AllKeyOff(this);
@@ -118,19 +121,24 @@ namespace Core
             //SSG Off
             for (int ch = 6; ch < 9; ch++)
             {
-                outYM2203SsgKeyOff(null,lstPartWork[ch]);
-                lstPartWork[ch].pg[lstPartWork[ch].cpg].volume = 0;
+                outYM2203SsgKeyOff(null, lstPartWork[ch].cpg);
+                foreach (partPage page in lstPartWork[ch].pg)
+                {
+                    page.volume = 0;
+                }
             }
 
             foreach (partWork pw in lstPartWork)
             {
-                if (pw.pg[pw.cpg].ch == 0)
+                foreach (partPage page in pw.pg)
                 {
-                    pw.pg[pw.cpg].hardLfoSw = false;
-                    pw.pg[pw.cpg].hardLfoNum = 0;
-                    OutOPNSetHardLfo(null, pw, pw.pg[pw.cpg].hardLfoSw, pw.pg[pw.cpg].hardLfoNum);
+                    if (page.ch == 0)
+                    {
+                        page.hardLfoSw = false;
+                        page.hardLfoNum = 0;
+                        OutOPNSetHardLfo(null, page, page.hardLfoSw, page.hardLfoNum);
+                    }
                 }
-
             }
 
             if (ChipID != 0 && parent.info.format != enmFormat.ZGM)
@@ -147,65 +155,68 @@ namespace Core
 
             foreach (partWork pw in chip.lstPartWork)
             {
-                if (pw.pg[pw.cpg].dataEnd) continue;
-                if (pw.pg[pw.cpg].ch > 2) continue;
+                foreach (partPage page in pw.pg)
+                {
+                    if (page.dataEnd) continue;
+                    if (page.ch > 2) continue;
 
-                OutFmKeyOff(pw, null);
-                OutFmSetTl(null,pw, 0, 127);
-                OutFmSetTl(null,pw, 1, 127);
-                OutFmSetTl(null,pw, 2, 127);
-                OutFmSetTl(null,pw, 3, 127);
+                    OutFmKeyOff(page, null);
+                    OutFmSetTl(null, page, 0, 127);
+                    OutFmSetTl(null, page, 1, 127);
+                    OutFmSetTl(null, page, 2, 127);
+                    OutFmSetTl(null, page, 3, 127);
+                }
             }
 
         }
 
-        public void outYM2203SsgKeyOff(MML mml,partWork pw)
+        public void outYM2203SsgKeyOff(MML mml,partPage page)
         {
-            byte pch = (byte)(pw.pg[pw.cpg].ch - 6);
+            byte pch = (byte)(page.ch - 6);
             int n = 9;
             byte data = 0;
 
-            data = (byte)(((YM2203)pw.pg[pw.cpg].chip).SSGKeyOn[0] | (n << pch));
-            ((YM2203)pw.pg[pw.cpg].chip).SSGKeyOn[0] = data;
+            data = (byte)(((YM2203)page.chip).SSGKeyOn[0] | (n << pch));
+            ((YM2203)page.chip).SSGKeyOn[0] = data;
 
             parent.OutData(mml,port[0], (byte)(0x08 + pch), 0);
-            pw.pg[pw.cpg].beforeVolume = -1;
+            page.beforeVolume = -1;
             parent.OutData(mml,port[0], 0x07, data);
         }
 
 
-        public override void SetFNum(partWork pw, MML mml)
+        public override void SetFNum(partPage page, MML mml)
         {
-            if (pw.pg[pw.cpg].Type != enmChannelType.SSG)
-                SetFmFNum(pw,mml);
-            else if (pw.pg[pw.cpg].Type == enmChannelType.SSG)
+            if (page.Type != enmChannelType.SSG)
+                SetFmFNum(page, mml);
+            else if (page.Type == enmChannelType.SSG)
             {
-                SetSsgFNum(pw,mml);
+                SetSsgFNum(page, mml);
             }
         }
 
-        public override void SetKeyOn(partWork pw, MML mml)
+        public override void SetKeyOn(partPage page, MML mml)
         {
-            if (pw.pg[pw.cpg].Type != enmChannelType.SSG)
-                OutFmKeyOn(pw,mml);
-            else if (pw.pg[pw.cpg].Type == enmChannelType.SSG)
+            if (page.Type != enmChannelType.SSG)
+                OutFmKeyOn(page, mml);
+            else if (page.Type == enmChannelType.SSG)
             {
-                OutSsgKeyOn(pw,mml);
+                OutSsgKeyOn(page, mml);
             }
         }
 
-        public override void SetKeyOff(partWork pw, MML mml)
+        public override void SetKeyOff(partPage page, MML mml)
         {
-            if (pw.pg[pw.cpg].Type != enmChannelType.SSG)
-                OutFmKeyOff(pw,mml);
+            if (page.Type != enmChannelType.SSG)
+                OutFmKeyOff(page, mml);
             else
-                OutSsgKeyOff(mml,pw);
+                OutSsgKeyOff(mml, page);
         }
 
 
-        public override void CmdY(partWork pw, MML mml)
+        public override void CmdY(partPage page, MML mml)
         {
-            base.CmdY(pw, mml);
+            base.CmdY(page, mml);
 
             if (mml.args[0] is string) return;
 
@@ -215,26 +226,26 @@ namespace Core
             parent.OutData(mml,port[0], adr, dat);
         }
 
-        public override void CmdInstrument(partWork pw, MML mml)
+        public override void CmdInstrument(partPage page, MML mml)
         {
             char type = (char)mml.args[0];
             int n = (int)mml.args[1];
 
             if (type == 'n' || type == 'N' || type == 'R' || type == 'A')
             {
-                if (pw.pg[pw.cpg].Type == enmChannelType.FMOPNex)
+                if (page.Type == enmChannelType.FMOPNex)
                 {
-                    pw.pg[pw.cpg].instrument = n;
-                    lstPartWork[2].pg[lstPartWork[2].cpg].instrument = n;
-                    lstPartWork[3].pg[lstPartWork[3].cpg].instrument = n;
-                    lstPartWork[4].pg[lstPartWork[4].cpg].instrument = n;
-                    lstPartWork[5].pg[lstPartWork[5].cpg].instrument = n;
-                    OutFmSetInstrument(pw,mml, n, pw.pg[pw.cpg].volume, type);
+                    page.instrument = n;
+                    lstPartWork[2].cpg.instrument = n;
+                    lstPartWork[3].cpg.instrument = n;
+                    lstPartWork[4].cpg.instrument = n;
+                    lstPartWork[5].cpg.instrument = n;
+                    OutFmSetInstrument(page, mml, n, page.volume, type);
                     return;
                 }
             }
 
-            base.CmdInstrument(pw, mml);
+            base.CmdInstrument(page, mml);
         }
 
     }

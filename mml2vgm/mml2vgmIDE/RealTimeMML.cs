@@ -44,7 +44,7 @@ namespace mml2vgmIDE
                     ? (chip.lstPartWork.Count - 1 - i)
                     : i
                     ];
-                vgm.partWorkByteData(pw);
+                vgm.partWorkByteData(pw, 0);
             }
             if (chip.SupportReversePartWork) chip.ReversePartWork = !chip.ReversePartWork;
 

@@ -81,9 +81,12 @@ namespace Core
 
         public override void InitPart(partWork pw)
         {
-            pw.pg[pw.cpg].MaxVolume = 255;
-            pw.pg[pw.cpg].volume = pw.pg[pw.cpg].MaxVolume;
-            pw.pg[pw.cpg].port = port;
+            foreach (partPage pg in pw.pg)
+            {
+                pg.MaxVolume = 255;
+                pg.volume = pg.MaxVolume;
+                pg.port = port;
+            }
         }
 
         private int[] n2f;
@@ -96,10 +99,13 @@ namespace Core
             for (int ch = 0; ch < ChMax; ch++)
             {
                 partWork pw = lstPartWork[ch];
-                pw.pg[pw.cpg].MaxVolume = Ch[ch].MaxVolume;
-                pw.pg[pw.cpg].panL = 0x4;//Center
-                pw.pg[pw.cpg].volume = pw.pg[pw.cpg].MaxVolume;
-                pw.pg[pw.cpg].port = port;
+                foreach (partPage pg in pw.pg)
+                {
+                    pg.MaxVolume = Ch[ch].MaxVolume;
+                    pg.panL = 0x4;//Center
+                    pg.volume = pg.MaxVolume;
+                    pg.port = port;
+                }
             }
 
             if (ChipID != 0 && parent.info.format != enmFormat.ZGM)
@@ -336,7 +342,7 @@ namespace Core
                 );
         }
 
-        private void OutK053260Port(MML mml, byte[] cmd, partWork pw, byte adr, byte data)
+        private void OutK053260Port(MML mml, byte[] cmd, partPage page, byte adr, byte data)
         {
             parent.OutData(
                 mml
@@ -348,12 +354,12 @@ namespace Core
             //Console.WriteLine("{0:x02} {1:x02}", adr, data);
         }
 
-        private void OutK053260KeyOn(partWork pw, MML mml)
+        private void OutK053260KeyOn(partPage page, MML mml)
         {
             byte adr = 0;
             byte data = 0;
 
-            if (pw.pg[pw.cpg].instrument == -1)
+            if (page.instrument == -1)
             {
                 LinePos lp = mml?.line?.Lp;
                 if (lp == null) lp = new LinePos("-");
@@ -362,54 +368,54 @@ namespace Core
             }
 
             //Volume
-            SetVolume(pw, mml);
+            SetVolume(page, mml);
 
             //Address shift
-            int stAdr = pw.pg[pw.cpg].pcmStartAddress + pw.pg[pw.cpg].addressShift;
-            if (stAdr >= pw.pg[pw.cpg].pcmEndAddress) stAdr = pw.pg[pw.cpg].pcmEndAddress - 1;
+            int stAdr = page.pcmStartAddress + page.addressShift;
+            if (stAdr >= page.pcmEndAddress) stAdr = page.pcmEndAddress - 1;
 
-            if (pw.pg[pw.cpg].beforepcmStartAddress != stAdr)
+            if (page.beforepcmStartAddress != stAdr)
             {
                 //StartAdr L
-                adr = (byte)((pw.pg[pw.cpg].ch + 1) * 8 + 0x04);
+                adr = (byte)((page.ch + 1) * 8 + 0x04);
                 data = (byte)stAdr;
-                OutK053260Port(mml, port[0], pw
+                OutK053260Port(mml, port[0], page
                     , adr
                     , data
                     );
                 //StartAdr H
-                adr = (byte)((pw.pg[pw.cpg].ch + 1) * 8 + 0x05);
+                adr = (byte)((page.ch + 1) * 8 + 0x05);
                 data = (byte)(stAdr >> 8);
-                OutK053260Port(mml, port[0], pw
+                OutK053260Port(mml, port[0], page
                     , adr
                     , data
                     );
 
-                pw.pg[pw.cpg].beforepcmStartAddress = stAdr;
+                page.beforepcmStartAddress = stAdr;
             }
 
             //K053260は終了アドレスではなくサイズを指定する
             //また、K053260はバンクをまたぐ演奏が可能(但しサイズは65534まで)
             //TODO:よって現在、パディングを行っているが不要かもしれない。
-            int size = pw.pg[pw.cpg].pcmEndAddress - pw.pg[pw.cpg].pcmStartAddress + 1;
-            if (pw.pg[pw.cpg].beforepcmEndAddress != size)
+            int size = page.pcmEndAddress - page.pcmStartAddress + 1;
+            if (page.beforepcmEndAddress != size)
             {
                 //EndAdr L
-                adr = (byte)((pw.pg[pw.cpg].ch + 1) * 8 + 0x02);
+                adr = (byte)((page.ch + 1) * 8 + 0x02);
                 data = (byte)size;
-                OutK053260Port(mml, port[0], pw
+                OutK053260Port(mml, port[0], page
                     , adr
                     , data
                     );
                 //EndAdr H
-                adr = (byte)((pw.pg[pw.cpg].ch + 1) * 8 + 0x03);
+                adr = (byte)((page.ch + 1) * 8 + 0x03);
                 data = (byte)(size >> 8);
-                OutK053260Port(mml, port[0], pw
+                OutK053260Port(mml, port[0], page
                     , adr
                     , data
                     );
 
-                pw.pg[pw.cpg].beforepcmEndAddress = size;
+                page.beforepcmEndAddress = size;
             }
 
 
@@ -417,27 +423,27 @@ namespace Core
             //また、他のチャンネルと合わせて設定する必要があります。
 
 
-            if (pw.pg[pw.cpg].beforepcmBank != pw.pg[pw.cpg].pcmBank)
+            if (page.beforepcmBank != page.pcmBank)
             {
-                adr = (byte)((pw.pg[pw.cpg].ch + 1) * 8 + 0x06);
-                data = (byte)(pw.pg[pw.cpg].pcmBank);
-                OutK053260Port(mml, port[0], pw
+                adr = (byte)((page.ch + 1) * 8 + 0x06);
+                data = (byte)(page.pcmBank);
+                OutK053260Port(mml, port[0], page
                     , adr
                     , data
                     );
 
-                pw.pg[pw.cpg].beforepcmBank = pw.pg[pw.cpg].pcmBank;
+                page.beforepcmBank = page.pcmBank;
             }
 
-            if (parent.instPCM[pw.pg[pw.cpg].instrument].status != enmPCMSTATUS.ERROR)
+            if (parent.instPCM[page.instrument].status != enmPCMSTATUS.ERROR)
             {
-                parent.instPCM[pw.pg[pw.cpg].instrument].status = enmPCMSTATUS.USED;
+                parent.instPCM[page.instrument].status = enmPCMSTATUS.USED;
             }
 
         }
 
 
-        public int GetK053260FNum(MML mml, partWork pw, int octave, char noteCmd, int shift)
+        public int GetK053260FNum(MML mml, partPage page, int octave, char noteCmd, int shift)
         {
             try
             {
@@ -452,15 +458,15 @@ namespace Core
                     o = Common.CheckRange(--o, 0, 7);
                 }
 
-                if (pw.pg[pw.cpg].instrument < 0 || !parent.instPCM.ContainsKey(pw.pg[pw.cpg].instrument))
+                if (page.instrument < 0 || !parent.instPCM.ContainsKey(page.instrument))
                 {
                     return 0;
                 }
 
-                double freq = (double)parent.instPCM[pw.pg[pw.cpg].instrument].samplerate;
-                if (parent.instPCM[pw.pg[pw.cpg].instrument].freq != -1)
+                double freq = (double)parent.instPCM[page.instrument].samplerate;
+                if (parent.instPCM[page.instrument].freq != -1)
                 {
-                    freq = (double)parent.instPCM[pw.pg[pw.cpg].instrument].freq;
+                    freq = (double)parent.instPCM[page.instrument].freq;
                 }
 
                 if (currentBaseFreq != freq)
@@ -478,116 +484,116 @@ namespace Core
             }
         }
 
-        public override void SetFNum(partWork pw, MML mml)
+        public override void SetFNum(partPage page, MML mml)
         {
-            int f = GetK053260FNum(mml, pw, pw.pg[pw.cpg].octaveNow, pw.pg[pw.cpg].noteCmd, pw.pg[pw.cpg].shift + pw.pg[pw.cpg].keyShift);//
-            if (pw.pg[pw.cpg].bendWaitCounter != -1)
+            int f = GetK053260FNum(mml, page, page.octaveNow, page.noteCmd, page.shift + page.keyShift);//
+            if (page.bendWaitCounter != -1)
             {
-                f = pw.pg[pw.cpg].bendFnum;
+                f = page.bendFnum;
             }
-            f = f + pw.pg[pw.cpg].detune;
+            f = f + page.detune;
             for (int lfo = 0; lfo < 4; lfo++)
             {
-                if (!pw.pg[pw.cpg].lfo[lfo].sw)
+                if (!page.lfo[lfo].sw)
                 {
                     continue;
                 }
-                if (pw.pg[pw.cpg].lfo[lfo].type != eLfoType.Vibrato)
+                if (page.lfo[lfo].type != eLfoType.Vibrato)
                 {
                     continue;
                 }
-                f += pw.pg[pw.cpg].lfo[lfo].value + pw.pg[pw.cpg].lfo[lfo].param[6];
+                f += page.lfo[lfo].value + page.lfo[lfo].param[6];
             }
 
             f = Common.CheckRange(f, 0, 0xfff);
-            if (pw.pg[pw.cpg].freq == f) return;
+            if (page.freq == f) return;
 
-            pw.pg[pw.cpg].freq = f;
+            page.freq = f;
 
 
             //Delta
             int data = f & 0xfff;
-            if (pw.pg[pw.cpg].beforeFNum != data)
+            if (page.beforeFNum != data)
             {
-                int adr = (pw.pg[pw.cpg].ch + 1) * 8 + 0x00;
-                OutK053260Port(mml, port[0], pw
+                int adr = (page.ch + 1) * 8 + 0x00;
+                OutK053260Port(mml, port[0], page
                     , (byte)adr
                     , (byte)data);
                 adr++;
-                OutK053260Port(mml, port[0], pw
+                OutK053260Port(mml, port[0], page
                     , (byte)adr
                     , (byte)((data & 0xf00) >> 8));
-                pw.pg[pw.cpg].beforeFNum = data;
+                page.beforeFNum = data;
             }
 
         }
 
-        public override int GetFNum(partWork pw, MML mml, int octave, char cmd, int shift)
+        public override int GetFNum(partPage page, MML mml, int octave, char cmd, int shift)
         {
-            return GetK053260FNum(mml, pw, octave, cmd, shift);
+            return GetK053260FNum(mml, page, octave, cmd, shift);
         }
 
-        public override void SetKeyOn(partWork pw, MML mml)
+        public override void SetKeyOn(partPage page, MML mml)
         {
-            OutK053260KeyOn(pw, mml);
-            pw.pg[pw.cpg].keyOn = true;
-            SetDummyData(pw, mml);
+            OutK053260KeyOn(page, mml);
+            page.keyOn = true;
+            SetDummyData(page, mml);
             UpdateKeyOn(mml);
         }
 
-        public override void SetKeyOff(partWork pw, MML mml)
+        public override void SetKeyOff(partPage page, MML mml)
         {
-            pw.pg[pw.cpg].keyOn = false;
-            pw.pg[pw.cpg].keyOff = true;
+            page.keyOn = false;
+            page.keyOff = true;
             UpdateKeyOn(mml);
         }
 
-        public override void SetVolume(partWork pw, MML mml)
+        public override void SetVolume(partPage page, MML mml)
         {
-            int vol = pw.pg[pw.cpg].volume;
+            int vol = page.volume;
 
-            if (pw.pg[pw.cpg].envelopeMode)
+            if (page.envelopeMode)
             {
                 vol = 0;
-                if (pw.pg[pw.cpg].envIndex != -1)
+                if (page.envIndex != -1)
                 {
-                    vol = pw.pg[pw.cpg].envVolume - (pw.pg[pw.cpg].MaxVolume - pw.pg[pw.cpg].volume);
+                    vol = page.envVolume - (page.MaxVolume - page.volume);
                 }
             }
             //Console.WriteLine("{0} ", pw.ppg[pw.cpgNum].envVolume);
 
             for (int lfo = 0; lfo < 4; lfo++)
             {
-                if (!pw.pg[pw.cpg].lfo[lfo].sw)
+                if (!page.lfo[lfo].sw)
                 {
                     continue;
                 }
-                if (pw.pg[pw.cpg].lfo[lfo].type != eLfoType.Tremolo)
+                if (page.lfo[lfo].type != eLfoType.Tremolo)
                 {
                     continue;
                 }
-                vol += pw.pg[pw.cpg].lfo[lfo].value + pw.pg[pw.cpg].lfo[lfo].param[6];
+                vol += page.lfo[lfo].value + page.lfo[lfo].param[6];
             }
 
             byte data = (byte)Common.CheckRange(vol, 0, 127);
-            if (pw.pg[pw.cpg].beforeVolume != data)
+            if (page.beforeVolume != data)
             {
-                byte adr = (byte)((pw.pg[pw.cpg].ch + 1) * 8 + 0x07);
-                OutK053260Port(mml, port[0], pw
+                byte adr = (byte)((page.ch + 1) * 8 + 0x07);
+                OutK053260Port(mml, port[0], page
                     , adr
                     , data
                     );
-                pw.pg[pw.cpg].beforeVolume = data;
+                page.beforeVolume = data;
             }
-            SetDummyData(pw, mml);
+            SetDummyData(page, mml);
 
         }
 
-        public override void SetLfoAtKeyOn(partWork pw, MML mml)
+        public override void SetLfoAtKeyOn(partPage page, MML mml)
         {
             for (int lfo = 0; lfo < 4; lfo++)
             {
-                clsLfo pl = pw.pg[pw.cpg].lfo[lfo];
+                clsLfo pl = page.lfo[lfo];
                 if (!pl.sw)
                     continue;
 
@@ -604,37 +610,37 @@ namespace Core
 
                 if (pl.type == eLfoType.Vibrato)
                 {
-                    SetFNum(pw, mml);
+                    SetFNum(page, mml);
                 }
                 if (pl.type == eLfoType.Tremolo)
                 {
-                    pw.pg[pw.cpg].beforeVolume = -1;
-                    SetVolume(pw, mml);
+                    page.beforeVolume = -1;
+                    SetVolume(page, mml);
                 }
             }
         }
 
-        public override void SetToneDoubler(partWork pw, MML mml)
+        public override void SetToneDoubler(partPage page, MML mml)
         {
             //実装不要
         }
 
-        public override int GetToneDoublerShift(partWork pw, int octave, char noteCmd, int shift)
+        public override int GetToneDoublerShift(partPage page, int octave, char noteCmd, int shift)
         {
             return 0;
         }
 
-        public override void CmdPan(partWork pw, MML mml)
+        public override void CmdPan(partPage page, MML mml)
         {
             int p = (int)mml.args[0];
 
             p = Common.CheckRange(p, 0, 7);
-            pw.pg[pw.cpg].panL = (7 - p);
+            page.panL = (7 - p);
 
-            SetDummyData(pw, mml);
+            SetDummyData(page, mml);
         }
 
-        public override void CmdInstrument(partWork pw, MML mml)
+        public override void CmdInstrument(partPage page, MML mml)
         {
             char type = (char)mml.args[0];
             int n = (int)mml.args[1];
@@ -655,7 +661,7 @@ namespace Core
 
             if (type == 'E')
             {
-                n = SetEnvelopParamFromInstrument(pw, n, mml);
+                n = SetEnvelopParamFromInstrument(page, n, mml);
                 return;
             }
 
@@ -675,26 +681,26 @@ namespace Core
                 return;
             }
 
-            pw.pg[pw.cpg].instrument = n;
-            pw.pg[pw.cpg].pcmStartAddress = (int)parent.instPCM[n].stAdr;
-            pw.pg[pw.cpg].pcmEndAddress = (int)parent.instPCM[n].edAdr;
-            pw.pg[pw.cpg].pcmLoopAddress = (int)parent.instPCM[n].loopAdr;
-            pw.pg[pw.cpg].pcmBank = (int)((parent.instPCM[n].stAdr >> 16));
-            SetDummyData(pw, mml);
+            page.instrument = n;
+            page.pcmStartAddress = (int)parent.instPCM[n].stAdr;
+            page.pcmEndAddress = (int)parent.instPCM[n].edAdr;
+            page.pcmLoopAddress = (int)parent.instPCM[n].loopAdr;
+            page.pcmBank = (int)((parent.instPCM[n].stAdr >> 16));
+            SetDummyData(page, mml);
 
         }
 
-        public override void CmdY(partWork pw, MML mml)
+        public override void CmdY(partPage page, MML mml)
         {
             if (mml.args[0] is string) return;
 
             byte adr = (byte)(int)mml.args[0];
             byte dat = (byte)(int)mml.args[1];
 
-            OutK053260Port(mml, port[0], pw, adr, dat);
+            OutK053260Port(mml, port[0], page, adr, dat);
         }
 
-        public override void CmdLoopExtProc(partWork pw, MML mml)
+        public override void CmdLoopExtProc(partPage page, MML mml)
         {
         }
 
@@ -706,11 +712,14 @@ namespace Core
             v = 0;
             foreach (partWork pw in lstPartWork)
             {
-                v |= (byte)(pw.pg[pw.cpg].pcmLoopAddress != -1 ? (1 << pw.pg[pw.cpg].ch) : 0);
-                if (pw.pg[pw.cpg].instrument != -1
-                    && parent.instPCM.ContainsKey(pw.pg[pw.cpg].instrument))
+                foreach (partPage page in pw.pg)
                 {
-                    v |= (byte)((bool)parent.instPCM[pw.pg[pw.cpg].instrument].option[0] ? (16 << pw.pg[pw.cpg].ch) : 0);
+                    v |= (byte)(page.pcmLoopAddress != -1 ? (1 << page.ch) : 0);
+                    if (page.instrument != -1
+                        && parent.instPCM.ContainsKey(page.instrument))
+                    {
+                        v |= (byte)((bool)parent.instPCM[page.instrument].option[0] ? (16 << page.ch) : 0);
+                    }
                 }
             }
             if (beforeloopDpcm != v)
@@ -724,10 +733,10 @@ namespace Core
             w = 0;
             foreach (partWork pw in lstPartWork)
             {
-                if (pw.pg[pw.cpg].ch < 2)
-                    v |= (byte)((pw.pg[pw.cpg].panL & 0x7) << (pw.pg[pw.cpg].ch == 0 ? 0 : 3));
+                if (pw.cpg.ch < 2)
+                    v |= (byte)((pw.cpg.panL & 0x7) << (pw.cpg.ch == 0 ? 0 : 3));
                 else
-                    w |= (byte)((pw.pg[pw.cpg].panL & 0x7) << (pw.pg[pw.cpg].ch == 2 ? 0 : 3));
+                    w |= (byte)((pw.cpg.panL & 0x7) << (pw.cpg.ch == 2 ? 0 : 3));
             }
             if (beforePan12 != v)
             {
@@ -750,7 +759,7 @@ namespace Core
             byte v = 0;
             foreach (partWork pw in lstPartWork)
             {
-                v |= (byte)(pw.pg[pw.cpg].keyOn ? (1 << pw.pg[pw.cpg].ch) : 0);
+                v |= (byte)(pw.cpg.keyOn ? (1 << pw.cpg.ch) : 0);
             }
             if (beforeKeyON != v)
             {

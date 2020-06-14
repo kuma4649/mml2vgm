@@ -221,18 +221,18 @@ namespace mml2vgmIDE
             {
                 for (int i = 0; i < 4; i++)
                 {
-                    if (pw.pg[pw.cpg].lfo[i] == null) continue;
+                    if (pw.apg.lfo[i] == null) continue;
 
-                    newParam.lfo[i].sw = pw.pg[pw.cpg].lfo[i].sw;
-                    newParam.lfo[i].type = pw.pg[pw.cpg].lfo[i].type;
+                    newParam.lfo[i].sw = pw.apg.lfo[i].sw;
+                    newParam.lfo[i].type = pw.apg.lfo[i].type;
                     if (newParam.lfo[i].param == null) continue;
-                    if (newParam.lfo[i].param.Count > 0) newParam.lfo[i].param[0] = pw.pg[pw.cpg].lfo[i].param[0];
-                    if (newParam.lfo[i].param.Count > 1) newParam.lfo[i].param[1] = pw.pg[pw.cpg].lfo[i].param[1];
-                    if (newParam.lfo[i].param.Count > 2) newParam.lfo[i].param[2] = pw.pg[pw.cpg].lfo[i].param[2];
-                    if (newParam.lfo[i].param.Count > 3) newParam.lfo[i].param[3] = pw.pg[pw.cpg].lfo[i].param[3];
-                    if (newParam.lfo[i].param.Count > 4) newParam.lfo[i].param[4] = pw.pg[pw.cpg].lfo[i].param[4];
-                    if (newParam.lfo[i].param.Count > 5) newParam.lfo[i].param[5] = pw.pg[pw.cpg].lfo[i].param[5];
-                    if (newParam.lfo[i].param.Count > 6) newParam.lfo[i].param[6] = pw.pg[pw.cpg].lfo[i].param[6];
+                    if (newParam.lfo[i].param.Count > 0) newParam.lfo[i].param[0] = pw.apg.lfo[i].param[0];
+                    if (newParam.lfo[i].param.Count > 1) newParam.lfo[i].param[1] = pw.apg.lfo[i].param[1];
+                    if (newParam.lfo[i].param.Count > 2) newParam.lfo[i].param[2] = pw.apg.lfo[i].param[2];
+                    if (newParam.lfo[i].param.Count > 3) newParam.lfo[i].param[3] = pw.apg.lfo[i].param[3];
+                    if (newParam.lfo[i].param.Count > 4) newParam.lfo[i].param[4] = pw.apg.lfo[i].param[4];
+                    if (newParam.lfo[i].param.Count > 5) newParam.lfo[i].param[5] = pw.apg.lfo[i].param[5];
+                    if (newParam.lfo[i].param.Count > 6) newParam.lfo[i].param[6] = pw.apg.lfo[i].param[6];
                 }
             }
         }
@@ -528,11 +528,11 @@ namespace mml2vgmIDE
 
             NoteOffMONO(latestNoteNumberMONO);
             MML mml = MakeMML_Octave(n);
-            cChip.CmdOctave(pw, mml);
+            cChip.CmdOctave(pw.apg, mml);
             mml = MakeMML_NoteOn(n);
             lock (lockObject)
             {
-                cChip.CmdNote(pw, 0, mml);//TODO:page制御やってない
+                cChip.CmdNote(pw.apg, mml);//TODO:page制御やってない
             }
 
             latestNoteNumberMONO = n;
@@ -564,7 +564,7 @@ namespace mml2vgmIDE
             MML mml = MakeMML_NoteOff(n);
             lock (lockObject)
             {
-                cChip.SetKeyOff(pw, mml);
+                cChip.SetKeyOff(pw.apg, mml);
             }
 
         }
@@ -636,14 +636,14 @@ namespace mml2vgmIDE
             mv.desVGM.isRealTimeMode = true;
             for(int i = 0; i < 4; i++)
             {
-                pw.pg[pw.cpg].lfo[i].param = new List<int>();
-                pw.pg[pw.cpg].lfo[i].param.Add(0);
-                pw.pg[pw.cpg].lfo[i].param.Add(0);
-                pw.pg[pw.cpg].lfo[i].param.Add(0);
-                pw.pg[pw.cpg].lfo[i].param.Add(0);
-                pw.pg[pw.cpg].lfo[i].param.Add(0);
-                pw.pg[pw.cpg].lfo[i].param.Add(0);
-                pw.pg[pw.cpg].lfo[i].param.Add(0);
+                pw.apg.lfo[i].param = new List<int>();
+                pw.apg.lfo[i].param.Add(0);
+                pw.apg.lfo[i].param.Add(0);
+                pw.apg.lfo[i].param.Add(0);
+                pw.apg.lfo[i].param.Add(0);
+                pw.apg.lfo[i].param.Add(0);
+                pw.apg.lfo[i].param.Add(0);
+                pw.apg.lfo[i].param.Add(0);
                 newParam.lfo[i].param = new List<int>();
                 newParam.lfo[i].param.Add(0);
                 newParam.lfo[i].param.Add(0);
@@ -661,16 +661,16 @@ namespace mml2vgmIDE
                 oldParam.lfo[i].param.Add(0);
                 oldParam.lfo[i].param.Add(0);
             }
-            pw.pg[pw.cpg].lfo[0].sw = true;
-            pw.pg[pw.cpg].lfo[0].direction = 1;
-            pw.pg[pw.cpg].lfo[0].type = eLfoType.Vibrato;
-            pw.pg[pw.cpg].lfo[0].param[0] = 100;//delay
-            pw.pg[pw.cpg].lfo[0].param[1] = 1;
-            pw.pg[pw.cpg].lfo[0].param[2] = 3;
-            pw.pg[pw.cpg].lfo[0].param[3] = 15;//depth
-            pw.pg[pw.cpg].lfo[0].param[4] = 0;//type 0:tri
-            pw.pg[pw.cpg].lfo[0].param[5] = 1;
-            pw.pg[pw.cpg].lfo[0].param[6] = 0;
+            pw.apg.lfo[0].sw = true;
+            pw.apg.lfo[0].direction = 1;
+            pw.apg.lfo[0].type = eLfoType.Vibrato;
+            pw.apg.lfo[0].param[0] = 100;//delay
+            pw.apg.lfo[0].param[1] = 1;
+            pw.apg.lfo[0].param[2] = 3;
+            pw.apg.lfo[0].param[3] = 15;//depth
+            pw.apg.lfo[0].param[4] = 0;//type 0:tri
+            pw.apg.lfo[0].param[5] = 1;
+            pw.apg.lfo[0].param[6] = 0;
 
             mv.desBuf = null;
             if (mv.desVGM.dat != null) mv.desVGM.dat.Clear();

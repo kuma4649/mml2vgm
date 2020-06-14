@@ -10,6 +10,11 @@ namespace Core
     {
 
         /// <summary>
+        /// パートデータ
+        /// </summary>
+        public List<Line> pData = null;
+
+        /// <summary>
         /// mmlデータ
         /// </summary>
         public List<MML> mmlData = null;

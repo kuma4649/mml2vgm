@@ -83,49 +83,54 @@ namespace Core
 
             foreach (partWork pw in lstPartWork)
             {
-                SetHuC6280CurrentChannel(null, pw);
-
-                pw.pg[pw.cpg].port = port;// 0xb9;
-
-                //freq( 0 )
-                pw.pg[pw.cpg].freq = 0;
-                OutHuC6280Port(null, port[0], 2, 0);
-                OutHuC6280Port(null, port[0], 3, 0);
-
-                pw.pg[pw.cpg].pcm = false;
-
-                //volume
-                byte data = (byte)(0x00 + (0 & 0x1f));
-                OutHuC6280Port(null, port[0], 4, data);
-
-                //pan
-                pw.pg[pw.cpg].panL = 0;
-                pw.pg[pw.cpg].panR = 0;
-                OutHuC6280Port(null, port[0], 5, 0xff);
-
-                for (int j = 0; j < 32; j++)
+                foreach (partPage pg in pw.pg)
                 {
-                    OutHuC6280Port(null, port[0], 6, 0);
-                }
+                    SetHuC6280CurrentChannel(null, pg);
 
-                if (pw.pg[pw.cpg].ch > 3)
-                {
-                    //noise(Ch5,6 only)
-                    pw.pg[pw.cpg].noise = 0x1f;
-                    OutHuC6280Port(null, port[0], 7, 0x1f);
+                    pg.port = port;// 0xb9;
+
+                    //freq( 0 )
+                    pg.freq = 0;
+                    OutHuC6280Port(null, port[0], 2, 0);
+                    OutHuC6280Port(null, port[0], 3, 0);
+
+                    pg.pcm = false;
+
+                    //volume
+                    byte data = (byte)(0x00 + (0 & 0x1f));
+                    OutHuC6280Port(null, port[0], 4, data);
+
+                    //pan
+                    pg.panL = 0;
+                    pg.panR = 0;
+                    OutHuC6280Port(null, port[0], 5, 0xff);
+
+                    for (int j = 0; j < 32; j++)
+                    {
+                        OutHuC6280Port(null, port[0], 6, 0);
+                    }
+
+                    if (pg.ch > 3)
+                    {
+                        //noise(Ch5,6 only)
+                        pg.noise = 0x1f;
+                        OutHuC6280Port(null, port[0], 7, 0x1f);
+                    }
                 }
             }
         }
 
         public override void InitPart(partWork pw)
         {
-            pw.pg[pw.cpg].MaxVolume = 31;
-            pw.pg[pw.cpg].volume = pw.pg[pw.cpg].MaxVolume;
-            pw.pg[pw.cpg].mixer = 0;
-            pw.pg[pw.cpg].noise = 0;
-            pw.pg[pw.cpg].port = port;
+            foreach (partPage pg in pw.pg)
+            {
+                pg.MaxVolume = 31;
+                pg.volume = pg.MaxVolume;
+                pg.mixer = 0;
+                pg.noise = 0;
+                pg.port = port;
+            }
         }
-
 
         public override void StorePcm(Dictionary<int, clsPcm> newDic, KeyValuePair<int, clsPcm> v, byte[] buf, bool is16bit, int samplerate, params object[] option)
         {
@@ -201,7 +206,7 @@ namespace Core
             CurrentChannel = 255;
         }
 
-        public override int GetFNum(partWork pw, MML mml, int octave, char cmd, int shift)
+        public override int GetFNum(partPage page, MML mml, int octave, char cmd, int shift)
         {
             return GetHuC6280Freq(octave, cmd, shift);
         }
@@ -234,22 +239,22 @@ namespace Core
             return (int)(Frequency / 32.0f / 261.62f / (Const.pcmMTbl[n] * (float)Math.Pow(2, (o - 4))));
         }
 
-        public void SetHuC6280Envelope(MML mml, partWork pw, int volume)
+        public void SetHuC6280Envelope(MML mml, partPage page, int volume)
         {
-            if (pw.pg[pw.cpg].huc6280Envelope != volume)
+            if (page.huc6280Envelope != volume)
             {
-                SetHuC6280CurrentChannel(mml, pw);
-                if (!pw.pg[pw.cpg].keyOn) volume = 0;
+                SetHuC6280CurrentChannel(mml, page);
+                if (!page.keyOn) volume = 0;
                 byte data = (byte)((volume != 0 ? 0x80 : 0) + (volume & 0x1f));
                 OutHuC6280Port(mml, port[0], 4, data);
-                pw.pg[pw.cpg].huc6280Envelope = volume;
+                page.huc6280Envelope = volume;
             }
         }
 
-        public void SetHuC6280CurrentChannel(MML mml, partWork pw)
+        public void SetHuC6280CurrentChannel(MML mml, partPage page)
         {
-            byte pch = (byte)pw.pg[pw.cpg].ch;
-            int chipNumber = pw.pg[pw.cpg].chipNumber;
+            byte pch = (byte)page.ch;
+            int chipNumber = page.chipNumber;
 
             if (CurrentChannel != pch)
             {
@@ -259,14 +264,14 @@ namespace Core
             }
         }
 
-        public void SetHuC6280Pan(MML mml, partWork pw, int pan)
+        public void SetHuC6280Pan(MML mml, partPage page, int pan)
         {
-            if (pw.pg[pw.cpg].huc6280Pan != pan)
+            if (page.huc6280Pan != pan)
             {
-                SetHuC6280CurrentChannel(mml, pw);
+                SetHuC6280CurrentChannel(mml, page);
                 byte data = (byte)(pan & 0xff);
                 OutHuC6280Port(mml, port[0], 0x5, data);
-                pw.pg[pw.cpg].huc6280Pan = pan;
+                page.huc6280Pan = pan;
             }
         }
 
@@ -279,7 +284,7 @@ namespace Core
                 , data);
         }
 
-        public void OutHuC6280SetInstrument(partWork pw, MML mml, int n)
+        public void OutHuC6280SetInstrument(partPage page, MML mml, int n)
         {
 
             if (!parent.instWF.ContainsKey(n))
@@ -288,8 +293,8 @@ namespace Core
                 return;
             }
 
-            SetHuC6280CurrentChannel(mml, pw);
-            OutHuC6280Port(mml, port[0], 4, (byte)(0x40 + pw.pg[pw.cpg].volume)); //WaveIndexReset(=0x40)
+            SetHuC6280CurrentChannel(mml, page);
+            OutHuC6280Port(mml, port[0], 4, (byte)(0x40 + page.volume)); //WaveIndexReset(=0x40)
 
             for (int i = 1; i < parent.instWF[n].Length; i++) // 0 は音色番号が入っている為1からスタート
             {
@@ -298,26 +303,26 @@ namespace Core
 
         }
 
-        public void OutHuC6280KeyOn(MML mml, partWork pw)
+        public void OutHuC6280KeyOn(MML mml, partPage page)
         {
-            int vol = pw.pg[pw.cpg].volume;
-            if (pw.pg[pw.cpg].envelopeMode)
+            int vol = page.volume;
+            if (page.envelopeMode)
             {
                 vol = 0;
-                if (pw.pg[pw.cpg].envIndex != -1)
+                if (page.envIndex != -1)
                 {
-                    vol = pw.pg[pw.cpg].envVolume - (31 - pw.pg[pw.cpg].volume);
+                    vol = page.envVolume - (31 - page.volume);
                 }
             }
             if (vol > 31) vol = 31;
             if (vol < 0) vol = 0;
             byte data = (byte)(((vol > 0) ? 0x80 : 0x00) + vol);
 
-            if (!pw.pg[pw.cpg].pcm)
+            if (!page.pcm)
             {
-                SetHuC6280CurrentChannel(mml, pw);
+                SetHuC6280CurrentChannel(mml, page);
                 OutHuC6280Port(mml, port[0], 0x4, data);
-                OutHuC6280Port(mml, port[0], 0x5, (byte)pw.pg[pw.cpg].huc6280Pan);
+                OutHuC6280Port(mml, port[0], 0x5, (byte)page.huc6280Pan);
                 return;
             }
 
@@ -326,58 +331,58 @@ namespace Core
                 return;
             }
 
-            SetHuC6280CurrentChannel(mml, pw);
+            SetHuC6280CurrentChannel(mml, page);
             data |= 0x40;
             OutHuC6280Port(mml, port[0], 0x4, data);
-            OutHuC6280Port(mml, port[0], 0x5, (byte)pw.pg[pw.cpg].huc6280Pan);
+            OutHuC6280Port(mml, port[0], 0x5, (byte)page.huc6280Pan);
 
-            if (pw.pg[pw.cpg].isPcmMap)
+            if (page.isPcmMap)
             {
-                int nt = Const.NOTE.IndexOf(pw.pg[pw.cpg].noteCmd);
-                int ff = pw.pg[pw.cpg].octaveNow * 12 + nt + pw.pg[pw.cpg].shift + pw.pg[pw.cpg].keyShift;
-                if (parent.instPCMMap.ContainsKey(pw.pg[pw.cpg].pcmMapNo))
+                int nt = Const.NOTE.IndexOf(page.noteCmd);
+                int ff = page.octaveNow * 12 + nt + page.shift + page.keyShift;
+                if (parent.instPCMMap.ContainsKey(page.pcmMapNo))
                 {
-                    if (parent.instPCMMap[pw.pg[pw.cpg].pcmMapNo].ContainsKey(ff))
+                    if (parent.instPCMMap[page.pcmMapNo].ContainsKey(ff))
                     {
-                        pw.pg[pw.cpg].instrument = parent.instPCMMap[pw.pg[pw.cpg].pcmMapNo][ff];
+                        page.instrument = parent.instPCMMap[page.pcmMapNo][ff];
                     }
                     else
                     {
-                        msgBox.setErrMsg(string.Format(msg.get("E10025"), pw.pg[pw.cpg].octaveNow, pw.pg[pw.cpg].noteCmd, pw.pg[pw.cpg].shift + pw.pg[pw.cpg].keyShift), mml.line.Lp);
+                        msgBox.setErrMsg(string.Format(msg.get("E10025"), page.octaveNow, page.noteCmd, page.shift + page.keyShift), mml.line.Lp);
                         return;
                     }
                 }
                 else
                 {
-                    msgBox.setErrMsg(string.Format(msg.get("E10024"), pw.pg[pw.cpg].pcmMapNo), mml.line.Lp);
+                    msgBox.setErrMsg(string.Format(msg.get("E10024"), page.pcmMapNo), mml.line.Lp);
                     return;
                 }
             }
 
-            float m = Const.pcmMTbl[pw.pg[pw.cpg].pcmNote] * (float)Math.Pow(2, (pw.pg[pw.cpg].pcmOctave - 4));
-            pw.pg[pw.cpg].pcmBaseFreqPerFreq = Information.VGM_SAMPLE_PER_SECOND / ((float)parent.instPCM[pw.pg[pw.cpg].instrument].freq * m);
-            pw.pg[pw.cpg].pcmFreqCountBuffer = 0.0f;
-            long p = parent.instPCM[pw.pg[pw.cpg].instrument].stAdr;
+            float m = Const.pcmMTbl[page.pcmNote] * (float)Math.Pow(2, (page.pcmOctave - 4));
+            page.pcmBaseFreqPerFreq = Information.VGM_SAMPLE_PER_SECOND / ((float)parent.instPCM[page.instrument].freq * m);
+            page.pcmFreqCountBuffer = 0.0f;
+            long p = parent.instPCM[page.instrument].stAdr;
 
-            long s = parent.instPCM[pw.pg[pw.cpg].instrument].size;
-            long f = parent.instPCM[pw.pg[pw.cpg].instrument].freq;
+            long s = parent.instPCM[page.instrument].size;
+            long f = parent.instPCM[page.instrument].freq;
             long w = 0;
-            if (pw.pg[pw.cpg].gatetimePmode)
+            if (page.gatetimePmode)
             {
-                w = pw.pg[pw.cpg].waitCounter * pw.pg[pw.cpg].gatetime / 8L;
+                w = page.waitCounter * page.gatetime / 8L;
             }
             else
             {
-                w = pw.pg[pw.cpg].waitCounter - pw.pg[pw.cpg].gatetime;
+                w = page.waitCounter - page.gatetime;
             }
             if (w < 1) w = 1;
             s = Math.Min(s, (long)(w * parent.info.samplesPerClock * f / 44100.0));
 
             byte[] cmd;
-            if (!pw.pg[pw.cpg].streamSetup)
+            if (!page.streamSetup)
             {
                 parent.newStreamID++;
-                pw.pg[pw.cpg].streamID = parent.newStreamID;
+                page.streamID = parent.newStreamID;
                 if (parent.info.format == enmFormat.ZGM)
                 {
                     if (parent.ChipCommandSize == 2) cmd = new byte[] { 0x30, 0x00 };
@@ -388,22 +393,22 @@ namespace Core
                     mml,
                     // setup stream control
                     cmd
-                    , (byte)pw.pg[pw.cpg].streamID
-                    , (byte)(0x1b + (pw.pg[pw.cpg].chipNumber!=0 ? 0x80 : 0x00)) //0x1b HuC6280
-                    , (byte)pw.pg[pw.cpg].ch
+                    , (byte)page.streamID
+                    , (byte)(0x1b + (page.chipNumber!=0 ? 0x80 : 0x00)) //0x1b HuC6280
+                    , (byte)page.ch
                     , (byte)(0x00 + 0x06)// 0x00 Select Channel 
                                          // set stream data
                     , 0x91
-                    , (byte)pw.pg[pw.cpg].streamID
+                    , (byte)page.streamID
                     , 0x05 // Data BankID(0x05 HuC6280)
                     , 0x01
                     , 0x00
                     );
 
-                pw.pg[pw.cpg].streamSetup = true;
+                page.streamSetup = true;
             }
 
-            if (pw.pg[pw.cpg].streamFreq != f)
+            if (page.streamFreq != f)
             {
                 if (parent.info.format == enmFormat.ZGM)
                 {
@@ -415,7 +420,7 @@ namespace Core
                 parent.OutData(
                     mml,
                     cmd
-                    , (byte)pw.pg[pw.cpg].streamID
+                    , (byte)page.streamID
 
                     , (byte)(f & 0xff)
                     , (byte)((f & 0xff00) / 0x100)
@@ -423,7 +428,7 @@ namespace Core
                     , (byte)((f & 0xff000000) / 0x10000)
                     );
 
-                pw.pg[pw.cpg].streamFreq = f;
+                page.streamFreq = f;
             }
 
             if (parent.info.format == enmFormat.ZGM)
@@ -436,7 +441,7 @@ namespace Core
             parent.OutData(
                 mml,
                 cmd
-                , (byte)pw.pg[pw.cpg].streamID
+                , (byte)page.streamID
 
                 , (byte)(p & 0xff)
                 , (byte)((p & 0xff00) / 0x100)
@@ -451,120 +456,120 @@ namespace Core
                 , (byte)((s & 0xff000000) / 0x10000)
                 );
 
-            if (parent.instPCM[pw.pg[pw.cpg].instrument].status != enmPCMSTATUS.ERROR)
+            if (parent.instPCM[page.instrument].status != enmPCMSTATUS.ERROR)
             {
-                parent.instPCM[pw.pg[pw.cpg].instrument].status = enmPCMSTATUS.USED;
+                parent.instPCM[page.instrument].status = enmPCMSTATUS.USED;
             }
 
         }
 
-        public void OutHuC6280KeyOff(MML mml, partWork pw)
+        public void OutHuC6280KeyOff(MML mml, partPage page)
         {
-            SetHuC6280CurrentChannel(mml, pw);
+            SetHuC6280CurrentChannel(mml, page);
 
             OutHuC6280Port(mml, port[0], 0x4, 0x00);
             //OutHuC6280Port(pw.ppg[pw.cpgNum].chipNumber, 0x5, 0);
         }
 
-        public override void SetFNum(partWork pw, MML mml)
+        public override void SetFNum(partPage page, MML mml)
         {
-            int f = GetHuC6280Freq(pw.pg[pw.cpg].octaveNow, pw.pg[pw.cpg].noteCmd, pw.pg[pw.cpg].keyShift + pw.pg[pw.cpg].shift);//
+            int f = GetHuC6280Freq(page.octaveNow, page.noteCmd, page.keyShift + page.shift);//
 
-            if (pw.pg[pw.cpg].bendWaitCounter != -1)
+            if (page.bendWaitCounter != -1)
             {
-                f = pw.pg[pw.cpg].bendFnum;
+                f = page.bendFnum;
             }
-            f = f + pw.pg[pw.cpg].detune;
+            f = f + page.detune;
             for (int lfo = 0; lfo < 4; lfo++)
             {
-                if (!pw.pg[pw.cpg].lfo[lfo].sw)
+                if (!page.lfo[lfo].sw)
                 {
                     continue;
                 }
-                if (pw.pg[pw.cpg].lfo[lfo].type != eLfoType.Vibrato)
+                if (page.lfo[lfo].type != eLfoType.Vibrato)
                 {
                     continue;
                 }
-                f += pw.pg[pw.cpg].lfo[lfo].value + pw.pg[pw.cpg].lfo[lfo].param[6];
+                f += page.lfo[lfo].value + page.lfo[lfo].param[6];
             }
 
             f = Common.CheckRange(f, 0, 0x0fff);
 
-            if (pw.pg[pw.cpg].freq == f) return;
+            if (page.freq == f) return;
 
-            SetHuC6280CurrentChannel(mml, pw);
-            if ((pw.pg[pw.cpg].freq & 0x0ff) != (f & 0x0ff)) OutHuC6280Port(mml, port[0], 2, (byte)(f & 0xff));
-            if ((pw.pg[pw.cpg].freq & 0xf00) != (f & 0xf00)) OutHuC6280Port(mml, port[0], 3, (byte)((f & 0xf00) >> 8));
+            SetHuC6280CurrentChannel(mml, page);
+            if ((page.freq & 0x0ff) != (f & 0x0ff)) OutHuC6280Port(mml, port[0], 2, (byte)(f & 0xff));
+            if ((page.freq & 0xf00) != (f & 0xf00)) OutHuC6280Port(mml, port[0], 3, (byte)((f & 0xf00) >> 8));
             //OutHuC6280Port(pw.ppg[pw.cpgNum].chipNumber, 2, (byte)(f & 0xff));
             //OutHuC6280Port(pw.ppg[pw.cpgNum].chipNumber, 3, (byte)((f & 0xf00) >> 8));
 
-            pw.pg[pw.cpg].freq = f;
+            page.freq = f;
 
         }
 
-        public override void SetKeyOn(partWork pw, MML mml)
+        public override void SetKeyOn(partPage page, MML mml)
         {
-            OutHuC6280KeyOn(mml, pw);
-            pw.pg[pw.cpg].keyOn = true;
+            OutHuC6280KeyOn(mml, page);
+            page.keyOn = true;
         }
 
-        public override void SetKeyOff(partWork pw, MML mml)
+        public override void SetKeyOff(partPage page, MML mml)
         {
-            OutHuC6280KeyOff(mml, pw);
-            pw.pg[pw.cpg].keyOn = false;
+            OutHuC6280KeyOff(mml, page);
+            page.keyOn = false;
         }
 
-        public override void SetVolume(partWork pw, MML mml)
+        public override void SetVolume(partPage page, MML mml)
         {
             int vol = 0;
-            if (pw.pg[pw.cpg].envelopeMode)
+            if (page.envelopeMode)
             {
-                if (pw.pg[pw.cpg].envIndex != -1)
+                if (page.envIndex != -1)
                 {
-                    vol = pw.pg[pw.cpg].volume;
+                    vol = page.volume;
                 }
             }
             else
             {
                 //if (pw.ppg[pw.cpgNum].keyOn)//ストリーム処理のbug?
-                vol = pw.pg[pw.cpg].volume;
+                vol = page.volume;
             }
 
-            if (pw.pg[pw.cpg].envelopeMode)
+            if (page.envelopeMode)
             {
                 vol = 0;
-                if (pw.pg[pw.cpg].envIndex != -1)
+                if (page.envIndex != -1)
                 {
-                    vol = pw.pg[pw.cpg].envVolume - (31 - pw.pg[pw.cpg].volume);
+                    vol = page.envVolume - (31 - page.volume);
                 }
             }
 
             for (int lfo = 0; lfo < 4; lfo++)
             {
-                if (!pw.pg[pw.cpg].lfo[lfo].sw)
+                if (!page.lfo[lfo].sw)
                 {
                     continue;
                 }
-                if (pw.pg[pw.cpg].lfo[lfo].type != eLfoType.Tremolo)
+                if (page.lfo[lfo].type != eLfoType.Tremolo)
                 {
                     continue;
                 }
-                vol += pw.pg[pw.cpg].lfo[lfo].value + pw.pg[pw.cpg].lfo[lfo].param[6];
+                vol += page.lfo[lfo].value + page.lfo[lfo].param[6];
             }
 
             vol = Common.CheckRange(vol, 0, 31);
-            if (pw.pg[pw.cpg].beforeVolume != vol)
+            if (page.beforeVolume != vol)
             {
-                SetHuC6280Envelope(mml, pw, vol);
-                pw.pg[pw.cpg].beforeVolume = vol;
+                SetHuC6280Envelope(mml, page, vol);
+                page.beforeVolume = vol;
             }
         }
 
-        public override void SetLfoAtKeyOn(partWork pw, MML mml)
+        public override void SetLfoAtKeyOn(partPage page, MML mml)
         {
             for (int lfo = 0; lfo < 4; lfo++)
             {
-                clsLfo pl = pw.pg[pw.cpg].lfo[lfo];
+                clsLfo pl = page.lfo[lfo];
                 if (!pl.sw) continue;
                 if (pl.type == eLfoType.Hardware) continue;
                 if (pl.param[5] != 1) continue;
@@ -579,72 +584,72 @@ namespace Core
 
                 if (pl.type == eLfoType.Vibrato)
                 {
-                    SetFNum(pw, mml);
+                    SetFNum(page, mml);
                 }
                 if (pl.type == eLfoType.Tremolo)
                 {
-                    pw.pg[pw.cpg].beforeVolume = -1;
-                    SetVolume(pw, mml);
+                    page.beforeVolume = -1;
+                    SetVolume(page, mml);
                 }
             }
         }
 
-        public override int GetToneDoublerShift(partWork pw, int octave, char noteCmd, int shift)
+        public override int GetToneDoublerShift(partPage page, int octave, char noteCmd, int shift)
         {
             //実装不要
             return 0;
         }
 
-        public override void SetToneDoubler(partWork pw, MML mml)
+        public override void SetToneDoubler(partPage page, MML mml)
         {
             //実装不要
         }
 
 
-        public override void CmdNoise(partWork pw, MML mml)
+        public override void CmdNoise(partPage page, MML mml)
         {
             int n = (int)mml.args[0];
             n = Common.CheckRange(n, 0, 31);
-            if (pw.pg[pw.cpg].noise != n)
+            if (page.noise != n)
             {
-                pw.pg[pw.cpg].noise = n;
-                SetHuC6280CurrentChannel(mml, pw);
-                OutHuC6280Port(mml, port[0], 7, (byte)((pw.pg[pw.cpg].mixer != 0 ? 0x80 : 0x00) + (pw.pg[pw.cpg].noise & 0x1f)));
+                page.noise = n;
+                SetHuC6280CurrentChannel(mml, page);
+                OutHuC6280Port(mml, port[0], 7, (byte)((page.mixer != 0 ? 0x80 : 0x00) + (page.noise & 0x1f)));
             }
         }
 
-        public override void CmdLfo(partWork pw, MML mml)
+        public override void CmdLfo(partPage page, MML mml)
         {
-            base.CmdLfo(pw, mml);
+            base.CmdLfo(page, mml);
 
             int c = (char)mml.args[0] - 'P';
-            if (pw.pg[pw.cpg].lfo[c].type == eLfoType.Hardware)
+            if (page.lfo[c].type == eLfoType.Hardware)
             {
-                if (pw.pg[pw.cpg].lfo[c].param.Count < 3)
+                if (page.lfo[c].param.Count < 3)
                 {
                     msgBox.setErrMsg(msg.get("E12001"), mml.line.Lp);
                     return;
                 }
-                if (pw.pg[pw.cpg].lfo[c].param.Count > 3)
+                if (page.lfo[c].param.Count > 3)
                 {
                     msgBox.setErrMsg(msg.get("E12002"), mml.line.Lp);
                     return;
                 }
 
-                pw.pg[pw.cpg].lfo[c].param[0] = Common.CheckRange(pw.pg[pw.cpg].lfo[c].param[0], 0, 3);//Control(n= 0(Disable),1-3(Ch2波形加算))
-                pw.pg[pw.cpg].lfo[c].param[1] = Common.CheckRange(pw.pg[pw.cpg].lfo[c].param[1], 0, 255);//Freq(n= 0-255)
-                pw.pg[pw.cpg].lfo[c].param[2] = Common.CheckRange(pw.pg[pw.cpg].lfo[c].param[2], 0, 4095);//Ch2Freq(n= 0-4095)
+                page.lfo[c].param[0] = Common.CheckRange(page.lfo[c].param[0], 0, 3);//Control(n= 0(Disable),1-3(Ch2波形加算))
+                page.lfo[c].param[1] = Common.CheckRange(page.lfo[c].param[1], 0, 255);//Freq(n= 0-255)
+                page.lfo[c].param[2] = Common.CheckRange(page.lfo[c].param[2], 0, 4095);//Ch2Freq(n= 0-4095)
 
             }
         }
 
-        public override void CmdLfoSwitch(partWork pw, MML mml)
+        public override void CmdLfoSwitch(partPage page, MML mml)
         {
-            base.CmdLfoSwitch(pw, mml);
+            base.CmdLfoSwitch(page, mml);
 
             int c = (char)mml.args[0] - 'P';
             int n = (int)mml.args[1];
-            if (pw.pg[pw.cpg].lfo[c].type == eLfoType.Hardware)
+            if (page.lfo[c].type == eLfoType.Hardware)
             {
                 if (n == 0)
                 {
@@ -652,18 +657,18 @@ namespace Core
                 }
                 else
                 {
-                    OutHuC6280Port(mml, port[0], 9, (byte)pw.pg[pw.cpg].lfo[c].param[0]);
-                    OutHuC6280Port(mml, port[0], 8, (byte)pw.pg[pw.cpg].lfo[c].param[1]);
+                    OutHuC6280Port(mml, port[0], 9, (byte)page.lfo[c].param[0]);
+                    OutHuC6280Port(mml, port[0], 8, (byte)page.lfo[c].param[1]);
                     OutHuC6280Port(mml, port[0], 0, 1);//CurrentChannel 2
                     CurrentChannel = 1;
-                    OutHuC6280Port(mml, port[0], 2, (byte)(pw.pg[pw.cpg].lfo[c].param[2] & 0xff));
-                    OutHuC6280Port(mml, port[0], 3, (byte)((pw.pg[pw.cpg].lfo[c].param[2] & 0xf00) >> 8));
-                    lstPartWork[1].pg[pw.cpg].freq = pw.pg[pw.cpg].lfo[c].param[2];
+                    OutHuC6280Port(mml, port[0], 2, (byte)(page.lfo[c].param[2] & 0xff));
+                    OutHuC6280Port(mml, port[0], 3, (byte)((page.lfo[c].param[2] & 0xf00) >> 8));
+                    lstPartWork[1].cpg.freq = page.lfo[c].param[2];
                 }
             }
         }
 
-        public override void CmdTotalVolume(partWork pw, MML mml)
+        public override void CmdTotalVolume(partPage page, MML mml)
         {
             int l = (int)mml.args[0];
             int r = (int)mml.args[1];
@@ -679,25 +684,25 @@ namespace Core
                 );
         }
 
-        public override void CmdPan(partWork pw, MML mml)
+        public override void CmdPan(partPage page, MML mml)
         {
             int l = (int)mml.args[0];
             int r = (int)mml.args[1];
 
             l = Common.CheckRange(l, 0, 15);
             r = Common.CheckRange(r, 0, 15);
-            pw.pg[pw.cpg].pan.val = (l << 4) | r;
+            page.pan.val = (l << 4) | r;
             //SetHuC6280CurrentChannel(pw);
-            SetHuC6280Pan(mml, pw, (int)pw.pg[pw.cpg].pan.val);
+            SetHuC6280Pan(mml, page, (int)page.pan.val);
         }
 
-        public override void CmdMode(partWork pw, MML mml)
+        public override void CmdMode(partPage page, MML mml)
         {
             int n = (int)mml.args[0];
             n = Common.CheckRange(n, 0, 1);
-            pw.pg[pw.cpg].pcm = (n == 1);
-            pw.pg[pw.cpg].freq = -1;//freqをリセット
-            pw.pg[pw.cpg].instrument = -1;
+            page.pcm = (n == 1);
+            page.freq = -1;//freqをリセット
+            page.instrument = -1;
 
             //SetHuC6280CurrentChannel(pw);
             //OutHuC6280Port(pw.ppg[pw.cpgNum].chipNumber, 4, (byte)(0x40 + pw.ppg[pw.cpgNum].volume));
@@ -707,7 +712,7 @@ namespace Core
             //}
         }
 
-        public override void CmdY(partWork pw, MML mml)
+        public override void CmdY(partPage page, MML mml)
         {
             if (mml.args[0] is string) return;
 
@@ -717,25 +722,25 @@ namespace Core
             OutHuC6280Port(mml, port[0], adr, dat);
         }
 
-        public override void CmdLoopExtProc(partWork p, MML mml)
+        public override void CmdLoopExtProc(partPage page, MML mml)
         {
-            if (p.pg[p.cpg].chip is HuC6280 && parent.huc6280[p.pg[p.cpg].chipNumber].use)
+            if (page.chip is HuC6280 && parent.huc6280[page.chipNumber].use)
             {
-                parent.huc6280[p.pg[p.cpg].chipNumber].CurrentChannel = 255;
+                parent.huc6280[page.chipNumber].CurrentChannel = 255;
                 //setHuC6280CurrentChannel(pw);
-                p.pg[p.cpg].beforeFNum = -1;
-                p.pg[p.cpg].huc6280Envelope = -1;
-                p.pg[p.cpg].huc6280Pan = -1;
+                page.beforeFNum = -1;
+                page.huc6280Envelope = -1;
+                page.huc6280Pan = -1;
             }
         }
 
-        public override void CmdPcmMapSw(partWork pw, MML mml)
+        public override void CmdPcmMapSw(partPage page, MML mml)
         {
             bool sw = (bool)mml.args[0];
-            pw.pg[pw.cpg].isPcmMap = sw;
+            page.isPcmMap = sw;
         }
 
-        public override void CmdInstrument(partWork pw, MML mml)
+        public override void CmdInstrument(partPage page, MML mml)
         {
             char type = (char)mml.args[0];
             int n = (int)mml.args[1];
@@ -754,24 +759,24 @@ namespace Core
 
             if (type == 'E')
             {
-                n = SetEnvelopParamFromInstrument(pw, n, mml);
+                n = SetEnvelopParamFromInstrument(page, n, mml);
                 return;
             }
 
             n = Common.CheckRange(n, 0, 255);
-            if (!pw.pg[pw.cpg].pcm)
+            if (!page.pcm)
             {
-                if (pw.pg[pw.cpg].instrument != n)
+                if (page.instrument != n)
                 {
-                    pw.pg[pw.cpg].instrument = n;
-                    ((HuC6280)pw.pg[pw.cpg].chip).OutHuC6280SetInstrument(pw, mml, n);
+                    page.instrument = n;
+                    ((HuC6280)page.chip).OutHuC6280SetInstrument(page, mml, n);
                 }
                 return;
             }
 
-            if (pw.pg[pw.cpg].isPcmMap)
+            if (page.isPcmMap)
             {
-                pw.pg[pw.cpg].pcmMapNo = n;
+                page.pcmMapNo = n;
                 if (!parent.instPCMMap.ContainsKey(n))
                 {
                     msgBox.setErrMsg(string.Format(msg.get("E10024"), n), mml.line.Lp);
@@ -779,7 +784,7 @@ namespace Core
                 return;
             }
 
-            if (pw.pg[pw.cpg].instrument == n) return;
+            if (page.instrument == n) return;
 
             if (!parent.instPCM.ContainsKey(n))
             {
@@ -792,20 +797,20 @@ namespace Core
                 msgBox.setErrMsg(string.Format(msg.get("E12006"), n), mml.line.Lp);
             }
 
-            pw.pg[pw.cpg].instrument = n;
-            SetDummyData(pw, mml);
+            page.instrument = n;
+            SetDummyData(page, mml);
         }
 
-        public override void CmdNoiseToneMixer(partWork pw, MML mml)
+        public override void CmdNoiseToneMixer(partPage page, MML mml)
         {
-            if (pw.pg[pw.cpg].ch < 4) return;
+            if (page.ch < 4) return;
             int n = (int)mml.args[0];
             n = Common.CheckRange(n, 0, 1);
-            if (pw.pg[pw.cpg].mixer != n)
+            if (page.mixer != n)
             {
-                pw.pg[pw.cpg].mixer = n;
-                SetHuC6280CurrentChannel(mml, pw);
-                OutHuC6280Port(mml, port[0], 7, (byte)((pw.pg[pw.cpg].mixer != 0 ? 0x80 : 0x00) + (pw.pg[pw.cpg].noise & 0x1f)));
+                page.mixer = n;
+                SetHuC6280CurrentChannel(mml, page);
+                OutHuC6280Port(mml, port[0], 7, (byte)((page.mixer != 0 ? 0x80 : 0x00) + (page.noise & 0x1f)));
             }
         }
 

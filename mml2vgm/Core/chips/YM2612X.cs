@@ -72,55 +72,58 @@ namespace Core
             }
         }
 
-    public override void InitPart(partWork pw)
+        public override void InitPart(partWork pw)
         {
-            pw.pg[pw.cpg].slots = (byte)((pw.pg[pw.cpg].Type == enmChannelType.FMOPN || pw.pg[pw.cpg].ch == 2 || pw.pg[pw.cpg].ch == 5) ? 0xf : 0x0);
-            pw.pg[pw.cpg].volume = 127;
-            pw.pg[pw.cpg].MaxVolume = 127;
-            pw.pg[pw.cpg].port = port;
-            pw.pg[pw.cpg].pcm = pw.pg[pw.cpg].ch > 9;
+            foreach (partPage page in pw.pg)
+            {
+                page.slots = (byte)((page.Type == enmChannelType.FMOPN || page.ch == 2 || page.ch == 5) ? 0xf : 0x0);
+                page.volume = 127;
+                page.MaxVolume = 127;
+                page.port = port;
+                page.pcm = page.ch > 9;
+            }
         }
 
 
-        public void OutYM2612XPcmKeyON(MML mml,partWork pw)
+        public void OutYM2612XPcmKeyON(MML mml, partPage page)
         {
-            if (pw.pg[pw.cpg].instrument >= 63) return;
+            if (page.instrument >= 63) return;
 
-            if (pw.pg[pw.cpg].isPcmMap)
+            if (page.isPcmMap)
             {
-                int n = Const.NOTE.IndexOf(pw.pg[pw.cpg].noteCmd);
-                int f = pw.pg[pw.cpg].octaveNow * 12 + n + pw.pg[pw.cpg].shift + pw.pg[pw.cpg].keyShift;
-                if (parent.instPCMMap.ContainsKey(pw.pg[pw.cpg].pcmMapNo))
+                int n = Const.NOTE.IndexOf(page.noteCmd);
+                int f = page.octaveNow * 12 + n + page.shift + page.keyShift;
+                if (parent.instPCMMap.ContainsKey(page.pcmMapNo))
                 {
-                    if (parent.instPCMMap[pw.pg[pw.cpg].pcmMapNo].ContainsKey(f))
+                    if (parent.instPCMMap[page.pcmMapNo].ContainsKey(f))
                     {
-                        pw.pg[pw.cpg].instrument = parent.instPCMMap[pw.pg[pw.cpg].pcmMapNo][f];
+                        page.instrument = parent.instPCMMap[page.pcmMapNo][f];
                     }
                     else
                     {
-                        msgBox.setErrMsg(string.Format(msg.get("E10025"), pw.pg[pw.cpg].octaveNow, pw.pg[pw.cpg].noteCmd, pw.pg[pw.cpg].shift + pw.pg[pw.cpg].keyShift), mml.line.Lp);
+                        msgBox.setErrMsg(string.Format(msg.get("E10025"), page.octaveNow, page.noteCmd, page.shift + page.keyShift), mml.line.Lp);
                         return;
                     }
                 }
                 else
                 {
-                    msgBox.setErrMsg(string.Format(msg.get("E10024"), pw.pg[pw.cpg].pcmMapNo), mml.line.Lp);
+                    msgBox.setErrMsg(string.Format(msg.get("E10024"), page.pcmMapNo), mml.line.Lp);
                     return;
                 }
             }
 
-            if (!parent.instPCM.ContainsKey(pw.pg[pw.cpg].instrument))
+            if (!parent.instPCM.ContainsKey(page.instrument))
             {
-                msgBox.setErrMsg(string.Format(msg.get("E21000"), pw.pg[pw.cpg].instrument), mml.line.Lp);
+                msgBox.setErrMsg(string.Format(msg.get("E21000"), page.instrument), mml.line.Lp);
                 return;
             }
 
-            int id = parent.instPCM[pw.pg[pw.cpg].instrument].seqNum + 1;
+            int id = parent.instPCM[page.instrument].seqNum + 1;
 
-            int ch = Math.Max(0, pw.pg[pw.cpg].ch - 8);
+            int ch = Math.Max(0, page.ch - 8);
             int priority = 0;
 
-            pcmKeyOnCh[ch & 0x3] = pw.pg[pw.cpg].ch;
+            pcmKeyOnCh[ch & 0x3] = page.ch;
             pcmKeyOnInstNum[ch & 0x3] = id;
 
             byte[] cmd;
@@ -139,21 +142,21 @@ namespace Core
             parent.info.samplesPerClock = parent.info.xgmSamplesPerSecond * 60.0 * 4.0 / (parent.info.tempo * parent.info.clockCount);
 
             //必要なサンプル数を算出し、保持しているサンプル数より大きい場合は更新
-            double m = pw.pg[pw.cpg].waitCounter * 60.0 * 4.0 / (parent.info.tempo * parent.info.clockCount) * 14000.0;//14000(Hz) = xgm sampling Rate
-            parent.instPCM[pw.pg[pw.cpg].instrument].xgmMaxSampleCount = Math.Max(parent.instPCM[pw.pg[pw.cpg].instrument].xgmMaxSampleCount, m);
+            double m = page.waitCounter * 60.0 * 4.0 / (parent.info.tempo * parent.info.clockCount) * 14000.0;//14000(Hz) = xgm sampling Rate
+            parent.instPCM[page.instrument].xgmMaxSampleCount = Math.Max(parent.instPCM[page.instrument].xgmMaxSampleCount, m);
 
-            if (parent.instPCM[pw.pg[pw.cpg].instrument].status != enmPCMSTATUS.ERROR)
+            if (parent.instPCM[page.instrument].status != enmPCMSTATUS.ERROR)
             {
-                parent.instPCM[pw.pg[pw.cpg].instrument].status = enmPCMSTATUS.USED;
+                parent.instPCM[page.instrument].status = enmPCMSTATUS.USED;
             }
 
         }
 
-        public void OutYM2612XPcmKeyOFF(MML mml, partWork pw)
+        public void OutYM2612XPcmKeyOFF(MML mml, partPage page)
         {
 
             int id = 0;
-            int ch = Math.Max(0, pw.pg[pw.cpg].ch - 8);
+            int ch = Math.Max(0, page.ch - 8);
             int priority = 0;
 
             byte[] cmd;
@@ -162,7 +165,7 @@ namespace Core
             else
                 cmd = new byte[] { 0x54 };
 
-            if (pcmKeyOnCh[ch & 0x3] == pw.pg[pw.cpg].ch)
+            if (pcmKeyOnCh[ch & 0x3] == page.ch)
             {
                 pcmKeyOnCh[ch & 0x3] = 0;
                 pcmKeyOnInstNum[ch & 0x3] = -1;
@@ -235,68 +238,68 @@ namespace Core
         }
 
 
-        public override void CmdMode(partWork pw, MML mml)
+        public override void CmdMode(partPage page, MML mml)
         {
             int n = (int)mml.args[0];
-            if (pw.pg[pw.cpg].Type == enmChannelType.FMPCMex)
+            if (page.Type == enmChannelType.FMPCMex)
             {
                 n = Common.CheckRange(n, 0, 1);
-                pw.pg[pw.cpg].chip.lstPartWork[5].pg[lstPartWork[5].cpg].pcm = (n == 1);
+                page.chip.lstPartWork[5].cpg.pcm = (n == 1);
                 for (int i = 9; i < ChMax; i++)
                 {
-                    pw.pg[pw.cpg].chip.lstPartWork[i].pg[lstPartWork[i].cpg].pcm = (n == 1);
+                    page.chip.lstPartWork[i].cpg.pcm = (n == 1);
                 }
-                pw.pg[pw.cpg].freq = -1;//freqをリセット
-                pw.pg[pw.cpg].instrument = -1;
+                page.freq = -1;//freqをリセット
+                page.instrument = -1;
                 OutSetCh6PCMMode(
                     mml,
-                    pw.pg[pw.cpg].chip.lstPartWork[5]
-                    , pw.pg[pw.cpg].chip.lstPartWork[5].pg[lstPartWork[5].cpg].pcm
+                    page.chip.lstPartWork[5].cpg
+                    , page.chip.lstPartWork[5].cpg.pcm
                     );
 
                 return;
             }
 
-            base.CmdMode(pw, mml);
+            base.CmdMode(page, mml);
 
         }
 
-        public override void CmdPcmMapSw(partWork pw, MML mml)
+        public override void CmdPcmMapSw(partPage page, MML mml)
         {
             bool sw = (bool)mml.args[0];
-            if(pw.pg[pw.cpg].Type== enmChannelType.FMPCMex)
+            if (page.Type == enmChannelType.FMPCMex)
             {
-                pw.pg[pw.cpg].isPcmMap = sw;
+                page.isPcmMap = sw;
             }
         }
 
 
-        public override void CmdInstrument(partWork pw, MML mml)
+        public override void CmdInstrument(partPage page, MML mml)
         {
             char type = (char)mml.args[0];
             int n = (int)mml.args[1];
 
             if (type == 'n' || type == 'N' || type == 'R' || type == 'A')
             {
-                if (pw.pg[pw.cpg].Type == enmChannelType.FMOPNex)
+                if (page.Type == enmChannelType.FMOPNex)
                 {
-                    lstPartWork[2].pg[lstPartWork[2].cpg].instrument = n;
-                    lstPartWork[6].pg[lstPartWork[6].cpg].instrument = n;
-                    lstPartWork[7].pg[lstPartWork[7].cpg].instrument = n;
-                    lstPartWork[8].pg[lstPartWork[8].cpg].instrument = n;
-                    OutFmSetInstrument(pw, mml, n, pw.pg[pw.cpg].volume, type);
+                    lstPartWork[2].cpg.instrument = n;
+                    lstPartWork[6].cpg.instrument = n;
+                    lstPartWork[7].cpg.instrument = n;
+                    lstPartWork[8].cpg.instrument = n;
+                    OutFmSetInstrument(page, mml, n, page.volume, type);
                     return;
                 }
             }
 
             if (type == 'n')
             {
-                if (pw.pg[pw.cpg].pcm)
+                if (page.pcm)
                 {
 
-                    if (pw.pg[pw.cpg].isPcmMap)
+                    if (page.isPcmMap)
                     {
-                        pw.pg[pw.cpg].pcmMapNo = n;
+                        page.pcmMapNo = n;
                         if (!parent.instPCMMap.ContainsKey(n))
                         {
                             msgBox.setErrMsg(string.Format(msg.get("E10024"), n), mml.line.Lp);
@@ -304,8 +307,8 @@ namespace Core
                         return;
                     }
 
-                    pw.pg[pw.cpg].instrument = n;
-                    SetDummyData(pw, mml);
+                    page.instrument = n;
+                    SetDummyData(page, mml);
                     if (!parent.instPCM.ContainsKey(n))
                     {
                         msgBox.setErrMsg(string.Format(msg.get("E21000"), n), mml.line.Lp);
@@ -322,7 +325,7 @@ namespace Core
 
             }
 
-            base.CmdInstrument(pw, mml);
+            base.CmdInstrument(page, mml);
         }
 
 

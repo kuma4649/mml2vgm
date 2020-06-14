@@ -38,9 +38,12 @@ namespace Core
 
         public override void InitPart(partWork pw)
         {
-            pw.pg[pw.cpg].volume = 15;
-            pw.pg[pw.cpg].MaxVolume = 15;
-            pw.pg[pw.cpg].port = port;
+            foreach (partPage pg in pw.pg)
+            {
+                pg.volume = 15;
+                pg.MaxVolume = 15;
+                pg.port = port;
+            }
         }
 
         public override void InitChip()
@@ -49,7 +52,10 @@ namespace Core
 
             for (int ch = 0; ch < ChMax; ch++)
             {
-                lstPartWork[ch].pg[lstPartWork[ch].cpg].volume = 0;
+                foreach (partPage pg in lstPartWork[ch].pg)
+                {
+                    pg.volume = 0;
+                }
             }
 
         }
@@ -63,50 +69,50 @@ namespace Core
             return false;
         }
 
-        public override int GetToneDoublerShift(partWork pw, int octave, char noteCmd, int shift)
+        public override int GetToneDoublerShift(partPage page, int octave, char noteCmd, int shift)
         {
             return 0;
         }
 
-        public override void SetToneDoubler(partWork pw, MML mml)
+        public override void SetToneDoubler(partPage page, MML mml)
         {
         }
 
-        public override int GetFNum(partWork pw, MML mml, int octave, char cmd, int shift)
+        public override int GetFNum(partPage page, MML mml, int octave, char cmd, int shift)
         {
             return 0;
         }
 
 
-        public override void SetFNum(partWork pw, MML mml)
+        public override void SetFNum(partPage page, MML mml)
         {
         }
 
-        public override void SetKeyOn(partWork pw, MML mml)
+        public override void SetKeyOn(partPage page, MML mml)
         {
         }
 
-        public override void SetKeyOff(partWork pw, MML mml)
+        public override void SetKeyOff(partPage page, MML mml)
         {
         }
 
-        public override void SetVolume(partWork pw, MML mml)
+        public override void SetVolume(partPage page, MML mml)
         {
         }
 
-        public override void SetLfoAtKeyOn(partWork pw, MML mml)
+        public override void SetLfoAtKeyOn(partPage page, MML mml)
         {
         }
 
-        public override void CmdY(partWork pw, MML mml)
+        public override void CmdY(partPage page, MML mml)
         {
         }
 
-        public override void CmdLoopExtProc(partWork p, MML mml)
+        public override void CmdLoopExtProc(partPage page, MML mml)
         {
         }
 
-        public override void CmdInstrument(partWork pw, MML mml)
+        public override void CmdInstrument(partPage page, MML mml)
         {
         }
 

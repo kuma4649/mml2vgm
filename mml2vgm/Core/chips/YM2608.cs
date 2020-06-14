@@ -101,21 +101,21 @@ namespace Core
 
             Ch[18].Type = enmChannelType.ADPCM;
 
-            pcmDataInfo = new clsPcmDataInfo[] { new clsPcmDataInfo()};
+            pcmDataInfo = new clsPcmDataInfo[] { new clsPcmDataInfo() };
             pcmDataInfo[0].totalBufPtr = 0L;
             pcmDataInfo[0].use = false;
             if (parent.info.format == enmFormat.ZGM)
             {
                 if (parent.ChipCommandSize == 2)
                 {
-                    if (chipNumber==0)
-                        pcmDataInfo[0].totalBuf = new byte[] { 0x07,0x00, 0x66, 0x81, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+                    if (chipNumber == 0)
+                        pcmDataInfo[0].totalBuf = new byte[] { 0x07, 0x00, 0x66, 0x81, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
                     else
-                        pcmDataInfo[0].totalBuf = new byte[] { 0x07,0x00, 0x66, 0x81, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+                        pcmDataInfo[0].totalBuf = new byte[] { 0x07, 0x00, 0x66, 0x81, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
                 }
                 else
                 {
-                    if (chipNumber==0)
+                    if (chipNumber == 0)
                         pcmDataInfo[0].totalBuf = new byte[] { 0x07, 0x66, 0x81, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
                     else
                         pcmDataInfo[0].totalBuf = new byte[] { 0x07, 0x66, 0x81, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
@@ -123,7 +123,7 @@ namespace Core
             }
             else
             {
-                if (chipNumber==0)
+                if (chipNumber == 0)
                     pcmDataInfo[0].totalBuf = new byte[] { 0x67, 0x66, 0x81, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
                 else
                     pcmDataInfo[0].totalBuf = new byte[] { 0x67, 0x66, 0x81, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
@@ -143,8 +143,8 @@ namespace Core
             if (!use) return;
 
             //initialize shared param
-            OutOPNSetHardLfo(null, lstPartWork[0], false, 0);
-            OutOPNSetCh3SpecialMode(null, lstPartWork[0], false);
+            OutOPNSetHardLfo(null, lstPartWork[0].cpg, false, 0);
+            OutOPNSetCh3SpecialMode(null, lstPartWork[0].cpg, false);
 
             //FM Off
             OutFmAllKeyOff();
@@ -152,8 +152,11 @@ namespace Core
             //SSG Off
             for (int ch = 9; ch < 12; ch++)
             {
-                OutSsgKeyOff(null, lstPartWork[ch]);
-                lstPartWork[ch].pg[lstPartWork[ch].cpg].volume = 0;
+                OutSsgKeyOff(null, lstPartWork[ch].cpg);
+                foreach (partPage page in lstPartWork[ch].pg)
+                {
+                    page.volume = 0;
+                }
             }
 
             //Use OPNA mode
@@ -168,19 +171,22 @@ namespace Core
 
             foreach (partWork pw in lstPartWork)
             {
-                if (pw.pg[pw.cpg].ch == 0)
+                foreach (partPage page in pw.pg)
                 {
-                    pw.pg[pw.cpg].hardLfoSw = false;
-                    pw.pg[pw.cpg].hardLfoNum = 0;
-                    OutOPNSetHardLfo(null, pw, pw.pg[pw.cpg].hardLfoSw, pw.pg[pw.cpg].hardLfoNum);
-                }
+                    if (page.ch == 0)
+                    {
+                        page.hardLfoSw = false;
+                        page.hardLfoNum = 0;
+                        OutOPNSetHardLfo(null, page, page.hardLfoSw, page.hardLfoNum);
+                    }
 
-                if (pw.pg[pw.cpg].ch < 6)
-                {
-                    pw.pg[pw.cpg].pan.val = 3;
-                    pw.pg[pw.cpg].ams = 0;
-                    pw.pg[pw.cpg].fms = 0;
-                    if (!pw.pg[pw.cpg].dataEnd) OutOPNSetPanAMSPMS(null, pw, 3, 0, 0);
+                    if (page.ch < 6)
+                    {
+                        page.pan.val = 3;
+                        page.ams = 0;
+                        page.fms = 0;
+                        if (!page.dataEnd) OutOPNSetPanAMSPMS(null, page, 3, 0, 0);
+                    }
                 }
             }
 
@@ -192,116 +198,119 @@ namespace Core
 
         public override void InitPart(partWork pw)
         {
-            pw.pg[pw.cpg].slots = (byte)((pw.pg[pw.cpg].Type == enmChannelType.FMOPN || pw.pg[pw.cpg].ch == 2) ? 0xf : 0x0);
-            pw.pg[pw.cpg].volume = 127;
-            pw.pg[pw.cpg].MaxVolume = 127;
-            if (pw.pg[pw.cpg].Type == enmChannelType.SSG)
+            foreach (partPage page in pw.pg)
             {
-                //pw.ppg[pw.cpgNum].volume = 32767;
-                pw.pg[pw.cpg].MaxVolume = 15;
-                pw.pg[pw.cpg].volume = pw.pg[pw.cpg].MaxVolume;
-            }
-            else if (pw.pg[pw.cpg].Type == enmChannelType.RHYTHM)
-            {
-                //pw.ppg[pw.cpgNum].volume = 32767;
-                pw.pg[pw.cpg].MaxVolume = 31;//5bit
-                pw.pg[pw.cpg].volume = pw.pg[pw.cpg].MaxVolume;
-            }
-            else if (pw.pg[pw.cpg].Type == enmChannelType.ADPCM)
-            {
-                //pw.ppg[pw.cpgNum].volume = 32767;
-                pw.pg[pw.cpg].MaxVolume = 255;
-                pw.pg[pw.cpg].volume = pw.pg[pw.cpg].MaxVolume;
-            }
+                page.slots = (byte)((page.Type == enmChannelType.FMOPN || page.ch == 2) ? 0xf : 0x0);
+                page.volume = 127;
+                page.MaxVolume = 127;
+                if (page.Type == enmChannelType.SSG)
+                {
+                    //pw.ppg[pw.cpgNum].volume = 32767;
+                    page.MaxVolume = 15;
+                    page.volume = page.MaxVolume;
+                }
+                else if (page.Type == enmChannelType.RHYTHM)
+                {
+                    //pw.ppg[pw.cpgNum].volume = 32767;
+                    page.MaxVolume = 31;//5bit
+                    page.volume = page.MaxVolume;
+                }
+                else if (page.Type == enmChannelType.ADPCM)
+                {
+                    //pw.ppg[pw.cpgNum].volume = 32767;
+                    page.MaxVolume = 255;
+                    page.volume = page.MaxVolume;
+                }
 
-            pw.pg[pw.cpg].port = port;
+                page.port = port;
+            }
         }
 
 
-        public void SetADPCMAddress(MML mml, partWork pw, int startAdr, int endAdr)
+        public void SetADPCMAddress(MML mml, partPage page, int startAdr, int endAdr)
         {
-            if (pw.pg[pw.cpg].pcmStartAddress != startAdr)
+            if (page.pcmStartAddress != startAdr)
             {
                 parent.OutData(mml, port[1], 0x02, (byte)((startAdr >> 2) & 0xff));
                 parent.OutData(mml, port[1], 0x03, (byte)((startAdr >> 10) & 0xff));
-                pw.pg[pw.cpg].pcmStartAddress = startAdr;
+                page.pcmStartAddress = startAdr;
             }
 
-            if (pw.pg[pw.cpg].pcmEndAddress != endAdr)
+            if (page.pcmEndAddress != endAdr)
             {
                 parent.OutData(mml, port[1], 0x04, (byte)(((endAdr - 0x04) >> 2) & 0xff));
                 parent.OutData(mml, port[1], 0x05, (byte)(((endAdr - 0x04) >> 10) & 0xff));
-                pw.pg[pw.cpg].pcmEndAddress = endAdr;
+                page.pcmEndAddress = endAdr;
             }
 
         }
 
-        public void SetAdpcmFNum(MML mml,partWork pw)
+        public void SetAdpcmFNum(MML mml, partPage page)
         {
-            int f = GetAdpcmFNum(pw,pw.pg[pw.cpg].octaveNow, pw.pg[pw.cpg].noteCmd, pw.pg[pw.cpg].shift + pw.pg[pw.cpg].keyShift);//
-            if (pw.pg[pw.cpg].bendWaitCounter != -1)
+            int f = GetAdpcmFNum(page, page.octaveNow, page.noteCmd, page.shift + page.keyShift);//
+            if (page.bendWaitCounter != -1)
             {
-                f = pw.pg[pw.cpg].bendFnum;
+                f = page.bendFnum;
             }
-            f = f + pw.pg[pw.cpg].detune;
+            f = f + page.detune;
             for (int lfo = 0; lfo < 4; lfo++)
             {
-                if (!pw.pg[pw.cpg].lfo[lfo].sw)
+                if (!page.lfo[lfo].sw)
                 {
                     continue;
                 }
-                if (pw.pg[pw.cpg].lfo[lfo].type != eLfoType.Vibrato)
+                if (page.lfo[lfo].type != eLfoType.Vibrato)
                 {
                     continue;
                 }
-                f += pw.pg[pw.cpg].lfo[lfo].value + pw.pg[pw.cpg].lfo[lfo].param[6];
+                f += page.lfo[lfo].value + page.lfo[lfo].param[6];
             }
 
             f = Common.CheckRange(f, 0, 0xffff);
-            if (pw.pg[pw.cpg].freq == f) return;
+            if (page.freq == f) return;
 
-            pw.pg[pw.cpg].freq = f;
+            page.freq = f;
 
             byte data = 0;
 
             data = (byte)(f & 0xff);
-            parent.OutData(mml,port[1], 0x09, data);
+            parent.OutData(mml, port[1], 0x09, data);
 
             data = (byte)((f & 0xff00) >> 8);
-            parent.OutData(mml,port[1], 0x0a, data);
+            parent.OutData(mml, port[1], 0x0a, data);
         }
 
-        public void SetAdpcmVolume(MML mml,partWork pw)
+        public void SetAdpcmVolume(MML mml, partPage page)
         {
 
-            int vol = pw.pg[pw.cpg].volume;
-            if (pw.pg[pw.cpg].envelopeMode)
+            int vol = page.volume;
+            if (page.envelopeMode)
             {
                 vol = 0;
-                if (pw.pg[pw.cpg].envIndex != -1)
+                if (page.envIndex != -1)
                 {
-                    vol = pw.pg[pw.cpg].volume - (0xff - pw.pg[pw.cpg].envVolume);
+                    vol = page.volume - (0xff - page.envVolume);
                 }
             }
             vol = Common.CheckRange(vol, 0, 0xff);
 
-            if (pw.pg[pw.cpg].beforeVolume != vol)
+            if (page.beforeVolume != vol)
             {
-                parent.OutData(mml,port[1], 0x0b, (byte)vol);
-                pw.pg[pw.cpg].beforeVolume = pw.pg[pw.cpg].volume;
+                parent.OutData(mml, port[1], 0x0b, (byte)vol);
+                page.beforeVolume = page.volume;
             }
         }
 
-        public void SetAdpcmPan(MML mml,partWork pw, int pan)
+        public void SetAdpcmPan(MML mml, partPage page, int pan)
         {
-            if (pw.pg[pw.cpg].pan.val != pan)
+            if (page.pan.val != pan)
             {
-                parent.OutData(mml,port[1], 0x01, (byte)((pan & 0x3) << 6));
-                pw.pg[pw.cpg].pan.val = pan;
+                parent.OutData(mml, port[1], 0x01, (byte)((pan & 0x3) << 6));
+                page.pan.val = pan;
             }
         }
 
-        public int GetAdpcmFNum(partWork pw,int octave, char noteCmd, int shift)
+        public int GetAdpcmFNum(partPage page, int octave, char noteCmd, int shift)
         {
             int o = octave - 1;
             int n = Const.NOTE.IndexOf(noteCmd) + shift;
@@ -320,12 +329,12 @@ namespace Core
             }
 
             double freq = 8000.0;
-            if (pw.pg[pw.cpg].instrument != -1)
+            if (page.instrument != -1)
             {
-                freq = (double)parent.instPCM[pw.pg[pw.cpg].instrument].samplerate;
-                if (parent.instPCM[pw.pg[pw.cpg].instrument].freq != -1)
+                freq = (double)parent.instPCM[page.instrument].samplerate;
+                if (parent.instPCM[page.instrument].freq != -1)
                 {
-                    freq = (double)parent.instPCM[pw.pg[pw.cpg].instrument].freq;
+                    freq = (double)parent.instPCM[page.instrument].freq;
                 }
             }
 
@@ -334,98 +343,98 @@ namespace Core
                 );
         }
 
-        public void OutAdpcmKeyOn(MML mml,partWork pw)
+        public void OutAdpcmKeyOn(MML mml, partPage page)
         {
 
-            SetAdpcmVolume(mml,pw);
-            parent.OutData(mml,port[1], 0x00, 0xa0);
+            SetAdpcmVolume(mml, page);
+            parent.OutData(mml, port[1], 0x00, 0xa0);
 
         }
 
-        public void OutAdpcmKeyOff(MML mml,partWork pw)
+        public void OutAdpcmKeyOff(MML mml, partPage page)
         {
 
-            parent.OutData(mml,port[1], 0x00, 0x01);
+            parent.OutData(mml, port[1], 0x00, 0x01);
 
         }
 
 
-        public override void SetFNum(partWork pw, MML mml)
+        public override void SetFNum(partPage page, MML mml)
         {
-            if (pw.pg[pw.cpg].ch < 9)
-                SetFmFNum(pw,mml);
-            else if (pw.pg[pw.cpg].Type == enmChannelType.SSG)
+            if (page.ch < 9)
+                SetFmFNum(page, mml);
+            else if (page.Type == enmChannelType.SSG)
             {
-                SetSsgFNum(pw,mml);
+                SetSsgFNum(page, mml);
             }
-            else if (pw.pg[pw.cpg].Type == enmChannelType.RHYTHM)
+            else if (page.Type == enmChannelType.RHYTHM)
             {
             }
-            else if (pw.pg[pw.cpg].Type == enmChannelType.ADPCM)
+            else if (page.Type == enmChannelType.ADPCM)
             {
-                SetAdpcmFNum(mml,pw);
+                SetAdpcmFNum(mml, page);
             }
         }
 
-        public override void SetKeyOn(partWork pw, MML mml)
+        public override void SetKeyOn(partPage page, MML mml)
         {
-            if (pw.pg[pw.cpg].ch < 9)
-                OutFmKeyOn(pw,mml);
-            else if (pw.pg[pw.cpg].Type == enmChannelType.SSG)
+            if (page.ch < 9)
+                OutFmKeyOn(page, mml);
+            else if (page.Type == enmChannelType.SSG)
             {
-                OutSsgKeyOn(pw,mml);
+                OutSsgKeyOn(page, mml);
             }
-            else if (pw.pg[pw.cpg].Type == enmChannelType.RHYTHM)
+            else if (page.Type == enmChannelType.RHYTHM)
             {
-                pw.pg[pw.cpg].keyOn = true;
-                pw.pg[pw.cpg].keyOff = false;
-                SetDummyData(pw, mml);
+                page.keyOn = true;
+                page.keyOff = false;
+                SetDummyData(page, mml);
             }
-            else if (pw.pg[pw.cpg].Type == enmChannelType.ADPCM)
+            else if (page.Type == enmChannelType.ADPCM)
             {
-                OutAdpcmKeyOn(mml,pw);
+                OutAdpcmKeyOn(mml, page);
             }
         }
 
-        public override void SetKeyOff(partWork pw, MML mml)
+        public override void SetKeyOff(partPage page, MML mml)
         {
-            if (pw.pg[pw.cpg].ch < 9)
-                OutFmKeyOff(pw,mml);
-            else if (pw.pg[pw.cpg].Type == enmChannelType.SSG)
+            if (page.ch < 9)
+                OutFmKeyOff(page, mml);
+            else if (page.Type == enmChannelType.SSG)
             {
-                OutSsgKeyOff(mml,pw);
+                OutSsgKeyOff(mml, page);
             }
-            else if (pw.pg[pw.cpg].Type == enmChannelType.RHYTHM)
+            else if (page.Type == enmChannelType.RHYTHM)
             {
-                pw.pg[pw.cpg].keyOn = false;
-                pw.pg[pw.cpg].keyOff = true;
+                page.keyOn = false;
+                page.keyOff = true;
             }
-            else if (pw.pg[pw.cpg].Type == enmChannelType.ADPCM)
+            else if (page.Type == enmChannelType.ADPCM)
             {
-                OutAdpcmKeyOff(mml,pw);
+                OutAdpcmKeyOff(mml, page);
             }
         }
 
-        public override void SetVolume(partWork pw, MML mml)
+        public override void SetVolume(partPage page, MML mml)
         {
-            base.SetVolume(pw,mml);
+            base.SetVolume(page, mml);
 
-            if (pw.pg[pw.cpg].Type == enmChannelType.RHYTHM)
+            if (page.Type == enmChannelType.RHYTHM)
             {
             }
-            else if (pw.pg[pw.cpg].Type == enmChannelType.ADPCM)
+            else if (page.Type == enmChannelType.ADPCM)
             {
-                SetAdpcmVolume(mml,pw);
+                SetAdpcmVolume(mml, page);
             }
         }
 
-        public override void SetLfoAtKeyOn(partWork pw, MML mml)
+        public override void SetLfoAtKeyOn(partPage page, MML mml)
         {
-            base.SetLfoAtKeyOn(pw,mml);
+            base.SetLfoAtKeyOn(page, mml);
 
             for (int lfo = 0; lfo < 4; lfo++)
             {
-                clsLfo pl = pw.pg[pw.cpg].lfo[lfo];
+                clsLfo pl = page.lfo[lfo];
                 if (!pl.sw)
                     continue;
 
@@ -442,19 +451,19 @@ namespace Core
 
                 if (pl.type == eLfoType.Vibrato)
                 {
-                    if (pw.pg[pw.cpg].Type == enmChannelType.ADPCM)
-                        SetAdpcmFNum(mml,pw);
+                    if (page.Type == enmChannelType.ADPCM)
+                        SetAdpcmFNum(mml, page);
 
                 }
 
                 if (pl.type == eLfoType.Tremolo)
                 {
-                    pw.pg[pw.cpg].beforeVolume = -1;
+                    page.beforeVolume = -1;
 
                     //if (pw.ppg[pw.cpgNum].Type == enmChannelType.RHYTHM)
                     //SetRhythmVolume(pw);
-                    if (pw.pg[pw.cpg].Type == enmChannelType.ADPCM)
-                        SetAdpcmVolume(mml,pw);
+                    if (page.Type == enmChannelType.ADPCM)
+                        SetAdpcmVolume(mml, page);
 
                 }
 
@@ -506,7 +515,7 @@ namespace Core
                     pi.totalBuf
                     , pi.totalHeadrSizeOfDataPtr
                     , (UInt32)(pi.totalBuf.Length - (pi.totalHeadrSizeOfDataPtr + 4))
-                    , ChipNumber!=0
+                    , ChipNumber != 0
                     );
                 Common.SetUInt32bit31(
                     pi.totalBuf
@@ -538,28 +547,28 @@ namespace Core
         }
 
 
-        public override void CmdY(partWork pw, MML mml)
+        public override void CmdY(partPage page, MML mml)
         {
-            base.CmdY(pw, mml);
+            base.CmdY(page, mml);
 
             if (mml.args[0] is string) return;
 
             byte adr = (byte)(int)mml.args[0];
             byte dat = (byte)(int)mml.args[1];
 
-            if (pw.pg[pw.cpg].Type == enmChannelType.FMOPN || pw.pg[pw.cpg].Type == enmChannelType.FMOPNex)
-                parent.OutData(mml, (pw.pg[pw.cpg].ch > 2 && pw.pg[pw.cpg].ch < 6) ? port[1] : port[0], adr, dat);
-            else if (pw.pg[pw.cpg].Type == enmChannelType.SSG)
+            if (page.Type == enmChannelType.FMOPN || page.Type == enmChannelType.FMOPNex)
+                parent.OutData(mml, (page.ch > 2 && page.ch < 6) ? port[1] : port[0], adr, dat);
+            else if (page.Type == enmChannelType.SSG)
                 parent.OutData(mml, port[0], adr, dat);
-            else if (pw.pg[pw.cpg].Type == enmChannelType.RHYTHM)
+            else if (page.Type == enmChannelType.RHYTHM)
                 parent.OutData(mml, port[0], adr, dat);
-            else if (pw.pg[pw.cpg].Type == enmChannelType.ADPCM)
+            else if (page.Type == enmChannelType.ADPCM)
                 parent.OutData(mml, port[1], adr, dat);
         }
 
-        public override void CmdMPMS(partWork pw, MML mml)
+        public override void CmdMPMS(partPage page, MML mml)
         {
-            if (pw.pg[pw.cpg].Type != enmChannelType.FMOPN)
+            if (page.Type != enmChannelType.FMOPN)
             {
                 msgBox.setWrnMsg(msg.get("E18000"), mml.line.Lp);
                 return;
@@ -567,18 +576,18 @@ namespace Core
 
             int n = (int)mml.args[1];
             n = Common.CheckRange(n, 0, 7);
-            pw.pg[pw.cpg].pms = n;
-            ((ClsOPN)pw.pg[pw.cpg].chip).OutOPNSetPanAMSPMS(
+            page.pms = n;
+            ((ClsOPN)page.chip).OutOPNSetPanAMSPMS(
                 mml,
-                pw
-                , (int)pw.pg[pw.cpg].pan.val
-                , pw.pg[pw.cpg].ams
-                , pw.pg[pw.cpg].pms);
+                page
+                , (int)page.pan.val
+                , page.ams
+                , page.pms);
         }
 
-        public override void CmdMAMS(partWork pw, MML mml)
+        public override void CmdMAMS(partPage page, MML mml)
         {
-            if (pw.pg[pw.cpg].Type != enmChannelType.FMOPN)
+            if (page.Type != enmChannelType.FMOPN)
             {
                 msgBox.setWrnMsg(msg.get("E18001"), mml.line.Lp);
                 return;
@@ -586,18 +595,18 @@ namespace Core
 
             int n = (int)mml.args[1];
             n = Common.CheckRange(n, 0, 3);
-            pw.pg[pw.cpg].ams = n;
-            ((ClsOPN)pw.pg[pw.cpg].chip).OutOPNSetPanAMSPMS(
+            page.ams = n;
+            ((ClsOPN)page.chip).OutOPNSetPanAMSPMS(
                 mml,
-                pw
-                , (int)pw.pg[pw.cpg].pan.val
-                , pw.pg[pw.cpg].ams
-                , pw.pg[pw.cpg].pms);
+                page
+                , (int)page.pan.val
+                , page.ams
+                , page.pms);
         }
 
-        public override void CmdLfo(partWork pw, MML mml)
+        public override void CmdLfo(partPage page, MML mml)
         {
-            base.CmdLfo(pw, mml);
+            base.CmdLfo(page, mml);
 
             if (mml.args[0] is string)
             {
@@ -605,115 +614,115 @@ namespace Core
             }
 
             int c = (char)mml.args[0] - 'P';
-            if (pw.pg[pw.cpg].lfo[c].type == eLfoType.Hardware)
+            if (page.lfo[c].type == eLfoType.Hardware)
             {
-                if (pw.pg[pw.cpg].Type == enmChannelType.FMOPN)
+                if (page.Type == enmChannelType.FMOPN)
                 {
-                    if (pw.pg[pw.cpg].lfo[c].param.Count < 4)
+                    if (page.lfo[c].param.Count < 4)
                     {
                         msgBox.setErrMsg(msg.get("E18002"), mml.line.Lp);
                         return;
                     }
-                    if (pw.pg[pw.cpg].lfo[c].param.Count > 5)
+                    if (page.lfo[c].param.Count > 5)
                     {
                         msgBox.setErrMsg(msg.get("E18003"), mml.line.Lp);
                         return;
                     }
 
-                    pw.pg[pw.cpg].lfo[c].param[0] = Common.CheckRange(pw.pg[pw.cpg].lfo[c].param[0], 0, (int)parent.info.clockCount);//Delay(無視)
-                    pw.pg[pw.cpg].lfo[c].param[1] = Common.CheckRange(pw.pg[pw.cpg].lfo[c].param[1], 0, 7);//Freq
-                    pw.pg[pw.cpg].lfo[c].param[2] = Common.CheckRange(pw.pg[pw.cpg].lfo[c].param[2], 0, 7);//PMS
-                    pw.pg[pw.cpg].lfo[c].param[3] = Common.CheckRange(pw.pg[pw.cpg].lfo[c].param[3], 0, 3);//AMS
-                    if (pw.pg[pw.cpg].lfo[c].param.Count == 5)
+                    page.lfo[c].param[0] = Common.CheckRange(page.lfo[c].param[0], 0, (int)parent.info.clockCount);//Delay(無視)
+                    page.lfo[c].param[1] = Common.CheckRange(page.lfo[c].param[1], 0, 7);//Freq
+                    page.lfo[c].param[2] = Common.CheckRange(page.lfo[c].param[2], 0, 7);//PMS
+                    page.lfo[c].param[3] = Common.CheckRange(page.lfo[c].param[3], 0, 3);//AMS
+                    if (page.lfo[c].param.Count == 5)
                     {
-                        pw.pg[pw.cpg].lfo[c].param[4] = Common.CheckRange(pw.pg[pw.cpg].lfo[c].param[4], 0, 1); //Switch
+                        page.lfo[c].param[4] = Common.CheckRange(page.lfo[c].param[4], 0, 1); //Switch
                     }
                     else
                     {
-                        pw.pg[pw.cpg].lfo[c].param.Add(1);
+                        page.lfo[c].param.Add(1);
                     }
                 }
             }
         }
 
-        public override void CmdLfoSwitch(partWork pw, MML mml)
+        public override void CmdLfoSwitch(partPage page, MML mml)
         {
-            base.CmdLfoSwitch(pw, mml);
+            base.CmdLfoSwitch(page, mml);
 
             int c = (char)mml.args[0] - 'P';
             int n = (int)mml.args[1];
-            if (pw.pg[pw.cpg].lfo[c].type == eLfoType.Hardware)
+            if (page.lfo[c].type == eLfoType.Hardware)
             {
-                if (pw.pg[pw.cpg].Type == enmChannelType.FMOPN)
+                if (page.Type == enmChannelType.FMOPN)
                 {
-                    if (pw.pg[pw.cpg].lfo[c].param[4] == 0)
+                    if (page.lfo[c].param[4] == 0)
                     {
-                        pw.pg[pw.cpg].fms = (n == 0) ? 0 : pw.pg[pw.cpg].lfo[c].param[2];
-                        pw.pg[pw.cpg].ams = (n == 0) ? 0 : pw.pg[pw.cpg].lfo[c].param[3];
-                        ((ClsOPN)pw.pg[pw.cpg].chip).OutOPNSetPanAMSPMS(mml, pw, (int)pw.pg[pw.cpg].pan.val, pw.pg[pw.cpg].ams, pw.pg[pw.cpg].fms);
-                        pw.pg[pw.cpg].chip.lstPartWork[0].pg[lstPartWork[0].cpg].hardLfoSw = (n != 0);
-                        pw.pg[pw.cpg].chip.lstPartWork[0].pg[lstPartWork[0].cpg].hardLfoNum = pw.pg[pw.cpg].lfo[c].param[1];
-                        ((ClsOPN)pw.pg[pw.cpg].chip).OutOPNSetHardLfo(null, pw, pw.pg[pw.cpg].chip.lstPartWork[0].pg[lstPartWork[0].cpg].hardLfoSw, pw.pg[pw.cpg].chip.lstPartWork[0].pg[lstPartWork[0].cpg].hardLfoNum);
+                        page.fms = (n == 0) ? 0 : page.lfo[c].param[2];
+                        page.ams = (n == 0) ? 0 : page.lfo[c].param[3];
+                        ((ClsOPN)page.chip).OutOPNSetPanAMSPMS(mml, page, (int)page.pan.val, page.ams, page.fms);
+                        page.chip.lstPartWork[0].cpg.hardLfoSw = (n != 0);
+                        page.chip.lstPartWork[0].cpg.hardLfoNum = page.lfo[c].param[1];
+                        ((ClsOPN)page.chip).OutOPNSetHardLfo(null, page, page.chip.lstPartWork[0].cpg.hardLfoSw, page.chip.lstPartWork[0].cpg.hardLfoNum);
                     }
                     else
                     {
-                        ((ClsOPN)pw.pg[pw.cpg].chip).OutOPNSetHardLfo(mml, pw, false, pw.pg[pw.cpg].lfo[c].param[1]);
+                        ((ClsOPN)page.chip).OutOPNSetHardLfo(mml, page, false, page.lfo[c].param[1]);
                     }
                 }
             }
         }
 
-        public override void CmdTotalVolume(partWork pw, MML mml)
+        public override void CmdTotalVolume(partPage page, MML mml)
         {
             int n = (int)mml.args[0];
-            ((YM2608)pw.pg[pw.cpg].chip).rhythm_TotalVolume 
-                = Common.CheckRange(n, 0, ((YM2608)pw.pg[pw.cpg].chip).rhythm_MAXTotalVolume);
+            ((YM2608)page.chip).rhythm_TotalVolume
+                = Common.CheckRange(n, 0, ((YM2608)page.chip).rhythm_MAXTotalVolume);
         }
 
-        public override void CmdPan(partWork pw, MML mml)
+        public override void CmdPan(partPage page, MML mml)
         {
             int n = (int)mml.args[0];
-            if (pw.pg[pw.cpg].Type == enmChannelType.FMOPN || pw.pg[pw.cpg].Type == enmChannelType.FMOPNex)
+            if (page.Type == enmChannelType.FMOPN || page.Type == enmChannelType.FMOPNex)
             {
                 n = Common.CheckRange(n, 0, 3);
-                pw.pg[pw.cpg].pan.val = n;
-                ((ClsOPN)pw.pg[pw.cpg].chip).OutOPNSetPanAMSPMS(mml, pw, n, pw.pg[pw.cpg].ams, pw.pg[pw.cpg].fms);
+                page.pan.val = n;
+                ((ClsOPN)page.chip).OutOPNSetPanAMSPMS(mml, page, n, page.ams, page.fms);
             }
-            else if (pw.pg[pw.cpg].Type == enmChannelType.RHYTHM)
+            else if (page.Type == enmChannelType.RHYTHM)
             {
                 n = Common.CheckRange(n, 0, 3);
-                pw.pg[pw.cpg].pan.val = n;
+                page.pan.val = n;
             }
-            else if (pw.pg[pw.cpg].Type == enmChannelType.ADPCM)
+            else if (page.Type == enmChannelType.ADPCM)
             {
                 n = Common.CheckRange(n, 0, 3);
-                ((YM2608)pw.pg[pw.cpg].chip).SetAdpcmPan(mml, pw, n);
+                ((YM2608)page.chip).SetAdpcmPan(mml, page, n);
             }
-            SetDummyData(pw, mml);
+            SetDummyData(page, mml);
         }
 
-        public override void CmdInstrument(partWork pw, MML mml)
+        public override void CmdInstrument(partPage page, MML mml)
         {
             char type = (char)mml.args[0];
             int n = (int)mml.args[1];
 
             if (type == 'n' || type == 'N' || type == 'R' || type == 'A')
             {
-                if (pw.pg[pw.cpg].Type == enmChannelType.FMOPNex)
+                if (page.Type == enmChannelType.FMOPNex)
                 {
-                    pw.pg[pw.cpg].instrument = n;
-                    lstPartWork[2].pg[lstPartWork[2].cpg].instrument = n;
-                    lstPartWork[6].pg[lstPartWork[6].cpg].instrument = n;
-                    lstPartWork[7].pg[lstPartWork[7].cpg].instrument = n;
-                    lstPartWork[8].pg[lstPartWork[8].cpg].instrument = n;
-                    OutFmSetInstrument(pw,mml, n, pw.pg[pw.cpg].volume, type);
+                    page.instrument = n;
+                    lstPartWork[2].cpg.instrument = n;
+                    lstPartWork[6].cpg.instrument = n;
+                    lstPartWork[7].cpg.instrument = n;
+                    lstPartWork[8].cpg.instrument = n;
+                    OutFmSetInstrument(page, mml, n, page.volume, type);
                     return;
                 }
             }
 
             if (type == 'n')
             {
-                if (pw.pg[pw.cpg].Type == enmChannelType.ADPCM)
+                if (page.Type == enmChannelType.ADPCM)
                 {
                     n = Common.CheckRange(n, 0, 255);
                     if (!parent.instPCM.ContainsKey(n))
@@ -726,24 +735,24 @@ namespace Core
                         {
                             msgBox.setErrMsg(string.Format(msg.get("E18005"), n), mml.line.Lp);
                         }
-                        pw.pg[pw.cpg].instrument = n;
+                        page.instrument = n;
                         SetADPCMAddress(
                             mml,
-                            pw
+                            page
                             , (int)parent.instPCM[n].stAdr
                             , (int)parent.instPCM[n].edAdr);
                     }
                     return;
                 }
 
-                if (pw.pg[pw.cpg].Type == enmChannelType.SSG)
+                if (page.Type == enmChannelType.SSG)
                 {
-                    SetEnvelopParamFromInstrument(pw, n, mml);
+                    SetEnvelopParamFromInstrument(page, n, mml);
                     return;
                 }
             }
 
-            base.CmdInstrument(pw, mml);
+            base.CmdInstrument(page, mml);
         }
 
         public override void MultiChannelCommand(MML mml)
@@ -752,20 +761,23 @@ namespace Core
             //コマンドを跨ぐデータ向け処理
             foreach (partWork pw in lstPartWork)
             {
-                if (pw.pg[pw.cpg].Type == enmChannelType.RHYTHM)
+                foreach (partPage page in pw.pg)
                 {
-                    //Rhythm Volume処理
-                    if (pw.pg[pw.cpg].beforeVolume != pw.pg[pw.cpg].volume || !pw.pg[pw.cpg].pan.eq())
+                    if (page.Type == enmChannelType.RHYTHM)
                     {
-                        parent.OutData(mml,port[0], (byte)(0x18 + (pw.pg[pw.cpg].ch - 12)), (byte)((byte)((pw.pg[pw.cpg].pan.val & 0x3) << 6) | (byte)(pw.pg[pw.cpg].volume & 0x1f)));
-                        pw.pg[pw.cpg].beforeVolume = pw.pg[pw.cpg].volume;
-                        pw.pg[pw.cpg].pan.rst();
-                    }
+                        //Rhythm Volume処理
+                        if (page.beforeVolume != page.volume || !page.pan.eq())
+                        {
+                            parent.OutData(mml, port[0], (byte)(0x18 + (page.ch - 12)), (byte)((byte)((page.pan.val & 0x3) << 6) | (byte)(page.volume & 0x1f)));
+                            page.beforeVolume = page.volume;
+                            page.pan.rst();
+                        }
 
-                    rhythm_KeyOn |= (byte)(pw.pg[pw.cpg].keyOn ? (1 << (pw.pg[pw.cpg].ch - 12)) : 0);
-                    pw.pg[pw.cpg].keyOn = false;
-                    rhythm_KeyOff |= (byte)(pw.pg[pw.cpg].keyOff ? (1 << (pw.pg[pw.cpg].ch - 12)) : 0);
-                    pw.pg[pw.cpg].keyOff = false;
+                        rhythm_KeyOn |= (byte)(page.keyOn ? (1 << (page.ch - 12)) : 0);
+                        page.keyOn = false;
+                        rhythm_KeyOff |= (byte)(page.keyOff ? (1 << (page.ch - 12)) : 0);
+                        page.keyOff = false;
+                    }
                 }
             }
 
@@ -773,14 +785,14 @@ namespace Core
             if (0 != rhythm_KeyOff)
             {
                 byte data = (byte)(0x80 + rhythm_KeyOff);
-                parent.OutData(mml,port[0], 0x10, data);
+                parent.OutData(mml, port[0], 0x10, data);
                 rhythm_KeyOff = 0;
             }
 
             //Rhythm TotalVolume処理
             if (rhythm_beforeTotalVolume != rhythm_TotalVolume)
             {
-                parent.OutData(mml,port[0], 0x11, (byte)(rhythm_TotalVolume & 0x3f));
+                parent.OutData(mml, port[0], 0x11, (byte)(rhythm_TotalVolume & 0x3f));
                 rhythm_beforeTotalVolume = rhythm_TotalVolume;
             }
 
@@ -788,7 +800,7 @@ namespace Core
             if (0 != rhythm_KeyOn)
             {
                 byte data = (byte)(0x00 + rhythm_KeyOn);
-                parent.OutData(mml,port[0], 0x10, data);
+                parent.OutData(mml, port[0], 0x10, data);
                 rhythm_KeyOn = 0;
             }
         }
@@ -797,7 +809,7 @@ namespace Core
         {
             return string.Format("{0,-10} {1,-7} {2,-5:D3} N/A  ${3,-7:X6} ${4,-7:X6} N/A      ${5,-7:X6}  NONE {6}\r\n"
                 , Name
-                , pcm.chipNumber!=0 ? "SEC" : "PRI"
+                , pcm.chipNumber != 0 ? "SEC" : "PRI"
                 , pcm.num
                 , pcm.stAdr & 0xffffff
                 , pcm.edAdr & 0xffffff

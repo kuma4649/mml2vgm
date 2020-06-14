@@ -21,7 +21,7 @@ namespace Core
             _canUsePcm = false;
             _canUsePI = false;
             FNumTbl = _FNumTbl;
-            port =new byte[][]{
+            port = new byte[][]{
                 new byte[] { (byte)(chipNumber!=0 ? 0x30 : 0x50) }
                 , new byte[] { (byte)(chipNumber!=0 ? 0x3f : 0x4f) }
             };
@@ -61,7 +61,7 @@ namespace Core
         public override void InitChip()
         {
             if (!use) return;
-            if (ChipID!= 0 && parent.info.format != enmFormat.ZGM)
+            if (ChipID != 0 && parent.info.format != enmFormat.ZGM)
             {
                 parent.dat[0x0f] = new outDatum(enmMMLType.unknown, null, null, (byte)(parent.dat[0x0f].val | 0x40));
             }
@@ -71,11 +71,14 @@ namespace Core
 
         public override void InitPart(partWork pw)
         {
-            pw.pg[pw.cpg].MaxVolume = 15;
-            pw.pg[pw.cpg].volume = pw.pg[pw.cpg].MaxVolume;
-            pw.pg[pw.cpg].keyOn = false;
-            pw.pg[pw.cpg].panL = 3;
-            pw.pg[pw.cpg].port = port;
+            foreach (partPage pg in pw.pg)
+            {
+                pg.MaxVolume = 15;
+                pg.volume = pg.MaxVolume;
+                pg.keyOn = false;
+                pg.panL = 3;
+                pg.port = port;
+            }
         }
 
 
@@ -110,28 +113,28 @@ namespace Core
                 );
         }
 
-        public void OutPsgKeyOn(partWork pw, MML mml)
+        public void OutPsgKeyOn(partPage page, MML mml)
         {
 
-            pw.pg[pw.cpg].keyOn = true;
-            SetFNum(pw, mml);
-            SetVolume(pw, mml);
-            SetDummyData(pw, mml);
+            page.keyOn = true;
+            SetFNum(page, mml);
+            SetVolume(page, mml);
+            SetDummyData(page, mml);
 
             MML vmml = new MML();
             vmml.type = enmMMLType.Volume;
             vmml.args = new List<object>();
-            vmml.args.Add(pw.pg[pw.cpg].volume);
+            vmml.args.Add(page.volume);
             vmml.line = mml.line;
-            SetDummyData(pw, vmml);
-            
+            SetDummyData(page, vmml);
+
         }
 
-        public void OutPsgKeyOff(partWork pw, MML mml)
+        public void OutPsgKeyOff(partPage page, MML mml)
         {
 
-            if (!pw.pg[pw.cpg].envelopeMode) pw.pg[pw.cpg].keyOn = false;
-            SetVolume(pw, mml);
+            if (!page.envelopeMode) page.keyOn = false;
+            SetVolume(page, mml);
 
         }
 
@@ -140,106 +143,108 @@ namespace Core
 
             foreach (partWork pw in lstPartWork)
             {
-                pw.pg[pw.cpg].beforeFNum = -1;
-                pw.pg[pw.cpg].beforeVolume = -1;
+                foreach (partPage page in pw.pg)
+                {
+                    page.beforeFNum = -1;
+                    page.beforeVolume = -1;
 
-                pw.pg[pw.cpg].keyOn = false;
-                OutPsgKeyOff(pw, null);
+                    page.keyOn = false;
+                    OutPsgKeyOff(page, null);
+                }
             }
-
         }
 
 
-        public override void SetFNum(partWork pw, MML mml)
+        public override void SetFNum(partPage page, MML mml)
         {
-            if (pw.pg[pw.cpg].Type != enmChannelType.DCSGNOISE)
+            if (page.Type != enmChannelType.DCSGNOISE)
             {
-                int f = -pw.pg[pw.cpg].detune;
+                int f = -page.detune;
 
                 for (int lfo = 0; lfo < 4; lfo++)
                 {
-                    if (!pw.pg[pw.cpg].lfo[lfo].sw)
+                    if (!page.lfo[lfo].sw)
                     {
                         continue;
                     }
-                    if (pw.pg[pw.cpg].lfo[lfo].type != eLfoType.Vibrato)
+                    if (page.lfo[lfo].type != eLfoType.Vibrato)
                     {
                         continue;
                     }
-                    f -= pw.pg[pw.cpg].lfo[lfo].value + pw.pg[pw.cpg].lfo[lfo].param[6];//param[6] : 位相
+                    f -= page.lfo[lfo].value + page.lfo[lfo].param[6];//param[6] : 位相
                 }
 
-                if (pw.pg[pw.cpg].octaveNow < 1)
+                if (page.octaveNow < 1)
                 {
-                    f <<= -pw.pg[pw.cpg].octaveNow;
+                    f <<= -page.octaveNow;
                 }
                 else
                 {
-                    f >>= pw.pg[pw.cpg].octaveNow - 1;
+                    f >>= page.octaveNow - 1;
                 }
 
-                if (pw.pg[pw.cpg].bendWaitCounter != -1)
+                if (page.bendWaitCounter != -1)
                 {
-                    f += pw.pg[pw.cpg].bendFnum;
+                    f += page.bendFnum;
                 }
                 else
                 {
-                    f += GetDcsgFNum(pw.pg[pw.cpg].octaveNow, pw.pg[pw.cpg].noteCmd, pw.pg[pw.cpg].shift + pw.pg[pw.cpg].keyShift);//
+                    f += GetDcsgFNum(page.octaveNow, page.noteCmd, page.shift + page.keyShift);//
                 }
 
                 f = Common.CheckRange(f, 0, 0x3ff);
 
-                if (pw.pg[pw.cpg].freq == f) return;
-                pw.pg[pw.cpg].freq = f;
+                if (page.freq == f) return;
+                page.freq = f;
 
-                byte data = (byte)(0x80 + (pw.pg[pw.cpg].ch << 5) + (f & 0xf));
-                OutPsgPort(mml, port[0],  data);
+                byte data = (byte)(0x80 + (page.ch << 5) + (f & 0xf));
+                OutPsgPort(mml, port[0], data);
 
                 data = (byte)((f & 0x3f0) >> 4);
                 OutPsgPort(mml, port[0], data);
             }
             else
             {
-                int f = 0xe0 + (pw.pg[pw.cpg].noise & 7);
-                if (pw.pg[pw.cpg].freq == f) return;
-                pw.pg[pw.cpg].freq = f;
+                int f = 0xe0 + (page.noise & 7);
+                if (page.freq == f) return;
+                page.freq = f;
                 byte data = (byte)f;
-                OutPsgPort(mml, port[0],  data);
+                OutPsgPort(mml, port[0], data);
             }
 
         }
 
-        public override int GetFNum(partWork pw, MML mml, int octave, char cmd, int shift)
+        public override int GetFNum(partPage page, MML mml, int octave, char cmd, int shift)
         {
             return GetDcsgFNum(octave, cmd, shift);
         }
 
-        public override void SetVolume(partWork pw, MML mml)
+        public override void SetVolume(partPage page, MML mml)
         {
             byte data = 0;
-            int vol = pw.pg[pw.cpg].volume;
+            int vol = page.volume;
 
-            if (pw.pg[pw.cpg].keyOn)
+            if (page.keyOn)
             {
-                if (pw.pg[pw.cpg].envelopeMode)
+                if (page.envelopeMode)
                 {
                     vol = 0;
-                    if (pw.pg[pw.cpg].envIndex != -1)
+                    if (page.envIndex != -1)
                     {
-                        vol = pw.pg[pw.cpg].envVolume - (15 - pw.pg[pw.cpg].volume);
+                        vol = page.envVolume - (15 - page.volume);
                     }
                     else
                     {
-                        pw.pg[pw.cpg].keyOn = false;
+                        page.keyOn = false;
                     }
                 }
 
                 for (int lfo = 0; lfo < 4; lfo++)
                 {
-                    if (!pw.pg[pw.cpg].lfo[lfo].sw) continue;
-                    if (pw.pg[pw.cpg].lfo[lfo].type != eLfoType.Tremolo) continue;
+                    if (!page.lfo[lfo].sw) continue;
+                    if (page.lfo[lfo].type != eLfoType.Tremolo) continue;
 
-                    vol += pw.pg[pw.cpg].lfo[lfo].value + pw.pg[pw.cpg].lfo[lfo].param[6];
+                    vol += page.lfo[lfo].value + page.lfo[lfo].param[6];
                 }
             }
             else
@@ -249,29 +254,29 @@ namespace Core
 
             vol = Common.CheckRange(vol, 0, 15);
 
-            if (pw.pg[pw.cpg].beforeVolume != vol)
+            if (page.beforeVolume != vol)
             {
-                data = (byte)(0x80 + (pw.pg[pw.cpg].ch << 5) + 0x10 + (15 - vol));
-                OutPsgPort(mml, port[0],  data);
-                pw.pg[pw.cpg].beforeVolume = vol;
+                data = (byte)(0x80 + (page.ch << 5) + 0x10 + (15 - vol));
+                OutPsgPort(mml, port[0], data);
+                page.beforeVolume = vol;
             }
         }
 
-        public override void SetKeyOn(partWork pw, MML mml)
+        public override void SetKeyOn(partPage page, MML mml)
         {
-            OutPsgKeyOn(pw, mml);
+            OutPsgKeyOn(page, mml);
         }
 
-        public override void SetKeyOff(partWork pw, MML mml)
+        public override void SetKeyOff(partPage page, MML mml)
         {
-            OutPsgKeyOff(pw, mml);
+            OutPsgKeyOff(page, mml);
         }
 
-        public override void SetLfoAtKeyOn(partWork pw, MML mml)
+        public override void SetLfoAtKeyOn(partPage page, MML mml)
         {
             for (int lfo = 0; lfo < 4; lfo++)
             {
-                clsLfo pl = pw.pg[pw.cpg].lfo[lfo];
+                clsLfo pl = page.lfo[lfo];
                 if (!pl.sw)
                     continue;
 
@@ -289,35 +294,35 @@ namespace Core
             }
         }
 
-        public override void SetToneDoubler(partWork pw, MML mml)
+        public override void SetToneDoubler(partPage page, MML mml)
         {
             //実装不要
         }
 
-        public override int GetToneDoublerShift(partWork pw, int octave, char noteCmd, int shift)
+        public override int GetToneDoublerShift(partPage page, int octave, char noteCmd, int shift)
         {
             return 0;
         }
 
 
-        public override void CmdY(partWork pw, MML mml)
+        public override void CmdY(partPage page, MML mml)
         {
             if (mml.args[0] is string) return;
 
             byte adr = (byte)(int)mml.args[0];
             byte dat = (byte)(int)mml.args[1];
 
-            OutPsgPort(mml, port[0],  dat);
+            OutPsgPort(mml, port[0], dat);
         }
 
-        public override void CmdNoise(partWork pw, MML mml)
+        public override void CmdNoise(partPage page, MML mml)
         {
             int n = (int)mml.args[0];
             n = Common.CheckRange(n, 0, 7);
-            pw.pg[pw.cpg].noise = n;
+            page.noise = n;
         }
 
-        public override void CmdDCSGCh3Freq(partWork pw, MML mml)
+        public override void CmdDCSGCh3Freq(partPage page, MML mml)
         {
             int n = (int)mml.args[0];
             n = Common.CheckRange(n, 0, 0x3ff);
@@ -329,29 +334,29 @@ namespace Core
             OutPsgPort(mml, port[0], data);
         }
 
-        public override void CmdLoopExtProc(partWork pw, MML mml)
+        public override void CmdLoopExtProc(partPage page, MML mml)
         {
         }
 
-        public override void CmdRest(partWork pw, MML mml)
+        public override void CmdRest(partPage page, MML mml)
         {
-            base.CmdRest(pw, mml);
+            base.CmdRest(page, mml);
 
-            if (pw.pg[pw.cpg].envelopeMode)
+            if (page.envelopeMode)
             {
-                if (pw.pg[pw.cpg].envIndex != -1)
+                if (page.envIndex != -1)
                 {
-                    pw.pg[pw.cpg].envIndex = 3;
+                    page.envIndex = 3;
                 }
             }
             else
             {
-                SetKeyOff(pw, mml);
+                SetKeyOff(page, mml);
             }
 
         }
 
-        public override void CmdInstrument(partWork pw, MML mml)
+        public override void CmdInstrument(partPage page, MML mml)
         {
             char type = (char)mml.args[0];
             int n = (int)mml.args[1];
@@ -368,16 +373,16 @@ namespace Core
                 return;
             }
 
-            n = SetEnvelopParamFromInstrument(pw, n, mml);
-            SetDummyData(pw, mml);
+            n = SetEnvelopParamFromInstrument(page, n, mml);
+            SetDummyData(page, mml);
         }
 
-        public override void CmdPan(partWork pw, MML mml)
+        public override void CmdPan(partPage page, MML mml)
         {
             int l = (int)mml.args[0];
 
             l = Common.CheckRange(l, 0, 3);
-            pw.pg[pw.cpg].panL = l;
+            page.panL = l;
         }
 
         public override void MultiChannelCommand(MML mml)
@@ -387,8 +392,11 @@ namespace Core
 
             foreach (partWork pw in lstPartWork)
             {
-                int p = pw.pg[pw.cpg].panL;
-                dat |= (((p & 2) == 0 ? 0x00 : 0x10) | ((p & 1) == 0 ? 0x00 : 0x01)) << pw.pg[pw.cpg].ch;
+                foreach (partPage page in pw.pg)
+                {
+                    int p = page.panL;
+                    dat |= (((p & 2) == 0 ? 0x00 : 0x10) | ((p & 1) == 0 ? 0x00 : 0x01)) << page.ch;
+                }
             }
 
             if (beforePanData == dat) return;
