@@ -5526,6 +5526,25 @@ namespace mml2vgmIDE
             data.Add(new PackData(null, YM2609[chipID], EnmDataType.Normal, 0x311 + 0x01, 0x06, null)); // ADPCM消音
             data.Add(new PackData(null, YM2609[chipID], EnmDataType.Normal, 0x311 + 0x10, 0x9C, null)); // FLAGリセット        
 
+            // ADPCM-A
+            data.Add(new PackData(null, YM2609[chipID], EnmDataType.Normal, 0x111, 0xBF, null)); // 強制発音停止
+            data.Add(new PackData(null, YM2609[chipID], EnmDataType.Normal, 0x112, 0x00, null)); // Total Level
+            data.Add(new PackData(null, YM2609[chipID], EnmDataType.Normal, 0x113, 0x00, null)); // BD音量
+            data.Add(new PackData(null, YM2609[chipID], EnmDataType.Normal, 0x114, 0x00, null)); 
+            data.Add(new PackData(null, YM2609[chipID], EnmDataType.Normal, 0x113, 0x01, null)); // SD音量
+            data.Add(new PackData(null, YM2609[chipID], EnmDataType.Normal, 0x114, 0x00, null)); 
+            data.Add(new PackData(null, YM2609[chipID], EnmDataType.Normal, 0x113, 0x02, null)); // CYM音量
+            data.Add(new PackData(null, YM2609[chipID], EnmDataType.Normal, 0x114, 0x00, null)); 
+            data.Add(new PackData(null, YM2609[chipID], EnmDataType.Normal, 0x113, 0x03, null)); // HH音量
+            data.Add(new PackData(null, YM2609[chipID], EnmDataType.Normal, 0x114, 0x00, null)); 
+            data.Add(new PackData(null, YM2609[chipID], EnmDataType.Normal, 0x113, 0x04, null)); // TOM音量
+            data.Add(new PackData(null, YM2609[chipID], EnmDataType.Normal, 0x114, 0x00, null)); 
+            data.Add(new PackData(null, YM2609[chipID], EnmDataType.Normal, 0x113, 0x05, null)); // RIM音量
+            data.Add(new PackData(null, YM2609[chipID], EnmDataType.Normal, 0x114, 0x00, null));
+
+            //Effect
+            data.Add(new PackData(null, YM2609[chipID], EnmDataType.Normal, 0x323, 0x80, null));
+
             return data;
         }
 

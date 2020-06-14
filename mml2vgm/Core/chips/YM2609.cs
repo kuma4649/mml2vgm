@@ -224,6 +224,8 @@ namespace Core
             parent.OutData((MML)null, port[3], 0x11, 0x80);
             parent.OutData((MML)null, port[3], 0x12, 0xc0);
             parent.OutData((MML)null, port[3], 0x11, 0x01);
+            //ADPCM-A Reset
+            parent.OutData((MML)null, port[1], 0x11, 0xbf);
 
             foreach (partWork pw in lstPartWork)
             {

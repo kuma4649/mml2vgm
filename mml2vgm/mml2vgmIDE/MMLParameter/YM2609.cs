@@ -84,8 +84,11 @@ namespace mml2vgmIDE.MMLParameter
                                     od.linePos.part == "FMOPN" ? 128 : (
                                     od.linePos.part == "FMOPNex" ? 128 : (
                                     od.linePos.part == "SSG" ? 16 : (
-                                    od.linePos.part == "RHYTHM" ? 32 : 256
-                                    )))) * vol[od.linePos.ch]);
+                                    od.linePos.part == "RHYTHM" ? 32 : (
+                                    od.linePos.part == "ADPCM" ? 32 : ( //ADPCM-A
+                                    od.linePos.part == "ADPCMA" ? 256 : ( //ADPCM 0
+                                    od.linePos.part == "ADPCMB" ? 256 : 32 // ADPCM 1/2
+                                    ))))))) * vol[od.linePos.ch]);
                             }
                         }
                         beforeTie[od.linePos.ch] = nt.tieSw;
