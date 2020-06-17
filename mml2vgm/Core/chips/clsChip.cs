@@ -1340,20 +1340,20 @@ namespace Core
         }
 
 
-        public virtual void CmdNote(partPage page, MML mml)
+        public virtual void CmdNote(partWork pw, partPage page, MML mml)
         {
-            partPage pg = page;
+            //partPage pg = page;
 
             Note note = (Note)mml.args[0];
             int ml = 0;
 
             if (note.tDblSw)
             {
-                pg.TdA = pg.octaveNew * 12
+                page.TdA = page.octaveNew * 12
                     + Const.NOTE.IndexOf(note.cmd)
                     + note.shift
-                    + pg.keyShift;
-                pg.octaveNow = pg.octaveNew;
+                    + page.keyShift;
+                page.octaveNow = page.octaveNew;
             }
 
             ml = note.length;
@@ -1370,31 +1370,31 @@ namespace Core
             {
                 msgBox.setErrMsg(msg.get("E10013")
                     , mml.line.Lp);
-                ml = (int)pg.length;
+                ml = (int)page.length;
             }
 
-            if (pg.renpuFlg)
+            if (page.renpuFlg)
             {
-                if (pg.stackRenpu.Count > 0)
+                if (page.stackRenpu.Count > 0)
                 {
-                    ml = pg.stackRenpu.First().lstRenpuLength[0];
-                    pg.stackRenpu.First().lstRenpuLength.RemoveAt(0);
+                    ml = page.stackRenpu.First().lstRenpuLength[0];
+                    page.stackRenpu.First().lstRenpuLength.RemoveAt(0);
                 }
             }
 
             //WaitClockの決定
-            pg.waitCounter = ml;
+            page.waitCounter = ml;
 
-            if (pg.reqFreqReset)
+            if (page.reqFreqReset)
             {
-                pg.freq = -1;
-                pg.reqFreqReset = false;
+                page.freq = -1;
+                page.reqFreqReset = false;
             }
 
-            pg.octaveNow = pg.octaveNew;
-            pg.noteCmd = note.cmd;
-            pg.shift = note.shift;
-            pg.tie = note.tieSw;
+            page.octaveNow = page.octaveNew;
+            page.noteCmd = note.cmd;
+            page.shift = note.shift;
+            page.tie = note.tieSw;
 
             //Tone Doubler
             if (note.tDblSw)
@@ -1403,33 +1403,33 @@ namespace Core
             }
             else
             {
-                if (pg.TdA != -1)
+                if (page.TdA != -1)
                 {
-                    pg.TdA = -1;
+                    page.TdA = -1;
                     SetToneDoubler(page, mml);
                 }
             }
 
             //発音周波数
-            if (pg.bendWaitCounter != -1)
+            if (page.bendWaitCounter != -1)
             {
-                pg.octaveNew = pg.bendOctave;//
-                pg.octaveNow = pg.bendOctave;//
-                pg.noteCmd = pg.bendNote;
-                pg.shift = pg.bendShift;
+                page.octaveNew = page.bendOctave;//
+                page.octaveNow = page.bendOctave;//
+                page.noteCmd = page.bendNote;
+                page.shift = page.bendShift;
             }
 
             //gateTimeの決定
-            if (pg.gatetimePmode)
-                pg.waitKeyOnCounter = pg.waitCounter * pg.gatetime / 8L;
+            if (page.gatetimePmode)
+                page.waitKeyOnCounter = page.waitCounter * page.gatetime / 8L;
             else
-                pg.waitKeyOnCounter = pg.waitCounter - pg.gatetime;
-            if (pg.waitKeyOnCounter < 1) pg.waitKeyOnCounter = 1;
+                page.waitKeyOnCounter = page.waitCounter - page.gatetime;
+            if (page.waitKeyOnCounter < 1) page.waitKeyOnCounter = 1;
 
             //タイ指定では無い場合はキーオンする
-            if (!pg.beforeTie)
+            if (!page.beforeTie)
             {
-                if (pg.envIndex != -1)
+                if (page.envIndex != -1)
                 {
                     SetKeyOff(page, mml);
                 }
@@ -1442,7 +1442,7 @@ namespace Core
                 SetDummyData(page, mml);
                 SetFNum(page, mml);
                 //midiむけ
-                if (pg.bendWaitCounter == -1)
+                if (page.bendWaitCounter == -1)
                     ResetTieBend(page, mml);
                 //if (!pw.ppg[pw.cpgNum].chip.parent.useSkipPlayCommand)
                 //{
@@ -1459,15 +1459,18 @@ namespace Core
                 SetTieBend(page, mml);
                 SetVolume(page, mml);
 
-                if(pg.Type== enmChannelType.MIDI)
+                if (page.Type == enmChannelType.MIDI)
                 {
                     SetKeyOn(page, mml);
                 }
             }
 
-            if (note.chordSw) pg.waitCounter = 0;
+            if (note.chordSw) page.waitCounter = 0;
 
-            pg.clockCounter += pg.waitCounter;
+            page.clockCounter += page.waitCounter;
+
+            page.enableInterrupt = false;
+            if (page != pw.cpg) page.requestInterrupt = true;
         }
 
         protected virtual void ResetTieBend(partPage page, MML mml)
@@ -1502,6 +1505,8 @@ namespace Core
 
             page.clockCounter += page.waitCounter;
             SetDummyData(page, mml);
+
+            page.enableInterrupt = true;//割り込み許可
         }
 
         public virtual void CmdLyric(partPage page, MML mml)
@@ -1531,9 +1536,160 @@ namespace Core
             //何もする必要なし
         }
 
+        public void CheckInterrupt(partWork pw, partPage page)
+        {
+            if (!page.requestInterrupt) return;
+            
+            //割り込み要求有り
+
+            bool success = false;
+            if (page == pw.cpg)
+            {
+                //自分がカレントページの場合は割り込み成功
+                success = true;
+            }
+            else
+            {
+                bool enablePage = true;
+                foreach (partPage pg in pw.pg)
+                {
+                    if (pg == page && enablePage)
+                    {
+                        //自分が見つかり、更に割り込み可能な場合は割り込み成功
+                        success = true;
+                        break;
+                    }
+
+                    //割り込みを禁止するページだった場合は割り込み失敗
+                    if (!pg.enableInterrupt)
+                    {
+                        enablePage = false;
+                        break;
+                    }
+
+                }
+            }
+
+            if (!success)
+            {
+                page.requestInterrupt = false;//割り込み要求を下げる
+                return;
+            }
+
+            //割り込み成功
+            pw.cpg = page;
+        }
+
+        public void LoopPage()
+        {
+            foreach (partWork pw in lstPartWork)
+            {
+                foreach (partPage page in pw.pg)
+                {
+                    FlashPage(pw, page);
+                }
+            }
+        }
+
+        private void FlashPage(partWork pw, partPage page)
+        {
+            //ページ形式
+            if (!page.isLayer)
+            {
+                //カレントページではない時
+                if (page != pw.cpg)
+                {
+                    //処理しない
+                    page.sendData.Clear();//送信データクリア
+                    return;
+                }
+
+                if (page.requestInterrupt)
+                {
+                    //このページの音色をセットアップする
+                    SetupPageData(pw, page);
+                }
+            }
+
+            page.requestInterrupt = false;//割り込み要求を下げる
+
+            //このページのデータをセンドする
+            parent.OutData(page.sendData);
+            page.sendData.Clear();
+
+
+        }
+
+        public void SOutData(partPage page, MML mml, byte[] cmd, params byte[] data)
+        {
+
+            if (cmd != null && cmd.Length > 0)
+            {
+                foreach (byte d in cmd)
+                {
+                    outDatum od = new outDatum();
+                    od.val = d;
+                    if (mml != null)
+                    {
+                        od.type = mml.type;
+                        od.args = mml.args;
+                        if (mml.line != null && mml.line.Lp != null)
+                        {
+                            od.linePos = new LinePos(
+                                mml.line.Lp.srcMMLID,
+                                mml.line.Lp.row,
+                                mml.line.Lp.col,
+                                mml.line.Lp.length,
+                                mml.line.Lp.part,
+                                mml.line.Lp.chip,
+                                mml.line.Lp.chipIndex,
+                                mml.line.Lp.chipNumber,
+                                mml.line.Lp.ch);
+                        }
+                    }
+                    page.sendData.Add(od);
+
+                    //Console.Write("{0:x02} :", d);
+                }
+            }
+
+            foreach (byte d in data)
+            {
+                outDatum od = new outDatum();
+                od.val = d;
+                if (mml != null)
+                {
+                    od.type = mml.type;
+                    od.args = mml.args;
+                    if (mml.line != null && mml.line.Lp != null)
+                    {
+                        od.linePos = new LinePos(
+                            mml.line.Lp.srcMMLID,
+                            mml.line.Lp.row,
+                            mml.line.Lp.col,
+                            mml.line.Lp.length,
+                            mml.line.Lp.part,
+                            mml.line.Lp.chip,
+                            mml.line.Lp.chipIndex,
+                            mml.line.Lp.chipNumber,
+                            mml.line.Lp.ch);
+                    }
+                }
+                page.sendData.Add(od);
+                //Console.Write("{0:x02} :", d);
+            }
+
+            //Console.WriteLine("S{0}", mml == null ? "NULL" : mml.type.ToString());
+        }
+
+
+        public virtual void SetupPageData(partWork pw, partPage page)
+        {
+        }
 
         public virtual void MultiChannelCommand(MML mml)
-        { }
+        { 
+        }
 
 
         public virtual string DispRegion(clsPcm pcm)

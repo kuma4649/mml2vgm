@@ -119,7 +119,7 @@ namespace mml2vgm
                         List<partWork> pw = chip.lstPartWork;
                         for (int i = 0; i < pw.Count; i++)
                         {
-                            if (pw[i].pg[0].clockCounter == 0) continue;
+                            if (pw[i].clockCounter == 0) continue;
 
                             DataGridViewRow row = new DataGridViewRow();
                             row.Cells.Add(new DataGridViewTextBoxCell());
@@ -127,7 +127,7 @@ namespace mml2vgm
                             row.Cells.Add(new DataGridViewTextBoxCell());
                             row.Cells[1].Value = pw[i].pg[0].chip.Name.ToUpper();
                             row.Cells.Add(new DataGridViewTextBoxCell());
-                            row.Cells[2].Value = pw[i].pg[0].clockCounter;
+                            row.Cells[2].Value = pw[i].clockCounter;
                             dgvResult.Rows.Add(row);
                         }
                     }

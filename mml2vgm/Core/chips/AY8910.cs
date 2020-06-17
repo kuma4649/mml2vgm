@@ -23,6 +23,7 @@ namespace Core
         //};
 
         public byte SSGKeyOn = 0x3f;
+        public int noiseFreq = -1;
 
         public AY8910(ClsVgm parent, int chipID, string initialPartName, string stPath, int chipNumber) : base(parent, chipID, initialPartName, stPath, chipNumber)
         {
@@ -68,9 +69,12 @@ namespace Core
 
         public override void InitPart(partWork pw)
         {
-            pw.apg.volume = 15;
-            pw.apg.MaxVolume = 15;
-            pw.apg.port = port;
+            foreach (partPage pg in pw.pg)
+            {
+                pg.volume = 15;
+                pg.MaxVolume = 15;
+                pg.port = port;
+            }
 
         }
 
@@ -78,11 +82,11 @@ namespace Core
         {
             if (!use) return;
 
-            for (int ch = 0; ch < 3; ch++)
-            {
-                OutSsgKeyOff(null, lstPartWork[ch].cpg);
-                lstPartWork[ch].apg.volume = 0;
-            }
+            //for (int ch = 0; ch < 3; ch++)
+            //{
+                //OutSsgKeyOff(null, lstPartWork[ch].cpg);
+                //lstPartWork[ch].apg.volume = 0;
+            //}
 
             if (ChipID != 0)
             {
@@ -103,9 +107,11 @@ namespace Core
             SetSsgVolume(mml, page);
             if (page.HardEnvelopeSw)
             {
-                parent.OutData(mml, port[0], 0x0d, (byte)(page.HardEnvelopeType & 0xf));
+                //parent.OutData(mml, port[0], 0x0d, (byte)(page.HardEnvelopeType & 0xf));
+                SOutData(page, mml, port[0], 0x0d, (byte)(page.HardEnvelopeType & 0xf));
             }
-            parent.OutData(mml, port[0], 0x07, data);
+            //parent.OutData(mml, port[0], 0x07, data);
+            SOutData(page,mml, port[0], 0x07, data);
         }
 
         public void OutSsgKeyOff(MML mml, partPage page)
@@ -117,9 +123,11 @@ namespace Core
             data = (byte)(SSGKeyOn | (n << pch));
             SSGKeyOn = data;
 
-            parent.OutData(mml, port[0], (byte)(0x08 + pch), 0);
-            page.beforeVolume = -1;
-            parent.OutData(mml, port[0], 0x07, data);
+            //parent.OutData(mml, port[0], (byte)(0x08 + pch), 0);
+            //SOutData(page, mml, port[0], (byte)(0x08 + pch), 0);
+            //page.spg.beforeVolume = -1;
+            //parent.OutData(mml, port[0], 0x07, data);
+            SOutData(page, mml, port[0], 0x07, data);
         }
 
         public void SetSsgVolume(MML mml, partPage page)
@@ -146,17 +154,22 @@ namespace Core
 
             vol = Common.CheckRange(vol, 0, 15) + (page.HardEnvelopeSw ? 0x10 : 0x00);
 
-            if (page.beforeVolume != vol)
+            if (page.spg.beforeVolume != vol)
             {
-                parent.OutData(mml, port[0], (byte)(0x08 + pch), (byte)vol);
+                //parent.OutData(mml, port[0], (byte)(0x08 + pch), (byte)vol);
+                SOutData(page,mml, port[0], (byte)(0x08 + pch), (byte)vol);
                 //pw.ppg[pw.cpgNum].beforeVolume = pw.ppg[pw.cpgNum].volume;
-                page.beforeVolume = vol;
+                page.spg.beforeVolume = vol;
             }
         }
 
-        public void OutSsgNoise(MML mml, partPage page, int n)
+        public void OutSsgNoise(MML mml, partPage page)
         {
-            parent.OutData(mml, port[0], 0x06, (byte)(n & 0x1f));
+            if (noiseFreq != page.noise)
+            {
+                noiseFreq = page.noise;
+                SOutData(page, mml, port[0], 0x06, (byte)(page.noise & 0x1f));
+            }
         }
 
         public void SetSsgFNum(partPage page, MML mml)
@@ -181,17 +194,19 @@ namespace Core
             }
 
             f = Common.CheckRange(f, 0, 0xfff);
-            if (page.freq == f) return;
+            if (page.spg.freq == f) return;
 
-            page.freq = f;
+            page.spg.freq = f;
 
             byte data = 0;
 
             data = (byte)(f & 0xff);
-            parent.OutData(mml, port[0], (byte)(0 + page.ch * 2), data);
+            //parent.OutData(mml, port[0], (byte)(0 + page.ch * 2), data);
+            SOutData(page,mml, port[0], (byte)(0 + page.ch * 2), data);
 
             data = (byte)((f & 0xf00) >> 8);
-            parent.OutData(mml, port[0], (byte)(1 + page.ch * 2), data);
+            //parent.OutData(mml, port[0], (byte)(1 + page.ch * 2), data);
+            SOutData(page,mml, port[0], (byte)(1 + page.ch * 2), data);
         }
 
         public int GetSsgFNum(partPage page, MML mml, int octave, char noteCmd, int shift)
@@ -316,8 +331,8 @@ namespace Core
         {
             int n = (int)mml.args[0];
             n = Common.CheckRange(n, 0, 31);
-            page.chip.lstPartWork[0].cpg.noise = n;//Chipの1Chに保存
-            OutSsgNoise(mml, page, n);
+            page.noise = n;
+            OutSsgNoise(mml, page);
         }
 
         public override void CmdHardEnvelope(partPage page, MML mml)
@@ -331,8 +346,10 @@ namespace Core
                     n = (int)mml.args[1];
                     if (page.HardEnvelopeSpeed != n)
                     {
-                        parent.OutData(mml, port[0], 0x0b, (byte)(n & 0xff));
-                        parent.OutData(mml, port[0], 0x0c, (byte)((n >> 8) & 0xff));
+                        //parent.OutData(mml, port[0], 0x0b, (byte)(n & 0xff));
+                        //parent.OutData(mml, port[0], 0x0c, (byte)((n >> 8) & 0xff));
+                        SOutData(page,mml, port[0], 0x0b, (byte)(n & 0xff));
+                        SOutData(page,mml, port[0], 0x0c, (byte)((n >> 8) & 0xff));
                         page.HardEnvelopeSpeed = n;
                     }
                     break;
@@ -346,7 +363,8 @@ namespace Core
                     n = (int)mml.args[1];
                     if (page.HardEnvelopeType != n)
                     {
-                        parent.OutData(mml, port[0], 0x0d, (byte)(n & 0xf));
+                        //parent.OutData(mml, port[0], 0x0d, (byte)(n & 0xf));
+                        SOutData(page,mml, port[0], 0x0d, (byte)(n & 0xf));
                         page.HardEnvelopeType = n;
                     }
                     break;
@@ -360,11 +378,37 @@ namespace Core
             int adr = (byte)(int)mml.args[0];
             byte dat = (byte)(int)mml.args[1];
 
-            parent.OutData(mml, port[0], (byte)adr, (byte)dat);
+            //parent.OutData(mml, port[0], (byte)adr, (byte)dat);
+            SOutData(page,mml, port[0], (byte)adr, (byte)dat);
         }
 
         public override void CmdLoopExtProc(partPage page, MML mml)
         {
+        }
+
+        public override void SetupPageData(partWork pw, partPage page)
+        {
+            //周波数
+            page.spg.freq = -1;
+            SetFNum(page, null);
+
+            //音量
+            page.spg.beforeVolume = -1;
+            SetVolume(page, null);
+
+            //ノイズ周波数
+            noiseFreq = -1;
+            OutSsgNoise(null, page);
+        }
+
+        public override void MultiChannelCommand(MML mml)
+        {
+            foreach (partWork pw in lstPartWork)
+            {
+                foreach (partPage page in pw.pg)
+                {
+                }
+            }
         }
 
     }

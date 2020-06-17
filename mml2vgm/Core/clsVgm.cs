@@ -50,7 +50,9 @@ namespace Core
         public Dictionary<int, ushort[]> instOPNA2WF = new Dictionary<int, ushort[]>();
         public Dictionary<int, byte[]> midiSysEx = new Dictionary<int, byte[]>();
 
-        public Dictionary<string, List<List<Line>>> partData = new Dictionary<string, List<List<Line>>>();
+        public Dictionary<string, List<List<Line>>>[] partData = new Dictionary<string, List<List<Line>>>[]{
+            new Dictionary<string, List<List<Line>>>(),new Dictionary<string, List<List<Line>>>() 
+        };
         public Dictionary<string, Line> aliesData = new Dictionary<string, Line>();
 
         private int instrumentCounter = -1;
@@ -463,31 +465,34 @@ namespace Core
 
             // チェック1定義されていない名称を使用したパートが存在するか
 
-            foreach (string p in partData.Keys)
+            for (int n = 0; n < 2; n++)
             {
-                bool flg = false;
-                foreach (KeyValuePair<enmChipType,ClsChip[]> kvp in chips)
+                foreach (string p in partData[n].Keys)
                 {
-                    foreach (ClsChip chip in kvp.Value)
+                    bool flg = false;
+                    foreach (KeyValuePair<enmChipType, ClsChip[]> kvp in chips)
                     {
-                        if (chip == null) continue;
-
-                        if (chip.ChannelNameContains(p))
+                        foreach (ClsChip chip in kvp.Value)
                         {
-                            flg = true;
-                            break;
+                            if (chip == null) continue;
+
+                            if (chip.ChannelNameContains(p))
+                            {
+                                flg = true;
+                                break;
+                            }
                         }
                     }
-                }
-                if (!flg)
-                {
-                    msgBox.setWrnMsg(string.Format(
-                        msg.get("E01000")
-                        , p.Substring(0, 2).Trim() + int.Parse(p.Substring(2, 2)).ToString()
-                        ),
-                        new LinePos("-")
-                        );
-                    flg = false;
+                    if (!flg)
+                    {
+                        msgBox.setWrnMsg(string.Format(
+                            msg.get("E01000")
+                            , p.Substring(0, 2).Trim() + int.Parse(p.Substring(2, 2)).ToString()
+                            ),
+                            new LinePos("-")
+                            );
+                        flg = false;
+                    }
                 }
             }
 
@@ -1436,7 +1441,7 @@ namespace Core
                 return 0;
             }
 
-            part = Common.DivParts(buf.Substring(1, i).Trim(), chips, out int ura);
+            part = Common.DivParts(buf.Substring(1, i).Trim(), chips, out int ura,out bool isLayer);
             data = buf.Substring(i).Trim();
             if (part == null)
             {
@@ -1453,9 +1458,11 @@ namespace Core
 
             foreach (string p in part)
             {
-                if (!partData.ContainsKey(p))
+                int n = isLayer ? 1 : 0;
+
+                if (!partData[n].ContainsKey(p))
                 {
-                    partData.Add(p, new List<List<Line>>());
+                    partData[n].Add(p, new List<List<Line>>());
                 }
                 Line l = new Line(new LinePos(
                     line.Lp.srcMMLID,
@@ -1468,13 +1475,12 @@ namespace Core
                     line.Lp.chipNumber,
                     line.Lp.ch), line.Txt);
                 l.Lp.col = i + 1;
-
-                if (partData[p].Count < ura + 1)
+                while (partData[n][p].Count < ura + 1)
                 {
-                    partData[p].Add(new List<Line>());
+                    partData[n][p].Add(new List<Line>());
                 }
 
-                partData[p][ura].Add(l);
+                partData[n][p][ura].Add(l);
             }
 
             return 0;
@@ -2065,10 +2071,34 @@ namespace Core
                 AllKeyOffEnv();
             }
 
+            //ページのClockCounterを比較し最大のものをパートのclockCounterとする
+            CompClockCounter();
+
             log.Write("フッター情報の作成");
             MakeFooter();
 
             return dat.ToArray();
+        }
+
+        private void CompClockCounter()
+        {
+            foreach (KeyValuePair<enmChipType, ClsChip[]> kvp in chips)
+            {
+                foreach (ClsChip chip in kvp.Value)
+                {
+                    if (chip == null) continue;
+
+                    foreach (partWork pw in chip.lstPartWork)
+                    {
+                        pw.clockCounter = 0;
+                        foreach (partPage pg in pw.pg)
+                        {
+                            if (pg.clockCounter > pw.clockCounter) pw.clockCounter = pg.clockCounter;
+                        }
+                    }
+                }
+            }
+
         }
 
         private void AllKeyOffEnv()
@@ -2108,9 +2138,14 @@ namespace Core
 
                     foreach (partWork pw in chip.lstPartWork)
                     {
-                        if (!pw.apg.chip.use) endChannel++;
-                        else if (pw.apg.dataEnd && pw.apg.waitCounter < 1) endChannel++;
-                        else if (loopOffset != -1 && pw.apg.dataEnd && pw.apg.envIndex == 3) endChannel++;
+                        int pc = 0;
+                        foreach (partPage pg in pw.pg)
+                        {
+                            if (!pg.chip.use) pc++;// endChannel++;
+                            else if (pg.dataEnd && pg.waitCounter < 1) pc++;
+                            else if (loopOffset != -1 && pg.dataEnd && pg.envIndex == 3) pc++;
+                        }
+                        if (pc == pw.pg.Count) endChannel++;
                     }
                 }
             }
@@ -2133,40 +2168,42 @@ namespace Core
 
                         foreach (partWork pw in chip.lstPartWork)
                         {
-
-                            if (pw.apg.waitKeyOnCounter > 0) pw.apg.waitKeyOnCounter -= waitCounter;
-
-                            if (pw.apg.waitCounter > 0) pw.apg.waitCounter -= waitCounter;
-
-                            if (pw.apg.bendWaitCounter > 0) pw.apg.bendWaitCounter -= waitCounter;
-
-                            for (int lfo = 0; lfo < 4; lfo++)
+                            foreach (partPage pg in pw.pg)
                             {
-                                if (!pw.apg.lfo[lfo].sw) continue;
-                                if (pw.apg.lfo[lfo].waitCounter == -1) continue;
+                                if (pg.waitKeyOnCounter > 0) pg.waitKeyOnCounter -= waitCounter;
 
-                                if (pw.apg.lfo[lfo].waitCounter > 0)
+                                if (pg.waitCounter > 0) pg.waitCounter -= waitCounter;
+
+                                if (pg.bendWaitCounter > 0) pg.bendWaitCounter -= waitCounter;
+
+                                for (int lfo = 0; lfo < 4; lfo++)
                                 {
-                                    pw.apg.lfo[lfo].waitCounter -= waitCounter;
-                                    if (pw.apg.lfo[lfo].waitCounter < 0) pw.apg.lfo[lfo].waitCounter = 0;
+                                    if (!pg.lfo[lfo].sw) continue;
+                                    if (pg.lfo[lfo].waitCounter == -1) continue;
+
+                                    if (pg.lfo[lfo].waitCounter > 0)
+                                    {
+                                        pg.lfo[lfo].waitCounter -= waitCounter;
+                                        if (pg.lfo[lfo].waitCounter < 0) pg.lfo[lfo].waitCounter = 0;
+                                    }
                                 }
-                            }
 
-                            if (pw.apg.pcmWaitKeyOnCounter > 0)
-                            {
-                                pw.apg.pcmWaitKeyOnCounter -= waitCounter;
-                            }
+                                if (pg.pcmWaitKeyOnCounter > 0)
+                                {
+                                    pg.pcmWaitKeyOnCounter -= waitCounter;
+                                }
 
-                            if (pw.apg.envelopeMode && pw.apg.envIndex != -1)
-                            {
-                                pw.apg.envCounter -= (int)waitCounter;
-                            }
+                                if (pg.envelopeMode && pg.envIndex != -1)
+                                {
+                                    pg.envCounter -= (int)waitCounter;
+                                }
 
-                            for(int i = 0; i<pw.apg.noteOns.Length; i++)
-                            {
-                                if (pw.apg.noteOns[i] == null) continue;
-                                if (pw.apg.noteOns[i].length < 1) continue;
-                                pw.apg.noteOns[i].length -= waitCounter;
+                                for (int i = 0; i < pg.noteOns.Length; i++)
+                                {
+                                    if (pg.noteOns[i] == null) continue;
+                                    if (pg.noteOns[i].length < 1) continue;
+                                    pg.noteOns[i].length -= waitCounter;
+                                }
                             }
                         }
                     }
@@ -2205,59 +2242,62 @@ namespace Core
 
                         partWork cpw = chip.lstPartWork[ch];
 
-                        if (!cpw.apg.chip.use) continue;
+                        foreach (partPage page in cpw.pg)
+                        {
+                            if (!page.chip.use) continue;
 
-                        //note
-                        if (cpw.apg.waitKeyOnCounter > 0)
-                        {
-                            waitCounter = Math.Min(waitCounter, cpw.apg.waitKeyOnCounter);
-                        }
-                        else if (cpw.apg.waitCounter > 0)
-                        {
-                            waitCounter = Math.Min(waitCounter, cpw.apg.waitCounter);
-                        }
-
-                        //bend
-                        if (cpw.apg.bendWaitCounter != -1)
-                        {
-                            waitCounter = Math.Min(waitCounter, cpw.apg.bendWaitCounter);
-                        }
-
-                        //lfoとenvelopeは音長によるウエイトカウントが存在する場合のみ対象にする。(さもないと、曲のループ直前の効果を出せない)
-                        if (waitCounter > 0)
-                        {
-                            //if (!cpw.ppg[pw.cpgNum].dataEnd)
+                            //note
+                            if (page.waitKeyOnCounter > 0)
                             {
-                                //lfo
-                                for (int lfo = 0; lfo < 4; lfo++)
-                                {
-                                    if (!cpw.apg.lfo[lfo].sw) continue;
-                                    if (cpw.apg.lfo[lfo].waitCounter == -1) continue;
+                                waitCounter = Math.Min(waitCounter, page.waitKeyOnCounter);
+                            }
+                            else if (page.waitCounter > 0)
+                            {
+                                waitCounter = Math.Min(waitCounter, page.waitCounter);
+                            }
 
-                                    waitCounter = Math.Min(waitCounter, cpw.apg.lfo[lfo].waitCounter);
-                                }
+                            //bend
+                            if (page.bendWaitCounter != -1)
+                            {
+                                waitCounter = Math.Min(waitCounter, page.bendWaitCounter);
+                            }
 
-                                //envelope
-                                if (cpw.apg.envelopeMode && cpw.apg.envIndex != -1)
+                            //lfoとenvelopeは音長によるウエイトカウントが存在する場合のみ対象にする。(さもないと、曲のループ直前の効果を出せない)
+                            if (waitCounter > 0)
+                            {
+                                //if (!cpw.ppg[pw.cpgNum].dataEnd)
                                 {
-                                    waitCounter = Math.Min(waitCounter, cpw.apg.envCounter);
+                                    //lfo
+                                    for (int lfo = 0; lfo < 4; lfo++)
+                                    {
+                                        if (!page.lfo[lfo].sw) continue;
+                                        if (page.lfo[lfo].waitCounter == -1) continue;
+
+                                        waitCounter = Math.Min(waitCounter, page.lfo[lfo].waitCounter);
+                                    }
+
+                                    //envelope
+                                    if (page.envelopeMode && page.envIndex != -1)
+                                    {
+                                        waitCounter = Math.Min(waitCounter, page.envCounter);
+                                    }
                                 }
                             }
-                        }
 
-                        //pcm
-                        if (cpw.apg.pcmWaitKeyOnCounter > 0)
-                        {
-                            waitCounter = Math.Min(waitCounter, cpw.apg.pcmWaitKeyOnCounter);
-                        }
+                            //pcm
+                            if (page.pcmWaitKeyOnCounter > 0)
+                            {
+                                waitCounter = Math.Min(waitCounter, page.pcmWaitKeyOnCounter);
+                            }
 
-                        //MIDINoteOns
-                        for(int i=0;i<cpw.apg.noteOns.Length;i++)
-                        {
-                            if (cpw.apg.noteOns[i] == null) continue;
-                            if (cpw.apg.noteOns[i].length < 1) continue;
+                            //MIDINoteOns
+                            for (int i = 0; i < page.noteOns.Length; i++)
+                            {
+                                if (page.noteOns[i] == null) continue;
+                                if (page.noteOns[i].length < 1) continue;
 
-                            waitCounter = Math.Min(waitCounter, cpw.apg.noteOns[i].length);
+                                waitCounter = Math.Min(waitCounter, page.noteOns[i].length);
+                            }
                         }
                     }
 
@@ -2293,6 +2333,26 @@ namespace Core
                             partWorkByteData(pw, p);
                         }
                     }
+
+                    //
+                    // 各パートのページ割り込みチェック
+                    //
+                    for (int i = 0; i < chip.lstPartWork.Count; i++)
+                    {
+                        partWork pw = chip.lstPartWork[
+                            chip.ReversePartWork
+                            ? (chip.lstPartWork.Count - 1 - i)
+                            : i
+                            ];
+
+                        for (int p = 0; p < pw.pg.Count; p++)
+                        {
+                            chip.CheckInterrupt(pw, pw.pg[p]);
+                        }
+                    }
+
+                    chip.LoopPage();
+
                     if (chip.SupportReversePartWork) chip.ReversePartWork = !chip.ReversePartWork;
 
                     log.Write("channelを跨ぐコマンド向け処理");
@@ -2331,8 +2391,16 @@ namespace Core
 
             ProcMidiNoteOff(pg);
 
-            pg.chip.SetFNum(pg, null);
-            pg.chip.SetVolume(pg, null);
+            if (!pg.isLayer
+                || (pg.isLayer && checkNextCommandNote(pg))
+                )
+            {
+                if (pg.noteCmd != 0) //0のとき(最初期)は正しいfnumが得られない為Fnumとvolを発行しない
+                    pg.chip.SetFNum(pg, null);
+            }
+
+            if(pg.noteCmd!=0)
+                pg.chip.SetVolume(pg, null);
 
             if (isRealTimeMode) return;
 
@@ -2357,6 +2425,7 @@ namespace Core
             if (pg.mmlData == null || pg.mmlData.Count < 1)
             {
                 pg.dataEnd = true;
+                pg.enableInterrupt = true;
                 return;
             }
 
@@ -2366,6 +2435,7 @@ namespace Core
                 if (pg.mmlPos >= pg.mmlData.Count)
                 {
                     pg.dataEnd = true;
+                    pg.enableInterrupt = true;
                 }
                 else
                 {
@@ -2378,10 +2448,27 @@ namespace Core
                     mml.line.Lp.col = mml.column + c;
                     mml.line.Lp.part = pg.Type.ToString();
 
-                    Commander(pg, mml);
+                    Commander(pw, pg, mml);
                 }
             }
 
+        }
+
+        private bool checkNextCommandNote(partPage pg)
+        {
+            if (pg == null) return false;
+            if (pg.mmlData == null) return false;
+
+            int i = pg.mmlPos;
+            while (i < pg.mmlData.Count)
+            {
+                if (pg.mmlData[i].type == enmMMLType.Note) return true;
+                else if (pg.mmlData[i].type == enmMMLType.Rest) return false;
+                else if (pg.mmlData[i].type == enmMMLType.RestNoWork) return false;
+                i++;
+            }
+
+            return false;
         }
 
         private void MakeHeader()
@@ -2540,80 +2627,80 @@ namespace Core
             {
                 if (ym2151!= null && ym2151.Length > i && ym2151[i] != null)
                     foreach (partWork pw in ym2151[i].lstPartWork)
-                    { useYM2151 += pw.apg.clockCounter; if (ym2151[i].ChipID == 1) useYM2151_S += pw.apg.clockCounter; }
+                    { useYM2151 += pw.clockCounter; if (ym2151[i].ChipID == 1) useYM2151_S += pw.clockCounter; }
 
                 if (ym2203 != null && ym2203.Length > i && ym2203[i] != null)
                     foreach (partWork pw in ym2203[i].lstPartWork)
-                    { useYM2203 += pw.apg.clockCounter; if (ym2203[i].ChipID == 1) useYM2203_S += pw.apg.clockCounter; }
+                    { useYM2203 += pw.clockCounter; if (ym2203[i].ChipID == 1) useYM2203_S += pw.clockCounter; }
                     
 
                 if (ym2608 != null && ym2608.Length > i && ym2608[i] != null)
                     foreach (partWork pw in ym2608[i].lstPartWork)
-                    { useYM2608 += pw.apg.clockCounter; if (ym2608[i].ChipID == 1) useYM2608_S += pw.apg.clockCounter; }
+                    { useYM2608 += pw.clockCounter; if (ym2608[i].ChipID == 1) useYM2608_S += pw.clockCounter; }
 
                 if (ym2610b != null && ym2610b.Length > i && ym2610b[i] != null)
                     foreach (partWork pw in ym2610b[i].lstPartWork)
-                    { useYM2610B += pw.apg.clockCounter; if (ym2610b[i].ChipID == 1) useYM2610B_S += pw.apg.clockCounter; }
+                    { useYM2610B += pw.clockCounter; if (ym2610b[i].ChipID == 1) useYM2610B_S += pw.clockCounter; }
 
                 if (ym2612 != null && ym2612.Length>i && ym2612[i] != null)
                     foreach (partWork pw in ym2612[i].lstPartWork)
-                    { useYM2612 += pw.apg.clockCounter; if (ym2612[i].ChipID == 1) useYM2612_S += pw.apg.clockCounter; }
+                    { useYM2612 += pw.clockCounter; if (ym2612[i].ChipID == 1) useYM2612_S += pw.clockCounter; }
 
                 if (sn76489 != null && sn76489.Length > i && sn76489[i] != null)
                     foreach (partWork pw in sn76489[i].lstPartWork)
-                    { useSN76489 += pw.apg.clockCounter; if (sn76489[i].ChipID == 1) useSN76489_S += pw.apg.clockCounter; }
+                    { useSN76489 += pw.clockCounter; if (sn76489[i].ChipID == 1) useSN76489_S += pw.clockCounter; }
 
                 if (rf5c164 != null && rf5c164.Length > i && rf5c164[i] != null)
                     foreach (partWork pw in rf5c164[i].lstPartWork)
-                    { useRf5c164 += pw.apg.clockCounter; if (rf5c164[i].ChipID == 1) useRf5c164_S += pw.apg.clockCounter; }
+                    { useRf5c164 += pw.clockCounter; if (rf5c164[i].ChipID == 1) useRf5c164_S += pw.clockCounter; }
 
                 if (segapcm != null && segapcm.Length > i && segapcm[i] != null)
                     foreach (partWork pw in segapcm[i].lstPartWork)
-                    { useSegaPcm += pw.apg.clockCounter; if (segapcm[i].ChipID == 1) useSegaPcm_S += pw.apg.clockCounter; }
+                    { useSegaPcm += pw.clockCounter; if (segapcm[i].ChipID == 1) useSegaPcm_S += pw.clockCounter; }
 
                 if (huc6280 != null && huc6280.Length > i && huc6280[i] != null)
                     foreach (partWork pw in huc6280[i].lstPartWork)
-                    { useHuC6280 += pw.apg.clockCounter; if (huc6280[i].ChipID == 1) useHuC6280_S += pw.apg.clockCounter; }
+                    { useHuC6280 += pw.clockCounter; if (huc6280[i].ChipID == 1) useHuC6280_S += pw.clockCounter; }
 
                 if (c140 != null && c140.Length > i && c140[i] != null)
                     foreach (partWork pw in c140[i].lstPartWork)
-                    { useC140 += pw.apg.clockCounter; if (c140[i].ChipID == 1) useC140_S += pw.apg.clockCounter; }
+                    { useC140 += pw.clockCounter; if (c140[i].ChipID == 1) useC140_S += pw.clockCounter; }
 
                 if (c352 != null && c352.Length > i && c352[i] != null)
                     foreach (partWork pw in c352[i].lstPartWork)
-                    { useC352 += pw.apg.clockCounter; if (c352[i].ChipID == 1) useC352_S += pw.apg.clockCounter; }
+                    { useC352 += pw.clockCounter; if (c352[i].ChipID == 1) useC352_S += pw.clockCounter; }
 
                 if (ay8910 != null && ay8910.Length > i && ay8910[i] != null)
                     foreach (partWork pw in ay8910[i].lstPartWork)
-                    { useAY8910 += pw.apg.clockCounter; if (ay8910[i].ChipID == 1) useAY8910_S += pw.apg.clockCounter; }
+                    { useAY8910 += pw.clockCounter; if (ay8910[i].ChipID == 1) useAY8910_S += pw.clockCounter; }
 
                 if (ym2413 != null && ym2413.Length > i && ym2413[i] != null)
                     foreach (partWork pw in ym2413[i].lstPartWork)
-                    { useYM2413 += pw.apg.clockCounter; if (ym2413[i].ChipID == 1) useYM2413_S += pw.apg.clockCounter; }
+                    { useYM2413 += pw.clockCounter; if (ym2413[i].ChipID == 1) useYM2413_S += pw.clockCounter; }
 
                 if (ym3526 != null && ym3526.Length > i && ym3526[i] != null)
                     foreach (partWork pw in ym3526[i].lstPartWork)
-                    { useYM3526 += pw.apg.clockCounter; if (ym3526[i].ChipID == 1) useYM3526_S += pw.apg.clockCounter; }
+                    { useYM3526 += pw.clockCounter; if (ym3526[i].ChipID == 1) useYM3526_S += pw.clockCounter; }
 
                 if (ym3812 != null && ym3812.Length > i && ym3812[i] != null)
                     foreach (partWork pw in ym3812[i].lstPartWork)
-                    { useYM3812 += pw.apg.clockCounter; if (ym3812[i].ChipID == 1) useYM3812_S += pw.apg.clockCounter; }
+                    { useYM3812 += pw.clockCounter; if (ym3812[i].ChipID == 1) useYM3812_S += pw.clockCounter; }
 
                 if (ymf262 != null && ymf262.Length > i && ymf262[i] != null)
                     foreach (partWork pw in ymf262[i].lstPartWork)
-                    { useYMF262 += pw.apg.clockCounter; if (ymf262[i].ChipID == 1) useYMF262_S += pw.apg.clockCounter; }
+                    { useYMF262 += pw.clockCounter; if (ymf262[i].ChipID == 1) useYMF262_S += pw.clockCounter; }
 
                 if (k051649 != null && k051649.Length > i && k051649[i] != null)
                     foreach (partWork pw in k051649[i].lstPartWork)
-                    { useK051649 += pw.apg.clockCounter; if (k051649[i].ChipID == 1) useK051649_S += pw.apg.clockCounter; }
+                    { useK051649 += pw.clockCounter; if (k051649[i].ChipID == 1) useK051649_S += pw.clockCounter; }
 
                 if (qsound != null && qsound.Length > i && qsound[i] != null)
                     foreach (partWork pw in qsound[i].lstPartWork)
-                    { useQSound += pw.apg.clockCounter; }
+                    { useQSound += pw.clockCounter; }
 
                 if (k053260 != null && k053260.Length > i && k053260[i] != null)
                     foreach (partWork pw in k053260[i].lstPartWork)
-                    { useK053260 += pw.apg.clockCounter; if (k053260[i].ChipID == 1) useK053260_S += pw.apg.clockCounter; }
+                    { useK053260 += pw.clockCounter; if (k053260[i].ChipID == 1) useK053260_S += pw.clockCounter; }
             }
 
             if (info.Version >= 1.00f && useSN76489 != 0)
@@ -3025,45 +3112,56 @@ namespace Core
                     log.Write("Envelope");
                     ProcEnvelope(page);
 
-                    pw.apg.chip.SetFNum(page, null);
-                    pw.apg.chip.SetVolume(page, null);
+                    if (!page.isLayer
+                        || (page.isLayer && checkNextCommandNote(page))
+                        )
+                    {
+                        if (page.noteCmd != 0) //0のとき(最初期)は正しいfnumが得られない為Fnumとvolを発行しない
+                            page.chip.SetFNum(page, null);
+                    }
+
+                    if (page.noteCmd != 0)
+                        page.chip.SetVolume(page, null);
 
                     log.Write("wait消化待ち");
-                    if (pw.apg.waitCounter > 0) continue;
+                    if (page.waitCounter > 0) continue;
 
                     log.Write("データは最後まで実施されたか");
-                    if (pw.apg.dataEnd) continue;
+                    if (page.dataEnd) continue;
 
                     log.Write("パートのデータがない場合は何もしないで次へ");
-                    if (pw.apg.mmlData == null || pw.apg.mmlData.Count < 1)
+                    if (page.mmlData == null || page.mmlData.Count < 1)
                     {
-                        pw.apg.dataEnd = true;
+                        page.dataEnd = true;
+                        page.enableInterrupt = true;
                         continue;
                     }
 
                     log.Write("コマンド毎の処理を実施");
-                    while (pw.apg.waitCounter == 0 && !pw.apg.dataEnd)
+                    while (page.waitCounter == 0 && !page.dataEnd)
                     {
-                        if (pw.apg.mmlPos >= pw.apg.mmlData.Count)
+                        if (page.mmlPos >= page.mmlData.Count)
                         {
-                            pw.apg.dataEnd = true;
+                            page.dataEnd = true;
+                            page.enableInterrupt = true;
                         }
                         else
                         {
-                            MML mml = pw.apg.mmlData[pw.apg.mmlPos];
-                            mml.line.Lp.ch = pw.apg.ch;
-                            mml.line.Lp.chipIndex = pw.apg.chip.ChipID;
-                            mml.line.Lp.chipNumber = pw.apg.chipNumber;
-                            mml.line.Lp.chip = pw.apg.chip.Name;
+                            MML mml = page.mmlData[pw.apg.mmlPos];
+                            mml.line.Lp.ch = page.ch;
+                            mml.line.Lp.chipIndex = page.chip.ChipID;
+                            mml.line.Lp.chipNumber = page.chipNumber;
+                            mml.line.Lp.chip = page.chip.Name;
                             int c = mml.line.Txt.IndexOfAny(new char[] { ' ', '\t' });
                             //c += mml.line.Txt.Substring(c).Length - mml.line.Txt.Substring(c).TrimStart().Length;
                             mml.line.Lp.col = mml.column + c;//-1;
-                            mml.line.Lp.part = pw.apg.Type.ToString();
+                            mml.line.Lp.part = page.Type.ToString();
 
                             //lineNumber = pw.getLineNumber();
-                            Commander(page, mml);//TODO: page制御やってない
+                            Commander(pw, page, mml);
                         }
                     }
+
                 }
             }
         }
@@ -3682,7 +3780,7 @@ namespace Core
             }
         }
 
-        private void Commander(partPage page, MML mml)
+        private void Commander(partWork pw, partPage page, MML mml)
         {
 
             switch (mml.type)
@@ -3690,6 +3788,7 @@ namespace Core
                 case enmMMLType.CompileSkip:
                     log.Write("CompileSkip");
                     page.dataEnd = true;
+                    page.enableInterrupt = true;
                     page.waitCounter = -1;
                     break;
                 case enmMMLType.Tempo:
@@ -3794,7 +3893,7 @@ namespace Core
                     break;
                 case enmMMLType.Note:
                     log.Write("Note");
-                    page.chip.CmdNote(page, mml);
+                    page.chip.CmdNote(pw, page, mml);
                     page.mmlPos++;
                     break;
                 case enmMMLType.Rest:
@@ -3959,69 +4058,134 @@ namespace Core
                             pg = new List<partPage>(),
                         };
 
-
-                        if (partData.ContainsKey(chip.Ch[i].Name))
+                        for (int n = 0; n < 2; n++)
                         {
-                            for (int c = 0; c < partData[chip.Ch[i].Name].Count; c++)
+                            if (!partData[n].ContainsKey(chip.Ch[i].Name)) continue;
+
+                            for (int c = 0; c < partData[n][chip.Ch[i].Name].Count; c++)
                             {
-                                pw.apg = new partPage();
+                                if (partData[n][chip.Ch[i].Name][c] == null || partData[n][chip.Ch[i].Name][c].Count<1)
+                                    continue;
+
+                                pw.apg = new partPage(pw.spg);
                                 pw.apg.chip = chip;
                                 pw.apg.chipNumber = ((info.format != enmFormat.ZGM && chip.ChipID == 1) ? 1 : 0);
                                 pw.apg.ch = i;// + 1;
-                                pw.apg.pData = partData[chip.Ch[i].Name][c];
+                                pw.apg.pData = partData[n][chip.Ch[i].Name][c];
+                                pw.apg.isLayer = (n == 1);
                                 pw.pg.Add(pw.apg);
                             }
+
                             pw.apg = pw.pg[0];
                             pw.cpg = pw.pg[0];
+
+                            pw.aData = aliesData;
+
+                            pw.setPos(pw.apg, 0);
+
+                            foreach (partPage page in pw.pg)
+                            {
+                                page.Type = chip.Ch[i].Type;
+                                page.slots = 0;
+                                page.volume = 32767;
+                            }
+
+                            chip.InitPart(pw);
+
+                            foreach (partPage pg in pw.pg)
+                            {
+                                pg.PartName = chip.Ch[i].Name;
+                                pg.waitKeyOnCounter = -1;
+                                pg.waitCounter = 0;
+                                pg.freq = -1;
+
+                                pg.dataEnd = false;
+                                if (pg.pData == null || pg.pData.Count < 1)
+                                {
+                                    pg.dataEnd = true;
+                                    pg.enableInterrupt = true;
+                                }
+                                else
+                                {
+                                    bool flg = false;
+                                    if (pg.pData != null && pg.pData.Count > 0)
+                                    {
+                                        //foreach (List<Line> plin in pw.apg.pData)
+                                        {
+                                            foreach (Line pl in pg.pData)
+                                            {
+                                                if (pl != null)
+                                                {
+                                                    flg = true;
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    if (flg) chip.use = true;
+                                }
+                            }
+
                         }
+
                         if (pw.pg.Count < 1)
                         {
                             //パートデータが無くてもページ0は用意する
-                            pw.apg = new partPage();
+                            pw.apg = new partPage(pw.spg);
                             pw.cpg = pw.apg;
                             pw.apg.chip = chip;
                             pw.apg.chipNumber = ((info.format != enmFormat.ZGM && chip.ChipID == 1) ? 1 : 0);
                             pw.apg.ch = i;// + 1;
                             pw.pg.Add(pw.apg);
-                        }
-                        pw.aData = aliesData;
-                        pw.setPos(pw.apg, 0);
 
-                        pw.apg.Type = chip.Ch[i].Type;
-                        pw.apg.slots = 0;
-                        pw.apg.volume = 32767;
+                            pw.aData = aliesData;
 
-                        chip.InitPart(pw);
+                            pw.setPos(pw.apg, 0);
 
-                        pw.apg.PartName = chip.Ch[i].Name;
-                        pw.apg.waitKeyOnCounter = -1;
-                        pw.apg.waitCounter = 0;
-                        pw.apg.freq = -1;
-
-                        pw.apg.dataEnd = false;
-                        if (pw.apg.pData == null || pw.apg.pData.Count < 1)
-                        {
-                            pw.apg.dataEnd = true;
-                        }
-                        else
-                        {
-                            bool flg = false;
-                            if (pw.apg.pData != null && pw.apg.pData.Count > 0)
+                            foreach (partPage page in pw.pg)
                             {
-                                //foreach (List<Line> plin in pw.apg.pData)
-                                {
-                                    foreach (Line pl in pw.apg.pData)
-                                    {
-                                        if (pl != null)
-                                        {
-                                            flg = true;
-                                            break;
-                                        }
-                                    }
-                                }
+                                page.Type = chip.Ch[i].Type;
+                                page.slots = 0;
+                                page.volume = 32767;
                             }
 
-                            if (flg) chip.use = true;
+                            chip.InitPart(pw);
+
+                            foreach (partPage pg in pw.pg)
+                            {
+                                pg.PartName = chip.Ch[i].Name;
+                                pg.waitKeyOnCounter = -1;
+                                pg.waitCounter = 0;
+                                pg.freq = -1;
+
+                                pg.dataEnd = false;
+                                if (pg.pData == null || pg.pData.Count < 1)
+                                {
+                                    pg.dataEnd = true;
+                                    pg.enableInterrupt = true;
+                                }
+                                else
+                                {
+                                    bool flg = false;
+                                    if (pg.pData != null && pg.pData.Count > 0)
+                                    {
+                                        //foreach (List<Line> plin in pw.apg.pData)
+                                        {
+                                            foreach (Line pl in pg.pData)
+                                            {
+                                                if (pl != null)
+                                                {
+                                                    flg = true;
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    if (flg) chip.use = true;
+                                }
+                            }
                         }
 
                         chip.lstPartWork.Add(pw);
@@ -4095,6 +4259,7 @@ namespace Core
 
         public void OutData(MML mml, byte[] cmd, params byte[] data)
         {
+
             if (cmd != null && cmd.Length > 0)
             {
                 foreach (byte d in cmd)
@@ -4121,7 +4286,7 @@ namespace Core
                     }
                     dat.Add(od);
 
-                    //Console.Write("{0:x02} :",d);
+                    //Console.Write("{0:x02} :", d);
                 }
             }
 
@@ -4151,34 +4316,8 @@ namespace Core
                 //Console.Write("{0:x02} :", d);
             }
 
-            //Console.WriteLine("");
+            //Console.WriteLine("{0}", mml == null ? "NULL" : mml.type.ToString());
         }
-
-        //public void OutData(outDatum od, params byte[] data)
-        //{
-        //    foreach (byte d in data)
-        //    {
-        //        outDatum o = new outDatum();
-        //        o.val = d;
-        //        if (od != null)
-        //        {
-        //            o.type = od.type;
-        //            if (od.linePos != null)
-        //            {
-        //                o.linePos = new LinePos(
-        //                    od.linePos.fullPath,
-        //                    od.linePos.row,
-        //                    od.linePos.col,
-        //                    od.linePos.length,
-        //                    od.linePos.part,
-        //                    od.linePos.chip,
-        //                    od.linePos.chipNumber,
-        //                    od.linePos.ch);
-        //            }
-        //        }
-        //        dat.Add(o);
-        //    }
-        //}
 
         public void OutData(outDatum od, byte[] cmd, params byte[] data)
         {
@@ -4235,6 +4374,15 @@ namespace Core
             }
             //Console.WriteLine("");
         }
+
+        public void OutData(List<outDatum> sendData)
+        {
+            foreach (outDatum od in sendData)
+            {
+                dat.Add(od);
+            }
+        }
+
 
         private void OutWaitNSamples(long n)
         {

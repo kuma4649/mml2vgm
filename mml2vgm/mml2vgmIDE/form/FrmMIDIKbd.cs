@@ -532,7 +532,7 @@ namespace mml2vgmIDE
             mml = MakeMML_NoteOn(n);
             lock (lockObject)
             {
-                cChip.CmdNote(pw.apg, mml);//TODO:page制御やってない
+                cChip.CmdNote(pw,pw.apg, mml);//TODO:page制御やってない
             }
 
             latestNoteNumberMONO = n;

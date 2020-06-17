@@ -127,7 +127,7 @@ namespace Core
 
         private void SetMonoPart(string val, Dictionary<enmChipType,ClsChip[]> chips)
         {
-            monoPart = Common.DivParts(val, chips, out int n);
+            monoPart = Common.DivParts(val, chips, out int n,out bool isLayer);
         }
 
         private void SetFormat(string val)

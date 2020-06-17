@@ -211,14 +211,16 @@ namespace Core
             return newBuf;
         }
 
-        public static List<string> DivParts(string parts, Dictionary<enmChipType, ClsChip[]> chips, out int ura)
+        public static List<string> DivParts(string parts, Dictionary<enmChipType, ClsChip[]> chips, out int ura,out bool isLayer)
         {
             List<string> ret = new List<string>();
             string a = "";
             int k = 1;
             int m = 0;
             string n0 = "";
+            int layer = 0;
             ura = 0;
+            isLayer = false;
 
             try
             {
@@ -288,8 +290,17 @@ namespace Core
                     }
                     else if (parts[i] == '_')
                     {
+                        if (layer == 2) { throw new ArgumentOutOfRangeException("Layer指定中にPage指定している"); }
+                        layer = 1;
                         ura++;
-                        i++;
+                        //i++;
+                    }
+                    else if (parts[i] == '~')
+                    {
+                        if (layer == 1) { throw new ArgumentOutOfRangeException("Page指定中にLayer指定している"); }
+                        layer = 2;
+                        ura++;
+                        //i++;
                     }
                     else
                     {
@@ -303,6 +314,7 @@ namespace Core
                 msgBox.setErrMsg(string.Format(msg.get("E02010"), parts), new LinePos("-"));
             }
 
+            isLayer = (layer == 2);
             return ret;
         }
 

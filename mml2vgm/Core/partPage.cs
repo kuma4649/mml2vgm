@@ -8,6 +8,26 @@ namespace Core
 {
     public class partPage
     {
+        /// <summary>
+        /// 共有ページ
+        /// </summary>
+        public partPage spg = null;
+
+        /// <summary>
+        /// レイヤーかどうか
+        /// </summary>
+        public bool isLayer = false;
+
+        /// <summary>
+        /// 割り込み許可フラグ
+        /// (他のページからの割り込みを許可するかどうかのフラグ)
+        /// </summary>
+        public bool enableInterrupt = false;
+
+        /// <summary>
+        /// 割り込み要求フラグ
+        /// </summary>
+        public bool requestInterrupt = false;
 
         /// <summary>
         /// パートデータ
@@ -449,12 +469,18 @@ namespace Core
         public int flag { get; internal set; }
         public bool changeFlag { get; internal set; }
         public int C352flag { get; internal set; }
+        public List<outDatum> sendData { get; internal set; } = new List<outDatum>();
 
-
+        public partPage(partPage sharedPg)
+        {
+            this.spg = sharedPg;
+        }
 
         public void sharedPageInitializer()
         {
 
         }
+
+
     }
 }

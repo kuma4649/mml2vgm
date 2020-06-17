@@ -43,6 +43,7 @@ namespace Core
                             if (page.pData == null)
                             {
                                 page.dataEnd = true;
+                                page.enableInterrupt = true;
                                 continue;
                             }
 

@@ -22,7 +22,7 @@ namespace Core
         /// <summary>
         /// 共有ページ
         /// </summary>
-        public partPage spg = new partPage();
+        public partPage spg = new partPage(null);
 
         /// <summary>
         /// 現在作業中のページ(アクティブページ)
@@ -33,6 +33,8 @@ namespace Core
         /// 現在演奏権を持っているページ(カレントページ)
         /// </summary>
         public partPage cpg;
+
+        public long clockCounter { get; internal set; }
 
         /// <summary>
         /// パート情報をリセットする
