@@ -315,6 +315,7 @@ namespace Core
 
             } while (endChannel < totalChannel);
 
+            mmlInfo.CompClockCounter();
             //残カット
             //if (mmlInfo.loopClock != -1 && waitCounter > 0 && waitCounter != long.MaxValue)
             //{

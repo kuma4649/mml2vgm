@@ -2080,7 +2080,7 @@ namespace Core
             return dat.ToArray();
         }
 
-        private void CompClockCounter()
+        public void CompClockCounter()
         {
             foreach (KeyValuePair<enmChipType, ClsChip[]> kvp in chips)
             {
@@ -2950,6 +2950,9 @@ namespace Core
                 AllKeyOffEnv();
             }
 
+            //ページのClockCounterを比較し最大のものをパートのclockCounterとする
+            CompClockCounter();
+            
             log.Write("VGMデータをXGMへコンバート");
             dat = ConvertVGMtoXGM(dat);
 

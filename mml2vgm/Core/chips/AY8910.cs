@@ -343,15 +343,8 @@ namespace Core
             switch (cmd)
             {
                 case "EH":
-                    n = (int)mml.args[1];
-                    if (page.HardEnvelopeSpeed != n)
-                    {
-                        //parent.OutData(mml, port[0], 0x0b, (byte)(n & 0xff));
-                        //parent.OutData(mml, port[0], 0x0c, (byte)((n >> 8) & 0xff));
-                        SOutData(page,mml, port[0], 0x0b, (byte)(n & 0xff));
-                        SOutData(page,mml, port[0], 0x0c, (byte)((n >> 8) & 0xff));
-                        page.HardEnvelopeSpeed = n;
-                    }
+                    page.HardEnvelopeSpeed = (int)mml.args[1];
+                    OutSsgHardEnvSpeed(page, mml);
                     break;
                 case "EHON":
                     page.HardEnvelopeSw = true;
@@ -360,14 +353,31 @@ namespace Core
                     page.HardEnvelopeSw = false;
                     break;
                 case "EHT":
-                    n = (int)mml.args[1];
-                    if (page.HardEnvelopeType != n)
-                    {
-                        //parent.OutData(mml, port[0], 0x0d, (byte)(n & 0xf));
-                        SOutData(page,mml, port[0], 0x0d, (byte)(n & 0xf));
-                        page.HardEnvelopeType = n;
-                    }
+                    page.HardEnvelopeType = (int)mml.args[1];
+                    OutSsgHardEnvType(page, mml);
                     break;
+            }
+        }
+
+        private void OutSsgHardEnvType(partPage page, MML mml)
+        {
+            if (page.spg.HardEnvelopeType != page.HardEnvelopeType)
+            {
+                //parent.OutData(mml, port[0], 0x0d, (byte)(n & 0xf));
+                SOutData(page, mml, port[0], 0x0d, (byte)(page.HardEnvelopeType & 0xf));
+                page.spg.HardEnvelopeType = page.HardEnvelopeType;
+            }
+        }
+
+        private void OutSsgHardEnvSpeed(partPage page, MML mml)
+        {
+            if (page.spg.HardEnvelopeSpeed != page.HardEnvelopeSpeed)
+            {
+                //parent.OutData(mml, port[0], 0x0b, (byte)(n & 0xff));
+                //parent.OutData(mml, port[0], 0x0c, (byte)((n >> 8) & 0xff));
+                SOutData(page, mml, port[0], 0x0b, (byte)(page.HardEnvelopeSpeed & 0xff));
+                SOutData(page, mml, port[0], 0x0c, (byte)((page.HardEnvelopeSpeed >> 8) & 0xff));
+                page.spg.HardEnvelopeSpeed = page.HardEnvelopeSpeed;
             }
         }
 
@@ -392,13 +402,22 @@ namespace Core
             page.spg.freq = -1;
             SetFNum(page, null);
 
+            //ノイズ周波数
+            noiseFreq = -1;
+            OutSsgNoise(null, page);
+
+            //ハードエンベロープtype
+            page.spg.HardEnvelopeType = -1;
+            OutSsgHardEnvType(page, null);
+
+            //ハードエンベロープspeed
+            page.spg.HardEnvelopeSpeed = -1;
+            OutSsgHardEnvSpeed(page, null);
+
             //音量
             page.spg.beforeVolume = -1;
             SetVolume(page, null);
 
-            //ノイズ周波数
-            noiseFreq = -1;
-            OutSsgNoise(null, page);
         }
 
         public override void MultiChannelCommand(MML mml)
