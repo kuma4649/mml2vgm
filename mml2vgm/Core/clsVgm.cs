@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Runtime.Remoting.Activation;
 using System.Text;
 using System.Threading.Tasks;
@@ -2351,12 +2352,13 @@ namespace Core
                         }
                     }
 
-                    chip.LoopPage();
-
                     if (chip.SupportReversePartWork) chip.ReversePartWork = !chip.ReversePartWork;
 
                     log.Write("channelを跨ぐコマンド向け処理");
                     chip.MultiChannelCommand(null);
+
+                    chip.LoopPage();
+
                 }
             }
         }
@@ -2504,6 +2506,14 @@ namespace Core
                 {
                     if (chip == null) continue;
                     chip.InitChip();
+                    foreach(partWork pw in chip.lstPartWork)
+                    {
+                        foreach (partPage pg in pw.pg)
+                        {
+                            OutData(pg.sendData);
+                            pg.sendData.Clear();
+                        }
+                    }
                 }
             }
 
@@ -4095,6 +4105,9 @@ namespace Core
 
                             chip.InitPart(pw);
 
+                            foreach (partPage page in pw.pg)
+                                OutData(page.sendData);
+
                             foreach (partPage pg in pw.pg)
                             {
                                 pg.PartName = chip.Ch[i].Name;
@@ -4154,6 +4167,9 @@ namespace Core
                             }
 
                             chip.InitPart(pw);
+
+                            foreach (partPage page in pw.pg)
+                                OutData(page.sendData);
 
                             foreach (partPage pg in pw.pg)
                             {
@@ -4380,10 +4396,15 @@ namespace Core
 
         public void OutData(List<outDatum> sendData)
         {
+            if (sendData == null || sendData.Count < 1) return;
+
+            //Console.WriteLine("SDataFlashing");
             foreach (outDatum od in sendData)
             {
                 dat.Add(od);
+                //Console.Write("{0:x02} :", od.val);
             }
+            //Console.WriteLine("");
         }
 
 

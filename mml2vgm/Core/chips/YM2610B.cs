@@ -258,15 +258,15 @@ namespace Core
         {
             if (page.pcmStartAddress != startAdr)
             {
-                parent.OutData(mml, port[1], (byte)(0x10 + (page.ch - 12)), (byte)((startAdr >> 8) & 0xff));
-                parent.OutData(mml, port[1], (byte)(0x18 + (page.ch - 12)), (byte)((startAdr >> 16) & 0xff));
+                SOutData(page,mml, port[1], (byte)(0x10 + (page.ch - 12)), (byte)((startAdr >> 8) & 0xff));
+                SOutData(page,mml, port[1], (byte)(0x18 + (page.ch - 12)), (byte)((startAdr >> 16) & 0xff));
                 page.pcmStartAddress = startAdr;
             }
 
             if (page.pcmEndAddress != endAdr)
             {
-                parent.OutData(mml, port[1], (byte)(0x20 + (page.ch - 12)), (byte)(((endAdr - 0x100) >> 8) & 0xff));
-                parent.OutData(mml, port[1], (byte)(0x28 + (page.ch - 12)), (byte)(((endAdr - 0x100) >> 16) & 0xff));
+                SOutData(page,mml, port[1], (byte)(0x20 + (page.ch - 12)), (byte)(((endAdr - 0x100) >> 8) & 0xff));
+                SOutData(page,mml, port[1], (byte)(0x28 + (page.ch - 12)), (byte)(((endAdr - 0x100) >> 16) & 0xff));
                 page.pcmEndAddress = endAdr;
             }
 
@@ -276,15 +276,15 @@ namespace Core
         {
             if (page.pcmStartAddress != startAdr)
             {
-                parent.OutData(mml, port[0], 0x12, (byte)((startAdr >> 8) & 0xff));
-                parent.OutData(mml, port[0], 0x13, (byte)((startAdr >> 16) & 0xff));
+                SOutData(page,mml, port[0], 0x12, (byte)((startAdr >> 8) & 0xff));
+                SOutData(page,mml, port[0], 0x13, (byte)((startAdr >> 16) & 0xff));
                 page.pcmStartAddress = startAdr;
             }
 
             if (page.pcmEndAddress != endAdr)
             {
-                parent.OutData(mml, port[0], 0x14, (byte)(((endAdr - 0x100) >> 8) & 0xff));
-                parent.OutData(mml, port[0], 0x15, (byte)(((endAdr - 0x100) >> 16) & 0xff));
+                SOutData(page,mml, port[0], 0x14, (byte)(((endAdr - 0x100) >> 8) & 0xff));
+                SOutData(page,mml, port[0], 0x15, (byte)(((endAdr - 0x100) >> 16) & 0xff));
                 page.pcmEndAddress = endAdr;
             }
 
@@ -319,10 +319,10 @@ namespace Core
             byte data = 0;
 
             data = (byte)(f & 0xff);
-            parent.OutData(mml, port[0], 0x19, data);
+            SOutData(page,mml, port[0], 0x19, data);
 
             data = (byte)((f & 0xff00) >> 8);
-            parent.OutData(mml, port[0], 0x1a, data);
+            SOutData(page,mml, port[0], 0x1a, data);
         }
 
         public void SetAdpcmBVolume(MML mml, partPage page)
@@ -341,7 +341,7 @@ namespace Core
 
             if (page.beforeVolume != vol)
             {
-                parent.OutData(mml, port[0], 0x1b, (byte)vol);
+                SOutData(page,mml, port[0], 0x1b, (byte)vol);
                 page.beforeVolume = page.volume;
             }
         }
@@ -350,7 +350,7 @@ namespace Core
         {
             if (page.pan.val != pan)
             {
-                parent.OutData(mml, port[0], 0x11, (byte)((pan & 0x3) << 6));
+                SOutData(page,mml, port[0], 0x11, (byte)((pan & 0x3) << 6));
                 page.pan.val = pan;
             }
         }
@@ -380,14 +380,14 @@ namespace Core
         {
 
             SetAdpcmBVolume(mml, page);
-            parent.OutData(mml, port[0], 0x10, 0x80);
+            SOutData(page,mml, port[0], 0x10, 0x80);
 
         }
 
         public void OutAdpcmBKeyOff(MML mml, partPage page)
         {
 
-            parent.OutData(mml, port[0], 0x10, 0x01);
+            SOutData(page,mml, port[0], 0x10, 0x01);
 
         }
 
@@ -746,13 +746,13 @@ namespace Core
             byte dat = (byte)(int)mml.args[1];
 
             if (page.Type == enmChannelType.FMOPN || page.Type == enmChannelType.FMOPNex)
-                parent.OutData(mml, (page.ch > 2 && page.ch < 6) ? port[1] : port[0], adr, dat);
+                SOutData(page,mml, (page.ch > 2 && page.ch < 6) ? port[1] : port[0], adr, dat);
             else if (page.Type == enmChannelType.SSG)
-                parent.OutData(mml, port[0], adr, dat);
+                SOutData(page,mml, port[0], adr, dat);
             else if (page.Type == enmChannelType.ADPCMA)
-                parent.OutData(mml, port[1], adr, dat);
+                SOutData(page,mml, port[1], adr, dat);
             else if (page.Type == enmChannelType.ADPCMB)
-                parent.OutData(mml, port[0], adr, dat);
+                SOutData(page,mml, port[0], adr, dat);
         }
 
         public override void CmdMPMS(partPage page, MML mml)
@@ -1002,7 +1002,7 @@ namespace Core
                         //Adpcm-A TotalVolume処理
                         if (page.beforeVolume != page.volume || !page.pan.eq())
                         {
-                            parent.OutData(mml, port[1], (byte)(0x08 + (page.ch - 12)), (byte)((byte)((page.pan.val & 0x3) << 6) | (byte)(page.volume & 0x1f)));
+                            SOutData(page,mml, port[1], (byte)(0x08 + (page.ch - 12)), (byte)((byte)((page.pan.val & 0x3) << 6) | (byte)(page.volume & 0x1f)));
                             page.beforeVolume = page.volume;
                             page.pan.rst();
                         }
@@ -1015,18 +1015,20 @@ namespace Core
                 }
             }
 
+            partPage pg = lstPartWork[17].cpg;
+
             //Adpcm-A KeyOff処理
             if (0 != adpcmA_KeyOff)
             {
                 byte data = (byte)(0x80 + adpcmA_KeyOff);
-                parent.OutData(mml, port[1], 0x00, data);
+                SOutData(pg,mml, port[1], 0x00, data);
                 adpcmA_KeyOff = 0;
             }
 
             //Adpcm-A TotalVolume処理
             if (adpcmA_beforeTotalVolume != adpcmA_TotalVolume)
             {
-                parent.OutData(mml, port[1], 0x01, (byte)(adpcmA_TotalVolume & 0x3f));
+                SOutData(pg,mml, port[1], 0x01, (byte)(adpcmA_TotalVolume & 0x3f));
                 adpcmA_beforeTotalVolume = adpcmA_TotalVolume;
             }
 
@@ -1034,7 +1036,7 @@ namespace Core
             if (0 != adpcmA_KeyOn)
             {
                 byte data = (byte)(0x00 + adpcmA_KeyOn);
-                parent.OutData(mml, port[1], 0x00, data);
+                SOutData(pg,mml, port[1], 0x00, data);
                 adpcmA_KeyOn = 0;
             }
         }

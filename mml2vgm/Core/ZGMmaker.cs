@@ -283,6 +283,14 @@ namespace Core
                 {
                     if (chip == null) continue;
                     chip.InitChip();
+                    foreach (partWork pw in chip.lstPartWork)
+                    {
+                        foreach (partPage pg in pw.pg)
+                        {
+                            mmlInfo.OutData(pg.sendData);
+                            pg.sendData.Clear();
+                        }
+                    }
                 }
             }
 

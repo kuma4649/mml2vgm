@@ -132,7 +132,8 @@ namespace Core
             else
                 cmd = new byte[] { 0x54 };
 
-            parent.OutData(
+            SOutData(
+                page,
                 mml,
                 cmd // original vgm command : YM2151
                 , (byte)(0x50 + ((priority & 0x3) << 2) + (ch & 0x3))
@@ -171,7 +172,8 @@ namespace Core
                 pcmKeyOnInstNum[ch & 0x3] = -1;
             }
 
-            parent.OutData(
+            SOutData(
+                page,
                 mml,
                 cmd // original vgm command : YM2151
                 , (byte)(0x50 + ((priority & 0x3) << 2) + (ch & 0x3))

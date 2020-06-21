@@ -76,6 +76,7 @@
             this.rbSCCIDetect = new System.Windows.Forms.RadioButton();
             this.rbC86ctlDetect = new System.Windows.Forms.RadioButton();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.ucSI = new mml2vgmIDE.ucSettingInstruments();
             this.tabPage13 = new System.Windows.Forms.TabPage();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.label16 = new System.Windows.Forms.Label();
@@ -329,6 +330,7 @@
             this.rbQueryPerformanceCounter = new System.Windows.Forms.RadioButton();
             this.rbDateTime = new System.Windows.Forms.RadioButton();
             this.rbStopWatch = new System.Windows.Forms.RadioButton();
+            this.cbUseSIen = new System.Windows.Forms.CheckBox();
             this.cbInfiniteOfflineMode = new System.Windows.Forms.CheckBox();
             this.groupBox29 = new System.Windows.Forms.GroupBox();
             this.label36 = new System.Windows.Forms.Label();
@@ -354,9 +356,8 @@
             this.labelCopyright = new System.Windows.Forms.Label();
             this.labelCompanyName = new System.Windows.Forms.Label();
             this.textBoxDescription = new System.Windows.Forms.TextBox();
+            this.llOpenGithub = new System.Windows.Forms.LinkLabel();
             this.cbHiyorimiMode = new System.Windows.Forms.CheckBox();
-            this.ucSI = new mml2vgmIDE.ucSettingInstruments();
-            this.cbUseSIen = new System.Windows.Forms.CheckBox();
             this.gbWaveOut.SuspendLayout();
             this.gbAsioOut.SuspendLayout();
             this.gbWasapiOut.SuspendLayout();
@@ -1002,6 +1003,17 @@
             this.groupBox1.Size = new System.Drawing.Size(411, 258);
             this.groupBox1.TabIndex = 8;
             this.groupBox1.TabStop = false;
+            // 
+            // ucSI
+            // 
+            this.ucSI.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.ucSI.AutoScroll = true;
+            this.ucSI.Location = new System.Drawing.Point(3, 18);
+            this.ucSI.Name = "ucSI";
+            this.ucSI.Size = new System.Drawing.Size(405, 237);
+            this.ucSI.TabIndex = 7;
             // 
             // tabPage13
             // 
@@ -3821,6 +3833,16 @@
             this.rbStopWatch.Text = "Stopwatch(C#) default";
             this.rbStopWatch.UseVisualStyleBackColor = true;
             // 
+            // cbUseSIen
+            // 
+            this.cbUseSIen.AutoSize = true;
+            this.cbUseSIen.Location = new System.Drawing.Point(162, 223);
+            this.cbUseSIen.Name = "cbUseSIen";
+            this.cbUseSIen.Size = new System.Drawing.Size(148, 16);
+            this.cbUseSIen.TabIndex = 23;
+            this.cbUseSIen.Text = "入力支援機能を使用する";
+            this.cbUseSIen.UseVisualStyleBackColor = true;
+            // 
             // cbInfiniteOfflineMode
             // 
             this.cbInfiniteOfflineMode.AutoSize = true;
@@ -4015,6 +4037,7 @@
             this.tableLayoutPanel.Controls.Add(this.labelCopyright, 1, 2);
             this.tableLayoutPanel.Controls.Add(this.labelCompanyName, 1, 3);
             this.tableLayoutPanel.Controls.Add(this.textBoxDescription, 1, 4);
+            this.tableLayoutPanel.Controls.Add(this.llOpenGithub, 1, 5);
             this.tableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel.Location = new System.Drawing.Point(3, 3);
             this.tableLayoutPanel.Name = "tableLayoutPanel";
@@ -4102,6 +4125,19 @@
             this.textBoxDescription.TabStop = false;
             this.textBoxDescription.Text = "説明";
             // 
+            // llOpenGithub
+            // 
+            this.llOpenGithub.AutoSize = true;
+            this.llOpenGithub.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.llOpenGithub.Location = new System.Drawing.Point(147, 358);
+            this.llOpenGithub.Name = "llOpenGithub";
+            this.llOpenGithub.Size = new System.Drawing.Size(287, 36);
+            this.llOpenGithub.TabIndex = 24;
+            this.llOpenGithub.TabStop = true;
+            this.llOpenGithub.Text = "Open latest version page of Github.";
+            this.llOpenGithub.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.llOpenGithub.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.llOpenGithub_LinkClicked);
+            // 
             // cbHiyorimiMode
             // 
             this.cbHiyorimiMode.AutoSize = true;
@@ -4112,27 +4148,6 @@
             this.cbHiyorimiMode.Text = "日和見モード(出力タブ：\r\n遅延時間100ms以下の時、使用を推奨)";
             this.cbHiyorimiMode.UseVisualStyleBackColor = true;
             this.cbHiyorimiMode.Visible = false;
-            // 
-            // ucSI
-            // 
-            this.ucSI.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.ucSI.AutoScroll = true;
-            this.ucSI.Location = new System.Drawing.Point(3, 18);
-            this.ucSI.Name = "ucSI";
-            this.ucSI.Size = new System.Drawing.Size(405, 237);
-            this.ucSI.TabIndex = 7;
-            // 
-            // cbUseSIen
-            // 
-            this.cbUseSIen.AutoSize = true;
-            this.cbUseSIen.Location = new System.Drawing.Point(162, 223);
-            this.cbUseSIen.Name = "cbUseSIen";
-            this.cbUseSIen.Size = new System.Drawing.Size(148, 16);
-            this.cbUseSIen.TabIndex = 23;
-            this.cbUseSIen.Text = "入力支援機能を使用する";
-            this.cbUseSIen.UseVisualStyleBackColor = true;
             // 
             // FrmSetting
             // 
@@ -4617,5 +4632,6 @@
         private System.Windows.Forms.Label lblSKKey;
         private System.Windows.Forms.Button btnInitializeShortCutKey;
         private System.Windows.Forms.CheckBox cbUseSIen;
+        private System.Windows.Forms.LinkLabel llOpenGithub;
     }
 }

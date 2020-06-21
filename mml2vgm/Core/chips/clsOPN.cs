@@ -36,9 +36,9 @@ namespace Core
             SetSsgVolume(page, mml);
             if (page.HardEnvelopeSw)
             {
-                parent.OutData(mml, page.port[port], (byte)(adr + 0x0d), (byte)(page.HardEnvelopeType & 0xf));
+                SOutData(page,mml, page.port[port], (byte)(adr + 0x0d), (byte)(page.HardEnvelopeType & 0xf));
             }
-            parent.OutData(mml, page.port[port], (byte)(adr + 0x07), data);
+            SOutData(page,mml, page.port[port], (byte)(adr + 0x07), data);
 
             MML vmml = new MML();
             vmml.type = enmMMLType.Volume;
@@ -65,9 +65,9 @@ namespace Core
             data = (byte)(((ClsOPN)page.chip).SSGKeyOn[p] | (n << vch));
             ((ClsOPN)page.chip).SSGKeyOn[p] = data;
 
-            parent.OutData(mml, page.port[port], (byte)(adr + 0x08 + vch), 0);
+            SOutData(page,mml, page.port[port], (byte)(adr + 0x08 + vch), 0);
             page.beforeVolume = -1;
-            parent.OutData(mml, page.port[port], (byte)(adr + 0x07), data);
+            SOutData(page,mml, page.port[port], (byte)(adr + 0x07), data);
 
         }
 
@@ -113,7 +113,7 @@ namespace Core
 
             if (page.beforeVolume != vol)
             {
-                parent.OutData(mml, page.port[port], (byte)(adr + 0x08 + vch), (byte)vol);
+                SOutData(page,mml, page.port[port], (byte)(adr + 0x08 + vch), (byte)vol);
                 page.beforeVolume = vol;
             }
         }
@@ -125,7 +125,7 @@ namespace Core
             int vch;//ノイズ設定はch未使用
             GetPortVchSsg(page, out port, out adr, out vch);
 
-            parent.OutData(mml, page.port[port], (byte)(adr + 0x06), (byte)(n & 0x1f));
+            SOutData(page,mml, page.port[port], (byte)(adr + 0x06), (byte)(n & 0x1f));
         }
 
         public void SetSsgFNum(partPage page,MML mml)
@@ -175,10 +175,10 @@ namespace Core
             byte data = 0;
 
             data = (byte)(f & 0xff);
-            parent.OutData(mml,page.port[port], (byte)(adr + 0 + vch * 2), data);
+            SOutData(page,mml,page.port[port], (byte)(adr + 0 + vch * 2), data);
 
             data = (byte)((f & 0xf00) >> 8);
-            parent.OutData(mml,page.port[port], (byte)(adr + 1 + vch * 2), data);
+            SOutData(page,mml,page.port[port], (byte)(adr + 1 + vch * 2), data);
         }
 
         public int GetSsgFNum(partPage page,MML mml, int octave, char noteCmd, int shift)
@@ -212,12 +212,12 @@ namespace Core
             ams = ams & 3;
             pms = pms & 7;
 
-            parent.OutData(mml, port, (byte)(0xb4 + vch), (byte)((pan << 6) + (ams << 4) + pms));
+            SOutData(page,mml, port, (byte)(0xb4 + vch), (byte)((pan << 6) + (ams << 4) + pms));
         }
 
         public void OutOPNSetHardLfo(MML mml,partPage page, bool sw, int lfoNum)
         {
-            parent.OutData(
+            SOutData(page,
                 mml,
                 page.port[0]
                 , 0x22
@@ -236,7 +236,7 @@ namespace Core
                 }
             }
             // ignore Timer ^^;
-            parent.OutData(
+            SOutData(page,
                 mml,
                 port
                 , 0x27
@@ -253,7 +253,7 @@ namespace Core
             fb &= 7;
             alg &= 7;
 
-            parent.OutData(mml, port, (byte)(0xb0 + vch), (byte)((fb << 3) + alg));
+            SOutData(page,mml, port, (byte)(0xb0 + vch), (byte)((fb << 3) + alg));
         }
 
         public void OutFmSetDtMl(MML mml, partPage page, int ope, int dt, int ml)
@@ -266,7 +266,7 @@ namespace Core
             dt &= 7;
             ml &= 15;
 
-            parent.OutData(mml, port, (byte)(0x30 + vch + ope * 4), (byte)((dt << 4) + ml));
+            SOutData(page,mml, port, (byte)(0x30 + vch + ope * 4), (byte)((dt << 4) + ml));
         }
 
         public void OutFmSetTl(MML mml,partPage page, int ope, int tl)
@@ -278,7 +278,7 @@ namespace Core
             ope = (ope == 1) ? 2 : ((ope == 2) ? 1 : ope);
             tl &= 0x7f;
 
-            parent.OutData(mml,port, (byte)(0x40 + vch + ope * 4), (byte)tl);
+            SOutData(page,mml,port, (byte)(0x40 + vch + ope * 4), (byte)tl);
         }
 
         public void OutFmSetKsAr(MML mml,partPage page, int ope, int ks, int ar)
@@ -291,7 +291,7 @@ namespace Core
             ks &= 3;
             ar &= 31;
 
-            parent.OutData(mml,port, (byte)(0x50 + vch + ope * 4), (byte)((ks << 6) + ar));
+            SOutData(page,mml,port, (byte)(0x50 + vch + ope * 4), (byte)((ks << 6) + ar));
         }
 
         public void OutFmSetAmDr(MML mml,partPage page, int ope, int am, int dr)
@@ -304,7 +304,7 @@ namespace Core
             am &= 1;
             dr &= 31;
 
-            parent.OutData(mml,port, (byte)(0x60 + vch + ope * 4), (byte)((am << 7) + dr));
+            SOutData(page,mml,port, (byte)(0x60 + vch + ope * 4), (byte)((am << 7) + dr));
         }
 
         public void OutFmSetSr(MML mml,partPage page, int ope, int sr)
@@ -316,7 +316,7 @@ namespace Core
             ope = (ope == 1) ? 2 : ((ope == 2) ? 1 : ope);
             sr &= 31;
 
-            parent.OutData(mml,port, (byte)(0x70 + vch + ope * 4), (byte)(sr));
+            SOutData(page,mml,port, (byte)(0x70 + vch + ope * 4), (byte)(sr));
         }
 
         public void OutFmSetSlRr(MML mml, partPage page, int ope, int sl, int rr)
@@ -329,7 +329,7 @@ namespace Core
             sl &= 15;
             rr &= 15;
 
-            parent.OutData(mml, port, (byte)(0x80 + vch + ope * 4), (byte)((sl << 4) + rr));
+            SOutData(page,mml, port, (byte)(0x80 + vch + ope * 4), (byte)((sl << 4) + rr));
         }
 
         protected void GetPortVch(partPage page, out byte[] port, out int vch)
@@ -421,7 +421,7 @@ namespace Core
             ope = (ope == 1) ? 2 : ((ope == 2) ? 1 : ope);
             n &= 15;
 
-            parent.OutData(mml,port, (byte)(0x90 + vch + ope * 4), (byte)n);
+            SOutData(page,mml,port, (byte)(0x90 + vch + ope * 4), (byte)n);
         }
 
         /// <summary>
@@ -506,13 +506,13 @@ namespace Core
             ope &= 3;
             if (ope == 0)
             {
-                parent.OutData(mml,page.port[0], 0xa6, (byte)(((num & 0x700) >> 8) + (((octave - 1) & 0x7) << 3)));
-                parent.OutData(mml,page.port[0], 0xa2, (byte)(num & 0xff));
+                SOutData(page,mml,page.port[0], 0xa6, (byte)(((num & 0x700) >> 8) + (((octave - 1) & 0x7) << 3)));
+                SOutData(page,mml,page.port[0], 0xa2, (byte)(num & 0xff));
             }
             else
             {
-                parent.OutData(mml,page.port[0], (byte)(0xac + ope), (byte)(((num & 0x700) >> 8) + (((octave - 1) & 0x7) << 3)));
-                parent.OutData(mml,page.port[0], (byte)(0xa8 + ope), (byte)(num & 0xff));
+                SOutData(page,mml,page.port[0], (byte)(0xac + ope), (byte)(((num & 0x700) >> 8) + (((octave - 1) & 0x7) << 3)));
+                SOutData(page,mml,page.port[0], (byte)(0xa8 + ope), (byte)(num & 0xff));
             }
         }
 
@@ -722,7 +722,7 @@ namespace Core
                             | (page.chip.lstPartWork[n + 4].apg.Ch3SpecialModeKeyOn ? page.chip.lstPartWork[n + 4].apg.slots : 0x0)
                             | (page.chip.lstPartWork[n + 5].apg.Ch3SpecialModeKeyOn ? page.chip.lstPartWork[n + 5].apg.slots : 0x0);
 
-                        parent.OutData(mml, page.port[0], 0x28, (byte)((slot << 4) + 2));
+                        SOutData(page,mml, page.port[0], 0x28, (byte)((slot << 4) + 2));
                     }
                     else
                     {
@@ -730,7 +730,7 @@ namespace Core
                         {
                             byte vch = (byte)((page.ch > 2) ? page.ch + 1 : page.ch);
                             //key off
-                            parent.OutData(mml, page.port[0], 0x28, (byte)(0x00 + (vch & 7)));
+                            SOutData(page,mml, page.port[0], 0x28, (byte)(0x00 + (vch & 7)));
                         }
                     }
                 }
@@ -874,7 +874,7 @@ namespace Core
                 if (parent.info.format == enmFormat.VGM)
                 {
                     //Stop Stream
-                    parent.OutData(mml, cmd, (byte)page.streamID);
+                    SOutData(page,mml, cmd, (byte)page.streamID);
                 }
             }
 
@@ -915,26 +915,26 @@ namespace Core
                 if ((page.slots & 8) != 0)
                 {
                     int f = page.freq + page.slotDetune[3];
-                    parent.OutData(mml, page.port[0], (byte)0xa6, (byte)(f >> 8));
-                    parent.OutData(mml, page.port[0], (byte)0xa2, (byte)f);
+                    SOutData(page,mml, page.port[0], (byte)0xa6, (byte)(f >> 8));
+                    SOutData(page,mml, page.port[0], (byte)0xa2, (byte)f);
                 }
                 if ((page.slots & 4) != 0)
                 {
                     int f = page.freq + page.slotDetune[2];
-                    parent.OutData(mml, page.port[0], (byte)0xac, (byte)(f >> 8));
-                    parent.OutData(mml, page.port[0], (byte)0xa8, (byte)f);
+                    SOutData(page,mml, page.port[0], (byte)0xac, (byte)(f >> 8));
+                    SOutData(page,mml, page.port[0], (byte)0xa8, (byte)f);
                 }
                 if ((page.slots & 1) != 0)
                 {
                     int f = page.freq + page.slotDetune[0];
-                    parent.OutData(mml, page.port[0], (byte)0xad, (byte)(f >> 8));
-                    parent.OutData(mml, page.port[0], (byte)0xa9, (byte)f);
+                    SOutData(page,mml, page.port[0], (byte)0xad, (byte)(f >> 8));
+                    SOutData(page,mml, page.port[0], (byte)0xa9, (byte)f);
                 }
                 if ((page.slots & 2) != 0)
                 {
                     int f = page.freq + page.slotDetune[1];
-                    parent.OutData(mml, page.port[0], (byte)0xae, (byte)(f >> 8));
-                    parent.OutData(mml, page.port[0], (byte)0xaa, (byte)f);
+                    SOutData(page,mml, page.port[0], (byte)0xae, (byte)(f >> 8));
+                    SOutData(page,mml, page.port[0], (byte)0xaa, (byte)f);
                 }
             }
             else
@@ -968,8 +968,8 @@ namespace Core
                     byte[] port;
                     GetPortVch(page, out port, out vch);
 
-                    parent.OutData(mml, port, (byte)(0xa4 + vch), (byte)((page.freq & 0xff00) >> 8));
-                    parent.OutData(mml, port, (byte)(0xa0 + vch), (byte)(page.freq & 0xff));
+                    SOutData(page,mml, port, (byte)(0xa4 + vch), (byte)((page.freq & 0xff00) >> 8));
+                    SOutData(page,mml, port, (byte)(0xa0 + vch), (byte)(page.freq & 0xff));
                 }
             }
         }
@@ -1025,7 +1025,7 @@ namespace Core
                         }
                         else
                         {
-                            parent.OutData(mml, page.port[0], 0x28, (byte)((slot << 4) + 2));
+                            SOutData(page,mml, page.port[0], 0x28, (byte)((slot << 4) + 2));
                         }
                     }
                     else
@@ -1060,7 +1060,7 @@ namespace Core
                             else
                             {
                                 //key on
-                                parent.OutData(mml, page.port[0], 0x28, (byte)((page.slots << 4) + (vch & 7)));
+                                SOutData(page,mml, page.port[0], 0x28, (byte)((page.slots << 4) + (vch & 7)));
                             }
                         }
                     }
@@ -1226,7 +1226,7 @@ namespace Core
                     else cmd = new byte[] { 0x40 };
                 }
                 else cmd = new byte[] { 0xe0 };
-                parent.OutData(
+                SOutData(page,
                     mml, cmd
                     , (byte)(p & 0xff)
                     , (byte)((p & 0xff00) / 0x100)
@@ -1276,7 +1276,7 @@ namespace Core
                         , (byte)(0x02 + (page.chipNumber!=0 ? 0x80 : 0x00))
                     };
 
-                    parent.OutData(
+                    SOutData(page,
                         mml,
                         // setup stream control
                         cmd
@@ -1289,7 +1289,7 @@ namespace Core
                         else cmd = new byte[] { 0x31 };
                     }
                     else cmd = new byte[] { 0x91 };
-                    parent.OutData(
+                    SOutData(page,
                         mml
                         // set stream data
                         , cmd
@@ -1311,7 +1311,7 @@ namespace Core
                     }
                     else cmd = new byte[] { 0x92 };
                     //Set Stream Frequency
-                    parent.OutData(
+                    SOutData(page,
                         mml, cmd
                         , (byte)page.streamID
                         , (byte)(f & 0xff)
@@ -1330,7 +1330,7 @@ namespace Core
                 }
                 else cmd = new byte[] { 0x93 };
                 //Start Stream
-                parent.OutData(
+                SOutData(page,
                     mml,
                     cmd
                     , (byte)page.streamID
@@ -1707,7 +1707,7 @@ namespace Core
 
             adr += (byte)(vch + (op << 2));
 
-            parent.OutData(mml,port, adr, dat);
+            SOutData(page,mml,port, adr, dat);
         }
 
         private void CmdY_ToneParamOPN_FBAL(MML mml,partPage page, byte dat)
@@ -1723,7 +1723,7 @@ namespace Core
 
             byte adr = (byte)(0xb0 + vch);
 
-            parent.OutData(mml,port, adr, dat);
+            SOutData(page,mml,port, adr, dat);
         }
 
 
@@ -1991,8 +1991,8 @@ namespace Core
                     n = (int)mml.args[1];
                     if (page.HardEnvelopeSpeed != n)
                     {
-                        parent.OutData(mml, page.port[port], (byte)(adr + 0x0b), (byte)(n & 0xff));
-                        parent.OutData(mml, page.port[port], (byte)(adr + 0x0c), (byte)((n >> 8) & 0xff));
+                        SOutData(page,mml, page.port[port], (byte)(adr + 0x0b), (byte)(n & 0xff));
+                        SOutData(page,mml, page.port[port], (byte)(adr + 0x0c), (byte)((n >> 8) & 0xff));
                         page.HardEnvelopeSpeed = n;
                     }
                     break;
@@ -2006,7 +2006,7 @@ namespace Core
                     n = (int)mml.args[1];
                     if (page.HardEnvelopeType != n)
                     {
-                        parent.OutData(mml, page.port[port], (byte)(adr + 0x0d), (byte)(n & 0xf));
+                        SOutData(page,mml, page.port[port], (byte)(adr + 0x0d), (byte)(n & 0xf));
                         page.HardEnvelopeType = n;
                     }
                     break;

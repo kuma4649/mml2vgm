@@ -179,9 +179,9 @@ namespace Core
             data = (byte)(((YM2203)page.chip).SSGKeyOn[0] | (n << pch));
             ((YM2203)page.chip).SSGKeyOn[0] = data;
 
-            parent.OutData(mml,port[0], (byte)(0x08 + pch), 0);
+            SOutData(page,mml,port[0], (byte)(0x08 + pch), 0);
             page.beforeVolume = -1;
-            parent.OutData(mml,port[0], 0x07, data);
+            SOutData(page,mml,port[0], 0x07, data);
         }
 
 
@@ -223,7 +223,7 @@ namespace Core
             byte adr = (byte)(int)mml.args[0];
             byte dat = (byte)(int)mml.args[1];
 
-            parent.OutData(mml,port[0], adr, dat);
+            SOutData(page,mml,port[0], adr, dat);
         }
 
         public override void CmdInstrument(partPage page, MML mml)

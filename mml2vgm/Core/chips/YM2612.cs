@@ -149,7 +149,8 @@ namespace Core
 
         public void OutSetCh6PCMMode(MML mml, partPage page, bool sw)
         {
-            parent.OutData(
+            SOutData(
+                page,
                 mml,
                 port[0]
                 , 0x2b
@@ -259,7 +260,7 @@ namespace Core
 
             byte adr = (byte)(int)mml.args[0];
             byte dat = (byte)(int)mml.args[1];
-            parent.OutData(mml, (page.ch > 2 && page.ch < 6) ? port[1] : port[0], adr, dat);
+            SOutData(page, mml, (page.ch > 2 && page.ch < 6) ? port[1] : port[0], adr, dat);
         }
 
         public override void CmdMPMS(partPage page, MML mml)

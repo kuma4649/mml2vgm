@@ -231,15 +231,15 @@ namespace Core
         {
             if (page.pcmStartAddress != startAdr)
             {
-                parent.OutData(mml, port[1], 0x02, (byte)((startAdr >> 2) & 0xff));
-                parent.OutData(mml, port[1], 0x03, (byte)((startAdr >> 10) & 0xff));
+                SOutData(page,mml, port[1], 0x02, (byte)((startAdr >> 2) & 0xff));
+                SOutData(page,mml, port[1], 0x03, (byte)((startAdr >> 10) & 0xff));
                 page.pcmStartAddress = startAdr;
             }
 
             if (page.pcmEndAddress != endAdr)
             {
-                parent.OutData(mml, port[1], 0x04, (byte)(((endAdr - 0x04) >> 2) & 0xff));
-                parent.OutData(mml, port[1], 0x05, (byte)(((endAdr - 0x04) >> 10) & 0xff));
+                SOutData(page,mml, port[1], 0x04, (byte)(((endAdr - 0x04) >> 2) & 0xff));
+                SOutData(page,mml, port[1], 0x05, (byte)(((endAdr - 0x04) >> 10) & 0xff));
                 page.pcmEndAddress = endAdr;
             }
 
@@ -274,10 +274,10 @@ namespace Core
             byte data = 0;
 
             data = (byte)(f & 0xff);
-            parent.OutData(mml, port[1], 0x09, data);
+            SOutData(page,mml, port[1], 0x09, data);
 
             data = (byte)((f & 0xff00) >> 8);
-            parent.OutData(mml, port[1], 0x0a, data);
+            SOutData(page,mml, port[1], 0x0a, data);
         }
 
         public void SetAdpcmVolume(MML mml, partPage page)
@@ -296,7 +296,7 @@ namespace Core
 
             if (page.beforeVolume != vol)
             {
-                parent.OutData(mml, port[1], 0x0b, (byte)vol);
+                SOutData(page,mml, port[1], 0x0b, (byte)vol);
                 page.beforeVolume = page.volume;
             }
         }
@@ -305,7 +305,7 @@ namespace Core
         {
             if (page.pan.val != pan)
             {
-                parent.OutData(mml, port[1], 0x01, (byte)((pan & 0x3) << 6));
+                SOutData(page,mml, port[1], 0x01, (byte)((pan & 0x3) << 6));
                 page.pan.val = pan;
             }
         }
@@ -347,14 +347,14 @@ namespace Core
         {
 
             SetAdpcmVolume(mml, page);
-            parent.OutData(mml, port[1], 0x00, 0xa0);
+            SOutData(page,mml, port[1], 0x00, 0xa0);
 
         }
 
         public void OutAdpcmKeyOff(MML mml, partPage page)
         {
 
-            parent.OutData(mml, port[1], 0x00, 0x01);
+            SOutData(page,mml, port[1], 0x00, 0x01);
 
         }
 
@@ -557,13 +557,13 @@ namespace Core
             byte dat = (byte)(int)mml.args[1];
 
             if (page.Type == enmChannelType.FMOPN || page.Type == enmChannelType.FMOPNex)
-                parent.OutData(mml, (page.ch > 2 && page.ch < 6) ? port[1] : port[0], adr, dat);
+                SOutData(page,mml, (page.ch > 2 && page.ch < 6) ? port[1] : port[0], adr, dat);
             else if (page.Type == enmChannelType.SSG)
-                parent.OutData(mml, port[0], adr, dat);
+                SOutData(page,mml, port[0], adr, dat);
             else if (page.Type == enmChannelType.RHYTHM)
-                parent.OutData(mml, port[0], adr, dat);
+                SOutData(page,mml, port[0], adr, dat);
             else if (page.Type == enmChannelType.ADPCM)
-                parent.OutData(mml, port[1], adr, dat);
+                SOutData(page,mml, port[1], adr, dat);
         }
 
         public override void CmdMPMS(partPage page, MML mml)
@@ -768,7 +768,7 @@ namespace Core
                         //Rhythm Volume処理
                         if (page.beforeVolume != page.volume || !page.pan.eq())
                         {
-                            parent.OutData(mml, port[0], (byte)(0x18 + (page.ch - 12)), (byte)((byte)((page.pan.val & 0x3) << 6) | (byte)(page.volume & 0x1f)));
+                            SOutData(page,mml, port[0], (byte)(0x18 + (page.ch - 12)), (byte)((byte)((page.pan.val & 0x3) << 6) | (byte)(page.volume & 0x1f)));
                             page.beforeVolume = page.volume;
                             page.pan.rst();
                         }
@@ -777,22 +777,26 @@ namespace Core
                         page.keyOn = false;
                         rhythm_KeyOff |= (byte)(page.keyOff ? (1 << (page.ch - 12)) : 0);
                         page.keyOff = false;
+
                     }
                 }
             }
+
+
+            partPage pg = lstPartWork[17].cpg;
 
             //Rhythm KeyOff処理
             if (0 != rhythm_KeyOff)
             {
                 byte data = (byte)(0x80 + rhythm_KeyOff);
-                parent.OutData(mml, port[0], 0x10, data);
+                SOutData(pg, mml, port[0], 0x10, data);
                 rhythm_KeyOff = 0;
             }
 
             //Rhythm TotalVolume処理
             if (rhythm_beforeTotalVolume != rhythm_TotalVolume)
             {
-                parent.OutData(mml, port[0], 0x11, (byte)(rhythm_TotalVolume & 0x3f));
+                SOutData(pg, mml, port[0], 0x11, (byte)(rhythm_TotalVolume & 0x3f));
                 rhythm_beforeTotalVolume = rhythm_TotalVolume;
             }
 
@@ -800,9 +804,10 @@ namespace Core
             if (0 != rhythm_KeyOn)
             {
                 byte data = (byte)(0x00 + rhythm_KeyOn);
-                parent.OutData(mml, port[0], 0x10, data);
+                SOutData(pg, mml, port[0], 0x10, data);
                 rhythm_KeyOn = 0;
             }
+
         }
 
         public override string DispRegion(clsPcm pcm)

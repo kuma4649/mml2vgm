@@ -1682,6 +1682,62 @@ namespace Core
             //Console.WriteLine("S{0}", mml == null ? "NULL" : mml.type.ToString());
         }
 
+        public void SOutData(partPage page, outDatum od, byte[] cmd, params byte[] data)
+        {
+            if (cmd != null && cmd.Length > 0)
+            {
+                foreach (byte d in cmd)
+                {
+                    outDatum o = new outDatum();
+                    o.val = d;
+                    if (od != null)
+                    {
+                        o.type = od.type;
+                        if (od.linePos != null)
+                        {
+                            o.linePos = new LinePos(
+                                od.linePos.srcMMLID,
+                                od.linePos.row,
+                                od.linePos.col,
+                                od.linePos.length,
+                                od.linePos.part,
+                                od.linePos.chip,
+                                od.linePos.chipIndex,
+                                od.linePos.chipNumber,
+                                od.linePos.ch);
+                        }
+                    }
+                    page.sendData.Add(o);
+                    //Console.Write("{0:x02} :", d);
+                }
+            }
+            foreach (byte d in data)
+            {
+                outDatum o = new outDatum();
+                o.val = d;
+                if (od != null)
+                {
+                    o.type = od.type;
+                    if (od.linePos != null)
+                    {
+                        o.linePos = new LinePos(
+                            od.linePos.srcMMLID,
+                            od.linePos.row,
+                            od.linePos.col,
+                            od.linePos.length,
+                            od.linePos.part,
+                            od.linePos.chip,
+                            od.linePos.chipIndex,
+                            od.linePos.chipNumber,
+                            od.linePos.ch);
+                    }
+                }
+                page.sendData.Add(o);
+                //Console.Write("{0:x02} :", d);
+            }
+            //Console.WriteLine("");
+        }
+
 
         public virtual void SetupPageData(partWork pw, partPage page)
         {

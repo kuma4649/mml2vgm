@@ -2274,6 +2274,11 @@ namespace mml2vgmIDE
             sRow.Cells["clmAlt"].Style.BackColor = color;
         }
 
+        private void llOpenGithub_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            llOpenGithub.LinkVisited = true;
+            System.Diagnostics.Process.Start("https://github.com/kuma4649/mml2vgm/releases/latest");
+        }
     }
 
 
