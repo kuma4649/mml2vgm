@@ -400,7 +400,13 @@ namespace Core
             }
 
             if (beforePanData == dat) return;
-            OutGGPsgStereoPort(mml, port[1], (byte)dat);
+            if (parent.info.format != enmFormat.XGM)//XGMではGGのステレオ機能は対応していない
+            {
+                if (parent.info.enableGGStereoDCSG)//enable指定の場合のみ
+                {
+                    OutGGPsgStereoPort(mml, port[1], (byte)dat);
+                }
+            }
             beforePanData = dat;
 
         }

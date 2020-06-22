@@ -32,6 +32,7 @@ namespace Core
         public const string PRIMARY = "PRIMARY";
         public const string SECONDARY = "SECONDARY";
         public const string MODEBEFORESEND = "MODEBEFORESEND";
+        public const string ENABLEGGSTEREODCSG = "ENABLEGGSTEREODCSG";
 
         readonly public static string[] IDName = new string[] { PRIMARY, SECONDARY };
         public const long DEFAULT_TEMPO = 120L;
@@ -66,6 +67,7 @@ namespace Core
         public bool volumeRev = false;
         public bool isK052539 = false;
         public int modeBeforeSend = 0;
+        public bool enableGGStereoDCSG = false;
 
 
         public void AddInformation(List<Line> lstLine, Dictionary<enmChipType, ClsChip[]> chips)
@@ -116,6 +118,7 @@ namespace Core
                     else if (wrd == ISK052539) SetIsK052539(val);
                     else if (wrd == FORCEDMONOPARTYM2612 && chips != null) SetMonoPart(val, chips);
                     else if (wrd == MODEBEFORESEND) SetModeBeforeSend(val);
+                    else if (wrd == ENABLEGGSTEREODCSG) SetEnableGGStereoDCSG(val);
                 }
                 catch
                 {
@@ -167,6 +170,26 @@ namespace Core
                     break;
                 case "PAL":
                     xgmSamplesPerSecond = 50;
+                    break;
+            }
+        }
+
+        private void SetEnableGGStereoDCSG(string val)
+        {
+            switch (val.ToUpper())
+            {
+                case "TRUE":
+                case "1":
+                case "YES":
+                case "Y":
+                    enableGGStereoDCSG = true;
+                    break;
+                case "FALSE":
+                case "0":
+                case "NO":
+                case "N":
+                default:
+                    enableGGStereoDCSG = false;
                     break;
             }
         }

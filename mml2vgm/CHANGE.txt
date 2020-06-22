@@ -1,4 +1,9 @@
 更新履歴
+TAG240 2020/06/23
+  Core
+    XGM:OPN2:昨日の対応でFMから音が出ないようになっていたのを修正。
+    VGM:ZGM:DCSG:EnableGGStereoDCSGタグ追加。DCSGのパンを指定します。(注意：今までは暗黙で有効になっていました)
+
 TAG239 2020/06/22
   Core
     OPN系:ページ機能対応 第１段階完了

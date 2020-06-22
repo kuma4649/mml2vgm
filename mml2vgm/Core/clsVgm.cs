@@ -2897,6 +2897,29 @@ namespace Core
 
                         //chip毎の処理
                         Xgm_procChip(chip);
+
+                        //
+                        // 各パートのページ割り込みチェック
+                        //
+                        for (int i = 0; i < chip.lstPartWork.Count; i++)
+                        {
+                            partWork pw = chip.lstPartWork[
+                                chip.ReversePartWork
+                                ? (chip.lstPartWork.Count - 1 - i)
+                                : i
+                                ];
+
+                            for (int p = 0; p < pw.pg.Count; p++)
+                            {
+                                chip.CheckInterrupt(pw, pw.pg[p]);
+                            }
+                        }
+
+                        log.Write("channelを跨ぐコマンド向け処理");
+                        chip.MultiChannelCommand(null);
+
+                        chip.LoopPage();
+
                     }
                 }
 
