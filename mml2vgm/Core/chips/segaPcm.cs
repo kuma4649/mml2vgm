@@ -209,7 +209,8 @@ namespace Core
 
         public void OutSegaPcmPort(MML mml, byte[] cmd, partPage page, int adr, byte data)
         {
-            parent.OutData(
+            SOutData(
+                page,
                 mml, cmd
                 , (byte)adr //ll
                 , (byte)(((adr & 0x7f00) >> 8) | (page.chipNumber != 0 ? 0x80 : 0)) //hh

@@ -97,17 +97,19 @@ namespace Core
             return FNumTbl[0][f];
         }
 
-        public void OutGGPsgStereoPort(MML mml, byte[] cmd, byte data)
+        public void OutGGPsgStereoPort(partPage page, MML mml, byte[] cmd, byte data)
         {
-            parent.OutData(
+            SOutData(
+                page,
                 mml, cmd
                 , data
                 );
         }
 
-        public void OutPsgPort(MML mml, byte[] cmd, byte data)
+        public void OutPsgPort(partPage page, MML mml, byte[] cmd, byte data)
         {
-            parent.OutData(
+            SOutData(
+                page,
                 mml, cmd
                 , data
                 );
@@ -198,10 +200,10 @@ namespace Core
                 page.freq = f;
 
                 byte data = (byte)(0x80 + (page.ch << 5) + (f & 0xf));
-                OutPsgPort(mml, port[0], data);
+                OutPsgPort(page,mml, port[0], data);
 
                 data = (byte)((f & 0x3f0) >> 4);
-                OutPsgPort(mml, port[0], data);
+                OutPsgPort(page, mml, port[0], data);
             }
             else
             {
@@ -209,7 +211,7 @@ namespace Core
                 if (page.freq == f) return;
                 page.freq = f;
                 byte data = (byte)f;
-                OutPsgPort(mml, port[0], data);
+                OutPsgPort(page, mml, port[0], data);
             }
 
         }
@@ -257,7 +259,7 @@ namespace Core
             if (page.beforeVolume != vol)
             {
                 data = (byte)(0x80 + (page.ch << 5) + 0x10 + (15 - vol));
-                OutPsgPort(mml, port[0], data);
+                OutPsgPort(page, mml, port[0], data);
                 page.beforeVolume = vol;
             }
         }
@@ -312,7 +314,7 @@ namespace Core
             byte adr = (byte)(int)mml.args[0];
             byte dat = (byte)(int)mml.args[1];
 
-            OutPsgPort(mml, port[0], dat);
+            OutPsgPort(page, mml, port[0], dat);
         }
 
         public override void CmdNoise(partPage page, MML mml)
@@ -328,10 +330,10 @@ namespace Core
             n = Common.CheckRange(n, 0, 0x3ff);
 
             byte data = (byte)(0xc0 + (n & 0xf));
-            OutPsgPort(mml, port[0], data);
+            OutPsgPort(page, mml, port[0], data);
 
             data = (byte)(n >> 4);
-            OutPsgPort(mml, port[0], data);
+            OutPsgPort(page, mml, port[0], data);
         }
 
         public override void CmdLoopExtProc(partPage page, MML mml)
@@ -404,7 +406,7 @@ namespace Core
             {
                 if (parent.info.enableGGStereoDCSG)//enable指定の場合のみ
                 {
-                    OutGGPsgStereoPort(mml, port[1], (byte)dat);
+                    OutGGPsgStereoPort(lstPartWork[lstPartWork.Count - 1].cpg, mml, port[1], (byte)dat);
                 }
             }
             beforePanData = dat;

@@ -419,7 +419,8 @@ namespace Core
 
         public void OutC352Port(MML mml, partPage page, int adr, int data)
         {
-            parent.OutData(
+            SOutData(
+                page,
                 mml,
                 page.port[0]
                 , (byte)(adr >> 8)
@@ -792,7 +793,7 @@ namespace Core
 
             if (executeKeyonoff)
             {
-                parent.OutData(mml, port[0], 0x02, 0x02, 0x0, 0x0);//execute keyon/keyoff
+                SOutData(lstPartWork[lstPartWork.Count - 1].cpg, mml, port[0], 0x02, 0x02, 0x0, 0x0);//execute keyon/keyoff
                 executeKeyonoff = false;
             }
         }

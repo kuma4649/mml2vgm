@@ -270,7 +270,8 @@ namespace Core
 
         private void OutQSoundPort(MML mml,byte[] cmd, partPage page, byte adr, ushort data)
         {
-            parent.OutData(
+            SOutData(
+                page,
                 mml,
                 cmd
                 , (byte)(data >> 8)

@@ -514,7 +514,8 @@ namespace Core
 
         public void OutC140Port(MML mml, partPage page, byte port, byte adr, byte data)
         {
-            parent.OutData(
+            SOutData(
+                page,
                 mml,
                 page.port[0]
                 , (byte)(port | (ChipNumber!=0 ? 0x80 : 0))

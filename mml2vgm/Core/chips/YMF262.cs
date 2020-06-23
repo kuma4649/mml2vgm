@@ -190,18 +190,18 @@ namespace Core
                 case 0: // N)one
                     break;
                 case 1: // R)R only
-                    parent.OutData(mml, port, (byte)(targetBaseReg + ope * 3 + 0x80)
+                    SOutData(page,mml, port, (byte)(targetBaseReg + ope * 3 + 0x80)
                         , ((0 & 0xf) << 4) | (15 & 0xf));//SL RR
                     break;
                 case 2: // A)ll
-                    SetInstAtOneOpeWithoutKslTl(mml, opeNum
+                    SetInstAtOneOpeWithoutKslTl(page, mml, opeNum
                         , 15, 15, 0, 15, 0, 0, 0, 0, 0, 0);
-                    parent.OutData(mml, port, (byte)(targetBaseReg + ope * 3 + 0x40)
+                    SOutData(page,mml, port, (byte)(targetBaseReg + ope * 3 + 0x40)
                         , ((0 & 0x3) << 6) | 0x3f);  //KL(M) TL
                     break;
             }
 
-            SetInstAtOneOpeWithoutKslTl(mml, opeNum,
+            SetInstAtOneOpeWithoutKslTl(page, mml, opeNum,
                 inst[ope * 12 + 1 + 0],//AR
                 inst[ope * 12 + 1 + 1],//DR
                 inst[ope * 12 + 1 + 2],//SL
@@ -220,12 +220,12 @@ namespace Core
                 if (ope == 0)
                 {
                     //OP1
-                    parent.OutData(mml, port, (byte)(0x40 + targetBaseReg + 0)
+                    SOutData(page,mml, port, (byte)(0x40 + targetBaseReg + 0)
                         , (byte)(((inst[12 * 0 + 5] & 0x3) << 6) | (inst[12 * 0 + 6] & 0x3f))); //KL(M) TL
                 }
             }
 
-            SetInstAtChannelPanFbCnt(mml, (opeNum % 6) % 3 + (opeNum / 6) * 3, (int)page.pan.val, inst[26], inst[25]);
+            SetInstAtChannelPanFbCnt(page, mml, (opeNum % 6) % 3 + (opeNum / 6) * 3, (int)page.pan.val, inst[26], inst[25]);
 
             page.beforeVolume = -1;
         }
@@ -242,15 +242,15 @@ namespace Core
                     break;
                 case 1: // R)R only
                     for (int ope = 0; ope < 2; ope++)
-                        parent.OutData(mml, port, (byte)(targetBaseReg + ope * 3 + 0x80)
+                        SOutData(page,mml, port, (byte)(targetBaseReg + ope * 3 + 0x80)
                             , ((0 & 0xf) << 4) | (15 & 0xf));//SL RR
                     break;
                 case 2: // A)ll
                     for (byte ope = 0; ope < 2; ope++)
                     {
-                        SetInstAtOneOpeWithoutKslTl(mml, (vch / 3 * 6) + (vch % 3) + ope * 3
+                        SetInstAtOneOpeWithoutKslTl(page, mml, (vch / 3 * 6) + (vch % 3) + ope * 3
                             , 15, 15, 0, 15, 0, 0, 0, 0, 0, 0);
-                        parent.OutData(mml, port, (byte)(targetBaseReg + ope * 3 + 0x40)
+                        SOutData(page,mml, port, (byte)(targetBaseReg + ope * 3 + 0x40)
                             , ((0 & 0x3) << 6) | 0x3f);  //KL(M) TL
                     }
                     break;
@@ -260,7 +260,7 @@ namespace Core
 
             for (int ope = 0; ope < 2; ope++)
             {
-                SetInstAtOneOpeWithoutKslTl(mml, slot1_operatorNumber + ope * 3,
+                SetInstAtOneOpeWithoutKslTl(page, mml, slot1_operatorNumber + ope * 3,
                     inst[ope * 12 + 1 + 0],
                     inst[ope * 12 + 1 + 1],
                     inst[ope * 12 + 1 + 2],
@@ -280,11 +280,11 @@ namespace Core
             if (cnt == 0)
             {
                 //OP1
-                parent.OutData(mml, port, (byte)(0x40 + ChnToBaseReg(vch) + 0)
+                SOutData(page,mml, port, (byte)(0x40 + ChnToBaseReg(vch) + 0)
                     , (byte)(((inst[12 * 0 + 5] & 0x3) << 6) | (inst[12 * 0 + 6] & 0x3f))); //KL(M) TL
             }
 
-            SetInstAtChannelPanFbCnt(mml, vch, (int)page.pan.val, inst[26], inst[25]);
+            SetInstAtChannelPanFbCnt(page, mml, vch, (int)page.pan.val, inst[26], inst[25]);
 
             page.beforeVolume = -1;
         }
@@ -307,15 +307,15 @@ namespace Core
                     break;
                 case 1: // R)R only
                     for (int ope = 0; ope < 2; ope++)
-                        parent.OutData(mml, port, (byte)(targetBaseReg + ope * 3 + 0x80)
+                        SOutData(page,mml, port, (byte)(targetBaseReg + ope * 3 + 0x80)
                             , ((0 & 0xf) << 4) | (15 & 0xf));//SL RR
                     break;
                 case 2: // A)ll
                     for (byte ope = 0; ope < 2; ope++)
                     {
-                        SetInstAtOneOpeWithoutKslTl(mml, (vch / 3 * 6) + (vch % 3) + ope * 3
+                        SetInstAtOneOpeWithoutKslTl(page, mml, (vch / 3 * 6) + (vch % 3) + ope * 3
                             , 15, 15, 0, 15, 0, 0, 0, 0, 0, 0);
-                        parent.OutData(mml, port, (byte)(targetBaseReg + ope * 3 + 0x40)
+                        SOutData(page,mml, port, (byte)(targetBaseReg + ope * 3 + 0x40)
                             , ((0 & 0x3) << 6) | 0x3f);  //KL(M) TL
                     }
                     break;
@@ -325,7 +325,7 @@ namespace Core
 
             for (int ope = 0; ope < 4; ope++)
             {
-                SetInstAtOneOpeWithoutKslTl(mml, slot1_operatorNumber + ope * 3,
+                SetInstAtOneOpeWithoutKslTl(page, mml, slot1_operatorNumber + ope * 3,
                     inst[ope * 12 + 1 + 0],
                     inst[ope * 12 + 1 + 1],
                     inst[ope * 12 + 1 + 2],
@@ -353,25 +353,25 @@ namespace Core
             else if (cnt1 == 1 && cnt2 == 1) { op2 = true; }
 
             if (op1)
-                parent.OutData(mml, port, (byte)(0x40 + ChnToBaseReg(vch) + 0)
+                SOutData(page,mml, port, (byte)(0x40 + ChnToBaseReg(vch) + 0)
                     , (byte)(((inst[12 * 0 + 5] & 0x3) << 6) | (inst[12 * 0 + 6] & 0x3f))); //KL(M) TL
 
             if (op2)
-                parent.OutData(mml, port, (byte)(0x40 + ChnToBaseReg(vch) + 3)
+                SOutData(page,mml, port, (byte)(0x40 + ChnToBaseReg(vch) + 3)
                     , (byte)(((inst[12 * 1 + 5] & 0x3) << 6) | (inst[12 * 1 + 6] & 0x3f))); //KL(M) TL
 
             if (op3)
-                parent.OutData(mml, port, (byte)(0x40 + ChnToBaseReg(vch) + 8)
+                SOutData(page,mml, port, (byte)(0x40 + ChnToBaseReg(vch) + 8)
                     , (byte)(((inst[12 * 2 + 5] & 0x3) << 6) | (inst[12 * 2 + 6] & 0x3f))); //KL(M) TL
 
 
-            SetInstAtChannelPanFbCnt(mml, vch, (int)page.pan.val, inst[51], cnt1);
-            SetInstAtChannelPanFbCnt(mml, vch + 3, (int)page.pan.val, inst[51], cnt2);
+            SetInstAtChannelPanFbCnt(page, mml, vch, (int)page.pan.val, inst[51], cnt1);
+            SetInstAtChannelPanFbCnt(page, mml, vch + 3, (int)page.pan.val, inst[51], cnt2);
 
             page.beforeVolume = -1;
         }
 
-        protected override void SetInstAtOneOpeWithoutKslTl(MML mml, int opeNum,
+        protected override void SetInstAtOneOpeWithoutKslTl(partPage page, MML mml, int opeNum,
             int ar, int dr, int sl, int rr,
             int mt, int am, int vib, int eg,
             int kr,
@@ -391,10 +391,10 @@ namespace Core
             //// / 3        ... slotは3ope毎に0か1を繰り返す
             //int slot = (opeNum % 6) / 3;
 
-            parent.OutData(mml, port, (byte)(0x80 + adr), (byte)(((sl & 0xf) << 4) | (rr & 0xf)));
-            parent.OutData(mml, port, (byte)(0x60 + adr), (byte)(((ar & 0xf) << 4) | (dr & 0xf)));
-            SetInstAtOneOpeAmVibEgKsMl(mml, port, (byte)(0x20 + adr), mt, am, vib, eg, kr);
-            parent.OutData(mml, port, (byte)(0xe0 + adr), (byte)(ws & 0x7));
+            SOutData(page,mml, port, (byte)(0x80 + adr), (byte)(((sl & 0xf) << 4) | (rr & 0xf)));
+            SOutData(page,mml, port, (byte)(0x60 + adr), (byte)(((ar & 0xf) << 4) | (dr & 0xf)));
+            SetInstAtOneOpeAmVibEgKsMl(page,mml, port, (byte)(0x20 + adr), mt, am, vib, eg, kr);
+            SOutData(page,mml, port, (byte)(0xe0 + adr), (byte)(ws & 0x7));
         }
 
 
@@ -472,7 +472,7 @@ namespace Core
                 );
             }
 
-            parent.OutData(mml, port, (byte)(vch % 9 + 0xC0), (byte)((
+            SOutData(page,mml, port, (byte)(vch % 9 + 0xC0), (byte)((
                 PanFbCnt
                 | (page.pan.val * 0x10) // PAN
                 )));
@@ -496,7 +496,7 @@ namespace Core
                 else
                     p = 0;
 
-                parent.OutData(mml, port[p], adr, dat);
+                SOutData(page,mml, port[p], adr, dat);
             }
             else
             {
@@ -504,7 +504,7 @@ namespace Core
                 byte adr = (byte)(int)mml.args[1];
                 byte dat = (byte)(int)mml.args[2];
 
-                parent.OutData(mml, port[prt & 1], adr, dat);
+                SOutData(page,mml, port[prt & 1], adr, dat);
 
             }
         }
@@ -535,7 +535,7 @@ namespace Core
                                 if (cnt != 0)
                                 {
                                     //OP1
-                                    parent.OutData(
+                                    SOutData(page,
                                         mml,
                                         port[page.ch / 9],
                                         (byte)(0x40 + ChnToBaseReg(page.ch) + 0),
@@ -546,7 +546,7 @@ namespace Core
                                         );
                                 }
                                 //OP2
-                                parent.OutData(
+                                SOutData(page,
                                     mml,
                                     port[page.ch / 9],
                                     (byte)(0x40 + ChnToBaseReg(page.ch) + 3),
@@ -578,7 +578,7 @@ namespace Core
                                 for (int i = 0; i < 4; i++)
                                 {
                                     if (!op[i]) continue;
-                                    parent.OutData(mml, port[page.ch / 9], (byte)(0x40 + ChnToBaseReg(page.ch) + i * 3 + (i > 1 ? 2 : 0)),
+                                    SOutData(page,mml, port[page.ch / 9], (byte)(0x40 + ChnToBaseReg(page.ch) + i * 3 + (i > 1 ? 2 : 0)),
                                         (byte)(
                                             ((parent.instFM[page.instrument][12 * i + 5] & 0x3) << 6)  //KL(M)
                                             | Common.CheckRange(((parent.instFM[page.instrument][12 * i + 6] & 0x3f) + (63 - (page.volume & 0x3f))), 0, 63) //TL
@@ -591,7 +591,7 @@ namespace Core
                         if (page.keyOff)
                         {
                             page.keyOff = false;
-                            parent.OutData(mml, getPortFromCh(page.ch)
+                            SOutData(page,mml, getPortFromCh(page.ch)
                                 , (byte)(0xB0 + page.ch % 9)
                                 , (byte)(
                                     ((page.freq >> 8) & 0x1f)
@@ -603,8 +603,8 @@ namespace Core
                         {
                             page.beforeFNum = page.freq | (page.keyOn ? 0x4000 : 0x0000);
                             //Console.WriteLine("CalcPitch {0} {1}_{2}", pw.ppg[pw.cpgNum].freq, pw.ppg[pw.cpgNum].freq >> 8 & 0x1F, pw.ppg[pw.cpgNum].freq & 0xFF);
-                            parent.OutData(mml, getPortFromCh(page.ch), (byte)(0xa0 + page.ch % 9), (byte)page.freq);
-                            parent.OutData(mml, getPortFromCh(page.ch)
+                            SOutData(page,mml, getPortFromCh(page.ch), (byte)(0xa0 + page.ch % 9), (byte)page.freq);
+                            SOutData(page,mml, getPortFromCh(page.ch)
                                 , (byte)(0xB0 + page.ch % 9)
                                 , (byte)(
                                     ((page.freq >> 8) & 0x1f)
@@ -628,7 +628,7 @@ namespace Core
                                 if (cnt != 0)
                                 {
                                     //OP1
-                                    parent.OutData(
+                                    SOutData(page,
                                         mml,
                                         port[vch / 9],
                                         (byte)(0x40 + ChnToBaseReg(vch) + 0),
@@ -639,7 +639,7 @@ namespace Core
                                         );
                                 }
                                 //OP2
-                                parent.OutData(
+                                SOutData(page,
                                     mml,
                                     port[vch / 9],
                                     (byte)(0x40 + ChnToBaseReg(vch) + 3),
@@ -653,7 +653,7 @@ namespace Core
                             {
                                 int vch = 7;
                                 //OP2
-                                parent.OutData(
+                                SOutData(page,
                                     mml,
                                     port[vch / 9],
                                     (byte)(0x40 + ChnToBaseReg(vch) + 3),
@@ -670,7 +670,7 @@ namespace Core
                                 //if (cnt != 0)
                                 {
                                     //OP1
-                                    parent.OutData(
+                                    SOutData(page,
                                         mml,
                                         port[vch / 9],
                                         (byte)(0x40 + ChnToBaseReg(vch) + 0),
@@ -685,7 +685,7 @@ namespace Core
                             {
                                 int vch = 8;
                                 //OP2
-                                parent.OutData(
+                                SOutData(page,
                                     mml,
                                     port[vch / 9],
                                     (byte)(0x40 + ChnToBaseReg(vch) + 3),
@@ -702,7 +702,7 @@ namespace Core
                                 //if (cnt != 0)
                                 {
                                     //OP1
-                                    parent.OutData(
+                                    SOutData(page,
                                         mml,
                                         port[vch / 9],
                                         (byte)(0x40 + ChnToBaseReg(vch) + 0),
@@ -742,8 +742,8 @@ namespace Core
                                 vch = 7;
                             }
 
-                            parent.OutData(mml, getPortFromCh(vch), (byte)(0xa0 + vch % 9), (byte)page.freq);
-                            parent.OutData(mml, getPortFromCh(vch)
+                            SOutData(page,mml, getPortFromCh(vch), (byte)(0xa0 + vch % 9), (byte)page.freq);
+                            SOutData(page,mml, getPortFromCh(vch)
                                 , (byte)(0xB0 + vch % 9)
                                 , (byte)(
                                     ((page.freq >> 8) & 0x1f)
@@ -769,7 +769,7 @@ namespace Core
             if (beforeRhythmStatus != rhythmStatus)
             {
                 beforeRhythmStatus = rhythmStatus;
-                parent.OutData(mml, port[0], 0xbd, rhythmStatus);
+                SOutData(lstPartWork[18].cpg, mml, port[0], 0xbd, rhythmStatus);
             }
 
         }

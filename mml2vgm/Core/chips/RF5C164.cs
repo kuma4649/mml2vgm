@@ -250,7 +250,7 @@ namespace Core
             {
                 SetRf5c164CurrentChannel(mml, page);
                 byte data = (byte)(volume & 0xff);
-                OutRf5c164Port(mml, port[0], page.chipNumber, 0x0, data);
+                OutRf5c164Port(page,mml, port[0], page.chipNumber, 0x0, data);
                 page.rf5c164Envelope = volume;
             }
         }
@@ -261,7 +261,7 @@ namespace Core
             {
                 SetRf5c164CurrentChannel(mml, page);
                 byte data = (byte)(pan & 0xff);
-                OutRf5c164Port(mml, port[0], page.chipNumber, 0x1, data);
+                OutRf5c164Port(page, mml, port[0], page.chipNumber, 0x1, data);
                 page.rf5c164Pan = pan;
             }
         }
@@ -275,7 +275,7 @@ namespace Core
             if (CurrentChannel != pch)
             {
                 byte data = (byte)(0xc0 + pch);
-                OutRf5c164Port(mml, port[0], chipNumber, 0x7, data);
+                OutRf5c164Port(page, mml, port[0], chipNumber, 0x7, data);
                 CurrentChannel = pch;
             }
         }
@@ -287,9 +287,9 @@ namespace Core
                 SetRf5c164CurrentChannel(mml, page);
 
                 byte data = (byte)(f & 0xff);
-                OutRf5c164Port(mml, port[0], page.chipNumber, 0x2, data);
+                OutRf5c164Port(page, mml, port[0], page.chipNumber, 0x2, data);
                 data = (byte)((f >> 8) & 0xff);
-                OutRf5c164Port(mml, port[0], page.chipNumber, 0x3, data);
+                OutRf5c164Port(page, mml, port[0], page.chipNumber, 0x3, data);
                 page.rf5c164AddressIncrement = f;
             }
         }
@@ -305,7 +305,7 @@ namespace Core
             {
                 SetRf5c164CurrentChannel(mml, page);
                 byte data = (byte)(stAdr >> 8);
-                OutRf5c164Port(mml, port[0], page.chipNumber, 0x6, data);
+                OutRf5c164Port(page, mml, port[0], page.chipNumber, 0x6, data);
                 //pw.ppg[pw.cpgNum].pcmStartAddress = stAdr;
             }
         }
@@ -316,9 +316,9 @@ namespace Core
             {
                 SetRf5c164CurrentChannel(mml, page);
                 byte data = (byte)(adr >> 8);
-                OutRf5c164Port(mml, port[0], page.chipNumber, 0x5, data);
+                OutRf5c164Port(page, mml, port[0], page.chipNumber, 0x5, data);
                 data = (byte)adr;
-                OutRf5c164Port(mml, port[0], page.chipNumber, 0x4, data);
+                OutRf5c164Port(page, mml, port[0], page.chipNumber, 0x4, data);
                 page.pcmLoopAddress = adr;
             }
         }
@@ -329,7 +329,7 @@ namespace Core
             SetRf5c164SampleStartAddress(mml, page);
             KeyOn |= (byte)(1 << page.ch);
             byte data = (byte)(~KeyOn);
-            OutRf5c164Port(mml, port[0], page.chipNumber, 0x8, data);
+            OutRf5c164Port(page, mml, port[0], page.chipNumber, 0x8, data);
             if (!parent.instPCM.ContainsKey(page.instrument))
             {
                 if (page.instrument == -1)
@@ -348,12 +348,13 @@ namespace Core
         {
             KeyOn &= (byte)(~(1 << page.ch));
             byte data = (byte)(~KeyOn);
-            OutRf5c164Port(mml, port[0], page.chipNumber, 0x8, data);
+            OutRf5c164Port(page, mml, port[0], page.chipNumber, 0x8, data);
         }
 
-        public void OutRf5c164Port(MML mml, byte[] cmd, int chipNumber, byte adr, byte data)
+        public void OutRf5c164Port(partPage page, MML mml, byte[] cmd, int chipNumber, byte adr, byte data)
         {
-            parent.OutData(
+            SOutData(
+                page,
                 mml,
                 cmd
                 , (byte)((adr & 0x7f) | (chipNumber != 0 ? 0x80 : 0x00))
@@ -617,7 +618,7 @@ namespace Core
             byte adr = (byte)(int)mml.args[0];
             byte dat = (byte)(int)mml.args[1];
 
-            OutRf5c164Port(mml, port[0], page.chipNumber, adr, dat);
+            OutRf5c164Port(page, mml, port[0], page.chipNumber, adr, dat);
         }
 
         public override void CmdPan(partPage page, MML mml)

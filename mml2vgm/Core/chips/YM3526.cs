@@ -43,7 +43,7 @@ namespace Core
 
         }
 
-        protected override void SetInstAtOneOpeWithoutKslTl(MML mml, int opeNum,
+        protected override void SetInstAtOneOpeWithoutKslTl(partPage page, MML mml, int opeNum,
 int ar, int dr, int sl, int rr,
 int mt, int am, int vib, int eg,
 int kr,
@@ -63,9 +63,9 @@ int ws
             //// / 3        ... slotは3ope毎に0か1を繰り返す
             //int slot = (opeNum % 6) / 3;
 
-            parent.OutData(mml, port, (byte)(0x80 + adr), (byte)(((sl & 0xf) << 4) | (rr & 0xf)));
-            parent.OutData(mml, port, (byte)(0x60 + adr), (byte)(((ar & 0xf) << 4) | (dr & 0xf)));
-            SetInstAtOneOpeAmVibEgKsMl(mml, port, (byte)(0x20 + adr), mt, am, vib, eg, kr);
+            SOutData(page,mml, port, (byte)(0x80 + adr), (byte)(((sl & 0xf) << 4) | (rr & 0xf)));
+            SOutData(page,mml, port, (byte)(0x60 + adr), (byte)(((ar & 0xf) << 4) | (dr & 0xf)));
+            SetInstAtOneOpeAmVibEgKsMl(page,mml, port, (byte)(0x20 + adr), mt, am, vib, eg, kr);
         }
     }
 }

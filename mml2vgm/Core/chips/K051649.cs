@@ -62,25 +62,25 @@ namespace Core
             //isK052539 = false;
 
             //keyOnOff : 0
-            OutK051649Port(null,port[0],ChipNumber, 3, 0, 0);
+            parent.OutData((MML)null, port[0], (byte)((ChipNumber != 0 ? 0x80 : 0x00) + 3), 0, 0);
             keyOnStatus = 0;
             keyOnStatusOld = 0;
 
             for (int i = 0; i < _ChMax; i++)
             {
                 //freq : 0
-                OutK051649Port(null, port[0], ChipNumber, 1, (byte)(i * 2 + 0), 0);
-                OutK051649Port(null, port[0], ChipNumber, 1, (byte)(i * 2 + 1), 0);
+                parent.OutData((MML)null, port[0], (byte)((ChipNumber != 0 ? 0x80 : 0x00) + 1), (byte)(i * 2 + 0), 0);
+                parent.OutData((MML)null, port[0], (byte)((ChipNumber != 0 ? 0x80 : 0x00) + 1), (byte)(i * 2 + 1), 0);
 
                 //volume : 0
-                OutK051649Port(null, port[0], ChipNumber, 2, (byte)i, 0);
+                parent.OutData((MML)null, port[0], (byte)((ChipNumber != 0 ? 0x80 : 0x00) + 2), (byte)i, 0);
 
                 //WaveForm : all 0
                 if (parent.info.isK052539 || i < 4) //K051の場合は4Ch分の初期化を行う
                 {
                     for (int j = 0; j < 32; j++)
                     {
-                        OutK051649Port(null, port[0], ChipNumber, (byte)(parent.info.isK052539 ? 4 : 0), (byte)(i * 32 + j), 0);
+                        parent.OutData((MML)null, port[0], (byte)((ChipNumber != 0 ? 0x80 : 0x00) + (parent.info.isK052539 ? 4 : 0)), (byte)(i * 32 + j), 0);
                     }
                 }
             }
@@ -106,9 +106,10 @@ namespace Core
             }
         }
 
-        public void OutK051649Port(MML mml, byte[] cmd, int chipNumber, byte port, byte adr, byte data)
+        public void OutK051649Port(partPage page, MML mml, byte[] cmd, int chipNumber, byte port, byte adr, byte data)
         {
-            parent.OutData(
+            SOutData(
+                page,
                 mml,
                 cmd
                 , (byte)((chipNumber!=0 ? 0x80 : 0x00) + port)
@@ -131,6 +132,7 @@ namespace Core
                 if (!parent.info.isK052539 && ch == 4) ch = 3;
 
                 OutK051649Port(
+                    page,
                     mml,port[0],
                     page.chipNumber
                     , (byte)(parent.info.isK052539 ? 4 : 0)
@@ -160,10 +162,10 @@ namespace Core
                     if (page.beforeFNum != page.FNum)
                     {
                         byte data = (byte)page.FNum;
-                        OutK051649Port(mml, port[0], ChipNumber, 1, (byte)(0 + page.ch * 2), data);
+                        OutK051649Port(page, mml, port[0], ChipNumber, 1, (byte)(0 + page.ch * 2), data);
 
                         data = (byte)((page.FNum & 0xf00) >> 8);
-                        OutK051649Port(mml, port[0], ChipNumber, 1, (byte)(1 + page.ch * 2), data);
+                        OutK051649Port(page, mml, port[0], ChipNumber, 1, (byte)(1 + page.ch * 2), data);
                         page.beforeFNum = page.FNum;
                     }
 
@@ -185,7 +187,7 @@ namespace Core
             //keyonoff
             if (keyOnStatus != keyOnStatusOld)
             {
-                OutK051649Port(mml, port[0], ChipNumber, 3, 0, keyOnStatus);
+                OutK051649Port(lstPartWork[lstPartWork.Count-1].cpg, mml, port[0], ChipNumber, 3, 0, keyOnStatus);
                 keyOnStatusOld = keyOnStatus;
             }
 
@@ -229,7 +231,7 @@ namespace Core
 
             if (page.beforeVolume != vol)
             {
-                OutK051649Port(mml, port[0], ChipNumber, 2, (byte)page.ch, (byte)vol);
+                OutK051649Port(page, mml, port[0], ChipNumber, 2, (byte)page.ch, (byte)vol);
                 page.beforeVolume = vol;
             }
         }
@@ -342,7 +344,7 @@ namespace Core
             byte adr = (byte)(int)mml.args[0];
             byte dat = (byte)(int)mml.args[1];
 
-            OutK051649Port(mml, this.port[0], page.chipNumber, port, adr, dat);
+            OutK051649Port(page, mml, this.port[0], page.chipNumber, port, adr, dat);
         }
 
         public override void CmdLoopExtProc(partPage page, MML mml)

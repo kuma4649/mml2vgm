@@ -118,7 +118,7 @@ namespace Core
             beforePan12 = -1;
             beforePan34 = -1;
 
-            OutK053260Port(null, port[0], null, 0x2f, 3);
+            parent.OutData((MML)null, port[0], (byte)((ChipNumber != 0 ? 0x80 : 0x00) + 0x2f), 3);
 
             currentBaseFreq = 8000.0;
             MakeFreqTable(currentBaseFreq);
@@ -344,7 +344,8 @@ namespace Core
 
         private void OutK053260Port(MML mml, byte[] cmd, partPage page, byte adr, byte data)
         {
-            parent.OutData(
+            SOutData(
+                page,
                 mml
                 , cmd
                 , (byte)((ChipNumber!=0 ? 0x80 : 0x00) + adr)
@@ -724,7 +725,7 @@ namespace Core
             }
             if (beforeloopDpcm != v)
             {
-                OutK053260Port(mml, port[0], null, 0x2a, v);
+                OutK053260Port(mml, port[0], lstPartWork[lstPartWork.Count - 1].cpg, 0x2a, v);
                 beforeloopDpcm = v;
             }
 
@@ -740,12 +741,12 @@ namespace Core
             }
             if (beforePan12 != v)
             {
-                OutK053260Port(mml, port[0], null, 0x2c, v);
+                OutK053260Port(mml, port[0], lstPartWork[lstPartWork.Count - 1].cpg, 0x2c, v);
                 beforePan12 = v;
             }
             if (beforePan34 != w)
             {
-                OutK053260Port(mml, port[0], null, 0x2d, w);
+                OutK053260Port(mml, port[0], lstPartWork[lstPartWork.Count - 1].cpg, 0x2d, w);
                 beforePan34 = w;
             }
 
@@ -763,7 +764,7 @@ namespace Core
             }
             if (beforeKeyON != v)
             {
-                OutK053260Port(mml, port[0], null, 0x28, v);
+                OutK053260Port(mml, port[0], lstPartWork[lstPartWork.Count - 1].cpg, 0x28, v);
                 beforeKeyON = v;
             }
 
