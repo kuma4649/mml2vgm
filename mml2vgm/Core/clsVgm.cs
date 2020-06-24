@@ -2354,6 +2354,8 @@ namespace Core
 
                     if (chip.SupportReversePartWork) chip.ReversePartWork = !chip.ReversePartWork;
 
+                    chip.LoopPage();
+
                     log.Write("channelを跨ぐコマンド向け処理");
                     chip.MultiChannelCommand(null);
 

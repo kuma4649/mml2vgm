@@ -10,6 +10,7 @@ namespace Core
     public class ClsOPN : ClsChip
     {
         public byte[] SSGKeyOn = new byte[] { 0x3f, 0x3f, 0x3f, 0x3f };
+        public int noiseFreq = -1;
 
         public ClsOPN(ClsVgm parent, int chipID, string initialPartName, string stPath, int chipNumber) : base(parent, chipID, initialPartName, stPath, chipNumber)
         {
@@ -111,21 +112,25 @@ namespace Core
                 vol |= (byte)(pan << 6);
             }
 
-            if (page.beforeVolume != vol)
+            if (page.spg.beforeVolume != vol)
             {
                 SOutData(page,mml, page.port[port], (byte)(adr + 0x08 + vch), (byte)vol);
-                page.beforeVolume = vol;
+                page.spg.beforeVolume = vol;
             }
         }
 
-        public void OutSsgNoise(MML mml,partPage page, int n)
+        public void OutSsgNoise(MML mml, partPage page)
         {
             int port;
             int adr;
             int vch;//ノイズ設定はch未使用
             GetPortVchSsg(page, out port, out adr, out vch);
 
-            SOutData(page,mml, page.port[port], (byte)(adr + 0x06), (byte)(n & 0x1f));
+            if (noiseFreq != page.noise)
+            {
+                noiseFreq = page.noise;
+                SOutData(page, mml, page.port[port], (byte)(adr + 0x06), (byte)(page.noise & 0x1f));
+            }
         }
 
         public void SetSsgFNum(partPage page,MML mml)
@@ -163,7 +168,7 @@ namespace Core
             }
 
             f = Common.CheckRange(f, 0, 0xfff);
-            if (page.freq == f) return;
+            if (page.spg.freq == f) return;
 
             page.freq = f;
 
@@ -906,33 +911,33 @@ namespace Core
             freq = ((num & 0x700) >> 8) + (((octave - 1) & 0x7) << 3);
             freq = (freq << 8) + (num & 0xff);
 
-            if (freq == page.freq) return;
+            if (freq == page.spg.freq) return;
 
-            page.freq = freq;
+            page.spg.freq = freq;
 
             if (page.chip.lstPartWork[2].apg.Ch3SpecialMode && page.Type == enmChannelType.FMOPNex)
             {
                 if ((page.slots & 8) != 0)
                 {
-                    int f = page.freq + page.slotDetune[3];
+                    int f = freq + page.slotDetune[3];
                     SOutData(page,mml, page.port[0], (byte)0xa6, (byte)(f >> 8));
                     SOutData(page,mml, page.port[0], (byte)0xa2, (byte)f);
                 }
                 if ((page.slots & 4) != 0)
                 {
-                    int f = page.freq + page.slotDetune[2];
+                    int f = freq + page.slotDetune[2];
                     SOutData(page,mml, page.port[0], (byte)0xac, (byte)(f >> 8));
                     SOutData(page,mml, page.port[0], (byte)0xa8, (byte)f);
                 }
                 if ((page.slots & 1) != 0)
                 {
-                    int f = page.freq + page.slotDetune[0];
+                    int f = freq + page.slotDetune[0];
                     SOutData(page,mml, page.port[0], (byte)0xad, (byte)(f >> 8));
                     SOutData(page,mml, page.port[0], (byte)0xa9, (byte)f);
                 }
                 if ((page.slots & 2) != 0)
                 {
-                    int f = page.freq + page.slotDetune[1];
+                    int f = freq + page.slotDetune[1];
                     SOutData(page,mml, page.port[0], (byte)0xae, (byte)(f >> 8));
                     SOutData(page,mml, page.port[0], (byte)0xaa, (byte)f);
                 }
@@ -968,8 +973,8 @@ namespace Core
                     byte[] port;
                     GetPortVch(page, out port, out vch);
 
-                    SOutData(page,mml, port, (byte)(0xa4 + vch), (byte)((page.freq & 0xff00) >> 8));
-                    SOutData(page,mml, port, (byte)(0xa0 + vch), (byte)(page.freq & 0xff));
+                    SOutData(page,mml, port, (byte)(0xa4 + vch), (byte)((freq & 0xff00) >> 8));
+                    SOutData(page,mml, port, (byte)(0xa0 + vch), (byte)(freq & 0xff));
                 }
             }
         }
@@ -1497,13 +1502,13 @@ namespace Core
                 vol += page.lfo[lfo].value + page.lfo[lfo].param[6];
             }
 
-            if (page.beforeVolume != vol)
+            if (page.spg.beforeVolume != vol)
             {
                 if (parent.instFM.ContainsKey(page.instrument))
                 {
                     OutFmSetVolume(page, mml, vol, page.instrument);
-                    page.beforeVolume = vol;
                 }
+                page.spg.beforeVolume = vol;
             }
         }
 
@@ -1751,8 +1756,8 @@ namespace Core
                 if (page.ch >= 27 && page.ch <= 29) ch = 27;
             }
 
-            page.chip.lstPartWork[ ch ].apg.noise = n;//各SSGChの1Chに保存
-            ((ClsOPN)page.chip).OutSsgNoise(mml,page, n);
+            page.noise = n;
+            ((ClsOPN)page.chip).OutSsgNoise(mml,page);
         }
 
         public override void CmdInstrument(partPage page, MML mml)

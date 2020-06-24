@@ -184,6 +184,24 @@ namespace Core
             SOutData(page,mml,port[0], 0x07, data);
         }
 
+        private void OutSsgHardEnvType(partPage page, MML mml)
+        {
+            if (page.spg.HardEnvelopeType != page.HardEnvelopeType)
+            {
+                SOutData(page, mml, port[0], 0x0d, (byte)(page.HardEnvelopeType & 0xf));
+                page.spg.HardEnvelopeType = page.HardEnvelopeType;
+            }
+        }
+
+        private void OutSsgHardEnvSpeed(partPage page, MML mml)
+        {
+            if (page.spg.HardEnvelopeSpeed != page.HardEnvelopeSpeed)
+            {
+                SOutData(page, mml, port[0], 0x0b, (byte)(page.HardEnvelopeSpeed & 0xff));
+                SOutData(page, mml, port[0], 0x0c, (byte)((page.HardEnvelopeSpeed >> 8) & 0xff));
+                page.spg.HardEnvelopeSpeed = page.HardEnvelopeSpeed;
+            }
+        }
 
         public override void SetFNum(partPage page, MML mml)
         {
@@ -198,7 +216,10 @@ namespace Core
         public override void SetKeyOn(partPage page, MML mml)
         {
             if (page.Type != enmChannelType.SSG)
-                OutFmKeyOn(page, mml);
+            {
+                page.keyOn = true;
+                //OutFmKeyOn(page, mml);
+            }
             else if (page.Type == enmChannelType.SSG)
             {
                 OutSsgKeyOn(page, mml);
@@ -246,6 +267,65 @@ namespace Core
             }
 
             base.CmdInstrument(page, mml);
+        }
+
+
+        public override void SetupPageData(partWork pw, partPage page)
+        {
+
+            if (page.Type == enmChannelType.FMOPN)
+            {
+                OutFmKeyOff(page, null);
+                page.spg.instrument = -1;
+                OutFmSetInstrument(page, null, page.instrument, page.volume, 'n');
+            }
+
+            //周波数
+            page.spg.freq = -1;
+            SetFNum(page, null);
+
+            if (page.Type == enmChannelType.SSG)
+            {
+                //ノイズ周波数
+                noiseFreq = -1;
+                OutSsgNoise(null, page);
+
+                //ハードエンベロープtype
+                page.spg.HardEnvelopeType = -1;
+                OutSsgHardEnvType(page, null);
+
+                //ハードエンベロープspeed
+                page.spg.HardEnvelopeSpeed = -1;
+                OutSsgHardEnvSpeed(page, null);
+            }
+            else
+            {
+            }
+
+            //音量
+            page.spg.beforeVolume = -1;
+            SetVolume(page, null);
+
+        }
+
+        public override void MultiChannelCommand(MML mml)
+        {
+            if (!use) return;
+            int dat = 0;
+
+            foreach (partWork pw in lstPartWork)
+            {
+                foreach (partPage page in pw.pg)
+                {
+                    if (page.keyOn)
+                    {
+                        page.keyOn = false;
+                        OutFmKeyOn(page, mml);
+                    }
+                }
+            }
+
+
         }
 
     }
