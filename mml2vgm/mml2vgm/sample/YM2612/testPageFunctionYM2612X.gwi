@@ -1,0 +1,63 @@
+﻿'{
+
+	TitleName   =
+	TitleNameJ  =ページ機能のテスト(OPN2)
+	GameName    =
+	GameNameJ   =
+	SystemName  =
+	SystemNameJ =
+	Composer    =
+	ComposerJ   =
+	ReleaseDate =
+	Converted   =
+	Notes       =
+
+	Format       =XGM
+	XGMBaseFrame =NTSC
+
+}
+
+   Chopper Bass 0(from VAL-SOUND)
+'@ N 000
+   AR  DR  SR  RR  SL  TL  KS  ML  DT  AM  SSGEG
+'@ 028 014 015 015 004 025 002 010 001 000 000
+'@ 031 014 010 009 003 034 002 000 002 000 000
+'@ 031 014 009 009 002 023 000 000 003 000 000
+'@ 031 006 005 011 002 000 000 000 007 000 000
+   AL  FB
+'@ 000 005
+
+   Snare Drum 1 light(from VAL-SOUND)
+'@ N 001
+   AR  DR  SR  RR  SL  TL  KS  ML  DT  AM  SSGEG
+'@ 031 000 000 007 000 000 000 015 000 000 000
+'@ 031 015 015 009 002 000 000 015 000 000 000
+'@ 031 021 000 015 011 010 000 004 001 000 000
+'@ 031 019 017 009 002 000 000 000 007 000 000
+   AL  FB
+'@ 004 007
+
+
+'@ E  4, 15,  0,  1, 3,  1,  1,  1, OPN
+'@ E  5, 15,  0,  1, 3,  1,  1,  3, OPN
+
+'@ P 1,"..\wav\bd_8bit14000.wav"      , 8000 , 80,OPN2X
+'@ P 2,"..\wav\sd_8bit14000Hz.wav"    , 8000 , 100,OPN2X
+
+
+'Cn1 T140
+Cn1 L
+
+
+E01  @0cr
+E01_ @1rc
+
+'E01  l16 @0p3v120o3q1 [ggggr8gg]4 [f8q0f8r8/q1f8]4f+8
+'E01_ l16 @1p2v127o4   [rrrrc8rr]4 [rr  rrc8   rr]4
+
+E06  m1@1l8 cr
+E06_ m1@2l8 rc
+
+'E06  m1@1l8 [crrrccrc]4
+'E06_ m1@2l8 [r4c4r4c4]4
+

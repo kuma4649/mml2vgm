@@ -338,7 +338,7 @@ namespace Core
         public override void CmdHardEnvelope(partPage page, MML mml)
         {
             string cmd = (string)mml.args[0];
-            int n = 0;
+            //int n = 0;
 
             switch (cmd)
             {

@@ -273,7 +273,7 @@ namespace Core
         public override void SetupPageData(partWork pw, partPage page)
         {
 
-            if (page.Type == enmChannelType.FMOPN)
+            if (page.Type == enmChannelType.FMOPN || page.Type == enmChannelType.FMOPNex)
             {
                 OutFmKeyOff(page, null);
                 page.spg.instrument = -1;
@@ -298,9 +298,6 @@ namespace Core
                 page.spg.HardEnvelopeSpeed = -1;
                 OutSsgHardEnvSpeed(page, null);
             }
-            else
-            {
-            }
 
             //音量
             page.spg.beforeVolume = -1;
@@ -311,7 +308,7 @@ namespace Core
         public override void MultiChannelCommand(MML mml)
         {
             if (!use) return;
-            int dat = 0;
+            //int dat = 0;
 
             foreach (partWork pw in lstPartWork)
             {

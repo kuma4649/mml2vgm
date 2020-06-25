@@ -879,7 +879,7 @@ namespace Core
                 if (parent.info.format == enmFormat.VGM)
                 {
                     //Stop Stream
-                    SOutData(page,mml, cmd, (byte)page.streamID);
+                    SOutData(page,mml, cmd, (byte)page.spg.streamID);
                 }
             }
 
@@ -985,7 +985,7 @@ namespace Core
 
             int n = (page.chip is YM2203) ? 0 : 3;
 
-            if (page.chip is YM2612X && (page.ch > 8 || page.ch == 5) && page.pcm)
+            if (page.chip is YM2612X && (page.ch > 8 || page.ch == 5) && page.chip.lstPartWork[5].pg[0].pcm)
             {
                 ((YM2612X)page.chip).OutYM2612XPcmKeyON(mml,page);
                 return;
@@ -1256,28 +1256,28 @@ namespace Core
                 s = Math.Min(s, (long)(w * parent.info.samplesPerClock * f / 44100.0));
 
                 byte[] cmd;
-                if (!page.streamSetup)
+                if (!page.spg.streamSetup)
                 {
                     parent.newStreamID++;
-                    page.streamID = parent.newStreamID;
+                    page.spg.streamID = parent.newStreamID;
 
                     if (parent.info.format == enmFormat.ZGM)
                     {
                         if (parent.ChipCommandSize == 2) cmd = new byte[] {
                             0x30, 0x00
-                            , (byte)page.streamID
+                            , (byte)page.spg.streamID
                             , (byte)page.chip.ChipID
                             , (byte)(page.chip.ChipID >> 8)
                         };
                         else cmd = new byte[] {
                             0x30
-                            , (byte)page.streamID
+                            , (byte)page.spg.streamID
                             , (byte)page.chip.ChipID
                         };
                     }
                     else cmd = new byte[] {
                         0x90
-                        , (byte)page.streamID
+                        , (byte)page.spg.streamID
                         , (byte)(0x02 + (page.chipNumber!=0 ? 0x80 : 0x00))
                     };
 
@@ -1298,16 +1298,16 @@ namespace Core
                         mml
                         // set stream data
                         , cmd
-                        , (byte)page.streamID
+                        , (byte)page.spg.streamID
                         , 0x00
                         , 0x01
                         , 0x00
                         );
 
-                    page.streamSetup = true;
+                    page.spg.streamSetup = true;
                 }
 
-                if (page.streamFreq != f)
+                if (page.spg.streamFreq != f)
                 {
                     if (parent.info.format == enmFormat.ZGM)
                     {
@@ -1318,14 +1318,14 @@ namespace Core
                     //Set Stream Frequency
                     SOutData(page,
                         mml, cmd
-                        , (byte)page.streamID
+                        , (byte)page.spg.streamID
                         , (byte)(f & 0xff)
                         , (byte)((f & 0xff00) / 0x100)
                         , (byte)((f & 0xff0000) / 0x10000)
                         , (byte)((f & 0xff000000) / 0x10000)
                         );
 
-                    page.streamFreq = f;
+                    page.spg.streamFreq = f;
                 }
 
                 if (parent.info.format == enmFormat.ZGM)
@@ -1338,7 +1338,7 @@ namespace Core
                 SOutData(page,
                     mml,
                     cmd
-                    , (byte)page.streamID
+                    , (byte)page.spg.streamID
 
                     , (byte)(p & 0xff)
                     , (byte)((p & 0xff00) / 0x100)
@@ -1747,14 +1747,14 @@ namespace Core
             int n = (int)mml.args[0];
             n = Common.CheckRange(n, 0, 31);
 
-            int ch = 0;
-            if (page.chip is YM2609)
-            {
-                if (page.ch >= 18 && page.ch <= 20) ch = 18;
-                if (page.ch >= 21 && page.ch <= 23) ch = 21;
-                if (page.ch >= 24 && page.ch <= 26) ch = 24;
-                if (page.ch >= 27 && page.ch <= 29) ch = 27;
-            }
+            //int ch = 0;
+            //if (page.chip is YM2609)
+            //{
+            //    if (page.ch >= 18 && page.ch <= 20) ch = 18;
+            //    if (page.ch >= 21 && page.ch <= 23) ch = 21;
+            //    if (page.ch >= 24 && page.ch <= 26) ch = 24;
+            //    if (page.ch >= 27 && page.ch <= 29) ch = 27;
+            //}
 
             page.noise = n;
             ((ClsOPN)page.chip).OutSsgNoise(mml,page);

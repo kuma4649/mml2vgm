@@ -1470,7 +1470,8 @@ namespace Core
             page.clockCounter += page.waitCounter;
 
             page.enableInterrupt = false;
-            if (page != pw.cpg) page.requestInterrupt = true;
+            if (page != pw.cpg)
+                page.requestInterrupt = true;
         }
 
         protected virtual void ResetTieBend(partPage page, MML mml)

@@ -326,6 +326,7 @@ namespace Core
         public void OutRf5c164KeyOn(MML mml, partPage page)
         {
             if (parent.instPCM.Count < 1) return;
+            //SetRf5c164CurrentChannel(mml, page);
             SetRf5c164SampleStartAddress(mml, page);
             KeyOn |= (byte)(1 << page.ch);
             byte data = (byte)(~KeyOn);

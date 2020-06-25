@@ -246,17 +246,17 @@ namespace Core
             if (page.Type == enmChannelType.FMPCMex)
             {
                 n = Common.CheckRange(n, 0, 1);
-                page.chip.lstPartWork[5].cpg.pcm = (n == 1);
+                page.chip.lstPartWork[5].pg[0].pcm = (n == 1);
                 for (int i = 9; i < ChMax; i++)
                 {
-                    page.chip.lstPartWork[i].cpg.pcm = (n == 1);
+                    page.chip.lstPartWork[i].pg[0].pcm = (n == 1);
                 }
                 page.freq = -1;//freqをリセット
                 page.instrument = -1;
                 OutSetCh6PCMMode(
                     mml,
-                    page.chip.lstPartWork[5].cpg
-                    , page.chip.lstPartWork[5].cpg.pcm
+                    page.chip.lstPartWork[5].pg[0]
+                    , page.chip.lstPartWork[5].pg[0].pcm
                     );
 
                 return;
@@ -328,6 +328,88 @@ namespace Core
             }
 
             base.CmdInstrument(page, mml);
+        }
+
+        public override void SetupPageData(partWork pw, partPage page)
+        {
+            if (page.Type == enmChannelType.FMOPN
+                || page.Type == enmChannelType.FMOPNex //効果音モード対応チャンネル
+                || (page.Type == enmChannelType.FMPCMex && !page.chip.lstPartWork[5].pg[0].pcm) //OPN2PCMチャンネル
+                )
+            {
+                if (page.Type == enmChannelType.FMPCMex)
+                {
+                    if (page.spg.pcm)
+                    {
+                        OutSetCh6PCMMode(null, page, false);
+                        page.spg.pcm = false;
+                    }
+                }
+
+                OutFmKeyOff(page, null);
+                //音色
+                page.spg.instrument = -1;
+                OutFmSetInstrument(page, null, page.instrument, page.volume, 'n');
+
+                //周波数
+                page.spg.freq = -1;
+                SetFNum(page, null);
+
+                //音量
+                page.spg.beforeVolume = -1;
+                SetVolume(page, null);
+
+                //パン
+                ((ClsOPN)page.chip).OutOPNSetPanAMSPMS(null, page, (int)page.pan.val, page.ams, page.fms);
+            }
+            else if (page.Type == enmChannelType.FMPCMex && page.chip.lstPartWork[5].pg[0].pcm)
+            {
+                if (page.Type == enmChannelType.FMPCMex)
+                {
+                    if (page.spg.pcm)
+                    {
+                        OutSetCh6PCMMode(null, page, true);
+                        page.spg.pcm = true;
+                    }
+                }
+
+                OutFmKeyOff(page, null);
+                //音色 
+                page.spg.instrument = -1;
+                //周波数
+                //音量
+                //パン
+                ((ClsOPN)page.chip).OutOPNSetPanAMSPMS(null, page, (int)page.pan.val, page.ams, page.fms);
+            }
+        }
+
+        public override void MultiChannelCommand(MML mml)
+        {
+            if (!use) return;
+            //int dat = 0;
+
+            foreach (partWork pw in lstPartWork)
+            {
+                foreach (partPage page in pw.pg)
+                {
+                    if (page.Type == enmChannelType.FMPCMex)
+                    {
+                        if (page.spg.pcm != page.chip.lstPartWork[5].pg[0].pcm)
+                        {
+                            OutSetCh6PCMMode(null, page, page.chip.lstPartWork[5].pg[0].pcm);
+                            page.spg.pcm = page.chip.lstPartWork[5].pg[0].pcm;
+                        }
+                    }
+
+                    if (page.keyOn)
+                    {
+                        page.keyOn = false;
+                        OutFmKeyOn(page, mml);
+                    }
+                }
+            }
+
+
         }
 
 

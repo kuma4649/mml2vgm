@@ -2111,11 +2111,12 @@ namespace Core
                     if (chip == null) continue;
                     for (int i = 0; i < chip.lstPartWork.Count; i++)
                     {
-                        partWork pw = chip.lstPartWork[
-                            chip.ReversePartWork
-                            ? (chip.lstPartWork.Count - 1 - i)
-                            : i
-                            ];
+                        //partWork pw = chip.lstPartWork[
+                        //    chip.ReversePartWork
+                        //    ? (chip.lstPartWork.Count - 1 - i)
+                        //    : i
+                        //    ];
+                        partWork pw = chip.lstPartWork[i];
                         foreach (partPage page in pw.pg)
                         {
                             if (page.envIndex != -1)
@@ -2323,11 +2324,12 @@ namespace Core
 
                     for (int i = 0; i < chip.lstPartWork.Count; i++)
                     {
-                        partWork pw = chip.lstPartWork[
-                            chip.ReversePartWork
-                            ? (chip.lstPartWork.Count - 1 - i)
-                            : i
-                            ];
+                        //partWork pw = chip.lstPartWork[
+                        //    chip.ReversePartWork
+                        //    ? (chip.lstPartWork.Count - 1 - i)
+                        //    : i
+                        //    ];
+                        partWork pw = chip.lstPartWork[i];
 
                         for (int p = 0; p < pw.pg.Count; p++)
                         {
@@ -2340,11 +2342,12 @@ namespace Core
                     //
                     for (int i = 0; i < chip.lstPartWork.Count; i++)
                     {
-                        partWork pw = chip.lstPartWork[
-                            chip.ReversePartWork
-                            ? (chip.lstPartWork.Count - 1 - i)
-                            : i
-                            ];
+                        //partWork pw = chip.lstPartWork[
+                        //    chip.ReversePartWork
+                        //    ? (chip.lstPartWork.Count - 1 - i)
+                        //    : i
+                        //    ];
+                        partWork pw = chip.lstPartWork[i];
 
                         for (int p = 0; p < pw.pg.Count; p++)
                         {
@@ -2352,7 +2355,7 @@ namespace Core
                         }
                     }
 
-                    if (chip.SupportReversePartWork) chip.ReversePartWork = !chip.ReversePartWork;
+                    //if (chip.SupportReversePartWork) chip.ReversePartWork = !chip.ReversePartWork;
 
                     chip.LoopPage();
 
@@ -2905,17 +2908,20 @@ namespace Core
                         //
                         for (int i = 0; i < chip.lstPartWork.Count; i++)
                         {
-                            partWork pw = chip.lstPartWork[
-                                chip.ReversePartWork
-                                ? (chip.lstPartWork.Count - 1 - i)
-                                : i
-                                ];
+                            //partWork pw = chip.lstPartWork[
+                            //    chip.ReversePartWork
+                            //    ? (chip.lstPartWork.Count - 1 - i)
+                            //    : i
+                            //    ];
+                            partWork pw = chip.lstPartWork[i];
 
                             for (int p = 0; p < pw.pg.Count; p++)
                             {
                                 chip.CheckInterrupt(pw, pw.pg[p]);
                             }
                         }
+
+                        chip.LoopPage();
 
                         log.Write("channelを跨ぐコマンド向け処理");
                         chip.MultiChannelCommand(null);
@@ -3185,7 +3191,7 @@ namespace Core
                         }
                         else
                         {
-                            MML mml = page.mmlData[pw.apg.mmlPos];
+                            MML mml = page.mmlData[page.mmlPos];
                             mml.line.Lp.ch = page.ch;
                             mml.line.Lp.chipIndex = page.chip.ChipID;
                             mml.line.Lp.chipNumber = page.chipNumber;
@@ -3217,30 +3223,33 @@ namespace Core
 
                     foreach (partWork pw in chip.lstPartWork)
                     {
-                        //note
-                        if (pw.apg.waitKeyOnCounter > 0) cnt = Math.Min(cnt, pw.apg.waitKeyOnCounter);
-                        else if (pw.apg.waitCounter > 0) cnt = Math.Min(cnt, pw.apg.waitCounter);
-
-                        //bend
-                        if (pw.apg.bendWaitCounter != -1) cnt = Math.Min(cnt, pw.apg.bendWaitCounter);
-
-                        //lfoとenvelopeは音長によるウエイトカウントが存在する場合のみ対象にする。(さもないと、曲のループ直前の効果を出せない)
-                        if (cnt < 1) continue;
-
-                        //if (!pw.ppg[pw.cpgNum].dataEnd) //ここを有効にするとデータ読み取り終了後即エンベロープ処理をしなくなってしまう
+                        foreach (partPage page in pw.pg)
                         {
-                            //lfo
-                            for (int lfo = 0; lfo < 4; lfo++)
+                            //note
+                            if (page.waitKeyOnCounter > 0) cnt = Math.Min(cnt, page.waitKeyOnCounter);
+                            else if (page.waitCounter > 0) cnt = Math.Min(cnt, page.waitCounter);
+
+                            //bend
+                            if (page.bendWaitCounter != -1) cnt = Math.Min(cnt, page.bendWaitCounter);
+
+                            //lfoとenvelopeは音長によるウエイトカウントが存在する場合のみ対象にする。(さもないと、曲のループ直前の効果を出せない)
+                            if (cnt < 1) continue;
+
+                            //if (!pw.ppg[pw.cpgNum].dataEnd) //ここを有効にするとデータ読み取り終了後即エンベロープ処理をしなくなってしまう
                             {
-                                if (!pw.apg.lfo[lfo].sw) continue;
-                                if (pw.apg.lfo[lfo].waitCounter == -1) continue;
+                                //lfo
+                                for (int lfo = 0; lfo < 4; lfo++)
+                                {
+                                    if (!page.lfo[lfo].sw) continue;
+                                    if (page.lfo[lfo].waitCounter == -1) continue;
 
-                                cnt = Math.Min(cnt, pw.apg.lfo[lfo].waitCounter);
+                                    cnt = Math.Min(cnt, page.lfo[lfo].waitCounter);
+                                }
+
+                                //envelope
+                                if (!(page.chip is SN76489)) continue;
+                                if (page.envelopeMode && page.envIndex != -1) cnt = Math.Min(cnt, page.envCounter);
                             }
-
-                            //envelope
-                            if (!(pw.apg.chip is SN76489)) continue;
-                            if (pw.apg.envelopeMode && pw.apg.envIndex != -1) cnt = Math.Min(cnt, pw.apg.envCounter);
                         }
                     }
                 }
@@ -3260,24 +3269,28 @@ namespace Core
 
                     foreach (partWork pw in chip.lstPartWork)
                     {
-                        if (pw.apg.waitKeyOnCounter > 0) pw.apg.waitKeyOnCounter -= cnt;
-                        if (pw.apg.waitCounter > 0) pw.apg.waitCounter -= cnt;
-                        if (pw.apg.bendWaitCounter > 0) pw.apg.bendWaitCounter -= cnt;
-
-                        for (int lfo = 0; lfo < 4; lfo++)
+                        foreach (partPage pg in pw.pg)
                         {
-                            if (!pw.apg.lfo[lfo].sw) continue;
-                            if (pw.apg.lfo[lfo].waitCounter == -1) continue;
 
-                            if (pw.apg.lfo[lfo].waitCounter > 0)
+                            if (pg.waitKeyOnCounter > 0) pg.waitKeyOnCounter -= cnt;
+                            if (pg.waitCounter > 0) pg.waitCounter -= cnt;
+                            if (pg.bendWaitCounter > 0) pg.bendWaitCounter -= cnt;
+
+                            for (int lfo = 0; lfo < 4; lfo++)
                             {
-                                pw.apg.lfo[lfo].waitCounter -= cnt;
-                                if (pw.apg.lfo[lfo].waitCounter < 0) pw.apg.lfo[lfo].waitCounter = 0;
-                            }
-                        }
+                                if (!pg.lfo[lfo].sw) continue;
+                                if (pg.lfo[lfo].waitCounter == -1) continue;
 
-                        if (!(pw.apg.chip is SN76489)) continue;
-                        if (pw.apg.envelopeMode && pw.apg.envIndex != -1) pw.apg.envCounter -= (int)cnt;
+                                if (pg.lfo[lfo].waitCounter > 0)
+                                {
+                                    pg.lfo[lfo].waitCounter -= cnt;
+                                    if (pg.lfo[lfo].waitCounter < 0) pg.lfo[lfo].waitCounter = 0;
+                                }
+                            }
+
+                            if (!(pg.chip is SN76489)) continue;
+                            if (pg.envelopeMode && pg.envIndex != -1) pg.envCounter -= (int)cnt;
+                        }
                     }
                 }
             }
