@@ -167,7 +167,7 @@ namespace mml2vgmIDE
         private uint muldiv64round(uint Multiplicand, uint Multiplier, uint Divisor)
         {
             // Yes, I'm correctly rounding the values.
-            return (uint)(((ulong)Multiplicand * Multiplier + Multiplier / 2) / Divisor);
+            return (uint)(((ulong)Multiplicand * Multiplier + Divisor / 2) / Divisor);
         }
 
         public void update(long Counter, byte ChipID, uint samples)
