@@ -4361,6 +4361,12 @@ namespace mml2vgmIDE
 
         private static void oneFrameEmuDataSend()
         {
+            if (sm.isVirtualOnlySend)
+            {
+                oneFrameVirtualOnlySendProc();
+                return;
+            }
+
             if (emuRecvBuffer == null) return;
 
             while ((long)emuRecvBuffer.LookUpCounter() <= EmuSeqCounter || !sm.IsRunningAtDataSender())//&& recvBuffer.LookUpCounter() != 0)
@@ -4400,6 +4406,49 @@ namespace mml2vgmIDE
             while (EmuSeqCounterWDelta >= 1.0)
             {
                 if (sm.IsRunningAsync() && sm.IsRunningAtEmuChipSender())
+                {
+                    EmuSeqCounter++;
+                }
+                EmuSeqCounterWDelta -= 1.0;
+            }
+            EmuSeqCounterWDelta += EmuSeqCounterDelta;
+            //EmuSeqCounterWDelta += (sm.IsRunningAtEmuChipSender()) ? EmuSeqCounterDelta : 0;
+            callcount++;
+        }
+
+        private static void oneFrameVirtualOnlySendProc()
+        {
+            if (emuRecvBuffer == null) return;
+
+            while ((long)emuRecvBuffer.LookUpCounter() <= EmuSeqCounter)
+            {
+
+                bool ret = emuRecvBuffer.Deq(ref Pack.od, ref PackCounter, ref Pack.Chip, ref Pack.Type, ref Pack.Address, ref Pack.Data, ref Pack.ExData);
+                if (!ret)
+                {
+                    if (!sm.IsRunningAtDataSender())
+                    {
+                        sm.RequestStopAtEmuChipSender();
+                    }
+                    break;
+                }
+
+                if (Pack.Address != -1 || Pack.Data != -1 || Pack.ExData != null)
+                {
+                    chipRegister.SendChipData(PackCounter, Pack.Chip, Pack.Type, Pack.Address, Pack.Data, Pack.ExData);
+                }
+                else
+                {
+                    ;
+                }
+
+                //SetMMLTraceInfo?.Invoke(Pack);
+
+            }
+
+            while (EmuSeqCounterWDelta >= 1.0)
+            {
+                //if (sm.IsRunningAsync() && sm.IsRunningAtEmuChipSender())
                 {
                     EmuSeqCounter++;
                 }

@@ -261,10 +261,13 @@ namespace SoundManager
 
                             {
                                 //待ち合わせ割り込み
-                                if (parent.GetInterrupt())
+                                if (!parent.isVirtualOnlySend)
                                 {
-                                    //Thread.Sleep(0);
-                                    continue;
+                                    if (parent.GetInterrupt())
+                                    {
+                                        //Thread.Sleep(0);
+                                        continue;
+                                    }
                                 }
 
                                 SeqSpeed += SeqSpeedDelta;

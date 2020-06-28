@@ -132,7 +132,7 @@ namespace SoundManager
             if (realChipSender != null) realChipSender.Unmount();
         }
 
-        public void RequestStart(SendMode mode,bool useEmu ,bool useReal)
+        public void RequestStart(SendMode mode, bool useEmu, bool useReal)
         {
             SetInterrupt();
             fadeOut = false;
@@ -157,12 +157,16 @@ namespace SoundManager
                 Application.DoEvents();
             }
 
-            if(useEmu)
+            if (useEmu)
                 emuChipSender.RequestStart();
             if (useReal)
                 realChipSender.RequestStart();
 
             ResetInterrupt();
+
+            isVirtualOnlySend = false;
+            if (useEmu && !useReal)
+                isVirtualOnlySend = true;
         }
 
         public void RequestStop()
@@ -455,7 +459,7 @@ namespace SoundManager
         private int _CurrentCh = 0;
         public int CurrentCh
         { get => _CurrentCh; set => _CurrentCh = value; }
-
+        public bool isVirtualOnlySend { get; internal set; }
 
         protected virtual void Dispose(bool disposing)
         {

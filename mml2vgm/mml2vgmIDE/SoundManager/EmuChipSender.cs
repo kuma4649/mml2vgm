@@ -35,7 +35,7 @@ namespace SoundManager
                     while (true)
                     {
                         if (unmount) return;
-                        Thread.Sleep(1);
+                        if(!parent.isVirtualOnlySend) Thread.Sleep(1);
                         if (ringBuffer.GetDataSize() == 0)
                         {
                             //送信データが無く、停止指示がある場合のみ停止する
