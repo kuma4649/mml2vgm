@@ -72,7 +72,7 @@ namespace Core
                 page.port = port;
                 page.mixer = 0;
                 page.noise = 0;
-                page.pan.val = 3;
+                page.pan = 3;
                 page.Type = enmChannelType.FMOPL;
                 page.isOp4Mode = false;
                 if (page.ch > 8) page.Type = enmChannelType.RHYTHM;

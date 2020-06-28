@@ -360,7 +360,7 @@ namespace Core
                 SetVolume(page, null);
 
                 //パン
-                ((ClsOPN)page.chip).OutOPNSetPanAMSPMS(null, page, (int)page.pan.val, page.ams, page.fms);
+                ((ClsOPN)page.chip).OutOPNSetPanAMSPMS(null, page, page.pan, page.ams, page.fms);
             }
             else if (page.Type == enmChannelType.FMPCMex && page.chip.lstPartWork[5].pg[0].pcm)
             {
@@ -379,7 +379,7 @@ namespace Core
                 //周波数
                 //音量
                 //パン
-                ((ClsOPN)page.chip).OutOPNSetPanAMSPMS(null, page, (int)page.pan.val, page.ams, page.fms);
+                ((ClsOPN)page.chip).OutOPNSetPanAMSPMS(null, page, page.pan, page.ams, page.fms);
             }
         }
 

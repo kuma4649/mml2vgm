@@ -184,25 +184,6 @@ namespace Core
             SOutData(page,mml,port[0], 0x07, data);
         }
 
-        private void OutSsgHardEnvType(partPage page, MML mml)
-        {
-            if (page.spg.HardEnvelopeType != page.HardEnvelopeType)
-            {
-                SOutData(page, mml, port[0], 0x0d, (byte)(page.HardEnvelopeType & 0xf));
-                page.spg.HardEnvelopeType = page.HardEnvelopeType;
-            }
-        }
-
-        private void OutSsgHardEnvSpeed(partPage page, MML mml)
-        {
-            if (page.spg.HardEnvelopeSpeed != page.HardEnvelopeSpeed)
-            {
-                SOutData(page, mml, port[0], 0x0b, (byte)(page.HardEnvelopeSpeed & 0xff));
-                SOutData(page, mml, port[0], 0x0c, (byte)((page.HardEnvelopeSpeed >> 8) & 0xff));
-                page.spg.HardEnvelopeSpeed = page.HardEnvelopeSpeed;
-            }
-        }
-
         public override void SetFNum(partPage page, MML mml)
         {
             if (page.Type != enmChannelType.SSG)

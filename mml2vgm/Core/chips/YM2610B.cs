@@ -207,7 +207,7 @@ namespace Core
 
                     if (page.ch < 6)
                     {
-                        page.pan.val = 3;
+                        page.pan = 3;
                         page.ams = 0;
                         page.fms = 0;
                     }
@@ -256,36 +256,36 @@ namespace Core
 
         public void SetADPCMAAddress(MML mml, partPage page, int startAdr, int endAdr)
         {
-            if (page.pcmStartAddress != startAdr)
+            if (page.spg.pcmStartAddress != startAdr)
             {
                 SOutData(page,mml, port[1], (byte)(0x10 + (page.ch - 12)), (byte)((startAdr >> 8) & 0xff));
                 SOutData(page,mml, port[1], (byte)(0x18 + (page.ch - 12)), (byte)((startAdr >> 16) & 0xff));
-                page.pcmStartAddress = startAdr;
+                page.spg.pcmStartAddress = startAdr;
             }
 
-            if (page.pcmEndAddress != endAdr)
+            if (page.spg.pcmEndAddress != endAdr)
             {
                 SOutData(page,mml, port[1], (byte)(0x20 + (page.ch - 12)), (byte)(((endAdr - 0x100) >> 8) & 0xff));
                 SOutData(page,mml, port[1], (byte)(0x28 + (page.ch - 12)), (byte)(((endAdr - 0x100) >> 16) & 0xff));
-                page.pcmEndAddress = endAdr;
+                page.spg.pcmEndAddress = endAdr;
             }
 
         }
 
         public void SetADPCMBAddress(MML mml, partPage page, int startAdr, int endAdr)
         {
-            if (page.pcmStartAddress != startAdr)
+            if (page.spg.pcmStartAddress != startAdr)
             {
                 SOutData(page,mml, port[0], 0x12, (byte)((startAdr >> 8) & 0xff));
                 SOutData(page,mml, port[0], 0x13, (byte)((startAdr >> 16) & 0xff));
-                page.pcmStartAddress = startAdr;
+                page.spg.pcmStartAddress = startAdr;
             }
 
-            if (page.pcmEndAddress != endAdr)
+            if (page.spg.pcmEndAddress != endAdr)
             {
                 SOutData(page,mml, port[0], 0x14, (byte)(((endAdr - 0x100) >> 8) & 0xff));
                 SOutData(page,mml, port[0], 0x15, (byte)(((endAdr - 0x100) >> 16) & 0xff));
-                page.pcmEndAddress = endAdr;
+                page.spg.pcmEndAddress = endAdr;
             }
 
         }
@@ -346,12 +346,12 @@ namespace Core
             }
         }
 
-        public void SetAdpcmBPan(MML mml, partPage page, int pan)
+        public void SetAdpcmBPan(MML mml, partPage page)
         {
-            if (page.pan.val != pan)
+            if (page.spg.pan != page.pan)
             {
-                SOutData(page,mml, port[0], 0x11, (byte)((pan & 0x3) << 6));
-                page.pan.val = pan;
+                SOutData(page,mml, port[0], 0x11, (byte)((page.pan & 0x3) << 6));
+                page.spg.pan = page.pan;
             }
         }
 
@@ -411,6 +411,12 @@ namespace Core
 
         public override void SetKeyOn(partPage page, MML mml)
         {
+            SetDummyData(page, mml);
+            page.keyOn = true;
+        }
+
+        public void OutKeyOn(partPage page, MML mml)
+        {
             if (page.ch < 9)
                 OutFmKeyOn(page, mml);
             else if (page.Type == enmChannelType.SSG)
@@ -419,7 +425,6 @@ namespace Core
             }
             else if (page.Type == enmChannelType.ADPCMA)
             {
-                page.keyOn = true;
                 page.keyOff = false;
 
                 if (page.isPcmMap)
@@ -454,7 +459,6 @@ namespace Core
                 {
                     parent.instPCM[page.instrument].status = enmPCMSTATUS.USED;
                 }
-                SetDummyData(page, mml);
             }
             else if (page.Type == enmChannelType.ADPCMB)
             {
@@ -769,7 +773,7 @@ namespace Core
             ((ClsOPN)page.chip).OutOPNSetPanAMSPMS(
                 mml,
                 page
-                , (int)page.pan.val
+                , page.pan
                 , page.ams
                 , page.pms);
         }
@@ -788,7 +792,7 @@ namespace Core
             ((ClsOPN)page.chip).OutOPNSetPanAMSPMS(
                 mml,
                 page
-                , (int)page.pan.val
+                , page.pan
                 , page.ams
                 , page.pms);
         }
@@ -848,7 +852,7 @@ namespace Core
                     {
                         page.fms = (n == 0) ? 0 : page.lfo[c].param[2];
                         page.ams = (n == 0) ? 0 : page.lfo[c].param[3];
-                        ((ClsOPN)page.chip).OutOPNSetPanAMSPMS(mml, page, (int)page.pan.val, page.ams, page.fms);
+                        ((ClsOPN)page.chip).OutOPNSetPanAMSPMS(mml, page, page.pan, page.ams, page.fms);
                         page.chip.lstPartWork[0].cpg.hardLfoSw = (n != 0);
                         page.chip.lstPartWork[0].cpg.hardLfoNum = page.lfo[c].param[1];
                         ((ClsOPN)page.chip).OutOPNSetHardLfo(null, page, page.chip.lstPartWork[0].cpg.hardLfoSw, page.chip.lstPartWork[0].cpg.hardLfoNum);
@@ -874,18 +878,19 @@ namespace Core
             if (page.Type == enmChannelType.FMOPN || page.Type == enmChannelType.FMOPNex)
             {
                 n = Common.CheckRange(n, 0, 3);
-                page.pan.val = n;
+                page.pan = n;
                 ((ClsOPN)page.chip).OutOPNSetPanAMSPMS(mml, page, n, page.ams, page.fms);
             }
             else if (page.Type == enmChannelType.ADPCMA)
             {
                 n = Common.CheckRange(n, 0, 3);
-                page.pan.val = n;
+                page.pan = n;
             }
             else if (page.Type == enmChannelType.ADPCMB)
             {
                 n = Common.CheckRange(n, 0, 3);
-                ((YM2610B)page.chip).SetAdpcmBPan(mml, page, n);
+                page.pan = n;
+                ((YM2610B)page.chip).SetAdpcmBPan(mml, page);
             }
             SetDummyData(page, mml);
         }
@@ -989,6 +994,95 @@ namespace Core
             base.CmdInstrument(page, mml);
         }
 
+        public override void SetupPageData(partWork pw, partPage page)
+        {
+
+            if (page.Type == enmChannelType.FMOPN || page.Type == enmChannelType.FMOPNex)
+            {
+
+                OutFmKeyOff(page, null);
+                page.spg.instrument = -1;
+                OutFmSetInstrument(page, null, page.instrument, page.volume, 'n');
+
+                //周波数
+                page.spg.freq = -1;
+                SetFNum(page, null);
+
+                //音量
+                page.spg.beforeVolume = -1;
+                SetVolume(page, null);
+
+                //パン
+                page.spg.pan = page.pan;
+                ((ClsOPN)page.chip).OutOPNSetPanAMSPMS(null, page, page.pan, page.ams, page.fms);
+            }
+            else if (page.Type == enmChannelType.SSG)
+            {
+
+                //周波数
+                page.spg.freq = -1;
+                SetFNum(page, null);
+
+                //ノイズ周波数
+                noiseFreq = -1;
+                OutSsgNoise(null, page);
+
+                //ハードエンベロープtype
+                page.spg.HardEnvelopeType = -1;
+                OutSsgHardEnvType(page, null);
+
+                //ハードエンベロープspeed
+                page.spg.HardEnvelopeSpeed = -1;
+                OutSsgHardEnvSpeed(page, null);
+
+                //音量
+                page.spg.beforeVolume = -1;
+                SetVolume(page, null);
+
+            }
+            else if (page.Type == enmChannelType.ADPCMA)
+            {
+                //音色
+                page.spg.instrument = page.instrument;
+                page.spg.pcmEndAddress = -1;
+                page.spg.pcmStartAddress = -1;
+
+                SetADPCMAAddress(null, page
+                    , (int)parent.instPCM[page.instrument].stAdr
+                    , (int)parent.instPCM[page.instrument].edAdr);
+
+                //音量
+                page.spg.beforeVolume = -1;
+                //パン
+                page.spg.pan = -1;
+
+            }
+            else if (page.Type == enmChannelType.ADPCMB)
+            {
+                //音色
+                page.spg.instrument = page.instrument;
+                page.spg.pcmEndAddress = -1;
+                page.spg.pcmStartAddress = -1;
+
+                SetADPCMBAddress(null, page
+                    , (int)parent.instPCM[page.instrument].stAdr
+                    , (int)parent.instPCM[page.instrument].edAdr);
+
+                //周波数
+                page.spg.freq = -1;
+                SetFNum(page, null);
+
+                //音量
+                page.spg.beforeVolume = -1;
+                SetVolume(page, null);
+
+                //パン
+                page.spg.pan = -1;
+                SetAdpcmBPan(null, page);
+            }
+
+        }
+
         public override void MultiChannelCommand(MML mml)
         {
             if (!use) return;
@@ -1000,17 +1094,25 @@ namespace Core
                     if (page.Type == enmChannelType.ADPCMA)
                     {
                         //Adpcm-A TotalVolume処理
-                        if (page.beforeVolume != page.volume || !page.pan.eq())
+                        if (page.spg.beforeVolume != page.volume || page.spg.pan != page.pan)
                         {
-                            SOutData(page,mml, port[1], (byte)(0x08 + (page.ch - 12)), (byte)((byte)((page.pan.val & 0x3) << 6) | (byte)(page.volume & 0x1f)));
-                            page.beforeVolume = page.volume;
-                            page.pan.rst();
+                            SOutData(page, mml, port[1], (byte)(0x08 + (page.ch - 12)), (byte)((byte)((page.pan & 0x3) << 6) | (byte)(page.volume & 0x1f)));
+                            page.spg.beforeVolume = page.volume;
+                            page.spg.pan = page.pan;
                         }
 
                         adpcmA_KeyOn |= (byte)(page.keyOn ? (1 << (page.ch - 12)) : 0);
                         page.keyOn = false;
                         adpcmA_KeyOff |= (byte)(page.keyOff ? (1 << (page.ch - 12)) : 0);
                         page.keyOff = false;
+                    }
+                    else
+                    {
+                        if (page.keyOn)
+                        {
+                            page.keyOn = false;
+                            OutKeyOn(page, mml);
+                        }
                     }
                 }
             }

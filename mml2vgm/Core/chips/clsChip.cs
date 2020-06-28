@@ -1203,7 +1203,7 @@ namespace Core
                             pg.beforeLVolume = -1;
                             pg.beforeRVolume = -1;
                             pg.beforeVolume = -1;
-                            pg.pan = new dint(3);
+                            pg.pan = 3;
                             pg.beforeTie = false;
 
                             chip.CmdLoopExtProc(pg, mml);

@@ -182,7 +182,7 @@ namespace Core
 
                     if (page.ch < 6)
                     {
-                        page.pan.val = 3;
+                        page.pan = 3;
                         page.ams = 0;
                         page.fms = 0;
                         if (!page.dataEnd) OutOPNSetPanAMSPMS(null, page, 3, 0, 0);
@@ -229,18 +229,18 @@ namespace Core
 
         public void SetADPCMAddress(MML mml, partPage page, int startAdr, int endAdr)
         {
-            if (page.pcmStartAddress != startAdr)
+            if (page.spg.pcmStartAddress != startAdr)
             {
                 SOutData(page,mml, port[1], 0x02, (byte)((startAdr >> 2) & 0xff));
                 SOutData(page,mml, port[1], 0x03, (byte)((startAdr >> 10) & 0xff));
-                page.pcmStartAddress = startAdr;
+                page.spg.pcmStartAddress = startAdr;
             }
 
-            if (page.pcmEndAddress != endAdr)
+            if (page.spg.pcmEndAddress != endAdr)
             {
                 SOutData(page,mml, port[1], 0x04, (byte)(((endAdr - 0x04) >> 2) & 0xff));
                 SOutData(page,mml, port[1], 0x05, (byte)(((endAdr - 0x04) >> 10) & 0xff));
-                page.pcmEndAddress = endAdr;
+                page.spg.pcmEndAddress = endAdr;
             }
 
         }
@@ -267,9 +267,10 @@ namespace Core
             }
 
             f = Common.CheckRange(f, 0, 0xffff);
-            if (page.freq == f) return;
+            if (page.spg.freq == f) return;
 
             page.freq = f;
+            page.spg.freq = f;
 
             byte data = 0;
 
@@ -294,19 +295,19 @@ namespace Core
             }
             vol = Common.CheckRange(vol, 0, 0xff);
 
-            if (page.beforeVolume != vol)
+            if (page.spg.beforeVolume != vol)
             {
                 SOutData(page,mml, port[1], 0x0b, (byte)vol);
-                page.beforeVolume = page.volume;
+                page.spg.beforeVolume = vol;
             }
         }
 
-        public void SetAdpcmPan(MML mml, partPage page, int pan)
+        public void SetAdpcmPan(MML mml, partPage page)
         {
-            if (page.pan.val != pan)
+            if (page.spg.pan != page. pan)
             {
-                SOutData(page,mml, port[1], 0x01, (byte)((pan & 0x3) << 6));
-                page.pan.val = pan;
+                SOutData(page,mml, port[1], 0x01, (byte)((page.pan & 0x3) << 6));
+                page.spg.pan = page.pan;
             }
         }
 
@@ -378,6 +379,12 @@ namespace Core
 
         public override void SetKeyOn(partPage page, MML mml)
         {
+            SetDummyData(page, mml);
+            page.keyOn = true;
+        }
+
+        public void OutKeyOn(partPage page, MML mml)
+        {
             if (page.ch < 9)
                 OutFmKeyOn(page, mml);
             else if (page.Type == enmChannelType.SSG)
@@ -386,9 +393,7 @@ namespace Core
             }
             else if (page.Type == enmChannelType.RHYTHM)
             {
-                page.keyOn = true;
                 page.keyOff = false;
-                SetDummyData(page, mml);
             }
             else if (page.Type == enmChannelType.ADPCM)
             {
@@ -580,7 +585,7 @@ namespace Core
             ((ClsOPN)page.chip).OutOPNSetPanAMSPMS(
                 mml,
                 page
-                , (int)page.pan.val
+                , page.pan
                 , page.ams
                 , page.pms);
         }
@@ -599,7 +604,7 @@ namespace Core
             ((ClsOPN)page.chip).OutOPNSetPanAMSPMS(
                 mml,
                 page
-                , (int)page.pan.val
+                , page.pan
                 , page.ams
                 , page.pms);
         }
@@ -659,7 +664,7 @@ namespace Core
                     {
                         page.fms = (n == 0) ? 0 : page.lfo[c].param[2];
                         page.ams = (n == 0) ? 0 : page.lfo[c].param[3];
-                        ((ClsOPN)page.chip).OutOPNSetPanAMSPMS(mml, page, (int)page.pan.val, page.ams, page.fms);
+                        ((ClsOPN)page.chip).OutOPNSetPanAMSPMS(mml, page, (int)page.pan, page.ams, page.fms);
                         page.chip.lstPartWork[0].cpg.hardLfoSw = (n != 0);
                         page.chip.lstPartWork[0].cpg.hardLfoNum = page.lfo[c].param[1];
                         ((ClsOPN)page.chip).OutOPNSetHardLfo(null, page, page.chip.lstPartWork[0].cpg.hardLfoSw, page.chip.lstPartWork[0].cpg.hardLfoNum);
@@ -685,18 +690,19 @@ namespace Core
             if (page.Type == enmChannelType.FMOPN || page.Type == enmChannelType.FMOPNex)
             {
                 n = Common.CheckRange(n, 0, 3);
-                page.pan.val = n;
+                page.pan = n;
                 ((ClsOPN)page.chip).OutOPNSetPanAMSPMS(mml, page, n, page.ams, page.fms);
             }
             else if (page.Type == enmChannelType.RHYTHM)
             {
                 n = Common.CheckRange(n, 0, 3);
-                page.pan.val = n;
+                page.pan = n;
             }
             else if (page.Type == enmChannelType.ADPCM)
             {
                 n = Common.CheckRange(n, 0, 3);
-                ((YM2608)page.chip).SetAdpcmPan(mml, page, n);
+                page.pan = n;
+                ((YM2608)page.chip).SetAdpcmPan(mml, page);
             }
             SetDummyData(page, mml);
         }
@@ -705,7 +711,7 @@ namespace Core
         {
             char type = (char)mml.args[0];
             int n = (int)mml.args[1];
-
+            
             if (type == 'n' || type == 'N' || type == 'R' || type == 'A')
             {
                 if (page.Type == enmChannelType.FMOPNex)
@@ -755,6 +761,87 @@ namespace Core
             base.CmdInstrument(page, mml);
         }
 
+        public override void SetupPageData(partWork pw, partPage page)
+        {
+
+            if (page.Type == enmChannelType.FMOPN || page.Type == enmChannelType.FMOPNex)
+            {
+
+                OutFmKeyOff(page, null);
+                page.spg.instrument = -1;
+                OutFmSetInstrument(page, null, page.instrument, page.volume, 'n');
+
+                //周波数
+                page.spg.freq = -1;
+                SetFNum(page, null);
+
+                //音量
+                page.spg.beforeVolume = -1;
+                SetVolume(page, null);
+
+                //パン
+                page.spg.pan = page.pan;
+                ((ClsOPN)page.chip).OutOPNSetPanAMSPMS(null, page, page.pan, page.ams, page.fms);
+            }
+            else if (page.Type == enmChannelType.SSG)
+            {
+
+                //周波数
+                page.spg.freq = -1;
+                SetFNum(page, null);
+
+                //ノイズ周波数
+                noiseFreq = -1;
+                OutSsgNoise(null, page);
+
+                //ハードエンベロープtype
+                page.spg.HardEnvelopeType = -1;
+                OutSsgHardEnvType(page, null);
+
+                //ハードエンベロープspeed
+                page.spg.HardEnvelopeSpeed = -1;
+                OutSsgHardEnvSpeed(page, null);
+
+                //音量
+                page.spg.beforeVolume = -1;
+                SetVolume(page, null);
+
+            }
+            else if (page.Type == enmChannelType.RHYTHM)
+            {
+
+                //音量
+                page.spg.beforeVolume = -1;
+                //パン
+                page.spg.pan = -1;
+
+            }
+            else if (page.Type == enmChannelType.ADPCM)
+            {
+                //音色
+                page.spg.instrument = page.instrument;
+                page.spg.pcmEndAddress = -1;
+                page.spg.pcmStartAddress = -1;
+
+                SetADPCMAddress(null, page
+                    , (int)parent.instPCM[page.instrument].stAdr
+                    , (int)parent.instPCM[page.instrument].edAdr);
+
+                //周波数
+                page.spg.freq = -1;
+                SetFNum(page, null);
+
+                //音量
+                page.spg.beforeVolume = -1;
+                SetVolume(page, null);
+
+                //パン
+                page.spg.pan = -1;
+                SetAdpcmPan(null, page);
+            }
+
+        }
+
         public override void MultiChannelCommand(MML mml)
         {
             if (!use) return;
@@ -763,14 +850,15 @@ namespace Core
             {
                 foreach (partPage page in pw.pg)
                 {
+
                     if (page.Type == enmChannelType.RHYTHM)
                     {
                         //Rhythm Volume処理
-                        if (page.beforeVolume != page.volume || !page.pan.eq())
+                        if (page.spg.beforeVolume != page.volume || page.spg.pan != page.pan)
                         {
-                            SOutData(page,mml, port[0], (byte)(0x18 + (page.ch - 12)), (byte)((byte)((page.pan.val & 0x3) << 6) | (byte)(page.volume & 0x1f)));
-                            page.beforeVolume = page.volume;
-                            page.pan.rst();
+                            SOutData(page,mml, port[0], (byte)(0x18 + (page.ch - 12)), (byte)((byte)((page.pan & 0x3) << 6) | (byte)(page.volume & 0x1f)));
+                            page.spg.beforeVolume = page.volume;
+                            page.spg.pan = page.pan;
                         }
 
                         rhythm_KeyOn |= (byte)(page.keyOn ? (1 << (page.ch - 12)) : 0);
@@ -778,6 +866,14 @@ namespace Core
                         rhythm_KeyOff |= (byte)(page.keyOff ? (1 << (page.ch - 12)) : 0);
                         page.keyOff = false;
 
+                    }
+                    else
+                    {
+                        if (page.keyOn)
+                        {
+                            page.keyOn = false;
+                            OutKeyOn(page, mml);
+                        }
                     }
                 }
             }

@@ -41,13 +41,15 @@ namespace Core
             }
             SOutData(page,mml, page.port[port], (byte)(adr + 0x07), data);
 
-            MML vmml = new MML();
-            vmml.type = enmMMLType.Volume;
-            vmml.args = new List<object>();
-            vmml.args.Add(page.volume);
-            vmml.line = mml.line;
-            SetDummyData(page, vmml);
-
+            if (mml != null)
+            {
+                MML vmml = new MML();
+                vmml.type = enmMMLType.Volume;
+                vmml.args = new List<object>();
+                vmml.args.Add(page.volume);
+                vmml.line = mml.line;
+                SetDummyData(page, vmml);
+            }
         }
 
         public void OutSsgKeyOff(MML mml, partPage page)
@@ -108,7 +110,7 @@ namespace Core
 
             if (page.chip is YM2609)
             {
-                int pan = (int)(page.pan.val == null ? 0 : page.pan.val);
+                int pan = page.pan & 3;
                 vol |= (byte)(pan << 6);
             }
 
@@ -132,6 +134,26 @@ namespace Core
                 SOutData(page, mml, page.port[port], (byte)(adr + 0x06), (byte)(page.noise & 0x1f));
             }
         }
+
+        public void OutSsgHardEnvType(partPage page, MML mml)
+        {
+            if (page.spg.HardEnvelopeType != page.HardEnvelopeType)
+            {
+                SOutData(page, mml, port[0], 0x0d, (byte)(page.HardEnvelopeType & 0xf));
+                page.spg.HardEnvelopeType = page.HardEnvelopeType;
+            }
+        }
+
+        public void OutSsgHardEnvSpeed(partPage page, MML mml)
+        {
+            if (page.spg.HardEnvelopeSpeed != page.HardEnvelopeSpeed)
+            {
+                SOutData(page, mml, port[0], 0x0b, (byte)(page.HardEnvelopeSpeed & 0xff));
+                SOutData(page, mml, port[0], 0x0c, (byte)((page.HardEnvelopeSpeed >> 8) & 0xff));
+                page.spg.HardEnvelopeSpeed = page.HardEnvelopeSpeed;
+            }
+        }
+
 
         public void SetSsgFNum(partPage page,MML mml)
         {
@@ -171,6 +193,7 @@ namespace Core
             if (page.spg.freq == f) return;
 
             page.freq = f;
+            page.spg.freq = f;
 
             int port;
             int adr;

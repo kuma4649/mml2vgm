@@ -629,8 +629,8 @@ namespace Core
 
             l = Common.CheckRange(l, 0, 15);
             r = Common.CheckRange(r, 0, 15);
-            page.pan.val = (r << 4) | l;
-            SetRf5c164Pan(mml, page, (int)page.pan.val);
+            page.pan = (r << 4) | l;
+            SetRf5c164Pan(mml, page, page.pan);
         }
 
         public override void CmdLoopExtProc(partPage page, MML mml)

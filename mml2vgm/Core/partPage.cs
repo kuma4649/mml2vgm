@@ -149,10 +149,10 @@ namespace Core
         /// <summary>
         /// pコマンドで設定されている音の定位(1:R 2:L 3:C)
         /// </summary>
-        //public int pan = 3;
-        //public int beforePan = -1;
-        public dint pan = new dint(3);
-        public dint beforePan = new dint(3);
+        public int pan = 3;
+        public int beforePan = -1;
+        //public dint pan = new dint(3);
+        //public dint beforePan = new dint(3);
 
         public bool[] tblNoteOn = null;
 

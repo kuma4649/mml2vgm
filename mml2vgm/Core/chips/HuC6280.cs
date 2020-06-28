@@ -693,9 +693,9 @@ namespace Core
 
             l = Common.CheckRange(l, 0, 15);
             r = Common.CheckRange(r, 0, 15);
-            page.pan.val = (l << 4) | r;
+            page.pan = (l << 4) | r;
             //SetHuC6280CurrentChannel(pw);
-            SetHuC6280Pan(mml, page, (int)page.pan.val);
+            SetHuC6280Pan(mml, page, page.pan);
         }
 
         public override void CmdMode(partPage page, MML mml)

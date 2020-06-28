@@ -240,7 +240,7 @@ namespace Core
 
                     if (page.ch < 12)
                     {
-                        page.pan.val = 3;
+                        page.pan = 3;
                         page.ams = 0;
                         page.fms = 0;
                         if (!page.dataEnd) OutOPNSetPanAMSPMS(null, page, 3, 0, 0);
@@ -261,26 +261,42 @@ namespace Core
 
                 page.volume = 127;
                 page.MaxVolume = 127;
-                if (page.Type == enmChannelType.SSG)
+                if (page.Type == enmChannelType.FMOPN || page.Type == enmChannelType.FMOPNex)
+                {
+                    page.MaxVolume = 127;
+                    page.volume = 127;
+                    page.panL = 4;
+                    page.panR = 4;
+                    page.pan = 3;
+                }
+                else if (page.Type == enmChannelType.SSG)
                 {
                     page.MaxVolume = 15;
                     page.volume = 0;
+                    page.pan = 3;
                 }
                 else if (page.Type == enmChannelType.RHYTHM)
                 {
                     page.MaxVolume = 31;//5bit
                     page.volume = page.MaxVolume;
+                    page.pan = 3;
                 }
                 else if (page.Type == enmChannelType.ADPCMA
                     || page.Type == enmChannelType.ADPCMB)
                 {
                     page.MaxVolume = 255;
                     page.volume = page.MaxVolume;
+                    page.panL = 4;
+                    page.panR = 4;
+                    page.pan = 3;
                 }
                 else if (page.Type == enmChannelType.ADPCM)
                 {
                     page.MaxVolume = 31;//5bit
                     page.volume = page.MaxVolume;
+                    page.panL = 4;
+                    page.panR = 4;
+                    page.pan = 3;
                 }
 
                 page.port = port;
@@ -607,12 +623,12 @@ namespace Core
             byte[] port;
             GetPortVch(page, out port, out vch);
 
-            page.beforePan.val = page.pan.val;
+            page.beforePan = page.pan;
             page.beforeAms = page.ams;
             page.beforeAlgConstSw = page.algConstSw;
             page.beforePms = page.pms;
 
-            SOutData(page,mml, port, (byte)(0xb4 + vch), (byte)((page.pan.val << 6) + (page.ams << 3) + (page.algConstSw << 2) + page.pms));
+            SOutData(page,mml, port, (byte)(0xb4 + vch), (byte)((page.pan << 6) + (page.ams << 3) + (page.algConstSw << 2) + page.pms));
         }
 
         public new void SetSsgFNum(partPage page, MML mml)
@@ -1048,7 +1064,7 @@ namespace Core
             ((ClsOPN)page.chip).OutOPNSetPanAMSPMS(
                 mml,
                 page
-                , (int)page.pan.val
+                , page.pan
                 , page.ams
                 , page.pms);
         }
@@ -1067,7 +1083,7 @@ namespace Core
             ((ClsOPN)page.chip).OutOPNSetPanAMSPMS(
                 mml,
                 page
-                , (int)page.pan.val
+                , page.pan
                 , page.ams
                 , page.pms);
         }
@@ -1127,7 +1143,7 @@ namespace Core
                     {
                         page.fms = (n == 0) ? 0 : page.lfo[c].param[2];
                         page.ams = (n == 0) ? 0 : page.lfo[c].param[3];
-                        ((ClsOPN)page.chip).OutOPNSetPanAMSPMS(mml, page, (int)page.pan.val, page.ams, page.fms);
+                        ((ClsOPN)page.chip).OutOPNSetPanAMSPMS(mml, page, page.pan, page.ams, page.fms);
                         page.chip.lstPartWork[0].cpg.hardLfoSw = (n != 0);
                         page.chip.lstPartWork[0].cpg.hardLfoNum = page.lfo[c].param[1];
                         ((ClsOPN)page.chip).OutOPNSetHardLfo(null, page, page.chip.lstPartWork[0].cpg.hardLfoSw, page.chip.lstPartWork[0].cpg.hardLfoNum);
@@ -1155,7 +1171,7 @@ namespace Core
                 page.panL = Common.CheckRange(n, 0, 4);
                 n = mml.args.Count < 2 ? 0 : (int)mml.args[1];
                 page.panR = Common.CheckRange(n, 0, 4);
-                page.pan.val = (page.panL != 0 ? 2 : 0) | (page.panR != 0 ? 1 : 0);
+                page.pan = (page.panL != 0 ? 2 : 0) | (page.panR != 0 ? 1 : 0);
 
                 //pw.ppg[pw.cpgNum].pan.val = n;
                 //((ClsOPN)pw.ppg[pw.cpgNum].chip).OutOPNSetPanAMSPMS(mml, pw, n, pw.ppg[pw.cpgNum].ams, pw.ppg[pw.cpgNum].fms);
@@ -1163,7 +1179,7 @@ namespace Core
             else if (page.Type == enmChannelType.RHYTHM)
             {
                 n = Common.CheckRange(n, 0, 3);
-                page.pan.val = n;
+                page.pan = n;
             }
             else if (page.Type == enmChannelType.ADPCMA || page.Type == enmChannelType.ADPCMB)
             {
@@ -1178,7 +1194,7 @@ namespace Core
                 n = mml.args.Count < 2 ? 0 : (int)mml.args[1];
                 page.panR = Common.CheckRange(n, 0, 4);
 
-                page.pan.val = (page.panL != 0 ? 2 : 0) | (page.panR != 0 ? 1 : 0);
+                page.pan = (page.panL != 0 ? 2 : 0) | (page.panR != 0 ? 1 : 0);
 
                 page.panL = page.panL < 1 ? 0 : (4 - page.panL);
                 page.panR = page.panR < 1 ? 0 : (4 - page.panR);
@@ -1186,7 +1202,7 @@ namespace Core
             else if (page.Type == enmChannelType.SSG)
             {
                 n = Common.CheckRange(n, 0, 3);
-                page.pan.val = n;
+                page.pan = n;
             }
             SetDummyData(page, mml);
         }
@@ -1909,11 +1925,11 @@ namespace Core
                     if (page.Type == enmChannelType.RHYTHM)//固定周波数ADPCM
                     {
                         //Rhythm Volume処理
-                        if (page.beforeVolume != page.volume || !page.pan.eq())
+                        if (page.beforeVolume != page.volume || page.spg.pan != page.pan)
                         {
-                            SOutData(page,mml, port[0], (byte)(0x18 + (page.ch - 30)), (byte)((byte)((page.pan.val & 0x3) << 6) | (byte)(page.volume & 0x1f)));
+                            SOutData(page, mml, port[0], (byte)(0x18 + (page.ch - 30)), (byte)((byte)((page.pan & 0x3) << 6) | (byte)(page.volume & 0x1f)));
                             page.beforeVolume = page.volume;
-                            page.pan.rst();
+                            page.spg.pan = page.pan;
                         }
 
                         rhythm_KeyOn |= (byte)(page.keyOn ? (1 << (page.ch - 30)) : 0);
@@ -1932,16 +1948,16 @@ namespace Core
                             page.beforeVolume = page.volume;
                         }
 
-                        if (page.pan.val != page.beforePan.val || page.panR != page.beforePanR || page.panL != page.beforePanL)
+                        if (page.pan != page.spg.pan || page.panR != page.beforePanR || page.panL != page.beforePanL)
                         {
                             SOutData(page,mml, port[1], (byte)0x13, (byte)(page.ch - 39));
                             SOutData(page,mml, port[1], (byte)0x15, (byte)(
-                                ((page.pan.val & 2) << 6)
+                                ((page.pan & 2) << 6)
                                 | ((page.panL & 3) << 5)
-                                | ((page.pan.val & 1) << 4)
+                                | ((page.pan & 1) << 4)
                                 | ((page.panR & 3) << 2)
                                 ));
-                            page.beforePan.val = page.pan.val;
+                            page.spg.pan = page.pan;
                             page.beforePanR = page.panR;
                             page.beforePanL = page.panL;
                         }
@@ -2061,7 +2077,7 @@ namespace Core
             {
                 if (page.panR != page.beforePanR || page.feedBack != page.beforeFeedBack || page.algo != page.beforeAlgo)
                     OutFmSetPanRFeedbackAlgorithm(mml, page);
-                if (page.pan.val != page.beforePan.val || page.ams != page.beforeAms || page.algConstSw != page.beforeAlgConstSw || page.pms != page.beforePms)
+                if (page.pan != page.spg.pan || page.ams != page.beforeAms || page.algConstSw != page.beforeAlgConstSw || page.pms != page.beforePms)
                     OutOPNSetPanAmsAcPms(mml, page);
             }
         }
@@ -2083,7 +2099,7 @@ namespace Core
         {
             if (page.Type == enmChannelType.FMOPN || page.Type == enmChannelType.FMOPNex)
             {
-                page.pan.val = (page.panL != 0 ? 2 : 0) | (page.panR != 0 ? 1 : 0);
+                page.pan = (page.panL != 0 ? 2 : 0) | (page.panR != 0 ? 1 : 0);
                 page.beforePanL = -1;
                 page.beforePanR = -1;
             }

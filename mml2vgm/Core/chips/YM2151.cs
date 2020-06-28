@@ -294,7 +294,7 @@ namespace Core
                         OutSetDt2Sr(mml, page, ope, 0, 31);
                         OutSetSlRr(mml, page, ope, 0, 15);
                     }
-                    OutSetPanFeedbackAlgorithm(mml, page, (int)page.pan.val, 7, 7);
+                    OutSetPanFeedbackAlgorithm(mml, page, page.pan, 7, 7);
                     break;
             }
 
@@ -317,7 +317,7 @@ namespace Core
             page.op3dt2 = parent.instFM[n][2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 10];
             page.op4dt2 = parent.instFM[n][3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 10];
 
-            OutSetPanFeedbackAlgorithm(mml, page, (int)page.pan.val, parent.instFM[n][46], parent.instFM[n][45]);
+            OutSetPanFeedbackAlgorithm(mml, page, page.pan, parent.instFM[n][46], parent.instFM[n][45]);
 
             int alg = parent.instFM[n][45] & 0x7;
             int[] op = new int[4] {
@@ -785,7 +785,7 @@ namespace Core
         {
             int n = (int)mml.args[0];
             n = Common.CheckRange(n, 0, 3);
-            page.pan.val = (n == 1) ? 2 : (n == 2 ? 1 : n);
+            page.pan = (n == 1) ? 2 : (n == 2 ? 1 : n);
             if (page.instrument < 0)
             {
                 msgBox.setErrMsg(msg.get("E16004")
@@ -796,7 +796,7 @@ namespace Core
                 ((YM2151)page.chip).OutSetPanFeedbackAlgorithm(
                     mml,
                     page
-                    , (int)page.pan.val
+                    , (int)page.pan
                     , parent.instFM[page.instrument][46]
                     , parent.instFM[page.instrument][45]
                     );

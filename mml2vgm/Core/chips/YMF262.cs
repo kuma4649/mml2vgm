@@ -103,7 +103,7 @@ namespace Core
                 page.port = port;
                 page.mixer = 0;
                 page.noise = 0;
-                page.pan.val = 3;
+                page.pan = 3;
                 page.Type = enmChannelType.FMOPL;
                 page.isOp4Mode = false;
                 if (page.ch > 17) page.Type = enmChannelType.RHYTHM;
@@ -225,7 +225,7 @@ namespace Core
                 }
             }
 
-            SetInstAtChannelPanFbCnt(page, mml, (opeNum % 6) % 3 + (opeNum / 6) * 3, (int)page.pan.val, inst[26], inst[25]);
+            SetInstAtChannelPanFbCnt(page, mml, (opeNum % 6) % 3 + (opeNum / 6) * 3, page.pan, inst[26], inst[25]);
 
             page.beforeVolume = -1;
         }
@@ -284,7 +284,7 @@ namespace Core
                     , (byte)(((inst[12 * 0 + 5] & 0x3) << 6) | (inst[12 * 0 + 6] & 0x3f))); //KL(M) TL
             }
 
-            SetInstAtChannelPanFbCnt(page, mml, vch, (int)page.pan.val, inst[26], inst[25]);
+            SetInstAtChannelPanFbCnt(page, mml, vch, page.pan, inst[26], inst[25]);
 
             page.beforeVolume = -1;
         }
@@ -365,8 +365,8 @@ namespace Core
                     , (byte)(((inst[12 * 2 + 5] & 0x3) << 6) | (inst[12 * 2 + 6] & 0x3f))); //KL(M) TL
 
 
-            SetInstAtChannelPanFbCnt(page, mml, vch, (int)page.pan.val, inst[51], cnt1);
-            SetInstAtChannelPanFbCnt(page, mml, vch + 3, (int)page.pan.val, inst[51], cnt2);
+            SetInstAtChannelPanFbCnt(page, mml, vch    , page.pan, inst[51], cnt1);
+            SetInstAtChannelPanFbCnt(page, mml, vch + 3, page.pan, inst[51], cnt2);
 
             page.beforeVolume = -1;
         }
@@ -449,7 +449,7 @@ namespace Core
         {
             int n = (int)mml.args[0];
             n = Common.CheckRange(n, 0, 3);
-            page.pan.val = ((n & 1) << 1) | ((n & 2) >> 1);//LR反転
+            page.pan = ((n & 1) << 1) | ((n & 2) >> 1);//LR反転
             int vch = page.ch;
 
             if (page.Type == enmChannelType.RHYTHM)
@@ -474,7 +474,7 @@ namespace Core
 
             SOutData(page,mml, port, (byte)(vch % 9 + 0xC0), (byte)((
                 PanFbCnt
-                | (page.pan.val * 0x10) // PAN
+                | (page.pan * 0x10) // PAN
                 )));
 
             SetDummyData(page, mml);

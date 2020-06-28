@@ -131,7 +131,7 @@ namespace Core
 
                     if (page.ch < 6)
                     {
-                        page.pan.val = 3;
+                        page.pan = 3;
                         page.ams = 0;
                         page.fms = 0;
                         if (!page.dataEnd) OutOPNSetPanAMSPMS(null, page, 3, 0, 0);
@@ -189,7 +189,7 @@ namespace Core
 
         public override void SetKeyOn(partPage page, MML mml)
         {
-            //OutFmKeyOn(page, mml);
+            SetDummyData(page, mml);
             page.keyOn = true;
         }
 
@@ -273,7 +273,7 @@ namespace Core
             ((ClsOPN)page.chip).OutOPNSetPanAMSPMS(
                 mml,
                 page
-                , (int)page.pan.val
+                , page.pan
                 , page.ams
                 , page.pms);
         }
@@ -287,7 +287,7 @@ namespace Core
             ((ClsOPN)page.chip).OutOPNSetPanAMSPMS(
                 mml,
                 page
-                , (int)page.pan.val
+                , page.pan
                 , page.ams
                 , page.pms);
         }
@@ -342,7 +342,7 @@ namespace Core
                 {
                     page.fms = (n == 0) ? 0 : page.lfo[c].param[2];
                     page.ams = (n == 0) ? 0 : page.lfo[c].param[3];
-                    ((ClsOPN)page.chip).OutOPNSetPanAMSPMS(mml, page, (int)page.pan.val, page.ams, page.fms);
+                    ((ClsOPN)page.chip).OutOPNSetPanAMSPMS(mml, page, page.pan, page.ams, page.fms);
                     page.chip.lstPartWork[0].cpg.hardLfoSw = (n != 0);
                     page.chip.lstPartWork[0].cpg.hardLfoNum = page.lfo[c].param[1];
                     ((ClsOPN)page.chip).OutOPNSetHardLfo(null, page, page.chip.lstPartWork[0].cpg.hardLfoSw, page.chip.lstPartWork[0].cpg.hardLfoNum);
@@ -366,7 +366,7 @@ namespace Core
             }
 
             n = Common.CheckRange(n, 0, 3);
-            page.pan.val = n;
+            page.pan = n;
             ((ClsOPN)page.chip).OutOPNSetPanAMSPMS(mml, page, n, page.ams, page.fms);
         }
 
@@ -531,7 +531,7 @@ namespace Core
                 SetVolume(page, null);
 
                 //パン
-                ((ClsOPN)page.chip).OutOPNSetPanAMSPMS(null, page, (int)page.pan.val, page.ams, page.fms);
+                ((ClsOPN)page.chip).OutOPNSetPanAMSPMS(null, page, page.pan, page.ams, page.fms);
 
             }
             else if (page.Type == enmChannelType.FMPCM && page.pcm)
@@ -551,7 +551,7 @@ namespace Core
                 //周波数
                 //音量
                 //パン
-                ((ClsOPN)page.chip).OutOPNSetPanAMSPMS(null, page, (int)page.pan.val, page.ams, page.fms);
+                ((ClsOPN)page.chip).OutOPNSetPanAMSPMS(null, page, page.pan, page.ams, page.fms);
             }
         }
 

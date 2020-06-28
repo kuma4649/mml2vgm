@@ -49,7 +49,7 @@ namespace Core
                 pg.port = port;
                 pg.mixer = 0;
                 pg.noise = 0;
-                pg.pan.val = 3;
+                pg.pan = 3;
                 pg.Type = enmChannelType.FMOPL;
                 pg.isOp4Mode = false;
                 if (pg.ch > 8) pg.Type = enmChannelType.RHYTHM;
@@ -190,7 +190,7 @@ namespace Core
                 }
             }
 
-            SetInstAtChannelPanFbCnt(page, mml, (opeNum % 6) % 3 + (opeNum / 6) * 3, (int)page.pan.val, inst[26], inst[25]);
+            SetInstAtChannelPanFbCnt(page, mml, (opeNum % 6) % 3 + (opeNum / 6) * 3, (int)page.pan, inst[26], inst[25]);
 
             page.beforeVolume = -1;
         }
@@ -249,7 +249,7 @@ namespace Core
                     , (byte)(((inst[12 * 0 + 5] & 0x3) << 6) | (inst[12 * 0 + 6] & 0x3f))); //KL(M) TL
             }
 
-            SetInstAtChannelPanFbCnt(page, mml, vch, (int)page.pan.val, inst[26], inst[25]);
+            SetInstAtChannelPanFbCnt(page, mml, vch, (int)page.pan, inst[26], inst[25]);
 
             page.beforeVolume = -1;
         }
@@ -330,8 +330,8 @@ namespace Core
                     , (byte)(((inst[12 * 2 + 5] & 0x3) << 6) | (inst[12 * 2 + 6] & 0x3f))); //KL(M) TL
 
 
-            SetInstAtChannelPanFbCnt(page, mml, vch, (int)page.pan.val, inst[51], cnt1);
-            SetInstAtChannelPanFbCnt(page, mml, vch + 3, (int)page.pan.val, inst[51], cnt2);
+            SetInstAtChannelPanFbCnt(page, mml, vch, (int)page.pan, inst[51], cnt1);
+            SetInstAtChannelPanFbCnt(page, mml, vch + 3, (int)page.pan, inst[51], cnt2);
 
             page.beforeVolume = -1;
         }

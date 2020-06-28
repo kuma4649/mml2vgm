@@ -3035,7 +3035,7 @@ namespace Core
 
                         if (page.ch < 6)
                         {
-                            page.pan.val = 3;
+                            page.pan = 3;
                             page.ams = 0;
                             page.fms = 0;
                             if (!page.dataEnd) ym2612x[0].OutOPNSetPanAMSPMS(null, page, 3, 0, 0);
