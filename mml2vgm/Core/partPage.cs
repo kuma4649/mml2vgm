@@ -462,6 +462,8 @@ namespace Core
         public int velocity { get; set; } = 110;
         public int effectDistortionSwitch { get; internal set; } = 0;
         public int effectDistortionVolume { get; internal set; } = 32;
+        public int effectChorusSwitch { get; internal set; } = 0;
+        public int effectChorusMixLevel { get; internal set; } = 40;
         public bool isOp4Mode { get; internal set; } = false;
         public int beforeBendNoteNum { get; internal set; } = -1;
         public int panRL { get; internal set; }

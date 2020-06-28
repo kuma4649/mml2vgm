@@ -1203,6 +1203,11 @@ namespace Core
                 CmdEffectDistortion(pw, page, mml);
                 return;
             }
+            else if (c == 'C')
+            {
+                CmdEffectChorus(pw, page, mml);
+                return;
+            }
 
             msgBox.setErrMsg(msg.get("E05059"), mml.line.Lp);
         }
@@ -1302,6 +1307,65 @@ namespace Core
                 n = Common.CheckRange(n, 0, 127);
             }
             else if (c == 'C')//cutoff
+            {
+                n = Common.CheckRange(n, 0, 127);
+            }
+            mml.args.Add(n);
+
+        }
+        
+        private void CmdEffectChorus(partWork pw, partPage page, MML mml)
+        {
+            pw.incPos(page);
+            char c = pw.getChar(page);
+            if (c != 'h')
+            {
+                msgBox.setErrMsg(msg.get("E05059"), mml.line.Lp);
+                return;
+            }
+
+            mml.type = enmMMLType.Effect;
+            mml.args = new List<object>();
+            mml.args.Add("Ch");
+
+            pw.incPos(page);
+            pw.skipTabSpace(page);
+
+            c = pw.getChar(page);
+            if (c != 'S' && c != 'M' && c != 'R' && c != 'D' && c != 'F')
+            {
+                msgBox.setErrMsg(msg.get("E05059"), mml.line.Lp);
+                return;
+            }
+
+            mml.args.Add(c);
+
+            int n = -1;
+            pw.incPos(page);
+            pw.skipTabSpace(page);
+            if (!pw.getNum(page, out n))
+            {
+                msgBox.setErrMsg(msg.get("E05059"), mml.line.Lp);
+                return;
+            }
+
+            if (c == 'S')//switch
+            {
+                n = Common.CheckRange(n, 0, 1);
+            }
+            else if (c == 'M')//mix level
+            {
+                n = Common.CheckRange(n, 0, 127);
+            }
+            else if (c == 'R')//rate
+            {
+                n = Common.CheckRange(n, 0, 127);
+            }
+            else if (c == 'D')//depth
+            {
+                n = Common.CheckRange(n, 0, 127);
+            }
+            else if (c == 'F')//feedback
             {
                 n = Common.CheckRange(n, 0, 127);
             }

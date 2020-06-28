@@ -1410,6 +1410,36 @@ namespace Core
                             break;
                     }
                 }
+                else if ((string)mml.args[0] == "Ch")
+                {
+                    int v = (int)mml.args[2];
+                    //Chorus
+                    switch ((char)mml.args[1])
+                    {
+                        case 'S'://switch
+                            page.effectChorusSwitch = v * 0x80;
+                            SOutData(page, mml, port[3], 0x23, ch);
+                            SOutData(page, mml, port[3], 0x28, (byte)(page.effectChorusSwitch + page.effectChorusMixLevel));
+                            break;
+                        case 'M'://mix level
+                            page.effectChorusMixLevel = v & 0x7f;
+                            SOutData(page, mml, port[3], 0x23, ch);
+                            SOutData(page, mml, port[3], 0x28, (byte)(page.effectChorusSwitch + page.effectChorusMixLevel));
+                            break;
+                        case 'R'://rate
+                            SOutData(page, mml, port[3], 0x23, ch);
+                            SOutData(page, mml, port[3], 0x29, (byte)(v & 0x7f));
+                            break;
+                        case 'D'://depth
+                            SOutData(page, mml, port[3], 0x23, ch);
+                            SOutData(page, mml, port[3], 0x2a, (byte)(v & 0x7f));
+                            break;
+                        case 'F'://feedback
+                            SOutData(page, mml, port[3], 0x23, ch);
+                            SOutData(page, mml, port[3], 0x2b, (byte)(v & 0x7f));
+                            break;
+                    }
+                }
             }
         }
 
