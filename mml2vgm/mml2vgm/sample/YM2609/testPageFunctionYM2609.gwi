@@ -1,0 +1,70 @@
+﻿'{
+
+	TitleName   =
+	TitleNameJ  =ページ機能のテスト(OPNA2)
+	GameName    =
+	GameNameJ   =
+	SystemName  =
+	SystemNameJ =
+	Composer    =
+	ComposerJ   =
+	ReleaseDate =
+	Converted   =
+	Notes       =
+
+	Format      =ZGM
+
+}
+
+   Chopper Bass 0(from VAL-SOUND)
+'@ N 000
+   AR  DR  SR  RR  SL  TL  KS  ML  DT  AM  SSGEG
+'@ 028 014 015 015 004 025 002 010 001 000 000
+'@ 031 014 010 009 003 034 002 000 002 000 000
+'@ 031 014 009 009 002 023 000 000 003 000 000
+'@ 031 006 005 011 002 000 000 000 007 000 000
+   AL  FB
+'@ 000 005
+
+   Snare Drum 1 light(from VAL-SOUND)
+'@ N 001
+   AR  DR  SR  RR  SL  TL  KS  ML  DT  AM  SSGEG
+'@ 031 000 000 007 000 000 000 015 000 000 000
+'@ 031 015 015 009 002 000 000 015 000 000 000
+'@ 031 021 000 015 011 010 000 004 001 000 000
+'@ 031 019 017 009 002 000 000 000 007 000 000
+   AL  FB
+'@ 004 007
+
+
+'@ E  4, 15,  0,  1, 3,  1,  1,  1, OPNA2
+'@ E  5, 15,  0,  1, 3,  1,  1,  3, OPNA2
+
+     @    filename          Hz     Vol Chip   type(0:ADPCM1 1:ADPCM2 2:ADPCM3 3:ADPCM-A)
+'@ P 1,"..\wav\bd.wav"    , 8000 ,  80,YM2609,2
+'@ P 2,"..\wav\sd.wav"    , 8000 , 100,YM2609,2
+
+
+'Cn1 T140
+Cn1 L
+
+U01-12 FM 1-12
+U13-18 FM3/9ex
+U19-30 PSG 1-12
+U31-36 Rhythm
+U37-39 ADPCM0/1/2
+U40-45 ADPCM-A
+
+
+U01  l16 @0v120o3q1 [ggggr8gg]4 [f8q0f8r8/q1f8]4f+8
+U01_ l16 @1v127o4   [rrrrc8rr]4 [rr  rrc8   rr]4
+
+U39  @1l8v200 [crrrccrc]4
+U39_ @2l8v200 [r4c4r4c4]4
+
+U36   l8v31p1 [crrrccrc]4
+U36_  l8v1 p2 [r4c4r4c4]4
+
+'U30   l8v16p1@I0Q4 [crrrccrc]4
+'U30_  l8v16p2@I9Q4 [r4g4r4g4]4
+

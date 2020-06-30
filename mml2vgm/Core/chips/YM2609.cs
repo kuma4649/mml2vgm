@@ -309,18 +309,18 @@ namespace Core
             int p = page.ch == 36 ? 1 : 3;
             int v = page.ch != 38 ? 0x00 : 0x11;
 
-            if (page.pcmStartAddress != startAdr)
+            if (page.spg.pcmStartAddress != startAdr)
             {
                 SOutData(page,mml, port[p], (byte)(0x02 + v), (byte)((startAdr >> (2 + (p == 1 ? 0 : 3))) & 0xff));
                 SOutData(page,mml, port[p], (byte)(0x03 + v), (byte)((startAdr >> (10 + (p == 1 ? 0 : 3))) & 0xff));
-                page.pcmStartAddress = startAdr;
+                page.spg.pcmStartAddress = startAdr;
             }
 
-            if (page.pcmEndAddress != endAdr)
+            if (page.spg.pcmEndAddress != endAdr)
             {
                 SOutData(page,mml, port[p], (byte)(0x04 + v), (byte)(((endAdr - 0x04) >> (2 + (p == 1 ? 0 : 3))) & 0xff));
                 SOutData(page,mml, port[p], (byte)(0x05 + v), (byte)(((endAdr - 0x04) >> (10 + (p == 1 ? 0 : 3))) & 0xff));
-                page.pcmEndAddress = endAdr;
+                page.spg.pcmEndAddress = endAdr;
             }
         }
 
@@ -329,18 +329,18 @@ namespace Core
 
             SOutData(page,mml, port[1], 0x13, (byte)(page.ch - 39));
 
-            if (page.pcmStartAddress != startAdr)
+            if (page.spg.pcmStartAddress != startAdr)
             {
                 SOutData(page,mml, port[1], 0x16, (byte)((startAdr >> 8) & 0xff));
                 SOutData(page,mml, port[1], 0x16, (byte)((startAdr >> 16) & 0xff));
-                page.pcmStartAddress = startAdr;
+                page.spg.pcmStartAddress = startAdr;
             }
 
-            if (page.pcmEndAddress != endAdr)
+            if (page.spg.pcmEndAddress != endAdr)
             {
                 SOutData(page,mml, port[1], 0x17, (byte)(((endAdr - 0x100) >> 8) & 0xff));
                 SOutData(page,mml, port[1], 0x17, (byte)(((endAdr - 0x100) >> 16) & 0xff));
-                page.pcmEndAddress = endAdr;
+                page.spg.pcmEndAddress = endAdr;
             }
 
         }
@@ -367,9 +367,10 @@ namespace Core
             }
 
             f = Common.CheckRange(f, 0, 0xffff);
-            if (page.freq == f) return;
-
             page.freq = f;
+            if (page.spg.freq == f) return;
+
+            page.spg.freq = f;
 
             byte data = 0;
             int p = page.ch == 36 ? 1 : 3;
@@ -405,24 +406,21 @@ namespace Core
             }
         }
 
-        public void SetAdpcmPan(MML mml, partPage page, int panL, int panR)
+        public void SetAdpcmPan(MML mml, partPage page)
         {
-            panL = Common.CheckRange(panL, 0, 4);
-            panR = Common.CheckRange(panR, 0, 4);
-
-            if (page.panL != panL || page.panR != panR)
+            if (page.spg.panL != page.panL || page.spg.panR != page.panR)
             {
                 int port = page.ch == 36 ? 1 : 3;
                 int adr = page.ch != 38 ? 0x00 : 0x11;
 
-                int v = (panL != 0 ? 0x80 : 00) | (panR != 0 ? 0x40 : 00);
+                int v = (page.panL != 0 ? 0x80 : 00) | (page.panR != 0 ? 0x40 : 00);
                 SOutData(page,mml, base.port[port], (byte)(0x01 + adr), (byte)v);
 
-                v = (((4 - panL) & 0x3) << 6) | (((4 - panR) & 0x3) << 4);
+                v = (((4 - page.panL) & 0x3) << 6) | (((4 - page.panR) & 0x3) << 4);
                 SOutData(page,mml, base.port[port], (byte)(0x07 + adr), (byte)v);
 
-                page.panL = panL;
-                page.panR = panR;
+                page.spg.panL = page.panL;
+                page.spg.panR = page.panR;
             }
         }
 
@@ -546,8 +544,8 @@ namespace Core
 
         public void OutFmSetPanLFnum(partPage page, MML mml)
         {
-            page.oldFreq = page.freq;
-            page.beforePanL = page.panL;
+            page.spg.oldFreq = page.freq;
+            page.spg.beforePanL = page.panL;
 
             int portEx = -1;
             if ((page.ch == 2 || page.ch == 12 || page.ch == 13 || page.ch == 14) && page.chip.lstPartWork[2].cpg.Ch3SpecialMode)
@@ -675,6 +673,12 @@ namespace Core
 
         public override void SetKeyOn(partPage page, MML mml)
         {
+            SetDummyData(page, mml);
+            page.keyOn = true;
+        }
+
+        public void OutKeyOn(partPage page, MML mml)
+        { 
             if (page.ch < 18)
                 OutFmKeyOn(page, mml);
             else if (page.Type == enmChannelType.SSG)
@@ -683,15 +687,11 @@ namespace Core
             }
             else if (page.Type == enmChannelType.RHYTHM)
             {
-                page.keyOn = true;
                 page.keyOff = false;
-                SetDummyData(page, mml);
             }
             else if (page.Type == enmChannelType.ADPCM)
             {
-                page.keyOn = true;
                 page.keyOff = false;
-                SetDummyData(page, mml);
             }
             else if (page.Type == enmChannelType.ADPCMA || page.Type == enmChannelType.ADPCMB)
             {
@@ -1186,7 +1186,9 @@ namespace Core
                 int pl = Common.CheckRange(n, 0, 4);
                 n = mml.args.Count < 2 ? 0 : (int)mml.args[1];
                 int pr = Common.CheckRange(n, 0, 4);
-                ((YM2609)page.chip).SetAdpcmPan(mml, page, pl, pr);
+                page.panL = pl;
+                page.panR = pr;
+                ((YM2609)page.chip).SetAdpcmPan(mml, page);
             }
             else if (page.Type == enmChannelType.ADPCM)
             {
@@ -1943,6 +1945,114 @@ namespace Core
             //if ((pw.ppg[pw.cpgNum].slots & 8) != 0 ) ((ClsOPN)pw.ppg[pw.cpgNum].chip).OutFmSetTl(vpw, 3, ope[3]);
         }
 
+        public override void SetupPageData(partWork pw, partPage page)
+        {
+
+            if (page.Type == enmChannelType.FMOPN || page.Type == enmChannelType.FMOPNex)
+            {
+
+                OutFmKeyOff(page, null);
+                page.spg.instrument = -1;
+                OutFmSetInstrument(page, null, page.instrument, page.volume, 'n');
+
+                //周波数
+                page.spg.freq = -1;
+                SetFNum(page, null);
+
+                //音量
+                page.spg.beforeVolume = -1;
+                SetVolume(page, null);
+
+                //パン
+                page.spg.pan = page.pan;
+                ((ClsOPN)page.chip).OutOPNSetPanAMSPMS(null, page, page.pan, page.ams, page.fms);
+            }
+            else if (page.Type == enmChannelType.SSG)
+            {
+                //I
+                page.spg.oldDutyCycle = -1;
+
+                //周波数
+                page.spg.freq = -1;
+                SetFNum(page, null);
+
+                //ノイズ周波数
+                noiseFreq = -1;
+                OutSsgNoise(null, page);
+
+                //ハードエンベロープtype
+                page.spg.HardEnvelopeType = -1;
+                OutSsgHardEnvType(page, null);
+
+                //ハードエンベロープspeed
+                page.spg.HardEnvelopeSpeed = -1;
+                OutSsgHardEnvSpeed(page, null);
+
+                //音量
+                page.spg.beforeVolume = -1;
+                SetVolume(page, null);
+
+            }
+            else if (page.Type == enmChannelType.RHYTHM)
+            {
+
+                //音量
+                page.spg.beforeVolume = -1;
+                //パン
+                page.spg.pan = -1;
+
+            }
+            else if (page.Type == enmChannelType.ADPCMA || page.Type == enmChannelType.ADPCMB)
+            {
+
+                //音色
+                page.spg.instrument = page.instrument;
+                page.spg.pcmEndAddress = -1;
+                page.spg.pcmStartAddress = -1;
+
+                SetADPCMAddress(null, page
+                    , (int)parent.instPCM[page.instrument].stAdr
+                    , (int)parent.instPCM[page.instrument].edAdr);
+
+                //周波数
+                page.spg.freq = -1;
+                SetFNum(page, null);
+
+                //音量
+                page.spg.beforeVolume = -1;
+                SetVolume(page, null);
+
+                //パン
+                page.spg.pan = -1;
+                SetAdpcmPan(null, page);
+
+            }
+            else if (page.Type == enmChannelType.ADPCM)
+            {
+                //音色
+                page.spg.instrument = page.instrument;
+                page.spg.pcmEndAddress = -1;
+                page.spg.pcmStartAddress = -1;
+
+                SetADPCMAAddress(null, page
+                    , (int)parent.instPCM[page.instrument].stAdr
+                    , (int)parent.instPCM[page.instrument].edAdr);
+
+                //周波数
+                page.spg.freq = -1;
+                SetFNum(page, null);
+
+                //音量
+                page.spg.beforeVolume = -1;
+                SetVolume(page, null);
+
+                //パン
+                page.spg.pan = -1;
+                SetAdpcmPan(null, page);
+            }
+
+        }
+
         public override void MultiChannelCommand(MML mml)
         {
             if (!use) return;
@@ -1955,10 +2065,10 @@ namespace Core
                     if (page.Type == enmChannelType.RHYTHM)//固定周波数ADPCM
                     {
                         //Rhythm Volume処理
-                        if (page.beforeVolume != page.volume || page.spg.pan != page.pan)
+                        if (page.spg.beforeVolume != page.volume || page.spg.pan != page.pan)
                         {
                             SOutData(page, mml, port[0], (byte)(0x18 + (page.ch - 30)), (byte)((byte)((page.pan & 0x3) << 6) | (byte)(page.volume & 0x1f)));
-                            page.beforeVolume = page.volume;
+                            page.spg.beforeVolume = page.volume;
                             page.spg.pan = page.pan;
                         }
 
@@ -1966,6 +2076,15 @@ namespace Core
                         page.keyOn = false;
                         rhythm_KeyOff |= (byte)(page.keyOff ? (1 << (page.ch - 30)) : 0);
                         page.keyOff = false;
+
+                    }
+                    else if (page.Type == enmChannelType.ADPCMA|| page.Type == enmChannelType.ADPCMB)
+                    {
+                        if (page.keyOn)
+                        {
+                            page.keyOn = false;
+                            OutKeyOn(page, mml);
+                        }
 
                     }
                     else if (page.Type == enmChannelType.ADPCM)//固定周波数ADPCM
@@ -2082,10 +2201,10 @@ namespace Core
             GetPortVchSsg(page, out port, out adr, out vch);
 
             //reg 00 - 05
-            if (page.freq != page.oldFreq || page.dutyCycle != page.oldDutyCycle)
+            if (page.freq != page.spg.oldFreq || page.dutyCycle != page.spg.oldDutyCycle)
             {
-                page.oldFreq = page.freq;
-                page.oldDutyCycle = page.dutyCycle;
+                page.spg.oldFreq = page.freq;
+                page.spg.oldDutyCycle = page.dutyCycle;
 
                 byte data = (byte)(page.freq & 0xff);
                 SOutData(page,mml, page.port[port], (byte)(adr + 0 + vch * 2), data);
@@ -2094,13 +2213,18 @@ namespace Core
                 SOutData(page,mml, page.port[port], (byte)(adr + 1 + vch * 2), data);
             }
 
+            if (page.keyOn)
+            {
+                page.keyOn = false;
+                OutKeyOn(page, mml);
+            }
         }
 
         private void MultiChannelCommand_FM(MML mml, partPage page)
         {
             //FNum l
             //panL Block FNum h
-            if (page.panL != page.beforePanL || page.freq != page.oldFreq)
+            if (page.panL != page.spg.beforePanL || page.freq != page.spg.oldFreq)
                 OutFmSetPanLFnum(page, mml);
 
             if (page.ch < 12)
@@ -2110,6 +2234,13 @@ namespace Core
                 if (page.pan != page.spg.pan || page.ams != page.beforeAms || page.algConstSw != page.beforeAlgConstSw || page.pms != page.beforePms)
                     OutOPNSetPanAmsAcPms(mml, page);
             }
+
+            if (page.keyOn)
+            {
+                page.keyOn = false;
+                OutKeyOn(page, mml);
+            }
+
         }
 
         public override string DispRegion(clsPcm pcm)
