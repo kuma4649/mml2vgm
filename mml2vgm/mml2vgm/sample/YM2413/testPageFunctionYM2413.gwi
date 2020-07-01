@@ -1,0 +1,63 @@
+﻿'{
+
+	TitleName   =
+	TitleNameJ  =ページ機能のテスト(OPNA2)
+	GameName    =
+	GameNameJ   =
+	SystemName  =
+	SystemNameJ =
+	Composer    =
+	ComposerJ   =
+	ReleaseDate =
+	Converted   =
+	Notes       =
+
+
+}
+
+'@ LL 110
+   AR DR SL RR KL MT AM VB EG KR DT
+'@ 15,00,15,08,00,03,00,01,01,00,01
+'@ 15,03,15,07,00,02,00,01,01,00,00
+   TL FB
+'@ 21,07
+
+
+'L01 T126
+
+
+
+L01  l16 @110v12o4q1 cv14drrv14gv13a
+[ggggr8gg]4 [f8q0f8r8/q1f8]4f+8
+L01_ l16 @110v14o4   rrefrr
+[rrrrc8rr]4 [rr  rrc8   rr]4
+
+プリセット音色
+L01  D0o4v15@I6rdrfgrr
+L01_ D0o4v15@I2crerrab
+L01 D20o4v15cv14dv13ev12fv11gv10av9b>v8c
+L01 D0o3v15Q1[c8c16c16>][l8dl16dd]
+L01 D0o3v15q1[c8c16c16>][l8dl16dd]
+L01 MSV0,1,10,100,0a1r1
+L01 MST0,1,1, 1,0a1r1
+L01 SS0y0,0
+
+L01 o4v15@I2cdefg
+N7 o4v15rrrrrcdefg
+A1 o4v15rrrrrrrrrrcdefg
+S1 o3v15rrrrrrrrrrrrrrrcdefg
+
+'L10 m1
+
+'L10  v15l4q0o3 [c8r8    ]4
+'L10_ v13l4q0o3 [r8c16c16]4
+'L11  v8 l4q0o3 [cr]2
+'L11_ v15l4q0o3 rcrc8(((c8)))
+L14 v15l4q0o3[cc]2
+L11 o3q0v0[c4)1]15
+L14 o3v9r4c4v10c4v9c4v10c4
+[c4)1]15
+L12 o5q0v0[c4)1]15
+L13 o5q0v0[c4)1]15
+L14 o3q0v0[c4)1]15
+

@@ -848,32 +848,30 @@ namespace Core
             //コマンドを跨ぐデータ向け処理
             foreach (partWork pw in lstPartWork)
             {
-                foreach (partPage page in pw.pg)
+                partPage page = pw.cpg;
+
+                if (page.Type == enmChannelType.RHYTHM)
                 {
-
-                    if (page.Type == enmChannelType.RHYTHM)
+                    //Rhythm Volume処理
+                    if (page.spg.beforeVolume != page.volume || page.spg.pan != page.pan)
                     {
-                        //Rhythm Volume処理
-                        if (page.spg.beforeVolume != page.volume || page.spg.pan != page.pan)
-                        {
-                            SOutData(page,mml, port[0], (byte)(0x18 + (page.ch - 12)), (byte)((byte)((page.pan & 0x3) << 6) | (byte)(page.volume & 0x1f)));
-                            page.spg.beforeVolume = page.volume;
-                            page.spg.pan = page.pan;
-                        }
-
-                        rhythm_KeyOn |= (byte)(page.keyOn ? (1 << (page.ch - 12)) : 0);
-                        page.keyOn = false;
-                        rhythm_KeyOff |= (byte)(page.keyOff ? (1 << (page.ch - 12)) : 0);
-                        page.keyOff = false;
-
+                        SOutData(page, mml, port[0], (byte)(0x18 + (page.ch - 12)), (byte)((byte)((page.pan & 0x3) << 6) | (byte)(page.volume & 0x1f)));
+                        page.spg.beforeVolume = page.volume;
+                        page.spg.pan = page.pan;
                     }
-                    else
+
+                    rhythm_KeyOn |= (byte)(page.keyOn ? (1 << (page.ch - 12)) : 0);
+                    page.keyOn = false;
+                    rhythm_KeyOff |= (byte)(page.keyOff ? (1 << (page.ch - 12)) : 0);
+                    page.keyOff = false;
+
+                }
+                else
+                {
+                    if (page.keyOn)
                     {
-                        if (page.keyOn)
-                        {
-                            page.keyOn = false;
-                            OutKeyOn(page, mml);
-                        }
+                        page.keyOn = false;
+                        OutKeyOn(page, mml);
                     }
                 }
             }

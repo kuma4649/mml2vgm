@@ -62,7 +62,7 @@ namespace Core
         {
             foreach (partPage page in pw.pg)
             {
-                page.beforeVolume = (page.Type == enmChannelType.FMOPL) ? 15 : -1;
+                page.beforeVolume = -1;// (page.Type == enmChannelType.FMOPL) ? 15 : -1;
                 page.volume = 15;
                 page.MaxVolume = 15;
                 page.beforeEnvInstrument = 0;
@@ -455,11 +455,11 @@ namespace Core
         public override void CmdMode(partPage page, MML mml)
         {
             int n = (int)mml.args[0];
-            page.chip.lstPartWork[9].cpg.rhythmMode = (n != 0);
-            page.chip.lstPartWork[10].cpg.rhythmMode = (n != 0);
-            page.chip.lstPartWork[11].cpg.rhythmMode = (n != 0);
-            page.chip.lstPartWork[12].cpg.rhythmMode = (n != 0);
-            page.chip.lstPartWork[13].cpg.rhythmMode = (n != 0);
+            page.chip.lstPartWork[9].spg.rhythmMode = (n != 0);
+            page.chip.lstPartWork[10].spg.rhythmMode = (n != 0);
+            page.chip.lstPartWork[11].spg.rhythmMode = (n != 0);
+            page.chip.lstPartWork[12].spg.rhythmMode = (n != 0);
+            page.chip.lstPartWork[13].spg.rhythmMode = (n != 0);
 
         }
 
@@ -480,56 +480,70 @@ namespace Core
             page.sus = (c == 'o');
         }
 
+        public override void SetupPageData(partWork pw, partPage page)
+        {
+            page.keyOff = true;
+            page.spg.instrument = -1;
+
+            page.spg.beforeEnvInstrument = -1;
+
+            //周波数
+            page.spg.beforeFNum = -1;
+
+            //音量
+            page.spg.beforeVolume = -1;
+            SetVolume(page, null);
+
+        }
+
         public override void MultiChannelCommand(MML mml)
         {
             foreach (partWork pw in lstPartWork)
             {
-                foreach (partPage page in pw.pg)
+
+                partPage page = pw.cpg;
+                if (page.Type != enmChannelType.FMOPL) continue;
+
+                if (page.spg.beforeEnvInstrument != page.envInstrument || page.spg.beforeVolume != page.volume)
                 {
-                    if (page.Type == enmChannelType.FMOPL)
-                    {
-                        if (page.beforeEnvInstrument != page.envInstrument || page.beforeVolume != page.volume)
-                        {
-                            page.beforeEnvInstrument = page.envInstrument;
-                            page.beforeVolume = page.volume;
+                    page.spg.beforeEnvInstrument = page.envInstrument;
+                    page.spg.beforeVolume = page.volume;
 
-                            SOutData(page,mml, port[0]
-                                , (byte)(0x30 + page.ch)
-                                , (byte)(((page.envInstrument << 4) & 0xf0) | ((15 - page.volume) & 0xf))
-                                );
-                        }
+                    SOutData(page, mml, port[0]
+                        , (byte)(0x30 + page.ch)
+                        , (byte)(((page.envInstrument << 4) & 0xf0) | ((15 - page.volume) & 0xf))
+                        );
+                }
 
-                        if (page.keyOff)
-                        {
-                            page.keyOff = false;
-                            SOutData(page,mml, port[0]
-                                , (byte)(0x20 + page.ch)
-                                , (byte)(
-                                    ((page.freq >> 8) & 0xf)
-                                  )
-                                );
-                        }
+                if (page.keyOff)
+                {
+                    page.keyOff = false;
+                    SOutData(page, mml, port[0]
+                        , (byte)(0x20 + page.ch)
+                        , (byte)(
+                            ((page.freq >> 8) & 0xf)
+                          )
+                        );
+                }
 
-                        if (page.beforeFNum != (page.freq | (page.keyOn ? 0x1000 : 0x0000)))
-                        {
-                            page.beforeFNum = page.freq | (page.keyOn ? 0x1000 : 0x0000);
+                if (page.freq != -1 && page.spg.beforeFNum != (page.freq | (page.keyOn ? 0x1000 : 0x0000)))
+                {
+                    page.spg.beforeFNum = page.freq | (page.keyOn ? 0x1000 : 0x0000);
 
-                            SOutData(page,mml, port[0], (byte)(0x10 + page.ch), (byte)page.freq);
-                            SOutData(page,mml, port[0]
-                                , (byte)(0x20 + page.ch)
-                                , (byte)(
-                                    ((page.freq >> 8) & 0xf)
-                                    | (page.keyOn ? 0x10 : 0x00)
-                                    | (page.sus ? 0x20 : 0x00)
-                                  )
-                                );
-                        }
-                    }
+                    SOutData(page, mml, port[0], (byte)(0x10 + page.ch), (byte)page.freq);
+                    SOutData(page, mml, port[0]
+                        , (byte)(0x20 + page.ch)
+                        , (byte)(
+                            ((page.freq >> 8) & 0xf)
+                            | (page.keyOn ? 0x10 : 0x00)
+                            | (page.sus ? 0x20 : 0x00)
+                          )
+                        );
                 }
 
             }
 
-            if (!lstPartWork[9].cpg.rhythmMode) return;
+            if (!lstPartWork[9].spg.rhythmMode) return;
 
             partWork p0, p1;
             byte dat;
@@ -577,9 +591,9 @@ namespace Core
 
             //Freq
             p0 = lstPartWork[9];
-            if (p0.cpg.freq != -1 && p0.cpg.beforeFNum != p0.cpg.freq)
+            if (p0.cpg.freq != -1 && p0.spg.beforeFNum != p0.cpg.freq)
             {
-                p0.cpg.beforeFNum = p0.cpg.freq;
+                p0.spg.beforeFNum = p0.cpg.freq;
 
                 SOutData(p0.cpg,mml, port[0], (byte)0x16, (byte)p0.cpg.freq);
                 SOutData(p0.cpg,mml, port[0]
@@ -590,52 +604,52 @@ namespace Core
 
             p0 = lstPartWork[10];
             p1 = lstPartWork[13];
-            if ((p0.cpg.freq != -1 && p0.cpg.beforeFNum != p0.cpg.freq)
-                || (p1.cpg.freq != -1 && p1.cpg.beforeFNum != p1.cpg.freq))
+            if ((p0.cpg.freq != -1 && p0.spg.beforeFNum != p0.cpg.freq)
+                || (p1.cpg.freq != -1 && p1.spg.beforeFNum != p1.cpg.freq))
             {
-                if (p1.cpg.freq != -1 && p1.cpg.beforeFNum != p1.cpg.freq)
+                if (p1.cpg.freq != -1 && p1.spg.beforeFNum != p1.cpg.freq)
                 {
-                    p0.cpg.beforeFNum = p1.cpg.freq;
-                    p1.cpg.beforeFNum = p1.cpg.freq;
+                    p0.spg.beforeFNum = p1.cpg.freq;
+                    p1.spg.beforeFNum = p1.cpg.freq;
                 }
-                else if (p0.cpg.freq != -1 && p0.cpg.beforeFNum != p0.cpg.freq)
+                else if (p0.cpg.freq != -1 && p0.spg.beforeFNum != p0.cpg.freq)
                 {
-                    p0.cpg.beforeFNum = p0.cpg.freq;
-                    p1.cpg.beforeFNum = p0.cpg.freq;
+                    p0.spg.beforeFNum = p0.cpg.freq;
+                    p1.spg.beforeFNum = p0.cpg.freq;
                 }
 
-                if (p0.cpg.beforeFNum != -1)
+                if (p0.spg.beforeFNum != -1)
                 {
-                    SOutData(p0.cpg,mml, port[0], (byte)0x17, (byte)p0.cpg.beforeFNum);
+                    SOutData(p0.cpg,mml, port[0], (byte)0x17, (byte)p0.spg.beforeFNum);
                     SOutData(p0.cpg,mml, port[0]
                         , (byte)0x27
-                        , (byte)((p0.cpg.beforeFNum >> 8) & 0xf)
+                        , (byte)((p0.spg.beforeFNum >> 8) & 0xf)
                         );
                 }
             }
 
             p0 = lstPartWork[12];
             p1 = lstPartWork[11];
-            if ((p0.cpg.freq != -1 && p0.cpg.beforeFNum != p0.cpg.freq)
-                || (p1.cpg.freq != -1 && p1.cpg.beforeFNum != p1.cpg.freq))
+            if ((p0.cpg.freq != -1 && p0.spg.beforeFNum != p0.cpg.freq)
+                || (p1.cpg.freq != -1 && p1.spg.beforeFNum != p1.cpg.freq))
             {
-                if (p1.cpg.freq != -1 && p1.cpg.beforeFNum != p1.cpg.freq)
+                if (p1.cpg.freq != -1 && p1.spg.beforeFNum != p1.cpg.freq)
                 {
-                    p0.cpg.beforeFNum = p1.cpg.freq;
-                    p1.cpg.beforeFNum = p1.cpg.freq;
+                    p0.spg.beforeFNum = p1.cpg.freq;
+                    p1.spg.beforeFNum = p1.cpg.freq;
                 }
-                else if (p0.cpg.freq != -1 && p0.cpg.beforeFNum != p0.cpg.freq)
+                else if (p0.cpg.freq != -1 && p0.spg.beforeFNum != p0.cpg.freq)
                 {
-                    p0.cpg.beforeFNum = p0.cpg.freq;
-                    p1.cpg.beforeFNum = p0.cpg.freq;
+                    p0.spg.beforeFNum = p0.cpg.freq;
+                    p1.spg.beforeFNum = p0.cpg.freq;
                 }
 
-                if (p0.cpg.beforeFNum != -1)
+                if (p0.spg.beforeFNum != -1)
                 {
-                    SOutData(p0.cpg,mml, port[0], (byte)0x18, (byte)p0.cpg.beforeFNum);
+                    SOutData(p0.cpg,mml, port[0], (byte)0x18, (byte)p0.spg.beforeFNum);
                     SOutData(p0.cpg,mml, port[0]
                         , (byte)0x28
-                        , (byte)((p0.cpg.beforeFNum >> 8) & 0xf)
+                        , (byte)((p0.spg.beforeFNum >> 8) & 0xf)
                         );
                 }
             }
@@ -643,25 +657,25 @@ namespace Core
 
             //Rhythm Volume
             p0 = lstPartWork[9];
-            if (p0.cpg.beforeVolume != p0.cpg.volume)
+            if (p0.spg.beforeVolume != p0.cpg.volume)
             {
-                p0.cpg.beforeVolume = p0.cpg.volume;
+                p0.spg.beforeVolume = p0.cpg.volume;
                 SOutData(p0.cpg, mml, port[0], 0x36, (byte)(15 - (p0.cpg.volume & 0xf)));
             }
             p0 = lstPartWork[10];
             p1 = lstPartWork[13];
-            if (p0.cpg.beforeVolume != p0.cpg.volume || p1.cpg.beforeVolume != p1.cpg.volume)
+            if (p0.spg.beforeVolume != p0.cpg.volume || p1.spg.beforeVolume != p1.cpg.volume)
             {
-                p0.cpg.beforeVolume = p0.cpg.volume;
-                p1.cpg.beforeVolume = p1.cpg.volume;
+                p0.spg.beforeVolume = p0.cpg.volume;
+                p1.spg.beforeVolume = p1.cpg.volume;
                 SOutData(p0.cpg, mml, port[0], 0x37, (byte)((15 - (p0.cpg.volume & 0xf)) | ((15 - (p1.cpg.volume & 0xf)) << 4)));
             }
             p0 = lstPartWork[12];
             p1 = lstPartWork[11];
-            if (p0.cpg.beforeVolume != p0.cpg.volume || p1.cpg.beforeVolume != p1.cpg.volume)
+            if (p0.spg.beforeVolume != p0.cpg.volume || p1.spg.beforeVolume != p1.cpg.volume)
             {
-                p0.cpg.beforeVolume = p0.cpg.volume;
-                p1.cpg.beforeVolume = p1.cpg.volume;
+                p0.spg.beforeVolume = p0.cpg.volume;
+                p1.spg.beforeVolume = p1.cpg.volume;
                 SOutData(p0.cpg, mml, port[0], 0x38, (byte)((15 - (p0.cpg.volume & 0xf)) | ((15 - (p1.cpg.volume & 0xf)) << 4)));
             }
 

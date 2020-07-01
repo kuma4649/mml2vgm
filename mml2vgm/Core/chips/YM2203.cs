@@ -293,14 +293,14 @@ namespace Core
 
             foreach (partWork pw in lstPartWork)
             {
-                foreach (partPage page in pw.pg)
+                partPage page = pw.cpg;
+
+                if (page.keyOn)
                 {
-                    if (page.keyOn)
-                    {
-                        page.keyOn = false;
-                        OutFmKeyOn(page, mml);
-                    }
+                    page.keyOn = false;
+                    OutFmKeyOn(page, mml);
                 }
+
             }
 
 
