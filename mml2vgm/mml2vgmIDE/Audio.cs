@@ -4272,24 +4272,24 @@ namespace mml2vgmIDE
                 EmuSeqCounterDelta = sm.GetSpeed();// 1.0;
 
                 //スピードの調整はせずにディレイの調整を行う
-                long sub = (seqcnt - EmuSeqCounter);
-                if (Math.Abs(sub) > bufCnt)
-                {
-                    long delta = Math.Abs(sub) - bufCnt;
-                    if (Math.Sign(delta) > 0)
-                    {
+                //long sub = (seqcnt - EmuSeqCounter);
+                //if (Math.Abs(sub) > bufCnt)
+                //{
+                //    long delta = Math.Abs(sub) - bufCnt;
+                //    if (Math.Sign(delta) > 0)
+                //    {
 
-                    }
-                    else
-                    {
+                //    }
+                //    else
+                //    {
 
-                    }
-                }
+                //    }
+                //}
 
-                if (bufCnt > getLatency()*2)
-                {
-                    ;
-                }
+                //if (bufCnt > getLatency()*2)
+                //{
+                //    ;
+                //}
                 callcount = 0;
 
                 {
@@ -4420,42 +4420,30 @@ namespace mml2vgmIDE
         {
             if (emuRecvBuffer == null) return;
 
-            while ((long)emuRecvBuffer.LookUpCounter() <= EmuSeqCounter)
+            sm.ForcedProc();
+
+            bool ret = emuRecvBuffer.Deq(ref Pack.od, ref PackCounter, ref Pack.Chip, ref Pack.Type, ref Pack.Address, ref Pack.Data, ref Pack.ExData);
+            if (!ret)
             {
-
-                bool ret = emuRecvBuffer.Deq(ref Pack.od, ref PackCounter, ref Pack.Chip, ref Pack.Type, ref Pack.Address, ref Pack.Data, ref Pack.ExData);
-                if (!ret)
+                if (!sm.IsRunningAtDataSender())
                 {
-                    if (!sm.IsRunningAtDataSender())
-                    {
-                        sm.RequestStopAtEmuChipSender();
-                    }
-                    break;
+                    sm.RequestStopAtEmuChipSender();
                 }
-
+            }
+            else
+            {
                 if (Pack.Address != -1 || Pack.Data != -1 || Pack.ExData != null)
                 {
                     chipRegister.SendChipData(PackCounter, Pack.Chip, Pack.Type, Pack.Address, Pack.Data, Pack.ExData);
                 }
-                else
-                {
-                    ;
-                }
-
-                //SetMMLTraceInfo?.Invoke(Pack);
-
             }
 
             while (EmuSeqCounterWDelta >= 1.0)
             {
-                //if (sm.IsRunningAsync() && sm.IsRunningAtEmuChipSender())
-                {
-                    EmuSeqCounter++;
-                }
+                EmuSeqCounter++;
                 EmuSeqCounterWDelta -= 1.0;
             }
             EmuSeqCounterWDelta += EmuSeqCounterDelta;
-            //EmuSeqCounterWDelta += (sm.IsRunningAtEmuChipSender()) ? EmuSeqCounterDelta : 0;
             callcount++;
         }
 

@@ -520,6 +520,11 @@ namespace SoundManager
             dataSender.OnDataSeqFrq -= h;
         }
 
+        internal void ForcedProc()
+        {
+            dataSender.ForcedStepUpSeqCounterProc();
+        }
+
         #endregion
     }
 

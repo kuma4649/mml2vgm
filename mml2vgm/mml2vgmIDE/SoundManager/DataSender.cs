@@ -235,6 +235,8 @@ namespace SoundManager
                         if (unmount) return;
                         Thread.Sleep(0);
 
+                        if (parent.isVirtualOnlySend) continue;
+
                         double el1 = spdc.ElapsedMilliSec();// sw.ElapsedTicks / swFreq;
                         if (el1 - o < step) continue;
                         if (el1 - o >= step * Frq / 1.0)//閾値1000ms
@@ -261,13 +263,10 @@ namespace SoundManager
 
                             {
                                 //待ち合わせ割り込み
-                                if (!parent.isVirtualOnlySend)
+                                if (parent.GetInterrupt())
                                 {
-                                    if (parent.GetInterrupt())
-                                    {
-                                        //Thread.Sleep(0);
-                                        continue;
-                                    }
+                                    //Thread.Sleep(0);
+                                    continue;
                                 }
 
                                 SeqSpeed += SeqSpeedDelta;
@@ -318,79 +317,7 @@ namespace SoundManager
                             lapPtr = spdc.ElapsedMilliSec();
 
                             //dataが貯まってます！
-                            while (SeqCounter >= ringBuffer.LookUpCounter())
-                            {
-                                if (unmount) return;
-                                if (!ringBuffer.Deq(ref od, ref Counter, ref Chip, ref Type, ref Address, ref Data, ref ExData))
-                                {
-                                    break;
-                                }
-
-                                //パラメーターセット
-                                SetMMLParameter?.Invoke(ref od, ref Counter, ref Chip, ref Type, ref Address, ref Data, ref ExData);
-
-                                //データ加工
-                                ProcessingData?.Invoke(ref od, ref Counter, ref Chip, ref Type, ref Address, ref Data, ref ExData);
-
-
-                                if (od != null && od.type == enmMMLType.Tempo)
-                                {
-                                    parent.CurrentTempo = (int)od.args[0];
-                                    parent.CurrentClockCount = (int)od.args[1];
-                                    continue;
-                                }
-
-                                if (od != null && od.type == enmMMLType.Length)
-                                {
-                                    if (od.linePos.chip == parent.CurrentChip
-                                        && od.linePos.ch == parent.CurrentCh - 1)
-                                    {
-                                        parent.CurrentNoteLength = (int)od.args[0];
-                                    }
-                                    continue;
-                                }
-
-                                //振り分けてEnqueue
-                                if (Chip.Model == EnmVRModel.VirtualModel)
-                                {
-                                    while (!EmuEnq(od, Counter, Chip, Type, Address, Data, ExData))
-                                    {
-                                        if (!Start)
-                                        {
-                                            break;
-                                        }
-                                        if (unmount) return;
-                                        Thread.Sleep(0);
-                                    }
-                                }
-                                else if (Chip.Model == EnmVRModel.RealModel)
-                                {
-                                    while (!RealEnq(od, Counter, Chip, Type, Address, Data, ExData))
-                                    {
-                                        if (!Start)
-                                        {
-                                            break;
-                                        }
-                                        if (unmount) return;
-                                        Thread.Sleep(0);
-                                    }
-                                }
-                                else
-                                {
-                                    //演奏制御処理
-                                    switch (Type)
-                                    {
-                                        case EnmDataType.Normal:
-                                            break;
-                                        case EnmDataType.FadeOut:
-                                            parent.SetFadeOut();
-                                            break;
-                                        case EnmDataType.Loop:
-                                            parent.CountUpLoopCounter();
-                                            break;
-                                    }
-                                }
-                            }
+                            SendData();
 
                             process2_Lap = spdc.ElapsedMilliSec() - lapPtr;
                         }
@@ -428,6 +355,103 @@ namespace SoundManager
             {
                 procExit = true;
                 Thread.CurrentThread.Priority = ThreadPriority.Normal;
+            }
+        }
+
+        internal void ForcedStepUpSeqCounterProc()
+        {
+            if (!GetStart())
+            {
+                parent.RequestStopAtEmuChipSender();
+                return;
+            }
+
+            SeqSpeed += SeqSpeedDelta;
+            while (SeqSpeed >= 1.0)
+            {
+                SeqCounter++;
+                SeqSpeed -= 1.0;
+            }
+
+            if (SeqCounter < 0) return;
+
+            SendData();
+        }
+
+        private void SendData()
+        { 
+            while (SeqCounter >= ringBuffer.LookUpCounter())
+            {
+                if (unmount) return;
+                if (!ringBuffer.Deq(ref od, ref Counter, ref Chip, ref Type, ref Address, ref Data, ref ExData))
+                {
+                    break;
+                }
+
+                //パラメーターセット
+                SetMMLParameter?.Invoke(ref od, ref Counter, ref Chip, ref Type, ref Address, ref Data, ref ExData);
+
+                //データ加工
+                ProcessingData?.Invoke(ref od, ref Counter, ref Chip, ref Type, ref Address, ref Data, ref ExData);
+
+
+                if (od != null && od.type == enmMMLType.Tempo)
+                {
+                    parent.CurrentTempo = (int)od.args[0];
+                    parent.CurrentClockCount = (int)od.args[1];
+                    continue;
+                }
+
+                if (od != null && od.type == enmMMLType.Length)
+                {
+                    if (od.linePos.chip == parent.CurrentChip
+                        && od.linePos.ch == parent.CurrentCh - 1)
+                    {
+                        parent.CurrentNoteLength = (int)od.args[0];
+                    }
+                    continue;
+                }
+
+                //振り分けてEnqueue
+                if (Chip.Model == EnmVRModel.VirtualModel)
+                {
+                    while (!EmuEnq(od, Counter, Chip, Type, Address, Data, ExData))
+                    {
+                        if (!Start)
+                        {
+                            break;
+                        }
+                        if (unmount) return;
+                        Thread.Sleep(0);
+                    }
+                }
+                else if (Chip.Model == EnmVRModel.RealModel)
+                {
+                    while (!RealEnq(od, Counter, Chip, Type, Address, Data, ExData))
+                    {
+                        if (!Start)
+                        {
+                            break;
+                        }
+                        if (unmount) return;
+                        Thread.Sleep(0);
+                    }
+                }
+                else
+                {
+                    //演奏制御処理
+                    switch (Type)
+                    {
+                        case EnmDataType.Normal:
+                            break;
+                        case EnmDataType.FadeOut:
+                            parent.SetFadeOut();
+                            break;
+                        case EnmDataType.Loop:
+                            parent.CountUpLoopCounter();
+                            break;
+                    }
+                }
             }
         }
 
