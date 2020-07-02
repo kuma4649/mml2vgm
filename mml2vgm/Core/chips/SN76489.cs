@@ -118,24 +118,26 @@ namespace Core
         public void OutPsgKeyOn(partPage page, MML mml)
         {
 
-            page.keyOn = true;
+            page.keyOff = false;
             SetFNum(page, mml);
             SetVolume(page, mml);
             SetDummyData(page, mml);
 
-            MML vmml = new MML();
-            vmml.type = enmMMLType.Volume;
-            vmml.args = new List<object>();
-            vmml.args.Add(page.volume);
-            vmml.line = mml.line;
-            SetDummyData(page, vmml);
-
+            if (mml != null)
+            {
+                MML vmml = new MML();
+                vmml.type = enmMMLType.Volume;
+                vmml.args = new List<object>();
+                vmml.args.Add(page.volume);
+                vmml.line = mml.line;
+                SetDummyData(page, vmml);
+            }
         }
 
         public void OutPsgKeyOff(partPage page, MML mml)
         {
 
-            if (!page.envelopeMode) page.keyOn = false;
+            if (!page.envelopeMode) page.keyOff = true;
             SetVolume(page, mml);
 
         }
@@ -226,7 +228,7 @@ namespace Core
             byte data = 0;
             int vol = page.volume;
 
-            if (page.keyOn)
+            if (!page.keyOff)
             {
                 if (page.envelopeMode)
                 {
@@ -266,12 +268,15 @@ namespace Core
 
         public override void SetKeyOn(partPage page, MML mml)
         {
-            OutPsgKeyOn(page, mml);
+            //OutPsgKeyOn(page, mml);
+            page.keyOn = true;
+            page.keyOff = false;
         }
 
         public override void SetKeyOff(partPage page, MML mml)
         {
-            OutPsgKeyOff(page, mml);
+            //OutPsgKeyOff(page, mml);
+            page.keyOff = true;
         }
 
         public override void SetLfoAtKeyOn(partPage page, MML mml)
@@ -387,6 +392,22 @@ namespace Core
             page.panL = l;
         }
 
+        public override void SetupPageData(partWork pw, partPage page)
+        {
+
+            //周波数
+            page.spg.freq = -1;
+            SetFNum(page, null);
+
+            //ノイズ周波数
+            //noiseFreq = -1;
+            //OutSsgNoise(null, page);
+
+            //音量
+            page.spg.beforeVolume = -1;
+            SetVolume(page, null);
+
+        }
         public override void MultiChannelCommand(MML mml)
         {
             if (!use) return;
@@ -394,23 +415,38 @@ namespace Core
 
             foreach (partWork pw in lstPartWork)
             {
-                foreach (partPage page in pw.pg)
-                {
-                    int p = page.panL;
-                    dat |= (((p & 2) == 0 ? 0x00 : 0x10) | ((p & 1) == 0 ? 0x00 : 0x01)) << page.ch;
-                }
+                partPage page = pw.cpg;
+                int p = page.panL;
+                dat |= (((p & 2) == 0 ? 0x00 : 0x10) | ((p & 1) == 0 ? 0x00 : 0x01)) << page.ch;
             }
 
-            if (beforePanData == dat) return;
-            if (parent.info.format != enmFormat.XGM)//XGMではGGのステレオ機能は対応していない
+            if (beforePanData != dat)
             {
-                if (parent.info.enableGGStereoDCSG)//enable指定の場合のみ
+                if (parent.info.format != enmFormat.XGM)//XGMではGGのステレオ機能は対応していない
                 {
-                    OutGGPsgStereoPort(lstPartWork[lstPartWork.Count - 1].cpg, mml, port[1], (byte)dat);
+                    if (parent.info.enableGGStereoDCSG)//enable指定の場合のみ
+                    {
+                        OutGGPsgStereoPort(lstPartWork[lstPartWork.Count - 1].cpg, mml, port[1], (byte)dat);
+                    }
+                }
+                beforePanData = dat;
+            }
+
+            foreach (partWork pw in lstPartWork)
+            {
+                partPage page = pw.cpg;
+
+                if (page.keyOff)
+                {
+                    page.keyOff = false;
+                    OutPsgKeyOff(page, mml);
+                }
+                if (page.keyOn)
+                {
+                    page.keyOn = false;
+                    OutPsgKeyOn(page, mml);
                 }
             }
-            beforePanData = dat;
-
         }
 
     }

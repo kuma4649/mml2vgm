@@ -1,0 +1,29 @@
+﻿'{
+
+	TitleName   =
+	TitleNameJ  =ページ機能のテスト
+	GameName    =
+	GameNameJ   =
+	SystemName  =
+	SystemNameJ =
+	Composer    =
+	ComposerJ   =
+	ReleaseDate =
+	Converted   =
+	Notes       =
+
+}
+
+
+
+'@ E  4, 15,  0,  1, 3,  1,  1,  1, DCSG
+'@ E  5, 15,  0,  1, 3,  1,  1,  3, DCSG
+
+'Cn1 T140
+Cn1 L
+
+
+
+'S1  l16 v12o3q0 rc
+'S1_ l16 v10o3q0 gr
+

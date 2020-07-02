@@ -506,7 +506,8 @@ namespace Core
 
         public override void SetKeyOn(partPage page, MML mml)
         {
-            OutKeyOn(mml, page);
+            page.keyOn = true;
+            //OutKeyOn(mml, page);
         }
 
         public override void SetKeyOff(partPage page, MML mml)
@@ -901,6 +902,46 @@ namespace Core
 
         public override void CmdLoopExtProc(partPage page, MML mml)
         {
+        }
+
+        public override void SetupPageData(partWork pw, partPage page)
+        {
+
+            OutKeyOff(null, page);
+
+            //音色
+            page.spg.instrument = -1;
+            OutSetInstrument(page, null, page.instrument, page.volume, 'n');
+
+            //周波数
+            page.spg.freq = -1;
+            SetFNum(page, null);
+
+            //音量
+            page.spg.beforeVolume = -1;
+            SetVolume(page, null);
+
+            //panは音色設定時に再設定されるので不要
+        }
+
+        public override void MultiChannelCommand(MML mml)
+        {
+            if (!use) return;
+            //int dat = 0;
+
+            foreach (partWork pw in lstPartWork)
+            {
+                partPage page = pw.cpg;
+
+                if (page.keyOn)
+                {
+                    page.keyOn = false;
+                    OutKeyOn(mml, page);
+                }
+
+            }
+
+
         }
 
     }
