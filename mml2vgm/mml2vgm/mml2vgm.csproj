@@ -132,7 +132,13 @@
     <None Include="sample\C140\testC140.gwi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="sample\C140\testPageFunctionC140.gwi">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="sample\C352\testC352.gwi">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="sample\C352\testPageFunctionC352.gwi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="sample\HuC6280\testHuC6280.gwi">
@@ -156,10 +162,25 @@
     <None Include="sample\Syntax\testPageFunction.gwi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="sample\YM2151\testPageFunctionYM2151.gwi">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="sample\YM2203\testPageFunctionYM2203.gwi">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="sample\YM2413\testPageFunctionYM2413.gwi">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="sample\YM2609\testPageFunctionYM2609.gwi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="sample\YM2610\testYM2610B.gwi">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="sample\YM2612\testPageFunctionYM2612.gwi">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="sample\YM2612\testPageFunctionYM2612X.gwi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="sample\YM3526\OPLtest.gwi">

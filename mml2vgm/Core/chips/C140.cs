@@ -555,7 +555,7 @@ namespace Core
             int stAdr = page.pcmStartAddress + page.addressShift;
             if (stAdr >= page.pcmEndAddress) stAdr = page.pcmEndAddress - 1;
 
-            if (page.beforepcmStartAddress != stAdr)
+            if (page.spg.beforepcmStartAddress != stAdr)
             {
                 //StartAdr H
                 adr = page.ch * 16 + 0x06;
@@ -573,10 +573,10 @@ namespace Core
                     , (byte)adr
                     , data);
 
-                page.beforepcmStartAddress = stAdr;
+                page.spg.beforepcmStartAddress = stAdr;
             }
 
-            if (page.beforepcmEndAddress != page.pcmEndAddress)
+            if (page.spg.beforepcmEndAddress != page.pcmEndAddress)
             {
                 int eAdr = page.pcmEndAddress;
                 //EndAdr H
@@ -594,10 +594,10 @@ namespace Core
                     , (byte)adr
                     , data);
 
-                page.beforepcmEndAddress = page.pcmEndAddress;
+                page.spg.beforepcmEndAddress = page.pcmEndAddress;
             }
 
-            if (page.beforepcmLoopAddress != page.pcmLoopAddress)
+            if (page.spg.beforepcmLoopAddress != page.pcmLoopAddress)
             {
                 if (page.pcmLoopAddress != -1)
                 {
@@ -617,11 +617,11 @@ namespace Core
                         , (byte)adr
                         , data);
 
-                    page.beforepcmLoopAddress = page.pcmLoopAddress;
+                    page.spg.beforepcmLoopAddress = page.pcmLoopAddress;
                 }
             }
 
-            if (page.beforepcmBank != page.pcmBank)
+            if (page.spg.beforepcmBank != page.pcmBank)
             {
                 adr = page.ch * 16 + 0x04;
                 data = (byte)((page.pcmBank & 7) | (isSystem2 ? ((page.pcmBank & 0x8) << 2) : ((page.pcmBank & 0x18) << 1)));
@@ -630,7 +630,7 @@ namespace Core
                     , (byte)adr
                     , data);
 
-                page.beforepcmBank = page.pcmBank;
+                page.spg.beforepcmBank = page.pcmBank;
             }
 
             adr = page.ch * 16 + 0x05;
@@ -680,14 +680,14 @@ namespace Core
             }
 
             f = Common.CheckRange(f, 0, 0xffff);
-            if (page.freq == f) return;
+            if (page.spg.freq == f) return;
 
-            page.freq = f;
+            page.spg.freq = f;
 
 
             //Delta
             int data = f & 0xffff;
-            if (page.beforeFNum != data)
+            if (page.spg.beforeFNum != data)
             {
                 int adr = page.ch * 16 + 0x02;
                 OutC140Port(mml, page
@@ -711,7 +711,8 @@ namespace Core
 
         public override void SetKeyOn(partPage page, MML mml)
         {
-            OutC140KeyOn(page, mml);
+            //OutC140KeyOn(page, mml);
+            page.keyOn = true;
         }
 
         public override void SetKeyOff(partPage page, MML mml)
@@ -751,7 +752,7 @@ namespace Core
             vl = Common.CheckRange(vl, 0, page.MaxVolume);
             vr = Common.CheckRange(vr, 0, page.MaxVolume);
 
-            if (page.beforeLVolume != vl)
+            if (page.spg.beforeLVolume != vl)
             {
                 //Volume(Left)
                 int adr = page.ch * 16 + 0x01;
@@ -759,10 +760,10 @@ namespace Core
                     , (byte)(adr >> 8)
                     , (byte)adr
                     , (byte)vl);
-                page.beforeLVolume = vl;
+                page.spg.beforeLVolume = vl;
             }
 
-            if (page.beforeRVolume != vr)
+            if (page.spg.beforeRVolume != vr)
             {
                 //Volume(Right)
                 int adr = page.ch * 16 + 0x00;
@@ -770,7 +771,7 @@ namespace Core
                     , (byte)(adr >> 8)
                     , (byte)adr
                     , (byte)vr);
-                page.beforeRVolume = vr;
+                page.spg.beforeRVolume = vr;
             }
         }
 
@@ -892,6 +893,48 @@ namespace Core
         public override void CmdLoopExtProc(partPage page, MML mml)
         {
         }
+
+
+
+        public override void SetupPageData(partWork pw, partPage page)
+        {
+
+            OutC140KeyOff(null, page);
+            page.spg.instrument = -1;
+
+            //周波数
+            page.spg.freq = -1;
+            SetFNum(page, null);
+
+            //音量(パン兼用)
+            page.spg.beforeLVolume = -1;
+            page.spg.beforeRVolume = -1;
+            SetVolume(page, null);
+
+        }
+
+
+
+        public override void MultiChannelCommand(MML mml)
+        {
+            if (!use) return;
+            //int dat = 0;
+
+            foreach (partWork pw in lstPartWork)
+            {
+                partPage page = pw.cpg;
+
+                if (page.keyOn)
+                {
+                    page.keyOn = false;
+                    OutC140KeyOn(page, mml);
+                }
+
+            }
+
+
+        }
+
 
 
         public override string DispRegion(clsPcm pcm)

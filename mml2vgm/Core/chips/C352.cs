@@ -454,20 +454,20 @@ namespace Core
             }
 
             f = Common.CheckRange(f, 0, 0xffff);
-            if (page.freq == f) return;
+            if (page.spg.freq == f) return;
 
-            page.freq = f;
+            page.spg.freq = f;
 
 
             //Delta
             int data = f & 0xffff;
-            if (page.beforeFNum != data)
+            if (page.spg.beforeFNum != data)
             {
                 int adr = page.ch * 8 + 0x02;//0x02:freq
                 OutC352Port(mml, page
                     , adr
                     , data);
-                page.beforeFNum = data;
+                page.spg.beforeFNum = data;
             }
 
         }
@@ -483,7 +483,10 @@ namespace Core
             page.keyOff = false;
             page.changeFlag = true;
             executeKeyonoff = true;
+        }
 
+        private void OutC352KeyOn(partPage page, MML mml)
+        { 
             //Volume
             SetVolume(page, mml);
 
@@ -492,17 +495,17 @@ namespace Core
             if (stAdr >= page.pcmEndAddress) stAdr = page.pcmEndAddress - 1;
 
             int adr, data;
-            if (page.beforepcmStartAddress != stAdr)
+            if (page.spg.beforepcmStartAddress != stAdr)
             {
                 //StartAdr
                 adr = page.ch * 8 + 0x05;
                 data = (ushort)(stAdr & 0xffff);
                 OutC352Port(mml, page, adr, data);
 
-                page.beforepcmStartAddress = stAdr;
+                page.spg.beforepcmStartAddress = stAdr;
             }
 
-            if (page.beforepcmEndAddress != page.pcmEndAddress)
+            if (page.spg.beforepcmEndAddress != page.pcmEndAddress)
             {
                 int eAdr = page.pcmEndAddress;
                 //EndAdr
@@ -510,10 +513,10 @@ namespace Core
                 data = (ushort)(eAdr & 0xffff);
                 OutC352Port(mml, page, adr, data);
 
-                page.beforepcmEndAddress = page.pcmEndAddress;
+                page.spg.beforepcmEndAddress = page.pcmEndAddress;
             }
 
-            if (page.beforepcmLoopAddress != page.pcmLoopAddress)
+            if (page.spg.beforepcmLoopAddress != page.pcmLoopAddress)
             {
                 if (page.pcmLoopAddress != -1)
                 {
@@ -522,27 +525,35 @@ namespace Core
                     data = (ushort)(page.pcmLoopAddress & 0xffff);
                     OutC352Port(mml, page, adr, data);
 
-                    page.beforepcmLoopAddress = page.pcmLoopAddress;
+                    page.spg.beforepcmLoopAddress = page.pcmLoopAddress;
                 }
             }
 
-            if (page.beforepcmBank != page.pcmBank)
+            if (page.spg.beforepcmBank != page.pcmBank)
             {
                 adr = page.ch * 8 + 0x04;
                 data = (ushort)(page.pcmBank & 0xffff);
                 OutC352Port(mml, page, adr, data);
 
-                page.beforepcmBank = page.pcmBank;
+                page.spg.beforepcmBank = page.pcmBank;
             }
 
         }
 
         public override void SetKeyOff(partPage page, MML mml)
         {
-            page.keyOn = false;
-            page.keyOff = true;
-            page.changeFlag = true;
-            executeKeyonoff = true;
+
+            int flag =
+    0x0000 |
+    0x2000 |
+    (page.noise != 0 ? 0x0010 : 0x0000) |
+    (parent.instPCM[page.instrument].is16bit ? 0x0008 : 0x0000) |
+    (parent.instPCM[page.instrument].loopAdr != -1 ? 0x0002 : 0x0000) |
+    (page.C352flag & 0xffff)
+    ;
+
+            OutC352Port(mml, page, page.ch * 8 + 3, flag);
+
         }
 
         public override void SetVolume(partPage page, MML mml)
@@ -582,7 +593,7 @@ namespace Core
             rvl = Common.CheckRange(rvl, 0, page.MaxVolume);
             rvr = Common.CheckRange(rvr, 0, page.MaxVolume);
 
-            if (page.beforeLVolume != vl || page.beforeRVolume != vr)
+            if (page.spg.beforeLVolume != vl || page.spg.beforeRVolume != vr)
             {
                 //front Volume
                 int adr = page.ch * 8 + 0x00;
@@ -590,11 +601,11 @@ namespace Core
                     , adr
                     , ((byte)vl << 8) | (byte)vr
                     );
-                page.beforeLVolume = vl;
-                page.beforeRVolume = vr;
+                page.spg.beforeLVolume = vl;
+                page.spg.beforeRVolume = vr;
             }
 
-            if (page.beforeRLVolume != rvl || page.beforeRRVolume != rvr)
+            if (page.spg.beforeRLVolume != rvl || page.spg.beforeRRVolume != rvr)
             {
                 //rear Volume
                 int adr = page.ch * 8 + 0x01;
@@ -602,8 +613,8 @@ namespace Core
                     , adr
                     , ((byte)rvl << 8) | (byte)rvr
                     );
-                page.beforeRLVolume = rvl;
-                page.beforeRRVolume = rvr;
+                page.spg.beforeRLVolume = rvl;
+                page.spg.beforeRRVolume = rvr;
             }
         }
 
@@ -768,6 +779,26 @@ namespace Core
         }
 
 
+        public override void SetupPageData(partWork pw, partPage page)
+        {
+
+            SetKeyOff(page, null);
+            page.spg.instrument = -1;
+
+            //周波数
+            page.spg.freq = -1;
+            page.spg.beforeFNum = -1;
+            SetFNum(page, null);
+
+            //音量(パン兼用)
+            page.spg.beforeLVolume = -1;
+            page.spg.beforeRVolume = -1;
+            page.spg.beforeRLVolume = -1;
+            page.spg.beforeRRVolume = -1;
+            SetVolume(page, null);
+
+        }
+
         public override void MultiChannelCommand(MML mml)
         {
             foreach (partWork pw in lstPartWork)
@@ -777,6 +808,8 @@ namespace Core
                     if (page.instrument == -1) continue;
                     if (!page.changeFlag) continue;
                     page.changeFlag = false;
+
+                    OutC352KeyOn(page, mml);
 
                     int flag =
                         (page.keyOn ? 0x4000 : 0x0000) |
@@ -797,6 +830,8 @@ namespace Core
                 executeKeyonoff = false;
             }
         }
+
+
 
         public override string DispRegion(clsPcm pcm)
         {

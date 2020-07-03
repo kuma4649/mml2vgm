@@ -1,0 +1,35 @@
+﻿'{
+
+	TitleName   =
+	TitleNameJ  =ページ機能のテスト
+	GameName    =
+	GameNameJ   =
+	SystemName  =
+	SystemNameJ =
+	Composer    =
+	ComposerJ   =
+	ReleaseDate =
+	Converted   =
+	Notes       =
+
+}
+
+
+
+     No,  SV, AR, DR,  SL, SR, RR,  ST, ChipName
+'@ E  0, 256,  0,  1, 200, 31,  1,  20, C352
+'@ E  1, 256,  0,  1,   1, 10,  1,  18, C352
+'@ E  2, 200,  1,  1, 120, 10,  1,   4, C352
+
+'@ P 0,"..\wav\muteGuitar.wav"    , 4000 , 100 , C352
+'@ P 1,"..\wav\Guitar.wav"        , 8000 , 100 , C352 , 14000
+'@ P 2,"..\wav\BD_16bit16000.wav" ,      , 100 , C352
+
+'G01 T126
+
+
+
+'G02  l16 @1EON@E1v255p0,255o4q1 crcrc1r1
+'G02_ l16 @1EON@E0v155p255,0o4Q4 rcrdr1e8r1
+[rrrrc8rr]4 [rr  rrc8   rr]4
+
