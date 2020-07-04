@@ -2910,15 +2910,10 @@ namespace Core
                                     {
                                         //休符発行
                                         err = 0;
-                                        MML smml = new MML();
-                                        smml.line = mml.line;
-                                        smml.type = enmMMLType.Rest;
-                                        smml.args = new List<object>();
                                         Rest rests = new Rest();
-                                        smml.args.Add(rests);
+                                        mml.args.Add(rests);
                                         rests.cmd = 'r';
                                         rests.length = slen;
-                                        page.mmlData.Insert(i, smml);
                                         mml.args[0] = 3;
                                     }
                                 }

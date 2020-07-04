@@ -4083,6 +4083,14 @@ namespace Core
                     break;
                 case enmMMLType.Synchronous:
                     log.Write("Synchronous");//同期コマンドの場合は特に処理は必要ない
+                    if ((int)mml.args[0] == 3)
+                    {
+                        MML smml = new MML();
+                        smml.args = new List<object>();
+                        smml.args.Add(mml.args[2]);
+                        smml.line = mml.line;
+                        page.chip.CmdRest(page, smml);
+                    }
                     page.mmlPos++;
                     break;
                 default:
