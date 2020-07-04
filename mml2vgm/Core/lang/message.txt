@@ -216,6 +216,8 @@ E05056=Failed to parse 'U' command.
 E05057=Failed to parse 'CC' command.
 E05058=Invalid number defined as 'wf' command.
 E05059=Failed to parse 'X' command.
+E05060=Failed to parse '*' command.
+E05061=Failed to syncronize '*S' command.
 
 
 ;partWork.cs 06000

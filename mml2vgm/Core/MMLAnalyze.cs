@@ -66,6 +66,9 @@ namespace Core
                     }
                 }
             }
+
+            Step4();
+
             return 0;
 
         }
@@ -98,6 +101,7 @@ namespace Core
         public Point caretPoint;
         private bool SkipFlg = false;
         private List<partWork> caretPointChannels = new List<partWork>();
+        private List<Tuple<int, int>> lstSynchronousMark = new List<Tuple<int, int>>();
 
         public LinePos linePos { get; internal set; }
 
@@ -325,6 +329,10 @@ namespace Core
                 case ';':
                     log.Write("comment out");
                     CmdCommentout(pw, page, mml);
+                    break;
+                case '*':
+                    log.Write("synchronous");
+                    CmdSynchronous(pw, page, mml);
                     break;
 
                 default:
@@ -1039,6 +1047,11 @@ namespace Core
 
                 mml.args = new List<object>();
                 mml.args.Add(n);
+            }
+            else
+            {
+                mml.args = new List<object>();
+                mml.args.Add((int)page.length);
             }
         }
 
@@ -1976,6 +1989,42 @@ namespace Core
             } while ((row == page.pos.row && alies == page.pos.alies) && ch != (char)0);
 
         }
+        
+        private void CmdSynchronous(partWork pw, partPage page, MML mml)
+        {
+            pw.incPos(page);
+            char c = pw.getChar(page);
+            int m = 0;
+            int n;
+
+            if (c == 'M')
+            {
+                m = 1;
+            }
+            else if (c == 'S')
+            {
+                m = 2;
+            }
+            else
+            {
+                msgBox.setErrMsg(msg.get("E05060"), mml.line.Lp);
+                return;
+            }
+
+            pw.incPos(page);
+            pw.skipTabSpace(page);
+
+            if (!pw.getNum(page, out n))
+            {
+                n = -1;
+            }
+
+            mml.type = enmMMLType.Synchronous;
+            mml.args = new List<object>();
+            mml.args.Add(m);
+            mml.args.Add(n);
+
+        }
 
         private void CmdRest(partWork pw, partPage page, MML mml)
         {
@@ -2669,7 +2718,225 @@ namespace Core
 
         #endregion
 
+        private void Step4()
+        {
+            //同期マーキングをリストアップする
+            foreach (KeyValuePair<enmChipType, ClsChip[]> kvp in chips)
+            {
+                foreach (ClsChip chip in kvp.Value)
+                {
+                    if (chip == null) continue;
+                    if (!chip.use) continue;
+                    foreach (partWork pw in chip.lstPartWork)
+                    {
+                        foreach (partPage page in pw.pg)
+                        {
+                            if (page.dataEnd) continue;
+                            Step4_CheckSync(page,0);
+                        }
+                    }
+                }
+            }
 
+            //同期マーキングをカウンター順にソート
+            for (int i = 0; i < lstSynchronousMark.Count; i++)
+            {
+                for (int j = i + 1; j < lstSynchronousMark.Count; j++)
+                {
+                    if (lstSynchronousMark[i].Item2 < lstSynchronousMark[j].Item2) continue;
+                    Tuple<int, int> item = lstSynchronousMark[i];
+                    lstSynchronousMark[i] = lstSynchronousMark[j];
+                    lstSynchronousMark[j] = item;
+                }
+            }
+
+            //同期の直後に休符を補填する
+            foreach (KeyValuePair<enmChipType, ClsChip[]> kvp in chips)
+            {
+                foreach (ClsChip chip in kvp.Value)
+                {
+                    if (chip == null) continue;
+                    if (!chip.use) continue;
+                    foreach (partWork pw in chip.lstPartWork)
+                    {
+                        foreach (partPage page in pw.pg)
+                        {
+                            if (page.dataEnd) continue;
+                            Step4_CheckSync(page,1);
+                        }
+                    }
+                }
+            }
+
+        }
+
+        private void Step4_CheckSync(partPage page,int mode)
+        {
+            int counter = 0;
+            Stack<int> renpuStack = new Stack<int>();
+            Stack<Tuple<int, int, int>> repeatStack = new Stack<Tuple<int, int, int>>();
+
+            for (int i = 0; i < page.mmlData.Count; i++)
+            {
+                MML mml = page.mmlData[i];
+                Tuple<int, int, int> re;
+                int repPos;
+                int repCnt;
+                int repExitCnt;
+
+                switch (mml.type)
+                {
+                    case enmMMLType.Rest:
+                    case enmMMLType.Note:
+                        Rest rest = (Rest)mml.args[0];
+                        int len = rest.length;
+
+                        //連符の中のノートの場合はカウントしない
+                        if (renpuStack.Count > 0) len = 0;
+
+                        counter += len;
+                        break;
+                    case enmMMLType.Repeat:
+                        re = new Tuple<int, int, int>(i, -1, -1);
+                        repeatStack.Push(re);
+                        break;
+                    case enmMMLType.RepertExit:
+                        re = repeatStack.Pop();
+                        repPos = re.Item1;
+                        repCnt = re.Item2;
+                        repExitCnt = re.Item3;
+
+                        if (repCnt == 1)
+                        {
+                            i = (int)mml.args[0];
+                        }
+                        else
+                        {
+                            if (repExitCnt == -1)
+                            {
+                                repExitCnt = counter;
+                            }
+                            repeatStack.Push(new Tuple<int, int, int>(repPos, repCnt, repExitCnt));
+                        }
+                        break;
+                    case enmMMLType.RepeatEnd:
+                        try
+                        {
+                            re = repeatStack.Pop();
+                            repPos = re.Item1;
+                            repCnt = re.Item2;
+                            repExitCnt = re.Item3;
+
+                            if (repCnt == -1)
+                            {
+                                repCnt = (int)mml.args[0];
+                            }
+                            repCnt--;
+                            if (repCnt != 0)
+                            {
+                                i = repPos;
+                                repeatStack.Push(new Tuple<int, int, int>(repPos, repCnt, repExitCnt));
+                            }
+                            else
+                            {
+                                if ((int)mml.args[0] < 2 && repExitCnt != -1)
+                                {
+                                    counter = repExitCnt;
+                                }
+                            }
+                        }
+                        catch
+                        {
+                            ;//スタックがない場合は既にエラー検知されているのでここでは無視する
+                        }
+                        break;
+                    case enmMMLType.Renpu:
+                        renpuStack.Push((int)mml.args[1]);
+                        break;
+                    case enmMMLType.RenpuEnd:
+                        try
+                        {
+                            int rlen = renpuStack.Pop();
+                            if (renpuStack.Count == 0) counter += rlen;
+                        }
+                        catch
+                        {
+                            ;//スタックがない場合は既にエラー検知されているのでここでは無視する
+                        }
+                        break;
+                    case enmMMLType.Synchronous:
+                        if (mode == 0)
+                        {
+                            int m = (int)mml.args[0];
+                            int n = (int)mml.args[1];
+                            if (m == 1)
+                            {
+                                Console.WriteLine("number:{0} counter:{1}", n, counter);
+                                Tuple<int, int> item = new Tuple<int, int>(n, counter);
+                                if (n != -1)
+                                {
+                                    for (int j = 0; j < lstSynchronousMark.Count; j++)
+                                    {
+                                        if (lstSynchronousMark[j].Item1 == n)
+                                        {
+                                            lstSynchronousMark.RemoveAt(j);
+                                            j--;
+                                        }
+                                    }
+                                }
+                                lstSynchronousMark.Add(item);
+                            }
+                        }
+                        else
+                        {
+                            int m = (int)mml.args[0];
+                            int n = (int)mml.args[1];
+                            if (m == 2)
+                            {
+                                int j;
+                                for(j = 0; j < lstSynchronousMark.Count; j++)
+                                {
+                                    if (n == lstSynchronousMark[j].Item1)
+                                    {
+                                        break;
+                                    }
+                                }
+                                int err = 1;
+                                if (j != lstSynchronousMark.Count)
+                                {
+                                    int slen = lstSynchronousMark[j].Item2;
+                                    slen = slen - counter;
+                                    if (slen > 0)
+                                    {
+                                        //休符発行
+                                        err = 0;
+                                        MML smml = new MML();
+                                        smml.line = mml.line;
+                                        smml.type = enmMMLType.Rest;
+                                        smml.args = new List<object>();
+                                        Rest rests = new Rest();
+                                        smml.args.Add(rests);
+                                        rests.cmd = 'r';
+                                        rests.length = slen;
+                                        page.mmlData.Insert(i, smml);
+                                        mml.args[0] = 3;
+                                    }
+                                }
+
+                                if (err != 0)
+                                {
+                                    msgBox.setWrnMsg(msg.get("E05061")
+                                    , page.mmlData[i].line.Lp);
+                                }
+                            }
+                        }
+                        break;
+                    default:
+                        Console.WriteLine(mml.type.ToString());
+                        break;
+                }
+            }
+        }
 
     }
 }

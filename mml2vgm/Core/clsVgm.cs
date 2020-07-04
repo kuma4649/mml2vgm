@@ -4081,6 +4081,10 @@ namespace Core
                     page.chip.CmdRelativeVolumeSetting(page, mml);
                     page.mmlPos++;
                     break;
+                case enmMMLType.Synchronous:
+                    log.Write("Synchronous");//同期コマンドの場合は特に処理は必要ない
+                    page.mmlPos++;
+                    break;
                 default:
                     msgBox.setErrMsg(string.Format(msg.get("E01016")
                         , mml.type)
