@@ -406,7 +406,7 @@ namespace Core
             }
         }
 
-        public void SetAdpcmPan(MML mml, partPage page)
+        public void SetAdpcmPan(MML mml, partPage page)//ADPCM1/2/3
         {
             if (page.spg.panL != page.panL || page.spg.panR != page.panR)
             {
@@ -2004,7 +2004,7 @@ namespace Core
             }
             else if (page.Type == enmChannelType.ADPCMA || page.Type == enmChannelType.ADPCMB)
             {
-
+                //ADPCM1/2/3
                 //音色
                 page.spg.instrument = page.instrument;
                 page.spg.pcmEndAddress = -1;
@@ -2029,6 +2029,7 @@ namespace Core
             }
             else if (page.Type == enmChannelType.ADPCM)
             {
+                //ADPCM-A
                 //音色
                 page.spg.instrument = page.instrument;
                 page.spg.pcmEndAddress = -1;
@@ -2048,7 +2049,9 @@ namespace Core
 
                 //パン
                 page.spg.pan = -1;
-                SetAdpcmPan(null, page);
+                page.spg.beforePanL = -1;
+                page.spg.beforePanR = -1;
+                //SetAdpcmPan(null, page);
             }
 
         }
@@ -2097,7 +2100,7 @@ namespace Core
                             page.beforeVolume = page.volume;
                         }
 
-                        if (page.pan != page.spg.pan || page.panR != page.beforePanR || page.panL != page.beforePanL)
+                        if (page.pan != page.spg.pan || page.panR != page.spg.beforePanR || page.panL != page.spg.beforePanL)
                         {
                             SOutData(page,mml, port[1], (byte)0x13, (byte)(page.ch - 39));
                             SOutData(page,mml, port[1], (byte)0x15, (byte)(
@@ -2107,8 +2110,8 @@ namespace Core
                                 | ((page.panR & 3) << 2)
                                 ));
                             page.spg.pan = page.pan;
-                            page.beforePanR = page.panR;
-                            page.beforePanL = page.panL;
+                            page.spg.beforePanR = page.panR;
+                            page.spg.beforePanL = page.panL;
                         }
 
                         adpcma_KeyOn |= (byte)(page.keyOn ? (1 << (page.ch - 39)) : 0);

@@ -4358,6 +4358,7 @@ namespace mml2vgmIDE
         private static bool useReal;
         public static int EmuSampleCount;
         private static Action startedOnceMethod = null;
+        public static PackData[] stopDataVirtulaOnlySend;
 
         private static void oneFrameEmuDataSend()
         {
@@ -4438,12 +4439,26 @@ namespace mml2vgmIDE
                 }
             }
 
+            if (!sm.IsRunningAtEmuChipSender())
+            {
+                if (stopDataVirtulaOnlySend != null)
+                {
+                    foreach (PackData dat in stopDataVirtulaOnlySend)
+                    {
+                        emuRecvBuffer.Enq(dat.od, 0, dat.Chip, dat.Type, dat.Address, dat.Data, null);
+                    }
+                    stopDataVirtulaOnlySend = null;
+                }
+                EmuSeqCounterDelta = 0;
+            }
+
             while (EmuSeqCounterWDelta >= 1.0)
             {
                 EmuSeqCounter++;
                 EmuSeqCounterWDelta -= 1.0;
             }
             EmuSeqCounterWDelta += EmuSeqCounterDelta;
+
             callcount++;
         }
 

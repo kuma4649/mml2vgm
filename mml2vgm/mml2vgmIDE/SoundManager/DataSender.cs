@@ -26,7 +26,7 @@ namespace SoundManager
         private readonly Enq EmuEnq = null;
         private readonly Enq RealEnq = null;
         private PackData[] startData = null;
-        private PackData[] stopData = null;
+        public PackData[] stopData = null;
         private Deq ProcessingData;
         private Deq SetMMLParameter;
         private Action WaitSync = null;
@@ -360,9 +360,16 @@ namespace SoundManager
 
         internal void ForcedStepUpSeqCounterProc()
         {
-            if (!GetStart())
+            if (!GetStart() || ringBuffer.GetDataSize() == 0)
             {
+                lock (lockObj)
+                {
+                    isRunning = false;
+                    Counter = 0;
+                    Start = false;
+                }
                 parent.RequestStopAtEmuChipSender();
+                parent.Mode = SendMode.none;
                 return;
             }
 

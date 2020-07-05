@@ -2871,7 +2871,7 @@ namespace Core
                             int n = (int)mml.args[1];
                             if (m == 1)
                             {
-                                Console.WriteLine("number:{0} counter:{1}", n, counter);
+                                //Console.WriteLine("number:{0} counter:{1}", n, counter);
                                 Tuple<int, int> item = new Tuple<int, int>(n, counter);
                                 if (n != -1)
                                 {
@@ -2927,7 +2927,7 @@ namespace Core
                         }
                         break;
                     default:
-                        Console.WriteLine(mml.type.ToString());
+                        //Console.WriteLine(mml.type.ToString());
                         break;
                 }
             }

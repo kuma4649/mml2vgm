@@ -618,7 +618,7 @@ namespace Core
 
         public override void CmdMode(partPage page, MML mml)
         {
-            Console.WriteLine("CmdMode()");
+            //Console.WriteLine("CmdMode()");
 
             int n = (int)mml.args[0];
 

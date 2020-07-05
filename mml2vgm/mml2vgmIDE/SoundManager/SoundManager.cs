@@ -166,7 +166,10 @@ namespace SoundManager
 
             isVirtualOnlySend = false;
             if (useEmu && !useReal)
+            {
                 isVirtualOnlySend = true;
+                //Audio.stopDataVirtulaOnlySend = dataSender.stopData;
+            }
         }
 
         public void RequestStop()
@@ -202,6 +205,12 @@ namespace SoundManager
                     realChipSender.RequestStop();
                     Application.DoEvents();//Waveデバイス対策
                 }
+            }
+
+            if (isVirtualOnlySend)
+            {
+                Audio.stopDataVirtulaOnlySend = dataSender.stopData;
+
             }
         }
 
@@ -439,7 +448,7 @@ namespace SoundManager
         #region IDisposable Support
         private bool disposedValue = false; // 重複する呼び出しを検出するには
 
-        public SendMode Mode { get; private set; }
+        public SendMode Mode { get; set; }
 
         private int _CurrentTempo = 120;
         public int CurrentTempo
