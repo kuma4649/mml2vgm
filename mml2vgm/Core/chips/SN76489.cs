@@ -12,6 +12,8 @@ namespace Core
             new int[96]
         };
         private int beforePanData = -1;
+        private int dcsgCh3Freq = 0;
+        private int beforeDcsgCh3Freq = -1;
 
         public SN76489(ClsVgm parent, int chipID, string initialPartName, string stPath, int chipNumber) : base(parent, chipID, initialPartName, stPath, chipNumber)
         {
@@ -198,8 +200,8 @@ namespace Core
 
                 f = Common.CheckRange(f, 0, 0x3ff);
 
-                if (page.freq == f) return;
-                page.freq = f;
+                if (page.spg.freq == f) return;
+                page.spg.freq = f;
 
                 byte data = (byte)(0x80 + (page.ch << 5) + (f & 0xf));
                 OutPsgPort(page,mml, port[0], data);
@@ -210,8 +212,9 @@ namespace Core
             else
             {
                 int f = 0xe0 + (page.noise & 7);
-                if (page.freq == f) return;
-                page.freq = f;
+                if (page.spg.freq == f) return;
+                page.spg.freq = f;
+                page.spg.noise = page.noise;
                 byte data = (byte)f;
                 OutPsgPort(page, mml, port[0], data);
             }
@@ -333,12 +336,23 @@ namespace Core
         {
             int n = (int)mml.args[0];
             n = Common.CheckRange(n, 0, 0x3ff);
+            dcsgCh3Freq = n;
+            OutDCSGCh3Freq(page, mml);
+        }
 
-            byte data = (byte)(0xc0 + (n & 0xf));
-            OutPsgPort(page, mml, port[0], data);
+        private void OutDCSGCh3Freq(partPage page, MML mml)
+        {
+            dcsgCh3Freq = Common.CheckRange(dcsgCh3Freq, 0, 0x3ff);
 
-            data = (byte)(n >> 4);
-            OutPsgPort(page, mml, port[0], data);
+            if (beforeDcsgCh3Freq != dcsgCh3Freq)
+            {
+                beforeDcsgCh3Freq = dcsgCh3Freq;
+                byte data = (byte)(0xc0 + (dcsgCh3Freq & 0xf));
+                OutPsgPort(page, mml, port[0], data);
+
+                data = (byte)(dcsgCh3Freq >> 4);
+                OutPsgPort(page, mml, port[0], data);
+            }
         }
 
         public override void CmdLoopExtProc(partPage page, MML mml)
@@ -394,20 +408,34 @@ namespace Core
 
         public override void SetupPageData(partWork pw, partPage page)
         {
+            if (page.Type != enmChannelType.DCSGNOISE)
+            {
+                //周波数
+                page.spg.freq = -1;
+                SetFNum(page, null);
 
-            //周波数
-            page.spg.freq = -1;
-            SetFNum(page, null);
+            }
+            else
+            {
+                //ノイズモード
+                page.spg.freq = -1;
+                page.spg.noise = -1;
+                SetFNum(page, null);
 
-            //ノイズ周波数
-            //noiseFreq = -1;
-            //OutSsgNoise(null, page);
+                //ノイズ周波数(Ch.3連動モード時のみ復帰させる)
+                if ((page.noise & 3) == 3)
+                {
+                    beforeDcsgCh3Freq = -1;
+                    OutDCSGCh3Freq(page, null);
+                }
+            }
 
             //音量
             page.spg.beforeVolume = -1;
             SetVolume(page, null);
 
         }
+
         public override void MultiChannelCommand(MML mml)
         {
             if (!use) return;
