@@ -108,7 +108,7 @@ namespace Core
                     pcmname[16] = 32;
                     info.name = Encoding.GetEncoding("shift_jis").GetString(pcmname).Trim();
                     ret.Add(info);
-                    Console.WriteLine(string.Format("#PCM{0} ${1:x04} ${2:x04} {3}", info.no, info.stAdr, info.edAdr, info.name));
+                    //Console.WriteLine(string.Format("#PCM{0} ${1:x04} ${2:x04} {3}", info.no, info.stAdr, info.edAdr, info.name));
                 }
                 pcmtable += 8;
                 inftable += 32;

@@ -12,7 +12,7 @@ namespace Core
             new int[96]
         };
         private int beforePanData = -1;
-        private int dcsgCh3Freq = 0;
+        private int dcsgCh3Freq = -1;
         private int beforeDcsgCh3Freq = -1;
 
         public SN76489(ClsVgm parent, int chipID, string initialPartName, string stPath, int chipNumber) : base(parent, chipID, initialPartName, stPath, chipNumber)
@@ -110,11 +110,16 @@ namespace Core
 
         public void OutPsgPort(partPage page, MML mml, byte[] cmd, byte data)
         {
+            //Console.Write("Ch:{0} ", page.ch);
+            //foreach(byte b in cmd) Console.Write("{0:x2} ", b);
+            //Console.WriteLine("{0:x2}", data);
+
             SOutData(
                 page,
                 mml, cmd
                 , data
                 );
+
         }
 
         public void OutPsgKeyOn(partPage page, MML mml)
@@ -122,7 +127,7 @@ namespace Core
 
             page.keyOff = false;
             SetFNum(page, mml);
-            SetVolume(page, mml);
+            //SetVolume(page, mml);
             SetDummyData(page, mml);
 
             if (mml != null)
@@ -140,7 +145,7 @@ namespace Core
         {
 
             if (!page.envelopeMode) page.keyOff = true;
-            SetVolume(page, mml);
+            //SetVolume(page, mml);
 
         }
 
@@ -199,26 +204,35 @@ namespace Core
                 }
 
                 f = Common.CheckRange(f, 0, 0x3ff);
-
-                if (page.spg.freq == f) return;
-                page.spg.freq = f;
-
-                byte data = (byte)(0x80 + (page.ch << 5) + (f & 0xf));
-                OutPsgPort(page,mml, port[0], data);
-
-                data = (byte)((f & 0x3f0) >> 4);
-                OutPsgPort(page, mml, port[0], data);
+                page.freq = f;
             }
             else
             {
                 int f = 0xe0 + (page.noise & 7);
-                if (page.spg.freq == f) return;
-                page.spg.freq = f;
-                page.spg.noise = page.noise;
-                byte data = (byte)f;
-                OutPsgPort(page, mml, port[0], data);
+                page.freq = f;
             }
 
+        }
+
+        private void OutPsgFnum(partPage page, MML mml)
+        {
+            if (page.spg.freq == page.freq) return;
+
+            page.spg.freq = page.freq;
+            if (page.Type != enmChannelType.DCSGNOISE)
+            {
+                byte data = (byte)(0x80 + (page.ch << 5) + (page.freq & 0xf));
+                OutPsgPort(page, mml, port[0], data);
+
+                data = (byte)((page.freq & 0x3f0) >> 4);
+                OutPsgPort(page, mml, port[0], data);
+            }
+            else
+            {
+                page.spg.noise = page.noise;
+                byte data = (byte)page.freq;
+                OutPsgPort(page, mml, port[0], data);
+            }
         }
 
         public override int GetFNum(partPage page, MML mml, int octave, char cmd, int shift)
@@ -231,8 +245,8 @@ namespace Core
             byte data = 0;
             int vol = page.volume;
 
-            if (!page.keyOff)
-            {
+            //if (!page.keyOff)
+            //{
                 if (page.envelopeMode)
                 {
                     vol = 0;
@@ -253,19 +267,23 @@ namespace Core
 
                     vol += page.lfo[lfo].value + page.lfo[lfo].param[6];
                 }
-            }
-            else
-            {
-                vol = 0;
-            }
+            //}
+            //else
+            //{
+                //vol = 0;
+            //}
 
-            vol = Common.CheckRange(vol, 0, 15);
+            page.beforeVolume = Common.CheckRange(vol, 0, 15);
 
-            if (page.beforeVolume != vol)
+        }
+
+        private void OutPsgVolume(partPage page, MML mml)
+        {
+            if (page.spg.beforeVolume != page.beforeVolume)
             {
-                data = (byte)(0x80 + (page.ch << 5) + 0x10 + (15 - vol));
+                byte data = (byte)(0x80 + (page.ch << 5) + 0x10 + (15 - page.beforeVolume));
                 OutPsgPort(page, mml, port[0], data);
-                page.beforeVolume = vol;
+                page.spg.beforeVolume = page.beforeVolume;
             }
         }
 
@@ -337,14 +355,14 @@ namespace Core
             int n = (int)mml.args[0];
             n = Common.CheckRange(n, 0, 0x3ff);
             dcsgCh3Freq = n;
-            OutDCSGCh3Freq(page, mml);
+            //OutDCSGCh3Freq(page, mml);
         }
 
         private void OutDCSGCh3Freq(partPage page, MML mml)
         {
-            dcsgCh3Freq = Common.CheckRange(dcsgCh3Freq, 0, 0x3ff);
+            dcsgCh3Freq = Common.CheckRange(dcsgCh3Freq, -1, 0x3ff);
 
-            if (beforeDcsgCh3Freq != dcsgCh3Freq)
+            if (beforeDcsgCh3Freq != dcsgCh3Freq && dcsgCh3Freq != -1)
             {
                 beforeDcsgCh3Freq = dcsgCh3Freq;
                 byte data = (byte)(0xc0 + (dcsgCh3Freq & 0xf));
@@ -408,11 +426,12 @@ namespace Core
 
         public override void SetupPageData(partWork pw, partPage page)
         {
+            page.spg.keyOff = true;
             if (page.Type != enmChannelType.DCSGNOISE)
             {
                 //周波数
                 page.spg.freq = -1;
-                SetFNum(page, null);
+                //SetFNum(page, null);
 
             }
             else
@@ -420,19 +439,19 @@ namespace Core
                 //ノイズモード
                 page.spg.freq = -1;
                 page.spg.noise = -1;
-                SetFNum(page, null);
+                //SetFNum(page, null);
 
                 //ノイズ周波数(Ch.3連動モード時のみ復帰させる)
                 if ((page.noise & 3) == 3)
                 {
                     beforeDcsgCh3Freq = -1;
-                    OutDCSGCh3Freq(page, null);
+                    //OutDCSGCh3Freq(page, null);
                 }
             }
 
             //音量
             page.spg.beforeVolume = -1;
-            SetVolume(page, null);
+            //SetVolume(page, null);
 
         }
 
@@ -464,6 +483,7 @@ namespace Core
             {
                 partPage page = pw.cpg;
 
+
                 if (page.keyOff)
                 {
                     page.keyOff = false;
@@ -474,6 +494,25 @@ namespace Core
                     page.keyOn = false;
                     OutPsgKeyOn(page, mml);
                 }
+
+
+                OutPsgFnum(page, mml);
+
+
+                if (page.Type == enmChannelType.DCSGNOISE)
+                {
+                    OutDCSGCh3Freq(page, mml);
+                }
+
+
+                if (page.keyOff)
+                {
+                    if (!page.envelopeMode)
+                    {
+                        page.beforeVolume = 0;
+                    }
+                }
+                OutPsgVolume(page, mml);
             }
         }
 

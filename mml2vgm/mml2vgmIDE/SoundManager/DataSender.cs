@@ -235,7 +235,11 @@ namespace SoundManager
                         if (unmount) return;
                         Thread.Sleep(0);
 
-                        if (parent.isVirtualOnlySend) continue;
+                        if (parent.isVirtualOnlySend)
+                        {
+                            Thread.Sleep(100);
+                            continue;
+                        }
 
                         double el1 = spdc.ElapsedMilliSec();// sw.ElapsedTicks / swFreq;
                         if (el1 - o < step) continue;
