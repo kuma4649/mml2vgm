@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using NAudio.Wave;
+using System;
 using System.Threading;
-using System.Threading.Tasks;
-using NAudio.Wave;
 
 namespace mml2vgmIDE
 {
@@ -27,7 +23,8 @@ namespace mml2vgmIDE
 
         public float Volume
         {
-            get {
+            get
+            {
                 return 0f;
             }
             set

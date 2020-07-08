@@ -1,9 +1,5 @@
-﻿using System;
+﻿using musicDriverInterface;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using musicDriverInterface;
 
 namespace Core
 {
@@ -91,7 +87,7 @@ namespace Core
             SetDummyData(page, vmml);
         }
 
-        public override void CmdMIDIControlChange(partPage page,MML mml)
+        public override void CmdMIDIControlChange(partPage page, MML mml)
         {
             int ctrl = (int)mml.args[0];
             int data = (int)mml.args[1];
@@ -428,7 +424,7 @@ namespace Core
             mn.page = page;
             mn.mml = mml;
             mn.noteNumber = noteNum;
-            mn.velocity = (byte)(n.velocity==-1 ? page.velocity : n.velocity);
+            mn.velocity = (byte)(n.velocity == -1 ? page.velocity : n.velocity);
             mn.length = page.tie ? -1 : page.waitKeyOnCounter;
             mn.beforeKeyon = null;
             if (page.beforeTie)
@@ -605,8 +601,8 @@ namespace Core
             Balance = 8,
             Panpot = 10,
             Expression = 11,
-            RPN_LSB=100,
-            RPN_MSB=101
+            RPN_LSB = 100,
+            RPN_MSB = 101
         }
     }
 }

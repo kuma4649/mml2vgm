@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Core
 {
@@ -128,9 +125,9 @@ namespace Core
 
         }
 
-        private void SetMonoPart(string val, Dictionary<enmChipType,ClsChip[]> chips)
+        private void SetMonoPart(string val, Dictionary<enmChipType, ClsChip[]> chips)
         {
-            monoPart = Common.DivParts(val, chips, out int n,out bool isLayer);
+            monoPart = Common.DivParts(val, chips, out int n, out bool isLayer);
         }
 
         private void SetFormat(string val)

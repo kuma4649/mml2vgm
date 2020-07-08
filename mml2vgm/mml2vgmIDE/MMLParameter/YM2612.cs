@@ -1,13 +1,13 @@
 ﻿using Core;
+using musicDriverInterface;
 using System;
 using System.Linq;
-using musicDriverInterface;
 
 namespace mml2vgmIDE.MMLParameter
 {
-    public class YM2612:Instrument
+    public class YM2612 : Instrument
     {
-        public YM2612(SoundManager.Chip chip) : base(9,chip)
+        public YM2612(SoundManager.Chip chip) : base(9, chip)
         {
             for (int i = 0; i < 9; i++)
             {

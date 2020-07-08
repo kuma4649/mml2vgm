@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Core
 {
@@ -155,13 +150,13 @@ namespace Core
                 case 0: // N)one
                     break;
                 case 1: // R)R only
-                    SOutData(page,mml, port, (byte)(targetBaseReg + ope * 3 + 0x80)
+                    SOutData(page, mml, port, (byte)(targetBaseReg + ope * 3 + 0x80)
                         , ((0 & 0xf) << 4) | (15 & 0xf));//SL RR
                     break;
                 case 2: // A)ll
                     SetInstAtOneOpeWithoutKslTl(page, mml, opeNum
                         , 15, 15, 0, 15, 0, 0, 0, 0, 0, 0);
-                    SOutData(page,mml, port, (byte)(targetBaseReg + ope * 3 + 0x40)
+                    SOutData(page, mml, port, (byte)(targetBaseReg + ope * 3 + 0x40)
                         , ((0 & 0x3) << 6) | 0x3f);  //KL(M) TL
                     break;
             }
@@ -185,7 +180,7 @@ namespace Core
                 if (ope == 0)
                 {
                     //OP1
-                    SOutData(page,mml, port, (byte)(0x40 + targetBaseReg + 0)
+                    SOutData(page, mml, port, (byte)(0x40 + targetBaseReg + 0)
                         , (byte)(((inst[12 * 0 + 5] & 0x3) << 6) | (inst[12 * 0 + 6] & 0x3f))); //KL(M) TL
                 }
             }
@@ -207,7 +202,7 @@ namespace Core
                     break;
                 case 1: // R)R only
                     for (int ope = 0; ope < 2; ope++)
-                        SOutData(page,mml, port, (byte)(targetBaseReg + ope * 3 + 0x80)
+                        SOutData(page, mml, port, (byte)(targetBaseReg + ope * 3 + 0x80)
                             , ((0 & 0xf) << 4) | (15 & 0xf));//SL RR
                     break;
                 case 2: // A)ll
@@ -215,7 +210,7 @@ namespace Core
                     {
                         SetInstAtOneOpeWithoutKslTl(page, mml, (vch / 3 * 6) + (vch % 3) + ope * 3
                             , 15, 15, 0, 15, 0, 0, 0, 0, 0, 0);
-                        SOutData(page,mml, port, (byte)(targetBaseReg + ope * 3 + 0x40)
+                        SOutData(page, mml, port, (byte)(targetBaseReg + ope * 3 + 0x40)
                             , ((0 & 0x3) << 6) | 0x3f);  //KL(M) TL
                     }
                     break;
@@ -245,7 +240,7 @@ namespace Core
             if (cnt == 0)
             {
                 //OP1
-                SOutData(page,mml, port, (byte)(0x40 + ChnToBaseReg(vch) + 0)
+                SOutData(page, mml, port, (byte)(0x40 + ChnToBaseReg(vch) + 0)
                     , (byte)(((inst[12 * 0 + 5] & 0x3) << 6) | (inst[12 * 0 + 6] & 0x3f))); //KL(M) TL
             }
 
@@ -272,7 +267,7 @@ namespace Core
                     break;
                 case 1: // R)R only
                     for (int ope = 0; ope < 2; ope++)
-                        SOutData(page,mml, port, (byte)(targetBaseReg + ope * 3 + 0x80)
+                        SOutData(page, mml, port, (byte)(targetBaseReg + ope * 3 + 0x80)
                             , ((0 & 0xf) << 4) | (15 & 0xf));//SL RR
                     break;
                 case 2: // A)ll
@@ -280,7 +275,7 @@ namespace Core
                     {
                         SetInstAtOneOpeWithoutKslTl(page, mml, (vch / 3 * 6) + (vch % 3) + ope * 3
                             , 15, 15, 0, 15, 0, 0, 0, 0, 0, 0);
-                        SOutData(page,mml, port, (byte)(targetBaseReg + ope * 3 + 0x40)
+                        SOutData(page, mml, port, (byte)(targetBaseReg + ope * 3 + 0x40)
                             , ((0 & 0x3) << 6) | 0x3f);  //KL(M) TL
                     }
                     break;
@@ -318,15 +313,15 @@ namespace Core
             else if (cnt1 == 1 && cnt2 == 1) { op2 = true; }
 
             if (op1)
-                SOutData(page,mml, port, (byte)(0x40 + ChnToBaseReg(vch) + 0)
+                SOutData(page, mml, port, (byte)(0x40 + ChnToBaseReg(vch) + 0)
                     , (byte)(((inst[12 * 0 + 5] & 0x3) << 6) | (inst[12 * 0 + 6] & 0x3f))); //KL(M) TL
 
             if (op2)
-                SOutData(page,mml, port, (byte)(0x40 + ChnToBaseReg(vch) + 3)
+                SOutData(page, mml, port, (byte)(0x40 + ChnToBaseReg(vch) + 3)
                     , (byte)(((inst[12 * 1 + 5] & 0x3) << 6) | (inst[12 * 1 + 6] & 0x3f))); //KL(M) TL
 
             if (op3)
-                SOutData(page,mml, port, (byte)(0x40 + ChnToBaseReg(vch) + 8)
+                SOutData(page, mml, port, (byte)(0x40 + ChnToBaseReg(vch) + 8)
                     , (byte)(((inst[12 * 2 + 5] & 0x3) << 6) | (inst[12 * 2 + 6] & 0x3f))); //KL(M) TL
 
 
@@ -356,8 +351,8 @@ namespace Core
             //// / 3        ... slotは3ope毎に0か1を繰り返す
             //int slot = (opeNum % 6) / 3;
 
-            SOutData(page,mml, port, (byte)(0x80 + adr), (byte)(((sl & 0xf) << 4) | (rr & 0xf)));
-            SOutData(page,mml, port, (byte)(0x60 + adr), (byte)(((ar & 0xf) << 4) | (dr & 0xf)));
+            SOutData(page, mml, port, (byte)(0x80 + adr), (byte)(((sl & 0xf) << 4) | (rr & 0xf)));
+            SOutData(page, mml, port, (byte)(0x60 + adr), (byte)(((ar & 0xf) << 4) | (dr & 0xf)));
             SetInstAtOneOpeAmVibEgKsMl(page, mml, port, (byte)(0x20 + adr), mt, am, vib, eg, kr);
             //SOutData(page,mml, port, (byte)(0xe0 + adr), (byte)(ws & 0x7));
         }
@@ -674,7 +669,7 @@ namespace Core
             byte dat = (byte)(int)mml.args[1];
             int p = 0;
 
-            SOutData(page,mml, port[p], adr, dat);
+            SOutData(page, mml, port[p], adr, dat);
         }
 
         public override void MultiChannelCommand(MML mml)
@@ -720,7 +715,7 @@ namespace Core
                         if (page.keyOff)
                         {
                             page.keyOff = false;
-                            SOutData(page,mml, getPortFromCh(page.ch)
+                            SOutData(page, mml, getPortFromCh(page.ch)
                                 , (byte)(0xB0 + page.ch)
                                 , (byte)(
                                     ((page.freq >> 8) & 0x1f)
@@ -732,8 +727,8 @@ namespace Core
                         {
                             page.beforeFNum = page.freq | (page.keyOn ? 0x4000 : 0x0000);
                             //Console.WriteLine("CalcPitch {0} {1}_{2}", pw.ppg[pw.cpgNum].freq, pw.ppg[pw.cpgNum].freq >> 8 & 0x1F, pw.ppg[pw.cpgNum].freq & 0xFF);
-                            SOutData(page,mml, getPortFromCh(page.ch), (byte)(0xa0 + page.ch), (byte)page.freq);
-                            SOutData(page,mml, getPortFromCh(page.ch)
+                            SOutData(page, mml, getPortFromCh(page.ch), (byte)(0xa0 + page.ch), (byte)page.freq);
+                            SOutData(page, mml, getPortFromCh(page.ch)
                                 , (byte)(0xB0 + page.ch)
                                 , (byte)(
                                     ((page.freq >> 8) & 0x1f)
@@ -871,8 +866,8 @@ namespace Core
                                 vch = 7;
                             }
 
-                            SOutData(page,mml, getPortFromCh(vch), (byte)(0xa0 + vch), (byte)page.freq);
-                            SOutData(page,mml, getPortFromCh(vch)
+                            SOutData(page, mml, getPortFromCh(vch), (byte)(0xa0 + vch), (byte)page.freq);
+                            SOutData(page, mml, getPortFromCh(vch)
                                 , (byte)(0xB0 + vch)
                                 , (byte)(
                                     ((page.freq >> 8) & 0x1f)
@@ -888,7 +883,7 @@ namespace Core
 
             rhythmStatus &= 0xe0;
             rhythmStatus |= (byte)(
-                (lstPartWork[   9].cpg.keyOn ? 0x10 : 0x00)
+                (lstPartWork[9].cpg.keyOn ? 0x10 : 0x00)
                 | (lstPartWork[10].cpg.keyOn ? 0x08 : 0x00)
                 | (lstPartWork[11].cpg.keyOn ? 0x04 : 0x00)
                 | (lstPartWork[12].cpg.keyOn ? 0x02 : 0x00)

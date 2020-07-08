@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-
-namespace mml2vgmIDE
+﻿namespace mml2vgmIDE
 {
     interface IForm
     {

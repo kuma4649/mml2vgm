@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Core;
+﻿using Core;
 using musicDriverInterface;
+using System;
+using System.Linq;
 
 namespace mml2vgmIDE.MMLParameter
 {
     public class YM2151 : Instrument
     {
-        public YM2151(SoundManager.Chip chip) : base(8,chip)
+        public YM2151(SoundManager.Chip chip) : base(8, chip)
         {
             for (int i = 0; i < 8; i++)
             {

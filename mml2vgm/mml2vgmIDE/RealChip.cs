@@ -1,11 +1,8 @@
-﻿using NScci;
-using Nc86ctl;
+﻿using Nc86ctl;
+using NScci;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace mml2vgmIDE
 {
@@ -16,7 +13,7 @@ namespace mml2vgmIDE
 
         #region IDisposable Support
 
-        private bool disposedValue = false; 
+        private bool disposedValue = false;
 
         protected virtual void Dispose(bool disposing)
         {
@@ -38,7 +35,7 @@ namespace mml2vgmIDE
 
         #endregion
 
-        public RealChip(bool sw) 
+        public RealChip(bool sw)
         {
             log.ForcedWrite("RealChip:Ctr:STEP 00(Start)");
             if (!sw)
@@ -160,10 +157,10 @@ namespace mml2vgmIDE
             if (nc86ctl != null)
             {
                 //nc86ctl.initialize();
-                int n=nc86ctl.getNumberOfChip();
-                for(int i = 0; i < n; i++)
+                int n = nc86ctl.getNumberOfChip();
+                for (int i = 0; i < n; i++)
                 {
-                    NIRealChip rc= nc86ctl.getChipInterface(i);
+                    NIRealChip rc = nc86ctl.getChipInterface(i);
                     rc.reset();
                 }
             }
@@ -331,7 +328,7 @@ namespace mml2vgmIDE
                     {
                         NSoundChip sc = iIntfc.getSoundChip(s);
                         int t = sc.getSoundChipType();
-                        if (t == (int)realChipType 
+                        if (t == (int)realChipType
                             || (realChipType == EnmRealChipType.YM2203 && t == (int)EnmRealChipType.YM2608)
                             || (realChipType == EnmRealChipType.YM2610 && t == (int)EnmRealChipType.YM2608)
                             || (realChipType == EnmRealChipType.AY8910 && t == (int)EnmRealChipType.YM2203)
@@ -498,7 +495,7 @@ namespace mml2vgmIDE
         //モジュール依存のチップ種類
         public int Type = 0;
 
-        public RSoundChip(int soundLocation,int busID,int soundChip,int type)
+        public RSoundChip(int soundLocation, int busID, int soundChip, int type)
         {
             SoundLocation = soundLocation;
             BusID = busID;
@@ -648,7 +645,7 @@ namespace mml2vgmIDE
         override public uint SetMasterClock(uint mClock)
         {
             NIGimic2 gm = realChip.QueryInterface();
-            uint nowClock= gm.getPLLClock();
+            uint nowClock = gm.getPLLClock();
             if (nowClock != mClock)
             {
                 gm.setPLLClock(mClock);

@@ -1,13 +1,10 @@
-﻿using System;
+﻿using musicDriverInterface;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Net.NetworkInformation;
-using System.Runtime.Remoting.Activation;
 using System.Text;
-using System.Threading.Tasks;
-using musicDriverInterface;
 
 namespace Core
 {
@@ -52,7 +49,7 @@ namespace Core
         public Dictionary<int, byte[]> midiSysEx = new Dictionary<int, byte[]>();
 
         public Dictionary<string, List<List<Line>>>[] partData = new Dictionary<string, List<List<Line>>>[]{
-            new Dictionary<string, List<List<Line>>>(),new Dictionary<string, List<List<Line>>>() 
+            new Dictionary<string, List<List<Line>>>(),new Dictionary<string, List<List<Line>>>()
         };
         public Dictionary<string, Line> aliesData = new Dictionary<string, Line>();
 
@@ -743,7 +740,7 @@ namespace Core
                 {
                     clsPcmDatSeq pds = new clsPcmDatSeq(
                         enmPcmDefineType.Mucom88
-                        , info.no+num
+                        , info.no + num
                         , info.name
                         , 8000
                         , 150
@@ -790,7 +787,7 @@ namespace Core
                     {
                         instFM.Remove(num + p / 32);
                     }
-                    instFM.Add(num + p / 32, ConvertMUCOM88toM(num,voi));
+                    instFM.Add(num + p / 32, ConvertMUCOM88toM(num, voi));
                 }
 
                 return;
@@ -929,7 +926,7 @@ namespace Core
 
             StringBuilder ret = new StringBuilder();
             bool flg = false;
-            for(int i = 0; i < trg.Length; i++)
+            for (int i = 0; i < trg.Length; i++)
             {
                 if (trg[i] == '"')
                 {
@@ -992,7 +989,7 @@ namespace Core
 
             if (info.format == enmFormat.XGM)
             {
-                if(enmChip!= enmChipType.YM2612X)
+                if (enmChip != enmChipType.YM2612X)
                 {
                     msgBox.setErrMsg(msg.get("E01017"), line.Lp);
                     return;
@@ -1174,7 +1171,7 @@ namespace Core
                 Option = new string[vs.Length - 6];
                 Array.Copy(vs, 6, Option, 0, vs.Length - 6);
             }
-            if(ChipName== enmChipType.YM2610B)
+            if (ChipName == enmChipType.YM2610B)
             {
                 if (Option == null || Option.Length < 1)
                 {
@@ -1280,7 +1277,7 @@ namespace Core
                 chipName = chipName.Replace(Information.SECONDARY, "");
             }
 
-            ClsChip cp=null;
+            ClsChip cp = null;
             cp = GetChip(chipName);
             if (cp == null)
             {
@@ -1288,13 +1285,13 @@ namespace Core
                 cp = GetChipFromPartName(chipName);
             }
 
-            if (cp==null || !cp.CanUsePcm)
+            if (cp == null || !cp.CanUsePcm)
             {
                 msgBox.setWrnMsg(string.Format(msg.get("E01002"), chipName), line.Lp);
                 return enmChipType.None;
             }
             enmChip = GetChipType(chipName);
-            if(enmChip== enmChipType.None)
+            if (enmChip == enmChipType.None)
             {
                 //パート名が指定されている場合はそれからチップTypeが取得できるかためす
                 enmChip = GetChipTypeFromPartName(chipName);
@@ -1305,9 +1302,9 @@ namespace Core
 
         private enmChipType GetChipType(string chipN)
         {
-            foreach(KeyValuePair<enmChipType,ClsChip[]> kvp in chips)
+            foreach (KeyValuePair<enmChipType, ClsChip[]> kvp in chips)
             {
-                foreach(ClsChip chip in kvp.Value)
+                foreach (ClsChip chip in kvp.Value)
                 {
                     if (chip == null) continue;
                     if (chip.Name.ToUpper().Trim() == chipN.ToUpper().Trim()
@@ -1442,7 +1439,7 @@ namespace Core
                 return 0;
             }
 
-            part = Common.DivParts(buf.Substring(1, i).Trim(), chips, out int ura,out bool isLayer);
+            part = Common.DivParts(buf.Substring(1, i).Trim(), chips, out int ura, out bool isLayer);
             data = buf.Substring(i).Trim();
             if (part == null)
             {
@@ -1492,7 +1489,7 @@ namespace Core
 
             try
             {
-                instrumentCounter= GetNums(instrumentBufCache, instrumentCounter, CutComment(line.Txt).Substring(1).TrimStart());
+                instrumentCounter = GetNums(instrumentBufCache, instrumentCounter, CutComment(line.Txt).Substring(1).TrimStart());
 
                 if (instrumentCounter == instrumentBufCache.Length)
                 {
@@ -1503,7 +1500,7 @@ namespace Core
                     }
 
 
-                    if(instrumentBufCache.Length == Const.INSTRUMENT_SIZE)
+                    if (instrumentBufCache.Length == Const.INSTRUMENT_SIZE)
                     {
                         //M
                         instFM.Add(instrumentBufCache[0], instrumentBufCache);
@@ -1595,7 +1592,7 @@ namespace Core
             return 0;
         }
 
-        private int GetNums(byte[] aryBuf,int aryIndex, string vals)
+        private int GetNums(byte[] aryBuf, int aryIndex, string vals)
         {
             string n = "";
             string h = "";
@@ -2000,7 +1997,7 @@ namespace Core
         /// ダミーコマンドを含むLoopOffset
         /// </summary>
         public long dummyCmdLoopSamples = 0;
-        public long dummyCmdLoopOffsetAddress=0;
+        public long dummyCmdLoopOffsetAddress = 0;
         private double bSample;
 
         public LinePos linePos { get; internal set; }
@@ -2008,7 +2005,7 @@ namespace Core
         public int ChipCommandSize { get; set; }
         public string wrkPath { get; internal set; }
         public long jumpPointClock { get; set; } = -1;
-        public List<Tuple<enmChipType,int>> jumpChannels = new List<Tuple<enmChipType, int>>();
+        public List<Tuple<enmChipType, int>> jumpChannels = new List<Tuple<enmChipType, int>>();
 
         public outDatum[] Vgm_getByteData(Dictionary<string, List<MML>> mmlData)
         {
@@ -2406,7 +2403,7 @@ namespace Core
                     pg.chip.SetFNum(pg, null);
             }
 
-            if(pg.noteCmd!=0)
+            if (pg.noteCmd != 0)
                 pg.chip.SetVolume(pg, null);
 
             if (isRealTimeMode) return;
@@ -2511,7 +2508,7 @@ namespace Core
                 {
                     if (chip == null) continue;
                     chip.InitChip();
-                    foreach(partWork pw in chip.lstPartWork)
+                    foreach (partWork pw in chip.lstPartWork)
                     {
                         foreach (partPage pg in pw.pg)
                         {
@@ -2640,14 +2637,14 @@ namespace Core
 
             for (int i = 0; i < 2; i++)
             {
-                if (ym2151!= null && ym2151.Length > i && ym2151[i] != null)
+                if (ym2151 != null && ym2151.Length > i && ym2151[i] != null)
                     foreach (partWork pw in ym2151[i].lstPartWork)
                     { useYM2151 += pw.clockCounter; if (ym2151[i].ChipID == 1) useYM2151_S += pw.clockCounter; }
 
                 if (ym2203 != null && ym2203.Length > i && ym2203[i] != null)
                     foreach (partWork pw in ym2203[i].lstPartWork)
                     { useYM2203 += pw.clockCounter; if (ym2203[i].ChipID == 1) useYM2203_S += pw.clockCounter; }
-                    
+
 
                 if (ym2608 != null && ym2608.Length > i && ym2608[i] != null)
                     foreach (partWork pw in ym2608[i].lstPartWork)
@@ -2657,7 +2654,7 @@ namespace Core
                     foreach (partWork pw in ym2610b[i].lstPartWork)
                     { useYM2610B += pw.clockCounter; if (ym2610b[i].ChipID == 1) useYM2610B_S += pw.clockCounter; }
 
-                if (ym2612 != null && ym2612.Length>i && ym2612[i] != null)
+                if (ym2612 != null && ym2612.Length > i && ym2612[i] != null)
                     foreach (partWork pw in ym2612[i].lstPartWork)
                     { useYM2612 += pw.clockCounter; if (ym2612[i].ChipID == 1) useYM2612_S += pw.clockCounter; }
 
@@ -2852,7 +2849,7 @@ namespace Core
         public outDatum[] Xgm_getByteData(Dictionary<string, List<MML>> mmlData)
         {
             if ((ym2612x == null || ym2612x[0] == null)
-                &&(sn76489 == null || sn76489[0] == null)
+                && (sn76489 == null || sn76489[0] == null)
                 ) return null;
 
             //if (doSkip)
@@ -2954,10 +2951,11 @@ namespace Core
 
                         foreach (partWork pw in chip.lstPartWork)
                         {
-                            if (!pw.apg.chip.use) 
+                            if (!pw.apg.chip.use)
                                 endChannel++;
-                            else if (pw.apg.dataEnd) {
-                                if (pw.apg.waitCounter < 1) 
+                            else if (pw.apg.dataEnd)
+                            {
+                                if (pw.apg.waitCounter < 1)
                                     endChannel++;
                                 else if (loopOffset != -1)
                                 {
@@ -2993,7 +2991,7 @@ namespace Core
 
             //ページのClockCounterを比較し最大のものをパートのclockCounterとする
             CompClockCounter();
-            
+
             log.Write("VGMデータをXGMへコンバート");
             dat = ConvertVGMtoXGM(dat);
 
@@ -3059,8 +3057,8 @@ namespace Core
                 uint size = (uint)p.size;
                 //if (size > (uint)p.xgmMaxSampleCount + 1)
                 //{
-                    //size = (uint)p.xgmMaxSampleCount + 1;
-                    //size = (uint)((size & 0xffff00) + (size % 0x100 != 0 ? 0x100 : 0x0));
+                //size = (uint)p.xgmMaxSampleCount + 1;
+                //size = (uint)((size & 0xffff00) + (size % 0x100 != 0 ? 0x100 : 0x0));
                 //}
                 p.size = size;
 
@@ -3104,7 +3102,7 @@ namespace Core
 
             }
 
-            dummyCmdLoopOffsetAddress += xdat.Count+4;
+            dummyCmdLoopOffsetAddress += xdat.Count + 4;
 
             if (dat != null)
             {
@@ -3473,9 +3471,9 @@ namespace Core
                                     des.Add(od);
                                     c++;
                                     ptr += 3;
-                                } while (c < 16 
-                                    && ptr < src.Count - 1 
-                                    && src[ptr].val == 0x52 
+                                } while (c < 16
+                                    && ptr < src.Count - 1
+                                    && src[ptr].val == 0x52
                                     && src[ptr + 1].val == 0x28
                                     );
                                 c--;
@@ -3538,7 +3536,7 @@ namespace Core
                         for (int i = 0; i < 512; i++) opn2reg[i / 0x100][i % 0x100] = -1;
 
                         break;
-                    case 0x2f: 
+                    case 0x2f:
                         //TODO: Dummy Command
                         //dummyコマンドの除去はmml2vgm.cs:OutXgmFileで行う。
                         if (cmd.val == 0x2f //dummyChipコマンド　(第2引数：chipID 第３引数:chipNumber)
@@ -3574,7 +3572,7 @@ namespace Core
                 dummyCmdLoopOffsetAddress = des.Count;
                 od = new outDatum(enmMMLType.unknown, null, null, 0x7e);
                 des.Add(od);
-                
+
                 //od = new outDatum(enmMMLType.unknown, null, null, (byte)loopOffset);
                 //des.Add(od);
                 //od = new outDatum(enmMMLType.unknown, null, null, (byte)(loopOffset >> 8));
@@ -3663,13 +3661,13 @@ namespace Core
                 {
                     //if ((cpw.ppg[pw.cpgNum].chip is YM2612) || (cpw.ppg[pw.cpgNum].chip is YM2612X))
                     //{
-                        //cpw.ppg[pw.cpgNum].fms = pl.param[2];
-                        //cpw.ppg[pw.cpgNum].ams = pl.param[3];
-                        //((ClsOPN)cpw.ppg[pw.cpgNum].chip).OutOPNSetPanAMSPMS(null, cpw, (int)cpw.ppg[pw.cpgNum].pan.val, cpw.ppg[pw.cpgNum].ams, cpw.ppg[pw.cpgNum].fms);
-                        //cpw.ppg[pw.cpgNum].chip.lstPartWork[0].hardLfoSw = true;
-                        //cpw.ppg[pw.cpgNum].chip.lstPartWork[0].hardLfoNum = pl.param[1];
-                        //((ClsOPN)cpw.ppg[pw.cpgNum].chip).OutOPNSetHardLfo(null, cpw, cpw.ppg[pw.cpgNum].chip.lstPartWork[0].hardLfoSw, cpw.ppg[pw.cpgNum].chip.lstPartWork[0].hardLfoNum);
-                        //pl.waitCounter = -1;
+                    //cpw.ppg[pw.cpgNum].fms = pl.param[2];
+                    //cpw.ppg[pw.cpgNum].ams = pl.param[3];
+                    //((ClsOPN)cpw.ppg[pw.cpgNum].chip).OutOPNSetPanAMSPMS(null, cpw, (int)cpw.ppg[pw.cpgNum].pan.val, cpw.ppg[pw.cpgNum].ams, cpw.ppg[pw.cpgNum].fms);
+                    //cpw.ppg[pw.cpgNum].chip.lstPartWork[0].hardLfoSw = true;
+                    //cpw.ppg[pw.cpgNum].chip.lstPartWork[0].hardLfoNum = pl.param[1];
+                    //((ClsOPN)cpw.ppg[pw.cpgNum].chip).OutOPNSetHardLfo(null, cpw, cpw.ppg[pw.cpgNum].chip.lstPartWork[0].hardLfoSw, cpw.ppg[pw.cpgNum].chip.lstPartWork[0].hardLfoNum);
+                    //pl.waitCounter = -1;
                     //}
                     pl.waitCounter = -1;
                     continue;
@@ -3748,7 +3746,7 @@ namespace Core
 
         private void ProcMidiNoteOff(partPage page)
         {
-            for(int i = 0; i< page.noteOns.Length; i++)
+            for (int i = 0; i < page.noteOns.Length; i++)
             {
                 if (page.noteOns[i] == null) continue;
                 if (page.noteOns[i].length > 0) continue;
@@ -4127,7 +4125,7 @@ namespace Core
 
                             for (int c = 0; c < partData[n][chip.Ch[i].Name].Count; c++)
                             {
-                                if (partData[n][chip.Ch[i].Name][c] == null || partData[n][chip.Ch[i].Name][c].Count<1)
+                                if (partData[n][chip.Ch[i].Name][c] == null || partData[n][chip.Ch[i].Name][c].Count < 1)
                                     continue;
 
                                 pw.apg = new partPage(pw.spg);

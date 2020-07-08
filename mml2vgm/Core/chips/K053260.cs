@@ -1,9 +1,7 @@
-﻿using System;
+﻿using musicDriverInterface;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using musicDriverInterface;
 
 namespace Core
 {
@@ -26,7 +24,7 @@ namespace Core
             ChipNumber = chipNumber;
 
             Frequency = 3_579_545;
-            port =new byte[][] { new byte[] { 0xba } };
+            port = new byte[][] { new byte[] { 0xba } };
 
             if (string.IsNullOrEmpty(initialPartName)) return;
 
@@ -125,7 +123,7 @@ namespace Core
         }
 
         private void MakeFreqTable(double baseFreq)
-        { 
+        {
             n2f = new int[8 * 12];
             int ind = 0;
             double dis = double.MaxValue;
@@ -282,14 +280,14 @@ namespace Core
                 }
                 else
                 {
-                    Array.Copy(buf, 0, pi.totalBuf, freeAdr+pi.totalHeaderLength, buf.Length);
+                    Array.Copy(buf, 0, pi.totalBuf, freeAdr + pi.totalHeaderLength, buf.Length);
                 }
 
                 Common.SetUInt32bit31(
                     pi.totalBuf
                     , pi.totalHeadrSizeOfDataPtr
                     , (UInt32)(pi.totalBuf.Length - (pi.totalHeadrSizeOfDataPtr + 4))
-                    , ChipNumber!=0
+                    , ChipNumber != 0
                     );
                 Common.SetUInt32bit31(
                     pi.totalBuf
@@ -330,7 +328,7 @@ namespace Core
 
             return string.Format("{0,-10} {1,-7} {2,-5:D3} {3,-4:D2} ${4,-7:X4} ${5,-7:X4} {6} ${7,-7:X4}  {8,4} {9}\r\n"
                 , Name //0
-                , pcm.chipNumber!=0 ? "SEC" : "PRI" //1
+                , pcm.chipNumber != 0 ? "SEC" : "PRI" //1
                 , pcm.num //2
                 , pcm.stAdr >> 16 //3
                 , pcm.stAdr & 0xffff //4
@@ -348,7 +346,7 @@ namespace Core
                 page,
                 mml
                 , cmd
-                , (byte)((ChipNumber!=0 ? 0x80 : 0x00) + adr)
+                , (byte)((ChipNumber != 0 ? 0x80 : 0x00) + adr)
                 , data
                 );
 

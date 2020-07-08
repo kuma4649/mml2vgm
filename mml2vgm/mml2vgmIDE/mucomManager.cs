@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using musicDriverInterface;
+using System;
 using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Reflection;
 using System.Text;
-using System.Threading.Tasks;
-using musicDriverInterface;
 
 namespace mml2vgmIDE
 {
@@ -22,7 +18,7 @@ namespace mml2vgmIDE
 
         public string wrkMUCFullPath { get; private set; }
 
-        public mucomManager(string compilerPath, string driverPath, string preprocessorPath, Action<string> disp,Setting setting)
+        public mucomManager(string compilerPath, string driverPath, string preprocessorPath, Action<string> disp, Setting setting)
         {
             try
             {
@@ -69,7 +65,7 @@ namespace mml2vgmIDE
 
         //private void WriteLog(LogLevel arg1, string arg2)
         //{
-            //disp?.Invoke(arg2);
+        //disp?.Invoke(arg2);
         //}
 
         public void InitDriver(
@@ -138,8 +134,8 @@ namespace mml2vgmIDE
             this.wrkMUCFullPath = wrkMUCFullPath;
             compiler.Init();
             compiler.SetCompileSwitch("IDE");
-            
-            if(poi!=Point.Empty)
+
+            if (poi != Point.Empty)
             {
                 compiler.SetCompileSwitch(string.Format("SkipPoint=R{0}:C{1}", poi.Y, poi.X));
             }

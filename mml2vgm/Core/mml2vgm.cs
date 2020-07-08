@@ -1,9 +1,9 @@
-﻿using System;
+﻿using musicDriverInterface;
+using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.IO.Compression;
-using System.Drawing;
-using musicDriverInterface;
 
 namespace Core
 {
@@ -60,7 +60,7 @@ namespace Core
         /// <param name="stPath">アプリケーションパス</param>
         /// <param name="disp">メッセージ表示メソッド</param>
         /// <param name="wrkPath">取り込みファイルが存在するパス(通常はソースファイルと同じパス)</param>
-        public Mml2vgm(string srcFn, string desFn, string stPath, Action<string> disp ,string wrkPath)
+        public Mml2vgm(string srcFn, string desFn, string stPath, Action<string> disp, string wrkPath)
         {
             this.srcFn = srcFn;
             this.desFn = desFn;
@@ -364,7 +364,7 @@ namespace Core
                     }
                     else
                     {
-                        throw new ArgumentException(string.Format("Unknown command {0:x02}",od.val));
+                        throw new ArgumentException(string.Format("Unknown command {0:x02}", od.val));
                     }
                 }
 
@@ -456,7 +456,7 @@ namespace Core
                         if (L == 0xe)//loop
                         {
                             //Console.WriteLine("loop command {0:x} adr:{1:x}", H | L, i - 1);
-                            lstBuf.Add((byte)desVGM.loopOffset );
+                            lstBuf.Add((byte)desVGM.loopOffset);
                             lstBuf.Add((byte)(desVGM.loopOffset >> 8));
                             lstBuf.Add((byte)(desVGM.loopOffset >> 16));
                             i += 3;
@@ -509,7 +509,7 @@ namespace Core
             byte[] buf = new byte[1024];
 
             MemoryStream inStream = new MemoryStream(bufs);
-            FileStream outStream = new FileStream(desFn, FileMode.Create,FileAccess.Write);
+            FileStream outStream = new FileStream(desFn, FileMode.Create, FileAccess.Write);
             GZipStream compStream = new GZipStream(outStream, CompressionMode.Compress);
 
             try
@@ -666,7 +666,7 @@ namespace Core
                         }
 
                         //pitch変換
-                        if (desVGM.info.format== enmFormat.XGM)
+                        if (desVGM.info.format == enmFormat.XGM)
                         {
                             int fFreq = (int)pds.DatLoopAdr;
                             //SOXで変換する
@@ -675,7 +675,7 @@ namespace Core
                             v.freq = fFreq;
                         }
 
-                        if (desVGM.info.format == enmFormat.XGM && v.chipNumber!=0)
+                        if (desVGM.info.format == enmFormat.XGM && v.chipNumber != 0)
                         {
                             msgBox.setErrMsg(string.Format(
                                 msg.get("E01017")
@@ -712,7 +712,7 @@ namespace Core
                                     pds.DatEndAdr = (int)((YM2609)desVGM.chips[v.chip][v.chipNumber]).pcmDataEasyB.Length - 16;
                                 }
                             }
-                            else 
+                            else
                             {
                                 //ADPCM-C
                                 if (desVGM.chips != null && desVGM.chips.ContainsKey(v.chip) && desVGM.chips[v.chip] != null)
@@ -793,7 +793,7 @@ namespace Core
                             continue;
                         }
 
-                        if (desVGM.info.format == enmFormat.XGM && v.chipNumber!=0)
+                        if (desVGM.info.format == enmFormat.XGM && v.chipNumber != 0)
                         {
                             msgBox.setErrMsg(string.Format(
                                 msg.get("E01017")
@@ -820,7 +820,7 @@ namespace Core
                                 , pds.FileName), new LinePos(pds.FileName));
                             continue;
                         }
-                        desVGM.chips[pds.chip][pds.chipNumber ]
+                        desVGM.chips[pds.chip][pds.chipNumber]
                             .StorePcmRawData(
                             pds
                             , buf
@@ -1040,8 +1040,8 @@ namespace Core
             {
                 tl += desVGM.instPCM[i].size;
             }
-            region +=(string.Format(msg.get("I04018"), tl));
-            region+="\r\n";
+            region += (string.Format(msg.get("I04018"), tl));
+            region += "\r\n";
 
             return region;
         }
@@ -1186,7 +1186,7 @@ namespace Core
 
                     region += string.Format("{0,-10} {1,-7} ${2,-7:X6} ${3,-7:X6} ${4,-7:X6}  {5}\r\n"
                         , c.Name
-                        , pds.chipNumber!=0 ? "SEC" : "PRI"
+                        , pds.chipNumber != 0 ? "SEC" : "PRI"
                         , pds.DatStartAdr
                         , pds.DatEndAdr
                         , pds.DatEndAdr - pds.DatStartAdr + 1

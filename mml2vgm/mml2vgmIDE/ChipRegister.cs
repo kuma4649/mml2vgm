@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using NAudio.Midi;
-using MDSound.np;
-using MDSound.np.memory;
-using MDSound.np.cpu;
+﻿using Core;
 using MDSound.np.chip;
-using NScci;
+using MDSound.np.cpu;
+using MDSound.np.memory;
 using SoundManager;
-using Core;
+using System;
+using System.Collections.Generic;
 
 namespace mml2vgmIDE
 {
@@ -60,22 +56,22 @@ namespace mml2vgmIDE
         private RSoundChip[] scQSound = new RSoundChip[2] { null, null };
         private RSoundChip[] scRF5C164 = new RSoundChip[2] { null, null };
         private RSoundChip[] scSEGAPCM = new RSoundChip[2] { null, null };
-        private RSoundChip[] scSN76489 =  new RSoundChip[2] { null, null };
+        private RSoundChip[] scSN76489 = new RSoundChip[2] { null, null };
         private RSoundChip[] scYM2151 = new RSoundChip[2] { null, null };
         private RSoundChip[] scYM2203 = new RSoundChip[2] { null, null };
         private RSoundChip[] scYM2413 = new RSoundChip[2] { null, null };
-        private RSoundChip[] scYM2612 =   new RSoundChip[2] { null, null };
+        private RSoundChip[] scYM2612 = new RSoundChip[2] { null, null };
         private RSoundChip[] scYM2608 = new RSoundChip[2] { null, null };
         private RSoundChip[] scYM2609 = new RSoundChip[2] { null, null };
-        private RSoundChip[] scYM2610 =   new RSoundChip[2] { null, null };
+        private RSoundChip[] scYM2610 = new RSoundChip[2] { null, null };
         private RSoundChip[] scYM2610EA = new RSoundChip[2] { null, null };
         private RSoundChip[] scYM2610EB = new RSoundChip[2] { null, null };
         private RSoundChip[] scYM3526 = new RSoundChip[2] { null, null };
         private RSoundChip[] scYM3812 = new RSoundChip[2] { null, null };
         private RSoundChip[] scYMF262 = new RSoundChip[2] { null, null };
-        private RSoundChip[] scYMF271 =   new RSoundChip[2] { null, null };
-        private RSoundChip[] scYMF278B =  new RSoundChip[2] { null, null };
-        private RSoundChip[] scYMZ280B =  new RSoundChip[2] { null, null };
+        private RSoundChip[] scYMF271 = new RSoundChip[2] { null, null };
+        private RSoundChip[] scYMF278B = new RSoundChip[2] { null, null };
+        private RSoundChip[] scYMZ280B = new RSoundChip[2] { null, null };
 
         /// <summary>
         /// AlgMask (Alg:4はop2 op3が逆に並んでいます)
@@ -198,7 +194,7 @@ namespace mml2vgmIDE
         };
 
         public int[][] fmRegisterYM3812 = new int[][] { null, null };
-        private int[] fmRegisterYM3812FM = new int[] { 0,0 };
+        private int[] fmRegisterYM3812FM = new int[] { 0, 0 };
         private int[] fmRegisterYM3812RyhthmB = new int[] { 0, 0 };
         private int[] fmRegisterYM3812Ryhthm = new int[] { 0, 0 };
         private ChipKeyInfo[] kiYM3812 = new ChipKeyInfo[2] { new ChipKeyInfo(14), new ChipKeyInfo(14) };
@@ -371,26 +367,26 @@ namespace mml2vgmIDE
 
 
         public List<Chip> CONDUCTOR = new List<Chip>();
-        public List<Chip> AY8910  = new List<Chip>();
+        public List<Chip> AY8910 = new List<Chip>();
         public List<Chip> C140 = new List<Chip>();
         public List<Chip> C352 = new List<Chip>();
-        public List<Chip> MIDI    = new List<Chip>();
+        public List<Chip> MIDI = new List<Chip>();
         public List<Chip> HuC6280 = new List<Chip>();
         public List<Chip> K051649 = new List<Chip>();
         public List<Chip> RF5C164 = new List<Chip>();
         public List<Chip> SEGAPCM = new List<Chip>();
         public List<Chip> SN76489 = new List<Chip>();
-        public List<Chip> YM2151  = new List<Chip>();
-        public List<Chip> YM2203  = new List<Chip>();
+        public List<Chip> YM2151 = new List<Chip>();
+        public List<Chip> YM2203 = new List<Chip>();
         public List<Chip> YM2413 = new List<Chip>();
         public List<Chip> YM3526 = new List<Chip>();
         public List<Chip> YM3812 = new List<Chip>();
         public List<Chip> YMF262 = new List<Chip>();
-        public List<Chip> YM2608  = new List<Chip>();
-        public List<Chip> YM2609  = new List<Chip>();
-        public List<Chip> YM2610  = new List<Chip>();
-        public List<Chip> YM2612  = new List<Chip>();
-        public List<Chip> QSound  = new List<Chip>();
+        public List<Chip> YM2608 = new List<Chip>();
+        public List<Chip> YM2609 = new List<Chip>();
+        public List<Chip> YM2610 = new List<Chip>();
+        public List<Chip> YM2612 = new List<Chip>();
+        public List<Chip> QSound = new List<Chip>();
         public List<Chip> K053260 = new List<Chip>();
 
 
@@ -413,7 +409,7 @@ namespace mml2vgmIDE
             this.mds = mds;
         }
 
-        public void SetRealChipInfo(EnmZGMDevice dev, Setting.ChipType chipTypeP, Setting.ChipType chipTypeS, int LatencyEmulation,int LatencyReal)
+        public void SetRealChipInfo(EnmZGMDevice dev, Setting.ChipType chipTypeP, Setting.ChipType chipTypeS, int LatencyEmulation, int LatencyReal)
         {
             int LEmu = SoundManager.SoundManager.DATA_SEQUENCE_FREQUENCE * LatencyEmulation / 1000;
             int LReal = SoundManager.SoundManager.DATA_SEQUENCE_FREQUENCE * LatencyReal / 1000;
@@ -659,7 +655,7 @@ namespace mml2vgmIDE
 
                         scYMF262[i] = realChip.GetRealChip(ctYMF262[i]);
                         if (scYMF262[i] != null) scYMF262[i].init();
-                        if (YMF262.Count < i + 1) YMF262.Add(new Chip(18+5));
+                        if (YMF262.Count < i + 1) YMF262.Add(new Chip(18 + 5));
                         YMF262[i].Model = ctYMF262[i].UseEmu ? EnmVRModel.VirtualModel : EnmVRModel.RealModel;
                         YMF262[i].Delay = (YMF262[i].Model == EnmVRModel.VirtualModel ? LEmu : LReal);
                     }
@@ -674,7 +670,7 @@ namespace mml2vgmIDE
 
                         scYM2608[i] = realChip.GetRealChip(ctYM2608[i]);
                         if (scYM2608[i] != null) scYM2608[i].init();
-                        if (YM2608.Count < i + 1) YM2608.Add(new Chip(6+3+3+6+1));
+                        if (YM2608.Count < i + 1) YM2608.Add(new Chip(6 + 3 + 3 + 6 + 1));
                         YM2608[i].Model = ctYM2608[i].UseEmu ? EnmVRModel.VirtualModel : EnmVRModel.RealModel;
                         YM2608[i].Delay = (YM2608[i].Model == EnmVRModel.VirtualModel ? LEmu : LReal);
                     }
@@ -689,7 +685,7 @@ namespace mml2vgmIDE
 
                         scYM2609[i] = realChip.GetRealChip(ctYM2609[i]);
                         if (scYM2609[i] != null) scYM2609[i].init();
-                        if (YM2609.Count < i + 1) YM2609.Add(new Chip(12+6+12+6+3+6));
+                        if (YM2609.Count < i + 1) YM2609.Add(new Chip(12 + 6 + 12 + 6 + 3 + 6));
                         YM2609[i].Model = ctYM2609[i].UseEmu ? EnmVRModel.VirtualModel : EnmVRModel.RealModel;
                         YM2609[i].Delay = (YM2609[i].Model == EnmVRModel.VirtualModel ? LEmu : LReal);
                     }
@@ -708,7 +704,7 @@ namespace mml2vgmIDE
                         if (scYM2610EA[i] != null) scYM2610EA[i].init();
                         scYM2610EB[i] = realChip.GetRealChip(ctYM2610[i], 2);
                         if (scYM2610EB[i] != null) scYM2610EB[i].init();
-                        if (YM2610.Count < i + 1) YM2610.Add(new Chip(6+3+3+6+1));
+                        if (YM2610.Count < i + 1) YM2610.Add(new Chip(6 + 3 + 3 + 6 + 1));
                         YM2610[i].Model = ctYM2610[i].UseEmu ? EnmVRModel.VirtualModel : EnmVRModel.RealModel;
                         YM2610[i].Delay = (YM2610[i].Model == EnmVRModel.VirtualModel ? LEmu : LReal);
                     }
@@ -752,7 +748,7 @@ namespace mml2vgmIDE
 
             CONDUCTOR.Clear();
 
-            
+
             for (int i = 0; i < 2; i++)
             {
                 if (CONDUCTOR.Count < i + 1) CONDUCTOR.Add(new Chip(2));
@@ -867,28 +863,28 @@ namespace mml2vgmIDE
                 YMF262[i].Number = i;
                 YMF262[i].Hosei = 0;
 
-                if (YM2608.Count < i + 1) YM2608.Add(new Chip(6+3+3+6+1));
+                if (YM2608.Count < i + 1) YM2608.Add(new Chip(6 + 3 + 3 + 6 + 1));
                 YM2608[i].Use = false;
                 YM2608[i].Model = EnmVRModel.None;
                 YM2608[i].Device = EnmZGMDevice.YM2608;
                 YM2608[i].Number = i;
                 YM2608[i].Hosei = 0;
 
-                if (YM2609.Count < i + 1) YM2609.Add(new Chip(12+6+12+6+3+6));
+                if (YM2609.Count < i + 1) YM2609.Add(new Chip(12 + 6 + 12 + 6 + 3 + 6));
                 YM2609[i].Use = false;
                 YM2609[i].Model = EnmVRModel.None;
                 YM2609[i].Device = EnmZGMDevice.YM2609;
                 YM2609[i].Number = i;
                 YM2609[i].Hosei = 0;
 
-                if (YM2610.Count < i + 1) YM2610.Add(new Chip(6+3+3+6+1));
+                if (YM2610.Count < i + 1) YM2610.Add(new Chip(6 + 3 + 3 + 6 + 1));
                 YM2610[i].Use = false;
                 YM2610[i].Model = EnmVRModel.None;
                 YM2610[i].Device = EnmZGMDevice.YM2610;
                 YM2610[i].Number = i;
                 YM2610[i].Hosei = 0;
 
-                if (YM2612.Count < i + 1) YM2612.Add(new Chip(6+3));
+                if (YM2612.Count < i + 1) YM2612.Add(new Chip(6 + 3));
                 YM2612[i].Use = false;
                 YM2612[i].Model = EnmVRModel.None;
                 YM2612[i].Device = EnmZGMDevice.YM2612;
@@ -1129,7 +1125,7 @@ namespace mml2vgmIDE
         public void LoopCountUp(long Counter)
         {
             dummyChip.Model = EnmVRModel.None;
-            enq(null,Counter, dummyChip, EnmDataType.Loop, -1, -1, null);
+            enq(null, Counter, dummyChip, EnmDataType.Loop, -1, -1, null);
         }
 
         public void initChipRegister(MDSound.MDSound.Chip[] chipInfos)
@@ -1422,7 +1418,7 @@ namespace mml2vgmIDE
             return midiOuts.Count;
         }
 
-        public void sendMIDIout(long Counter,int chipID, byte cmd, byte prm1, byte prm2)//, int deltaFrames = 0)
+        public void sendMIDIout(long Counter, int chipID, byte cmd, byte prm1, byte prm2)//, int deltaFrames = 0)
         {
             if (MIDI[0].Model == EnmVRModel.RealModel)
             {
@@ -1430,7 +1426,7 @@ namespace mml2vgmIDE
                 if (chipID >= midiOuts.Count) return;
                 if (midiOuts[chipID] == null) return;
 
-                enq(null,Counter, MIDI[0], EnmDataType.Block, chipID, -1, new byte[] { cmd, prm1, prm2 });
+                enq(null, Counter, MIDI[0], EnmDataType.Block, chipID, -1, new byte[] { cmd, prm1, prm2 });
                 //midiOuts[chipID].SendBuffer(data);
                 //if (chipID < midiParams.Length) midiParams[chipID].SendBuffer(data);
                 return;
@@ -1464,7 +1460,7 @@ namespace mml2vgmIDE
             //if (num < midiParams.Length) midiParams[num].SendBuffer(new byte[] { cmd, prm1, prm2 });
         }
 
-        public void sendMIDIout(long Counter,int chipID, byte cmd, byte prm1)//, int deltaFrames = 0)
+        public void sendMIDIout(long Counter, int chipID, byte cmd, byte prm1)//, int deltaFrames = 0)
         {
             if (MIDI[0].Model == EnmVRModel.RealModel)
             {
@@ -1472,7 +1468,7 @@ namespace mml2vgmIDE
                 if (chipID >= midiOuts.Count) return;
                 if (midiOuts[chipID] == null) return;
 
-                enq(null,Counter, MIDI[0], EnmDataType.Block, chipID, -1, new byte[] { cmd, prm1 });
+                enq(null, Counter, MIDI[0], EnmDataType.Block, chipID, -1, new byte[] { cmd, prm1 });
                 //midiOuts[chipID].SendBuffer(data);
                 //if (chipID < midiParams.Length) midiParams[chipID].SendBuffer(data);
                 return;
@@ -1506,7 +1502,7 @@ namespace mml2vgmIDE
             //if (num < midiParams.Length) midiParams[num].SendBuffer(new byte[] { cmd, prm1 });
         }
 
-        public void sendMIDIout(long Counter,int chipID, byte[] data)
+        public void sendMIDIout(long Counter, int chipID, byte[] data)
         {
             if (MIDI[0].Model == EnmVRModel.RealModel)
             {
@@ -1514,7 +1510,7 @@ namespace mml2vgmIDE
                 if (chipID >= midiOuts.Count) return;
                 if (midiOuts[chipID] == null) return;
 
-                enq(null,Counter, MIDI[0], EnmDataType.Block, chipID, -1, data);
+                enq(null, Counter, MIDI[0], EnmDataType.Block, chipID, -1, data);
                 //midiOuts[chipID].SendBuffer(data);
                 //if (chipID < midiParams.Length) midiParams[chipID].SendBuffer(data);
                 return;
@@ -1890,18 +1886,18 @@ namespace mml2vgmIDE
 
         public void AY8910SetRegister(outDatum od, long Counter, int ChipID, int dAddr, int dData)
         {
-            enq(od,Counter, AY8910[ChipID], EnmDataType.Normal, dAddr, dData, null);
+            enq(od, Counter, AY8910[ChipID], EnmDataType.Normal, dAddr, dData, null);
         }
 
         public void AY8910SetRegister(outDatum od, long Counter, int ChipID, PackData[] data)
         {
-            enq(od,Counter, AY8910[ChipID], EnmDataType.Block, -1, -1, data);
+            enq(od, Counter, AY8910[ChipID], EnmDataType.Block, -1, -1, data);
         }
 
         public void AY8910SoftReset(long Counter, int ChipID)
         {
             List<PackData> data = AY8910MakeSoftReset(ChipID);
-            AY8910SetRegister(null,Counter, ChipID, data.ToArray());
+            AY8910SetRegister(null, Counter, ChipID, data.ToArray());
         }
 
         public List<PackData> AY8910MakeSoftReset(int chipID)
@@ -1912,19 +1908,19 @@ namespace mml2vgmIDE
             // SSG 音程(2byte*3ch)
             for (i = 0x00; i < 0x05 + 1; i++)
             {
-                data.Add(new PackData(null,AY8910[chipID], EnmDataType.Normal, i, 0x00, null));
+                data.Add(new PackData(null, AY8910[chipID], EnmDataType.Normal, i, 0x00, null));
             }
-            data.Add(new PackData(null,AY8910[chipID], EnmDataType.Normal, 0x06, 0x00, null)); // SSG ノイズ周波数
-            data.Add(new PackData(null,AY8910[chipID], EnmDataType.Normal, 0x07, 0x38, null)); // SSG ミキサ
-                                                                                          // SSG ボリューム(3ch)
+            data.Add(new PackData(null, AY8910[chipID], EnmDataType.Normal, 0x06, 0x00, null)); // SSG ノイズ周波数
+            data.Add(new PackData(null, AY8910[chipID], EnmDataType.Normal, 0x07, 0x38, null)); // SSG ミキサ
+                                                                                                // SSG ボリューム(3ch)
             for (i = 0x08; i < 0x0A + 1; i++)
             {
-                data.Add(new PackData(null,AY8910[chipID], EnmDataType.Normal, i, 0x00, null));
+                data.Add(new PackData(null, AY8910[chipID], EnmDataType.Normal, i, 0x00, null));
             }
             // SSG Envelope
             for (i = 0x0B; i < 0x0D + 1; i++)
             {
-                data.Add(new PackData(null,AY8910[chipID], EnmDataType.Normal, i, 0x00, null));
+                data.Add(new PackData(null, AY8910[chipID], EnmDataType.Normal, i, 0x00, null));
             }
 
             return data;
@@ -1939,7 +1935,7 @@ namespace mml2vgmIDE
             int c = ch;
             if (ch < 3)
             {
-                AY8910SetRegister(null,Counter, (byte)chipID, 0x08 + c , AY8910PsgRegister[chipID][0x08 + c ]);
+                AY8910SetRegister(null, Counter, (byte)chipID, 0x08 + c, AY8910PsgRegister[chipID][0x08 + c]);
             }
         }
 
@@ -1968,12 +1964,12 @@ namespace mml2vgmIDE
             {
                 if (!AY8910[i].Use) continue;
                 if (AY8910[i].Model == EnmVRModel.VirtualModel) continue;
-                if (AY8910NowFadeoutVol[i]  == v) continue;
+                if (AY8910NowFadeoutVol[i] == v) continue;
 
                 AY8910NowFadeoutVol[i] = v;
                 for (int c = 0; c < 3; c++)
                 {
-                    AY8910SetRegister(null,Counter, i, 0x08 + c , AY8910PsgRegister[i][0x08 + c ]);
+                    AY8910SetRegister(null, Counter, i, 0x08 + c, AY8910PsgRegister[i][0x08 + c]);
                 }
             }
         }
@@ -2036,7 +2032,7 @@ namespace mml2vgmIDE
                     {
                         if (Chip.Model == EnmVRModel.VirtualModel)
                             mds.WriteC140PCMData(Chip.Index, (byte)Chip.Number, (uint)((object[])exData)[0], (uint)((object[])exData)[1], (uint)((object[])exData)[2], (byte[])((object[])exData)[3], (uint)((object[])exData)[4]);
-                            // ROMSize, DataStart, DataLength, romdata, SrcStartAdr);
+                        // ROMSize, DataStart, DataLength, romdata, SrcStartAdr);
                         else
                         {
                             if (scC140 != null && scC140[Chip.Number] != null)
@@ -2095,7 +2091,7 @@ namespace mml2vgmIDE
                     }
                 }
 
-                if((dAddr & 0xf) == 0 || (dAddr & 0xf) == 1)
+                if ((dAddr & 0xf) == 0 || (dAddr & 0xf) == 1)
                 {
                     int d = C140NowFadeoutVol[Chip.Number];// >> 3;
                     dData = Math.Max(dData - d, 0);
@@ -2116,17 +2112,17 @@ namespace mml2vgmIDE
 
         public void C140SetRegister(outDatum od, long Counter, int ChipID, int dAddr, int dData)
         {
-            enq(od,Counter, C140[ChipID], EnmDataType.Normal, dAddr, dData, null);
+            enq(od, Counter, C140[ChipID], EnmDataType.Normal, dAddr, dData, null);
         }
 
         public void C140SetRegister(outDatum od, long Counter, int ChipID, PackData[] data)
         {
-            enq(od,Counter, C140[ChipID], EnmDataType.Block, -1, -1, data);
+            enq(od, Counter, C140[ChipID], EnmDataType.Block, -1, -1, data);
         }
 
-        public void C140WritePCMData(outDatum od, long Counter,byte chipID, uint ROMSize, uint DataStart, uint DataLength, byte[] romdata, uint SrcStartAdr)
+        public void C140WritePCMData(outDatum od, long Counter, byte chipID, uint ROMSize, uint DataStart, uint DataLength, byte[] romdata, uint SrcStartAdr)
         {
-            enq(od,Counter, C140[chipID], EnmDataType.Block, -1, -2, new object[] { ROMSize, DataStart, DataLength, romdata, SrcStartAdr });
+            enq(od, Counter, C140[chipID], EnmDataType.Block, -1, -2, new object[] { ROMSize, DataStart, DataLength, romdata, SrcStartAdr });
 
             //if (model == EnmModel.VirtualModel)
             //    mds.WriteC140PCMData(chipID, ROMSize, DataStart, DataLength, romdata, SrcStartAdr);
@@ -2175,7 +2171,7 @@ namespace mml2vgmIDE
         public void C140SoftReset(long Counter, int ChipID)
         {
             List<PackData> data = C140MakeSoftReset(ChipID);
-            C140SetRegister(null,Counter, ChipID, data.ToArray());
+            C140SetRegister(null, Counter, ChipID, data.ToArray());
         }
 
         public List<PackData> C140MakeSoftReset(int chipID)
@@ -2185,9 +2181,9 @@ namespace mml2vgmIDE
 
             for (i = 0; i < 24; i++)
             {
-                data.Add(new PackData(null,C140[chipID], EnmDataType.Normal, (i << 4) + 0x05, 0x00, null));// KeyOff
-                data.Add(new PackData(null,C140[chipID], EnmDataType.Normal, (i << 4) + 0x00, 0x00, null));// L vol
-                data.Add(new PackData(null,C140[chipID], EnmDataType.Normal, (i << 4) + 0x01, 0x00, null));// R vol
+                data.Add(new PackData(null, C140[chipID], EnmDataType.Normal, (i << 4) + 0x05, 0x00, null));// KeyOff
+                data.Add(new PackData(null, C140[chipID], EnmDataType.Normal, (i << 4) + 0x00, 0x00, null));// L vol
+                data.Add(new PackData(null, C140[chipID], EnmDataType.Normal, (i << 4) + 0x01, 0x00, null));// R vol
             }
 
             return data;
@@ -2213,8 +2209,8 @@ namespace mml2vgmIDE
                 C140NowFadeoutVol[i] = v;
                 for (int c = 0; c < 24; c++)
                 {
-                    C140SetRegister(null,Counter, i, (c << 4) + 0, pcmRegisterC140[i][(c << 4) + 0]);
-                    C140SetRegister(null,Counter, i, (c << 4) + 1, pcmRegisterC140[i][(c << 4) + 1]);
+                    C140SetRegister(null, Counter, i, (c << 4) + 0, pcmRegisterC140[i][(c << 4) + 0]);
+                    C140SetRegister(null, Counter, i, (c << 4) + 1, pcmRegisterC140[i][(c << 4) + 1]);
                 }
             }
         }
@@ -2376,7 +2372,7 @@ namespace mml2vgmIDE
             {
                 Chip.currentCh = dData & 0x7;
             }
-            else if(reg==4)
+            else if (reg == 4)
             {
                 if (Chip.ChMasks[Chip.currentCh]) dData &= 0x7f;
             }
@@ -2515,7 +2511,7 @@ namespace mml2vgmIDE
             {
                 if ((Address >> 1) == 0x03)
                 {
-                    dData = 
+                    dData =
                         (Chip.ChMasks[0] ? 0 : (dData & 1))
                         | (Chip.ChMasks[1] ? 0 : (dData & 2))
                         | (Chip.ChMasks[2] ? 0 : (dData & 4))
@@ -2985,7 +2981,7 @@ namespace mml2vgmIDE
             if (Chip.Number == 0) chipLED.PriRF5C = 2;
             else chipLED.SecRF5C = 2;
 
-            if ((Address&0xf) == 8)
+            if ((Address & 0xf) == 8)
             {
                 dData =
                     ((Chip.ChMasks[0] ? 1 : (dData & 1))
@@ -3064,7 +3060,7 @@ namespace mml2vgmIDE
         }
 
         #endregion
-        
+
 
 
         #region YM2151(OPM)
@@ -3077,7 +3073,7 @@ namespace mml2vgmIDE
                 {
                     if (!ctYM2151[Chip.Number].UseScci)
                     {
-                        if (ctYM2151[Chip.Number].UseEmu) mds.WriteYM2151(Chip.Index,(byte)Chip.Number, (byte)address, (byte)data);
+                        if (ctYM2151[Chip.Number].UseEmu) mds.WriteYM2151(Chip.Index, (byte)Chip.Number, (byte)address, (byte)data);
                         if (ctYM2151[Chip.Number].UseEmu2) mds.WriteYM2151mame(Chip.Index, (byte)Chip.Number, (byte)address, (byte)data);
                         if (ctYM2151[Chip.Number].UseEmu3) mds.WriteYM2151x68sound(Chip.Index, (byte)Chip.Number, (byte)address, (byte)data);
                     }
@@ -3152,7 +3148,7 @@ namespace mml2vgmIDE
             if (Chip.Number == 0) chipLED.PriOPM = 2;
             else chipLED.SecOPM = 2;
 
-            int dPort = (byte)(Address >> 8);
+            //int dPort = (byte)(Address >> 8);
             int dAddr = (byte)Address;
 
             YM2151FmRegister[Chip.Number][dAddr] = dData;
@@ -3300,18 +3296,18 @@ namespace mml2vgmIDE
 
         public void YM2151SetRegister(outDatum od, long Counter, int ChipID, int dAddr, int dData)
         {
-            enq(od,Counter, YM2151[ChipID], EnmDataType.Normal, dAddr, dData, null);
+            enq(od, Counter, YM2151[ChipID], EnmDataType.Normal, dAddr, dData, null);
         }
 
         public void YM2151SetRegister(outDatum od, long Counter, int ChipID, PackData[] data)
         {
-            enq(od,Counter, YM2151[ChipID], EnmDataType.Block, -1, -1, data);
+            enq(od, Counter, YM2151[ChipID], EnmDataType.Block, -1, -1, data);
         }
 
         public void YM2151SoftReset(long Counter, int chipID)
         {
             List<PackData> data = YM2151MakeSoftReset(chipID);
-            YM2151SetRegister(null,Counter, chipID, data.ToArray());
+            YM2151SetRegister(null, Counter, chipID, data.ToArray());
         }
 
         public List<PackData> YM2151MakeSoftReset(int ChipID)
@@ -3323,49 +3319,49 @@ namespace mml2vgmIDE
             for (i = 0; i < 8; i++)
             {
                 // note off
-                data.Add(new PackData(null,YM2151[ChipID], EnmDataType.Normal, 0x08, 0x00 + i, null));
+                data.Add(new PackData(null, YM2151[ChipID], EnmDataType.Normal, 0x08, 0x00 + i, null));
             }
 
-            data.Add(new PackData(null,YM2151[ChipID], EnmDataType.Normal, 0x0f, 0x00, null)); //  FM NOISE ENABLE/NOISE FREQ
-            data.Add(new PackData(null,YM2151[ChipID], EnmDataType.Normal, 0x18, 0x00, null)); //  FM HW LFO FREQ
-            data.Add(new PackData(null,YM2151[ChipID], EnmDataType.Normal, 0x19, 0x80, null)); //  FM PMD/VALUE
-            data.Add(new PackData(null,YM2151[ChipID], EnmDataType.Normal, 0x19, 0x00, null)); //  FM AMD/VALUE
-            data.Add(new PackData(null,YM2151[ChipID], EnmDataType.Normal, 0x1b, 0x00, null)); //  FM HW LFO WAVEFORM
+            data.Add(new PackData(null, YM2151[ChipID], EnmDataType.Normal, 0x0f, 0x00, null)); //  FM NOISE ENABLE/NOISE FREQ
+            data.Add(new PackData(null, YM2151[ChipID], EnmDataType.Normal, 0x18, 0x00, null)); //  FM HW LFO FREQ
+            data.Add(new PackData(null, YM2151[ChipID], EnmDataType.Normal, 0x19, 0x80, null)); //  FM PMD/VALUE
+            data.Add(new PackData(null, YM2151[ChipID], EnmDataType.Normal, 0x19, 0x00, null)); //  FM AMD/VALUE
+            data.Add(new PackData(null, YM2151[ChipID], EnmDataType.Normal, 0x1b, 0x00, null)); //  FM HW LFO WAVEFORM
 
             //FM HW LFO RESET
-            data.Add(new PackData(null,YM2151[ChipID], EnmDataType.Normal, 0x01, 0x02, null));
-            data.Add(new PackData(null,YM2151[ChipID], EnmDataType.Normal, 0x01, 0x00, null));
-                                  
-            data.Add(new PackData(null,YM2151[ChipID], EnmDataType.Normal, 0x10, 0x00, null)); // FM Timer-A(H)
-            data.Add(new PackData(null,YM2151[ChipID], EnmDataType.Normal, 0x11, 0x00, null)); // FM Timer-A(L)
-            data.Add(new PackData(null,YM2151[ChipID], EnmDataType.Normal, 0x12, 0x00, null)); // FM Timer-B
-            data.Add(new PackData(null,YM2151[ChipID], EnmDataType.Normal, 0x14, 0x00, null)); // FM Timer Control
+            data.Add(new PackData(null, YM2151[ChipID], EnmDataType.Normal, 0x01, 0x02, null));
+            data.Add(new PackData(null, YM2151[ChipID], EnmDataType.Normal, 0x01, 0x00, null));
+
+            data.Add(new PackData(null, YM2151[ChipID], EnmDataType.Normal, 0x10, 0x00, null)); // FM Timer-A(H)
+            data.Add(new PackData(null, YM2151[ChipID], EnmDataType.Normal, 0x11, 0x00, null)); // FM Timer-A(L)
+            data.Add(new PackData(null, YM2151[ChipID], EnmDataType.Normal, 0x12, 0x00, null)); // FM Timer-B
+            data.Add(new PackData(null, YM2151[ChipID], EnmDataType.Normal, 0x14, 0x00, null)); // FM Timer Control
 
             for (i = 0; i < 8; i++)
             {
                 //  FB/ALG/PAN
-                data.Add(new PackData(null,YM2151[ChipID], EnmDataType.Normal, 0x20 + i, 0x00, null));
+                data.Add(new PackData(null, YM2151[ChipID], EnmDataType.Normal, 0x20 + i, 0x00, null));
                 // KC                 
-                data.Add(new PackData(null,YM2151[ChipID], EnmDataType.Normal, 0x28 + i, 0x00, null));
+                data.Add(new PackData(null, YM2151[ChipID], EnmDataType.Normal, 0x28 + i, 0x00, null));
                 // KF                 
-                data.Add(new PackData(null,YM2151[ChipID], EnmDataType.Normal, 0x30 + i, 0x00, null));
+                data.Add(new PackData(null, YM2151[ChipID], EnmDataType.Normal, 0x30 + i, 0x00, null));
                 // PMS/AMS            
-                data.Add(new PackData(null,YM2151[ChipID], EnmDataType.Normal, 0x38 + i, 0x00, null));
+                data.Add(new PackData(null, YM2151[ChipID], EnmDataType.Normal, 0x38 + i, 0x00, null));
             }
             for (i = 0; i < 0x20; i++)
             {
                 // DT1/ML
-                data.Add(new PackData(null,YM2151[ChipID], EnmDataType.Normal, 0x40 + i, 0x00, null));
+                data.Add(new PackData(null, YM2151[ChipID], EnmDataType.Normal, 0x40 + i, 0x00, null));
                 // TL=127             
-                data.Add(new PackData(null,YM2151[ChipID], EnmDataType.Normal, 0x60 + i, 0x7f, null));
+                data.Add(new PackData(null, YM2151[ChipID], EnmDataType.Normal, 0x60 + i, 0x7f, null));
                 // KS/AR              
-                data.Add(new PackData(null,YM2151[ChipID], EnmDataType.Normal, 0x80 + i, 0x1F, null));
+                data.Add(new PackData(null, YM2151[ChipID], EnmDataType.Normal, 0x80 + i, 0x1F, null));
                 // AMD/D1R            
-                data.Add(new PackData(null,YM2151[ChipID], EnmDataType.Normal, 0xa0 + i, 0x00, null));
+                data.Add(new PackData(null, YM2151[ChipID], EnmDataType.Normal, 0xa0 + i, 0x00, null));
                 // DT2/D2R            
-                data.Add(new PackData(null,YM2151[ChipID], EnmDataType.Normal, 0xc0 + i, 0x00, null));
+                data.Add(new PackData(null, YM2151[ChipID], EnmDataType.Normal, 0xc0 + i, 0x00, null));
                 // D1L/RR             
-                data.Add(new PackData(null,YM2151[ChipID], EnmDataType.Normal, 0xe0 + i, 0x0F, null));
+                data.Add(new PackData(null, YM2151[ChipID], EnmDataType.Normal, 0xe0 + i, 0x0F, null));
             }
 
             return data;
@@ -3375,10 +3371,10 @@ namespace mml2vgmIDE
         {
             YM2151MaskFMCh[chipID][ch] = mask;
 
-            YM2151SetRegister(null,Counter, (byte)chipID, 0x60 + ch, YM2151FmRegister[chipID][0x60 + ch]);
-            YM2151SetRegister(null,Counter, (byte)chipID, 0x68 + ch, YM2151FmRegister[chipID][0x68 + ch]);
-            YM2151SetRegister(null,Counter, (byte)chipID, 0x70 + ch, YM2151FmRegister[chipID][0x70 + ch]);
-            YM2151SetRegister(null,Counter, (byte)chipID, 0x78 + ch, YM2151FmRegister[chipID][0x78 + ch]);
+            YM2151SetRegister(null, Counter, (byte)chipID, 0x60 + ch, YM2151FmRegister[chipID][0x60 + ch]);
+            YM2151SetRegister(null, Counter, (byte)chipID, 0x68 + ch, YM2151FmRegister[chipID][0x68 + ch]);
+            YM2151SetRegister(null, Counter, (byte)chipID, 0x70 + ch, YM2151FmRegister[chipID][0x70 + ch]);
+            YM2151SetRegister(null, Counter, (byte)chipID, 0x78 + ch, YM2151FmRegister[chipID][0x78 + ch]);
 
         }
 
@@ -3402,10 +3398,10 @@ namespace mml2vgmIDE
 
                 for (int c = 0; c < 8; c++)
                 {
-                    YM2151SetRegister(null,Counter, i, 0x60 + c, YM2151FmRegister[i][0x60 + c]);
-                    YM2151SetRegister(null,Counter, i, 0x68 + c, YM2151FmRegister[i][0x68 + c]);
-                    YM2151SetRegister(null,Counter, i, 0x70 + c, YM2151FmRegister[i][0x70 + c]);
-                    YM2151SetRegister(null,Counter, i, 0x78 + c, YM2151FmRegister[i][0x78 + c]);
+                    YM2151SetRegister(null, Counter, i, 0x60 + c, YM2151FmRegister[i][0x60 + c]);
+                    YM2151SetRegister(null, Counter, i, 0x68 + c, YM2151FmRegister[i][0x68 + c]);
+                    YM2151SetRegister(null, Counter, i, 0x70 + c, YM2151FmRegister[i][0x70 + c]);
+                    YM2151SetRegister(null, Counter, i, 0x78 + c, YM2151FmRegister[i][0x78 + c]);
                 }
             }
         }
@@ -3579,7 +3575,6 @@ namespace mml2vgmIDE
             //    scYM2203[Chip.Number].setRegister(dAddr, dData);
             //}
 
-            ch = -1;
 
             //FM ch<6
             if (Address == 0x28)
@@ -3608,18 +3603,18 @@ namespace mml2vgmIDE
 
         public void YM2203SetRegister(outDatum od, long Counter, int ChipID, int dAddr, int dData)
         {
-            enq(od,Counter, YM2203[ChipID], EnmDataType.Normal, dAddr, dData, null);
+            enq(od, Counter, YM2203[ChipID], EnmDataType.Normal, dAddr, dData, null);
         }
 
         public void YM2203SetRegister(outDatum od, long Counter, int ChipID, PackData[] data)
         {
-            enq(od,Counter, YM2203[ChipID], EnmDataType.Block, -1, -1, data);
+            enq(od, Counter, YM2203[ChipID], EnmDataType.Block, -1, -1, data);
         }
 
         public void YM2203SoftReset(long Counter, int ChipID)
         {
             List<PackData> data = YM2203MakeSoftReset(ChipID);
-            YM2203SetRegister(null,Counter, ChipID, data.ToArray());
+            YM2203SetRegister(null, Counter, ChipID, data.ToArray());
         }
 
         public List<PackData> YM2203MakeSoftReset(int chipID)
@@ -3628,9 +3623,9 @@ namespace mml2vgmIDE
             int i;
 
             // FM全チャネルキーオフ
-            data.Add(new PackData(null,YM2203[chipID], EnmDataType.Normal, 0x28, 0x00, null));
-            data.Add(new PackData(null,YM2203[chipID], EnmDataType.Normal, 0x28, 0x01, null));
-            data.Add(new PackData(null,YM2203[chipID], EnmDataType.Normal, 0x28, 0x02, null));
+            data.Add(new PackData(null, YM2203[chipID], EnmDataType.Normal, 0x28, 0x00, null));
+            data.Add(new PackData(null, YM2203[chipID], EnmDataType.Normal, 0x28, 0x01, null));
+            data.Add(new PackData(null, YM2203[chipID], EnmDataType.Normal, 0x28, 0x02, null));
 
             // FM TL=127
             for (i = 0x40; i < 0x4F + 1; i++)
@@ -3662,10 +3657,10 @@ namespace mml2vgmIDE
             {
                 data.Add(new PackData(null, YM2203[chipID], EnmDataType.Normal, i, 0xc0, null));
             }
-            data.Add(new PackData(null,YM2203[chipID], EnmDataType.Normal, 0x22, 0x00, null)); // HW LFO
-            data.Add(new PackData(null,YM2203[chipID], EnmDataType.Normal, 0x24, 0x00, null)); // Timer-A(1)
-            data.Add(new PackData(null,YM2203[chipID], EnmDataType.Normal, 0x25, 0x00, null)); // Timer-A(2)
-            data.Add(new PackData(null,YM2203[chipID], EnmDataType.Normal, 0x26, 0x00, null)); // Timer-B
+            data.Add(new PackData(null, YM2203[chipID], EnmDataType.Normal, 0x22, 0x00, null)); // HW LFO
+            data.Add(new PackData(null, YM2203[chipID], EnmDataType.Normal, 0x24, 0x00, null)); // Timer-A(1)
+            data.Add(new PackData(null, YM2203[chipID], EnmDataType.Normal, 0x25, 0x00, null)); // Timer-A(2)
+            data.Add(new PackData(null, YM2203[chipID], EnmDataType.Normal, 0x26, 0x00, null)); // Timer-B
             data.Add(new PackData(null, YM2203[chipID], EnmDataType.Normal, 0x27, 0x30, null)); // Timer Control
 
             // SSG 音程(2byte*3ch)
@@ -3675,7 +3670,7 @@ namespace mml2vgmIDE
             }
             data.Add(new PackData(null, YM2203[chipID], EnmDataType.Normal, 0x06, 0x00, null)); // SSG ノイズ周波数
             data.Add(new PackData(null, YM2203[chipID], EnmDataType.Normal, 0x07, 0x38, null)); // SSG ミキサ
-                                                       // SSG ボリューム(3ch)
+                                                                                                // SSG ボリューム(3ch)
             for (i = 0x08; i < 0x0A + 1; i++)
             {
                 data.Add(new PackData(null, YM2203[chipID], EnmDataType.Normal, i, 0x00, null));
@@ -3705,15 +3700,15 @@ namespace mml2vgmIDE
             int c = ch;
             if (ch < 3)
             {
-                YM2203SetRegister(null,Counter, (byte)chipID, 0x40 + c, fmRegisterYM2203[chipID][0x40 + c]);
-                YM2203SetRegister(null,Counter, (byte)chipID, 0x44 + c, fmRegisterYM2203[chipID][0x44 + c]);
-                YM2203SetRegister(null,Counter, (byte)chipID, 0x48 + c, fmRegisterYM2203[chipID][0x48 + c]);
-                YM2203SetRegister(null,Counter, (byte)chipID, 0x4c + c, fmRegisterYM2203[chipID][0x4c + c]);
+                YM2203SetRegister(null, Counter, (byte)chipID, 0x40 + c, fmRegisterYM2203[chipID][0x40 + c]);
+                YM2203SetRegister(null, Counter, (byte)chipID, 0x44 + c, fmRegisterYM2203[chipID][0x44 + c]);
+                YM2203SetRegister(null, Counter, (byte)chipID, 0x48 + c, fmRegisterYM2203[chipID][0x48 + c]);
+                YM2203SetRegister(null, Counter, (byte)chipID, 0x4c + c, fmRegisterYM2203[chipID][0x4c + c]);
 
             }
             else
             {
-                YM2203SetRegister(null,Counter, (byte)chipID, 0x08 + c - 3, fmRegisterYM2203[chipID][0x08 + c - 3]);
+                YM2203SetRegister(null, Counter, (byte)chipID, 0x08 + c - 3, fmRegisterYM2203[chipID][0x08 + c - 3]);
             }
         }
 
@@ -3745,10 +3740,10 @@ namespace mml2vgmIDE
                 nowYM2203FadeoutVol[i] = v;
                 for (int c = 0; c < 3; c++)
                 {
-                    YM2203SetRegister(null,Counter, i, 0x40 + c, fmRegisterYM2203[i][0x40 + c]);
-                    YM2203SetRegister(null,Counter, i, 0x44 + c, fmRegisterYM2203[i][0x44 + c]);
-                    YM2203SetRegister(null,Counter, i, 0x48 + c, fmRegisterYM2203[i][0x48 + c]);
-                    YM2203SetRegister(null,Counter, i, 0x4c + c, fmRegisterYM2203[i][0x4c + c]);
+                    YM2203SetRegister(null, Counter, i, 0x40 + c, fmRegisterYM2203[i][0x40 + c]);
+                    YM2203SetRegister(null, Counter, i, 0x44 + c, fmRegisterYM2203[i][0x44 + c]);
+                    YM2203SetRegister(null, Counter, i, 0x48 + c, fmRegisterYM2203[i][0x48 + c]);
+                    YM2203SetRegister(null, Counter, i, 0x4c + c, fmRegisterYM2203[i][0x4c + c]);
                 }
             }
         }
@@ -3889,7 +3884,6 @@ namespace mml2vgmIDE
             //    scYM2413[Chip.Number].setRegister(dAddr, dData);
             //}
 
-            ch = -1;
 
             //FM ch<18
             if (dAddr >= 0x20 && dAddr <= 0x28)
@@ -3902,18 +3896,18 @@ namespace mml2vgmIDE
 
         public void YM2413SetRegister(outDatum od, long Counter, int ChipID, int dAddr, int dData)
         {
-            enq(od,Counter, YM2413[ChipID], EnmDataType.Normal, dAddr, dData, null);
+            enq(od, Counter, YM2413[ChipID], EnmDataType.Normal, dAddr, dData, null);
         }
 
         public void YM2413SetRegister(outDatum od, long Counter, int ChipID, PackData[] data)
         {
-            enq(od,Counter, YM2413[ChipID], EnmDataType.Block, -1, -1, data);
+            enq(od, Counter, YM2413[ChipID], EnmDataType.Block, -1, -1, data);
         }
 
         public void YM2413SoftReset(long Counter, int ChipID)
         {
             List<PackData> data = YM2413MakeSoftReset(ChipID);
-            YM2413SetRegister(null,Counter, ChipID, data.ToArray());
+            YM2413SetRegister(null, Counter, ChipID, data.ToArray());
         }
 
         public List<PackData> YM2413MakeSoftReset(int chipID)
@@ -3941,11 +3935,11 @@ namespace mml2vgmIDE
 
             if (ch < 9)
             {
-                YM2413SetRegister(null,Counter, (byte)chipID, 0x20 + ch, fmRegisterYM2413[chipID][0x20 + ch]);
+                YM2413SetRegister(null, Counter, (byte)chipID, 0x20 + ch, fmRegisterYM2413[chipID][0x20 + ch]);
             }
             else if (ch < 14)
             {
-                YM2413SetRegister(null,Counter, (byte)chipID, 0x0e, fmRegisterYM2413[chipID][0x0e]);
+                YM2413SetRegister(null, Counter, (byte)chipID, 0x0e, fmRegisterYM2413[chipID][0x0e]);
             }
         }
 
@@ -3968,7 +3962,7 @@ namespace mml2vgmIDE
                 nowYM2413FadeoutVol[i] = v;
                 for (int c = 0; c < 9; c++)
                 {
-                    YM2413SetRegister(null,Counter, i, 0x30 + c, fmRegisterYM2413[i][0x30 + c]);
+                    YM2413SetRegister(null, Counter, i, 0x30 + c, fmRegisterYM2413[i][0x30 + c]);
                 }
             }
         }
@@ -4224,7 +4218,6 @@ namespace mml2vgmIDE
 
             Address = dPort * 0x100 + dAddr;
 
-            ch = -1;
 
             //FM ch<9
             if (Address == 0x28)
@@ -4281,24 +4274,24 @@ namespace mml2vgmIDE
                 dummyChip.Model = EnmVRModel.VirtualModel;
             }
 
-            if(dPort==-1 && dAddr == -1 && dData == -1)
+            if (dPort == -1 && dAddr == -1 && dData == -1)
             {
                 //ダミーデータ(演奏情報だけ流したい時向け)
                 enq(od, Counter, dummyChip, EnmDataType.Normal, -1, -1, null);
             }
             else
-                enq(od,Counter, dummyChip, EnmDataType.Normal, dPort * 0x100 + dAddr, dData, null);
+                enq(od, Counter, dummyChip, EnmDataType.Normal, dPort * 0x100 + dAddr, dData, null);
         }
 
         public void YM2608SetRegister(outDatum od, long Counter, Chip chip, PackData[] data)
         {
-            enq(od,Counter, chip, EnmDataType.Block, -1, -1, data);
+            enq(od, Counter, chip, EnmDataType.Block, -1, -1, data);
         }
 
         public void YM2608SoftReset(long Counter, int chipID)
         {
             List<PackData> data = YM2608MakeSoftReset(chipID);
-            YM2608SetRegister(null,Counter, YM2608[chipID], data.ToArray());
+            YM2608SetRegister(null, Counter, YM2608[chipID], data.ToArray());
         }
 
         public List<PackData> YM2608MakeSoftReset(int chipID)
@@ -4307,11 +4300,11 @@ namespace mml2vgmIDE
             int i;
 
             // FM全チャネルキーオフ
-            data.Add(new PackData(null,YM2608[chipID], EnmDataType.Normal, 0x28, 0x00, null));
-            data.Add(new PackData(null,YM2608[chipID], EnmDataType.Normal, 0x28, 0x01, null));
-            data.Add(new PackData(null,YM2608[chipID], EnmDataType.Normal, 0x28, 0x02, null));
-            data.Add(new PackData(null,YM2608[chipID], EnmDataType.Normal, 0x28, 0x04, null));
-            data.Add(new PackData(null,YM2608[chipID], EnmDataType.Normal, 0x28, 0x05, null));
+            data.Add(new PackData(null, YM2608[chipID], EnmDataType.Normal, 0x28, 0x00, null));
+            data.Add(new PackData(null, YM2608[chipID], EnmDataType.Normal, 0x28, 0x01, null));
+            data.Add(new PackData(null, YM2608[chipID], EnmDataType.Normal, 0x28, 0x02, null));
+            data.Add(new PackData(null, YM2608[chipID], EnmDataType.Normal, 0x28, 0x04, null));
+            data.Add(new PackData(null, YM2608[chipID], EnmDataType.Normal, 0x28, 0x05, null));
             data.Add(new PackData(null, YM2608[chipID], EnmDataType.Normal, 0x28, 0x06, null));
 
             // FM TL=127
@@ -4350,11 +4343,11 @@ namespace mml2vgmIDE
                 data.Add(new PackData(null, YM2608[chipID], EnmDataType.Normal, i, 0xc0, null));
                 data.Add(new PackData(null, YM2608[chipID], EnmDataType.Normal, 0x100 + i, 0xc0, null));
             }
-            data.Add(new PackData(null,YM2608[chipID], EnmDataType.Normal, 0x22, 0x00, null)); // HW LFO
-            data.Add(new PackData(null,YM2608[chipID], EnmDataType.Normal, 0x24, 0x00, null)); // Timer-A(1)
-            data.Add(new PackData(null,YM2608[chipID], EnmDataType.Normal, 0x25, 0x00, null)); // Timer-A(2)
-            data.Add(new PackData(null,YM2608[chipID], EnmDataType.Normal, 0x26, 0x00, null)); // Timer-B
-            data.Add(new PackData(null,YM2608[chipID], EnmDataType.Normal, 0x27, 0x30, null)); // Timer Control
+            data.Add(new PackData(null, YM2608[chipID], EnmDataType.Normal, 0x22, 0x00, null)); // HW LFO
+            data.Add(new PackData(null, YM2608[chipID], EnmDataType.Normal, 0x24, 0x00, null)); // Timer-A(1)
+            data.Add(new PackData(null, YM2608[chipID], EnmDataType.Normal, 0x25, 0x00, null)); // Timer-A(2)
+            data.Add(new PackData(null, YM2608[chipID], EnmDataType.Normal, 0x26, 0x00, null)); // Timer-B
+            data.Add(new PackData(null, YM2608[chipID], EnmDataType.Normal, 0x27, 0x30, null)); // Timer Control
             data.Add(new PackData(null, YM2608[chipID], EnmDataType.Normal, 0x29, 0x80, null)); // FM4-6 Enable
 
             // SSG 音程(2byte*3ch)
@@ -4364,7 +4357,7 @@ namespace mml2vgmIDE
             }
             data.Add(new PackData(null, YM2608[chipID], EnmDataType.Normal, 0x06, 0x00, null)); // SSG ノイズ周波数
             data.Add(new PackData(null, YM2608[chipID], EnmDataType.Normal, 0x07, 0x38, null)); // SSG ミキサ
-                                                                                          // SSG ボリューム(3ch)
+                                                                                                // SSG ボリューム(3ch)
             for (i = 0x08; i < 0x0A + 1; i++)
             {
                 data.Add(new PackData(null, YM2608[chipID], EnmDataType.Normal, i, 0x00, null));
@@ -4376,18 +4369,18 @@ namespace mml2vgmIDE
             }
 
             // RHYTHM
-            data.Add(new PackData(null,YM2608[chipID], EnmDataType.Normal, 0x10, 0xBF, null)); // 強制発音停止
-            data.Add(new PackData(null,YM2608[chipID], EnmDataType.Normal, 0x11, 0x00, null)); // Total Level
-            data.Add(new PackData(null,YM2608[chipID], EnmDataType.Normal, 0x18, 0x00, null)); // BD音量
-            data.Add(new PackData(null,YM2608[chipID], EnmDataType.Normal, 0x19, 0x00, null)); // SD音量
-            data.Add(new PackData(null,YM2608[chipID], EnmDataType.Normal, 0x1A, 0x00, null)); // CYM音量
-            data.Add(new PackData(null,YM2608[chipID], EnmDataType.Normal, 0x1B, 0x00, null)); // HH音量
-            data.Add(new PackData(null,YM2608[chipID], EnmDataType.Normal, 0x1C, 0x00, null)); // TOM音量
-            data.Add(new PackData(null,YM2608[chipID], EnmDataType.Normal, 0x1D, 0x00, null)); // RIM音量
-                                  
+            data.Add(new PackData(null, YM2608[chipID], EnmDataType.Normal, 0x10, 0xBF, null)); // 強制発音停止
+            data.Add(new PackData(null, YM2608[chipID], EnmDataType.Normal, 0x11, 0x00, null)); // Total Level
+            data.Add(new PackData(null, YM2608[chipID], EnmDataType.Normal, 0x18, 0x00, null)); // BD音量
+            data.Add(new PackData(null, YM2608[chipID], EnmDataType.Normal, 0x19, 0x00, null)); // SD音量
+            data.Add(new PackData(null, YM2608[chipID], EnmDataType.Normal, 0x1A, 0x00, null)); // CYM音量
+            data.Add(new PackData(null, YM2608[chipID], EnmDataType.Normal, 0x1B, 0x00, null)); // HH音量
+            data.Add(new PackData(null, YM2608[chipID], EnmDataType.Normal, 0x1C, 0x00, null)); // TOM音量
+            data.Add(new PackData(null, YM2608[chipID], EnmDataType.Normal, 0x1D, 0x00, null)); // RIM音量
+
             // ADPCM              
-            data.Add(new PackData(null,YM2608[chipID], EnmDataType.Normal, 0x100 + 0x00, 0x21, null)); // ADPCMリセット
-            data.Add(new PackData(null,YM2608[chipID], EnmDataType.Normal, 0x100 + 0x01, 0x06, null)); // ADPCM消音
+            data.Add(new PackData(null, YM2608[chipID], EnmDataType.Normal, 0x100 + 0x00, 0x21, null)); // ADPCMリセット
+            data.Add(new PackData(null, YM2608[chipID], EnmDataType.Normal, 0x100 + 0x01, 0x06, null)); // ADPCM消音
             data.Add(new PackData(null, YM2608[chipID], EnmDataType.Normal, 0x100 + 0x10, 0x9C, null)); // FLAGリセット        
 
             return data;
@@ -4411,22 +4404,22 @@ namespace mml2vgmIDE
 
             if (ch < 6)
             {
-                YM2608SetRegister(null,Counter, ChipID, p, 0x40 + c, fmRegisterYM2608[ChipID][p][0x40 + c]);
-                YM2608SetRegister(null,Counter, ChipID, p, 0x44 + c, fmRegisterYM2608[ChipID][p][0x44 + c]);
-                YM2608SetRegister(null,Counter, ChipID, p, 0x48 + c, fmRegisterYM2608[ChipID][p][0x48 + c]);
-                YM2608SetRegister(null,Counter, ChipID, p, 0x4c + c, fmRegisterYM2608[ChipID][p][0x4c + c]);
+                YM2608SetRegister(null, Counter, ChipID, p, 0x40 + c, fmRegisterYM2608[ChipID][p][0x40 + c]);
+                YM2608SetRegister(null, Counter, ChipID, p, 0x44 + c, fmRegisterYM2608[ChipID][p][0x44 + c]);
+                YM2608SetRegister(null, Counter, ChipID, p, 0x48 + c, fmRegisterYM2608[ChipID][p][0x48 + c]);
+                YM2608SetRegister(null, Counter, ChipID, p, 0x4c + c, fmRegisterYM2608[ChipID][p][0x4c + c]);
 
             }
             else if (ch < 9)
             {
-                YM2608SetRegister(null,Counter, ChipID, 0, 0x08 + ch - 6, fmRegisterYM2608[ChipID][0][0x08 + ch - 6]);
+                YM2608SetRegister(null, Counter, ChipID, 0, 0x08 + ch - 6, fmRegisterYM2608[ChipID][0][0x08 + ch - 6]);
             }
             else if (ch < 12)
             {
-                YM2608SetRegister(null,Counter, ChipID, 0, 0x40 + 2, fmRegisterYM2608[ChipID][0][0x40 + 2]);
-                YM2608SetRegister(null,Counter, ChipID, 0, 0x44 + 2, fmRegisterYM2608[ChipID][0][0x44 + 2]);
-                YM2608SetRegister(null,Counter, ChipID, 0, 0x48 + 2, fmRegisterYM2608[ChipID][0][0x48 + 2]);
-                YM2608SetRegister(null,Counter, ChipID, 0, 0x4c + 2, fmRegisterYM2608[ChipID][0][0x4c + 2]);
+                YM2608SetRegister(null, Counter, ChipID, 0, 0x40 + 2, fmRegisterYM2608[ChipID][0][0x40 + 2]);
+                YM2608SetRegister(null, Counter, ChipID, 0, 0x44 + 2, fmRegisterYM2608[ChipID][0][0x44 + 2]);
+                YM2608SetRegister(null, Counter, ChipID, 0, 0x48 + 2, fmRegisterYM2608[ChipID][0][0x48 + 2]);
+                YM2608SetRegister(null, Counter, ChipID, 0, 0x4c + 2, fmRegisterYM2608[ChipID][0][0x4c + 2]);
 
             }
         }
@@ -4453,23 +4446,23 @@ namespace mml2vgmIDE
                 {
                     for (int c = 0; c < 3; c++)
                     {
-                        YM2608SetRegister(null,Counter, i, p, 0x40 + c, fmRegisterYM2608[i][p][0x40 + c]);
-                        YM2608SetRegister(null,Counter, i, p, 0x44 + c, fmRegisterYM2608[i][p][0x44 + c]);
-                        YM2608SetRegister(null,Counter, i, p, 0x48 + c, fmRegisterYM2608[i][p][0x48 + c]);
-                        YM2608SetRegister(null,Counter, i, p, 0x4c + c, fmRegisterYM2608[i][p][0x4c + c]);
+                        YM2608SetRegister(null, Counter, i, p, 0x40 + c, fmRegisterYM2608[i][p][0x40 + c]);
+                        YM2608SetRegister(null, Counter, i, p, 0x44 + c, fmRegisterYM2608[i][p][0x44 + c]);
+                        YM2608SetRegister(null, Counter, i, p, 0x48 + c, fmRegisterYM2608[i][p][0x48 + c]);
+                        YM2608SetRegister(null, Counter, i, p, 0x4c + c, fmRegisterYM2608[i][p][0x4c + c]);
                     }
                 }
 
                 //ssg
-                YM2608SetRegister(null,Counter, i, 0, 0x08, fmRegisterYM2608[i][0][0x08]);
-                YM2608SetRegister(null,Counter, i, 0, 0x09, fmRegisterYM2608[i][0][0x09]);
-                YM2608SetRegister(null,Counter, i, 0, 0x0a, fmRegisterYM2608[i][0][0x0a]);
-                                           
+                YM2608SetRegister(null, Counter, i, 0, 0x08, fmRegisterYM2608[i][0][0x08]);
+                YM2608SetRegister(null, Counter, i, 0, 0x09, fmRegisterYM2608[i][0][0x09]);
+                YM2608SetRegister(null, Counter, i, 0, 0x0a, fmRegisterYM2608[i][0][0x0a]);
+
                 //rhythm                   
-                YM2608SetRegister(null,Counter, i, 0, 0x11, fmRegisterYM2608[i][0][0x11]);
-                                           
+                YM2608SetRegister(null, Counter, i, 0, 0x11, fmRegisterYM2608[i][0][0x11]);
+
                 //adpcm                    
-                YM2608SetRegister(null,Counter, i, 1, 0x0b, fmRegisterYM2608[i][1][0x0b]);
+                YM2608SetRegister(null, Counter, i, 1, 0x0b, fmRegisterYM2608[i][1][0x0b]);
             }
         }
 
@@ -4541,7 +4534,7 @@ namespace mml2vgmIDE
 
                             if (bSend)
                             {
-                                mds.WriteYM2610(Chip.Index,(byte)Chip.Number, (byte)(address >> 8), (byte)address, (byte)data);
+                                mds.WriteYM2610(Chip.Index, (byte)Chip.Number, (byte)(address >> 8), (byte)address, (byte)data);
                             }
                         }
                     }
@@ -4721,7 +4714,7 @@ namespace mml2vgmIDE
 
             fmRegisterYM2610[Chip.Number][dPort][dAddr] = dData;
 
-            if ((Chip.Model == EnmVRModel.RealModel && (ctYM2610[Chip.Number].UseScci || ctYM2610[Chip.Number].UseScci2)) || (Chip.Model == EnmVRModel.VirtualModel && !ctYM2610[Chip.Number ].UseScci))
+            if ((Chip.Model == EnmVRModel.RealModel && (ctYM2610[Chip.Number].UseScci || ctYM2610[Chip.Number].UseScci2)) || (Chip.Model == EnmVRModel.VirtualModel && !ctYM2610[Chip.Number].UseScci))
             {
                 //fmRegisterYM2610[dPort][dAddr] = dData;
                 if (dPort == 0 && dAddr == 0x28)
@@ -4729,25 +4722,25 @@ namespace mml2vgmIDE
                     ch = (dData & 0x3) + ((dData & 0x4) > 0 ? 3 : 0);
                     if (ch >= 0 && ch < 6)// && (dData & 0xf0) > 0)
                     {
-                        if (ch != 2 || (fmRegisterYM2610[Chip.Number ][0][0x27] & 0xc0) != 0x40)
+                        if (ch != 2 || (fmRegisterYM2610[Chip.Number][0][0x27] & 0xc0) != 0x40)
                         {
                             if ((dData & 0xf0) != 0)
                             {
-                                fmKeyOnYM2610[Chip.Number ][ch] = (dData & 0xf0) | 1;
-                                fmVolYM2610[Chip.Number ][ch] = 256 * 6;
+                                fmKeyOnYM2610[Chip.Number][ch] = (dData & 0xf0) | 1;
+                                fmVolYM2610[Chip.Number][ch] = 256 * 6;
                             }
                             else
                             {
-                                fmKeyOnYM2610[Chip.Number ][ch] &= 0xfe;
+                                fmKeyOnYM2610[Chip.Number][ch] &= 0xfe;
                             }
                         }
                         else
                         {
-                            fmKeyOnYM2610[Chip.Number ][2] = dData & 0xf0;
-                            if ((dData & 0x10) > 0) fmCh3SlotVolYM2610[Chip.Number ][0] = 256 * 6;
-                            if ((dData & 0x20) > 0) fmCh3SlotVolYM2610[Chip.Number ][1] = 256 * 6;
-                            if ((dData & 0x40) > 0) fmCh3SlotVolYM2610[Chip.Number ][2] = 256 * 6;
-                            if ((dData & 0x80) > 0) fmCh3SlotVolYM2610[Chip.Number ][3] = 256 * 6;
+                            fmKeyOnYM2610[Chip.Number][2] = dData & 0xf0;
+                            if ((dData & 0x10) > 0) fmCh3SlotVolYM2610[Chip.Number][0] = 256 * 6;
+                            if ((dData & 0x20) > 0) fmCh3SlotVolYM2610[Chip.Number][1] = 256 * 6;
+                            if ((dData & 0x40) > 0) fmCh3SlotVolYM2610[Chip.Number][2] = 256 * 6;
+                            if ((dData & 0x80) > 0) fmCh3SlotVolYM2610[Chip.Number][3] = 256 * 6;
                         }
                     }
                 }
@@ -4757,15 +4750,15 @@ namespace mml2vgmIDE
                 {
                     if ((dData & 0x80) != 0)
                     {
-                        int p = (fmRegisterYM2610[Chip.Number ][0][0x11] & 0xc0) >> 6;
+                        int p = (fmRegisterYM2610[Chip.Number][0][0x11] & 0xc0) >> 6;
                         p = p == 0 ? 3 : p;
-                        if (fmVolYM2610AdpcmPan[Chip.Number ] != p)
-                            fmVolYM2610AdpcmPan[Chip.Number ] = p;
+                        if (fmVolYM2610AdpcmPan[Chip.Number] != p)
+                            fmVolYM2610AdpcmPan[Chip.Number] = p;
 
                         //if (fmVolYM2610AdpcmPan > 0)
                         //{
-                        fmVolYM2610Adpcm[Chip.Number ][0] = (int)((256 * 6.0 * fmRegisterYM2610[Chip.Number ][0][0x1b] / 64.0) * ((fmVolYM2610AdpcmPan[Chip.Number ] & 0x02) > 0 ? 1 : 0));
-                        fmVolYM2610Adpcm[Chip.Number ][1] = (int)((256 * 6.0 * fmRegisterYM2610[Chip.Number ][0][0x1b] / 64.0) * ((fmVolYM2610AdpcmPan[Chip.Number ] & 0x01) > 0 ? 1 : 0));
+                        fmVolYM2610Adpcm[Chip.Number][0] = (int)((256 * 6.0 * fmRegisterYM2610[Chip.Number][0][0x1b] / 64.0) * ((fmVolYM2610AdpcmPan[Chip.Number] & 0x02) > 0 ? 1 : 0));
+                        fmVolYM2610Adpcm[Chip.Number][1] = (int)((256 * 6.0 * fmRegisterYM2610[Chip.Number][0][0x1b] / 64.0) * ((fmVolYM2610AdpcmPan[Chip.Number] & 0x01) > 0 ? 1 : 0));
                         //                        System.Console.WriteLine("{0:X2}:{1:X2}", 0x09, fmRegisterYM2610[1][0x09]);
                         //                        System.Console.WriteLine("{0:X2}:{1:X2}", 0x0A, fmRegisterYM2610[1][0x0A]);
                         //}
@@ -4777,15 +4770,15 @@ namespace mml2vgmIDE
                 {
                     if ((dData & 0x80) == 0)
                     {
-                        int tl = fmRegisterYM2610[Chip.Number ][1][0x01] & 0x3f;
+                        int tl = fmRegisterYM2610[Chip.Number][1][0x01] & 0x3f;
                         for (int i = 0; i < 6; i++)
                         {
                             if ((dData & (0x1 << i)) > 0)
                             {
-                                int il = fmRegisterYM2610[Chip.Number ][1][0x08 + i] & 0x1f;
-                                int pan = (fmRegisterYM2610[Chip.Number ][1][0x08 + i] & 0xc0) >> 6;
-                                fmVolYM2610Rhythm[Chip.Number ][i][0] = (int)(256 * 6 * ((tl * il) >> 4) / 127.0) * ((pan & 2) > 0 ? 1 : 0);
-                                fmVolYM2610Rhythm[Chip.Number ][i][1] = (int)(256 * 6 * ((tl * il) >> 4) / 127.0) * ((pan & 1) > 0 ? 1 : 0);
+                                int il = fmRegisterYM2610[Chip.Number][1][0x08 + i] & 0x1f;
+                                int pan = (fmRegisterYM2610[Chip.Number][1][0x08 + i] & 0xc0) >> 6;
+                                fmVolYM2610Rhythm[Chip.Number][i][0] = (int)(256 * 6 * ((tl * il) >> 4) / 127.0) * ((pan & 2) > 0 ? 1 : 0);
+                                fmVolYM2610Rhythm[Chip.Number][i][1] = (int)(256 * 6 * ((tl * il) >> 4) / 127.0) * ((pan & 1) > 0 ? 1 : 0);
                             }
                         }
                     }
@@ -4834,23 +4827,23 @@ namespace mml2vgmIDE
             //ssg level
             if (dPort == 0 && (dAddr == 0x08 || dAddr == 0x09 || dAddr == 0x0a))
             {
-                int d = nowYM2610FadeoutVol[Chip.Number ] >> 3;
+                int d = nowYM2610FadeoutVol[Chip.Number] >> 3;
                 dData = Math.Max(dData - d, 0);
-                dData = maskFMChYM2610[Chip.Number ][dAddr - 0x08 + 6] ? 0 : dData;
+                dData = maskFMChYM2610[Chip.Number][dAddr - 0x08 + 6] ? 0 : dData;
             }
 
             //rhythm level
             if (dPort == 1 && dAddr == 0x01)
             {
-                int d = nowYM2610FadeoutVol[Chip.Number ] >> 1;
+                int d = nowYM2610FadeoutVol[Chip.Number] >> 1;
                 dData = Math.Max(dData - d, 0);
-                dData = maskFMChYM2610[Chip.Number ][12] ? 0 : dData;
+                dData = maskFMChYM2610[Chip.Number][12] ? 0 : dData;
             }
 
             //Rhythm
             if (dPort == 1 && dAddr == 0x00)
             {
-                if (maskFMChYM2610[Chip.Number ][12])
+                if (maskFMChYM2610[Chip.Number][12])
                 {
                     dData = 0;
                 }
@@ -4859,15 +4852,15 @@ namespace mml2vgmIDE
             //adpcm level
             if (dPort == 0 && dAddr == 0x1b)
             {
-                int d = nowYM2610FadeoutVol[Chip.Number ] * 2;
+                int d = nowYM2610FadeoutVol[Chip.Number] * 2;
                 dData = Math.Max(dData - d, 0);
-                dData = maskFMChYM2610[Chip.Number ][13] ? 0 : dData;
+                dData = maskFMChYM2610[Chip.Number][13] ? 0 : dData;
             }
 
             //adpcm start
             if (dPort == 0 && dAddr == 0x10)
             {
-                if ((dData & 0x80) != 0 && maskFMChYM2610[Chip.Number ][13])
+                if ((dData & 0x80) != 0 && maskFMChYM2610[Chip.Number][13])
                 {
                     dData &= 0x7f;
                 }
@@ -4911,7 +4904,6 @@ namespace mml2vgmIDE
             //    }
             //}
 
-            ch = -1;
 
             //FM ch<9
             if (Address == 0x28)
@@ -4965,34 +4957,34 @@ namespace mml2vgmIDE
 
             int address = dPort * 0x100 + dAddr;
             if ((
-                (address >= 0x100 && address <= 0x12d) 
-                || (address >= 0x010 && address <= 0x01c) 
+                (address >= 0x100 && address <= 0x12d)
+                || (address >= 0x010 && address <= 0x01c)
                 //|| ((address >= 0x200 && address <= 0x204) || address == 0x210)
-                ) 
+                )
                 && ctYM2610[0].OnlyPCMEmulation)
             {
                 dummyChip.Model = EnmVRModel.VirtualModel;
             }
 
-            enq(od,Counter, dummyChip, EnmDataType.Normal, dPort * 0x100 + dAddr, dData, null);
+            enq(od, Counter, dummyChip, EnmDataType.Normal, dPort * 0x100 + dAddr, dData, null);
             //enq(Counter, YM2610[ChipID], EnmDataType.Normal, dPort * 0x100 + dAddr, dData, null);
         }
 
         public void YM2610SetRegister(outDatum od, long Counter, int ChipID, PackData[] data)
         {
-            enq(null,Counter, YM2610[ChipID], EnmDataType.Block, -1, -1, data);
+            enq(null, Counter, YM2610[ChipID], EnmDataType.Block, -1, -1, data);
         }
 
-        public void YM2610WriteSetAdpcmA(outDatum od, long Counter,int ChipID, byte[] ym2610AdpcmA)
+        public void YM2610WriteSetAdpcmA(outDatum od, long Counter, int ChipID, byte[] ym2610AdpcmA)
         {
             dummyChip.Move(YM2610[ChipID]);
-            
+
             if (ctYM2610[0].OnlyPCMEmulation)
             {
                 dummyChip.Model = EnmVRModel.VirtualModel;
             }
 
-            enq(od,Counter, dummyChip, EnmDataType.Block, -1, -1, ym2610AdpcmA );
+            enq(od, Counter, dummyChip, EnmDataType.Block, -1, -1, ym2610AdpcmA);
 
         }
 
@@ -5005,13 +4997,13 @@ namespace mml2vgmIDE
                 dummyChip.Model = EnmVRModel.VirtualModel;
             }
 
-            enq(od,Counter, dummyChip, EnmDataType.Block, -1, -2, ym2610AdpcmB);
+            enq(od, Counter, dummyChip, EnmDataType.Block, -1, -2, ym2610AdpcmB);
         }
 
         public void YM2610SoftReset(long Counter, int chipID)
         {
             List<PackData> data = YM2610MakeSoftReset(chipID);
-            YM2610SetRegister(null,Counter, chipID, data.ToArray());
+            YM2610SetRegister(null, Counter, chipID, data.ToArray());
         }
 
         public List<PackData> YM2610MakeSoftReset(int chipID)
@@ -5020,11 +5012,11 @@ namespace mml2vgmIDE
             int i;
 
             // FM全チャネルキーオフ
-            data.Add(new PackData(null,YM2610[chipID], EnmDataType.Normal, 0x28, 0x00, null));
-            data.Add(new PackData(null,YM2610[chipID], EnmDataType.Normal, 0x28, 0x01, null));
-            data.Add(new PackData(null,YM2610[chipID], EnmDataType.Normal, 0x28, 0x02, null));
-            data.Add(new PackData(null,YM2610[chipID], EnmDataType.Normal, 0x28, 0x04, null));
-            data.Add(new PackData(null,YM2610[chipID], EnmDataType.Normal, 0x28, 0x05, null));
+            data.Add(new PackData(null, YM2610[chipID], EnmDataType.Normal, 0x28, 0x00, null));
+            data.Add(new PackData(null, YM2610[chipID], EnmDataType.Normal, 0x28, 0x01, null));
+            data.Add(new PackData(null, YM2610[chipID], EnmDataType.Normal, 0x28, 0x02, null));
+            data.Add(new PackData(null, YM2610[chipID], EnmDataType.Normal, 0x28, 0x04, null));
+            data.Add(new PackData(null, YM2610[chipID], EnmDataType.Normal, 0x28, 0x05, null));
             data.Add(new PackData(null, YM2610[chipID], EnmDataType.Normal, 0x28, 0x06, null));
 
             // FM TL=127
@@ -5063,11 +5055,11 @@ namespace mml2vgmIDE
                 data.Add(new PackData(null, YM2610[chipID], EnmDataType.Normal, i, 0xc0, null));
                 data.Add(new PackData(null, YM2610[chipID], EnmDataType.Normal, 0x100 + i, 0xc0, null));
             }
-            data.Add(new PackData(null,YM2610[chipID], EnmDataType.Normal, 0x22, 0x00, null)); // HW LFO
-            data.Add(new PackData(null,YM2610[chipID], EnmDataType.Normal, 0x24, 0x00, null)); // Timer-A(1)
-            data.Add(new PackData(null,YM2610[chipID], EnmDataType.Normal, 0x25, 0x00, null)); // Timer-A(2)
-            data.Add(new PackData(null,YM2610[chipID], EnmDataType.Normal, 0x26, 0x00, null)); // Timer-B
-            data.Add(new PackData(null,YM2610[chipID], EnmDataType.Normal, 0x27, 0x30, null)); // Timer Control
+            data.Add(new PackData(null, YM2610[chipID], EnmDataType.Normal, 0x22, 0x00, null)); // HW LFO
+            data.Add(new PackData(null, YM2610[chipID], EnmDataType.Normal, 0x24, 0x00, null)); // Timer-A(1)
+            data.Add(new PackData(null, YM2610[chipID], EnmDataType.Normal, 0x25, 0x00, null)); // Timer-A(2)
+            data.Add(new PackData(null, YM2610[chipID], EnmDataType.Normal, 0x26, 0x00, null)); // Timer-B
+            data.Add(new PackData(null, YM2610[chipID], EnmDataType.Normal, 0x27, 0x30, null)); // Timer Control
             data.Add(new PackData(null, YM2610[chipID], EnmDataType.Normal, 0x29, 0x80, null)); // FM4-6 Enable
 
             // SSG 音程(2byte*3ch)
@@ -5077,7 +5069,7 @@ namespace mml2vgmIDE
             }
             data.Add(new PackData(null, YM2610[chipID], EnmDataType.Normal, 0x06, 0x00, null)); // SSG ノイズ周波数
             data.Add(new PackData(null, YM2610[chipID], EnmDataType.Normal, 0x07, 0x38, null)); // SSG ミキサ
-                                                                                          // SSG ボリューム(3ch)
+                                                                                                // SSG ボリューム(3ch)
             for (i = 0x08; i < 0x0A + 1; i++)
             {
                 data.Add(new PackData(null, YM2610[chipID], EnmDataType.Normal, i, 0x00, null));
@@ -5089,18 +5081,18 @@ namespace mml2vgmIDE
             }
 
             // ADPCM-A
-            data.Add(new PackData(null,YM2610[chipID], EnmDataType.Normal, 0x100 + 0x00, 0xBF, null)); // 強制発音停止
-            data.Add(new PackData(null,YM2610[chipID], EnmDataType.Normal, 0x100 + 0x01, 0x00, null)); // Total Level
-            data.Add(new PackData(null,YM2610[chipID], EnmDataType.Normal, 0x100 + 0x08, 0x00, null)); // BD音量
-            data.Add(new PackData(null,YM2610[chipID], EnmDataType.Normal, 0x100 + 0x09, 0x00, null)); // SD音量
-            data.Add(new PackData(null,YM2610[chipID], EnmDataType.Normal, 0x100 + 0x0A, 0x00, null)); // CYM音量
-            data.Add(new PackData(null,YM2610[chipID], EnmDataType.Normal, 0x100 + 0x0B, 0x00, null)); // HH音量
-            data.Add(new PackData(null,YM2610[chipID], EnmDataType.Normal, 0x100 + 0x0C, 0x00, null)); // TOM音量
+            data.Add(new PackData(null, YM2610[chipID], EnmDataType.Normal, 0x100 + 0x00, 0xBF, null)); // 強制発音停止
+            data.Add(new PackData(null, YM2610[chipID], EnmDataType.Normal, 0x100 + 0x01, 0x00, null)); // Total Level
+            data.Add(new PackData(null, YM2610[chipID], EnmDataType.Normal, 0x100 + 0x08, 0x00, null)); // BD音量
+            data.Add(new PackData(null, YM2610[chipID], EnmDataType.Normal, 0x100 + 0x09, 0x00, null)); // SD音量
+            data.Add(new PackData(null, YM2610[chipID], EnmDataType.Normal, 0x100 + 0x0A, 0x00, null)); // CYM音量
+            data.Add(new PackData(null, YM2610[chipID], EnmDataType.Normal, 0x100 + 0x0B, 0x00, null)); // HH音量
+            data.Add(new PackData(null, YM2610[chipID], EnmDataType.Normal, 0x100 + 0x0C, 0x00, null)); // TOM音量
             data.Add(new PackData(null, YM2610[chipID], EnmDataType.Normal, 0x100 + 0x0D, 0x00, null)); // RIM音量
 
             // ADPCM-B
-            data.Add(new PackData(null,YM2610[chipID], EnmDataType.Normal, 0x000 + 0x10, 0x01, null)); // ADPCMリセット
-            data.Add(new PackData(null,YM2610[chipID], EnmDataType.Normal, 0x000 + 0x1B, 0x00, null)); // ADPCM消音
+            data.Add(new PackData(null, YM2610[chipID], EnmDataType.Normal, 0x000 + 0x10, 0x01, null)); // ADPCMリセット
+            data.Add(new PackData(null, YM2610[chipID], EnmDataType.Normal, 0x000 + 0x1B, 0x00, null)); // ADPCM消音
             data.Add(new PackData(null, YM2610[chipID], EnmDataType.Normal, 0x000 + 0x1C, 0x00, null)); // FLAGリセット        
 
             return data;
@@ -5122,22 +5114,22 @@ namespace mml2vgmIDE
 
             if (ch < 6)
             {
-                YM2610SetRegister(null,Counter, ChipID, p, 0x40 + c, fmRegisterYM2610[ChipID][p][0x40 + c]);
-                YM2610SetRegister(null,Counter, ChipID, p, 0x44 + c, fmRegisterYM2610[ChipID][p][0x44 + c]);
-                YM2610SetRegister(null,Counter, ChipID, p, 0x48 + c, fmRegisterYM2610[ChipID][p][0x48 + c]);
-                YM2610SetRegister(null,Counter, ChipID, p, 0x4c + c, fmRegisterYM2610[ChipID][p][0x4c + c]);
+                YM2610SetRegister(null, Counter, ChipID, p, 0x40 + c, fmRegisterYM2610[ChipID][p][0x40 + c]);
+                YM2610SetRegister(null, Counter, ChipID, p, 0x44 + c, fmRegisterYM2610[ChipID][p][0x44 + c]);
+                YM2610SetRegister(null, Counter, ChipID, p, 0x48 + c, fmRegisterYM2610[ChipID][p][0x48 + c]);
+                YM2610SetRegister(null, Counter, ChipID, p, 0x4c + c, fmRegisterYM2610[ChipID][p][0x4c + c]);
 
             }
             else if (ch < 9)
             {
-                YM2610SetRegister(null,Counter, ChipID, 0, 0x08 + ch - 6, fmRegisterYM2610[ChipID][0][0x08 + ch - 6]);
-            }                     
-            else if (ch < 12)     
-            {                     
-                YM2610SetRegister(null,Counter, ChipID, 0, 0x40 + 2, fmRegisterYM2610[ChipID][0][0x40 + 2]);
-                YM2610SetRegister(null,Counter, ChipID, 0, 0x44 + 2, fmRegisterYM2610[ChipID][0][0x44 + 2]);
-                YM2610SetRegister(null,Counter, ChipID, 0, 0x48 + 2, fmRegisterYM2610[ChipID][0][0x48 + 2]);
-                YM2610SetRegister(null,Counter, ChipID, 0, 0x4c + 2, fmRegisterYM2610[ChipID][0][0x4c + 2]);
+                YM2610SetRegister(null, Counter, ChipID, 0, 0x08 + ch - 6, fmRegisterYM2610[ChipID][0][0x08 + ch - 6]);
+            }
+            else if (ch < 12)
+            {
+                YM2610SetRegister(null, Counter, ChipID, 0, 0x40 + 2, fmRegisterYM2610[ChipID][0][0x40 + 2]);
+                YM2610SetRegister(null, Counter, ChipID, 0, 0x44 + 2, fmRegisterYM2610[ChipID][0][0x44 + 2]);
+                YM2610SetRegister(null, Counter, ChipID, 0, 0x48 + 2, fmRegisterYM2610[ChipID][0][0x48 + 2]);
+                YM2610SetRegister(null, Counter, ChipID, 0, 0x4c + 2, fmRegisterYM2610[ChipID][0][0x4c + 2]);
 
             }
         }
@@ -5164,23 +5156,23 @@ namespace mml2vgmIDE
                 {
                     for (int c = 0; c < 3; c++)
                     {
-                        YM2610SetRegister(null,Counter, i, p, 0x40 + c, fmRegisterYM2610[i][p][0x40 + c]);
-                        YM2610SetRegister(null,Counter, i, p, 0x44 + c, fmRegisterYM2610[i][p][0x44 + c]);
-                        YM2610SetRegister(null,Counter, i, p, 0x48 + c, fmRegisterYM2610[i][p][0x48 + c]);
-                        YM2610SetRegister(null,Counter, i, p, 0x4c + c, fmRegisterYM2610[i][p][0x4c + c]);
+                        YM2610SetRegister(null, Counter, i, p, 0x40 + c, fmRegisterYM2610[i][p][0x40 + c]);
+                        YM2610SetRegister(null, Counter, i, p, 0x44 + c, fmRegisterYM2610[i][p][0x44 + c]);
+                        YM2610SetRegister(null, Counter, i, p, 0x48 + c, fmRegisterYM2610[i][p][0x48 + c]);
+                        YM2610SetRegister(null, Counter, i, p, 0x4c + c, fmRegisterYM2610[i][p][0x4c + c]);
                     }
                 }
 
                 //ssg
-                YM2610SetRegister(null,Counter, i, 0, 0x08, fmRegisterYM2610[i][0][0x08]);
-                YM2610SetRegister(null,Counter, i, 0, 0x09, fmRegisterYM2610[i][0][0x09]);
-                YM2610SetRegister(null,Counter, i, 0, 0x0a, fmRegisterYM2610[i][0][0x0a]);
+                YM2610SetRegister(null, Counter, i, 0, 0x08, fmRegisterYM2610[i][0][0x08]);
+                YM2610SetRegister(null, Counter, i, 0, 0x09, fmRegisterYM2610[i][0][0x09]);
+                YM2610SetRegister(null, Counter, i, 0, 0x0a, fmRegisterYM2610[i][0][0x0a]);
 
                 //rhythm
-                YM2610SetRegister(null,Counter, i, 1, 0x01, fmRegisterYM2610[i][1][0x01]);
+                YM2610SetRegister(null, Counter, i, 1, 0x01, fmRegisterYM2610[i][1][0x01]);
 
                 //adpcm
-                YM2610SetRegister(null,Counter, i, 0, 0x1b, fmRegisterYM2610[i][0][0x1b]);
+                YM2610SetRegister(null, Counter, i, 0, 0x1b, fmRegisterYM2610[i][0][0x1b]);
             }
         }
 
@@ -5268,7 +5260,7 @@ namespace mml2vgmIDE
 
             if (Type != EnmDataType.Normal) return;
 
-            int ch = -1;
+            int ch;
 
             // FMch:0-12
             // FMexch:13-18
@@ -5380,7 +5372,7 @@ namespace mml2vgmIDE
 
         public void YM2609WriteClock(byte chipID, int clock)
         {
-            if (scYM2609 != null && scYM2609.Length>chipID && scYM2609[chipID] != null)
+            if (scYM2609 != null && scYM2609.Length > chipID && scYM2609[chipID] != null)
             {
                 scYM2609[chipID].dClock = scYM2609[chipID].SetMasterClock((uint)clock);
             }
@@ -5488,7 +5480,7 @@ namespace mml2vgmIDE
             data.Add(new PackData(null, YM2609[chipID], EnmDataType.Normal, 0x200 + 0x07, 0x38, null)); // SSG ミキサ
             data.Add(new PackData(null, YM2609[chipID], EnmDataType.Normal, 0x210 + 0x06, 0x00, null)); // SSG ノイズ周波数
             data.Add(new PackData(null, YM2609[chipID], EnmDataType.Normal, 0x210 + 0x07, 0x38, null)); // SSG ミキサ
-                                                                                                // SSG ボリューム(3ch)
+                                                                                                        // SSG ボリューム(3ch)
             for (i = 0x08; i < 0x0A + 1; i++)
             {
                 data.Add(new PackData(null, YM2609[chipID], EnmDataType.Normal, i, 0x00, null));
@@ -5530,15 +5522,15 @@ namespace mml2vgmIDE
             data.Add(new PackData(null, YM2609[chipID], EnmDataType.Normal, 0x111, 0xBF, null)); // 強制発音停止
             data.Add(new PackData(null, YM2609[chipID], EnmDataType.Normal, 0x112, 0x00, null)); // Total Level
             data.Add(new PackData(null, YM2609[chipID], EnmDataType.Normal, 0x113, 0x00, null)); // BD音量
-            data.Add(new PackData(null, YM2609[chipID], EnmDataType.Normal, 0x114, 0x00, null)); 
+            data.Add(new PackData(null, YM2609[chipID], EnmDataType.Normal, 0x114, 0x00, null));
             data.Add(new PackData(null, YM2609[chipID], EnmDataType.Normal, 0x113, 0x01, null)); // SD音量
-            data.Add(new PackData(null, YM2609[chipID], EnmDataType.Normal, 0x114, 0x00, null)); 
+            data.Add(new PackData(null, YM2609[chipID], EnmDataType.Normal, 0x114, 0x00, null));
             data.Add(new PackData(null, YM2609[chipID], EnmDataType.Normal, 0x113, 0x02, null)); // CYM音量
-            data.Add(new PackData(null, YM2609[chipID], EnmDataType.Normal, 0x114, 0x00, null)); 
+            data.Add(new PackData(null, YM2609[chipID], EnmDataType.Normal, 0x114, 0x00, null));
             data.Add(new PackData(null, YM2609[chipID], EnmDataType.Normal, 0x113, 0x03, null)); // HH音量
-            data.Add(new PackData(null, YM2609[chipID], EnmDataType.Normal, 0x114, 0x00, null)); 
+            data.Add(new PackData(null, YM2609[chipID], EnmDataType.Normal, 0x114, 0x00, null));
             data.Add(new PackData(null, YM2609[chipID], EnmDataType.Normal, 0x113, 0x04, null)); // TOM音量
-            data.Add(new PackData(null, YM2609[chipID], EnmDataType.Normal, 0x114, 0x00, null)); 
+            data.Add(new PackData(null, YM2609[chipID], EnmDataType.Normal, 0x114, 0x00, null));
             data.Add(new PackData(null, YM2609[chipID], EnmDataType.Normal, 0x113, 0x05, null)); // RIM音量
             data.Add(new PackData(null, YM2609[chipID], EnmDataType.Normal, 0x114, 0x00, null));
 
@@ -5580,28 +5572,28 @@ namespace mml2vgmIDE
                         {
                             mds.WriteYM2612(Chip.Index, (byte)Chip.Number, (byte)(address >> 8), (byte)address, (byte)data);
                         }
-                        if (ctYM2612[Chip.Number].UseEmu2)
+                        else if (ctYM2612[Chip.Number].UseEmu2)
                         {
                             mds.WriteYM3438(Chip.Index, (byte)Chip.Number, (byte)(address >> 8), (byte)address, (byte)data);
                         }
                     }
                     else if (ctYM2612[Chip.Number].OnlyPCMEmulation)
                     {
-                        if (address == 0x2a || address == 0x2b || address==0x1b6)
+                        if (address == 0x2a || address == 0x2b || address == 0x1b6)
                         {
                             if (mds == null) return;
                             if (ctYM2612[Chip.Number].UseEmu)
                             {
                                 mds.WriteYM2612(Chip.Index, (byte)Chip.Number, (byte)(address >> 8), (byte)address, (byte)data);
                             }
-                            if (ctYM2612[Chip.Number].UseEmu2)
+                            else if (ctYM2612[Chip.Number].UseEmu2)
                             {
                                 mds.WriteYM3438(Chip.Index, (byte)Chip.Number, (byte)(address >> 8), (byte)address, (byte)data);
                             }
                         }
                     }
                 }
-                if (Chip.Model == EnmVRModel.RealModel)
+                else if (Chip.Model == EnmVRModel.RealModel)
                 {
                     if (address != -1 && data != -1)
                     {
@@ -5657,10 +5649,10 @@ namespace mml2vgmIDE
 
             fmRegisterYM2612[Chip.Number][dPort][dAddr] = dData;
 
-            if (Chip.Model == EnmVRModel.VirtualModel)
-            {
+            //if (Chip.Model == EnmVRModel.VirtualModel)
+            //{
                 //midiExport.outMIDIData(EnmChip.YM2612, Chip.Number, dPort, dAddr, dData, 0, Counter);
-            }
+            //}
 
             if ((Chip.Model == EnmVRModel.RealModel && ctYM2612[Chip.Number].UseScci) || (Chip.Model == EnmVRModel.VirtualModel && !ctYM2612[Chip.Number].UseScci))
             {
@@ -5722,8 +5714,8 @@ namespace mml2vgmIDE
                         dData = maskFMChYM2612[Chip.Number][dPort * 3 + ch] ? 127 : dData;
                         //if (nowYM2612FadeoutVol[Chip.Number] != 0)
                         //{
-                            //log.Write(string.Format("fv{0}", nowYM2612FadeoutVol[Chip.Number]));
-                            //log.Write(string.Format("ddata{0}", dData));
+                        //log.Write(string.Format("fv{0}", nowYM2612FadeoutVol[Chip.Number]));
+                        //log.Write(string.Format("ddata{0}", dData));
                         //}
                     }
                 }
@@ -5881,7 +5873,7 @@ namespace mml2vgmIDE
 
         public void YM2612SetRegister(outDatum od, long Counter, int ChipID, PackData[] data)
         {
-            enq(od,Counter, YM2612[ChipID], EnmDataType.Block, -1, -1, data);
+            enq(od, Counter, YM2612[ChipID], EnmDataType.Block, -1, -1, data);
         }
 
         public void YM2612SetRegisterXGM(long Counter, int dData)
@@ -5895,7 +5887,7 @@ namespace mml2vgmIDE
         public void YM2612SoftReset(long Counter, int chipID)
         {
             List<PackData> data = YM2612MakeSoftReset(chipID);
-            YM2612SetRegister(null,Counter, chipID, data.ToArray());
+            YM2612SetRegister(null, Counter, chipID, data.ToArray());
         }
 
         public void YM2612SetMask(long Counter, int chipID, int ch, bool mask)
@@ -5905,16 +5897,16 @@ namespace mml2vgmIDE
             int c = (ch < 3) ? ch : (ch - 3);
             int p = (ch < 3) ? 0 : 1;
 
-            YM2612SetRegister(null,Counter, (byte)chipID, p, 0x40 + c, fmRegisterYM2612[chipID][p][0x40 + c]);
-            YM2612SetRegister(null,Counter, (byte)chipID, p, 0x44 + c, fmRegisterYM2612[chipID][p][0x44 + c]);
-            YM2612SetRegister(null,Counter, (byte)chipID, p, 0x48 + c, fmRegisterYM2612[chipID][p][0x48 + c]);
-            YM2612SetRegister(null,Counter, (byte)chipID, p, 0x4c + c, fmRegisterYM2612[chipID][p][0x4c + c]);
+            YM2612SetRegister(null, Counter, (byte)chipID, p, 0x40 + c, fmRegisterYM2612[chipID][p][0x40 + c]);
+            YM2612SetRegister(null, Counter, (byte)chipID, p, 0x44 + c, fmRegisterYM2612[chipID][p][0x44 + c]);
+            YM2612SetRegister(null, Counter, (byte)chipID, p, 0x48 + c, fmRegisterYM2612[chipID][p][0x48 + c]);
+            YM2612SetRegister(null, Counter, (byte)chipID, p, 0x4c + c, fmRegisterYM2612[chipID][p][0x4c + c]);
 
         }
 
         public void YM2612WriteClock(byte chipID, int clock)
         {
-            if (scYM2612 != null && scYM2612.Length>chipID && scYM2612[chipID] != null)
+            if (scYM2612 != null && scYM2612.Length > chipID && scYM2612[chipID] != null)
             {
                 scYM2612[chipID].dClock = scYM2612[chipID].SetMasterClock((uint)clock);
             }
@@ -5934,10 +5926,10 @@ namespace mml2vgmIDE
                 {
                     for (int c = 0; c < 3; c++)
                     {
-                        YM2612SetRegister(null,Counter, i, p, 0x40 + c, fmRegisterYM2612[i][p][0x40 + c]);
-                        YM2612SetRegister(null,Counter, i, p, 0x44 + c, fmRegisterYM2612[i][p][0x44 + c]);
-                        YM2612SetRegister(null,Counter, i, p, 0x48 + c, fmRegisterYM2612[i][p][0x48 + c]);
-                        YM2612SetRegister(null,Counter, i, p, 0x4c + c, fmRegisterYM2612[i][p][0x4c + c]);
+                        YM2612SetRegister(null, Counter, i, p, 0x40 + c, fmRegisterYM2612[i][p][0x40 + c]);
+                        YM2612SetRegister(null, Counter, i, p, 0x44 + c, fmRegisterYM2612[i][p][0x44 + c]);
+                        YM2612SetRegister(null, Counter, i, p, 0x48 + c, fmRegisterYM2612[i][p][0x48 + c]);
+                        YM2612SetRegister(null, Counter, i, p, 0x4c + c, fmRegisterYM2612[i][p][0x4c + c]);
                         //if (c == 0 && p == 0)
                         //{
                         //    log.Write(string.Format("send Counter{0} Ch1 op4 ddata{1} v:{2}", Counter, fmRegisterYM2612[Chip.Number][p][0x4c], v));
@@ -5953,11 +5945,11 @@ namespace mml2vgmIDE
             int i;
 
             // FM全チャネルキーオフ
-            data.Add(new PackData(null,YM2612[chipID], EnmDataType.Normal, 0x28, 0x00, null));
-            data.Add(new PackData(null,YM2612[chipID], EnmDataType.Normal, 0x28, 0x01, null));
-            data.Add(new PackData(null,YM2612[chipID], EnmDataType.Normal, 0x28, 0x02, null));
-            data.Add(new PackData(null,YM2612[chipID], EnmDataType.Normal, 0x28, 0x04, null));
-            data.Add(new PackData(null,YM2612[chipID], EnmDataType.Normal, 0x28, 0x05, null));
+            data.Add(new PackData(null, YM2612[chipID], EnmDataType.Normal, 0x28, 0x00, null));
+            data.Add(new PackData(null, YM2612[chipID], EnmDataType.Normal, 0x28, 0x01, null));
+            data.Add(new PackData(null, YM2612[chipID], EnmDataType.Normal, 0x28, 0x02, null));
+            data.Add(new PackData(null, YM2612[chipID], EnmDataType.Normal, 0x28, 0x04, null));
+            data.Add(new PackData(null, YM2612[chipID], EnmDataType.Normal, 0x28, 0x05, null));
             data.Add(new PackData(null, YM2612[chipID], EnmDataType.Normal, 0x28, 0x06, null));
 
             // FM TL=127
@@ -5996,12 +5988,12 @@ namespace mml2vgmIDE
                 data.Add(new PackData(null, YM2612[chipID], EnmDataType.Normal, i, 0xc0, null));
                 data.Add(new PackData(null, YM2612[chipID], EnmDataType.Normal, 0x100 + i, 0xc0, null));
             }
-            data.Add(new PackData(null,YM2612[chipID], EnmDataType.Normal, 0x22, 0x00, null)); // HW LFO
-            data.Add(new PackData(null,YM2612[chipID], EnmDataType.Normal, 0x24, 0x00, null)); // Timer-A(1)
-            data.Add(new PackData(null,YM2612[chipID], EnmDataType.Normal, 0x25, 0x00, null)); // Timer-A(2)
-            data.Add(new PackData(null,YM2612[chipID], EnmDataType.Normal, 0x26, 0x00, null)); // Timer-B
-            data.Add(new PackData(null,YM2612[chipID], EnmDataType.Normal, 0x27, 0x30, null)); // Timer Control
-            data.Add(new PackData(null,YM2612[chipID], EnmDataType.Normal, 0x29, 0x80, null)); // FM4-6 Enable
+            data.Add(new PackData(null, YM2612[chipID], EnmDataType.Normal, 0x22, 0x00, null)); // HW LFO
+            data.Add(new PackData(null, YM2612[chipID], EnmDataType.Normal, 0x24, 0x00, null)); // Timer-A(1)
+            data.Add(new PackData(null, YM2612[chipID], EnmDataType.Normal, 0x25, 0x00, null)); // Timer-A(2)
+            data.Add(new PackData(null, YM2612[chipID], EnmDataType.Normal, 0x26, 0x00, null)); // Timer-B
+            data.Add(new PackData(null, YM2612[chipID], EnmDataType.Normal, 0x27, 0x30, null)); // Timer Control
+            data.Add(new PackData(null, YM2612[chipID], EnmDataType.Normal, 0x29, 0x80, null)); // FM4-6 Enable
             data.Add(new PackData(null, YM2612[chipID], EnmDataType.Normal, 0x2a, 0x80, null)); // PCM 0
 
             return data;
@@ -6152,7 +6144,7 @@ namespace mml2vgmIDE
                 }
             }
 
-            if (((Address-0x86) & 7) == 0)
+            if (((Address - 0x86) & 7) == 0)
             {
                 int ch = (Address - 0x86) >> 3;
                 if (ch >= 0 && ch < 16)
@@ -6178,15 +6170,15 @@ namespace mml2vgmIDE
 
         public void SEGAPCMSetRegister(outDatum od, long Counter, int ChipID, int dAddr, int dData)
         {
-            enq(od,Counter, SEGAPCM[ChipID], EnmDataType.Normal, dAddr, dData, null);
+            enq(od, Counter, SEGAPCM[ChipID], EnmDataType.Normal, dAddr, dData, null);
         }
 
         public void SEGAPCMSetRegister(long Counter, int ChipID, PackData[] data)
         {
-            enq(null,Counter, SEGAPCM[ChipID], EnmDataType.Block, -1, -1, data);
+            enq(null, Counter, SEGAPCM[ChipID], EnmDataType.Block, -1, -1, data);
         }
 
-        public void SEGAPCMWritePCMData(outDatum od, long Counter,byte chipID, uint ROMSize, uint DataStart, uint DataLength, byte[] romdata, uint SrcStartAdr)
+        public void SEGAPCMWritePCMData(outDatum od, long Counter, byte chipID, uint ROMSize, uint DataStart, uint DataLength, byte[] romdata, uint SrcStartAdr)
         {
             enq(od, Counter, SEGAPCM[chipID], EnmDataType.Block, -1, -2, new object[] { ROMSize, DataStart, DataLength, romdata, SrcStartAdr });
 
@@ -6231,8 +6223,8 @@ namespace mml2vgmIDE
 
             for (i = 0; i < 16; i++)
             {
-                data.Add(new PackData(null,SEGAPCM[chipID], EnmDataType.Normal, (i * 8) + 0x86, 0x01, null));// KeyOff
-                data.Add(new PackData(null,SEGAPCM[chipID], EnmDataType.Normal, (i * 8) + 0x02, 0x00, null));// L vol
+                data.Add(new PackData(null, SEGAPCM[chipID], EnmDataType.Normal, (i * 8) + 0x86, 0x01, null));// KeyOff
+                data.Add(new PackData(null, SEGAPCM[chipID], EnmDataType.Normal, (i * 8) + 0x02, 0x00, null));// L vol
                 data.Add(new PackData(null, SEGAPCM[chipID], EnmDataType.Normal, (i * 8) + 0x03, 0x00, null));// R vol
             }
 
@@ -6260,8 +6252,8 @@ namespace mml2vgmIDE
                 SEGAPCMNowFadeoutVol[i] = v;
                 for (int c = 0; c < 16; c++)
                 {
-                    SEGAPCMSetRegister(null,Counter, i, (c * 8) + 2, pcmRegisterSEGAPCM[i][(c * 8) + 2]);
-                    SEGAPCMSetRegister(null,Counter, i, (c * 8) + 3, pcmRegisterSEGAPCM[i][(c * 8) + 3]);
+                    SEGAPCMSetRegister(null, Counter, i, (c * 8) + 2, pcmRegisterSEGAPCM[i][(c * 8) + 2]);
+                    SEGAPCMSetRegister(null, Counter, i, (c * 8) + 3, pcmRegisterSEGAPCM[i][(c * 8) + 3]);
                 }
             }
         }
@@ -6317,7 +6309,7 @@ namespace mml2vgmIDE
                         foreach (PackData dat in pdata)
                             if (dat.Address != 0x100)
                             {
-                                mds.WriteSN76489(dat.Chip.Index,(byte)dat.Chip.Number, (byte)dat.Data);
+                                mds.WriteSN76489(dat.Chip.Index, (byte)dat.Chip.Number, (byte)dat.Data);
                             }
                             else
                             {
@@ -6397,18 +6389,18 @@ namespace mml2vgmIDE
 
             //if (Chip.Model == EnmModel.RealModel)
             //{
-                //if (ctSN76489[Chip.Number].UseScci)
-                //{
-                //    if (scSN76489[Chip.Number] == null) return;
-                //    scSN76489[Chip.Number].setRegister(0, dData);
-                //}
+            //if (ctSN76489[Chip.Number].UseScci)
+            //{
+            //    if (scSN76489[Chip.Number] == null) return;
+            //    scSN76489[Chip.Number].setRegister(0, dData);
+            //}
             //}
             //else
             //{
-                //if (!ctSN76489[Chip.Number].UseScci && ctSN76489[Chip.Number].UseEmu)
-                //{
-                //    mds.WriteSN76489((byte)Chip.Number, (byte)dData);
-                //}
+            //if (!ctSN76489[Chip.Number].UseScci && ctSN76489[Chip.Number].UseEmu)
+            //{
+            //    mds.WriteSN76489((byte)Chip.Number, (byte)dData);
+            //}
             //}
         }
 
@@ -6419,7 +6411,7 @@ namespace mml2vgmIDE
 
         public void SN76489SetRegister(long Counter, int ChipID, PackData[] data)
         {
-            enq(null,Counter, SN76489[ChipID], EnmDataType.Block, -1, -1, data);
+            enq(null, Counter, SN76489[ChipID], EnmDataType.Block, -1, -1, data);
         }
 
         public void SN76489SoftReset(long Counter, int chipID)
@@ -6452,7 +6444,7 @@ namespace mml2vgmIDE
                 SN76489NowFadeoutVol[i] = v;// (v & 0x78) >> 3;
                 for (int c = 0; c < 4; c++)
                 {
-                    SN76489SetRegister(null,Counter,i, 0x90 + (c << 5) + SN76489Register[i][1 + (c << 1)]);
+                    SN76489SetRegister(null, Counter, i, 0x90 + (c << 5) + SN76489Register[i][1 + (c << 1)]);
                 }
             }
         }
@@ -6462,9 +6454,9 @@ namespace mml2vgmIDE
             List<PackData> data = new List<PackData>();
 
             //vol off
-            data.Add(new PackData(null,SN76489[chipID], EnmDataType.Normal, 0, 0x9f, null));
-            data.Add(new PackData(null,SN76489[chipID], EnmDataType.Normal, 0, 0xbf, null));
-            data.Add(new PackData(null,SN76489[chipID], EnmDataType.Normal, 0, 0xdf, null));
+            data.Add(new PackData(null, SN76489[chipID], EnmDataType.Normal, 0, 0x9f, null));
+            data.Add(new PackData(null, SN76489[chipID], EnmDataType.Normal, 0, 0xbf, null));
+            data.Add(new PackData(null, SN76489[chipID], EnmDataType.Normal, 0, 0xdf, null));
             data.Add(new PackData(null, SN76489[chipID], EnmDataType.Normal, 0, 0xff, null));
 
             return data;
@@ -6562,7 +6554,7 @@ namespace mml2vgmIDE
                                 if (midiOuts.Count > address && midiOuts[address] != null) midiOuts[address].SendBuffer((byte[])exData);
                             }
                         }
-                        else if(exData is PackData[])
+                        else if (exData is PackData[])
                         {
                             PackData[] pdata = (PackData[])exData;
                             if (Chip.Model == EnmVRModel.VirtualModel)
@@ -6588,18 +6580,18 @@ namespace mml2vgmIDE
                         {
                             //if (scC140 != null && scC140[Chip.Number] != null)
                             //{
-                                // スタートアドレス設定
-                                //scC140[Chip.Number].setRegister(0x10000, (byte)((uint)((object[])exData)[1]));
-                                //scC140[Chip.Number].setRegister(0x10001, (byte)((uint)((object[])exData)[1] >> 8));
-                                //scC140[Chip.Number].setRegister(0x10002, (byte)((uint)((object[])exData)[1] >> 16));
-                                // データ転送
-                                //for (int cnt = 0; cnt < (uint)((object[])exData)[2]; cnt++)
-                                //{
-                                    //scC140[Chip.Number].setRegister(0x10004, ((byte[])((object[])exData)[3])[(uint)((object[])exData)[4] + cnt]);
-                                //}
-                                //scC140[chipID].setRegister(0x10006, (int)ROMSize);
+                            // スタートアドレス設定
+                            //scC140[Chip.Number].setRegister(0x10000, (byte)((uint)((object[])exData)[1]));
+                            //scC140[Chip.Number].setRegister(0x10001, (byte)((uint)((object[])exData)[1] >> 8));
+                            //scC140[Chip.Number].setRegister(0x10002, (byte)((uint)((object[])exData)[1] >> 16));
+                            // データ転送
+                            //for (int cnt = 0; cnt < (uint)((object[])exData)[2]; cnt++)
+                            //{
+                            //scC140[Chip.Number].setRegister(0x10004, ((byte[])((object[])exData)[3])[(uint)((object[])exData)[4] + cnt]);
+                            //}
+                            //scC140[chipID].setRegister(0x10006, (int)ROMSize);
 
-                                //realChip.SendData();
+                            //realChip.SendData();
                             //}
                         }
                     }
@@ -6624,7 +6616,7 @@ namespace mml2vgmIDE
             {
             }
 
-            if (ExData != null && ExData is byte[] && ((byte[])ExData).Length==3)
+            if (ExData != null && ExData is byte[] && ((byte[])ExData).Length == 3)
             {
                 if ((((byte[])ExData)[0] & 0xf0) == 0x90)
                 {
@@ -6678,7 +6670,7 @@ namespace mml2vgmIDE
 
         public void ConductorSoftReset(long Counter, int chipID)
         {
-            List<PackData> data = ConductorMakeSoftReset(chipID);
+            //List<PackData> data = ConductorMakeSoftReset(chipID);
         }
 
         public List<PackData> ConductorMakeSoftReset(int chipID)
@@ -7376,7 +7368,7 @@ namespace mml2vgmIDE
             }
         }
 
-        public void YMF262SetRegisterProcessing(ref long Counter,ref Chip Chip,ref EnmDataType type,ref int Address, ref int dData, ref object ExData)
+        public void YMF262SetRegisterProcessing(ref long Counter, ref Chip Chip, ref EnmDataType type, ref int Address, ref int dData, ref object ExData)
         {
             if (ctYMF262 == null) return;
             if (Address == -1 && dData == -1) return;
@@ -7390,38 +7382,38 @@ namespace mml2vgmIDE
 
             fmRegisterYMF262[Chip.Number][dPort][dAddr] = dData;
 
-                if (dAddr >= 0xb0 && dAddr <= 0xb8)
+            if (dAddr >= 0xb0 && dAddr <= 0xb8)
+            {
+                ch = dAddr - 0xb0 + dPort * 9;
+                int k = (dData >> 5) & 1;
+                if (k == 0)
                 {
-                    ch = dAddr - 0xb0 + dPort * 9;
-                    int k = (dData >> 5) & 1;
-                    if (k == 0)
-                    {
-                        fmRegisterYMF262FM[Chip.Number] &= ~(1 << ch);
-                    }
-                    else
-                    {
-                        fmRegisterYMF262FM[Chip.Number] |= (1 << ch);
-                    }
-                    fmRegisterYMF262FM[Chip.Number] &= 0x3ffff;
-                    if (maskFMChYMF262[Chip.Number][ch]) dData &= 0x1f;
+                    fmRegisterYMF262FM[Chip.Number] &= ~(1 << ch);
                 }
-
-                if (dAddr == 0xbd && dPort == 0)
+                else
                 {
-                    if ((fmRegisterYMF262RyhthmB[Chip.Number] & 0x10) == 0 && (dData & 0x10) != 0) fmRegisterYMF262Ryhthm[Chip.Number] |= 0x10;
-                    if ((fmRegisterYMF262RyhthmB[Chip.Number] & 0x08) == 0 && (dData & 0x08) != 0) fmRegisterYMF262Ryhthm[Chip.Number] |= 0x08;
-                    if ((fmRegisterYMF262RyhthmB[Chip.Number] & 0x04) == 0 && (dData & 0x04) != 0) fmRegisterYMF262Ryhthm[Chip.Number] |= 0x04;
-                    if ((fmRegisterYMF262RyhthmB[Chip.Number] & 0x02) == 0 && (dData & 0x02) != 0) fmRegisterYMF262Ryhthm[Chip.Number] |= 0x02;
-                    if ((fmRegisterYMF262RyhthmB[Chip.Number] & 0x01) == 0 && (dData & 0x01) != 0) fmRegisterYMF262Ryhthm[Chip.Number] |= 0x01;
-                    fmRegisterYMF262RyhthmB[Chip.Number] = dData;
-
-                    if (maskFMChYMF262[Chip.Number][18]) dData &= 0xef;
-                    if (maskFMChYMF262[Chip.Number][19]) dData &= 0xf7;
-                    if (maskFMChYMF262[Chip.Number][20]) dData &= 0xfb;
-                    if (maskFMChYMF262[Chip.Number][21]) dData &= 0xfd;
-                    if (maskFMChYMF262[Chip.Number][22]) dData &= 0xfe;
-
+                    fmRegisterYMF262FM[Chip.Number] |= (1 << ch);
                 }
+                fmRegisterYMF262FM[Chip.Number] &= 0x3ffff;
+                if (maskFMChYMF262[Chip.Number][ch]) dData &= 0x1f;
+            }
+
+            if (dAddr == 0xbd && dPort == 0)
+            {
+                if ((fmRegisterYMF262RyhthmB[Chip.Number] & 0x10) == 0 && (dData & 0x10) != 0) fmRegisterYMF262Ryhthm[Chip.Number] |= 0x10;
+                if ((fmRegisterYMF262RyhthmB[Chip.Number] & 0x08) == 0 && (dData & 0x08) != 0) fmRegisterYMF262Ryhthm[Chip.Number] |= 0x08;
+                if ((fmRegisterYMF262RyhthmB[Chip.Number] & 0x04) == 0 && (dData & 0x04) != 0) fmRegisterYMF262Ryhthm[Chip.Number] |= 0x04;
+                if ((fmRegisterYMF262RyhthmB[Chip.Number] & 0x02) == 0 && (dData & 0x02) != 0) fmRegisterYMF262Ryhthm[Chip.Number] |= 0x02;
+                if ((fmRegisterYMF262RyhthmB[Chip.Number] & 0x01) == 0 && (dData & 0x01) != 0) fmRegisterYMF262Ryhthm[Chip.Number] |= 0x01;
+                fmRegisterYMF262RyhthmB[Chip.Number] = dData;
+
+                if (maskFMChYMF262[Chip.Number][18]) dData &= 0xef;
+                if (maskFMChYMF262[Chip.Number][19]) dData &= 0xf7;
+                if (maskFMChYMF262[Chip.Number][20]) dData &= 0xfb;
+                if (maskFMChYMF262[Chip.Number][21]) dData &= 0xfd;
+                if (maskFMChYMF262[Chip.Number][22]) dData &= 0xfe;
+
+            }
 
         }
 
@@ -7840,7 +7832,7 @@ namespace mml2vgmIDE
             else chipLED.SecC352 = 2;
 
             pcmRegisterC352[chipid][adr] = (ushort)data;
-            int c = (int)adr / 8;
+            //int c = (int)adr / 8;
             if (adr < 0x100 && (adr % 8) == 3 && maskChC352[chipid][adr / 8])
             {
                 data &= 0xbfff;

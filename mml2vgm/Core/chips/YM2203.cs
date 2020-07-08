@@ -1,9 +1,5 @@
-﻿using System;
+﻿using musicDriverInterface;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using musicDriverInterface;
 
 namespace Core
 {
@@ -31,7 +27,7 @@ namespace Core
             //}
         };
 
-        public YM2203(ClsVgm parent,int chipID, string initialPartName, string stPath, int chipNumber) : base(parent, chipID, initialPartName, stPath, chipNumber)
+        public YM2203(ClsVgm parent, int chipID, string initialPartName, string stPath, int chipNumber) : base(parent, chipID, initialPartName, stPath, chipNumber)
         {
 
             _Name = "YM2203";
@@ -42,7 +38,7 @@ namespace Core
             FNumTbl = _FNumTbl;
 
             Frequency = 3993600;// 7987200/2;
-            port =new byte[][] { new byte[] { (byte)(chipNumber!=0 ? 0xa5 : 0x55) } };
+            port = new byte[][] { new byte[] { (byte)(chipNumber != 0 ? 0xa5 : 0x55) } };
 
             if (string.IsNullOrEmpty(initialPartName)) return;
 
@@ -170,7 +166,7 @@ namespace Core
 
         }
 
-        public void outYM2203SsgKeyOff(MML mml,partPage page)
+        public void outYM2203SsgKeyOff(MML mml, partPage page)
         {
             byte pch = (byte)(page.ch - 6);
             int n = 9;
@@ -179,9 +175,9 @@ namespace Core
             data = (byte)(((YM2203)page.chip).SSGKeyOn[0] | (n << pch));
             ((YM2203)page.chip).SSGKeyOn[0] = data;
 
-            SOutData(page,mml,port[0], (byte)(0x08 + pch), 0);
+            SOutData(page, mml, port[0], (byte)(0x08 + pch), 0);
             page.beforeVolume = -1;
-            SOutData(page,mml,port[0], 0x07, data);
+            SOutData(page, mml, port[0], 0x07, data);
         }
 
         public override void SetFNum(partPage page, MML mml)
@@ -225,7 +221,7 @@ namespace Core
             byte adr = (byte)(int)mml.args[0];
             byte dat = (byte)(int)mml.args[1];
 
-            SOutData(page,mml,port[0], adr, dat);
+            SOutData(page, mml, port[0], adr, dat);
         }
 
         public override void CmdInstrument(partPage page, MML mml)

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Core;
+﻿using Core;
 using mml2vgmIDE;
 
 namespace SoundManager
@@ -12,7 +8,7 @@ namespace SoundManager
         /// <summary>
         /// Emuチップ / 実チップ
         /// </summary>
-        public Chip Chip=new Chip(1);
+        public Chip Chip = new Chip(1);
 
         /// <summary>
         /// データの種類

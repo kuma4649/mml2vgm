@@ -1,9 +1,6 @@
 ﻿using Core;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace mml2vgmIDE
 {
@@ -22,7 +19,7 @@ namespace mml2vgmIDE
             throw new NotImplementedException();
         }
 
-        public override bool init(outDatum[] vgmBuf, ChipRegister chipRegister, EnmChip[] useChip, uint latency, uint waitTime,long jumpPointClock)
+        public override bool init(outDatum[] vgmBuf, ChipRegister chipRegister, EnmChip[] useChip, uint latency, uint waitTime, long jumpPointClock)
         {
             throw new NotImplementedException();
         }
@@ -37,12 +34,12 @@ namespace mml2vgmIDE
                 chipRegister.YM2608SetRegister(null, count, chipYM2608, pd.ToArray());
                 return;
             }
-            
+
             mm.Rendering();
             count++;
         }
 
-        public bool init(musicDriverInterface.MmlDatum[] mubBuf,string workPath, mucomManager mucomManager, ChipRegister chipRegister
+        public bool init(musicDriverInterface.MmlDatum[] mubBuf, string workPath, mucomManager mucomManager, ChipRegister chipRegister
             , EnmChip[] useChip
             , uint latency
             , uint waitTime
@@ -93,18 +90,18 @@ namespace mml2vgmIDE
             outDatum od = null;
             if (dat.addtionalData != null)
             {
-                if(dat.addtionalData is musicDriverInterface.MmlDatum)
+                if (dat.addtionalData is musicDriverInterface.MmlDatum)
                 {
                     musicDriverInterface.MmlDatum md = (musicDriverInterface.MmlDatum)dat.addtionalData;
                     if (md.linePos != null) md.linePos.srcMMLID = filename;
                     od = new outDatum(md.type, md.args, md.linePos, (byte)md.dat);
                 }
-                
+
             }
 
             //if (od != null && od.linePos != null)
             //{
-                //Console.WriteLine("{0}", od.linePos.col);
+            //Console.WriteLine("{0}", od.linePos.col);
             //}
 
             //chipRegister.YM2608SetRegister(od, (long)dat.time, 0, dat.port, dat.address, dat.data);

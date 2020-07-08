@@ -1,9 +1,7 @@
-﻿using System;
+﻿using Core;
 using mml2vgmIDE;
+using System;
 using System.Windows.Forms;
-using Core;
-using System.Threading;
-using System.Collections.Generic;
 
 namespace SoundManager
 {
@@ -15,6 +13,7 @@ namespace SoundManager
     {
 
         public const int DATA_SEQUENCE_FREQUENCE = 44100;
+        public Setting setting = null;
 
         /// <summary>
         /// ミュージックデータ解析
@@ -56,6 +55,7 @@ namespace SoundManager
 
         private bool fadeOut = false;
         private int loopCounter = 0;
+
 
         private volatile object lockObj = new object();
 
@@ -165,10 +165,13 @@ namespace SoundManager
             ResetInterrupt();
 
             isVirtualOnlySend = false;
-            if (useEmu && !useReal)
+            if (setting.other.PlayDeviceCB)
             {
-                isVirtualOnlySend = true;
-                //Audio.stopDataVirtulaOnlySend = dataSender.stopData;
+                if (useEmu && !useReal)
+                {
+                    isVirtualOnlySend = true;
+                    //Audio.stopDataVirtulaOnlySend = dataSender.stopData;
+                }
             }
         }
 
@@ -358,9 +361,9 @@ namespace SoundManager
         {
             if (dataMaker != null) if (dataMaker.IsRunning())
                     return true;
-            if(dataSender!=null) if (dataSender.IsRunning())
+            if (dataSender != null) if (dataSender.IsRunning())
                     return true;
-            if (emuChipSender != null) if (emuChipSender.IsRunning()) 
+            if (emuChipSender != null) if (emuChipSender.IsRunning())
                     return true;
             if (realChipSender != null) if (realChipSender.IsRunning())
                     return true;

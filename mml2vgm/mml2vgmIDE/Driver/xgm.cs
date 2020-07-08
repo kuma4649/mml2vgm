@@ -1,9 +1,5 @@
 ﻿using Core;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace mml2vgmIDE
 {
@@ -63,7 +59,7 @@ namespace mml2vgmIDE
 
             //Driverの初期化
             musicPtr = musicDataBlockAddr;
-            xgmpcm= new XGMPCM[] { new XGMPCM(), new XGMPCM(), new XGMPCM(), new XGMPCM() };
+            xgmpcm = new XGMPCM[] { new XGMPCM(), new XGMPCM(), new XGMPCM(), new XGMPCM() };
             DACEnable = 0;
             //this.jumpPointClock *= Common.SampleRate / (isNTSC ? 60 : 50);
             return true;
@@ -203,7 +199,7 @@ namespace mml2vgmIDE
                 Counter++;
                 vgmFrameCounter++;
                 Audio.DriverSeqCounter++;
-                
+
                 musicStep = Common.SampleRate / (isNTSC ? 60.0 : 50.0);
 
                 if (musicDownCounter <= 0.0)
@@ -346,7 +342,7 @@ namespace mml2vgmIDE
             }
             //for(int i = 0x108; i < vgmBuf.Length; i++)
             //{
-                //Console.WriteLine("{0:x2}", vgmBuf[i].val);
+            //Console.WriteLine("{0:x2}", vgmBuf[i].val);
             //}
         }
 

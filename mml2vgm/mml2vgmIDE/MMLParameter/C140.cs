@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Core;
+﻿using Core;
 using musicDriverInterface;
+using System;
+using System.Linq;
 
 namespace mml2vgmIDE.MMLParameter
 {
     public class C140 : Instrument
     {
-        public C140(SoundManager.Chip chip) : base(24,chip)
+        public C140(SoundManager.Chip chip) : base(24, chip)
         {
             for (int i = 0; i < 24; i++)
             {

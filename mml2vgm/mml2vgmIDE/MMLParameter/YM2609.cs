@@ -1,13 +1,13 @@
 ﻿using Core;
+using musicDriverInterface;
 using System;
 using System.Linq;
-using musicDriverInterface;
 
 namespace mml2vgmIDE.MMLParameter
 {
     public class YM2609 : Instrument
     {
-        public YM2609(SoundManager.Chip chip) : base(12+6+12+6+3+6,chip)
+        public YM2609(SoundManager.Chip chip) : base(12 + 6 + 12 + 6 + 3 + 6, chip)
         {
             for (int i = 0; i < 45; i++)
             {
@@ -34,7 +34,7 @@ namespace mml2vgmIDE.MMLParameter
                     }
                     else
                     {
-                        inst[od.linePos.ch] = od.args[1]!=null ? od.args[1].ToString() : "(null)";
+                        inst[od.linePos.ch] = od.args[1] != null ? od.args[1].ToString() : "(null)";
                     }
                     break;
                 //case enmMMLType.Envelope:

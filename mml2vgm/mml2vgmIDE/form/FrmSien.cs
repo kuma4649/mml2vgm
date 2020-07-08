@@ -1,15 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
 using System.Security.Permissions;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using WeifenLuo.WinFormsUI.Docking;
 
 namespace mml2vgmIDE
@@ -120,7 +114,7 @@ namespace mml2vgmIDE
 
             if (found == null || found.Count < 1)
             {
-                this.SetOpacity(false); 
+                this.SetOpacity(false);
                 selRow = -1;
                 return;
             }
@@ -147,7 +141,7 @@ namespace mml2vgmIDE
                     dgvItem.Rows[dgvItem.Rows.Count - 1].Tag = si;
                 }
             }
-            if (selRow==-1 && dgvItem.SelectedRows.Count > 0)
+            if (selRow == -1 && dgvItem.SelectedRows.Count > 0)
             {
                 dgvItem.SelectedRows[0].Selected = false;
             }
@@ -250,7 +244,7 @@ namespace mml2vgmIDE
                     instCache.Add(si.content, obj);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 log.ForcedWrite(ex);
             }

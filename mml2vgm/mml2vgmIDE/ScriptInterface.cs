@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.IO;
+﻿using Core;
 using IronPython.Hosting;
-using Microsoft.Scripting.Hosting;
-using System.Reflection;
-using System.Diagnostics;
-using Microsoft.Scripting.Hosting.Providers;
 using IronPython.Runtime;
-using System.Runtime.InteropServices;
-using Core;
+using Microsoft.Scripting.Hosting;
+using Microsoft.Scripting.Hosting.Providers;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Reflection;
 
 namespace mml2vgmIDE
 {
@@ -22,10 +18,10 @@ namespace mml2vgmIDE
         {
         }
 
-        private static string[] GetScriptInfo(string path,int t)
+        private static string[] GetScriptInfo(string path, int t)
         {
-           
-            ScriptEngine engine=null;
+
+            ScriptEngine engine = null;
             ScriptRuntime runtime = null;
 
             try
@@ -55,7 +51,7 @@ namespace mml2vgmIDE
                         return mml2vgmScript.supportFileExt().Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
                 }
             }
-            catch(Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
+            catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
             {
                 ;//無視
             }
@@ -120,7 +116,7 @@ namespace mml2vgmIDE
             finally
             {
                 runtime.Shutdown();
-                
+
             }
         }
 
@@ -248,7 +244,8 @@ namespace mml2vgmIDE
         {
         }
 
-        public bool confirm(string message, string caption = "") {
+        public bool confirm(string message, string caption = "")
+        {
             var result = System.Windows.Forms.MessageBox.Show(message, caption, System.Windows.Forms.MessageBoxButtons.YesNo);
             return result == System.Windows.Forms.DialogResult.Yes;
         }
@@ -268,7 +265,8 @@ namespace mml2vgmIDE
             return text;
         }
 
-        public string getCurrentFilepath() {
+        public string getCurrentFilepath()
+        {
             return document.gwiFullPath;
         }
 
@@ -361,30 +359,35 @@ namespace mml2vgmIDE
         //    parent.ProcessMsgDisp(e.Data);
         //}
 
-        public string fileSelect(string title) {
+        public string fileSelect(string title)
+        {
             var ofd = new System.Windows.Forms.OpenFileDialog();
             ofd.Title = title;
 
             return ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK ? ofd.FileName : null;
         }
 
-        public void loadSetting(string xmlFilename = null) {
+        public void loadSetting(string xmlFilename = null)
+        {
             string xmlPath = getXmlPath(xmlFilename);
-            if(!File.Exists(xmlPath)) return;
+            if (!File.Exists(xmlPath)) return;
 
             var xe = System.Xml.Linq.XElement.Load(xmlPath);
             settingData = xe.Elements().ToDictionary(x => x.Name.LocalName, x => (string)x);
         }
 
-        private string getXmlPath(string xmlFilename) {
-            if(xmlFilename == null) xmlFilename = defaultXmlFilename;
+        private string getXmlPath(string xmlFilename)
+        {
+            if (xmlFilename == null) xmlFilename = defaultXmlFilename;
             var xmlPath = Path.Combine(getApplicationDataFolder(), xmlFilename);
             return xmlPath;
         }
 
-        public void saveSetting(string xmlFilename = null) {
+        public void saveSetting(string xmlFilename = null)
+        {
             var xe = new System.Xml.Linq.XElement(settingXmlName);
-            foreach(var k in settingData.Keys) {
+            foreach (var k in settingData.Keys)
+            {
                 xe.Add(new System.Xml.Linq.XElement(k, settingData[k]));
             }
 
@@ -392,28 +395,31 @@ namespace mml2vgmIDE
             xe.Save(xmlPath);
         }
 
-        public string getSettingValue(string key) {
-            if(!settingData.ContainsKey(key)) return null;
+        public string getSettingValue(string key)
+        {
+            if (!settingData.ContainsKey(key)) return null;
             return settingData[key];
         }
 
-        public void setSettingValue(string key, string value) {
+        public void setSettingValue(string key, string value)
+        {
             settingData[key] = value;
         }
 
-        public void removeSetting(string key) {
-            if(!settingData.ContainsKey(key)) return;
+        public void removeSetting(string key)
+        {
+            if (!settingData.ContainsKey(key)) return;
             settingData.Remove(key);
         }
 
         public string compile()
         {
             parent.Compile(false, false, false, false, true);
-            while (parent.Compiling!=0) { System.Windows.Forms.Application.DoEvents(); }
+            while (parent.Compiling != 0) { System.Windows.Forms.Application.DoEvents(); }
             string sf = Path.Combine(
                 Common.GetApplicationDataFolder(true)
                 , "temp"
-                , Path.GetFileNameWithoutExtension(Path.GetFileName(document.gwiFullPath)) 
+                , Path.GetFileNameWithoutExtension(Path.GetFileName(document.gwiFullPath))
                 + (FileInformation.format == enmFormat.VGM ? ".vgm" : (FileInformation.format == enmFormat.XGM ? ".xgm" : ".zgm"))
                 );
             return (parent.isSuccess && msgBox.getErr().Length < 1) ? sf : "";

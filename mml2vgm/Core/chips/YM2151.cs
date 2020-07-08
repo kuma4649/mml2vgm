@@ -1,9 +1,6 @@
-﻿using System;
+﻿using musicDriverInterface;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using musicDriverInterface;
 
 namespace Core
 {
@@ -90,7 +87,7 @@ namespace Core
             note &= 0xf;
             note = note < 3 ? note : (note < 6 ? (note + 1) : (note < 9 ? (note + 2) : (note + 3)));
             SOutData(page, mml, port[0], (byte)(0x28 + page.ch), (byte)((octave << 4) | note));
-            SOutData(page,mml, port[0], (byte)(0x30 + page.ch), (byte)(kf << 2));
+            SOutData(page, mml, port[0], (byte)(0x30 + page.ch), (byte)(kf << 2));
         }
 
         public void OutSetVolume(partPage page, MML mml, int vol, int n)
@@ -203,7 +200,7 @@ namespace Core
             fb &= 7;
             alg &= 7;
 
-            SOutData(page,mml, port[0], (byte)(0x20 + page.ch), (byte)((pan << 6) | (fb << 3) | alg));
+            SOutData(page, mml, port[0], (byte)(0x20 + page.ch), (byte)((pan << 6) | (fb << 3) | alg));
         }
 
         public void OutSetDtMl(MML mml, partPage page, int ope, int dt, int ml)
@@ -212,7 +209,7 @@ namespace Core
             dt &= 7;
             ml &= 15;
 
-            SOutData(page,mml, port[0], (byte)(0x40 + page.ch + ope * 8), (byte)((dt << 4) | ml));
+            SOutData(page, mml, port[0], (byte)(0x40 + page.ch + ope * 8), (byte)((dt << 4) | ml));
         }
 
         public void OutSetKsAr(MML mml, partPage page, int ope, int ks, int ar)
@@ -221,7 +218,7 @@ namespace Core
             ks &= 3;
             ar &= 31;
 
-            SOutData(page,mml, port[0], (byte)(0x80 + page.ch + ope * 8), (byte)((ks << 6) | ar));
+            SOutData(page, mml, port[0], (byte)(0x80 + page.ch + ope * 8), (byte)((ks << 6) | ar));
         }
 
         public void OutSetAmDr(MML mml, partPage page, int ope, int am, int dr)
@@ -230,7 +227,7 @@ namespace Core
             am &= 1;
             dr &= 31;
 
-            SOutData(page,mml, port[0], (byte)(0xa0 + page.ch + ope * 8), (byte)((am << 7) | dr));
+            SOutData(page, mml, port[0], (byte)(0xa0 + page.ch + ope * 8), (byte)((am << 7) | dr));
         }
 
         public void OutSetDt2Sr(MML mml, partPage page, int ope, int dt2, int sr)
@@ -239,7 +236,7 @@ namespace Core
             dt2 &= 3;
             sr &= 31;
 
-            SOutData(page,mml, port[0], (byte)(0xc0 + page.ch + ope * 8), (byte)((dt2 << 6) | sr));
+            SOutData(page, mml, port[0], (byte)(0xc0 + page.ch + ope * 8), (byte)((dt2 << 6) | sr));
         }
 
         public void OutSetSlRr(MML mml, partPage page, int ope, int sl, int rr)
@@ -248,24 +245,24 @@ namespace Core
             sl &= 15;
             rr &= 15;
 
-            SOutData(page,mml, port[0], (byte)(0xe0 + page.ch + ope * 8), (byte)((sl << 4) | rr));
+            SOutData(page, mml, port[0], (byte)(0xe0 + page.ch + ope * 8), (byte)((sl << 4) | rr));
         }
 
         public void OutSetHardLfo(MML mml, partPage page, bool sw, List<int> param)
         {
             if (sw)
             {
-                SOutData(page,mml, port[0], 0x1b, (byte)(param[0] & 0x3));//type
-                SOutData(page,mml, port[0], 0x18, (byte)(param[1] & 0xff));//LFRQ
-                SOutData(page,mml, port[0], 0x19, (byte)((param[2] & 0x7f) | 0x80));//PMD
-                SOutData(page,mml, port[0], 0x19, (byte)((param[3] & 0x7f) | 0x00));//AMD
+                SOutData(page, mml, port[0], 0x1b, (byte)(param[0] & 0x3));//type
+                SOutData(page, mml, port[0], 0x18, (byte)(param[1] & 0xff));//LFRQ
+                SOutData(page, mml, port[0], 0x19, (byte)((param[2] & 0x7f) | 0x80));//PMD
+                SOutData(page, mml, port[0], 0x19, (byte)((param[3] & 0x7f) | 0x00));//AMD
             }
             else
             {
-                SOutData(page,mml, port[0], 0x1b, 0);//type
-                SOutData(page,mml, port[0], 0x18, 0);//LFRQ
-                SOutData(page,mml, port[0], 0x19, 0x80);//PMD
-                SOutData(page,mml, port[0], 0x19, 0x00);//AMD
+                SOutData(page, mml, port[0], 0x1b, 0);//type
+                SOutData(page, mml, port[0], 0x18, 0);//LFRQ
+                SOutData(page, mml, port[0], 0x19, 0x80);//PMD
+                SOutData(page, mml, port[0], 0x19, 0x00);//AMD
             }
         }
 
@@ -369,20 +366,20 @@ namespace Core
 
             if (page.ch == 7 && page.mixer == 1)
             {
-                SOutData(page,mml, port[0], 0x0f, (byte)((page.mixer << 7) | (page.noise & 0x1f)));
+                SOutData(page, mml, port[0], 0x0f, (byte)((page.mixer << 7) | (page.noise & 0x1f)));
             }
             //key on
-            SOutData(page,mml, port[0], 0x08, (byte)((page.slots << 3) + page.ch));
+            SOutData(page, mml, port[0], 0x08, (byte)((page.slots << 3) + page.ch));
         }
 
         public void OutKeyOff(MML mml, partPage page)
         {
 
             //key off
-            SOutData(page,mml, port[0], 0x08, (byte)(0x00 + (page.ch & 7)));
+            SOutData(page, mml, port[0], 0x08, (byte)(0x00 + (page.ch & 7)));
             if (page.ch == 7 && page.mixer == 1)
             {
-                SOutData(page,mml, port[0], 0x0f, 0x00);
+                SOutData(page, mml, port[0], 0x0f, 0x00);
             }
 
         }
@@ -861,34 +858,34 @@ namespace Core
                 {
                     case "PANFBAL":
                     case "PANFLCON":
-                        SOutData(page,mml, port[0], (byte)(0x20 + page.ch), dat);
+                        SOutData(page, mml, port[0], (byte)(0x20 + page.ch), dat);
                         break;
                     case "PMSAMS":
-                        SOutData(page,mml, port[0], (byte)(0x38 + page.ch), dat);
+                        SOutData(page, mml, port[0], (byte)(0x38 + page.ch), dat);
                         break;
                     case "DTML":
                     case "DTMUL":
                     case "DT1ML":
                     case "DT1MUL":
-                        SOutData(page,mml, port[0], (byte)(0x40 + page.ch + op * 8), dat);
+                        SOutData(page, mml, port[0], (byte)(0x40 + page.ch + op * 8), dat);
                         break;
                     case "TL":
-                        SOutData(page,mml, port[0], (byte)(0x60 + page.ch + op * 8), dat);
+                        SOutData(page, mml, port[0], (byte)(0x60 + page.ch + op * 8), dat);
                         break;
                     case "KSAR":
-                        SOutData(page,mml, port[0], (byte)(0x80 + page.ch + op * 8), dat);
+                        SOutData(page, mml, port[0], (byte)(0x80 + page.ch + op * 8), dat);
                         break;
                     case "AMDR":
                     case "AMED1R":
-                        SOutData(page,mml, port[0], (byte)(0xa0 + page.ch + op * 8), dat);
+                        SOutData(page, mml, port[0], (byte)(0xa0 + page.ch + op * 8), dat);
                         break;
                     case "DT2SR":
                     case "DT2D2R":
-                        SOutData(page,mml, port[0], (byte)(0xc0 + page.ch + op * 8), dat);
+                        SOutData(page, mml, port[0], (byte)(0xc0 + page.ch + op * 8), dat);
                         break;
                     case "SLRR":
                     case "D1LRR":
-                        SOutData(page,mml, port[0], (byte)(0xe0 + page.ch + op * 8), dat);
+                        SOutData(page, mml, port[0], (byte)(0xe0 + page.ch + op * 8), dat);
                         break;
                 }
             }
@@ -896,7 +893,7 @@ namespace Core
             {
                 byte adr = (byte)(int)mml.args[0];
                 byte dat = (byte)(int)mml.args[1];
-                SOutData(page,mml, port[0], adr, dat);
+                SOutData(page, mml, port[0], adr, dat);
             }
         }
 

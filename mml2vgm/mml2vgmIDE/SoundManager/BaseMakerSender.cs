@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Core;
+using mml2vgmIDE;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Core;
-using mml2vgmIDE;
 
 namespace SoundManager
 {
@@ -42,7 +42,7 @@ namespace SoundManager
 
             task = new Task(action, cancellationToken);
             task.Start();
-            
+
             return true;
         }
 
@@ -68,7 +68,7 @@ namespace SoundManager
 
         public bool Enq(outDatum od, long Counter, Chip Chip, EnmDataType Type, int Address, int Data, object ExData)
         {
-            return ringBuffer.Enq(od,Counter, Chip , Type, Address, Data, ExData);
+            return ringBuffer.Enq(od, Counter, Chip, Type, Address, Data, ExData);
         }
 
         public bool Deq(ref outDatum od, ref long Counter, ref Chip Chip, ref EnmDataType Type, ref int Address, ref int Data, ref object ExData)

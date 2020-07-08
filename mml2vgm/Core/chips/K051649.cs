@@ -1,9 +1,5 @@
-﻿using System;
+﻿using musicDriverInterface;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using musicDriverInterface;
 
 namespace Core
 {
@@ -23,7 +19,7 @@ namespace Core
             ChipNumber = chipNumber;
 
             Frequency = 1789772;
-            port =new byte[][] { new byte[] { 0xd2 } };
+            port = new byte[][] { new byte[] { 0xd2 } };
 
             if (string.IsNullOrEmpty(initialPartName)) return;
 
@@ -112,7 +108,7 @@ namespace Core
                 page,
                 mml,
                 cmd
-                , (byte)((chipNumber!=0 ? 0x80 : 0x00) + port)
+                , (byte)((chipNumber != 0 ? 0x80 : 0x00) + port)
                 , adr
                 , data);
         }
@@ -133,7 +129,7 @@ namespace Core
 
                 OutK051649Port(
                     page,
-                    mml,port[0],
+                    mml, port[0],
                     page.chipNumber
                     , (byte)(parent.info.isK052539 ? 4 : 0)
                     , (byte)(ch * 32 + i - 1)
@@ -187,25 +183,25 @@ namespace Core
             //keyonoff
             if (keyOnStatus != keyOnStatusOld)
             {
-                OutK051649Port(lstPartWork[lstPartWork.Count-1].cpg, mml, port[0], ChipNumber, 3, 0, keyOnStatus);
+                OutK051649Port(lstPartWork[lstPartWork.Count - 1].cpg, mml, port[0], ChipNumber, 3, 0, keyOnStatus);
                 keyOnStatusOld = keyOnStatus;
             }
 
         }
 
-        public void OutSsgKeyOn(MML mml,partPage page)
+        public void OutSsgKeyOn(MML mml, partPage page)
         {
             SetSsgVolume(mml, page);
             page.keyOn = true;
         }
 
-        public void OutSsgKeyOff(MML mml,partPage page)
+        public void OutSsgKeyOff(MML mml, partPage page)
         {
             SetSsgVolume(mml, page);
             page.keyOn = false;
         }
 
-        public void SetSsgVolume(MML mml,partPage page)
+        public void SetSsgVolume(MML mml, partPage page)
         {
             byte pch = (byte)page.ch;
 

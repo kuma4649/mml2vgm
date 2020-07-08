@@ -44,9 +44,9 @@ namespace SoundManager
 
                         try
                         {
-                            while (ringBuffer.Deq(ref od,ref Counter, ref Chip, ref Type, ref Address, ref Data, ref ExData))
+                            while (ringBuffer.Deq(ref od, ref Counter, ref Chip, ref Type, ref Address, ref Data, ref ExData))
                             {
-                                ActionOfChip?.Invoke(od,Counter, Chip, Type, Address, Data, ExData);
+                                ActionOfChip?.Invoke(od, Counter, Chip, Type, Address, Data, ExData);
                                 if (unmount) return;
                             }
                         }

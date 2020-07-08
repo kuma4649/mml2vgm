@@ -1,9 +1,4 @@
 ﻿using Core;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace mml2vgmIDE.MMLParameter
 {
@@ -22,7 +17,7 @@ namespace mml2vgmIDE.MMLParameter
 
         public override void SetParameter(outDatum od, int cc)
         {
-            
+
         }
     }
 }

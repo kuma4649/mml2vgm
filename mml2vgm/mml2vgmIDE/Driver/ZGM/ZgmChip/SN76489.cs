@@ -1,15 +1,11 @@
 ﻿using Core;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace mml2vgmIDE.Driver.ZGM.ZgmChip
 {
     public class SN76489 : ZgmChip
     {
-        public SN76489(ChipRegister chipRegister, Setting setting, outDatum[] vgmBuf):base(4)
+        public SN76489(ChipRegister chipRegister, Setting setting, outDatum[] vgmBuf) : base(4)
         {
             this.chipRegister = chipRegister;
             this.setting = setting;

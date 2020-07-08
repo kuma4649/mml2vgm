@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Core;
+﻿using Core;
 using musicDriverInterface;
+using System;
+using System.Linq;
 
 namespace mml2vgmIDE.MMLParameter
 {
     public class GeneralMIDI : Instrument
     {
-        public GeneralMIDI(SoundManager.Chip chip) : base(99,chip)
+        public GeneralMIDI(SoundManager.Chip chip) : base(99, chip)
         {
             for (int i = 0; i < 99; i++)
             {
@@ -68,7 +65,7 @@ namespace mml2vgmIDE.MMLParameter
                         velocity[od.linePos.ch] = (int)od.args[0];
                     break;
                 case enmMMLType.Pan:
-                        pan[od.linePos.ch] = od.args[0].ToString();
+                    pan[od.linePos.ch] = od.args[0].ToString();
                     break;
                 case enmMMLType.Octave:
                     octave[od.linePos.ch] = (int)od.args[0];
@@ -92,8 +89,8 @@ namespace mml2vgmIDE.MMLParameter
                         {
                             if (vol[od.linePos.ch] != null)
                             {
-                                keyOnMeter[od.linePos.ch] = (int)(256.0 
-                                    / 128 * vol[od.linePos.ch] 
+                                keyOnMeter[od.linePos.ch] = (int)(256.0
+                                    / 128 * vol[od.linePos.ch]
                                     / 128 * expression[od.linePos.ch]
                                     / 128 * velocity[od.linePos.ch]
                                     );

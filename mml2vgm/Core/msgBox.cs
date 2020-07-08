@@ -1,9 +1,5 @@
-﻿using System;
+﻿using musicDriverInterface;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using musicDriverInterface;
 
 namespace Core
 {
@@ -23,7 +19,7 @@ namespace Core
             errBox.Add(msg);
         }
 
-        public static void setErrMsg(string msg,LinePos lp)
+        public static void setErrMsg(string msg, LinePos lp)
         {
             //errBox.Add(string.Format("(F : {0}  L : {1}) : {2}", System.IO.Path.GetFileName(fn), lineNumber, msg));
             if (lp != null)
@@ -72,7 +68,7 @@ namespace Core
         public int length = -1;
         public string body = "";
 
-        public msgInfo(string filename, int line,int column,int length, string body)
+        public msgInfo(string filename, int line, int column, int length, string body)
         {
             this.filename = filename;
             this.line = line;

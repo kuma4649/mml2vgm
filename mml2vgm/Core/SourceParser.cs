@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Core
 {
@@ -154,9 +152,9 @@ namespace Core
         }
 
 
-        private Dictionary<enmChipType, Tuple<string, string, List<string>,int[]>> GetChipPartNames()
+        private Dictionary<enmChipType, Tuple<string, string, List<string>, int[]>> GetChipPartNames()
         {
-            Dictionary<enmChipType, Tuple<string, string, List<string>,int[]>> cpn = new Dictionary<enmChipType, Tuple<string, string, List<string>,int[]>>();
+            Dictionary<enmChipType, Tuple<string, string, List<string>, int[]>> cpn = new Dictionary<enmChipType, Tuple<string, string, List<string>, int[]>>();
             ClsChip cp;
 
             //default

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Core
 {
@@ -17,7 +13,7 @@ namespace Core
             _canUsePcm = false;
 
             Frequency = 3579545;
-            port = new byte[][] { 
+            port = new byte[][] {
                 new byte[] { (byte)(chipNumber != 0 ? 0xaa : 0x5a) }
             };
 
@@ -99,10 +95,10 @@ int ws
             //// / 3        ... slotは3ope毎に0か1を繰り返す
             //int slot = (opeNum % 6) / 3;
 
-            SOutData(page,mml, port, (byte)(0x80 + adr), (byte)(((sl & 0xf) << 4) | (rr & 0xf)));
-            SOutData(page,mml, port, (byte)(0x60 + adr), (byte)(((ar & 0xf) << 4) | (dr & 0xf)));
-            SetInstAtOneOpeAmVibEgKsMl(page,mml, port, (byte)(0x20 + adr), mt, am, vib, eg, kr);
-            SOutData(page,mml, port, (byte)(0xe0 + adr), (byte)(ws & 0x3));
+            SOutData(page, mml, port, (byte)(0x80 + adr), (byte)(((sl & 0xf) << 4) | (rr & 0xf)));
+            SOutData(page, mml, port, (byte)(0x60 + adr), (byte)(((ar & 0xf) << 4) | (dr & 0xf)));
+            SetInstAtOneOpeAmVibEgKsMl(page, mml, port, (byte)(0x20 + adr), mt, am, vib, eg, kr);
+            SOutData(page, mml, port, (byte)(0xe0 + adr), (byte)(ws & 0x3));
         }
 
     }

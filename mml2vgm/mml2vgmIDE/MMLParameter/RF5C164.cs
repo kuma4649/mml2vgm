@@ -1,13 +1,13 @@
 ﻿using Core;
+using musicDriverInterface;
 using System;
 using System.Linq;
-using musicDriverInterface;
 
 namespace mml2vgmIDE.MMLParameter
 {
     public class RF5C164 : Instrument
     {
-        public RF5C164(SoundManager.Chip chip) : base(8,chip)
+        public RF5C164(SoundManager.Chip chip) : base(8, chip)
         {
             for (int i = 0; i < 8; i++)
             {

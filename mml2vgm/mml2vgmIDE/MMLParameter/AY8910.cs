@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Core;
+﻿using Core;
 using musicDriverInterface;
+using System;
+using System.Linq;
 
 namespace mml2vgmIDE.MMLParameter
 {
     public class AY8910 : Instrument
     {
-        public AY8910(SoundManager.Chip chip) : base(3,chip)
+        public AY8910(SoundManager.Chip chip) : base(3, chip)
         {
             for (int i = 0; i < 3; i++)
             {
@@ -34,8 +31,8 @@ namespace mml2vgmIDE.MMLParameter
                     envelope[od.linePos.ch] = (int)od.args[1];
                     break;
                 //case enmMMLType.Envelope:
-                    //envelope[od.linePos.ch] = (int)od.args[1];
-                    //break;
+                //envelope[od.linePos.ch] = (int)od.args[1];
+                //break;
                 case enmMMLType.Octave:
                     octave[od.linePos.ch] = (int)od.args[0];
                     break;

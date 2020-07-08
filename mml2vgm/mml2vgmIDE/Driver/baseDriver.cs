@@ -1,9 +1,4 @@
 ﻿using Core;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace mml2vgmIDE
 {
@@ -34,7 +29,7 @@ namespace mml2vgmIDE
 
         public string errMsg { get; internal set; }
 
-        public abstract bool init(outDatum[] vgmBuf, ChipRegister chipRegister, EnmChip[] useChip, uint latency, uint waitTime,long jumpPointClock);
+        public abstract bool init(outDatum[] vgmBuf, ChipRegister chipRegister, EnmChip[] useChip, uint latency, uint waitTime, long jumpPointClock);
         public abstract void oneFrameProc();
         public abstract GD3 getGD3Info(byte[] buf, uint vgmGd3);
 

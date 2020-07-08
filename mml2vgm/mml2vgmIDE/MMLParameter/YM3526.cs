@@ -1,17 +1,12 @@
 ﻿using Core;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace mml2vgmIDE.MMLParameter
 {
     public class YM3526 : Instrument
     {
-        public YM3526(SoundManager.Chip chip) : base(9+5, chip)
+        public YM3526(SoundManager.Chip chip) : base(9 + 5, chip)
         {
-            for (int i = 0; i < 9+5; i++)
+            for (int i = 0; i < 9 + 5; i++)
             {
                 vol[i] = 63;
                 beforeTie[i] = false;

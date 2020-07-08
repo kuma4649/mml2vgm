@@ -1,6 +1,5 @@
 ﻿using Core;
 using mml2vgmIDE.Driver.ZGM;
-using NScci;
 using System;
 
 namespace mml2vgmIDE
@@ -21,7 +20,7 @@ namespace mml2vgmIDE
 
         public zgm driver { get; internal set; }
 
-        public void sendCommand(long Counter,dac_control chip)
+        public void sendCommand(long Counter, dac_control chip)
         {
             byte Port;
             byte Command;
@@ -55,7 +54,7 @@ namespace mml2vgmIDE
                     Command = (byte)(chip.Data[chip.DataStart + chip.RealPos + 1] & 0x0F);
                     Data = chip.Data[chip.DataStart + chip.RealPos];
                     od = chip.od;
-                    chip_reg_write(Counter, chip.DstChipType, chip.DstChipID, Port, Command, Data,od);
+                    chip_reg_write(Counter, chip.DstChipType, chip.DstChipID, Port, Command, Data, od);
                     break;
                 // Support for other chips (mainly for completeness)
                 case 0x00:  // SN76496 (4-bit Register, 4-bit/10-bit Data)
@@ -65,14 +64,14 @@ namespace mml2vgmIDE
                     if ((Command & 0x10) > 0)
                     {
                         // Volume Change (4-Bit value)
-                        chip_reg_write(Counter, chip.DstChipType, chip.DstChipID, 0x00, 0x00, (byte)(Command | Data),od);
+                        chip_reg_write(Counter, chip.DstChipType, chip.DstChipID, 0x00, 0x00, (byte)(Command | Data), od);
                     }
                     else
                     {
                         // Frequency Write (10-Bit value)
                         Port = (byte)(((chip.Data[chip.DataStart + chip.RealPos + 1] & 0x03) << 4) | ((chip.Data[chip.DataStart + chip.RealPos] & 0xF0) >> 4));
-                        chip_reg_write(Counter, chip.DstChipType, chip.DstChipID, 0x00, 0x00, (byte)(Command | Data),od);
-                        chip_reg_write(Counter, chip.DstChipType, chip.DstChipID, 0x00, 0x00, Port,od);
+                        chip_reg_write(Counter, chip.DstChipType, chip.DstChipID, 0x00, 0x00, (byte)(Command | Data), od);
+                        chip_reg_write(Counter, chip.DstChipType, chip.DstChipID, 0x00, 0x00, Port, od);
                     }
                     break;
                 case 0x18:  // OKIM6295 - TODO: verify
@@ -87,19 +86,19 @@ namespace mml2vgmIDE
                         {
                             // Sample Start
                             // write sample ID
-                            chip_reg_write(Counter, chip.DstChipType, chip.DstChipID, 0x00, Command, Data,od);
+                            chip_reg_write(Counter, chip.DstChipType, chip.DstChipID, 0x00, Command, Data, od);
                             // write channel(s) that should play the sample
-                            chip_reg_write(Counter, chip.DstChipType, chip.DstChipID, 0x00, Command, (byte)(Port << 4),od);
+                            chip_reg_write(Counter, chip.DstChipType, chip.DstChipID, 0x00, Command, (byte)(Port << 4), od);
                         }
                         else
                         {
                             // Sample Stop
-                            chip_reg_write(Counter, chip.DstChipType, chip.DstChipID, 0x00, Command, (byte)(Port << 3),od);
+                            chip_reg_write(Counter, chip.DstChipType, chip.DstChipID, 0x00, Command, (byte)(Port << 3), od);
                         }
                     }
                     else
                     {
-                        chip_reg_write(Counter, chip.DstChipType, chip.DstChipID, 0x00, Command, Data,od);
+                        chip_reg_write(Counter, chip.DstChipType, chip.DstChipID, 0x00, Command, Data, od);
                     }
                     break;
                 // Generic support: 8-bit Register, 8-bit Data
@@ -121,7 +120,7 @@ namespace mml2vgmIDE
                     Command = (byte)((chip.DstCommand & 0x00FF) >> 0);
                     Data = chip.Data[chip.DataStart + chip.RealPos];
                     od = chip.od;
-                    chip_reg_write(Counter, chip.DstChipType, chip.DstChipID, 0x00, Command, Data,od);
+                    chip_reg_write(Counter, chip.DstChipType, chip.DstChipID, 0x00, Command, Data, od);
                     break;
                 // Generic support: 16-bit Register, 8-bit Data
                 case 0x07:  // YM2608
@@ -136,7 +135,7 @@ namespace mml2vgmIDE
                     Command = (byte)((chip.DstCommand & 0x00FF) >> 0);
                     Data = chip.Data[chip.DataStart + chip.RealPos];
                     od = chip.od;
-                    chip_reg_write(Counter, chip.DstChipType, chip.DstChipID, Port, Command, Data,od);
+                    chip_reg_write(Counter, chip.DstChipType, chip.DstChipID, Port, Command, Data, od);
                     break;
                 // Generic support: 8-bit Register with Channel Select, 8-bit Data
                 case 0x05:  // RF5C68
@@ -148,15 +147,15 @@ namespace mml2vgmIDE
                     od = null;//chip.od;
 
                     if (Port != 0xFF)   // Send Channel Select
-                        chip_reg_write(Counter, chip.DstChipType, chip.DstChipID, 0x00, (byte)(Command >> 4), Port,od);
+                        chip_reg_write(Counter, chip.DstChipType, chip.DstChipID, 0x00, (byte)(Command >> 4), Port, od);
                     // Send Data
-                    chip_reg_write(Counter, chip.DstChipType, chip.DstChipID, 0x00, (byte)(Command & 0x0F), Data,od);
+                    chip_reg_write(Counter, chip.DstChipType, chip.DstChipID, 0x00, (byte)(Command & 0x0F), Data, od);
                     break;
                 // Generic support: 8-bit Register, 16-bit Data
                 case 0x1F:  // QSound
                     Command = (byte)((chip.DstCommand & 0x00FF) >> 0);
                     od = chip.od;
-                    chip_reg_write(Counter, chip.DstChipType, chip.DstChipID, chip.Data[chip.DataStart + chip.RealPos], chip.Data[chip.DataStart + chip.RealPos + 1], Command,od);
+                    chip_reg_write(Counter, chip.DstChipType, chip.DstChipID, chip.Data[chip.DataStart + chip.RealPos], chip.Data[chip.DataStart + chip.RealPos + 1], Command, od);
                     break;
             }
             chip.Running |= 0x10;
@@ -316,11 +315,11 @@ namespace mml2vgmIDE
             dac_control chip = DACData[StreamID];
             byte ChType = 0x2;
             byte ChNum = 0x0;
-            foreach(Driver.ZGM.ZgmChip.ZgmChip zchip in driver.chips)
+            foreach (Driver.ZGM.ZgmChip.ZgmChip zchip in driver.chips)
             {
                 if (zchip.defineInfo.commandNo != ChipID) continue;
 
-                if(zchip is Driver.ZGM.ZgmChip.YM2612)
+                if (zchip is Driver.ZGM.ZgmChip.YM2612)
                 {
                     ChType = 0x2;
                 }
@@ -415,7 +414,7 @@ namespace mml2vgmIDE
             return;
         }
 
-        public void start(byte ChipID, uint DataPos, byte LenMode, uint Length,outDatum od)
+        public void start(byte ChipID, uint DataPos, byte LenMode, uint Length, outDatum od)
         {
             dac_control chip = DACData[ChipID];
             chip.od = od;
@@ -484,7 +483,7 @@ namespace mml2vgmIDE
             return;
         }
 
-        private void chip_reg_write(long Counter, byte ChipType, byte ChipID, byte Port, byte Offset, byte Data,outDatum od)
+        private void chip_reg_write(long Counter, byte ChipType, byte ChipID, byte Port, byte Offset, byte Data, outDatum od)
         {
             switch (ChipType)
             {

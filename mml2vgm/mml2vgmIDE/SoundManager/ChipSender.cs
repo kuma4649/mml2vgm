@@ -1,6 +1,4 @@
-﻿using System.Threading;
-
-namespace SoundManager
+﻿namespace SoundManager
 {
     public class ChipSender : BaseSender
     {

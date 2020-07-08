@@ -1,11 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace mml2vgmIDE
@@ -132,9 +125,9 @@ namespace mml2vgmIDE
 
         private void TxtOCT_KeyDown(object sender, KeyEventArgs e)
         {
-            if(e.KeyCode == Keys.Enter 
-                || e.KeyCode == Keys.Escape 
-                || e.KeyCode == Keys.PageUp 
+            if (e.KeyCode == Keys.Enter
+                || e.KeyCode == Keys.Escape
+                || e.KeyCode == Keys.PageUp
                 || e.KeyCode == Keys.PageDown)
             {
                 TxtOCT_Leave(null, null);
@@ -270,13 +263,13 @@ namespace mml2vgmIDE
                     break;
                 case FrmMIDIKbd.KbdParam.LfoWaveType:
                     tbl = new Control[] {
-                        lp[0].WaveType==0 ? rbP_WType_Triangle : (lp[0].WaveType==1 ? rbP_WType_Saw 
+                        lp[0].WaveType==0 ? rbP_WType_Triangle : (lp[0].WaveType==1 ? rbP_WType_Saw
                             : (lp[0].WaveType==2 ? rbP_WType_Square : (lp[0].WaveType==3 ? rbP_WType_OneShot : rbP_WType_Random))),
-                        lp[1].WaveType==0 ? rbQ_WType_Triangle : (lp[1].WaveType==1 ? rbQ_WType_Saw 
+                        lp[1].WaveType==0 ? rbQ_WType_Triangle : (lp[1].WaveType==1 ? rbQ_WType_Saw
                             : (lp[1].WaveType==2 ? rbQ_WType_Square : (lp[1].WaveType==3 ? rbQ_WType_OneShot : rbQ_WType_Random))),
-                        lp[2].WaveType==0 ? rbR_WType_Triangle : (lp[2].WaveType==1 ? rbR_WType_Saw 
+                        lp[2].WaveType==0 ? rbR_WType_Triangle : (lp[2].WaveType==1 ? rbR_WType_Saw
                             : (lp[2].WaveType==2 ? rbR_WType_Square : (lp[2].WaveType==3 ? rbR_WType_OneShot : rbR_WType_Random))),
-                        lp[3].WaveType==0 ? rbS_WType_Triangle : (lp[3].WaveType==1 ? rbS_WType_Saw 
+                        lp[3].WaveType==0 ? rbS_WType_Triangle : (lp[3].WaveType==1 ? rbS_WType_Saw
                             : (lp[3].WaveType==2 ? rbS_WType_Square : (lp[3].WaveType==3 ? rbS_WType_OneShot : rbS_WType_Random)))
                     };
                     break;

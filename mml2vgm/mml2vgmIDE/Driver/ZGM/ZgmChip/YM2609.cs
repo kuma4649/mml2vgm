@@ -1,16 +1,12 @@
 ﻿using Core;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace mml2vgmIDE.Driver.ZGM.ZgmChip
 {
     public class YM2609 : ZgmChip
     {
 
-        public YM2609(ChipRegister chipRegister, Setting setting, outDatum[] vgmBuf):base(12+6+12+6+3+6)
+        public YM2609(ChipRegister chipRegister, Setting setting, outDatum[] vgmBuf) : base(12 + 6 + 12 + 6 + 3 + 6)
         {
             this.chipRegister = chipRegister;
             this.setting = setting;

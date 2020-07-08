@@ -1,19 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using Core;
-using NAudio;
+﻿using Core;
+using musicDriverInterface;
 using NAudio.Midi;
 using Sgry.Azuki.WinForms;
 using SoundManager;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
-using musicDriverInterface;
 
 namespace mml2vgmIDE
 {
@@ -89,7 +83,8 @@ namespace mml2vgmIDE
                 DrawBuff.screenInitMixer(frameBuffer);
                 update();
                 Init();
-            }catch
+            }
+            catch
             {
 
             }
@@ -505,7 +500,7 @@ namespace mml2vgmIDE
             mNote = -1;
         }
 
-        private void NoteOn(int n,int velocity)
+        private void NoteOn(int n, int velocity)
         {
             noteFlg[n & 0x7f] = (byte)(velocity & 0x7f);
             log.Write(string.Format("MIDIKbd:Note On{0}", n));
@@ -532,7 +527,7 @@ namespace mml2vgmIDE
             mml = MakeMML_NoteOn(n);
             lock (lockObject)
             {
-                cChip.CmdNote(pw,pw.apg, mml);//TODO:page制御やってない
+                cChip.CmdNote(pw, pw.apg, mml);//TODO:page制御やってない
             }
 
             latestNoteNumberMONO = n;
@@ -634,7 +629,7 @@ namespace mml2vgmIDE
             pw = cChip.lstPartWork[0];
             cChip.use = true;
             mv.desVGM.isRealTimeMode = true;
-            for(int i = 0; i < 4; i++)
+            for (int i = 0; i < 4; i++)
             {
                 pw.apg.lfo[i].param = new List<int>();
                 pw.apg.lfo[i].param.Add(0);
@@ -701,8 +696,8 @@ namespace mml2vgmIDE
 
             if ((Audio.sm.Mode & SendMode.MML) != SendMode.MML)
             {
-                if(rtMML!=null)
-                rtMML.OneFrameSeq();
+                if (rtMML != null)
+                    rtMML.OneFrameSeq();
             }
 
             if (mv.desVGM.dat.Count == 0) return;
@@ -826,7 +821,7 @@ namespace mml2vgmIDE
             rec_currentOctave = octave;
         }
 
-        private void rec_dispNote(int note,long length)
+        private void rec_dispNote(int note, long length)
         {
             long c = rtMML.clockCount;
             long len = length;
@@ -982,7 +977,7 @@ namespace mml2vgmIDE
             }
         }
 
-        private void PbScreen_MouseClick_KeybdArea(int px, int py, MouseEventArgs e,out int oct,out int note)
+        private void PbScreen_MouseClick_KeybdArea(int px, int py, MouseEventArgs e, out int oct, out int note)
         {
             px = e.Location.X / zoom - 1;
             py = e.Location.Y / zoom - 1 - 7 * 8;
@@ -1000,7 +995,7 @@ namespace mml2vgmIDE
                 if (ox >= 4 && ox <= 9) note = 1;//c#
                 else if (ox >= 12 && ox <= 17) note = 3;//d#
                 else if (ox >= 28 && ox <= 33) note = 6;//f#
-                else if (ox >= 36 && ox <= 41) note= 8;//g#
+                else if (ox >= 36 && ox <= 41) note = 8;//g#
                 else if (ox >= 44 && ox <= 49) note = 10;//a#
             }
             if (note == -1)

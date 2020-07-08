@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Core
 {
@@ -118,7 +115,7 @@ namespace Core
 
         //our main sub, init buffers and runs the encode process
         //enter this with your sound file loaded into buffer
-        public byte[] YM_ADPCM_A_Encode(byte[] buffer,bool is16bit)  //input buffer, load your sound file into this
+        public byte[] YM_ADPCM_A_Encode(byte[] buffer, bool is16bit)  //input buffer, load your sound file into this
         {
             int i;
 
@@ -154,7 +151,7 @@ namespace Core
                 }
                 else inBuffer = new short[buffer.Length];
 
-                for (i = 0; i < buffer.Length; i ++)
+                for (i = 0; i < buffer.Length; i++)
                 {
                     inBuffer[i] = (short)(buffer[i] - 128);
                     inBuffer[i] <<= 4;
@@ -171,7 +168,7 @@ namespace Core
                 outBuffer[i / 2] = (byte)((YM2610_ADPCM_A_Encode(inBuffer[i]) << 4) | YM2610_ADPCM_A_Encode(inBuffer[i + 1]));
             }
             //padding
-            for (i = i/2; i < outBuffer.Length; i ++)
+            for (i = i / 2; i < outBuffer.Length; i++)
             {
                 outBuffer[i] = (byte)((YM2610_ADPCM_A_Encode(0x00) << 4) | YM2610_ADPCM_A_Encode(0x00));
             }
@@ -187,7 +184,7 @@ namespace Core
         //private byte[] outBuffer; //our output buffer, this is your PCM file, save it after encoding. Its size has to be allocated to buffer.length / 4 (16 bits per sample to 4 bits per sample)
         //private int outBufferIndex = 0; //reset to 0 before each encoding
 
-        public byte[] YM_ADPCM_B_Encode(byte[] buffer,bool is16bit,bool isYM2610B)
+        public byte[] YM_ADPCM_B_Encode(byte[] buffer, bool is16bit, bool isYM2610B)
         {
             int lpc, flag;
             long i, dn, xn, stepSize;

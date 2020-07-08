@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Core;
+﻿using Core;
 using musicDriverInterface;
+using System;
+using System.Linq;
 
 namespace mml2vgmIDE.MMLParameter
 {
     public class YM2413 : Instrument
     {
-        public YM2413(SoundManager.Chip chip) :base(14,chip)
+        public YM2413(SoundManager.Chip chip) : base(14, chip)
         {
             for (int i = 0; i < 14; i++)
             {
@@ -33,7 +30,7 @@ namespace mml2vgmIDE.MMLParameter
                 case enmMMLType.Instrument:
                     if ((char)od.args[0] == 'I')
                     {
-                        inst[od.linePos.ch] = string.Format("{0}(Preset)" , od.args[1]);
+                        inst[od.linePos.ch] = string.Format("{0}(Preset)", od.args[1]);
                     }
                     else
                     {

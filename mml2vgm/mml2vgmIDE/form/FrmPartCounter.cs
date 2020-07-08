@@ -1,12 +1,9 @@
-﻿using System;
+﻿using mml2vgmIDE.MMLParameter;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Reflection;
-using System.Text;
 using System.Windows.Forms;
-using mml2vgmIDE.MMLParameter;
 using WeifenLuo.WinFormsUI.Docking;
 
 namespace mml2vgmIDE
@@ -106,7 +103,7 @@ namespace mml2vgmIDE
                 }
 
                 Color c = Color.FromArgb(255
-                    , Math.Max(Math.Min((int)r,255),0)
+                    , Math.Max(Math.Min((int)r, 255), 0)
                     , Math.Max(Math.Min((int)g, 255), 0)
                     , Math.Max(Math.Min((int)b, 255), 0)
                     );
@@ -127,14 +124,14 @@ namespace mml2vgmIDE
         private void CacheMuteSolo()
         {
             lstCacheMuteSolo.Clear();
-            foreach(DataGridViewRow r in dgvPartCounter.Rows)
+            foreach (DataGridViewRow r in dgvPartCounter.Rows)
             {
                 Tuple<string, int, int, int, bool, bool, bool> t = new Tuple<string, int, int, int, bool, bool, bool>(
                     (string)r.Cells[dgvPartCounter.Columns["ClmChip"].Index].Value
                     , (int)r.Cells[dgvPartCounter.Columns["ClmChipIndex"].Index].Value
                     , (int)r.Cells[dgvPartCounter.Columns["ClmChipNumber"].Index].Value
                     , (int)r.Cells[dgvPartCounter.Columns["ClmPartNumber"].Index].Value
-                    , (bool)(r.Cells[dgvPartCounter.Columns["ClmMute"].Index].Value == null ? false : ((string)r.Cells[dgvPartCounter.Columns["ClmMute"].Index].Value=="M"))
+                    , (bool)(r.Cells[dgvPartCounter.Columns["ClmMute"].Index].Value == null ? false : ((string)r.Cells[dgvPartCounter.Columns["ClmMute"].Index].Value == "M"))
                     , (bool)(r.Cells[dgvPartCounter.Columns["ClmPush"].Index].Value == null ? false : ((string)r.Cells[dgvPartCounter.Columns["ClmPush"].Index].Value == "M"))
                     , (bool)(r.Cells[dgvPartCounter.Columns["ClmSolo"].Index].Value == null ? false : ((string)r.Cells[dgvPartCounter.Columns["ClmSolo"].Index].Value == "S"))
                     );
@@ -229,7 +226,7 @@ namespace mml2vgmIDE
 
         private void FrmPartCounter_FormClosed(object sender, FormClosedEventArgs e)
         {
-            for(int i = 0; i < 256; i++)
+            for (int i = 0; i < 256; i++)
             {
                 meterBrush[i].Dispose();
             }
@@ -287,7 +284,7 @@ namespace mml2vgmIDE
             dgvPartCounter.ResumeLayout();
         }
 
-        private void DrawMeter(DataGridViewCell dataGridViewCell, Instrument mmli,int pn)
+        private void DrawMeter(DataGridViewCell dataGridViewCell, Instrument mmli, int pn)
         {
             DataGridViewImageCell cell = (DataGridViewImageCell)dataGridViewCell;
             int cw = cell.Size.Width;
@@ -359,7 +356,7 @@ namespace mml2vgmIDE
             }
 
             //spacerは常に最後にする
-            dgvPartCounter.Columns["ClmSpacer"].DisplayIndex = dgvPartCounter.Columns.Count  - 1;
+            dgvPartCounter.Columns["ClmSpacer"].DisplayIndex = dgvPartCounter.Columns.Count - 1;
         }
 
 
@@ -500,7 +497,7 @@ namespace mml2vgmIDE
             if (e.Button != MouseButtons.Right) return;
             if (e.RowIndex != -1) return;
             if (setting == null || setting.location == null) return;
-            if( setting.location.PartCounterClmInfo == null)
+            if (setting.location.PartCounterClmInfo == null)
             {
                 setting.location.PartCounterClmInfo = getDisplayIndex();
             }
@@ -553,7 +550,7 @@ namespace mml2vgmIDE
         private void MenuItem_Click(object sender, EventArgs e)
         {
             ToolStripMenuItem i = (ToolStripMenuItem)sender;
-            foreach(DataGridViewColumn c in dgvPartCounter.Columns)
+            foreach (DataGridViewColumn c in dgvPartCounter.Columns)
             {
                 if (c.Tag != i.Tag) continue;
                 c.Visible = !c.Visible;

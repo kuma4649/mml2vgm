@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Core;
+﻿using Core;
 using musicDriverInterface;
+using System;
+using System.Linq;
 
 namespace mml2vgmIDE.MMLParameter
 {
     public class K053260 : Instrument
     {
-        public K053260(SoundManager.Chip chip) : base(4,chip)
+        public K053260(SoundManager.Chip chip) : base(4, chip)
         {
             for (int i = 0; i < 4; i++)
             {

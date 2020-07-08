@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
-using WeifenLuo.WinFormsUI.Docking;
 
 namespace mml2vgmIDE
 {
@@ -13,9 +12,9 @@ namespace mml2vgmIDE
         //ウィンドウの位置と大きさ(フロート状態の位置と大きさを含む)
         private Rectangle _rect = Rectangle.Empty;
         //ウィンドウの状態(通常/最大化/最小化)
-        private FormWindowState _windowState= FormWindowState.Normal;
+        private FormWindowState _windowState = FormWindowState.Normal;
         //非表示か
-        private bool _hide=false;
+        private bool _hide = false;
 
         public string Name { get => _name; set => _name = value; }
         public Rectangle Rect { get => _rect; set => _rect = value; }

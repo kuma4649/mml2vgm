@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using Core;
+﻿using Core;
 using mml2vgmIDE;
+using System.Collections.Generic;
 
 namespace SoundManager
 {
@@ -20,7 +19,7 @@ namespace SoundManager
 
         private readonly object lockObj = new object();
 
-        public RingBuffer(int size,string name="")
+        public RingBuffer(int size, string name = "")
         {
             if (size < 2) return;
 
@@ -97,7 +96,7 @@ namespace SoundManager
                 //サーチ
                 long bufCounter = buf.Count + 1;
                 srcPos = enqPos.prev;
-                while (Counter < srcPos.Counter && srcPos != deqPos && bufCounter>0)
+                while (Counter < srcPos.Counter && srcPos != deqPos && bufCounter > 0)
                 {
                     srcPos = srcPos.prev;
                     bufCounter--;
@@ -129,7 +128,7 @@ namespace SoundManager
             }
         }
 
-        public bool Deq(ref outDatum od, ref long Counter,ref Chip Chip, ref EnmDataType Type, ref int Address, ref int Data, ref object ExData)
+        public bool Deq(ref outDatum od, ref long Counter, ref Chip Chip, ref EnmDataType Type, ref int Address, ref int Data, ref object ExData)
         {
             lock (lockObj)
             {
@@ -183,10 +182,10 @@ namespace SoundManager
                 CntPackData edbg = deqPos;
                 do
                 {
-                    Console.Write("[{0}:{1}]::", edbg.Counter, edbg.pack.Chip.Device);
+                    System.Console.Write("[{0}:{1}]::", edbg.Counter, edbg.pack.Chip.Device);
                     edbg = edbg.next;
                 } while (edbg != enqPos.next);
-                Console.WriteLine("");
+                System.Console.WriteLine("");
             }
         }
 

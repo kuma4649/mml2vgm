@@ -1,10 +1,9 @@
-﻿using System;
+﻿using musicDriverInterface;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
-using System.IO;
-using System.Threading.Tasks;
-using musicDriverInterface;
 
 namespace Core
 {
@@ -164,9 +163,9 @@ namespace Core
             //FNumTbl[0][12] = FNumTbl[0][0] * 2;
 
             string fn = string.Format("FNUM_{0}.txt", Name);
-            Stream stream = null;
             Dictionary<string, List<double>> dic = new Dictionary<string, List<double>>();
 
+            Stream stream;
             if (File.Exists(Path.Combine(stPath, "fnum", fn)))
             {
                 fn = Path.Combine(stPath, "fnum", fn);
@@ -295,9 +294,8 @@ namespace Core
             return n;
         }
 
-        private int AnalyzeBend(partPage page,MML mml, Note note, int ml)
+        private int AnalyzeBend(partPage page, MML mml, Note note, int ml)
         {
-            int n = -1;
             int bendDelayCounter;
             page.octaveNow = page.octaveNew;
             page.bendOctave = page.octaveNow;
@@ -311,7 +309,7 @@ namespace Core
                 switch (note.bendOctave[i].type)
                 {
                     case enmMMLType.Octave:
-                        n = (int)note.bendOctave[i].args[0];
+                        int n = (int)note.bendOctave[i].args[0];
                         n = Common.CheckRange(n, 1, 8);
                         page.bendOctave = n;
                         break;
@@ -347,7 +345,8 @@ namespace Core
                 float tl = 0;
                 float bf = Math.Sign(wait);
                 List<int> lstBend = new List<int>();
-                int toneDoublerShift = GetToneDoublerShift(
+                //int toneDoublerShift = 
+                    GetToneDoublerShift(
                     page
                     , page.octaveNow
                     , note.cmd
@@ -367,7 +366,7 @@ namespace Core
                     tl += wait;
                     GetFNumAtoB(
                         page
-                        ,mml
+                        , mml
                         , out int a
                         , page.octaveNow
                         , note.cmd
@@ -471,7 +470,7 @@ namespace Core
             int maxSize = 0;
             int ptr = 7 + (parent.ChipCommandSize == 2 ? 2 : 0);
 
-            if(parent.info.format== enmFormat.ZGM)
+            if (parent.info.format == enmFormat.ZGM)
             {
                 if (port.Length < 1) return;
 
@@ -480,7 +479,7 @@ namespace Core
                     if (port[0].Length < 1) return;
 
                     if (pcmDataEasy != null && pcmDataEasy.Length > 1) pcmDataEasy[1] = port[0][0];
-                    for(int i = 0; i < pcmDataDirect.Count; i++)
+                    for (int i = 0; i < pcmDataDirect.Count; i++)
                     {
                         pcmDataDirect[i][1] = port[0][0];
                     }
@@ -570,7 +569,7 @@ namespace Core
         }
 
 
-        public virtual int GetFNum(partPage page,MML mml, int octave, char cmd, int shift)
+        public virtual int GetFNum(partPage page, MML mml, int octave, char cmd, int shift)
         {
             throw new NotImplementedException("継承先で要実装");
         }
@@ -628,12 +627,12 @@ namespace Core
             throw new NotImplementedException("継承先で要実装");
         }
 
-        public virtual void SetVolume(partPage page,MML mml)
+        public virtual void SetVolume(partPage page, MML mml)
         {
             throw new NotImplementedException("継承先で要実装");
         }
 
-        public virtual void SetLfoAtKeyOn(partPage page,MML mml)
+        public virtual void SetLfoAtKeyOn(partPage page, MML mml)
         {
             throw new NotImplementedException("継承先で要実装");
         }
@@ -720,7 +719,7 @@ namespace Core
         public virtual void CmdTempo(partPage page, MML mml)
         {
             parent.info.tempo = (int)mml.args[0];
-            if (parent.info.format == enmFormat.VGM|| parent.info.format == enmFormat.ZGM)
+            if (parent.info.format == enmFormat.VGM || parent.info.format == enmFormat.ZGM)
             {
                 parent.info.samplesPerClock = Information.VGM_SAMPLE_PER_SECOND * 60.0 * 4.0 / (parent.info.tempo * parent.info.clockCount);
             }
@@ -829,8 +828,8 @@ namespace Core
             page.lfo[c].param = new List<int>();
             for (int i = 2; i < mml.args.Count; i++)
             {
-                if(mml.args[i] is int)
-                page.lfo[c].param.Add((int)mml.args[i]);
+                if (mml.args[i] is int)
+                    page.lfo[c].param.Add((int)mml.args[i]);
             }
 
             if (page.lfo[c].type == eLfoType.Tremolo || page.lfo[c].type == eLfoType.Vibrato)
@@ -1002,7 +1001,7 @@ namespace Core
 
         public virtual void CmdVolumeUp(partPage page, MML mml)
         {
-            int n = 1;
+            int n;
             if (mml.args[0] == null)
             {
                 n = GetDefaultRelativeVolume(page, mml);
@@ -1024,7 +1023,7 @@ namespace Core
 
         public virtual void CmdVolumeDown(partPage page, MML mml)
         {
-            int n = 1;
+            int n;
             if (mml.args[0] == null)
             {
                 n = GetDefaultRelativeVolume(page, mml);
@@ -1313,7 +1312,7 @@ namespace Core
             wkCount--;
             if (wkCount > 0)
             {
-                page.mmlPos=pos-1;
+                page.mmlPos = pos - 1;
                 mml.args[2] = wkCount;
             }
             else
@@ -1335,7 +1334,7 @@ namespace Core
             //最終リピート中のみ]に飛ばす
             if (wkCount < 2)
             {
-                page.mmlPos = pos-1;
+                page.mmlPos = pos - 1;
             }
         }
 
@@ -1345,8 +1344,6 @@ namespace Core
             //partPage pg = page;
 
             Note note = (Note)mml.args[0];
-            int ml = 0;
-
             if (note.tDblSw)
             {
                 page.TdA = page.octaveNew * 12
@@ -1356,13 +1353,12 @@ namespace Core
                 page.octaveNow = page.octaveNew;
             }
 
-            ml = note.length;
-
-            //ベンドの解析
-            int bendDelayCounter = 0;
+            int ml = note.length;
             if (note.bendSw)
             {
-                bendDelayCounter = AnalyzeBend(page, mml, note, ml);
+                //ベンドの解析
+                //int bendDelayCounter =
+                    AnalyzeBend(page, mml, note, ml);
             }
 
 
@@ -1485,10 +1481,7 @@ namespace Core
         public virtual void CmdRest(partPage page, MML mml)
         {
             Rest rest = (Rest)mml.args[0];
-            int ml = 0;
-
-            ml = rest.length;
-
+            int ml = rest.length;
             if (rest.length < 1)
             {
                 msgBox.setErrMsg(msg.get("E10013")
@@ -1532,7 +1525,7 @@ namespace Core
             SetDummyData(page, mml);
         }
 
-        public virtual void CmdBend(partPage page,MML mml)
+        public virtual void CmdBend(partPage page, MML mml)
         {
             //何もする必要なし
         }
@@ -1540,7 +1533,7 @@ namespace Core
         public void CheckInterrupt(partWork pw, partPage page)
         {
             if (!page.requestInterrupt) return;
-            
+
             //割り込み要求有り
 
             bool success = false;
@@ -1745,7 +1738,7 @@ namespace Core
         }
 
         public virtual void MultiChannelCommand(MML mml)
-        { 
+        {
         }
 
 

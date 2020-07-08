@@ -1,12 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
 
@@ -79,7 +73,7 @@ namespace mml2vgmIDE
         {
             if (lyrics == null || lyrics.Count < 1) return;
 
-            long cnt = Audio.GetDriverCounter()- skip;
+            long cnt = Audio.GetDriverCounter() - skip;
 
             try
             {

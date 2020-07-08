@@ -1,9 +1,7 @@
-﻿using System;
+﻿using musicDriverInterface;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using musicDriverInterface;
 
 namespace Core
 {
@@ -89,7 +87,7 @@ namespace Core
                 }
             }
 
-            if (ChipNumber!=0)
+            if (ChipNumber != 0)
             {
                 parent.dat[0xab] = new outDatum(enmMMLType.unknown, null, null, (byte)(parent.dat[0xab].val | 0x40));
             }
@@ -104,7 +102,7 @@ namespace Core
         /// <param name="v"></param>
         /// <param name="buf"></param>
         /// <param name="option"></param>
-        public override void StorePcm(Dictionary<int, clsPcm> newDic, KeyValuePair<int, clsPcm> v, byte[] buf,bool is16bit,int samplerate, params object[] option)
+        public override void StorePcm(Dictionary<int, clsPcm> newDic, KeyValuePair<int, clsPcm> v, byte[] buf, bool is16bit, int samplerate, params object[] option)
         {
             clsPcmDataInfo pi = pcmDataInfo[0];
 
@@ -140,7 +138,7 @@ namespace Core
 
                 //空いているBankを探す
                 int freeBank = 0;
-                int freeAdr =  0;
+                int freeAdr = 0;
                 do
                 {
                     if (memoryMap.Count < freeBank + 1)
@@ -189,7 +187,7 @@ namespace Core
                         , is16bit
                         , samplerate)
                     );
-                
+
                 if (newDic[v.Key].loopAdr != -1 && (v.Value.loopAdr < 0 || v.Value.loopAdr >= size))
                 {
                     msgBox.setErrMsg(string.Format(msg.get("E09000")
@@ -219,7 +217,7 @@ namespace Core
                     pi.totalBuf
                     , pi.totalHeadrSizeOfDataPtr
                     , (UInt32)(pi.totalBuf.Length - (pi.totalHeadrSizeOfDataPtr + 4))
-                    , ChipNumber!=0
+                    , ChipNumber != 0
                     );//size of data ( totalHeadrSizeOfDataPtr:サイズ値を設定する位置 4:サイズ値の大きさ(4byte32bit) )
                 Common.SetUInt32bit31(
                     pi.totalBuf
@@ -280,8 +278,8 @@ namespace Core
         }
 
 
-        
-        
+
+
         //Encoder code ここから
         //vgmplay/mame c140 code ここから
         private int[] pcmtbl;
@@ -404,12 +402,12 @@ namespace Core
                 destBit13Data = (short)((upper4bit << shiftBit) + pcmtbl[shiftBit] * (bit13data >= 0 ? 1 : -1));
                 dDat = (byte)((upper4bit << 3) | (shiftBit & 7));
 
-//#if DEBUG
-//                Console.WriteLine("src:{0:x2} 13bit:{1:x2}    dest:{2:x2} 13bit:{3:x2}   src-dest:{4}"
-//                    , sDat, bit13data
-//                    , dDat, destBit13Data
-//                    , bit13data - destBit13Data);
-//#endif
+                //#if DEBUG
+                //                Console.WriteLine("src:{0:x2} 13bit:{1:x2}    dest:{2:x2} 13bit:{3:x2}   src-dest:{4}"
+                //                    , sDat, bit13data
+                //                    , dDat, destBit13Data
+                //                    , bit13data - destBit13Data);
+                //#endif
 
                 dBuf.Add(dDat);
             }
@@ -457,7 +455,7 @@ namespace Core
         }
         //Encoder code ここまで
 
-        public int GetC140FNum(MML mml,partPage page, int octave, char noteCmd, int shift)
+        public int GetC140FNum(MML mml, partPage page, int octave, char noteCmd, int shift)
         {
             try
             {
@@ -518,7 +516,7 @@ namespace Core
                 page,
                 mml,
                 page.port[0]
-                , (byte)(port | (ChipNumber!=0 ? 0x80 : 0))
+                , (byte)(port | (ChipNumber != 0 ? 0x80 : 0))
                 , adr
                 , data
                 );
@@ -540,7 +538,7 @@ namespace Core
             int adr = 0;
             byte data = 0;
 
-            if(page.instrument==-1)
+            if (page.instrument == -1)
             {
                 LinePos lp = mml?.line?.Lp;
                 if (lp == null) lp = new LinePos("-");
@@ -549,7 +547,7 @@ namespace Core
             }
 
             //Volume
-            SetVolume(page,mml);
+            SetVolume(page, mml);
 
             //Address shift
             int stAdr = page.pcmStartAddress + page.addressShift;
@@ -560,7 +558,7 @@ namespace Core
                 //StartAdr H
                 adr = page.ch * 16 + 0x06;
                 data = (byte)((stAdr & 0xff00) >> 8);
-                OutC140Port(mml,page
+                OutC140Port(mml, page
                     , (byte)(adr >> 8)
                     , (byte)adr
                     , data);
@@ -941,7 +939,7 @@ namespace Core
         {
             return string.Format("{0,-10} {1,-7} {2,-5:D3} {3,-4:D2} ${4,-7:X4} ${5,-7:X4} {6} ${7,-7:X4}  {8,4} {9}\r\n"
                 , Name //0
-                , pcm.chipNumber!=0 ? "SEC" : "PRI" //1
+                , pcm.chipNumber != 0 ? "SEC" : "PRI" //1
                 , pcm.num //2
                 , pcm.stAdr >> 16 //3
                 , pcm.stAdr & 0xffff //4

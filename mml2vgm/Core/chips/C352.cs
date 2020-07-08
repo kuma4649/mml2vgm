@@ -2,8 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Core
 {
@@ -486,7 +484,7 @@ namespace Core
         }
 
         private void OutC352KeyOn(partPage page, MML mml)
-        { 
+        {
             //Volume
             SetVolume(page, mml);
 

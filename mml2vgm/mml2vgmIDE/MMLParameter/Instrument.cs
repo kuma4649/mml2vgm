@@ -63,7 +63,7 @@ namespace mml2vgmIDE.MMLParameter
         }
 
         public abstract void SetParameter(outDatum od, int cc);
-        
+
         public void SetMute(int ch, bool flg)
         {
             if (chip == null) return;

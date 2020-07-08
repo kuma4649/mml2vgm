@@ -1,11 +1,11 @@
-﻿using System;
+﻿using NAudio.CoreAudioApi;
+using NAudio.Wave;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Windows.Forms;
-using NAudio.Wave;
-using NAudio.CoreAudioApi;
-using System.Reflection;
 using System.IO;
+using System.Reflection;
+using System.Windows.Forms;
 
 namespace mml2vgmIDE
 {
@@ -489,6 +489,7 @@ namespace mml2vgmIDE
             lblFontSize.Text = setting.other.TextFontSize.ToString();
             lblFontStyle.Text = setting.other.TextFontStyle.ToString();
             cbLogWarning.Checked = setting.other.LogWarning;
+            cbPlayDeviceCB.Checked = setting.other.PlayDeviceCB;
             rbLoglevelINFO.Checked = setting.other.LogLevel == 8;
             rbLoglevelDEBUG.Checked = setting.other.LogLevel == 16;
             rbLoglevelTRACE.Checked = setting.other.LogLevel == 32;
@@ -709,7 +710,7 @@ namespace mml2vgmIDE
         private void SetSCCICombo(EnmRealChipType scciType, ComboBox cmbP, RadioButton rbP, ComboBox cmbS, RadioButton rbS)
         {
 
-            if(rbP!=null) rbP.Enabled = false;
+            if (rbP != null) rbP.Enabled = false;
             cmbP.Enabled = false;
 
             if (rbS != null) rbS.Enabled = false;
@@ -831,7 +832,7 @@ namespace mml2vgmIDE
 
             dgv.Columns.Clear();
 
-            foreach(DataGridViewColumn col in dgvMIDIoutListA.Columns)
+            foreach (DataGridViewColumn col in dgvMIDIoutListA.Columns)
             {
                 dgv.Columns.Add((DataGridViewColumn)col.Clone());
             }
@@ -1407,11 +1408,12 @@ namespace mml2vgmIDE
             setting.HiyorimiMode = cbHiyorimiMode.Checked;
 
             setting.other.LogWarning = cbLogWarning.Checked;
-            if(rbLoglevelINFO.Checked) setting.other.LogLevel = 8;
-            else if(rbLoglevelDEBUG.Checked) setting.other.LogLevel = 16;
-            else if(rbLoglevelTRACE.Checked) setting.other.LogLevel = 32;
+            setting.other.PlayDeviceCB = cbPlayDeviceCB.Checked;
+            if (rbLoglevelINFO.Checked) setting.other.LogLevel = 8;
+            else if (rbLoglevelDEBUG.Checked) setting.other.LogLevel = 16;
+            else if (rbLoglevelTRACE.Checked) setting.other.LogLevel = 32;
 
-            setting.midiExport.UseMIDIExport=cbUseMIDIExport.Checked;
+            setting.midiExport.UseMIDIExport = cbUseMIDIExport.Checked;
             setting.midiExport.ExportPath = tbMIDIOutputPath.Text;
             setting.midiExport.UseVOPMex = cbMIDIUseVOPM.Checked;
             setting.midiExport.KeyOnFnum = cbMIDIKeyOnFnum.Checked;
@@ -1464,57 +1466,57 @@ namespace mml2vgmIDE
                     setting.midiOut.lstMidiOutInfo.Add(lstMoi.ToArray());
                 }
                 else
-                    {
-                        setting.midiOut.lstMidiOutInfo.Add(null);
-                    }
+                {
+                    setting.midiOut.lstMidiOutInfo.Add(null);
                 }
+            }
 
-                setting.midiOut.GMReset = tbBeforeSend_GMReset.Text;
-                setting.midiOut.XGReset = tbBeforeSend_XGReset.Text;
-                setting.midiOut.GSReset = tbBeforeSend_GSReset.Text;
-                setting.midiOut.Custom = tbBeforeSend_Custom.Text;
+            setting.midiOut.GMReset = tbBeforeSend_GMReset.Text;
+            setting.midiOut.XGReset = tbBeforeSend_XGReset.Text;
+            setting.midiOut.GSReset = tbBeforeSend_GSReset.Text;
+            setting.midiOut.Custom = tbBeforeSend_Custom.Text;
 
-                //setting.nsf.NESUnmuteOnReset = cbNFSNes_UnmuteOnReset.Checked;
-                //setting.nsf.NESNonLinearMixer = cbNFSNes_NonLinearMixer.Checked;
-                //setting.nsf.NESPhaseRefresh = cbNFSNes_PhaseRefresh.Checked;
-                //setting.nsf.NESDutySwap = cbNFSNes_DutySwap.Checked;
+            //setting.nsf.NESUnmuteOnReset = cbNFSNes_UnmuteOnReset.Checked;
+            //setting.nsf.NESNonLinearMixer = cbNFSNes_NonLinearMixer.Checked;
+            //setting.nsf.NESPhaseRefresh = cbNFSNes_PhaseRefresh.Checked;
+            //setting.nsf.NESDutySwap = cbNFSNes_DutySwap.Checked;
 
-                //if (int.TryParse(tbNSFFds_LPF.Text, out i)) setting.nsf.FDSLpf = Math.Min(Math.Max(i, 0), 99999);
-                //setting.nsf.FDS4085Reset = cbNFSFds_4085Reset.Checked;
-                //setting.nsf.FDSWriteDisable8000 = cbNSFFDSWriteDisable8000.Checked;
+            //if (int.TryParse(tbNSFFds_LPF.Text, out i)) setting.nsf.FDSLpf = Math.Min(Math.Max(i, 0), 99999);
+            //setting.nsf.FDS4085Reset = cbNFSFds_4085Reset.Checked;
+            //setting.nsf.FDSWriteDisable8000 = cbNSFFDSWriteDisable8000.Checked;
 
-                //setting.nsf.DMCUnmuteOnReset = cbNSFDmc_UnmuteOnReset.Checked;
-                //setting.nsf.DMCNonLinearMixer = cbNSFDmc_NonLinearMixer.Checked;
-                //setting.nsf.DMCEnable4011 = cbNSFDmc_Enable4011.Checked;
-                //setting.nsf.DMCEnablePnoise = cbNSFDmc_EnablePNoise.Checked;
-                //setting.nsf.DMCDPCMAntiClick = cbNSFDmc_DPCMAntiClick.Checked;
-                //setting.nsf.DMCRandomizeNoise = cbNSFDmc_RandomizeNoise.Checked;
-                //setting.nsf.DMCTRImute = cbNSFDmc_TriMute.Checked;
-                //setting.nsf.DMCTRINull = cbNSFDmc_TriNull.Checked;
+            //setting.nsf.DMCUnmuteOnReset = cbNSFDmc_UnmuteOnReset.Checked;
+            //setting.nsf.DMCNonLinearMixer = cbNSFDmc_NonLinearMixer.Checked;
+            //setting.nsf.DMCEnable4011 = cbNSFDmc_Enable4011.Checked;
+            //setting.nsf.DMCEnablePnoise = cbNSFDmc_EnablePNoise.Checked;
+            //setting.nsf.DMCDPCMAntiClick = cbNSFDmc_DPCMAntiClick.Checked;
+            //setting.nsf.DMCRandomizeNoise = cbNSFDmc_RandomizeNoise.Checked;
+            //setting.nsf.DMCTRImute = cbNSFDmc_TriMute.Checked;
+            //setting.nsf.DMCTRINull = cbNSFDmc_TriNull.Checked;
 
-                //setting.nsf.MMC5NonLinearMixer = cbNSFMmc5_NonLinearMixer.Checked;
-                //setting.nsf.MMC5PhaseRefresh = cbNSFMmc5_PhaseRefresh.Checked;
+            //setting.nsf.MMC5NonLinearMixer = cbNSFMmc5_NonLinearMixer.Checked;
+            //setting.nsf.MMC5PhaseRefresh = cbNSFMmc5_PhaseRefresh.Checked;
 
-                //setting.nsf.N160Serial = cbNSFN160_Serial.Checked;
+            //setting.nsf.N160Serial = cbNSFN160_Serial.Checked;
 
-                //setting.sid = new Setting.SID();
-                //setting.sid.RomKernalPath = tbSIDKernal.Text;
-                //setting.sid.RomBasicPath = tbSIDBasic.Text;
-                //setting.sid.RomCharacterPath = tbSIDCharacter.Text;
-                //if (rdSIDQ1.Checked) setting.sid.Quality = 0;
-                //if (rdSIDQ2.Checked) setting.sid.Quality = 1;
-                //if (rdSIDQ3.Checked) setting.sid.Quality = 2;
-                //if (rdSIDQ4.Checked) setting.sid.Quality = 3;
-                //try
-                //{
-                //    setting.sid.OutputBufferSize = Math.Min(Math.Max(int.Parse(tbSIDOutputBufferSize.Text), 100), 999999);
-                //}
-                //catch
-                //{
-                //    setting.sid.OutputBufferSize = 5000;
-                //}
+            //setting.sid = new Setting.SID();
+            //setting.sid.RomKernalPath = tbSIDKernal.Text;
+            //setting.sid.RomBasicPath = tbSIDBasic.Text;
+            //setting.sid.RomCharacterPath = tbSIDCharacter.Text;
+            //if (rdSIDQ1.Checked) setting.sid.Quality = 0;
+            //if (rdSIDQ2.Checked) setting.sid.Quality = 1;
+            //if (rdSIDQ3.Checked) setting.sid.Quality = 2;
+            //if (rdSIDQ4.Checked) setting.sid.Quality = 3;
+            //try
+            //{
+            //    setting.sid.OutputBufferSize = Math.Min(Math.Max(int.Parse(tbSIDOutputBufferSize.Text), 100), 999999);
+            //}
+            //catch
+            //{
+            //    setting.sid.OutputBufferSize = 5000;
+            //}
 
-                setting.nukedOPN2 = new Setting.NukedOPN2();
+            setting.nukedOPN2 = new Setting.NukedOPN2();
             if (rbNukedOPN2OptionYM2612.Checked) setting.nukedOPN2.EmuType = 2;
             if (rbNukedOPN2OptionASIC.Checked) setting.nukedOPN2.EmuType = 1;
             if (rbNukedOPN2OptionDiscrete.Checked) setting.nukedOPN2.EmuType = 0;
@@ -1524,9 +1526,9 @@ namespace mml2vgmIDE
             setting.autoBalance = new Setting.AutoBalance();
             setting.autoBalance.UseThis = cbAutoBalanceUseThis.Checked;
             setting.autoBalance.LoadSongBalance = rbAutoBalanceLoadSongBalance.Checked;
-            setting.autoBalance.LoadDriverBalance= rbAutoBalanceLoadDriverBalance.Checked;
+            setting.autoBalance.LoadDriverBalance = rbAutoBalanceLoadDriverBalance.Checked;
             setting.autoBalance.SaveSongBalance = rbAutoBalanceSaveSongBalance.Checked;
-            setting.autoBalance.SamePositionAsSongData= rbAutoBalanceSamePositionAsSongData.Checked;
+            setting.autoBalance.SamePositionAsSongData = rbAutoBalanceSamePositionAsSongData.Checked;
 
             //setting.keyBoardHook.Stop.Shift = cbStopShift.Checked;
             //setting.keyBoardHook.Stop.Ctrl = cbStopCtrl.Checked;
@@ -1544,7 +1546,7 @@ namespace mml2vgmIDE
 
             setting.shortCutKey.Info = new Setting.ShortCutKey.ShortCutKeyInfo[dgvShortCutKey.Rows.Count];
             i = 0;
-            foreach(DataGridViewRow row in dgvShortCutKey.Rows)
+            foreach (DataGridViewRow row in dgvShortCutKey.Rows)
             {
                 Setting.ShortCutKey.ShortCutKeyInfo scki = new Setting.ShortCutKey.ShortCutKeyInfo(
                     (int)row.Cells["clmNumber"].Value,
@@ -1610,7 +1612,7 @@ namespace mml2vgmIDE
                     else ret = true;
 
             if (ucSI.rbYM2151P_SCCI.Checked)
-                if (ucSI.cmbYM2151P_SCCI.SelectedItem!=null)
+                if (ucSI.cmbYM2151P_SCCI.SelectedItem != null)
                     if (!hsSCCIs.Contains(ucSI.cmbYM2151P_SCCI.SelectedItem.ToString()))
                         hsSCCIs.Add(ucSI.cmbYM2151P_SCCI.SelectedItem.ToString());
                     else ret = true;
@@ -1839,7 +1841,7 @@ namespace mml2vgmIDE
         {
             FolderBrowserDialog fbd = new FolderBrowserDialog();
             fbd.Description = "フォルダーを指定してください。";
-            
+
 
             if (fbd.ShowDialog(this) != DialogResult.OK)
             {
@@ -1878,7 +1880,7 @@ namespace mml2vgmIDE
 
         private void btnResetPosition_Click(object sender, EventArgs e)
         {
-            DialogResult res= MessageBox.Show("表示位置を全てリセットします。よろしいですか。", "確認", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            DialogResult res = MessageBox.Show("表示位置を全てリセットします。よろしいですか。", "確認", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (res == DialogResult.No) return;
 
         }
@@ -1969,7 +1971,7 @@ namespace mml2vgmIDE
                     }
                 }
 
-                if (!found) dgv[p].Rows.Add(row.Cells[0].Value, false, "", row.Cells[1].Value, "GM","None", row.Cells[2].Value);
+                if (!found) dgv[p].Rows.Add(row.Cells[0].Value, false, "", row.Cells[1].Value, "GM", "None", row.Cells[2].Value);
             }
         }
 
@@ -1995,7 +1997,7 @@ namespace mml2vgmIDE
             {
                 if (row.Index < 1) continue;
 
-                int i = row.Index-1;
+                int i = row.Index - 1;
                 dgv[p].Rows.Insert(i, row.Cells[0].Value, row.Cells[1].Value, row.Cells[2].Value, row.Cells[3].Value, row.Cells[4].Value, row.Cells[5].Value);
                 dgv[p].Rows.Remove(row);
                 dgv[p].Rows[i].Selected = true;
@@ -2010,10 +2012,10 @@ namespace mml2vgmIDE
 
             foreach (DataGridViewRow row in dgv[p].SelectedRows)
             {
-                if (row.Index > dgv[p].Rows.Count-2) continue;
+                if (row.Index > dgv[p].Rows.Count - 2) continue;
 
                 int i = row.Index + 1;
-                dgv[p].Rows.Insert(row.Index+2, row.Cells[0].Value, row.Cells[1].Value, row.Cells[2].Value, row.Cells[3].Value, row.Cells[4].Value, row.Cells[5].Value);
+                dgv[p].Rows.Insert(row.Index + 2, row.Cells[0].Value, row.Cells[1].Value, row.Cells[2].Value, row.Cells[3].Value, row.Cells[4].Value, row.Cells[5].Value);
                 dgv[p].Rows.Remove(row);
                 dgv[p].Rows[i].Selected = true;
             }
@@ -2136,7 +2138,7 @@ namespace mml2vgmIDE
         public static Button btSet = null;
         public static Button btClr = null;
         public static Button btOK = null;
-        private int waitShortCutKey=-1;
+        private int waitShortCutKey = -1;
 
         private void frmSetting_FormClosed(object sender, FormClosedEventArgs e)
         {
@@ -2213,7 +2215,7 @@ namespace mml2vgmIDE
             waitShortCutKey = -1;
             btnOK.Enabled = true;
             updateDgvShortCutKeyControl();
-            
+
             ////キー設定中のESC押下時はウィンドウを閉じないようにする
             //if (keyData == Keys.Escape) return true;
 
@@ -2264,7 +2266,7 @@ namespace mml2vgmIDE
             dgvShortCutKey.ResumeLayout();
         }
 
-        private void SetBackColorDgvShortCutKeyControl(int index,System.Drawing.Color color)
+        private void SetBackColorDgvShortCutKeyControl(int index, System.Drawing.Color color)
         {
             DataGridViewRow sRow = dgvShortCutKey.Rows[index];
             sRow.Cells["clmFunc"].Style.BackColor = color;

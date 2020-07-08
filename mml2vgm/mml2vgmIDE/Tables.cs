@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace mml2vgmIDE
+﻿namespace mml2vgmIDE
 {
     public static class Tables
     {
@@ -69,7 +63,7 @@ namespace mml2vgmIDE
         public static int[] pcmpitchTbl = new int[]
         {
             //0-1023
-            0 
+            0
             ,61
             ,125
             ,194
@@ -203,8 +197,8 @@ namespace mml2vgmIDE
         public static string[] kbns = new string[] { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
         public static string[] kbnp = new string[] { "C ", "C+", "D ", "D+", "E ", "F ", "F+", "G ", "G+", "A ", "A+", "B " };
         public static string[] kbo = new string[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F" };
-        public static int[] kbl2 = new int[] { 0, 24, 8, 24, 16,  0, 24,  8, 24,  8, 24, 16 };
-        public static int[] kbdl = new int[] { 0,  4, 8, 12, 16, 24, 28, 32, 36, 40, 44, 48 };
+        public static int[] kbl2 = new int[] { 0, 24, 8, 24, 16, 0, 24, 8, 24, 8, 24, 16 };
+        public static int[] kbdl = new int[] { 0, 4, 8, 12, 16, 24, 28, 32, 36, 40, 44, 48 };
 
         public static string[] hexCh = new string[] { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F" };
     }

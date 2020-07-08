@@ -1,15 +1,11 @@
 ﻿using Core;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace mml2vgmIDE.Driver.ZGM.ZgmChip
 {
     public class YM2610 : ZgmChip
     {
-        public YM2610(ChipRegister chipRegister, Setting setting, outDatum[] vgmBuf):base(6+3+3+6+1)
+        public YM2610(ChipRegister chipRegister, Setting setting, outDatum[] vgmBuf) : base(6 + 3 + 3 + 6 + 1)
         {
             this.chipRegister = chipRegister;
             this.setting = setting;
@@ -37,7 +33,7 @@ namespace mml2vgmIDE.Driver.ZGM.ZgmChip
 
         private void SendPort0(outDatum od, ref uint vgmAdr)
         {
-            chipRegister.YM2610SetRegister(od, Audio.DriverSeqCounter, Index,0, vgmBuf[vgmAdr + 1].val, vgmBuf[vgmAdr + 2].val);
+            chipRegister.YM2610SetRegister(od, Audio.DriverSeqCounter, Index, 0, vgmBuf[vgmAdr + 1].val, vgmBuf[vgmAdr + 2].val);
             vgmAdr += 3;
         }
 

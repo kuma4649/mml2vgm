@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Core;
+﻿using Core;
 using musicDriverInterface;
+using System;
+using System.Linq;
 
 namespace mml2vgmIDE.MMLParameter
 {
-    public class YM2610B:Instrument
+    public class YM2610B : Instrument
     {
-        public YM2610B(SoundManager.Chip chip) : base(19,chip)
+        public YM2610B(SoundManager.Chip chip) : base(19, chip)
         {
             for (int i = 0; i < 19; i++)
             {
@@ -40,8 +37,8 @@ namespace mml2vgmIDE.MMLParameter
                     }
                     break;
                 //case enmMMLType.Envelope:
-                    //envelope[od.linePos.ch] = (int)od.args[1];
-                    //break;
+                //envelope[od.linePos.ch] = (int)od.args[1];
+                //break;
                 case enmMMLType.Volume:
                     if (od.linePos != null)
                         vol[od.linePos.ch] = (int)od.args[0];

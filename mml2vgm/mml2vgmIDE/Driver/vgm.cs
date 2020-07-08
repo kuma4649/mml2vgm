@@ -2,7 +2,6 @@
 using SoundManager;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace mml2vgmIDE
 {
@@ -30,12 +29,12 @@ namespace mml2vgmIDE
         public uint RF5C164ClockValue = 12500000;
         public uint PWMClockValue = 23011361;
         public uint C140ClockValue = 21390;
-        public MDSound.c140.C140_TYPE C140Type= MDSound.c140.C140_TYPE.ASIC219;
+        public MDSound.c140.C140_TYPE C140Type = MDSound.c140.C140_TYPE.ASIC219;
         public uint OKIM6258ClockValue = 4000000;
         public byte OKIM6258Type = 0;
         public uint OKIM6295ClockValue = 4000000;
         public uint SEGAPCMClockValue = 4000000;
-        public int SEGAPCMInterface=0;
+        public int SEGAPCMInterface = 0;
         public uint YM2151ClockValue;
         public uint YM2608ClockValue;
         public uint YM2203ClockValue;
@@ -124,7 +123,7 @@ namespace mml2vgmIDE
 
 
 
-        public override bool init(outDatum[] vgmBuf, ChipRegister chipRegister, EnmChip[] useChip,uint latency,uint waitTime,long jumpPointClock)
+        public override bool init(outDatum[] vgmBuf, ChipRegister chipRegister, EnmChip[] useChip, uint latency, uint waitTime, long jumpPointClock)
         {
             this.vgmBuf = vgmBuf;
             this.chipRegister = chipRegister;
@@ -246,7 +245,7 @@ namespace mml2vgmIDE
                 else
                 {
                     //わからんコマンド
-                    Console.WriteLine("unknown command: Adr:{0:X} Dat:{1:X}", vgmAdr , vgmBuf[vgmAdr].val);
+                    Console.WriteLine("unknown command: Adr:{0:X} Dat:{1:X}", vgmAdr, vgmBuf[vgmAdr].val);
                     vgmAdr++;
                 }
                 countNum++;
@@ -416,19 +415,19 @@ namespace mml2vgmIDE
             vgmCmdTbl[0x8e] = vcWaitNSamplesAndSendYM26120x2a;
             vgmCmdTbl[0x8f] = vcWaitNSamplesAndSendYM26120x2a;
 
-                vgmCmdTbl[0x90] = vcSetupStreamControl;
-                vgmCmdTbl[0x91] = vcSetStreamData;
-                vgmCmdTbl[0x92] = vcSetStreamFrequency;
-                vgmCmdTbl[0x93] = vcStartStream;
-                vgmCmdTbl[0x94] = vcStopStream;
-                vgmCmdTbl[0x95] = vcStartStreamFastCall;
+            vgmCmdTbl[0x90] = vcSetupStreamControl;
+            vgmCmdTbl[0x91] = vcSetStreamData;
+            vgmCmdTbl[0x92] = vcSetStreamFrequency;
+            vgmCmdTbl[0x93] = vcStartStream;
+            vgmCmdTbl[0x94] = vcStopStream;
+            vgmCmdTbl[0x95] = vcStartStreamFastCall;
 
             vgmCmdTbl[0xa0] = vcAY8910;
             vgmCmdTbl[0xa1] = vcYM2413;
             vgmCmdTbl[0xa2] = vcYM2612Port0;
             vgmCmdTbl[0xa3] = vcYM2612Port1;
             vgmCmdTbl[0xa4] = vcYM2151;
-            vgmCmdTbl[0xa5] = vcYM2203; 
+            vgmCmdTbl[0xa5] = vcYM2203;
             vgmCmdTbl[0xa6] = vcYM2608Port0;
             vgmCmdTbl[0xa7] = vcYM2608Port1;
 
@@ -460,7 +459,7 @@ namespace mml2vgmIDE
             //}
             //else
             //{
-                //vgmCmdTbl[0xb2] = vcDummy2Ope;
+            //vgmCmdTbl[0xb2] = vcDummy2Ope;
             //}
             vgmCmdTbl[0xb3] = vcDMG;
             vgmCmdTbl[0xb4] = vcNES;
@@ -644,7 +643,7 @@ namespace mml2vgmIDE
 
         private void vcYM3812(outDatum od)
         {
-            chipRegister.YM3812SetRegister(od,Audio.DriverSeqCounter,(vgmBuf[vgmAdr].val & 0x80) == 0 ? 0 : 1, vgmBuf[vgmAdr + 1].val , vgmBuf[vgmAdr + 2].val);
+            chipRegister.YM3812SetRegister(od, Audio.DriverSeqCounter, (vgmBuf[vgmAdr].val & 0x80) == 0 ? 0 : 1, vgmBuf[vgmAdr + 1].val, vgmBuf[vgmAdr + 2].val);
             vgmAdr += 3;
         }
 
@@ -720,7 +719,7 @@ namespace mml2vgmIDE
 
         private void vcYM3526(outDatum od)
         {
-            chipRegister.YM3526SetRegister(od,Audio.DriverSeqCounter,(vgmBuf[vgmAdr].val & 0x80) == 0 ? 0 : 1, vgmBuf[vgmAdr + 1].val, vgmBuf[vgmAdr + 2].val);
+            chipRegister.YM3526SetRegister(od, Audio.DriverSeqCounter, (vgmBuf[vgmAdr].val & 0x80) == 0 ? 0 : 1, vgmBuf[vgmAdr + 1].val, vgmBuf[vgmAdr + 2].val);
             vgmAdr += 3;
         }
 
@@ -756,9 +755,9 @@ namespace mml2vgmIDE
                 , vgmBuf[vgmAdr + 3].val
                 );
             //Console.WriteLine("fm:{0:x02}:{1:x02}:{2:x02}:", vgmBuf[vgmAdr + 1].val & 0x7f
-                //, vgmBuf[vgmAdr + 2].val
-                //, vgmBuf[vgmAdr + 3].val
-//);
+            //, vgmBuf[vgmAdr + 2].val
+            //, vgmBuf[vgmAdr + 3].val
+            //);
             vgmAdr += 4;
         }
 
@@ -844,7 +843,7 @@ namespace mml2vgmIDE
             byte bType = vgmBuf[vgmAdr + 2].val;
             uint bLen = getLE32(vgmAdr + 3);
             byte chipID = 0;
-            if ((bLen & 0x80000000)!=0)
+            if ((bLen & 0x80000000) != 0)
             {
                 bLen &= 0x7fffffff;
                 chipID = 1;
@@ -878,14 +877,14 @@ namespace mml2vgmIDE
                                 new PackData(null,chipRegister.YM2608[chipID],0,0x100+ 0x00, 0x20,null),
                                 new PackData(null,chipRegister.YM2608[chipID],0,0x100+ 0x00, 0x21,null),
                                 new PackData(null,chipRegister.YM2608[chipID],0,0x100+ 0x00, 0x00,null),
-                                             
+
                                 new PackData(null,chipRegister.YM2608[chipID],0,0x100+ 0x10, 0x00,null),
                                 new PackData(null,chipRegister.YM2608[chipID],0,0x100+ 0x10, 0x80,null),
-                                             
+
                                 new PackData(null,chipRegister.YM2608[chipID],0,0x100+ 0x00, 0x61,null),
                                 new PackData(null,chipRegister.YM2608[chipID],0,0x100+ 0x00, 0x68,null),
                                 new PackData(null,chipRegister.YM2608[chipID],0,0x100+ 0x01, 0x00,null),
-                                             
+
                                 new PackData(null,chipRegister.YM2608[chipID],0,0x100+ 0x02, (byte)(startAddress >> 2),null),
                                 new PackData(null,chipRegister.YM2608[chipID],0,0x100+ 0x03, (byte)(startAddress >> 10),null),
                                 new PackData(null,chipRegister.YM2608[chipID],0,0x100+ 0x04, 0xff,null),
@@ -967,7 +966,7 @@ namespace mml2vgmIDE
                                     ym2610AdpcmB[chipID][startAddress + cnt] = vgmBuf[vgmAdr + 15 + cnt].val;
                                 }
                                 //if (model == EnmModel.VirtualModel)
-                                chipRegister.YM2610WriteSetAdpcmB(od, Audio.DriverSeqCounter,chipID, ym2610AdpcmB[chipID]);
+                                chipRegister.YM2610WriteSetAdpcmB(od, Audio.DriverSeqCounter, chipID, ym2610AdpcmB[chipID]);
                                 //else chipRegister.WriteYM2610_SetAdpcmB(chipID, model, (int)startAddress, (int)(bLen - 8), vgmBuf, (int)(vgmAdr + 15));
                                 //dumpData(chipRegister.YM2610[chipID], "YM2610_ADPCMB", vgmAdr + 15, bLen - 8);
                             }
@@ -1171,7 +1170,7 @@ namespace mml2vgmIDE
         {
             if (jumpPointClock < 0)
             {
-                Audio.DriverSeqCounter += (int)(vgmBuf[vgmAdr].val - 0x6f); 
+                Audio.DriverSeqCounter += (int)(vgmBuf[vgmAdr].val - 0x6f);
             }
             else
             {
@@ -1250,8 +1249,8 @@ namespace mml2vgmIDE
 
             VGM_PCM_BANK TempPCM = PCMBank[DacCtrl[si].Bank];
             //Last95Max = TempPCM->BankCount;
-                dacControl.set_data(si, TempPCM.Data, TempPCM.DataSize,
-                                vgmBuf[vgmAdr + 3].val, vgmBuf[vgmAdr + 4].val);
+            dacControl.set_data(si, TempPCM.Data, TempPCM.DataSize,
+                            vgmBuf[vgmAdr + 3].val, vgmBuf[vgmAdr + 4].val);
 
             vgmAdr += 5;
         }
@@ -1272,7 +1271,7 @@ namespace mml2vgmIDE
             }
             uint TempLng = getLE32(vgmAdr + 2);
             //Last95Freq = TempLng;
-                dacControl.set_frequency(si, TempLng);
+            dacControl.set_frequency(si, TempLng);
             vgmAdr += 6;
         }
 
@@ -1308,7 +1307,7 @@ namespace mml2vgmIDE
             //}
 
             byte si = vgmBuf[vgmAdr + 1].val;
-            if (si<0xff && !DacCtrl[si].Enable)
+            if (si < 0xff && !DacCtrl[si].Enable)
             {
                 vgmAdr += 0x02;
                 return;
@@ -1316,12 +1315,12 @@ namespace mml2vgmIDE
             //Last95Drum = 0xFFFF;
             if (si < 0xFF)
             {
-                    dacControl.stop(si);
+                dacControl.stop(si);
             }
             else
             {
                 for (si = 0x00; si < 0xFF; si++)
-                        dacControl.stop(si);
+                    dacControl.stop(si);
             }
             vgmAdr += 0x02;
         }
@@ -1550,8 +1549,8 @@ namespace mml2vgmIDE
             //if (BankSize != TempBnk.DataSize) Console.Write("Error reading Data Block! Data Size conflict!\n");
             TempPCM.DataSize += BankSize;
 
-            // realloc may've moved the Bank block, so refresh all DAC Streams
-            RefreshDACStrm:
+        // realloc may've moved the Bank block, so refresh all DAC Streams
+        RefreshDACStrm:
             for (CurDAC = 0x00; CurDAC < DacCtrlUsed; CurDAC++)
             {
                 if (DacCtrl[DacCtrlUsg[CurDAC]].Bank == BnkType)
@@ -1683,8 +1682,8 @@ namespace mml2vgmIDE
                                         //#ifndef BIG_ENDIAN
                                         //					OutVal = Ent2B[InVal];
                                         //#else
-                                        OutVal = (uint)(PCMTbl.Entries[Ent2B + InVal*2] + PCMTbl.Entries[Ent2B + InVal*2 + 1] * 0x100);// ReadLE16((UINT8*)&Ent2B[InVal]);
-                                                                                                                                   //#endif
+                                        OutVal = (uint)(PCMTbl.Entries[Ent2B + InVal * 2] + PCMTbl.Entries[Ent2B + InVal * 2 + 1] * 0x100);// ReadLE16((UINT8*)&Ent2B[InVal]);
+                                                                                                                                           //#endif
                                         break;
                                 }
                                 break;
@@ -2448,7 +2447,7 @@ namespace mml2vgmIDE
         public string Version = "";
         public string UsedChips = "";
 
-        public List<Tuple<int,int, string>> Lyrics = null;
+        public List<Tuple<int, int, string>> Lyrics = null;
     }
 
 

@@ -1,16 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
-using System.IO;
-using System.Reflection;
-using System.Text.RegularExpressions;
-using CustomControl;
-using WeifenLuo.WinFormsUI.Docking;
 using System.Collections;
+using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
+using System.Text.RegularExpressions;
+using System.Windows.Forms;
+using WeifenLuo.WinFormsUI.Docking;
 
 namespace mml2vgmIDE
 {
@@ -22,15 +17,15 @@ namespace mml2vgmIDE
         public string basePath = "";
         private bool useMouse;
 
-        public FrmFolderTree(Setting setting,DockPanel dockPanel)
+        public FrmFolderTree(Setting setting, DockPanel dockPanel)
         {
             InitializeComponent();
             this.tvFolderTree.BackColor = Color.FromArgb(setting.ColorScheme.FolderTree_BackColor);
             this.tvFolderTree.ForeColor = Color.FromArgb(setting.ColorScheme.FolderTree_ForeColor);
             this.tvFolderTree.HotColor = Color.FromArgb(setting.ColorScheme.FolderTree_BackColor);
             this.tvFolderTree.HotColor = Color.FromArgb(
-                (int)(tvFolderTree.HotColor.R * 1.3), 
-                (int)(tvFolderTree.HotColor.G * 1.3), 
+                (int)(tvFolderTree.HotColor.R * 1.3),
+                (int)(tvFolderTree.HotColor.G * 1.3),
                 (int)(tvFolderTree.HotColor.B * 1.3));
 
             tvFolderTree.TreeViewNodeSorter = new NodeSorter();
@@ -77,7 +72,7 @@ namespace mml2vgmIDE
                         node.Nodes.Add(ts);
                     }
                 }
-                catch(UnauthorizedAccessException)
+                catch (UnauthorizedAccessException)
                 {
                     MessageBox.Show("アクセスが拒否されました。", "権限不足", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
@@ -138,7 +133,7 @@ namespace mml2vgmIDE
                 CheckExtension(cmsMenu.Items, lstFullPathExt.ToArray());
 
                 cmsMenu.Show((Control)sender, e.X, e.Y);
-                
+
             }
             else if (e.Button == MouseButtons.Left)
             {
@@ -513,12 +508,12 @@ namespace mml2vgmIDE
                         }
                         else
                         {
-                            if (ttn.ImageIndex==1 && ttn.Nodes.Count == 0)
+                            if (ttn.ImageIndex == 1 && ttn.Nodes.Count == 0)
                                 refreshAddCheck(ttn);
 
                         }
 
-                        string fpath = Path.Combine(path1,Path.GetFullPath( ttn.FullPath));
+                        string fpath = Path.Combine(path1, Path.GetFullPath(ttn.FullPath));
                         if (ds.FullName == fpath)
                         {
                             flg = true;
@@ -570,7 +565,7 @@ namespace mml2vgmIDE
             if (tsmiFilterAll.Checked) return;
 
             int i = 0;
-            while(i< nodes.Count)
+            while (i < nodes.Count)
             {
                 TreeNode tn = nodes[i++];
 
@@ -805,7 +800,7 @@ namespace mml2vgmIDE
         private void TsmiFilterAll_Click(object sender, EventArgs e)
         {
             //All以外は全てチェックオフ
-            foreach(ToolStripItem tsi in tsddbFilter.DropDownItems)
+            foreach (ToolStripItem tsi in tsddbFilter.DropDownItems)
             {
                 if (!(tsi is ToolStripMenuItem)) continue;
                 ToolStripMenuItem item = (ToolStripMenuItem)tsi;

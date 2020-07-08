@@ -36,7 +36,7 @@ namespace mml2vgmIDE
             waveProvider.SetWaveFormat(sampleRate, 2);
 
             callBack = nCallBack;
-            
+
         }
 
         public static void Start(Setting setting)
@@ -89,7 +89,7 @@ namespace mml2vgmIDE
                         }
                         else
                         {
-                            dsOut = new DirectSoundOut(g,setting.outputDevice.Latency);
+                            dsOut = new DirectSoundOut(g, setting.outputDevice.Latency);
                         }
                         dsOut.PlaybackStopped += DeviceOut_PlaybackStopped;
                         dsOut.Init(waveProvider);
@@ -308,7 +308,7 @@ namespace mml2vgmIDE
             public override int Read(short[] buffer, int offset, int sampleCount)
             {
 
-                return callBack(buffer,offset, sampleCount);
+                return callBack(buffer, offset, sampleCount);
 
             }
 

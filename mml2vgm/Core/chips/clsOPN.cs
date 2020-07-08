@@ -1,9 +1,6 @@
-﻿using System;
+﻿using musicDriverInterface;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using musicDriverInterface;
 
 namespace Core
 {
@@ -17,7 +14,7 @@ namespace Core
         }
 
 
-        public void OutSsgKeyOn(partPage page,MML mml)
+        public void OutSsgKeyOn(partPage page, MML mml)
         {
             int port;
             int adr;
@@ -37,9 +34,9 @@ namespace Core
             SetSsgVolume(page, mml);
             if (page.HardEnvelopeSw)
             {
-                SOutData(page,mml, page.port[port], (byte)(adr + 0x0d), (byte)(page.HardEnvelopeType & 0xf));
+                SOutData(page, mml, page.port[port], (byte)(adr + 0x0d), (byte)(page.HardEnvelopeType & 0xf));
             }
-            SOutData(page,mml, page.port[port], (byte)(adr + 0x07), data);
+            SOutData(page, mml, page.port[port], (byte)(adr + 0x07), data);
 
             if (mml != null)
             {
@@ -68,9 +65,9 @@ namespace Core
             data = (byte)(((ClsOPN)page.chip).SSGKeyOn[p] | (n << vch));
             ((ClsOPN)page.chip).SSGKeyOn[p] = data;
 
-            SOutData(page,mml, page.port[port], (byte)(adr + 0x08 + vch), 0);
+            SOutData(page, mml, page.port[port], (byte)(adr + 0x08 + vch), 0);
             page.beforeVolume = -1;
-            SOutData(page,mml, page.port[port], (byte)(adr + 0x07), data);
+            SOutData(page, mml, page.port[port], (byte)(adr + 0x07), data);
 
         }
 
@@ -116,7 +113,7 @@ namespace Core
 
             if (page.spg.beforeVolume != vol)
             {
-                SOutData(page,mml, page.port[port], (byte)(adr + 0x08 + vch), (byte)vol);
+                SOutData(page, mml, page.port[port], (byte)(adr + 0x08 + vch), (byte)vol);
                 page.spg.beforeVolume = vol;
             }
         }
@@ -155,9 +152,9 @@ namespace Core
         }
 
 
-        public void SetSsgFNum(partPage page,MML mml)
+        public void SetSsgFNum(partPage page, MML mml)
         {
-            int f = - page.detune;
+            int f = -page.detune;
             for (int lfo = 0; lfo < 4; lfo++)
             {
                 if (!page.lfo[lfo].sw)
@@ -203,13 +200,13 @@ namespace Core
             byte data = 0;
 
             data = (byte)(f & 0xff);
-            SOutData(page,mml,page.port[port], (byte)(adr + 0 + vch * 2), data);
+            SOutData(page, mml, page.port[port], (byte)(adr + 0 + vch * 2), data);
 
             data = (byte)((f & 0xf00) >> 8);
-            SOutData(page,mml,page.port[port], (byte)(adr + 1 + vch * 2), data);
+            SOutData(page, mml, page.port[port], (byte)(adr + 1 + vch * 2), data);
         }
 
-        public int GetSsgFNum(partPage page,MML mml, int octave, char noteCmd, int shift)
+        public int GetSsgFNum(partPage page, MML mml, int octave, char noteCmd, int shift)
         {
             int o = octave - 1;
             int n = Const.NOTE.IndexOf(noteCmd) + shift;
@@ -231,7 +228,7 @@ namespace Core
             int vch;
             byte[] port;
             GetPortVch(page, out port, out vch);
-            if (page.chip is YM2612X && page.ch > 8 && page.ch<12)
+            if (page.chip is YM2612X && page.ch > 8 && page.ch < 12)
             {
                 vch = 2;
             }
@@ -240,10 +237,10 @@ namespace Core
             ams = ams & 3;
             pms = pms & 7;
 
-            SOutData(page,mml, port, (byte)(0xb4 + vch), (byte)((pan << 6) + (ams << 4) + pms));
+            SOutData(page, mml, port, (byte)(0xb4 + vch), (byte)((pan << 6) + (ams << 4) + pms));
         }
 
-        public void OutOPNSetHardLfo(MML mml,partPage page, bool sw, int lfoNum)
+        public void OutOPNSetHardLfo(MML mml, partPage page, bool sw, int lfoNum)
         {
             SOutData(page,
                 mml,
@@ -253,10 +250,10 @@ namespace Core
                 );
         }
 
-        public void OutOPNSetCh3SpecialMode(MML mml,partPage page, bool sw)
+        public void OutOPNSetCh3SpecialMode(MML mml, partPage page, bool sw)
         {
             byte[] port = page.port[0];
-            if(page.chip.chipType== enmChipType.YM2609)
+            if (page.chip.chipType == enmChipType.YM2609)
             {
                 if (page.ch == 8 || page.ch == 15 || page.ch == 16 || page.ch == 17)
                 {
@@ -281,7 +278,7 @@ namespace Core
             fb &= 7;
             alg &= 7;
 
-            SOutData(page,mml, port, (byte)(0xb0 + vch), (byte)((fb << 3) + alg));
+            SOutData(page, mml, port, (byte)(0xb0 + vch), (byte)((fb << 3) + alg));
         }
 
         public void OutFmSetDtMl(MML mml, partPage page, int ope, int dt, int ml)
@@ -294,10 +291,10 @@ namespace Core
             dt &= 7;
             ml &= 15;
 
-            SOutData(page,mml, port, (byte)(0x30 + vch + ope * 4), (byte)((dt << 4) + ml));
+            SOutData(page, mml, port, (byte)(0x30 + vch + ope * 4), (byte)((dt << 4) + ml));
         }
 
-        public void OutFmSetTl(MML mml,partPage page, int ope, int tl)
+        public void OutFmSetTl(MML mml, partPage page, int ope, int tl)
         {
             int vch;
             byte[] port;
@@ -306,10 +303,10 @@ namespace Core
             ope = (ope == 1) ? 2 : ((ope == 2) ? 1 : ope);
             tl &= 0x7f;
 
-            SOutData(page,mml,port, (byte)(0x40 + vch + ope * 4), (byte)tl);
+            SOutData(page, mml, port, (byte)(0x40 + vch + ope * 4), (byte)tl);
         }
 
-        public void OutFmSetKsAr(MML mml,partPage page, int ope, int ks, int ar)
+        public void OutFmSetKsAr(MML mml, partPage page, int ope, int ks, int ar)
         {
             int vch;
             byte[] port;
@@ -319,10 +316,10 @@ namespace Core
             ks &= 3;
             ar &= 31;
 
-            SOutData(page,mml,port, (byte)(0x50 + vch + ope * 4), (byte)((ks << 6) + ar));
+            SOutData(page, mml, port, (byte)(0x50 + vch + ope * 4), (byte)((ks << 6) + ar));
         }
 
-        public void OutFmSetAmDr(MML mml,partPage page, int ope, int am, int dr)
+        public void OutFmSetAmDr(MML mml, partPage page, int ope, int am, int dr)
         {
             int vch;
             byte[] port;
@@ -332,10 +329,10 @@ namespace Core
             am &= 1;
             dr &= 31;
 
-            SOutData(page,mml,port, (byte)(0x60 + vch + ope * 4), (byte)((am << 7) + dr));
+            SOutData(page, mml, port, (byte)(0x60 + vch + ope * 4), (byte)((am << 7) + dr));
         }
 
-        public void OutFmSetSr(MML mml,partPage page, int ope, int sr)
+        public void OutFmSetSr(MML mml, partPage page, int ope, int sr)
         {
             int vch;
             byte[] port;
@@ -344,7 +341,7 @@ namespace Core
             ope = (ope == 1) ? 2 : ((ope == 2) ? 1 : ope);
             sr &= 31;
 
-            SOutData(page,mml,port, (byte)(0x70 + vch + ope * 4), (byte)(sr));
+            SOutData(page, mml, port, (byte)(0x70 + vch + ope * 4), (byte)(sr));
         }
 
         public void OutFmSetSlRr(MML mml, partPage page, int ope, int sl, int rr)
@@ -357,7 +354,7 @@ namespace Core
             sl &= 15;
             rr &= 15;
 
-            SOutData(page,mml, port, (byte)(0x80 + vch + ope * 4), (byte)((sl << 4) + rr));
+            SOutData(page, mml, port, (byte)(0x80 + vch + ope * 4), (byte)((sl << 4) + rr));
         }
 
         protected void GetPortVch(partPage page, out byte[] port, out int vch)
@@ -369,12 +366,12 @@ namespace Core
             }
             else
             {
-                port = 
-                    page.ch < 3 ? 
+                port =
+                    page.ch < 3 ?
                     page.port[0] :
-                    (page.ch < 6 ? 
-                        page.port[1] : 
-                        (page.ch < 9 ? 
+                    (page.ch < 6 ?
+                        page.port[1] :
+                        (page.ch < 9 ?
                             page.port[2] :
                             (page.ch < 12 ?
                                 page.port[3] :
@@ -386,10 +383,10 @@ namespace Core
                         )
                     );
                 vch = (byte)(
-                    page.ch < 3 ? 
-                    page.ch : 
+                    page.ch < 3 ?
+                    page.ch :
                     (page.ch < 6 ?
-                        (page.ch - 3) : 
+                        (page.ch - 3) :
                         (page.ch < 9 ?
                             (page.ch - 6) :
                             (page.ch < 12 ?
@@ -440,7 +437,7 @@ namespace Core
             }
         }
 
-        public void OutFmSetSSGEG(MML mml,partPage page, int ope, int n)
+        public void OutFmSetSSGEG(MML mml, partPage page, int ope, int n)
         {
             int vch;
             byte[] port;
@@ -449,7 +446,7 @@ namespace Core
             ope = (ope == 1) ? 2 : ((ope == 2) ? 1 : ope);
             n &= 15;
 
-            SOutData(page,mml,port, (byte)(0x90 + vch + ope * 4), (byte)n);
+            SOutData(page, mml, port, (byte)(0x90 + vch + ope * 4), (byte)n);
         }
 
         /// <summary>
@@ -529,18 +526,18 @@ namespace Core
             if ((page.slots & 8) != 0 && ope[3] != -1) ((ClsOPN)page.chip).OutFmSetTl(vmml, vpg, 3, ope[3]);
         }
 
-        public void OutFmCh3SpecialModeSetFnum(MML mml,partPage page, byte ope, int octave, int num)
+        public void OutFmCh3SpecialModeSetFnum(MML mml, partPage page, byte ope, int octave, int num)
         {
             ope &= 3;
             if (ope == 0)
             {
-                SOutData(page,mml,page.port[0], 0xa6, (byte)(((num & 0x700) >> 8) + (((octave - 1) & 0x7) << 3)));
-                SOutData(page,mml,page.port[0], 0xa2, (byte)(num & 0xff));
+                SOutData(page, mml, page.port[0], 0xa6, (byte)(((num & 0x700) >> 8) + (((octave - 1) & 0x7) << 3)));
+                SOutData(page, mml, page.port[0], 0xa2, (byte)(num & 0xff));
             }
             else
             {
-                SOutData(page,mml,page.port[0], (byte)(0xac + ope), (byte)(((num & 0x700) >> 8) + (((octave - 1) & 0x7) << 3)));
-                SOutData(page,mml,page.port[0], (byte)(0xa8 + ope), (byte)(num & 0xff));
+                SOutData(page, mml, page.port[0], (byte)(0xac + ope), (byte)(((num & 0x700) >> 8) + (((octave - 1) & 0x7) << 3)));
+                SOutData(page, mml, page.port[0], (byte)(0xa8 + ope), (byte)(num & 0xff));
             }
         }
 
@@ -750,7 +747,7 @@ namespace Core
                             | (page.chip.lstPartWork[n + 4].apg.Ch3SpecialModeKeyOn ? page.chip.lstPartWork[n + 4].apg.slots : 0x0)
                             | (page.chip.lstPartWork[n + 5].apg.Ch3SpecialModeKeyOn ? page.chip.lstPartWork[n + 5].apg.slots : 0x0);
 
-                        SOutData(page,mml, page.port[0], 0x28, (byte)((slot << 4) + 2));
+                        SOutData(page, mml, page.port[0], 0x28, (byte)((slot << 4) + 2));
                     }
                     else
                     {
@@ -758,14 +755,14 @@ namespace Core
                         {
                             byte vch = (byte)((page.ch > 2) ? page.ch + 1 : page.ch);
                             //key off
-                            SOutData(page,mml, page.port[0], 0x28, (byte)(0x00 + (vch & 7)));
+                            SOutData(page, mml, page.port[0], 0x28, (byte)(0x00 + (vch & 7)));
                         }
                     }
                 }
                 else
                 {
-                    if ((page.ch == 2 || page.ch == 12 
-                        || page.ch == 13 || page.ch == 14) 
+                    if ((page.ch == 2 || page.ch == 12
+                        || page.ch == 13 || page.ch == 14)
                         && page.chip.lstPartWork[2].apg.Ch3SpecialMode)
                     {
                         page.Ch3SpecialModeKeyOn = false;
@@ -902,7 +899,7 @@ namespace Core
                 if (parent.info.format == enmFormat.VGM)
                 {
                     //Stop Stream
-                    SOutData(page,mml, cmd, (byte)page.spg.streamID);
+                    SOutData(page, mml, cmd, (byte)page.spg.streamID);
                 }
             }
 
@@ -928,7 +925,7 @@ namespace Core
             }
         }
 
-        public void OutFmSetFnum(partPage page,MML mml, int octave, int num)
+        public void OutFmSetFnum(partPage page, MML mml, int octave, int num)
         {
             int freq;
             freq = ((num & 0x700) >> 8) + (((octave - 1) & 0x7) << 3);
@@ -943,26 +940,26 @@ namespace Core
                 if ((page.slots & 8) != 0)
                 {
                     int f = freq + page.slotDetune[3];
-                    SOutData(page,mml, page.port[0], (byte)0xa6, (byte)(f >> 8));
-                    SOutData(page,mml, page.port[0], (byte)0xa2, (byte)f);
+                    SOutData(page, mml, page.port[0], (byte)0xa6, (byte)(f >> 8));
+                    SOutData(page, mml, page.port[0], (byte)0xa2, (byte)f);
                 }
                 if ((page.slots & 4) != 0)
                 {
                     int f = freq + page.slotDetune[2];
-                    SOutData(page,mml, page.port[0], (byte)0xac, (byte)(f >> 8));
-                    SOutData(page,mml, page.port[0], (byte)0xa8, (byte)f);
+                    SOutData(page, mml, page.port[0], (byte)0xac, (byte)(f >> 8));
+                    SOutData(page, mml, page.port[0], (byte)0xa8, (byte)f);
                 }
                 if ((page.slots & 1) != 0)
                 {
                     int f = freq + page.slotDetune[0];
-                    SOutData(page,mml, page.port[0], (byte)0xad, (byte)(f >> 8));
-                    SOutData(page,mml, page.port[0], (byte)0xa9, (byte)f);
+                    SOutData(page, mml, page.port[0], (byte)0xad, (byte)(f >> 8));
+                    SOutData(page, mml, page.port[0], (byte)0xa9, (byte)f);
                 }
                 if ((page.slots & 2) != 0)
                 {
                     int f = freq + page.slotDetune[1];
-                    SOutData(page,mml, page.port[0], (byte)0xae, (byte)(f >> 8));
-                    SOutData(page,mml, page.port[0], (byte)0xaa, (byte)f);
+                    SOutData(page, mml, page.port[0], (byte)0xae, (byte)(f >> 8));
+                    SOutData(page, mml, page.port[0], (byte)0xaa, (byte)f);
                 }
             }
             else
@@ -996,13 +993,13 @@ namespace Core
                     byte[] port;
                     GetPortVch(page, out port, out vch);
 
-                    SOutData(page,mml, port, (byte)(0xa4 + vch), (byte)((freq & 0xff00) >> 8));
-                    SOutData(page,mml, port, (byte)(0xa0 + vch), (byte)(freq & 0xff));
+                    SOutData(page, mml, port, (byte)(0xa4 + vch), (byte)((freq & 0xff00) >> 8));
+                    SOutData(page, mml, port, (byte)(0xa0 + vch), (byte)(freq & 0xff));
                 }
             }
         }
 
-        public void OutFmKeyOn(partPage page,MML mml)
+        public void OutFmKeyOn(partPage page, MML mml)
         {
             SetDummyData(page, mml);
 
@@ -1010,7 +1007,7 @@ namespace Core
 
             if (page.chip is YM2612X && (page.ch > 8 || page.ch == 5) && page.chip.lstPartWork[5].pg[0].pcm)
             {
-                ((YM2612X)page.chip).OutYM2612XPcmKeyON(mml,page);
+                ((YM2612X)page.chip).OutYM2612XPcmKeyON(mml, page);
                 return;
             }
 
@@ -1053,7 +1050,7 @@ namespace Core
                         }
                         else
                         {
-                            SOutData(page,mml, page.port[0], 0x28, (byte)((slot << 4) + 2));
+                            SOutData(page, mml, page.port[0], 0x28, (byte)((slot << 4) + 2));
                         }
                     }
                     else
@@ -1088,7 +1085,7 @@ namespace Core
                             else
                             {
                                 //key on
-                                SOutData(page,mml, page.port[0], 0x28, (byte)((page.slots << 4) + (vch & 7)));
+                                SOutData(page, mml, page.port[0], 0x28, (byte)((page.slots << 4) + (vch & 7)));
                             }
                         }
                     }
@@ -1385,7 +1382,7 @@ namespace Core
         }
 
 
-        public void SetFmFNum(partPage page,MML mml)
+        public void SetFmFNum(partPage page, MML mml)
         {
             if (page.noteCmd == (char)0)
             {
@@ -1482,13 +1479,13 @@ namespace Core
             return 0;
         }
 
-        public override void GetFNumAtoB(partPage page,MML mml
+        public override void GetFNumAtoB(partPage page, MML mml
             , out int a, int aOctaveNow, char aCmd, int aShift
             , out int b, int bOctaveNow, char bCmd, int bShift
             , int dir)
         {
-            a = GetFNum(page,mml, aOctaveNow, aCmd, aShift);
-            b = GetFNum(page,mml, bOctaveNow, bCmd, bShift);
+            a = GetFNum(page, mml, aOctaveNow, aCmd, aShift);
+            b = GetFNum(page, mml, bOctaveNow, bCmd, bShift);
 
             int oa = (a & 0xf000) / 0x1000;
             int ob = (b & 0xf000) / 0x1000;
@@ -1508,7 +1505,7 @@ namespace Core
         }
 
 
-        public void SetFmVolume(partPage page,MML mml)
+        public void SetFmVolume(partPage page, MML mml)
         {
             int vol = page.volume;
 
@@ -1535,8 +1532,8 @@ namespace Core
             }
         }
 
-        public override void SetKeyOff(partPage page,MML mml)
-        { 
+        public override void SetKeyOff(partPage page, MML mml)
+        {
         }
 
         public override void SetVolume(partPage page, MML mml)
@@ -1720,7 +1717,7 @@ namespace Core
         }
 
 
-        private void CmdY_ToneParamOPN(MML mml,byte adr, partPage page, byte op, byte dat)
+        private void CmdY_ToneParamOPN(MML mml, byte adr, partPage page, byte op, byte dat)
         {
             int ch;
             if (page.Type == enmChannelType.FMOPNex) ch = 2;
@@ -1735,10 +1732,10 @@ namespace Core
 
             adr += (byte)(vch + (op << 2));
 
-            SOutData(page,mml,port, adr, dat);
+            SOutData(page, mml, port, adr, dat);
         }
 
-        private void CmdY_ToneParamOPN_FBAL(MML mml,partPage page, byte dat)
+        private void CmdY_ToneParamOPN_FBAL(MML mml, partPage page, byte dat)
         {
             int ch;
             if (page.Type == enmChannelType.FMOPNex) ch = 2;
@@ -1751,7 +1748,7 @@ namespace Core
 
             byte adr = (byte)(0xb0 + vch);
 
-            SOutData(page,mml,port, adr, dat);
+            SOutData(page, mml, port, adr, dat);
         }
 
 
@@ -1780,7 +1777,7 @@ namespace Core
             //}
 
             page.noise = n;
-            ((ClsOPN)page.chip).OutSsgNoise(mml,page);
+            ((ClsOPN)page.chip).OutSsgNoise(mml, page);
         }
 
         public override void CmdInstrument(partPage page, MML mml)
@@ -1879,10 +1876,10 @@ namespace Core
                     break;
                 case "EXON":
                     page.Ch3SpecialMode = true;
-                    ((ClsOPN)page.chip).OutOPNSetCh3SpecialMode(mml,page, true);
+                    ((ClsOPN)page.chip).OutOPNSetCh3SpecialMode(mml, page, true);
                     foreach (partWork p in page.chip.lstPartWork)
                     {
-                        if(page.chip.chipType== enmChipType.YM2609)
+                        if (page.chip.chipType == enmChipType.YM2609)
                         {
                             if (page.ch == 2 || page.ch == 12 || page.ch == 13 || page.ch == 14)
                                 if (p.apg.ch == 8 || p.apg.ch == 15 || p.apg.ch == 16 || p.apg.ch == 17)
@@ -1970,7 +1967,7 @@ namespace Core
                 switch (toneparamName)
                 {
                     case "DTML":
-                        CmdY_ToneParamOPN(mml,0x30, page, op, dat);
+                        CmdY_ToneParamOPN(mml, 0x30, page, op, dat);
                         break;
                     case "TL":
                         CmdY_ToneParamOPN(mml, 0x40, page, op, dat);
@@ -2019,8 +2016,8 @@ namespace Core
                     n = (int)mml.args[1];
                     if (page.HardEnvelopeSpeed != n)
                     {
-                        SOutData(page,mml, page.port[port], (byte)(adr + 0x0b), (byte)(n & 0xff));
-                        SOutData(page,mml, page.port[port], (byte)(adr + 0x0c), (byte)((n >> 8) & 0xff));
+                        SOutData(page, mml, page.port[port], (byte)(adr + 0x0b), (byte)(n & 0xff));
+                        SOutData(page, mml, page.port[port], (byte)(adr + 0x0c), (byte)((n >> 8) & 0xff));
                         page.HardEnvelopeSpeed = n;
                     }
                     break;
@@ -2034,7 +2031,7 @@ namespace Core
                     n = (int)mml.args[1];
                     if (page.HardEnvelopeType != n)
                     {
-                        SOutData(page,mml, page.port[port], (byte)(adr + 0x0d), (byte)(n & 0xf));
+                        SOutData(page, mml, page.port[port], (byte)(adr + 0x0d), (byte)(n & 0xf));
                         page.HardEnvelopeType = n;
                     }
                     break;

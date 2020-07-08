@@ -1,9 +1,6 @@
-﻿using System;
+﻿using musicDriverInterface;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using musicDriverInterface;
 
 namespace Core
 {
@@ -250,7 +247,7 @@ namespace Core
             {
                 SetRf5c164CurrentChannel(mml, page);
                 byte data = (byte)(volume & 0xff);
-                OutRf5c164Port(page,mml, port[0], page.chipNumber, 0x0, data);
+                OutRf5c164Port(page, mml, port[0], page.chipNumber, 0x0, data);
                 page.rf5c164Envelope = volume;
             }
         }

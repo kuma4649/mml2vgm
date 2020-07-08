@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Core
 {
@@ -123,7 +121,7 @@ namespace Core
         /// </summary>
         public void incPos(partPage page)
         {
-            setPos(page,page.pos.tCol + 1);
+            setPos(page, page.pos.tCol + 1);
         }
 
         /// <summary>
@@ -721,7 +719,7 @@ namespace Core
         /// Lfoの変化値
         /// </summary>
         public int value = 0;
-        
+
         /// <summary>
         /// Lfoの変化する方向
         /// </summary>
@@ -753,19 +751,19 @@ namespace Core
         public enmPCMSTATUS status = enmPCMSTATUS.NONE;
 
         public clsPcm(int num
-            ,int seqNum
-            ,enmChipType chip
-            ,int chipNumber
-            ,string fileName
-            ,int freq
-            ,int vol 
-            ,long stAdr
-            ,long edAdr
-            ,long size
-            ,long loopAdr
-            ,bool is16bit
-            ,int samplerate
-            ,params object[] option)
+            , int seqNum
+            , enmChipType chip
+            , int chipNumber
+            , string fileName
+            , int freq
+            , int vol
+            , long stAdr
+            , long edAdr
+            , long size
+            , long loopAdr
+            , bool is16bit
+            , int samplerate
+            , params object[] option)
         {
             this.num = num;
             this.seqNum = seqNum;
@@ -840,7 +838,7 @@ namespace Core
             this.DesStartAdr = DesStartAdr;
             this.SrcLength = Length;
             this.Option = Option;
-            if(chip== enmChipType.YM2610B)
+            if (chip == enmChipType.YM2610B)
             {
                 if (Option != null)
                 {

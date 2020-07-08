@@ -1,16 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Diagnostics;
-using Core;
-//using Jacobi.Vst.Interop.Host;
-//using Jacobi.Vst.Core;
-using System.IO;
-using System.IO.Compression;
-//using mml2vgmIDE.form;
-using SoundManager;
+﻿using Core;
 using MDSound;
 using mml2vgmIDE.MMLParameter;
+//using Jacobi.Vst.Interop.Host;
+//using Jacobi.Vst.Core;
+//using mml2vgmIDE.form;
+using SoundManager;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Threading;
 
 namespace mml2vgmIDE
 {
@@ -131,7 +129,9 @@ namespace mml2vgmIDE
 
         public static string errMsg = "";
         public static bool flgReinit = false;
+#pragma warning disable CS0414 // フィールド 'Audio.bufVirtualFunction_MIDIKeyboard' が割り当てられていますが、値は使用されていません。
         private static short[] bufVirtualFunction_MIDIKeyboard = null;
+#pragma warning restore CS0414 // フィールド 'Audio.bufVirtualFunction_MIDIKeyboard' が割り当てられていますが、値は使用されていません。
         private static byte[] mmc5regs = new byte[10];
 
         private static List<NAudio.Midi.MidiOut> midiOuts = new List<NAudio.Midi.MidiOut>();
@@ -140,8 +140,8 @@ namespace mml2vgmIDE
         public static SoundManager.SoundManager sm = null;
         private static Enq enq;
         private static RingBuffer emuRecvBuffer = null;
-        public static long DriverSeqCounter=0;
-        public static long EmuSeqCounter=0;
+        public static long DriverSeqCounter = 0;
+        public static long EmuSeqCounter = 0;
         public static Action<PackData> SetMMLTraceInfo = null;
 
 
@@ -513,7 +513,7 @@ namespace mml2vgmIDE
 
         }
 
-        private static void SearchRealChip(Setting.ChipType[] chipType, List<Setting.ChipType> ret, int i, EnmZGMDevice dev, Chip chip,int ModuleType)
+        private static void SearchRealChip(Setting.ChipType[] chipType, List<Setting.ChipType> ret, int i, EnmZGMDevice dev, Chip chip, int ModuleType)
         {
             for (int j = 0; j < ret.Count; j++)
             {
@@ -569,7 +569,7 @@ namespace mml2vgmIDE
                     }
                     break;
                 case EnmZGMDevice.C140:
-                    if (chipType.SoundLocation == -1) 
+                    if (chipType.SoundLocation == -1)
                     {
                     }
                     else
@@ -605,7 +605,7 @@ namespace mml2vgmIDE
                     }
                     break;
                 case EnmZGMDevice.YM2151:
-                    if (chipType.SoundLocation == -1) 
+                    if (chipType.SoundLocation == -1)
                     {
                         if (chipType.Type == (int)Nc86ctl.ChipType.CHIP_YM2151)
                         {
@@ -716,14 +716,14 @@ namespace mml2vgmIDE
             return EnmRealModel.unknown;
         }
 
-        public static void SetVGMBuffer(EnmFileFormat format, outDatum[] srcBuf,long jumpPointClock)
+        public static void SetVGMBuffer(EnmFileFormat format, outDatum[] srcBuf, long jumpPointClock)
         {
             PlayingFileFormat = format;
             vgmBuf = srcBuf;
             Audio.jumpPointClock = jumpPointClock;
         }
 
-        public static void SetVGMBuffer(EnmFileFormat format, musicDriverInterface.MmlDatum[] srcBuf,string wrkPath,string mubFileName)
+        public static void SetVGMBuffer(EnmFileFormat format, musicDriverInterface.MmlDatum[] srcBuf, string wrkPath, string mubFileName)
         {
             PlayingFileFormat = format;
             mubBuf = srcBuf;
@@ -738,6 +738,7 @@ namespace mml2vgmIDE
             DriverAction.Init = DriverActionInit;
             DriverAction.Main = DriverActionMain;
             DriverAction.Final = DriverActionFinal;
+            sm.setting = setting;
             sm.Setup(
                 DriverAction, RealChipAction
                 , chipRegister.ProcessingData
@@ -761,7 +762,7 @@ namespace mml2vgmIDE
             while (!GetAudioDeviceSync()) { Thread.Sleep(0); }
             if (sm.GetSeqCounter() > 0)
             {
-                log.Write(string.Format("Warn:{0}",sm.GetSeqCounter()));
+                log.Write(string.Format("Warn:{0}", sm.GetSeqCounter()));
             }
         }
 
@@ -812,7 +813,7 @@ namespace mml2vgmIDE
         static long rPackCounter = 0;
         static PackData rPack = new PackData();
 
-        private static void RealChipAction(outDatum od, long Counter,Chip Chip, EnmDataType Type, int Address, int Data, object ExData)
+        private static void RealChipAction(outDatum od, long Counter, Chip Chip, EnmDataType Type, int Address, int Data, object ExData)
         {
 
             rPackCounter = Counter;
@@ -863,10 +864,8 @@ namespace mml2vgmIDE
             return NAudioWrap.getAsioLatency();
         }
 
-        public static bool Play(Setting setting,bool doSkipStop=false,Action startedOnceMethod=null)
+        public static bool Play(Setting setting, bool doSkipStop = false, Action startedOnceMethod = null)
         {
-            bool ret = false;
-
             useEmu = false;
             useReal = false;
 
@@ -898,6 +897,7 @@ namespace mml2vgmIDE
             MDSound.MDSound.np_nes_vrc7_volume = 0;
 
 
+            bool ret;
             if (PlayingFileFormat == EnmFileFormat.XGM)
             {
                 driver = new xgm();
@@ -905,13 +905,13 @@ namespace mml2vgmIDE
 
                 ret = xgmPlay(setting);
             }
-            else if( PlayingFileFormat== EnmFileFormat.ZGM)
+            else if (PlayingFileFormat == EnmFileFormat.ZGM)
             {
 
                 //zgmはchipの再定義が必須の為、初期化を行うとmask情報も初期化されてしまう。
                 //その為いったん退避しておく
                 List<Chip> maskChips = null;
-                if (driver != null && (driver is Driver.ZGM.zgm) && ((Driver.ZGM.zgm)driver).chips != null) 
+                if (driver != null && (driver is Driver.ZGM.zgm) && ((Driver.ZGM.zgm)driver).chips != null)
                 {
                     maskChips = ((Driver.ZGM.zgm)driver).chips;
                 }
@@ -925,9 +925,9 @@ namespace mml2vgmIDE
                 ret = zgmPlay(setting);
 
                 //mask情報の復帰
-                if(ret && maskChips != null)
+                if (ret && maskChips != null)
                 {
-                    foreach(Chip chip in ((Driver.ZGM.zgm)driver).chips)
+                    foreach (Chip chip in ((Driver.ZGM.zgm)driver).chips)
                     {
                         foreach (Chip mchip in maskChips)
                         {
@@ -949,7 +949,7 @@ namespace mml2vgmIDE
 
                 ret = vgmPlay(setting);
             }
-            else if(PlayingFileFormat== EnmFileFormat.MUB)
+            else if (PlayingFileFormat == EnmFileFormat.MUB)
             {
                 driver = new mucomMub();
                 driver.setting = setting;
@@ -982,10 +982,10 @@ namespace mml2vgmIDE
             EmuSeqCounter = 0;
             Stopped = false;
 
-//            if (!useEmu) 
-//                sm.RequestStopAtEmuChipSender();
-//            if (!useReal) 
-//                sm.RequestStopAtRealChipSender();
+            //            if (!useEmu) 
+            //                sm.RequestStopAtEmuChipSender();
+            //            if (!useReal) 
+            //                sm.RequestStopAtRealChipSender();
 
 
             return ret;
@@ -1178,7 +1178,7 @@ namespace mml2vgmIDE
                     , new EnmChip[] { EnmChip.YM2203 }// usechip.ToArray()
                     , (uint)(Common.SampleRate * setting.LatencyEmulation / 1000)
                     , (uint)(Common.SampleRate * setting.outputDevice.WaitTime / 1000)
-                    ,jumpPointClock
+                    , jumpPointClock
                     ))
                     return false;
 
@@ -1484,7 +1484,7 @@ namespace mml2vgmIDE
                         zCnt++;
                         chip = new MDSound.MDSound.Chip();
                         chip.ID = (byte)0;//ZGMでは常に0
-                        MDSound.Instrument ym2151=null;
+                        MDSound.Instrument ym2151 = null;
                         if (setting.YM2151Type.UseEmu) ym2151 = new ym2151();
                         else if (setting.YM2151Type.UseEmu2) ym2151 = new ym2151_mame();
                         else if (setting.YM2151Type.UseEmu3) ym2151 = new ym2151_x68sound();
@@ -1931,7 +1931,7 @@ namespace mml2vgmIDE
                     break;
                 }
 
-                foreach(Chip c in chipRegister.MIDI)
+                foreach (Chip c in chipRegister.MIDI)
                 {
                     if (!c.Use) continue;
                     if (c.Model == EnmVRModel.VirtualModel) useEmu = true;
@@ -2483,7 +2483,7 @@ namespace mml2vgmIDE
                                 chip.Stop = ym2612.Stop;
                                 chip.Reset = ym2612.Reset;
                             }
-                            else if ((i == 0 && setting.YM2612Type.UseEmu2) 
+                            else if ((i == 0 && setting.YM2612Type.UseEmu2)
                                 || (i == 1 && setting.YM2612SType.UseEmu2))
                             {
                                 if (ym3438 == null) ym3438 = new ym3438();
@@ -3665,9 +3665,9 @@ namespace mml2vgmIDE
                 if (!mubDriver.init(mubBuf, mubWorkPath, mucomManager, chipRegister, new EnmChip[] { EnmChip.YM2608 }
                     , (uint)(Common.SampleRate * setting.LatencyEmulation / 1000)
                     , (uint)(Common.SampleRate * setting.outputDevice.WaitTime / 1000)
-                    ,mubFileName
+                    , mubFileName
                     )
-                    
+
                     ) return false;
 
                 log.Write("Volume 設定");
@@ -3773,7 +3773,7 @@ namespace mml2vgmIDE
 
             if (tag.IndexOf("8801") > 0) return 63;
             if (tag.IndexOf("PC-88") > 0) return 63;
-            if (tag.IndexOf("PC88") > 0)  return 63;
+            if (tag.IndexOf("PC88") > 0) return 63;
 
             return -1;
         }
@@ -4145,24 +4145,24 @@ namespace mml2vgmIDE
             List<PackData> data = new List<PackData>();
             for (int i = 0; i < chipRegister.CONDUCTOR.Count; i++) if (chipRegister.CONDUCTOR[i].Use) data.AddRange(chipRegister.ConductorMakeSoftReset(i));
             for (int i = 0; i < chipRegister.AY8910.Count; i++) if (chipRegister.AY8910[i].Use) data.AddRange(chipRegister.AY8910MakeSoftReset(i));
-            for (int i = 0; i < chipRegister.C140.Count; i++)    if (chipRegister.C140[i].Use) data.AddRange(chipRegister.C140MakeSoftReset(i));
+            for (int i = 0; i < chipRegister.C140.Count; i++) if (chipRegister.C140[i].Use) data.AddRange(chipRegister.C140MakeSoftReset(i));
             for (int i = 0; i < chipRegister.HuC6280.Count; i++) if (chipRegister.HuC6280[i].Use) data.AddRange(chipRegister.HuC6280MakeSoftReset(i));
             for (int i = 0; i < chipRegister.K051649.Count; i++) if (chipRegister.K051649[i].Use) data.AddRange(chipRegister.K051649MakeSoftReset(i));
             for (int i = 0; i < chipRegister.K053260.Count; i++) if (chipRegister.K053260[i].Use) data.AddRange(chipRegister.K053260MakeSoftReset(i));
-            for (int i = 0; i < chipRegister.QSound.Count; i++)  if (chipRegister.QSound[i].Use) data.AddRange(chipRegister.QSoundMakeSoftReset(i));
+            for (int i = 0; i < chipRegister.QSound.Count; i++) if (chipRegister.QSound[i].Use) data.AddRange(chipRegister.QSoundMakeSoftReset(i));
             for (int i = 0; i < chipRegister.RF5C164.Count; i++) if (chipRegister.RF5C164[i].Use) data.AddRange(chipRegister.RF5C164MakeSoftReset(i));
             for (int i = 0; i < chipRegister.SEGAPCM.Count; i++) if (chipRegister.SEGAPCM[i].Use) data.AddRange(chipRegister.SEGAPCMMakeSoftReset(i));
             for (int i = 0; i < chipRegister.SN76489.Count; i++) if (chipRegister.SN76489[i].Use) data.AddRange(chipRegister.SN76489MakeSoftReset(i));
-            for (int i = 0; i < chipRegister.YM2151.Count; i++)  if (chipRegister.YM2151[i].Use) data.AddRange(chipRegister.YM2151MakeSoftReset(i));
-            for (int i = 0; i < chipRegister.YM2203.Count; i++)  if (chipRegister.YM2203[i].Use) data.AddRange(chipRegister.YM2203MakeSoftReset(i));
-            for (int i = 0; i < chipRegister.YM2413.Count; i++)  if (chipRegister.YM2413[i].Use) data.AddRange(chipRegister.YM2413MakeSoftReset(i));
+            for (int i = 0; i < chipRegister.YM2151.Count; i++) if (chipRegister.YM2151[i].Use) data.AddRange(chipRegister.YM2151MakeSoftReset(i));
+            for (int i = 0; i < chipRegister.YM2203.Count; i++) if (chipRegister.YM2203[i].Use) data.AddRange(chipRegister.YM2203MakeSoftReset(i));
+            for (int i = 0; i < chipRegister.YM2413.Count; i++) if (chipRegister.YM2413[i].Use) data.AddRange(chipRegister.YM2413MakeSoftReset(i));
             for (int i = 0; i < chipRegister.YM3526.Count; i++) if (chipRegister.YM3526[i].Use) data.AddRange(chipRegister.YM3526MakeSoftReset(i));
             for (int i = 0; i < chipRegister.YM3812.Count; i++) if (chipRegister.YM3812[i].Use) data.AddRange(chipRegister.YM3812MakeSoftReset(i));
             for (int i = 0; i < chipRegister.YMF262.Count; i++) if (chipRegister.YMF262[i].Use) data.AddRange(chipRegister.YMF262MakeSoftReset(i));
             for (int i = 0; i < chipRegister.YM2608.Count; i++) if (chipRegister.YM2608[i].Use) data.AddRange(chipRegister.YM2608MakeSoftReset(i));
             for (int i = 0; i < chipRegister.YM2609.Count; i++) if (chipRegister.YM2609[i].Use) data.AddRange(chipRegister.YM2609MakeSoftReset(i));
-            for (int i = 0; i < chipRegister.YM2610.Count; i++)  if (chipRegister.YM2610[i].Use) data.AddRange(chipRegister.YM2610MakeSoftReset(i));
-            for (int i = 0; i < chipRegister.YM2612.Count; i++)  if (chipRegister.YM2612[i].Use) data.AddRange(chipRegister.YM2612MakeSoftReset(i));
+            for (int i = 0; i < chipRegister.YM2610.Count; i++) if (chipRegister.YM2610[i].Use) data.AddRange(chipRegister.YM2610MakeSoftReset(i));
+            for (int i = 0; i < chipRegister.YM2612.Count; i++) if (chipRegister.YM2612[i].Use) data.AddRange(chipRegister.YM2612MakeSoftReset(i));
             for (int i = 0; i < chipRegister.MIDI.Count; i++) if (chipRegister.MIDI[i].Use) data.AddRange(chipRegister.MIDIMakeSoftReset(i));
 
             return data.ToArray();
@@ -4207,13 +4207,13 @@ namespace mml2vgmIDE
 
             int cnt = trdVgmVirtualMainFunction(buffer, offset, sampleCount);
 
-            if (setting.midiKbd.UseMIDIKeyboard)
-            {
-                if (bufVirtualFunction_MIDIKeyboard == null || bufVirtualFunction_MIDIKeyboard.Length < sampleCount)
-                {
-                    bufVirtualFunction_MIDIKeyboard = new short[sampleCount];
-                }
-            }
+            //if (setting.midiKbd.UseMIDIKeyboard)
+            //{
+            //    if (bufVirtualFunction_MIDIKeyboard == null || bufVirtualFunction_MIDIKeyboard.Length < sampleCount)
+            //    {
+            //        bufVirtualFunction_MIDIKeyboard = new short[sampleCount];
+            //    }
+            //}
             return cnt;
         }
 
@@ -4307,7 +4307,7 @@ namespace mml2vgmIDE
                         }
                     }
 
-                    if(driver!=null) driver.vstDelta = 0;
+                    if (driver != null) driver.vstDelta = 0;
                     stwh.Reset(); stwh.Start();
                     cnt = mds.Update(buffer, offset, sampleCount, oneFrameEmuDataSend);// driverVirtual.oneFrameProc);
                     ProcTimePer1Frame = ((double)stwh.ElapsedMilliseconds / (sampleCount + 1) * 1000000.0);
@@ -4352,7 +4352,7 @@ namespace mml2vgmIDE
 
         public static double EmuSeqCounterDelta = 0.0;
         public static double RealSeqCounterDelta = 0.0;
-        static double EmuSeqCounterWDelta =0.0;
+        static double EmuSeqCounterWDelta = 0.0;
         static int callcount = 0;
         private static bool useEmu;
         private static bool useReal;
@@ -4386,12 +4386,12 @@ namespace mml2vgmIDE
                     }
                     break;
                 }
-                if(EmuSeqCounter- PackCounter > 5)
+                if (EmuSeqCounter - PackCounter > 5)
                 {
                     ;
                 }
 
-                if (Pack.Address != -1 || Pack.Data != -1 || Pack.ExData!=null)
+                if (Pack.Address != -1 || Pack.Data != -1 || Pack.ExData != null)
                 {
                     chipRegister.SendChipData(PackCounter, Pack.Chip, Pack.Type, Pack.Address, Pack.Data, Pack.ExData);
                 }
@@ -4655,7 +4655,7 @@ namespace mml2vgmIDE
         {
             return chipRegister.fmRegisterYM2413[chipID];
         }
-    
+
         public static byte[] GetVRC7Register(int chipID)
         {
             return chipRegister.getVRC7Register(chipID);
@@ -4763,7 +4763,7 @@ namespace mml2vgmIDE
 
         public static byte[] GetAPURegister(int chipID)
         {
-            byte[] reg = null;
+            byte[] reg;
 
             //nsf向け
             if (chipRegister == null) reg = null;
@@ -4780,9 +4780,9 @@ namespace mml2vgmIDE
 
         public static byte[] GetDMCRegister(int chipID)
         {
-            byte[] reg = null;
             try
             {
+                byte[] reg;
                 //nsf向け
                 if (chipRegister == null) reg = null;
                 else if (chipRegister.nes_apu == null) reg = null;
@@ -4803,7 +4803,7 @@ namespace mml2vgmIDE
 
         public static MDSound.np.np_nes_fds.NES_FDS GetFDSRegister(int chipID)
         {
-            MDSound.np.np_nes_fds.NES_FDS reg = null;
+            MDSound.np.np_nes_fds.NES_FDS reg;
 
             //nsf向け
             if (chipRegister == null) reg = null;
@@ -5580,7 +5580,7 @@ namespace mml2vgmIDE
         public static void setYM2610Mask(int chipID, int ch)
         {
             //mds.setYM2610Mask(ch);
-            chipRegister.YM2610SetMask(0,chipID, ch, true);
+            chipRegister.YM2610SetMask(0, chipID, ch, true);
         }
 
         public static void setYM2612Mask(int chipID, int ch)
@@ -5590,7 +5590,7 @@ namespace mml2vgmIDE
 
         public static void setYM3526Mask(int chipID, int ch)
         {
-            chipRegister.YM3526SetMask(0,chipID, ch, true);
+            chipRegister.YM3526SetMask(0, chipID, ch, true);
         }
 
         public static void setY8950Mask(int chipID, int ch)
@@ -5600,12 +5600,12 @@ namespace mml2vgmIDE
 
         public static void setYM3812Mask(int chipID, int ch)
         {
-            chipRegister.YM3812SetMask(0,chipID, ch, true);
+            chipRegister.YM3812SetMask(0, chipID, ch, true);
         }
 
         public static void setYMF262Mask(int chipID, int ch)
         {
-            chipRegister.YMF262SetMask(0,chipID, ch, true);
+            chipRegister.YMF262SetMask(0, chipID, ch, true);
         }
 
         public static void setYMF278BMask(int chipID, int ch)
@@ -5769,7 +5769,7 @@ namespace mml2vgmIDE
         {
             try
             {
-                chipRegister.YM3526SetMask(0,chipID, ch, false);
+                chipRegister.YM3526SetMask(0, chipID, ch, false);
             }
             catch { }
         }
@@ -5787,7 +5787,7 @@ namespace mml2vgmIDE
         {
             try
             {
-                chipRegister.YM3812SetMask(0,chipID, ch, false);
+                chipRegister.YM3812SetMask(0, chipID, ch, false);
             }
             catch { }
         }

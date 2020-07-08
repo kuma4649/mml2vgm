@@ -1,15 +1,11 @@
 ﻿using Core;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace mml2vgmIDE.Driver.ZGM.ZgmChip
 {
     public class SEGAPCM : ZgmChip
     {
-        public SEGAPCM(ChipRegister chipRegister, Setting setting, outDatum[] vgmBuf):base(16)
+        public SEGAPCM(ChipRegister chipRegister, Setting setting, outDatum[] vgmBuf) : base(16)
         {
             this.chipRegister = chipRegister;
             this.setting = setting;

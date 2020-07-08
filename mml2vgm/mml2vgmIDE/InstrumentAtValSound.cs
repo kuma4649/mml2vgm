@@ -1,9 +1,8 @@
 ﻿using HtmlAgilityPack;
 using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Text;
-using System.Linq;
-using System.Collections.Generic;
 
 namespace mml2vgmIDE
 {
@@ -16,11 +15,11 @@ namespace mml2vgmIDE
         private string xpath = "";
         private string nameNode = "";
         private string paramsNode = "";
-        private Action<object,string[]> CompleteMethod = null;
+        private Action<object, string[]> CompleteMethod = null;
         private FrmMain parent = null;
         public bool isFirst = false;
 
-        public void Start(FrmMain parent ,object sender, string add, string url, Encoding encoding, string xpath, string nameNode, string paramsNode, Action<object, string[]> CompleteMethod)
+        public void Start(FrmMain parent, object sender, string add, string url, Encoding encoding, string xpath, string nameNode, string paramsNode, Action<object, string[]> CompleteMethod)
         {
             this.parent = parent;
             this.sender = sender;
@@ -63,12 +62,12 @@ No     : オフラインモードに遷移する
 Cancel : 永続的にオフラインモードにする
 ", "入力支援機能", System.Windows.Forms.MessageBoxButtons.YesNoCancel, System.Windows.Forms.MessageBoxIcon.Error);
 
-                if (res== System.Windows.Forms.DialogResult.Yes)
+                if (res == System.Windows.Forms.DialogResult.Yes)
                 {
                     return;
                 }
                 parent.setting.OfflineMode = true;
-                if(res== System.Windows.Forms.DialogResult.Cancel)
+                if (res == System.Windows.Forms.DialogResult.Cancel)
                 {
                     parent.setting.InfiniteOfflineMode = true;
                 }

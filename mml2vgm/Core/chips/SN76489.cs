@@ -1,6 +1,5 @@
-﻿using System;
+﻿using musicDriverInterface;
 using System.Collections.Generic;
-using musicDriverInterface;
 
 namespace Core
 {
@@ -242,35 +241,34 @@ namespace Core
 
         public override void SetVolume(partPage page, MML mml)
         {
-            byte data = 0;
             int vol = page.volume;
 
             //if (!page.keyOff)
             //{
-                if (page.envelopeMode)
+            if (page.envelopeMode)
+            {
+                vol = 0;
+                if (page.envIndex != -1)
                 {
-                    vol = 0;
-                    if (page.envIndex != -1)
-                    {
-                        vol = page.envVolume - (15 - page.volume);
-                    }
-                    else
-                    {
-                        page.keyOn = false;
-                    }
+                    vol = page.envVolume - (15 - page.volume);
                 }
-
-                for (int lfo = 0; lfo < 4; lfo++)
+                else
                 {
-                    if (!page.lfo[lfo].sw) continue;
-                    if (page.lfo[lfo].type != eLfoType.Tremolo) continue;
-
-                    vol += page.lfo[lfo].value + page.lfo[lfo].param[6];
+                    page.keyOn = false;
                 }
+            }
+
+            for (int lfo = 0; lfo < 4; lfo++)
+            {
+                if (!page.lfo[lfo].sw) continue;
+                if (page.lfo[lfo].type != eLfoType.Tremolo) continue;
+
+                vol += page.lfo[lfo].value + page.lfo[lfo].param[6];
+            }
             //}
             //else
             //{
-                //vol = 0;
+            //vol = 0;
             //}
 
             page.beforeVolume = Common.CheckRange(vol, 0, 15);
@@ -337,7 +335,7 @@ namespace Core
         {
             if (mml.args[0] is string) return;
 
-            byte adr = (byte)(int)mml.args[0];
+            //byte adr = (byte)(int)mml.args[0];
             byte dat = (byte)(int)mml.args[1];
 
             OutPsgPort(page, mml, port[0], dat);
@@ -412,7 +410,7 @@ namespace Core
                 return;
             }
 
-            n = SetEnvelopParamFromInstrument(page, n, mml);
+            SetEnvelopParamFromInstrument(page, n, mml);
             SetDummyData(page, mml);
         }
 

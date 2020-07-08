@@ -1,9 +1,9 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
-using Newtonsoft.Json;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using System.IO;
 
 namespace mml2vgmIDE
 {

@@ -1,9 +1,6 @@
-﻿using System;
+﻿using musicDriverInterface;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using musicDriverInterface;
 
 namespace Core
 {
@@ -566,7 +563,7 @@ namespace Core
                 {
                     if (page.Type == enmChannelType.FMPCM)
                     {
-                        if (page.spg.pcm!=page.pcm)
+                        if (page.spg.pcm != page.pcm)
                         {
                             OutSetCh6PCMMode(null, page, page.pcm);
                             page.spg.pcm = page.pcm;

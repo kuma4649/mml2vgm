@@ -1,9 +1,7 @@
-﻿using System;
+﻿using musicDriverInterface;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using musicDriverInterface;
 
 namespace Core
 {
@@ -222,7 +220,7 @@ namespace Core
                 }
                 else
                 {
-                    Array.Copy(buf, 0, pi.totalBuf, freeAdr+ pi.totalHeaderLength, buf.Length);
+                    Array.Copy(buf, 0, pi.totalBuf, freeAdr + pi.totalHeaderLength, buf.Length);
                 }
 
                 Common.SetUInt32bit31(
@@ -255,20 +253,20 @@ namespace Core
         {
             return string.Format("{0,-10} {1,-7} {2,-5:D3} {3,-4:D2} ${4,-7:X4} ${5,-7:X4} {6} ${7,-7:X4}  {8,4} {9}\r\n"
                 , Name //0
-                , pcm.chipNumber!=0 ? "SEC" : "PRI" //1
+                , pcm.chipNumber != 0 ? "SEC" : "PRI" //1
                 , pcm.num //2
                 , pcm.stAdr >> 16 //3
                 , pcm.stAdr & 0xffff //4
                 , pcm.edAdr & 0xffff //5
                 , pcm.loopAdr == -1 ? "N/A     " : string.Format("${0,-7:X4}", (pcm.loopAdr & 0xffff)) //6
                 , pcm.size //7
-                ,"NONE" //mode //8
+                , "NONE" //mode //8
                 , pcm.status.ToString() //9
                 );
         }
 
 
-        private void OutQSoundPort(MML mml,byte[] cmd, partPage page, byte adr, ushort data)
+        private void OutQSoundPort(MML mml, byte[] cmd, partPage page, byte adr, ushort data)
         {
             SOutData(
                 page,
@@ -294,7 +292,7 @@ namespace Core
             adr = (byte)((page.ch << 3) + 0x03);
             data = 0;
 
-            OutQSoundPort(mml,port[0], page
+            OutQSoundPort(mml, port[0], page
                 , adr
                 , (ushort)data
                 );
@@ -346,13 +344,13 @@ namespace Core
                 page.beforepcmEndAddress = page.pcmEndAddress;
             }
 
-            if (page.beforepcmLoopAddress != (page.pcmEndAddress - page.pcmLoopAddress) && page.beforepcmLoopAddress!=4)
+            if (page.beforepcmLoopAddress != (page.pcmEndAddress - page.pcmLoopAddress) && page.beforepcmLoopAddress != 4)
             {
                 //LoopAdr
                 adr = (byte)((page.ch << 3) + 0x04);
                 data = (ushort)(page.pcmLoopAddress == -1
                     ? 4 //QSoundはループがデフォ。(thanks Ian(@SuperCTR)さん)
-                    : (page.pcmEndAddress- page.pcmLoopAddress)
+                    : (page.pcmEndAddress - page.pcmLoopAddress)
                     );
                 OutQSoundPort(mml, port[0], page
                     , adr
@@ -517,7 +515,7 @@ namespace Core
             if (page.beforeVolume != data)
             {
                 byte adr = (byte)((page.ch << 3) + 0x06);
-                OutQSoundPort(mml,port[0], page
+                OutQSoundPort(mml, port[0], page
                     , adr
                     , (ushort)data
                     );
@@ -574,7 +572,7 @@ namespace Core
             page.panL = (32 - p);
 
             byte adr = (byte)(page.ch + 0x80);
-            OutQSoundPort(mml,port[0], page
+            OutQSoundPort(mml, port[0], page
                 , adr
                 , (ushort)(page.panL + 0x110)
                 );

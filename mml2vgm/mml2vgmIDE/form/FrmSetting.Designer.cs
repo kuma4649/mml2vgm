@@ -358,6 +358,7 @@
             this.textBoxDescription = new System.Windows.Forms.TextBox();
             this.llOpenGithub = new System.Windows.Forms.LinkLabel();
             this.cbHiyorimiMode = new System.Windows.Forms.CheckBox();
+            this.cbPlayDeviceCB = new System.Windows.Forms.CheckBox();
             this.gbWaveOut.SuspendLayout();
             this.gbAsioOut.SuspendLayout();
             this.gbWasapiOut.SuspendLayout();
@@ -3752,7 +3753,7 @@
             this.groupBox31.Controls.Add(this.rbLoglevelTRACE);
             this.groupBox31.Location = new System.Drawing.Point(192, 3);
             this.groupBox31.Name = "groupBox31";
-            this.groupBox31.Size = new System.Drawing.Size(243, 72);
+            this.groupBox31.Size = new System.Drawing.Size(243, 43);
             this.groupBox31.TabIndex = 25;
             this.groupBox31.TabStop = false;
             this.groupBox31.Text = "Log level";
@@ -3935,7 +3936,7 @@
             // 
             // tbOpacity
             // 
-            this.tbOpacity.Location = new System.Drawing.Point(109, 81);
+            this.tbOpacity.Location = new System.Drawing.Point(292, 52);
             this.tbOpacity.Maximum = 100;
             this.tbOpacity.Minimum = 1;
             this.tbOpacity.Name = "tbOpacity";
@@ -3949,7 +3950,7 @@
             // label52
             // 
             this.label52.AutoSize = true;
-            this.label52.Location = new System.Drawing.Point(7, 96);
+            this.label52.Location = new System.Drawing.Point(190, 67);
             this.label52.Name = "label52";
             this.label52.Size = new System.Drawing.Size(96, 12);
             this.label52.TabIndex = 19;
@@ -3986,11 +3987,12 @@
             // 
             // groupBox5
             // 
+            this.groupBox5.Controls.Add(this.cbPlayDeviceCB);
             this.groupBox5.Controls.Add(this.cbLogWarning);
             this.groupBox5.Controls.Add(this.cbDispFrameCounter);
             this.groupBox5.Location = new System.Drawing.Point(7, 3);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(178, 72);
+            this.groupBox5.Size = new System.Drawing.Size(178, 94);
             this.groupBox5.TabIndex = 3;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Debug Mode";
@@ -4148,6 +4150,16 @@
             this.cbHiyorimiMode.Text = "日和見モード(出力タブ：\r\n遅延時間100ms以下の時、使用を推奨)";
             this.cbHiyorimiMode.UseVisualStyleBackColor = true;
             this.cbHiyorimiMode.Visible = false;
+            // 
+            // cbPlayDeviceCB
+            // 
+            this.cbPlayDeviceCB.AutoSize = true;
+            this.cbPlayDeviceCB.Location = new System.Drawing.Point(6, 63);
+            this.cbPlayDeviceCB.Name = "cbPlayDeviceCB";
+            this.cbPlayDeviceCB.Size = new System.Drawing.Size(159, 16);
+            this.cbPlayDeviceCB.TabIndex = 2;
+            this.cbPlayDeviceCB.Text = "デバイスのコールバックで演奏";
+            this.cbPlayDeviceCB.UseVisualStyleBackColor = true;
             // 
             // FrmSetting
             // 
@@ -4633,5 +4645,6 @@
         private System.Windows.Forms.Button btnInitializeShortCutKey;
         private System.Windows.Forms.CheckBox cbUseSIen;
         private System.Windows.Forms.LinkLabel llOpenGithub;
+        private System.Windows.Forms.CheckBox cbPlayDeviceCB;
     }
 }

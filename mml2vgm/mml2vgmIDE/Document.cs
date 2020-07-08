@@ -1,11 +1,8 @@
 ﻿using Core;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using System.IO;
+using System.Text;
+using System.Windows.Forms;
 
 namespace mml2vgmIDE
 {
@@ -35,7 +32,7 @@ namespace mml2vgmIDE
         public EnmFileFormat dstFileFormat = EnmFileFormat.unknown;
         public object compiledData = null;
 
-        public Document(Setting setting,bool isMUC)
+        public Document(Setting setting, bool isMUC)
         {
             gwiFullPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "(新規mmlファイル).gwi");
             errBox = null;
@@ -75,7 +72,7 @@ namespace mml2vgmIDE
             {
                 case ".muc":
                     srcFileFormat = EnmMmlFileFormat.MUC;
-                    editor.azukiControl.Text = File.ReadAllText(fullPath,Encoding.GetEncoding(932));
+                    editor.azukiControl.Text = File.ReadAllText(fullPath, Encoding.GetEncoding(932));
                     break;
                 case ".gwi":
                 default:
@@ -95,7 +92,7 @@ namespace mml2vgmIDE
             return true;
         }
 
-        public bool InitOpen(string fullPath,string context)
+        public bool InitOpen(string fullPath, string context)
         {
             fullPath = fullPath.Replace('\\', Path.DirectorySeparatorChar).Replace('/', Path.DirectorySeparatorChar);
 
@@ -118,7 +115,7 @@ namespace mml2vgmIDE
         {
             string path1 = Path.GetDirectoryName(gwiFullPath);
             path1 = string.IsNullOrEmpty(path1) ? gwiFullPath : path1;
-            TreeNode tn = new TreeNode(path1,1,1);
+            TreeNode tn = new TreeNode(path1, 1, 1);
             gwiTree = tn;
             tn.Expand();
             TreeNode ts = new TreeNode();
@@ -128,13 +125,13 @@ namespace mml2vgmIDE
             {
                 foreach (DirectoryInfo ds in dm.GetDirectories())
                 {
-                    ts = new TreeNode(ds.Name,1,1);
+                    ts = new TreeNode(ds.Name, 1, 1);
                     ts.Nodes.Add("!dmy");
                     tn.Nodes.Add(ts);
                 }
                 foreach (FileInfo fi in dm.GetFiles())
                 {
-                    ts = new TreeNode(fi.Name,0,0);
+                    ts = new TreeNode(fi.Name, 0, 0);
                     tn.Nodes.Add(ts);
                 }
             }

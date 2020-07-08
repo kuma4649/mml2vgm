@@ -1,10 +1,8 @@
-﻿using System;
+﻿using musicDriverInterface;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using musicDriverInterface;
 
 namespace Core
 {
@@ -1326,7 +1324,7 @@ namespace Core
             mml.args.Add(n);
 
         }
-        
+
         private void CmdEffectChorus(partWork pw, partPage page, MML mml)
         {
             pw.incPos(page);
@@ -1989,7 +1987,7 @@ namespace Core
             } while ((row == page.pos.row && alies == page.pos.alies) && ch != (char)0);
 
         }
-        
+
         private void CmdSynchronous(partWork pw, partPage page, MML mml)
         {
             pw.incPos(page);
@@ -2732,7 +2730,7 @@ namespace Core
                         foreach (partPage page in pw.pg)
                         {
                             if (page.dataEnd) continue;
-                            Step4_CheckSync(page,0);
+                            Step4_CheckSync(page, 0);
                         }
                     }
                 }
@@ -2762,7 +2760,7 @@ namespace Core
                         foreach (partPage page in pw.pg)
                         {
                             if (page.dataEnd) continue;
-                            Step4_CheckSync(page,1);
+                            Step4_CheckSync(page, 1);
                         }
                     }
                 }
@@ -2770,7 +2768,7 @@ namespace Core
 
         }
 
-        private void Step4_CheckSync(partPage page,int mode)
+        private void Step4_CheckSync(partPage page, int mode)
         {
             int counter = 0;
             Stack<int> renpuStack = new Stack<int>();
@@ -2894,7 +2892,7 @@ namespace Core
                             if (m == 2)
                             {
                                 int j;
-                                for(j = 0; j < lstSynchronousMark.Count; j++)
+                                for (j = 0; j < lstSynchronousMark.Count; j++)
                                 {
                                     if (n == lstSynchronousMark[j].Item1)
                                     {

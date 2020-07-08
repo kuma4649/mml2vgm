@@ -1,10 +1,6 @@
-﻿using System;
+﻿using musicDriverInterface;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using musicDriverInterface;
 
 namespace Core
 {
@@ -94,7 +90,7 @@ namespace Core
         public ZGMmaker()
         {
             dicChipIdentifyNumber = new Dictionary<string, object[]>();
-            for(int i = 0; i < tblChipIdentifyNumber.Length; i++)
+            for (int i = 0; i < tblChipIdentifyNumber.Length; i++)
             {
                 string key = (string)(((object[])tblChipIdentifyNumber[i])[0]);
                 object[] val = (object[])(tblChipIdentifyNumber[i]);
@@ -119,12 +115,12 @@ namespace Core
             return mmlInfo.dat.ToArray();
         }
 
-        public void OutFile(outDatum[] desBuf,string fn)
+        public void OutFile(outDatum[] desBuf, string fn)
         {
             log.Write("ZGMファイル出力");
 
             List<byte> buf = new List<byte>();
-            foreach(outDatum dt in desBuf)
+            foreach (outDatum dt in desBuf)
             {
                 buf.Add(dt.val);
             }
@@ -144,7 +140,7 @@ namespace Core
 
         private void makeAndOutHeaderDiv()
         {
-            foreach(byte b in HeaderTemp)
+            foreach (byte b in HeaderTemp)
             {
                 outDatum dt = new outDatum(enmMMLType.unknown, null, null, b);
                 mmlInfo.dat.Add(dt);

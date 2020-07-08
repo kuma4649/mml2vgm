@@ -28,7 +28,7 @@ namespace mml2vgmIDE
                 _outputDevice = value;
             }
         }
-        
+
         private ChipType _AY8910Type = new ChipType();
         public ChipType AY8910Type
         {
@@ -898,7 +898,8 @@ namespace mml2vgmIDE
         }
 
         private AutoBalance _autoBalance = new AutoBalance();
-        public AutoBalance autoBalance {
+        public AutoBalance autoBalance
+        {
             get => _autoBalance; set => _autoBalance = value;
         }
 
@@ -1696,12 +1697,15 @@ namespace mml2vgmIDE
             public bool EmptyPlayList { get => _EmptyPlayList; set => _EmptyPlayList = value; }
 
             private int _Opacity = 100;
-            public int Opacity {
-                get {
+            public int Opacity
+            {
+                get
+                {
                     _Opacity = Common.Range(_Opacity, 10, 100);
                     return _Opacity;
                 }
-                set {
+                set
+                {
                     _Opacity = value;
                     _Opacity = Common.Range(_Opacity, 10, 100);
                 }
@@ -1716,6 +1720,9 @@ namespace mml2vgmIDE
             public string[] GwiFileHistory { get => _GwiFileHistory; set => _GwiFileHistory = value; }
 
             public bool LogWarning { get; set; } = false;
+
+            public bool PlayDeviceCB { get; set; } = false;
+
             public int LogLevel { get; set; } = 8;//8:INFO
             public List<string> SearchWordHistory { get; set; }
 
@@ -1746,6 +1753,7 @@ namespace mml2vgmIDE
                 other.TextFontStyle = this.TextFontStyle;
                 other.GwiFileHistory = this.GwiFileHistory;
                 other.LogWarning = this.LogWarning;
+                other.PlayDeviceCB = this.PlayDeviceCB;
                 other.LogLevel = this.LogLevel;
 
                 return other;
@@ -2729,7 +2737,7 @@ namespace mml2vgmIDE
             }
         }
 
-            [Serializable]
+        [Serializable]
         public class MidiExport
         {
 
@@ -3811,8 +3819,9 @@ namespace mml2vgmIDE
                 string fullPath = Common.settingFilePath;
                 fullPath = Path.Combine(fullPath, Properties.Resources.cntSettingFileName);
 
-                if (!File.Exists(fullPath)) {
-                    Setting s=new Setting();
+                if (!File.Exists(fullPath))
+                {
+                    Setting s = new Setting();
                     s.OfflineMode = s.InfiniteOfflineMode;
                     CheckShortCutKey(s);
                     return s;
@@ -3820,7 +3829,7 @@ namespace mml2vgmIDE
                 XmlSerializer serializer = new XmlSerializer(typeof(Setting), typeof(Setting).GetNestedTypes());
                 using (StreamReader sr = new StreamReader(fullPath, new UTF8Encoding(false)))
                 {
-                    Setting s= (Setting)serializer.Deserialize(sr);
+                    Setting s = (Setting)serializer.Deserialize(sr);
                     s.OfflineMode = s.InfiniteOfflineMode;
                     CheckShortCutKey(s);
                     return s;
@@ -4029,9 +4038,9 @@ namespace mml2vgmIDE
                 Kbd = -1100,
                 CloseTab = 1200,
                 CloseTabForce = 1210,
-                CommentOnOff=1220,
-                PartEnter=1230,
-                Home=1240,
+                CommentOnOff = 1220,
+                PartEnter = 1230,
+                Home = 1240,
 
                 Ch01Solo = 2000,
                 Ch02Solo = 2100,
@@ -4064,7 +4073,7 @@ namespace mml2vgmIDE
                 ShortCutKey ret = new ShortCutKey();
                 ret.Info = new ShortCutKeyInfo[this.Info.Length];
                 int i = 0;
-                foreach(ShortCutKeyInfo inf in this.Info)
+                foreach (ShortCutKeyInfo inf in this.Info)
                 {
                     ret.Info[i++] = inf.Copy();
                 }

@@ -3,10 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace mml2vgmIDE
 {
@@ -53,7 +50,7 @@ namespace mml2vgmIDE
         private Action<string> disp = null;
         private mucomManager mucom = null;
 
-        public CompileManager(Action<string> disp,mucomManager mucom)
+        public CompileManager(Action<string> disp, mucomManager mucom)
         {
             this.disp = disp;
             this.mucom = mucom;
@@ -190,7 +187,7 @@ namespace mml2vgmIDE
         }
 
         private void Compile_GWI(queItem qi)
-        { 
+        {
 
             string stPath = System.Windows.Forms.Application.StartupPath;
             string[] activeMMLTextLines = qi.srcText.Split(new string[] { "\r\n" }, StringSplitOptions.None);

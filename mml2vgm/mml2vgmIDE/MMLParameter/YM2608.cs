@@ -1,13 +1,13 @@
 ﻿using Core;
+using musicDriverInterface;
 using System;
 using System.Linq;
-using musicDriverInterface;
 
 namespace mml2vgmIDE.MMLParameter
 {
     public class YM2608 : Instrument
     {
-        public YM2608(SoundManager.Chip chip) : base(19,chip)
+        public YM2608(SoundManager.Chip chip) : base(19, chip)
         {
             for (int i = 0; i < 19; i++)
             {
@@ -20,7 +20,7 @@ namespace mml2vgmIDE.MMLParameter
         public override string Name => "YM2608";
 
         public bool isMub = false;
-        private string[] noteStrTbl=new string[] { "c", "c+", "d", "d+", "e", "f", "f+", "g", "g+", "a", "a+", "b" };
+        private string[] noteStrTbl = new string[] { "c", "c+", "d", "d+", "e", "f", "f+", "g", "g+", "a", "a+", "b" };
 
         private int GetChNumFromMucChNum(int ch)
         {

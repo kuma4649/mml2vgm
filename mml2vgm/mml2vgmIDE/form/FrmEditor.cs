@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
+﻿using Sgry.Azuki;
+using Sgry.Azuki.WinForms;
+using System;
 using System.Drawing;
-using System.Reflection;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using Newtonsoft.Json;
-using Sgry.Azuki;
-using Sgry.Azuki.WinForms;
 using WeifenLuo.WinFormsUI.Docking;
 
 namespace mml2vgmIDE
@@ -21,7 +15,7 @@ namespace mml2vgmIDE
         private Regex searchRegex;
         private string anchorTextPattern = "//";
         private string searchTextPattern = "";
-        private bool searchMatchCase=false;
+        private bool searchMatchCase = false;
         public Document document = null;
         public FrmSien frmSien = null;
         //public int col = -1;
@@ -46,7 +40,7 @@ namespace mml2vgmIDE
             }
         }
 
-        public FrmEditor(Setting setting,bool isMUC)
+        public FrmEditor(Setting setting, bool isMUC)
         {
             InitializeComponent();
             this.setting = setting;
@@ -62,7 +56,7 @@ namespace mml2vgmIDE
         }
 
         private void setHighlighterVGMZGMZGM()
-        { 
+        {
             Sgry.Azuki.Highlighter.KeywordHighlighter keywordHighlighter = new Sgry.Azuki.Highlighter.KeywordHighlighter();
             keywordHighlighter.AddRegex("^[^'].*", false, CharClass.DocComment);
             keywordHighlighter.AddRegex("^'[A-Za-z0-9\\-\\,\\+]+_*[ |\\t]", CharClass.Keyword);
@@ -189,7 +183,7 @@ namespace mml2vgmIDE
 
             string[] source = (string[])e.Data.GetData(DataFormats.FileDrop);
 
-            if (e.Effect== DragDropEffects.Move)
+            if (e.Effect == DragDropEffects.Move)
             {
                 main.ExecFile(source);
                 return;
@@ -210,7 +204,7 @@ namespace mml2vgmIDE
                 && ext != ".wav"
                 && ext != ".bin" //mucom PCM data?
                 && ext != ".dat" //mucom voice data?
-                && ext != ".tfi" 
+                && ext != ".tfi"
                 )
             {
                 log.dispMsg(string.Format("Can't include '{0}'.", source));
@@ -268,7 +262,7 @@ namespace mml2vgmIDE
 
             DragDropEffects efc = DragDropEffects.Move;
             //shift または ctrl が押されている場合はmove
-            if ((e.KeyState & (8+4)) != 0)
+            if ((e.KeyState & (8 + 4)) != 0)
             {
 
                 if (CanDropFilesToEditor(source))
@@ -295,7 +289,7 @@ namespace mml2vgmIDE
             foreach (string fn in source)
             {
                 string ext = System.IO.Path.GetExtension(fn).ToLower();
-                if (ext==".gwi"
+                if (ext == ".gwi"
                     || ext == ".wav"
                     || ext == ".bin" //mucom PCM data?
                     || ext == ".dat" //mucom voice data?
@@ -311,10 +305,10 @@ namespace mml2vgmIDE
         private bool CanMoveFiles(string[] source)
         {
             //ひとつでも移動可能なファイルが含まれるならばtrue
-            foreach(string fn in source)
+            foreach (string fn in source)
             {
                 string ext = System.IO.Path.GetExtension(fn).ToLower();
-                if(ext==".gwi"
+                if (ext == ".gwi"
                     || ext == ".mwi" //fmp7 mml data
                     || ext == ".muc" //mucom mml data
                     || ext == ".mml" //common mml data
@@ -386,7 +380,7 @@ namespace mml2vgmIDE
                 line = line.Substring(0, line.Length - 2);
             }
             azukiControl.Document.Replace(line, st, ed);
-            azukiControl.SetSelection(st, st+line.Length);
+            azukiControl.SetSelection(st, st + line.Length);
         }
 
         public void ActionShiftEnter(IUserInterface ui)
@@ -566,7 +560,7 @@ namespace mml2vgmIDE
             }
 
             searchRegex = null;
-            SearchFindNext(searchTextPattern,false);
+            SearchFindNext(searchTextPattern, false);
         }
 
         public void ActionFindPrevious(IUserInterface ui)
@@ -651,7 +645,7 @@ namespace mml2vgmIDE
             return true;
         }
 
-        public bool SearchFindPrevious(string sTextPtn,bool searchUseRegex)
+        public bool SearchFindPrevious(string sTextPtn, bool searchUseRegex)
         {
 
             //AzukiのAnnの検索処理を利用
@@ -761,7 +755,7 @@ namespace mml2vgmIDE
             Point ciP = azukiControl.GetPositionFromIndex(Math.Max(ci - 1, 0));
             ciP = azukiControl.PointToScreen(new Point(ciP.X, ciP.Y + azukiControl.LineHeight));
             string line = azukiControl.GetTextInRange(st, ci).TrimStart();
-            if (line != "" && line[0] == '\'' && frmSien!=null)
+            if (line != "" && line[0] == '\'' && frmSien != null)
             {
                 frmSien.selRow = -1;
                 frmSien.Request(line, ciP);
@@ -772,7 +766,7 @@ namespace mml2vgmIDE
         {
             if (e.CloseReason == CloseReason.UserClosing)
             {
-                if(!forceClose && (document.isNew || document.edit))
+                if (!forceClose && (document.isNew || document.edit))
                 {
                     DialogResult res = MessageBox.Show("保存せずにファイルを閉じますか？"
                         , "ファイル保存確認"
@@ -793,7 +787,7 @@ namespace mml2vgmIDE
             }
         }
 
-        private void Hokan(string line,Point ciP)
+        private void Hokan(string line, Point ciP)
         {
             if (line == "\'@" && setting.UseSien)
             {
@@ -812,7 +806,7 @@ namespace mml2vgmIDE
 
         private void AzukiControl_KeyDown(object sender, KeyEventArgs e)
         {
-            if (this.DockState== DockState.Float)
+            if (this.DockState == DockState.Float)
             {
                 main.FrmMain_KeyDown(sender, e);
             }
@@ -829,7 +823,7 @@ namespace mml2vgmIDE
                 return;
             }
             e.SuppressKeyPress = true;
-            
+
             switch (e.KeyCode)
             {
                 case Keys.Down:
@@ -927,7 +921,7 @@ namespace mml2vgmIDE
 
         private void FrmEditor_Deactivate(object sender, EventArgs e)
         {
-            if (main != null && main.activeDocument==this) main.activeDocument = null;
+            if (main != null && main.activeDocument == this) main.activeDocument = null;
         }
     }
 }

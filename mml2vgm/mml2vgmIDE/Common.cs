@@ -1,12 +1,10 @@
-﻿using System;
+﻿using Core;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Reflection;
-using Core;
-using System.Windows.Forms;
 using System.Drawing;
+using System.Reflection;
+using System.Text;
+using System.Windows.Forms;
 
 namespace mml2vgmIDE
 {
@@ -22,7 +20,7 @@ namespace mml2vgmIDE
         public static Int32 SampleRate = 44100;
         public static string settingFilePath = "";
 
-        public static void SetDoubleBuffered(Control control) 
+        public static void SetDoubleBuffered(Control control)
         {
             control.GetType().InvokeMember(
                "DoubleBuffered",
@@ -32,7 +30,7 @@ namespace mml2vgmIDE
                new object[] { true });
         }
 
-public static string AssemblyTitle
+        public static string AssemblyTitle
         {
             get
             {
@@ -311,7 +309,7 @@ public static string AssemblyTitle
             return ary.ToArray();
         }
 
-        public static void SetBFColor(Control parent,Setting setting)
+        public static void SetBFColor(Control parent, Setting setting)
         {
             if (parent is Form)
             {

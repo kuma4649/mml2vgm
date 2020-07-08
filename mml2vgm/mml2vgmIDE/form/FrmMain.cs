@@ -1,21 +1,15 @@
-﻿using System;
+﻿using Core;
+using musicDriverInterface;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
+using System.Diagnostics;
 using System.Drawing;
-using System.Linq;
+using System.IO;
+using System.Runtime.InteropServices;
 using System.Text;
-using System.Threading.Tasks;
 using System.Threading;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
-using System.IO;
-using Core;
-using System.Diagnostics;
-using SoundManager;
-using System.Runtime.InteropServices;
-using System.Reflection;
-using musicDriverInterface;
 
 namespace mml2vgmIDE
 {
@@ -172,9 +166,9 @@ namespace mml2vgmIDE
             string[] args = Environment.GetCommandLineArgs();
             //foreach (string ag in args) MessageBox.Show(ag);
             string startFn = "";
-            if(args.Length>1 
-                && File.Exists(args[1]) 
-                && (Path.GetExtension(args[1]).ToLower() == ".gwi"|| Path.GetExtension(args[1]).ToLower() == ".muc"))
+            if (args.Length > 1
+                && File.Exists(args[1])
+                && (Path.GetExtension(args[1]).ToLower() == ".gwi" || Path.GetExtension(args[1]).ToLower() == ".muc"))
             {
                 startFn = args[1];
             }
@@ -317,7 +311,7 @@ namespace mml2vgmIDE
             }
             catch (System.IO.IOException ioe)
             {
-                MessageBox.Show(string.Format("Occured exception.\r\nMessage:\r\n{0}",ioe.Message),"Saving failed.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(string.Format("Occured exception.\r\nMessage:\r\n{0}", ioe.Message), "Saving failed.", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
         }
@@ -397,7 +391,7 @@ namespace mml2vgmIDE
                 }
 
                 if (d == null) return;
-                
+
                 if (Path.GetExtension(d.gwiFullPath).ToLower() == ".muc")
                 {
                     MessageBox.Show("mucのエクスポート処理は今のところサポートしておりません。",
@@ -408,7 +402,7 @@ namespace mml2vgmIDE
                 }
 
                 Compile(false, false, false, false, true);
-                while (Compiling!=0) { Application.DoEvents(); }//待ち合わせ
+                while (Compiling != 0) { Application.DoEvents(); }//待ち合わせ
 
                 if (msgBox.getErr().Length > 0)
                 {
@@ -627,7 +621,7 @@ namespace mml2vgmIDE
             file = File.ReadAllText(file);
             string[] text = file.Split(new string[] { "\r\n" }, StringSplitOptions.None);
             Compile(true, false, false, false, false, text);
-            while (Compiling!=0)
+            while (Compiling != 0)
             {
                 Thread.Sleep(0);
                 Application.DoEvents();
@@ -722,7 +716,7 @@ namespace mml2vgmIDE
 
         //private void TssbPlay_ButtonClick(object sender, EventArgs e)
         //{
-            //TsmiCompileAndTracePlay_Click(null, null);
+        //TsmiCompileAndTracePlay_Click(null, null);
         //}
 
         private void TssbSkipPlay_ButtonClick(object sender, EventArgs e)
@@ -761,7 +755,7 @@ namespace mml2vgmIDE
 
                 Document doc;
 
-                switch (setting.shortCutKey.Info[i].number- (setting.shortCutKey.Info[i].number%10))
+                switch (setting.shortCutKey.Info[i].number - (setting.shortCutKey.Info[i].number % 10))
                 {
                     case (int)Setting.ShortCutKey.enmContent.FileOpen:
                         TsmiFileOpen_Click(null, null);
@@ -910,7 +904,7 @@ namespace mml2vgmIDE
                     case (int)Setting.ShortCutKey.enmContent.Play:
                         jumpSoloModeSw = false;
                         //      doPlay isTrace doSkip
-                        Compile(  true,  false, false, false, false);
+                        Compile(true, false, false, false, false);
                         return true;
                     case (int)Setting.ShortCutKey.enmContent.JsoloPlay:
                         jumpSoloModeSw = true;
@@ -961,9 +955,9 @@ namespace mml2vgmIDE
             ctrl = (e.KeyData & Keys.Control) == Keys.Control;
             shift = (e.KeyData & Keys.Shift) == Keys.Shift;
             alt = (e.KeyData & Keys.Alt) == Keys.Alt;
-            tssbPlay.Text = (ctrl ? Properties.Resources.lblF5_Trace : "") 
-                + (shift ? Properties.Resources.lblF5_Skip : "") 
-                + (alt ? Properties.Resources.lblF5_JSolo : "") 
+            tssbPlay.Text = (ctrl ? Properties.Resources.lblF5_Trace : "")
+                + (shift ? Properties.Resources.lblF5_Skip : "")
+                + (alt ? Properties.Resources.lblF5_JSolo : "")
                 + Properties.Resources.lblF5_Play;
 
             //switch (e.KeyCode)
@@ -1184,7 +1178,7 @@ namespace mml2vgmIDE
             Compiling = 1;//フラグはコンパイルと共有
         }
 
-        public void Compile(bool doPlay, bool isTrace, bool doSkip, bool doSkipStop,bool doExport,string[] text=null)
+        public void Compile(bool doPlay, bool isTrace, bool doSkip, bool doSkipStop, bool doExport, string[] text = null)
         {
             if (Compiling != 0) return;
 
@@ -1313,7 +1307,7 @@ namespace mml2vgmIDE
             }
             catch (Exception e)
             {
-                Disp(string.Format("Message:\r\n{0}\r\nStackTrace:\r\n{1}\r\n", e.Message,e.StackTrace));
+                Disp(string.Format("Message:\r\n{0}\r\nStackTrace:\r\n{1}\r\n", e.Message, e.StackTrace));
                 isSuccess = false;
             }
 
@@ -1359,7 +1353,7 @@ namespace mml2vgmIDE
                 path1 = string.IsNullOrEmpty(path1) ? fileName : path1;
                 fileName = Path.Combine(
                     path1
-                    , Path.GetFileNameWithoutExtension(fileName) 
+                    , Path.GetFileNameWithoutExtension(fileName)
                     + string.Format("_{0}", m98Count++) + ".muc"
                     );
                 title = Path.GetFileName(Path.GetFileName(fileName));
@@ -1428,7 +1422,7 @@ namespace mml2vgmIDE
         }
 
         private void startCompileGWI()
-        { 
+        {
             Core.log.Write("Call mml2vgm core");
 
             string stPath = System.Windows.Forms.Application.StartupPath;
@@ -1844,7 +1838,7 @@ namespace mml2vgmIDE
                 TsmiUndo.Enabled = d.editor.azukiControl.CanUndo;
                 TsmiRedo.Enabled = d.editor.azukiControl.CanRedo;
 
-                if (frmFolderTree.tvFolderTree.Nodes.Count == 0 || frmFolderTree.tvFolderTree.Nodes[0] != d.gwiTree) 
+                if (frmFolderTree.tvFolderTree.Nodes.Count == 0 || frmFolderTree.tvFolderTree.Nodes[0] != d.gwiTree)
                 {
                     string path1 = System.IO.Path.GetDirectoryName(d.gwiFullPath);
                     path1 = string.IsNullOrEmpty(path1) ? d.gwiFullPath : path1;
@@ -1921,7 +1915,7 @@ namespace mml2vgmIDE
 
                 try
                 {
-                    if (string.IsNullOrEmpty( filename)) continue;
+                    if (string.IsNullOrEmpty(filename)) continue;
                     if (filename[filename.Length - 1] == '\\')
                     {
                         continue;
@@ -2087,7 +2081,7 @@ namespace mml2vgmIDE
             frmLog = new FrmLog(setting, theme);
             FormBox.Add(frmLog);
 
-            frmFolderTree = new FrmFolderTree(setting,dpMain);
+            frmFolderTree = new FrmFolderTree(setting, dpMain);
             FormBox.Add(frmFolderTree);
 
             frmErrorList = new FrmErrorList(setting);
@@ -2205,7 +2199,7 @@ namespace mml2vgmIDE
             this.Visible = false;
             log.ForcedWrite("終了処理開始");
             log.ForcedWrite("frmMain_FormClosing:STEP 00");
-            
+
             timer.Enabled = false;
 
             Audio.Close();
@@ -2225,7 +2219,7 @@ namespace mml2vgmIDE
             }
             if (setting.location.ShowMixer)
             {
-                setting.location.RMixer = new Rectangle(frmMixer.Location.X, frmMixer.Location.Y, 0,0);
+                setting.location.RMixer = new Rectangle(frmMixer.Location.X, frmMixer.Location.Y, 0, 0);
             }
 
             frmPartCounter.Close();
@@ -2233,7 +2227,7 @@ namespace mml2vgmIDE
             setting.Save();
         }
 
-        public bool InitPlayer(EnmFileFormat format, outDatum[] srcBuf,long jumpPointClock)
+        public bool InitPlayer(EnmFileFormat format, outDatum[] srcBuf, long jumpPointClock)
         {
             if (srcBuf == null) return false;
 
@@ -2331,7 +2325,7 @@ namespace mml2vgmIDE
                 {
                     ac = ((FrmEditor)dc).azukiControl;
                 }
-                string fn=((FrmEditor)dc).document.gwiFullPath;
+                string fn = ((FrmEditor)dc).document.gwiFullPath;
 
                 if (Audio.flgReinit) flgReinit = true;
                 if (setting.other.InitAlways) flgReinit = true;
@@ -2387,7 +2381,7 @@ namespace mml2vgmIDE
 
                 frmLyrics.update();
                 frmPartCounter.Stop();
-                Audio.mmlParams.Init(isTrace,true);
+                Audio.mmlParams.Init(isTrace, true);
                 frmPartCounter.Start(Audio.mmlParams);
 
                 if (isTrace && ac != null)
@@ -2428,7 +2422,7 @@ namespace mml2vgmIDE
                 Audio.Stop(0);
                 ResumeNormalModeDisp();
 
-                if (!Audio.Play(setting, doSkipStop,jumpSoloMode))
+                if (!Audio.Play(setting, doSkipStop, jumpSoloMode))
                 {
                     try
                     {
@@ -2509,7 +2503,7 @@ namespace mml2vgmIDE
 
             long w = Audio.EmuSeqCounter;
             double sec = (double)w / (double)Common.SampleRate;
-            toolStripStatusLabel1.Text = string.Format("{0:d2}:{1:d2}.{2:d2}", (int)(sec / 60), (int)(sec%60), (int)(sec * 100 % 100));
+            toolStripStatusLabel1.Text = string.Format("{0:d2}:{1:d2}.{2:d2}", (int)(sec / 60), (int)(sec % 60), (int)(sec * 100 % 100));
         }
 
         private void UpdateScreenInfo()
@@ -2748,7 +2742,7 @@ namespace mml2vgmIDE
             }
             this.Opacity = setting.other.Opacity / 100.0;
 
-            if(setting.location.RMixer!=System.Drawing.Rectangle.Empty)
+            if (setting.location.RMixer != System.Drawing.Rectangle.Empty)
             {
                 if (setting.location.ShowMixer)
                 {
@@ -2780,8 +2774,8 @@ namespace mml2vgmIDE
             TreeNode tn = new TreeNode();
             SScript(tn, path);
 
-            DivScripts(tsmiScript, tn , "FROMMENU");
-            DivScripts(tsmiTreeView, tn , "FROMTREEVIEWCONTEXTMENU");
+            DivScripts(tsmiScript, tn, "FROMMENU");
+            DivScripts(tsmiTreeView, tn, "FROMTREEVIEWCONTEXTMENU");
             frmFolderTree.extendItem = tsmiTreeView;
         }
 
@@ -2802,7 +2796,7 @@ namespace mml2vgmIDE
                 {
                     string[] scriptTitles = ScriptInterface.GetScriptTitles(fi.FullName);
                     string[] scriptTypes = ScriptInterface.GetScriptTypes(fi.FullName);
-                    string[] scriptSupportFileExt= ScriptInterface.GetScriptSupportFileExt(fi.FullName);
+                    string[] scriptSupportFileExt = ScriptInterface.GetScriptSupportFileExt(fi.FullName);
                     for (int i = 0; i < scriptTitles.Length; i++)
                     {
                         TreeNode tn = new TreeNode(scriptTitles[i]);
@@ -2814,7 +2808,7 @@ namespace mml2vgmIDE
             catch { }
         }
 
-        private void DivScripts(ToolStripMenuItem tsmi,TreeNode tn,string target)
+        private void DivScripts(ToolStripMenuItem tsmi, TreeNode tn, string target)
         {
             foreach (TreeNode ctn in tn.Nodes)
             {
@@ -2875,7 +2869,7 @@ namespace mml2vgmIDE
 
             //if (d == null) return;
 
-            Tuple<int,string, string[],string> tpl = (Tuple<int, string, string[], string>)((ToolStripMenuItem)sender).Tag;
+            Tuple<int, string, string[], string> tpl = (Tuple<int, string, string[], string>)((ToolStripMenuItem)sender).Tag;
             string fn = tpl.Item4;
 
             List<string> lstFullPath = new List<string>();
@@ -2887,7 +2881,7 @@ namespace mml2vgmIDE
             info.document = d;
             info.fileNamesFull = lstFullPath.ToArray();
 
-            string cd=Directory.GetCurrentDirectory();
+            string cd = Directory.GetCurrentDirectory();
             ScriptInterface.run(fn, info, tpl.Item1);
             Directory.SetCurrentDirectory(cd);
         }
@@ -2915,7 +2909,7 @@ namespace mml2vgmIDE
             if (!Audio.sm.IsRunningAtDataMaker())
             {
                 Compile(true, false, true, true, false);
-                while (Compiling!=0)
+                while (Compiling != 0)
                 {
                     Thread.Sleep(0);
                     Application.DoEvents();
@@ -2976,7 +2970,7 @@ namespace mml2vgmIDE
         private void TsslCompileError_Click(object sender, EventArgs e)
         {
             frmErrorList.Focus();
-            if(frmErrorList.DockState!= DockState.Float)
+            if (frmErrorList.DockState != DockState.Float)
             {
                 frmErrorList.Activate();
             }
@@ -3015,7 +3009,7 @@ namespace mml2vgmIDE
 
             if (qi.doc.dstFileFormat == EnmFileFormat.MUB)
             {
-                mubData =(musicDriverInterface.MmlDatum[])qi.doc.compiledData;
+                mubData = (musicDriverInterface.MmlDatum[])qi.doc.compiledData;
                 doPlay = true;
                 finishedCompileMUC();
             }

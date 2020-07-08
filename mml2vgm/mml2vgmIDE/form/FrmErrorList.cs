@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Reflection;
-using System.Text;
 using System.Windows.Forms;
 
 namespace mml2vgmIDE
@@ -52,7 +47,7 @@ namespace mml2vgmIDE
 
         private void DataGridView1_SelectionChanged(object sender, EventArgs e)
         {
-            if (dataGridView1.SelectedRows.Count<1 || dataGridView1.SelectedRows[0].Index < 0) return;
+            if (dataGridView1.SelectedRows.Count < 1 || dataGridView1.SelectedRows[0].Index < 0) return;
             int rowIndex = dataGridView1.SelectedRows[0].Index;
             JumpDocument(rowIndex, false);
         }

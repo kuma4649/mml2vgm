@@ -1,9 +1,5 @@
-﻿using System;
+﻿using musicDriverInterface;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using musicDriverInterface;
 
 namespace Core
 {
@@ -84,8 +80,8 @@ namespace Core
 
             //for (int ch = 0; ch < 3; ch++)
             //{
-                //OutSsgKeyOff(null, lstPartWork[ch].cpg);
-                //lstPartWork[ch].apg.volume = 0;
+            //OutSsgKeyOff(null, lstPartWork[ch].cpg);
+            //lstPartWork[ch].apg.volume = 0;
             //}
 
             if (ChipID != 0)
@@ -98,9 +94,7 @@ namespace Core
         {
             byte pch = (byte)page.ch;
             int n = (page.mixer & 0x1) + ((page.mixer & 0x2) << 2);
-            byte data = 0;
-
-            data = (byte)(SSGKeyOn | (9 << pch));
+            byte data = (byte)(SSGKeyOn | 9 << pch);
             data &= (byte)(~(n << pch));
             SSGKeyOn = data;
 
@@ -111,16 +105,14 @@ namespace Core
                 SOutData(page, mml, port[0], 0x0d, (byte)(page.HardEnvelopeType & 0xf));
             }
             //parent.OutData(mml, port[0], 0x07, data);
-            SOutData(page,mml, port[0], 0x07, data);
+            SOutData(page, mml, port[0], 0x07, data);
         }
 
         public void OutSsgKeyOff(MML mml, partPage page)
         {
             byte pch = (byte)page.ch;
             int n = 9;
-            byte data = 0;
-
-            data = (byte)(SSGKeyOn | (n << pch));
+            byte data = (byte)(SSGKeyOn | n << pch);
             SSGKeyOn = data;
 
             //parent.OutData(mml, port[0], (byte)(0x08 + pch), 0);
@@ -157,7 +149,7 @@ namespace Core
             if (page.spg.beforeVolume != vol)
             {
                 //parent.OutData(mml, port[0], (byte)(0x08 + pch), (byte)vol);
-                SOutData(page,mml, port[0], (byte)(0x08 + pch), (byte)vol);
+                SOutData(page, mml, port[0], (byte)(0x08 + pch), (byte)vol);
                 //pw.ppg[pw.cpgNum].beforeVolume = pw.ppg[pw.cpgNum].volume;
                 page.spg.beforeVolume = vol;
             }
@@ -197,16 +189,13 @@ namespace Core
             if (page.spg.freq == f) return;
 
             page.spg.freq = f;
-
-            byte data = 0;
-
-            data = (byte)(f & 0xff);
+            byte data = (byte)(f & 0xff);
             //parent.OutData(mml, port[0], (byte)(0 + page.ch * 2), data);
-            SOutData(page,mml, port[0], (byte)(0 + page.ch * 2), data);
+            SOutData(page, mml, port[0], (byte)(0 + page.ch * 2), data);
 
             data = (byte)((f & 0xf00) >> 8);
             //parent.OutData(mml, port[0], (byte)(1 + page.ch * 2), data);
-            SOutData(page,mml, port[0], (byte)(1 + page.ch * 2), data);
+            SOutData(page, mml, port[0], (byte)(1 + page.ch * 2), data);
         }
 
         public int GetSsgFNum(partPage page, MML mml, int octave, char noteCmd, int shift)
@@ -312,7 +301,7 @@ namespace Core
 
             if (type == 'E')
             {
-                n = SetEnvelopParamFromInstrument(page, n, mml);
+                SetEnvelopParamFromInstrument(page, n, mml);
                 return;
             }
 
@@ -389,7 +378,7 @@ namespace Core
             byte dat = (byte)(int)mml.args[1];
 
             //parent.OutData(mml, port[0], (byte)adr, (byte)dat);
-            SOutData(page,mml, port[0], (byte)adr, (byte)dat);
+            SOutData(page, mml, port[0], (byte)adr, (byte)dat);
         }
 
         public override void CmdLoopExtProc(partPage page, MML mml)

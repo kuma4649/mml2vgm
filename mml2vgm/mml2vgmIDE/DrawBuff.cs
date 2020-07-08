@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Drawing;
 using System.Drawing.Imaging;
 
@@ -2575,7 +2571,7 @@ namespace mml2vgmIDE
             drawFont4Int5S(screen, x, y, t, nn);
             on = nn;
         }
-        
+
         public static void font4Hex4Bit(FrameBuffer screen, int x, int y, int t, ref int on, int nn)
         {
             if (on == nn) return;

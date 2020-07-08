@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Core;
+using mml2vgmIDE;
+using musicDriverInterface;
+using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Threading;
-using Core;
-using mml2vgmIDE;
-using musicDriverInterface;
 
 namespace SoundManager
 {
@@ -94,7 +93,7 @@ namespace SoundManager
             }
         }
 
-        private long processOverFlowCounter=0;
+        private long processOverFlowCounter = 0;
         private double process1_Lap;
         private double process2_Lap;
         private int skipframe = 1;
@@ -259,7 +258,7 @@ namespace SoundManager
 
                         skipframe = Math.Max(Math.Min((int)((el1 - o) / step), 500), 1);
 
-                        for (int skipf = 0; skipf < skipframe ; skipf++)
+                        for (int skipf = 0; skipf < skipframe; skipf++)
                         {
                             o += step;
 
@@ -346,7 +345,7 @@ namespace SoundManager
                     parent.RequestStopAtRealChipSender();
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 mml2vgmIDE.log.ForcedWrite(ex);
                 lock (lockObj)
@@ -390,14 +389,17 @@ namespace SoundManager
         }
 
         private void SendData()
-        { 
-            while (SeqCounter >= ringBuffer.LookUpCounter())
+        {
+            long rlc = ringBuffer.LookUpCounter();
+            while (SeqCounter >= rlc)
             {
                 if (unmount) return;
                 if (!ringBuffer.Deq(ref od, ref Counter, ref Chip, ref Type, ref Address, ref Data, ref ExData))
                 {
                     break;
                 }
+
+                rlc = Counter;
 
                 //パラメーターセット
                 SetMMLParameter?.Invoke(ref od, ref Counter, ref Chip, ref Type, ref Address, ref Data, ref ExData);
@@ -549,7 +551,7 @@ namespace SoundManager
         public double ElapsedMilliSec()
         {
             //stopWatch.Stop();
-            return (double)stopWatch.ElapsedTicks/Stopwatch.Frequency;
+            return (double)stopWatch.ElapsedTicks / Stopwatch.Frequency;
         }
 
     }

@@ -1,9 +1,6 @@
-﻿using System;
+﻿using musicDriverInterface;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using musicDriverInterface;
 
 namespace Core
 {
@@ -27,7 +24,7 @@ namespace Core
             _canUsePcm = false;
 
             Frequency = 3579545;
-            port =new byte[][] { new byte[] { (byte)(chipNumber!=0 ? 0xa1 : 0x51) } };
+            port = new byte[][] { new byte[] { (byte)(chipNumber != 0 ? 0xa1 : 0x51) } };
 
             if (string.IsNullOrEmpty(initialPartName)) return;
 
@@ -103,12 +100,12 @@ namespace Core
         public void outYM2413AllKeyOff(MML mml, partPage page)
         {
             //Rhythm Off
-            SOutData(page,mml, port[0], 0x0e, 0);
+            SOutData(page, mml, port[0], 0x0e, 0);
             for (byte adr = 0; adr < 9; adr++)
             {
                 //Ch Off
-                SOutData(page,mml, port[0], (byte)(0x20 + adr), 0);
-                SOutData(page,mml, port[0], (byte)(0x30 + adr), 0);
+                SOutData(page, mml, port[0], (byte)(0x20 + adr), 0);
+                SOutData(page, mml, port[0], (byte)(0x30 + adr), 0);
             }
         }
 
@@ -129,7 +126,7 @@ namespace Core
                 case 1: // R)R only
                     for (int ope = 0; ope < 2; ope++)
                     {
-                        SOutData(page,mml, port[0], (byte)(0x6 + ope), (byte)((
+                        SOutData(page, mml, port[0], (byte)(0x6 + ope), (byte)((
                             (0 & 0xf) << 4) //SL
                             | (15 & 0xf) // RR
                             ));
@@ -145,20 +142,20 @@ namespace Core
                             , false //KS
                             , 0 //MT
                             );
-                        SOutData(page,mml, port[0], (byte)(0x4 + ope), (byte)((
+                        SOutData(page, mml, port[0], (byte)(0x4 + ope), (byte)((
                             (15 & 0xf) << 4) //AR
                             | (15 & 0xf) // DR
                             ));
-                        SOutData(page,mml, port[0], (byte)(0x6 + ope), (byte)((
+                        SOutData(page, mml, port[0], (byte)(0x6 + ope), (byte)((
                             (0 & 0xf) << 4) //SL
                             | (15 & 0xf) // RR
                             ));
                     }
-                    SOutData(page,mml, port[0], (byte)(0x2), (byte)(
+                    SOutData(page, mml, port[0], (byte)(0x2), (byte)(
                         (0 << 6)  //KL(M)
                         | (0 & 0x3f) //TL
                         ));
-                    SOutData(page,mml, port[0], (byte)(0x3), (byte)((
+                    SOutData(page, mml, port[0], (byte)(0x3), (byte)((
                         (3 & 0x3) << 6) //KL(C)
                         | (0) // DT(M)
                         | (0) // DT(C)
@@ -176,20 +173,20 @@ namespace Core
                     , parent.instFM[n][ope * 11 + 10] != 0 //KS
                     , parent.instFM[n][ope * 11 + 6] & 0xf //MT
                     );
-                SOutData(page,mml, port[0], (byte)(0x4 + ope), (byte)((
+                SOutData(page, mml, port[0], (byte)(0x4 + ope), (byte)((
                     (parent.instFM[n][ope * 11 + 1] & 0xf) << 4) //AR
                     | (parent.instFM[n][ope * 11 + 2] & 0xf) // DR
                     ));
-                SOutData(page,mml, port[0], (byte)(0x6 + ope), (byte)((
+                SOutData(page, mml, port[0], (byte)(0x6 + ope), (byte)((
                     (parent.instFM[n][ope * 11 + 3] & 0xf) << 4) //SL
                     | (parent.instFM[n][ope * 11 + 4] & 0xf) // RR
                     ));
             }
-            SOutData(page,mml, port[0], (byte)(0x2), (byte)((
+            SOutData(page, mml, port[0], (byte)(0x2), (byte)((
                 (parent.instFM[n][0 * 11 + 5] & 0x3) << 6)  //KL(M)
                 | (parent.instFM[n][23] & 0x3f) //TL
                 ));
-            SOutData(page,mml, port[0], (byte)(0x3), (byte)((
+            SOutData(page, mml, port[0], (byte)(0x3), (byte)((
                 (parent.instFM[n][1 * 11 + 5] & 0x3) << 6) //KL(C)
                 | (parent.instFM[n][0 * 11 + 11] != 0 ? 0x08 : 0) // DT(M)
                 | (parent.instFM[n][1 * 11 + 11] != 0 ? 0x10 : 0) // DT(C)
@@ -467,7 +464,7 @@ namespace Core
         {
             byte adr = (byte)(int)mml.args[0];
             byte dat = (byte)(int)mml.args[1];
-            SOutData(page,mml, port[0], adr, dat);
+            SOutData(page, mml, port[0], adr, dat);
         }
 
         public override void CmdLoopExtProc(partPage page, MML mml)
@@ -595,8 +592,8 @@ namespace Core
             {
                 p0.spg.beforeFNum = p0.cpg.freq;
 
-                SOutData(p0.cpg,mml, port[0], (byte)0x16, (byte)p0.cpg.freq);
-                SOutData(p0.cpg,mml, port[0]
+                SOutData(p0.cpg, mml, port[0], (byte)0x16, (byte)p0.cpg.freq);
+                SOutData(p0.cpg, mml, port[0]
                     , (byte)0x26
                     , (byte)((p0.cpg.freq >> 8) & 0xf)
                     );
@@ -620,8 +617,8 @@ namespace Core
 
                 if (p0.spg.beforeFNum != -1)
                 {
-                    SOutData(p0.cpg,mml, port[0], (byte)0x17, (byte)p0.spg.beforeFNum);
-                    SOutData(p0.cpg,mml, port[0]
+                    SOutData(p0.cpg, mml, port[0], (byte)0x17, (byte)p0.spg.beforeFNum);
+                    SOutData(p0.cpg, mml, port[0]
                         , (byte)0x27
                         , (byte)((p0.spg.beforeFNum >> 8) & 0xf)
                         );
@@ -646,8 +643,8 @@ namespace Core
 
                 if (p0.spg.beforeFNum != -1)
                 {
-                    SOutData(p0.cpg,mml, port[0], (byte)0x18, (byte)p0.spg.beforeFNum);
-                    SOutData(p0.cpg,mml, port[0]
+                    SOutData(p0.cpg, mml, port[0], (byte)0x18, (byte)p0.spg.beforeFNum);
+                    SOutData(p0.cpg, mml, port[0]
                         , (byte)0x28
                         , (byte)((p0.spg.beforeFNum >> 8) & 0xf)
                         );

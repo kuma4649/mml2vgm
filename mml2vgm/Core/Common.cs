@@ -1,10 +1,7 @@
-﻿using System;
+﻿using musicDriverInterface;
+using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using musicDriverInterface;
 
 namespace Core
 {
@@ -211,7 +208,7 @@ namespace Core
             return newBuf;
         }
 
-        public static List<string> DivParts(string parts, Dictionary<enmChipType, ClsChip[]> chips, out int ura,out bool isLayer)
+        public static List<string> DivParts(string parts, Dictionary<enmChipType, ClsChip[]> chips, out int ura, out bool isLayer)
         {
             List<string> ret = new List<string>();
             string a = "";
@@ -381,7 +378,7 @@ namespace Core
             byte[] dmy = new byte[length];
             Array.Copy(data, pds.SrcStartAdr, dmy, 0, length);
 
-            Common.Add32bits(desDat, (uint)(length + 8) | (pds.chipNumber!=0 ? 0x8000_0000 : 0x0000_0000));//size of data, in bytes
+            Common.Add32bits(desDat, (uint)(length + 8) | (pds.chipNumber != 0 ? 0x8000_0000 : 0x0000_0000));//size of data, in bytes
             Common.Add32bits(desDat, (uint)(pds.DesStartAdr + length));//size of the entire ROM
             Common.Add32bits(desDat, (uint)pds.DesStartAdr);//start address of data
 
@@ -411,7 +408,7 @@ namespace Core
             byte[] dmy = new byte[length];
             Array.Copy(data, pds.SrcStartAdr, dmy, 0, length);
 
-            Common.Add32bits(desDat, (uint)(length + 2) | (pds.chipNumber!=0 ? 0x8000_0000 : 0x0000_0000));//size of data, in bytes
+            Common.Add32bits(desDat, (uint)(length + 2) | (pds.chipNumber != 0 ? 0x8000_0000 : 0x0000_0000));//size of data, in bytes
             Common.Add16bits(desDat, (uint)pds.DesStartAdr);//start address of data
 
             desDat.AddRange(dmy);
@@ -471,7 +468,7 @@ namespace Core
             return false;
         }
 
-        public static bool CheckSoXVersion(string srcpath,Action<string> Disp)
+        public static bool CheckSoXVersion(string srcpath, Action<string> Disp)
         {
             try
             {

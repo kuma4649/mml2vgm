@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Core;
+﻿using Core;
 using musicDriverInterface;
+using System;
+using System.Linq;
 
 namespace mml2vgmIDE.MMLParameter
 {
     public class HuC6280 : Instrument
     {
-        public HuC6280(SoundManager.Chip chip) : base(6,chip)
+        public HuC6280(SoundManager.Chip chip) : base(6, chip)
         {
             for (int i = 0; i < 6; i++)
             {

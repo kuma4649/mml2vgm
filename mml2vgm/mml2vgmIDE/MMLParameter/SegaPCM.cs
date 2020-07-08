@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Core;
+﻿using Core;
 using musicDriverInterface;
+using System;
+using System.Linq;
 
 namespace mml2vgmIDE.MMLParameter
 {
     public class SegaPCM : Instrument
     {
-        public SegaPCM(SoundManager.Chip chip) : base(16,chip)
+        public SegaPCM(SoundManager.Chip chip) : base(16, chip)
         {
             for (int i = 0; i < 16; i++)
             {

@@ -1,6 +1,6 @@
-﻿using System;
+﻿using musicDriverInterface;
+using System;
 using System.Collections.Generic;
-using musicDriverInterface;
 
 namespace Core
 {
@@ -42,18 +42,18 @@ namespace Core
             {
                 if (parent.ChipCommandSize == 2)
                 {
-                    if (chipNumber==0) pcmDataInfo[0].totalBuf = new byte[] { 0x07, 0x00, 0x66, 0x05, 0x00, 0x00, 0x00, 0x00 };
+                    if (chipNumber == 0) pcmDataInfo[0].totalBuf = new byte[] { 0x07, 0x00, 0x66, 0x05, 0x00, 0x00, 0x00, 0x00 };
                     else pcmDataInfo[0].totalBuf = new byte[] { 0x07, 0x00, 0x66, 0x05, 0x00, 0x00, 0x00, 0x00 };
                 }
                 else
                 {
-                    if (chipNumber==0) pcmDataInfo[0].totalBuf = new byte[] { 0x07, 0x66, 0x05, 0x00, 0x00, 0x00, 0x00 };
+                    if (chipNumber == 0) pcmDataInfo[0].totalBuf = new byte[] { 0x07, 0x66, 0x05, 0x00, 0x00, 0x00, 0x00 };
                     else pcmDataInfo[0].totalBuf = new byte[] { 0x07, 0x66, 0x05, 0x00, 0x00, 0x00, 0x00 };
                 }
             }
             else
             {
-                if (chipNumber==0) pcmDataInfo[0].totalBuf = new byte[] { 0x67, 0x66, 0x05, 0x00, 0x00, 0x00, 0x00 };
+                if (chipNumber == 0) pcmDataInfo[0].totalBuf = new byte[] { 0x67, 0x66, 0x05, 0x00, 0x00, 0x00, 0x00 };
                 else pcmDataInfo[0].totalBuf = new byte[] { 0x67, 0x66, 0x05, 0x00, 0x00, 0x00, 0x00 };
             }
 
@@ -91,7 +91,7 @@ namespace Core
 
                     //freq( 0 )
                     pg.freq = 0;
-                    OutHuC6280Port(pg,null, port[0], 2, 0);
+                    OutHuC6280Port(pg, null, port[0], 2, 0);
                     OutHuC6280Port(pg, null, port[0], 3, 0);
 
                     pg.pcm = false;
@@ -182,7 +182,7 @@ namespace Core
                     pi.totalBuf
                     , pi.totalHeadrSizeOfDataPtr
                     , (UInt32)(pi.totalBuf.Length - (pi.totalHeadrSizeOfDataPtr + 4))
-                    , ChipNumber!=0);
+                    , ChipNumber != 0);
                 pcmDataEasy = pi.use ? pi.totalBuf : null;
 
             }
@@ -281,7 +281,7 @@ namespace Core
                 page,
                 mml,
                 cmd
-                , (byte)((ChipNumber!=0 ? 0x80 : 0x00) + adr)
+                , (byte)((ChipNumber != 0 ? 0x80 : 0x00) + adr)
                 , data);
         }
 
@@ -395,7 +395,7 @@ namespace Core
                     // setup stream control
                     cmd
                     , (byte)page.streamID
-                    , (byte)(0x1b + (page.chipNumber!=0 ? 0x80 : 0x00)) //0x1b HuC6280
+                    , (byte)(0x1b + (page.chipNumber != 0 ? 0x80 : 0x00)) //0x1b HuC6280
                     , (byte)page.ch
                     , (byte)(0x00 + 0x06)// 0x00 Select Channel 
                                          // set stream data
@@ -820,7 +820,7 @@ namespace Core
         {
             return string.Format("{0,-10} {1,-7} {2,-5:D3} N/A  ${3,-7:X6} ${4,-7:X6} N/A      ${5,-7:X6}  NONE {6}\r\n"
                 , Name
-                , pcm.chipNumber!=0 ? "SEC" : "PRI"
+                , pcm.chipNumber != 0 ? "SEC" : "PRI"
                 , pcm.num
                 , pcm.stAdr & 0xffffff
                 , pcm.edAdr & 0xffffff

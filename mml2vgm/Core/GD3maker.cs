@@ -1,15 +1,12 @@
-﻿using System;
+﻿using musicDriverInterface;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using musicDriverInterface;
 
 namespace Core
 {
     public class GD3maker
     {
-        public void make(List<outDatum> dat,Information info,string lyric)
+        public void make(List<outDatum> dat, Information info, string lyric)
         {
             //'Gd3 '
             dat.Add(new outDatum(enmMMLType.unknown, null, null, 0x47));

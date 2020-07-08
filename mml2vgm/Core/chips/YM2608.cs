@@ -1,9 +1,6 @@
-﻿using System;
+﻿using musicDriverInterface;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using musicDriverInterface;
 
 namespace Core
 {
@@ -231,15 +228,15 @@ namespace Core
         {
             if (page.spg.pcmStartAddress != startAdr)
             {
-                SOutData(page,mml, port[1], 0x02, (byte)((startAdr >> 2) & 0xff));
-                SOutData(page,mml, port[1], 0x03, (byte)((startAdr >> 10) & 0xff));
+                SOutData(page, mml, port[1], 0x02, (byte)((startAdr >> 2) & 0xff));
+                SOutData(page, mml, port[1], 0x03, (byte)((startAdr >> 10) & 0xff));
                 page.spg.pcmStartAddress = startAdr;
             }
 
             if (page.spg.pcmEndAddress != endAdr)
             {
-                SOutData(page,mml, port[1], 0x04, (byte)(((endAdr - 0x04) >> 2) & 0xff));
-                SOutData(page,mml, port[1], 0x05, (byte)(((endAdr - 0x04) >> 10) & 0xff));
+                SOutData(page, mml, port[1], 0x04, (byte)(((endAdr - 0x04) >> 2) & 0xff));
+                SOutData(page, mml, port[1], 0x05, (byte)(((endAdr - 0x04) >> 10) & 0xff));
                 page.spg.pcmEndAddress = endAdr;
             }
 
@@ -275,10 +272,10 @@ namespace Core
             byte data = 0;
 
             data = (byte)(f & 0xff);
-            SOutData(page,mml, port[1], 0x09, data);
+            SOutData(page, mml, port[1], 0x09, data);
 
             data = (byte)((f & 0xff00) >> 8);
-            SOutData(page,mml, port[1], 0x0a, data);
+            SOutData(page, mml, port[1], 0x0a, data);
         }
 
         public void SetAdpcmVolume(MML mml, partPage page)
@@ -297,16 +294,16 @@ namespace Core
 
             if (page.spg.beforeVolume != vol)
             {
-                SOutData(page,mml, port[1], 0x0b, (byte)vol);
+                SOutData(page, mml, port[1], 0x0b, (byte)vol);
                 page.spg.beforeVolume = vol;
             }
         }
 
         public void SetAdpcmPan(MML mml, partPage page)
         {
-            if (page.spg.pan != page. pan)
+            if (page.spg.pan != page.pan)
             {
-                SOutData(page,mml, port[1], 0x01, (byte)((page.pan & 0x3) << 6));
+                SOutData(page, mml, port[1], 0x01, (byte)((page.pan & 0x3) << 6));
                 page.spg.pan = page.pan;
             }
         }
@@ -348,14 +345,14 @@ namespace Core
         {
 
             SetAdpcmVolume(mml, page);
-            SOutData(page,mml, port[1], 0x00, 0xa0);
+            SOutData(page, mml, port[1], 0x00, 0xa0);
 
         }
 
         public void OutAdpcmKeyOff(MML mml, partPage page)
         {
 
-            SOutData(page,mml, port[1], 0x00, 0x01);
+            SOutData(page, mml, port[1], 0x00, 0x01);
 
         }
 
@@ -562,13 +559,13 @@ namespace Core
             byte dat = (byte)(int)mml.args[1];
 
             if (page.Type == enmChannelType.FMOPN || page.Type == enmChannelType.FMOPNex)
-                SOutData(page,mml, (page.ch > 2 && page.ch < 6) ? port[1] : port[0], adr, dat);
+                SOutData(page, mml, (page.ch > 2 && page.ch < 6) ? port[1] : port[0], adr, dat);
             else if (page.Type == enmChannelType.SSG)
-                SOutData(page,mml, port[0], adr, dat);
+                SOutData(page, mml, port[0], adr, dat);
             else if (page.Type == enmChannelType.RHYTHM)
-                SOutData(page,mml, port[0], adr, dat);
+                SOutData(page, mml, port[0], adr, dat);
             else if (page.Type == enmChannelType.ADPCM)
-                SOutData(page,mml, port[1], adr, dat);
+                SOutData(page, mml, port[1], adr, dat);
         }
 
         public override void CmdMPMS(partPage page, MML mml)
@@ -711,7 +708,7 @@ namespace Core
         {
             char type = (char)mml.args[0];
             int n = (int)mml.args[1];
-            
+
             if (type == 'n' || type == 'N' || type == 'R' || type == 'A')
             {
                 if (page.Type == enmChannelType.FMOPNex)
