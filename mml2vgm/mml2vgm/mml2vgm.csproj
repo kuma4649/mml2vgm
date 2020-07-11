@@ -159,6 +159,12 @@
     <None Include="sample\MidiGM\testGM.gwi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="sample\Syntax\testArpeggio.gwi">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="sample\Syntax\testArpeggioXGM.gwi">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="sample\Syntax\testPageFunction.gwi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

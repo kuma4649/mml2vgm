@@ -2062,6 +2062,50 @@
     ハードウェアエンベロープの周波数(EH)を設定します。  
 
 
+### アルペジオ  
+-----------  
+- Command  
+    APON  
+    APOF  
+    AP  
+- Format  
+    APON  
+    APOF  
+    APn  
+- 設定可能範囲  
+    n : 未チェック  
+- Support chips  
+    - SN76489  
+    - RF5C164  
+    - YM2610B(SSG)  
+    - YM2610B(ADPCM-B)  
+    - YM2608(SSG)  
+    - YM2608(ADPCM)  
+    - YM2609(SSG)  
+    - YM2609(ADPCM)  
+    - YM2203(SSG)  
+    - SEGAPCM  
+    - HuC6280  
+    - C140  
+    - C352  
+    - AY8910  
+    - YM2413(RHYTHM)  
+	- YM3526(FM)  
+	- YM3526(RHYTHM)  
+	- YM3812(FM)  
+	- YM3812(RHYTHM)  
+	- YMF262(FM)  
+	- YMF262(RHYTHM)  
+    - K051649  
+    - QSound  
+    - K053260  
+- Remark  
+    アルペジオの開始(APON)、停止(APOF)、定義番号指定(APn)  
+- Description  
+    アルペジオを開始(APON)、または停止(APOF)します。  
+    APnを使用してアルペジオの定義番号を指定します。  
+
+
 ### 効果音モード  
 -----------  
 - Command  

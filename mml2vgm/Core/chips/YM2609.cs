@@ -344,7 +344,7 @@ namespace Core
 
         public void SetAdpcmFNum(MML mml, partPage page)
         {
-            int f = GetAdpcmFNum(page, page.octaveNow, page.noteCmd, page.shift + page.keyShift);//
+            int f = GetAdpcmFNum(page, page.octaveNow, page.noteCmd, page.shift + page.keyShift + page.arpDelta);//
             if (page.bendWaitCounter != -1)
             {
                 f = page.bendFnum;
@@ -500,7 +500,7 @@ namespace Core
 
             int[] ftbl = page.chip.FNumTbl[0];
 
-            int f = GetFmFNum(ftbl, page.octaveNow, page.noteCmd, page.shift + page.keyShift + page.toneDoublerKeyShift);//
+            int f = GetFmFNum(ftbl, page.octaveNow, page.noteCmd, page.shift + page.keyShift + page.toneDoublerKeyShift + page.arpDelta);//
             if (page.bendWaitCounter != -1)
             {
                 f = page.bendFnum;
@@ -657,7 +657,7 @@ namespace Core
             }
             else
             {
-                f += GetSsgFNum(page, mml, page.octaveNow, page.noteCmd, page.shift + page.keyShift);//
+                f += GetSsgFNum(page, mml, page.octaveNow, page.noteCmd, page.shift + page.keyShift + page.arpDelta);//
             }
 
             f = Common.CheckRange(f, 0, 0xfff);

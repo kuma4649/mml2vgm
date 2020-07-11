@@ -166,7 +166,7 @@ namespace Core
 
         public void SetSsgFNum(partPage page, MML mml)
         {
-            int f = GetSsgFNum(page, mml, page.octaveNow, page.noteCmd, page.shift + page.keyShift);//
+            int f = GetSsgFNum(page, mml, page.octaveNow, page.noteCmd, page.shift + page.keyShift + page.arpDelta);//
             if (page.bendWaitCounter != -1)
             {
                 f = page.bendFnum;

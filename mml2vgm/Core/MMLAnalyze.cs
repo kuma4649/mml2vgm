@@ -209,8 +209,8 @@ namespace Core
 
 
                 case 'A': // Address shift
-                    log.Write("Address shift");
-                    CmdAddressShift(pw, page, mml);
+                    log.Write("Address shift / Arpeggio");
+                    CmdAddressShiftArpeggio(pw, page, mml);
                     break;
                 case 'C': //MIDI Ch
                     log.Write("MIDI Ch");
@@ -1528,10 +1528,21 @@ namespace Core
             mml.args.Add(n);
         }
 
+        private void CmdAddressShiftArpeggio(partWork pw, partPage page, MML mml)
+        {
+            pw.incPos(page);
+            if (pw.getChar(page) != 'P') //aP
+            {
+                CmdAddressShift(pw, page, mml);
+                return;
+            }
+
+            CmdArpeggio(pw, page, mml);
+        }
+
         private void CmdAddressShift(partWork pw, partPage page, MML mml)
         {
-            int n = -1;
-            pw.incPos(page);
+            int n;
             int sign = 0;
 
             if (pw.getChar(page) == '+')
@@ -1555,6 +1566,47 @@ namespace Core
             mml.args = new List<object>();
             mml.args.Add(sign);
             mml.args.Add(n);
+        }
+
+        private void CmdArpeggio(partWork pw, partPage page, MML mml)
+        {
+            pw.incPos(page);
+            if (pw.getChar(page) == 'O') //apO
+            {
+                pw.incPos(page);
+                if (pw.getChar(page) == 'N') //apoN
+                {
+                    pw.incPos(page);
+                    mml.type = enmMMLType.Arpeggio;
+                    mml.args = new List<object>();
+                    mml.args.Add("APON");
+                }
+                else if (pw.getChar(page) == 'F') //apoN
+                {
+                    pw.incPos(page);
+                    mml.type = enmMMLType.Arpeggio;
+                    mml.args = new List<object>();
+                    mml.args.Add("APOF");
+                }
+                else
+                {
+                    msgBox.setErrMsg(msg.get("E05062"), mml.line.Lp);
+                }
+            }
+            else
+            {
+                //APn
+                if (!pw.getNum(page, out int n))
+                {
+                    msgBox.setErrMsg(msg.get("E05063"), mml.line.Lp);
+                }
+                else
+                {
+                    mml.type = enmMMLType.Arpeggio;
+                    mml.args = new List<object>();
+                    mml.args.Add(n);
+                }
+            }
         }
 
         /// <summary>

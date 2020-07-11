@@ -289,7 +289,7 @@ namespace Core
 
         public void SetAdpcmBFNum(MML mml, partPage page)
         {
-            int f = GetAdpcmBFNum(page.octaveNow, page.noteCmd, page.shift + page.keyShift);//
+            int f = GetAdpcmBFNum(page.octaveNow, page.noteCmd, page.shift + page.keyShift + page.arpDelta);//
             if (page.bendWaitCounter != -1)
             {
                 f = page.bendFnum;
@@ -427,7 +427,7 @@ namespace Core
                 if (page.isPcmMap)
                 {
                     int n = Const.NOTE.IndexOf(page.noteCmd);
-                    int f = page.octaveNow * 12 + n + page.shift + page.keyShift;
+                    int f = page.octaveNow * 12 + n + page.shift + page.keyShift + page.arpDelta;
                     if (parent.instPCMMap.ContainsKey(page.pcmMapNo))
                     {
                         if (parent.instPCMMap[page.pcmMapNo].ContainsKey(f))
@@ -441,7 +441,7 @@ namespace Core
                         }
                         else
                         {
-                            msgBox.setErrMsg(string.Format(msg.get("E10025"), page.octaveNow, page.noteCmd, page.shift + page.keyShift), mml.line.Lp);
+                            msgBox.setErrMsg(string.Format(msg.get("E10025"), page.octaveNow, page.noteCmd, page.shift + page.keyShift + page.arpDelta), mml.line.Lp);
                             return;
                         }
                     }

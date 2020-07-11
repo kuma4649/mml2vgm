@@ -183,7 +183,7 @@ namespace Core
             }
             else
             {
-                f += GetSsgFNum(page, mml, page.octaveNow, page.noteCmd, page.shift + page.keyShift);//
+                f += GetSsgFNum(page, mml, page.octaveNow, page.noteCmd, page.shift + page.keyShift + page.arpDelta);//
             }
 
             f = Common.CheckRange(f, 0, 0xfff);
@@ -1216,7 +1216,7 @@ namespace Core
             if (page.isPcmMap)
             {
                 int nt = Const.NOTE.IndexOf(page.noteCmd);
-                int f = page.octaveNow * 12 + nt + page.shift + page.keyShift;
+                int f = page.octaveNow * 12 + nt + page.shift + page.keyShift + page.arpDelta;
                 if (parent.instPCMMap.ContainsKey(page.pcmMapNo))
                 {
                     if (parent.instPCMMap[page.pcmMapNo].ContainsKey(f))
@@ -1225,7 +1225,7 @@ namespace Core
                     }
                     else
                     {
-                        msgBox.setErrMsg(string.Format(msg.get("E10025"), page.octaveNow, page.noteCmd, page.shift + page.keyShift), mml.line.Lp);
+                        msgBox.setErrMsg(string.Format(msg.get("E10025"), page.octaveNow, page.noteCmd, page.shift + page.keyShift + page.arpDelta), mml.line.Lp);
                         return;
                     }
                 }
@@ -1391,7 +1391,7 @@ namespace Core
 
             int[] ftbl = page.chip.FNumTbl[0];
 
-            int f = GetFmFNum(ftbl, page.octaveNow, page.noteCmd, page.shift + page.keyShift + page.toneDoublerKeyShift);//
+            int f = GetFmFNum(ftbl, page.octaveNow, page.noteCmd, page.shift + page.keyShift + page.toneDoublerKeyShift + page.arpDelta);//
             if (page.bendWaitCounter != -1)
             {
                 f = page.bendFnum;
@@ -1654,7 +1654,7 @@ namespace Core
                 }
                 oct = Common.CheckRange(oct, 1, 8);
                 page.octaveNew = oct;
-                int TdB = oct * 12 + Const.NOTE.IndexOf(note.tDblCmd) + note.tDblShift + page.keyShift;
+                int TdB = oct * 12 + Const.NOTE.IndexOf(note.tDblCmd) + note.tDblShift + page.keyShift + page.arpDelta;
                 int s = TdB - page.TdA;// - TdB;
                 int us = Math.Abs(s);
                 int n = page.toneDoubler;

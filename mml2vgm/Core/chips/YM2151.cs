@@ -407,7 +407,7 @@ namespace Core
         public override void SetFNum(partPage page, MML mml)
         {
 
-            int f = GetFNum(page, mml, page.octaveNow, page.noteCmd, page.shift + page.keyShift + page.toneDoublerKeyShift);//
+            int f = GetFNum(page, mml, page.octaveNow, page.noteCmd, page.shift + page.keyShift + page.toneDoublerKeyShift + page.arpDelta);//
 
             if (page.bendWaitCounter != -1)
             {
@@ -639,7 +639,7 @@ namespace Core
                 }
                 oct = Common.CheckRange(oct, 1, 8);
                 page.octaveNew = oct;
-                int TdB = oct * 12 + Const.NOTE.IndexOf(note.tDblCmd) + note.tDblShift + page.keyShift;
+                int TdB = oct * 12 + Const.NOTE.IndexOf(note.tDblCmd) + note.tDblShift + page.keyShift + page.arpDelta;
                 int s = TdB - page.TdA;// - TdB;
                 int us = Math.Abs(s);
                 int n = page.toneDoubler;

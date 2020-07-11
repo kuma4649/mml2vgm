@@ -244,7 +244,7 @@ namespace Core
 
         public void SetAdpcmFNum(MML mml, partPage page)
         {
-            int f = GetAdpcmFNum(page, page.octaveNow, page.noteCmd, page.shift + page.keyShift);//
+            int f = GetAdpcmFNum(page, page.octaveNow, page.noteCmd, page.shift + page.keyShift + page.arpDelta);//
             if (page.bendWaitCounter != -1)
             {
                 f = page.bendFnum;

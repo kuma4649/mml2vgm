@@ -340,7 +340,7 @@ namespace Core
             if (page.isPcmMap)
             {
                 int nt = Const.NOTE.IndexOf(page.noteCmd);
-                int ff = page.octaveNow * 12 + nt + page.shift + page.keyShift;
+                int ff = page.octaveNow * 12 + nt + page.shift + page.keyShift + page.arpDelta;
                 if (parent.instPCMMap.ContainsKey(page.pcmMapNo))
                 {
                     if (parent.instPCMMap[page.pcmMapNo].ContainsKey(ff))
@@ -349,7 +349,7 @@ namespace Core
                     }
                     else
                     {
-                        msgBox.setErrMsg(string.Format(msg.get("E10025"), page.octaveNow, page.noteCmd, page.shift + page.keyShift), mml.line.Lp);
+                        msgBox.setErrMsg(string.Format(msg.get("E10025"), page.octaveNow, page.noteCmd, page.shift + page.keyShift + page.arpDelta), mml.line.Lp);
                         return;
                     }
                 }
@@ -474,7 +474,7 @@ namespace Core
 
         public override void SetFNum(partPage page, MML mml)
         {
-            int f = GetHuC6280Freq(page.octaveNow, page.noteCmd, page.keyShift + page.shift);//
+            int f = GetHuC6280Freq(page.octaveNow, page.noteCmd, page.keyShift + page.shift + page.arpDelta);//
 
             if (page.bendWaitCounter != -1)
             {

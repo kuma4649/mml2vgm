@@ -47,6 +47,7 @@ namespace Core
         public Dictionary<int, byte[]> instWF = new Dictionary<int, byte[]>();
         public Dictionary<int, ushort[]> instOPNA2WF = new Dictionary<int, ushort[]>();
         public Dictionary<int, byte[]> midiSysEx = new Dictionary<int, byte[]>();
+        public Dictionary<int, MmlDatum[]> instArp = new Dictionary<int, MmlDatum[]>();
 
         public Dictionary<string, List<List<Line>>>[] partData = new Dictionary<string, List<List<Line>>>[]{
             new Dictionary<string, List<List<Line>>>(),new Dictionary<string, List<List<Line>>>()
@@ -65,6 +66,7 @@ namespace Core
         public bool doSkipStop = false;
         public Point caretPoint = Point.Empty;
         private int midiSysExCounter = -1;
+        private int instArpCounter = -1;
 
         public int newStreamID = -1;
 
@@ -461,6 +463,13 @@ namespace Core
                 SetMidiSysEx();
             }
 
+            // 定義中のinstArpがあればここで定義完了
+            if (instArpCounter != -1)
+            {
+                instArpCounter = -1;
+                SetInstArp();
+            }
+
             // チェック1定義されていない名称を使用したパートが存在するか
 
             for (int n = 0; n < 2; n++)
@@ -553,7 +562,9 @@ namespace Core
 
             }
 
-            char t = buf.ToUpper()[0];
+            char t = (buf != null && buf.Length > 0) ? buf.ToUpper()[0] : '\0';
+            char t1 = (buf != null && buf.Length > 1) ? buf.ToUpper()[1] : '\0';
+            char t2 = (buf != null && buf.Length > 2) ? buf.ToUpper()[2] : '\0';
             if (toneDoublerCounter != -1)
             {
                 //他の定義が現れたらtoneDoublerの定義は終了
@@ -610,9 +621,17 @@ namespace Core
                     return 0;
 
                 case 'A':
-                    instrumentBufCache = new byte[Const.OPNA2_INSTRUMENT_SIZE];
-                    instrumentCounter = 0;
-                    SetInstrument(line);
+                    if (t1 == 'R' && t2 == 'P')
+                    {
+                        instArpCounter = 0;
+                        StoreInstArpBuffer(line);
+                    }
+                    else
+                    {
+                        instrumentBufCache = new byte[Const.OPNA2_INSTRUMENT_SIZE];
+                        instrumentCounter = 0;
+                        SetInstrument(line);
+                    }
                     return 0;
 
                 case 'P':
@@ -709,6 +728,11 @@ namespace Core
             if (midiSysExCounter != -1)
             {
                 return StoreMidiSysExBuffer(line);
+            }
+
+            if (instArpCounter != -1)
+            {
+                return StoreInstArpBuffer(line);
             }
 
             return 0;
@@ -1765,6 +1789,100 @@ namespace Core
             return lstBuf;
         }
 
+        private List<MmlDatum> GetNumsInt(int ptr, string vals)
+        {
+            List<MmlDatum> lstBuf = new List<MmlDatum>();
+            string n = "";
+            string h = "";
+            int hc = -1;
+            int i = 0;
+            int p = 0;
+            MmlDatum dat = null;
+            enmMMLType tp;
+            tp = enmMMLType.Note;
+
+            foreach (char c in vals)
+            {
+                p++;
+                if (p <= ptr) continue;
+
+                if (c == '|')
+                {
+                    hc = -1;
+                    n = "";
+                    dat = new MmlDatum();
+                    dat.type = enmMMLType.LoopPoint;
+                    lstBuf.Add(dat);
+                    continue;
+                }
+                else if (c == '#')
+                {
+                    tp = enmMMLType.LengthClock;
+                    continue;
+
+                }
+                else if (c == 'Q')
+                {
+                    tp = enmMMLType.Gatetime;
+                    continue;
+                }
+
+                if (c == '$')
+                {
+                    hc = 0;
+                    continue;
+                }
+
+                if (hc > -1 && ((c >= '0' && c <= '9') || (c >= 'A' && c <= 'F')))
+                {
+                    h += c;
+                    hc++;
+                    if (hc == 2)
+                    {
+                        i = int.Parse(h, System.Globalization.NumberStyles.HexNumber);
+                        dat = new MmlDatum();
+                        dat.type = enmMMLType.Note;
+                        dat.dat = (byte)(i & 0xff);
+                        lstBuf.Add(dat);
+                        h = "";
+                        hc = -1;
+                    }
+                    continue;
+                }
+
+                if ((c >= '0' && c <= '9') || c == '-')
+                {
+                    n = n + c.ToString();
+                    continue;
+                }
+
+                if (int.TryParse(n, out i))
+                {
+                    dat = new MmlDatum();
+                    dat.type = tp;
+                    dat.dat = i;
+                    lstBuf.Add(dat);
+
+                    tp = enmMMLType.Note;
+                    n = "";
+                }
+            }
+
+            if (!string.IsNullOrEmpty(n))
+            {
+                if (int.TryParse(n, out i))
+                {
+                    dat = new MmlDatum();
+                    dat.type = enmMMLType.Note;
+                    dat.dat = i;
+                    lstBuf.Add(dat);
+                    n = "";
+                }
+            }
+
+            return lstBuf;
+        }
+
         private int StoreToneDoublerBuffer(string vals, Line line)
         {
             string n = "";
@@ -1897,10 +2015,45 @@ namespace Core
             return 0;
         }
 
+        private int StoreInstArpBuffer(Line line)
+        {
+            try
+            {
+                List<MmlDatum> buf = null;
+                if (instArpCounter == 0)
+                {
+                    string txt = line.Txt.ToUpper();
+                    buf = GetNumsInt(CutComment(txt).IndexOf("ARP") + 1, CutComment(txt));
+                    instArpCounter = buf[0].dat + 1;
+                    if (instArp.ContainsKey(buf[0].dat))
+                    {
+                        instArp.Remove(buf[0].dat);
+                    }
+                    instArp.Add(buf[0].dat, buf.ToArray());
+                }
+                else
+                {
+                    string txt = line.Txt.ToUpper();
+                    buf = GetNumsInt(CutComment(txt).IndexOf('@') + 1, CutComment(txt));
+                    List<MmlDatum> ebuf = instArp[instArpCounter - 1].ToList();
+                    ebuf.AddRange(buf);
+                    instArp.Remove(instArpCounter - 1);
+                    instArp.Add(instArpCounter - 1, ebuf.ToArray());
+                }
+            }
+            catch { }
+
+            return 0;
+        }
 
         private void SetMidiSysEx()
         {
             midiSysExCounter = -1;
+        }
+
+        private void SetInstArp()
+        {
+            instArpCounter = -1;
         }
 
         private byte[] ConvertFtoM(byte[] instrumentBufCache)
@@ -2197,6 +2350,11 @@ namespace Core
                                     pg.envCounter -= (int)waitCounter;
                                 }
 
+                                if (pg.arpeggioMode && pg.arpIndex != -1)
+                                {
+                                    pg.arpCounter -= (int)waitCounter;
+                                }
+
                                 for (int i = 0; i < pg.noteOns.Length; i++)
                                 {
                                     if (pg.noteOns[i] == null) continue;
@@ -2279,6 +2437,11 @@ namespace Core
                                     if (page.envelopeMode && page.envIndex != -1)
                                     {
                                         waitCounter = Math.Min(waitCounter, page.envCounter);
+                                    }
+
+                                    if(page.arpeggioMode && page.arpIndex!=-1)
+                                    {
+                                        waitCounter = Math.Min(waitCounter, page.arpCounter);
                                     }
                                 }
                             }
@@ -2392,6 +2555,9 @@ namespace Core
 
             log.Write("Envelope");
             ProcEnvelope(pg);
+
+            log.Write("Arpeggio");
+            ProcArpeggio(pg);
 
             ProcMidiNoteOff(pg);
 
@@ -3154,6 +3320,9 @@ namespace Core
                     log.Write("Envelope");
                     ProcEnvelope(page);
 
+                    log.Write("Arpeggio");
+                    ProcArpeggio(page);
+
                     if (!page.isLayer
                         || (page.isLayer && checkNextCommandNote(page))
                         )
@@ -3244,6 +3413,9 @@ namespace Core
                                     cnt = Math.Min(cnt, page.lfo[lfo].waitCounter);
                                 }
 
+                                if (page.arpeggioMode && page.arpIndex != -1) 
+                                    cnt = Math.Min(cnt, page.arpCounter);
+
                                 //envelope
                                 if (!(page.chip is SN76489)) continue;
                                 if (page.envelopeMode && page.envIndex != -1) cnt = Math.Min(cnt, page.envCounter);
@@ -3285,6 +3457,8 @@ namespace Core
                                     if (pg.lfo[lfo].waitCounter < 0) pg.lfo[lfo].waitCounter = 0;
                                 }
                             }
+
+                            if (pg.arpeggioMode && pg.arpIndex != -1) pg.arpCounter -= (int)cnt;
 
                             if (!(pg.chip is SN76489)) continue;
                             if (pg.envelopeMode && pg.envIndex != -1) pg.envCounter -= (int)cnt;
@@ -3829,6 +4003,108 @@ namespace Core
             }
         }
 
+        private void ProcArpeggio(partPage page)
+        {
+            if (!page.arpeggioMode) return;//アルペジオのモードが有効になっていない場合
+            if (page.arpIndex == -1) return;//動作不要な場合
+            if (page.arpInstrument == -1) return;//アルペジオ番号未設定の場合
+            if (!instArp.ContainsKey(page.arpInstrument)) return;//存在しないアルペジオ番号の場合
+
+            while (page.arpCounter == 0 && page.arpIndex != -1)
+            {
+                switch (page.arpIndex)
+                {
+                    case 0://KeyON phase
+                        //最後まで解析したかな
+                        if (page.arpInstrumentPtr >= instArp[page.arpInstrument].Length)
+                        {
+                            //ループ設定あるかな
+                            if (page.arpLoopPtr < 0)
+                            {
+                                //ループが設定されていない場合は動作はここで完了
+                                page.arpIndex = -1;
+                                page.arpDelta = 0;
+                                continue;
+                            }
+                            //ループポイントセット
+                            page.arpInstrumentPtr = page.arpLoopPtr;
+                        }
+
+                        //データの読み込み
+                        MmlDatum delta = instArp[page.arpInstrument][page.arpInstrumentPtr++];
+
+                        //ループポイント指定かな
+                        if (delta.type == enmMMLType.LoopPoint)
+                        {
+                            page.arpLoopPtr = page.arpInstrumentPtr;//ループポイントの設定
+                            if (page.arpLoopPtr >= instArp[page.arpInstrument].Length)
+                            {
+                                //ループポイント指定あとのデータがない場合は動作はここで完了
+                                page.arpIndex = -1;
+                                continue;
+                            }
+                            continue;
+                        }
+                        else if (delta.type == enmMMLType.LengthClock)
+                        {
+                            int clock = delta.dat;
+                            clock = clock < 1 ? 1 : clock;//0の場合は補正
+                            page.arpClock = clock;
+                            continue;
+                        }
+                        else if (delta.type == enmMMLType.Gatetime)
+                        {
+                            int q = delta.dat;
+                            page.arpGatetime = q;
+                            continue;
+                        }
+
+                        //keyOn のlengthを求める
+                        int w = page.arpClock;
+                        if (page.arpGatetimePmode)
+                        {
+                            w = page.arpClock * page.arpGatetime / 8;
+                        }
+                        else
+                        {
+                            w = page.arpClock - page.arpGatetime;
+                        }
+                        if (w < 1) w = 1;
+
+                        page.arpKeyOnLength = w;//tbd
+                        //keyOff のlengthを求める
+                        page.arpKeyOffLength = Math.Max(page.arpClock - page.arpKeyOnLength, 0);//念のため0未満にならないように
+                        //deltaは前回の値を基準に変化する
+                        page.arpDelta += delta.dat;
+
+                        if (!page.arpTieMode) page.chip.SetKeyOn(page, null);
+
+                        page.arpCounter = page.arpKeyOnLength;
+                        page.arpIndex++;
+                        break;
+
+                    case 1://KeyOff phase
+
+                        if (!page.arpTieMode) page.chip.SetKeyOff(page, null);
+
+                        page.arpCounter = page.arpKeyOffLength;
+                        page.arpIndex++;
+                        break;
+
+                    case 2://次行ってみよう
+                        page.arpIndex = 0;
+                        break;
+                }
+            }
+
+            if (page.arpIndex == -1)
+            {
+                page.chip.SetKeyOff(page, null);
+            }
+        }
+
+
+
         private void Commander(partWork pw, partPage page, MML mml)
         {
 
@@ -3958,6 +4234,11 @@ namespace Core
                 case enmMMLType.Envelope:
                     log.Write("Envelope");
                     page.chip.CmdEnvelope(page, mml);
+                    page.mmlPos++;
+                    break;
+                case enmMMLType.Arpeggio:
+                    log.Write("Arpeggio");
+                    page.chip.CmdArpeggio(page, mml);
                     page.mmlPos++;
                     break;
                 case enmMMLType.HardEnvelope:

@@ -410,12 +410,12 @@ namespace Core
             byte noteNum;
             if (page.bendWaitCounter == -1)
             {
-                noteNum = (byte)GetNoteNum(page.octaveNew, n.cmd, n.shift + page.keyShift);
+                noteNum = (byte)GetNoteNum(page.octaveNew, n.cmd, n.shift + page.keyShift + page.arpDelta);
                 if (!page.beforeTie) page.beforeBendNoteNum = -1;
             }
             else
             {
-                noteNum = (byte)GetNoteNum(page.bendStartOctave, page.bendStartNote, page.bendStartShift + page.keyShift);
+                noteNum = (byte)GetNoteNum(page.bendStartOctave, page.bendStartNote, page.bendStartShift + page.keyShift + page.arpDelta);
                 page.beforeBendNoteNum = noteNum;
             }
             page.tblNoteOn[noteNum] = true;

@@ -1,0 +1,66 @@
+﻿'{
+
+	TitleName   =
+	TitleNameJ  =アルペジオのテスト
+	GameName    =
+	GameNameJ   =
+	SystemName  =
+	SystemNameJ =
+	Composer    =
+	ComposerJ   =
+	ReleaseDate =
+	Converted   =
+	Notes       =
+
+}
+
+lead synthっぽいなにか
+'@ N 000
+   AR  DR  SR  RR  SL  TL  KS  ML  DT  AM  SSG-EG
+'@ 031,001,001,001,005,026,000,001,002,000,000
+'@ 031,004,003,008,010,000,000,000,003,000,000
+'@ 031,001,001,001,005,020,000,001,006,000,000
+'@ 031,004,003,008,010,004,000,000,005,000,000
+   ALG FB
+'@ 004,005
+
+'@ M 001
+   AR  DR  SR  RR  SL  TL  KS  ML  DT1 DT2 AME
+'@ 026,006,004,007,003,044,002,007,003,000,000
+'@ 026,011,008,006,002,000,001,001,002,000,000
+'@ 022,004,003,004,002,010,002,001,003,000,000
+'@ 022,004,003,005,002,005,002,001,007,000,000
+   ALG FB
+'@ 004,006
+
+
+
+
+
+
+ #でクロック値を指定する。qでgatetime値を指定する
+
+       No tie   data...
+'@ ARP  0   0
+'@              q8 #24 0 | #12 -5 5 ; 複数行定義可能
+'@ ARP  1   0   q8 #24 0 | #12 -4 4
+
+       No tie   data...
+'@ ARP  2   1   #24 0 | -5 5 ; tieモード時はq値を無視する
+'@ ARP  3   1   #24 0 | -4 4
+
+'@ ARP  4   0   #2 q1 0 | 7 5 -12
+
+'Cn1 T110
+
+'F1 @0D0p3v115o6l8q0
+'F1 APON AP0c1 < AP1b1 > 
+'F1      AP2c1 < AP3b1 > 
+
+'F1 @1D0p3v120o6l16q0
+'F1 AP4 
+'F1 APON e#180 APOF b     
+'F1 APON d#144 APOF da>cd<
+'F1 APON e#180 APOF b     
+'F1 APON d#144 APOF daga  
+

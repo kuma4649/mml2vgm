@@ -200,6 +200,7 @@ namespace Core
         /// </summary>
         public bool sus = false;
 
+
         /// <summary>
         /// 使用中のエンベロープ定義番号
         /// </summary>
@@ -230,6 +231,73 @@ namespace Core
         /// エンベロープスイッチ
         /// </summary>
         public bool envelopeMode = false;
+
+
+        /// <summary>
+        /// 使用中のアルペジオ定義番号
+        /// </summary>
+        public int arpInstrument = -1;
+        public int beforeArpInstrument = 0;
+
+        /// <summary>
+        /// アルペジオの進捗位置
+        /// </summary>
+        public int arpIndex = -1;
+
+        /// <summary>
+        /// アルペジオの解析位置
+        /// </summary>
+        public int arpInstrumentPtr = 0;
+
+        /// <summary>
+        /// アルペジオの解析ループ位置
+        /// </summary>
+        public int arpLoopPtr = 0;
+
+        /// <summary>
+        /// アルペジオ中のKeyOnの長さ
+        /// </summary>
+        public int arpKeyOnLength = 0;
+
+        /// <summary>
+        /// アルペジオ中のKeyOffの長さ
+        /// </summary>
+        public int arpKeyOffLength = 0;
+
+        /// <summary>
+        /// アルペジオ中の変化量
+        /// </summary>
+        public int arpDelta = 0;
+
+        /// <summary>
+        /// アルペジオ中の長さ(KeyOn/Off含む)
+        /// </summary>
+        public int arpClock = 0;
+
+        /// <summary>
+        /// アルペジオ タイモード
+        /// </summary>
+        public bool arpTieMode = false;
+
+        /// <summary>
+        /// アルペジオ向け汎用カウンター
+        /// </summary>
+        public int arpCounter = -1;
+
+        /// <summary>
+        /// アルペジオスイッチ
+        /// </summary>
+        public bool arpeggioMode = false;
+
+        /// <summary>
+        /// アルペジオ向けゲートタイムモード(当分false固定)
+        /// </summary>
+        public bool arpGatetimePmode = false;
+
+        /// <summary>
+        /// アルペジオ向けゲートタイム
+        /// </summary>
+        public int arpGatetime = 0;
 
         /// <summary>
         /// リズムモードスイッチ

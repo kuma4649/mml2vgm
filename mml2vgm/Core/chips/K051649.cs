@@ -234,7 +234,7 @@ namespace Core
 
         public void SetSsgFNum(partPage page)
         {
-            int f = GetSsgFNum(page, page.octaveNow, page.noteCmd, page.shift + page.keyShift);//
+            int f = GetSsgFNum(page, page.octaveNow, page.noteCmd, page.shift + page.keyShift + page.arpDelta);//
             if (page.bendWaitCounter != -1)
             {
                 f = page.bendFnum;

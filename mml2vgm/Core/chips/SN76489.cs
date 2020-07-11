@@ -199,7 +199,7 @@ namespace Core
                 }
                 else
                 {
-                    f += GetDcsgFNum(page.octaveNow, page.noteCmd, page.shift + page.keyShift);//
+                    f += GetDcsgFNum(page.octaveNow, page.noteCmd, page.shift + page.keyShift + page.arpDelta);//
                 }
 
                 f = Common.CheckRange(f, 0, 0x3ff);

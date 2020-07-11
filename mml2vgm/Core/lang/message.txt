@@ -218,6 +218,8 @@ E05058=Invalid number defined as 'wf' command.
 E05059=Failed to parse 'X' command.
 E05060=Failed to parse '*' command.
 E05061=Failed to syncronize '*S' command.
+E05062=Unknown command ('APO?') defined.
+E05063=Unknown command ('AP?') defined.
 
 
 ;partWork.cs 06000
@@ -275,6 +277,7 @@ E10030=Sound patch isn't selected.
 E10031=This channel can't use CC command.
 E10032=This channel can't use wf command.
 E10033=This channel can't use X command.
+E10034=Arpeggio analysis failed.
 
 
 ;clsOPN.cs 11000

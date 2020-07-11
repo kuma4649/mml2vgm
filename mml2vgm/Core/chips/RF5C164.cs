@@ -521,7 +521,7 @@ namespace Core
 
         public override void SetFNum(partPage page, MML mml)
         {
-            int f = GetFNum(page, mml, page.octaveNow, page.noteCmd, page.keyShift + page.shift);//
+            int f = GetFNum(page, mml, page.octaveNow, page.noteCmd, page.keyShift + page.shift + page.arpDelta);//
 
             if (page.bendWaitCounter != -1)
             {

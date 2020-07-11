@@ -370,11 +370,11 @@ namespace Core
                         , out int a
                         , page.octaveNow
                         , note.cmd
-                        , note.shift + (i + 0) * Math.Sign(delta) + page.keyShift + page.toneDoublerKeyShift
+                        , note.shift + (i + 0) * Math.Sign(delta) + page.keyShift + page.toneDoublerKeyShift + page.arpDelta
                         , out int b
                         , page.octaveNow
                         , note.cmd
-                        , note.shift + (i + 1) * Math.Sign(delta) + page.keyShift + page.toneDoublerKeyShift
+                        , note.shift + (i + 1) * Math.Sign(delta) + page.keyShift + page.toneDoublerKeyShift + page.arpDelta
                         , delta
                         );
 
@@ -709,6 +709,37 @@ namespace Core
             }
         }
 
+        public virtual void SetArpeggioAtKeyOn(partPage page, MML mml)
+        {
+            if (!page.arpeggioMode 
+                || page.arpInstrument==-1
+                || !parent.instArp.ContainsKey(page.arpInstrument)
+                || parent.instArp[page.arpInstrument].Length < 2
+                )
+            {
+                page.arpIndex = -1;
+                return;
+            }
+
+            page.arpIndex = 0;
+            page.arpDelta = 0;
+            page.arpInstrumentPtr = 2;//0番目はinstの番号
+            page.arpGatetime = 0;
+            if (parent.instArp[page.arpInstrument][1].dat == 0)
+            {
+                page.arpTieMode = false;
+            }
+            else
+            {
+                page.arpTieMode = true;
+            }
+            page.arpLoopPtr = -1;
+            page.arpCounter = 0;
+
+            page.arpGatetimePmode = false;
+        }
+
+
 
 
         public virtual void CmdY(partPage page, MML mml)
@@ -967,6 +998,39 @@ namespace Core
             }
 
             SetDummyData(page, mml);
+            return;
+        }
+
+        public virtual void CmdArpeggio(partPage page, MML mml)
+        {
+            if (!(mml.args[0] is string))
+            {
+                if (!(mml.args[0] is int))
+                {
+                    msgBox.setErrMsg(msg.get("E10034"), mml.line.Lp);
+                    return;
+                }
+                int inst = (int)mml.args[0];
+                if (parent.instArp.ContainsKey(inst))
+                {
+                    page.arpInstrument = inst;
+                }
+                return;
+            }
+
+            string cmd = (string)mml.args[0];
+
+            switch (cmd)
+            {
+                case "APON":
+                    page.arpeggioMode = true;
+                    break;
+                case "APOF":
+                    page.arpeggioMode = false;
+                    break;
+            }
+
+            //SetDummyData(page, mml);
             return;
         }
 
@@ -1349,7 +1413,8 @@ namespace Core
                 page.TdA = page.octaveNew * 12
                     + Const.NOTE.IndexOf(note.cmd)
                     + note.shift
-                    + page.keyShift;
+                    + page.keyShift
+                    + page.arpDelta;
                 page.octaveNow = page.octaveNew;
             }
 
@@ -1429,6 +1494,7 @@ namespace Core
                 {
                     SetKeyOff(page, mml);
                 }
+                SetArpeggioAtKeyOn(page, mml);
                 SetEnvelopeAtKeyOn(page, mml);
                 SetLfoAtKeyOn(page, mml);
                 SetVolume(page, mml);
