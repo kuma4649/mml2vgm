@@ -2678,7 +2678,7 @@ namespace Core
                     {
                         foreach (partPage pg in pw.pg)
                         {
-                            OutData(pg.sendData);
+                            if (pg == pw.cpg) OutData(pg.sendData);
                             pg.sendData.Clear();
                         }
                     }

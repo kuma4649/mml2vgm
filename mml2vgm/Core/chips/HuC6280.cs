@@ -126,10 +126,14 @@ namespace Core
             {
                 pg.MaxVolume = 31;
                 pg.volume = pg.MaxVolume;
+                pg.keyOn = false;
+                pg.pan = 0;
                 pg.mixer = 0;
                 pg.noise = 0;
                 pg.port = port;
+                pg.freq = -1;
             }
+            pw.spg.freq = -1;
         }
 
         public override void StorePcm(Dictionary<int, clsPcm> newDic, KeyValuePair<int, clsPcm> v, byte[] buf, bool is16bit, int samplerate, params object[] option)
@@ -199,13 +203,6 @@ namespace Core
             msgBox.setWrnMsg(msg.get("E12007"), new LinePos("-"));
         }
 
-        public override void MultiChannelCommand(MML mml)
-        {
-            //PCMをストリームの機能を使用し再生するため、1Frame毎にカレントチャンネル情報が破壊される。よって次のフレームでリセットできるようにする。
-            if (!use) return;
-            CurrentChannel = 255;
-        }
-
         public override int GetFNum(partPage page, MML mml, int octave, char cmd, int shift)
         {
             return GetHuC6280Freq(octave, cmd, shift);
@@ -241,37 +238,48 @@ namespace Core
 
         public void SetHuC6280Envelope(MML mml, partPage page, int volume)
         {
-            if (page.huc6280Envelope != volume)
-            {
-                SetHuC6280CurrentChannel(mml, page);
-                if (!page.keyOn) volume = 0;
-                byte data = (byte)((volume != 0 ? 0x80 : 0) + (volume & 0x1f));
-                OutHuC6280Port(page, mml, port[0], 4, data);
-                page.huc6280Envelope = volume;
-            }
+            //if (page.huc6280Envelope != volume)
+            //{
+            SetHuC6280CurrentChannel(mml, page);
+            //if (!page.keyOn) volume = 0;
+            byte data = (byte)((volume != 0 ? 0x80 : 0) + (volume & 0x1f));
+            if (page.pcm) data |= 0x40;
+            OutHuC6280Port(page, mml, port[0], 4, data);
+            //page.huc6280Envelope = volume;
+            //}
         }
+
+        partPage CurrentPage = null;
+        int bCurrentChannel = 0;
 
         public void SetHuC6280CurrentChannel(MML mml, partPage page)
         {
-            byte pch = (byte)page.ch;
-            int chipNumber = page.chipNumber;
+            if (CurrentPage != page)
+            {
+                CurrentPage = page;
+                bCurrentChannel = 0;
+            }
 
-            if (CurrentChannel != pch)
+            byte pch = (byte)page.ch;
+            
+
+            if (CurrentChannel != pch || bCurrentChannel==0)
             {
                 byte data = (byte)(pch & 0x7);
                 OutHuC6280Port(page, mml, port[0], 0x0, data);
                 CurrentChannel = pch;
+                bCurrentChannel = 1;
             }
         }
 
         public void SetHuC6280Pan(MML mml, partPage page, int pan)
         {
-            if (page.huc6280Pan != pan)
+            if (page.spg.huc6280Pan != pan)
             {
                 SetHuC6280CurrentChannel(mml, page);
                 byte data = (byte)(pan & 0xff);
                 OutHuC6280Port(page, mml, port[0], 0x5, data);
-                page.huc6280Pan = pan;
+                page.spg.huc6280Pan = pan;
             }
         }
 
@@ -306,6 +314,7 @@ namespace Core
 
         public void OutHuC6280KeyOn(MML mml, partPage page)
         {
+            page.keyOff = false;
             int vol = page.volume;
             if (page.envelopeMode)
             {
@@ -390,7 +399,8 @@ namespace Core
                     else cmd = new byte[] { 0x30 };
                 }
                 else cmd = new byte[] { 0x90 };
-                parent.OutData(
+                SOutData(
+                    page,
                     mml,
                     // setup stream control
                     cmd
@@ -418,7 +428,8 @@ namespace Core
                 }
                 else cmd = new byte[] { 0x92 };
                 //Set Stream Frequency
-                parent.OutData(
+                SOutData(
+                    page,
                     mml,
                     cmd
                     , (byte)page.streamID
@@ -439,7 +450,8 @@ namespace Core
             }
             else cmd = new byte[] { 0x93 };
             //Start Stream
-            parent.OutData(
+            SOutData(
+                page,
                 mml,
                 cmd
                 , (byte)page.streamID
@@ -466,14 +478,15 @@ namespace Core
 
         public void OutHuC6280KeyOff(MML mml, partPage page)
         {
-            SetHuC6280CurrentChannel(mml, page);
-
-            OutHuC6280Port(page, mml, port[0], 0x4, 0x00);
-            //OutHuC6280Port(pw.ppg[pw.cpgNum].chipNumber, 0x5, 0);
+            if (!page.envelopeMode) page.keyOff = true;
+            //SetHuC6280CurrentChannel(mml, page);
+            //OutHuC6280Port(page, mml, port[0], 0x4, 0x00);
         }
 
         public override void SetFNum(partPage page, MML mml)
         {
+            if (page.noteCmd == '\0') return;
+
             int f = GetHuC6280Freq(page.octaveNow, page.noteCmd, page.keyShift + page.shift + page.arpDelta);//
 
             if (page.bendWaitCounter != -1)
@@ -495,29 +508,34 @@ namespace Core
             }
 
             f = Common.CheckRange(f, 0, 0x0fff);
+            page.freq = f;
+        }
 
-            if (page.freq == f) return;
+        public void OutHuC6280FNum(partPage page, MML mml)
+        {
+            if (page.spg.freq == page.freq) return;
 
             SetHuC6280CurrentChannel(mml, page);
-            if ((page.freq & 0x0ff) != (f & 0x0ff)) OutHuC6280Port(page, mml, port[0], 2, (byte)(f & 0xff));
-            if ((page.freq & 0xf00) != (f & 0xf00)) OutHuC6280Port(page, mml, port[0], 3, (byte)((f & 0xf00) >> 8));
-            //OutHuC6280Port(pw.ppg[pw.cpgNum].chipNumber, 2, (byte)(f & 0xff));
-            //OutHuC6280Port(pw.ppg[pw.cpgNum].chipNumber, 3, (byte)((f & 0xf00) >> 8));
+            if ((page.spg.freq & 0x0ff) != (page.freq & 0x0ff))
+                OutHuC6280Port(page, mml, port[0], 2, (byte)(page.freq & 0xff));
+            if ((page.spg.freq & 0xf00) != (page.freq & 0xf00))
+                OutHuC6280Port(page, mml, port[0], 3, (byte)((page.freq & 0xf00) >> 8));
 
-            page.freq = f;
+            page.spg.freq = page.freq;
 
         }
 
         public override void SetKeyOn(partPage page, MML mml)
         {
-            OutHuC6280KeyOn(mml, page);
+            //OutHuC6280KeyOn(mml, page);
             page.keyOn = true;
+            page.keyOff = false;
         }
 
         public override void SetKeyOff(partPage page, MML mml)
         {
-            OutHuC6280KeyOff(mml, page);
-            page.keyOn = false;
+            //OutHuC6280KeyOff(mml, page);
+            page.keyOff = true;
         }
 
         public override void SetVolume(partPage page, MML mml)
@@ -559,10 +577,15 @@ namespace Core
             }
 
             vol = Common.CheckRange(vol, 0, 31);
-            if (page.beforeVolume != vol)
+            page.beforeVolume = vol;
+        }
+
+        public void OutHuC6280Volume(partPage page, MML mml)
+        {
+            if (page.spg.beforeVolume != page.beforeVolume)
             {
-                SetHuC6280Envelope(mml, page, vol);
-                page.beforeVolume = vol;
+                SetHuC6280Envelope(mml, page, page.beforeVolume);
+                page.spg.beforeVolume = page.beforeVolume;
             }
         }
 
@@ -815,6 +838,68 @@ namespace Core
                 OutHuC6280Port(page, mml, port[0], 7, (byte)((page.mixer != 0 ? 0x80 : 0x00) + (page.noise & 0x1f)));
             }
         }
+
+        public override void SetupPageData(partWork pw, partPage page)
+        {
+
+            page.spg.keyOff = true;
+            //SetKeyOff(page, null);
+
+            page.spg.instrument = -1;
+
+            //周波数
+            page.spg.freq = -1;
+            page.spg.beforeFNum = -1;
+            
+            //音量
+            page.spg.beforeVolume = -1;
+            SetVolume(page, null);
+
+            //パン
+            page.spg.pan = -1;
+            SetHuC6280Pan(null, page, page.pan);
+        }
+
+        public override void MultiChannelCommand(MML mml)
+        {
+
+            foreach (partWork pw in lstPartWork)
+            {
+                partPage page = pw.cpg;
+                CurrentChannel = 255;
+
+                if (page.keyOff)
+                {
+                    page.keyOff = false;
+                    OutHuC6280KeyOff(mml, page);
+                }
+                if (page.keyOn)
+                {
+                    page.keyOn = false;
+                    OutHuC6280KeyOn(mml, page);
+                }
+
+                SetFNum(page, null);
+                OutHuC6280FNum(page, mml);
+
+                if (page.keyOff)
+                {
+                    if (!page.envelopeMode)
+                    {
+                        page.beforeVolume = 0;
+                    }
+                }
+                OutHuC6280Volume(page, mml);
+            }
+
+
+            //PCMをストリームの機能を使用し再生するため、1Frame毎にカレントチャンネル情報が破壊される。よって次のフレームでリセットできるようにする。
+            if (use)
+            {
+                CurrentChannel = 255;
+            }
+        }
+
 
         public override string DispRegion(clsPcm pcm)
         {
