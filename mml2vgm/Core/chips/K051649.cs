@@ -146,49 +146,6 @@ namespace Core
         {
         }
 
-        public override void MultiChannelCommand(MML mml)
-        {
-            if (!use) return;
-
-            for (int i = 0; i < ChMax; i++)
-            {
-                foreach (partPage page in lstPartWork[i].pg)
-                {
-                    //fnum
-                    if (page.beforeFNum != page.FNum)
-                    {
-                        byte data = (byte)page.FNum;
-                        OutK051649Port(page, mml, port[0], ChipNumber, 1, (byte)(0 + page.ch * 2), data);
-
-                        data = (byte)((page.FNum & 0xf00) >> 8);
-                        OutK051649Port(page, mml, port[0], ChipNumber, 1, (byte)(1 + page.ch * 2), data);
-                        page.beforeFNum = page.FNum;
-                    }
-
-                    //volume
-                    SetSsgVolume(mml, page);
-
-                    //keyonoff
-                    if (page.keyOn)
-                    {
-                        keyOnStatus |= (byte)(1 << page.ch);
-                    }
-                    else
-                    {
-                        keyOnStatus &= (byte)~(1 << page.ch);
-                    }
-                }
-            }
-
-            //keyonoff
-            if (keyOnStatus != keyOnStatusOld)
-            {
-                OutK051649Port(lstPartWork[lstPartWork.Count - 1].cpg, mml, port[0], ChipNumber, 3, 0, keyOnStatus);
-                keyOnStatusOld = keyOnStatus;
-            }
-
-        }
-
         public void OutSsgKeyOn(MML mml, partPage page)
         {
             SetSsgVolume(mml, page);
@@ -224,11 +181,12 @@ namespace Core
             }
 
             vol = Common.CheckRange(vol, 0, 15);
+            page.beforeVolume = vol;
 
-            if (page.beforeVolume != vol)
+            if (page.spg.beforeVolume != vol)
             {
                 OutK051649Port(page, mml, port[0], ChipNumber, 2, (byte)page.ch, (byte)vol);
-                page.beforeVolume = vol;
+                page.spg.beforeVolume = vol;
             }
         }
 
@@ -374,11 +332,79 @@ namespace Core
                 return;
             }
 
-            n = Common.CheckRange(n, 0, 255);
-            if (page.instrument != n)
+            page.instrument = Common.CheckRange(n, 0, 255);
+            if (page.spg.instrument!= page.instrument)
             {
-                page.instrument = n;
+                page.spg.instrument = page.instrument;
                 ((K051649)page.chip).OutK051649SetInstrument(page, mml, n);
+            }
+
+        }
+
+
+
+        public override void SetupPageData(partWork pw, partPage page)
+        {
+
+            page.spg.keyOff = true;
+            //SetKeyOff(page, null);
+
+            page.spg.instrument = -1;
+
+            //周波数
+            page.spg.freq = -1;
+            page.spg.beforeFNum = -1;
+
+            //音量
+            page.spg.beforeVolume = -1;
+            SetVolume(page, null);
+
+        }
+
+        public override void MultiChannelCommand(MML mml)
+        {
+            if (!use) return;
+
+            for (int i = 0; i < ChMax; i++)
+            {
+                partPage page = lstPartWork[i].cpg;
+                //fnum
+                if (page.beforeFNum != page.FNum)
+                {
+                    byte data = (byte)page.FNum;
+                    OutK051649Port(page, mml, port[0], ChipNumber, 1, (byte)(0 + page.ch * 2), data);
+
+                    data = (byte)((page.FNum & 0xf00) >> 8);
+                    OutK051649Port(page, mml, port[0], ChipNumber, 1, (byte)(1 + page.ch * 2), data);
+                    page.beforeFNum = page.FNum;
+                }
+
+                //instrument
+                if (page.spg.instrument != page.instrument)
+                {
+                    page.spg.instrument = page.instrument;
+                    ((K051649)page.chip).OutK051649SetInstrument(page, mml, page.instrument);
+                }
+
+                //volume
+                SetSsgVolume(mml, page);
+
+                //keyonoff
+                if (page.keyOn)
+                {
+                    keyOnStatus |= (byte)(1 << page.ch);
+                }
+                else
+                {
+                    keyOnStatus &= (byte)~(1 << page.ch);
+                }
+            }
+
+            //keyonoff
+            if (keyOnStatus != keyOnStatusOld)
+            {
+                OutK051649Port(lstPartWork[lstPartWork.Count - 1].cpg, mml, port[0], ChipNumber, 3, 0, keyOnStatus);
+                keyOnStatusOld = keyOnStatus;
             }
 
         }
