@@ -1,0 +1,30 @@
+﻿'{
+
+	TitleName   =
+	TitleNameJ  =ページ機能のテスト
+	GameName    =
+	GameNameJ   =
+	SystemName  =
+	SystemNameJ =
+	Composer    =
+	ComposerJ   =
+	ReleaseDate =
+	Converted   =
+	Notes       =
+
+}
+
+
+'@ P 1,"..\wav\Guitar.wav"        , 8000 , 100,K053260,1
+'@ P 2,"..\wav\muteGuitar.wav"    , 8000 , 100,K053260
+
+
+
+
+
+'O2   l8q0o3v15 p0@1 rrcr rr<b->c
+f&frr
+'O2_  l8q1o3v15p7@2  cccc cccc p3
+g&gg
+
+
