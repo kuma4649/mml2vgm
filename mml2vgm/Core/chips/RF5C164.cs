@@ -557,6 +557,7 @@ namespace Core
         public override void SetKeyOn(partPage page, MML mml)
         {
             OutRf5c164KeyOn(mml, page);
+            if (mml == null) return;
 
             MML vmml = new MML();
             vmml.type = enmMMLType.Volume;

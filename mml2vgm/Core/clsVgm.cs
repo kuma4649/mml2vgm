@@ -4077,7 +4077,12 @@ namespace Core
                         //deltaは前回の値を基準に変化する
                         page.arpDelta += delta.dat;
 
-                        if (!page.arpTieMode) page.chip.SetKeyOn(page, null);
+                        if (!page.arpTieMode)
+                        {
+                            page.chip.SetEnvelopeAtKeyOn(page, null);
+                            page.chip.SetKeyOn(page, null);
+
+                        }
 
                         page.arpCounter = page.arpKeyOnLength;
                         page.arpIndex++;
@@ -4085,7 +4090,21 @@ namespace Core
 
                     case 1://KeyOff phase
 
-                        if (!page.arpTieMode) page.chip.SetKeyOff(page, null);
+                        if (!page.arpTieMode)
+                        {
+                            if (!page.envelopeMode)
+                            {
+                                page.chip.SetKeyOff(page, null);
+                            }
+                            else
+                            {
+                                if (page.envIndex != -1)
+                                {
+                                    page.envIndex = 3;//RR phase
+                                    page.envCounter = 0;
+                                }
+                            }
+                        }
 
                         page.arpCounter = page.arpKeyOffLength;
                         page.arpIndex++;
