@@ -1722,6 +1722,8 @@ namespace Core
             int ch;
             if (page.Type == enmChannelType.FMOPNex) ch = 2;
             else if (page.Type == enmChannelType.FMOPN) ch = page.ch;
+            else if (page.Type == enmChannelType.FMPCM) ch = page.ch;
+            else if (page.Type == enmChannelType.FMPCMex) ch = page.ch;
             else return;
 
             int vch;
