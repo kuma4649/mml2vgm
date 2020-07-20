@@ -210,7 +210,7 @@ namespace SoundManager
                 }
             }
 
-            if (isVirtualOnlySend)
+            //if (isVirtualOnlySend)
             {
                 Audio.stopDataVirtulaOnlySend = dataSender.stopData;
 
