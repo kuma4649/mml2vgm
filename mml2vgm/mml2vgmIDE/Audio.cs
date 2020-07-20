@@ -4404,6 +4404,19 @@ namespace mml2vgmIDE
 
             }
 
+            if (!sm.IsRunningAtEmuChipSender())
+            {
+                if (stopDataVirtulaOnlySend != null)
+                {
+                    foreach (PackData dat in stopDataVirtulaOnlySend)
+                    {
+                        emuRecvBuffer.Enq(dat.od, 0, dat.Chip, dat.Type, dat.Address, dat.Data, null);
+                    }
+                    stopDataVirtulaOnlySend = null;
+                }
+                EmuSeqCounterDelta = 0;
+            }
+
             while (EmuSeqCounterWDelta >= 1.0)
             {
                 if (sm.IsRunningAsync() && sm.IsRunningAtEmuChipSender())
