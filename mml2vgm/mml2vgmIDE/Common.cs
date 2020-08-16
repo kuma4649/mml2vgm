@@ -335,5 +335,14 @@ namespace mml2vgmIDE
                 }
             }
         }
+
+        public static EnmMmlFileFormat GetEnmMmlFileFormat(string extension)
+        {
+            if (extension.ToUpper() == ".GWI") return EnmMmlFileFormat.GWI;
+            if (extension.ToUpper() == ".MUC") return EnmMmlFileFormat.MUC;
+            if (extension.ToUpper() == ".MML") return EnmMmlFileFormat.MML;
+
+            return EnmMmlFileFormat.unknown;
+        }
     }
 }

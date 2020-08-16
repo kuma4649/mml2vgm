@@ -48,15 +48,19 @@ namespace mml2vgmIDE
 
         private RealChip realChip = null;
         private RSoundChip[] scAY8910 = new RSoundChip[2] { null, null };
+
         private RSoundChip[] scC140 = new RSoundChip[2] { null, null };
         private RSoundChip[] scC352 = new RSoundChip[2] { null, null };
+
         private RSoundChip[] scHuC6280 = new RSoundChip[2] { null, null };
         private RSoundChip[] scK051649 = new RSoundChip[2] { null, null };
         private RSoundChip[] scK053260 = new RSoundChip[2] { null, null };
         private RSoundChip[] scQSound = new RSoundChip[2] { null, null };
+
         private RSoundChip[] scRF5C164 = new RSoundChip[2] { null, null };
         private RSoundChip[] scSEGAPCM = new RSoundChip[2] { null, null };
         private RSoundChip[] scSN76489 = new RSoundChip[2] { null, null };
+
         private RSoundChip[] scYM2151 = new RSoundChip[2] { null, null };
         private RSoundChip[] scYM2203 = new RSoundChip[2] { null, null };
         private RSoundChip[] scYM2413 = new RSoundChip[2] { null, null };
@@ -388,6 +392,8 @@ namespace mml2vgmIDE
         public List<Chip> YM2612 = new List<Chip>();
         public List<Chip> QSound = new List<Chip>();
         public List<Chip> K053260 = new List<Chip>();
+        public List<Chip> PPZ8 = new List<Chip>();
+        public List<Chip> PPSDRV = new List<Chip>();
 
 
 
@@ -800,6 +806,20 @@ namespace mml2vgmIDE
                 K053260[i].Number = i;
                 K053260[i].Hosei = 0;
 
+                if (PPSDRV.Count < i + 1) PPSDRV.Add(new Chip(1));
+                PPSDRV[i].Use = false;
+                PPSDRV[i].Model = EnmVRModel.None;
+                PPSDRV[i].Device = EnmZGMDevice.PPSDRV;
+                PPSDRV[i].Number = i;
+                PPSDRV[i].Hosei = 0;
+
+                if (PPZ8.Count < i + 1) PPZ8.Add(new Chip(8));
+                PPZ8[i].Use = false;
+                PPZ8[i].Model = EnmVRModel.None;
+                PPZ8[i].Device = EnmZGMDevice.PPZ8;
+                PPZ8[i].Number = i;
+                PPZ8[i].Hosei = 0;
+
                 if (QSound.Count < i + 1) QSound.Add(new Chip(16));
                 QSound[i].Use = false;
                 QSound[i].Model = EnmVRModel.None;
@@ -1021,6 +1041,10 @@ namespace mml2vgmIDE
                 case EnmZGMDevice.None:
                     //Dummy Command
                     break;
+                case EnmZGMDevice.PPZ8:
+                    throw new ArgumentException();
+                case EnmZGMDevice.PPSDRV:
+                    throw new ArgumentException();
                 default:
                     throw new ArgumentException();
             }
@@ -4040,7 +4064,10 @@ namespace mml2vgmIDE
                     {
                         log.Write("Sending YM2608(Emu) ADPCM");
                         foreach (PackData dat in pdata)
+                        {
+                            //Console.WriteLine("FM P{2} Out:Adr[{0:x02}] val[{1:x02}]", (byte)dat.Address, (byte)dat.Data, (byte)(dat.Address >> 8));
                             mds.WriteYM2608((byte)dat.Chip.Number, (byte)(dat.Address >> 8), (byte)dat.Address, (byte)dat.Data);
+                        }
                     }
                     if (Chip.Model == EnmVRModel.RealModel)
                     {
@@ -8264,6 +8291,54 @@ namespace mml2vgmIDE
 
             if (midiOutsType.Count > 0) midiParams[0].MIDIModule = Math.Min(midiOutsType[0], 2);
             if (midiOutsType.Count > 1) midiParams[1].MIDIModule = Math.Min(midiOutsType[1], 2);
+
+        }
+
+        public void PPSDRVLoad(outDatum od, long Counter, int ChipID, byte[] addtionalData)
+        {
+            EnmVRModel model = EnmVRModel.VirtualModel;
+            if (ChipID == 0) chipLED.PriPPSDRV = 2;
+            else chipLED.SecPPSDRV = 2;
+
+            if (model == EnmVRModel.VirtualModel)
+                enq(od, Counter, PPZ8[ChipID], EnmDataType.Block, -1, -2, new object[] { addtionalData });
+        }
+
+        public void PPSDRVWrite(outDatum od, long Counter, int ChipID, int dPort, int dAddr, int dData)
+        {
+            dummyChip.Move(PPSDRV[ChipID]);
+
+            if (dPort == -1 && dAddr == -1 && dData == -1)
+            {
+                //ダミーデータ(演奏情報だけ流したい時向け)
+                enq(od, Counter, dummyChip, EnmDataType.Normal, -1, -1, null);
+            }
+            else
+                enq(od, Counter, dummyChip, EnmDataType.Normal, dPort, dAddr, dData);
+
+        }
+
+        public void PPZ8LoadPcm(outDatum od, long Counter, int ChipID, byte address, byte data, byte[] addtionalData)
+        {
+            EnmVRModel model = EnmVRModel.VirtualModel;
+            if (ChipID == 0) chipLED.PriPPZ8 = 2;
+            else chipLED.SecPPZ8 = 2;
+
+            if (model == EnmVRModel.VirtualModel)
+                enq(od, Counter, PPZ8[ChipID], EnmDataType.Block, -1, -2, new object[] { address, data, addtionalData });
+        }
+
+        public void PPZ8Write(outDatum od, long Counter, int ChipID, int dPort, int dAddr, int dData)
+        {
+            dummyChip.Move(PPZ8[ChipID]);
+
+            if (dPort == -1 && dAddr == -1 && dData == -1)
+            {
+                //ダミーデータ(演奏情報だけ流したい時向け)
+                enq(od, Counter, dummyChip, EnmDataType.Normal, -1, -1, null);
+            }
+            else
+                enq(od, Counter, dummyChip, EnmDataType.Normal, dPort, dAddr, dData);
 
         }
 

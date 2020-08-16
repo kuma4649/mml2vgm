@@ -38,6 +38,7 @@ namespace mml2vgmIDE
         public static MDSound.MDSound mdsMIDI = null;
         public static Manager mmlParams = new Manager();
         public static mucomManager mucomManager = null;
+        public static PMDManager PMDManager = null;
 
         private static object lockObj = new object();
         private static bool _fatalError = false;
@@ -102,6 +103,9 @@ namespace mml2vgmIDE
         private static musicDriverInterface.MmlDatum[] mubBuf = null;
         private static string mubWorkPath;
         private static string mubFileName;
+        private static musicDriverInterface.MmlDatum[] mBuf = null;
+        private static string mWorkPath;
+        private static string mFileName;
         public static double fadeoutCounter;
         public static double fadeoutCounterEmu;
         private static double fadeoutCounterDelta;
@@ -723,12 +727,22 @@ namespace mml2vgmIDE
             Audio.jumpPointClock = jumpPointClock;
         }
 
-        public static void SetVGMBuffer(EnmFileFormat format, musicDriverInterface.MmlDatum[] srcBuf, string wrkPath, string mubFileName)
+        public static void SetVGMBuffer(EnmFileFormat format, musicDriverInterface.MmlDatum[] srcBuf, string wrkPath, string mdFileName)
         {
             PlayingFileFormat = format;
-            mubBuf = srcBuf;
-            mubWorkPath = wrkPath;
-            Audio.mubFileName = mubFileName;
+
+            if (format == EnmFileFormat.MUB)
+            {
+                mubBuf = srcBuf;
+                mubWorkPath = wrkPath;
+                Audio.mubFileName = mdFileName;
+            }
+            else if(format== EnmFileFormat.M)
+            {
+                mBuf = srcBuf;
+                mWorkPath = wrkPath;
+                Audio.mFileName = mdFileName;
+            }
         }
 
         private static void SoundManagerMount()
@@ -907,7 +921,6 @@ namespace mml2vgmIDE
             }
             else if (PlayingFileFormat == EnmFileFormat.ZGM)
             {
-
                 //zgmはchipの再定義が必須の為、初期化を行うとmask情報も初期化されてしまう。
                 //その為いったん退避しておく
                 List<Chip> maskChips = null;
@@ -955,6 +968,13 @@ namespace mml2vgmIDE
                 driver.setting = setting;
 
                 ret = mubPlay(setting);
+            }
+            else if (PlayingFileFormat == EnmFileFormat.M)
+            {
+                driver = new pmdM();
+                driver.setting = setting;
+
+                ret = mPlay(setting);
             }
             else
             {
@@ -3701,6 +3721,161 @@ namespace mml2vgmIDE
 
         }
 
+        public static bool mPlay(Setting setting)
+        {
+
+            try
+            {
+
+                if (mBuf == null || setting == null) return false;
+
+                pmdM mDriver = (pmdM)driver;
+
+                ResetFadeOutParam();
+                useChip.Clear();
+                chipRegister.ClearChipParam();
+
+                List<MDSound.MDSound.Chip> lstChips = new List<MDSound.MDSound.Chip>();
+
+                MDSound.MDSound.Chip chip;
+
+                hiyorimiNecessary = setting.HiyorimiMode;
+
+                chipLED = new ChipLEDs();
+
+                MasterVolume = setting.balance.MasterVolume;
+
+                chip = new MDSound.MDSound.Chip();
+                chip.ID = (byte)0;
+                MDSound.ym2608 ym2608 = null;
+
+                if (setting.YM2608Type.UseEmu)
+                {
+                    ym2608 = new ym2608();
+                    chip.type = MDSound.MDSound.enmInstrumentType.YM2608;
+                    chip.Instrument = ym2608;
+                    chip.Update = ym2608.Update;
+                    chip.Start = ym2608.Start;
+                    chip.Stop = ym2608.Stop;
+                    chip.Reset = ym2608.Reset;
+                }
+
+                chip.SamplingRate = 55467;// (UInt32)Common.SampleRate;
+                chip.Volume = setting.balance.YM2608Volume;
+                chip.Clock = (uint)mDriver.YM2608ClockValue;
+                chip.Option = null;
+                chipLED.PriOPN2 = 1;
+                chipRegister.YM2608[0].Use = true;
+                lstChips.Add(chip);
+                useChip.Add(EnmChip.YM2608);
+
+
+                MDSound.PPZ8 ppz8 = null;
+                chip = new MDSound.MDSound.Chip();
+                chip.ID = (byte)0;
+                ppz8 = new PPZ8();
+                chip.type = MDSound.MDSound.enmInstrumentType.PPZ8;
+                chip.Instrument = ppz8;
+                chip.Update = ppz8.Update;
+                chip.Start = ppz8.Start;
+                chip.Stop = ppz8.Stop;
+                chip.Reset = ppz8.Reset;
+                chip.SamplingRate = (UInt32)Common.SampleRate;
+                chip.Volume = 0;// setting.balance.PPZ8Volume;
+                chip.Clock = (uint)mDriver.YM2608ClockValue;
+                chip.Option = null;
+                chipLED.PriPPZ8 = 1;
+                chipRegister.PPZ8[0].Use = true;
+                lstChips.Add(chip);
+                useChip.Add(EnmChip.PPZ8);
+
+
+                MDSound.PPSDRV ppsdrv = null;
+                chip = new MDSound.MDSound.Chip();
+                chip.ID = (byte)0;
+                ppsdrv = new PPSDRV();
+                chip.type = MDSound.MDSound.enmInstrumentType.PPSDRV;
+                chip.Instrument = ppsdrv;
+                chip.Update = ppsdrv.Update;
+                chip.Start = ppsdrv.Start;
+                chip.Stop = ppsdrv.Stop;
+                chip.Reset = ppsdrv.Reset;
+                chip.SamplingRate = (UInt32)Common.SampleRate;
+                chip.Volume = 0;// setting.balance.PPZ8Volume;
+                chip.Clock = (uint)mDriver.YM2608ClockValue;
+                chip.Option = null;
+                chipLED.PriPPSDRV = 1;
+                chipRegister.PPSDRV[0].Use = true;
+                lstChips.Add(chip);
+                useChip.Add(EnmChip.PPSDRV);
+
+
+
+                if (hiyorimiNecessary) hiyorimiNecessary = true;
+                else hiyorimiNecessary = false;
+
+                log.Write("MDSound 初期化");
+
+                if (mds == null)
+                    mds = new MDSound.MDSound((UInt32)Common.SampleRate, samplingBuffer, lstChips.ToArray());
+                else
+                    mds.Init((UInt32)Common.SampleRate, samplingBuffer, lstChips.ToArray());
+
+                log.Write("ChipRegister 初期化");
+                chipRegister.SetMDSound(mds);
+                chipRegister.initChipRegister(lstChips.ToArray());
+
+                if (setting.IsManualDetect)
+                {
+                    RealChipManualDetect(setting);
+                }
+                else
+                {
+                    RealChipAutoDetect(setting);
+                }
+
+                if (chipRegister.YM2608[0].Model == EnmVRModel.VirtualModel) useEmu = true;
+                if (chipRegister.YM2608[0].Model == EnmVRModel.RealModel) useReal = true;
+
+                if (!mDriver.init(mBuf, mWorkPath, PMDManager, chipRegister, new EnmChip[] { EnmChip.YM2608 }
+                    , (uint)(Common.SampleRate * setting.LatencyEmulation / 1000)
+                    , (uint)(Common.SampleRate * setting.outputDevice.WaitTime / 1000)
+                    , mFileName
+                    )
+
+                    ) return false;
+
+                log.Write("Volume 設定");
+
+                SetYM2608Volume(true, setting.balance.YM2608Volume);
+
+                log.Write("Clock 設定");
+
+                chipRegister.YM2608WriteClock((byte)0, (int)mDriver.YM2608ClockValue);
+
+                //Play
+
+                PackData[] stopData = MakeSoftResetData();
+                sm.SetStopData(stopData);
+
+                Paused = false;
+
+                //Thread.Sleep(100);
+
+                log.Write("初期化完了");
+
+
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                log.ForcedWrite(ex);
+                return false;
+            }
+
+        }
+
         private static void MakeMIDIout(Setting setting, int m)
         {
             if (setting.midiOut.lstMidiOutInfo == null || setting.midiOut.lstMidiOutInfo.Count < 1) return;
@@ -4311,6 +4486,7 @@ namespace mml2vgmIDE
                     stwh.Reset(); stwh.Start();
                     cnt = mds.Update(buffer, offset, sampleCount, oneFrameEmuDataSend);// driverVirtual.oneFrameProc);
                     ProcTimePer1Frame = ((double)stwh.ElapsedMilliseconds / (sampleCount + 1) * 1000000.0);
+                    //Console.WriteLine("{0}", buffer[offset]);
                 }
 
                 for (i = 0; i < sampleCount; i++)

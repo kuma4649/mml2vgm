@@ -114,6 +114,7 @@
     <Compile Include="ChipRegister.cs" />
     <Compile Include="CompileManager.cs" />
     <Compile Include="Driver\mucomMub.cs" />
+    <Compile Include="Driver\pmdM.cs" />
     <Compile Include="Driver\ZGM\ZgmChip\C140.cs" />
     <Compile Include="Driver\ZGM\ZgmChip\HuC6280.cs" />
     <Compile Include="Driver\ZGM\ZgmChip\K051649.cs" />
@@ -143,6 +144,7 @@
     <Compile Include="Driver\xgm.cs" />
     <Compile Include="Driver\ZGM\zgm.cs" />
     <Compile Include="Enums.cs" />
+    <Compile Include="Environment.cs" />
     <Compile Include="form\ChannelInfo.cs" />
     <Compile Include="form\frmDebug.cs">
       <SubType>Form</SubType>
@@ -282,6 +284,7 @@
     <Compile Include="mucomManager.cs" />
     <Compile Include="NAudioWrap.cs" />
     <Compile Include="NullOut.cs" />
+    <Compile Include="PMDManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RealChip.cs" />
@@ -424,6 +427,12 @@
     <Content Include="lang\mucomDotNETmessage.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="lang\PMDDotNETmessage.ja-JP.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="lang\PMDDotNETmessage.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="M98DotNETcore.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -437,6 +446,15 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="musicDriverInterface.dll" />
+    <Content Include="PMDDotNETCommon.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PMDDotNETCompiler.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PMDDotNETDriver.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="RealChipCtlWrap.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

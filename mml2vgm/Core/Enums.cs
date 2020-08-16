@@ -123,6 +123,10 @@
         //Wave                  
         , Wave = 0x0007_0000
         , RawWave = 0x0007_0000
+        //ドライバ固有音源
+        , basicDriverChip = 0x0008_0000
+        , PPZ8 = 0x0008_0001
+        , PPSDRV = 0x0008_0002
     }
 
     public enum enmPcmDefineType

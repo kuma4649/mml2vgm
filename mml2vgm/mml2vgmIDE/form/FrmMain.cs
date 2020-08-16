@@ -54,7 +54,9 @@ namespace mml2vgmIDE
         //private bool beforeAlt = false;
         private ChannelInfo defaultChannelInfo = null;
         private mucomManager mucom = null;
+        private PMDManager pmdmng = null;
         private musicDriverInterface.MmlDatum[] mubData = null;
+        private musicDriverInterface.MmlDatum[] mData = null;
         private string m98ResultMucString = null;
         private CompileManager compileManager = null;
 
@@ -161,6 +163,7 @@ namespace mml2vgmIDE
             UpdateControl();
             Core.Common.CheckSoXVersion(System.Windows.Forms.Application.StartupPath, Disp);
             CheckAndLoadMucomDotNET(System.Windows.Forms.Application.StartupPath, Disp);
+            CheckAndLoadPMDDotNET(System.Windows.Forms.Application.StartupPath, Disp);
             compileManager = new CompileManager(Disp, mucom);
 
             string[] args = Environment.GetCommandLineArgs();
@@ -211,6 +214,40 @@ namespace mml2vgmIDE
             }
         }
 
+        private void CheckAndLoadPMDDotNET(string startupPath, Action<string> disp)
+        {
+            string mes = "";
+            if (!File.Exists(Path.Combine(startupPath, "PMDDotNETCommon.dll"))) mes += "'PMDDotNETCommon.dll' not found.\r\n";
+            if (!File.Exists(Path.Combine(startupPath, "PMDDotNETCompiler.dll"))) mes += "'PMDDotNETCompiler.dll' not found.\r\n";
+            if (!File.Exists(Path.Combine(startupPath, "PMDDotNETDriver.dll"))) mes += "'PMDDotNETDriver.dll' not found.\r\n";
+            if (!File.Exists(Path.Combine(startupPath, "lang\\PMDDotNETmessage.ja-JP.txt"))) mes += "'lang\\PMDDotNETmessage.ja-JP.txt' not found.\r\n";
+            if (!File.Exists(Path.Combine(startupPath, "lang\\PMDDotNETmessage.txt"))) mes += "'lang\\PMDDotNETmessage.txt' not found.\r\n";
+            if (mes != "")
+            {
+                disp(mes);
+                return;
+            }
+
+            try
+            {
+                pmdmng = new PMDManager(
+                    Path.Combine(startupPath, "PMDDotNETCompiler.dll"),
+                    Path.Combine(startupPath, "PMDDotNETDriver.dll"),
+                    disp, setting);
+                Audio.PMDManager = pmdmng;
+
+                disp("PMDDotNETを読み込みました");
+            }
+            catch (Exception ex)
+            {
+                disp("PMDDotNETの読み込みに失敗しました");
+                disp(string.Format("message:\r\n{0}\r\nstacktrace:\r\n{1}\r\n", ex.Message, ex.StackTrace));
+                disp(string.Format("startuppath:\r\n{0}\r\n", startupPath));
+                pmdmng = null;
+                Audio.PMDManager = null;
+            }
+        }
+
         private void FrmMain_FormClosing(object sender, FormClosingEventArgs e)
         {
             bool flg = false;
@@ -258,7 +295,7 @@ namespace mml2vgmIDE
         {
             OpenFileDialog ofd = new OpenFileDialog();
 
-            ofd.Filter = "全てのサポートファイル(*.gwi;*.muc)|*.gwi;*.muc|gwiファイル(*.gwi)|*.gwi|mucファイル(*.muc)|*.muc|すべてのファイル(*.*)|*.*";
+            ofd.Filter = "全てのサポートファイル(*.gwi;*.muc;*.mml)|*.gwi;*.muc;*.mml|gwiファイル(*.gwi)|*.gwi|mucファイル(*.muc)|*.muc|mmlファイル(*.mml)|*.mml|すべてのファイル(*.*)|*.*";
             ofd.Title = "ファイルを開く";
             ofd.RestoreDirectory = true;
 
@@ -294,6 +331,8 @@ namespace mml2vgmIDE
                 if (d.srcFileFormat == EnmMmlFileFormat.GWI)
                     File.WriteAllText(d.gwiFullPath, d.editor.azukiControl.Text, Encoding.UTF8);
                 else if (d.srcFileFormat == EnmMmlFileFormat.MUC)
+                    File.WriteAllText(d.gwiFullPath, d.editor.azukiControl.Text, Encoding.GetEncoding(932));
+                else if (d.srcFileFormat == EnmMmlFileFormat.MML)
                     File.WriteAllText(d.gwiFullPath, d.editor.azukiControl.Text, Encoding.GetEncoding(932));
 
                 d.parentFullPath = "";
@@ -346,8 +385,11 @@ namespace mml2vgmIDE
             string path1 = System.IO.Path.GetDirectoryName(fn);
             path1 = string.IsNullOrEmpty(path1) ? fn : path1;
             sfd.InitialDirectory = path1;
-            sfd.Filter = "gwiファイル(*.gwi)|*.gwi|すべてのファイル(*.*)|*.*";
+            sfd.Filter = "gwiファイル(*.gwi)|*.gwi|mucファイル(*.muc)|*.muc|mmlファイル(*.mml)|*.mml|すべてのファイル(*.*)|*.*";
             sfd.Title = "名前を付けて保存";
+            int n = (int)Common.GetEnmMmlFileFormat(Path.GetExtension(sfd.FileName));
+            if (n < 1 || n > 3) n = 4;
+            sfd.FilterIndex = n;
             sfd.RestoreDirectory = true;
             if (sfd.ShowDialog() != DialogResult.OK)
             {
@@ -394,7 +436,15 @@ namespace mml2vgmIDE
 
                 if (Path.GetExtension(d.gwiFullPath).ToLower() == ".muc")
                 {
-                    MessageBox.Show("mucのエクスポート処理は今のところサポートしておりません。",
+                    MessageBox.Show(".mucのエクスポート処理は今のところサポートしておりません。",
+                        "エラー発生",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
+                    return;
+                }
+                if (Path.GetExtension(d.gwiFullPath).ToLower() == ".mml")
+                {
+                    MessageBox.Show(".mmlのエクスポート処理は今のところサポートしておりません。",
                         "エラー発生",
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Error);
@@ -989,7 +1039,7 @@ namespace mml2vgmIDE
 
         private void OpenFile(string fileName)
         {
-            Document dc = new Document(setting, Path.GetExtension(fileName).ToLower() == ".muc");
+            Document dc = new Document(setting, Common.GetEnmMmlFileFormat(Path.GetExtension(fileName)));
             if (fileName != "") dc.InitOpen(fileName);
             dc.editor.Show(dpMain, DockState.Document);
             dc.editor.main = this;
@@ -1009,7 +1059,7 @@ namespace mml2vgmIDE
 
         private void ImportFile(string fileName)
         {
-            Document dc = new Document(setting, false);
+            Document dc = new Document(setting, EnmMmlFileFormat.GWI);
             if (fileName != "") dc.InitOpen(fileName);
             dc.editor.Show(dpMain, DockState.Document);
             dc.editor.main = this;
@@ -1186,7 +1236,7 @@ namespace mml2vgmIDE
             stop();
 
             IDockContent dc = GetActiveDockContent();
-            bool isMuc = false;
+            EnmMmlFileFormat isMuc = EnmMmlFileFormat.GWI;
 
             if (text == null)
             {
@@ -1197,7 +1247,7 @@ namespace mml2vgmIDE
                 string tempPath = Path.Combine(Common.GetApplicationDataFolder(true), "temp", Path.GetFileName(((Document)((FrmEditor)dc).Tag).gwiFullPath));
                 title = Path.GetFileName(Path.GetFileName(((Document)((FrmEditor)dc).Tag).gwiFullPath));
 
-                if (Path.GetExtension(tempPath) == ".muc")
+                if (Path.GetExtension(tempPath).ToLower() == ".muc")
                 {
                     if (mucom == null)
                     {
@@ -1206,7 +1256,18 @@ namespace mml2vgmIDE
                     }
 
                     activeMMLTextLines = new string[] { ((FrmEditor)dc).azukiControl.Text };
-                    isMuc = true;
+                    isMuc = EnmMmlFileFormat.MUC;
+                }
+                else if (Path.GetExtension(tempPath).ToLower() == ".mml")
+                {
+                    if (pmdmng == null)
+                    {
+                        MessageBox.Show("Not found PMDDotNET.", "error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+
+                    activeMMLTextLines = new string[] { ((FrmEditor)dc).azukiControl.Text };
+                    isMuc = EnmMmlFileFormat.MML;
                 }
 
                 args = new string[2];
@@ -1255,7 +1316,7 @@ namespace mml2vgmIDE
                     int row, col;
                     ac.GetLineColumnIndexFromCharIndex(ci, out row, out col);
                     caretPoint = new Point(col, row);
-                    if (isMuc)
+                    if (isMuc == EnmMmlFileFormat.MUC)
                     {
                         caretPoint.Y++;
                     }
@@ -1267,8 +1328,8 @@ namespace mml2vgmIDE
                     //先頭の文字が'ではないときは既存の動作
                     else
                     {
-                        if (!isMuc && line[0] != '\'') doSkip = false;
-                        if (isMuc && (line[0] < 'A' || line[0] > 'K')) doSkip = false;
+                        if (isMuc != EnmMmlFileFormat.MUC && line[0] != '\'') doSkip = false;
+                        if (isMuc == EnmMmlFileFormat.MUC && (line[0] < 'A' || line[0] > 'K')) doSkip = false;
                     }
                 }
             }
@@ -1357,7 +1418,7 @@ namespace mml2vgmIDE
                     + string.Format("_{0}", m98Count++) + ".muc"
                     );
                 title = Path.GetFileName(Path.GetFileName(fileName));
-                Document dc = new Document(setting, true);
+                Document dc = new Document(setting,  EnmMmlFileFormat.MUC);
                 dc.InitOpen(fileName, m98ResultMucString);
                 dc.editor.Show(dpMain, DockState.Document);
                 dc.editor.main = this;
@@ -1402,7 +1463,7 @@ namespace mml2vgmIDE
 
             msgBox.clear();
 
-            string ext = Path.GetExtension(args[1]);
+            string ext = Path.GetExtension(args[1]).ToLower();
             switch (ext)
             {
                 case ".gwi":
@@ -1417,6 +1478,15 @@ namespace mml2vgmIDE
                     }
                     Compiling |= 4;
                     startCompileMUC();
+                    break;
+                case ".mml":
+                    if (pmdmng == null)
+                    {
+                        MessageBox.Show("Not found PMDDotNET.", "error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                    Compiling |= 8;
+                    startCompileMML();
                     break;
             }
         }
@@ -1487,6 +1557,38 @@ namespace mml2vgmIDE
             Core.log.Close();
         }
 
+        private void startCompileMML()
+        {
+            Core.log.Write("Call PMDDotNET compiler");
+
+            string stPath = System.Windows.Forms.Application.StartupPath;
+
+            try
+            {
+                mData = pmdmng.compileFromSrcText(activeMMLTextLines[0], wrkPath,args[1], doSkip ? caretPoint : Point.Empty);
+            }
+            catch
+            {
+                isSuccess = false;
+            }
+
+            if (mData == null)
+            {
+                isSuccess = false;
+            }
+
+            Core.log.Write("Return PMDDotNET compiler");
+            //}
+
+            Core.log.Write("Disp Result");
+
+            Action dmy = finishedCompile;
+            this.Invoke(dmy);
+
+            Core.log.Write("end compile thread");
+            Core.log.Close();
+        }
+
         private void updateTitle()
         {
             if (title == "")
@@ -1543,9 +1645,13 @@ namespace mml2vgmIDE
             {
                 finishedCompileGWI();
             }
-            else
+            else if ((Compiling & 4) != 0)
             {
                 finishedCompileMUC();
+            }
+            else if ((Compiling & 8) != 0)
+            {
+                finishedCompileMML();
             }
         }
 
@@ -1782,6 +1888,118 @@ namespace mml2vgmIDE
 
             Compiling = 0;
             UpdateControl();
+        }
+
+        private void finishedCompileMML()
+        {
+            musicDriverInterface.CompilerInfo ci = pmdmng.GetCompilerInfo();
+            if (isSuccess)
+            {
+                //frmPartCounter.ClearCounter();
+                //Object[] cells = new object[7];
+                //int[] pn = new int[] { 1, 2, 3, 10, 11, 12, 13, 4, 5, 6, 19 };
+                //for (int i = 0; i < 11; i++)
+                //{
+                //    //if (pw[i].clockCounter == 0) continue;
+
+                //    cells[0] = pn[i];//PartNumber
+                //    cells[1] = 0;//ChipIndex
+                //    cells[2] = 0;//ChipNumber
+                //    cells[3] = ((char)('A' + i)).ToString();
+                //    cells[4] = "YM2608";//.ToUpper();
+                //    cells[5] = ci.totalCount[i];
+                //    cells[6] = ci.loopCount[i];
+                //    frmPartCounter.AddPartCounter(cells);
+                //}
+            }
+
+            foreach (Tuple<int, int, string> mes in ci.errorList)
+            {
+                frmErrorList.dataGridView1.Rows.Add("Error", "-"
+                    , mes.Item1 == -1 ? "-" : (mes.Item1 + 1).ToString()
+                    , mes.Item3);
+            }
+
+            foreach (Tuple<int, int, string> mes in ci.warningList)
+            {
+                frmErrorList.dataGridView1.Rows.Add("Warning", "-"
+                    , mes.Item1 == -1 ? "-" : (mes.Item1 + 1).ToString()
+                    , mes.Item3);
+            }
+
+            if (isSuccess)
+            {
+                //mubCompilerInfo = ci;
+
+                //if (ci.jumpChannel != null && jumpSoloModeSw)
+                //{
+                //    for (int i = 0; i < 11; i++)
+                //    {
+                //        bool solo = false;
+                //        if (i == ci.jumpChannel[0]) solo = true;
+
+                //        int ch = i;
+                //        if (i < 2)//FM 1-2
+                //        {
+                //            Audio.chipRegister.YM2608[0].ChMasks[ch] = !solo;
+                //        }
+                //        else if (i == 2)//FM 3
+                //        {
+                //            Audio.chipRegister.YM2608[0].ChMasks[2] = !solo;
+                //            Audio.chipRegister.YM2608[0].ChMasks[6] = !solo;
+                //            Audio.chipRegister.YM2608[0].ChMasks[7] = !solo;
+                //            Audio.chipRegister.YM2608[0].ChMasks[8] = !solo;
+                //        }
+                //        else if (i < 6)//SSG
+                //        {
+                //            ch = i + 6;
+                //            Audio.chipRegister.YM2608[0].ChMasks[ch] = !solo;
+                //        }
+                //        else if (i == 6)//Rhythm
+                //        {
+                //            Audio.chipRegister.YM2608[0].ChMasks[12] = !solo;
+                //            Audio.chipRegister.YM2608[0].ChMasks[13] = !solo;
+                //            Audio.chipRegister.YM2608[0].ChMasks[14] = !solo;
+                //            Audio.chipRegister.YM2608[0].ChMasks[15] = !solo;
+                //            Audio.chipRegister.YM2608[0].ChMasks[16] = !solo;
+                //            Audio.chipRegister.YM2608[0].ChMasks[17] = !solo;
+                //        }
+                //        else if (i < 10)
+                //        {
+                //            ch = i - 4;
+                //            Audio.chipRegister.YM2608[0].ChMasks[ch] = !solo;
+                //        }
+                //        else
+                //        {
+                //            Audio.chipRegister.YM2608[0].ChMasks[18] = !solo;
+                //        }
+                //    }
+                //}
+
+                if (doPlay && ci.errorList.Count < 1)
+                {
+                    try
+                    {
+                        //WriteMmlDatumn("test.m", mData);
+                        InitPlayer(EnmFileFormat.M, mData);
+                    }
+                    catch
+                    {
+                        MessageBox.Show(msg.get("E0100"), "mml2vgm", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+
+            }
+
+            Compiling = 0;
+            UpdateControl();
+        }
+
+        private void WriteMmlDatumn(string fn,MmlDatum[] mmlData)
+        {
+            List<byte> data = new List<byte>();
+            foreach (MmlDatum d in mmlData) data.Add((byte)d.dat);
+            File.WriteAllBytes(fn,data.ToArray());
         }
 
         private delegate void SafeCallDelegate();
@@ -2312,10 +2530,17 @@ namespace mml2vgmIDE
             return true;
         }
 
-        public bool InitPlayer(EnmFileFormat format, musicDriverInterface.MmlDatum[] mubdata)
+        public bool InitPlayer(EnmFileFormat format, musicDriverInterface.MmlDatum[] md)
         {
-            if (mucom == null) return false;
-            if (mubdata == null || mubdata.Length < 1) return false;
+            if (format == EnmFileFormat.MUB)
+            {
+                if (mucom == null) return false;
+            }
+            else if (format == EnmFileFormat.M)
+            {
+                if (pmdmng == null) return false;
+            }
+            if (md == null || md.Length < 1) return false;
 
             try
             {
@@ -2335,7 +2560,7 @@ namespace mml2vgmIDE
                 //rowとcolをazuki向けlinePosに変換する
                 if (ac != null)
                 {
-                    foreach (musicDriverInterface.MmlDatum od in mubData)
+                    foreach (musicDriverInterface.MmlDatum od in md)
                     {
                         if (od == null) continue;
                         if (od.linePos == null) continue;
@@ -2361,7 +2586,7 @@ namespace mml2vgmIDE
                 //}
                 //File.WriteAllBytes("c:\\temp\\test.mub",dmy.ToArray());
 
-                Audio.SetVGMBuffer(format, mubData, wrkPath, fn);
+                Audio.SetVGMBuffer(format, md, wrkPath, fn);
 
                 //for (int i = 0; i < 100; i++)
                 {
@@ -2369,7 +2594,7 @@ namespace mml2vgmIDE
                     Application.DoEvents();
                 }
 
-                if (mubData != null)
+                if (md != null)
                 {
                     playdata();
                     if (Audio.errMsg != "")

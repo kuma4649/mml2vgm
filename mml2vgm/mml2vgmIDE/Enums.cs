@@ -75,6 +75,8 @@
     , K053260
     , K054539
     , DMG
+    , PPZ8
+    , PPSDRV
 
     , S_SN76489
     , S_YM2612
@@ -116,6 +118,8 @@
     , S_K053260
     , S_K054539
     , S_DMG
+    , S_PPZ8
+    , S_PPSDRV
     }
 
     public enum EnmRealModel
@@ -145,14 +149,16 @@
         MND = 15,
         MUB = 16,
         MUC = 17,
-        ZGM = 18
+        ZGM = 18,
+        M = 19
     }
 
     public enum EnmMmlFileFormat : int
     {
         unknown = 0,
         GWI = 1,
-        MUC = 2
+        MUC = 2,
+        MML = 3
     }
 
     public enum SendMode : int
