@@ -15,8 +15,10 @@ namespace mml2vgmIDE
         private PMDManager pm = null;
         bool initPhase = true;
         List<SoundManager.PackData> pd = new List<SoundManager.PackData>();
+        List<SoundManager.PackData> pzd = new List<SoundManager.PackData>();
         long count = 0;
         private SoundManager.Chip chipYM2608;
+        private SoundManager.Chip chipPPZ8;
         private string filename = "";
 
         public override GD3 getGD3Info(byte[] buf, uint vgmGd3)
@@ -35,6 +37,7 @@ namespace mml2vgmIDE
             {
                 initPhase = false;
                 chipRegister.YM2608SetRegister(null, count, chipYM2608, pd.ToArray());
+                chipRegister.PPZ8SetRegister(null, count, chipPPZ8, pzd.ToArray());
                 return;
             }
 
@@ -54,6 +57,7 @@ namespace mml2vgmIDE
             this.waitTime = waitTime;
             this.pm = pmdManager;
             chipYM2608 = chipRegister.YM2608[0];
+            chipPPZ8 = chipRegister.PPZ8[0];
             filename = mFileName;
 
             Counter = 0;
@@ -108,16 +112,34 @@ namespace mml2vgmIDE
         {
             if (arg == null) return 0;
 
-            outDatum od = null;
+            if (!initPhase)
+            {
+                outDatum od = null;
+                if (arg.port == 0x03)
+                {
+                    chipRegister.PPZ8LoadPcm(od, count, 0, (byte)arg.address, (byte)arg.data, (byte[])arg.addtionalData);
+                }
+                else
+                {
+                    chipRegister.PPZ8Write(od, count, 0, arg.port, arg.address, arg.data);
+                }
+
+                return 0;
+            }
+
+            SoundManager.PackData p;
             if (arg.port == 0x03)
             {
-                //chipRegister.PPZ8LoadPcm(od, count, 0, (byte)arg.address, (byte)arg.data, (byte[])arg.addtionalData);
+                p = new SoundManager.PackData(
+                    null, null, EnmDataType.Block, arg.address, arg.data, arg.addtionalData);
             }
             else
             {
-                //chipRegister.PPZ8Write(od, count, 0, arg.port, arg.address, arg.data);
+                p = new SoundManager.PackData(
+                    null, null, EnmDataType.Normal, arg.port, arg.address, arg.data);
             }
 
+            pzd.Add(p);
             return 0;
         }
 

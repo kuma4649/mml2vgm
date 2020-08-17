@@ -141,6 +141,34 @@ namespace mml2vgmIDE
             }
         }
 
+        private ChipType _PPZ8Type = new ChipType();
+        public ChipType PPZ8Type
+        {
+            get
+            {
+                return _PPZ8Type;
+            }
+
+            set
+            {
+                _PPZ8Type = value;
+            }
+        }
+
+        private ChipType _PPSDRVType = new ChipType();
+        public ChipType PPSDRVType
+        {
+            get
+            {
+                return _PPSDRVType;
+            }
+
+            set
+            {
+                _PPSDRVType = value;
+            }
+        }
+
         private ChipType _QSoundType = new ChipType();
         public ChipType QSoundType
         {

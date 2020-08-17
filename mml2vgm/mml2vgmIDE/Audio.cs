@@ -239,6 +239,8 @@ namespace mml2vgmIDE
             chipRegister.SetRealChipInfo(EnmZGMDevice.HuC6280, setting.HuC6280Type, setting.HuC6280SType, setting.LatencyEmulation, setting.LatencySCCI);
             chipRegister.SetRealChipInfo(EnmZGMDevice.K051649, setting.K051649Type, setting.K051649SType, setting.LatencyEmulation, setting.LatencySCCI);
             chipRegister.SetRealChipInfo(EnmZGMDevice.K053260, setting.K053260Type, setting.K053260SType, setting.LatencyEmulation, setting.LatencySCCI);
+            chipRegister.SetRealChipInfo(EnmZGMDevice.PPZ8, setting.PPZ8Type, null, setting.LatencyEmulation, setting.LatencySCCI);
+            chipRegister.SetRealChipInfo(EnmZGMDevice.PPSDRV, setting.PPSDRVType, null, setting.LatencyEmulation, setting.LatencySCCI);
             chipRegister.SetRealChipInfo(EnmZGMDevice.QSound, setting.QSoundType, null, setting.LatencyEmulation, setting.LatencySCCI);
             chipRegister.SetRealChipInfo(EnmZGMDevice.Y8950, setting.Y8950Type, setting.Y8950SType, setting.LatencyEmulation, setting.LatencySCCI);
             chipRegister.SetRealChipInfo(EnmZGMDevice.YM3526, setting.YM3526Type, setting.YM3526SType, setting.LatencyEmulation, setting.LatencySCCI);
@@ -325,6 +327,28 @@ namespace mml2vgmIDE
                 if (ret.Count == 0) continue;
             }
             chipRegister.SetRealChipInfo(EnmZGMDevice.K053260, chipType[0], chipType[1], setting.LatencyEmulation, setting.LatencySCCI);
+
+            for (int i = 0; i < chipRegister.PPZ8.Count; i++)
+            {
+                chipType[i] = new Setting.ChipType();
+                if (!chipRegister.PPZ8[i].Use) continue;
+                chipRegister.PPZ8[i].Model = EnmVRModel.VirtualModel;
+                chipType[i].UseEmu = true;
+                chipType[i].UseScci = false;
+                if (ret.Count == 0) continue;
+            }
+            chipRegister.SetRealChipInfo(EnmZGMDevice.PPZ8, chipType[0], chipType[1], setting.LatencyEmulation, setting.LatencySCCI);
+
+            for (int i = 0; i < chipRegister.PPSDRV.Count; i++)
+            {
+                chipType[i] = new Setting.ChipType();
+                if (!chipRegister.PPSDRV[i].Use) continue;
+                chipRegister.PPSDRV[i].Model = EnmVRModel.VirtualModel;
+                chipType[i].UseEmu = true;
+                chipType[i].UseScci = false;
+                if (ret.Count == 0) continue;
+            }
+            chipRegister.SetRealChipInfo(EnmZGMDevice.PPSDRV, chipType[0], chipType[1], setting.LatencyEmulation, setting.LatencySCCI);
 
             for (int i = 0; i < chipRegister.QSound.Count; i++)
             {

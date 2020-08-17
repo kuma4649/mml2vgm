@@ -27,6 +27,8 @@ namespace mml2vgmIDE
         private Setting.ChipType[] ctHuC6280 = new Setting.ChipType[2] { null, null };
         private Setting.ChipType[] ctK051649 = new Setting.ChipType[2] { null, null };
         private Setting.ChipType[] ctK053260 = new Setting.ChipType[2] { null, null };
+        private Setting.ChipType[] ctPPZ8 = new Setting.ChipType[2] { null, null };
+        private Setting.ChipType[] ctPPSDRV = new Setting.ChipType[2] { null, null };
         private Setting.ChipType[] ctQSound = new Setting.ChipType[2] { null, null };
         private Setting.ChipType[] ctRF5C164 = new Setting.ChipType[2] { null, null };
         private Setting.ChipType[] ctSEGAPCM = new Setting.ChipType[2] { null, null };
@@ -48,19 +50,17 @@ namespace mml2vgmIDE
 
         private RealChip realChip = null;
         private RSoundChip[] scAY8910 = new RSoundChip[2] { null, null };
-
         private RSoundChip[] scC140 = new RSoundChip[2] { null, null };
         private RSoundChip[] scC352 = new RSoundChip[2] { null, null };
-
         private RSoundChip[] scHuC6280 = new RSoundChip[2] { null, null };
         private RSoundChip[] scK051649 = new RSoundChip[2] { null, null };
         private RSoundChip[] scK053260 = new RSoundChip[2] { null, null };
+        private RSoundChip[] scPPZ8 = new RSoundChip[2] { null, null };
+        private RSoundChip[] scPPSDRV = new RSoundChip[2] { null, null };
         private RSoundChip[] scQSound = new RSoundChip[2] { null, null };
-
         private RSoundChip[] scRF5C164 = new RSoundChip[2] { null, null };
         private RSoundChip[] scSEGAPCM = new RSoundChip[2] { null, null };
         private RSoundChip[] scSN76489 = new RSoundChip[2] { null, null };
-
         private RSoundChip[] scYM2151 = new RSoundChip[2] { null, null };
         private RSoundChip[] scYM2203 = new RSoundChip[2] { null, null };
         private RSoundChip[] scYM2413 = new RSoundChip[2] { null, null };
@@ -510,6 +510,42 @@ namespace mml2vgmIDE
                         if (K053260.Count < i + 1) K053260.Add(new Chip(4));
                         K053260[i].Model = ctK053260[i].UseEmu ? EnmVRModel.VirtualModel : EnmVRModel.RealModel;
                         K053260[i].Delay = (K053260[i].Model == EnmVRModel.VirtualModel ? LEmu : LReal);
+                    }
+                    break;
+                case EnmZGMDevice.PPZ8:
+                    ctPPZ8 = new Setting.ChipType[] { chipTypeP, chipTypeS };
+                    for (int i = 0; i < PPZ8.Count; i++)
+                    {
+                        PPZ8[i].Model = EnmVRModel.VirtualModel;
+                        PPZ8[i].Delay = LEmu;
+                        if (i > 1) continue;
+
+                        scPPZ8[i] = null;
+                        if (scPPZ8[i] != null) scPPZ8[i].init();
+                        if (ctPPZ8[i] != null)
+                        {
+                            if (PPZ8.Count < i + 1) PPZ8.Add(new Chip(8));
+                            PPZ8[i].Model = ctPPZ8[i].UseEmu ? EnmVRModel.VirtualModel : EnmVRModel.RealModel;
+                            PPZ8[i].Delay = (PPZ8[i].Model == EnmVRModel.VirtualModel ? LEmu : LReal);
+                        }
+                    }
+                    break;
+                case EnmZGMDevice.PPSDRV:
+                    ctPPSDRV = new Setting.ChipType[] { chipTypeP, chipTypeS };
+                    for (int i = 0; i < PPSDRV.Count; i++)
+                    {
+                        PPSDRV[i].Model = EnmVRModel.VirtualModel;
+                        PPSDRV[i].Delay = LEmu;
+                        if (i > 1) continue;
+
+                        scPPSDRV[i] = null;
+                        if (scPPSDRV[i] != null) scPPSDRV[i].init();
+                        if (ctPPSDRV[i] != null)
+                        {
+                            if (PPSDRV.Count < i + 1) PPSDRV.Add(new Chip(8));
+                            PPSDRV[i].Model = ctPPSDRV[i].UseEmu ? EnmVRModel.VirtualModel : EnmVRModel.RealModel;
+                            PPSDRV[i].Delay = (PPSDRV[i].Model == EnmVRModel.VirtualModel ? LEmu : LReal);
+                        }
                     }
                     break;
                 case EnmZGMDevice.QSound:
@@ -1042,7 +1078,8 @@ namespace mml2vgmIDE
                     //Dummy Command
                     break;
                 case EnmZGMDevice.PPZ8:
-                    throw new ArgumentException();
+                    PPZ8SetRegisterProcessing(ref Counter, ref Chip, ref Type, ref Address, ref Data, ref ExData);
+                    break;
                 case EnmZGMDevice.PPSDRV:
                     throw new ArgumentException();
                 default:
@@ -1076,6 +1113,9 @@ namespace mml2vgmIDE
                     break;
                 case EnmZGMDevice.K053260:
                     K053260WriteRegisterControl(Chip, type, address, data, exData);
+                    break;
+                case EnmZGMDevice.PPZ8:
+                    PPZ8WriteRegisterControl(Chip, type, address, data, exData);
                     break;
                 case EnmZGMDevice.QSound:
                     QSoundWriteRegisterControl(Chip, type, address, data, exData);
@@ -2749,6 +2789,98 @@ namespace mml2vgmIDE
 
             return data;
         }
+
+        #endregion
+
+
+
+        #region PPZ8
+
+        private void PPZ8WriteRegisterControl(Chip Chip, EnmDataType type, int address, int data, object exData)
+        {
+            if (type == EnmDataType.Normal)
+            {
+                if (Chip.Model == EnmVRModel.VirtualModel)
+                {
+                    if (!ctPPZ8[Chip.Number].UseScci)
+                    {
+                        mds.WritePPZ8(Chip.Index, (byte)Chip.Number, address, data, (int)exData, null);
+                    }
+                }
+                if (Chip.Model == EnmVRModel.RealModel)
+                {
+                }
+            }
+            else if (type == EnmDataType.Block)
+            {
+                Audio.sm.SetInterrupt();
+
+                try
+                {
+                    if (exData == null) return;
+
+                    if (data == -1)
+                    {
+                        PackData[] pdata = (PackData[])exData;
+                        if (Chip.Model == EnmVRModel.VirtualModel)
+                        {
+                            foreach (PackData dat in pdata)
+                            {
+                                ;
+                                if (dat.Type== EnmDataType.Normal)
+                                {
+                                    mds.WritePPZ8(dat.Chip.Index, (byte)dat.Chip.Number
+                                        , dat.Address, dat.Data, (int)dat.ExData, null);
+                                }
+                                else
+                                {
+                                    mds.WritePPZ8PCMData(dat.Chip.Index, (byte)dat.Chip.Number
+                                        , (byte)dat.Address
+                                        , (byte)dat.Data
+                                        , (byte[])dat.ExData
+                                        );
+
+                                }
+                            }
+                        }
+                        if (Chip.Model == EnmVRModel.RealModel)
+                        {
+                        }
+                    }
+                    else
+                    {
+                        if (Chip.Model == EnmVRModel.VirtualModel)
+                            mds.WritePPZ8PCMData(Chip.Index, (byte)Chip.Number
+                                , (byte)((object[])exData)[0]
+                                , (byte)((object[])exData)[1]
+                                , (byte[])((object[])exData)[2]
+                                );
+                        else
+                        {
+                        }
+                    }
+                }
+                finally
+                {
+                    Audio.sm.ResetInterrupt();
+                }
+            }
+        }
+
+        public void PPZ8SetRegisterProcessing(ref long Counter, ref Chip Chip, ref EnmDataType Type, ref int Address, ref int dData, ref object ExData)
+        {
+            if (ctPPZ8 == null) return;
+            if (Address == -1 && dData == -1) return;
+
+            if (Chip.Number == 0) chipLED.PriPPZ8 = 2;
+
+        }
+
+        public void PPZ8SetRegister(outDatum od, long Counter, Chip chip, PackData[] data)
+        {
+            enq(od, Counter, chip, EnmDataType.Block, -1, -1, data);
+        }
+
 
         #endregion
 
