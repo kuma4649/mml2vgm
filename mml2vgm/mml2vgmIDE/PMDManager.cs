@@ -124,6 +124,7 @@ namespace mml2vgmIDE
             }
             catch (IOException)
             {
+                Log.WriteLine(LogLevel.ERROR, string.Format("File({0}) not found.",arg));
                 strm = null;
             }
 
@@ -168,6 +169,7 @@ namespace mml2vgmIDE
                 envPmd,//string[] envPmd;
                 envPmdOpt,//string[] envPmdOpt;
                 fileName,//string srcFile;
+                (Func<string,Stream>)appendFileReaderCallback
             };
             string[] addtionalPMDOption = new string[]{
             };
@@ -183,7 +185,7 @@ namespace mml2vgmIDE
                     , ppz8Write
                     , ppsdrvWrite
                 });
-
+            
         }
 
         public void MSTART(int v)

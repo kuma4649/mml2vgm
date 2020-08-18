@@ -4322,6 +4322,8 @@ namespace mml2vgmIDE
             for (int i = 0; i < chipRegister.HuC6280.Count; i++) if (chipRegister.HuC6280[i].Use) chipRegister.HuC6280SoftReset(counter, i);
             for (int i = 0; i < chipRegister.K051649.Count; i++) if (chipRegister.K051649[i].Use) chipRegister.K051649SoftReset(counter, i);
             for (int i = 0; i < chipRegister.K053260.Count; i++) if (chipRegister.K053260[i].Use) chipRegister.K053260SoftReset(counter, i);
+            for (int i = 0; i < chipRegister.PPZ8.Count; i++) if (chipRegister.PPZ8[i].Use) chipRegister.PPZ8SoftReset(counter, i);
+            for (int i = 0; i < chipRegister.PPSDRV.Count; i++) if (chipRegister.PPSDRV[i].Use) chipRegister.PPSDRVSoftReset(counter, i);
             for (int i = 0; i < chipRegister.QSound.Count; i++) if (chipRegister.QSound[i].Use) chipRegister.QSoundSoftReset(counter, i);
             for (int i = 0; i < chipRegister.RF5C164.Count; i++) if (chipRegister.RF5C164[i].Use) chipRegister.RF5C164SoftReset(counter, i);
             for (int i = 0; i < chipRegister.SEGAPCM.Count; i++) if (chipRegister.SEGAPCM[i].Use) chipRegister.SEGAPCMSoftReset(counter, i);
@@ -4348,6 +4350,8 @@ namespace mml2vgmIDE
             for (int i = 0; i < chipRegister.HuC6280.Count; i++) if (chipRegister.HuC6280[i].Use) data.AddRange(chipRegister.HuC6280MakeSoftReset(i));
             for (int i = 0; i < chipRegister.K051649.Count; i++) if (chipRegister.K051649[i].Use) data.AddRange(chipRegister.K051649MakeSoftReset(i));
             for (int i = 0; i < chipRegister.K053260.Count; i++) if (chipRegister.K053260[i].Use) data.AddRange(chipRegister.K053260MakeSoftReset(i));
+            for (int i = 0; i < chipRegister.PPZ8.Count; i++) if (chipRegister.PPZ8[i].Use) data.AddRange(chipRegister.PPZ8MakeSoftReset(i));
+            for (int i = 0; i < chipRegister.PPSDRV.Count; i++) if (chipRegister.PPSDRV[i].Use) data.AddRange(chipRegister.PPSDRVMakeSoftReset(i));
             for (int i = 0; i < chipRegister.QSound.Count; i++) if (chipRegister.QSound[i].Use) data.AddRange(chipRegister.QSoundMakeSoftReset(i));
             for (int i = 0; i < chipRegister.RF5C164.Count; i++) if (chipRegister.RF5C164[i].Use) data.AddRange(chipRegister.RF5C164MakeSoftReset(i));
             for (int i = 0; i < chipRegister.SEGAPCM.Count; i++) if (chipRegister.SEGAPCM[i].Use) data.AddRange(chipRegister.SEGAPCMMakeSoftReset(i));
@@ -4377,6 +4381,8 @@ namespace mml2vgmIDE
             for (int i = 0; i < chipRegister.HuC6280.Count; i++) if (chipRegister.HuC6280[i].Use) data.AddRange(chipRegister.HuC6280MakeSoftReset(i));
             for (int i = 0; i < chipRegister.K051649.Count; i++) if (chipRegister.K051649[i].Use) data.AddRange(chipRegister.K051649MakeSoftReset(i));
             for (int i = 0; i < chipRegister.K053260.Count; i++) if (chipRegister.K053260[i].Use) data.AddRange(chipRegister.K053260MakeSoftReset(i));
+            for (int i = 0; i < chipRegister.PPZ8.Count; i++) if (chipRegister.PPZ8[i].Use) data.AddRange(chipRegister.PPZ8MakeSoftReset(i));
+            for (int i = 0; i < chipRegister.PPSDRV.Count; i++) if (chipRegister.PPSDRV[i].Use) data.AddRange(chipRegister.PPSDRVMakeSoftReset(i));
             for (int i = 0; i < chipRegister.QSound.Count; i++) if (chipRegister.QSound[i].Use) data.AddRange(chipRegister.QSoundMakeSoftReset(i));
             for (int i = 0; i < chipRegister.RF5C164.Count; i++) if (chipRegister.RF5C164[i].Use) data.AddRange(chipRegister.RF5C164MakeSoftReset(i));
             for (int i = 0; i < chipRegister.SEGAPCM.Count; i++) if (chipRegister.SEGAPCM[i].Use) data.AddRange(chipRegister.SEGAPCMMakeSoftReset(i));

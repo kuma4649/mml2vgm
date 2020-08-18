@@ -2808,7 +2808,8 @@ namespace mml2vgmIDE
                 {
                     if (!ctPPZ8[Chip.Number].UseScci)
                     {
-                        mds.WritePPZ8(Chip.Index, (byte)Chip.Number, address, data, (int)exData, null);
+                        if (exData is int)
+                            mds.WritePPZ8(Chip.Index, (byte)Chip.Number, address, data, (int)exData, null);
                     }
                 }
                 if (Chip.Model == EnmVRModel.RealModel)
@@ -2885,6 +2886,22 @@ namespace mml2vgmIDE
             enq(od, Counter, chip, EnmDataType.Block, -1, -1, data);
         }
 
+        public void PPZ8SoftReset(long Counter, int chipID)
+        {
+            List<PackData> data = PPZ8MakeSoftReset(chipID);
+            PPZ8SetRegister(null, Counter, PPZ8[chipID], data.ToArray());
+        }
+
+        public List<PackData> PPZ8MakeSoftReset(int chipID)
+        {
+            List<PackData> data = new List<PackData>();
+            for (int i = 0; i < 8; i++)
+            {
+                data.Add(new PackData(null, PPZ8[chipID], EnmDataType.Normal, 0x02, i, 0));
+            }
+
+            return data;
+        }
 
         #endregion
 
@@ -2900,7 +2917,8 @@ namespace mml2vgmIDE
                 {
                     if (!ctPPSDRV[Chip.Number].UseScci)
                     {
-                        mds.WritePPSDRV(Chip.Index, (byte)Chip.Number, address, data, (int)exData, null);
+                        if(exData is int)
+                            mds.WritePPSDRV(Chip.Index, (byte)Chip.Number, address, data, (int)exData, null);
                     }
                 }
                 if (Chip.Model == EnmVRModel.RealModel)
@@ -2971,6 +2989,20 @@ namespace mml2vgmIDE
         public void PPSDRVSetRegister(outDatum od, long Counter, Chip chip, PackData[] data)
         {
             enq(od, Counter, chip, EnmDataType.Block, -1, -1, data);
+        }
+
+        public void PPSDRVSoftReset(long Counter, int chipID)
+        {
+            List<PackData> data = PPSDRVMakeSoftReset(chipID);
+            PPSDRVSetRegister(null, Counter, PPSDRV[chipID], data.ToArray());
+        }
+
+        public List<PackData> PPSDRVMakeSoftReset(int chipID)
+        {
+            List<PackData> data = new List<PackData>();
+            data.Add(new PackData(null, PPSDRV[chipID], EnmDataType.Normal, 0x02, 0, 0));
+
+            return data;
         }
 
 

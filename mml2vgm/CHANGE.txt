@@ -1,4 +1,10 @@
 更新履歴
+TAG271 2020/08/19
+  IDE PMDDotNET:
+  曲再生時の追加ファイル読み込み時に環境変数PMDも参照するよう修正。(見つからない時はエラー表示。)
+  曲停止時にPPZ8,PPSDRVにStopを送るように修正。
+  (注意：settingにPMDDotNETタブを追加しましたが、全く参照しません。)
+
 TAG270 2020/08/18 2nd
   IDE
     PMDDotNET:PPSの再生に対応。
