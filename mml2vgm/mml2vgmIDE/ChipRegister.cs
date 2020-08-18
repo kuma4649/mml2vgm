@@ -1081,7 +1081,8 @@ namespace mml2vgmIDE
                     PPZ8SetRegisterProcessing(ref Counter, ref Chip, ref Type, ref Address, ref Data, ref ExData);
                     break;
                 case EnmZGMDevice.PPSDRV:
-                    throw new ArgumentException();
+                    PPSDRVSetRegisterProcessing(ref Counter, ref Chip, ref Type, ref Address, ref Data, ref ExData);
+                    break;
                 default:
                     throw new ArgumentException();
             }
@@ -1116,6 +1117,9 @@ namespace mml2vgmIDE
                     break;
                 case EnmZGMDevice.PPZ8:
                     PPZ8WriteRegisterControl(Chip, type, address, data, exData);
+                    break;
+                case EnmZGMDevice.PPSDRV:
+                    PPSDRVWriteRegisterControl(Chip, type, address, data, exData);
                     break;
                 case EnmZGMDevice.QSound:
                     QSoundWriteRegisterControl(Chip, type, address, data, exData);
@@ -2877,6 +2881,94 @@ namespace mml2vgmIDE
         }
 
         public void PPZ8SetRegister(outDatum od, long Counter, Chip chip, PackData[] data)
+        {
+            enq(od, Counter, chip, EnmDataType.Block, -1, -1, data);
+        }
+
+
+        #endregion
+
+
+
+        #region PPSDRV
+
+        private void PPSDRVWriteRegisterControl(Chip Chip, EnmDataType type, int address, int data, object exData)
+        {
+            if (type == EnmDataType.Normal)
+            {
+                if (Chip.Model == EnmVRModel.VirtualModel)
+                {
+                    if (!ctPPSDRV[Chip.Number].UseScci)
+                    {
+                        mds.WritePPSDRV(Chip.Index, (byte)Chip.Number, address, data, (int)exData, null);
+                    }
+                }
+                if (Chip.Model == EnmVRModel.RealModel)
+                {
+                }
+            }
+            else if (type == EnmDataType.Block)
+            {
+                Audio.sm.SetInterrupt();
+
+                try
+                {
+                    if (exData == null) return;
+
+                    if (data == -1)
+                    {
+                        PackData[] pdata = (PackData[])exData;
+                        if (Chip.Model == EnmVRModel.VirtualModel)
+                        {
+                            foreach (PackData dat in pdata)
+                            {
+                                ;
+                                if (dat.Type == EnmDataType.Normal)
+                                {
+                                    mds.WritePPSDRV(dat.Chip.Index, (byte)dat.Chip.Number
+                                        , dat.Address, dat.Data, (int)dat.ExData, null);
+                                }
+                                else
+                                {
+                                    mds.WritePPSDRVPCMData(dat.Chip.Index, (byte)dat.Chip.Number
+                                        , (byte[])dat.ExData
+                                        );
+
+                                }
+                            }
+                        }
+                        if (Chip.Model == EnmVRModel.RealModel)
+                        {
+                        }
+                    }
+                    else
+                    {
+                        if (Chip.Model == EnmVRModel.VirtualModel)
+                            mds.WritePPSDRVPCMData(Chip.Index, (byte)Chip.Number
+                                , (byte[])((object[])exData)[0]
+                                );
+                        else
+                        {
+                        }
+                    }
+                }
+                finally
+                {
+                    Audio.sm.ResetInterrupt();
+                }
+            }
+        }
+
+        public void PPSDRVSetRegisterProcessing(ref long Counter, ref Chip Chip, ref EnmDataType Type, ref int Address, ref int dData, ref object ExData)
+        {
+            if (ctPPSDRV == null) return;
+            if (Address == -1 && dData == -1) return;
+
+            if (Chip.Number == 0) chipLED.PriPPSDRV = 2;
+
+        }
+
+        public void PPSDRVSetRegister(outDatum od, long Counter, Chip chip, PackData[] data)
         {
             enq(od, Counter, chip, EnmDataType.Block, -1, -1, data);
         }

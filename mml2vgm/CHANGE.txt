@@ -1,4 +1,8 @@
 更新履歴
+TAG270 2020/08/18 2nd
+  IDE
+    PMDDotNET:PPSの再生に対応。
+
 TAG269 2020/08/18
   IDE
     PMDDotNET:PPZ8の再生に対応。
