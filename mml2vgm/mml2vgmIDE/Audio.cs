@@ -114,7 +114,7 @@ namespace mml2vgmIDE
         public static bool Stopped = false;
         private static int StepCounter = 0;
 
-        private static Setting setting = null;
+        public static Setting setting = null;
 
         public static baseDriver driver = null;
 
@@ -3721,6 +3721,7 @@ namespace mml2vgmIDE
                 log.Write("Clock 設定");
 
                 chipRegister.YM2608WriteClock((byte)0, (int)mubDriver.YM2608ClockValue);
+               
 
                 //Play
 
@@ -3782,17 +3783,15 @@ namespace mml2vgmIDE
                     chip.Start = ym2608.Start;
                     chip.Stop = ym2608.Stop;
                     chip.Reset = ym2608.Reset;
+                    chip.SamplingRate = 55467;// (UInt32)Common.SampleRate;
+                    chip.Volume = setting.balance.YM2608Volume;
+                    chip.Clock = (uint)mDriver.YM2608ClockValue;
+                    chip.Option = null;
+                    chipLED.PriOPN2 = 1;
+                    lstChips.Add(chip);
+                    useChip.Add(EnmChip.YM2608);
                 }
-
-                chip.SamplingRate = 55467;// (UInt32)Common.SampleRate;
-                chip.Volume = setting.balance.YM2608Volume;
-                chip.Clock = (uint)mDriver.YM2608ClockValue;
-                chip.Option = null;
-                chipLED.PriOPN2 = 1;
                 chipRegister.YM2608[0].Use = true;
-                lstChips.Add(chip);
-                useChip.Add(EnmChip.YM2608);
-
 
                 MDSound.PPZ8 ppz8 = null;
                 chip = new MDSound.MDSound.Chip();
@@ -3858,24 +3857,55 @@ namespace mml2vgmIDE
                     RealChipAutoDetect(setting);
                 }
 
+                bool isGIMICOPNA = false;
+                useEmu = true;
                 if (chipRegister.YM2608[0].Model == EnmVRModel.VirtualModel) useEmu = true;
-                if (chipRegister.YM2608[0].Model == EnmVRModel.RealModel) useReal = true;
+                if (chipRegister.YM2608[0].Model == EnmVRModel.RealModel)
+                {
+                    useReal = true;
+                    isGIMICOPNA = chipRegister.YM2608GetGIMICType(0) == Nc86ctl.ChipType.CHIP_OPNA;
+                }
 
-                if (!mDriver.init(mBuf, mWorkPath, PMDManager, chipRegister, new EnmChip[] { EnmChip.YM2608 }
-                    , (uint)(Common.SampleRate * setting.LatencyEmulation / 1000)
-                    , (uint)(Common.SampleRate * setting.outputDevice.WaitTime / 1000)
-                    , mFileName
-                    )
-
-                    ) return false;
-
-                log.Write("Volume 設定");
+                log.Write("Volume(emu) 設定");
 
                 SetYM2608Volume(true, setting.balance.YM2608Volume);
 
                 log.Write("Clock 設定");
 
                 chipRegister.YM2608WriteClock((byte)0, (int)mDriver.YM2608ClockValue);
+
+                log.Write("Clock 設定");
+
+                if (!mDriver.init(mBuf, mWorkPath, PMDManager, chipRegister, new EnmChip[] { EnmChip.YM2608 }
+                    , (uint)(Common.SampleRate * setting.LatencyEmulation / 1000)
+                    , (uint)(Common.SampleRate * setting.outputDevice.WaitTime / 1000)
+                    , mFileName
+                    , isGIMICOPNA
+                    )
+
+                    ) return false;
+
+                //driverが決定したボリュームを反映する
+                SetYM2608FMVolume(true, mDriver.YM2608_FMVolume);
+                SetYM2608PSGVolume(true, mDriver.YM2608_SSGVolume);
+                SetYM2608RhythmVolume(true, mDriver.YM2608_RhythmVolume);
+                SetYM2608AdpcmVolume(true, mDriver.YM2608_AdpcmVolume);
+                if (isGIMICOPNA)
+                {
+                    SetGimicOPNAVolume(true, mDriver.GIMIC_SSGVolume);
+                    chipRegister.setYM2608SSGVolume(0, mDriver.GIMIC_SSGVolume, EnmVRModel.RealModel);
+                    //System.Threading.Thread.Sleep(500);
+                }
+
+                if (chipRegister.YM2608[0].Model == EnmVRModel.RealModel)
+                {
+                    object opnaPcmData = mDriver.GetOPNAPCMData();
+                    if (opnaPcmData != null)
+                    {
+                        RealChipAction(null, 0, chipRegister.YM2608[0], EnmDataType.Block, -1, -1, opnaPcmData);
+                        Thread.Sleep(100);
+                    }
+                }
 
                 //Play
 

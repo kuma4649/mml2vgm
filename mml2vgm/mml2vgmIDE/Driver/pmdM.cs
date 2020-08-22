@@ -11,17 +11,24 @@ namespace mml2vgmIDE
     public class pmdM : baseDriver
     {
         public uint YM2608ClockValue { get; internal set; } = 7987200;
+        public int YM2608_FMVolume=0;
+        public int YM2608_SSGVolume = 0;
+        public int YM2608_RhythmVolume = 0;
+        public int YM2608_AdpcmVolume = 0;
+        public int GIMIC_SSGVolume = 0;
+
         private musicDriverInterface.MmlDatum[] mBuf = null;
         private PMDManager pm = null;
-        bool initPhase = true;
-        List<SoundManager.PackData> pd = new List<SoundManager.PackData>();
-        List<SoundManager.PackData> psd = new List<SoundManager.PackData>();
-        List<SoundManager.PackData> pzd = new List<SoundManager.PackData>();
-        long count = 0;
+        private bool initPhase = true;
+        private List<SoundManager.PackData> pd = new List<SoundManager.PackData>();
+        private List<SoundManager.PackData> psd = new List<SoundManager.PackData>();
+        private List<SoundManager.PackData> pzd = new List<SoundManager.PackData>();
+        private long count = 0;
         private SoundManager.Chip chipYM2608;
         private SoundManager.Chip chipPPZ8;
         private SoundManager.Chip chipPPSDRV;
         private string filename = "";
+
 
         public override GD3 getGD3Info(byte[] buf, uint vgmGd3)
         {
@@ -38,9 +45,10 @@ namespace mml2vgmIDE
             if (initPhase)
             {
                 initPhase = false;
-                chipRegister.YM2608SetRegister(null, count, chipYM2608, pd.ToArray());
-                chipRegister.PPZ8SetRegister(null, count, chipPPZ8, pzd.ToArray());
-                chipRegister.PPSDRVSetRegister(null, count, chipPPSDRV, psd.ToArray());
+
+                if (pd != null) chipRegister.YM2608SetRegister(null, count, chipYM2608, pd.ToArray());
+                if (pzd != null) chipRegister.PPZ8SetRegister(null, count, chipPPZ8, pzd.ToArray());
+                if (psd != null) chipRegister.PPSDRVSetRegister(null, count, chipPPSDRV, psd.ToArray());
                 return;
             }
 
@@ -48,7 +56,14 @@ namespace mml2vgmIDE
             count++;
         }
 
-        public bool init(MmlDatum[] mBuf, string mWorkPath, PMDManager pmdManager, ChipRegister chipRegister, EnmChip[] enmChips, uint v1, uint v2, string mFileName)
+        public bool init(MmlDatum[] mBuf
+            , string mWorkPath
+            , PMDManager pmdManager
+            , ChipRegister chipRegister
+            , EnmChip[] enmChips
+            , uint v1, uint v2
+            , string mFileName
+            , bool isGIMICOPNA)
         {
             if (pmdManager == null) return false;
 
@@ -72,9 +87,16 @@ namespace mml2vgmIDE
             vgmFrameCounter = -latency - waitTime;
             vgmSpeed = 1;
             vgmSpeedCounter = 0;
+            YM2608_FMVolume = 0;
+            YM2608_SSGVolume = 0;
+            YM2608_RhythmVolume = 0;
+            YM2608_AdpcmVolume = 0;
+            GIMIC_SSGVolume = 0;
 
             initPhase = true;
             pd = new List<SoundManager.PackData>();
+            psd = new List<SoundManager.PackData>();
+            pzd = new List<SoundManager.PackData>();
 
             //Driverの初期化
             pm.InitDriver(
@@ -87,7 +109,25 @@ namespace mml2vgmIDE
                 , mBuf
                 , true
                 , false
+                , chipRegister
+                , isGIMICOPNA
                 );
+
+            YM2608_FMVolume     = pm.YM2608_FMVolume    ;
+            YM2608_SSGVolume    = pm.YM2608_SSGVolume   ;
+            YM2608_RhythmVolume = pm.YM2608_RhythmVolume;
+            YM2608_AdpcmVolume  = pm.YM2608_AdpcmVolume ;
+            GIMIC_SSGVolume     = pm.GIMIC_SSGVolume;
+
+            if(!Audio.setting.pmdDotNET.isAuto && Audio.setting.pmdDotNET.setManualVolume)
+            {
+                YM2608_FMVolume = Audio.setting.pmdDotNET.volumeFM;
+                YM2608_SSGVolume = Audio.setting.pmdDotNET.volumeSSG;
+                YM2608_RhythmVolume = Audio.setting.pmdDotNET.volumeRhythm;
+                YM2608_AdpcmVolume = Audio.setting.pmdDotNET.volumeAdpcm;
+                GIMIC_SSGVolume = Audio.setting.pmdDotNET.volumeGIMICSSG;
+            }
+
 
             pm.StartRendering((int)Common.SampleRate, (int)YM2608ClockValue);
             pm.MSTART(0);
@@ -206,6 +246,13 @@ namespace mml2vgmIDE
 
             SoundManager.PackData p = new SoundManager.PackData(null, null, EnmDataType.Block, dat.port * 0x100 + dat.address, dat.data, null);
             pd.Add(p);
+        }
+
+        public object GetOPNAPCMData()
+        {
+            object rpd= pd.ToArray();
+            pd = null;
+            return rpd;
         }
     }
 }

@@ -4253,6 +4253,17 @@ namespace mml2vgmIDE
 
         #region YM2608(OPNA)
 
+        public Nc86ctl.ChipType YM2608GetGIMICType(int ChipID)
+        {
+            if (scYM2608[ChipID] == null) return Nc86ctl.ChipType.CHIP_UNKNOWN;
+            if (scYM2608[ChipID] is RC86ctlSoundChip)
+            {
+                return (Nc86ctl.ChipType)((RC86ctlSoundChip)scYM2608[ChipID]).Type;
+            }
+
+            return Nc86ctl.ChipType.CHIP_UNKNOWN;
+        }
+
         private void YM2608WriteRegisterControl(Chip Chip, EnmDataType type, int address, int data, object exData)
         {
             if (type == EnmDataType.Normal)
@@ -4778,6 +4789,20 @@ namespace mml2vgmIDE
             {
                 realChip.SendData();
                 while (!scYM2608[chipID].isBufferEmpty()) { }
+            }
+        }
+
+        public void setYM2608SSGVolume(byte chipID, int vol, EnmVRModel model)
+        {
+            if (model == EnmVRModel.VirtualModel)
+            {
+            }
+            else
+            {
+                if (scYM2608 != null && scYM2608[chipID] != null)
+                {
+                    scYM2608[chipID].setSSGVolume((byte)vol);
+                }
             }
         }
 
