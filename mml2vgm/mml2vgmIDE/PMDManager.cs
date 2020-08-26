@@ -94,7 +94,7 @@ namespace mml2vgmIDE
             MmlDatum[] ret;
             musicDriverInterface.Log.writeMethod = disp;
             musicDriverInterface.Log.off = 0;
-            
+
             if (!setting.other.LogWarning)
             {
                 musicDriverInterface.Log.off = (int)musicDriverInterface.LogLevel.WARNING;
@@ -103,6 +103,8 @@ namespace mml2vgmIDE
             else if (setting.other.LogLevel == (int)LogLevel.DEBUG) musicDriverInterface.Log.level = LogLevel.DEBUG;
             else if (setting.other.LogLevel == (int)LogLevel.TRACE) musicDriverInterface.Log.level = LogLevel.TRACE;
 
+            //musicDriverInterface.Log.level = LogLevel.TRACE;
+
             compiler.SetCompileSwitch(string.Format(
                 "PmdOption={0} \"{1}\""
                 , setting.pmdDotNET.compilerArguments
@@ -110,6 +112,15 @@ namespace mml2vgmIDE
             byte[] src = Encoding.GetEncoding(932).GetBytes(srcText);
             using (MemoryStream sourceMML = new MemoryStream(src))
                 ret = compiler.Compile(sourceMML, appendFileReaderCallback);// wrkMUCFullPath, disp);
+
+            //foreach(MmlDatum d in ret)
+            //{
+            //    if(d.type == enmMMLType.Note)
+            //    {
+            //        Console.WriteLine("{0} {1}", d.linePos.row, d.linePos.col);
+            //        ;
+            //    }
+            //}
             return ret;
         }
 

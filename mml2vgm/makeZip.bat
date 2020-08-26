@@ -17,9 +17,11 @@ copy /Y .\..\mmlCommandTable.md .\output
 copy /Y .\..\README.md .\output
 copy /Y .\..\ZGMspec.txt .\output
 copy /Y .\..\m98コマンド・リファレンス.pdf .\output
+copy /Y .\removeZoneIdent.bat .\output
 del /Q .\output\mml2vgmIDE\*.pdb
 del /Q .\output\mml2vgmIDE\*.config
 del /Q .\output\mml2vgmIDE\*.wav
+del /Q .\output\mml2vgm\*.pdb
 del /Q .\output\mml2vgm\*.config
 del /Q .\output\bin.zip
 

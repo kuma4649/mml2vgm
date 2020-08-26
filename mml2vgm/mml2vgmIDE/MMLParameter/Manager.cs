@@ -31,6 +31,7 @@ namespace mml2vgmIDE.MMLParameter
         public List<Instrument> YM2612 = new List<Instrument>();
         public List<Instrument> YM2612X = new List<Instrument>();
         public List<Instrument> GeneralMIDI = new List<Instrument>();
+        public List<Instrument> PPZ8 = new List<Instrument>();
         public Dictionary<string, Dictionary<int, Dictionary<int, Instrument>>> Insts;
 
         private Dictionary<string, Dictionary<int, Dictionary<int, Action<outDatum, int>>>> dicInst
@@ -514,6 +515,25 @@ namespace mml2vgmIDE.MMLParameter
                         dicInstAdd(gmidi, od.linePos.chipIndex, od.linePos.chipNumber);
                         instsAdd(gmidi, od.linePos.chipIndex, od.linePos.chipNumber);
                         gmidi.isTrace = isTrace;
+                        break;
+                    case "PPZ8":
+                        if (Audio.chipRegister != null
+                            && Audio.chipRegister.PPZ8 != null
+                            && od.linePos.chipIndex < Audio.chipRegister.PPZ8.Count)
+                        {
+                            chip = Audio.chipRegister.PPZ8[od.linePos.chipIndex];
+                        }
+                        if (chip == null && od.linePos.chipIndex >= 0x80)
+                        {
+                            Driver.ZGM.ZgmChip.ZgmChip zChip = Audio.chipRegister.dicChipCmdNo[od.linePos.chipIndex];
+                            chip = Audio.chipRegister.PPZ8[zChip.Index];
+                            //chipIndex = zChip.Index;
+                        }
+                        PPZ8 ppz8 = new PPZ8(chip);
+                        PPZ8.Add(ppz8);
+                        dicInstAdd(ppz8, od.linePos.chipIndex, od.linePos.chipNumber);
+                        instsAdd(ppz8, od.linePos.chipIndex, od.linePos.chipNumber);
+                        ppz8.isTrace = isTrace;
                         break;
                 }
             }

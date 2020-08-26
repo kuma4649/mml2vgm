@@ -22,6 +22,13 @@ namespace mml2vgmIDE.MMLParameter
         public bool isMub = false;
         private string[] noteStrTbl = new string[] { "c", "c+", "d", "d+", "e", "f", "f+", "g", "g+", "a", "a+", "b" };
 
+        //  0- 2 FM1-3ch
+        //  3- 5 FM4-6ch
+        //  6- 8 FM3ex1-3ch 
+        //  9-11 SSG1-3ch
+        // 12-17 Rhythm1-6ch
+        // 18    adpcm1ch
+
         private int GetChNumFromMucChNum(int ch)
         {
             if (ch < 3) return ch;//FM1-3ch
@@ -41,7 +48,10 @@ namespace mml2vgmIDE.MMLParameter
             {
                 int ch = isMub ? GetChNumFromMucChNum(od.linePos.ch) : od.linePos.ch;
 
-                if (isTrace) TraceInfo[ch].Enqueue(od);
+                if (isTrace)
+                {
+                    if (ch < TraceInfo.Length) TraceInfo[ch].Enqueue(od);
+                }
 
                 switch (od.type)
                 {
@@ -114,16 +124,22 @@ namespace mml2vgmIDE.MMLParameter
                         else
                         {
                             if (od.args == null || od.args.Count <= 0) break;
-                            octave[ch] = ((int)od.args[0] >> 4);
-                            notecmd[ch] = string.Format("o{0}{1}", octave[ch], noteStrTbl[((int)od.args[0] & 0xf)]);
-                            length[ch] = string.Format("{0:0.##}(#{1:d})", 1.0 * clockCounter[ch] / (int)od.args[1], (int)od.args[1]);
-                            if (vol[ch] != null)
+                            if (ch < octave.Length)
                             {
-                                keyOnMeter[ch] = (int)(256.0 / (
-                                    od.linePos.part == "FM" ? 15 : (
-                                    od.linePos.part == "SSG" ? 15 : (
-                                    od.linePos.part == "RHYTHM" ? 63 : 255
-                                    ))) * vol[ch]);
+                                octave[ch] = ((int)od.args[0] >> 4);
+                                if (((int)od.args[0] & 0xf) < noteStrTbl.Length)
+                                {
+                                    notecmd[ch] = string.Format("o{0}{1}", octave[ch], noteStrTbl[((int)od.args[0] & 0xf)]);
+                                }
+                                length[ch] = string.Format("{0:0.##}(#{1:d})", 1.0 * clockCounter[ch] / (int)od.args[1], (int)od.args[1]);
+                                if (vol[ch] != null)
+                                {
+                                    keyOnMeter[ch] = (int)(256.0 / (
+                                        od.linePos.part == "FM" ? 15 : (
+                                        od.linePos.part == "SSG" ? 15 : (
+                                        od.linePos.part == "RHYTHM" ? 63 : 255
+                                        ))) * vol[ch]);
+                                }
                             }
                         }
                         break;

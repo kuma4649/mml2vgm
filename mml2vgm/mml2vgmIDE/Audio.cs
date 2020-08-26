@@ -3796,7 +3796,7 @@ namespace mml2vgmIDE
                 MDSound.PPZ8 ppz8 = null;
                 chip = new MDSound.MDSound.Chip();
                 chip.ID = (byte)0;
-                ppz8 = new PPZ8();
+                ppz8 = new MDSound.PPZ8();
                 chip.type = MDSound.MDSound.enmInstrumentType.PPZ8;
                 chip.Instrument = ppz8;
                 chip.Update = ppz8.Update;
