@@ -1,4 +1,8 @@
 更新履歴
+TAG275 2020/08/29 2nd
+  IDE PMDDotNET:
+  パートカウンター対応。
+
 TAG274 2020/08/29
   IDE PMDDotNET:
   パートカウンター対応。

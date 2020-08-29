@@ -83,21 +83,15 @@ namespace mml2vgmIDE.MMLParameter
                                 if (((int)od.args[0] & 0xf) < noteStrTbl.Length)
                                 {
                                     notecmd[ch] = string.Format("o{0}{1}", octave[ch], noteStrTbl[((int)od.args[0] & 0xf)]);
-                                    keyOnMeter[ch] = 256;//TBD
+                                    length[ch] = string.Format("{0:0.##}(#{1:d})", 1.0 * cc / (int)od.args[1], (int)od.args[1]);
+                                    if (vol[ch] != null)
+                                        keyOnMeter[ch] = (int)(256.0 / 255 * vol[ch]);
                                 }
                                 else
                                 {
                                     notecmd[ch] = "r";
+                                    length[ch] = string.Format("{0:0.##}(#{1:d})", 1.0 * cc / (int)od.args[1], (int)od.args[1]);
                                 }
-                                length[ch] = string.Format("{0:0.##}(#{1:d})", 1.0 * clockCounter[ch] / (int)od.args[1], (int)od.args[1]);
-                                //if (vol[ch] != null)
-                                //{
-                                //    keyOnMeter[ch] = (int)(256.0 / (
-                                //        od.linePos.part == "FM" ? 15 : (
-                                //        od.linePos.part == "SSG" ? 15 : (
-                                //        od.linePos.part == "RHYTHM" ? 63 : 255
-                                //        ))) * vol[ch]);
-                                //}
                             }
                         }
                         break;
