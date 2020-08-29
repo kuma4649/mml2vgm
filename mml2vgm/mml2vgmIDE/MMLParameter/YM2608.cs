@@ -19,7 +19,7 @@ namespace mml2vgmIDE.MMLParameter
 
         public override string Name => "YM2608";
 
-        public bool isMub = false;
+        public EnmMmlFileFormat mmlType = EnmMmlFileFormat.GWI;
         private string[] noteStrTbl = new string[] { "c", "c+", "d", "d+", "e", "f", "f+", "g", "g+", "a", "a+", "b" };
 
         //  0- 2 FM1-3ch
@@ -46,7 +46,8 @@ namespace mml2vgmIDE.MMLParameter
             string s;
             try
             {
-                int ch = isMub ? GetChNumFromMucChNum(od.linePos.ch) : od.linePos.ch;
+                int ch = mmlType == EnmMmlFileFormat.MUC ? GetChNumFromMucChNum(od.linePos.ch) : od.linePos.ch;
+                //ch += mmlType == EnmMmlFileFormat.MML ? 1 : 0;
 
                 if (isTrace)
                 {
@@ -97,7 +98,7 @@ namespace mml2vgmIDE.MMLParameter
                         octave[ch]++;
                         break;
                     case enmMMLType.Note:
-                        if (!isMub)
+                        if (mmlType == EnmMmlFileFormat.GWI)
                         {
                             if (od.args == null || od.args.Count <= 0) break;
 
@@ -120,6 +121,33 @@ namespace mml2vgmIDE.MMLParameter
                                 }
                             }
                             beforeTie[ch] = nt.tieSw;
+                        }
+                        else if (mmlType == EnmMmlFileFormat.MML)
+                        {
+                            if (od.args == null || od.args.Count <= 0) break;
+                            if (ch < octave.Length)
+                            {
+                                octave[ch] = ((int)od.args[0] >> 4);
+                                if (((int)od.args[0] & 0xf) < noteStrTbl.Length)
+                                {
+                                    notecmd[ch] = string.Format("o{0}{1}", octave[ch], noteStrTbl[((int)od.args[0] & 0xf)]);
+                                    keyOnMeter[ch] = 255;//TBD
+                                }
+                                else
+                                {
+                                    //TBD
+                                    notecmd[ch] = "r";
+                                }
+                                length[ch] = string.Format("{0:0.##}(#{1:d})", 1.0 * clockCounter[ch] / (int)od.args[1], (int)od.args[1]);
+                                //if (vol[ch] != null)
+                                //{
+                                //    keyOnMeter[ch] = (int)(256.0 / (
+                                //        od.linePos.part == "FM" ? 15 : (
+                                //        od.linePos.part == "SSG" ? 15 : (
+                                //        od.linePos.part == "RHYTHM" ? 63 : 255
+                                //        ))) * vol[ch]);
+                                //}
+                            }
                         }
                         else
                         {
@@ -144,7 +172,7 @@ namespace mml2vgmIDE.MMLParameter
                         }
                         break;
                     case enmMMLType.Rest:
-                        if (!isMub)
+                        if (mmlType != EnmMmlFileFormat.MUC)
                         {
                             if (od.args != null)
                             {

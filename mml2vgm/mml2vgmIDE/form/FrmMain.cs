@@ -1895,22 +1895,27 @@ namespace mml2vgmIDE
             musicDriverInterface.CompilerInfo ci = pmdmng.GetCompilerInfo();
             if (isSuccess)
             {
-                //frmPartCounter.ClearCounter();
-                //Object[] cells = new object[7];
-                //int[] pn = new int[] { 1, 2, 3, 10, 11, 12, 13, 4, 5, 6, 19 };
-                //for (int i = 0; i < 11; i++)
-                //{
-                //    //if (pw[i].clockCounter == 0) continue;
-
-                //    cells[0] = pn[i];//PartNumber
-                //    cells[1] = 0;//ChipIndex
-                //    cells[2] = 0;//ChipNumber
-                //    cells[3] = ((char)('A' + i)).ToString();
-                //    cells[4] = "YM2608";//.ToUpper();
-                //    cells[5] = ci.totalCount[i];
-                //    cells[6] = ci.loopCount[i];
-                //    frmPartCounter.AddPartCounter(cells);
-                //}
+                frmPartCounter.ClearCounter();
+                Object[] cells = new object[7];
+                for (int i = 0; i < ci.totalCount.Count; i++)
+                {
+                    //if (pw[i].clockCounter == 0) continue;
+                    int ch = ci.partType[i] == "YM2608" ? ci.partNumber[i] : (
+                            ci.partType[i] == "FM3ex" ? (ci.partNumber[i] + 6) : (
+                            ci.partNumber[i]
+                            )
+                        );
+                    ch += (ci.partName[i][0] >= 'G' && ci.partName[i][0] <= 'I') ? 3 : 0;
+                    ch++;
+                    cells[0] = ch;
+                    cells[1] = 0;//ChipIndex
+                    cells[2] = 0;//ChipNumber
+                    cells[3] = ci.partName[i];
+                    cells[4] = ci.partType[i] == "FM3ex" ? "YM2608" : ci.partType[i];
+                    cells[5] = ci.totalCount[i];
+                    cells[6] = ci.loopCount[i];
+                    frmPartCounter.AddPartCounter(cells);
+                }
             }
 
             foreach (Tuple<int, int, string> mes in ci.errorList)
@@ -2502,7 +2507,31 @@ namespace mml2vgmIDE
 
                 frmLyrics.update();
                 frmPartCounter.Stop();
-                Audio.mmlParams.Init(isTrace, false);
+                Audio.mmlParams.Init(isTrace
+                    , format == EnmFileFormat.VGM
+                    ? EnmMmlFileFormat.GWI
+                    : (
+                        format == EnmFileFormat.XGM
+                        ? EnmMmlFileFormat.GWI
+                        : (
+                            format == EnmFileFormat.ZGM
+                            ? EnmMmlFileFormat.GWI
+                            : (
+                                format == EnmFileFormat.MUB
+                                ? EnmMmlFileFormat.MUC
+                                : (
+                                    format == EnmFileFormat.MUC
+                                    ? EnmMmlFileFormat.MUC
+                                    : (
+                                        format == EnmFileFormat.M
+                                        ? EnmMmlFileFormat.MML
+                                        : EnmMmlFileFormat.unknown
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                    );
                 frmPartCounter.Start(Audio.mmlParams);
 
                 if (isTrace && ac != null)
@@ -2606,7 +2635,31 @@ namespace mml2vgmIDE
 
                 frmLyrics.update();
                 frmPartCounter.Stop();
-                Audio.mmlParams.Init(isTrace, true);
+                Audio.mmlParams.Init(isTrace
+                    , format == EnmFileFormat.VGM 
+                    ? EnmMmlFileFormat.GWI 
+                    : (
+                        format == EnmFileFormat.XGM 
+                        ? EnmMmlFileFormat.GWI 
+                        : (
+                            format == EnmFileFormat.ZGM
+                            ? EnmMmlFileFormat.GWI
+                            : (
+                                format == EnmFileFormat.MUB
+                                ? EnmMmlFileFormat.MUC
+                                : (
+                                    format == EnmFileFormat.MUC
+                                    ? EnmMmlFileFormat.MUC
+                                    : (
+                                        format == EnmFileFormat.M
+                                        ? EnmMmlFileFormat.MML
+                                        : EnmMmlFileFormat.unknown
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                    );
                 frmPartCounter.Start(Audio.mmlParams);
 
                 if (isTrace && ac != null)

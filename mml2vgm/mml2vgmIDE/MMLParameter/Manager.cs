@@ -37,16 +37,16 @@ namespace mml2vgmIDE.MMLParameter
         private Dictionary<string, Dictionary<int, Dictionary<int, Action<outDatum, int>>>> dicInst
             = new Dictionary<string, Dictionary<int, Dictionary<int, Action<outDatum, int>>>>();
         private bool isTrace = false;
-        private bool isMub = false;
+        private EnmMmlFileFormat mmlFileFormat = EnmMmlFileFormat.GWI;
 
         public Manager()
         {
         }
 
-        public void Init(bool isTrace, bool isMub)
+        public void Init(bool isTrace, EnmMmlFileFormat mmlFileFormat)
         {
             this.isTrace = isTrace;
-            this.isMub = isMub;
+            this.mmlFileFormat = mmlFileFormat;
 
             dicInst.Clear();
             Insts = new Dictionary<string, Dictionary<int, Dictionary<int, Instrument>>>();
@@ -72,6 +72,7 @@ namespace mml2vgmIDE.MMLParameter
             YM2610B.Clear();
             YM2612.Clear();
             YM2612X.Clear();
+            PPZ8.Clear();
         }
 
         public bool SetMMLParameter(ref outDatum od, ref long Counter, ref Chip Chip, ref EnmDataType Type, ref int Address, ref int Data, ref object ExData)
@@ -414,7 +415,7 @@ namespace mml2vgmIDE.MMLParameter
                             //chipIndex = zChip.Index;
                         }
                         YM2608 opna = new YM2608(chip);
-                        opna.isMub = isMub;
+                        opna.mmlType = mmlFileFormat;
                         YM2608.Add(opna);
                         dicInstAdd(opna, od.linePos.chipIndex, od.linePos.chipNumber);
                         instsAdd(opna, od.linePos.chipIndex, od.linePos.chipNumber);
@@ -531,6 +532,7 @@ namespace mml2vgmIDE.MMLParameter
                         }
                         PPZ8 ppz8 = new PPZ8(chip);
                         PPZ8.Add(ppz8);
+                        ppz8.mmlType = mmlFileFormat;
                         dicInstAdd(ppz8, od.linePos.chipIndex, od.linePos.chipNumber);
                         instsAdd(ppz8, od.linePos.chipIndex, od.linePos.chipNumber);
                         ppz8.isTrace = isTrace;
