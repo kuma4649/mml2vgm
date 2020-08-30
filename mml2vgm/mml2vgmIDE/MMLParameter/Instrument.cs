@@ -11,6 +11,7 @@ namespace mml2vgmIDE.MMLParameter
         public string[] inst;
         public int?[] envelope;
         public string[] notecmd;
+        public string[] gatetime;
         public int?[] vol;
         public int?[] expression;
         public int?[] velocity;
@@ -36,6 +37,7 @@ namespace mml2vgmIDE.MMLParameter
             ChCount = n;
             inst = new string[n];
             envelope = new int?[n];
+            gatetime = new string[n];
             notecmd = new string[n];
             vol = new int?[n];
             expression = new int?[n];

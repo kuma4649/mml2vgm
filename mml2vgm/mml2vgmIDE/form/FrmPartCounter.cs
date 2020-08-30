@@ -271,6 +271,7 @@ namespace mml2vgmIDE
                 dgvPartCounter.Rows[p].Cells["ClmExpression"].Value = mmli.expression[r] == null ? "-" : mmli.expression[r].ToString();
                 dgvPartCounter.Rows[p].Cells["ClmVelocity"].Value = mmli.velocity[r] == null ? "-" : mmli.velocity[r].ToString();
                 dgvPartCounter.Rows[p].Cells["ClmPan"].Value = mmli.pan[r] == null ? "-" : mmli.pan[r];
+                dgvPartCounter.Rows[p].Cells["ClmGateTime"].Value = mmli.gatetime[r] == null ? "-" : mmli.gatetime[r];
                 dgvPartCounter.Rows[p].Cells["ClmNote"].Value = mmli.notecmd[r] == null ? "-" : mmli.notecmd[r];
                 dgvPartCounter.Rows[p].Cells["ClmLength"].Value = mmli.length[r] == null ? "-" : mmli.length[r];
                 dgvPartCounter.Rows[p].Cells["ClmEnvSw"].Value = mmli.envSw[r] == null ? "-" : mmli.envSw[r];

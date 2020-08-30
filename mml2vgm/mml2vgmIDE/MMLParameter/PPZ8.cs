@@ -73,6 +73,17 @@ namespace mml2vgmIDE.MMLParameter
                     case enmMMLType.OctaveUp:
                         octave[ch]++;
                         break;
+                    case enmMMLType.Gatetime:
+                        if (mmlType == EnmMmlFileFormat.MML)
+                        {
+                            gatetime[ch] = string.Format("Q%{0:d03} q{1}-{2},{3}"
+                                , 255 - (int)od.args[0]
+                                , (int)od.args[1]
+                                , (byte)((int)od.args[3] + (int)od.args[1])
+                                , (int)od.args[2]
+                                );
+                        }
+                        break;
                     case enmMMLType.Note:
                         if (mmlType == EnmMmlFileFormat.MML)
                         {

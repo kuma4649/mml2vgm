@@ -30,7 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle19 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle20 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
@@ -48,6 +48,7 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle16 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle17 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle18 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle19 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmPartCounter));
             this.dgvPartCounter = new System.Windows.Forms.DataGridView();
             this.cmsMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -71,6 +72,7 @@
             this.ClmVelocity = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ClmPan = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ClmNote = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ClmGateTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ClmLength = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ClmEnvSw = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ClmLfoSw = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -117,6 +119,7 @@
             this.ClmVelocity,
             this.ClmPan,
             this.ClmNote,
+            this.ClmGateTime,
             this.ClmLength,
             this.ClmEnvSw,
             this.ClmLfoSw,
@@ -124,14 +127,14 @@
             this.ClmKeyShift,
             this.ClmMeter,
             this.ClmSpacer});
-            dataGridViewCellStyle19.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle19.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle19.Font = new System.Drawing.Font("MS UI Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            dataGridViewCellStyle19.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle19.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(180)))));
-            dataGridViewCellStyle19.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle19.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvPartCounter.DefaultCellStyle = dataGridViewCellStyle19;
+            dataGridViewCellStyle20.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle20.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle20.Font = new System.Drawing.Font("MS UI Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            dataGridViewCellStyle20.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle20.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(180)))));
+            dataGridViewCellStyle20.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle20.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvPartCounter.DefaultCellStyle = dataGridViewCellStyle20;
             this.dgvPartCounter.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgvPartCounter.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
             this.dgvPartCounter.EnableHeadersVisualStyles = false;
@@ -314,11 +317,20 @@
             this.ClmNote.Name = "ClmNote";
             this.ClmNote.ReadOnly = true;
             // 
+            // ClmGateTime
+            // 
+            dataGridViewCellStyle16.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle16.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ClmGateTime.DefaultCellStyle = dataGridViewCellStyle16;
+            this.ClmGateTime.HeaderText = "GateTime";
+            this.ClmGateTime.Name = "ClmGateTime";
+            this.ClmGateTime.ReadOnly = true;
+            // 
             // ClmLength
             // 
-            dataGridViewCellStyle16.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle16.Font = new System.Drawing.Font("Consolas", 9F);
-            this.ClmLength.DefaultCellStyle = dataGridViewCellStyle16;
+            dataGridViewCellStyle17.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle17.Font = new System.Drawing.Font("Consolas", 9F);
+            this.ClmLength.DefaultCellStyle = dataGridViewCellStyle17;
             this.ClmLength.HeaderText = "Length(#)";
             this.ClmLength.Name = "ClmLength";
             this.ClmLength.ReadOnly = true;
@@ -337,16 +349,16 @@
             // 
             // ClmDetune
             // 
-            dataGridViewCellStyle17.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.ClmDetune.DefaultCellStyle = dataGridViewCellStyle17;
+            dataGridViewCellStyle18.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.ClmDetune.DefaultCellStyle = dataGridViewCellStyle18;
             this.ClmDetune.HeaderText = "Detune";
             this.ClmDetune.Name = "ClmDetune";
             this.ClmDetune.ReadOnly = true;
             // 
             // ClmKeyShift
             // 
-            dataGridViewCellStyle18.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.ClmKeyShift.DefaultCellStyle = dataGridViewCellStyle18;
+            dataGridViewCellStyle19.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.ClmKeyShift.DefaultCellStyle = dataGridViewCellStyle19;
             this.ClmKeyShift.HeaderText = "Key shift";
             this.ClmKeyShift.Name = "ClmKeyShift";
             this.ClmKeyShift.ReadOnly = true;
@@ -409,6 +421,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn ClmVelocity;
         private System.Windows.Forms.DataGridViewTextBoxColumn ClmPan;
         private System.Windows.Forms.DataGridViewTextBoxColumn ClmNote;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ClmGateTime;
         private System.Windows.Forms.DataGridViewTextBoxColumn ClmLength;
         private System.Windows.Forms.DataGridViewTextBoxColumn ClmEnvSw;
         private System.Windows.Forms.DataGridViewTextBoxColumn ClmLfoSw;
