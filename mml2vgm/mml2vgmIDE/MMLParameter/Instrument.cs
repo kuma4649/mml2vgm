@@ -9,7 +9,7 @@ namespace mml2vgmIDE.MMLParameter
 
         public int ChCount;
         public string[] inst;
-        public int?[] envelope;
+        public string[] envelope;
         public string[] notecmd;
         public string[] gatetime;
         public int?[] vol;
@@ -36,7 +36,7 @@ namespace mml2vgmIDE.MMLParameter
         {
             ChCount = n;
             inst = new string[n];
-            envelope = new int?[n];
+            envelope = new string[n];
             gatetime = new string[n];
             notecmd = new string[n];
             vol = new int?[n];

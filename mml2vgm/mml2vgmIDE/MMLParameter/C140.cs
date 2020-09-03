@@ -29,7 +29,7 @@ namespace mml2vgmIDE.MMLParameter
             {
                 case enmMMLType.Instrument:
                     if ((char)od.args[0] == 'E')
-                        envelope[od.linePos.ch] = (int)od.args[1];
+                        envelope[od.linePos.ch] = ((int)od.args[1]).ToString(); 
                     else
                         inst[od.linePos.ch] = od.args[1].ToString();
                     break;

@@ -1,4 +1,9 @@
 更新履歴
+TAG277 2020/09/03
+  IDE PMDDotNET:
+  パートカウンター対応。(@:Instrument)
+  トレース機能でマクロ先に飛ぶように修正。
+
 TAG276 2020/08/31
   IDE PMDDotNET:
   パートカウンター対応。(Q,q:GateTime)

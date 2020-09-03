@@ -29,7 +29,7 @@ namespace mml2vgmIDE.MMLParameter
                 case enmMMLType.Instrument:
                     if (od.linePos.part == "SSG")
                     {
-                        envelope[od.linePos.ch] = (int)od.args[1];
+                        envelope[od.linePos.ch] = ((int)od.args[1]).ToString();
                     }
                     else
                     {

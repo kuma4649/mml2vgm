@@ -44,7 +44,10 @@ namespace mml2vgmIDE.MMLParameter
                         clockCounter[ch] = (int)od.args[0];
                         break;
                     case enmMMLType.Instrument:
-                        inst[ch] = od.args[1].ToString();
+                        if (od.args[0]is char && (char)od.args[0] == 'E')
+                            envelope[od.linePos.ch] = ((int)od.args[1]).ToString();
+                        else
+                            inst[od.linePos.ch] = od.args[1].ToString();
                         break;
                     //case enmMMLType.Envelope:
                     //envelope[od.linePos.ch] = (int)od.args[1];

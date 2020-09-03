@@ -77,8 +77,10 @@ namespace mml2vgmIDE.MMLParameter
 
         public bool SetMMLParameter(ref outDatum od, ref long Counter, ref Chip Chip, ref EnmDataType Type, ref int Address, ref int Data, ref object ExData)
         {
-            if (od == null || od.type == enmMMLType.unknown || od.linePos == null)
+            if (od == null) return true;
+            if (od.type == enmMMLType.unknown || od.linePos == null)
             {
+                Console.WriteLine("{0}", od.type);
                 return true;
             }
 

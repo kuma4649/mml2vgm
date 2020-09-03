@@ -61,13 +61,18 @@ namespace mml2vgmIDE.MMLParameter
                         clockCounter[ch] = (int)od.args[0];
                         break;
                     case enmMMLType.Instrument:
-                        if (od.linePos.part == "SSG")
-                        {
-                            envelope[ch] = (int)od.args[1];
-                        }
+                        if (od.args[0] is char && (char)od.args[0] == 'E')
+                            envelope[od.linePos.ch] = ((int)od.args[1]).ToString();
                         else
                         {
-                            inst[ch] = od.args[1].ToString();
+                            if (od.linePos.part == "SSG")
+                            {
+                                envelope[ch] = ((int)od.args[1]).ToString();
+                            }
+                            else
+                            {
+                                inst[ch] = od.args[1].ToString();
+                            }
                         }
                         break;
                     //case enmMMLType.Envelope:

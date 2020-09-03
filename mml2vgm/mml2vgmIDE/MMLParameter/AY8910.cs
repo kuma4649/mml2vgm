@@ -28,7 +28,7 @@ namespace mml2vgmIDE.MMLParameter
             switch (od.type)
             {
                 case enmMMLType.Instrument:
-                    envelope[od.linePos.ch] = (int)od.args[1];
+                    envelope[od.linePos.ch] = ((int)od.args[1]).ToString();
                     break;
                 //case enmMMLType.Envelope:
                 //envelope[od.linePos.ch] = (int)od.args[1];

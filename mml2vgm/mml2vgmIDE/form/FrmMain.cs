@@ -2594,6 +2594,16 @@ namespace mml2vgmIDE
                         if (od == null) continue;
                         if (od.linePos == null) continue;
                         if (od.linePos.row == -1 || od.linePos.col == -1) continue;
+                        string src = od.linePos.srcMMLID;
+                        string dst = fn;
+                        if (src != null && src.Length > 0 && src[0] == '"' && src.Length>1 && src[src.Length-1]=='"')
+                        {
+                            src = src.Substring(1, src.Length - 2);
+                            src = Path.GetFileName(src);
+                        }
+                        if (dst != null && dst.Length > 0) dst = Path.GetFileName(dst);
+
+                        if (!string.IsNullOrEmpty(src) && src != dst) continue;
 
                         od.linePos.col = ac.GetCharIndexFromLineColumnIndex(
                             (int)(od.linePos.row - 1)
