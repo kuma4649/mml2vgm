@@ -64,7 +64,11 @@ namespace mml2vgmIDE.MMLParameter
                         }
                         else
                         {
-                            pan[ch] = n == 0 ? "-" : (n == 1 ? "Right" : (n == 2 ? "Left" : (n == 3 ? "Center" : n.ToString())));
+                            pan[ch] = "-";
+                            if (n != 0) {
+                                n -= 5;
+                                pan[ch] = string.Format("{0}({1})", (n == 0 ? "Center" : (n < 0 ? "Left" : "Right")), n);
+                            }
                         }
                         break;
                     case enmMMLType.Octave:

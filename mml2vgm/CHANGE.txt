@@ -1,4 +1,8 @@
 更新履歴
+TAG278 2020/09/05
+  IDE PMDDotNET:
+  パートカウンター対応。(KeyShift,Detune,Pan)
+
 TAG277 2020/09/03
   IDE PMDDotNET:
   パートカウンター対応。(@:Instrument)
