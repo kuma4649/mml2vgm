@@ -34,6 +34,7 @@ namespace mml2vgmIDE
         private bool usePPZ;
         private ChipRegister chipRegister;
         private bool isGIMICOPNA;
+        private GD3Tag currentGD3Tag;
 
         public PMDManager(string compilerPath, string driverPath, Action<string> disp, Setting setting)
         {
@@ -113,6 +114,7 @@ namespace mml2vgmIDE
             using (MemoryStream sourceMML = new MemoryStream(src))
                 ret = compiler.Compile(sourceMML, appendFileReaderCallback);// wrkMUCFullPath, disp);
 
+            currentGD3Tag = compiler.GetGD3TagInfo(src);
             //foreach(MmlDatum d in ret)
             //{
             //    if(d.type == enmMMLType.Note)
@@ -320,5 +322,9 @@ namespace mml2vgmIDE
             return ret.ToArray();
         }
 
+        public GD3Tag GetGD3Tag()
+        {
+            return currentGD3Tag;
+        }
     }
 }

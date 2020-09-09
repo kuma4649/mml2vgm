@@ -80,7 +80,7 @@ namespace mml2vgmIDE.MMLParameter
             if (od == null) return true;
             if (od.type == enmMMLType.unknown || od.linePos == null)
             {
-                Console.WriteLine("{0}", od.type);
+                //Console.WriteLine("{0}", od.type);
                 return true;
             }
 

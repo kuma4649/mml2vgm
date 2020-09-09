@@ -444,69 +444,138 @@ namespace mml2vgmIDE
                 }
                 if (Path.GetExtension(d.gwiFullPath).ToLower() == ".mml")
                 {
-                    MessageBox.Show(".mmlのエクスポート処理は今のところサポートしておりません。",
-                        "エラー発生",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Error);
+                    ExportM(d);
                     return;
                 }
 
-                Compile(false, false, false, false, true);
-                while (Compiling != 0) { Application.DoEvents(); }//待ち合わせ
-
-                if (msgBox.getErr().Length > 0)
+                if (Path.GetExtension(d.gwiFullPath).ToLower() == ".gwi")
                 {
-                    MessageBox.Show("コンパイル時にエラーが発生しました。エクスポート処理を中断します。",
-                        "エラー発生",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Error);
-
+                    ExportVgmXgmZgm(d);
                     return;
                 }
 
-                SaveFileDialog sfd = new SaveFileDialog();
-                string fn = d.gwiFullPath;
-                if (fn.Length > 0 && fn[fn.Length - 1] == '*')
-                {
-                    fn = fn.Substring(0, fn.Length - 1);
-                }
-                sfd.FileName = Path.GetFileNameWithoutExtension(fn) + (FileInformation.format == enmFormat.VGM ? ".vgm" : (FileInformation.format == enmFormat.XGM ? ".xgm" : ".zgm"));
-                string path1 = System.IO.Path.GetDirectoryName(fn);
-                path1 = string.IsNullOrEmpty(path1) ? fn : path1;
-                sfd.InitialDirectory = path1;
-                sfd.Filter = "vgmファイル(*.vgm)|*.vgm|すべてのファイル(*.*)|*.*";
-                if (FileInformation.format == enmFormat.XGM)
-                {
-                    sfd.Filter = "xgmファイル(*.xgm)|*.xgm|すべてのファイル(*.*)|*.*";
-                }
-                else if (FileInformation.format == enmFormat.ZGM)
-                {
-                    sfd.Filter = "zgmファイル(*.zgm)|*.zgm|すべてのファイル(*.*)|*.*";
-                }
-                sfd.Title = "エクスポート";
-                sfd.RestoreDirectory = true;
-                if (sfd.ShowDialog() != DialogResult.OK)
-                {
-                    return;
-                }
-                fn = sfd.FileName;
-                if (Path.GetExtension(fn) == "")
-                {
-                    fn = Path.GetFileNameWithoutExtension(fn) + (FileInformation.format == enmFormat.VGM ? ".vgm" : (FileInformation.format == enmFormat.XGM ? ".xgm" : ".zgm"));
-                }
-
-                string sf = Path.Combine(
-                    Common.GetApplicationDataFolder(true)
-                    , "temp"
-                    , Path.GetFileNameWithoutExtension(Path.GetFileName(d.gwiFullPath)) + (FileInformation.format == enmFormat.VGM ? ".vgm" : (FileInformation.format == enmFormat.XGM ? ".xgm" : ".zgm"))
-                    );
-                File.Copy(sf, fn, File.Exists(fn));
             }
             catch (Exception)
             {
                 MessageBox.Show("エクスポート処理に失敗しました。", "エクスポート失敗", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        private void ExportVgmXgmZgm(Document d)
+        {
+            Compile(false, false, false, false, true);
+            while (Compiling != 0) { Application.DoEvents(); }//待ち合わせ
+
+            if (msgBox.getErr().Length > 0)
+            {
+                MessageBox.Show("コンパイル時にエラーが発生しました。エクスポート処理を中断します。",
+                    "エラー発生",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+
+                return;
+            }
+
+            SaveFileDialog sfd = new SaveFileDialog();
+            string fn = d.gwiFullPath;
+            if (fn.Length > 0 && fn[fn.Length - 1] == '*')
+            {
+                fn = fn.Substring(0, fn.Length - 1);
+            }
+            sfd.FileName = Path.GetFileNameWithoutExtension(fn) + (FileInformation.format == enmFormat.VGM ? ".vgm" : (FileInformation.format == enmFormat.XGM ? ".xgm" : ".zgm"));
+            string path1 = System.IO.Path.GetDirectoryName(fn);
+            path1 = string.IsNullOrEmpty(path1) ? fn : path1;
+            sfd.InitialDirectory = path1;
+            sfd.Filter = "vgmファイル(*.vgm)|*.vgm|すべてのファイル(*.*)|*.*";
+            if (FileInformation.format == enmFormat.XGM)
+            {
+                sfd.Filter = "xgmファイル(*.xgm)|*.xgm|すべてのファイル(*.*)|*.*";
+            }
+            else if (FileInformation.format == enmFormat.ZGM)
+            {
+                sfd.Filter = "zgmファイル(*.zgm)|*.zgm|すべてのファイル(*.*)|*.*";
+            }
+            sfd.Title = "エクスポート";
+            sfd.RestoreDirectory = true;
+            if (sfd.ShowDialog() != DialogResult.OK)
+            {
+                return;
+            }
+            fn = sfd.FileName;
+            if (Path.GetExtension(fn) == "")
+            {
+                fn = Path.GetFileNameWithoutExtension(fn) + (FileInformation.format == enmFormat.VGM ? ".vgm" : (FileInformation.format == enmFormat.XGM ? ".xgm" : ".zgm"));
+            }
+
+            string sf = Path.Combine(
+                Common.GetApplicationDataFolder(true)
+                , "temp"
+                , Path.GetFileNameWithoutExtension(Path.GetFileName(d.gwiFullPath)) + (FileInformation.format == enmFormat.VGM ? ".vgm" : (FileInformation.format == enmFormat.XGM ? ".xgm" : ".zgm"))
+                );
+            File.Copy(sf, fn, File.Exists(fn));
+        }
+
+        private void ExportM(Document d)
+        {
+            Compile(false, false, false, false, true);
+            while (Compiling != 0) { Application.DoEvents(); }//待ち合わせ
+
+            if (msgBox.getErr().Length > 0)
+            {
+                MessageBox.Show("コンパイル時にエラーが発生しました。エクスポート処理を中断します。",
+                    "エラー発生",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+
+                return;
+            }
+
+            SaveFileDialog sfd = new SaveFileDialog();
+            string fn = d.gwiFullPath;
+            if (fn.Length > 0 && fn[fn.Length - 1] == '*')
+            {
+                fn = fn.Substring(0, fn.Length - 1);
+            }
+
+            GD3Tag gd3 = pmdmng.GetGD3Tag();
+            string gd3FileName = "";
+            if(gd3.dicItem.ContainsKey(enmTag.SongObjFilename))
+            {
+                gd3FileName = gd3.dicItem[enmTag.SongObjFilename][0];
+                if (Path.GetFileNameWithoutExtension(gd3FileName)=="")
+                {
+                    gd3FileName= Path.GetFileNameWithoutExtension(fn) + gd3FileName;
+                }
+            }
+            if (gd3FileName == "")
+            {
+                gd3FileName= Path.GetFileNameWithoutExtension(fn) + ".m";
+            }
+
+            sfd.FileName = gd3FileName;
+            string path1 = System.IO.Path.GetDirectoryName(fn);
+            path1 = string.IsNullOrEmpty(path1) ? fn : path1;
+            sfd.InitialDirectory = path1;
+            sfd.Filter = "mファイル(*.m;*.m2;*.mz)|*.m;*.m2;*.mz|すべてのファイル(*.*)|*.*";
+            sfd.Title = "エクスポート";
+            sfd.RestoreDirectory = true;
+            if (sfd.ShowDialog() != DialogResult.OK)
+            {
+                return;
+            }
+            fn = sfd.FileName;
+
+            if (Path.GetExtension(fn) == "")
+            {
+                fn = Path.GetFileNameWithoutExtension(fn) +".m";
+            }
+
+            List<byte> buf = new List<byte>();
+            foreach (MmlDatum md in mData) buf.Add((byte)md.dat);
+
+            File.WriteAllBytes(fn, buf.ToArray());
+        }
+
 
         private void TsmiExit_Click(object sender, EventArgs e)
         {

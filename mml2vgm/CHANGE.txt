@@ -1,4 +1,8 @@
 更新履歴
+TAG279 2020/09/10
+  IDE PMDDotNET:
+  エクスポート対応。
+
 TAG278 2020/09/05
   IDE PMDDotNET:
   パートカウンター対応。(KeyShift,Detune,Pan)
