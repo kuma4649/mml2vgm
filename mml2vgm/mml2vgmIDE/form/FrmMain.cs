@@ -436,10 +436,7 @@ namespace mml2vgmIDE
 
                 if (Path.GetExtension(d.gwiFullPath).ToLower() == ".muc")
                 {
-                    MessageBox.Show(".mucのエクスポート処理は今のところサポートしておりません。",
-                        "エラー発生",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Error);
+                    ExportMub(d);
                     return;
                 }
                 if (Path.GetExtension(d.gwiFullPath).ToLower() == ".mml")
@@ -572,6 +569,53 @@ namespace mml2vgmIDE
 
             List<byte> buf = new List<byte>();
             foreach (MmlDatum md in mData) buf.Add((byte)md.dat);
+
+            File.WriteAllBytes(fn, buf.ToArray());
+        }
+
+        private void ExportMub(Document d)
+        {
+            Compile(false, false, false, false, true);
+            while (Compiling != 0) { Application.DoEvents(); }//待ち合わせ
+
+            if (msgBox.getErr().Length > 0)
+            {
+                MessageBox.Show("コンパイル時にエラーが発生しました。エクスポート処理を中断します。",
+                    "エラー発生",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+
+                return;
+            }
+
+            SaveFileDialog sfd = new SaveFileDialog();
+            string fn = d.gwiFullPath;
+            if (fn.Length > 0 && fn[fn.Length - 1] == '*')
+            {
+                fn = fn.Substring(0, fn.Length - 1);
+            }
+            fn = Path.Combine(Path.GetDirectoryName(fn), Path.GetFileNameWithoutExtension(fn) + ".mub");
+
+            sfd.FileName = fn;
+            string path1 = System.IO.Path.GetDirectoryName(fn);
+            path1 = string.IsNullOrEmpty(path1) ? fn : path1;
+            sfd.InitialDirectory = path1;
+            sfd.Filter = "mubファイル(*.mub)|*.mub|すべてのファイル(*.*)|*.*";
+            sfd.Title = "エクスポート";
+            sfd.RestoreDirectory = true;
+            if (sfd.ShowDialog() != DialogResult.OK)
+            {
+                return;
+            }
+            fn = sfd.FileName;
+
+            if (Path.GetExtension(fn) == "")
+            {
+                fn = Path.GetFileNameWithoutExtension(fn) + ".mub";
+            }
+
+            List<byte> buf = new List<byte>();
+            foreach (MmlDatum md in mubData) buf.Add((byte)md.dat);
 
             File.WriteAllBytes(fn, buf.ToArray());
         }

@@ -1,4 +1,8 @@
 更新履歴
+TAG280 2020/09/10 2nd
+  IDE MucomDotNET:
+  エクスポート対応。
+
 TAG279 2020/09/10
   IDE PMDDotNET:
   エクスポート対応。
