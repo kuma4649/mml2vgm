@@ -3,7 +3,11 @@
   
 [概要]  
  このツールは、ユーザーが作成したMMLファイルを元にVGM/XGM/ZGMファイルを作成します。  
- IDEでは更にmucomDotNET/M98DotNETを使用しmubファイルを作成したりランダムな曲を生成したりすることが可能です。  
+ IDEでは更に  
+	mucomDotNET  
+	M98DotNET  
+	PMDDotNET  
+ を使用し各ドライバ毎の演奏ファイルを作成したりランダムな曲を生成したりすることが可能です。  
  IDEについては、IDE.txtを参照してください。  
  スクリプトについては、各々のスクリプトに付属の説明をご覧ください。  
  スクリプト作成については、Script.txtを参照してください。  
@@ -51,10 +55,12 @@
 [MMLコマンドの説明]  
  ・VGM/XGM/ZGM  
    mmlCommandTable.mdを参照してください。  
- ・muc(mucom88)  
+ ・.muc(mucom88)  
    mucom88の公式ページを参照してください。  
  ・M98  
    m98コマンドリファレンス.pdfを参照してください。  
+ ・.m/.m2/.mz(PMD)  
+   PMDの公式ページを参照してください。  
   
 [必要な環境]  
  ・Windows7以降のOSがインストールされたPC。私はWindows10Home(x64)を使用しています。  
@@ -155,6 +161,9 @@ mml2vgm , mvc , mml2vgmIDEはMITライセンスに準ずる物とします。LIC
   ・c86ctl /動的リンク  
     BSD 3-Clause  
     
+  ・PMDDotNET /動的リンク  
+    MIT License(但しPMD関係は別ライセンス)  
+
   
   
 [SpecialThanks]  
@@ -166,7 +175,7 @@ mml2vgm , mvc , mml2vgmIDEはMITライセンスに準ずる物とします。LIC
  ・とぼけがお さん  
  ・wani さん  
  ・mucom さん  
- ・ume3fmp さん  
+ ・UME-3 さん  
  ・おやぢぴぴ さん  
  ・なると さん  
  ・hex125 さん  
@@ -181,6 +190,9 @@ mml2vgm , mvc , mml2vgmIDEはMITライセンスに準ずる物とします。LIC
  ・古代 さんはじめオープンMUCOMのみなさん  
  ・sdhizumi/S.Kudo さん  
  ・Ian Karlsson さん  
+ ・KAJA さん  
+ ・C60 さん  
+ ・sio29 さん  
   
  ・XPCMK  
  ・FMP7  
@@ -198,6 +210,9 @@ mml2vgm , mvc , mml2vgmIDEはMITライセンスに準ずる物とします。LIC
  ・BambooTracker  
  ・みゅあっぷ  
  ・714MIDI  
+ ・PMD  
+ ・PMDWin  
+ ・PPZ8  
   
  ・SGDKとは - nendo  
  ・FutureDriver  
