@@ -112,7 +112,7 @@ namespace mml2vgmIDE
 
         private static bool Paused = false;
         public static bool Stopped = false;
-        private static int StepCounter = 0;
+        public static int StepCounter = 0;
 
         public static Setting setting = null;
 
@@ -349,6 +349,17 @@ namespace mml2vgmIDE
                 if (ret.Count == 0) continue;
             }
             chipRegister.SetRealChipInfo(EnmZGMDevice.PPSDRV, chipType[0], chipType[1], setting.LatencyEmulation, setting.LatencySCCI);
+
+            for (int i = 0; i < chipRegister.P86.Count; i++)
+            {
+                chipType[i] = new Setting.ChipType();
+                if (!chipRegister.P86[i].Use) continue;
+                chipRegister.P86[i].Model = EnmVRModel.VirtualModel;
+                chipType[i].UseEmu = true;
+                chipType[i].UseScci = false;
+                if (ret.Count == 0) continue;
+            }
+            chipRegister.SetRealChipInfo(EnmZGMDevice.P86, chipType[0], chipType[1], setting.LatencyEmulation, setting.LatencySCCI);
 
             for (int i = 0; i < chipRegister.QSound.Count; i++)
             {
@@ -3833,6 +3844,26 @@ namespace mml2vgmIDE
                 useChip.Add(EnmChip.PPSDRV);
 
 
+                MDSound.P86 p86 = null;
+                chip = new MDSound.MDSound.Chip();
+                chip.ID = (byte)0;
+                p86 = new MDSound.P86();
+                chip.type = MDSound.MDSound.enmInstrumentType.P86;
+                chip.Instrument = p86;
+                chip.Update = p86.Update;
+                chip.Start = p86.Start;
+                chip.Stop = p86.Stop;
+                chip.Reset = p86.Reset;
+                chip.SamplingRate = (UInt32)Common.SampleRate;
+                chip.Volume = 0;// setting.balance.P86Volume;
+                chip.Clock = (uint)mDriver.YM2608ClockValue;
+                chip.Option = null;
+                chipLED.PriP86 = 1;
+                chipRegister.P86[0].Use = true;
+                lstChips.Add(chip);
+                useChip.Add(EnmChip.P86);
+
+
 
                 if (hiyorimiNecessary) hiyorimiNecessary = true;
                 else hiyorimiNecessary = false;
@@ -4354,6 +4385,7 @@ namespace mml2vgmIDE
             for (int i = 0; i < chipRegister.K053260.Count; i++) if (chipRegister.K053260[i].Use) chipRegister.K053260SoftReset(counter, i);
             for (int i = 0; i < chipRegister.PPZ8.Count; i++) if (chipRegister.PPZ8[i].Use) chipRegister.PPZ8SoftReset(counter, i);
             for (int i = 0; i < chipRegister.PPSDRV.Count; i++) if (chipRegister.PPSDRV[i].Use) chipRegister.PPSDRVSoftReset(counter, i);
+            for (int i = 0; i < chipRegister.P86.Count; i++) if (chipRegister.P86[i].Use) chipRegister.P86SoftReset(counter, i);
             for (int i = 0; i < chipRegister.QSound.Count; i++) if (chipRegister.QSound[i].Use) chipRegister.QSoundSoftReset(counter, i);
             for (int i = 0; i < chipRegister.RF5C164.Count; i++) if (chipRegister.RF5C164[i].Use) chipRegister.RF5C164SoftReset(counter, i);
             for (int i = 0; i < chipRegister.SEGAPCM.Count; i++) if (chipRegister.SEGAPCM[i].Use) chipRegister.SEGAPCMSoftReset(counter, i);
@@ -4382,6 +4414,7 @@ namespace mml2vgmIDE
             for (int i = 0; i < chipRegister.K053260.Count; i++) if (chipRegister.K053260[i].Use) data.AddRange(chipRegister.K053260MakeSoftReset(i));
             for (int i = 0; i < chipRegister.PPZ8.Count; i++) if (chipRegister.PPZ8[i].Use) data.AddRange(chipRegister.PPZ8MakeSoftReset(i));
             for (int i = 0; i < chipRegister.PPSDRV.Count; i++) if (chipRegister.PPSDRV[i].Use) data.AddRange(chipRegister.PPSDRVMakeSoftReset(i));
+            for (int i = 0; i < chipRegister.P86.Count; i++) if (chipRegister.P86[i].Use) data.AddRange(chipRegister.P86MakeSoftReset(i));
             for (int i = 0; i < chipRegister.QSound.Count; i++) if (chipRegister.QSound[i].Use) data.AddRange(chipRegister.QSoundMakeSoftReset(i));
             for (int i = 0; i < chipRegister.RF5C164.Count; i++) if (chipRegister.RF5C164[i].Use) data.AddRange(chipRegister.RF5C164MakeSoftReset(i));
             for (int i = 0; i < chipRegister.SEGAPCM.Count; i++) if (chipRegister.SEGAPCM[i].Use) data.AddRange(chipRegister.SEGAPCMMakeSoftReset(i));
@@ -4413,6 +4446,7 @@ namespace mml2vgmIDE
             for (int i = 0; i < chipRegister.K053260.Count; i++) if (chipRegister.K053260[i].Use) data.AddRange(chipRegister.K053260MakeSoftReset(i));
             for (int i = 0; i < chipRegister.PPZ8.Count; i++) if (chipRegister.PPZ8[i].Use) data.AddRange(chipRegister.PPZ8MakeSoftReset(i));
             for (int i = 0; i < chipRegister.PPSDRV.Count; i++) if (chipRegister.PPSDRV[i].Use) data.AddRange(chipRegister.PPSDRVMakeSoftReset(i));
+            for (int i = 0; i < chipRegister.P86.Count; i++) if (chipRegister.P86[i].Use) data.AddRange(chipRegister.P86MakeSoftReset(i));
             for (int i = 0; i < chipRegister.QSound.Count; i++) if (chipRegister.QSound[i].Use) data.AddRange(chipRegister.QSoundMakeSoftReset(i));
             for (int i = 0; i < chipRegister.RF5C164.Count; i++) if (chipRegister.RF5C164[i].Use) data.AddRange(chipRegister.RF5C164MakeSoftReset(i));
             for (int i = 0; i < chipRegister.SEGAPCM.Count; i++) if (chipRegister.SEGAPCM[i].Use) data.AddRange(chipRegister.SEGAPCMMakeSoftReset(i));
@@ -4505,7 +4539,11 @@ namespace mml2vgmIDE
                 long seqcnt = sm.GetSeqCounter();
 
                 EmuSeqCounterDelta = sm.GetSpeed();// 1.0;
-
+                if(EmuSeqCounterDelta==0)
+                {
+                    if(emuRecvBuffer.GetDataSize()>0)
+                    EmuSeqCounterDelta = 1;
+                }
                 //スピードの調整はせずにディレイの調整を行う
                 //long sub = (seqcnt - EmuSeqCounter);
                 //if (Math.Abs(sub) > bufCnt)
@@ -4529,18 +4567,18 @@ namespace mml2vgmIDE
 
                 {
 
-                    if (StepCounter > 0)
-                    {
-                        StepCounter -= sampleCount;
-                        if (StepCounter <= 0)
-                        {
-                            Paused = true;
-                            StepCounter = 0;
-                            mds.Update(buffer, offset, sampleCount, null);
-                            SetAudioDeviceSync();
-                            return sampleCount;
-                        }
-                    }
+                    //if (StepCounter > 0)
+                    //{
+                    //    StepCounter -= sampleCount;
+                    //    if (StepCounter <= 0)
+                    //    {
+                    //        Paused = true;
+                    //        StepCounter = 0;
+                    //        mds.Update(buffer, offset, sampleCount, null);
+                    //        SetAudioDeviceSync();
+                    //        return sampleCount;
+                    //    }
+                    //}
 
                     if (driver != null) driver.vstDelta = 0;
                     stwh.Reset(); stwh.Start();

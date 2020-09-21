@@ -1,4 +1,8 @@
 更新履歴
+TAG281 2020/09/21
+  IDE PMDDotNET: P86対応
+  IDE: ポーズ、ステップ実行機能追加
+
 TAG280 2020/09/10 2nd
   IDE MucomDotNET:
   エクスポート対応。

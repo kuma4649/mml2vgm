@@ -127,6 +127,7 @@
         , basicDriverChip = 0x0008_0000
         , PPZ8 = 0x0008_0001
         , PPSDRV = 0x0008_0002
+        , P86 = 0x0008_0003
     }
 
     public enum enmPcmDefineType

@@ -273,6 +273,12 @@ namespace SoundManager
                                 }
 
                                 SeqSpeed += SeqSpeedDelta;
+                                if(SeqSpeedDelta==0 && Audio.StepCounter > 0)
+                                {
+                                    SeqSpeed++;
+                                    Audio.StepCounter--;
+                                }
+
                                 while (SeqSpeed >= 1.0)
                                 {
                                     SeqCounter++;

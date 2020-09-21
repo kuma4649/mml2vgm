@@ -3952,6 +3952,7 @@ namespace mml2vgmIDE
             ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.TraceJsoloPlay,"トレース+Jソロ+再生",false,true,true,"F5")
             ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.SkipTraceJsoloPlay,"スキップ+トレース+Jソロ+再生",true,true,true,"F5")
             ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.M98,"M98",false,false,false,"F6")
+            ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Pause,"ポーズ",false,false,false,"F8")
             ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Stop,"停止",false,false,false,"F9")
             ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Slow,"スロー",false,false,false,"F10")
             ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Fastx4,"4倍速",false,false,false,"F11")
@@ -4119,6 +4120,7 @@ namespace mml2vgmIDE
                 TraceJsoloPlay = 460,
                 SkipTraceJsoloPlay = 470,
                 M98 = 500,
+                Pause = 600,
                 Stop = 800,
                 Slow = 900,
                 Fastx4 = 1000,

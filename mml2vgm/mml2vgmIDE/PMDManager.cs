@@ -175,6 +175,7 @@ namespace mml2vgmIDE
             , Action<long, int> oPNAWaitSend
             , Func<ChipDatum, int> ppz8Write
             , Func<ChipDatum, int> ppsdrvWrite
+            , Func<ChipDatum, int> p86Write
             , bool dummy_NotSoundBoard2 //参照しません
             , musicDriverInterface.MmlDatum[] mBuf
             , bool isLoadADPCM
@@ -223,6 +224,7 @@ namespace mml2vgmIDE
                     , addtionalPMDOption // PMD option
                     , ppz8Write
                     , ppsdrvWrite
+                    , p86Write
                 });
 
             //AUTO指定の場合に構成が変わるので、構成情報を受け取ってから音量設定を行う

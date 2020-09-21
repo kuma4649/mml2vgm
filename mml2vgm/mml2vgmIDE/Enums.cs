@@ -77,6 +77,7 @@
     , DMG
     , PPZ8
     , PPSDRV
+    , P86
 
     , S_SN76489
     , S_YM2612
@@ -120,6 +121,7 @@
     , S_DMG
     , S_PPZ8
     , S_PPSDRV
+    , S_P86
     }
 
     public enum EnmRealModel

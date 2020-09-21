@@ -23,10 +23,12 @@ namespace mml2vgmIDE
         private List<SoundManager.PackData> pd = new List<SoundManager.PackData>();
         private List<SoundManager.PackData> psd = new List<SoundManager.PackData>();
         private List<SoundManager.PackData> pzd = new List<SoundManager.PackData>();
+        private List<SoundManager.PackData> p8d = new List<SoundManager.PackData>();
         private long count = 0;
         private SoundManager.Chip chipYM2608;
         private SoundManager.Chip chipPPZ8;
         private SoundManager.Chip chipPPSDRV;
+        private SoundManager.Chip chipP86;
         private string filename = "";
 
 
@@ -49,6 +51,7 @@ namespace mml2vgmIDE
                 if (pd != null) chipRegister.YM2608SetRegister(null, count, chipYM2608, pd.ToArray());
                 if (pzd != null) chipRegister.PPZ8SetRegister(null, count, chipPPZ8, pzd.ToArray());
                 if (psd != null) chipRegister.PPSDRVSetRegister(null, count, chipPPSDRV, psd.ToArray());
+                if (p8d != null) chipRegister.P86SetRegister(null, count, chipP86, p8d.ToArray());
                 return;
             }
 
@@ -77,6 +80,7 @@ namespace mml2vgmIDE
             chipYM2608 = chipRegister.YM2608[0];
             chipPPZ8 = chipRegister.PPZ8[0];
             chipPPSDRV = chipRegister.PPSDRV[0];
+            chipP86 = chipRegister.P86[0];
             filename = mFileName;
 
             Counter = 0;
@@ -97,6 +101,7 @@ namespace mml2vgmIDE
             pd = new List<SoundManager.PackData>();
             psd = new List<SoundManager.PackData>();
             pzd = new List<SoundManager.PackData>();
+            p8d = new List<SoundManager.PackData>();
 
             //Driverの初期化
             pm.InitDriver(
@@ -105,6 +110,7 @@ namespace mml2vgmIDE
                 , OPNAWaitSend
                 , PPZ8Write
                 , PPSDRVWrite
+                , P86Write
                 , false
                 , mBuf
                 , true
@@ -213,6 +219,52 @@ namespace mml2vgmIDE
             }
 
             pzd.Add(p);
+            return 0;
+        }
+
+        private int P86Write(ChipDatum arg)
+        {
+            if (arg == null) return 0;
+
+            if (!initPhase)
+            {
+                outDatum od = null;
+                if (arg.addtionalData != null)
+                {
+                    if (arg.addtionalData is MmlDatum)
+                    {
+                        MmlDatum md = (MmlDatum)arg.addtionalData;
+                        if (md.linePos != null) md.linePos.srcMMLID = filename;
+                        od = new outDatum(md.type, md.args, md.linePos, (byte)md.dat);
+                    }
+
+                }
+
+                if (arg.port == 0x00)
+                {
+                    chipRegister.P86LoadPcm(od, count, 0, (byte)arg.address, (byte)arg.data, (byte[])arg.addtionalData);
+                }
+                else
+                {
+                    chipRegister.P86Write(od, count, 0, arg.port, arg.address, arg.data);
+                }
+
+                return 0;
+            }
+
+            SoundManager.PackData p;
+            if (arg.port == 0x00)
+            {
+                p = new SoundManager.PackData(
+                    null, null, EnmDataType.Block, arg.address, arg.data, arg.addtionalData);
+            }
+            else
+            {
+                p = new SoundManager.PackData(
+                    null, null, EnmDataType.Normal, arg.port, arg.address, arg.data);
+            }
+
+            p8d.Add(p);
             return 0;
         }
 

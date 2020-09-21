@@ -862,6 +862,11 @@ namespace mml2vgmIDE
             M98Preprocess();
         }
 
+        private void tssbPause_ButtonClick(object sender, EventArgs e)
+        {
+            pause();
+        }
+
         private void TssbStop_ButtonClick(object sender, EventArgs e)
         {
             stop();
@@ -951,6 +956,9 @@ namespace mml2vgmIDE
                         return true;
                     case (int)Setting.ShortCutKey.enmContent.M98:
                         M98Preprocess();
+                        return true;
+                    case (int)Setting.ShortCutKey.enmContent.Pause:
+                        pause();
                         return true;
                     case (int)Setting.ShortCutKey.enmContent.Stop:
                         stop();
@@ -2848,6 +2856,11 @@ namespace mml2vgmIDE
             }
         }
 
+        public void pause()
+        {
+            Audio.Pause();
+        }
+
         public void stop()
         {
             if (Audio.isPaused)
@@ -2884,8 +2897,8 @@ namespace mml2vgmIDE
         {
             if (Audio.isPaused)
             {
-                Audio.StepPlay(4000);
-                Audio.Pause();
+                Audio.StepPlay(Common.SampleRate / 10);
+                //Audio.Pause();
                 return;
             }
 

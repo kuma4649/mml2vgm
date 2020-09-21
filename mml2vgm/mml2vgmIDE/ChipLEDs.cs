@@ -45,6 +45,7 @@
         public byte PriMID = 0;
         public byte PriPPZ8 = 0;
         public byte PriPPSDRV = 0;
+        public byte PriP86 = 0;
 
         public byte SecOPN = 0;
         public byte SecOPN2 = 0;
@@ -88,6 +89,7 @@
         public byte SecMID = 0;
         public byte SecPPZ8 = 0;
         public byte SecPPSDRV = 0;
+        public byte SecP86 = 0;
 
     }
 }

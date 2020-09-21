@@ -321,6 +321,9 @@
     <EmbeddedResource Include="form\FrmMain.ja-JP.resx">
       <DependentUpon>FrmMain.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="form\FrmMain.ja.resx">
+      <DependentUpon>FrmMain.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="form\FrmMIDIKbd.resx">
       <DependentUpon>FrmMIDIKbd.cs</DependentUpon>
     </EmbeddedResource>

@@ -29,6 +29,7 @@ namespace mml2vgmIDE
         private Setting.ChipType[] ctK053260 = new Setting.ChipType[2] { null, null };
         private Setting.ChipType[] ctPPZ8 = new Setting.ChipType[2] { null, null };
         private Setting.ChipType[] ctPPSDRV = new Setting.ChipType[2] { null, null };
+        private Setting.ChipType[] ctP86 = new Setting.ChipType[2] { null, null };
         private Setting.ChipType[] ctQSound = new Setting.ChipType[2] { null, null };
         private Setting.ChipType[] ctRF5C164 = new Setting.ChipType[2] { null, null };
         private Setting.ChipType[] ctSEGAPCM = new Setting.ChipType[2] { null, null };
@@ -57,6 +58,7 @@ namespace mml2vgmIDE
         private RSoundChip[] scK053260 = new RSoundChip[2] { null, null };
         private RSoundChip[] scPPZ8 = new RSoundChip[2] { null, null };
         private RSoundChip[] scPPSDRV = new RSoundChip[2] { null, null };
+        private RSoundChip[] scP86 = new RSoundChip[2] { null, null };
         private RSoundChip[] scQSound = new RSoundChip[2] { null, null };
         private RSoundChip[] scRF5C164 = new RSoundChip[2] { null, null };
         private RSoundChip[] scSEGAPCM = new RSoundChip[2] { null, null };
@@ -394,6 +396,7 @@ namespace mml2vgmIDE
         public List<Chip> K053260 = new List<Chip>();
         public List<Chip> PPZ8 = new List<Chip>();
         public List<Chip> PPSDRV = new List<Chip>();
+        public List<Chip> P86 = new List<Chip>();
 
 
 
@@ -545,6 +548,24 @@ namespace mml2vgmIDE
                             if (PPSDRV.Count < i + 1) PPSDRV.Add(new Chip(8));
                             PPSDRV[i].Model = ctPPSDRV[i].UseEmu ? EnmVRModel.VirtualModel : EnmVRModel.RealModel;
                             PPSDRV[i].Delay = (PPSDRV[i].Model == EnmVRModel.VirtualModel ? LEmu : LReal);
+                        }
+                    }
+                    break;
+                case EnmZGMDevice.P86:
+                    ctP86 = new Setting.ChipType[] { chipTypeP, chipTypeS };
+                    for (int i = 0; i < P86.Count; i++)
+                    {
+                        P86[i].Model = EnmVRModel.VirtualModel;
+                        P86[i].Delay = LEmu;
+                        if (i > 1) continue;
+
+                        scP86[i] = null;
+                        if (scP86[i] != null) scP86[i].init();
+                        if (ctP86[i] != null)
+                        {
+                            if (P86.Count < i + 1) P86.Add(new Chip(8));
+                            P86[i].Model = ctP86[i].UseEmu ? EnmVRModel.VirtualModel : EnmVRModel.RealModel;
+                            P86[i].Delay = (P86[i].Model == EnmVRModel.VirtualModel ? LEmu : LReal);
                         }
                     }
                     break;
@@ -856,6 +877,13 @@ namespace mml2vgmIDE
                 PPZ8[i].Number = i;
                 PPZ8[i].Hosei = 0;
 
+                if (P86.Count < i + 1) P86.Add(new Chip(1));
+                P86[i].Use = false;
+                P86[i].Model = EnmVRModel.None;
+                P86[i].Device = EnmZGMDevice.P86;
+                P86[i].Number = i;
+                P86[i].Hosei = 0;
+
                 if (QSound.Count < i + 1) QSound.Add(new Chip(16));
                 QSound[i].Use = false;
                 QSound[i].Model = EnmVRModel.None;
@@ -1083,6 +1111,9 @@ namespace mml2vgmIDE
                 case EnmZGMDevice.PPSDRV:
                     PPSDRVSetRegisterProcessing(ref Counter, ref Chip, ref Type, ref Address, ref Data, ref ExData);
                     break;
+                case EnmZGMDevice.P86:
+                    P86SetRegisterProcessing(ref Counter, ref Chip, ref Type, ref Address, ref Data, ref ExData);
+                    break;
                 default:
                     throw new ArgumentException();
             }
@@ -1120,6 +1151,9 @@ namespace mml2vgmIDE
                     break;
                 case EnmZGMDevice.PPSDRV:
                     PPSDRVWriteRegisterControl(Chip, type, address, data, exData);
+                    break;
+                case EnmZGMDevice.P86:
+                    P86WriteRegisterControl(Chip, type, address, data, exData);
                     break;
                 case EnmZGMDevice.QSound:
                     QSoundWriteRegisterControl(Chip, type, address, data, exData);
@@ -3008,6 +3042,111 @@ namespace mml2vgmIDE
 
         #endregion
 
+
+
+        #region P86
+
+        private void P86WriteRegisterControl(Chip Chip, EnmDataType type, int address, int data, object exData)
+        {
+            if (type == EnmDataType.Normal)
+            {
+                if (Chip.Model == EnmVRModel.VirtualModel)
+                {
+                    if (!ctP86[Chip.Number].UseScci)
+                    {
+                        if (exData is int)
+                            mds.WriteP86(Chip.Index, (byte)Chip.Number, address, data, (int)exData, null);
+                    }
+                }
+                if (Chip.Model == EnmVRModel.RealModel)
+                {
+                }
+            }
+            else if (type == EnmDataType.Block)
+            {
+                Audio.sm.SetInterrupt();
+
+                try
+                {
+                    if (exData == null) return;
+
+                    if (data == -1)
+                    {
+                        PackData[] pdata = (PackData[])exData;
+                        if (Chip.Model == EnmVRModel.VirtualModel)
+                        {
+                            foreach (PackData dat in pdata)
+                            {
+                                ;
+                                if (dat.Type == EnmDataType.Normal)
+                                {
+                                    mds.WriteP86(dat.Chip.Index, (byte)dat.Chip.Number
+                                        , dat.Address, dat.Data, (int)dat.ExData, null);
+                                }
+                                else
+                                {
+                                    mds.WriteP86PCMData(dat.Chip.Index, (byte)dat.Chip.Number
+                                        , (byte)dat.Address
+                                        , (byte)dat.Data
+                                        , (byte[])dat.ExData
+                                        );
+
+                                }
+                            }
+                        }
+                        if (Chip.Model == EnmVRModel.RealModel)
+                        {
+                        }
+                    }
+                    else
+                    {
+                        if (Chip.Model == EnmVRModel.VirtualModel)
+                            mds.WriteP86PCMData(Chip.Index, (byte)Chip.Number
+                                , (byte)((object[])exData)[0]
+                                , (byte)((object[])exData)[1]
+                                , (byte[])((object[])exData)[2]
+                                );
+                        else
+                        {
+                        }
+                    }
+                }
+                finally
+                {
+                    Audio.sm.ResetInterrupt();
+                }
+            }
+        }
+
+        public void P86SetRegisterProcessing(ref long Counter, ref Chip Chip, ref EnmDataType Type, ref int Address, ref int dData, ref object ExData)
+        {
+            if (ctP86 == null) return;
+            if (Address == -1 && dData == -1) return;
+
+            if (Chip.Number == 0) chipLED.PriP86 = 2;
+
+        }
+
+        public void P86SetRegister(outDatum od, long Counter, Chip chip, PackData[] data)
+        {
+            enq(od, Counter, chip, EnmDataType.Block, -1, -1, data);
+        }
+
+        public void P86SoftReset(long Counter, int chipID)
+        {
+            List<PackData> data = P86MakeSoftReset(chipID);
+            P86SetRegister(null, Counter, P86[chipID], data.ToArray());
+        }
+
+        public List<PackData> P86MakeSoftReset(int chipID)
+        {
+            List<PackData> data = new List<PackData>();
+            data.Add(new PackData(null, P86[chipID], EnmDataType.Normal, 0x09, 0, 0));
+
+            return data;
+        }
+
+        #endregion
 
 
         #region QSound
@@ -8582,7 +8721,7 @@ namespace mml2vgmIDE
             else chipLED.SecPPSDRV = 2;
 
             if (model == EnmVRModel.VirtualModel)
-                enq(od, Counter, PPZ8[ChipID], EnmDataType.Block, -1, -2, new object[] { addtionalData });
+                enq(od, Counter, PPSDRV[ChipID], EnmDataType.Block, -1, -2, new object[] { addtionalData });
         }
 
         public void PPSDRVWrite(outDatum od, long Counter, int ChipID, int dPort, int dAddr, int dData)
@@ -8612,6 +8751,30 @@ namespace mml2vgmIDE
         public void PPZ8Write(outDatum od, long Counter, int ChipID, int dPort, int dAddr, int dData)
         {
             dummyChip.Move(PPZ8[ChipID]);
+
+            if (dPort == -1 && dAddr == -1 && dData == -1)
+            {
+                //ダミーデータ(演奏情報だけ流したい時向け)
+                enq(od, Counter, dummyChip, EnmDataType.Normal, -1, -1, null);
+            }
+            else
+                enq(od, Counter, dummyChip, EnmDataType.Normal, dPort, dAddr, dData);
+
+        }
+
+        public void P86LoadPcm(outDatum od, long Counter, int ChipID, byte bank, byte mode, byte[] pcmData)
+        {
+            EnmVRModel model = EnmVRModel.VirtualModel;
+            if (ChipID == 0) chipLED.PriP86 = 2;
+            else chipLED.SecP86 = 2;
+
+            if (model == EnmVRModel.VirtualModel)
+                enq(od, Counter, P86[ChipID], EnmDataType.Block, -1, -2, new object[] { bank, mode, pcmData });
+        }
+
+        public void P86Write(outDatum od, long Counter, int ChipID, int dPort, int dAddr, int dData)
+        {
+            dummyChip.Move(P86[ChipID]);
 
             if (dPort == -1 && dAddr == -1 && dData == -1)
             {
