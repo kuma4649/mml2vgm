@@ -100,6 +100,9 @@
             this.TsmiReference = new System.Windows.Forms.ToolStripMenuItem();
             this.TsmiAbout = new System.Windows.Forms.ToolStripMenuItem();
             this.timer = new System.Windows.Forms.Timer(this.components);
+            this.tsmiNewGwi = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiNewMuc = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiNewMml = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -270,7 +273,6 @@
             // 
             // menuStrip1
             // 
-            this.menuStrip1.GripMargin = new System.Windows.Forms.Padding(2, 2, 0, 2);
             this.menuStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.TsmiFile,
@@ -304,9 +306,12 @@
             // 
             // TsmiNew
             // 
+            this.TsmiNew.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmiNewGwi,
+            this.tsmiNewMuc,
+            this.tsmiNewMml});
             this.TsmiNew.Name = "TsmiNew";
             resources.ApplyResources(this.TsmiNew, "TsmiNew");
-            this.TsmiNew.Click += new System.EventHandler(this.TsmiNew_Click);
             // 
             // TsmiOpenFile
             // 
@@ -605,6 +610,24 @@
             this.timer.Interval = 16;
             this.timer.Tick += new System.EventHandler(this.Timer_Tick);
             // 
+            // tsmiNewGwi
+            // 
+            this.tsmiNewGwi.Name = "tsmiNewGwi";
+            resources.ApplyResources(this.tsmiNewGwi, "tsmiNewGwi");
+            this.tsmiNewGwi.Click += new System.EventHandler(this.tsmiNewGwi_Click);
+            // 
+            // tsmiNewMuc
+            // 
+            this.tsmiNewMuc.Name = "tsmiNewMuc";
+            resources.ApplyResources(this.tsmiNewMuc, "tsmiNewMuc");
+            this.tsmiNewMuc.Click += new System.EventHandler(this.tsmiNewMuc_Click);
+            // 
+            // tsmiNewMml
+            // 
+            this.tsmiNewMml.Name = "tsmiNewMml";
+            resources.ApplyResources(this.tsmiNewMml, "tsmiNewMml");
+            this.tsmiNewMml.Click += new System.EventHandler(this.tsmiNewMml_Click);
+            // 
             // FrmMain
             // 
             resources.ApplyResources(this, "$this");
@@ -700,6 +723,9 @@
         private System.Windows.Forms.ToolStripMenuItem tsmiJumpSoloMode;
         private System.Windows.Forms.ToolStripStatusLabel tsslJumpSoloMode;
         private System.Windows.Forms.ToolStripSplitButton tssbPause;
+        private System.Windows.Forms.ToolStripMenuItem tsmiNewGwi;
+        private System.Windows.Forms.ToolStripMenuItem tsmiNewMuc;
+        private System.Windows.Forms.ToolStripMenuItem tsmiNewMml;
     }
 }
 

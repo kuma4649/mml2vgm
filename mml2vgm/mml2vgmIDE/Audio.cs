@@ -4667,6 +4667,13 @@ namespace mml2vgmIDE
 
                 if (Pack.Address != -1 || Pack.Data != -1 || Pack.ExData != null)
                 {
+#if DEBUG
+                    //ブロックデータを送っているのが誰かを調べる場合は有効にする
+                    //if(Pack.ExData != null && Pack.ExData is PackData[] && ((PackData[])Pack.ExData).Length>0)
+                    //{
+                    //    Console.WriteLine("{0}",Pack.Chip.Device);
+                    //}
+#endif
                     chipRegister.SendChipData(PackCounter, Pack.Chip, Pack.Type, Pack.Address, Pack.Data, Pack.ExData);
                 }
                 else

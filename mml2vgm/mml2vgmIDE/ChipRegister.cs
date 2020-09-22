@@ -1123,6 +1123,12 @@ namespace mml2vgmIDE
 
         public void SendChipData(long packCounter, Chip Chip, EnmDataType type, int address, int data, object exData)
         {
+
+#if DEBUG
+            //特定のデータを送るタイミングに疑いがあるとき、以下のコメントアウトを有効にしデバッグする
+            //Console.WriteLine("packCounter:{0}",packCounter);
+#endif 
+
             switch (Chip.Device)
             {
                 case EnmZGMDevice.AY8910:
@@ -4468,7 +4474,7 @@ namespace mml2vgmIDE
                     PackData[] pdata = (PackData[])exData;
                     if (Chip.Model == EnmVRModel.VirtualModel)
                     {
-                        log.Write("Sending YM2608(Emu) ADPCM");
+                        log.Write("Sending YM2608(Emu) Block data");
                         foreach (PackData dat in pdata)
                         {
                             //Console.WriteLine("FM P{2} Out:Adr[{0:x02}] val[{1:x02}]", (byte)dat.Address, (byte)dat.Data, (byte)(dat.Address >> 8));
@@ -4479,7 +4485,7 @@ namespace mml2vgmIDE
                     {
                         if (scYM2608[Chip.Number] != null)
                         {
-                            log.Write("Sending YM2608 ADPCM");
+                            log.Write("Sending YM2608 Block data");
                             foreach (PackData dat in pdata)
                                 scYM2608[Chip.Number].setRegister(dat.Address, dat.Data);
                             Audio.realChip.WaitOPNADPCMData();

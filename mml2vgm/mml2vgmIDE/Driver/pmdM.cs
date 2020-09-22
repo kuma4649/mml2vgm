@@ -56,6 +56,13 @@ namespace mml2vgmIDE
             }
 
             pm.Rendering();
+            Audio.DriverSeqCounter = count;
+
+            if (pm.Stopped)
+            {
+                Stopped = true;
+                return;
+            }
             count++;
         }
 

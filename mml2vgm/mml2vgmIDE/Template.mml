@@ -1,0 +1,26 @@
+﻿
+#Title		PMD向けテンプレート
+#Composer	だれか
+#Arranger	だれか
+
+#Filename	.M
+#Zenlen		72
+#Tempo		60
+
+ #FFFile 	
+ #PPZFilename	
+ #Include	
+ #PPZExtend	
+ #Detune		Extend
+
+ lead synthっぽいなにか
+@000 004 005
+ 031 001 001 001 005 026 000 001 002 000
+ 031 004 003 008 010 000 000 000 003 000
+ 031 001 001 001 005 020 000 001 006 000
+ 031 004 003 008 010 004 000 000 005 000
+
+
+A @0D0p3v11o5l4q0T60
+A cdefgab>c
+

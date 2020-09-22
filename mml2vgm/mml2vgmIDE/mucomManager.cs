@@ -17,6 +17,7 @@ namespace mml2vgmIDE
         private InstanceMarker im = null;
 
         public string wrkMUCFullPath { get; private set; }
+        public bool Stopped = false;
 
         public mucomManager(string compilerPath, string driverPath, string preprocessorPath, Action<string> disp, Setting setting)
         {
@@ -61,6 +62,7 @@ namespace mml2vgmIDE
         public void Rendering()
         {
             driver.Rendering();
+            this.Stopped = (driver.GetStatus() < 1);
         }
 
         //private void WriteLog(LogLevel arg1, string arg2)

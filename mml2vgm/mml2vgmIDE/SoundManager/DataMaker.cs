@@ -46,7 +46,8 @@ namespace SoundManager
 
                     while (true)
                     {
-                        if (!GetStart()) break;
+                        if (!GetStart())
+                            break;
                         if (unmount) return;
 
                         if (pause)

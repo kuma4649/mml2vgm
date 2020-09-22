@@ -18,6 +18,7 @@ namespace mml2vgmIDE
         public int YM2608_RhythmVolume = 0;
         public int YM2608_AdpcmVolume = 0;
         public int GIMIC_SSGVolume = 0;
+        public bool Stopped = false;
 
         private iCompiler compiler = null;
         private iDriver driver = null;
@@ -35,6 +36,7 @@ namespace mml2vgmIDE
         private ChipRegister chipRegister;
         private bool isGIMICOPNA;
         private GD3Tag currentGD3Tag;
+
 
         public PMDManager(string compilerPath, string driverPath, Action<string> disp, Setting setting)
         {
@@ -167,6 +169,7 @@ namespace mml2vgmIDE
         public void Rendering()
         {
             driver.Rendering();
+            this.Stopped = (driver.GetStatus() < 1);
         }
 
         public void InitDriver(

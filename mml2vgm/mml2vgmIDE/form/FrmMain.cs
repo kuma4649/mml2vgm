@@ -286,9 +286,22 @@ namespace mml2vgmIDE
             DocumentBox.Remove(parent);
         }
 
-        private void TsmiNew_Click(object sender, EventArgs e)
+        private void tsmiNewGwi_Click(object sender, EventArgs e)
         {
-            OpenFile("");
+            OpenFile("Template.gwi");
+
+        }
+
+        private void tsmiNewMuc_Click(object sender, EventArgs e)
+        {
+            OpenFile("Template.muc");
+
+        }
+
+        private void tsmiNewMml_Click(object sender, EventArgs e)
+        {
+            OpenFile("Template.mml");
+
         }
 
         public void TsmiFileOpen_Click(object sender, EventArgs e)
@@ -3436,9 +3449,5 @@ namespace mml2vgmIDE
             }
         }
 
-        //private void tsmiJumpSoloMode_Click(object sender, EventArgs e)
-        //{
-        //UpdateControl();
-        //}
     }
 }

@@ -123,13 +123,10 @@
   </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="dpMain.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 34</value>
-  </data>
-  <data name="dpMain.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>5, 4, 5, 4</value>
+    <value>0, 23</value>
   </data>
   <data name="dpMain.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1690, 776</value>
+    <value>1014, 517</value>
   </data>
   <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="dpMain.TabIndex" type="System.Int32, mscorlib">
@@ -156,215 +153,11 @@
   <metadata name="statusStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>372, 17</value>
   </metadata>
-  <data name="tsslCompileError.ImageAlign" type="System.Drawing.ContentAlignment, System.Drawing">
-    <value>MiddleRight</value>
-  </data>
-  <data name="tsslCompileError.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
-    <value>None</value>
-  </data>
-  <data name="tsslCompileError.Size" type="System.Drawing.Size, System.Drawing">
-    <value>58, 25</value>
-  </data>
-  <data name="tsslCompileError.Text" xml:space="preserve">
-    <value>123</value>
-  </data>
-  <data name="tsslCompileError.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
-    <value>MiddleRight</value>
-  </data>
-  <data name="tsslCompileError.ToolTipText" xml:space="preserve">
-    <value>エラー数</value>
-  </data>
-  <data name="tsslCompileWarning.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
-    <value>None</value>
-  </data>
-  <data name="tsslCompileWarning.Size" type="System.Drawing.Size, System.Drawing">
-    <value>58, 25</value>
-  </data>
-  <data name="tsslCompileWarning.Text" xml:space="preserve">
-    <value>123</value>
-  </data>
-  <data name="tsslCompileWarning.ToolTipText" xml:space="preserve">
-    <value>警告数</value>
-  </data>
-  <data name="tsslCompileStatus.Size" type="System.Drawing.Size, System.Drawing">
-    <value>135, 25</value>
-  </data>
-  <data name="tsslCompileStatus.Text" xml:space="preserve">
-    <value>C:9999 LC:9999</value>
-  </data>
-  <data name="TsslLineCol.Size" type="System.Drawing.Size, System.Drawing">
-    <value>96, 25</value>
-  </data>
-  <data name="TsslLineCol.Text" xml:space="preserve">
-    <value>Line:- Col:-</value>
-  </data>
-  <data name="tsslJumpSoloMode.Size" type="System.Drawing.Size, System.Drawing">
-    <value>38, 25</value>
-  </data>
-  <data name="tsslJumpSoloMode.Text" xml:space="preserve">
-    <value>[JS]</value>
-  </data>
-  <data name="tsslJumpSoloMode.Visible" type="System.Boolean, mscorlib">
-    <value>False</value>
-  </data>
-  <data name="toolStripStatusLabel1.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Consolas, 9pt, style=Bold</value>
-  </data>
-  <data name="toolStripStatusLabel1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>230, 25</value>
-  </data>
-  <data name="toolStripStatusLabel1.Text" xml:space="preserve">
-    <value> </value>
-  </data>
-  <data name="toolStripStatusLabel1.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
-    <value>MiddleLeft</value>
-  </data>
-  <data name="tssbOpen.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
-    <value>None</value>
-  </data>
-  <data name="tssbOpen.ImageTransparentColor" type="System.Drawing.Color, System.Drawing">
-    <value>Magenta</value>
-  </data>
-  <data name="tssbOpen.Size" type="System.Drawing.Size, System.Drawing">
-    <value>93, 29</value>
-  </data>
-  <data name="tssbOpen.Text" xml:space="preserve">
-    <value>Open</value>
-  </data>
-  <data name="tssbSave.Enabled" type="System.Boolean, mscorlib">
-    <value>False</value>
-  </data>
-  <data name="tssbSave.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
-    <value>None</value>
-  </data>
-  <data name="tssbSave.ImageTransparentColor" type="System.Drawing.Color, System.Drawing">
-    <value>Magenta</value>
-  </data>
-  <data name="tssbSave.Size" type="System.Drawing.Size, System.Drawing">
-    <value>86, 29</value>
-  </data>
-  <data name="tssbSave.Text" xml:space="preserve">
-    <value>Save</value>
-  </data>
-  <data name="tssbFind.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
-    <value>None</value>
-  </data>
-  <data name="tssbFind.ImageTransparentColor" type="System.Drawing.Color, System.Drawing">
-    <value>Magenta</value>
-  </data>
-  <data name="tssbFind.Size" type="System.Drawing.Size, System.Drawing">
-    <value>83, 29</value>
-  </data>
-  <data name="tssbFind.Text" xml:space="preserve">
-    <value>Find</value>
-  </data>
-  <data name="tssbCompile.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
-    <value>None</value>
-  </data>
-  <data name="tssbCompile.ImageTransparentColor" type="System.Drawing.Color, System.Drawing">
-    <value>Magenta</value>
-  </data>
-  <data name="tssbCompile.Size" type="System.Drawing.Size, System.Drawing">
-    <value>115, 29</value>
-  </data>
-  <data name="tssbCompile.Text" xml:space="preserve">
-    <value>Compile</value>
-  </data>
-  <data name="tssbPlay.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
-    <value>None</value>
-  </data>
-  <data name="tssbPlay.ImageTransparentColor" type="System.Drawing.Color, System.Drawing">
-    <value>Magenta</value>
-  </data>
-  <data name="tssbPlay.Size" type="System.Drawing.Size, System.Drawing">
-    <value>81, 29</value>
-  </data>
-  <data name="tssbPlay.Text" xml:space="preserve">
-    <value>Play</value>
-  </data>
-  <data name="tssbM98.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
-    <value>None</value>
-  </data>
-  <data name="tssbM98.ImageTransparentColor" type="System.Drawing.Color, System.Drawing">
-    <value>Magenta</value>
-  </data>
-  <data name="tssbM98.Size" type="System.Drawing.Size, System.Drawing">
-    <value>85, 29</value>
-  </data>
-  <data name="tssbM98.Text" xml:space="preserve">
-    <value>M98</value>
-  </data>
-  <data name="tssbPause.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
-    <value>None</value>
-  </data>
-  <data name="tssbPause.ImageTransparentColor" type="System.Drawing.Color, System.Drawing">
-    <value>Magenta</value>
-  </data>
-  <data name="tssbPause.Size" type="System.Drawing.Size, System.Drawing">
-    <value>95, 29</value>
-  </data>
-  <data name="tssbPause.Text" xml:space="preserve">
-    <value>Pause</value>
-  </data>
-  <data name="tssbStop.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
-    <value>None</value>
-  </data>
-  <data name="tssbStop.ImageTransparentColor" type="System.Drawing.Color, System.Drawing">
-    <value>Magenta</value>
-  </data>
-  <data name="tssbStop.Size" type="System.Drawing.Size, System.Drawing">
-    <value>87, 29</value>
-  </data>
-  <data name="tssbStop.Text" xml:space="preserve">
-    <value>Stop</value>
-  </data>
-  <data name="tssbSlow.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
-    <value>None</value>
-  </data>
-  <data name="tssbSlow.ImageTransparentColor" type="System.Drawing.Color, System.Drawing">
-    <value>Magenta</value>
-  </data>
-  <data name="tssbSlow.Size" type="System.Drawing.Size, System.Drawing">
-    <value>87, 29</value>
-  </data>
-  <data name="tssbSlow.Text" xml:space="preserve">
-    <value>Slow</value>
-  </data>
-  <data name="tssbFast.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
-    <value>None</value>
-  </data>
-  <data name="tssbFast.ImageTransparentColor" type="System.Drawing.Color, System.Drawing">
-    <value>Magenta</value>
-  </data>
-  <data name="tssbFast.Size" type="System.Drawing.Size, System.Drawing">
-    <value>67, 29</value>
-  </data>
-  <data name="tssbFast.Text" xml:space="preserve">
-    <value>x4</value>
-  </data>
-  <data name="tssbMIDIKbd.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
-    <value>None</value>
-  </data>
-  <data name="tssbMIDIKbd.ImageTransparentColor" type="System.Drawing.Color, System.Drawing">
-    <value>Magenta</value>
-  </data>
-  <data name="tssbMIDIKbd.Size" type="System.Drawing.Size, System.Drawing">
-    <value>125, 29</value>
-  </data>
-  <data name="tssbMIDIKbd.Text" xml:space="preserve">
-    <value>Keyboard</value>
-  </data>
-  <data name="tssbMIDIKbd.Visible" type="System.Boolean, mscorlib">
-    <value>False</value>
-  </data>
   <data name="statusStrip1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 810</value>
-  </data>
-  <data name="statusStrip1.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 0, 23, 0</value>
+    <value>0, 539</value>
   </data>
   <data name="statusStrip1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1690, 32</value>
+    <value>1014, 22</value>
   </data>
   <data name="statusStrip1.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
@@ -384,17 +177,236 @@
   <data name="&gt;&gt;statusStrip1.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
+  <data name="tsslCompileError.ImageAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleRight</value>
+  </data>
+  <data name="tsslCompileError.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
+    <value>None</value>
+  </data>
+  <data name="tsslCompileError.Size" type="System.Drawing.Size, System.Drawing">
+    <value>41, 17</value>
+  </data>
+  <data name="tsslCompileError.Text" xml:space="preserve">
+    <value>123</value>
+  </data>
+  <data name="tsslCompileError.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleRight</value>
+  </data>
+  <data name="tsslCompileError.ToolTipText" xml:space="preserve">
+    <value>エラー数</value>
+  </data>
+  <data name="tsslCompileWarning.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
+    <value>None</value>
+  </data>
+  <data name="tsslCompileWarning.Size" type="System.Drawing.Size, System.Drawing">
+    <value>41, 17</value>
+  </data>
+  <data name="tsslCompileWarning.Text" xml:space="preserve">
+    <value>123</value>
+  </data>
+  <data name="tsslCompileWarning.ToolTipText" xml:space="preserve">
+    <value>警告数</value>
+  </data>
+  <data name="tsslCompileStatus.Size" type="System.Drawing.Size, System.Drawing">
+    <value>84, 17</value>
+  </data>
+  <data name="tsslCompileStatus.Text" xml:space="preserve">
+    <value>C:9999 LC:9999</value>
+  </data>
+  <data name="TsslLineCol.Size" type="System.Drawing.Size, System.Drawing">
+    <value>65, 17</value>
+  </data>
+  <data name="TsslLineCol.Text" xml:space="preserve">
+    <value>Line:- Col:-</value>
+  </data>
+  <data name="tsslJumpSoloMode.Size" type="System.Drawing.Size, System.Drawing">
+    <value>25, 17</value>
+  </data>
+  <data name="tsslJumpSoloMode.Text" xml:space="preserve">
+    <value>[JS]</value>
+  </data>
+  <data name="tsslJumpSoloMode.Visible" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="toolStripStatusLabel1.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Consolas, 9pt, style=Bold</value>
+  </data>
+  <data name="toolStripStatusLabel1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>72, 17</value>
+  </data>
+  <data name="toolStripStatusLabel1.Text" xml:space="preserve">
+    <value> </value>
+  </data>
+  <data name="toolStripStatusLabel1.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleLeft</value>
+  </data>
+  <data name="tssbOpen.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
+    <value>None</value>
+  </data>
+  <data name="tssbOpen.ImageTransparentColor" type="System.Drawing.Color, System.Drawing">
+    <value>Magenta</value>
+  </data>
+  <data name="tssbOpen.Size" type="System.Drawing.Size, System.Drawing">
+    <value>73, 20</value>
+  </data>
+  <data name="tssbOpen.Text" xml:space="preserve">
+    <value>Open</value>
+  </data>
+  <data name="tssbSave.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="tssbSave.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
+    <value>None</value>
+  </data>
+  <data name="tssbSave.ImageTransparentColor" type="System.Drawing.Color, System.Drawing">
+    <value>Magenta</value>
+  </data>
+  <data name="tssbSave.Size" type="System.Drawing.Size, System.Drawing">
+    <value>68, 20</value>
+  </data>
+  <data name="tssbSave.Text" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="tssbFind.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
+    <value>None</value>
+  </data>
+  <data name="tssbFind.ImageTransparentColor" type="System.Drawing.Color, System.Drawing">
+    <value>Magenta</value>
+  </data>
+  <data name="tssbFind.Size" type="System.Drawing.Size, System.Drawing">
+    <value>67, 20</value>
+  </data>
+  <data name="tssbFind.Text" xml:space="preserve">
+    <value>Find</value>
+  </data>
+  <data name="tssbCompile.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
+    <value>None</value>
+  </data>
+  <data name="tssbCompile.ImageTransparentColor" type="System.Drawing.Color, System.Drawing">
+    <value>Magenta</value>
+  </data>
+  <data name="tssbCompile.Size" type="System.Drawing.Size, System.Drawing">
+    <value>87, 20</value>
+  </data>
+  <data name="tssbCompile.Text" xml:space="preserve">
+    <value>Compile</value>
+  </data>
+  <data name="tssbPlay.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
+    <value>None</value>
+  </data>
+  <data name="tssbPlay.ImageTransparentColor" type="System.Drawing.Color, System.Drawing">
+    <value>Magenta</value>
+  </data>
+  <data name="tssbPlay.Size" type="System.Drawing.Size, System.Drawing">
+    <value>66, 20</value>
+  </data>
+  <data name="tssbPlay.Text" xml:space="preserve">
+    <value>Play</value>
+  </data>
+  <data name="tssbM98.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
+    <value>None</value>
+  </data>
+  <data name="tssbM98.ImageTransparentColor" type="System.Drawing.Color, System.Drawing">
+    <value>Magenta</value>
+  </data>
+  <data name="tssbM98.Size" type="System.Drawing.Size, System.Drawing">
+    <value>67, 20</value>
+  </data>
+  <data name="tssbM98.Text" xml:space="preserve">
+    <value>M98</value>
+  </data>
+  <data name="tssbPause.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
+    <value>None</value>
+  </data>
+  <data name="tssbPause.ImageTransparentColor" type="System.Drawing.Color, System.Drawing">
+    <value>Magenta</value>
+  </data>
+  <data name="tssbPause.Size" type="System.Drawing.Size, System.Drawing">
+    <value>75, 20</value>
+  </data>
+  <data name="tssbPause.Text" xml:space="preserve">
+    <value>Pause</value>
+  </data>
+  <data name="tssbStop.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
+    <value>None</value>
+  </data>
+  <data name="tssbStop.ImageTransparentColor" type="System.Drawing.Color, System.Drawing">
+    <value>Magenta</value>
+  </data>
+  <data name="tssbStop.Size" type="System.Drawing.Size, System.Drawing">
+    <value>68, 20</value>
+  </data>
+  <data name="tssbStop.Text" xml:space="preserve">
+    <value>Stop</value>
+  </data>
+  <data name="tssbSlow.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
+    <value>None</value>
+  </data>
+  <data name="tssbSlow.ImageTransparentColor" type="System.Drawing.Color, System.Drawing">
+    <value>Magenta</value>
+  </data>
+  <data name="tssbSlow.Size" type="System.Drawing.Size, System.Drawing">
+    <value>69, 20</value>
+  </data>
+  <data name="tssbSlow.Text" xml:space="preserve">
+    <value>Slow</value>
+  </data>
+  <data name="tssbFast.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
+    <value>None</value>
+  </data>
+  <data name="tssbFast.ImageTransparentColor" type="System.Drawing.Color, System.Drawing">
+    <value>Magenta</value>
+  </data>
+  <data name="tssbFast.Size" type="System.Drawing.Size, System.Drawing">
+    <value>56, 20</value>
+  </data>
+  <data name="tssbFast.Text" xml:space="preserve">
+    <value>x4</value>
+  </data>
+  <data name="tssbMIDIKbd.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
+    <value>None</value>
+  </data>
+  <data name="tssbMIDIKbd.ImageTransparentColor" type="System.Drawing.Color, System.Drawing">
+    <value>Magenta</value>
+  </data>
+  <data name="tssbMIDIKbd.Size" type="System.Drawing.Size, System.Drawing">
+    <value>94, 20</value>
+  </data>
+  <data name="tssbMIDIKbd.Text" xml:space="preserve">
+    <value>Keyboard</value>
+  </data>
+  <data name="tssbMIDIKbd.Visible" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
   <metadata name="menuStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>488, 17</value>
   </metadata>
+  <data name="tsmiNewGwi.Size" type="System.Drawing.Size, System.Drawing">
+    <value>180, 22</value>
+  </data>
+  <data name="tsmiNewGwi.Text" xml:space="preserve">
+    <value>New .gwi</value>
+  </data>
+  <data name="tsmiNewMuc.Size" type="System.Drawing.Size, System.Drawing">
+    <value>180, 22</value>
+  </data>
+  <data name="tsmiNewMuc.Text" xml:space="preserve">
+    <value>New .muc</value>
+  </data>
+  <data name="tsmiNewMml.Size" type="System.Drawing.Size, System.Drawing">
+    <value>180, 22</value>
+  </data>
+  <data name="tsmiNewMml.Text" xml:space="preserve">
+    <value>New .mml</value>
+  </data>
   <data name="TsmiNew.Size" type="System.Drawing.Size, System.Drawing">
-    <value>264, 34</value>
+    <value>180, 22</value>
   </data>
   <data name="TsmiNew.Text" xml:space="preserve">
     <value>&amp;New</value>
   </data>
   <data name="TsmiOpenFile.Size" type="System.Drawing.Size, System.Drawing">
-    <value>264, 34</value>
+    <value>180, 22</value>
   </data>
   <data name="TsmiOpenFile.Text" xml:space="preserve">
     <value>&amp;Open file</value>
@@ -403,13 +415,13 @@
     <value>False</value>
   </data>
   <data name="TsmiOpenFolder.Size" type="System.Drawing.Size, System.Drawing">
-    <value>264, 34</value>
+    <value>180, 22</value>
   </data>
   <data name="TsmiOpenFolder.Text" xml:space="preserve">
     <value>open &amp;Folder</value>
   </data>
   <data name="tsmiGwiFileHistory.Size" type="System.Drawing.Size, System.Drawing">
-    <value>264, 34</value>
+    <value>180, 22</value>
   </data>
   <data name="tsmiGwiFileHistory.Text" xml:space="preserve">
     <value>Recently Used Files</value>
@@ -418,7 +430,7 @@
     <value>False</value>
   </data>
   <data name="TsmiSaveFile.Size" type="System.Drawing.Size, System.Drawing">
-    <value>264, 34</value>
+    <value>180, 22</value>
   </data>
   <data name="TsmiSaveFile.Text" xml:space="preserve">
     <value>&amp;Save</value>
@@ -427,16 +439,16 @@
     <value>False</value>
   </data>
   <data name="TsmiSaveAs.Size" type="System.Drawing.Size, System.Drawing">
-    <value>264, 34</value>
+    <value>180, 22</value>
   </data>
   <data name="TsmiSaveAs.Text" xml:space="preserve">
     <value>Save &amp;As</value>
   </data>
   <data name="toolStripSeparator2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>261, 6</value>
+    <value>177, 6</value>
   </data>
   <data name="tsmiImport.Size" type="System.Drawing.Size, System.Drawing">
-    <value>264, 34</value>
+    <value>180, 22</value>
   </data>
   <data name="tsmiImport.Text" xml:space="preserve">
     <value>Import</value>
@@ -445,220 +457,46 @@
     <value>False</value>
   </data>
   <data name="tsmiExport.Size" type="System.Drawing.Size, System.Drawing">
-    <value>264, 34</value>
+    <value>180, 22</value>
   </data>
   <data name="tsmiExport.Text" xml:space="preserve">
     <value>Export</value>
   </data>
   <data name="toolStripSeparator1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>261, 6</value>
+    <value>177, 6</value>
   </data>
   <data name="TsmiExit.Size" type="System.Drawing.Size, System.Drawing">
-    <value>264, 34</value>
+    <value>180, 22</value>
   </data>
   <data name="TsmiExit.Text" xml:space="preserve">
     <value>&amp;Exit</value>
   </data>
   <data name="TsmiFile.Size" type="System.Drawing.Size, System.Drawing">
-    <value>54, 29</value>
+    <value>37, 20</value>
   </data>
   <data name="TsmiFile.Text" xml:space="preserve">
     <value>&amp;File</value>
   </data>
-  <data name="TsmiUndo.Enabled" type="System.Boolean, mscorlib">
-    <value>False</value>
-  </data>
-  <data name="TsmiUndo.ShortcutKeyDisplayString" xml:space="preserve">
-    <value>Ctrl+Z</value>
-  </data>
-  <data name="TsmiUndo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>300, 34</value>
-  </data>
-  <data name="TsmiUndo.Text" xml:space="preserve">
-    <value>Undo</value>
-  </data>
-  <data name="TsmiRedo.Enabled" type="System.Boolean, mscorlib">
-    <value>False</value>
-  </data>
-  <data name="TsmiRedo.ShortcutKeyDisplayString" xml:space="preserve">
-    <value>Ctrl+Y</value>
-  </data>
-  <data name="TsmiRedo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>300, 34</value>
-  </data>
-  <data name="TsmiRedo.Text" xml:space="preserve">
-    <value>Redo</value>
-  </data>
-  <data name="toolStripSeparator4.Size" type="System.Drawing.Size, System.Drawing">
-    <value>297, 6</value>
-  </data>
-  <data name="TsmiFind.ShortcutKeyDisplayString" xml:space="preserve">
-    <value>Ctrl+F</value>
-  </data>
-  <data name="TsmiFind.Size" type="System.Drawing.Size, System.Drawing">
-    <value>300, 34</value>
-  </data>
-  <data name="TsmiFind.Text" xml:space="preserve">
-    <value>Find...</value>
-  </data>
-  <data name="TsmiFindNext.ShortcutKeyDisplayString" xml:space="preserve">
-    <value>F3</value>
-  </data>
-  <data name="TsmiFindNext.Size" type="System.Drawing.Size, System.Drawing">
-    <value>300, 34</value>
-  </data>
-  <data name="TsmiFindNext.Text" xml:space="preserve">
-    <value>Find next</value>
-  </data>
-  <data name="TsmiFindPrevious.ShortcutKeyDisplayString" xml:space="preserve">
-    <value>Shift+F3</value>
-  </data>
-  <data name="TsmiFindPrevious.Size" type="System.Drawing.Size, System.Drawing">
-    <value>300, 34</value>
-  </data>
-  <data name="TsmiFindPrevious.Text" xml:space="preserve">
-    <value>Find previous</value>
-  </data>
   <data name="TsmiEdit.Size" type="System.Drawing.Size, System.Drawing">
-    <value>58, 29</value>
+    <value>39, 20</value>
   </data>
   <data name="TsmiEdit.Text" xml:space="preserve">
     <value>&amp;Edit</value>
   </data>
-  <data name="TsmiShowPartCounter.Size" type="System.Drawing.Size, System.Drawing">
-    <value>248, 34</value>
-  </data>
-  <data name="TsmiShowPartCounter.Text" xml:space="preserve">
-    <value>Part Counter</value>
-  </data>
-  <data name="TsmiShowFolderTree.Size" type="System.Drawing.Size, System.Drawing">
-    <value>248, 34</value>
-  </data>
-  <data name="TsmiShowFolderTree.Text" xml:space="preserve">
-    <value>Folder Tree</value>
-  </data>
-  <data name="TsmiShowErrorList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>248, 34</value>
-  </data>
-  <data name="TsmiShowErrorList.Text" xml:space="preserve">
-    <value>Error List</value>
-  </data>
-  <data name="TsmiShowLog.Size" type="System.Drawing.Size, System.Drawing">
-    <value>248, 34</value>
-  </data>
-  <data name="TsmiShowLog.Text" xml:space="preserve">
-    <value>Log</value>
-  </data>
-  <data name="TsmiShowLyrics.Size" type="System.Drawing.Size, System.Drawing">
-    <value>248, 34</value>
-  </data>
-  <data name="TsmiShowLyrics.Text" xml:space="preserve">
-    <value>Lyric</value>
-  </data>
-  <data name="TsmiShowMixer.Size" type="System.Drawing.Size, System.Drawing">
-    <value>248, 34</value>
-  </data>
-  <data name="TsmiShowMixer.Text" xml:space="preserve">
-    <value>Instrument Mixer</value>
-  </data>
-  <data name="TsmiShowMIDIKbd.Size" type="System.Drawing.Size, System.Drawing">
-    <value>248, 34</value>
-  </data>
-  <data name="TsmiShowMIDIKbd.Text" xml:space="preserve">
-    <value>MIDI Keyboard</value>
-  </data>
-  <data name="TsmiShowMIDIKbd.Visible" type="System.Boolean, mscorlib">
-    <value>False</value>
-  </data>
-  <data name="toolStripSeparator3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>245, 6</value>
-  </data>
-  <data name="TsmiFncHide.Size" type="System.Drawing.Size, System.Drawing">
-    <value>237, 34</value>
-  </data>
-  <data name="TsmiFncHide.Text" xml:space="preserve">
-    <value>disable</value>
-  </data>
-  <data name="TsmiFncButtonOnly.Size" type="System.Drawing.Size, System.Drawing">
-    <value>237, 34</value>
-  </data>
-  <data name="TsmiFncButtonOnly.Text" xml:space="preserve">
-    <value>Button</value>
-  </data>
-  <data name="TsmiFncButtonAndText.Size" type="System.Drawing.Size, System.Drawing">
-    <value>237, 34</value>
-  </data>
-  <data name="TsmiFncButtonAndText.Text" xml:space="preserve">
-    <value>Button and Text</value>
-  </data>
-  <data name="TsmiFunctionKey.Size" type="System.Drawing.Size, System.Drawing">
-    <value>248, 34</value>
-  </data>
-  <data name="TsmiFunctionKey.Text" xml:space="preserve">
-    <value>Function Key</value>
-  </data>
   <data name="表示VToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>65, 29</value>
+    <value>44, 20</value>
   </data>
   <data name="表示VToolStripMenuItem.Text" xml:space="preserve">
     <value>&amp;View</value>
   </data>
-  <data name="TsmiCompileAndPlay.ShortcutKeyDisplayString" xml:space="preserve">
-    <value />
-  </data>
-  <data name="TsmiCompileAndPlay.Size" type="System.Drawing.Size, System.Drawing">
-    <value>291, 34</value>
-  </data>
-  <data name="TsmiCompileAndPlay.Text" xml:space="preserve">
-    <value>Compile and Play</value>
-  </data>
-  <data name="TsmiCompileAndTracePlay.ShortcutKeyDisplayString" xml:space="preserve">
-    <value />
-  </data>
-  <data name="TsmiCompileAndTracePlay.Size" type="System.Drawing.Size, System.Drawing">
-    <value>291, 34</value>
-  </data>
-  <data name="TsmiCompileAndTracePlay.Text" xml:space="preserve">
-    <value>Compile and TracePlay</value>
-  </data>
-  <data name="TsmiCompileAndSkipPlay.ShortcutKeyDisplayString" xml:space="preserve">
-    <value />
-  </data>
-  <data name="TsmiCompileAndSkipPlay.Size" type="System.Drawing.Size, System.Drawing">
-    <value>291, 34</value>
-  </data>
-  <data name="TsmiCompileAndSkipPlay.Text" xml:space="preserve">
-    <value>Compile and SkipPlay</value>
-  </data>
-  <data name="TsmiAllCompile.Enabled" type="System.Boolean, mscorlib">
-    <value>False</value>
-  </data>
-  <data name="TsmiAllCompile.Size" type="System.Drawing.Size, System.Drawing">
-    <value>291, 34</value>
-  </data>
-  <data name="TsmiAllCompile.Text" xml:space="preserve">
-    <value>Compile All files</value>
-  </data>
-  <data name="TsmiCompile.Size" type="System.Drawing.Size, System.Drawing">
-    <value>291, 34</value>
-  </data>
-  <data name="TsmiCompile.Text" xml:space="preserve">
-    <value>Compile only</value>
-  </data>
   <data name="コンパイルCToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>94, 29</value>
+    <value>62, 20</value>
   </data>
   <data name="コンパイルCToolStripMenuItem.Text" xml:space="preserve">
     <value>&amp;Compile</value>
   </data>
-  <data name="tsmiJumpSoloMode.Size" type="System.Drawing.Size, System.Drawing">
-    <value>248, 34</value>
-  </data>
-  <data name="tsmiJumpSoloMode.Text" xml:space="preserve">
-    <value>Jump solo Mode</value>
-  </data>
   <data name="featureToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>85, 29</value>
+    <value>58, 20</value>
   </data>
   <data name="featureToolStripMenuItem.Text" xml:space="preserve">
     <value>Fe&amp;ature</value>
@@ -667,43 +505,19 @@
     <value>False</value>
   </data>
   <data name="tsmiScript.Size" type="System.Drawing.Size, System.Drawing">
-    <value>73, 29</value>
+    <value>49, 20</value>
   </data>
   <data name="tsmiScript.Text" xml:space="preserve">
     <value>&amp;Script</value>
   </data>
-  <data name="tsmiOption.Size" type="System.Drawing.Size, System.Drawing">
-    <value>170, 34</value>
-  </data>
-  <data name="tsmiOption.Text" xml:space="preserve">
-    <value>&amp;Option</value>
-  </data>
   <data name="ツールTToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>61, 29</value>
+    <value>41, 20</value>
   </data>
   <data name="ツールTToolStripMenuItem.Text" xml:space="preserve">
     <value>&amp;Tool</value>
   </data>
-  <data name="TsmiTutorial.Size" type="System.Drawing.Size, System.Drawing">
-    <value>269, 34</value>
-  </data>
-  <data name="TsmiTutorial.Text" xml:space="preserve">
-    <value>How to.</value>
-  </data>
-  <data name="TsmiReference.Size" type="System.Drawing.Size, System.Drawing">
-    <value>269, 34</value>
-  </data>
-  <data name="TsmiReference.Text" xml:space="preserve">
-    <value>MML command ref.</value>
-  </data>
-  <data name="TsmiAbout.Size" type="System.Drawing.Size, System.Drawing">
-    <value>269, 34</value>
-  </data>
-  <data name="TsmiAbout.Text" xml:space="preserve">
-    <value>About</value>
-  </data>
   <data name="TsmiHelp.Size" type="System.Drawing.Size, System.Drawing">
-    <value>65, 29</value>
+    <value>44, 20</value>
   </data>
   <data name="TsmiHelp.Text" xml:space="preserve">
     <value>&amp;Help</value>
@@ -711,11 +525,8 @@
   <data name="menuStrip1.Location" type="System.Drawing.Point, System.Drawing">
     <value>0, 0</value>
   </data>
-  <data name="menuStrip1.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>10, 3, 0, 3</value>
-  </data>
   <data name="menuStrip1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1690, 35</value>
+    <value>1014, 24</value>
   </data>
   <data name="menuStrip1.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -735,6 +546,204 @@
   <data name="&gt;&gt;menuStrip1.ZOrder" xml:space="preserve">
     <value>2</value>
   </data>
+  <data name="TsmiUndo.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="TsmiUndo.ShortcutKeyDisplayString" xml:space="preserve">
+    <value>Ctrl+Z</value>
+  </data>
+  <data name="TsmiUndo.Size" type="System.Drawing.Size, System.Drawing">
+    <value>196, 22</value>
+  </data>
+  <data name="TsmiUndo.Text" xml:space="preserve">
+    <value>Undo</value>
+  </data>
+  <data name="TsmiRedo.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="TsmiRedo.ShortcutKeyDisplayString" xml:space="preserve">
+    <value>Ctrl+Y</value>
+  </data>
+  <data name="TsmiRedo.Size" type="System.Drawing.Size, System.Drawing">
+    <value>196, 22</value>
+  </data>
+  <data name="TsmiRedo.Text" xml:space="preserve">
+    <value>Redo</value>
+  </data>
+  <data name="toolStripSeparator4.Size" type="System.Drawing.Size, System.Drawing">
+    <value>193, 6</value>
+  </data>
+  <data name="TsmiFind.ShortcutKeyDisplayString" xml:space="preserve">
+    <value>Ctrl+F</value>
+  </data>
+  <data name="TsmiFind.Size" type="System.Drawing.Size, System.Drawing">
+    <value>196, 22</value>
+  </data>
+  <data name="TsmiFind.Text" xml:space="preserve">
+    <value>Find...</value>
+  </data>
+  <data name="TsmiFindNext.ShortcutKeyDisplayString" xml:space="preserve">
+    <value>F3</value>
+  </data>
+  <data name="TsmiFindNext.Size" type="System.Drawing.Size, System.Drawing">
+    <value>196, 22</value>
+  </data>
+  <data name="TsmiFindNext.Text" xml:space="preserve">
+    <value>Find next</value>
+  </data>
+  <data name="TsmiFindPrevious.ShortcutKeyDisplayString" xml:space="preserve">
+    <value>Shift+F3</value>
+  </data>
+  <data name="TsmiFindPrevious.Size" type="System.Drawing.Size, System.Drawing">
+    <value>196, 22</value>
+  </data>
+  <data name="TsmiFindPrevious.Text" xml:space="preserve">
+    <value>Find previous</value>
+  </data>
+  <data name="TsmiShowPartCounter.Size" type="System.Drawing.Size, System.Drawing">
+    <value>164, 22</value>
+  </data>
+  <data name="TsmiShowPartCounter.Text" xml:space="preserve">
+    <value>Part Counter</value>
+  </data>
+  <data name="TsmiShowFolderTree.Size" type="System.Drawing.Size, System.Drawing">
+    <value>164, 22</value>
+  </data>
+  <data name="TsmiShowFolderTree.Text" xml:space="preserve">
+    <value>Folder Tree</value>
+  </data>
+  <data name="TsmiShowErrorList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>164, 22</value>
+  </data>
+  <data name="TsmiShowErrorList.Text" xml:space="preserve">
+    <value>Error List</value>
+  </data>
+  <data name="TsmiShowLog.Size" type="System.Drawing.Size, System.Drawing">
+    <value>164, 22</value>
+  </data>
+  <data name="TsmiShowLog.Text" xml:space="preserve">
+    <value>Log</value>
+  </data>
+  <data name="TsmiShowLyrics.Size" type="System.Drawing.Size, System.Drawing">
+    <value>164, 22</value>
+  </data>
+  <data name="TsmiShowLyrics.Text" xml:space="preserve">
+    <value>Lyric</value>
+  </data>
+  <data name="TsmiShowMixer.Size" type="System.Drawing.Size, System.Drawing">
+    <value>164, 22</value>
+  </data>
+  <data name="TsmiShowMixer.Text" xml:space="preserve">
+    <value>Instrument Mixer</value>
+  </data>
+  <data name="TsmiShowMIDIKbd.Size" type="System.Drawing.Size, System.Drawing">
+    <value>164, 22</value>
+  </data>
+  <data name="TsmiShowMIDIKbd.Text" xml:space="preserve">
+    <value>MIDI Keyboard</value>
+  </data>
+  <data name="TsmiShowMIDIKbd.Visible" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="toolStripSeparator3.Size" type="System.Drawing.Size, System.Drawing">
+    <value>161, 6</value>
+  </data>
+  <data name="TsmiFunctionKey.Size" type="System.Drawing.Size, System.Drawing">
+    <value>164, 22</value>
+  </data>
+  <data name="TsmiFunctionKey.Text" xml:space="preserve">
+    <value>Function Key</value>
+  </data>
+  <data name="TsmiFncHide.Size" type="System.Drawing.Size, System.Drawing">
+    <value>157, 22</value>
+  </data>
+  <data name="TsmiFncHide.Text" xml:space="preserve">
+    <value>disable</value>
+  </data>
+  <data name="TsmiFncButtonOnly.Size" type="System.Drawing.Size, System.Drawing">
+    <value>157, 22</value>
+  </data>
+  <data name="TsmiFncButtonOnly.Text" xml:space="preserve">
+    <value>Button</value>
+  </data>
+  <data name="TsmiFncButtonAndText.Size" type="System.Drawing.Size, System.Drawing">
+    <value>157, 22</value>
+  </data>
+  <data name="TsmiFncButtonAndText.Text" xml:space="preserve">
+    <value>Button and Text</value>
+  </data>
+  <data name="TsmiCompileAndPlay.ShortcutKeyDisplayString" xml:space="preserve">
+    <value />
+  </data>
+  <data name="TsmiCompileAndPlay.Size" type="System.Drawing.Size, System.Drawing">
+    <value>192, 22</value>
+  </data>
+  <data name="TsmiCompileAndPlay.Text" xml:space="preserve">
+    <value>Compile and Play</value>
+  </data>
+  <data name="TsmiCompileAndTracePlay.ShortcutKeyDisplayString" xml:space="preserve">
+    <value />
+  </data>
+  <data name="TsmiCompileAndTracePlay.Size" type="System.Drawing.Size, System.Drawing">
+    <value>192, 22</value>
+  </data>
+  <data name="TsmiCompileAndTracePlay.Text" xml:space="preserve">
+    <value>Compile and TracePlay</value>
+  </data>
+  <data name="TsmiCompileAndSkipPlay.ShortcutKeyDisplayString" xml:space="preserve">
+    <value />
+  </data>
+  <data name="TsmiCompileAndSkipPlay.Size" type="System.Drawing.Size, System.Drawing">
+    <value>192, 22</value>
+  </data>
+  <data name="TsmiCompileAndSkipPlay.Text" xml:space="preserve">
+    <value>Compile and SkipPlay</value>
+  </data>
+  <data name="TsmiAllCompile.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="TsmiAllCompile.Size" type="System.Drawing.Size, System.Drawing">
+    <value>192, 22</value>
+  </data>
+  <data name="TsmiAllCompile.Text" xml:space="preserve">
+    <value>Compile All files</value>
+  </data>
+  <data name="TsmiCompile.Size" type="System.Drawing.Size, System.Drawing">
+    <value>192, 22</value>
+  </data>
+  <data name="TsmiCompile.Text" xml:space="preserve">
+    <value>Compile only</value>
+  </data>
+  <data name="tsmiJumpSoloMode.Size" type="System.Drawing.Size, System.Drawing">
+    <value>161, 22</value>
+  </data>
+  <data name="tsmiJumpSoloMode.Text" xml:space="preserve">
+    <value>Jump solo Mode</value>
+  </data>
+  <data name="tsmiOption.Size" type="System.Drawing.Size, System.Drawing">
+    <value>111, 22</value>
+  </data>
+  <data name="tsmiOption.Text" xml:space="preserve">
+    <value>&amp;Option</value>
+  </data>
+  <data name="TsmiTutorial.Size" type="System.Drawing.Size, System.Drawing">
+    <value>177, 22</value>
+  </data>
+  <data name="TsmiTutorial.Text" xml:space="preserve">
+    <value>How to.</value>
+  </data>
+  <data name="TsmiReference.Size" type="System.Drawing.Size, System.Drawing">
+    <value>177, 22</value>
+  </data>
+  <data name="TsmiReference.Text" xml:space="preserve">
+    <value>MML command ref.</value>
+  </data>
+  <data name="TsmiAbout.Size" type="System.Drawing.Size, System.Drawing">
+    <value>177, 22</value>
+  </data>
+  <data name="TsmiAbout.Text" xml:space="preserve">
+    <value>About</value>
+  </data>
   <metadata name="timer.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>603, 17</value>
   </metadata>
@@ -742,10 +751,10 @@
     <value>True</value>
   </metadata>
   <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
-    <value>10, 18</value>
+    <value>6, 12</value>
   </data>
   <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
-    <value>1690, 842</value>
+    <value>1014, 561</value>
   </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -814,11 +823,8 @@
         AAAAfwAA/gAAAAD/AAD/gAAAA/8AAP/AAAAH/wAA/+AAAA//AAD/+AAAP/8AAP/+AAD//wAA
 </value>
   </data>
-  <data name="$this.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>5, 4, 5, 4</value>
-  </data>
   <data name="$this.MinimumSize" type="System.Drawing.Size, System.Drawing">
-    <value>1052, 692</value>
+    <value>638, 474</value>
   </data>
   <data name="$this.Text" xml:space="preserve">
     <value>mml2vgmIDE</value>
@@ -1224,6 +1230,24 @@
   </data>
   <data name="&gt;&gt;timer.Type" xml:space="preserve">
     <value>System.Windows.Forms.Timer, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tsmiNewGwi.Name" xml:space="preserve">
+    <value>tsmiNewGwi</value>
+  </data>
+  <data name="&gt;&gt;tsmiNewGwi.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tsmiNewMuc.Name" xml:space="preserve">
+    <value>tsmiNewMuc</value>
+  </data>
+  <data name="&gt;&gt;tsmiNewMuc.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tsmiNewMml.Name" xml:space="preserve">
+    <value>tsmiNewMml</value>
+  </data>
+  <data name="&gt;&gt;tsmiNewMml.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">
     <value>FrmMain</value>
