@@ -18,6 +18,7 @@ namespace mml2vgmIDE
         private bool searchMatchCase = false;
         public Document document = null;
         public FrmSien frmSien = null;
+        public EnmMmlFileFormat fmt = EnmMmlFileFormat.GWI;
         //public int col = -1;
         public AzukiControl azukiControl;
         public bool forceClose = false;
@@ -49,6 +50,7 @@ namespace mml2vgmIDE
             else if (fmt == EnmMmlFileFormat.MML) setHighlighterMML();
             else setHighlighterVGMZGMZGM();
 
+            this.fmt = fmt;
             Common.SetDoubleBuffered(this);
             Common.SetDoubleBuffered(azukiControl);
         }
@@ -453,10 +455,21 @@ namespace mml2vgmIDE
             string line = azukiControl.GetTextInRange(st, ci);
 
             if (line == null || line.Length < 1) return;
-            //先頭の文字が'ではないときは既存の動作
-            if (line[0] != '\'')
+
+            if (fmt == EnmMmlFileFormat.GWI)
             {
-                return;
+                //先頭の文字が'ではないときは既存の動作
+                if (line[0] != '\'') return;
+            }
+            else if (fmt == EnmMmlFileFormat.MUC)
+            {
+                //パート定義じゃないなら既存の動作
+                if (!Regex.IsMatch(line, "^[A-Z]+[\\s\\t].*")) return;
+            }
+            else if (fmt == EnmMmlFileFormat.MML)
+            {
+                //パート定義じゃないなら既存の動作
+                if (!Regex.IsMatch(line, "^[A-Za-z]+[0-9]*[\\s\\t].*")) return;
             }
 
             int a = -1;

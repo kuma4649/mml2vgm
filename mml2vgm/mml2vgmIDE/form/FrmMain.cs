@@ -3251,22 +3251,28 @@ namespace mml2vgmIDE
         {
             tssbOpen.Visible = visible;
             tssbSave.Visible = visible;
+            tssbFind.Visible = visible;
+            tssbCompile.Visible = visible;
             tssbPlay.Visible = visible;
             //tssbTracePlay.Visible = visible;
+            tssbM98.Visible = visible;
+            tssbPause.Visible = visible;
             tssbStop.Visible = visible;
             tssbSlow.Visible = visible;
             tssbFast.Visible = visible;
-            tssbFind.Visible = visible;
             tssbMIDIKbd.Visible = visible;
 
             tssbOpen.DisplayStyle = style;
             tssbSave.DisplayStyle = style;
+            tssbFind.DisplayStyle = style;
+            tssbCompile.DisplayStyle = style;
             tssbPlay.DisplayStyle = style;
             //tssbTracePlay.DisplayStyle = style;
+            tssbM98.DisplayStyle = style;
+            tssbPause.DisplayStyle = style;
             tssbStop.DisplayStyle = style;
             tssbSlow.DisplayStyle = style;
             tssbFast.DisplayStyle = style;
-            tssbFind.DisplayStyle = style;
             tssbMIDIKbd.DisplayStyle = style;
         }
 
