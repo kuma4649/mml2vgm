@@ -823,7 +823,22 @@ namespace mml2vgmIDE
         {
             try
             {
-                Process.Start("Tutorial.txt");
+                while (!File.Exists(setting.other.Tutorial) || (Control.ModifierKeys & Keys.Shift) == Keys.Shift)
+                {
+                    OpenFileDialog ofd = new OpenFileDialog();
+                    ofd.Filter = "テキストファイル(*.txt;*.doc;*.man;*.pdf)|*.txt;*.doc;*.man;*.pdf|すべてのファイル(*.*)|*.*";
+                    ofd.Title = "MMLのリファレンスマニュアルを選択";
+                    ofd.RestoreDirectory = true;
+
+                    if (ofd.ShowDialog() != DialogResult.OK)
+                    {
+                        return;
+                    }
+
+                    setting.other.Tutorial = ofd.FileName;
+                }
+
+                Process.Start(setting.other.Tutorial);
             }
             catch
             {
@@ -835,7 +850,103 @@ namespace mml2vgmIDE
         {
             try
             {
-                Process.Start("mml2vgm_MMLCommandMemo.txt");
+                while (!File.Exists(setting.other.CommandManual) || (Control.ModifierKeys & Keys.Shift) == Keys.Shift)
+                {
+                    OpenFileDialog ofd = new OpenFileDialog();
+                    ofd.Filter = "テキストファイル(*.txt;*.doc;*.man;*.pdf)|*.txt;*.doc;*.man;*.pdf|すべてのファイル(*.*)|*.*";
+                    ofd.Title = "MMLのリファレンスマニュアルを選択";
+                    ofd.RestoreDirectory = true;
+
+                    if (ofd.ShowDialog() != DialogResult.OK)
+                    {
+                        return;
+                    }
+
+                    setting.other.CommandManual = ofd.FileName;
+                }
+
+                Process.Start(setting.other.CommandManual);
+            }
+            catch
+            {
+                MessageBox.Show("Failed to open the file.", "error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void TsmiReferenceMucom_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                while (!File.Exists(setting.other.CommandManualMucom) || (Control.ModifierKeys & Keys.Shift) == Keys.Shift)
+                {
+                    OpenFileDialog ofd = new OpenFileDialog();
+                    ofd.Filter = "テキストファイル(*.txt;*.doc;*.man;*.pdf)|*.txt;*.doc;*.man;*.pdf|すべてのファイル(*.*)|*.*";
+                    ofd.Title = "MML(Mucom向け)のリファレンスマニュアルを選択";
+                    ofd.RestoreDirectory = true;
+
+                    if (ofd.ShowDialog() != DialogResult.OK)
+                    {
+                        return;
+                    }
+
+                    setting.other.CommandManualMucom = ofd.FileName;
+                }
+
+                Process.Start(setting.other.CommandManualMucom);
+            }
+            catch
+            {
+                MessageBox.Show("Failed to open the file.", "error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void TsmiReferencePMD_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                while (!File.Exists(setting.other.CommandManualPMD) || (Control.ModifierKeys & Keys.Shift) == Keys.Shift)
+                {
+                    OpenFileDialog ofd = new OpenFileDialog();
+                    ofd.Filter = "テキストファイル(*.txt;*.doc;*.man;*.pdf)|*.txt;*.doc;*.man;*.pdf|すべてのファイル(*.*)|*.*";
+                    ofd.Title = "MML(PMD向け)のリファレンスマニュアルを選択";
+                    ofd.RestoreDirectory = true;
+
+                    if (ofd.ShowDialog() != DialogResult.OK)
+                    {
+                        return;
+                    }
+
+                    setting.other.CommandManualPMD = ofd.FileName;
+                }
+
+                Process.Start(setting.other.CommandManualPMD);
+            }
+            catch
+            {
+                MessageBox.Show("Failed to open the file.", "error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void TsmiReferenceM98_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                while (!File.Exists(setting.other.CommandManualM98) || (Control.ModifierKeys & Keys.Shift) == Keys.Shift)
+                {
+                    OpenFileDialog ofd = new OpenFileDialog();
+                    ofd.Filter = "テキストファイル(*.txt;*.doc;*.man;*.pdf)|*.txt;*.doc;*.man;*.pdf|すべてのファイル(*.*)|*.*";
+                    ofd.Title = "MML(Mucom向け)のリファレンスマニュアルを選択";
+                    ofd.RestoreDirectory = true;
+
+                    if (ofd.ShowDialog() != DialogResult.OK)
+                    {
+                        return;
+                    }
+
+                    setting.other.CommandManualM98 = ofd.FileName;
+                }
+
+                Process.Start(setting.other.CommandManualM98);
             }
             catch
             {

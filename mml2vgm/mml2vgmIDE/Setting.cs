@@ -1759,6 +1759,17 @@ namespace mml2vgmIDE
             private FontStyle _TextFontStyle = FontStyle.Regular;
             public FontStyle TextFontStyle { get => _TextFontStyle; set => _TextFontStyle = value; }
             private string[] _GwiFileHistory = null;
+            private string _Tutorial = "Tutorial.txt";
+            private string _CommandManual = "mml2vgm_MMLCommandMemo.txt";
+            private string _CommandManualMucom = "";
+            private string _CommandManualPMD="";
+            private string _CommandManualM98 = "m98コマンド・リファレンス.pdf";
+            public string Tutorial { get => _Tutorial; set => _Tutorial = value; }
+            public string CommandManual { get => _CommandManual; set => _CommandManual = value; }
+            public string CommandManualMucom { get => _CommandManualMucom; set => _CommandManualMucom = value; }
+            public string CommandManualPMD { get => _CommandManualPMD; set => _CommandManualPMD = value; }
+            public string CommandManualM98 { get => _CommandManualM98; set => _CommandManualM98 = value; }
+
             public string[] GwiFileHistory { get => _GwiFileHistory; set => _GwiFileHistory = value; }
 
             public bool LogWarning { get; set; } = false;
@@ -1797,6 +1808,11 @@ namespace mml2vgmIDE
                 other.LogWarning = this.LogWarning;
                 other.PlayDeviceCB = this.PlayDeviceCB;
                 other.LogLevel = this.LogLevel;
+                other.Tutorial = this.Tutorial;
+                other.CommandManual = this.CommandManual;
+                other.CommandManualMucom = this.CommandManualMucom;
+                other.CommandManualPMD = this.CommandManualPMD;
+                other.CommandManualM98 = this.CommandManualM98;
 
                 return other;
             }

@@ -119,328 +119,343 @@
   </resheader>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="toolStripStatusLabel1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>392, 25</value>
+    <value>40, 17</value>
   </data>
   <data name="tssbOpen.Size" type="System.Drawing.Size, System.Drawing">
-    <value>78, 29</value>
+    <value>63, 20</value>
   </data>
   <data name="tssbOpen.Text" xml:space="preserve">
     <value>開く</value>
-  </data>
-  <data name="tssbSave.Size" type="System.Drawing.Size, System.Drawing">
-    <value>85, 29</value>
   </data>
   <data name="tssbSave.Text" xml:space="preserve">
     <value>保存</value>
   </data>
   <data name="tssbFind.Size" type="System.Drawing.Size, System.Drawing">
-    <value>117, 29</value>
+    <value>89, 20</value>
   </data>
   <data name="tssbFind.Text" xml:space="preserve">
     <value>次を検索</value>
   </data>
   <data name="tssbCompile.Size" type="System.Drawing.Size, System.Drawing">
-    <value>118, 29</value>
+    <value>90, 20</value>
   </data>
   <data name="tssbCompile.Text" xml:space="preserve">
     <value>コンパイル</value>
   </data>
   <data name="tssbPlay.Size" type="System.Drawing.Size, System.Drawing">
-    <value>85, 29</value>
+    <value>68, 20</value>
   </data>
   <data name="tssbPlay.Text" xml:space="preserve">
     <value>再生</value>
   </data>
   <data name="tssbPause.Size" type="System.Drawing.Size, System.Drawing">
-    <value>90, 29</value>
+    <value>71, 20</value>
   </data>
   <data name="tssbPause.Text" xml:space="preserve">
     <value>ポーズ</value>
-  </data>
-  <data name="tssbStop.Size" type="System.Drawing.Size, System.Drawing">
-    <value>85, 29</value>
   </data>
   <data name="tssbStop.Text" xml:space="preserve">
     <value>停止</value>
   </data>
   <data name="tssbSlow.Size" type="System.Drawing.Size, System.Drawing">
-    <value>88, 29</value>
+    <value>70, 20</value>
   </data>
   <data name="tssbSlow.Text" xml:space="preserve">
     <value>スロー</value>
   </data>
   <data name="tssbFast.Size" type="System.Drawing.Size, System.Drawing">
-    <value>95, 29</value>
+    <value>74, 20</value>
   </data>
   <data name="tssbFast.Text" xml:space="preserve">
     <value>4倍速</value>
   </data>
   <data name="tssbMIDIKbd.Size" type="System.Drawing.Size, System.Drawing">
-    <value>85, 29</value>
+    <value>68, 20</value>
   </data>
   <data name="tssbMIDIKbd.Text" xml:space="preserve">
     <value>鍵盤</value>
   </data>
   <data name="TsmiNew.Size" type="System.Drawing.Size, System.Drawing">
-    <value>307, 34</value>
+    <value>201, 22</value>
   </data>
   <data name="TsmiNew.Text" xml:space="preserve">
     <value>新規作成(&amp;N)</value>
   </data>
   <data name="TsmiOpenFile.Size" type="System.Drawing.Size, System.Drawing">
-    <value>307, 34</value>
+    <value>201, 22</value>
   </data>
   <data name="TsmiOpenFile.Text" xml:space="preserve">
     <value>ファイルを開く(&amp;O)</value>
   </data>
   <data name="TsmiOpenFolder.Size" type="System.Drawing.Size, System.Drawing">
-    <value>307, 34</value>
+    <value>201, 22</value>
   </data>
   <data name="TsmiOpenFolder.Text" xml:space="preserve">
     <value>フォルダーを開く(&amp;F)</value>
   </data>
   <data name="tsmiGwiFileHistory.Size" type="System.Drawing.Size, System.Drawing">
-    <value>307, 34</value>
+    <value>201, 22</value>
   </data>
   <data name="tsmiGwiFileHistory.Text" xml:space="preserve">
     <value>最近使用したファイルを開く</value>
   </data>
   <data name="TsmiSaveFile.Size" type="System.Drawing.Size, System.Drawing">
-    <value>307, 34</value>
+    <value>201, 22</value>
   </data>
   <data name="TsmiSaveFile.Text" xml:space="preserve">
     <value>上書き保存(&amp;S)</value>
   </data>
   <data name="TsmiSaveAs.Size" type="System.Drawing.Size, System.Drawing">
-    <value>307, 34</value>
+    <value>201, 22</value>
   </data>
   <data name="TsmiSaveAs.Text" xml:space="preserve">
     <value>名前を付けて保存(&amp;A)</value>
   </data>
   <data name="toolStripSeparator2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>304, 6</value>
+    <value>198, 6</value>
   </data>
   <data name="tsmiImport.Size" type="System.Drawing.Size, System.Drawing">
-    <value>307, 34</value>
+    <value>201, 22</value>
   </data>
   <data name="tsmiImport.Text" xml:space="preserve">
     <value>インポート</value>
   </data>
   <data name="tsmiExport.Size" type="System.Drawing.Size, System.Drawing">
-    <value>307, 34</value>
+    <value>201, 22</value>
   </data>
   <data name="tsmiExport.Text" xml:space="preserve">
     <value>エクスポート</value>
   </data>
   <data name="toolStripSeparator1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>304, 6</value>
+    <value>198, 6</value>
   </data>
   <data name="TsmiExit.Size" type="System.Drawing.Size, System.Drawing">
-    <value>307, 34</value>
+    <value>201, 22</value>
   </data>
   <data name="TsmiExit.Text" xml:space="preserve">
     <value>終了(&amp;E)</value>
   </data>
   <data name="TsmiFile.Size" type="System.Drawing.Size, System.Drawing">
-    <value>98, 29</value>
+    <value>67, 20</value>
   </data>
   <data name="TsmiFile.Text" xml:space="preserve">
     <value>ファイル(&amp;F)</value>
   </data>
   <data name="TsmiUndo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>261, 34</value>
+    <value>170, 22</value>
   </data>
   <data name="TsmiUndo.Text" xml:space="preserve">
     <value>元に戻す</value>
   </data>
   <data name="TsmiRedo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>261, 34</value>
+    <value>170, 22</value>
   </data>
   <data name="TsmiRedo.Text" xml:space="preserve">
     <value>やり直し</value>
   </data>
   <data name="toolStripSeparator4.Size" type="System.Drawing.Size, System.Drawing">
-    <value>258, 6</value>
+    <value>167, 6</value>
   </data>
   <data name="TsmiFind.Size" type="System.Drawing.Size, System.Drawing">
-    <value>261, 34</value>
+    <value>170, 22</value>
   </data>
   <data name="TsmiFind.Text" xml:space="preserve">
     <value>検索</value>
   </data>
   <data name="TsmiFindNext.Size" type="System.Drawing.Size, System.Drawing">
-    <value>261, 34</value>
+    <value>170, 22</value>
   </data>
   <data name="TsmiFindNext.Text" xml:space="preserve">
     <value>次を検索</value>
   </data>
   <data name="TsmiFindPrevious.Size" type="System.Drawing.Size, System.Drawing">
-    <value>261, 34</value>
+    <value>170, 22</value>
   </data>
   <data name="TsmiFindPrevious.Text" xml:space="preserve">
     <value>前を検索</value>
   </data>
   <data name="TsmiEdit.Size" type="System.Drawing.Size, System.Drawing">
-    <value>83, 29</value>
+    <value>57, 20</value>
   </data>
   <data name="TsmiEdit.Text" xml:space="preserve">
     <value>編集(&amp;E)</value>
   </data>
   <data name="TsmiShowPartCounter.Size" type="System.Drawing.Size, System.Drawing">
-    <value>228, 34</value>
+    <value>150, 22</value>
   </data>
   <data name="TsmiShowPartCounter.Text" xml:space="preserve">
     <value>パートカウンター</value>
   </data>
   <data name="TsmiShowFolderTree.Size" type="System.Drawing.Size, System.Drawing">
-    <value>228, 34</value>
+    <value>150, 22</value>
   </data>
   <data name="TsmiShowFolderTree.Text" xml:space="preserve">
     <value>フォルダーツリー</value>
   </data>
   <data name="TsmiShowErrorList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>228, 34</value>
+    <value>150, 22</value>
   </data>
   <data name="TsmiShowErrorList.Text" xml:space="preserve">
     <value>エラーリスト</value>
   </data>
   <data name="TsmiShowLog.Size" type="System.Drawing.Size, System.Drawing">
-    <value>228, 34</value>
+    <value>150, 22</value>
   </data>
   <data name="TsmiShowLog.Text" xml:space="preserve">
     <value>ログ</value>
   </data>
   <data name="TsmiShowLyrics.Size" type="System.Drawing.Size, System.Drawing">
-    <value>228, 34</value>
+    <value>150, 22</value>
   </data>
   <data name="TsmiShowLyrics.Text" xml:space="preserve">
     <value>歌詞</value>
   </data>
   <data name="TsmiShowMixer.Size" type="System.Drawing.Size, System.Drawing">
-    <value>228, 34</value>
+    <value>150, 22</value>
   </data>
   <data name="TsmiShowMixer.Text" xml:space="preserve">
     <value>音源ミキサー</value>
   </data>
   <data name="TsmiShowMIDIKbd.Size" type="System.Drawing.Size, System.Drawing">
-    <value>228, 34</value>
+    <value>150, 22</value>
   </data>
   <data name="TsmiShowMIDIKbd.Text" xml:space="preserve">
     <value>MIDIキーボード</value>
   </data>
   <data name="toolStripSeparator3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>225, 6</value>
+    <value>147, 6</value>
   </data>
   <data name="TsmiFncHide.Size" type="System.Drawing.Size, System.Drawing">
-    <value>223, 34</value>
+    <value>146, 22</value>
   </data>
   <data name="TsmiFncHide.Text" xml:space="preserve">
     <value>非表示</value>
   </data>
   <data name="TsmiFncButtonOnly.Size" type="System.Drawing.Size, System.Drawing">
-    <value>223, 34</value>
+    <value>146, 22</value>
   </data>
   <data name="TsmiFncButtonOnly.Text" xml:space="preserve">
     <value>ボタンのみ</value>
   </data>
   <data name="TsmiFncButtonAndText.Size" type="System.Drawing.Size, System.Drawing">
-    <value>223, 34</value>
+    <value>146, 22</value>
   </data>
   <data name="TsmiFncButtonAndText.Text" xml:space="preserve">
     <value>ボタンとテキスト</value>
   </data>
   <data name="TsmiFunctionKey.Size" type="System.Drawing.Size, System.Drawing">
-    <value>228, 34</value>
+    <value>150, 22</value>
   </data>
   <data name="TsmiFunctionKey.Text" xml:space="preserve">
     <value>ファンクションキー</value>
   </data>
   <data name="表示VToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>85, 29</value>
+    <value>58, 20</value>
   </data>
   <data name="表示VToolStripMenuItem.Text" xml:space="preserve">
     <value>表示(&amp;V)</value>
   </data>
   <data name="TsmiCompileAndPlay.Size" type="System.Drawing.Size, System.Drawing">
-    <value>340, 34</value>
+    <value>225, 22</value>
   </data>
   <data name="TsmiCompileAndPlay.Text" xml:space="preserve">
     <value>コンパイルと再生</value>
   </data>
   <data name="TsmiCompileAndTracePlay.Size" type="System.Drawing.Size, System.Drawing">
-    <value>340, 34</value>
+    <value>225, 22</value>
   </data>
   <data name="TsmiCompileAndTracePlay.Text" xml:space="preserve">
     <value>コンパイルとトレース再生</value>
   </data>
   <data name="TsmiCompileAndSkipPlay.Size" type="System.Drawing.Size, System.Drawing">
-    <value>340, 34</value>
+    <value>225, 22</value>
   </data>
   <data name="TsmiCompileAndSkipPlay.Text" xml:space="preserve">
     <value>コンパイルとスキップ再生</value>
   </data>
   <data name="TsmiAllCompile.Size" type="System.Drawing.Size, System.Drawing">
-    <value>340, 34</value>
+    <value>225, 22</value>
   </data>
   <data name="TsmiAllCompile.Text" xml:space="preserve">
     <value>開いているファイル全てコンパイル</value>
   </data>
   <data name="TsmiCompile.Size" type="System.Drawing.Size, System.Drawing">
-    <value>340, 34</value>
+    <value>225, 22</value>
   </data>
   <data name="TsmiCompile.Text" xml:space="preserve">
     <value>コンパイルのみ</value>
   </data>
   <data name="コンパイルCToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>118, 29</value>
+    <value>80, 20</value>
   </data>
   <data name="コンパイルCToolStripMenuItem.Text" xml:space="preserve">
     <value>コンパイル(&amp;C)</value>
   </data>
   <data name="featureToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>83, 29</value>
+    <value>57, 20</value>
   </data>
   <data name="featureToolStripMenuItem.Text" xml:space="preserve">
     <value>機能(&amp;a)</value>
   </data>
   <data name="tsmiScript.Size" type="System.Drawing.Size, System.Drawing">
-    <value>115, 29</value>
+    <value>76, 20</value>
   </data>
   <data name="tsmiScript.Text" xml:space="preserve">
     <value>スクリプト(&amp;S)</value>
   </data>
   <data name="tsmiOption.Size" type="System.Drawing.Size, System.Drawing">
-    <value>211, 34</value>
+    <value>140, 22</value>
   </data>
   <data name="tsmiOption.Text" xml:space="preserve">
     <value>オプション(&amp;O)_</value>
   </data>
   <data name="ツールTToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>87, 29</value>
+    <value>60, 20</value>
   </data>
   <data name="ツールTToolStripMenuItem.Text" xml:space="preserve">
     <value>ツール(&amp;T)</value>
   </data>
   <data name="TsmiTutorial.Size" type="System.Drawing.Size, System.Drawing">
-    <value>284, 34</value>
+    <value>229, 22</value>
   </data>
   <data name="TsmiTutorial.Text" xml:space="preserve">
     <value>データ作成手順 </value>
   </data>
   <data name="TsmiReference.Size" type="System.Drawing.Size, System.Drawing">
-    <value>284, 34</value>
+    <value>229, 22</value>
   </data>
   <data name="TsmiReference.Text" xml:space="preserve">
     <value>mmlコマンドリファレンス </value>
   </data>
+  <data name="TsmiReferenceMucom.Size" type="System.Drawing.Size, System.Drawing">
+    <value>229, 22</value>
+  </data>
+  <data name="TsmiReferenceMucom.Text" xml:space="preserve">
+    <value>mmlコマンドリファレンス(mucom)</value>
+  </data>
+  <data name="TsmiReferencePMD.Size" type="System.Drawing.Size, System.Drawing">
+    <value>229, 22</value>
+  </data>
+  <data name="TsmiReferencePMD.Text" xml:space="preserve">
+    <value>mmlコマンドリファレンス(PMD)</value>
+  </data>
+  <data name="TsmiReferenceM98.Size" type="System.Drawing.Size, System.Drawing">
+    <value>229, 22</value>
+  </data>
+  <data name="TsmiReferenceM98.Text" xml:space="preserve">
+    <value>mmlコマンドリファレンス(M98)</value>
+  </data>
+  <data name="toolStripSeparator5.Size" type="System.Drawing.Size, System.Drawing">
+    <value>226, 6</value>
+  </data>
   <data name="TsmiAbout.Size" type="System.Drawing.Size, System.Drawing">
-    <value>284, 34</value>
+    <value>229, 22</value>
   </data>
   <data name="TsmiAbout.Text" xml:space="preserve">
     <value>About </value>
   </data>
   <data name="TsmiHelp.Size" type="System.Drawing.Size, System.Drawing">
-    <value>95, 29</value>
+    <value>65, 20</value>
   </data>
   <data name="TsmiHelp.Text" xml:space="preserve">
     <value>ヘルプ(&amp;H)</value>

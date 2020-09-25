@@ -672,6 +672,7 @@ ebass3(from MUSIC LALF @70)
                                                               実際のチップによる演奏の場合を想定していて、
                                                               エミュレーションによる演奏の場合は効果が薄い。
 @vn             -oo--ooooooooooooooooooooooooooooooooooooooo  )(コマンド使用時、値を省略した場合に適用される値
+@Wn,n,n,n       -----------------oo-------------------------  基本波形番号指定(0 - 255) 基本波形4種を指定した波形に変更できる
 ln              oooooooooooooooooooooooooooooooooooooooooooo  デフォルト音長指定
 l#n             oooooooooooooooooooooooooooooooooooooooooooo  デフォルト音長指定(クロック値指定)
 on              -ooo-ooooo-oooo-oooo-oooooo-o-ooo-o-o-o-oooo  オクターブ絶対指定(1 - 8)(実際に発音される音は可能な音域のみ)
@@ -881,6 +882,8 @@ b               -ooooooooooooooooooooooooooooooooooooooooooo  音符シ
                                                               音長を指定しない場合はキーオフせずに次の音符とつなげる)
     &#n         oooooooooooooooooooooooooooooooooooooooooooo  タイ(#n:  クロック指定音長 音長分だけ発音を追加する。
                                                               音長を指定しない場合はキーオフせずに次の音符とつなげる)
+    ^n          oooooooooooooooooooooooooooooooooooooooooooo  タイ(n: 音長 音長分だけ発音を延長。)
+    ^#n         oooooooooooooooooooooooooooooooooooooooooooo  タイ(#n:  クロック指定音長 音長分だけ発音を延長。)
     ~n          oooooooooooooooooooooooooooooooooooooooooooo  タイの逆(n: 音長 音長分だけ発音を削る。)
     ~#n         oooooooooooooooooooooooooooooooooooooooooooo  タイの逆(#n:  クロック指定音長 音長分だけ発音を削る。)
     ,           -oo----oo---oo---oo----oo-o-----------------  Tone Doublerモード
@@ -1218,6 +1221,14 @@ FM1Chで指定の音程2音を同時に出力することを主な目的とし�
 '@   8   8   3   3    0   0   0   0     5
 '@   8   8   4   4    1   1   0   0     0
 '@  12  12   4   4    0   0   0   0     0
+
+
+(5) 基本波形定義
+  YM2609はFMの合成に使用される基本波形を編集することが可能です。
+'@ W No , val1, ... val1024
+    No          定義番号(0-255)
+    valn        波形データ($0-$FFFF) 1024個の定義が必要。複数行に分けてもよい。
+
 
 
 ■ エンベロープ定義
