@@ -19,7 +19,8 @@ namespace mml2vgmIDE
         public Document document = null;
         public FrmSien frmSien = null;
         public EnmMmlFileFormat fmt = EnmMmlFileFormat.GWI;
-        //public int col = -1;
+        public int parentID= -1;
+
         public AzukiControl azukiControl;
         public bool forceClose = false;
 
@@ -41,7 +42,7 @@ namespace mml2vgmIDE
             }
         }
 
-        public FrmEditor(Setting setting, EnmMmlFileFormat fmt)
+        public FrmEditor(Setting setting, EnmMmlFileFormat fmt, FrmSien sien)
         {
             InitializeComponent();
             this.setting = setting;
@@ -50,10 +51,17 @@ namespace mml2vgmIDE
             else if (fmt == EnmMmlFileFormat.MML) setHighlighterMML();
             else setHighlighterVGMZGMZGM();
 
+            frmSien = sien;
+
+            //frmSien = new FrmSien(setting);
+            //frmSien.parent = main;
+            //frmSien.Show();
+
             this.fmt = fmt;
             Common.SetDoubleBuffered(this);
             Common.SetDoubleBuffered(azukiControl);
         }
+
         protected override bool ProcessCmdKey(ref System.Windows.Forms.Message msg, System.Windows.Forms.Keys keyData)
         {
             return main.SendProcessCmdKey(ref msg, keyData);
@@ -110,9 +118,6 @@ namespace mml2vgmIDE
 
             this.Controls.Add(azukiControl);
 
-            frmSien = new FrmSien(setting);
-            frmSien.parent = main;
-            frmSien.Show();
         }
 
         private void setHighlighterMUC()
@@ -169,9 +174,6 @@ namespace mml2vgmIDE
 
             this.Controls.Add(azukiControl);
 
-            frmSien = new FrmSien(setting);
-            frmSien.parent = main;
-            frmSien.Show();
         }
 
         private void setHighlighterMML()
@@ -228,9 +230,6 @@ namespace mml2vgmIDE
 
             this.Controls.Add(azukiControl);
 
-            frmSien = new FrmSien(setting);
-            frmSien.parent = main;
-            frmSien.Show();
         }
 
         private void AzukiControl_DragDrop(object sender, DragEventArgs e)
@@ -824,15 +823,28 @@ namespace mml2vgmIDE
 
             //main.UpdateControl();
 
+            dispSienForm(-1);
+        }
+
+        private void dispSienForm(int row)
+        {
             int ci = azukiControl.CaretIndex;
             int st = azukiControl.GetLineHeadIndexFromCharIndex(ci);
             Point ciP = azukiControl.GetPositionFromIndex(Math.Max(ci - 1, 0));
             ciP = azukiControl.PointToScreen(new Point(ciP.X, ciP.Y + azukiControl.LineHeight));
             string line = azukiControl.GetTextInRange(st, ci).TrimStart();
-            if (line != "" && line[0] == '\'' && frmSien != null)
+            if (row < 0)
             {
-                frmSien.selRow = -1;
-                frmSien.Request(line, ciP);
+                if (line != "" && line[0] == '\'' && frmSien != null)
+                {
+                    frmSien.selRow = row;
+                    frmSien.Request(line, ciP, parentID, fmt);
+                }
+            }
+            else
+            {
+                frmSien.selRow = row;
+                frmSien.Request(line, ciP, parentID, fmt);
             }
         }
 
@@ -896,61 +908,119 @@ namespace mml2vgmIDE
                 e.SuppressKeyPress = false;
                 return;
             }
-            e.SuppressKeyPress = true;
 
-            switch (e.KeyCode)
+            //支援ウィンドウのキーによる制御
+            e.SuppressKeyPress = true;
+            
+            //Console.WriteLine("{0}", e.KeyCode);
+
+            try
             {
-                case Keys.Down:
-                    if (frmSien.selRow < 0) frmSien.selRow = -1;
-                    if (frmSien.dgvItem.Rows.Count - 1 > frmSien.selRow) frmSien.selRow++;
-                    frmSien.dgvItem.Rows[frmSien.selRow].Selected = true;
-                    frmSien.dgvItem.FirstDisplayedScrollingRowIndex = Math.Max(frmSien.selRow, 0);
-                    break;
-                case Keys.Up:
-                    if (frmSien.dgvItem.Rows.Count > -1) frmSien.selRow--;
-                    if (frmSien.selRow < 0)
-                        frmSien.SetOpacity(false);
-                    else
-                    {
+                switch (e.KeyCode)
+                {
+                    case Keys.Down:
+                        if (frmSien.selRow < 0) frmSien.selRow = -1;
+                        if (frmSien.dgvItem.Rows.Count - 1 > frmSien.selRow) frmSien.selRow++;
                         frmSien.dgvItem.Rows[frmSien.selRow].Selected = true;
                         frmSien.dgvItem.FirstDisplayedScrollingRowIndex = Math.Max(frmSien.selRow, 0);
-                    }
-                    break;
-                case Keys.Enter:
-                case Keys.Tab:
-                    frmSien.SetOpacity(false);
-                    if (frmSien.dgvItem.SelectedRows.Count == 1)
-                    {
-                        int ci = azukiControl.CaretIndex;
-                        SienItem si = (SienItem)frmSien.dgvItem.Rows[frmSien.dgvItem.SelectedRows[0].Index].Tag;
-                        if (si.sienType == 2)
-                        {
-                            azukiControl.Document.Replace(
-                                (document.srcFileFormat == EnmMmlFileFormat.GWI) ? si.content : ConvertMucFromGwiOPN(si.content),
-                                ci - si.foundCnt,
-                                ci);
-                        }
+                        break;
+                    case Keys.Up:
+                        if (frmSien.dgvItem.Rows.Count > -1) frmSien.selRow--;
+                        if (frmSien.selRow < 0)
+                            frmSien.SetOpacity(false);
                         else
                         {
-                            azukiControl.Document.Replace(
-                                si.content,
-                                ci - si.foundCnt,
-                                ci);
+                            frmSien.dgvItem.Rows[frmSien.selRow].Selected = true;
+                            frmSien.dgvItem.FirstDisplayedScrollingRowIndex = Math.Max(frmSien.selRow, 0);
                         }
+                        break;
+                    case Keys.Enter:
+                    case Keys.Tab:
+                        frmSien.SetOpacity(false);
+                        if (frmSien.dgvItem.SelectedRows.Count == 1)
+                        {
+                            int ci = azukiControl.CaretIndex;
+                            SienItem si = (SienItem)frmSien.dgvItem.Rows[frmSien.dgvItem.SelectedRows[0].Index].Tag;
 
-                        azukiControl.SetSelection(ci - si.foundCnt + si.nextAnchor, ci - si.foundCnt + si.nextCaret);
-                    }
-                    break;
-                case Keys.Right:
-                case Keys.Left:
-                case Keys.Home:
-                case Keys.End:
-                case Keys.Escape:
-                    frmSien.SetOpacity(false);
-                    break;
-                default:
-                    e.SuppressKeyPress = false;
-                    break;
+                            if (si.haveChild)
+                            {
+                                parentID = si.ID;
+                                dispSienForm(0);
+                                break;
+                            }
+
+                            if (si.sienType == 2)
+                            {
+                                azukiControl.Document.Replace(
+                                    (document.srcFileFormat == EnmMmlFileFormat.GWI) ? si.content : (
+                                    (document.srcFileFormat == EnmMmlFileFormat.MUC) ? ConvertMucFromGwiOPN(si.content) : (
+                                    (document.srcFileFormat == EnmMmlFileFormat.MML) ? ConvertMMLFromGwiOPN(si.content) : (
+                                    si.content))),
+                                    ci - si.foundCnt,
+                                    ci);
+                            }
+                            else
+                            {
+                                azukiControl.Document.Replace(
+                                    si.content,
+                                    ci - si.foundCnt,
+                                    ci);
+                            }
+
+                            azukiControl.SetSelection(ci - si.foundCnt + si.nextAnchor, ci - si.foundCnt + si.nextCaret);
+                        }
+                        break;
+                    case Keys.Right:
+                        if (frmSien.dgvItem.SelectedRows.Count == 1)
+                        {
+                            SienItem si = (SienItem)frmSien.dgvItem.Rows[frmSien.dgvItem.SelectedRows[0].Index].Tag;
+                            if (!si.haveChild)
+                            {
+                                frmSien.SetOpacity(false);
+                                parentID = -1;
+                                break;
+                            }
+
+                            parentID = si.ID;
+                            dispSienForm(0);
+                        }
+                        break;
+                    case Keys.Left:
+                        if (frmSien.dgvItem.SelectedRows.Count == 1)
+                        {
+                            SienItem si = (SienItem)frmSien.dgvItem.Rows[frmSien.dgvItem.SelectedRows[0].Index].Tag;
+                            if (si.parentID < -1)
+                            {
+                                frmSien.SetOpacity(false);
+                                parentID = -1;
+                                break;
+                            }
+
+                            parentID = si.parentID;
+                            dispSienForm(0);
+                        }
+                        break;
+                    case Keys.Home:
+                    case Keys.End:
+                    case Keys.Escape:
+                        frmSien.SetOpacity(false);
+                        parentID = -1;
+                        break;
+                    case Keys.Back:
+                        frmSien.SetOpacity(false);
+                        parentID = -1;
+                        e.SuppressKeyPress = false;
+                        break;
+                    default:
+                        parentID = -1;
+                        e.SuppressKeyPress = false;
+                        break;
+                }
+            }
+            catch
+            {
+                parentID = -1;
+                e.SuppressKeyPress = false;
             }
         }
 
@@ -958,7 +1028,15 @@ namespace mml2vgmIDE
         {
             try
             {
-                string[] ops = content.Split(new string[] { "\r\n" }, StringSplitOptions.None);
+                string[] ops;
+                if (content.IndexOf("\r\n") >= 0)
+                {
+                    ops = content.Split(new string[] { "\r\n" }, StringSplitOptions.None);
+                }
+                else
+                {
+                    ops = content.Split(new string[] { "\n" }, StringSplitOptions.None);
+                }
                 string ret = string.Format(
                     "  @001:{{\r\n  {5} {6}\r\n  {0}\r\n  {1}\r\n  {2}\r\n  {3} \"{4}\"}}\r\n"
                     , ops[3].Substring(3)
@@ -968,6 +1046,46 @@ namespace mml2vgmIDE
                     , ops[0].Trim().Substring(0, 8)
                     , ops[8].Substring(3).Trim().Split(' ')[1]
                     , ops[8].Substring(3).Trim().Split(' ')[0]
+                    );
+                return ret;
+            }
+            catch
+            {
+                return "";
+            }
+        }
+
+        private string ConvertMMLFromGwiOPN(string content)
+        {
+            try
+            {
+                string[] ops;
+                if (content.IndexOf("\r\n") >= 0)
+                {
+                    ops = content.Split(new string[] { "\r\n" }, StringSplitOptions.None);
+                }
+                else
+                {
+                    ops = content.Split(new string[] { "\n" }, StringSplitOptions.None);
+                }
+
+                string o1= ops[3].Trim().Substring(3);
+                o1 = o1.Substring(0, o1.Length - 4);
+                string o2= ops[4].Trim().Substring(3);
+                o2 = o2.Substring(0, o2.Length - 4);
+                string o3 = ops[5].Trim().Substring(3);
+                o3 = o3.Substring(0, o3.Length - 4);
+                string o4 = ops[6].Trim().Substring(3);
+                o4 = o4.Substring(0, o4.Length - 4);
+
+                string ret = string.Format(
+                    "; nm alg fbl\r\n@xxx {0} ={5}\r\n; ar  dr  sr  rr  sl  tl  ks  ml  dt ams\r\n {1}\r\n {2}\r\n {3}\r\n {4}\r\n"
+                    , ops[8].Substring(3)
+                    , o1
+                    , o2
+                    , o3
+                    , o4
+                    ,ops[0].Trim()
                     );
                 return ret;
             }

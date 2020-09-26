@@ -1603,6 +1603,7 @@ namespace mml2vgmIDE
             setting.InfiniteOfflineMode = cbInfiniteOfflineMode.Checked;
             if (cbInfiniteOfflineMode.Checked) setting.OfflineMode = true;
             setting.UseSien = cbUseSIen.Checked;
+            if (cbRequestCacheClear.Checked) setting.sien.cacheClear = true;
 
             if (rbStopWatch.Checked) setting.musicInterruptTimer = MusicInterruptTimer.StopWatch;
             if (rbDateTime.Checked) setting.musicInterruptTimer = MusicInterruptTimer.DateTime;

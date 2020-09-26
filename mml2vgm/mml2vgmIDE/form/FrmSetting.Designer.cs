@@ -76,7 +76,6 @@
             this.rbSCCIDetect = new System.Windows.Forms.RadioButton();
             this.rbC86ctlDetect = new System.Windows.Forms.RadioButton();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.ucSI = new mml2vgmIDE.ucSettingInstruments();
             this.tabPage13 = new System.Windows.Forms.TabPage();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.label16 = new System.Windows.Forms.Label();
@@ -203,14 +202,15 @@
             this.rbPMDNrmB = new System.Windows.Forms.RadioButton();
             this.cbPMDUsePPSDRV = new System.Windows.Forms.CheckBox();
             this.gbPPSDRV = new System.Windows.Forms.GroupBox();
+            this.groupBox33 = new System.Windows.Forms.GroupBox();
             this.rbPMDUsePPSDRVManualFreq = new System.Windows.Forms.RadioButton();
-            this.rbPMDUsePPSDRVFreqDefault = new System.Windows.Forms.RadioButton();
-            this.label40 = new System.Windows.Forms.Label();
             this.label38 = new System.Windows.Forms.Label();
-            this.tbPMDPPSDRVManualWait = new System.Windows.Forms.TextBox();
-            this.label39 = new System.Windows.Forms.Label();
-            this.tbPMDPPSDRVFreq = new System.Windows.Forms.TextBox();
+            this.rbPMDUsePPSDRVFreqDefault = new System.Windows.Forms.RadioButton();
             this.btnPMDPPSDRVManualWait = new System.Windows.Forms.Button();
+            this.label40 = new System.Windows.Forms.Label();
+            this.tbPMDPPSDRVFreq = new System.Windows.Forms.TextBox();
+            this.label39 = new System.Windows.Forms.Label();
+            this.tbPMDPPSDRVManualWait = new System.Windows.Forms.TextBox();
             this.gbPMDSetManualVolume = new System.Windows.Forms.GroupBox();
             this.label41 = new System.Windows.Forms.Label();
             this.label46 = new System.Windows.Forms.Label();
@@ -397,7 +397,8 @@
             this.textBoxDescription = new System.Windows.Forms.TextBox();
             this.llOpenGithub = new System.Windows.Forms.LinkLabel();
             this.cbHiyorimiMode = new System.Windows.Forms.CheckBox();
-            this.groupBox33 = new System.Windows.Forms.GroupBox();
+            this.ucSI = new mml2vgmIDE.ucSettingInstruments();
+            this.cbRequestCacheClear = new System.Windows.Forms.CheckBox();
             this.gbWaveOut.SuspendLayout();
             this.gbAsioOut.SuspendLayout();
             this.gbWasapiOut.SuspendLayout();
@@ -448,6 +449,7 @@
             this.gbPMDManual.SuspendLayout();
             this.groupBox32.SuspendLayout();
             this.gbPPSDRV.SuspendLayout();
+            this.groupBox33.SuspendLayout();
             this.gbPMDSetManualVolume.SuspendLayout();
             this.tpMIDIExp.SuspendLayout();
             this.gbMIDIExport.SuspendLayout();
@@ -490,7 +492,6 @@
             this.tpAbout.SuspendLayout();
             this.tableLayoutPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.logoPictureBox)).BeginInit();
-            this.groupBox33.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnOK
@@ -1050,17 +1051,6 @@
             this.groupBox1.Size = new System.Drawing.Size(411, 258);
             this.groupBox1.TabIndex = 8;
             this.groupBox1.TabStop = false;
-            // 
-            // ucSI
-            // 
-            this.ucSI.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.ucSI.AutoScroll = true;
-            this.ucSI.Location = new System.Drawing.Point(3, 18);
-            this.ucSI.Name = "ucSI";
-            this.ucSI.Size = new System.Drawing.Size(405, 237);
-            this.ucSI.TabIndex = 7;
             // 
             // tabPage13
             // 
@@ -2458,6 +2448,24 @@
             this.gbPPSDRV.TabIndex = 8;
             this.gbPPSDRV.TabStop = false;
             // 
+            // groupBox33
+            // 
+            this.groupBox33.Controls.Add(this.rbPMDUsePPSDRVManualFreq);
+            this.groupBox33.Controls.Add(this.label38);
+            this.groupBox33.Controls.Add(this.rbPMDUsePPSDRVFreqDefault);
+            this.groupBox33.Controls.Add(this.btnPMDPPSDRVManualWait);
+            this.groupBox33.Controls.Add(this.label40);
+            this.groupBox33.Controls.Add(this.tbPMDPPSDRVFreq);
+            this.groupBox33.Controls.Add(this.label39);
+            this.groupBox33.Controls.Add(this.tbPMDPPSDRVManualWait);
+            this.groupBox33.Enabled = false;
+            this.groupBox33.Location = new System.Drawing.Point(6, 18);
+            this.groupBox33.Name = "groupBox33";
+            this.groupBox33.Size = new System.Drawing.Size(394, 100);
+            this.groupBox33.TabIndex = 12;
+            this.groupBox33.TabStop = false;
+            this.groupBox33.Text = "TBD";
+            // 
             // rbPMDUsePPSDRVManualFreq
             // 
             this.rbPMDUsePPSDRVManualFreq.AutoSize = true;
@@ -2468,6 +2476,15 @@
             this.rbPMDUsePPSDRVManualFreq.TabStop = true;
             this.rbPMDUsePPSDRVManualFreq.UseVisualStyleBackColor = true;
             this.rbPMDUsePPSDRVManualFreq.CheckedChanged += new System.EventHandler(this.rbPMDUsePPSDRVManualFreq_CheckedChanged);
+            // 
+            // label38
+            // 
+            this.label38.AutoSize = true;
+            this.label38.Location = new System.Drawing.Point(12, 19);
+            this.label38.Name = "label38";
+            this.label38.Size = new System.Drawing.Size(175, 12);
+            this.label38.TabIndex = 1;
+            this.label38.Text = "(Real Chip) Rendering Frequency";
             // 
             // rbPMDUsePPSDRVFreqDefault
             // 
@@ -2480,6 +2497,16 @@
             this.rbPMDUsePPSDRVFreqDefault.Text = "Use interface default";
             this.rbPMDUsePPSDRVFreqDefault.UseVisualStyleBackColor = true;
             // 
+            // btnPMDPPSDRVManualWait
+            // 
+            this.btnPMDPPSDRVManualWait.Location = new System.Drawing.Point(298, 71);
+            this.btnPMDPPSDRVManualWait.Name = "btnPMDPPSDRVManualWait";
+            this.btnPMDPPSDRVManualWait.Size = new System.Drawing.Size(64, 23);
+            this.btnPMDPPSDRVManualWait.TabIndex = 2;
+            this.btnPMDPPSDRVManualWait.Text = "reset";
+            this.btnPMDPPSDRVManualWait.UseVisualStyleBackColor = true;
+            this.btnPMDPPSDRVManualWait.Click += new System.EventHandler(this.btnPMDPPSDRVManualWait_Click);
+            // 
             // label40
             // 
             this.label40.AutoSize = true;
@@ -2488,31 +2515,6 @@
             this.label40.Size = new System.Drawing.Size(18, 12);
             this.label40.TabIndex = 1;
             this.label40.Text = "Hz";
-            // 
-            // label38
-            // 
-            this.label38.AutoSize = true;
-            this.label38.Location = new System.Drawing.Point(12, 19);
-            this.label38.Name = "label38";
-            this.label38.Size = new System.Drawing.Size(175, 12);
-            this.label38.TabIndex = 1;
-            this.label38.Text = "(Real Chip) Rendering Frequency";
-            // 
-            // tbPMDPPSDRVManualWait
-            // 
-            this.tbPMDPPSDRVManualWait.Location = new System.Drawing.Point(241, 73);
-            this.tbPMDPPSDRVManualWait.Name = "tbPMDPPSDRVManualWait";
-            this.tbPMDPPSDRVManualWait.Size = new System.Drawing.Size(51, 19);
-            this.tbPMDPPSDRVManualWait.TabIndex = 7;
-            // 
-            // label39
-            // 
-            this.label39.AutoSize = true;
-            this.label39.Location = new System.Drawing.Point(12, 76);
-            this.label39.Name = "label39";
-            this.label39.Size = new System.Drawing.Size(182, 12);
-            this.label39.TabIndex = 1;
-            this.label39.Text = "(SCCI) Send syncronize wait value";
             // 
             // tbPMDPPSDRVFreq
             // 
@@ -2523,15 +2525,21 @@
             this.tbPMDPPSDRVFreq.Click += new System.EventHandler(this.tbPMDPPSDRVFreq_Click);
             this.tbPMDPPSDRVFreq.MouseClick += new System.Windows.Forms.MouseEventHandler(this.tbPMDPPSDRVFreq_MouseClick);
             // 
-            // btnPMDPPSDRVManualWait
+            // label39
             // 
-            this.btnPMDPPSDRVManualWait.Location = new System.Drawing.Point(298, 71);
-            this.btnPMDPPSDRVManualWait.Name = "btnPMDPPSDRVManualWait";
-            this.btnPMDPPSDRVManualWait.Size = new System.Drawing.Size(64, 23);
-            this.btnPMDPPSDRVManualWait.TabIndex = 2;
-            this.btnPMDPPSDRVManualWait.Text = "reset";
-            this.btnPMDPPSDRVManualWait.UseVisualStyleBackColor = true;
-            this.btnPMDPPSDRVManualWait.Click += new System.EventHandler(this.btnPMDPPSDRVManualWait_Click);
+            this.label39.AutoSize = true;
+            this.label39.Location = new System.Drawing.Point(12, 76);
+            this.label39.Name = "label39";
+            this.label39.Size = new System.Drawing.Size(182, 12);
+            this.label39.TabIndex = 1;
+            this.label39.Text = "(SCCI) Send syncronize wait value";
+            // 
+            // tbPMDPPSDRVManualWait
+            // 
+            this.tbPMDPPSDRVManualWait.Location = new System.Drawing.Point(241, 73);
+            this.tbPMDPPSDRVManualWait.Name = "tbPMDPPSDRVManualWait";
+            this.tbPMDPPSDRVManualWait.Size = new System.Drawing.Size(51, 19);
+            this.tbPMDPPSDRVManualWait.TabIndex = 7;
             // 
             // gbPMDSetManualVolume
             // 
@@ -4153,6 +4161,7 @@
             // 
             this.tpOmake.Controls.Add(this.groupBox31);
             this.tpOmake.Controls.Add(this.groupBox30);
+            this.tpOmake.Controls.Add(this.cbRequestCacheClear);
             this.tpOmake.Controls.Add(this.cbUseSIen);
             this.tpOmake.Controls.Add(this.cbInfiniteOfflineMode);
             this.tpOmake.Controls.Add(this.groupBox29);
@@ -4218,7 +4227,7 @@
             this.groupBox30.Controls.Add(this.rbQueryPerformanceCounter);
             this.groupBox30.Controls.Add(this.rbDateTime);
             this.groupBox30.Controls.Add(this.rbStopWatch);
-            this.groupBox30.Location = new System.Drawing.Point(7, 245);
+            this.groupBox30.Location = new System.Drawing.Point(7, 285);
             this.groupBox30.Name = "groupBox30";
             this.groupBox30.Size = new System.Drawing.Size(236, 85);
             this.groupBox30.TabIndex = 24;
@@ -4584,23 +4593,26 @@
             this.cbHiyorimiMode.UseVisualStyleBackColor = true;
             this.cbHiyorimiMode.Visible = false;
             // 
-            // groupBox33
+            // ucSI
             // 
-            this.groupBox33.Controls.Add(this.rbPMDUsePPSDRVManualFreq);
-            this.groupBox33.Controls.Add(this.label38);
-            this.groupBox33.Controls.Add(this.rbPMDUsePPSDRVFreqDefault);
-            this.groupBox33.Controls.Add(this.btnPMDPPSDRVManualWait);
-            this.groupBox33.Controls.Add(this.label40);
-            this.groupBox33.Controls.Add(this.tbPMDPPSDRVFreq);
-            this.groupBox33.Controls.Add(this.label39);
-            this.groupBox33.Controls.Add(this.tbPMDPPSDRVManualWait);
-            this.groupBox33.Enabled = false;
-            this.groupBox33.Location = new System.Drawing.Point(6, 18);
-            this.groupBox33.Name = "groupBox33";
-            this.groupBox33.Size = new System.Drawing.Size(394, 100);
-            this.groupBox33.TabIndex = 12;
-            this.groupBox33.TabStop = false;
-            this.groupBox33.Text = "TBD";
+            this.ucSI.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.ucSI.AutoScroll = true;
+            this.ucSI.Location = new System.Drawing.Point(3, 18);
+            this.ucSI.Name = "ucSI";
+            this.ucSI.Size = new System.Drawing.Size(405, 237);
+            this.ucSI.TabIndex = 7;
+            // 
+            // cbRequestCacheClear
+            // 
+            this.cbRequestCacheClear.AutoSize = true;
+            this.cbRequestCacheClear.Location = new System.Drawing.Point(16, 245);
+            this.cbRequestCacheClear.Name = "cbRequestCacheClear";
+            this.cbRequestCacheClear.Size = new System.Drawing.Size(209, 16);
+            this.cbRequestCacheClear.TabIndex = 23;
+            this.cbRequestCacheClear.Text = "音色のキャッシュをクリアする(要再起動)";
+            this.cbRequestCacheClear.UseVisualStyleBackColor = true;
             // 
             // FrmSetting
             // 
@@ -4690,6 +4702,8 @@
             this.groupBox32.ResumeLayout(false);
             this.groupBox32.PerformLayout();
             this.gbPPSDRV.ResumeLayout(false);
+            this.groupBox33.ResumeLayout(false);
+            this.groupBox33.PerformLayout();
             this.gbPMDSetManualVolume.ResumeLayout(false);
             this.gbPMDSetManualVolume.PerformLayout();
             this.tpMIDIExp.ResumeLayout(false);
@@ -4759,8 +4773,6 @@
             this.tableLayoutPanel.ResumeLayout(false);
             this.tableLayoutPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.logoPictureBox)).EndInit();
-            this.groupBox33.ResumeLayout(false);
-            this.groupBox33.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -5137,5 +5149,6 @@
         private System.Windows.Forms.Label label45;
         private System.Windows.Forms.TextBox tbPMDVolumeFM;
         private System.Windows.Forms.GroupBox groupBox33;
+        private System.Windows.Forms.CheckBox cbRequestCacheClear;
     }
 }

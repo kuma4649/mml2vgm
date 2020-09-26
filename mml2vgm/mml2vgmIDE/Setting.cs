@@ -785,6 +785,20 @@ namespace mml2vgmIDE
             }
         }
 
+        private Sien _sien = new Sien();
+        public Sien sien
+        {
+            get
+            {
+                return _sien;
+            }
+
+            set
+            {
+                _sien = value;
+            }
+        }
+
         private Balance _balance = new Balance();
         public Balance balance
         {
@@ -3342,6 +3356,24 @@ namespace mml2vgmIDE
             }
         }
 
+        [Serializable]
+        public class Sien
+        {
+            public string[] CacheInstrumentName = null;
+            public string[][] CacheInstrumentData = null;
+            public bool cacheClear = false;
+
+            public Sien Copy()
+            {
+                Sien sien = new Sien();
+                sien.CacheInstrumentName = this.CacheInstrumentName;
+                sien.CacheInstrumentData = this.CacheInstrumentData;
+                sien.cacheClear = this.cacheClear;
+
+                return sien;
+            }
+        }
+
         //[Serializable]
         //public class Vst
         //{
@@ -3887,6 +3919,7 @@ namespace mml2vgmIDE
             setting.InfiniteOfflineMode = this.InfiniteOfflineMode;
             setting.UseSien = this.UseSien;
             setting.shortCutKey = (this.shortCutKey != null) ? this.shortCutKey.Copy() : null;
+            setting.sien=this.sien.Copy();
 
             return setting;
         }

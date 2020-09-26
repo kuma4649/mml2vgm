@@ -80,6 +80,7 @@
             this.ShowInTaskbar = false;
             this.Text = "FrmSien(Do not touch me)";
             this.TopMost = true;
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FrmSien_FormClosing);
             this.Load += new System.EventHandler(this.FrmSien_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgvItem)).EndInit();
             this.ResumeLayout(false);

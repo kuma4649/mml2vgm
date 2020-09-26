@@ -1,4 +1,5 @@
-﻿using System;
+﻿using musicDriverInterface;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Security.Permissions;
@@ -23,6 +24,52 @@ namespace mml2vgmIDE
             InitializeComponent();
             ss = new SienSearch(System.IO.Path.Combine(Common.GetApplicationFolder(), "mmlSien.json"));
             this.setting = setting;
+            if (setting.sien.CacheInstrumentName != null)
+            {
+                instCache = ConvertCacheList(setting.sien);
+            }
+        }
+
+        private Dictionary<string, string[]> ConvertCacheList(Setting.Sien sien)
+        {
+            Dictionary<string, string[]> ret = new Dictionary<string, string[]>();
+            string[] names = sien.CacheInstrumentName;
+            string[][] data = sien.CacheInstrumentData;
+
+            if (names == null || data == null) return ret;
+            if (names.Length != data.Length) return ret;
+            if (setting.sien.cacheClear)
+            {
+                setting.sien.cacheClear = false;
+                return ret;
+            }
+
+            for (int i = 0; i < names.Length; i++)
+            {
+                if (ret.ContainsKey(names[i]))
+                {
+                    ret.Remove(names[i]);
+                }
+
+                ret.Add(names[i], data[i]);
+            }
+
+            return ret;
+        }
+
+        private void ReConvertCacheList()
+        {
+            List<string> cNames = new List<string>();
+            List<string[]> cData = new List<string[]>();
+
+            foreach(var v in instCache)
+            {
+                cNames.Add(v.Key);
+                cData.Add(v.Value);
+            }
+
+            setting.sien.CacheInstrumentName = cNames.ToArray();
+            setting.sien.CacheInstrumentData = cData.ToArray();
         }
 
         protected override bool ShowWithoutActivation
@@ -97,11 +144,19 @@ namespace mml2vgmIDE
             this.Height = Math.Min(5 * (dgvItem.RowTemplate.Height + 1), dgvItem.RowCount * (dgvItem.RowTemplate.Height + 1));
         }
 
-        internal void Request(string line, Point ciP)
+        public void Request(string line, Point ciP,int parentID,EnmMmlFileFormat tp)
         {
             Location = new Point(ciP.X, ciP.Y);
             dgvItem.Rows.Clear();
-            ss.Request(line, cbUpdateList);
+            ss.Request(
+                line, 
+                cbUpdateList, 
+                parentID,
+                tp== EnmMmlFileFormat.GWI ? ".gwi" : (
+                tp == EnmMmlFileFormat.MUC ? ".muc" : (
+                tp == EnmMmlFileFormat.MML ? ".mml" : 
+                ""
+                )));
         }
 
         private void cbUpdateList(List<SienItem> found)
@@ -145,7 +200,8 @@ namespace mml2vgmIDE
             {
                 dgvItem.SelectedRows[0].Selected = false;
             }
-            update();
+
+            if (isFirst) update();
         }
 
         /// <summary>
@@ -174,6 +230,7 @@ namespace mml2vgmIDE
 
         public bool GetOpacity()
         {
+            //Console.WriteLine("{0}", this.Width);
             return this.Width != 0;
             //return Opacity==1.0;
             //return Visible;
@@ -206,6 +263,7 @@ namespace mml2vgmIDE
             else
             {
                 GetInstrumentComp(si, instCache[si.content]);
+                update();//キャッシュがある場合はここでupdateして大丈夫
             }
         }
 
@@ -222,7 +280,17 @@ namespace mml2vgmIDE
                 foreach (string line in obj)
                 {
                     SienItem ssi = new SienItem();
-                    ssi.title = string.Format(si.title, line.Substring(0, line.IndexOf("\r\n")).Trim());
+                    string lin = line;
+                    if (lin.IndexOf("\r\n") >= 0)
+                    {
+                        lin = lin.Substring(0, line.IndexOf("\r\n")).Trim();
+                    }
+                    else
+                    {
+                        lin = lin.Substring(0, line.IndexOf("\n")).Trim();
+                    }
+                    ssi.title = string.Format(si.title, lin);
+                    ssi.parentID = -1;// si.parentID;
                     ssi.content = line;
                     ssi.description = si.description;
                     ssi.foundCnt = si.foundCnt;
@@ -238,6 +306,7 @@ namespace mml2vgmIDE
                         ssi.content);
                     dgvItem.Rows[dgvItem.Rows.Count - 1].Tag = ssi;
                 }
+                update();
 
                 if (!instCache.ContainsKey(si.content))
                 {
@@ -256,6 +325,11 @@ namespace mml2vgmIDE
             dgvItem.ForeColor = Color.FromArgb(setting.ColorScheme.FrmSien_ForeColor);
             dgvItem.DefaultCellStyle.BackColor = Color.FromArgb(setting.ColorScheme.FrmSien_BackColor);
             dgvItem.DefaultCellStyle.ForeColor = Color.FromArgb(setting.ColorScheme.FrmSien_ForeColor);
+        }
+
+        private void FrmSien_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            ReConvertCacheList();
         }
     }
 

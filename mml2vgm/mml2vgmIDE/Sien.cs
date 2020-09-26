@@ -4,6 +4,11 @@ namespace mml2vgmIDE
 {
     public class SienItem
     {
+
+        public int ID { get; set; }
+        public int parentID { get; set; }
+        public bool haveChild { get; set; }
+        public string supportMMLFormat { get; set; }
         public int sienType { get; set; }
         public int nextAnchor { get; set; }
         public int nextCaret { get; set; }

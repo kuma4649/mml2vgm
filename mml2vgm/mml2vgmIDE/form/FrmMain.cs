@@ -30,6 +30,7 @@ namespace mml2vgmIDE
         private frmDebug frmDebug = null;
         private FrmMixer frmMixer = null;
         private FrmMIDIKbd frmMIDIKbd = null;
+        private FrmSien frmSien = null;
         private bool doPlay = false;
         public bool isTrace = false;
         private bool doSkip = false;
@@ -1284,7 +1285,7 @@ namespace mml2vgmIDE
 
         private void OpenFile(string fileName)
         {
-            Document dc = new Document(setting, Common.GetEnmMmlFileFormat(Path.GetExtension(fileName)));
+            Document dc = new Document(setting, Common.GetEnmMmlFileFormat(Path.GetExtension(fileName)),frmSien);
             if (fileName != "") dc.InitOpen(fileName);
             dc.editor.Show(dpMain, DockState.Document);
             dc.editor.main = this;
@@ -1304,7 +1305,7 @@ namespace mml2vgmIDE
 
         private void ImportFile(string fileName)
         {
-            Document dc = new Document(setting, EnmMmlFileFormat.GWI);
+            Document dc = new Document(setting, EnmMmlFileFormat.GWI, frmSien);
             if (fileName != "") dc.InitOpen(fileName);
             dc.editor.Show(dpMain, DockState.Document);
             dc.editor.main = this;
@@ -1663,7 +1664,7 @@ namespace mml2vgmIDE
                     + string.Format("_{0}", m98Count++) + ".muc"
                     );
                 title = Path.GetFileName(Path.GetFileName(fileName));
-                Document dc = new Document(setting,  EnmMmlFileFormat.MUC);
+                Document dc = new Document(setting,  EnmMmlFileFormat.MUC, frmSien);
                 dc.InitOpen(fileName, m98ResultMucString);
                 dc.editor.Show(dpMain, DockState.Document);
                 dc.editor.main = this;
@@ -2692,6 +2693,8 @@ namespace mml2vgmIDE
 
             frmPartCounter.Close();
 
+            frmSien.Close();
+
             setting.Save();
         }
 
@@ -3310,6 +3313,10 @@ namespace mml2vgmIDE
 
             tsmiTreeView = new ToolStripMenuItem();
             GetScripts(tsmiScript, tsmiTreeView, Path.Combine(Common.GetApplicationFolder(), "Script"));
+
+            frmSien = new FrmSien(setting);
+            frmSien.parent = this;
+            frmSien.Show();
 
         }
 

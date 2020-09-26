@@ -11,12 +11,14 @@ namespace mml2vgmIDE
     {
         private Sien sien;
         private List<SienItem> found = new List<SienItem>();
-        private Tuple<string, Action<List<SienItem>>> req;
+        private Tuple<string, Action<List<SienItem>>, int, string> req;
         private object lockObj = new object();
         private CancellationTokenSource tokenSource;
         private CancellationToken cancellationToken;
         private Task task = null;
         private string reqText;
+        private int reqParentID = -1;
+        private string reqMMLFileFormat = "";
         private Action<List<SienItem>> reqCallback;
 
         public SienSearch(string filename)
@@ -49,6 +51,8 @@ namespace mml2vgmIDE
                     {
                         reqText = req.Item1;
                         reqCallback = req.Item2;
+                        reqParentID = req.Item3;
+                        reqMMLFileFormat = req.Item4;
                         req = null;
                     }
                     Search();
@@ -62,11 +66,11 @@ namespace mml2vgmIDE
         /// </summary>
         /// <param name="text">検索文字</param>
         /// <param name="callback">検索後に実行したいメソッド(別スレッドで呼ばれるので注意)</param>
-        public void Request(string text, Action<List<SienItem>> callback)
+        public void Request(string text, Action<List<SienItem>> callback,int parentID,string MMLFormat)
         {
             lock (lockObj)
             {
-                req = new Tuple<string, Action<List<SienItem>>>(text, callback);
+                req = new Tuple<string, Action<List<SienItem>>, int, string>(text, callback, parentID, MMLFormat);
             }
         }
 
@@ -80,6 +84,9 @@ namespace mml2vgmIDE
             }
             foreach (SienItem si in sien.list)
             {
+                if (si.parentID != reqParentID) continue;
+                if (si.supportMMLFormat.IndexOf(reqMMLFileFormat) < 0) continue;
+
                 switch (si.patternType)
                 {
                     case "Z":
