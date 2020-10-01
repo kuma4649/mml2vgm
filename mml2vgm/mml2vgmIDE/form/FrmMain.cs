@@ -1,4 +1,6 @@
 ﻿using Core;
+using mml2vgmIDE.D88N88;
+using mml2vgmIDE.form;
 using musicDriverInterface;
 using System;
 using System.Collections.Generic;
@@ -418,58 +420,18 @@ namespace mml2vgmIDE
 
         private void TsmiImport_Click(object sender, EventArgs e)
         {
-            OpenFileDialog ofd = new OpenFileDialog();
+            //OpenFileDialog ofd = new OpenFileDialog();
 
-            ofd.Filter = "btmファイル(*.btm)|*.btm|すべてのファイル(*.*)|*.*";
-            ofd.Title = "ファイルを開く";
-            ofd.RestoreDirectory = true;
+            //ofd.Filter = "btmファイル(*.btm)|*.btm|すべてのファイル(*.*)|*.*";
+            //ofd.Title = "ファイルを開く";
+            //ofd.RestoreDirectory = true;
 
-            if (ofd.ShowDialog() != DialogResult.OK)
-            {
-                return;
-            }
+            //if (ofd.ShowDialog() != DialogResult.OK)
+            //{
+            //    return;
+            //}
 
-            ImportFile(ofd.FileName);
-        }
-
-        private void TsmiExport_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                DockContent dc = (DockContent)GetActiveDockContent();
-                Document d = null;
-                if (dc != null)
-                {
-                    if (dc.Tag is Document)
-                    {
-                        d = (Document)dc.Tag;
-                    }
-                }
-
-                if (d == null) return;
-
-                if (Path.GetExtension(d.gwiFullPath).ToLower() == ".muc")
-                {
-                    ExportMub(d);
-                    return;
-                }
-                if (Path.GetExtension(d.gwiFullPath).ToLower() == ".mml")
-                {
-                    ExportM(d);
-                    return;
-                }
-
-                if (Path.GetExtension(d.gwiFullPath).ToLower() == ".gwi")
-                {
-                    ExportVgmXgmZgm(d);
-                    return;
-                }
-
-            }
-            catch (Exception)
-            {
-                MessageBox.Show("エクスポート処理に失敗しました。", "エクスポート失敗", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            //ImportFile(ofd.FileName);
         }
 
         private void ExportVgmXgmZgm(Document d)
@@ -3570,6 +3532,150 @@ namespace mml2vgmIDE
                 doPlay = true;
                 args = new string[2] { qi.doc.gwiFullPath, "" };
                 finishedCompileGWI();
+            }
+        }
+
+        private void tsmiImport_D88toMuc_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog ofd = new OpenFileDialog();
+
+            ofd.Filter = "D88ファイル(*.d88)|*.d88|すべてのファイル(*.*)|*.*";
+            ofd.Title = "D88ファイルを選択してください";
+            ofd.RestoreDirectory = true;
+
+            if (ofd.ShowDialog() != DialogResult.OK)
+            {
+                return;
+            }
+
+            List<N88FileAtr> directory;
+            N88Disk n88;
+            try
+            {
+                byte[] d88b = File.ReadAllBytes(ofd.FileName);
+                D88 d88 = new D88(d88b);
+                n88 = new N88Disk(d88);
+                directory = n88.GetDirectories();
+                n88.GetFAT();
+            }
+            catch
+            {
+                MessageBox.Show("D88ファイルのオープンに失敗しました。", "インポート失敗", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            FormN88Files fnf = new FormN88Files();
+
+            for (int row = 0; row < Math.Ceiling(directory.Count / 5.0); row++)
+            {
+                object[] celObj = new object[5];
+                for (int col = 0; col < 5; col++)
+                {
+                    if (row * 5 + col < directory.Count)
+                    {
+                        try
+                        {
+                            N88FileAtr atr = directory[row * 5 + col];
+                            string f = atr.fn.Replace(".", ((atr.atr & 1) != 0 ? "*" : ((atr.atr & 0x80) == 0 ? " " : ".")));
+                            celObj[col] = string.Format(
+                                " {0} {1,3:D} "
+                                , f
+                                , n88.GetUseClusterFromFAT(atr.cluster));
+                        }
+                        catch { }
+                    }
+                }
+                fnf.dgvFiles.Rows.Add(celObj);
+            }
+
+            DialogResult res= fnf.ShowDialog();
+            if (res == DialogResult.Cancel) return;
+            if (fnf.n == -1) return;
+            if (fnf.n >= directory.Count) return;
+
+            string[] sbuf;
+            string fileName = directory[fnf.n].fn;
+            try
+            {
+                string ss = Encoding.GetEncoding("shift_jis").GetString(n88.GetFile(Path.GetFileName(fileName), 0));
+                sbuf = ss.Split(new string[] { "\r\n" }, StringSplitOptions.None);
+
+                for(int i = 0; i < sbuf.Length; i++)
+                {
+                    if (sbuf[i].IndexOf("'") != -1) sbuf[i] = sbuf[i].Substring(sbuf[i].IndexOf("'") + 1);
+                }
+            }
+            catch(Exception ex)
+            {
+                log.Write(ex.Message);
+                MessageBox.Show("D88内のbasファイルのオープンに失敗しました。", "インポート失敗", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            Document dc = new Document(setting, EnmMmlFileFormat.MUC, frmSien);
+            fileName = fileName.Trim();
+            if (fileName.Length > 1 && fileName[fileName.Length - 1] == '.') fileName = fileName.Substring(0, fileName.Length - 1);
+            fileName += ".muc";
+            dc.InitOpen(fileName, sbuf, EnmMmlFileFormat.MUC);
+            dc.editor.Show(dpMain, DockState.Document);
+            dc.editor.main = this;
+            dc.editor.document = dc;
+
+            frmFolderTree.tvFolderTree.Nodes.Clear();
+            frmFolderTree.tvFolderTree.Nodes.Add(dc.gwiTree);
+            string path1 = Path.GetDirectoryName(dc.gwiFullPath);
+            path1 = string.IsNullOrEmpty(path1) ? dc.gwiFullPath : path1;
+            frmFolderTree.basePath = path1;
+
+            FormBox.Add(dc.editor);
+            DocumentBox.Add(dc);
+            AddGwiFileHistory(fileName);
+            UpdateGwiFileHistory();
+
+        }
+
+        private void tsmiExport_MuctoD88_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void tsmiExport_toDriverFormat_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                DockContent dc = (DockContent)GetActiveDockContent();
+                Document d = null;
+                if (dc != null)
+                {
+                    if (dc.Tag is Document)
+                    {
+                        d = (Document)dc.Tag;
+                    }
+                }
+
+                if (d == null) return;
+
+                if (Path.GetExtension(d.gwiFullPath).ToLower() == ".muc")
+                {
+                    ExportMub(d);
+                    return;
+                }
+                if (Path.GetExtension(d.gwiFullPath).ToLower() == ".mml")
+                {
+                    ExportM(d);
+                    return;
+                }
+
+                if (Path.GetExtension(d.gwiFullPath).ToLower() == ".gwi")
+                {
+                    ExportVgmXgmZgm(d);
+                    return;
+                }
+
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("エクスポート処理に失敗しました。", "エクスポート失敗", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

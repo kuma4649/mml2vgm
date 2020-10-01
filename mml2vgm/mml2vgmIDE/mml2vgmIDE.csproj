@@ -113,6 +113,9 @@
     <Compile Include="ChipLEDs.cs" />
     <Compile Include="ChipRegister.cs" />
     <Compile Include="CompileManager.cs" />
+    <Compile Include="D88N88\D88.cs" />
+    <Compile Include="D88N88\N88Disk.cs" />
+    <Compile Include="D88N88\N88FileAtr.cs" />
     <Compile Include="Driver\mucomMub.cs" />
     <Compile Include="Driver\pmdM.cs" />
     <Compile Include="Driver\ZGM\ZgmChip\C140.cs" />
@@ -146,6 +149,12 @@
     <Compile Include="Enums.cs" />
     <Compile Include="Environment.cs" />
     <Compile Include="form\ChannelInfo.cs" />
+    <Compile Include="form\FormN88Files.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="form\FormN88Files.Designer.cs">
+      <DependentUpon>FormN88Files.cs</DependentUpon>
+    </Compile>
     <Compile Include="form\frmDebug.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -309,6 +318,9 @@
     <Compile Include="Tables.cs" />
     <Compile Include="VisVolume.cs" />
     <Compile Include="WindowPosition.cs" />
+    <EmbeddedResource Include="form\FormN88Files.resx">
+      <DependentUpon>FormN88Files.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="form\frmDebug.resx">
       <DependentUpon>frmDebug.cs</DependentUpon>
     </EmbeddedResource>

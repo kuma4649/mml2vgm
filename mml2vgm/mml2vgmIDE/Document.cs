@@ -1,6 +1,7 @@
 ﻿using Core;
 using System;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
@@ -84,6 +85,34 @@ namespace mml2vgmIDE
                     editor.azukiControl.Text = File.ReadAllText(fullPath);
                     break;
             }
+            editor.azukiControl.ClearHistory();
+            editor.Tag = this;
+            editor.azukiControl.Tag = this;
+            isNew = false;
+            edit = false;
+
+            compileStatus = EnmCompileStatus.NeedCompile;
+            dstFileFormat = EnmFileFormat.unknown;
+            compiledData = null;
+            return true;
+        }
+
+        public bool InitOpen(string fullPath,string[] buf,EnmMmlFileFormat srcFileFormat)
+        {
+            fullPath = fullPath.Replace('\\', Path.DirectorySeparatorChar).Replace('/', Path.DirectorySeparatorChar);
+
+            if (buf==null || buf.Length<1)
+            {
+                return false;
+            }
+
+            gwiFullPath = fullPath;
+            errBox = null;
+            wrnBox = null;
+            InitFolderTree();
+            editor.Text = Path.GetFileName(fullPath);
+            this.srcFileFormat = srcFileFormat;
+            editor.azukiControl.Text = string.Join("\r\n", buf);
             editor.azukiControl.ClearHistory();
             editor.Tag = this;
             editor.azukiControl.Tag = this;
