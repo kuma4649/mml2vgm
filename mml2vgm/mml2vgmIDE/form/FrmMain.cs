@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
@@ -3636,6 +3637,89 @@ namespace mml2vgmIDE
 
         private void tsmiExport_MuctoD88_Click(object sender, EventArgs e)
         {
+            DockContent dc = (DockContent)GetActiveDockContent();
+            Document d = null;
+            if (dc != null)
+            {
+                if (dc.Tag is Document)
+                {
+                    d = (Document)dc.Tag;
+                }
+            }
+
+            if (d == null) return;
+            if (Path.GetExtension(d.gwiFullPath).ToLower() != ".muc")
+            {
+                MessageBox.Show("この機能は.mucファイル専用です。", "Export Muc to D88", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            SaveFileDialog sfd = new SaveFileDialog();
+            string fnD88 = d.gwiFullPath;
+            if (fnD88.Length > 0 && fnD88[fnD88.Length - 1] == '*')
+            {
+                fnD88 = fnD88.Substring(0, fnD88.Length - 1);
+            }
+            fnD88 = Path.Combine(Path.GetDirectoryName(fnD88), Path.GetFileNameWithoutExtension(fnD88) + ".d88");
+
+            sfd.FileName = fnD88;
+            string path1 = System.IO.Path.GetDirectoryName(fnD88);
+            path1 = string.IsNullOrEmpty(path1) ? fnD88 : path1;
+            sfd.InitialDirectory = path1;
+            sfd.Filter = "D88ファイル(*.d88)|*.d88|すべてのファイル(*.*)|*.*";
+            sfd.Title = "エクスポート";
+            sfd.RestoreDirectory = true;
+            sfd.OverwritePrompt = false;
+            if (sfd.ShowDialog() != DialogResult.OK)
+            {
+                return;
+            }
+            fnD88 = sfd.FileName;
+            if (Path.GetExtension(fnD88) == "")
+            {
+                fnD88 = Path.GetFileNameWithoutExtension(fnD88) + ".d88";
+            }
+            if (!File.Exists(fnD88))
+            {
+                MessageBox.Show("指定したD88ファイルが見つかりませんでした。", "Export Muc to D88", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            String backFn = fnD88 + ".bak";
+            String backFnb = backFn;
+            int i = 1;
+            while (File.Exists(backFnb))
+            {
+                backFnb = backFn + string.Format("({0})", i++);
+            }
+            backFn = backFnb;
+            File.Copy(fnD88, backFn);
+
+            List< N88FileAtr > directory;
+            N88Disk n88;
+            try
+            {
+                byte[] d88b = File.ReadAllBytes(fnD88);
+                D88 d88 = new D88(d88b);
+                n88 = new N88Disk(d88);
+                directory = n88.GetDirectories();
+                n88.GetFAT();
+            }
+            catch
+            {
+                MessageBox.Show("D88ファイルのオープンに失敗しました。", "インポート失敗", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            string[] text = d.editor.azukiControl.Text.Split(new string[] { "\r\n" }, StringSplitOptions.None);
+            for (i = 0; i < Math.Min(65535, text.Length); i++)
+            {
+                text[i] = string.Format("{0} '{1}", i + 1, text[i]);
+            }
+            string txt = string.Join("\r\n", text);
+
+            byte[] buf = n88.SetFile(Path.GetFileName(d.gwiFullPath), Encoding.GetEncoding("shift_jis").GetBytes(txt), 3, 0);
+            File.WriteAllBytes(fnD88, buf);
 
         }
 
