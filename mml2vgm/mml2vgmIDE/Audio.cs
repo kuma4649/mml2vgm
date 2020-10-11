@@ -253,9 +253,10 @@ namespace mml2vgmIDE
 
         public static void RealChipAutoDetect(Setting setting)
         {
-            Setting.ChipType[] chipType = new Setting.ChipType[2];
+            Setting.ChipType[] chipType;
             List<Setting.ChipType> ret = realChip.GetRealChipList();
 
+            chipType = new Setting.ChipType[Math.Max(chipRegister.AY8910.Count, 2)];
             for (int i = 0; i < chipRegister.AY8910.Count; i++)
             {
                 chipType[i] = new Setting.ChipType();
@@ -269,6 +270,7 @@ namespace mml2vgmIDE
             }
             chipRegister.SetRealChipInfo(EnmZGMDevice.AY8910, chipType[0], chipType[1], setting.LatencyEmulation, setting.LatencySCCI);
 
+            chipType = new Setting.ChipType[Math.Max(chipRegister.C140.Count, 2)];
             for (int i = 0; i < chipRegister.C140.Count; i++)
             {
                 chipType[i] = new Setting.ChipType();
@@ -282,6 +284,7 @@ namespace mml2vgmIDE
             }
             chipRegister.SetRealChipInfo(EnmZGMDevice.C140, chipType[0], chipType[1], setting.LatencyEmulation, setting.LatencySCCI);
 
+            chipType = new Setting.ChipType[Math.Max(chipRegister.C352.Count, 2)];
             for (int i = 0; i < chipRegister.C352.Count; i++)
             {
                 chipType[i] = new Setting.ChipType();
@@ -295,6 +298,7 @@ namespace mml2vgmIDE
             }
             chipRegister.SetRealChipInfo(EnmZGMDevice.C352, chipType[0], chipType[1], setting.LatencyEmulation, setting.LatencySCCI);
 
+            chipType = new Setting.ChipType[Math.Max(chipRegister.HuC6280.Count, 2)];
             for (int i = 0; i < chipRegister.HuC6280.Count; i++)
             {
                 chipType[i] = new Setting.ChipType();
@@ -306,6 +310,7 @@ namespace mml2vgmIDE
             }
             chipRegister.SetRealChipInfo(EnmZGMDevice.HuC6280, chipType[0], chipType[1], setting.LatencyEmulation, setting.LatencySCCI);
 
+            chipType = new Setting.ChipType[Math.Max(chipRegister.K051649.Count, 2)];
             for (int i = 0; i < chipRegister.K051649.Count; i++)
             {
                 chipType[i] = new Setting.ChipType();
@@ -317,6 +322,7 @@ namespace mml2vgmIDE
             }
             chipRegister.SetRealChipInfo(EnmZGMDevice.K051649, chipType[0], chipType[1], setting.LatencyEmulation, setting.LatencySCCI);
 
+            chipType = new Setting.ChipType[Math.Max(chipRegister.K053260.Count, 2)];
             for (int i = 0; i < chipRegister.K053260.Count; i++)
             {
                 chipType[i] = new Setting.ChipType();
@@ -328,6 +334,7 @@ namespace mml2vgmIDE
             }
             chipRegister.SetRealChipInfo(EnmZGMDevice.K053260, chipType[0], chipType[1], setting.LatencyEmulation, setting.LatencySCCI);
 
+            chipType = new Setting.ChipType[Math.Max(chipRegister.PPZ8.Count, 2)];
             for (int i = 0; i < chipRegister.PPZ8.Count; i++)
             {
                 chipType[i] = new Setting.ChipType();
@@ -339,6 +346,7 @@ namespace mml2vgmIDE
             }
             chipRegister.SetRealChipInfo(EnmZGMDevice.PPZ8, chipType[0], chipType[1], setting.LatencyEmulation, setting.LatencySCCI);
 
+            chipType = new Setting.ChipType[Math.Max(chipRegister.PPSDRV.Count, 2)];
             for (int i = 0; i < chipRegister.PPSDRV.Count; i++)
             {
                 chipType[i] = new Setting.ChipType();
@@ -350,6 +358,7 @@ namespace mml2vgmIDE
             }
             chipRegister.SetRealChipInfo(EnmZGMDevice.PPSDRV, chipType[0], chipType[1], setting.LatencyEmulation, setting.LatencySCCI);
 
+            chipType = new Setting.ChipType[Math.Max(chipRegister.P86.Count, 2)];
             for (int i = 0; i < chipRegister.P86.Count; i++)
             {
                 chipType[i] = new Setting.ChipType();
@@ -361,6 +370,7 @@ namespace mml2vgmIDE
             }
             chipRegister.SetRealChipInfo(EnmZGMDevice.P86, chipType[0], chipType[1], setting.LatencyEmulation, setting.LatencySCCI);
 
+            chipType = new Setting.ChipType[Math.Max(chipRegister.QSound.Count, 2)];
             for (int i = 0; i < chipRegister.QSound.Count; i++)
             {
                 chipType[i] = new Setting.ChipType();
@@ -372,6 +382,7 @@ namespace mml2vgmIDE
             }
             chipRegister.SetRealChipInfo(EnmZGMDevice.QSound, chipType[0], chipType[1], setting.LatencyEmulation, setting.LatencySCCI);
 
+            chipType = new Setting.ChipType[Math.Max(chipRegister.RF5C164.Count, 2)];
             for (int i = 0; i < chipRegister.RF5C164.Count; i++)
             {
                 chipType[i] = new Setting.ChipType();
@@ -383,6 +394,7 @@ namespace mml2vgmIDE
             }
             chipRegister.SetRealChipInfo(EnmZGMDevice.RF5C164, chipType[0], chipType[1], setting.LatencyEmulation, setting.LatencySCCI);
 
+            chipType = new Setting.ChipType[Math.Max(chipRegister.SEGAPCM.Count, 2)];
             for (int i = 0; i < chipRegister.SEGAPCM.Count; i++)
             {
                 chipType[i] = new Setting.ChipType();
@@ -396,6 +408,7 @@ namespace mml2vgmIDE
             }
             chipRegister.SetRealChipInfo(EnmZGMDevice.SegaPCM, chipType[0], chipType[1], setting.LatencyEmulation, setting.LatencySCCI);
 
+            chipType = new Setting.ChipType[Math.Max(chipRegister.SN76489.Count, 2)];
             for (int i = 0; i < chipRegister.SN76489.Count; i++)
             {
                 chipType[i] = new Setting.ChipType();
@@ -409,6 +422,7 @@ namespace mml2vgmIDE
             }
             chipRegister.SetRealChipInfo(EnmZGMDevice.SN76489, chipType[0], chipType[1], setting.LatencyEmulation, setting.LatencySCCI);
 
+            chipType = new Setting.ChipType[Math.Max(chipRegister.YM2151.Count, 2)];
             for (int i = 0; i < chipRegister.YM2151.Count; i++)
             {
                 chipType[i] = new Setting.ChipType();
@@ -424,6 +438,7 @@ namespace mml2vgmIDE
             }
             chipRegister.SetRealChipInfo(EnmZGMDevice.YM2151, chipType[0], chipType[1], setting.LatencyEmulation, setting.LatencySCCI);
 
+            chipType = new Setting.ChipType[Math.Max(chipRegister.YM2203.Count, 2)];
             for (int i = 0; i < chipRegister.YM2203.Count; i++)
             {
                 chipType[i] = new Setting.ChipType();
@@ -437,6 +452,7 @@ namespace mml2vgmIDE
             }
             chipRegister.SetRealChipInfo(EnmZGMDevice.YM2203, chipType[0], chipType[1], setting.LatencyEmulation, setting.LatencySCCI);
 
+            chipType = new Setting.ChipType[Math.Max(chipRegister.YM2413.Count, 2)];
             for (int i = 0; i < chipRegister.YM2413.Count; i++)
             {
                 chipType[i] = new Setting.ChipType();
@@ -450,6 +466,7 @@ namespace mml2vgmIDE
             }
             chipRegister.SetRealChipInfo(EnmZGMDevice.YM2413, chipType[0], chipType[1], setting.LatencyEmulation, setting.LatencySCCI);
 
+            chipType = new Setting.ChipType[Math.Max(chipRegister.YM3526.Count, 2)];
             for (int i = 0; i < chipRegister.YM3526.Count; i++)
             {
                 chipType[i] = new Setting.ChipType();
@@ -463,6 +480,7 @@ namespace mml2vgmIDE
             }
             chipRegister.SetRealChipInfo(EnmZGMDevice.YM3526, chipType[0], chipType[1], setting.LatencyEmulation, setting.LatencySCCI);
 
+            chipType = new Setting.ChipType[Math.Max(chipRegister.YM3812.Count, 2)];
             for (int i = 0; i < chipRegister.YM3812.Count; i++)
             {
                 chipType[i] = new Setting.ChipType();
@@ -476,6 +494,7 @@ namespace mml2vgmIDE
             }
             chipRegister.SetRealChipInfo(EnmZGMDevice.YM3812, chipType[0], chipType[1], setting.LatencyEmulation, setting.LatencySCCI);
 
+            chipType = new Setting.ChipType[Math.Max(chipRegister.YMF262.Count, 2)];
             for (int i = 0; i < chipRegister.YMF262.Count; i++)
             {
                 chipType[i] = new Setting.ChipType();
@@ -489,6 +508,7 @@ namespace mml2vgmIDE
             }
             chipRegister.SetRealChipInfo(EnmZGMDevice.YMF262, chipType[0], chipType[1], setting.LatencyEmulation, setting.LatencySCCI);
 
+            chipType = new Setting.ChipType[Math.Max(chipRegister.YM2608.Count, 2)];
             for (int i = 0; i < chipRegister.YM2608.Count; i++)
             {
                 chipType[i] = new Setting.ChipType();
@@ -502,6 +522,7 @@ namespace mml2vgmIDE
             }
             chipRegister.SetRealChipInfo(EnmZGMDevice.YM2608, chipType[0], chipType[1], setting.LatencyEmulation, setting.LatencySCCI);
 
+            chipType = new Setting.ChipType[Math.Max(chipRegister.YM2609.Count, 2)];
             for (int i = 0; i < chipRegister.YM2609.Count; i++)
             {
                 chipType[i] = new Setting.ChipType();
@@ -515,6 +536,7 @@ namespace mml2vgmIDE
             }
             chipRegister.SetRealChipInfo(EnmZGMDevice.YM2609, chipType[0], chipType[1], setting.LatencyEmulation, setting.LatencySCCI);
 
+            chipType = new Setting.ChipType[Math.Max(chipRegister.YM2610.Count, 2)];
             for (int i = 0; i < chipRegister.YM2610.Count; i++)
             {
                 chipType[i] = new Setting.ChipType();
@@ -528,6 +550,7 @@ namespace mml2vgmIDE
             }
             chipRegister.SetRealChipInfo(EnmZGMDevice.YM2610, chipType[0], chipType[1], setting.LatencyEmulation, setting.LatencySCCI);
 
+            chipType = new Setting.ChipType[Math.Max(chipRegister.YM2612.Count,2)];
             for (int i = 0; i < chipRegister.YM2612.Count; i++)
             {
                 chipType[i] = new Setting.ChipType();

@@ -257,7 +257,7 @@ namespace Core
                     CmdPan(pw, page, mml);
                     break;
                 case 'P': // noise or tone mixer
-                    log.Write("noise or tone mixer");
+                    log.Write("noise or tone mixer or phase reset");
                     CmdMixer(pw, page, mml);
                     break;
                 case 'q': // gatetime
@@ -1499,6 +1499,33 @@ namespace Core
         {
             int n = -1;
             pw.incPos(page);
+            if (pw.getChar(page) == 'R') //PR
+            {
+                pw.incPos(page);
+                if (pw.getChar(page) == 'O') //PRO
+                {
+                    pw.incPos(page);
+                    if (pw.getChar(page) == 'N') //PRON
+                    {
+                        pw.incPos(page);
+                        mml.type = enmMMLType.PhaseReset;
+                        mml.args = new List<object>();
+                        mml.args.Add("PRON");
+                    }
+                    else if (pw.getChar(page) == 'F') //PROF
+                    {
+                        pw.incPos(page);
+                        mml.type = enmMMLType.PhaseReset;
+                        mml.args = new List<object>();
+                        mml.args.Add("PROF");
+                    }
+                }
+                else
+                {
+                    msgBox.setErrMsg(msg.get("E05064"), mml.line.Lp);
+                }
+                return;
+            }
 
             if (!pw.getNum(page, out n))
             {

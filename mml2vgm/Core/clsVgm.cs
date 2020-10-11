@@ -46,6 +46,7 @@ namespace Core
         public Dictionary<int, clsToneDoubler> instToneDoubler = new Dictionary<int, clsToneDoubler>();
         public Dictionary<int, byte[]> instWF = new Dictionary<int, byte[]>();
         public Dictionary<int, ushort[]> instOPNA2WF = new Dictionary<int, ushort[]>();
+        public Dictionary<int, byte[]> instOPNA2WFS = new Dictionary<int, byte[]>();
         public Dictionary<int, byte[]> midiSysEx = new Dictionary<int, byte[]>();
         public Dictionary<int, MmlDatum[]> instArp = new Dictionary<int, MmlDatum[]>();
 
@@ -58,10 +59,16 @@ namespace Core
         private byte[] instrumentBufCache = new byte[Const.INSTRUMENT_SIZE];
         private int toneDoublerCounter = -1;
         private List<int> toneDoublerBufCache = new List<int>();
+
         private int wfInstrumentCounter = -1;
         private byte[] wfInstrumentBufCache = null;
+
         private int opna2wfInstrumentCounter = -1;
         private ushort[] opna2WfInstrumentBufCache = null;
+
+        private int opna2wfsInstrumentCounter = -1;
+        private byte[] opna2WfsInstrumentBufCache = null;
+
         public bool doSkip = false;
         public bool doSkipStop = false;
         public Point caretPoint = Point.Empty;
@@ -562,6 +569,14 @@ namespace Core
 
             }
 
+            // opna2 WaveForm(SSG)の音色を定義中の場合
+            if (opna2wfsInstrumentCounter != -1)
+            {
+
+                return SetOPNA2WfsInstrument(line);
+
+            }
+
             char t = (buf != null && buf.Length > 0) ? buf.ToUpper()[0] : '\0';
             char t1 = (buf != null && buf.Length > 1) ? buf.ToUpper()[1] : '\0';
             char t2 = (buf != null && buf.Length > 2) ? buf.ToUpper()[2] : '\0';
@@ -708,9 +723,18 @@ namespace Core
                     return 0;
 
                 case 'W':
-                    opna2WfInstrumentBufCache = new ushort[Const.OPNA2_WF_INSTRUMENT_SIZE];
-                    opna2wfInstrumentCounter = 0;
-                    SetOPNA2WfInstrument(line);
+                    if (buf.ToUpper()[1] == 'S')
+                    {
+                        opna2WfsInstrumentBufCache = new byte[Const.OPNA2_WFS_INSTRUMENT_SIZE];
+                        opna2wfsInstrumentCounter = 0;
+                        SetOPNA2WfsInstrument(line);
+                    }
+                    else
+                    {
+                        opna2WfInstrumentBufCache = new ushort[Const.OPNA2_WF_INSTRUMENT_SIZE];
+                        opna2wfInstrumentCounter = 0;
+                        SetOPNA2WfInstrument(line);
+                    }
                     return 0;
 
                 case 'S':
@@ -1616,6 +1640,32 @@ namespace Core
             return 0;
         }
 
+        private int SetOPNA2WfsInstrument(Line line)
+        {
+
+            try
+            {
+                opna2wfsInstrumentCounter = GetNums(opna2WfsInstrumentBufCache, opna2wfsInstrumentCounter, CutComment(line.Txt).Substring(1).TrimStart());
+
+                if (opna2wfsInstrumentCounter == opna2WfsInstrumentBufCache.Length)
+                {
+                    if (instOPNA2WFS.ContainsKey(opna2WfsInstrumentBufCache[0]))
+                    {
+                        instOPNA2WFS.Remove(opna2WfsInstrumentBufCache[0]);
+                    }
+                    instOPNA2WFS.Add(opna2WfsInstrumentBufCache[0], opna2WfsInstrumentBufCache);
+
+                    opna2wfsInstrumentCounter = -1;
+                }
+            }
+            catch
+            {
+                msgBox.setErrMsg(msg.get("E01013"), line.Lp);
+            }
+
+            return 0;
+        }
+
         private int GetNums(byte[] aryBuf, int aryIndex, string vals)
         {
             string n = "";
@@ -1631,7 +1681,7 @@ namespace Core
                     continue;
                 }
 
-                if (hc > -1 && ((c >= '0' && c <= '9') || (c >= 'A' && c <= 'F')))
+                if (hc > -1 && ((c >= '0' && c <= '9') || (c >= 'A' && c <= 'F') || (c >= 'a' && c <= 'f')))
                 {
                     h += c;
                     hc++;
@@ -4258,6 +4308,11 @@ namespace Core
                 case enmMMLType.Arpeggio:
                     log.Write("Arpeggio");
                     page.chip.CmdArpeggio(page, mml);
+                    page.mmlPos++;
+                    break;
+                case enmMMLType.PhaseReset:
+                    log.Write("PhaseReset");
+                    page.chip.CmdPhaseReset(page, mml);
                     page.mmlPos++;
                     break;
                 case enmMMLType.HardEnvelope:

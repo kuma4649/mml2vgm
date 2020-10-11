@@ -31,7 +31,7 @@ namespace Core
             data &= (byte)(~(n << vch));
             ((ClsOPN)page.chip).SSGKeyOn[p] = data;
 
-            SetSsgVolume(page, mml);
+            SetSsgVolume(page, mml, page.phaseReset);
             if (page.HardEnvelopeSw)
             {
                 SOutData(page, mml, page.port[port], (byte)(adr + 0x0d), (byte)(page.HardEnvelopeType & 0xf));
@@ -71,7 +71,7 @@ namespace Core
 
         }
 
-        public virtual void SetSsgVolume(partPage page, MML mml)
+        public virtual void SetSsgVolume(partPage page, MML mml,bool phaseReset=false)
         {
             int port;
             int adr;
@@ -109,6 +109,7 @@ namespace Core
             {
                 int pan = page.pan & 3;
                 vol |= (byte)(pan << 6);
+                if (phaseReset) vol |= 0x20;
             }
 
             if (page.spg.beforeVolume != vol)
@@ -306,17 +307,18 @@ namespace Core
             SOutData(page, mml, port, (byte)(0x40 + vch + ope * 4), (byte)tl);
         }
 
-        public void OutFmSetKsAr(MML mml, partPage page, int ope, int ks, int ar)
+        public void OutFmSetKsAr(MML mml, partPage page, int ope, int ks, int ar, int pr = -1)
         {
             int vch;
             byte[] port;
             GetPortVch(page, out port, out vch);
 
             ope = (ope == 1) ? 2 : ((ope == 2) ? 1 : ope);
-            ks &= 3;
-            ar &= 31;
+            ks = (ks & 3) << 6;
+            ar = ar & 31;
+            pr = (pr != -1) ? ((pr & 1) << 5) : 0;
 
-            SOutData(page, mml, port, (byte)(0x50 + vch + ope * 4), (byte)((ks << 6) + ar));
+            SOutData(page, mml, port, (byte)(0x50 + vch + ope * 4), (byte)(ks | ar | pr));
         }
 
         public void OutFmSetAmDr(MML mml, partPage page, int ope, int am, int dr)

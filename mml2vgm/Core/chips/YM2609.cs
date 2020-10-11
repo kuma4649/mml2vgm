@@ -1282,7 +1282,7 @@ namespace Core
             {
                 if (page.Type == enmChannelType.SSG)
                 {
-                    n = Common.CheckRange(n, 0, 9);
+                    n = Common.CheckRange(n, 0, 15);
                     page.dutyCycle = n;
                     return;
                 }
@@ -1306,7 +1306,8 @@ namespace Core
 
             if (type == 'W')
             {
-                SetWaveTableFromInstrument(page, mml);
+                if (page.Type != enmChannelType.SSG) SetWaveTableFromInstrument(page, mml);
+                else SetWaveTableSSGFromInstrument(page, mml);
                 return;
             }
 
@@ -1497,6 +1498,34 @@ namespace Core
                 SOutData(page, mml, port, 0x2c, (byte)(d >> 8));
 
             }
+        }
+
+        public void SetWaveTableSSGFromInstrument(partPage page, MML mml)
+        {
+            OutSsgSetWaveTable(mml, page);
+            SetDummyData(page, mml);
+        }
+
+        public void OutSsgSetWaveTable(MML mml, partPage page)
+        {
+            int vch;
+            int port;
+            int adr;
+            GetPortVchSsg(page, out port,out adr, out vch);
+            int n = (int)mml.args[1];
+
+            //又は流し込むデータなんてなかった場合は処理終了
+            if (!parent.instOPNA2WFS.ContainsKey(n)) return;
+
+            //データの流し込みいくよー
+            byte[] wd = parent.instOPNA2WFS[n];
+            for (n = 0; n < wd.Length; n++)
+            {
+                if (n == 0) continue;
+                byte d = (byte)((n == 1 ? 0x80 : 0x00) | ((vch & 3) << 4) | (wd[n] & 0xf));
+                SOutData(page, mml, page.port[port], (byte)(adr + 0x0e), d);
+            }
+            page.dutyCycle = (vch & 3) + 10;
         }
 
         public void OutFmSetWtLDtMl(MML mml, partPage page, int ope, int wt, int dt, int ml)
@@ -1733,57 +1762,59 @@ namespace Core
 
         private void OutFmSetInstrumentOPNA(partPage page, MML mml, int n, int vol)
         {
+            int opeLength = 16;
             for (int ope = 0; ope < 4; ope++)
             {
                 //ch3以外の拡張チャンネルでも音色設定できるようにする場合はslotの様子もみてセットすること
                 OutFmSetWtLDtMl(mml, page, ope
-                    , parent.instFM[n][ope * 15 + 1 + 13] // 13 : WT  1 : No  15 : OPE Size
-                    , parent.instFM[n][ope * 15 + 1 + 8] // 8 : DT1
-                    , parent.instFM[n][ope * 15 + 1 + 7]); // 7 : ML
+                    , parent.instFM[n][ope * opeLength + 1 + 13] // 13 : WT  1 : No  15 : OPE Size
+                    , parent.instFM[n][ope * opeLength + 1 + 8] // 8 : DT1
+                    , parent.instFM[n][ope * opeLength + 1 + 7]); // 7 : ML
 
                 ((ClsOPN)page.chip).OutFmSetKsAr(mml, page, ope
-                    , parent.instFM[n][ope * 15 + 1 + 6] // 6 : KS
-                    , parent.instFM[n][ope * 15 + 1 + 0] // 0 : AR
+                    , parent.instFM[n][ope * opeLength + 1 + 6]  //  6 : KS
+                    , parent.instFM[n][ope * opeLength + 1 + 0]  //  0 : AR
+                    , parent.instFM[n][ope * opeLength + 1 + 15] // 15 : PR
                     );
                 OutFmSetAmDt2Dr(mml, page, ope
-                    , parent.instFM[n][ope * 15 + 1 + 10] // 10 : AM
-                    , parent.instFM[n][ope * 15 + 1 + 9] // 9 : DT2
-                    , parent.instFM[n][ope * 15 + 1 + 1] // 1 : DR
+                    , parent.instFM[n][ope * opeLength + 1 + 10] // 10 : AM
+                    , parent.instFM[n][ope * opeLength + 1 + 9] // 9 : DT2
+                    , parent.instFM[n][ope * opeLength + 1 + 1] // 1 : DR
                     );
                 OutFmSetFbSr(mml, page, ope
-                    , parent.instFM[n][ope * 15 + 1 + 12] // 12 : FB
-                    , parent.instFM[n][ope * 15 + 1 + 2] //2 : SR
+                    , parent.instFM[n][ope * opeLength + 1 + 12] // 12 : FB
+                    , parent.instFM[n][ope * opeLength + 1 + 2] //2 : SR
                     );
                 ((ClsOPN)page.chip).OutFmSetSlRr(mml, page, ope
-                    , parent.instFM[n][ope * 15 + 1 + 4] // 4 : SL
-                    , parent.instFM[n][ope * 15 + 1 + 3] // 3 : RR
+                    , parent.instFM[n][ope * opeLength + 1 + 4] // 4 : SL
+                    , parent.instFM[n][ope * opeLength + 1 + 3] // 3 : RR
                     );
                 OutFmSetALGLinkSSGEG(mml, page, ope
-                    , parent.instFM[n][ope * 15 + 1 + 14] // 14 : ALG Link
-                    , parent.instFM[n][ope * 15 + 1 + 11] // 11 : SSG-EG
+                    , parent.instFM[n][ope * opeLength + 1 + 14] // 14 : ALG Link
+                    , parent.instFM[n][ope * opeLength + 1 + 11] // 11 : SSG-EG
                     );
             }
 
             //ch3以外の拡張チャンネルでも音色設定できるようにする場合はslotの様子もみてセットすること
-            page.op1ml = parent.instFM[n][0 * 15 + 1 + 7];// 7 : ML
-            page.op2ml = parent.instFM[n][1 * 15 + 1 + 7];// 7 : ML
-            page.op3ml = parent.instFM[n][2 * 15 + 1 + 7];// 7 : ML
-            page.op4ml = parent.instFM[n][3 * 15 + 1 + 7];// 7 : ML
+            page.op1ml = parent.instFM[n][0 * opeLength + 1 + 7];// 7 : ML
+            page.op2ml = parent.instFM[n][1 * opeLength + 1 + 7];// 7 : ML
+            page.op3ml = parent.instFM[n][2 * opeLength + 1 + 7];// 7 : ML
+            page.op4ml = parent.instFM[n][3 * opeLength + 1 + 7];// 7 : ML
             //ch3以外の拡張チャンネルでも音色設定できるようにする場合はslotの様子もみてセットすること
-            page.op1dt2 = parent.instFM[n][0 * 15 + 1 + 9];// 9 : DT2
-            page.op2dt2 = parent.instFM[n][1 * 15 + 1 + 9];// 9 : DT2
-            page.op3dt2 = parent.instFM[n][2 * 15 + 1 + 9];// 9 : DT2
-            page.op4dt2 = parent.instFM[n][3 * 15 + 1 + 9];// 9 : DT2
+            page.op1dt2 = parent.instFM[n][0 * opeLength + 1 + 9];// 9 : DT2
+            page.op2dt2 = parent.instFM[n][1 * opeLength + 1 + 9];// 9 : DT2
+            page.op3dt2 = parent.instFM[n][2 * opeLength + 1 + 9];// 9 : DT2
+            page.op4dt2 = parent.instFM[n][3 * opeLength + 1 + 9];// 9 : DT2
 
             page.feedBack = parent.instFM[n][1 + 12] & 7;
-            page.algo = parent.instFM[n][61] == 0xff ? 8 : (parent.instFM[n][61] & 0x7);
+            page.algo = parent.instFM[n][65] == 0xff ? 8 : (parent.instFM[n][65] & 0x7);
             OutFmSetPanRFeedbackAlgorithm(mml, page);
 
             int[] op = new int[4] {
-                parent.instFM[n][0 * 15 + 1 + 5]// 5 : TL
-                , parent.instFM[n][1 * 15 + 1 + 5]// 5 : TL
-                , parent.instFM[n][2 * 15 + 1 + 5]// 5 : TL
-                , parent.instFM[n][3 * 15 + 1 + 5]// 5 : TL
+                parent.instFM[n][0 * opeLength + 1 + 5]// 5 : TL
+                , parent.instFM[n][1 * opeLength + 1 + 5]// 5 : TL
+                , parent.instFM[n][2 * opeLength + 1 + 5]// 5 : TL
+                , parent.instFM[n][3 * opeLength + 1 + 5]// 5 : TL
             };
 
             int[][] algs = new int[9][]
@@ -1870,10 +1901,10 @@ namespace Core
             {
                 alg = parent.instFM[n][61] == 0xff ? 8 : (parent.instFM[n][61] & 0x7);
                 ope = new int[4] {
-                    parent.instFM[n][0 * 15 + 1 + 5]// 5 : TL
-                    , parent.instFM[n][1 * 15 + 1 + 5]// 5 : TL
-                    , parent.instFM[n][2 * 15 + 1 + 5]// 5 : TL
-                    , parent.instFM[n][3 * 15 + 1 + 5]// 5 : TL
+                    parent.instFM[n][0 * 16 + 1 + 5]// 5 : TL
+                    , parent.instFM[n][1 * 16 + 1 + 5]// 5 : TL
+                    , parent.instFM[n][2 * 16 + 1 + 5]// 5 : TL
+                    , parent.instFM[n][3 * 16 + 1 + 5]// 5 : TL
                 };
             }
             else

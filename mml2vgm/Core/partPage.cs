@@ -510,6 +510,7 @@ namespace Core
         public MIDINote[] noteOns = new MIDINote[128];
 
         public List<clsPos> LstPos = null;
+        public bool phaseReset = false;
 
         public int pcmMapNo { get; set; } = 0;
         public int dutyCycle { get; set; } = 0;

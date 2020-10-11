@@ -214,16 +214,45 @@
 - Remark  
     duty比、或いは波形を設定する  
 - Description  
-    0:8/8 Pure square wave.
-    1:7/8
-    2:6/8
-    3:5/8
-    4:4/8
-    5:3/8
-    6:2/8
-    7:1/8
-    8:Triangle Wave
-    9:Saw Wave
+    0:8/8 Pure square wave.  
+    1:7/8  
+    2:6/8  
+    3:5/8  
+    4:4/8  
+    5:3/8  
+    6:2/8  
+    7:1/8  
+    8:Triangle Wave  
+    9:Saw Wave  
+    10:User define wave 1  
+    11:User define wave 2  
+    12:User define wave 3  
+    13:User define wave 4  
+    14:User define wave 5  
+    15:User define wave 6  
+    @Wコマンドに影響を受けます。  
+
+
+### 波形変更  
+-----------  
+- Command  
+    @W  
+- Format  
+    @Wn  
+- 設定可能範囲  
+    n : 0 ～ 255  
+- Support chips
+    - YM2609(SSG)  
+- Remark  
+    SSG音源の波形を変更する  
+- Description  
+    SSG音源の波形を変更します。  
+    @Iコマンドに影響を受けます。  
+    YM2609はduty比のパラメータに10～15の値を設定するとSSGのブロック毎に最大6音まで波形を選択することができます。  
+    このコマンドはその波形を定義するとともに、チャンネルに合わせてduty比の値を設定します。  
+    SSG ch1の場合はUser define wave 1に定義され、duty比 10が選択されます。  
+    SSG ch2の場合はUser define wave 2に定義され、duty比 11が選択されます。  
+    SSG ch3の場合はUser define wave 3に定義され、duty比 12が選択されます。  
 
 
 ### エンベロープ変更1  
@@ -2104,6 +2133,25 @@
 - Description  
     アルペジオを開始(APON)、または停止(APOF)します。  
     APnを使用してアルペジオの定義番号を指定します。  
+
+
+### 位相リセット  
+-----------  
+- Command  
+    PRON  
+    PROF  
+- Format  
+    APON  
+    APOF  
+- 設定可能範囲  
+    無し  
+- Support chips  
+    - YM2609(SSG)  
+- Remark  
+    位相リセットの開始(PRON)、停止(PROF)  
+- Description  
+    位相リセットを開始(PRON)、または停止(PROF)します。  
+    開始するとキーオン時に位相をリセットするようになります。  
 
 
 ### 効果音モード  

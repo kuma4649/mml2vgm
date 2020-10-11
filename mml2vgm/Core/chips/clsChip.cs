@@ -1033,6 +1033,24 @@ namespace Core
             //SetDummyData(page, mml);
             return;
         }
+        
+        public virtual void CmdPhaseReset(partPage page, MML mml)
+        {
+            string cmd = (string)mml.args[0];
+
+            switch (cmd)
+            {
+                case "PRON":
+                    page.phaseReset = true;
+                    break;
+                case "PROF":
+                    page.phaseReset = false;
+                    break;
+            }
+
+            //SetDummyData(page, mml);
+            return;
+        }
 
         public virtual void CmdHardEnvelope(partPage page, MML mml)
         {

@@ -40,6 +40,8 @@ Triangle
 'U19 gf+fe
 'U20-25 l1rrrr
 
+'U19-25 J r2
+
 SuperSaw
 'U19-25 o4 v10 l8 @I9 q1 p3
 'U19    D-40 p1 (2
@@ -49,6 +51,42 @@ SuperSaw
 'U23    D10  p3
 'U24    D20  p3 (1
 'U25    D40  p2 (2
-'U19-25 e.e.e e.e.d e.e.e d.e.f
+ 位相リセット無し
+'U19-25 PROF e.e.e e.e.d e.e.e d.e.f
+ 位相リセット有り
+'U19-25 PRON e.e.e e.e.d e.e.e d.e.f
+
+ SSG user define wave form test
+'@ WS 0,
+'@ $07,$07,$0e,$0e ,$0c,$0c,$09,$09 ,$0c,$0c,$0e,$0e ,$0a,$0a,$07,$07
+'@ $0c,$0c,$0f,$0f ,$0d,$0d,$08,$08 ,$0a,$0a,$0b,$0b ,$07,$07,$02,$02
+'@ $08,$08,$0d,$0d ,$09,$09,$04,$04 ,$05,$05,$07,$07 ,$02,$02,$00,$00
+'@ $03,$03,$08,$08 ,$05,$05,$01,$01 ,$03,$03,$06,$06 ,$03,$03,$01,$01
+
+
+単独 ノーエフェクト
+'U19 o4 v13l8 q1 p3 D0 T150 @W0
+'U19 <g.>c16d.f16e.c16d.a16 g.c16d.f16e.c16g.b16
+
+単独 リバーブ、コーラス
+'U19 XRvS3 XChS1 XChM35 XChD20 XChR16 XChF0 )
+'U19 <g.>c16d.f16e.c16d.a16 g.c16d.f16e.c16g.b16
+'U19 XRvS0 XChS0
+'U19 *M0 ;同期マーク
+
+複数 ノーエフェクト
+'U2021   *S0 ;同期開始
+'U192021 o4 v13l8 q1 p3 D0 @W0
+'U20     v10D2  r8
+'U21     v8 D-2 r4
+'U192021 <g.>c16d.f16e.c16d.a16 g.c16d.f16e.c16g.b16
+
+複数 リバーブ、コーラス
+'U192021 XRvS1 XChS1 XChM35 XChD30 XChR16 XChF0 )
+'U192021 <g.>c16d.f16e.c16d.a16 g.c16d.f16e.c16g.b16
+'U192021 >c.<b-16a-.g16f.e-16d.<b-16> b-.>c16<b-.g16
+'U192021 T140 a12f12 T130 d12g12 T120 e12d12
+'U192021 r1
+
 
 

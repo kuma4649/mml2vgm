@@ -220,6 +220,7 @@ E05060=Failed to parse '*' command.
 E05061=Failed to syncronize '*S' command.
 E05062=Unknown command ('APO?') defined.
 E05063=Unknown command ('AP?') defined.
+E05064=Unknown command ('PRO?') defined.
 
 
 ;partWork.cs 06000

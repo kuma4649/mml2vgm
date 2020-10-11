@@ -7,11 +7,12 @@
         public const int OPLL_INSTRUMENT_SIZE = 11 + 11 + 2 + 1;//25
         public const int OPL3_INSTRUMENT_SIZE = 12 + 12 + 2 + 1;//27
         public const int OPL_OP4_INSTRUMENT_SIZE = 12 + 12 + 12 + 12 + 3 + 1;//52
-        public const int OPNA2_INSTRUMENT_SIZE = 1 + 15 + 15 + 15 + 15 + 1;//62
+        public const int OPNA2_INSTRUMENT_SIZE = 1 + 16 + 16 + 16 + 16 + 1;//66
         public const int INSTRUMENT_OPERATOR_SIZE = 9;
         public const int INSTRUMENT_M_OPERATOR_SIZE = 11;
         public const int WF_INSTRUMENT_SIZE = 33;
         public const int OPNA2_WF_INSTRUMENT_SIZE = 1024 + 1;
+        public const int OPNA2_WFS_INSTRUMENT_SIZE = 64 + 1;
 
         public const string NOTE = "c_d_ef_g_a_b";
 

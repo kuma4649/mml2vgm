@@ -972,17 +972,18 @@ b               -ooooooooooooooooooooooooooooooooooooooooooo  音符シ
 
   定義パターン7
     "A"を指定した音色を妄想音源YM2609(OPNA2)で使用すると以下のように解釈される。
-     DT2 DeTune2   OPNA2はDT2を使用可
-     FB  Feed Back OPNA2はop毎に使用可
-     WT  WaveType  OPNA2はop毎に基本波形(Ch毎)を選択できる(0～3)。更に波形は@Wコマンドで割り当てる。
-     ALL ALg Link  OPNA2はアルゴリズムを編集できる(0～15)。op毎に親となるopをbitで選択。自分が選択される又は誰も選択しない場合、キャリアとなる。
-                   bit3:Op4  bit2:Op3  bit1:Op2  bit0:Op1
-     AL  ALg       -1 を設定するとOPNA2は上記のALLでアルゴリズムを編集できるモードになる。
+     DT2 DeTune2    OPNA2はDT2を使用可
+     FB  Feed Back  OPNA2はop毎に使用可
+     WT  WaveType   OPNA2はop毎に基本波形(Ch毎)を選択できる(0～3)。更に波形は@Wコマンドで割り当てる。
+     ALL ALg Link   OPNA2はアルゴリズムを編集できる(0～15)。op毎に親となるopをbitで選択。自分が選択される又は誰も選択しない場合、キャリアとなる。
+                    bit3:Op4  bit2:Op3  bit1:Op2  bit0:Op1
+     AL  ALg        -1 を設定するとOPNA2は上記のALLでアルゴリズムを編集できるモードになる。
+     PR  PhaseReset 0:デフォルト 1:KeyOn時に必ず位相がリセットされる
 '@ A No
-'@ AR DR SR RR SL TL KS ML DT1 DT2 AM SSGEG FB WT ALL
-'@ AR DR SR RR SL TL KS ML DT1 DT2 AM SSGEG FB WT ALL
-'@ AR DR SR RR SL TL KS ML DT1 DT2 AM SSGEG FB WT ALL
-'@ AR DR SR RR SL TL KS ML DT1 DT2 AM SSGEG FB WT ALL
+'@ AR DR SR RR SL TL KS ML DT1 DT2 AM SSGEG FB WT ALL PR
+'@ AR DR SR RR SL TL KS ML DT1 DT2 AM SSGEG FB WT ALL PR
+'@ AR DR SR RR SL TL KS ML DT1 DT2 AM SSGEG FB WT ALL PR
+'@ AR DR SR RR SL TL KS ML DT1 DT2 AM SSGEG FB WT ALL PR
 '@ AL
 
 
@@ -1223,11 +1224,17 @@ FM1Chで指定の音程2音を同時に出力することを主な目的とし�
 '@  12  12   4   4    0   0   0   0     0
 
 
-(5) 基本波形定義
+(5) 基本波形定義(FM)
   YM2609はFMの合成に使用される基本波形を編集することが可能です。
 '@ W No , val1, ... val1024
-    No          定義番号(0-255)
+    No          定義番号(0-3)
     valn        波形データ($0-$FFFF) 1024個の定義が必要。複数行に分けてもよい。
+
+(6) 基本波形定義(SSG)
+  YM2609はSSGの波形を編集することが可能です。
+'@ WS No , val1, ... val32
+    No          定義番号(0-255)
+    valn        波形データ($00-$0F) 32個の定義が必要。複数行に分けてもよい。
 
 
 
