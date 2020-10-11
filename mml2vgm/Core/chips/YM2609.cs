@@ -624,6 +624,7 @@ namespace Core
             page.beforePms = page.pms;
 
             SOutData(page, mml, port, (byte)(0xb4 + vch), (byte)((page.pan << 6) + (page.ams << 3) + (page.algConstSw << 2) + page.pms));
+            //Console.WriteLine("{0} {1} {2}",port[0],vch, page.pan);
         }
 
         public new void SetSsgFNum(partPage page, MML mml)
@@ -2262,7 +2263,7 @@ namespace Core
             {
                 if (page.panR != page.beforePanR || page.feedBack != page.beforeFeedBack || page.algo != page.beforeAlgo)
                     OutFmSetPanRFeedbackAlgorithm(mml, page);
-                if (page.pan != page.spg.pan || page.ams != page.beforeAms || page.algConstSw != page.beforeAlgConstSw || page.pms != page.beforePms)
+                if (page.pan != page.spg.pan || page.pan != page.beforePan || page.ams != page.beforeAms || page.algConstSw != page.beforeAlgConstSw || page.pms != page.beforePms)
                     OutOPNSetPanAmsAcPms(mml, page);
             }
 

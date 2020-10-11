@@ -5660,7 +5660,7 @@ namespace mml2vgmIDE
                     if (!ctYM2609[Chip.Number].UseScci && ctYM2609[Chip.Number].UseEmu)
                     {
                         mds.WriteYM2609(Chip.Index, (byte)Chip.Number, (byte)(address >> 8), (byte)address, (byte)data);
-                        //Console.WriteLine("{0:x02} : {1:x02} : {2:x02} : {3:x02}", (byte)Chip.Number, (byte)(address >> 8), (byte)address, (byte)data);
+                        //if(address==0xb4) Console.WriteLine("{0:x02} : {1:x02} : {2:x02} : {3:x02}", (byte)Chip.Number, (byte)(address >> 8), (byte)address, (byte)data);
                     }
                 }
                 if (Chip.Model == EnmVRModel.RealModel)
