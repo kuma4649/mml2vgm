@@ -1672,7 +1672,7 @@ namespace mml2vgmIDE
                         chip.Start = ym2608.Start;
                         chip.Stop = ym2608.Stop;
                         chip.Reset = ym2608.Reset;
-                        chip.SamplingRate = (UInt32)Common.SampleRate;
+                        chip.SamplingRate = 55467;// (UInt32)Common.SampleRate;
                         chip.Volume = setting.balance.YM2608Volume;
                         chip.Clock = (uint)zchip.defineInfo.clock;
                         chip.Option = null;
@@ -2471,7 +2471,7 @@ namespace mml2vgmIDE
                             chip.Start = ym2608.Start;
                             chip.Stop = ym2608.Stop;
                             chip.Reset = ym2608.Reset;
-                            chip.SamplingRate = (UInt32)Common.SampleRate;
+                            chip.SamplingRate = 55467;// (UInt32)Common.SampleRate;
                             chip.Volume = setting.balance.YM2608Volume;
                             chip.Clock = vgmDriver.YM2608ClockValue;
                             chip.Option = new object[] { Common.GetApplicationFolder() };
@@ -3705,7 +3705,7 @@ namespace mml2vgmIDE
                     chip.Reset = ym2608.Reset;
                 }
 
-                chip.SamplingRate = (UInt32)Common.SampleRate;
+                chip.SamplingRate = 55467;// (UInt32)Common.SampleRate;
                 chip.Volume = setting.balance.YM2608Volume;
                 chip.Clock = (uint)mubDriver.YM2608ClockValue;
                 chip.Option = null;
