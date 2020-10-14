@@ -221,6 +221,7 @@ E05061=Failed to syncronize '*S' command.
 E05062=Unknown command ('APO?') defined.
 E05063=Unknown command ('AP?') defined.
 E05064=Unknown command ('PRO?') defined.
+E05065=Unknown command ('F?') defined.
 
 
 ;partWork.cs 06000
@@ -279,6 +280,7 @@ E10031=This channel can't use CC command.
 E10032=This channel can't use wf command.
 E10033=This channel can't use X command.
 E10034=Arpeggio analysis failed.
+E10035=This channel can't use F command.
 
 
 ;clsOPN.cs 11000

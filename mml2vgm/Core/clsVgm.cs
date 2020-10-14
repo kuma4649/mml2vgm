@@ -4417,6 +4417,11 @@ namespace Core
                     page.chip.CmdEffect(page, mml);
                     page.mmlPos++;
                     break;
+                case enmMMLType.ForcedFnum:
+                    log.Write("ForcedFnum");
+                    page.chip.CmdForcedFnum(page, mml);
+                    page.mmlPos++;
+                    break;
                 case enmMMLType.SkipPlay:
                     log.Write("SkipPlay");
                     jumpPointClock = (long)dSample;

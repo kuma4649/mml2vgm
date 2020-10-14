@@ -444,6 +444,11 @@ namespace Core
         public int noise = 0;
 
         /// <summary>
+        /// 固定fnumモード(-1:off 0以上:fnum値)
+        /// </summary>
+        public int forcedFnum = -1;
+
+        /// <summary>
         /// SSG Noise or Tone mixer 0:Silent 1:Tone 2:Noise 3:Tone&Noise
         /// OPM Noise 0:Disable 1:Enable
         /// </summary>

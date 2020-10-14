@@ -1001,6 +1001,79 @@ namespace Core
             }
         }
 
+        public void OutFmSetForcedFnum(partPage page, MML mml, int num)
+        {
+            int freq;
+            freq = num & 0xffff;
+
+            if (freq == page.spg.freq) return;
+
+            page.spg.freq = freq;
+
+            if (page.chip.lstPartWork[2].apg.Ch3SpecialMode && page.Type == enmChannelType.FMOPNex)
+            {
+                if ((page.slots & 8) != 0)
+                {
+                    int f = freq + page.slotDetune[3];
+                    SOutData(page, mml, page.port[0], (byte)0xa6, (byte)(f >> 8));
+                    SOutData(page, mml, page.port[0], (byte)0xa2, (byte)f);
+                }
+                if ((page.slots & 4) != 0)
+                {
+                    int f = freq + page.slotDetune[2];
+                    SOutData(page, mml, page.port[0], (byte)0xac, (byte)(f >> 8));
+                    SOutData(page, mml, page.port[0], (byte)0xa8, (byte)f);
+                }
+                if ((page.slots & 1) != 0)
+                {
+                    int f = freq + page.slotDetune[0];
+                    SOutData(page, mml, page.port[0], (byte)0xad, (byte)(f >> 8));
+                    SOutData(page, mml, page.port[0], (byte)0xa9, (byte)f);
+                }
+                if ((page.slots & 2) != 0)
+                {
+                    int f = freq + page.slotDetune[1];
+                    SOutData(page, mml, page.port[0], (byte)0xae, (byte)(f >> 8));
+                    SOutData(page, mml, page.port[0], (byte)0xaa, (byte)f);
+                }
+            }
+            else
+            {
+                int n;
+                if (!(page.chip is YM2609))
+                {
+                    n = (page.chip is YM2203) ? 0 : 3;
+                    if (page.ch >= n + 3 && page.ch < n + 6)
+                    {
+                        return;
+                    }
+                }
+                else
+                {
+                    n = 9;
+                    if (page.ch >= 12 && page.ch < 18)
+                    {
+                        return;
+                    }
+                }
+                if ((page.chip is YM2612X) && page.ch >= 9 && page.ch <= 11)
+                {
+                    return;
+                }
+                if (page.ch < n + 3)
+                {
+                    if (page.pcm) return;
+
+                    int vch;
+                    byte[] port;
+                    GetPortVch(page, out port, out vch);
+
+                    SOutData(page, mml, port, (byte)(0xa4 + vch), (byte)((freq & 0xff00) >> 8));
+                    SOutData(page, mml, port, (byte)(0xa0 + vch), (byte)(freq & 0xff));
+                }
+            }
+        }
+
         public void OutFmKeyOn(partPage page, MML mml)
         {
             SetDummyData(page, mml);
@@ -1391,9 +1464,15 @@ namespace Core
                 return;
             }
 
-            int[] ftbl = page.chip.FNumTbl[0];
+            if (page.forcedFnum != -1)
+            {
+                SetFmForcedFNum(page, mml);
+                return;
+            }
 
-            int f = GetFmFNum(ftbl, page.octaveNow, page.noteCmd, page.shift + page.keyShift + page.toneDoublerKeyShift + page.arpDelta);//
+            int[] ftbl = page.chip.FNumTbl[0];
+            int f;
+            f = GetFmFNum(ftbl, page.octaveNow, page.noteCmd, page.shift + page.keyShift + page.toneDoublerKeyShift + page.arpDelta);//
             if (page.bendWaitCounter != -1)
             {
                 f = page.bendFnum;
@@ -1434,6 +1513,29 @@ namespace Core
             }
             f = Common.CheckRange(f, 0, 0x7ff);
             OutFmSetFnum(page, mml, o, f);
+        }
+
+        public void SetFmForcedFNum(partPage page, MML mml)
+        {
+            int[] ftbl = page.chip.FNumTbl[0];
+
+            int f = page.forcedFnum & 0xffff;
+
+            f = f + page.detune;
+            for (int lfo = 0; lfo < 4; lfo++)
+            {
+                if (!page.lfo[lfo].sw)
+                {
+                    continue;
+                }
+                if (page.lfo[lfo].type != eLfoType.Vibrato)
+                {
+                    continue;
+                }
+                f += page.lfo[lfo].value + page.lfo[lfo].param[6];
+            }
+            f = Common.CheckRange(f, 0, 0xffff);
+            OutFmSetForcedFnum(page, mml, f);
         }
 
         public int GetFmFNum(int[] ftbl, int octave, char noteCmd, int shift)
@@ -1782,6 +1884,17 @@ namespace Core
 
             page.noise = n;
             ((ClsOPN)page.chip).OutSsgNoise(mml, page);
+        }
+
+        public override void CmdForcedFnum(partPage page, MML mml)
+        {
+            int n1 = (int)mml.args[0];
+            int n2 = 0;
+            if (n1 != 0) n2 = (int)mml.args[1];
+            n1 = Common.CheckRange(n1, 0, 1);
+            n2 = Common.CheckRange(n2, 0, 0xffff);
+
+            page.forcedFnum = n1 == 0 ? -1 : n2;
         }
 
         public override void CmdInstrument(partPage page, MML mml)

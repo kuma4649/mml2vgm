@@ -560,6 +560,83 @@ namespace Core
             return true;
         }
 
+        public bool getNumInt16(partPage page, out int num)
+        {
+
+            string n = "";
+            int ret;// = -1;
+
+            skipTabSpace(page);
+
+            //+-符号を取得する(ない場合は正とする)
+            if (getChar(page) == '-' || getChar(page) == '+')
+            {
+                n = getChar(page).ToString();
+                incPos(page);
+            }
+
+            skipTabSpace(page);
+
+            //１６進数指定されているか
+            if (getChar(page) != '$')
+            {
+                //数字でなくなるまで取得
+                while (true)
+                {
+                    if (getChar(page) >= '0' && getChar(page) <= '9')
+                    {
+                        try
+                        {
+                            n += getChar(page);
+                            incPos(page);
+                        }
+                        catch
+                        {
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+
+                //数値に変換できたら成功
+                if (!int.TryParse(n, out ret))
+                {
+                    num = -1;
+                    return false;
+                }
+
+                num = ret;
+            }
+            else
+            {
+                //4文字取得
+                incPos(page);
+                n += getChar(page);
+                incPos(page);
+                n += getChar(page);
+                incPos(page);
+                n += getChar(page);
+                incPos(page);
+                n += getChar(page);
+                incPos(page);
+                //数値に変換できたら成功
+                try
+                {
+                    num = Convert.ToInt32(n, 16);
+                }
+                catch
+                {
+                    num = -1;
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
         public bool getNumNoteLength(partPage page, out int num, out bool flg)
         {
 

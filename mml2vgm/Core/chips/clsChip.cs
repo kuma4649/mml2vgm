@@ -820,6 +820,11 @@ namespace Core
                     , mml.line.Lp);
         }
 
+        public virtual void CmdForcedFnum(partPage page, MML mml)
+        {
+            msgBox.setErrMsg(msg.get("E10035")
+                    , mml.line.Lp);
+        }
 
         public virtual void CmdMPMS(partPage page, MML mml)
         {
@@ -1729,6 +1734,7 @@ namespace Core
 
                     //Console.Write("{0:x02} :", d);
                 }
+                //return;
             }
 
             foreach (byte d in data)

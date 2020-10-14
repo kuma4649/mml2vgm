@@ -304,6 +304,10 @@ namespace Core
                     log.Write(" Effect");
                     CmdEffect(pw, page, mml);
                     break;
+                case 'F'://Forced Fnum
+                    log.Write("Forced Fnum");
+                    CmdForcedFnum(pw, page, mml);
+                    break;
 
 
                 case 'c':
@@ -1196,6 +1200,41 @@ namespace Core
             mml.type = enmMMLType.SusOnOff;
             mml.args = new List<object>();
             mml.args.Add(c);
+        }
+
+        private void CmdForcedFnum(partWork pw, partPage page, MML mml)
+        {
+            pw.incPos(page);
+            if (!pw.getNum(page, out int num))
+            {
+                msgBox.setErrMsg(msg.get("E05065"), mml.line.Lp);
+                return;
+            }
+
+            //Fコマンドは数値でオンオフする...
+            if (num != 0 && num != 1)
+            {
+                msgBox.setErrMsg(msg.get("E05065"), mml.line.Lp);
+                return;
+            }
+
+            mml.type = enmMMLType.ForcedFnum;
+            mml.args = new List<object>();
+            mml.args.Add(num);
+
+            //1(ON)の場合は第２引数(固定するfnum値)を参照する
+            if (num == 0) return;
+
+            pw.incPos(page);//デリミタは何でもいいけど','を推奨
+            pw.skipTabSpace(page);
+            if (!pw.getNumInt16(page, out num))
+            {
+                msgBox.setErrMsg(msg.get("E05065"), mml.line.Lp);
+                return;
+            }
+            num = Common.CheckRange((int)(UInt16)num, 0, 0xffff);
+            mml.args.Add(num);
+
         }
 
         private void CmdEffect(partWork pw, partPage page, MML mml)
