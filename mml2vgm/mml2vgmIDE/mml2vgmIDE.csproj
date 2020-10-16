@@ -191,6 +191,12 @@
     <Compile Include="form\FrmMixer.Designer.cs">
       <DependentUpon>FrmMixer.cs</DependentUpon>
     </Compile>
+    <Compile Include="form\FrmProgress.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="form\FrmProgress.Designer.cs">
+      <DependentUpon>FrmProgress.cs</DependentUpon>
+    </Compile>
     <Compile Include="form\FrmSearchBox.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -317,6 +323,7 @@
     <Compile Include="SoundManager\SoundManager.cs" />
     <Compile Include="Tables.cs" />
     <Compile Include="VisVolume.cs" />
+    <Compile Include="WaveWriter.cs" />
     <Compile Include="WindowPosition.cs" />
     <EmbeddedResource Include="form\FormN88Files.resx">
       <DependentUpon>FormN88Files.cs</DependentUpon>
@@ -344,6 +351,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="form\FrmMixer.resx">
       <DependentUpon>FrmMixer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="form\FrmProgress.resx">
+      <DependentUpon>FrmProgress.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="form\FrmSearchBox.ja-JP.resx">
       <DependentUpon>FrmSearchBox.cs</DependentUpon>

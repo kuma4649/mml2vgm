@@ -168,7 +168,7 @@ namespace mml2vgmIDE
             Core.Common.CheckSoXVersion(System.Windows.Forms.Application.StartupPath, Disp);
             CheckAndLoadMucomDotNET(System.Windows.Forms.Application.StartupPath, Disp);
             CheckAndLoadPMDDotNET(System.Windows.Forms.Application.StartupPath, Disp);
-            compileManager = new CompileManager(Disp, mucom);
+            compileManager = new CompileManager(Disp, mucom, pmdmng);
 
             string[] args = Environment.GetCommandLineArgs();
             //foreach (string ag in args) MessageBox.Show(ag);
@@ -1875,6 +1875,7 @@ namespace mml2vgmIDE
                 return;
             }
 
+            //パートカウンターのリスト表示を初期化
             if (isSuccess)
             {
                 frmPartCounter.ClearCounter();
@@ -1906,18 +1907,21 @@ namespace mml2vgmIDE
 
             frmLog.tbLog.AppendText(msg.get("I0107"));
 
+            //エラーリストウィンドウにエラーメッセージリストを追加
             foreach (msgInfo mes in msgBox.getErr())
             {
                 frmErrorList.dataGridView1.Rows.Add("Error", mes.filename, mes.line == -1 ? "-" : (mes.line + 1).ToString(), mes.body);
                 //frmConsole.textBox1.AppendText(string.Format(msg.get("I0109"), mes));
             }
 
+            //エラーリストウィンドウにワーニングメッセージリストを追加
             foreach (msgInfo mes in msgBox.getWrn())
             {
                 frmErrorList.dataGridView1.Rows.Add("Warning", mes.filename, mes.line == -1 ? "-" : (mes.line + 1).ToString(), mes.body);
                 //frmConsole.textBox1.AppendText(string.Format(msg.get("I0108"), mes));
             }
 
+            //ログウィンドウに各種メッセージを表示
             frmLog.tbLog.AppendText("\r\n");
             frmLog.tbLog.AppendText(string.Format(msg.get("I0110"), msgBox.getErr().Length, msgBox.getWrn().Length));
 
@@ -1946,46 +1950,52 @@ namespace mml2vgmIDE
 
             frmLog.tbLog.AppendText(msg.get("I0126"));
 
-            if (isSuccess)
+
+
+            if (!isSuccess)
             {
-                if (args.Length == 2 && doPlay && msgBox.getErr().Length < 1)
+                Compiling = 0;
+                UpdateControl();
+                return;
+            }
+
+            if (args.Length != 2 || !doPlay || msgBox.getErr().Length >= 1)
+            {
+                Compiling = 0;
+                UpdateControl();
+                return;
+            }
+
+            try
+            {
+                //ヘッダー情報にダミーコマンド情報分の値を水増しした値をセットしなおす
+                if (mv.desVGM.info.format == enmFormat.VGM)
                 {
-                    try
-                    {
-                        //Process.Start(Path.ChangeExtension(args[1], (mv.desVGM.info.format == enmFormat.VGM) ? Properties.Resources.ExtensionVGM : Properties.Resources.ExtensionXGM));
+                    uint EOFOffset = Common.getLE32(mv.desBuf, 0x04) + (uint)mv.desVGM.dummyCmdCounter;
+                    Common.SetLE32(mv.desBuf, 0x04, EOFOffset);
 
-                        //ヘッダー情報にダミーコマンド情報分の値を水増しした値をセットしなおす
-                        if (mv.desVGM.info.format == enmFormat.VGM)
-                        {
-                            uint EOFOffset = Common.getLE32(mv.desBuf, 0x04) + (uint)mv.desVGM.dummyCmdCounter;
-                            Common.SetLE32(mv.desBuf, 0x04, EOFOffset);
+                    uint GD3Offset = Common.getLE32(mv.desBuf, 0x14) + (uint)mv.desVGM.dummyCmdCounter;
+                    Common.SetLE32(mv.desBuf, 0x14, GD3Offset);
 
-                            uint GD3Offset = Common.getLE32(mv.desBuf, 0x14) + (uint)mv.desVGM.dummyCmdCounter;
-                            Common.SetLE32(mv.desBuf, 0x14, GD3Offset);
+                    uint LoopOffset = (uint)mv.desVGM.dummyCmdLoopOffset - 0x1c;
+                    Common.SetLE32(mv.desBuf, 0x1c, LoopOffset);
 
-                            uint LoopOffset = (uint)mv.desVGM.dummyCmdLoopOffset - 0x1c;
-                            Common.SetLE32(mv.desBuf, 0x1c, LoopOffset);
-
-                            InitPlayer(EnmFileFormat.VGM, mv.desBuf, mv.desVGM.jumpPointClock);
-                        }
-                        else if (mv.desVGM.info.format == enmFormat.XGM)
-                        {
-                            //uint LoopOffserAddress = (uint)mv.desVGM.dummyCmdLoopOffsetAddress;
-                            //uint LoopOffset = (uint)mv.desVGM.dummyCmdLoopOffset;
-                            //Common.SetLE24(mv.desBuf, (uint)(mv.desVGM.dummyCmdLoopOffsetAddress + 1), LoopOffset);
-
-                            InitPlayer(EnmFileFormat.XGM, mv.desBuf, mv.desVGM.jumpPointClock);
-                        }
-                        else
-                        {
-                            InitPlayer(EnmFileFormat.ZGM, mv.desBuf, mv.desVGM.jumpPointClock);
-                        }
-                    }
-                    catch (Exception)
-                    {
-                        MessageBox.Show(msg.get("E0100"), "mml2vgm", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
+                    InitPlayer(EnmFileFormat.VGM, mv.desBuf, mv.desVGM.jumpPointClock);
                 }
+                else if (mv.desVGM.info.format == enmFormat.XGM)
+                {
+                    //XGM
+                    InitPlayer(EnmFileFormat.XGM, mv.desBuf, mv.desVGM.jumpPointClock);
+                }
+                else
+                {
+                    //ZGM
+                    InitPlayer(EnmFileFormat.ZGM, mv.desBuf, mv.desVGM.jumpPointClock);
+                }
+            }
+            catch (Exception)
+            {
+                MessageBox.Show(msg.get("E0100"), "mml2vgm", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
             Compiling = 0;
@@ -2918,13 +2928,22 @@ namespace mml2vgmIDE
                 {
                     Audio.Pause();
                 }
+
+                //TODO: 無意味なコール?
                 Audio.Stop(0);
+
                 ResumeNormalModeDisp();
+
+                if (Audio.waveMode)
+                {
+                    return;
+                }
 
                 if (!Audio.Play(setting, doSkipStop, jumpSoloMode))
                 {
                     try
                     {
+                        //TODO: 無意味なコール?
                         Audio.Stop(0);
                     }
                     catch (Exception ex)
@@ -3762,6 +3781,91 @@ namespace mml2vgmIDE
                 MessageBox.Show("エクスポート処理に失敗しました。", "エクスポート失敗", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        private void tsmiExport_toWaveFile_Click(object sender, EventArgs e)
+        {
+
+            IDockContent dc = GetActiveDockContent();
+            if (dc == null) return;
+            if (!(dc is FrmEditor)) return;
+
+            string tempPath = Path.Combine(Common.GetApplicationDataFolder(true), "temp", Path.GetFileName(((Document)((FrmEditor)dc).Tag).gwiFullPath));
+
+            compileManager.RequestCompile(((FrmEditor)dc).document, ((FrmEditor)dc).azukiControl.Text + "", tempPath);
+            compileManager.RequestPlayBack(((FrmEditor)dc).document, playToWavCB);
+        }
+
+        private void playToWavCB(CompileManager.queItem qi)
+        {
+            if (InvokeRequired)
+            {
+                this.Invoke(new Action<CompileManager.queItem>(playToWavCB), new object[] { qi });
+                return;
+            }
+
+            //コンパイルエラーが発生する場合はエクスポート処理中止
+            if(qi.doc.errBox!=null && qi.doc.errBox.Length > 0)
+            {
+                Audio.Stop(SendMode.Both);
+                MessageBox.Show("コンパイル時にエラーが発生したため、エクスポート処理を中止しました。", "エクスポート失敗", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+
+            //出力ファイル名の問い合わせ
+            SaveFileDialog sfd = new SaveFileDialog();
+            string fnWav = qi.doc.gwiFullPath;
+            if (fnWav.Length > 0 && fnWav[fnWav.Length - 1] == '*')
+            {
+                fnWav = fnWav.Substring(0, fnWav.Length - 1);
+            }
+            fnWav = Path.Combine(Path.GetDirectoryName(fnWav), Path.GetFileNameWithoutExtension(fnWav) + ".wav");
+            sfd.FileName = fnWav;
+            string path1 = System.IO.Path.GetDirectoryName(fnWav);
+            path1 = string.IsNullOrEmpty(path1) ? fnWav : path1;
+            sfd.InitialDirectory = path1;
+            sfd.Filter = "WAVファイル(*.wav)|*.wav|すべてのファイル(*.*)|*.*";
+            sfd.Title = "エクスポート";
+            sfd.RestoreDirectory = true;
+            sfd.OverwritePrompt = false;
+            if (sfd.ShowDialog() != DialogResult.OK)
+            {
+                return;
+            }
+
+
+            if (qi.doc.dstFileFormat == EnmFileFormat.MUB)
+            {
+                mubData = (musicDriverInterface.MmlDatum[])qi.doc.compiledData;
+                doPlay = true;
+                finishedCompileMUC();
+            }
+            else if (qi.doc.dstFileFormat == EnmFileFormat.M)
+            {
+                mData = (musicDriverInterface.MmlDatum[])qi.doc.compiledData;
+                doPlay = true;
+                finishedCompileMML();
+            }
+            else
+            {
+                mv = (Mml2vgm)qi.doc.compiledData;
+                doPlay = true;
+                args = new string[2] { qi.doc.gwiFullPath, "" };
+                finishedCompileGWI();
+            }
+
+            Audio.waveMode = true;
+            Audio.waveModeAbort = false;
+            Audio.Stop(SendMode.Both);
+            Audio.PlayToWav(setting, sfd.FileName);
+
+            FrmProgress fp = new FrmProgress();
+            fp.ShowDialog();
+
+            MessageBox.Show("完了");
+        }
+
+
 
     }
 }

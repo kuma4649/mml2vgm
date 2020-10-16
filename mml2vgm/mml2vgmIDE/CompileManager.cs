@@ -49,20 +49,22 @@ namespace mml2vgmIDE
         }
         private Action<string> disp = null;
         private mucomManager mucom = null;
+        private PMDManager pmd = null;
 
-        public CompileManager(Action<string> disp, mucomManager mucom)
+        public CompileManager(Action<string> disp, mucomManager mucom,PMDManager pmd)
         {
             this.disp = disp;
             this.mucom = mucom;
+            this.pmd = pmd;
         }
 
-        public void RequestCompile(Document doc, string srcText)
+        public void RequestCompile(Document doc, string srcText,object param=null)
         {
             if (doc == null) return;
             if (doc.compileStatus == Document.EnmCompileStatus.Compiling) return;
 
             doc.compileStatus = Document.EnmCompileStatus.ReqCompile;
-            queCompile.Enqueue(new queItem(enmCompileCommand.compile, doc, srcText, null));
+            queCompile.Enqueue(new queItem(enmCompileCommand.compile, doc, srcText, null, param));
 
             KickRunner();
         }
@@ -126,7 +128,66 @@ namespace mml2vgmIDE
                 case ".muc":
                     Compile_MUC(qi);
                     break;
+                case ".mml":
+                    Compile_MML(qi);
+                    break;
             }
+
+        }
+
+        private void Compile_MML(queItem qi)
+        {
+            if (pmd == null)
+            {
+                qi.doc.compileStatus = Document.EnmCompileStatus.Success;
+                return;
+            }
+
+            string tempPath = Path.Combine(Common.GetApplicationDataFolder(true), "temp", Path.GetFileName(qi.doc.gwiFullPath));
+            string path1 = Path.GetDirectoryName(qi.doc.gwiFullPath);
+            path1 = string.IsNullOrEmpty(path1) ? qi.doc.gwiFullPath : path1;
+            string wrkPath = path1;
+            msgBox.clear();
+            musicDriverInterface.MmlDatum[] mData = null;
+            bool isSuccess = true;
+
+            try
+            {
+                mData = pmd.compileFromSrcText(qi.srcText, wrkPath, qi.param.ToString(), Point.Empty);
+            }
+            catch
+            {
+                isSuccess = false;
+            }
+            if (mData == null) isSuccess = false;
+
+            qi.doc.compiledData = mData;
+            qi.doc.compileStatus = isSuccess ? Document.EnmCompileStatus.Success : Document.EnmCompileStatus.Failed;
+            qi.doc.dstFileFormat = EnmFileFormat.M;
+
+            musicDriverInterface.CompilerInfo ci = pmd.GetCompilerInfo();
+
+            List<msgInfo> lstMsgInfo = new List<msgInfo>();
+            if (ci != null && ci.errorList != null)
+            {
+                foreach (Tuple<int, int, string> mes in ci.errorList)
+                {
+                    msgInfo mi = new msgInfo("", mes.Item1, mes.Item2, 0, mes.Item3);
+                    lstMsgInfo.Add(mi);
+                }
+            }
+            qi.doc.errBox = lstMsgInfo.ToArray();
+
+            lstMsgInfo.Clear();
+            if (ci != null && ci.warningList != null)
+            {
+                foreach (Tuple<int, int, string> mes in ci.warningList)
+                {
+                    msgInfo mi = new msgInfo("", mes.Item1, mes.Item2, 0, mes.Item3);
+                    lstMsgInfo.Add(mi);
+                }
+            }
+            qi.doc.wrnBox = lstMsgInfo.ToArray();
 
         }
 

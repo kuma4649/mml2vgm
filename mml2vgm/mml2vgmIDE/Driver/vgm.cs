@@ -227,6 +227,7 @@ namespace mml2vgmIDE
                     {
                         vgmAdr = (uint)(vgmLoopOffset + 0x1c);
                         chipRegister.LoopCountUp(Audio.DriverSeqCounter);
+                        vgmCurLoop++;
                     }
                     else
                     {

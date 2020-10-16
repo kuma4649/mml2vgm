@@ -57,6 +57,7 @@ namespace mml2vgmIDE
 
             pm.Rendering();
             Audio.DriverSeqCounter = count;
+            vgmCurLoop = (uint)GetNowLoopCounter();
 
             if (pm.Stopped)
             {
@@ -144,7 +145,7 @@ namespace mml2vgmIDE
 
             pm.StartRendering((int)Common.SampleRate, (int)YM2608ClockValue);
             pm.MSTART(0);
-
+            
             return true;
         }
 
@@ -324,5 +325,11 @@ namespace mml2vgmIDE
             pd = null;
             return rpd;
         }
+
+        public int GetNowLoopCounter()
+        {
+            return pm.GetNowLoopCounter();
+        }
+
     }
 }

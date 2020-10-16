@@ -331,5 +331,11 @@ namespace mml2vgmIDE
         {
             return currentGD3Tag;
         }
+
+        public int GetNowLoopCounter()
+        {
+            int lp= driver.GetNowLoopCounter();
+            return (lp < 0) ? 0 : lp;
+        }
     }
 }

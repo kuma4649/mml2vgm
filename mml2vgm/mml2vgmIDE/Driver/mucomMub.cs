@@ -37,6 +37,7 @@ namespace mml2vgmIDE
 
             mm.Rendering();
             Audio.DriverSeqCounter = count;
+            vgmCurLoop = (uint)GetNowLoopCounter();
 
             if (mm.Stopped)
             {
@@ -125,6 +126,11 @@ namespace mml2vgmIDE
 
             SoundManager.PackData p = new SoundManager.PackData(null, null, EnmDataType.Block, dat.port * 0x100 + dat.address, dat.data, null);
             pd.Add(p);
+        }
+
+        public int GetNowLoopCounter()
+        {
+            return mm.GetNowLoopCounter();
         }
 
     }

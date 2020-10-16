@@ -147,7 +147,8 @@ namespace mml2vgmIDE
         public static long DriverSeqCounter = 0;
         public static long EmuSeqCounter = 0;
         public static Action<PackData> SetMMLTraceInfo = null;
-
+        public static bool waveMode = false;
+        public static bool waveModeAbort = false;
 
 
         public static void Init(Setting setting)
@@ -969,6 +970,38 @@ namespace mml2vgmIDE
             MDSound.MDSound.np_nes_vrc7_volume = 0;
 
 
+            bool ret = playSet();
+
+            sm.SetMode(SendMode.MML);
+            if (sm.Mode == SendMode.MML)
+            {
+                sm.RequestStart(SendMode.MML, useEmu, useReal);
+            }
+            else
+            {
+                sm.RequestStart(SendMode.Both, useEmu, useReal);
+            }
+
+            while (!sm.IsRunningAsync())
+            {
+            }
+
+            Audio.startedOnceMethod = startedOnceMethod;
+
+            EmuSeqCounter = 0;
+            Stopped = false;
+
+            //            if (!useEmu) 
+            //                sm.RequestStopAtEmuChipSender();
+            //            if (!useReal) 
+            //                sm.RequestStopAtRealChipSender();
+
+
+            return ret;
+        }
+
+        private static bool playSet()
+        {
             bool ret;
             if (PlayingFileFormat == EnmFileFormat.XGM)
             {
@@ -1040,31 +1073,6 @@ namespace mml2vgmIDE
             }
 
             if (!ret) return false;
-
-            sm.SetMode(SendMode.MML);
-            if (sm.Mode == SendMode.MML)
-            {
-                sm.RequestStart(SendMode.MML, useEmu, useReal);
-            }
-            else
-            {
-                sm.RequestStart(SendMode.Both, useEmu, useReal);
-            }
-
-            while (!sm.IsRunningAsync())
-            {
-            }
-
-            Audio.startedOnceMethod = startedOnceMethod;
-
-            EmuSeqCounter = 0;
-            Stopped = false;
-
-            //            if (!useEmu) 
-            //                sm.RequestStopAtEmuChipSender();
-            //            if (!useReal) 
-            //                sm.RequestStopAtRealChipSender();
-
 
             return ret;
         }
@@ -4546,7 +4554,7 @@ namespace mml2vgmIDE
                 return sampleCount;
             }
 
-            if (mds == null || sm == null || !GetAudioDeviceSync())
+            if (mds == null || sm == null || !GetAudioDeviceSync() || waveMode)
             {
                 SetAudioDeviceSync();
                 return sampleCount;
@@ -6201,6 +6209,121 @@ namespace mml2vgmIDE
         }
 
         #endregion
+
+        public static bool PlayToWav(Setting setting,string fnWav, bool doSkipStop = false, Action startedOnceMethod = null)
+        {
+            useEmu = false;
+            useReal = false;
+
+            waveMode = true;
+
+            errMsg = "";
+            Stop(SendMode.Both);
+
+            //if (doSkipStop)
+            //{
+            //sm.SetMode(SendMode.RealTime);
+            //}
+
+            //sm.SetSpeed(1.0);
+            vgmSpeed = 1.0;
+            //sm.SetMusicInterruptTimer(setting.musicInterruptTimer);
+
+            ////スレッドなどの準備など(?)で演奏開始時にテンポが乱れることがあるため念のため待つ。
+            //DriverSeqCounter = sm.GetDriverSeqCounterDelay();
+
+            ////開始時にバッファ分のデータが貯まらないうちにコールバックがくるとテンポが乱れるため、レイテンシ(デバイスのバッファ)分だけ演奏開始を待つ。
+            //DriverSeqCounter += getLatency();
+
+            //MDSound.MDSound.np_nes_apu_volume = 0;
+            //MDSound.MDSound.np_nes_dmc_volume = 0;
+            //MDSound.MDSound.np_nes_fds_volume = 0;
+            //MDSound.MDSound.np_nes_fme7_volume = 0;
+            //MDSound.MDSound.np_nes_mmc5_volume = 0;
+            //MDSound.MDSound.np_nes_n106_volume = 0;
+            //MDSound.MDSound.np_nes_vrc6_volume = 0;
+            //MDSound.MDSound.np_nes_vrc7_volume = 0;
+
+
+            bool ret = playSet();
+            if (!ret) return false;
+            //sm.SetMode(SendMode.MML);
+            //if (sm.Mode == SendMode.MML)
+            //{
+            //    sm.RequestStart(SendMode.MML, useEmu, useReal);
+            //}
+            //else
+            //{
+            //    sm.RequestStart(SendMode.Both, useEmu, useReal);
+            //}
+
+            //while (!sm.IsRunningAsync())
+            //{
+            //}
+
+            Audio.startedOnceMethod = startedOnceMethod;
+
+            EmuSeqCounter = 0;
+            DriverSeqCounter = 0;
+
+            //Stopped = false;
+
+            //            if (!useEmu) 
+            sm.RequestStopAtEmuChipSender();
+            //            if (!useReal) 
+            sm.RequestStopAtRealChipSender();
+
+            Stop(SendMode.Both);
+
+            toWavWaveWriter = new WaveWriter(setting);
+            toWavWaveWriter.Open(fnWav);
+
+            Thread mm = new Thread(new ThreadStart(trdToWavRenderingProcess));
+            mm.Start();
+
+            return ret;
+        }
+        
+        private static WaveWriter toWavWaveWriter=null;
+
+        private static void trdToWavRenderingProcess()
+        {
+            short[] buf = new short[2];
+            int offset = 0;
+            int sampleCount = 1;
+
+            Enq bEnq = chipRegister.enq;
+            chipRegister.enq = EnqToWav;
+
+            while (!driver.Stopped && GetVgmCurLoopCounter() < 2 && !waveModeAbort)
+            {
+                mds.Update(buf, offset, sampleCount, playToWavOneProc);
+                EmuSeqCounter++;
+                toWavWaveWriter.Write(buf, offset, sampleCount * 2);
+            }
+
+
+            Stop(SendMode.Both);
+            toWavWaveWriter.Close();
+            chipRegister.enq = bEnq;
+            waveMode = false;
+        }
+
+        private static void playToWavOneProc()
+        {
+            //
+            if (EmuSeqCounter >= DriverSeqCounter)
+                driver.oneFrameProc();
+        }
+
+        public static bool EnqToWav(outDatum od, long Counter, Chip Chip, EnmDataType Type, int Address, int Data, object ExData)
+        {
+            if (Chip.Device == EnmZGMDevice.Conductor) return false;
+            if (Type == EnmDataType.None) return false;
+
+            chipRegister.SendChipData(Counter, Chip, Type, Address, Data, ExData);
+            return false;
+        }
 
 
 

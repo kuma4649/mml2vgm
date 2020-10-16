@@ -205,5 +205,12 @@ namespace mml2vgmIDE
             disp("M98 を完了");
             return ret;
         }
+
+        public int GetNowLoopCounter()
+        {
+            int lp = driver.GetNowLoopCounter();
+            return (lp < 0) ? 0 : lp;
+        }
+
     }
 }
