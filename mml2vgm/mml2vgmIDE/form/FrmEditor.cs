@@ -951,11 +951,17 @@ namespace mml2vgmIDE
 
                             if (si.sienType == 2)
                             {
+                                string cnt = si.content;
+                                if (cnt.IndexOf("\r\n") < 0 && cnt.IndexOf("\n")>=0)
+                                {
+                                    cnt=cnt.Replace("\n", "\r\n");
+                                }
+
                                 azukiControl.Document.Replace(
-                                    (document.srcFileFormat == EnmMmlFileFormat.GWI) ? si.content : (
-                                    (document.srcFileFormat == EnmMmlFileFormat.MUC) ? ConvertMucFromGwiOPN(si.content) : (
-                                    (document.srcFileFormat == EnmMmlFileFormat.MML) ? ConvertMMLFromGwiOPN(si.content) : (
-                                    si.content))),
+                                    (document.srcFileFormat == EnmMmlFileFormat.GWI) ? cnt : (
+                                    (document.srcFileFormat == EnmMmlFileFormat.MUC) ? ConvertMucFromGwiOPN(cnt) : (
+                                    (document.srcFileFormat == EnmMmlFileFormat.MML) ? ConvertMMLFromGwiOPN(cnt) : (
+                                    cnt))),
                                     ci - si.foundCnt,
                                     ci);
                             }

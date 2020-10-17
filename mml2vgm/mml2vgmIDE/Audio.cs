@@ -258,9 +258,10 @@ namespace mml2vgmIDE
             List<Setting.ChipType> ret = realChip.GetRealChipList();
 
             chipType = new Setting.ChipType[Math.Max(chipRegister.AY8910.Count, 2)];
-            for (int i = 0; i < chipRegister.AY8910.Count; i++)
+            for (int i = 0; i < Math.Max(chipRegister.AY8910.Count, 2); i++)
             {
                 chipType[i] = new Setting.ChipType();
+                if (chipRegister.AY8910.Count <= i) continue;
                 if (!chipRegister.AY8910[i].Use) continue;
                 chipRegister.AY8910[i].Model = EnmVRModel.VirtualModel;
                 chipType[i].UseEmu = true;
@@ -272,9 +273,10 @@ namespace mml2vgmIDE
             chipRegister.SetRealChipInfo(EnmZGMDevice.AY8910, chipType[0], chipType[1], setting.LatencyEmulation, setting.LatencySCCI);
 
             chipType = new Setting.ChipType[Math.Max(chipRegister.C140.Count, 2)];
-            for (int i = 0; i < chipRegister.C140.Count; i++)
+            for (int i = 0; i < Math.Max(chipRegister.C140.Count, 2); i++)
             {
                 chipType[i] = new Setting.ChipType();
+                if (chipRegister.C140.Count <= i) continue;
                 if (!chipRegister.C140[i].Use) continue;
                 chipRegister.C140[i].Model = EnmVRModel.VirtualModel;
                 chipType[i].UseEmu = true;
@@ -286,9 +288,10 @@ namespace mml2vgmIDE
             chipRegister.SetRealChipInfo(EnmZGMDevice.C140, chipType[0], chipType[1], setting.LatencyEmulation, setting.LatencySCCI);
 
             chipType = new Setting.ChipType[Math.Max(chipRegister.C352.Count, 2)];
-            for (int i = 0; i < chipRegister.C352.Count; i++)
+            for (int i = 0; i < Math.Max(chipRegister.C352.Count, 2); i++)
             {
                 chipType[i] = new Setting.ChipType();
+                if (chipRegister.C352.Count <= i) continue;
                 if (!chipRegister.C352[i].Use) continue;
                 chipRegister.C352[i].Model = EnmVRModel.VirtualModel;
                 chipType[i].UseEmu = true;
@@ -300,9 +303,10 @@ namespace mml2vgmIDE
             chipRegister.SetRealChipInfo(EnmZGMDevice.C352, chipType[0], chipType[1], setting.LatencyEmulation, setting.LatencySCCI);
 
             chipType = new Setting.ChipType[Math.Max(chipRegister.HuC6280.Count, 2)];
-            for (int i = 0; i < chipRegister.HuC6280.Count; i++)
+            for (int i = 0; i < Math.Max(chipRegister.HuC6280.Count, 2); i++)
             {
                 chipType[i] = new Setting.ChipType();
+                if (chipRegister.HuC6280.Count <= i) continue;
                 if (!chipRegister.HuC6280[i].Use) continue;
                 chipRegister.HuC6280[i].Model = EnmVRModel.VirtualModel;
                 chipType[i].UseEmu = true;
@@ -312,9 +316,10 @@ namespace mml2vgmIDE
             chipRegister.SetRealChipInfo(EnmZGMDevice.HuC6280, chipType[0], chipType[1], setting.LatencyEmulation, setting.LatencySCCI);
 
             chipType = new Setting.ChipType[Math.Max(chipRegister.K051649.Count, 2)];
-            for (int i = 0; i < chipRegister.K051649.Count; i++)
+            for (int i = 0; i < Math.Max(chipRegister.K051649.Count, 2); i++)
             {
                 chipType[i] = new Setting.ChipType();
+                if (chipRegister.K051649.Count <= i) continue;
                 if (!chipRegister.K051649[i].Use) continue;
                 chipRegister.K051649[i].Model = EnmVRModel.VirtualModel;
                 chipType[i].UseEmu = true;
@@ -324,9 +329,10 @@ namespace mml2vgmIDE
             chipRegister.SetRealChipInfo(EnmZGMDevice.K051649, chipType[0], chipType[1], setting.LatencyEmulation, setting.LatencySCCI);
 
             chipType = new Setting.ChipType[Math.Max(chipRegister.K053260.Count, 2)];
-            for (int i = 0; i < chipRegister.K053260.Count; i++)
+            for (int i = 0; i < Math.Max(chipRegister.K053260.Count, 2); i++)
             {
                 chipType[i] = new Setting.ChipType();
+                if (chipRegister.K053260.Count <= i) continue;
                 if (!chipRegister.K053260[i].Use) continue;
                 chipRegister.K053260[i].Model = EnmVRModel.VirtualModel;
                 chipType[i].UseEmu = true;
@@ -336,9 +342,10 @@ namespace mml2vgmIDE
             chipRegister.SetRealChipInfo(EnmZGMDevice.K053260, chipType[0], chipType[1], setting.LatencyEmulation, setting.LatencySCCI);
 
             chipType = new Setting.ChipType[Math.Max(chipRegister.PPZ8.Count, 2)];
-            for (int i = 0; i < chipRegister.PPZ8.Count; i++)
+            for (int i = 0; i < Math.Max(chipRegister.PPZ8.Count, 2); i++)
             {
                 chipType[i] = new Setting.ChipType();
+                if (chipRegister.PPZ8.Count <= i) continue;
                 if (!chipRegister.PPZ8[i].Use) continue;
                 chipRegister.PPZ8[i].Model = EnmVRModel.VirtualModel;
                 chipType[i].UseEmu = true;
@@ -348,9 +355,10 @@ namespace mml2vgmIDE
             chipRegister.SetRealChipInfo(EnmZGMDevice.PPZ8, chipType[0], chipType[1], setting.LatencyEmulation, setting.LatencySCCI);
 
             chipType = new Setting.ChipType[Math.Max(chipRegister.PPSDRV.Count, 2)];
-            for (int i = 0; i < chipRegister.PPSDRV.Count; i++)
+            for (int i = 0; i < Math.Max(chipRegister.PPSDRV.Count, 2); i++)
             {
                 chipType[i] = new Setting.ChipType();
+                if (chipRegister.PPSDRV.Count <= i) continue;
                 if (!chipRegister.PPSDRV[i].Use) continue;
                 chipRegister.PPSDRV[i].Model = EnmVRModel.VirtualModel;
                 chipType[i].UseEmu = true;
@@ -360,9 +368,10 @@ namespace mml2vgmIDE
             chipRegister.SetRealChipInfo(EnmZGMDevice.PPSDRV, chipType[0], chipType[1], setting.LatencyEmulation, setting.LatencySCCI);
 
             chipType = new Setting.ChipType[Math.Max(chipRegister.P86.Count, 2)];
-            for (int i = 0; i < chipRegister.P86.Count; i++)
+            for (int i = 0; i < Math.Max(chipRegister.P86.Count, 2); i++)
             {
                 chipType[i] = new Setting.ChipType();
+                if (chipRegister.P86.Count <= i) continue;
                 if (!chipRegister.P86[i].Use) continue;
                 chipRegister.P86[i].Model = EnmVRModel.VirtualModel;
                 chipType[i].UseEmu = true;
@@ -372,9 +381,10 @@ namespace mml2vgmIDE
             chipRegister.SetRealChipInfo(EnmZGMDevice.P86, chipType[0], chipType[1], setting.LatencyEmulation, setting.LatencySCCI);
 
             chipType = new Setting.ChipType[Math.Max(chipRegister.QSound.Count, 2)];
-            for (int i = 0; i < chipRegister.QSound.Count; i++)
+            for (int i = 0; i < Math.Max(chipRegister.QSound.Count, 2); i++)
             {
                 chipType[i] = new Setting.ChipType();
+                if (chipRegister.QSound.Count <= i) continue;
                 if (!chipRegister.QSound[i].Use) continue;
                 chipRegister.QSound[i].Model = EnmVRModel.VirtualModel;
                 chipType[i].UseEmu = true;
@@ -384,9 +394,10 @@ namespace mml2vgmIDE
             chipRegister.SetRealChipInfo(EnmZGMDevice.QSound, chipType[0], chipType[1], setting.LatencyEmulation, setting.LatencySCCI);
 
             chipType = new Setting.ChipType[Math.Max(chipRegister.RF5C164.Count, 2)];
-            for (int i = 0; i < chipRegister.RF5C164.Count; i++)
+            for (int i = 0; i < Math.Max(chipRegister.RF5C164.Count, 2); i++)
             {
                 chipType[i] = new Setting.ChipType();
+                if (chipRegister.RF5C164.Count <= i) continue;
                 if (!chipRegister.RF5C164[i].Use) continue;
                 chipRegister.RF5C164[i].Model = EnmVRModel.VirtualModel;
                 chipType[i].UseEmu = true;
@@ -396,9 +407,10 @@ namespace mml2vgmIDE
             chipRegister.SetRealChipInfo(EnmZGMDevice.RF5C164, chipType[0], chipType[1], setting.LatencyEmulation, setting.LatencySCCI);
 
             chipType = new Setting.ChipType[Math.Max(chipRegister.SEGAPCM.Count, 2)];
-            for (int i = 0; i < chipRegister.SEGAPCM.Count; i++)
+            for (int i = 0; i < Math.Max(chipRegister.SEGAPCM.Count, 2); i++)
             {
                 chipType[i] = new Setting.ChipType();
+                if (chipRegister.SEGAPCM.Count <= i) continue;
                 if (!chipRegister.SEGAPCM[i].Use) continue;
                 chipRegister.SEGAPCM[i].Model = EnmVRModel.VirtualModel;
                 chipType[i].UseEmu = true;
@@ -410,9 +422,10 @@ namespace mml2vgmIDE
             chipRegister.SetRealChipInfo(EnmZGMDevice.SegaPCM, chipType[0], chipType[1], setting.LatencyEmulation, setting.LatencySCCI);
 
             chipType = new Setting.ChipType[Math.Max(chipRegister.SN76489.Count, 2)];
-            for (int i = 0; i < chipRegister.SN76489.Count; i++)
+            for (int i = 0; i < Math.Max(chipRegister.SN76489.Count, 2); i++)
             {
                 chipType[i] = new Setting.ChipType();
+                if (chipRegister.SN76489.Count <= i) continue;
                 if (!chipRegister.SN76489[i].Use) continue;
                 chipRegister.SN76489[i].Model = EnmVRModel.VirtualModel;
                 chipType[i].UseEmu = true;
@@ -424,9 +437,10 @@ namespace mml2vgmIDE
             chipRegister.SetRealChipInfo(EnmZGMDevice.SN76489, chipType[0], chipType[1], setting.LatencyEmulation, setting.LatencySCCI);
 
             chipType = new Setting.ChipType[Math.Max(chipRegister.YM2151.Count, 2)];
-            for (int i = 0; i < chipRegister.YM2151.Count; i++)
+            for (int i = 0; i < Math.Max(chipRegister.YM2151.Count, 2); i++)
             {
                 chipType[i] = new Setting.ChipType();
+                if (chipRegister.YM2151.Count <= i) continue;
                 if (!chipRegister.YM2151[i].Use) continue;
                 chipRegister.YM2151[i].Model = EnmVRModel.VirtualModel;
                 chipType[i].UseEmu = true;
@@ -440,9 +454,10 @@ namespace mml2vgmIDE
             chipRegister.SetRealChipInfo(EnmZGMDevice.YM2151, chipType[0], chipType[1], setting.LatencyEmulation, setting.LatencySCCI);
 
             chipType = new Setting.ChipType[Math.Max(chipRegister.YM2203.Count, 2)];
-            for (int i = 0; i < chipRegister.YM2203.Count; i++)
+            for (int i = 0; i < Math.Max(chipRegister.YM2203.Count, 2); i++)
             {
                 chipType[i] = new Setting.ChipType();
+                if (chipRegister.YM2203.Count <= i) continue;
                 if (!chipRegister.YM2203[i].Use) continue;
                 chipRegister.YM2203[i].Model = EnmVRModel.VirtualModel;
                 chipType[i].UseEmu = true;
@@ -454,9 +469,10 @@ namespace mml2vgmIDE
             chipRegister.SetRealChipInfo(EnmZGMDevice.YM2203, chipType[0], chipType[1], setting.LatencyEmulation, setting.LatencySCCI);
 
             chipType = new Setting.ChipType[Math.Max(chipRegister.YM2413.Count, 2)];
-            for (int i = 0; i < chipRegister.YM2413.Count; i++)
+            for (int i = 0; i < Math.Max(chipRegister.YM2413.Count, 2); i++)
             {
                 chipType[i] = new Setting.ChipType();
+                if (chipRegister.YM2413.Count <= i) continue;
                 if (!chipRegister.YM2413[i].Use) continue;
                 chipRegister.YM2413[i].Model = EnmVRModel.VirtualModel;
                 chipType[i].UseEmu = true;
@@ -468,9 +484,10 @@ namespace mml2vgmIDE
             chipRegister.SetRealChipInfo(EnmZGMDevice.YM2413, chipType[0], chipType[1], setting.LatencyEmulation, setting.LatencySCCI);
 
             chipType = new Setting.ChipType[Math.Max(chipRegister.YM3526.Count, 2)];
-            for (int i = 0; i < chipRegister.YM3526.Count; i++)
+            for (int i = 0; i < Math.Max(chipRegister.YM3526.Count, 2); i++)
             {
                 chipType[i] = new Setting.ChipType();
+                if (chipRegister.YM3526.Count <= i) continue;
                 if (!chipRegister.YM3526[i].Use) continue;
                 chipRegister.YM3526[i].Model = EnmVRModel.VirtualModel;
                 chipType[i].UseEmu = true;
@@ -482,9 +499,10 @@ namespace mml2vgmIDE
             chipRegister.SetRealChipInfo(EnmZGMDevice.YM3526, chipType[0], chipType[1], setting.LatencyEmulation, setting.LatencySCCI);
 
             chipType = new Setting.ChipType[Math.Max(chipRegister.YM3812.Count, 2)];
-            for (int i = 0; i < chipRegister.YM3812.Count; i++)
+            for (int i = 0; i < Math.Max(chipRegister.YM3812.Count, 2); i++)
             {
                 chipType[i] = new Setting.ChipType();
+                if (chipRegister.YM3812.Count <= i) continue;
                 if (!chipRegister.YM3812[i].Use) continue;
                 chipRegister.YM3812[i].Model = EnmVRModel.VirtualModel;
                 chipType[i].UseEmu = true;
@@ -496,9 +514,10 @@ namespace mml2vgmIDE
             chipRegister.SetRealChipInfo(EnmZGMDevice.YM3812, chipType[0], chipType[1], setting.LatencyEmulation, setting.LatencySCCI);
 
             chipType = new Setting.ChipType[Math.Max(chipRegister.YMF262.Count, 2)];
-            for (int i = 0; i < chipRegister.YMF262.Count; i++)
+            for (int i = 0; i < Math.Max(chipRegister.YMF262.Count, 2); i++)
             {
                 chipType[i] = new Setting.ChipType();
+                if (chipRegister.YMF262.Count <= i) continue;
                 if (!chipRegister.YMF262[i].Use) continue;
                 chipRegister.YMF262[i].Model = EnmVRModel.VirtualModel;
                 chipType[i].UseEmu = true;
@@ -510,9 +529,10 @@ namespace mml2vgmIDE
             chipRegister.SetRealChipInfo(EnmZGMDevice.YMF262, chipType[0], chipType[1], setting.LatencyEmulation, setting.LatencySCCI);
 
             chipType = new Setting.ChipType[Math.Max(chipRegister.YM2608.Count, 2)];
-            for (int i = 0; i < chipRegister.YM2608.Count; i++)
+            for (int i = 0; i < Math.Max(chipRegister.YM2608.Count, 2); i++)
             {
                 chipType[i] = new Setting.ChipType();
+                if (chipRegister.YM2608.Count <= i) continue;
                 if (!chipRegister.YM2608[i].Use) continue;
                 chipRegister.YM2608[i].Model = EnmVRModel.VirtualModel;
                 chipType[i].UseEmu = true;
@@ -524,9 +544,10 @@ namespace mml2vgmIDE
             chipRegister.SetRealChipInfo(EnmZGMDevice.YM2608, chipType[0], chipType[1], setting.LatencyEmulation, setting.LatencySCCI);
 
             chipType = new Setting.ChipType[Math.Max(chipRegister.YM2609.Count, 2)];
-            for (int i = 0; i < chipRegister.YM2609.Count; i++)
+            for (int i = 0; i < Math.Max(chipRegister.YM2609.Count, 2); i++)
             {
                 chipType[i] = new Setting.ChipType();
+                if (chipRegister.YM2609.Count <= i) continue;
                 if (!chipRegister.YM2609[i].Use) continue;
                 chipRegister.YM2609[i].Model = EnmVRModel.VirtualModel;
                 chipType[i].UseEmu = true;
@@ -538,9 +559,10 @@ namespace mml2vgmIDE
             chipRegister.SetRealChipInfo(EnmZGMDevice.YM2609, chipType[0], chipType[1], setting.LatencyEmulation, setting.LatencySCCI);
 
             chipType = new Setting.ChipType[Math.Max(chipRegister.YM2610.Count, 2)];
-            for (int i = 0; i < chipRegister.YM2610.Count; i++)
+            for (int i = 0; i < Math.Max(chipRegister.YM2610.Count, 2); i++)
             {
                 chipType[i] = new Setting.ChipType();
+                if (chipRegister.YM2610.Count <= i) continue;
                 if (!chipRegister.YM2610[i].Use) continue;
                 chipRegister.YM2610[i].Model = EnmVRModel.VirtualModel;
                 chipType[i].UseEmu = true;
@@ -552,9 +574,10 @@ namespace mml2vgmIDE
             chipRegister.SetRealChipInfo(EnmZGMDevice.YM2610, chipType[0], chipType[1], setting.LatencyEmulation, setting.LatencySCCI);
 
             chipType = new Setting.ChipType[Math.Max(chipRegister.YM2612.Count,2)];
-            for (int i = 0; i < chipRegister.YM2612.Count; i++)
+            for (int i = 0; i < Math.Max(chipRegister.YM2612.Count, 2); i++)
             {
                 chipType[i] = new Setting.ChipType();
+                if (chipRegister.YM2612.Count <= i) continue;
                 if (!chipRegister.YM2612[i].Use) continue;
                 chipRegister.YM2612[i].Model = EnmVRModel.VirtualModel;
                 chipType[i].UseEmu = true;

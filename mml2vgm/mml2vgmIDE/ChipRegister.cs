@@ -4415,7 +4415,7 @@ namespace mml2vgmIDE
             {
                 if (Chip.Model == EnmVRModel.VirtualModel)
                 {
-                    if (!ctYM2608[Chip.Number].UseScci && ctYM2608[Chip.Number].UseEmu)
+                    if (ctYM2608[Chip.Number]==null ||(!ctYM2608[Chip.Number].UseScci && ctYM2608[Chip.Number].UseEmu))
                     {
                         //Console.WriteLine("FM P{2} Out:Adr[{0:x02}] val[{1:x02}]", (byte)address, (byte)data, (byte)(address >> 8));
                         mds.WriteYM2608(Chip.Index, (byte)Chip.Number, (byte)(address >> 8), (byte)address, (byte)data);
@@ -6018,10 +6018,10 @@ namespace mml2vgmIDE
             {
                 if (Chip.Model == EnmVRModel.VirtualModel)
                 {
-                    if (!ctYM2612[Chip.Number].UseScci)
+                    if (ctYM2612[Chip.Number] == null || !ctYM2612[Chip.Number].UseScci)
                     {
                         if (mds == null) return;
-                        if (ctYM2612[Chip.Number].UseEmu)
+                        if (ctYM2612[Chip.Number] == null || ctYM2612[Chip.Number].UseEmu)
                         {
                             mds.WriteYM2612(Chip.Index, (byte)Chip.Number, (byte)(address >> 8), (byte)address, (byte)data);
                         }
@@ -6723,7 +6723,7 @@ namespace mml2vgmIDE
             {
                 if (Chip.Model == EnmVRModel.VirtualModel)
                 {
-                    if (!ctSN76489[Chip.Number].UseScci)
+                    if (ctSN76489[Chip.Number] == null || !ctSN76489[Chip.Number].UseScci)
                     {
                         if (ctSN76489[Chip.Number].UseEmu)
                         {
