@@ -1032,6 +1032,8 @@ namespace Core
                     break;
                 case "APOF":
                     page.arpeggioMode = false;
+                    page.beforeFNum = -1;
+                    page.arpDelta = 0;
                     break;
             }
 

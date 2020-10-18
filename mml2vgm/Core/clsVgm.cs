@@ -3818,31 +3818,31 @@ namespace Core
 
         private void ProcKeyOff(partPage page)
         {
-            if (page.waitKeyOnCounter == 0)
+            if (page.waitKeyOnCounter != 0) return;
+
+            if (!page.tie)
             {
-                if (!page.tie)
+                if (!page.envelopeMode)
                 {
-                    if (!page.envelopeMode)
+                    page.chip.SetKeyOff(page, null);
+                    page.arpIndex = -1;
+                }
+                else
+                {
+                    if (page.envIndex != -1)
                     {
-                        page.chip.SetKeyOff(page, null);
-                    }
-                    else
-                    {
-                        if (page.envIndex != -1)
-                        {
-                            page.envIndex = 3;//RR phase
-                            page.envCounter = 0;
-                        }
+                        page.envIndex = 3;//RR phase
+                        page.envCounter = 0;
                     }
                 }
-
-                //次回に引き継ぎリセット
-                page.beforeTie = page.tie;
-                page.tie = false;
-
-                //ゲートタイムカウンターをリセット
-                page.waitKeyOnCounter = -1;
             }
+
+            //次回に引き継ぎリセット
+            page.beforeTie = page.tie;
+            page.tie = false;
+
+            //ゲートタイムカウンターをリセット
+            page.waitKeyOnCounter = -1;
         }
 
         private void ProcBend(partPage page)
@@ -4040,6 +4040,7 @@ namespace Core
                             page.envVolume = 0;
                             page.envCounter = 0;
                             page.envIndex = -1;
+                            page.arpIndex = -1;//アルペジオも止める
                             break;
                         }
                         page.envCounter = page.envelope[6]; // RR
