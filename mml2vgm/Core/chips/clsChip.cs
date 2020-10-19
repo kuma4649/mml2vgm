@@ -750,13 +750,28 @@ namespace Core
         public virtual void CmdTempo(partPage page, MML mml)
         {
             parent.info.tempo = (int)mml.args[0];
-            if (parent.info.format == enmFormat.VGM || parent.info.format == enmFormat.ZGM)
+            if (parent.info.vgmVsync == -1)
             {
-                parent.info.samplesPerClock = Information.VGM_SAMPLE_PER_SECOND * 60.0 * 4.0 / (parent.info.tempo * parent.info.clockCount);
+                if (parent.info.format == enmFormat.VGM || parent.info.format == enmFormat.ZGM)
+                {
+                    parent.info.samplesPerClock = Information.VGM_SAMPLE_PER_SECOND * 60.0 * 4.0 / (parent.info.tempo * parent.info.clockCount);
+                }
+                else
+                {
+                    parent.info.samplesPerClock = parent.info.xgmSamplesPerSecond * 60.0 * 4.0 / (parent.info.tempo * parent.info.clockCount);
+                }
             }
             else
             {
-                parent.info.samplesPerClock = parent.info.xgmSamplesPerSecond * 60.0 * 4.0 / (parent.info.tempo * parent.info.clockCount);
+                if (parent.info.format == enmFormat.VGM || parent.info.format == enmFormat.ZGM)
+                {
+                    parent.info.samplesPerClock = 44100 / parent.info.vgmVsync;
+                }
+                else
+                {
+                    parent.info.samplesPerClock = parent.info.xgmSamplesPerSecond / parent.info.vgmVsync;
+                }
+
             }
 
             SetDummyData(page, mml);

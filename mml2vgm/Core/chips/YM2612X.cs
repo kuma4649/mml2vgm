@@ -137,8 +137,14 @@ namespace Core
                 , (byte)id
                 );
 
-            parent.info.samplesPerClock = parent.info.xgmSamplesPerSecond * 60.0 * 4.0 / (parent.info.tempo * parent.info.clockCount);
-
+            if (parent.info.vgmVsync == -1)
+            {
+                parent.info.samplesPerClock = parent.info.xgmSamplesPerSecond * 60.0 * 4.0 / (parent.info.tempo * parent.info.clockCount);
+            }
+            else
+            {
+                parent.info.samplesPerClock = parent.info.xgmSamplesPerSecond / parent.info.vgmVsync;
+            }
             //必要なサンプル数を算出し、保持しているサンプル数より大きい場合は更新
             double m = page.waitCounter * 60.0 * 4.0 / (parent.info.tempo * parent.info.clockCount) * 14000.0;//14000(Hz) = xgm sampling Rate
             parent.instPCM[page.instrument].xgmMaxSampleCount = Math.Max(parent.instPCM[page.instrument].xgmMaxSampleCount, m);
@@ -177,8 +183,14 @@ namespace Core
                 , (byte)id
                 );
 
-            parent.info.samplesPerClock = parent.info.xgmSamplesPerSecond * 60.0 * 4.0 / (parent.info.tempo * parent.info.clockCount);
-
+            if (parent.info.vgmVsync == -1)
+            {
+                parent.info.samplesPerClock = parent.info.xgmSamplesPerSecond * 60.0 * 4.0 / (parent.info.tempo * parent.info.clockCount);
+            }
+            else
+            {
+                parent.info.samplesPerClock = parent.info.xgmSamplesPerSecond / parent.info.vgmVsync;
+            }
         }
 
         public override void StorePcm(Dictionary<int, clsPcm> newDic, KeyValuePair<int, clsPcm> v, byte[] buf, bool is16bit, int samplerate, params object[] option)
