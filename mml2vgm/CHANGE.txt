@@ -1,4 +1,8 @@
 更新履歴
+TAG296 2020/10/25
+  Core:AY8910/C140/OPL系/OPN系/HuC/K051/K053/MIDI/Qsnd/RF5C/SegaPCM/DCSG/OPM
+    D(ディチューン)コマンドの設定範囲の修正
+
 TAG295 2020/10/19
   Vsyncタグ追加
 

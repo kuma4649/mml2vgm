@@ -1,6 +1,7 @@
 ﻿using musicDriverInterface;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -1230,7 +1231,7 @@ namespace Core
         public virtual void CmdDetune(partPage page, MML mml)
         {
             int n = (int)mml.args[0];
-            n = Common.CheckRange(n, -127, 127);
+            n = Common.CheckRange(n, -128, 128);
             page.detune = n;
             SetDummyData(page, mml);
         }

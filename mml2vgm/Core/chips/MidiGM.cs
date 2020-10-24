@@ -266,6 +266,15 @@ namespace Core
             parent.OutData(mml, page.port[0], dat.ToArray());
         }
 
+        public override void CmdDetune(partPage page, MML mml)
+        {
+            int n = (int)mml.args[0];
+            n = Common.CheckRange(n, -0xffff, 0xffff);
+            page.detune = n;
+            SetDummyData(page, mml);
+        }
+
+
 
         private void SendSysEx(partPage page, MML mml, int n)
         {

@@ -422,6 +422,14 @@ namespace Core
             page.panL = l;
         }
 
+        public override void CmdDetune(partPage page, MML mml)
+        {
+            int n = (int)mml.args[0];
+            n = Common.CheckRange(n, -0x3ff, 0x3ff);
+            page.detune = n;
+            SetDummyData(page, mml);
+        }
+
         public override void SetupPageData(partWork pw, partPage page)
         {
             page.spg.keyOff = true;

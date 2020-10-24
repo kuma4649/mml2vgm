@@ -672,6 +672,14 @@ namespace Core
             SOutData(page, mml, port[p], adr, dat);
         }
 
+        public override void CmdDetune(partPage page, MML mml)
+        {
+            int n = (int)mml.args[0];
+            n = Common.CheckRange(n, -0x3ff, 0x3ff);
+            page.detune = n;
+            SetDummyData(page, mml);
+        }
+
         public override void MultiChannelCommand(MML mml)
         {
 

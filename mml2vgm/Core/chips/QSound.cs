@@ -644,5 +644,13 @@ namespace Core
         public override void CmdLoopExtProc(partPage page, MML mml)
         {
         }
+
+        public override void CmdDetune(partPage page, MML mml)
+        {
+            int n = (int)mml.args[0];
+            n = Common.CheckRange(n, -0xffff, 0xffff);
+            page.detune = n;
+            SetDummyData(page, mml);
+        }
     }
 }

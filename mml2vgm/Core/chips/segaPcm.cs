@@ -577,6 +577,14 @@ namespace Core
         {
         }
 
+        public override void CmdDetune(partPage page, MML mml)
+        {
+            int n = (int)mml.args[0];
+            n = Common.CheckRange(n, -0xff, 0xff);
+            page.detune = n;
+            SetDummyData(page, mml);
+        }
+
         public override string DispRegion(clsPcm pcm)
         {
             return string.Format("{0,-10} {1,-7} {2,-5:D3} {3,-4:D2} ${4,-7:X4} ${5,-7:X4} {6} ${7,-7:X4}  {8,4} {9}\r\n"

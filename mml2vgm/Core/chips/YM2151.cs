@@ -901,6 +901,14 @@ namespace Core
         {
         }
 
+        public override void CmdDetune(partPage page, MML mml)
+        {
+            int n = (int)mml.args[0];
+            n = Common.CheckRange(n, -(9 * 12 * 64 - 1), (9 * 12 * 64 - 1));
+            page.detune = n;
+            SetDummyData(page, mml);
+        }
+
         public override void SetupPageData(partWork pw, partPage page)
         {
 
