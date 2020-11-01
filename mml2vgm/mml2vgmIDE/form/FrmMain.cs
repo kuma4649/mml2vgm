@@ -1525,10 +1525,13 @@ namespace mml2vgmIDE
                     int row, col;
                     ac.GetLineColumnIndexFromCharIndex(ci, out row, out col);
                     caretPoint = new Point(col, row);
-                    if (isMuc == EnmMmlFileFormat.MUC)
+                    switch (isMuc)
                     {
-                        caretPoint.Y++;
+                        case EnmMmlFileFormat.MUC:
+                            caretPoint.Y++;
+                            break;
                     }
+
                     int st = ac.GetLineHeadIndexFromCharIndex(ci);
                     int li = ac.GetLineIndexFromCharIndex(ci);
                     //int ed = st + ac.GetLineLength(li);
@@ -1537,8 +1540,17 @@ namespace mml2vgmIDE
                     //先頭の文字が'ではないときは既存の動作
                     else
                     {
-                        if (isMuc != EnmMmlFileFormat.MUC && line[0] != '\'') doSkip = false;
-                        if (isMuc == EnmMmlFileFormat.MUC && (line[0] < 'A' || line[0] > 'K')) doSkip = false;
+                        switch (isMuc)
+                        {
+                            case EnmMmlFileFormat.MUC:
+                                if (line[0] < 'A' || line[0] > 'K') doSkip = false;
+                                break;
+                            case EnmMmlFileFormat.MML:
+                                break;
+                            default:
+                                if (line[0] != '\'') doSkip = false;
+                                break;
+                        }
                     }
                 }
             }

@@ -199,6 +199,13 @@ namespace mml2vgmIDE
             usePPZ = setting.pmdDotNET.usePPZ8;
             this.isGIMICOPNA = isGIMICOPNA;
 
+            int jumpIndex = -1;
+            if (compiler != null)
+            {
+                CompilerInfo ci = compiler.GetCompilerInfo();
+                if (ci.jumpClock != -1) jumpIndex = ci.jumpClock;
+            }
+
             object[] addtionalPMDDotNETOption = new object[]{
                 isLoadADPCM,//bool
                 loadADPCMOnly,//bool
@@ -212,7 +219,8 @@ namespace mml2vgmIDE
                 envPmdOpt,//string[] 環境変数PMDOpt
                 fileName,//string srcFile;
                 "",//string PPCFileHeader無視されます(設定不要)
-                (Func<string,Stream>)appendFileReaderCallback
+                (Func<string,Stream>)appendFileReaderCallback,
+                jumpIndex
             };
 
             string[] addtionalPMDOption = GetPMDOption();
