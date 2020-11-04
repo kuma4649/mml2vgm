@@ -592,7 +592,7 @@ namespace mml2vgmIDE
             }
 
             List<byte> buf = new List<byte>();
-            foreach (MmlDatum md in mubData) buf.Add((byte)md.dat);
+            foreach (MmlDatum md in mubData) buf.Add(md != null ? (byte)md.dat : (byte)0);
 
             File.WriteAllBytes(fn, buf.ToArray());
         }
@@ -2128,24 +2128,31 @@ namespace mml2vgmIDE
             {
                 frmPartCounter.ClearCounter();
                 Object[] cells = new object[7];
-                for (int i = 0; i < ci.totalCount.Count; i++)
+                try
                 {
-                    //if (pw[i].clockCounter == 0) continue;
-                    int ch = ci.partType[i] == "YM2608" ? ci.partNumber[i] : (
-                            ci.partType[i] == "FM3ex" ? (ci.partNumber[i] + 6) : (
-                            ci.partNumber[i]
-                            )
-                        );
-                    ch += (ci.partName[i][0] >= 'G' && ci.partName[i][0] <= 'I') ? 3 : 0;
-                    ch++;
-                    cells[0] = ch;
-                    cells[1] = 0;//ChipIndex
-                    cells[2] = 0;//ChipNumber
-                    cells[3] = ci.partName[i];
-                    cells[4] = ci.partType[i] == "FM3ex" ? "YM2608" : ci.partType[i];
-                    cells[5] = ci.totalCount[i];
-                    cells[6] = ci.loopCount[i];
-                    frmPartCounter.AddPartCounter(cells);
+                    for (int i = 0; i < ci.totalCount.Count; i++)
+                    {
+                        //if (pw[i].clockCounter == 0) continue;
+                        int ch = ci.partType[i] == "YM2608" ? ci.partNumber[i] : (
+                                ci.partType[i] == "FM3ex" ? (ci.partNumber[i] + 6) : (
+                                ci.partNumber[i]
+                                )
+                            );
+                        ch += (ci.partName[i][0] >= 'G' && ci.partName[i][0] <= 'I') ? 3 : 0;
+                        ch++;
+                        cells[0] = ch;
+                        cells[1] = 0;//ChipIndex
+                        cells[2] = 0;//ChipNumber
+                        cells[3] = ci.partName[i];
+                        cells[4] = ci.partType[i] == "FM3ex" ? "YM2608" : ci.partType[i];
+                        cells[5] = ci.totalCount[i];
+                        cells[6] = ci.loopCount[i];
+                        frmPartCounter.AddPartCounter(cells);
+                    }
+                }
+                catch(Exception e)
+                {
+                    Log.WriteLine(LogLevel.ERROR, string.Format("Exception:\r\nMessage\r\n{0}\r\nStackTrace\r\n{1}\r\n", e.Message, e.StackTrace));
                 }
             }
 

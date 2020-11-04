@@ -46,8 +46,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>lib\Azuki.dll</HintPath>
     </Reference>
-    <Reference Include="HtmlAgilityPack, Version=1.11.24.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
-      <HintPath>..\packages\HtmlAgilityPack.1.11.24\lib\Net45\HtmlAgilityPack.dll</HintPath>
+    <Reference Include="HtmlAgilityPack, Version=1.11.26.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
+      <HintPath>..\packages\HtmlAgilityPack.1.11.26\lib\Net45\HtmlAgilityPack.dll</HintPath>
     </Reference>
     <Reference Include="IronPython, Version=2.7.10.0, Culture=neutral, PublicKeyToken=7f709c5b713576e1, processorArchitecture=MSIL">
       <HintPath>..\packages\IronPython.2.7.10\lib\net45\IronPython.dll</HintPath>
