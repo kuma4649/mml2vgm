@@ -460,6 +460,7 @@ namespace Core
                 || typ == enmMMLType.unknown
                 || typ == enmMMLType.Lyric
                 || typ == enmMMLType.Lfo
+                || typ == enmMMLType.TraceUpdateStack
                 )
             {
                 return true;

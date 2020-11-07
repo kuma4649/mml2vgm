@@ -4452,6 +4452,11 @@ namespace Core
                     }
                     page.mmlPos++;
                     break;
+                case enmMMLType.TraceUpdateStack:
+                    log.Write("TraceUpdateStack");
+                    page.chip.CmdTraceUpdateStack(page, mml);
+                    page.mmlPos++;
+                    break;
                 default:
                     msgBox.setErrMsg(string.Format(msg.get("E01016")
                         , mml.type)

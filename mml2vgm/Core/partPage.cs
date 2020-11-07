@@ -543,6 +543,9 @@ namespace Core
         public bool changeFlag { get; internal set; }
         public int C352flag { get; internal set; }
         public List<outDatum> sendData { get; internal set; } = new List<outDatum>();
+        public int oldAliesCount { get; internal set; }
+        public clsAliesPos oldAlies { get; internal set; }
+        public Stack<clsAliesPos> stackAliesPos { get; internal set; }
 
         public partPage(partPage sharedPg)
         {

@@ -54,11 +54,11 @@ namespace Core
 
         public Line getLine(partPage page)
         {
-            if (page.pos.alies == "")
+            if (page.pos.alies == null || page.pos.alies.Length < 1)
             {
                 return page.pData[page.pos.row].Copy();
             }
-            return aData[page.pos.alies].Copy();
+            return aData[page.pos.alies[0].nextName].Copy();
         }
 
         /// <summary>
@@ -67,11 +67,11 @@ namespace Core
         /// <returns></returns>
         public int getLineNumber(int page)
         {
-            if (pg[page].pos.alies == "")
+            if (pg[page].pos.alies == null || pg[page].pos.alies.Length < 1)
             {
                 return pg[page].pData[pg[page].pos.row].Lp.row;
             }
-            return aData[pg[page].pos.alies].Lp.row;
+            return aData[pg[page].pos.alies[0].nextName].Lp.row;
         }
 
         /// <summary>
@@ -80,11 +80,11 @@ namespace Core
         /// <returns></returns>
         public string getSrcFn(int page)
         {
-            if (pg[page].pos.alies == "")
+            if (pg[page].pos.alies == null || pg[page].pos.alies.Length < 1)
             {
                 return pg[page].pData[pg[page].pos.row].Lp.srcMMLID;
             }
-            return aData[pg[page].pos.alies].Lp.srcMMLID;
+            return aData[pg[page].pos.alies[0].nextName].Lp.srcMMLID;
         }
 
         /// <summary>
@@ -96,7 +96,7 @@ namespace Core
             //if (dataEnd) return (char)0;
 
             char ch;
-            if (page.pos.alies == "")
+            if (page.pos.alies == null || page.pos.alies.Length<1)
             {
                 if (page.pData[page.pos.row].Txt.Length <= page.pos.col + page.pData[page.pos.row].Lp.col)
                 {
@@ -106,11 +106,11 @@ namespace Core
             }
             else
             {
-                if (aData[page.pos.alies].Txt.Length <= page.pos.col + aData[page.pos.alies].Lp.col)
+                if (aData[page.pos.alies[0].nextName].Txt.Length <= page.pos.col + aData[page.pos.alies[0].nextName].Lp.col)
                 {
                     return (char)0;
                 }
-                ch = aData[page.pos.alies].Txt[page.pos.col + aData[page.pos.alies].Lp.col];
+                ch = aData[page.pos.alies[0].nextName].Txt[page.pos.col + aData[page.pos.alies[0].nextName].Lp.col];
             }
             //Console.Write(ch);
             return ch;
@@ -219,9 +219,11 @@ namespace Core
             int col = 0;
             int pCol = 0;
             string aliesName = "";
+            //int aliesDepth = 0;
 
             page.LstPos = new List<clsPos>();
             page.LstPos.Add(new clsPos());
+            page.stackAliesPos = new Stack<clsAliesPos>();
             resetPos(page);
 
             while (true)
@@ -263,7 +265,7 @@ namespace Core
 
                             clsPos p = new clsPos();
                             p.tCol = tCol;
-                            p.alies = "";
+                            p.alies = null;
                             p.col = 0;
                             p.row = row;
                             page.LstPos.Add(p);
@@ -274,7 +276,8 @@ namespace Core
                     else
                     {
                         clsPos p = page.stackPos.Pop();
-                        aliesName = p.alies;
+                        aliesName = p.alies[0].name;
+                        page.stackAliesPos.Pop();
                         col = p.col;
                         row = p.row;
                         if (aliesName == "")
@@ -301,11 +304,23 @@ namespace Core
                     string a = getAliesName(data, col + pCol);
                     if (a != "")
                     {
+                        clsAliesPos ali = new clsAliesPos();
+                        ali.name = aliesName;
+                        ali.nextName = a;
+                        ali.depth = page.stackAliesPos.Count+1;
+                        //ali.nextDepth = page.stackAliesPos.Count + 1;
+                        ali.row = page.pData[row].Lp.row;
+                        ali.col = col + pCol;
+                        ali.len = a.Length + 1;
+
+                        //マクロから復帰する際に使用する場所情報を作成
                         clsPos p = new clsPos();
-                        p.alies = aliesName;
                         p.col = col + a.Length + 1;
                         p.row = row;
+                        p.alies = CopyAndToArrayStackAliesPos(page.stackAliesPos); //現時点のスタックの内容に戻す
+
                         page.stackPos.Push(p);
+                        page.stackAliesPos.Push(ali);
 
                         data = aData[a].Txt;
                         pCol = aData[a].Lp.col;
@@ -315,7 +330,7 @@ namespace Core
 
                         p = new clsPos();
                         p.tCol = tCol;
-                        p.alies = a;
+                        p.alies = CopyAndToArrayStackAliesPos(page.stackAliesPos);
                         p.col = 0;
                         p.row = 0;
                         page.LstPos.Add(p);
@@ -351,7 +366,7 @@ namespace Core
 
                             clsPos p = new clsPos();
                             p.tCol = tCol;
-                            p.alies = "";
+                            p.alies = null;
                             p.col = 0;
                             p.row = row;
                             page.LstPos.Add(p);
@@ -362,7 +377,8 @@ namespace Core
                     else
                     {
                         clsPos p = page.stackPos.Pop();
-                        aliesName = p.alies;
+                        aliesName = p.alies.Length < 1 ? "" : p.alies[0].name;
+                        page.stackAliesPos.Pop();
                         col = p.col;
                         row = p.row;
                         if (aliesName == "")
@@ -383,6 +399,27 @@ namespace Core
 
             }
 
+        }
+
+        private clsAliesPos[] CopyAndToArrayStackAliesPos(Stack<clsAliesPos> stackAliesPos)
+        {
+            List<clsAliesPos> ret = new List<clsAliesPos>();
+
+            clsAliesPos[] saps = stackAliesPos.ToArray();
+            foreach (clsAliesPos sap in saps)
+            {
+                clsAliesPos ap = new clsAliesPos();
+                ap.col = sap.col;
+                ap.depth = sap.depth;
+                ap.len = sap.len;
+                ap.name = sap.name;
+                ap.nextName = sap.nextName;
+                ap.row = sap.row;
+
+                ret.Add(ap);
+            }
+
+            return ret.ToArray();
         }
 
         /// <summary>
@@ -722,10 +759,27 @@ namespace Core
         /// </summary>
         public int col = 0;
 
-        /// <summary>
-        /// 次に演奏されるデータのエイリアス名
-        /// </summary>
-        public string alies = "";
+        public clsAliesPos[] alies = null;
+        ///// <summary>
+        ///// 次に演奏されるデータのエイリアス名
+        ///// </summary>
+        //public string alies = "";
+
+        //public int aliesDepth = 0;
+
+        //public int aliesRow { get; internal set; }
+        //public int aliesCol { get; internal set; }
+        //public int aliesLen { get; internal set; }
+    }
+
+    public class clsAliesPos
+    {
+        public string name = "";
+        public string nextName = "";
+        public int depth = 0;
+        public int row = -1;
+        public int col = -1;
+        public int len = -1;
     }
 
     public class clsRepeat

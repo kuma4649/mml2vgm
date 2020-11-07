@@ -1637,6 +1637,13 @@ namespace Core
             //何もする必要なし
         }
 
+        public virtual void CmdTraceUpdateStack(partPage page, MML mml)
+        {
+            //
+            SetDummyData(page, mml);
+        }
+
+
         public void CheckInterrupt(partWork pw, partPage page)
         {
             if (!page.requestInterrupt) return;

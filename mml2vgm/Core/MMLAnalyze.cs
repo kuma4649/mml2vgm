@@ -1,6 +1,7 @@
 ﻿using musicDriverInterface;
 using System;
 using System.Collections.Generic;
+using System.Data.OleDb;
 using System.Drawing;
 using System.Linq;
 
@@ -109,6 +110,91 @@ namespace Core
             mml.line = pw.getLine(page);
             mml.column = page.pos.col + 1;// pw.getPos();
 
+
+            //エイリアスのスタックが変化したかチェック,更新する
+
+            int aliesCnt = page.pos.alies == null ? 0 : page.pos.alies.Length;
+            if (aliesCnt != page.oldAliesCount
+                || (
+                        aliesCnt > 0
+                        // 同じ位置のマクロに入りなおした場合、検知できないが動作には問題ないはず...
+                        // ( [%BD]2 こんな感じにしてもループ脱出コマンドが間にはいる )
+                        && (
+                            page.oldAlies == null
+                            || page.pos.alies[0].name != page.oldAlies.name
+                            || page.pos.alies[0].col != page.oldAlies.col
+                            || page.pos.alies[0].depth != page.oldAlies.depth
+                            //|| page.pos.alies[0].nextDepth != page.oldAlies.nextDepth
+                            || page.pos.alies[0].len != page.oldAlies.len
+                            || page.pos.alies[0].nextName != page.oldAlies.nextName
+                            || page.pos.alies[0].row != page.oldAlies.row
+                        )
+                    )
+                )
+            {
+
+                //初っ端の場合は直前値に初期値をセット
+                if (page.oldAlies == null)
+                {
+                    page.oldAlies = new clsAliesPos();
+                    page.oldAlies.depth = 0;
+                }
+
+#if DEBUG
+
+                //参考 : マクロに入ったか、抜けたか、入りなおしたか判定する。
+                int n = 0;
+                if (page.pos.alies != null)
+                {
+                    if ((page.pos.alies.Length < 1 ? 0 : page.pos.alies[0].depth) > page.oldAlies.depth)
+                    {
+                        n = page.pos.alies[0].depth - page.oldAlies.depth;
+                        Console.WriteLine("Push {0} times", n);
+                    }
+                    else if ((page.pos.alies.Length < 1 ? 0 : page.pos.alies[0].depth) == page.oldAlies.depth)
+                    {
+                        Console.WriteLine("Pop and Push");
+                    }
+                    else
+                    {
+                        n = page.oldAlies.depth - (page.pos.alies.Length < 1 ? 0 : page.pos.alies[0].depth);
+                        Console.WriteLine("Pop {0} times", n);
+                    }
+                }
+#endif
+
+                //トレース情報の更新コマンドを発行
+                MML mm = new MML();
+                mm.type = enmMMLType.TraceUpdateStack;
+                mm.line = pw.getLine(page);
+                mm.column = page.pos.col + 1;
+                mm.args = new List<object>();
+                mm.args.Add(page.pos.alies);
+                page.mmlData.Add(mm);
+
+                //直前値を更新
+                page.oldAliesCount = aliesCnt;
+                if (page.pos.alies != null && page.pos.alies.Length > 0)
+                {
+                    page.oldAlies.name = page.pos.alies[0].name;
+                    page.oldAlies.col = page.pos.alies[0].col;
+                    page.oldAlies.depth = page.pos.alies[0].depth;
+                    page.oldAlies.len = page.pos.alies[0].len;
+                    page.oldAlies.nextName = page.pos.alies[0].nextName;
+                    page.oldAlies.row = page.pos.alies[0].row;
+                }
+                else
+                {
+                    page.oldAlies.name = "";
+                    page.oldAlies.col = -1;
+                    page.oldAlies.depth = 0;
+                    page.oldAlies.len = -1;
+                    page.oldAlies.nextName = "";
+                    page.oldAlies.row = -1;
+                }
+            }
+
+
             if (caretPoint.Y == mml.line.Lp.row)
             {
                 if (!caretPointChannels.Contains(pw)) caretPointChannels.Add(pw);
@@ -119,6 +205,7 @@ namespace Core
                 || (caretPoint.Y < mml.line.Lp.row && caretPointChannels.Contains(pw))
                 ))
             {
+
                 MML m = new MML();
                 m.type = enmMMLType.SkipPlay;
                 m.line = pw.getLine(page);
@@ -352,7 +439,9 @@ namespace Core
                 mmlData.Add(page.PartName, new List<MML>());//この処理無意味っぽい(mmlData使ってない)
             }//この処理無意味っぽい
 
+
             page.mmlData.Add(mml);
+
 
             if (swToneDoubler)
             {
@@ -2097,12 +2186,12 @@ namespace Core
 
             int row = page.pos.row;
             char ch;
-            string alies = page.pos.alies;
+            string alies = page.pos.alies == null ? "" : page.pos.alies[0].nextName;
             do
             {
                 pw.incPos(page);
                 ch = pw.getChar(page);
-            } while ((row == page.pos.row && alies == page.pos.alies) && ch != (char)0);
+            } while ((row == page.pos.row && ((alies == "" && page.pos.alies == null) || alies == page.pos.alies[0].nextName)) && ch != (char)0);
 
         }
 
@@ -2604,6 +2693,7 @@ namespace Core
                 {
                     case enmMMLType.ToneDoubler:
                     case enmMMLType.Bend:
+                    case enmMMLType.TraceUpdateStack:
                         break;
                     case enmMMLType.Note:
                     case enmMMLType.Rest:
@@ -2637,6 +2727,7 @@ namespace Core
                 {
                     case enmMMLType.ToneDoubler:
                     case enmMMLType.Bend:
+                    case enmMMLType.TraceUpdateStack:
                         break;
                     case enmMMLType.Note:
                     case enmMMLType.Rest:

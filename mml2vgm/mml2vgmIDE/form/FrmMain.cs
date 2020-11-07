@@ -1425,6 +1425,7 @@ namespace mml2vgmIDE
             ac.ColorScheme.LineNumberFore = Color.FromArgb(setting.ColorScheme.Azuki_LineNumberFore_Normal);
             statusStrip1.BackColor = Color.FromArgb(setting.ColorScheme.StatusStripBack_Normal);
             ac.Document.Unmark(0, ac.Text.Length, 1);
+            ac.Document.Unmark(0, ac.Text.Length, 2);
             ac.IsReadOnly = false;
             ac.Refresh();
 
@@ -1505,6 +1506,7 @@ namespace mml2vgmIDE
                 ac.ColorScheme.LineNumberFore = Color.FromArgb(setting.ColorScheme.Azuki_LineNumberFore_Normal);
                 statusStrip1.BackColor = Color.FromArgb(setting.ColorScheme.StatusStripBack_Normal);
                 ac.Document.Unmark(0, ac.Text.Length, 1);
+                ac.Document.Unmark(0, ac.Text.Length, 2);
                 ac.IsReadOnly = false;
                 ac.Refresh();
             }
@@ -3161,6 +3163,7 @@ namespace mml2vgmIDE
                 a.ColorScheme.LineNumberBack = Color.FromArgb(setting.ColorScheme.Azuki_LineNumberBack_Normal);
                 a.ColorScheme.LineNumberFore = Color.FromArgb(setting.ColorScheme.Azuki_LineNumberFore_Normal);
                 a.Document.Unmark(0, a.Text.Length, 1);
+                a.Document.Unmark(0, a.Text.Length, 2);
                 a.IsReadOnly = false;
                 a.Refresh();
             }
@@ -3180,6 +3183,14 @@ namespace mml2vgmIDE
                 {
                     od = ods[ch].Dequeue();
                 }
+
+                string odfn = Path.GetFileName(od.linePos.srcMMLID);
+                if (fe.Text != odfn && fe.Text != odfn + "*")
+                {
+                    continue;
+                }
+
+
                 outDatum odo = odos[ch];
                 if (od != null
                     && od != odo
@@ -3190,40 +3201,89 @@ namespace mml2vgmIDE
                     )
                 )
                 {
-                    string odfn = Path.GetFileName(od.linePos.srcMMLID);
-                    if (fe.Text == odfn || fe.Text == odfn + "*")
+                    int i, c;
+                    ac.GetLineColumnIndexFromCharIndex(od.linePos.col, out i, out c);
+                    //log.Write(string.Format("{0} {1}", i, c));
+                    lock (traceInfoLockObj)
                     {
-                        int i, c;
-                        ac.GetLineColumnIndexFromCharIndex(od.linePos.col, out i, out c);
-                        //log.Write(string.Format("{0} {1}", i, c));
-                        lock (traceInfoLockObj)
+                        if (odo != null)
                         {
-                            if (odo != null)
+                            try
+                            {
+                                ac.Document.Unmark(odo.linePos.col, odo.linePos.col + Math.Max(odo.linePos.length, 1), 1);
+                            }
+                            catch
+                            {
+                                ;//何もしない
+                            }
+                        }
+                        ac.Document.Mark(od.linePos.col, od.linePos.col + Math.Max(od.linePos.length, 1), 1);
+                        odos[ch] = od;
+                    }
+                    flg = true;
+                }
+
+                if (od != null && od.type == enmMMLType.TraceUpdateStack)
+                {
+                    while (lstOldAliesPos.Count < ch + 1)
+                    {
+                        lstOldAliesPos.Add(new List<clsAliesPos>());
+                    }
+
+                    lock (traceInfoLockObj)
+                    {
+                        for (int i = 0; i < lstOldAliesPos[ch].Count; i++)
+                        {
+                            if (lstOldAliesPos[ch][i].col != -1)
                             {
                                 try
                                 {
-                                    ac.Document.Unmark(odo.linePos.col, odo.linePos.col + Math.Max(odo.linePos.length, 1), 1);
+                                    ac.Document.Unmark(lstOldAliesPos[ch][i].col, lstOldAliesPos[ch][i].col + Math.Max(lstOldAliesPos[ch][i].len, 1), 2);
                                 }
-                                catch
+                                catch 
                                 {
                                     ;//何もしない
                                 }
+                                lstOldAliesPos[ch][i].col = -1;
+                                flg = true;
                             }
-                            ac.Document.Mark(od.linePos.col, od.linePos.col + Math.Max(od.linePos.length, 1), 1);
-                            odos[ch] = od;
                         }
-                        flg = true;
-                        continue;
+                    }
+
+                    Core.clsAliesPos[] lp = (Core.clsAliesPos[])od.args[0];
+                    if (lp != null)
+                    {
+
+                        for (int i = 0; i < lp.Length; i++)
+                        {
+                            while (lstOldAliesPos[ch].Count < i + 1)
+                            {
+                                lstOldAliesPos[ch].Add(new clsAliesPos());
+                            }
+
+                            int ci = ac.GetCharIndexFromLineColumnIndex(lp[i].row, lp[i].col);
+                            //if (lp.Length > 0) Console.WriteLine("* {0}", ci);
+
+                            //マーク消去が必要か判定
+                            //if (ci != lstOldAliesPos[i].col)
+                            {
+                                lstOldAliesPos[ch][i].col = ci;
+                                lstOldAliesPos[ch][i].len = lp[i].len;
+                            }
+
+                            //マーク
+                            lock (traceInfoLockObj) ac.Document.Mark(ci, ci + Math.Max(lp[i].len, 1), 2);
+                            flg = true;
+                        }
                     }
                 }
-                if (od != null && od.type == enmMMLType.Tempo)
-                {
-                    ;
-                }
+
             }
 
             return flg;
         }
+
+        private List<List<clsAliesPos>> lstOldAliesPos = new List<List<clsAliesPos>>();
 
         private void TsmiFncHide_Click(object sender, EventArgs e)
         {
