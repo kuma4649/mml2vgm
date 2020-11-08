@@ -3227,7 +3227,7 @@ namespace mml2vgmIDE
                 {
                     while (lstOldAliesPos.Count < ch + 1)
                     {
-                        lstOldAliesPos.Add(new List<clsAliesPos>());
+                        lstOldAliesPos.Add(new List<LinePos>());
                     }
 
                     lock (traceInfoLockObj)
@@ -3238,7 +3238,7 @@ namespace mml2vgmIDE
                             {
                                 try
                                 {
-                                    ac.Document.Unmark(lstOldAliesPos[ch][i].col, lstOldAliesPos[ch][i].col + Math.Max(lstOldAliesPos[ch][i].len, 1), 2);
+                                    ac.Document.Unmark(lstOldAliesPos[ch][i].col, lstOldAliesPos[ch][i].col + Math.Max(lstOldAliesPos[ch][i].length, 1), 2);
                                 }
                                 catch 
                                 {
@@ -3250,7 +3250,7 @@ namespace mml2vgmIDE
                         }
                     }
 
-                    Core.clsAliesPos[] lp = (Core.clsAliesPos[])od.args[0];
+                    LinePos[] lp = (LinePos[])od.args[0];
                     if (lp != null)
                     {
 
@@ -3258,21 +3258,25 @@ namespace mml2vgmIDE
                         {
                             while (lstOldAliesPos[ch].Count < i + 1)
                             {
-                                lstOldAliesPos[ch].Add(new clsAliesPos());
+                                lstOldAliesPos[ch].Add(new LinePos());
                             }
 
-                            int ci = ac.GetCharIndexFromLineColumnIndex(lp[i].row, lp[i].col);
-                            //if (lp.Length > 0) Console.WriteLine("* {0}", ci);
-
-                            //マーク消去が必要か判定
-                            //if (ci != lstOldAliesPos[i].col)
+                            int ci;
+                            try
                             {
-                                lstOldAliesPos[ch][i].col = ci;
-                                lstOldAliesPos[ch][i].len = lp[i].len;
+                                ci = ac.GetCharIndexFromLineColumnIndex(lp[i].row, lp[i].col);
+                                //if (lp.Length > 0) Console.WriteLine("* {0}", ci);
                             }
+                            catch
+                            {
+                                continue;
+                            }
+
+                            lstOldAliesPos[ch][i].col = ci;
+                            lstOldAliesPos[ch][i].length = lp[i].length;
 
                             //マーク
-                            lock (traceInfoLockObj) ac.Document.Mark(ci, ci + Math.Max(lp[i].len, 1), 2);
+                            lock (traceInfoLockObj) ac.Document.Mark(ci, ci + Math.Max(lp[i].length, 1), 2);
                             flg = true;
                         }
                     }
@@ -3283,7 +3287,7 @@ namespace mml2vgmIDE
             return flg;
         }
 
-        private List<List<clsAliesPos>> lstOldAliesPos = new List<List<clsAliesPos>>();
+        private List<List<LinePos>> lstOldAliesPos = new List<List<LinePos>>();
 
         private void TsmiFncHide_Click(object sender, EventArgs e)
         {

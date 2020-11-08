@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using musicDriverInterface;
 
 namespace Core
 {
@@ -58,7 +59,7 @@ namespace Core
             {
                 return page.pData[page.pos.row].Copy();
             }
-            return aData[page.pos.alies[0].nextName].Copy();
+            return aData[page.pos.alies[0].aliesNextName].Copy();
         }
 
         /// <summary>
@@ -71,7 +72,7 @@ namespace Core
             {
                 return pg[page].pData[pg[page].pos.row].Lp.row;
             }
-            return aData[pg[page].pos.alies[0].nextName].Lp.row;
+            return aData[pg[page].pos.alies[0].aliesNextName].Lp.row;
         }
 
         /// <summary>
@@ -84,7 +85,7 @@ namespace Core
             {
                 return pg[page].pData[pg[page].pos.row].Lp.srcMMLID;
             }
-            return aData[pg[page].pos.alies[0].nextName].Lp.srcMMLID;
+            return aData[pg[page].pos.alies[0].aliesNextName].Lp.srcMMLID;
         }
 
         /// <summary>
@@ -106,11 +107,11 @@ namespace Core
             }
             else
             {
-                if (aData[page.pos.alies[0].nextName].Txt.Length <= page.pos.col + aData[page.pos.alies[0].nextName].Lp.col)
+                if (aData[page.pos.alies[0].aliesNextName].Txt.Length <= page.pos.col + aData[page.pos.alies[0].aliesNextName].Lp.col)
                 {
                     return (char)0;
                 }
-                ch = aData[page.pos.alies[0].nextName].Txt[page.pos.col + aData[page.pos.alies[0].nextName].Lp.col];
+                ch = aData[page.pos.alies[0].aliesNextName].Txt[page.pos.col + aData[page.pos.alies[0].aliesNextName].Lp.col];
             }
             //Console.Write(ch);
             return ch;
@@ -223,7 +224,7 @@ namespace Core
 
             page.LstPos = new List<clsPos>();
             page.LstPos.Add(new clsPos());
-            page.stackAliesPos = new Stack<clsAliesPos>();
+            page.stackAliesPos = new Stack<LinePos>();
             resetPos(page);
 
             while (true)
@@ -276,7 +277,7 @@ namespace Core
                     else
                     {
                         clsPos p = page.stackPos.Pop();
-                        aliesName = p.alies[0].name;
+                        aliesName = p.alies[0].aliesName;
                         page.stackAliesPos.Pop();
                         col = p.col;
                         row = p.row;
@@ -304,14 +305,14 @@ namespace Core
                     string a = getAliesName(data, col + pCol);
                     if (a != "")
                     {
-                        clsAliesPos ali = new clsAliesPos();
-                        ali.name = aliesName;
-                        ali.nextName = a;
-                        ali.depth = page.stackAliesPos.Count+1;
+                        LinePos ali = new LinePos();
+                        ali.aliesName = aliesName;
+                        ali.aliesNextName = a;
+                        ali.aliesDepth = page.stackAliesPos.Count+1;
                         //ali.nextDepth = page.stackAliesPos.Count + 1;
                         ali.row = page.pData[row].Lp.row;
                         ali.col = col + pCol;
-                        ali.len = a.Length + 1;
+                        ali.length = a.Length + 1;
 
                         //マクロから復帰する際に使用する場所情報を作成
                         clsPos p = new clsPos();
@@ -377,7 +378,7 @@ namespace Core
                     else
                     {
                         clsPos p = page.stackPos.Pop();
-                        aliesName = p.alies.Length < 1 ? "" : p.alies[0].name;
+                        aliesName = p.alies.Length < 1 ? "" : p.alies[0].aliesName;
                         page.stackAliesPos.Pop();
                         col = p.col;
                         row = p.row;
@@ -401,21 +402,14 @@ namespace Core
 
         }
 
-        private clsAliesPos[] CopyAndToArrayStackAliesPos(Stack<clsAliesPos> stackAliesPos)
+        private LinePos[] CopyAndToArrayStackAliesPos(Stack<LinePos> stackAliesPos)
         {
-            List<clsAliesPos> ret = new List<clsAliesPos>();
+            List<LinePos> ret = new List<LinePos>();
 
-            clsAliesPos[] saps = stackAliesPos.ToArray();
-            foreach (clsAliesPos sap in saps)
+            LinePos[] saps = stackAliesPos.ToArray();
+            foreach (LinePos sap in saps)
             {
-                clsAliesPos ap = new clsAliesPos();
-                ap.col = sap.col;
-                ap.depth = sap.depth;
-                ap.len = sap.len;
-                ap.name = sap.name;
-                ap.nextName = sap.nextName;
-                ap.row = sap.row;
-
+                LinePos ap = LinePos.Copy(sap);
                 ret.Add(ap);
             }
 
@@ -759,7 +753,7 @@ namespace Core
         /// </summary>
         public int col = 0;
 
-        public clsAliesPos[] alies = null;
+        public LinePos[] alies = null;
         ///// <summary>
         ///// 次に演奏されるデータのエイリアス名
         ///// </summary>
@@ -772,15 +766,15 @@ namespace Core
         //public int aliesLen { get; internal set; }
     }
 
-    public class clsAliesPos
-    {
-        public string name = "";
-        public string nextName = "";
-        public int depth = 0;
-        public int row = -1;
-        public int col = -1;
-        public int len = -1;
-    }
+    //public class clsAliesPos
+    //{
+    //    public string name = "";
+    //    public string nextName = "";
+    //    public int depth = 0;
+    //    public int row = -1;
+    //    public int col = -1;
+    //    public int len = -1;
+    //}
 
     public class clsRepeat
     {

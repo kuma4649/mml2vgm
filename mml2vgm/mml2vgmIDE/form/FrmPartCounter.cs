@@ -265,6 +265,8 @@ namespace mml2vgmIDE
 
                 MMLParameter.Instrument mmli = mmlParams.Insts[chip][chipIndex][chipNumber];
 
+                if (r >= mmli.inst.Length) continue;
+
                 dgvPartCounter.Rows[p].Cells["ClmInstrument"].Value = mmli.inst[r] == null ? "-" : mmli.inst[r].ToString();
                 dgvPartCounter.Rows[p].Cells["ClmEnvelope"].Value = mmli.envelope[r] == null ? "-" : mmli.envelope[r].ToString();
                 dgvPartCounter.Rows[p].Cells["ClmVolume"].Value = mmli.vol[r] == null ? "-" : mmli.vol[r].ToString();

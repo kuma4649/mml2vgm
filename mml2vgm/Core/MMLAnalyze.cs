@@ -119,16 +119,7 @@ namespace Core
                         aliesCnt > 0
                         // 同じ位置のマクロに入りなおした場合、検知できないが動作には問題ないはず...
                         // ( [%BD]2 こんな感じにしてもループ脱出コマンドが間にはいる )
-                        && (
-                            page.oldAlies == null
-                            || page.pos.alies[0].name != page.oldAlies.name
-                            || page.pos.alies[0].col != page.oldAlies.col
-                            || page.pos.alies[0].depth != page.oldAlies.depth
-                            //|| page.pos.alies[0].nextDepth != page.oldAlies.nextDepth
-                            || page.pos.alies[0].len != page.oldAlies.len
-                            || page.pos.alies[0].nextName != page.oldAlies.nextName
-                            || page.pos.alies[0].row != page.oldAlies.row
-                        )
+                        && page.pos.alies[0] != page.oldAlies
                     )
                 )
             {
@@ -136,8 +127,8 @@ namespace Core
                 //初っ端の場合は直前値に初期値をセット
                 if (page.oldAlies == null)
                 {
-                    page.oldAlies = new clsAliesPos();
-                    page.oldAlies.depth = 0;
+                    page.oldAlies = new LinePos();
+                    page.oldAlies.aliesDepth = 0;
                 }
 
 #if DEBUG
@@ -146,18 +137,18 @@ namespace Core
                 int n = 0;
                 if (page.pos.alies != null)
                 {
-                    if ((page.pos.alies.Length < 1 ? 0 : page.pos.alies[0].depth) > page.oldAlies.depth)
+                    if ((page.pos.alies.Length < 1 ? 0 : page.pos.alies[0].aliesDepth) > page.oldAlies.aliesDepth)
                     {
-                        n = page.pos.alies[0].depth - page.oldAlies.depth;
+                        n = page.pos.alies[0].aliesDepth - page.oldAlies.aliesDepth;
                         Console.WriteLine("Push {0} times", n);
                     }
-                    else if ((page.pos.alies.Length < 1 ? 0 : page.pos.alies[0].depth) == page.oldAlies.depth)
+                    else if ((page.pos.alies.Length < 1 ? 0 : page.pos.alies[0].aliesDepth) == page.oldAlies.aliesDepth)
                     {
                         Console.WriteLine("Pop and Push");
                     }
                     else
                     {
-                        n = page.oldAlies.depth - (page.pos.alies.Length < 1 ? 0 : page.pos.alies[0].depth);
+                        n = page.oldAlies.aliesDepth - (page.pos.alies.Length < 1 ? 0 : page.pos.alies[0].aliesDepth);
                         Console.WriteLine("Pop {0} times", n);
                     }
                 }
@@ -176,21 +167,11 @@ namespace Core
                 page.oldAliesCount = aliesCnt;
                 if (page.pos.alies != null && page.pos.alies.Length > 0)
                 {
-                    page.oldAlies.name = page.pos.alies[0].name;
-                    page.oldAlies.col = page.pos.alies[0].col;
-                    page.oldAlies.depth = page.pos.alies[0].depth;
-                    page.oldAlies.len = page.pos.alies[0].len;
-                    page.oldAlies.nextName = page.pos.alies[0].nextName;
-                    page.oldAlies.row = page.pos.alies[0].row;
+                    LinePos.Move(page.pos.alies[0], page.oldAlies);
                 }
                 else
                 {
-                    page.oldAlies.name = "";
-                    page.oldAlies.col = -1;
-                    page.oldAlies.depth = 0;
-                    page.oldAlies.len = -1;
-                    page.oldAlies.nextName = "";
-                    page.oldAlies.row = -1;
+                    LinePos.Clear(page.oldAlies);
                 }
             }
 
@@ -2186,12 +2167,12 @@ namespace Core
 
             int row = page.pos.row;
             char ch;
-            string alies = page.pos.alies == null ? "" : page.pos.alies[0].nextName;
+            string alies = page.pos.alies == null ? "" : page.pos.alies[0].aliesNextName;
             do
             {
                 pw.incPos(page);
                 ch = pw.getChar(page);
-            } while ((row == page.pos.row && ((alies == "" && page.pos.alies == null) || alies == page.pos.alies[0].nextName)) && ch != (char)0);
+            } while ((row == page.pos.row && ((alies == "" && page.pos.alies == null) || alies == page.pos.alies[0].aliesNextName)) && ch != (char)0);
 
         }
 

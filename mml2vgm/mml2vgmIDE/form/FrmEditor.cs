@@ -177,6 +177,11 @@ namespace mml2vgmIDE
             TextDecoration dec = new BgColorTextDecoration(Color.DarkGoldenrod);
             azukiControl.ColorScheme.SetMarkingDecoration(1, dec);
 
+            info = new MarkingInfo(2, "TraceInfoAlies");
+            Marking.Register(info);
+            dec = new BgColorTextDecoration(Color.FromArgb(0xff, 0xd4, 0x68, 0x10));
+            azukiControl.ColorScheme.SetMarkingDecoration(2, dec);
+
             this.Controls.Add(azukiControl);
 
         }
@@ -232,6 +237,11 @@ namespace mml2vgmIDE
             Marking.Register(info);
             TextDecoration dec = new BgColorTextDecoration(Color.DarkGoldenrod);
             azukiControl.ColorScheme.SetMarkingDecoration(1, dec);
+
+            info = new MarkingInfo(2, "TraceInfoAlies");
+            Marking.Register(info);
+            dec = new BgColorTextDecoration(Color.FromArgb(0xff, 0xd4, 0x68, 0x10));
+            azukiControl.ColorScheme.SetMarkingDecoration(2, dec);
 
             this.Controls.Add(azukiControl);
 

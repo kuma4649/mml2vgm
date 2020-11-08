@@ -1,4 +1,5 @@
-﻿using System;
+﻿using musicDriverInterface;
+using System;
 using System.Collections.Generic;
 
 namespace Core
@@ -544,8 +545,8 @@ namespace Core
         public int C352flag { get; internal set; }
         public List<outDatum> sendData { get; internal set; } = new List<outDatum>();
         public int oldAliesCount { get; internal set; }
-        public clsAliesPos oldAlies { get; internal set; }
-        public Stack<clsAliesPos> stackAliesPos { get; internal set; }
+        public LinePos oldAlies { get; internal set; }
+        public Stack<LinePos> stackAliesPos { get; internal set; }
 
         public partPage(partPage sharedPg)
         {
