@@ -76,17 +76,20 @@ namespace SoundManager
 
                 }
             }
-            catch
+            catch(Exception e)
             {
                 lock (lockObj)
                 {
                     isRunning = false;
                     Start = false;
                 }
+
+                log.ForcedWrite(e);
             }
             finally
             {
                 procExit = true;
+                unmount = true;
             }
         }
 
