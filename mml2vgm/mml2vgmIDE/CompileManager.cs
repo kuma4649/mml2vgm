@@ -153,7 +153,7 @@ namespace mml2vgmIDE
 
             try
             {
-                mData = pmd.compileFromSrcText(qi.srcText, wrkPath, qi.param.ToString(), Point.Empty);
+                mData = pmd.compileFromSrcText(qi.srcText, wrkPath, qi.param.ToString(), Point.Empty, true);
             }
             catch
             {

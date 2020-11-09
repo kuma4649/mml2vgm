@@ -1788,7 +1788,7 @@ namespace mml2vgmIDE
 
             try
             {
-                mData = pmdmng.compileFromSrcText(activeMMLTextLines[0], wrkPath,args[1], doSkip ? caretPoint : Point.Empty);
+                mData = pmdmng.compileFromSrcText(activeMMLTextLines[0], wrkPath, args[1], doSkip ? caretPoint : Point.Empty, !doExport);
             }
             catch
             {

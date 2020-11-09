@@ -81,13 +81,13 @@ namespace mml2vgmIDE
             }
         }
 
-        public MmlDatum[] compileFromSrcText(string srcText, string wrkMMLFullPath,string srcFileFullPath, Point point)
+        public MmlDatum[] compileFromSrcText(string srcText, string wrkMMLFullPath,string srcFileFullPath, Point point,bool doTrace)
         {
             if (!ok) return null;
 
             PMDManager.wrkMMLFullPath = wrkMMLFullPath;
             compiler.Init();
-            compiler.SetCompileSwitch("IDE");
+            if (doTrace) compiler.SetCompileSwitch("IDE");
 
             if (point != Point.Empty)
             {
