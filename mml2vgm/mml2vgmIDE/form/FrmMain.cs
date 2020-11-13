@@ -3282,12 +3282,36 @@ namespace mml2vgmIDE
                     }
                 }
 
+                if (od != null && od.type == enmMMLType.TraceLocate)
+                {
+                    //
+                    int sw = (int)od.args[1];
+                    if (sw == 1)
+                    {
+                        int ci;
+                        if (oldTraceLoc != null)
+                        {
+                            ci = oldTraceLoc.col;
+                            //アンマーク
+                            lock (traceInfoLockObj) ac.Document.Unmark(ci, ci + Math.Max(oldTraceLoc.length, 1), 2);
+                            oldTraceLoc = null;
+                        }
+
+                        LinePos lp = ((MmlDatum)od.args[2]).linePos;
+                        ci = lp.col;
+                        //マーク
+                        lock (traceInfoLockObj) ac.Document.Mark(ci, ci + Math.Max(lp.length, 1), 2);
+                        oldTraceLoc = lp;
+                        flg = true;
+                    }
+                }
             }
 
             return flg;
         }
 
         private List<List<LinePos>> lstOldAliesPos = new List<List<LinePos>>();
+        private LinePos oldTraceLoc = null;
 
         private void TsmiFncHide_Click(object sender, EventArgs e)
         {

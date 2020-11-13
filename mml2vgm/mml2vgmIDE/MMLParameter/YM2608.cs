@@ -7,9 +7,9 @@ namespace mml2vgmIDE.MMLParameter
 {
     public class YM2608 : Instrument
     {
-        public YM2608(SoundManager.Chip chip) : base(19, chip)
+        public YM2608(SoundManager.Chip chip) : base(20, chip)
         {
-            for (int i = 0; i < 19; i++)
+            for (int i = 0; i < 20; i++)
             {
                 //vol[i] = i < 9 ? 127 : (i < 12 ? 15 : (i < 18 ? 31 : 255));
                 vol[i] = 0;
@@ -52,6 +52,7 @@ namespace mml2vgmIDE.MMLParameter
                 if (isTrace)
                 {
                     if (ch < TraceInfo.Length) TraceInfo[ch].Enqueue(od);
+
                 }
 
                 switch (od.type)

@@ -539,6 +539,9 @@ namespace mml2vgmIDE.MMLParameter
                         instsAdd(ppz8, od.linePos.chipIndex, od.linePos.chipNumber);
                         ppz8.isTrace = isTrace;
                         break;
+                    default:
+                        Console.WriteLine("{0}", od.linePos.chip);
+                        break;
                 }
             }
 

@@ -156,6 +156,16 @@ namespace mml2vgmIDE
             if (!initPhase)
             {
                 outDatum od = null;
+                if (arg.addtionalData != null)
+                {
+                    if (arg.addtionalData is MmlDatum)
+                    {
+                        MmlDatum md = (MmlDatum)arg.addtionalData;
+                        if (md.linePos != null) md.linePos.srcMMLID = filename;
+                        od = new outDatum(md.type, md.args, md.linePos, (byte)md.dat);
+                    }
+
+                }
                 if (arg.port == 0x05)
                 {
                     chipRegister.PPSDRVLoad(od, count, 0, (byte[])arg.addtionalData);
