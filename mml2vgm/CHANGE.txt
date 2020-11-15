@@ -1,4 +1,7 @@
 更新履歴
+TAG306 2020/11/15 2nd
+  Core:LFO one shotのDepthを超えてsweepするバグ修正
+
 TAG305 2020/11/15
   Core:コマンドアルペジヲ機能を追加
     sampleにHuC6280とk051649向けgwi追加(データ作成&提供: musicalman さん(Thanx!!))

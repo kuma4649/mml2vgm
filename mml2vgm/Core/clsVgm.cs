@@ -4144,10 +4144,13 @@ namespace Core
                     case 3: //ワンショット
                         pl.value += Math.Abs(pl.param[2]) * pl.direction;
                         pl.waitCounter = pl.param[1];
-                        if ((pl.direction > 0 && pl.value >= pl.depth) || (pl.direction < 0 && pl.value <= -pl.depth))
+
+                        if (Math.Abs(pl.value) >= Math.Abs(pl.depth))
                         {
+                            pl.value = Math.Abs(pl.depth) * pl.direction;
                             pl.waitCounter = -1;
                         }
+                        //Console.WriteLine("{0}", pl.param[2]);
                         break;
                     case 4: //ランダム
                         pl.value = rnd.Next(-pl.depth, pl.depth);

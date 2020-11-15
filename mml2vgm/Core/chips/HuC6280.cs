@@ -505,6 +505,7 @@ namespace Core
                     continue;
                 }
                 f += page.lfo[lfo].value + page.lfo[lfo].param[6];
+                //Console.WriteLine("{0} {1}", page.lfo[lfo].value , page.lfo[lfo].param[6]);
             }
 
             f = Common.CheckRange(f, 0, 0x0fff);
