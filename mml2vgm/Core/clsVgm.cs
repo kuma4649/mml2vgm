@@ -4113,6 +4113,7 @@ namespace Core
                             pl.direction = -pl.direction;
                             procLfo_updateDepth(pl);
                         }
+                        //Console.WriteLine("{0}", pl.value);
                         break;
                     case 1: //のこぎり
                         pl.value += Math.Abs(pl.param[2]) * pl.direction;
@@ -4434,6 +4435,8 @@ namespace Core
 
                         case enmMMLType.LoopPoint:
                             ca.LoopPtr = ca.Ptr;
+                            if (ca.LoopPtr >= instCommandArp[ca.Num].Length)
+                                ca.LoopPtr = -1;
                             continue;
 
                         case enmMMLType.Instrument:

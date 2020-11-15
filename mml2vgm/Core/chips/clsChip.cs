@@ -1047,6 +1047,8 @@ namespace Core
         {
             if (!(mml.args[0] is string))
             {
+                //APのとき
+
                 if (!(mml.args[0] is int))
                 {
                     msgBox.setErrMsg(msg.get("E10034"), mml.line.Lp);
@@ -1057,40 +1059,81 @@ namespace Core
                 {
                     page.arpInstrument = inst;
                 }
+                else
+                {
+                    //ARPの定義がない場合はエラー
+                    msgBox.setErrMsg(msg.get("E10034"), mml.line.Lp);
+                    page.arpeggioMode = false;
+                }
                 return;
             }
 
             string cmd = (string)mml.args[0];
-            int n1, n2;
 
             switch (cmd)
             {
                 case "APON":
                     page.arpeggioMode = true;
-                    break;
+                    if (!parent.instArp.ContainsKey(page.arpInstrument))
+                    {
+                        //ARPの定義がない場合はエラー
+                        msgBox.setErrMsg(msg.get("E10034"), mml.line.Lp);
+                        page.arpeggioMode = false;
+                    }
+                    return;
                 case "APOF":
                     page.arpeggioMode = false;
                     page.beforeFNum = -1;
                     page.arpDelta = 0;
-                    break;
+                    return;
+            }
+
+            //ここからCA コマンドの解析
+
+            if (!(mml.args[1] is int))
+            {
+                //数値指定ではない場合はエラー
+                msgBox.setErrMsg(msg.get("E10036"), mml.line.Lp);
+                return;
+            }
+
+            int n1 = (int)mml.args[1];
+            if (!page.commandArpeggio.ContainsKey(n1))
+                page.commandArpeggio.Add(n1, new CommandArpeggio());
+
+            switch (cmd)
+            {
                 case "CAON":
-                    n1 = (int)mml.args[1];
-                    if (!page.commandArpeggio.ContainsKey(n1))
-                        page.commandArpeggio.Add(n1, new CommandArpeggio());
                     page.commandArpeggio[n1].Sw = true;
+                    if (!parent.instCommandArp.ContainsKey(page.commandArpeggio[n1].Num))
+                    {
+                        //ARPの定義がない場合はエラー
+                        msgBox.setErrMsg(msg.get("E10036"), mml.line.Lp);
+                        page.commandArpeggio[n1].Sw = false;
+                    }
                     break;
                 case "CAOF":
-                    n1 = (int)mml.args[1];
-                    if (!page.commandArpeggio.ContainsKey(n1))
-                        page.commandArpeggio.Add(n1, new CommandArpeggio());
                     page.commandArpeggio[n1].Sw = false;
                     break;
                 case "CA":
-                    n1 = (int)mml.args[1];
-                    n2 = (int)mml.args[2];
-                    if (!page.commandArpeggio.ContainsKey(n1))
-                        page.commandArpeggio.Add(n1, new CommandArpeggio());
                     page.commandArpeggio[n1].Sw = true;
+                    int n2 = (int)mml.args[2];
+                    if (!(mml.args[2] is int))
+                    {
+                        //数値指定ではない場合はエラー
+                        msgBox.setErrMsg(msg.get("E10036"), mml.line.Lp);
+                        page.commandArpeggio[n1].Sw = false;
+                        return;
+                    }
+
+                    if (!parent.instCommandArp.ContainsKey(n2))
+                    {
+                        //ARPの定義がない場合はエラー
+                        msgBox.setErrMsg(msg.get("E10036"), mml.line.Lp);
+                        page.commandArpeggio[n1].Sw = false;
+                        return;
+                    }
+
                     page.commandArpeggio[n1].Num = n2;
                     break;
             }
