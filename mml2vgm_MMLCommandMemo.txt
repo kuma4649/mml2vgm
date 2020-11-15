@@ -816,6 +816,13 @@ EHn             ---------o----o----o-----o-----o------------  ハードウェア
 APON            -ooooooooo-oooo-oooo-ooooooooooooooooooooooo  アルペジオの開始
 APOF            -ooooooooo-oooo-oooo-ooooooooooooooooooooooo  アルペジオの停止
 APn             -ooooooooo-oooo-oooo-ooooooooooooooooooooooo  アルペジオの定義番号を指定
+CAONn           oooooooooooooooooooooooooooooooooooooooooooo  コマンドアルペジオの開始
+                                                               ( n:  アルペジオスロット 0 - )
+CAOFn           oooooooooooooooooooooooooooooooooooooooooooo  コマンドアルペジオの停止
+                                                               ( n:  アルペジオスロット 0 - )
+CAn1,n2         oooooooooooooooooooooooooooooooooooooooooooo  コマンドアルペジオの定義番号を指定
+                                                               ( n1: アルペジオスロット 0 -  
+                                                                 n2: 定義番号           0 - 255 )
 EXON            -oo----oo---oo---oo----oo-------------------  効果音モードの開始
 EXOF            -oo----oo---oo---oo----oo-------------------  効果音モードの停止
 EXn             -oo----oo---oo---oo----oo-------------------  効果音モードのスロット割り当て(使用するスロットを列挙する)
@@ -1261,7 +1268,7 @@ FM1Chで指定の音程2音を同時に出力することを主な目的とし�
     No          定義番号(0-255)
     TieMode     タイモード。キーオンせずに後の音をつなげる。qコマンド(後述)は無視される(0:タイ無効 1:タイ有効)
     Data        n   音程をシフトさせる量を半音単位で指定する。例えば1を指定すれば半音上がる。このコマンドを指定すると#で指定したclockだけ発音を持続する。
-                #n  発音するclock数を指定する。1以上。
+                #n  発音するclock数を指定する。1以上。初期値:1
                 qn  gatetimeをclock数で指定する。
                 |   ループポイントを指定する。定義を最後まで解析するとこの位置まで戻る。
     例)
@@ -1269,6 +1276,25 @@ FM1Chで指定の音程2音を同時に出力することを主な目的とし�
                 定義番号0に以下を定義する。
                 タイモードを有効にする。gatetimeを1、clock数を12に設定する。
                 シフト無しで12clock発音。 > ループポイントを設定 > 3つ半音を上げて12clock発音 > 3つ半音を下げて(元の音程に戻して)12clock発音 > ループポイントに戻る
+
+
+■ コマンドアルペジオ定義
+
+'@ CAR No , Cmd , Data ...
+    No          定義番号(0-255)
+    Cmd         @ とりあえず音色のみ。
+    Data        n | @n | @In | @En | @Nn | @Rn | @An | @Wn
+                  音色番号を指定する。このコマンドを指定すると#で指定したclockだけ発音を持続する。
+                #n  発音するclock数を指定する。1以上。初期値:1
+                |   ループポイントを指定する。定義を最後まで解析するとこの位置まで戻る。
+    例)
+    '@ CAR 0,#6,1,|,#24,2,3
+                定義番号0に以下を定義する。
+                持続clock数を6に、音色を番号1に設定し、持続clock数6だけ持続する。
+                > ループポイントを設定 > 持続clock数を24に
+                > 音色を番号2に設定し、持続clock数24だけ持続する。
+                > 音色を番号3に設定し、持続clock数24だけ持続する。
+                > ループポイントに戻る
 
 
 ■ エイリアス定義

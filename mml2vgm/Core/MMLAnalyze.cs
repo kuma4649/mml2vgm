@@ -280,9 +280,9 @@ namespace Core
                     log.Write("Address shift / Arpeggio");
                     CmdAddressShiftArpeggio(pw, page, mml);
                     break;
-                case 'C': //MIDI Ch
-                    log.Write("MIDI Ch");
-                    CmdMIDICh(pw, page, mml);
+                case 'C': //MIDI Ch / Command Arpeggio
+                    log.Write("MIDI Ch / Command Arpeggio");
+                    CmdMIDIChCommandArpeggio(pw, page, mml);
                     break;
                 case 'D': // Detune / ダイレクトモード
                     log.Write("Detune / DirectMode");
@@ -1745,6 +1745,18 @@ namespace Core
             }
         }
 
+        private void CmdMIDIChCommandArpeggio(partWork pw, partPage page, MML mml)
+        {
+            pw.incPos(page);
+            if (pw.getChar(page) != 'A') //cA
+            {
+                CmdMIDICh(pw, page, mml);
+                return;
+            }
+
+            CmdCommandArpeggio(pw, page, mml);
+        }
+
         /// <summary>
         /// MIDI CH
         /// </summary>
@@ -1760,7 +1772,7 @@ namespace Core
         {
             int n = -1;
 
-            pw.incPos(page);
+            //pw.incPos(page);
 
             if (pw.getChar(page) == 'H')
             {
@@ -1816,6 +1828,56 @@ namespace Core
             {
                 msgBox.setErrMsg(msg.get("E05055"), mml.line.Lp);
                 return;
+            }
+        }
+
+        private void CmdCommandArpeggio(partWork pw, partPage page, MML mml)
+        {
+            pw.incPos(page);
+            if (pw.getChar(page) == 'O') //caO
+            {
+                pw.incPos(page);
+                if (pw.getChar(page) == 'N') //caoN
+                {
+                    pw.incPos(page);
+                    mml.type = enmMMLType.Arpeggio;
+                    mml.args = new List<object>();
+                    mml.args.Add("CAON");
+                    //CAONn
+                    if (!pw.getNum(page, out int n)) msgBox.setErrMsg(msg.get("E05067"), mml.line.Lp);
+                    else mml.args.Add(n);
+                }
+                else if (pw.getChar(page) == 'F') //caoF
+                {
+                    pw.incPos(page);
+                    mml.type = enmMMLType.Arpeggio;
+                    mml.args = new List<object>();
+                    mml.args.Add("CAOF");
+                    //CAOFn
+                    if (!pw.getNum(page, out int n)) msgBox.setErrMsg(msg.get("E05067"), mml.line.Lp);
+                    else mml.args.Add(n);
+                }
+                else
+                {
+                    msgBox.setErrMsg(msg.get("E05066"), mml.line.Lp);
+                }
+            }
+            else
+            {
+                //CAn1,n2
+                mml.type = enmMMLType.Arpeggio;
+                mml.args = new List<object>();
+                mml.args.Add("CA");
+
+                int n;
+                do
+                {
+                    if (!pw.getNum(page, out n)) break;
+                    mml.args.Add(n);
+                    pw.skipTabSpace(page);
+                    if (pw.getChar(page) != ',') break;
+                    pw.incPos(page);
+                } while (true);
             }
         }
 

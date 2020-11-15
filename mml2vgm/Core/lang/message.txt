@@ -222,6 +222,8 @@ E05062=Unknown command ('APO?') defined.
 E05063=Unknown command ('AP?') defined.
 E05064=Unknown command ('PRO?') defined.
 E05065=Unknown command ('F?') defined.
+E05066=Unknown command ('CAO?') defined.
+E05067=Unknown command ('CA?') defined.
 
 
 ;partWork.cs 06000

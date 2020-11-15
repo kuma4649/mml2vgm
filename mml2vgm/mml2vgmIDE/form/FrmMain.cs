@@ -23,6 +23,7 @@ namespace mml2vgmIDE
         private List<Document> DocumentBox = new List<Document>();
         public bool isSuccess = true;
         private string[] args;
+        private bool exportWav;
         private Mml2vgm mv = null;
         private string title = "";
         public FrmLog frmLog = null;
@@ -1985,14 +1986,17 @@ namespace mml2vgmIDE
                 //ヘッダー情報にダミーコマンド情報分の値を水増しした値をセットしなおす
                 if (mv.desVGM.info.format == enmFormat.VGM)
                 {
-                    uint EOFOffset = Common.getLE32(mv.desBuf, 0x04) + (uint)mv.desVGM.dummyCmdCounter;
-                    Common.SetLE32(mv.desBuf, 0x04, EOFOffset);
+                    if (!exportWav)
+                    {
+                        uint EOFOffset = Common.getLE32(mv.desBuf, 0x04) + (uint)mv.desVGM.dummyCmdCounter;
+                        Common.SetLE32(mv.desBuf, 0x04, EOFOffset);
 
-                    uint GD3Offset = Common.getLE32(mv.desBuf, 0x14) + (uint)mv.desVGM.dummyCmdCounter;
-                    Common.SetLE32(mv.desBuf, 0x14, GD3Offset);
+                        uint GD3Offset = Common.getLE32(mv.desBuf, 0x14) + (uint)mv.desVGM.dummyCmdCounter;
+                        Common.SetLE32(mv.desBuf, 0x14, GD3Offset);
 
-                    uint LoopOffset = (uint)mv.desVGM.dummyCmdLoopOffset - 0x1c;
-                    Common.SetLE32(mv.desBuf, 0x1c, LoopOffset);
+                        uint LoopOffset = (uint)mv.desVGM.dummyCmdLoopOffset - 0x1c;
+                        Common.SetLE32(mv.desBuf, 0x1c, LoopOffset);
+                    }
 
                     InitPlayer(EnmFileFormat.VGM, mv.desBuf, mv.desVGM.jumpPointClock);
                 }
@@ -3940,6 +3944,7 @@ namespace mml2vgmIDE
                 return;
             }
 
+            exportWav = true;
 
             if (qi.doc.dstFileFormat == EnmFileFormat.MUB)
             {
@@ -3964,7 +3969,14 @@ namespace mml2vgmIDE
             Audio.waveMode = true;
             Audio.waveModeAbort = false;
             Audio.Stop(SendMode.Both);
-            Audio.PlayToWav(setting, sfd.FileName);
+            exportWav = false;
+
+            bool res =Audio.PlayToWav(setting, sfd.FileName);
+            if (!res)
+            {
+                MessageBox.Show("失敗");
+                return;
+            }
 
             FrmProgress fp = new FrmProgress();
             fp.ShowDialog();

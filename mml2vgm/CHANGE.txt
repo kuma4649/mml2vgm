@@ -1,4 +1,9 @@
 更新履歴
+TAG305 2020/11/15
+  Core:コマンドアルペジヲ機能を追加
+    sampleにHuC6280とk051649向けgwi追加(データ作成&提供: musicalman さん(Thanx!!))
+  IDE:vgmのwaveエクスポートができないバグを修正
+
 TAG304 2020/11/13
   IDE:PMDDotNET
     トレースモードで、K/Rパートのマークをするようになりました。

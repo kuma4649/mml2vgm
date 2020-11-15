@@ -740,6 +740,27 @@ namespace Core
             page.arpGatetimePmode = false;
         }
 
+        public virtual void SetCommandArpeggioAtKeyOn(partPage page, MML mml)
+        {
+            foreach (CommandArpeggio ca in page.commandArpeggio.Values)
+            {
+
+                if (!ca.Sw
+                    || ca.Num == -1
+                    || !parent.instCommandArp.ContainsKey(ca.Num)
+                    || parent.instCommandArp[ca.Num].Length < 2
+                    )
+                {
+                    ca.Num = -1;
+                    return;
+                }
+
+                ca.Ptr = 0;
+                ca.LoopPtr = -1;
+                ca.WaitCounter = 0;
+
+            }
+        }
 
 
 
@@ -1040,6 +1061,7 @@ namespace Core
             }
 
             string cmd = (string)mml.args[0];
+            int n1, n2;
 
             switch (cmd)
             {
@@ -1050,6 +1072,26 @@ namespace Core
                     page.arpeggioMode = false;
                     page.beforeFNum = -1;
                     page.arpDelta = 0;
+                    break;
+                case "CAON":
+                    n1 = (int)mml.args[1];
+                    if (!page.commandArpeggio.ContainsKey(n1))
+                        page.commandArpeggio.Add(n1, new CommandArpeggio());
+                    page.commandArpeggio[n1].Sw = true;
+                    break;
+                case "CAOF":
+                    n1 = (int)mml.args[1];
+                    if (!page.commandArpeggio.ContainsKey(n1))
+                        page.commandArpeggio.Add(n1, new CommandArpeggio());
+                    page.commandArpeggio[n1].Sw = false;
+                    break;
+                case "CA":
+                    n1 = (int)mml.args[1];
+                    n2 = (int)mml.args[2];
+                    if (!page.commandArpeggio.ContainsKey(n1))
+                        page.commandArpeggio.Add(n1, new CommandArpeggio());
+                    page.commandArpeggio[n1].Sw = true;
+                    page.commandArpeggio[n1].Num = n2;
                     break;
             }
 
@@ -1536,6 +1578,7 @@ namespace Core
                     SetKeyOff(page, mml);
                 }
                 SetArpeggioAtKeyOn(page, mml);
+                SetCommandArpeggioAtKeyOn(page, mml);
                 SetEnvelopeAtKeyOn(page, mml);
                 SetLfoAtKeyOn(page, mml);
                 SetVolume(page, mml);

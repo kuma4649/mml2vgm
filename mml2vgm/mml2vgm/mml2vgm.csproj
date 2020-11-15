@@ -141,6 +141,9 @@
     <None Include="sample\C352\testPageFunctionC352.gwi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="sample\HuC6280\testCommandArpeggioHuc6280.gwi">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="sample\HuC6280\testHuC6280.gwi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -148,6 +151,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="sample\HuC6280\testPCMMapMode.gwi">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="sample\K051649\testCommandArpeggioK051649.gwi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="sample\K051649\testK051649.gwi">
