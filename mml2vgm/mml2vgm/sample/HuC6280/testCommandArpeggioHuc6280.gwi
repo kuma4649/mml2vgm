@@ -56,10 +56,10 @@ Command Arpeggio定義
 
 single switch
 'H1 T120 v24 l96 @1 c @3 c4 ~ @1 d @3 d4 ~ @1 e @3 e4 ~ @1 f @3 f4 ~ @1 g @3 g4 ~ r4
-'H1 T120 v24 l4 CAON0 CA0,0 cdefgr CAOF0
+'H1 T120 v24 l4 CA0,0 cdefgr CAOF0
 
 pwm (looping pattern)
 'H1 o3 l48 [@4 c @5 c @6 c @7 c @6 c @5 c / @4 c @3 c @2 c @1 c @0 c @1 c @2 c @3 c]4 [@4 g @5 g @6 g @7 g @6 g @5 g / @4 g @3 g @2 g @1 g @0 g @1 g @2 g @3 g]4
-'H1 o3 l1 CAON0 CA0,1 cg CAOF0 r
+'H1 o3 l1 CA0,1 cg CAOF0 r
 
 
