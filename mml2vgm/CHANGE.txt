@@ -1,6 +1,6 @@
 更新履歴
 TAG307 2020/11/16
-  Core:CAR ARPのエラーチェックの強化
+  Core:CAR ARPのエラーチェックの強化。
 
 TAG306 2020/11/15 2nd
   Core:LFO one shotのDepthを超えてsweepするバグ修正
