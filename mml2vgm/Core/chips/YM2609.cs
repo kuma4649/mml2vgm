@@ -1164,45 +1164,32 @@ namespace Core
         public override void CmdPan(partPage page, MML mml)
         {
             int n = (int)mml.args[0];
-            if (page.Type == enmChannelType.FMOPN || page.Type == enmChannelType.FMOPNex)
-            {
-                page.panL = Common.CheckRange(n, 0, 4);
-                n = mml.args.Count < 2 ? 0 : (int)mml.args[1];
-                page.panR = Common.CheckRange(n, 0, 4);
-                page.pan = (page.panL != 0 ? 2 : 0) | (page.panR != 0 ? 1 : 0);
-
-                //pw.ppg[pw.cpgNum].pan.val = n;
-                //((ClsOPN)pw.ppg[pw.cpgNum].chip).OutOPNSetPanAMSPMS(mml, pw, n, pw.ppg[pw.cpgNum].ams, pw.ppg[pw.cpgNum].fms);
-            }
-            else if (page.Type == enmChannelType.RHYTHM)
+            int l = 0, r = 0;
+            if (mml.args.Count < 2)
             {
                 n = Common.CheckRange(n, 0, 3);
-                page.pan = n;
+                r = ((n & 1) != 0) ? 4 : 0;
+                l = ((n & 2) != 0) ? 4 : 0;
             }
-            else if (page.Type == enmChannelType.ADPCMA || page.Type == enmChannelType.ADPCMB)
+            else
             {
-                int pl = Common.CheckRange(n, 0, 4);
-                n = mml.args.Count < 2 ? 0 : (int)mml.args[1];
-                int pr = Common.CheckRange(n, 0, 4);
-                page.panL = pl;
-                page.panR = pr;
+                r = Common.CheckRange(n, 0, 4);
+                l = Common.CheckRange((int)mml.args[1], 0, 4);
+                n = (l != 0 ? 2 : 0) | (r != 0 ? 1 : 0);
+            }
+
+            page.panL = l;
+            page.panR = r;
+            page.pan = n;
+
+            if (page.Type == enmChannelType.ADPCMA || page.Type == enmChannelType.ADPCMB)
+            {
                 ((YM2609)page.chip).SetAdpcmPan(mml, page);
             }
             else if (page.Type == enmChannelType.ADPCM)
             {
-                page.panL = Common.CheckRange(n, 0, 4);
-                n = mml.args.Count < 2 ? 0 : (int)mml.args[1];
-                page.panR = Common.CheckRange(n, 0, 4);
-
-                page.pan = (page.panL != 0 ? 2 : 0) | (page.panR != 0 ? 1 : 0);
-
                 page.panL = page.panL < 1 ? 0 : (4 - page.panL);
                 page.panR = page.panR < 1 ? 0 : (4 - page.panR);
-            }
-            else if (page.Type == enmChannelType.SSG)
-            {
-                n = Common.CheckRange(n, 0, 3);
-                page.pan = n;
             }
             SetDummyData(page, mml);
         }

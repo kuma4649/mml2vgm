@@ -80,6 +80,7 @@
     <Compile Include="chips\YM2612.cs" />
     <Compile Include="chips\YM2612X.cs" />
     <Compile Include="clsVgm.cs" />
+    <Compile Include="CommandArpeggio.cs" />
     <Compile Include="Common.cs" />
     <Compile Include="Const.cs" />
     <Compile Include="Core.cs" />

@@ -1959,7 +1959,7 @@ namespace Core
             return lstBuf;
         }
 
-        private List<MmlDatum> GetNumsIntCommandArp(int ptr, string anavals)
+        private List<MmlDatum> GetNumsIntCommandArp(int ptr, string anavals, int sin = 0, enmMMLType defaultMMLType = enmMMLType.Instrument)
         {
             //wordのリストを作成する
             List<string> lstWord = new List<string>();
@@ -1989,6 +1989,8 @@ namespace Core
 
 
             List<MmlDatum> lstBuf = new List<MmlDatum>();
+            enmMMLType tp = defaultMMLType;
+            enmMMLType defTp = tp;
 
             foreach (string vals in lstWord)
             {
@@ -1998,8 +2000,6 @@ namespace Core
                 int hc = -1;
                 int i = 0;
                 MmlDatum dat = null;
-                enmMMLType tp = enmMMLType.Instrument;
-                enmMMLType defTp = tp;
                 char instType = 'n';
                 List<int> ivalue = new List<int>();
 
@@ -2021,10 +2021,6 @@ namespace Core
                             h = "";
                             hc = -1;
                             ivalue.Add(i);
-                            //dat = new MmlDatum();
-                            //dat.type = tp;
-                            //dat.dat = i;
-                            //lstBuf.Add(dat);
                         }
                     }
 
@@ -2046,9 +2042,10 @@ namespace Core
 
                     if (c == '#')
                     {
+                        hc = -1;
+                        n = "";
                         tp = enmMMLType.LengthClock;
                         continue;
-
                     }
 
                     if (c == '@')
@@ -2061,14 +2058,31 @@ namespace Core
                             instType = nc;
                             ptr = p + 1;
                         }
-                        if (lstBuf.Count == 1)//デフォルトコマンドの位置か
+                        hc = -1;
+                        n = "";
+                        if (sin == 0 && lstBuf.Count == 1)//デフォルトコマンドの位置か
                         {
                             defTp = tp;
 
-                            hc = -1;
-                            n = "";
                             dat = new MmlDatum();
                             dat.type = enmMMLType.Instrument;//.DefaultCommand;
+                            dat.args = new List<object>(new object[] { defTp });
+                            lstBuf.Add(dat);
+                        }
+                        continue;
+                    }
+
+                    if (c == 'p')
+                    {
+                        tp = enmMMLType.Pan;
+                        hc = -1;
+                        n = "";
+                        if (sin == 0 && lstBuf.Count == 1)//デフォルトコマンドの位置か
+                        {
+                            defTp = tp;
+
+                            dat = new MmlDatum();
+                            dat.type = enmMMLType.Pan;//.DefaultCommand;
                             dat.args = new List<object>(new object[] { defTp });
                             lstBuf.Add(dat);
                         }
@@ -2087,20 +2101,6 @@ namespace Core
                         if (int.TryParse(n, out i))
                         {
                             ivalue.Add(i);
-                            //dat = new MmlDatum();
-                            //dat.type = tp;
-                            //dat.dat = i;
-
-                            //if (tp == enmMMLType.Instrument)
-                            //{
-                            //    dat.args = new List<object>();
-                            //    dat.args.Add(instType);
-                            //    dat.args.Add(i);
-                            //    instType = 'n';
-                            //}
-
-                            //lstBuf.Add(dat);
-                            //tp = defTp;
                         }
                         n = "";
                     }
@@ -2111,20 +2111,6 @@ namespace Core
                     if (int.TryParse(n, out i))
                     {
                         ivalue.Add(i);
-                        //dat = new MmlDatum();
-                        //dat.type = tp;
-                        //dat.dat = i;
-
-                        //if (tp == enmMMLType.Instrument)
-                        //{
-                        //    dat.args = new List<object>();
-                        //    dat.args.Add(instType);
-                        //    dat.args.Add(i);
-                        //    instType = 'n';
-                        //}
-
-                        //lstBuf.Add(dat);
-                        //tp = defTp;
                     }
                     n = "";
                 }
@@ -2140,6 +2126,15 @@ namespace Core
                         dat.args = new List<object>();
                         dat.args.Add(instType);
                         instType = 'n';
+                        foreach (int j in ivalue)
+                        {
+                            dat.args.Add(j);
+                        }
+                    }
+
+                    if (tp == enmMMLType.Pan)
+                    {
+                        dat.args = new List<object>();
                         foreach (int j in ivalue)
                         {
                             dat.args.Add(j);
@@ -2327,7 +2322,7 @@ namespace Core
                 List<MmlDatum> buf = null;
                 if (instCommandArpCounter == 0)
                 {
-                    string txt = line.Txt.ToUpper();
+                    string txt = line.Txt;
                     buf = GetNumsIntCommandArp(CutComment(txt).IndexOf("CAR") + 3, CutComment(txt));
                     instCommandArpCounter = buf[0].dat + 1;
                     if (instCommandArp.ContainsKey(buf[0].dat))
@@ -2338,8 +2333,8 @@ namespace Core
                 }
                 else
                 {
-                    string txt = line.Txt.ToUpper();
-                    buf = GetNumsIntCommandArp(CutComment(txt).IndexOf('@') + 1, CutComment(txt));
+                    string txt = line.Txt;
+                    buf = GetNumsIntCommandArp(CutComment(txt).IndexOf('@') + 1, CutComment(txt), 1, instCommandArp[instCommandArpCounter - 1][1].type);
                     List<MmlDatum> ebuf = instCommandArp[instCommandArpCounter - 1].ToList();
                     ebuf.AddRange(buf);
                     instCommandArp.Remove(instCommandArpCounter - 1);
@@ -4515,7 +4510,7 @@ namespace Core
 
                     //コマンド一つ取り出す
                     MmlDatum md = instCommandArp[ca.Num][ca.Ptr++];
-
+                    MML mml;
                     switch (md.type)
                     {
                         case enmMMLType.LengthClock:
@@ -4530,15 +4525,24 @@ namespace Core
 
                         case enmMMLType.Instrument:
                             ca.WaitCounter = ca.WaitClock;
-                            MML mml = new MML();
+                            mml = new MML();
                             mml.args = md.args;
                             mml.type = md.type;
                             mml.line = new Line(md.linePos, "");
                             page.chip.CmdInstrument(page, mml);
-                            if(page.chip.chipType== enmChipType.HuC6280)
+                            if (page.chip.chipType == enmChipType.HuC6280)
                             {
                                 page.chip.SetKeyOn(page, mml);
                             }
+                            break;
+
+                        case enmMMLType.Pan:
+                            ca.WaitCounter = ca.WaitClock;
+                            mml = new MML();
+                            mml.args = md.args;
+                            mml.type = md.type;
+                            mml.line = new Line(md.linePos, "");
+                            page.chip.CmdPan(page, mml);
                             break;
                     }
 

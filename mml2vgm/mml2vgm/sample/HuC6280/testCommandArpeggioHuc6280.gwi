@@ -53,6 +53,10 @@ Command Arpeggio定義
        No  Cmd Sync  Data ...
 '@ CAR 0 , @ , 0 ,   #2 , 1 , #46 , 3 ; Instrument Arpeggio pattern 0
 '@ CAR 1 , @ , 0 ,   #4 , | , 4 , 5 , 6 , 7 , 6 , 5 , 4 , 3 , 2 , 1 , 0 , 1 , 2 , 3 ; Instrument Arpeggio pattern 1
+'@ CAR 2 , p , 0 ,   #8 , | , "15,15" , "15,14" , "15,13" , "15,12" , "15,13" , "15,14"  
+'@                          , "15,15" , "14,15" , "13,15" , "12,15" , "13,15" , "14,15" ; pan Arpeggio pattern 2
+'@ CAR 3 , p , 1 ,   #8 , | , "15,15" , "15,14" , "15,13" , "15,12" , "15,13" , "15,14"  
+'@                          , "15,15" , "14,15" , "13,15" , "12,15" , "13,15" , "14,15" ; pan Arpeggio pattern 3(async)
 
 
 single switch
@@ -62,5 +66,9 @@ single switch
 pwm (looping pattern)
 'H1 o3 l48 [@4 c @5 c @6 c @7 c @6 c @5 c / @4 c @3 c @2 c @1 c @0 c @1 c @2 c @3 c]4 [@4 g @5 g @6 g @7 g @6 g @5 g / @4 g @3 g @2 g @1 g @0 g @1 g @2 g @3 g]4
 'H1 o3 l1 CA0,1 cg CAOF0 r
+
+pan
+'H1 T120 v24 l8 @1 CA0,2 cdefgr CAOF0
+'H1 T120 v24 l8 @1 CA0,3 cdefgr CAOF0
 
 
