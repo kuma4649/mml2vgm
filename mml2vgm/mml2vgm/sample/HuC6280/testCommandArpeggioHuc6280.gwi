@@ -50,8 +50,9 @@ square wave
 
 
 Command Arpeggio定義
-'@ CAR 0 , @ , #2 , 1 , #46 , 3 ; Instrument Arpeggio pattern 0
-'@ CAR 1 , @ , #4 , | , 4 , 5 , 6 , 7 , 6 , 5 , 4 , 3 , 2 , 1 , 0 , 1 , 2 , 3 ; Instrument Arpeggio pattern 1
+       No  Cmd Sync  Data ...
+'@ CAR 0 , @ , 0 ,   #2 , 1 , #46 , 3 ; Instrument Arpeggio pattern 0
+'@ CAR 1 , @ , 0 ,   #4 , | , 4 , 5 , 6 , 7 , 6 , 5 , 4 , 3 , 2 , 1 , 0 , 1 , 2 , 3 ; Instrument Arpeggio pattern 1
 
 
 single switch

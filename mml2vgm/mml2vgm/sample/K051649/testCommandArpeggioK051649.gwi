@@ -48,8 +48,9 @@ square wave
 '@10,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00
 
 Command Arpeggio定義
-'@ CAR 0 , @ , #2 , 1 , #46 , 3 ; Instrument Arpeggio pattern 0
-'@ CAR 1 , @ , #4 , | , 4 , 5 , 6 , 7 , 6 , 5 , 4 , 3 , 2 , 1 , 0 , 1 , 2 , 3 ; Instrument Arpeggio pattern 1
+       No  Cmd Sync  Data ...
+'@ CAR 0 , @ , 0 ,   #2 , 1 , #46 , 3 ; Instrument Arpeggio pattern 0
+'@ CAR 1 , @ , 0 ,   #4 , | , 4 , 5 , 6 , 7 , 6 , 5 , 4 , 3 , 2 , 1 , 0 , 1 , 2 , 3 ; Instrument Arpeggio pattern 1
 
 single switch
 'K1 T120 v7 l96 @1 c @3 c4 ~ @1 d @3 d4 ~ @1 e @3 e4 ~ @1 f @3 f4 ~ @1 g @3 g4 ~ r4

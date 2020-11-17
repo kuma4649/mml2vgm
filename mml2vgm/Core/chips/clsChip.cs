@@ -752,8 +752,10 @@ namespace Core
                     )
                 {
                     ca.Num = -1;
-                    return;
+                    continue;
                 }
+
+                if (ca.Sync != 0) continue;
 
                 ca.Ptr = 0;
                 ca.LoopPtr = -1;
@@ -1111,9 +1113,26 @@ namespace Core
                         msgBox.setErrMsg(msg.get("E10036"), mml.line.Lp);
                         page.commandArpeggio[n1].Sw = false;
                     }
+                    if (parent.instCommandArp[n1].Length < 3)
+                    {
+                        //ARPの定義がない場合はエラー
+                        msgBox.setErrMsg(msg.get("E10036"), mml.line.Lp);
+                        page.commandArpeggio[n1].Sw = false;
+                        return;
+                    }
+
+                    page.commandArpeggio[n1].Sync = parent.instCommandArp[page.commandArpeggio[n1].Num][2].dat;
+                    if (page.commandArpeggio[n1].Sync != 0)
+                    {
+                        page.commandArpeggio[n1].Ptr = 0;
+                        page.commandArpeggio[n1].LoopPtr = -1;
+                        page.commandArpeggio[n1].WaitClock = 1;
+                        page.commandArpeggio[n1].WaitCounter = 0;
+                    }
                     break;
                 case "CAOF":
                     page.commandArpeggio[n1].Sw = false;
+                    if (page.commandArpeggio[n1].Sync != 0) page.commandArpeggio[n1].Ptr = -1;
                     break;
                 case "CA":
                     page.commandArpeggio[n1].Sw = true;
@@ -1133,8 +1152,23 @@ namespace Core
                         page.commandArpeggio[n1].Sw = false;
                         return;
                     }
+                    if (parent.instCommandArp[n2].Length < 3)
+                    {
+                        //ARPの定義がない場合はエラー
+                        msgBox.setErrMsg(msg.get("E10036"), mml.line.Lp);
+                        page.commandArpeggio[n1].Sw = false;
+                        return;
+                    }
 
                     page.commandArpeggio[n1].Num = n2;
+                    page.commandArpeggio[n1].Sync = parent.instCommandArp[page.commandArpeggio[n1].Num][2].dat;
+                    if (page.commandArpeggio[n1].Sync != 0)
+                    {
+                        page.commandArpeggio[n1].Ptr = 0;
+                        page.commandArpeggio[n1].LoopPtr = -1;
+                        page.commandArpeggio[n1].WaitClock = 1;
+                        page.commandArpeggio[n1].WaitCounter = 0;
+                    }
                     break;
             }
 
