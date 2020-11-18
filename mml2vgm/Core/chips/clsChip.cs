@@ -1060,6 +1060,7 @@ namespace Core
                 if (parent.instArp.ContainsKey(inst))
                 {
                     page.arpInstrument = inst;
+                    page.arpeggioMode = true;
                 }
                 else
                 {

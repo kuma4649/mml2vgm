@@ -1652,11 +1652,20 @@ namespace Core
                     , 0
                     , parent.instFM[n][ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 1 + 8] // 8 : DT1
                     , parent.instFM[n][ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 1 + 7]); // 7 : ML
-                ((ClsOPN)page.chip).OutFmSetKsAr(mml, page, ope, parent.instFM[n][ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 7], parent.instFM[n][ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 1]);
-                OutFmSetAmDt2Dr(mml, page, ope, parent.instFM[n][ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 10], 0, parent.instFM[n][ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 2]);
-                ((ClsOPN)page.chip).OutFmSetSr(mml, page, ope, parent.instFM[n][ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 3]);
-                ((ClsOPN)page.chip).OutFmSetSlRr(mml, page, ope, parent.instFM[n][ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 5], parent.instFM[n][ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 4]);
-                ((ClsOPN)page.chip).OutFmSetSSGEG(mml, page, ope, parent.instFM[n][ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 11]);
+                ((ClsOPN)page.chip).OutFmSetKsAr(mml, page, ope
+                    , parent.instFM[n][ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 7]
+                    , parent.instFM[n][ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 1]);
+                OutFmSetAmDt2Dr(mml, page, ope
+                    , parent.instFM[n][ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 10]
+                    , 0
+                    , parent.instFM[n][ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 2]);
+                ((ClsOPN)page.chip).OutFmSetSr(mml, page, ope
+                    , parent.instFM[n][ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 3]);
+                ((ClsOPN)page.chip).OutFmSetSlRr(mml, page, ope
+                    , parent.instFM[n][ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 5]
+                    , parent.instFM[n][ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 4]);
+                ((ClsOPN)page.chip).OutFmSetSSGEG(mml, page, ope
+                    , parent.instFM[n][ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 11]);
             }
 
             //ch3以外の拡張チャンネルでも音色設定できるようにする場合はslotの様子もみてセットすること
@@ -1887,7 +1896,7 @@ namespace Core
             int[] ope;
             if (parent.instFM[n].Length == Const.OPNA2_INSTRUMENT_SIZE)
             {
-                alg = parent.instFM[n][61] == 0xff ? 8 : (parent.instFM[n][61] & 0x7);
+                alg = parent.instFM[n][65] == 0xff ? 8 : (parent.instFM[n][65] & 0x7);
                 ope = new int[4] {
                     parent.instFM[n][0 * 16 + 1 + 5]// 5 : TL
                     , parent.instFM[n][1 * 16 + 1 + 5]// 5 : TL
