@@ -536,7 +536,7 @@ namespace Core
         {
             //OutK053260KeyOn(page, mml);
             page.keyOn = true;
-            //page.keyOff = false;
+            page.keyOff = false;
             SetDummyData(page, mml);
             //UpdateKeyOn(mml);
         }
