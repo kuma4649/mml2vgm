@@ -536,7 +536,7 @@ namespace Core
         {
             //OutK053260KeyOn(page, mml);
             page.keyOn = true;
-            page.keyOff = false;
+            //page.keyOff = false;
             SetDummyData(page, mml);
             //UpdateKeyOn(mml);
         }
@@ -829,6 +829,7 @@ namespace Core
                 if (pw.cpg.keyOff && !pw.cpg.envelopeMode)
                 {
                     v &= (byte)(0xfe << pw.cpg.ch);
+                    pw.cpg.keyOff = false;
                 }
             }
 
