@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Security.Permissions;
 using System.Text;
 using System.Windows.Forms;
@@ -16,6 +17,7 @@ namespace mml2vgmIDE
         private SienSearch ss;
         public int selRow = -1;
         private Dictionary<string, string[]> instCache = new Dictionary<string, string[]>();
+        private Dictionary<string, Tuple<InstrumentAtLocal.enmInstType, string, string>[]> instCacheFolder = new Dictionary<string, Tuple<InstrumentAtLocal.enmInstType, string, string>[]>();
         private int tw;
         private int th;
 
@@ -116,6 +118,7 @@ namespace mml2vgmIDE
             if (e.RowIndex != -1)
             {
                 dgvItem.Rows[e.RowIndex].Selected = true;
+                SienItem si = (SienItem)dgvItem.Rows[e.RowIndex].Tag;
                 DockContent dc = (DockContent)parent.GetActiveDockContent();
                 Document d = null;
                 if (dc != null)
@@ -124,7 +127,6 @@ namespace mml2vgmIDE
                     {
                         d = (Document)dc.Tag;
                         int ci = d.editor.azukiControl.CaretIndex;
-                        SienItem si = (SienItem)dgvItem.Rows[e.RowIndex].Tag;
                         d.editor.azukiControl.Document.Replace(
                             si.content,
                             ci - si.foundCnt,
@@ -144,7 +146,7 @@ namespace mml2vgmIDE
             this.Height = Math.Min(5 * (dgvItem.RowTemplate.Height + 1), dgvItem.RowCount * (dgvItem.RowTemplate.Height + 1));
         }
 
-        public void Request(string line, Point ciP,int parentID,EnmMmlFileFormat tp)
+        public void Request(string line, Point ciP,int parentID,EnmMmlFileFormat tp,object option)
         {
             Location = new Point(ciP.X, ciP.Y);
             dgvItem.Rows.Clear();
@@ -156,7 +158,9 @@ namespace mml2vgmIDE
                 tp == EnmMmlFileFormat.MUC ? ".muc" : (
                 tp == EnmMmlFileFormat.MML ? ".mml" : 
                 ""
-                )));
+                )),
+                option
+                );
         }
 
         private void cbUpdateList(List<SienItem> found)
@@ -171,12 +175,25 @@ namespace mml2vgmIDE
             {
                 this.SetOpacity(false);
                 selRow = -1;
+                DockContent dc = (DockContent)parent.GetActiveDockContent();
+                Document d = null;
+                if (dc != null)
+                {
+                    if (dc.Tag is Document)
+                    {
+                        d = (Document)dc.Tag;
+                        d.editor.parentID = -1;
+                        d.editor.option = null;
+                    }
+                }
+
                 return;
             }
 
             this.SetOpacity(setting.UseSien);
 
             bool isFirst = true;
+            bool isFirstFolder = true;
             foreach (SienItem si in found)
             {
                 if (si.sienType == 1)
@@ -186,6 +203,11 @@ namespace mml2vgmIDE
                         GetInstrument(si, isFirst);
                         isFirst = false;
                     }
+                }
+                else if (si.sienType == 2)
+                {
+                    GetInstrumentFromFolder(si,isFirstFolder);
+                    isFirstFolder = false;
                 }
                 else
                 {
@@ -330,6 +352,121 @@ namespace mml2vgmIDE
         private void FrmSien_FormClosing(object sender, FormClosingEventArgs e)
         {
             ReConvertCacheList();
+        }
+
+        private void GetInstrumentFromFolder(SienItem si,bool isFirstFolder)
+        {
+            InstrumentAtLocal iavs = new InstrumentAtLocal();
+            iavs.isFirst = isFirstFolder;
+            //string[] param = new string[6];
+            //string[] val = si.content.Split(',');
+            //for (int i = 0; i < param.Length; i++)
+            //{
+            //    param[i] = val[i].Trim().Trim('\'');
+            //}
+
+            //if (!instCacheFolder.ContainsKey(si.content))
+            {
+                string path = Path.Combine(Common.GetApplicationFolder(),"Instruments");// "C:\\Users\\kuma\\Desktop\\FM-SoundLibrary-master";
+                if (si.description != "")
+                {
+                    path = si.description;
+                }
+                iavs.Start(
+                    parent, si, path, "", GetInstrumentFromFolderComp);
+            }
+            //else
+            //{
+            //    GetInstrumentFromFolderComp(si, instCacheFolder[si.content]);
+            //}
+        }
+
+        private void GetInstrumentFromFolderComp(object sender, Tuple<InstrumentAtLocal.enmInstType, string, string>[] obj)
+        {
+            if (!(sender is SienItem)) return;
+            if (obj == null || obj.Length < 1) return;
+
+            try
+            {
+                SienItem si = (SienItem)sender;
+                InstrumentAtLocal.enmInstType tp = InstrumentAtLocal.enmInstType.FM_L;
+                foreach (InstrumentAtLocal.enmInstType e in Enum.GetValues(typeof(InstrumentAtLocal.enmInstType)))
+                {
+                    if (e.ToString() != si.content) continue;
+                    tp = e;
+                    break;
+                }
+
+                int depth = -1;
+                foreach (Tuple<InstrumentAtLocal.enmInstType, string, string> line in obj)
+                {
+                    depth++;
+                    SienItem ssi;
+                    string name = Path.GetFileName(line.Item2);
+                    string filePath = Path.GetDirectoryName(line.Item2);
+                    string[] paths = filePath.Split(Path.DirectorySeparatorChar);
+                    string lin = line.Item3;
+
+                    if (line.Item1 == InstrumentAtLocal.enmInstType.Dir)
+                    {
+                        ssi = new SienItem();
+                        //ssi.ID = 99 + depth;
+                        ssi.title = string.Format("> {0}",name);
+                        ssi.ID = si.parentID;
+                        ssi.parentID = si.ID;
+                        ssi.haveChild = true;
+                        ssi.content = si.content;
+                        ssi.description = line.Item2;
+                        ssi.foundCnt = si.foundCnt;
+                        ssi.nextAnchor = si.nextAnchor;
+                        ssi.nextCaret = si.nextCaret;
+                        ssi.pattern = si.pattern;
+                        ssi.patternType = si.patternType;
+                        ssi.sienType = si.sienType;
+
+                        dgvItem.Rows.Add(
+                            ssi.title,
+                            ssi.description,
+                            ssi.content);
+                        dgvItem.Rows[dgvItem.Rows.Count - 1].Tag = ssi;
+
+                    }
+                    else
+                    {
+                        if (line.Item1 == tp)
+                        {
+                            ssi = new SienItem();
+                            ssi.title = string.Format(si.title, name);
+                            ssi.parentID = si.ID;
+                            ssi.content = lin;
+                            ssi.description = si.description;
+                            ssi.foundCnt = si.foundCnt;
+                            ssi.nextAnchor = si.nextAnchor;
+                            ssi.nextCaret = si.nextCaret;
+                            ssi.pattern = si.pattern;
+                            ssi.patternType = si.patternType;
+                            ssi.sienType = si.sienType + 1;
+
+                            dgvItem.Rows.Add(
+                                ssi.title,
+                                ssi.description,
+                                ssi.content);
+                            dgvItem.Rows[dgvItem.Rows.Count - 1].Tag = ssi;
+                        }
+                    }
+                }
+                update();
+
+                if (!instCacheFolder.ContainsKey(si.content))
+                {
+                    instCacheFolder.Add(si.content, obj);
+                }
+            }
+            catch (Exception ex)
+            {
+                log.ForcedWrite(ex);
+            }
+
         }
     }
 

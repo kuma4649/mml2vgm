@@ -601,6 +601,34 @@
       "title": "'@ OPN {0}",
       "description": "VAL-SOUND様からFM音色を参照します。",
       "content": "'(from VAL-SOUND)','http://valsound.fc2web.com/fmindex/data/world01.html','Shift_JIS','//body/tt','a','pre'"
+    },
+    {
+      "ID": 62,
+      "parentID": -1,
+      "haveChild": true,
+      "supportMMLFormat": ".gwi;.muc;.mml",
+      "sienType": 0,
+      "nextAnchor": 0,
+      "nextCaret": 0,
+      "pattern": "'@ N ",
+      "patternType": "B",
+      "title": "> Instruments ",
+      "description": "",
+      "content": ""
+    },
+    {
+      "ID": 63,
+      "parentID": 62,
+      "haveChild": false,
+      "supportMMLFormat": ".gwi;.muc;.mml",
+      "sienType": 2,
+      "nextAnchor": 0,
+      "nextCaret": 0,
+      "pattern": "'@ N ",
+      "patternType": "B",
+      "title": "OPN: {0}",
+      "description": "",
+      "content": "FM_N"
     }
   ]
 }

@@ -442,10 +442,10 @@ namespace Core
             double freq = 8000.0;
             if (page.instrument != -1)
             {
-                freq = (double)parent.instPCM[page.instrument].samplerate;
-                if (parent.instPCM[page.instrument].freq != -1)
+                freq = (double)parent.instPCM[page.instrument].Item2.samplerate;
+                if (parent.instPCM[page.instrument].Item2.freq != -1)
                 {
-                    freq = (double)parent.instPCM[page.instrument].freq;
+                    freq = (double)parent.instPCM[page.instrument].Item2.freq;
                 }
             }
 
@@ -814,7 +814,7 @@ namespace Core
             }
         }
 
-        public override void StorePcm(Dictionary<int, clsPcm> newDic, KeyValuePair<int, clsPcm> v, byte[] buf, bool is16bit, int samplerate, params object[] option)
+        public override void StorePcm(Dictionary<int,Tuple<string, clsPcm>> newDic, KeyValuePair<int, clsPcm> v, byte[] buf, bool is16bit, int samplerate, params object[] option)
         {
             int aCh = (int)v.Value.loopAdr;
             aCh = Common.CheckRange(aCh, 0, 3);
@@ -846,7 +846,7 @@ namespace Core
 
                 newDic.Add(
                     v.Key
-                    , new clsPcm(
+                    , new Tuple<string, clsPcm>("", new clsPcm(
                         v.Value.num
                         , v.Value.seqNum, v.Value.chip
                         , v.Value.chipNumber
@@ -859,7 +859,7 @@ namespace Core
                         , aCh
                         , is16bit
                         , samplerate)
-                    );
+                    ));
 
                 pi.totalBufPtr += size;
                 newBuf = new byte[pi.totalBuf.Length + buf.Length];
@@ -1234,7 +1234,7 @@ namespace Core
                     }
                     else
                     {
-                        if (parent.instPCM[n].chip != enmChipType.YM2609)
+                        if (parent.instPCM[n].Item2.chip != enmChipType.YM2609)
                         {
                             msgBox.setErrMsg(string.Format(msg.get("E18005"), n), mml.line.Lp);
                         }
@@ -1244,16 +1244,16 @@ namespace Core
                             SetADPCMAddress(
                                 mml,
                                 page
-                                , (int)parent.instPCM[n].stAdr
-                                , (int)parent.instPCM[n].edAdr);
+                                , (int)parent.instPCM[n].Item2.stAdr
+                                , (int)parent.instPCM[n].Item2.edAdr);
                         }
                         else
                         {
                             SetADPCMAAddress(
                                 mml,
                                 page
-                                , (int)parent.instPCM[n].stAdr
-                                , (int)parent.instPCM[n].edAdr);
+                                , (int)parent.instPCM[n].Item2.stAdr
+                                , (int)parent.instPCM[n].Item2.edAdr);
                         }
                     }
                     return;
@@ -1475,7 +1475,7 @@ namespace Core
             if (reset || !parent.instOPNA2WF.ContainsKey(n)) return;
 
             //データの流し込みいくよー
-            ushort[] wd = parent.instOPNA2WF[n];
+            ushort[] wd = parent.instOPNA2WF[n].Item2;
             for (n = 0; n < wd.Length; n++)
             {
                 if (n == 0) continue;
@@ -1506,7 +1506,7 @@ namespace Core
             if (!parent.instOPNA2WFS.ContainsKey(n)) return;
 
             //データの流し込みいくよー
-            byte[] wd = parent.instOPNA2WFS[n];
+            byte[] wd = parent.instOPNA2WFS[n].Item2;
             for (n = 0; n < wd.Length; n++)
             {
                 if (n == 0) continue;
@@ -1639,7 +1639,7 @@ namespace Core
                     break;
             }
 
-            if (parent.instFM[n].Length == Const.OPNA2_INSTRUMENT_SIZE)
+            if (parent.instFM[n].Item2.Length == Const.OPNA2_INSTRUMENT_SIZE)
             {
                 OutFmSetInstrumentOPNA(page, mml, n, vol);
                 return;
@@ -1650,44 +1650,44 @@ namespace Core
                 //ch3以外の拡張チャンネルでも音色設定できるようにする場合はslotの様子もみてセットすること
                 OutFmSetWtLDtMl(mml, page, ope
                     , 0
-                    , parent.instFM[n][ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 1 + 8] // 8 : DT1
-                    , parent.instFM[n][ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 1 + 7]); // 7 : ML
+                    , parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 1 + 8] // 8 : DT1
+                    , parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 1 + 7]); // 7 : ML
                 ((ClsOPN)page.chip).OutFmSetKsAr(mml, page, ope
-                    , parent.instFM[n][ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 7]
-                    , parent.instFM[n][ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 1]);
+                    , parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 7]
+                    , parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 1]);
                 OutFmSetAmDt2Dr(mml, page, ope
-                    , parent.instFM[n][ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 10]
+                    , parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 10]
                     , 0
-                    , parent.instFM[n][ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 2]);
+                    , parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 2]);
                 ((ClsOPN)page.chip).OutFmSetSr(mml, page, ope
-                    , parent.instFM[n][ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 3]);
+                    , parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 3]);
                 ((ClsOPN)page.chip).OutFmSetSlRr(mml, page, ope
-                    , parent.instFM[n][ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 5]
-                    , parent.instFM[n][ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 4]);
+                    , parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 5]
+                    , parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 4]);
                 ((ClsOPN)page.chip).OutFmSetSSGEG(mml, page, ope
-                    , parent.instFM[n][ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 11]);
+                    , parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 11]);
             }
 
             //ch3以外の拡張チャンネルでも音色設定できるようにする場合はslotの様子もみてセットすること
-            page.op1ml = parent.instFM[n][0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
-            page.op2ml = parent.instFM[n][1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
-            page.op3ml = parent.instFM[n][2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
-            page.op4ml = parent.instFM[n][3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
+            page.op1ml = parent.instFM[n].Item2[0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
+            page.op2ml = parent.instFM[n].Item2[1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
+            page.op3ml = parent.instFM[n].Item2[2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
+            page.op4ml = parent.instFM[n].Item2[3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
             //ch3以外の拡張チャンネルでも音色設定できるようにする場合はslotの様子もみてセットすること
             page.op1dt2 = 0;
             page.op2dt2 = 0;
             page.op3dt2 = 0;
             page.op4dt2 = 0;
 
-            page.feedBack = parent.instFM[n][46];
-            page.algo = parent.instFM[n][45] & 0x7;
+            page.feedBack = parent.instFM[n].Item2[46];
+            page.algo = parent.instFM[n].Item2[45] & 0x7;
             OutFmSetPanRFeedbackAlgorithm(mml, page);
 
             int[] op = new int[4] {
-                parent.instFM[n][0*Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
-                , parent.instFM[n][1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
-                , parent.instFM[n][2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
-                , parent.instFM[n][3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
+                parent.instFM[n].Item2[0*Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
+                , parent.instFM[n].Item2[1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
+                , parent.instFM[n].Item2[2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
+                , parent.instFM[n].Item2[3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
             };
             int[][] algs = new int[8][]
             {
@@ -1764,54 +1764,54 @@ namespace Core
             {
                 //ch3以外の拡張チャンネルでも音色設定できるようにする場合はslotの様子もみてセットすること
                 OutFmSetWtLDtMl(mml, page, ope
-                    , parent.instFM[n][ope * opeLength + 1 + 13] // 13 : WT  1 : No  15 : OPE Size
-                    , parent.instFM[n][ope * opeLength + 1 + 8] // 8 : DT1
-                    , parent.instFM[n][ope * opeLength + 1 + 7]); // 7 : ML
+                    , parent.instFM[n].Item2[ope * opeLength + 1 + 13] // 13 : WT  1 : No  15 : OPE Size
+                    , parent.instFM[n].Item2[ope * opeLength + 1 + 8] // 8 : DT1
+                    , parent.instFM[n].Item2[ope * opeLength + 1 + 7]); // 7 : ML
 
                 ((ClsOPN)page.chip).OutFmSetKsAr(mml, page, ope
-                    , parent.instFM[n][ope * opeLength + 1 + 6]  //  6 : KS
-                    , parent.instFM[n][ope * opeLength + 1 + 0]  //  0 : AR
-                    , parent.instFM[n][ope * opeLength + 1 + 15] // 15 : PR
+                    , parent.instFM[n].Item2[ope * opeLength + 1 + 6]  //  6 : KS
+                    , parent.instFM[n].Item2[ope * opeLength + 1 + 0]  //  0 : AR
+                    , parent.instFM[n].Item2[ope * opeLength + 1 + 15] // 15 : PR
                     );
                 OutFmSetAmDt2Dr(mml, page, ope
-                    , parent.instFM[n][ope * opeLength + 1 + 10] // 10 : AM
-                    , parent.instFM[n][ope * opeLength + 1 + 9] // 9 : DT2
-                    , parent.instFM[n][ope * opeLength + 1 + 1] // 1 : DR
+                    , parent.instFM[n].Item2[ope * opeLength + 1 + 10] // 10 : AM
+                    , parent.instFM[n].Item2[ope * opeLength + 1 + 9] // 9 : DT2
+                    , parent.instFM[n].Item2[ope * opeLength + 1 + 1] // 1 : DR
                     );
                 OutFmSetFbSr(mml, page, ope
-                    , parent.instFM[n][ope * opeLength + 1 + 12] // 12 : FB
-                    , parent.instFM[n][ope * opeLength + 1 + 2] //2 : SR
+                    , parent.instFM[n].Item2[ope * opeLength + 1 + 12] // 12 : FB
+                    , parent.instFM[n].Item2[ope * opeLength + 1 + 2] //2 : SR
                     );
                 ((ClsOPN)page.chip).OutFmSetSlRr(mml, page, ope
-                    , parent.instFM[n][ope * opeLength + 1 + 4] // 4 : SL
-                    , parent.instFM[n][ope * opeLength + 1 + 3] // 3 : RR
+                    , parent.instFM[n].Item2[ope * opeLength + 1 + 4] // 4 : SL
+                    , parent.instFM[n].Item2[ope * opeLength + 1 + 3] // 3 : RR
                     );
                 OutFmSetALGLinkSSGEG(mml, page, ope
-                    , parent.instFM[n][ope * opeLength + 1 + 14] // 14 : ALG Link
-                    , parent.instFM[n][ope * opeLength + 1 + 11] // 11 : SSG-EG
+                    , parent.instFM[n].Item2[ope * opeLength + 1 + 14] // 14 : ALG Link
+                    , parent.instFM[n].Item2[ope * opeLength + 1 + 11] // 11 : SSG-EG
                     );
             }
 
             //ch3以外の拡張チャンネルでも音色設定できるようにする場合はslotの様子もみてセットすること
-            page.op1ml = parent.instFM[n][0 * opeLength + 1 + 7];// 7 : ML
-            page.op2ml = parent.instFM[n][1 * opeLength + 1 + 7];// 7 : ML
-            page.op3ml = parent.instFM[n][2 * opeLength + 1 + 7];// 7 : ML
-            page.op4ml = parent.instFM[n][3 * opeLength + 1 + 7];// 7 : ML
+            page.op1ml = parent.instFM[n].Item2[0 * opeLength + 1 + 7];// 7 : ML
+            page.op2ml = parent.instFM[n].Item2[1 * opeLength + 1 + 7];// 7 : ML
+            page.op3ml = parent.instFM[n].Item2[2 * opeLength + 1 + 7];// 7 : ML
+            page.op4ml = parent.instFM[n].Item2[3 * opeLength + 1 + 7];// 7 : ML
             //ch3以外の拡張チャンネルでも音色設定できるようにする場合はslotの様子もみてセットすること
-            page.op1dt2 = parent.instFM[n][0 * opeLength + 1 + 9];// 9 : DT2
-            page.op2dt2 = parent.instFM[n][1 * opeLength + 1 + 9];// 9 : DT2
-            page.op3dt2 = parent.instFM[n][2 * opeLength + 1 + 9];// 9 : DT2
-            page.op4dt2 = parent.instFM[n][3 * opeLength + 1 + 9];// 9 : DT2
+            page.op1dt2 = parent.instFM[n].Item2[0 * opeLength + 1 + 9];// 9 : DT2
+            page.op2dt2 = parent.instFM[n].Item2[1 * opeLength + 1 + 9];// 9 : DT2
+            page.op3dt2 = parent.instFM[n].Item2[2 * opeLength + 1 + 9];// 9 : DT2
+            page.op4dt2 = parent.instFM[n].Item2[3 * opeLength + 1 + 9];// 9 : DT2
 
-            page.feedBack = parent.instFM[n][1 + 12] & 7;
-            page.algo = parent.instFM[n][65] == 0xff ? 8 : (parent.instFM[n][65] & 0x7);
+            page.feedBack = parent.instFM[n].Item2[1 + 12] & 7;
+            page.algo = parent.instFM[n].Item2[65] == 0xff ? 8 : (parent.instFM[n].Item2[65] & 0x7);
             OutFmSetPanRFeedbackAlgorithm(mml, page);
 
             int[] op = new int[4] {
-                parent.instFM[n][0 * opeLength + 1 + 5]// 5 : TL
-                , parent.instFM[n][1 * opeLength + 1 + 5]// 5 : TL
-                , parent.instFM[n][2 * opeLength + 1 + 5]// 5 : TL
-                , parent.instFM[n][3 * opeLength + 1 + 5]// 5 : TL
+                parent.instFM[n].Item2[0 * opeLength + 1 + 5]// 5 : TL
+                , parent.instFM[n].Item2[1 * opeLength + 1 + 5]// 5 : TL
+                , parent.instFM[n].Item2[2 * opeLength + 1 + 5]// 5 : TL
+                , parent.instFM[n].Item2[3 * opeLength + 1 + 5]// 5 : TL
             };
 
             int[][] algs = new int[9][]
@@ -1829,7 +1829,7 @@ namespace Core
 
             if (page.algo == 8)
             {
-                algs = GetVolumeOpe(algs, parent.instFM[n], true);
+                algs = GetVolumeOpe(algs, parent.instFM[n].Item2, true);
             }
 
             for (int i = 0; i < 4; i++)
@@ -1894,24 +1894,24 @@ namespace Core
 
             int alg;
             int[] ope;
-            if (parent.instFM[n].Length == Const.OPNA2_INSTRUMENT_SIZE)
+            if (parent.instFM[n].Item2.Length == Const.OPNA2_INSTRUMENT_SIZE)
             {
-                alg = parent.instFM[n][65] == 0xff ? 8 : (parent.instFM[n][65] & 0x7);
+                alg = parent.instFM[n].Item2[65] == 0xff ? 8 : (parent.instFM[n].Item2[65] & 0x7);
                 ope = new int[4] {
-                    parent.instFM[n][0 * 16 + 1 + 5]// 5 : TL
-                    , parent.instFM[n][1 * 16 + 1 + 5]// 5 : TL
-                    , parent.instFM[n][2 * 16 + 1 + 5]// 5 : TL
-                    , parent.instFM[n][3 * 16 + 1 + 5]// 5 : TL
+                    parent.instFM[n].Item2[0 * 16 + 1 + 5]// 5 : TL
+                    , parent.instFM[n].Item2[1 * 16 + 1 + 5]// 5 : TL
+                    , parent.instFM[n].Item2[2 * 16 + 1 + 5]// 5 : TL
+                    , parent.instFM[n].Item2[3 * 16 + 1 + 5]// 5 : TL
                 };
             }
             else
             {
-                alg = parent.instFM[n][45] & 0x7;
+                alg = parent.instFM[n].Item2[45] & 0x7;
                 ope = new int[4] {
-                    parent.instFM[n][0*Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
-                    , parent.instFM[n][1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
-                    , parent.instFM[n][2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
-                    , parent.instFM[n][3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
+                    parent.instFM[n].Item2[0*Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
+                    , parent.instFM[n].Item2[1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
+                    , parent.instFM[n].Item2[2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
+                    , parent.instFM[n].Item2[3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
                 };
             }
 
@@ -1930,7 +1930,7 @@ namespace Core
 
             if (alg == 8)
             {
-                algs = GetVolumeOpe(algs, parent.instFM[n], false);
+                algs = GetVolumeOpe(algs, parent.instFM[n].Item2, false);
             }
 
             for (int i = 0; i < 4; i++)
@@ -2036,8 +2036,8 @@ namespace Core
                 page.spg.pcmStartAddress = -1;
 
                 SetADPCMAddress(null, page
-                    , (int)parent.instPCM[page.instrument].stAdr
-                    , (int)parent.instPCM[page.instrument].edAdr);
+                    , (int)parent.instPCM[page.instrument].Item2.stAdr
+                    , (int)parent.instPCM[page.instrument].Item2.edAdr);
 
                 //周波数
                 page.spg.freq = -1;
@@ -2061,8 +2061,8 @@ namespace Core
                 page.spg.pcmStartAddress = -1;
 
                 SetADPCMAAddress(null, page
-                    , (int)parent.instPCM[page.instrument].stAdr
-                    , (int)parent.instPCM[page.instrument].edAdr);
+                    , (int)parent.instPCM[page.instrument].Item2.stAdr
+                    , (int)parent.instPCM[page.instrument].Item2.edAdr);
 
                 //周波数
                 page.spg.freq = -1;
@@ -2271,16 +2271,16 @@ namespace Core
 
         }
 
-        public override string DispRegion(clsPcm pcm)
+        public override string DispRegion(Tuple<string, clsPcm> pcm)
         {
             return string.Format("{0,-10} {1,-7} {2,-5:D3} N/A  ${3,-7:X6} ${4,-7:X6} N/A      ${5,-7:X6}  NONE {6}\r\n"
                 , Name
-                , pcm.chipNumber != 0 ? "SEC" : "PRI"
-                , pcm.num
-                , pcm.stAdr & 0xffffff
-                , pcm.edAdr & 0xffffff
-                , pcm.size
-                , pcm.status.ToString()
+                , pcm.Item2.chipNumber != 0 ? "SEC" : "PRI"
+                , pcm.Item2.num
+                , pcm.Item2.stAdr & 0xffffff
+                , pcm.Item2.edAdr & 0xffffff
+                , pcm.Item2.size
+                , pcm.Item2.status.ToString()
                 );
         }
 

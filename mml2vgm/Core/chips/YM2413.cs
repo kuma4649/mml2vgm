@@ -167,34 +167,34 @@ namespace Core
             for (byte ope = 0; ope < 2; ope++)
             {
                 outYM2413SetAdr00_01(mml, page, ope
-                    , parent.instFM[n][ope * 11 + 7] != 0 //AM
-                    , parent.instFM[n][ope * 11 + 8] != 0 //VIB
-                    , parent.instFM[n][ope * 11 + 9] != 0 //EG
-                    , parent.instFM[n][ope * 11 + 10] != 0 //KS
-                    , parent.instFM[n][ope * 11 + 6] & 0xf //MT
+                    , parent.instFM[n].Item2[ope * 11 + 7] != 0 //AM
+                    , parent.instFM[n].Item2[ope * 11 + 8] != 0 //VIB
+                    , parent.instFM[n].Item2[ope * 11 + 9] != 0 //EG
+                    , parent.instFM[n].Item2[ope * 11 + 10] != 0 //KS
+                    , parent.instFM[n].Item2[ope * 11 + 6] & 0xf //MT
                     );
                 SOutData(page, mml, port[0], (byte)(0x4 + ope), (byte)((
-                    (parent.instFM[n][ope * 11 + 1] & 0xf) << 4) //AR
-                    | (parent.instFM[n][ope * 11 + 2] & 0xf) // DR
+                    (parent.instFM[n].Item2[ope * 11 + 1] & 0xf) << 4) //AR
+                    | (parent.instFM[n].Item2[ope * 11 + 2] & 0xf) // DR
                     ));
                 SOutData(page, mml, port[0], (byte)(0x6 + ope), (byte)((
-                    (parent.instFM[n][ope * 11 + 3] & 0xf) << 4) //SL
-                    | (parent.instFM[n][ope * 11 + 4] & 0xf) // RR
+                    (parent.instFM[n].Item2[ope * 11 + 3] & 0xf) << 4) //SL
+                    | (parent.instFM[n].Item2[ope * 11 + 4] & 0xf) // RR
                     ));
             }
             SOutData(page, mml, port[0], (byte)(0x2), (byte)((
-                (parent.instFM[n][0 * 11 + 5] & 0x3) << 6)  //KL(M)
-                | (parent.instFM[n][23] & 0x3f) //TL
+                (parent.instFM[n].Item2[0 * 11 + 5] & 0x3) << 6)  //KL(M)
+                | (parent.instFM[n].Item2[23] & 0x3f) //TL
                 ));
             SOutData(page, mml, port[0], (byte)(0x3), (byte)((
-                (parent.instFM[n][1 * 11 + 5] & 0x3) << 6) //KL(C)
-                | (parent.instFM[n][0 * 11 + 11] != 0 ? 0x08 : 0) // DT(M)
-                | (parent.instFM[n][1 * 11 + 11] != 0 ? 0x10 : 0) // DT(C)
-                | (parent.instFM[n][24] & 0x07) //FB
+                (parent.instFM[n].Item2[1 * 11 + 5] & 0x3) << 6) //KL(C)
+                | (parent.instFM[n].Item2[0 * 11 + 11] != 0 ? 0x08 : 0) // DT(M)
+                | (parent.instFM[n].Item2[1 * 11 + 11] != 0 ? 0x10 : 0) // DT(C)
+                | (parent.instFM[n].Item2[24] & 0x07) //FB
                 ));
 
-            page.op1ml = parent.instFM[n][0 * 11 + 5];
-            page.op2ml = parent.instFM[n][1 * 11 + 5];
+            page.op1ml = parent.instFM[n].Item2[0 * 11 + 5];
+            page.op2ml = parent.instFM[n].Item2[1 * 11 + 5];
             page.op1dt2 = 0;
             page.op2dt2 = 0;
 

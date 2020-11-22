@@ -1,4 +1,5 @@
 ﻿using musicDriverInterface;
+using System;
 using System.Collections.Generic;
 
 namespace Core
@@ -122,7 +123,7 @@ namespace Core
                 return;
             }
 
-            for (int i = 1; i < parent.instWF[n].Length; i++) // 添え字0 は音色番号が入っている為1からスタート
+            for (int i = 1; i < parent.instWF[n].Item2.Length; i++) // 添え字0 は音色番号が入っている為1からスタート
             {
                 int ch = page.ch;
                 if (!parent.info.isK052539 && ch == 4) ch = 3;
@@ -133,12 +134,12 @@ namespace Core
                     page.chipNumber
                     , (byte)(parent.info.isK052539 ? 4 : 0)
                     , (byte)(ch * 32 + i - 1)
-                    , parent.instWF[n][i]);
+                    , parent.instWF[n].Item2[i]);
             }
 
         }
 
-        public override void StorePcm(Dictionary<int, clsPcm> newDic, KeyValuePair<int, clsPcm> v, byte[] buf, bool is16bit, int samplerate, params object[] option)
+        public override void StorePcm(Dictionary<int,Tuple<string, clsPcm>> newDic, KeyValuePair<int, clsPcm> v, byte[] buf, bool is16bit, int samplerate, params object[] option)
         {
         }
 

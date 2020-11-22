@@ -280,7 +280,7 @@ namespace Core
         {
             if (!parent.midiSysEx.ContainsKey(n)) return;
 
-            byte[] data = parent.midiSysEx[n];
+            byte[] data = parent.midiSysEx[n].Item2;
             if (data == null || data.Length < 1) return;
 
             List<byte> dat = new List<byte>();

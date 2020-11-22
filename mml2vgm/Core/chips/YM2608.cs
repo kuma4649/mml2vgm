@@ -329,10 +329,10 @@ namespace Core
             double freq = 8000.0;
             if (page.instrument != -1)
             {
-                freq = (double)parent.instPCM[page.instrument].samplerate;
-                if (parent.instPCM[page.instrument].freq != -1)
+                freq = (double)parent.instPCM[page.instrument].Item2.samplerate;
+                if (parent.instPCM[page.instrument].Item2.freq != -1)
                 {
-                    freq = (double)parent.instPCM[page.instrument].freq;
+                    freq = (double)parent.instPCM[page.instrument].Item2.freq;
                 }
             }
 
@@ -472,7 +472,7 @@ namespace Core
             }
         }
 
-        public override void StorePcm(Dictionary<int, clsPcm> newDic, KeyValuePair<int, clsPcm> v, byte[] buf, bool is16bit, int samplerate, params object[] option)
+        public override void StorePcm(Dictionary<int,Tuple<string, clsPcm>> newDic, KeyValuePair<int, clsPcm> v, byte[] buf, bool is16bit, int samplerate, params object[] option)
         {
             clsPcmDataInfo pi = pcmDataInfo[0];
 
@@ -491,7 +491,7 @@ namespace Core
 
                 newDic.Add(
                     v.Key
-                    , new clsPcm(
+                    ,new Tuple<string, clsPcm>("", new clsPcm(
                         v.Value.num
                         , v.Value.seqNum, v.Value.chip
                         , v.Value.chipNumber
@@ -504,7 +504,7 @@ namespace Core
                         , -1
                         , is16bit
                         , samplerate)
-                    );
+                    ));
 
                 pi.totalBufPtr += size;
                 newBuf = new byte[pi.totalBuf.Length + buf.Length];
@@ -734,7 +734,7 @@ namespace Core
                     }
                     else
                     {
-                        if (parent.instPCM[n].chip != enmChipType.YM2608)
+                        if (parent.instPCM[n].Item2.chip != enmChipType.YM2608)
                         {
                             msgBox.setErrMsg(string.Format(msg.get("E18005"), n), mml.line.Lp);
                         }
@@ -742,8 +742,8 @@ namespace Core
                         SetADPCMAddress(
                             mml,
                             page
-                            , (int)parent.instPCM[n].stAdr
-                            , (int)parent.instPCM[n].edAdr);
+                            , (int)parent.instPCM[n].Item2.stAdr
+                            , (int)parent.instPCM[n].Item2.edAdr);
                     }
                     return;
                 }
@@ -821,8 +821,8 @@ namespace Core
                 page.spg.pcmStartAddress = -1;
 
                 SetADPCMAddress(null, page
-                    , (int)parent.instPCM[page.instrument].stAdr
-                    , (int)parent.instPCM[page.instrument].edAdr);
+                    , (int)parent.instPCM[page.instrument].Item2.stAdr
+                    , (int)parent.instPCM[page.instrument].Item2.edAdr);
 
                 //周波数
                 page.spg.freq = -1;
@@ -901,16 +901,16 @@ namespace Core
 
         }
 
-        public override string DispRegion(clsPcm pcm)
+        public override string DispRegion(Tuple<string, clsPcm> pcm)
         {
             return string.Format("{0,-10} {1,-7} {2,-5:D3} N/A  ${3,-7:X6} ${4,-7:X6} N/A      ${5,-7:X6}  NONE {6}\r\n"
                 , Name
-                , pcm.chipNumber != 0 ? "SEC" : "PRI"
-                , pcm.num
-                , pcm.stAdr & 0xffffff
-                , pcm.edAdr & 0xffffff
-                , pcm.size
-                , pcm.status.ToString()
+                , pcm.Item2.chipNumber != 0 ? "SEC" : "PRI"
+                , pcm.Item2.num
+                , pcm.Item2.stAdr & 0xffffff
+                , pcm.Item2.edAdr & 0xffffff
+                , pcm.Item2.size
+                , pcm.Item2.status.ToString()
                 );
         }
     }

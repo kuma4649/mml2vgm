@@ -115,7 +115,7 @@ namespace Core
                 return;
             }
 
-            int id = parent.instPCM[page.instrument].seqNum + 1;
+            int id = parent.instPCM[page.instrument].Item2.seqNum + 1;
 
             int ch = Math.Max(0, page.ch - 8);
             int priority = 0;
@@ -147,11 +147,11 @@ namespace Core
             }
             //必要なサンプル数を算出し、保持しているサンプル数より大きい場合は更新
             double m = page.waitCounter * 60.0 * 4.0 / (parent.info.tempo * parent.info.clockCount) * 14000.0;//14000(Hz) = xgm sampling Rate
-            parent.instPCM[page.instrument].xgmMaxSampleCount = Math.Max(parent.instPCM[page.instrument].xgmMaxSampleCount, m);
+            parent.instPCM[page.instrument].Item2.xgmMaxSampleCount = Math.Max(parent.instPCM[page.instrument].Item2.xgmMaxSampleCount, m);
 
-            if (parent.instPCM[page.instrument].status != enmPCMSTATUS.ERROR)
+            if (parent.instPCM[page.instrument].Item2.status != enmPCMSTATUS.ERROR)
             {
-                parent.instPCM[page.instrument].status = enmPCMSTATUS.USED;
+                parent.instPCM[page.instrument].Item2.status = enmPCMSTATUS.USED;
             }
 
         }
@@ -193,7 +193,7 @@ namespace Core
             }
         }
 
-        public override void StorePcm(Dictionary<int, clsPcm> newDic, KeyValuePair<int, clsPcm> v, byte[] buf, bool is16bit, int samplerate, params object[] option)
+        public override void StorePcm(Dictionary<int,Tuple<string, clsPcm>> newDic, KeyValuePair<int, clsPcm> v, byte[] buf, bool is16bit, int samplerate, params object[] option)
         {
             clsPcmDataInfo pi = pcmDataInfo[0];
 
@@ -218,7 +218,7 @@ namespace Core
                 {
                     newDic.Remove(v.Key);
                 }
-                newDic.Add(v.Key, new clsPcm(
+                newDic.Add(v.Key, new Tuple<string, clsPcm>("", new clsPcm(
                     v.Value.num
                     , v.Value.seqNum
                     , v.Value.chip
@@ -231,7 +231,8 @@ namespace Core
                     , size
                     , -1
                     , is16bit
-                    , samplerate));
+                    , samplerate)
+                    ));
                 pi.totalBufPtr += size;
 
                 newBuf = new byte[pi.totalBuf.Length + buf.Length];
@@ -326,7 +327,7 @@ namespace Core
                     }
                     else
                     {
-                        if (parent.instPCM[n].chip != enmChipType.YM2612X)
+                        if (parent.instPCM[n].Item2.chip != enmChipType.YM2612X)
                         {
                             msgBox.setErrMsg(string.Format(msg.get("E21001"), n), mml.line.Lp);
                         }

@@ -285,9 +285,9 @@ namespace Core
                     page.envInstrument = n;
                     page.envIndex = -1;
                     page.envCounter = -1;
-                    for (int i = 0; i < parent.instENV[n].Length; i++)
+                    for (int i = 0; i < parent.instENV[n].Item2.Length; i++)
                     {
-                        page.envelope[i] = parent.instENV[n][i];
+                        page.envelope[i] = parent.instENV[n].Item2[i];
                     }
                 }
             }
@@ -448,7 +448,7 @@ namespace Core
             return CanUsePI;
         }
 
-        public virtual void StorePcm(Dictionary<int, clsPcm> newDic, KeyValuePair<int, clsPcm> v, byte[] buf, bool is16bit, int samplerate, params object[] option)
+        public virtual void StorePcm(Dictionary<int, Tuple<string, clsPcm>> newDic, KeyValuePair<int, clsPcm> v, byte[] buf, bool is16bit, int samplerate, params object[] option)
         {
             pcmDataInfo = null;
         }
@@ -1978,7 +1978,7 @@ namespace Core
         }
 
 
-        public virtual string DispRegion(clsPcm pcm)
+        public virtual string DispRegion(Tuple<string, clsPcm> pcm)
         {
             return "みじっそう";
         }

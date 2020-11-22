@@ -98,12 +98,12 @@ namespace Core
                 return;
             }
 
-            int alg = parent.instFM[n][45] & 0x7;
+            int alg = parent.instFM[n].Item2[45] & 0x7;
             int[] ope = new int[4] {
-                parent.instFM[n][0*Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
-                , parent.instFM[n][1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
-                , parent.instFM[n][2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
-                , parent.instFM[n][3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
+                parent.instFM[n].Item2[0*Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
+                , parent.instFM[n].Item2[1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
+                , parent.instFM[n].Item2[2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
+                , parent.instFM[n].Item2[3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
             };
             int[][] algs = new int[8][]
             {
@@ -298,30 +298,30 @@ namespace Core
             for (int ope = 0; ope < 4; ope++)
             {
 
-                OutSetDtMl(mml, page, ope, parent.instFM[n][ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 9], parent.instFM[n][ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 8]);
-                OutSetKsAr(mml, page, ope, parent.instFM[n][ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 7], parent.instFM[n][ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 1]);
-                OutSetAmDr(mml, page, ope, parent.instFM[n][ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 11], parent.instFM[n][ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 2]);
-                OutSetDt2Sr(mml, page, ope, parent.instFM[n][ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 10], parent.instFM[n][ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 3]);
-                OutSetSlRr(mml, page, ope, parent.instFM[n][ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 5], parent.instFM[n][ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 4]);
+                OutSetDtMl(mml, page, ope, parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 9], parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 8]);
+                OutSetKsAr(mml, page, ope, parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 7], parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 1]);
+                OutSetAmDr(mml, page, ope, parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 11], parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 2]);
+                OutSetDt2Sr(mml, page, ope, parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 10], parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 3]);
+                OutSetSlRr(mml, page, ope, parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 5], parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 4]);
 
             }
-            page.op1ml = parent.instFM[n][0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
-            page.op2ml = parent.instFM[n][1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
-            page.op3ml = parent.instFM[n][2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
-            page.op4ml = parent.instFM[n][3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
-            page.op1dt2 = parent.instFM[n][0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 10];
-            page.op2dt2 = parent.instFM[n][1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 10];
-            page.op3dt2 = parent.instFM[n][2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 10];
-            page.op4dt2 = parent.instFM[n][3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 10];
+            page.op1ml = parent.instFM[n].Item2[0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
+            page.op2ml = parent.instFM[n].Item2[1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
+            page.op3ml = parent.instFM[n].Item2[2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
+            page.op4ml = parent.instFM[n].Item2[3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
+            page.op1dt2 = parent.instFM[n].Item2[0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 10];
+            page.op2dt2 = parent.instFM[n].Item2[1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 10];
+            page.op3dt2 = parent.instFM[n].Item2[2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 10];
+            page.op4dt2 = parent.instFM[n].Item2[3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 10];
 
-            OutSetPanFeedbackAlgorithm(mml, page, page.pan, parent.instFM[n][46], parent.instFM[n][45]);
+            OutSetPanFeedbackAlgorithm(mml, page, page.pan, parent.instFM[n].Item2[46], parent.instFM[n].Item2[45]);
 
-            int alg = parent.instFM[n][45] & 0x7;
+            int alg = parent.instFM[n].Item2[45] & 0x7;
             int[] op = new int[4] {
-                parent.instFM[n][0*Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
-                , parent.instFM[n][1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
-                , parent.instFM[n][2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
-                , parent.instFM[n][3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
+                parent.instFM[n].Item2[0*Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
+                , parent.instFM[n].Item2[1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
+                , parent.instFM[n].Item2[2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
+                , parent.instFM[n].Item2[3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
             };
             int[][] algs = new int[8][]
             {
@@ -568,7 +568,7 @@ namespace Core
             if (i < 0) return;
 
             page.toneDoublerKeyShift = 0;
-            byte[] instFM = parent.instFM[i];
+            byte[] instFM = parent.instFM[i].Item2;
             if (instFM == null || instFM.Length < 1) return;
             Note note = (Note)mml.args[0];
 
@@ -795,8 +795,8 @@ namespace Core
                     mml,
                     page
                     , (int)page.pan
-                    , parent.instFM[page.instrument][46]
-                    , parent.instFM[page.instrument][45]
+                    , parent.instFM[page.instrument].Item2[46]
+                    , parent.instFM[page.instrument].Item2[45]
                     );
             }
         }

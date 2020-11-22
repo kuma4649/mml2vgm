@@ -465,12 +465,12 @@ namespace Core
                 return;
             }
 
-            int alg = parent.instFM[n][45] & 0x7;
+            int alg = parent.instFM[n].Item2[45] & 0x7;
             int[] ope = new int[4] {
-                parent.instFM[n][0*Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
-                , parent.instFM[n][1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
-                , parent.instFM[n][2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
-                , parent.instFM[n][3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
+                parent.instFM[n].Item2[0*Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
+                , parent.instFM[n].Item2[1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
+                , parent.instFM[n].Item2[2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
+                , parent.instFM[n].Item2[3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
             };
             int[][] algs = new int[8][]
             {
@@ -608,32 +608,32 @@ namespace Core
             for (int ope = 0; ope < 4; ope++)
             {
                 //ch3以外の拡張チャンネルでも音色設定できるようにする場合はslotの様子もみてセットすること
-                ((ClsOPN)page.chip).OutFmSetDtMl(mml, page, ope, parent.instFM[n][ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 9], parent.instFM[n][ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 8]);
-                ((ClsOPN)page.chip).OutFmSetKsAr(mml, page, ope, parent.instFM[n][ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 7], parent.instFM[n][ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 1]);
-                ((ClsOPN)page.chip).OutFmSetAmDr(mml, page, ope, parent.instFM[n][ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 10], parent.instFM[n][ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 2]);
-                ((ClsOPN)page.chip).OutFmSetSr(mml, page, ope, parent.instFM[n][ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 3]);
-                ((ClsOPN)page.chip).OutFmSetSlRr(mml, page, ope, parent.instFM[n][ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 5], parent.instFM[n][ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 4]);
-                ((ClsOPN)page.chip).OutFmSetSSGEG(mml, page, ope, parent.instFM[n][ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 11]);
+                ((ClsOPN)page.chip).OutFmSetDtMl(mml, page, ope, parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 9], parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 8]);
+                ((ClsOPN)page.chip).OutFmSetKsAr(mml, page, ope, parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 7], parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 1]);
+                ((ClsOPN)page.chip).OutFmSetAmDr(mml, page, ope, parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 10], parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 2]);
+                ((ClsOPN)page.chip).OutFmSetSr(mml, page, ope, parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 3]);
+                ((ClsOPN)page.chip).OutFmSetSlRr(mml, page, ope, parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 5], parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 4]);
+                ((ClsOPN)page.chip).OutFmSetSSGEG(mml, page, ope, parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 11]);
             }
             //ch3以外の拡張チャンネルでも音色設定できるようにする場合はslotの様子もみてセットすること
-            page.op1ml = parent.instFM[n][0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
-            page.op2ml = parent.instFM[n][1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
-            page.op3ml = parent.instFM[n][2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
-            page.op4ml = parent.instFM[n][3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
+            page.op1ml = parent.instFM[n].Item2[0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
+            page.op2ml = parent.instFM[n].Item2[1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
+            page.op3ml = parent.instFM[n].Item2[2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
+            page.op4ml = parent.instFM[n].Item2[3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
             //ch3以外の拡張チャンネルでも音色設定できるようにする場合はslotの様子もみてセットすること
             page.op1dt2 = 0;
             page.op2dt2 = 0;
             page.op3dt2 = 0;
             page.op4dt2 = 0;
 
-            ((ClsOPN)page.chip).OutFmSetFeedbackAlgorithm(mml, page, parent.instFM[n][46], parent.instFM[n][45]);
+            ((ClsOPN)page.chip).OutFmSetFeedbackAlgorithm(mml, page, parent.instFM[n].Item2[46], parent.instFM[n].Item2[45]);
 
-            int alg = parent.instFM[n][45] & 0x7;
+            int alg = parent.instFM[n].Item2[45] & 0x7;
             int[] op = new int[4] {
-                parent.instFM[n][0*Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
-                , parent.instFM[n][1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
-                , parent.instFM[n][2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
-                , parent.instFM[n][3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
+                parent.instFM[n].Item2[0*Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
+                , parent.instFM[n].Item2[1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
+                , parent.instFM[n].Item2[2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
+                , parent.instFM[n].Item2[3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
             };
             int[][] algs = new int[8][]
             {
@@ -1314,9 +1314,9 @@ namespace Core
             if (!parent.instPCM.ContainsKey(page.instrument)) return;
 
             float m = Const.pcmMTbl[page.pcmNote] * (float)Math.Pow(2, (page.pcmOctave - 4));
-            page.pcmBaseFreqPerFreq = Information.VGM_SAMPLE_PER_SECOND / ((float)parent.instPCM[page.instrument].freq * m);
+            page.pcmBaseFreqPerFreq = Information.VGM_SAMPLE_PER_SECOND / ((float)parent.instPCM[page.instrument].Item2.freq * m);
             page.pcmFreqCountBuffer = 0.0f;
-            long p = parent.instPCM[page.instrument].stAdr;
+            long p = parent.instPCM[page.instrument].Item2.stAdr;
             if (parent.info.Version == 1.51f)
             {
                 byte[] cmd;
@@ -1336,8 +1336,8 @@ namespace Core
             }
             else
             {
-                long s = parent.instPCM[page.instrument].size;
-                long f = parent.instPCM[page.instrument].freq;
+                long s = parent.instPCM[page.instrument].Item2.size;
+                long f = parent.instPCM[page.instrument].Item2.freq;
                 long w = 0;
                 if (page.gatetimePmode)
                 {
@@ -1449,9 +1449,9 @@ namespace Core
                     );
             }
 
-            if (parent.instPCM[page.instrument].status != enmPCMSTATUS.ERROR)
+            if (parent.instPCM[page.instrument].Item2.status != enmPCMSTATUS.ERROR)
             {
-                parent.instPCM[page.instrument].status = enmPCMSTATUS.USED;
+                parent.instPCM[page.instrument].Item2.status = enmPCMSTATUS.USED;
             }
 
         }
@@ -1709,7 +1709,7 @@ namespace Core
             if (i < 0) return;
 
             page.toneDoublerKeyShift = 0;
-            byte[] instFM = parent.instFM[i];
+            byte[] instFM = parent.instFM[i].Item2;
             if (instFM == null || instFM.Length < 1) return;
             Note note = (Note)mml.args[0];
 

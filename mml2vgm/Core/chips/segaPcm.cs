@@ -199,9 +199,9 @@ namespace Core
             d = (byte)(((page.pcmBank & 0x3f) << 2) | (page.pcmLoopAddress != -1 ? 0 : 2) | 0);
             OutSegaPcmPort(mml, port[0], page, adr, d);
 
-            if (page.instrument != -1 && parent.instPCM[page.instrument].status != enmPCMSTATUS.ERROR)
+            if (page.instrument != -1 && parent.instPCM[page.instrument].Item2.status != enmPCMSTATUS.ERROR)
             {
-                parent.instPCM[page.instrument].status = enmPCMSTATUS.USED;
+                parent.instPCM[page.instrument].Item2.status = enmPCMSTATUS.USED;
             }
         }
 
@@ -217,7 +217,7 @@ namespace Core
         }
 
 
-        public override void StorePcm(Dictionary<int, clsPcm> newDic, KeyValuePair<int, clsPcm> v, byte[] buf, bool is16bit, int samplerate, params object[] option)
+        public override void StorePcm(Dictionary<int,Tuple<string, clsPcm>> newDic, KeyValuePair<int, clsPcm> v, byte[] buf, bool is16bit, int samplerate, params object[] option)
         {
             clsPcmDataInfo pi = pcmDataInfo[0];
 
@@ -255,7 +255,7 @@ namespace Core
 
                 newDic.Add(
                     v.Key
-                    , new clsPcm(
+                    , new Tuple<string, clsPcm>("", new clsPcm(
                         v.Value.num
                         , v.Value.seqNum, v.Value.chip
                         , v.Value.chipNumber
@@ -268,7 +268,7 @@ namespace Core
                         , v.Value.loopAdr == -1 ? -1 : (pi.totalBufPtr + v.Value.loopAdr)
                         , is16bit
                         , samplerate)
-                    );
+                    ));
 
                 pi.totalBufPtr += size;
                 newBuf = new byte[pi.totalBuf.Length + buf.Length];
@@ -293,7 +293,7 @@ namespace Core
             catch
             {
                 pi.use = false;
-                newDic[v.Key].status = enmPCMSTATUS.ERROR;
+                newDic[v.Key].Item2.status = enmPCMSTATUS.ERROR;
             }
 
         }
@@ -558,7 +558,7 @@ namespace Core
                 return;
             }
 
-            if (parent.instPCM[n].chip != enmChipType.SEGAPCM)
+            if (parent.instPCM[n].Item2.chip != enmChipType.SEGAPCM)
             {
                 msgBox.setErrMsg(string.Format(msg.get("E14004"), n)
                     , mml.line.Lp);
@@ -566,10 +566,10 @@ namespace Core
             }
 
             page.instrument = n;
-            page.pcmStartAddress = (int)parent.instPCM[n].stAdr;
-            page.pcmEndAddress = (int)parent.instPCM[n].edAdr;
-            page.pcmLoopAddress = (int)parent.instPCM[n].loopAdr;// == 0 ? -1 : (int)parent.instPCM[n].loopAdr;
-            page.pcmBank = (int)((parent.instPCM[n].stAdr >> 16) << 1);
+            page.pcmStartAddress = (int)parent.instPCM[n].Item2.stAdr;
+            page.pcmEndAddress = (int)parent.instPCM[n].Item2.edAdr;
+            page.pcmLoopAddress = (int)parent.instPCM[n].Item2.loopAdr;// == 0 ? -1 : (int)parent.instPCM[n].loopAdr;
+            page.pcmBank = (int)((parent.instPCM[n].Item2.stAdr >> 16) << 1);
             SetDummyData(page, mml);
         }
 
@@ -585,19 +585,19 @@ namespace Core
             SetDummyData(page, mml);
         }
 
-        public override string DispRegion(clsPcm pcm)
+        public override string DispRegion(Tuple<string, clsPcm> pcm)
         {
             return string.Format("{0,-10} {1,-7} {2,-5:D3} {3,-4:D2} ${4,-7:X4} ${5,-7:X4} {6} ${7,-7:X4}  {8,4} {9}\r\n"
                 , Name //0
-                , pcm.chipNumber != 0 ? "SEC" : "PRI" //1
-                , pcm.num //2
-                , pcm.stAdr >> 16 //3
-                , pcm.stAdr & 0xffff //4
-                , pcm.edAdr & 0xffff //5
-                , pcm.loopAdr == -1 ? "N/A     " : string.Format("${0,-7:X4}", (pcm.loopAdr & 0xffff)) //6
-                , pcm.size //7
-                , pcm.is16bit ? 1 : 0 //8
-                , pcm.status.ToString() //9
+                , pcm.Item2.chipNumber != 0 ? "SEC" : "PRI" //1
+                , pcm.Item2.num //2
+                , pcm.Item2.stAdr >> 16 //3
+                , pcm.Item2.stAdr & 0xffff //4
+                , pcm.Item2.edAdr & 0xffff //5
+                , pcm.Item2.loopAdr == -1 ? "N/A     " : string.Format("${0,-7:X4}", (pcm.Item2.loopAdr & 0xffff)) //6
+                , pcm.Item2.size //7
+                , pcm.Item2.is16bit ? 1 : 0 //8
+                , pcm.Item2.status.ToString() //9
                 );
         }
 

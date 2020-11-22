@@ -182,6 +182,7 @@ namespace mml2vgmIDE
             }
 
             OpenLatestFile(startFn);
+            
         }
 
         private void CheckAndLoadMucomDotNET(string startupPath, Action<string> disp)

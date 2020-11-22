@@ -265,6 +265,7 @@
       <DependentUpon>ucSettingInstruments.cs</DependentUpon>
     </Compile>
     <Compile Include="FrameBuffer.cs" />
+    <Compile Include="InstrumentAtLocal.cs" />
     <Compile Include="InstrumentAtValSound.cs" />
     <Compile Include="log.cs" />
     <Compile Include="MDChipParams.cs" />
@@ -406,6 +407,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="c86ctl.ini">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Instruments\Instrument.gwi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="scci.ini">

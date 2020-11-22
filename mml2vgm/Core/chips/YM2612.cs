@@ -195,7 +195,7 @@ namespace Core
             OutFmKeyOff(page, mml);
         }
 
-        public override void StorePcm(Dictionary<int, clsPcm> newDic, KeyValuePair<int, clsPcm> v, byte[] buf, bool is16bit, int samplerate, params object[] option)
+        public override void StorePcm(Dictionary<int,Tuple<string, clsPcm>> newDic, KeyValuePair<int, clsPcm> v, byte[] buf, bool is16bit, int samplerate, params object[] option)
         {
             clsPcmDataInfo pi = pcmDataInfo[0];
 
@@ -208,7 +208,7 @@ namespace Core
                 }
                 newDic.Add(
                     v.Key
-                    , new clsPcm(
+                    , new Tuple<string, clsPcm>("",  new clsPcm(
                         v.Value.num
                         , v.Value.seqNum
                         , v.Value.chip
@@ -221,7 +221,8 @@ namespace Core
                         , size
                         , -1
                         , is16bit
-                        , samplerate));
+                        , samplerate)
+                    ));
                 pi.totalBufPtr += size;
 
                 byte[] newBuf = new byte[pi.totalBuf.Length + buf.Length];
@@ -434,7 +435,7 @@ namespace Core
                     }
                     else
                     {
-                        if (parent.instPCM[n].chip != enmChipType.YM2612)
+                        if (parent.instPCM[n].Item2.chip != enmChipType.YM2612)
                         {
                             msgBox.setErrMsg(string.Format(msg.get("E20003"), n), mml.line.Lp);
                         }
@@ -484,16 +485,16 @@ namespace Core
         }
 
 
-        public override string DispRegion(clsPcm pcm)
+        public override string DispRegion(Tuple<string, clsPcm> pcm)
         {
             return string.Format("{0,-10} {1,-7} {2,-5:D3} N/A  ${3,-7:X6} ${4,-7:X6} N/A      ${5,-7:X6}  NONE {6}\r\n"
                 , Name
-                , pcm.chipNumber != 0 ? "SEC" : "PRI"
-                , pcm.num
-                , pcm.stAdr & 0xffffff
-                , pcm.edAdr & 0xffffff
-                , pcm.size
-                , pcm.status.ToString()
+                , pcm.Item2.chipNumber != 0 ? "SEC" : "PRI"
+                , pcm.Item2.num
+                , pcm.Item2.stAdr & 0xffffff
+                , pcm.Item2.edAdr & 0xffffff
+                , pcm.Item2.size
+                , pcm.Item2.status.ToString()
                 );
         }
 

@@ -136,7 +136,7 @@ namespace Core
             pw.spg.freq = -1;
         }
 
-        public override void StorePcm(Dictionary<int, clsPcm> newDic, KeyValuePair<int, clsPcm> v, byte[] buf, bool is16bit, int samplerate, params object[] option)
+        public override void StorePcm(Dictionary<int,Tuple<string, clsPcm>> newDic, KeyValuePair<int, clsPcm> v, byte[] buf, bool is16bit, int samplerate, params object[] option)
         {
             clsPcmDataInfo pi = pcmDataInfo[0];
 
@@ -156,7 +156,7 @@ namespace Core
 
                 newDic.Add(
                     v.Key
-                    , new clsPcm(
+                    , new Tuple<string, clsPcm>("", new clsPcm(
                         v.Value.num
                         , v.Value.seqNum
                         , v.Value.chip
@@ -171,7 +171,7 @@ namespace Core
                         , is16bit
                         , samplerate
                         )
-                    );
+                    ));
 
                 pi.totalBufPtr += size;
 
@@ -285,6 +285,7 @@ namespace Core
 
         public void OutHuC6280Port(partPage page, MML mml, byte[] cmd, byte adr, byte data)
         {
+            //Console.WriteLine("{0:X} {1:X}",adr,data);
             SOutData(
                 page,
                 mml,
@@ -305,9 +306,9 @@ namespace Core
             SetHuC6280CurrentChannel(mml, page);
             OutHuC6280Port(page, mml, port[0], 4, (byte)(0x40 + page.volume)); //WaveIndexReset(=0x40)
 
-            for (int i = 1; i < parent.instWF[n].Length; i++) // 0 は音色番号が入っている為1からスタート
+            for (int i = 1; i < parent.instWF[n].Item2.Length; i++) // 0 は音色番号が入っている為1からスタート
             {
-                OutHuC6280Port(page, mml, port[0], 6, (byte)(parent.instWF[n][i] & 0x1f));
+                OutHuC6280Port(page, mml, port[0], 6, (byte)(parent.instWF[n].Item2[i] & 0x1f));
             }
 
         }
@@ -332,7 +333,7 @@ namespace Core
             {
                 SetHuC6280CurrentChannel(mml, page);
                 OutHuC6280Port(page, mml, port[0], 0x4, data);
-                OutHuC6280Port(page, mml, port[0], 0x5, (byte)page.huc6280Pan);
+                OutHuC6280Port(page, mml, port[0], 0x5, (byte)page.spg.huc6280Pan);
                 return;
             }
 
@@ -344,7 +345,7 @@ namespace Core
             SetHuC6280CurrentChannel(mml, page);
             data |= 0x40;
             OutHuC6280Port(page, mml, port[0], 0x4, data);
-            OutHuC6280Port(page, mml, port[0], 0x5, (byte)page.huc6280Pan);
+            OutHuC6280Port(page, mml, port[0], 0x5, (byte)page.spg.huc6280Pan);
 
             if (page.isPcmMap)
             {
@@ -370,12 +371,12 @@ namespace Core
             }
 
             float m = Const.pcmMTbl[page.pcmNote] * (float)Math.Pow(2, (page.pcmOctave - 4));
-            page.pcmBaseFreqPerFreq = Information.VGM_SAMPLE_PER_SECOND / ((float)parent.instPCM[page.instrument].freq * m);
+            page.pcmBaseFreqPerFreq = Information.VGM_SAMPLE_PER_SECOND / ((float)parent.instPCM[page.instrument].Item2.freq * m);
             page.pcmFreqCountBuffer = 0.0f;
-            long p = parent.instPCM[page.instrument].stAdr;
+            long p = parent.instPCM[page.instrument].Item2.stAdr;
 
-            long s = parent.instPCM[page.instrument].size;
-            long f = parent.instPCM[page.instrument].freq;
+            long s = parent.instPCM[page.instrument].Item2.size;
+            long f = parent.instPCM[page.instrument].Item2.freq;
             long w = 0;
             if (page.gatetimePmode)
             {
@@ -469,9 +470,9 @@ namespace Core
                 , (byte)((s & 0xff000000) / 0x10000)
                 );
 
-            if (parent.instPCM[page.instrument].status != enmPCMSTATUS.ERROR)
+            if (parent.instPCM[page.instrument].Item2.status != enmPCMSTATUS.ERROR)
             {
-                parent.instPCM[page.instrument].status = enmPCMSTATUS.USED;
+                parent.instPCM[page.instrument].Item2.status = enmPCMSTATUS.USED;
             }
 
         }
@@ -818,7 +819,7 @@ namespace Core
                 return;
             }
 
-            if (parent.instPCM[n].chip != enmChipType.HuC6280)
+            if (parent.instPCM[n].Item2.chip != enmChipType.HuC6280)
             {
                 msgBox.setErrMsg(string.Format(msg.get("E12006"), n), mml.line.Lp);
             }
@@ -910,16 +911,16 @@ namespace Core
         }
 
 
-        public override string DispRegion(clsPcm pcm)
+        public override string DispRegion(Tuple<string, clsPcm> pcm)
         {
             return string.Format("{0,-10} {1,-7} {2,-5:D3} N/A  ${3,-7:X6} ${4,-7:X6} N/A      ${5,-7:X6}  NONE {6}\r\n"
                 , Name
-                , pcm.chipNumber != 0 ? "SEC" : "PRI"
-                , pcm.num
-                , pcm.stAdr & 0xffffff
-                , pcm.edAdr & 0xffffff
-                , pcm.size
-                , pcm.status.ToString()
+                , pcm.Item2.chipNumber != 0 ? "SEC" : "PRI"
+                , pcm.Item2.num
+                , pcm.Item2.stAdr & 0xffffff
+                , pcm.Item2.edAdr & 0xffffff
+                , pcm.Item2.size
+                , pcm.Item2.status.ToString()
                 );
         }
 

@@ -140,7 +140,7 @@ namespace Core
 
         protected virtual void SetInst1Operator(partPage page, MML mml, int n, int modeBeforeSend, int opeNum)
         {
-            byte[] inst = parent.instFM[n];
+            byte[] inst = parent.instFM[n].Item2;
             int targetBaseReg = (opeNum / 6) * 8 + (opeNum % 6);
             byte[] port = this.port[opeNum / 18];
             int ope = (opeNum % 6) / 3;
@@ -192,7 +192,7 @@ namespace Core
 
         protected virtual void SetInst2Operator(partPage page, MML mml, int n, int modeBeforeSend, int vch)
         {
-            byte[] inst = parent.instFM[n];
+            byte[] inst = parent.instFM[n].Item2;
             byte targetBaseReg = ChnToBaseReg(vch);
             byte[] port = getPortFromCh(vch);
 
@@ -257,7 +257,7 @@ namespace Core
                 return;
             }
 
-            byte[] inst = parent.instFM[n];
+            byte[] inst = parent.instFM[n].Item2;
             byte targetBaseReg = ChnToBaseReg(vch);
             byte[] port = getPortFromCh(vch);
 
@@ -694,7 +694,7 @@ namespace Core
                             page.beforeVolume = page.volume;
 
 
-                            int cnt = parent.instFM[page.instrument][25];
+                            int cnt = parent.instFM[page.instrument].Item2[25];
                             if (cnt != 0)
                             {
                                 //OP1
@@ -703,8 +703,8 @@ namespace Core
                                     port[0],
                                     (byte)(0x40 + ChnToBaseReg(page.ch) + 0),
                                     (byte)(
-                                            ((parent.instFM[page.instrument][12 * 0 + 5] & 0x3) << 6)  //KL(M)
-                                            | Common.CheckRange(((parent.instFM[page.instrument][12 * 0 + 6] & 0x3f) + (63 - (page.volume & 0x3f))), 0, 63) //TL
+                                            ((parent.instFM[page.instrument].Item2[12 * 0 + 5] & 0x3) << 6)  //KL(M)
+                                            | Common.CheckRange(((parent.instFM[page.instrument].Item2[12 * 0 + 6] & 0x3f) + (63 - (page.volume & 0x3f))), 0, 63) //TL
                                         )
                                     );
                             }
@@ -714,8 +714,8 @@ namespace Core
                                 port[0],
                                 (byte)(0x40 + ChnToBaseReg(page.ch) + 3),
                                 (byte)(
-                                        ((parent.instFM[page.instrument][12 * 1 + 5] & 0x3) << 6)  //KL(M)
-                                        | Common.CheckRange(((parent.instFM[page.instrument][12 * 1 + 6] & 0x3f) + (63 - (page.volume & 0x3f))), 0, 63) //TL
+                                        ((parent.instFM[page.instrument].Item2[12 * 1 + 5] & 0x3) << 6)  //KL(M)
+                                        | Common.CheckRange(((parent.instFM[page.instrument].Item2[12 * 1 + 6] & 0x3f) + (63 - (page.volume & 0x3f))), 0, 63) //TL
                                     )
                                 );
                         }
@@ -756,7 +756,7 @@ namespace Core
                             {
                                 int vch = 6;
 
-                                int cnt = parent.instFM[page.instrument][25];
+                                int cnt = parent.instFM[page.instrument].Item2[25];
                                 if (cnt != 0)
                                 {
                                     //OP1
@@ -765,8 +765,8 @@ namespace Core
                                         port[0],
                                         (byte)(0x40 + ChnToBaseReg(vch) + 0),
                                         (byte)(
-                                                ((parent.instFM[page.instrument][12 * 0 + 5] & 0x3) << 6)  //KL(M)
-                                                | Common.CheckRange(((parent.instFM[page.instrument][12 * 0 + 6] & 0x3f) + (63 - (page.volume & 0x3f))), 0, 63) //TL
+                                                ((parent.instFM[page.instrument].Item2[12 * 0 + 5] & 0x3) << 6)  //KL(M)
+                                                | Common.CheckRange(((parent.instFM[page.instrument].Item2[12 * 0 + 6] & 0x3f) + (63 - (page.volume & 0x3f))), 0, 63) //TL
                                             )
                                         );
                                 }
@@ -776,8 +776,8 @@ namespace Core
                                     port[0],
                                     (byte)(0x40 + ChnToBaseReg(vch) + 3),
                                     (byte)(
-                                            ((parent.instFM[page.instrument][12 * 1 + 5] & 0x3) << 6)  //KL(M)
-                                            | Common.CheckRange(((parent.instFM[page.instrument][12 * 1 + 6] & 0x3f) + (63 - (page.volume & 0x3f))), 0, 63) //TL
+                                            ((parent.instFM[page.instrument].Item2[12 * 1 + 5] & 0x3) << 6)  //KL(M)
+                                            | Common.CheckRange(((parent.instFM[page.instrument].Item2[12 * 1 + 6] & 0x3f) + (63 - (page.volume & 0x3f))), 0, 63) //TL
                                         )
                                     );
                             }
@@ -790,8 +790,8 @@ namespace Core
                                     port[0],
                                     (byte)(0x40 + ChnToBaseReg(vch) + 3),
                                     (byte)(
-                                            ((parent.instFM[page.instrument][12 * 1 + 5] & 0x3) << 6)  //KL(M)
-                                            | Common.CheckRange(((parent.instFM[page.instrument][12 * 1 + 6] & 0x3f) + (63 - (page.volume & 0x3f))), 0, 63) //TL
+                                            ((parent.instFM[page.instrument].Item2[12 * 1 + 5] & 0x3) << 6)  //KL(M)
+                                            | Common.CheckRange(((parent.instFM[page.instrument].Item2[12 * 1 + 6] & 0x3f) + (63 - (page.volume & 0x3f))), 0, 63) //TL
                                         )
                                     );
                             }
@@ -807,8 +807,8 @@ namespace Core
                                         port[0],
                                         (byte)(0x40 + ChnToBaseReg(vch) + 0),
                                         (byte)(
-                                                ((parent.instFM[page.instrument][12 * 0 + 5] & 0x3) << 6)  //KL(M)
-                                                | Common.CheckRange(((parent.instFM[page.instrument][12 * 0 + 6] & 0x3f) + (63 - (page.volume & 0x3f))), 0, 63) //TL
+                                                ((parent.instFM[page.instrument].Item2[12 * 0 + 5] & 0x3) << 6)  //KL(M)
+                                                | Common.CheckRange(((parent.instFM[page.instrument].Item2[12 * 0 + 6] & 0x3f) + (63 - (page.volume & 0x3f))), 0, 63) //TL
                                             )
                                         );
                                 }
@@ -822,8 +822,8 @@ namespace Core
                                     port[0],
                                     (byte)(0x40 + ChnToBaseReg(vch) + 3),
                                     (byte)(
-                                            ((parent.instFM[page.instrument][12 * 1 + 5] & 0x3) << 6)  //KL(M)
-                                            | Common.CheckRange(((parent.instFM[page.instrument][12 * 1 + 6] & 0x3f) + (63 - (page.volume & 0x3f))), 0, 63) //TL
+                                            ((parent.instFM[page.instrument].Item2[12 * 1 + 5] & 0x3) << 6)  //KL(M)
+                                            | Common.CheckRange(((parent.instFM[page.instrument].Item2[12 * 1 + 6] & 0x3f) + (63 - (page.volume & 0x3f))), 0, 63) //TL
                                         )
                                     );
                             }
@@ -839,8 +839,8 @@ namespace Core
                                         port[0],
                                         (byte)(0x40 + ChnToBaseReg(vch) + 0),
                                         (byte)(
-                                                ((parent.instFM[page.instrument][12 * 0 + 5] & 0x3) << 6)  //KL(M)
-                                                | Common.CheckRange(((parent.instFM[page.instrument][12 * 0 + 6] & 0x3f) + (63 - (page.volume & 0x3f))), 0, 63) //TL
+                                                ((parent.instFM[page.instrument].Item2[12 * 0 + 5] & 0x3) << 6)  //KL(M)
+                                                | Common.CheckRange(((parent.instFM[page.instrument].Item2[12 * 0 + 6] & 0x3f) + (63 - (page.volume & 0x3f))), 0, 63) //TL
                                             )
                                         );
                                 }

@@ -95,51 +95,8 @@ namespace Core
                 Disp(string.Format(msg.get("I04000"), "mml2vgm"));
                 Disp("");
 
-                List<Line> src = null;
-
-                //.gwiファイルの読み込み
-                if (!bufferMode)
-                {
-                    Disp(msg.get("I04001"));
-                    srcFn = srcFn.Replace('\\', Path.DirectorySeparatorChar).Replace('/', Path.DirectorySeparatorChar);
-                    if (!File.Exists(srcFn))
-                    {
-                        msgBox.setErrMsg(msg.get("E04000"), new LinePos(srcFn));
-                        return -1;
-                    }
-
-                    Disp(msg.get("I04002"));
-                    //string path = Path.GetDirectoryName(Path.GetFullPath(srcFn));
-                    //wrkPath インクルードファイル取り込み対象パス
-                    srcTxt = File.ReadAllLines(srcFn);
-                }
-
-                //インクルードファイルのマージ
-                src = GetSrc(srcTxt, wrkPath);
-
-                if (src == null)
-                {
-                    msgBox.setErrMsg(msg.get("E04001"), new LinePos(srcFn));
-                    return -1;
-                }
-
-                Disp(msg.get("I04003"));
-                //ざっくりくわけ
-                SourceParser sp = new SourceParser();
-                sp.Parse(src);
-
-                desVGM = new ClsVgm(stPath, sp);
-                desVGM.doSkip = doSkip;
-                desVGM.doSkipStop = doSkipStop;
-                desVGM.caretPoint = caretPoint;
-                desVGM.wrkPath = wrkPath;
-                if (desVGM.Analyze(src) != 0)
-                {
-                    msgBox.setErrMsg(string.Format(
-                        msg.get("E04002")
-                        , desVGM.linePos.row), desVGM.linePos);
-                    return -1;
-                }
+                int ret = Start_Analyze();
+                if (ret != 0) return ret;
 
                 Disp(msg.get("I04004"));
                 //wrkPath PCMファイル取り込み対象パス
@@ -252,6 +209,57 @@ namespace Core
                 Disp(msg.get("I04011"));
                 Disp("");
             }
+        }
+
+        public int Start_Analyze()
+        {
+            List<Line> src = null;
+
+            //.gwiファイルの読み込み
+            if (!bufferMode)
+            {
+                Disp(msg.get("I04001"));
+                srcFn = srcFn.Replace('\\', Path.DirectorySeparatorChar).Replace('/', Path.DirectorySeparatorChar);
+                if (!File.Exists(srcFn))
+                {
+                    msgBox.setErrMsg(msg.get("E04000"), new LinePos(srcFn));
+                    return -1;
+                }
+
+                Disp(msg.get("I04002"));
+                //string path = Path.GetDirectoryName(Path.GetFullPath(srcFn));
+                //wrkPath インクルードファイル取り込み対象パス
+                srcTxt = File.ReadAllLines(srcFn);
+            }
+
+            //インクルードファイルのマージ
+            src = GetSrc(srcTxt, wrkPath);
+
+            if (src == null)
+            {
+                msgBox.setErrMsg(msg.get("E04001"), new LinePos(srcFn));
+                return -1;
+            }
+
+            Disp(msg.get("I04003"));
+            //ざっくりくわけ
+            SourceParser sp = new SourceParser();
+            sp.Parse(src);
+
+            desVGM = new ClsVgm(stPath, sp);
+            desVGM.doSkip = doSkip;
+            desVGM.doSkipStop = doSkipStop;
+            desVGM.caretPoint = caretPoint;
+            desVGM.wrkPath = wrkPath;
+            if (desVGM.Analyze(src) != 0)
+            {
+                msgBox.setErrMsg(string.Format(
+                    msg.get("E04002")
+                    , desVGM.linePos.row), desVGM.linePos);
+                return -1;
+            }
+
+            return 0;
         }
 
         private void OutVgmFile(outDatum[] desBuf)
@@ -621,7 +629,7 @@ namespace Core
 
         private void GetPCMData(string path)
         {
-            Dictionary<int, clsPcm> newDic = new Dictionary<int, clsPcm>();
+            Dictionary<int, Tuple<string, clsPcm>> newDic = new Dictionary<int, Tuple<string, clsPcm>>();
             foreach (clsPcmDatSeq pds in desVGM.instPCMDatSeq)
             {
                 byte[] buf;
@@ -653,7 +661,7 @@ namespace Core
                             , pds.DatLoopAdr
                             , false
                             , 8000);
-                        desVGM.instPCM.Add(pds.No, v);
+                        desVGM.instPCM.Add(pds.No, new Tuple<string, clsPcm>("", v));
 
                         //ファイルの読み込み
                         buf = Common.GetPCMDataFromFile(path, v, out isRaw, out is16bit, out samplerate);
@@ -769,7 +777,7 @@ namespace Core
                             , pds.DatLoopAdr
                             , false
                             , 8000);
-                        desVGM.instPCM.Add(pds.No, v);
+                        desVGM.instPCM.Add(pds.No, new Tuple<string, clsPcm>("", v));
 
                         mucomADPCM2PCM.mucomPCMInfo info = null;
                         for (int i = 0; i < mucomADPCM2PCM.lstMucomPCMInfo.Count; i++)
@@ -854,7 +862,7 @@ namespace Core
                             , false
                             , 8000
                             , pds.Option);
-                        newDic.Add(pds.No, v);
+                        newDic.Add(pds.No, new Tuple<string, clsPcm>("", v));
 
                         break;
                 }
@@ -1028,8 +1036,8 @@ namespace Core
             for (int i = 0; i < 256; i++)
             {
                 if (!desVGM.instPCM.ContainsKey(i)) continue;
-                if (desVGM.instPCM[i].chip != c.chipType) continue;
-                if (desVGM.instPCM[i].chipNumber != c.ChipNumber) continue;
+                if (desVGM.instPCM[i].Item2.chip != c.chipType) continue;
+                if (desVGM.instPCM[i].Item2.chipNumber != c.ChipNumber) continue;
 
                 region += c.DispRegion(desVGM.instPCM[i]);
 
@@ -1038,7 +1046,7 @@ namespace Core
             long tl = 0;
             foreach (int i in desVGM.instPCM.Keys)
             {
-                tl += desVGM.instPCM[i].size;
+                tl += desVGM.instPCM[i].Item2.size;
             }
             region += (string.Format(msg.get("I04018"), tl));
             region += "\r\n";

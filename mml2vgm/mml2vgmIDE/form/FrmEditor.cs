@@ -20,6 +20,7 @@ namespace mml2vgmIDE
         public FrmSien frmSien = null;
         public EnmMmlFileFormat fmt = EnmMmlFileFormat.GWI;
         public int parentID= -1;
+        public object option = null;
 
         public AzukiControl azukiControl;
         public bool forceClose = false;
@@ -850,17 +851,12 @@ namespace mml2vgmIDE
             string line = azukiControl.GetTextInRange(st, ci).TrimStart();
             if (row < 0)
             {
-                if (line != "" && line[0] == '\'' && frmSien != null)
-                {
-                    frmSien.selRow = row;
-                    frmSien.Request(line, ciP, parentID, fmt);
-                }
+                if (line == "" || line[0] != '\'' || frmSien == null)
+                    return;
             }
-            else
-            {
-                frmSien.selRow = row;
-                frmSien.Request(line, ciP, parentID, fmt);
-            }
+
+            frmSien.selRow = row;
+            frmSien.Request(line, ciP, parentID, fmt, option);
         }
 
         private void FrmEditor_FormClosing(object sender, FormClosingEventArgs e)
@@ -1003,6 +999,7 @@ namespace mml2vgmIDE
                             }
 
                             parentID = si.ID;
+                            option = si.description;
                             dispSienForm(0);
                         }
                         break;

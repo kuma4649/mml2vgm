@@ -66,8 +66,7 @@
     ・FM音源向け、PCM音源、波形メモリ音源向けの音色を定義する。PSG音源は除く。
     ・FM音源の音色定義は例外的に定義行が複数行要り、決められた順序で定義が必要。
        例)
-ebass3(from MUSIC LALF @70)
-'@ F 070
+'@ F 070 "ebass3(from MUSIC LALF @70)"
    AR  DR  SR  RR  SL  TL  KS  ML  DT
 '@ 031,018,000,006,002,036,000,010,003
 '@ 031,014,004,006,002,045,000,000,003
@@ -923,7 +922,7 @@ b               -ooooooooooooooooooooooooooooooooooooooooooo  音符シ
     "F"を指定するとパラメータDTまで音色を定義する。
     AM SSGEGは0で定義される。
 
-'@ F No
+'@ F No "Name"
 '@ AR DR SR RR SL TL KS ML DT
 '@ AR DR SR RR SL TL KS ML DT
 '@ AR DR SR RR SL TL KS ML DT
@@ -934,7 +933,7 @@ b               -ooooooooooooooooooooooooooooooooooooooooooo  音符シ
   定義パターン2
     "N"を指定するとパラメータSSGEGまで音色を定義する。
 
-'@ N No
+'@ N No "Name"
 '@ AR DR SR RR SL TL KS ML DT AM SSGEG
 '@ AR DR SR RR SL TL KS ML DT AM SSGEG
 '@ AR DR SR RR SL TL KS ML DT AM SSGEG
@@ -944,7 +943,7 @@ b               -ooooooooooooooooooooooooooooooooooooooooooo  音符シ
   定義パターン3
     "M"を指定した音色をYM2151(OPM)で使用すると以下のように解釈される。
 
-'@ M No
+'@ M No "Name"
 '@ AR DR SR RR SL TL KS ML DT1 DT2 AME
 '@ AR DR SR RR SL TL KS ML DT1 DT2 AME
 '@ AR DR SR RR SL TL KS ML DT1 DT2 AME
@@ -954,7 +953,7 @@ b               -ooooooooooooooooooooooooooooooooooooooooooo  音符シ
   定義パターン4
     "LL"を指定した音色をYM2413(OPLL)で使用すると以下のように解釈される。
 
-'@ LL No
+'@ LL No "Name"
 '@ AR DR SL RR KL MT AM VB EG KR DT
 '@ AR DR SL RR KL MT AM VB EG KR DT
 '@ TL FB
@@ -962,7 +961,7 @@ b               -ooooooooooooooooooooooooooooooooooooooooooo  音符シ
   定義パターン5
     "L"を指定した音色をYMF262(OPL3)で使用すると以下のように解釈される。
 
-'@ L No
+'@ L No "Name"
 '@ AR DR SL RR KSL TL MT AM VIB EGT KSR WS
 '@ AR DR SL RR KSL TL MT AM VIB EGT KSR WS
 '@ CNT FB
@@ -970,7 +969,7 @@ b               -ooooooooooooooooooooooooooooooooooooooooooo  音符シ
   定義パターン6
     "L4"を指定した音色をYMF262(OPL3)で使用すると以下のように解釈される。
 
-'@ L4 No
+'@ L4 No "Name"
 '@ AR DR SL RR KSL TL MT AM VIB EGT KSR WS
 '@ AR DR SL RR KSL TL MT AM VIB EGT KSR WS
 '@ AR DR SL RR KSL TL MT AM VIB EGT KSR WS
@@ -986,7 +985,7 @@ b               -ooooooooooooooooooooooooooooooooooooooooooo  音符シ
                     bit3:Op4  bit2:Op3  bit1:Op2  bit0:Op1
      AL  ALg        -1 を設定するとOPNA2は上記のALLでアルゴリズムを編集できるモードになる。
      PR  PhaseReset 0:デフォルト 1:KeyOn時に必ず位相がリセットされる
-'@ A No
+'@ A No "Name"
 '@ AR DR SR RR SL TL KS ML DT1 DT2 AM SSGEG FB WT ALL PR
 '@ AR DR SR RR SL TL KS ML DT1 DT2 AM SSGEG FB WT ALL PR
 '@ AR DR SR RR SL TL KS ML DT1 DT2 AM SSGEG FB WT ALL PR
@@ -1233,13 +1232,13 @@ FM1Chで指定の音程2音を同時に出力することを主な目的とし�
 
 (5) 基本波形定義(FM)
   YM2609はFMの合成に使用される基本波形を編集することが可能です。
-'@ W No , val1, ... val1024
+'@ W No ,"Name", val1, ... val1024
     No          定義番号(0-3)
     valn        波形データ($0-$FFFF) 1024個の定義が必要。複数行に分けてもよい。
 
 (6) 基本波形定義(SSG)
   YM2609はSSGの波形を編集することが可能です。
-'@ WS No , val1, ... val32
+'@ WS No ,"Name", val1, ... val32
     No          定義番号(0-255)
     valn        波形データ($00-$0F) 32個の定義が必要。複数行に分けてもよい。
 

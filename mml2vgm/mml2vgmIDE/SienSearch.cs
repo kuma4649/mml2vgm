@@ -11,7 +11,7 @@ namespace mml2vgmIDE
     {
         private Sien sien;
         private List<SienItem> found = new List<SienItem>();
-        private Tuple<string, Action<List<SienItem>>, int, string> req;
+        private Tuple<string, Action<List<SienItem>>, int, string, object> req;
         private object lockObj = new object();
         private CancellationTokenSource tokenSource;
         private CancellationToken cancellationToken;
@@ -19,6 +19,7 @@ namespace mml2vgmIDE
         private string reqText;
         private int reqParentID = -1;
         private string reqMMLFileFormat = "";
+        private object reqOption = null;
         private Action<List<SienItem>> reqCallback;
 
         public SienSearch(string filename)
@@ -53,6 +54,7 @@ namespace mml2vgmIDE
                         reqCallback = req.Item2;
                         reqParentID = req.Item3;
                         reqMMLFileFormat = req.Item4;
+                        reqOption = req.Item5;
                         req = null;
                     }
                     Search();
@@ -66,11 +68,11 @@ namespace mml2vgmIDE
         /// </summary>
         /// <param name="text">検索文字</param>
         /// <param name="callback">検索後に実行したいメソッド(別スレッドで呼ばれるので注意)</param>
-        public void Request(string text, Action<List<SienItem>> callback,int parentID,string MMLFormat)
+        public void Request(string text, Action<List<SienItem>> callback,int parentID,string MMLFormat,object option)
         {
             lock (lockObj)
             {
-                req = new Tuple<string, Action<List<SienItem>>, int, string>(text, callback, parentID, MMLFormat);
+                req = new Tuple<string, Action<List<SienItem>>, int, string, object>(text, callback, parentID, MMLFormat, option);
             }
         }
 
@@ -108,10 +110,12 @@ namespace mml2vgmIDE
                                 break;
                             }
                         }
+                        if (reqOption != null) si.description = reqOption.ToString();
                         break;
 
                 }
             }
+            if (found.Count < 1) reqParentID = -1;
             reqCallback?.Invoke(found);
         }
 

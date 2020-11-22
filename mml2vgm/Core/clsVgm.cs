@@ -38,16 +38,16 @@ namespace Core
         public Dictionary<enmChipType, ClsChip[]> chips;
 
 
-        public Dictionary<int, byte[]> instFM = new Dictionary<int, byte[]>();
-        public Dictionary<int, int[]> instENV = new Dictionary<int, int[]>();
-        public Dictionary<int, clsPcm> instPCM = new Dictionary<int, clsPcm>();
+        public Dictionary<int, Tuple<string, byte[]>> instFM = new Dictionary<int, Tuple<string, byte[]>>();
+        public Dictionary<int, Tuple<string, int[]>> instENV = new Dictionary<int, Tuple<string, int[]>>();
+        public Dictionary<int, Tuple<string, clsPcm>> instPCM = new Dictionary<int, Tuple<string, clsPcm>>();
         public List<clsPcmDatSeq> instPCMDatSeq = new List<clsPcmDatSeq>();
         public Dictionary<int, Dictionary<int, int>> instPCMMap = new Dictionary<int, Dictionary<int, int>>();
         public Dictionary<int, clsToneDoubler> instToneDoubler = new Dictionary<int, clsToneDoubler>();
-        public Dictionary<int, byte[]> instWF = new Dictionary<int, byte[]>();
-        public Dictionary<int, ushort[]> instOPNA2WF = new Dictionary<int, ushort[]>();
-        public Dictionary<int, byte[]> instOPNA2WFS = new Dictionary<int, byte[]>();
-        public Dictionary<int, byte[]> midiSysEx = new Dictionary<int, byte[]>();
+        public Dictionary<int, Tuple<string, byte[]>> instWF = new Dictionary<int, Tuple<string, byte[]>>();
+        public Dictionary<int, Tuple<string, ushort[]>> instOPNA2WF = new Dictionary<int, Tuple<string, ushort[]>>();
+        public Dictionary<int, Tuple<string, byte[]>> instOPNA2WFS = new Dictionary<int, Tuple<string, byte[]>>();
+        public Dictionary<int, Tuple<string, byte[]>> midiSysEx = new Dictionary<int, Tuple<string, byte[]>>();
         public Dictionary<int, MmlDatum[]> instArp = new Dictionary<int, MmlDatum[]>();
         public Dictionary<int, MmlDatum[]> instCommandArp = new Dictionary<int, MmlDatum[]>();
 
@@ -57,6 +57,7 @@ namespace Core
         public Dictionary<string, Line> aliesData = new Dictionary<string, Line>();
 
         private int instrumentCounter = -1;
+        private string instrumentName;
         private byte[] instrumentBufCache = new byte[Const.INSTRUMENT_SIZE];
         private int toneDoublerCounter = -1;
         private List<int> toneDoublerBufCache = new List<int>();
@@ -613,6 +614,7 @@ namespace Core
                 }
             }
 
+            instrumentName = "";
             switch (t)
             {
                 case 'F':
@@ -713,7 +715,7 @@ namespace Core
                         {
                             instENV.Remove(num);
                         }
-                        instENV.Add(num, env);
+                        instENV.Add(num, new Tuple<string, int[]>("", env));
                     }
                     catch
                     {
@@ -861,7 +863,7 @@ namespace Core
                     {
                         instFM.Remove(num + p / 32);
                     }
-                    instFM.Add(num + p / 32, ConvertMUCOM88toM(num, voi));
+                    instFM.Add(num + p / 32, new Tuple<string, byte[]>("", ConvertMUCOM88toM(num, voi)));
                 }
 
                 return;
@@ -923,7 +925,7 @@ namespace Core
                 {
                     instFM.Remove(num);
                 }
-                instFM.Add(num, ConvertTFItoM(num, buf));
+                instFM.Add(num, new Tuple<string, byte[]>("", ConvertTFItoM(num, buf)));
 
                 return;
             }
@@ -1563,7 +1565,9 @@ namespace Core
 
             try
             {
-                instrumentCounter = GetNums(instrumentBufCache, instrumentCounter, CutComment(line.Txt).Substring(1).TrimStart());
+                string name = "";
+                instrumentCounter = GetNums(instrumentBufCache, instrumentCounter, CutComment(line.Txt).Substring(1).TrimStart(), ref name);
+                if (string.IsNullOrEmpty(instrumentName)) instrumentName = name;//音色名
 
                 if (instrumentCounter == instrumentBufCache.Length)
                 {
@@ -1577,30 +1581,30 @@ namespace Core
                     if (instrumentBufCache.Length == Const.INSTRUMENT_SIZE)
                     {
                         //M
-                        instFM.Add(instrumentBufCache[0], instrumentBufCache);
+                        instFM.Add(instrumentBufCache[0],new Tuple<string, byte[]>(instrumentName, instrumentBufCache));
                     }
                     else if (instrumentBufCache.Length == Const.OPLL_INSTRUMENT_SIZE)
                     {
                         //OPL
-                        instFM.Add(instrumentBufCache[0], instrumentBufCache);
+                        instFM.Add(instrumentBufCache[0], new Tuple<string, byte[]>(instrumentName, instrumentBufCache));
                     }
                     else if (instrumentBufCache.Length == Const.OPL3_INSTRUMENT_SIZE)
                     {
-                        instFM.Add(instrumentBufCache[0], instrumentBufCache);
+                        instFM.Add(instrumentBufCache[0], new Tuple<string, byte[]>(instrumentName, instrumentBufCache));
                     }
                     else if (instrumentBufCache.Length == Const.OPL_OP4_INSTRUMENT_SIZE)
                     {
-                        instFM.Add(instrumentBufCache[0], instrumentBufCache);
+                        instFM.Add(instrumentBufCache[0], new Tuple<string, byte[]>(instrumentName, instrumentBufCache));
                     }
                     else if (instrumentBufCache.Length == Const.OPNA2_INSTRUMENT_SIZE)
                     {
                         //OPNA2
-                        instFM.Add(instrumentBufCache[0], instrumentBufCache);
+                        instFM.Add(instrumentBufCache[0], new Tuple<string, byte[]>(instrumentName, instrumentBufCache));
                     }
                     else
                     {
                         //F
-                        instFM.Add(instrumentBufCache[0], ConvertFtoM(instrumentBufCache));
+                        instFM.Add(instrumentBufCache[0], new Tuple<string, byte[]>(instrumentName, ConvertFtoM(instrumentBufCache)));
                     }
 
                     instrumentCounter = -1;
@@ -1619,7 +1623,9 @@ namespace Core
 
             try
             {
-                wfInstrumentCounter = GetNums(wfInstrumentBufCache, wfInstrumentCounter, CutComment(line.Txt).Substring(1).TrimStart());
+                string name = "";
+                wfInstrumentCounter = GetNums(wfInstrumentBufCache, wfInstrumentCounter, CutComment(line.Txt).Substring(1).TrimStart(), ref name);
+                if (string.IsNullOrEmpty(instrumentName)) instrumentName = name;//音色名
 
                 if (wfInstrumentCounter == wfInstrumentBufCache.Length)
                 {
@@ -1627,7 +1633,7 @@ namespace Core
                     {
                         instWF.Remove(wfInstrumentBufCache[0]);
                     }
-                    instWF.Add(wfInstrumentBufCache[0], wfInstrumentBufCache);
+                    instWF.Add(wfInstrumentBufCache[0], new Tuple<string, byte[]>(instrumentName, wfInstrumentBufCache));
 
                     wfInstrumentCounter = -1;
                 }
@@ -1645,7 +1651,9 @@ namespace Core
 
             try
             {
-                opna2wfInstrumentCounter = GetNums2(opna2WfInstrumentBufCache, opna2wfInstrumentCounter, CutComment(line.Txt).Substring(1).TrimStart());
+                string name="";
+                opna2wfInstrumentCounter = GetNums2(opna2WfInstrumentBufCache, opna2wfInstrumentCounter, CutComment(line.Txt).Substring(1).TrimStart(),ref name);
+                if (string.IsNullOrEmpty(instrumentName)) instrumentName = name;//音色名
 
                 if (opna2wfInstrumentCounter == opna2WfInstrumentBufCache.Length)
                 {
@@ -1653,7 +1661,7 @@ namespace Core
                     {
                         instOPNA2WF.Remove(opna2WfInstrumentBufCache[0]);
                     }
-                    instOPNA2WF.Add(opna2WfInstrumentBufCache[0], opna2WfInstrumentBufCache);
+                    instOPNA2WF.Add(opna2WfInstrumentBufCache[0], new Tuple<string, ushort[]>(instrumentName, opna2WfInstrumentBufCache));
 
                     opna2wfInstrumentCounter = -1;
                 }
@@ -1671,7 +1679,9 @@ namespace Core
 
             try
             {
-                opna2wfsInstrumentCounter = GetNums(opna2WfsInstrumentBufCache, opna2wfsInstrumentCounter, CutComment(line.Txt).Substring(1).TrimStart());
+                string name = "";
+                opna2wfsInstrumentCounter = GetNums(opna2WfsInstrumentBufCache, opna2wfsInstrumentCounter, CutComment(line.Txt).Substring(1).TrimStart(), ref name);
+                if (string.IsNullOrEmpty(instrumentName)) instrumentName = name;//音色名
 
                 if (opna2wfsInstrumentCounter == opna2WfsInstrumentBufCache.Length)
                 {
@@ -1679,7 +1689,7 @@ namespace Core
                     {
                         instOPNA2WFS.Remove(opna2WfsInstrumentBufCache[0]);
                     }
-                    instOPNA2WFS.Add(opna2WfsInstrumentBufCache[0], opna2WfsInstrumentBufCache);
+                    instOPNA2WFS.Add(opna2WfsInstrumentBufCache[0], new Tuple<string, byte[]>(instrumentName, opna2WfsInstrumentBufCache));
 
                     opna2wfsInstrumentCounter = -1;
                 }
@@ -1692,15 +1702,16 @@ namespace Core
             return 0;
         }
 
-        private int GetNums(byte[] aryBuf, int aryIndex, string vals)
+        private int GetNums(byte[] aryBuf, int aryIndex, string vals,ref string name)
         {
             string n = "";
             string h = "";
             int hc = -1;
             int i = 0;
 
-            foreach (char c in vals)
+            for (int ind=0;ind<vals.Length;ind++)
             {
+                char c = vals[ind];
                 if (c == '$')
                 {
                     hc = 0;
@@ -1728,6 +1739,19 @@ namespace Core
                     continue;
                 }
 
+                if (c == '"')
+                {
+                    name = "";
+                    int j = ind + 1;
+                    for (; j < vals.Length && vals[j] != '"'; j++)
+                    {
+                        name += vals[j];
+                    }
+                    ind = j;
+                    n = "";
+                    continue;
+                }
+
                 if (int.TryParse(n, out i))
                 {
                     aryBuf[aryIndex] = (byte)(i & 0xff);
@@ -1749,15 +1773,16 @@ namespace Core
             return aryIndex;
         }
 
-        private int GetNums2(ushort[] aryBuf, int aryIndex, string vals)
+        private int GetNums2(ushort[] aryBuf, int aryIndex, string vals, ref string name)
         {
             string n = "";
             string h = "";
             int hc = -1;
             int i = 0;
 
-            foreach (char c in vals)
+            for (int ind = 0; ind < vals.Length; ind++)
             {
+                char c = vals[ind];
                 if (c == '$')
                 {
                     hc = 0;
@@ -1785,6 +1810,19 @@ namespace Core
                     continue;
                 }
 
+                if (c == '"')
+                {
+                    name = "";
+                    int j = ind + 1;
+                    for (; j < vals.Length && vals[j] != '"'; j++)
+                    {
+                        name += vals[j];
+                    }
+                    ind = j;
+                    n = "";
+                    continue;
+                }
+
                 if (int.TryParse(n, out i))
                 {
                     aryBuf[aryIndex] = (ushort)(i & 0xffff);
@@ -1806,7 +1844,7 @@ namespace Core
             return aryIndex;
         }
 
-        private List<byte> GetNums(int ptr, string vals)
+        private List<byte> GetNums(int ptr, string vals, ref string name)
         {
             List<byte> lstBuf = new List<byte>();
             string n = "";
@@ -1815,8 +1853,9 @@ namespace Core
             int i = 0;
             int p = 0;
 
-            foreach (char c in vals)
+            for (int ind = 0; ind < vals.Length; ind++)
             {
+                char c = vals[ind];
                 p++;
                 if (p <= ptr) continue;
 
@@ -1846,6 +1885,19 @@ namespace Core
                     continue;
                 }
 
+                if (c == '"')
+                {
+                    name = "";
+                    int j = ind + 1;
+                    for (; j < vals.Length && vals[j] != '"'; j++)
+                    {
+                        name += vals[j];
+                    }
+                    ind = j;
+                    n = "";
+                    continue;
+                }
+
                 if (int.TryParse(n, out i))
                 {
                     lstBuf.Add((byte)(i & 0xff));
@@ -1865,6 +1917,9 @@ namespace Core
             return lstBuf;
         }
 
+        /// <summary>
+        /// ARP専用
+        /// </summary>
         private List<MmlDatum> GetNumsInt(int ptr, string vals)
         {
             List<MmlDatum> lstBuf = new List<MmlDatum>();
@@ -1959,6 +2014,9 @@ namespace Core
             return lstBuf;
         }
 
+        /// <summary>
+        /// Command ARP専用
+        /// </summary>
         private List<MmlDatum> GetNumsIntCommandArp(int ptr, string anavals, int sin = 0, enmMMLType defaultMMLType = enmMMLType.Instrument)
         {
             //wordのリストを作成する
@@ -2259,24 +2317,27 @@ namespace Core
         {
             try
             {
+                string name = "";
                 List<byte> buf = null;
                 if (midiSysExCounter == 0)
                 {
-                    buf = GetNums(CutComment(line.Txt).IndexOf('S') + 1, CutComment(line.Txt));
+                    buf = GetNums(CutComment(line.Txt).IndexOf('S') + 1, CutComment(line.Txt), ref name);
+                    if (string.IsNullOrEmpty(instrumentName)) instrumentName = name;//音色名
                     midiSysExCounter = buf[0] + 1;
                     if (midiSysEx.ContainsKey(buf[0]))
                     {
                         midiSysEx.Remove(buf[0]);
                     }
-                    midiSysEx.Add(buf[0], buf.ToArray());
+                    midiSysEx.Add(buf[0], new Tuple<string, byte[]>(instrumentName, buf.ToArray()));
                 }
                 else
                 {
-                    buf = GetNums(CutComment(line.Txt).IndexOf('@') + 1, CutComment(line.Txt));
-                    List<byte> ebuf = midiSysEx[midiSysExCounter - 1].ToList();
+                    buf = GetNums(CutComment(line.Txt).IndexOf('@') + 1, CutComment(line.Txt), ref name);
+                    if (string.IsNullOrEmpty(instrumentName)) instrumentName = name;//音色名
+                    List<byte> ebuf = midiSysEx[midiSysExCounter - 1].Item2.ToList();
                     ebuf.AddRange(buf);
                     midiSysEx.Remove(midiSysExCounter - 1);
-                    midiSysEx.Add(midiSysExCounter - 1, ebuf.ToArray());
+                    midiSysEx.Add(midiSysExCounter - 1, new Tuple<string, byte[]>(instrumentName, ebuf.ToArray()));
                 }
             }
             catch { }
@@ -3538,18 +3599,18 @@ namespace Core
             //$0004               Sample id table
             uint ptr = 0;
             int n = 4;
-            foreach (clsPcm p in instPCM.Values)
+            foreach (Tuple<string, clsPcm> p in instPCM.Values)
             {
-                if (p.chip != enmChipType.YM2612X) continue;
+                if (p.Item2.chip != enmChipType.YM2612X) continue;
 
                 uint stAdr = ptr;
-                uint size = (uint)p.size;
+                uint size = (uint)p.Item2.size;
                 //if (size > (uint)p.xgmMaxSampleCount + 1)
                 //{
                 //size = (uint)p.xgmMaxSampleCount + 1;
                 //size = (uint)((size & 0xffff00) + (size % 0x100 != 0 ? 0x100 : 0x0));
                 //}
-                p.size = size;
+                p.Item2.size = size;
 
                 xdat[n + 0] = new outDatum(enmMMLType.unknown, null, null, (byte)((stAdr / 256) & 0xff));
                 xdat[n + 1] = new outDatum(enmMMLType.unknown, null, null, (byte)(((stAdr / 256) & 0xff00) >> 8));
@@ -3578,13 +3639,13 @@ namespace Core
             //$0104               Sample data block
             if (ym2612x != null && ym2612x[0] != null && ym2612x[0].pcmDataEasy != null)
             {
-                foreach (clsPcm p in instPCM.Values)
+                foreach (Tuple<string, clsPcm> p in instPCM.Values)
                 {
-                    if (p.chip != enmChipType.YM2612X) continue;
+                    if (p.Item2.chip != enmChipType.YM2612X) continue;
 
-                    for (uint cnt = 0; cnt < p.size; cnt++)
+                    for (uint cnt = 0; cnt < p.Item2.size; cnt++)
                     {
-                        xdat.Add(new outDatum(enmMMLType.unknown, null, null, ym2612x[0].pcmDataEasy[p.stAdr + cnt]));
+                        xdat.Add(new outDatum(enmMMLType.unknown, null, null, ym2612x[0].pcmDataEasy[p.Item2.stAdr + cnt]));
                     }
 
                 }

@@ -114,7 +114,7 @@ namespace Core
 
         }
 
-        public override void StorePcm(Dictionary<int, clsPcm> newDic, KeyValuePair<int, clsPcm> v, byte[] buf, bool is16bit, int samplerate, params object[] option)
+        public override void StorePcm(Dictionary<int,Tuple<string, clsPcm>> newDic, KeyValuePair<int, clsPcm> v, byte[] buf, bool is16bit, int samplerate, params object[] option)
         {
             clsPcmDataInfo pi = pcmDataInfo[0];
 
@@ -185,7 +185,7 @@ namespace Core
 
                 newDic.Add(
                     v.Key
-                    , new clsPcm(
+                    ,new Tuple<string, clsPcm>("", new clsPcm(
                         v.Value.num
                         , v.Value.seqNum, v.Value.chip
                         , v.Value.chipNumber
@@ -198,15 +198,15 @@ namespace Core
                         , (v.Value.loopAdr == -1 ? v.Value.loopAdr : (v.Value.loopAdr + freeAdr))
                         , is16bit
                         , samplerate)
-                    );
+                    ));
 
-                if (newDic[v.Key].loopAdr != -1 && (v.Value.loopAdr < 0 || v.Value.loopAdr >= size))
+                if (newDic[v.Key].Item2.loopAdr != -1 && (v.Value.loopAdr < 0 || v.Value.loopAdr >= size))
                 {
                     msgBox.setErrMsg(string.Format(msg.get("E22000")
-                        , newDic[v.Key].loopAdr
+                        , newDic[v.Key].Item2.loopAdr
                         , size - 1), new LinePos("-"));
-                    newDic[v.Key].loopAdr = -1;
-                    newDic[v.Key].status = enmPCMSTATUS.ERROR;
+                    newDic[v.Key].Item2.loopAdr = -1;
+                    newDic[v.Key].Item2.status = enmPCMSTATUS.ERROR;
                 }
 
                 if (freeAdr == pi.totalBufPtr)
@@ -240,7 +240,7 @@ namespace Core
             catch
             {
                 pi.use = false;
-                newDic[v.Key].status = enmPCMSTATUS.ERROR;
+                newDic[v.Key].Item2.status = enmPCMSTATUS.ERROR;
             }
         }
 
@@ -249,19 +249,19 @@ namespace Core
             throw new NotImplementedException();
         }
 
-        public override string DispRegion(clsPcm pcm)
+        public override string DispRegion(Tuple<string, clsPcm> pcm)
         {
             return string.Format("{0,-10} {1,-7} {2,-5:D3} {3,-4:D2} ${4,-7:X4} ${5,-7:X4} {6} ${7,-7:X4}  {8,4} {9}\r\n"
                 , Name //0
-                , pcm.chipNumber != 0 ? "SEC" : "PRI" //1
-                , pcm.num //2
-                , pcm.stAdr >> 16 //3
-                , pcm.stAdr & 0xffff //4
-                , pcm.edAdr & 0xffff //5
-                , pcm.loopAdr == -1 ? "N/A     " : string.Format("${0,-7:X4}", (pcm.loopAdr & 0xffff)) //6
-                , pcm.size //7
+                , pcm.Item2.chipNumber != 0 ? "SEC" : "PRI" //1
+                , pcm.Item2.num //2
+                , pcm.Item2.stAdr >> 16 //3
+                , pcm.Item2.stAdr & 0xffff //4
+                , pcm.Item2.edAdr & 0xffff //5
+                , pcm.Item2.loopAdr == -1 ? "N/A     " : string.Format("${0,-7:X4}", (pcm.Item2.loopAdr & 0xffff)) //6
+                , pcm.Item2.size //7
                 , "NONE" //mode //8
-                , pcm.status.ToString() //9
+                , pcm.Item2.status.ToString() //9
                 );
         }
 
@@ -376,9 +376,9 @@ namespace Core
             adr = (byte)((page.ch << 3) + 0x03);
             data = (ushort)0x8000;
 
-            if (parent.instPCM[page.instrument].status != enmPCMSTATUS.ERROR)
+            if (parent.instPCM[page.instrument].Item2.status != enmPCMSTATUS.ERROR)
             {
-                parent.instPCM[page.instrument].status = enmPCMSTATUS.USED;
+                parent.instPCM[page.instrument].Item2.status = enmPCMSTATUS.USED;
             }
 
             OutQSoundPort(mml, port[0], page
@@ -452,10 +452,10 @@ namespace Core
                     return 0;
                 }
 
-                double freq = (double)parent.instPCM[page.instrument].samplerate;
-                if (parent.instPCM[page.instrument].freq != -1)
+                double freq = (double)parent.instPCM[page.instrument].Item2.samplerate;
+                if (parent.instPCM[page.instrument].Item2.freq != -1)
                 {
-                    freq = (double)parent.instPCM[page.instrument].freq;
+                    freq = (double)parent.instPCM[page.instrument].Item2.freq;
                 }
 
                 return (int)(
@@ -614,7 +614,7 @@ namespace Core
                 return;
             }
 
-            if (parent.instPCM[n].chip != enmChipType.QSound)
+            if (parent.instPCM[n].Item2.chip != enmChipType.QSound)
             {
                 msgBox.setErrMsg(string.Format(msg.get("E22004"), n)
                     , mml.line.Lp);
@@ -622,11 +622,11 @@ namespace Core
             }
 
             page.instrument = n;
-            page.pcmStartAddress = (int)parent.instPCM[n].stAdr;
-            page.pcmEndAddress = (int)parent.instPCM[n].edAdr;
-            page.pcmLoopAddress = (int)parent.instPCM[n].loopAdr;
+            page.pcmStartAddress = (int)parent.instPCM[n].Item2.stAdr;
+            page.pcmEndAddress = (int)parent.instPCM[n].Item2.edAdr;
+            page.pcmLoopAddress = (int)parent.instPCM[n].Item2.loopAdr;
             page.beforepcmLoopAddress = -1;
-            page.pcmBank = (int)((parent.instPCM[n].stAdr >> 16));
+            page.pcmBank = (int)((parent.instPCM[n].Item2.stAdr >> 16));
             SetDummyData(page, mml);
 
         }
