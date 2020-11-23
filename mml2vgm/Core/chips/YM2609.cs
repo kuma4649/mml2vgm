@@ -1173,8 +1173,8 @@ namespace Core
             }
             else
             {
-                r = Common.CheckRange(n, 0, 4);
-                l = Common.CheckRange((int)mml.args[1], 0, 4);
+                l = Common.CheckRange(n, 0, 4);
+                r = Common.CheckRange((int)mml.args[1], 0, 4);
                 n = (l != 0 ? 2 : 0) | (r != 0 ? 1 : 0);
             }
 
