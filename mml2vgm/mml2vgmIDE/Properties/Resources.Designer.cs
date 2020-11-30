@@ -468,6 +468,24 @@ namespace mml2vgmIDE.Properties {
         }
         
         /// <summary>
+        ///   Fade out に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string lblF9_FadeOut {
+            get {
+                return ResourceManager.GetString("lblF9_FadeOut", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Stop に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string lblF9_Stop {
+            get {
+                return ResourceManager.GetString("lblF9_Stop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
         /// </summary>
         internal static System.Drawing.Bitmap LineCursor {

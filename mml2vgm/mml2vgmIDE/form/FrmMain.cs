@@ -959,7 +959,7 @@ namespace mml2vgmIDE
 
         private void TssbStop_ButtonClick(object sender, EventArgs e)
         {
-            stop();
+stop();
         }
 
         private void TssbFast_ButtonClick(object sender, EventArgs e)
@@ -1049,6 +1049,9 @@ namespace mml2vgmIDE
                         return true;
                     case (int)Setting.ShortCutKey.enmContent.Pause:
                         pause();
+                        return true;
+                    case (int)Setting.ShortCutKey.enmContent.FadeOut:
+                        fadeOut();
                         return true;
                     case (int)Setting.ShortCutKey.enmContent.Stop:
                         stop();
@@ -1221,6 +1224,7 @@ namespace mml2vgmIDE
                 + (alt ? Properties.Resources.lblF5_JSolo : "")
                 + Properties.Resources.lblF5_Play;
 
+            tssbStop.Text = (shift ? Properties.Resources.lblF9_FadeOut : Properties.Resources.lblF9_Stop);
             //switch (e.KeyCode)
             //{
             //    //case Keys.F5:
@@ -1245,6 +1249,7 @@ namespace mml2vgmIDE
                 + (alt ? Properties.Resources.lblF5_JSolo : "")
                 + Properties.Resources.lblF5_Play;
 
+            tssbStop.Text = (shift ? Properties.Resources.lblF9_FadeOut : Properties.Resources.lblF9_Stop);
         }
 
 
@@ -2996,8 +3001,24 @@ namespace mml2vgmIDE
             Audio.Pause();
         }
 
+        public void fadeOut()
+        {
+            if (Audio.isPaused)
+            {
+                Audio.Pause();
+            }
+
+            Audio.Fadeout();
+        }
+
         public void stop()
         {
+            if (shift)
+            {
+                fadeOut();
+                return;
+            }
+            
             if (Audio.isPaused)
             {
                 Audio.Pause();

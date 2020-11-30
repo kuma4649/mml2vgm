@@ -129,4 +129,10 @@
   <data name="lblF5_Trace" xml:space="preserve">
     <value>トレース+</value>
   </data>
+  <data name="lblF9_FadeOut" xml:space="preserve">
+    <value>フェードアウト</value>
+  </data>
+  <data name="lblF9_Stop" xml:space="preserve">
+    <value>ストップ</value>
+  </data>
 </root>

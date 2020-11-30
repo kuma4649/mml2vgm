@@ -4003,6 +4003,7 @@ namespace mml2vgmIDE
             ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.M98,"M98",false,false,false,"F6")
             ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Pause,"ポーズ",false,false,false,"F8")
             ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Stop,"停止",false,false,false,"F9")
+            ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.FadeOut,"フェードアウト",true,false,false,"F9")
             ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Slow,"スロー",false,false,false,"F10")
             ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Fastx4,"4倍速",false,false,false,"F11")
             ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Kbd,"鍵盤",false,false,false,"F12")
@@ -4040,6 +4041,7 @@ namespace mml2vgmIDE
             ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Ch10Mute,"Ch10 Mute ",false,false,true,"D0")
             ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Ch11Mute,"Ch11 Mute ",false,false,true,"OemMinus")
             ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.ResetMute,"Reset Mute",false,false,true,"Oem5")
+
         };
 
 
@@ -4171,6 +4173,7 @@ namespace mml2vgmIDE
                 M98 = 500,
                 Pause = 600,
                 Stop = 800,
+                FadeOut = 810,
                 Slow = 900,
                 Fastx4 = 1000,
                 Kbd = -1100,

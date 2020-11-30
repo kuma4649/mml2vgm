@@ -310,4 +310,10 @@
   <data name="lblF5_Trace" xml:space="preserve">
     <value>Trace+</value>
   </data>
+  <data name="lblF9_FadeOut" xml:space="preserve">
+    <value>Fade out</value>
+  </data>
+  <data name="lblF9_Stop" xml:space="preserve">
+    <value>Stop</value>
+  </data>
 </root>
