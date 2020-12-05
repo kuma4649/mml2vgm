@@ -2229,12 +2229,23 @@ namespace Core
 
             int row = page.pos.row;
             char ch;
-            string alies = page.pos.alies == null ? "" : page.pos.alies[0].aliesNextName;
+            string alies = (page.pos.alies == null || page.pos.alies.Length<1) ? "" : page.pos.alies[0].aliesNextName;
             do
             {
                 pw.incPos(page);
                 ch = pw.getChar(page);
-            } while ((row == page.pos.row && ((alies == "" && page.pos.alies == null) || alies == page.pos.alies[0].aliesNextName)) && ch != (char)0);
+            } while (
+                (row == page.pos.row && 
+                    (
+                        (
+                            alies == "" && 
+                            (page.pos.alies == null || page.pos.alies.Length < 1)
+                        ) 
+                        || alies == page.pos.alies[0].aliesNextName
+                    )
+                ) 
+                && ch != (char)0
+            );
 
         }
 

@@ -306,8 +306,8 @@ namespace Core
                     if (a != "")
                     {
                         LinePos ali = new LinePos();
-                        ali.aliesName = aliesName;
-                        ali.aliesNextName = a;
+                        ali.aliesName = aliesName;//現在のエイリアス名
+                        ali.aliesNextName = a;//飛び先となるエイリアス名
                         ali.aliesDepth = page.stackAliesPos.Count+1;
                         //ali.nextDepth = page.stackAliesPos.Count + 1;
                         ali.row = page.pData[row].Lp.row;
@@ -378,7 +378,7 @@ namespace Core
                     else
                     {
                         clsPos p = page.stackPos.Pop();
-                        aliesName = p.alies.Length < 1 ? "" : p.alies[0].aliesName;
+                        aliesName = p.alies.Length < 1 ? "" : p.alies[0].aliesNextName;
                         page.stackAliesPos.Pop();
                         col = p.col;
                         row = p.row;
