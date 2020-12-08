@@ -537,6 +537,23 @@ namespace Core
                 }
                 n = Common.CheckRange(n, 0, 0xffff);
                 mml.args.Add(n);
+
+                if (
+                        (
+                        pw.cpg.Type == enmChannelType.FMOPN
+                        || pw.cpg.Type == enmChannelType.FMOPL
+                        || pw.cpg.Type == enmChannelType.FMOPM
+                        || pw.cpg.Type == enmChannelType.FMOPNex
+                        )
+                    && (
+                        a == 'N' 
+                        || a == 'R'
+                        || a == 'A'
+                        || (mml.args[0] is char && (char)mml.args[0] == 'n')
+                        )
+                    )
+                    mml.args.Add(desVGM.instFM[n].Item1);
+
                 return;
             }
 

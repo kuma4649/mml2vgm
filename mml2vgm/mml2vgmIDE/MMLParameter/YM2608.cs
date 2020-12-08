@@ -72,7 +72,10 @@ namespace mml2vgmIDE.MMLParameter
                             }
                             else
                             {
-                                inst[ch] = od.args[1].ToString();
+                                if (od.args.Count == 3 && (od.args[2] != null && od.args[2].ToString() != ""))
+                                    inst[od.linePos.ch] = od.args[2].ToString();
+                                else
+                                    inst[od.linePos.ch] = od.args[1] != null ? od.args[1].ToString() : "(null)";
                             }
                         }
                         break;
