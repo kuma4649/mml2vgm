@@ -5136,7 +5136,11 @@ namespace Core
 
         public void OutData(MML mml, byte[] cmd, params byte[] data)
         {
-
+#if DEBUG
+            //if (mml != null && mml.line != null && mml.line.Lp != null)
+            //    Console.WriteLine("Chip:[{0}] type:[{1}]", mml.line.Lp.chip, mml.type);
+            //else Console.WriteLine("mml null");
+#endif
             if (cmd != null && cmd.Length > 0)
             {
                 foreach (byte d in cmd)

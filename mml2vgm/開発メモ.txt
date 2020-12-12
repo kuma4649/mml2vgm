@@ -3,3 +3,17 @@ IDE
   　表示について(FrmPartCounter)
       ClearCounterを呼ぶと、現状の状態をキャッシュ(lstCacheMuteSolo)してから行をクリアする。
       キャッシュは一回分しかないので多重で呼ぶと前回の分は無くなる。
+
+・トレース、パラメータ系DEBUG
+  パートカウンターにパートが出ない
+    TBD
+  パートカウンターにパートは出るが情報は表示できない
+    ChipRegister.cs : writeDummyChip にChipが定義されているか確認
+    Manager.cs : SetMMLParameter のデバグ情報出力を有効にし、欲しいChipの情報が届いているか確認
+    ChipRegister.cs : xxxxSetRegister 目的のチップのレジスタ書き込みメソッドにパラメータ情報が届いているか確認。
+    　　参考) YMF262SetRegister
+    以下vgmの場合
+    clsVgm.cs : OutData のデバッグ情報を有効にし、Chipが情報を作っているか確認
+    mml2vgm.cs : OutTraceInfoFile でデバッグビルド時のみDEBUG_vgmData.txtをかならず出力しているのでそれを参照、確認
+  パートに情報はでるが正しい情報ではない
+

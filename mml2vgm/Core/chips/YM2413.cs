@@ -529,6 +529,7 @@ namespace Core
                             ((page.freq >> 8) & 0xf)
                           )
                         );
+                    page.spg.beforeFNum = page.freq;
                 }
 
                 if (page.freq != -1 && page.spg.beforeFNum != (page.freq | (page.keyOn ? 0x1000 : 0x0000)))

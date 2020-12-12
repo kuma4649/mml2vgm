@@ -537,7 +537,7 @@ namespace Core
         public override void SetKeyOn(partPage page, MML mml)
         {
             page.keyOn = true;
-            SetDummyData(page, mml);
+            //SetDummyData(page, mml);
         }
 
         public override void SetKeyOff(partPage page, MML mml)
@@ -729,6 +729,7 @@ namespace Core
                                     ((page.freq >> 8) & 0x1f)
                                   )
                                 );
+                            page.beforeFNum = page.freq;
                         }
 
                         if (page.beforeFNum != (page.freq | (page.keyOn ? 0x4000 : 0x0000)))

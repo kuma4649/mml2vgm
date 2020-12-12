@@ -49,6 +49,8 @@ namespace mml2vgmIDE.MMLParameter
                         notecmd[od.linePos.ch] = string.Format("o{0}{1}{2}", octave[od.linePos.ch], nt.cmd, f);
                         length[od.linePos.ch] = string.Format("{0:0.##}(#{1:d})", 1.0 * cc / nt.length, nt.length);
 
+                        //log.Write(notecmd[od.linePos.ch]);
+
                         if (!beforeTie[od.linePos.ch])
                         {
                             if (vol[od.linePos.ch] != null)

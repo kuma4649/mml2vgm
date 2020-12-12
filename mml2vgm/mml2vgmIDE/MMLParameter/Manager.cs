@@ -80,7 +80,9 @@ namespace mml2vgmIDE.MMLParameter
             if (od == null) return true;
             if (od.type == enmMMLType.unknown || od.linePos == null)
             {
-                //Console.WriteLine("{0}", od.type);
+#if DEBUG
+                //log.Write(string.Format("Manager.cs:SetMMLParameter: {0}", od.type));
+#endif
                 return true;
             }
 
@@ -547,7 +549,9 @@ namespace mml2vgmIDE.MMLParameter
 
             int cc = Audio.sm != null ? Audio.sm.CurrentClockCount : 0;
             dicInst[od.linePos.chip][od.linePos.chipIndex][od.linePos.chipNumber](od, cc);
-
+#if DEBUG
+            //log.Write(string.Format("MML Param  Chip:[{0}] Type:[{1}]",od.linePos.chip,od.type));
+#endif
             return true;
         }
 

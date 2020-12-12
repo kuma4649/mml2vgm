@@ -181,11 +181,15 @@ namespace Core
 
                 }
 
+#if !DEBUG
                 if (outTraceInfoFile && writeFileMode)
                 {
+#endif
                     Disp(msg.get("I04022"));
                     OutTraceInfoFile(desBuf);
+#if !DEBUG
                 }
+#endif
 
                 Result();
 
@@ -574,6 +578,9 @@ namespace Core
             }
 
             log.Write(msg.get("I04022"));
+#if DEBUG
+            desTiFn = "DEBUG_vgmData.txt";
+#endif
             File.WriteAllLines(desTiFn, buf, System.Text.Encoding.UTF8);
         }
 

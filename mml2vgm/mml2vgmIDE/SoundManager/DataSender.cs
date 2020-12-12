@@ -396,8 +396,8 @@ namespace SoundManager
 
         private void SendData()
         {
-            long rlc = ringBuffer.LookUpCounter();
-            while (SeqCounter >= rlc)
+            //long rlc = ringBuffer.LookUpCounter();
+            while (SeqCounter >= ringBuffer.LookUpCounter())
             {
                 if (unmount) return;
                 if (!ringBuffer.Deq(ref od, ref Counter, ref Chip, ref Type, ref Address, ref Data, ref ExData))
@@ -405,7 +405,8 @@ namespace SoundManager
                     break;
                 }
 
-                rlc = Counter;
+                //rlc = Counter;
+                //Console.WriteLine(string.Format("{0}",rlc));
 
                 //パラメーターセット
                 SetMMLParameter?.Invoke(ref od, ref Counter, ref Chip, ref Type, ref Address, ref Data, ref ExData);

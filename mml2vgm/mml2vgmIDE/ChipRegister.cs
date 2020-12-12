@@ -1759,6 +1759,12 @@ namespace mml2vgmIDE
                 case 0xa8:
                     enq(od, Counter, YM2610[chipNumber], EnmDataType.Normal, -1, -1, null);
                     break;
+                case 0x5e:
+                case 0x5f:
+                case 0xae:
+                case 0xaf:
+                    enq(od, Counter, YMF262[chipNumber], EnmDataType.Normal, -1, -1, null);
+                    break;
                 case 0xb1:
                     enq(od, Counter, RF5C164[chipNumber], EnmDataType.Normal, -1, -1, null);
                     break;
@@ -1779,6 +1785,9 @@ namespace mml2vgmIDE
                     break;
                 case 0xd4:
                     enq(od, Counter, C140[chipNumber], EnmDataType.Normal, -1, -1, null);
+                    break;
+                default:
+                    log.Write(string.Format("Chipregister.cs:writeDummyChip  unknown chipID:[{0:x02}]",chipID));
                     break;
             }
         }
@@ -7872,6 +7881,9 @@ namespace mml2vgmIDE
 
         public void YMF262SetRegister(outDatum od, long Counter, int ChipID, int dPort, int dAddr, int dData)
         {
+#if DEBUG
+            //log.Write(string.Format("MML Param  Chip:[{0}] Type:[{1}]", od.linePos == null ? "(null)" : od.linePos.chip, od.type));
+#endif
             enq(od, Counter, YMF262[ChipID], EnmDataType.Normal, dPort * 0x100 + dAddr, dData, null);
         }
 
