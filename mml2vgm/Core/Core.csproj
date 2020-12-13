@@ -68,6 +68,7 @@
     <Compile Include="chips\RF5C164.cs" />
     <Compile Include="chips\segaPcm.cs" />
     <Compile Include="chips\SN76489.cs" />
+    <Compile Include="chips\Y8950.cs" />
     <Compile Include="chips\YM2151.cs" />
     <Compile Include="chips\YM2203.cs" />
     <Compile Include="chips\YM3526.cs" />
@@ -117,6 +118,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="fnum\FNUM_YM2203.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="fnum\FNUM_Y8950.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="fnum\FNUM_YM3526.txt">

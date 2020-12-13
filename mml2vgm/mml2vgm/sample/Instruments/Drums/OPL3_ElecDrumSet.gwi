@@ -1,0 +1,52 @@
+﻿'{
+
+	TitleName   = YMF262(OPL3) test
+	TitleNameJ  =
+	GameName    =
+	GameNameJ   =
+	SystemName  =
+	SystemNameJ =
+	Composer    =
+	ComposerJ   =
+	ReleaseDate =
+	Converted   =
+	Notes       =
+
+}
+
+
+'@ L 2 "BD"
+   AR  DR  SL  RR  KSL TL  MT  AM  VIB EGT KSR WS BD
+'@ 014 010 015 010 000 000 000 000 000 000 000 004
+'@ 015 005 005 005 000 000 000 000 000 000 000 000
+   CNT FB
+'@ 000 000
+
+'@ L 3 "HH & SD"
+   AR  DR  SL  RR  KSL TL  MT  AM  VIB EGT KSR WS  HH
+'@ 015 014 001 009 001 005 000 001 001 000 001 001
+'@ 015 006 006 006 001 000 000 000 001 000 001 000
+   CNT FB
+'@ 000 000
+
+'@ L 4
+   AR  DR  SL  RR  KSL TL  MT  AM  VIB EGT KSR WS TOM
+'@ 015 006 005 007 000 000 001 000 000 000 000 000
+'@ 015 004 001 005 001 000 013 001 000 000 000 006
+   CNT FB
+'@ 000 000
+
+
+'Cn1 T120
+
+BD
+'D19 m1@2v55 o3l8p3q1 [c4rr ccrr]4
+SD
+'D20   @3v55 o3l8p3q1 [rrc4 rrc4]4
+TOM
+'D21   @4v60 o3l8p3q1 r1 r1 r1 rrrg16g16 r>c<gc
+CYM
+'D22   @4v60 o6l8p3q1 r1 r1 [c4r4 c4r4]2
+HH
+'D23   @3v60 o3l8p3q1 r1 [cccc cccc]3
+

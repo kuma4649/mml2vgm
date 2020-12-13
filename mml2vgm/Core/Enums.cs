@@ -53,7 +53,8 @@
         YMF262 = 19,
         C352 = 20,
         YM3526 = 21,
-        YM3812 = 22
+        YM3812 = 22,
+        Y8950 = 23
     }
 
     public enum EnmZGMDevice : int

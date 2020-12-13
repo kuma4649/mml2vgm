@@ -191,10 +191,10 @@ namespace Core
 
         public static void SetUInt32bit31(byte[] buf, int ptr, UInt32 value, bool sw = false)
         {
-            buf[ptr + 0] = (byte)(value & 0xff);
-            buf[ptr + 1] = (byte)((value & 0xff00) >> 8);
-            buf[ptr + 2] = (byte)((value & 0xff0000) >> 16);
-            buf[ptr + 3] = (byte)((value & 0x7f000000) >> 24);
+            buf[ptr + 0] = (byte)value;
+            buf[ptr + 1] = (byte)(value >> 8);
+            buf[ptr + 2] = (byte)(value >> 16);
+            buf[ptr + 3] = (byte)((value >> 24) & 0x7f);
             if (sw) buf[ptr + 3] |= 0x80;
         }
 

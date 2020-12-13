@@ -118,6 +118,7 @@
     <Compile Include="D88N88\N88FileAtr.cs" />
     <Compile Include="Driver\mucomMub.cs" />
     <Compile Include="Driver\pmdM.cs" />
+    <Compile Include="Driver\ZGM\ZgmChip\C352.cs" />
     <Compile Include="Driver\ZGM\ZgmChip\C140.cs" />
     <Compile Include="Driver\ZGM\ZgmChip\HuC6280.cs" />
     <Compile Include="Driver\ZGM\ZgmChip\K051649.cs" />
@@ -126,6 +127,10 @@
     <Compile Include="Driver\ZGM\ZgmChip\RF5C164.cs" />
     <Compile Include="Driver\ZGM\ZgmChip\SEGAPCM.cs" />
     <Compile Include="Driver\ZGM\ZgmChip\YM2151.cs" />
+    <Compile Include="Driver\ZGM\ZgmChip\Y8950.cs" />
+    <Compile Include="Driver\ZGM\ZgmChip\YMF262.cs" />
+    <Compile Include="Driver\ZGM\ZgmChip\YM3812.cs" />
+    <Compile Include="Driver\ZGM\ZgmChip\YM3526.cs" />
     <Compile Include="Driver\ZGM\ZgmChip\YM2413.cs" />
     <Compile Include="Driver\ZGM\ZgmChip\YM2608.cs" />
     <Compile Include="Driver\ZGM\ZgmChip\YM2610.cs" />
@@ -295,6 +300,7 @@
     <Compile Include="MMLParameter\YM2610B.cs" />
     <Compile Include="MMLParameter\YM2612.cs" />
     <Compile Include="MMLParameter\YM2612X.cs" />
+    <Compile Include="MMLParameter\Y8950.cs" />
     <Compile Include="MMLParameter\YM3526.cs" />
     <Compile Include="MMLParameter\YM3812.cs" />
     <Compile Include="MMLParameter\YMF262.cs" />

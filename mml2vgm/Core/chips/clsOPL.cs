@@ -47,7 +47,8 @@ namespace Core
                 pg.pan = 3;
                 pg.Type = enmChannelType.FMOPL;
                 pg.isOp4Mode = false;
-                if (pg.ch > 8) pg.Type = enmChannelType.RHYTHM;
+                if (pg.ch > 8)
+                    pg.Type = enmChannelType.RHYTHM;
             }
         }
 
@@ -883,6 +884,59 @@ namespace Core
                                   //| (pw.ppg[pw.cpgNum].keyOn ? 0x20 : 0x00)
                                   )
                                 );
+                        }
+
+                    }
+
+                    else if(page.Type==enmChannelType.ADPCM)//Y8950専用
+                    {
+                        //ボリュームチェック
+                        int vol = page.volume;
+                        if (page.envelopeMode)
+                        {
+                            vol = 0;
+                            if (page.envIndex != -1)
+                            {
+                                vol = page.volume - (0xff - page.envVolume);
+                            }
+                        }
+                        vol = Common.CheckRange(vol, 0, 0xff);//256段階
+                        if (page.spg.beforeVolume != vol)
+                        {
+                            SOutData(page, mml, port[0], 0x12, (byte)vol);
+                            page.spg.beforeVolume = vol;
+                        }
+
+                        //キーオフチェック
+                        if (page.keyOff)
+                        {
+                            page.keyOff = false;
+                            SOutData(page, mml, port[0]
+                                , 0x07
+                                , 0x20
+                                );
+                            page.beforeFNum = page.freq;
+                        }
+
+                        //キーオンチェック
+                        if (page.keyOn)
+                        {
+                            page.keyOn = false;
+                            SOutData(page, mml, port[0]
+                                , 0x07
+                                , 0xa0
+                                );
+                        }
+
+                        //freqチェック
+                        if (page.spg.freq != page.freq)
+                        {
+                            page.spg.freq = page.freq;
+                            byte data = 0;
+                            data = (byte)(page.freq & 0xff);
+                            SOutData(page, mml, port[0], 0x10, data);//DELTA-N(L)
+                            data = (byte)((page.freq & 0xff00) >> 8);
+                            SOutData(page, mml, port[0], 0x11, data);//DELTA-N(H)
                         }
 
                     }

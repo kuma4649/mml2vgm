@@ -397,6 +397,12 @@ namespace mml2vgmIDE.Driver.ZGM
             vgmAdr += 3;
         }
 
+        private void vcY8950(outDatum od)
+        {
+            chipRegister.Y8950SetRegister(od, Audio.DriverSeqCounter, (vgmBuf[vgmAdr].val & 0x80) == 0 ? 0 : 1, vgmBuf[vgmAdr + 1].val, vgmBuf[vgmAdr + 2].val);
+            vgmAdr += 3;
+        }
+
         private void vcYM2151(outDatum od)
         {
             chipRegister.YM2151SetRegister(od, Audio.DriverSeqCounter, (vgmBuf[vgmAdr].val & 0x80) == 0 ? 0 : 1, vgmBuf[vgmAdr + 1].val, vgmBuf[vgmAdr + 2].val);

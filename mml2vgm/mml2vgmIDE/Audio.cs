@@ -498,6 +498,21 @@ namespace mml2vgmIDE
             }
             chipRegister.SetRealChipInfo(EnmZGMDevice.YM3526, chipType[0], chipType[1], setting.LatencyEmulation, setting.LatencySCCI);
 
+            chipType = new Setting.ChipType[Math.Max(chipRegister.Y8950.Count, 2)];
+            for (int i = 0; i < Math.Max(chipRegister.Y8950.Count, 2); i++)
+            {
+                chipType[i] = new Setting.ChipType();
+                if (chipRegister.Y8950.Count <= i) continue;
+                if (!chipRegister.Y8950[i].Use) continue;
+                chipRegister.Y8950[i].Model = EnmVRModel.VirtualModel;
+                chipType[i].UseEmu = true;
+                chipType[i].UseScci = false;
+                if (ret.Count == 0) continue;
+                SearchRealChip(chipType, ret, i, EnmZGMDevice.Y8950, chipRegister.Y8950[i], setting.AutoDetectModuleType == 0 ? 0 : 1);
+                if (chipType[i].UseEmu) SearchRealChip(chipType, ret, i, EnmZGMDevice.Y8950, chipRegister.Y8950[i], setting.AutoDetectModuleType == 0 ? 1 : 0);
+            }
+            chipRegister.SetRealChipInfo(EnmZGMDevice.Y8950, chipType[0], chipType[1], setting.LatencyEmulation, setting.LatencySCCI);
+
             chipType = new Setting.ChipType[Math.Max(chipRegister.YM3812.Count, 2)];
             for (int i = 0; i < Math.Max(chipRegister.YM3812.Count, 2); i++)
             {
@@ -1686,6 +1701,105 @@ namespace mml2vgmIDE
                         chipRegister.YM2413[zCnt].Use = true;
                         chipRegister.YM2413[zCnt].Model = EnmVRModel.VirtualModel;
                         chipRegister.YM2413[zCnt].Device = EnmZGMDevice.YM2413;
+                    }
+
+                    zCnt = -1;
+                    foreach (Driver.ZGM.ZgmChip.ZgmChip zchip in zgmDriver.chips)
+                    {
+                        if (!(zchip is Driver.ZGM.ZgmChip.YM3526)) continue;
+
+                        zCnt++;
+                        chip = new MDSound.MDSound.Chip();
+                        chip.ID = (byte)0;//ZGMでは常に0
+                        ym3526 ym3526 = new ym3526();
+                        chip.type = MDSound.MDSound.enmInstrumentType.YM3526;
+                        chip.Instrument = ym3526;
+                        chip.Update = ym3526.Update;
+                        chip.Start = ym3526.Start;
+                        chip.Stop = ym3526.Stop;
+                        chip.Reset = ym3526.Reset;
+                        chip.SamplingRate = (UInt32)Common.SampleRate;
+                        chip.Volume = setting.balance.YM3526Volume;
+                        chip.Clock = (uint)zchip.defineInfo.clock;
+                        chip.Option = null;
+                        lstChips.Add(chip);
+
+                        hiyorimiDeviceFlag |= 0x2;
+
+                        log.Write(string.Format("Use OPL(#{0}) Clk:{1}"
+                            , zCnt
+                            , chip.Clock
+                            ));
+
+                        chipRegister.YM3526[zCnt].Use = true;
+                        chipRegister.YM3526[zCnt].Model = EnmVRModel.VirtualModel;
+                        chipRegister.YM3526[zCnt].Device = EnmZGMDevice.YM3526;
+                    }
+
+                    zCnt = -1;
+                    foreach (Driver.ZGM.ZgmChip.ZgmChip zchip in zgmDriver.chips)
+                    {
+                        if (!(zchip is Driver.ZGM.ZgmChip.Y8950)) continue;
+
+                        zCnt++;
+                        chip = new MDSound.MDSound.Chip();
+                        chip.ID = (byte)0;//ZGMでは常に0
+                        y8950 y8950 = new y8950();
+                        chip.type = MDSound.MDSound.enmInstrumentType.Y8950;
+                        chip.Instrument = y8950;
+                        chip.Update = y8950.Update;
+                        chip.Start = y8950.Start;
+                        chip.Stop = y8950.Stop;
+                        chip.Reset = y8950.Reset;
+                        chip.SamplingRate = (UInt32)Common.SampleRate;
+                        chip.Volume = setting.balance.Y8950Volume;
+                        chip.Clock = (uint)zchip.defineInfo.clock;
+                        chip.Option = null;
+                        lstChips.Add(chip);
+
+                        hiyorimiDeviceFlag |= 0x2;
+
+                        log.Write(string.Format("Use Y8950(#{0}) Clk:{1}"
+                            , zCnt
+                            , chip.Clock
+                            ));
+
+                        chipRegister.Y8950[zCnt].Use = true;
+                        chipRegister.Y8950[zCnt].Model = EnmVRModel.VirtualModel;
+                        chipRegister.Y8950[zCnt].Device = EnmZGMDevice.Y8950;
+                    }
+
+                    zCnt = -1;
+                    foreach (Driver.ZGM.ZgmChip.ZgmChip zchip in zgmDriver.chips)
+                    {
+                        if (!(zchip is Driver.ZGM.ZgmChip.YM3812)) continue;
+
+                        zCnt++;
+                        chip = new MDSound.MDSound.Chip();
+                        chip.ID = (byte)0;//ZGMでは常に0
+                        ym3812 ym3812 = new ym3812();
+                        chip.type = MDSound.MDSound.enmInstrumentType.YM3812;
+                        chip.Instrument = ym3812;
+                        chip.Update = ym3812.Update;
+                        chip.Start = ym3812.Start;
+                        chip.Stop = ym3812.Stop;
+                        chip.Reset = ym3812.Reset;
+                        chip.SamplingRate = (UInt32)Common.SampleRate;
+                        chip.Volume = setting.balance.YM3812Volume;
+                        chip.Clock = (uint)zchip.defineInfo.clock;
+                        chip.Option = null;
+                        lstChips.Add(chip);
+
+                        hiyorimiDeviceFlag |= 0x2;
+
+                        log.Write(string.Format("Use OPL(#{0}) Clk:{1}"
+                            , zCnt
+                            , chip.Clock
+                            ));
+
+                        chipRegister.YM3812[zCnt].Use = true;
+                        chipRegister.YM3812[zCnt].Model = EnmVRModel.VirtualModel;
+                        chipRegister.YM3812[zCnt].Device = EnmZGMDevice.YM3812;
                     }
 
                     zCnt = -1;
@@ -3340,13 +3454,26 @@ namespace mml2vgmIDE
                             chip.Volume = setting.balance.Y8950Volume;
                             chip.Clock = ((vgm)driver).Y8950ClockValue;
                             chip.Option = null;
-                            if (i == 0) chipLED.PriY8950 = 1;
-                            else chipLED.SecY8950 = 1;
+                            if (i == 0)
+                            {
+                                chipLED.PriY8950 = 1;
+                                useChip.Add(EnmChip.Y8950);
+                            }
+                            else
+                            {
+                                chipLED.SecY8950 = 1;
+                                useChip.Add(EnmChip.S_Y8950);
+                            }
 
                             hiyorimiDeviceFlag |= 0x2;
 
+                            log.Write(string.Format("Use Y8950({0}) Clk:{1}"
+                                , (i == 0) ? "Pri" : "Sec"
+                                , chip.Clock
+                                ));
+
+                            chipRegister.Y8950[i].Use = true;
                             if (chip.Instrument != null) lstChips.Add(chip);
-                            useChip.Add(i == 0 ? EnmChip.Y8950 : EnmChip.S_Y8950);
                         }
                     }
 
@@ -3591,6 +3718,12 @@ namespace mml2vgmIDE
                     {
                         if (chipRegister.YM3526[i].Model == EnmVRModel.VirtualModel) useEmu = true;
                         if (chipRegister.YM3526[i].Model == EnmVRModel.RealModel) useReal = true;
+                    }
+
+                    if (chipRegister.Y8950[i].Use)
+                    {
+                        if (chipRegister.Y8950[i].Model == EnmVRModel.VirtualModel) useEmu = true;
+                        if (chipRegister.Y8950[i].Model == EnmVRModel.RealModel) useReal = true;
                     }
 
                     if (chipRegister.YM3812[i].Use)
@@ -4448,6 +4581,7 @@ namespace mml2vgmIDE
             for (int i = 0; i < chipRegister.YM2203.Count; i++) if (chipRegister.YM2203[i].Use) chipRegister.YM2203SoftReset(counter, i);
             for (int i = 0; i < chipRegister.YM2413.Count; i++) if (chipRegister.YM2413[i].Use) chipRegister.YM2413SoftReset(counter, i);
             for (int i = 0; i < chipRegister.YM3526.Count; i++) if (chipRegister.YM3526[i].Use) chipRegister.YM3526SoftReset(counter, i);
+            for (int i = 0; i < chipRegister.Y8950.Count; i++) if (chipRegister.Y8950[i].Use) chipRegister.Y8950SoftReset(counter, i);
             for (int i = 0; i < chipRegister.YM3812.Count; i++) if (chipRegister.YM3812[i].Use) chipRegister.YM3812SoftReset(counter, i);
             for (int i = 0; i < chipRegister.YMF262.Count; i++) if (chipRegister.YMF262[i].Use) chipRegister.YMF262SoftReset(counter, i);
             for (int i = 0; i < chipRegister.YM2608.Count; i++) if (chipRegister.YM2608[i].Use) chipRegister.YM2608SoftReset(counter, i);
@@ -4477,6 +4611,7 @@ namespace mml2vgmIDE
             for (int i = 0; i < chipRegister.YM2203.Count; i++) if (chipRegister.YM2203[i].Use) data.AddRange(chipRegister.YM2203MakeSoftReset(i));
             for (int i = 0; i < chipRegister.YM2413.Count; i++) if (chipRegister.YM2413[i].Use) data.AddRange(chipRegister.YM2413MakeSoftReset(i));
             for (int i = 0; i < chipRegister.YM3526.Count; i++) if (chipRegister.YM3526[i].Use) data.AddRange(chipRegister.YM3526MakeSoftReset(i));
+            for (int i = 0; i < chipRegister.Y8950.Count; i++) if (chipRegister.Y8950[i].Use) data.AddRange(chipRegister.Y8950MakeSoftReset(i));
             for (int i = 0; i < chipRegister.YM3812.Count; i++) if (chipRegister.YM3812[i].Use) data.AddRange(chipRegister.YM3812MakeSoftReset(i));
             for (int i = 0; i < chipRegister.YMF262.Count; i++) if (chipRegister.YMF262[i].Use) data.AddRange(chipRegister.YMF262MakeSoftReset(i));
             for (int i = 0; i < chipRegister.YM2608.Count; i++) if (chipRegister.YM2608[i].Use) data.AddRange(chipRegister.YM2608MakeSoftReset(i));
@@ -4509,6 +4644,7 @@ namespace mml2vgmIDE
             for (int i = 0; i < chipRegister.YM2203.Count; i++) if (chipRegister.YM2203[i].Use) data.AddRange(chipRegister.YM2203MakeSoftReset(i));
             for (int i = 0; i < chipRegister.YM2413.Count; i++) if (chipRegister.YM2413[i].Use) data.AddRange(chipRegister.YM2413MakeSoftReset(i));
             for (int i = 0; i < chipRegister.YM3526.Count; i++) if (chipRegister.YM3526[i].Use) data.AddRange(chipRegister.YM3526MakeSoftReset(i));
+            for (int i = 0; i < chipRegister.Y8950.Count; i++) if (chipRegister.Y8950[i].Use) data.AddRange(chipRegister.Y8950MakeSoftReset(i));
             for (int i = 0; i < chipRegister.YM3812.Count; i++) if (chipRegister.YM3812[i].Use) data.AddRange(chipRegister.YM3812MakeSoftReset(i));
             for (int i = 0; i < chipRegister.YMF262.Count; i++) if (chipRegister.YMF262[i].Use) data.AddRange(chipRegister.YMF262MakeSoftReset(i));
             for (int i = 0; i < chipRegister.YM2608.Count; i++) if (chipRegister.YM2608[i].Use) data.AddRange(chipRegister.YM2608MakeSoftReset(i));
@@ -5943,7 +6079,7 @@ namespace mml2vgmIDE
 
         public static void setY8950Mask(int chipID, int ch)
         {
-            chipRegister.setMaskY8950(chipID, ch, true);
+            chipRegister.Y8950SetMask(0, chipID, ch, true);
         }
 
         public static void setYM3812Mask(int chipID, int ch)
@@ -6126,7 +6262,7 @@ namespace mml2vgmIDE
         {
             try
             {
-                chipRegister.setMaskY8950(chipID, ch, false);
+                chipRegister.Y8950SetMask(0, chipID, ch, false);
             }
             catch { }
         }

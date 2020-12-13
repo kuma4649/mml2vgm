@@ -73,6 +73,7 @@ namespace mml2vgmIDE
         private RSoundChip[] scYM2610EA = new RSoundChip[2] { null, null };
         private RSoundChip[] scYM2610EB = new RSoundChip[2] { null, null };
         private RSoundChip[] scYM3526 = new RSoundChip[2] { null, null };
+        private RSoundChip[] scY8950 = new RSoundChip[2] { null, null };
         private RSoundChip[] scYM3812 = new RSoundChip[2] { null, null };
         private RSoundChip[] scYMF262 = new RSoundChip[2] { null, null };
         private RSoundChip[] scYMF271 = new RSoundChip[2] { null, null };
@@ -186,6 +187,7 @@ namespace mml2vgmIDE
         private int[] fmRegisterYM3526Ryhthm = new int[] { 0, 0 };
         private ChipKeyInfo[] kiYM3526 = new ChipKeyInfo[2] { new ChipKeyInfo(14), new ChipKeyInfo(14) };
         private ChipKeyInfo[] kiYM3526ret = new ChipKeyInfo[2] { new ChipKeyInfo(14), new ChipKeyInfo(14) };
+        private int[] YM3526NowFadeoutVol = new int[] { 0, 0 };
         private bool[][] maskFMChYM3526 = new bool[2][] {
             new bool[9 + 5]
             {
@@ -205,6 +207,7 @@ namespace mml2vgmIDE
         private int[] fmRegisterYM3812Ryhthm = new int[] { 0, 0 };
         private ChipKeyInfo[] kiYM3812 = new ChipKeyInfo[2] { new ChipKeyInfo(14), new ChipKeyInfo(14) };
         private ChipKeyInfo[] kiYM3812ret = new ChipKeyInfo[2] { new ChipKeyInfo(14), new ChipKeyInfo(14) };
+        private int[] YM3812NowFadeoutVol = new int[] { 0, 0 };
         private bool[][] maskFMChYM3812 = new bool[2][] {
             new bool[9 + 5]
             {
@@ -225,6 +228,7 @@ namespace mml2vgmIDE
         private int[] fmRegisterYMF262FM = new int[2] { 0, 0 };
         private int[] fmRegisterYMF262RyhthmB = new int[2] { 0, 0 };
         private int[] fmRegisterYMF262Ryhthm = new int[2] { 0, 0 };
+        private int[] YMF262NowFadeoutVol = new int[] { 0, 0 };
         private bool[][] maskFMChYMF262 = new bool[][] {
             new bool[23] {
                 false, false, false, false, false, false, false, false, false, false,
@@ -266,16 +270,20 @@ namespace mml2vgmIDE
         public int[][] YMZ280BRegister = new int[][] { null, null };
 
         public int[][] fmRegisterY8950 = new int[][] { null, null };
+        private int[] fmRegisterY8950FM = new int[] { 0, 0 };
+        private int[] fmRegisterY8950RyhthmB = new int[] { 0, 0 };
+        private int[] fmRegisterY8950Ryhthm = new int[] { 0, 0 };
+        private int[] Y8950NowFadeoutVol = new int[] { 0, 0 };
         private ChipKeyInfo[] kiY8950 = new ChipKeyInfo[2] { new ChipKeyInfo(15), new ChipKeyInfo(15) };
         private ChipKeyInfo[] kiY8950ret = new ChipKeyInfo[2] { new ChipKeyInfo(15), new ChipKeyInfo(15) };
         private bool[][] maskFMChY8950 = new bool[2][] {
-            new bool[9 + 5+1]
+            new bool[9 + 5 + 1]
             {
                 false, false, false, false, false, false, false, false, false, false,
                 false, false, false, false
                 , false
             },
-            new bool[9 + 5+1]
+            new bool[9 + 5 + 1]
             {
                 false, false, false, false, false, false, false, false, false, false,
                 false, false, false, false
@@ -386,6 +394,7 @@ namespace mml2vgmIDE
         public List<Chip> YM2203 = new List<Chip>();
         public List<Chip> YM2413 = new List<Chip>();
         public List<Chip> YM3526 = new List<Chip>();
+        public List<Chip> Y8950 = new List<Chip>();
         public List<Chip> YM3812 = new List<Chip>();
         public List<Chip> YMF262 = new List<Chip>();
         public List<Chip> YM2608 = new List<Chip>();
@@ -790,6 +799,18 @@ namespace mml2vgmIDE
 
                 case EnmZGMDevice.Y8950:
                     ctY8950 = new Setting.ChipType[] { chipTypeP, chipTypeS };
+                    for (int i = 0; i < Y8950.Count; i++)
+                    {
+                        Y8950[i].Model = EnmVRModel.VirtualModel;
+                        Y8950[i].Delay = LEmu;
+                        if (i > 1) continue;
+
+                        scY8950[i] = realChip.GetRealChip(ctY8950[i]);
+                        if (scY8950[i] != null) scY8950[i].init();
+                        if (Y8950.Count < i + 1) Y8950.Add(new Chip(15));
+                        Y8950[i].Model = ctY8950[i].UseEmu ? EnmVRModel.VirtualModel : EnmVRModel.RealModel;
+                        Y8950[i].Delay = (Y8950[i].Model == EnmVRModel.VirtualModel ? LEmu : LReal);
+                    }
                     break;
                 case EnmZGMDevice.YMF271:
                     ctYMF271 = new Setting.ChipType[] { chipTypeP, chipTypeS };
@@ -933,6 +954,13 @@ namespace mml2vgmIDE
                 YM3526[i].Number = i;
                 YM3526[i].Hosei = 0;
 
+                if (Y8950.Count < i + 1) Y8950.Add(new Chip(9 + 5 + 1));
+                Y8950[i].Use = false;
+                Y8950[i].Model = EnmVRModel.None;
+                Y8950[i].Device = EnmZGMDevice.Y8950;
+                Y8950[i].Number = i;
+                Y8950[i].Hosei = 0;
+
                 if (YM3812.Count < i + 1) YM3812.Add(new Chip(9 + 5));
                 YM3812[i].Use = false;
                 YM3812[i].Model = EnmVRModel.None;
@@ -995,6 +1023,7 @@ namespace mml2vgmIDE
         {
             CONDUCTOR.Clear();
             C140.Clear();
+            C352.Clear();
             HuC6280.Clear();
             K051649.Clear();
             K053260.Clear();
@@ -1005,6 +1034,10 @@ namespace mml2vgmIDE
             YM2151.Clear();
             YM2203.Clear();
             YM2413.Clear();
+            YM3526.Clear();
+            Y8950.Clear();
+            YM3812.Clear();
+            YMF262.Clear();
             YM2608.Clear();
             YM2609.Clear();
             YM2610.Clear();
@@ -1015,6 +1048,7 @@ namespace mml2vgmIDE
             {
                 if (c is Driver.ZGM.ZgmChip.Conductor) CONDUCTOR.Add(c);
                 if (c is Driver.ZGM.ZgmChip.C140) C140.Add(c);
+                if (c is Driver.ZGM.ZgmChip.C352) C352.Add(c);
                 if (c is Driver.ZGM.ZgmChip.HuC6280) HuC6280.Add(c);
                 if (c is Driver.ZGM.ZgmChip.K051649) K051649.Add(c);
                 if (c is Driver.ZGM.ZgmChip.K053260) K053260.Add(c);
@@ -1025,6 +1059,10 @@ namespace mml2vgmIDE
                 if (c is Driver.ZGM.ZgmChip.YM2151) YM2151.Add(c);
                 if (c is Driver.ZGM.ZgmChip.YM2203) YM2203.Add(c);
                 if (c is Driver.ZGM.ZgmChip.YM2413) YM2413.Add(c);
+                if (c is Driver.ZGM.ZgmChip.YM3526) YM3526.Add(c);
+                if (c is Driver.ZGM.ZgmChip.Y8950) Y8950.Add(c);
+                if (c is Driver.ZGM.ZgmChip.YM3812) YM3812.Add(c);
+                if (c is Driver.ZGM.ZgmChip.YMF262) YMF262.Add(c);
                 if (c is Driver.ZGM.ZgmChip.YM2608) YM2608.Add(c);
                 if (c is Driver.ZGM.ZgmChip.YM2609) YM2609.Add(c);
                 if (c is Driver.ZGM.ZgmChip.YM2610) YM2610.Add(c);
@@ -1080,6 +1118,9 @@ namespace mml2vgmIDE
                     break;
                 case EnmZGMDevice.YM3526:
                     YM3526SetRegisterProcessing(ref Counter, ref Chip, ref Type, ref Address, ref Data, ref ExData);
+                    break;
+                case EnmZGMDevice.Y8950:
+                    Y8950SetRegisterProcessing(ref Counter, ref Chip, ref Type, ref Address, ref Data, ref ExData);
                     break;
                 case EnmZGMDevice.YM3812:
                     YM3812SetRegisterProcessing(ref Counter, ref Chip, ref Type, ref Address, ref Data, ref ExData);
@@ -1182,6 +1223,9 @@ namespace mml2vgmIDE
                 case EnmZGMDevice.YM3526:
                     YM3526WriteRegisterControl(Chip, type, address, data, exData);
                     break;
+                case EnmZGMDevice.Y8950:
+                    Y8950WriteRegisterControl(Chip, type, address, data, exData);
+                    break;
                 case EnmZGMDevice.YM3812:
                     YM3812WriteRegisterControl(Chip, type, address, data, exData);
                     break;
@@ -1225,6 +1269,10 @@ namespace mml2vgmIDE
             YM2151SetFadeoutVolume(counter, (int)((1.0 - fadeoutCounter) * 127.0));
             YM2203SetFadeoutVolume(counter, (int)((1.0 - fadeoutCounter) * 127.0));
             YM2413SetFadeoutVolume(counter, (int)((1.0 - fadeoutCounter) * 15.0));
+            YM3526SetFadeoutVolume(counter, (int)((1.0 - fadeoutCounter) * 63.0));
+            Y8950SetFadeoutVolume(counter, (int)((1.0 - fadeoutCounter) * 63.0));
+            YM3812SetFadeoutVolume(counter, (int)((1.0 - fadeoutCounter) * 63.0));
+            YMF262SetFadeoutVolume(counter, (int)((1.0 - fadeoutCounter) * 63.0));
             YM2608SetFadeoutVolume(counter, (int)((1.0 - fadeoutCounter) * 127.0));
             YM2610SetFadeoutVolume(counter, (int)((1.0 - fadeoutCounter) * 127.0));
             YM2612SetFadeoutVolume(counter, (int)((1.0 - fadeoutCounter) * 127.0));
@@ -1300,13 +1348,11 @@ namespace mml2vgmIDE
                 for (int i = 0; i < 0x100; i++)
                 {
                     fmRegisterYM3526[chipID][i] = 0;
-                    fmRegisterYM3526[chipID][i] = 0;
                 }
 
                 fmRegisterYM3812[chipID] = new int[0x100];
                 for (int i = 0; i < 0x100; i++)
                 {
-                    fmRegisterYM3812[chipID][i] = 0;
                     fmRegisterYM3812[chipID][i] = 0;
                 }
 
@@ -1759,6 +1805,18 @@ namespace mml2vgmIDE
                 case 0xa8:
                     enq(od, Counter, YM2610[chipNumber], EnmDataType.Normal, -1, -1, null);
                     break;
+                case 0x5a:
+                case 0xaa:
+                    enq(od, Counter, YM3812[chipNumber], EnmDataType.Normal, -1, -1, null);
+                    break;
+                case 0x5b:
+                case 0xab:
+                    enq(od, Counter, YM3526[chipNumber], EnmDataType.Normal, -1, -1, null);
+                    break;
+                case 0x5c:
+                case 0xac:
+                    enq(od, Counter, Y8950[chipNumber], EnmDataType.Normal, -1, -1, null);
+                    break;
                 case 0x5e:
                 case 0x5f:
                 case 0xae:
@@ -1812,6 +1870,11 @@ namespace mml2vgmIDE
             }
 
             foreach (Driver.ZGM.ZgmChip.ZgmChip c in C140)
+            {
+                dicChipCmdNo.Add(c.defineInfo.commandNo, c);
+            }
+
+            foreach (Driver.ZGM.ZgmChip.ZgmChip c in C352)
             {
                 dicChipCmdNo.Add(c.defineInfo.commandNo, c);
             }
@@ -1887,6 +1950,26 @@ namespace mml2vgmIDE
             }
 
             foreach (Driver.ZGM.ZgmChip.ZgmChip c in MIDI)
+            {
+                dicChipCmdNo.Add(c.defineInfo.commandNo, c);
+            }
+
+            foreach (Driver.ZGM.ZgmChip.ZgmChip c in YM3526)
+            {
+                dicChipCmdNo.Add(c.defineInfo.commandNo, c);
+            }
+
+            foreach (Driver.ZGM.ZgmChip.ZgmChip c in Y8950)
+            {
+                dicChipCmdNo.Add(c.defineInfo.commandNo, c);
+            }
+
+            foreach (Driver.ZGM.ZgmChip.ZgmChip c in YM3812)
+            {
+                dicChipCmdNo.Add(c.defineInfo.commandNo, c);
+            }
+
+            foreach (Driver.ZGM.ZgmChip.ZgmChip c in YMF262)
             {
                 dicChipCmdNo.Add(c.defineInfo.commandNo, c);
             }
@@ -7148,11 +7231,6 @@ namespace mml2vgmIDE
             maskFMChYM3526[chipID][ch] = mask;
         }
 
-        public void setMaskY8950(int chipID, int ch, bool mask)
-        {
-            maskFMChY8950[chipID][ch] = mask;
-        }
-
         public void setMaskYM3812(int chipID, int ch, bool mask)
         {
             maskFMChYM3812[chipID][ch] = mask;
@@ -7568,6 +7646,11 @@ namespace mml2vgmIDE
                 if (maskFMChYM3526[Chip.Number][ch]) dData &= 0x1f;
             }
 
+            if (dAddr >= 0x40 && dAddr <= 0x55) //TL制御(TBD)
+            {
+                ch = dAddr - 0x40;
+            }
+
             if (dAddr == 0xbd)
             {
                 if ((fmRegisterYM3526RyhthmB[Chip.Number] & 0x10) == 0 && (dData & 0x10) != 0) fmRegisterYM3526Ryhthm[Chip.Number] |= 0x10;
@@ -7636,6 +7719,230 @@ namespace mml2vgmIDE
                 YM3526SetRegister(null, Counter, (byte)chipID, 0xbd, fmRegisterYM3526[chipID][0xbd]);
             }
         }
+
+        public void YM3526SetFadeoutVolume(long Counter, int v)
+        {
+            for (int i = 0; i < YM3526.Count; i++)
+            {
+                if (!YM3526[i].Use) continue;
+                if (YM3526[i].Model == EnmVRModel.VirtualModel) continue;
+                if (YM3526NowFadeoutVol[i] == v) continue;
+
+                YM3526NowFadeoutVol[i] = v;// (v & 0x78) >> 3;
+                for (int c = 0; c < 9; c++)
+                {
+                    int adr = 0x40 + (c / 3) * 6 + (c % 3);
+                    YM3526SetRegister(null, Counter, i, adr, fmRegisterYM3526[i][adr]);
+                    YM3526SetRegister(null, Counter, i, adr + 3, fmRegisterYM3526[i][adr + 3]);
+                }
+            }
+        }
+
+
+
+
+        private void Y8950WriteRegisterControl(Chip Chip, EnmDataType type, int address, int data, object exData)
+        {
+            if (type == EnmDataType.Normal)
+            {
+                if (Chip.Model == EnmVRModel.VirtualModel)
+                {
+                    if (!ctY8950[Chip.Number].UseScci && ctY8950[Chip.Number].UseEmu)
+                        mds.WriteY8950(Chip.Index, (byte)Chip.Number, (byte)address, (byte)data);
+                }
+                if (Chip.Model == EnmVRModel.RealModel)
+                {
+                    if (scY8950[Chip.Number] != null)
+                        scY8950[Chip.Number].setRegister(address, data);
+                }
+            }
+            else if (type == EnmDataType.Block)
+            {
+                Audio.sm.SetInterrupt();
+
+                try
+                {
+                    if (exData == null) return;
+
+                    PackData[] pdata = (PackData[])exData;
+                    if (Chip.Model == EnmVRModel.VirtualModel)
+                    {
+                        foreach (PackData dat in pdata)
+                            mds.WriteY8950(Chip.Index, (byte)Chip.Number, (byte)address, (byte)data);
+                    }
+                    if (Chip.Model == EnmVRModel.RealModel)
+                    {
+                        if (scY8950[Chip.Number] != null)
+                        {
+                            foreach (PackData dat in pdata)
+                                scY8950[Chip.Number].setRegister(dat.Address, dat.Data);
+                        }
+                    }
+                }
+                finally
+                {
+                    Audio.sm.ResetInterrupt();
+                }
+            }
+        }
+
+        public void Y8950SetRegisterProcessing(ref long Counter, ref Chip Chip, ref EnmDataType type, ref int Address, ref int dData, ref object ExData)
+        {
+            if (ctY8950 == null) return;
+            if (Address == -1 && dData == -1) return;
+
+            if (Chip.Number == 0) chipLED.PriY8950 = 2;
+            else chipLED.SecY8950 = 2;
+
+            int dAddr = (Address & 0xff);
+            int ch;
+
+            fmRegisterY8950[Chip.Number][dAddr] = dData;
+
+            if (dAddr >= 0xb0 && dAddr <= 0xb8)
+            {
+                ch = dAddr - 0xb0;
+                int k = (dData >> 5) & 1;
+                if (k == 0)
+                {
+                    fmRegisterY8950FM[Chip.Number] &= ~(1 << ch);
+                }
+                else
+                {
+                    fmRegisterY8950FM[Chip.Number] |= (1 << ch);
+                }
+                fmRegisterY8950FM[Chip.Number] &= 0x3ffff;
+                if (maskFMChY8950[Chip.Number][ch]) dData &= 0x1f;
+            }
+
+            if (dAddr == 0xbd)
+            {
+                if ((fmRegisterY8950RyhthmB[Chip.Number] & 0x10) == 0 && (dData & 0x10) != 0) fmRegisterY8950Ryhthm[Chip.Number] |= 0x10;
+                if ((fmRegisterY8950RyhthmB[Chip.Number] & 0x08) == 0 && (dData & 0x08) != 0) fmRegisterY8950Ryhthm[Chip.Number] |= 0x08;
+                if ((fmRegisterY8950RyhthmB[Chip.Number] & 0x04) == 0 && (dData & 0x04) != 0) fmRegisterY8950Ryhthm[Chip.Number] |= 0x04;
+                if ((fmRegisterY8950RyhthmB[Chip.Number] & 0x02) == 0 && (dData & 0x02) != 0) fmRegisterY8950Ryhthm[Chip.Number] |= 0x02;
+                if ((fmRegisterY8950RyhthmB[Chip.Number] & 0x01) == 0 && (dData & 0x01) != 0) fmRegisterY8950Ryhthm[Chip.Number] |= 0x01;
+                fmRegisterY8950RyhthmB[Chip.Number] = dData;
+
+                if (maskFMChY8950[Chip.Number][9]) dData &= 0xef;
+                if (maskFMChY8950[Chip.Number][10]) dData &= 0xf7;
+                if (maskFMChY8950[Chip.Number][11]) dData &= 0xfb;
+                if (maskFMChY8950[Chip.Number][12]) dData &= 0xfd;
+                if (maskFMChY8950[Chip.Number][13]) dData &= 0xfe;
+
+            }
+
+            //ADPCM
+            if (dAddr == 0x07)
+            {
+                int k = (dData & 0x80);
+                if (k == 0)
+                {
+                    kiY8950[Chip.Number].On[14] = false;
+                    kiY8950[Chip.Number].Off[14] = true;
+                }
+                else
+                {
+                    kiY8950[Chip.Number].On[14] = true;
+                }
+                if (maskFMChY8950[Chip.Number][14]) dData &= 0x7f;
+            }
+        }
+
+        public void Y8950SetRegister(outDatum od, long Counter, int ChipID, int dAddr, int dData)
+        {
+            enq(od, Counter, Y8950[ChipID], EnmDataType.Normal, dAddr, dData, null);
+        }
+
+        public void Y8950SetRegister(outDatum od, long Counter, int ChipID, PackData[] data)
+        {
+            enq(od, Counter, Y8950[ChipID], EnmDataType.Block, -1, -1, data);
+        }
+
+        public void Y8950SoftReset(long Counter, int chipID)
+        {
+            List<PackData> data = Y8950MakeSoftReset(chipID);
+            Y8950SetRegister(null, Counter, chipID, data.ToArray());
+        }
+
+        public List<PackData> Y8950MakeSoftReset(int chipID)
+        {
+            List<PackData> data = new List<PackData>();
+            int i;
+
+            // FM全チャネルキーオフ
+            for (i = 0; i < 9; i++)
+            {
+                data.Add(new PackData(null, Y8950[chipID], EnmDataType.Normal, 0x0a0 + i, 0x00, null));
+                data.Add(new PackData(null, Y8950[chipID], EnmDataType.Normal, 0x0b0 + i, 0x00, null));
+            }
+            // FM Vol=64(min)
+            for (i = 0x40; i < 0x56; i++)
+            {
+                data.Add(new PackData(null, Y8950[chipID], EnmDataType.Normal, 0x000 + i, 0x3f, null));
+            }
+
+            //ADPCMキーオフ
+            data.Add(new PackData(null, Y8950[chipID], EnmDataType.Normal, 0x000 + 0x07, 0x20, null));
+
+            return data;
+        }
+
+        public void Y8950SetMask(long Counter, int chipID, int ch, bool mask, bool noSend = false)
+        {
+            maskFMChY8950[chipID][YMF278BCh[ch]] = mask;
+
+            if (ch < 9)
+            {
+                Y8950SetRegister(null, Counter, (byte)chipID, 0xb0 + ch, fmRegisterY8950[chipID][0xb0 + ch]);
+            }
+            else
+            {
+                Y8950SetRegister(null, Counter, (byte)chipID, 0xbd, fmRegisterY8950[chipID][0xbd]);
+            }
+        }
+
+        public void Y8950SetFadeoutVolume(long Counter, int v)
+        {
+            for (int i = 0; i < Y8950.Count; i++)
+            {
+                if (!Y8950[i].Use) continue;
+                if (Y8950[i].Model == EnmVRModel.VirtualModel) continue;
+                if (Y8950NowFadeoutVol[i] == v) continue;
+
+                Y8950NowFadeoutVol[i] = v;// (v & 0x78) >> 3;
+                for (int c = 0; c < 9; c++)
+                {
+                    int adr = 0x40 + (c / 3) * 6 + (c % 3);
+                    Y8950SetRegister(null, Counter, i, adr, fmRegisterY8950[i][adr]);
+                    Y8950SetRegister(null, Counter, i, adr + 3, fmRegisterY8950[i][adr + 3]);
+                }
+            }
+        }
+
+        public void writeY8950PCMData(byte chipid, uint ROMSize, uint DataStart, uint DataLength, byte[] romdata, uint SrcStartAdr)
+        {
+            EnmVRModel model = EnmVRModel.VirtualModel;
+            if (chipid == 0) chipLED.PriY8950 = 2;
+            else chipLED.SecY8950 = 2;
+
+            if (model == EnmVRModel.VirtualModel)
+                mds.WriteY8950PCMData(chipid, ROMSize, DataStart, DataLength, romdata, SrcStartAdr);
+        }
+
+        public ChipKeyInfo getY8950KeyInfo(int chipID)
+        {
+            for (int ch = 0; ch < kiY8950[chipID].Off.Length; ch++)
+            {
+                kiY8950ret[chipID].Off[ch] = kiY8950[chipID].Off[ch];
+                kiY8950ret[chipID].On[ch] = kiY8950[chipID].On[ch];
+                kiY8950[chipID].On[ch] = false;
+            }
+            return kiY8950ret[chipID];
+        }
+
+
+
 
 
 
@@ -7782,6 +8089,23 @@ namespace mml2vgmIDE
             }
         }
 
+        public void YM3812SetFadeoutVolume(long Counter, int v)
+        {
+            for (int i = 0; i < YM3812.Count; i++)
+            {
+                if (!YM3812[i].Use) continue;
+                if (YM3812[i].Model == EnmVRModel.VirtualModel) continue;
+                if (YM3812NowFadeoutVol[i] == v) continue;
+
+                YM3812NowFadeoutVol[i] = v;// (v & 0x78) >> 3;
+                for (int c = 0; c < 9; c++)
+                {
+                    int adr = 0x40 + (c / 3) * 6 + (c % 3);
+                    YM3812SetRegister(null, Counter, i, adr, fmRegisterYM3812[i][adr]);
+                    YM3812SetRegister(null, Counter, i, adr + 3, fmRegisterYM3812[i][adr + 3]);
+                }
+            }
+        }
 
 
 
@@ -7939,6 +8263,24 @@ namespace mml2vgmIDE
             }
         }
 
+        public void YMF262SetFadeoutVolume(long Counter, int v)
+        {
+            for (int i = 0; i < YMF262.Count; i++)
+            {
+                if (!YMF262[i].Use) continue;
+                if (YMF262[i].Model == EnmVRModel.VirtualModel) continue;
+                if (YMF262NowFadeoutVol[i] == v) continue;
+
+                YMF262NowFadeoutVol[i] = v;// (v & 0x78) >> 3;
+                for (int c = 0; c < 18; c++)
+                {
+                    int port = c / 9;
+                    int adr = 0x40 + (c / 3) * 6 + (c % 3);
+                    YMF262SetRegister(null, Counter, i, port, adr, fmRegisterYMF262[i][port][adr]);
+                    YMF262SetRegister(null, Counter, i, port, adr + 3, fmRegisterYMF262[i][port][adr + 3]);
+                }
+            }
+        }
 
 
 
@@ -8113,88 +8455,6 @@ namespace mml2vgmIDE
         //    }
 
         //}
-
-        public void setY8950Register(int chipID, int dAddr, int dData)
-        {
-            EnmVRModel model = EnmVRModel.VirtualModel;
-            if (ctY8950 == null) return;
-
-            if (chipID == 0) chipLED.PriY8950 = 2;
-            else chipLED.SecY8950 = 2;
-
-            if (model == EnmVRModel.VirtualModel)
-            {
-                fmRegisterY8950[chipID][dAddr] = dData;
-                if (dAddr >= 0xb0 && dAddr <= 0xb8)
-                {
-                    int ch = dAddr - 0xb0;
-                    int k = (dData >> 5) & 1;
-                    if (k == 0)
-                    {
-                        kiY8950[chipID].On[ch] = false;
-                        kiY8950[chipID].Off[ch] = true;
-                    }
-                    else
-                    {
-                        kiY8950[chipID].On[ch] = true;
-                    }
-                    if (maskFMChY8950[chipID][ch]) dData &= 0x1f;
-                }
-
-                if (dAddr == 0xbd)
-                {
-
-                    for (int c = 0; c < 5; c++)
-                    {
-                        if ((dData & (0x10 >> c)) == 0)
-                        {
-                            kiY8950[chipID].Off[c + 9] = true;
-                        }
-                        else
-                        {
-                            if (kiY8950[chipID].Off[c + 9]) kiY8950[chipID].On[c + 9] = true;
-                            kiY8950[chipID].Off[c + 9] = false;
-                        }
-                    }
-
-                    if (maskFMChY8950[chipID][9]) dData &= 0xef;
-                    if (maskFMChY8950[chipID][10]) dData &= 0xf7;
-                    if (maskFMChY8950[chipID][11]) dData &= 0xfb;
-                    if (maskFMChY8950[chipID][12]) dData &= 0xfd;
-                    if (maskFMChY8950[chipID][13]) dData &= 0xfe;
-
-                }
-
-                //ADPCM
-                if (dAddr == 0x07)
-                {
-                    int k = (dData & 0x80);
-                    if (k == 0)
-                    {
-                        kiY8950[chipID].On[14] = false;
-                        kiY8950[chipID].Off[14] = true;
-                    }
-                    else
-                    {
-                        kiY8950[chipID].On[14] = true;
-                    }
-                    if (maskFMChY8950[chipID][14]) dData &= 0x7f;
-                }
-
-            }
-
-            if (model == EnmVRModel.VirtualModel)
-            {
-                //if (!ctY8950[chipID].UseScci)
-                {
-                    mds.WriteY8950((byte)chipID, (byte)dAddr, (byte)dData);
-                }
-            }
-            else
-            {
-            }
-
-        }
 
         public void setYMZ280BRegister(int chipID, int dAddr, int dData)
         {
@@ -8421,16 +8681,6 @@ namespace mml2vgmIDE
                 mds.WriteYMZ280BPCMData(chipid, ROMSize, DataStart, DataLength, romdata, SrcStartAdr);
         }
 
-        public void writeY8950PCMData(byte chipid, uint ROMSize, uint DataStart, uint DataLength, byte[] romdata, uint SrcStartAdr)
-        {
-            EnmVRModel model = EnmVRModel.VirtualModel;
-            if (chipid == 0) chipLED.PriY8950 = 2;
-            else chipLED.SecY8950 = 2;
-
-            if (model == EnmVRModel.VirtualModel)
-                mds.WriteY8950PCMData(chipid, ROMSize, DataStart, DataLength, romdata, SrcStartAdr);
-        }
-
 
         //
         // 鍵盤のボリューム表示のため音量を取得する
@@ -8611,17 +8861,6 @@ namespace mml2vgmIDE
                 kiYM3526[chipID].On[ch] = false;
             }
             return kiYM3526ret[chipID];
-        }
-
-        public ChipKeyInfo getY8950KeyInfo(int chipID)
-        {
-            for (int ch = 0; ch < kiY8950[chipID].Off.Length; ch++)
-            {
-                kiY8950ret[chipID].Off[ch] = kiY8950[chipID].Off[ch];
-                kiY8950ret[chipID].On[ch] = kiY8950[chipID].On[ch];
-                kiY8950[chipID].On[ch] = false;
-            }
-            return kiY8950ret[chipID];
         }
 
         public ChipKeyInfo getYM3812KeyInfo(int chipID)

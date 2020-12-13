@@ -63,6 +63,12 @@
     Support type: FM 9Ch  
 - YM3526(RHYTHM)  
     Support type: RHYTHM 5Ch  
+- Y8950(FM)  
+    Support type: FM 9Ch  
+- Y8950(RHYTHM)  
+    Support type: RHYTHM 5Ch  
+- Y8950(ADPCM)  
+    Support type: ADPCM 1Ch  
 - YM3812(FM)  
     Support type: FM 9Ch  
 - YM3812(RHYTHM)  

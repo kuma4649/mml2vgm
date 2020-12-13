@@ -420,3 +420,9 @@ E27003=Tone number({0}) does not exist for PCM definition.
 E27004=Selected Tone number({0}) is not for C352 PCM data.
 
 
+
+;Y8950.cs 28000
+E28004=Tone number({0}) does not exist for PCM definition.
+E28005=Selected Tone number({0}) is not for Y8950 ADPCM data.
+
+

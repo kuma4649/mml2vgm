@@ -226,6 +226,11 @@ namespace Core
                 info.format == enmFormat.VGM ? new string[] { "I", "Is" } : (info.format == enmFormat.XGM ? new string[] { } : new string[] { "I", "Is" })
                 ), new int[] { 2, 0, -1 }));
 
+            cp = new Y8950(null, 0, null, null, 0);
+            cpn.Add(enmChipType.Y8950, new Tuple<string, string, List<string>, int[]>(cp.Name, cp.ShortName, new List<string>(
+                info.format == enmFormat.VGM ? new string[] { "B", "Bs" } : (info.format == enmFormat.XGM ? new string[] { } : new string[] { "B", "Bs" })
+                ), new int[] { 2, 0, -1 }));
+
             cp = new YM3812(null, 0, null, null, 0);
             cpn.Add(enmChipType.YM3812, new Tuple<string, string, List<string>, int[]>(cp.Name, cp.ShortName, new List<string>(
                 info.format == enmFormat.VGM ? new string[] { "J", "Js" } : (info.format == enmFormat.XGM ? new string[] { } : new string[] { "J", "Js" })
@@ -268,7 +273,7 @@ namespace Core
 
             cp = new MidiGM(null, 0, null, null, 0);
             cpn.Add(enmChipType.MIDI_GM, new Tuple<string, string, List<string>, int[]>(cp.Name, cp.ShortName, new List<string>(
-                info.format == enmFormat.VGM ? new string[] { } : (info.format == enmFormat.XGM ? new string[] { } : new string[] { "B", "Bs" })
+                info.format == enmFormat.VGM ? new string[] { } : (info.format == enmFormat.XGM ? new string[] { } : new string[] { "M", "Ms" })
                 ), new int[] { 0, 0, -1 }));
 
             //パート名定義文を解析し、デフォルト設定を書き換える
