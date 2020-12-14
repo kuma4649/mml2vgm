@@ -1104,6 +1104,11 @@ namespace Core
             //optionが未指定の場合の初期値を設定
             if (opt == -1)
             {
+                if (enmChip == enmChipType.Y8950)
+                {
+                    opt = 0;
+                }
+
                 if (enmChip == enmChipType.YM2610B)
                 {
                     opt = 0;

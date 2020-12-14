@@ -120,9 +120,10 @@
            ・8bitも読み込めるが16bitに変換される。
            ・8KHzがo4c(オクターブ4のドの音)として再生される。
            ・32byte毎にPaddingされる。
-           ・合計512Kbyteまで定義可能。
+           ・合計2Mbyte(262144byteメモリ x 8 bank)まで定義可能。
+           ・一つのサンプルは最大262144byteまで。それ以上はカットされる。
+           ・バンクに収まらない場合は次のバンクに格納し、収まらなかったバンクの方はPaddingされる。
            ・ROMとして定義される。
-           ・(TBD)バンクに収まらない場合は次のバンクに格納し、収まらなかったバンクの方はPaddingされる。
          YM2612
            ・PCMは8KHz,8bit,mono,圧縮なし,unsignedのwavファイルであること。
            ・16bit,signedも読み込めるが8bit,unsignedに変換される。(TBD)
@@ -448,18 +449,18 @@
   D01    YMF262(FM音源)(Primary)         CH1(2OP | 4OP)
   D02    YMF262(FM音源)(Primary)         CH2(2OP | 4OP)
   D03    YMF262(FM音源)(Primary)         CH3(2OP | 4OP)
-  D04    YMF262(FM音源)(Primary)         CH4(2OP | CH1が4OP時は使用不可)
-  D05    YMF262(FM音源)(Primary)         CH5(2OP | CH2が4OP時は使用不可)
-  D06    YMF262(FM音源)(Primary)         CH6(2OP | CH3が4OP時は使用不可)
-  D07    YMF262(FM音源)(Primary)         CH7(2OP only | RHYTHM使用時は使用不可)
-  D08    YMF262(FM音源)(Primary)         CH8(2OP only | RHYTHM使用時は使用不可)
-  D09    YMF262(FM音源)(Primary)         CH9(2OP only | RHYTHM使用時は使用不可)
+  D04    YMF262(FM音源)(Primary)         CH4(2OP CH1が4OP時は使用不可)
+  D05    YMF262(FM音源)(Primary)         CH5(2OP CH2が4OP時は使用不可)
+  D06    YMF262(FM音源)(Primary)         CH6(2OP CH3が4OP時は使用不可)
+  D07    YMF262(FM音源)(Primary)         CH7(2OP only RHYTHM使用時は使用不可)
+  D08    YMF262(FM音源)(Primary)         CH8(2OP only RHYTHM使用時は使用不可)
+  D09    YMF262(FM音源)(Primary)         CH9(2OP only RHYTHM使用時は使用不可)
   D10    YMF262(FM音源)(Primary)         CH10(2OP | 4OP)
   D11    YMF262(FM音源)(Primary)         CH11(2OP | 4OP)
   D12    YMF262(FM音源)(Primary)         CH12(2OP | 4OP)
-  D13    YMF262(FM音源)(Primary)         CH13(2OP | CH10が4OP時は使用不可)
-  D14    YMF262(FM音源)(Primary)         CH14(2OP | CH11が4OP時は使用不可)
-  D15    YMF262(FM音源)(Primary)         CH15(2OP | CH12が4OP時は使用不可)
+  D13    YMF262(FM音源)(Primary)         CH13(2OP CH10が4OP時は使用不可)
+  D14    YMF262(FM音源)(Primary)         CH14(2OP CH11が4OP時は使用不可)
+  D15    YMF262(FM音源)(Primary)         CH15(2OP CH12が4OP時は使用不可)
   D16    YMF262(FM音源)(Primary)         CH16(2OP only)
   D17    YMF262(FM音源)(Primary)         CH17(2OP only)
   D18    YMF262(FM音源)(Primary)         CH18(2OP only)
@@ -515,12 +516,7 @@
   Ss3    SN76489(SSG音源)(Secondary)     CH3
   Ss4    SN76489(SSG音源)(Secondary)     CH4(ノイズ)
   Rs1    RF5C164(PCM音源)(Secondary)     CH1(MDPlayerのみ再生可能)
-  Rs2    RF5C164(PCM音源)(Secondary)     CH2(MDPlayerのみ再生可能)
-  Rs3    RF5C164(PCM音源)(Secondary)     CH3(MDPlayerのみ再生可能)
-  Rs4    RF5C164(PCM音源)(Secondary)     CH4(MDPlayerのみ再生可能)
-  Rs5    RF5C164(PCM音源)(Secondary)     CH5(MDPlayerのみ再生可能)
-  Rs6    RF5C164(PCM音源)(Secondary)     CH6(MDPlayerのみ再生可能)
-  Rs7    RF5C164(PCM音源)(Secondary)     CH7(MDPlayerのみ再生可能)
+   ...
   Rs8    RF5C164(PCM音源)(Secondary)     CH8(MDPlayerのみ再生可能)
   Ts01   YM2610B(FM音源)(Secondary)      CH1
   Ts02   YM2610B(FM音源)(Secondary)      CH2
@@ -1065,6 +1061,10 @@ b               -oooooooooooooooooooooooooooooooooooooooooooooo  音符シ
                           73以上を指定すると14000を既定の周波数として音程を変換し定義する。
                           この機能を利用するにはSoXが必要。
                 YM2609  : 0,1,2,3がそれぞれADPCM1,2,3,Aとして定義される
+                Y8950   : bit0が0の場合 ROMとして定義する
+                          bit0が1の場合 RAMとして定義する(TBD)
+                          bit1が0の場合 REPEATしない
+                          bit1が1の場合 REPEATする
     P を使用すると、mml2vgmはPCMデータを音量などを加工した後、メモリに順番に配置する。
     Bankの機能が存在するChipの場合は、パディングなどを行いその制約に沿った配置を行う。
     また、音色定義も合わせて行われ、加工後のデータを基準にStartAdr、EndAdrが設定される。

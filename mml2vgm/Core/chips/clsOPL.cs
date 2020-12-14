@@ -924,7 +924,7 @@ namespace Core
                             page.keyOn = false;
                             SOutData(page, mml, port[0]
                                 , 0x07
-                                , 0xa0
+                                , (byte)(0xa0 | ((page.pcmLoopAddress & 2) != 0 ? 0x10 : 0x00))
                                 );
                         }
 

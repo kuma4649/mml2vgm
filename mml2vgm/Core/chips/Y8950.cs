@@ -8,6 +8,8 @@ namespace Core
 {
     public class Y8950 : ClsOPL
     {
+        public List<long> memoryMap = null;
+
         public Y8950(ClsVgm parent, int chipID, string initialPartName, string stPath, int chipNumber) : base(parent, chipID, initialPartName, stPath, chipNumber)
         {
             _chipType = enmChipType.Y8950;
@@ -72,6 +74,7 @@ namespace Core
             pcmDataInfo[0].totalHeaderLength = pcmDataInfo[0].totalBuf.Length;
             pcmDataInfo[0].totalHeadrSizeOfDataPtr = (parent.ChipCommandSize == 2) ? 4 : 3;
 
+            memoryMap = new List<long>();
         }
 
         public override void InitChip()
@@ -180,8 +183,54 @@ int ws
                 newBuf = new byte[size];
                 Array.Copy(buf, newBuf, size);
                 buf = newBuf;
-                long tSize = size;
-                size = buf.Length;
+                int m256kbyte = 0b100_0000_0000_0000_0000;//CASAdr 9bit  RASAdr 9bit = 18bit(2+4+4+4+4)
+
+                //262,144 バイトを超える場合はそれ以降をカット
+                if (size > m256kbyte)
+                {
+                    List<byte> n = newBuf.ToList();
+                    n.RemoveRange(m256kbyte, (int)(size - m256kbyte));
+                    newBuf = n.ToArray();
+                    size = m256kbyte;
+                }
+
+                //空いているBankを探す
+                int freeBank = 0;
+                int freeAdr = 0;
+                do
+                {
+                    if (memoryMap.Count < freeBank + 1)
+                    {
+                        memoryMap.Add(0);
+                        freeAdr = 0 + freeBank * m256kbyte;
+                        memoryMap[freeBank] += size;
+                        break;
+                    }
+
+                    if (size < m256kbyte - memoryMap[freeBank])
+                    {
+                        freeAdr = (int)(memoryMap[freeBank] + freeBank * m256kbyte);
+                        memoryMap[freeBank] += size;
+                        break;
+                    }
+
+                    freeBank++;
+
+                } while (true);
+
+                //パディング(空きが足りない場合はバンクをひとつ進める(0b100_0000_0000_0000_0000)為、空きを全て埋める)
+                while (freeAdr > pi.totalBuf.Length - pi.totalHeaderLength)
+                {
+                    int fs = (pi.totalBuf.Length - pi.totalHeaderLength) % m256kbyte;
+
+                    List<byte> n = pi.totalBuf.ToList();
+                    for (int i = 0; i < m256kbyte - fs; i++) n.Add(0x00);
+                    pi.totalBuf = n.ToArray();
+                    pi.totalBufPtr += m256kbyte - fs;
+                }
+
+                //long tSize = size;
+                //size = buf.Length;
 
                 newDic.Add(
                     v.Key
@@ -192,21 +241,30 @@ int ws
                         , v.Value.fileName
                         , v.Value.freq
                         , v.Value.vol
-                        , pi.totalBufPtr
-                        , pi.totalBufPtr + size - 1
+                        , freeAdr
+                        , freeAdr + size - 1
                         , size
                         , -1
                         , is16bit
-                        , samplerate)
+                        , samplerate
+                        , (v.Value.loopAdr & 3)
+                        )
                     ));
 
-                pi.totalBufPtr += size;
-                newBuf = new byte[pi.totalBuf.Length + buf.Length];
-                Array.Copy(pi.totalBuf, newBuf, pi.totalBuf.Length);
-                Array.Copy(buf, 0, newBuf, pi.totalBuf.Length, buf.Length);
+                if (freeAdr == pi.totalBufPtr)
+                {
+                    pi.totalBufPtr += size;
 
-                pi.totalBuf = newBuf;
-                pi.use = true;
+                    newBuf = new byte[pi.totalBuf.Length + buf.Length];
+                    Array.Copy(pi.totalBuf, newBuf, pi.totalBuf.Length);
+                    Array.Copy(buf, 0, newBuf, pi.totalBuf.Length, buf.Length);
+                    pi.totalBuf = newBuf;
+                }
+                else
+                {
+                    Array.Copy(buf, 0, pi.totalBuf, freeAdr + pi.totalHeaderLength, buf.Length);
+                }
+
                 Common.SetUInt32bit31(
                     pi.totalBuf
                     , pi.totalHeadrSizeOfDataPtr
@@ -218,12 +276,14 @@ int ws
                     , pi.totalHeadrSizeOfDataPtr + 4
                     , (UInt32)(pi.totalBuf.Length - (pi.totalHeadrSizeOfDataPtr + 4 + 4 + 4))
                     );
+                pi.use = true;
                 pcmDataEasy = pi.use ? pi.totalBuf : null;
 
             }
             catch
             {
                 pi.use = false;
+                newDic[v.Key].Item2.status = enmPCMSTATUS.ERROR;
             }
 
         }
@@ -362,6 +422,10 @@ int ws
                     , (int)parent.instPCM[n].Item2.stAdr
                     , (int)parent.instPCM[n].Item2.edAdr);
 
+                page.pcmLoopAddress = (int)(long)parent.instPCM[n].Item2.option[0];
+
+                parent.instPCM[n].Item2.status = enmPCMSTATUS.USED;
+
                 return;
             }
 
@@ -380,8 +444,8 @@ int ws
                 , Name
                 , pcm.Item2.chipNumber != 0 ? "SEC" : "PRI"
                 , pcm.Item2.num
-                , pcm.Item2.stAdr & 0xffffff
-                , pcm.Item2.edAdr & 0xffffff
+                , pcm.Item2.stAdr & 0xff_ff_ff
+                , pcm.Item2.edAdr & 0xff_ff_ff
                 , pcm.Item2.size
                 , pcm.Item2.status.ToString()
                 );
