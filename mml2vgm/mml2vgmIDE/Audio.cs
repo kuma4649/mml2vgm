@@ -6477,6 +6477,7 @@ namespace mml2vgmIDE
 
         public static bool EnqToWav(outDatum od, long Counter, Chip Chip, EnmDataType Type, int Address, int Data, object ExData)
         {
+            if (Chip == null) return false;
             if (Chip.Device == EnmZGMDevice.Conductor) return false;
             if (Type == EnmDataType.None) return false;
 
