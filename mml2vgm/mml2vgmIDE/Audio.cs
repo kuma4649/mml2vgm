@@ -6453,19 +6453,25 @@ namespace mml2vgmIDE
 
             Enq bEnq = chipRegister.enq;
             chipRegister.enq = EnqToWav;
-
-            while (!driver.Stopped && GetVgmCurLoopCounter() < 2 && !waveModeAbort)
+            try
             {
-                mds.Update(buf, offset, sampleCount, playToWavOneProc);
-                EmuSeqCounter++;
-                toWavWaveWriter.Write(buf, offset, sampleCount * 2);
+
+                while (!driver.Stopped && GetVgmCurLoopCounter() < 2 && !waveModeAbort)
+                {
+                    mds.Update(buf, offset, sampleCount, playToWavOneProc);
+                    EmuSeqCounter++;
+                    toWavWaveWriter.Write(buf, offset, sampleCount * 2);
+                }
+
             }
+            finally
+            {
+                Stop(SendMode.Both);
+                toWavWaveWriter.Close();
 
-
-            Stop(SendMode.Both);
-            toWavWaveWriter.Close();
-            chipRegister.enq = bEnq;
-            waveMode = false;
+                chipRegister.enq = bEnq;
+                waveMode = false;
+            }
         }
 
         private static void playToWavOneProc()

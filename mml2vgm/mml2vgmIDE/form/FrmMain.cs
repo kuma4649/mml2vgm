@@ -3967,43 +3967,66 @@ stop();
             }
 
             exportWav = true;
+            int Latency = setting.outputDevice.Latency;
+            int WaitTime = setting.outputDevice.WaitTime;
+            int LatencyEmu = setting.LatencyEmulation;
+            int LatencySCCI = setting.LatencySCCI;
+            setting.outputDevice.Latency = 0;
+            setting.outputDevice.WaitTime = 0;
+            setting.LatencyEmulation = 0;
+            setting.LatencySCCI = 0;
 
-            if (qi.doc.dstFileFormat == EnmFileFormat.MUB)
+            try
             {
-                mubData = (musicDriverInterface.MmlDatum[])qi.doc.compiledData;
-                doPlay = true;
-                finishedCompileMUC();
+                if (qi.doc.dstFileFormat == EnmFileFormat.MUB)
+                {
+                    mubData = (musicDriverInterface.MmlDatum[])qi.doc.compiledData;
+                    doPlay = true;
+                    finishedCompileMUC();
+                }
+                else if (qi.doc.dstFileFormat == EnmFileFormat.M)
+                {
+                    mData = (musicDriverInterface.MmlDatum[])qi.doc.compiledData;
+                    doPlay = true;
+                    finishedCompileMML();
+                }
+                else
+                {
+                    mv = (Mml2vgm)qi.doc.compiledData;
+                    doPlay = true;
+                    args = new string[2] { qi.doc.gwiFullPath, "" };
+                    finishedCompileGWI();
+                }
+
+                Audio.waveMode = true;
+                Audio.waveModeAbort = false;
+                Audio.Stop(SendMode.Both);
+                exportWav = false;
+
+                bool res = Audio.PlayToWav(setting, sfd.FileName);
+                if (!res)
+                {
+                    MessageBox.Show("失敗");
+                    return;
+                }
+
+                FrmProgress fp = new FrmProgress();
+                fp.ShowDialog();
+
+                MessageBox.Show("完了");
             }
-            else if (qi.doc.dstFileFormat == EnmFileFormat.M)
+            catch(Exception ex)
             {
-                mData = (musicDriverInterface.MmlDatum[])qi.doc.compiledData;
-                doPlay = true;
-                finishedCompileMML();
+                MessageBox.Show(string.Format("失敗\r\n{0}\r\n{1}\r\n", ex.Message, ex.StackTrace));
             }
-            else
+            finally
             {
-                mv = (Mml2vgm)qi.doc.compiledData;
-                doPlay = true;
-                args = new string[2] { qi.doc.gwiFullPath, "" };
-                finishedCompileGWI();
+                setting.outputDevice.Latency = Latency;
+                setting.outputDevice.WaitTime = WaitTime;
+                setting.LatencyEmulation = LatencyEmu;
+                setting.LatencySCCI = LatencySCCI;
             }
 
-            Audio.waveMode = true;
-            Audio.waveModeAbort = false;
-            Audio.Stop(SendMode.Both);
-            exportWav = false;
-
-            bool res =Audio.PlayToWav(setting, sfd.FileName);
-            if (!res)
-            {
-                MessageBox.Show("失敗");
-                return;
-            }
-
-            FrmProgress fp = new FrmProgress();
-            fp.ShowDialog();
-
-            MessageBox.Show("完了");
         }
 
 
