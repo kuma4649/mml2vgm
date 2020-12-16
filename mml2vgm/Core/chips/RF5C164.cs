@@ -699,6 +699,11 @@ namespace Core
             SetRf5c164SampleStartAddress(mml, page);
             SetRf5c164LoopAddress(mml, page, (int)(parent.instPCM[n].Item2.loopAdr + 2));
 
+            //L対策も混みです
+            page.envIndex = -1;
+            page.envCounter = -1;
+            page.envVolume = 0;
+            SetKeyOff(page, mml);
         }
 
         public override void CmdDetune(partPage page, MML mml)

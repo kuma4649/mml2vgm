@@ -140,13 +140,15 @@ namespace Core
                 Array.Copy(buf, newBuf, size);
                 buf = newBuf;
 
-                //65536 バイトを超える場合はそれ以降をカット
-                if (size > 0x10000)
+                //65536/2 バイトを超える場合はそれ以降をカット
+                int bankSize = 0x10000 / 2;
+
+                if (size > bankSize)
                 {
                     List<byte> n = newBuf.ToList();
-                    n.RemoveRange(0x10000, (int)(size - 0x10000));
+                    n.RemoveRange(bankSize, (int)(size - bankSize));
                     newBuf = n.ToArray();
-                    size = 0x10000;
+                    size = bankSize;
                 }
 
                 //空いているBankを探す
@@ -157,14 +159,14 @@ namespace Core
                     if (memoryMap.Count < freeBank + 1)
                     {
                         memoryMap.Add(0);
-                        freeAdr = 0 + freeBank * 0x10000;
+                        freeAdr = 0 + freeBank * bankSize;
                         memoryMap[freeBank] += size;
                         break;
                     }
 
-                    if (size < 0x10000 - memoryMap[freeBank])
+                    if (size < bankSize - memoryMap[freeBank])
                     {
-                        freeAdr = (int)(memoryMap[freeBank] + freeBank * 0x10000);
+                        freeAdr = (int)(memoryMap[freeBank] + freeBank * bankSize);
                         memoryMap[freeBank] += size;
                         break;
                     }
@@ -176,11 +178,11 @@ namespace Core
                 //パディング(空きが足りない場合はバンクをひとつ進める(0x10000)為、空きを全て埋める)
                 while (freeAdr > pi.totalBuf.Length - pi.totalHeaderLength)
                 {
-                    int fs = (pi.totalBuf.Length - pi.totalHeaderLength) % 0x10000;
+                    int fs = (pi.totalBuf.Length - pi.totalHeaderLength) % bankSize;
                     List<byte> n = pi.totalBuf.ToList();
-                    for (int i = 0; i < 0x10000 - fs; i++) n.Add(0x00);
+                    for (int i = 0; i < bankSize - fs; i++) n.Add(0x00);
                     pi.totalBuf = n.ToArray();
-                    pi.totalBufPtr += 0x10000 - fs;
+                    pi.totalBufPtr += bankSize - fs;
                 }
 
                 newDic.Add(

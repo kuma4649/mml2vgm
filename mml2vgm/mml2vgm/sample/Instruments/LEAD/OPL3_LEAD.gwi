@@ -1,0 +1,32 @@
+﻿'{
+
+	TitleName   = YMF262(OPL3) test
+	TitleNameJ  =
+	GameName    =
+	GameNameJ   =
+	SystemName  =
+	SystemNameJ =
+	Composer    =
+	ComposerJ   =
+	ReleaseDate =
+	Converted   =
+	Notes       =
+
+}
+
+
+'Cn1 T120
+
+
+'@ L 3 "LEAD (from Kuma 20/12/15)"
+   AR  DR  SL  RR  KSL TL  MT  AM  VIB EGT KSR WS
+'@ 015 002 007 000 000 030 004 001 000 000 000 000
+'@ 015 000 012 006 000 000 002 000 001 001 000 000
+   CNT FB
+'@ 000 006
+
+'D0102 @3v60l8o5Q8
+'D02   (9D1r16
+'D0102 e2.g4b4.g4.e4d4.c4.<a4f1
+
+

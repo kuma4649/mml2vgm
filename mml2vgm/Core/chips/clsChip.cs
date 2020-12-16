@@ -1429,6 +1429,10 @@ namespace Core
                             pg.beforeVolume = -1;
                             pg.pan = 3;
                             pg.beforeTie = false;
+                            pg.beforepcmBank = -1;
+                            pg.beforepcmEndAddress = -1;
+                            pg.beforepcmLoopAddress = -1;
+                            pg.beforepcmStartAddress = -1;
 
                             chip.CmdLoopExtProc(pg, mml);
                         }
