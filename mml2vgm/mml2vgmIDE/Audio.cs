@@ -6658,8 +6658,42 @@ namespace mml2vgmIDE
 
             return ret;
         }
-        
-        private static WaveWriter toWavWaveWriter=null;
+
+        public static bool PlayToMid(Setting setting, string fnMid, bool doSkipStop = false, Action startedOnceMethod = null)
+        {
+            useEmu = false;
+            useReal = false;
+
+            waveMode = true;
+
+            errMsg = "";
+            Stop(SendMode.Both);
+
+            vgmSpeed = 1.0;
+            bool ret = playSet();
+            if (!ret) return false;
+
+            Audio.startedOnceMethod = startedOnceMethod;
+
+            EmuSeqCounter = 0;
+            DriverSeqCounter = 0;
+
+            sm.RequestStopAtEmuChipSender();
+            sm.RequestStopAtRealChipSender();
+
+            Stop(SendMode.Both);
+
+            toMidWriter = new MidWriter(setting);
+            toMidWriter.Open(fnMid);
+
+            Thread mm = new Thread(new ThreadStart(trdToMidRenderingProcess));
+            mm.Start();
+
+            return ret;
+        }
+
+        private static WaveWriter toWavWaveWriter = null;
+        private static MidWriter toMidWriter = null;
 
         private static void trdToWavRenderingProcess()
         {
@@ -6697,6 +6731,42 @@ namespace mml2vgmIDE
                 driver.oneFrameProc();
         }
 
+        private static void trdToMidRenderingProcess()
+        {
+            short[] buf = new short[2];
+            int offset = 0;
+            int sampleCount = 1;
+
+            Enq bEnq = chipRegister.enq;
+            chipRegister.enq = EnqToMid;
+            try
+            {
+
+                while (!driver.Stopped && GetVgmCurLoopCounter() < 2 && !waveModeAbort)
+                {
+                    mds.Update(buf, offset, sampleCount, playToMidOneProc);
+                    EmuSeqCounter++;
+                    toMidWriter.Write(buf, offset, sampleCount * 2);
+                }
+
+            }
+            finally
+            {
+                Stop(SendMode.Both);
+                toMidWriter.Close();
+
+                chipRegister.enq = bEnq;
+                waveMode = false;
+            }
+        }
+
+        private static void playToMidOneProc()
+        {
+            //
+            if (EmuSeqCounter >= DriverSeqCounter)
+                driver.oneFrameProc();
+        }
+
         public static bool EnqToWav(outDatum od, long Counter, Chip Chip, EnmDataType Type, int Address, int Data, object ExData)
         {
             if (Chip == null) return false;
@@ -6707,6 +6777,16 @@ namespace mml2vgmIDE
             return false;
         }
 
+        public static bool EnqToMid(outDatum od, long Counter, Chip Chip, EnmDataType Type, int Address, int Data, object ExData)
+        {
+            if (Chip == null) return false;
+            if (Chip.Device == EnmZGMDevice.Conductor) return false;
+            if (Type == EnmDataType.None) return false;
+            if (toMidWriter == null) return false;
+
+            toMidWriter.SendChipData(Counter, Chip, Type, Address, Data, ExData);
+            return false;
+        }
 
 
     }

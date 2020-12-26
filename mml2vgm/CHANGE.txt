@@ -1,4 +1,7 @@
 更新履歴
+TAG327 2020/12/26 2nd
+  IDE:.zgm MIDI出力の.midファイルエクスポート機能を追加
+
 TAG326 2020/12/26
   Sample:MIDI パート名が改修前のままだったので修正
   IDE:MoonDriverDotNET暫定対応

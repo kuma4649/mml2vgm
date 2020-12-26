@@ -278,6 +278,7 @@
     <Compile Include="MDChipParams.cs" />
     <Compile Include="midiOutInfo.cs" />
     <Compile Include="MIDIParam.cs" />
+    <Compile Include="MidWriter.cs" />
     <Compile Include="MMLParameter\AY8910.cs" />
     <Compile Include="MMLParameter\C140.cs" />
     <Compile Include="MMLParameter\C352.cs" />

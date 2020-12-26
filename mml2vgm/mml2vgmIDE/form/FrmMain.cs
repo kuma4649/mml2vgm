@@ -24,6 +24,7 @@ namespace mml2vgmIDE
         public bool isSuccess = true;
         private string[] args;
         private bool exportWav;
+        private bool exportMid;
         private Mml2vgm mv = null;
         private string title = "";
         public FrmLog frmLog = null;
@@ -4149,6 +4150,26 @@ stop();
             compileManager.RequestPlayBack(((FrmEditor)dc).document, playToWavCB);
         }
 
+        private void tsmiExport_toMidiFile_Click(object sender, EventArgs e)
+        {
+            IDockContent dc = GetActiveDockContent();
+            if (dc == null) return;
+            if (!(dc is FrmEditor)) return;
+
+            FrmEditor fe = (FrmEditor)dc;
+            Document doc = (Document)(fe.Tag);
+            if(doc.srcFileFormat!= EnmMmlFileFormat.GWI)
+            {
+                MessageBox.Show("This mml file is not support.");
+                return;
+            }
+
+            string tempPath = Path.Combine(Common.GetApplicationDataFolder(true), "temp", Path.GetFileName(((Document)((FrmEditor)dc).Tag).gwiFullPath));
+
+            compileManager.RequestCompile(((FrmEditor)dc).document, ((FrmEditor)dc).azukiControl.Text + "", tempPath);
+            compileManager.RequestPlayBack(((FrmEditor)dc).document, playToMIDCB);
+        }
+
         private void playToWavCB(CompileManager.queItem qi)
         {
             if (InvokeRequired)
@@ -4250,7 +4271,96 @@ stop();
 
         }
 
+        private void playToMIDCB(CompileManager.queItem qi)
+        {
+            if (InvokeRequired)
+            {
+                this.Invoke(new Action<CompileManager.queItem>(playToMIDCB), new object[] { qi });
+                return;
+            }
 
+            //コンパイルエラーが発生する場合はエクスポート処理中止
+            if (qi.doc.errBox != null && qi.doc.errBox.Length > 0)
+            {
+                Audio.Stop(SendMode.Both);
+                MessageBox.Show("コンパイル時にエラーが発生したため、エクスポート処理を中止しました。", "エクスポート失敗", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
 
+            if (qi.doc.dstFileFormat != EnmFileFormat.ZGM)
+            {
+                Audio.Stop(SendMode.Both);
+                MessageBox.Show("MIDエクスポートはZGM形式のみです。", "エクスポート失敗", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            //出力ファイル名の問い合わせ
+            SaveFileDialog sfd = new SaveFileDialog();
+            string fnMid = qi.doc.gwiFullPath;
+            if (fnMid.Length > 0 && fnMid[fnMid.Length - 1] == '*')
+            {
+                fnMid = fnMid.Substring(0, fnMid.Length - 1);
+            }
+            fnMid = Path.Combine(Path.GetDirectoryName(fnMid), Path.GetFileNameWithoutExtension(fnMid) + ".mid");
+            sfd.FileName = fnMid;
+            string path1 = System.IO.Path.GetDirectoryName(fnMid);
+            path1 = string.IsNullOrEmpty(path1) ? fnMid : path1;
+            sfd.InitialDirectory = path1;
+            sfd.Filter = "Standard MIDファイル(*.mid)|*.mid|すべてのファイル(*.*)|*.*";
+            sfd.Title = "エクスポート";
+            sfd.RestoreDirectory = true;
+            sfd.OverwritePrompt = false;
+            if (sfd.ShowDialog() != DialogResult.OK)
+            {
+                return;
+            }
+
+            exportMid = true;
+            int Latency = setting.outputDevice.Latency;
+            int WaitTime = setting.outputDevice.WaitTime;
+            int LatencyEmu = setting.LatencyEmulation;
+            int LatencySCCI = setting.LatencySCCI;
+            setting.outputDevice.Latency = 0;
+            setting.outputDevice.WaitTime = 0;
+            setting.LatencyEmulation = 0;
+            setting.LatencySCCI = 0;
+
+            try
+            {
+                mv = (Mml2vgm)qi.doc.compiledData;
+                doPlay = true;
+                args = new string[2] { qi.doc.gwiFullPath, "" };
+                finishedCompileGWI();
+
+                Audio.waveMode = true;
+                Audio.waveModeAbort = false;
+                Audio.Stop(SendMode.Both);
+                exportMid = false;
+
+                bool res = Audio.PlayToMid(setting, sfd.FileName);
+                if (!res)
+                {
+                    MessageBox.Show("失敗");
+                    return;
+                }
+
+                FrmProgress fp = new FrmProgress();
+                fp.ShowDialog();
+
+                MessageBox.Show("完了");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(string.Format("失敗\r\n{0}\r\n{1}\r\n", ex.Message, ex.StackTrace));
+            }
+            finally
+            {
+                setting.outputDevice.Latency = Latency;
+                setting.outputDevice.WaitTime = WaitTime;
+                setting.LatencyEmulation = LatencyEmu;
+                setting.LatencySCCI = LatencySCCI;
+            }
+
+        }
     }
 }
