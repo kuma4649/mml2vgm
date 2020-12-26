@@ -60,6 +60,7 @@ namespace mml2vgmIDE
         private ChannelInfo defaultChannelInfo = null;
         private mucomManager mucom = null;
         private PMDManager pmdmng = null;
+        private MoonDriverManager mdmng = null;
         private musicDriverInterface.MmlDatum[] mubData = null;
         private musicDriverInterface.MmlDatum[] mData = null;
         private string m98ResultMucString = null;
@@ -169,7 +170,9 @@ namespace mml2vgmIDE
             Core.Common.CheckSoXVersion(System.Windows.Forms.Application.StartupPath, Disp);
             CheckAndLoadMucomDotNET(System.Windows.Forms.Application.StartupPath, Disp);
             CheckAndLoadPMDDotNET(System.Windows.Forms.Application.StartupPath, Disp);
-            compileManager = new CompileManager(Disp, mucom, pmdmng);
+            CheckAndLoadMoonDriverDotNET(System.Windows.Forms.Application.StartupPath, Disp);
+
+            compileManager = new CompileManager(Disp, mucom, pmdmng, mdmng);
 
             string[] args = Environment.GetCommandLineArgs();
             //foreach (string ag in args) MessageBox.Show(ag);
@@ -254,6 +257,40 @@ namespace mml2vgmIDE
             }
         }
 
+        private void CheckAndLoadMoonDriverDotNET(string startupPath, Action<string> disp)
+        {
+            string mes = "";
+            if (!File.Exists(Path.Combine(startupPath, "MoonDriverDotNETCommon.dll"))) mes += "'MoonDriverDotNETCommon.dll' not found.\r\n";
+            if (!File.Exists(Path.Combine(startupPath, "MoonDriverDotNETCompiler.dll"))) mes += "'MoonDriverDotNETCompiler.dll' not found.\r\n";
+            if (!File.Exists(Path.Combine(startupPath, "MoonDriverDotNETDriver.dll"))) mes += "'MoonDriverDotNETDriver.dll' not found.\r\n";
+            if (!File.Exists(Path.Combine(startupPath, "lang\\MoonDriverDotNETmessage.ja-JP.txt"))) mes += "'lang\\MoonDriverDotNETmessage.ja-JP.txt' not found.\r\n";
+            if (!File.Exists(Path.Combine(startupPath, "lang\\MoonDriverDotNETmessage.txt"))) mes += "'lang\\MoonDriverDotNETmessage.txt' not found.\r\n";
+            if (mes != "")
+            {
+                disp(mes);
+                return;
+            }
+
+            try
+            {
+                mdmng = new MoonDriverManager(
+                    Path.Combine(startupPath, "MoonDriverDotNETCompiler.dll"),
+                    Path.Combine(startupPath, "MoonDriverDotNETDriver.dll"),
+                    disp, setting);
+                Audio.MoonDriverManager = mdmng;
+
+                disp("MoonDriverDotNETを読み込みました");
+            }
+            catch (Exception ex)
+            {
+                disp("MoonDriverDotNETの読み込みに失敗しました");
+                disp(string.Format("message:\r\n{0}\r\nstacktrace:\r\n{1}\r\n", ex.Message, ex.StackTrace));
+                disp(string.Format("startuppath:\r\n{0}\r\n", startupPath));
+                mdmng = null;
+                Audio.MoonDriverManager = null;
+            }
+        }
+
         private void FrmMain_FormClosing(object sender, FormClosingEventArgs e)
         {
             bool flg = false;
@@ -314,7 +351,7 @@ namespace mml2vgmIDE
         {
             OpenFileDialog ofd = new OpenFileDialog();
 
-            ofd.Filter = "全てのサポートファイル(*.gwi;*.muc;*.mml)|*.gwi;*.muc;*.mml|gwiファイル(*.gwi)|*.gwi|mucファイル(*.muc)|*.muc|mmlファイル(*.mml)|*.mml|すべてのファイル(*.*)|*.*";
+            ofd.Filter = "全てのサポートファイル(*.gwi;*.muc;*.mml;*.mdl)|*.gwi;*.muc;*.mml;*.mdl|gwiファイル(*.gwi)|*.gwi|mucファイル(*.muc)|*.muc|mmlファイル(*.mml)|*.mml|mdlファイル(*.mdl)|*.mdl|すべてのファイル(*.*)|*.*";
             ofd.Title = "ファイルを開く";
             ofd.RestoreDirectory = true;
 
@@ -352,6 +389,8 @@ namespace mml2vgmIDE
                 else if (d.srcFileFormat == EnmMmlFileFormat.MUC)
                     File.WriteAllText(d.gwiFullPath, d.editor.azukiControl.Text, Encoding.GetEncoding(932));
                 else if (d.srcFileFormat == EnmMmlFileFormat.MML)
+                    File.WriteAllText(d.gwiFullPath, d.editor.azukiControl.Text, Encoding.GetEncoding(932));
+                else if (d.srcFileFormat == EnmMmlFileFormat.MDL)
                     File.WriteAllText(d.gwiFullPath, d.editor.azukiControl.Text, Encoding.GetEncoding(932));
 
                 d.parentFullPath = "";
@@ -1486,6 +1525,17 @@ stop();
                     activeMMLTextLines = new string[] { ((FrmEditor)dc).azukiControl.Text };
                     isMuc = EnmMmlFileFormat.MML;
                 }
+                else if (Path.GetExtension(tempPath).ToLower() == ".mdl")
+                {
+                    if (mdmng == null)
+                    {
+                        MessageBox.Show("Not found MoonDriverDotNET.", "error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+
+                    activeMMLTextLines = new string[] { ((FrmEditor)dc).azukiControl.Text };
+                    isMuc = EnmMmlFileFormat.MDL;
+                }
 
                 args = new string[2];
                 args[1] = tempPath;
@@ -1718,6 +1768,15 @@ stop();
                     Compiling |= 8;
                     startCompileMML();
                     break;
+                case ".mdl":
+                    if (mdmng == null)
+                    {
+                        MessageBox.Show("Not found MoonDriverDotNET.", "error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                    Compiling |= 16;
+                    startCompileMDL();
+                    break;
             }
         }
 
@@ -1819,6 +1878,38 @@ stop();
             Core.log.Close();
         }
 
+        private void startCompileMDL()
+        {
+            Core.log.Write("Call MoonDriverDotNET compiler");
+
+            string stPath = System.Windows.Forms.Application.StartupPath;
+
+            try
+            {
+                mData = mdmng.compileFromSrcText(activeMMLTextLines[0], wrkPath, args[1], doSkip ? caretPoint : Point.Empty, !doExport);
+            }
+            catch
+            {
+                isSuccess = false;
+            }
+
+            if (mData == null)
+            {
+                isSuccess = false;
+            }
+
+            Core.log.Write("Return MoonDriverDotNET compiler");
+            //}
+
+            Core.log.Write("Disp Result");
+
+            Action dmy = finishedCompile;
+            this.Invoke(dmy);
+
+            Core.log.Write("end compile thread");
+            Core.log.Close();
+        }
+
         private void updateTitle()
         {
             if (title == "")
@@ -1882,6 +1973,10 @@ stop();
             else if ((Compiling & 8) != 0)
             {
                 finishedCompileMML();
+            }
+            else if ((Compiling & 16) != 0)
+            {
+                finishedCompileMDL();
             }
         }
 
@@ -2237,6 +2332,133 @@ stop();
                     {
                         //WriteMmlDatumn("test.m", mData);
                         InitPlayer(EnmFileFormat.M, mData);
+                    }
+                    catch
+                    {
+                        MessageBox.Show(msg.get("E0100"), "mml2vgm", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+
+            }
+
+            Compiling = 0;
+            UpdateControl();
+        }
+
+        private void finishedCompileMDL()
+        {
+            musicDriverInterface.CompilerInfo ci = mdmng.GetCompilerInfo();
+            if (ci == null)
+            {
+                Compiling = 0;
+                UpdateControl();
+                return;
+            }
+
+            if (isSuccess)
+            {
+                frmPartCounter.ClearCounter();
+                Object[] cells = new object[7];
+                try
+                {
+                    if (ci != null && ci.totalCount != null && ci.totalCount.Count > 0)
+                    {
+                        for (int i = 0; i < ci.totalCount.Count; i++)
+                        {
+                            //if (pw[i].clockCounter == 0) continue;
+                            int ch = ci.partType[i] == "YM2608" ? ci.partNumber[i] : (
+                                    ci.partType[i] == "FM3ex" ? (ci.partNumber[i] + 6) : (
+                                    ci.partNumber[i]
+                                    )
+                                );
+                            ch += (ci.partName[i][0] >= 'G' && ci.partName[i][0] <= 'I') ? 3 : 0;
+                            ch++;
+                            cells[0] = ch;
+                            cells[1] = 0;//ChipIndex
+                            cells[2] = 0;//ChipNumber
+                            cells[3] = ci.partName[i];
+                            cells[4] = ci.partType[i] == "FM3ex" ? "YM2608" : ci.partType[i];
+                            cells[5] = ci.totalCount[i];
+                            cells[6] = ci.loopCount[i];
+                            frmPartCounter.AddPartCounter(cells);
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    Log.WriteLine(LogLevel.ERROR, string.Format("Exception:\r\nMessage\r\n{0}\r\nStackTrace\r\n{1}\r\n", e.Message, e.StackTrace));
+                }
+            }
+
+            foreach (Tuple<int, int, string> mes in ci.errorList)
+            {
+                frmErrorList.dataGridView1.Rows.Add("Error", "-"
+                    , mes.Item1 == -1 ? "-" : (mes.Item1 + 1).ToString()
+                    , mes.Item3);
+            }
+
+            foreach (Tuple<int, int, string> mes in ci.warningList)
+            {
+                frmErrorList.dataGridView1.Rows.Add("Warning", "-"
+                    , mes.Item1 == -1 ? "-" : (mes.Item1 + 1).ToString()
+                    , mes.Item3);
+            }
+
+            if (isSuccess)
+            {
+                //mubCompilerInfo = ci;
+
+                //if (ci.jumpChannel != null && jumpSoloModeSw)
+                //{
+                //    for (int i = 0; i < 11; i++)
+                //    {
+                //        bool solo = false;
+                //        if (i == ci.jumpChannel[0]) solo = true;
+
+                //        int ch = i;
+                //        if (i < 2)//FM 1-2
+                //        {
+                //            Audio.chipRegister.YM2608[0].ChMasks[ch] = !solo;
+                //        }
+                //        else if (i == 2)//FM 3
+                //        {
+                //            Audio.chipRegister.YM2608[0].ChMasks[2] = !solo;
+                //            Audio.chipRegister.YM2608[0].ChMasks[6] = !solo;
+                //            Audio.chipRegister.YM2608[0].ChMasks[7] = !solo;
+                //            Audio.chipRegister.YM2608[0].ChMasks[8] = !solo;
+                //        }
+                //        else if (i < 6)//SSG
+                //        {
+                //            ch = i + 6;
+                //            Audio.chipRegister.YM2608[0].ChMasks[ch] = !solo;
+                //        }
+                //        else if (i == 6)//Rhythm
+                //        {
+                //            Audio.chipRegister.YM2608[0].ChMasks[12] = !solo;
+                //            Audio.chipRegister.YM2608[0].ChMasks[13] = !solo;
+                //            Audio.chipRegister.YM2608[0].ChMasks[14] = !solo;
+                //            Audio.chipRegister.YM2608[0].ChMasks[15] = !solo;
+                //            Audio.chipRegister.YM2608[0].ChMasks[16] = !solo;
+                //            Audio.chipRegister.YM2608[0].ChMasks[17] = !solo;
+                //        }
+                //        else if (i < 10)
+                //        {
+                //            ch = i - 4;
+                //            Audio.chipRegister.YM2608[0].ChMasks[ch] = !solo;
+                //        }
+                //        else
+                //        {
+                //            Audio.chipRegister.YM2608[0].ChMasks[18] = !solo;
+                //        }
+                //    }
+                //}
+
+                if (doPlay && ci.errorList.Count < 1)
+                {
+                    try
+                    {
+                        //WriteMmlDatumn("test.m", mData);
+                        InitPlayer(EnmFileFormat.MDR, mData);
                     }
                     catch
                     {
@@ -2821,6 +3043,11 @@ stop();
             {
                 if (pmdmng == null) return false;
             }
+            else if (format == EnmFileFormat.MDR)
+            {
+                if (mdmng == null) return false;
+            }
+
             if (md == null || md.Length < 1) return false;
 
             try
@@ -2848,7 +3075,7 @@ stop();
                         if (od.linePos.row == -1 || od.linePos.col == -1) continue;
                         string src = od.linePos.srcMMLID;
                         string dst = fn;
-                        if (src != null && src.Length > 0 && src[0] == '"' && src.Length>1 && src[src.Length-1]=='"')
+                        if (src != null && src.Length > 0 && src[0] == '"' && src.Length > 1 && src[src.Length - 1] == '"')
                         {
                             src = src.Substring(1, src.Length - 2);
                             src = Path.GetFileName(src);
@@ -2897,31 +3124,25 @@ stop();
 
                 frmLyrics.update();
                 frmPartCounter.Stop();
-                Audio.mmlParams.Init(isTrace
-                    , format == EnmFileFormat.VGM 
-                    ? EnmMmlFileFormat.GWI 
-                    : (
-                        format == EnmFileFormat.XGM 
-                        ? EnmMmlFileFormat.GWI 
-                        : (
-                            format == EnmFileFormat.ZGM
-                            ? EnmMmlFileFormat.GWI
-                            : (
-                                format == EnmFileFormat.MUB
-                                ? EnmMmlFileFormat.MUC
-                                : (
-                                    format == EnmFileFormat.MUC
-                                    ? EnmMmlFileFormat.MUC
-                                    : (
-                                        format == EnmFileFormat.M
-                                        ? EnmMmlFileFormat.MML
-                                        : EnmMmlFileFormat.unknown
-                                        )
-                                    )
-                                )
-                            )
-                        )
-                    );
+                EnmMmlFileFormat mff = EnmMmlFileFormat.unknown;
+                switch (format)
+                {
+                    case EnmFileFormat.VGM:
+                    case EnmFileFormat.XGM:
+                    case EnmFileFormat.ZGM:
+                        mff = EnmMmlFileFormat.GWI;
+                        break;
+                    case EnmFileFormat.MUB:
+                        mff = EnmMmlFileFormat.MUC;
+                        break;
+                    case EnmFileFormat.M:
+                        mff = EnmMmlFileFormat.MML;
+                        break;
+                    case EnmFileFormat.MDR:
+                        mff = EnmMmlFileFormat.MDL;
+                        break;
+                }
+                Audio.mmlParams.Init(isTrace, mff);
                 frmPartCounter.Start(Audio.mmlParams);
 
                 if (isTrace && ac != null)

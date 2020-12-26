@@ -546,13 +546,22 @@ namespace Core
                         || pw.cpg.Type == enmChannelType.FMOPNex
                         )
                     && (
-                        a == 'N' 
+                        a == 'N'
                         || a == 'R'
                         || a == 'A'
                         || (mml.args[0] is char && (char)mml.args[0] == 'n')
                         )
                     )
-                    mml.args.Add(desVGM.instFM[n].Item1);
+                {
+                    if (desVGM.instFM.ContainsKey(n))
+                    {
+                        mml.args.Add(desVGM.instFM[n].Item1);
+                    }
+                    else
+                    {
+                        msgBox.setErrMsg(msg.get("E05002"), mml.line.Lp);
+                    }
+                }
 
                 return;
             }

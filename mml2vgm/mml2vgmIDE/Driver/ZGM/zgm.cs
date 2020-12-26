@@ -680,14 +680,16 @@ namespace mml2vgmIDE.Driver.ZGM
                     }
                     vgmAdr += (uint)bLen + 7;
                     break;
-                //        case 0x84:
-                //            // YMF278B
-                //            //chipRegister.writeYMF278BPCMData(chipID, romSize, startAddress, bLen - 8, vgmBuf, vgmAdr + 15);
-                //            pcmDat.Clear();
-                //            for (uint i = vgmAdr + 15; i < vgmAdr + 15 + bLen - 8; i++) pcmDat.Add(vgmBuf[i].val);
-                //            chipRegister.writeYMF278BPCMData(chipID, romSize, startAddress, bLen - 8, pcmDat.ToArray(), 0);
-                //            //dumpData(model, "YMF278B_PCMData", vgmAdr + 15, bLen - 8);
-                //            break;
+                case Driver.ZGM.ZgmChip.YMF278B _:
+                    // YMF278B
+                    //chipRegister.writeYMF278BPCMData(chipID, romSize, startAddress, bLen - 8, vgmBuf, vgmAdr + 15);
+                    pcmDat.Clear();
+                    uint ymf278B_romSize = Common.getLE32(vgmBuf, vgmAdr + 7);
+                    uint ymf278B_startAddress = Common.getLE32(vgmBuf, vgmAdr + 0x0B);
+                    for (uint i = vgmAdr + 15; i < vgmAdr + 15 + bLen - 8; i++) pcmDat.Add(vgmBuf[i].val);
+                    chipRegister.writeYMF278BPCMData((byte)chip.Index, ymf278B_romSize, ymf278B_startAddress, bLen - 8, pcmDat.ToArray(), 0);
+                    //dumpData(model, "YMF278B_PCMData", vgmAdr + 15, bLen - 8);
+                    break;
 
                 //        case 0x85:
                 //            // YMF271

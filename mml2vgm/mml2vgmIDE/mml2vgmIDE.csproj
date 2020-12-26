@@ -116,6 +116,7 @@
     <Compile Include="D88N88\D88.cs" />
     <Compile Include="D88N88\N88Disk.cs" />
     <Compile Include="D88N88\N88FileAtr.cs" />
+    <Compile Include="Driver\moonDriverM.cs" />
     <Compile Include="Driver\mucomMub.cs" />
     <Compile Include="Driver\pmdM.cs" />
     <Compile Include="Driver\ZGM\ZgmChip\C352.cs" />
@@ -128,6 +129,7 @@
     <Compile Include="Driver\ZGM\ZgmChip\SEGAPCM.cs" />
     <Compile Include="Driver\ZGM\ZgmChip\YM2151.cs" />
     <Compile Include="Driver\ZGM\ZgmChip\Y8950.cs" />
+    <Compile Include="Driver\ZGM\ZgmChip\YMF278B.cs" />
     <Compile Include="Driver\ZGM\ZgmChip\YMF262.cs" />
     <Compile Include="Driver\ZGM\ZgmChip\YM3812.cs" />
     <Compile Include="Driver\ZGM\ZgmChip\YM3526.cs" />
@@ -303,7 +305,9 @@
     <Compile Include="MMLParameter\Y8950.cs" />
     <Compile Include="MMLParameter\YM3526.cs" />
     <Compile Include="MMLParameter\YM3812.cs" />
+    <Compile Include="MMLParameter\YMF278B.cs" />
     <Compile Include="MMLParameter\YMF262.cs" />
+    <Compile Include="MoonDriverManager.cs" />
     <Compile Include="mucomManager.cs" />
     <Compile Include="NAudioWrap.cs" />
     <Compile Include="NullOut.cs" />
@@ -463,6 +467,12 @@
     <Content Include="c86ctl.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="lang\MoonDriverDotNETmessage.ja-JP.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="lang\MoonDriverDotNETmessage.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="lang\mucomDotNETmessage.ja-JP.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -476,6 +486,15 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="M98DotNETcore.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MoonDriverDotNETCommon.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MoonDriverDotNETCompiler.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MoonDriverDotNETDriver.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="mucomDotNETCommon.dll">

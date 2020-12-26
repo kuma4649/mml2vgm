@@ -160,7 +160,8 @@
         unknown = 0,
         GWI = 1,
         MUC = 2,
-        MML = 3
+        MML = 3,
+        MDL = 4
     }
 
     public enum SendMode : int

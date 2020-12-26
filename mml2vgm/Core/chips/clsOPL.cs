@@ -653,10 +653,10 @@ namespace Core
             }
         }
 
-        public override void CmdPan(partPage page, MML mml)
-        {
-            throw new NotImplementedException();
-        }
+        //public override void CmdPan(partPage page, MML mml)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
         public override void CmdLoopExtProc(partPage page, MML mml)
         {

@@ -26,6 +26,7 @@ namespace mml2vgmIDE.MMLParameter
         public List<Instrument> Y8950 = new List<Instrument>();
         public List<Instrument> YM3812 = new List<Instrument>();
         public List<Instrument> YMF262 = new List<Instrument>();
+        public List<Instrument> YMF278B = new List<Instrument>();
         public List<Instrument> YM2608 = new List<Instrument>();
         public List<Instrument> YM2609 = new List<Instrument>();
         public List<Instrument> YM2610B = new List<Instrument>();
@@ -425,6 +426,25 @@ namespace mml2vgmIDE.MMLParameter
                         dicInstAdd(opl3, od.linePos.chipIndex, od.linePos.chipNumber);
                         instsAdd(opl3, od.linePos.chipIndex, od.linePos.chipNumber);
                         opl3.isTrace = isTrace;
+                        break;
+                    case "YMF278B":
+                        if (Audio.chipRegister != null
+                            && Audio.chipRegister.YMF278B != null
+                            && od.linePos.chipIndex < Audio.chipRegister.YMF278B.Count)
+                        {
+                            chip = Audio.chipRegister.YMF278B[od.linePos.chipIndex];
+                        }
+                        if (chip == null && od.linePos.chipIndex >= 0x80)
+                        {
+                            Driver.ZGM.ZgmChip.ZgmChip zChip = Audio.chipRegister.dicChipCmdNo[od.linePos.chipIndex];
+                            chip = Audio.chipRegister.YMF278B[zChip.Index];
+                            //chipIndex = zChip.Index;
+                        }
+                        YMF278B opl4 = new YMF278B(chip);
+                        YMF278B.Add(opl4);
+                        dicInstAdd(opl4, od.linePos.chipIndex, od.linePos.chipNumber);
+                        instsAdd(opl4, od.linePos.chipIndex, od.linePos.chipNumber);
+                        opl4.isTrace = isTrace;
                         break;
                     case "YM2608":
                         if (Audio.chipRegister != null

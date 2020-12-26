@@ -197,12 +197,13 @@ namespace Core
                         , freeAdr
                         , freeAdr + size - 1
                         , size
-                        , (v.Value.loopAdr == -1 ? v.Value.loopAdr : (v.Value.loopAdr + freeAdr))
+                        , (v.Value.loopAdr == -1 ? freeAdr : (v.Value.loopAdr + freeAdr))
                         , is16bit
                         , samplerate)
                     ));
 
-                if (newDic[v.Key].Item2.loopAdr != -1 && (v.Value.loopAdr < 0 || v.Value.loopAdr >= size))
+                if (newDic[v.Key].Item2.loopAdr != -1 
+                    && (newDic[v.Key].Item2.loopAdr < freeAdr || v.Value.loopAdr >= size))
                 {
                     msgBox.setErrMsg(string.Format(msg.get("E22000")
                         , newDic[v.Key].Item2.loopAdr

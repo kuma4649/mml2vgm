@@ -79,6 +79,10 @@ namespace mml2vgmIDE
                     srcFileFormat = EnmMmlFileFormat.MML;
                     editor.azukiControl.Text = File.ReadAllText(fullPath, Encoding.GetEncoding(932));
                     break;
+                case ".mdl":
+                    srcFileFormat = EnmMmlFileFormat.MDL;
+                    editor.azukiControl.Text = File.ReadAllText(fullPath, Encoding.GetEncoding(932));
+                    break;
                 case ".gwi":
                 default:
                     srcFileFormat = EnmMmlFileFormat.GWI;

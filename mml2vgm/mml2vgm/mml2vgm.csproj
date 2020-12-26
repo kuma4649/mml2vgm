@@ -181,6 +181,7 @@
     <None Include="sample\MidiGM\testGM.gwi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="sample\MidiGM\testGMwaon.gwi" />
     <None Include="sample\Syntax\testArpeggio.gwi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

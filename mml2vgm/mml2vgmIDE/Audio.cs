@@ -39,6 +39,7 @@ namespace mml2vgmIDE
         public static Manager mmlParams = new Manager();
         public static mucomManager mucomManager = null;
         public static PMDManager PMDManager = null;
+        public static MoonDriverManager MoonDriverManager = null;
 
         private static object lockObj = new object();
         private static bool _fatalError = false;
@@ -100,12 +101,17 @@ namespace mml2vgmIDE
         private static outDatum[] vgmBuf = null;
         private static long jumpPointClock;
         private static double vgmSpeed;
+
         private static musicDriverInterface.MmlDatum[] mubBuf = null;
         private static string mubWorkPath;
         private static string mubFileName;
         private static musicDriverInterface.MmlDatum[] mBuf = null;
         private static string mWorkPath;
         private static string mFileName;
+        private static musicDriverInterface.MmlDatum[] mdrBuf = null;
+        private static string mdrWorkPath;
+        private static string mdrFileName;
+
         public static double fadeoutCounter;
         public static double fadeoutCounterEmu;
         private static double fadeoutCounterDelta;
@@ -543,6 +549,21 @@ namespace mml2vgmIDE
             }
             chipRegister.SetRealChipInfo(EnmZGMDevice.YMF262, chipType[0], chipType[1], setting.LatencyEmulation, setting.LatencySCCI);
 
+            chipType = new Setting.ChipType[Math.Max(chipRegister.YMF278B.Count, 2)];
+            for (int i = 0; i < Math.Max(chipRegister.YMF278B.Count, 2); i++)
+            {
+                chipType[i] = new Setting.ChipType();
+                if (chipRegister.YMF278B.Count <= i) continue;
+                if (!chipRegister.YMF278B[i].Use) continue;
+                chipRegister.YMF278B[i].Model = EnmVRModel.VirtualModel;
+                chipType[i].UseEmu = true;
+                chipType[i].UseScci = false;
+                if (ret.Count == 0) continue;
+                SearchRealChip(chipType, ret, i, EnmZGMDevice.YMF278B, chipRegister.YMF278B[i], setting.AutoDetectModuleType == 0 ? 0 : 1);
+                if (chipType[i].UseEmu) SearchRealChip(chipType, ret, i, EnmZGMDevice.YMF278B, chipRegister.YMF278B[i], setting.AutoDetectModuleType == 0 ? 1 : 0);
+            }
+            chipRegister.SetRealChipInfo(EnmZGMDevice.YMF278B, chipType[0], chipType[1], setting.LatencyEmulation, setting.LatencySCCI);
+
             chipType = new Setting.ChipType[Math.Max(chipRegister.YM2608.Count, 2)];
             for (int i = 0; i < Math.Max(chipRegister.YM2608.Count, 2); i++)
             {
@@ -834,11 +855,17 @@ namespace mml2vgmIDE
                 mubWorkPath = wrkPath;
                 Audio.mubFileName = mdFileName;
             }
-            else if(format== EnmFileFormat.M)
+            else if (format == EnmFileFormat.M)
             {
                 mBuf = srcBuf;
                 mWorkPath = wrkPath;
                 Audio.mFileName = mdFileName;
+            }
+            else if (format == EnmFileFormat.MDR)
+            {
+                mdrBuf = srcBuf;
+                mdrWorkPath = wrkPath;
+                Audio.mdrFileName = mdFileName;
             }
         }
 
@@ -1105,12 +1132,21 @@ namespace mml2vgmIDE
 
                 ret = mPlay(setting);
             }
+            else if (PlayingFileFormat == EnmFileFormat.MDR)
+            {
+                driver = new moonDriverM
+                {
+                    setting = setting
+                };
+
+                ret = mdrPlay(setting);
+            }
             else
             {
                 ret = false;
             }
 
-            if (!ret) return false;
+            if (!ret) return false;// ?
 
             return ret;
         }
@@ -1805,6 +1841,39 @@ namespace mml2vgmIDE
                     zCnt = -1;
                     foreach (Driver.ZGM.ZgmChip.ZgmChip zchip in zgmDriver.chips)
                     {
+                        if (!(zchip is Driver.ZGM.ZgmChip.YMF278B)) continue;
+
+                        zCnt++;
+                        chip = new MDSound.MDSound.Chip();
+                        chip.ID = (byte)0;//ZGMでは常に0
+                        ymf278b ymf278b = new ymf278b();
+                        chip.type = MDSound.MDSound.enmInstrumentType.YMF278B;
+                        chip.Instrument = ymf278b;
+                        chip.Update = ymf278b.Update;
+                        chip.Start = ymf278b.Start;
+                        chip.Stop = ymf278b.Stop;
+                        chip.Reset = ymf278b.Reset;
+                        chip.SamplingRate = (UInt32)Common.SampleRate;
+                        chip.Volume = setting.balance.YMF278BVolume;
+                        chip.Clock = (uint)zchip.defineInfo.clock;
+                        chip.Option = null;
+                        lstChips.Add(chip);
+
+                        hiyorimiDeviceFlag |= 0x2;
+
+                        log.Write(string.Format("Use OPL4(#{0}) Clk:{1}"
+                            , zCnt
+                            , chip.Clock
+                            ));
+
+                        chipRegister.YMF278B[zCnt].Use = true;
+                        chipRegister.YMF278B[zCnt].Model = EnmVRModel.VirtualModel;
+                        chipRegister.YMF278B[zCnt].Device = EnmZGMDevice.YMF278B;
+                    }
+
+                    zCnt = -1;
+                    foreach (Driver.ZGM.ZgmChip.ZgmChip zchip in zgmDriver.chips)
+                    {
                         if (!(zchip is Driver.ZGM.ZgmChip.YM2608)) continue;
 
                         zCnt++;
@@ -2110,6 +2179,15 @@ namespace mml2vgmIDE
                     break;
                 }
 
+                foreach (Chip c in chipRegister.YMF278B)
+                {
+                    if (!c.Use) continue;
+                    if (c.Model == EnmVRModel.VirtualModel) useEmu = true;
+                    if (c.Model == EnmVRModel.RealModel) useReal = true;
+                    SetYMF278BVolume(true, setting.balance.YMF278BVolume);
+                    break;
+                }
+
                 foreach (Chip c in chipRegister.YM2608)
                 {
                     if (!c.Use) continue;
@@ -2181,6 +2259,7 @@ namespace mml2vgmIDE
                 for (int i = 0; i < chipRegister.YM2151.Count; i++) if (chipRegister.YM2151[i].Use) chipRegister.YM2151WriteClock((byte)i, (int)zgmDriver.YM2151ClockValue);
                 for (int i = 0; i < chipRegister.YM2203.Count; i++) if (chipRegister.YM2203[i].Use) chipRegister.YM2203WriteClock((byte)i, (int)zgmDriver.YM2203ClockValue);
                 for (int i = 0; i < chipRegister.YM2413.Count; i++) if (chipRegister.YM2413[i].Use) chipRegister.YM2413WriteClock((byte)i, (int)zgmDriver.YM2413ClockValue);
+                for (int i = 0; i < chipRegister.YMF278B.Count; i++) if (chipRegister.YMF278B[i].Use) chipRegister.YM2413WriteClock((byte)i, (int)zgmDriver.YMF278BClockValue);
                 for (int i = 0; i < chipRegister.YM2608.Count; i++) if (chipRegister.YM2608[i].Use) chipRegister.YM2608WriteClock((byte)i, (int)zgmDriver.YM2608ClockValue);
                 for (int i = 0; i < chipRegister.YM2609.Count; i++) if (chipRegister.YM2609[i].Use) chipRegister.YM2609WriteClock((byte)i, (int)zgmDriver.YM2609ClockValue);
                 for (int i = 0; i < chipRegister.YM2610.Count; i++) if (chipRegister.YM2610[i].Use) chipRegister.YM2610WriteClock((byte)i, (int)zgmDriver.YM2610ClockValue);
@@ -3738,6 +3817,12 @@ namespace mml2vgmIDE
                         if (chipRegister.YMF262[i].Model == EnmVRModel.RealModel) useReal = true;
                     }
 
+                    if (chipRegister.YMF278B[i].Use)
+                    {
+                        if (chipRegister.YMF278B[i].Model == EnmVRModel.VirtualModel) useEmu = true;
+                        if (chipRegister.YMF278B[i].Model == EnmVRModel.RealModel) useReal = true;
+                    }
+
                 }
 
                 log.Write("Volume 設定");
@@ -3784,6 +3869,7 @@ namespace mml2vgmIDE
                     if (chipRegister.YM2151[i].Use) chipRegister.YM2151WriteClock((byte)i, (int)vgmDriver.YM2151ClockValue);
                     if (chipRegister.YM2203[i].Use) chipRegister.YM2203WriteClock((byte)i, (int)vgmDriver.YM2203ClockValue);
                     if (chipRegister.YM2413[i].Use) chipRegister.YM2413WriteClock((byte)i, (int)vgmDriver.YM2413ClockValue);
+                    if (chipRegister.YMF278B[i].Use) chipRegister.YMF278BWriteClock((byte)i, (int)vgmDriver.YMF278BClockValue);
                     if (chipRegister.YM2608[i].Use) chipRegister.YM2608WriteClock((byte)i, (int)vgmDriver.YM2608ClockValue);
                     if (chipRegister.YM2612[i].Use) chipRegister.YM2612WriteClock((byte)i, (int)vgmDriver.YM2612ClockValue);
 
@@ -4137,6 +4223,133 @@ namespace mml2vgmIDE
                 log.Write("初期化完了");
 
 
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                log.ForcedWrite(ex);
+                return false;
+            }
+
+        }
+
+        public static bool mdrPlay(Setting setting)
+        {
+
+            try
+            {
+
+                if (mdrBuf == null || setting == null) return false;
+
+                moonDriverM mdrDriver = (moonDriverM)driver;
+
+                ResetFadeOutParam();
+                useChip.Clear();
+                chipRegister.ClearChipParam();
+
+                List<MDSound.MDSound.Chip> lstChips = new List<MDSound.MDSound.Chip>();
+
+                MDSound.MDSound.Chip chip;
+
+                hiyorimiNecessary = setting.HiyorimiMode;
+
+                chipLED = new ChipLEDs();
+
+                MasterVolume = setting.balance.MasterVolume;
+
+                chip = new MDSound.MDSound.Chip();
+                chip.ID = (byte)0;
+                MDSound.ymf278b ymf278b = null;
+
+                if (setting.YMF278BType.UseEmu)
+                {
+                    ymf278b = new ymf278b();
+                    chip.type = MDSound.MDSound.enmInstrumentType.YMF278B;
+                    chip.Instrument = ymf278b;
+                    chip.Update = ymf278b.Update;
+                    chip.Start = ymf278b.Start;
+                    chip.Stop = ymf278b.Stop;
+                    chip.Reset = ymf278b.Reset;
+                    chip.SamplingRate = (UInt32)Common.SampleRate;
+                    chip.Volume = setting.balance.YMF278BVolume;
+                    chip.Clock = (uint)mdrDriver.YMF278BClockValue;
+                    chip.Option = null;
+                    chipLED.PriOPL4 = 1;
+                    lstChips.Add(chip);
+                    useChip.Add(EnmChip.YMF278B);
+                }
+                chipRegister.YMF278B[0].Use = true;
+
+                if (hiyorimiNecessary) hiyorimiNecessary = true;
+                else hiyorimiNecessary = false;
+
+                log.Write("MDSound 初期化");
+
+                if (mds == null)
+                    mds = new MDSound.MDSound((UInt32)Common.SampleRate, samplingBuffer, lstChips.ToArray());
+                else
+                    mds.Init((UInt32)Common.SampleRate, samplingBuffer, lstChips.ToArray());
+
+                log.Write("ChipRegister 初期化");
+                chipRegister.SetMDSound(mds);
+                chipRegister.initChipRegister(lstChips.ToArray());
+
+                if (setting.IsManualDetect)
+                {
+                    RealChipManualDetect(setting);
+                }
+                else
+                {
+                    RealChipAutoDetect(setting);
+                }
+
+                //bool isGIMICOPNA = false;
+                useEmu = true;
+                if (chipRegister.YMF278B[0].Model == EnmVRModel.VirtualModel) useEmu = true;
+                if (chipRegister.YMF278B[0].Model == EnmVRModel.RealModel)
+                {
+                    useReal = true;
+                    //isGIMICOPNA = chipRegister.YM2608GetGIMICType(0) == Nc86ctl.ChipType.CHIP_OPNA;
+                }
+
+                log.Write("Volume(emu) 設定");
+                SetYMF278BVolume(true, setting.balance.YMF278BVolume);
+
+                //log.Write("Clock 設定");
+                //chipRegister.YMF278BWriteClock((byte)0, (int)mdrDriver.YMF278BClockValue);
+
+                log.Write("Clock 設定");
+                if (!mdrDriver.init(mdrBuf, mdrWorkPath, MoonDriverManager, chipRegister, new EnmChip[] { EnmChip.YMF278B }
+                    , (uint)(Common.SampleRate * setting.LatencyEmulation / 1000)
+                    , (uint)(Common.SampleRate * setting.outputDevice.WaitTime / 1000)
+                    , mdrFileName
+                    //, isGIMICOPNA
+                    )
+
+                    ) return false;
+
+                //実チップの場合にPCMデータの転送が必要な時
+                if (chipRegister.YMF278B[0].Model == EnmVRModel.RealModel)
+                {
+                    //object opnaPcmData = mdrDriver.GetOPNAPCMData();
+                    //if (opnaPcmData != null)
+                    //{
+                    //    RealChipAction(null, 0, chipRegister.YM2608[0], EnmDataType.Block, -1, -1, opnaPcmData);
+                    //    Thread.Sleep(100);
+                    //}
+                }
+
+                //Play
+
+                PackData[] stopData = MakeSoftResetData();
+                sm.SetStopData(stopData);
+
+                Paused = false;
+
+                //Thread.Sleep(100);
+
+                log.Write("初期化完了");
 
                 return true;
             }
@@ -4584,6 +4797,7 @@ namespace mml2vgmIDE
             for (int i = 0; i < chipRegister.Y8950.Count; i++) if (chipRegister.Y8950[i].Use) chipRegister.Y8950SoftReset(counter, i);
             for (int i = 0; i < chipRegister.YM3812.Count; i++) if (chipRegister.YM3812[i].Use) chipRegister.YM3812SoftReset(counter, i);
             for (int i = 0; i < chipRegister.YMF262.Count; i++) if (chipRegister.YMF262[i].Use) chipRegister.YMF262SoftReset(counter, i);
+            for (int i = 0; i < chipRegister.YMF278B.Count; i++) if (chipRegister.YMF278B[i].Use) chipRegister.YMF278BSoftReset(counter, i);
             for (int i = 0; i < chipRegister.YM2608.Count; i++) if (chipRegister.YM2608[i].Use) chipRegister.YM2608SoftReset(counter, i);
             for (int i = 0; i < chipRegister.YM2609.Count; i++) if (chipRegister.YM2609[i].Use) chipRegister.YM2609SoftReset(counter, i);
             for (int i = 0; i < chipRegister.YM2610.Count; i++) if (chipRegister.YM2610[i].Use) chipRegister.YM2610SoftReset(counter, i);
@@ -4614,6 +4828,7 @@ namespace mml2vgmIDE
             for (int i = 0; i < chipRegister.Y8950.Count; i++) if (chipRegister.Y8950[i].Use) data.AddRange(chipRegister.Y8950MakeSoftReset(i));
             for (int i = 0; i < chipRegister.YM3812.Count; i++) if (chipRegister.YM3812[i].Use) data.AddRange(chipRegister.YM3812MakeSoftReset(i));
             for (int i = 0; i < chipRegister.YMF262.Count; i++) if (chipRegister.YMF262[i].Use) data.AddRange(chipRegister.YMF262MakeSoftReset(i));
+            for (int i = 0; i < chipRegister.YMF278B.Count; i++) if (chipRegister.YMF278B[i].Use) data.AddRange(chipRegister.YMF278BMakeSoftReset(i));
             for (int i = 0; i < chipRegister.YM2608.Count; i++) if (chipRegister.YM2608[i].Use) data.AddRange(chipRegister.YM2608MakeSoftReset(i));
             for (int i = 0; i < chipRegister.YM2609.Count; i++) if (chipRegister.YM2609[i].Use) data.AddRange(chipRegister.YM2609MakeSoftReset(i));
             for (int i = 0; i < chipRegister.YM2610.Count; i++) if (chipRegister.YM2610[i].Use) data.AddRange(chipRegister.YM2610MakeSoftReset(i));
@@ -4647,6 +4862,7 @@ namespace mml2vgmIDE
             for (int i = 0; i < chipRegister.Y8950.Count; i++) if (chipRegister.Y8950[i].Use) data.AddRange(chipRegister.Y8950MakeSoftReset(i));
             for (int i = 0; i < chipRegister.YM3812.Count; i++) if (chipRegister.YM3812[i].Use) data.AddRange(chipRegister.YM3812MakeSoftReset(i));
             for (int i = 0; i < chipRegister.YMF262.Count; i++) if (chipRegister.YMF262[i].Use) data.AddRange(chipRegister.YMF262MakeSoftReset(i));
+            for (int i = 0; i < chipRegister.YMF278B.Count; i++) if (chipRegister.YMF278B[i].Use) data.AddRange(chipRegister.YMF278BMakeSoftReset(i));
             for (int i = 0; i < chipRegister.YM2608.Count; i++) if (chipRegister.YM2608[i].Use) data.AddRange(chipRegister.YM2608MakeSoftReset(i));
             for (int i = 0; i < chipRegister.YM2609.Count; i++) if (chipRegister.YM2609[i].Use) data.AddRange(chipRegister.YM2609MakeSoftReset(i));
             for (int i = 0; i < chipRegister.YM2610.Count; i++) if (chipRegister.YM2610[i].Use) data.AddRange(chipRegister.YM2610MakeSoftReset(i));
@@ -6094,7 +6310,7 @@ namespace mml2vgmIDE
 
         public static void setYMF278BMask(int chipID, int ch)
         {
-            chipRegister.setMaskYMF278B(chipID, ch, true);
+            chipRegister.YMF278BSetMask(0, chipID, ch, true);
         }
 
         public static void setC140Mask(int chipID, int ch)
@@ -6289,7 +6505,7 @@ namespace mml2vgmIDE
         {
             try
             {
-                chipRegister.setMaskYMF278B(chipID, ch, false);
+                chipRegister.YMF278BSetMask(0, chipID, ch, false);
             }
             catch { }
         }

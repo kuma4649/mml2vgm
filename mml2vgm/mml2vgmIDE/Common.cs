@@ -341,6 +341,7 @@ namespace mml2vgmIDE
             if (extension.ToUpper() == ".GWI") return EnmMmlFileFormat.GWI;
             if (extension.ToUpper() == ".MUC") return EnmMmlFileFormat.MUC;
             if (extension.ToUpper() == ".MML") return EnmMmlFileFormat.MML;
+            if (extension.ToUpper() == ".MDL") return EnmMmlFileFormat.MDL;
 
             return EnmMmlFileFormat.unknown;
         }
