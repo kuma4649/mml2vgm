@@ -575,6 +575,11 @@ namespace Core
                 vol += page.lfo[lfo].value + page.lfo[lfo].param[6];
             }
 
+            if (page.varpeggioMode && page.varpIndex != -1)
+            {
+                vol += page.varpDelta;
+            }
+
             byte data = (byte)Common.CheckRange(vol, 0, 127);
             if (page.spg.beforeVolume != data)
             {

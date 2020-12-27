@@ -50,6 +50,7 @@ namespace Core
         public Dictionary<int, Tuple<string, byte[]>> instOPNA2WFS = new Dictionary<int, Tuple<string, byte[]>>();
         public Dictionary<int, Tuple<string, byte[]>> midiSysEx = new Dictionary<int, Tuple<string, byte[]>>();
         public Dictionary<int, MmlDatum[]> instArp = new Dictionary<int, MmlDatum[]>();
+        public Dictionary<int, MmlDatum[]> instVArp = new Dictionary<int, MmlDatum[]>();
         public Dictionary<int, MmlDatum[]> instCommandArp = new Dictionary<int, MmlDatum[]>();
 
         public Dictionary<string, List<List<Line>>>[] partData = new Dictionary<string, List<List<Line>>>[]{
@@ -78,6 +79,7 @@ namespace Core
         private int midiSysExCounter = -1;
         private int instArpCounter = -1;
         private int instCommandArpCounter = -1;
+        private int instVArpCounter = -1;
 
         public int newStreamID = -1;
 
@@ -609,7 +611,8 @@ namespace Core
             {
                 //他の定義が現れたらtoneDoublerの定義は終了
                 if (t == 'F' || t == 'N' || t == 'M' || t == 'L'
-                    || t == 'A' || t == 'C' || t == 'P' || t == 'E' 
+                    || t == 'A' || t == 'V' || t == 'C'
+                    || t == 'P' || t == 'E' 
                     || t == 'T' || t == 'H' || t == 'W' || t == 'S')
                 {
                     toneDoublerCounter = -1;
@@ -621,11 +624,36 @@ namespace Core
             {
                 //他の定義が現れたらSysExの定義は終了
                 if (t == 'F' || t == 'N' || t == 'M' || t == 'L'
-                    || t == 'A' || t == 'C' || t == 'P' || t == 'E'
+                    || t == 'A' || t == 'V' || t == 'C'
+                    || t == 'P' || t == 'E'
                     || t == 'T' || t == 'H' || t == 'W' || t == 'S')
                 {
                     midiSysExCounter = -1;
                     SetMidiSysEx();
+                }
+            }
+
+            if (instArpCounter != -1)
+            {
+                //他の定義が現れたらSysExの定義は終了
+                if (t == 'F' || t == 'N' || t == 'M' || t == 'L'
+                    || t == 'A' || t == 'V' || t == 'C'
+                    || t == 'P' || t == 'E'
+                    || t == 'T' || t == 'H' || t == 'W' || t == 'S')
+                {
+                    SetInstArp();
+                }
+            }
+
+            if (instVArpCounter != -1)
+            {
+                //他の定義が現れたらSysExの定義は終了
+                if (t == 'F' || t == 'N' || t == 'M' || t == 'L'
+                    || t == 'A' || t == 'V' || t == 'C'
+                    || t == 'P' || t == 'E'
+                    || t == 'T' || t == 'H' || t == 'W' || t == 'S')
+                {
+                    SetInstVArp();
                 }
             }
 
@@ -676,6 +704,14 @@ namespace Core
                         instrumentBufCache = new byte[Const.OPNA2_INSTRUMENT_SIZE];
                         instrumentCounter = 0;
                         SetInstrument(line);
+                    }
+                    return 0;
+
+                case 'V':
+                    if (t1 == 'A' && t2 == 'R')
+                    {
+                        instVArpCounter = 0;
+                        StoreInstVArpBuffer(line);
                     }
                     return 0;
 
@@ -795,6 +831,11 @@ namespace Core
             if (instArpCounter != -1)
             {
                 return StoreInstArpBuffer(line);
+            }
+
+            if (instVArpCounter != -1)
+            {
+                return StoreInstVArpBuffer(line);
             }
 
             if (instCommandArpCounter != -1)
@@ -1940,7 +1981,7 @@ namespace Core
         /// <summary>
         /// ARP専用
         /// </summary>
-        private List<MmlDatum> GetNumsInt(int ptr, string vals)
+        private List<MmlDatum> GetNumsIntForArp(int ptr, string vals)
         {
             List<MmlDatum> lstBuf = new List<MmlDatum>();
             string n = "";
@@ -1957,12 +1998,13 @@ namespace Core
                 p++;
                 if (p <= ptr) continue;
 
-                if (c == '|')
+                if (c == '|' || c == '/')
                 {
                     hc = -1;
                     n = "";
                     dat = new MmlDatum();
                     dat.type = enmMMLType.LoopPoint;
+                    dat.dat = c == '|' ? 0 : 1;
                     lstBuf.Add(dat);
                     continue;
                 }
@@ -2035,9 +2077,112 @@ namespace Core
         }
 
         /// <summary>
+        /// VAR専用
+        /// </summary>
+        private List<MmlDatum> GetNumsIntForVArp(int ptr, string vals)
+        {
+            List<MmlDatum> lstBuf = new List<MmlDatum>();
+            string n = "";
+            string h = "";
+            int hc = -1;
+            int i = 0;
+            int p = 0;
+            MmlDatum dat = null;
+            enmMMLType tp;
+            tp = enmMMLType.Note;
+
+            foreach (char c in vals)
+            {
+                p++;
+                if (p <= ptr) continue;
+
+                if (c == '|' || c == '/')
+                {
+                    hc = -1;
+                    n = "";
+                    dat = new MmlDatum();
+                    dat.type = enmMMLType.LoopPoint;
+                    dat.dat = c == '|' ? 0 : 1;
+                    lstBuf.Add(dat);
+                    continue;
+                }
+                else if (c == 'E')
+                {
+                    hc = -1;
+                    n = "";
+                    dat = new MmlDatum();
+                    dat.type = enmMMLType.LoopPoint;
+                    dat.dat = 2;
+                    lstBuf.Add(dat);
+                    continue;
+                }
+                else if (c == '#')
+                {
+                    tp = enmMMLType.LengthClock;
+                    continue;
+
+                }
+
+                if (c == '$')
+                {
+                    hc = 0;
+                    continue;
+                }
+
+                if (hc > -1 && ((c >= '0' && c <= '9') || (c >= 'A' && c <= 'F')))
+                {
+                    h += c;
+                    hc++;
+                    if (hc == 2)
+                    {
+                        i = int.Parse(h, System.Globalization.NumberStyles.HexNumber);
+                        dat = new MmlDatum();
+                        dat.type = enmMMLType.Note;
+                        dat.dat = (byte)(i & 0xff);
+                        lstBuf.Add(dat);
+                        h = "";
+                        hc = -1;
+                    }
+                    continue;
+                }
+
+                if ((c >= '0' && c <= '9') || c == '-')
+                {
+                    n = n + c.ToString();
+                    continue;
+                }
+
+                if (int.TryParse(n, out i))
+                {
+                    dat = new MmlDatum();
+                    dat.type = tp;
+                    dat.dat = i;
+                    lstBuf.Add(dat);
+
+                    tp = enmMMLType.Note;
+                    n = "";
+                }
+            }
+
+            if (!string.IsNullOrEmpty(n))
+            {
+                if (int.TryParse(n, out i))
+                {
+                    dat = new MmlDatum();
+                    dat.type = enmMMLType.Note;
+                    dat.dat = i;
+                    lstBuf.Add(dat);
+                    n = "";
+                }
+            }
+
+            return lstBuf;
+        }
+
+        /// <summary>
         /// Command ARP専用
         /// </summary>
-        private List<MmlDatum> GetNumsIntCommandArp(int ptr, string anavals, int sin = 0, enmMMLType defaultMMLType = enmMMLType.Instrument)
+        private List<MmlDatum> GetNumsIntForCommandArp(int ptr, string anavals, int sin = 0, enmMMLType defaultMMLType = enmMMLType.Instrument)
         {
             //wordのリストを作成する
             List<string> lstWord = new List<string>();
@@ -2108,12 +2253,24 @@ namespace Core
                         continue;
                     }
 
-                    if (c == '|')
+                    if (c == '|' || c == '/')
                     {
                         hc = -1;
                         n = "";
                         dat = new MmlDatum();
                         dat.type = enmMMLType.LoopPoint;
+                        dat.dat = c == '|' ? 0 : 1;
+                        lstBuf.Add(dat);
+                        continue;
+                    }
+
+                    if (c == 'E')
+                    {
+                        hc = -1;
+                        n = "";
+                        dat = new MmlDatum();
+                        dat.type = enmMMLType.LoopPoint;
+                        dat.dat = 2;
                         lstBuf.Add(dat);
                         continue;
                     }
@@ -2373,7 +2530,7 @@ namespace Core
                 if (instArpCounter == 0)
                 {
                     string txt = line.Txt.ToUpper();
-                    buf = GetNumsInt(CutComment(txt).IndexOf("ARP") + 3, CutComment(txt));
+                    buf = GetNumsIntForArp(CutComment(txt).IndexOf("ARP") + 3, CutComment(txt));
                     instArpCounter = buf[0].dat + 1;
                     if (instArp.ContainsKey(buf[0].dat))
                     {
@@ -2384,11 +2541,42 @@ namespace Core
                 else
                 {
                     string txt = line.Txt.ToUpper();
-                    buf = GetNumsInt(CutComment(txt).IndexOf('@') + 1, CutComment(txt));
+                    buf = GetNumsIntForArp(CutComment(txt).IndexOf('@') + 1, CutComment(txt));
                     List<MmlDatum> ebuf = instArp[instArpCounter - 1].ToList();
                     ebuf.AddRange(buf);
                     instArp.Remove(instArpCounter - 1);
                     instArp.Add(instArpCounter - 1, ebuf.ToArray());
+                }
+            }
+            catch { }
+
+            return 0;
+        }
+
+        private int StoreInstVArpBuffer(Line line)
+        {
+            try
+            {
+                List<MmlDatum> buf = null;
+                if (instVArpCounter == 0)
+                {
+                    string txt = line.Txt.ToUpper();
+                    buf = GetNumsIntForVArp(CutComment(txt).IndexOf("VAR") + 3, CutComment(txt));
+                    instVArpCounter = buf[0].dat + 1;
+                    if (instVArp.ContainsKey(buf[0].dat))
+                    {
+                        instVArp.Remove(buf[0].dat);
+                    }
+                    instVArp.Add(buf[0].dat, buf.ToArray());
+                }
+                else
+                {
+                    string txt = line.Txt.ToUpper();
+                    buf = GetNumsIntForVArp(CutComment(txt).IndexOf('@') + 1, CutComment(txt));
+                    List<MmlDatum> ebuf = instVArp[instVArpCounter - 1].ToList();
+                    ebuf.AddRange(buf);
+                    instVArp.Remove(instVArpCounter - 1);
+                    instVArp.Add(instVArpCounter - 1, ebuf.ToArray());
                 }
             }
             catch { }
@@ -2404,7 +2592,7 @@ namespace Core
                 if (instCommandArpCounter == 0)
                 {
                     string txt = line.Txt;
-                    buf = GetNumsIntCommandArp(CutComment(txt).IndexOf("CAR") + 3, CutComment(txt));
+                    buf = GetNumsIntForCommandArp(CutComment(txt).IndexOf("CAR") + 3, CutComment(txt));
                     instCommandArpCounter = buf[0].dat + 1;
                     if (instCommandArp.ContainsKey(buf[0].dat))
                     {
@@ -2415,7 +2603,7 @@ namespace Core
                 else
                 {
                     string txt = line.Txt;
-                    buf = GetNumsIntCommandArp(CutComment(txt).IndexOf('@') + 1, CutComment(txt), 1, instCommandArp[instCommandArpCounter - 1][1].type);
+                    buf = GetNumsIntForCommandArp(CutComment(txt).IndexOf('@') + 1, CutComment(txt), 1, instCommandArp[instCommandArpCounter - 1][1].type);
                     List<MmlDatum> ebuf = instCommandArp[instCommandArpCounter - 1].ToList();
                     ebuf.AddRange(buf);
                     instCommandArp.Remove(instCommandArpCounter - 1);
@@ -2435,6 +2623,11 @@ namespace Core
         private void SetInstArp()
         {
             instArpCounter = -1;
+        }
+
+        private void SetInstVArp()
+        {
+            instVArpCounter = -1;
         }
 
         private void SetInstCommandArp()
@@ -2741,6 +2934,11 @@ namespace Core
                                     pg.arpCounter -= (int)waitCounter;
                                 }
 
+                                if (pg.varpeggioMode && pg.varpIndex != -1)
+                                {
+                                    pg.varpCounter -= (int)waitCounter;
+                                }
+
                                 foreach (CommandArpeggio ca in pg.commandArpeggio.Values)
                                 {
                                     if (!ca.Sw) continue;
@@ -2832,9 +3030,14 @@ namespace Core
                                         waitCounter = Math.Min(waitCounter, page.envCounter);
                                     }
 
-                                    if(page.arpeggioMode && page.arpIndex!=-1)
+                                    if (page.arpeggioMode && page.arpIndex != -1)
                                     {
                                         waitCounter = Math.Min(waitCounter, page.arpCounter);
+                                    }
+
+                                    if (page.varpeggioMode && page.varpIndex != -1)
+                                    {
+                                        waitCounter = Math.Min(waitCounter, page.varpCounter);
                                     }
 
                                     foreach (CommandArpeggio ca in page.commandArpeggio.Values)
@@ -2959,6 +3162,9 @@ namespace Core
 
             log.Write("Arpeggio");
             ProcArpeggio(pg);
+
+            log.Write("Volume Arpeggio");
+            ProcVArpeggio(pg);
 
             log.Write("Command Arpeggio");
             ProcCommandArpeggio(pg);
@@ -3738,6 +3944,9 @@ namespace Core
                     log.Write("Arpeggio");
                     ProcArpeggio(page);
 
+                    log.Write("Volume Arpeggio");
+                    ProcVArpeggio(page);
+
                     log.Write("Command Arpeggio");
                     ProcCommandArpeggio(page);
 
@@ -4194,6 +4403,7 @@ namespace Core
                 {
                     page.chip.SetKeyOff(page, null);
                     page.arpIndex = -1;
+                    if (page.varpIndex != -1) page.varpIndex = 1;
                     foreach (CommandArpeggio ca in page.commandArpeggio.Values)
                     {
                         if (ca.Sync != 0) continue;
@@ -4432,6 +4642,8 @@ namespace Core
             }
         }
 
+
+
         private void ProcArpeggio(partPage page)
         {
             if (!page.arpeggioMode) return;//アルペジオのモードが有効になっていない場合
@@ -4549,6 +4761,121 @@ namespace Core
             {
                 page.chip.SetKeyOff(page, null);
             }
+        }
+
+        private void ProcVArpeggio(partPage page)
+        {
+            if (!page.varpeggioMode) return;//アルペジオのモードが有効になっていない場合
+            if (page.varpIndex == -1) return;//動作不要な場合
+            if (page.varpInstrument == -1) return;//アルペジオ番号未設定の場合
+            if (!instVArp.ContainsKey(page.varpInstrument)) return;//存在しないアルペジオ番号の場合
+
+            while (page.varpCounter == 0 && page.varpIndex != -1)
+            {
+                switch (page.varpIndex)
+                {
+                    case 0://KeyON phase
+                        //最後まで解析したかな
+                        if (page.varpInstrumentPtr >= instVArp[page.varpInstrument].Length)
+                        {
+                            //ループ設定あるかな
+                            if (page.varpLoopPtr < 0)
+                            {
+                                //ループが設定されていない場合は動作はここで完了
+                                page.varpIndex = -1;
+                                page.varpDelta = 0;
+                                continue;
+                            }
+                            //ループポイントセット
+                            page.varpInstrumentPtr = page.varpLoopPtr;
+                        }
+
+                        //データの読み込み
+                        MmlDatum delta = instVArp[page.varpInstrument][page.varpInstrumentPtr++];
+
+                        //ループポイント指定かな
+                        if (delta.type == enmMMLType.LoopPoint)
+                        {
+                            if (page.varpLoopPtr == -1)
+                            {
+                                page.varpLoopPtr = page.varpInstrumentPtr;//ループポイントの設定
+                                if (page.varpLoopPtr >= instVArp[page.varpInstrument].Length)
+                                {
+                                    //ループポイント指定あとのデータがない場合は動作はここで完了
+                                    page.varpIndex = -1;
+                                    continue;
+                                }
+
+                                if (delta.dat != 0)
+                                {
+                                    page.varpDelta = 0;//
+                                }
+                            }
+                            else
+                            {
+                                //2個目のループポイントの場合は一つ目のループポイントへ戻る
+                                //ループポイントセット
+                                page.varpInstrumentPtr = page.varpLoopPtr;
+                            }
+                            continue;
+                        }
+                        else if (delta.type == enmMMLType.LengthClock)
+                        {
+                            int clock = delta.dat;
+                            clock = clock < 1 ? 1 : clock;//0の場合は補正
+                            page.varpClock = clock;
+                            continue;
+                        }
+
+                        //keyOn のlengthを求める
+                        int w = page.varpClock;
+                        if (w < 1) w = 1;
+
+                        page.varpKeyOnLength = w;//tbd
+                        //deltaは前回の値を基準に変化する
+                        page.varpDelta += delta.dat;
+                        page.varpCounter = page.varpKeyOnLength;
+                        //page.varpIndex++;
+                        break;
+
+                    case 1://KeyOff phase
+                        //最後のループポイントを探す
+                        int lp = -1;
+                        for (int p = 0; p < instVArp[page.varpInstrument].Length; p++) 
+                        {
+                            if (instVArp[page.varpInstrument][p].type != enmMMLType.LoopPoint) continue;
+                            lp = p + 1;
+                        }
+                        
+                        if (lp != page.varpLoopPtr)//既存のループポイントと異なるループポイントが見つかった(2個目のループポイントが見つかった)
+                        {
+                            if (instVArp[page.varpInstrument][lp].dat != 0)
+                            {
+                                page.varpDelta = 0;// 「/」の場合は変化量リセット
+                            }
+
+                            page.varpInstrumentPtr = lp;
+                            page.varpLoopPtr = lp;
+
+                            page.varpCounter = 0;
+                            page.varpIndex = 0;
+                        }
+                        else
+                        {
+                            //一つ目のループポイントしか見つからなかった
+                            //ループポイントが無かった
+
+                            page.varpIndex = 0;
+                        }
+
+                        break;
+
+                    case 2://次行ってみよう
+                        page.varpIndex = 0;
+                        break;
+                }
+            }
+
         }
 
         private void ProcCommandArpeggio(partPage page)

@@ -491,6 +491,11 @@ namespace Core
                 vol += page.lfo[lfo].value + page.lfo[lfo].param[6];
             }
 
+            if (page.varpeggioMode && page.varpIndex != -1)
+            {
+                vol += page.varpDelta;
+            }
+
             if (page.beforeVolume != vol)
             {
                 if (parent.instFM.ContainsKey(page.instrument))

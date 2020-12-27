@@ -581,6 +581,11 @@ namespace Core
                 vol += page.lfo[lfo].value + page.lfo[lfo].param[6];
             }
 
+            if (page.varpeggioMode && page.varpIndex != -1)
+            {
+                vol += page.varpDelta;
+            }
+
             vol = Common.CheckRange(vol, 0, 256);
             int vl = vol * page.panL / page.MaxVolume;
             int vr = vol * page.panR / page.MaxVolume;

@@ -99,6 +99,11 @@ namespace Core
                 vol += page.lfo[lfo].value + page.lfo[lfo].param[6];
             }
 
+            if (page.varpeggioMode && page.varpIndex != -1)
+            {
+                vol += page.varpDelta;
+            }
+
             vol = Common.CheckRange(vol, 0, 15) + (page.HardEnvelopeSw ? 0x10 : 0x00);
             if ((((ClsOPN)page.chip).SSGKeyOn[p] & (9 << vch)) == (9 << vch))
             {
@@ -1624,6 +1629,11 @@ namespace Core
                     continue;
                 }
                 vol += page.lfo[lfo].value + page.lfo[lfo].param[6];
+            }
+
+            if(page.varpeggioMode && page.varpIndex != -1)
+            {
+                vol += page.varpDelta;
             }
 
             if (page.spg.beforeVolume != vol)

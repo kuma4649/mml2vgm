@@ -356,9 +356,9 @@ namespace Core
                     log.Write("volume");
                     CmdVolume(pw, page, mml);
                     break;
-                case 'V': // totalVolume(Adpcm-A / Rhythm)
-                    log.Write("totalVolume(Adpcm-A / Rhythm)");
-                    CmdTotalVolume(pw, page, mml);
+                case 'V': // totalVolume(Adpcm-A / Rhythm) or volume Arpeggio
+                    log.Write("totalVolume(Adpcm-A / Rhythm) or volume Arpeggio");
+                    CmdTotalVolumeOrArpeggio(pw, page, mml);
                     break;
                 case 'w': // noise
                     log.Write("noise");
@@ -605,6 +605,18 @@ namespace Core
             {
                 mml.args = null;
             }
+        }
+
+        private void CmdTotalVolumeOrArpeggio(partWork pw, partPage page, MML mml)
+        {
+            pw.incPos(page);
+            if (pw.getChar(page) != 'P') //vP
+            {
+                CmdTotalVolume(pw, page, mml);
+                return;
+            }
+
+            CmdVArpeggio(pw, page, mml);
         }
 
         private void CmdTotalVolume(partWork pw, partPage page, MML mml)
@@ -1743,7 +1755,7 @@ namespace Core
                     mml.args = new List<object>();
                     mml.args.Add("APON");
                 }
-                else if (pw.getChar(page) == 'F') //apoN
+                else if (pw.getChar(page) == 'F') //apoF
                 {
                     pw.incPos(page);
                     mml.type = enmMMLType.Arpeggio;
@@ -1766,6 +1778,49 @@ namespace Core
                 {
                     mml.type = enmMMLType.Arpeggio;
                     mml.args = new List<object>();
+                    mml.args.Add("AP");
+                    mml.args.Add(n);
+                }
+            }
+        }
+
+        private void CmdVArpeggio(partWork pw, partPage page, MML mml)
+        {
+            pw.incPos(page);
+            if (pw.getChar(page) == 'O') //vpO
+            {
+                pw.incPos(page);
+                if (pw.getChar(page) == 'N') //vpoN
+                {
+                    pw.incPos(page);
+                    mml.type = enmMMLType.Arpeggio;
+                    mml.args = new List<object>();
+                    mml.args.Add("VPON");
+                }
+                else if (pw.getChar(page) == 'F') //vpoF
+                {
+                    pw.incPos(page);
+                    mml.type = enmMMLType.Arpeggio;
+                    mml.args = new List<object>();
+                    mml.args.Add("VPOF");
+                }
+                else
+                {
+                    msgBox.setErrMsg(msg.get("E05062"), mml.line.Lp);
+                }
+            }
+            else
+            {
+                //VPn
+                if (!pw.getNum(page, out int n))
+                {
+                    msgBox.setErrMsg(msg.get("E05063"), mml.line.Lp);
+                }
+                else
+                {
+                    mml.type = enmMMLType.Arpeggio;
+                    mml.args = new List<object>();
+                    mml.args.Add("VP");
                     mml.args.Add(n);
                 }
             }

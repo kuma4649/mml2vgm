@@ -740,6 +740,26 @@ namespace Core
             page.arpGatetimePmode = false;
         }
 
+        public virtual void SetVArpeggioAtKeyOn(partPage page, MML mml)
+        {
+            if (!page.varpeggioMode
+                || page.varpInstrument == -1
+                || !parent.instVArp.ContainsKey(page.varpInstrument)
+                || parent.instVArp[page.varpInstrument].Length < 2
+                )
+            {
+                page.varpIndex = -1;
+                return;
+            }
+
+            page.varpIndex = 0;
+            page.varpDelta = 0;
+            page.varpInstrumentPtr = 2;//0番目はinstの番号
+            page.varpLoopPtr = -1;
+            page.varpCounter = 0;
+
+        }
+
         public virtual void SetCommandArpeggioAtKeyOn(partPage page, MML mml)
         {
             foreach (CommandArpeggio ca in page.commandArpeggio.Values)
@@ -1049,25 +1069,7 @@ namespace Core
         {
             if (!(mml.args[0] is string))
             {
-                //APのとき
-
-                if (!(mml.args[0] is int))
-                {
-                    msgBox.setErrMsg(msg.get("E10034"), mml.line.Lp);
-                    return;
-                }
-                int inst = (int)mml.args[0];
-                if (parent.instArp.ContainsKey(inst))
-                {
-                    page.arpInstrument = inst;
-                    page.arpeggioMode = true;
-                }
-                else
-                {
-                    //ARPの定義がない場合はエラー
-                    msgBox.setErrMsg(msg.get("E10034"), mml.line.Lp);
-                    page.arpeggioMode = false;
-                }
+                msgBox.setErrMsg(msg.get("E10034"), mml.line.Lp);
                 return;
             }
 
@@ -1075,6 +1077,20 @@ namespace Core
 
             switch (cmd)
             {
+                case "AP":
+                    int inst = (int)mml.args[1];
+                    if (parent.instArp.ContainsKey(inst))
+                    {
+                        page.arpInstrument = inst;
+                        page.arpeggioMode = true;
+                    }
+                    else
+                    {
+                        //ARPの定義がない場合はエラー
+                        msgBox.setErrMsg(msg.get("E10034"), mml.line.Lp);
+                        page.arpeggioMode = false;
+                    }
+                    return;
                 case "APON":
                     page.arpeggioMode = true;
                     if (!parent.instArp.ContainsKey(page.arpInstrument))
@@ -1088,6 +1104,35 @@ namespace Core
                     page.arpeggioMode = false;
                     page.beforeFNum = -1;
                     page.arpDelta = 0;
+                    return;
+
+
+                case "VP":
+                    int vinst = (int)mml.args[1];
+                    if (parent.instVArp.ContainsKey(vinst))
+                    {
+                        page.varpInstrument = vinst;
+                        page.varpeggioMode = true;
+                    }
+                    else
+                    {
+                        //VARの定義がない場合はエラー
+                        msgBox.setErrMsg(msg.get("E10037"), mml.line.Lp);
+                        page.varpeggioMode = false;
+                    }
+                    return;
+                case "VPON":
+                    page.varpeggioMode = true;
+                    if (!parent.instVArp.ContainsKey(page.varpInstrument))
+                    {
+                        //VARの定義がない場合はエラー
+                        msgBox.setErrMsg(msg.get("E10037"), mml.line.Lp);
+                        page.varpeggioMode = false;
+                    }
+                    return;
+                case "VPOF":
+                    page.varpeggioMode = false;
+                    page.varpDelta = 0;
                     return;
             }
 
@@ -1660,6 +1705,7 @@ namespace Core
                     SetKeyOff(page, mml);
                 }
                 SetArpeggioAtKeyOn(page, mml);
+                SetVArpeggioAtKeyOn(page, mml);
                 SetCommandArpeggioAtKeyOn(page, mml);
                 SetEnvelopeAtKeyOn(page, mml);
                 SetLfoAtKeyOn(page, mml);

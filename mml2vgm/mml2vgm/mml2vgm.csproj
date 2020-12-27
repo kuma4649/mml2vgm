@@ -188,6 +188,9 @@
     <None Include="sample\Syntax\testArpeggioXGM.gwi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="sample\Syntax\testArpeggio_2.gwi">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="sample\Syntax\testPageFunction.gwi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

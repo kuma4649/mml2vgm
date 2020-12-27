@@ -300,6 +300,76 @@ namespace Core
         /// </summary>
         public int arpGatetime = 0;
 
+
+
+        /// <summary>
+        /// volumeアルペジオスイッチ
+        /// </summary>
+        public bool varpeggioMode = false;
+
+        /// <summary>
+        /// 使用中のvolumeアルペジオ定義番号
+        /// </summary>
+        public int varpInstrument = -1;
+        //public int beforeVArpInstrument = 0;
+
+        /// <summary>
+        /// volumeアルペジオ中の変化量
+        /// </summary>
+        public int varpDelta = 0;
+
+        /// <summary>
+        /// volumeアルペジオの進捗位置
+        /// </summary>
+        public int varpIndex = -1;
+
+        /// <summary>
+        /// volumeアルペジオの解析位置
+        /// </summary>
+        public int varpInstrumentPtr = 0;
+
+        /// <summary>
+        /// volumeアルペジオの解析ループ位置
+        /// </summary>
+        public int varpLoopPtr = 0;
+
+        /// <summary>
+        /// volumeアルペジオ中のKeyOnの長さ
+        /// </summary>
+        public int varpKeyOnLength = 0;
+
+        ///// <summary>
+        ///// volumeアルペジオ中のKeyOffの長さ
+        ///// </summary>
+        //public int varpKeyOffLength = 0;
+
+        /// <summary>
+        /// volumeアルペジオ中の長さ(KeyOn/Off含む)
+        /// </summary>
+        public int varpClock = 0;
+
+        ///// <summary>
+        ///// volumeアルペジオ タイモード
+        ///// </summary>
+        //public bool varpTieMode = false;
+
+        /// <summary>
+        /// volumeアルペジオ向け汎用カウンター
+        /// </summary>
+        public int varpCounter = -1;
+
+        ///// <summary>
+        ///// volumeアルペジオ向けゲートタイムモード(当分false固定)
+        ///// </summary>
+        //public bool varpGatetimePmode = false;
+
+        ///// <summary>
+        ///// volumeアルペジオ向けゲートタイム
+        ///// </summary>
+        //public int varpGatetime = 0;
+
+
+
         /// <summary>
         /// リズムモードスイッチ
         /// </summary>
