@@ -250,8 +250,10 @@ namespace Core
             }
 
             int[] ftbl = FNumTbl[0];
+            int arpNote = page.arpFreqMode ? 0 : page.arpDelta;
+            int arpFreq = page.arpFreqMode ? page.arpDelta : 0;
 
-            int f = GetFmFNum(ftbl, page.octaveNow, page.noteCmd, page.shift + page.keyShift + page.toneDoublerKeyShift + page.arpDelta);//
+            int f = GetFmFNum(ftbl, page.octaveNow, page.noteCmd, page.shift + page.keyShift + page.toneDoublerKeyShift + arpNote);//
             if (page.bendWaitCounter != -1)
             {
                 f = page.bendFnum;
@@ -260,6 +262,7 @@ namespace Core
             f &= 0x1ff;
 
             f = f + page.detune;
+            f = f + arpFreq;
             for (int lfo = 0; lfo < 4; lfo++)
             {
                 if (!page.lfo[lfo].sw)
@@ -342,7 +345,7 @@ namespace Core
                 vol += page.lfo[lfo].value + page.lfo[lfo].param[6];
             }
 
-            if (page.varpeggioMode && page.varpIndex != -1)
+            if (page.varpeggioMode)
             {
                 vol += page.varpDelta;
             }

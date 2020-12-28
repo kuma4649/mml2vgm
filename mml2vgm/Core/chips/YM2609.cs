@@ -344,12 +344,16 @@ namespace Core
 
         public void SetAdpcmFNum(MML mml, partPage page)
         {
-            int f = GetAdpcmFNum(page, page.octaveNow, page.noteCmd, page.shift + page.keyShift + page.arpDelta);//
+            int arpNote = page.arpFreqMode ? 0 : page.arpDelta;
+            int arpFreq = page.arpFreqMode ? page.arpDelta : 0;
+
+            int f = GetAdpcmFNum(page, page.octaveNow, page.noteCmd, page.shift + page.keyShift + arpNote);//
             if (page.bendWaitCounter != -1)
             {
                 f = page.bendFnum;
             }
             f = f + page.detune;
+            f = f + arpFreq;
             for (int lfo = 0; lfo < 4; lfo++)
             {
                 if (!page.lfo[lfo].sw)
@@ -499,8 +503,10 @@ namespace Core
                 return;
 
             int[] ftbl = page.chip.FNumTbl[0];
+            int arpNote = page.arpFreqMode ? 0 : page.arpDelta;
+            int arpFreq = page.arpFreqMode ? page.arpDelta : 0;
 
-            int f = GetFmFNum(ftbl, page.octaveNow, page.noteCmd, page.shift + page.keyShift + page.toneDoublerKeyShift + page.arpDelta);//
+            int f = GetFmFNum(ftbl, page.octaveNow, page.noteCmd, page.shift + page.keyShift + page.toneDoublerKeyShift + arpNote);//
             if (page.bendWaitCounter != -1)
             {
                 f = page.bendFnum;
@@ -509,6 +515,7 @@ namespace Core
             f &= 0xfff;
 
             f = f + page.detune;
+            f = f + arpFreq;
             for (int lfo = 0; lfo < 4; lfo++)
             {
                 if (!page.lfo[lfo].sw || page.lfo[lfo].type != eLfoType.Vibrato)
@@ -629,7 +636,11 @@ namespace Core
 
         public new void SetSsgFNum(partPage page, MML mml)
         {
+            int arpNote = page.arpFreqMode ? 0 : page.arpDelta;
+            int arpFreq = page.arpFreqMode ? page.arpDelta : 0;
+
             int f = -page.detune;
+            f = f - arpFreq;
             for (int lfo = 0; lfo < 4; lfo++)
             {
                 if (!page.lfo[lfo].sw)
@@ -658,7 +669,7 @@ namespace Core
             }
             else
             {
-                f += GetSsgFNum(page, mml, page.octaveNow, page.noteCmd, page.shift + page.keyShift + page.arpDelta);//
+                f += GetSsgFNum(page, mml, page.octaveNow, page.noteCmd, page.shift + page.keyShift + arpNote);//
             }
 
             f = Common.CheckRange(f, 0, 0xfff);
@@ -761,7 +772,7 @@ namespace Core
                 vol += page.lfo[lfo].value + page.lfo[lfo].param[6];
             }
 
-            if (page.varpeggioMode && page.varpIndex != -1)
+            if (page.varpeggioMode)
             {
                 vol += page.varpDelta;
             }

@@ -244,12 +244,16 @@ namespace Core
 
         public void SetAdpcmFNum(MML mml, partPage page)
         {
-            int f = GetAdpcmFNum(page, page.octaveNow, page.noteCmd, page.shift + page.keyShift + page.arpDelta);//
+            int arpNote = page.arpFreqMode ? 0 : page.arpDelta;
+            int arpFreq = page.arpFreqMode ? page.arpDelta : 0;
+
+            int f = GetAdpcmFNum(page, page.octaveNow, page.noteCmd, page.shift + page.keyShift + arpNote);//
             if (page.bendWaitCounter != -1)
             {
                 f = page.bendFnum;
             }
             f = f + page.detune;
+            f = f + arpFreq;
             for (int lfo = 0; lfo < 4; lfo++)
             {
                 if (!page.lfo[lfo].sw)

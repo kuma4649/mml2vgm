@@ -485,12 +485,16 @@ namespace Core
 
         public override void SetFNum(partPage page, MML mml)
         {
-            int f = GetK053260FNum(mml, page, page.octaveNow, page.noteCmd, page.shift + page.keyShift + page.arpDelta);//
+            int arpNote = page.arpFreqMode ? 0 : page.arpDelta;
+            int arpFreq = page.arpFreqMode ? page.arpDelta : 0;
+
+            int f = GetK053260FNum(mml, page, page.octaveNow, page.noteCmd, page.shift + page.keyShift + arpNote);//
             if (page.bendWaitCounter != -1)
             {
                 f = page.bendFnum;
             }
             f = f + page.detune;
+            f = f + arpFreq;
             for (int lfo = 0; lfo < 4; lfo++)
             {
                 if (!page.lfo[lfo].sw)
@@ -575,7 +579,7 @@ namespace Core
                 vol += page.lfo[lfo].value + page.lfo[lfo].param[6];
             }
 
-            if (page.varpeggioMode && page.varpIndex != -1)
+            if (page.varpeggioMode)
             {
                 vol += page.varpDelta;
             }
@@ -754,6 +758,8 @@ namespace Core
                     page.pcmEndAddress = (int)parent.instPCM[page.instrument].Item2.edAdr;
                     page.pcmLoopAddress = (int)parent.instPCM[page.instrument].Item2.loopAdr;
                     page.pcmBank = (int)((parent.instPCM[page.instrument].Item2.stAdr >> 16));
+                    page.keyOff = true;
+                    page.spg.keyOn = false;
                 }
 
                 if (page.spg.keyOn != page.keyOn)
@@ -831,7 +837,7 @@ namespace Core
             byte v = (byte)(beforeKeyON != -1 ? beforeKeyON : 0);
             foreach (partWork pw in lstPartWork)
             {
-                if (pw.cpg.keyOff && !pw.cpg.envelopeMode)
+                if (pw.cpg.keyOff && !pw.cpg.envelopeMode && !pw.cpg.varpeggioMode)
                 {
                     v &= (byte)(0xfe << pw.cpg.ch);
                     pw.cpg.keyOff = false;

@@ -2008,6 +2008,16 @@ namespace Core
                     lstBuf.Add(dat);
                     continue;
                 }
+                else if (c == 'E')
+                {
+                    hc = -1;
+                    n = "";
+                    dat = new MmlDatum();
+                    dat.type = enmMMLType.LoopPoint;
+                    dat.dat = 2;
+                    lstBuf.Add(dat);
+                    continue;
+                }
                 else if (c == '#')
                 {
                     tp = enmMMLType.LengthClock;
@@ -2848,7 +2858,7 @@ namespace Core
                         partWork pw = chip.lstPartWork[i];
                         foreach (partPage page in pw.pg)
                         {
-                            if (page.envIndex != -1)
+                            if (page.envIndex != -1 || page.varpIndex != -1)
                             {
                                 chip.SetKeyOff(page, null);
                             }
@@ -4399,7 +4409,7 @@ namespace Core
 
             if (!page.tie)
             {
-                if (!page.envelopeMode)
+                if (!page.envelopeMode && !page.varpeggioMode)
                 {
                     page.chip.SetKeyOff(page, null);
                     page.arpIndex = -1;
@@ -4417,6 +4427,8 @@ namespace Core
                         page.envIndex = 3;//RR phase
                         page.envCounter = 0;
                     }
+
+                    if (page.varpIndex != -1) page.varpIndex = 1;//RR phase
                 }
             }
 
@@ -4677,6 +4689,14 @@ namespace Core
                         //ループポイント指定かな
                         if (delta.type == enmMMLType.LoopPoint)
                         {
+                            if (delta.dat == 2)// e
+                            {
+                                //動作はここで完了
+                                page.arpIndex = -1;
+                                //page.arpDelta = 0;
+                               continue;
+                            }
+
                             page.arpLoopPtr = page.arpInstrumentPtr;//ループポイントの設定
                             if (page.arpLoopPtr >= instArp[page.arpInstrument].Length)
                             {
@@ -4733,7 +4753,7 @@ namespace Core
 
                         if (!page.arpTieMode)
                         {
-                            if (!page.envelopeMode)
+                            if (!page.envelopeMode && !page.varpeggioMode)
                             {
                                 page.chip.SetKeyOff(page, null);
                             }
@@ -4757,7 +4777,7 @@ namespace Core
                 }
             }
 
-            if (page.arpIndex == -1)
+            if (page.arpIndex == -1 && page.varpIndex == -1)
             {
                 page.chip.SetKeyOff(page, null);
             }
@@ -4796,6 +4816,13 @@ namespace Core
                         //ループポイント指定かな
                         if (delta.type == enmMMLType.LoopPoint)
                         {
+                            if (delta.dat == 2)// e だったとき
+                            {
+                                //動作はここで完了
+                                page.varpIndex = -1;
+                                continue;
+                            }
+
                             if (page.varpLoopPtr == -1)
                             {
                                 page.varpLoopPtr = page.varpInstrumentPtr;//ループポイントの設定
@@ -4843,13 +4870,13 @@ namespace Core
                         int lp = -1;
                         for (int p = 0; p < instVArp[page.varpInstrument].Length; p++) 
                         {
-                            if (instVArp[page.varpInstrument][p].type != enmMMLType.LoopPoint) continue;
+                            if (instVArp[page.varpInstrument][p].type != enmMMLType.LoopPoint || instVArp[page.varpInstrument][p].dat == 2) continue;
                             lp = p + 1;
                         }
                         
                         if (lp != page.varpLoopPtr)//既存のループポイントと異なるループポイントが見つかった(2個目のループポイントが見つかった)
                         {
-                            if (instVArp[page.varpInstrument][lp].dat != 0)
+                            if (instVArp[page.varpInstrument][lp - 1].dat != 0)//ループポイントが「/」の場合はリセット
                             {
                                 page.varpDelta = 0;// 「/」の場合は変化量リセット
                             }
@@ -4937,6 +4964,12 @@ namespace Core
                             continue;
 
                         case enmMMLType.LoopPoint:
+                            if (md.dat == 2)//e
+                            {
+                                //今回はここまで。
+                                ca.Ptr = -1;
+                                continue;
+                            }
                             ca.LoopPtr = ca.Ptr;
                             if (ca.LoopPtr >= instCommandArp[ca.Num].Length)
                                 ca.LoopPtr = -1;

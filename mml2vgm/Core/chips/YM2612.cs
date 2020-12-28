@@ -157,7 +157,8 @@ namespace Core
 
         public void GetPcmNote(partPage page)
         {
-            int shift = page.shift + page.keyShift + page.arpDelta;
+            int arpNote = page.arpFreqMode ? 0 : page.arpDelta;
+            int shift = page.shift + page.keyShift + arpNote;
             int o = page.octaveNow;//
             int n = Const.NOTE.IndexOf(page.noteCmd) + shift;
             if (n >= 0)

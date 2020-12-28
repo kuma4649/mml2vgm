@@ -350,7 +350,8 @@ namespace Core
             if (page.isPcmMap)
             {
                 int nt = Const.NOTE.IndexOf(page.noteCmd);
-                int ff = page.octaveNow * 12 + nt + page.shift + page.keyShift + page.arpDelta;
+                int arpNote = page.arpFreqMode ? 0 : page.arpDelta;
+                int ff = page.octaveNow * 12 + nt + page.shift + page.keyShift + arpNote;
                 if (parent.instPCMMap.ContainsKey(page.pcmMapNo))
                 {
                     if (parent.instPCMMap[page.pcmMapNo].ContainsKey(ff))
@@ -359,7 +360,7 @@ namespace Core
                     }
                     else
                     {
-                        msgBox.setErrMsg(string.Format(msg.get("E10025"), page.octaveNow, page.noteCmd, page.shift + page.keyShift + page.arpDelta), mml.line.Lp);
+                        msgBox.setErrMsg(string.Format(msg.get("E10025"), page.octaveNow, page.noteCmd, page.shift + page.keyShift + arpNote), mml.line.Lp);
                         return;
                     }
                 }
@@ -479,7 +480,7 @@ namespace Core
 
         public void OutHuC6280KeyOff(MML mml, partPage page)
         {
-            if (!page.envelopeMode) page.keyOff = true;
+            if (!page.envelopeMode && !page.varpeggioMode) page.keyOff = true;
             //SetHuC6280CurrentChannel(mml, page);
             //OutHuC6280Port(page, mml, port[0], 0x4, 0x00);
         }
@@ -488,13 +489,16 @@ namespace Core
         {
             if (page.noteCmd == '\0') return;
 
-            int f = GetHuC6280Freq(page.octaveNow, page.noteCmd, page.keyShift + page.shift + page.arpDelta);//
+            int arpNote = page.arpFreqMode ? 0 : page.arpDelta;
+            int arpFreq = page.arpFreqMode ? page.arpDelta : 0;
+            int f = GetHuC6280Freq(page.octaveNow, page.noteCmd, page.keyShift + page.shift + arpNote);//
 
             if (page.bendWaitCounter != -1)
             {
                 f = page.bendFnum;
             }
             f = f + page.detune;
+            f = f + arpFreq;
             for (int lfo = 0; lfo < 4; lfo++)
             {
                 if (!page.lfo[lfo].sw)
@@ -578,7 +582,7 @@ namespace Core
                 vol += page.lfo[lfo].value + page.lfo[lfo].param[6];
             }
 
-            if (page.varpeggioMode && page.varpIndex != -1)
+            if (page.varpeggioMode)
             {
                 vol += page.varpDelta;
             }
@@ -899,7 +903,7 @@ namespace Core
 
                 if (page.keyOff)
                 {
-                    if (!page.envelopeMode)
+                    if (!page.envelopeMode && !page.varpeggioMode)
                     {
                         page.beforeVolume = 0;
                     }

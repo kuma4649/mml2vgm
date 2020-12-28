@@ -281,6 +281,11 @@ namespace Core
         public bool arpTieMode = false;
 
         /// <summary>
+        /// アルペジオ 周波数モード
+        /// </summary>
+        public bool arpFreqMode = false;
+
+        /// <summary>
         /// アルペジオ向け汎用カウンター
         /// </summary>
         public int arpCounter = -1;

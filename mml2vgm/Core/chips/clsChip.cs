@@ -365,17 +365,18 @@ namespace Core
                 {
                     bf += wait;
                     tl += wait;
+                    int arpNote = page.arpFreqMode ? 0 : page.arpDelta;
                     GetFNumAtoB(
                         page
                         , mml
                         , out int a
                         , page.octaveNow
                         , note.cmd
-                        , note.shift + (i + 0) * Math.Sign(delta) + page.keyShift + page.toneDoublerKeyShift + page.arpDelta
+                        , note.shift + (i + 0) * Math.Sign(delta) + page.keyShift + page.toneDoublerKeyShift + arpNote
                         , out int b
                         , page.octaveNow
                         , note.cmd
-                        , note.shift + (i + 1) * Math.Sign(delta) + page.keyShift + page.toneDoublerKeyShift + page.arpDelta
+                        , note.shift + (i + 1) * Math.Sign(delta) + page.keyShift + page.toneDoublerKeyShift + arpNote
                         , delta
                         );
 
@@ -726,13 +727,21 @@ namespace Core
             page.arpDelta = 0;
             page.arpInstrumentPtr = 2;//0番目はinstの番号
             page.arpGatetime = 0;
-            if (parent.instArp[page.arpInstrument][1].dat == 0)
+            if ((parent.instArp[page.arpInstrument][1].dat & 1) == 0)
             {
                 page.arpTieMode = false;
             }
             else
             {
                 page.arpTieMode = true;
+            }
+            if ((parent.instArp[page.arpInstrument][1].dat & 2) == 0)
+            {
+                page.arpFreqMode = false;
+            }
+            else
+            {
+                page.arpFreqMode = true;
             }
             page.arpLoopPtr = -1;
             page.arpCounter = 0;
@@ -1620,11 +1629,12 @@ namespace Core
             Note note = (Note)mml.args[0];
             if (note.tDblSw)
             {
+                int arpNote = page.arpFreqMode ? 0 : page.arpDelta;
                 page.TdA = page.octaveNew * 12
                     + Const.NOTE.IndexOf(note.cmd)
                     + note.shift
                     + page.keyShift
-                    + page.arpDelta;
+                    + arpNote;
                 page.octaveNow = page.octaveNew;
             }
 
@@ -1700,7 +1710,7 @@ namespace Core
             //タイ指定では無い場合はキーオンする
             if (!page.beforeTie)
             {
-                if (page.envIndex != -1)
+                if (page.envIndex != -1 || page.varpIndex != -1)
                 {
                     SetKeyOff(page, mml);
                 }

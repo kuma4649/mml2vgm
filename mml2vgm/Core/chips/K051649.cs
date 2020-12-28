@@ -181,7 +181,7 @@ namespace Core
                 vol += page.lfo[lfo].value + page.lfo[lfo].param[6];
             }
 
-            if (page.varpeggioMode && page.varpIndex != -1)
+            if (page.varpeggioMode)
             {
                 vol += page.varpDelta;
             }
@@ -198,12 +198,16 @@ namespace Core
 
         public void SetSsgFNum(partPage page)
         {
-            int f = GetSsgFNum(page, page.octaveNow, page.noteCmd, page.shift + page.keyShift + page.arpDelta);//
+            int arpNote = page.arpFreqMode ? 0 : page.arpDelta;
+            int arpFreq = page.arpFreqMode ? page.arpDelta : 0;
+
+            int f = GetSsgFNum(page, page.octaveNow, page.noteCmd, page.shift + page.keyShift + arpNote);//
             if (page.bendWaitCounter != -1)
             {
                 f = page.bendFnum;
             }
             f = f + page.detune;
+            f = f + arpFreq;
             for (int lfo = 0; lfo < 4; lfo++)
             {
                 if (!page.lfo[lfo].sw)

@@ -289,12 +289,16 @@ namespace Core
 
         public void SetAdpcmBFNum(MML mml, partPage page)
         {
-            int f = GetAdpcmBFNum(page.octaveNow, page.noteCmd, page.shift + page.keyShift + page.arpDelta);//
+            int arpNote = page.arpFreqMode ? 0 : page.arpDelta;
+            int arpFreq = page.arpFreqMode ? page.arpDelta : 0;
+
+            int f = GetAdpcmBFNum(page.octaveNow, page.noteCmd, page.shift + page.keyShift + arpNote);//
             if (page.bendWaitCounter != -1)
             {
                 f = page.bendFnum;
             }
             f = f + page.detune;
+            f = f + arpFreq;
             for (int lfo = 0; lfo < 4; lfo++)
             {
                 if (!page.lfo[lfo].sw)
@@ -427,7 +431,8 @@ namespace Core
                 if (page.isPcmMap)
                 {
                     int n = Const.NOTE.IndexOf(page.noteCmd);
-                    int f = page.octaveNow * 12 + n + page.shift + page.keyShift + page.arpDelta;
+                    int arpNote = page.arpFreqMode ? 0 : page.arpDelta;
+                    int f = page.octaveNow * 12 + n + page.shift + page.keyShift + arpNote;
                     if (parent.instPCMMap.ContainsKey(page.pcmMapNo))
                     {
                         if (parent.instPCMMap[page.pcmMapNo].ContainsKey(f))
@@ -441,7 +446,7 @@ namespace Core
                         }
                         else
                         {
-                            msgBox.setErrMsg(string.Format(msg.get("E10025"), page.octaveNow, page.noteCmd, page.shift + page.keyShift + page.arpDelta), mml.line.Lp);
+                            msgBox.setErrMsg(string.Format(msg.get("E10025"), page.octaveNow, page.noteCmd, page.shift + page.keyShift + arpNote), mml.line.Lp);
                             return;
                         }
                     }

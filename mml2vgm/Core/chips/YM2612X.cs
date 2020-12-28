@@ -89,7 +89,8 @@ namespace Core
             if (page.isPcmMap)
             {
                 int n = Const.NOTE.IndexOf(page.noteCmd);
-                int f = page.octaveNow * 12 + n + page.shift + page.keyShift + page.arpDelta;
+                int arpNote = page.arpFreqMode ? 0 : page.arpDelta;
+                int f = page.octaveNow * 12 + n + page.shift + page.keyShift + arpNote;
                 if (parent.instPCMMap.ContainsKey(page.pcmMapNo))
                 {
                     if (parent.instPCMMap[page.pcmMapNo].ContainsKey(f))
@@ -98,7 +99,7 @@ namespace Core
                     }
                     else
                     {
-                        msgBox.setErrMsg(string.Format(msg.get("E10025"), page.octaveNow, page.noteCmd, page.shift + page.keyShift + page.arpDelta), mml.line.Lp);
+                        msgBox.setErrMsg(string.Format(msg.get("E10025"), page.octaveNow, page.noteCmd, page.shift + page.keyShift + arpNote), mml.line.Lp);
                         return;
                     }
                 }

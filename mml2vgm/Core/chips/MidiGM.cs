@@ -341,7 +341,7 @@ namespace Core
                     vol += page.lfo[lfo].value + page.lfo[lfo].param[6];
                 }
 
-                if (page.varpeggioMode && page.varpIndex != -1)
+                if (page.varpeggioMode)
                 {
                     vol += page.varpDelta;
                 }
@@ -423,14 +423,15 @@ namespace Core
         {
             Note n = (Note)mml.args[0];
             byte noteNum;
+            int arpNote = page.arpFreqMode ? 0 : page.arpDelta;
             if (page.bendWaitCounter == -1)
             {
-                noteNum = (byte)GetNoteNum(page.octaveNew, n.cmd, n.shift + page.keyShift + page.arpDelta);
+                noteNum = (byte)GetNoteNum(page.octaveNew, n.cmd, n.shift + page.keyShift + arpNote);
                 if (!page.beforeTie) page.beforeBendNoteNum = -1;
             }
             else
             {
-                noteNum = (byte)GetNoteNum(page.bendStartOctave, page.bendStartNote, page.bendStartShift + page.keyShift + page.arpDelta);
+                noteNum = (byte)GetNoteNum(page.bendStartOctave, page.bendStartNote, page.bendStartShift + page.keyShift + arpNote);
                 page.beforeBendNoteNum = noteNum;
             }
             page.tblNoteOn[noteNum] = true;

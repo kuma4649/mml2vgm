@@ -143,7 +143,7 @@ namespace Core
         public void OutPsgKeyOff(partPage page, MML mml)
         {
 
-            if (!page.envelopeMode) page.keyOff = true;
+            if (!page.envelopeMode && !page.varpeggioMode) page.keyOff = true;
             //SetVolume(page, mml);
 
         }
@@ -169,7 +169,11 @@ namespace Core
         {
             if (page.Type != enmChannelType.DCSGNOISE)
             {
+                int arpNote = page.arpFreqMode ? 0 : page.arpDelta;
+                int arpFreq = page.arpFreqMode ? page.arpDelta : 0;
+
                 int f = -page.detune;
+                f = f - arpFreq;
 
                 for (int lfo = 0; lfo < 4; lfo++)
                 {
@@ -199,7 +203,7 @@ namespace Core
                 }
                 else
                 {
-                    f += GetDcsgFNum(page.octaveNow, page.noteCmd, page.shift + page.keyShift + page.arpDelta);//
+                    f += GetDcsgFNum(page.octaveNow, page.noteCmd, page.shift + page.keyShift + arpNote);//
                 }
 
                 f = Common.CheckRange(f, 0, 0x3ff);
@@ -266,7 +270,7 @@ namespace Core
                 vol += page.lfo[lfo].value + page.lfo[lfo].param[6];
             }
 
-            if (page.varpeggioMode && page.varpIndex != -1)
+            if (page.varpeggioMode)
             {
                 vol += page.varpDelta;
             }

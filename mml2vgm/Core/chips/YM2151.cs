@@ -406,8 +406,10 @@ namespace Core
 
         public override void SetFNum(partPage page, MML mml)
         {
+            int arpNote = page.arpFreqMode ? 0 : page.arpDelta;
+            int arpFreq = page.arpFreqMode ? page.arpDelta : 0;
 
-            int f = GetFNum(page, mml, page.octaveNow, page.noteCmd, page.shift + page.keyShift + page.toneDoublerKeyShift + page.arpDelta);//
+            int f = GetFNum(page, mml, page.octaveNow, page.noteCmd, page.shift + page.keyShift + page.toneDoublerKeyShift + arpNote);//
 
             if (page.bendWaitCounter != -1)
             {
@@ -415,6 +417,7 @@ namespace Core
             }
 
             f = f + page.detune;
+            f = f + arpFreq;
             for (int lfo = 0; lfo < 4; lfo++)
             {
                 if (!page.lfo[lfo].sw)
@@ -491,7 +494,7 @@ namespace Core
                 vol += page.lfo[lfo].value + page.lfo[lfo].param[6];
             }
 
-            if (page.varpeggioMode && page.varpIndex != -1)
+            if (page.varpeggioMode)
             {
                 vol += page.varpDelta;
             }
@@ -644,7 +647,8 @@ namespace Core
                 }
                 oct = Common.CheckRange(oct, 1, 8);
                 page.octaveNew = oct;
-                int TdB = oct * 12 + Const.NOTE.IndexOf(note.tDblCmd) + note.tDblShift + page.keyShift + page.arpDelta;
+                int arpNote = page.arpFreqMode ? 0 : page.arpDelta;
+                int TdB = oct * 12 + Const.NOTE.IndexOf(note.tDblCmd) + note.tDblShift + page.keyShift + arpNote;
                 int s = TdB - page.TdA;// - TdB;
                 int us = Math.Abs(s);
                 int n = page.toneDoubler;

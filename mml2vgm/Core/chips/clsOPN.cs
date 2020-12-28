@@ -99,7 +99,7 @@ namespace Core
                 vol += page.lfo[lfo].value + page.lfo[lfo].param[6];
             }
 
-            if (page.varpeggioMode && page.varpIndex != -1)
+            if (page.varpeggioMode)
             {
                 vol += page.varpDelta;
             }
@@ -160,7 +160,11 @@ namespace Core
 
         public void SetSsgFNum(partPage page, MML mml)
         {
+            int arpNote = page.arpFreqMode ? 0 : page.arpDelta;
+            int arpFreq = page.arpFreqMode ? page.arpDelta : 0;
+
             int f = -page.detune;
+            f = f + arpFreq;
             for (int lfo = 0; lfo < 4; lfo++)
             {
                 if (!page.lfo[lfo].sw)
@@ -189,7 +193,7 @@ namespace Core
             }
             else
             {
-                f += GetSsgFNum(page, mml, page.octaveNow, page.noteCmd, page.shift + page.keyShift + page.arpDelta);//
+                f += GetSsgFNum(page, mml, page.octaveNow, page.noteCmd, page.shift + page.keyShift + arpNote);//
             }
 
             f = Common.CheckRange(f, 0, 0xfff);
@@ -1296,7 +1300,8 @@ namespace Core
             if (page.isPcmMap)
             {
                 int nt = Const.NOTE.IndexOf(page.noteCmd);
-                int f = page.octaveNow * 12 + nt + page.shift + page.keyShift + page.arpDelta;
+                int arpNote = page.arpFreqMode ? 0 : page.arpDelta;
+                int f = page.octaveNow * 12 + nt + page.shift + page.keyShift + arpNote;
                 if (parent.instPCMMap.ContainsKey(page.pcmMapNo))
                 {
                     if (parent.instPCMMap[page.pcmMapNo].ContainsKey(f))
@@ -1305,7 +1310,7 @@ namespace Core
                     }
                     else
                     {
-                        msgBox.setErrMsg(string.Format(msg.get("E10025"), page.octaveNow, page.noteCmd, page.shift + page.keyShift + page.arpDelta), mml.line.Lp);
+                        msgBox.setErrMsg(string.Format(msg.get("E10025"), page.octaveNow, page.noteCmd, page.shift + page.keyShift + arpNote), mml.line.Lp);
                         return;
                     }
                 }
@@ -1476,8 +1481,10 @@ namespace Core
             }
 
             int[] ftbl = page.chip.FNumTbl[0];
+            int arpNote = page.arpFreqMode ? 0 : page.arpDelta;
+            int arpFreq = page.arpFreqMode ? page.arpDelta : 0;
             int f;
-            f = GetFmFNum(ftbl, page.octaveNow, page.noteCmd, page.shift + page.keyShift + page.toneDoublerKeyShift + page.arpDelta);//
+            f = GetFmFNum(ftbl, page.octaveNow, page.noteCmd, page.shift + page.keyShift + page.toneDoublerKeyShift + arpNote);//
             if (page.bendWaitCounter != -1)
             {
                 f = page.bendFnum;
@@ -1486,6 +1493,7 @@ namespace Core
             f &= 0xfff;
 
             f = f + page.detune;
+            f = f + arpFreq;
             for (int lfo = 0; lfo < 4; lfo++)
             {
                 if (!page.lfo[lfo].sw)
@@ -1631,7 +1639,7 @@ namespace Core
                 vol += page.lfo[lfo].value + page.lfo[lfo].param[6];
             }
 
-            if(page.varpeggioMode && page.varpIndex != -1)
+            if(page.varpeggioMode)
             {
                 vol += page.varpDelta;
             }
@@ -1768,7 +1776,8 @@ namespace Core
                 }
                 oct = Common.CheckRange(oct, 1, 8);
                 page.octaveNew = oct;
-                int TdB = oct * 12 + Const.NOTE.IndexOf(note.tDblCmd) + note.tDblShift + page.keyShift + page.arpDelta;
+                int arpNote = page.arpFreqMode ? 0 : page.arpDelta;
+                int TdB = oct * 12 + Const.NOTE.IndexOf(note.tDblCmd) + note.tDblShift + page.keyShift + arpNote;
                 int s = TdB - page.TdA;// - TdB;
                 int us = Math.Abs(s);
                 int n = page.toneDoubler;
