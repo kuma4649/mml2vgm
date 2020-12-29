@@ -1,4 +1,7 @@
 更新履歴
+TAG330 2020/12/29 2nd
+  IDE:PMDDotNETの差し替え
+
 TAG329 2020/12/29
   Core:ARP,VAR,CARコマンドバグ修正と調整
 
