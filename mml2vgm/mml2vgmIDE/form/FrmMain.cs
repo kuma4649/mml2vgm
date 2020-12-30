@@ -2240,19 +2240,34 @@ stop();
                 {
                     for (int i = 0; i < ci.totalCount.Count; i++)
                     {
-                        //if (pw[i].clockCounter == 0) continue;
-                        int ch = ci.partType[i] == "YM2608" ? ci.partNumber[i] : (
-                                ci.partType[i] == "FM3ex" ? (ci.partNumber[i] + 6) : (
-                                ci.partNumber[i]
-                                )
-                            );
-                        ch += (ci.partName[i][0] >= 'G' && ci.partName[i][0] <= 'I') ? 3 : 0;
-                        ch++;
-                        cells[0] = ch;
+                        cells[0] = -1;
+
+                        if (ci.partType[i] == "FMOPN" || ci.partType[i] == "PPZ8")
+                        {
+                            cells[0] = ci.partNumber[i] + 1;
+                        }                        
+
+                        //Fm3exは　D/E/F又は任意
+                        if(ci.partType[i] == "FMOPNex")
+                        {
+                            cells[0] = 6 + 1 + (ci.partNumber[i] % 3);//FM3ex1～3 part(6-8)に割り当てる
+                        }
+
+                        //SSG はG/H/I固定
+                        if (ci.partName[i][0] == 'G') cells[0] = 9 + 1;//SSG1 part(9)に割り当てる
+                        if (ci.partName[i][0] == 'H') cells[0] = 10 + 1;//SSG2 part(10)に割り当てる
+                        if (ci.partName[i][0] == 'I') cells[0] = 11 + 1;//SSG3 part(11)に割り当てる
+
+                        //ADPCM はJ固定
+                        if (ci.partName[i][0] == 'J') cells[0] = 18 + 1;//ADPCM part(18)に割り当てる
+
+                        //K/R はK固定
+                        if (ci.partName[i][0] == 'K') cells[0] = 12 + 1;//BD part(12)に割り当てる
+
                         cells[1] = 0;//ChipIndex
                         cells[2] = 0;//ChipNumber
                         cells[3] = ci.partName[i];
-                        cells[4] = ci.partType[i] == "FM3ex" ? "YM2608" : ci.partType[i];
+                        cells[4] = ci.partType[i] != "PPZ8" ? "YM2608" : ci.partType[i];
                         cells[5] = ci.totalCount[i];
                         cells[6] = ci.loopCount[i];
                         frmPartCounter.AddPartCounter(cells);

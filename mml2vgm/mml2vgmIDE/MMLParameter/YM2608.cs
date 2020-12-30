@@ -47,6 +47,13 @@ namespace mml2vgmIDE.MMLParameter
             try
             {
                 int ch = mmlType == EnmMmlFileFormat.MUC ? GetChNumFromMucChNum(od.linePos.ch) : od.linePos.ch;
+                if (mmlType == EnmMmlFileFormat.MML)
+                {
+                    if (od.linePos.part == "Rhythm")
+                    {
+                        ch = 12;
+                    }
+                }
                 //ch += mmlType == EnmMmlFileFormat.MML ? 1 : 0;
 
                 if (isTrace)
@@ -147,28 +154,50 @@ namespace mml2vgmIDE.MMLParameter
                             if (od.args == null || od.args.Count <= 0) break;
                             if (ch < octave.Length)
                             {
-                                octave[ch] = ((int)od.args[0] >> 4);
-                                if (((int)od.args[0] & 0xf) < noteStrTbl.Length)
+                                if (od.linePos.part != "Rhythm")
                                 {
-                                    notecmd[ch] = string.Format("o{0}{1}", octave[ch], noteStrTbl[((int)od.args[0] & 0xf)]);
-                                    keyOnMeter[ch] = 255;//TBD
-                                    length[ch] = string.Format("{0:0.##}(#{1:d})", cc / (int)od.args[1], (int)od.args[1]);
-                                    if (vol[ch] != null)
+                                    octave[ch] = ((int)od.args[0] >> 4);
+                                    if (((int)od.args[0] & 0xf) < noteStrTbl.Length)
                                     {
-                                        keyOnMeter[ch] = (int)(256.0 / (
-                                            od.linePos.part == "FM" ? 127 : (
-                                            od.linePos.part == "SSG" ? 15 : (
-                                            od.linePos.part == "RHYTHM" ? 63 : (
-                                            od.linePos.part == "FM3ex" ? 127 : 255
-                                            )))) * vol[ch]);
+                                        notecmd[ch] = string.Format("o{0}{1}", octave[ch], noteStrTbl[((int)od.args[0] & 0xf)]);
+                                        keyOnMeter[ch] = 255;//TBD
+                                        length[ch] = string.Format("{0:0.##}(#{1:d})", cc / (int)od.args[1], (int)od.args[1]);
+                                        if (vol[ch] != null)
+                                        {
+                                            keyOnMeter[ch] = (int)(256.0 / (
+                                                od.linePos.part == "FMOPN" ? 127 : (
+                                                od.linePos.part == "SSG" ? 15 : (
+                                                od.linePos.part == "RHYTHM" ? 63 : (
+                                                od.linePos.part == "FMOPNex" ? 127 : 255
+                                                )))) * vol[ch]);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        //TBD
+                                        notecmd[ch] = "r";
+                                        length[ch] = string.Format("{0:0.##}(#{1:d})", cc / (int)od.args[1], (int)od.args[1]);
                                     }
                                 }
                                 else
                                 {
-                                    //TBD
-                                    notecmd[ch] = "r";
+                                    int nn = (int)od.args[0];
+                                    notecmd[ch] =
+                                          (((nn & 1024) != 0) ? "Rc" : "--")
+                                        + (((nn &  512) != 0) ? "Cc" : "--")
+                                        + (((nn &  256) != 0) ? "Ho" : "--")
+                                        + (((nn &  128) != 0) ? "Hc" : "--")
+                                        + (((nn &   64) != 0) ? "S2" : "--")
+                                        + (((nn &   32) != 0) ? "Rs" : "--")
+                                        + (((nn &   16) != 0) ? "Ht" : "--")
+                                        + (((nn &    8) != 0) ? "Mt" : "--")
+                                        + (((nn &    4) != 0) ? "Lt" : "--")
+                                        + (((nn &    2) != 0) ? "S1" : "--")
+                                        + (((nn &    1) != 0) ? "Bd" : "--")
+                                        ;
                                     length[ch] = string.Format("{0:0.##}(#{1:d})", cc / (int)od.args[1], (int)od.args[1]);
                                 }
+
                             }
                         }
                         else
@@ -194,21 +223,34 @@ namespace mml2vgmIDE.MMLParameter
                         }
                         break;
                     case enmMMLType.Rest:
-                        if (mmlType != EnmMmlFileFormat.MUC)
+                        if (mmlType == EnmMmlFileFormat.MUC)
                         {
                             if (od.args != null)
                             {
-                                Core.Rest rs = (Core.Rest)od.args[0];
                                 notecmd[ch] = "r";
-                                length[ch] = string.Format("{0:0.##}(#{1:d})", 1.0 * cc / rs.length, rs.length);
+                                length[ch] = string.Format("{0:0.##}(#{1:d})", 1.0 * clockCounter[ch] / (int)od.args[0], (int)od.args[0]);
+                            }
+                        }
+                        else if (mmlType == EnmMmlFileFormat.MML)
+                        {
+                            if (od.linePos.part != "Rhythm")
+                            {
+                                //TBD
+                                notecmd[ch] = "r";
+                                length[ch] = string.Format("{0:0.##}(#{1:d})", cc / (int)od.args[1], (int)od.args[1]);
+                            }
+                            else
+                            {
+                                ;
                             }
                         }
                         else
                         {
                             if (od.args != null)
                             {
+                                Core.Rest rs = (Core.Rest)od.args[0];
                                 notecmd[ch] = "r";
-                                length[ch] = string.Format("{0:0.##}(#{1:d})", 1.0 * clockCounter[ch] / (int)od.args[0], (int)od.args[0]);
+                                length[ch] = string.Format("{0:0.##}(#{1:d})", 1.0 * cc / rs.length, rs.length);
                             }
                         }
                         break;
