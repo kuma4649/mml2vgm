@@ -622,7 +622,6 @@ namespace Core
         private void CmdTotalVolume(partWork pw, partPage page, MML mml)
         {
             int n;
-            pw.incPos(page);
             mml.type = enmMMLType.TotalVolume;
             mml.args = new List<object>();
 
