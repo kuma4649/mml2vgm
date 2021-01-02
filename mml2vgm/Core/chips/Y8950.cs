@@ -167,6 +167,10 @@ int ws
             base.SetFmFNum(page, mml);
         }
 
+        protected override void SetInst4Operator(partPage page, MML mml, int n, int modeBeforeSend, int vch)
+        {
+            msgBox.setErrMsg(string.Format(msg.get("E28006"), n), mml.line.Lp);
+        }
 
 
         public override void StorePcm(Dictionary<int, Tuple<string, clsPcm>> newDic, KeyValuePair<int, clsPcm> v, byte[] buf, bool is16bit, int samplerate, params object[] option)

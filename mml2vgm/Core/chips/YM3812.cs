@@ -101,5 +101,10 @@ int ws
             SOutData(page, mml, port, (byte)(0xe0 + adr), (byte)(ws & 0x3));
         }
 
+        protected override void SetInst4Operator(partPage page, MML mml, int n, int modeBeforeSend, int vch)
+        {
+            msgBox.setErrMsg(string.Format(msg.get("E30006"), n), mml.line.Lp);
+        }
+
     }
 }

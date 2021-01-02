@@ -173,197 +173,17 @@ namespace Core
             }
         }
 
-        protected override void SetInst1Operator(partPage page, MML mml, int n, int modeBeforeSend, int opeNum)
-        {
-            byte[] inst = parent.instFM[n].Item2;
-            int targetBaseReg = (opeNum / 6) * 8 + (opeNum % 6);
-            byte[] port = this.port[opeNum / 18];
-            int ope = (opeNum % 6) / 3;
-
-            switch (modeBeforeSend)
-            {
-                case 0: // N)one
-                    break;
-                case 1: // R)R only
-                    SOutData(page, mml, port, (byte)(targetBaseReg + ope * 3 + 0x80)
-                        , ((0 & 0xf) << 4) | (15 & 0xf));//SL RR
-                    break;
-                case 2: // A)ll
-                    SetInstAtOneOpeWithoutKslTl(page, mml, opeNum
-                        , 15, 15, 0, 15, 0, 0, 0, 0, 0, 0);
-                    SOutData(page, mml, port, (byte)(targetBaseReg + ope * 3 + 0x40)
-                        , ((0 & 0x3) << 6) | 0x3f);  //KL(M) TL
-                    break;
-            }
-
-            SetInstAtOneOpeWithoutKslTl(page, mml, opeNum,
-                inst[ope * 12 + 1 + 0],//AR
-                inst[ope * 12 + 1 + 1],//DR
-                inst[ope * 12 + 1 + 2],//SL
-                inst[ope * 12 + 1 + 3],//RR
-                inst[ope * 12 + 1 + 6],//MT
-                inst[ope * 12 + 1 + 7],//AM
-                inst[ope * 12 + 1 + 8],//VIB
-                inst[ope * 12 + 1 + 9],//EGT
-                inst[ope * 12 + 1 + 10],//KSR
-                inst[ope * 12 + 1 + 11]//WS
-            );
-
-            int cnt = inst[25];
-            if (cnt == 0 || page.Type == enmChannelType.RHYTHM)
-            {
-                if (ope == 0)
-                {
-                    //OP1
-                    SOutData(page, mml, port, (byte)(0x40 + targetBaseReg + 0)
-                        , (byte)(((inst[12 * 0 + 5] & 0x3) << 6) | (inst[12 * 0 + 6] & 0x3f))); //KL(M) TL
-                }
-            }
-
-            SetInstAtChannelPanFbCnt(page, mml, (opeNum % 6) % 3 + (opeNum / 6) * 3, page.pan, inst[26], inst[25]);
-
-            page.beforeVolume = -1;
-        }
-
         protected override void SetInst2Operator(partPage page, MML mml, int n, int modeBeforeSend, int vch)
         {
-            byte[] inst = parent.instFM[n].Item2;
-            byte targetBaseReg = ChnToBaseReg(vch);
-            byte[] port = getPortFromCh(vch);
 
-            switch (modeBeforeSend)
+            if (page.isOp4Mode)
             {
-                case 0: // N)one
-                    break;
-                case 1: // R)R only
-                    for (int ope = 0; ope < 2; ope++)
-                        SOutData(page, mml, port, (byte)(targetBaseReg + ope * 3 + 0x80)
-                            , ((0 & 0xf) << 4) | (15 & 0xf));//SL RR
-                    break;
-                case 2: // A)ll
-                    for (byte ope = 0; ope < 2; ope++)
-                    {
-                        SetInstAtOneOpeWithoutKslTl(page, mml, (vch / 3 * 6) + (vch % 3) + ope * 3
-                            , 15, 15, 0, 15, 0, 0, 0, 0, 0, 0);
-                        SOutData(page, mml, port, (byte)(targetBaseReg + ope * 3 + 0x40)
-                            , ((0 & 0x3) << 6) | 0x3f);  //KL(M) TL
-                    }
-                    break;
-            }
-
-            int slot1_operatorNumber = (vch / 3 * 6) + (vch % 3) + 0;
-
-            for (int ope = 0; ope < 2; ope++)
-            {
-                SetInstAtOneOpeWithoutKslTl(page, mml, slot1_operatorNumber + ope * 3,
-                    inst[ope * 12 + 1 + 0],
-                    inst[ope * 12 + 1 + 1],
-                    inst[ope * 12 + 1 + 2],
-                    inst[ope * 12 + 1 + 3],
-                    inst[ope * 12 + 1 + 6],
-                    inst[ope * 12 + 1 + 7],
-                    inst[ope * 12 + 1 + 8],
-                    inst[ope * 12 + 1 + 9],
-                    inst[ope * 12 + 1 + 10],
-                    inst[ope * 12 + 1 + 11]
-                    );
-            }
-
-            //TLはvolumeの設定と一緒に行うがキャリアのみである。
-            //そのため、CNT0の場合はモジュレータのパラメータをセットする必要がある
-            int cnt = inst[25];
-            if (cnt == 0)
-            {
-                //OP1
-                SOutData(page, mml, port, (byte)(0x40 + ChnToBaseReg(vch) + 0)
-                    , (byte)(((inst[12 * 0 + 5] & 0x3) << 6) | (inst[12 * 0 + 6] & 0x3f))); //KL(M) TL
-            }
-
-            SetInstAtChannelPanFbCnt(page, mml, vch, page.pan, inst[26], inst[25]);
-
-            page.beforeVolume = -1;
-        }
-
-        protected override void SetInst4Operator(partPage page, MML mml, int n, int modeBeforeSend, int vch)
-        {
-            if (!page.isOp4Mode)
-            {
-                msgBox.setErrMsg(string.Format(msg.get("E26000"), n), mml.line.Lp);
+                msgBox.setErrMsg(string.Format(msg.get("E26001"), n), mml.line.Lp);
                 return;
             }
 
-            byte[] inst = parent.instFM[n].Item2;
-            byte targetBaseReg = ChnToBaseReg(vch);
-            byte[] port = getPortFromCh(vch);
+            base.SetInst2Operator(page, mml, n, modeBeforeSend, vch);
 
-            switch (modeBeforeSend)
-            {
-                case 0: // N)one
-                    break;
-                case 1: // R)R only
-                    for (int ope = 0; ope < 2; ope++)
-                        SOutData(page, mml, port, (byte)(targetBaseReg + ope * 3 + 0x80)
-                            , ((0 & 0xf) << 4) | (15 & 0xf));//SL RR
-                    break;
-                case 2: // A)ll
-                    for (byte ope = 0; ope < 2; ope++)
-                    {
-                        SetInstAtOneOpeWithoutKslTl(page, mml, (vch / 3 * 6) + (vch % 3) + ope * 3
-                            , 15, 15, 0, 15, 0, 0, 0, 0, 0, 0);
-                        SOutData(page, mml, port, (byte)(targetBaseReg + ope * 3 + 0x40)
-                            , ((0 & 0x3) << 6) | 0x3f);  //KL(M) TL
-                    }
-                    break;
-            }
-
-            int slot1_operatorNumber = (vch / 3 * 6) + (vch % 3) + 0;
-
-            for (int ope = 0; ope < 4; ope++)
-            {
-                SetInstAtOneOpeWithoutKslTl(page, mml, slot1_operatorNumber + ope * 3,
-                    inst[ope * 12 + 1 + 0],
-                    inst[ope * 12 + 1 + 1],
-                    inst[ope * 12 + 1 + 2],
-                    inst[ope * 12 + 1 + 3],
-                    inst[ope * 12 + 1 + 6],
-                    inst[ope * 12 + 1 + 7],
-                    inst[ope * 12 + 1 + 8],
-                    inst[ope * 12 + 1 + 9],
-                    inst[ope * 12 + 1 + 10],
-                    inst[ope * 12 + 1 + 11]
-                    );
-            }
-
-            //TLはvolumeの設定と一緒に行うがキャリアのみである。
-            //そのため、CNT0の場合はモジュレータのパラメータをセットする必要がある
-            int cnt1 = inst[49];
-            int cnt2 = inst[50];
-            bool op1 = false;
-            bool op2 = false;
-            bool op3 = false;
-
-            if (cnt1 == 0 && cnt2 == 0) { op1 = true; op2 = true; op3 = true; }
-            else if (cnt1 == 0 && cnt2 == 1) { op1 = true; op3 = true; }
-            else if (cnt1 == 1 && cnt2 == 0) { op2 = true; op3 = true; }
-            else if (cnt1 == 1 && cnt2 == 1) { op2 = true; }
-
-            if (op1)
-                SOutData(page, mml, port, (byte)(0x40 + ChnToBaseReg(vch) + 0)
-                    , (byte)(((inst[12 * 0 + 5] & 0x3) << 6) | (inst[12 * 0 + 6] & 0x3f))); //KL(M) TL
-
-            if (op2)
-                SOutData(page, mml, port, (byte)(0x40 + ChnToBaseReg(vch) + 3)
-                    , (byte)(((inst[12 * 1 + 5] & 0x3) << 6) | (inst[12 * 1 + 6] & 0x3f))); //KL(M) TL
-
-            if (op3)
-                SOutData(page, mml, port, (byte)(0x40 + ChnToBaseReg(vch) + 8)
-                    , (byte)(((inst[12 * 2 + 5] & 0x3) << 6) | (inst[12 * 2 + 6] & 0x3f))); //KL(M) TL
-
-
-            SetInstAtChannelPanFbCnt(page, mml, vch, page.pan, inst[51], cnt1);
-            SetInstAtChannelPanFbCnt(page, mml, vch + 3, page.pan, inst[51], cnt2);
-
-            page.beforeVolume = -1;
         }
 
         protected override void SetInstAtOneOpeWithoutKslTl(partPage page, MML mml, int opeNum,
@@ -391,11 +211,6 @@ namespace Core
             SetInstAtOneOpeAmVibEgKsMl(page, mml, port, (byte)(0x20 + adr), mt, am, vib, eg, kr);
             SOutData(page, mml, port, (byte)(0xe0 + adr), (byte)(ws & 0x7));
         }
-
-
-
-
-
 
 
 
@@ -557,7 +372,9 @@ namespace Core
                         {
                             if ((page.ch >= 3 && page.ch <= 5) || (page.ch >= 12 && page.ch <= 14)) continue;
 
-                            if (page.beforeVolume != page.volume && parent.instFM.ContainsKey(page.instrument))
+                            if (page.beforeVolume != page.volume 
+                                && parent.instFM.ContainsKey(page.instrument) 
+                                && parent.instFM[page.instrument].Item2.Length== Const.OPL_OP4_INSTRUMENT_SIZE)
                             {
                                 page.beforeVolume = page.volume;
 

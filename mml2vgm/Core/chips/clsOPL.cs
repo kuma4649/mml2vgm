@@ -99,11 +99,11 @@ namespace Core
                 return;
             }
 
-            //if (parent.instFM[n].Length == Const.OPL_OP4_INSTRUMENT_SIZE)
-            //{
-            //    SetInst4Operator(pw, mml, n, modeBeforeSend, pw.ppg[pw.cpgNum].ch);
-            //    return;
-            //}
+            if (parent.instFM[n].Item2.Length == Const.OPL_OP4_INSTRUMENT_SIZE)
+            {
+                SetInst4Operator(page, mml, n, modeBeforeSend, page.ch);
+                return;
+            }
 
             SetInst2Operator(page, mml, n, modeBeforeSend, page.ch);
         }
