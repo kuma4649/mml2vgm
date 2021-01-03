@@ -591,6 +591,9 @@
     <Content Include="Script\SOX\sox.py">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Script\XGM\Slasher.py">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Tutorial.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
