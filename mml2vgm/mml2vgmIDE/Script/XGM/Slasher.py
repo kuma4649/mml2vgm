@@ -77,7 +77,7 @@ class Mml2vgmScript:
 
         adr = sampleDataBlockAddr + sampleDataBlockSize * 256
         musicDataBlockSize = xgmDat[adr] + xgmDat[adr+1]*0x100 + xgmDat[adr+2]*0x10000 + xgmDat[adr+3]*0x1000000
-        Mml2vgmInfo.msg(musicDataBlockSize.ToString())
+        #Mml2vgmInfo.msg(musicDataBlockSize.ToString())
 
         musicDataBlockAddr = sampleDataBlockAddr + sampleDataBlockSize * 256 + 4;
         #Mml2vgmInfo.msg(musicDataBlockAddr.ToString())
@@ -120,6 +120,20 @@ class Mml2vgmScript:
                 n+=1
             File.WriteAllBytes( xgmFn + ".seqData.bin" , lst.ToArray() )
             lst.Clear();
+
+        #GD3データを取得＆出力
+        if existGD3:
+            n=0
+            while n < xgmDat.Length - gd3InfoStartAddr:
+                ind=n + gd3InfoStartAddr
+                lst.Add(xgmDat[ind])
+                n+=1
+            File.WriteAllBytes( xgmFn + ".gd3.bin" , lst.ToArray() )
+            lst.Clear();
+
+
+        Mml2vgmInfo.msg("xgmファイルを分割しました")
+
 
         #戻り値を生成(何もしないけど念のため)
         si = ScriptInfo()
