@@ -636,6 +636,23 @@ namespace Core
 
         private void GetPCMData(string path)
         {
+
+            //キャッシュ処理:キャッシュファイルの存在をチェックする。あるなら読み込む
+            desVGM.pcmCache = null;
+            desVGM.fnPcmCache = null;
+            if (desVGM.info.usePcmCache && desVGM.info.format == enmFormat.XGM)
+            {
+                try
+                {
+                    desVGM.fnPcmCache = srcFn + ".pcmCache.bin";
+                    if (File.Exists(desVGM.fnPcmCache)) desVGM.pcmCache = File.ReadAllBytes(desVGM.fnPcmCache);
+                }
+                catch
+                {
+                    desVGM.pcmCache = null;
+                }
+            }
+
             Dictionary<int, Tuple<string, clsPcm>> newDic = new Dictionary<int, Tuple<string, clsPcm>>();
             foreach (clsPcmDatSeq pds in desVGM.instPCMDatSeq)
             {
@@ -670,43 +687,59 @@ namespace Core
                             , 8000);
                         desVGM.instPCM.Add(pds.No, new Tuple<string, clsPcm>("", v));
 
-                        //ファイルの読み込み
-                        buf = Common.GetPCMDataFromFile(path, v, out isRaw, out is16bit, out samplerate);
-                        if (buf == null)
+                        if ((desVGM.info.format == enmFormat.XGM && desVGM.pcmCache == null)
+                            || desVGM.info.format != enmFormat.XGM)
                         {
-                            msgBox.setErrMsg(string.Format(
-                                msg.get("E04007")
-                                , v.fileName), new LinePos(pds.FileName));
-                            continue;
-                        }
+                            //ファイルの読み込み
+                            buf = Common.GetPCMDataFromFile(path, v, out isRaw, out is16bit, out samplerate);
+                            if (buf == null)
+                            {
+                                msgBox.setErrMsg(string.Format(
+                                    msg.get("E04007")
+                                    , v.fileName), new LinePos(pds.FileName));
+                                continue;
+                            }
 
-                        //pitch変換
-                        if (desVGM.info.format == enmFormat.XGM)
-                        {
-                            int fFreq = (int)pds.DatLoopAdr;
-                            //SOXで変換する
-                            ConvertFreq(path, ref buf, pds.BaseFreq, ref fFreq);
-                            pds.BaseFreq = fFreq;
-                            v.freq = fFreq;
-                        }
+                            //pitch変換
+                            if (desVGM.info.format == enmFormat.XGM)
+                            {
+                                int fFreq = (int)pds.DatLoopAdr;
+                                //SOXで変換する
+                                ConvertFreq(path, ref buf, pds.BaseFreq, ref fFreq);
+                                pds.BaseFreq = fFreq;
+                                v.freq = fFreq;
+                            }
 
-                        if (desVGM.info.format == enmFormat.XGM && v.chipNumber != 0)
-                        {
-                            msgBox.setErrMsg(string.Format(
-                                msg.get("E01017")
-                                , v.fileName), new LinePos(pds.FileName));
-                            continue;
-                        }
+                            if (desVGM.info.format == enmFormat.XGM && v.chipNumber != 0)
+                            {
+                                msgBox.setErrMsg(string.Format(
+                                    msg.get("E01017")
+                                    , v.fileName), new LinePos(pds.FileName));
+                                continue;
+                            }
 
-                        if (desVGM.chips.ContainsKey(v.chip))
+                            if (desVGM.chips.ContainsKey(v.chip))
+                            {
+                                desVGM.chips[v.chip][v.chipNumber]
+                                    .StorePcm(
+                                    newDic
+                                    , new KeyValuePair<int, clsPcm>(pds.No, v)
+                                    , buf
+                                    , is16bit
+                                    , samplerate);
+                            }
+                        }
+                        else
                         {
+                            //キャッシュを使う場合は
+                            //dummy情報を登録する
                             desVGM.chips[v.chip][v.chipNumber]
                                 .StorePcm(
                                 newDic
                                 , new KeyValuePair<int, clsPcm>(pds.No, v)
-                                , buf
-                                , is16bit
-                                , samplerate);
+                                , new byte[0]
+                                , false
+                                , 14000);
                         }
 
                         if (v.chip == enmChipType.YM2609)

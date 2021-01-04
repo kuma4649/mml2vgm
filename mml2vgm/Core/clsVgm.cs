@@ -86,6 +86,10 @@ namespace Core
         public SourceParser sp = null;
         public Information info = null;
 
+        public byte[] pcmCache = null;
+        public string fnPcmCache = "";
+
+
         public ClsVgm(string stPath, SourceParser sp)
         {
             this.sp = sp;
@@ -3843,60 +3847,91 @@ namespace Core
         private void Xgm_makeFooter()
         {
 
-            //$0004               Sample id table
-            uint ptr = 0;
-            int n = 4;
-            foreach (Tuple<string, clsPcm> p in instPCM.Values)
+            if (pcmCache == null)
             {
-                if (p.Item2.chip != enmChipType.YM2612X) continue;
-
-                uint stAdr = ptr;
-                uint size = (uint)p.Item2.size;
-                //if (size > (uint)p.xgmMaxSampleCount + 1)
-                //{
-                //size = (uint)p.xgmMaxSampleCount + 1;
-                //size = (uint)((size & 0xffff00) + (size % 0x100 != 0 ? 0x100 : 0x0));
-                //}
-                p.Item2.size = size;
-
-                xdat[n + 0] = new outDatum(enmMMLType.unknown, null, null, (byte)((stAdr / 256) & 0xff));
-                xdat[n + 1] = new outDatum(enmMMLType.unknown, null, null, (byte)(((stAdr / 256) & 0xff00) >> 8));
-                xdat[n + 2] = new outDatum(enmMMLType.unknown, null, null, (byte)((size / 256) & 0xff));
-                xdat[n + 3] = new outDatum(enmMMLType.unknown, null, null, (byte)(((size / 256) & 0xff00) >> 8));
-
-                ptr += size;
-                n += 4;
-            }
-
-            //$0100               Sample data bloc size / 256
-            if (ym2612x != null && ym2612x[0] != null && ym2612x[0].pcmDataEasy != null)
-            {
-                xdat[0x100] = new outDatum(enmMMLType.unknown, null, null, (byte)((ptr / 256) & 0xff));
-                xdat[0x101] = new outDatum(enmMMLType.unknown, null, null, (byte)(((ptr / 256) & 0xff00) >> 8));
-            }
-            else
-            {
-                xdat[0x100] = new outDatum(enmMMLType.unknown, null, null, 0);
-                xdat[0x101] = new outDatum(enmMMLType.unknown, null, null, 0);
-            }
-
-            //$0103 bit #0: NTSC / PAL information
-            xdat[0x103] = new outDatum(enmMMLType.unknown, null, null, (byte)(xdat[0x103].val | (byte)(info.xgmSamplesPerSecond == 50 ? 1 : 0)));
-
-            //$0104               Sample data block
-            if (ym2612x != null && ym2612x[0] != null && ym2612x[0].pcmDataEasy != null)
-            {
+                //$0004               Sample id table
+                uint ptr = 0;
+                int n = 4;
                 foreach (Tuple<string, clsPcm> p in instPCM.Values)
                 {
                     if (p.Item2.chip != enmChipType.YM2612X) continue;
 
-                    for (uint cnt = 0; cnt < p.Item2.size; cnt++)
+                    uint stAdr = ptr;
+                    uint size = (uint)p.Item2.size;
+                    //if (size > (uint)p.xgmMaxSampleCount + 1)
+                    //{
+                    //size = (uint)p.xgmMaxSampleCount + 1;
+                    //size = (uint)((size & 0xffff00) + (size % 0x100 != 0 ? 0x100 : 0x0));
+                    //}
+                    p.Item2.size = size;
+
+                    xdat[n + 0] = new outDatum(enmMMLType.unknown, null, null, (byte)((stAdr / 256) & 0xff));
+                    xdat[n + 1] = new outDatum(enmMMLType.unknown, null, null, (byte)(((stAdr / 256) & 0xff00) >> 8));
+                    xdat[n + 2] = new outDatum(enmMMLType.unknown, null, null, (byte)((size / 256) & 0xff));
+                    xdat[n + 3] = new outDatum(enmMMLType.unknown, null, null, (byte)(((size / 256) & 0xff00) >> 8));
+
+                    ptr += size;
+                    n += 4;
+                }
+
+                //$0100               Sample data block size / 256
+                if (ym2612x != null && ym2612x[0] != null && ym2612x[0].pcmDataEasy != null)
+                {
+                    xdat[0x100] = new outDatum(enmMMLType.unknown, null, null, (byte)(ptr / 256));
+                    xdat[0x101] = new outDatum(enmMMLType.unknown, null, null, (byte)((ptr / 256) >> 8));
+                }
+                else
+                {
+                    xdat[0x100] = new outDatum(enmMMLType.unknown, null, null, 0);
+                    xdat[0x101] = new outDatum(enmMMLType.unknown, null, null, 0);
+                }
+
+                //$0103 bit #0: NTSC / PAL information
+                xdat[0x103] = new outDatum(enmMMLType.unknown, null, null, (byte)(xdat[0x103].val | (byte)(info.xgmSamplesPerSecond == 50 ? 1 : 0)));
+
+                //$0104               Sample data block
+                if (ym2612x != null && ym2612x[0] != null && ym2612x[0].pcmDataEasy != null)
+                {
+                    foreach (Tuple<string, clsPcm> p in instPCM.Values)
                     {
-                        xdat.Add(new outDatum(enmMMLType.unknown, null, null, ym2612x[0].pcmDataEasy[p.Item2.stAdr + cnt]));
+                        if (p.Item2.chip != enmChipType.YM2612X) continue;
+
+                        for (uint cnt = 0; cnt < p.Item2.size; cnt++)
+                        {
+                            xdat.Add(new outDatum(enmMMLType.unknown, null, null, ym2612x[0].pcmDataEasy[p.Item2.stAdr + cnt]));
+                        }
+
                     }
 
                 }
+            }
+            else
+            {
+                xdat.Clear();
+                for (uint cnt = 0; cnt < pcmCache.Length; cnt++)
+                {
+                    xdat.Add(new outDatum(enmMMLType.unknown, null, null, pcmCache[cnt]));
+                }
+                //$0103 bit #0: NTSC / PAL information
+                xdat[0x103] = new outDatum(enmMMLType.unknown, null, null, (byte)(xdat[0x103].val | (byte)(info.xgmSamplesPerSecond == 50 ? 1 : 0)));
+            }
 
+            if (info.usePcmCache && pcmCache == null)
+            {
+                //pcmのキャッシュがないままここまで来た場合は次回向けにキャッシュを作成する
+                try
+                {
+                    List<byte> lstCache = new List<byte>();
+                    for (int cnt = 0; cnt < xdat.Count; cnt++)
+                    {
+                        lstCache.Add(xdat[cnt].val);
+                    }
+                    File.WriteAllBytes(fnPcmCache, lstCache.ToArray());
+                }
+                catch
+                {
+                    ;//キャッシュ作成失敗
+                }
             }
 
             dummyCmdLoopOffsetAddress += xdat.Count + 4;
@@ -3929,6 +3964,7 @@ namespace Core
             gd3.make(xdat, info, lyric);
 
             dat = xdat;
+
         }
 
         private void Xgm_procChip(ClsChip chip)
