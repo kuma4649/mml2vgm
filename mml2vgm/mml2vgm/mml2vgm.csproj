@@ -68,6 +68,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="res\icon6.png" />
     <Content Include="sample\wav\BD.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

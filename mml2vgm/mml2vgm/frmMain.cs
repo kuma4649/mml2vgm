@@ -242,6 +242,12 @@ namespace mml2vgm
                 Core.log.Write("Call mml2vgm core");
 
                 mv = new Mml2vgm(arg, desfn, stPath, Disp);
+                
+                if(tsbUseCache.Checked)
+                {
+                    mv.usePCMCacheFromGUI = true;
+                }
+
                 if (mv.Start() != 0)
                 {
                     isSuccess = false;
@@ -398,7 +404,6 @@ namespace mml2vgm
                     break;
             }
         }
-
     }
 
 }

@@ -50,6 +50,7 @@
             this.tsbOnPlay = new System.Windows.Forms.ToolStripButton();
             this.tsbWatcher = new System.Windows.Forms.ToolStripButton();
             this.tsbToVGZ = new System.Windows.Forms.ToolStripButton();
+            this.tsbUseCache = new System.Windows.Forms.ToolStripButton();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -214,10 +215,11 @@
             this.toolStripSeparator1,
             this.tsbOnPlay,
             this.tsbWatcher,
-            this.tsbToVGZ});
+            this.tsbToVGZ,
+            this.tsbUseCache});
             this.toolStrip1.Location = new System.Drawing.Point(3, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(124, 25);
+            this.toolStrip1.Size = new System.Drawing.Size(178, 25);
             this.toolStrip1.TabIndex = 0;
             // 
             // tsbOpen
@@ -276,6 +278,17 @@
             this.tsbToVGZ.Size = new System.Drawing.Size(23, 22);
             this.tsbToVGZ.Text = "Compress to VGZ";
             // 
+            // tsbUseCache
+            // 
+            this.tsbUseCache.CheckOnClick = true;
+            this.tsbUseCache.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tsbUseCache.Image = global::mml2vgm.Properties.Resources.icon6;
+            this.tsbUseCache.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbUseCache.Name = "tsbUseCache";
+            this.tsbUseCache.Size = new System.Drawing.Size(23, 22);
+            this.tsbUseCache.Text = "Use PCM Cache";
+            this.tsbUseCache.ToolTipText = "Use PCM Cache";
+            // 
             // frmMain
             // 
             this.AllowDrop = true;
@@ -332,5 +345,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn clmCounter;
         private System.Windows.Forms.DataGridViewTextBoxColumn clmSpacer;
         private System.Windows.Forms.ToolStripButton tsbToVGZ;
+        private System.Windows.Forms.ToolStripButton tsbUseCache;
     }
 }

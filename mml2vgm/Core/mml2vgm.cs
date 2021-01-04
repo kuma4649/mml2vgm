@@ -27,11 +27,13 @@ namespace Core
         private string[] srcTxt;
 
         private int pcmDataSeqNum = 0;
+        private bool bufferMode = false;
+        private bool writeFileMode;
+
         public bool doSkip = false;
         public bool doSkipStop = false;
         public Point caretPoint = Point.Empty;
-        private bool bufferMode = false;
-        private bool writeFileMode;
+        public bool usePCMCacheFromGUI = false;
 
         /// <summary>
         /// コンストラクタ
@@ -640,6 +642,10 @@ namespace Core
             //キャッシュ処理:キャッシュファイルの存在をチェックする。あるなら読み込む
             desVGM.pcmCache = null;
             desVGM.fnPcmCache = null;
+
+            //mml2vgmGUIからキャッシュを使う指示有りの場合は強制的に有効にする
+            if (usePCMCacheFromGUI) desVGM.info.usePcmCache = true;
+
             if (desVGM.info.usePcmCache && desVGM.info.format == enmFormat.XGM)
             {
                 try
