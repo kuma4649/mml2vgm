@@ -939,6 +939,20 @@ namespace mml2vgmIDE
             }
         }
 
+        private GensOption _GensOption = new GensOption();
+        public GensOption gensOption
+        {
+            get
+            {
+                return _GensOption;
+            }
+
+            set
+            {
+                _GensOption = value;
+            }
+        }
+
         private AutoBalance _autoBalance = new AutoBalance();
         public AutoBalance autoBalance
         {
@@ -3791,6 +3805,22 @@ namespace mml2vgmIDE
                 return no;
             }
         }
+        
+        [Serializable]
+        public class GensOption
+        {
+            public bool DACHPF = true;
+            public bool SSGEG = true;
+
+            public GensOption Copy()
+            {
+                GensOption go = new GensOption();
+                go.DACHPF = this.DACHPF;
+                go.SSGEG = this.SSGEG;
+
+                return go;
+            }
+        }
 
         [Serializable]
         public class AutoBalance
@@ -3909,6 +3939,7 @@ namespace mml2vgmIDE
             //setting.nsf = this.nsf.Copy();
             //setting.sid = this.sid.Copy();
             setting.nukedOPN2 = this.nukedOPN2.Copy();
+            setting.gensOption = this.gensOption.Copy();
             setting.autoBalance = this.autoBalance.Copy();
             setting.pmdDotNET = this.pmdDotNET.Copy();
 

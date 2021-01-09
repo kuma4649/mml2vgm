@@ -616,9 +616,10 @@ namespace mml2vgmIDE
                 if (chipRegister.YM2612.Count <= i) continue;
                 if (!chipRegister.YM2612[i].Use) continue;
                 chipRegister.YM2612[i].Model = EnmVRModel.VirtualModel;
-                chipType[i].UseEmu = true;
-                chipType[i].UseEmu2 = true;
-                chipType[i].UseEmu3 = false;
+                Setting.ChipType sct = (i == 0) ? setting.YM2612Type : setting.YM2612SType;
+                chipType[i].UseEmu = sct.UseEmu;
+                chipType[i].UseEmu2 = sct.UseEmu2;
+                chipType[i].UseEmu3 = sct.UseEmu3;
                 chipType[i].UseScci = false;
 
                 if (ret.Count == 0) continue;
@@ -1183,8 +1184,10 @@ namespace mml2vgmIDE
 
                 chip = new MDSound.MDSound.Chip();
                 chip.ID = (byte)0;
+                chip.Option = null;
                 MDSound.ym2612 ym2612 = null;
                 MDSound.ym3438 ym3438 = null;
+                MDSound.ym2612mame ym2612mame = null;
 
                 if (setting.YM2612Type.UseEmu)
                 {
@@ -1195,6 +1198,13 @@ namespace mml2vgmIDE
                     chip.Start = ym2612.Start;
                     chip.Stop = ym2612.Stop;
                     chip.Reset = ym2612.Reset;
+                    chip.Option = new object[]
+                    {
+                        (int)(
+                            (setting.gensOption.DACHPF ? 0x01: 0x00)
+                            |(setting.gensOption.SSGEG ? 0x02: 0x00)
+                        )
+                    };
                 }
                 else if (setting.YM2612Type.UseEmu2)
                 {
@@ -1224,6 +1234,17 @@ namespace mml2vgmIDE
                             break;
                     }
                 }
+                else if (setting.YM2612Type.UseEmu3)
+                {
+                    if (ym2612mame == null) ym2612mame = new ym2612mame();
+                    chip.type = MDSound.MDSound.enmInstrumentType.YM2612mame;
+                    chip.Instrument = ym2612mame;
+                    chip.Update = ym2612mame.Update;
+                    chip.Start = ym2612mame.Start;
+                    chip.Stop = ym2612mame.Stop;
+                    chip.Reset = ym2612mame.Reset;
+                }
+
                 chip.SamplingRate = (UInt32)Common.SampleRate;
                 chip.Volume = setting.balance.YM2612Volume;
                 chip.Clock = (uint)xgmDriver.YM2612ClockValue;
@@ -1977,18 +1998,85 @@ namespace mml2vgmIDE
 
                         zCnt++;
                         chip = new MDSound.MDSound.Chip();
-                        chip.ID = (byte)0;//ZGMでは常に0
-                        ym2612 ym2612 = new ym2612();
-                        chip.type = MDSound.MDSound.enmInstrumentType.YM2612;
-                        chip.Instrument = ym2612;
-                        chip.Update = ym2612.Update;
-                        chip.Start = ym2612.Start;
-                        chip.Stop = ym2612.Stop;
-                        chip.Reset = ym2612.Reset;
+                        //chip.ID = (byte)0;//ZGMでは常に0
+                        //ym2612 ym2612 = new ym2612();
+                        //chip.type = MDSound.MDSound.enmInstrumentType.YM2612;
+                        //chip.Instrument = ym2612;
+                        //chip.Update = ym2612.Update;
+                        //chip.Start = ym2612.Start;
+                        //chip.Stop = ym2612.Stop;
+                        //chip.Reset = ym2612.Reset;
+                        //chip.SamplingRate = (UInt32)Common.SampleRate;
+                        //chip.Volume = setting.balance.YM2612Volume;
+                        //chip.Clock = (uint)zchip.defineInfo.clock;
+                        //chip.Option = null;
+                        //lstChips.Add(chip);
+
+                        chip.Option = null;
+                        MDSound.ym2612 ym2612 = null;
+                        MDSound.ym3438 ym3438 = null;
+                        MDSound.ym2612mame ym2612mame = null;
+
+                        if (setting.YM2612Type.UseEmu)
+                        {
+                            if (ym2612 == null) ym2612 = new ym2612();
+                            chip.type = MDSound.MDSound.enmInstrumentType.YM2612;
+                            chip.Instrument = ym2612;
+                            chip.Update = ym2612.Update;
+                            chip.Start = ym2612.Start;
+                            chip.Stop = ym2612.Stop;
+                            chip.Reset = ym2612.Reset;
+                            chip.Option = new object[]
+                            {
+                        (int)(
+                            (setting.gensOption.DACHPF ? 0x01: 0x00)
+                            |(setting.gensOption.SSGEG ? 0x02: 0x00)
+                        )
+                            };
+                        }
+                        else if (setting.YM2612Type.UseEmu2)
+                        {
+                            if (ym3438 == null) ym3438 = new ym3438();
+                            chip.type = MDSound.MDSound.enmInstrumentType.YM3438;
+                            chip.Instrument = ym3438;
+                            chip.Update = ym3438.Update;
+                            chip.Start = ym3438.Start;
+                            chip.Stop = ym3438.Stop;
+                            chip.Reset = ym3438.Reset;
+                            switch (setting.nukedOPN2.EmuType)
+                            {
+                                case 0:
+                                    ym3438.OPN2_SetChipType(ym3438_const.ym3438_type.discrete);
+                                    break;
+                                case 1:
+                                    ym3438.OPN2_SetChipType(ym3438_const.ym3438_type.asic);
+                                    break;
+                                case 2:
+                                    ym3438.OPN2_SetChipType(ym3438_const.ym3438_type.ym2612);
+                                    break;
+                                case 3:
+                                    ym3438.OPN2_SetChipType(ym3438_const.ym3438_type.ym2612_u);
+                                    break;
+                                case 4:
+                                    ym3438.OPN2_SetChipType(ym3438_const.ym3438_type.asic_lp);
+                                    break;
+                            }
+                        }
+                        else if (setting.YM2612Type.UseEmu3)
+                        {
+                            if (ym2612mame == null) ym2612mame = new ym2612mame();
+                            chip.type = MDSound.MDSound.enmInstrumentType.YM2612mame;
+                            chip.Instrument = ym2612mame;
+                            chip.Update = ym2612mame.Update;
+                            chip.Start = ym2612mame.Start;
+                            chip.Stop = ym2612mame.Stop;
+                            chip.Reset = ym2612mame.Reset;
+                        }
+
                         chip.SamplingRate = (UInt32)Common.SampleRate;
                         chip.Volume = setting.balance.YM2612Volume;
                         chip.Clock = (uint)zchip.defineInfo.clock;
-                        chip.Option = null;
+                        clockYM2612 = zchip.defineInfo.clock;
                         lstChips.Add(chip);
 
                         hiyorimiDeviceFlag |= (setting.YM2612Type.UseScci) ? 0x1 : 0x2;
@@ -2767,12 +2855,14 @@ namespace mml2vgmIDE
                     {
                         MDSound.ym2612 ym2612 = null;
                         MDSound.ym3438 ym3438 = null;
+                        MDSound.ym2612mame ym2612mame = null;
 
                         for (int i = 0; i < (((vgm)driver).YM2612DualChipFlag ? 2 : 1); i++)
                         {
                             //MDSound.ym2612 ym2612 = new MDSound.ym2612();
                             chip = new MDSound.MDSound.Chip();
                             chip.ID = (byte)i;
+                            chip.Option = null;
 
                             if ((i == 0 && (setting.YM2612Type.UseEmu || setting.YM2612Type.UseScci))
                                 || (i == 1 && setting.YM2612SType.UseEmu || setting.YM2612SType.UseScci))
@@ -2784,6 +2874,13 @@ namespace mml2vgmIDE
                                 chip.Start = ym2612.Start;
                                 chip.Stop = ym2612.Stop;
                                 chip.Reset = ym2612.Reset;
+                                chip.Option = new object[]
+                                {
+                                (int)(
+                                    (setting.gensOption.DACHPF ? 0x01: 0x00)
+                                    |(setting.gensOption.SSGEG ? 0x02: 0x00)
+                                )
+                                };
                             }
                             else if ((i == 0 && setting.YM2612Type.UseEmu2)
                                 || (i == 1 && setting.YM2612SType.UseEmu2))
@@ -2814,11 +2911,20 @@ namespace mml2vgmIDE
                                         break;
                                 }
                             }
+                            else if ((i == 0 && setting.YM2612Type.UseEmu3) || (i == 1 && setting.YM2612SType.UseEmu3))
+                            {
+                                if (ym2612mame == null) ym2612mame = new ym2612mame();
+                                chip.type = MDSound.MDSound.enmInstrumentType.YM2612mame;
+                                chip.Instrument = ym2612mame;
+                                chip.Update = ym2612mame.Update;
+                                chip.Start = ym2612mame.Start;
+                                chip.Stop = ym2612mame.Stop;
+                                chip.Reset = ym2612mame.Reset;
+                            }
 
                             chip.SamplingRate = (UInt32)Common.SampleRate;
                             chip.Volume = setting.balance.YM2612Volume;
                             chip.Clock = ((vgm)driver).YM2612ClockValue;
-                            chip.Option = null;
 
                             hiyorimiDeviceFlag |= (setting.YM2612Type.UseScci) ? 0x1 : 0x2;
                             hiyorimiDeviceFlag |= (setting.YM2612Type.UseScci && setting.YM2612Type.OnlyPCMEmulation) ? 0x2 : 0x0;

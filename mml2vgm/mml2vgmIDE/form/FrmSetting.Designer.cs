@@ -76,6 +76,7 @@
             this.rbSCCIDetect = new System.Windows.Forms.RadioButton();
             this.rbC86ctlDetect = new System.Windows.Forms.RadioButton();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.ucSI = new mml2vgmIDE.ucSettingInstruments();
             this.tabPage13 = new System.Windows.Forms.TabPage();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.label16 = new System.Windows.Forms.Label();
@@ -122,6 +123,10 @@
             this.rbNukedOPN2OptionDiscrete = new System.Windows.Forms.RadioButton();
             this.rbNukedOPN2OptionASIClp = new System.Windows.Forms.RadioButton();
             this.rbNukedOPN2OptionASIC = new System.Windows.Forms.RadioButton();
+            this.tabPage5 = new System.Windows.Forms.TabPage();
+            this.groupBox34 = new System.Windows.Forms.GroupBox();
+            this.cbGensSSGEG = new System.Windows.Forms.CheckBox();
+            this.cbGensDACHPF = new System.Windows.Forms.CheckBox();
             this.tpNSF = new System.Windows.Forms.TabPage();
             this.tabControl3 = new System.Windows.Forms.TabControl();
             this.tabPage15 = new System.Windows.Forms.TabPage();
@@ -368,6 +373,7 @@
             this.rbQueryPerformanceCounter = new System.Windows.Forms.RadioButton();
             this.rbDateTime = new System.Windows.Forms.RadioButton();
             this.rbStopWatch = new System.Windows.Forms.RadioButton();
+            this.cbRequestCacheClear = new System.Windows.Forms.CheckBox();
             this.cbUseSIen = new System.Windows.Forms.CheckBox();
             this.cbInfiniteOfflineMode = new System.Windows.Forms.CheckBox();
             this.groupBox29 = new System.Windows.Forms.GroupBox();
@@ -397,8 +403,6 @@
             this.textBoxDescription = new System.Windows.Forms.TextBox();
             this.llOpenGithub = new System.Windows.Forms.LinkLabel();
             this.cbHiyorimiMode = new System.Windows.Forms.CheckBox();
-            this.ucSI = new mml2vgmIDE.ucSettingInstruments();
-            this.cbRequestCacheClear = new System.Windows.Forms.CheckBox();
             this.gbWaveOut.SuspendLayout();
             this.gbAsioOut.SuspendLayout();
             this.gbWasapiOut.SuspendLayout();
@@ -432,6 +436,8 @@
             this.tabControl2.SuspendLayout();
             this.tabPage14.SuspendLayout();
             this.groupBox26.SuspendLayout();
+            this.tabPage5.SuspendLayout();
+            this.groupBox34.SuspendLayout();
             this.tpNSF.SuspendLayout();
             this.tabControl3.SuspendLayout();
             this.tabPage15.SuspendLayout();
@@ -967,7 +973,7 @@
             this.tabPage12.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage12.Size = new System.Drawing.Size(429, 341);
             this.tabPage12.TabIndex = 1;
-            this.tabPage12.Text = "実音源";
+            this.tabPage12.Text = "音源割り当て";
             this.tabPage12.UseVisualStyleBackColor = true;
             // 
             // groupBox27
@@ -1051,6 +1057,17 @@
             this.groupBox1.Size = new System.Drawing.Size(411, 258);
             this.groupBox1.TabIndex = 8;
             this.groupBox1.TabStop = false;
+            // 
+            // ucSI
+            // 
+            this.ucSI.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.ucSI.AutoScroll = true;
+            this.ucSI.Location = new System.Drawing.Point(3, 18);
+            this.ucSI.Name = "ucSI";
+            this.ucSI.Size = new System.Drawing.Size(405, 237);
+            this.ucSI.TabIndex = 7;
             // 
             // tabPage13
             // 
@@ -1511,6 +1528,7 @@
             // tabControl2
             // 
             this.tabControl2.Controls.Add(this.tabPage14);
+            this.tabControl2.Controls.Add(this.tabPage5);
             this.tabControl2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl2.HotTrack = true;
             this.tabControl2.Location = new System.Drawing.Point(0, 0);
@@ -1598,6 +1616,48 @@
             this.rbNukedOPN2OptionASIC.TabStop = true;
             this.rbNukedOPN2OptionASIC.Text = "ASIC(MD1 VA7,MD2,MD3,etc)";
             this.rbNukedOPN2OptionASIC.UseVisualStyleBackColor = true;
+            // 
+            // tabPage5
+            // 
+            this.tabPage5.Controls.Add(this.groupBox34);
+            this.tabPage5.Location = new System.Drawing.Point(4, 22);
+            this.tabPage5.Name = "tabPage5";
+            this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage5.Size = new System.Drawing.Size(435, 374);
+            this.tabPage5.TabIndex = 1;
+            this.tabPage5.Text = "Gens";
+            this.tabPage5.UseVisualStyleBackColor = true;
+            // 
+            // groupBox34
+            // 
+            this.groupBox34.Controls.Add(this.cbGensSSGEG);
+            this.groupBox34.Controls.Add(this.cbGensDACHPF);
+            this.groupBox34.Location = new System.Drawing.Point(6, 6);
+            this.groupBox34.Name = "groupBox34";
+            this.groupBox34.Size = new System.Drawing.Size(318, 66);
+            this.groupBox34.TabIndex = 1;
+            this.groupBox34.TabStop = false;
+            this.groupBox34.Text = "Gens Emulation option";
+            // 
+            // cbGensSSGEG
+            // 
+            this.cbGensSSGEG.AutoSize = true;
+            this.cbGensSSGEG.Location = new System.Drawing.Point(6, 40);
+            this.cbGensSSGEG.Name = "cbGensSSGEG";
+            this.cbGensSSGEG.Size = new System.Drawing.Size(105, 16);
+            this.cbGensSSGEG.TabIndex = 1;
+            this.cbGensSSGEG.Text = "SSG-EG Enable";
+            this.cbGensSSGEG.UseVisualStyleBackColor = true;
+            // 
+            // cbGensDACHPF
+            // 
+            this.cbGensDACHPF.AutoSize = true;
+            this.cbGensDACHPF.Location = new System.Drawing.Point(6, 18);
+            this.cbGensDACHPF.Name = "cbGensDACHPF";
+            this.cbGensDACHPF.Size = new System.Drawing.Size(137, 16);
+            this.cbGensDACHPF.TabIndex = 0;
+            this.cbGensDACHPF.Text = "DAC Highpass Enable";
+            this.cbGensDACHPF.UseVisualStyleBackColor = true;
             // 
             // tpNSF
             // 
@@ -4266,6 +4326,16 @@
             this.rbStopWatch.Text = "Stopwatch(C#) default";
             this.rbStopWatch.UseVisualStyleBackColor = true;
             // 
+            // cbRequestCacheClear
+            // 
+            this.cbRequestCacheClear.AutoSize = true;
+            this.cbRequestCacheClear.Location = new System.Drawing.Point(16, 245);
+            this.cbRequestCacheClear.Name = "cbRequestCacheClear";
+            this.cbRequestCacheClear.Size = new System.Drawing.Size(209, 16);
+            this.cbRequestCacheClear.TabIndex = 23;
+            this.cbRequestCacheClear.Text = "音色のキャッシュをクリアする(要再起動)";
+            this.cbRequestCacheClear.UseVisualStyleBackColor = true;
+            // 
             // cbUseSIen
             // 
             this.cbUseSIen.AutoSize = true;
@@ -4593,27 +4663,6 @@
             this.cbHiyorimiMode.UseVisualStyleBackColor = true;
             this.cbHiyorimiMode.Visible = false;
             // 
-            // ucSI
-            // 
-            this.ucSI.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.ucSI.AutoScroll = true;
-            this.ucSI.Location = new System.Drawing.Point(3, 18);
-            this.ucSI.Name = "ucSI";
-            this.ucSI.Size = new System.Drawing.Size(405, 237);
-            this.ucSI.TabIndex = 7;
-            // 
-            // cbRequestCacheClear
-            // 
-            this.cbRequestCacheClear.AutoSize = true;
-            this.cbRequestCacheClear.Location = new System.Drawing.Point(16, 245);
-            this.cbRequestCacheClear.Name = "cbRequestCacheClear";
-            this.cbRequestCacheClear.Size = new System.Drawing.Size(209, 16);
-            this.cbRequestCacheClear.TabIndex = 23;
-            this.cbRequestCacheClear.Text = "音色のキャッシュをクリアする(要再起動)";
-            this.cbRequestCacheClear.UseVisualStyleBackColor = true;
-            // 
             // FrmSetting
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -4673,6 +4722,9 @@
             this.tabPage14.ResumeLayout(false);
             this.groupBox26.ResumeLayout(false);
             this.groupBox26.PerformLayout();
+            this.tabPage5.ResumeLayout(false);
+            this.groupBox34.ResumeLayout(false);
+            this.groupBox34.PerformLayout();
             this.tpNSF.ResumeLayout(false);
             this.tabControl3.ResumeLayout(false);
             this.tabPage15.ResumeLayout(false);
@@ -5150,5 +5202,9 @@
         private System.Windows.Forms.TextBox tbPMDVolumeFM;
         private System.Windows.Forms.GroupBox groupBox33;
         private System.Windows.Forms.CheckBox cbRequestCacheClear;
+        private System.Windows.Forms.TabPage tabPage5;
+        private System.Windows.Forms.GroupBox groupBox34;
+        private System.Windows.Forms.CheckBox cbGensSSGEG;
+        private System.Windows.Forms.CheckBox cbGensDACHPF;
     }
 }

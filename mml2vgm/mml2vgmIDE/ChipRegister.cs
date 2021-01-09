@@ -7073,11 +7073,18 @@ namespace mml2vgmIDE
                         if (mds == null) return;
                         if (ctYM2612[Chip.Number] == null || ctYM2612[Chip.Number].UseEmu)
                         {
+                            //Gens
                             mds.WriteYM2612(Chip.Index, (byte)Chip.Number, (byte)(address >> 8), (byte)address, (byte)data);
                         }
                         else if (ctYM2612[Chip.Number].UseEmu2)
                         {
+                            //Nuked
                             mds.WriteYM3438(Chip.Index, (byte)Chip.Number, (byte)(address >> 8), (byte)address, (byte)data);
+                        }
+                        else if (ctYM2612[Chip.Number].UseEmu3)
+                        {
+                            //mame
+                            mds.WriteYM2612mame(Chip.Index, (byte)Chip.Number, (byte)(address >> 8), (byte)address, (byte)data);
                         }
                     }
                     else if (ctYM2612[Chip.Number].OnlyPCMEmulation)
@@ -7092,6 +7099,10 @@ namespace mml2vgmIDE
                             else if (ctYM2612[Chip.Number].UseEmu2)
                             {
                                 mds.WriteYM3438(Chip.Index, (byte)Chip.Number, (byte)(address >> 8), (byte)address, (byte)data);
+                            }
+                            else if (ctYM2612[Chip.Number].UseEmu3)
+                            {
+                                mds.WriteYM2612mame(Chip.Index, (byte)Chip.Number, (byte)(address >> 8), (byte)address, (byte)data);
                             }
                         }
                     }
@@ -7119,7 +7130,25 @@ namespace mml2vgmIDE
                     {
                         if (mds == null) return;
                         foreach (PackData dat in pdata)
+                        {
                             mds.WriteYM2612(dat.Chip.Index, (byte)dat.Chip.Number, (byte)(dat.Address >> 8), (byte)dat.Address, (byte)dat.Data);
+                        }
+
+                        if (ctYM2612[Chip.Number].UseEmu)
+                        {
+                            foreach (PackData dat in pdata)
+                                mds.WriteYM2612(dat.Chip.Index, (byte)dat.Chip.Number, (byte)(dat.Address >> 8), (byte)dat.Address, (byte)dat.Data);
+                        }
+                        else if (ctYM2612[Chip.Number].UseEmu2)
+                        {
+                            foreach (PackData dat in pdata)
+                                mds.WriteYM3438(dat.Chip.Index, (byte)dat.Chip.Number, (byte)(dat.Address >> 8), (byte)dat.Address, (byte)dat.Data);
+                        }
+                        else if (ctYM2612[Chip.Number].UseEmu3)
+                        {
+                            foreach (PackData dat in pdata)
+                                mds.WriteYM2612mame(dat.Chip.Index, (byte)dat.Chip.Number, (byte)(dat.Address >> 8), (byte)dat.Address, (byte)dat.Data);
+                        }
                     }
                     if (Chip.Model == EnmVRModel.RealModel)
                     {

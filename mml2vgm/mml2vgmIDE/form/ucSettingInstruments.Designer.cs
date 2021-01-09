@@ -83,9 +83,11 @@
             this.rbYM2612P_SCCI = new System.Windows.Forms.RadioButton();
             this.rbYM2612P_Emu = new System.Windows.Forms.RadioButton();
             this.groupBox9 = new System.Windows.Forms.GroupBox();
+            this.rbYM2612P_EmuMame = new System.Windows.Forms.RadioButton();
             this.rbYM2612P_Silent = new System.Windows.Forms.RadioButton();
             this.rbYM2612P_EmuNuked = new System.Windows.Forms.RadioButton();
             this.groupBox10 = new System.Windows.Forms.GroupBox();
+            this.rbYM2612S_EmuMame = new System.Windows.Forms.RadioButton();
             this.rbYM2612S_Silent = new System.Windows.Forms.RadioButton();
             this.cmbYM2612S_SCCI = new System.Windows.Forms.ComboBox();
             this.rbYM2612S_SCCI = new System.Windows.Forms.RadioButton();
@@ -781,16 +783,17 @@
             this.rbYM2612P_Emu.Checked = true;
             this.rbYM2612P_Emu.Location = new System.Drawing.Point(234, 15);
             this.rbYM2612P_Emu.Name = "rbYM2612P_Emu";
-            this.rbYM2612P_Emu.Size = new System.Drawing.Size(83, 16);
+            this.rbYM2612P_Emu.Size = new System.Drawing.Size(79, 16);
             this.rbYM2612P_Emu.TabIndex = 0;
             this.rbYM2612P_Emu.TabStop = true;
-            this.rbYM2612P_Emu.Text = "Emu(mame)";
+            this.rbYM2612P_Emu.Text = "Emu(Gens)";
             this.rbYM2612P_Emu.UseVisualStyleBackColor = true;
             // 
             // groupBox9
             // 
             this.groupBox9.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox9.Controls.Add(this.rbYM2612P_EmuMame);
             this.groupBox9.Controls.Add(this.rbYM2612P_Silent);
             this.groupBox9.Controls.Add(this.cmbYM2612P_SCCI);
             this.groupBox9.Controls.Add(this.rbYM2612P_SCCI);
@@ -802,6 +805,16 @@
             this.groupBox9.TabIndex = 4;
             this.groupBox9.TabStop = false;
             this.groupBox9.Text = "YM2612(Primary)";
+            // 
+            // rbYM2612P_EmuMame
+            // 
+            this.rbYM2612P_EmuMame.AutoSize = true;
+            this.rbYM2612P_EmuMame.Location = new System.Drawing.Point(4, 37);
+            this.rbYM2612P_EmuMame.Name = "rbYM2612P_EmuMame";
+            this.rbYM2612P_EmuMame.Size = new System.Drawing.Size(129, 16);
+            this.rbYM2612P_EmuMame.TabIndex = 3;
+            this.rbYM2612P_EmuMame.Text = "エミュレーション(mame)";
+            this.rbYM2612P_EmuMame.UseVisualStyleBackColor = true;
             // 
             // rbYM2612P_Silent
             // 
@@ -827,6 +840,7 @@
             // 
             this.groupBox10.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox10.Controls.Add(this.rbYM2612S_EmuMame);
             this.groupBox10.Controls.Add(this.rbYM2612S_Silent);
             this.groupBox10.Controls.Add(this.cmbYM2612S_SCCI);
             this.groupBox10.Controls.Add(this.rbYM2612S_SCCI);
@@ -838,6 +852,16 @@
             this.groupBox10.TabIndex = 4;
             this.groupBox10.TabStop = false;
             this.groupBox10.Text = "YM2612(Secondary)";
+            // 
+            // rbYM2612S_EmuMame
+            // 
+            this.rbYM2612S_EmuMame.AutoSize = true;
+            this.rbYM2612S_EmuMame.Location = new System.Drawing.Point(4, 36);
+            this.rbYM2612S_EmuMame.Name = "rbYM2612S_EmuMame";
+            this.rbYM2612S_EmuMame.Size = new System.Drawing.Size(129, 16);
+            this.rbYM2612S_EmuMame.TabIndex = 3;
+            this.rbYM2612S_EmuMame.Text = "エミュレーション(mame)";
+            this.rbYM2612S_EmuMame.UseVisualStyleBackColor = true;
             // 
             // rbYM2612S_Silent
             // 
@@ -886,10 +910,10 @@
             this.rbYM2612S_Emu.Checked = true;
             this.rbYM2612S_Emu.Location = new System.Drawing.Point(234, 15);
             this.rbYM2612S_Emu.Name = "rbYM2612S_Emu";
-            this.rbYM2612S_Emu.Size = new System.Drawing.Size(83, 16);
+            this.rbYM2612S_Emu.Size = new System.Drawing.Size(79, 16);
             this.rbYM2612S_Emu.TabIndex = 0;
             this.rbYM2612S_Emu.TabStop = true;
-            this.rbYM2612S_Emu.Text = "Emu(mame)";
+            this.rbYM2612S_Emu.Text = "Emu(Gens)";
             this.rbYM2612S_Emu.UseVisualStyleBackColor = true;
             // 
             // cmbSN76489P_SCCI
@@ -1728,5 +1752,7 @@
         public System.Windows.Forms.RadioButton rbYM2413S_SCCI;
         public System.Windows.Forms.RadioButton rbYM2413S_Silent;
         public System.Windows.Forms.RadioButton rbYM2413S_Emu;
+        public System.Windows.Forms.RadioButton rbYM2612P_EmuMame;
+        public System.Windows.Forms.RadioButton rbYM2612S_EmuMame;
     }
 }

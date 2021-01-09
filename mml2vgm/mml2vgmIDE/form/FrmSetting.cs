@@ -421,7 +421,7 @@ namespace mml2vgmIDE
                     , ucSI.cmbYM2612P_SCCI
                     , null, null, null
                     , ucSI.rbYM2612P_EmuNuked
-                    , null);
+                    , ucSI.rbYM2612P_EmuMame);
                 SetSCCIParam(setting.YM2612SType
                     , ucSI.rbYM2612S_Silent
                     , ucSI.rbYM2612S_Emu
@@ -429,7 +429,7 @@ namespace mml2vgmIDE
                     , ucSI.cmbYM2612S_SCCI
                     , null, null, null
                     , ucSI.rbYM2612S_EmuNuked
-                    , null);
+                    , ucSI.rbYM2612S_EmuMame);
                 ucSI.cbSendWait.Checked = setting.YM2612Type.UseWait;
                 ucSI.cbTwice.Checked = setting.YM2612Type.UseWaitBoost;
                 ucSI.cbEmulationPCMOnly.Checked = setting.YM2612Type.OnlyPCMEmulation;
@@ -649,6 +649,9 @@ namespace mml2vgmIDE
                     rbNukedOPN2OptionASIClp.Checked = true;
                     break;
             }
+
+            cbGensDACHPF.Checked = setting.gensOption.DACHPF;
+            cbGensSSGEG.Checked = setting.gensOption.SSGEG;
 
             cbAutoBalanceUseThis.Checked = setting.autoBalance.UseThis;
             rbAutoBalanceLoadSongBalance.Checked = setting.autoBalance.LoadSongBalance;
@@ -967,6 +970,7 @@ namespace mml2vgmIDE
             }
             setting.YM2612Type.UseEmu = (ucSI.rbYM2612P_Emu.Checked || ucSI.rbYM2612P_SCCI.Checked);
             setting.YM2612Type.UseEmu2 = ucSI.rbYM2612P_EmuNuked.Checked;
+            setting.YM2612Type.UseEmu3 = ucSI.rbYM2612P_EmuMame.Checked;
 
             setting.YM2612SType = new Setting.ChipType();
             setting.YM2612SType.UseScci = ucSI.rbYM2612S_SCCI.Checked;
@@ -986,6 +990,7 @@ namespace mml2vgmIDE
             }
             setting.YM2612SType.UseEmu = (ucSI.rbYM2612S_Emu.Checked || ucSI.rbYM2612S_SCCI.Checked);
             setting.YM2612SType.UseEmu2 = ucSI.rbYM2612S_EmuNuked.Checked;
+            setting.YM2612SType.UseEmu3 = ucSI.rbYM2612S_EmuMame.Checked;
 
 
             setting.YM2612Type.UseWait = ucSI.cbSendWait.Checked;
@@ -1551,6 +1556,10 @@ namespace mml2vgmIDE
             if (rbNukedOPN2OptionDiscrete.Checked) setting.nukedOPN2.EmuType = 0;
             if (rbNukedOPN2OptionYM2612u.Checked) setting.nukedOPN2.EmuType = 3;
             if (rbNukedOPN2OptionASIClp.Checked) setting.nukedOPN2.EmuType = 4;
+
+            setting.gensOption = new Setting.GensOption();
+            setting.gensOption.DACHPF = cbGensDACHPF.Checked;
+            setting.gensOption.SSGEG = cbGensSSGEG.Checked;
 
             setting.autoBalance = new Setting.AutoBalance();
             setting.autoBalance.UseThis = cbAutoBalanceUseThis.Checked;
