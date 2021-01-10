@@ -623,6 +623,7 @@ namespace Core
         public LinePos oldAlies { get; internal set; }
         public Stack<LinePos> stackAliesPos { get; internal set; }
         public Dictionary<int, CommandArpeggio> commandArpeggio = new Dictionary<int, CommandArpeggio>();
+        public int beforeInstrument { get; set; } = -1;
 
         public partPage(partPage sharedPg)
         {

@@ -495,6 +495,29 @@ namespace Core
             {
                 SetAdpcmFNum(mml, page);
             }
+            else if (page.Type== enmChannelType.ADPCM && page.isPcmMap)
+            {
+                int n = Const.NOTE.IndexOf(page.noteCmd);
+                int arpNote = page.arpFreqMode ? 0 : page.arpDelta;
+                int f = page.octaveNow * 12 + n + page.shift + page.keyShift + arpNote;
+                if (parent.instPCMMap.ContainsKey(page.pcmMapNo))
+                {
+                    if (parent.instPCMMap[page.pcmMapNo].ContainsKey(f))
+                    {
+                        page.instrument = parent.instPCMMap[page.pcmMapNo][f];
+                    }
+                    else
+                    {
+                        msgBox.setErrMsg(string.Format(msg.get("E10025"), page.octaveNow, page.noteCmd, page.shift + page.keyShift + arpNote), mml.line.Lp);
+                        return;
+                    }
+                }
+                else
+                {
+                    msgBox.setErrMsg(string.Format(msg.get("E10024"), page.pcmMapNo), mml != null ? mml.line.Lp : null);
+                    return;
+                }
+            }
         }
 
         public new void SetFmFNum(partPage page, MML mml)
@@ -1243,33 +1266,45 @@ namespace Core
             {
                 if (page.Type == enmChannelType.ADPCMA || page.Type == enmChannelType.ADPCMB || page.Type == enmChannelType.ADPCM)
                 {
-                    n = Common.CheckRange(n, 0, 255);
-                    if (!parent.instPCM.ContainsKey(n))
+                    if (page.isPcmMap)
                     {
-                        msgBox.setErrMsg(string.Format(msg.get("E18004"), n), mml.line.Lp);
+                        page.pcmMapNo = n;
+                        if (!parent.instPCMMap.ContainsKey(n))
+                        {
+                            msgBox.setErrMsg(string.Format(msg.get("E10024"), n), mml.line.Lp);
+                        }
+                        return;
                     }
                     else
                     {
-                        if (parent.instPCM[n].Item2.chip != enmChipType.YM2609)
+                        n = Common.CheckRange(n, 0, 255);
+                        if (!parent.instPCM.ContainsKey(n))
                         {
-                            msgBox.setErrMsg(string.Format(msg.get("E18005"), n), mml.line.Lp);
-                        }
-                        page.instrument = n;
-                        if (page.Type != enmChannelType.ADPCM)
-                        {
-                            SetADPCMAddress(
-                                mml,
-                                page
-                                , (int)parent.instPCM[n].Item2.stAdr
-                                , (int)parent.instPCM[n].Item2.edAdr);
+                            msgBox.setErrMsg(string.Format(msg.get("E18004"), n), mml.line.Lp);
                         }
                         else
                         {
-                            SetADPCMAAddress(
-                                mml,
-                                page
-                                , (int)parent.instPCM[n].Item2.stAdr
-                                , (int)parent.instPCM[n].Item2.edAdr);
+                            if (parent.instPCM[n].Item2.chip != enmChipType.YM2609)
+                            {
+                                msgBox.setErrMsg(string.Format(msg.get("E18005"), n), mml.line.Lp);
+                            }
+                            page.instrument = n;
+                            if (page.Type != enmChannelType.ADPCM)
+                            {
+                                SetADPCMAddress(
+                                    mml,
+                                    page
+                                    , (int)parent.instPCM[n].Item2.stAdr
+                                    , (int)parent.instPCM[n].Item2.edAdr);
+                            }
+                            else
+                            {
+                                SetADPCMAAddress(
+                                    mml,
+                                    page
+                                    , (int)parent.instPCM[n].Item2.stAdr
+                                    , (int)parent.instPCM[n].Item2.edAdr);
+                            }
                         }
                     }
                     return;
@@ -1444,6 +1479,19 @@ namespace Core
                             break;
                     }
                 }
+            }
+        }
+
+        public override void CmdPcmMapSw(partPage page, MML mml)
+        {
+            bool sw = (bool)mml.args[0];
+            if (page.Type == enmChannelType.ADPCM && page.ch >= 39 && page.ch <= 44)
+            {
+                page.isPcmMap = sw;
+            }
+            else
+            {
+                msgBox.setErrMsg(msg.get("E10023"), mml.line.Lp);
             }
         }
 
@@ -2153,6 +2201,20 @@ namespace Core
                             page.spg.pan = page.pan;
                             page.spg.beforePanR = page.panR;
                             page.spg.beforePanL = page.panL;
+                        }
+
+                        if (page.keyOn && page.isPcmMap)
+                        {
+                            int n = page.instrument;
+                            if (n != page.beforeInstrument)
+                            {
+                                SetADPCMAAddress(
+                                    mml,
+                                    page
+                                    , (int)parent.instPCM[n].Item2.stAdr
+                                    , (int)parent.instPCM[n].Item2.edAdr);
+                                page.beforeInstrument = n;
+                            }
                         }
 
                         adpcma_KeyOn |= (byte)(page.keyOn ? (1 << (page.ch - 39)) : 0);

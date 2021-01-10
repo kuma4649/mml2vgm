@@ -1,0 +1,46 @@
+﻿'{
+
+	TitleName            =test YM2609 ADPCM Pan
+	TitleNameJ           =YM2609テスト ADPCM Pan
+	GameName             =
+	GameNameJ            =
+	SystemName           =Virtual chip
+	SystemNameJ          =妄想音源
+	Composer             =kuma
+	ComposerJ            =くま
+	ReleaseDate          =2345/01/23
+	Converted            =kuma
+	Notes                =ADPCMテスト
+
+	Format               =ZGM
+	ClockCount           =192
+
+}
+
+
+
+'U01 T120
+
+ADPCM
+      @   filename                Hz   Vol Chip   type(0:ADPCM1 1:ADPCM2 2:ADPCM3 3:ADPCM-A)
+@ P  1 , "..\wav\Guitar.wav"    ,8000,100,YM2609,0
+@ P  2 , "..\wav\SD.wav"        ,8000,100,YM2609,0
+@ P  3 , "..\wav\muteGuitar.wav",8000,100,YM2609,0
+
+@ P  4 , "..\wav\Guitar.wav"    ,8000,100,YM2609,1
+@ P  5 , "..\wav\SD.wav"        ,8000,100,YM2609,1
+@ P  6 , "..\wav\muteGuitar.wav",8000,100,YM2609,1
+
+@ P  7 , "..\wav\Guitar.wav"    ,8000,100,YM2609,2
+@ P  8 , "..\wav\SD.wav"        ,8000,100,YM2609,2
+@ P  9 , "..\wav\muteGuitar.wav",8000,100,YM2609,2
+
+'@ P 10 , "..\wav\Guitar.wav"        ,    ,100,YM2609,3
+'@ P 11 , "..\wav\SD_16bit18500.wav" ,    ,100,YM2609,3
+
+PCM Map
+     MapNo0     o4c から  c   c+   d   d+    e    f    f+    g     g+     a     a+    b
+'@ PM  0    ,    4,0,     10,   ,  11,   ,     ,    ,    ,     ,     ,      ,      ,
+
+'U40 mon@0l8q0v31p4,4cd
+

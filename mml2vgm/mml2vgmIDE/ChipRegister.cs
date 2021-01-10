@@ -7914,7 +7914,7 @@ namespace mml2vgmIDE
                 int v = dData & 0xf;
                 v = v + SN76489NowFadeoutVol[Chip.Number];
                 //v += SN76489MaskCh[Chip.Number][(dData & 0x60) >> 5] ? 15 : 0;
-                v += Chip.ChMasks[(dData & 0x60) >> 5] ? 15 : 0;
+                v = Chip.ChMasks[(dData & 0x60) >> 5] ? 15 : v;
                 v = Math.Min(v, 15);
                 dData = (dData & 0xf0) | v;
             }
