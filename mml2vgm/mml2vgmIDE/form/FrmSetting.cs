@@ -490,6 +490,7 @@ namespace mml2vgmIDE
             lblFontStyle.Text = setting.other.TextFontStyle.ToString();
             cbLogWarning.Checked = setting.other.LogWarning;
             cbPlayDeviceCB.Checked = setting.other.PlayDeviceCB;
+            cbSinWave.Checked = setting.other.sinWaveGen;
             rbLoglevelINFO.Checked = setting.other.LogLevel == 8;
             rbLoglevelDEBUG.Checked = setting.other.LogLevel == 16;
             rbLoglevelTRACE.Checked = setting.other.LogLevel == 32;
@@ -1443,6 +1444,7 @@ namespace mml2vgmIDE
 
             setting.other.LogWarning = cbLogWarning.Checked;
             setting.other.PlayDeviceCB = cbPlayDeviceCB.Checked;
+            setting.other.sinWaveGen = cbSinWave.Checked;
             if (rbLoglevelINFO.Checked) setting.other.LogLevel = 8;
             else if (rbLoglevelDEBUG.Checked) setting.other.LogLevel = 16;
             else if (rbLoglevelTRACE.Checked) setting.other.LogLevel = 32;

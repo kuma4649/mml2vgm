@@ -1,4 +1,7 @@
 更新履歴
+TAG340 2021/01/12
+  Core:OPN/A/A2:FNUMテーブル修正
+
 TAG339 2021/01/10
   Core:妄想音源OPNA2:ADPCMA：PCMマッピングモードに対応した。
 

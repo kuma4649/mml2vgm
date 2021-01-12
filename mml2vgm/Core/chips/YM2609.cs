@@ -59,7 +59,7 @@ namespace Core
             FNumTbl = _FNumTbl;
             ChipNumber = chipNumber;
             dataType = 0x81;
-            Frequency = 7987200;
+            Frequency = 7987200;// 8080991;// 7987200;
             port = new byte[][]{
                 new byte[] { 0x00 }
                 , new byte[] { 0x01 }

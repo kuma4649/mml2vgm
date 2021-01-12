@@ -2124,12 +2124,31 @@ namespace mml2vgmIDE
                         chipRegister.MIDI[zCnt].Device = EnmZGMDevice.MIDIGM;
                     }
 
+
                     if (zCnt >= 0)
                     {
                         ReleaseAllMIDIout();
                         MakeMIDIout(setting, MidiMode);
                         chipRegister.setMIDIout(setting.midiOut.lstMidiOutInfo[MidiMode], midiOuts, midiOutsType);
                     }
+                }
+
+
+                if (setting.other.sinWaveGen)
+                {
+                    chip = new MDSound.MDSound.Chip();
+                    chip.Option = null;
+                    MDSound.SinWave sin = new SinWave();
+                    chip.type = MDSound.MDSound.enmInstrumentType.None;
+                    chip.Instrument = sin;
+                    chip.Update = sin.Update;
+                    chip.Start = sin.Start;
+                    chip.Stop = sin.Stop;
+                    chip.Reset = sin.Reset;
+                    chip.SamplingRate = (UInt32)Common.SampleRate;
+                    chip.Volume = setting.balance.YM2612Volume;
+                    chip.Clock = 0;
+                    lstChips.Add(chip);
                 }
 
 

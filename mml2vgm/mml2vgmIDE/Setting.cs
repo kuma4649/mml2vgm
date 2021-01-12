@@ -1792,6 +1792,9 @@ namespace mml2vgmIDE
             private string _CommandManualMucom = "";
             private string _CommandManualPMD="";
             private string _CommandManualM98 = "m98コマンド・リファレンス.pdf";
+            private bool _sinWaveGen=false;
+            public bool sinWaveGen { get => _sinWaveGen; set => _sinWaveGen = value; }
+
             public string Tutorial { get => _Tutorial; set => _Tutorial = value; }
             public string CommandManual { get => _CommandManual; set => _CommandManual = value; }
             public string CommandManualMucom { get => _CommandManualMucom; set => _CommandManualMucom = value; }
@@ -1841,6 +1844,7 @@ namespace mml2vgmIDE
                 other.CommandManualMucom = this.CommandManualMucom;
                 other.CommandManualPMD = this.CommandManualPMD;
                 other.CommandManualM98 = this.CommandManualM98;
+                other.sinWaveGen = this.sinWaveGen;
 
                 return other;
             }

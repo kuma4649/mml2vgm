@@ -403,6 +403,7 @@
             this.textBoxDescription = new System.Windows.Forms.TextBox();
             this.llOpenGithub = new System.Windows.Forms.LinkLabel();
             this.cbHiyorimiMode = new System.Windows.Forms.CheckBox();
+            this.cbSinWave = new System.Windows.Forms.CheckBox();
             this.gbWaveOut.SuspendLayout();
             this.gbAsioOut.SuspendLayout();
             this.gbWasapiOut.SuspendLayout();
@@ -4489,12 +4490,13 @@
             // 
             // groupBox5
             // 
+            this.groupBox5.Controls.Add(this.cbSinWave);
             this.groupBox5.Controls.Add(this.cbPlayDeviceCB);
             this.groupBox5.Controls.Add(this.cbLogWarning);
             this.groupBox5.Controls.Add(this.cbDispFrameCounter);
             this.groupBox5.Location = new System.Drawing.Point(7, 3);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(178, 94);
+            this.groupBox5.Size = new System.Drawing.Size(178, 112);
             this.groupBox5.TabIndex = 3;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Debug Mode";
@@ -4662,6 +4664,16 @@
             this.cbHiyorimiMode.Text = "日和見モード(出力タブ：\r\n遅延時間100ms以下の時、使用を推奨)";
             this.cbHiyorimiMode.UseVisualStyleBackColor = true;
             this.cbHiyorimiMode.Visible = false;
+            // 
+            // cbSinWave
+            // 
+            this.cbSinWave.AutoSize = true;
+            this.cbSinWave.Location = new System.Drawing.Point(7, 85);
+            this.cbSinWave.Name = "cbSinWave";
+            this.cbSinWave.Size = new System.Drawing.Size(91, 16);
+            this.cbSinWave.TabIndex = 2;
+            this.cbSinWave.Text = "440Hz正弦波";
+            this.cbSinWave.UseVisualStyleBackColor = true;
             // 
             // FrmSetting
             // 
@@ -5206,5 +5218,6 @@
         private System.Windows.Forms.GroupBox groupBox34;
         private System.Windows.Forms.CheckBox cbGensSSGEG;
         private System.Windows.Forms.CheckBox cbGensDACHPF;
+        private System.Windows.Forms.CheckBox cbSinWave;
     }
 }
