@@ -306,10 +306,11 @@ namespace mml2vgmIDE
 
             if (flg)
             {
-                DialogResult res = MessageBox.Show("保存していないファイルがあります。終了しますか？"
+                DialogResult res = MessageBox.Show("未保存のファイルがあります。このまま終了しますか？"
                     , "終了確認"
                     , MessageBoxButtons.YesNo
-                    , MessageBoxIcon.Question);
+                    , MessageBoxIcon.Question
+                    , MessageBoxDefaultButton.Button2);
                 if (res != DialogResult.Yes)
                 {
                     e.Cancel = true;
@@ -2153,6 +2154,8 @@ stop();
                 frmErrorList.dataGridView1.Rows.Add("Error", "-"
                     , mes.Item1 == -1 ? "-" : (mes.Item1 + 1).ToString()
                     , mes.Item3);
+                msgInfo mi = new msgInfo("", mes.Item1, mes.Item2, -1, mes.Item3);
+                msgBox.setErrMsg(mi);
             }
 
             foreach (Tuple<int, int, string> mes in ci.warningList)
@@ -2160,6 +2163,8 @@ stop();
                 frmErrorList.dataGridView1.Rows.Add("Warning", "-"
                     , mes.Item1 == -1 ? "-" : (mes.Item1 + 1).ToString()
                     , mes.Item3);
+                msgInfo mi = new msgInfo("", mes.Item1, mes.Item2, -1, mes.Item3);
+                msgBox.setWrnMsg(mi);
             }
 
             if (isSuccess)
@@ -2284,6 +2289,8 @@ stop();
                 frmErrorList.dataGridView1.Rows.Add("Error", "-"
                     , mes.Item1 == -1 ? "-" : (mes.Item1 + 1).ToString()
                     , mes.Item3);
+                msgInfo mi = new msgInfo("", mes.Item1, mes.Item2, -1, mes.Item3);
+                msgBox.setErrMsg(mi);
             }
 
             foreach (Tuple<int, int, string> mes in ci.warningList)
@@ -2291,56 +2298,12 @@ stop();
                 frmErrorList.dataGridView1.Rows.Add("Warning", "-"
                     , mes.Item1 == -1 ? "-" : (mes.Item1 + 1).ToString()
                     , mes.Item3);
+                msgInfo mi = new msgInfo("", mes.Item1, mes.Item2, -1, mes.Item3);
+                msgBox.setWrnMsg(mi);
             }
 
             if (isSuccess)
             {
-                //mubCompilerInfo = ci;
-
-                //if (ci.jumpChannel != null && jumpSoloModeSw)
-                //{
-                //    for (int i = 0; i < 11; i++)
-                //    {
-                //        bool solo = false;
-                //        if (i == ci.jumpChannel[0]) solo = true;
-
-                //        int ch = i;
-                //        if (i < 2)//FM 1-2
-                //        {
-                //            Audio.chipRegister.YM2608[0].ChMasks[ch] = !solo;
-                //        }
-                //        else if (i == 2)//FM 3
-                //        {
-                //            Audio.chipRegister.YM2608[0].ChMasks[2] = !solo;
-                //            Audio.chipRegister.YM2608[0].ChMasks[6] = !solo;
-                //            Audio.chipRegister.YM2608[0].ChMasks[7] = !solo;
-                //            Audio.chipRegister.YM2608[0].ChMasks[8] = !solo;
-                //        }
-                //        else if (i < 6)//SSG
-                //        {
-                //            ch = i + 6;
-                //            Audio.chipRegister.YM2608[0].ChMasks[ch] = !solo;
-                //        }
-                //        else if (i == 6)//Rhythm
-                //        {
-                //            Audio.chipRegister.YM2608[0].ChMasks[12] = !solo;
-                //            Audio.chipRegister.YM2608[0].ChMasks[13] = !solo;
-                //            Audio.chipRegister.YM2608[0].ChMasks[14] = !solo;
-                //            Audio.chipRegister.YM2608[0].ChMasks[15] = !solo;
-                //            Audio.chipRegister.YM2608[0].ChMasks[16] = !solo;
-                //            Audio.chipRegister.YM2608[0].ChMasks[17] = !solo;
-                //        }
-                //        else if (i < 10)
-                //        {
-                //            ch = i - 4;
-                //            Audio.chipRegister.YM2608[0].ChMasks[ch] = !solo;
-                //        }
-                //        else
-                //        {
-                //            Audio.chipRegister.YM2608[0].ChMasks[18] = !solo;
-                //        }
-                //    }
-                //}
 
                 if (doPlay && ci.errorList.Count < 1)
                 {
@@ -2411,6 +2374,8 @@ stop();
                 frmErrorList.dataGridView1.Rows.Add("Error", "-"
                     , mes.Item1 == -1 ? "-" : (mes.Item1 + 1).ToString()
                     , mes.Item3);
+                msgInfo mi = new msgInfo("", mes.Item1, mes.Item2, -1, mes.Item3);
+                msgBox.setErrMsg(mi);
             }
 
             foreach (Tuple<int, int, string> mes in ci.warningList)
@@ -2418,57 +2383,12 @@ stop();
                 frmErrorList.dataGridView1.Rows.Add("Warning", "-"
                     , mes.Item1 == -1 ? "-" : (mes.Item1 + 1).ToString()
                     , mes.Item3);
+                msgInfo mi = new msgInfo("", mes.Item1, mes.Item2, -1, mes.Item3);
+                msgBox.setWrnMsg(mi);
             }
 
             if (isSuccess)
             {
-                //mubCompilerInfo = ci;
-
-                //if (ci.jumpChannel != null && jumpSoloModeSw)
-                //{
-                //    for (int i = 0; i < 11; i++)
-                //    {
-                //        bool solo = false;
-                //        if (i == ci.jumpChannel[0]) solo = true;
-
-                //        int ch = i;
-                //        if (i < 2)//FM 1-2
-                //        {
-                //            Audio.chipRegister.YM2608[0].ChMasks[ch] = !solo;
-                //        }
-                //        else if (i == 2)//FM 3
-                //        {
-                //            Audio.chipRegister.YM2608[0].ChMasks[2] = !solo;
-                //            Audio.chipRegister.YM2608[0].ChMasks[6] = !solo;
-                //            Audio.chipRegister.YM2608[0].ChMasks[7] = !solo;
-                //            Audio.chipRegister.YM2608[0].ChMasks[8] = !solo;
-                //        }
-                //        else if (i < 6)//SSG
-                //        {
-                //            ch = i + 6;
-                //            Audio.chipRegister.YM2608[0].ChMasks[ch] = !solo;
-                //        }
-                //        else if (i == 6)//Rhythm
-                //        {
-                //            Audio.chipRegister.YM2608[0].ChMasks[12] = !solo;
-                //            Audio.chipRegister.YM2608[0].ChMasks[13] = !solo;
-                //            Audio.chipRegister.YM2608[0].ChMasks[14] = !solo;
-                //            Audio.chipRegister.YM2608[0].ChMasks[15] = !solo;
-                //            Audio.chipRegister.YM2608[0].ChMasks[16] = !solo;
-                //            Audio.chipRegister.YM2608[0].ChMasks[17] = !solo;
-                //        }
-                //        else if (i < 10)
-                //        {
-                //            ch = i - 4;
-                //            Audio.chipRegister.YM2608[0].ChMasks[ch] = !solo;
-                //        }
-                //        else
-                //        {
-                //            Audio.chipRegister.YM2608[0].ChMasks[18] = !solo;
-                //        }
-                //    }
-                //}
-
                 if (doPlay && ci.errorList.Count < 1)
                 {
                     try

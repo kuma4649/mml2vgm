@@ -927,10 +927,11 @@ namespace mml2vgmIDE
             {
                 if (!forceClose && (document.isNew || document.edit))
                 {
-                    DialogResult res = MessageBox.Show("保存せずにファイルを閉じますか？"
+                    DialogResult res = MessageBox.Show("このファイルは未保存です。保存せずに閉じますか？"
                         , "ファイル保存確認"
                         , MessageBoxButtons.YesNo
-                        , MessageBoxIcon.Question);
+                        , MessageBoxIcon.Question
+                        , MessageBoxDefaultButton.Button2);
                     if (res != DialogResult.Yes)
                     {
                         e.Cancel = true;

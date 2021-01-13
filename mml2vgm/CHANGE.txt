@@ -1,4 +1,8 @@
 更新履歴
+TAG341 2021/01/13
+  IDE:メッセージの調整
+  IDE:mucomDotNETのdll更新
+
 TAG340 2021/01/12
   Core:OPN/A/A2:FNUMテーブル修正
 
