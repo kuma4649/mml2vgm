@@ -1531,7 +1531,7 @@ namespace Core
                 len = page.stackRenpu.First().lstRenpuLength[0];
                 page.stackRenpu.First().lstRenpuLength.RemoveAt(0);
             }
-            //TODO: ネストしている場合と、数値していないの場合
+            //TODO: ネストしている場合と、数値していなしの場合
 
             //連符内の音符の長さを作成
             for (int p = 0; p < noteCount; p++)
@@ -1775,6 +1775,15 @@ namespace Core
                 msgBox.setErrMsg(msg.get("E10013")
                     , mml.line.Lp);
                 ml = (int)page.length;
+            }
+
+            if (page.renpuFlg)
+            {
+                if (page.stackRenpu.Count > 0)
+                {
+                    ml = page.stackRenpu.First().lstRenpuLength[0];
+                    page.stackRenpu.First().lstRenpuLength.RemoveAt(0);
+                }
             }
 
             //WaitClockの決定
