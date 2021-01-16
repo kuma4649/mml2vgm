@@ -198,6 +198,9 @@
     <None Include="sample\Syntax\testPageFunction.gwi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="sample\Syntax\testRenpu.gwi">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="sample\Y8950\Y89test.gwi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

@@ -11,7 +11,9 @@
 	ReleaseDate =
 	Converted   =
 	Notes       =
-
+	ClockCount   =112
+	VSYNC=1
+	FORMAT=XGM
 }
 
 '@ N 000 "Analog Bass #2+FBsynth(from VAL-SOUND)"
@@ -37,10 +39,11 @@
 'Cn1 T80
 Cn1 L
 
-'F1 @0D0v120o2l8q0
-'F2 @1D0v110o2l8q0
+'E01 @0D0v120o2l8q0
+'E02 @1D0v110o2l8q0
 
-'F1 [ [{brb}]7{>b<b>b<} ]3[{brb}]6ab-
-'F2 [ [{brb}]7{ b r b } ]3[{brb}]6ab-
+'E01 {brb}r
+E01 [ [{brb}]7{>b<b>b<} ]3[{brb}]6ab-
+E02 [ [{brb}]7{ b r b } ]3[{brb}]6ab-
 
 
