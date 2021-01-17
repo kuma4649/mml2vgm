@@ -1550,59 +1550,91 @@ namespace Core
             //}
 
 
-            //連符内の音符の長さを作成(残尿方式)
-            // 協力： itoken(@SNDR_SNDL)さん、 ewifan(@ewifan)さん 39 2021/01/16
+            ////連符内の音符の長さを作成(残尿方式)
+            //// 協力： itoken(@SNDR_SNDL)さん、 ewifan(@ewifan)さん 39 2021/01/16
 
-            int dc = len / noteCount;
-            float df = 0;
-            int sum = 0;
-            List<int> lstRenpuLength = new List<int>();
+            //int dc = len / noteCount;
+            //float df = 0;
+            //int sum = 0;
+            //List<int> lstRenpuLength = new List<int>();
 
-            for (int i = 0; i < noteCount; i++)
-            {
-                lstRenpuLength.Add(dc);
-                df += ((float)len / (float)noteCount) - dc;
-                if (df >= 1.0f)
-                {
-                    lstRenpuLength[i]++;
-                    df -= 1.0f;
-                }
-                sum += lstRenpuLength[i];
-            }
-            if (sum != len)
-            {
-                lstRenpuLength[lstRenpuLength.Count - 1] += len - sum;
-            }
+            //for (int i = 0; i < noteCount; i++)
+            //{
+            //    lstRenpuLength.Add(dc);
+            //    df += ((float)len / (float)noteCount) - dc;
+            //    if (df >= 1.0f)
+            //    {
+            //        lstRenpuLength[i]++;
+            //        df -= 1.0f;
+            //    }
+            //    sum += lstRenpuLength[i];
+            //}
+            //if (sum != len)
+            //{
+            //    lstRenpuLength[lstRenpuLength.Count - 1] += len - sum;
+            //}
 
-            //位置調整のためにローテートを行う
-            int r = noteCount / 2 - (len % noteCount) + ((noteCount / 2) >= (len % noteCount) ? 1 : 0);
-            for (int i = 0; i < Math.Abs(r); i++)
-            {
-                if (r > 0)
-                {
-                    int v = lstRenpuLength[0];
-                    for (int j = 0; j < noteCount - 1; j++)
-                    {
-                        lstRenpuLength[j] = lstRenpuLength[j + 1];
-                    }
-                    lstRenpuLength[lstRenpuLength.Count - 1] = v;
-                }
-                else
-                {
-                    int v = lstRenpuLength[lstRenpuLength.Count - 1];
-                    for (int j = noteCount - 1;j>0 ; j--)
-                    {
-                        lstRenpuLength[j] = lstRenpuLength[j - 1];
-                    }
-                    lstRenpuLength[0] = v;
-                }
-            }
+
+            ////位置調整のためにローテートを行う
+            //int r = noteCount / 2 - (len % noteCount) + ((noteCount / 2) >= (len % noteCount) ? 1 : 0);
+            //for (int i = 0; i < Math.Abs(r); i++)
+            //{
+            //    if (r > 0)
+            //    {
+            //        int v = lstRenpuLength[0];
+            //        for (int j = 0; j < noteCount - 1; j++)
+            //        {
+            //            lstRenpuLength[j] = lstRenpuLength[j + 1];
+            //        }
+            //        lstRenpuLength[lstRenpuLength.Count - 1] = v;
+            //    }
+            //    else
+            //    {
+            //        int v = lstRenpuLength[lstRenpuLength.Count - 1];
+            //        for (int j = noteCount - 1;j>0 ; j--)
+            //        {
+            //            lstRenpuLength[j] = lstRenpuLength[j - 1];
+            //        }
+            //        lstRenpuLength[0] = v;
+            //    }
+            //}
+
+            List<int> lstRenpuLength = f3(len, noteCount);
 
             page.renpuFlg = true;
 
             clsRenpu rp = new clsRenpu();
             rp.lstRenpuLength = lstRenpuLength;
             page.stackRenpu.Push(rp);
+        }
+        
+        /// <summary>
+        /// DDA 
+        ///   zipperpull(@zipperpull)さんより
+        /// </summary>
+        /// <returns></returns>
+        public List<int> f3(int len, int noteCount)
+        {
+            // len > noteCount は前提
+            int dc = len / noteCount;
+            int mod = len % noteCount;
+            int di = noteCount / 2;
+            //Console.WriteLine("dc:{0} mod:{1} di:{2}", dc, mod, di);
+
+            List<int> lstRenpuLength = new List<int>();
+
+            for (int i = 0; i < noteCount; i++)
+            {
+                lstRenpuLength.Add(dc);
+                di += mod;
+                if (di >= noteCount)
+                {
+                    lstRenpuLength[i]++;
+                    di -= noteCount;
+                }
+            }
+
+            return lstRenpuLength;
         }
 
         public virtual void CmdRenpuEnd(partPage page, MML mml)

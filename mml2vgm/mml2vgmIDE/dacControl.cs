@@ -487,9 +487,21 @@ namespace mml2vgmIDE
         {
             switch (ChipType)
             {
+                case 0x00:  // SN76489
+                    chipRegister.SN76489SetRegister(od, Counter, ChipID, Data);
+                    break;
                 case 0x02:  // YM2612
                     chipRegister.YM2612SetRegister(od, Counter, ChipID, Port, Offset, Data);
                     //log.Write(string.Format("Cnt{0} Data{1}",Counter,Data));
+                    break;
+                case 0x06:  // YM2203+
+                    chipRegister.YM2203SetRegister(od, Counter, ChipID, Offset, Data);
+                    break;
+                case 0x07:  // YM2608+
+                    chipRegister.YM2608SetRegister(od,Counter, ChipID, Port, Offset, Data);
+                    break;
+                case 0x08:  // YM2610+
+                    chipRegister.YM2610SetRegister(od, Counter, ChipID, Port, Offset, Data);
                     break;
                 case 0x10:
                     chipRegister.RF5C164SetRegister(od, Counter, ChipID, Offset, Data);

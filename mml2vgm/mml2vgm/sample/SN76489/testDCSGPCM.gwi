@@ -1,0 +1,29 @@
+﻿'{
+
+	TitleName   =DCSG PCM Test
+	TitleNameJ  =DCSG PCM Test
+	GameName    =
+	GameNameJ   =
+	SystemName  =
+	SystemNameJ =
+	Composer    =
+	ComposerJ   =
+	ReleaseDate =2021/01/xx
+	Converted   =
+	Notes       =
+
+	ClockCount  =192
+
+}
+
+
+     No,SV,AR,DR,SL,SR,RR,ST,ChipName
+'@ E  0,15, 0, 1,10,10, 6, 1,DCSG
+
+'@ P 0,"..\wav\SD.wav",8000,100,DCSG
+'@ P 1,"..\wav\HC.wav",8000,100,DCSG
+
+PCM Test
+'S3 m1p3o4Q8@0c4c4c4@1c4m0v15c4
+
+

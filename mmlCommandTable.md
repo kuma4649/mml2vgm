@@ -126,6 +126,7 @@
 - 設定可能範囲  
     n : 0 ～ 255  
 - Support chips  
+    - SN76489(PCM)  
     - YM2612(FM)  
     - YM2612X(FM)  
     - YM2612(Ch3 Ex)  
@@ -270,7 +271,7 @@
 - 設定可能範囲  
     n : 0 ～ 255  
 - Support chips
-    - SN76489  
+    - SN76489(DCSG)  
     - YM2610B(SSG)  
     - YM2608(SSG)  
     - YM2609(SSG)  
@@ -1954,8 +1955,8 @@
     `[cd[e]]`  
     cdeecdee と演奏します  
     `[cd<e]`  
-    cd\<e>cd<e ではなく  
-    cd\<ecd<e と演奏します  
+    cd\<e\>cd\<e ではなく  
+    cd\<ecd\<e と演奏します  
 
 
 ### 連符  
