@@ -686,6 +686,7 @@ namespace Core
             page.pcm = (n == 1);
             page.freq = -1;//freqをリセット
             page.instrument = -1;
+            page.spg.beforeVolume = -1;
         }
 
 
