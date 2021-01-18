@@ -439,6 +439,7 @@ namespace Core
         private void OutPsgFnum(partPage page, MML mml)
         {
             if (page.spg.freq == page.freq) return;
+            if (page.pcm) return;
 
             page.spg.freq = page.freq;
             if (page.Type != enmChannelType.DCSGNOISE)
@@ -506,6 +507,8 @@ namespace Core
 
         private void OutPsgVolume(partPage page, MML mml)
         {
+            if (page.pcm) return;
+
             if (page.spg.beforeVolume != page.beforeVolume)
             {
                 byte data = (byte)(0x80 + (page.ch << 5) + 0x10 + (15 - page.beforeVolume));
@@ -683,8 +686,14 @@ namespace Core
         {
             int n = (int)mml.args[0];
             n = Common.CheckRange(n, 0, 1);
+            if (n == 1)
+            {
+                page.freq = 0;//freqをリセット
+                page.spg.freq = -1;
+                OutPsgFnum(page, mml);
+            }
+
             page.pcm = (n == 1);
-            page.freq = -1;//freqをリセット
             page.instrument = -1;
             page.spg.beforeVolume = -1;
         }
