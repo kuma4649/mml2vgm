@@ -168,7 +168,8 @@
         unknown,
         Tremolo,
         Vibrato,
-        Hardware
+        Hardware,
+        Wah
     }
 
 }

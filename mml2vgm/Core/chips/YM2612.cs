@@ -458,28 +458,34 @@ namespace Core
                     continue;
                 if (pl.type == eLfoType.Hardware)
                     continue;
-                if (pl.param[5] != 1)
+                int w = 0;
+                if (pl.type == eLfoType.Wah) w = 1;
+                if (pl.param[w+5] != 1)
                     continue;
 
                 pl.isEnd = false;
-                pl.value = (pl.param[0] == 0) ? pl.param[6] : 0;//ディレイ中は振幅補正は適用されない
-                pl.waitCounter = pl.param[0];
-                pl.direction = pl.param[2] < 0 ? -1 : 1;
-                pl.depthWaitCounter = pl.param[7];
-                pl.depth = pl.param[3];
-                pl.depthV2 = pl.param[2];
+                pl.value = (pl.param[w + 0] == 0) ? pl.param[w + 6] : 0;//ディレイ中は振幅補正は適用されない
+                pl.waitCounter = pl.param[w + 0];
+                pl.direction = pl.param[w + 2] < 0 ? -1 : 1;
+                pl.depthWaitCounter = pl.param[w + 7];
+                pl.depth = pl.param[w + 3];
+                pl.depthV2 = pl.param[w + 2];
 
                 if (pl.type == eLfoType.Vibrato)
                 {
                     SetFmFNum(page, mml);
-
                 }
 
                 if (pl.type == eLfoType.Tremolo)
                 {
                     page.beforeVolume = -1;
                     SetFmVolume(page, mml);
+                }
 
+                if (pl.type == eLfoType.Wah)
+                {
+                    page.beforeVolume = -1;
+                    SetFmTL(page, mml);
                 }
 
             }

@@ -1,4 +1,7 @@
 更新履歴
+TAG347 2021/01/18 3rd
+  Core:YM2612:Wah LFOに対応(lfoWahTest.gwi)
+
 TAG346 2021/01/18 2nd
   Core:SN76489:Lコマンド使用時のバグ修正
 

@@ -186,6 +186,9 @@
     <None Include="sample\SN76489\testDCSGPCM.gwi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="sample\Syntax\lfoWahTest.gwi">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="sample\Syntax\testArpeggio.gwi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

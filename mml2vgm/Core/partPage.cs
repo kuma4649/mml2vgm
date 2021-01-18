@@ -463,6 +463,14 @@ namespace Core
         /// </summary>
         public int beforeVolume = -1;
         public int beforeExpression = -1;
+        public int tlDelta1 = 0;
+        public int beforeTlDelta1 = -1;
+        public int tlDelta2 = 0;
+        public int beforeTlDelta2 = -1;
+        public int tlDelta3 = 0;
+        public int beforeTlDelta3 = -1;
+        public int tlDelta4 = 0;
+        public int beforeTlDelta4 = -1;
         /// <summary>
         /// 効果音モード
         /// </summary>

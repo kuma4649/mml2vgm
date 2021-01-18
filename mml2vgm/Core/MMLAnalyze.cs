@@ -1235,7 +1235,7 @@ namespace Core
                 return;
             }
 
-            if (t != 'T' && t != 'V' && t != 'H')
+            if (t != 'T' && t != 'V' && t != 'H' && t != 'W')
             {
                 msgBox.setErrMsg(msg.get("E05029"), mml.line.Lp);
                 return;

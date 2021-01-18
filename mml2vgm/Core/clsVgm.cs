@@ -3194,7 +3194,9 @@ namespace Core
             }
 
             if (pg.noteCmd != 0)
+            {
                 pg.chip.SetVolume(pg, null);
+            }
 
             if (isRealTimeMode) return;
 
@@ -4528,11 +4530,14 @@ namespace Core
                     continue;
                 }
 
-                switch (pl.param[4])
+                int w = 0;
+                if (pl.type == eLfoType.Wah) w = 1;
+
+                switch (pl.param[w+4])
                 {
                     case 0: //三角
-                        pl.value += Math.Abs(pl.param[2]) * pl.direction;
-                        pl.waitCounter = pl.param[1];
+                        pl.value += Math.Abs(pl.param[w + 2]) * pl.direction;
+                        pl.waitCounter = pl.param[w + 1];
                         if ((pl.direction > 0 && pl.value >= pl.depth) || (pl.direction < 0 && pl.value <= -pl.depth))
                         {
                             pl.value = pl.depth * pl.direction;
@@ -4542,8 +4547,8 @@ namespace Core
                         //Console.WriteLine("{0}", pl.value);
                         break;
                     case 1: //のこぎり
-                        pl.value += Math.Abs(pl.param[2]) * pl.direction;
-                        pl.waitCounter = pl.param[1];
+                        pl.value += Math.Abs(pl.param[w + 2]) * pl.direction;
+                        pl.waitCounter = pl.param[w + 1];
                         if ((pl.direction > 0 && pl.value >= pl.depth) || (pl.direction < 0 && pl.value <= -pl.depth))
                         {
                             pl.value = -pl.depth * pl.direction;
@@ -4553,24 +4558,24 @@ namespace Core
                     case 2: //矩形
                         if (pl.direction < 0) pl.value = pl.depth;
                         else pl.value = pl.depthV2;
-                        pl.waitCounter = pl.param[1];
+                        pl.waitCounter = pl.param[w + 1];
                         pl.direction = -pl.direction;
-                        if (pl.param[7] != 0)
+                        if (pl.param[w + 7] != 0)
                         {
                             pl.depthWaitCounter--;
                             if (pl.depthWaitCounter == 0)
                             {
-                                pl.depthWaitCounter = pl.param[7];
-                                pl.depth += (pl.param[2] >= pl.param[3]) ? pl.param[8] : (-pl.param[8]);
+                                pl.depthWaitCounter = pl.param[w + 7];
+                                pl.depth += (pl.param[w + 2] >= pl.param[w + 3]) ? pl.param[w + 8] : (-pl.param[w + 8]);
                                 pl.depth = Common.CheckRange(pl.depth, 0, 32767);
-                                pl.depthV2 += (pl.param[3] >= pl.param[2]) ? pl.param[8] : (-pl.param[8]);
+                                pl.depthV2 += (pl.param[w + 3] >= pl.param[w + 2]) ? pl.param[w + 8] : (-pl.param[w + 8]);
                                 pl.depthV2 = Common.CheckRange(pl.depthV2, 0, 32767);
                             }
                         }
                         break;
                     case 3: //ワンショット
-                        pl.value += Math.Abs(pl.param[2]) * pl.direction;
-                        pl.waitCounter = pl.param[1];
+                        pl.value += Math.Abs(pl.param[w + 2]) * pl.direction;
+                        pl.waitCounter = pl.param[w + 1];
 
                         if (Math.Abs(pl.value) >= Math.Abs(pl.depth))
                         {
@@ -4581,7 +4586,7 @@ namespace Core
                         break;
                     case 4: //ランダム
                         pl.value = rnd.Next(-pl.depth, pl.depth);
-                        pl.waitCounter = pl.param[1];
+                        pl.waitCounter = pl.param[w + 1];
                         procLfo_updateDepth(pl);
                         break;
                 }
@@ -4591,13 +4596,15 @@ namespace Core
 
         private static void procLfo_updateDepth(clsLfo pl)
         {
-            if (pl.param[7] != 0)
+            int w = 0;
+            if (pl.type == eLfoType.Wah) w = 1;
+            if (pl.param[w+7] != 0)
             {
                 pl.depthWaitCounter--;
                 if (pl.depthWaitCounter == 0)
                 {
-                    pl.depthWaitCounter = pl.param[7];
-                    pl.depth += pl.param[8];
+                    pl.depthWaitCounter = pl.param[w + 7];
+                    pl.depth += pl.param[w + 8];
                     pl.depth = Common.CheckRange(pl.depth, 0, 32767);
                 }
             }

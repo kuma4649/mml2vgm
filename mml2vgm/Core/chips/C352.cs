@@ -633,6 +633,8 @@ namespace Core
                 if (!pl.sw)
                     continue;
 
+                if (pl.type == eLfoType.Wah)
+                    continue;
                 if (pl.param[5] != 1)
                     continue;
 

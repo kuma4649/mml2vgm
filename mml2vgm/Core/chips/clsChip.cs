@@ -923,8 +923,22 @@ namespace Core
             }
 
             int c = (char)mml.args[0] - 'P';
-            eLfoType t = (char)mml.args[1] == 'T' ? eLfoType.Tremolo
-                : ((char)mml.args[1] == 'V' ? eLfoType.Vibrato : eLfoType.Hardware);
+            eLfoType t = eLfoType.unknown;
+            switch ((char)mml.args[1])
+            {
+                case 'T':
+                    t = eLfoType.Tremolo;
+                    break;
+                case 'V':
+                    t = eLfoType.Vibrato;
+                    break;
+                case 'H':
+                    t = eLfoType.Hardware;
+                    break;
+                case 'W':
+                    t = eLfoType.Wah;
+                    break;
+            }
 
             page.lfo[c].type = t;
             page.lfo[c].sw = false;
@@ -936,47 +950,52 @@ namespace Core
                     page.lfo[c].param.Add((int)mml.args[i]);
             }
 
-            if (page.lfo[c].type == eLfoType.Tremolo || page.lfo[c].type == eLfoType.Vibrato)
+            if (page.lfo[c].type == eLfoType.Tremolo
+                || page.lfo[c].type == eLfoType.Vibrato
+                || page.lfo[c].type == eLfoType.Wah)
             {
-                if (page.lfo[c].param.Count < 4)
+                if (page.lfo[c].param.Count < 4+(page.lfo[c].type == eLfoType.Wah?1:0))
                 {
                     msgBox.setErrMsg(msg.get("E10005")
                     , mml.line.Lp);
                     return;
                 }
-                if (page.lfo[c].param.Count > 9)
+                if (page.lfo[c].param.Count > 9 + (page.lfo[c].type == eLfoType.Wah ? 1 : 0))
                 {
                     msgBox.setErrMsg(msg.get("E10006")
                     , mml.line.Lp);
                     return;
                 }
 
-                page.lfo[c].param[0] = Common.CheckRange(page.lfo[c].param[0], 0, (int)parent.info.clockCount);
-                page.lfo[c].param[1] = Common.CheckRange(page.lfo[c].param[1], 1, 255);
-                page.lfo[c].param[2] = Common.CheckRange(page.lfo[c].param[2], -32768, 32767);
-                if (page.lfo[c].param.Count > 4)
+                int w = 0;
+                if (page.lfo[c].type == eLfoType.Wah) w = 1;
+
+                page.lfo[c].param[w + 0] = Common.CheckRange(page.lfo[c].param[w + 0], 0, (int)parent.info.clockCount);
+                page.lfo[c].param[w + 1] = Common.CheckRange(page.lfo[c].param[w + 1], 1, 255);
+                page.lfo[c].param[w + 2] = Common.CheckRange(page.lfo[c].param[w + 2], -32768, 32767);
+                if (page.lfo[c].param.Count > w + 4)
                 {
-                    page.lfo[c].param[4] = Common.CheckRange(page.lfo[c].param[4], 0, 4);
+                    page.lfo[c].param[w + 4] = Common.CheckRange(page.lfo[c].param[w + 4], 0, 4);
                 }
                 else
                 {
                     page.lfo[c].param.Add(0);
                 }
 
-                if (page.lfo[c].param[4] != 2) page.lfo[c].param[3] = Math.Abs(Common.CheckRange(page.lfo[c].param[3], 0, 32767));
-                else page.lfo[c].param[3] = Common.CheckRange(page.lfo[c].param[3], -32768, 32767);
+                if (page.lfo[c].param[w + 4] != 2) page.lfo[c].param[w + 3] = Math.Abs(Common.CheckRange(page.lfo[c].param[w + 3], 0, 32767));
+                else page.lfo[c].param[w + 3] = Common.CheckRange(page.lfo[c].param[w + 3], -32768, 32767);
 
-                if (page.lfo[c].param.Count > 5)
+                if (page.lfo[c].param.Count > w + 5)
                 {
-                    page.lfo[c].param[5] = Common.CheckRange(page.lfo[c].param[5], 0, 1);
+                    page.lfo[c].param[w + 5] = Common.CheckRange(page.lfo[c].param[w + 5], 0, 1);
                 }
                 else
                 {
                     page.lfo[c].param.Add(1);
                 }
-                if (page.lfo[c].param.Count > 6)
+                if (page.lfo[c].param.Count > w + 6)
                 {
-                    page.lfo[c].param[6] = Common.CheckRange(page.lfo[c].param[6], -32768, 32767);
+                    page.lfo[c].param[w + 6] = Common.CheckRange(page.lfo[c].param[w + 6], -32768, 32767);
                     //if (pw.ppg[pw.cpgNum].lfo[c].param[6] == 0) pw.ppg[pw.cpgNum].lfo[c].param[6] = 1;
                 }
                 else
@@ -985,22 +1004,35 @@ namespace Core
                 }
 
                 //DepthSpeed
-                if (page.lfo[c].param.Count > 7) page.lfo[c].param[7] = Common.CheckRange(page.lfo[c].param[7], 0, 255);
+                if (page.lfo[c].param.Count > w + 7) page.lfo[c].param[w + 7] = Common.CheckRange(page.lfo[c].param[w + 7], 0, 255);
                 else page.lfo[c].param.Add(0);
 
                 //DepthDelta
-                if (page.lfo[c].param.Count > 8) page.lfo[c].param[8] = Common.CheckRange(page.lfo[c].param[8], -32768, 32767);
+                if (page.lfo[c].param.Count > w + 8) page.lfo[c].param[w + 8] = Common.CheckRange(page.lfo[c].param[w + 8], -32768, 32767);
                 else page.lfo[c].param.Add(0);
 
                 page.lfo[c].sw = true;
                 page.lfo[c].isEnd = false;
-                page.lfo[c].value = (page.lfo[c].param[0] == 0) ? page.lfo[c].param[6] : 0;//ディレイ中は振幅補正は適用されない
-                page.lfo[c].waitCounter = page.lfo[c].param[0];
-                page.lfo[c].direction = page.lfo[c].param[2] < 0 ? -1 : 1;
-                if (page.lfo[c].param[4] == 2) page.lfo[c].direction = -1; //矩形の場合は必ず-1(Val1から開始する)をセット
-                page.lfo[c].depthWaitCounter = page.lfo[c].param[7];
-                page.lfo[c].depth = page.lfo[c].param[3];
-                page.lfo[c].depthV2 = page.lfo[c].param[2];
+                page.lfo[c].value = (page.lfo[c].param[w + 0] == 0) ? page.lfo[c].param[w + 6] : 0;//ディレイ中は振幅補正は適用されない
+                page.lfo[c].waitCounter = page.lfo[c].param[w + 0];
+                page.lfo[c].direction = page.lfo[c].param[w + 2] < 0 ? -1 : 1;
+                if (page.lfo[c].param[w + 4] == 2) page.lfo[c].direction = -1; //矩形の場合は必ず-1(Val1から開始する)をセット
+                page.lfo[c].depthWaitCounter = page.lfo[c].param[w + 7];
+                page.lfo[c].depth = page.lfo[c].param[w + 3];
+                page.lfo[c].depthV2 = page.lfo[c].param[w + 2];
+
+                page.lfo[c].slot = 0;
+                if (page.lfo[c].type == eLfoType.Wah)
+                {
+                    string n = page.lfo[c].param[0].ToString();
+                    foreach (char ch in n)
+                    {
+                        if (ch == '1') page.lfo[c].slot += 1;
+                        if (ch == '2') page.lfo[c].slot += 2;
+                        if (ch == '3') page.lfo[c].slot += 4;
+                        if (ch == '4') page.lfo[c].slot += 8;
+                    }
+                }
             }
             else
             {
