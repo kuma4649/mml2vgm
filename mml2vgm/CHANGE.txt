@@ -1,4 +1,7 @@
 XV—š—ğ
+TAG348 2021/01/19
+  Core:YM2203:YM2608:YM2610B:YM2151:Wah LFO‚É‘Î‰(lfoWahTest.gwi)
+
 TAG347 2021/01/18 3rd
   Core:YM2612:Wah LFO‚É‘Î‰(lfoWahTest.gwi)
 

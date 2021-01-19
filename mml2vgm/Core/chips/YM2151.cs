@@ -151,6 +151,66 @@ namespace Core
             if ((page.slots & 8) != 0 && ope[3] != -1) OutSetTl(mml, page, 3, ope[3]);
         }
 
+        public void OutFmSetTL(partPage page, MML mml, int tl1, int tl2, int tl3, int tl4, int n)
+        {
+            if (!parent.instFM.ContainsKey(n))
+            {
+                msgBox.setWrnMsg(string.Format(msg.get("E11000"), n), mml.line.Lp);
+                return;
+            }
+
+            int alg = parent.instFM[n].Item2[45] & 0x7;
+            int[] ope = new int[4] {
+                parent.instFM[n].Item2[0*Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
+                , parent.instFM[n].Item2[1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
+                , parent.instFM[n].Item2[2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
+                , parent.instFM[n].Item2[3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
+            };
+            int[][] algs = new int[8][]
+            {
+                new int[4] { 1,1,1,0}
+                ,new int[4] { 1,1,1,0}
+                ,new int[4] { 1,1,1,0}
+                ,new int[4] { 1,1,1,0}
+                ,new int[4] { 1,0,1,0}
+                ,new int[4] { 1,0,0,0}
+                ,new int[4] { 1,0,0,0}
+                ,new int[4] { 0,0,0,0}
+            };
+
+            for (int i = 0; i < 4; i++)
+            {
+                if (algs[alg][i] == 0 || (page.slots & (1 << i)) == 0)
+                {
+                    ope[i] = -1;
+                    continue;
+                }
+                if (i == 0) ope[i] = ope[i] - tl1;
+                if (i == 1) ope[i] = ope[i] - tl2;
+                if (i == 2) ope[i] = ope[i] - tl3;
+                if (i == 3) ope[i] = ope[i] - tl4;
+                ope[i] = Common.CheckRange(ope[i], 0, 127);
+            }
+
+            partPage vpg = page;
+            int m = (page.chip is YM2203) ? 0 : 3;
+            if (page.chip.lstPartWork[2].cpg.Ch3SpecialMode && page.ch >= m + 3 && page.ch < m + 6)
+            {
+                vpg = page.chip.lstPartWork[2].cpg;
+            }
+
+            MML vmml = new MML();
+            vmml.args = new List<object>();
+            vmml.args.Add(tl1);
+            vmml.type = enmMMLType.unknown;//.TotalLevel;
+            if (mml != null)
+                vmml.line = mml.line;
+            if ((page.slots & 1) != 0 && ope[0] != -1) OutSetTl(vmml, vpg, 0, ope[0]);
+            if ((page.slots & 2) != 0 && ope[1] != -1) OutSetTl(vmml, vpg, 1, ope[1]);
+            if ((page.slots & 4) != 0 && ope[2] != -1) OutSetTl(vmml, vpg, 2, ope[2]);
+            if ((page.slots & 8) != 0 && ope[3] != -1) OutSetTl(vmml, vpg, 3, ope[3]);
+        }
+
         public void OutSetTl(MML mml, partPage page, int ope, int tl)
         {
             ope = (ope == 1) ? 2 : ((ope == 2) ? 1 : ope);
@@ -507,8 +567,46 @@ namespace Core
                     page.beforeVolume = vol;
                 }
             }
+
+            SetFmTL(page, mml);
         }
 
+        public void SetFmTL(partPage page, MML mml)
+        {
+            int tl1 = page.tlDelta1;
+            int tl2 = page.tlDelta2;
+            int tl3 = page.tlDelta3;
+            int tl4 = page.tlDelta4;
+
+            for (int lfo = 0; lfo < 4; lfo++)
+            {
+                if (!page.lfo[lfo].sw)
+                {
+                    continue;
+                }
+                if (page.lfo[lfo].type != eLfoType.Wah)
+                {
+                    continue;
+                }
+
+                if ((page.lfo[lfo].slot & 1) != 0) tl1 += page.lfo[lfo].value + page.lfo[lfo].param[1 + 6];
+                if ((page.lfo[lfo].slot & 2) != 0) tl2 += page.lfo[lfo].value + page.lfo[lfo].param[1 + 6];
+                if ((page.lfo[lfo].slot & 4) != 0) tl3 += page.lfo[lfo].value + page.lfo[lfo].param[1 + 6];
+                if ((page.lfo[lfo].slot & 8) != 0) tl4 += page.lfo[lfo].value + page.lfo[lfo].param[1 + 6];
+            }
+
+            if (page.spg.beforeTlDelta1 != tl1 || page.spg.beforeTlDelta2 != tl2 || page.spg.beforeTlDelta3 != tl3 || page.spg.beforeTlDelta4 != tl4)
+            {
+                if (parent.instFM.ContainsKey(page.instrument))
+                {
+                    OutFmSetTL(page, mml, tl1, tl2, tl3, tl4, page.instrument);
+                }
+                page.spg.beforeTlDelta1 = tl1;
+                page.spg.beforeTlDelta2 = tl2;
+                page.spg.beforeTlDelta3 = tl3;
+                page.spg.beforeTlDelta4 = tl4;
+            }
+        }
         public override void SetKeyOn(partPage page, MML mml)
         {
             page.keyOn = true;
@@ -530,23 +628,30 @@ namespace Core
                     continue;
                 if (pl.type == eLfoType.Hardware)
                     continue;
-                if (pl.type == eLfoType.Wah) continue;
-                if (pl.param[5] != 1)
+                int w = 0;
+                if (pl.type == eLfoType.Wah) w = 1;
+                if (pl.param[w+5] != 1)
                     continue;
 
                 pl.isEnd = false;
-                pl.value = (pl.param[0] == 0) ? pl.param[6] : 0;//ディレイ中は振幅補正は適用されない
-                pl.waitCounter = pl.param[0];
-                pl.direction = pl.param[2] < 0 ? -1 : 1;
-                pl.depthWaitCounter = pl.param[7];
-                pl.depth = pl.param[3];
-                pl.depthV2 = pl.param[2];
+                pl.value = (pl.param[w + 0] == 0) ? pl.param[w + 6] : 0;//ディレイ中は振幅補正は適用されない
+                pl.waitCounter = pl.param[w + 0];
+                pl.direction = pl.param[w + 2] < 0 ? -1 : 1;
+                pl.depthWaitCounter = pl.param[w + 7];
+                pl.depth = pl.param[w + 3];
+                pl.depthV2 = pl.param[w + 2];
 
                 if (pl.type == eLfoType.Vibrato)
                     SetFNum(page, mml);
 
                 if (pl.type == eLfoType.Tremolo)
                     SetVolume(page, mml);
+
+                if (pl.type == eLfoType.Wah)
+                {
+                    page.beforeVolume = -1;
+                    SetFmTL(page, mml);
+                }
 
             }
         }

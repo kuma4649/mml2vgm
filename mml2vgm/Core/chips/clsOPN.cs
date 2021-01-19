@@ -1828,6 +1828,12 @@ namespace Core
                         SetSsgVolume(page, mml);
                 }
 
+                if (pl.type == eLfoType.Wah)
+                {
+                    page.beforeVolume = -1;
+                    SetFmTL(page, mml);
+                }
+
             }
         }
 

@@ -764,6 +764,7 @@ namespace Core
                 )
             {
                 SetFmVolumeM(page, mml);
+                SetFmTL(page, mml);
             }
             else if (page.Type == enmChannelType.SSG)
             {
