@@ -1,4 +1,6 @@
-﻿using System;
+﻿using musicDriverInterface;
+using System;
+using System.Collections.Generic;
 
 namespace Core
 {
@@ -105,7 +107,14 @@ namespace Core
                 return;
             }
 
-            SetInst2Operator(page, mml, n, modeBeforeSend, page.ch);
+            if (parent.instFM[n].Item2.Length == Const.OPL3_INSTRUMENT_SIZE)
+            {
+                SetInst2Operator(page, mml, n, modeBeforeSend, page.ch);
+                return;
+            }
+
+            msgBox.setErrMsg(string.Format(msg.get("E17002"), n), mml.line.Lp);
+            page.instrument = -1;
         }
 
         protected virtual void SetInstToRhythmChannel(partPage page, MML mml, int n, int modeBeforeSend)
@@ -503,6 +512,76 @@ namespace Core
             //}
         }
 
+        public void SetFmTL(partPage page, MML mml)
+        {
+
+            int tl1 = page.tlDelta1;
+
+            for (int lfo = 0; lfo < 4; lfo++)
+            {
+                if (!page.lfo[lfo].sw)
+                {
+                    continue;
+                }
+                if (page.lfo[lfo].type != eLfoType.Wah)
+                {
+                    continue;
+                }
+
+                if ((page.lfo[lfo].slot & 1) != 0) tl1 += page.lfo[lfo].value + page.lfo[lfo].param[1 + 6];
+            }
+
+            if (page.spg.beforeTlDelta1 != tl1 )
+            {
+                if (parent.instFM.ContainsKey(page.instrument))
+                {
+                    OutFmSetTL(page, mml, tl1, page.instrument);
+                }
+                page.spg.beforeTlDelta1 = tl1;
+            }
+        }
+
+        public void OutFmSetTL(partPage page, MML mml, int tl1, int n)
+        {
+            if (!parent.instFM.ContainsKey(n))
+            {
+                msgBox.setWrnMsg(string.Format(msg.get("E11000"), n), mml.line.Lp);
+                return;
+            }
+
+            int alg = parent.instFM[n].Item2[25];
+            int opeTL = -1;
+            if (alg == 0)
+            {
+                opeTL = parent.instFM[n].Item2[12 * 0 + 6];
+                opeTL = opeTL - tl1;
+                opeTL = Common.CheckRange(opeTL, 0, 63);
+            }
+
+            partPage vpg = page;
+            MML vmml = new MML();
+            vmml.args = new List<object>();
+            vmml.args.Add(tl1);
+            vmml.type = enmMMLType.unknown;//.TotalLevel;
+            if (mml != null)
+                vmml.line = mml.line;
+            if (opeTL != -1) OutFmSetTl(vmml, vpg, 0, opeTL);
+        }
+
+        public void OutFmSetTl(MML mml, partPage page, int ope, int tl)
+        {
+
+            SOutData(page,
+                mml,
+                port[0],
+                (byte)(0x40 + ChnToBaseReg(page.ch) + 0),
+                (byte)(
+                        ((parent.instFM[page.instrument].Item2[12 * ope + 5] & 0x3) << 6)  //KL(M)
+                        | Common.CheckRange( tl, 0, 63) //TL
+                    )
+                );
+        }
+
         public override void GetFNumAtoB(partPage page, MML mml
             , out int a, int aOctaveNow, char aCmd, int aShift
             , out int b, int bOctaveNow, char bCmd, int bShift
@@ -558,6 +637,48 @@ namespace Core
 
         public override void SetLfoAtKeyOn(partPage page, MML mml)
         {
+            for (int lfo = 0; lfo < 4; lfo++)
+            {
+                clsLfo pl = page.lfo[lfo];
+                if (!pl.sw)
+                    continue;
+
+                int w = 0;
+                if (pl.type == eLfoType.Wah) w = 1;
+
+                if (pl.param[w + 5] != 1)
+                    continue;
+
+                pl.isEnd = false;
+                pl.value = (pl.param[w + 0] == 0) ? pl.param[w + 6] : 0;//ディレイ中は振幅補正は適用されない
+                pl.waitCounter = pl.param[w + 0];
+                pl.direction = pl.param[w + 2] < 0 ? -1 : 1;
+                pl.depthWaitCounter = pl.param[w + 7];
+                pl.depth = pl.param[w + 3];
+                pl.depthV2 = pl.param[w + 2];
+
+                if (pl.type == eLfoType.Vibrato)
+                {
+                    if (page.Type == enmChannelType.FMOPL)
+                        SetFmFNum(page, mml);
+
+                }
+
+                if (pl.type == eLfoType.Tremolo)
+                {
+                    page.beforeVolume = -1;
+                    if (page.Type == enmChannelType.FMOPL)
+                        SetFmVolume(page, mml);
+                }
+
+                if (pl.type == eLfoType.Wah)
+                {
+                    page.beforeVolume = -1;
+                    if (page.Type == enmChannelType.FMOPL)
+                        SetFmTL(page, mml);
+                }
+
+            }
         }
 
         public override void SetToneDoubler(partPage page, MML mml)
@@ -729,6 +850,8 @@ namespace Core
                                     )
                                 );
                         }
+
+                        SetFmTL(page, mml);
 
                         if (page.keyOff)
                         {

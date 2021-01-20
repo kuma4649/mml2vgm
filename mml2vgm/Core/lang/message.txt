@@ -343,6 +343,7 @@ E16005=This soundchip doesn't have instruments.
 ;YM2413.cs 17000
 E17000=Selected undefined note patch ({0}).
 E17001=ToneDoubler cannot be used if chip is not OPN or OPM.
+E17002=Selected Tone number({0}) is not for YM2413 data.
 
 
 

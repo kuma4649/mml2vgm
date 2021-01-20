@@ -328,6 +328,36 @@ namespace Core
             return (f & 0x1ff) + (o & 0x7) * 0x0200;
         }
 
+        public void OutFmSetTL(partPage page, MML mml, int tl1, int n)
+        {
+            if (!parent.instFM.ContainsKey(n))
+            {
+                msgBox.setWrnMsg(string.Format(msg.get("E11000"), n), mml.line.Lp);
+                return;
+            }
+
+            int ope = parent.instFM[n].Item2[23] & 0x3f;
+            ope = ope - tl1;
+            ope = Common.CheckRange(ope, 0, 127);
+            int kl = parent.instFM[n].Item2[0 * 11 + 5] & 0x3;
+
+            partPage vpg = page;
+            MML vmml = new MML();
+            vmml.args = new List<object>();
+            vmml.args.Add(tl1);
+            vmml.type = enmMMLType.unknown;//.TotalLevel;
+            if (mml != null)
+                vmml.line = mml.line;
+            OutFmSetKLTl(vmml, vpg,kl, ope);
+        }
+
+        public void OutFmSetKLTl(MML mml, partPage page,int kl, int tl)
+        {
+            kl &= 0x3;
+            tl &= 0x3f;
+            SOutData(page, mml, port[0], (byte)(0x2), (byte)((kl << 6) | tl));
+        }
+
         public void SetFmVolume(partPage page, MML mml)
         {
             int vol = page.volume;
@@ -361,6 +391,34 @@ namespace Core
             //}
         }
 
+        public void SetFmTL(partPage page, MML mml)
+        {
+            int tl1 = page.tlDelta1;
+
+            for (int lfo = 0; lfo < 4; lfo++)
+            {
+                if (!page.lfo[lfo].sw)
+                {
+                    continue;
+                }
+                if (page.lfo[lfo].type != eLfoType.Wah)
+                {
+                    continue;
+                }
+
+                if ((page.lfo[lfo].slot & 1) != 0) tl1 += page.lfo[lfo].value + page.lfo[lfo].param[1 + 6];
+            }
+
+            if (page.spg.beforeTlDelta1 != tl1)
+            {
+                if (parent.instFM.ContainsKey(page.instrument))
+                {
+                    OutFmSetTL(page, mml, tl1, page.instrument);
+                }
+                page.spg.beforeTlDelta1 = tl1;
+            }
+        }
+
         public override void SetFNum(partPage page, MML mml)
         {
             SetFmFNum(page, mml);
@@ -375,6 +433,10 @@ namespace Core
         public override void SetVolume(partPage page, MML mml)
         {
             SetFmVolume(page, mml);
+            if (page.Type == enmChannelType.FMOPL)
+            {
+                SetFmTL(page, mml);
+            }
         }
 
         public override void SetKeyOn(partPage page, MML mml)
@@ -391,6 +453,48 @@ namespace Core
 
         public override void SetLfoAtKeyOn(partPage page, MML mml)
         {
+            for (int lfo = 0; lfo < 4; lfo++)
+            {
+                clsLfo pl = page.lfo[lfo];
+                if (!pl.sw)
+                    continue;
+
+                int w = 0;
+                if (pl.type == eLfoType.Wah) w = 1;
+
+                if (pl.param[w + 5] != 1)
+                    continue;
+
+                pl.isEnd = false;
+                pl.value = (pl.param[w + 0] == 0) ? pl.param[w + 6] : 0;//ディレイ中は振幅補正は適用されない
+                pl.waitCounter = pl.param[w + 0];
+                pl.direction = pl.param[w + 2] < 0 ? -1 : 1;
+                pl.depthWaitCounter = pl.param[w + 7];
+                pl.depth = pl.param[w + 3];
+                pl.depthV2 = pl.param[w + 2];
+
+                if (pl.type == eLfoType.Vibrato)
+                {
+                    if (page.Type == enmChannelType.FMOPL)
+                        SetFmFNum(page, mml);
+
+                }
+
+                if (pl.type == eLfoType.Tremolo)
+                {
+                    page.beforeVolume = -1;
+                    if (page.Type == enmChannelType.FMOPL)
+                        SetFmVolume(page, mml);
+                }
+
+                if (pl.type == eLfoType.Wah)
+                {
+                    page.beforeVolume = -1;
+                    if (page.Type == enmChannelType.FMOPL)
+                        SetFmTL(page, mml);
+                }
+
+            }
         }
 
         public override void SetToneDoubler(partPage page, MML mml)

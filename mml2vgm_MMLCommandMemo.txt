@@ -964,7 +964,7 @@ b               -oooooooooooooooooooooooooooooooooooooooooooooo  音符シ
   音色(No)は( 0 - 255 )までの256種類定義できる。
   パラメータの内容についてはFM音源の音色について詳しく説明している書籍やサイトを参照してください。
   
-  定義パターン1
+  定義パターン1(OPN系/OPM)
     "F"を指定するとパラメータDTまで音色を定義する。
     AM SSGEGは0で定義される。
 
@@ -976,7 +976,7 @@ b               -oooooooooooooooooooooooooooooooooooooooooooooo  音符シ
 '@ AL FB
 
 
-  定義パターン2
+  定義パターン2(OPN系/OPM)
     "N"を指定するとパラメータSSGEGまで音色を定義する。
 
 '@ N No "Name"
@@ -986,7 +986,7 @@ b               -oooooooooooooooooooooooooooooooooooooooooooooo  音符シ
 '@ AR DR SR RR SL TL KS ML DT AM SSGEG
 '@ AL FB
 
-  定義パターン3
+  定義パターン3(OPM)
     "M"を指定した音色をYM2151(OPM)で使用すると以下のように解釈される。
 
 '@ M No "Name"
@@ -996,7 +996,7 @@ b               -oooooooooooooooooooooooooooooooooooooooooooooo  音符シ
 '@ AR DR SR RR SL TL KS ML DT1 DT2 AME
 '@ AL FB
 
-  定義パターン4
+  定義パターン4(OPLL)
     "LL"を指定した音色をYM2413(OPLL)で使用すると以下のように解釈される。
 
 '@ LL No "Name"
@@ -1004,7 +1004,7 @@ b               -oooooooooooooooooooooooooooooooooooooooooooooo  音符シ
 '@ AR DR SL RR KL MT AM VB EG KR DT
 '@ TL FB
 
-  定義パターン5
+  定義パターン5(OPL系)
     "L"を指定した音色をYMF262(OPL3)で使用すると以下のように解釈される。
 
 '@ L No "Name"
@@ -1012,7 +1012,7 @@ b               -oooooooooooooooooooooooooooooooooooooooooooooo  音符シ
 '@ AR DR SL RR KSL TL MT AM VIB EGT KSR WS
 '@ CNT FB
 
-  定義パターン6
+  定義パターン6(OPL系)
     "L4"を指定した音色をYMF262(OPL3)で使用すると以下のように解釈される。
 
 '@ L4 No "Name"
@@ -1022,7 +1022,7 @@ b               -oooooooooooooooooooooooooooooooooooooooooooooo  音符シ
 '@ AR DR SL RR KSL TL MT AM VIB EGT KSR WS
 '@ CNT1 CNT2 FB
 
-  定義パターン7
+  定義パターン7(OPNA2)
     "A"を指定した音色を妄想音源YM2609(OPNA2)で使用すると以下のように解釈される。
      DT2 DeTune2    OPNA2はDT2を使用可
      FB  Feed Back  OPNA2はop毎に使用可
