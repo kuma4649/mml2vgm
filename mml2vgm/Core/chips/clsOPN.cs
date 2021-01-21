@@ -2253,6 +2253,7 @@ namespace Core
 
         public override void CmdLoopExtProc(partPage page, MML mml)
         {
+            page.spg.freq = -1;
         }
 
         public override void CmdHardEnvelope(partPage page, MML mml)

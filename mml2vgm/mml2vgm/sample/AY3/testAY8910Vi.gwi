@@ -1,0 +1,33 @@
+﻿'{
+
+	TitleName   =Fanfare ~ Victory
+	TitleNameJ  =ファンファーレ ~ 勝利 
+	GameName    =Final Fantasy
+	GameNameJ   =ファイナルファンタジー
+	SystemName  =AY8910(Orig:FC)
+	SystemNameJ =AY8910(Orig:NES)
+	Composer    =Nobuo Uematsu
+	ComposerJ   =植松伸夫
+	ReleaseDate =
+	Converted   =
+	Notes       =
+
+}
+
+
+'@ E 1,15,0,120,7,100,2,1,AY8910
+'A123 T140D0o2v11l4q0
+'A12  MST36,4,1,1,0
+
+'A1   ){e-gb->e-gb->e-gb->e-gb-}4 EON@1 Q5{e-e-e-}e-<b>c+{e-rc+}e-2.
+'A2    {rre-gb->e-gb->e-gb->e-}4  EON@1 Q5{ggg}ge-f{grf}g2.
+'A3   o4r Q5{e-<b-g}e-f+g+{e-re-}e-e-e-
+
+'A1 L
+
+'A1 < [ b-a-b-a-8>c+c+8c c+8c c8 <b-a- / g a-8f8  ^1 ] b-> d-8e-8^1
+'A2 < [ g f g f8  f f8 e-f8 e-e-8 g f  / e-f8 d-8 ^1 ] g   b-8b8 ^1
+'A3 l8 [ [ Q7e-Q4b- ]4 / [ Q7d-Q4a- ]4 ]4 [ <Q7b>Q4f+ ]4
+
+
+
