@@ -764,7 +764,7 @@ namespace Core
                 )
             {
                 SetFmVolumeM(page, mml);
-                SetFmTL(page, mml);
+                SetFmTLM(page, mml);
             }
             else if (page.Type == enmChannelType.SSG)
             {
@@ -811,6 +811,42 @@ namespace Core
             }
         }
 
+        public void SetFmTLM(partPage page, MML mml)
+        {
+            int tl1 = page.tlDelta1;
+            int tl2 = page.tlDelta2;
+            int tl3 = page.tlDelta3;
+            int tl4 = page.tlDelta4;
+
+            for (int lfo = 0; lfo < 4; lfo++)
+            {
+                if (!page.lfo[lfo].sw)
+                {
+                    continue;
+                }
+                if (page.lfo[lfo].type != eLfoType.Wah)
+                {
+                    continue;
+                }
+
+                if ((page.lfo[lfo].slot & 1) != 0) tl1 += page.lfo[lfo].value + page.lfo[lfo].param[1 + 6];
+                if ((page.lfo[lfo].slot & 2) != 0) tl2 += page.lfo[lfo].value + page.lfo[lfo].param[1 + 6];
+                if ((page.lfo[lfo].slot & 4) != 0) tl3 += page.lfo[lfo].value + page.lfo[lfo].param[1 + 6];
+                if ((page.lfo[lfo].slot & 8) != 0) tl4 += page.lfo[lfo].value + page.lfo[lfo].param[1 + 6];
+            }
+
+            if (page.spg.beforeTlDelta1 != tl1 || page.spg.beforeTlDelta2 != tl2 || page.spg.beforeTlDelta3 != tl3 || page.spg.beforeTlDelta4 != tl4)
+            {
+                if (parent.instFM.ContainsKey(page.instrument))
+                {
+                    OutFmSetTLM(page, mml, tl1, tl2, tl3, tl4, page.instrument);
+                }
+                page.spg.beforeTlDelta1 = tl1;
+                page.spg.beforeTlDelta2 = tl2;
+                page.spg.beforeTlDelta3 = tl3;
+                page.spg.beforeTlDelta4 = tl4;
+            }
+        }
 
         public override void SetLfoAtKeyOn(partPage page, MML mml)
         {
@@ -1920,10 +1956,10 @@ namespace Core
                 vpg = page.chip.lstPartWork[8].cpg;
             }
 
-            if (op[0] != -1) OutFmSetWtHTl(mml, vpg, 0, 0, op[0]);
-            if (op[1] != -1) OutFmSetWtHTl(mml, vpg, 1, 0, op[1]);
-            if (op[2] != -1) OutFmSetWtHTl(mml, vpg, 2, 0, op[2]);
-            if (op[3] != -1) OutFmSetWtHTl(mml, vpg, 3, 0, op[3]);
+            if (op[0] != -1) OutFmSetWtHTl(mml, vpg, 0, parent.instFM[n].Item2[0 * opeLength + 1 + 13], op[0]);
+            if (op[1] != -1) OutFmSetWtHTl(mml, vpg, 1, parent.instFM[n].Item2[1 * opeLength + 1 + 13], op[1]);
+            if (op[2] != -1) OutFmSetWtHTl(mml, vpg, 2, parent.instFM[n].Item2[2 * opeLength + 1 + 13], op[2]);
+            if (op[3] != -1) OutFmSetWtHTl(mml, vpg, 3, parent.instFM[n].Item2[3 * opeLength + 1 + 13], op[3]);
 
             OutFmSetVolumeM(page, mml, vol, n);
 
@@ -2026,14 +2062,123 @@ namespace Core
             vmml.type = enmMMLType.Volume;
             if (mml != null)
                 vmml.line = mml.line;
-            if ((page.slots & 1) != 0 && ope[0] != -1) OutFmSetWtHTl(vmml, vpg, 0, 0, ope[0]);
-            if ((page.slots & 2) != 0 && ope[1] != -1) OutFmSetWtHTl(vmml, vpg, 1, 0, ope[1]);
-            if ((page.slots & 4) != 0 && ope[2] != -1) OutFmSetWtHTl(vmml, vpg, 2, 0, ope[2]);
-            if ((page.slots & 8) != 0 && ope[3] != -1) OutFmSetWtHTl(vmml, vpg, 3, 0, ope[3]);
-            //if ((pw.ppg[pw.cpgNum].slots & 1) != 0 ) ((ClsOPN)pw.ppg[pw.cpgNum].chip).OutFmSetTl(vpw, 0, ope[0]);
-            //if ((pw.ppg[pw.cpgNum].slots & 2) != 0 ) ((ClsOPN)pw.ppg[pw.cpgNum].chip).OutFmSetTl(vpw, 1, ope[1]);
-            //if ((pw.ppg[pw.cpgNum].slots & 4) != 0 ) ((ClsOPN)pw.ppg[pw.cpgNum].chip).OutFmSetTl(vpw, 2, ope[2]);
-            //if ((pw.ppg[pw.cpgNum].slots & 8) != 0 ) ((ClsOPN)pw.ppg[pw.cpgNum].chip).OutFmSetTl(vpw, 3, ope[3]);
+
+            if (parent.instFM[n].Item2.Length == Const.OPNA2_INSTRUMENT_SIZE)
+            {
+                if ((page.slots & 1) != 0 && ope[0] != -1) OutFmSetWtHTl(vmml, vpg, 0, parent.instFM[n].Item2[0 * 16 + 1 + 13], ope[0]);
+                if ((page.slots & 2) != 0 && ope[1] != -1) OutFmSetWtHTl(vmml, vpg, 1, parent.instFM[n].Item2[1 * 16 + 1 + 13], ope[1]);
+                if ((page.slots & 4) != 0 && ope[2] != -1) OutFmSetWtHTl(vmml, vpg, 2, parent.instFM[n].Item2[2 * 16 + 1 + 13], ope[2]);
+                if ((page.slots & 8) != 0 && ope[3] != -1) OutFmSetWtHTl(vmml, vpg, 3, parent.instFM[n].Item2[3 * 16 + 1 + 13], ope[3]);
+            }
+            else
+            {
+                if ((page.slots & 1) != 0 && ope[0] != -1) OutFmSetWtHTl(vmml, vpg, 0, 0, ope[0]);
+                if ((page.slots & 2) != 0 && ope[1] != -1) OutFmSetWtHTl(vmml, vpg, 1, 0, ope[1]);
+                if ((page.slots & 4) != 0 && ope[2] != -1) OutFmSetWtHTl(vmml, vpg, 2, 0, ope[2]);
+                if ((page.slots & 8) != 0 && ope[3] != -1) OutFmSetWtHTl(vmml, vpg, 3, 0, ope[3]);
+            }
+
+        }
+
+        public void OutFmSetTLM(partPage page, MML mml, int tl1, int tl2, int tl3, int tl4, int n)
+        {
+            if (!parent.instFM.ContainsKey(n))
+            {
+                msgBox.setWrnMsg(string.Format(msg.get("E11000"), n), mml.line.Lp);
+                return;
+            }
+
+            int alg;
+            int[] ope;
+            if (parent.instFM[n].Item2.Length == Const.OPNA2_INSTRUMENT_SIZE)
+            {
+                alg = parent.instFM[n].Item2[65] == 0xff ? 8 : (parent.instFM[n].Item2[65] & 0x7);
+                ope = new int[4] {
+                    parent.instFM[n].Item2[0 * 16 + 1 + 5]// 5 : TL
+                    , parent.instFM[n].Item2[1 * 16 + 1 + 5]// 5 : TL
+                    , parent.instFM[n].Item2[2 * 16 + 1 + 5]// 5 : TL
+                    , parent.instFM[n].Item2[3 * 16 + 1 + 5]// 5 : TL
+                };
+            }
+            else
+            {
+                alg = parent.instFM[n].Item2[45] & 0x7;
+                ope = new int[4] {
+                    parent.instFM[n].Item2[0*Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
+                    , parent.instFM[n].Item2[1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
+                    , parent.instFM[n].Item2[2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
+                    , parent.instFM[n].Item2[3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
+                };
+            }
+
+            int[][] algs = new int[9][]
+            {
+                new int[4] { 1,1,1,0}
+                ,new int[4] { 1,1,1,0}
+                ,new int[4] { 1,1,1,0}
+                ,new int[4] { 1,1,1,0}
+                ,new int[4] { 1,0,1,0}
+                ,new int[4] { 1,0,0,0}
+                ,new int[4] { 1,0,0,0}
+                ,new int[4] { 0,0,0,0}
+                ,new int[4] { 0 , 0 , 0 , 0 } // ALG Link向け
+            };
+
+            if (alg == 8)
+            {
+                algs = GetVolumeOpe(algs, parent.instFM[n].Item2, false);
+                for(int i = 0; i < algs[alg].Length; i++)
+                {
+                    algs[alg][i] = algs[alg][i] == 0 ? 1 : 0;
+                }
+            }
+
+            for (int i = 0; i < 4; i++)
+            {
+                if (algs[alg][i] == 0 || (page.slots & (1 << i)) == 0)
+                {
+                    ope[i] = -1;
+                    continue;
+                }
+                if (i == 0) ope[i] = ope[i] - tl1;
+                if (i == 1) ope[i] = ope[i] - tl2;
+                if (i == 2) ope[i] = ope[i] - tl3;
+                if (i == 3) ope[i] = ope[i] - tl4;
+                ope[i] = Common.CheckRange(ope[i], 0, 127);
+            }
+
+            partPage vpg = page;
+            if (page.chip.lstPartWork[2].cpg.Ch3SpecialMode && page.ch >= 12 && page.ch < 15)
+            {
+                vpg = page.chip.lstPartWork[2].cpg;
+            }
+            if (page.chip.lstPartWork[8].cpg.Ch3SpecialMode && page.ch >= 15 && page.ch < 18)
+            {
+                vpg = page.chip.lstPartWork[8].cpg;
+            }
+
+            MML vmml = new MML();
+            vmml.args = new List<object>();
+            vmml.args.Add(tl1);
+            vmml.type = enmMMLType.unknown;//.TotalLevel;
+            if (mml != null)
+                vmml.line = mml.line;
+
+            if (parent.instFM[n].Item2.Length == Const.OPNA2_INSTRUMENT_SIZE)
+            {
+                if ((page.slots & 1) != 0 && ope[0] != -1) OutFmSetWtHTl(vmml, vpg, 0, parent.instFM[n].Item2[0 * 16 + 1 + 13], ope[0]);
+                if ((page.slots & 2) != 0 && ope[1] != -1) OutFmSetWtHTl(vmml, vpg, 1, parent.instFM[n].Item2[1 * 16 + 1 + 13], ope[1]);
+                if ((page.slots & 4) != 0 && ope[2] != -1) OutFmSetWtHTl(vmml, vpg, 2, parent.instFM[n].Item2[2 * 16 + 1 + 13], ope[2]);
+                if ((page.slots & 8) != 0 && ope[3] != -1) OutFmSetWtHTl(vmml, vpg, 3, parent.instFM[n].Item2[3 * 16 + 1 + 13], ope[3]);
+            }
+            else
+            {
+                if ((page.slots & 1) != 0 && ope[0] != -1) OutFmSetWtHTl(vmml, vpg, 0, 0, ope[0]);
+                if ((page.slots & 2) != 0 && ope[1] != -1) OutFmSetWtHTl(vmml, vpg, 1, 0, ope[1]);
+                if ((page.slots & 4) != 0 && ope[2] != -1) OutFmSetWtHTl(vmml, vpg, 2, 0, ope[2]);
+                if ((page.slots & 8) != 0 && ope[3] != -1) OutFmSetWtHTl(vmml, vpg, 3, 0, ope[3]);
+            }
+
         }
 
         public override void SetupPageData(partWork pw, partPage page)
