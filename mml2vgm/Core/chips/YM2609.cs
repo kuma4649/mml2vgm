@@ -817,6 +817,7 @@ namespace Core
             int tl2 = page.tlDelta2;
             int tl3 = page.tlDelta3;
             int tl4 = page.tlDelta4;
+            int slot = 0;
 
             for (int lfo = 0; lfo < 4; lfo++)
             {
@@ -829,17 +830,17 @@ namespace Core
                     continue;
                 }
 
-                if ((page.lfo[lfo].slot & 1) != 0) tl1 += page.lfo[lfo].value + page.lfo[lfo].param[1 + 6];
-                if ((page.lfo[lfo].slot & 2) != 0) tl2 += page.lfo[lfo].value + page.lfo[lfo].param[1 + 6];
-                if ((page.lfo[lfo].slot & 4) != 0) tl3 += page.lfo[lfo].value + page.lfo[lfo].param[1 + 6];
-                if ((page.lfo[lfo].slot & 8) != 0) tl4 += page.lfo[lfo].value + page.lfo[lfo].param[1 + 6];
+                if ((page.lfo[lfo].slot & 1) != 0) { tl1 += page.lfo[lfo].value + page.lfo[lfo].param[1 + 6]; slot |= 1; }
+                if ((page.lfo[lfo].slot & 2) != 0) { tl2 += page.lfo[lfo].value + page.lfo[lfo].param[1 + 6]; slot |= 2; }
+                if ((page.lfo[lfo].slot & 4) != 0) { tl3 += page.lfo[lfo].value + page.lfo[lfo].param[1 + 6]; slot |= 4; }
+                if ((page.lfo[lfo].slot & 8) != 0) { tl4 += page.lfo[lfo].value + page.lfo[lfo].param[1 + 6]; slot |= 8; }
             }
 
             if (page.spg.beforeTlDelta1 != tl1 || page.spg.beforeTlDelta2 != tl2 || page.spg.beforeTlDelta3 != tl3 || page.spg.beforeTlDelta4 != tl4)
             {
                 if (parent.instFM.ContainsKey(page.instrument))
                 {
-                    OutFmSetTLM(page, mml, tl1, tl2, tl3, tl4, page.instrument);
+                    OutFmSetTLM(page, mml, tl1, tl2, tl3, tl4, slot, page.instrument);
                 }
                 page.spg.beforeTlDelta1 = tl1;
                 page.spg.beforeTlDelta2 = tl2;
@@ -2080,7 +2081,7 @@ namespace Core
 
         }
 
-        public void OutFmSetTLM(partPage page, MML mml, int tl1, int tl2, int tl3, int tl4, int n)
+        public void OutFmSetTLM(partPage page, MML mml, int tl1, int tl2, int tl3, int tl4,int slot, int n)
         {
             if (!parent.instFM.ContainsKey(n))
             {
@@ -2135,7 +2136,7 @@ namespace Core
 
             for (int i = 0; i < 4; i++)
             {
-                if (algs[alg][i] == 0 || (page.slots & (1 << i)) == 0)
+                if (algs[alg][i] == 0 || (slot & (1 << i)) == 0)
                 {
                     ope[i] = -1;
                     continue;

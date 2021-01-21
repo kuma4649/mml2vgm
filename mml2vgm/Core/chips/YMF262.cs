@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using musicDriverInterface;
+using System;
+using System.Collections.Generic;
 
 namespace Core
 {
@@ -212,7 +214,114 @@ namespace Core
             SOutData(page, mml, port, (byte)(0xe0 + adr), (byte)(ws & 0x7));
         }
 
+        public override void SetFmTL(partPage page, MML mml)
+        {
+            if (!page.isOp4Mode)
+            {
+                base.SetFmTL(page, mml);
+                return;
+            }
 
+            int tl1 = page.tlDelta1;
+            int tl2 = page.tlDelta2;
+            int tl3 = page.tlDelta3;
+            int tl4 = page.tlDelta4;
+            int slot = 0;
+
+            for (int lfo = 0; lfo < 4; lfo++)
+            {
+                if (!page.lfo[lfo].sw)
+                {
+                    continue;
+                }
+                if (page.lfo[lfo].type != eLfoType.Wah)
+                {
+                    continue;
+                }
+
+                if ((page.lfo[lfo].slot & 1) != 0) { tl1 += page.lfo[lfo].value + page.lfo[lfo].param[1 + 6]; slot |= 1; }
+                if ((page.lfo[lfo].slot & 2) != 0) { tl2 += page.lfo[lfo].value + page.lfo[lfo].param[1 + 6]; slot |= 2; }
+                if ((page.lfo[lfo].slot & 4) != 0) { tl3 += page.lfo[lfo].value + page.lfo[lfo].param[1 + 6]; slot |= 4; }
+                if ((page.lfo[lfo].slot & 8) != 0) { tl4 += page.lfo[lfo].value + page.lfo[lfo].param[1 + 6]; slot |= 8; }
+            }
+
+            if (page.spg.beforeTlDelta1 != tl1 || page.spg.beforeTlDelta2 != tl2 || page.spg.beforeTlDelta3 != tl3 || page.spg.beforeTlDelta4 != tl4)
+            {
+                if (parent.instFM.ContainsKey(page.instrument))
+                {
+                    OutFmSetTL4OP(page, mml, tl1, tl2, tl3, tl4, slot, page.instrument);
+                }
+                page.spg.beforeTlDelta1 = tl1;
+                page.spg.beforeTlDelta2 = tl2;
+                page.spg.beforeTlDelta3 = tl3;
+                page.spg.beforeTlDelta4 = tl4;
+            }
+
+        }
+
+        public void OutFmSetTL4OP(partPage page, MML mml, int tl1, int tl2, int tl3, int tl4, int slot, int n)
+        {
+            if (!parent.instFM.ContainsKey(n))
+            {
+                msgBox.setWrnMsg(string.Format(msg.get("E11000"), n), mml.line.Lp);
+                return;
+            }
+
+            byte[] inst = parent.instFM[n].Item2;
+            int cnt1 = inst[49];
+            int cnt2 = inst[50];
+            int alg = ((cnt1 & 0x1) << 1) | ((cnt2 & 0x1) << 0);
+
+            int[] ope = new int[4] {
+                inst[12*0+6]&0x3f
+                , inst[12*1+6]&0x3f
+                , inst[12*2+6]&0x3f
+                , inst[12*3+6]&0x3f
+            };
+            int[][] algs = new int[4][]
+            {
+                new int[4] { 1,1,1,0}// 0 0
+                ,new int[4] { 1,0,1,0}// 0 1
+                ,new int[4] { 0,1,1,0}// 1 0
+                ,new int[4] { 0,1,0,0}// 1 1
+            };
+
+            for (int i = 0; i < 4; i++)
+            {
+                if (algs[alg][i] == 0 || (slot & (1 << i)) == 0)
+                {
+                    ope[i] = -1;
+                    continue;
+                }
+                if (i == 0) ope[i] = ope[i] - tl1;
+                if (i == 1) ope[i] = ope[i] - tl2;
+                if (i == 2) ope[i] = ope[i] - tl3;
+                if (i == 3) ope[i] = ope[i] - tl4;
+                ope[i] = Common.CheckRange(ope[i], 0, 63);
+            }
+
+            MML vmml = new MML();
+            vmml.args = new List<object>();
+            vmml.args.Add(tl1);
+            vmml.type = enmMMLType.unknown;//.TotalLevel;
+            if (mml != null)
+                vmml.line = mml.line;
+
+            if (ope[0] != -1) OutFmSetTl4OP(vmml, page, 0, ope[0]);
+            if (ope[1] != -1) OutFmSetTl4OP(vmml, page, 1, ope[1]);
+            if (ope[2] != -1) OutFmSetTl4OP(vmml, page, 2, ope[2]);
+            if (ope[3] != -1) OutFmSetTl4OP(vmml, page, 3, ope[3]);
+        }
+
+        private void OutFmSetTl4OP(MML mml, partPage page, int ope, int tl)
+        {
+            SOutData(page, mml, port[page.ch / 9], (byte)(0x40 + ChnToBaseReg(page.ch) + ope * 3 + (ope > 1 ? 2 : 0)),
+                (byte)(
+                    ((parent.instFM[page.instrument].Item2[12 * ope + 5] & 0x3) << 6)  //KL(M)
+                    | Common.CheckRange(((parent.instFM[page.instrument].Item2[12 * ope + 6] & 0x3f) + tl), 0, 63) //TL
+                )
+            );
+        }
 
         public override void CmdMode(partPage page, MML mml)
         {
@@ -398,7 +507,10 @@ namespace Core
                                     );
                                 }
                             }
+
                         }
+
+                        SetFmTL(page, mml);
 
                         if (page.keyOff)
                         {

@@ -512,7 +512,7 @@ namespace Core
             //}
         }
 
-        public void SetFmTL(partPage page, MML mml)
+        public virtual void SetFmTL(partPage page, MML mml)
         {
 
             int tl1 = page.tlDelta1;

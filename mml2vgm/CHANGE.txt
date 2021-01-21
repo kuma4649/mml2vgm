@@ -1,4 +1,7 @@
 更新履歴
+TAG352 2021/01/22
+  Core:YM3812:YMF262:Wah LFOに対応(lfoWahTest.gwi)
+
 TAG351 2021/01/21 2nd
   Core:YM2609:Wahの処理でOPNA2向け音色を選択したときの不具合を修正
 
