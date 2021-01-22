@@ -4783,6 +4783,7 @@ namespace Core
 
                         if (!page.arpTieMode)
                         {
+                            page.chip.SetKeyOff(page, null);
                             page.chip.SetEnvelopeAtKeyOn(page, null);
                             page.chip.SetVArpeggioAtKeyOn(page, null);
                             page.chip.SetKeyOn(page, null);
