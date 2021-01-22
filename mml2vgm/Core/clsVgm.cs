@@ -4784,6 +4784,7 @@ namespace Core
                         if (!page.arpTieMode)
                         {
                             page.chip.SetEnvelopeAtKeyOn(page, null);
+                            page.chip.SetVArpeggioAtKeyOn(page, null);
                             page.chip.SetKeyOn(page, null);
 
                         }
@@ -4802,11 +4803,19 @@ namespace Core
                             }
                             else
                             {
-                                if (page.envIndex != -1)
-                                {
-                                    page.envIndex = 3;//RR phase
-                                    page.envCounter = 0;
-                                }
+                                //if (page.varpeggioMode)
+                                //{
+                                //    page.varpIndex = 1;//RR
+                                //}
+                                
+                                //if(page.envelopeMode)
+                                //{
+                                //    if (page.envIndex != -1)
+                                //    {
+                                //        page.envIndex = 3;//RR phase
+                                //        page.envCounter = 0;
+                                //    }
+                                //}
                             }
                         }
 

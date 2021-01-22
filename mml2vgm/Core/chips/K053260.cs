@@ -838,7 +838,13 @@ namespace Core
             byte v = (byte)(beforeKeyON != -1 ? beforeKeyON : 0);
             foreach (partWork pw in lstPartWork)
             {
-                if (pw.cpg.keyOff && !pw.cpg.envelopeMode && !pw.cpg.varpeggioMode)
+                // keyOffの指示がでていて
+                //    + ( 
+                //        次のKeyONの指示もでている
+                //    or  エンベロープがOFFっている
+                //    or  VアルペジオがOFFっている
+                //      )
+                if (pw.cpg.keyOff && (pw.cpg.keyOn || !pw.cpg.envelopeMode && !pw.cpg.varpeggioMode))
                 {
                     v &= (byte)(0xfe << pw.cpg.ch);
                     pw.cpg.keyOff = false;
