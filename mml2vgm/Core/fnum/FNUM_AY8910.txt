@@ -1,4 +1,10 @@
-﻿' TP = M / (ftone * 16)       16:Divider
+﻿'
+'
+'
+
+MASTERCLOCK=1789750
+
+' TP = M / (ftone * 16)       16:Divider
 '       c    c+   d    d+   e    f    f+   g    g+   a    a+   b
 FNUM_00=$D5D,$C9C,$BE7,$B3C,$A9B,$A02,$973,$8EB,$86B,$7F2,$780,$714
 FNUM_00=$6AF,$64E,$5F4,$59E,$54E,$501,$4BA,$476,$436,$3F9,$3C0,$38A

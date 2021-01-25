@@ -46,6 +46,10 @@ namespace Core
                     FNumTbl[0][c++] = (int)v;
                     if (c == FNumTbl[0].Length) break;
                 }
+                if (dic.ContainsKey("MASTERCLOCK"))
+                {
+                    Frequency = (int)dic["MASTERCLOCK"][0];
+                }
             }
 
             Ch = new ClsChannel[ChMax];
