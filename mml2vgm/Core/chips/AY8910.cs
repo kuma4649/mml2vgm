@@ -20,6 +20,8 @@ namespace Core
 
         public byte SSGKeyOn = 0x3f;
         public int noiseFreq = -1;
+        public byte ChipType = 0;
+        public byte Flags = 0;
 
         public AY8910(ClsVgm parent, int chipID, string initialPartName, string stPath, int chipNumber) : base(parent, chipID, initialPartName, stPath, chipNumber)
         {
@@ -49,6 +51,14 @@ namespace Core
                 if (dic.ContainsKey("MASTERCLOCK"))
                 {
                     Frequency = (int)dic["MASTERCLOCK"][0];
+                }
+                if (dic.ContainsKey("CHIPTYPE"))
+                {
+                    ChipType = (byte)(int)dic["CHIPTYPE"][0];
+                }
+                if (dic.ContainsKey("FLAGS"))
+                {
+                    Flags = (byte)(int)dic["FLAGS"][0];
                 }
             }
 

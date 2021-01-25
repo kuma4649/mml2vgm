@@ -3587,8 +3587,8 @@ namespace Core
             {
                 AY8910 a = ay8910[0] != null ? ay8910[0] : ay8910[1];
                 Common.SetLE32(dat, 0x74, (uint)a.Frequency | (uint)(useAY8910_S == 0 ? 0 : 0x40000000));
-                dat[0x78] = new outDatum(enmMMLType.unknown, null, null, 0);
-                dat[0x79] = new outDatum(enmMMLType.unknown, null, null, 0);
+                dat[0x78] = new outDatum(enmMMLType.unknown, null, null, a.ChipType);
+                dat[0x79] = new outDatum(enmMMLType.unknown, null, null, a.Flags);
                 dat[0x7a] = new outDatum(enmMMLType.unknown, null, null, 0);
                 dat[0x7b] = new outDatum(enmMMLType.unknown, null, null, 0);
             }

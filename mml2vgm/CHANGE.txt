@@ -1,4 +1,7 @@
 更新履歴
+TAG355 2021/01/25 2nd
+  Core:AY8910:FNUMテーブルにchiptypeとflagsを指定できるようにした
+
 TAG354 2021/01/25
   Core:AY8910:FNUMテーブルにmasterclockを指定できるようにした
 
