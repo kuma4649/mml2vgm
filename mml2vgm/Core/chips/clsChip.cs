@@ -280,6 +280,7 @@ namespace Core
             }
             else
             {
+                page.envelopeMode = true;
                 if (page.envInstrument != n)
                 {
                     page.envInstrument = n;

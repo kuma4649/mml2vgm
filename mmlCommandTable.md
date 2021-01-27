@@ -3288,6 +3288,312 @@
     0で最小(0.0)、127で最大(1.0)の量になります。  
 
 
+### LPFエフェクトスイッチ  
+-----------  
+- Command  
+    XLpS  
+- Format  
+    XLpSn  
+- 設定可能範囲  
+    n:0-1(def:0)  
+- Support chips  
+    - YM2609  
+- Remark  
+    LPFエフェクトのスイッチを設定する。  
+- Description  
+    LPFエフェクトのスイッチを設定します。  
+    0でオフ、1でオンです。  
+
+
+### LPFエフェクトレート  
+-----------  
+- Command  
+    XLpR  
+- Format  
+    XLpRn  
+- 設定可能範囲  
+    n:0-255(def:126)  
+- Support chips  
+    - YM2609  
+- Remark  
+    LPFエフェクトのレートを設定する。  
+- Description  
+    LPFエフェクトのレート(周波数)を設定します。  
+    設定値(0～255)で(1～38500Hz)に対応します。  
+
+
+### LPFエフェクトQ値  
+-----------  
+- Command  
+    XLpQ  
+- Format  
+    XLpQn  
+- 設定可能範囲  
+    n:0-255(def:67)  
+- Support chips  
+    - YM2609  
+- Remark  
+    LPFエフェクトのQ値を設定する。  
+- Description  
+    LPFエフェクトのQ値を設定します。  
+    設定値(0～255)で(0.1～20.0)に対応します。  
+
+
+### HPFエフェクトスイッチ  
+-----------  
+- Command  
+    XHpS  
+- Format  
+    XHpSn  
+- 設定可能範囲  
+    n:0-1(def:0)  
+- Support chips  
+    - YM2609  
+- Remark  
+    HPFエフェクトのスイッチを設定する。  
+- Description  
+    HPFエフェクトのスイッチを設定します。  
+    0でオフ、1でオンです。  
+
+
+### HPFエフェクトレート  
+-----------  
+- Command  
+    XHpR  
+- Format  
+    XHpRn  
+- 設定可能範囲  
+    n:0-255(def:126)  
+- Support chips  
+    - YM2609  
+- Remark  
+    HPFエフェクトのレートを設定する。  
+- Description  
+    HPFエフェクトのレート(周波数)を設定します。  
+    設定値(0～255)で(1～38500Hz)に対応します。  
+
+
+### HPFエフェクトQ値  
+-----------  
+- Command  
+    XHpQ  
+- Format  
+    XHpQn  
+- 設定可能範囲  
+    n:0-255(def:67)  
+- Support chips  
+    - YM2609  
+- Remark  
+    HPFエフェクトのQ値を設定する。  
+- Description  
+    HPFエフェクトのQ値を設定します。  
+    設定値(0～255)で(0.1～20.0)に対応します。  
+
+
+### EQ low システムエフェクト スイッチ  
+-----------  
+- Command  
+    SXElS  
+- Format  
+    SXElSn  
+- 設定可能範囲  
+    n:0-1(def:0)  
+- Support chips  
+    - YM2609  
+- Remark  
+    EQ low システムエフェクトのスイッチを設定する。  
+- Description  
+    EQ low システムエフェクトのスイッチを設定します。  
+    0でオフ、1でオンです。  
+
+
+### EQ low システムエフェクト レート  
+-----------  
+- Command  
+    SXElR  
+- Format  
+    SXElRn  
+- 設定可能範囲  
+    n:0-255(def:126)  
+- Support chips  
+    - YM2609  
+- Remark  
+    EQ low システムエフェクトのレートを設定する。  
+- Description  
+    EQ low システムエフェクトのレート(周波数)を設定します。  
+    設定値(0～255)で(1～38500Hz)に対応します。  
+
+
+### EQ low システムエフェクト gain値  
+-----------  
+- Command  
+    SXElG  
+- Format  
+    SXElGn  
+- 設定可能範囲  
+    n:0-255(def:141)  
+- Support chips  
+    - YM2609  
+- Remark  
+    EQ low システムエフェクトのgain値を設定する。  
+- Description  
+    EQ low システムエフェクトのgain値を設定します。  
+    設定値(0～255)で(-20～+19.84375)に対応します。  
+
+
+### EQ low システムエフェクトQ値  
+-----------  
+- Command  
+    SXElQ  
+- Format  
+    SXElQn  
+- 設定可能範囲  
+    n:0-255(def:67)  
+- Support chips  
+    - YM2609  
+- Remark  
+    EQ low システムエフェクトのQ値を設定する。  
+- Description  
+    EQ low システムエフェクトのQ値を設定します。  
+    設定値(0～255)で(0.1～20.0)に対応します。  
+
+
+### EQ mid システムエフェクト スイッチ  
+-----------  
+- Command  
+    SXEmS  
+- Format  
+    SXEmSn  
+- 設定可能範囲  
+    n:0-1(def:0)  
+- Support chips  
+    - YM2609  
+- Remark  
+    EQ mid システムエフェクトのスイッチを設定する。  
+- Description  
+    EQ mid システムエフェクトのスイッチを設定します。  
+    0でオフ、1でオンです。  
+
+
+### EQ mid システムエフェクト レート  
+-----------  
+- Command  
+    SXEmR  
+- Format  
+    SXEmRn  
+- 設定可能範囲  
+    n:0-255(def:126)  
+- Support chips  
+    - YM2609  
+- Remark  
+    EQ mid システムエフェクトのレートを設定する。  
+- Description  
+    EQ mid システムエフェクトのレート(周波数)を設定します。  
+    設定値(0～255)で(1～38500Hz)に対応します。  
+
+
+### EQ mid システムエフェクト gain値  
+-----------  
+- Command  
+    SXEmG  
+- Format  
+    SXEmGn  
+- 設定可能範囲  
+    n:0-255(def:141)  
+- Support chips  
+    - YM2609  
+- Remark  
+    EQ mid システムエフェクトのgain値を設定する。  
+- Description  
+    EQ mid システムエフェクトのgain値を設定します。  
+    設定値(0～255)で(-20～+19.84375)に対応します。  
+
+
+### EQ mid システムエフェクトQ値  
+-----------  
+- Command  
+    SXEmQ  
+- Format  
+    SXEmQn  
+- 設定可能範囲  
+    n:0-255(def:67)  
+- Support chips  
+    - YM2609  
+- Remark  
+    EQ mid システムエフェクトのQ値を設定する。  
+- Description  
+    EQ mid システムエフェクトのQ値を設定します。  
+    設定値(0～255)で(0.1～20.0)に対応します。  
+
+
+### EQ high システムエフェクト スイッチ  
+-----------  
+- Command  
+    SXEhS  
+- Format  
+    SXEhSn  
+- 設定可能範囲  
+    n:0-1(def:0)  
+- Support chips  
+    - YM2609  
+- Remark  
+    EQ high システムエフェクトのスイッチを設定する。  
+- Description  
+    EQ high システムエフェクトのスイッチを設定します。  
+    0でオフ、1でオンです。  
+
+
+### EQ high システムエフェクト レート  
+-----------  
+- Command  
+    SXEhR  
+- Format  
+    SXEhRn  
+- 設定可能範囲  
+    n:0-255(def:126)  
+- Support chips  
+    - YM2609  
+- Remark  
+    EQ high システムエフェクトのレートを設定する。  
+- Description  
+    EQ high システムエフェクトのレート(周波数)を設定します。  
+    設定値(0～255)で(1～38500Hz)に対応します。  
+
+
+### EQ high システムエフェクト gain値  
+-----------  
+- Command  
+    SXEhG  
+- Format  
+    SXEhGn  
+- 設定可能範囲  
+    n:0-255(def:141)  
+- Support chips  
+    - YM2609  
+- Remark  
+    EQ high システムエフェクトのgain値を設定する。  
+- Description  
+    EQ high システムエフェクトのgain値を設定します。  
+    設定値(0～255)で(-20～+19.84375)に対応します。  
+
+
+### EQ high システムエフェクトQ値  
+-----------  
+- Command  
+    SXEhQ  
+- Format  
+    SXEhQn  
+- 設定可能範囲  
+    n:0-255(def:67)  
+- Support chips  
+    - YM2609  
+- Remark  
+    EQ high システムエフェクトのQ値を設定する。  
+- Description  
+    EQ high システムエフェクトのQ値を設定します。  
+    設定値(0～255)で(0.1～20.0)に対応します。  
+
+
 ### Fnum固定モード  
 -----------  
 - Command  
