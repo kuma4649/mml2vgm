@@ -1414,8 +1414,6 @@ namespace Core
 
         public override void CmdEffect(partPage page, MML mml)
         {
-            if (mml.args.Count == 3)
-            {
                 byte ch = (byte)page.ch;
                 if (ch < 12)
                 {
@@ -1518,7 +1516,95 @@ namespace Core
                             break;
                     }
                 }
-            }
+                else if ((string)mml.args[0] == "Lp")//LPF
+                {
+                    int v = (int)mml.args[2];
+                    switch ((char)mml.args[1])
+                    {
+                        case 'S'://switch
+                            page.effectLPF.Sw = v & 0x1;
+                            SOutData(page, mml, port[3], 0x23, ch);
+                            SOutData(page, mml, port[3], 0xc0, (byte)page.effectLPF.Sw);
+                            break;
+                        case 'R'://rate
+                            page.effectLPF.Freq = v & 0xff;
+                            SOutData(page, mml, port[3], 0x23, ch);
+                            SOutData(page, mml, port[3], 0xc1, (byte)page.effectLPF.Freq);
+                            break;
+                        case 'Q'://Q
+                            page.effectLPF.Q = v & 0xff;
+                            SOutData(page, mml, port[3], 0x23, ch);
+                            SOutData(page, mml, port[3], 0xc2, (byte)page.effectLPF.Q);
+                            break;
+                    }
+
+                }
+                else if ((string)mml.args[0] == "Hp")//HPF
+                {
+                    int v = (int)mml.args[2];
+                    switch ((char)mml.args[1])
+                    {
+                        case 'S'://switch
+                            page.effectHPF.Sw = v & 0x1;
+                            SOutData(page, mml, port[3], 0x23, ch);
+                            SOutData(page, mml, port[3], 0xc3, (byte)page.effectHPF.Sw);
+                            break;
+                        case 'R'://rate
+                            page.effectHPF.Freq = v & 0xff;
+                            SOutData(page, mml, port[3], 0x23, ch);
+                            SOutData(page, mml, port[3], 0xc4, (byte)page.effectHPF.Freq);
+                            break;
+                        case 'Q'://Q
+                            page.effectHPF.Q = v & 0xff;
+                            SOutData(page, mml, port[3], 0x23, ch);
+                            SOutData(page, mml, port[3], 0xc5, (byte)page.effectHPF.Q);
+                            break;
+                    }
+
+                }
+                else if ((string)mml.args[0] == "Sys.Efc.EQ")//system effect EQ
+                {
+                    string typ1 = (string)mml.args[1];
+                    string typ2 = (string)mml.args[2];
+                    int val = (int)mml.args[3];
+                    int adr = 0;
+                    partPage.EffectParams efc = page.effectSystemEffectEQLow;
+                    switch (typ1)
+                    {
+                        case "l":
+                            adr = 0xc0;
+                            efc = page.effectSystemEffectEQLow;
+                            break;
+                        case "m":
+                            adr = 0xc4;
+                            efc = page.effectSystemEffectEQMid;
+                            break;
+                        case "h":
+                            adr = 0xc8;
+                            efc = page.effectSystemEffectEQHigh;
+                            break;
+                    }
+                    switch (typ2)
+                    {
+                        case "S":
+                            efc.Sw = val & 0x1;
+                            SOutData(page, mml, port[0], (byte)(adr + 0x0), (byte)(val & 0x1));
+                            break;
+                        case "R":
+                            efc.Freq = val & 0x1;
+                            SOutData(page, mml, port[0], (byte)(adr + 0x1), (byte)(val & 0xff));
+                            break;
+                        case "G":
+                            efc.Gain = val & 0x1;
+                            SOutData(page, mml, port[0], (byte)(adr + 0x2), (byte)(val & 0xff));
+                            break;
+                        case "Q":
+                            efc.Q = val & 0x1;
+                            SOutData(page, mml, port[0], (byte)(adr + 0x3), (byte)(val & 0xff));
+                            break;
+                    }
+
+                }
         }
 
         public override void CmdPcmMapSw(partPage page, MML mml)

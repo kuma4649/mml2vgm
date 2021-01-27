@@ -11,7 +11,7 @@ namespace mml2vgmIDE
         public delegate int naudioCallBack(short[] buffer, int offset, int sampleCount);
         public static event EventHandler<StoppedEventArgs> PlaybackStopped;
 
-        private static WaveOut waveOut;
+        private static WaveOutEvent waveOut;
         private static WasapiOut wasapiOut;
         private static DirectSoundOut dsOut;
         private static AsioOut asioOut;
@@ -58,7 +58,7 @@ namespace mml2vgmIDE
                 switch (setting.outputDevice.DeviceType)
                 {
                     case 0:
-                        waveOut = new WaveOut();
+                        waveOut = new WaveOutEvent();
                         waveOut.DeviceNumber = 0;
                         waveOut.DesiredLatency = setting.outputDevice.Latency;
                         for (int i = 0; i < WaveOut.DeviceCount; i++)
@@ -162,7 +162,7 @@ namespace mml2vgmIDE
             catch (Exception ex)
             {
                 log.ForcedWrite(ex);
-                waveOut = new WaveOut();
+                waveOut = new WaveOutEvent();
                 waveOut.PlaybackStopped += DeviceOut_PlaybackStopped;
                 waveOut.Init(waveProvider);
                 waveOut.DeviceNumber = 0;

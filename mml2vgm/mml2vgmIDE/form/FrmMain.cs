@@ -2848,9 +2848,13 @@ stop();
             {
                 setting.location.RMain = new Rectangle(RestoreBounds.Location.X, RestoreBounds.Location.Y, RestoreBounds.Size.Width, RestoreBounds.Size.Height);
             }
+
             if (setting.location.ShowMixer)
             {
-                setting.location.RMixer = new Rectangle(frmMixer.Location.X, frmMixer.Location.Y, 0, 0);
+                if (frmMixer != null)
+                {
+                    setting.location.RMixer = new Rectangle(frmMixer.Location.X, frmMixer.Location.Y, 0, 0);
+                }
             }
 
             frmPartCounter.Close();
@@ -3554,20 +3558,37 @@ stop();
         private void FrmMain_Load(object sender, EventArgs e)
         {
 
-            if (setting.location.RMain != System.Drawing.Rectangle.Empty)
+            //if (setting.location.RMain != System.Drawing.Rectangle.Empty)
             {
-                this.Location = new Point(setting.location.RMain.X, setting.location.RMain.Y);
-                this.Size = new Size(setting.location.RMain.Width, setting.location.RMain.Height);
+                if (SearchScreen(setting.location.RMain.X, setting.location.RMain.Y))
+                {
+                    this.Location = new Point(setting.location.RMain.X, setting.location.RMain.Y);
+                    this.Size = new Size(setting.location.RMain.Width, setting.location.RMain.Height);
+                }
+                else
+                {
+                    this.Location = new Point(0, 0);
+                    this.Size = new Size(this.MinimumSize.Width, this.MinimumSize.Height);
+                }
             }
+
+
             this.Opacity = setting.other.Opacity / 100.0;
 
-            if (setting.location.RMixer != System.Drawing.Rectangle.Empty)
+            //if (setting.location.RMixer != System.Drawing.Rectangle.Empty)
             {
                 if (setting.location.ShowMixer)
                 {
                     frmMixer = new FrmMixer(this, 1, newParam.mixer);
-                    frmMixer.Location = new Point(setting.location.RMixer.X, setting.location.RMixer.Y);
                     frmMixer.Show();
+                    if (SearchScreen(setting.location.RMixer.X, setting.location.RMixer.Y))
+                    {
+                        frmMixer.Location = new Point(setting.location.RMixer.X, setting.location.RMixer.Y);
+                    }
+                    else
+                    {
+                        frmMixer.Location = new Point(0, 0);
+                    }
                     frmMixer.isClosed = false;
                     setting.location.ShowMixer = true;
                     TsmiShowMixer.Checked = (frmMixer != null);
@@ -3590,6 +3611,23 @@ stop();
             frmSien.parent = this;
             frmSien.Show();
 
+        }
+
+        private bool SearchScreen(int x,int y)
+        {
+            Screen[] scrn = Screen.AllScreens;
+            foreach (Screen scr in scrn)
+            {
+                if (x >= scr.WorkingArea.Left && x <= scr.WorkingArea.Right)
+                {
+                    if (y >= scr.WorkingArea.Top && y <= scr.WorkingArea.Bottom)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
         }
 
         private void GetScripts(ToolStripMenuItem tsmiScript, ToolStripMenuItem tsmiTreeView, string path)

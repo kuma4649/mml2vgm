@@ -619,6 +619,11 @@ namespace Core
         public int effectDistortionVolume { get; internal set; } = 32;
         public int effectChorusSwitch { get; internal set; } = 0;
         public int effectChorusMixLevel { get; internal set; } = 40;
+        public EffectParams effectLPF = new EffectParams();
+        public EffectParams effectHPF = new EffectParams();
+        public EffectParams effectSystemEffectEQLow = new EffectParams();
+        public EffectParams effectSystemEffectEQMid = new EffectParams();
+        public EffectParams effectSystemEffectEQHigh = new EffectParams();
         public bool isOp4Mode { get; internal set; } = false;
         public int beforeBendNoteNum { get; internal set; } = -1;
         public int panRL { get; internal set; }
@@ -643,7 +648,13 @@ namespace Core
 
         }
 
-
+        public class EffectParams
+        {
+            public int Sw = 0;
+            public int Freq = 0;
+            public int Gain = 0;
+            public int Q = 0;
+        }
     }
 
 }

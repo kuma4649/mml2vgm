@@ -340,9 +340,9 @@ namespace Core
                     log.Write("sus ON/OFF");
                     CmdSusOnOff(pw, page, mml);
                     break;
-                case 'S': // lfo switch
-                    log.Write(" lfo switch");
-                    CmdLfoSwitch(pw, page, mml);
+                case 'S': // lfo switch or system effect
+                    log.Write(" lfo switch or system effect");
+                    CmdLfoSwitchOrSystemEffect(pw, page, mml);
                     break;
                 case 'T': // tempo
                     log.Write(" tempo");
@@ -1266,11 +1266,22 @@ namespace Core
 
         }
 
-        private void CmdLfoSwitch(partWork pw, partPage page, MML mml)
+        private void CmdLfoSwitchOrSystemEffect(partWork pw, partPage page, MML mml)
         {
 
             pw.incPos(page);
             char c = pw.getChar(page);
+            if (c == 'X')
+            {
+                CmdSystemEffect(pw, page, mml);
+                return;
+            }
+
+            CmdLfoSwitch(pw, page, mml,c);
+        }
+
+        private void CmdLfoSwitch(partWork pw, partPage page, MML mml,char c)
+        {
             if (c < 'P' || c > 'S')
             {
                 msgBox.setErrMsg(msg.get("E05031"), mml.line.Lp);
@@ -1291,6 +1302,68 @@ namespace Core
             mml.args = new List<object>();
             mml.args.Add(c);
             mml.args.Add(n);
+        }
+
+        private void CmdSystemEffect(partWork pw, partPage page, MML mml)
+        {
+            pw.incPos(page);
+            char c = pw.getChar(page);
+            if (c == 'E')
+            {
+                CmdSystemEffectEQ(pw, page, mml);
+                return;
+            }
+            else
+            {
+                msgBox.setErrMsg(msg.get("E05068"), mml.line.Lp);
+                return;
+            }
+        }
+
+        private void CmdSystemEffectEQ(partWork pw, partPage page, MML mml)
+        {
+            pw.incPos(page);
+            pw.skipTabSpace(page);
+            char c = pw.getChar(page);
+            if (c != 'l' && c != 'm' && c != 'h')
+            {
+                msgBox.setErrMsg(msg.get("E05068"), mml.line.Lp);
+                return;
+            }
+            string typ1 = c.ToString();
+
+            pw.incPos(page);
+            pw.skipTabSpace(page);
+            c = pw.getChar(page);
+            if (c != 'S' && c != 'R' && c != 'G' && c != 'Q')
+            {
+                msgBox.setErrMsg(msg.get("E05068"), mml.line.Lp);
+                return;
+            }
+            string typ2 = c.ToString();
+
+            pw.incPos(page);
+            pw.skipTabSpace(page);
+            if (!pw.getNum(page, out int num))
+            {
+                msgBox.setErrMsg(msg.get("E05068"), mml.line.Lp);
+                return;
+            }
+            if (c == 'S')//switch
+            {
+                num = Common.CheckRange(num, 0, 1);
+            }
+            else
+            {
+                num = Common.CheckRange(num, 0, 255);
+            }
+
+            mml.type = enmMMLType.Effect;
+            mml.args = new List<object>();
+            mml.args.Add("Sys.Efc.EQ");
+            mml.args.Add(typ1);
+            mml.args.Add(typ2);
+            mml.args.Add(num);
         }
 
         private void CmdSusOnOff(partWork pw, partPage page, MML mml)
@@ -1363,6 +1436,16 @@ namespace Core
             else if (c == 'C')
             {
                 CmdEffectChorus(pw, page, mml);
+                return;
+            }
+            else if (c == 'L')
+            {
+                CmdEffectLPF(pw, page, mml);
+                return;
+            }
+            else if (c == 'H')
+            {
+                CmdEffectHPF(pw, page, mml);
                 return;
             }
 
@@ -1525,6 +1608,108 @@ namespace Core
             else if (c == 'F')//feedback
             {
                 n = Common.CheckRange(n, 0, 127);
+            }
+            mml.args.Add(n);
+
+        }
+
+        private void CmdEffectLPF(partWork pw, partPage page, MML mml)
+        {
+            pw.incPos(page);
+            char c = pw.getChar(page);
+            if (c != 'p')
+            {
+                msgBox.setErrMsg(msg.get("E05059"), mml.line.Lp);
+                return;
+            }
+
+            mml.type = enmMMLType.Effect;
+            mml.args = new List<object>();
+            mml.args.Add("Lp");
+
+            pw.incPos(page);
+            pw.skipTabSpace(page);
+
+            c = pw.getChar(page);
+            if (c != 'S' && c != 'R' && c != 'Q')
+            {
+                msgBox.setErrMsg(msg.get("E05059"), mml.line.Lp);
+                return;
+            }
+
+            mml.args.Add(c);
+
+            int n = -1;
+            pw.incPos(page);
+            pw.skipTabSpace(page);
+            if (!pw.getNum(page, out n))
+            {
+                msgBox.setErrMsg(msg.get("E05059"), mml.line.Lp);
+                return;
+            }
+
+            if (c == 'S')//switch
+            {
+                n = Common.CheckRange(n, 0, 1);
+            }
+            else if (c == 'R')//rate
+            {
+                n = Common.CheckRange(n, 0, 255);
+            }
+            else if (c == 'Q')//Q
+            {
+                n = Common.CheckRange(n, 0, 255);
+            }
+            mml.args.Add(n);
+
+        }
+
+        private void CmdEffectHPF(partWork pw, partPage page, MML mml)
+        {
+            pw.incPos(page);
+            char c = pw.getChar(page);
+            if (c != 'p')
+            {
+                msgBox.setErrMsg(msg.get("E05059"), mml.line.Lp);
+                return;
+            }
+
+            mml.type = enmMMLType.Effect;
+            mml.args = new List<object>();
+            mml.args.Add("Hp");
+
+            pw.incPos(page);
+            pw.skipTabSpace(page);
+
+            c = pw.getChar(page);
+            if (c != 'S' && c != 'R' && c != 'Q')
+            {
+                msgBox.setErrMsg(msg.get("E05059"), mml.line.Lp);
+                return;
+            }
+
+            mml.args.Add(c);
+
+            int n = -1;
+            pw.incPos(page);
+            pw.skipTabSpace(page);
+            if (!pw.getNum(page, out n))
+            {
+                msgBox.setErrMsg(msg.get("E05059"), mml.line.Lp);
+                return;
+            }
+
+            if (c == 'S')//switch
+            {
+                n = Common.CheckRange(n, 0, 1);
+            }
+            else if (c == 'R')//rate
+            {
+                n = Common.CheckRange(n, 0, 255);
+            }
+            else if (c == 'Q')//Q
+            {
+                n = Common.CheckRange(n, 0, 255);
             }
             mml.args.Add(n);
 
