@@ -1,0 +1,61 @@
+    Read/Write Data
+    ADDR.     D7    D6    D5    D4    D3    D2    D1    D0              COMMENT
+    _____  __________________________________________________   _______________________
+          |                                                  |
+     +00  |                    Fine Tune                     |
+          |__________________________________________________|  Channel-A Tone Period
+          |                        |                         |  / Duty cycle
+     +01  |      Duty cycle        |      Coarse Tune        |
+    ____  |________________________|_________________________|  _______________________
+          |                                                  |
+     +02  |                    Fine Tune                     |
+          |__________________________________________________|  Channel-B Tone Period
+          |                        |                         |  / Duty cycle
+     +03  |      Duty cycle        |      Coarse Tune        |
+    ____  |________________________|_________________________|  _______________________
+          |                                                  |
+     +04  |                    Fine Tune                     |
+          |__________________________________________________|  Channel-C Tone Period
+          |                        |                         |  / Duty cycle
+     +05  |      Duty cycle        |      Coarse Tune        |
+    ____  |________________________|_________________________|  _______________________
+          |                 |                                |
+     +06  |=================|        Period Control          |  Noise Period
+    ____  |_________________|________________________________|  _______________________
+          |           |                   |                  |
+     +07  |===========|      /Noise       |    /Tone         |  /Enable
+    ____  |___________|___________________|__________________|  _______________________
+          |     |     |     |      |                         |
+     +08  |  L  |  R  |PHRST|  M   |         Level           |  Channel-A Amplitude / Phase reset / Panpot
+          |_____|_____|_____|______|_________________________|
+          |     |     |     |      |                         |
+     +09  |  L  |  R  |PHRST|  M   |         Level           |  Channel-B Amplitude / Phase reset / Panpot
+          |_____|_____|_____|______|_________________________|
+          |     |     |     |      |                         |
+     +0A  |  L  |  R  |PHRST|  M   |         Level           |  Channel-C Amplitude / Phase reset / Panpot
+    ____  |_____|_____|_____|______|_________________________|  _______________________
+          |                                                  |
+     +0B  |                    Fine Tune                     |
+          |__________________________________________________|  Envelop Period
+          |                                                  |
+     +0C  |                    Coarse tune                   |
+    ____  |__________________________________________________|  _______________________
+          |                         |     |     |     |      |
+     +0D  |=========================| CON | ATT | ALT | HLD  |  Envelop Shape Cycle
+    ____  |_________________________|_____|_____|_____|______|  _______________________
+          |     |                   |                        |
+     +0E  | RST | User def.#(0 ~ 5) |       Wave Data        |  Define Wave data 
+    ____  |_____|___________________|________________________|  _______________________
+
+    Duty cycle
+        7:1/8 6:2/8 5:3/8 4:4/8 3:5/8 2:6/8 1:7/8 duty. 0:8/8 Pure square wave.
+        8:Triangle Wave  9:Saw Wave  10,11,12,13,14,15:user0 ~ user5
+    L/R panpot
+        0:LR Enable 1:R Enable 2:L Enable 3:LR Enable
+    User define wave form(0x0E)
+        RST : reset setting position 
+        User def.# : user define wave number 0 ~ 5 (select duty cycle 10~15)
+        Wave Data : 0 ~ 15 (Write 64 times)
+
+        ex) set user0 wave form
+              0x80 0x01 0x02 ... 0x0f  ( 64 data )

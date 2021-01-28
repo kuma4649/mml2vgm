@@ -18,9 +18,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		makeZip.bat = makeZip.bat
 		..\mml2vgm_MMLCommandMemo.txt = ..\mml2vgm_MMLCommandMemo.txt
 		..\mmlCommandTable.md = ..\mmlCommandTable.md
+		..\PSG2.txt = ..\PSG2.txt
 		..\README.md = ..\README.md
 		removeZoneIdent.bat = removeZoneIdent.bat
 		Script.txt = Script.txt
+		..\YM2609.txt = ..\YM2609.txt
 		..\ZGMspec.txt = ..\ZGMspec.txt
 		開発メモ.txt = 開発メモ.txt
 	EndProjectSection
