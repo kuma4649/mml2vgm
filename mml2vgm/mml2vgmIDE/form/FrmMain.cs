@@ -1795,6 +1795,7 @@ stop();
             {
                 mv = new Mml2vgm(activeMMLTextLines, args[1], args[1], stPath, Disp, wrkPath, true);
             }
+            mv.isIDE = true;
             mv.doSkip = doSkip;
             mv.doSkipStop = doSkipStop;
             mv.caretPoint = caretPoint;

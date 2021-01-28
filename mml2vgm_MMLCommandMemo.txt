@@ -891,6 +891,7 @@ mn              --------------------------------oo-o-o--o-o----  OPL系Rhythmモ
 mn              -----------------------------------------o-----  OPLL系OP4モード指定(0: 停止  1: 開始)
 Tn              ooooooooooooooooooooooooooooooooooooooooooooooo  テンポ(1 - 1200)
 !               ooooooooooooooooooooooooooooooooooooooooooooooo  このパートのこれ以降をコンパイルしない(発音しない)
+!!              ooooooooooooooooooooooooooooooooooooooooooooooo  コンパイルを打ち切る
 Kn              -ooo-ooooo-oooo-oooo-oooooooooooo-o-o-oo-o-oooo  移調絶対指定 ( -12 - +12 )
 An              ------o--------------------o-oo-------------oo-  PCMの再生開始位置を停止方向へnbyteずらす。
                                                                   (最小：再生開始位置　最大：停止位置-1byte)

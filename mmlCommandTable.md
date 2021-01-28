@@ -2775,6 +2775,66 @@
     主にデータを作成中にパートごとの確認を行うために使用することを想定しています。  
 
 
+### コンパイル停止  
+-----------  
+- Command  
+    !!  
+- Format  
+    !!  
+- 設定可能範囲  
+    なし  
+- Support chips  
+    - Conductor  
+    - YM2612  
+    - YM2612X  
+    - YM2612(Ch3 Ex)  
+    - YM2612X(Ch3 Ex)  
+    - YM2612(6ChPCMmode)  
+    - YM2612X(6ChPCMmode)  
+    - SN76489  
+    - RF5C164  
+    - YM2610B(FM)  
+    - YM2610B(Ch3 Ex)  
+    - YM2610B(SSG)  
+    - YM2610B(ADPCM-A)  
+    - YM2610B(ADPCM-B)  
+    - YM2608(FM)  
+    - YM2608(Ch3 Ex)  
+    - YM2608(SSG)  
+    - YM2608(RHYTHM)  
+    - YM2608(ADPCM)  
+    - YM2609(FM)  
+    - YM2609(Ch3 Ex)  
+    - YM2609(Ch9 Ex)  
+    - YM2609(SSG)  
+    - YM2609(RHYTHM)  
+    - YM2609(ADPCM)  
+    - YM2203(FM)  
+    - YM2203(Ch3 Ex)  
+    - YM2203(SSG)  
+    - YM2151  
+    - SEGAPCM  
+    - HuC6280  
+    - C140  
+    - C352  
+    - AY8910  
+    - YM2413(FM)  
+    - YM2413(RHYTHM)  
+	- YM3526(FM)  
+	- YM3526(RHYTHM)  
+	- YM3812(FM)  
+	- YM3812(RHYTHM)  
+	- YMF262(FM)  
+	- YMF262(RHYTHM)  
+    - K051649  
+    - QSound  
+    - K053260  
+- Remark  
+    コンパイル停止  
+- Description  
+    コンパイルをこのコマンドの時点で停止します。  
+
+
 ### 移調絶対指定  
 -----------  
 - Command  

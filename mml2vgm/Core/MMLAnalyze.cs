@@ -102,6 +102,11 @@ namespace Core
         private List<partWork> caretPointChannels = new List<partWork>();
         private List<Tuple<int, int>> lstSynchronousMark = new List<Tuple<int, int>>();
 
+        /// <summary>
+        /// GUI/CUI向け(IDEは別)
+        /// </summary>
+        public bool useJumpPoint=false;
+
         public LinePos linePos { get; internal set; }
 
         private void Commander(partWork pw, partPage page, char cmd)
@@ -208,7 +213,12 @@ namespace Core
                     log.Write("CompileSkip");
                     page.dataEnd = true;
                     mml.type = enmMMLType.CompileSkip;
-                    mml.args = null;
+                    mml.args = new List<object>();
+                    pw.incPos(page);
+                    if (pw.getChar(page) == '!')
+                        mml.args.Add("compileEnd");
+                    else
+                        mml.args.Add("partEnd");
                     break;
                 case '@': // instrument
                     log.Write("instrument");
@@ -2872,6 +2882,14 @@ namespace Core
                     step2_CmdTie(page, i);
                     page.mmlData.RemoveAt(i);
                     i--;
+                }
+            }
+
+            for (int i = 0; i < page.mmlData.Count; i++)
+            {
+                if (page.mmlData[i].type == enmMMLType.JumpPoint)
+                {
+                    useJumpPoint = true;
                 }
             }
         }

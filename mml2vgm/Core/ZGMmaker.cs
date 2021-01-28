@@ -317,7 +317,7 @@ namespace Core
                     mmlInfo.DecAllPartWaitCounter(waitCounter);
                 }
 
-            } while (endChannel < totalChannel);
+            } while (endChannel < totalChannel && !mmlInfo.compileEnd);
 
             mmlInfo.CompClockCounter();
             //残カット

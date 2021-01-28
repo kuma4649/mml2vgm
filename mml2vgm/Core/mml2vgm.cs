@@ -34,6 +34,8 @@ namespace Core
         public bool doSkipStop = false;
         public Point caretPoint = Point.Empty;
         public bool usePCMCacheFromGUI = false;
+        public bool isIDE = false;
+        private bool doJumping=false;
 
         /// <summary>
         /// コンストラクタ
@@ -52,6 +54,7 @@ namespace Core
             this.srcTxt = null;
             bufferMode = false;
             this.writeFileMode = true;
+            this.doJumping = false;
         }
 
         /// <summary>
@@ -72,6 +75,7 @@ namespace Core
             this.srcTxt = null;
             bufferMode = false;
             this.writeFileMode = true;
+            this.doJumping = false;
         }
 
         public Mml2vgm(string[] srcTxt, string srcFn, string desFn, string stPath, Action<string> disp, string wrkPath, bool writeFileMode)
@@ -84,6 +88,7 @@ namespace Core
             this.srcTxt = srcTxt;
             this.bufferMode = true;
             this.writeFileMode = writeFileMode;
+            this.doJumping = false;
         }
 
         /// <summary>
@@ -117,6 +122,14 @@ namespace Core
                         , mmlAnalyze.linePos.row), mmlAnalyze.linePos);
                     return -1;
                 }
+
+
+                if(!isIDE && mmlAnalyze.useJumpPoint)
+                {
+                    doJumping = true;
+                    desVGM.doJumping = true;
+                }
+
 
                 if (desVGM.info.format != enmFormat.ZGM)
                 {
@@ -253,6 +266,7 @@ namespace Core
             sp.Parse(src);
 
             desVGM = new ClsVgm(stPath, sp);
+            desVGM.doJumping = doJumping;
             desVGM.doSkip = doSkip;
             desVGM.doSkipStop = doSkipStop;
             desVGM.caretPoint = caretPoint;

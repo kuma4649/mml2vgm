@@ -624,6 +624,7 @@ namespace mml2vgmIDE
             string wrkPath = "";
 
             mv = new Mml2vgm(text, "", "", stPath, dmy, wrkPath, false);
+            mv.isIDE = true;
             mv.Start();
             cChip = mv.desVGM.ym2612[0];
             pw = cChip.lstPartWork[0];

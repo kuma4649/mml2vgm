@@ -96,6 +96,7 @@ namespace mvc
             path = string.IsNullOrEmpty(path1) ? myAssembly.Location : path;
 
             Mml2vgm mv = new Mml2vgm(srcFn, desFn, path, Disp);
+            mv.isIDE = false;
             mv.outVgmFile = outVgmFile;
             mv.outTraceInfoFile = outTraceInfoFile;
             mv.desTiFn = desTiFn;

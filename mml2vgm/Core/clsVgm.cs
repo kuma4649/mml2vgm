@@ -13,6 +13,7 @@ namespace Core
 
         public Conductor[] conductor = null;
         public YM2151[] ym2151 = null;
+
         public YM2203[] ym2203 = null;
         public YM2608[] ym2608 = null;
         public YM2609[] ym2609 = null;
@@ -80,6 +81,11 @@ namespace Core
         private int instArpCounter = -1;
         private int instCommandArpCounter = -1;
         private int instVArpCounter = -1;
+        /// <summary>
+        /// GUI/CUI向け(IDEは別)
+        /// </summary>
+        public bool doJumping { get; internal set; }
+
 
         public int newStreamID = -1;
 
@@ -2752,6 +2758,7 @@ namespace Core
         public string wrkPath { get; internal set; }
         public long jumpPointClock { get; set; } = -1;
         public List<Tuple<enmChipType, int>> jumpChannels = new List<Tuple<enmChipType, int>>();
+        public bool compileEnd=false;
 
         public outDatum[] Vgm_getByteData(Dictionary<string, List<MML>> mmlData)
         {
@@ -2802,7 +2809,7 @@ namespace Core
                     DecAllPartWaitCounter(waitCounter);
                 }
 
-            } while (endChannel < totalChannel);
+            } while (endChannel < totalChannel && !compileEnd);
 
             //残カット
             //if (loopClock != -1 && waitCounter > 0 && waitCounter != long.MaxValue)
@@ -2973,20 +2980,24 @@ namespace Core
 
                 // wait発行
 
-                lClock += waitCounter;
-                dSample += (long)(info.samplesPerClock * waitCounter);
-                bSample += info.samplesPerClock * waitCounter - (double)(long)(info.samplesPerClock * waitCounter);
-                dSample += (long)bSample;
-                bSample -= (long)bSample;
-
-                bool flg = false;
-                if (ym2612 != null && ym2612[0] != null)
+                if (!doJumping)
                 {
-                    if (ym2612[0].lstPartWork[5].cpg.pcmWaitKeyOnCounter > 0) flg = true;
+                    lClock += waitCounter;
+                    dSample += (long)(info.samplesPerClock * waitCounter);
+                    bSample += info.samplesPerClock * waitCounter - (double)(long)(info.samplesPerClock * waitCounter);
+                    dSample += (long)bSample;
+                    bSample -= (long)bSample;
+
+                    bool flg = false;
+                    if (ym2612 != null && ym2612[0] != null)
+                    {
+                        if (ym2612[0].lstPartWork[5].cpg.pcmWaitKeyOnCounter > 0) flg = true;
+                    }
+
+                    if (flg) OutWaitNSamplesWithPCMSending(ym2612[0].lstPartWork[5], waitCounter);
+                    else OutWaitNSamples((long)(info.samplesPerClock * waitCounter));
                 }
 
-                if (flg) OutWaitNSamplesWithPCMSending(ym2612[0].lstPartWork[5], waitCounter);
-                else OutWaitNSamples((long)(info.samplesPerClock * waitCounter));
             }
         }
 
@@ -3112,6 +3123,7 @@ namespace Core
                         for (int p = 0; p < pw.pg.Count; p++)
                         {
                             partWorkByteData(pw, p);
+                            if (compileEnd) return;
                         }
                     }
 
@@ -3702,7 +3714,7 @@ namespace Core
 
                         //chip毎の処理
                         Xgm_procChip(chip);
-
+                        if (compileEnd) goto lblexit;
                         //
                         // 各パートのページ割り込みチェック
                         //
@@ -3730,7 +3742,7 @@ namespace Core
 
                     }
                 }
-
+            lblexit:;
                 log.Write("全パートのうち次のコマンドまで一番近い値を求める");
                 waitCounter = Xgm_procCheckMinimumWaitCounter();
 
@@ -3778,7 +3790,7 @@ namespace Core
                     Xgm_procWait(waitCounter);
                 }
 
-            } while (endChannel < totalChannel);//全てのチャンネルが終了していない場合はループする
+            } while (endChannel < totalChannel && !compileEnd);//全てのチャンネルが終了していない場合はループする
             //if (loopClock != -1)
             //{
             //    if (waitCounter > 0)
@@ -4045,6 +4057,8 @@ namespace Core
 
                             //lineNumber = pw.getLineNumber();
                             Commander(pw, page, mml);
+                            if (compileEnd) 
+                                return;
                         }
                     }
 
@@ -4142,19 +4156,20 @@ namespace Core
                 }
             }
 
-            //if (jumpCommandCounter == 0 && !useSkipPlayCommand)
-            //{
-            // wait発行
-            lClock += cnt;
-            //dSample += (long)(info.samplesPerClock * cnt);
-            //Console.WriteLine("pw.ppg[pw.cpgNum].ch{0} lclock{1}", ym2612x[0].lstPartWork[0].clockCounter, lClock);
 
-            sampleB += info.samplesPerClock * cnt;
-            //Console.WriteLine("samplesPerClock{0}", info.samplesPerClock);
-            OutWaitNSamples((long)(sampleB));
-            dSample += (long)sampleB;
-            sampleB -= (long)sampleB;
-            //}
+            if (!doJumping)
+            {
+                // wait発行
+                lClock += cnt;
+                //dSample += (long)(info.samplesPerClock * cnt);
+                //Console.WriteLine("pw.ppg[pw.cpgNum].ch{0} lclock{1}", ym2612x[0].lstPartWork[0].clockCounter, lClock);
+
+                sampleB += info.samplesPerClock * cnt;
+                //Console.WriteLine("samplesPerClock{0}", info.samplesPerClock);
+                OutWaitNSamples((long)(sampleB));
+                dSample += (long)sampleB;
+                sampleB -= (long)sampleB;
+            }
         }
 
         private List<outDatum> ConvertVGMtoXGM(List<outDatum> src)
@@ -5073,6 +5088,10 @@ namespace Core
                     page.dataEnd = true;
                     page.enableInterrupt = true;
                     page.waitCounter = -1;
+                    if (mml.args[0] != "partEnd")
+                    {
+                        compileEnd=true;
+                    }
                     break;
                 case enmMMLType.Tempo:
                     log.Write("Tempo");
@@ -5263,7 +5282,7 @@ namespace Core
                     log.Write("JumpPoint");
                     jumpPointClock = (long)dSample;// lClock;
                     jumpChannels.Add(new Tuple<enmChipType, int>(page.chip.chipType, page.ch));
-
+                    if (doJumping) doJumping = false;
                     page.mmlPos++;
                     break;
                 case enmMMLType.NoiseToneMixer:

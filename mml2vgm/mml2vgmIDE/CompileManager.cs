@@ -320,6 +320,7 @@ namespace mml2vgmIDE
             msgBox.clear();
 
             Mml2vgm mv = new Mml2vgm(activeMMLTextLines, tempPath, null, stPath, disp, wrkPath, false);
+            mv.isIDE = true;
             int result = mv.Start();
 
             qi.doc.errBox = msgBox.getErr();
