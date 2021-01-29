@@ -41,15 +41,15 @@ lead synthっぽいなにか
 '@ P 3,"..\wav\SD_16bit16000Hz.wav",8000,100,YM2610B,1
 
 'T01 T160
-T01 @110v127p3o4l8[p1cp2dp3efgab>c<rrrrrrrr]
-T10     v15   o4l8[rrrrrrrrcdefgab>c<]
-T13 @0p3V50l4v31[ccc8c8c ]
-T14 @1p1   l4v31[rcr   c ]
-T15 @1p2   l4v31[ccc   c ]
-T16 @1p2   l8v31[cccccccc]
-T17 @1p1   l8v31[rrrrrrrc]
-T18 @1p3   l8v31[rcrcrcrc]
-T19 o4l4p3q0v155@2p1cp2dp3efgab>c<@3cdefgab>c
+'T01 @110v127p3o4l8[p1cp2dp3efgab>c<rrrrrrrr]
+'T10     v15   o4l8[rrrrrrrrcdefgab>c<]
+'T13 @0p3V50l4v31[ccc8c8c ]
+'T14 @1p1   l4v31[rcr   c ]
+'T15 @1p2   l4v31[ccc   c ]
+'T16 @1p2   l8v31[cccccccc]
+'T17 @1p1   l8v31[rrrrrrrc]
+'T18 @1p3   l8v31[rcrcrcrc]
+'T19 o4l4p3q0v155@2p1cp2dp3efgab>c<@3cdefgab>c
 
 T01  @110v125p1l4o4cr8e
 T01_ @0  v100p2l4o5rdfg

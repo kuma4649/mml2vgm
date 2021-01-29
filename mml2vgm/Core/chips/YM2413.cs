@@ -639,6 +639,7 @@ namespace Core
                         , (byte)(0x20 + page.ch)
                         , (byte)(
                             ((page.freq >> 8) & 0xf)
+                            | (page.sus ? 0x20 : 0x00)
                           )
                         );
                     page.spg.beforeFNum = page.freq;

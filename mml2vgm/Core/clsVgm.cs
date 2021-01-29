@@ -514,6 +514,9 @@ namespace Core
                 SetInstCommandArp();
             }
 
+            //定義中で終わってしまった場合はエラーとする
+            CheckDefineInstrument(null);
+
             // チェック1定義されていない名称を使用したパートが存在するか
 
             for (int n = 0; n < 2; n++)
@@ -554,6 +557,43 @@ namespace Core
 
         }
 
+        private void CheckDefineInstrument(Line line)
+        {
+            if (instrumentCounter != -1)
+            {
+                if (line == null)
+                    msgBox.setErrMsg(string.Format(msg.get("E01022"), "FM"), null);
+                else
+                    msgBox.setErrMsg(string.Format(msg.get("E01023"), "FM"), line.Lp);
+            }
+            // WaveFormの音色を定義中の場合
+            if (wfInstrumentCounter != -1)
+            {
+                if (line == null)
+                    msgBox.setErrMsg(string.Format(msg.get("E01022"), "WaveForm"), null);
+                else
+                    msgBox.setErrMsg(string.Format(msg.get("E01023"), "WaveForm"), line.Lp);
+            }
+
+            // opna2 WaveFormの音色を定義中の場合
+            if (opna2wfInstrumentCounter != -1)
+            {
+                if (line == null)
+                    msgBox.setErrMsg(string.Format(msg.get("E01022"), "WaveForm(OPNA2)"), null);
+                else
+                    msgBox.setErrMsg(string.Format(msg.get("E01023"), "WaveForm(OPNA2)"), line.Lp);
+            }
+
+            // opna2 WaveForm(SSG)の音色を定義中の場合
+            if (opna2wfsInstrumentCounter != -1)
+            {
+                if (line == null)
+                    msgBox.setErrMsg(string.Format(msg.get("E01022"), "WaveForm(OPNA2 SSG)"), null);
+                else
+                    msgBox.setErrMsg(string.Format(msg.get("E01023"), "WaveForm(OPNA2 SSG)"), line.Lp);
+            }
+        }
+
         private int AddInstrument(Line line)
         {
             string buf = line.Txt.Trim().Replace("'@", "").Trim();
@@ -585,33 +625,25 @@ namespace Core
             // FMの音色を定義中の場合
             if (instrumentCounter != -1)
             {
-
                 return SetInstrument(line);
-
             }
 
             // WaveFormの音色を定義中の場合
             if (wfInstrumentCounter != -1)
             {
-
                 return SetWfInstrument(line);
-
             }
 
             // opna2 WaveFormの音色を定義中の場合
             if (opna2wfInstrumentCounter != -1)
             {
-
                 return SetOPNA2WfInstrument(line);
-
             }
 
             // opna2 WaveForm(SSG)の音色を定義中の場合
             if (opna2wfsInstrumentCounter != -1)
             {
-
                 return SetOPNA2WfsInstrument(line);
-
             }
 
             char t = (buf != null && buf.Length > 0) ? buf.ToUpper()[0] : '\0';
@@ -645,7 +677,7 @@ namespace Core
 
             if (instArpCounter != -1)
             {
-                //他の定義が現れたらSysExの定義は終了
+                //他の定義が現れたらArpの定義は終了
                 if (t == 'F' || t == 'N' || t == 'M' || t == 'L'
                     || t == 'A' || t == 'V' || t == 'C'
                     || t == 'P' || t == 'E'
@@ -657,7 +689,7 @@ namespace Core
 
             if (instVArpCounter != -1)
             {
-                //他の定義が現れたらSysExの定義は終了
+                //他の定義が現れたらVArpの定義は終了
                 if (t == 'F' || t == 'N' || t == 'M' || t == 'L'
                     || t == 'A' || t == 'V' || t == 'C'
                     || t == 'P' || t == 'E'
@@ -666,6 +698,9 @@ namespace Core
                     SetInstVArp();
                 }
             }
+
+            //定義中に次の定義を始めた場合はエラーとする
+            CheckDefineInstrument(line);
 
             instrumentName = "";
             switch (t)
@@ -1637,7 +1672,7 @@ namespace Core
             try
             {
                 string name = "";
-                instrumentCounter = GetNums(instrumentBufCache, instrumentCounter, CutComment(line.Txt).Substring(1).TrimStart(), ref name);
+                instrumentCounter = GetNums(instrumentBufCache, instrumentCounter, CutComment(line.Txt).Substring(1).TrimStart(), ref name, line);
                 if (string.IsNullOrEmpty(instrumentName)) instrumentName = name;//音色名
 
                 if (instrumentCounter == instrumentBufCache.Length)
@@ -1695,7 +1730,7 @@ namespace Core
             try
             {
                 string name = "";
-                wfInstrumentCounter = GetNums(wfInstrumentBufCache, wfInstrumentCounter, CutComment(line.Txt).Substring(1).TrimStart(), ref name);
+                wfInstrumentCounter = GetNums(wfInstrumentBufCache, wfInstrumentCounter, CutComment(line.Txt).Substring(1).TrimStart(), ref name, line);
                 if (string.IsNullOrEmpty(instrumentName)) instrumentName = name;//音色名
 
                 if (wfInstrumentCounter == wfInstrumentBufCache.Length)
@@ -1751,7 +1786,7 @@ namespace Core
             try
             {
                 string name = "";
-                opna2wfsInstrumentCounter = GetNums(opna2WfsInstrumentBufCache, opna2wfsInstrumentCounter, CutComment(line.Txt).Substring(1).TrimStart(), ref name);
+                opna2wfsInstrumentCounter = GetNums(opna2WfsInstrumentBufCache, opna2wfsInstrumentCounter, CutComment(line.Txt).Substring(1).TrimStart(), ref name, line);
                 if (string.IsNullOrEmpty(instrumentName)) instrumentName = name;//音色名
 
                 if (opna2wfsInstrumentCounter == opna2WfsInstrumentBufCache.Length)
@@ -1773,14 +1808,14 @@ namespace Core
             return 0;
         }
 
-        private int GetNums(byte[] aryBuf, int aryIndex, string vals,ref string name)
+        private int GetNums(byte[] aryBuf, int aryIndex, string vals,ref string name,Line line)
         {
             string n = "";
             string h = "";
             int hc = -1;
             int i = 0;
 
-            for (int ind=0;ind<vals.Length;ind++)
+            for (int ind = 0; ind < vals.Length; ind++)
             {
                 char c = vals[ind];
                 if (c == '$')
@@ -1825,7 +1860,15 @@ namespace Core
 
                 if (int.TryParse(n, out i))
                 {
-                    aryBuf[aryIndex] = (byte)(i & 0xff);
+                    if (aryBuf.Length <= aryIndex)
+                    {
+                        msgBox.setErrMsg(msg.get("E01024"), line == null ? null : line.Lp);
+                        return aryIndex;
+                    }
+                    else
+                    {
+                        aryBuf[aryIndex] = (byte)(i & 0xff);
+                    }
                     aryIndex++;
                     n = "";
                 }

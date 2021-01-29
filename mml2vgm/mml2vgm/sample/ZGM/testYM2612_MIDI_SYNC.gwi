@@ -29,7 +29,7 @@ BASS
 
 'A1 T90
 'A1  D0 @1 p3 o4 v110 l8 q8 
-'B01 o5 @5 V110 l8 q1 v80
-'A1,B01 [[cder]gedcde/dr]crggegaagreeddcrrr
+'M01 o5 @5 V110 l8 q1 v80
+'A1,M01 [[cder]gedcde/dr]crggegaagreeddcrrr
 
 

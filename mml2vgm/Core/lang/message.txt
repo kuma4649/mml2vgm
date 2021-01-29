@@ -94,7 +94,10 @@ E01017=Can't define PCM other than YM2612X(OPN2X) on XGM format.
 E01018=Failed to load MUCOM88 voice file.
 E01019=Failed to load MUCOM88 ADPCM file.
 E01020=Found unknown command {0}.(XGM format)
-E01021=Failed to load MUCOM88 voice file.
+E01021=Failed to load TFI voice file.
+E01022=The {0} definition has been truncated in the middle.
+E01023=Illegal {0} definition.
+E01024=The number of definitions exceeding the default size was detected.(Please also check the number of elements in the definition statement in the foreground.)
 
 
 ;Common.cs 02000

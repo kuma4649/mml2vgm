@@ -424,44 +424,11 @@ namespace Core
             {
                 OutSsgKeyOn(page, mml);
             }
-            else if (page.Type == enmChannelType.ADPCMA)
-            {
-                page.keyOff = false;
-
-                if (page.isPcmMap)
-                {
-                    int n = Const.NOTE.IndexOf(page.noteCmd);
-                    int arpNote = page.arpFreqMode ? 0 : page.arpDelta;
-                    int f = page.octaveNow * 12 + n + page.shift + page.keyShift + arpNote;
-                    if (parent.instPCMMap.ContainsKey(page.pcmMapNo))
-                    {
-                        if (parent.instPCMMap[page.pcmMapNo].ContainsKey(f))
-                        {
-                            page.instrument = parent.instPCMMap[page.pcmMapNo][f];
-                            SetADPCMAAddress(
-                                mml,
-                                page
-                                , (int)parent.instPCM[page.instrument].Item2.stAdr
-                                , (int)parent.instPCM[page.instrument].Item2.edAdr);
-                        }
-                        else
-                        {
-                            msgBox.setErrMsg(string.Format(msg.get("E10025"), page.octaveNow, page.noteCmd, page.shift + page.keyShift + arpNote), mml.line.Lp);
-                            return;
-                        }
-                    }
-                    else
-                    {
-                        msgBox.setErrMsg(string.Format(msg.get("E10024"), page.pcmMapNo), mml.line.Lp);
-                        return;
-                    }
-                }
-
-                if (parent.instPCM[page.instrument].Item2.status != enmPCMSTATUS.ERROR)
-                {
-                    parent.instPCM[page.instrument].Item2.status = enmPCMSTATUS.USED;
-                }
-            }
+            //else if (page.Type == enmChannelType.ADPCMA)
+            //{
+            //    //ADPCM A はmultiのほうで処理する
+            //    page.keyOff = false;
+            //}
             else if (page.Type == enmChannelType.ADPCMB)
             {
                 OutAdpcmBKeyOn(mml, page);
@@ -1104,10 +1071,46 @@ namespace Core
                             page.spg.pan = page.pan;
                         }
 
+                        if (page.isPcmMap && page.keyOn)
+                        {
+                            int n = Const.NOTE.IndexOf(page.noteCmd);
+                            int arpNote = page.arpFreqMode ? 0 : page.arpDelta;
+                            int f = page.octaveNow * 12 + n + page.shift + page.keyShift + arpNote;
+                            if (parent.instPCMMap.ContainsKey(page.pcmMapNo))
+                            {
+                                if (parent.instPCMMap[page.pcmMapNo].ContainsKey(f))
+                                {
+                                    page.instrument = parent.instPCMMap[page.pcmMapNo][f];
+                                    SetADPCMAAddress(
+                                        mml,
+                                        page
+                                        , (int)parent.instPCM[page.instrument].Item2.stAdr
+                                        , (int)parent.instPCM[page.instrument].Item2.edAdr);
+                                }
+                                else
+                                {
+                                    msgBox.setErrMsg(string.Format(msg.get("E10025"), page.octaveNow, page.noteCmd, page.shift + page.keyShift + arpNote), mml.line.Lp);
+                                    return;
+                                }
+                            }
+                            else
+                            {
+                                msgBox.setErrMsg(string.Format(msg.get("E10024"), page.pcmMapNo), mml.line.Lp);
+                                return;
+                            }
+
+                            if (parent.instPCM[page.instrument].Item2.status != enmPCMSTATUS.ERROR)
+                            {
+                                parent.instPCM[page.instrument].Item2.status = enmPCMSTATUS.USED;
+                            }
+                        }
+
                         adpcmA_KeyOn |= (byte)(page.keyOn ? (1 << (page.ch - 12)) : 0);
                         page.keyOn = false;
                         adpcmA_KeyOff |= (byte)(page.keyOff ? (1 << (page.ch - 12)) : 0);
                         page.keyOff = false;
+
+
                     }
                     else
                     {
