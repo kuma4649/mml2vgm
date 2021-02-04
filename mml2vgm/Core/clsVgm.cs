@@ -4740,8 +4740,8 @@ namespace Core
                             page.envVolume = 0;
                             page.envCounter = 0;
                             page.envIndex = -1;
-                            page.arpIndex = -1;//アルペジオも止める
-                            foreach (CommandArpeggio ca in page.commandArpeggio.Values) ca.Ptr = -1;
+                            //page.arpIndex = -1;//アルペジオも止める
+                            //foreach (CommandArpeggio ca in page.commandArpeggio.Values) ca.Ptr = -1;
                             break;
                         }
                         page.envCounter = page.envelope[6]; // RR
@@ -4862,11 +4862,35 @@ namespace Core
                             }
                             else
                             {
+                                if (!page.envelopeMode) //エンベロープ無しの場合
+                                {
+                                    if (page.varpeggioMode)//ボリュームアルペジオが有効な場合はリリースに移行する
+                                    {
+                                        page.varpIndex = 1;//RR phase
+                                    }
+                                    else//エンベロープもボリュームアルペジオも無効な場合はキーオフする
+                                        page.chip.SetKeyOff(page, null);
+                                }
+                                else //エンベロープありの場合
+                                {
+                                    if (page.varpeggioMode)//ボリュームアルペジオが有効な場合はリリースに移行する
+                                    {
+                                        page.varpIndex = 1;//RR phase
+                                    }
+
+                                    if (page.envIndex != -1)//エンベロープ動作中の場合はリリースに移行する
+                                    {
+                                        page.envIndex = 3;//RR phase
+                                        page.envCounter = 0;
+                                    }
+
+                                }
+
                                 //if (page.varpeggioMode)
                                 //{
                                 //    page.varpIndex = 1;//RR
                                 //}
-                                
+
                                 //if(page.envelopeMode)
                                 //{
                                 //    if (page.envIndex != -1)
