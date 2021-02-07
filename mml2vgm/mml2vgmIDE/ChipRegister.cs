@@ -639,7 +639,7 @@ namespace mml2vgmIDE
                         scSN76489[i] = realChip.GetRealChip(ctSN76489[i]);
                         if (scSN76489[i] != null) scSN76489[i].init();
                         if (SN76489.Count < i + 1) SN76489.Add(new Chip(4));
-                        SN76489[i].Model = ctSN76489[i].UseEmu ? EnmVRModel.VirtualModel : EnmVRModel.RealModel;
+                        SN76489[i].Model = (ctSN76489[i].UseEmu || ctSN76489[i].UseEmu2) ? EnmVRModel.VirtualModel : EnmVRModel.RealModel;
                         SN76489[i].Delay = (SN76489[i].Model == EnmVRModel.VirtualModel ? LEmu : LReal);
                     }
                     break;
@@ -2018,7 +2018,17 @@ namespace mml2vgmIDE
                 if (Chip.Model == EnmVRModel.RealModel)
                 {
                     if (scAY8910[Chip.Number] != null)
-                        scAY8910[Chip.Number].setRegister(address, data);
+                    {
+                        int skip = 0x0;
+                        if(scAY8910[Chip.Number] is RC86ctlSoundChip)
+                        {
+                            if(((RC86ctlSoundChip)scAY8910[Chip.Number]).chiptype== Nc86ctl.ChipType.CHIP_UNKNOWN)
+                            {
+                                skip = 0x100;
+                            }
+                        }
+                        scAY8910[Chip.Number].setRegister(address + skip, data);
+                    }
                 }
             }
             else if (type == EnmDataType.Block)
@@ -2040,7 +2050,17 @@ namespace mml2vgmIDE
                         if (scAY8910[Chip.Number] != null)
                         {
                             foreach (PackData dat in pdata)
-                                scAY8910[Chip.Number].setRegister(dat.Address, dat.Data);
+                            {
+                                int skip = 0x0;
+                                if (scAY8910[Chip.Number] is RC86ctlSoundChip)
+                                {
+                                    if (((RC86ctlSoundChip)scAY8910[Chip.Number]).chiptype == Nc86ctl.ChipType.CHIP_UNKNOWN)
+                                    {
+                                        skip = 0x100;
+                                    }
+                                }
+                                scAY8910[Chip.Number].setRegister(dat.Address + skip, dat.Data);
+                            }
                         }
                     }
                 }
@@ -2182,6 +2202,14 @@ namespace mml2vgmIDE
 
                 scAY8910[chipID].dClock = scAY8910[chipID].SetMasterClock((uint)clock);
                 scAY8910[chipID].mul = (double)scAY8910[chipID].dClock / (double)clock;
+
+                if(scAY8910[chipID] is RC86ctlSoundChip)
+                {
+                    if(((RC86ctlSoundChip)scAY8910[chipID]).chiptype== Nc86ctl.ChipType.CHIP_UNKNOWN)
+                    {
+                        scAY8910[chipID].mul = 1.0;
+                    }
+                }
             }
         }
 
@@ -5538,7 +5566,10 @@ namespace mml2vgmIDE
                             log.Write("Sending YM2608 Block data");
                             foreach (PackData dat in pdata)
                                 scYM2608[Chip.Number].setRegister(dat.Address, dat.Data);
-                            Audio.realChip.WaitOPNADPCMData();
+                            if (Chip.Number == 0)
+                                Audio.realChip.WaitOPNADPCMData(Audio.setting.YM2608Type.SoundLocation == -1);
+                            else
+                                Audio.realChip.WaitOPNADPCMData(Audio.setting.YM2608SType.SoundLocation == -1);
                         }
                     }
                 }
@@ -7804,9 +7835,10 @@ namespace mml2vgmIDE
                 {
                     if (ctSN76489[Chip.Number] == null || !ctSN76489[Chip.Number].UseScci)
                     {
+                        if (mds == null) return;
+
                         if (ctSN76489[Chip.Number].UseEmu)
                         {
-                            if (mds == null) return;
                             if (address != 0x100)
                             {
                                 mds.WriteSN76489(Chip.Index, (byte)Chip.Number, (byte)data);
@@ -7814,6 +7846,17 @@ namespace mml2vgmIDE
                             else
                             {
                                 mds.WriteSN76489GGPanning(Chip.Index, (byte)Chip.Number, (byte)data);
+                            }
+                        }
+                        else if (ctSN76489[Chip.Number].UseEmu2)
+                        {
+                            if (address != 0x100)
+                            {
+                                mds.WriteSN76496(Chip.Index, (byte)Chip.Number, (byte)data);
+                            }
+                            else
+                            {
+                                mds.WriteSN76496GGPanning(Chip.Index, (byte)Chip.Number, (byte)data);
                             }
                         }
                     }
@@ -7839,20 +7882,37 @@ namespace mml2vgmIDE
                     {
                         if (mds == null) return;
                         foreach (PackData dat in pdata)
-                            if (dat.Address != 0x100)
+                        {
+                            if (ctSN76489[dat.Chip.Number].UseEmu)
                             {
-                                mds.WriteSN76489(dat.Chip.Index, (byte)dat.Chip.Number, (byte)dat.Data);
+                                if (dat.Address != 0x100)
+                                {
+                                    mds.WriteSN76489(dat.Chip.Index, (byte)dat.Chip.Number, (byte)dat.Data);
+                                }
+                                else
+                                {
+                                    mds.WriteSN76489GGPanning(dat.Chip.Index, (byte)dat.Chip.Number, (byte)dat.Data);
+                                }
                             }
-                            else
+                            else if (ctSN76489[dat.Chip.Number].UseEmu2)
                             {
-                                mds.WriteSN76489GGPanning(dat.Chip.Index, (byte)dat.Chip.Number, (byte)dat.Data);
+                                if (dat.Address != 0x100)
+                                {
+                                    mds.WriteSN76496(dat.Chip.Index, (byte)dat.Chip.Number, (byte)dat.Data);
+                                }
+                                else
+                                {
+                                    mds.WriteSN76496GGPanning(dat.Chip.Index, (byte)dat.Chip.Number, (byte)dat.Data);
+                                }
                             }
+                        }
                     }
                     if (Chip.Model == EnmVRModel.RealModel)
                     {
                         foreach (PackData dat in pdata)
                         {
-                            scSN76489[dat.Chip.Number].setRegister(dat.Address, dat.Data);
+                            if (scSN76489[Chip.Number] != null)
+                                scSN76489[dat.Chip.Number].setRegister(dat.Address, dat.Data);
                         }
                     }
                 }

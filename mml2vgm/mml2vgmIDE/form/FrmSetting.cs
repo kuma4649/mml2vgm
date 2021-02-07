@@ -325,12 +325,16 @@ namespace mml2vgmIDE
                     , ucSI.rbSN76489P_Silent
                     , ucSI.rbSN76489P_Emu
                     , ucSI.rbSN76489P_SCCI
-                    , ucSI.cmbSN76489P_SCCI);
+                    , ucSI.cmbSN76489P_SCCI
+                    , null,null,null
+                    , ucSI.rbSN76489P_Emu2);
                 SetSCCIParam(setting.SN76489SType
                     , ucSI.rbSN76489S_Silent
                     , ucSI.rbSN76489S_Emu
                     , ucSI.rbSN76489S_SCCI
-                    , ucSI.cmbSN76489S_SCCI);
+                    , ucSI.cmbSN76489S_SCCI
+                    , null,null,null
+                    , ucSI.rbSN76489S_Emu2);
 
                 SetSCCIParam(setting.YM2151Type
                     , ucSI.rbYM2151P_Silent
@@ -1013,6 +1017,7 @@ namespace mml2vgmIDE
                 setting.SN76489Type.Type = int.Parse(ns[4]);
             }
             setting.SN76489Type.UseEmu = ucSI.rbSN76489P_Emu.Checked;
+            setting.SN76489Type.UseEmu2 = ucSI.rbSN76489P_Emu2.Checked;
 
             setting.SN76489SType = new Setting.ChipType();
             setting.SN76489SType.UseScci = ucSI.rbSN76489S_SCCI.Checked;
@@ -1028,6 +1033,7 @@ namespace mml2vgmIDE
                 setting.SN76489SType.Type = int.Parse(ns[4]);
             }
             setting.SN76489SType.UseEmu = ucSI.rbSN76489S_Emu.Checked;
+            setting.SN76489SType.UseEmu2 = ucSI.rbSN76489S_Emu2.Checked;
 
 
             setting.YM2608Type = new Setting.ChipType();

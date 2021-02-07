@@ -1560,6 +1560,7 @@ namespace mml2vgmIDE
                 ct.OnlyPCMEmulation = this.OnlyPCMEmulation;
                 ct.LatencyForEmulation = this.LatencyForEmulation;
                 ct.LatencyForScci = this.LatencyForScci;
+                ct.Type = this.Type;
 
                 return ct;
             }

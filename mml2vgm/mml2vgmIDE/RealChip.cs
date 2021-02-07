@@ -44,6 +44,7 @@ namespace mml2vgmIDE
                 return;
             }
 
+            //SCCIの存在確認
             int n = 0;
             try
             {
@@ -184,10 +185,10 @@ namespace mml2vgmIDE
             }
         }
 
-        public void WaitOPNADPCMData()//bool isGIMIC)
+        public void WaitOPNADPCMData(bool isGIMIC)
         {
             if (nScci != null) nScci.NSoundInterfaceManager_.sendData();
-            if (nc86ctl != null)// && isGIMIC)
+            if (nc86ctl != null && isGIMIC)
             {
                 //int n = nc86ctl.getNumberOfChip();
                 //for (int i = 0; i < n; i++)
@@ -205,7 +206,15 @@ namespace mml2vgmIDE
                 //}
 
             }
-            Thread.Sleep(1500);
+            else
+            {
+                if (nScci == null) return;
+                nScci.NSoundInterfaceManager_.sendData();
+                while (!nScci.NSoundInterfaceManager_.isBufferEmpty())
+                {
+                    Thread.Sleep(0);
+                }
+            }
         }
 
         public RSoundChip GetRealChip(Setting.ChipType chipType, int ind = 0)
@@ -328,22 +337,33 @@ namespace mml2vgmIDE
                     {
                         NSoundChip sc = iIntfc.getSoundChip(s);
                         int t = sc.getSoundChipType();
-                        if (t == (int)realChipType
-                            || (realChipType == EnmRealChipType.YM2203 && t == (int)EnmRealChipType.YM2608)
-                            || (realChipType == EnmRealChipType.YM2610 && t == (int)EnmRealChipType.YM2608)
-                            || (realChipType == EnmRealChipType.AY8910 && t == (int)EnmRealChipType.YM2203)
-                            || (realChipType == EnmRealChipType.AY8910 && t == (int)EnmRealChipType.YM2608)
-                            || (realChipType == EnmRealChipType.AY8910 && t == (int)EnmRealChipType.YM2610)
-                            )
+                        if (t == (int)realChipType)
                         {
                             Setting.ChipType ct = new Setting.ChipType();
                             ct.SoundLocation = 0;
                             ct.BusID = i;
                             ct.SoundChip = s;
                             ct.ChipName = sc.getSoundChipInfo().cSoundChipName;
-                            ct.Type = t;
                             ct.InterfaceName = iInfo.cInterfaceName;
                             ret.Add(ct);
+                        }
+                        else
+                        {
+                            //互換指定をチェック
+                            NSCCI_SOUND_CHIP_INFO chipInfo = sc.getSoundChipInfo();
+                            for (int n = 0; n < chipInfo.iCompatibleSoundChip.Length; n++)
+                            {
+                                if ((int)realChipType != chipInfo.iCompatibleSoundChip[n]) continue;
+
+                                Setting.ChipType ct = new Setting.ChipType();
+                                ct.SoundLocation = 0;
+                                ct.BusID = i;
+                                ct.SoundChip = s;
+                                ct.ChipName = sc.getSoundChipInfo().cSoundChipName;
+                                ct.InterfaceName = iInfo.cInterfaceName;
+                                ret.Add(ct);
+                                break;
+                            }
                         }
 
                     }
@@ -363,7 +383,7 @@ namespace mml2vgmIDE
                     switch (realChipType)
                     {
                         case EnmRealChipType.AY8910:
-                            if (cct == ChipType.CHIP_YM2608 || cct == ChipType.CHIP_YMF288 || cct == ChipType.CHIP_YM2203)
+                            if (cct == ChipType.CHIP_UNKNOWN || cct == ChipType.CHIP_YM2608 || cct == ChipType.CHIP_YMF288 || cct == ChipType.CHIP_YM2203)
                             {
                                 ct = new Setting.ChipType();
                                 ct.SoundLocation = -1;
@@ -391,6 +411,19 @@ namespace mml2vgmIDE
                                 ct.Type = (int)cct;
                             }
                             break;
+                        case EnmRealChipType.YM2413:
+                            if (cct == ChipType.CHIP_YM2413 || cct == ChipType.CHIP_UNKNOWN)
+                            {
+                                ct = new Setting.ChipType();
+                                ct.SoundLocation = -1;
+                                ct.BusID = i;
+                                string seri = gm.getModuleInfo().Serial;
+                                if (!int.TryParse(seri, out o)) o = -1;
+                                ct.SoundChip = o;
+                                ct.ChipName = gm.getModuleInfo().Devname;
+                                ct.InterfaceName = gm.getMBInfo().Devname;
+                            }
+                            break;
                         case EnmRealChipType.YM2610:
                             if (cct == ChipType.CHIP_YM2608 || cct == ChipType.CHIP_YMF288)
                             {
@@ -407,6 +440,22 @@ namespace mml2vgmIDE
                             break;
                         case EnmRealChipType.YM2151:
                             if (cct == ChipType.CHIP_YM2151)
+                            {
+                                ct = new Setting.ChipType();
+                                ct.SoundLocation = -1;
+                                ct.BusID = i;
+                                string seri = gm.getModuleInfo().Serial;
+                                if (!int.TryParse(seri, out o)) o = -1;
+                                ct.SoundChip = o;
+                                ct.ChipName = gm.getModuleInfo().Devname;
+                                ct.InterfaceName = gm.getMBInfo().Devname;
+                                ct.Type = (int)cct;
+                            }
+                            break;
+                        case EnmRealChipType.YM3526:
+                        case EnmRealChipType.YM3812:
+                        case EnmRealChipType.YMF262:
+                            if (cct == ChipType.CHIP_OPL3)
                             {
                                 ct = new Setting.ChipType();
                                 ct.SoundLocation = -1;

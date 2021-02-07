@@ -2592,18 +2592,34 @@ namespace mml2vgmIDE
 
                     if (vgmDriver.SN76489ClockValue != 0)
                     {
-                        MDSound.sn76489 sn76489 = new MDSound.sn76489();
+                        MDSound.sn76489 sn76489 = null;
+                        MDSound.SN76496 sn76496 = null;
 
                         for (int i = 0; i < (((vgm)driver).SN76489DualChipFlag ? 2 : 1); i++)
                         {
                             chip = new MDSound.MDSound.Chip();
-                            chip.type = MDSound.MDSound.enmInstrumentType.SN76489;
                             chip.ID = (byte)i;
-                            chip.Instrument = sn76489;
-                            chip.Update = sn76489.Update;
-                            chip.Start = sn76489.Start;
-                            chip.Stop = sn76489.Stop;
-                            chip.Reset = sn76489.Reset;
+
+                            if ((i == 0 && setting.SN76489Type.UseEmu) || (i == 1 && setting.SN76489SType.UseEmu))
+                            {
+                                if (sn76489 == null) sn76489 = new MDSound.sn76489();
+                                chip.type = MDSound.MDSound.enmInstrumentType.SN76489;
+                                chip.Instrument = sn76489;
+                                chip.Update = sn76489.Update;
+                                chip.Start = sn76489.Start;
+                                chip.Stop = sn76489.Stop;
+                                chip.Reset = sn76489.Reset;
+                            }
+                            else if ((i == 0 && setting.SN76489Type.UseEmu2) || (i == 1 && setting.SN76489SType.UseEmu2))
+                            {
+                                if (sn76496 == null) sn76496 = new MDSound.SN76496();
+                                chip.type = MDSound.MDSound.enmInstrumentType.SN76496;
+                                chip.Instrument = sn76496;
+                                chip.Update = sn76496.Update;
+                                chip.Start = sn76496.Start;
+                                chip.Stop = sn76496.Stop;
+                                chip.Reset = sn76496.Reset;
+                            }
 
                             chip.SamplingRate = (UInt32)Common.SampleRate;
                             chip.Volume = setting.balance.SN76489Volume;

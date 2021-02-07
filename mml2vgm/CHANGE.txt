@@ -1,4 +1,9 @@
 更新履歴
+TAG362 2021/02/07
+  IDE:AY8910:GIMIC STICに対応
+  IDE:OPLL:GIMIC STICに対応
+  IDE:DCSG:mame版に対応
+
 TAG361 2021/02/04
   Core:多数:音程アルペジオのQが効かなくなっていたのを修正
 
