@@ -17,7 +17,7 @@ namespace mml2vgmIDE
         public const int DEV_SPPCM = 4;
         public const int DEV_Null = 5;
 
-        public static Int32 SampleRate = 44100;
+        public static Int32 SampleRate = 48000;
         public static string settingFilePath = "";
 
         public static void SetDoubleBuffered(Control control)

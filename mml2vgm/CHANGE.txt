@@ -1,4 +1,7 @@
 更新履歴
+TAG363 2021/02/08
+  IDE:NAudio他ライブラリのアップデート
+
 TAG362 2021/02/07
   IDE:AY8910:GIMIC STICに対応
   IDE:OPLL:GIMIC STICに対応
