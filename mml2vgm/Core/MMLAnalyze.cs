@@ -2949,16 +2949,20 @@ namespace Core
 
         private void step2_CmdBend(partPage page, int pos)
         {
+            int bPos = pos - 1;
+            while (bPos>0 && page.mmlData[bPos].type == enmMMLType.TraceUpdateStack) bPos--;
+            //if (bPos != 0) pos = bPos;
+
             if (!(
                     (
-                    pos > 0
-                    && page.mmlData[pos - 1].type == enmMMLType.Note
+                    bPos > 0
+                    && page.mmlData[bPos].type == enmMMLType.Note
                     )
                 ||
                     (
-                    pos > 1
-                    && page.mmlData[pos - 1].type == enmMMLType.ToneDoubler
-                    && page.mmlData[pos - 2].type == enmMMLType.Note
+                    bPos > 1
+                    && page.mmlData[bPos].type == enmMMLType.ToneDoubler
+                    && page.mmlData[bPos - 1].type == enmMMLType.Note
                     )
                 ))
             {
@@ -2967,7 +2971,7 @@ namespace Core
                 return;
             }
 
-            Note note = (Note)page.mmlData[pos - (page.mmlData[pos - 1].type == enmMMLType.Note ? 1 : 2)].args[0];
+            Note note = (Note)page.mmlData[bPos - (page.mmlData[bPos].type == enmMMLType.Note ? 0 : 1)].args[0];
 
             //直前の音符コマンドへベンドコマンドが続くことを知らせる
             note.bendSw = true;
@@ -2998,6 +3002,8 @@ namespace Core
                         bendMML.Add(page.mmlData[i]);
                         page.mmlData.RemoveAt(i);
                         i--;
+                        break;
+                    case enmMMLType.TraceUpdateStack:
                         break;
                     default:
                         msgBox.setErrMsg(msg.get("E05040")
