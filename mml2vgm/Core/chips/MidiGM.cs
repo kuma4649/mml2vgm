@@ -428,7 +428,10 @@ namespace Core
             if (page.bendWaitCounter == -1)
             {
                 noteNum = (byte)GetNoteNum(page.octaveNew, n.cmd, n.shift + page.keyShift + arpNote);
-                if (!page.beforeTie) page.beforeBendNoteNum = -1;
+                if (!page.beforeTie)
+                    page.beforeBendNoteNum = noteNum;
+                //if (!page.beforeTie) 
+                //    page.beforeBendNoteNum = -1;
             }
             else
             {

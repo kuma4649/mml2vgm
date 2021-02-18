@@ -21,10 +21,10 @@ copy /Y .\..\PSG2.txt .\output
 copy /Y .\..\YM2609.txt .\output
 copy /Y .\removeZoneIdent.bat .\output
 del /Q .\output\mml2vgmIDE\*.pdb
-del /Q .\output\mml2vgmIDE\*.config
+rem del /Q .\output\mml2vgmIDE\*.config
 del /Q .\output\mml2vgmIDE\*.wav
 del /Q .\output\mml2vgm\*.pdb
-del /Q .\output\mml2vgm\*.config
+rem del /Q .\output\mml2vgm\*.config
 del /Q .\output\bin.zip
 
 pause

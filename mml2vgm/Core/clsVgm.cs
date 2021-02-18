@@ -4676,7 +4676,8 @@ namespace Core
                 if (page.noteOns[i].length > 0) continue;
                 if (!page.noteOns[i].Keyon) continue;
 
-                if (page.noteOns[i].length != -1) page.noteOns[i].Keyon = false;
+                if (page.noteOns[i].length != -1) 
+                    page.noteOns[i].Keyon = false;
             }
         }
 
