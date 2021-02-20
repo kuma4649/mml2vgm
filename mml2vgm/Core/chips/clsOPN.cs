@@ -2069,8 +2069,9 @@ namespace Core
             }
 
             n = Common.CheckRange(n, 0, 255);
-            if (page.instrument == n) return;
+            if (page.beforeInstrument == n) return;
             page.instrument = n;
+            page.beforeInstrument = n;
             ((ClsOPN)page.chip).OutFmSetInstrument(page, mml, n, page.volume, type);
         }
 
