@@ -717,7 +717,10 @@ namespace Core
                 SOutData(p0.cpg, mml, port[0], (byte)0x16, (byte)p0.cpg.freq);
                 SOutData(p0.cpg, mml, port[0]
                     , (byte)0x26
-                    , (byte)((p0.cpg.freq >> 8) & 0xf)
+                    , (byte)(
+                              ((p0.cpg.freq >> 8) & 0xf)
+                            | (p0.cpg.sus ? 0x20 : 0x00)
+                            )
                     );
             }
 
@@ -742,7 +745,10 @@ namespace Core
                     SOutData(p0.cpg, mml, port[0], (byte)0x17, (byte)p0.spg.beforeFNum);
                     SOutData(p0.cpg, mml, port[0]
                         , (byte)0x27
-                        , (byte)((p0.spg.beforeFNum >> 8) & 0xf)
+                        , (byte)(
+                            ((p0.spg.beforeFNum >> 8) & 0xf)
+                            | (p0.cpg.sus ? 0x20 : 0x00)
+                            )
                         );
                 }
             }
@@ -768,7 +774,10 @@ namespace Core
                     SOutData(p0.cpg, mml, port[0], (byte)0x18, (byte)p0.spg.beforeFNum);
                     SOutData(p0.cpg, mml, port[0]
                         , (byte)0x28
-                        , (byte)((p0.spg.beforeFNum >> 8) & 0xf)
+                        , (byte)(
+                            ((p0.spg.beforeFNum >> 8) & 0xf)
+                            | (p0.cpg.sus ? 0x20 : 0x00)
+                            )
                         );
                 }
             }

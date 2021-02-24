@@ -48,15 +48,21 @@ N7 o4v15rrrrrcdefg
 A1 o4v15rrrrrrrrrrcdefg
 S1 o3v15rrrrrrrrrrrrrrrcdefg
 
+BD
 'L10 m1
+'L10 so v15l4Q1o4[c16r16g16<g16>]4
+'L10             [g16_<<<c>>>r16g16_<<<c>>>g16_<<<c>>>]4
+SD
+'L11 so v15l4Q1o3 ceg>c<
+'L11             [rc_<<c>>]2
 
-L10 v15l4q0o3[c8c16c16]4
-'L11 v15l4q0o3[rc]2
+L12 sfo5q10[c c_>c<]4
+L13 o8q0[o8cc]4
+
 L14 v13l4q0o3[cc]2
 L11 o3q0v0[c4)1]15
 L14 o3v9r4c4v10c4v9c4v10c4
 [c4)1]15
-L12 o5q0v0[c4)1]15
-L13 o5q0v0[c4)1]15
-L14 o3q0v0[c4)1]15
+L14 o8q0[c4]4
 
+'L11 r1

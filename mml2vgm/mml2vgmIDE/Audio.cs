@@ -1254,19 +1254,37 @@ namespace mml2vgmIDE
                 lstChips.Add(chip);
                 useChip.Add(EnmChip.YM2612);
 
-                sn76489 sn76489 = new sn76489();
                 chip = new MDSound.MDSound.Chip();
-                chip.type = MDSound.MDSound.enmInstrumentType.SN76489;
                 chip.ID = (byte)0;
-                chip.Instrument = sn76489;
-                chip.Update = sn76489.Update;
-                chip.Start = sn76489.Start;
-                chip.Stop = sn76489.Stop;
-                chip.Reset = sn76489.Reset;
+                sn76489 sn76489 = null;
+                SN76496 sn76496 = null;
+
+                if (setting.SN76489Type.UseEmu)
+                {
+                    if (sn76489 == null) sn76489 = new MDSound.sn76489();
+                    chip.type = MDSound.MDSound.enmInstrumentType.SN76489;
+                    chip.Instrument = sn76489;
+                    chip.Update = sn76489.Update;
+                    chip.Start = sn76489.Start;
+                    chip.Stop = sn76489.Stop;
+                    chip.Reset = sn76489.Reset;
+                }
+                else if (setting.SN76489Type.UseEmu2)
+                {
+                    if (sn76496 == null) sn76496 = new MDSound.SN76496();
+                    chip.type = MDSound.MDSound.enmInstrumentType.SN76496;
+                    chip.Instrument = sn76496;
+                    chip.Update = sn76496.Update;
+                    chip.Start = sn76496.Start;
+                    chip.Stop = sn76496.Stop;
+                    chip.Reset = sn76496.Reset;
+                }
+
                 chip.SamplingRate = (UInt32)Common.SampleRate;
                 chip.Volume = setting.balance.SN76489Volume;
                 chip.Clock = (uint)xgmDriver.SN76489ClockValue;
                 chip.Option = null;
+
                 chipLED.PriDCSG = 1;
                 chipRegister.SN76489[0].Use = true;
                 lstChips.Add(chip);
@@ -1630,15 +1648,33 @@ namespace mml2vgmIDE
                         if (!(zchip is Driver.ZGM.ZgmChip.SN76489)) continue;
 
                         zCnt++;
-                        sn76489 sn76489 = new sn76489();
+
                         chip = new MDSound.MDSound.Chip();
-                        chip.type = MDSound.MDSound.enmInstrumentType.SN76489;
-                        chip.ID = (byte)0;//ZGMでは常に0
-                        chip.Instrument = sn76489;
-                        chip.Update = sn76489.Update;
-                        chip.Start = sn76489.Start;
-                        chip.Stop = sn76489.Stop;
-                        chip.Reset = sn76489.Reset;
+                        chip.ID = (byte)0;
+                        sn76489 sn76489 = null;
+                        SN76496 sn76496 = null;
+
+                        if (setting.SN76489Type.UseEmu)
+                        {
+                            if (sn76489 == null) sn76489 = new MDSound.sn76489();
+                            chip.type = MDSound.MDSound.enmInstrumentType.SN76489;
+                            chip.Instrument = sn76489;
+                            chip.Update = sn76489.Update;
+                            chip.Start = sn76489.Start;
+                            chip.Stop = sn76489.Stop;
+                            chip.Reset = sn76489.Reset;
+                        }
+                        else if (setting.SN76489Type.UseEmu2)
+                        {
+                            if (sn76496 == null) sn76496 = new MDSound.SN76496();
+                            chip.type = MDSound.MDSound.enmInstrumentType.SN76496;
+                            chip.Instrument = sn76496;
+                            chip.Update = sn76496.Update;
+                            chip.Start = sn76496.Start;
+                            chip.Stop = sn76496.Stop;
+                            chip.Reset = sn76496.Reset;
+                        }
+
                         chip.SamplingRate = (UInt32)Common.SampleRate;
                         chip.Volume = setting.balance.SN76489Volume;
                         chip.Clock = (uint)zchip.defineInfo.clock;
