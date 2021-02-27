@@ -241,7 +241,7 @@ namespace mml2vgm
 
                 Core.log.Write("Call mml2vgm core");
 
-                mv = new Mml2vgm(arg, desfn, stPath, Disp);
+                mv = new Mml2vgm(null, arg, desfn, stPath, Disp);
                 mv.isIDE = false;
                 mv.doSkip = true;
                 if(tsbUseCache.Checked)
