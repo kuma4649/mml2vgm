@@ -248,7 +248,7 @@ namespace Core
 
         public override void StorePcmRawData(clsPcmDatSeq pds, byte[] buf, bool isRaw, bool is16bit, int samplerate, params object[] option)
         {
-            msgBox.setWrnMsg(msg.get("E20004"), new LinePos("-"));
+            msgBox.setWrnMsg(msg.get("E20004"), new LinePos(null,"-"));
         }
 
 

@@ -110,7 +110,7 @@ namespace mml2vgmIDE
             try
             {
                 string stPath = System.Windows.Forms.Application.StartupPath;
-                Core.Mml2vgm mv = new Core.Mml2vgm(srcFn, "", stPath, Disp);
+                Core.Mml2vgm mv = new Core.Mml2vgm(null, srcFn, "", stPath, Disp);
                 mv.isIDE = true;
                 if (mv.Start_Analyze() != 0) return null;
 

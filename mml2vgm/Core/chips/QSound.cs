@@ -207,7 +207,7 @@ namespace Core
                 {
                     msgBox.setErrMsg(string.Format(msg.get("E22000")
                         , newDic[v.Key].Item2.loopAdr
-                        , size - 1), new LinePos("-"));
+                        , size - 1), new LinePos(null,"-"));
                     newDic[v.Key].Item2.loopAdr = -1;
                     newDic[v.Key].Item2.status = enmPCMSTATUS.ERROR;
                 }
@@ -309,7 +309,7 @@ namespace Core
             if (page.instrument == -1)
             {
                 LinePos lp = mml?.line?.Lp;
-                if (lp == null) lp = new LinePos("-");
+                if (lp == null) lp = new LinePos(null,"-");
                 msgBox.setErrMsg(msg.get("E22005"), lp);
                 return;
             }

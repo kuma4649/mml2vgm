@@ -865,6 +865,7 @@ namespace Core
                             if (mml.line != null && mml.line.Lp != null)
                             {
                                 od.linePos = new LinePos(
+                                    mml.line.Lp.document,
                                     mml.line.Lp.srcMMLID,
                                     mml.line.Lp.row,
                                     mml.line.Lp.col,
@@ -895,6 +896,7 @@ namespace Core
                             if (mml.line != null && mml.line.Lp != null)
                             {
                                 od.linePos = new LinePos(
+                                    mml.line.Lp.document,
                                     mml.line.Lp.srcMMLID,
                                     mml.line.Lp.row,
                                     mml.line.Lp.col,
@@ -922,6 +924,7 @@ namespace Core
                                 if (mml.line != null && mml.line.Lp != null)
                                 {
                                     od.linePos = new LinePos(
+                                        mml.line.Lp.document,
                                         mml.line.Lp.srcMMLID,
                                         mml.line.Lp.row,
                                         mml.line.Lp.col,
@@ -948,6 +951,7 @@ namespace Core
                                 if (mml.line != null && mml.line.Lp != null)
                                 {
                                     od.linePos = new LinePos(
+                                        mml.line.Lp.document,
                                         mml.line.Lp.srcMMLID,
                                         mml.line.Lp.row,
                                         mml.line.Lp.col,
@@ -1192,6 +1196,7 @@ namespace Core
                                 if (mml.line != null && mml.line.Lp != null)
                                 {
                                     od.linePos = new LinePos(
+                                        mml.line.Lp.document,
                                         mml.line.Lp.srcMMLID,
                                         mml.line.Lp.row,
                                         mml.line.Lp.col,
@@ -1226,6 +1231,7 @@ namespace Core
                                     if (mml.line != null && mml.line.Lp != null)
                                     {
                                         od.linePos = new LinePos(
+                                            mml.line.Lp.document,
                                             mml.line.Lp.srcMMLID,
                                             mml.line.Lp.row,
                                             mml.line.Lp.col,
@@ -1267,6 +1273,7 @@ namespace Core
                             if (mml.line != null && mml.line.Lp != null)
                             {
                                 od.linePos = new LinePos(
+                                    mml.line.Lp.document,
                                     mml.line.Lp.srcMMLID,
                                     mml.line.Lp.row,
                                     mml.line.Lp.col,
@@ -1298,6 +1305,7 @@ namespace Core
                             if (mml.line != null && mml.line.Lp != null)
                             {
                                 od.linePos = new LinePos(
+                                    mml.line.Lp.document,
                                     mml.line.Lp.srcMMLID,
                                     mml.line.Lp.row,
                                     mml.line.Lp.col,
@@ -1325,6 +1333,7 @@ namespace Core
                                 if (mml.line != null && mml.line.Lp != null)
                                 {
                                     od.linePos = new LinePos(
+                                        mml.line.Lp.document,
                                         mml.line.Lp.srcMMLID,
                                         mml.line.Lp.row,
                                         mml.line.Lp.col,
@@ -1351,6 +1360,7 @@ namespace Core
                                 if (mml.line != null && mml.line.Lp != null)
                                 {
                                     od.linePos = new LinePos(
+                                        mml.line.Lp.document,
                                         mml.line.Lp.srcMMLID,
                                         mml.line.Lp.row,
                                         mml.line.Lp.col,

@@ -71,6 +71,7 @@ namespace mml2vgmIDE
         private bool traceInfoSw = false;
         private string wrkPath = "";
         private string[] activeMMLTextLines = null;
+        private object compileTargetDocument = null;
         private System.Media.SoundPlayer player = null;
         public Setting setting;
         private ToolStripMenuItem tsmiTreeView = null;
@@ -1500,6 +1501,7 @@ stop();
             {
                 if (dc == null) return;
                 if (!(dc is FrmEditor)) return;
+                compileTargetDocument = (FrmEditor)dc;
                 activeMMLTextLines = ((FrmEditor)dc).azukiControl.Text.Split(new string[] { "\r\n" }, StringSplitOptions.None);
 
                 string tempPath = Path.Combine(Common.GetApplicationDataFolder(true), "temp", Path.GetFileName(((Document)((FrmEditor)dc).Tag).gwiFullPath));
@@ -1789,11 +1791,11 @@ stop();
             string stPath = System.Windows.Forms.Application.StartupPath;
             if (!doExport)
             {
-                mv = new Mml2vgm(activeMMLTextLines, args[1], null, stPath, Disp, wrkPath, false);
+                mv = new Mml2vgm(compileTargetDocument, activeMMLTextLines, args[1], null, stPath, Disp, wrkPath, false);
             }
             else
             {
-                mv = new Mml2vgm(activeMMLTextLines, args[1], args[1], stPath, Disp, wrkPath, true);
+                mv = new Mml2vgm(compileTargetDocument, activeMMLTextLines, args[1], args[1], stPath, Disp, wrkPath, true);
             }
             mv.isIDE = true;
             mv.doSkip = doSkip;
@@ -2029,7 +2031,22 @@ stop();
             //エラーリストウィンドウにエラーメッセージリストを追加
             foreach (msgInfo mes in msgBox.getErr())
             {
-                frmErrorList.dataGridView1.Rows.Add("Error", mes.filename, mes.line == -1 ? "-" : (mes.line + 1).ToString(), mes.body);
+                if (mes.document != null)
+                {
+                    frmErrorList.dataGridView1.Rows.Add(
+                        "Error",
+                        ((FrmEditor)mes.document).document.gwiFullPath,
+                        mes.line == -1 ? "-" : (mes.line + 1).ToString(),
+                        mes.body);
+                }
+                else
+                {
+                    frmErrorList.dataGridView1.Rows.Add(
+                        "Error",
+                        mes.filename,
+                        mes.line == -1 ? "-" : (mes.line + 1).ToString(),
+                        mes.body);
+                }
                 //frmConsole.textBox1.AppendText(string.Format(msg.get("I0109"), mes));
             }
 
@@ -2155,7 +2172,7 @@ stop();
                 frmErrorList.dataGridView1.Rows.Add("Error", "-"
                     , mes.Item1 == -1 ? "-" : (mes.Item1 + 1).ToString()
                     , mes.Item3);
-                msgInfo mi = new msgInfo("", mes.Item1, mes.Item2, -1, mes.Item3);
+                msgInfo mi = new msgInfo(null,"", mes.Item1, mes.Item2, -1, mes.Item3);
                 msgBox.setErrMsg(mi);
             }
 
@@ -2164,7 +2181,7 @@ stop();
                 frmErrorList.dataGridView1.Rows.Add("Warning", "-"
                     , mes.Item1 == -1 ? "-" : (mes.Item1 + 1).ToString()
                     , mes.Item3);
-                msgInfo mi = new msgInfo("", mes.Item1, mes.Item2, -1, mes.Item3);
+                msgInfo mi = new msgInfo(null, "", mes.Item1, mes.Item2, -1, mes.Item3);
                 msgBox.setWrnMsg(mi);
             }
 
@@ -2290,7 +2307,7 @@ stop();
                 frmErrorList.dataGridView1.Rows.Add("Error", "-"
                     , mes.Item1 == -1 ? "-" : (mes.Item1 + 1).ToString()
                     , mes.Item3);
-                msgInfo mi = new msgInfo("", mes.Item1, mes.Item2, -1, mes.Item3);
+                msgInfo mi = new msgInfo(null, "", mes.Item1, mes.Item2, -1, mes.Item3);
                 msgBox.setErrMsg(mi);
             }
 
@@ -2299,7 +2316,7 @@ stop();
                 frmErrorList.dataGridView1.Rows.Add("Warning", "-"
                     , mes.Item1 == -1 ? "-" : (mes.Item1 + 1).ToString()
                     , mes.Item3);
-                msgInfo mi = new msgInfo("", mes.Item1, mes.Item2, -1, mes.Item3);
+                msgInfo mi = new msgInfo(null, "", mes.Item1, mes.Item2, -1, mes.Item3);
                 msgBox.setWrnMsg(mi);
             }
 
@@ -2375,7 +2392,7 @@ stop();
                 frmErrorList.dataGridView1.Rows.Add("Error", "-"
                     , mes.Item1 == -1 ? "-" : (mes.Item1 + 1).ToString()
                     , mes.Item3);
-                msgInfo mi = new msgInfo("", mes.Item1, mes.Item2, -1, mes.Item3);
+                msgInfo mi = new msgInfo(null, "", mes.Item1, mes.Item2, -1, mes.Item3);
                 msgBox.setErrMsg(mi);
             }
 
@@ -2384,7 +2401,7 @@ stop();
                 frmErrorList.dataGridView1.Rows.Add("Warning", "-"
                     , mes.Item1 == -1 ? "-" : (mes.Item1 + 1).ToString()
                     , mes.Item3);
-                msgInfo mi = new msgInfo("", mes.Item1, mes.Item2, -1, mes.Item3);
+                msgInfo mi = new msgInfo(null, "", mes.Item1, mes.Item2, -1, mes.Item3);
                 msgBox.setWrnMsg(mi);
             }
 
@@ -2624,7 +2641,8 @@ stop();
             {
                 foreach (DockContent dc in dpMain.Documents)
                 {
-                    if (Path.GetFileName(((Document)dc.Tag).gwiFullPath) != fn)
+                    //if (Path.GetFileName(((Document)dc.Tag).gwiFullPath) != fn)
+                    if (((Document)dc.Tag).gwiFullPath != fn)
                     {
                         continue;
                     }

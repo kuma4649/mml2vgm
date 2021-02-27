@@ -19,6 +19,7 @@ namespace Core
         public bool outTraceInfoFile = false;
         public string desTiFn = "";
 
+        private object document;
         private string srcFn;
         private string desFn;
         private string stPath;
@@ -44,8 +45,9 @@ namespace Core
         /// <param name="desFn">出力ファイル</param>
         /// <param name="stPath">アプリケーションパス</param>
         /// <param name="disp">メッセージ表示メソッド</param>
-        public Mml2vgm(string srcFn, string desFn, string stPath, Action<string> disp)
+        public Mml2vgm(object document, string srcFn, string desFn, string stPath, Action<string> disp)
         {
+            this.document = document;
             this.srcFn = srcFn;
             this.desFn = desFn;
             this.stPath = stPath;
@@ -65,8 +67,9 @@ namespace Core
         /// <param name="stPath">アプリケーションパス</param>
         /// <param name="disp">メッセージ表示メソッド</param>
         /// <param name="wrkPath">取り込みファイルが存在するパス(通常はソースファイルと同じパス)</param>
-        public Mml2vgm(string srcFn, string desFn, string stPath, Action<string> disp, string wrkPath)
+        public Mml2vgm(object document, string srcFn, string desFn, string stPath, Action<string> disp, string wrkPath)
         {
+            this.document = document;
             this.srcFn = srcFn;
             this.desFn = desFn;
             this.stPath = stPath;
@@ -78,8 +81,9 @@ namespace Core
             this.doJumping = false;
         }
 
-        public Mml2vgm(string[] srcTxt, string srcFn, string desFn, string stPath, Action<string> disp, string wrkPath, bool writeFileMode)
+        public Mml2vgm(object document, string[] srcTxt, string srcFn, string desFn, string stPath, Action<string> disp, string wrkPath, bool writeFileMode)
         {
+            this.document = document;
             this.srcFn = srcFn;
             this.desFn = desFn;
             this.stPath = stPath;
@@ -241,7 +245,7 @@ namespace Core
                 srcFn = srcFn.Replace('\\', Path.DirectorySeparatorChar).Replace('/', Path.DirectorySeparatorChar);
                 if (!File.Exists(srcFn))
                 {
-                    msgBox.setErrMsg(msg.get("E04000"), new LinePos(srcFn));
+                    msgBox.setErrMsg(msg.get("E04000"), new LinePos(document,srcFn));
                     return -1;
                 }
 
@@ -256,7 +260,7 @@ namespace Core
 
             if (src == null)
             {
-                msgBox.setErrMsg(msg.get("E04001"), new LinePos(srcFn));
+                msgBox.setErrMsg(msg.get("E04001"), new LinePos(document, srcFn));
                 return -1;
             }
 
@@ -611,7 +615,7 @@ namespace Core
             {
                 msgBox.setErrMsg(string.Format(
                                 msg.get("E04008")
-                                , srcFn), new LinePos(srcFn));
+                                , srcFn), new LinePos(document, srcFn));
                 return null;
             }
         }
@@ -620,7 +624,7 @@ namespace Core
         {
             foreach (string s in srcBuf)
             {
-                Line line = new Line(new LinePos(sourceFileName, sourceLineNumber), s);
+                Line line = new Line(new LinePos(document,sourceFileName, sourceLineNumber), s);
                 des.Add(line);
                 sourceLineNumber++;
 
@@ -638,7 +642,7 @@ namespace Core
                         {
                             msgBox.setErrMsg(string.Format(
                                 msg.get("E04006")
-                                , includeFn), new LinePos(sourceFileName, sourceLineNumber, 0, s.Length));
+                                , includeFn), new LinePos(null,sourceFileName, sourceLineNumber, 0, s.Length));
                             return null;
                         }
                     }
@@ -716,7 +720,7 @@ namespace Core
                             {
                                 msgBox.setErrMsg(string.Format(
                                     msg.get("E04007")
-                                    , v.fileName), new LinePos(pds.FileName));
+                                    , v.fileName), new LinePos(null,pds.FileName));
                                 continue;
                             }
 
@@ -734,7 +738,7 @@ namespace Core
                             {
                                 msgBox.setErrMsg(string.Format(
                                     msg.get("E01017")
-                                    , v.fileName), new LinePos(pds.FileName));
+                                    , v.fileName), new LinePos(null,pds.FileName));
                                 continue;
                             }
 
@@ -857,7 +861,7 @@ namespace Core
                         {
                             msgBox.setErrMsg(string.Format(
                                 msg.get("E04007")
-                                , v.fileName), new LinePos(pds.FileName));
+                                , v.fileName), new LinePos(null,pds.FileName));
                             continue;
                         }
 
@@ -865,7 +869,7 @@ namespace Core
                         {
                             msgBox.setErrMsg(string.Format(
                                 msg.get("E01017")
-                                , v.fileName), new LinePos(pds.FileName));
+                                , v.fileName), new LinePos(null,pds.FileName));
                             continue;
                         }
 
@@ -885,7 +889,7 @@ namespace Core
                         {
                             msgBox.setErrMsg(string.Format(
                                 msg.get("E04007")
-                                , pds.FileName), new LinePos(pds.FileName));
+                                , pds.FileName), new LinePos(null,pds.FileName));
                             continue;
                         }
                         desVGM.chips[pds.chip][pds.chipNumber]

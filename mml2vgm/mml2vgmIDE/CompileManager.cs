@@ -177,7 +177,7 @@ namespace mml2vgmIDE
             {
                 foreach (Tuple<int, int, string> mes in ci.errorList)
                 {
-                    msgInfo mi = new msgInfo("", mes.Item1, mes.Item2, 0, mes.Item3);
+                    msgInfo mi = new msgInfo(null,"", mes.Item1, mes.Item2, 0, mes.Item3);
                     lstMsgInfo.Add(mi);
                 }
             }
@@ -188,7 +188,7 @@ namespace mml2vgmIDE
             {
                 foreach (Tuple<int, int, string> mes in ci.warningList)
                 {
-                    msgInfo mi = new msgInfo("", mes.Item1, mes.Item2, 0, mes.Item3);
+                    msgInfo mi = new msgInfo(null,"", mes.Item1, mes.Item2, 0, mes.Item3);
                     lstMsgInfo.Add(mi);
                 }
             }
@@ -233,7 +233,7 @@ namespace mml2vgmIDE
             {
                 foreach (Tuple<int, int, string> mes in ci.errorList)
                 {
-                    msgInfo mi = new msgInfo("", mes.Item1, mes.Item2, 0, mes.Item3);
+                    msgInfo mi = new msgInfo(null,"", mes.Item1, mes.Item2, 0, mes.Item3);
                     lstMsgInfo.Add(mi);
                 }
             }
@@ -244,7 +244,7 @@ namespace mml2vgmIDE
             {
                 foreach (Tuple<int, int, string> mes in ci.warningList)
                 {
-                    msgInfo mi = new msgInfo("", mes.Item1, mes.Item2, 0, mes.Item3);
+                    msgInfo mi = new msgInfo(null,"", mes.Item1, mes.Item2, 0, mes.Item3);
                     lstMsgInfo.Add(mi);
                 }
             }
@@ -289,7 +289,7 @@ namespace mml2vgmIDE
             {
                 foreach (Tuple<int, int, string> mes in ci.errorList)
                 {
-                    msgInfo mi = new msgInfo("", mes.Item1, mes.Item2, 0, mes.Item3);
+                    msgInfo mi = new msgInfo(null,"", mes.Item1, mes.Item2, 0, mes.Item3);
                     lstMsgInfo.Add(mi);
                 }
             }
@@ -300,7 +300,7 @@ namespace mml2vgmIDE
             {
                 foreach (Tuple<int, int, string> mes in ci.warningList)
                 {
-                    msgInfo mi = new msgInfo("", mes.Item1, mes.Item2, 0, mes.Item3);
+                    msgInfo mi = new msgInfo(null,"", mes.Item1, mes.Item2, 0, mes.Item3);
                     lstMsgInfo.Add(mi);
                 }
             }
@@ -310,7 +310,7 @@ namespace mml2vgmIDE
 
         private void Compile_GWI(queItem qi)
         {
-
+            object compileTargetDocument = qi.doc;
             string stPath = System.Windows.Forms.Application.StartupPath;
             string[] activeMMLTextLines = qi.srcText.Split(new string[] { "\r\n" }, StringSplitOptions.None);
             string tempPath = Path.Combine(Common.GetApplicationDataFolder(true), "temp", Path.GetFileName(qi.doc.gwiFullPath));
@@ -319,7 +319,7 @@ namespace mml2vgmIDE
             string wrkPath = path1;
             msgBox.clear();
 
-            Mml2vgm mv = new Mml2vgm(activeMMLTextLines, tempPath, null, stPath, disp, wrkPath, false);
+            Mml2vgm mv = new Mml2vgm(compileTargetDocument, activeMMLTextLines, tempPath, null, stPath, disp, wrkPath, false);
             mv.isIDE = true;
             int result = mv.Start();
 

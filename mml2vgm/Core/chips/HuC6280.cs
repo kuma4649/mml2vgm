@@ -200,7 +200,7 @@ namespace Core
 
         public override void StorePcmRawData(clsPcmDatSeq pds, byte[] buf, bool isRaw, bool is16bit, int samplerate, params object[] option)
         {
-            msgBox.setWrnMsg(msg.get("E12007"), new LinePos("-"));
+            msgBox.setWrnMsg(msg.get("E12007"), new LinePos(null,"-"));
         }
 
         public override int GetFNum(partPage page, MML mml, int octave, char cmd, int shift)

@@ -81,9 +81,9 @@ namespace mml2vgmIDE
             this.vgmBuf = null;
             this.mBuf = mBuf;
             this.chipRegister = chipRegister;
-            this.useChip = useChip;
-            this.latency = latency;
-            this.waitTime = waitTime;
+            //this.useChip = useChip;
+            //this.latency = latency;
+            //this.waitTime = waitTime;
             this.pm = pmdManager;
             chipYM2608 = chipRegister.YM2608[0];
             chipPPZ8 = chipRegister.PPZ8[0];

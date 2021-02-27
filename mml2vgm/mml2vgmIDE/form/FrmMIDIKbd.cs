@@ -623,7 +623,7 @@ namespace mml2vgmIDE
             Action<string> dmy = dmyDisp;
             string wrkPath = "";
 
-            mv = new Mml2vgm(text, "", "", stPath, dmy, wrkPath, false);
+            mv = new Mml2vgm(null, text, "", "", stPath, dmy, wrkPath, false);
             mv.isIDE = true;
             mv.Start();
             cChip = mv.desVGM.ym2612[0];

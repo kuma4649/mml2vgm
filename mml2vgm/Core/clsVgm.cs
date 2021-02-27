@@ -543,7 +543,7 @@ namespace Core
                             msg.get("E01000")
                             , p.Substring(0, 2).Trim() + int.Parse(p.Substring(2, 2)).ToString()
                             ),
-                            new LinePos("-")
+                            new LinePos(null,"-")
                             );
                         flg = false;
                     }
@@ -1593,6 +1593,7 @@ namespace Core
                 aliesData.Remove(name);
             }
             Line l = new Line(new LinePos(
+                line.Lp.document,
                 line.Lp.srcMMLID,
                 line.Lp.row,
                 line.Lp.col,
@@ -1645,6 +1646,7 @@ namespace Core
                     partData[n].Add(p, new List<List<Line>>());
                 }
                 Line l = new Line(new LinePos(
+                    line.Lp.document,
                     line.Lp.srcMMLID,
                     line.Lp.row,
                     line.Lp.col,
@@ -4271,7 +4273,7 @@ namespace Core
 
                         if (des.Count - frameDummyCounter - framePtr > 256)
                         {
-                            msgBox.setWrnMsg(string.Format(msg.get("E01015"), frameCnt, des.Count - frameDummyCounter - framePtr), new LinePos("-"));
+                            msgBox.setWrnMsg(string.Format(msg.get("E01015"), frameCnt, des.Count - frameDummyCounter - framePtr), new LinePos(null,"-"));
                         }
                         framePtr = des.Count;
                         frameDummyCounter = 0;
@@ -4464,7 +4466,7 @@ namespace Core
 
                         break;
                     default:
-                        msgBox.setErrMsg(string.Format("Unknown command[{0:X}]", cmd.val), new LinePos("-"));
+                        msgBox.setErrMsg(string.Format("Unknown command[{0:X}]", cmd.val), new LinePos(null,"-"));
                         return null;
                 }
             }
@@ -5156,7 +5158,7 @@ namespace Core
                     page.dataEnd = true;
                     page.enableInterrupt = true;
                     page.waitCounter = -1;
-                    if (mml.args[0] != "partEnd")
+                    if ((string)mml.args[0] != "partEnd")
                     {
                         compileEnd=true;
                     }
@@ -5685,6 +5687,7 @@ namespace Core
                         if (mml.line != null && mml.line.Lp != null)
                         {
                             od.linePos = new LinePos(
+                                mml.line.Lp.document,
                                 mml.line.Lp.srcMMLID,
                                 mml.line.Lp.row,
                                 mml.line.Lp.col,
@@ -5713,6 +5716,7 @@ namespace Core
                     if (mml.line != null && mml.line.Lp != null)
                     {
                         od.linePos = new LinePos(
+                            mml.line.Lp.document,
                             mml.line.Lp.srcMMLID,
                             mml.line.Lp.row,
                             mml.line.Lp.col,
@@ -5745,6 +5749,7 @@ namespace Core
                         if (od.linePos != null)
                         {
                             o.linePos = new LinePos(
+                                od.linePos.document,
                                 od.linePos.srcMMLID,
                                 od.linePos.row,
                                 od.linePos.col,
@@ -5770,6 +5775,7 @@ namespace Core
                     if (od.linePos != null)
                     {
                         o.linePos = new LinePos(
+                            od.linePos.document,
                             od.linePos.srcMMLID,
                             od.linePos.row,
                             od.linePos.col,

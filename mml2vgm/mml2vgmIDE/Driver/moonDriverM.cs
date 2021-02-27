@@ -73,9 +73,9 @@ namespace mml2vgmIDE
             this.vgmBuf = null;
             this.mdrBuf = mdrBuf;
             this.chipRegister = chipRegister;
-            this.useChip = useChip;
-            this.latency = latency;
-            this.waitTime = waitTime;
+            //this.useChip = useChip;
+            //this.latency = latency;
+            //this.waitTime = waitTime;
             this.MoonDriverManager = moonDriverManager;
             chipYMF278B = chipRegister.YMF278B[0];
             filename = mdrFileName;

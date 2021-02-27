@@ -24,11 +24,11 @@ namespace Core
             //errBox.Add(string.Format("(F : {0}  L : {1}) : {2}", System.IO.Path.GetFileName(fn), lineNumber, msg));
             if (lp != null)
             {
-                errBox.Add(new msgInfo(lp.srcMMLID, lp.row, lp.col, lp.length, msg));
+                errBox.Add(new msgInfo(lp.document,lp.srcMMLID, lp.row, lp.col, lp.length, msg));
             }
             else
             {
-                errBox.Add(new msgInfo("-", -1, -1, -1, msg));
+                errBox.Add(new msgInfo(null,"-", -1, -1, -1, msg));
             }
         }
 
@@ -41,11 +41,11 @@ namespace Core
         {
             if (lp != null)
             {
-                wrnBox.Add(new msgInfo(lp.srcMMLID, lp.row, lp.col, lp.length, msg));
+                wrnBox.Add(new msgInfo(lp.document, lp.srcMMLID, lp.row, lp.col, lp.length, msg));
             }
             else
             {
-                wrnBox.Add(new msgInfo("-", -1, -1, -1, msg));
+                wrnBox.Add(new msgInfo(null, "-", -1, -1, -1, msg));
             }
         }
 
@@ -62,14 +62,16 @@ namespace Core
 
     public class msgInfo
     {
+        public object document = null;
         public string filename = "-";
         public int line = -1;
         public int column = -1;
         public int length = -1;
         public string body = "";
 
-        public msgInfo(string filename, int line, int column, int length, string body)
+        public msgInfo(object document,string filename, int line, int column, int length, string body)
         {
+            this.document = document;
             this.filename = filename;
             this.line = line;
             this.column = column;
