@@ -92,18 +92,18 @@ namespace Core
 
         public void OutSetVolume(partPage page, MML mml, int vol, int n)
         {
-            if (!parent.instFM.ContainsKey(n))
+            if (!parent.instOPM.ContainsKey(n))
             {
                 msgBox.setWrnMsg(string.Format(msg.get("E16000"), n), mml.line.Lp);
                 return;
             }
 
-            int alg = parent.instFM[n].Item2[45] & 0x7;
+            int alg = parent.instOPM[n].Item2[45] & 0x7;
             int[] ope = new int[4] {
-                parent.instFM[n].Item2[0*Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
-                , parent.instFM[n].Item2[1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
-                , parent.instFM[n].Item2[2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
-                , parent.instFM[n].Item2[3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
+                parent.instOPM[n].Item2[0*Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
+                , parent.instOPM[n].Item2[1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
+                , parent.instOPM[n].Item2[2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
+                , parent.instOPM[n].Item2[3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
             };
             int[][] algs = new int[8][]
             {
@@ -153,18 +153,18 @@ namespace Core
 
         public void OutFmSetTL(partPage page, MML mml, int tl1, int tl2, int tl3, int tl4,int slot, int n)
         {
-            if (!parent.instFM.ContainsKey(n))
+            if (!parent.instOPM.ContainsKey(n))
             {
                 msgBox.setWrnMsg(string.Format(msg.get("E11000"), n), mml.line.Lp);
                 return;
             }
 
-            int alg = parent.instFM[n].Item2[45] & 0x7;
+            int alg = parent.instOPM[n].Item2[45] & 0x7;
             int[] ope = new int[4] {
-                parent.instFM[n].Item2[0*Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
-                , parent.instFM[n].Item2[1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
-                , parent.instFM[n].Item2[2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
-                , parent.instFM[n].Item2[3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
+                parent.instOPM[n].Item2[0*Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
+                , parent.instOPM[n].Item2[1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
+                , parent.instOPM[n].Item2[2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
+                , parent.instOPM[n].Item2[3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
             };
             int[][] algs = new int[8][]
             {
@@ -329,7 +329,7 @@ namespace Core
         public void OutSetInstrument(partPage page, MML mml, int n, int vol, int modeBeforeSend)
         {
 
-            if (!parent.instFM.ContainsKey(n))
+            if (!parent.instOPM.ContainsKey(n))
             {
                 msgBox.setWrnMsg(string.Format(msg.get("E16001"), n), mml.line.Lp);
                 return;
@@ -358,30 +358,30 @@ namespace Core
             for (int ope = 0; ope < 4; ope++)
             {
 
-                OutSetDtMl(mml, page, ope, parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 9], parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 8]);
-                OutSetKsAr(mml, page, ope, parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 7], parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 1]);
-                OutSetAmDr(mml, page, ope, parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 11], parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 2]);
-                OutSetDt2Sr(mml, page, ope, parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 10], parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 3]);
-                OutSetSlRr(mml, page, ope, parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 5], parent.instFM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 4]);
+                OutSetDtMl(mml, page, ope, parent.instOPM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 9], parent.instOPM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 8]);
+                OutSetKsAr(mml, page, ope, parent.instOPM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 7], parent.instOPM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 1]);
+                OutSetAmDr(mml, page, ope, parent.instOPM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 11], parent.instOPM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 2]);
+                OutSetDt2Sr(mml, page, ope, parent.instOPM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 10], parent.instOPM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 3]);
+                OutSetSlRr(mml, page, ope, parent.instOPM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 5], parent.instOPM[n].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 4]);
 
             }
-            page.op1ml = parent.instFM[n].Item2[0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
-            page.op2ml = parent.instFM[n].Item2[1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
-            page.op3ml = parent.instFM[n].Item2[2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
-            page.op4ml = parent.instFM[n].Item2[3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
-            page.op1dt2 = parent.instFM[n].Item2[0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 10];
-            page.op2dt2 = parent.instFM[n].Item2[1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 10];
-            page.op3dt2 = parent.instFM[n].Item2[2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 10];
-            page.op4dt2 = parent.instFM[n].Item2[3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 10];
+            page.op1ml = parent.instOPM[n].Item2[0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
+            page.op2ml = parent.instOPM[n].Item2[1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
+            page.op3ml = parent.instOPM[n].Item2[2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
+            page.op4ml = parent.instOPM[n].Item2[3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
+            page.op1dt2 = parent.instOPM[n].Item2[0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 10];
+            page.op2dt2 = parent.instOPM[n].Item2[1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 10];
+            page.op3dt2 = parent.instOPM[n].Item2[2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 10];
+            page.op4dt2 = parent.instOPM[n].Item2[3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 10];
 
-            OutSetPanFeedbackAlgorithm(mml, page, page.pan, parent.instFM[n].Item2[46], parent.instFM[n].Item2[45]);
+            OutSetPanFeedbackAlgorithm(mml, page, page.pan, parent.instOPM[n].Item2[46], parent.instOPM[n].Item2[45]);
 
-            int alg = parent.instFM[n].Item2[45] & 0x7;
+            int alg = parent.instOPM[n].Item2[45] & 0x7;
             int[] op = new int[4] {
-                parent.instFM[n].Item2[0*Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
-                , parent.instFM[n].Item2[1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
-                , parent.instFM[n].Item2[2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
-                , parent.instFM[n].Item2[3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
+                parent.instOPM[n].Item2[0*Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
+                , parent.instOPM[n].Item2[1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
+                , parent.instOPM[n].Item2[2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
+                , parent.instOPM[n].Item2[3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 6]
             };
             int[][] algs = new int[8][]
             {
@@ -561,7 +561,7 @@ namespace Core
 
             if (page.beforeVolume != vol)
             {
-                if (parent.instFM.ContainsKey(page.instrument))
+                if (parent.instOPM.ContainsKey(page.instrument))
                 {
                     OutSetVolume(page, mml, vol, page.instrument);
                     page.beforeVolume = vol;
@@ -598,7 +598,7 @@ namespace Core
 
             if (page.spg.beforeTlDelta1 != tl1 || page.spg.beforeTlDelta2 != tl2 || page.spg.beforeTlDelta3 != tl3 || page.spg.beforeTlDelta4 != tl4)
             {
-                if (parent.instFM.ContainsKey(page.instrument))
+                if (parent.instOPM.ContainsKey(page.instrument))
                 {
                     OutFmSetTL(page, mml, tl1, tl2, tl3, tl4, slot, page.instrument);
                 }
@@ -683,54 +683,54 @@ namespace Core
             if (i < 0) return;
 
             page.toneDoublerKeyShift = 0;
-            byte[] instFM = parent.instFM[i].Item2;
-            if (instFM == null || instFM.Length < 1) return;
+            byte[] instOPM = parent.instOPM[i].Item2;
+            if (instOPM == null || instOPM.Length < 1) return;
             Note note = (Note)mml.args[0];
 
             if (page.TdA == -1)
             {
                 //resetToneDoubler
                 //ML
-                if (page.op1ml != instFM[0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8])
+                if (page.op1ml != instOPM[0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8])
                 {
-                    ((YM2151)page.chip).OutSetDtMl(mml, page, 0, instFM[0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 9], instFM[0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8]);
-                    page.op1ml = instFM[0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
+                    ((YM2151)page.chip).OutSetDtMl(mml, page, 0, instOPM[0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 9], instOPM[0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8]);
+                    page.op1ml = instOPM[0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
                 }
-                if (page.op2ml != instFM[1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8])
+                if (page.op2ml != instOPM[1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8])
                 {
-                    ((YM2151)page.chip).OutSetDtMl(mml, page, 1, instFM[1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 9], instFM[1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8]);
-                    page.op2ml = instFM[1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
+                    ((YM2151)page.chip).OutSetDtMl(mml, page, 1, instOPM[1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 9], instOPM[1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8]);
+                    page.op2ml = instOPM[1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
                 }
-                if (page.op3ml != instFM[2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8])
+                if (page.op3ml != instOPM[2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8])
                 {
-                    ((YM2151)page.chip).OutSetDtMl(mml, page, 2, instFM[2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 9], instFM[2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8]);
-                    page.op3ml = instFM[2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
+                    ((YM2151)page.chip).OutSetDtMl(mml, page, 2, instOPM[2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 9], instOPM[2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8]);
+                    page.op3ml = instOPM[2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
                 }
-                if (page.op4ml != instFM[3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8])
+                if (page.op4ml != instOPM[3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8])
                 {
-                    ((YM2151)page.chip).OutSetDtMl(mml, page, 3, instFM[3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 9], instFM[3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8]);
-                    page.op4ml = instFM[3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
+                    ((YM2151)page.chip).OutSetDtMl(mml, page, 3, instOPM[3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 9], instOPM[3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8]);
+                    page.op4ml = instOPM[3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 8];
                 }
                 //DT2
-                if (page.op1dt2 != instFM[0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 10])
+                if (page.op1dt2 != instOPM[0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 10])
                 {
-                    ((YM2151)page.chip).OutSetDt2Sr(mml, page, 0, instFM[0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 10], instFM[0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 3]);
-                    page.op1dt2 = instFM[0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 10];
+                    ((YM2151)page.chip).OutSetDt2Sr(mml, page, 0, instOPM[0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 10], instOPM[0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 3]);
+                    page.op1dt2 = instOPM[0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 10];
                 }
-                if (page.op2dt2 != instFM[1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 10])
+                if (page.op2dt2 != instOPM[1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 10])
                 {
-                    ((YM2151)page.chip).OutSetDt2Sr(mml, page, 1, instFM[1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 10], instFM[1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 3]);
-                    page.op2dt2 = instFM[1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 10];
+                    ((YM2151)page.chip).OutSetDt2Sr(mml, page, 1, instOPM[1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 10], instOPM[1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 3]);
+                    page.op2dt2 = instOPM[1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 10];
                 }
-                if (page.op3dt2 != instFM[2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 10])
+                if (page.op3dt2 != instOPM[2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 10])
                 {
-                    ((YM2151)page.chip).OutSetDt2Sr(mml, page, 2, instFM[2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 10], instFM[2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 3]);
-                    page.op3dt2 = instFM[2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 10];
+                    ((YM2151)page.chip).OutSetDt2Sr(mml, page, 2, instOPM[2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 10], instOPM[2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 3]);
+                    page.op3dt2 = instOPM[2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 10];
                 }
-                if (page.op4dt2 != instFM[3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 10])
+                if (page.op4dt2 != instOPM[3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 10])
                 {
-                    ((YM2151)page.chip).OutSetDt2Sr(mml, page, 3, instFM[3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 10], instFM[3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 3]);
-                    page.op4dt2 = instFM[3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 10];
+                    ((YM2151)page.chip).OutSetDt2Sr(mml, page, 3, instOPM[3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 10], instOPM[3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 3]);
+                    page.op4dt2 = instOPM[3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 10];
                 }
             }
             else
@@ -770,43 +770,43 @@ namespace Core
                 //ML
                 if (page.op1ml != instToneDoubler.lstTD[us].OP1ML)
                 {
-                    ((YM2151)page.chip).OutSetDtMl(mml, page, 0, instFM[0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 9], instToneDoubler.lstTD[us].OP1ML);
+                    ((YM2151)page.chip).OutSetDtMl(mml, page, 0, instOPM[0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 9], instToneDoubler.lstTD[us].OP1ML);
                     page.op1ml = instToneDoubler.lstTD[us].OP1ML;
                 }
                 if (page.op2ml != instToneDoubler.lstTD[us].OP2ML)
                 {
-                    ((YM2151)page.chip).OutSetDtMl(mml, page, 1, instFM[1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 9], instToneDoubler.lstTD[us].OP2ML);
+                    ((YM2151)page.chip).OutSetDtMl(mml, page, 1, instOPM[1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 9], instToneDoubler.lstTD[us].OP2ML);
                     page.op2ml = instToneDoubler.lstTD[us].OP2ML;
                 }
                 if (page.op3ml != instToneDoubler.lstTD[us].OP3ML)
                 {
-                    ((YM2151)page.chip).OutSetDtMl(mml, page, 2, instFM[2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 9], instToneDoubler.lstTD[us].OP3ML);
+                    ((YM2151)page.chip).OutSetDtMl(mml, page, 2, instOPM[2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 9], instToneDoubler.lstTD[us].OP3ML);
                     page.op3ml = instToneDoubler.lstTD[us].OP3ML;
                 }
                 if (page.op4ml != instToneDoubler.lstTD[us].OP4ML)
                 {
-                    ((YM2151)page.chip).OutSetDtMl(mml, page, 3, instFM[3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 9], instToneDoubler.lstTD[us].OP4ML);
+                    ((YM2151)page.chip).OutSetDtMl(mml, page, 3, instOPM[3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 9], instToneDoubler.lstTD[us].OP4ML);
                     page.op4ml = instToneDoubler.lstTD[us].OP4ML;
                 }
                 //DT2
                 if (page.op1dt2 != instToneDoubler.lstTD[us].OP1DT2)
                 {
-                    ((YM2151)page.chip).OutSetDt2Sr(mml, page, 0, instToneDoubler.lstTD[us].OP1DT2, instFM[0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 3]);
+                    ((YM2151)page.chip).OutSetDt2Sr(mml, page, 0, instToneDoubler.lstTD[us].OP1DT2, instOPM[0 * Const.INSTRUMENT_M_OPERATOR_SIZE + 3]);
                     page.op1dt2 = instToneDoubler.lstTD[us].OP1DT2;
                 }
                 if (page.op2dt2 != instToneDoubler.lstTD[us].OP2DT2)
                 {
-                    ((YM2151)page.chip).OutSetDt2Sr(mml, page, 1, instToneDoubler.lstTD[us].OP2DT2, instFM[1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 3]);
+                    ((YM2151)page.chip).OutSetDt2Sr(mml, page, 1, instToneDoubler.lstTD[us].OP2DT2, instOPM[1 * Const.INSTRUMENT_M_OPERATOR_SIZE + 3]);
                     page.op2dt2 = instToneDoubler.lstTD[us].OP2DT2;
                 }
                 if (page.op3dt2 != instToneDoubler.lstTD[us].OP3DT2)
                 {
-                    ((YM2151)page.chip).OutSetDt2Sr(mml, page, 2, instToneDoubler.lstTD[us].OP3DT2, instFM[2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 3]);
+                    ((YM2151)page.chip).OutSetDt2Sr(mml, page, 2, instToneDoubler.lstTD[us].OP3DT2, instOPM[2 * Const.INSTRUMENT_M_OPERATOR_SIZE + 3]);
                     page.op3dt2 = instToneDoubler.lstTD[us].OP3DT2;
                 }
                 if (page.op4dt2 != instToneDoubler.lstTD[us].OP4DT2)
                 {
-                    ((YM2151)page.chip).OutSetDt2Sr(mml, page, 3, instToneDoubler.lstTD[us].OP4DT2, instFM[3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 3]);
+                    ((YM2151)page.chip).OutSetDt2Sr(mml, page, 3, instToneDoubler.lstTD[us].OP4DT2, instOPM[3 * Const.INSTRUMENT_M_OPERATOR_SIZE + 3]);
                     page.op4dt2 = instToneDoubler.lstTD[us].OP4DT2;
                 }
 
@@ -911,8 +911,8 @@ namespace Core
                     mml,
                     page
                     , (int)page.pan
-                    , parent.instFM[page.instrument].Item2[46]
-                    , parent.instFM[page.instrument].Item2[45]
+                    , parent.instOPM[page.instrument].Item2[46]
+                    , parent.instOPM[page.instrument].Item2[45]
                     );
             }
         }

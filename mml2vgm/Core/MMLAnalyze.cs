@@ -552,7 +552,6 @@ namespace Core
                         (
                         pw.cpg.Type == enmChannelType.FMOPN
                         || pw.cpg.Type == enmChannelType.FMOPL
-                        || pw.cpg.Type == enmChannelType.FMOPM
                         || pw.cpg.Type == enmChannelType.FMOPNex
                         )
                     && (
@@ -566,6 +565,27 @@ namespace Core
                     if (desVGM.instFM.ContainsKey(n))
                     {
                         mml.args.Add(desVGM.instFM[n].Item1);
+                    }
+                    else
+                    {
+                        msgBox.setErrMsg(msg.get("E05002"), mml.line.Lp);
+                    }
+                }
+                else if (
+                        (
+                        pw.cpg.Type == enmChannelType.FMOPM
+                        )
+                    && (
+                        a == 'N'
+                        || a == 'R'
+                        || a == 'A'
+                        || (mml.args[0] is char && (char)mml.args[0] == 'n')
+                        )
+                    )
+                {
+                    if (desVGM.instOPM.ContainsKey(n))
+                    {
+                        mml.args.Add(desVGM.instOPM[n].Item1);
                     }
                     else
                     {

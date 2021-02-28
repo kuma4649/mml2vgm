@@ -29,6 +29,10 @@ namespace mml2vgmIDE
             {
                 instCache = ConvertCacheList(setting.sien);
             }
+
+            this.BackColor = Color.FromArgb(setting.ColorScheme.Azuki_BackColor);
+            treeView1.BackColor = Color.FromArgb(setting.ColorScheme.Azuki_BackColor);
+            this.Opacity = setting.other.Opacity / 100.0;
         }
 
         private Dictionary<string, string[]> ConvertCacheList(Setting.Sien sien)
@@ -199,6 +203,8 @@ namespace mml2vgmIDE
             foreach(TreeNode tn in root.Nodes) treeView1.Nodes.Add(tn);
 
             if (isFirst) update();
+
+            this.treeView1.Enabled = true;
         }
 
 
@@ -447,7 +453,10 @@ namespace mml2vgmIDE
 
         private void treeView1_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (e.KeyChar != 13) return;
+            if (e.KeyChar != 13)
+            {
+                return;
+            }
             if (treeView1.SelectedNode == null) return;
             if (treeView1.SelectedNode.Tag == null) return;
             if (!(treeView1.SelectedNode.Tag is SienItem)) return;
@@ -489,6 +498,17 @@ namespace mml2vgmIDE
             catch { }
         }
 
+        private void treeView1_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+            label2.Text = "";
+            if (treeView1.SelectedNode == null) return;
+            if (treeView1.SelectedNode.Tag == null) return;
+            if (!(treeView1.SelectedNode.Tag is SienItem)) return;
+
+            SienItem si = (SienItem)treeView1.SelectedNode.Tag;
+            label2.Text = si.description;
+
+        }
     }
 
 }

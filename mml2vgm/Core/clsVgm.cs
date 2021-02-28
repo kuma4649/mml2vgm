@@ -41,6 +41,7 @@ namespace Core
 
 
         public Dictionary<int, Tuple<string, byte[]>> instFM = new Dictionary<int, Tuple<string, byte[]>>();
+        public Dictionary<int, Tuple<string, byte[]>> instOPM = new Dictionary<int, Tuple<string, byte[]>>();
         public Dictionary<int, Tuple<string, int[]>> instENV = new Dictionary<int, Tuple<string, int[]>>();
         public Dictionary<int, Tuple<string, clsPcm>> instPCM = new Dictionary<int, Tuple<string, clsPcm>>();
         public List<clsPcmDatSeq> instPCMDatSeq = new List<clsPcmDatSeq>();
@@ -59,11 +60,16 @@ namespace Core
         };
         public Dictionary<string, Line> aliesData = new Dictionary<string, Line>();
 
-        private int instrumentCounter = -1;
-        private string instrumentName;
-        private byte[] instrumentBufCache = new byte[Const.INSTRUMENT_SIZE];
         private int toneDoublerCounter = -1;
         private List<int> toneDoublerBufCache = new List<int>();
+
+        private string instrumentName;
+
+        private int instrumentCounter = -1;
+        private byte[] instrumentBufCache = null;// new byte[Const.INSTRUMENT_SIZE];
+
+        private int opmInstrumentCounter = -1;
+        private byte[] opmInstrumentBufCache = null;
 
         private int wfInstrumentCounter = -1;
         private byte[] wfInstrumentBufCache = null;
@@ -566,6 +572,13 @@ namespace Core
                 else
                     msgBox.setErrMsg(string.Format(msg.get("E01023"), "FM"), line.Lp);
             }
+            if (opmInstrumentCounter != -1)
+            {
+                if (line == null)
+                    msgBox.setErrMsg(string.Format(msg.get("E01022"), "OPM"), null);
+                else
+                    msgBox.setErrMsg(string.Format(msg.get("E01023"), "OPM"), line.Lp);
+            }
             // WaveFormの音色を定義中の場合
             if (wfInstrumentCounter != -1)
             {
@@ -626,6 +639,12 @@ namespace Core
             if (instrumentCounter != -1)
             {
                 return SetInstrument(line);
+            }
+
+            // OPMの音色を定義中の場合
+            if (opmInstrumentCounter != -1)
+            {
+                return SetOpmInstrument(line);
             }
 
             // WaveFormの音色を定義中の場合
@@ -718,9 +737,9 @@ namespace Core
                     return 0;
 
                 case 'M':
-                    instrumentBufCache = new byte[Const.INSTRUMENT_SIZE];
-                    instrumentCounter = 0;
-                    SetInstrument(line);
+                    opmInstrumentBufCache = new byte[Const.OPM_INSTRUMENT_SIZE];
+                    opmInstrumentCounter = 0;
+                    SetOpmInstrument(line);
                     return 0;
 
                 case 'L':
@@ -1688,8 +1707,8 @@ namespace Core
 
                     if (instrumentBufCache.Length == Const.INSTRUMENT_SIZE)
                     {
-                        //M
-                        instFM.Add(instrumentBufCache[0],new Tuple<string, byte[]>(instrumentName, instrumentBufCache));
+                        //OPN
+                        instFM.Add(instrumentBufCache[0], new Tuple<string, byte[]>(instrumentName, instrumentBufCache));
                     }
                     else if (instrumentBufCache.Length == Const.OPLL_INSTRUMENT_SIZE)
                     {
@@ -1716,6 +1735,41 @@ namespace Core
                     }
 
                     instrumentCounter = -1;
+                }
+            }
+            catch
+            {
+                msgBox.setErrMsg(msg.get("E01012"), line.Lp);
+            }
+
+            return 0;
+        }
+
+        private int SetOpmInstrument(Line line)
+        {
+
+            try
+            {
+                string name = "";
+                opmInstrumentCounter = GetNums(opmInstrumentBufCache, opmInstrumentCounter, CutComment(line.Txt).Substring(1).TrimStart(), ref name, line);
+                if (string.IsNullOrEmpty(instrumentName)) instrumentName = name;//音色名
+
+                if (opmInstrumentCounter == opmInstrumentBufCache.Length)
+                {
+                    //すでに定義済みの場合はいったん削除する(後に定義されたものが優先)
+                    if (instOPM.ContainsKey(opmInstrumentBufCache[0]))
+                    {
+                        instOPM.Remove(opmInstrumentBufCache[0]);
+                    }
+
+
+                    if (opmInstrumentBufCache.Length == Const.OPM_INSTRUMENT_SIZE)
+                    {
+                        //M
+                        instOPM.Add(opmInstrumentBufCache[0], new Tuple<string, byte[]>(instrumentName, opmInstrumentBufCache));
+                    }
+
+                    opmInstrumentCounter = -1;
                 }
             }
             catch

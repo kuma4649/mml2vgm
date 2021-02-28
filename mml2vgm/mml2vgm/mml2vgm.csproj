@@ -154,16 +154,6 @@
     <None Include="sample\HuC6280\testPCMMapMode.gwi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="sample\Instruments\Base\OPL3_Bass.gwi" />
-    <None Include="sample\Instruments\Bell\OPL3_BELL.gwi">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="sample\Instruments\Drums\OPL3_ElecDrumSet.gwi">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="sample\Instruments\Drums\OPL3_鈴.gwi">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="sample\K051649\testCommandArpeggioK051649.gwi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -401,7 +391,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="sample\Instruments\SE\" />
     <Folder Include="sample\RF5C164\" />
   </ItemGroup>
   <ItemGroup>

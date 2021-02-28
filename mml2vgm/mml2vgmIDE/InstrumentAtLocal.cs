@@ -116,6 +116,7 @@ namespace mml2vgmIDE
                 mv.isIDE = true;
                 if (mv.Start_Analyze() != 0) return null;
 
+                int renban = 0;
                 //inst FM
                 Dictionary<int, Tuple<string, byte[]>> instFM = mv.desVGM.instFM;
                 foreach (int num in instFM.Keys)
@@ -123,11 +124,78 @@ namespace mml2vgmIDE
                     if (instFM[num].Item2.Length == 47)
                     {
                         string name = instFM[num].Item1;
+                        if (string.IsNullOrEmpty(name))
+                        {
+                            name = string.Format("OPN instrument noname {0}", renban++);
+                        }
                         string str = GetInstrumentGwiFmString(num, name, instFM[num].Item2);
                         if (!string.IsNullOrEmpty(str))
                         {
                             ret.Add(new Tuple<enmInstType, string, string>(enmInstType.FM_N, Path.Combine(srcFn, name).Replace(baseDir, ""), str));
                         }
+                    }
+                    else if (instFM[num].Item2.Length == 27)
+                    {
+                        string name = instFM[num].Item1;
+                        if (string.IsNullOrEmpty(name))
+                        {
+                            name = string.Format("OPL instrument noname {0}", renban++);
+                        }
+                        string str = GetInstrumentGwiFmOPLString(num, name, instFM[num].Item2);
+                        if (!string.IsNullOrEmpty(str))
+                        {
+                            ret.Add(new Tuple<enmInstType, string, string>(enmInstType.FM_L, Path.Combine(srcFn, name).Replace(baseDir, ""), str));
+                        }
+                    }
+                    else
+                    {
+                        ;
+                    }
+                }
+
+                //inst OPM
+                Dictionary<int, Tuple<string, byte[]>> instOPM = mv.desVGM.instOPM;
+                foreach (int num in instOPM.Keys)
+                {
+                    if (instOPM[num].Item2.Length == 47)
+                    {
+                        string name = instOPM[num].Item1;
+                        if (string.IsNullOrEmpty(name))
+                        {
+                            name = string.Format("OPM instrument noname {0}", renban++);
+                        }
+                        string str = GetInstrumentGwiFmOPMString(num, name, instOPM[num].Item2);
+                        if (!string.IsNullOrEmpty(str))
+                        {
+                            ret.Add(new Tuple<enmInstType, string, string>(enmInstType.FM_N, Path.Combine(srcFn, name).Replace(baseDir, ""), str));
+                        }
+                    }
+                    else
+                    {
+                        ;
+                    }
+                }
+
+                //inst WF
+                Dictionary<int, Tuple<string, byte[]>> instWF = mv.desVGM.instWF;
+                foreach (int num in instWF.Keys)
+                {
+                    if (instWF[num].Item2.Length == 33)
+                    {
+                        string name = instWF[num].Item1;
+                        if (string.IsNullOrEmpty(name))
+                        {
+                            name = string.Format("HuC instrument noname {0}", renban++);
+                        }
+                        string str = GetInstrumentGwiWFString(num, name, instWF[num].Item2);
+                        if (!string.IsNullOrEmpty(str))
+                        {
+                            ret.Add(new Tuple<enmInstType, string, string>(enmInstType.FM_M, Path.Combine(srcFn, name).Replace(baseDir, ""), str));
+                        }
+                    }
+                    else
+                    {
+                        ;
                     }
                 }
 
@@ -136,6 +204,10 @@ namespace mml2vgmIDE
                 foreach (int num in instOPNA2WFS.Keys)
                 {
                     string name = instOPNA2WFS[num].Item1;
+                    if (string.IsNullOrEmpty(name))
+                    {
+                        name = string.Format("OPNA2 SSG WF instrument noname {0}", renban++);
+                    }
                     string str = GetInstrumentGwiWfsString(num, name, instOPNA2WFS[num].Item2);
 
                     if (!string.IsNullOrEmpty(str))
@@ -181,6 +253,83 @@ namespace mml2vgmIDE
    AL  FB
 '@ {5}
 ", name + add, line[0], line[1], line[2], line[3], line[4], num);
+
+        }
+
+        private string GetInstrumentGwiFmOPMString(int num, string name, byte[] val)
+        {
+
+            string[] line = new string[5];
+            for (int i = 0; i < 4; i++)
+            {
+                line[i] = "";
+                for (int j = 0; j < 11; j++)
+                {
+                    line[i] += string.Format("{0:D3} ", val[i * 11 + j + 1]);
+                }
+            }
+            line[4] = string.Format("{0:D3} {1:D3}", val[45], val[46]);
+
+            return string.Format(
+@"'@ M {6} ""{0}""
+   AR  DR  SR  RR  SL  TL  KS  ML  DT1 DT2 AME
+'@ {1}
+'@ {2}
+'@ {3}
+'@ {4}
+   AL  FB
+'@ {5}
+", name + add, line[0], line[1], line[2], line[3], line[4], num);
+
+        }
+
+        private string GetInstrumentGwiFmOPLString(int num, string name, byte[] val)
+        {
+
+            string[] line = new string[3];
+            for (int i = 0; i < 2; i++)
+            {
+                line[i] = "";
+                for (int j = 0; j < 12; j++)
+                {
+                    line[i] += string.Format("{0:D3} ", val[i * 12 + j + 1]);
+                }
+            }
+            line[2] = string.Format("{0:D3} {1:D3}", val[25], val[26]);
+
+            return string.Format(
+@"'@ L {4} ""{0}""
+   AR  DR  SL  RR  KSL TL  MT  AM  VIB EGT KSR WS
+'@ {1}
+'@ {2}
+   AL  FB
+'@ {3}
+", name + add, line[0], line[1], line[2], num);
+
+        }
+
+        private string GetInstrumentGwiWFString(int num, string name, byte[] val)
+        {
+
+            string[] line = new string[5];
+            for (int i = 0; i < 4; i++)
+            {
+                line[i] = "";
+                for (int j = 0; j < 8; j++)
+                {
+                    line[i] += string.Format("{0:D2} ", val[i * 8 + j + 1]);
+                }
+            }
+            line[4] = string.Format("{0:D3}", val[32]);
+
+            return string.Format(
+@"'@ H {5} ""{0}""
+   +0 +1 +2 +3 +4 +5 +6 +7
+'@ {1}
+'@ {2}
+'@ {3}
+'@ {4}
+", name + add, line[0], line[1], line[2], line[3], line[4]);
 
         }
 

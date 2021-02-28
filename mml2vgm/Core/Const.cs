@@ -4,6 +4,7 @@
     {
 
         public const int INSTRUMENT_SIZE = 39 + 8;//47
+        public const int OPM_INSTRUMENT_SIZE = 39 + 8;//47(同じ)
         public const int OPLL_INSTRUMENT_SIZE = 11 + 11 + 2 + 1;//25
         public const int OPL3_INSTRUMENT_SIZE = 12 + 12 + 2 + 1;//27
         public const int OPL_OP4_INSTRUMENT_SIZE = 12 + 12 + 12 + 12 + 3 + 1;//52

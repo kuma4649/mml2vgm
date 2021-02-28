@@ -2886,7 +2886,7 @@ stop();
 
             frmPartCounter.Close();
 
-            frmSien.Close();
+            if (frmSien != null) frmSien.Close();
 
             setting.Save();
         }
