@@ -6,6 +6,7 @@ namespace mml2vgmIDE
     {
 
         public int ID { get; set; }
+        public string tree { get; set; }
         public int parentID { get; set; }
         public bool haveChild { get; set; }
         public string supportMMLFormat { get; set; }

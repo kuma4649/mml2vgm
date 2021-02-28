@@ -153,30 +153,6 @@
   <metadata name="statusStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>372, 17</value>
   </metadata>
-  <data name="statusStrip1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 539</value>
-  </data>
-  <data name="statusStrip1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1014, 22</value>
-  </data>
-  <data name="statusStrip1.TabIndex" type="System.Int32, mscorlib">
-    <value>2</value>
-  </data>
-  <data name="statusStrip1.Text" xml:space="preserve">
-    <value>statusStrip1</value>
-  </data>
-  <data name="&gt;&gt;statusStrip1.Name" xml:space="preserve">
-    <value>statusStrip1</value>
-  </data>
-  <data name="&gt;&gt;statusStrip1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.StatusStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;statusStrip1.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;statusStrip1.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
   <data name="tsslCompileError.ImageAlign" type="System.Drawing.ContentAlignment, System.Drawing">
     <value>MiddleRight</value>
   </data>
@@ -232,7 +208,7 @@
     <value>Consolas, 9pt, style=Bold</value>
   </data>
   <data name="toolStripStatusLabel1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>72, 17</value>
+    <value>47, 17</value>
   </data>
   <data name="toolStripStatusLabel1.Text" xml:space="preserve">
     <value> </value>
@@ -363,6 +339,21 @@
   <data name="tssbFast.Text" xml:space="preserve">
     <value>x4</value>
   </data>
+  <data name="tssbSien.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
+    <value>None</value>
+  </data>
+  <data name="tssbSien.ImageTransparentColor" type="System.Drawing.Color, System.Drawing">
+    <value>Magenta</value>
+  </data>
+  <data name="tssbSien.Size" type="System.Drawing.Size, System.Drawing">
+    <value>65, 20</value>
+  </data>
+  <data name="tssbSien.Text" xml:space="preserve">
+    <value>sien</value>
+  </data>
+  <data name="tssbSien.ToolTipText" xml:space="preserve">
+    <value>sien</value>
+  </data>
   <data name="tssbMIDIKbd.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
     <value>None</value>
   </data>
@@ -378,177 +369,33 @@
   <data name="tssbMIDIKbd.Visible" type="System.Boolean, mscorlib">
     <value>False</value>
   </data>
+  <data name="statusStrip1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 539</value>
+  </data>
+  <data name="statusStrip1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>1014, 22</value>
+  </data>
+  <data name="statusStrip1.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="statusStrip1.Text" xml:space="preserve">
+    <value>statusStrip1</value>
+  </data>
+  <data name="&gt;&gt;statusStrip1.Name" xml:space="preserve">
+    <value>statusStrip1</value>
+  </data>
+  <data name="&gt;&gt;statusStrip1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.StatusStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;statusStrip1.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;statusStrip1.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
   <metadata name="menuStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>488, 17</value>
   </metadata>
-  <data name="TsmiNew.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
-  </data>
-  <data name="TsmiNew.Text" xml:space="preserve">
-    <value>&amp;New</value>
-  </data>
-  <data name="TsmiOpenFile.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
-  </data>
-  <data name="TsmiOpenFile.Text" xml:space="preserve">
-    <value>&amp;Open file</value>
-  </data>
-  <data name="TsmiOpenFolder.Enabled" type="System.Boolean, mscorlib">
-    <value>False</value>
-  </data>
-  <data name="TsmiOpenFolder.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
-  </data>
-  <data name="TsmiOpenFolder.Text" xml:space="preserve">
-    <value>open &amp;Folder</value>
-  </data>
-  <data name="tsmiGwiFileHistory.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
-  </data>
-  <data name="tsmiGwiFileHistory.Text" xml:space="preserve">
-    <value>Recently Used Files</value>
-  </data>
-  <data name="TsmiSaveFile.Enabled" type="System.Boolean, mscorlib">
-    <value>False</value>
-  </data>
-  <data name="TsmiSaveFile.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
-  </data>
-  <data name="TsmiSaveFile.Text" xml:space="preserve">
-    <value>&amp;Save</value>
-  </data>
-  <data name="TsmiSaveAs.Enabled" type="System.Boolean, mscorlib">
-    <value>False</value>
-  </data>
-  <data name="TsmiSaveAs.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
-  </data>
-  <data name="TsmiSaveAs.Text" xml:space="preserve">
-    <value>Save &amp;As</value>
-  </data>
-  <data name="toolStripSeparator2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>177, 6</value>
-  </data>
-  <data name="tsmiImport.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
-  </data>
-  <data name="tsmiImport.Text" xml:space="preserve">
-    <value>Import</value>
-  </data>
-  <data name="tsmiExport_toDriverFormat.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
-  </data>
-  <data name="tsmiExport_toDriverFormat.Text" xml:space="preserve">
-    <value>to driver format</value>
-  </data>
-  <data name="tsmiExport_MuctoD88.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
-  </data>
-  <data name="tsmiExport_MuctoD88.Text" xml:space="preserve">
-    <value>muc to d88</value>
-  </data>
-  <data name="tsmiExport_toWaveFile.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
-  </data>
-  <data name="tsmiExport_toWaveFile.Text" xml:space="preserve">
-    <value>to .WAV file</value>
-  </data>
-  <data name="tsmiExport_toMidiFile.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
-  </data>
-  <data name="tsmiExport_toMidiFile.Text" xml:space="preserve">
-    <value>to .MID file</value>
-  </data>
-  <data name="tsmiExport.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
-  </data>
-  <data name="tsmiExport.Text" xml:space="preserve">
-    <value>Export</value>
-  </data>
-  <data name="toolStripSeparator1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>177, 6</value>
-  </data>
-  <data name="TsmiExit.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
-  </data>
-  <data name="TsmiExit.Text" xml:space="preserve">
-    <value>&amp;Exit</value>
-  </data>
-  <data name="TsmiFile.Size" type="System.Drawing.Size, System.Drawing">
-    <value>37, 20</value>
-  </data>
-  <data name="TsmiFile.Text" xml:space="preserve">
-    <value>&amp;File</value>
-  </data>
-  <data name="TsmiEdit.Size" type="System.Drawing.Size, System.Drawing">
-    <value>39, 20</value>
-  </data>
-  <data name="TsmiEdit.Text" xml:space="preserve">
-    <value>&amp;Edit</value>
-  </data>
-  <data name="表示VToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>44, 20</value>
-  </data>
-  <data name="表示VToolStripMenuItem.Text" xml:space="preserve">
-    <value>&amp;View</value>
-  </data>
-  <data name="コンパイルCToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>62, 20</value>
-  </data>
-  <data name="コンパイルCToolStripMenuItem.Text" xml:space="preserve">
-    <value>&amp;Compile</value>
-  </data>
-  <data name="featureToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>58, 20</value>
-  </data>
-  <data name="featureToolStripMenuItem.Text" xml:space="preserve">
-    <value>Fe&amp;ature</value>
-  </data>
-  <data name="featureToolStripMenuItem.Visible" type="System.Boolean, mscorlib">
-    <value>False</value>
-  </data>
-  <data name="tsmiScript.Size" type="System.Drawing.Size, System.Drawing">
-    <value>49, 20</value>
-  </data>
-  <data name="tsmiScript.Text" xml:space="preserve">
-    <value>&amp;Script</value>
-  </data>
-  <data name="ツールTToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>41, 20</value>
-  </data>
-  <data name="ツールTToolStripMenuItem.Text" xml:space="preserve">
-    <value>&amp;Tool</value>
-  </data>
-  <data name="TsmiHelp.Size" type="System.Drawing.Size, System.Drawing">
-    <value>44, 20</value>
-  </data>
-  <data name="TsmiHelp.Text" xml:space="preserve">
-    <value>&amp;Help</value>
-  </data>
-  <data name="menuStrip1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 0</value>
-  </data>
-  <data name="menuStrip1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1014, 24</value>
-  </data>
-  <data name="menuStrip1.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
-  </data>
-  <data name="menuStrip1.Text" xml:space="preserve">
-    <value>menuStrip1</value>
-  </data>
-  <data name="&gt;&gt;menuStrip1.Name" xml:space="preserve">
-    <value>menuStrip1</value>
-  </data>
-  <data name="&gt;&gt;menuStrip1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.MenuStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;menuStrip1.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;menuStrip1.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
   <data name="tsmiNewGwi.Size" type="System.Drawing.Size, System.Drawing">
     <value>127, 22</value>
   </data>
@@ -567,11 +414,110 @@
   <data name="tsmiNewMml.Text" xml:space="preserve">
     <value>New .mml</value>
   </data>
+  <data name="TsmiNew.Size" type="System.Drawing.Size, System.Drawing">
+    <value>174, 22</value>
+  </data>
+  <data name="TsmiNew.Text" xml:space="preserve">
+    <value>&amp;New</value>
+  </data>
+  <data name="TsmiOpenFile.Size" type="System.Drawing.Size, System.Drawing">
+    <value>174, 22</value>
+  </data>
+  <data name="TsmiOpenFile.Text" xml:space="preserve">
+    <value>&amp;Open file</value>
+  </data>
+  <data name="TsmiOpenFolder.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="TsmiOpenFolder.Size" type="System.Drawing.Size, System.Drawing">
+    <value>174, 22</value>
+  </data>
+  <data name="TsmiOpenFolder.Text" xml:space="preserve">
+    <value>open &amp;Folder</value>
+  </data>
+  <data name="tsmiGwiFileHistory.Size" type="System.Drawing.Size, System.Drawing">
+    <value>174, 22</value>
+  </data>
+  <data name="tsmiGwiFileHistory.Text" xml:space="preserve">
+    <value>Recently Used Files</value>
+  </data>
+  <data name="TsmiSaveFile.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="TsmiSaveFile.Size" type="System.Drawing.Size, System.Drawing">
+    <value>174, 22</value>
+  </data>
+  <data name="TsmiSaveFile.Text" xml:space="preserve">
+    <value>&amp;Save</value>
+  </data>
+  <data name="TsmiSaveAs.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="TsmiSaveAs.Size" type="System.Drawing.Size, System.Drawing">
+    <value>174, 22</value>
+  </data>
+  <data name="TsmiSaveAs.Text" xml:space="preserve">
+    <value>Save &amp;As</value>
+  </data>
+  <data name="toolStripSeparator2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>171, 6</value>
+  </data>
   <data name="tsmiImport_D88toMuc.Size" type="System.Drawing.Size, System.Drawing">
     <value>161, 22</value>
   </data>
   <data name="tsmiImport_D88toMuc.Text" xml:space="preserve">
     <value>from d88 to muc</value>
+  </data>
+  <data name="tsmiImport.Size" type="System.Drawing.Size, System.Drawing">
+    <value>174, 22</value>
+  </data>
+  <data name="tsmiImport.Text" xml:space="preserve">
+    <value>Import</value>
+  </data>
+  <data name="tsmiExport_toDriverFormat.Size" type="System.Drawing.Size, System.Drawing">
+    <value>156, 22</value>
+  </data>
+  <data name="tsmiExport_toDriverFormat.Text" xml:space="preserve">
+    <value>to driver format</value>
+  </data>
+  <data name="tsmiExport_MuctoD88.Size" type="System.Drawing.Size, System.Drawing">
+    <value>156, 22</value>
+  </data>
+  <data name="tsmiExport_MuctoD88.Text" xml:space="preserve">
+    <value>muc to d88</value>
+  </data>
+  <data name="tsmiExport_toWaveFile.Size" type="System.Drawing.Size, System.Drawing">
+    <value>156, 22</value>
+  </data>
+  <data name="tsmiExport_toWaveFile.Text" xml:space="preserve">
+    <value>to .WAV file</value>
+  </data>
+  <data name="tsmiExport_toMidiFile.Size" type="System.Drawing.Size, System.Drawing">
+    <value>156, 22</value>
+  </data>
+  <data name="tsmiExport_toMidiFile.Text" xml:space="preserve">
+    <value>to .MID file</value>
+  </data>
+  <data name="tsmiExport.Size" type="System.Drawing.Size, System.Drawing">
+    <value>174, 22</value>
+  </data>
+  <data name="tsmiExport.Text" xml:space="preserve">
+    <value>Export</value>
+  </data>
+  <data name="toolStripSeparator1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>171, 6</value>
+  </data>
+  <data name="TsmiExit.Size" type="System.Drawing.Size, System.Drawing">
+    <value>174, 22</value>
+  </data>
+  <data name="TsmiExit.Text" xml:space="preserve">
+    <value>&amp;Exit</value>
+  </data>
+  <data name="TsmiFile.Size" type="System.Drawing.Size, System.Drawing">
+    <value>37, 20</value>
+  </data>
+  <data name="TsmiFile.Text" xml:space="preserve">
+    <value>&amp;File</value>
   </data>
   <data name="TsmiUndo.Enabled" type="System.Boolean, mscorlib">
     <value>False</value>
@@ -627,6 +573,12 @@
   <data name="TsmiFindPrevious.Text" xml:space="preserve">
     <value>Find previous</value>
   </data>
+  <data name="TsmiEdit.Size" type="System.Drawing.Size, System.Drawing">
+    <value>39, 20</value>
+  </data>
+  <data name="TsmiEdit.Text" xml:space="preserve">
+    <value>&amp;Edit</value>
+  </data>
   <data name="TsmiShowPartCounter.Size" type="System.Drawing.Size, System.Drawing">
     <value>164, 22</value>
   </data>
@@ -675,12 +627,6 @@
   <data name="toolStripSeparator3.Size" type="System.Drawing.Size, System.Drawing">
     <value>161, 6</value>
   </data>
-  <data name="TsmiFunctionKey.Size" type="System.Drawing.Size, System.Drawing">
-    <value>164, 22</value>
-  </data>
-  <data name="TsmiFunctionKey.Text" xml:space="preserve">
-    <value>Function Key</value>
-  </data>
   <data name="TsmiFncHide.Size" type="System.Drawing.Size, System.Drawing">
     <value>157, 22</value>
   </data>
@@ -698,6 +644,18 @@
   </data>
   <data name="TsmiFncButtonAndText.Text" xml:space="preserve">
     <value>Button and Text</value>
+  </data>
+  <data name="TsmiFunctionKey.Size" type="System.Drawing.Size, System.Drawing">
+    <value>164, 22</value>
+  </data>
+  <data name="TsmiFunctionKey.Text" xml:space="preserve">
+    <value>Function Key</value>
+  </data>
+  <data name="表示VToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>44, 20</value>
+  </data>
+  <data name="表示VToolStripMenuItem.Text" xml:space="preserve">
+    <value>&amp;View</value>
   </data>
   <data name="TsmiCompileAndPlay.ShortcutKeyDisplayString" xml:space="preserve">
     <value />
@@ -741,17 +699,44 @@
   <data name="TsmiCompile.Text" xml:space="preserve">
     <value>Compile only</value>
   </data>
+  <data name="コンパイルCToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>62, 20</value>
+  </data>
+  <data name="コンパイルCToolStripMenuItem.Text" xml:space="preserve">
+    <value>&amp;Compile</value>
+  </data>
   <data name="tsmiJumpSoloMode.Size" type="System.Drawing.Size, System.Drawing">
     <value>161, 22</value>
   </data>
   <data name="tsmiJumpSoloMode.Text" xml:space="preserve">
     <value>Jump solo Mode</value>
   </data>
+  <data name="featureToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>58, 20</value>
+  </data>
+  <data name="featureToolStripMenuItem.Text" xml:space="preserve">
+    <value>Fe&amp;ature</value>
+  </data>
+  <data name="featureToolStripMenuItem.Visible" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="tsmiScript.Size" type="System.Drawing.Size, System.Drawing">
+    <value>49, 20</value>
+  </data>
+  <data name="tsmiScript.Text" xml:space="preserve">
+    <value>&amp;Script</value>
+  </data>
   <data name="tsmiOption.Size" type="System.Drawing.Size, System.Drawing">
     <value>111, 22</value>
   </data>
   <data name="tsmiOption.Text" xml:space="preserve">
     <value>&amp;Option</value>
+  </data>
+  <data name="ツールTToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>41, 20</value>
+  </data>
+  <data name="ツールTToolStripMenuItem.Text" xml:space="preserve">
+    <value>&amp;Tool</value>
   </data>
   <data name="TsmiTutorial.Size" type="System.Drawing.Size, System.Drawing">
     <value>225, 22</value>
@@ -791,6 +776,36 @@
   </data>
   <data name="TsmiAbout.Text" xml:space="preserve">
     <value>About</value>
+  </data>
+  <data name="TsmiHelp.Size" type="System.Drawing.Size, System.Drawing">
+    <value>44, 20</value>
+  </data>
+  <data name="TsmiHelp.Text" xml:space="preserve">
+    <value>&amp;Help</value>
+  </data>
+  <data name="menuStrip1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="menuStrip1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>1014, 24</value>
+  </data>
+  <data name="menuStrip1.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="menuStrip1.Text" xml:space="preserve">
+    <value>menuStrip1</value>
+  </data>
+  <data name="&gt;&gt;menuStrip1.Name" xml:space="preserve">
+    <value>menuStrip1</value>
+  </data>
+  <data name="&gt;&gt;menuStrip1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.MenuStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;menuStrip1.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;menuStrip1.ZOrder" xml:space="preserve">
+    <value>2</value>
   </data>
   <metadata name="timer.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>603, 17</value>
@@ -983,6 +998,12 @@
     <value>tssbFast</value>
   </data>
   <data name="&gt;&gt;tssbFast.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripSplitButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tssbSien.Name" xml:space="preserve">
+    <value>tssbSien</value>
+  </data>
+  <data name="&gt;&gt;tssbSien.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripSplitButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;tssbMIDIKbd.Name" xml:space="preserve">

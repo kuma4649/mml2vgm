@@ -2,6 +2,7 @@
   "list": [
     {
       "ID": 0,
+      "tree": "\\Template",
       "parentID": -1,
       "haveChild": false,
       "supportMMLFormat": ".gwi",
@@ -16,6 +17,7 @@
     },
     {
       "ID": 1,
+      "tree": "\\Template",
       "parentID": -1,
       "haveChild": false,
       "supportMMLFormat": ".gwi",
@@ -30,6 +32,7 @@
     },
     {
       "ID": 2,
+      "tree": "\\Template",
       "parentID": -1,
       "haveChild": false,
       "supportMMLFormat": ".gwi",
@@ -44,6 +47,7 @@
     },
     {
       "ID": 3,
+      "tree": "\\Template",
       "parentID": -1,
       "haveChild": false,
       "supportMMLFormat": ".gwi",
@@ -58,6 +62,7 @@
     },
     {
       "ID": 4,
+      "tree": "\\Template",
       "parentID": -1,
       "haveChild": false,
       "supportMMLFormat": ".gwi",
@@ -72,6 +77,7 @@
     },
     {
       "ID": 5,
+      "tree": "\\Template",
       "parentID": -1,
       "haveChild": false,
       "supportMMLFormat": ".gwi",
@@ -86,6 +92,7 @@
     },
     {
       "ID": 6,
+      "tree": "\\Template",
       "parentID": -1,
       "haveChild": false,
       "supportMMLFormat": ".gwi",
@@ -100,6 +107,7 @@
     },
     {
       "ID": 7,
+      "tree": "\\Template",
       "parentID": -1,
       "haveChild": false,
       "supportMMLFormat": ".gwi",
@@ -114,6 +122,7 @@
     },
     {
       "ID": 8,
+      "tree": "\\Template",
       "parentID": -1,
       "haveChild": false,
       "supportMMLFormat": ".gwi",
@@ -128,6 +137,7 @@
     },
     {
       "ID": 9,
+      "tree": "\\Template",
       "parentID": -1,
       "haveChild": false,
       "supportMMLFormat": ".gwi",
@@ -142,6 +152,7 @@
     },
     {
       "ID": 10,
+      "tree": "\\Template",
       "parentID": -1,
       "haveChild": false,
       "supportMMLFormat": ".gwi",
@@ -156,6 +167,7 @@
     },
     {
       "ID": 11,
+      "tree": "\\Template",
       "parentID": -1,
       "haveChild": false,
       "supportMMLFormat": ".gwi",
@@ -170,6 +182,7 @@
     },
     {
       "ID": 12,
+      "tree": "\\Template",
       "parentID": -1,
       "haveChild": false,
       "supportMMLFormat": ".gwi",
@@ -184,6 +197,7 @@
     },
     {
       "ID": 13,
+      "tree": "\\Template",
       "parentID": -1,
       "haveChild": false,
       "supportMMLFormat": ".gwi",
@@ -198,6 +212,7 @@
     },
     {
       "ID": 14,
+      "tree": "\\Template",
       "parentID": -1,
       "haveChild": false,
       "supportMMLFormat": ".gwi",
@@ -212,6 +227,7 @@
     },
     {
       "ID": 15,
+      "tree": "\\Template",
       "parentID": -1,
       "haveChild": false,
       "supportMMLFormat": ".gwi",
@@ -226,6 +242,7 @@
     },
     {
       "ID": 16,
+      "tree": "\\Template",
       "parentID": -1,
       "haveChild": false,
       "supportMMLFormat": ".gwi",
@@ -240,6 +257,7 @@
     },
     {
       "ID": 17,
+      "tree": "\\Template",
       "parentID": -1,
       "haveChild": false,
       "supportMMLFormat": ".gwi",
@@ -254,6 +272,7 @@
     },
     {
       "ID": 18,
+      "tree": "\\Template",
       "parentID": -1,
       "haveChild": false,
       "supportMMLFormat": ".gwi",
@@ -267,21 +286,8 @@
       "content": "yFBAL,"
     },
     {
-      "ID": 50,
-      "parentID": -1,
-      "haveChild": true,
-      "supportMMLFormat": ".gwi;.muc;.mml",
-      "sienType": 0,
-      "nextAnchor": 0,
-      "nextCaret": 0,
-      "pattern": "'@ N ",
-      "patternType": "B",
-      "title": "> OPN Instrument(BASS)",
-      "description": "",
-      "content": ""
-    },
-    {
       "ID": 100,
+      "tree": "\\Instrument\\OPN\\BASS",
       "parentID": 50,
       "haveChild": false,
       "supportMMLFormat": ".gwi;.muc;.mml",
@@ -295,21 +301,8 @@
       "content": "'(from VAL-SOUND)','http://valsound.fc2web.com/fmindex/data/bass01.html','Shift_JIS','//body/tt','a','pre'"
     },
     {
-      "ID": 51,
-      "parentID": -1,
-      "haveChild": true,
-      "supportMMLFormat": ".gwi;.muc;.mml",
-      "sienType": 0,
-      "nextAnchor": 0,
-      "nextCaret": 0,
-      "pattern": "'@ N ",
-      "patternType": "B",
-      "title": "> OPN Instrument(BELL)",
-      "description": "",
-      "content": ""
-    },
-    {
       "ID": 101,
+      "tree": "\\Instrument\\OPN\\BELL",
       "parentID": 51,
       "haveChild": false,
       "supportMMLFormat": ".gwi;.muc;.mml",
@@ -323,21 +316,8 @@
       "content": "'(from VAL-SOUND)','http://valsound.fc2web.com/fmindex/data/bell01.html','Shift_JIS','//body/tt','a','pre'"
     },
     {
-      "ID": 52,
-      "parentID": -1,
-      "haveChild": true,
-      "supportMMLFormat": ".gwi;.muc;.mml",
-      "sienType": 0,
-      "nextAnchor": 0,
-      "nextCaret": 0,
-      "pattern": "'@ N ",
-      "patternType": "B",
-      "title": "> OPN Instrument(BRASS)",
-      "description": "",
-      "content": ""
-    },
-    {
       "ID": 102,
+      "tree": "\\Instrument\\OPN\\BRASS",
       "parentID": 52,
       "haveChild": false,
       "supportMMLFormat": ".gwi;.muc;.mml",
@@ -351,21 +331,8 @@
       "content": "'(from VAL-SOUND)','http://valsound.fc2web.com/fmindex/data/brass01.html','Shift_JIS','//body','a','pre'"
     },
     {
-      "ID": 53,
-      "parentID": -1,
-      "haveChild": true,
-      "supportMMLFormat": ".gwi;.muc;.mml",
-      "sienType": 0,
-      "nextAnchor": 0,
-      "nextCaret": 0,
-      "pattern": "'@ N ",
-      "patternType": "B",
-      "title": "> OPN Instrument(GUITAR)",
-      "description": "",
-      "content": ""
-    },
-    {
       "ID": 103,
+      "tree": "\\Instrument\\OPN\\GUITAR",
       "parentID": 53,
       "haveChild": false,
       "supportMMLFormat": ".gwi;.muc;.mml",
@@ -379,21 +346,8 @@
       "content": "'(from VAL-SOUND)','http://valsound.fc2web.com/fmindex/data/guitar01.html','Shift_JIS','//body','a','pre'"
     },
     {
-      "ID": 54,
-      "parentID": -1,
-      "haveChild": true,
-      "supportMMLFormat": ".gwi;.muc;.mml",
-      "sienType": 0,
-      "nextAnchor": 0,
-      "nextCaret": 0,
-      "pattern": "'@ N ",
-      "patternType": "B",
-      "title": "> OPN Instrument(LEAD)",
-      "description": "",
-      "content": ""
-    },
-    {
       "ID": 104,
+      "tree": "\\Instrument\\OPN\\LEAD",
       "parentID": 54,
       "haveChild": false,
       "supportMMLFormat": ".gwi;.muc;.mml",
@@ -407,21 +361,8 @@
       "content": "'(from VAL-SOUND)','http://valsound.fc2web.com/fmindex/data/lead01.html','Shift_JIS','//body/tt','a','pre'"
     },
     {
-      "ID": 55,
-      "parentID": -1,
-      "haveChild": true,
-      "supportMMLFormat": ".gwi;.muc;.mml",
-      "sienType": 0,
-      "nextAnchor": 0,
-      "nextCaret": 0,
-      "pattern": "'@ N ",
-      "patternType": "B",
-      "title": "> OPN Instrument(PERCUS)",
-      "description": "",
-      "content": ""
-    },
-    {
       "ID": 105,
+      "tree": "\\Instrument\\OPN\\PERCUS",
       "parentID": 55,
       "haveChild": false,
       "supportMMLFormat": ".gwi;.muc;.mml",
@@ -435,21 +376,8 @@
       "content": "'(from VAL-SOUND)','http://valsound.fc2web.com/fmindex/data/percus01.html','Shift_JIS','//body/tt','a','pre'"
     },
     {
-      "ID": 56,
-      "parentID": -1,
-      "haveChild": true,
-      "supportMMLFormat": ".gwi;.muc;.mml",
-      "sienType": 0,
-      "nextAnchor": 0,
-      "nextCaret": 0,
-      "pattern": "'@ N ",
-      "patternType": "B",
-      "title": "> OPN Instrument(PIANO)",
-      "description": "",
-      "content": ""
-    },
-    {
       "ID": 106,
+      "tree": "\\Instrument\\OPN\\PIANO",
       "parentID": 56,
       "haveChild": false,
       "supportMMLFormat": ".gwi;.muc;.mml",
@@ -463,21 +391,8 @@
       "content": "'(from VAL-SOUND)','http://valsound.fc2web.com/fmindex/data/piano01.html','Shift_JIS','//body/tt','a','pre'"
     },
     {
-      "ID": 57,
-      "parentID": -1,
-      "haveChild": true,
-      "supportMMLFormat": ".gwi;.muc;.mml",
-      "sienType": 0,
-      "nextAnchor": 0,
-      "nextCaret": 0,
-      "pattern": "'@ N ",
-      "patternType": "B",
-      "title": "> OPN Instrument(S.E.)",
-      "description": "",
-      "content": ""
-    },
-    {
       "ID": 107,
+      "tree": "\\Instrument\\OPN\\SE",
       "parentID": 57,
       "haveChild": false,
       "supportMMLFormat": ".gwi;.muc;.mml",
@@ -491,21 +406,8 @@
       "content": "'(from VAL-SOUND)','http://valsound.fc2web.com/fmindex/data/se01.html','Shift_JIS','//body','a','pre'"
     },
     {
-      "ID": 58,
-      "parentID": -1,
-      "haveChild": true,
-      "supportMMLFormat": ".gwi;.muc;.mml",
-      "sienType": 0,
-      "nextAnchor": 0,
-      "nextCaret": 0,
-      "pattern": "'@ N ",
-      "patternType": "B",
-      "title": "> OPN Instrument(SPECAL)",
-      "description": "",
-      "content": ""
-    },
-    {
       "ID": 108,
+      "tree": "\\Instrument\\OPN\\SPECIAL",
       "parentID": 58,
       "haveChild": false,
       "supportMMLFormat": ".gwi;.muc;.mml",
@@ -519,21 +421,8 @@
       "content": "'(from VAL-SOUND)','http://valsound.fc2web.com/fmindex/data/specal01.html','Shift_JIS','//body/tt','a','pre'"
     },
     {
-      "ID": 59,
-      "parentID": -1,
-      "haveChild": true,
-      "supportMMLFormat": ".gwi;.muc;.mml",
-      "sienType": 0,
-      "nextAnchor": 0,
-      "nextCaret": 0,
-      "pattern": "'@ N ",
-      "patternType": "B",
-      "title": "> OPN Instrument(STRPAD)",
-      "description": "",
-      "content": ""
-    },
-    {
       "ID": 109,
+      "tree": "\\Instrument\\OPN\\STRPAD",
       "parentID": 59,
       "haveChild": false,
       "supportMMLFormat": ".gwi;.muc;.mml",
@@ -547,21 +436,8 @@
       "content": "'(from VAL-SOUND)','http://valsound.fc2web.com/fmindex/data/strpad01.html','Shift_JIS','//body/tt','a','pre'"
     },
     {
-      "ID": 60,
-      "parentID": -1,
-      "haveChild": true,
-      "supportMMLFormat": ".gwi;.muc;.mml",
-      "sienType": 0,
-      "nextAnchor": 0,
-      "nextCaret": 0,
-      "pattern": "'@ N ",
-      "patternType": "B",
-      "title": "> OPN Instrument(WIND)",
-      "description": "",
-      "content": ""
-    },
-    {
       "ID": 110,
+      "tree": "\\Instrument\\OPN\\WIND",
       "parentID": 60,
       "haveChild": false,
       "supportMMLFormat": ".gwi;.muc;.mml",
@@ -575,21 +451,8 @@
       "content": "'(from VAL-SOUND)','http://valsound.fc2web.com/fmindex/data/wind01.html','Shift_JIS','//body/tt','a','pre'"
     },
     {
-      "ID": 61,
-      "parentID": -1,
-      "haveChild": true,
-      "supportMMLFormat": ".gwi;.muc;.mml",
-      "sienType": 0,
-      "nextAnchor": 0,
-      "nextCaret": 0,
-      "pattern": "'@ N ",
-      "patternType": "B",
-      "title": "> OPN Instrument(WORLD)",
-      "description": "",
-      "content": ""
-    },
-    {
       "ID": 111,
+      "tree": "\\Instrument\\OPN\\WORLD",
       "parentID": 61,
       "haveChild": false,
       "supportMMLFormat": ".gwi;.muc;.mml",
@@ -603,21 +466,8 @@
       "content": "'(from VAL-SOUND)','http://valsound.fc2web.com/fmindex/data/world01.html','Shift_JIS','//body/tt','a','pre'"
     },
     {
-      "ID": 62,
-      "parentID": -1,
-      "haveChild": true,
-      "supportMMLFormat": ".gwi;.muc;.mml",
-      "sienType": 0,
-      "nextAnchor": 0,
-      "nextCaret": 0,
-      "pattern": "'@ N ",
-      "patternType": "B",
-      "title": "> Instruments ",
-      "description": "",
-      "content": ""
-    },
-    {
       "ID": 63,
+      "tree": "\\Instrument\\",
       "parentID": 62,
       "haveChild": false,
       "supportMMLFormat": ".gwi;.muc;.mml",

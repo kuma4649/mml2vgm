@@ -17,7 +17,7 @@ namespace mml2vgmIDE
         private string searchTextPattern = "";
         private bool searchMatchCase = false;
         public Document document = null;
-        public FrmSien frmSien = null;
+        //public FrmSien frmSien = null;
         public EnmMmlFileFormat fmt = EnmMmlFileFormat.GWI;
         public int parentID= -1;
         public object option = null;
@@ -36,14 +36,14 @@ namespace mml2vgmIDE
             }
             set
             {
-                frmSien.parent = value;
+                //frmSien.parent = value;
                 _main = value;
-                main.LocationChanged += AzukiControl_CancelSien;
-                main.SizeChanged += AzukiControl_CancelSien;
+                //main.LocationChanged += AzukiControl_CancelSien;
+                //main.SizeChanged += AzukiControl_CancelSien;
             }
         }
 
-        public FrmEditor(Setting setting, EnmMmlFileFormat fmt, FrmSien sien)
+        public FrmEditor(Setting setting, EnmMmlFileFormat fmt)//, FrmSien sien)
         {
             InitializeComponent();
             this.setting = setting;
@@ -53,7 +53,7 @@ namespace mml2vgmIDE
             else if (fmt == EnmMmlFileFormat.MDL) setHighlighterMDL();
             else setHighlighterVGMZGMZGM();
 
-            frmSien = sien;
+            //frmSien = sien;
 
             //frmSien = new FrmSien(setting);
             //frmSien.parent = main;
@@ -88,10 +88,10 @@ namespace mml2vgmIDE
             azukiControl.IconBarClicked += AzukiControl_IconBarClicked;
             azukiControl.TextChanged += AzukiControl_TextChanged;
             azukiControl.KeyDown += AzukiControl_KeyDown;
-            azukiControl.HScroll += AzukiControl_CancelSien;
-            azukiControl.VScroll += AzukiControl_CancelSien;
-            azukiControl.LocationChanged += AzukiControl_CancelSien;
-            azukiControl.SizeChanged += AzukiControl_CancelSien;
+            //azukiControl.HScroll += AzukiControl_CancelSien;
+            //azukiControl.VScroll += AzukiControl_CancelSien;
+            //azukiControl.LocationChanged += AzukiControl_CancelSien;
+            //azukiControl.SizeChanged += AzukiControl_CancelSien;
             azukiControl.CaretMoved += AzukiControl_CaretMoved;
             azukiControl.AllowDrop = true;
             azukiControl.DragOver += AzukiControl_DragOver;
@@ -149,10 +149,10 @@ namespace mml2vgmIDE
             azukiControl.IconBarClicked += AzukiControl_IconBarClicked;
             azukiControl.TextChanged += AzukiControl_TextChanged;
             azukiControl.KeyDown += AzukiControl_KeyDown;
-            azukiControl.HScroll += AzukiControl_CancelSien;
-            azukiControl.VScroll += AzukiControl_CancelSien;
-            azukiControl.LocationChanged += AzukiControl_CancelSien;
-            azukiControl.SizeChanged += AzukiControl_CancelSien;
+            //azukiControl.HScroll += AzukiControl_CancelSien;
+            //azukiControl.VScroll += AzukiControl_CancelSien;
+            //azukiControl.LocationChanged += AzukiControl_CancelSien;
+            //azukiControl.SizeChanged += AzukiControl_CancelSien;
             azukiControl.CaretMoved += AzukiControl_CaretMoved;
             azukiControl.AllowDrop = true;
             azukiControl.DragOver += AzukiControl_DragOver;
@@ -210,10 +210,10 @@ namespace mml2vgmIDE
             azukiControl.IconBarClicked += AzukiControl_IconBarClicked;
             azukiControl.TextChanged += AzukiControl_TextChanged;
             azukiControl.KeyDown += AzukiControl_KeyDown;
-            azukiControl.HScroll += AzukiControl_CancelSien;
-            azukiControl.VScroll += AzukiControl_CancelSien;
-            azukiControl.LocationChanged += AzukiControl_CancelSien;
-            azukiControl.SizeChanged += AzukiControl_CancelSien;
+            //azukiControl.HScroll += AzukiControl_CancelSien;
+            //azukiControl.VScroll += AzukiControl_CancelSien;
+            //azukiControl.LocationChanged += AzukiControl_CancelSien;
+            //azukiControl.SizeChanged += AzukiControl_CancelSien;
             azukiControl.CaretMoved += AzukiControl_CaretMoved;
             azukiControl.AllowDrop = true;
             azukiControl.DragOver += AzukiControl_DragOver;
@@ -271,10 +271,10 @@ namespace mml2vgmIDE
             azukiControl.IconBarClicked += AzukiControl_IconBarClicked;
             azukiControl.TextChanged += AzukiControl_TextChanged;
             azukiControl.KeyDown += AzukiControl_KeyDown;
-            azukiControl.HScroll += AzukiControl_CancelSien;
-            azukiControl.VScroll += AzukiControl_CancelSien;
-            azukiControl.LocationChanged += AzukiControl_CancelSien;
-            azukiControl.SizeChanged += AzukiControl_CancelSien;
+            //azukiControl.HScroll += AzukiControl_CancelSien;
+            //azukiControl.VScroll += AzukiControl_CancelSien;
+            //azukiControl.LocationChanged += AzukiControl_CancelSien;
+            //azukiControl.SizeChanged += AzukiControl_CancelSien;
             azukiControl.CaretMoved += AzukiControl_CaretMoved;
             azukiControl.AllowDrop = true;
             azukiControl.DragOver += AzukiControl_DragOver;
@@ -866,7 +866,7 @@ namespace mml2vgmIDE
 
         private void AzukiControl_IconBarClicked(object sender, IconBarClickedEventArgs e)
         {
-            AzukiControl_CancelSien(null, null);
+            //AzukiControl_CancelSien(null, null);
             int n = azukiControl.Document.GetLineIconIndex(e.clickedIndex);
             n++;
             if (n == imglstIconBar.Images.Count) n = -1;
@@ -877,13 +877,13 @@ namespace mml2vgmIDE
 
         private void acDown(IUserInterface ui)
         {
-            if (!frmSien.GetOpacity())
-            {
-                return;
-            }
+            //if (!frmSien.GetOpacity())
+            //{
+            //    return;
+            //}
 
-            if (frmSien.dgvItem.Rows.Count - 1 > frmSien.selRow) frmSien.selRow++;
-            frmSien.dgvItem.Rows[frmSien.selRow].Selected = true;
+            //if (frmSien.dgvItem.Rows.Count - 1 > frmSien.selRow) frmSien.selRow++;
+            //frmSien.dgvItem.Rows[frmSien.selRow].Selected = true;
         }
 
         private void AzukiControl_TextChanged(object sender, EventArgs e)
@@ -901,24 +901,24 @@ namespace mml2vgmIDE
 
             //main.UpdateControl();
 
-            dispSienForm(-1);
+            //dispSienForm(-1);
         }
 
         private void dispSienForm(int row)
         {
-            int ci = azukiControl.CaretIndex;
-            int st = azukiControl.GetLineHeadIndexFromCharIndex(ci);
-            Point ciP = azukiControl.GetPositionFromIndex(Math.Max(ci - 1, 0));
-            ciP = azukiControl.PointToScreen(new Point(ciP.X, ciP.Y + azukiControl.LineHeight));
-            string line = azukiControl.GetTextInRange(st, ci).TrimStart();
-            if (row < 0)
-            {
-                if (line == "" || line[0] != '\'' || frmSien == null)
-                    return;
-            }
+            //int ci = azukiControl.CaretIndex;
+            //int st = azukiControl.GetLineHeadIndexFromCharIndex(ci);
+            //Point ciP = azukiControl.GetPositionFromIndex(Math.Max(ci - 1, 0));
+            //ciP = azukiControl.PointToScreen(new Point(ciP.X, ciP.Y + azukiControl.LineHeight));
+            //string line = azukiControl.GetTextInRange(st, ci).TrimStart();
+            //if (row < 0)
+            //{
+            //    if (line == "" || line[0] != '\'' || frmSien == null)
+            //        return;
+            //}
 
-            frmSien.selRow = row;
-            frmSien.Request(line, ciP, parentID, fmt, option);
+            //frmSien.selRow = row;
+            //frmSien.Request(line, ciP, parentID, fmt, option);
         }
 
         private void FrmEditor_FormClosing(object sender, FormClosingEventArgs e)
@@ -939,7 +939,7 @@ namespace mml2vgmIDE
                     }
                 }
 
-                this.frmSien.Close();
+                //this.frmSien.Close();
                 forceClose = false;
                 main.RemoveForm(this);
                 main.RemoveDocument(document);
@@ -949,19 +949,19 @@ namespace mml2vgmIDE
 
         private void Hokan(string line, Point ciP)
         {
-            if (line == "\'@" && setting.UseSien)
-            {
-                Point r = azukiControl.PointToScreen(new Point(ciP.X, ciP.Y + azukiControl.LineHeight));
-                frmSien.Location = new Point(r.X, r.Y);
-                frmSien.SetOpacity(true);
-                frmSien.update();
-                frmSien.dgvItem.Rows[0].Selected = false;
-                frmSien.selRow = -1;
-            }
-            else
-            {
-                frmSien.SetOpacity(false);
-            }
+            //if (line == "\'@" && setting.UseSien)
+            //{
+            //    Point r = azukiControl.PointToScreen(new Point(ciP.X, ciP.Y + azukiControl.LineHeight));
+            //    frmSien.Location = new Point(r.X, r.Y);
+            //    frmSien.SetOpacity(true);
+            //    frmSien.update();
+            //    frmSien.dgvItem.Rows[0].Selected = false;
+            //    frmSien.selRow = -1;
+            //}
+            //else
+            //{
+            //    frmSien.SetOpacity(false);
+            //}
         }
 
         private void AzukiControl_KeyDown(object sender, KeyEventArgs e)
@@ -971,138 +971,138 @@ namespace mml2vgmIDE
                 main.FrmMain_KeyDown(sender, e);
             }
 
-            if (frmSien == null)
-            {
-                e.SuppressKeyPress = false;
-                return;
-            }
+            //if (frmSien == null)
+            //{
+            //    e.SuppressKeyPress = false;
+            //    return;
+            //}
 
-            if (!frmSien.GetOpacity())
-            {
-                e.SuppressKeyPress = false;
-                return;
-            }
+            //if (!frmSien.GetOpacity())
+            //{
+            //    e.SuppressKeyPress = false;
+            //    return;
+            //}
 
-            //支援ウィンドウのキーによる制御
-            e.SuppressKeyPress = true;
+            ////支援ウィンドウのキーによる制御
+            //e.SuppressKeyPress = true;
             
-            //Console.WriteLine("{0}", e.KeyCode);
+            ////Console.WriteLine("{0}", e.KeyCode);
 
-            try
-            {
-                switch (e.KeyCode)
-                {
-                    case Keys.Down:
-                        if (frmSien.selRow < 0) frmSien.selRow = -1;
-                        if (frmSien.dgvItem.Rows.Count - 1 > frmSien.selRow) frmSien.selRow++;
-                        frmSien.dgvItem.Rows[frmSien.selRow].Selected = true;
-                        frmSien.dgvItem.FirstDisplayedScrollingRowIndex = Math.Max(frmSien.selRow, 0);
-                        break;
-                    case Keys.Up:
-                        if (frmSien.dgvItem.Rows.Count > -1) frmSien.selRow--;
-                        if (frmSien.selRow < 0)
-                            frmSien.SetOpacity(false);
-                        else
-                        {
-                            frmSien.dgvItem.Rows[frmSien.selRow].Selected = true;
-                            frmSien.dgvItem.FirstDisplayedScrollingRowIndex = Math.Max(frmSien.selRow, 0);
-                        }
-                        break;
-                    case Keys.Enter:
-                    case Keys.Tab:
-                        frmSien.SetOpacity(false);
-                        if (frmSien.dgvItem.SelectedRows.Count == 1)
-                        {
-                            int ci = azukiControl.CaretIndex;
-                            SienItem si = (SienItem)frmSien.dgvItem.Rows[frmSien.dgvItem.SelectedRows[0].Index].Tag;
+            //try
+            //{
+            //    switch (e.KeyCode)
+            //    {
+            //        case Keys.Down:
+            //            if (frmSien.selRow < 0) frmSien.selRow = -1;
+            //            if (frmSien.dgvItem.Rows.Count - 1 > frmSien.selRow) frmSien.selRow++;
+            //            frmSien.dgvItem.Rows[frmSien.selRow].Selected = true;
+            //            frmSien.dgvItem.FirstDisplayedScrollingRowIndex = Math.Max(frmSien.selRow, 0);
+            //            break;
+            //        case Keys.Up:
+            //            if (frmSien.dgvItem.Rows.Count > -1) frmSien.selRow--;
+            //            if (frmSien.selRow < 0)
+            //                frmSien.SetOpacity(false);
+            //            else
+            //            {
+            //                frmSien.dgvItem.Rows[frmSien.selRow].Selected = true;
+            //                frmSien.dgvItem.FirstDisplayedScrollingRowIndex = Math.Max(frmSien.selRow, 0);
+            //            }
+            //            break;
+            //        case Keys.Enter:
+            //        case Keys.Tab:
+            //            frmSien.SetOpacity(false);
+            //            if (frmSien.dgvItem.SelectedRows.Count == 1)
+            //            {
+            //                int ci = azukiControl.CaretIndex;
+            //                SienItem si = (SienItem)frmSien.dgvItem.Rows[frmSien.dgvItem.SelectedRows[0].Index].Tag;
 
-                            if (si.haveChild)
-                            {
-                                parentID = si.ID;
-                                dispSienForm(0);
-                                break;
-                            }
+            //                if (si.haveChild)
+            //                {
+            //                    parentID = si.ID;
+            //                    //dispSienForm(0);
+            //                    break;
+            //                }
 
-                            if (si.sienType == 2)
-                            {
-                                string cnt = si.content;
-                                if (cnt.IndexOf("\r\n") < 0 && cnt.IndexOf("\n")>=0)
-                                {
-                                    cnt=cnt.Replace("\n", "\r\n");
-                                }
+            //                if (si.sienType == 2)
+            //                {
+            //                    string cnt = si.content;
+            //                    if (cnt.IndexOf("\r\n") < 0 && cnt.IndexOf("\n")>=0)
+            //                    {
+            //                        cnt=cnt.Replace("\n", "\r\n");
+            //                    }
 
-                                azukiControl.Document.Replace(
-                                    (document.srcFileFormat == EnmMmlFileFormat.GWI) ? cnt : (
-                                    (document.srcFileFormat == EnmMmlFileFormat.MUC) ? ConvertMucFromGwiOPN(cnt) : (
-                                    (document.srcFileFormat == EnmMmlFileFormat.MML) ? ConvertMMLFromGwiOPN(cnt) : (
-                                    cnt))),
-                                    ci - si.foundCnt,
-                                    ci);
-                            }
-                            else
-                            {
-                                azukiControl.Document.Replace(
-                                    si.content,
-                                    ci - si.foundCnt,
-                                    ci);
-                            }
+            //                    azukiControl.Document.Replace(
+            //                        (document.srcFileFormat == EnmMmlFileFormat.GWI) ? cnt : (
+            //                        (document.srcFileFormat == EnmMmlFileFormat.MUC) ? ConvertMucFromGwiOPN(cnt) : (
+            //                        (document.srcFileFormat == EnmMmlFileFormat.MML) ? ConvertMMLFromGwiOPN(cnt) : (
+            //                        cnt))),
+            //                        ci - si.foundCnt,
+            //                        ci);
+            //                }
+            //                else
+            //                {
+            //                    azukiControl.Document.Replace(
+            //                        si.content,
+            //                        ci - si.foundCnt,
+            //                        ci);
+            //                }
 
-                            azukiControl.SetSelection(ci - si.foundCnt + si.nextAnchor, ci - si.foundCnt + si.nextCaret);
-                        }
-                        break;
-                    case Keys.Right:
-                        if (frmSien.dgvItem.SelectedRows.Count == 1)
-                        {
-                            SienItem si = (SienItem)frmSien.dgvItem.Rows[frmSien.dgvItem.SelectedRows[0].Index].Tag;
-                            if (!si.haveChild)
-                            {
-                                frmSien.SetOpacity(false);
-                                parentID = -1;
-                                break;
-                            }
+            //                azukiControl.SetSelection(ci - si.foundCnt + si.nextAnchor, ci - si.foundCnt + si.nextCaret);
+            //            }
+            //            break;
+            //        case Keys.Right:
+            //            if (frmSien.dgvItem.SelectedRows.Count == 1)
+            //            {
+            //                SienItem si = (SienItem)frmSien.dgvItem.Rows[frmSien.dgvItem.SelectedRows[0].Index].Tag;
+            //                if (!si.haveChild)
+            //                {
+            //                    frmSien.SetOpacity(false);
+            //                    parentID = -1;
+            //                    break;
+            //                }
 
-                            parentID = si.ID;
-                            option = si.description;
-                            dispSienForm(0);
-                        }
-                        break;
-                    case Keys.Left:
-                        if (frmSien.dgvItem.SelectedRows.Count == 1)
-                        {
-                            SienItem si = (SienItem)frmSien.dgvItem.Rows[frmSien.dgvItem.SelectedRows[0].Index].Tag;
-                            if (si.parentID < -1)
-                            {
-                                frmSien.SetOpacity(false);
-                                parentID = -1;
-                                break;
-                            }
+            //                parentID = si.ID;
+            //                option = si.description;
+            //                //dispSienForm(0);
+            //            }
+            //            break;
+            //        case Keys.Left:
+            //            if (frmSien.dgvItem.SelectedRows.Count == 1)
+            //            {
+            //                SienItem si = (SienItem)frmSien.dgvItem.Rows[frmSien.dgvItem.SelectedRows[0].Index].Tag;
+            //                if (si.parentID < -1)
+            //                {
+            //                    frmSien.SetOpacity(false);
+            //                    parentID = -1;
+            //                    break;
+            //                }
 
-                            parentID = si.parentID;
-                            dispSienForm(0);
-                        }
-                        break;
-                    case Keys.Home:
-                    case Keys.End:
-                    case Keys.Escape:
-                        frmSien.SetOpacity(false);
-                        parentID = -1;
-                        break;
-                    case Keys.Back:
-                        frmSien.SetOpacity(false);
-                        parentID = -1;
-                        e.SuppressKeyPress = false;
-                        break;
-                    default:
-                        parentID = -1;
-                        e.SuppressKeyPress = false;
-                        break;
-                }
-            }
-            catch
-            {
-                parentID = -1;
-                e.SuppressKeyPress = false;
-            }
+            //                parentID = si.parentID;
+            //                //dispSienForm(0);
+            //            }
+            //            break;
+            //        case Keys.Home:
+            //        case Keys.End:
+            //        case Keys.Escape:
+            //            frmSien.SetOpacity(false);
+            //            parentID = -1;
+            //            break;
+            //        case Keys.Back:
+            //            frmSien.SetOpacity(false);
+            //            parentID = -1;
+            //            e.SuppressKeyPress = false;
+            //            break;
+            //        default:
+            //            parentID = -1;
+            //            e.SuppressKeyPress = false;
+            //            break;
+            //    }
+            //}
+            //catch
+            //{
+            //    parentID = -1;
+            //    e.SuppressKeyPress = false;
+            //}
         }
 
         private string ConvertMucFromGwiOPN(string content)
@@ -1178,8 +1178,8 @@ namespace mml2vgmIDE
 
         private void AzukiControl_CancelSien(object sender, EventArgs e)
         {
-            if (frmSien == null) return;
-            if (frmSien.GetOpacity()) frmSien.SetOpacity(false);
+            //if (frmSien == null) return;
+            //if (frmSien.GetOpacity()) frmSien.SetOpacity(false);
         }
 
         private void FrmEditor_Shown(object sender, EventArgs e)

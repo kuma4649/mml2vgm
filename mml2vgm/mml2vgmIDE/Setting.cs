@@ -4042,7 +4042,8 @@ namespace mml2vgmIDE
             ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.FadeOut,"フェードアウト",true,false,false,"F9")
             ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Slow,"スロー",false,false,false,"F10")
             ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Fastx4,"4倍速",false,false,false,"F11")
-            ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Kbd,"鍵盤",false,false,false,"F12")
+            //,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Kbd,"鍵盤",false,false,false,"F12")
+            ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Sien,"支援",false,false,false,"F12")
             ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.CloseTab,"タブを閉じる",false,true,false,"W")
             ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.CloseTabForce,"強制的にタブを閉じる",true,true,false,"W")
             ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.JumpAnchorNext,"次の//まで飛ぶ",false,true,false,"Next")
@@ -4213,6 +4214,7 @@ namespace mml2vgmIDE
                 Slow = 900,
                 Fastx4 = 1000,
                 Kbd = -1100,
+                Sien = 1100,
                 CloseTab = 1200,
                 CloseTabForce = 1210,
                 CommentOnOff = 1220,

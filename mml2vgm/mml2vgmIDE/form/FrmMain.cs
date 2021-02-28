@@ -1029,6 +1029,11 @@ stop();
             TsmiShowMIDIKbd_Click(null, null);
         }
 
+        private void tssbSien_ButtonClick(object sender, EventArgs e)
+        {
+            sien();
+        }
+
         protected override bool ProcessCmdKey(ref System.Windows.Forms.Message msg, System.Windows.Forms.Keys keyData)
         {
             //log.Write(string.Format("2動作未定義のキー：{0}", keyData));
@@ -1105,7 +1110,10 @@ stop();
                         ff();
                         return true;
                     case (int)Setting.ShortCutKey.enmContent.Kbd:
-                        TsmiShowMIDIKbd_Click(null, null);
+                        //TsmiShowMIDIKbd_Click(null, null);
+                        return true;
+                    case (int)Setting.ShortCutKey.enmContent.Sien:
+                        sien();
                         return true;
                     case (int)Setting.ShortCutKey.enmContent.CloseTab:
                         IDockContent dc1 = GetActiveDockContent();
@@ -1297,7 +1305,7 @@ stop();
 
         private void OpenFile(string fileName)
         {
-            Document dc = new Document(setting, Common.GetEnmMmlFileFormat(Path.GetExtension(fileName)),frmSien);
+            Document dc = new Document(setting, Common.GetEnmMmlFileFormat(Path.GetExtension(fileName)));//,frmSien);
             if (fileName != "") dc.InitOpen(fileName);
             dc.editor.Show(dpMain, DockState.Document);
             dc.editor.main = this;
@@ -1317,7 +1325,7 @@ stop();
 
         private void ImportFile(string fileName)
         {
-            Document dc = new Document(setting, EnmMmlFileFormat.GWI, frmSien);
+            Document dc = new Document(setting, EnmMmlFileFormat.GWI);//, frmSien);
             if (fileName != "") dc.InitOpen(fileName);
             dc.editor.Show(dpMain, DockState.Document);
             dc.editor.main = this;
@@ -1702,7 +1710,7 @@ stop();
                     + string.Format("_{0}", m98Count++) + ".muc"
                     );
                 title = Path.GetFileName(Path.GetFileName(fileName));
-                Document dc = new Document(setting,  EnmMmlFileFormat.MUC, frmSien);
+                Document dc = new Document(setting, EnmMmlFileFormat.MUC);//, frmSien);
                 dc.InitOpen(fileName, m98ResultMucString);
                 dc.editor.Show(dpMain, DockState.Document);
                 dc.editor.main = this;
@@ -3246,6 +3254,27 @@ stop();
             Audio.Slow();
         }
 
+        public void sien()
+        {
+            if (frmSien != null && !frmSien.IsDisposed)
+            {
+                frmSien.Close();
+                frmSien = null;
+            }
+            else
+            {
+                if (frmSien != null)
+                {
+                    frmSien.Close();
+                }
+
+                frmSien = new FrmSien(this,setting);
+                frmSien.Show();
+            }
+        }
+
+
+
         private void Timer_Tick(object sender, EventArgs e)
         {
             UpdateTraceInfo();
@@ -3626,9 +3655,9 @@ stop();
             tsmiTreeView = new ToolStripMenuItem();
             GetScripts(tsmiScript, tsmiTreeView, Path.Combine(Common.GetApplicationFolder(), "Script"));
 
-            frmSien = new FrmSien(setting);
-            frmSien.parent = this;
-            frmSien.Show();
+            //frmSien = new FrmSien(setting);
+            //frmSien.parent = this;
+            //frmSien.Show();
 
         }
 
@@ -3979,7 +4008,7 @@ stop();
                 return;
             }
 
-            Document dc = new Document(setting, EnmMmlFileFormat.MUC, frmSien);
+            Document dc = new Document(setting, EnmMmlFileFormat.MUC);//, frmSien);
             fileName = fileName.Trim();
             if (fileName.Length > 1 && fileName[fileName.Length - 1] == '.') fileName = fileName.Substring(0, fileName.Length - 1);
             fileName += ".muc";
@@ -4354,5 +4383,6 @@ stop();
             }
 
         }
+
     }
 }

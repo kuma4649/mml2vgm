@@ -17,6 +17,8 @@ namespace mml2vgmIDE
         private object sender = null;
         private string baseDir = "";
 
+        public TreeNode treenode { get; internal set; }
+
         public enum enmInstType
         {
             Dir,
@@ -27,7 +29,7 @@ namespace mml2vgmIDE
             SSG_WF,//OPNA2(SSG)
         }
 
-        public void Start(FrmMain parent, object sender, string baseDir,string add, Action<object, Tuple<enmInstType, string, string>[]> CompleteMethod)
+        public void Start(FrmMain parent, object sender, string baseDir,string add, Action<object,TreeNode , Tuple<enmInstType, string, string>[]> CompleteMethod)
         {
             this.parent = parent;
             this.sender = sender;
@@ -35,7 +37,8 @@ namespace mml2vgmIDE
             this.add = add;
 
             //mmlファイルの一覧を得る
-            List<FileSystemInfo> lstFile = GetFileList(baseDir);
+            List<FileSystemInfo> lstFile = new List<FileSystemInfo>();
+            GetFileList(baseDir,ref lstFile);
             //音色データを解析する
             List<Tuple<enmInstType, string, string>> lstInst = new List<Tuple<enmInstType, string, string>>();
             foreach (FileSystemInfo fi in lstFile)
@@ -51,12 +54,11 @@ namespace mml2vgmIDE
                     if (ins != null) lstInst.AddRange(ins);
                 }
             }
-            CompleteMethod?.Invoke(this.sender, lstInst.ToArray());
+            CompleteMethod?.Invoke(this.sender,treenode, lstInst.ToArray());
         }
 
-        private List<FileSystemInfo> GetFileList(string baseDir)
+        private void GetFileList(string baseDir, ref List<FileSystemInfo> lstFile)
         {
-            List<FileSystemInfo> lstFile = new List<FileSystemInfo>();
             try
             {
                 DirectoryInfo di = new DirectoryInfo(baseDir);
@@ -67,6 +69,7 @@ namespace mml2vgmIDE
                     if (f.Attributes == FileAttributes.Directory)
                     {
                         lstFile.Add(f);
+                        GetFileList(f.FullName, ref lstFile);
                     }
                     else
                     {
@@ -84,7 +87,6 @@ namespace mml2vgmIDE
             }
             catch { }
 
-            return lstFile;
         }
 
         private List<Tuple<enmInstType, string, string>> GetInsts(string file)
@@ -210,7 +212,7 @@ namespace mml2vgmIDE
         private List<Tuple<enmInstType, string, string>> GetInstsAtMuc(string srcFn)
         {
             List<Tuple<enmInstType, string, string>> ret = new List<Tuple<enmInstType, string, string>>();
-
+            int renban = 0;
             try
             {
                 string[] lin = File.ReadAllText(srcFn, Encoding.GetEncoding(932)).Split(new string[] { "\r\n" }, StringSplitOptions.None);
@@ -328,7 +330,7 @@ namespace mml2vgmIDE
 
                     if (string.IsNullOrEmpty(name))
                     {
-                        name = string.Format("{0}_{1}", Path.GetFileName(srcFn), voiceNum);
+                        name = string.Format("{0}_{1}", Path.GetFileName(srcFn), renban++);
                     }
 
                     string sdat = string.Format(
@@ -342,7 +344,6 @@ namespace mml2vgmIDE
 '@ {5}
 ", name + add, line[0], line[1], line[2], line[3], line[4], voiceNum);
                     //Console.WriteLine("{0}",sdat);
-
 
                     ret.Add(new Tuple<enmInstType, string, string>(enmInstType.FM_N, Path.Combine(srcFn, name).Replace(baseDir, ""), sdat));
                 }

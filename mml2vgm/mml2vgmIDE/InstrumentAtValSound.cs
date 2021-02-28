@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Text;
+using System.Windows.Forms;
 
 namespace mml2vgmIDE
 {
@@ -16,8 +17,11 @@ namespace mml2vgmIDE
         private string nameNode = "";
         private string paramsNode = "";
         private Action<object, string[]> CompleteMethod = null;
+        private Action<object,TreeNode, string[]> CompleteMethodTN = null;
         private FrmMain parent = null;
         public bool isFirst = false;
+
+        public System.Windows.Forms.TreeNode treenode { get; internal set; }
 
         public void Start(FrmMain parent, object sender, string add, string url, Encoding encoding, string xpath, string nameNode, string paramsNode, Action<object, string[]> CompleteMethod)
         {
@@ -43,9 +47,33 @@ namespace mml2vgmIDE
             }
         }
 
+        public void Start(FrmMain parent, object sender, string add, string url, Encoding encoding, string xpath, string nameNode, string paramsNode, Action<object,TreeNode, string[]> CompleteMethod)
+        {
+            this.parent = parent;
+            this.sender = sender;
+            this.add = add;
+            this.url = url;
+            this.encoding = encoding;
+            this.xpath = xpath;
+            this.nameNode = nameNode;
+            this.paramsNode = paramsNode;
+            this.CompleteMethodTN = CompleteMethod;
+            try
+            {
+                WebClient wc = new WebClient();
+                wc.Encoding = encoding;
+                wc.DownloadStringCompleted += CompleteDownloadProcTN;
+                wc.DownloadStringAsync(new Uri(url));
+            }
+            catch
+            {
+                System.Windows.Forms.MessageBox.Show("音色の取得に失敗しました");
+            }
+        }
+
         public void CompleteDownloadProc(Object sender, DownloadStringCompletedEventArgs e)
         {
-            if (parent.setting.OfflineMode)
+            //if (parent.setting.OfflineMode)
             {
                 return;
             }
@@ -74,7 +102,7 @@ Cancel : 永続的にオフラインモードにする
                 return;
             }
 
-            var doc = new HtmlDocument();
+            var doc = new HtmlAgilityPack.HtmlDocument();
             doc.LoadHtml(e.Result);
 
             List<string> inst = new List<string>();
@@ -121,6 +149,86 @@ Cancel : 永続的にオフラインモードにする
             }
 
             CompleteMethod?.Invoke(this.sender, ret);
+        }
+
+        public void CompleteDownloadProcTN(Object sender, DownloadStringCompletedEventArgs e)
+        {
+            //if (parent.setting.OfflineMode)
+            {
+                //return;
+            }
+
+            if (e.Error != null)
+            {
+                if (!isFirst) return;
+
+                System.Windows.Forms.DialogResult res = System.Windows.Forms.MessageBox.Show(
+                    @"
+VAL-SOUND様からネットワーク経由での音色情報取得に失敗しました
+Yes    : 再度接続に挑戦する
+No     : オフラインモードに遷移する
+Cancel : 永続的にオフラインモードにする
+", "入力支援機能", System.Windows.Forms.MessageBoxButtons.YesNoCancel, System.Windows.Forms.MessageBoxIcon.Error);
+
+                if (res == System.Windows.Forms.DialogResult.Yes)
+                {
+                    return;
+                }
+                parent.setting.OfflineMode = true;
+                if (res == System.Windows.Forms.DialogResult.Cancel)
+                {
+                    parent.setting.InfiniteOfflineMode = true;
+                }
+                return;
+            }
+
+            var doc = new HtmlAgilityPack.HtmlDocument();
+            doc.LoadHtml(e.Result);
+
+            List<string> inst = new List<string>();
+            string[] ret = null;
+            try
+            {
+                foreach (var nd in doc.DocumentNode.SelectNodes(xpath))
+                {
+                    foreach (var cnd in nd.ChildNodes)
+                    {
+                        if (cnd == null || cnd.Name != nameNode) continue;
+
+                        try
+                        {
+                            var a = cnd;
+                            var b = cnd.NextSibling;
+                            while (b != null && b.Name != paramsNode) b = b.NextSibling;
+                            if (a != null && b != null)
+                            {
+                                string[] bs = b.InnerText.Replace("\n", ",").Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
+                                List<int> bi = new List<int>();
+                                foreach (string bsi in bs)
+                                {
+                                    int bsii;
+                                    if (!int.TryParse(bsi, out bsii)) continue;
+                                    bi.Add(bsii);
+                                }
+                                string i = GetInstrumentString(a.InnerText.Replace("\n", "").Trim(), bi.ToArray());
+                                inst.Add(i);
+                            }
+                        }
+                        catch (Exception ex1)
+                        {
+                            log.ForcedWrite(ex1);
+                        }
+                    }
+
+                }
+                ret = inst.ToArray();
+            }
+            catch (Exception ex2)
+            {
+                log.ForcedWrite(ex2);
+            }
+
+            CompleteMethodTN?.Invoke(this.sender,treenode, ret);
         }
 
         private string GetInstrumentString(string name, int[] val)

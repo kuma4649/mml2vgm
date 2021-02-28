@@ -33,13 +33,13 @@ namespace mml2vgmIDE
         public EnmFileFormat dstFileFormat = EnmFileFormat.unknown;
         public object compiledData = null;
 
-        public Document(Setting setting, EnmMmlFileFormat fmt,FrmSien sien)
+        public Document(Setting setting, EnmMmlFileFormat fmt)//,FrmSien sien)
         {
             gwiFullPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "(新規mmlファイル).gwi");
             errBox = null;
             wrnBox = null;
             InitFolderTree();
-            editor = new FrmEditor(setting, fmt, sien);
+            editor = new FrmEditor(setting, fmt);//, sien);
             editor.Text = Path.GetFileName(gwiFullPath + "*");
             string filename = Path.Combine(System.Windows.Forms.Application.StartupPath, "Template.gwi");
             editor.azukiControl.Text = "";

@@ -50,6 +50,7 @@
             this.tssbStop = new System.Windows.Forms.ToolStripSplitButton();
             this.tssbSlow = new System.Windows.Forms.ToolStripSplitButton();
             this.tssbFast = new System.Windows.Forms.ToolStripSplitButton();
+            this.tssbSien = new System.Windows.Forms.ToolStripSplitButton();
             this.tssbMIDIKbd = new System.Windows.Forms.ToolStripSplitButton();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.TsmiFile = new System.Windows.Forms.ToolStripMenuItem();
@@ -150,6 +151,7 @@
             this.tssbStop,
             this.tssbSlow,
             this.tssbFast,
+            this.tssbSien,
             this.tssbMIDIKbd});
             resources.ApplyResources(this.statusStrip1, "statusStrip1");
             this.statusStrip1.Name = "statusStrip1";
@@ -272,13 +274,20 @@
             this.tssbFast.Name = "tssbFast";
             this.tssbFast.ButtonClick += new System.EventHandler(this.TssbFast_ButtonClick);
             // 
+            // tssbSien
+            // 
+            this.tssbSien.DropDownButtonWidth = 0;
+            this.tssbSien.Image = global::mml2vgmIDE.Properties.Resources.F12;
+            resources.ApplyResources(this.tssbSien, "tssbSien");
+            this.tssbSien.Name = "tssbSien";
+            this.tssbSien.ButtonClick += new System.EventHandler(this.tssbSien_ButtonClick);
+            // 
             // tssbMIDIKbd
             // 
             this.tssbMIDIKbd.DropDownButtonWidth = 0;
             this.tssbMIDIKbd.Image = global::mml2vgmIDE.Properties.Resources.F12;
             resources.ApplyResources(this.tssbMIDIKbd, "tssbMIDIKbd");
             this.tssbMIDIKbd.Name = "tssbMIDIKbd";
-            this.tssbMIDIKbd.ButtonClick += new System.EventHandler(this.TssbMIDIKbd_ButtonClick);
             // 
             // menuStrip1
             // 
@@ -807,6 +816,7 @@
         private System.Windows.Forms.ToolStripMenuItem tsmiExport_MuctoD88;
         private System.Windows.Forms.ToolStripMenuItem tsmiExport_toWaveFile;
         private System.Windows.Forms.ToolStripMenuItem tsmiExport_toMidiFile;
+        private System.Windows.Forms.ToolStripSplitButton tssbSien;
     }
 }
 

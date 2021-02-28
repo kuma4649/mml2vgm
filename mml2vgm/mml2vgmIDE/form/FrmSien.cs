@@ -18,14 +18,13 @@ namespace mml2vgmIDE
         public int selRow = -1;
         private Dictionary<string, string[]> instCache = new Dictionary<string, string[]>();
         private Dictionary<string, Tuple<InstrumentAtLocal.enmInstType, string, string>[]> instCacheFolder = new Dictionary<string, Tuple<InstrumentAtLocal.enmInstType, string, string>[]>();
-        private int tw;
-        private int th;
 
-        public FrmSien(Setting setting)
+        public FrmSien(FrmMain parent,Setting setting)
         {
             InitializeComponent();
             ss = new SienSearch(System.IO.Path.Combine(Common.GetApplicationFolder(), "mmlSien.json"));
             this.setting = setting;
+            this.parent = parent;
             if (setting.sien.CacheInstrumentName != null)
             {
                 instCache = ConvertCacheList(setting.sien);
@@ -83,73 +82,44 @@ namespace mml2vgmIDE
             }
         }
 
-        protected override CreateParams CreateParams
-        {
-            [SecurityPermission(SecurityAction.Demand,
-                Flags = SecurityPermissionFlag.UnmanagedCode)]
-            get
-            {
-                const int WS_EX_TOOLWINDOW = 0x80;
-                const long WS_POPUP = 0x80000000L;
-                const int WS_VISIBLE = 0x10000000;
-                const int WS_SYSMENU = 0x80000;
-                const int WS_MAXIMIZEBOX = 0x10000;
+        //protected override CreateParams CreateParams
+        //{
+        //    [SecurityPermission(SecurityAction.Demand,
+        //        Flags = SecurityPermissionFlag.UnmanagedCode)]
+        //    get
+        //    {
+        //        const int WS_EX_TOOLWINDOW = 0x80;
+        //        const long WS_POPUP = 0x80000000L;
+        //        const int WS_VISIBLE = 0x10000000;
+        //        const int WS_SYSMENU = 0x80000;
+        //        const int WS_MAXIMIZEBOX = 0x10000;
 
-                CreateParams cp = base.CreateParams;
-                cp.ExStyle = WS_EX_TOOLWINDOW;
-                cp.Style = unchecked((int)WS_POPUP) |
-                    WS_VISIBLE | WS_SYSMENU | WS_MAXIMIZEBOX;
+        //        CreateParams cp = base.CreateParams;
+        //        cp.ExStyle = WS_EX_TOOLWINDOW;
+        //        cp.Style = unchecked((int)WS_POPUP) |
+        //            WS_VISIBLE | WS_SYSMENU | WS_MAXIMIZEBOX;
 
-                if (this.Width != 0)
-                {
-                    tw = this.Width;
-                    th = this.Height;
-                }
+        //        if (this.Width != 0)
+        //        {
+        //            tw = this.Width;
+        //            th = this.Height;
+        //        }
 
-                cp.Width = 0;
-                cp.Height = 0;
+        //        cp.Width = 0;
+        //        cp.Height = 0;
 
-                return cp;
-            }
-        }
-
-        private void dgvItem_CellClick(object sender, DataGridViewCellEventArgs e)
-        {
-            if (e.RowIndex != -1)
-            {
-                dgvItem.Rows[e.RowIndex].Selected = true;
-                SienItem si = (SienItem)dgvItem.Rows[e.RowIndex].Tag;
-                DockContent dc = (DockContent)parent.GetActiveDockContent();
-                Document d = null;
-                if (dc != null)
-                {
-                    if (dc.Tag is Document)
-                    {
-                        d = (Document)dc.Tag;
-                        int ci = d.editor.azukiControl.CaretIndex;
-                        d.editor.azukiControl.Document.Replace(
-                            si.content,
-                            ci - si.foundCnt,
-                            ci);
-
-                        d.editor.azukiControl.SetSelection(ci - si.foundCnt + si.nextAnchor, ci - si.foundCnt + si.nextCaret);
-                    }
-                }
-            }
-
-            this.SetOpacity(false);
-            parent.Activate();
-        }
+        //        return cp;
+        //    }
+        //}
 
         public void update()
         {
-            this.Height = Math.Min(5 * (dgvItem.RowTemplate.Height + 1), dgvItem.RowCount * (dgvItem.RowTemplate.Height + 1));
         }
 
         public void Request(string line, Point ciP,int parentID,EnmMmlFileFormat tp,object option)
         {
             Location = new Point(ciP.X, ciP.Y);
-            dgvItem.Rows.Clear();
+            //dgvItem.Rows.Clear();
             ss.Request(
                 line, 
                 cbUpdateList, 
@@ -173,95 +143,70 @@ namespace mml2vgmIDE
 
             if (found == null || found.Count < 1)
             {
-                this.SetOpacity(false);
-                selRow = -1;
-                DockContent dc = (DockContent)parent.GetActiveDockContent();
-                Document d = null;
-                if (dc != null)
-                {
-                    if (dc.Tag is Document)
-                    {
-                        d = (Document)dc.Tag;
-                        d.editor.parentID = -1;
-                        d.editor.option = null;
-                    }
-                }
-
                 return;
             }
 
-            this.SetOpacity(setting.UseSien);
-
             bool isFirst = true;
             bool isFirstFolder = true;
+
+            TreeNode root = new TreeNode();
+            treeView1.Nodes.Clear();
             foreach (SienItem si in found)
             {
+                if (si == null) continue;
+                if (si.tree == null) continue;
+
+                string[] flds = si.tree.Split(new char[] { '\\' }, StringSplitOptions.RemoveEmptyEntries);
+                TreeNode tns = root;
+                foreach (string fld in flds)
+                {
+                    TreeNode fnd = null;
+                        foreach (TreeNode tn in tns.Nodes)
+                        {
+                            if (tn.Text == fld)
+                            {
+                                fnd = tn;
+                                break;
+                            }
+                        }
+
+                    if (fnd == null)
+                    {
+                        fnd = new TreeNode(fld);
+                        tns.Nodes.Add(fnd);
+                    }
+                    tns = fnd;
+                }
+
                 if (si.sienType == 1)
                 {
-                    if (!parent.setting.OfflineMode)
-                    {
-                        GetInstrument(si, isFirst);
-                        isFirst = false;
-                    }
+                    GetInstrument(si, tns, isFirst);
+                    isFirst = false;
                 }
                 else if (si.sienType == 2)
                 {
-                    GetInstrumentFromFolder(si,isFirstFolder);
+                    GetInstrumentFromFolder(si,tns, isFirstFolder);
                     isFirstFolder = false;
                 }
                 else
                 {
-                    dgvItem.Rows.Add(
-                        si.title,
-                        si.description,
-                        si.content);
-                    dgvItem.Rows[dgvItem.Rows.Count - 1].Tag = si;
+                    TreeNode n = new TreeNode(si.title);
+                    n.Tag = si;
+                    tns.Nodes.Add(n);
                 }
             }
-            if (selRow == -1 && dgvItem.SelectedRows.Count > 0)
-            {
-                dgvItem.SelectedRows[0].Selected = false;
-            }
+
+            foreach(TreeNode tn in root.Nodes) treeView1.Nodes.Add(tn);
 
             if (isFirst) update();
         }
 
-        /// <summary>
-        /// 0.0 非表示
-        /// 1.0 表示
-        /// </summary>
-        /// <param name="sw"></param>
-        public void SetOpacity(bool sw)
-        {
-            if (sw)
-            {
-                this.Width = tw;
-                this.Height = th;
-                return;
-            }
 
-            //既に非表示の状態の場合は何もせずに戻る
-            //(フォーカスが切り替わるときちらつきが発生してしまう為)
-            if (this.Width == 0) return;
-
-            this.Width = 0;
-            this.Height = 0;
-            this.TopMost = true;
-            if (parent != null) parent.Activate();
-        }
-
-        public bool GetOpacity()
-        {
-            //Console.WriteLine("{0}", this.Width);
-            return this.Width != 0;
-            //return Opacity==1.0;
-            //return Visible;
-        }
-
-        private void GetInstrument(SienItem si, bool isFirst)
+        private void GetInstrument(SienItem si, TreeNode tns, bool isFirst)
         {
             InstrumentAtValSound iavs = new InstrumentAtValSound();
             iavs.isFirst = isFirst;
+            iavs.treenode = tns;
             string[] param = new string[6];
             string[] val = si.content.Split(',');
             for (int i = 0; i < param.Length; i++)
@@ -280,17 +225,16 @@ namespace mml2vgmIDE
                     , param[3]
                     , param[4]
                     , param[5]
-                    , GetInstrumentComp);
+                    , GetInstrumentCompTN);
             }
             else
             {
-                GetInstrumentComp(si, instCache[si.content]);
+                GetInstrumentCompTN(si, tns, instCache[si.content]);
                 update();//キャッシュがある場合はここでupdateして大丈夫
             }
         }
 
-
-        private void GetInstrumentComp(object sender, string[] obj)
+        private void GetInstrumentCompTN(object sender,TreeNode tn, string[] obj)
         {
             if (!(sender is SienItem)) return;
             if (obj == null || obj.Length < 1) return;
@@ -322,11 +266,9 @@ namespace mml2vgmIDE
                     ssi.patternType = si.patternType;
                     ssi.sienType = si.sienType + 1;
 
-                    dgvItem.Rows.Add(
-                        ssi.title,
-                        ssi.description,
-                        ssi.content);
-                    dgvItem.Rows[dgvItem.Rows.Count - 1].Tag = ssi;
+                    TreeNode n = new TreeNode(ssi.title);
+                    n.Tag = ssi;
+                    tn.Nodes.Add(n);
                 }
                 update();
 
@@ -343,10 +285,6 @@ namespace mml2vgmIDE
 
         private void FrmSien_Load(object sender, EventArgs e)
         {
-            dgvItem.BackColor = Color.FromArgb(setting.ColorScheme.FrmSien_BackColor);
-            dgvItem.ForeColor = Color.FromArgb(setting.ColorScheme.FrmSien_ForeColor);
-            dgvItem.DefaultCellStyle.BackColor = Color.FromArgb(setting.ColorScheme.FrmSien_BackColor);
-            dgvItem.DefaultCellStyle.ForeColor = Color.FromArgb(setting.ColorScheme.FrmSien_ForeColor);
         }
 
         private void FrmSien_FormClosing(object sender, FormClosingEventArgs e)
@@ -354,34 +292,21 @@ namespace mml2vgmIDE
             ReConvertCacheList();
         }
 
-        private void GetInstrumentFromFolder(SienItem si,bool isFirstFolder)
+        private void GetInstrumentFromFolder(SienItem si, TreeNode tn, bool isFirstFolder)
         {
             InstrumentAtLocal iavs = new InstrumentAtLocal();
             iavs.isFirst = isFirstFolder;
-            //string[] param = new string[6];
-            //string[] val = si.content.Split(',');
-            //for (int i = 0; i < param.Length; i++)
-            //{
-            //    param[i] = val[i].Trim().Trim('\'');
-            //}
-
-            //if (!instCacheFolder.ContainsKey(si.content))
+            iavs.treenode = tn;
+            string path = Path.Combine(Common.GetApplicationFolder(), "Instruments");// "C:\\Users\\kuma\\Desktop\\FM-SoundLibrary-master";
+            if (si.description != "")
             {
-                string path = Path.Combine(Common.GetApplicationFolder(),"Instruments");// "C:\\Users\\kuma\\Desktop\\FM-SoundLibrary-master";
-                if (si.description != "")
-                {
-                    path = si.description;
-                }
-                iavs.Start(
-                    parent, si, path, "", GetInstrumentFromFolderComp);
+                path = si.description;
             }
-            //else
-            //{
-            //    GetInstrumentFromFolderComp(si, instCacheFolder[si.content]);
-            //}
+            iavs.Start(
+                parent, si, path, "", GetInstrumentFromFolderComp);
         }
 
-        private void GetInstrumentFromFolderComp(object sender, Tuple<InstrumentAtLocal.enmInstType, string, string>[] obj)
+        private void GetInstrumentFromFolderComp(object sender,TreeNode tn, Tuple<InstrumentAtLocal.enmInstType, string, string>[] obj)
         {
             if (!(sender is SienItem)) return;
             if (obj == null || obj.Length < 1) return;
@@ -400,61 +325,107 @@ namespace mml2vgmIDE
                 int depth = -1;
                 foreach (Tuple<InstrumentAtLocal.enmInstType, string, string> line in obj)
                 {
+                    if (line.Item1 != InstrumentAtLocal.enmInstType.Dir) continue;
+
                     depth++;
                     SienItem ssi;
                     string name = Path.GetFileName(line.Item2);
                     string filePath = Path.GetDirectoryName(line.Item2);
                     string[] paths = filePath.Split(Path.DirectorySeparatorChar);
                     string lin = line.Item3;
+                    string treename = line.Item2.Replace(Path.Combine(Common.GetApplicationFolder(), "Instruments") + "\\", "");
 
-                    if (line.Item1 == InstrumentAtLocal.enmInstType.Dir)
+                    ssi = new SienItem();
+                    ssi.title = string.Format("{0}", name);
+                    ssi.tree = treename;
+                    ssi.ID = si.parentID;
+                    ssi.parentID = si.ID;
+                    ssi.haveChild = true;
+                    ssi.content = si.content;
+                    ssi.description = line.Item2;
+                    ssi.foundCnt = si.foundCnt;
+                    ssi.nextAnchor = si.nextAnchor;
+                    ssi.nextCaret = si.nextCaret;
+                    ssi.pattern = si.pattern;
+                    ssi.patternType = si.patternType;
+                    ssi.sienType = si.sienType;
+
+                    string[] flds = ssi.tree.Split(new char[] { '\\' }, StringSplitOptions.RemoveEmptyEntries);
+                    TreeNode tns = tn;
+                    foreach (string fld in flds)
                     {
-                        ssi = new SienItem();
-                        //ssi.ID = 99 + depth;
-                        ssi.title = string.Format("> {0}",name);
-                        ssi.ID = si.parentID;
-                        ssi.parentID = si.ID;
-                        ssi.haveChild = true;
-                        ssi.content = si.content;
-                        ssi.description = line.Item2;
-                        ssi.foundCnt = si.foundCnt;
-                        ssi.nextAnchor = si.nextAnchor;
-                        ssi.nextCaret = si.nextCaret;
-                        ssi.pattern = si.pattern;
-                        ssi.patternType = si.patternType;
-                        ssi.sienType = si.sienType;
-
-                        dgvItem.Rows.Add(
-                            ssi.title,
-                            ssi.description,
-                            ssi.content);
-                        dgvItem.Rows[dgvItem.Rows.Count - 1].Tag = ssi;
-
-                    }
-                    else
-                    {
-                        if (line.Item1 == tp)
+                        TreeNode fnd = null;
+                        foreach (TreeNode t in tns.Nodes)
                         {
-                            ssi = new SienItem();
-                            ssi.title = string.Format(si.title, name);
-                            ssi.parentID = si.ID;
-                            ssi.content = lin;
-                            ssi.description = si.description;
-                            ssi.foundCnt = si.foundCnt;
-                            ssi.nextAnchor = si.nextAnchor;
-                            ssi.nextCaret = si.nextCaret;
-                            ssi.pattern = si.pattern;
-                            ssi.patternType = si.patternType;
-                            ssi.sienType = si.sienType + 1;
-
-                            dgvItem.Rows.Add(
-                                ssi.title,
-                                ssi.description,
-                                ssi.content);
-                            dgvItem.Rows[dgvItem.Rows.Count - 1].Tag = ssi;
+                            if (t.Text == fld)
+                            {
+                                fnd = t;
+                                break;
+                            }
                         }
+
+                        if (fnd == null)
+                        {
+                            fnd = new TreeNode(fld);
+                            tns.Nodes.Add(fnd);
+                        }
+                        tns = fnd;
                     }
+
                 }
+
+                foreach (Tuple<InstrumentAtLocal.enmInstType, string, string> line in obj)
+                {
+                    if (line.Item1 == InstrumentAtLocal.enmInstType.Dir) continue;
+
+                    depth++;
+                    SienItem ssi;
+                    string name = Path.GetFileName(line.Item2);
+                    string filePath = Path.GetDirectoryName(line.Item2);
+                    string[] paths = filePath.Split(Path.DirectorySeparatorChar);
+                    string lin = line.Item3;
+                    string treename = line.Item2.Replace(Path.Combine(Common.GetApplicationFolder(), "Instruments") + "\\", "");
+
+                    ssi = new SienItem();
+                    ssi.title = string.Format("{0}", name);
+                    ssi.tree = treename;
+                    ssi.ID = si.parentID;
+                    ssi.parentID = si.ID;
+                    ssi.haveChild = true;
+                    ssi.content = lin;// si.content;
+                    ssi.description = line.Item2;
+                    ssi.foundCnt = si.foundCnt;
+                    ssi.nextAnchor = si.nextAnchor;
+                    ssi.nextCaret = si.nextCaret;
+                    ssi.pattern = si.pattern;
+                    ssi.patternType = si.patternType;
+                    ssi.sienType = si.sienType;
+
+                    string[] flds = ssi.tree.Split(new char[] { '\\' }, StringSplitOptions.RemoveEmptyEntries);
+                    TreeNode tns = tn;
+                    foreach (string fld in flds)
+                    {
+                        TreeNode fnd = null;
+                        foreach (TreeNode t in tns.Nodes)
+                        {
+                            if (t.Text == fld)
+                            {
+                                fnd = t;
+                                break;
+                            }
+                        }
+
+                        if (fnd == null)
+                        {
+                            fnd = new TreeNode(fld);
+                            fnd.Tag = ssi;
+                            tns.Nodes.Add(fnd);
+                        }
+                        tns = fnd;
+                    }
+
+                }
+
                 update();
 
                 if (!instCacheFolder.ContainsKey(si.content))
@@ -468,6 +439,56 @@ namespace mml2vgmIDE
             }
 
         }
+
+        private void FrmSien_Shown(object sender, EventArgs e)
+        {
+            Request("'", Point.Empty, 0, EnmMmlFileFormat.GWI, null);
+        }
+
+        private void treeView1_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar != 13) return;
+            if (treeView1.SelectedNode == null) return;
+            if (treeView1.SelectedNode.Tag == null) return;
+            if (!(treeView1.SelectedNode.Tag is SienItem)) return;
+            e.Handled = true;
+            SienItem si = (SienItem)treeView1.SelectedNode.Tag;
+
+            ReplaceContents(si);
+        }
+
+        private void treeView1_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
+        {
+            if (e.Node == null) return;
+            if (e.Node.Tag == null) return;
+            if (!(e.Node.Tag is SienItem)) return;
+            SienItem si = (SienItem)e.Node.Tag;
+            ReplaceContents(si);
+        }
+
+        private void ReplaceContents(SienItem si)
+        {
+            DockContent dc = (DockContent)parent.GetActiveDockContent();
+            Document d;
+
+            if (dc == null) return;
+            if (!(dc.Tag is Document)) return;
+
+            try
+            {
+                d = (Document)dc.Tag;
+                int ci = d.editor.azukiControl.CaretIndex;
+                d.editor.azukiControl.Document.Replace(
+                    si.content,
+                    ci,// - si.foundCnt,
+                    ci);
+
+                //d.editor.azukiControl.SetSelection(ci - si.foundCnt + si.nextAnchor, ci - si.foundCnt + si.nextCaret);
+                d.editor.azukiControl.SetSelection(ci + si.nextAnchor, ci + si.nextCaret);
+            }
+            catch { }
+        }
+
     }
 
 }

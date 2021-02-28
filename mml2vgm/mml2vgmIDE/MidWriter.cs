@@ -13,7 +13,7 @@ namespace mml2vgmIDE
         private Setting setting = null;
         private FileStream dest = null;
         private midiChip midi = new midiChip();
-        private int len = 0;
+        //private int len = 0;
 
         public MidWriter(Setting setting)
         {

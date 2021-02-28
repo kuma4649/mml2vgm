@@ -86,7 +86,7 @@ namespace mml2vgmIDE
             }
             foreach (SienItem si in sien.list)
             {
-                if (si.parentID != reqParentID) continue;
+                //if (si.parentID != reqParentID) continue;
                 if (si.supportMMLFormat.IndexOf(reqMMLFileFormat) < 0) continue;
 
                 switch (si.patternType)

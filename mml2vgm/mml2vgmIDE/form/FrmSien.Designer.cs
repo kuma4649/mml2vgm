@@ -28,67 +28,49 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("root");
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmSien));
-            this.dgvItem = new System.Windows.Forms.DataGridView();
-            this.ClmContent = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvItem)).BeginInit();
+            this.treeView1 = new System.Windows.Forms.TreeView();
             this.SuspendLayout();
             // 
-            // dgvItem
+            // treeView1
             // 
-            this.dgvItem.AllowUserToAddRows = false;
-            this.dgvItem.AllowUserToDeleteRows = false;
-            this.dgvItem.AllowUserToResizeColumns = false;
-            this.dgvItem.AllowUserToResizeRows = false;
-            this.dgvItem.BackgroundColor = System.Drawing.Color.Black;
-            this.dgvItem.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvItem.ColumnHeadersVisible = false;
-            this.dgvItem.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.ClmContent});
-            this.dgvItem.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dgvItem.Location = new System.Drawing.Point(0, 0);
-            this.dgvItem.MultiSelect = false;
-            this.dgvItem.Name = "dgvItem";
-            this.dgvItem.ReadOnly = true;
-            this.dgvItem.RowHeadersVisible = false;
-            this.dgvItem.RowTemplate.Height = 21;
-            this.dgvItem.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvItem.Size = new System.Drawing.Size(480, 125);
-            this.dgvItem.TabIndex = 0;
-            this.dgvItem.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvItem_CellClick);
-            // 
-            // ClmContent
-            // 
-            this.ClmContent.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ClmContent.DefaultCellStyle = dataGridViewCellStyle1;
-            this.ClmContent.HeaderText = "Contentt";
-            this.ClmContent.Name = "ClmContent";
-            this.ClmContent.ReadOnly = true;
+            this.treeView1.BackColor = System.Drawing.Color.Black;
+            this.treeView1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.treeView1.ForeColor = System.Drawing.Color.Orange;
+            this.treeView1.Location = new System.Drawing.Point(0, 0);
+            this.treeView1.Name = "treeView1";
+            treeNode1.Name = "ノード2";
+            treeNode1.Text = "root";
+            this.treeView1.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
+            treeNode1});
+            this.treeView1.ShowNodeToolTips = true;
+            this.treeView1.Size = new System.Drawing.Size(476, 121);
+            this.treeView1.TabIndex = 1;
+            this.treeView1.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.treeView1_NodeMouseDoubleClick);
+            this.treeView1.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.treeView1_KeyPress);
             // 
             // FrmSien
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(480, 125);
-            this.Controls.Add(this.dgvItem);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.ClientSize = new System.Drawing.Size(476, 121);
+            this.Controls.Add(this.treeView1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MinimumSize = new System.Drawing.Size(492, 160);
             this.Name = "FrmSien";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
-            this.Text = "FrmSien(Do not touch me)";
+            this.Text = "Sien";
             this.TopMost = true;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FrmSien_FormClosing);
             this.Load += new System.EventHandler(this.FrmSien_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.dgvItem)).EndInit();
+            this.Shown += new System.EventHandler(this.FrmSien_Shown);
             this.ResumeLayout(false);
 
         }
 
         #endregion
-        private System.Windows.Forms.DataGridViewTextBoxColumn ClmContent;
-        public System.Windows.Forms.DataGridView dgvItem;
+        private System.Windows.Forms.TreeView treeView1;
     }
 }
