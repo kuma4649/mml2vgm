@@ -739,6 +739,14 @@ namespace mml2vgmIDE
             TsmiShowLyrics.Checked = !frmLyrics.IsHidden;
         }
 
+        private void TsmiShowSien_Click(object sender, EventArgs e)
+        {
+            if (frmSien.IsHidden) frmSien.Show();
+            else frmSien.Hide();
+
+            TsmiShowSien.Checked = !frmSien.IsHidden;
+        }
+
         private void TsmiShowMixer_Click(object sender, EventArgs e)
         {
             if (frmMixer == null)
@@ -1031,7 +1039,7 @@ stop();
 
         private void tssbSien_ButtonClick(object sender, EventArgs e)
         {
-            sien();
+            //sien();
         }
 
         protected override bool ProcessCmdKey(ref System.Windows.Forms.Message msg, System.Windows.Forms.Keys keyData)
@@ -2522,6 +2530,7 @@ stop();
             TsmiShowErrorList.Checked = !frmErrorList.IsHidden;
             TsmiShowLog.Checked = !frmLog.IsHidden;
             TsmiShowLyrics.Checked = !frmLyrics.IsHidden;
+            TsmiShowSien.Checked = !frmSien.IsHidden;
 
             tsslCompileError.Text = string.Format(
                 "{0}",
@@ -2748,6 +2757,9 @@ stop();
             frmLyrics = new FrmLyrics(setting, theme);
             FormBox.Add(frmLyrics);
 
+            frmSien = new FrmSien(this, setting);
+            FormBox.Add(frmSien);
+
             if (string.IsNullOrEmpty(setting.dockingState))
             {
                 frmPartCounter.Show(dpMain, WeifenLuo.WinFormsUI.Docking.DockState.DockLeft);
@@ -2755,6 +2767,7 @@ stop();
                 frmFolderTree.Show(dpMain, WeifenLuo.WinFormsUI.Docking.DockState.DockLeft);
                 frmErrorList.Show(dpMain, WeifenLuo.WinFormsUI.Docking.DockState.DockBottom);
                 frmLyrics.Show(dpMain, WeifenLuo.WinFormsUI.Docking.DockState.DockTop);
+                frmSien.Show(dpMain, WeifenLuo.WinFormsUI.Docking.DockState.DockRight);
             }
             else
             {
@@ -2768,6 +2781,7 @@ stop();
                     if (frmFolderTree.ParentForm == null) frmFolderTree.Show(dpMain, DockState.DockLeft);
                     if (frmErrorList.ParentForm == null) frmErrorList.Show(dpMain, DockState.DockBottom);
                     if (frmLyrics.ParentForm == null) frmLyrics.Show(dpMain, DockState.DockTop);
+                    if (frmSien.ParentForm == null) frmSien.Show(dpMain, DockState.DockRight);
                 }
                 catch (Exception ex)
                 {
@@ -2789,6 +2803,7 @@ stop();
             frmErrorList.parentUpdate = UpdateControl;
             frmErrorList.parentJumpDocument = JumpDocument;
             frmLyrics.parentUpdate = UpdateControl;
+            frmSien.parentUpdate = UpdateControl;
 
             statusStrip1.BackColor = Color.FromArgb(setting.ColorScheme.StatusStripBack_Normal);
 
@@ -3269,7 +3284,7 @@ stop();
                 }
 
                 frmSien = new FrmSien(this,setting);
-                frmSien.Show();
+                frmSien.Show(dpMain, DockState.DockRight);
             }
         }
 

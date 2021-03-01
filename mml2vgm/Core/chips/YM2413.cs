@@ -113,7 +113,7 @@ namespace Core
         {
             page.instrument = n;
 
-            if (!parent.instFM.ContainsKey(n))
+            if (!parent.instOPL.ContainsKey(n))
             {
                 msgBox.setWrnMsg(string.Format(msg.get("E17000"), n), mml.line.Lp);
                 return;
@@ -167,34 +167,34 @@ namespace Core
             for (byte ope = 0; ope < 2; ope++)
             {
                 outYM2413SetAdr00_01(mml, page, ope
-                    , parent.instFM[n].Item2[ope * 11 + 7] != 0 //AM
-                    , parent.instFM[n].Item2[ope * 11 + 8] != 0 //VIB
-                    , parent.instFM[n].Item2[ope * 11 + 9] != 0 //EG
-                    , parent.instFM[n].Item2[ope * 11 + 10] != 0 //KS
-                    , parent.instFM[n].Item2[ope * 11 + 6] & 0xf //MT
+                    , parent.instOPL[n].Item2[ope * 11 + 7] != 0 //AM
+                    , parent.instOPL[n].Item2[ope * 11 + 8] != 0 //VIB
+                    , parent.instOPL[n].Item2[ope * 11 + 9] != 0 //EG
+                    , parent.instOPL[n].Item2[ope * 11 + 10] != 0 //KS
+                    , parent.instOPL[n].Item2[ope * 11 + 6] & 0xf //MT
                     );
                 SOutData(page, mml, port[0], (byte)(0x4 + ope), (byte)((
-                    (parent.instFM[n].Item2[ope * 11 + 1] & 0xf) << 4) //AR
-                    | (parent.instFM[n].Item2[ope * 11 + 2] & 0xf) // DR
+                    (parent.instOPL[n].Item2[ope * 11 + 1] & 0xf) << 4) //AR
+                    | (parent.instOPL[n].Item2[ope * 11 + 2] & 0xf) // DR
                     ));
                 SOutData(page, mml, port[0], (byte)(0x6 + ope), (byte)((
-                    (parent.instFM[n].Item2[ope * 11 + 3] & 0xf) << 4) //SL
-                    | (parent.instFM[n].Item2[ope * 11 + 4] & 0xf) // RR
+                    (parent.instOPL[n].Item2[ope * 11 + 3] & 0xf) << 4) //SL
+                    | (parent.instOPL[n].Item2[ope * 11 + 4] & 0xf) // RR
                     ));
             }
             SOutData(page, mml, port[0], (byte)(0x2), (byte)((
-                (parent.instFM[n].Item2[0 * 11 + 5] & 0x3) << 6)  //KL(M)
-                | (parent.instFM[n].Item2[23] & 0x3f) //TL
+                (parent.instOPL[n].Item2[0 * 11 + 5] & 0x3) << 6)  //KL(M)
+                | (parent.instOPL[n].Item2[23] & 0x3f) //TL
                 ));
             SOutData(page, mml, port[0], (byte)(0x3), (byte)((
-                (parent.instFM[n].Item2[1 * 11 + 5] & 0x3) << 6) //KL(C)
-                | (parent.instFM[n].Item2[0 * 11 + 11] != 0 ? 0x08 : 0) // DT(M)
-                | (parent.instFM[n].Item2[1 * 11 + 11] != 0 ? 0x10 : 0) // DT(C)
-                | (parent.instFM[n].Item2[24] & 0x07) //FB
+                (parent.instOPL[n].Item2[1 * 11 + 5] & 0x3) << 6) //KL(C)
+                | (parent.instOPL[n].Item2[0 * 11 + 11] != 0 ? 0x08 : 0) // DT(M)
+                | (parent.instOPL[n].Item2[1 * 11 + 11] != 0 ? 0x10 : 0) // DT(C)
+                | (parent.instOPL[n].Item2[24] & 0x07) //FB
                 ));
 
-            page.op1ml = parent.instFM[n].Item2[0 * 11 + 5];
-            page.op2ml = parent.instFM[n].Item2[1 * 11 + 5];
+            page.op1ml = parent.instOPL[n].Item2[0 * 11 + 5];
+            page.op2ml = parent.instOPL[n].Item2[1 * 11 + 5];
             page.op1dt2 = 0;
             page.op2dt2 = 0;
 
@@ -330,16 +330,16 @@ namespace Core
 
         public void OutFmSetTL(partPage page, MML mml, int tl1, int n)
         {
-            if (!parent.instFM.ContainsKey(n))
+            if (!parent.instOPL.ContainsKey(n))
             {
                 msgBox.setWrnMsg(string.Format(msg.get("E11000"), n), mml.line.Lp);
                 return;
             }
 
-            int ope = parent.instFM[n].Item2[23] & 0x3f;
+            int ope = parent.instOPL[n].Item2[23] & 0x3f;
             ope = ope - tl1;
             ope = Common.CheckRange(ope, 0, 127);
-            int kl = parent.instFM[n].Item2[0 * 11 + 5] & 0x3;
+            int kl = parent.instOPL[n].Item2[0 * 11 + 5] & 0x3;
 
             partPage vpg = page;
             MML vmml = new MML();
@@ -382,7 +382,7 @@ namespace Core
 
             //if (pw.ppg[pw.cpgNum].beforeVolume != vol)
             //{
-            //if (parent.instFM.ContainsKey(pw.ppg[pw.cpgNum].instrument))
+            //if (parent.instOPL.ContainsKey(pw.ppg[pw.cpgNum].instrument))
             //{
             page.volume = vol;
             //outYM2413SetInstVol(pw, pw.ppg[pw.cpgNum].envInstrument, vol);
@@ -411,7 +411,7 @@ namespace Core
 
             if (page.spg.beforeTlDelta1 != tl1)
             {
-                if (parent.instFM.ContainsKey(page.instrument))
+                if (parent.instOPL.ContainsKey(page.instrument))
                 {
                     OutFmSetTL(page, mml, tl1, page.instrument);
                 }

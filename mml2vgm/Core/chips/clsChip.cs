@@ -1282,6 +1282,24 @@ namespace Core
             return;
         }
 
+        public virtual void CmdPageDirectSend(partPage page, MML mml)
+        {
+            string cmd = (string)mml.args[0];
+
+            switch (cmd)
+            {
+                case "PDON":
+                    page.spg.DirectSend = true;
+                    break;
+                case "PDOF":
+                    page.spg.DirectSend = false;
+                    break;
+            }
+
+            //SetDummyData(page, mml);
+            return;
+        }
+        
         public virtual void CmdHardEnvelope(partPage page, MML mml)
         {
             msgBox.setWrnMsg(msg.get("E10011")
@@ -2011,7 +2029,9 @@ namespace Core
                 //カレントページではない時
                 if (page != pw.cpg)
                 {
-                    //処理しない
+                    //処理しない(但しダイレクトセンドモードが有効な場合はコマンドを送信する)
+                    if(pw.spg.DirectSend)
+                        parent.OutData(page.sendData);
                     page.sendData.Clear();//送信データクリア
                     return;
                 }

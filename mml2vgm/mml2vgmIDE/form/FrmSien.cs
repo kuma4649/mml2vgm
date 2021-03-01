@@ -10,8 +10,9 @@ using WeifenLuo.WinFormsUI.Docking;
 
 namespace mml2vgmIDE
 {
-    public partial class FrmSien : Form
+    public partial class FrmSien : DockContent
     {
+        public Action parentUpdate = null;
         public FrmMain parent = null;
         public Setting setting = null;
         private SienSearch ss;
@@ -296,6 +297,10 @@ namespace mml2vgmIDE
         private void FrmSien_FormClosing(object sender, FormClosingEventArgs e)
         {
             ReConvertCacheList();
+
+            e.Cancel = true;
+            this.Hide();
+            parentUpdate?.Invoke();
         }
 
         private void GetInstrumentFromFolder(SienItem si, TreeNode tn, bool isFirstFolder)

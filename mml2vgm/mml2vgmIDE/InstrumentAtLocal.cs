@@ -134,19 +134,6 @@ namespace mml2vgmIDE
                             ret.Add(new Tuple<enmInstType, string, string>(enmInstType.FM_N, Path.Combine(srcFn, name).Replace(baseDir, ""), str));
                         }
                     }
-                    else if (instFM[num].Item2.Length == 27)
-                    {
-                        string name = instFM[num].Item1;
-                        if (string.IsNullOrEmpty(name))
-                        {
-                            name = string.Format("OPL instrument noname {0}", renban++);
-                        }
-                        string str = GetInstrumentGwiFmOPLString(num, name, instFM[num].Item2);
-                        if (!string.IsNullOrEmpty(str))
-                        {
-                            ret.Add(new Tuple<enmInstType, string, string>(enmInstType.FM_L, Path.Combine(srcFn, name).Replace(baseDir, ""), str));
-                        }
-                    }
                     else
                     {
                         ;
@@ -168,6 +155,55 @@ namespace mml2vgmIDE
                         if (!string.IsNullOrEmpty(str))
                         {
                             ret.Add(new Tuple<enmInstType, string, string>(enmInstType.FM_N, Path.Combine(srcFn, name).Replace(baseDir, ""), str));
+                        }
+                    }
+                    else
+                    {
+                        ;
+                    }
+                }
+
+                //inst OPL
+                Dictionary<int, Tuple<string, byte[]>> instOPL = mv.desVGM.instOPL;
+                foreach (int num in instOPL.Keys)
+                {
+                    if (instOPL[num].Item2.Length == Core.Const.OPLL_INSTRUMENT_SIZE)
+                    {
+                        string name = instOPL[num].Item1;
+                        if (string.IsNullOrEmpty(name))
+                        {
+                            name = string.Format("OPLL instrument noname {0}", renban++);
+                        }
+                        string str = GetInstrumentGwiFmOPLLString(num, name, instOPL[num].Item2);
+                        if (!string.IsNullOrEmpty(str))
+                        {
+                            ret.Add(new Tuple<enmInstType, string, string>(enmInstType.FM_L, Path.Combine(srcFn, name).Replace(baseDir, ""), str));
+                        }
+                    }
+                    else if (instOPL[num].Item2.Length == Core.Const.OPL3_INSTRUMENT_SIZE)
+                    {
+                        string name = instOPL[num].Item1;
+                        if (string.IsNullOrEmpty(name))
+                        {
+                            name = string.Format("OPL instrument noname {0}", renban++);
+                        }
+                        string str = GetInstrumentGwiFmOPLString(num, name, instOPL[num].Item2);
+                        if (!string.IsNullOrEmpty(str))
+                        {
+                            ret.Add(new Tuple<enmInstType, string, string>(enmInstType.FM_L, Path.Combine(srcFn, name).Replace(baseDir, ""), str));
+                        }
+                    }
+                    else if (instOPL[num].Item2.Length == Core.Const.OPL_OP4_INSTRUMENT_SIZE)
+                    {
+                        string name = instOPL[num].Item1;
+                        if (string.IsNullOrEmpty(name))
+                        {
+                            name = string.Format("OPL4 4OP instrument noname {0}", renban++);
+                        }
+                        string str = GetInstrumentGwiFmOPL4String(num, name, instOPL[num].Item2);
+                        if (!string.IsNullOrEmpty(str))
+                        {
+                            ret.Add(new Tuple<enmInstType, string, string>(enmInstType.FM_L, Path.Combine(srcFn, name).Replace(baseDir, ""), str));
                         }
                     }
                     else
@@ -283,6 +319,31 @@ namespace mml2vgmIDE
 
         }
 
+        private string GetInstrumentGwiFmOPLLString(int num, string name, byte[] val)
+        {
+
+            string[] line = new string[3];
+            for (int i = 0; i < 2; i++)
+            {
+                line[i] = "";
+                for (int j = 0; j < 11; j++)
+                {
+                    line[i] += string.Format("{0:D3} ", val[i * 11 + j + 1]);
+                }
+            }
+            line[2] = string.Format("{0:D3} {1:D3}", val[23], val[24]);
+
+            return string.Format(
+@"'@ LL {4} ""{0}""
+   AR  DR  SL  RR  KL  MT  AM  VB  EG  KR  DT
+'@ {1}
+'@ {2}
+   TL  FB
+'@ {3}
+", name + add, line[0], line[1], line[2], num);
+
+        }
+
         private string GetInstrumentGwiFmOPLString(int num, string name, byte[] val)
         {
 
@@ -305,6 +366,33 @@ namespace mml2vgmIDE
    AL  FB
 '@ {3}
 ", name + add, line[0], line[1], line[2], num);
+
+        }
+
+        private string GetInstrumentGwiFmOPL4String(int num, string name, byte[] val)
+        {
+
+            string[] line = new string[5];
+            for (int i = 0; i < 4; i++)
+            {
+                line[i] = "";
+                for (int j = 0; j < 12; j++)
+                {
+                    line[i] += string.Format("{0:D3} ", val[i * 12 + j + 1]);
+                }
+            }
+            line[4] = string.Format("{0:D3} {1:D3} {2:D3}", val[49], val[50], val[51]);
+
+            return string.Format(
+@"'@ L4 {6} ""{0}""
+   AR  DR  SL  RR  KSL TL  MT  AM  VIB EGT KSR WS
+'@ {1}
+'@ {2}
+'@ {3}
+'@ {4}
+   CNT1 CNT2 FB
+'@ {5}
+", name + add, line[0], line[1], line[2], line[3], line[4], num);
 
         }
 

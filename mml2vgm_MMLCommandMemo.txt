@@ -908,6 +908,10 @@ pn1,n2          ------------------------------o----------------  パン (n1: 前
 pn1,n2,n3,n4    ------------------------------o----------------  パン (n1: 前左 0 - 255 n2: 前右 0 - 255 後左 0 - 255 n2: 後右 0 - 255)
 so              --------------------------------oo-------------  サスティンON (RyhthmChは10,11,13のみ)
 sf              --------------------------------oo-------------  サスティンOFF(RyhthmChは10,11,13のみ)
+PRON            -----------------ooo---------------------------  フェーズリセット有効
+PROF            -----------------ooo---------------------------  フェーズリセット無効
+PDON            ooooooooooooooooooooooooooooooooooooooooooooooo  ページダイレクトセンド有効
+PDOF            ooooooooooooooooooooooooooooooooooooooooooooooo  ページダイレクトセンド無効
 %xxx            ooooooooooooooooooooooooooooooooooooooooooooooo  エイリアス展開
 ;               ooooooooooooooooooooooooooooooooooooooooooooooo  コメントアウト 行末まで無視する
 *Mn             ooooooooooooooooooooooooooooooooooooooooooooooo  同期マーキング (0 - )
@@ -1088,6 +1092,14 @@ SXEhQ           -----------------oooooo------------------------  EQ Highシス�
 例)
 '@ TFI 0,"voice.tfi"
   voice.tfiを読み込み、音色番号0に定義する。
+
+  FM音源は形式によって音色番号を共有しています。
+  OPN系音色
+    F , N , A の３つで音色番号を共有
+  OPM音色
+    M のひとつ。
+  OPL系音色
+    LL , L , L4 の３つで音色番号を共有
 
 
 (2) PCM音源音色定義

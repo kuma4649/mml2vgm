@@ -86,6 +86,7 @@
             this.TsmiShowErrorList = new System.Windows.Forms.ToolStripMenuItem();
             this.TsmiShowLog = new System.Windows.Forms.ToolStripMenuItem();
             this.TsmiShowLyrics = new System.Windows.Forms.ToolStripMenuItem();
+            this.TsmiShowSien = new System.Windows.Forms.ToolStripMenuItem();
             this.TsmiShowMixer = new System.Windows.Forms.ToolStripMenuItem();
             this.TsmiShowMIDIKbd = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
@@ -150,8 +151,8 @@
             this.tssbPause,
             this.tssbStop,
             this.tssbSlow,
-            this.tssbFast,
             this.tssbSien,
+            this.tssbFast,
             this.tssbMIDIKbd});
             resources.ApplyResources(this.statusStrip1, "statusStrip1");
             this.statusStrip1.Name = "statusStrip1";
@@ -280,7 +281,6 @@
             this.tssbSien.Image = global::mml2vgmIDE.Properties.Resources.F12;
             resources.ApplyResources(this.tssbSien, "tssbSien");
             this.tssbSien.Name = "tssbSien";
-            this.tssbSien.ButtonClick += new System.EventHandler(this.tssbSien_ButtonClick);
             // 
             // tssbMIDIKbd
             // 
@@ -497,6 +497,7 @@
             this.TsmiShowErrorList,
             this.TsmiShowLog,
             this.TsmiShowLyrics,
+            this.TsmiShowSien,
             this.TsmiShowMixer,
             this.TsmiShowMIDIKbd,
             this.toolStripSeparator3,
@@ -533,6 +534,12 @@
             this.TsmiShowLyrics.Name = "TsmiShowLyrics";
             resources.ApplyResources(this.TsmiShowLyrics, "TsmiShowLyrics");
             this.TsmiShowLyrics.Click += new System.EventHandler(this.TsmiShowLyrics_Click);
+            // 
+            // TsmiShowSien
+            // 
+            this.TsmiShowSien.Name = "TsmiShowSien";
+            resources.ApplyResources(this.TsmiShowSien, "TsmiShowSien");
+            this.TsmiShowSien.Click += new System.EventHandler(this.TsmiShowSien_Click);
             // 
             // TsmiShowMixer
             // 
@@ -817,6 +824,7 @@
         private System.Windows.Forms.ToolStripMenuItem tsmiExport_toWaveFile;
         private System.Windows.Forms.ToolStripMenuItem tsmiExport_toMidiFile;
         private System.Windows.Forms.ToolStripSplitButton tssbSien;
+        private System.Windows.Forms.ToolStripMenuItem TsmiShowSien;
     }
 }
 

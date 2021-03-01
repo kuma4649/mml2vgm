@@ -637,6 +637,7 @@ namespace Core
         public Stack<LinePos> stackAliesPos { get; internal set; }
         public Dictionary<int, CommandArpeggio> commandArpeggio = new Dictionary<int, CommandArpeggio>();
         public int beforeInstrument { get; set; } = -1;
+        public bool DirectSend { get; internal set; } = false;
 
         public partPage(partPage sharedPg)
         {

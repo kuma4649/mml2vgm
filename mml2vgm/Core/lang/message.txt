@@ -228,6 +228,7 @@ E05065=Unknown command ('F?') defined.
 E05066=Unknown command ('CAO?') defined.
 E05067=Unknown command ('CA?') defined.
 E05068=Unknown command ('SX?') defined.
+E05069=Unknown command ('PDO?') defined.
 
 
 ;partWork.cs 06000

@@ -334,8 +334,8 @@ namespace Core
                     log.Write(" pan");
                     CmdPan(pw, page, mml);
                     break;
-                case 'P': // noise or tone mixer
-                    log.Write("noise or tone mixer or phase reset");
+                case 'P': // noise or tone mixer or phase reset or Page Direct send
+                    log.Write("noise or tone mixer or phase reset or Page Direct send");
                     CmdMixer(pw, page, mml);
                     break;
                 case 'q': // gatetime
@@ -551,7 +551,6 @@ namespace Core
                 if (
                         (
                         pw.cpg.Type == enmChannelType.FMOPN
-                        || pw.cpg.Type == enmChannelType.FMOPL
                         || pw.cpg.Type == enmChannelType.FMOPNex
                         )
                     && (
@@ -586,6 +585,27 @@ namespace Core
                     if (desVGM.instOPM.ContainsKey(n))
                     {
                         mml.args.Add(desVGM.instOPM[n].Item1);
+                    }
+                    else
+                    {
+                        msgBox.setErrMsg(msg.get("E05002"), mml.line.Lp);
+                    }
+                }
+                else if (
+                        (
+                        pw.cpg.Type == enmChannelType.FMOPL
+                        )
+                    && (
+                        a == 'N'
+                        || a == 'R'
+                        || a == 'A'
+                        || (mml.args[0] is char && (char)mml.args[0] == 'n')
+                        )
+                    )
+                {
+                    if (desVGM.instOPL.ContainsKey(n))
+                    {
+                        mml.args.Add(desVGM.instOPL[n].Item1);
                     }
                     else
                     {
@@ -1884,6 +1904,33 @@ namespace Core
                 else
                 {
                     msgBox.setErrMsg(msg.get("E05064"), mml.line.Lp);
+                }
+                return;
+            }
+            else if (pw.getChar(page) == 'D') //PD
+            {
+                pw.incPos(page);
+                if (pw.getChar(page) == 'O') //PDO
+                {
+                    pw.incPos(page);
+                    if (pw.getChar(page) == 'N') //PDON
+                    {
+                        pw.incPos(page);
+                        mml.type = enmMMLType.PageDirectSend;
+                        mml.args = new List<object>();
+                        mml.args.Add("PDON");
+                    }
+                    else if (pw.getChar(page) == 'F') //PDOF
+                    {
+                        pw.incPos(page);
+                        mml.type = enmMMLType.PageDirectSend;
+                        mml.args = new List<object>();
+                        mml.args.Add("PDOF");
+                    }
+                }
+                else
+                {
+                    msgBox.setErrMsg(msg.get("E05069"), mml.line.Lp);
                 }
                 return;
             }
