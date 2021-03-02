@@ -3752,7 +3752,7 @@ namespace Core
                 C352 c = c352[0] != null ? c352[0] : c352[1];
                 Common.SetLE32(dat, 0xdc, (uint)c.Frequency | (uint)(useC352_S == 0 ? 0 : 0x40000000));
                 if (c != null)
-                    dat[0xd6] = new outDatum(enmMMLType.unknown, null, null, (byte)0);
+                    dat[0xd6] = new outDatum(enmMMLType.unknown, null, null, (byte)(c.C352Divider/4));
             }
             if (info.Version >= 1.51f && useAY8910 != 0)
             {

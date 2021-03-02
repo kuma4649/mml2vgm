@@ -21,7 +21,7 @@ namespace Core
             _canUsePI = true;
             ChipNumber = chipNumber;
 
-            Frequency = 8000000;
+            Frequency = 0x538e;// 8000000;
             port = new byte[][] { new byte[] { 0xd4 } };
             Interface = 0x0;//System2
 
@@ -478,7 +478,7 @@ namespace Core
                 if (parent.instPCM[page.instrument].Item2.freq == -1)
                 {
                     return ((int)(
-                        65536.0 / 2.0 / Frequency * 384
+                        65536.0 / 2.0 / Frequency //* 384
                         * 8000.0
                         * Const.pcmMTbl[n]
                         * Math.Pow(2, (o - 3))
@@ -495,7 +495,7 @@ namespace Core
                     //    * ((double)parent.instPCM[pw.ppg[pw.cpgNum].instrument].freq / 8000.0)
                     //    ));
                     return ((int)(
-                        65536.0 / 2.0 / Frequency * 384
+                        65536.0 / 2.0 / Frequency //* 384
                         * 8000.0
                         * Const.pcmMTbl[n]
                         * Math.Pow(2, (o - 3))

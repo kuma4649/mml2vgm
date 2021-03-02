@@ -9,7 +9,7 @@ namespace Core
     {
         private short[] mulaw_tab;
         public List<long> memoryMap = null;
-        private double C352Divider;
+        public double C352Divider;
 
         public bool executeKeyonoff { get; private set; }
 
