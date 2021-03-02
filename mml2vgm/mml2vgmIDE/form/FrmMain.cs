@@ -2069,7 +2069,22 @@ stop();
             //エラーリストウィンドウにワーニングメッセージリストを追加
             foreach (msgInfo mes in msgBox.getWrn())
             {
-                frmErrorList.dataGridView1.Rows.Add("Warning", mes.filename, mes.line == -1 ? "-" : (mes.line + 1).ToString(), mes.body);
+                if (mes.document != null)
+                {
+                    frmErrorList.dataGridView1.Rows.Add(
+                        "Warning",
+                        ((FrmEditor)mes.document).document.gwiFullPath,
+                        mes.line == -1 ? "-" : (mes.line + 1).ToString(),
+                        mes.body);
+                }
+                else
+                {
+                    frmErrorList.dataGridView1.Rows.Add(
+                    "Warning",
+                    mes.filename,
+                    mes.line == -1 ? "-" : (mes.line + 1).ToString(),
+                    mes.body);
+                }
                 //frmConsole.textBox1.AppendText(string.Format(msg.get("I0108"), mes));
             }
 
