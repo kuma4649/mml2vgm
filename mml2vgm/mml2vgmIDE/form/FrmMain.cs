@@ -2919,6 +2919,15 @@ stop();
                     ac = ((FrmEditor)dc).azukiControl;
                 }
 
+                DockContent ddc = (DockContent)dc;
+                Document d = null;
+                if (ddc != null)
+                {
+                    if (ddc.Tag is Document)
+                    {
+                        d = (Document)ddc.Tag;
+                    }
+                }
 
                 if (Audio.flgReinit) flgReinit = true;
                 if (setting.other.InitAlways) flgReinit = true;
@@ -2932,7 +2941,8 @@ stop();
                     {
                         if (od.linePos == null) continue;
                         //Console.WriteLine("{0} {1}", od.linePos.row, od.linePos.col);
-                        od.linePos.col = ac.GetCharIndexFromLineColumnIndex(od.linePos.row, od.linePos.col);
+                        if (d == null || d.gwiFullPath == od.linePos.srcMMLID)
+                            od.linePos.col = ac.GetCharIndexFromLineColumnIndex(od.linePos.row, od.linePos.col);
 
                     }
                 }

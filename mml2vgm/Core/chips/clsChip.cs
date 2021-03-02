@@ -2039,7 +2039,9 @@ namespace Core
                 if (page.requestInterrupt)
                 {
                     //このページの音色をセットアップする
-                    SetupPageData(pw, page);
+                    //(但しダイレクトセンドモードが有効な場合はコマンドを送信しない)
+                    if (!pw.spg.DirectSend)
+                        SetupPageData(pw, page);
                 }
             }
 
@@ -2048,7 +2050,6 @@ namespace Core
             //このページのデータをセンドする
             parent.OutData(page.sendData);
             page.sendData.Clear();
-
 
         }
 
