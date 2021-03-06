@@ -108,6 +108,9 @@
     <Compile Include="ZGMmaker.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="fnum\FNUM_HuC6280.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="fnum\FNUM_AY8910.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

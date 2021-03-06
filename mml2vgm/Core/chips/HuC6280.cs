@@ -25,6 +25,22 @@ namespace Core
 
             if (string.IsNullOrEmpty(initialPartName)) return;
 
+            Dictionary<string, List<double>> dic = MakeFNumTbl();
+            if (dic != null)
+            {
+                int c = 0;
+                FNumTbl = new int[1][] { new int[96] };
+                foreach (double v in dic["FNUM_00"])
+                {
+                    FNumTbl[0][c++] = (int)v;
+                    if (c == FNumTbl[0].Length) break;
+                }
+                if (dic.ContainsKey("MASTERCLOCK"))
+                {
+                    Frequency = (int)dic["MASTERCLOCK"][0];
+                }
+            }
+
             Ch = new ClsChannel[ChMax];
             SetPartToCh(Ch, initialPartName);
             foreach (ClsChannel ch in Ch)
@@ -210,30 +226,30 @@ namespace Core
 
         private int GetHuC6280Freq(int octave, char noteCmd, int shift)
         {
-            int o = octave;
+            int o = octave - 1;
             int n = Const.NOTE.IndexOf(noteCmd) + shift;
-
             o += n / 12;
+            o = Common.CheckRange(o, 0, 7);
             n %= 12;
-            if (n < 0)
-            {
-                n += 12;
-                o = Common.CheckRange(--o, 1, 8);
-            }
-            //if (n >= 0)
+
+            int f = o * 12 + n;
+            if (f < 0) f = 0;
+            if (f >= FNumTbl[0].Length) f = FNumTbl[0].Length - 1;
+
+            return FNumTbl[0][f];
+
+            //int o = octave;
+            //int n = Const.NOTE.IndexOf(noteCmd) + shift;
+
+            //o += n / 12;
+            //n %= 12;
+            //if (n < 0)
             //{
-            //    o += n / 12;
-            //    o = Common.CheckRange(o, 1, 8);
-            //    n %= 12;
+            //    n += 12;
+            //    o = Common.CheckRange(--o, 1, 8);
             //}
-            //else
-            //{
-            //    o += n / 12 - 1;
-            //    o = Common.CheckRange(o, 1, 8);
-            //    n %= 12;
-            //    if (n < 0) { n += 12; }
-            //}
-            return (int)(Frequency / 32.0f / 261.62f / (Const.pcmMTbl[n] * (float)Math.Pow(2, (o - 4))));
+
+            //return (int)(Frequency / 32.0f / 261.62f / (Const.pcmMTbl[n] * (float)Math.Pow(2, (o - 4))));
         }
 
         public void SetHuC6280Envelope(MML mml, partPage page, int volume)
