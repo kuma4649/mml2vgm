@@ -1810,6 +1810,8 @@ namespace mml2vgmIDE
 
             public int LogLevel { get; set; } = 8;//8:INFO
             public List<string> SearchWordHistory { get; set; }
+            private bool _ClearHistory  = true;
+            public bool ClearHistory { get => _ClearHistory; set => _ClearHistory = value; }
 
             public Other Copy()
             {
@@ -1846,6 +1848,7 @@ namespace mml2vgmIDE
                 other.CommandManualPMD = this.CommandManualPMD;
                 other.CommandManualM98 = this.CommandManualM98;
                 other.sinWaveGen = this.sinWaveGen;
+                other.ClearHistory = this.ClearHistory;
 
                 return other;
             }

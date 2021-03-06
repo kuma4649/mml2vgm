@@ -715,6 +715,8 @@ namespace mml2vgmIDE
                     break;
             }
 
+            cbClearHistory.Checked = setting.other.ClearHistory;
+
             //ShortCutKey
             initializeDgvShortCutKey();
         }
@@ -1454,6 +1456,8 @@ namespace mml2vgmIDE
             if (rbLoglevelINFO.Checked) setting.other.LogLevel = 8;
             else if (rbLoglevelDEBUG.Checked) setting.other.LogLevel = 16;
             else if (rbLoglevelTRACE.Checked) setting.other.LogLevel = 32;
+            setting.other.ClearHistory = cbClearHistory.Checked;
+
 
             setting.midiExport.UseMIDIExport = cbUseMIDIExport.Checked;
             setting.midiExport.ExportPath = tbMIDIOutputPath.Text;

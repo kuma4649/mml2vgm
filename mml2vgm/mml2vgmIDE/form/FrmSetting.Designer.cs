@@ -390,6 +390,7 @@
             this.btVST = new System.Windows.Forms.Button();
             this.tbVST = new System.Windows.Forms.TextBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.cbSinWave = new System.Windows.Forms.CheckBox();
             this.cbPlayDeviceCB = new System.Windows.Forms.CheckBox();
             this.cbLogWarning = new System.Windows.Forms.CheckBox();
             this.cbDispFrameCounter = new System.Windows.Forms.CheckBox();
@@ -403,7 +404,7 @@
             this.textBoxDescription = new System.Windows.Forms.TextBox();
             this.llOpenGithub = new System.Windows.Forms.LinkLabel();
             this.cbHiyorimiMode = new System.Windows.Forms.CheckBox();
-            this.cbSinWave = new System.Windows.Forms.CheckBox();
+            this.cbClearHistory = new System.Windows.Forms.CheckBox();
             this.gbWaveOut.SuspendLayout();
             this.gbAsioOut.SuspendLayout();
             this.gbWasapiOut.SuspendLayout();
@@ -4220,6 +4221,7 @@
             // 
             // tpOmake
             // 
+            this.tpOmake.Controls.Add(this.cbClearHistory);
             this.tpOmake.Controls.Add(this.groupBox31);
             this.tpOmake.Controls.Add(this.groupBox30);
             this.tpOmake.Controls.Add(this.cbRequestCacheClear);
@@ -4501,6 +4503,16 @@
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Debug Mode";
             // 
+            // cbSinWave
+            // 
+            this.cbSinWave.AutoSize = true;
+            this.cbSinWave.Location = new System.Drawing.Point(7, 85);
+            this.cbSinWave.Name = "cbSinWave";
+            this.cbSinWave.Size = new System.Drawing.Size(91, 16);
+            this.cbSinWave.TabIndex = 2;
+            this.cbSinWave.Text = "440Hz正弦波";
+            this.cbSinWave.UseVisualStyleBackColor = true;
+            // 
             // cbPlayDeviceCB
             // 
             this.cbPlayDeviceCB.AutoSize = true;
@@ -4665,15 +4677,14 @@
             this.cbHiyorimiMode.UseVisualStyleBackColor = true;
             this.cbHiyorimiMode.Visible = false;
             // 
-            // cbSinWave
+            // cbClearHistory
             // 
-            this.cbSinWave.AutoSize = true;
-            this.cbSinWave.Location = new System.Drawing.Point(7, 85);
-            this.cbSinWave.Name = "cbSinWave";
-            this.cbSinWave.Size = new System.Drawing.Size(91, 16);
-            this.cbSinWave.TabIndex = 2;
-            this.cbSinWave.Text = "440Hz正弦波";
-            this.cbSinWave.UseVisualStyleBackColor = true;
+            this.cbClearHistory.Location = new System.Drawing.Point(228, 137);
+            this.cbClearHistory.Name = "cbClearHistory";
+            this.cbClearHistory.Size = new System.Drawing.Size(204, 34);
+            this.cbClearHistory.TabIndex = 26;
+            this.cbClearHistory.Text = "ファイル保存時、ヒストリ(アンドゥ)をクリアする";
+            this.cbClearHistory.UseVisualStyleBackColor = true;
             // 
             // FrmSetting
             // 
@@ -5219,5 +5230,6 @@
         private System.Windows.Forms.CheckBox cbGensSSGEG;
         private System.Windows.Forms.CheckBox cbGensDACHPF;
         private System.Windows.Forms.CheckBox cbSinWave;
+        private System.Windows.Forms.CheckBox cbClearHistory;
     }
 }

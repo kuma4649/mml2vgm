@@ -401,7 +401,10 @@ namespace mml2vgmIDE
                 UpdateGwiFileHistory();
 
                 d.edit = false;
-                d.editor.azukiControl.ClearHistory();
+                
+                if (setting.other.ClearHistory)
+                    d.editor.azukiControl.ClearHistory();
+
                 if (d.editor.Text.Length > 0 && d.editor.Text[d.editor.Text.Length - 1] == '*')
                 {
                     d.editor.Text = d.editor.Text.Substring(0, d.editor.Text.Length - 1);
