@@ -2,7 +2,7 @@
   "list": [
     {
       "ID": 0,
-      "tree": "\\Template",
+      "tree": "\\Template\\Instrument",
       "parentID": -1,
       "haveChild": false,
       "supportMMLFormat": ".gwi",
@@ -13,11 +13,11 @@
       "patternType": "Z",
       "title": "'@ OPL FM音色定義　テンプレート",
       "description": "OPL(YM2413)系FM音色定義のテンプレートを挿入します。",
-      "content": "'@ L 000\r\n   AR DR SL RR KL MT AM VB EG KR DT\r\n'@ 00 00 00 00 00 00 00 00 00 00 00\r\n'@ 00 00 00 00 00 00 00 00 00 00 00\r\n   TL FB\r\n'@ 00 00\r\n"
+      "content": "'@ L 000 \"NONAME\"\r\n   AR DR SL RR KL MT AM VB EG KR DT\r\n'@ 00 00 00 00 00 00 00 00 00 00 00\r\n'@ 00 00 00 00 00 00 00 00 00 00 00\r\n   TL FB\r\n'@ 00 00\r\n"
     },
     {
       "ID": 1,
-      "tree": "\\Template",
+      "tree": "\\Template\\Instrument",
       "parentID": -1,
       "haveChild": false,
       "supportMMLFormat": ".gwi",
@@ -28,11 +28,11 @@
       "patternType": "Z",
       "title": "'@ OPN FM音色定義　テンプレート",
       "description": "OPN(YM2203)系FM音色定義のテンプレートを挿入します。",
-      "content": "'@ N 000\r\n   AR DR SR RR SL TL  KS ML DT AM SSGEG\r\n'@ 00 00 00 00 00 000 00 00 00 00 00\r\n'@ 00 00 00 00 00 000 00 00 00 00 00\r\n'@ 00 00 00 00 00 000 00 00 00 00 00\r\n'@ 00 00 00 00 00 000 00 00 00 00 00\r\n   AL FB\r\n'@ 00 00\r\n"
+      "content": "'@ N 000 \"NONAME\"\r\n   AR DR SR RR SL TL  KS ML DT AM SSGEG\r\n'@ 00 00 00 00 00 000 00 00 00 00 00\r\n'@ 00 00 00 00 00 000 00 00 00 00 00\r\n'@ 00 00 00 00 00 000 00 00 00 00 00\r\n'@ 00 00 00 00 00 000 00 00 00 00 00\r\n   AL FB\r\n'@ 00 00\r\n"
     },
     {
       "ID": 2,
-      "tree": "\\Template",
+      "tree": "\\Template\\Instrument",
       "parentID": -1,
       "haveChild": false,
       "supportMMLFormat": ".gwi",
@@ -43,11 +43,26 @@
       "patternType": "Z",
       "title": "'@ OPM FM音色定義　テンプレート",
       "description": "OPM(YM2151)系FM音色定義のテンプレートを挿入します。",
-      "content": "'@ M 000\r\n   AR DR SR RR SL TL  KS ML DT1 DT2 AME\r\n'@ 00 00 00 00 00 000 00 00 00  00  00\r\n'@ 00 00 00 00 00 000 00 00 00  00  00\r\n'@ 00 00 00 00 00 000 00 00 00  00  00\r\n'@ 00 00 00 00 00 000 00 00 00  00  00\r\n   AL FB\r\n'@ 00 00\r\n"
+      "content": "'@ M 000 \"NONAME\"\r\n   AR DR SR RR SL TL  KS ML DT1 DT2 AME\r\n'@ 00 00 00 00 00 000 00 00 00  00  00\r\n'@ 00 00 00 00 00 000 00 00 00  00  00\r\n'@ 00 00 00 00 00 000 00 00 00  00  00\r\n'@ 00 00 00 00 00 000 00 00 00  00  00\r\n   AL FB\r\n'@ 00 00\r\n"
+    },
+    {
+      "ID": 20,
+      "tree": "\\Template\\Instrument",
+      "parentID": -1,
+      "haveChild": false,
+      "supportMMLFormat": ".gwi",
+      "sienType": 0,
+      "nextAnchor": 5,
+      "nextCaret": 8,
+      "pattern": "'@ A ",
+      "patternType": "Z",
+      "title": "'@ OPNA2 FM音色定義　テンプレート",
+      "description": "OPNA2 FM音色定義のテンプレートを挿入します。",
+      "content": "'@ A 000 \"NONAME\"\r\n   AR  DR  SR  RR  SL  TL  KS  ML  DT1 DT2 AM  SSG FB  WT  ALL PR\r\n'@ 004,002,003,005,001,003,000,000,003,000,000,000,005,000,000,001\r\n'@ 031,004,000,005,002,000,000,002,003,000,000,000,000,000,000,001\r\n'@ 004,002,003,005,001,003,000,000,007,000,000,000,000,000,000,001\r\n'@ 031,004,000,005,002,000,000,001,007,000,000,000,000,000,000,001\r\n   ALG\r\n'@ 004\r\n\""
     },
     {
       "ID": 3,
-      "tree": "\\Template",
+      "tree": "\\Template\\Instrument",
       "parentID": -1,
       "haveChild": false,
       "supportMMLFormat": ".gwi",
@@ -62,7 +77,7 @@
     },
     {
       "ID": 4,
-      "tree": "\\Template",
+      "tree": "\\Template\\Define",
       "parentID": -1,
       "haveChild": false,
       "supportMMLFormat": ".gwi",
@@ -77,7 +92,7 @@
     },
     {
       "ID": 5,
-      "tree": "\\Template",
+      "tree": "\\Template\\Instrument",
       "parentID": -1,
       "haveChild": false,
       "supportMMLFormat": ".gwi",
@@ -91,8 +106,23 @@
       "content": "     No\r\n'@ H 000\r\n     +0  +1  +2  +3  +4  +5  +6  +7\r\n'@   000 000 000 000 000 000 000 000\r\n'@   000 000 000 000 000 000 000 000\r\n'@   000 000 000 000 000 000 000 000\r\n'@   000 000 000 000 000 000 000 000\r\n"
     },
     {
+      "ID": 19,
+      "tree": "\\Template\\Instrument",
+      "parentID": -1,
+      "haveChild": false,
+      "supportMMLFormat": ".gwi",
+      "sienType": 0,
+      "nextAnchor": 16,
+      "nextCaret": 19,
+      "pattern": "'@ WS ",
+      "patternType": "Z",
+      "title": "'@ WS  OPNA2 SSG波形メモリ音色定義　テンプレート",
+      "description": "OPNA2 SSG波形メモリ音色定義のテンプレートを挿入します。",
+      "content": "      No\r\n'@ WS 000,\"NONAME\"\r\n'@ $00,$00,$00,$00 ,$00,$00,$00,$00 ,$00,$00,$00,$00 ,$00,$00,$00,$00\r\n'@ $00,$00,$00,$00 ,$00,$00,$00,$00 ,$00,$00,$00,$00 ,$00,$00,$00,$00\r\n'@ $00,$00,$00,$00 ,$00,$00,$00,$00 ,$00,$00,$00,$00 ,$00,$00,$00,$00\r\n'@ $00,$00,$00,$00 ,$00,$00,$00,$00 ,$00,$00,$00,$00 ,$00,$00,$00,$00\r\n"
+    },
+    {
       "ID": 6,
-      "tree": "\\Template",
+      "tree": "\\Template\\Instrument",
       "parentID": -1,
       "haveChild": false,
       "supportMMLFormat": ".gwi",
@@ -107,7 +137,7 @@
     },
     {
       "ID": 7,
-      "tree": "\\Template",
+      "tree": "\\Template\\Instrument",
       "parentID": -1,
       "haveChild": false,
       "supportMMLFormat": ".gwi",
@@ -122,7 +152,7 @@
     },
     {
       "ID": 8,
-      "tree": "\\Template",
+      "tree": "\\Template\\Instrument",
       "parentID": -1,
       "haveChild": false,
       "supportMMLFormat": ".gwi",
@@ -137,7 +167,7 @@
     },
     {
       "ID": 9,
-      "tree": "\\Template",
+      "tree": "\\Template\\Instrument",
       "parentID": -1,
       "haveChild": false,
       "supportMMLFormat": ".gwi",
@@ -152,7 +182,7 @@
     },
     {
       "ID": 10,
-      "tree": "\\Template",
+      "tree": "\\Template\\MML",
       "parentID": -1,
       "haveChild": false,
       "supportMMLFormat": ".gwi",
@@ -167,7 +197,7 @@
     },
     {
       "ID": 11,
-      "tree": "\\Template",
+      "tree": "\\Template\\MML",
       "parentID": -1,
       "haveChild": false,
       "supportMMLFormat": ".gwi",
@@ -182,7 +212,7 @@
     },
     {
       "ID": 12,
-      "tree": "\\Template",
+      "tree": "\\Template\\MML",
       "parentID": -1,
       "haveChild": false,
       "supportMMLFormat": ".gwi",
@@ -197,7 +227,7 @@
     },
     {
       "ID": 13,
-      "tree": "\\Template",
+      "tree": "\\Template\\MML",
       "parentID": -1,
       "haveChild": false,
       "supportMMLFormat": ".gwi",
@@ -212,7 +242,7 @@
     },
     {
       "ID": 14,
-      "tree": "\\Template",
+      "tree": "\\Template\\MML",
       "parentID": -1,
       "haveChild": false,
       "supportMMLFormat": ".gwi",
@@ -221,13 +251,13 @@
       "nextCaret": 6,
       "pattern": "yAMDR,",
       "patternType": "B",
-      "title": "yAMDR,op,n",
+      "title": "yAMDR,op,n AM,DRレジスタ直接書き込み(op=OP(1 - 4) n=データ)",
       "description": "",
       "content": "yAMDR,"
     },
     {
       "ID": 15,
-      "tree": "\\Template",
+      "tree": "\\Template\\MML",
       "parentID": -1,
       "haveChild": false,
       "supportMMLFormat": ".gwi",
@@ -236,13 +266,13 @@
       "nextCaret": 4,
       "pattern": "ySR,",
       "patternType": "B",
-      "title": "ySR,op,n",
+      "title": "ySR,op,n  SRレジスタ直接書き込み(op=OP(1 - 4) n=データ)",
       "description": "",
       "content": "ySR,"
     },
     {
       "ID": 16,
-      "tree": "\\Template",
+      "tree": "\\Template\\MML",
       "parentID": -1,
       "haveChild": false,
       "supportMMLFormat": ".gwi",
@@ -251,13 +281,13 @@
       "nextCaret": 6,
       "pattern": "ySLRR,",
       "patternType": "B",
-      "title": "ySLRR,op,n",
+      "title": "ySLRR,op,n SL,RRレジスタ直接書き込み(op=OP(1 - 4) n=データ)",
       "description": "",
       "content": "ySLRR,"
     },
     {
       "ID": 17,
-      "tree": "\\Template",
+      "tree": "\\Template\\MML",
       "parentID": -1,
       "haveChild": false,
       "supportMMLFormat": ".gwi",
@@ -266,13 +296,13 @@
       "nextCaret": 5,
       "pattern": "ySSG,",
       "patternType": "B",
-      "title": "ySSG,op,n",
+      "title": "ySSG,op,n SSG-EGレジスタ直接書き込み(op=OP(1 - 4) n=データ)",
       "description": "",
       "content": "ySSG,"
     },
     {
       "ID": 18,
-      "tree": "\\Template",
+      "tree": "\\Template\\MML",
       "parentID": -1,
       "haveChild": false,
       "supportMMLFormat": ".gwi",
@@ -281,7 +311,7 @@
       "nextCaret": 6,
       "pattern": "yFBAL,",
       "patternType": "B",
-      "title": "yFBAL,op,n",
+      "title": "yFBAL,op,n  FB,ALレジスタ直接書き込み(op=OP(1 - 4) n=データ)",
       "description": "",
       "content": "yFBAL,"
     },

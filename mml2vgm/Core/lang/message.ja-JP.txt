@@ -296,7 +296,12 @@ E10033=このパートではXコマンドは使用できません。
 E10034=Arpeggioの解析に失敗しました。
 E10035=このパートではFコマンドは使用できません。
 E10036=CommandArpeggioの解析に失敗しました。
-E10037=VolumeArpeggioの解析に失敗しました。
+E10037=未定義のVolumeArpeggioの番号が指定されています。
+E10038=未定義の番号を指定、又は指定なしでVPON(VolumeArpeggioを有効に)しました。
+E10039=未定義のArpeggioの番号が指定されています。
+E10040=未定義の番号を指定、又は指定なしでAPON(Arpeggioを有効に)しました。
+E10041=未定義のCommandArpeggioの番号が指定されています。
+E10042=未定義の番号を指定、又は指定なしでCAON(CommandArpeggioを有効に)しました。
 
 
 ;clsOPN.cs 11000

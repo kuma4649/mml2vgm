@@ -89,31 +89,34 @@ namespace mml2vgmIDE
                 //if (si.parentID != reqParentID) continue;
                 if (si.supportMMLFormat.IndexOf(reqMMLFileFormat) < 0) continue;
 
-                switch (si.patternType)
-                {
-                    case "Z":
-                        if (si.pattern.IndexOf(reqText) == 0)
-                        {
-                            found.Add(si);
-                            si.foundCnt = reqText.Length;
-                        }
-                        break;
+                found.Add(si);
+                si.foundCnt = reqText.Length;
 
-                    case "B":
-                        for (int i = 0; i < reqText.Length; i++)
-                        {
-                            string src = reqText.Substring(reqText.Length - i - 1);
-                            if (si.pattern.IndexOf(src) == 0)
-                            {
-                                found.Add(si);
-                                si.foundCnt = i + 1;
-                                break;
-                            }
-                        }
-                        if (reqOption != null) si.description = reqOption.ToString();
-                        break;
+                //switch (si.patternType)
+                //{
+                //    case "Z":
+                //        if (si.pattern.IndexOf(reqText) == 0)
+                //        {
+                //            found.Add(si);
+                //            si.foundCnt = reqText.Length;
+                //        }
+                //        break;
 
-                }
+                //    case "B":
+                //        for (int i = 0; i < reqText.Length; i++)
+                //        {
+                //            string src = reqText.Substring(reqText.Length - i - 1);
+                //            if (si.pattern.IndexOf(src) == 0)
+                //            {
+                //                found.Add(si);
+                //                si.foundCnt = i + 1;
+                //                break;
+                //            }
+                //        }
+                //        if (reqOption != null) si.description = reqOption.ToString();
+                //        break;
+
+                //}
             }
             if (found.Count < 1) reqParentID = -1;
             reqCallback?.Invoke(found);

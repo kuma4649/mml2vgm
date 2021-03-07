@@ -1129,7 +1129,7 @@ namespace Core
                     else
                     {
                         //ARPの定義がない場合はエラー
-                        msgBox.setErrMsg(msg.get("E10034"), mml.line.Lp);
+                        msgBox.setErrMsg(msg.get("E10039"), mml.line.Lp);
                         page.arpeggioMode = false;
                     }
                     return;
@@ -1138,7 +1138,7 @@ namespace Core
                     if (!parent.instArp.ContainsKey(page.arpInstrument))
                     {
                         //ARPの定義がない場合はエラー
-                        msgBox.setErrMsg(msg.get("E10034"), mml.line.Lp);
+                        msgBox.setErrMsg(msg.get("E10040"), mml.line.Lp);
                         page.arpeggioMode = false;
                     }
                     return;
@@ -1168,7 +1168,7 @@ namespace Core
                     if (!parent.instVArp.ContainsKey(page.varpInstrument))
                     {
                         //VARの定義がない場合はエラー
-                        msgBox.setErrMsg(msg.get("E10037"), mml.line.Lp);
+                        msgBox.setErrMsg(msg.get("E10038"), mml.line.Lp);
                         page.varpeggioMode = false;
                     }
                     return;
@@ -1198,13 +1198,13 @@ namespace Core
                     if (!parent.instCommandArp.ContainsKey(page.commandArpeggio[n1].Num))
                     {
                         //ARPの定義がない場合はエラー
-                        msgBox.setErrMsg(msg.get("E10036"), mml.line.Lp);
+                        msgBox.setErrMsg(msg.get("E10042"), mml.line.Lp);
                         page.commandArpeggio[n1].Sw = false;
                     }
                     if (parent.instCommandArp[n1].Length < 3)
                     {
                         //ARPの定義がない場合はエラー
-                        msgBox.setErrMsg(msg.get("E10036"), mml.line.Lp);
+                        msgBox.setErrMsg(msg.get("E10042"), mml.line.Lp);
                         page.commandArpeggio[n1].Sw = false;
                         return;
                     }
@@ -1228,7 +1228,7 @@ namespace Core
                     if (!(mml.args[2] is int))
                     {
                         //数値指定ではない場合はエラー
-                        msgBox.setErrMsg(msg.get("E10036"), mml.line.Lp);
+                        msgBox.setErrMsg(msg.get("E10041"), mml.line.Lp);
                         page.commandArpeggio[n1].Sw = false;
                         return;
                     }
@@ -1236,14 +1236,14 @@ namespace Core
                     if (!parent.instCommandArp.ContainsKey(n2))
                     {
                         //ARPの定義がない場合はエラー
-                        msgBox.setErrMsg(msg.get("E10036"), mml.line.Lp);
+                        msgBox.setErrMsg(msg.get("E10041"), mml.line.Lp);
                         page.commandArpeggio[n1].Sw = false;
                         return;
                     }
                     if (parent.instCommandArp[n2].Length < 3)
                     {
                         //ARPの定義がない場合はエラー
-                        msgBox.setErrMsg(msg.get("E10036"), mml.line.Lp);
+                        msgBox.setErrMsg(msg.get("E10041"), mml.line.Lp);
                         page.commandArpeggio[n1].Sw = false;
                         return;
                     }

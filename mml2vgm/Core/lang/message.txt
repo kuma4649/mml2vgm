@@ -289,7 +289,12 @@ E10033=This channel can't use X command.
 E10034=Arpeggio analysis failed.
 E10035=This channel can't use F command.
 E10036=Command Arpeggio analysis failed.
-E10037=Volume Arpeggio analysis failed.
+E10037=Selecting undefined VolumeArpeggio.
+E10038=An undefined number was specified. or VolumeArpeggio enabled without specification.
+E10039=Selecting undefined Arpeggio.
+E10040=An undefined number was specified. or Arpeggio enabled without specification.
+E10041=Selecting undefined CommandArpeggio.
+E10042=An undefined number was specified. or CommandArpeggio enabled without specification.
 
 
 ;clsOPN.cs 11000
