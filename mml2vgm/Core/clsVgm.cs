@@ -4625,7 +4625,11 @@ namespace Core
                 {
                     page.chip.SetKeyOff(page, null);
                     page.arpIndex = -1;
-                    if (page.varpIndex != -1) page.varpIndex = 1;
+                    if (page.varpIndex != -1)
+                    {
+                        page.varpIndex = 1;
+                        page.varpCounter = 0;
+                    }
                     foreach (CommandArpeggio ca in page.commandArpeggio.Values)
                     {
                         if (ca.Sync != 0) continue;
@@ -4640,7 +4644,11 @@ namespace Core
                         page.envCounter = 0;
                     }
 
-                    if (page.varpIndex != -1) page.varpIndex = 1;//RR phase
+                    if (page.varpIndex != -1)
+                    {
+                        page.varpIndex = 1;//RR phase
+                        page.varpCounter = 0;
+                    }
                 }
             }
 
