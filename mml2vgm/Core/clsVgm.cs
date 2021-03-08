@@ -4992,6 +4992,7 @@ namespace Core
                                     if (page.varpeggioMode)//ボリュームアルペジオが有効な場合はリリースに移行する
                                     {
                                         page.varpIndex = 1;//RR phase
+                                        page.varpCounter = 0;//RR phase
                                     }
                                     else//エンベロープもボリュームアルペジオも無効な場合はキーオフする
                                         page.chip.SetKeyOff(page, null);
@@ -5001,6 +5002,7 @@ namespace Core
                                     if (page.varpeggioMode)//ボリュームアルペジオが有効な場合はリリースに移行する
                                     {
                                         page.varpIndex = 1;//RR phase
+                                        page.varpCounter = 0;//RR phase
                                     }
 
                                     if (page.envIndex != -1)//エンベロープ動作中の場合はリリースに移行する
