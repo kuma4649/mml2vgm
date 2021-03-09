@@ -2959,8 +2959,10 @@ stop();
                     {
                         if (od.linePos == null) continue;
                         //Console.WriteLine("{0} {1}", od.linePos.row, od.linePos.col);
-                        if (d != null && d.editor==od.linePos.document)//d.gwiFullPath == od.linePos.srcMMLID)
+                        if (d != null && d.editor == od.linePos.document)//d.gwiFullPath == od.linePos.srcMMLID)
                             od.linePos.col = ac.GetCharIndexFromLineColumnIndex(od.linePos.row, od.linePos.col);
+                        else
+                            od.linePos = null;
 
                     }
                 }

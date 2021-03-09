@@ -1865,6 +1865,9 @@ namespace mml2vgmIDE
                 case 0xd4:
                     enq(od, Counter, C140[chipNumber], EnmDataType.Normal, -1, -1, null);
                     break;
+                case 0xe1:
+                    enq(od, Counter, C352[chipNumber], EnmDataType.Normal, -1, -1, null);
+                    break;
                 default:
                     log.Write(string.Format("Chipregister.cs:writeDummyChip  unknown chipID:[{0:x02}]",chipID));
                     break;
