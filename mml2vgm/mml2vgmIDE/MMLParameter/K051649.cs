@@ -7,7 +7,7 @@ namespace mml2vgmIDE.MMLParameter
 {
     public class K051649 : Instrument
     {
-        public K051649(SoundManager.Chip chip) : base(5, chip)
+        public K051649(SoundManager.Chip chip, Setting setting) : base(5, chip, setting)
         {
             for (int i = 0; i < 5; i++)
             {
@@ -31,7 +31,15 @@ namespace mml2vgmIDE.MMLParameter
                     if ((char)od.args[0] == 'E')
                         envelope[od.linePos.ch] = ((int)od.args[1]).ToString();
                     else
-                        inst[od.linePos.ch] = od.args[1].ToString();
+                    {
+                        if (setting.MMLParameter.dispInstrumentName
+                            && od.args.Count == 3
+                            && (od.args[2] != null
+                            && od.args[2].ToString() != ""))
+                            inst[od.linePos.ch] = od.args[2].ToString();
+                        else
+                            inst[od.linePos.ch] = od.args[1] != null ? od.args[1].ToString() : "(null)";
+                    }
                     break;
                 case enmMMLType.Octave:
                     octave[od.linePos.ch] = (int)od.args[0];

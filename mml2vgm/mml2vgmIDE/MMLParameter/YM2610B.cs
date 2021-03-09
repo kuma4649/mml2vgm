@@ -7,7 +7,7 @@ namespace mml2vgmIDE.MMLParameter
 {
     public class YM2610B : Instrument
     {
-        public YM2610B(SoundManager.Chip chip) : base(19, chip)
+        public YM2610B(SoundManager.Chip chip, Setting setting) : base(19, chip,setting)
         {
             for (int i = 0; i < 19; i++)
             {
@@ -33,7 +33,10 @@ namespace mml2vgmIDE.MMLParameter
                     }
                     else
                     {
-                        if (od.args.Count == 3 && (od.args[2] != null && od.args[2].ToString() != ""))
+                        if (setting.MMLParameter.dispInstrumentName
+                            && od.args.Count == 3
+                            && (od.args[2] != null
+                            && od.args[2].ToString() != ""))
                             inst[od.linePos.ch] = od.args[2].ToString();
                         else
                             inst[od.linePos.ch] = od.args[1] != null ? od.args[1].ToString() : "(null)";

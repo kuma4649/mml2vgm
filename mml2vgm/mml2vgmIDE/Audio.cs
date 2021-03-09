@@ -169,7 +169,7 @@ namespace mml2vgmIDE
 
             log.ForcedWrite("Audio:Init:STEP 02");
             Audio.setting = setting;
-
+            mmlParams.setting = setting;
 
             log.ForcedWrite("Audio:Init:STEP 03");
             {

@@ -14,7 +14,7 @@ namespace mml2vgmIDE.MMLParameter
         public EnmMmlFileFormat mmlType = EnmMmlFileFormat.GWI;
         private string[] noteStrTbl = new string[] { "c", "c+", "d", "d+", "e", "f", "f+", "g", "g+", "a", "a+", "b" };
 
-        public PPZ8(SoundManager.Chip chip) : base(8, chip)
+        public PPZ8(SoundManager.Chip chip, Setting setting) : base(8, chip,setting)
         {
             for (int i = 0; i < 8; i++)
             {
@@ -44,10 +44,18 @@ namespace mml2vgmIDE.MMLParameter
                         clockCounter[ch] = (int)od.args[0];
                         break;
                     case enmMMLType.Instrument:
-                        if (od.args[0]is char && (char)od.args[0] == 'E')
+                        if (od.args[0] is char && (char)od.args[0] == 'E')
                             envelope[od.linePos.ch] = ((int)od.args[1]).ToString();
                         else
-                            inst[od.linePos.ch] = od.args[1].ToString();
+                        {
+                            if (setting.MMLParameter.dispInstrumentName
+                                && od.args.Count == 3
+                                && (od.args[2] != null
+                                && od.args[2].ToString() != ""))
+                                inst[od.linePos.ch] = od.args[2].ToString();
+                            else
+                                inst[od.linePos.ch] = od.args[1] != null ? od.args[1].ToString() : "(null)";
+                        }
                         break;
                     //case enmMMLType.Envelope:
                     //envelope[od.linePos.ch] = (int)od.args[1];

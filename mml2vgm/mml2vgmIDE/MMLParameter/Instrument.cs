@@ -31,8 +31,9 @@ namespace mml2vgmIDE.MMLParameter
         public outDatum[] TraceInfoOld;
         public bool isTrace;
         public SoundManager.Chip chip;
+        public Setting setting = null;
 
-        public Instrument(int n, SoundManager.Chip chip)
+        public Instrument(int n, SoundManager.Chip chip,Setting setting)
         {
             ChCount = n;
             inst = new string[n];
@@ -62,6 +63,7 @@ namespace mml2vgmIDE.MMLParameter
             }
             TraceInfoOld = new outDatum[n];
             this.chip = chip;
+            this.setting = setting;
         }
 
         public abstract void SetParameter(outDatum od, int cc);

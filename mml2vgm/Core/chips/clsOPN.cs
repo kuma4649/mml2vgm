@@ -2050,6 +2050,7 @@ namespace Core
 
         public override void CmdInstrument(partPage page, MML mml)
         {
+            SetDummyData(page, mml);
             char type = (char)mml.args[0];
             int n = (int)mml.args[1];
 

@@ -365,6 +365,7 @@
             this.cbAutoOpen = new System.Windows.Forms.CheckBox();
             this.cbUseLoopTimes = new System.Windows.Forms.CheckBox();
             this.tpOmake = new System.Windows.Forms.TabPage();
+            this.cbClearHistory = new System.Windows.Forms.CheckBox();
             this.groupBox31 = new System.Windows.Forms.GroupBox();
             this.rbLoglevelINFO = new System.Windows.Forms.RadioButton();
             this.rbLoglevelDEBUG = new System.Windows.Forms.RadioButton();
@@ -404,7 +405,8 @@
             this.textBoxDescription = new System.Windows.Forms.TextBox();
             this.llOpenGithub = new System.Windows.Forms.LinkLabel();
             this.cbHiyorimiMode = new System.Windows.Forms.CheckBox();
-            this.cbClearHistory = new System.Windows.Forms.CheckBox();
+            this.tpMMLParameter = new System.Windows.Forms.TabPage();
+            this.cbDispInstrumentName = new System.Windows.Forms.CheckBox();
             this.gbWaveOut.SuspendLayout();
             this.gbAsioOut.SuspendLayout();
             this.gbWasapiOut.SuspendLayout();
@@ -500,6 +502,7 @@
             this.tpAbout.SuspendLayout();
             this.tableLayoutPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.logoPictureBox)).BeginInit();
+            this.tpMMLParameter.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnOK
@@ -709,6 +712,7 @@
             this.tcSetting.Controls.Add(this.tpMIDIKBD);
             this.tcSetting.Controls.Add(this.tpKeyBoard);
             this.tcSetting.Controls.Add(this.tpBalance);
+            this.tcSetting.Controls.Add(this.tpMMLParameter);
             this.tcSetting.Controls.Add(this.tpOther);
             this.tcSetting.Controls.Add(this.tpOmake);
             this.tcSetting.Controls.Add(this.tpAbout);
@@ -4241,6 +4245,15 @@
             this.tpOmake.Text = "おまけ";
             this.tpOmake.UseVisualStyleBackColor = true;
             // 
+            // cbClearHistory
+            // 
+            this.cbClearHistory.Location = new System.Drawing.Point(228, 137);
+            this.cbClearHistory.Name = "cbClearHistory";
+            this.cbClearHistory.Size = new System.Drawing.Size(204, 34);
+            this.cbClearHistory.TabIndex = 26;
+            this.cbClearHistory.Text = "ファイル保存時、ヒストリ(アンドゥ)をクリアする";
+            this.cbClearHistory.UseVisualStyleBackColor = true;
+            // 
             // groupBox31
             // 
             this.groupBox31.Controls.Add(this.rbLoglevelINFO);
@@ -4677,14 +4690,25 @@
             this.cbHiyorimiMode.UseVisualStyleBackColor = true;
             this.cbHiyorimiMode.Visible = false;
             // 
-            // cbClearHistory
+            // tpMMLParameter
             // 
-            this.cbClearHistory.Location = new System.Drawing.Point(228, 137);
-            this.cbClearHistory.Name = "cbClearHistory";
-            this.cbClearHistory.Size = new System.Drawing.Size(204, 34);
-            this.cbClearHistory.TabIndex = 26;
-            this.cbClearHistory.Text = "ファイル保存時、ヒストリ(アンドゥ)をクリアする";
-            this.cbClearHistory.UseVisualStyleBackColor = true;
+            this.tpMMLParameter.Controls.Add(this.cbDispInstrumentName);
+            this.tpMMLParameter.Location = new System.Drawing.Point(4, 22);
+            this.tpMMLParameter.Name = "tpMMLParameter";
+            this.tpMMLParameter.Size = new System.Drawing.Size(443, 400);
+            this.tpMMLParameter.TabIndex = 16;
+            this.tpMMLParameter.Text = "MMLParameter";
+            this.tpMMLParameter.UseVisualStyleBackColor = true;
+            // 
+            // cbDispInstrumentName
+            // 
+            this.cbDispInstrumentName.AutoSize = true;
+            this.cbDispInstrumentName.Location = new System.Drawing.Point(23, 19);
+            this.cbDispInstrumentName.Name = "cbDispInstrumentName";
+            this.cbDispInstrumentName.Size = new System.Drawing.Size(134, 16);
+            this.cbDispInstrumentName.TabIndex = 0;
+            this.cbDispInstrumentName.Text = "disp Instrument name";
+            this.cbDispInstrumentName.UseVisualStyleBackColor = true;
             // 
             // FrmSetting
             // 
@@ -4848,6 +4872,8 @@
             this.tableLayoutPanel.ResumeLayout(false);
             this.tableLayoutPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.logoPictureBox)).EndInit();
+            this.tpMMLParameter.ResumeLayout(false);
+            this.tpMMLParameter.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -5231,5 +5257,7 @@
         private System.Windows.Forms.CheckBox cbGensDACHPF;
         private System.Windows.Forms.CheckBox cbSinWave;
         private System.Windows.Forms.CheckBox cbClearHistory;
+        private System.Windows.Forms.TabPage tpMMLParameter;
+        private System.Windows.Forms.CheckBox cbDispInstrumentName;
     }
 }

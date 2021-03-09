@@ -717,6 +717,8 @@ namespace mml2vgmIDE
 
             cbClearHistory.Checked = setting.other.ClearHistory;
 
+            cbDispInstrumentName.Checked = setting.MMLParameter.dispInstrumentName;
+
             //ShortCutKey
             initializeDgvShortCutKey();
         }
@@ -1644,6 +1646,8 @@ namespace mml2vgmIDE
                     );
                 setting.shortCutKey.Info[i++] = scki;
             }
+
+            setting.MMLParameter.dispInstrumentName= cbDispInstrumentName.Checked;
 
 
             this.DialogResult = DialogResult.OK;

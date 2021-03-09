@@ -785,6 +785,20 @@ namespace mml2vgmIDE
             }
         }
 
+        private MMLParameters _MMLParameter = new MMLParameters();
+        public MMLParameters MMLParameter
+        {
+            get
+            {
+                return _MMLParameter;
+            }
+
+            set
+            {
+                _MMLParameter = value;
+            }
+        }
+
         private Sien _sien = new Sien();
         public Sien sien
         {
@@ -1851,6 +1865,32 @@ namespace mml2vgmIDE
                 other.ClearHistory = this.ClearHistory;
 
                 return other;
+            }
+        }
+
+        [Serializable]
+        public class MMLParameters
+        {
+            private bool _dispInstrumentName = true;
+            public bool dispInstrumentName
+            {
+                get
+                {
+                    return _dispInstrumentName;
+                }
+
+                set
+                {
+                    _dispInstrumentName = value;
+                }
+            }
+
+
+            public MMLParameters Copy()
+            {
+                MMLParameters MMLParameter = new MMLParameters();
+                MMLParameter.dispInstrumentName = this.dispInstrumentName;
+                return MMLParameter;
             }
         }
 
@@ -3931,6 +3971,7 @@ namespace mml2vgmIDE
             setting.SEGAPCMSType = this.SEGAPCMSType.Copy();
 
             setting.other = this.other.Copy();
+            setting.MMLParameter = this.MMLParameter.Copy();
             setting.balance = this.balance.Copy();
             setting.location = this.location.Copy();
             setting.LatencyEmulation = this.LatencyEmulation;
