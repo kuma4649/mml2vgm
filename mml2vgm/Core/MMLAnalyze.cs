@@ -3175,6 +3175,9 @@ namespace Core
                     case enmMMLType.Note:
                         nPos = i;
                         goto loop_exit;
+                    case enmMMLType.TraceUpdateStack:
+                    case enmMMLType.TraceLocate:
+                        break;
                     default:
                         msgBox.setErrMsg(msg.get("E05045")
                         , page.mmlData[pos].line.Lp);
