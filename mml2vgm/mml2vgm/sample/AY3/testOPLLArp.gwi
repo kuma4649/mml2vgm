@@ -1,0 +1,34 @@
+﻿'{
+
+	TitleName   =
+	TitleNameJ  =
+	GameName    =
+	GameNameJ   =
+	SystemName  =
+	SystemNameJ =
+	Composer    =
+	ComposerJ   =
+	ReleaseDate =
+	Converted   =
+	Notes       =
+
+}
+
+lead synthっぽいなにか
+'@ N 000
+   AR  DR  SR  RR  SL  TL  KS  ML  DT  AM  SSG-EG
+'@ 031,001,001,001,005,026,000,001,002,000,000
+'@ 031,004,003,008,010,000,000,000,003,000,000
+'@ 031,001,001,001,005,020,000,001,006,000,000
+'@ 031,004,003,008,010,004,000,000,005,000,000
+   ALG FB
+'@ 004,005
+'@ var 0,0,#0,-5,#12,1,1,1,1,1,|,e
+
+
+'Cn1 T120
+Cn1 L
+
+'L03-06 v10o4l16@I9soQ8
+'L04 VP0a1
+

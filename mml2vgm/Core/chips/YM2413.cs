@@ -60,7 +60,7 @@ namespace Core
             foreach (partPage page in pw.pg)
             {
                 page.beforeVolume = -1;// (page.Type == enmChannelType.FMOPL) ? 15 : -1;
-                page.volume = 15;
+                page.volume = 0;
                 page.MaxVolume = 15;
                 page.beforeEnvInstrument = 0;
                 page.envInstrument = 0;
@@ -360,35 +360,35 @@ namespace Core
 
         public void SetFmVolume(partPage page, MML mml)
         {
-            int vol = page.volume;
+            //int vol = page.volume;
 
-            for (int lfo = 0; lfo < 4; lfo++)
-            {
-                if (!page.lfo[lfo].sw)
-                {
-                    continue;
-                }
-                if (page.lfo[lfo].type != eLfoType.Tremolo)
-                {
-                    continue;
-                }
-                vol += page.lfo[lfo].value + page.lfo[lfo].param[6];
-            }
-
-            if (page.varpeggioMode)
-            {
-                vol += page.varpDelta;
-            }
-
-            //if (pw.ppg[pw.cpgNum].beforeVolume != vol)
+            //for (int lfo = 0; lfo < 4; lfo++)
             //{
-            //if (parent.instOPL.ContainsKey(pw.ppg[pw.cpgNum].instrument))
+            //    if (!page.lfo[lfo].sw)
+            //    {
+            //        continue;
+            //    }
+            //    if (page.lfo[lfo].type != eLfoType.Tremolo)
+            //    {
+            //        continue;
+            //    }
+            //    vol += page.lfo[lfo].value + page.lfo[lfo].param[6];
+            //}
+
+            //if (page.varpeggioMode)
             //{
-            page.volume = vol;
-            //outYM2413SetInstVol(pw, pw.ppg[pw.cpgNum].envInstrument, vol);
-            //pw.ppg[pw.cpgNum].beforeVolume = vol;
+            //    vol += page.varpDelta;
             //}
-            //}
+
+            ////if (pw.ppg[pw.cpgNum].beforeVolume != vol)
+            ////{
+            ////if (parent.instOPL.ContainsKey(pw.ppg[pw.cpgNum].instrument))
+            ////{
+            //page.volume = Common.CheckRange(vol, 0, 15);
+            ////outYM2413SetInstVol(pw, pw.ppg[pw.cpgNum].envInstrument, vol);
+            ////pw.ppg[pw.cpgNum].beforeVolume = vol;
+            ////}
+            ////}
         }
 
         public void SetFmTL(partPage page, MML mml)
@@ -621,14 +621,41 @@ namespace Core
                 partPage page = pw.cpg;
                 if (page.Type != enmChannelType.FMOPL) continue;
 
-                if (page.spg.beforeEnvInstrument != page.envInstrument || page.spg.beforeVolume != page.volume)
+                if (page.spg.beforeEnvInstrument != page.envInstrument)// || page.spg.beforeVolume != page.volume)
                 {
                     page.spg.beforeEnvInstrument = page.envInstrument;
-                    page.spg.beforeVolume = page.volume;
+                }
 
+                int vol = page.volume;
+
+                if (page.envIndex != -1) vol += page.envVolume;
+
+                for (int lfo = 0; lfo < 4; lfo++)
+                {
+                    if (!page.lfo[lfo].sw)
+                    {
+                        continue;
+                    }
+                    if (page.lfo[lfo].type != eLfoType.Tremolo)
+                    {
+                        continue;
+                    }
+                    vol += page.lfo[lfo].value + page.lfo[lfo].param[6];
+                }
+
+                if (page.varpeggioMode)
+                {
+                    vol += page.varpDelta;
+                }
+
+                vol = Common.CheckRange(vol, 0, 15);
+
+                if (page.spg.beforeVolume != vol)
+                {
+                    page.spg.beforeVolume = vol;
                     SOutData(page, mml, port[0]
                         , (byte)(0x30 + page.ch)
-                        , (byte)(((page.envInstrument << 4) & 0xf0) | ((15 - page.volume) & 0xf))
+                        , (byte)(((page.envInstrument << 4) & 0xf0) | ((15 - vol) & 0xf))
                         );
                 }
 
