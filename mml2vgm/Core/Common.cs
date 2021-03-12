@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 
 namespace Core
 {
@@ -13,6 +14,34 @@ namespace Core
             if (n > max) return max;
             return n;
         }
+
+        public static string CutComment(string lineText)
+        {
+            if (string.IsNullOrEmpty(lineText)) return lineText;
+            string trg = lineText.Trim();
+            if (trg.LastIndexOf(";") == -1) return lineText;
+
+            StringBuilder ret = new StringBuilder();
+            bool flg = false;
+            for (int i = 0; i < trg.Length; i++)
+            {
+                if (trg[i] == '"')
+                {
+                    flg = !flg;
+                }
+
+                if (trg[i] != ';' || flg)
+                {
+                    ret.Append(trg[i]);
+                    continue;
+                }
+
+                break;
+            }
+
+            return ret.ToString();
+        }
+
 
         public static byte[] GetPCMDataFromFile(string path, clsPcm instPCM, out bool isRaw, out bool is16bit, out int samplerate)
         {

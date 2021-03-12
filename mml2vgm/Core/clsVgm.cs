@@ -813,7 +813,7 @@ namespace Core
                     {
                         instrumentCounter = -1;
                         //string[] vs = buf.Substring(1).Trim().Split(new string[] { "," }, StringSplitOptions.None);
-                        string[] vs = CutComment(buf).Substring(1).Trim().Split(new string[] { "," }, StringSplitOptions.None);
+                        string[] vs = Common.CutComment(buf).Substring(1).Trim().Split(new string[] { "," }, StringSplitOptions.None);
                         int[] env = null;
                         env = new int[9];
                         int num = int.Parse(vs[0]);
@@ -863,7 +863,7 @@ namespace Core
                         if (buf.ToUpper()[1] != 'D') return 0;
 
                         toneDoublerBufCache.Clear();
-                        StoreToneDoublerBuffer(CutComment(buf).ToUpper().Substring(2).TrimStart(), line);
+                        StoreToneDoublerBuffer(Common.CutComment(buf).ToUpper().Substring(2).TrimStart(), line);
                     }
                     catch
                     {
@@ -901,7 +901,7 @@ namespace Core
             // ToneDoublerを定義中の場合
             if (toneDoublerCounter != -1)
             {
-                return StoreToneDoublerBuffer(CutComment(buf).ToUpper(), line);
+                return StoreToneDoublerBuffer(Common.CutComment(buf).ToUpper(), line);
             }
 
             if (midiSysExCounter != -1)
@@ -931,7 +931,7 @@ namespace Core
         {
             try
             {
-                string[] vs = CutComment(line.Txt).Trim().Substring(2).Trim().Substring(12).Trim().Split(new string[] { "," }, StringSplitOptions.None);
+                string[] vs = Common.CutComment(line.Txt).Trim().Substring(2).Trim().Substring(12).Trim().Split(new string[] { "," }, StringSplitOptions.None);
                 if (vs.Length < 1) throw new ArgumentOutOfRangeException();
                 for (int i = 0; i < vs.Length; i++) vs[i] = vs[i].Trim();
 
@@ -977,7 +977,7 @@ namespace Core
         {
             try
             {
-                string[] vs = CutComment(line.Txt).Trim().Substring(2).Trim().Substring(7).Trim().Split(new string[] { "," }, StringSplitOptions.None);
+                string[] vs = Common.CutComment(line.Txt).Trim().Substring(2).Trim().Substring(7).Trim().Split(new string[] { "," }, StringSplitOptions.None);
                 if (vs.Length < 1) throw new ArgumentOutOfRangeException();
                 for (int i = 0; i < vs.Length; i++) vs[i] = vs[i].Trim();
 
@@ -1042,7 +1042,7 @@ namespace Core
         {
             try
             {
-                string[] vs = CutComment(line.Txt).Trim().Substring(2).Trim().Substring(3).Trim().Split(new string[] { "," }, StringSplitOptions.None);
+                string[] vs = Common.CutComment(line.Txt).Trim().Substring(2).Trim().Substring(3).Trim().Split(new string[] { "," }, StringSplitOptions.None);
                 if (vs.Length < 1) throw new ArgumentOutOfRangeException();
                 for (int i = 0; i < vs.Length; i++) vs[i] = vs[i].Trim();
 
@@ -1103,7 +1103,7 @@ namespace Core
         {
             try
             {
-                string[] vs = CutComment(line.Txt).Trim().Substring(2).Trim().Substring(1).Trim().Split(new string[] { "," }, StringSplitOptions.None);
+                string[] vs = Common.CutComment(line.Txt).Trim().Substring(2).Trim().Substring(1).Trim().Split(new string[] { "," }, StringSplitOptions.None);
                 if (vs.Length < 1) throw new ArgumentOutOfRangeException();
                 for (int i = 0; i < vs.Length; i++) vs[i] = vs[i].Trim();
 
@@ -1129,33 +1129,6 @@ namespace Core
             {
                 msgBox.setWrnMsg(msg.get("E01003"), line.Lp);
             }
-        }
-
-        private static string CutComment(string lineText)
-        {
-            if (string.IsNullOrEmpty(lineText)) return lineText;
-            string trg = lineText.Trim();
-            if (trg.LastIndexOf(";") == -1) return lineText;
-
-            StringBuilder ret = new StringBuilder();
-            bool flg = false;
-            for (int i = 0; i < trg.Length; i++)
-            {
-                if (trg[i] == '"')
-                {
-                    flg = !flg;
-                }
-
-                if (trg[i] != ';' || flg)
-                {
-                    ret.Append(trg[i]);
-                    continue;
-                }
-
-                break;
-            }
-
-            return ret.ToString();
         }
 
         /// <summary>
@@ -1710,7 +1683,7 @@ namespace Core
             try
             {
                 string name = "";
-                instrumentCounter = GetNums(instrumentBufCache, instrumentCounter, CutComment(line.Txt).Substring(1).TrimStart(), ref name, line);
+                instrumentCounter = GetNums(instrumentBufCache, instrumentCounter, Common.CutComment(line.Txt).Substring(1).TrimStart(), ref name, line);
                 if (string.IsNullOrEmpty(instrumentName)) instrumentName = name;//音色名
 
                 if (instrumentCounter == instrumentBufCache.Length)
@@ -1768,7 +1741,7 @@ namespace Core
             try
             {
                 string name = "";
-                opmInstrumentCounter = GetNums(opmInstrumentBufCache, opmInstrumentCounter, CutComment(line.Txt).Substring(1).TrimStart(), ref name, line);
+                opmInstrumentCounter = GetNums(opmInstrumentBufCache, opmInstrumentCounter, Common.CutComment(line.Txt).Substring(1).TrimStart(), ref name, line);
                 if (string.IsNullOrEmpty(instrumentName)) instrumentName = name;//音色名
 
                 if (opmInstrumentCounter == opmInstrumentBufCache.Length)
@@ -1803,7 +1776,7 @@ namespace Core
             try
             {
                 string name = "";
-                oplInstrumentCounter = GetNums(oplInstrumentBufCache, oplInstrumentCounter, CutComment(line.Txt).Substring(1).TrimStart(), ref name, line);
+                oplInstrumentCounter = GetNums(oplInstrumentBufCache, oplInstrumentCounter, Common.CutComment(line.Txt).Substring(1).TrimStart(), ref name, line);
                 if (string.IsNullOrEmpty(instrumentName)) instrumentName = name;//音色名
 
                 if (oplInstrumentCounter == oplInstrumentBufCache.Length)
@@ -1846,7 +1819,7 @@ namespace Core
             try
             {
                 string name = "";
-                wfInstrumentCounter = GetNums(wfInstrumentBufCache, wfInstrumentCounter, CutComment(line.Txt).Substring(1).TrimStart(), ref name, line);
+                wfInstrumentCounter = GetNums(wfInstrumentBufCache, wfInstrumentCounter, Common.CutComment(line.Txt).Substring(1).TrimStart(), ref name, line);
                 if (string.IsNullOrEmpty(instrumentName)) instrumentName = name;//音色名
 
                 if (wfInstrumentCounter == wfInstrumentBufCache.Length)
@@ -1874,7 +1847,7 @@ namespace Core
             try
             {
                 string name="";
-                opna2wfInstrumentCounter = GetNums2(opna2WfInstrumentBufCache, opna2wfInstrumentCounter, CutComment(line.Txt).Substring(1).TrimStart(),ref name);
+                opna2wfInstrumentCounter = GetNums2(opna2WfInstrumentBufCache, opna2wfInstrumentCounter, Common.CutComment(line.Txt).Substring(1).TrimStart(),ref name);
                 if (string.IsNullOrEmpty(instrumentName)) instrumentName = name;//音色名
 
                 if (opna2wfInstrumentCounter == opna2WfInstrumentBufCache.Length)
@@ -1902,7 +1875,7 @@ namespace Core
             try
             {
                 string name = "";
-                opna2wfsInstrumentCounter = GetNums(opna2WfsInstrumentBufCache, opna2wfsInstrumentCounter, CutComment(line.Txt).Substring(1).TrimStart(), ref name, line);
+                opna2wfsInstrumentCounter = GetNums(opna2WfsInstrumentBufCache, opna2wfsInstrumentCounter, Common.CutComment(line.Txt).Substring(1).TrimStart(), ref name, line);
                 if (string.IsNullOrEmpty(instrumentName)) instrumentName = name;//音色名
 
                 if (opna2wfsInstrumentCounter == opna2WfsInstrumentBufCache.Length)
@@ -2677,7 +2650,7 @@ namespace Core
                 List<byte> buf = null;
                 if (midiSysExCounter == 0)
                 {
-                    buf = GetNums(CutComment(line.Txt).IndexOf('S') + 1, CutComment(line.Txt), ref name);
+                    buf = GetNums(Common.CutComment(line.Txt).IndexOf('S') + 1, Common.CutComment(line.Txt), ref name);
                     if (string.IsNullOrEmpty(instrumentName)) instrumentName = name;//音色名
                     midiSysExCounter = buf[0] + 1;
                     if (midiSysEx.ContainsKey(buf[0]))
@@ -2688,7 +2661,7 @@ namespace Core
                 }
                 else
                 {
-                    buf = GetNums(CutComment(line.Txt).IndexOf('@') + 1, CutComment(line.Txt), ref name);
+                    buf = GetNums(Common.CutComment(line.Txt).IndexOf('@') + 1, Common.CutComment(line.Txt), ref name);
                     if (string.IsNullOrEmpty(instrumentName)) instrumentName = name;//音色名
                     List<byte> ebuf = midiSysEx[midiSysExCounter - 1].Item2.ToList();
                     ebuf.AddRange(buf);
@@ -2709,7 +2682,7 @@ namespace Core
                 if (instArpCounter == 0)
                 {
                     string txt = line.Txt.ToUpper();
-                    buf = GetNumsIntForArp(CutComment(txt).IndexOf("ARP") + 3, CutComment(txt));
+                    buf = GetNumsIntForArp(Common.CutComment(txt).IndexOf("ARP") + 3, Common.CutComment(txt));
                     instArpCounter = buf[0].dat + 1;
                     if (instArp.ContainsKey(buf[0].dat))
                     {
@@ -2720,7 +2693,7 @@ namespace Core
                 else
                 {
                     string txt = line.Txt.ToUpper();
-                    buf = GetNumsIntForArp(CutComment(txt).IndexOf('@') + 1, CutComment(txt));
+                    buf = GetNumsIntForArp(Common.CutComment(txt).IndexOf('@') + 1, Common.CutComment(txt));
                     List<MmlDatum> ebuf = instArp[instArpCounter - 1].ToList();
                     ebuf.AddRange(buf);
                     instArp.Remove(instArpCounter - 1);
@@ -2740,7 +2713,7 @@ namespace Core
                 if (instVArpCounter == 0)
                 {
                     string txt = line.Txt.ToUpper();
-                    buf = GetNumsIntForVArp(CutComment(txt).IndexOf("VAR") + 3, CutComment(txt));
+                    buf = GetNumsIntForVArp(Common.CutComment(txt).IndexOf("VAR") + 3, Common.CutComment(txt));
                     instVArpCounter = buf[0].dat + 1;
                     if (instVArp.ContainsKey(buf[0].dat))
                     {
@@ -2751,7 +2724,7 @@ namespace Core
                 else
                 {
                     string txt = line.Txt.ToUpper();
-                    buf = GetNumsIntForVArp(CutComment(txt).IndexOf('@') + 1, CutComment(txt));
+                    buf = GetNumsIntForVArp(Common.CutComment(txt).IndexOf('@') + 1, Common.CutComment(txt));
                     List<MmlDatum> ebuf = instVArp[instVArpCounter - 1].ToList();
                     ebuf.AddRange(buf);
                     instVArp.Remove(instVArpCounter - 1);
@@ -2771,7 +2744,7 @@ namespace Core
                 if (instCommandArpCounter == 0)
                 {
                     string txt = line.Txt;
-                    buf = GetNumsIntForCommandArp(CutComment(txt).IndexOf("CAR") + 3, CutComment(txt));
+                    buf = GetNumsIntForCommandArp(Common.CutComment(txt).IndexOf("CAR") + 3, Common.CutComment(txt));
                     instCommandArpCounter = buf[0].dat + 1;
                     if (instCommandArp.ContainsKey(buf[0].dat))
                     {
@@ -2782,7 +2755,7 @@ namespace Core
                 else
                 {
                     string txt = line.Txt;
-                    buf = GetNumsIntForCommandArp(CutComment(txt).IndexOf('@') + 1, CutComment(txt), 1, instCommandArp[instCommandArpCounter - 1][1].type);
+                    buf = GetNumsIntForCommandArp(Common.CutComment(txt).IndexOf('@') + 1, Common.CutComment(txt), 1, instCommandArp[instCommandArpCounter - 1][1].type);
                     List<MmlDatum> ebuf = instCommandArp[instCommandArpCounter - 1].ToList();
                     ebuf.AddRange(buf);
                     instCommandArp.Remove(instCommandArpCounter - 1);

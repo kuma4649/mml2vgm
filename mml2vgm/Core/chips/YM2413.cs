@@ -198,6 +198,7 @@ namespace Core
             page.op1dt2 = 0;
             page.op2dt2 = 0;
 
+            page.spg.beforeVolume = -1;
         }
 
         //public void outYM2413SetInstVol(partWork pw, int inst, int vol)
@@ -650,9 +651,10 @@ namespace Core
 
                 vol = Common.CheckRange(vol, 0, 15);
 
-                if (page.spg.beforeVolume != vol)
+                if (page.spg.beforeInstrument != page.envInstrument || page.spg.beforeVolume != vol)
                 {
                     page.spg.beforeVolume = vol;
+                    page.spg.beforeInstrument = page.envInstrument;
                     SOutData(page, mml, port[0]
                         , (byte)(0x30 + page.ch)
                         , (byte)(((page.envInstrument << 4) & 0xf0) | ((15 - vol) & 0xf))

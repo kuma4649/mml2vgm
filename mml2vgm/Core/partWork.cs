@@ -248,6 +248,8 @@ namespace Core
                     pCol = aData[aliesName].Lp.col;
                 }
 
+                data = Common.CutComment(data);
+
                 //解析行の解析位置が終端に達したときの処理
                 while (data.Length == col + pCol)
                 {
@@ -261,6 +263,7 @@ namespace Core
                         else
                         {
                             data = page.pData[row].Txt;
+                            data = Common.CutComment(data);
                             pCol = page.pData[row].Lp.col;
                             col = 0;// pData[row].Lp.col;
 
@@ -292,6 +295,7 @@ namespace Core
                             pCol = aData[aliesName].Lp.col;
                         }
 
+                        data = Common.CutComment(data);
                         p.tCol = tCol;
                         page.LstPos.Add(p);
                     }
@@ -324,6 +328,7 @@ namespace Core
                         page.stackAliesPos.Push(ali);
 
                         data = aData[a].Txt;
+                        data = Common.CutComment(data);
                         pCol = aData[a].Lp.col;
                         col = 0;
                         aliesName = a;
@@ -350,7 +355,7 @@ namespace Core
                 tCol++;
                 col++;
                 //解析行の解析位置が終端に達したときの処理
-                while (data.Length == col + pCol)
+                while (data.Length == col + pCol)// || data[col + pCol] == ';')
                 {
                     if (aliesName == "")
                     {
@@ -362,6 +367,7 @@ namespace Core
                         else
                         {
                             data = page.pData[row].Txt;
+                            data = Common.CutComment(data);
                             pCol = page.pData[row].Lp.col;
                             col = 0;
 
@@ -385,11 +391,13 @@ namespace Core
                         if (aliesName == "")
                         {
                             data = page.pData[row].Txt;
+                            data = Common.CutComment(data);
                             pCol = page.pData[row].Lp.col;
                         }
                         else
                         {
                             data = aData[aliesName].Txt;
+                            data = Common.CutComment(data);
                             pCol = aData[aliesName].Lp.col;
                         }
 
