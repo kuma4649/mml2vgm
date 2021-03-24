@@ -3032,7 +3032,7 @@ namespace mml2vgmIDE
                                     mds.WritePPZ8PCMData(dat.Chip.Index, (byte)dat.Chip.Number
                                         , (byte)dat.Address
                                         , (byte)dat.Data
-                                        , (byte[])dat.ExData
+                                        , (byte[][])dat.ExData
                                         );
 
                                 }
@@ -3048,7 +3048,7 @@ namespace mml2vgmIDE
                             mds.WritePPZ8PCMData(Chip.Index, (byte)Chip.Number
                                 , (byte)((object[])exData)[0]
                                 , (byte)((object[])exData)[1]
-                                , (byte[])((object[])exData)[2]
+                                , (byte[][])((object[])exData)[2]
                                 );
                         else
                         {

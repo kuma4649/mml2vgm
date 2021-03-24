@@ -173,6 +173,21 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="sample\MidiGM\testGMwaon.gwi" />
+    <None Include="sample\mucomDotNET\mucompcm.bin">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="sample\mucomDotNET\test.muc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="sample\mucomDotNET\testRhythmPageFunction.muc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="sample\mucomDotNET\testSSGPageFunction.muc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="sample\mucomDotNET\voice.dat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="sample\SN76489\testDCSGPCM.gwi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

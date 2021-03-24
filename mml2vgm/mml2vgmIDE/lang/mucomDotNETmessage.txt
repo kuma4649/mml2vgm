@@ -27,7 +27,7 @@ E0300=[row:{0} column:{1}]{2}
 ;muc88.cs 0400
 I0400=Parse Macro
 I0401=Parse Line{0}
-I0402=Begin FMCOMP on Ch.{0}
+I0402=Begin FMCOMP on Ch.{0} Page{1}
 W0400=Macro number value range is exceeding $00~$ff.
 W0401=Can't set '^' or '&' command on rest length.
 W0402=Can only use one '.' on rest.
