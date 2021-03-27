@@ -533,20 +533,9 @@ namespace mml2vgmIDE
 
             if (line == null || line.Length < 1) return;
 
-            if (fmt == EnmMmlFileFormat.GWI)
+            if (!IsPartHeader(line))
             {
-                //先頭の文字が'ではないときは既存の動作
-                if (line[0] != '\'') return;
-            }
-            else if (fmt == EnmMmlFileFormat.MUC)
-            {
-                //パート定義じゃないなら既存の動作
-                if (!Regex.IsMatch(line, "^[A-Z]+[\\s\\t].*")) return;
-            }
-            else if (fmt == EnmMmlFileFormat.MML)
-            {
-                //パート定義じゃないなら既存の動作
-                if (!Regex.IsMatch(line, "^[A-Za-z]+[0-9]*[\\s\\t].*")) return;
+                return;
             }
 
             int a = -1;
@@ -588,8 +577,9 @@ namespace mml2vgmIDE
             int a = -1;
 
             if (line == null || line.Length < 1) return;
+
             //先頭の文字が'ではないときは既存の動作
-            if (line[0] != '\'')
+            if (!IsPartHeader(line))
             {
                 a = 0;
                 while (a < line.Length && (line[a] == ' ' || line[a] == '\t'))
@@ -628,6 +618,27 @@ namespace mml2vgmIDE
             }
 
             azukiControl.SetSelection(st + a, st + a);
+        }
+
+        private bool IsPartHeader(string line)
+        {
+            if (fmt == EnmMmlFileFormat.GWI)
+            {
+                //先頭の文字が'ではないときは既存の動作
+                if (line[0] != '\'') return false;
+            }
+            else if (fmt == EnmMmlFileFormat.MUC)
+            {
+                //パート定義じゃないなら既存の動作
+                if (!Regex.IsMatch(line, "^[#A-Za-z0-9]+[\\s\\t].*")) return false;
+            }
+            else if (fmt == EnmMmlFileFormat.MML)
+            {
+                //パート定義じゃないなら既存の動作
+                if (!Regex.IsMatch(line, "^[A-Za-z]+[0-9]*[\\s\\t].*")) return false;
+            }
+
+            return true;
         }
 
         public void ActionFind(IUserInterface ui)
