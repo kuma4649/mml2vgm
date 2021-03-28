@@ -328,7 +328,7 @@
       "patternType": "B",
       "title": "'@ OPN {0}",
       "description": "VAL-SOUND様からFM音色を参照します。",
-      "content": "'(from VAL-SOUND)','http://valsound.fc2web.com/fmindex/data/bass01.html','Shift_JIS','//body/tt','a','pre'"
+      "content": "'(from VAL-SOUND)','http://vasound.fc2web.com/fmindex/data/bass01.html','Shift_JIS','//body/tt','a','pre'"
     },
     {
       "ID": 101,

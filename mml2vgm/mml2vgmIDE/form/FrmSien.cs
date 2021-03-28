@@ -211,6 +211,8 @@ namespace mml2vgmIDE
 
         private void GetInstrument(SienItem si, TreeNode tns, bool isFirst)
         {
+            if (setting.OfflineMode) return;
+
             InstrumentAtValSound iavs = new InstrumentAtValSound();
             iavs.isFirst = isFirst;
             iavs.treenode = tns;

@@ -16,10 +16,12 @@ copy /Y .\..\mml2vgm_MMLCommandMemo.txt .\output\mml2vgmIDE
 copy /Y .\..\mmlCommandTable.md .\output
 copy /Y .\..\README.md .\output
 copy /Y .\..\ZGMspec.txt .\output
-copy /Y .\..\m98コマンド・リファレンス.pdf .\output
 copy /Y .\..\PSG2.txt .\output
 copy /Y .\..\YM2609.txt .\output
 copy /Y .\removeZoneIdent.bat .\output
+md .\output\OtherDocuments
+copy /Y .\..\..\mucomDotNET\MML.txt .\output\OtherDocuments
+copy /Y .\..\m98コマンド・リファレンス.pdf .\output\OtherDocuments
 del /Q .\output\mml2vgmIDE\*.pdb
 rem del /Q .\output\mml2vgmIDE\*.config
 del /Q .\output\mml2vgmIDE\*.wav
