@@ -1,4 +1,7 @@
 更新履歴
+TAG387 2021/03/28
+  Core:)(コマンド使用時に数値0を指定しても1として扱われるのを修正
+
 TAG386 2021/03/27
   IDE:mucomDotNET差し替え
   IDE:mucomDotNET:[SHIFT]+[ENTER]と[HOME]キー操作の処理が効かなくなっていたのを修正
