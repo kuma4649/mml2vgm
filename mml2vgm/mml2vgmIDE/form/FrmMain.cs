@@ -2184,18 +2184,40 @@ stop();
                 frmPartCounter.ClearCounter();
                 Object[] cells = new object[7];
                 int[] pn = new int[] { 1, 2, 3, 10, 11, 12, 13, 4, 5, 6, 19 };
-                for (int i = 0; i < 11; i++)
+                if (ci.formatType == "mub")
                 {
-                    //if (pw[i].clockCounter == 0) continue;
+                    for (int i = 0; i < 11; i++)
+                    {
+                        //if (pw[i].clockCounter == 0) continue;
 
-                    cells[0] = pn[i];//PartNumber
-                    cells[1] = 0;//ChipIndex
-                    cells[2] = 0;//ChipNumber
-                    cells[3] = ((char)('A' + i)).ToString();
-                    cells[4] = "YM2608";//.ToUpper();
-                    cells[5] = ci.totalCount[i];
-                    cells[6] = ci.loopCount[i];
-                    frmPartCounter.AddPartCounter(cells);
+                        cells[0] = pn[i];//PartNumber
+                        cells[1] = 0;//ChipIndex
+                        cells[2] = 0;//ChipNumber
+                        cells[3] = ((char)('A' + i)).ToString();
+                        cells[4] = "YM2608";//.ToUpper();
+                        cells[5] = ci.totalCount[i];
+                        cells[6] = ci.loopCount[i];
+                        frmPartCounter.AddPartCounter(cells);
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < 11; i++)
+                    {
+                        for (int j = 0; j < 10; j++)
+                        {
+                            //if (pw[i].clockCounter == 0) continue;
+
+                            cells[0] = pn[i];//PartNumber
+                            cells[1] = 0;//ChipIndex
+                            cells[2] = 0;//ChipNumber
+                            cells[3] = ((char)('A' + i)).ToString() + j.ToString();
+                            cells[4] = "YM2608";//.ToUpper();
+                            cells[5] = ci.totalCount[i * 10 + j];
+                            cells[6] = ci.loopCount[i * 10 + j];
+                            if (ci.bufferCount[i * 10 + j] > 1) frmPartCounter.AddPartCounter(cells);
+                        }
+                    }
                 }
             }
 

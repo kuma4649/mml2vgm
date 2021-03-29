@@ -42,6 +42,7 @@ namespace mml2vgmIDE.MMLParameter
 
         public override void SetParameter(outDatum od, int cc)
         {
+            return;
             int n;
             string s;
             try
