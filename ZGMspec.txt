@@ -115,6 +115,28 @@ Chip Identify number
  
  0x00010000 - 0x0001FFFF Chips
    0x00010000 Conductor                           1                 2  
+   0x00010001 Paula(Amiga)                        ?                 ?  
+   0x00010002 0066-117XX(Astrocade)               ?                 ?  
+   0x00010003 HuC6230(PC-FX)                      ?                 ?  
+   0x00010004 K005289(Bubble system)              ?                 ?  
+   0x00010005 Mikey(Atari)                        ?                 ?  
+   0x00010006 MM3205B(DS)                         ?                 ?  
+   0x00010007 SID(MOS)                            ?                 ?  
+   0x00010008 MSM5205(PCE)                        ?                 ?  
+   0x00010009 WSG(namco)                          ?                 ?  
+   0x0001000A 15XX(namco)                         ?                 ?  
+   0x0001000B CU30/30XX(namco)                    ?                 ?  
+   0x0001000C uPD1771C(SuperCassetteVision)       ?                 ?  
+   0x0001000D MMC5(NES)                           ?                 ?  
+   0x0001000E SN76477(TI)                         ?                 ?  
+   0x0001000F SPC700(SNES)                        ?                 ?  
+   0x00010010 TIA(Atari)                          ?                 ?  
+   0x00010011 GBA                                 ?                 ?  
+   0x00010012 PCM8(X68k)                          ?                 ?  
+   0x00010013 PPZ8(PC98)                          ?                 ?  
+   0x00010014 CEM3394                             ?                 ?  
+   0x00010015 MSM5232                             ?                 ?  
+   0x00010016 HC-55516                            ?                 ?  
 
  0x00020000 - 0x0002FFFF –Ï‘zChips
    0x00020000 AY8910B                             1                 2  
