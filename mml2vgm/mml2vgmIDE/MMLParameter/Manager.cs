@@ -460,8 +460,20 @@ namespace mml2vgmIDE.MMLParameter
                             chip = Audio.chipRegister.YM2608[zChip.Index];
                             //chipIndex = zChip.Index;
                         }
-                        YM2608 opna = new YM2608(chip, setting);
-                        opna.mmlType = mmlFileFormat;
+                        Instrument opna;
+                        switch(mmlFileFormat)
+                        {
+                            case EnmMmlFileFormat.GWI:
+                            default:
+                                opna = new YM2608(chip, setting);
+                                break;
+                            case EnmMmlFileFormat.MUC:
+                                opna = new YM2608_mucom(chip, setting);
+                                break;
+                            case EnmMmlFileFormat.MML:
+                                opna = new YM2608_PMD(chip, setting);
+                                break;
+                        }
                         YM2608.Add(opna);
                         dicInstAdd(opna, od.linePos.chipIndex, od.linePos.chipNumber);
                         instsAdd(opna, od.linePos.chipIndex, od.linePos.chipNumber);

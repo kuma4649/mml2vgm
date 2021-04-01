@@ -268,6 +268,14 @@ namespace mml2vgmIDE
 
                 MMLParameter.Instrument mmli = mmlParams.Insts[chip][chipIndex][chipNumber];
 
+                if(mmli is YM2608_mucom)
+                {
+                    string cp = (string)dgvPartCounter.Rows[p].Cells["ClmPart"].Value;
+                    int ch = cp[0]-'A';
+                    int pg = cp.Length < 2 ? 0 : (cp[1] - '0');
+                    r = ch * 10 + pg;
+                }
+
                 if (r >= mmli.inst.Length) continue;
 
                 dgvPartCounter.Rows[p].Cells["ClmInstrument"].Value = mmli.inst[r] == null ? "-" : mmli.inst[r].ToString();
