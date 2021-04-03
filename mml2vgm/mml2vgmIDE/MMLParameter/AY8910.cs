@@ -1,6 +1,7 @@
 ﻿using Core;
 using musicDriverInterface;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace mml2vgmIDE.MMLParameter
@@ -39,6 +40,27 @@ namespace mml2vgmIDE.MMLParameter
                 }
             }
             beforeTie[od.linePos.ch] = nt.tieSw;
+        }
+
+        public static Instrument SetupInstInfo(outDatum od, ref SoundManager.Chip chip,Setting setting,bool isTrace)
+        {
+            if (Audio.chipRegister == null || Audio.chipRegister.AY8910 == null) return null;
+
+            if (od.linePos.chipIndex < Audio.chipRegister.AY8910.Count)
+            {
+                chip = Audio.chipRegister.AY8910[od.linePos.chipIndex];
+            }
+
+            if (chip == null && od.linePos.chipIndex >= 0x80)
+            {
+                Driver.ZGM.ZgmChip.ZgmChip zChip = Audio.chipRegister.dicChipCmdNo[od.linePos.chipIndex];
+                chip = Audio.chipRegister.AY8910[zChip.Index];
+            }
+
+            AY8910 ay891 = new AY8910(chip, setting);
+            ay891.isTrace = isTrace;
+
+            return ay891;
         }
 
     }

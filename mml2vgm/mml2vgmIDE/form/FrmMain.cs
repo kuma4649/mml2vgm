@@ -2,6 +2,7 @@
 using mml2vgmIDE.D88N88;
 using mml2vgmIDE.form;
 using musicDriverInterface;
+using Sgry.Azuki.WinForms;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -3453,13 +3454,9 @@ stop();
         {
             foreach (object o in FormBox)
             {
-                if (!(o is DockContent))
-                {
-                    continue;
-                }
-
+                if (o == null) continue;
+                if (!(o is DockContent)) continue;
                 DockContent d = (DockContent)o;
-                if (d == null) continue;
                 if (!(d is FrmEditor)) continue;
                 Sgry.Azuki.WinForms.AzukiControl a = ((FrmEditor)d).azukiControl;
                 a.ColorScheme.LineNumberBack = Color.FromArgb(setting.ColorScheme.Azuki_LineNumberBack_Normal);
@@ -3481,136 +3478,151 @@ stop();
             while (ods[ch].Count > 0)
             {
                 outDatum od;
-                lock (traceInfoLockObj)
-                {
-                    od = ods[ch].Dequeue();
-                }
-
+                lock (traceInfoLockObj) od = ods[ch].Dequeue();
+                if (od == null) continue;
                 string odfn = Path.GetFileName(od.linePos.srcMMLID);
-                if (fe.Text != odfn && fe.Text != odfn + "*")
+                if (fe.Text != odfn && fe.Text != odfn + "*") continue;
+
+                switch (od.type)
                 {
-                    continue;
-                }
-
-
-                outDatum odo = odos[ch];
-                if (od != null
-                    && od != odo
-                    && (od.type == enmMMLType.Note || od.type == enmMMLType.Rest || od.type == enmMMLType.Lyric)
-                    && (
-                        (odo != null && od.linePos.col != odo.linePos.col)
-                        || odo == null
-                    )
-                )
-                {
-                    int i, c;
-                    ac.GetLineColumnIndexFromCharIndex(od.linePos.col, out i, out c);
-                    //log.Write(string.Format("{0} {1}", i, c));
-                    lock (traceInfoLockObj)
-                    {
-                        if (odo != null)
-                        {
-                            try
-                            {
-                                ac.Document.Unmark(odo.linePos.col, odo.linePos.col + Math.Max(odo.linePos.length, 1), 1);
-                            }
-                            catch
-                            {
-                                ;//何もしない
-                            }
-                        }
-                        ac.Document.Mark(od.linePos.col, od.linePos.col + Math.Max(od.linePos.length, 1), 1);
-                        odos[ch] = od;
-                    }
-                    flg = true;
-                }
-
-                if (od != null && od.type == enmMMLType.TraceUpdateStack)
-                {
-                    while (lstOldAliesPos.Count < ch + 1)
-                    {
-                        lstOldAliesPos.Add(new List<LinePos>());
-                    }
-
-                    lock (traceInfoLockObj)
-                    {
-                        for (int i = 0; i < lstOldAliesPos[ch].Count; i++)
-                        {
-                            if (lstOldAliesPos[ch][i].col != -1)
-                            {
-                                try
-                                {
-                                    ac.Document.Unmark(lstOldAliesPos[ch][i].col, lstOldAliesPos[ch][i].col + Math.Max(lstOldAliesPos[ch][i].length, 1), 2);
-                                }
-                                catch 
-                                {
-                                    ;//何もしない
-                                }
-                                lstOldAliesPos[ch][i].col = -1;
-                                flg = true;
-                            }
-                        }
-                    }
-
-                    LinePos[] lp = (LinePos[])od.args[0];
-                    if (lp != null)
-                    {
-
-                        for (int i = 0; i < lp.Length; i++)
-                        {
-                            while (lstOldAliesPos[ch].Count < i + 1)
-                            {
-                                lstOldAliesPos[ch].Add(new LinePos());
-                            }
-
-                            int ci;
-                            try
-                            {
-                                ci = ac.GetCharIndexFromLineColumnIndex(lp[i].row, lp[i].col);
-                                //if (lp.Length > 0) Console.WriteLine("* {0}", ci);
-                            }
-                            catch
-                            {
-                                continue;
-                            }
-
-                            lstOldAliesPos[ch][i].col = ci;
-                            lstOldAliesPos[ch][i].length = lp[i].length;
-
-                            //マーク
-                            lock (traceInfoLockObj) ac.Document.Mark(ci, ci + Math.Max(lp[i].length, 1), 2);
-                            flg = true;
-                        }
-                    }
-                }
-
-                if (od != null && od.type == enmMMLType.TraceLocate)
-                {
-                    //
-                    int sw = (int)od.args[1];
-                    if (sw == 1)
-                    {
-                        int ci;
-                        if (oldTraceLoc != null)
-                        {
-                            ci = oldTraceLoc.col;
-                            //アンマーク
-                            lock (traceInfoLockObj) ac.Document.Unmark(ci, ci + Math.Max(oldTraceLoc.length, 1), 2);
-                            oldTraceLoc = null;
-                        }
-
-                        LinePos lp = ((MmlDatum)od.args[2]).linePos;
-                        ci = lp.col;
-                        //マーク
-                        lock (traceInfoLockObj) ac.Document.Mark(ci, ci + Math.Max(lp.length, 1), 2);
-                        oldTraceLoc = lp;
-                        flg = true;
-                    }
+                    case enmMMLType.Note:
+                    case enmMMLType.Rest:
+                    case enmMMLType.Lyric:
+                        flg = MarkUpTraceInfo_Update(odos, ch, ac, od);
+                        break;
+                    case enmMMLType.TraceUpdateStack:
+                        flg = MarkUpTraceInfo_TraceUpdateStack(ch, ac, flg, od);
+                        break;
+                    case enmMMLType.TraceLocate:
+                        flg = MarkUpTraceInfo_TraceLocate(ac, flg, od);
+                        break;
                 }
             }
 
             return flg;
         }
+
+        private bool MarkUpTraceInfo_Update(outDatum[] odos, int ch, AzukiControl ac, outDatum od)
+        {
+            outDatum odo = odos[ch];
+            if (od == odo) return true;
+            if (odo != null && od.linePos.col == odo.linePos.col) return true;
+
+            bool flg;
+            ac.GetLineColumnIndexFromCharIndex(od.linePos.col, out int i, out int c);
+            //log.Write(string.Format("{0} {1}", i, c));
+            lock (traceInfoLockObj)
+            {
+                if (odo != null)
+                {
+                    try
+                    {
+                        ac.Document.Unmark(odo.linePos.col, odo.linePos.col + Math.Max(odo.linePos.length, 1), 1);
+                    }
+                    catch
+                    {
+                        ;//何もしない
+                    }
+                }
+                ac.Document.Mark(od.linePos.col, od.linePos.col + Math.Max(od.linePos.length, 1), 1);
+                odos[ch] = od;
+            }
+            flg = true;
+            return flg;
+        }
+
+        private bool MarkUpTraceInfo_TraceUpdateStack(int ch, AzukiControl ac, bool flg, outDatum od)
+        {
+            while (lstOldAliesPos.Count < ch + 1)
+                lstOldAliesPos.Add(new List<LinePos>());
+
+            lock (traceInfoLockObj)
+            {
+                for (int i = 0; i < lstOldAliesPos[ch].Count; i++)
+                {
+                    if (lstOldAliesPos[ch][i].col == -1) continue;
+                    try
+                    {
+                        ac.Document.Unmark(
+                            lstOldAliesPos[ch][i].col
+                            , lstOldAliesPos[ch][i].col + Math.Max(lstOldAliesPos[ch][i].length, 1)
+                            , 2);
+                    }
+                    catch
+                    {
+                        ;//何もしない
+                    }
+                    lstOldAliesPos[ch][i].col = -1;
+                    flg = true;
+                }
+            }
+
+            LinePos[] lp = (LinePos[])od.args[0];
+            if (lp == null) return flg;
+
+            for (int i = 0; i < lp.Length; i++)
+            {
+                while (lstOldAliesPos[ch].Count < i + 1)
+                    lstOldAliesPos[ch].Add(new LinePos());
+
+                int ci;
+                try
+                {
+                    ci = ac.GetCharIndexFromLineColumnIndex(lp[i].row, lp[i].col);
+                    //if (lp.Length > 0) Console.WriteLine("* {0}", ci);
+                }
+                catch
+                {
+                    continue;
+                }
+
+                lstOldAliesPos[ch][i].col = ci;
+                lstOldAliesPos[ch][i].length = lp[i].length;
+
+                //マーク
+                lock (traceInfoLockObj)
+                    ac.Document.Mark(
+                        ci
+                        , ci + Math.Max(lp[i].length, 1)
+                        , 2);
+                flg = true;
+            }
+
+            return flg;
+        }
+
+        private bool MarkUpTraceInfo_TraceLocate(AzukiControl ac, bool flg, outDatum od)
+        {
+            //
+            int sw = (int)od.args[1];
+            if (sw != 1) return flg;
+
+            int ci;
+            if (oldTraceLoc != null)
+            {
+                ci = oldTraceLoc.col;
+                //アンマーク
+                lock (traceInfoLockObj) ac.Document.Unmark(
+                    ci
+                    , ci + Math.Max(oldTraceLoc.length, 1)
+                    , 2);
+                oldTraceLoc = null;
+            }
+
+            LinePos lp = ((MmlDatum)od.args[2]).linePos;
+            ci = lp.col;
+            //マーク
+            lock (traceInfoLockObj) ac.Document.Mark(
+                ci
+                , ci + Math.Max(lp.length, 1)
+                , 2);
+            oldTraceLoc = lp;
+            flg = true;
+
+            return flg;
+        }
+
+
 
         private List<List<LinePos>> lstOldAliesPos = new List<List<LinePos>>();
         private LinePos oldTraceLoc = null;
