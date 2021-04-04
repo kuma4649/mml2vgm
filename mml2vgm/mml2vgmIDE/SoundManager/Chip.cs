@@ -27,11 +27,25 @@ namespace SoundManager
             }
         }
 
+        private int[] _ChMasksPG = null;
+        public int[] ChMasksPG
+        {
+            set
+            {
+                lock (lockobj) { _ChMasksPG = value; }
+            }
+            get
+            {
+                lock (lockobj) { return _ChMasksPG; }
+            }
+        }
+
         public int currentCh { get; internal set; }
 
         public Chip(int Ch)
         {
             ChMasks = new bool[Ch];
+            ChMasksPG = new int[Ch];
         }
 
 

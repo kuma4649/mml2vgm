@@ -497,13 +497,33 @@ namespace mml2vgmIDE
             int pn = (int)r.Cells["ClmPartNumber"].Value - 1;
             bool mute = (string)r.Cells["ClmMute"].Value == "M";
 
-            mmli.SetMute(pn, mute);
-
-            //特殊処理：mucの場合はリズムは一括で制御
-            if (pn == 12 && (string)r.Cells["ClmPart"].Value == "G")
+            if (!(mmli is YM2608_mucom))
             {
-                for (int i = 0; i < 5; i++) mmli.SetMute(i + 13, mute);
+                mmli.SetMute(pn, mute);
+                return;
             }
+
+
+            string cp = (string)r.Cells["ClmPart"].Value;
+            int ch = cp[0] - 'A';
+            int pg;// = cp.Length < 2 ? 0 : (cp[1] - '0');
+            string mm = (string)r.Cells["ClmMute"].Value;
+            string sm = (string)r.Cells["ClmSolo"].Value;
+
+            foreach(DataGridViewRow rw in dgvPartCounter.Rows)
+            {
+                string p = (string)rw.Cells["ClmPart"].Value;
+                int c = p[0] - 'A';
+                if (c != ch) continue;
+
+                rw.Cells["ClmMute"].Value=mm;
+                rw.Cells["ClmSolo"].Value=sm;
+                pn = (int)rw.Cells["ClmPartNumber"].Value - 1;
+                pg = p.Length < 2 ? 0 : (p[1] - '0');
+
+                ((YM2608_mucom)mmli).SetMute(pn, ch, pg, mute);
+            }
+
         }
 
         private void DgvPartCounter_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)

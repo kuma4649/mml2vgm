@@ -29,6 +29,32 @@ namespace mml2vgmIDE.MMLParameter
             return ch;
         }
 
+        public void SetMute(int ch, int pt, int pg, bool flg)
+        {
+            if (chip == null) return;
+            if (chip.ChMasks == null) return;
+            if (ch < 0 || ch >= chip.ChMasks.Length) return;
+
+            //FM ch<9
+            //SSG ch<12
+            //リズム ch<18
+            //ADPCM1 ch=18
+            if (ch < 12 || ch == 18)
+            {
+                chip.ChMasks[ch] = flg;
+                chip.ChMasksPG[ch] = pt * 10 + pg;
+            }
+            else
+            {
+                chip.ChMasks[12] = flg;
+                chip.ChMasks[13] = flg;
+                chip.ChMasks[14] = flg;
+                chip.ChMasks[15] = flg;
+                chip.ChMasks[16] = flg;
+                chip.ChMasks[17] = flg;
+            }
+        }
+
         protected override void SetPan(outDatum od, int ch, int cc)
         {
             int n = (int)od.args[0];
