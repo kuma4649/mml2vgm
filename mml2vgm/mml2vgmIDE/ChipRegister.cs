@@ -408,6 +408,7 @@ namespace mml2vgmIDE
         public List<Chip> PPSDRV = new List<Chip>();
         public List<Chip> P86 = new List<Chip>();
         public List<Chip> YMF278B = new List<Chip>();
+        public List<Chip> YMF271 = new List<Chip>();
 
 
 
@@ -734,6 +735,21 @@ namespace mml2vgmIDE
                         YMF262[i].Delay = (YMF262[i].Model == EnmVRModel.VirtualModel ? LEmu : LReal);
                     }
                     break;
+                case EnmZGMDevice.YMF271:
+                    ctYMF271 = new Setting.ChipType[] { chipTypeP, chipTypeS };
+                    for (int i = 0; i < YMF271.Count; i++)
+                    {
+                        YMF271[i].Model = EnmVRModel.VirtualModel;
+                        YMF271[i].Delay = LEmu;
+                        if (i > 1) continue;
+
+                        scYMF271[i] = realChip.GetRealChip(ctYMF271[i]);
+                        if (scYMF271[i] != null) scYMF271[i].init();
+                        if (YMF271.Count < i + 1) YMF271.Add(new Chip(48));
+                        YMF271[i].Model = ctYMF271[i].UseEmu ? EnmVRModel.VirtualModel : EnmVRModel.RealModel;
+                        YMF271[i].Delay = (YMF271[i].Model == EnmVRModel.VirtualModel ? LEmu : LReal);
+                    }
+                    break;
                 case EnmZGMDevice.YM2608:
                     ctYM2608 = new Setting.ChipType[] { chipTypeP, chipTypeS };
                     for (int i = 0; i < YM2608.Count; i++)
@@ -813,9 +829,6 @@ namespace mml2vgmIDE
                         Y8950[i].Model = ctY8950[i].UseEmu ? EnmVRModel.VirtualModel : EnmVRModel.RealModel;
                         Y8950[i].Delay = (Y8950[i].Model == EnmVRModel.VirtualModel ? LEmu : LReal);
                     }
-                    break;
-                case EnmZGMDevice.YMF271:
-                    ctYMF271 = new Setting.ChipType[] { chipTypeP, chipTypeS };
                     break;
                 case EnmZGMDevice.YMF278B:
                     ctYMF278B = new Setting.ChipType[] { chipTypeP, chipTypeS };
@@ -984,6 +997,13 @@ namespace mml2vgmIDE
                 YMF278B[i].Number = i;
                 YMF278B[i].Hosei = 0;
 
+                if (YMF271.Count < i + 1) YMF271.Add(new Chip(18 + 5 + 24));
+                YMF271[i].Use = false;
+                YMF271[i].Model = EnmVRModel.None;
+                YMF271[i].Device = EnmZGMDevice.YMF271;
+                YMF271[i].Number = i;
+                YMF271[i].Hosei = 0;
+
                 if (YM2608.Count < i + 1) YM2608.Add(new Chip(6 + 3 + 3 + 6 + 1));
                 YM2608[i].Use = false;
                 YM2608[i].Model = EnmVRModel.None;
@@ -1048,6 +1068,7 @@ namespace mml2vgmIDE
             YM3812.Clear();
             YMF262.Clear();
             YMF278B.Clear();
+            YMF271.Clear();
             YM2608.Clear();
             YM2609.Clear();
             YM2610.Clear();
@@ -1074,6 +1095,7 @@ namespace mml2vgmIDE
                 if (c is Driver.ZGM.ZgmChip.YM3812) YM3812.Add(c);
                 if (c is Driver.ZGM.ZgmChip.YMF262) YMF262.Add(c);
                 if (c is Driver.ZGM.ZgmChip.YMF278B) YMF278B.Add(c);
+                if (c is Driver.ZGM.ZgmChip.YMF271) YMF271.Add(c);
                 if (c is Driver.ZGM.ZgmChip.YM2608) YM2608.Add(c);
                 if (c is Driver.ZGM.ZgmChip.YM2609) YM2609.Add(c);
                 if (c is Driver.ZGM.ZgmChip.YM2610) YM2610.Add(c);
@@ -1141,6 +1163,9 @@ namespace mml2vgmIDE
                     break;
                 case EnmZGMDevice.YMF278B:
                     YMF278BSetRegisterProcessing(ref Counter, ref Chip, ref Type, ref Address, ref Data, ref ExData);
+                    break;
+                case EnmZGMDevice.YMF271:
+                    YMF271SetRegisterProcessing(ref Counter, ref Chip, ref Type, ref Address, ref Data, ref ExData);
                     break;
                 case EnmZGMDevice.YM2608:
                     YM2608SetRegisterProcessing(ref Counter, ref Chip, ref Type, ref Address, ref Data, ref ExData);
@@ -1245,6 +1270,9 @@ namespace mml2vgmIDE
                     break;
                 case EnmZGMDevice.YMF262:
                     YMF262WriteRegisterControl(Chip, type, address, data, exData);
+                    break;
+                case EnmZGMDevice.YMF271:
+                    YMF271WriteRegisterControl(Chip, type, address, data, exData);
                     break;
                 case EnmZGMDevice.YMF278B:
                     YMF278BWriteRegisterControl(Chip, type, address, data, exData);
@@ -1853,6 +1881,9 @@ namespace mml2vgmIDE
                 case 0xd0:
                     enq(od, Counter, YMF278B[chipNumber], EnmDataType.Normal, -1, -1, null);
                     break;
+                case 0xd1:
+                    enq(od, Counter, YMF271[chipNumber], EnmDataType.Normal, -1, -1, null);
+                    break;
                 case 0xd2:
                     enq(od, Counter, K051649[chipNumber], EnmDataType.Normal, -1, -1, null);
                     break;
@@ -1999,6 +2030,11 @@ namespace mml2vgmIDE
             }
 
             foreach (Driver.ZGM.ZgmChip.ZgmChip c in YMF278B)
+            {
+                dicChipCmdNo.Add(c.defineInfo.commandNo, c);
+            }
+
+            foreach (Driver.ZGM.ZgmChip.ZgmChip c in YMF271)
             {
                 dicChipCmdNo.Add(c.defineInfo.commandNo, c);
             }
@@ -5475,6 +5511,190 @@ namespace mml2vgmIDE
 
         #endregion
 
+        #region YMF271(OPX)
+
+        private void YMF271WriteRegisterControl(Chip Chip, EnmDataType type, int address, int data, object exData)
+        {
+            if (type == EnmDataType.Normal)
+            {
+                if (Chip.Model == EnmVRModel.VirtualModel)
+                {
+                    if (!ctYMF271[Chip.Number].UseScci && ctYMF271[Chip.Number].UseEmu)
+                    {
+                        //Console.WriteLine(string.Format("[INFO   ] FM P{0:x1} Out:Adr[{1:x02}] val[{2:x02}]", address>>8, (byte)address, (byte)data));
+                        mds.WriteYMF271(Chip.Index, (byte)Chip.Number, (byte)(address >> 8), (byte)address, (byte)data);
+                    }
+                }
+                if (Chip.Model == EnmVRModel.RealModel)
+                {
+                    if (scYMF271[Chip.Number] != null)
+                        scYMF271[Chip.Number].setRegister(address, data);
+                }
+            }
+            else if (type == EnmDataType.Block)
+            {
+                Audio.sm.SetInterrupt();
+
+                try
+                {
+                    if (exData == null) return;
+
+                    PackData[] pdata = (PackData[])exData;
+                    if (Chip.Model == EnmVRModel.VirtualModel)
+                    {
+                        foreach (PackData dat in pdata)
+                            mds.WriteYMF271(Chip.Index, (byte)Chip.Number, (byte)(dat.Address >> 8), (byte)dat.Address, (byte)dat.Data);
+                    }
+                    if (Chip.Model == EnmVRModel.RealModel)
+                    {
+                        if (scYMF271[Chip.Number] != null)
+                        {
+                            foreach (PackData dat in pdata)
+                                scYMF271[Chip.Number].setRegister(dat.Address, dat.Data);
+                        }
+                    }
+                }
+                finally
+                {
+                    Audio.sm.ResetInterrupt();
+                }
+            }
+        }
+
+        public void YMF271SetRegisterProcessing(ref long Counter, ref Chip Chip, ref EnmDataType type, ref int Address, ref int dData, ref object ExData)
+        {
+            if (ctYMF271 == null) return;
+            if (Address == -1 && dData == -1) return;
+            return;
+
+            //if (Chip.Number == 0) chipLED.PriOPX = 2;
+            //else chipLED.SecOPX = 2;
+
+            //int dAddr = (Address & 0xff);
+            //int dPort = Address >> 8;
+            //int ch;
+
+            //fmRegisterYMF271[Chip.Number][dPort][dAddr] = dData;
+
+            //if (dAddr >= 0xb0 && dAddr <= 0xb8)
+            //{
+            //    ch = dAddr - 0xb0 + dPort * 9;
+            //    int k = (dData >> 5) & 1;
+            //    if (k == 0)
+            //    {
+            //        fmRegisterYMF271FM[Chip.Number] &= ~(1 << ch);
+            //    }
+            //    else
+            //    {
+            //        fmRegisterYMF271FM[Chip.Number] |= (1 << ch);
+            //    }
+            //    fmRegisterYMF271FM[Chip.Number] &= 0x3ffff;
+            //    if (maskFMChYMF271[Chip.Number][ch]) dData &= 0x1f;
+            //}
+
+        }
+
+        public void YMF271SetRegister(outDatum od, long Counter, int ChipID, int dPort, int dAddr, int dData)
+        {
+#if DEBUG
+            //log.Write(string.Format("MML Param  Chip:[{0}] Type:[{1}]", od.linePos == null ? "(null)" : od.linePos.chip, od.type));
+            //log.Write(string.Format("[INFO  ] FM P{0:x1} Out:Adr[{1:x02}] val[{2:x02}]", dPort, dAddr, dData));
+            //System.Threading.Thread.Sleep(10);
+#endif
+            enq(od, Counter, YMF271[ChipID], EnmDataType.Normal, dPort * 0x100 + dAddr, dData, null);
+        }
+
+        public void YMF271SetRegister(outDatum od, long Counter, int ChipID, PackData[] data)
+        {
+            enq(od, Counter, YMF271[ChipID], EnmDataType.Block, -1, -1, data);
+        }
+
+        public void YMF271SoftReset(long Counter, int chipID)
+        {
+            List<PackData> data = YMF271MakeSoftReset(chipID);
+            YMF271SetRegister(null, Counter, chipID, data.ToArray());
+        }
+
+        public List<PackData> YMF271MakeSoftReset(int chipID)
+        {
+            List<PackData> data = new List<PackData>();
+            //int i;
+
+            //// FM全チャネルキーオフ
+            //for (i = 0; i < 9; i++)
+            //{
+            //    data.Add(new PackData(null, YMF271[chipID], EnmDataType.Normal, 0x0a0 + i, 0x00, null));
+            //    data.Add(new PackData(null, YMF271[chipID], EnmDataType.Normal, 0x0b0 + i, 0x00, null));
+            //    data.Add(new PackData(null, YMF271[chipID], EnmDataType.Normal, 0x1a0 + i, 0x00, null));
+            //    data.Add(new PackData(null, YMF271[chipID], EnmDataType.Normal, 0x1b0 + i, 0x00, null));
+            //}
+            //// FM Vol=15(min)
+            //for (i = 0x40; i < 0x56; i++)
+            //{
+            //    data.Add(new PackData(null, YMF271[chipID], EnmDataType.Normal, 0x000 + i, 0x3f, null));
+            //    data.Add(new PackData(null, YMF271[chipID], EnmDataType.Normal, 0x100 + i, 0x3f, null));
+            //}
+
+            //for (i = 0x68; i < 0x80; i++)
+            //{
+            //    data.Add(new PackData(null, YMF271[chipID], EnmDataType.Normal, 0x200 + i, 0x00, null));
+            //}
+            //for (i = 0x50; i < 0x68; i++)
+            //{
+            //    data.Add(new PackData(null, YMF271[chipID], EnmDataType.Normal, 0x200 + i, 0x00, null));
+            //}
+
+            return data;
+        }
+
+        public void YMF271SetMask(long Counter, int chipID, int ch, bool mask, bool noSend = false)
+        {
+            //maskFMChYMF271[chipID][YMF271Ch[ch]] = mask;
+
+            //if (ch < 9)
+            //{
+            //    YMF271SetRegister(null, Counter, (byte)chipID, 0, 0xb0 + ch, fmRegisterYMF271[chipID][0][0xb0 + ch]);
+            //}
+            //else if (ch < 18)
+            //{
+            //    YMF271SetRegister(null, Counter, (byte)chipID, 1, 0xb0 + ch - 9, fmRegisterYMF271[chipID][1][0xb0 + ch - 9]);
+            //}
+            //else
+            //{
+            //    YMF271SetRegister(null, Counter, (byte)chipID, 0, 0xbd, fmRegisterYMF271[chipID][1][0xbd]);
+            //}
+        }
+
+        public void YMF271SetFadeoutVolume(long Counter, int v)
+        {
+            //for (int i = 0; i < YMF271.Count; i++)
+            //{
+            //    if (!YMF271[i].Use) continue;
+            //    if (YMF271[i].Model == EnmVRModel.VirtualModel) continue;
+            //    if (YMF271NowFadeoutVol[i] == v) continue;
+
+            //    YMF271NowFadeoutVol[i] = v;// (v & 0x78) >> 3;
+            //    for (int c = 0; c < 18; c++)
+            //    {
+            //        int port = c / 9;
+            //        int adr = 0x40 + (c / 3) * 6 + (c % 3);
+            //        YMF271SetRegister(null, Counter, i, port, adr, fmRegisterYMF271[i][port][adr]);
+            //        YMF271SetRegister(null, Counter, i, port, adr + 3, fmRegisterYMF271[i][port][adr + 3]);
+            //    }
+            //}
+        }
+
+        public void YMF271WriteClock(byte chipID, int clock)
+        {
+            if (scYMF271 != null && scYMF271.Length > chipID && scYMF271[chipID] != null)
+            {
+                scYMF271[chipID].dClock = scYMF271[chipID].SetMasterClock((uint)clock);
+            }
+        }
+
+
+        #endregion
+
 
 
         #region YM2608(OPNA)
@@ -8623,30 +8843,30 @@ namespace mml2vgmIDE
 
 
 
-        public void setYMF271Register(int chipID, int dPort, int dAddr, int dData)
-        {
-            EnmVRModel model = EnmVRModel.VirtualModel;
-            if (ctYMF271 == null) return;
+        //public void setYMF271Register(int chipID, int dPort, int dAddr, int dData)
+        //{
+        //    EnmVRModel model = EnmVRModel.VirtualModel;
+        //    if (ctYMF271 == null) return;
 
-            if (chipID == 0) chipLED.PriOPX = 2;
-            else chipLED.SecOPX = 2;
+        //    if (chipID == 0) chipLED.PriOPX = 2;
+        //    else chipLED.SecOPX = 2;
 
-            if (model == EnmVRModel.VirtualModel) fmRegisterYMF271[chipID][dPort][dAddr] = dData;
+        //    if (model == EnmVRModel.VirtualModel) fmRegisterYMF271[chipID][dPort][dAddr] = dData;
 
-            if (model == EnmVRModel.VirtualModel)
-            {
-                if (!ctYMF271[chipID].UseScci)
-                {
-                    mds.WriteYMF271((byte)chipID, (byte)dPort, (byte)dAddr, (byte)dData);
-                }
-            }
-            else
-            {
-                if (scYMF271[chipID] == null) return;
-                scYMF271[chipID].setRegister(dPort * 0x100 + dAddr, dData);
-            }
+        //    if (model == EnmVRModel.VirtualModel)
+        //    {
+        //        if (!ctYMF271[chipID].UseScci)
+        //        {
+        //            mds.WriteYMF271((byte)chipID, (byte)dPort, (byte)dAddr, (byte)dData);
+        //        }
+        //    }
+        //    else
+        //    {
+        //        if (scYMF271[chipID] == null) return;
+        //        scYMF271[chipID].setRegister(dPort * 0x100 + dAddr, dData);
+        //    }
 
-        }
+        //}
 
         public void setYMF278BRegister(int chipID, int dPort, int dAddr, int dData)
         {

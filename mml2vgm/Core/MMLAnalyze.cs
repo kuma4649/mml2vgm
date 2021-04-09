@@ -1420,13 +1420,21 @@ namespace Core
         {
             pw.incPos(page);
             char c = pw.getChar(page);
-            pw.incPos(page);
             if (c != 'o' && c != 'f')
             {
-                msgBox.setErrMsg(msg.get("E05031"), mml.line.Lp);
+                if (!pw.getNum(page, out int num))
+                {
+                    pw.incPos(page);
+                    msgBox.setErrMsg(msg.get("E05031"), mml.line.Lp);
+                    return;
+                }
+                mml.type = enmMMLType.SusOnOff;
+                mml.args = new List<object>();
+                mml.args.Add(num);
                 return;
             }
 
+            pw.incPos(page);
             mml.type = enmMMLType.SusOnOff;
             mml.args = new List<object>();
             mml.args.Add(c);

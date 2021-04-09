@@ -284,6 +284,8 @@
   Y8950     Y89    B               3579545   15Ch(FM   :  9Ch  Rhythm : 5Ch  ADPCM:1Ch)
   YM3812    OPL2   J               3579545   14Ch(FM   :  9Ch  Rhythm : 5Ch)
   YMF262    OPL3   D              14318180   23Ch(FM   : 18Ch  Rhythm : 5Ch)
+  YMF271    OPX    V              16934400   30Ch(FM   : 24Ch  PCM : 12Ch) (30ch内訳は FM : 9(group) * 2(sync1) = 18  +  PCM : 3(group) * 4(sync3) = 12)
+  (YMF271のエミュレーションは開発中であり完全ではありません。)       
   SegaPCM   SPCM   Z               4000000   16Ch(PCM  : 16Ch)
   HuC6280   HuC8   H               3579545    6Ch(WF   :  6Ch)
   K051649   SCC    K               1789772    5Ch(WF   :  5Ch)

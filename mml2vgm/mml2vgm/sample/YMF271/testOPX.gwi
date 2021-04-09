@@ -1,0 +1,72 @@
+﻿'{
+
+	TitleName   =
+	TitleNameJ  =
+	GameName    =
+	GameNameJ   =
+	SystemName  =
+	SystemNameJ =
+	Composer    =
+	ComposerJ   =
+	ReleaseDate =
+	Converted   =
+	Notes       =
+
+}
+
+
+'@ X4 000 "OPX Instrument 4OP"
+   AR  DR  SR  RR  SL  TL  KS  ML  DT  WF  ACC FB  LFO AMS PMS
+'@ 028,003,008,015,004,015,001,002,003,000,000,014,000,000,000 ;S1
+'@ 028,008,003,015,001,010,000,001,003,000,000,000,000,000,000 ;S3
+'@ 028,003,008,015,004,015,001,001,004,001,000,006,000,000,000 ;S2
+'@ 028,008,003,015,001,012,000,001,004,002,000,010,000,000,000 ;S4
+'@ 006 ;ALG
+
+'@ X3 001 "OPX Instrument 3OP"
+   AR  DR  SR  RR  SL  TL  KS  ML  DT  WF  ACC FB  LFO AMS PMS
+'@ 031,001,001,001,005,026,000,001,002,000,000,000,000,000,000 ;S1
+'@ 031,004,003,008,010,000,000,000,003,000,000,000,000,000,000 ;S3
+'@ 031,001,001,001,005,020,000,001,006,000,000,000,000,000,000 ;S2
+'@ 006 ;ALG
+
+'@ X2 002 "OPX Instrument 2OP"
+   AR  DR  SR  RR  SL  TL  KS  ML  DT  WF  ACC FB  LFO AMS PMS
+'@ 031,001,001,001,005,026,000,001,002,000,000,000,000,000,000 ;S1
+'@ 031,004,003,008,010,000,000,000,003,000,000,000,000,000,000 ;S3
+'@ 000 ;ALG
+
+
+        //
+        // Note:
+        //
+        // Groupは0～11まである
+        // Group0/4/8 でのみPCMを使用可能(TBD1)
+        // Sync2/3 で1slot又は4slot分のPCMを割り当てることができる(TBD2)
+        // 上記より最大3*4=12個のPCMが発音可能(TBD3)
+        //
+        // また、Group0/4/8ではFMの基本波形にPCM波形を割り当てることが可能。(TBD4)
+        //
+        //
+        // Sync0 4slot(FM) (1Groupで4Op形式のFM1個)
+        // Sync1 2slotx2(FM) (1Groupで2Op形式のFM2個)
+        // sync2 3slot(FM),1slot(PCM) (1Groupで3Op形式のFM1個と、PCM1個)
+        // Sync3 1slot(PCM) (1Groupで4このPCM)
+
+        // Ch01:Group01 01
+        // Ch02:Group01 25
+        // Ch03:Group01 13
+        // Ch04:Group01 37
+        // ...
+        // Ch45:Group12 12
+        // Ch46:Group12 36
+        // Ch47:Group12 24
+        // Ch48:Group12 48
+
+        's'コマンドがsyncになります
+
+'Cn1 T60
+'V01 s0@0v127q1o4l16cdefgfedcdefgfedcegecr
+V05 s2@1o4l4rrrcde
+
+

@@ -156,6 +156,7 @@
     <Compile Include="Driver\ZGM\ZgmChip\SEGAPCM.cs" />
     <Compile Include="Driver\ZGM\ZgmChip\YM2151.cs" />
     <Compile Include="Driver\ZGM\ZgmChip\Y8950.cs" />
+    <Compile Include="Driver\ZGM\ZgmChip\YMF271.cs" />
     <Compile Include="Driver\ZGM\ZgmChip\YMF278B.cs" />
     <Compile Include="Driver\ZGM\ZgmChip\YMF262.cs" />
     <Compile Include="Driver\ZGM\ZgmChip\YM3812.cs" />
@@ -335,6 +336,7 @@
     <Compile Include="MMLParameter\Y8950.cs" />
     <Compile Include="MMLParameter\YM3526.cs" />
     <Compile Include="MMLParameter\YM3812.cs" />
+    <Compile Include="MMLParameter\YMF271.cs" />
     <Compile Include="MMLParameter\YMF278B.cs" />
     <Compile Include="MMLParameter\YMF262.cs" />
     <Compile Include="MoonDriverManager.cs" />

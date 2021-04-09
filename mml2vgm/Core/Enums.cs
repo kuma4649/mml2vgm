@@ -14,6 +14,7 @@
         FMOPN,   // OPN系のFMCh
         FMOPNex, // OPN系の拡張FMCh
         FMOPM,   // OPM系のFMCh
+        FMOPX,   // OPX系のFMCh
         DCSG,
         PCM,
         ADPCM,
@@ -54,7 +55,8 @@
         C352 = 20,
         YM3526 = 21,
         YM3812 = 22,
-        Y8950 = 23
+        Y8950 = 23,
+        YMF271 = 24
     }
 
     public enum EnmZGMDevice : int

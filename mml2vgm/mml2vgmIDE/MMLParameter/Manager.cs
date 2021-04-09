@@ -27,6 +27,7 @@ namespace mml2vgmIDE.MMLParameter
         public List<Instrument> YM3812 = new List<Instrument>();
         public List<Instrument> YMF262 = new List<Instrument>();
         public List<Instrument> YMF278B = new List<Instrument>();
+        public List<Instrument> YMF271 = new List<Instrument>();
         public List<Instrument> YM2608 = new List<Instrument>();
         public List<Instrument> YM2609 = new List<Instrument>();
         public List<Instrument> YM2610B = new List<Instrument>();
@@ -155,6 +156,9 @@ namespace mml2vgmIDE.MMLParameter
                         break;
                     case "YMF278B":
                         SetupYMF278B(od);
+                        break;
+                    case "YMF271":
+                        SetupYMF271(od);
                         break;
                     case "YM2608":
                         SetupYM2608(od);
@@ -380,6 +384,28 @@ namespace mml2vgmIDE.MMLParameter
             dicInstAdd(opl4, od.linePos.chipIndex, od.linePos.chipNumber);
             instsAdd(opl4, od.linePos.chipIndex, od.linePos.chipNumber);
             opl4.isTrace = isTrace;
+        }
+
+        private void SetupYMF271(outDatum od)
+        {
+            Chip chip = null;
+            if (Audio.chipRegister != null
+                && Audio.chipRegister.YMF271 != null
+                && od.linePos.chipIndex < Audio.chipRegister.YMF271.Count)
+            {
+                chip = Audio.chipRegister.YMF271[od.linePos.chipIndex];
+            }
+            if (chip == null && od.linePos.chipIndex >= 0x80)
+            {
+                Driver.ZGM.ZgmChip.ZgmChip zChip = Audio.chipRegister.dicChipCmdNo[od.linePos.chipIndex];
+                chip = Audio.chipRegister.YMF271[zChip.Index];
+                //chipIndex = zChip.Index;
+            }
+            YMF271 opx = new YMF271(chip, setting);
+            YMF271.Add(opx);
+            dicInstAdd(opx, od.linePos.chipIndex, od.linePos.chipNumber);
+            instsAdd(opx, od.linePos.chipIndex, od.linePos.chipNumber);
+            opx.isTrace = isTrace;
         }
 
         private void SetupYMF262(outDatum od)

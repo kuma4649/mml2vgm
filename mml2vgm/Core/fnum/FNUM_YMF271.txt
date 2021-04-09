@@ -1,0 +1,4 @@
+﻿' OPX(FM) : Fnum = 9 * 2^(22-B) * ftone / M       ftone:Hz M:MasterClock B:Block
+'       c    c+   d    d+   e    f    f+   g    g+   a    a+   b
+FNUM_00=$613,$670,$6d1,$739,$7a7,$81c,$897,$91a,$9a5,$a38,$ad3,$b78,$c26
+

@@ -738,7 +738,8 @@ namespace mml2vgmIDE
 
         private void vcYMF271(outDatum od)
         {
-            chipRegister.setYMF271Register(
+            chipRegister.YMF271SetRegister(
+                od,Audio.DriverSeqCounter,
                 (vgmBuf[vgmAdr + 1].val & 0x80) == 0 ? 0 : 1
                 , vgmBuf[vgmAdr + 1].val & 0x7f
                 , vgmBuf[vgmAdr + 2].val

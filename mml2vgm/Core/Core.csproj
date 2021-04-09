@@ -80,6 +80,7 @@
     <Compile Include="chips\YM2610B.cs" />
     <Compile Include="chips\YM2612.cs" />
     <Compile Include="chips\YM2612X.cs" />
+    <Compile Include="chips\YMF271.cs" />
     <Compile Include="clsVgm.cs" />
     <Compile Include="CommandArpeggio.cs" />
     <Compile Include="Common.cs" />
@@ -130,6 +131,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="fnum\FNUM_YM3812.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="fnum\FNUM_YMF271.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="fnum\FNUM_YMF262.txt">

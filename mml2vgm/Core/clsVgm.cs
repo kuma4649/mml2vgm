@@ -29,6 +29,7 @@ namespace Core
         public Y8950[] y8950 = null;
         public YM3812[] ym3812 = null;
         public YMF262[] ymf262 = null;
+        public YMF271[] ymf271 = null;
         public C140[] c140 = null;
         public C352[] c352 = null;
         public AY8910[] ay8910 = null;
@@ -43,6 +44,7 @@ namespace Core
         public Dictionary<int, Tuple<string, byte[]>> instFM = new Dictionary<int, Tuple<string, byte[]>>();
         public Dictionary<int, Tuple<string, byte[]>> instOPM = new Dictionary<int, Tuple<string, byte[]>>();
         public Dictionary<int, Tuple<string, byte[]>> instOPL = new Dictionary<int, Tuple<string, byte[]>>();
+        public Dictionary<int, Tuple<string, byte[]>> instOPX = new Dictionary<int, Tuple<string, byte[]>>();
         public Dictionary<int, Tuple<string, int[]>> instENV = new Dictionary<int, Tuple<string, int[]>>();
         public Dictionary<int, Tuple<string, clsPcm>> instPCM = new Dictionary<int, Tuple<string, clsPcm>>();
         public List<clsPcmDatSeq> instPCMDatSeq = new List<clsPcmDatSeq>();
@@ -74,6 +76,9 @@ namespace Core
 
         private int oplInstrumentCounter = -1;
         private byte[] oplInstrumentBufCache = null;
+
+        private int opxInstrumentCounter = -1;
+        private byte[] opxInstrumentBufCache = null;
 
         private int wfInstrumentCounter = -1;
         private byte[] wfInstrumentBufCache = null;
@@ -353,6 +358,20 @@ namespace Core
                 chips.Add(enmChipType.YMF262, ymf262);
             }
 
+            List<YMF271> lstYMF271 = new List<YMF271>();
+            n = sp.dicChipPartName[enmChipType.YMF271];
+            for (int i = 0; i < n.Item3.Count; i++)
+            {
+                if (string.IsNullOrEmpty(n.Item3[i])) continue;
+                if (sp.lnChipPartName.Contains(n.Item3[i]))
+                    lstYMF271.Add(new YMF271(this, i, n.Item3[i], stPath, (info.format == enmFormat.ZGM ? 0 : i)));
+            }
+            if (lstYMF271.Count > 0)
+            {
+                ymf271 = lstYMF271.ToArray();
+                chips.Add(enmChipType.YMF271, ymf271);
+            }
+
             List<C140> lstC140 = new List<C140>();
             n = sp.dicChipPartName[enmChipType.C140];
             for (int i = 0; i < n.Item3.Count; i++)
@@ -590,6 +609,13 @@ namespace Core
                 else
                     msgBox.setErrMsg(string.Format(msg.get("E01023"), "OPL"), line.Lp);
             }
+            if (opxInstrumentCounter != -1)
+            {
+                if (line == null)
+                    msgBox.setErrMsg(string.Format(msg.get("E01022"), "OPX"), null);
+                else
+                    msgBox.setErrMsg(string.Format(msg.get("E01023"), "OPX"), line.Lp);
+            }
             // WaveFormの音色を定義中の場合
             if (wfInstrumentCounter != -1)
             {
@@ -662,6 +688,12 @@ namespace Core
             if (oplInstrumentCounter != -1)
             {
                 return SetOplInstrument(line);
+            }
+
+            // OPXの音色を定義中の場合
+            if (opxInstrumentCounter != -1)
+            {
+                return SetOpxInstrument(line);
             }
 
             // WaveFormの音色を定義中の場合
@@ -739,6 +771,7 @@ namespace Core
             CheckDefineInstrument(line);
 
             instrumentName = "";
+            string val;
             switch (t)
             {
                 case 'F':
@@ -760,7 +793,7 @@ namespace Core
                     return 0;
 
                 case 'L':
-                    string val = buf.ToUpper();
+                    val = buf.ToUpper();
                     if (val.Length > 1 && val[1] == 'L')
                         oplInstrumentBufCache = new byte[Const.OPLL_INSTRUMENT_SIZE];
                     else if (val.Length > 1 && val[1] == '4')
@@ -774,7 +807,23 @@ namespace Core
                     SetOplInstrument(line);
                     return 0;
 
-                case 'A':
+                case 'X':
+                    val = buf.ToUpper();
+                    if (val.Length > 1 && val[1] == '2')
+                        opxInstrumentBufCache = new byte[Const.OPX_2OP_INSTRUMENT_SIZE];
+                    else if (val.Length > 1 && val[1] == '3')
+                    {
+                        opxInstrumentBufCache = new byte[Const.OPX_3OP_INSTRUMENT_SIZE];
+                    }
+                    else
+                        opxInstrumentBufCache = new byte[Const.OPX_4OP_INSTRUMENT_SIZE];
+                    opxInstrumentCounter = 0;
+                    SetOpxInstrument(line);
+                    return 0;
+
+
+
+                case 'A'://@ ARP
                     if (t1 == 'R' && t2 == 'P')
                     {
                         instArpCounter = 0;
@@ -788,7 +837,7 @@ namespace Core
                     }
                     return 0;
 
-                case 'V':
+                case 'V'://@ VAR
                     if (t1 == 'A' && t2 == 'R')
                     {
                         instVArpCounter = 0;
@@ -796,7 +845,7 @@ namespace Core
                     }
                     return 0;
 
-                case 'C':
+                case 'C'://@ CAR
                     if (t1 == 'A' && t2 == 'R')
                     {
                         instCommandArpCounter = 0;
@@ -804,11 +853,11 @@ namespace Core
                     }
                     return 0;
 
-                case 'P':
+                case 'P':// @ P
                     definePCMInstrument(line);
                     return 0;
 
-                case 'E':
+                case 'E':// @ E
                     try
                     {
                         instrumentCounter = -1;
@@ -855,7 +904,7 @@ namespace Core
                     }
                     return 0;
 
-                case 'T':
+                case 'T':// @ T
                     try
                     {
                         instrumentCounter = -1;
@@ -871,13 +920,13 @@ namespace Core
                     }
                     return 0;
 
-                case 'H':
+                case 'H':// @ H
                     wfInstrumentBufCache = new byte[Const.WF_INSTRUMENT_SIZE];
                     wfInstrumentCounter = 0;
                     SetWfInstrument(line);
                     return 0;
 
-                case 'W':
+                case 'W':// @ W
                     if (buf.ToUpper()[1] == 'S')
                     {
                         opna2WfsInstrumentBufCache = new byte[Const.OPNA2_WFS_INSTRUMENT_SIZE];
@@ -892,7 +941,7 @@ namespace Core
                     }
                     return 0;
 
-                case 'S':
+                case 'S':// @ S
                     midiSysExCounter = 0;
                     StoreMidiSysExBuffer(line);
                     return 0;
@@ -1803,6 +1852,48 @@ namespace Core
                     }
 
                     oplInstrumentCounter = -1;
+                }
+            }
+            catch
+            {
+                msgBox.setErrMsg(msg.get("E01012"), line.Lp);
+            }
+
+            return 0;
+        }
+
+        private int SetOpxInstrument(Line line)
+        {
+
+            try
+            {
+                string name = "";
+                opxInstrumentCounter = GetNums(opxInstrumentBufCache, opxInstrumentCounter, Common.CutComment(line.Txt).Substring(1).TrimStart(), ref name, line);
+                if (string.IsNullOrEmpty(instrumentName)) instrumentName = name;//音色名
+
+                if (opxInstrumentCounter == opxInstrumentBufCache.Length)
+                {
+                    //すでに定義済みの場合はいったん削除する(後に定義されたものが優先)
+                    if (instOPX.ContainsKey(opxInstrumentBufCache[1]))
+                    {
+                        instOPX.Remove(opxInstrumentBufCache[1]);
+                    }
+
+
+                    if (opxInstrumentBufCache.Length == Const.OPX_4OP_INSTRUMENT_SIZE)
+                    {
+                        instOPX.Add(opxInstrumentBufCache[1], new Tuple<string, byte[]>(instrumentName, opxInstrumentBufCache));
+                    }
+                    else if (opxInstrumentBufCache.Length == Const.OPX_3OP_INSTRUMENT_SIZE)
+                    {
+                        instOPX.Add(opxInstrumentBufCache[1], new Tuple<string, byte[]>(instrumentName, opxInstrumentBufCache));
+                    }
+                    else if (opxInstrumentBufCache.Length == Const.OPX_2OP_INSTRUMENT_SIZE)
+                    {
+                        instOPX.Add(opxInstrumentBufCache[1], new Tuple<string, byte[]>(instrumentName, opxInstrumentBufCache));
+                    }
+
+                    opxInstrumentCounter = -1;
                 }
             }
             catch
@@ -3572,6 +3663,8 @@ namespace Core
             long useYM3812_S = 0;
             long useYMF262 = 0;
             long useYMF262_S = 0;
+            long useYMF271 = 0;
+            long useYMF271_S = 0;
 
             for (int i = 0; i < 2; i++)
             {
@@ -3643,6 +3736,10 @@ namespace Core
                 if (ymf262 != null && ymf262.Length > i && ymf262[i] != null)
                     foreach (partWork pw in ymf262[i].lstPartWork)
                     { useYMF262 += pw.clockCounter; if (ymf262[i].ChipID == 1) useYMF262_S += pw.clockCounter; }
+
+                if (ymf271 != null && ymf271.Length > i && ymf271[i] != null)
+                    foreach (partWork pw in ymf271[i].lstPartWork)
+                    { useYMF271 += pw.clockCounter; if (ymf271[i].ChipID == 1) useYMF271_S += pw.clockCounter; }
 
                 if (k051649 != null && k051649.Length > i && k051649[i] != null)
                     foreach (partWork pw in k051649[i].lstPartWork)
@@ -3760,6 +3857,11 @@ namespace Core
             {
                 YMF262 u = ymf262[0] != null ? ymf262[0] : ymf262[1];
                 Common.SetLE32(dat, 0x5c, (uint)u.Frequency | (uint)(useYMF262_S == 0 ? 0 : 0x40000000));
+            }
+            if (info.Version >= 1.51f && useYMF271 != 0)
+            {
+                YMF271 u = ymf271[0] != null ? ymf271[0] : ymf271[1];
+                Common.SetLE32(dat, 0x64, (uint)u.Frequency | (uint)(useYMF271_S == 0 ? 0 : 0x40000000));
             }
             if (info.Version >= 1.61f && useK051649 != 0)
             {

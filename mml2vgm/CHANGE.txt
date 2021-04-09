@@ -1,4 +1,7 @@
 更新履歴
+TAG393 2021/04/09
+  Core:vgm:IDE:OPX:FMだけ大体対応
+
 TAG392 2021/04/04
   IDE:mucomDotNET:パートカウンターのmute処理の修正
 
