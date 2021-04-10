@@ -853,7 +853,7 @@ namespace Core
             int n = page.instrument;
             if (!parent.instOPX.ContainsKey(n))
             {
-                msgBox.setWrnMsg(string.Format(msg.get("E11000"), n), mml.line.Lp);
+                msgBox.setWrnMsg(string.Format(msg.get("E11000"), n), mml==null?null:mml.line.Lp);
                 return;
             }
 
@@ -864,6 +864,15 @@ namespace Core
             switch (page.sync)
             {
                 case 0://4ope
+                    if (inst[0] != 4)//4ope音色のみ
+                    {
+                        msgBox.setErrMsg(
+                            string.Format(msg.get("E31009")
+                            , page.sync
+                            , n)
+                            , mml == null ? null : mml.line.Lp);
+                        return;
+                    }
                     for (int ope = 0; ope < 4; ope++)
                     {
                         byte opeN = (byte)(ope == 1 ? 2 : (ope == 2 ? 1 : ope));
@@ -876,6 +885,15 @@ namespace Core
                     }
                     break;
                 case 1://2ope x 2ope
+                    if (inst[0] != 2)//2ope音色のみ
+                    {
+                        msgBox.setErrMsg(
+                            string.Format(msg.get("E31009")
+                            , page.sync
+                            , n)
+                            , mml == null ? null : mml.line.Lp);
+                        return;
+                    }
                     for (int ope = 0; ope < 2; ope++)
                     {
                         byte opeN = (byte)((ope == 1 ? 2 : (ope == 2 ? 1 : ope)) + info.bankB);
@@ -888,6 +906,15 @@ namespace Core
                     }
                     break;
                 case 2://3ope 
+                    if (inst[0] != 3)//3ope音色のみ
+                    {
+                        msgBox.setErrMsg(
+                            string.Format(msg.get("E31009")
+                            , page.sync
+                            , n)
+                            , mml == null ? null : mml.line.Lp);
+                        return;
+                    }
                     for (int ope = 0; ope < 3; ope++)
                     {
                         byte opeN = (byte)(ope == 1 ? 2 : (ope == 2 ? 1 : ope));

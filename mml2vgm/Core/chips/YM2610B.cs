@@ -1056,6 +1056,9 @@ namespace Core
         public override void MultiChannelCommand(MML mml)
         {
             if (!use) return;
+
+            base.MultiChannelCommand(mml);
+
             //コマンドを跨ぐデータ向け処理
             foreach (partWork pw in lstPartWork)
             {
@@ -1114,6 +1117,7 @@ namespace Core
                     }
                     else
                     {
+                        if (page.Type == enmChannelType.SSG) continue;
                         if (page.keyOn)
                         {
                             page.keyOn = false;

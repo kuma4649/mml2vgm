@@ -285,11 +285,13 @@ namespace Core
         public override void MultiChannelCommand(MML mml)
         {
             if (!use) return;
-            //int dat = 0;
+            base.MultiChannelCommand(mml);
 
             foreach (partWork pw in lstPartWork)
             {
                 partPage page = pw.cpg;
+
+                if (page.Type == enmChannelType.SSG) continue;
 
                 if (page.keyOn)
                 {

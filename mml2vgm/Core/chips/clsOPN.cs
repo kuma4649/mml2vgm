@@ -16,6 +16,8 @@ namespace Core
 
         public void OutSsgKeyOn(partPage page, MML mml)
         {
+            page.keyOn = true;
+
             int port;
             int adr;
             int vch;
@@ -24,19 +26,19 @@ namespace Core
             if (adr == 0x10)
                 p++;
 
-            int n = (page.mixer & 0x1) + ((page.mixer & 0x2) << 2);
-            byte data = 0;
+            //int n = (page.mixer & 0x1) + ((page.mixer & 0x2) << 2);
+            //byte data = 0;
 
-            data = (byte)(((ClsOPN)page.chip).SSGKeyOn[p] | (9 << vch));
-            data &= (byte)(~(n << vch));
-            ((ClsOPN)page.chip).SSGKeyOn[p] = data;
+            //data = (byte)(((ClsOPN)page.chip).SSGKeyOn[p] | (9 << vch));
+            //data &= (byte)(~(n << vch));
+            //((ClsOPN)page.chip).SSGKeyOn[p] = data;
 
             SetSsgVolume(page, mml, page.phaseReset);
             if (page.HardEnvelopeSw)
             {
                 SOutData(page, mml, page.port[port], (byte)(adr + 0x0d), (byte)(page.HardEnvelopeType & 0xf));
             }
-            SOutData(page, mml, page.port[port], (byte)(adr + 0x07), data);
+            //SOutData(page, mml, page.port[port], (byte)(adr + 0x07), data);
 
             if (mml != null)
             {
@@ -51,23 +53,24 @@ namespace Core
 
         public void OutSsgKeyOff(MML mml, partPage page)
         {
-            int port;
-            int adr;
-            int vch;
-            GetPortVchSsg(page, out port, out adr, out vch);
-            int p = port;
-            if (adr == 0x10)
-                p++;
+            page.keyOn = false;
+            //int port;
+            //int adr;
+            //int vch;
+            //GetPortVchSsg(page, out port, out adr, out vch);
+            //int p = port;
+            //if (adr == 0x10)
+            //    p++;
 
-            int n = 9;
-            byte data = 0;
+            //int n = 9;
+            //byte data = 0;
 
-            data = (byte)(((ClsOPN)page.chip).SSGKeyOn[p] | (n << vch));
-            ((ClsOPN)page.chip).SSGKeyOn[p] = data;
+            //data = (byte)(((ClsOPN)page.chip).SSGKeyOn[p] | (n << vch));
+            //((ClsOPN)page.chip).SSGKeyOn[p] = data;
 
-            SOutData(page, mml, page.port[port], (byte)(adr + 0x08 + vch), 0);
-            page.beforeVolume = -1;
-            SOutData(page, mml, page.port[port], (byte)(adr + 0x07), data);
+            //SOutData(page, mml, page.port[port], (byte)(adr + 0x08 + vch), 0);
+            //page.beforeVolume = -1;
+            //SOutData(page, mml, page.port[port], (byte)(adr + 0x07), data);
 
         }
 
@@ -105,10 +108,10 @@ namespace Core
             }
 
             vol = Common.CheckRange(vol, 0, 15) + (page.HardEnvelopeSw ? 0x10 : 0x00);
-            if ((((ClsOPN)page.chip).SSGKeyOn[p] & (9 << vch)) == (9 << vch))
-            {
-                vol = 0;
-            }
+            //if (!page.keyOn)// (((ClsOPN)page.chip).SSGKeyOn[p] & (9 << vch)) == (9 << vch))
+            //{
+            //    vol = 0;
+            //}
 
             if (page.chip is YM2609)
             {
@@ -2315,6 +2318,73 @@ namespace Core
             n = Common.CheckRange(n, -0xfff, 0xfff);
             page.detune = n;
             SetDummyData(page, mml);
+        }
+
+        private byte[] nSSGKeyOn = new byte[] { 0, 0, 0, 0 };
+
+        public override void MultiChannelCommand(MML mml)
+        {
+            nSSGKeyOn[0] = 0;
+            nSSGKeyOn[1] = 0;
+            nSSGKeyOn[2] = 0;
+            nSSGKeyOn[3] = 0;
+
+            int ssg = 0;
+            foreach (partWork pw in lstPartWork)
+            {
+                if (pw.cpg.Type != enmChannelType.SSG) continue;
+
+
+                //foreach (partPage page in pw.pg)
+                partPage page = pw.cpg;
+                int port;
+                int adr;
+                int vch;
+                GetPortVchSsg(page, out port, out adr, out vch);
+                int p = port;
+                //if (adr == 0x10)
+                //    p++;
+
+                byte data = (byte)(9 << vch);
+                if (page.keyOn)
+                {
+                    int n = (page.mixer & 0x1) + ((page.mixer & 0x2) << 2);
+                    data &= (byte)(~(n << vch));
+                    nSSGKeyOn[ssg / 3] |= data;
+                }
+                else
+                {
+                    nSSGKeyOn[ssg / 3] |= data;
+                }
+
+                ssg++;
+            }
+
+            if (SSGKeyOn[0] != nSSGKeyOn[0])
+            {
+                parent.OutData(mml, port[0], 0x07, nSSGKeyOn[0]);
+                SSGKeyOn[0] = nSSGKeyOn[0];
+            }
+
+            if (this is YM2609)
+            {
+                if (SSGKeyOn[1] != nSSGKeyOn[1])
+                {
+                    parent.OutData(mml, port[1], 0x27, nSSGKeyOn[1]);
+                    SSGKeyOn[1] = nSSGKeyOn[1];
+                }
+                if (SSGKeyOn[2] != nSSGKeyOn[2])
+                {
+                    parent.OutData(mml, port[2], 0x07, nSSGKeyOn[2]);
+                    SSGKeyOn[2] = nSSGKeyOn[2];
+                }
+                if (SSGKeyOn[3] != nSSGKeyOn[3])
+                {
+                    parent.OutData(mml, port[2], 0x17, nSSGKeyOn[3]);
+                    SSGKeyOn[3] = nSSGKeyOn[3];
+                }
+            }
+
         }
 
     }

@@ -106,11 +106,12 @@ namespace Core
 
         public void OutSsgKeyOn(MML mml, partPage page)
         {
-            byte pch = (byte)page.ch;
-            int n = (page.mixer & 0x1) + ((page.mixer & 0x2) << 2);
-            byte data = (byte)(SSGKeyOn | 9 << pch);
-            data &= (byte)(~(n << pch));
-            SSGKeyOn = data;
+            page.keyOn = true;
+            //byte pch = (byte)page.ch;
+            //int n = (page.mixer & 0x1) + ((page.mixer & 0x2) << 2);
+            //byte data = (byte)(SSGKeyOn | 9 << pch);
+            //data &= (byte)(~(n << pch));
+            //SSGKeyOn = data;
 
             SetSsgVolume(mml, page);
             if (page.HardEnvelopeSw)
@@ -119,21 +120,24 @@ namespace Core
                 SOutData(page, mml, port[0], 0x0d, (byte)(page.HardEnvelopeType & 0xf));
             }
             //parent.OutData(mml, port[0], 0x07, data);
-            SOutData(page, mml, port[0], 0x07, data);
+
+            //SOutData(page, mml, port[0], 0x07, data);
         }
 
         public void OutSsgKeyOff(MML mml, partPage page)
         {
-            byte pch = (byte)page.ch;
-            int n = 9;
-            byte data = (byte)(SSGKeyOn | n << pch);
-            SSGKeyOn = data;
+            page.keyOn = false;
+            //byte pch = (byte)page.ch;
+            //int n = 9;
+            //byte data = (byte)(SSGKeyOn | n << pch);
+            //SSGKeyOn = data;
 
             //parent.OutData(mml, port[0], (byte)(0x08 + pch), 0);
             //SOutData(page, mml, port[0], (byte)(0x08 + pch), 0);
             //page.spg.beforeVolume = -1;
             //parent.OutData(mml, port[0], 0x07, data);
-            SOutData(page, mml, port[0], 0x07, data);
+
+            //SOutData(page, mml, port[0], 0x07, data);
         }
 
         public void SetSsgVolume(MML mml, partPage page)
@@ -444,11 +448,28 @@ namespace Core
 
         public override void MultiChannelCommand(MML mml)
         {
+            byte nSSGKeyOn = 0;
+
             foreach (partWork pw in lstPartWork)
             {
-                foreach (partPage page in pw.pg)
+                partPage page = pw.cpg;
+                byte data = (byte)(9 << page.ch);
+                if (page.keyOn)
                 {
+                    int n = (page.mixer & 0x1) + ((page.mixer & 0x2) << 2);
+                    data &= (byte)(~(n << page.ch));
+                    nSSGKeyOn |= data;
                 }
+                else
+                {
+                    nSSGKeyOn |= data;
+                }
+            }
+
+            if (SSGKeyOn != nSSGKeyOn)
+            {
+                parent.OutData( mml, port[0], 0x07, nSSGKeyOn);
+                SSGKeyOn = nSSGKeyOn;
             }
         }
 

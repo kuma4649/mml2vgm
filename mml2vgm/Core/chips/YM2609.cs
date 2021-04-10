@@ -2528,6 +2528,7 @@ namespace Core
             foreach (outDatum dat in opna20x228KeyOnData) SOutData(lstPartWork[6].cpg, dat, p, 0x28, dat.val);
             opna20x028KeyOnData.Clear();
             opna20x228KeyOnData.Clear();
+            base.MultiChannelCommand(mml);
         }
 
         public List<outDatum> opna20x028KeyOnData = new List<outDatum>();
@@ -2562,6 +2563,7 @@ namespace Core
 
         private void MultiChannelCommand_FM(MML mml, partPage page)
         {
+
             //FNum l
             //panL Block FNum h
             if (page.panL != page.spg.beforePanL || page.freq != page.spg.oldFreq)

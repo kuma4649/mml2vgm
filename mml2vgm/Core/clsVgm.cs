@@ -750,9 +750,7 @@ namespace Core
                     || t == 'A' || t == 'V' || t == 'C'
                     || t == 'P' || t == 'E'
                     || t == 'T' || t == 'H' || t == 'W' || t == 'S')
-                {
                     SetInstArp();
-                }
             }
 
             if (instVArpCounter != -1)
@@ -762,9 +760,7 @@ namespace Core
                     || t == 'A' || t == 'V' || t == 'C'
                     || t == 'P' || t == 'E'
                     || t == 'T' || t == 'H' || t == 'W' || t == 'S')
-                {
                     SetInstVArp();
-                }
             }
 
             //定義中に次の定義を始めた場合はエラーとする
@@ -809,12 +805,12 @@ namespace Core
 
                 case 'X':
                     val = buf.ToUpper();
-                    if (val.Length > 1 && val[1] == '2')
+                    if (val.Length > 1 && val[1] == '1')
+                        opxInstrumentBufCache = new byte[Const.OPX_1OP_INSTRUMENT_SIZE];
+                    else if (val.Length > 1 && val[1] == '2')
                         opxInstrumentBufCache = new byte[Const.OPX_2OP_INSTRUMENT_SIZE];
                     else if (val.Length > 1 && val[1] == '3')
-                    {
                         opxInstrumentBufCache = new byte[Const.OPX_3OP_INSTRUMENT_SIZE];
-                    }
                     else
                         opxInstrumentBufCache = new byte[Const.OPX_4OP_INSTRUMENT_SIZE];
                     opxInstrumentCounter = 0;
@@ -893,9 +889,7 @@ namespace Core
                         }
 
                         if (instENV.ContainsKey(num))
-                        {
                             instENV.Remove(num);
-                        }
                         instENV.Add(num, new Tuple<string, int[]>("", env));
                     }
                     catch
@@ -1046,9 +1040,7 @@ namespace Core
                     byte[] voi = new byte[26];
                     Array.Copy(buf, p + 0, voi, 0, 26);
                     if (instFM.ContainsKey(num + p / 32))
-                    {
                         instFM.Remove(num + p / 32);
-                    }
                     instFM.Add(num + p / 32, new Tuple<string, byte[]>("", ConvertMUCOM88toM(num, voi)));
                 }
 
@@ -1108,9 +1100,7 @@ namespace Core
                 buf = File.ReadAllBytes(fn);
 
                 if (instFM.ContainsKey(num))
-                {
                     instFM.Remove(num);
-                }
                 instFM.Add(num, new Tuple<string, byte[]>("", ConvertTFItoM(num, buf)));
 
                 return;
@@ -1249,19 +1239,13 @@ namespace Core
             if (opt == -1)
             {
                 if (enmChip == enmChipType.Y8950)
-                {
                     opt = 0;
-                }
 
                 if (enmChip == enmChipType.YM2610B)
-                {
                     opt = 0;
-                }
 
                 if (enmChip == enmChipType.YM2612X)
-                {
                     opt = 36;
-                }
             }
 
             instPCMDatSeq.Add(new clsPcmDatSeq(
@@ -1302,19 +1286,13 @@ namespace Core
 
             int SrcStartAdr = 0;
             if (vs.Length > 2 && !string.IsNullOrEmpty(vs[2].Trim()))
-            {
                 SrcStartAdr = Common.ParseNumber(vs[2]);
-            }
             int DesStartAdr = 0;
             if (vs.Length > 3 && !string.IsNullOrEmpty(vs[3].Trim()))
-            {
-                DesStartAdr = Common.ParseNumber(vs[3]);
-            }
+                 DesStartAdr = Common.ParseNumber(vs[3]);
             int Length = -1;
             if (vs.Length > 4 && !string.IsNullOrEmpty(vs[4].Trim()))
-            {
                 Length = Common.ParseNumber(vs[4]);
-            }
             string[] Option = null;
             if (vs.Length > 5)
             {
@@ -1381,9 +1359,7 @@ namespace Core
             //EndAdr省略不可(RF5C164は設定不可)
             int EndAdr = 0;
             if (ChipName != enmChipType.RF5C164)
-            {
                 EndAdr = Common.ParseNumber(vs[4]);
-            }
             else
             {
                 if (!string.IsNullOrEmpty(vs[4].ToString()))
@@ -1396,9 +1372,7 @@ namespace Core
             {
                 LoopAdr = (ChipName != enmChipType.YM2610B) ? -1 : 0;
                 if (vs.Length > 5 && !string.IsNullOrEmpty(vs[5].Trim()))
-                {
                     LoopAdr = Common.ParseNumber(vs[5]);
-                }
             }
             else
             {
@@ -1414,16 +1388,12 @@ namespace Core
             if (ChipName == enmChipType.YM2610B)
             {
                 if (Option == null || Option.Length < 1)
-                {
                     LoopAdr = 0;
-                }
                 else
                 {
                     LoopAdr = 1;
                     if (Option[0].Trim() != "1")
-                    {
                         LoopAdr = 0;
-                    }
                 }
             }
 
@@ -1454,9 +1424,7 @@ namespace Core
             note = Math.Min(Math.Max(note, 0), 11);
 
             if (!instPCMMap.ContainsKey(map))
-            {
                 instPCMMap.Add(map, new Dictionary<int, int>());
-            }
 
             int i = 0;
             while (i < vs.Length - 3)
@@ -1471,9 +1439,7 @@ namespace Core
                 no = Math.Min(Math.Max(no, 0), 255);
 
                 if (instPCMMap[map].ContainsKey(oct * 12 + note + i))
-                {
                     instPCMMap[map].Remove(oct * 12 + note + i);
-                }
                 instPCMMap[map].Add(oct * 12 + note + i, no);
                 i++;
             }
@@ -1520,10 +1486,7 @@ namespace Core
             ClsChip cp = null;
             cp = GetChip(chipName);
             if (cp == null)
-            {
-                //パート名が指定されている場合はそれからチップが取得できるかためす
                 cp = GetChipFromPartName(chipName);
-            }
 
             if (cp == null || !cp.CanUsePcm)
             {
@@ -1532,10 +1495,7 @@ namespace Core
             }
             enmChip = GetChipType(chipName);
             if (enmChip == enmChipType.None)
-            {
-                //パート名が指定されている場合はそれからチップTypeが取得できるかためす
                 enmChip = GetChipTypeFromPartName(chipName);
-            }
 
             return enmChip;
         }
@@ -1641,15 +1601,10 @@ namespace Core
                 return -1;
             }
             if (data == "")
-            {
-                //データがない場合は警告する
                 msgBox.setWrnMsg(msg.get("E01010"), line.Lp);
-            }
 
             if (aliesData.ContainsKey(name))
-            {
                 aliesData.Remove(name);
-            }
             Line l = new Line(new LinePos(
                 line.Lp.document,
                 line.Lp.srcMMLID,
@@ -1688,21 +1643,14 @@ namespace Core
                 msgBox.setWrnMsg(msg.get("E01011"), line.Lp);
                 return -1;
             }
-            if (data == "")
-            {
-                ////データがない場合は無視する
-                //return 0;
-                line.Txt += " ";//スキップ再生に対応するためダミーの空白を強制的に入れる
-            }
+            if (data == "") line.Txt += " ";
 
             foreach (string p in part)
             {
                 int n = isLayer ? 1 : 0;
 
                 if (!partData[n].ContainsKey(p))
-                {
                     partData[n].Add(p, new List<List<Line>>());
-                }
                 Line l = new Line(new LinePos(
                     line.Lp.document,
                     line.Lp.srcMMLID,
@@ -1739,34 +1687,19 @@ namespace Core
                 {
                     //すでに定義済みの場合はいったん削除する(後に定義されたものが優先)
                     if (instFM.ContainsKey(instrumentBufCache[0]))
-                    {
                         instFM.Remove(instrumentBufCache[0]);
-                    }
 
 
                     if (instrumentBufCache.Length == Const.INSTRUMENT_SIZE)
-                    {
-                        //OPN
                         instFM.Add(instrumentBufCache[0], new Tuple<string, byte[]>(instrumentName, instrumentBufCache));
-                    }
                     else if (instrumentBufCache.Length == Const.OPLL_INSTRUMENT_SIZE)
-                    {
-                        //OPL
                         instFM.Add(instrumentBufCache[0], new Tuple<string, byte[]>(instrumentName, instrumentBufCache));
-                    }
                     else if (instrumentBufCache.Length == Const.OPL3_INSTRUMENT_SIZE)
-                    {
                         instFM.Add(instrumentBufCache[0], new Tuple<string, byte[]>(instrumentName, instrumentBufCache));
-                    }
                     else if (instrumentBufCache.Length == Const.OPL_OP4_INSTRUMENT_SIZE)
-                    {
                         instFM.Add(instrumentBufCache[0], new Tuple<string, byte[]>(instrumentName, instrumentBufCache));
-                    }
                     else if (instrumentBufCache.Length == Const.OPNA2_INSTRUMENT_SIZE)
-                    {
-                        //OPNA2
                         instFM.Add(instrumentBufCache[0], new Tuple<string, byte[]>(instrumentName, instrumentBufCache));
-                    }
                     else
                     {
                         //F
@@ -1797,16 +1730,11 @@ namespace Core
                 {
                     //すでに定義済みの場合はいったん削除する(後に定義されたものが優先)
                     if (instOPM.ContainsKey(opmInstrumentBufCache[0]))
-                    {
                         instOPM.Remove(opmInstrumentBufCache[0]);
-                    }
 
 
                     if (opmInstrumentBufCache.Length == Const.OPM_INSTRUMENT_SIZE)
-                    {
-                        //M
                         instOPM.Add(opmInstrumentBufCache[0], new Tuple<string, byte[]>(instrumentName, opmInstrumentBufCache));
-                    }
 
                     opmInstrumentCounter = -1;
                 }
@@ -1832,24 +1760,15 @@ namespace Core
                 {
                     //すでに定義済みの場合はいったん削除する(後に定義されたものが優先)
                     if (instOPL.ContainsKey(oplInstrumentBufCache[0]))
-                    {
                         instOPL.Remove(oplInstrumentBufCache[0]);
-                    }
 
 
                     if (oplInstrumentBufCache.Length == Const.OPLL_INSTRUMENT_SIZE)
-                    {
-                        //OPL
                         instOPL.Add(oplInstrumentBufCache[0], new Tuple<string, byte[]>(instrumentName, oplInstrumentBufCache));
-                    }
                     else if (oplInstrumentBufCache.Length == Const.OPL3_INSTRUMENT_SIZE)
-                    {
                         instOPL.Add(oplInstrumentBufCache[0], new Tuple<string, byte[]>(instrumentName, oplInstrumentBufCache));
-                    }
                     else if (oplInstrumentBufCache.Length == Const.OPL_OP4_INSTRUMENT_SIZE)
-                    {
                         instOPL.Add(oplInstrumentBufCache[0], new Tuple<string, byte[]>(instrumentName, oplInstrumentBufCache));
-                    }
 
                     oplInstrumentCounter = -1;
                 }
@@ -1875,23 +1794,13 @@ namespace Core
                 {
                     //すでに定義済みの場合はいったん削除する(後に定義されたものが優先)
                     if (instOPX.ContainsKey(opxInstrumentBufCache[1]))
-                    {
                         instOPX.Remove(opxInstrumentBufCache[1]);
-                    }
 
-
-                    if (opxInstrumentBufCache.Length == Const.OPX_4OP_INSTRUMENT_SIZE)
-                    {
+                    if (opxInstrumentBufCache.Length == Const.OPX_4OP_INSTRUMENT_SIZE
+                     || opxInstrumentBufCache.Length == Const.OPX_3OP_INSTRUMENT_SIZE
+                     || opxInstrumentBufCache.Length == Const.OPX_2OP_INSTRUMENT_SIZE
+                     || opxInstrumentBufCache.Length == Const.OPX_1OP_INSTRUMENT_SIZE)
                         instOPX.Add(opxInstrumentBufCache[1], new Tuple<string, byte[]>(instrumentName, opxInstrumentBufCache));
-                    }
-                    else if (opxInstrumentBufCache.Length == Const.OPX_3OP_INSTRUMENT_SIZE)
-                    {
-                        instOPX.Add(opxInstrumentBufCache[1], new Tuple<string, byte[]>(instrumentName, opxInstrumentBufCache));
-                    }
-                    else if (opxInstrumentBufCache.Length == Const.OPX_2OP_INSTRUMENT_SIZE)
-                    {
-                        instOPX.Add(opxInstrumentBufCache[1], new Tuple<string, byte[]>(instrumentName, opxInstrumentBufCache));
-                    }
 
                     opxInstrumentCounter = -1;
                 }
@@ -1916,9 +1825,7 @@ namespace Core
                 if (wfInstrumentCounter == wfInstrumentBufCache.Length)
                 {
                     if (instWF.ContainsKey(wfInstrumentBufCache[0]))
-                    {
                         instWF.Remove(wfInstrumentBufCache[0]);
-                    }
                     instWF.Add(wfInstrumentBufCache[0], new Tuple<string, byte[]>(instrumentName, wfInstrumentBufCache));
 
                     wfInstrumentCounter = -1;
@@ -1944,9 +1851,7 @@ namespace Core
                 if (opna2wfInstrumentCounter == opna2WfInstrumentBufCache.Length)
                 {
                     if (instOPNA2WF.ContainsKey(opna2WfInstrumentBufCache[0]))
-                    {
                         instOPNA2WF.Remove(opna2WfInstrumentBufCache[0]);
-                    }
                     instOPNA2WF.Add(opna2WfInstrumentBufCache[0], new Tuple<string, ushort[]>(instrumentName, opna2WfInstrumentBufCache));
 
                     opna2wfInstrumentCounter = -1;
@@ -1972,9 +1877,7 @@ namespace Core
                 if (opna2wfsInstrumentCounter == opna2WfsInstrumentBufCache.Length)
                 {
                     if (instOPNA2WFS.ContainsKey(opna2WfsInstrumentBufCache[0]))
-                    {
                         instOPNA2WFS.Remove(opna2WfsInstrumentBufCache[0]);
-                    }
                     instOPNA2WFS.Add(opna2WfsInstrumentBufCache[0], new Tuple<string, byte[]>(instrumentName, opna2WfsInstrumentBufCache));
 
                     opna2wfsInstrumentCounter = -1;
@@ -2567,6 +2470,48 @@ namespace Core
                         continue;
                     }
 
+                    if (c == 'P')
+                    {
+                        tp = enmMMLType.NoiseToneMixer;
+                        hc = -1;
+                        n = "";
+                        if (sin == 0 && lstBuf.Count == 1)//デフォルトコマンドの位置か
+                        {
+                            defTp = tp;
+
+                            dat = new MmlDatum();
+                            dat.type = enmMMLType.NoiseToneMixer;//.DefaultCommand;
+                            dat.args = new List<object>(new object[] { defTp });
+                            lstBuf.Add(dat);
+                        }
+                        continue;
+                    }
+
+                    if (c == 'w')
+                    {
+                        char nc = p < vals.Length ? vals[p] : '\0';
+                        if (nc == 'f')
+                        {
+                            ptr = p + 1;
+                            tp = enmMMLType.DCSGCh3Freq;
+                        }
+                        else
+                            tp = enmMMLType.Noise;
+
+                        hc = -1;
+                        n = "";
+                        if (sin == 0 && lstBuf.Count == 1)//デフォルトコマンドの位置か
+                        {
+                            defTp = tp;
+
+                            dat = new MmlDatum();
+                            dat.type = tp;//.DefaultCommand;
+                            dat.args = new List<object>(new object[] { defTp });
+                            lstBuf.Add(dat);
+                        }
+                        continue;
+                    }
+
                     if ((c >= '0' && c <= '9') || c == '-' || c == '+')
                     {
                         n = n + c.ToString();
@@ -2577,9 +2522,7 @@ namespace Core
                     if (!string.IsNullOrEmpty(n))
                     {
                         if (int.TryParse(n, out i))
-                        {
                             ivalue.Add(i);
-                        }
                         n = "";
                     }
                 }
@@ -2587,9 +2530,7 @@ namespace Core
                 if (!string.IsNullOrEmpty(n))
                 {
                     if (int.TryParse(n, out i))
-                    {
                         ivalue.Add(i);
-                    }
                     n = "";
                 }
 
@@ -2610,7 +2551,7 @@ namespace Core
                         }
                     }
 
-                    if (tp == enmMMLType.Pan)
+                    if (tp == enmMMLType.Pan || tp == enmMMLType.NoiseToneMixer || tp == enmMMLType.Noise || tp == enmMMLType.DCSGCh3Freq )
                     {
                         dat.args = new List<object>();
                         foreach (int j in ivalue)
@@ -2725,9 +2666,7 @@ namespace Core
 
             clsToneDoubler toneDoubler = new clsToneDoubler(num, lstTD);
             if (instToneDoubler.ContainsKey(num))
-            {
                 instToneDoubler.Remove(num);
-            }
             instToneDoubler.Add(num, toneDoubler);
             toneDoublerBufCache.Clear();
             toneDoublerCounter = -1;
@@ -2743,11 +2682,9 @@ namespace Core
                 {
                     buf = GetNums(Common.CutComment(line.Txt).IndexOf('S') + 1, Common.CutComment(line.Txt), ref name);
                     if (string.IsNullOrEmpty(instrumentName)) instrumentName = name;//音色名
-                    midiSysExCounter = buf[0] + 1;
+                        midiSysExCounter = buf[0] + 1;
                     if (midiSysEx.ContainsKey(buf[0]))
-                    {
                         midiSysEx.Remove(buf[0]);
-                    }
                     midiSysEx.Add(buf[0], new Tuple<string, byte[]>(instrumentName, buf.ToArray()));
                 }
                 else
@@ -2776,9 +2713,7 @@ namespace Core
                     buf = GetNumsIntForArp(Common.CutComment(txt).IndexOf("ARP") + 3, Common.CutComment(txt));
                     instArpCounter = buf[0].dat + 1;
                     if (instArp.ContainsKey(buf[0].dat))
-                    {
                         instArp.Remove(buf[0].dat);
-                    }
                     instArp.Add(buf[0].dat, buf.ToArray());
                 }
                 else
@@ -2807,9 +2742,7 @@ namespace Core
                     buf = GetNumsIntForVArp(Common.CutComment(txt).IndexOf("VAR") + 3, Common.CutComment(txt));
                     instVArpCounter = buf[0].dat + 1;
                     if (instVArp.ContainsKey(buf[0].dat))
-                    {
                         instVArp.Remove(buf[0].dat);
-                    }
                     instVArp.Add(buf[0].dat, buf.ToArray());
                 }
                 else
@@ -2838,15 +2771,17 @@ namespace Core
                     buf = GetNumsIntForCommandArp(Common.CutComment(txt).IndexOf("CAR") + 3, Common.CutComment(txt));
                     instCommandArpCounter = buf[0].dat + 1;
                     if (instCommandArp.ContainsKey(buf[0].dat))
-                    {
                         instCommandArp.Remove(buf[0].dat);
-                    }
                     instCommandArp.Add(buf[0].dat, buf.ToArray());
                 }
                 else
                 {
                     string txt = line.Txt;
-                    buf = GetNumsIntForCommandArp(Common.CutComment(txt).IndexOf('@') + 1, Common.CutComment(txt), 1, instCommandArp[instCommandArpCounter - 1][1].type);
+                    buf = GetNumsIntForCommandArp(
+                        Common.CutComment(txt).IndexOf('@') + 1
+                        , Common.CutComment(txt)
+                        , 1
+                        , instCommandArp[instCommandArpCounter - 1][1].type);
                     List<MmlDatum> ebuf = instCommandArp[instCommandArpCounter - 1].ToList();
                     ebuf.AddRange(buf);
                     instCommandArp.Remove(instCommandArpCounter - 1);
@@ -3041,9 +2976,7 @@ namespace Core
             //    dSample -= (long)(info.samplesPerClock * waitCounter);
             //}
             if (loopClock == -1)
-            {
                 AllKeyOffEnv();
-            }
 
             //ページのClockCounterを比較し最大のものをパートのclockCounterとする
             CompClockCounter();
@@ -3093,9 +3026,7 @@ namespace Core
                         foreach (partPage page in pw.pg)
                         {
                             if (page.envIndex != -1 || page.varpIndex != -1)
-                            {
                                 chip.SetKeyOff(page, null);
-                            }
                         }
                     }
                 }
@@ -3164,24 +3095,16 @@ namespace Core
                                 }
 
                                 if (pg.pcmWaitKeyOnCounter > 0)
-                                {
                                     pg.pcmWaitKeyOnCounter -= waitCounter;
-                                }
 
                                 if (pg.envelopeMode && pg.envIndex != -1)
-                                {
                                     pg.envCounter -= (int)waitCounter;
-                                }
 
                                 if (pg.arpeggioMode && pg.arpIndex != -1)
-                                {
                                     pg.arpCounter -= (int)waitCounter;
-                                }
 
                                 if (pg.varpeggioMode && pg.varpIndex != -1)
-                                {
                                     pg.varpCounter -= (int)waitCounter;
-                                }
 
                                 foreach (CommandArpeggio ca in pg.commandArpeggio.Values)
                                 {
@@ -3244,19 +3167,13 @@ namespace Core
 
                             //note
                             if (page.waitKeyOnCounter > 0)
-                            {
                                 waitCounter = Math.Min(waitCounter, page.waitKeyOnCounter);
-                            }
                             else if (page.waitCounter > 0)
-                            {
                                 waitCounter = Math.Min(waitCounter, page.waitCounter);
-                            }
 
                             //bend
                             if (page.bendWaitCounter != -1)
-                            {
                                 waitCounter = Math.Min(waitCounter, page.bendWaitCounter);
-                            }
 
                             //lfoとenvelopeは音長によるウエイトカウントが存在する場合のみ対象にする。(さもないと、曲のループ直前の効果を出せない)
                             if (waitCounter > 0)
@@ -3274,19 +3191,13 @@ namespace Core
 
                                     //envelope
                                     if (page.envelopeMode && page.envIndex != -1)
-                                    {
                                         waitCounter = Math.Min(waitCounter, page.envCounter);
-                                    }
 
                                     if (page.arpeggioMode && page.arpIndex != -1)
-                                    {
                                         waitCounter = Math.Min(waitCounter, page.arpCounter);
-                                    }
 
                                     if (page.varpeggioMode && page.varpIndex != -1)
-                                    {
                                         waitCounter = Math.Min(waitCounter, page.varpCounter);
-                                    }
 
                                     foreach (CommandArpeggio ca in page.commandArpeggio.Values)
                                     {
@@ -3300,9 +3211,7 @@ namespace Core
 
                             //pcm
                             if (page.pcmWaitKeyOnCounter > 0)
-                            {
                                 waitCounter = Math.Min(waitCounter, page.pcmWaitKeyOnCounter);
-                            }
 
                             //MIDINoteOns
                             for (int i = 0; i < page.noteOns.Length; i++)
@@ -3429,9 +3338,7 @@ namespace Core
             }
 
             if (pg.noteCmd != 0)
-            {
                 pg.chip.SetVolume(pg, null);
-            }
 
             if (isRealTimeMode) return;
 
@@ -3869,13 +3776,9 @@ namespace Core
                 Common.SetLE32(dat, 0x9c, (uint)k.Frequency | (uint)(useK051649_S == 0 ? 0 : 0x40000000));
             }
             if (info.Version >= 1.61f && useQSound != 0)
-            {
                 Common.SetLE32(dat, 0xb4, (uint)qsound[0].Frequency);
-            }
             if (info.Version >= 1.61f && useK053260 != 0)
-            {
                 Common.SetLE32(dat, 0xac, (uint)k053260[0].Frequency);
-            }
 
             //if (info.Version == 1.51f)
             //{
@@ -4019,10 +3922,7 @@ namespace Core
 
                 log.Write("全パートのwaitcounterを減らす");
                 if (waitCounter != long.MaxValue && endChannel < totalChannel)
-                {
-                    //wait処理
                     Xgm_procWait(waitCounter);
-                }
 
             } while (endChannel < totalChannel && !compileEnd);//全てのチャンネルが終了していない場合はループする
             //if (loopClock != -1)
@@ -4034,9 +3934,7 @@ namespace Core
             //    }
             //}
             if (loopClock == -1)
-            {
                 AllKeyOffEnv();
-            }
 
             //ページのClockCounterを比較し最大のものをパートのclockCounterとする
             CompClockCounter();
@@ -4461,9 +4359,7 @@ namespace Core
                         }
 
                         if (des.Count - frameDummyCounter - framePtr > 256)
-                        {
-                            msgBox.setWrnMsg(string.Format(msg.get("E01015"), frameCnt, des.Count - frameDummyCounter - framePtr), new LinePos(null,"-"));
-                        }
+                            msgBox.setWrnMsg(string.Format(msg.get("E01015"), frameCnt, des.Count - frameDummyCounter - framePtr), new LinePos(null, "-"));
                         framePtr = des.Count;
                         frameDummyCounter = 0;
 
@@ -4494,9 +4390,7 @@ namespace Core
                             else
                             {
                                 if (psgch != -1)
-                                {
                                     psgreg[psgch * 4 + 1 + psgtp] = new outDatum(src[ptr + 1].type, src[ptr + 1].args, src[ptr + 1].linePos, (byte)d2);
-                                }
                                 psgch = -1;
                             }
                             ptr += 2;
@@ -4950,9 +4844,7 @@ namespace Core
             }
 
             if (page.envIndex == -1)
-            {
                 page.chip.SetKeyOff(page, null);
-            }
         }
 
 
@@ -5024,9 +4916,7 @@ namespace Core
                         //keyOn のlengthを求める
                         int w = page.arpClock;
                         if (page.arpGatetimePmode)
-                        {
                             w = page.arpClock * page.arpGatetime / 8;
-                        }
                         else
                         {
                             w = page.arpClock - page.arpGatetime;
@@ -5057,9 +4947,7 @@ namespace Core
                         if (!page.arpTieMode)
                         {
                             if (!page.envelopeMode && !page.varpeggioMode)
-                            {
                                 page.chip.SetKeyOff(page, null);
-                            }
                             else
                             {
                                 if (!page.envelopeMode) //エンベロープ無しの場合
@@ -5115,9 +5003,7 @@ namespace Core
             }
 
             if (page.arpIndex == -1 && page.varpIndex == -1)
-            {
                 page.chip.SetKeyOff(page, null);
-            }
         }
 
         private void ProcVArpeggio(partPage page)
@@ -5171,9 +5057,7 @@ namespace Core
                                 }
 
                                 if (delta.dat != 0)
-                                {
-                                    page.varpDelta = 0;//
-                                }
+                                    page.varpDelta = 0;
                             }
                             else
                             {
@@ -5214,9 +5098,7 @@ namespace Core
                         if (lp != page.varpLoopPtr)//既存のループポイントと異なるループポイントが見つかった(2個目のループポイントが見つかった)
                         {
                             if (instVArp[page.varpInstrument][lp - 1].dat != 0)//ループポイントが「/」の場合はリセット
-                            {
-                                page.varpDelta = 0;// 「/」の場合は変化量リセット
-                            }
+                                page.varpDelta = 0;
 
                             page.varpInstrumentPtr = lp;
                             page.varpLoopPtr = lp;
@@ -5320,9 +5202,7 @@ namespace Core
                             mml.line = new Line(md.linePos, "");
                             page.chip.CmdInstrument(page, mml);
                             if (page.chip.chipType == enmChipType.HuC6280)
-                            {
                                 page.chip.SetKeyOn(page, mml);
-                            }
                             break;
 
                         case enmMMLType.Pan:
@@ -5332,6 +5212,33 @@ namespace Core
                             mml.type = md.type;
                             mml.line = new Line(md.linePos, "");
                             page.chip.CmdPan(page, mml);
+                            break;
+
+                        case enmMMLType.NoiseToneMixer:
+                            ca.WaitCounter = ca.WaitClock;
+                            mml = new MML();
+                            mml.args = md.args;
+                            mml.type = md.type;
+                            mml.line = new Line(md.linePos, "");
+                            page.chip.CmdNoiseToneMixer(page, mml);
+                            break;
+
+                        case enmMMLType.Noise:
+                            ca.WaitCounter = ca.WaitClock;
+                            mml = new MML();
+                            mml.args = md.args;
+                            mml.type = md.type;
+                            mml.line = new Line(md.linePos, "");
+                            page.chip.CmdNoise(page, mml);
+                            break;
+
+                        case enmMMLType.DCSGCh3Freq:
+                            ca.WaitCounter = ca.WaitClock;
+                            mml = new MML();
+                            mml.args = md.args;
+                            mml.type = md.type;
+                            mml.line = new Line(md.linePos, "");
+                            page.chip.CmdDCSGCh3Freq(page, mml);
                             break;
                     }
 
@@ -5358,9 +5265,7 @@ namespace Core
                     page.enableInterrupt = true;
                     page.waitCounter = -1;
                     if ((string)mml.args[0] != "partEnd")
-                    {
-                        compileEnd=true;
-                    }
+                        compileEnd = true;
                     break;
                 case enmMMLType.Tempo:
                     log.Write("Tempo");
@@ -5889,19 +5794,7 @@ namespace Core
                         od.type = mml.type;
                         od.args = mml.args;
                         if (mml.line != null && mml.line.Lp != null)
-                        {
-                            od.linePos = new LinePos(
-                                mml.line.Lp.document,
-                                mml.line.Lp.srcMMLID,
-                                mml.line.Lp.row,
-                                mml.line.Lp.col,
-                                mml.line.Lp.length,
-                                mml.line.Lp.part,
-                                mml.line.Lp.chip,
-                                mml.line.Lp.chipIndex,
-                                mml.line.Lp.chipNumber,
-                                mml.line.Lp.ch);
-                        }
+                            od.linePos = new LinePos(mml.line.Lp.document, mml.line.Lp.srcMMLID, mml.line.Lp.row, mml.line.Lp.col, mml.line.Lp.length, mml.line.Lp.part, mml.line.Lp.chip, mml.line.Lp.chipIndex, mml.line.Lp.chipNumber, mml.line.Lp.ch);
                     }
                     dat.Add(od);
 
@@ -5918,19 +5811,7 @@ namespace Core
                     od.type = mml.type;
                     od.args = mml.args;
                     if (mml.line != null && mml.line.Lp != null)
-                    {
-                        od.linePos = new LinePos(
-                            mml.line.Lp.document,
-                            mml.line.Lp.srcMMLID,
-                            mml.line.Lp.row,
-                            mml.line.Lp.col,
-                            mml.line.Lp.length,
-                            mml.line.Lp.part,
-                            mml.line.Lp.chip,
-                            mml.line.Lp.chipIndex,
-                            mml.line.Lp.chipNumber,
-                            mml.line.Lp.ch);
-                    }
+                        od.linePos = new LinePos(mml.line.Lp.document, mml.line.Lp.srcMMLID, mml.line.Lp.row, mml.line.Lp.col, mml.line.Lp.length, mml.line.Lp.part, mml.line.Lp.chip, mml.line.Lp.chipIndex, mml.line.Lp.chipNumber, mml.line.Lp.ch);
                 }
                 dat.Add(od);
                 //Console.Write("{0:x02} :", d);
@@ -5951,19 +5832,7 @@ namespace Core
                     {
                         o.type = od.type;
                         if (od.linePos != null)
-                        {
-                            o.linePos = new LinePos(
-                                od.linePos.document,
-                                od.linePos.srcMMLID,
-                                od.linePos.row,
-                                od.linePos.col,
-                                od.linePos.length,
-                                od.linePos.part,
-                                od.linePos.chip,
-                                od.linePos.chipIndex,
-                                od.linePos.chipNumber,
-                                od.linePos.ch);
-                        }
+                            o.linePos = new LinePos(od.linePos.document, od.linePos.srcMMLID, od.linePos.row, od.linePos.col, od.linePos.length, od.linePos.part, od.linePos.chip, od.linePos.chipIndex, od.linePos.chipNumber, od.linePos.ch);
                     }
                     dat.Add(o);
                     //Console.Write("{0:x02} :", d);
@@ -5977,19 +5846,7 @@ namespace Core
                 {
                     o.type = od.type;
                     if (od.linePos != null)
-                    {
-                        o.linePos = new LinePos(
-                            od.linePos.document,
-                            od.linePos.srcMMLID,
-                            od.linePos.row,
-                            od.linePos.col,
-                            od.linePos.length,
-                            od.linePos.part,
-                            od.linePos.chip,
-                            od.linePos.chipIndex,
-                            od.linePos.chipNumber,
-                            od.linePos.ch);
-                    }
+                        o.linePos = new LinePos(od.linePos.document, od.linePos.srcMMLID, od.linePos.row, od.linePos.col, od.linePos.length, od.linePos.part, od.linePos.chip, od.linePos.chipIndex, od.linePos.chipNumber, od.linePos.ch);
                 }
                 dat.Add(o);
                 //Console.Write("{0:x02} :", d);

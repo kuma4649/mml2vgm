@@ -1201,7 +1201,7 @@ namespace Core
                         msgBox.setErrMsg(msg.get("E10042"), mml.line.Lp);
                         page.commandArpeggio[n1].Sw = false;
                     }
-                    if (parent.instCommandArp[n1].Length < 3)
+                    if (parent.instCommandArp[page.commandArpeggio[n1].Num].Length < 3)
                     {
                         //ARPの定義がない場合はエラー
                         msgBox.setErrMsg(msg.get("E10042"), mml.line.Lp);

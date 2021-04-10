@@ -1,4 +1,8 @@
 更新履歴
+TAG394 2021/04/10
+  Core:OPN:AY:SSG/PSG:CARコマンド内のw,Pコマンド対応
+  DCSG/OPM/HuCは今後対応予定
+
 TAG393 2021/04/09
   Core:vgm:IDE:OPX:FMだけ大体対応
 
