@@ -33,8 +33,30 @@ ST = ボリュームの変化量
 S1 D0 v15 o4 l8 q0 v1cv2dv3ev4fv5ev6dv7crv8ev9fv10gv11av12gv13fv14e
 S2 D1 v15 o4 l8 q0 v1cv2dv3ev4fv5ev6dv7crv8ev9fv10gv11av12gv13fv14e
 
-'S1 D0
-'S2 D1
-'S1 [cd/e]3f
+S1 D0
+S2 D1
+S1 [cd/e]3f
 
 S12 v15 EON @0 o4 l8 Q7 v15cdefedcrefgagferv2crv6crv10crv14crv15l16ccddeeffl8edcr EOF cdefedcr
+
+       No Cmd Sync   data...
+'@ CAR  1,  w,   0,
+'@                   #96,0,1,2,3,4,5,6,7 ; 複数行定義可能
+'@ CAR  2,  wf,  0,
+'@                   #1 , 0, 1, 2, 3, 4, 5, 6, 7, 8, 9
+'@                      ,10,11,12,13,14,15,16,17,18,19
+'@                      ,20,21,22,23,24,25,26,27,28,29 ; 複数行定義可能
+
+'S4 v12wf1
+'S4 CA0,1         ;slot0 にCAR番号1を割り当て、アルペジオを有効にする
+'S4 CAON0         ;slot0を有効にする。(CA0,1の時点で有効になっているので、無くても構わない。)
+'S4 l8c1^1^1^1 r1 ;slot0のコマンドアルペジオによる効果を得られる
+'S4 CAOF0         ;slot0を無効にする
+
+'S4 l2 w0cw1cw2cw3cw4cw5cw6cw7cr1 ; コマンドアルペジオ未使用
+
+'S4 v12w7
+'S4 CA1,2         ;slot1 にCAR番号1を割り当て、アルペジオを有効にする
+'S4 l8cccc        ;slot1のコマンドアルペジオによる効果を得られる
+
+

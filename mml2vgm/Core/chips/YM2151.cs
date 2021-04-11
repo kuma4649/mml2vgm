@@ -77,6 +77,8 @@ namespace Core
                 page.port = port;
                 page.mixer = 0;
                 page.noise = 0;
+                page.beforeMixer = -1;
+                page.beforeNoise = -1;
             }
         }
 
@@ -1058,6 +1060,13 @@ namespace Core
                 {
                     page.keyOn = false;
                     OutKeyOn(mml, page);
+                }
+
+                if (page.ch == 7 && (page.beforeNoise != page.noise|| page.beforeMixer != page.mixer))
+                {
+                    page.beforeNoise = page.noise;
+                    page.beforeMixer = page.mixer;
+                    SOutData(page, mml, port[0], 0x0f, (byte)((page.mixer << 7) | (page.noise & 0x1f)));
                 }
 
             }

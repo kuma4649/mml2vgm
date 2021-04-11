@@ -1,4 +1,9 @@
 更新履歴
+TAG395 2021/04/11
+  Core:CAR:一度オフにしたCARコマンドは2度目以降からONに出来なくなっていたのを修正
+  Core:DCSG:OPM:HuC:CARコマンド内のw,Pコマンド対応
+  (C352は普通のアルペジオで足りそうなので未対応)
+
 TAG394 2021/04/10
   Core:OPN:AY:SSG/PSG:CARコマンド内のw,Pコマンド対応
   DCSG/OPM/HuCは今後対応予定

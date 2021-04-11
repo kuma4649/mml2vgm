@@ -29,6 +29,14 @@ lead synthっぽいなにか
 '@ var 0,0,#5,0,|,-1,/,#1,-1,-1,-1,-1,-1,-1
 '@ e 1,14,0,5,8,1,1,1,Ay3
 
-'A1 T120 v14 l1 AP0 VP0 o4 c VPOF @E1 c1 EOF
+'A1 T120 v14 l1 AP0 VP0 o4 c VPOF @E1 c1 EOF APOF
 
+
+       No Cmd Sync   data...
+'@ CAR  1,  w,   0,
+'@                   #1,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20 ; 複数行定義可能
+
+'A1 CA0,1
+'A1 v12CAON0
+'A1 l8P2rcccc cccc r1 CAOF0
 

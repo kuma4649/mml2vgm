@@ -2489,7 +2489,7 @@ namespace Core
 
                     if (c == 'w')
                     {
-                        char nc = p < vals.Length ? vals[p] : '\0';
+                        char nc = (p + 1) < vals.Length ? vals[p + 1] : '\0';
                         if (nc == 'f')
                         {
                             ptr = p + 1;

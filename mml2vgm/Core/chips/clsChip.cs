@@ -781,7 +781,7 @@ namespace Core
                     || parent.instCommandArp[ca.Num].Length < 2
                     )
                 {
-                    ca.Num = -1;
+                    //ca.Num = -1;
                     continue;
                 }
 
@@ -1223,8 +1223,6 @@ namespace Core
                     if (page.commandArpeggio[n1].Sync != 0) page.commandArpeggio[n1].Ptr = -1;
                     break;
                 case "CA":
-                    page.commandArpeggio[n1].Sw = true;
-                    int n2 = (int)mml.args[2];
                     if (!(mml.args[2] is int))
                     {
                         //数値指定ではない場合はエラー
@@ -1232,6 +1230,8 @@ namespace Core
                         page.commandArpeggio[n1].Sw = false;
                         return;
                     }
+                    page.commandArpeggio[n1].Sw = true;
+                    int n2 = (int)mml.args[2];
 
                     if (!parent.instCommandArp.ContainsKey(n2))
                     {
