@@ -260,6 +260,7 @@ namespace Core
             //if (!page.keyOn) volume = 0;
             byte data = (byte)((volume != 0 ? 0x80 : 0) + (volume & 0x1f));
             if (page.pcm) data |= 0x40;
+            //Console.WriteLine("{0}",data);
             OutHuC6280Port(page, mml, port[0], 4, data);
             //page.huc6280Envelope = volume;
             //}
@@ -301,7 +302,7 @@ namespace Core
 
         public void OutHuC6280Port(partPage page, MML mml, byte[] cmd, byte adr, byte data)
         {
-            //Console.WriteLine("{0:X} {1:X}",adr,data);
+            //if(adr==4) Console.WriteLine("W {0:X} {1:X}",adr,data);
             SOutData(
                 page,
                 mml,
@@ -332,17 +333,8 @@ namespace Core
         public void OutHuC6280KeyOn(MML mml, partPage page)
         {
             page.keyOff = false;
-            int vol = page.volume;
-            if (page.envelopeMode)
-            {
-                vol = 0;
-                if (page.envIndex != -1)
-                {
-                    vol = page.envVolume - (31 - page.volume);
-                }
-            }
-            if (vol > 31) vol = 31;
-            if (vol < 0) vol = 0;
+
+            int vol = makeVolume(page);
             byte data = (byte)(((vol > 0) ? 0x80 : 0x00) + vol);
 
             if (!page.pcm)
@@ -494,6 +486,52 @@ namespace Core
 
         }
 
+        private static int makeVolume(partPage page )
+        {
+            int vol = 0;
+            if (page.envelopeMode)
+            {
+                if (page.envIndex != -1)
+                {
+                    vol = page.volume;
+                }
+            }
+            else
+            {
+                //if (pw.ppg[pw.cpgNum].keyOn)//ストリーム処理のbug?
+                vol = page.volume;
+            }
+
+            if (page.envelopeMode)
+            {
+                vol = 0;
+                if (page.envIndex != -1)
+                {
+                    vol = page.envVolume - (31 - page.volume);
+                }
+            }
+
+            for (int lfo = 0; lfo < 4; lfo++)
+            {
+                if (!page.lfo[lfo].sw)
+                {
+                    continue;
+                }
+                if (page.lfo[lfo].type != eLfoType.Tremolo)
+                {
+                    continue;
+                }
+                vol += page.lfo[lfo].value + page.lfo[lfo].param[6];
+            }
+
+            if (page.varpeggioMode)
+            {
+                vol += page.varpDelta;
+            }
+            vol = Common.CheckRange(vol, 0, 31);
+            return vol;
+        }
+
         public void OutHuC6280KeyOff(MML mml, partPage page)
         {
             if (!page.envelopeMode && !page.varpeggioMode) page.keyOff = true;
@@ -562,49 +600,7 @@ namespace Core
 
         public override void SetVolume(partPage page, MML mml)
         {
-            int vol = 0;
-            if (page.envelopeMode)
-            {
-                if (page.envIndex != -1)
-                {
-                    vol = page.volume;
-                }
-            }
-            else
-            {
-                //if (pw.ppg[pw.cpgNum].keyOn)//ストリーム処理のbug?
-                vol = page.volume;
-            }
-
-            if (page.envelopeMode)
-            {
-                vol = 0;
-                if (page.envIndex != -1)
-                {
-                    vol = page.envVolume - (31 - page.volume);
-                }
-            }
-
-            for (int lfo = 0; lfo < 4; lfo++)
-            {
-                if (!page.lfo[lfo].sw)
-                {
-                    continue;
-                }
-                if (page.lfo[lfo].type != eLfoType.Tremolo)
-                {
-                    continue;
-                }
-                vol += page.lfo[lfo].value + page.lfo[lfo].param[6];
-            }
-
-            if (page.varpeggioMode)
-            {
-                vol += page.varpDelta;
-            }
-
-            vol = Common.CheckRange(vol, 0, 31);
-            page.beforeVolume = vol;
+            page.beforeVolume = makeVolume(page);
         }
 
         public void OutHuC6280Volume(partPage page, MML mml)
