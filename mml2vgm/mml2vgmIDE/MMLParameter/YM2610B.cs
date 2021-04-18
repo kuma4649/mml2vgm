@@ -21,6 +21,7 @@ namespace mml2vgmIDE.MMLParameter
         {
             if (od.linePos.part == "SSG")
             {
+                if (od.linePos.ch >= envelope.Length) return;
                 envelope[od.linePos.ch] = ((int)od.args[1]).ToString();
             }
             else

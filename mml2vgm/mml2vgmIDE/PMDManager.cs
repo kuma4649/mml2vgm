@@ -224,12 +224,17 @@ namespace mml2vgmIDE
             };
 
             string[] addtionalPMDOption = GetPMDOption();
+            List<ChipAction> lca = new List<ChipAction>();
+            PMDChipAction ca = new PMDChipAction(oPNAWrite, oPNAWaitSend);
+            lca.Add(ca);
 
             driver.Init(
-                fileName
-                , oPNAWrite
-                , oPNAWaitSend
+                lca
+                //fileName
+                //, oPNAWrite
+                //, oPNAWaitSend
                 , mBuf
+                , null//ここのコールバックは未使用
                 , new object[] {
                       addtionalPMDDotNETOption //PMDDotNET option 
                     , addtionalPMDOption // PMD option
@@ -254,6 +259,37 @@ namespace mml2vgmIDE
 
         }
 
+        public class PMDChipAction : ChipAction
+        {
+            private Action<ChipDatum> oPNAWrite;
+            private Action<long, int> oPNAWaitSend;
+
+            public PMDChipAction(Action<ChipDatum> oPNAWrite, Action<long, int> oPNAWaitSend)
+            {
+                this.oPNAWrite = oPNAWrite;
+                this.oPNAWaitSend = oPNAWaitSend;
+            }
+
+            public override string GetChipName()
+            {
+                throw new NotImplementedException();
+            }
+
+            public override void WaitSend(long t1, int t2)
+            {
+                oPNAWaitSend(t1, t2);
+            }
+
+            public override void WritePCMData(byte[] data, int startAddress, int endAddress)
+            {
+                throw new NotImplementedException();
+            }
+
+            public override void WriteRegister(ChipDatum cd)
+            {
+                oPNAWrite(cd);
+            }
+        }
 
         private string[] GetPMDOption()
         {

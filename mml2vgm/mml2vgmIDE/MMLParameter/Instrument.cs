@@ -118,7 +118,7 @@ namespace mml2vgmIDE.MMLParameter
                 if (ch < TraceInfo.Length) TraceInfo[ch].Enqueue(od);
             }
 
-            Console.WriteLine("{0}",od.type);
+            //Console.WriteLine("{0}",od.type);
             SetParam[(int)od.type]?.Invoke(od, ch, cc);
         }
 
@@ -136,6 +136,8 @@ namespace mml2vgmIDE.MMLParameter
 
         protected virtual void SetInstrument(outDatum od, int ch, int cc)
         {
+            if (od.linePos.ch >= inst.Length) return;
+
             if (setting.MMLParameter.dispInstrumentName
                 && od.args.Count == 3
                 && (od.args[2] != null
@@ -149,28 +151,35 @@ namespace mml2vgmIDE.MMLParameter
 
         protected virtual void SetVolume(outDatum od, int ch, int cc)
         {
+            if (ch >= vol.Length) return;
+
             if (od.linePos != null)
                 vol[ch] = (int)od.args[0];
         }
 
         protected virtual void SetTotalVolume(outDatum od, int ch, int cc)
         {
+            if (ch >= vol.Length) return;
+
             if (od.linePos != null)
                 vol[ch] = (int)od.args[0];
         }
 
         protected virtual void SetOctave(outDatum od, int ch, int cc)
         {
+            if (ch >= octave.Length) return;
             octave[ch] = (int)od.args[0];
         }
 
         protected virtual void SetOctaveUp(outDatum od, int ch, int cc)
         {
+            if (ch >= octave.Length) return;
             octave[ch]++;
         }
 
         protected virtual void SetOctaveDown(outDatum od, int ch, int cc)
         {
+            if (ch >= octave.Length) return;
             octave[ch]--;
         }
 
@@ -178,16 +187,19 @@ namespace mml2vgmIDE.MMLParameter
 
         protected virtual void SetLength(outDatum od, int ch, int cc)
         {
+            if (od.linePos.ch >= length.Length) return;
             length[od.linePos.ch] = od.args[0].ToString();
         }
 
         protected virtual void SetPan(outDatum od, int ch, int cc)
         {
+            if (od.linePos.ch >= pan.Length) return;
             pan[od.linePos.ch] = string.Format("L{0} R{1}", (int)od.args[0], (int)od.args[1]);
         }
 
         protected virtual void SetDetune(outDatum od, int ch, int cc)
         {
+            if (ch >= detune.Length) return;
             int n = (int)od.args[0];
             detune[ch] = n;
         }
@@ -204,6 +216,7 @@ namespace mml2vgmIDE.MMLParameter
 
         protected virtual void SetEnvelope(outDatum od, int ch, int cc)
         {
+            if (ch >= envSw.Length) return;
             string s = (string)od.args[0];
             envSw[ch] = s == "EON" ? "ON " : "OFF";
         }
@@ -216,24 +229,30 @@ namespace mml2vgmIDE.MMLParameter
 
         protected virtual void SetLfoSwitch(outDatum od, int ch, int cc)
         {
+            if (ch >= lfoSw.Length) return;
             string s = (string)od.args[2];
             lfoSw[ch] = s;
         }
 
         protected virtual void SetKeyShift(outDatum od, int ch, int cc)
         {
+            if (ch >= keyShift.Length) return;
             int n = (int)od.args[0];
             keyShift[ch] = n;
         }
 
         protected virtual void SetMIDICh(outDatum od, int ch, int cc)
         {
+            if (ch >= MIDIch.Length) return;
             int n = (int)od.args[0];
             MIDIch[od.linePos.ch] = n + 1;
         }
 
         protected virtual void SetNote(outDatum od, int ch, int cc)
         {
+            if (ch >= notecmd.Length) return;
+            if (!(od.args[0] is Core.Note)) return;
+
             Core.Note nt = (Core.Note)od.args[0];
             int shift = nt.shift;
             string f = Math.Sign(shift) >= 0 ? string.Concat(Enumerable.Repeat("+", shift)) : string.Concat(Enumerable.Repeat("-", -shift));
@@ -257,6 +276,9 @@ namespace mml2vgmIDE.MMLParameter
 
         protected virtual void SetRest(outDatum od, int ch, int cc)
         {
+            if (ch >= notecmd.Length) return;
+            if (!(od.args[0] is Core.Rest)) return;
+
             Core.Rest rs = (Core.Rest)od.args[0];
             notecmd[ch] = "r";
             length[ch] = string.Format("{0:0.##}(#{1:d})", 1.0 * cc / rs.length, rs.length);
@@ -270,6 +292,8 @@ namespace mml2vgmIDE.MMLParameter
 
         protected virtual void SetVelocity(outDatum od, int ch, int cc)
         {
+            if (od.linePos.ch >= velocity.Length) return;
+
             if (od.linePos != null)
                 velocity[od.linePos.ch] = (int)od.args[0];
         }
@@ -278,6 +302,8 @@ namespace mml2vgmIDE.MMLParameter
 
         protected virtual void SetClockCounter(outDatum od, int ch, int cc)
         {
+            if (ch >= clockCounter.Length) return;
+
             clockCounter[ch] = (int)od.args[0];
         }
 

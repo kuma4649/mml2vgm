@@ -182,7 +182,7 @@ namespace mml2vgmIDE.MMLParameter
                         SetupPPZ8(od);
                         break;
                     default:
-                        Console.WriteLine("{0}", od.linePos.chip);
+                        Console.WriteLine("Warning Unknown Chip {0}", od.linePos.chip);
                         break;
                 }
             }

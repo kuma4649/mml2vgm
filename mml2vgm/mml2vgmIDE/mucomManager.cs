@@ -1,5 +1,6 @@
 ﻿using musicDriverInterface;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Text;
@@ -72,23 +73,69 @@ namespace mml2vgmIDE
 
         public void InitDriver(
             string fileName
-            , Action<ChipDatum> oPNAWrite
+            , List<Action<ChipDatum>> oPNAWrite
+            , List<Action<byte[],int,int>> WritePCMData
             , Action<long, int> oPNAWaitSend
             , bool notSoundBoard2
             , musicDriverInterface.MmlDatum[] mubBuf
             , bool isLoadADPCM
             , bool loadADPCMOnly)
         {
+            List<ChipAction> lca = new List<ChipAction>();
+            mucomChipAction ca;
+            ca = new mucomChipAction(oPNAWrite[0], null, oPNAWaitSend); lca.Add(ca);
+            ca = new mucomChipAction(oPNAWrite[1], null, null); lca.Add(ca);
+            ca = new mucomChipAction(oPNAWrite[2], WritePCMData[2], null); lca.Add(ca);
+            ca = new mucomChipAction(oPNAWrite[3], WritePCMData[3], null); lca.Add(ca);
+
             driver.Init(
-                fileName
-                , oPNAWrite
-                , oPNAWaitSend
+                lca
+                //fileName
+                //, oPNAWrite
+                //, WritePCMData
+                //, oPNAWaitSend
                 , mubBuf
+                , null
                 , new object[] {
                       notSoundBoard2
                     , isLoadADPCM
                     , loadADPCMOnly
+                    , fileName
                 });
+        }
+
+        public class mucomChipAction : ChipAction
+        {
+            private Action<ChipDatum> _Write;
+            private Action<byte[], int, int> _WritePCMData;
+            private Action<long, int> _WaitSend;
+
+            public mucomChipAction(Action<ChipDatum> Write, Action<byte[], int, int> WritePCMData, Action<long, int> WaitSend)
+            {
+                _Write = Write;
+                _WritePCMData = WritePCMData;
+                _WaitSend = WaitSend;
+            }
+
+            public override string GetChipName()
+            {
+                throw new NotImplementedException();
+            }
+
+            public override void WaitSend(long t1, int t2)
+            {
+                _WaitSend?.Invoke(t1, t2);
+            }
+
+            public override void WritePCMData(byte[] data, int startAddress, int endAddress)
+            {
+                _WritePCMData?.Invoke(data, startAddress, endAddress);
+            }
+
+            public override void WriteRegister(ChipDatum cd)
+            {
+                _Write?.Invoke(cd);
+            }
         }
 
         public void MSTART(int v)

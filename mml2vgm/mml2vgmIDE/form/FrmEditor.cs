@@ -131,7 +131,7 @@ namespace mml2vgmIDE
         {
             Sgry.Azuki.Highlighter.KeywordHighlighter keywordHighlighter = new Sgry.Azuki.Highlighter.KeywordHighlighter();
             //keywordHighlighter.AddRegex("^.*", false, CharClass.DocComment);
-            keywordHighlighter.AddRegex("^[A-Z0-9]+[ |\\t]", CharClass.Keyword);//パート部
+            keywordHighlighter.AddRegex("^[A-Za-z0-9]+[ |\\t]", CharClass.Keyword);//パート部
             keywordHighlighter.AddRegex("^#[A-Za-z0-9]*[ |\\t]", CharClass.Keyword);
             keywordHighlighter.AddRegex("^#\\S*\\*", CharClass.Keyword);
             keywordHighlighter.AddRegex("^'@", CharClass.Keyword);

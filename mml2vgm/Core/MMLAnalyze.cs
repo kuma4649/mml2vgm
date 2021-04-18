@@ -145,16 +145,16 @@ namespace Core
                     if ((page.pos.alies.Length < 1 ? 0 : page.pos.alies[0].aliesDepth) > page.oldAlies.aliesDepth)
                     {
                         n = page.pos.alies[0].aliesDepth - page.oldAlies.aliesDepth;
-                        Console.WriteLine("Push {0} times", n);
+                        //Console.WriteLine("Push {0} times", n);
                     }
                     else if ((page.pos.alies.Length < 1 ? 0 : page.pos.alies[0].aliesDepth) == page.oldAlies.aliesDepth)
                     {
-                        Console.WriteLine("Pop and Push");
+                        //Console.WriteLine("Pop and Push");
                     }
                     else
                     {
                         n = page.oldAlies.aliesDepth - (page.pos.alies.Length < 1 ? 0 : page.pos.alies[0].aliesDepth);
-                        Console.WriteLine("Pop {0} times", n);
+                        //Console.WriteLine("Pop {0} times", n);
                     }
                 }
 #endif

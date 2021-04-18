@@ -5718,7 +5718,7 @@ namespace mml2vgmIDE
                 {
                     if (ctYM2608[Chip.Number]==null ||(!ctYM2608[Chip.Number].UseScci && ctYM2608[Chip.Number].UseEmu))
                     {
-                        //Console.WriteLine("FM P{2} Out:Adr[{0:x02}] val[{1:x02}]", (byte)address, (byte)data, (byte)(address >> 8));
+                        //log.Write(string.Format("FM P{2} Out:Adr[{0:x02}] val[{1:x02}]", (byte)address, (byte)data, (byte)(address >> 8)));
                         mds.WriteYM2608(Chip.Index, (byte)Chip.Number, (byte)(address >> 8), (byte)address, (byte)data);
                     }
                     else if (ctYM2610[Chip.Number].OnlyPCMEmulation)
@@ -6456,6 +6456,12 @@ namespace mml2vgmIDE
                 }
             }
         }
+
+        public void YM2610SetRegister(outDatum od, long Counter, Chip chip, byte[] data,bool isA)
+        {
+            enq(od, Counter, chip, EnmDataType.Block, -1, isA ? -1 : -2, data);
+        }
+
 
         public void YM2610SetRegisterProcessing(ref long Counter, ref Chip Chip, ref EnmDataType Type, ref int Address, ref int dData, ref object ExData)
         {

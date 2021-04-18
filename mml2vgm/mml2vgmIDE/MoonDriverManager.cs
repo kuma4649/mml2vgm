@@ -182,19 +182,53 @@ namespace mml2vgmIDE
 
             object[] addOp = new object[]{
                 fileName,
-                (Func<string, Stream>)appendFileReaderCallback,
+                //(Func<string, Stream>)appendFileReaderCallback,
                 (double)Common.SampleRate,
                 jumpIndex
             };
 
+            List<ChipAction> lca = new List<ChipAction>();
+            MoonDriverChipAction ca = new MoonDriverChipAction(OPL4Write);lca.Add(ca);
             driver.Init(
-                fileName
-                , OPL4Write
-                , OPL4WaitSend
+                //fileName
+                //, OPL4Write
+                lca
                 , mdrBuf
+                , appendFileReaderCallback
+                //,OPL4WaitSend
                 , addOp
             );
 
+        }
+
+        public class MoonDriverChipAction : ChipAction
+        {
+            private Action<ChipDatum> oPL4Write;
+
+            public MoonDriverChipAction(Action<ChipDatum> oPL4Write)
+            {
+                this.oPL4Write = oPL4Write;
+            }
+
+            public override string GetChipName()
+            {
+                throw new NotImplementedException();
+            }
+
+            public override void WaitSend(long t1, int t2)
+            {
+                throw new NotImplementedException();
+            }
+
+            public override void WritePCMData(byte[] data, int startAddress, int endAddress)
+            {
+                throw new NotImplementedException();
+            }
+
+            public override void WriteRegister(ChipDatum cd)
+            {
+                oPL4Write?.Invoke(cd);
+            }
         }
 
         public void MSTART(int v)

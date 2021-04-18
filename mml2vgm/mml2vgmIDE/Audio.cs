@@ -4185,29 +4185,81 @@ namespace mml2vgmIDE
 
                 MasterVolume = setting.balance.MasterVolume;
 
-                chip = new MDSound.MDSound.Chip();
-                chip.ID = (byte)0;
-                MDSound.ym2608 ym2608 = null;
-
-                if (setting.YM2608Type.UseEmu)
+                MDSound.ym2608 ym2608 = new MDSound.ym2608();
+                for (int i = 0; i < 2; i++)
                 {
-                    if (ym2608 == null) ym2608 = new ym2608();
+                    chip = new MDSound.MDSound.Chip();
                     chip.type = MDSound.MDSound.enmInstrumentType.YM2608;
+                    chip.ID = (byte)i;
                     chip.Instrument = ym2608;
                     chip.Update = ym2608.Update;
                     chip.Start = ym2608.Start;
                     chip.Stop = ym2608.Stop;
                     chip.Reset = ym2608.Reset;
+                    chip.SamplingRate = 55467;// (UInt32)Common.SampleRate;
+                    chip.Volume = setting.balance.YM2608Volume;
+                    chip.Clock = mubDriver.YM2608ClockValue;
+                    chip.Option = new object[] { Common.GetApplicationFolder() };
+                    //hiyorimiDeviceFlag |= 0x2;
+
+                    if (i == 0)
+                    {
+                        chipLED.PriOPNA = 1;
+                        useChip.Add(EnmChip.YM2608);
+                    }
+                    else
+                    {
+                        chipLED.SecOPNA = 1;
+                        useChip.Add(EnmChip.S_YM2608);
+                    }
+
+                    log.Write(string.Format("Use OPNA({0}) Clk:{1}"
+                        , (i == 0) ? "Pri" : "Sec"
+                        , chip.Clock
+                        ));
+
+                    chipRegister.YM2608[i].Use = true;
+                    if (chip.Instrument != null) lstChips.Add(chip);
                 }
 
-                chip.SamplingRate = 55467;// (UInt32)Common.SampleRate;
-                chip.Volume = setting.balance.YM2608Volume;
-                chip.Clock = (uint)mubDriver.YM2608ClockValue;
-                chip.Option = null;
-                chipLED.PriOPN2 = 1;
-                chipRegister.YM2608[0].Use = true;
-                lstChips.Add(chip);
-                useChip.Add(EnmChip.YM2608);
+                MDSound.ym2610 ym2610 = new MDSound.ym2610();
+                for (int i = 0; i < 2; i++)
+                {
+                    chip = new MDSound.MDSound.Chip();
+                    chip.type = MDSound.MDSound.enmInstrumentType.YM2610;
+                    chip.ID = (byte)i;
+                    chip.Instrument = ym2610;
+                    chip.Update = ym2610.Update;
+                    chip.Start = ym2610.Start;
+                    chip.Stop = ym2610.Stop;
+                    chip.Reset = ym2610.Reset;
+                    chip.SamplingRate = 55467;// (UInt32)Common.SampleRate;
+                    chip.Volume = setting.balance.YM2610Volume;
+                    chip.Clock = mubDriver.YM2610ClockValue;
+                    chip.Option = null;
+                    //chip.Option = new object[] { Common.GetApplicationFolder() };
+                    //hiyorimiDeviceFlag |= 0x2;
+
+                    if (i == 0)
+                    {
+                        chipLED.PriOPNB = 1;
+                        useChip.Add(EnmChip.YM2610);
+                    }
+                    else
+                    {
+                        chipLED.SecOPNB = 1;
+                        useChip.Add(EnmChip.S_YM2610);
+                    }
+
+                    log.Write(string.Format("Use OPNB({0}) Clk:{1}"
+                        , (i == 0) ? "Pri" : "Sec"
+                        , chip.Clock
+                        ));
+
+                    chipRegister.YM2610[i].Use = true;
+                    if (chip.Instrument != null) lstChips.Add(chip);
+                }
+
 
                 if (hiyorimiNecessary) hiyorimiNecessary = true;
                 else hiyorimiNecessary = false;
@@ -4232,10 +4284,27 @@ namespace mml2vgmIDE
                     RealChipAutoDetect(setting);
                 }
 
-                if (chipRegister.YM2608[0].Model == EnmVRModel.VirtualModel) useEmu = true;
-                if (chipRegister.YM2608[0].Model == EnmVRModel.RealModel) useReal = true;
+                if (
+                    chipRegister.YM2608[0].Model == EnmVRModel.VirtualModel
+                    || chipRegister.YM2608[1].Model == EnmVRModel.VirtualModel
+                    || chipRegister.YM2610[0].Model == EnmVRModel.VirtualModel
+                    || chipRegister.YM2610[1].Model == EnmVRModel.VirtualModel
+                    )
+                    useEmu = true;
+                if (
+                    chipRegister.YM2608[0].Model == EnmVRModel.RealModel
+                    || chipRegister.YM2608[1].Model == EnmVRModel.RealModel
+                    || chipRegister.YM2610[0].Model == EnmVRModel.RealModel
+                    || chipRegister.YM2610[1].Model == EnmVRModel.RealModel
+                    )
+                    useReal = true;
 
-                if (!mubDriver.init(mubBuf, mubWorkPath, mucomManager, chipRegister, new EnmChip[] { EnmChip.YM2608 }
+                if (!mubDriver.init(
+                    mubBuf
+                    , mubWorkPath
+                    , mucomManager
+                    , chipRegister
+                    , new EnmChip[] { EnmChip.YM2608, EnmChip.S_YM2608, EnmChip.YM2610, EnmChip.S_YM2610 }
                     , (uint)(Common.SampleRate * setting.LatencyEmulation / 1000)
                     , (uint)(Common.SampleRate * setting.outputDevice.WaitTime / 1000)
                     , mubFileName
@@ -4246,11 +4315,15 @@ namespace mml2vgmIDE
                 log.Write("Volume 設定");
 
                 SetYM2608Volume(true, setting.balance.YM2608Volume);
+                SetYM2610Volume(true, setting.balance.YM2610Volume);
 
                 log.Write("Clock 設定");
 
                 chipRegister.YM2608WriteClock((byte)0, (int)mubDriver.YM2608ClockValue);
-               
+                chipRegister.YM2608WriteClock((byte)1, (int)mubDriver.YM2608ClockValue);
+                chipRegister.YM2610WriteClock((byte)0, (int)mubDriver.YM2610ClockValue);
+                chipRegister.YM2610WriteClock((byte)1, (int)mubDriver.YM2608ClockValue);
+
 
                 //Play
 
@@ -5238,7 +5311,7 @@ namespace mml2vgmIDE
                     stwh.Reset(); stwh.Start();
                     cnt = mds.Update(buffer, offset, sampleCount, oneFrameEmuDataSend);// driverVirtual.oneFrameProc);
                     ProcTimePer1Frame = ((double)stwh.ElapsedMilliseconds / (sampleCount + 1) * 1000000.0);
-                    //Console.WriteLine("{0}", buffer[offset]);
+                    //if(buffer[offset]!=0) Console.WriteLine("{0}", buffer[offset]);
                 }
 
                 for (i = 0; i < sampleCount; i++)
