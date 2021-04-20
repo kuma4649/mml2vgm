@@ -30,6 +30,7 @@ namespace mml2vgmIDE.MMLParameter
 
         protected override void SetPan(outDatum od, int ch, int cc)
         {
+            if (od.linePos.ch >= pan.Length) return;
             int n = (int)od.args[0];
             pan[od.linePos.ch] = n == 0 ? "-" : (n == 1 ? "Right" : (n == 2 ? "Left" : "Center"));
         }
