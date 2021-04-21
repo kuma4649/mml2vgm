@@ -39,8 +39,8 @@ namespace mml2vgmIDE
                 initPhase = false;
                 chipRegister.YM2608SetRegister(null, count, chipYM2608, pd[0].ToArray());
                 chipRegister.YM2608SetRegister(null, count, chipYM2608S, pd[1].ToArray());
-                //chipRegister.YM2608SetRegister(null, count, chipYM2610, pd[2].ToArray());
-                //chipRegister.YM2608SetRegister(null, count, chipYM2610S, pd[3].ToArray());
+                chipRegister.YM2608SetRegister(null, count, chipYM2610, pd[2].ToArray());
+                chipRegister.YM2608SetRegister(null, count, chipYM2610S, pd[3].ToArray());
 
                 chipRegister.YM2610SetRegister(null, count, chipYM2610, pdOPNB[0],true);
                 chipRegister.YM2610SetRegister(null, count, chipYM2610, pdOPNB[1],false);

@@ -1,4 +1,8 @@
 更新履歴
+TAG401 2021/04/22
+  IDE:mucomDotNET:OPNBにPCMデータ以外の初期化向けのデータが送られていなかったのを修正
+  IDE:mucomDotNET:ハイライターのタグ判定を修正
+
 TAG400 2021/04/21
   IDE:MDSound差し替え(YM2609のヘロヘロ音向けの修正)
 
