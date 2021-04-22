@@ -1,4 +1,7 @@
 更新履歴
+TAG402 2021/04/22 2nd
+  IDE:mucomDotNET差し替え
+
 TAG401 2021/04/22
   IDE:mucomDotNET:OPNBにPCMデータ以外の初期化向けのデータが送られていなかったのを修正
   IDE:mucomDotNET:ハイライターのタグ判定を修正

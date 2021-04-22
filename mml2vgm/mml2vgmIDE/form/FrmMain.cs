@@ -2224,23 +2224,25 @@ stop();
 
             //frmLog.tbLog.AppendText(msg.get("I0107"));
 
-            foreach (Tuple<int, int, string> mes in ci.errorList)
-            {
-                frmErrorList.dataGridView1.Rows.Add("Error", "-"
-                    , mes.Item1 == -1 ? "-" : (mes.Item1 + 1).ToString()
-                    , mes.Item3);
-                msgInfo mi = new msgInfo(null,"", mes.Item1, mes.Item2, -1, mes.Item3);
-                msgBox.setErrMsg(mi);
-            }
+            if (ci != null)
+                foreach (Tuple<int, int, string> mes in ci.errorList)
+                {
+                    frmErrorList.dataGridView1.Rows.Add("Error", "-"
+                        , mes.Item1 == -1 ? "-" : (mes.Item1 + 1).ToString()
+                        , mes.Item3);
+                    msgInfo mi = new msgInfo(null, "", mes.Item1, mes.Item2, -1, mes.Item3);
+                    msgBox.setErrMsg(mi);
+                }
 
-            foreach (Tuple<int, int, string> mes in ci.warningList)
-            {
-                frmErrorList.dataGridView1.Rows.Add("Warning", "-"
-                    , mes.Item1 == -1 ? "-" : (mes.Item1 + 1).ToString()
-                    , mes.Item3);
-                msgInfo mi = new msgInfo(null, "", mes.Item1, mes.Item2, -1, mes.Item3);
-                msgBox.setWrnMsg(mi);
-            }
+            if (ci != null)
+                foreach (Tuple<int, int, string> mes in ci.warningList)
+                {
+                    frmErrorList.dataGridView1.Rows.Add("Warning", "-"
+                        , mes.Item1 == -1 ? "-" : (mes.Item1 + 1).ToString()
+                        , mes.Item3);
+                    msgInfo mi = new msgInfo(null, "", mes.Item1, mes.Item2, -1, mes.Item3);
+                    msgBox.setWrnMsg(mi);
+                }
 
             if (isSuccess)
             {
