@@ -2176,6 +2176,7 @@ stop();
             UpdateControl();
         }
 
+        private string mucPartName = "ABCDEFGHIJKLMNOPQRSTUVabcdefghijklmnopqrstuv";
 
         private void finishedCompileMUC()
         {
@@ -2203,20 +2204,20 @@ stop();
                 }
                 else
                 {
-                    for (int i = 0; i < 11; i++)
+                    for (int i = 0; i < 44; i++)
                     {
                         for (int j = 0; j < 10; j++)
                         {
                             //if (pw[i].clockCounter == 0) continue;
 
-                            cells[0] = pn[i];//PartNumber
-                            cells[1] = 0;//ChipIndex
+                            cells[0] = pn[i % 11];//PartNumber
+                            cells[1] = i < 22 ? 0 : 1;//ChipIndex
                             cells[2] = 0;//ChipNumber
-                            cells[3] = ((char)('A' + i)).ToString() + j.ToString();
-                            cells[4] = "YM2608";//.ToUpper();
+                            cells[3] = (mucPartName[i]).ToString() + j.ToString();
+                            cells[4] = i < 22 ? "YM2608" : "YM2610B";//.ToUpper();
                             cells[5] = ci.totalCount[i * 10 + j];
                             cells[6] = ci.loopCount[i * 10 + j];
-                            if (ci.bufferCount[i * 10 + j] > 1) frmPartCounter.AddPartCounter(cells);
+                            if (ci.bufferCount[i * 10 + j] > 3) frmPartCounter.AddPartCounter(cells);
                         }
                     }
                 }
@@ -2250,29 +2251,30 @@ stop();
 
                 if (ci.jumpChannel != null && jumpSoloModeSw)
                 {
-                    for (int i = 0; i < 11; i++)
+                    for (int i = 0; i < 44; i++)
                     {
+                        int p = i % 11;
                         bool solo = false;
-                        if (i == ci.jumpChannel[0]) solo = true;
+                        if (p == ci.jumpChannel[0]) solo = true;
 
-                        int ch = i;
-                        if (i < 2)//FM 1-2
+                        int ch = p;
+                        if (p < 2)//FM 1-2
                         {
                             Audio.chipRegister.YM2608[0].ChMasks[ch] = !solo;
                         }
-                        else if (i == 2)//FM 3
+                        else if (p == 2)//FM 3
                         {
                             Audio.chipRegister.YM2608[0].ChMasks[2] = !solo;
                             Audio.chipRegister.YM2608[0].ChMasks[6] = !solo;
                             Audio.chipRegister.YM2608[0].ChMasks[7] = !solo;
                             Audio.chipRegister.YM2608[0].ChMasks[8] = !solo;
                         }
-                        else if (i < 6)//SSG
+                        else if (p < 6)//SSG
                         {
-                            ch = i + 6;
+                            ch = p + 6;
                             Audio.chipRegister.YM2608[0].ChMasks[ch] = !solo;
                         }
-                        else if (i == 6)//Rhythm
+                        else if (p == 6)//Rhythm
                         {
                             Audio.chipRegister.YM2608[0].ChMasks[12] = !solo;
                             Audio.chipRegister.YM2608[0].ChMasks[13] = !solo;
@@ -2281,9 +2283,9 @@ stop();
                             Audio.chipRegister.YM2608[0].ChMasks[16] = !solo;
                             Audio.chipRegister.YM2608[0].ChMasks[17] = !solo;
                         }
-                        else if (i < 10)
+                        else if (p < 10)
                         {
-                            ch = i - 4;
+                            ch = p - 4;
                             Audio.chipRegister.YM2608[0].ChMasks[ch] = !solo;
                         }
                         else

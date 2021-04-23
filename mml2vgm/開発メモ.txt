@@ -6,7 +6,7 @@ IDE
 
 ・トレース、パラメータ系DEBUG
   パートカウンターにパートが出ない
-    TBD
+    frmMain:finishedCompilexxxをチェック。
   パートカウンターにパートは出るが情報は表示できない
     ChipRegister.cs : writeDummyChip にChipが定義されているか確認
     Manager.cs : SetMMLParameter のデバグ情報出力を有効にし、欲しいChipの情報が届いているか確認

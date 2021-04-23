@@ -330,6 +330,7 @@
     <Compile Include="MMLParameter\YM2608_mucom.cs" />
     <Compile Include="MMLParameter\YM2608_PMD.cs" />
     <Compile Include="MMLParameter\YM2609.cs" />
+    <Compile Include="MMLParameter\YM2610B_mucom.cs" />
     <Compile Include="MMLParameter\YM2610B.cs" />
     <Compile Include="MMLParameter\YM2612.cs" />
     <Compile Include="MMLParameter\YM2612X.cs" />

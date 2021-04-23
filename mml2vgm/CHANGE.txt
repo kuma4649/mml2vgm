@@ -1,4 +1,8 @@
 更新履歴
+TAG404 2021/04/23
+  IDE:mucomDotNET差し替え
+  IDE:mucomDotNET向けパラメータ表示ちょっとだけ対応
+
 TAG403 2021/04/22 3rd
   IDE:mucomDotNET差し替え
 

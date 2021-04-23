@@ -275,6 +275,13 @@ namespace mml2vgmIDE
                     int pg = cp.Length < 2 ? 0 : (cp[1] - '0');
                     r = ch * 10 + pg;
                 }
+                if (mmli is YM2610B_mucom)
+                {
+                    string cp = (string)dgvPartCounter.Rows[p].Cells["ClmPart"].Value;
+                    int ch = cp[0] - 'a';
+                    int pg = cp.Length < 2 ? 0 : (cp[1] - '0');
+                    r = ch * 10 + pg;
+                }
 
                 if (r >= mmli.inst.Length) continue;
 
@@ -497,7 +504,7 @@ namespace mml2vgmIDE
             int pn = (int)r.Cells["ClmPartNumber"].Value - 1;
             bool mute = (string)r.Cells["ClmMute"].Value == "M";
 
-            if (!(mmli is YM2608_mucom))
+            if (!(mmli is YM2608_mucom) && !(mmli is YM2610B_mucom))
             {
                 mmli.SetMute(pn, mute);
                 return;
@@ -510,14 +517,14 @@ namespace mml2vgmIDE
             string mm = (string)r.Cells["ClmMute"].Value;
             string sm = (string)r.Cells["ClmSolo"].Value;
 
-            foreach(DataGridViewRow rw in dgvPartCounter.Rows)
+            foreach (DataGridViewRow rw in dgvPartCounter.Rows)
             {
                 string p = (string)rw.Cells["ClmPart"].Value;
                 int c = p[0] - 'A';
                 if (c != ch) continue;
 
-                rw.Cells["ClmMute"].Value=mm;
-                rw.Cells["ClmSolo"].Value=sm;
+                rw.Cells["ClmMute"].Value = mm;
+                rw.Cells["ClmSolo"].Value = sm;
                 pn = (int)rw.Cells["ClmPartNumber"].Value - 1;
                 pg = p.Length < 2 ? 0 : (p[1] - '0');
 

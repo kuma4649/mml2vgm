@@ -151,7 +151,8 @@ namespace mml2vgmIDE.MMLParameter
 
         protected virtual void SetVolume(outDatum od, int ch, int cc)
         {
-            if (ch >= vol.Length) return;
+            if (ch >= vol.Length) 
+                return;
 
             if (od.linePos != null)
                 vol[ch] = (int)od.args[0];
