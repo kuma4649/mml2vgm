@@ -328,6 +328,8 @@
             this.groupBox20 = new System.Windows.Forms.GroupBox();
             this.rbAutoBalanceNotLoadDriverBalance = new System.Windows.Forms.RadioButton();
             this.rbAutoBalanceLoadDriverBalance = new System.Windows.Forms.RadioButton();
+            this.tpMMLParameter = new System.Windows.Forms.TabPage();
+            this.cbDispInstrumentName = new System.Windows.Forms.CheckBox();
             this.tpOther = new System.Windows.Forms.TabPage();
             this.cbWavSwitch = new System.Windows.Forms.CheckBox();
             this.groupBox17 = new System.Windows.Forms.GroupBox();
@@ -405,8 +407,7 @@
             this.textBoxDescription = new System.Windows.Forms.TextBox();
             this.llOpenGithub = new System.Windows.Forms.LinkLabel();
             this.cbHiyorimiMode = new System.Windows.Forms.CheckBox();
-            this.tpMMLParameter = new System.Windows.Forms.TabPage();
-            this.cbDispInstrumentName = new System.Windows.Forms.CheckBox();
+            this.label48 = new System.Windows.Forms.Label();
             this.gbWaveOut.SuspendLayout();
             this.gbAsioOut.SuspendLayout();
             this.gbWasapiOut.SuspendLayout();
@@ -488,6 +489,7 @@
             this.groupBox23.SuspendLayout();
             this.groupBox19.SuspendLayout();
             this.groupBox20.SuspendLayout();
+            this.tpMMLParameter.SuspendLayout();
             this.tpOther.SuspendLayout();
             this.groupBox17.SuspendLayout();
             this.groupBox4.SuspendLayout();
@@ -502,7 +504,6 @@
             this.tpAbout.SuspendLayout();
             this.tableLayoutPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.logoPictureBox)).BeginInit();
-            this.tpMMLParameter.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnOK
@@ -3827,6 +3828,26 @@
             this.rbAutoBalanceLoadDriverBalance.Text = "再生時に自動で読み込む(曲データ毎のバランスファイルが無い場合)";
             this.rbAutoBalanceLoadDriverBalance.UseVisualStyleBackColor = true;
             // 
+            // tpMMLParameter
+            // 
+            this.tpMMLParameter.Controls.Add(this.cbDispInstrumentName);
+            this.tpMMLParameter.Location = new System.Drawing.Point(4, 22);
+            this.tpMMLParameter.Name = "tpMMLParameter";
+            this.tpMMLParameter.Size = new System.Drawing.Size(443, 400);
+            this.tpMMLParameter.TabIndex = 16;
+            this.tpMMLParameter.Text = "MMLParameter";
+            this.tpMMLParameter.UseVisualStyleBackColor = true;
+            // 
+            // cbDispInstrumentName
+            // 
+            this.cbDispInstrumentName.AutoSize = true;
+            this.cbDispInstrumentName.Location = new System.Drawing.Point(23, 19);
+            this.cbDispInstrumentName.Name = "cbDispInstrumentName";
+            this.cbDispInstrumentName.Size = new System.Drawing.Size(134, 16);
+            this.cbDispInstrumentName.TabIndex = 0;
+            this.cbDispInstrumentName.Text = "disp Instrument name";
+            this.cbDispInstrumentName.UseVisualStyleBackColor = true;
+            // 
             // tpOther
             // 
             this.tpOther.Controls.Add(this.cbWavSwitch);
@@ -3839,9 +3860,7 @@
             this.tpOther.Controls.Add(this.label30);
             this.tpOther.Controls.Add(this.tbScreenFrameRate);
             this.tpOther.Controls.Add(this.label29);
-            this.tpOther.Controls.Add(this.lblLoopTimes);
             this.tpOther.Controls.Add(this.btnDataPath);
-            this.tpOther.Controls.Add(this.tbLoopTimes);
             this.tpOther.Controls.Add(this.tbDataPath);
             this.tpOther.Controls.Add(this.label19);
             this.tpOther.Controls.Add(this.btnResetPosition);
@@ -4114,7 +4133,7 @@
             // lblLoopTimes
             // 
             this.lblLoopTimes.AutoSize = true;
-            this.lblLoopTimes.Location = new System.Drawing.Point(340, 8);
+            this.lblLoopTimes.Location = new System.Drawing.Point(417, 325);
             this.lblLoopTimes.Name = "lblLoopTimes";
             this.lblLoopTimes.Size = new System.Drawing.Size(17, 12);
             this.lblLoopTimes.TabIndex = 1;
@@ -4133,7 +4152,7 @@
             // 
             // tbLoopTimes
             // 
-            this.tbLoopTimes.Location = new System.Drawing.Point(282, 5);
+            this.tbLoopTimes.Location = new System.Drawing.Point(359, 322);
             this.tbLoopTimes.Name = "tbLoopTimes";
             this.tbLoopTimes.Size = new System.Drawing.Size(52, 19);
             this.tbLoopTimes.TabIndex = 0;
@@ -4225,10 +4244,13 @@
             // 
             // tpOmake
             // 
+            this.tpOmake.Controls.Add(this.label48);
             this.tpOmake.Controls.Add(this.cbClearHistory);
             this.tpOmake.Controls.Add(this.groupBox31);
             this.tpOmake.Controls.Add(this.groupBox30);
             this.tpOmake.Controls.Add(this.cbRequestCacheClear);
+            this.tpOmake.Controls.Add(this.tbLoopTimes);
+            this.tpOmake.Controls.Add(this.lblLoopTimes);
             this.tpOmake.Controls.Add(this.cbUseSIen);
             this.tpOmake.Controls.Add(this.cbInfiniteOfflineMode);
             this.tpOmake.Controls.Add(this.groupBox29);
@@ -4690,25 +4712,13 @@
             this.cbHiyorimiMode.UseVisualStyleBackColor = true;
             this.cbHiyorimiMode.Visible = false;
             // 
-            // tpMMLParameter
+            // label48
             // 
-            this.tpMMLParameter.Controls.Add(this.cbDispInstrumentName);
-            this.tpMMLParameter.Location = new System.Drawing.Point(4, 22);
-            this.tpMMLParameter.Name = "tpMMLParameter";
-            this.tpMMLParameter.Size = new System.Drawing.Size(443, 400);
-            this.tpMMLParameter.TabIndex = 16;
-            this.tpMMLParameter.Text = "MMLParameter";
-            this.tpMMLParameter.UseVisualStyleBackColor = true;
-            // 
-            // cbDispInstrumentName
-            // 
-            this.cbDispInstrumentName.AutoSize = true;
-            this.cbDispInstrumentName.Location = new System.Drawing.Point(23, 19);
-            this.cbDispInstrumentName.Name = "cbDispInstrumentName";
-            this.cbDispInstrumentName.Size = new System.Drawing.Size(134, 16);
-            this.cbDispInstrumentName.TabIndex = 0;
-            this.cbDispInstrumentName.Text = "disp Instrument name";
-            this.cbDispInstrumentName.UseVisualStyleBackColor = true;
+            this.label48.Location = new System.Drawing.Point(249, 315);
+            this.label48.Name = "label48";
+            this.label48.Size = new System.Drawing.Size(104, 47);
+            this.label48.TabIndex = 27;
+            this.label48.Text = "wavファイルエクスポート時のループ回数";
             // 
             // FrmSetting
             // 
@@ -4847,6 +4857,8 @@
             this.groupBox19.PerformLayout();
             this.groupBox20.ResumeLayout(false);
             this.groupBox20.PerformLayout();
+            this.tpMMLParameter.ResumeLayout(false);
+            this.tpMMLParameter.PerformLayout();
             this.tpOther.ResumeLayout(false);
             this.tpOther.PerformLayout();
             this.groupBox17.ResumeLayout(false);
@@ -4872,8 +4884,6 @@
             this.tableLayoutPanel.ResumeLayout(false);
             this.tableLayoutPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.logoPictureBox)).EndInit();
-            this.tpMMLParameter.ResumeLayout(false);
-            this.tpMMLParameter.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -5259,5 +5269,6 @@
         private System.Windows.Forms.CheckBox cbClearHistory;
         private System.Windows.Forms.TabPage tpMMLParameter;
         private System.Windows.Forms.CheckBox cbDispInstrumentName;
+        private System.Windows.Forms.Label label48;
     }
 }

@@ -200,6 +200,7 @@ namespace SoundManager
                 {
                     emuChipSender.RequestStop();
                     Application.DoEvents();//Waveデバイス対策
+                    emuChipSender.recvBuffer.Init(DATA_SEQUENCE_FREQUENCE);
                 }
             }
             if (realChipSender != null)

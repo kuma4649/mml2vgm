@@ -214,6 +214,8 @@ namespace mml2vgmIDE
                 wrkMUCFullPath// Path.GetDirectoryName(wrkMUCFullPath)
                 , arg
                 );
+            
+            if (!File.Exists(fn)) return null;
 
             FileStream strm;
             try
