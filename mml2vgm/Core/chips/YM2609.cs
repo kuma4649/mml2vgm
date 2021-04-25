@@ -1362,6 +1362,7 @@ namespace Core
                 {
                     n = Common.CheckRange(n, 0, 15);
                     page.dutyCycle = n;
+                    SetDummyData(page, mml);
                     return;
                 }
 
@@ -1694,6 +1695,7 @@ namespace Core
             //又は流し込むデータなんてなかった場合は処理終了
             if (!parent.instOPNA2WFS.ContainsKey(n)) return;
 
+            mml.args.Add(parent.instOPNA2WFS[n].Item1);
             //データの流し込みいくよー
             byte[] wd = parent.instOPNA2WFS[n].Item2;
             for (n = 0; n < wd.Length; n++)

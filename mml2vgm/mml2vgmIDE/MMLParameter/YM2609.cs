@@ -22,7 +22,20 @@ namespace mml2vgmIDE.MMLParameter
         {
             if (od.linePos.part == "SSG")
             {
-                envelope[od.linePos.ch] = ((int)od.args[1]).ToString();
+                if (od.args[0] is char && (char)od.args[0] == 'W')
+                {
+                    if (setting.MMLParameter.dispInstrumentName
+                        && od.args.Count == 3
+                        && (od.args[2] != null
+                        && od.args[2].ToString() != ""))
+                        inst[od.linePos.ch] = string.Format("{0}", od.args[2]);
+                    else
+                        inst[od.linePos.ch] = string.Format("W:{0}", (int)od.args[1]);
+                }
+                else if (od.args[0] is char && (char)od.args[0] == 'I')
+                    inst[od.linePos.ch] = string.Format("I:{0}", (int)od.args[1]);
+                else
+                    envelope[od.linePos.ch] = ((int)od.args[1]).ToString();
             }
             else
                 base.SetInstrument(od, ch, cc);

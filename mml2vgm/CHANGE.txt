@@ -1,4 +1,8 @@
 更新履歴
+TAG405 2021/04/25
+  Core:MDSound差し替え
+  IDE:パラメータ表示:エンベロープ番号列にSSGの音色番号の値が混ざって表示されていたのを修正
+
 TAG404 2021/04/23
   IDE:mucomDotNET差し替え
   IDE:mucomDotNET向けパラメータ表示ちょっとだけ対応
