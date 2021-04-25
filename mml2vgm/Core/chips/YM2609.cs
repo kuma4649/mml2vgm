@@ -653,7 +653,7 @@ namespace Core
             page.beforeAlgConstSw = page.algConstSw;
             page.beforePms = page.pms;
 
-            SOutData(page, mml, port, (byte)(0xb4 + vch), (byte)((page.pan << 6) + (page.ams << 3) + (page.algConstSw << 2) + page.pms));
+            SOutData(page, mml, port, (byte)(0xb4 + vch), (byte)((page.pan << 6) + (page.ams << 4) + (page.algConstSw << 3) + page.pms));
             //Console.WriteLine("{0} {1} {2}",port[0],vch, page.pan);
         }
 
@@ -1962,7 +1962,7 @@ namespace Core
                 ((ClsOPN)page.chip).OutFmSetKsAr(mml, page, ope
                     , parent.instFM[n].Item2[ope * opeLength + 1 + 6]  //  6 : KS
                     , parent.instFM[n].Item2[ope * opeLength + 1 + 0]  //  0 : AR
-                    , parent.instFM[n].Item2[ope * opeLength + 1 + 15] // 15 : PR
+                    , page.phaseReset ? parent.instFM[n].Item2[ope * opeLength + 1 + 15] : -1 // 15 : PR
                     );
                 OutFmSetAmDt2Dr(mml, page, ope
                     , parent.instFM[n].Item2[ope * opeLength + 1 + 10] // 10 : AM
@@ -1997,6 +1997,10 @@ namespace Core
             page.feedBack = parent.instFM[n].Item2[1 + 12] & 7;
             page.algo = parent.instFM[n].Item2[65] == 0xff ? 8 : (parent.instFM[n].Item2[65] & 0x7);
             OutFmSetPanRFeedbackAlgorithm(mml, page);
+            page.algo = parent.instFM[n].Item2[65] == 0xff ? 8 : (parent.instFM[n].Item2[65] & 0x7);
+            page.algConstSw = 0;
+            if (parent.instFM[n].Item2[65] == 0xff) page.algConstSw = 1;
+            OutOPNSetPanAmsAcPms(mml, page);
 
             int[] op = new int[4] {
                 parent.instFM[n].Item2[0 * opeLength + 1 + 5]// 5 : TL
@@ -2057,10 +2061,10 @@ namespace Core
         private int[][] GetVolumeOpe(int[][] algs, byte[] inst, bool reverse)
         {
             byte[] a = new byte[]{
-                    inst[0 * 15 + 1 + 14]// 14 : ALG Link
-                    ,inst[1 * 15 + 1 + 14]// 14 : ALG Link
-                    ,inst[2 * 15 + 1 + 14]// 14 : ALG Link
-                    ,inst[3 * 15 + 1 + 14]// 14 : ALG Link
+                    inst[0 * 16 + 1 + 14]// 14 : ALG Link
+                    ,inst[1 * 16 + 1 + 14]// 14 : ALG Link
+                    ,inst[2 * 16 + 1 + 14]// 14 : ALG Link
+                    ,inst[3 * 16 + 1 + 14]// 14 : ALG Link
                 };
 
             for (int ope = 0; ope < 4; ope++)
