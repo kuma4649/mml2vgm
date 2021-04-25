@@ -1,4 +1,7 @@
 更新履歴
+TAG407 2021/04/25 3rd
+  IDE:mucomDotNET差し替え
+
 TAG406 2021/04/25 2nd
   Core:MDSound差し替え
   IDE:FM:ALGコンストラクションフラグのセットが正しくできていなかったのを修正
