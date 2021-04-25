@@ -8,6 +8,7 @@ using SoundManager;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Threading;
 
 namespace mml2vgmIDE
@@ -1084,6 +1085,7 @@ namespace mml2vgmIDE
         private static bool playSet()
         {
             bool ret;
+
             if (PlayingFileFormat == EnmFileFormat.XGM)
             {
                 driver = new xgm();
@@ -4170,6 +4172,7 @@ namespace mml2vgmIDE
                 if (mubBuf == null || setting == null) return false;
 
                 mucomMub mubDriver = (mucomMub)driver;
+                Common.playingFilePath = Path.GetDirectoryName(mubFileName);
 
                 ResetFadeOutParam();
                 useChip.Clear();
@@ -4199,7 +4202,8 @@ namespace mml2vgmIDE
                     chip.SamplingRate = 55467;// (UInt32)Common.SampleRate;
                     chip.Volume = setting.balance.YM2608Volume;
                     chip.Clock = mubDriver.YM2608ClockValue;
-                    chip.Option = new object[] { Common.GetApplicationFolder() };
+                    Func<string, Stream> fn = Common.GetOPNARyhthmStream;
+                    chip.Option = new object[] { fn };
                     //hiyorimiDeviceFlag |= 0x2;
 
                     if (i == 0)

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
@@ -19,6 +20,7 @@ namespace mml2vgmIDE
 
         public static Int32 SampleRate = 44100;
         public static string settingFilePath = "";
+        public static string playingFilePath = "";
 
         public static void SetDoubleBuffered(Control control)
         {
@@ -344,6 +346,33 @@ namespace mml2vgmIDE
             if (extension.ToUpper() == ".MDL") return EnmMmlFileFormat.MDL;
 
             return EnmMmlFileFormat.unknown;
+        }
+
+        public static Stream GetOPNARyhthmStream(string fn)
+        {
+            string ffn = fn;
+
+            string chk;
+
+            chk = Path.Combine(playingFilePath, fn);
+            if (File.Exists(chk))
+                ffn = chk;
+            else
+            {
+                chk = Path.Combine(GetApplicationFolder(), fn);
+                if (File.Exists(chk)) ffn = chk;
+            }
+
+            try
+            {
+                if (!File.Exists(ffn)) return null;
+                FileStream fs = new FileStream(ffn, FileMode.Open, FileAccess.Read, FileShare.Read);
+                return fs;
+            }
+            catch
+            {
+                return null;
+            }
         }
     }
 }

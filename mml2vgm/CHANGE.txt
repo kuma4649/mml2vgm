@@ -1,4 +1,7 @@
 更新履歴
+TAG408 2021/04/25 4th
+  IDE:mucomDotNET:mucファイルのあるフォルダのOPNAのリズム音源ファイルを参照するように修正(ゆきにゃんさん仕様w)
+
 TAG407 2021/04/25 3rd
   IDE:mucomDotNET差し替え
 
