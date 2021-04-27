@@ -178,37 +178,72 @@ namespace SoundManager
 
         public void RequestStop()
         {
+            int waitCounter;
             if (dataMaker != null)
             {
+                waitCounter = 3000;
                 while (dataMaker.IsRunning())
                 {
                     dataMaker.RequestStop();
                     Application.DoEvents();//Waveデバイス対策
+
+                    System.Threading.Thread.Sleep(1);
+                    waitCounter--;
+                    if (waitCounter == 0)
+                    {
+                        break;
+                    }
                 }
             }
             if (dataSender != null)
             {
+                waitCounter = 3000;
                 while (dataSender.IsRunning())
                 {
                     dataSender.RequestStop();
                     Application.DoEvents();//Waveデバイス対策
+
+                    System.Threading.Thread.Sleep(1);
+                    waitCounter--;
+                    if (waitCounter == 0)
+                    {
+                        break;
+                    }
                 }
             }
             if (emuChipSender != null)
             {
+                waitCounter = 3000;
                 while (emuChipSender.IsRunning())
                 {
                     emuChipSender.RequestStop();
                     Application.DoEvents();//Waveデバイス対策
-                    emuChipSender.recvBuffer.Init(DATA_SEQUENCE_FREQUENCE);
+
+                    System.Threading.Thread.Sleep(1);
+                    waitCounter--;
+                    if (waitCounter == 0)
+                    {
+                        //emuChipSender.recvBuffer.Init(DATA_SEQUENCE_FREQUENCE);
+                        emuChipSender.recvBuffer.Clear();
+                        break;
+                    }
+
                 }
             }
             if (realChipSender != null)
             {
+                waitCounter = 3000;
                 while (realChipSender.IsRunning())
                 {
                     realChipSender.RequestStop();
                     Application.DoEvents();//Waveデバイス対策
+
+                    System.Threading.Thread.Sleep(1);
+                    waitCounter--;
+                    if (waitCounter == 0)
+                    {
+                        break;
+                    }
                 }
             }
 

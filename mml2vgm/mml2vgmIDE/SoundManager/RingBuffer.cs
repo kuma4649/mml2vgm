@@ -47,6 +47,23 @@ namespace SoundManager
             bLength = 0;
         }
 
+        public void Clear()
+        {
+            if (buf == null || buf.Count < 2) return;
+
+            for (int i = 1; i < buf.Count; i++)
+            {
+                buf[i].prev = buf[i - 1];
+                buf[i - 1].next = buf[i];
+            }
+            buf[0].prev = buf[buf.Count - 1];
+            buf[buf.Count - 1].next = buf[0];
+
+            enqPos = buf[0];
+            deqPos = buf[0];
+            bLength = 0;
+        }
+
         public bool Enq(outDatum od, long Counter, Chip Chip, EnmDataType Type, int Address, int Data, object ExData)
         {
             //if (name != "") mml2vgmIDE.log.Write(
