@@ -257,12 +257,19 @@ namespace Core
             long w = 0;
             if (page.gatetimePmode)
             {
-                w = page.waitCounter * page.gatetime / 8L;
+                if (!page.gatetimeReverse)
+                    w = page.waitCounter * page.gatetime / 8L;
+                else
+                    w = page.waitCounter - page.waitCounter * page.gatetime / 8L;
             }
             else
             {
-                w = page.waitCounter - page.gatetime;
+                if (!page.gatetimeReverse)
+                    w = page.waitCounter - page.gatetime;
+                else
+                    w = page.gatetime;
             }
+            if (w > page.waitCounter) w = page.waitCounter;
             if (w < 1) w = 1;
             s = Math.Min(s, (long)(w * parent.info.samplesPerClock * f / 44100.0));
 

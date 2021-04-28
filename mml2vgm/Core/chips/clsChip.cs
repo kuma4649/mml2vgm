@@ -1473,6 +1473,9 @@ namespace Core
             n = Common.CheckRange(n, 0, 255);
             page.gatetime = n;
             page.gatetimePmode = false;
+            page.gatetimeReverse = false;
+            if (mml.args.Count > 1)
+                page.gatetimeReverse = (bool)mml.args[1];
         }
 
         public virtual void CmdGatetime2(partPage page, MML mml)
@@ -1481,6 +1484,9 @@ namespace Core
             n = Common.CheckRange(n, 1, 8);
             page.gatetime = n;
             page.gatetimePmode = true;
+            page.gatetimeReverse = false;
+            if (mml.args.Count > 1)
+                page.gatetimeReverse = (bool)mml.args[1];
         }
 
 
@@ -1834,9 +1840,20 @@ namespace Core
 
             //gateTimeの決定
             if (page.gatetimePmode)
-                page.waitKeyOnCounter = page.waitCounter * page.gatetime / 8L;
+            {
+                if (!page.gatetimeReverse)
+                    page.waitKeyOnCounter = page.waitCounter * page.gatetime / 8L;
+                else
+                    page.waitKeyOnCounter = page.waitCounter - page.waitCounter * page.gatetime / 8L;
+            }
             else
-                page.waitKeyOnCounter = page.waitCounter - page.gatetime;
+            {
+                if (!page.gatetimeReverse)
+                    page.waitKeyOnCounter = page.waitCounter - page.gatetime;
+                else
+                    page.waitKeyOnCounter = page.gatetime;
+            }
+            if (page.waitKeyOnCounter > page.waitCounter) page.waitKeyOnCounter = page.waitCounter;
             if (page.waitKeyOnCounter < 1) page.waitKeyOnCounter = 1;
 
             //タイ指定では無い場合はキーオンする

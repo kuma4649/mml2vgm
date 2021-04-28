@@ -901,7 +901,10 @@ L               ooooooooooooooooooooooooooooooooooooooooooooooooo  曲全体の�
 J               ooooooooooooooooooooooooooooooooooooooooooooooooo  指定した位置まで演奏をスキップする。複数指定した場合は最後のJが有効になる
 qn              -ooo-oooooooooooooooooooooooooooooooooooooooooooo  ゲートタイム指定(クロック数で指定。音長分のクロック数からn引いた分が
                                                                    発音する長さになる。)
-Qn              -ooo-oooooooooooooooooooooooooooooooooooooooooooo  ゲートタイム割合指定(1 - 8)
+Qn              -ooo-oooooooooooooooooooooooooooooooooooooooooooo  ゲートタイム割合指定(1 - 8)(n/8の長さだけ発音する)
+q*n             -ooo-oooooooooooooooooooooooooooooooooooooooooooo  ゲートタイム指定(クロック数で指定。音長分のクロック数だけ
+                                                                   発音する長さになる。)
+Q*n             -ooo-oooooooooooooooooooooooooooooooooooooooooooo  ゲートタイム割合指定(1 - 8)(1-n/8の長さだけ発音する)
 wn              -----o-------------------------------------------  ノイズモード指定(0 - 7)
 wfn             -----o-------------------------------------------  DCSG Ch3周波数直接指定(0 - 1023)
 wn              ---------o----o----o-----oo-o--o-----------------  ノイズ周波数

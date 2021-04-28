@@ -432,6 +432,11 @@ namespace Core
         public bool gatetimePmode = false;
 
         /// <summary>
+        /// q/Qコマンドのリバースモード
+        /// </summary>
+        public bool gatetimeReverse = false;
+
+        /// <summary>
         /// 使用する現在のスロット
         /// </summary>
         public byte slots = 0xf;

@@ -950,7 +950,15 @@ namespace Core
         private void CmdGatetime(partWork pw, partPage page, MML mml)
         {
             int n;
+            bool rv = false;
+
             pw.incPos(page);
+            if (pw.getChar(page) == '*')
+            {
+                rv = true;
+                pw.incPos(page);
+            }
+
             if (!pw.getNum(page, out n))
             {
                 msgBox.setErrMsg(msg.get("E05013"), mml.line.Lp);
@@ -960,12 +968,21 @@ namespace Core
             mml.type = enmMMLType.Gatetime;
             mml.args = new List<object>();
             mml.args.Add(n);
+            mml.args.Add(rv);
         }
 
         private void CmdGatetime2(partWork pw, partPage page, MML mml)
         {
             int n;
+            bool rv = false;
+
             pw.incPos(page);
+            if (pw.getChar(page) == '*')
+            {
+                rv = true;
+                pw.incPos(page);
+            }
+
             if (!pw.getNum(page, out n))
             {
                 msgBox.setErrMsg(msg.get("E05014"), mml.line.Lp);
@@ -975,6 +992,7 @@ namespace Core
             mml.type = enmMMLType.GatetimeDiv;
             mml.args = new List<object>();
             mml.args.Add(n);
+            mml.args.Add(rv);
         }
 
         private void CmdE(partWork pw, partPage page, MML mml)
