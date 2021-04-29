@@ -271,14 +271,14 @@ namespace mml2vgmIDE
                 if(mmli is YM2608_mucom)
                 {
                     string cp = (string)dgvPartCounter.Rows[p].Cells["ClmPart"].Value;
-                    int ch = cp[0]-'A';
+                    int ch = cp[0]- (chipNumber == 0 ? 'A' : 'L');
                     int pg = cp.Length < 2 ? 0 : (cp[1] - '0');
                     r = ch * 10 + pg;
                 }
                 if (mmli is YM2610B_mucom)
                 {
                     string cp = (string)dgvPartCounter.Rows[p].Cells["ClmPart"].Value;
-                    int ch = cp[0] - 'a';
+                    int ch = cp[0] - (chipNumber == 0 ? 'a' : 'l');
                     int pg = cp.Length < 2 ? 0 : (cp[1] - '0');
                     r = ch * 10 + pg;
                 }
@@ -399,6 +399,12 @@ namespace mml2vgmIDE
 
         public void ClickSOLO(int rowIndex)
         {
+            if (CheckMucomParameter())
+            {
+                ClickSOLO_mucom(rowIndex);
+                return;
+            }
+
             if (rowIndex < 0)
             {
                 if (!SoloMode) return;
@@ -447,6 +453,12 @@ namespace mml2vgmIDE
 
         public void ClickMUTE(int rowIndex)
         {
+            if (CheckMucomParameter())
+            {
+                ClickMUTE_mucom(rowIndex);
+                return;
+            }
+
             if (rowIndex < 0)
             {
                 if (SoloMode) return;
@@ -474,6 +486,187 @@ namespace mml2vgmIDE
                 foreach (DataGridViewRow r in dgvPartCounter.Rows)
                 {
                     r.Cells["ClmMute"].Value = r.Cells["ClmPush"].Value;
+                    SetMute(r);
+                }
+            }
+        }
+
+        public void ClickSOLO_mucom(int rowIndex)
+        {
+
+            if (rowIndex < 0)
+            {
+                if (!SoloMode) return;
+                //Click SOLO Reset(mute復帰)) 
+                List<char> usePt = new List<char>();
+                object obj1 = null;
+                object obj2 = null;
+                foreach (DataGridViewRow r in dgvPartCounter.Rows)
+                {
+                    string sp = (string)r.Cells["ClmPart"].Value;
+                    if (usePt.Contains(sp[0]))
+                    {
+                        r.Cells["ClmSolo"].Value = obj1;
+                        r.Cells["ClmMute"].Value = obj2;
+                        continue;
+                    }
+                    usePt.Add(sp[0]);
+
+                    obj1 = "";
+                    obj2 = r.Cells["ClmPush"].Value;
+                    r.Cells["ClmSolo"].Value = obj1;
+                    r.Cells["ClmMute"].Value = obj2;
+                    SetMute(r);
+                }
+                SoloMode = false;
+                return;
+            }
+
+            if (dgvPartCounter.Rows.Count < rowIndex + 1) return;
+
+            bool nowSolo = (string)dgvPartCounter.Rows[rowIndex].Cells["ClmSolo"].Value == "S";
+            //SOLOモードではなく、SOLOではない場合はチェックを行う
+            if (!SoloMode && !nowSolo && !CheckSoloCh())
+            {
+                SoloMode = true;
+                //mute退避
+                List<char> usePt = new List<char>();
+                object obj1 = null;
+                object obj2 = null;
+                foreach (DataGridViewRow r in dgvPartCounter.Rows)
+                {
+                    string sp = (string)r.Cells["ClmPart"].Value;
+                    if (usePt.Contains(sp[0]))
+                    {
+                        r.Cells["ClmPush"].Value = obj1;
+                        r.Cells["ClmMute"].Value = obj2;
+                        continue;
+                    }
+                    usePt.Add(sp[0]);
+
+                    obj1 = r.Cells["ClmMute"].Value;
+                    obj2 = "M";
+                    r.Cells["ClmPush"].Value = obj1;
+                    r.Cells["ClmMute"].Value = obj2;
+                    SetMute(r);
+                }
+            }
+
+            //
+            char cp = ((string)dgvPartCounter.Rows[rowIndex].Cells["ClmPart"].Value)[0];
+            foreach (DataGridViewRow r in dgvPartCounter.Rows)
+            {
+                string p = (string)r.Cells["ClmPart"].Value;
+                if (p.IndexOf(cp) != 0) continue;
+
+                r.Cells["ClmSolo"].Value = nowSolo ? "" : "S";
+                if (SoloMode) r.Cells["ClmMute"].Value = !nowSolo ? "" : "M";
+                SetMute(r);
+            }
+
+            //dgvPartCounter.Rows[rowIndex].Cells["ClmSolo"].Value = nowSolo ? "" : "S";
+            //if (SoloMode) dgvPartCounter.Rows[rowIndex].Cells["ClmMute"].Value = !nowSolo ? "" : "M";
+            //SetMute(dgvPartCounter.Rows[rowIndex]);
+
+            if (SoloMode && nowSolo && !CheckSoloCh())
+            {
+                SoloMode = false;
+                //mute復帰
+                List<char> usePt = new List<char>();
+                object obj=null;
+                foreach (DataGridViewRow r in dgvPartCounter.Rows)
+                {
+                    string sp = (string)r.Cells["ClmPart"].Value;
+                    if (usePt.Contains(sp[0]))
+                    {
+                        r.Cells["ClmMute"].Value = obj;
+                        continue;
+                    }
+                    usePt.Add(sp[0]);
+
+                    obj = r.Cells["ClmPush"].Value;
+                    r.Cells["ClmMute"].Value = obj;
+                    SetMute(r);
+                }
+            }
+        }
+
+        public void ClickMUTE_mucom(int rowIndex)
+        {
+            List<char> usePt;
+
+            if (rowIndex < 0)
+            {
+                if (SoloMode) return;
+                //Click MUTE Reset 
+                usePt = new List<char>();
+                object obj = null;
+                foreach (DataGridViewRow r in dgvPartCounter.Rows)
+                {
+                    string sp = (string)r.Cells["ClmPart"].Value;
+                    if (usePt.Contains(sp[0]))
+                    {
+                        r.Cells["ClmMute"].Value = obj;
+                        continue;
+                    }
+                    usePt.Add(sp[0]);
+
+                    obj = "";
+                    r.Cells["ClmMute"].Value = obj;
+                    SetMute(r);
+                }
+                return;
+            }
+
+            if (dgvPartCounter.Rows.Count < rowIndex + 1) return;
+
+            bool nowMute = (string)dgvPartCounter.Rows[rowIndex].Cells["ClmMute"].Value == "M";
+            char tp = ((string)dgvPartCounter.Rows[rowIndex].Cells["ClmPart"].Value)[0];
+            usePt = new List<char>();
+            object obj1 = null;
+            object obj2 = null;
+            foreach (DataGridViewRow r in dgvPartCounter.Rows)
+            {
+                string sp = (string)r.Cells["ClmPart"].Value;
+                if (tp != sp[0]) continue;
+
+                if (usePt.Contains(sp[0]))
+                {
+                    r.Cells["ClmMute"].Value = obj1;
+                    if (SoloMode)
+                        r.Cells["ClmSolo"].Value = obj2;
+                    continue;
+                }
+                usePt.Add(sp[0]);
+
+                obj1 = nowMute ? "" : "M";
+                r.Cells["ClmMute"].Value = obj1;
+                if (SoloMode)
+                {
+                    obj2 = !nowMute ? "" : "S";
+                    r.Cells["ClmSolo"].Value = obj2;
+                }
+                SetMute(r);
+            }
+
+            if (SoloMode && !nowMute && !CheckSoloCh())
+            {
+                SoloMode = false;
+                //mute復帰
+                usePt = new List<char>();
+                object obj = null;
+                foreach (DataGridViewRow r in dgvPartCounter.Rows)
+                {
+                    string sp = (string)r.Cells["ClmPart"].Value;
+                    if (usePt.Contains(sp[0]))
+                    {
+                        r.Cells["ClmMute"].Value = obj;
+                        continue;
+                    }
+                    usePt.Add(sp[0]);
+
+                    obj = r.Cells["ClmPush"].Value;
+                    r.Cells["ClmMute"].Value = obj;
                     SetMute(r);
                 }
             }
@@ -512,7 +705,10 @@ namespace mml2vgmIDE
 
 
             string cp = (string)r.Cells["ClmPart"].Value;
-            int ch = cp[0] - 'A';
+            bool isOPNA = (cp[0] < 'a');
+            int ch = (cp[0] < 'a') ? (cp[0] - 'A') : (cp[0] - 'a');
+            int cn = ch < 11 ? 0 : 1;
+            ch = ch < 11 ? ch : (ch - 11);
             int pg;// = cp.Length < 2 ? 0 : (cp[1] - '0');
             string mm = (string)r.Cells["ClmMute"].Value;
             string sm = (string)r.Cells["ClmSolo"].Value;
@@ -520,15 +716,25 @@ namespace mml2vgmIDE
             foreach (DataGridViewRow rw in dgvPartCounter.Rows)
             {
                 string p = (string)rw.Cells["ClmPart"].Value;
-                int c = p[0] - 'A';
-                if (c != ch) continue;
+                bool isOPNAc = (p[0] < 'a');
+                int c = (p[0] < 'a') ? (p[0] - 'A') : (p[0] - 'a');
+                int n = c < 11 ? 0 : 1;
+                c = c < 11 ? c : (c - 11);
+                if (isOPNA != isOPNAc || n != cn || c != ch) continue;
 
                 rw.Cells["ClmMute"].Value = mm;
                 rw.Cells["ClmSolo"].Value = sm;
                 pn = (int)rw.Cells["ClmPartNumber"].Value - 1;
                 pg = p.Length < 2 ? 0 : (p[1] - '0');
 
-                ((YM2608_mucom)mmli).SetMute(pn, ch, pg, mute);
+                if (isOPNA)
+                {
+                    ((YM2608_mucom)mmli).SetMute(pn, ch, pg, mute);
+                }
+                else
+                {
+                    ((YM2610B_mucom)mmli).SetMute(pn, ch, pg, mute);
+                }
             }
 
         }
@@ -610,6 +816,24 @@ namespace mml2vgmIDE
             }
         }
 
+        private bool CheckMucomParameter()
+        {
+            if (dgvPartCounter.Rows.Count < 1) return false;
+
+            DataGridViewRow r = dgvPartCounter.Rows[0];
+            string chip = (string)r.Cells["ClmChip"].Value;
+            int chipIndex = (int)r.Cells["ClmChipIndex"].Value;
+            int chipNumber = (int)r.Cells["ClmChipNumber"].Value;
+            if (mmlParams == null) return false;
+            if (!mmlParams.Insts.ContainsKey(chip)) return false;
+            if (!mmlParams.Insts[chip].ContainsKey(chipIndex) || !mmlParams.Insts[chip][chipIndex].ContainsKey(chipNumber)) return false;
+            MMLParameter.Instrument mmli = mmlParams.Insts[chip][chipIndex][chipNumber];
+
+            if (mmli is YM2608_mucom) return true;
+            if (mmli is YM2610B_mucom) return true;
+
+            return false;
+        }
     }
 
     public class dgvColumnInfo

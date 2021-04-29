@@ -2211,8 +2211,8 @@ stop();
                             //if (pw[i].clockCounter == 0) continue;
 
                             cells[0] = pn[i % 11];//PartNumber
-                            cells[1] = i < 22 ? 0 : 1;//ChipIndex
-                            cells[2] = 0;//ChipNumber
+                            cells[1] = 0;//ChipIndex
+                            cells[2] = ((i / 11) & 1);//ChipNumber
                             cells[3] = (mucPartName[i]).ToString() + j.ToString();
                             cells[4] = i < 22 ? "YM2608" : "YM2610B";//.ToUpper();
                             cells[5] = ci.totalCount[i * 10 + j];

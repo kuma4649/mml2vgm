@@ -202,7 +202,7 @@ namespace mml2vgmIDE.MMLParameter
                 && Audio.chipRegister.PPZ8 != null
                 && od.linePos.chipIndex < Audio.chipRegister.PPZ8.Count)
             {
-                chip = Audio.chipRegister.PPZ8[od.linePos.chipIndex];
+                chip = Audio.chipRegister.PPZ8[od.linePos.chipNumber];
             }
             if (chip == null && od.linePos.chipIndex >= 0x80)
             {
@@ -225,7 +225,7 @@ namespace mml2vgmIDE.MMLParameter
                 && Audio.chipRegister.MIDI != null
                 && od.linePos.chipIndex < Audio.chipRegister.MIDI.Count)
             {
-                chip = Audio.chipRegister.MIDI[od.linePos.chipIndex];
+                chip = Audio.chipRegister.MIDI[od.linePos.chipNumber];
             }
             if (chip == null && od.linePos.chipIndex >= 0x80)
             {
@@ -247,7 +247,7 @@ namespace mml2vgmIDE.MMLParameter
                 && Audio.chipRegister.YM2612 != null
                 && od.linePos.chipIndex < Audio.chipRegister.YM2612.Count)
             {
-                chip = Audio.chipRegister.YM2612[od.linePos.chipIndex];
+                chip = Audio.chipRegister.YM2612[od.linePos.chipNumber];
             }
             if (chip == null && od.linePos.chipIndex >= 0x80)
             {
@@ -269,7 +269,7 @@ namespace mml2vgmIDE.MMLParameter
                 && Audio.chipRegister.YM2612 != null
                 && od.linePos.chipIndex < Audio.chipRegister.YM2612.Count)
             {
-                chip = Audio.chipRegister.YM2612[od.linePos.chipIndex];
+                chip = Audio.chipRegister.YM2612[od.linePos.chipNumber];
             }
             if (chip == null && od.linePos.chipIndex >= 0x80)
             {
@@ -291,7 +291,8 @@ namespace mml2vgmIDE.MMLParameter
                 && Audio.chipRegister.YM2610 != null
                 && od.linePos.chipIndex < Audio.chipRegister.YM2610.Count)
             {
-                chip = Audio.chipRegister.YM2610[od.linePos.chipIndex];
+                //chip = Audio.chipRegister.YM2610[od.linePos.chipIndex];
+                chip = Audio.chipRegister.YM2610[od.linePos.chipNumber];
             }
             if (chip == null && od.linePos.chipIndex >= 0x80)
             {
@@ -323,7 +324,7 @@ namespace mml2vgmIDE.MMLParameter
                 && Audio.chipRegister.YM2609 != null
                 && od.linePos.chipIndex < Audio.chipRegister.YM2609.Count)
             {
-                chip = Audio.chipRegister.YM2609[od.linePos.chipIndex];
+                chip = Audio.chipRegister.YM2609[od.linePos.chipNumber];
                 //chipIndex = od.linePos.chipIndex;
             }
             if (chip == null && od.linePos.chipIndex >= 0x80)
@@ -346,7 +347,7 @@ namespace mml2vgmIDE.MMLParameter
                 && Audio.chipRegister.YM2608 != null
                 && od.linePos.chipIndex < Audio.chipRegister.YM2608.Count)
             {
-                chip = Audio.chipRegister.YM2608[od.linePos.chipIndex];
+                chip = Audio.chipRegister.YM2608[od.linePos.chipNumber];
             }
             if (chip == null && od.linePos.chipIndex >= 0x80)
             {
@@ -381,7 +382,7 @@ namespace mml2vgmIDE.MMLParameter
                 && Audio.chipRegister.YMF278B != null
                 && od.linePos.chipIndex < Audio.chipRegister.YMF278B.Count)
             {
-                chip = Audio.chipRegister.YMF278B[od.linePos.chipIndex];
+                chip = Audio.chipRegister.YMF278B[od.linePos.chipNumber];
             }
             if (chip == null && od.linePos.chipIndex >= 0x80)
             {
@@ -403,7 +404,7 @@ namespace mml2vgmIDE.MMLParameter
                 && Audio.chipRegister.YMF271 != null
                 && od.linePos.chipIndex < Audio.chipRegister.YMF271.Count)
             {
-                chip = Audio.chipRegister.YMF271[od.linePos.chipIndex];
+                chip = Audio.chipRegister.YMF271[od.linePos.chipNumber];
             }
             if (chip == null && od.linePos.chipIndex >= 0x80)
             {
@@ -425,7 +426,7 @@ namespace mml2vgmIDE.MMLParameter
                 && Audio.chipRegister.YMF262 != null
                 && od.linePos.chipIndex < Audio.chipRegister.YMF262.Count)
             {
-                chip = Audio.chipRegister.YMF262[od.linePos.chipIndex];
+                chip = Audio.chipRegister.YMF262[od.linePos.chipNumber];
             }
             if (chip == null && od.linePos.chipIndex >= 0x80)
             {
@@ -447,7 +448,7 @@ namespace mml2vgmIDE.MMLParameter
                 && Audio.chipRegister.YM3812 != null
                 && od.linePos.chipIndex < Audio.chipRegister.YM3812.Count)
             {
-                chip = Audio.chipRegister.YM3812[od.linePos.chipIndex];
+                chip = Audio.chipRegister.YM3812[od.linePos.chipNumber];
             }
             if (chip == null && od.linePos.chipIndex >= 0x80)
             {
@@ -469,7 +470,7 @@ namespace mml2vgmIDE.MMLParameter
                 && Audio.chipRegister.Y8950 != null
                 && od.linePos.chipIndex < Audio.chipRegister.Y8950.Count)
             {
-                chip = Audio.chipRegister.Y8950[od.linePos.chipIndex];
+                chip = Audio.chipRegister.Y8950[od.linePos.chipNumber];
             }
             if (chip == null && od.linePos.chipIndex >= 0x80)
             {
@@ -491,7 +492,7 @@ namespace mml2vgmIDE.MMLParameter
                 && Audio.chipRegister.YM3526 != null
                 && od.linePos.chipIndex < Audio.chipRegister.YM3526.Count)
             {
-                chip = Audio.chipRegister.YM3526[od.linePos.chipIndex];
+                chip = Audio.chipRegister.YM3526[od.linePos.chipNumber];
             }
             if (chip == null && od.linePos.chipIndex >= 0x80)
             {
@@ -513,7 +514,7 @@ namespace mml2vgmIDE.MMLParameter
                 && Audio.chipRegister.YM2413 != null
                 && od.linePos.chipIndex < Audio.chipRegister.YM2413.Count)
             {
-                chip = Audio.chipRegister.YM2413[od.linePos.chipIndex];
+                chip = Audio.chipRegister.YM2413[od.linePos.chipNumber];
             }
             if (chip == null && od.linePos.chipIndex >= 0x80)
             {
@@ -535,7 +536,7 @@ namespace mml2vgmIDE.MMLParameter
                 && Audio.chipRegister.YM2203 != null
                 && od.linePos.chipIndex < Audio.chipRegister.YM2203.Count)
             {
-                chip = Audio.chipRegister.YM2203[od.linePos.chipIndex];
+                chip = Audio.chipRegister.YM2203[od.linePos.chipNumber];
             }
             if (chip == null && od.linePos.chipIndex >= 0x80)
             {
@@ -557,7 +558,7 @@ namespace mml2vgmIDE.MMLParameter
                 && Audio.chipRegister.YM2151 != null
                 && od.linePos.chipIndex < Audio.chipRegister.YM2151.Count)
             {
-                chip = Audio.chipRegister.YM2151[od.linePos.chipIndex];
+                chip = Audio.chipRegister.YM2151[od.linePos.chipNumber];
             }
             if (chip == null && od.linePos.chipIndex >= 0x80)
             {
@@ -579,7 +580,7 @@ namespace mml2vgmIDE.MMLParameter
                 && Audio.chipRegister.SN76489 != null
                 && od.linePos.chipIndex < Audio.chipRegister.SN76489.Count)
             {
-                chip = Audio.chipRegister.SN76489[od.linePos.chipIndex];
+                chip = Audio.chipRegister.SN76489[od.linePos.chipNumber];
             }
             if (chip == null && od.linePos.chipIndex >= 0x80)
             {
@@ -601,7 +602,7 @@ namespace mml2vgmIDE.MMLParameter
                 && Audio.chipRegister.SEGAPCM != null
                 && od.linePos.chipIndex < Audio.chipRegister.SEGAPCM.Count)
             {
-                chip = Audio.chipRegister.SEGAPCM[od.linePos.chipIndex];
+                chip = Audio.chipRegister.SEGAPCM[od.linePos.chipNumber];
             }
             if (chip == null && od.linePos.chipIndex >= 0x80)
             {
@@ -623,7 +624,7 @@ namespace mml2vgmIDE.MMLParameter
                 && Audio.chipRegister.RF5C164 != null
                 && od.linePos.chipIndex < Audio.chipRegister.RF5C164.Count)
             {
-                chip = Audio.chipRegister.RF5C164[od.linePos.chipIndex];
+                chip = Audio.chipRegister.RF5C164[od.linePos.chipNumber];
             }
             if (chip == null && od.linePos.chipIndex >= 0x80)
             {
@@ -645,7 +646,7 @@ namespace mml2vgmIDE.MMLParameter
                 && Audio.chipRegister.QSound != null
                 && od.linePos.chipIndex < Audio.chipRegister.QSound.Count)
             {
-                chip = Audio.chipRegister.QSound[od.linePos.chipIndex];
+                chip = Audio.chipRegister.QSound[od.linePos.chipNumber];
             }
             if (chip == null && od.linePos.chipIndex >= 0x80)
             {
@@ -667,7 +668,7 @@ namespace mml2vgmIDE.MMLParameter
                 && Audio.chipRegister.K053260 != null
                 && od.linePos.chipIndex < Audio.chipRegister.K053260.Count)
             {
-                chip = Audio.chipRegister.K053260[od.linePos.chipIndex];
+                chip = Audio.chipRegister.K053260[od.linePos.chipNumber];
             }
             if (chip == null && od.linePos.chipIndex >= 0x80)
             {
@@ -689,7 +690,7 @@ namespace mml2vgmIDE.MMLParameter
                 && Audio.chipRegister.K051649 != null
                 && od.linePos.chipIndex < Audio.chipRegister.K051649.Count)
             {
-                chip = Audio.chipRegister.K051649[od.linePos.chipIndex];
+                chip = Audio.chipRegister.K051649[od.linePos.chipNumber];
             }
             if (chip == null && od.linePos.chipIndex >= 0x80)
             {
@@ -711,7 +712,7 @@ namespace mml2vgmIDE.MMLParameter
                 && Audio.chipRegister.HuC6280 != null
                 && od.linePos.chipIndex < Audio.chipRegister.HuC6280.Count)
             {
-                chip = Audio.chipRegister.HuC6280[od.linePos.chipIndex];
+                chip = Audio.chipRegister.HuC6280[od.linePos.chipNumber];
             }
             if (chip == null && od.linePos.chipIndex >= 0x80)
             {
@@ -743,7 +744,7 @@ namespace mml2vgmIDE.MMLParameter
                 && Audio.chipRegister.C352 != null
                 && od.linePos.chipIndex < Audio.chipRegister.C352.Count)
             {
-                chip = Audio.chipRegister.C352[od.linePos.chipIndex];
+                chip = Audio.chipRegister.C352[od.linePos.chipNumber];
             }
             if (chip == null && od.linePos.chipIndex >= 0x80)
             {
@@ -765,7 +766,7 @@ namespace mml2vgmIDE.MMLParameter
                 && Audio.chipRegister.C140 != null
                 && od.linePos.chipIndex < Audio.chipRegister.C140.Count)
             {
-                chip = Audio.chipRegister.C140[od.linePos.chipIndex];
+                chip = Audio.chipRegister.C140[od.linePos.chipNumber];
             }
             if (chip == null && od.linePos.chipIndex >= 0x80)
             {
@@ -786,7 +787,7 @@ namespace mml2vgmIDE.MMLParameter
             if (Audio.chipRegister.AY8910 == null) return;
             if (od.linePos.chipIndex < Audio.chipRegister.AY8910.Count)
             {
-                chip = Audio.chipRegister.AY8910[od.linePos.chipIndex];
+                chip = Audio.chipRegister.AY8910[od.linePos.chipNumber];
             }
             if (chip == null && od.linePos.chipIndex >= 0x80)
             {

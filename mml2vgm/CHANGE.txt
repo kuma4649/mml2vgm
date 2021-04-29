@@ -1,4 +1,7 @@
 更新履歴
+TAG414 2021/04/29 2nd
+  IDE:パラメータ表示:mucomDotNET向け処理の追加とバグ修正
+
 TAG413 2021/04/29
   IDE:mucomDotNET:PMDDotNET:初期データ送信処理の修正
 
