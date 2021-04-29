@@ -1,6 +1,7 @@
 ﻿using Core;
 using musicDriverInterface;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -30,7 +31,7 @@ namespace mml2vgmIDE.MMLParameter
         public bool[] beforeTie;
         public int[] clockCounter;
 
-        public Queue<outDatum>[] TraceInfo;
+        public ConcurrentQueue<outDatum>[] TraceInfo;
         public outDatum[] TraceInfoOld;
         public bool isTrace;
         public SoundManager.Chip chip;
@@ -60,10 +61,10 @@ namespace mml2vgmIDE.MMLParameter
             clockCounter = new int[n];
             MIDIch = new int?[n];
 
-            TraceInfo = new Queue<outDatum>[n];
+            TraceInfo = new ConcurrentQueue<outDatum>[n];
             for (int i = 0; i < n; i++)
             {
-                TraceInfo[i] = new Queue<outDatum>();
+                TraceInfo[i] = new ConcurrentQueue<outDatum>();
                 clockCounter[i] = 128;
                 vol[i] = 0;
                 beforeTie[i] = false;
@@ -115,7 +116,17 @@ namespace mml2vgmIDE.MMLParameter
 
             if (isTrace)
             {
-                if (ch < TraceInfo.Length) TraceInfo[ch].Enqueue(od);
+                if (ch < TraceInfo.Length)
+                {
+                    try
+                    {
+                        TraceInfo[ch].Enqueue(od);
+                    }
+                    catch
+                    {
+                        ;
+                    }
+                }
             }
 
             //Console.WriteLine("{0}",od.type);

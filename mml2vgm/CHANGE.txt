@@ -1,4 +1,8 @@
 更新履歴
+TAG415 2021/04/29 3rd
+  IDE:トレース機能:キューをConcurrentQueueに変更してみた。
+  IDE:トレース機能:mucomDotNET:ちょっとだけ精度を上げた。
+
 TAG414 2021/04/29 2nd
   IDE:パラメータ表示:mucomDotNET向け処理の追加とバグ修正
 

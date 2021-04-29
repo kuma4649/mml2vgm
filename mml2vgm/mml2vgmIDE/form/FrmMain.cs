@@ -4,6 +4,7 @@ using mml2vgmIDE.form;
 using musicDriverInterface;
 using Sgry.Azuki.WinForms;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -3474,7 +3475,7 @@ stop();
             this.statusStrip1.BackColor = Color.FromArgb(setting.ColorScheme.StatusStripBack_Normal);
         }
 
-        private bool MarkUpTraceInfo(Queue<outDatum>[] ods, outDatum[] odos, int ch, FrmEditor fe, Sgry.Azuki.WinForms.AzukiControl ac)
+        private bool MarkUpTraceInfo(ConcurrentQueue<outDatum>[] ods, outDatum[] odos, int ch, FrmEditor fe, Sgry.Azuki.WinForms.AzukiControl ac)
         {
             bool flg = false;
             if (ods[ch] == null) return false;
@@ -3482,7 +3483,7 @@ stop();
             while (ods[ch].Count > 0)
             {
                 outDatum od;
-                lock (traceInfoLockObj) od = ods[ch].Dequeue();
+                lock (traceInfoLockObj) ods[ch].TryDequeue(out od);
                 if (od == null) continue;
                 string odfn = Path.GetFileName(od.linePos.srcMMLID);
                 if (fe.Text != odfn && fe.Text != odfn + "*") continue;
