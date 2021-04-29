@@ -182,12 +182,12 @@ namespace mml2vgmIDE
             if (arg.port == 0x05)
             {
                 p = new SoundManager.PackData(
-                    null, null, EnmDataType.Block, arg.address, arg.data, arg.addtionalData);
+                    null, chipRegister.PPSDRV[0], EnmDataType.Block, arg.address, arg.data, arg.addtionalData);
             }
             else
             {
                 p = new SoundManager.PackData(
-                    null, null, EnmDataType.Normal, arg.port, arg.address, arg.data);
+                    null, chipRegister.PPSDRV[0], EnmDataType.Normal, arg.port, arg.address, arg.data);
             }
 
             psd.Add(p);
@@ -228,12 +228,12 @@ namespace mml2vgmIDE
             if (arg.port == 0x03)
             {
                 p = new SoundManager.PackData(
-                    null, null, EnmDataType.Block, arg.address, arg.data, arg.addtionalData);
+                    null,chipRegister.PPZ8[0], EnmDataType.Block, arg.address, arg.data, arg.addtionalData);
             }
             else
             {
                 p = new SoundManager.PackData(
-                    null, null, EnmDataType.Normal, arg.port, arg.address, arg.data);
+                    null, chipRegister.PPZ8[0], EnmDataType.Normal, arg.port, arg.address, arg.data);
             }
 
             pzd.Add(p);
@@ -274,12 +274,12 @@ namespace mml2vgmIDE
             if (arg.port == 0x00)
             {
                 p = new SoundManager.PackData(
-                    null, null, EnmDataType.Block, arg.address, arg.data, arg.addtionalData);
+                    null, chipRegister.P86[0], EnmDataType.Block, arg.address, arg.data, arg.addtionalData);
             }
             else
             {
                 p = new SoundManager.PackData(
-                    null, null, EnmDataType.Normal, arg.port, arg.address, arg.data);
+                    null, chipRegister.P86[0], EnmDataType.Normal, arg.port, arg.address, arg.data);
             }
 
             p8d.Add(p);
@@ -325,7 +325,7 @@ namespace mml2vgmIDE
                 return;
             }
 
-            SoundManager.PackData p = new SoundManager.PackData(null, null, EnmDataType.Block, dat.port * 0x100 + dat.address, dat.data, null);
+            SoundManager.PackData p = new SoundManager.PackData(null, chipRegister.YM2608[0], EnmDataType.Block, dat.port * 0x100 + dat.address, dat.data, null);
             pd.Add(p);
         }
 

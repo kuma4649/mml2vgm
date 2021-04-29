@@ -187,7 +187,7 @@ namespace mml2vgmIDE
                 return;
             }
 
-            SoundManager.PackData p = new SoundManager.PackData(null, null, EnmDataType.Block, dat.port * 0x100 + dat.address, dat.data, null);
+            SoundManager.PackData p = new SoundManager.PackData(null, chipRegister.YM2608[ChipID], EnmDataType.Block, dat.port * 0x100 + dat.address, dat.data, null);
             p.Chip.Number = ChipID;
             pd[ChipID].Add(p);
         }
@@ -199,7 +199,7 @@ namespace mml2vgmIDE
                 return;
             }
 
-            SoundManager.PackData p = new SoundManager.PackData(null, null, EnmDataType.Block, dat.port * 0x100 + dat.address, dat.data, null);
+            SoundManager.PackData p = new SoundManager.PackData(null, chipRegister.YM2610[ChipID], EnmDataType.Block, dat.port * 0x100 + dat.address, dat.data, null);
             pd[ChipID+2].Add(p);
         }
 

@@ -1,4 +1,7 @@
 更新履歴
+TAG413 2021/04/29
+  IDE:mucomDotNET:PMDDotNET:初期データ送信処理の修正
+
 TAG412 2021/04/28 2nd
   Core:vgm/xgm/zgm:q*,Q*コマンドの追加
 

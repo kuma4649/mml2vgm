@@ -154,7 +154,7 @@ namespace mml2vgmIDE
                 return;
             }
 
-            SoundManager.PackData p = new SoundManager.PackData(null, null, EnmDataType.Block, dat.port * 0x100 + dat.address, dat.data, null);
+            SoundManager.PackData p = new SoundManager.PackData(null,chipRegister.YMF278B[0], EnmDataType.Block, dat.port * 0x100 + dat.address, dat.data, null);
             pcmdata.Add(p);
         }
 
