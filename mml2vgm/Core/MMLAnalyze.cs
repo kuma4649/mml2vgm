@@ -1718,6 +1718,18 @@ namespace Core
             int n = -1;
             pw.incPos(page);
             pw.skipTabSpace(page);
+
+            char nc = pw.getChar(page);
+            int relative = 0;
+            if (c == 'R' && (nc == '+' || nc == '-'))
+            {
+                pw.incPos(page);
+                nc = pw.getChar(page);
+                if (nc == '+') { relative = 1; pw.incPos(page); }
+                else if (nc == '-') { relative = -1; pw.incPos(page); }
+                else pw.decPos(page);
+            }
+
             if (!pw.getNum(page, out n))
             {
                 msgBox.setErrMsg(msg.get("E05059"), mml.line.Lp);
@@ -1737,7 +1749,7 @@ namespace Core
                 n = Common.CheckRange(n, 0, 255);
             }
             mml.args.Add(n);
-
+            if (relative != 0) mml.args.Add(relative);
         }
 
         private void CmdEffectHPF(partWork pw, partPage page, MML mml)
@@ -1769,6 +1781,18 @@ namespace Core
             int n = -1;
             pw.incPos(page);
             pw.skipTabSpace(page);
+
+            char nc = pw.getChar(page);
+            int relative = 0;
+            if (c == 'R' && (nc == '+' || nc == '-'))
+            {
+                pw.incPos(page);
+                nc = pw.getChar(page);
+                if (nc == '+') { relative = 1; pw.incPos(page); }
+                else if (nc == '-') { relative = -1; pw.incPos(page); }
+                else pw.decPos(page);
+            }
+
             if (!pw.getNum(page, out n))
             {
                 msgBox.setErrMsg(msg.get("E05059"), mml.line.Lp);
@@ -1788,7 +1812,7 @@ namespace Core
                 n = Common.CheckRange(n, 0, 255);
             }
             mml.args.Add(n);
-
+            if (relative != 0) mml.args.Add(relative);
         }
 
         private void CmdY(partWork pw, partPage page, MML mml)

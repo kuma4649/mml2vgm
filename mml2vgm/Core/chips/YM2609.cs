@@ -1415,197 +1415,269 @@ namespace Core
 
         public override void CmdEffect(partPage page, MML mml)
         {
-                byte ch = (byte)page.ch;
-                if (ch < 12)
+            byte ch = (byte)page.ch;
+            if (ch < 12)
+            {
+                ;
+            }
+            else if (ch < 15)
+            {
+                ch = 2;
+            }
+            else if (ch < 18)
+            {
+                ch = 8;
+            }
+            else if (ch < 30)
+            {
+                ch = (byte)(ch - 6);
+            }
+            else if (ch < 36)
+            {
+                ch = (byte)(ch - 3);
+            }
+            else if (ch < 39)
+            {
+                ch = (byte)(ch - 12);
+            }
+            else
+            {
+                ch = (byte)(ch - 6);
+            }
+
+            if ((string)mml.args[0] == "Rv")
+            {
+                //Reverb
+                switch ((char)mml.args[1])
                 {
-                    ;
+                    case 'D':
+                        int v = (int)mml.args[2];
+                        //SOutData(page, mml, port[3], 0x22, (byte)v);
+                        //ページに関係なく即反映
+                        parent.OutData(mml, port[3], 0x22, (byte)v);
+                        break;
+                    case 'S':
+                        int sl = (int)mml.args[2];
+                        //SOutData(page, mml, port[3], 0x23, ch);
+                        //SOutData(page, mml, port[3], 0x24, (byte)sl);
+                        //ページに関係なく即反映
+                        parent.OutData(mml, port[3], 0x23, ch);
+                        parent.OutData(mml, port[3], 0x24, (byte)sl);
+                        break;
                 }
-                else if (ch < 15)
+            }
+            else if ((string)mml.args[0] == "Ds")
+            {
+                int v = (int)mml.args[2];
+                //Distortion
+                switch ((char)mml.args[1])
                 {
-                    ch = 2;
+                    case 'S'://switch
+                        page.effectDistortionSwitch = v * 0x80;
+                        //SOutData(page, mml, port[3], 0x23, ch);
+                        //SOutData(page, mml, port[3], 0x25, (byte)(page.effectDistortionSwitch + page.effectDistortionVolume));
+                        //ページに関係なく即反映
+                        parent.OutData(mml, port[3], 0x23, ch);
+                        parent.OutData(mml, port[3], 0x25, (byte)(page.effectDistortionSwitch + page.effectDistortionVolume));
+                        break;
+                    case 'V'://volume
+                        page.effectDistortionVolume = v & 0x7f;
+                        //SOutData(page, mml, port[3], 0x23, ch);
+                        //SOutData(page, mml, port[3], 0x25, (byte)(page.effectDistortionSwitch + page.effectDistortionVolume));
+                        //ページに関係なく即反映
+                        parent.OutData(mml, port[3], 0x23, ch);
+                        parent.OutData(mml, port[3], 0x25, (byte)(page.effectDistortionSwitch + page.effectDistortionVolume));
+                        break;
+                    case 'G'://gain
+                        //SOutData(page, mml, port[3], 0x23, ch);
+                        //SOutData(page, mml, port[3], 0x26, (byte)(v & 0x7f));
+                        //ページに関係なく即反映
+                        parent.OutData(mml, port[3], 0x23, ch);
+                        parent.OutData(mml, port[3], 0x26, (byte)(v & 0x7f));
+                        break;
+                    case 'C'://CutOff
+                        //SOutData(page, mml, port[3], 0x23, ch);
+                        //SOutData(page, mml, port[3], 0x27, (byte)(v & 0x7f));
+                        //ページに関係なく即反映
+                        parent.OutData(mml, port[3], 0x23, ch);
+                        parent.OutData(mml, port[3], 0x27, (byte)(v & 0x7f));
+                        break;
                 }
-                else if (ch < 18)
+            }
+            else if ((string)mml.args[0] == "Ch")
+            {
+                int v = (int)mml.args[2];
+                //Chorus
+                switch ((char)mml.args[1])
                 {
-                    ch = 8;
+                    case 'S'://switch
+                        page.effectChorusSwitch = v * 0x80;
+                        //SOutData(page, mml, port[3], 0x23, ch);
+                        //SOutData(page, mml, port[3], 0x28, (byte)(page.effectChorusSwitch + page.effectChorusMixLevel));
+                        //ページに関係なく即反映
+                        parent.OutData(mml, port[3], 0x23, ch);
+                        parent.OutData(mml, port[3], 0x28, (byte)(page.effectChorusSwitch + page.effectChorusMixLevel));
+                        break;
+                    case 'M'://mix level
+                        page.effectChorusMixLevel = v & 0x7f;
+                        //SOutData(page, mml, port[3], 0x23, ch);
+                        //SOutData(page, mml, port[3], 0x28, (byte)(page.effectChorusSwitch + page.effectChorusMixLevel));
+                        //ページに関係なく即反映
+                        parent.OutData(mml, port[3], 0x23, ch);
+                        parent.OutData(mml, port[3], 0x28, (byte)(page.effectChorusSwitch + page.effectChorusMixLevel));
+                        break;
+                    case 'R'://rate
+                        //SOutData(page, mml, port[3], 0x23, ch);
+                        //SOutData(page, mml, port[3], 0x29, (byte)(v & 0x7f));
+                        //ページに関係なく即反映
+                        parent.OutData(mml, port[3], 0x23, ch);
+                        parent.OutData(mml, port[3], 0x29, (byte)(v & 0x7f));
+                        break;
+                    case 'D'://depth
+                        //SOutData(page, mml, port[3], 0x23, ch);
+                        //SOutData(page, mml, port[3], 0x2a, (byte)(v & 0x7f));
+                        //ページに関係なく即反映
+                        parent.OutData(mml, port[3], 0x23, ch);
+                        parent.OutData(mml, port[3], 0x2a, (byte)(v & 0x7f));
+                        break;
+                    case 'F'://feedback
+                        //SOutData(page, mml, port[3], 0x23, ch);
+                        //SOutData(page, mml, port[3], 0x2b, (byte)(v & 0x7f));
+                        //ページに関係なく即反映
+                        parent.OutData(mml, port[3], 0x23, ch);
+                        parent.OutData(mml, port[3], 0x2b, (byte)(v & 0x7f));
+                        break;
                 }
-                else if (ch < 30)
+            }
+            else if ((string)mml.args[0] == "Lp")//LPF
+            {
+                int v = (int)mml.args[2];
+                int relative = 0;
+                if (mml.args.Count > 3)
                 {
-                    ch = (byte)(ch - 6);
+                    relative = (int)mml.args[3];
                 }
-                else if (ch < 36)
+                switch ((char)mml.args[1])
                 {
-                    ch = (byte)(ch - 3);
-                }
-                else if (ch < 39)
-                {
-                    ch = (byte)(ch - 12);
-                }
-                else
-                {
-                    ch = (byte)(ch - 6);
+                    case 'S'://switch
+                        page.effectLPF.Sw = v & 0x1;
+                        //SOutData(page, mml, port[3], 0x23, ch);
+                        //SOutData(page, mml, port[3], 0xc0, (byte)page.effectLPF.Sw);
+                        //ページに関係なく即反映
+                        parent.OutData(mml, port[3], 0x23, ch);
+                        parent.OutData(mml, port[3], 0xc0, (byte)page.effectLPF.Sw);
+                        break;
+                    case 'R'://rate
+                        if (relative == 0) page.effectLPF.Freq = v & 0xff;
+                        else if (relative == 1) page.effectLPF.Freq = Math.Min(Math.Max((page.effectLPF.Freq + v), 0), 255);
+                        else if (relative == -1) page.effectLPF.Freq = Math.Min(Math.Max((page.effectLPF.Freq - v), 0), 255);
+                        //SOutData(page, mml, port[3], 0x23, ch);
+                        //SOutData(page, mml, port[3], 0xc1, (byte)page.effectLPF.Freq);
+                        //ページに関係なく即反映
+                        parent.OutData(mml, port[3], 0x23, ch);
+                        parent.OutData(mml, port[3], 0xc1, (byte)page.effectLPF.Freq);
+                        break;
+                    case 'Q'://Q
+                        page.effectLPF.Q = v & 0xff;
+                        //SOutData(page, mml, port[3], 0x23, ch);
+                        //SOutData(page, mml, port[3], 0xc2, (byte)page.effectLPF.Q);
+                        //ページに関係なく即反映
+                        parent.OutData(mml, port[3], 0x23, ch);
+                        parent.OutData(mml, port[3], 0xc2, (byte)page.effectLPF.Q);
+                        break;
                 }
 
-                if ((string)mml.args[0] == "Rv")
+            }
+            else if ((string)mml.args[0] == "Hp")//HPF
+            {
+                int v = (int)mml.args[2];
+                int relative = 0;
+                if (mml.args.Count > 3)
                 {
-                    //Reverb
-                    switch ((char)mml.args[1])
-                    {
-                        case 'D':
-                            int v = (int)mml.args[2];
-                            SOutData(page, mml, port[3], 0x22, (byte)v);
-                            break;
-                        case 'S':
-                            int sl = (int)mml.args[2];
-                            SOutData(page, mml, port[3], 0x23, ch);
-                            SOutData(page, mml, port[3], 0x24, (byte)sl);
-                            break;
-                    }
+                    relative = (int)mml.args[3];
                 }
-                else if ((string)mml.args[0] == "Ds")
+                switch ((char)mml.args[1])
                 {
-                    int v = (int)mml.args[2];
-                    //Distortion
-                    switch ((char)mml.args[1])
-                    {
-                        case 'S'://switch
-                            page.effectDistortionSwitch = v * 0x80;
-                            SOutData(page, mml, port[3], 0x23, ch);
-                            SOutData(page, mml, port[3], 0x25, (byte)(page.effectDistortionSwitch + page.effectDistortionVolume));
-                            break;
-                        case 'V'://volume
-                            page.effectDistortionVolume = v & 0x7f;
-                            SOutData(page, mml, port[3], 0x23, ch);
-                            SOutData(page, mml, port[3], 0x25, (byte)(page.effectDistortionSwitch + page.effectDistortionVolume));
-                            break;
-                        case 'G'://gain
-                            SOutData(page, mml, port[3], 0x23, ch);
-                            SOutData(page, mml, port[3], 0x26, (byte)(v & 0x7f));
-                            break;
-                        case 'C'://CutOff
-                            SOutData(page, mml, port[3], 0x23, ch);
-                            SOutData(page, mml, port[3], 0x27, (byte)(v & 0x7f));
-                            break;
-                    }
+                    case 'S'://switch
+                        page.effectHPF.Sw = v & 0x1;
+                        //SOutData(page, mml, port[3], 0x23, ch);
+                        //SOutData(page, mml, port[3], 0xc3, (byte)page.effectHPF.Sw);
+                        //ページに関係なく即反映
+                        parent.OutData(mml, port[3], 0x23, ch);
+                        parent.OutData(mml, port[3], 0xc3, (byte)page.effectHPF.Sw);
+                        break;
+                    case 'R'://rate
+                        if (relative == 0) page.effectHPF.Freq = v & 0xff;
+                        else if (relative == 1) page.effectHPF.Freq = Math.Min(Math.Max((page.effectHPF.Freq + v), 0), 255);
+                        else if (relative == -1) page.effectHPF.Freq = Math.Min(Math.Max((page.effectHPF.Freq - v), 0), 255);
+                        //SOutData(page, mml, port[3], 0x23, ch);
+                        //SOutData(page, mml, port[3], 0xc4, (byte)page.effectHPF.Freq);
+                        //ページに関係なく即反映
+                        parent.OutData(mml, port[3], 0x23, ch);
+                        parent.OutData(mml, port[3], 0xc4, (byte)page.effectHPF.Freq);
+                        break;
+                    case 'Q'://Q
+                        page.effectHPF.Q = v & 0xff;
+                        //SOutData(page, mml, port[3], 0x23, ch);
+                        //SOutData(page, mml, port[3], 0xc5, (byte)page.effectHPF.Q);
+                        //ページに関係なく即反映
+                        parent.OutData(mml, port[3], 0x23, ch);
+                        parent.OutData(mml, port[3], 0xc5, (byte)page.effectHPF.Q);
+                        break;
                 }
-                else if ((string)mml.args[0] == "Ch")
-                {
-                    int v = (int)mml.args[2];
-                    //Chorus
-                    switch ((char)mml.args[1])
-                    {
-                        case 'S'://switch
-                            page.effectChorusSwitch = v * 0x80;
-                            SOutData(page, mml, port[3], 0x23, ch);
-                            SOutData(page, mml, port[3], 0x28, (byte)(page.effectChorusSwitch + page.effectChorusMixLevel));
-                            break;
-                        case 'M'://mix level
-                            page.effectChorusMixLevel = v & 0x7f;
-                            SOutData(page, mml, port[3], 0x23, ch);
-                            SOutData(page, mml, port[3], 0x28, (byte)(page.effectChorusSwitch + page.effectChorusMixLevel));
-                            break;
-                        case 'R'://rate
-                            SOutData(page, mml, port[3], 0x23, ch);
-                            SOutData(page, mml, port[3], 0x29, (byte)(v & 0x7f));
-                            break;
-                        case 'D'://depth
-                            SOutData(page, mml, port[3], 0x23, ch);
-                            SOutData(page, mml, port[3], 0x2a, (byte)(v & 0x7f));
-                            break;
-                        case 'F'://feedback
-                            SOutData(page, mml, port[3], 0x23, ch);
-                            SOutData(page, mml, port[3], 0x2b, (byte)(v & 0x7f));
-                            break;
-                    }
-                }
-                else if ((string)mml.args[0] == "Lp")//LPF
-                {
-                    int v = (int)mml.args[2];
-                    switch ((char)mml.args[1])
-                    {
-                        case 'S'://switch
-                            page.effectLPF.Sw = v & 0x1;
-                            SOutData(page, mml, port[3], 0x23, ch);
-                            SOutData(page, mml, port[3], 0xc0, (byte)page.effectLPF.Sw);
-                            break;
-                        case 'R'://rate
-                            page.effectLPF.Freq = v & 0xff;
-                            SOutData(page, mml, port[3], 0x23, ch);
-                            SOutData(page, mml, port[3], 0xc1, (byte)page.effectLPF.Freq);
-                            break;
-                        case 'Q'://Q
-                            page.effectLPF.Q = v & 0xff;
-                            SOutData(page, mml, port[3], 0x23, ch);
-                            SOutData(page, mml, port[3], 0xc2, (byte)page.effectLPF.Q);
-                            break;
-                    }
 
-                }
-                else if ((string)mml.args[0] == "Hp")//HPF
+            }
+            else if ((string)mml.args[0] == "Sys.Efc.EQ")//system effect EQ
+            {
+                string typ1 = (string)mml.args[1];
+                string typ2 = (string)mml.args[2];
+                int val = (int)mml.args[3];
+                int adr = 0;
+                partPage.EffectParams efc = page.effectSystemEffectEQLow;
+                switch (typ1)
                 {
-                    int v = (int)mml.args[2];
-                    switch ((char)mml.args[1])
-                    {
-                        case 'S'://switch
-                            page.effectHPF.Sw = v & 0x1;
-                            SOutData(page, mml, port[3], 0x23, ch);
-                            SOutData(page, mml, port[3], 0xc3, (byte)page.effectHPF.Sw);
-                            break;
-                        case 'R'://rate
-                            page.effectHPF.Freq = v & 0xff;
-                            SOutData(page, mml, port[3], 0x23, ch);
-                            SOutData(page, mml, port[3], 0xc4, (byte)page.effectHPF.Freq);
-                            break;
-                        case 'Q'://Q
-                            page.effectHPF.Q = v & 0xff;
-                            SOutData(page, mml, port[3], 0x23, ch);
-                            SOutData(page, mml, port[3], 0xc5, (byte)page.effectHPF.Q);
-                            break;
-                    }
-
+                    case "l":
+                        adr = 0xc0;
+                        efc = page.effectSystemEffectEQLow;
+                        break;
+                    case "m":
+                        adr = 0xc4;
+                        efc = page.effectSystemEffectEQMid;
+                        break;
+                    case "h":
+                        adr = 0xc8;
+                        efc = page.effectSystemEffectEQHigh;
+                        break;
                 }
-                else if ((string)mml.args[0] == "Sys.Efc.EQ")//system effect EQ
+                switch (typ2)
                 {
-                    string typ1 = (string)mml.args[1];
-                    string typ2 = (string)mml.args[2];
-                    int val = (int)mml.args[3];
-                    int adr = 0;
-                    partPage.EffectParams efc = page.effectSystemEffectEQLow;
-                    switch (typ1)
-                    {
-                        case "l":
-                            adr = 0xc0;
-                            efc = page.effectSystemEffectEQLow;
-                            break;
-                        case "m":
-                            adr = 0xc4;
-                            efc = page.effectSystemEffectEQMid;
-                            break;
-                        case "h":
-                            adr = 0xc8;
-                            efc = page.effectSystemEffectEQHigh;
-                            break;
-                    }
-                    switch (typ2)
-                    {
-                        case "S":
-                            efc.Sw = val & 0x1;
-                            SOutData(page, mml, port[0], (byte)(adr + 0x0), (byte)(val & 0x1));
-                            break;
-                        case "R":
-                            efc.Freq = val & 0x1;
-                            SOutData(page, mml, port[0], (byte)(adr + 0x1), (byte)(val & 0xff));
-                            break;
-                        case "G":
-                            efc.Gain = val & 0x1;
-                            SOutData(page, mml, port[0], (byte)(adr + 0x2), (byte)(val & 0xff));
-                            break;
-                        case "Q":
-                            efc.Q = val & 0x1;
-                            SOutData(page, mml, port[0], (byte)(adr + 0x3), (byte)(val & 0xff));
-                            break;
-                    }
-
+                    case "S":
+                        efc.Sw = val & 0x1;
+                        //SOutData(page, mml, port[0], (byte)(adr + 0x0), (byte)(val & 0x1));
+                        //ページに関係なく即反映
+                        parent.OutData(mml, port[0], (byte)(adr + 0x0), (byte)(val & 0x1));
+                        break;
+                    case "R":
+                        efc.Freq = val & 0x1;
+                        //SOutData(page, mml, port[0], (byte)(adr + 0x1), (byte)(val & 0xff));
+                        //ページに関係なく即反映
+                        parent.OutData(mml, port[0], (byte)(adr + 0x1), (byte)(val & 0xff));
+                        break;
+                    case "G":
+                        efc.Gain = val & 0x1;
+                        //SOutData(page, mml, port[0], (byte)(adr + 0x2), (byte)(val & 0xff));
+                        //ページに関係なく即反映
+                        parent.OutData(mml, port[0], (byte)(adr + 0x2), (byte)(val & 0xff));
+                        break;
+                    case "Q":
+                        efc.Q = val & 0x1;
+                        //SOutData(page, mml, port[0], (byte)(adr + 0x3), (byte)(val & 0xff));
+                        //ページに関係なく即反映
+                        parent.OutData(mml, port[0], (byte)(adr + 0x3), (byte)(val & 0xff));
+                        break;
                 }
+
+            }
         }
 
         public override void CmdPcmMapSw(partPage page, MML mml)

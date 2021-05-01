@@ -82,8 +82,23 @@ ALG Link 利用 ( ope1 -+
 'A01 T120
 
 FM
-'A01 D0 p4,4 o4 v120 l8 q8 PRON q0 @12c2c2 r2 @13c2c2 r2
-'A01 D0 p4,4 o4 v120 l8 q8 PRON q0 @3 c2c2 r2 @4 c2c2 r2
+A01 D0 p4,4 o4 v120 l8 q8 PRON q0 @12c2c2 r2 @13c2c2 r2
+A01 D0 p4,4 o4 v120 l8 q8 PRON q0 @3 c2c2 r2 @4 c2c2 r2
 B01 D0 p0,4 o4 v120 l8 q8 @2e1 @1e1
 C01 D0 p4,0 o4 v120 l8 q8 @2g1 @1g1
+
+
+
+
+
+'A01 XLpS1 XLpQ160 l16
+'A01   [ XLpR186 [ r XLpR--7 ]16 [ r XLpR++7 ]16 ]2
+'A01   [ XLpR186 [ r XLpR--7 ]16 [ r XLpR++7 ]16 ]2
+'A01 XLpS0
+
+'A01_ @13p3o3l16 q5 v119
+'A01_  [ [aaaa]8 ]2
+'A01_  [ [a4]8   ]2
+
+
 

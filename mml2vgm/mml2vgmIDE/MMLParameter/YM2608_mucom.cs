@@ -62,9 +62,17 @@ namespace mml2vgmIDE.MMLParameter
             {
                 pan[ch] = "-";
             }
-            else
+            else if (od.linePos.part == "FM")
             {
                 pan[ch] = n == 0 ? "-" : (n == 1 ? "Right" : (n == 2 ? "Left" : (n == 3 ? "Center" : n.ToString())));
+            }
+            else if (od.linePos.part == "ADPCM")
+            {
+                pan[ch] = n == 0 ? "-" : (n == 1 ? "Right" : (n == 2 ? "Left" : (n == 3 ? "Center" : n.ToString())));
+            }
+            else
+            {
+                pan[ch] = "?";
             }
         }
 
