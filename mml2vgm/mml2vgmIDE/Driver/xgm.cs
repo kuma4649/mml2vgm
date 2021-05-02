@@ -184,8 +184,8 @@ namespace mml2vgmIDE
         }
 
 
-        private double musicStep = Common.SampleRate / 60.0;
-        private double pcmStep = Common.SampleRate / 14000.0;
+        private double musicStep = Common.DataSequenceSampleRate / 60.0;
+        private double pcmStep = Common.DataSequenceSampleRate / 14000.0;
         private double musicDownCounter = 0.0;
         private double pcmDownCounter = 0.0;
         private uint musicPtr = 0;
@@ -200,7 +200,7 @@ namespace mml2vgmIDE
                 vgmFrameCounter++;
                 Audio.DriverSeqCounter++;
 
-                musicStep = Common.SampleRate / (isNTSC ? 60.0 : 50.0);
+                musicStep = Common.DataSequenceSampleRate / (isNTSC ? 60.0 : 50.0);
 
                 if (musicDownCounter <= 0.0)
                 {
@@ -396,42 +396,25 @@ namespace mml2vgmIDE
         private void oneFramePCM()
         {
             if (DACEnable == 0) return;
-            //return;
+
             short o = 0;
-            int cnt = 0;
 
             for (int i = 0; i < 4; i++)
             {
                 if (!xgmpcm[i].isPlaying) continue;
-                cnt++;
-                short d = vgmBuf[xgmpcm[i].addr++].val;
-                o += (short)(d > 127 ? (d - 256) : d);
+                sbyte d = (sbyte)vgmBuf[xgmpcm[i].addr++].val;
+                o += d;
                 xgmpcm[i].data = (byte)(Math.Abs((int)d));
                 if (xgmpcm[i].addr >= xgmpcm[i].endAddr)
                 {
                     xgmpcm[i].isPlaying = false;
                     xgmpcm[i].data = 0;
                 }
-                if (xgmpcm[i].isPlaying)
-                {
-                    //chipRegister.YM2612SetRegister(xgmpcm[i].od, Audio.DriverSeqCounter, 0, 0, -1, -1);
-                    //chipRegister.YM2612SetRegister(null, Audio.DriverSeqCounter, 0, 0, -1, -1);
-                }
             }
 
-            //if (cnt > 1)
-            //{
-            //if (o < sbyte.MinValue || o > sbyte.MaxValue)
-            //{a
-            //o = (short)(o >> (cnt - 1))aa;
             o = Math.Min(Math.Max(o, (short)(sbyte.MinValue + 1)), (short)(sbyte.MaxValue));
             o += 0x80;
-            //}
-            //}
-            //else
-            //{
-            //    o = 0;
-            //}
+
             //Console.WriteLine("seq{0} dat{1}", Audio.DriverSeqCounter, o);
             chipRegister.YM2612SetRegisterXGM(Audio.DriverSeqCounter, o);
         }

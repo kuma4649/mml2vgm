@@ -18,7 +18,9 @@ namespace mml2vgmIDE
         public const int DEV_SPPCM = 4;
         public const int DEV_Null = 5;
 
-        public static Int32 SampleRate = 44100;
+        public static Int32 SampleRate = 44100;//44100;
+        public static Int32 DataSequenceSampleRate = 44100;//44100;
+
         public static string settingFilePath = "";
         public static string playingFilePath = "";
 

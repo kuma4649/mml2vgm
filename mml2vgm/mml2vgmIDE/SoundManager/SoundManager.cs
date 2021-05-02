@@ -92,6 +92,8 @@ namespace SoundManager
                 , WaitSync
                 , EmuDelay
                 , RealDelay
+                //, mml2vgmIDE.Common.SampleRate
+                //, mml2vgmIDE.Common.SampleRate
                 );
 
             dataMaker.parent = this;

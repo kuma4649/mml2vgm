@@ -1012,6 +1012,20 @@ namespace mml2vgmIDE
         public class OutputDevice
         {
 
+            private int _SampleRate = 44100;
+            public int SampleRate
+            {
+                get
+                {
+                    return _SampleRate;
+                }
+
+                set
+                {
+                    _SampleRate = value;
+                }
+            }
+
             private int _DeviceType = 0;
             public int DeviceType
             {
@@ -1127,6 +1141,7 @@ namespace mml2vgmIDE
             public OutputDevice Copy()
             {
                 OutputDevice outputDevice = new OutputDevice();
+                outputDevice.SampleRate = this.SampleRate;
                 outputDevice.DeviceType = this.DeviceType;
                 outputDevice.Latency = this.Latency;
                 outputDevice.WaitTime = this.WaitTime;

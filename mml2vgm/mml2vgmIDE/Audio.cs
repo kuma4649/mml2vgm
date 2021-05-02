@@ -164,6 +164,7 @@ namespace mml2vgmIDE
 
             log.ForcedWrite("Audio:Init:STEP 01");
 
+            Common.SampleRate = setting.outputDevice.SampleRate;
             NAudioWrap.Init((int)Common.SampleRate, trdVgmVirtualFunction);
             NAudioWrap.PlaybackStopped += NaudioWrap_PlaybackStopped;
 

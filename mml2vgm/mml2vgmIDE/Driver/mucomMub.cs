@@ -118,7 +118,8 @@ namespace mml2vgmIDE
                 }
                 , OPNAWaitSend
                 , false, mubBuf, true, false);
-            mm.StartRendering((int)Common.SampleRate, (int)YM2608ClockValue);
+
+            mm.StartRendering(Common.DataSequenceSampleRate, (int)YM2608ClockValue);
             mm.MSTART(0);
 
             return true;

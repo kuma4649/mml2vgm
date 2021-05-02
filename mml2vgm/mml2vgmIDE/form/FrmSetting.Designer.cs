@@ -51,6 +51,9 @@
             this.cbUseRealChip = new System.Windows.Forms.CheckBox();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage11 = new System.Windows.Forms.TabPage();
+            this.label55 = new System.Windows.Forms.Label();
+            this.label50 = new System.Windows.Forms.Label();
+            this.cmbSampleRate = new System.Windows.Forms.ComboBox();
             this.rbSPPCM = new System.Windows.Forms.RadioButton();
             this.rbNullDevice = new System.Windows.Forms.RadioButton();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
@@ -355,9 +358,7 @@
             this.label30 = new System.Windows.Forms.Label();
             this.tbScreenFrameRate = new System.Windows.Forms.TextBox();
             this.label29 = new System.Windows.Forms.Label();
-            this.lblLoopTimes = new System.Windows.Forms.Label();
             this.btnDataPath = new System.Windows.Forms.Button();
-            this.tbLoopTimes = new System.Windows.Forms.TextBox();
             this.tbDataPath = new System.Windows.Forms.TextBox();
             this.label19 = new System.Windows.Forms.Label();
             this.btnResetPosition = new System.Windows.Forms.Button();
@@ -367,6 +368,7 @@
             this.cbAutoOpen = new System.Windows.Forms.CheckBox();
             this.cbUseLoopTimes = new System.Windows.Forms.CheckBox();
             this.tpOmake = new System.Windows.Forms.TabPage();
+            this.label48 = new System.Windows.Forms.Label();
             this.cbClearHistory = new System.Windows.Forms.CheckBox();
             this.groupBox31 = new System.Windows.Forms.GroupBox();
             this.rbLoglevelINFO = new System.Windows.Forms.RadioButton();
@@ -377,6 +379,8 @@
             this.rbDateTime = new System.Windows.Forms.RadioButton();
             this.rbStopWatch = new System.Windows.Forms.RadioButton();
             this.cbRequestCacheClear = new System.Windows.Forms.CheckBox();
+            this.tbLoopTimes = new System.Windows.Forms.TextBox();
+            this.lblLoopTimes = new System.Windows.Forms.Label();
             this.cbUseSIen = new System.Windows.Forms.CheckBox();
             this.cbInfiniteOfflineMode = new System.Windows.Forms.CheckBox();
             this.groupBox29 = new System.Windows.Forms.GroupBox();
@@ -407,7 +411,6 @@
             this.textBoxDescription = new System.Windows.Forms.TextBox();
             this.llOpenGithub = new System.Windows.Forms.LinkLabel();
             this.cbHiyorimiMode = new System.Windows.Forms.CheckBox();
-            this.label48 = new System.Windows.Forms.Label();
             this.gbWaveOut.SuspendLayout();
             this.gbAsioOut.SuspendLayout();
             this.gbWasapiOut.SuspendLayout();
@@ -535,7 +538,7 @@
             this.gbWaveOut.Controls.Add(this.cmbWaveOutDevice);
             this.gbWaveOut.Location = new System.Drawing.Point(6, 10);
             this.gbWaveOut.Name = "gbWaveOut";
-            this.gbWaveOut.Size = new System.Drawing.Size(416, 48);
+            this.gbWaveOut.Size = new System.Drawing.Size(322, 48);
             this.gbWaveOut.TabIndex = 1;
             this.gbWaveOut.TabStop = false;
             // 
@@ -547,7 +550,7 @@
             this.cmbWaveOutDevice.FormattingEnabled = true;
             this.cmbWaveOutDevice.Location = new System.Drawing.Point(6, 18);
             this.cmbWaveOutDevice.Name = "cmbWaveOutDevice";
-            this.cmbWaveOutDevice.Size = new System.Drawing.Size(405, 20);
+            this.cmbWaveOutDevice.Size = new System.Drawing.Size(310, 20);
             this.cmbWaveOutDevice.TabIndex = 0;
             // 
             // rbWaveOut
@@ -685,7 +688,7 @@
             this.gbDirectSound.Controls.Add(this.cmbDirectSoundDevice);
             this.gbDirectSound.Location = new System.Drawing.Point(6, 66);
             this.gbDirectSound.Name = "gbDirectSound";
-            this.gbDirectSound.Size = new System.Drawing.Size(416, 48);
+            this.gbDirectSound.Size = new System.Drawing.Size(417, 48);
             this.gbDirectSound.TabIndex = 3;
             this.gbDirectSound.TabStop = false;
             // 
@@ -697,7 +700,7 @@
             this.cmbDirectSoundDevice.FormattingEnabled = true;
             this.cmbDirectSoundDevice.Location = new System.Drawing.Point(6, 18);
             this.cmbDirectSoundDevice.Name = "cmbDirectSoundDevice";
-            this.cmbDirectSoundDevice.Size = new System.Drawing.Size(405, 20);
+            this.cmbDirectSoundDevice.Size = new System.Drawing.Size(406, 20);
             this.cmbDirectSoundDevice.TabIndex = 2;
             // 
             // tcSetting
@@ -763,6 +766,9 @@
             // 
             // tabPage11
             // 
+            this.tabPage11.Controls.Add(this.label55);
+            this.tabPage11.Controls.Add(this.label50);
+            this.tabPage11.Controls.Add(this.cmbSampleRate);
             this.tabPage11.Controls.Add(this.rbWasapiOut);
             this.tabPage11.Controls.Add(this.rbSPPCM);
             this.tabPage11.Controls.Add(this.rbDirectSoundOut);
@@ -788,6 +794,38 @@
             this.tabPage11.TabIndex = 0;
             this.tabPage11.Text = "Emulation";
             this.tabPage11.UseVisualStyleBackColor = true;
+            // 
+            // label55
+            // 
+            this.label55.AutoSize = true;
+            this.label55.Location = new System.Drawing.Point(400, 50);
+            this.label55.Name = "label55";
+            this.label55.Size = new System.Drawing.Size(18, 12);
+            this.label55.TabIndex = 12;
+            this.label55.Text = "Hz";
+            // 
+            // label50
+            // 
+            this.label50.AutoSize = true;
+            this.label50.Location = new System.Drawing.Point(336, 10);
+            this.label50.Name = "label50";
+            this.label50.Size = new System.Drawing.Size(66, 12);
+            this.label50.TabIndex = 11;
+            this.label50.Text = "SampleRate";
+            // 
+            // cmbSampleRate
+            // 
+            this.cmbSampleRate.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbSampleRate.FormattingEnabled = true;
+            this.cmbSampleRate.Items.AddRange(new object[] {
+            "44100",
+            "48000",
+            "96000",
+            "192000"});
+            this.cmbSampleRate.Location = new System.Drawing.Point(334, 26);
+            this.cmbSampleRate.Name = "cmbSampleRate";
+            this.cmbSampleRate.Size = new System.Drawing.Size(86, 20);
+            this.cmbSampleRate.TabIndex = 10;
             // 
             // rbSPPCM
             // 
@@ -4130,15 +4168,6 @@
             this.label29.TabIndex = 19;
             this.label29.Text = "フレームレート";
             // 
-            // lblLoopTimes
-            // 
-            this.lblLoopTimes.AutoSize = true;
-            this.lblLoopTimes.Location = new System.Drawing.Point(417, 325);
-            this.lblLoopTimes.Name = "lblLoopTimes";
-            this.lblLoopTimes.Size = new System.Drawing.Size(17, 12);
-            this.lblLoopTimes.TabIndex = 1;
-            this.lblLoopTimes.Text = "回";
-            // 
             // btnDataPath
             // 
             this.btnDataPath.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -4149,13 +4178,6 @@
             this.btnDataPath.Text = "...";
             this.btnDataPath.UseVisualStyleBackColor = true;
             this.btnDataPath.Click += new System.EventHandler(this.btnDataPath_Click);
-            // 
-            // tbLoopTimes
-            // 
-            this.tbLoopTimes.Location = new System.Drawing.Point(359, 322);
-            this.tbLoopTimes.Name = "tbLoopTimes";
-            this.tbLoopTimes.Size = new System.Drawing.Size(52, 19);
-            this.tbLoopTimes.TabIndex = 0;
             // 
             // tbDataPath
             // 
@@ -4267,6 +4289,14 @@
             this.tpOmake.Text = "おまけ";
             this.tpOmake.UseVisualStyleBackColor = true;
             // 
+            // label48
+            // 
+            this.label48.Location = new System.Drawing.Point(249, 315);
+            this.label48.Name = "label48";
+            this.label48.Size = new System.Drawing.Size(104, 47);
+            this.label48.TabIndex = 27;
+            this.label48.Text = "wavファイルエクスポート時のループ回数";
+            // 
             // cbClearHistory
             // 
             this.cbClearHistory.Location = new System.Drawing.Point(228, 137);
@@ -4373,6 +4403,22 @@
             this.cbRequestCacheClear.TabIndex = 23;
             this.cbRequestCacheClear.Text = "音色のキャッシュをクリアする(要再起動)";
             this.cbRequestCacheClear.UseVisualStyleBackColor = true;
+            // 
+            // tbLoopTimes
+            // 
+            this.tbLoopTimes.Location = new System.Drawing.Point(359, 322);
+            this.tbLoopTimes.Name = "tbLoopTimes";
+            this.tbLoopTimes.Size = new System.Drawing.Size(52, 19);
+            this.tbLoopTimes.TabIndex = 0;
+            // 
+            // lblLoopTimes
+            // 
+            this.lblLoopTimes.AutoSize = true;
+            this.lblLoopTimes.Location = new System.Drawing.Point(417, 325);
+            this.lblLoopTimes.Name = "lblLoopTimes";
+            this.lblLoopTimes.Size = new System.Drawing.Size(17, 12);
+            this.lblLoopTimes.TabIndex = 1;
+            this.lblLoopTimes.Text = "回";
             // 
             // cbUseSIen
             // 
@@ -4711,14 +4757,6 @@
             this.cbHiyorimiMode.Text = "日和見モード(出力タブ：\r\n遅延時間100ms以下の時、使用を推奨)";
             this.cbHiyorimiMode.UseVisualStyleBackColor = true;
             this.cbHiyorimiMode.Visible = false;
-            // 
-            // label48
-            // 
-            this.label48.Location = new System.Drawing.Point(249, 315);
-            this.label48.Name = "label48";
-            this.label48.Size = new System.Drawing.Size(104, 47);
-            this.label48.TabIndex = 27;
-            this.label48.Text = "wavファイルエクスポート時のループ回数";
             // 
             // FrmSetting
             // 
@@ -5270,5 +5308,8 @@
         private System.Windows.Forms.TabPage tpMMLParameter;
         private System.Windows.Forms.CheckBox cbDispInstrumentName;
         private System.Windows.Forms.Label label48;
+        private System.Windows.Forms.Label label55;
+        private System.Windows.Forms.Label label50;
+        private System.Windows.Forms.ComboBox cmbSampleRate;
     }
 }

@@ -102,7 +102,7 @@ namespace mml2vgmIDE
                 , chipRegister
                 );
 
-            moonDriverManager.StartRendering((int)Common.SampleRate, (int)YMF278BClockValue);
+            moonDriverManager.StartRendering(Common.DataSequenceSampleRate, (int)YMF278BClockValue);
             moonDriverManager.MSTART(0);
 
             return true;

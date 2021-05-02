@@ -186,6 +186,8 @@ namespace mml2vgmIDE
 
             //設定内容をコントロールへ適用
 
+            cmbSampleRate.SelectedItem = setting.outputDevice.SampleRate.ToString();
+
             cbUseRealChip.Checked = setting.unuseRealChip;
 
             switch (setting.outputDevice.DeviceType)
@@ -921,6 +923,7 @@ namespace mml2vgmIDE
             setting.outputDevice.WasapiShareMode = rbShare.Checked;
             setting.outputDevice.Latency = int.Parse(cmbLatency.SelectedItem.ToString());
             setting.outputDevice.WaitTime = int.Parse(cmbWaitTime.SelectedItem.ToString());
+            setting.outputDevice.SampleRate= int.Parse(cmbSampleRate.SelectedItem.ToString());
 
             setting.IsManualDetect = !rbAutoDetect.Checked;
             setting.AutoDetectModuleType = rbSCCIDetect.Checked ? 0 : 1;
