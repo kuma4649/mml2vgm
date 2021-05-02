@@ -1203,13 +1203,19 @@ namespace mml2vgmIDE
                 chip = new MDSound.MDSound.Chip();
                 chip.ID = (byte)0;
                 chip.Option = null;
-                MDSound.ym2612 ym2612 = null;
-                MDSound.ym3438 ym3438 = null;
-                MDSound.ym2612mame ym2612mame = null;
+                MDSound.ym2612X ym2612 = null;
+                MDSound.ym3438X ym3438 = null;
+                MDSound.ym2612mameX ym2612mame = null;
+
+                List<byte> pcmBuf = new List<byte>();
+                for(int i = 0; i < ((xgm)driver).sampleDataBlockSize * 256; i++)
+                {
+                    pcmBuf.Add(vgmBuf[((xgm)driver).sampleDataBlockAddr + i].val);
+                }
 
                 if (setting.YM2612Type.UseEmu)
                 {
-                    if (ym2612 == null) ym2612 = new ym2612();
+                    if (ym2612 == null) ym2612 = new MDSound.ym2612X();
                     chip.type = MDSound.MDSound.enmInstrumentType.YM2612;
                     chip.Instrument = ym2612;
                     chip.Update = ym2612.Update;
@@ -1226,7 +1232,7 @@ namespace mml2vgmIDE
                 }
                 else if (setting.YM2612Type.UseEmu2)
                 {
-                    if (ym3438 == null) ym3438 = new ym3438();
+                    if (ym3438 == null) ym3438 = new ym3438X();
                     chip.type = MDSound.MDSound.enmInstrumentType.YM3438;
                     chip.Instrument = ym3438;
                     chip.Update = ym3438.Update;
@@ -1254,7 +1260,7 @@ namespace mml2vgmIDE
                 }
                 else if (setting.YM2612Type.UseEmu3)
                 {
-                    if (ym2612mame == null) ym2612mame = new ym2612mame();
+                    if (ym2612mame == null) ym2612mame = new ym2612mameX();
                     chip.type = MDSound.MDSound.enmInstrumentType.YM2612mame;
                     chip.Instrument = ym2612mame;
                     chip.Update = ym2612mame.Update;
@@ -1317,6 +1323,25 @@ namespace mml2vgmIDE
                     mds = new MDSound.MDSound((UInt32)Common.SampleRate, samplingBuffer, lstChips.ToArray());
                 else
                     mds.Init((UInt32)Common.SampleRate, samplingBuffer, lstChips.ToArray());
+
+                if (setting.YM2612Type.UseEmu)
+                {
+                    ym2612.XGMfunction.sampleID[0] = ((xgm)driver).sampleID;
+                    ym2612.XGMfunction.xgmpcm[0] = ((xgm)driver).xgmpcm;
+                    ym2612.XGMfunction.pcmBuf[0] = pcmBuf.ToArray();
+                }
+                else if (setting.YM2612Type.UseEmu2)
+                {
+                    ym3438.XGMfunction.sampleID[0] = ((xgm)driver).sampleID;
+                    ym3438.XGMfunction.xgmpcm[0] = ((xgm)driver).xgmpcm;
+                    ym3438.XGMfunction.pcmBuf[0] = pcmBuf.ToArray();
+                }
+                else if (setting.YM2612Type.UseEmu3)
+                {
+                    ym2612mame.XGMfunction.sampleID[0] = ((xgm)driver).sampleID;
+                    ym2612mame.XGMfunction.xgmpcm[0] = ((xgm)driver).xgmpcm;
+                    ym2612mame.XGMfunction.pcmBuf[0] = pcmBuf.ToArray();
+                }
 
                 log.Write("ChipRegister 初期化");
                 chipRegister.SetMDSound(mds);
