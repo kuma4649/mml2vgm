@@ -2345,9 +2345,12 @@ namespace Core
                     continue;
                 }
 
-                if (c == ',' && strSw == 0)
+                if ((c == ',' || c == ' ') && strSw == 0)
                 {
-                    lstWord.Add(wrd);
+                    if (wrd.Trim() != "")
+                    {
+                        lstWord.Add(wrd.Trim());
+                    }
                     wrd = "";
                     continue;
                 }
@@ -4864,8 +4867,8 @@ namespace Core
                         //最後まで解析したかな
                         if (page.arpInstrumentPtr >= instArp[page.arpInstrument].Length)
                         {
-                            //ループ設定あるかな
-                            if (page.arpLoopPtr < 0)
+                            //ループ設定あるかな もしくは無限ループ対策フラグが立ったまま(waitしていない状態)かな
+                            if (page.arpLoopPtr < 0 || page.arpInfinite)
                             {
                                 //ループが設定されていない場合は動作はここで完了
                                 page.arpIndex = -1;
@@ -4891,6 +4894,7 @@ namespace Core
                             }
 
                             page.arpLoopPtr = page.arpInstrumentPtr;//ループポイントの設定
+                            page.arpInfinite = true;
                             if (page.arpLoopPtr >= instArp[page.arpInstrument].Length)
                             {
                                 //ループポイント指定あとのデータがない場合は動作はここで完了
@@ -4939,6 +4943,7 @@ namespace Core
                         }
 
                         page.arpCounter = page.arpKeyOnLength;
+                        if (page.arpCounter > 0) page.arpInfinite = false;
                         page.arpIndex++;
                         break;
 
@@ -4993,6 +4998,7 @@ namespace Core
                         }
 
                         page.arpCounter = page.arpKeyOffLength;
+                        if (page.arpCounter > 0) page.arpInfinite = false;
                         page.arpIndex++;
                         break;
 
@@ -5022,7 +5028,7 @@ namespace Core
                         if (page.varpInstrumentPtr >= instVArp[page.varpInstrument].Length)
                         {
                             //ループ設定あるかな
-                            if (page.varpLoopPtr < 0)
+                            if (page.varpLoopPtr < 0 || page.varpInfinite)
                             {
                                 //ループが設定されていない場合は動作はここで完了
                                 page.varpIndex = -1;
@@ -5049,6 +5055,7 @@ namespace Core
                             if (page.varpLoopPtr == -1)
                             {
                                 page.varpLoopPtr = page.varpInstrumentPtr;//ループポイントの設定
+                                page.varpInfinite = true;
                                 if (page.varpLoopPtr >= instVArp[page.varpInstrument].Length)
                                 {
                                     //ループポイント指定あとのデータがない場合は動作はここで完了
@@ -5083,6 +5090,7 @@ namespace Core
                         //deltaは前回の値を基準に変化する
                         page.varpDelta += delta.dat;
                         page.varpCounter = page.varpKeyOnLength;
+                        if (page.varpCounter > 0) page.varpInfinite = false;
                         //page.varpIndex++;
                         break;
 
@@ -5102,6 +5110,7 @@ namespace Core
 
                             page.varpInstrumentPtr = lp;
                             page.varpLoopPtr = lp;
+                            page.varpInfinite = true;
 
                             page.varpCounter = 0;
                             page.varpIndex = 0;
@@ -5163,7 +5172,7 @@ namespace Core
                     if (ca.Ptr == instCommandArp[ca.Num].Length)
                     {
                         //ループポイントの設定があるなら繰り返し処理続行
-                        if (ca.LoopPtr != -1)
+                        if (ca.LoopPtr != -1 && !ca.Infinite)
                         {
                             ca.Ptr = ca.LoopPtr;
                             continue;
@@ -5192,10 +5201,12 @@ namespace Core
                             ca.LoopPtr = ca.Ptr;
                             if (ca.LoopPtr >= instCommandArp[ca.Num].Length)
                                 ca.LoopPtr = -1;
+                            if (ca.LoopPtr != -1) ca.Infinite = true;
                             continue;
 
                         case enmMMLType.Instrument:
                             ca.WaitCounter = ca.WaitClock;
+                            if (ca.WaitCounter > 0) ca.Infinite = false;
                             mml = new MML();
                             mml.args = md.args;
                             mml.type = md.type;
@@ -5207,6 +5218,7 @@ namespace Core
 
                         case enmMMLType.Pan:
                             ca.WaitCounter = ca.WaitClock;
+                            if (ca.WaitCounter > 0) ca.Infinite = false;
                             mml = new MML();
                             mml.args = md.args;
                             mml.type = md.type;
@@ -5216,6 +5228,7 @@ namespace Core
 
                         case enmMMLType.NoiseToneMixer:
                             ca.WaitCounter = ca.WaitClock;
+                            if (ca.WaitCounter > 0) ca.Infinite = false;
                             mml = new MML();
                             mml.args = md.args;
                             mml.type = md.type;
@@ -5225,6 +5238,7 @@ namespace Core
 
                         case enmMMLType.Noise:
                             ca.WaitCounter = ca.WaitClock;
+                            if (ca.WaitCounter > 0) ca.Infinite = false;
                             mml = new MML();
                             mml.args = md.args;
                             mml.type = md.type;
@@ -5234,6 +5248,7 @@ namespace Core
 
                         case enmMMLType.DCSGCh3Freq:
                             ca.WaitCounter = ca.WaitClock;
+                            if (ca.WaitCounter > 0) ca.Infinite = false;
                             mml = new MML();
                             mml.args = md.args;
                             mml.type = md.type;

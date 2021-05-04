@@ -14,5 +14,6 @@ namespace Core
         public int LoopPtr = -1;//ループポイント
         public int WaitCounter = 0;//次の行動までの待ち時間
         public int WaitClock = 1;//待ち時間
+        public bool Infinite = false;//無限ループ対策
     }
 }

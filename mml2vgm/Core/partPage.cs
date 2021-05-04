@@ -305,6 +305,10 @@ namespace Core
         /// </summary>
         public int arpGatetime = 0;
 
+        /// <summary>
+        /// アルペジオ向け無限ループ対策
+        /// </summary>
+        public bool arpInfinite = false;
 
 
         /// <summary>
@@ -372,6 +376,11 @@ namespace Core
         ///// volumeアルペジオ向けゲートタイム
         ///// </summary>
         //public int varpGatetime = 0;
+
+        /// <summary>
+        /// アルペジオ向け無限ループ対策
+        /// </summary>
+        public bool varpInfinite = false;
 
 
 
