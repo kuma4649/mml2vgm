@@ -3354,7 +3354,7 @@ stop();
             UpdateScreenInfo();
 
             long w = Audio.EmuSeqCounter;
-            double sec = (double)w / (double)Common.SampleRate;
+            double sec = (double)w / (double)Common.DataSequenceSampleRate;//.SampleRate;
             toolStripStatusLabel1.Text = string.Format("{0:d2}:{1:d2}.{2:d2}", (int)(sec / 60), (int)(sec % 60), (int)(sec * 100 % 100));
         }
 
