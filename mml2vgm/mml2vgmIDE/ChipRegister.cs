@@ -382,6 +382,7 @@ namespace mml2vgmIDE
 
 
         public List<Chip> CONDUCTOR = new List<Chip>();
+        public List<Chip> DACControl = new List<Chip>();
         public List<Chip> AY8910 = new List<Chip>();
         public List<Chip> C140 = new List<Chip>();
         public List<Chip> C352 = new List<Chip>();
@@ -846,7 +847,7 @@ namespace mml2vgmIDE
         {
 
             CONDUCTOR.Clear();
-
+            DACControl.Clear();
 
             for (int i = 0; i < 2; i++)
             {
@@ -856,6 +857,13 @@ namespace mml2vgmIDE
                 CONDUCTOR[i].Device = EnmZGMDevice.Conductor;
                 CONDUCTOR[i].Number = i;
                 CONDUCTOR[i].Hosei = 0;
+
+                if (DACControl.Count < i + 1) DACControl.Add(new Chip(2));
+                DACControl[i].Use = false;
+                DACControl[i].Model = EnmVRModel.None;
+                DACControl[i].Device = EnmZGMDevice.DACControl;
+                DACControl[i].Number = i;
+                DACControl[i].Hosei = 0;
 
                 if (AY8910.Count < i + 1) AY8910.Add(new Chip(3));
                 AY8910[i].Use = false;
@@ -1110,6 +1118,9 @@ namespace mml2vgmIDE
 
             switch (Chip.Device)
             {
+                case EnmZGMDevice.DACControl:
+                    DACControlSetRegisterProcessing(ref Counter, ref Chip, ref Type, ref Address, ref Data, ref ExData);
+                    break;
                 case EnmZGMDevice.AY8910:
                     AY8910SetRegisterProcessing(ref Counter, ref Chip, ref Type, ref Address, ref Data, ref ExData);
                     break;
@@ -1211,6 +1222,9 @@ namespace mml2vgmIDE
 
             switch (Chip.Device)
             {
+                case EnmZGMDevice.DACControl:
+                    DACControlWriteRegisterControl(Chip, type, address, data, exData);
+                    break;
                 case EnmZGMDevice.AY8910:
                     AY8910WriteRegisterControl(Chip, type, address, data, exData);
                     break;
@@ -2041,6 +2055,165 @@ namespace mml2vgmIDE
 
         }
 
+
+
+
+        #region DACControl
+
+        private void DACControlWriteRegisterControl(Chip Chip, EnmDataType type, int address, int data, object exData)
+        {
+            object[] args = (object[])exData;
+
+            if (type == EnmDataType.Normal)
+            {
+                if (Chip.Model == EnmVRModel.VirtualModel)
+                {
+                    switch (address)
+                    {
+                        case 0:
+                            mds.dacControl.SetupStreamControl(
+                                (byte)args[0]
+                                , (byte)args[1]
+                                , (byte)args[2]
+                                , (byte)args[3]
+                                , (byte)args[4]
+                                , (byte)args[5]
+                                , (byte)args[6]
+                                );
+                            break;
+                        case 1:
+                            mds.dacControl.SetStreamData(
+                                (byte)args[0]
+                                , (byte)args[1]
+                                , (byte)args[2]
+                                , (byte)args[3]
+                                );
+                            break;
+                        case 2:
+                            mds.dacControl.SetStreamFrequency(
+                                (byte)args[0]
+                                , (uint)args[1]
+                                );
+                            break;
+                        case 3:
+                            mds.dacControl.StartStream(
+                                (byte)args[0]
+                                , (uint)args[1]
+                                , (byte)args[2]
+                                , (uint)args[3]
+                                );
+                            break;
+                        case 4:
+                            mds.dacControl.StopStream(
+                                (byte)args[0]
+                                );
+                            break;
+                        case 5:
+                            mds.dacControl.StartStreamFastCall(
+                                (byte)args[0]
+                                , (uint)args[1]
+                                , (byte)args[2]
+                                );
+                            break;
+                    }
+                }
+                if (Chip.Model == EnmVRModel.RealModel)
+                {
+                    ;
+                }
+            }
+            else if (type == EnmDataType.Block)
+            {
+                Audio.sm.SetInterrupt();
+
+                try
+                {
+                    if (exData == null) return;
+
+                    PackData[] pdata = (PackData[])exData;
+                    if (Chip.Model == EnmVRModel.VirtualModel)
+                    {
+                        foreach (PackData dat in pdata)
+                            ;
+                    }
+                    if (Chip.Model == EnmVRModel.RealModel)
+                    {
+                        if (scAY8910[Chip.Number] != null)
+                        {
+                            foreach (PackData dat in pdata)
+                            {
+                                ;
+                            }
+                        }
+                    }
+                }
+                finally
+                {
+                    Audio.sm.ResetInterrupt();
+                }
+            }
+        }
+
+        public void DACControlSetRegisterProcessing(ref long Counter, ref Chip Chip, ref EnmDataType Type, ref int Address, ref int dData, ref object ExData)
+        {
+        }
+
+        public void DACControlAddPCMData(byte type,uint DataSize,uint Adr,byte[] vgmBuf)
+        {
+            mds.dacControl.AddPCMData(type, DataSize, Adr, vgmBuf);
+        }
+
+        public void DACControlSetupStreamControl(outDatum od, long Counter, byte si, byte ChipType, byte EmuType, byte ChipIndex, byte ChipID, byte port, byte cmd)
+        {
+            byte et = EmuType;
+            if (ChipType == 2)//YM2612
+            {
+                if (ctYM2612 == null || ctYM2612.Length < ChipID + 1 || ctYM2612[ChipID] == null) et = 0;
+                else if (ctYM2612[ChipID].UseEmu) et = 0;
+                else if (ctYM2612[ChipID].UseEmu2) et = 1;
+                else if (ctYM2612[ChipID].UseEmu3) et = 2;
+            }
+
+            enq(od, Counter, DACControl[ChipID], EnmDataType.Normal, 0, 0,
+                new object[] { si, ChipType, et, ChipIndex, ChipID, port, cmd });
+            //mds.dacControl.SetupStreamControl(si, ChipType, EmuType, ChipIndex, ChipID, port, cmd);
+        }
+
+        public void DACControlSetStreamData(outDatum od, long Counter, int ChipID, byte si, byte bank, byte StepSize, byte StepBase)
+        {
+            enq(od, Counter, DACControl[ChipID], EnmDataType.Normal, 1, 0,
+                new object[] { si, bank, StepSize, StepBase });
+        }
+
+        public void DACControlSetFrequency(outDatum od, long Counter, int ChipID, byte si, uint TempLng)
+        {
+            enq(od, Counter, DACControl[ChipID], EnmDataType.Normal, 2, 0,
+                new object[] { si, TempLng });
+            //mds.dacControl.SetStreamFrequency(si, TempLng);
+        }
+
+        public void DACControlStartStream(outDatum od, long Counter, int ChipID, byte si, uint DataStart, byte TempByt, uint DataLen)
+        {
+            enq(od, Counter, DACControl[ChipID], EnmDataType.Normal, 3, 0,
+                new object[] { si, DataStart, TempByt, DataLen });
+            //mds.dacControl.StartStream(si, DataStart, TempByt, DataLen);
+        }
+
+        public void DACControlStopStream(outDatum od, long Counter, int ChipID, byte si)
+        {
+            enq(od, Counter, DACControl[ChipID], EnmDataType.Normal, 4, 0,
+                new object[] { si });
+            //mds.dacControl.StopStream(si);
+        }
+
+        public void DACControlStartStream(outDatum od, long Counter, int ChipID, byte CurChip, uint TempSht, byte mode)
+        {
+            enq(od, Counter, DACControl[ChipID], EnmDataType.Normal, 5, 0,
+                new object[] { CurChip, TempSht, mode });
+            //mds.dacControl.StartStreamFastCall(CurChip, TempSht, mode);
+        }
+
+        #endregion
 
 
         #region AY8910

@@ -1106,9 +1106,9 @@ namespace mml2vgmIDE
 
                 driver = new Driver.ZGM.zgm();
                 driver.setting = setting;
-                ((Driver.ZGM.zgm)driver).dacControl.chipRegister = chipRegister;
-                ((Driver.ZGM.zgm)driver).dacControl.model = EnmVRModel.VirtualModel;
-                ((Driver.ZGM.zgm)driver).dacControl.driver = ((Driver.ZGM.zgm)driver);
+                //((Driver.ZGM.zgm)driver).dacControl.chipRegister = chipRegister;
+                //((Driver.ZGM.zgm)driver).dacControl.model = EnmVRModel.VirtualModel;
+                //((Driver.ZGM.zgm)driver).dacControl.driver = ((Driver.ZGM.zgm)driver);
 
                 ret = zgmPlay(setting);
 
@@ -1132,8 +1132,8 @@ namespace mml2vgmIDE
             {
                 driver = new vgm();
                 driver.setting = setting;
-                ((vgm)driver).dacControl.chipRegister = chipRegister;
-                ((vgm)driver).dacControl.model = EnmVRModel.VirtualModel;
+                //((vgm)driver).dacControl.chipRegister = chipRegister;
+                //((vgm)driver).dacControl.model = EnmVRModel.VirtualModel;
 
                 ret = vgmPlay(setting);
             }
@@ -3929,6 +3929,11 @@ namespace mml2vgmIDE
                     mds = new MDSound.MDSound((UInt32)Common.SampleRate, samplingBuffer, lstChips.ToArray());
                 else
                     mds.Init((UInt32)Common.SampleRate, samplingBuffer, lstChips.ToArray());
+
+                log.Write("MDSound DAC control 初期化");
+                mds.dacControl.init((uint)Common.SampleRate, mds, ((vgm)driver).PCMBank);
+                chipRegister.DACControl[0].Use = true;
+                chipRegister.DACControl[0].Model = EnmVRModel.VirtualModel;
 
                 log.Write("ChipRegister 初期化");
                 chipRegister.SetMDSound(mds);

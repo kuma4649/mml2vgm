@@ -2,6 +2,7 @@
 using SoundManager;
 using System;
 using System.Collections.Generic;
+using static MDSound.dacControl;
 
 namespace mml2vgmIDE.Driver.ZGM
 {
@@ -64,7 +65,7 @@ namespace mml2vgmIDE.Driver.ZGM
         public uint NESClockValue;
         public uint MultiPCMClockValue;
 
-        public dacControl dacControl = new dacControl();
+        //public dacControl dacControl = new dacControl();
         public bool isPcmRAMWrite = false;
         public bool useChipYM2612Ch6 = false;
         //public Setting setting = null;
@@ -124,7 +125,7 @@ namespace mml2vgmIDE.Driver.ZGM
             vgmSpeedCounter = 0;
 
             for (int i = 0; i < PCM_BANK_COUNT; i++) PCMBank[i] = new VGM_PCM_BANK();
-            dacControl.refresh();
+            //dacControl.refresh();
             DacCtrlUsed = 0x00;
             for (byte CurChip = 0x00; CurChip < 0xFF; CurChip++)
             {
@@ -226,22 +227,22 @@ namespace mml2vgmIDE.Driver.ZGM
 
             }
 
-            for (long i = Counter; i < Audio.DriverSeqCounter; i++)
-            {
-                oneFrameVGMStream(i);
-            }
+            //for (long i = Counter; i < Audio.DriverSeqCounter; i++)
+            //{
+            //    oneFrameVGMStream(i);
+            //}
 
             vgmFrameCounter++;
 
         }
 
-        private void oneFrameVGMStream(long Counter)
-        {
-            for (int CurChip = 0x00; CurChip < DacCtrlUsed; CurChip++)
-            {
-                dacControl.update(Counter, DacCtrlUsg[CurChip], 1);
-            }
-        }
+        //private void oneFrameVGMStream(long Counter)
+        //{
+        //    for (int CurChip = 0x00; CurChip < DacCtrlUsed; CurChip++)
+        //    {
+        //        dacControl.update(Counter, DacCtrlUsg[CurChip], 1);
+        //    }
+        //}
 
         private void setCommands()
         {
@@ -933,8 +934,8 @@ namespace mml2vgmIDE.Driver.ZGM
             }
             if (!DacCtrl[si].Enable)
             {
-                dacControl.device_start_daccontrol(si);
-                dacControl.device_reset_daccontrol(si);
+                //dacControl.device_start_daccontrol(si);
+                //dacControl.device_reset_daccontrol(si);
                 DacCtrl[si].Enable = true;
                 DacCtrlUsg[DacCtrlUsed] = si;
                 DacCtrlUsed++;
@@ -952,7 +953,7 @@ namespace mml2vgmIDE.Driver.ZGM
             byte cmd = vgmBuf[vgmAdr + pos].val;
             pos++;
 
-            dacControl.setup_chipZGM(si, chipId, (uint)(port * 0x100 + cmd));
+            //dacControl.setup_chipZGM(si, chipId, (uint)(port * 0x100 + cmd));
             vgmAdr += (uint)pos;
         }
 
@@ -976,8 +977,8 @@ namespace mml2vgmIDE.Driver.ZGM
 
             VGM_PCM_BANK TempPCM = PCMBank[DacCtrl[si].Bank];
             //Last95Max = TempPCM->BankCount;
-            dacControl.set_data(si, TempPCM.Data, TempPCM.DataSize,
-                            vgmBuf[vgmAdr + 3].val, vgmBuf[vgmAdr + 4].val);
+            //dacControl.set_data(si, TempPCM.Data, TempPCM.DataSize,
+            //                vgmBuf[vgmAdr + 3].val, vgmBuf[vgmAdr + 4].val);
 
             vgmAdr += 5;
         }
@@ -998,7 +999,7 @@ namespace mml2vgmIDE.Driver.ZGM
             }
             uint TempLng = Common.getLE32(vgmBuf, vgmAdr + 2);
             //Last95Freq = TempLng;
-            dacControl.set_frequency(si, TempLng);
+            //dacControl.set_frequency(si, TempLng);
             vgmAdr += 6;
         }
 
@@ -1020,7 +1021,7 @@ namespace mml2vgmIDE.Driver.ZGM
             //Last95Drum = 0xFFFF;
             byte TempByt = vgmBuf[vgmAdr + 6].val;
             uint DataLen = Common.getLE32(vgmBuf, vgmAdr + 7);
-            dacControl.start(si, DataStart, TempByt, DataLen, od);
+            //dacControl.start(si, DataStart, TempByt, DataLen, od);
             vgmAdr += 0x0B;
 
         }
@@ -1042,12 +1043,12 @@ namespace mml2vgmIDE.Driver.ZGM
             //Last95Drum = 0xFFFF;
             if (si < 0xFF)
             {
-                dacControl.stop(si);
+                //dacControl.stop(si);
             }
             else
             {
-                for (si = 0x00; si < 0xFF; si++)
-                    dacControl.stop(si);
+                //for (si = 0x00; si < 0xFF; si++)
+                    //dacControl.stop(si);
             }
             vgmAdr += 0x02;
         }
@@ -1060,25 +1061,25 @@ namespace mml2vgmIDE.Driver.ZGM
             //    return;
             //}
 
-            byte CurChip = vgmBuf[vgmAdr + 1].val;
-            if (CurChip == 0xFF || !DacCtrl[CurChip].Enable ||
-                PCMBank[DacCtrl[CurChip].Bank].BankCount == 0)
-            {
-                vgmAdr += 0x05;
-                return;
-            }
-            VGM_PCM_BANK TempPCM = PCMBank[DacCtrl[CurChip].Bank];
-            uint TempSht = Common.getLE16(vgmBuf, vgmAdr + 2);
-            //Last95Drum = TempSht;
-            //Last95Max = TempPCM->BankCount;
-            if (TempSht >= TempPCM.BankCount)
-                TempSht = 0x00;
-            VGM_PCM_DATA TempBnk = TempPCM.Bank[(int)TempSht];
+            //byte CurChip = vgmBuf[vgmAdr + 1].val;
+            //if (CurChip == 0xFF || !DacCtrl[CurChip].Enable ||
+            //    PCMBank[DacCtrl[CurChip].Bank].BankCount == 0)
+            //{
+            //    vgmAdr += 0x05;
+            //    return;
+            //}
+            //VGM_PCM_BANK TempPCM = PCMBank[DacCtrl[CurChip].Bank];
+            //uint TempSht = Common.getLE16(vgmBuf, vgmAdr + 2);
+            ////Last95Drum = TempSht;
+            ////Last95Max = TempPCM->BankCount;
+            //if (TempSht >= TempPCM.BankCount)
+            //    TempSht = 0x00;
+            //VGM_PCM_DATA TempBnk = TempPCM.Bank[(int)TempSht];
 
-            byte TempByt = (byte)(dacControl.DCTRL_LMODE_BYTES |
-                        (vgmBuf[vgmAdr + 4].val & 0x10) |         // Reverse Mode
-                        ((vgmBuf[vgmAdr + 4].val & 0x01) << 7));   // Looping
-            dacControl.start(CurChip, TempBnk.DataStart, TempByt, TempBnk.DataSize, od);
+            //byte TempByt = (byte)(dacControl.DCTRL_LMODE_BYTES |
+            //            (vgmBuf[vgmAdr + 4].val & 0x10) |         // Reverse Mode
+            //            ((vgmBuf[vgmAdr + 4].val & 0x01) << 7));   // Looping
+            //dacControl.start(CurChip, TempBnk.DataStart, TempByt, TempBnk.DataSize, od);
             vgmAdr += 0x05;
 
         }
@@ -1228,8 +1229,8 @@ namespace mml2vgmIDE.Driver.ZGM
         RefreshDACStrm:
             for (CurDAC = 0x00; CurDAC < DacCtrlUsed; CurDAC++)
             {
-                if (DacCtrl[DacCtrlUsg[CurDAC]].Bank == BnkType)
-                    dacControl.refresh_data(DacCtrlUsg[CurDAC], TempPCM.Data, TempPCM.DataSize);
+                //if (DacCtrl[DacCtrlUsg[CurDAC]].Bank == BnkType)
+                    //dacControl.refresh_data(DacCtrlUsg[CurDAC], TempPCM.Data, TempPCM.DataSize);
             }
 
             return;
