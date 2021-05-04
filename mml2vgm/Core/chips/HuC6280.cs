@@ -412,26 +412,65 @@ namespace Core
                 page.streamID = parent.newStreamID;
                 if (parent.info.format == enmFormat.ZGM)
                 {
-                    if (parent.ChipCommandSize == 2) cmd = new byte[] { 0x30, 0x00 };
-                    else cmd = new byte[] { 0x30 };
+                    if (parent.ChipCommandSize == 2)
+                    {
+                        SOutData(
+                            page,
+                            mml,
+                            // setup stream control
+                            new byte[] { 0x30, 0x00 }
+                            , (byte)page.streamID
+                            , (byte)(0x1b + (page.chipNumber != 0 ? 0x80 : 0x00)) //0x1b HuC6280
+                            , (byte)page.ch
+                            , (byte)(0x00 + 0x06)// 0x00 Select Channel 
+                                                 // set stream data
+                            , 0x31,0x00
+                            , (byte)page.streamID
+                            , 0x05 // Data BankID(0x05 HuC6280)
+                            , 0x01
+                            , 0x00
+                            );
+                    }
+                    else
+                    {
+                        SOutData(
+                            page,
+                            mml,
+                            // setup stream control
+                            new byte[] { 0x30 }
+                            , (byte)page.streamID
+                            , (byte)(0x1b + (page.chipNumber != 0 ? 0x80 : 0x00)) //0x1b HuC6280
+                            , (byte)page.ch
+                            , (byte)(0x00 + 0x06)// 0x00 Select Channel 
+                                                 // set stream data
+                            , 0x31
+                            , (byte)page.streamID
+                            , 0x05 // Data BankID(0x05 HuC6280)
+                            , 0x01
+                            , 0x00
+                            );
+                    }
                 }
-                else cmd = new byte[] { 0x90 };
-                SOutData(
-                    page,
-                    mml,
-                    // setup stream control
-                    cmd
-                    , (byte)page.streamID
-                    , (byte)(0x1b + (page.chipNumber != 0 ? 0x80 : 0x00)) //0x1b HuC6280
-                    , (byte)page.ch
-                    , (byte)(0x00 + 0x06)// 0x00 Select Channel 
-                                         // set stream data
-                    , 0x91
-                    , (byte)page.streamID
-                    , 0x05 // Data BankID(0x05 HuC6280)
-                    , 0x01
-                    , 0x00
-                    );
+                else
+                {
+                    cmd = new byte[] { 0x90 };
+                    SOutData(
+                        page,
+                        mml,
+                        // setup stream control
+                        cmd
+                        , (byte)page.streamID
+                        , (byte)(0x1b + (page.chipNumber != 0 ? 0x80 : 0x00)) //0x1b HuC6280
+                        , (byte)page.ch
+                        , (byte)(0x00 + 0x06)// 0x00 Select Channel 
+                                             // set stream data
+                        , 0x91
+                        , (byte)page.streamID
+                        , 0x05 // Data BankID(0x05 HuC6280)
+                        , 0x01
+                        , 0x00
+                        );
+                }
 
                 page.streamSetup = true;
             }

@@ -1465,13 +1465,13 @@ namespace Core
                         if (parent.ChipCommandSize == 2) cmd = new byte[] {
                             0x30, 0x00
                             , (byte)page.spg.streamID
-                            , (byte)page.chip.ChipID
-                            , (byte)(page.chip.ChipID >> 8)
+                            , (byte)(0x02 + (page.chipNumber!=0 ? 0x80 : 0x00))
+                            , 0
                         };
                         else cmd = new byte[] {
                             0x30
                             , (byte)page.spg.streamID
-                            , (byte)page.chip.ChipID
+                            , (byte)(0x02 + (page.chipNumber!=0 ? 0x80 : 0x00))
                         };
                     }
                     else cmd = new byte[] {

@@ -2276,6 +2276,12 @@ namespace mml2vgmIDE
                     mds.Init((UInt32)Common.SampleRate, samplingBuffer, lstChips.ToArray());
 
 
+                log.Write("MDSound DAC control 初期化");
+                mds.dacControl.init((uint)Common.SampleRate, mds, ((Driver.ZGM.zgm)driver).PCMBank);
+                chipRegister.DACControl[0].Use = true;
+                chipRegister.DACControl[0].Model = EnmVRModel.VirtualModel;
+
+
                 log.Write("ChipRegister 初期化");
                 chipRegister.SetMDSound(mds);
                 chipRegister.initChipRegister(lstChips.ToArray());

@@ -37,11 +37,14 @@ BASS
 
 
 'A1 T90
-'A1 D0     @1 p3 o4 v113 l16 q8 c4
+ 'A1 D0     @1 p3 o4 v113 l16 q8 c4
 
 A6 T120
 'A6 D0 m1 @1 p3 o4 v120 l16 q8 r2c2
 'B6 D0 m1 @5 p3 o4 v120 l16 q8 c2@5c4c4c4c4c4c4c4
-'C6 D0 m1 @3 p3 o4 v120 l16 q8 r2r2c2
+ 'C6 D0 m1 @3 p3 o4 v120 l16 q8 r2r2c2
 
+ 'A1 @1c
+ 'B1 @1e
+ 'C1 @1g
 
