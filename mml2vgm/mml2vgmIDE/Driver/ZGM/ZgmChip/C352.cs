@@ -31,10 +31,10 @@ namespace mml2vgmIDE.Driver.ZGM.ZgmChip
         private void SendPort0(outDatum od, ref uint vgmAdr)
         {
             byte id = (byte)((vgmBuf[vgmAdr + 1].val & 0x80) != 0 ? 1 : 0);
-            int adr = (vgmBuf[vgmAdr + 1].val & 0x7f) * 0x100 + (vgmBuf[vgmAdr + 2].val & 0xff);
-            byte data = vgmBuf[vgmAdr + 3].val;
+            int adr = (int)((vgmBuf[vgmAdr + 1].val & 0x7f) * 0x100 + (vgmBuf[vgmAdr + 2].val & 0xff));
+            int data = (int)((vgmBuf[vgmAdr + 3].val & 0xff) * 0x100 + (vgmBuf[vgmAdr + 4].val & 0xff));
             chipRegister.C352SetRegister(od, Audio.DriverSeqCounter, id, adr, data);
-            vgmAdr += 4;
+            vgmAdr += 5;
 
         }
 

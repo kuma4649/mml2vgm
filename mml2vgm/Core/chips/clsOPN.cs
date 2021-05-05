@@ -1814,7 +1814,8 @@ namespace Core
                 clsLfo pl = page.lfo[lfo];
                 if (!pl.sw)
                     continue;
-
+                if (pl.type == eLfoType.Hardware)
+                    continue;
                 int w = 0;
                 if (pl.type == eLfoType.Wah) w = 1;
 

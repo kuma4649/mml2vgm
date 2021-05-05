@@ -1488,6 +1488,39 @@ namespace mml2vgmIDE
                     zCnt = -1;
                     foreach (Driver.ZGM.ZgmChip.ZgmChip zchip in zgmDriver.chips)
                     {
+                        if (!(zchip is Driver.ZGM.ZgmChip.C352)) continue;
+
+                        zCnt++;
+                        c352 c352 = new c352();
+                        chip = new MDSound.MDSound.Chip();
+                        chip.type = MDSound.MDSound.enmInstrumentType.C352;
+                        chip.ID = (byte)0;//ZGMでは常に0
+                        chip.Instrument = c352;
+                        chip.Update = c352.Update;
+                        chip.Start = c352.Start;
+                        chip.Stop = c352.Stop;
+                        chip.Reset = c352.Reset;
+                        chip.SamplingRate = (UInt32)Common.SampleRate;
+                        chip.Volume = setting.balance.C352Volume;
+                        chip.Clock = (uint)zchip.defineInfo.clock;
+                        chip.Option = null;
+                        lstChips.Add(chip);
+
+                        hiyorimiDeviceFlag |= (setting.C352Type.UseScci) ? 0x1 : 0x2;
+
+                        log.Write(string.Format("Use C352(#{0}) Clk:{1}"
+                            , zCnt
+                            , chip.Clock
+                            ));
+
+                        chipRegister.C352[zCnt].Use = true;
+                        chipRegister.C352[zCnt].Model = EnmVRModel.VirtualModel;
+                        chipRegister.C352[zCnt].Device = EnmZGMDevice.C352;
+                    }
+
+                    zCnt = -1;
+                    foreach (Driver.ZGM.ZgmChip.ZgmChip zchip in zgmDriver.chips)
+                    {
                         if (!(zchip is Driver.ZGM.ZgmChip.HuC6280)) continue;
 
                         zCnt++;

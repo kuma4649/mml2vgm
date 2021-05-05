@@ -2780,6 +2780,11 @@ namespace mml2vgmIDE
             enq(od, Counter, C352[ChipID], EnmDataType.Block, -1, -1, data);
         }
 
+        public void C352WritePCMData(outDatum od, long Counter, byte chipID, uint ROMSize, uint DataStart, uint DataLength, byte[] romdata, uint SrcStartAdr)
+        {
+            enq(od, Counter, C352[chipID], EnmDataType.Block, -1, -2, new object[] { ROMSize, DataStart, DataLength, romdata, SrcStartAdr });
+        }
+
         #endregion
 
 

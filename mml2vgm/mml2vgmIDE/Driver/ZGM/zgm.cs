@@ -759,6 +759,15 @@ namespace mml2vgmIDE.Driver.ZGM
                     vgmAdr += (uint)bLen + 7;
                     break;
 
+                case Driver.ZGM.ZgmChip.C352 _:
+                    uint c352_romSize = Common.getLE32(vgmBuf, vgmAdr + 7);
+                    uint c352_startAddress = Common.getLE32(vgmBuf, vgmAdr + 0x0B);
+                    pcmDat.Clear();
+                    for (uint i = 0; i < bLen - 8; i++) pcmDat.Add(vgmBuf[vgmAdr + 15 + i].val);
+                    chipRegister.C352WritePCMData(od, Audio.DriverSeqCounter, (byte)chip.Index, c352_romSize, c352_startAddress, (uint)pcmDat.Count, pcmDat.ToArray(), 0);
+                    vgmAdr += (uint)bLen + 7;
+                    break;
+
                 case Driver.ZGM.ZgmChip.K053260 _:
                     uint K053260_romSize = Common.getLE32(vgmBuf, vgmAdr + 7);
                     uint K053260_startAddress = Common.getLE32(vgmBuf, vgmAdr + 0x0B);

@@ -66,6 +66,7 @@ namespace Core
             , new object[]{ "K053260"        , EnmZGMDevice.K053260   , 1   , 3     , new byte[] { 0 } }
             , new object[]{ "HuC6280"        , EnmZGMDevice.HuC6280   , 1   , 2     , null }
             , new object[]{ "C140"           , EnmZGMDevice.C140      , 1   , 2     , new byte[] { 0 } }
+            , new object[]{ "C352"           , EnmZGMDevice.C352      , 1   , 2     , null }
             // 0x00010000 - 0x0001FFFF 妄想Chips
             , new object[]{ "CONDUCTOR"      , EnmZGMDevice.Conductor , 1   , 2     , null }
             // 0x00020000 - 0x0002FFFF 妄想Chips

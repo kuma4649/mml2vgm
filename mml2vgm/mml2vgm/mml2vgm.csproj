@@ -139,6 +139,9 @@
     <None Include="sample\C352\testC352.gwi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="sample\C352\testC352zgm.gwi">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="sample\C352\testPageFunctionC352.gwi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -189,6 +192,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="sample\SN76489\testDCSGPCM.gwi">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="sample\Syntax\hardLFOTest.gwi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="sample\Syntax\lfoWahTest.gwi">
