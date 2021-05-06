@@ -829,12 +829,7 @@ namespace mml2vgmIDE
         private void TsmiOption_Click(object sender, EventArgs e)
         {
             stop();
-            while (Audio.sm.IsRunningAtDataSender())
-            {
-                Thread.Sleep(1);
-                Application.DoEvents();
-            }
-            Audio.sm.ClearData();
+            Audio.Close();
 
             FrmSetting frmSetting = new FrmSetting(setting);
             DialogResult res = frmSetting.ShowDialog();
@@ -1022,7 +1017,7 @@ namespace mml2vgmIDE
 
         private void TssbStop_ButtonClick(object sender, EventArgs e)
         {
-stop();
+            stop();
         }
 
         private void TssbFast_ButtonClick(object sender, EventArgs e)
@@ -1348,6 +1343,7 @@ stop();
         {
             Document dc = new Document(setting, EnmMmlFileFormat.GWI);//, frmSien);
             if (fileName != "") dc.InitOpen(fileName);
+
             dc.editor.Show(dpMain, DockState.Document);
             dc.editor.main = this;
             dc.editor.document = dc;
@@ -2025,34 +2021,44 @@ stop();
                 return;
             }
 
-            //パートカウンターのリスト表示を初期化
-            if (isSuccess)
+            try
             {
-                frmPartCounter.ClearCounter();
-                Object[] cells = new object[7];
-
-                foreach (KeyValuePair<enmChipType, ClsChip[]> kvp in mv.desVGM.chips)
+                //パートカウンターのリスト表示を初期化
+                if (isSuccess)
                 {
-                    foreach (ClsChip chip in kvp.Value)
+                    frmPartCounter.ClearCounter();
+                    Object[] cells = new object[7];
+
+                    foreach (KeyValuePair<enmChipType, ClsChip[]> kvp in mv.desVGM.chips)
                     {
-                        if (chip == null) continue;
-                        List<partWork> pw = chip.lstPartWork;
-                        for (int i = 0; i < pw.Count; i++)
+                        foreach (ClsChip chip in kvp.Value)
                         {
-                            if (pw[i].clockCounter == 0) continue;
+                            if (chip == null) continue;
+                            List<partWork> pw = chip.lstPartWork;
+                            for (int i = 0; i < pw.Count; i++)
+                            {
+                                if (pw[i].clockCounter == 0) continue;
 
-                            cells[0] = int.Parse(pw[i].pg[0].PartName.Substring(2, 2));
-                            cells[1] = chip.ChipID;//ChipIndex
-                            cells[2] = pw[i].pg[0].chipNumber;//ChipNumber
-                            cells[3] = pw[i].pg[0].PartName.Substring(0, 2).Replace(" ", "") + int.Parse(pw[i].pg[0].PartName.Substring(2, 2)).ToString();
-                            cells[4] = pw[i].pg[0].chip.Name;//.ToUpper();
-                            cells[5] = pw[i].clockCounter;
-                            cells[6] = "-";
-                            frmPartCounter.AddPartCounter(cells);
+                                cells[0] = int.Parse(pw[i].pg[0].PartName.Substring(2, 2));
+                                cells[1] = chip.ChipID;//ChipIndex
+                                cells[2] = pw[i].pg[0].chipNumber;//ChipNumber
+                                cells[3] = pw[i].pg[0].PartName.Substring(0, 2).Replace(" ", "") + int.Parse(pw[i].pg[0].PartName.Substring(2, 2)).ToString();
+                                cells[4] = pw[i].pg[0].chip.Name;//.ToUpper();
+                                cells[5] = pw[i].clockCounter;
+                                cells[6] = "-";
+                                frmPartCounter.AddPartCounter(cells);
+                            }
+
                         }
-
                     }
                 }
+            }
+            catch
+            {
+                isSuccess = false;
+                Compiling = 0;
+                UpdateControl();
+                return;
             }
 
             frmLog.tbLog.AppendText(msg.get("I0107"));
@@ -2190,46 +2196,56 @@ stop();
         private void finishedCompileMUC()
         {
             musicDriverInterface.CompilerInfo ci = mucom.GetCompilerInfo();
-            if (isSuccess)
+            try
             {
-                frmPartCounter.ClearCounter();
-                Object[] cells = new object[7];
-                int[] pn = new int[] { 1, 2, 3, 10, 11, 12, 13, 4, 5, 6, 19 };
-                if (ci.formatType == "mub")
+                if (isSuccess)
                 {
-                    for (int i = 0; i < 11; i++)
+                    frmPartCounter.ClearCounter();
+                    Object[] cells = new object[7];
+                    int[] pn = new int[] { 1, 2, 3, 10, 11, 12, 13, 4, 5, 6, 19 };
+                    if (ci.formatType == "mub")
                     {
-                        //if (pw[i].clockCounter == 0) continue;
-
-                        cells[0] = pn[i];//PartNumber
-                        cells[1] = 0;//ChipIndex
-                        cells[2] = 0;//ChipNumber
-                        cells[3] = ((char)('A' + i)).ToString();
-                        cells[4] = "YM2608";//.ToUpper();
-                        cells[5] = ci.totalCount[i];
-                        cells[6] = ci.loopCount[i];
-                        frmPartCounter.AddPartCounter(cells);
-                    }
-                }
-                else
-                {
-                    for (int i = 0; i < 44; i++)
-                    {
-                        for (int j = 0; j < 10; j++)
+                        for (int i = 0; i < 11; i++)
                         {
                             //if (pw[i].clockCounter == 0) continue;
 
-                            cells[0] = pn[i % 11];//PartNumber
+                            cells[0] = pn[i];//PartNumber
                             cells[1] = 0;//ChipIndex
-                            cells[2] = ((i / 11) & 1);//ChipNumber
-                            cells[3] = (mucPartName[i]).ToString() + j.ToString();
-                            cells[4] = i < 22 ? "YM2608" : "YM2610B";//.ToUpper();
-                            cells[5] = ci.totalCount[i * 10 + j];
-                            cells[6] = ci.loopCount[i * 10 + j];
-                            if (ci.bufferCount[i * 10 + j] > 3) frmPartCounter.AddPartCounter(cells);
+                            cells[2] = 0;//ChipNumber
+                            cells[3] = ((char)('A' + i)).ToString();
+                            cells[4] = "YM2608";//.ToUpper();
+                            cells[5] = ci.totalCount[i];
+                            cells[6] = ci.loopCount[i];
+                            frmPartCounter.AddPartCounter(cells);
+                        }
+                    }
+                    else
+                    {
+                        for (int i = 0; i < 44; i++)
+                        {
+                            for (int j = 0; j < 10; j++)
+                            {
+                                //if (pw[i].clockCounter == 0) continue;
+
+                                cells[0] = pn[i % 11];//PartNumber
+                                cells[1] = 0;//ChipIndex
+                                cells[2] = ((i / 11) & 1);//ChipNumber
+                                cells[3] = (mucPartName[i]).ToString() + j.ToString();
+                                cells[4] = i < 22 ? "YM2608" : "YM2610B";//.ToUpper();
+                                cells[5] = ci.totalCount[i * 10 + j];
+                                cells[6] = ci.loopCount[i * 10 + j];
+                                if (ci.bufferCount[i * 10 + j] > 3) frmPartCounter.AddPartCounter(cells);
+                            }
                         }
                     }
                 }
+            }
+            catch
+            {
+                isSuccess = false;
+                Compiling = 0;
+                UpdateControl();
+                return;
             }
 
             //frmLog.tbLog.AppendText(msg.get("I0107"));
@@ -2325,51 +2341,61 @@ stop();
         private void finishedCompileMML()
         {
             musicDriverInterface.CompilerInfo ci = pmdmng.GetCompilerInfo();
-            if (isSuccess)
+            try
             {
-                frmPartCounter.ClearCounter();
-                Object[] cells = new object[7];
-                try
+                if (isSuccess)
                 {
-                    for (int i = 0; i < ci.totalCount.Count; i++)
+                    frmPartCounter.ClearCounter();
+                    Object[] cells = new object[7];
+                    try
                     {
-                        cells[0] = -1;
-
-                        if (ci.partType[i] == "FMOPN" || ci.partType[i] == "PPZ8")
+                        for (int i = 0; i < ci.totalCount.Count; i++)
                         {
-                            cells[0] = ci.partNumber[i] + 1;
-                        }                        
+                            cells[0] = -1;
 
-                        //Fm3exは　D/E/F又は任意
-                        if(ci.partType[i] == "FMOPNex")
-                        {
-                            cells[0] = 6 + 1 + (ci.partNumber[i] % 3);//FM3ex1～3 part(6-8)に割り当てる
+                            if (ci.partType[i] == "FMOPN" || ci.partType[i] == "PPZ8")
+                            {
+                                cells[0] = ci.partNumber[i] + 1;
+                            }
+
+                            //Fm3exは　D/E/F又は任意
+                            if (ci.partType[i] == "FMOPNex")
+                            {
+                                cells[0] = 6 + 1 + (ci.partNumber[i] % 3);//FM3ex1～3 part(6-8)に割り当てる
+                            }
+
+                            //SSG はG/H/I固定
+                            if (ci.partName[i][0] == 'G') cells[0] = 9 + 1;//SSG1 part(9)に割り当てる
+                            if (ci.partName[i][0] == 'H') cells[0] = 10 + 1;//SSG2 part(10)に割り当てる
+                            if (ci.partName[i][0] == 'I') cells[0] = 11 + 1;//SSG3 part(11)に割り当てる
+
+                            //ADPCM はJ固定
+                            if (ci.partName[i][0] == 'J') cells[0] = 18 + 1;//ADPCM part(18)に割り当てる
+
+                            //K/R はK固定
+                            if (ci.partName[i][0] == 'K') cells[0] = 12 + 1;//BD part(12)に割り当てる
+
+                            cells[1] = 0;//ChipIndex
+                            cells[2] = 0;//ChipNumber
+                            cells[3] = ci.partName[i];
+                            cells[4] = ci.partType[i] != "PPZ8" ? "YM2608" : ci.partType[i];
+                            cells[5] = ci.totalCount[i];
+                            cells[6] = ci.loopCount[i];
+                            frmPartCounter.AddPartCounter(cells);
                         }
-
-                        //SSG はG/H/I固定
-                        if (ci.partName[i][0] == 'G') cells[0] = 9 + 1;//SSG1 part(9)に割り当てる
-                        if (ci.partName[i][0] == 'H') cells[0] = 10 + 1;//SSG2 part(10)に割り当てる
-                        if (ci.partName[i][0] == 'I') cells[0] = 11 + 1;//SSG3 part(11)に割り当てる
-
-                        //ADPCM はJ固定
-                        if (ci.partName[i][0] == 'J') cells[0] = 18 + 1;//ADPCM part(18)に割り当てる
-
-                        //K/R はK固定
-                        if (ci.partName[i][0] == 'K') cells[0] = 12 + 1;//BD part(12)に割り当てる
-
-                        cells[1] = 0;//ChipIndex
-                        cells[2] = 0;//ChipNumber
-                        cells[3] = ci.partName[i];
-                        cells[4] = ci.partType[i] != "PPZ8" ? "YM2608" : ci.partType[i];
-                        cells[5] = ci.totalCount[i];
-                        cells[6] = ci.loopCount[i];
-                        frmPartCounter.AddPartCounter(cells);
+                    }
+                    catch (Exception e)
+                    {
+                        Log.WriteLine(LogLevel.ERROR, string.Format("Exception:\r\nMessage\r\n{0}\r\nStackTrace\r\n{1}\r\n", e.Message, e.StackTrace));
                     }
                 }
-                catch(Exception e)
-                {
-                    Log.WriteLine(LogLevel.ERROR, string.Format("Exception:\r\nMessage\r\n{0}\r\nStackTrace\r\n{1}\r\n", e.Message, e.StackTrace));
-                }
+            }
+            catch
+            {
+                isSuccess = false;
+                Compiling = 0;
+                UpdateControl();
+                return;
             }
 
             foreach (Tuple<int, int, string> mes in ci.errorList)
@@ -2421,40 +2447,49 @@ stop();
                 UpdateControl();
                 return;
             }
-
-            if (isSuccess)
+            try
             {
-                frmPartCounter.ClearCounter();
-                Object[] cells = new object[7];
-                try
+                if (isSuccess)
                 {
-                    if (ci != null && ci.totalCount != null && ci.totalCount.Count > 0)
+                    frmPartCounter.ClearCounter();
+                    Object[] cells = new object[7];
+                    try
                     {
-                        for (int i = 0; i < ci.totalCount.Count; i++)
+                        if (ci != null && ci.totalCount != null && ci.totalCount.Count > 0)
                         {
-                            //if (pw[i].clockCounter == 0) continue;
-                            int ch = ci.partType[i] == "YM2608" ? ci.partNumber[i] : (
-                                    ci.partType[i] == "FM3ex" ? (ci.partNumber[i] + 6) : (
-                                    ci.partNumber[i]
-                                    )
-                                );
-                            ch += (ci.partName[i][0] >= 'G' && ci.partName[i][0] <= 'I') ? 3 : 0;
-                            ch++;
-                            cells[0] = ch;
-                            cells[1] = 0;//ChipIndex
-                            cells[2] = 0;//ChipNumber
-                            cells[3] = ci.partName[i];
-                            cells[4] = ci.partType[i] == "FM3ex" ? "YM2608" : ci.partType[i];
-                            cells[5] = ci.totalCount[i];
-                            cells[6] = ci.loopCount[i];
-                            frmPartCounter.AddPartCounter(cells);
+                            for (int i = 0; i < ci.totalCount.Count; i++)
+                            {
+                                //if (pw[i].clockCounter == 0) continue;
+                                int ch = ci.partType[i] == "YM2608" ? ci.partNumber[i] : (
+                                        ci.partType[i] == "FM3ex" ? (ci.partNumber[i] + 6) : (
+                                        ci.partNumber[i]
+                                        )
+                                    );
+                                ch += (ci.partName[i][0] >= 'G' && ci.partName[i][0] <= 'I') ? 3 : 0;
+                                ch++;
+                                cells[0] = ch;
+                                cells[1] = 0;//ChipIndex
+                                cells[2] = 0;//ChipNumber
+                                cells[3] = ci.partName[i];
+                                cells[4] = ci.partType[i] == "FM3ex" ? "YM2608" : ci.partType[i];
+                                cells[5] = ci.totalCount[i];
+                                cells[6] = ci.loopCount[i];
+                                frmPartCounter.AddPartCounter(cells);
+                            }
                         }
                     }
+                    catch (Exception e)
+                    {
+                        Log.WriteLine(LogLevel.ERROR, string.Format("Exception:\r\nMessage\r\n{0}\r\nStackTrace\r\n{1}\r\n", e.Message, e.StackTrace));
+                    }
                 }
-                catch (Exception e)
-                {
-                    Log.WriteLine(LogLevel.ERROR, string.Format("Exception:\r\nMessage\r\n{0}\r\nStackTrace\r\n{1}\r\n", e.Message, e.StackTrace));
-                }
+            }
+            catch
+            {
+                isSuccess = false;
+                Compiling = 0;
+                UpdateControl();
+                return;
             }
 
             foreach (Tuple<int, int, string> mes in ci.errorList)
@@ -3282,6 +3317,15 @@ stop();
 
         public void stop()
         {
+            if (Compiling != 0)
+            {
+                return;
+            }
+            if (Audio.isStopped)
+            {
+                return;
+            }
+
             if (shift)
             {
                 fadeOut();
@@ -3306,6 +3350,12 @@ stop();
                 Audio.Stop(SendMode.MML);
             }
             ResumeNormalModeDisp();
+
+            while (Audio.sm.IsRunningAtDataSender())
+            {
+                Thread.Sleep(1);
+            }
+            Audio.sm.ClearData();
         }
 
         public void ff()

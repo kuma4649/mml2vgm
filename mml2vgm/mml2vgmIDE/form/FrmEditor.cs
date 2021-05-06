@@ -26,7 +26,7 @@ namespace mml2vgmIDE
         public bool forceClose = false;
 
         private FrmMain _main;
-        private Setting setting;
+        public Setting setting;
 
         public FrmMain main
         {

@@ -1796,6 +1796,9 @@ namespace mml2vgmIDE
             private bool _EmptyPlayList = false;
             public bool EmptyPlayList { get => _EmptyPlayList; set => _EmptyPlayList = value; }
 
+            private bool _ChangeEnterCode = true;
+            public bool ChangeEnterCode { get => _ChangeEnterCode; set => _ChangeEnterCode = value; }
+
             private int _Opacity = 100;
             public int Opacity
             {
@@ -1863,6 +1866,7 @@ namespace mml2vgmIDE
                 other.ImageExt = this.ImageExt;
                 other.InitAlways = this.InitAlways;
                 other.EmptyPlayList = this.EmptyPlayList;
+                other.ChangeEnterCode = this.ChangeEnterCode;
                 other.Opacity = this.Opacity;
                 other.TextFontName = this.TextFontName;
                 other.TextFontSize = this.TextFontSize;

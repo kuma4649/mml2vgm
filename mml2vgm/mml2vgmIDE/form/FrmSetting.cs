@@ -490,6 +490,7 @@ namespace mml2vgmIDE
             tbImageExt.Text = setting.other.ImageExt;
             cbInitAlways.Checked = setting.other.InitAlways;
             cbEmptyPlayList.Checked = setting.other.EmptyPlayList;
+            cbChangeEnterCode.Checked = setting.other.ChangeEnterCode;
             tbOpacity.Value = setting.other.Opacity;
             lblFontName.Text = setting.other.TextFontName;
             lblFontSize.Text = setting.other.TextFontSize.ToString();
@@ -1443,6 +1444,7 @@ namespace mml2vgmIDE
             setting.other.ImageExt = tbImageExt.Text;
             setting.other.InitAlways = cbInitAlways.Checked;
             setting.other.EmptyPlayList = cbEmptyPlayList.Checked;
+            setting.other.ChangeEnterCode= cbChangeEnterCode.Checked;
             setting.other.Opacity = tbOpacity.Value;
             setting.other.TextFontName = lblFontName.Text;
             setting.other.TextFontSize = float.Parse(lblFontSize.Text);

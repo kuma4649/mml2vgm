@@ -1,5 +1,6 @@
 ﻿using Core;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -69,36 +70,81 @@ namespace mml2vgmIDE
             wrnBox = null;
             InitFolderTree();
             editor.Text = Path.GetFileName(fullPath);
+            string txt="";
             switch (Path.GetExtension(fullPath).ToLower())
             {
                 case ".muc":
                     srcFileFormat = EnmMmlFileFormat.MUC;
-                    editor.azukiControl.Text = File.ReadAllText(fullPath, Encoding.GetEncoding(932));
+                    txt = File.ReadAllText(fullPath, Encoding.GetEncoding(932));
                     break;
                 case ".mml":
                     srcFileFormat = EnmMmlFileFormat.MML;
-                    editor.azukiControl.Text = File.ReadAllText(fullPath, Encoding.GetEncoding(932));
+                    txt = File.ReadAllText(fullPath, Encoding.GetEncoding(932));
                     break;
                 case ".mdl":
                     srcFileFormat = EnmMmlFileFormat.MDL;
-                    editor.azukiControl.Text = File.ReadAllText(fullPath, Encoding.GetEncoding(932));
+                    txt = File.ReadAllText(fullPath, Encoding.GetEncoding(932));
                     break;
                 case ".gwi":
                 default:
                     srcFileFormat = EnmMmlFileFormat.GWI;
-                    editor.azukiControl.Text = File.ReadAllText(fullPath);
+                    txt = File.ReadAllText(fullPath);
                     break;
             }
+
+            edit = false;
+            if (editor.setting != null && editor.setting.other.ChangeEnterCode)
+            {
+                int len = txt.Length;
+                txt = ChangeEnterCode(txt);
+                if (len != txt.Length)
+                {
+                    edit = true;
+                    editor.Text = Path.GetFileName(gwiFullPath + "*");
+                }
+            }
+
+            editor.azukiControl.Text = txt;
             editor.azukiControl.ClearHistory();
             editor.Tag = this;
             editor.azukiControl.Tag = this;
             isNew = false;
-            edit = false;
 
             compileStatus = EnmCompileStatus.NeedCompile;
             dstFileFormat = EnmFileFormat.unknown;
             compiledData = null;
+            
             return true;
+        }
+
+        private string ChangeEnterCode(string txt)
+        {
+            string buf = "";
+            for (int i = 0; i < txt.Length; i++)
+            {
+                if (txt[i] != '\r' && txt[i] != '\n')
+                {
+                    buf += txt[i];
+                    continue;
+                }
+
+                if (txt[i] == '\r' && i + 1 < txt.Length && txt[i + 1] == '\n')
+                {
+                    if (i + 1 < txt.Length && txt[i + 1] == '\n')
+                    {
+                        buf += txt[i];
+                        buf += txt[i + 1];
+                        i++;
+                        continue;
+                    }
+
+                }
+
+                buf += "\r\n";
+                continue;
+            }
+
+            return buf;
         }
 
         public bool InitOpen(string fullPath,string[] buf,EnmMmlFileFormat srcFileFormat)

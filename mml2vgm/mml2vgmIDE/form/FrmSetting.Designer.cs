@@ -334,6 +334,7 @@
             this.tpMMLParameter = new System.Windows.Forms.TabPage();
             this.cbDispInstrumentName = new System.Windows.Forms.CheckBox();
             this.tpOther = new System.Windows.Forms.TabPage();
+            this.cbChangeEnterCode = new System.Windows.Forms.CheckBox();
             this.cbWavSwitch = new System.Windows.Forms.CheckBox();
             this.groupBox17 = new System.Windows.Forms.GroupBox();
             this.tbImageExt = new System.Windows.Forms.TextBox();
@@ -3914,6 +3915,16 @@
             this.tpOther.Text = "Other";
             this.tpOther.UseVisualStyleBackColor = true;
             // 
+            // cbChangeEnterCode
+            // 
+            this.cbChangeEnterCode.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.cbChangeEnterCode.Location = new System.Drawing.Point(228, 182);
+            this.cbChangeEnterCode.Name = "cbChangeEnterCode";
+            this.cbChangeEnterCode.Size = new System.Drawing.Size(194, 28);
+            this.cbChangeEnterCode.TabIndex = 24;
+            this.cbChangeEnterCode.Text = "テキストファイルを開いた時、\r\n改行コード変換を行う";
+            this.cbChangeEnterCode.UseVisualStyleBackColor = true;
+            // 
             // cbWavSwitch
             // 
             this.cbWavSwitch.AutoSize = true;
@@ -4200,7 +4211,7 @@
             // btnResetPosition
             // 
             this.btnResetPosition.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnResetPosition.Location = new System.Drawing.Point(167, 345);
+            this.btnResetPosition.Location = new System.Drawing.Point(167, 374);
             this.btnResetPosition.Name = "btnResetPosition";
             this.btnResetPosition.Size = new System.Drawing.Size(142, 23);
             this.btnResetPosition.TabIndex = 13;
@@ -4211,7 +4222,7 @@
             // btnOpenSettingFolder
             // 
             this.btnOpenSettingFolder.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnOpenSettingFolder.Location = new System.Drawing.Point(315, 345);
+            this.btnOpenSettingFolder.Location = new System.Drawing.Point(315, 374);
             this.btnOpenSettingFolder.Name = "btnOpenSettingFolder";
             this.btnOpenSettingFolder.Size = new System.Drawing.Size(125, 23);
             this.btnOpenSettingFolder.TabIndex = 13;
@@ -4266,6 +4277,7 @@
             // 
             // tpOmake
             // 
+            this.tpOmake.Controls.Add(this.cbChangeEnterCode);
             this.tpOmake.Controls.Add(this.label48);
             this.tpOmake.Controls.Add(this.cbClearHistory);
             this.tpOmake.Controls.Add(this.groupBox31);
@@ -5311,5 +5323,6 @@
         private System.Windows.Forms.Label label55;
         private System.Windows.Forms.Label label50;
         private System.Windows.Forms.ComboBox cmbSampleRate;
+        private System.Windows.Forms.CheckBox cbChangeEnterCode;
     }
 }

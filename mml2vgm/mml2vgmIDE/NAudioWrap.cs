@@ -250,7 +250,7 @@ namespace mml2vgmIDE
                 try
                 {
                     //waveOut.Pause();
-                    waveOut.Stop();
+                    try { waveOut.Stop(); } catch { }
                     while (waveOut.PlaybackState != PlaybackState.Stopped) { System.Threading.Thread.Sleep(1); }
                     waveOut.Dispose();
                 }
@@ -263,7 +263,7 @@ namespace mml2vgmIDE
                 try
                 {
                     //wasapiOut.Pause();
-                    wasapiOut.Stop();
+                    try { wasapiOut.Stop(); } catch { }
                     while (wasapiOut.PlaybackState != PlaybackState.Stopped) { System.Threading.Thread.Sleep(1); }
                     wasapiOut.Dispose();
                 }
@@ -276,7 +276,7 @@ namespace mml2vgmIDE
                 try
                 {
                     //dsOut.Pause();
-                    dsOut.Stop();
+                    try { dsOut.Stop(); } catch { }
                     while (dsOut.PlaybackState != PlaybackState.Stopped) { System.Threading.Thread.Sleep(1); }
                     dsOut.Dispose();
                 }
@@ -289,7 +289,7 @@ namespace mml2vgmIDE
                 try
                 {
                     //asioOut.Pause();
-                    asioOut.Stop();
+                    try { asioOut.Stop(); } catch { }
                     while (asioOut.PlaybackState != PlaybackState.Stopped) { System.Threading.Thread.Sleep(1); }
                     asioOut.Dispose();
                 }
@@ -301,7 +301,7 @@ namespace mml2vgmIDE
             {
                 try
                 {
-                    nullOut.Stop();
+                    try { nullOut.Stop(); } catch { }
                     while (nullOut.PlaybackState != PlaybackState.Stopped) { Thread.Sleep(1); }
                     nullOut.Dispose();
                 }
@@ -310,11 +310,11 @@ namespace mml2vgmIDE
             }
 
             //一休み
-            //for (int i = 0; i < 10; i++)
-            //{
-            //    System.Threading.Thread.Sleep(1);
-            //    System.Windows.Forms.Application.DoEvents();
-            //}
+            for (int i = 0; i < 10; i++)
+            {
+                System.Threading.Thread.Sleep(1);
+                System.Windows.Forms.Application.DoEvents();
+            }
         }
 
         public class SineWaveProvider16 : WaveProvider16
