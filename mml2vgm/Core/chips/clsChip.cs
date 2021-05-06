@@ -1146,6 +1146,7 @@ namespace Core
                     page.arpeggioMode = false;
                     page.beforeFNum = -1;
                     page.arpDelta = 0;
+                    SetKeyOff(page, mml);
                     return;
 
 
@@ -1175,6 +1176,7 @@ namespace Core
                 case "VPOF":
                     page.varpeggioMode = false;
                     page.varpDelta = 0;
+                    SetKeyOff(page, mml);
                     return;
             }
 
