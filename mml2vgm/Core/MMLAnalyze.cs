@@ -79,6 +79,8 @@ namespace Core
         private void Step1(partWork pw, partPage page)
         {
             pw.resetPos(page);
+            page.pos.tCol = -1;
+            pw.incPos(page);
             page.dataEnd = false;
             page.mmlData = new List<MML>();
             SkipFlg = false;

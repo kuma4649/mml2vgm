@@ -58,6 +58,7 @@ namespace mml2vgmIDE
                 switch (setting.outputDevice.DeviceType)
                 {
                     case 0:
+                        log.ForcedWrite("NAudioWrap:Start:Start Wave Init.");
                         waveOut = new WaveOutEvent();
                         waveOut.DeviceNumber = 0;
                         waveOut.DesiredLatency = setting.outputDevice.Latency;
@@ -70,10 +71,13 @@ namespace mml2vgmIDE
                             }
                         }
                         waveOut.PlaybackStopped += DeviceOut_PlaybackStopped;
+                        log.ForcedWrite("NAudioWrap:Start:Call Wave Init.");
                         waveOut.Init(waveProvider);
+                        log.ForcedWrite("NAudioWrap:Start:Call Wave Play.");
                         waveOut.Play();
                         break;
                     case 1:
+                        log.ForcedWrite("NAudioWrap:Start:Start Directsound Init.");
                         System.Guid g = System.Guid.Empty;
                         foreach (DirectSoundDeviceInfo d in DirectSoundOut.Devices)
                         {
@@ -92,10 +96,13 @@ namespace mml2vgmIDE
                             dsOut = new DirectSoundOut(g, setting.outputDevice.Latency);
                         }
                         dsOut.PlaybackStopped += DeviceOut_PlaybackStopped;
+                        log.ForcedWrite("NAudioWrap:Start:Call Directsound Init.");
                         dsOut.Init(waveProvider);
+                        log.ForcedWrite("NAudioWrap:Start:Call Directsound Play.");
                         dsOut.Play();
                         break;
                     case 2:
+                        log.ForcedWrite("NAudioWrap:Start:Start Wasapi Init.");
                         MMDevice dev = null;
                         var enumerator = new MMDeviceEnumerator();
                         var endPoints = enumerator.EnumerateAudioEndPoints(DataFlow.Render, DeviceState.Active);
@@ -116,10 +123,13 @@ namespace mml2vgmIDE
                             wasapiOut = new WasapiOut(dev, setting.outputDevice.WasapiShareMode ? AudioClientShareMode.Shared : AudioClientShareMode.Exclusive, false, setting.outputDevice.Latency);
                         }
                         wasapiOut.PlaybackStopped += DeviceOut_PlaybackStopped;
+                        log.ForcedWrite("NAudioWrap:Start:Call Wasapi Init.");
                         wasapiOut.Init(waveProvider);
+                        log.ForcedWrite("NAudioWrap:Start:Call Wasapi Play.");
                         wasapiOut.Play();
                         break;
                     case 3:
+                        log.ForcedWrite("NAudioWrap:Start:Start ASIO Init.");
                         if (AsioOut.isSupported())
                         {
                             int i = 0;
@@ -146,26 +156,34 @@ namespace mml2vgmIDE
                                 }
                             } while (asioOut == null && retry > 0);
                             asioOut.PlaybackStopped += DeviceOut_PlaybackStopped;
+                            log.ForcedWrite("NAudioWrap:Start:Call ASIO Init.");
                             asioOut.Init(waveProvider);
+                            log.ForcedWrite("NAudioWrap:Start:Call ASIO Play.");
                             asioOut.Play();
                         }
                         break;
 
                     case 5:
+                        log.ForcedWrite("NAudioWrap:Start:Start NULLDevice Init.");
                         nullOut = new NullOut(true);
                         nullOut.PlaybackStopped += DeviceOut_PlaybackStopped;
+                        log.ForcedWrite("NAudioWrap:Start:Call NULLDevice Init.");
                         nullOut.Init(waveProvider);
+                        log.ForcedWrite("NAudioWrap:Start:Call NULLDevice Play.");
                         nullOut.Play();
                         break;
                 }
             }
             catch (Exception ex)
             {
+                log.ForcedWrite("NAudioWrap:Start:Start Wave Init.(reinit)");
                 log.ForcedWrite(ex);
                 waveOut = new WaveOutEvent();
                 waveOut.PlaybackStopped += DeviceOut_PlaybackStopped;
+                log.ForcedWrite("NAudioWrap:Start:Call Wave Init.(reinit)");
                 waveOut.Init(waveProvider);
                 waveOut.DeviceNumber = 0;
+                log.ForcedWrite("NAudioWrap:Start:Call Wave Play.(reinit)");
                 waveOut.Play();
             }
 
@@ -203,6 +221,7 @@ namespace mml2vgmIDE
             } while (asioOut == null && retry > 0);
 
             asioOut.ShowControlPanel();
+            asioOut.Dispose();
         }
 
         private static void DeviceOut_PlaybackStopped(object sender, StoppedEventArgs e)

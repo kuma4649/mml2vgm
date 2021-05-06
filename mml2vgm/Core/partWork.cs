@@ -257,9 +257,7 @@ namespace Core
                     {
                         row++;
                         if (page.pData.Count == row)
-                        {
-                            break;
-                        }
+                            goto Exit;
                         else
                         {
                             data = page.pData[row].Txt;
@@ -274,7 +272,7 @@ namespace Core
                             p.row = row;
                             page.LstPos.Add(p);
 
-                            break;
+                            continue;
                         }
                     }
                     else
@@ -361,9 +359,7 @@ namespace Core
                     {
                         row++;
                         if (page.pData.Count == row)
-                        {
-                            break;
-                        }
+                            goto Exit;
                         else
                         {
                             data = page.pData[row].Txt;
@@ -378,7 +374,7 @@ namespace Core
                             p.row = row;
                             page.LstPos.Add(p);
 
-                            break;
+                            continue;
                         }
                     }
                     else
@@ -407,6 +403,7 @@ namespace Core
                 }
 
             }
+        Exit:;
 
         }
 

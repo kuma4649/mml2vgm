@@ -828,14 +828,22 @@ namespace mml2vgmIDE
 
         private void TsmiOption_Click(object sender, EventArgs e)
         {
+            stop();
+            while (Audio.sm.IsRunningAtDataSender())
+            {
+                Thread.Sleep(1);
+                Application.DoEvents();
+            }
+            Audio.sm.ClearData();
+
             FrmSetting frmSetting = new FrmSetting(setting);
             DialogResult res = frmSetting.ShowDialog();
-            if (res != DialogResult.OK)
-            {
-                return;
-            }
+            //if (res != DialogResult.OK)
+            //{
+            //    return;
+            //}
 
-            stop();
+            //stop();
             flgReinit = true;
             Reinit(frmSetting.setting);
         }
@@ -2905,9 +2913,9 @@ stop();
 
             flgReinit = false;
 
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < 500; i++)
             {
-                System.Threading.Thread.Sleep(100);
+                System.Threading.Thread.Sleep(1);
                 Application.DoEvents();
             }
 

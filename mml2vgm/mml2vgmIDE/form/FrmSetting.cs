@@ -1663,6 +1663,143 @@ namespace mml2vgmIDE
         /// <returns></returns>
         private bool CheckSetting()
         {
+            //Waveサポートチェック
+            if (WaveOut.DeviceCount > 0)
+            {
+                if (rbWaveOut.Checked)
+                {
+                    if (cmbWaveOutDevice.SelectedItem != null)
+                    {
+                        string WaveDeviceName = cmbWaveOutDevice.SelectedItem.ToString();
+                        int SampleRate = int.Parse(cmbSampleRate.SelectedItem.ToString());
+                        for(int i = 0; i < WaveOut.DeviceCount; i++)
+                        {
+                            WaveOutCapabilities woc= WaveOut.GetCapabilities(i);
+                            if (woc.ProductName == WaveDeviceName)
+                            {
+                                bool support = false;
+                                switch (SampleRate)
+                                {
+                                    case 44100:
+                                        support = woc.SupportsWaveFormat(SupportedWaveFormat.WAVE_FORMAT_4S16);
+                                        break;
+                                    case 48000:
+                                        support = woc.SupportsWaveFormat(SupportedWaveFormat.WAVE_FORMAT_48S16);
+                                        break;
+                                    case 96000:
+                                        support = woc.SupportsWaveFormat(SupportedWaveFormat.WAVE_FORMAT_96S16);
+                                        break;
+                                }
+                                if (!support)
+                                {
+                                    MessageBox.Show(
+                                        "Not supported this SampleRate."
+                                        , "Error"
+                                        , MessageBoxButtons.OK
+                                        , MessageBoxIcon.Error);
+                                    return false;
+                                }
+                            }
+                        }
+
+                    }
+                }
+            }
+
+            //DirectSoundサポートチェック
+            int dsCount = 0;
+            foreach (DirectSoundDeviceInfo d in DirectSoundOut.Devices) dsCount++;
+            if (dsCount > 0)
+            {
+                if (rbDirectSoundOut.Checked)
+                {
+                    if (cmbDirectSoundDevice.SelectedItem != null)
+                    {
+                        string DsDeviceName = cmbDirectSoundDevice.SelectedItem.ToString();
+                        int SampleRate = int.Parse(cmbSampleRate.SelectedItem.ToString());
+                        foreach (DirectSoundDeviceInfo d in DirectSoundOut.Devices)
+                        {
+                            if (d.Description == DsDeviceName)
+                            {
+                                try
+                                {
+                                    using (DirectSoundOut ds = new DirectSoundOut(d.Guid))
+                                    {
+                                    }
+                                }
+                                catch
+                                {
+                                    MessageBox.Show(
+                                        "Not supported this Device."
+                                        , "Error"
+                                        , MessageBoxButtons.OK
+                                        , MessageBoxIcon.Error);
+                                    return false;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            //wasapi
+            if (wasapiSupported)
+            {
+                string WasapiDeviceName = cmbWasapiDevice.SelectedItem.ToString();
+                int SampleRate = int.Parse(cmbSampleRate.SelectedItem.ToString());
+
+                var enumerator = new MMDeviceEnumerator();
+                var endPoints = enumerator.EnumerateAudioEndPoints(DataFlow.Render, DeviceState.Active);
+                foreach (var endPoint in endPoints)
+                {
+                    if (WasapiDeviceName == string.Format("{0} ({1})", endPoint.FriendlyName, endPoint.DeviceFriendlyName))
+                    {
+                        try
+                        {
+                            using (WasapiOut wo = new WasapiOut(endPoint, AudioClientShareMode.Shared, false, 0))
+                        {
+                        }
+                        }
+                        catch
+                        {
+                            MessageBox.Show(
+                                "Not supported this Device."
+                                , "Error"
+                                , MessageBoxButtons.OK
+                                , MessageBoxIcon.Error);
+                            return false;
+                        }
+                    }
+                }
+            }
+
+            //ASIOサポートチェック
+            if (AsioOut.isSupported())
+            {
+                if (rbAsioOut.Checked)
+                {
+                    if (cmbAsioDevice.SelectedItem != null) 
+                    {
+                        string ASIODeviceName=cmbAsioDevice.SelectedItem.ToString();
+                        int SampleRate = int.Parse(cmbSampleRate.SelectedItem.ToString());
+
+                        //再生周波数サポートチェック
+                        using(AsioOut ao=new AsioOut(ASIODeviceName))
+                        {
+                            if (!ao.IsSampleRateSupported(SampleRate))
+                            {
+                                MessageBox.Show(
+                                    "Not supported this SampleRate."
+                                    , "Error"
+                                    , MessageBoxButtons.OK
+                                    , MessageBoxIcon.Error);
+                                return false;
+                            }
+                        }
+                    } 
+                }
+            }
+
             HashSet<string> hsSCCIs = new HashSet<string>();
             bool ret = false;
 
