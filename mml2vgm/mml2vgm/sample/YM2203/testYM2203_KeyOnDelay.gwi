@@ -1,0 +1,32 @@
+﻿'{
+
+	TitleName   =YM2203(OPN) KeyOnDelay Test
+	TitleNameJ  =YM2203(OPN) キーオンディレイ テスト
+	GameName    =
+	GameNameJ   =
+	SystemName  =
+	SystemNameJ =
+	Composer    =
+	ComposerJ   =
+	ReleaseDate =2021/05/08
+	Converted   =
+	Notes       =
+
+	ClockCount  =192
+
+}
+
+'@ N 110
+   AR  DR  SR  RR  SL  TL  KS  ML  DT  AM  SSG-EG
+'@ 031,000,000,015,000,000,000,001,000,000,000
+'@ 031,000,000,015,000,000,000,002,000,000,000
+'@ 031,000,000,015,000,000,000,003,000,000,000
+'@ 031,000,000,015,000,000,000,004,000,000,000
+'@ 007,000
+
+'F01 T110
+'F01 @110v120o4l8q4
+'F01 KD0,8,16,24
+'F01 c4r4
+'F01 c4d4e4f4e4d4c4r4e4f4g4a4g4f4e4r4c4c4c4c4ccddeeffe4d4c4r4
+

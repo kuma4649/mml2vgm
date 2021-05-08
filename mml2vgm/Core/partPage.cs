@@ -655,6 +655,7 @@ namespace Core
         public int sync { get; internal set; }
         public int beforeNoise { get; internal set; }
         public int beforeMixer { get; internal set; }
+        public KeyOnDelay keyOnDelay { get; internal set; } = new KeyOnDelay();
 
         public partPage(partPage sharedPg)
         {
@@ -672,6 +673,23 @@ namespace Core
             public int Freq = 0;
             public int Gain = 0;
             public int Q = 0;
+        }
+
+        public class KeyOnDelay
+        {
+            public bool sw = false;
+            public int[] delay = new int[] { 0, 0, 0, 0 };
+            public int[] delayWrk = new int[] { -1, -1, -1, -1 };
+            public byte keyOn = 0;
+            public byte beforekeyOn = 0xff;
+            public void KeyOff()
+            {
+                beforekeyOn = keyOn;
+                delayWrk[0] = -1;
+                delayWrk[1] = -1;
+                delayWrk[2] = -1;
+                delayWrk[3] = -1;
+            }
         }
     }
 

@@ -569,6 +569,21 @@ namespace Core
             {
                 foreach (partPage page in pw.pg)
                 {
+                    if (page.Type == enmChannelType.FMOPN 
+                        || (!page.Ch3SpecialMode && page.Type == enmChannelType.FMOPNex)
+                        || (!page.pcm && page.Type == enmChannelType.FMPCM))
+                    {
+                        if (page.keyOnDelay.sw)
+                        {
+                            if (page.keyOnDelay.beforekeyOn != page.keyOnDelay.keyOn)
+                            {
+                                page.keyOn = true;
+                                page.keyOnDelay.beforekeyOn = page.keyOnDelay.keyOn;
+                            }
+                        }
+                        //continue;
+                    }
+
                     if (page.Type == enmChannelType.FMPCM)
                     {
                         if (page.spg.pcm != page.pcm)

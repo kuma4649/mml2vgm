@@ -136,7 +136,7 @@ Virtual Instrument YM2609(Register Map)
     ____   |____________________|
 
     Extend Memory Capacity
-		ADPCM1:64Kbyte
+		ADPCM1:256Kbyte
 		ADPCM2,3:16Mbyte
 
     Write Data  (FM)

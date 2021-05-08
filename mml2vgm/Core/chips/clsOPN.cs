@@ -6,6 +6,7 @@ namespace Core
 {
     public class ClsOPN : ClsChip
     {
+        private byte[] nSSGKeyOn = new byte[] { 0, 0, 0, 0 };
         public byte[] SSGKeyOn = new byte[] { 0x3f, 0x3f, 0x3f, 0x3f };
         public int noiseFreq = -1;
 
@@ -844,6 +845,7 @@ namespace Core
                             byte vch = (byte)((page.ch > 2) ? page.ch + 1 : page.ch);
                             //key off
                             SOutData(page, mml, page.port[0], 0x28, (byte)(0x00 + (vch & 7)));
+                            page.keyOnDelay.KeyOff();
                         }
                     }
                 }
@@ -1216,7 +1218,15 @@ namespace Core
                         }
                         else
                         {
-                            SOutData(page, mml, page.port[0], 0x28, (byte)((slot << 4) + 2));
+                            if (!page.keyOnDelay.sw)
+                            {
+                                SOutData(page, mml, page.port[0], 0x28, (byte)((page.slots << 4) + (2 & 7)));
+                            }
+                            else
+                            {
+                                SOutData(page, mml, page.port[0], 0x28, (byte)((page.keyOnDelay.keyOn << 4) + (2 & 7)));
+                                page.keyOnDelay.beforekeyOn = page.keyOnDelay.keyOn;
+                            }
                         }
                     }
                     else
@@ -1227,7 +1237,15 @@ namespace Core
                             if (page.chip is YM2612X)
                             {
                                 outDatum od = new outDatum();
-                                od.val = (byte)((page.slots << 4) + (vch & 7));
+                                if (!page.keyOnDelay.sw)
+                                {
+                                    od.val = (byte)((page.slots << 4) + (vch & 7));
+                                }
+                                else
+                                {
+                                    od.val = (byte)((page.keyOnDelay.keyOn << 4) + (vch & 7));
+                                    page.keyOnDelay.beforekeyOn = 0xff;
+                                }
                                 if (mml != null)
                                 {
                                     od.type = mml.type;
@@ -1252,7 +1270,15 @@ namespace Core
                             else
                             {
                                 //key on
-                                SOutData(page, mml, page.port[0], 0x28, (byte)((page.slots << 4) + (vch & 7)));
+                                if (!page.keyOnDelay.sw)
+                                {
+                                    SOutData(page, mml, page.port[0], 0x28, (byte)((page.slots << 4) + (vch & 7)));
+                                }
+                                else
+                                {
+                                    SOutData(page, mml, page.port[0], 0x28, (byte)((page.keyOnDelay.keyOn << 4) + (vch & 7)));
+                                    page.keyOnDelay.beforekeyOn = page.keyOnDelay.keyOn;
+                                }
                             }
                         }
                     }
@@ -1301,7 +1327,15 @@ namespace Core
                             | (page.chip.lstPartWork[17].apg.Ch3SpecialModeKeyOn ? page.chip.lstPartWork[17].apg.slots : 0x0);
 
                         outDatum od = new outDatum();
-                        od.val = (byte)((slot << 4) + 2);
+                        if (!page.keyOnDelay.sw)
+                        {
+                            od.val = (byte)((slot << 4) + 2);
+                        }
+                        else
+                        {
+                            od.val = (byte)((page.keyOnDelay.keyOn << 4) + 2);
+                            page.keyOnDelay.beforekeyOn = 0xff;
+                        }
                         if (mml != null)
                         {
                             od.type = mml.type;
@@ -1329,7 +1363,15 @@ namespace Core
                             byte vch = (byte)((page.ch > 2) ? page.ch + 1 : page.ch);
                             //key on
                             outDatum od = new outDatum();
-                            od.val = (byte)((page.slots << 4) + (vch & 7));
+                            if (!page.keyOnDelay.sw)
+                            {
+                                od.val = (byte)((page.slots << 4) + (vch & 7));
+                            }
+                            else
+                            {
+                                od.val = (byte)((page.keyOnDelay.keyOn << 4) + (vch & 7));
+                                page.keyOnDelay.beforekeyOn = 0xff;
+                            }
                             if (mml != null)
                             {
                                 od.type = mml.type;
@@ -1356,7 +1398,15 @@ namespace Core
                             vch = (byte)(((vch > 2) ? (vch + 1) : vch));
                             //key on
                             outDatum od = new outDatum();
-                            od.val = (byte)((page.slots << 4) + (vch & 7));
+                            if (!page.keyOnDelay.sw)
+                            {
+                                od.val = (byte)((page.slots << 4) + (vch & 7));
+                            }
+                            else
+                            {
+                                od.val = (byte)((page.keyOnDelay.keyOn << 4) + (vch & 7));
+                                page.keyOnDelay.beforekeyOn = 0xff;
+                            }
                             if (mml != null)
                             {
                                 od.type = mml.type;
@@ -2328,7 +2378,47 @@ namespace Core
             SetDummyData(page, mml);
         }
 
-        private byte[] nSSGKeyOn = new byte[] { 0, 0, 0, 0 };
+        public override void CmdKeyOnDelay(partPage page, MML mml)
+        {
+            if (mml.args == null || (mml.args.Count != 4 && mml.args.Count != 1))
+            {
+                msgBox.setErrMsg(msg.get("E11006")
+                    , mml.line.Lp);
+
+                return;
+            }
+
+            //パラメータが一つの場合はスイッチのみ変化
+            if (mml.args.Count == 1)
+            {
+                if (!(mml.args[0] is int))
+                {
+                    msgBox.setErrMsg(msg.get("E11007")
+                        , mml.line.Lp);
+                    return;
+                }
+
+                page.keyOnDelay.sw = ((int)mml.args[0] != 0);
+                return;
+            }
+
+            //パラメータが４つの場合はスロットのディレイ値をセット＆スイッチ変化
+            bool sw = false;
+            for (int i = 0; i < 4; i++)
+            {
+                if (!(mml.args[i] is int))
+                {
+                    msgBox.setErrMsg(msg.get("E11007")
+                        , mml.line.Lp);
+                    return;
+                }
+
+                page.keyOnDelay.delay[i] = (int)mml.args[i];
+                if (page.keyOnDelay.delay[i] != 0) sw = true;
+            }
+            page.keyOnDelay.sw = sw;
+
+        }
 
         public override void MultiChannelCommand(MML mml)
         {
@@ -2340,14 +2430,30 @@ namespace Core
             int ssg = 0;
             foreach (partWork pw in lstPartWork)
             {
+                partPage page = pw.cpg;
+                int port;
+                int adr;
+                byte[] fmPort;
+                int vch;
+
+                if (pw.cpg.Type == enmChannelType.FMOPN|| (!pw.cpg.Ch3SpecialMode && pw.cpg.Type == enmChannelType.FMOPNex))
+                {
+                    if (pw.cpg.keyOnDelay.sw)
+                    {
+                        if (pw.cpg.keyOnDelay.beforekeyOn != pw.cpg.keyOnDelay.keyOn)
+                        {
+                            vch = (byte)((pw.cpg.ch > 2) ? pw.cpg.ch + 1 : pw.cpg.ch);
+                            SOutData(pw.cpg, mml, pw.cpg.port[0], 0x28, (byte)((pw.cpg.keyOnDelay.keyOn << 4) + (vch & 7)));
+                            pw.cpg.keyOnDelay.beforekeyOn = pw.cpg.keyOnDelay.keyOn;
+                        }
+                    }
+                    continue;
+                }
+
                 if (pw.cpg.Type != enmChannelType.SSG) continue;
 
 
                 //foreach (partPage page in pw.pg)
-                partPage page = pw.cpg;
-                int port;
-                int adr;
-                int vch;
                 GetPortVchSsg(page, out port, out adr, out vch);
                 int p = port;
                 //if (adr == 0x10)

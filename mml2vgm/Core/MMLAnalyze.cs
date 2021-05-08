@@ -308,9 +308,9 @@ namespace Core
                     log.Write("Jump point");
                     CmdJump(pw, page, mml);
                     break;
-                case 'K': // key shift
-                    log.Write("key shift");
-                    CmdKeyShift(pw, page, mml);
+                case 'K': // key shift / key On Delay
+                    log.Write("key shift / key On Delay");
+                    CmdKeyShiftKeyOnDelay(pw, page, mml);
                     break;
                 case 'l': // length
                     log.Write("length");
@@ -1999,10 +1999,38 @@ namespace Core
 
         }
 
+        private void CmdKeyShiftKeyOnDelay(partWork pw, partPage page, MML mml)
+        {
+            pw.incPos(page);
+            if (pw.getChar(page) != 'D') //kD
+            {
+                CmdKeyShift(pw, page, mml);
+                return;
+            }
+
+            CmdKeyOnDelay(pw, page, mml);
+        }
+
+        private void CmdKeyOnDelay(partWork pw, partPage page, MML mml)
+        { 
+            mml.type = enmMMLType.KeyOnDelay;
+            mml.args = new List<object>();
+            pw.incPos(page);
+
+            int n;
+            do
+            {
+                if (!pw.getNum(page, out n)) break;
+                mml.args.Add(n);
+                pw.skipTabSpace(page);
+                if (pw.getChar(page) != ',') break;
+                pw.incPos(page);
+            } while (true);
+        }
+
         private void CmdKeyShift(partWork pw, partPage page, MML mml)
         {
             int n = -1;
-            pw.incPos(page);
 
             if (!pw.getNum(page, out n))
             {

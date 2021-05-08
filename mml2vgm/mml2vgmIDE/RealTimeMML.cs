@@ -53,6 +53,7 @@
         {
             foreach (Core.partWork pw in chip.lstPartWork)
             {
+
                 if (pw.pg[0].waitKeyOnCounter > 0) pw.pg[0].waitKeyOnCounter--;
                 if (pw.pg[0].waitCounter > 0) pw.pg[0].waitCounter--;
                 if (pw.pg[0].bendWaitCounter > 0) pw.pg[0].bendWaitCounter--;
@@ -68,6 +69,15 @@
                         if (pw.pg[0].lfo[lfo].waitCounter < 0) pw.pg[0].lfo[lfo].waitCounter = 0;
                     }
                 }
+                if (pw.pg[0].keyOnDelay.sw)
+                {
+                    for (int i = 0; i < 4; i++)
+                    {
+                        if (pw.pg[0].keyOnDelay.delayWrk[i]<=0) continue;
+                        pw.pg[0].keyOnDelay.delayWrk[i]--;
+                    }
+                }
+
             }
         }
     }

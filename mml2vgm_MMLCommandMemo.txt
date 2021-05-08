@@ -897,6 +897,11 @@ EXOF            -oo----oo---oo---oo----oo------------------------  効果音モ�
 EXn             -oo----oo---oo---oo----oo------------------------  効果音モードのスロット割り当て(使用するスロットを列挙する)
 EXDn1,n2,n3,n4  -oo----oo---oo---oo----oo------------------------  効果音モードのスロットディチューン。
                                                                     n1～n4はそれぞれOP1～OP4までのディチューン値。
+KDn             -oo----oo---oo---oo----oo------------------------  キーオンディレイ(スイッチ)
+                                                                    0:OFF  1:ON
+KDn1,n2,n3,n4   -oo----oo---oo---oo----oo------------------------  キーオンディレイ
+                                                                    n1～n4はそれぞれOP1～OP4までのディレイ値。
+                                                                    この形式で指定すると自動的にスイッチがONになる
 L               ooooooooooooooooooooooooooooooooooooooooooooooooo  曲全体のループ位置指定(曲者です)
 J               ooooooooooooooooooooooooooooooooooooooooooooooooo  指定した位置まで演奏をスキップする。複数指定した場合は最後のJが有効になる
 qn              -ooo-oooooooooooooooooooooooooooooooooooooooooooo  ゲートタイム指定(クロック数で指定。音長分のクロック数からn引いた分が

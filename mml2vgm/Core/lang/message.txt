@@ -295,6 +295,7 @@ E10039=Selecting undefined Arpeggio.
 E10040=An undefined number was specified. or Arpeggio enabled without specification.
 E10041=Selecting undefined CommandArpeggio.
 E10042=An undefined number was specified. or CommandArpeggio enabled without specification.
+E10043=This channel can't use KD command.
 
 
 ;clsOPN.cs 11000
@@ -304,6 +305,8 @@ E11002=Can't change sound patch in extended channels.
 E11003=This soundchip doesn't have instruments.
 E11004=Envelope analysis failed.
 E11005=Unknown command defined. (EX{0})
+E11006=There are 4 | 1 parameters for the KD command.
+E11007=A non-numeric value has been specified for the KD command parameter.
 
 
 ;HuC6280.cs 12000

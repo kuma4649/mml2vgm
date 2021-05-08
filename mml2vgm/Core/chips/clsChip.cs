@@ -1881,6 +1881,19 @@ namespace Core
                     ResetTieBend(page, mml);
                 //if (!pw.ppg[pw.cpgNum].chip.parent.useSkipPlayCommand)
                 //{
+
+                if (page.keyOnDelay.sw)
+                {
+                    page.keyOnDelay.keyOn = 0;
+                    page.keyOnDelay.beforekeyOn = 0xff;
+                    for (int i = 0; i < 4; i++)
+                    {
+                        page.keyOnDelay.delayWrk[i] = page.keyOnDelay.delay[i];
+                        if (page.keyOnDelay.delayWrk[i] == 0 && page.keyOnDelay.delay[i] != -1)
+                            page.keyOnDelay.keyOn |= (byte)(1 << i);
+                    }
+                }
+
                 SetKeyOn(page, mml);
                 //}
             }
@@ -1896,6 +1909,18 @@ namespace Core
 
                 if (page.Type == enmChannelType.MIDI)
                 {
+                    if (page.keyOnDelay.sw)
+                    {
+                        page.keyOnDelay.keyOn = 0;
+                        page.keyOnDelay.beforekeyOn = 0xff;
+                        for (int i = 0; i < 4; i++)
+                        {
+                            page.keyOnDelay.delayWrk[i] = page.keyOnDelay.delay[i];
+                            if (page.keyOnDelay.delayWrk[i] == 0 && page.keyOnDelay.delay[i] != -1)
+                                page.keyOnDelay.keyOn |= (byte)(1 << i);
+                        }
+                    }
+
                     SetKeyOn(page, mml);
                 }
             }
@@ -1984,6 +2009,11 @@ namespace Core
             SetDummyData(page, mml);
         }
 
+        public virtual void CmdKeyOnDelay(partPage page, MML mml)
+        {
+            msgBox.setErrMsg(msg.get("E10043")
+                    , mml.line.Lp);
+        }
 
         public void CheckInterrupt(partWork pw, partPage page)
         {

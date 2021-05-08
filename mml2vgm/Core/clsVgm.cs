@@ -3116,6 +3116,15 @@ namespace Core
                                     ca.WaitCounter -= (int)waitCounter;
                                 }
 
+                                if (pg.keyOnDelay.sw)
+                                {
+                                    for (int i = 0; i < 4; i++)
+                                    {
+                                        if (pg.keyOnDelay.delayWrk[i] <= 0) continue;
+                                        pg.keyOnDelay.delayWrk[i] -= (int)waitCounter;
+                                    }
+                                }
+
                                 for (int i = 0; i < pg.noteOns.Length; i++)
                                 {
                                     if (pg.noteOns[i] == null) continue;
@@ -3190,6 +3199,11 @@ namespace Core
                                         if (page.lfo[lfo].waitCounter == -1) continue;
 
                                         waitCounter = Math.Min(waitCounter, page.lfo[lfo].waitCounter);
+                                    }
+
+                                    if (page.keyOnDelay.sw)
+                                    {
+                                        waitCounter = Math.Min(waitCounter, 1);
                                     }
 
                                     //envelope
@@ -3329,6 +3343,9 @@ namespace Core
 
             log.Write("Command Arpeggio");
             ProcCommandArpeggio(pg);
+
+            log.Write("KeyOnDelay");
+            ProcKeyOnDelay(pg);
 
             ProcMidiNoteOff(pg);
 
@@ -4145,6 +4162,9 @@ namespace Core
                     log.Write("Command Arpeggio");
                     ProcCommandArpeggio(page);
 
+                    log.Write("Key On Delay");
+                    ProcKeyOnDelay(page);
+
                     if (!page.isLayer
                         || (page.isLayer && checkNextCommandNote(page))
                         )
@@ -4240,6 +4260,9 @@ namespace Core
                                 if (page.arpeggioMode && page.arpIndex != -1) 
                                     cnt = Math.Min(cnt, page.arpCounter);
 
+                                if (page.keyOnDelay.sw)
+                                    cnt = Math.Min(cnt, 1);
+
                                 //envelope
                                 if (!(page.chip is SN76489)) continue;
                                 if (page.envelopeMode && page.envIndex != -1) cnt = Math.Min(cnt, page.envCounter);
@@ -4283,6 +4306,15 @@ namespace Core
                             }
 
                             if (pg.arpeggioMode && pg.arpIndex != -1) pg.arpCounter -= (int)cnt;
+
+                            if (pg.keyOnDelay.sw)
+                            {
+                                for (int i = 0; i < 4; i++)
+                                {
+                                    if (pg.keyOnDelay.delayWrk[i] <= 0) continue;
+                                    pg.keyOnDelay.delayWrk[i] -= (int)cnt;
+                                }
+                            }
 
                             if (!(pg.chip is SN76489)) continue;
                             if (pg.envelopeMode && pg.envIndex != -1) pg.envCounter -= (int)cnt;
@@ -4938,6 +4970,17 @@ namespace Core
                             page.chip.SetKeyOff(page, null);
                             page.chip.SetEnvelopeAtKeyOn(page, null);
                             page.chip.SetVArpeggioAtKeyOn(page, null);
+                            if (page.keyOnDelay.sw)
+                            {
+                                page.keyOnDelay.keyOn = 0;
+                                page.keyOnDelay.beforekeyOn = 0xff;
+                                for (int i = 0; i < 4; i++)
+                                {
+                                    page.keyOnDelay.delayWrk[i] = page.keyOnDelay.delay[i];
+                                    if (page.keyOnDelay.delayWrk[i] == 0 && page.keyOnDelay.delay[i] != -1)
+                                        page.keyOnDelay.keyOn |= (byte)(1 << i);
+                                }
+                            }
                             page.chip.SetKeyOn(page, null);
 
                         }
@@ -5213,7 +5256,19 @@ namespace Core
                             mml.line = new Line(md.linePos, "");
                             page.chip.CmdInstrument(page, mml);
                             if (page.chip.chipType == enmChipType.HuC6280)
+                            {
+                                //HuC6280はキーオンディレイ未対応だから不要かな...
+                                //if (page.keyOnDelay.sw)
+                                //{
+                                //    for (int i = 0; i < 4; i++)
+                                //    {
+                                //        page.keyOnDelay.delayWrk[i] = page.keyOnDelay.delay[i];
+                                //        if (page.keyOnDelay.delayWrk[i] == 0 && page.keyOnDelay.delay[i] != -1)
+                                //        page.keyOnDelay.keyOn |= (byte)(1 << i);
+                                //    }
+                                //}
                                 page.chip.SetKeyOn(page, mml);
+                            }
                             break;
 
                         case enmMMLType.Pan:
@@ -5265,6 +5320,21 @@ namespace Core
                 }
             }
 
+        }
+
+        private void ProcKeyOnDelay(partPage page)
+        {
+            if (!page.keyOnDelay.sw) return;
+
+            for (int i = 0; i < 4; i++)
+            {
+                if (page.keyOnDelay.delayWrk[i] < 0) continue;
+
+                if (page.keyOnDelay.delayWrk[i] == 0 && page.keyOnDelay.delay[i] != -1)
+                {
+                    page.keyOnDelay.keyOn |= (byte)(1 << i);
+                }
+            }
         }
 
 
@@ -5556,6 +5626,11 @@ namespace Core
                 case enmMMLType.TraceUpdateStack:
                     log.Write("TraceUpdateStack");
                     page.chip.CmdTraceUpdateStack(page, mml);
+                    page.mmlPos++;
+                    break;
+                case enmMMLType.KeyOnDelay:
+                    log.Write("KeyOnDelay");
+                    page.chip.CmdKeyOnDelay(page, mml);
                     page.mmlPos++;
                     break;
                 default:
