@@ -1,4 +1,7 @@
 更新履歴
+TAG429 2021/05/08 2nd
+  IDE:mucomDotNET差し替え
+
 TAG428 2021/05/08
   Core:vgm/xgm/zgm:OPN系:キーオンディレイに対応(OPMは未対応)
 
