@@ -879,6 +879,14 @@ EHON            ---------o----o----o-----o-----o-----------------  ハードウ�
 EHOF            ---------o----o----o-----o-----o-----------------  ハードウェアエンベロープの停止
 EHTn            ---------o----o----o-----o-----o-----------------  ハードウェアエンベロープタイプ
 EHn             ---------o----o----o-----o-----o-----------------  ハードウェアエンベロープ周波数
+HSON            -------------------------------o-----------------  Hardware envelope Sync mode ON
+HSOF            -------------------------------o-----------------  Hardware envelope Sync mode OFf(default)
+HSOn            -------------------------------o-----------------  Hardware envelope Sync mode Octave ( n : 1 ~ 5 )(default : 3)
+H>              -------------------------------o-----------------  Hardware envelope Sync mode Octave (+1)
+H<              -------------------------------o-----------------  Hardware envelope Sync mode Octave (-1)
+HSDn            -------------------------------o-----------------  Hardware envelope Sync mode Detune ( n : 0 ~ 255 )(default : 0)
+HSTN            -------------------------------o-----------------  Hardware envelope Sync mode Tone override oN(default)
+HSTF            -------------------------------o-----------------  Hardware envelope Sync mode Tone override oFf
 APON            -ooooooooo-oooo-oooo-oooooooooooooooooooooooooooo  音程アルペジオの開始
 APOF            -ooooooooo-oooo-oooo-oooooooooooooooooooooooooooo  音程アルペジオの停止
 APn             -ooooooooo-oooo-oooo-oooooooooooooooooooooooooooo  音程アルペジオの定義番号を指定

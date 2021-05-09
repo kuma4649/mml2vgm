@@ -5633,6 +5633,11 @@ namespace Core
                     page.chip.CmdKeyOnDelay(page, mml);
                     page.mmlPos++;
                     break;
+                case enmMMLType.HardEnvelopeSync:
+                    log.Write("HardEnvelopeSync");
+                    page.chip.CmdHardEnvelopeSync(page, mml);
+                    page.mmlPos++;
+                    break;
                 default:
                     msgBox.setErrMsg(string.Format(msg.get("E01016")
                         , mml.type)

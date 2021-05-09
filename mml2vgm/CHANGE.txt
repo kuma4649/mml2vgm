@@ -1,4 +1,8 @@
 更新履歴
+TAG430 2021/05/09
+  Core:vgm:AY8913が選ばれていたのでAY8910に変更
+  Core:vgm:AY8910:HardwareEnvelope sync modeを追加
+
 TAG429 2021/05/08 2nd
   IDE:mucomDotNET差し替え
 

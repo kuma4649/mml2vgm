@@ -388,6 +388,10 @@ namespace Core
                     log.Write("Forced Fnum");
                     CmdForcedFnum(pw, page, mml);
                     break;
+                case 'H'://Hardware envelope sync mode
+                    log.Write("Hardware envelope sync mode");
+                    CmdHardEnvSyncMode(pw, page, mml);
+                    break;
 
 
                 case 'c':
@@ -1492,6 +1496,98 @@ namespace Core
             }
             num = Common.CheckRange((int)(UInt16)num, 0, 0xffff);
             mml.args.Add(num);
+
+        }
+
+        private void CmdHardEnvSyncMode(partWork pw, partPage page, MML mml)
+        {
+            pw.incPos(page);
+            char c = pw.getChar(page);
+            int num = 0;
+
+            mml.type = enmMMLType.HardEnvelopeSync;
+            mml.args = new List<object>();
+
+            if (c == 'S')//HS...
+            {
+                pw.incPos(page);
+                c = pw.getChar(page);
+                if (c == 'O')//HSO...
+                {
+                    pw.incPos(page);
+                    c = pw.getChar(page);
+                    if (c == 'N')//HSON command
+                    {
+                        mml.args.Add("HSON");
+                        pw.incPos(page);
+                    }
+                    else if (c == 'F')//HSOF command
+                    {
+                        mml.args.Add("HSOF");
+                        pw.incPos(page);
+                    }
+                    else//HSOn command
+                    {
+                        mml.args.Add("HSO");
+                        if (!pw.getNum(page, out num))
+                        {
+                            msgBox.setErrMsg(msg.get("E05071"), mml.line.Lp);
+                            return;
+                        }
+                        num = Common.CheckRange(num, 1, 6);
+                        mml.args.Add(num);
+                    }
+
+                }
+                else if (c == 'D')//HSD command
+                {
+                    mml.args.Add("HSD");
+                    if (!pw.getNum(page, out num))
+                    {
+                        msgBox.setErrMsg(msg.get("E"), mml.line.Lp);
+                        return;
+                    }
+                    num = Common.CheckRange(num, short.MinValue, short.MaxValue);
+                    mml.args.Add(num);
+                }
+                else if (c == 'T')//HST...
+                {
+                    pw.incPos(page);
+                    c = pw.getChar(page);
+                    if (c == 'N')//HSTN command
+                    {
+                        mml.args.Add("HSTN");
+                        pw.incPos(page);
+                    }
+                    else if (c == 'F')//HSTF command
+                    {
+                        mml.args.Add("HSTF");
+                        pw.incPos(page);
+                    }
+                    else
+                    {
+                        //err
+                        msgBox.setErrMsg(msg.get("E05072"), mml.line.Lp);
+                        return;
+                    }
+                }
+            }
+            else if (c == '>')//H> command
+            {
+                mml.args.Add("H>");
+                pw.incPos(page);
+            }
+            else if (c == '<')//H< command
+            {
+                mml.args.Add("H<");
+                pw.incPos(page);
+            }
+            else
+            {
+                //err
+                msgBox.setErrMsg(msg.get("E05070"), mml.line.Lp);
+                return;
+            }
 
         }
 

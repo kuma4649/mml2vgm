@@ -2014,6 +2014,12 @@ namespace Core
             msgBox.setErrMsg(msg.get("E10043")
                     , mml.line.Lp);
         }
+        
+        public virtual void CmdHardEnvelopeSync(partPage page, MML mml)
+        {
+            msgBox.setErrMsg(msg.get("E10044")
+                    , mml.line.Lp);
+        }
 
         public void CheckInterrupt(partWork pw, partPage page)
         {

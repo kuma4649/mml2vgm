@@ -147,16 +147,16 @@ namespace SoundManager
             if ((mode & SendMode.MML) == SendMode.MML)
             {
                 if(dataMaker.unmount) dataMaker.Mount();
-                dataMaker.RequestStart();
                 while (!dataMaker.IsRunning())
                 {
-                    //Application.DoEvents();
+                    dataMaker.RequestStart();
+                    Application.DoEvents();
                 }
             }
 
-            dataSender.RequestStart();
             while (!dataSender.IsRunning())
             {
+                dataSender.RequestStart();
                 Application.DoEvents();
             }
 

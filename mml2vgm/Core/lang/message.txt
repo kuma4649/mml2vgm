@@ -229,6 +229,9 @@ E05066=Unknown command ('CAO?') defined.
 E05067=Unknown command ('CA?') defined.
 E05068=Unknown command ('SX?') defined.
 E05069=Unknown command ('PDO?') defined.
+E05070=Unknown command ('H?') defined.
+E05071=Unknown command ('HSO?') defined.
+E05072=Unknown command ('HST?') defined.
 
 
 ;partWork.cs 06000
@@ -296,6 +299,7 @@ E10040=An undefined number was specified. or Arpeggio enabled without specificat
 E10041=Selecting undefined CommandArpeggio.
 E10042=An undefined number was specified. or CommandArpeggio enabled without specification.
 E10043=This channel can't use KD command.
+E10044=This channel can't use HS command.
 
 
 ;clsOPN.cs 11000

@@ -656,6 +656,8 @@ namespace Core
         public int beforeNoise { get; internal set; }
         public int beforeMixer { get; internal set; }
         public KeyOnDelay keyOnDelay { get; internal set; } = new KeyOnDelay();
+        public HardEnvelopeSync hardEnvelopeSync { get; internal set; } = new HardEnvelopeSync();
+        public int hsFnum { get; internal set; }
 
         public partPage(partPage sharedPg)
         {
@@ -690,6 +692,14 @@ namespace Core
                 delayWrk[2] = -1;
                 delayWrk[3] = -1;
             }
+        }
+
+        public class HardEnvelopeSync
+        {
+            public bool sw = false;
+            public int octave = 4;
+            public int detune = 0;
+            public bool tone = false;
         }
     }
 
