@@ -1,4 +1,7 @@
 更新履歴
+TAG431 2021/05/11
+  Core:vgm:AY8910:HardwareEnvelope sync mode:page切り替え向けの処理を追加
+
 TAG430 2021/05/09
   Core:vgm:AY8913が選ばれていたのでAY8910に変更
   Core:vgm:AY8910:HardwareEnvelope sync modeを追加

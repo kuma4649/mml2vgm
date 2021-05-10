@@ -519,13 +519,23 @@ namespace Core
             noiseFreq = -1;
             OutSsgNoise(null, page);
 
-            //ハードエンベロープtype
-            page.spg.HardEnvelopeType = -1;
-            OutSsgHardEnvType(page, null);
+            if (!page.hardEnvelopeSync.sw)
+            {
+                //ハードエンベロープtype
+                page.spg.HardEnvelopeType = -1;
+                OutSsgHardEnvType(page, null);
 
-            //ハードエンベロープspeed
-            page.spg.HardEnvelopeSpeed = -1;
-            OutSsgHardEnvSpeed(page, null);
+                //ハードエンベロープspeed
+                page.spg.HardEnvelopeSpeed = -1;
+                OutSsgHardEnvSpeed(page, null);
+            }
+            else
+            {
+                //ハードエンベロープtype
+                page.spg.HardEnvelopeType = -1;
+                OutSsgHardEnvType(page, null);
+            }
+
 
             //音量
             page.spg.beforeVolume = -1;
