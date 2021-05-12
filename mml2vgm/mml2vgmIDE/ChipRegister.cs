@@ -2166,12 +2166,20 @@ namespace mml2vgmIDE
         public void DACControlSetupStreamControl(outDatum od, long Counter, byte si, byte ChipType, byte EmuType, byte ChipIndex, byte ChipID, byte port, byte cmd)
         {
             byte et = EmuType;
-            if (ChipType == 2)//YM2612
+            switch (ChipType)
             {
-                if (ctYM2612 == null || ctYM2612.Length < ChipID + 1 || ctYM2612[ChipID] == null) et = 0;
-                else if (ctYM2612[ChipID].UseEmu) et = 0;
-                else if (ctYM2612[ChipID].UseEmu2) et = 1;
-                else if (ctYM2612[ChipID].UseEmu3) et = 2;
+                case 0:
+                    if (ctSN76489 == null || ctSN76489.Length < ChipID + 1 || ctSN76489[ChipID] == null) et = 0;
+                    else if (ctSN76489[ChipID].UseEmu) et = 0;
+                    else if (ctSN76489[ChipID].UseEmu2) et = 1;
+                    else if (ctSN76489[ChipID].UseEmu3) et = 2;
+                    break;
+                case 2:
+                    if (ctYM2612 == null || ctYM2612.Length < ChipID + 1 || ctYM2612[ChipID] == null) et = 0;
+                    else if (ctYM2612[ChipID].UseEmu) et = 0;
+                    else if (ctYM2612[ChipID].UseEmu2) et = 1;
+                    else if (ctYM2612[ChipID].UseEmu3) et = 2;
+                    break;
             }
 
             enq(od, Counter, DACControl[ChipID], EnmDataType.Normal, 0, 0,

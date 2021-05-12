@@ -909,13 +909,21 @@ namespace Core
             }
             else
             {
-                ((YM2151)page.chip).OutSetPanFeedbackAlgorithm(
-                    mml,
-                    page
-                    , (int)page.pan
-                    , parent.instOPM[page.instrument].Item2[46]
-                    , parent.instOPM[page.instrument].Item2[45]
-                    );
+                if (parent.instOPM.ContainsKey(page.instrument))
+                {
+                    ((YM2151)page.chip).OutSetPanFeedbackAlgorithm(
+                        mml,
+                        page
+                        , (int)page.pan
+                        , parent.instOPM[page.instrument].Item2[46]
+                        , parent.instOPM[page.instrument].Item2[45]
+                        );
+                }
+                else
+                {
+                    msgBox.setErrMsg(string.Format(msg.get("E16001"),page.instrument)
+                        , mml.line.Lp);
+                }
             }
         }
 
