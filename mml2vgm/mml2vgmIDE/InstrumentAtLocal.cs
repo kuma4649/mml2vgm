@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml.Linq;
 
 namespace mml2vgmIDE
 {
@@ -74,7 +75,7 @@ namespace mml2vgmIDE
                     else
                     {
                         string ext = Path.GetExtension(f.FullName).ToLower();
-                        if (ext == ".gwi" || ext == ".muc" || ext == ".mml")
+                        if (ext == ".gwi" || ext == ".muc" || ext == ".mml" || ext == ".rym2612")
                         {
                             lstFile.Add(f);
                         }
@@ -100,6 +101,9 @@ namespace mml2vgmIDE
                     break;
                 case ".muc":
                     lstInst = GetInstsAtMuc(file);
+                    break;
+                case ".rym2612":
+                    lstInst = GetInstsAtRym2612(file);
                     break;
             }
 
@@ -725,6 +729,140 @@ namespace mml2vgmIDE
             //SECCOM = (byte)ch;
             carry = true; // NON DATA
             return 0;
+        }
+
+
+
+
+        private List<Tuple<enmInstType, string, string>> GetInstsAtRym2612(string srcFn)
+        {
+            List<Tuple<enmInstType, string, string>> ret = new List<Tuple<enmInstType, string, string>>();
+            try
+            {
+                XElement xml = XElement.Load(srcFn);
+                if (xml == null) return null;
+                if (xml.Name.ToString().ToUpper().Trim() != "RYM2612PARAMS") return null;
+
+                string patchName = "";
+                string category = "";
+                var xatr = xml.FirstAttribute;
+                while (xatr != null)
+                {
+                    if (xatr.Name.ToString().ToUpper().Trim() == "PATCHNAME")
+                        patchName = xatr.Value;
+                    else if (xatr.Name.ToString().ToUpper().Trim() == "CATEGORY")
+                        category = xatr.Value;
+                    xatr = xatr.NextAttribute;
+                }
+
+                Dictionary<string, decimal> dicPatch = new Dictionary<string, decimal>();
+
+                foreach (var eleParam in xml.Elements())
+                {
+                    if (eleParam.Name.ToString().ToUpper().Trim() != "PARAM") continue;
+                    string id = null;
+                    string val = null;
+                    foreach (var atr in eleParam.Attributes())
+                    {
+                        XName name = atr.Name;
+                        if (name == null) continue;
+                        string sval = atr.Value;
+                        if (string.IsNullOrEmpty(sval)) continue;
+                        string sname = name.ToString().ToUpper().Trim();
+                        sval = sval.ToUpper().Trim();
+
+                        if (sname == "ID") id = sval;
+                        else if (sname == "VALUE") val = sval;
+                    }
+                    if (string.IsNullOrEmpty(id) || string.IsNullOrEmpty(val)) continue;
+
+                    if (dicPatch.ContainsKey(id)) dicPatch.Remove(id);
+                    decimal q;
+                    if (decimal.TryParse(val, out q))
+                    {
+                        dicPatch.Add(id, q);
+                    }
+                }
+
+                List<decimal>[] iop = new List<decimal>[4] { new List<decimal>(), new List<decimal>(), new List<decimal>(), new List<decimal>() };
+                int[] muls = new int[] { 0, 1054, 1581, 2635, 3689, 4743, 5797, 6851, 7905, 8959, 10013, 10540, 11594, 12648, 14229, 15000 };
+                for (int op = 0; op < 4; op++)
+                {
+                    string sop = $"OP{op + 1}";
+                    string key;
+                    key = sop + "AR"; if (dicPatch.ContainsKey(key)) iop[op].Add(dicPatch[key]); else iop[op].Add(0);
+                    key = sop + "D1R"; if (dicPatch.ContainsKey(key)) iop[op].Add(dicPatch[key]); else iop[op].Add(0);
+                    key = sop + "D2R"; if (dicPatch.ContainsKey(key)) iop[op].Add(dicPatch[key]); else iop[op].Add(0);
+                    key = sop + "RR"; if (dicPatch.ContainsKey(key)) iop[op].Add(dicPatch[key]); else iop[op].Add(0);
+                    key = sop + "D2L"; if (dicPatch.ContainsKey(key)) iop[op].Add(15 - dicPatch[key]); else iop[op].Add(0);
+                    key = sop + "TL"; if (dicPatch.ContainsKey(key)) iop[op].Add(127 - dicPatch[key]); else iop[op].Add(0);
+                    key = sop + "RS"; if (dicPatch.ContainsKey(key)) iop[op].Add(dicPatch[key]); else iop[op].Add(0);
+                    key = sop + "MUL"; if (dicPatch.ContainsKey(key))
+                    {
+                        decimal ml = dicPatch[key];
+                        decimal dis = decimal.MaxValue;
+                        int dml = 0;
+                        for (int m = 0; m < muls.Length; m++)
+                        {
+                            if (dis <= Math.Abs(muls[m] - ml))
+                                continue;
+
+                            dis = Math.Abs(muls[m] - ml);
+                            dml = m;
+                        }
+                        iop[op].Add(dml);
+                    }
+                    else iop[op].Add(0);
+                    key = sop + "DT"; if (dicPatch.ContainsKey(key)) iop[op].Add(dicPatch[key] >= 0 ? dicPatch[key] : (4 - dicPatch[key])); else iop[op].Add(0);
+                    key = sop + "AM"; if (dicPatch.ContainsKey(key)) iop[op].Add(dicPatch[key]); else iop[op].Add(0);
+                    key = sop + "SSGEG"; if (dicPatch.ContainsKey(key)) iop[op].Add(dicPatch[key] == 0 ? 0 : (dicPatch[key] + 7)); else iop[op].Add(0);
+                }
+
+                int alg = 0, fb = 0;
+                if (dicPatch.ContainsKey("ALGORITHM")) alg = (int)dicPatch["ALGORITHM"] - 1; else alg = 0;
+                if (dicPatch.ContainsKey("FEEDBACK")) fb = (int)dicPatch["FEEDBACK"]; else fb = 0;
+
+                //音色定義文を作成
+                string vname = "";
+                int renban = 0;
+                int voiceNum = 0;
+
+                string[] line = new string[5];
+                for (int j = 0; j < 4; j++)
+                {
+                    line[j] = "";
+                    for (int k = 0; k < 11; k++)
+                    {
+                        line[j] += string.Format("{0:D3} ", (int)iop[j][k]);
+                    }
+                }
+                line[4] = string.Format("{0:D3} {1:D3}", alg, fb);
+
+                if (string.IsNullOrEmpty(vname))
+                {
+                    vname = string.Format("{0}_{1}", Path.GetFileName(srcFn), renban++);
+                }
+
+                string sdat = string.Format(
+    @"'@ N {6} ""{0}""
+   AR  DR  SR  RR  SL  TL  KS  ML  DT  AM  SSGEG
+'@ {1}
+'@ {2}
+'@ {3}
+'@ {4}
+   AL  FB
+'@ {5}
+", patchName == "" ? (vname + add) : patchName, line[0], line[1], line[2], line[3], line[4], voiceNum);
+
+                //ret.Add(new Tuple<enmInstType, string, string>(enmInstType.FM_N, Path.Combine(srcFn, vname).Replace(baseDir, ""), sdat));
+                ret.Add(new Tuple<enmInstType, string, string>(enmInstType.FM_N, srcFn.Replace(baseDir, ""), sdat));
+            }
+            catch
+            {
+                return null;
+            }
+
+            return ret;
         }
     }
 }

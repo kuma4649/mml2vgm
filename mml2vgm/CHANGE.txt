@@ -1,4 +1,7 @@
 更新履歴
+TAG432 2021/05/12
+  IDE:sien:rym2612の音色ファイルを取り込めるようにした。(instrumentsフォルダに突っ込んでください。)
+
 TAG431 2021/05/11
   Core:vgm:AY8910:HardwareEnvelope sync mode:page切り替え向けの処理を追加
 
