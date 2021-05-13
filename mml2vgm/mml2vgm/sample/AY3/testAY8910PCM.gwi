@@ -1,0 +1,31 @@
+﻿'{
+
+	TitleName   =AY8910 PCM Test
+	TitleNameJ  =AY8910 PCM Test
+	GameName    =
+	GameNameJ   =
+	SystemName  =
+	SystemNameJ =
+	Composer    =
+	ComposerJ   =
+	ReleaseDate =2021/05/xx
+	Converted   =
+	Notes       =
+
+	ClockCount  =192
+
+}
+
+
+     No,SV,AR,DR,SL,SR,RR,ST,ChipName
+'@ E  0,15, 0, 1,10,10, 6, 1,AY10
+
+'@ P 0,"..\wav\SD.wav",8000,100,AY10
+'@ P 1,"..\wav\HC.wav",8000,100,AY8910
+
+PCM Test(小さいので3つ重ねて...)
+'A1 m1o4q1@0c4c4c4@1c4m0v15c4
+'A2 m1o4q1@0c4c4c4@1c4m0
+'A3 m1o4q1@0c4c4c4@1c4m0
+
+

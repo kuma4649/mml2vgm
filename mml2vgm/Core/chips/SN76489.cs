@@ -14,6 +14,7 @@ namespace Core
         private int beforePanData = -1;
         private int dcsgCh3Freq = -1;
         private int beforeDcsgCh3Freq = -1;
+        private byte DataBankID = 0x08;
 
         public SN76489(ClsVgm parent, int chipID, string initialPartName, string stPath, int chipNumber) : base(parent, chipID, initialPartName, stPath, chipNumber)
         {
@@ -66,19 +67,19 @@ namespace Core
             {
                 if (parent.ChipCommandSize == 2)
                 {
-                    if (chipNumber == 0) pcmDataInfo[0].totalBuf = new byte[] { 0x07, 0x00, 0x66, 0x08, 0x00, 0x00, 0x00, 0x00 };
-                    else pcmDataInfo[0].totalBuf = new byte[] { 0x07, 0x00, 0x66, 0x05, 0x00, 0x00, 0x00, 0x00 };
+                    if (chipNumber == 0) pcmDataInfo[0].totalBuf = new byte[] { 0x07, 0x00, 0x66, DataBankID, 0x00, 0x00, 0x00, 0x00 };
+                    else pcmDataInfo[0].totalBuf = new byte[] { 0x07, 0x00, 0x66, DataBankID, 0x00, 0x00, 0x00, 0x00 };
                 }
                 else
                 {
-                    if (chipNumber == 0) pcmDataInfo[0].totalBuf = new byte[] { 0x07, 0x66, 0x08, 0x00, 0x00, 0x00, 0x00 };
-                    else pcmDataInfo[0].totalBuf = new byte[] { 0x07, 0x66, 0x08, 0x00, 0x00, 0x00, 0x00 };
+                    if (chipNumber == 0) pcmDataInfo[0].totalBuf = new byte[] { 0x07, 0x66, DataBankID, 0x00, 0x00, 0x00, 0x00 };
+                    else pcmDataInfo[0].totalBuf = new byte[] { 0x07, 0x66, DataBankID, 0x00, 0x00, 0x00, 0x00 };
                 }
             }
             else
             {
-                if (chipNumber == 0) pcmDataInfo[0].totalBuf = new byte[] { 0x67, 0x66, 0x08, 0x00, 0x00, 0x00, 0x00 };
-                else pcmDataInfo[0].totalBuf = new byte[] { 0x67, 0x66, 0x08, 0x00, 0x00, 0x00, 0x00 };
+                if (chipNumber == 0) pcmDataInfo[0].totalBuf = new byte[] { 0x67, 0x66, DataBankID, 0x00, 0x00, 0x00, 0x00 };
+                else pcmDataInfo[0].totalBuf = new byte[] { 0x67, 0x66, DataBankID, 0x00, 0x00, 0x00, 0x00 };
             }
 
             pcmDataInfo[0].totalHeaderLength = pcmDataInfo[0].totalBuf.Length;
@@ -300,7 +301,7 @@ namespace Core
                     // set stream data
                     , 0x91
                     , (byte)page.streamID
-                    , 0x08 // Data BankID(0x08 SN76489/SN76496)
+                    , DataBankID // Data BankID(0x08 SN76489/SN76496)
                     , 0x01 // Step Size
                     , 0x00 // StepBase
                     );

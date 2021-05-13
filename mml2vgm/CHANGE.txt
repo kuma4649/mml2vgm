@@ -1,4 +1,7 @@
 更新履歴
+TAG434 2021/05/13 2nd
+  Core:vgm:AY8910:PCMに対応(サンプル:testAY8910PCM.gwi)
+
 TAG433 2021/05/13
   Core:MDSound差し替え
   IDE:OPM:未定義の音色を指定したときに例外を出していたバグを修正

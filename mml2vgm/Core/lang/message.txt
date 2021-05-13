@@ -245,6 +245,8 @@ I07000=mml2vgm Commandline Version\r\n                                   By kuma
 ;AY8910.cs 08000
 E08000=This sound chip doesn't have instruments.
 E08001=ToneDoubler cannot be used if chip is not OPN or OPM.
+E08002=Sound patch does not exist as PCM definition({0}).
+E08003=Selected Tone number({0}) is not for AY8910 PCM data.
 
 ;C140.cs 09000
 E09000=defined loop address [{0}] is exceeding PCM data size. select between 0~{1}.

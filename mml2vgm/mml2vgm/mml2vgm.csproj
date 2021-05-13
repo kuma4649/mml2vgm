@@ -139,6 +139,9 @@
     <None Include="sample\AY3\testAY8910hardEnv.gwi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="sample\AY3\testAY8910PCM.gwi">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="sample\AY3\testAY8910Vi.gwi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
