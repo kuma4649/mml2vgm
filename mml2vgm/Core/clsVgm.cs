@@ -37,6 +37,8 @@ namespace Core
         public QSound[] qsound = null;
         public K053260[] k053260 = null;
         public MidiGM[] midiGM = null;
+        public NES[] nes = null;
+        public DMG[] dmg = null;
 
         public Dictionary<enmChipType, ClsChip[]> chips;
 
@@ -469,6 +471,35 @@ namespace Core
                 midiGM = lstMidiGM.ToArray();
                 chips.Add(enmChipType.MIDI_GM, midiGM);
             }
+
+            List<NES> lstNES = new List<NES>();
+            n = sp.dicChipPartName[enmChipType.NES];
+            for (int i = 0; i < n.Item3.Count; i++)
+            {
+                if (string.IsNullOrEmpty(n.Item3[i])) continue;
+                if (sp.lnChipPartName.Contains(n.Item3[i]))
+                    lstNES.Add(new NES(this, i, n.Item3[i], stPath, (info.format == enmFormat.ZGM ? 0 : i)));
+            }
+            if (lstNES.Count > 0)
+            {
+                nes = lstNES.ToArray();
+                chips.Add(enmChipType.NES, nes);
+            }
+
+            List<DMG> lstDMG = new List<DMG>();
+            n = sp.dicChipPartName[enmChipType.DMG];
+            for (int i = 0; i < n.Item3.Count; i++)
+            {
+                if (string.IsNullOrEmpty(n.Item3[i])) continue;
+                if (sp.lnChipPartName.Contains(n.Item3[i]))
+                    lstDMG.Add(new DMG(this, i, n.Item3[i], stPath, (info.format == enmFormat.ZGM ? 0 : i)));
+            }
+            if (lstDMG.Count > 0)
+            {
+                dmg = lstDMG.ToArray();
+                chips.Add(enmChipType.DMG, dmg);
+            }
+
 
             List<clsTD> lstTD = new List<clsTD>
             {
@@ -3551,41 +3582,45 @@ namespace Core
             dat[p - 2] = new outDatum(enmMMLType.unknown, null, null, v[2]);
             dat[p - 1] = new outDatum(enmMMLType.unknown, null, null, v[3]);
 
-            long useYM2151 = 0;
-            long useYM2203 = 0;
-            long useYM2608 = 0;
-            long useYM2610B = 0;
-            long useYM2612 = 0;
-            long useSN76489 = 0;
-            long useRf5c164 = 0;
-            long useSegaPcm = 0;
-            long useHuC6280 = 0;
-            long useC140 = 0;
-            long useC352 = 0;
             long useAY8910 = 0;
-            long useYM2413 = 0;
-            long useK051649 = 0;
-            long useQSound = 0;
-            long useK053260 = 0;
-            long useYM2151_S = 0;
-            long useYM2203_S = 0;
-            long useYM2608_S = 0;
-            long useYM2610B_S = 0;
-            long useYM2612_S = 0;
-            long useSN76489_S = 0;
-            long useRf5c164_S = 0;
-            long useSegaPcm_S = 0;
-            long useHuC6280_S = 0;
-            long useC140_S = 0;
-            long useC352_S = 0;
             long useAY8910_S = 0;
-            long useYM2413_S = 0;
+            long useC140 = 0;
+            long useC140_S = 0;
+            long useC352 = 0;
+            long useC352_S = 0;
+            long useDMG = 0;
+            long useDMG_S = 0;
+            long useHuC6280 = 0;
+            long useHuC6280_S = 0;
+            long useK051649 = 0;
             long useK051649_S = 0;
+            long useK053260 = 0;
             long useK053260_S = 0;
-            long useYM3526 = 0;
-            long useYM3526_S = 0;
+            long useNES = 0;
+            long useNES_S = 0;
+            long useQSound = 0;
+            long useRf5c164 = 0;
+            long useRf5c164_S = 0;
+            long useSegaPcm = 0;
+            long useSegaPcm_S = 0;
+            long useSN76489 = 0;
+            long useSN76489_S = 0;
             long useY8950 = 0;
             long useY8950_S = 0;
+            long useYM2151 = 0;
+            long useYM2151_S = 0;
+            long useYM2203 = 0;
+            long useYM2203_S = 0;
+            long useYM2413 = 0;
+            long useYM2413_S = 0;
+            long useYM2608 = 0;
+            long useYM2608_S = 0;
+            long useYM2610B = 0;
+            long useYM2610B_S = 0;
+            long useYM2612 = 0;
+            long useYM2612_S = 0;
+            long useYM3526 = 0;
+            long useYM3526_S = 0;
             long useYM3812 = 0;
             long useYM3812_S = 0;
             long useYMF262 = 0;
@@ -3632,6 +3667,10 @@ namespace Core
                     foreach (partWork pw in huc6280[i].lstPartWork)
                     { useHuC6280 += pw.clockCounter; if (huc6280[i].ChipID == 1) useHuC6280_S += pw.clockCounter; }
 
+                if (ay8910 != null && ay8910.Length > i && ay8910[i] != null)
+                    foreach (partWork pw in ay8910[i].lstPartWork)
+                    { useAY8910 += pw.clockCounter; if (ay8910[i].ChipID == 1) useAY8910_S += pw.clockCounter; }
+
                 if (c140 != null && c140.Length > i && c140[i] != null)
                     foreach (partWork pw in c140[i].lstPartWork)
                     { useC140 += pw.clockCounter; if (c140[i].ChipID == 1) useC140_S += pw.clockCounter; }
@@ -3640,9 +3679,13 @@ namespace Core
                     foreach (partWork pw in c352[i].lstPartWork)
                     { useC352 += pw.clockCounter; if (c352[i].ChipID == 1) useC352_S += pw.clockCounter; }
 
-                if (ay8910 != null && ay8910.Length > i && ay8910[i] != null)
-                    foreach (partWork pw in ay8910[i].lstPartWork)
-                    { useAY8910 += pw.clockCounter; if (ay8910[i].ChipID == 1) useAY8910_S += pw.clockCounter; }
+                if (dmg != null && dmg.Length > i && dmg[i] != null)
+                    foreach (partWork pw in dmg[i].lstPartWork)
+                    { useDMG += pw.clockCounter; if (dmg[i].ChipID == 1) useDMG_S += pw.clockCounter; }
+
+                if (nes != null && nes.Length > i && nes[i] != null)
+                    foreach (partWork pw in nes[i].lstPartWork)
+                    { useNES += pw.clockCounter; if (nes[i].ChipID == 1) useNES_S += pw.clockCounter; }
 
                 if (ym2413 != null && ym2413.Length > i && ym2413[i] != null)
                     foreach (partWork pw in ym2413[i].lstPartWork)
@@ -3759,6 +3802,16 @@ namespace Core
                 dat[0x79] = new outDatum(enmMMLType.unknown, null, null, a.Flags);
                 dat[0x7a] = new outDatum(enmMMLType.unknown, null, null, 0);
                 dat[0x7b] = new outDatum(enmMMLType.unknown, null, null, 0);
+            }
+            if (info.Version >= 1.61f && useDMG != 0)
+            {
+                DMG c = dmg[0] != null ? dmg[0] : dmg[1];
+                Common.SetLE32(dat, 0x80, (uint)c.Frequency | (uint)(useDMG_S == 0 ? 0 : 0x40000000));
+            }
+            if (info.Version >= 1.61f && useNES != 0)
+            {
+                NES c = nes[0] != null ? nes[0] : nes[1];
+                Common.SetLE32(dat, 0x84, (uint)c.Frequency | (uint)(useNES_S == 0 ? 0 : 0x40000000));
             }
             if (info.Version >= 1.00f && useYM2413 != 0)
             {

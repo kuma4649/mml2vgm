@@ -460,3 +460,9 @@ E30006=This sound chip doesn't support 4-operator mode, so L4 format voices cann
 
 
 
+;NES.cs 32000
+E32000=Duty cycle can only be used on pulse channels.
+
+
+
+

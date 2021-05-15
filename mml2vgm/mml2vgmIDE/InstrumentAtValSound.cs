@@ -259,5 +259,32 @@ Cancel : 永続的にオフラインモードにする
 ", name + add, line[0], line[1], line[2], line[3], line[4]);
 
         }
+
+        private string GetInstrumentStringMUC(string name, int[] val)
+        {
+
+            string[] line = new string[5];
+
+            for (int i = 0; i < 4; i++)
+            {
+                line[i] = "";
+                for (int j = 0; j < 9; j++)
+                {
+                    line[i] += string.Format("{0:D3} ", val[i * 10 + j + 2]);
+                }
+            }
+            line[4] = string.Format("{0:D3} {1:D3}", val[1], val[0]);
+
+            return string.Format(
+@"@{0}:{{
+  {5}
+  {1}
+  {2}
+  {3}
+  {4}
+  }}
+", name + add, line[0], line[1], line[2], line[3], line[4]);
+
+        }
     }
 }

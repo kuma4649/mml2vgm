@@ -601,14 +601,13 @@ namespace mml2vgmIDE
 
         private void vcDMG(outDatum od)
         {
-            chipRegister.setDMGRegister((vgmBuf[vgmAdr + 1].val & 0x80) == 0 ? 0 : 1, vgmBuf[vgmAdr + 1].val & 0x7f, vgmBuf[vgmAdr + 2].val);
-            //chipRegister.setAY8910Register(0, vgmBuf[vgmAdr + 1], vgmBuf[vgmAdr + 2], model);
+            chipRegister.DMGSetRegister(od,Audio.DriverSeqCounter,(vgmBuf[vgmAdr + 1].val & 0x80) == 0 ? 0 : 1, vgmBuf[vgmAdr + 1].val & 0x7f, vgmBuf[vgmAdr + 2].val);
             vgmAdr += 3;
         }
 
         private void vcNES(outDatum od)
         {
-            chipRegister.setNESRegister((vgmBuf[vgmAdr + 1].val & 0x80) == 0 ? 0 : 1, vgmBuf[vgmAdr + 1].val & 0x7f, vgmBuf[vgmAdr + 2].val);
+            chipRegister.NESSetRegister(od, Audio.DriverSeqCounter, (vgmBuf[vgmAdr + 1].val & 0x80) == 0 ? 0 : 1, vgmBuf[vgmAdr + 1].val & 0x7f, vgmBuf[vgmAdr + 2].val);
             vgmAdr += 3;
         }
 

@@ -24,9 +24,11 @@ namespace mml2vgmIDE
         private Setting.ChipType[] ctAY8910 = new Setting.ChipType[2] { null, null };
         private Setting.ChipType[] ctC140 = new Setting.ChipType[2] { null, null };
         private Setting.ChipType[] ctC352 = new Setting.ChipType[2] { null, null };
+        private Setting.ChipType[] ctDMG = new Setting.ChipType[2] { null, null };
         private Setting.ChipType[] ctHuC6280 = new Setting.ChipType[2] { null, null };
         private Setting.ChipType[] ctK051649 = new Setting.ChipType[2] { null, null };
         private Setting.ChipType[] ctK053260 = new Setting.ChipType[2] { null, null };
+        private Setting.ChipType[] ctNES = new Setting.ChipType[2] { null, null };
         private Setting.ChipType[] ctPPZ8 = new Setting.ChipType[2] { null, null };
         private Setting.ChipType[] ctPPSDRV = new Setting.ChipType[2] { null, null };
         private Setting.ChipType[] ctP86 = new Setting.ChipType[2] { null, null };
@@ -53,9 +55,11 @@ namespace mml2vgmIDE
         private RSoundChip[] scAY8910 = new RSoundChip[2] { null, null };
         private RSoundChip[] scC140 = new RSoundChip[2] { null, null };
         private RSoundChip[] scC352 = new RSoundChip[2] { null, null };
+        private RSoundChip[] scDMG = new RSoundChip[2] { null, null };
         private RSoundChip[] scHuC6280 = new RSoundChip[2] { null, null };
         private RSoundChip[] scK051649 = new RSoundChip[2] { null, null };
         private RSoundChip[] scK053260 = new RSoundChip[2] { null, null };
+        private RSoundChip[] scNES = new RSoundChip[2] { null, null };
         private RSoundChip[] scPPZ8 = new RSoundChip[2] { null, null };
         private RSoundChip[] scPPSDRV = new RSoundChip[2] { null, null };
         private RSoundChip[] scP86 = new RSoundChip[2] { null, null };
@@ -390,6 +394,8 @@ namespace mml2vgmIDE
         public List<Chip> HuC6280 = new List<Chip>();
         public List<Chip> K051649 = new List<Chip>();
         public List<Chip> RF5C164 = new List<Chip>();
+        public List<Chip> DMG = new List<Chip>();
+        public List<Chip> NES = new List<Chip>();
         public List<Chip> SEGAPCM = new List<Chip>();
         public List<Chip> SN76489 = new List<Chip>();
         public List<Chip> YM2151 = new List<Chip>();
@@ -483,6 +489,21 @@ namespace mml2vgmIDE
                         C352[i].Delay = (C352[i].Model == EnmVRModel.VirtualModel ? LEmu : LReal);
                     }
                     break;
+                case EnmZGMDevice.GameBoyDMG:
+                    ctDMG = new Setting.ChipType[] { chipTypeP, chipTypeS };
+                    for (int i = 0; i < DMG.Count; i++)
+                    {
+                        DMG[i].Model = EnmVRModel.VirtualModel;
+                        DMG[i].Delay = LEmu;
+                        if (i > 1) continue;
+
+                        scDMG[i] = realChip.GetRealChip(ctDMG[i]);
+                        if (scDMG[i] != null) scDMG[i].init();
+                        if (DMG.Count < i + 1) DMG.Add(new Chip(3));
+                        DMG[i].Model = ctDMG[i].UseEmu ? EnmVRModel.VirtualModel : EnmVRModel.RealModel;
+                        DMG[i].Delay = (DMG[i].Model == EnmVRModel.VirtualModel ? LEmu : LReal);
+                    }
+                    break;
                 case EnmZGMDevice.HuC6280:
                     ctHuC6280 = new Setting.ChipType[] { chipTypeP, chipTypeS };
                     for (int i = 0; i < HuC6280.Count; i++)
@@ -526,6 +547,21 @@ namespace mml2vgmIDE
                         if (K053260.Count < i + 1) K053260.Add(new Chip(4));
                         K053260[i].Model = ctK053260[i].UseEmu ? EnmVRModel.VirtualModel : EnmVRModel.RealModel;
                         K053260[i].Delay = (K053260[i].Model == EnmVRModel.VirtualModel ? LEmu : LReal);
+                    }
+                    break;
+                case EnmZGMDevice.NESAPU:
+                    ctNES = new Setting.ChipType[] { chipTypeP, chipTypeS };
+                    for (int i = 0; i < NES.Count; i++)
+                    {
+                        NES[i].Model = EnmVRModel.VirtualModel;
+                        NES[i].Delay = LEmu;
+                        if (i > 1) continue;
+
+                        scNES[i] = realChip.GetRealChip(ctNES[i]);
+                        if (scNES[i] != null) scNES[i].init();
+                        if (NES.Count < i + 1) NES.Add(new Chip(3));
+                        NES[i].Model = ctNES[i].UseEmu ? EnmVRModel.VirtualModel : EnmVRModel.RealModel;
+                        NES[i].Delay = (NES[i].Model == EnmVRModel.VirtualModel ? LEmu : LReal);
                     }
                     break;
                 case EnmZGMDevice.PPZ8:
@@ -886,6 +922,13 @@ namespace mml2vgmIDE
                 C352[i].Number = i;
                 C352[i].Hosei = 0;
 
+                if (DMG.Count < i + 1) DMG.Add(new Chip(4));
+                DMG[i].Use = false;
+                DMG[i].Model = EnmVRModel.None;
+                DMG[i].Device = EnmZGMDevice.GameBoyDMG;
+                DMG[i].Number = i;
+                DMG[i].Hosei = 0;
+
                 if (HuC6280.Count < i + 1) HuC6280.Add(new Chip(6));
                 HuC6280[i].Use = false;
                 HuC6280[i].Model = EnmVRModel.None;
@@ -906,6 +949,13 @@ namespace mml2vgmIDE
                 K053260[i].Device = EnmZGMDevice.K053260;
                 K053260[i].Number = i;
                 K053260[i].Hosei = 0;
+
+                if (NES.Count < i + 1) NES.Add(new Chip(5));
+                NES[i].Use = false;
+                NES[i].Model = EnmVRModel.None;
+                NES[i].Device = EnmZGMDevice.NESAPU;
+                NES[i].Number = i;
+                NES[i].Hosei = 0;
 
                 if (PPSDRV.Count < i + 1) PPSDRV.Add(new Chip(1));
                 PPSDRV[i].Use = false;
@@ -1130,6 +1180,9 @@ namespace mml2vgmIDE
                 case EnmZGMDevice.C352:
                     C352SetRegisterProcessing(ref Counter, ref Chip, ref Type, ref Address, ref Data, ref ExData);
                     break;
+                case EnmZGMDevice.GameBoyDMG:
+                    DMGSetRegisterProcessing(ref Counter, ref Chip, ref Type, ref Address, ref Data, ref ExData);
+                    break;
                 case EnmZGMDevice.HuC6280:
                     HuC6280SetRegisterProcessing(ref Counter, ref Chip, ref Type, ref Address, ref Data, ref ExData);
                     break;
@@ -1138,6 +1191,9 @@ namespace mml2vgmIDE
                     break;
                 case EnmZGMDevice.K053260:
                     K053260SetRegisterProcessing(ref Counter, ref Chip, ref Type, ref Address, ref Data, ref ExData);
+                    break;
+                case EnmZGMDevice.NESAPU:
+                    NESSetRegisterProcessing(ref Counter, ref Chip, ref Type, ref Address, ref Data, ref ExData);
                     break;
                 case EnmZGMDevice.QSound:
                     QSoundSetRegisterProcessing(ref Counter, ref Chip, ref Type, ref Address, ref Data, ref ExData);
@@ -1234,6 +1290,9 @@ namespace mml2vgmIDE
                 case EnmZGMDevice.C352:
                     C352WriteRegisterControl(Chip, type, address, data, exData);
                     break;
+                case EnmZGMDevice.GameBoyDMG:
+                    DMGWriteRegisterControl(Chip, type, address, data, exData);
+                    break;
                 case EnmZGMDevice.MIDIGM:
                     MidiGMWriteRegisterControl(Chip, type, address, data, exData);
                     break;
@@ -1245,6 +1304,9 @@ namespace mml2vgmIDE
                     break;
                 case EnmZGMDevice.K053260:
                     K053260WriteRegisterControl(Chip, type, address, data, exData);
+                    break;
+                case EnmZGMDevice.NESAPU:
+                    NESWriteRegisterControl(Chip, type, address, data, exData);
                     break;
                 case EnmZGMDevice.PPZ8:
                     PPZ8WriteRegisterControl(Chip, type, address, data, exData);
@@ -1318,9 +1380,11 @@ namespace mml2vgmIDE
         {
             AY8910SetFadeoutVolume(counter, (int)((1.0 - fadeoutCounter) * 15.0));
             C140SetFadeoutVolume(counter, (int)((1.0 - fadeoutCounter) * 255.0));
+            DMGSetFadeoutVolume(counter, (int)((1.0 - fadeoutCounter) * 15.0));
             HuC6280SetFadeoutVolume(counter, (int)((1.0 - fadeoutCounter) * 127.0));
             K051649SetFadeoutVolume(counter, (int)((1.0 - fadeoutCounter) * 15.0));
             K053260SetFadeoutVolume(counter, (int)((1.0 - fadeoutCounter) * 127.0));
+            NESSetFadeoutVolume(counter, (int)((1.0 - fadeoutCounter) * 15.0));
             QSoundSetFadeoutVolume(counter, (int)((1.0 - fadeoutCounter) * 65535.0));
             RF5C164SetFadeoutVolume(counter, (int)((1.0 - fadeoutCounter) * 255.0));
             SEGAPCMSetFadeoutVolume(counter, (int)((1.0 - fadeoutCounter) * 255.0));
@@ -1885,6 +1949,12 @@ namespace mml2vgmIDE
                     break;
                 case 0xb1:
                     enq(od, Counter, RF5C164[chipNumber], EnmDataType.Normal, -1, -1, null);
+                    break;
+                case 0xb3:
+                    enq(od, Counter, DMG[chipNumber], EnmDataType.Normal, -1, -1, null);
+                    break;
+                case 0xb4:
+                    enq(od, Counter, NES[chipNumber], EnmDataType.Normal, -1, -1, null);
                     break;
                 case 0xb9:
                     enq(od, Counter, HuC6280[chipNumber], EnmDataType.Normal, -1, -1, null);
@@ -2459,7 +2529,294 @@ namespace mml2vgmIDE
 
         #endregion
 
+        #region DMG
 
+        private void DMGWriteRegisterControl(Chip Chip, EnmDataType type, int address, int data, object exData)
+        {
+            if (type == EnmDataType.Normal)
+            {
+                if (Chip.Model == EnmVRModel.VirtualModel)
+                {
+                    if (!ctDMG[Chip.Number].UseScci && ctDMG[Chip.Number].UseEmu)
+                        mds.WriteDMG(Chip.Index, (byte)Chip.Number, (byte)address, (byte)data);
+                }
+                if (Chip.Model == EnmVRModel.RealModel)
+                {
+                    if (scDMG[Chip.Number] != null)
+                    {
+                        int skip = 0x0;
+                        if (scDMG[Chip.Number] is RC86ctlSoundChip)
+                        {
+                            if (((RC86ctlSoundChip)scDMG[Chip.Number]).chiptype == Nc86ctl.ChipType.CHIP_UNKNOWN)
+                            {
+                                skip = 0x100;
+                            }
+                        }
+                        scDMG[Chip.Number].setRegister(address + skip, data);
+                    }
+                }
+            }
+            else if (type == EnmDataType.Block)
+            {
+                Audio.sm.SetInterrupt();
+
+                try
+                {
+                    if (exData == null) return;
+
+                    PackData[] pdata = (PackData[])exData;
+                    if (Chip.Model == EnmVRModel.VirtualModel)
+                    {
+                        foreach (PackData dat in pdata)
+                            mds.WriteDMG(Chip.Index, (byte)Chip.Number, (byte)dat.Address, (byte)dat.Data);
+                    }
+                    if (Chip.Model == EnmVRModel.RealModel)
+                    {
+                        if (scDMG[Chip.Number] != null)
+                        {
+                            foreach (PackData dat in pdata)
+                            {
+                                int skip = 0x0;
+                                if (scDMG[Chip.Number] is RC86ctlSoundChip)
+                                {
+                                    if (((RC86ctlSoundChip)scDMG[Chip.Number]).chiptype == Nc86ctl.ChipType.CHIP_UNKNOWN)
+                                    {
+                                        skip = 0x100;
+                                    }
+                                }
+                                scDMG[Chip.Number].setRegister(dat.Address + skip, dat.Data);
+                            }
+                        }
+                    }
+                }
+                finally
+                {
+                    Audio.sm.ResetInterrupt();
+                }
+            }
+        }
+
+        public void DMGSetRegisterProcessing(ref long Counter, ref Chip Chip, ref EnmDataType Type, ref int Address, ref int dData, ref object ExData)
+        {
+        }
+
+        public void DMGSetRegister(outDatum od, long Counter, int ChipID, int dAddr, int dData)
+        {
+            enq(od, Counter, DMG[ChipID], EnmDataType.Normal, dAddr, dData, null);
+        }
+
+        public void DMGSetRegister(outDatum od, long Counter, int ChipID, PackData[] data)
+        {
+            enq(od, Counter, DMG[ChipID], EnmDataType.Block, -1, -1, data);
+        }
+
+        public void DMGSoftReset(long Counter, int ChipID)
+        {
+            List<PackData> data = DMGMakeSoftReset(ChipID);
+            DMGSetRegister(null, Counter, ChipID, data.ToArray());
+        }
+
+        public List<PackData> DMGMakeSoftReset(int chipID)
+        {
+            List<PackData> data = new List<PackData>();
+            int i;
+
+            // SSG 音程(2byte*3ch)
+            for (i = 0x00; i < 0x05 + 1; i++)
+            {
+                data.Add(new PackData(null, DMG[chipID], EnmDataType.Normal, i, 0x00, null));
+            }
+            data.Add(new PackData(null, DMG[chipID], EnmDataType.Normal, 0x06, 0x00, null)); // SSG ノイズ周波数
+            data.Add(new PackData(null, DMG[chipID], EnmDataType.Normal, 0x07, 0x38, null)); // SSG ミキサ
+                                                                                                // SSG ボリューム(3ch)
+            for (i = 0x08; i < 0x0A + 1; i++)
+            {
+                data.Add(new PackData(null, DMG[chipID], EnmDataType.Normal, i, 0x00, null));
+            }
+            // SSG Envelope
+            for (i = 0x0B; i < 0x0D + 1; i++)
+            {
+                data.Add(new PackData(null, DMG[chipID], EnmDataType.Normal, i, 0x00, null));
+            }
+
+            return data;
+        }
+
+        public void DMGSetMask(long Counter, int chipID, int ch, bool mask, bool noSend = false)
+        {
+        }
+
+        public void DMGWriteClock(byte chipID, int clock)
+        {
+            if (scDMG != null && scDMG[chipID] != null)
+            {
+                if (scDMG[chipID] is RC86ctlSoundChip)
+                {
+                    Nc86ctl.ChipType ct = ((RC86ctlSoundChip)scDMG[chipID]).chiptype;
+                }
+
+                scDMG[chipID].dClock = scDMG[chipID].SetMasterClock((uint)clock);
+                scDMG[chipID].mul = (double)scDMG[chipID].dClock / (double)clock;
+
+                if (scDMG[chipID] is RC86ctlSoundChip)
+                {
+                    if (((RC86ctlSoundChip)scDMG[chipID]).chiptype == Nc86ctl.ChipType.CHIP_UNKNOWN)
+                    {
+                        scDMG[chipID].mul = 1.0;
+                    }
+                }
+            }
+        }
+
+        public void DMGSetFadeoutVolume(long Counter, int v)
+        {
+        }
+
+        public void DMGSetSSGVolume(byte chipID, int vol)
+        {
+        }
+
+        #endregion
+
+        #region NES
+
+        private void NESWriteRegisterControl(Chip Chip, EnmDataType type, int address, int data, object exData)
+        {
+            if (type == EnmDataType.Normal)
+            {
+                if (Chip.Model == EnmVRModel.VirtualModel)
+                {
+                    if (!ctNES[Chip.Number].UseScci && ctNES[Chip.Number].UseEmu)
+                        mds.WriteNES(Chip.Index, (byte)Chip.Number, (byte)address, (byte)data);
+                }
+                if (Chip.Model == EnmVRModel.RealModel)
+                {
+                    if (scNES[Chip.Number] != null)
+                    {
+                        int skip = 0x0;
+                        if (scNES[Chip.Number] is RC86ctlSoundChip)
+                        {
+                            if (((RC86ctlSoundChip)scNES[Chip.Number]).chiptype == Nc86ctl.ChipType.CHIP_UNKNOWN)
+                            {
+                                skip = 0x100;
+                            }
+                        }
+                        scNES[Chip.Number].setRegister(address + skip, data);
+                    }
+                }
+            }
+            else if (type == EnmDataType.Block)
+            {
+                Audio.sm.SetInterrupt();
+
+                try
+                {
+                    if (exData == null) return;
+
+                    PackData[] pdata = (PackData[])exData;
+                    if (Chip.Model == EnmVRModel.VirtualModel)
+                    {
+                        foreach (PackData dat in pdata)
+                            mds.WriteNES(Chip.Index, (byte)Chip.Number, (byte)dat.Address, (byte)dat.Data);
+                    }
+                    if (Chip.Model == EnmVRModel.RealModel)
+                    {
+                        if (scNES[Chip.Number] != null)
+                        {
+                            foreach (PackData dat in pdata)
+                            {
+                                int skip = 0x0;
+                                if (scNES[Chip.Number] is RC86ctlSoundChip)
+                                {
+                                    if (((RC86ctlSoundChip)scNES[Chip.Number]).chiptype == Nc86ctl.ChipType.CHIP_UNKNOWN)
+                                    {
+                                        skip = 0x100;
+                                    }
+                                }
+                                scNES[Chip.Number].setRegister(dat.Address + skip, dat.Data);
+                            }
+                        }
+                    }
+                }
+                finally
+                {
+                    Audio.sm.ResetInterrupt();
+                }
+            }
+        }
+
+        public void NESSetRegisterProcessing(ref long Counter, ref Chip Chip, ref EnmDataType Type, ref int Address, ref int dData, ref object ExData)
+        {
+        }
+
+        public void NESSetRegister(outDatum od, long Counter, int ChipID, int dAddr, int dData)
+        {
+            enq(od, Counter, NES[ChipID], EnmDataType.Normal, dAddr, dData, null);
+        }
+
+        public void NESSetRegister(outDatum od, long Counter, int ChipID, PackData[] data)
+        {
+            enq(od, Counter, NES[ChipID], EnmDataType.Block, -1, -1, data);
+        }
+
+        public void NESSoftReset(long Counter, int ChipID)
+        {
+            List<PackData> data = NESMakeSoftReset(ChipID);
+            NESSetRegister(null, Counter, ChipID, data.ToArray());
+        }
+
+        public List<PackData> NESMakeSoftReset(int chipID)
+        {
+            List<PackData> data = new List<PackData>();
+            data.Add(new PackData(null, NES[chipID], EnmDataType.Normal, 0x00, 0x00, null));
+            data.Add(new PackData(null, NES[chipID], EnmDataType.Normal, 0x04, 0x00, null));
+            data.Add(new PackData(null, NES[chipID], EnmDataType.Normal, 0x08, 0x00, null));
+            data.Add(new PackData(null, NES[chipID], EnmDataType.Normal, 0x0c, 0x00, null));
+            data.Add(new PackData(null, NES[chipID], EnmDataType.Normal, 0x09, 0x00, null));
+
+            return data;
+        }
+
+        public void NESSetMask(long Counter, int chipID, int ch, bool mask, bool noSend = false)
+        {
+        }
+
+        public void NESWriteClock(byte chipID, int clock)
+        {
+            if (scNES != null && scNES[chipID] != null)
+            {
+                if (scNES[chipID] is RC86ctlSoundChip)
+                {
+                    Nc86ctl.ChipType ct = ((RC86ctlSoundChip)scNES[chipID]).chiptype;
+                    //OPNA/OPN3Lが選ばれている場合は周波数を2倍にする
+                    if (ct == Nc86ctl.ChipType.CHIP_OPN3L || ct == Nc86ctl.ChipType.CHIP_OPNA)
+                    {
+                        clock *= 4;
+                    }
+                }
+
+                scNES[chipID].dClock = scNES[chipID].SetMasterClock((uint)clock);
+                scNES[chipID].mul = (double)scNES[chipID].dClock / (double)clock;
+
+                if (scNES[chipID] is RC86ctlSoundChip)
+                {
+                    if (((RC86ctlSoundChip)scNES[chipID]).chiptype == Nc86ctl.ChipType.CHIP_UNKNOWN)
+                    {
+                        scNES[chipID].mul = 1.0;
+                    }
+                }
+            }
+        }
+
+        public void NESSetFadeoutVolume(long Counter, int v)
+        {
+        }
+
+        public void NESSetSSGVolume(byte chipID, int vol)
+        {
+        }
+
+        #endregion
 
         #region C140
 

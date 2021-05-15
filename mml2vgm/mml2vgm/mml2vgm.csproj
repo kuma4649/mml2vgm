@@ -206,6 +206,9 @@
     <None Include="sample\mucomDotNET\voice.dat">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="sample\NES\testNES.gwi">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="sample\SN76489\testDCSGPCM.gwi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

@@ -24,7 +24,6 @@ namespace Core
         public byte ChipType = 0;
         public byte Flags = 0;
         public int[] hsFnumTbl = null;
-        private byte DataBankID = 0x09;
 
         public AY8910(ClsVgm parent, int chipID, string initialPartName, string stPath, int chipNumber) : base(parent, chipID, initialPartName, stPath, chipNumber)
         {
@@ -38,6 +37,7 @@ namespace Core
 
             Frequency = 1789750;
             port = new byte[][] { new byte[] { 0xa0 } };
+            DataBankID = 0x09;
 
             if (string.IsNullOrEmpty(initialPartName)) return;
 

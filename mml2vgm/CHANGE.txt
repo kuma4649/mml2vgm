@@ -1,4 +1,7 @@
 更新履歴
+TAG435 2021/05/16
+  Core:vgm:NESに対応(DPCMまだ)(サンプル:testNES.gwi)
+
 TAG434 2021/05/13 2nd
   Core:vgm:AY8910:PCMに対応(サンプル:testAY8910PCM.gwi)
 

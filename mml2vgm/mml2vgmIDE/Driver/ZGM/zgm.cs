@@ -325,7 +325,6 @@ namespace mml2vgmIDE.Driver.ZGM
         private void vcAY8910(outDatum od)
         {
             chipRegister.AY8910SetRegister(od, Audio.DriverSeqCounter, (vgmBuf[vgmAdr + 1].val & 0x80) == 0 ? 0 : 1, vgmBuf[vgmAdr + 1].val & 0x7f, vgmBuf[vgmAdr + 2].val);
-            //chipRegister.setAY8910Register(0, vgmBuf[vgmAdr + 1], vgmBuf[vgmAdr + 2], model);
             vgmAdr += 3;
         }
 

@@ -12,29 +12,31 @@ namespace mml2vgmIDE.MMLParameter
         public List<Instrument> AY8910 = new List<Instrument>();
         public List<Instrument> C140 = new List<Instrument>();
         public List<Instrument> C352 = new List<Instrument>();
+        public List<Instrument> DMG = new List<Instrument>();
+        public List<Instrument> GeneralMIDI = new List<Instrument>();
         public List<Instrument> HuC6280 = new List<Instrument>();
         public List<Instrument> K051649 = new List<Instrument>();
         public List<Instrument> K053260 = new List<Instrument>();
+        public List<Instrument> NES = new List<Instrument>();
+        public List<Instrument> PPZ8 = new List<Instrument>();
         public List<Instrument> QSound = new List<Instrument>();
         public List<Instrument> RF5C164 = new List<Instrument>();
-        public List<Instrument> SN76489 = new List<Instrument>();
         public List<Instrument> SegaPCM = new List<Instrument>();
+        public List<Instrument> SN76489 = new List<Instrument>();
+        public List<Instrument> Y8950 = new List<Instrument>();
         public List<Instrument> YM2151 = new List<Instrument>();
         public List<Instrument> YM2203 = new List<Instrument>();
         public List<Instrument> YM2413 = new List<Instrument>();
-        public List<Instrument> YM3526 = new List<Instrument>();
-        public List<Instrument> Y8950 = new List<Instrument>();
-        public List<Instrument> YM3812 = new List<Instrument>();
-        public List<Instrument> YMF262 = new List<Instrument>();
-        public List<Instrument> YMF278B = new List<Instrument>();
-        public List<Instrument> YMF271 = new List<Instrument>();
         public List<Instrument> YM2608 = new List<Instrument>();
         public List<Instrument> YM2609 = new List<Instrument>();
         public List<Instrument> YM2610B = new List<Instrument>();
         public List<Instrument> YM2612 = new List<Instrument>();
         public List<Instrument> YM2612X = new List<Instrument>();
-        public List<Instrument> GeneralMIDI = new List<Instrument>();
-        public List<Instrument> PPZ8 = new List<Instrument>();
+        public List<Instrument> YM3526 = new List<Instrument>();
+        public List<Instrument> YM3812 = new List<Instrument>();
+        public List<Instrument> YMF262 = new List<Instrument>();
+        public List<Instrument> YMF271 = new List<Instrument>();
+        public List<Instrument> YMF278B = new List<Instrument>();
         public Dictionary<string, Dictionary<int, Dictionary<int, Instrument>>> Insts;
 
         private Dictionary<string, Dictionary<int, Dictionary<int, Action<outDatum, int>>>> dicInst
@@ -109,6 +111,9 @@ namespace mml2vgmIDE.MMLParameter
                     case "C352":
                         SetupC352(od);
                         break;
+                    case "DMG":
+                        SetupDMG(od);
+                        break;
                     case "CONDUCTOR":
                         SetupConductor(od);
                         break;
@@ -120,6 +125,9 @@ namespace mml2vgmIDE.MMLParameter
                         break;
                     case "K053260":
                         SetupK053260(od);
+                        break;
+                    case "NES":
+                        SetupNES(od);
                         break;
                     case "QSound":
                         SetupQSound(od);
@@ -193,6 +201,179 @@ namespace mml2vgmIDE.MMLParameter
             //log.Write(string.Format("MML Param  Chip:[{0}] Type:[{1}]",od.linePos.chip,od.type));
 #endif
             return true;
+        }
+
+        private void SetupAY8910(outDatum od)
+        {
+            Chip chip = null;
+            if (Audio.chipRegister.AY8910 == null) return;
+            if (od.linePos.chipIndex < Audio.chipRegister.AY8910.Count)
+            {
+                chip = Audio.chipRegister.AY8910[od.linePos.chipNumber];
+            }
+            if (chip == null && od.linePos.chipIndex >= 0x80)
+            {
+                Driver.ZGM.ZgmChip.ZgmChip zChip = Audio.chipRegister.dicChipCmdNo[od.linePos.chipIndex];
+                chip = Audio.chipRegister.AY8910[zChip.Index];
+            }
+            AY8910 ay891 = new AY8910(chip, setting);
+            ay891.isTrace = isTrace;
+
+            AY8910.Add(ay891);
+            dicInstAdd(ay891, od.linePos.chipIndex, od.linePos.chipNumber);
+            instsAdd(ay891, od.linePos.chipIndex, od.linePos.chipNumber);
+        }
+
+        private void SetupC140(outDatum od)
+        {
+            Chip chip = null;
+            if (Audio.chipRegister != null
+                && Audio.chipRegister.C140 != null
+                && od.linePos.chipIndex < Audio.chipRegister.C140.Count)
+            {
+                chip = Audio.chipRegister.C140[od.linePos.chipNumber];
+            }
+            if (chip == null && od.linePos.chipIndex >= 0x80)
+            {
+                Driver.ZGM.ZgmChip.ZgmChip zChip = Audio.chipRegister.dicChipCmdNo[od.linePos.chipIndex];
+                chip = Audio.chipRegister.C140[zChip.Index];
+                //chipIndex = zChip.Index;
+            }
+            C140 c140 = new C140(chip, setting);
+            C140.Add(c140);
+            dicInstAdd(c140, od.linePos.chipIndex, od.linePos.chipNumber);
+            instsAdd(c140, od.linePos.chipIndex, od.linePos.chipNumber);
+            c140.isTrace = isTrace;
+        }
+
+        private void SetupC352(outDatum od)
+        {
+            Chip chip = null;
+            if (Audio.chipRegister != null
+                && Audio.chipRegister.C352 != null
+                && od.linePos.chipIndex < Audio.chipRegister.C352.Count)
+            {
+                chip = Audio.chipRegister.C352[od.linePos.chipNumber];
+            }
+            if (chip == null && od.linePos.chipIndex >= 0x80)
+            {
+                Driver.ZGM.ZgmChip.ZgmChip zChip = Audio.chipRegister.dicChipCmdNo[od.linePos.chipIndex];
+                chip = Audio.chipRegister.C352[zChip.Index];
+                //chipIndex = zChip.Index;
+            }
+            C352 c352 = new C352(chip, setting);
+            C352.Add(c352);
+            dicInstAdd(c352, od.linePos.chipIndex, od.linePos.chipNumber);
+            instsAdd(c352, od.linePos.chipIndex, od.linePos.chipNumber);
+            c352.isTrace = isTrace;
+        }
+
+        private void SetupDMG(outDatum od)
+        {
+            Chip chip = null;
+            if (Audio.chipRegister.DMG == null) return;
+            if (od.linePos.chipIndex < Audio.chipRegister.DMG.Count)
+            {
+                chip = Audio.chipRegister.DMG[od.linePos.chipNumber];
+            }
+            if (chip == null && od.linePos.chipIndex >= 0x80)
+            {
+                Driver.ZGM.ZgmChip.ZgmChip zChip = Audio.chipRegister.dicChipCmdNo[od.linePos.chipIndex];
+                chip = Audio.chipRegister.DMG[zChip.Index];
+            }
+            DMG dmg = new DMG(chip, setting);
+            dmg.isTrace = isTrace;
+
+            DMG.Add(dmg);
+            dicInstAdd(dmg, od.linePos.chipIndex, od.linePos.chipNumber);
+            instsAdd(dmg, od.linePos.chipIndex, od.linePos.chipNumber);
+        }
+
+        private void SetupK053260(outDatum od)
+        {
+            Chip chip = null;
+            if (Audio.chipRegister != null
+                && Audio.chipRegister.K053260 != null
+                && od.linePos.chipIndex < Audio.chipRegister.K053260.Count)
+            {
+                chip = Audio.chipRegister.K053260[od.linePos.chipNumber];
+            }
+            if (chip == null && od.linePos.chipIndex >= 0x80)
+            {
+                Driver.ZGM.ZgmChip.ZgmChip zChip = Audio.chipRegister.dicChipCmdNo[od.linePos.chipIndex];
+                chip = Audio.chipRegister.K053260[zChip.Index];
+                //chipIndex = zChip.Index;
+            }
+            K053260 k53 = new K053260(chip, setting);
+            K053260.Add(k53);
+            dicInstAdd(k53, od.linePos.chipIndex, od.linePos.chipNumber);
+            instsAdd(k53, od.linePos.chipIndex, od.linePos.chipNumber);
+            k53.isTrace = isTrace;
+        }
+
+        private void SetupK051649(outDatum od)
+        {
+            Chip chip = null;
+            if (Audio.chipRegister != null
+                && Audio.chipRegister.K051649 != null
+                && od.linePos.chipIndex < Audio.chipRegister.K051649.Count)
+            {
+                chip = Audio.chipRegister.K051649[od.linePos.chipNumber];
+            }
+            if (chip == null && od.linePos.chipIndex >= 0x80)
+            {
+                Driver.ZGM.ZgmChip.ZgmChip zChip = Audio.chipRegister.dicChipCmdNo[od.linePos.chipIndex];
+                chip = Audio.chipRegister.K051649[zChip.Index];
+                //chipIndex = zChip.Index;
+            }
+            K051649 k51 = new K051649(chip, setting);
+            K051649.Add(k51);
+            dicInstAdd(k51, od.linePos.chipIndex, od.linePos.chipNumber);
+            instsAdd(k51, od.linePos.chipIndex, od.linePos.chipNumber);
+            k51.isTrace = isTrace;
+        }
+
+        private void SetupHuC6280(outDatum od)
+        {
+            Chip chip = null;
+            if (Audio.chipRegister != null
+                && Audio.chipRegister.HuC6280 != null
+                && od.linePos.chipIndex < Audio.chipRegister.HuC6280.Count)
+            {
+                chip = Audio.chipRegister.HuC6280[od.linePos.chipNumber];
+            }
+            if (chip == null && od.linePos.chipIndex >= 0x80)
+            {
+                Driver.ZGM.ZgmChip.ZgmChip zChip = Audio.chipRegister.dicChipCmdNo[od.linePos.chipIndex];
+                chip = Audio.chipRegister.HuC6280[zChip.Index];
+                //chipIndex = zChip.Index;
+            }
+            HuC6280 huc = new HuC6280(chip, setting);
+            HuC6280.Add(huc);
+            dicInstAdd(huc, od.linePos.chipIndex, od.linePos.chipNumber);
+            instsAdd(huc, od.linePos.chipIndex, od.linePos.chipNumber);
+            huc.isTrace = isTrace;
+        }
+
+        private void SetupNES(outDatum od)
+        {
+            Chip chip = null;
+            if (Audio.chipRegister.NES == null) return;
+            if (od.linePos.chipIndex < Audio.chipRegister.NES.Count)
+            {
+                chip = Audio.chipRegister.NES[od.linePos.chipNumber];
+            }
+            if (chip == null && od.linePos.chipIndex >= 0x80)
+            {
+                Driver.ZGM.ZgmChip.ZgmChip zChip = Audio.chipRegister.dicChipCmdNo[od.linePos.chipIndex];
+                chip = Audio.chipRegister.NES[zChip.Index];
+            }
+            NES nes = new NES(chip, setting);
+            nes.isTrace = isTrace;
+
+            NES.Add(nes);
+            dicInstAdd(nes, od.linePos.chipIndex, od.linePos.chipNumber);
+            instsAdd(nes, od.linePos.chipIndex, od.linePos.chipNumber);
         }
 
         private void SetupPPZ8(outDatum od)
@@ -661,72 +842,6 @@ namespace mml2vgmIDE.MMLParameter
             qsnd.isTrace = isTrace;
         }
 
-        private void SetupK053260(outDatum od)
-        {
-            Chip chip = null;
-            if (Audio.chipRegister != null
-                && Audio.chipRegister.K053260 != null
-                && od.linePos.chipIndex < Audio.chipRegister.K053260.Count)
-            {
-                chip = Audio.chipRegister.K053260[od.linePos.chipNumber];
-            }
-            if (chip == null && od.linePos.chipIndex >= 0x80)
-            {
-                Driver.ZGM.ZgmChip.ZgmChip zChip = Audio.chipRegister.dicChipCmdNo[od.linePos.chipIndex];
-                chip = Audio.chipRegister.K053260[zChip.Index];
-                //chipIndex = zChip.Index;
-            }
-            K053260 k53 = new K053260(chip, setting);
-            K053260.Add(k53);
-            dicInstAdd(k53, od.linePos.chipIndex, od.linePos.chipNumber);
-            instsAdd(k53, od.linePos.chipIndex, od.linePos.chipNumber);
-            k53.isTrace = isTrace;
-        }
-
-        private void SetupK051649(outDatum od)
-        {
-            Chip chip = null;
-            if (Audio.chipRegister != null
-                && Audio.chipRegister.K051649 != null
-                && od.linePos.chipIndex < Audio.chipRegister.K051649.Count)
-            {
-                chip = Audio.chipRegister.K051649[od.linePos.chipNumber];
-            }
-            if (chip == null && od.linePos.chipIndex >= 0x80)
-            {
-                Driver.ZGM.ZgmChip.ZgmChip zChip = Audio.chipRegister.dicChipCmdNo[od.linePos.chipIndex];
-                chip = Audio.chipRegister.K051649[zChip.Index];
-                //chipIndex = zChip.Index;
-            }
-            K051649 k51 = new K051649(chip, setting);
-            K051649.Add(k51);
-            dicInstAdd(k51, od.linePos.chipIndex, od.linePos.chipNumber);
-            instsAdd(k51, od.linePos.chipIndex, od.linePos.chipNumber);
-            k51.isTrace = isTrace;
-        }
-
-        private void SetupHuC6280(outDatum od)
-        {
-            Chip chip = null;
-            if (Audio.chipRegister != null
-                && Audio.chipRegister.HuC6280 != null
-                && od.linePos.chipIndex < Audio.chipRegister.HuC6280.Count)
-            {
-                chip = Audio.chipRegister.HuC6280[od.linePos.chipNumber];
-            }
-            if (chip == null && od.linePos.chipIndex >= 0x80)
-            {
-                Driver.ZGM.ZgmChip.ZgmChip zChip = Audio.chipRegister.dicChipCmdNo[od.linePos.chipIndex];
-                chip = Audio.chipRegister.HuC6280[zChip.Index];
-                //chipIndex = zChip.Index;
-            }
-            HuC6280 huc = new HuC6280(chip, setting);
-            HuC6280.Add(huc);
-            dicInstAdd(huc, od.linePos.chipIndex, od.linePos.chipNumber);
-            instsAdd(huc, od.linePos.chipIndex, od.linePos.chipNumber);
-            huc.isTrace = isTrace;
-        }
-
         private void SetupConductor(outDatum od)
         {
             Chip chip = null;
@@ -735,71 +850,6 @@ namespace mml2vgmIDE.MMLParameter
             dicInstAdd(con, od.linePos.chipIndex, od.linePos.chipNumber);
             instsAdd(con, od.linePos.chipIndex, od.linePos.chipNumber);
             con.isTrace = isTrace;
-        }
-
-        private void SetupC352(outDatum od)
-        {
-            Chip chip = null;
-            if (Audio.chipRegister != null
-                && Audio.chipRegister.C352 != null
-                && od.linePos.chipIndex < Audio.chipRegister.C352.Count)
-            {
-                chip = Audio.chipRegister.C352[od.linePos.chipNumber];
-            }
-            if (chip == null && od.linePos.chipIndex >= 0x80)
-            {
-                Driver.ZGM.ZgmChip.ZgmChip zChip = Audio.chipRegister.dicChipCmdNo[od.linePos.chipIndex];
-                chip = Audio.chipRegister.C352[zChip.Index];
-                //chipIndex = zChip.Index;
-            }
-            C352 c352 = new C352(chip, setting);
-            C352.Add(c352);
-            dicInstAdd(c352, od.linePos.chipIndex, od.linePos.chipNumber);
-            instsAdd(c352, od.linePos.chipIndex, od.linePos.chipNumber);
-            c352.isTrace = isTrace;
-        }
-
-        private void SetupC140(outDatum od)
-        {
-            Chip chip = null;
-            if (Audio.chipRegister != null
-                && Audio.chipRegister.C140 != null
-                && od.linePos.chipIndex < Audio.chipRegister.C140.Count)
-            {
-                chip = Audio.chipRegister.C140[od.linePos.chipNumber];
-            }
-            if (chip == null && od.linePos.chipIndex >= 0x80)
-            {
-                Driver.ZGM.ZgmChip.ZgmChip zChip = Audio.chipRegister.dicChipCmdNo[od.linePos.chipIndex];
-                chip = Audio.chipRegister.C140[zChip.Index];
-                //chipIndex = zChip.Index;
-            }
-            C140 c140 = new C140(chip, setting);
-            C140.Add(c140);
-            dicInstAdd(c140, od.linePos.chipIndex, od.linePos.chipNumber);
-            instsAdd(c140, od.linePos.chipIndex, od.linePos.chipNumber);
-            c140.isTrace = isTrace;
-        }
-
-        private void SetupAY8910(outDatum od)
-        {
-            Chip chip = null;
-            if (Audio.chipRegister.AY8910 == null) return;
-            if (od.linePos.chipIndex < Audio.chipRegister.AY8910.Count)
-            {
-                chip = Audio.chipRegister.AY8910[od.linePos.chipNumber];
-            }
-            if (chip == null && od.linePos.chipIndex >= 0x80)
-            {
-                Driver.ZGM.ZgmChip.ZgmChip zChip = Audio.chipRegister.dicChipCmdNo[od.linePos.chipIndex];
-                chip = Audio.chipRegister.AY8910[zChip.Index];
-            }
-            AY8910 ay891 = new AY8910(chip, setting);
-            ay891.isTrace = isTrace;
-
-            AY8910.Add(ay891);
-            dicInstAdd(ay891, od.linePos.chipIndex, od.linePos.chipNumber);
-            instsAdd(ay891, od.linePos.chipIndex, od.linePos.chipNumber);
         }
 
 

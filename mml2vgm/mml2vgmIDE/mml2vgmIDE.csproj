@@ -152,6 +152,8 @@
     <Compile Include="Driver\ZGM\ZgmChip\K051649.cs" />
     <Compile Include="Driver\ZGM\ZgmChip\K053260.cs" />
     <Compile Include="Driver\ZGM\ZgmChip\QSound.cs" />
+    <Compile Include="Driver\ZGM\ZgmChip\DMG.cs" />
+    <Compile Include="Driver\ZGM\ZgmChip\NES.cs" />
     <Compile Include="Driver\ZGM\ZgmChip\RF5C164.cs" />
     <Compile Include="Driver\ZGM\ZgmChip\SEGAPCM.cs" />
     <Compile Include="Driver\ZGM\ZgmChip\YM2151.cs" />
@@ -307,6 +309,8 @@
     <Compile Include="midiOutInfo.cs" />
     <Compile Include="MIDIParam.cs" />
     <Compile Include="MidWriter.cs" />
+    <Compile Include="MMLParameter\DMG.cs" />
+    <Compile Include="MMLParameter\NES.cs" />
     <Compile Include="MMLParameter\AY8910.cs" />
     <Compile Include="MMLParameter\C140.cs" />
     <Compile Include="MMLParameter\C352.cs" />

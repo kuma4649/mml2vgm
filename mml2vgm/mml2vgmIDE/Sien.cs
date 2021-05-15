@@ -18,6 +18,7 @@ namespace mml2vgmIDE
         public string title { get; set; }
         public string description { get; set; }
         public string content { get; set; }
+        public string content2 { get; set; }
         public int foundCnt { get; set; }
     }
 

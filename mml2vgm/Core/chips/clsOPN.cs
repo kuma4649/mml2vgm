@@ -2433,7 +2433,7 @@ namespace Core
                 partPage page = pw.cpg;
                 int port;
                 int adr;
-                byte[] fmPort;
+                //byte[] fmPort;
                 int vch;
 
                 if (pw.cpg.Type == enmChannelType.FMOPN|| (!pw.cpg.Ch3SpecialMode && pw.cpg.Type == enmChannelType.FMOPNex))

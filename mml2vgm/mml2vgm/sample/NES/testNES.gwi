@@ -1,0 +1,50 @@
+﻿'{
+
+	TitleName            =test NES
+	TitleNameJ           =NESテスト
+	GameName             =
+	GameNameJ            =
+	SystemName           =
+	SystemNameJ          =
+	Composer             =kuma
+	ComposerJ            =くま
+	ReleaseDate          =2345/01/23
+	Converted            =kuma
+	Notes                =
+
+
+}
+
+
+'Cn1  T120
+'Cn1  r1r1r1r1r2
+
+
+ Pulse channel test
+'Na12 D0v12o4l4Q4
+'Na2  r8D1(5
+'Na12 @I0 cde ;Duty 12.5%
+'Na12 @I1 cde ;Duty 25%
+'Na12 @I2 cde ;Duty 50%
+'Na12 @I3 cde ;Duty 75%(25% neg)
+'Na12 rrrrrr
+
+
+ Triangle channel test
+'Na3 o3l4Q4
+'Na3 [rrr]4
+'Na3 cde>cde>
+
+
+ Noise channel test
+'Na4 l4v10Q4o1cc+dd+eff+gg+aa+b>cc+dd+rr
+
+
+ melo test
+'Cn1  T80 [r2.]7 T78r4 T66r4 T70r4
+'Na12  @I1 
+'Na123 MPV48,1,1,3 q0l8 [ <a4>e4.g  f+d/e2 ] e4.
+'Na12  MPV48,1,3,9 @I0) {f+gab>cd} l16  e2dc<ba> c2<b-a-gf g2.  <l4b>cd
+'Na3   MPV48,1,2,6 Q6<< f8>        q1l2.f        c+        d    <l4g gg
+
+

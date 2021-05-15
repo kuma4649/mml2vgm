@@ -232,6 +232,8 @@ namespace mml2vgmIDE
         public static void RealChipManualDetect(Setting setting)
         {
             chipRegister.SetRealChipInfo(EnmZGMDevice.AY8910, setting.AY8910Type, setting.AY8910SType, setting.LatencyEmulation, setting.LatencySCCI);
+            chipRegister.SetRealChipInfo(EnmZGMDevice.GameBoyDMG, setting.DMGType, setting.DMGSType, setting.LatencyEmulation, setting.LatencySCCI);
+            chipRegister.SetRealChipInfo(EnmZGMDevice.NESAPU, setting.NESType, setting.NESSType, setting.LatencyEmulation, setting.LatencySCCI);
             chipRegister.SetRealChipInfo(EnmZGMDevice.C140, setting.C140Type, setting.C140SType, setting.LatencyEmulation, setting.LatencySCCI);
             chipRegister.SetRealChipInfo(EnmZGMDevice.C352, setting.C352Type, setting.C352SType, setting.LatencyEmulation, setting.LatencySCCI);
             chipRegister.SetRealChipInfo(EnmZGMDevice.RF5C164, new Setting.ChipType(), new Setting.ChipType(), setting.LatencyEmulation, setting.LatencySCCI);
@@ -413,6 +415,32 @@ namespace mml2vgmIDE
                 if (ret.Count == 0) continue;
             }
             chipRegister.SetRealChipInfo(EnmZGMDevice.RF5C164, chipType[0], chipType[1], setting.LatencyEmulation, setting.LatencySCCI);
+
+            chipType = new Setting.ChipType[Math.Max(chipRegister.DMG.Count, 2)];
+            for (int i = 0; i < Math.Max(chipRegister.DMG.Count, 2); i++)
+            {
+                chipType[i] = new Setting.ChipType();
+                if (chipRegister.DMG.Count <= i) continue;
+                if (!chipRegister.DMG[i].Use) continue;
+                chipRegister.DMG[i].Model = EnmVRModel.VirtualModel;
+                chipType[i].UseEmu = true;
+                chipType[i].UseScci = false;
+                if (ret.Count == 0) continue;
+            }
+            chipRegister.SetRealChipInfo(EnmZGMDevice.GameBoyDMG, chipType[0], chipType[1], setting.LatencyEmulation, setting.LatencySCCI);
+
+            chipType = new Setting.ChipType[Math.Max(chipRegister.NES.Count, 2)];
+            for (int i = 0; i < Math.Max(chipRegister.NES.Count, 2); i++)
+            {
+                chipType[i] = new Setting.ChipType();
+                if (chipRegister.NES.Count <= i) continue;
+                if (!chipRegister.NES[i].Use) continue;
+                chipRegister.NES[i].Model = EnmVRModel.VirtualModel;
+                chipType[i].UseEmu = true;
+                chipType[i].UseScci = false;
+                if (ret.Count == 0) continue;
+            }
+            chipRegister.SetRealChipInfo(EnmZGMDevice.NESAPU, chipType[0], chipType[1], setting.LatencyEmulation, setting.LatencySCCI);
 
             chipType = new Setting.ChipType[Math.Max(chipRegister.SEGAPCM.Count, 2)];
             for (int i = 0; i < Math.Max(chipRegister.SEGAPCM.Count, 2); i++)
@@ -1673,7 +1701,7 @@ namespace mml2vgmIDE
                         chip.Option = null;
                         lstChips.Add(chip);
 
-                        hiyorimiDeviceFlag |= (setting.QSoundType.UseScci) ? 0x1 : 0x2;
+                        hiyorimiDeviceFlag |= (setting.RF5C164Type.UseScci) ? 0x1 : 0x2;
 
                         log.Write(string.Format("Use RF5C164(#{0}) Clk:{1}"
                             , zCnt
@@ -1683,6 +1711,72 @@ namespace mml2vgmIDE
                         chipRegister.RF5C164[zCnt].Use = true;
                         chipRegister.RF5C164[zCnt].Model = EnmVRModel.VirtualModel;
                         chipRegister.RF5C164[zCnt].Device = EnmZGMDevice.RF5C164;
+                    }
+
+                    zCnt = -1;
+                    foreach (Driver.ZGM.ZgmChip.ZgmChip zchip in zgmDriver.chips)
+                    {
+                        if (!(zchip is Driver.ZGM.ZgmChip.DMG)) continue;
+
+                        zCnt++;
+                        MDSound.scd_pcm dmg = new MDSound.scd_pcm();
+                        chip = new MDSound.MDSound.Chip();
+                        chip.type = MDSound.MDSound.enmInstrumentType.DMG;
+                        chip.ID = (byte)0;//ZGMでは常に0
+                        chip.Instrument = dmg;
+                        chip.Update = dmg.Update;
+                        chip.Start = dmg.Start;
+                        chip.Stop = dmg.Stop;
+                        chip.Reset = dmg.Reset;
+                        chip.SamplingRate = (UInt32)Common.SampleRate;
+                        chip.Volume = setting.balance.DMGVolume;
+                        chip.Clock = (uint)zchip.defineInfo.clock;
+                        chip.Option = null;
+                        lstChips.Add(chip);
+
+                        hiyorimiDeviceFlag |= (setting.DMGType.UseScci) ? 0x1 : 0x2;
+
+                        log.Write(string.Format("Use DMG(#{0}) Clk:{1}"
+                            , zCnt
+                            , chip.Clock
+                            ));
+
+                        chipRegister.DMG[zCnt].Use = true;
+                        chipRegister.DMG[zCnt].Model = EnmVRModel.VirtualModel;
+                        chipRegister.DMG[zCnt].Device = EnmZGMDevice.GameBoyDMG;
+                    }
+
+                    zCnt = -1;
+                    foreach (Driver.ZGM.ZgmChip.ZgmChip zchip in zgmDriver.chips)
+                    {
+                        if (!(zchip is Driver.ZGM.ZgmChip.NES)) continue;
+
+                        zCnt++;
+                        MDSound.scd_pcm nes = new MDSound.scd_pcm();
+                        chip = new MDSound.MDSound.Chip();
+                        chip.type = MDSound.MDSound.enmInstrumentType.Nes;
+                        chip.ID = (byte)0;//ZGMでは常に0
+                        chip.Instrument = nes;
+                        chip.Update = nes.Update;
+                        chip.Start = nes.Start;
+                        chip.Stop = nes.Stop;
+                        chip.Reset = nes.Reset;
+                        chip.SamplingRate = (UInt32)Common.SampleRate;
+                        chip.Volume = setting.balance.APUVolume;
+                        chip.Clock = (uint)zchip.defineInfo.clock;
+                        chip.Option = null;
+                        lstChips.Add(chip);
+
+                        hiyorimiDeviceFlag |= (setting.NESType.UseScci) ? 0x1 : 0x2;
+
+                        log.Write(string.Format("Use NES(#{0}) Clk:{1}"
+                            , zCnt
+                            , chip.Clock
+                            ));
+
+                        chipRegister.NES[zCnt].Use = true;
+                        chipRegister.NES[zCnt].Model = EnmVRModel.VirtualModel;
+                        chipRegister.NES[zCnt].Device = EnmZGMDevice.NESAPU;
                     }
 
                     zCnt = -1;
@@ -2391,6 +2485,24 @@ namespace mml2vgmIDE
                     break;
                 }
 
+                foreach (Chip c in chipRegister.DMG)
+                {
+                    if (!c.Use) continue;
+                    if (c.Model == EnmVRModel.VirtualModel) useEmu = true;
+                    if (c.Model == EnmVRModel.RealModel) useReal = true;
+                    SetDMGVolume(true, setting.balance.DMGVolume);
+                    break;
+                }
+
+                foreach (Chip c in chipRegister.NES)
+                {
+                    if (!c.Use) continue;
+                    if (c.Model == EnmVRModel.VirtualModel) useEmu = true;
+                    if (c.Model == EnmVRModel.RealModel) useReal = true;
+                    SetNESVolume(true, setting.balance.APUVolume);
+                    break;
+                }
+
                 foreach (Chip c in chipRegister.SEGAPCM)
                 {
                     if (!c.Use) continue;
@@ -2507,9 +2619,11 @@ namespace mml2vgmIDE
                         chipRegister.C140WriteClock((byte)i, (int)zgmDriver.C140ClockValue);
                         chipRegister.C140WriteType(chipRegister.C140[i], zgmDriver.C140Type);
                     }
+                for (int i = 0; i < chipRegister.DMG.Count; i++) if (chipRegister.DMG[i].Use) chipRegister.DMGWriteClock((byte)i, (int)zgmDriver.DMGClockValue);
                 for (int i = 0; i < chipRegister.HuC6280.Count; i++) if (chipRegister.HuC6280[i].Use) chipRegister.HuC6280WriteClock((byte)i, (int)zgmDriver.HuC6280ClockValue);
                 for (int i = 0; i < chipRegister.K051649.Count; i++) if (chipRegister.K051649[i].Use) chipRegister.K051649WriteClock((byte)i, (int)zgmDriver.K051649ClockValue);
                 for (int i = 0; i < chipRegister.K053260.Count; i++) if (chipRegister.K053260[i].Use) chipRegister.K053260WriteClock((byte)i, (int)zgmDriver.K053260ClockValue);
+                for (int i = 0; i < chipRegister.NES.Count; i++) if (chipRegister.NES[i].Use) chipRegister.NESWriteClock((byte)i, (int)zgmDriver.NESClockValue);
                 for (int i = 0; i < chipRegister.QSound.Count; i++) if (chipRegister.QSound[i].Use) chipRegister.QSoundWriteClock((byte)i, (int)zgmDriver.QSoundClockValue);
                 for (int i = 0; i < chipRegister.RF5C164.Count; i++) if (chipRegister.RF5C164[i].Use) chipRegister.RF5C164WriteClock((byte)i, (int)zgmDriver.RF5C164ClockValue);
                 for (int i = 0; i < chipRegister.SEGAPCM.Count; i++) if (chipRegister.SEGAPCM[i].Use) chipRegister.SEGAPCMWriteClock((byte)i, (int)zgmDriver.SEGAPCMClockValue);
@@ -3885,6 +3999,12 @@ namespace mml2vgmIDE
 
                             hiyorimiDeviceFlag |= 0x2;
 
+                            log.Write(string.Format("Use DMG({0}) Clk:{1}"
+                                , (i == 0) ? "Pri" : "Sec"
+                                , chip.Clock
+                                ));
+
+                            chipRegister.DMG[i].Use = true;
                             if (chip.Instrument != null) lstChips.Add(chip);
                             useChip.Add(i == 0 ? EnmChip.DMG : EnmChip.S_DMG);
                         }
@@ -3911,6 +4031,12 @@ namespace mml2vgmIDE
                             if (i == 0) chipLED.PriNES = 1;
                             else chipLED.SecNES = 1;
 
+                            log.Write(string.Format("Use NES({0}) Clk:{1}"
+                                , (i == 0) ? "Pri" : "Sec"
+                                , chip.Clock
+                                ));
+
+                            chipRegister.NES[i].Use = true;
                             lstChips.Add(chip);
                             useChip.Add(i == 0 ? EnmChip.NES : EnmChip.S_NES);
 
@@ -4007,6 +4133,12 @@ namespace mml2vgmIDE
                         if (chipRegister.C352[i].Model == EnmVRModel.RealModel) useReal = true;
                     }
 
+                    if (chipRegister.DMG[i].Use)
+                    {
+                        if (chipRegister.DMG[i].Model == EnmVRModel.VirtualModel) useEmu = true;
+                        if (chipRegister.DMG[i].Model == EnmVRModel.RealModel) useReal = true;
+                    }
+
                     if (chipRegister.HuC6280[i].Use)
                     {
                         if (chipRegister.HuC6280[i].Model == EnmVRModel.VirtualModel) useEmu = true;
@@ -4023,6 +4155,12 @@ namespace mml2vgmIDE
                     {
                         if (chipRegister.K053260[i].Model == EnmVRModel.VirtualModel) useEmu = true;
                         if (chipRegister.K053260[i].Model == EnmVRModel.RealModel) useReal = true;
+                    }
+
+                    if (chipRegister.NES[i].Use)
+                    {
+                        if (chipRegister.NES[i].Model == EnmVRModel.VirtualModel) useEmu = true;
+                        if (chipRegister.NES[i].Model == EnmVRModel.RealModel) useReal = true;
                     }
 
                     if (chipRegister.QSound[i].Use)
@@ -4175,9 +4313,11 @@ namespace mml2vgmIDE
                         chipRegister.C140WriteClock((byte)i, (int)vgmDriver.C140ClockValue);
                         chipRegister.C140WriteType(chipRegister.C140[i], vgmDriver.C140Type);
                     }
+                    if (chipRegister.DMG[i].Use) chipRegister.DMGWriteClock((byte)i, (int)vgmDriver.DMGClockValue);
                     if (chipRegister.HuC6280[i].Use) chipRegister.HuC6280WriteClock((byte)i, (int)vgmDriver.HuC6280ClockValue);
                     if (chipRegister.K051649[i].Use) chipRegister.K051649WriteClock((byte)i, (int)vgmDriver.K051649ClockValue);
                     if (chipRegister.K053260[i].Use) chipRegister.K053260WriteClock((byte)i, (int)vgmDriver.K053260ClockValue);
+                    if (chipRegister.NES[i].Use) chipRegister.NESWriteClock((byte)i, (int)vgmDriver.NESClockValue);
                     if (chipRegister.QSound[i].Use) chipRegister.QSoundWriteClock((byte)i, (int)vgmDriver.QSoundClockValue);
                     if (chipRegister.RF5C164[i].Use) chipRegister.RF5C164WriteClock((byte)i, (int)vgmDriver.RF5C164ClockValue);
                     if (chipRegister.SEGAPCM[i].Use) chipRegister.SEGAPCMWriteClock((byte)i, (int)vgmDriver.SEGAPCMClockValue);
@@ -5172,9 +5312,11 @@ namespace mml2vgmIDE
             for (int i = 0; i < chipRegister.CONDUCTOR.Count; i++) if (chipRegister.CONDUCTOR[i].Use) chipRegister.ConductorSoftReset(counter, i);
             for (int i = 0; i < chipRegister.AY8910.Count; i++) if (chipRegister.AY8910[i].Use) chipRegister.AY8910SoftReset(counter, i);
             for (int i = 0; i < chipRegister.C140.Count; i++) if (chipRegister.C140[i].Use) chipRegister.C140SoftReset(counter, i);
+            for (int i = 0; i < chipRegister.DMG.Count; i++) if (chipRegister.DMG[i].Use) chipRegister.DMGSoftReset(counter, i);
             for (int i = 0; i < chipRegister.HuC6280.Count; i++) if (chipRegister.HuC6280[i].Use) chipRegister.HuC6280SoftReset(counter, i);
             for (int i = 0; i < chipRegister.K051649.Count; i++) if (chipRegister.K051649[i].Use) chipRegister.K051649SoftReset(counter, i);
             for (int i = 0; i < chipRegister.K053260.Count; i++) if (chipRegister.K053260[i].Use) chipRegister.K053260SoftReset(counter, i);
+            for (int i = 0; i < chipRegister.NES.Count; i++) if (chipRegister.NES[i].Use) chipRegister.NESSoftReset(counter, i);
             for (int i = 0; i < chipRegister.PPZ8.Count; i++) if (chipRegister.PPZ8[i].Use) chipRegister.PPZ8SoftReset(counter, i);
             for (int i = 0; i < chipRegister.PPSDRV.Count; i++) if (chipRegister.PPSDRV[i].Use) chipRegister.PPSDRVSoftReset(counter, i);
             for (int i = 0; i < chipRegister.P86.Count; i++) if (chipRegister.P86[i].Use) chipRegister.P86SoftReset(counter, i);
@@ -5204,9 +5346,11 @@ namespace mml2vgmIDE
             for (int i = 0; i < chipRegister.CONDUCTOR.Count; i++) if (chipRegister.CONDUCTOR[i].Use) data.AddRange(chipRegister.ConductorMakeSoftReset(i));
             for (int i = 0; i < chipRegister.AY8910.Count; i++) if (chipRegister.AY8910[i].Use) data.AddRange(chipRegister.AY8910MakeSoftReset(i));
             for (int i = 0; i < chipRegister.C140.Count; i++) if (chipRegister.C140[i].Use) data.AddRange(chipRegister.C140MakeSoftReset(i));
+            for (int i = 0; i < chipRegister.DMG.Count; i++) if (chipRegister.DMG[i].Use) data.AddRange(chipRegister.DMGMakeSoftReset(i));
             for (int i = 0; i < chipRegister.HuC6280.Count; i++) if (chipRegister.HuC6280[i].Use) data.AddRange(chipRegister.HuC6280MakeSoftReset(i));
             for (int i = 0; i < chipRegister.K051649.Count; i++) if (chipRegister.K051649[i].Use) data.AddRange(chipRegister.K051649MakeSoftReset(i));
             for (int i = 0; i < chipRegister.K053260.Count; i++) if (chipRegister.K053260[i].Use) data.AddRange(chipRegister.K053260MakeSoftReset(i));
+            for (int i = 0; i < chipRegister.NES.Count; i++) if (chipRegister.NES[i].Use) data.AddRange(chipRegister.NESMakeSoftReset(i));
             for (int i = 0; i < chipRegister.PPZ8.Count; i++) if (chipRegister.PPZ8[i].Use) data.AddRange(chipRegister.PPZ8MakeSoftReset(i));
             for (int i = 0; i < chipRegister.PPSDRV.Count; i++) if (chipRegister.PPSDRV[i].Use) data.AddRange(chipRegister.PPSDRVMakeSoftReset(i));
             for (int i = 0; i < chipRegister.P86.Count; i++) if (chipRegister.P86[i].Use) data.AddRange(chipRegister.P86MakeSoftReset(i));
@@ -5239,9 +5383,11 @@ namespace mml2vgmIDE
             for (int i = 0; i < chipRegister.CONDUCTOR.Count; i++) if (chipRegister.CONDUCTOR[i].Use) data.AddRange(chipRegister.ConductorMakeSoftReset(i));
             for (int i = 0; i < chipRegister.AY8910.Count; i++) if (chipRegister.AY8910[i].Use) data.AddRange(chipRegister.AY8910MakeSoftReset(i));
             for (int i = 0; i < chipRegister.C140.Count; i++) if (chipRegister.C140[i].Use) data.AddRange(chipRegister.C140MakeSoftReset(i));
+            for (int i = 0; i < chipRegister.DMG.Count; i++) if (chipRegister.DMG[i].Use) data.AddRange(chipRegister.DMGMakeSoftReset(i));
             for (int i = 0; i < chipRegister.HuC6280.Count; i++) if (chipRegister.HuC6280[i].Use) data.AddRange(chipRegister.HuC6280MakeSoftReset(i));
             for (int i = 0; i < chipRegister.K051649.Count; i++) if (chipRegister.K051649[i].Use) data.AddRange(chipRegister.K051649MakeSoftReset(i));
             for (int i = 0; i < chipRegister.K053260.Count; i++) if (chipRegister.K053260[i].Use) data.AddRange(chipRegister.K053260MakeSoftReset(i));
+            for (int i = 0; i < chipRegister.NES.Count; i++) if (chipRegister.NES[i].Use) data.AddRange(chipRegister.NESMakeSoftReset(i));
             for (int i = 0; i < chipRegister.PPZ8.Count; i++) if (chipRegister.PPZ8[i].Use) data.AddRange(chipRegister.PPZ8MakeSoftReset(i));
             for (int i = 0; i < chipRegister.PPSDRV.Count; i++) if (chipRegister.PPSDRV[i].Use) data.AddRange(chipRegister.PPSDRVMakeSoftReset(i));
             for (int i = 0; i < chipRegister.P86.Count; i++) if (chipRegister.P86[i].Use) data.AddRange(chipRegister.P86MakeSoftReset(i));
@@ -6408,6 +6554,16 @@ namespace mml2vgmIDE
             {
                 mds.SetVolumeDMG(setting.balance.DMGVolume
                     = Common.Range((isAbs ? 0 : setting.balance.DMGVolume) + volume, -192, 20));
+            }
+            catch { }
+        }
+
+        public static void SetNESVolume(bool isAbs, int volume)
+        {
+            try
+            {
+                mds.SetVolumeNES(setting.balance.APUVolume
+                    = Common.Range((isAbs ? 0 : setting.balance.APUVolume) + volume, -192, 20));
             }
             catch { }
         }

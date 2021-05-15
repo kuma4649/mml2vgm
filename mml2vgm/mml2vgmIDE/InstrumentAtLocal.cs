@@ -30,7 +30,7 @@ namespace mml2vgmIDE
             SSG_WF,//OPNA2(SSG)
         }
 
-        public void Start(FrmMain parent, object sender, string baseDir,string add, Action<object,TreeNode , Tuple<enmInstType, string, string>[]> CompleteMethod)
+        public void Start(FrmMain parent, object sender, string baseDir,string add, Action<object,TreeNode , List<Tuple<enmInstType, string, string, string>>> CompleteMethod)
         {
             this.parent = parent;
             this.sender = sender;
@@ -41,21 +41,24 @@ namespace mml2vgmIDE
             List<FileSystemInfo> lstFile = new List<FileSystemInfo>();
             GetFileList(baseDir,ref lstFile);
             //音色データを解析する
-            List<Tuple<enmInstType, string, string>> lstInst = new List<Tuple<enmInstType, string, string>>();
+            List<Tuple<enmInstType, string, string, string>> lstInst = new List<Tuple<enmInstType, string, string, string>>();
             foreach (FileSystemInfo fi in lstFile)
             {
                 if (fi.Attributes == FileAttributes.Directory)
                 {
-                    Tuple<enmInstType, string, string> ins = new Tuple<enmInstType, string, string>(enmInstType.Dir, fi.FullName, "");
+                    Tuple<enmInstType, string, string, string> ins = new Tuple<enmInstType, string, string, string>(enmInstType.Dir, fi.FullName, "", "");
                     lstInst.Add(ins);
                 }
                 else
                 {
-                    List<Tuple<enmInstType, string, string>> ins = GetInsts(fi.FullName);
-                    if (ins != null) lstInst.AddRange(ins);
+                    List<Tuple<enmInstType, string, string, string>> ins = GetInsts(fi.FullName);
+                    if (ins != null)
+                    {
+                        lstInst.AddRange(ins);
+                    }
                 }
             }
-            CompleteMethod?.Invoke(this.sender,treenode, lstInst.ToArray());
+            CompleteMethod?.Invoke(this.sender,treenode, lstInst);
         }
 
         private void GetFileList(string baseDir, ref List<FileSystemInfo> lstFile)
@@ -90,9 +93,10 @@ namespace mml2vgmIDE
 
         }
 
-        private List<Tuple<enmInstType, string, string>> GetInsts(string file)
+        private List<Tuple<enmInstType, string, string, string>> GetInsts(string file)
         {
-            List<Tuple<enmInstType, string, string>> lstInst = null;
+            List<Tuple<enmInstType, string, string, string>> lstInst =
+                    new List<Tuple<enmInstType, string, string, string>>();
             string ext = Path.GetExtension(file).ToLower();
             switch (ext)
             {
@@ -110,9 +114,9 @@ namespace mml2vgmIDE
             return lstInst;
         }
 
-        private List<Tuple<enmInstType, string, string>> GetInstsAtGwi(string srcFn)
+        private List<Tuple<enmInstType, string, string, string>> GetInstsAtGwi(string srcFn)
         {
-            List<Tuple<enmInstType, string, string>> ret = new List<Tuple<enmInstType, string, string>>();
+            List<Tuple<enmInstType, string, string, string>> ret = new List<Tuple<enmInstType, string, string, string>>();
             try
             {
                 string stPath = System.Windows.Forms.Application.StartupPath;
@@ -132,11 +136,22 @@ namespace mml2vgmIDE
                         {
                             name = string.Format("OPN instrument noname {0}", renban++);
                         }
-                        string str = GetInstrumentGwiFmString(num, name, instFM[num].Item2);
-                        if (!string.IsNullOrEmpty(str))
+
+                        int[][] prms = new int[][] { new int[11], new int[11], new int[11], new int[11] };
+                        int alg = 0, fb = 0;
+                        for (int i = 0; i < 4; i++)
                         {
-                            ret.Add(new Tuple<enmInstType, string, string>(enmInstType.FM_N, Path.Combine(srcFn, name).Replace(baseDir, ""), str));
+                            for (int j = 0; j < 11; j++)
+                            {
+                                prms[i][j] = (byte)instFM[num].Item2[i * 11 + j + 1];
+                            }
                         }
+                        alg = (int)instFM[num].Item2[45];
+                        fb = (int)instFM[num].Item2[46];
+                        string sdatV, sdatM;
+                        sdatV = MakeVoiceDefineForGWI_OPN(name + add, num, prms, alg, fb);
+                        sdatM = MakeVoiceDefineForMUC_OPN(name + add, num, prms, alg, fb);
+                        ret.Add(new Tuple<enmInstType, string, string, string>(enmInstType.FM_N, Path.Combine(srcFn, name).Replace(baseDir, ""), sdatV, sdatM));
                     }
                     else
                     {
@@ -158,7 +173,7 @@ namespace mml2vgmIDE
                         string str = GetInstrumentGwiFmOPMString(num, name, instOPM[num].Item2);
                         if (!string.IsNullOrEmpty(str))
                         {
-                            ret.Add(new Tuple<enmInstType, string, string>(enmInstType.FM_N, Path.Combine(srcFn, name).Replace(baseDir, ""), str));
+                            ret.Add(new Tuple<enmInstType, string, string, string>(enmInstType.FM_N, Path.Combine(srcFn, name).Replace(baseDir, ""), str,""));
                         }
                     }
                     else
@@ -181,7 +196,7 @@ namespace mml2vgmIDE
                         string str = GetInstrumentGwiFmOPLLString(num, name, instOPL[num].Item2);
                         if (!string.IsNullOrEmpty(str))
                         {
-                            ret.Add(new Tuple<enmInstType, string, string>(enmInstType.FM_L, Path.Combine(srcFn, name).Replace(baseDir, ""), str));
+                            ret.Add(new Tuple<enmInstType, string, string, string>(enmInstType.FM_L, Path.Combine(srcFn, name).Replace(baseDir, ""), str, ""));
                         }
                     }
                     else if (instOPL[num].Item2.Length == Core.Const.OPL3_INSTRUMENT_SIZE)
@@ -194,7 +209,7 @@ namespace mml2vgmIDE
                         string str = GetInstrumentGwiFmOPLString(num, name, instOPL[num].Item2);
                         if (!string.IsNullOrEmpty(str))
                         {
-                            ret.Add(new Tuple<enmInstType, string, string>(enmInstType.FM_L, Path.Combine(srcFn, name).Replace(baseDir, ""), str));
+                            ret.Add(new Tuple<enmInstType, string, string, string>(enmInstType.FM_L, Path.Combine(srcFn, name).Replace(baseDir, ""), str,""));
                         }
                     }
                     else if (instOPL[num].Item2.Length == Core.Const.OPL_OP4_INSTRUMENT_SIZE)
@@ -207,7 +222,7 @@ namespace mml2vgmIDE
                         string str = GetInstrumentGwiFmOPL4String(num, name, instOPL[num].Item2);
                         if (!string.IsNullOrEmpty(str))
                         {
-                            ret.Add(new Tuple<enmInstType, string, string>(enmInstType.FM_L, Path.Combine(srcFn, name).Replace(baseDir, ""), str));
+                            ret.Add(new Tuple<enmInstType, string, string, string>(enmInstType.FM_L, Path.Combine(srcFn, name).Replace(baseDir, ""), str,""));
                         }
                     }
                     else
@@ -230,7 +245,7 @@ namespace mml2vgmIDE
                         string str = GetInstrumentGwiWFString(num, name, instWF[num].Item2);
                         if (!string.IsNullOrEmpty(str))
                         {
-                            ret.Add(new Tuple<enmInstType, string, string>(enmInstType.FM_M, Path.Combine(srcFn, name).Replace(baseDir, ""), str));
+                            ret.Add(new Tuple<enmInstType, string, string, string>(enmInstType.FM_M, Path.Combine(srcFn, name).Replace(baseDir, ""), str,""));
                         }
                     }
                     else
@@ -252,7 +267,7 @@ namespace mml2vgmIDE
 
                     if (!string.IsNullOrEmpty(str))
                     {
-                        ret.Add(new Tuple<enmInstType, string, string>(enmInstType.SSG_WF, Path.Combine(srcFn, name).Replace(baseDir, ""), str));
+                        ret.Add(new Tuple<enmInstType, string, string, string>(enmInstType.SSG_WF, Path.Combine(srcFn, name).Replace(baseDir, ""), str,""));
                     }
                 }
             }
@@ -264,35 +279,248 @@ namespace mml2vgmIDE
             return ret;
         }
 
-        private void Disp(string msg)
+        private List<Tuple<enmInstType, string, string, string>> GetInstsAtMuc(string srcFn)
         {
-
-        }
-
-        private string GetInstrumentGwiFmString(int num, string name, byte[] val)
-        {
-
-            string[] line = new string[5];
-            for (int i = 0; i < 4; i++)
+            List<Tuple<enmInstType, string, string, string>> ret = new List<Tuple<enmInstType, string, string, string>>();
+            int renban = 0;
+            try
             {
-                line[i] = "";
-                for (int j = 0; j < 11; j++)
+                string[] lin = File.ReadAllText(srcFn, Encoding.GetEncoding(932)).Split(new string[] { "\r\n" }, StringSplitOptions.None);
+                bool fvfg = false;
+                for (int i = 0; i < lin.Length; i++)
                 {
-                    line[i] += string.Format("{0:D3} ", val[i * 11 + j + 1]);
+                    if (string.IsNullOrEmpty(lin[i])) continue;
+                    if (lin[i].Length < 4) continue;
+                    if (lin[i][0] != ' ') continue;
+                    if (lin[i][2] != '@') continue;
+
+                    int srcCPtr = 3;
+                    bool carry = false;
+                    bool errSign = false;
+                    int[][] dat = new int[4][] { new int[11], new int[11], new int[11], new int[11] };
+                    List<byte> dat25 = new List<byte>();
+                    string name = "";
+                    int fb = 0, alg = 0;
+
+                    if (lin[i][srcCPtr] == '%')
+                    {
+                        srcCPtr++;
+                        fvfg = true;
+                    }
+
+                    int voiceNum = REDATA(lin[i], ref srcCPtr, ref carry, ref errSign);
+
+                    if (fvfg)
+                    {
+                        //%25
+                        for (int row = 0; row < 6; row++)
+                        {
+                            i++;
+                            srcCPtr = 1;
+                            for (int col = 0; col < 4; col++)
+                            {
+                                byte v = (byte)REDATA(lin[i], ref srcCPtr, ref carry, ref errSign);
+                                if (carry || errSign)
+                                {
+                                    //muc88.WriteWarning(msg.get("W0409"), i, srcCPtr);
+                                }
+                                srcCPtr++;// SKIP','
+                                dat25.Add(v);
+                            }
+                        }
+
+                        i++;
+                        srcCPtr = 2;
+                        dat25.Add((byte)REDATA(lin[i], ref srcCPtr, ref carry, ref errSign));
+                    }
+                    else
+                    {
+                        //38
+                        i++;
+                        srcCPtr = 2;
+                        fb = REDATA(lin[i], ref srcCPtr, ref carry, ref errSign);
+                        if (carry || errSign)
+                        {
+                            //muc88.WriteWarning(msg.get("W0409"), i, srcCPtr);
+                        }
+                        srcCPtr++;
+                        alg = REDATA(lin[i], ref srcCPtr, ref carry, ref errSign);
+                        if (carry || errSign)
+                        {
+                            //muc88.WriteWarning(msg.get("W0409"), i, srcCPtr);
+                        }
+                        srcCPtr++;
+
+                        for (int row = 0; row < 4; row++)
+                        {
+                            i++;
+                            srcCPtr = 1;
+                            for (int col = 0; col < 9; col++)
+                            {
+                                byte v = (byte)REDATA(lin[i], ref srcCPtr, ref carry, ref errSign);
+                                if (carry || errSign)
+                                {
+                                    //muc88.WriteWarning(msg.get("W0409"), i, srcCPtr);
+                                }
+                                srcCPtr++;// SKIP','
+                                dat[row][col] = v;
+                            }
+
+                            if (row == 3)
+                            {
+                                for (; srcCPtr < lin[i].Length; srcCPtr++)
+                                {
+                                    if (lin[i][srcCPtr] != '"') continue;
+                                    srcCPtr++;
+                                    for (; srcCPtr < lin[i].Length; srcCPtr++)
+                                    {
+                                        if (lin[i][srcCPtr] == '"') break;
+                                        name += lin[i][srcCPtr];
+                                    }
+                                }
+                            }
+                        }
+
+                    }
+
+
+                    //音色定義文を作成
+
+                    if (string.IsNullOrEmpty(name))
+                    {
+                        name = string.Format("{0}_{1}", Path.GetFileName(srcFn), renban++);
+                    }
+
+                    string sdatV, sdatM;
+                    sdatV = MakeVoiceDefineForGWI_OPN(name + add, voiceNum, dat, alg, fb);
+                    sdatM = MakeVoiceDefineForMUC_OPN(name + add, voiceNum, dat, alg, fb);
+
+                    ret.Add(new Tuple<enmInstType, string, string, string>(enmInstType.FM_N, Path.Combine(srcFn, name).Replace(baseDir, ""), sdatV, sdatM));
                 }
             }
-            line[4] = string.Format("{0:D3} {1:D3}", val[45], val[46]);
+            catch
+            {
+                return null;
+            }
 
-            return string.Format(
-@"'@ N {6} ""{0}""
-   AR  DR  SR  RR  SL  TL  KS  ML  DT  AM  SSGEG
-'@ {1}
-'@ {2}
-'@ {3}
-'@ {4}
-   AL  FB
-'@ {5}
-", name + add, line[0], line[1], line[2], line[3], line[4], num);
+            return ret;
+        }
+
+        private List<Tuple<enmInstType, string, string, string>> GetInstsAtRym2612(string srcFn)
+        {
+            List<Tuple<enmInstType, string, string, string>> ret = new List<Tuple<enmInstType, string, string, string>>();
+            try
+            {
+                XElement xml = XElement.Load(srcFn);
+                if (xml == null) return null;
+                if (xml.Name.ToString().ToUpper().Trim() != "RYM2612PARAMS") return null;
+
+                string patchName = "";
+                string category = "";
+                var xatr = xml.FirstAttribute;
+                while (xatr != null)
+                {
+                    if (xatr.Name.ToString().ToUpper().Trim() == "PATCHNAME")
+                        patchName = xatr.Value;
+                    else if (xatr.Name.ToString().ToUpper().Trim() == "CATEGORY")
+                        category = xatr.Value;
+                    xatr = xatr.NextAttribute;
+                }
+
+                Dictionary<string, decimal> dicPatch = new Dictionary<string, decimal>();
+
+                foreach (var eleParam in xml.Elements())
+                {
+                    if (eleParam.Name.ToString().ToUpper().Trim() != "PARAM") continue;
+                    string id = null;
+                    string val = null;
+                    foreach (var atr in eleParam.Attributes())
+                    {
+                        XName name = atr.Name;
+                        if (name == null) continue;
+                        string sval = atr.Value;
+                        if (string.IsNullOrEmpty(sval)) continue;
+                        string sname = name.ToString().ToUpper().Trim();
+                        sval = sval.ToUpper().Trim();
+
+                        if (sname == "ID") id = sval;
+                        else if (sname == "VALUE") val = sval;
+                    }
+                    if (string.IsNullOrEmpty(id) || string.IsNullOrEmpty(val)) continue;
+
+                    if (dicPatch.ContainsKey(id)) dicPatch.Remove(id);
+                    decimal q;
+                    if (decimal.TryParse(val, out q))
+                    {
+                        dicPatch.Add(id, q);
+                    }
+                }
+
+                int[][] iop = new int[4][] { new int[11], new int[11], new int[11], new int[11] };
+                int[] muls = new int[] { 0, 1054, 1581, 2635, 3689, 4743, 5797, 6851, 7905, 8959, 10013, 10540, 11594, 12648, 14229, 15000 };
+                for (int op = 0; op < 4; op++)
+                {
+                    string sop = $"OP{op + 1}";
+                    string key;
+                    key = sop + "AR"; if (dicPatch.ContainsKey(key)) iop[op][0] = (int)dicPatch[key];
+                    key = sop + "D1R"; if (dicPatch.ContainsKey(key)) iop[op][1] = (int)dicPatch[key];
+                    key = sop + "D2R"; if (dicPatch.ContainsKey(key)) iop[op][2] = (int)dicPatch[key];
+                    key = sop + "RR"; if (dicPatch.ContainsKey(key)) iop[op][3] = (int)dicPatch[key];
+                    key = sop + "D2L"; if (dicPatch.ContainsKey(key)) iop[op][4] = 15 - (int)dicPatch[key];
+                    key = sop + "TL"; if (dicPatch.ContainsKey(key)) iop[op][5] = 127 - (int)dicPatch[key];
+                    key = sop + "RS"; if (dicPatch.ContainsKey(key)) iop[op][6] = (int)dicPatch[key];
+                    key = sop + "MUL"; if (dicPatch.ContainsKey(key))
+                    {
+                        decimal ml = dicPatch[key];
+                        decimal dis = decimal.MaxValue;
+                        int dml = 0;
+                        for (int m = 0; m < muls.Length; m++)
+                        {
+                            if (dis <= Math.Abs(muls[m] - ml))
+                                continue;
+
+                            dis = Math.Abs(muls[m] - ml);
+                            dml = m;
+                        }
+                        iop[op][7] = dml;
+                    }
+                    key = sop + "DT"; if (dicPatch.ContainsKey(key)) iop[op][8] = (int)dicPatch[key] >= 0 ? (int)dicPatch[key] : (4 - (int)dicPatch[key]);
+                    key = sop + "AM"; if (dicPatch.ContainsKey(key)) iop[op][9] = (int)dicPatch[key];
+                    key = sop + "SSGEG"; if (dicPatch.ContainsKey(key)) iop[op][10] = (int)dicPatch[key] == 0 ? 0 : ((int)dicPatch[key] + 7);
+                }
+
+                int alg = 0, fb = 0;
+                if (dicPatch.ContainsKey("ALGORITHM")) alg = (int)dicPatch["ALGORITHM"] - 1; else alg = 0;
+                if (dicPatch.ContainsKey("FEEDBACK")) fb = (int)dicPatch["FEEDBACK"]; else fb = 0;
+
+                //音色定義文を作成
+                string vname = "";
+                int renban = 0;
+                int voiceNum = 0;
+
+                if (string.IsNullOrEmpty(vname))
+                {
+                    vname = string.Format("{0}_{1}", Path.GetFileName(srcFn), renban++);
+                }
+
+                string sdatV,sdatM;
+                    sdatV = MakeVoiceDefineForGWI_OPN(patchName == "" ? (vname + add) : patchName, voiceNum, iop, alg, fb);
+                    sdatM = MakeVoiceDefineForMUC_OPN(patchName == "" ? (vname + add) : patchName, voiceNum, iop, alg, fb);
+
+                ret.Add(new Tuple<enmInstType, string, string, string>(enmInstType.FM_N, srcFn.Replace(baseDir, ""), sdatV,sdatM));
+            }
+            catch
+            {
+                return null;
+            }
+
+            return ret;
+        }
+
+
+
+        private void Disp(string msg)
+        {
 
         }
 
@@ -448,155 +676,6 @@ namespace mml2vgmIDE
 
         }
 
-
-
-        private List<Tuple<enmInstType, string, string>> GetInstsAtMuc(string srcFn)
-        {
-            List<Tuple<enmInstType, string, string>> ret = new List<Tuple<enmInstType, string, string>>();
-            int renban = 0;
-            try
-            {
-                string[] lin = File.ReadAllText(srcFn, Encoding.GetEncoding(932)).Split(new string[] { "\r\n" }, StringSplitOptions.None);
-                bool fvfg = false;
-                for (int i = 0; i < lin.Length; i++)
-                {
-                    if (string.IsNullOrEmpty(lin[i])) continue;
-                    if (lin[i].Length < 4) continue;
-                    if (lin[i][0] != ' ') continue;
-                    if (lin[i][2] != '@') continue;
-
-                    int srcCPtr = 3;
-                    bool carry = false;
-                    bool errSign = false;
-                    List<byte> dat = new List<byte>();
-                    List<byte> dat25 = new List<byte>();
-                    string name = "";
-
-                    if (lin[i][srcCPtr] == '%')
-                    {
-                        srcCPtr++;
-                        fvfg = true;
-                    }
-
-                    int voiceNum = REDATA(lin[i], ref srcCPtr,ref carry,ref errSign);
-
-                    if (fvfg)
-                    {
-                        //%25
-                        for (int row = 0; row < 6; row++)
-                        {
-                            i++;
-                            srcCPtr = 1;
-                            for (int col = 0; col < 4; col++)
-                            {
-                                byte v = (byte)REDATA(lin[i], ref srcCPtr,ref carry,ref errSign);
-                                if (carry || errSign)
-                                {
-                                    //muc88.WriteWarning(msg.get("W0409"), i, srcCPtr);
-                                }
-                                srcCPtr++;// SKIP','
-                                dat25.Add(v);
-                            }
-                        }
-
-                        i++;
-                        srcCPtr = 2;
-                        dat25.Add((byte)REDATA(lin[i], ref srcCPtr, ref carry, ref errSign));
-                    }
-                    else
-                    {
-                        //38
-                        i++;
-                        srcCPtr = 2;
-                        int fb = REDATA(lin[i], ref srcCPtr, ref carry, ref errSign);
-                        if (carry || errSign)
-                        {
-                            //muc88.WriteWarning(msg.get("W0409"), i, srcCPtr);
-                        }
-                        srcCPtr++;
-                        int alg = REDATA(lin[i], ref srcCPtr, ref carry, ref errSign);
-                        if (carry || errSign)
-                        {
-                            //muc88.WriteWarning(msg.get("W0409"), i, srcCPtr);
-                        }
-                        srcCPtr++;
-
-                        for (int row = 0; row < 4; row++)
-                        {
-                            i++;
-                            srcCPtr = 1;
-                            for (int col = 0; col < 9; col++)
-                            {
-                                byte v = (byte)REDATA(lin[i], ref srcCPtr, ref carry, ref errSign);
-                                if (carry || errSign)
-                                {
-                                    //muc88.WriteWarning(msg.get("W0409"), i, srcCPtr);
-                                }
-                                srcCPtr++;// SKIP','
-                                dat.Add(v);
-                            }
-
-                            if (row == 3)
-                            {
-                                for (; srcCPtr < lin[i].Length; srcCPtr++)
-                                {
-                                    if (lin[i][srcCPtr] != '"') continue;
-                                    srcCPtr++;
-                                    for (; srcCPtr < lin[i].Length; srcCPtr++)
-                                    {
-                                        if (lin[i][srcCPtr] == '"') break;
-                                        name += lin[i][srcCPtr];
-                                    }
-                                }
-                            }
-                        }
-
-                        dat.Add((byte)fb);
-                        dat.Add((byte)alg);
-                    }
-
-
-                    //音色定義文を作成
-
-                    string[] line = new string[5];
-                    for (int j = 0; j < 4; j++)
-                    {
-                        line[j] = "";
-                        for (int k = 0; k < 9; k++)
-                        {
-                            line[j] += string.Format("{0:D3} ", dat[j * 9 + k + 0]);
-                        }
-                    }
-                    line[4] = string.Format("{0:D3} {1:D3}", dat[37], dat[36]);
-
-                    if (string.IsNullOrEmpty(name))
-                    {
-                        name = string.Format("{0}_{1}", Path.GetFileName(srcFn), renban++);
-                    }
-
-                    string sdat = string.Format(
-        @"'@ N {6} ""{0}""
-   AR  DR  SR  RR  SL  TL  KS  ML  DT  AM  SSGEG
-'@ {1}000 000
-'@ {2}000 000
-'@ {3}000 000
-'@ {4}000 000
-   AL  FB
-'@ {5}
-", name + add, line[0], line[1], line[2], line[3], line[4], voiceNum);
-                    //Console.WriteLine("{0}",sdat);
-
-                    ret.Add(new Tuple<enmInstType, string, string>(enmInstType.FM_N, Path.Combine(srcFn, name).Replace(baseDir, ""), sdat));
-                }
-            }
-            catch
-            {
-                return null;
-            }
-
-            return ret;
-        }
-
         private int REDATA(string lin, ref int srcCPtr,ref bool carry,ref bool ErrSign)
         {
             int[] SCORE = new int[6];
@@ -731,120 +810,21 @@ namespace mml2vgmIDE
             return 0;
         }
 
-
-
-
-        private List<Tuple<enmInstType, string, string>> GetInstsAtRym2612(string srcFn)
+        private string MakeVoiceDefineForGWI_OPN(string patchName,int voiceNo,int[][] prms,int alg,int fb)
         {
-            List<Tuple<enmInstType, string, string>> ret = new List<Tuple<enmInstType, string, string>>();
-            try
+            string[] line = new string[5];
+            for (int j = 0; j < 4; j++)
             {
-                XElement xml = XElement.Load(srcFn);
-                if (xml == null) return null;
-                if (xml.Name.ToString().ToUpper().Trim() != "RYM2612PARAMS") return null;
-
-                string patchName = "";
-                string category = "";
-                var xatr = xml.FirstAttribute;
-                while (xatr != null)
+                line[j] = "";
+                for (int k = 0; k < 11; k++)
                 {
-                    if (xatr.Name.ToString().ToUpper().Trim() == "PATCHNAME")
-                        patchName = xatr.Value;
-                    else if (xatr.Name.ToString().ToUpper().Trim() == "CATEGORY")
-                        category = xatr.Value;
-                    xatr = xatr.NextAttribute;
+                    line[j] += string.Format("{0:D3} ", (int)prms[j][k]);
                 }
+            }
+            line[4] = string.Format("{0:D3} {1:D3}", alg, fb);
 
-                Dictionary<string, decimal> dicPatch = new Dictionary<string, decimal>();
-
-                foreach (var eleParam in xml.Elements())
-                {
-                    if (eleParam.Name.ToString().ToUpper().Trim() != "PARAM") continue;
-                    string id = null;
-                    string val = null;
-                    foreach (var atr in eleParam.Attributes())
-                    {
-                        XName name = atr.Name;
-                        if (name == null) continue;
-                        string sval = atr.Value;
-                        if (string.IsNullOrEmpty(sval)) continue;
-                        string sname = name.ToString().ToUpper().Trim();
-                        sval = sval.ToUpper().Trim();
-
-                        if (sname == "ID") id = sval;
-                        else if (sname == "VALUE") val = sval;
-                    }
-                    if (string.IsNullOrEmpty(id) || string.IsNullOrEmpty(val)) continue;
-
-                    if (dicPatch.ContainsKey(id)) dicPatch.Remove(id);
-                    decimal q;
-                    if (decimal.TryParse(val, out q))
-                    {
-                        dicPatch.Add(id, q);
-                    }
-                }
-
-                List<decimal>[] iop = new List<decimal>[4] { new List<decimal>(), new List<decimal>(), new List<decimal>(), new List<decimal>() };
-                int[] muls = new int[] { 0, 1054, 1581, 2635, 3689, 4743, 5797, 6851, 7905, 8959, 10013, 10540, 11594, 12648, 14229, 15000 };
-                for (int op = 0; op < 4; op++)
-                {
-                    string sop = $"OP{op + 1}";
-                    string key;
-                    key = sop + "AR"; if (dicPatch.ContainsKey(key)) iop[op].Add(dicPatch[key]); else iop[op].Add(0);
-                    key = sop + "D1R"; if (dicPatch.ContainsKey(key)) iop[op].Add(dicPatch[key]); else iop[op].Add(0);
-                    key = sop + "D2R"; if (dicPatch.ContainsKey(key)) iop[op].Add(dicPatch[key]); else iop[op].Add(0);
-                    key = sop + "RR"; if (dicPatch.ContainsKey(key)) iop[op].Add(dicPatch[key]); else iop[op].Add(0);
-                    key = sop + "D2L"; if (dicPatch.ContainsKey(key)) iop[op].Add(15 - dicPatch[key]); else iop[op].Add(0);
-                    key = sop + "TL"; if (dicPatch.ContainsKey(key)) iop[op].Add(127 - dicPatch[key]); else iop[op].Add(0);
-                    key = sop + "RS"; if (dicPatch.ContainsKey(key)) iop[op].Add(dicPatch[key]); else iop[op].Add(0);
-                    key = sop + "MUL"; if (dicPatch.ContainsKey(key))
-                    {
-                        decimal ml = dicPatch[key];
-                        decimal dis = decimal.MaxValue;
-                        int dml = 0;
-                        for (int m = 0; m < muls.Length; m++)
-                        {
-                            if (dis <= Math.Abs(muls[m] - ml))
-                                continue;
-
-                            dis = Math.Abs(muls[m] - ml);
-                            dml = m;
-                        }
-                        iop[op].Add(dml);
-                    }
-                    else iop[op].Add(0);
-                    key = sop + "DT"; if (dicPatch.ContainsKey(key)) iop[op].Add(dicPatch[key] >= 0 ? dicPatch[key] : (4 - dicPatch[key])); else iop[op].Add(0);
-                    key = sop + "AM"; if (dicPatch.ContainsKey(key)) iop[op].Add(dicPatch[key]); else iop[op].Add(0);
-                    key = sop + "SSGEG"; if (dicPatch.ContainsKey(key)) iop[op].Add(dicPatch[key] == 0 ? 0 : (dicPatch[key] + 7)); else iop[op].Add(0);
-                }
-
-                int alg = 0, fb = 0;
-                if (dicPatch.ContainsKey("ALGORITHM")) alg = (int)dicPatch["ALGORITHM"] - 1; else alg = 0;
-                if (dicPatch.ContainsKey("FEEDBACK")) fb = (int)dicPatch["FEEDBACK"]; else fb = 0;
-
-                //音色定義文を作成
-                string vname = "";
-                int renban = 0;
-                int voiceNum = 0;
-
-                string[] line = new string[5];
-                for (int j = 0; j < 4; j++)
-                {
-                    line[j] = "";
-                    for (int k = 0; k < 11; k++)
-                    {
-                        line[j] += string.Format("{0:D3} ", (int)iop[j][k]);
-                    }
-                }
-                line[4] = string.Format("{0:D3} {1:D3}", alg, fb);
-
-                if (string.IsNullOrEmpty(vname))
-                {
-                    vname = string.Format("{0}_{1}", Path.GetFileName(srcFn), renban++);
-                }
-
-                string sdat = string.Format(
-    @"'@ N {6} ""{0}""
+            string sdat = string.Format(
+@"'@ N {6} ""{0}""
    AR  DR  SR  RR  SL  TL  KS  ML  DT  AM  SSGEG
 '@ {1}
 '@ {2}
@@ -852,17 +832,35 @@ namespace mml2vgmIDE
 '@ {4}
    AL  FB
 '@ {5}
-", patchName == "" ? (vname + add) : patchName, line[0], line[1], line[2], line[3], line[4], voiceNum);
+", patchName, line[0], line[1], line[2], line[3], line[4], voiceNo);
 
-                //ret.Add(new Tuple<enmInstType, string, string>(enmInstType.FM_N, Path.Combine(srcFn, vname).Replace(baseDir, ""), sdat));
-                ret.Add(new Tuple<enmInstType, string, string>(enmInstType.FM_N, srcFn.Replace(baseDir, ""), sdat));
-            }
-            catch
+            return sdat;
+        }
+
+        private string MakeVoiceDefineForMUC_OPN(string patchName, int voiceNo, int[][] prms, int alg, int fb)
+        {
+            string[] line = new string[5];
+            for (int j = 0; j < 4; j++)
             {
-                return null;
+                line[j] = "";
+                for (int k = 0; k < 9; k++)
+                {
+                    line[j] += string.Format("{0:D3} ", (int)prms[j][k]);
+                }
             }
+            line[4] = string.Format("{0:D3} {1:D3}", fb, alg);
 
-            return ret;
+            string sdat = string.Format(
+@"  @{6}:{{ ""{0}""
+  {5}
+  {1}
+  {2}
+  {3}
+  {4}
+  }}
+", patchName, line[0], line[1], line[2], line[3], line[4], voiceNo);
+
+            return sdat;
         }
     }
 }

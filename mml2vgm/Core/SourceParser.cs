@@ -281,6 +281,16 @@ namespace Core
                 info.format == enmFormat.VGM ? new string[] { } : (info.format == enmFormat.XGM ? new string[] { } : new string[] { "M", "Ms" })
                 ), new int[] { 0, 0, -1 }));
 
+            cp = new NES(null, 0, null, null, 0);
+            cpn.Add(enmChipType.NES, new Tuple<string, string, List<string>, int[]>(cp.Name, cp.ShortName, new List<string>(
+                info.format == enmFormat.VGM ? new string[] { "Na", "Nb" } : (info.format == enmFormat.XGM ? new string[] { } : new string[] { "Na", "Nb" })
+                ), new int[] { 2, 0, -1 }));
+
+            cp = new DMG(null, 0, null, null, 0);
+            cpn.Add(enmChipType.DMG, new Tuple<string, string, List<string>, int[]>(cp.Name, cp.ShortName, new List<string>(
+                info.format == enmFormat.VGM ? new string[] { "Ga", "Gb" } : (info.format == enmFormat.XGM ? new string[] { } : new string[] { "Ga", "Gb" })
+                ), new int[] { 2, 0, -1 }));
+
             //パート名定義文を解析し、デフォルト設定を書き換える
             foreach (Line ln in lnInformation)
             {
@@ -312,7 +322,7 @@ namespace Core
                         npn[i] = npn[i].Trim();
                         //書式のチェック
                         if (
-                            (npn[i][0] < 'A' || npn[i][0] > 'Z')//１文字目は大文字である故t
+                            (npn[i][0] < 'A' || npn[i][0] > 'Z')//１文字目は大文字であること
                             || (npn[i].Length == 2 && (npn[i][1] < 'a' || npn[i][1] > 'z'))//２文字目は小文字であること
                             )
                         {

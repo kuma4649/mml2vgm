@@ -155,11 +155,17 @@ namespace mml2vgmIDE
                         prevChn = Port; // by default don't restore channel
                                         // get current channel for supported chips
                         if (chip.DstChipType == 0x05)
+                        {
                             ;   // TODO
+                        }
                         else if (chip.DstChipType == 0x05)
+                        {
                             ;   // TODO
+                        }
                         else if (chip.DstChipType == 0x1B)
+                        {
                             ;// prevChn = chipRegister.ReadHuC6280Register(chip.DstChipID, 0x00, model);
+                        }
 
                         // Send Channel Select
                         chip_reg_write(Counter, chip.DstChipType, chip.DstChipID, 0x00, (byte)(Command >> 4), Port, od);

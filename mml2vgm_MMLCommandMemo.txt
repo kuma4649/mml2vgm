@@ -296,6 +296,8 @@
   QSound    QSnd   Q               4000000   16Ch(PCM  : 16Ch)
   K053260   K53    O               3579545    4Ch(PCM  :  4Ch  |  DPCM:4Ch)
   MIDI      MIDI   M                     -   16Ch(MIDI : 16Ch)
+  NES       NES    Na              1789772    5Ch(Pulse:  2Ch  Tri : 1Ch  Noise : 1Ch  DPCM : 1Ch)
+  DMG       DMG    Ga              4194304    4Ch(Pulse:  2Ch  WF  : 1Ch  Noise : 1Ch)
   PWM       PWM                   23011361    2Ch(PCM  :  2Ch)(T.B.D.)
   OKIM6258  OKI5                   4000000    1Ch(ADPCM:  1Ch)(T.B.D.)
   OKIM6295  OKI9                   8000000    4Ch(ADPCM:  4Ch)(T.B.D.)

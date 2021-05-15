@@ -14,7 +14,6 @@ namespace Core
         private int beforePanData = -1;
         private int dcsgCh3Freq = -1;
         private int beforeDcsgCh3Freq = -1;
-        private byte DataBankID = 0x08;
 
         public SN76489(ClsVgm parent, int chipID, string initialPartName, string stPath, int chipNumber) : base(parent, chipID, initialPartName, stPath, chipNumber)
         {
@@ -28,6 +27,7 @@ namespace Core
                 new byte[] { (byte)(chipNumber!=0 ? 0x30 : 0x50) }
                 , new byte[] { (byte)(chipNumber!=0 ? 0x3f : 0x4f) }
             };
+            DataBankID = 0x08;
 
             Frequency = 3579545;
             this.ChipNumber = chipNumber;

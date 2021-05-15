@@ -26,7 +26,11 @@
         ADPCMB,
         WaveForm,
         FMPCMex,
-        MIDI
+        MIDI,
+        Pulse,
+        Triangle,
+        Noise,
+        DPCM
     }
 
     public enum enmChipType : int
@@ -56,7 +60,9 @@
         YM3526 = 21,
         YM3812 = 22,
         Y8950 = 23,
-        YMF271 = 24
+        YMF271 = 24,
+        NES = 25,
+        DMG = 26
     }
 
     public enum EnmZGMDevice : int

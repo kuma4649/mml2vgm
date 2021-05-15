@@ -60,10 +60,12 @@
     <Compile Include="chips\clsOPL.cs" />
     <Compile Include="chips\clsOPN.cs" />
     <Compile Include="chips\Conductor.cs" />
+    <Compile Include="chips\DMG.cs" />
     <Compile Include="chips\HuC6280.cs" />
     <Compile Include="chips\K051649.cs" />
     <Compile Include="chips\K053260.cs" />
     <Compile Include="chips\MidiGM.cs" />
+    <Compile Include="chips\NES.cs" />
     <Compile Include="chips\QSound.cs" />
     <Compile Include="chips\RF5C164.cs" />
     <Compile Include="chips\segaPcm.cs" />
@@ -109,6 +111,12 @@
     <Compile Include="ZGMmaker.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="fnum\FNUM_NES.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="fnum\FNUM_DMG.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="fnum\FNUM_HuC6280.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

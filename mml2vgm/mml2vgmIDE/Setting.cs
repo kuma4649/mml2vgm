@@ -183,6 +183,76 @@ namespace mml2vgmIDE
             }
         }
 
+        private ChipType _RF5C164Type = new ChipType();
+        public ChipType RF5C164Type
+        {
+            get
+            {
+                return _RF5C164Type;
+            }
+
+            set
+            {
+                _RF5C164Type = value;
+            }
+        }
+
+        private ChipType _DMGType = new ChipType();
+        public ChipType DMGType
+        {
+            get
+            {
+                return _DMGType;
+            }
+
+            set
+            {
+                _DMGType = value;
+            }
+        }
+
+        private ChipType _DMGSType = new ChipType();
+        public ChipType DMGSType
+        {
+            get
+            {
+                return _DMGSType;
+            }
+
+            set
+            {
+                _DMGSType = value;
+            }
+        }
+
+        private ChipType _NESType = new ChipType();
+        public ChipType NESType
+        {
+            get
+            {
+                return _NESType;
+            }
+
+            set
+            {
+                _NESType = value;
+            }
+        }
+
+        private ChipType _NESSType = new ChipType();
+        public ChipType NESSType
+        {
+            get
+            {
+                return _NESSType;
+            }
+
+            set
+            {
+                _NESSType = value;
+            }
+        }
+
         private ChipType _YM2413SType = new ChipType();
         public ChipType YM2413SType
         {

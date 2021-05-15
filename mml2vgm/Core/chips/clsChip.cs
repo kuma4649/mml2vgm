@@ -128,6 +128,8 @@ namespace Core
         public List<byte[]> pcmDataDirect = new List<byte[]>();
         public byte[][] port;
         public Dictionary<int, int> relVol = new Dictionary<int, int>();
+        public byte vgmHeaderPos;
+        public byte DataBankID;
 
         public ClsChip(ClsVgm parent, int chipID, string initialPartName, string stPath, int chipNumber)
         {

@@ -18,7 +18,7 @@ namespace mml2vgmIDE
         private SienSearch ss;
         public int selRow = -1;
         private Dictionary<string, string[]> instCache = new Dictionary<string, string[]>();
-        private Dictionary<string, Tuple<InstrumentAtLocal.enmInstType, string, string>[]> instCacheFolder = new Dictionary<string, Tuple<InstrumentAtLocal.enmInstType, string, string>[]>();
+        private Dictionary<string, Tuple<InstrumentAtLocal.enmInstType, string, string, string>[]> instCacheFolder = new Dictionary<string, Tuple<InstrumentAtLocal.enmInstType, string, string, string>[]>();
 
         public FrmSien(FrmMain parent,Setting setting)
         {
@@ -319,10 +319,10 @@ namespace mml2vgmIDE
                 parent, si, path, "", GetInstrumentFromFolderComp);
         }
 
-        private void GetInstrumentFromFolderComp(object sender,TreeNode tn, Tuple<InstrumentAtLocal.enmInstType, string, string>[] obj)
+        private void GetInstrumentFromFolderComp(object sender,TreeNode tn, List<Tuple<InstrumentAtLocal.enmInstType, string, string, string>> obj)
         {
             if (!(sender is SienItem)) return;
-            if (obj == null || obj.Length < 1) return;
+            if (obj == null || obj.Count < 1) return;
 
             try
             {
@@ -336,7 +336,7 @@ namespace mml2vgmIDE
                 }
 
                 int depth = -1;
-                foreach (Tuple<InstrumentAtLocal.enmInstType, string, string> line in obj)
+                foreach (Tuple<InstrumentAtLocal.enmInstType, string, string,string> line in obj)
                 {
                     if (line.Item1 != InstrumentAtLocal.enmInstType.Dir) continue;
 
@@ -346,6 +346,7 @@ namespace mml2vgmIDE
                     string filePath = Path.GetDirectoryName(line.Item2);
                     string[] paths = filePath.Split(Path.DirectorySeparatorChar);
                     string lin = line.Item3;
+                    string linMUC = line.Item4;
                     string treename = line.Item2.Replace(Path.Combine(Common.GetApplicationFolder(), "Instruments") + "\\", "");
 
                     ssi = new SienItem();
@@ -387,7 +388,7 @@ namespace mml2vgmIDE
 
                 }
 
-                foreach (Tuple<InstrumentAtLocal.enmInstType, string, string> line in obj)
+                foreach (Tuple<InstrumentAtLocal.enmInstType, string, string, string> line in obj)
                 {
                     if (line.Item1 == InstrumentAtLocal.enmInstType.Dir) continue;
 
@@ -397,6 +398,7 @@ namespace mml2vgmIDE
                     string filePath = Path.GetDirectoryName(line.Item2);
                     string[] paths = filePath.Split(Path.DirectorySeparatorChar);
                     string lin = line.Item3;
+                    string linMUC = line.Item4;
                     string treename = line.Item2.Replace(Path.Combine(Common.GetApplicationFolder(), "Instruments") + "\\", "");
 
                     ssi = new SienItem();
@@ -406,6 +408,7 @@ namespace mml2vgmIDE
                     ssi.parentID = si.ID;
                     ssi.haveChild = true;
                     ssi.content = lin;// si.content;
+                    ssi.content2 = linMUC;
                     ssi.description = line.Item2;
                     ssi.foundCnt = si.foundCnt;
                     ssi.nextAnchor = si.nextAnchor;
@@ -443,7 +446,7 @@ namespace mml2vgmIDE
 
                 if (!instCacheFolder.ContainsKey(si.content))
                 {
-                    instCacheFolder.Add(si.content, obj);
+                    instCacheFolder.Add(si.content, obj.ToArray());
                 }
             }
             catch (Exception ex)
