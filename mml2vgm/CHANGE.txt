@@ -1,4 +1,11 @@
 更新履歴
+TAG436 2021/05/16 2nd
+  Core:NES:DPCM対応、
+  ループコマンド対応、
+  yコマンド対応(byte)、
+  ソフトエンベロープ切り替え対応、
+  Sweepの初期値設定追加
+
 TAG435 2021/05/16
   Core:vgm:NESに対応(DPCMまだ)(サンプル:testNES.gwi)
 

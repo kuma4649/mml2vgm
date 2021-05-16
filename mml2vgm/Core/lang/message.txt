@@ -247,6 +247,7 @@ E08000=This sound chip doesn't have instruments.
 E08001=ToneDoubler cannot be used if chip is not OPN or OPM.
 E08002=Sound patch does not exist as PCM definition({0}).
 E08003=Selected Tone number({0}) is not for AY8910 PCM data.
+E08004=AY8910 can't use PD command.
 
 ;C140.cs 09000
 E09000=defined loop address [{0}] is exceeding PCM data size. select between 0~{1}.
@@ -462,6 +463,7 @@ E30006=This sound chip doesn't support 4-operator mode, so L4 format voices cann
 
 ;NES.cs 32000
 E32000=Duty cycle can only be used on pulse channels.
+E32001=NES can't use PD command.
 
 
 

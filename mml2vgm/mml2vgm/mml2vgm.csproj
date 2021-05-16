@@ -209,6 +209,9 @@
     <None Include="sample\NES\testNES.gwi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="sample\NES\testNES_DPCM.gwi">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="sample\SN76489\testDCSGPCM.gwi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

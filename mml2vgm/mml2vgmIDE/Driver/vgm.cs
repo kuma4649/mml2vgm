@@ -1122,7 +1122,7 @@ namespace mml2vgmIDE
                                 //chipRegister.writeNESPCMData(chipID, stAdr, dataSize, vgmBuf, vgmAdr + 9);
                                 pcmDat.Clear();
                                 for (uint i = vgmAdr + 9; i < vgmAdr + 9 + dataSize; i++) pcmDat.Add(vgmBuf[i].val);
-                                chipRegister.writeNESPCMData(chipID, stAdr, dataSize, pcmDat.ToArray(), 0);
+                                chipRegister.NESWritePCMData(od, Audio.DriverSeqCounter, chipID, stAdr, dataSize, pcmDat.ToArray(), 0);
                                 //dumpData(model, "NES_PCMData", vgmAdr + 9, dataSize);
                                 break;
                         }

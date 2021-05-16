@@ -800,6 +800,15 @@ namespace mml2vgmIDE.Driver.ZGM
                     vgmAdr += (uint)bLen + 7;
                     break;
 
+                case Driver.ZGM.ZgmChip.NES _:
+                    //uint RF5C164_romSize = Common.getLE32(vgmBuf, vgmAdr + 7);
+                    uint NES_startAddress = Common.getLE32(vgmBuf, vgmAdr + 0x0B);
+                    pcmDat.Clear();
+                    for (uint i = 0; i < bLen - 8; i++) pcmDat.Add(vgmBuf[vgmAdr + 15 + i].val);
+                    chipRegister.NESWritePCMData(od, Audio.DriverSeqCounter, (byte)chip.Index, NES_startAddress, (uint)pcmDat.Count, pcmDat.ToArray(), 0);
+                    vgmAdr += (uint)bLen + 7;
+                    break;
+
                 //        case 0x92:
                 //            // C352
                 //            //chipRegister.writeC352PCMData(chipID, romSize, startAddress, bLen - 8, vgmBuf, vgmAdr + 15);
@@ -841,20 +850,6 @@ namespace mml2vgmIDE.Driver.ZGM
                 //                for (uint i = vgmAdr + 9; i < vgmAdr + 9 + dataSize; i++) pcmDat.Add(vgmBuf[i].val);
                 //                chipRegister.writeRF5C68PCMData(chipID, stAdr, dataSize, pcmDat.ToArray(), 0);
                 //                //dumpData(model, "RF5C68_PCMData(8BitMonoSigned)", vgmAdr + 9, dataSize);
-                //                break;
-                //            case 0xc1:
-                //                //chipRegister.writeRF5C164PCMData(chipID, stAdr, dataSize, vgmBuf, vgmAdr + 9);
-                //                pcmDat.Clear();
-                //                for (uint i = vgmAdr + 9; i < vgmAdr + 9 + dataSize; i++) pcmDat.Add(vgmBuf[i].val);
-                //                chipRegister.RF5C164WritePCMData(od, Audio.DriverSeqCounter, chipID, stAdr, dataSize, pcmDat.ToArray(), 0);
-                //                //dumpData(model, "RF5C164_PCMData(8BitMonoSigned)", vgmAdr + 9, dataSize);
-                //                break;
-                //            case 0xc2:
-                //                //chipRegister.writeNESPCMData(chipID, stAdr, dataSize, vgmBuf, vgmAdr + 9);
-                //                pcmDat.Clear();
-                //                for (uint i = vgmAdr + 9; i < vgmAdr + 9 + dataSize; i++) pcmDat.Add(vgmBuf[i].val);
-                //                chipRegister.writeNESPCMData(chipID, stAdr, dataSize, pcmDat.ToArray(), 0);
-                //                //dumpData(model, "NES_PCMData", vgmAdr + 9, dataSize);
                 //                break;
                 //        }
                 //    }

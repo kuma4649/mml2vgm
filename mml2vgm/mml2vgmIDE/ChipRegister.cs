@@ -2713,29 +2713,48 @@ namespace mml2vgmIDE
                 {
                     if (exData == null) return;
 
-                    PackData[] pdata = (PackData[])exData;
+                    if (exData is PackData[])
+                    {
+                        PackData[] pdata = (PackData[])exData;
+                        if (Chip.Model == EnmVRModel.VirtualModel)
+                        {
+                            foreach (PackData dat in pdata)
+                                mds.WriteNES(Chip.Index, (byte)Chip.Number, (byte)dat.Address, (byte)dat.Data);
+                        }
+                        if (Chip.Model == EnmVRModel.RealModel)
+                        {
+                            if (scNES[Chip.Number] != null)
+                            {
+                                foreach (PackData dat in pdata)
+                                {
+                                    int skip = 0x0;
+                                    if (scNES[Chip.Number] is RC86ctlSoundChip)
+                                    {
+                                        if (((RC86ctlSoundChip)scNES[Chip.Number]).chiptype == Nc86ctl.ChipType.CHIP_UNKNOWN)
+                                        {
+                                            skip = 0x100;
+                                        }
+                                    }
+                                    scNES[Chip.Number].setRegister(dat.Address + skip, dat.Data);
+                                }
+                            }
+                        }
+                        return;
+                    }
+
+                    uint stAdr = (uint)((object[])exData)[0];
+                    uint dataSize = (uint)((object[])exData)[1];
+                    byte[] pcmData = (byte[])((object[])exData)[2];
+                    uint vgmAdr = (uint)((object[])exData)[3];
+
                     if (Chip.Model == EnmVRModel.VirtualModel)
                     {
-                        foreach (PackData dat in pdata)
-                            mds.WriteNES(Chip.Index, (byte)Chip.Number, (byte)dat.Address, (byte)dat.Data);
+                        log.Write("Sending NES(Emu) PCM");
+                        mds.WriteNESRam(Chip.Index, (byte)Chip.Number, (int)stAdr, (int)dataSize, pcmData, (int)vgmAdr);
                     }
                     if (Chip.Model == EnmVRModel.RealModel)
                     {
-                        if (scNES[Chip.Number] != null)
-                        {
-                            foreach (PackData dat in pdata)
-                            {
-                                int skip = 0x0;
-                                if (scNES[Chip.Number] is RC86ctlSoundChip)
-                                {
-                                    if (((RC86ctlSoundChip)scNES[Chip.Number]).chiptype == Nc86ctl.ChipType.CHIP_UNKNOWN)
-                                    {
-                                        skip = 0x100;
-                                    }
-                                }
-                                scNES[Chip.Number].setRegister(dat.Address + skip, dat.Data);
-                            }
-                        }
+                        ;
                     }
                 }
                 finally
@@ -2772,9 +2791,16 @@ namespace mml2vgmIDE
             data.Add(new PackData(null, NES[chipID], EnmDataType.Normal, 0x04, 0x00, null));
             data.Add(new PackData(null, NES[chipID], EnmDataType.Normal, 0x08, 0x00, null));
             data.Add(new PackData(null, NES[chipID], EnmDataType.Normal, 0x0c, 0x00, null));
-            data.Add(new PackData(null, NES[chipID], EnmDataType.Normal, 0x09, 0x00, null));
+            data.Add(new PackData(null, NES[chipID], EnmDataType.Normal, 0x11, 0x00, null));
+            data.Add(new PackData(null, NES[chipID], EnmDataType.Normal, 0x15, 0x00, null));
 
             return data;
+        }
+
+        public void NESWritePCMData(outDatum od, long Counter, byte ChipID, uint stAdr, uint dataSize, byte[] vgmBuf, uint vgmAdr)
+        {
+            enq(od, Counter, NES[ChipID], EnmDataType.Block, -1, -2, new object[] { stAdr, dataSize, vgmBuf, vgmAdr });
+
         }
 
         public void NESSetMask(long Counter, int chipID, int ch, bool mask, bool noSend = false)
