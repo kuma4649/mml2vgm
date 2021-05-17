@@ -1,4 +1,5 @@
 ﻿using musicDriverInterface;
+using System.Collections.Generic;
 
 namespace Core
 {
@@ -8,6 +9,7 @@ namespace Core
 
         public int Num = -1;//アルペジヲ定義番号
         public enmMMLType DefCmd;//デフォルトで使用するコマンドの種類
+        public List<object> DefCmdArg;//デフォルトで使用するコマンドの引数
         public int Sync = 0;//同期モード
 
         public int Ptr = 0;//現在の位置

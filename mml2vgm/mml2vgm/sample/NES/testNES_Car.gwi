@@ -1,0 +1,27 @@
+﻿'{
+
+	TitleName   =
+	TitleNameJ  =
+	GameName    =
+	GameNameJ   =
+	SystemName  =
+	SystemNameJ =
+	Composer    =
+	ComposerJ   =
+	ReleaseDate =
+	Converted   =
+	Notes       =
+
+}
+
+
+
+       No Cmd Sync   data...
+'@ CAR  1, @I,   0,
+'@                   #5,1,0 ; 複数行定義可能
+
+'Na1 CA0,1
+'Na1 v15CAON0
+'Na1 l8c1
+
+

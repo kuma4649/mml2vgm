@@ -2359,7 +2359,7 @@ namespace Core
         /// <summary>
         /// Command ARP専用
         /// </summary>
-        private List<MmlDatum> GetNumsIntForCommandArp(int ptr, string anavals, int sin = 0, enmMMLType defaultMMLType = enmMMLType.Instrument)
+        private List<MmlDatum> GetNumsIntForCommandArp(int ptr, string anavals, int sin = 0, enmMMLType defaultMMLType = enmMMLType.Instrument, List<object> defaultMMLArgs = null)
         {
             //wordのリストを作成する
             List<string> lstWord = new List<string>();
@@ -2393,7 +2393,9 @@ namespace Core
 
             List<MmlDatum> lstBuf = new List<MmlDatum>();
             enmMMLType tp = defaultMMLType;
+            List<object> tpArgs = defaultMMLArgs;
             enmMMLType defTp = tp;
+            List<object> defArgs = tpArgs;
 
             foreach (string vals in lstWord)
             {
@@ -2466,7 +2468,7 @@ namespace Core
                     if (c == '@')
                     {
                         tp = enmMMLType.Instrument;
-                        char nc = p < vals.Length ? vals[p] : '\0';
+                        char nc = p + 1 < vals.Length ? vals[p + 1] : '\0';
 
                         if (nc == 'I' || nc == 'E' || nc == 'N' || nc == 'R' || nc == 'A' || nc == 'W')
                         {
@@ -2482,8 +2484,17 @@ namespace Core
                             dat = new MmlDatum();
                             dat.type = enmMMLType.Instrument;//.DefaultCommand;
                             dat.args = new List<object>(new object[] { defTp });
+                            if (instType == 'n')
+                            {
+                            }
+                            else
+                            {
+                                dat.args = new List<object>(new object[] { instType });
+                                defArgs = new List<object>(new object[] { instType });
+                            }
                             lstBuf.Add(dat);
                         }
+                        tpArgs = dat.args;
                         continue;
                     }
 
@@ -2577,7 +2588,8 @@ namespace Core
                     if (tp == enmMMLType.Instrument)
                     {
                         dat.args = new List<object>();
-                        dat.args.Add(instType);
+                        if (tpArgs == null) dat.args.Add(instType);
+                        else dat.args.AddRange(tpArgs);
                         instType = 'n';
                         foreach (int j in ivalue)
                         {
@@ -2596,6 +2608,7 @@ namespace Core
 
                     lstBuf.Add(dat);
                     tp = defTp;
+                    tpArgs = defArgs;
 
                     ivalue.Clear();
                 }
@@ -2815,8 +2828,9 @@ namespace Core
                         Common.CutComment(txt).IndexOf('@') + 1
                         , Common.CutComment(txt)
                         , 1
-                        , instCommandArp[instCommandArpCounter - 1][1].type);
-                    List<MmlDatum> ebuf = instCommandArp[instCommandArpCounter - 1].ToList();
+                        , instCommandArp[instCommandArpCounter - 1].Length > 1 ? instCommandArp[instCommandArpCounter - 1][1].type : enmMMLType.Instrument
+                        , instCommandArp[instCommandArpCounter - 1].Length > 1 ? instCommandArp[instCommandArpCounter - 1][1].args : null);
+                    List <MmlDatum> ebuf = instCommandArp[instCommandArpCounter - 1].ToList();
                     ebuf.AddRange(buf);
                     instCommandArp.Remove(instCommandArpCounter - 1);
                     instCommandArp.Add(instCommandArpCounter - 1, ebuf.ToArray());
@@ -5252,6 +5266,7 @@ namespace Core
                     if (ca.Ptr == 1)
                     {
                         ca.DefCmd = instCommandArp[ca.Num][ca.Ptr].type;
+                        ca.DefCmdArg= instCommandArp[ca.Num][ca.Ptr].args;
                         ca.Ptr++;
                         continue;
                     }

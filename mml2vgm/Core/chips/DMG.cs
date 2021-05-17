@@ -180,5 +180,15 @@ namespace Core
         {
             page.keyOn = false;
         }
+
+        public override int GetToneDoublerShift(partPage page, int octave, char noteCmd, int shift)
+        {
+            return 0;
+        }
+
+        public override void SetToneDoubler(partPage page, MML mml)
+        {
+        }
+
     }
 }

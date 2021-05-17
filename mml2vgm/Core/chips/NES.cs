@@ -358,8 +358,10 @@ namespace Core
             {
                 f = page.bendFnum;
             }
+
             f = f + page.detune;
             f = f + arpFreq;
+
             for (int lfo = 0; lfo < 4; lfo++)
             {
                 if (!page.lfo[lfo].sw)
@@ -380,16 +382,7 @@ namespace Core
             }
             else if (page.Type == enmChannelType.Noise|| page.Type == enmChannelType.DPCM)
             {
-                int o = page.octaveNow - 1;
-                int n = Const.NOTE.IndexOf(page.noteCmd) + page.shift + page.keyShift + arpNote;
-                o += n / 12;
-                o = Common.CheckRange(o, 0, 1);
-                n %= 12;
-
-                f = Common.CheckRange(o * 12 + n, 0, 0xf);
-                if (page.Type == enmChannelType.Noise)
-                    f = 15 - f;
-
+                f = Common.CheckRange(f, 0, 0xf);
                 page.FNum = f;
             }
         }
@@ -399,14 +392,30 @@ namespace Core
             int o = octave - 1;
             int n = Const.NOTE.IndexOf(noteCmd) + shift;
             o += n / 12;
-            o = Common.CheckRange(o, 0, 7);
-            n %= 12;
 
-            int f = o * 12 + n;
-            if (f < 0) f = 0;
-            if (f >= FNumTbl[0].Length) f = FNumTbl[0].Length - 1;
+            if (page.Type == enmChannelType.Pulse || page.Type == enmChannelType.Triangle)
+            {
+                o = Common.CheckRange(o, 0, 7);
+                n %= 12;
 
-            return FNumTbl[0][f];
+                int f = o * 12 + n;
+                if (f < 0) f = 0;
+                if (f >= FNumTbl[0].Length) f = FNumTbl[0].Length - 1;
+                return FNumTbl[0][f];
+            }
+            else if (page.Type == enmChannelType.Noise || page.Type == enmChannelType.DPCM)
+            {
+                o = Common.CheckRange(o, 0, 1);
+                n %= 12;
+
+                int f = Common.CheckRange(o * 12 + n, 0, 0xf);
+                if (page.Type == enmChannelType.Noise)
+                    f = 15 - f;
+
+                return f;
+            }
+
+            return 0;
         }
 
         public override int GetFNum(partPage page, MML mml, int octave, char cmd, int shift)
@@ -498,7 +507,7 @@ namespace Core
                             //
 
                             if (page.keyOn 
-                                || page.latestVolume != page.beforeVolume)
+                                || page.latestVolume != page.beforeVolume || page.dutyCycle!=page.spg.dutyCycle)
                             {
                                 vol = ((page.dutyCycle & 0x3) << 6) | (page.HardEnvelopeSw ? 0x20 : 0x30) | Common.CheckRange(page.latestVolume, 0, 15);//0x30持続音
                                 SOutData(page, mml, port[0], (byte)(0x00 + page.ch * 4), (byte)vol);
@@ -653,6 +662,7 @@ namespace Core
                 page.keyOn = false;
                 page.beforeVolume = page.latestVolume;
                 page.beforeFNum = page.FNum;
+                page.spg.dutyCycle = page.dutyCycle;
 
             }
 
@@ -734,6 +744,15 @@ namespace Core
         public override void CmdLoopExtProc(partPage page, MML mml)
         {
             page.keyOff = true;
+        }
+
+        public override int GetToneDoublerShift(partPage page, int octave, char noteCmd, int shift)
+        {
+            return 0;
+        }
+
+        public override void SetToneDoubler(partPage page, MML mml)
+        {
         }
 
     }

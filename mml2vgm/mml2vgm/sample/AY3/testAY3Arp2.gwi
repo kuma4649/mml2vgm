@@ -41,6 +41,6 @@ Cn1 L
 '%sd VP0 VPON CA0,0 CA1,1 CAON0 CAON1 AP0 APON a16 CAOF0 CAOF1 APOF VPOF P1
 '%hc P2 w0 VP1 VPON c16 VPOF P1
 '%k VP2 VPON AP1 APON c16 APOF VPOF 
-'A1 l8 o3q0 [%k r. %sdr.%kr16%hc%hc%sdr.]2
-'A1 l8q0 VP2cVPOFd4e4 frr
+'A1 l8 o3q0v15 [%k r. %sdr.%kr16%hc%hc%sdr.]2
+'A1 l8q0v15 VP2cVPOFd4e4 frr
 
