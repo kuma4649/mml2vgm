@@ -849,20 +849,23 @@ Mx1x2n,...      -oo--oooooooooooooooooooooooooooooooooooooooooooo  LFO(
                                                                     OPN系(YM2203除く)
                                                                             : Mx1Hn1,n2,n3,n4
                                                                                 n1:Delay(無視されます)TBD
-                                                                                n2:Freq(0 - 7)
-                                                                                n3:PMS(0 - 7)
-                                                                                n4:AMS(0 - 3)
+                                                                                n2:Freq(0 ~ 7)
+                                                                                n3:PMS(0 ~ 7)
+                                                                                n4:AMS(0 ~ 3)
                                                                                 n5:Switch(0必須)TBD
                                                                     OPM     : Mx1Hn1,n2,n3,n4,n5
-                                                                                n1:LFO波形(0 - 3)
-                                                                                n2:LFRQ(0 - 255)
-                                                                                n3:PMD(0 - 127)
-                                                                                n4:AMD(0 - 127)
-                                                                                n5:LFO RESET(SYNC)(0 - 1)
+                                                                                n1:LFO波形(0 ~ 3)
+                                                                                n2:LFRQ(0 ~ 255)
+                                                                                n3:PMD(0 ~ 127)
+                                                                                n4:AMD(0 ~ 127)
+                                                                                n5:LFO RESET(SYNC)(0 ~ 1)
                                                                     HuC6280 : Mx1Hn1,n2,n3
-                                                                                n1:Control(n= 0(Disable),1-3(Ch2波形加算))
-                                                                                n2:Freq(n= 0-255)
-                                                                                n3:Ch2Freq(n= 0-4095)
+                                                                                n1:Control(n= 0(Disable),1~3(Ch2波形加算))
+                                                                                n2:Freq(n= 0~255)
+                                                                                n3:Ch2Freq(n= 0~4095)
+                                                                    NES     : Mx1Hn1,n2
+                                                                                n1:Sweep Speed(0 ~ 7)
+                                                                                n2:Sweep ShiftCount(-7 ~ 7)
 MAMSn           -oo----oo---oo---oo----oo------------------  ----  AMS値 音量LFO感度(0-7)
 MAMSn           --------------------------o----------------  ----  AMS値 音量LFO感度(0-3)
 MPMSn           -oo----oo---oo---oo----oo------------------  ----  PMS値 音程LFO感度(0-3)

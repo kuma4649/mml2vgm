@@ -29,7 +29,6 @@
 'Na12 @I3 cde ;Duty 75%(25% neg)
 'Na12 rrrrrr
 
-
  Triangle channel test
 'Na3 o3l4Q4
 'Na3 [rrr]4
@@ -41,10 +40,28 @@
 
 
  melo test
-'Cn1  T80 [r2.]7 T78r4 T66r4 T70r4
-'Na12  @I1 
-'Na123 MPV48,1,1,3 q0l8 [ <a4>e4.g  f+d/e2 ] e4.
-'Na12  MPV48,1,3,9 @I0) {f+gab>cd} l16  e2dc<ba> c2<b-a-gf g2.  <l4b>cd
-'Na3   MPV48,1,2,6 Q6<< f8>        q1l2.f        c+        d    <l4g gg
+Cn1   T80 [r2.]7 T78r4 T66r4 T70r4
+Na12  @I1 
+Na123 MPV48,1,1,3 q0l8 [ <a4>e4.g  f+d/e2 ] e4.
+Na12  MPV48,1,3,9 @I0) {f+gab>cd} l16  e2dc<ba> c2<b-a-gf g2.  <l4b>cd
+Na3   MPV48,1,2,6 Q6<< f8>        q1l2.f        c+        d    <l4g gg
+
+
+'Cn1 T120
+
+'Na1 D0o4l4Q4@I3
+'Na1 l8rd f b-d16 f16r16 b-16&b-4
+'Na1 l8rf+a>d<f+16a16r16>d16 &d4
+'Na1 c16.<b-32>c16.<b-32 g16.f32 d+d+16.d32c+16c8.<
+'Na1 b-16>dd+ef32b-4
+
+ Sweep test
+'Na1 MPH0,-7 SP1
+'Na1 l8rd f b-d16 f16r16 b-16&b-4
+'Na1 l8rf+a>d<f+16a16r16>d16 &d4
+'Na1 MPH4,1
+'Na1 c16.<b-32>c16.<b-32 g16.f32 d+d+16.d32c+16c8.<
+'Na1 MPH0,7
+'Na1 b-16>dd+ef32b-4
 
 

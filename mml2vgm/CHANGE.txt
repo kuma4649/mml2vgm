@@ -1,4 +1,7 @@
 更新履歴
+TAG438 2021/05/18
+  Core:NES:Sweep機能対応(HardwareLFOとして使用します)
+
 TAG437 2021/05/17
   Core:NES:ポルタメントコマンド対応、
   Core:CARコマンド:@ I コマンド対応
