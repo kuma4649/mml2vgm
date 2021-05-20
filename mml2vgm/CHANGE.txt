@@ -1,4 +1,8 @@
 更新履歴
+TAG439 2021/05/20
+  IDE:mucomDotNET差し替え
+  Core:NES:HardEnvelope,LengthCounterに対応(したと思う...)
+
 TAG438 2021/05/18
   Core:NES:Sweep機能対応(HardwareLFOとして使用します)
 

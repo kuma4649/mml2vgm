@@ -172,6 +172,8 @@ E0523='/' Was used without a corresponding '['.
 E0524='p'Illegal value1 on Pan command.(value1={0} range:1-6)
 E0525=When 4 to 6 is specified for the 'p' pan command, the wait value must be specified.
 E0526=Exceeds the range (1 to {0}) that can be specified for the weight value of the 'p' pan command.(value:{1})
+E0527='S' slot detuning already uses the traditional format; use the Driver tag to pre-declare mucomDotNET.
+E0528=Rests cannot be tied together.
 
 ;Program.cs 0600
 E0600=I want arguments(.muc File) please?

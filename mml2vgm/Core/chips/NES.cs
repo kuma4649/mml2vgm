@@ -490,7 +490,7 @@ namespace Core
 
                                     if (!page.lfo[i].sw)
                                     {
-                                        SOutData(page, mml, port[0], (byte)(0x01 + page.ch * 4), (byte)0x00);
+                                        SOutData(page, mml, port[0], (byte)(0x01 + page.ch * 4), (byte)0x70);
                                         continue;
                                     }
 
@@ -520,7 +520,7 @@ namespace Core
                                 //(上位をセットすると位相とエンベロープがリセットされる)
                                 if (page.keyOn || (page.FNum != page.beforeFNum && (page.FNum & 0x700) != (page.beforeFNum & 0x700)))
                                 {
-                                    data = (byte)((f >> 8) & 0x7);
+                                    data = (byte)((page.HardEnvelopeSw ? (page.HardEnvelopeSpeed<<3) : 0) | ((f >> 8) & 0x7));
                                     SOutData(page, mml, port[0], (byte)(3 + page.ch * 4), data);
                                 }
                             }
@@ -533,7 +533,7 @@ namespace Core
                             if (page.keyOn 
                                 || page.latestVolume != page.beforeVolume || page.dutyCycle!=page.spg.dutyCycle)
                             {
-                                vol = ((page.dutyCycle & 0x3) << 6) | (page.HardEnvelopeSw ? 0x20 : 0x30) | Common.CheckRange(page.latestVolume, 0, 15);//0x30持続音
+                                vol = ((page.dutyCycle & 0x3) << 6) | (page.HardEnvelopeSw ? (page.HardEnvelopeType == 0 ? 0x10 : 0x20) : 0x30) | Common.CheckRange(page.latestVolume, 0, 15);//0x30持続音
                                 SOutData(page, mml, port[0], (byte)(0x00 + page.ch * 4), (byte)vol);
                             }
                         }
@@ -543,7 +543,7 @@ namespace Core
                             //キーオフした直後
                             if (page.keyOff)
                             {
-                                vol = 0x80;//仮
+                                vol = (page.HardEnvelopeSw ? 0 : 0x80) | (page.HardEnvelopeType & 0x7f);//仮
                                 SOutData(page, mml, port[0], 0x08, (byte)vol);
                             }
 
@@ -566,7 +566,7 @@ namespace Core
                                 //(上位をセットすると位相とエンベロープがリセットされる)
                                 if (page.keyOn || (page.FNum != page.beforeFNum && (page.FNum & 0x700) != (page.beforeFNum & 0x700)))
                                 {
-                                    data = (byte)((f & 0x700) >> 8);
+                                    data = (byte)((page.HardEnvelopeSw ? (page.HardEnvelopeSpeed << 3) : 0) | ((f >> 8) & 0x7));
                                     SOutData(page, mml, port[0], 0x0b, data);
                                 }
                             }
@@ -609,7 +609,7 @@ namespace Core
                                 ////キーオンした直後
                                 ////(セットすると位相とエンベロープがリセットされる)
                                 if (page.keyOn)
-                                    SOutData(page, mml, port[0], 0x0f, 0x08);
+                                    SOutData(page, mml, port[0], 0x0f, (byte)(page.HardEnvelopeSw ? ((page.HardEnvelopeSpeed & 0x1f) << 3) : 0x08));
                             }
 
 
@@ -619,7 +619,7 @@ namespace Core
 
                             if (page.keyOn || page.latestVolume != page.beforeVolume)
                             {
-                                vol = (page.HardEnvelopeSw ? 0x20 : 0x30) | Common.CheckRange(page.latestVolume, 0, 15);//0x30持続音
+                                vol = (page.HardEnvelopeSw ? (page.HardEnvelopeType == 0 ? 0x10 : 0x20) : 0x30) | Common.CheckRange(page.latestVolume, 0, 15);//0x30持続音
                                 SOutData(page, mml, port[0], 0x0c, (byte)vol);
                             }
                         }
@@ -826,6 +826,28 @@ namespace Core
             }
         }
 
+        public override void CmdHardEnvelope(partPage page, MML mml)
+        {
+            string cmd = (string)mml.args[0];
+            //int n = 0;
+
+            switch (cmd)
+            {
+                case "EH":
+                    page.HardEnvelopeSw = true;
+                    page.HardEnvelopeSpeed = ((int)mml.args[1] & 0x1f);
+                    break;
+                case "EHON":
+                    page.HardEnvelopeSw = true;
+                    break;
+                case "EHOF":
+                    page.HardEnvelopeSw = false;
+                    break;
+                case "EHT":
+                    page.HardEnvelopeType = (int)mml.args[1];
+                    break;
+            }
+        }
 
     }
 }
