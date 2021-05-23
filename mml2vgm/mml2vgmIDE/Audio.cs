@@ -7260,7 +7260,6 @@ namespace mml2vgmIDE
                 while (!driver.Stopped && GetVgmCurLoopCounter() < setting.other.LoopTimes && !waveModeAbort)
                 {
                     mds.Update(buf, offset, sampleCount, playToWavOneProc);
-                    EmuSeqCounter++;
                     toWavWaveWriter.Write(buf, offset, sampleCount * 2);
                 }
 
@@ -7275,11 +7274,20 @@ namespace mml2vgmIDE
             }
         }
 
+        static long playToWavSampleCounter = 0;
+
         private static void playToWavOneProc()
         {
-            //
-            if (EmuSeqCounter >= DriverSeqCounter)
-                driver.oneFrameProc();
+            playToWavSampleCounter += Common.DataSequenceSampleRate;
+            while (playToWavSampleCounter >= Common.SampleRate)
+            {
+                EmuSeqCounter++;
+                while (EmuSeqCounter >= DriverSeqCounter)
+                {
+                    driver.oneFrameProc();
+                }
+                playToWavSampleCounter -= Common.SampleRate;
+            }
         }
 
         private static void trdToMidRenderingProcess()
