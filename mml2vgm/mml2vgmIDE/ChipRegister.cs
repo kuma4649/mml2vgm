@@ -2787,12 +2787,14 @@ namespace mml2vgmIDE
         public List<PackData> NESMakeSoftReset(int chipID)
         {
             List<PackData> data = new List<PackData>();
-            data.Add(new PackData(null, NES[chipID], EnmDataType.Normal, 0x00, 0x00, null));
-            data.Add(new PackData(null, NES[chipID], EnmDataType.Normal, 0x04, 0x00, null));
-            data.Add(new PackData(null, NES[chipID], EnmDataType.Normal, 0x08, 0x00, null));
-            data.Add(new PackData(null, NES[chipID], EnmDataType.Normal, 0x0c, 0x00, null));
-            data.Add(new PackData(null, NES[chipID], EnmDataType.Normal, 0x11, 0x00, null));
-            data.Add(new PackData(null, NES[chipID], EnmDataType.Normal, 0x15, 0x00, null));
+            for (int i = 0; i < 0x80; i++)
+            {
+                if (i == 0x3f) continue;//0x4023はスキップ
+                data.Add(new PackData(null, NES[chipID], EnmDataType.Normal, i, 0x00, null));
+            }
+
+            data.Add(new PackData(null, NES[chipID], EnmDataType.Normal, 0x29, 0x80, null));
+            data.Add(new PackData(null, NES[chipID], EnmDataType.Normal, 0x3f, 0x00, null));
 
             return data;
         }

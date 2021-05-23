@@ -6,12 +6,15 @@ namespace Core
 {
     public class NES : ClsChip
     {
+        public bool EnableFDS { get; internal set; } = true;
+        public int[][] FDS_FNumTbl;
+
         public NES(ClsVgm parent, int chipID, string initialPartName, string stPath, int chipNumber) : base(parent, chipID, initialPartName, stPath, chipNumber)
         {
             _chipType = enmChipType.NES;
             _Name = "NES";
             _ShortName = "NES";
-            _ChMax = 5;
+            _ChMax = 5 + 1;
             _canUsePcm = true;
             _canUsePI = false;
             ChipNumber = chipNumber;
@@ -37,6 +40,13 @@ namespace Core
                 {
                     Frequency = (int)dic["MASTERCLOCK"][0];
                 }
+                c = 0;
+                FDS_FNumTbl = new int[1][] { new int[96] };
+                foreach (double v in dic["FDS_FNUM_00"])
+                {
+                    FDS_FNumTbl[0][c++] = (int)v;
+                    if (c == FDS_FNumTbl[0].Length) break;
+                }
             }
 
             Ch = new ClsChannel[ChMax];
@@ -44,9 +54,24 @@ namespace Core
             c = 0;
             foreach (ClsChannel ch in Ch)
             {
-                ch.Type = c < 2 ? enmChannelType.Pulse : (c == 2 ? enmChannelType.Triangle : (c == 3 ? enmChannelType.Noise : enmChannelType.DPCM));
+                ch.Type = c < 2 
+                    ? enmChannelType.Pulse 
+                    : (c == 2 
+                        ? enmChannelType.Triangle 
+                        : (c == 3 
+                            ? enmChannelType.Noise
+                           : (c == 4
+                                ? enmChannelType.DPCM
+                                : enmChannelType.WaveForm
+                            )
+                        )
+                    );
                 ch.chipNumber = chipID == 1;
-                ch.MaxVolume = 15;
+                if (c != 5)
+                    ch.MaxVolume = 15;
+                else
+                    ch.MaxVolume = 63;
+
                 c++;
             }
 
@@ -109,8 +134,32 @@ namespace Core
         {
             foreach (partPage pg in pw.pg)
             {
-                pg.volume = 15;
-                pg.MaxVolume = 15;
+                if (pg.ch < 2)
+                {
+                    pg.volume = 15;
+                    pg.MaxVolume = 15;
+                }
+                else if(pg.ch==2)
+                {
+                    pg.volume = 15;
+                    pg.MaxVolume = 15;
+                }
+                else if (pg.ch == 3)
+                {
+                    pg.volume = 15;
+                    pg.MaxVolume = 15;
+                }
+                else if (pg.ch == 4)
+                {
+                    pg.volume = 15;
+                    pg.MaxVolume = 15;
+                }
+                else if (pg.ch == 5)
+                {
+                    pg.volume = 63;
+                    pg.MaxVolume = 63;
+                }
+
                 pg.port = port;
             }
 
@@ -139,12 +188,17 @@ namespace Core
             parent.OutData((MML)null, port[0], new byte[] { 0x01, 0x07 });//pls1 sweep(shift count MAX)
             parent.OutData((MML)null, port[0], new byte[] { 0x05, 0x07 });//pls2 sweep(shift count MAX)
 
+            parent.OutData((MML)null, port[0], new byte[] { 0x3f, 0x00 });//FDS audio ini step1
+            parent.OutData((MML)null, port[0], new byte[] { 0x3f, 0x83 });//FDS audio ini step2
+
 
             //ヘッダの調整
             if (ChipID != 0)
             {
-                parent.dat[vgmHeaderPos + 3] = new outDatum(enmMMLType.unknown, null, null, (byte)(parent.dat[vgmHeaderPos + 3].val | 0x40));//use Secondary
+                parent.dat[vgmHeaderPos + 3] = new outDatum(enmMMLType.unknown, null, null
+                    , (byte)(parent.dat[vgmHeaderPos + 3].val | 0x40));//use Secondary
             }
+
         }
 
 
@@ -380,9 +434,14 @@ namespace Core
                 f = Common.CheckRange(f, 0, 0x7ff);
                 page.FNum = f;
             }
-            else if (page.Type == enmChannelType.Noise|| page.Type == enmChannelType.DPCM)
+            else if (page.Type == enmChannelType.Noise || page.Type == enmChannelType.DPCM)
             {
                 f = Common.CheckRange(f, 0, 0xf);
+                page.FNum = f;
+            }
+            else if (page.Type == enmChannelType.WaveForm)
+            {
+                f = Common.CheckRange(f, 0, 0xfff);
                 page.FNum = f;
             }
         }
@@ -413,6 +472,16 @@ namespace Core
                     f = 15 - f;
 
                 return f;
+            }
+            else if (page.Type == enmChannelType.WaveForm)
+            {
+                o = Common.CheckRange(o, 0, 7);
+                n %= 12;
+
+                int f = o * 12 + n;
+                if (f < 0) f = 0;
+                if (f >= FDS_FNumTbl[0].Length) f = FDS_FNumTbl[0].Length - 1;
+                return FDS_FNumTbl[0][f];
             }
 
             return 0;
@@ -680,6 +749,51 @@ namespace Core
                             }
                         }
                         break;
+                    case enmChannelType.WaveForm:
+                        {
+                            //キーオフした直後
+                            if (page.keyOff)
+                            {
+                                vol = 0x80;
+                                SOutData(page, mml, port[0], (byte)0x29, (byte)vol);//0x4089 この方法あってるのかなぁ
+                            }
+
+
+                            //
+                            // 周波数の更新(と位相、エンベロープの初期化)
+                            //
+
+                            //キーオンした直後
+                            //または周波数が違う　場合は周波数再セット
+                            if (page.keyOn
+                                || page.FNum != page.beforeFNum)
+                            {
+                                vol = 0x00;
+                                SOutData(page, mml, port[0], (byte)0x29, (byte)vol);//0x4089 この方法あってるのかなぁ
+                                int f = page.FNum;
+                                byte data = (byte)(f & 0xff);
+                                SOutData(page, mml, port[0], 0x22, data);//0x4082 freq low
+                                data = (byte)((f>>8) & 0x0f);
+                                SOutData(page, mml, port[0], 0x23, data);//0x4083 freq high
+                                                                         //bit7:envelope faster speed
+                                                                         //bit6:disable volume and sweep envelopes
+                            }
+
+
+                            //
+                            // ボリュームの更新
+                            //
+
+                            if (page.keyOn || page.latestVolume != page.beforeVolume)
+                            {
+                                vol = Common.CheckRange(page.latestVolume, 0, 63);//bit5-0:ボリューム(エンベロープ時でinc時は到達音量 dec時は謎)
+                                vol |= 0x80;//bit7:エンベロープモード0:on
+                                //bit6:エンベロープ方向0:dec 1:inc
+                                SOutData(page, mml, port[0], 0x20, (byte)vol);//0x4080
+                            }
+
+                        }
+                        break;
                 }
 
                 page.keyOff = false;
@@ -721,6 +835,21 @@ namespace Core
                 return;
             }
 
+            //無指定でFDSの場合は 波形書き換え
+            if (page.Type == enmChannelType.WaveForm)
+            {
+                n = Common.CheckRange(n, 0, 255);
+                if (!parent.instWF.ContainsKey(n))
+                {
+                    msgBox.setErrMsg(string.Format(msg.get("E32004"), n)
+                        , mml.line.Lp);
+                    return;
+                }
+
+                SetWaveFormFromInstrument(page, n, mml);
+                return;
+            }
+
             //無指定でdpcm以外の場合は ソフトエンベロープ切り替え
             if (page.Type!= enmChannelType.DPCM)
             {
@@ -754,6 +883,15 @@ namespace Core
 
         }
 
+        public override int GetToneDoublerShift(partPage page, int octave, char noteCmd, int shift)
+        {
+            return 0;
+        }
+
+        public override void SetToneDoubler(partPage page, MML mml)
+        {
+        }
+
         public override void CmdY(partPage page, MML mml)
         {
             if (mml.args[0] is string) return;
@@ -768,15 +906,6 @@ namespace Core
         public override void CmdLoopExtProc(partPage page, MML mml)
         {
             page.keyOff = true;
-        }
-
-        public override int GetToneDoublerShift(partPage page, int octave, char noteCmd, int shift)
-        {
-            return 0;
-        }
-
-        public override void SetToneDoubler(partPage page, MML mml)
-        {
         }
 
         public override void CmdLfo(partPage page, MML mml)
@@ -847,6 +976,27 @@ namespace Core
                     page.HardEnvelopeType = (int)mml.args[1];
                     break;
             }
+        }
+
+        public override void CmdTotalVolume(partPage page, MML mml)
+        {
+            int n = (int)mml.args[1];
+            page.masterVolume = n & 3;
+        }
+
+        /// <summary>
+        /// FDS:波形書き換え
+        /// </summary>
+        private void SetWaveFormFromInstrument(partPage page, int n, MML mml)
+        {
+            SOutData(page, mml, port[0], 0x29, (byte)(0x80 | page.masterVolume));//0x4089 bit7:Wavetable write enable  bit0,1:MasterVolume
+
+            page.beforeMasterVolume = page.masterVolume;
+            for (int i = 1; i < parent.instWF[n].Item2.Length; i++) // 0 は音色番号が入っている為1からスタート
+                SOutData(page, mml, port[0], (byte)(0x40 + i - 1), (byte)(parent.instWF[n].Item2[i] & 0x3f));
+
+            SOutData(page, mml, port[0], 0x29, (byte)(0x00 | page.masterVolume));//disable
+
         }
 
     }

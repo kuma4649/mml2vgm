@@ -11,7 +11,8 @@
         public const int OPNA2_INSTRUMENT_SIZE = 1 + 16 + 16 + 16 + 16 + 1;//66
         public const int INSTRUMENT_OPERATOR_SIZE = 9;
         public const int INSTRUMENT_M_OPERATOR_SIZE = 11;
-        public const int WF_INSTRUMENT_SIZE = 33;
+        public const int WF_HuC_K051_INSTRUMENT_SIZE = 32 + 1;//HuC_K051:32
+        public const int WF_FDS_INSTRUMENT_SIZE = 64 + 1;//FDS:64
         public const int OPNA2_WF_INSTRUMENT_SIZE = 1024 + 1;
         public const int OPNA2_WFS_INSTRUMENT_SIZE = 64 + 1;
         public const int OPX_1OP_INSTRUMENT_SIZE = 2 + 15;//17

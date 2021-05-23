@@ -1,4 +1,7 @@
 更新履歴
+TAG440 2021/05/23
+  Core:NES:FDS:波形のみ対応(モジュレーション、エンベロープはまだ。どうmmlの仕様に落とし込むか悩んでます。)
+
 TAG439 2021/05/20
   IDE:mucomDotNET差し替え
   Core:NES:HardEnvelope,LengthCounterに対応(したと思う...)

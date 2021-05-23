@@ -8,9 +8,9 @@ namespace mml2vgmIDE.MMLParameter
 {
     public class NES : Instrument
     {
-        public NES(SoundManager.Chip chip,Setting setting) : base(5, chip, setting)
+        public NES(SoundManager.Chip chip,Setting setting) : base(6, chip, setting)
         {
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < 6; i++)
             {
                 vol[i] = 15;
                 beforeTie[i] = false;

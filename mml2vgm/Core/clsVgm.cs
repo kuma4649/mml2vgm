@@ -546,6 +546,12 @@ namespace Core
             foreach (Line line in sp.lnAlies) AddAlies(line);
             foreach (Line line in sp.lnPart) AddPart(line);
 
+            // 定義中のWaveFormがあればここで定義完了
+            if (wfInstrumentCounter != -1)
+            {
+                SetWfInstrument();
+            }
+
             // 定義中のToneDoublerがあればここで定義完了
             if (toneDoublerCounter != -1)
             {
@@ -647,14 +653,6 @@ namespace Core
                 else
                     msgBox.setErrMsg(string.Format(msg.get("E01023"), "OPX"), line.Lp);
             }
-            // WaveFormの音色を定義中の場合
-            if (wfInstrumentCounter != -1)
-            {
-                if (line == null)
-                    msgBox.setErrMsg(string.Format(msg.get("E01022"), "WaveForm"), null);
-                else
-                    msgBox.setErrMsg(string.Format(msg.get("E01023"), "WaveForm"), line.Lp);
-            }
 
             // opna2 WaveFormの音色を定義中の場合
             if (opna2wfInstrumentCounter != -1)
@@ -727,12 +725,6 @@ namespace Core
                 return SetOpxInstrument(line);
             }
 
-            // WaveFormの音色を定義中の場合
-            if (wfInstrumentCounter != -1)
-            {
-                return SetWfInstrument(line);
-            }
-
             // opna2 WaveFormの音色を定義中の場合
             if (opna2wfInstrumentCounter != -1)
             {
@@ -748,6 +740,19 @@ namespace Core
             char t = (buf != null && buf.Length > 0) ? buf.ToUpper()[0] : '\0';
             char t1 = (buf != null && buf.Length > 1) ? buf.ToUpper()[1] : '\0';
             char t2 = (buf != null && buf.Length > 2) ? buf.ToUpper()[2] : '\0';
+
+            if (wfInstrumentCounter != -1)
+            {
+                //他の定義が現れたらwaveformの定義は終了
+                if (t == 'F' || t == 'N' || t == 'M' || t == 'L'
+                    || t == 'A' || t == 'V' || t == 'C'
+                    || t == 'P' || t == 'E'
+                    || t == 'T' || t == 'H' || t == 'W' || t == 'S')
+                {
+                    SetWfInstrument();
+                }
+            }
+
             if (toneDoublerCounter != -1)
             {
                 //他の定義が現れたらtoneDoublerの定義は終了
@@ -797,29 +802,33 @@ namespace Core
             //定義中に次の定義を始めた場合はエラーとする
             CheckDefineInstrument(line);
 
-            instrumentName = "";
+            //instrumentName = "";
             string val;
             switch (t)
             {
                 case 'F':
+                    instrumentName = "";
                     instrumentBufCache = new byte[Const.INSTRUMENT_SIZE - 8];
                     instrumentCounter = 0;
                     SetInstrument(line);
                     return 0;
 
                 case 'N':
+                    instrumentName = "";
                     instrumentBufCache = new byte[Const.INSTRUMENT_SIZE];
                     instrumentCounter = 0;
                     SetInstrument(line);
                     return 0;
 
                 case 'M':
+                    instrumentName = "";
                     opmInstrumentBufCache = new byte[Const.OPM_INSTRUMENT_SIZE];
                     opmInstrumentCounter = 0;
                     SetOpmInstrument(line);
                     return 0;
 
                 case 'L':
+                    instrumentName = "";
                     val = buf.ToUpper();
                     if (val.Length > 1 && val[1] == 'L')
                         oplInstrumentBufCache = new byte[Const.OPLL_INSTRUMENT_SIZE];
@@ -835,6 +844,7 @@ namespace Core
                     return 0;
 
                 case 'X':
+                    instrumentName = "";
                     val = buf.ToUpper();
                     if (val.Length > 1 && val[1] == '1')
                         opxInstrumentBufCache = new byte[Const.OPX_1OP_INSTRUMENT_SIZE];
@@ -851,6 +861,7 @@ namespace Core
 
 
                 case 'A'://@ ARP
+                    instrumentName = "";
                     if (t1 == 'R' && t2 == 'P')
                     {
                         instArpCounter = 0;
@@ -865,6 +876,7 @@ namespace Core
                     return 0;
 
                 case 'V'://@ VAR
+                    instrumentName = "";
                     if (t1 == 'A' && t2 == 'R')
                     {
                         instVArpCounter = 0;
@@ -873,6 +885,7 @@ namespace Core
                     return 0;
 
                 case 'C'://@ CAR
+                    instrumentName = "";
                     if (t1 == 'A' && t2 == 'R')
                     {
                         instCommandArpCounter = 0;
@@ -881,10 +894,12 @@ namespace Core
                     return 0;
 
                 case 'P':// @ P
+                    instrumentName = "";
                     definePCMInstrument(line);
                     return 0;
 
                 case 'E':// @ E
+                    instrumentName = "";
                     try
                     {
                         instrumentCounter = -1;
@@ -930,6 +945,7 @@ namespace Core
                     return 0;
 
                 case 'T':// @ T
+                    instrumentName = "";
                     try
                     {
                         instrumentCounter = -1;
@@ -946,12 +962,16 @@ namespace Core
                     return 0;
 
                 case 'H':// @ H
-                    wfInstrumentBufCache = new byte[Const.WF_INSTRUMENT_SIZE];
+                    instrumentName = "";
+                    wfInstrumentBufCache = new byte[
+                        Math.Max(Const.WF_HuC_K051_INSTRUMENT_SIZE, Const.WF_FDS_INSTRUMENT_SIZE)
+                        ];
                     wfInstrumentCounter = 0;
-                    SetWfInstrument(line);
+                    StoreWfInstrument(line);
                     return 0;
 
                 case 'W':// @ W
+                    instrumentName = "";
                     if (buf.ToUpper()[1] == 'S')
                     {
                         opna2WfsInstrumentBufCache = new byte[Const.OPNA2_WFS_INSTRUMENT_SIZE];
@@ -967,9 +987,16 @@ namespace Core
                     return 0;
 
                 case 'S':// @ S
+                    instrumentName = "";
                     midiSysExCounter = 0;
                     StoreMidiSysExBuffer(line);
                     return 0;
+            }
+
+            // Waveformを定義中の場合
+            if (wfInstrumentCounter != -1)
+            {
+                return StoreWfInstrument(line);
             }
 
             // ToneDoublerを定義中の場合
@@ -1844,7 +1871,7 @@ namespace Core
             return 0;
         }
 
-        private int SetWfInstrument(Line line)
+        private int StoreWfInstrument(Line line)
         {
 
             try
@@ -1853,18 +1880,48 @@ namespace Core
                 wfInstrumentCounter = GetNums(wfInstrumentBufCache, wfInstrumentCounter, Common.CutComment(line.Txt).Substring(1).TrimStart(), ref name, line);
                 if (string.IsNullOrEmpty(instrumentName)) instrumentName = name;//音色名
 
-                if (wfInstrumentCounter == wfInstrumentBufCache.Length)
+                //音色定義形式「H」の最大の大きさ(65:FDS waveform)の場合はここでWFの一覧に加える。
+                //(33(K051やHuc)の場合はこの時点では検知できないので、他の定義が始まるときに検出する処理に任せる)
+                if (wfInstrumentCounter == 65)
+                    SetWfInstrument();
+            }
+            catch
+            {
+                msgBox.setErrMsg(msg.get("E01013"), line.Lp);
+            }
+
+            return 0;
+        }
+
+        private int SetWfInstrument()
+        {
+
+            try
+            {
+                if (wfInstrumentCounter == Const.WF_FDS_INSTRUMENT_SIZE
+                    || wfInstrumentCounter == Const.WF_HuC_K051_INSTRUMENT_SIZE)
                 {
                     if (instWF.ContainsKey(wfInstrumentBufCache[0]))
                         instWF.Remove(wfInstrumentBufCache[0]);
-                    instWF.Add(wfInstrumentBufCache[0], new Tuple<string, byte[]>(instrumentName, wfInstrumentBufCache));
+
+                    if (wfInstrumentCounter == Const.WF_HuC_K051_INSTRUMENT_SIZE)
+                    {
+                        byte[] b = new byte[Const.WF_HuC_K051_INSTRUMENT_SIZE];
+                        Array.Copy(wfInstrumentBufCache, b, Const.WF_HuC_K051_INSTRUMENT_SIZE);
+                        instWF.Add(b[0], new Tuple<string, byte[]>(instrumentName, b));
+                    }
+                    else
+                    {
+                        byte[] b = new byte[Const.WF_FDS_INSTRUMENT_SIZE];
+                        Array.Copy(wfInstrumentBufCache, b, Const.WF_FDS_INSTRUMENT_SIZE);
+                        instWF.Add(b[0], new Tuple<string, byte[]>(instrumentName, b));
+                    }
 
                     wfInstrumentCounter = -1;
                 }
             }
             catch
             {
-                msgBox.setErrMsg(msg.get("E01013"), line.Lp);
             }
 
             return 0;
@@ -3826,6 +3883,7 @@ namespace Core
             {
                 NES c = nes[0] != null ? nes[0] : nes[1];
                 Common.SetLE32(dat, 0x84, (uint)c.Frequency | (uint)(useNES_S == 0 ? 0 : 0x40000000));
+                dat[0x87].val |= (byte)(c.EnableFDS ? 0x80 : 0x00);
             }
             if (info.Version >= 1.00f && useYM2413 != 0)
             {

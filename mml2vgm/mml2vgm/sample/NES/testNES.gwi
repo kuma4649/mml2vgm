@@ -67,17 +67,50 @@ Na1 b-16>dd+ef32b-4
 
  HardEnvelope & length counter test
 
-Na1 @I2D0o4l4Q8 EHT1 EH10 v10c1 v5d1        ; loop Envelope(volumeでスピード?)
+Na1 @I2D0o4l4Q8 EHT1 EH10 v10c1
+Na1                             v5d1        ; loop Envelope(volumeでスピード?)
 Na1             EHT0 EH0  v15e1 EH3f1 EH4g1 ; length counter(EHで音の長さ?)
 Na1             EHOF a1                     ; HardEnv off
 
 Na3 q0o5   r4
 Na3 EH15   c4        ; length counter
 Na3 EHOF   d4        ; HardEnv off
-Na3 EHT120 e4 f4 r4  ; linear
+Na3 EHT0   e4 f4 r4 f4 r4 ; linear
 
-'Na4 D0o1l4Q8 EHT1 EH10 v10c1 v5d1        ; loop Envelope(volumeでスピード?)
-'Na4          EHT0 EH0  v15e1 EH3f1 EH4g1 ; length counter(EHで音の長さ?)
-'Na4          EHOF a1                     ; HardEnv off
+Na4 D0o1l4Q8 EHT1 EH10 v10c1 v5d1        ; loop Envelope(volumeでスピード?)
+Na4          EHT0 EH0  v15e1 EH3f1 EH4g1 ; length counter(EHで音の長さ?)
+Na4          EHOF a1                     ; HardEnv off
+
+
+@ L 5 "Mello Piano 9999/99/99 Chrochan"
+@ 8 2 2 6 0 13 1 1 1 0 1 4
+@ 9 1 3 14 0 0 3 0 1 1 1 4
+@ 1 0
+
+Cn1 T150
+L01 @5v12 cdefgab
+
+
+'@ E 0, 0, 2, 3, 1, 3, 1, 1, NES
+
+Cn1 T150
+Na1 @E0 EON @I2 v10 l4 cdefgab>c
+
+
+@ E 1, 15, 0, 5, 1, 1, 1, 1, NES
+
+Cn1 T150
+Na4 l4v10o1 @E1 EON [dddddddd]4
+
+
+     No,
+'@ H  0 "Saw wave(FDS Waveform instrument)"
+   +0 +1 +2 +3 +4 +5 +6 +7 +8 +9 +A +B +C +D +E +F
+'@ 01 05 09 13 18 22 26 31 35 39 43 47 51 55 59 63
+'@ 01 05 09 13 18 22 26 31 35 39 43 47 51 55 59 63
+'@ 01 05 09 13 18 22 26 31 35 39 43 47 51 55 59 63
+'@ 01 05 09 13 18 22 26 31 35 39 43 47 51 55 59 63
+
+'Na6 @0o4l4v32Q2cdefgab ; FDS max vol=63 (ただし32以上は変わらない)
 
 

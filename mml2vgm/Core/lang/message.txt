@@ -466,6 +466,7 @@ E32000=Duty cycle can only be used on pulse channels.
 E32001=NES can't use PD command.
 E32002=Parameters missing or not enough to setup LFO.
 E32003=Parameters number exceeded to setup LFO.
+E32004=Selecting undefined sound patch ({0}).
 
 
 

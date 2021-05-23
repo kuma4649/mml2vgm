@@ -658,6 +658,8 @@ namespace Core
         public KeyOnDelay keyOnDelay { get; internal set; } = new KeyOnDelay();
         public HardEnvelopeSync hardEnvelopeSync { get; internal set; } = new HardEnvelopeSync();
         public int hsFnum { get; internal set; }
+        public int masterVolume { get; internal set; }
+        public int beforeMasterVolume { get; internal set; }
 
         public partPage(partPage sharedPg)
         {
