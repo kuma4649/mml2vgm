@@ -1,4 +1,7 @@
 更新履歴
+TAG443 2021/05/25
+  IDE:mucomDotNET差し替え
+
 TAG442 2021/05/23 3rd
   IDE:Export:周波数変更機能にwav出力を対応。
 
