@@ -76,6 +76,7 @@
             this.ClmLength = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ClmEnvSw = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ClmLfoSw = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ClmLfo = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ClmDetune = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ClmKeyShift = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ClmMeter = new System.Windows.Forms.DataGridViewImageColumn();
@@ -123,6 +124,7 @@
             this.ClmLength,
             this.ClmEnvSw,
             this.ClmLfoSw,
+            this.ClmLfo,
             this.ClmDetune,
             this.ClmKeyShift,
             this.ClmMeter,
@@ -347,6 +349,12 @@
             this.ClmLfoSw.Name = "ClmLfoSw";
             this.ClmLfoSw.ReadOnly = true;
             // 
+            // ClmLfo
+            // 
+            this.ClmLfo.HeaderText = "LFO";
+            this.ClmLfo.Name = "ClmLfo";
+            this.ClmLfo.ReadOnly = true;
+            // 
             // ClmDetune
             // 
             dataGridViewCellStyle18.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
@@ -425,6 +433,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn ClmLength;
         private System.Windows.Forms.DataGridViewTextBoxColumn ClmEnvSw;
         private System.Windows.Forms.DataGridViewTextBoxColumn ClmLfoSw;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ClmLfo;
         private System.Windows.Forms.DataGridViewTextBoxColumn ClmDetune;
         private System.Windows.Forms.DataGridViewTextBoxColumn ClmKeyShift;
         private System.Windows.Forms.DataGridViewImageColumn ClmMeter;

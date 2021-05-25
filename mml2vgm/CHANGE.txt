@@ -1,4 +1,8 @@
 更新履歴
+TAG445 2021/05/26
+  IDE:Export:wav出力時にフリーズすることがあるのを修正
+  IDE:PartCounter:mucomDotNET:LFOのパラメータ表示に対応
+
 TAG444 2021/05/25 2nd
   IDE:mucomDotNET差し替え
   IDE:mucomDotNET:コンパイルするとJコマンドがある場合、行頭に矢印アイコンが出るようにした

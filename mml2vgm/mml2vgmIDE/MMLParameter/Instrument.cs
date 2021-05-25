@@ -24,6 +24,7 @@ namespace mml2vgmIDE.MMLParameter
         public string[] pan;
         public string[] envSw;
         public string[] lfoSw;
+        public string[] lfo;
         public int?[] detune;
         public int?[] keyShift;
         public int?[] keyOnMeter;
@@ -54,6 +55,7 @@ namespace mml2vgmIDE.MMLParameter
             pan = new string[n];
             envSw = new string[n];
             lfoSw = new string[n];
+            lfo = new string[n];
             detune = new int?[n];
             keyShift = new int?[n];
             keyOnMeter = new int?[n];
@@ -220,10 +222,6 @@ namespace mml2vgmIDE.MMLParameter
         {
         }
 
-        protected virtual void SetLfo(outDatum od, int ch, int cc)
-        {
-        }
-
         //20 -
 
         protected virtual void SetEnvelope(outDatum od, int ch, int cc)
@@ -235,6 +233,11 @@ namespace mml2vgmIDE.MMLParameter
 
         protected virtual void SetExtendChannel(outDatum od, int ch, int cc)
         {
+        }
+
+        protected virtual void SetLfo(outDatum od, int ch, int cc)
+        {
+            ;
         }
 
         //30 -

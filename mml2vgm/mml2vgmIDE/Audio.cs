@@ -7282,7 +7282,7 @@ namespace mml2vgmIDE
             while (playToWavSampleCounter >= Common.SampleRate)
             {
                 EmuSeqCounter++;
-                while (EmuSeqCounter >= DriverSeqCounter)
+                while (EmuSeqCounter > DriverSeqCounter)
                 {
                     driver.oneFrameProc();
                 }

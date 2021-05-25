@@ -70,6 +70,11 @@ namespace mml2vgmIDE.MMLParameter
             {
                 pan[ch] = n == 0 ? "-" : (n == 1 ? "Right" : (n == 2 ? "Left" : (n == 3 ? "Center" : n.ToString())));
             }
+            else if (od.linePos.part == "RHYTHM")
+            {
+                n = (n & 0xf0) >> 4;
+                pan[ch] = n == 0 ? "-" : (n == 1 ? "Right" : (n == 2 ? "Left" : (n == 3 ? "Center" : n.ToString())));
+            }
             else
             {
                 pan[ch] = "?";
@@ -115,5 +120,19 @@ namespace mml2vgmIDE.MMLParameter
             length[ch] = string.Format("{0:0.##}(#{1:d})", 1.0 * clockCounter[ch] / (int)od.args[0], (int)od.args[0]);
         }
 
+        protected override void SetLfo(outDatum od, int ch, int cc)
+        {
+            if (ch >= lfo.Length) return;
+            lfo[ch] = string.Format("M{0},{1},{2},{3}", od.args[0], od.args[1], od.args[2], od.args[3]);
+        }
+
+        //30 -
+
+        protected override void SetLfoSwitch(outDatum od, int ch, int cc)
+        {
+            if (ch >= lfoSw.Length) return;
+            string s = (bool)od.args[0] ? "ON" : "OFF";
+            lfoSw[ch] = s;
+        }
     }
 }
