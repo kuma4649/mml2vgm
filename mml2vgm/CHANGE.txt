@@ -1,4 +1,8 @@
 更新履歴
+TAG444 2021/05/25 2nd
+  IDE:mucomDotNET差し替え
+  IDE:mucomDotNET:コンパイルするとJコマンドがある場合、行頭に矢印アイコンが出るようにした
+
 TAG443 2021/05/25
   IDE:mucomDotNET差し替え
   IDE:mucomDotNET:コンパイルするとJコマンドがある場合、行頭に矢印アイコンが出るようにした
