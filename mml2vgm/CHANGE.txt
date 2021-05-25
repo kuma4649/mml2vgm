@@ -5,7 +5,6 @@ TAG444 2021/05/25 2nd
 
 TAG443 2021/05/25
   IDE:mucomDotNET差し替え
-  IDE:mucomDotNET:コンパイルするとJコマンドがある場合、行頭に矢印アイコンが出るようにした
 
 TAG442 2021/05/23 3rd
   IDE:Export:周波数変更機能にwav出力を対応。
