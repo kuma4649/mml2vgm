@@ -1,4 +1,7 @@
 更新履歴
+TAG446 2021/05/26 2nd
+  IDE:Export:wav出力時にフリーズすることがあるのを修正
+
 TAG445 2021/05/26
   IDE:Export:wav出力時にフリーズすることがあるのを修正
   IDE:PartCounter:mucomDotNET:LFOのパラメータ表示に対応
