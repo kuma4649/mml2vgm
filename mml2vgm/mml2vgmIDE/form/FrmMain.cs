@@ -2196,6 +2196,19 @@ namespace mml2vgmIDE
         private void finishedCompileMUC()
         {
             musicDriverInterface.CompilerInfo ci = mucom.GetCompilerInfo();
+
+            if (compileTargetDocument != null)
+            {
+                FrmEditor fe = (FrmEditor)compileTargetDocument;
+                AzukiControl ac=fe.azukiControl;
+                for (int i = 0; i < ac.Document.LineCount; i++)
+                    ac.Document.SetLineIconIndex(i, -1);
+                if (ci.jumpRow != -1)
+                {
+                    ac.Document.SetLineIconIndex(ci.jumpRow - 1, 5);//●
+                }
+            }
+
             try
             {
                 if (isSuccess)
