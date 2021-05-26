@@ -197,7 +197,8 @@ namespace SoundManager
                     Thread.CurrentThread.Priority = ThreadPriority.BelowNormal;
                     while (!GetStart())
                     {
-                        if (unmount) return;
+                        if (unmount)
+                            return;
                         Thread.Sleep(0);
                     }
                     Thread.CurrentThread.Priority = ThreadPriority.AboveNormal;
