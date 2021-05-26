@@ -35,6 +35,10 @@ namespace mml2vgmIDE
             treeView1.BackColor = Color.FromArgb(setting.ColorScheme.Azuki_BackColor);
             this.Opacity = setting.other.Opacity / 100.0;
         }
+        protected override string GetPersistString()
+        {
+            return this.Name;
+        }
 
         private Dictionary<string, string[]> ConvertCacheList(Setting.Sien sien)
         {

@@ -7146,57 +7146,17 @@ namespace mml2vgmIDE
             errMsg = "";
             Stop(SendMode.Both);
 
-            //if (doSkipStop)
-            //{
-            //sm.SetMode(SendMode.RealTime);
-            //}
-
-            //sm.SetSpeed(1.0);
             vgmSpeed = 1.0;
-            //sm.SetMusicInterruptTimer(setting.musicInterruptTimer);
-
-            ////スレッドなどの準備など(?)で演奏開始時にテンポが乱れることがあるため念のため待つ。
-            //DriverSeqCounter = sm.GetDriverSeqCounterDelay();
-
-            ////開始時にバッファ分のデータが貯まらないうちにコールバックがくるとテンポが乱れるため、レイテンシ(デバイスのバッファ)分だけ演奏開始を待つ。
-            //DriverSeqCounter += getLatency();
-
-            //MDSound.MDSound.np_nes_apu_volume = 0;
-            //MDSound.MDSound.np_nes_dmc_volume = 0;
-            //MDSound.MDSound.np_nes_fds_volume = 0;
-            //MDSound.MDSound.np_nes_fme7_volume = 0;
-            //MDSound.MDSound.np_nes_mmc5_volume = 0;
-            //MDSound.MDSound.np_nes_n106_volume = 0;
-            //MDSound.MDSound.np_nes_vrc6_volume = 0;
-            //MDSound.MDSound.np_nes_vrc7_volume = 0;
-
 
             bool ret = playSet();
             if (!ret) return false;
-            //sm.SetMode(SendMode.MML);
-            //if (sm.Mode == SendMode.MML)
-            //{
-            //    sm.RequestStart(SendMode.MML, useEmu, useReal);
-            //}
-            //else
-            //{
-            //    sm.RequestStart(SendMode.Both, useEmu, useReal);
-            //}
-
-            //while (!sm.IsRunningAsync())
-            //{
-            //}
 
             Audio.startedOnceMethod = startedOnceMethod;
 
             EmuSeqCounter = 0;
             DriverSeqCounter = 0;
 
-            //Stopped = false;
-
-            //            if (!useEmu) 
             sm.RequestStopAtEmuChipSender();
-            //            if (!useReal) 
             sm.RequestStopAtRealChipSender();
 
             Stop(SendMode.Both);

@@ -135,6 +135,8 @@ namespace mml2vgmIDE
             keywordHighlighter.AddRegex("^#[_@A-Za-z0-9]*[ |\\t]", CharClass.Keyword);
             keywordHighlighter.AddRegex("^#\\S*\\*", CharClass.Keyword);
             keywordHighlighter.AddRegex("^'@", CharClass.Keyword);
+            keywordHighlighter.AddRegex("(?<!^[^\\s]*)J", CharClass.Keyword);
+            //keywordHighlighter.AddRegex("(?<!^[^\\S]+[ |\\t]+)J", CharClass.Keyword);
             keywordHighlighter.AddRegex("^'%\\S+[ |\\t]", CharClass.Keyword);
             keywordHighlighter.AddRegex("^\\{ .*", CharClass.DocComment);
             keywordHighlighter.AddRegex("^\\}.*", CharClass.DocComment);

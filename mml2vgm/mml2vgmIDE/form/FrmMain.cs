@@ -2864,12 +2864,12 @@ namespace mml2vgmIDE
 
             if (string.IsNullOrEmpty(setting.dockingState))
             {
-                frmPartCounter.Show(dpMain, WeifenLuo.WinFormsUI.Docking.DockState.DockLeft);
-                frmLog.Show(dpMain, WeifenLuo.WinFormsUI.Docking.DockState.DockBottom);
-                frmFolderTree.Show(dpMain, WeifenLuo.WinFormsUI.Docking.DockState.DockLeft);
-                frmErrorList.Show(dpMain, WeifenLuo.WinFormsUI.Docking.DockState.DockBottom);
-                frmLyrics.Show(dpMain, WeifenLuo.WinFormsUI.Docking.DockState.DockTop);
-                frmSien.Show(dpMain, WeifenLuo.WinFormsUI.Docking.DockState.DockRight);
+                frmPartCounter.Show(dpMain, DockState.DockLeft);
+                frmLog.Show(dpMain, DockState.DockBottom);
+                frmFolderTree.Show(dpMain, DockState.DockLeft);
+                frmErrorList.Show(dpMain, DockState.DockBottom);
+                frmLyrics.Show(dpMain, DockState.DockTop);
+                frmSien.Show(dpMain, DockState.DockRight);
             }
             else
             {
@@ -2894,6 +2894,7 @@ namespace mml2vgmIDE
                     frmFolderTree.Show(dpMain, WeifenLuo.WinFormsUI.Docking.DockState.DockLeft);
                     frmErrorList.Show(dpMain, WeifenLuo.WinFormsUI.Docking.DockState.DockBottom);
                     frmLyrics.Show(dpMain, WeifenLuo.WinFormsUI.Docking.DockState.DockTop);
+                    frmSien.Show(dpMain, WeifenLuo.WinFormsUI.Docking.DockState.DockRight);
                 }
             }
 
@@ -4315,7 +4316,6 @@ namespace mml2vgmIDE
 
         private void tsmiExport_toWaveFile_Click(object sender, EventArgs e)
         {
-
             IDockContent dc = GetActiveDockContent();
             if (dc == null) return;
             if (!(dc is FrmEditor)) return;
@@ -4323,6 +4323,7 @@ namespace mml2vgmIDE
             string tempPath = Path.Combine(Common.GetApplicationDataFolder(true), "temp", Path.GetFileName(((Document)((FrmEditor)dc).Tag).gwiFullPath));
 
             compileManager.RequestCompile(((FrmEditor)dc).document, ((FrmEditor)dc).azukiControl.Text + "", tempPath);
+            if (sender == tsmiExport_toMp3File) ((FrmEditor)dc).document.isMp3 = true;
             compileManager.RequestPlayBack(((FrmEditor)dc).document, playToWavCB);
         }
 
@@ -4355,7 +4356,7 @@ namespace mml2vgmIDE
             }
 
             //コンパイルエラーが発生する場合はエクスポート処理中止
-            if(qi.doc.errBox!=null && qi.doc.errBox.Length > 0)
+            if (qi.doc.errBox != null && qi.doc.errBox.Length > 0)
             {
                 Audio.Stop(SendMode.Both);
                 MessageBox.Show("コンパイル時にエラーが発生したため、エクスポート処理を中止しました。", "エクスポート失敗", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -4370,15 +4371,25 @@ namespace mml2vgmIDE
             {
                 fnWav = fnWav.Substring(0, fnWav.Length - 1);
             }
-            fnWav = Path.Combine(Path.GetDirectoryName(fnWav), Path.GetFileNameWithoutExtension(fnWav) + ".wav");
-            sfd.FileName = fnWav;
+            if (!qi.doc.isMp3)
+            {
+                fnWav = Path.Combine(Path.GetDirectoryName(fnWav), Path.GetFileNameWithoutExtension(fnWav) + ".wav");
+                sfd.FileName = fnWav;
+                sfd.Filter = "WAVファイル(*.wav)|*.wav|すべてのファイル(*.*)|*.*";
+            }
+            else
+            {
+                fnWav = Path.Combine(Path.GetDirectoryName(fnWav), Path.GetFileNameWithoutExtension(fnWav) + ".mp3");
+                sfd.FileName = fnWav;
+                sfd.Filter = "MP3ファイル(*.mp3)|*.mp3|すべてのファイル(*.*)|*.*";
+            }
             string path1 = System.IO.Path.GetDirectoryName(fnWav);
             path1 = string.IsNullOrEmpty(path1) ? fnWav : path1;
             sfd.InitialDirectory = path1;
-            sfd.Filter = "WAVファイル(*.wav)|*.wav|すべてのファイル(*.*)|*.*";
             sfd.Title = "エクスポート";
             sfd.RestoreDirectory = true;
             sfd.OverwritePrompt = false;
+
             if (sfd.ShowDialog() != DialogResult.OK)
             {
                 return;

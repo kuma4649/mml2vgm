@@ -28,6 +28,7 @@ namespace mml2vgmIDE
         public FrmEditor editor = null;
         public bool isNew = false;
         public bool edit = false;
+        public bool isMp3 = false;
 
         public EnmCompileStatus compileStatus = EnmCompileStatus.None;
         public EnmMmlFileFormat srcFileFormat = EnmMmlFileFormat.unknown;

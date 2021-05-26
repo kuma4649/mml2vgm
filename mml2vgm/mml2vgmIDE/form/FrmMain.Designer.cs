@@ -49,8 +49,8 @@
             this.tssbPause = new System.Windows.Forms.ToolStripSplitButton();
             this.tssbStop = new System.Windows.Forms.ToolStripSplitButton();
             this.tssbSlow = new System.Windows.Forms.ToolStripSplitButton();
-            this.tssbFast = new System.Windows.Forms.ToolStripSplitButton();
             this.tssbSien = new System.Windows.Forms.ToolStripSplitButton();
+            this.tssbFast = new System.Windows.Forms.ToolStripSplitButton();
             this.tssbMIDIKbd = new System.Windows.Forms.ToolStripSplitButton();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.TsmiFile = new System.Windows.Forms.ToolStripMenuItem();
@@ -114,6 +114,7 @@
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.TsmiAbout = new System.Windows.Forms.ToolStripMenuItem();
             this.timer = new System.Windows.Forms.Timer(this.components);
+            this.tsmiExport_toMp3File = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -267,6 +268,13 @@
             this.tssbSlow.Name = "tssbSlow";
             this.tssbSlow.ButtonClick += new System.EventHandler(this.TssbSlow_ButtonClick);
             // 
+            // tssbSien
+            // 
+            this.tssbSien.DropDownButtonWidth = 0;
+            this.tssbSien.Image = global::mml2vgmIDE.Properties.Resources.F12;
+            resources.ApplyResources(this.tssbSien, "tssbSien");
+            this.tssbSien.Name = "tssbSien";
+            // 
             // tssbFast
             // 
             this.tssbFast.DropDownButtonWidth = 0;
@@ -274,13 +282,6 @@
             resources.ApplyResources(this.tssbFast, "tssbFast");
             this.tssbFast.Name = "tssbFast";
             this.tssbFast.ButtonClick += new System.EventHandler(this.TssbFast_ButtonClick);
-            // 
-            // tssbSien
-            // 
-            this.tssbSien.DropDownButtonWidth = 0;
-            this.tssbSien.Image = global::mml2vgmIDE.Properties.Resources.F12;
-            resources.ApplyResources(this.tssbSien, "tssbSien");
-            this.tssbSien.Name = "tssbSien";
             // 
             // tssbMIDIKbd
             // 
@@ -403,6 +404,7 @@
             this.tsmiExport_toDriverFormat,
             this.tsmiExport_MuctoD88,
             this.tsmiExport_toWaveFile,
+            this.tsmiExport_toMp3File,
             this.tsmiExport_toMidiFile});
             this.tsmiExport.Name = "tsmiExport";
             resources.ApplyResources(this.tsmiExport, "tsmiExport");
@@ -716,6 +718,12 @@
             this.timer.Interval = 16;
             this.timer.Tick += new System.EventHandler(this.Timer_Tick);
             // 
+            // tsmiExport_toMp3File
+            // 
+            this.tsmiExport_toMp3File.Name = "tsmiExport_toMp3File";
+            resources.ApplyResources(this.tsmiExport_toMp3File, "tsmiExport_toMp3File");
+            this.tsmiExport_toMp3File.Click += new System.EventHandler(this.tsmiExport_toWaveFile_Click);
+            // 
             // FrmMain
             // 
             resources.ApplyResources(this, "$this");
@@ -825,6 +833,7 @@
         private System.Windows.Forms.ToolStripMenuItem tsmiExport_toMidiFile;
         private System.Windows.Forms.ToolStripSplitButton tssbSien;
         private System.Windows.Forms.ToolStripMenuItem TsmiShowSien;
+        private System.Windows.Forms.ToolStripMenuItem tsmiExport_toMp3File;
     }
 }
 

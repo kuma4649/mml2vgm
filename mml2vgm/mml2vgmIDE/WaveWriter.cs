@@ -1,4 +1,6 @@
-﻿using System;
+﻿using NAudio.Lame;
+using NAudio.Wave;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -10,7 +12,9 @@ namespace mml2vgmIDE
     public class WaveWriter
     {
         private Setting setting = null;
-        private FileStream dest = null;
+        private MemoryStream dest = null;
+        private string filename = null;
+        private bool isMp3 = false;
         private int len = 0;
 
         public WaveWriter(Setting setting)
@@ -22,7 +26,9 @@ namespace mml2vgmIDE
         {
 
             if (dest != null) Close();
-            dest = new FileStream(filename, FileMode.Create, FileAccess.Write);
+            this.filename = filename;
+            isMp3 = Path.GetExtension(filename).ToLower().Trim() == ".mp3";
+            dest = new MemoryStream();
 
             List<byte> des = new List<byte>();
             len = 0;
@@ -86,8 +92,21 @@ namespace mml2vgmIDE
             dest.WriteByte((byte)((len & 0xff0000) >> 16));
             dest.WriteByte((byte)((len & 0xff000000) >> 24));
 
+            if (!isMp3)
+            {
+                using (FileStream file = new FileStream(filename, FileMode.Create, FileAccess.Write))
+                    dest.CopyTo(file);
+            }
+            else
+            {
+                WaveFormat wf = new WaveFormat(Common.SampleRate, 16, 2);
+                using (var wtr = new LameMP3FileWriter(filename, wf, 128))
+                    dest.CopyTo(wtr);
+            }
+
             dest.Close();
             dest = null;
+
         }
 
         public void Write(short[] buffer, int offset, int sampleCount)

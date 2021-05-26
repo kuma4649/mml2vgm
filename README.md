@@ -7,6 +7,7 @@
 	mucomDotNET  
 	M98DotNET  
 	PMDDotNET  
+	moondriverDotNET  
  を使用し各ドライバ毎の演奏ファイルを作成したりランダムな曲を生成したりすることが可能です。  
  IDEについては、IDE.txtを参照してください。  
  スクリプトについては、各々のスクリプトに付属の説明をご覧ください。  
@@ -119,6 +120,9 @@ mml2vgm , mvc , mml2vgmIDEはMITライセンスに準ずる物とします。LIC
   ・NAudio /動的リンク  
     ms-pl  
   
+  ・NAudio.Lame /動的リンク  
+    MIT License  
+  
   ・Azukiエディター  
     zlib License  
     オリジナルではなく改造したものを使用しています。  
@@ -164,6 +168,9 @@ mml2vgm , mvc , mml2vgmIDEはMITライセンスに準ずる物とします。LIC
     
   ・PMDDotNET /動的リンク  
     MIT License(但しPMD関係は別ライセンス)  
+
+  ・moondriverDotNET /動的リンク  
+    MIT License(但しmoondriver関係は別ライセンス)  
 
   
   
@@ -216,6 +223,7 @@ mml2vgm , mvc , mml2vgmIDEはMITライセンスに準ずる物とします。LIC
  ・PMD  
  ・PMDWin  
  ・PPZ8  
+ ・moondriver  
   
  ・SGDKとは - nendo  
  ・FutureDriver  
