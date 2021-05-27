@@ -129,24 +129,28 @@ namespace mml2vgmIDE
 
         private void setHighlighterMUC()
         {
-            Sgry.Azuki.Highlighter.KeywordHighlighter keywordHighlighter = new Sgry.Azuki.Highlighter.KeywordHighlighter();
-            //keywordHighlighter.AddRegex("^.*", false, CharClass.DocComment);
-            keywordHighlighter.AddRegex("^[A-Za-z0-9]+[ |\\t]", CharClass.Keyword);//パート部
-            keywordHighlighter.AddRegex("^#[_@A-Za-z0-9]*[ |\\t]", CharClass.Keyword);
-            keywordHighlighter.AddRegex("^#\\S*\\*", CharClass.Keyword);
-            keywordHighlighter.AddRegex("^'@", CharClass.Keyword);
-            keywordHighlighter.AddRegex("(?<!^[^\\s]*)J", CharClass.Keyword);
-            //keywordHighlighter.AddRegex("(?<!^[^\\S]+[ |\\t]+)J", CharClass.Keyword);
-            keywordHighlighter.AddRegex("^'%\\S+[ |\\t]", CharClass.Keyword);
-            keywordHighlighter.AddRegex("^\\{ .*", CharClass.DocComment);
-            keywordHighlighter.AddRegex("^\\}.*", CharClass.DocComment);
-            keywordHighlighter.AddRegex("\\;.*", CharClass.Comment);
-            //keywordHighlighter.AddEnclosure("{", "}", CharClass.Comment, true);
+            //Sgry.Azuki.Highlighter.KeywordHighlighter keywordHighlighter = new Sgry.Azuki.Highlighter.KeywordHighlighter();
+            ////keywordHighlighter.AddRegex("^.*", false, CharClass.DocComment);
+            //keywordHighlighter.AddRegex("^[A-Za-z0-9]+[ |\\t]", CharClass.Keyword);//パート部
+            //keywordHighlighter.AddRegex("^#[_@A-Za-z0-9]*[ |\\t]", CharClass.Keyword);
+            //keywordHighlighter.AddRegex("^#\\S*\\*", CharClass.Keyword);
+            //keywordHighlighter.AddRegex("^'@", CharClass.Keyword);
+            //keywordHighlighter.AddRegex("(?<!^[^\\s]*)J", CharClass.Keyword);
+            ////keywordHighlighter.AddRegex("(?<!^[^\\S]+[ |\\t]+)J", CharClass.Keyword);
+            //keywordHighlighter.AddRegex("^'%\\S+[ |\\t]", CharClass.Keyword);
+            //keywordHighlighter.AddRegex("^\\{ .*", CharClass.DocComment);
+            //keywordHighlighter.AddRegex("^\\}.*", CharClass.DocComment);
+            //keywordHighlighter.AddRegex("\\;.*", CharClass.Comment);
+            ////keywordHighlighter.AddEnclosure("{", "}", CharClass.Comment, true);
+
+            MUCHighlighter mucHighlighter = new MUCHighlighter();
+
             azukiControl = new AzukiControl();
             azukiControl.Font = new Font(setting.other.TextFontName, setting.other.TextFontSize, setting.other.TextFontStyle);
             azukiControl.Dock = DockStyle.Fill;
             azukiControl.ShowsIconBar = true;
-            azukiControl.Highlighter = keywordHighlighter;
+            //azukiControl.Highlighter = keywordHighlighter;
+            azukiControl.Highlighter = mucHighlighter;
             azukiControl.IconBarImageList = imglstIconBar;
             azukiControl.IconBarClicked += AzukiControl_IconBarClicked;
             azukiControl.TextChanged += AzukiControl_TextChanged;
@@ -175,6 +179,7 @@ namespace mml2vgmIDE
             azukiControl.ColorScheme.SetColor(CharClass.DocComment, Color.FromArgb(setting.ColorScheme.Azuki_DocComment), Color.Transparent);
             azukiControl.ColorScheme.SetColor(CharClass.Number, Color.FromArgb(setting.ColorScheme.Azuki_Number), Color.Transparent);
             azukiControl.ColorScheme.SetColor(CharClass.Delimiter, Color.FromArgb(setting.ColorScheme.Azuki_Number), Color.Transparent);
+            azukiControl.ColorScheme.SetColor(CharClass.Annotation, Color.FromArgb(60,255,60), Color.Transparent);
 
             MarkingInfo info = new MarkingInfo(1, "TraceInfo");
             Marking.Register(info);

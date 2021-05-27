@@ -1,4 +1,7 @@
 更新履歴
+TAG448 2021/05/27
+  IDE:mucomDotNET:ハイライターの実装
+
 TAG447 2021/05/26 3rd
   IDE:Export:mp3出力対応
   IDE:Sien:ウィンドウの状態を保存するようにした

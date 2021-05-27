@@ -315,6 +315,7 @@
       <DependentUpon>FrmLog.cs</DependentUpon>
     </Compile>
     <Compile Include="form\IForm.cs" />
+    <Compile Include="form\MUCHighlighter.cs" />
     <Compile Include="form\ucSettingInstruments.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -648,6 +649,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Script\Git\git.py">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Script\Sample\test2.py">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Script\Sample\testMenuItem.py">
