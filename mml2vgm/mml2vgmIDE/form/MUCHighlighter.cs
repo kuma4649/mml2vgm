@@ -102,6 +102,8 @@ namespace mml2vgmIDE
                         }
                         else if (doc.Text[i] == 'L')
                             doc.SetCharClass(i, CharClass.Annotation);
+                        else if (doc.Text[i] == '!')
+                            doc.SetCharClass(i, CharClass.Annotation);
                         else if (doc.Text[i] == ';')
                         {
                             doc.SetCharClass(i, CharClass.Comment);

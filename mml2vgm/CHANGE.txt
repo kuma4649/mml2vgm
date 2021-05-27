@@ -1,4 +1,7 @@
 更新履歴
+TAG449 2021/05/28
+  IDE:mucomDotNET差し替え
+
 TAG448 2021/05/27
   IDE:mucomDotNET:ハイライターの実装
 
