@@ -1,4 +1,7 @@
 更新履歴
+TAG450 2021/05/28 2nd
+  IDE:PartCounter:mucomDotNET:Jコマンドで飛ばしたMMLの値も反映するように修正
+
 TAG449 2021/05/28
   IDE:mucomDotNET差し替え
 

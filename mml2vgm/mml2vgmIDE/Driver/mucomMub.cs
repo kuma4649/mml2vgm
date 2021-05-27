@@ -188,7 +188,15 @@ namespace mml2vgmIDE
                 return;
             }
 
-            SoundManager.PackData p = new SoundManager.PackData(null, chipRegister.YM2608[ChipID], EnmDataType.Block, dat.port * 0x100 + dat.address, dat.data, null);
+            outDatum od = null;
+            if (dat.addtionalData is musicDriverInterface.MmlDatum)
+            {
+                musicDriverInterface.MmlDatum md = (musicDriverInterface.MmlDatum)dat.addtionalData;
+                if (md.linePos != null) md.linePos.srcMMLID = filename;
+                od = new outDatum(md.type, md.args, md.linePos, (byte)md.dat);
+            }
+
+            SoundManager.PackData p = new SoundManager.PackData(od, chipRegister.YM2608[ChipID], EnmDataType.Block, dat.port * 0x100 + dat.address, dat.data, null);
             p.Chip.Number = ChipID;
             pd[ChipID].Add(p);
         }
@@ -200,7 +208,15 @@ namespace mml2vgmIDE
                 return;
             }
 
-            SoundManager.PackData p = new SoundManager.PackData(null, chipRegister.YM2610[ChipID], EnmDataType.Block, dat.port * 0x100 + dat.address, dat.data, null);
+            outDatum od = null;
+            if (dat.addtionalData is musicDriverInterface.MmlDatum)
+            {
+                musicDriverInterface.MmlDatum md = (musicDriverInterface.MmlDatum)dat.addtionalData;
+                if (md.linePos != null) md.linePos.srcMMLID = filename;
+                od = new outDatum(md.type, md.args, md.linePos, (byte)md.dat);
+            }
+
+            SoundManager.PackData p = new SoundManager.PackData(od, chipRegister.YM2610[ChipID], EnmDataType.Block, dat.port * 0x100 + dat.address, dat.data, null);
             pd[ChipID+2].Add(p);
         }
 

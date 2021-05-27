@@ -85,7 +85,18 @@ namespace mml2vgmIDE.MMLParameter
 
         public bool SetMMLParameter(ref outDatum od, ref long Counter, ref Chip Chip, ref EnmDataType Type, ref int Address, ref int Data, ref object ExData)
         {
-            if (od == null) return true;
+            if (od == null)
+            {
+                if (Type != EnmDataType.Block) return true;
+                if (!(ExData is PackData[])) return true;
+                foreach(var o in (PackData[])ExData)
+                {
+                    if (o.od == null) continue;
+                    SetMMLParameter(ref o.od, ref Counter, ref Chip, ref o.Type, ref Address, ref Data, ref o.ExData);
+                }
+                return true;
+            }
+
             if (od.type == enmMMLType.unknown || od.linePos == null)
             {
 #if DEBUG
