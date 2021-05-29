@@ -92,14 +92,14 @@ namespace mml2vgmIDE
             dest.WriteByte((byte)((len & 0xff0000) >> 16));
             dest.WriteByte((byte)((len & 0xff000000) >> 24));
 
+            WaveFormat wf = new WaveFormat(Common.SampleRate, 16, 2);
             if (!isMp3)
             {
-                using (FileStream file = new FileStream(filename, FileMode.Create, FileAccess.Write))
-                    dest.CopyTo(file);
+                using (WaveFileWriter wtr = new WaveFileWriter(filename, wf))
+                    dest.CopyTo(wtr);
             }
             else
             {
-                WaveFormat wf = new WaveFormat(Common.SampleRate, 16, 2);
                 using (var wtr = new LameMP3FileWriter(filename, wf, 128))
                     dest.CopyTo(wtr);
             }
