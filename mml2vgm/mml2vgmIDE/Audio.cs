@@ -222,6 +222,8 @@ namespace mml2vgmIDE
         {
             switch (chipType)
             {
+                case EnmChip.YM2608:
+                    return chipRegister.YM2608[0];
                 case EnmChip.YM2612:
                     return chipRegister.YM2612[0];
                 default:

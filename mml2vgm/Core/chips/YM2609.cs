@@ -47,6 +47,7 @@ namespace Core
         public int adpcma_MAXTotalVolume = 63;
         public byte adpcma_KeyOn = 0;
         public byte adpcma_KeyOff = 0;
+        public int[] rv = new int[39];
 
         public YM2609(ClsVgm parent, int chipID, string initialPartName, string stPath, int chipNumber) : base(parent, chipID, initialPartName, stPath, chipNumber)
         {
@@ -1408,7 +1409,7 @@ namespace Core
         // U01-12 FM     ch1-12 ( 0-11) : 0-11
         // U13-15 FMch3ex  1-3  (12-14) : 2
         // U16-18 FMch9ex  1-3  (15-17) : 8
-        // U19-30 PSG    ch1-12 (18-29) : 12-23
+        // U19-30 SSG    ch1-12 (18-29) : 12-23
         // U31-36 Rhythm ch1-6  (30-35) : 27-32
         // U37    ADPCM0 ch1    (36)    : 24
         // U38    ADPCM1 ch1    (37)    : 25
@@ -1679,6 +1680,64 @@ namespace Core
                         break;
                 }
 
+            }
+        }
+
+        // mml2vgm                      : opna2 effect ch
+        // U01-12 FM     ch1-12 ( 0-11) : 0-11
+        // U13-15 FMch3ex  1-3  (12-14) : 2
+        // U16-18 FMch9ex  1-3  (15-17) : 8
+        // U19-30 SSG    ch1-12 (18-29) : 12-23
+        // U31-36 Rhythm ch1-6  (30-35) : 27-32
+        // U37    ADPCM0 ch1    (36)    : 24
+        // U38    ADPCM1 ch1    (37)    : 25
+        // U39    ADPCM2 ch1    (38)    : 26
+        // U40-45 ADPCMA ch1-6  (39-44) : 33-38
+        public override void CmdReversePhase(partPage page, MML mml)
+        {
+            byte ch = (byte)page.ch;
+
+            if (ch < 12)
+            {
+                //FM
+                rv[ch] = (int)mml.args[0] & 3;
+                parent.OutData(mml, port[0], (byte)(0xD0 + ch / 3), (byte)(rv[ch / 3 + 0] | (rv[ch / 3 + 1] << 2) | (rv[ch / 3 + 2] << 4)));
+            }
+            else if (ch < 15)
+            {
+                ch = 2;
+                rv[ch] = (int)mml.args[0] & 3;
+                parent.OutData(mml, port[0], (byte)(0xD0 + ch / 3), (byte)(rv[ch / 3 + 0] | (rv[ch / 3 + 1] << 2) | (rv[ch / 3 + 2] << 4)));
+            }
+            else if (ch < 18)
+            {
+                ch = 8;
+                rv[ch] = (int)mml.args[0] & 3;
+                parent.OutData(mml, port[0], (byte)(0xD0 + ch / 3), (byte)(rv[ch / 3 + 0] | (rv[ch / 3 + 1] << 2) | (rv[ch / 3 + 2] << 4)));
+            }
+            else if (ch < 30)
+            {
+                ch = (byte)(ch - 18);
+                rv[ch + 12] = (int)mml.args[0] & 3;
+                parent.OutData(mml, port[0], (byte)(0xCC + ch / 3), (byte)(rv[ch / 3 + 12] | (rv[ch / 3 + 13] << 2) | (rv[ch / 3 + 14] << 4)));
+            }
+            else if (ch < 36)
+            {
+                ch = (byte)(ch - 30);
+                rv[ch + 27] = (int)mml.args[0] & 3;
+                parent.OutData(mml, port[0], (byte)(0xD4 + ch / 3), (byte)(rv[ch / 3 + 27] | (rv[ch / 3 + 28] << 2) | (rv[ch / 3 + 29] << 4)));
+            }
+            else if (ch < 39)
+            {
+                ch = (byte)(ch - 36);
+                rv[ch + 24] = (int)mml.args[0] & 3;
+                parent.OutData(mml, port[0], (byte)(0xD8 + ch / 3), (byte)(rv[ch / 3 + 24] | (rv[ch / 3 + 25] << 2) | (rv[ch / 3 + 26] << 4)));
+            }
+            else
+            {
+                ch = (byte)(ch - 39);
+                rv[ch + 33] = (int)mml.args[0] & 3;
+                parent.OutData(mml, port[0], (byte)(0xD6 + ch / 3), (byte)(rv[ch / 3 + 33] | (rv[ch / 3 + 34] << 2) | (rv[ch / 3 + 35] << 4)));
             }
         }
 

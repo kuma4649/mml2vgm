@@ -55,6 +55,32 @@ namespace mml2vgmIDE.MMLParameter
             }
         }
 
+        public void SetAssign(int ch, int pt, int pg, bool flg)
+        {
+            if (chip == null) return;
+            if (chip.silentVoice == null) return;
+            if (ch < 0 || ch >= chip.silentVoice.Length) return;
+
+            //FM ch<9
+            //SSG ch<12
+            //リズム ch<18
+            //ADPCM1 ch=18
+            if (ch < 12 || ch == 18)
+            {
+                chip.silentVoice[ch] = flg;
+                chip.silentVoicePG[ch] = pt * 10 + pg;
+            }
+            else
+            {
+                chip.silentVoice[12] = flg;
+                chip.silentVoice[13] = flg;
+                chip.silentVoice[14] = flg;
+                chip.silentVoice[15] = flg;
+                chip.silentVoice[16] = flg;
+                chip.silentVoice[17] = flg;
+            }
+        }
+
         protected override void SetPan(outDatum od, int ch, int cc)
         {
             int n = (int)od.args[0];

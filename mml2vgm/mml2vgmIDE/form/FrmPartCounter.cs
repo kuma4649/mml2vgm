@@ -14,6 +14,11 @@ namespace mml2vgmIDE
         private MMLParameter.Manager mmlParams = null;
         private Setting setting = null;
         private Brush[] meterBrush = new Brush[256];
+        private bool SoloMode = false;
+        private List<Tuple<string, int, int, int, bool, bool, bool>> lstCacheMuteSolo = new List<Tuple<string, int, int, int, bool, bool, bool>>();
+
+        private const string clmKBDAssign = "ClmKBDAssign";
+        private const string Assign = "Assign";
 
 
         public FrmPartCounter(Setting setting)
@@ -111,6 +116,195 @@ namespace mml2vgmIDE
             }
         }
 
+
+        private void FrmPartCounter_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            setting.location.PartCounterClmInfo = getDisplayIndex();
+
+            if (e.CloseReason == CloseReason.UserClosing)
+            {
+                e.Cancel = true;
+                this.Hide();
+                parentUpdate?.Invoke();
+                return;
+            }
+        }
+
+        private void FrmPartCounter_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            for (int i = 0; i < 256; i++)
+            {
+                meterBrush[i].Dispose();
+            }
+
+        }
+
+        private void FrmPartCounter_DragOver(object sender, DragEventArgs e)
+        {
+            e.Effect = DragDropEffects.None;
+        }
+
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            if (mmlParams == null) return;
+
+            //パラメータ取得
+
+            //パラメータ描画
+            dgvPartCounter.SuspendLayout();
+
+            for (int p = 0; p < dgvPartCounter.Rows.Count; p++)
+            {
+                string chip = (string)dgvPartCounter.Rows[p].Cells["ClmChip"].Value;
+                int r = (int)dgvPartCounter.Rows[p].Cells["ClmPartNumber"].Value -1;
+                if (r < 0)
+                    continue;
+                int chipIndex = (int)dgvPartCounter.Rows[p].Cells["ClmChipIndex"].Value;
+                int chipNumber = (int)dgvPartCounter.Rows[p].Cells["ClmChipNumber"].Value;
+
+                if (!mmlParams.Insts.ContainsKey(chip)) 
+                    continue;
+                if (!mmlParams.Insts[chip].ContainsKey(chipIndex) || !mmlParams.Insts[chip][chipIndex].ContainsKey(chipNumber)) 
+                    continue;
+
+                MMLParameter.Instrument mmli = mmlParams.Insts[chip][chipIndex][chipNumber];
+
+                if(mmli is YM2608_mucom)
+                {
+                    string cp = (string)dgvPartCounter.Rows[p].Cells["ClmPart"].Value;
+                    int ch = cp[0]- (chipNumber == 0 ? 'A' : 'L');
+                    int pg = cp.Length < 2 ? 0 : (cp[1] - '0');
+                    r = ch * 10 + pg;
+                }
+                if (mmli is YM2610B_mucom)
+                {
+                    string cp = (string)dgvPartCounter.Rows[p].Cells["ClmPart"].Value;
+                    int ch = cp[0] - (chipNumber == 0 ? 'a' : 'l');
+                    int pg = cp.Length < 2 ? 0 : (cp[1] - '0');
+                    r = ch * 10 + pg;
+                }
+
+                if (r >= mmli.inst.Length) continue;
+
+                dgvPartCounter.Rows[p].Cells["ClmInstrument"].Value = mmli.inst[r] == null ? "-" : mmli.inst[r].ToString();
+                dgvPartCounter.Rows[p].Cells["ClmEnvelope"].Value = mmli.envelope[r] == null ? "-" : mmli.envelope[r].ToString();
+                dgvPartCounter.Rows[p].Cells["ClmVolume"].Value = mmli.vol[r] == null ? "-" : mmli.vol[r].ToString();
+                dgvPartCounter.Rows[p].Cells["ClmExpression"].Value = mmli.expression[r] == null ? "-" : mmli.expression[r].ToString();
+                dgvPartCounter.Rows[p].Cells["ClmVelocity"].Value = mmli.velocity[r] == null ? "-" : mmli.velocity[r].ToString();
+                dgvPartCounter.Rows[p].Cells["ClmPan"].Value = mmli.pan[r] == null ? "-" : mmli.pan[r];
+                dgvPartCounter.Rows[p].Cells["ClmGateTime"].Value = mmli.gatetime[r] == null ? "-" : mmli.gatetime[r];
+                dgvPartCounter.Rows[p].Cells["ClmNote"].Value = mmli.notecmd[r] == null ? "-" : mmli.notecmd[r];
+                dgvPartCounter.Rows[p].Cells["ClmLength"].Value = mmli.length[r] == null ? "-" : mmli.length[r];
+                dgvPartCounter.Rows[p].Cells["ClmEnvSw"].Value = mmli.envSw[r] == null ? "-" : mmli.envSw[r];
+                dgvPartCounter.Rows[p].Cells["ClmLfoSw"].Value = mmli.lfoSw[r] == null ? "-" : mmli.lfoSw[r];
+                dgvPartCounter.Rows[p].Cells["ClmLfo"].Value = mmli.lfo[r] == null ? "-" : mmli.lfo[r];
+                dgvPartCounter.Rows[p].Cells["ClmDetune"].Value = mmli.detune[r] == null ? "-" : mmli.detune[r].ToString();
+                dgvPartCounter.Rows[p].Cells["ClmKeyShift"].Value = mmli.keyShift[r] == null ? "-" : mmli.keyShift[r].ToString();
+                dgvPartCounter.Rows[p].Cells["ClmMIDIch"].Value = mmli.MIDIch[r] == null ? "-" : mmli.MIDIch[r].ToString();
+                DrawMeter(dgvPartCounter.Rows[p].Cells["ClmMeter"], mmli, r);
+            }
+
+            dgvPartCounter.ResumeLayout();
+        }
+
+        private void DgvPartCounter_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            string cellName = dgvPartCounter.Columns[e.ColumnIndex].Name;
+
+            if (cellName != "ClmMute" && cellName != "ClmSolo" && cellName != clmKBDAssign) return;
+            switch (cellName)
+            {
+                case "ClmMute":
+                    ClickMUTE(e.RowIndex);
+                    break;
+                case "ClmSolo":
+                    ClickSOLO(e.RowIndex);
+                    break;
+                case clmKBDAssign:
+                    ClickKBDAssign(e.RowIndex);
+                    break;
+            }
+        }
+
+        private void DgvPartCounter_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            if (e.Button != MouseButtons.Right) return;
+            if (e.RowIndex != -1) return;
+            if (setting == null || setting.location == null) return;
+            if (setting.location.PartCounterClmInfo == null)
+            {
+                setting.location.PartCounterClmInfo = getDisplayIndex();
+            }
+
+            //メニューのアイテムを生成する
+            //  hide / show all / セパレータの追加
+            cmsMenu.Items.Clear();
+            string txt = dgvPartCounter.Columns[e.ColumnIndex].HeaderText;
+            if (!string.IsNullOrEmpty(txt))
+            {
+                cmsMenu.Items.Add(string.Format("Hide {0}", txt));
+                cmsMenu.Items[0].Tag = dgvPartCounter.Columns[e.ColumnIndex].Tag;
+                cmsMenu.Items[0].Click += MenuItem_Click;
+            }
+            cmsMenu.Items.Add("Show all");
+            cmsMenu.Items[cmsMenu.Items.Count - 1].Click += MenuItem_Click;
+            cmsMenu.Items.Add("-");
+
+            //  その他の列を全て追加する
+            foreach (DataGridViewColumn c in dgvPartCounter.Columns)
+            {
+                if (txt == c.HeaderText) continue;
+                if (string.IsNullOrEmpty(c.HeaderText)) continue;
+                if (c.Name == "ClmChipIndex") continue;
+                if (c.Name == "ClmChipNumber") continue;
+                if (c.Name == "ClmPartNumber") continue;
+                if (c.Name == "ClmchipNumber") continue;
+
+                cmsMenu.Items.Add(c.HeaderText);
+                cmsMenu.Items[cmsMenu.Items.Count - 1].Tag = c.Tag;
+                cmsMenu.Items[cmsMenu.Items.Count - 1].Click += MenuItem_Click;
+                ((ToolStripMenuItem)cmsMenu.Items[cmsMenu.Items.Count - 1]).Checked = c.Visible;
+            }
+
+            cmsMenu.Show(Cursor.Position);
+
+        }
+
+        private void CmsMenu_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        {
+            if (e.KeyValue != 13) return;
+            foreach (ToolStripItem i in cmsMenu.Items)
+            {
+                if (!i.Selected) continue;
+                //MenuItem_Click(i, null);
+                break;
+            }
+        }
+
+        private void MenuItem_Click(object sender, EventArgs e)
+        {
+            ToolStripMenuItem i = (ToolStripMenuItem)sender;
+            foreach (DataGridViewColumn c in dgvPartCounter.Columns)
+            {
+                if (c.Tag != i.Tag) continue;
+                c.Visible = !c.Visible;
+                return;
+            }
+
+            //show all
+            foreach (DataGridViewColumn c in dgvPartCounter.Columns)
+            {
+                if (c.Name == "ClmChipIndex") continue;
+                if (c.Name == "ClmChipNumber") continue;
+                if (c.Name == "ClmPartNumber") continue;
+                if (c.Name == "ClmchipNumber") continue;
+                c.Visible = true;
+                c.Width = Math.Max(c.Width, 10);
+            }
+        }
+
+
+
         public void ClearCounter()
         {
             CacheMuteSolo();
@@ -118,8 +312,6 @@ namespace mml2vgmIDE
             dgvPartCounter.Rows.Clear();
             //SoloMode = false;
         }
-
-        private List<Tuple<string, int, int, int, bool, bool, bool>> lstCacheMuteSolo = new List<Tuple<string, int, int, int, bool, bool, bool>>();
 
         private void CacheMuteSolo()
         {
@@ -196,7 +388,6 @@ namespace mml2vgmIDE
             mmlParams = null;
         }
 
-
         /// <summary>
         /// ダブルバッファリングを有効にする(from DOBON)
         /// </summary>
@@ -208,102 +399,6 @@ namespace mml2vgmIDE
                null,
                control,
                new object[] { true });
-        }
-
-        private void FrmPartCounter_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            setting.location.PartCounterClmInfo = getDisplayIndex();
-
-            if (e.CloseReason == CloseReason.UserClosing)
-            {
-                e.Cancel = true;
-                this.Hide();
-                parentUpdate?.Invoke();
-                return;
-            }
-        }
-
-
-        private void FrmPartCounter_FormClosed(object sender, FormClosedEventArgs e)
-        {
-            for (int i = 0; i < 256; i++)
-            {
-                meterBrush[i].Dispose();
-            }
-
-        }
-
-        protected override string GetPersistString()
-        {
-            return this.Name;
-        }
-
-        private void FrmPartCounter_DragOver(object sender, DragEventArgs e)
-        {
-            e.Effect = DragDropEffects.None;
-        }
-
-        private void Timer_Tick(object sender, EventArgs e)
-        {
-            if (mmlParams == null) return;
-
-            //パラメータ取得
-
-            //パラメータ描画
-            dgvPartCounter.SuspendLayout();
-
-            for (int p = 0; p < dgvPartCounter.Rows.Count; p++)
-            {
-                string chip = (string)dgvPartCounter.Rows[p].Cells["ClmChip"].Value;
-                int r = (int)dgvPartCounter.Rows[p].Cells["ClmPartNumber"].Value -1;
-                if (r < 0)
-                    continue;
-                int chipIndex = (int)dgvPartCounter.Rows[p].Cells["ClmChipIndex"].Value;
-                int chipNumber = (int)dgvPartCounter.Rows[p].Cells["ClmChipNumber"].Value;
-
-                if (!mmlParams.Insts.ContainsKey(chip)) 
-                    continue;
-                if (!mmlParams.Insts[chip].ContainsKey(chipIndex) || !mmlParams.Insts[chip][chipIndex].ContainsKey(chipNumber)) 
-                    continue;
-
-                MMLParameter.Instrument mmli = mmlParams.Insts[chip][chipIndex][chipNumber];
-
-                if(mmli is YM2608_mucom)
-                {
-                    string cp = (string)dgvPartCounter.Rows[p].Cells["ClmPart"].Value;
-                    int ch = cp[0]- (chipNumber == 0 ? 'A' : 'L');
-                    int pg = cp.Length < 2 ? 0 : (cp[1] - '0');
-                    r = ch * 10 + pg;
-                }
-                if (mmli is YM2610B_mucom)
-                {
-                    string cp = (string)dgvPartCounter.Rows[p].Cells["ClmPart"].Value;
-                    int ch = cp[0] - (chipNumber == 0 ? 'a' : 'l');
-                    int pg = cp.Length < 2 ? 0 : (cp[1] - '0');
-                    r = ch * 10 + pg;
-                }
-
-                if (r >= mmli.inst.Length) continue;
-
-                dgvPartCounter.Rows[p].Cells["ClmInstrument"].Value = mmli.inst[r] == null ? "-" : mmli.inst[r].ToString();
-                dgvPartCounter.Rows[p].Cells["ClmEnvelope"].Value = mmli.envelope[r] == null ? "-" : mmli.envelope[r].ToString();
-                dgvPartCounter.Rows[p].Cells["ClmVolume"].Value = mmli.vol[r] == null ? "-" : mmli.vol[r].ToString();
-                dgvPartCounter.Rows[p].Cells["ClmExpression"].Value = mmli.expression[r] == null ? "-" : mmli.expression[r].ToString();
-                dgvPartCounter.Rows[p].Cells["ClmVelocity"].Value = mmli.velocity[r] == null ? "-" : mmli.velocity[r].ToString();
-                dgvPartCounter.Rows[p].Cells["ClmPan"].Value = mmli.pan[r] == null ? "-" : mmli.pan[r];
-                dgvPartCounter.Rows[p].Cells["ClmGateTime"].Value = mmli.gatetime[r] == null ? "-" : mmli.gatetime[r];
-                dgvPartCounter.Rows[p].Cells["ClmNote"].Value = mmli.notecmd[r] == null ? "-" : mmli.notecmd[r];
-                dgvPartCounter.Rows[p].Cells["ClmLength"].Value = mmli.length[r] == null ? "-" : mmli.length[r];
-                dgvPartCounter.Rows[p].Cells["ClmEnvSw"].Value = mmli.envSw[r] == null ? "-" : mmli.envSw[r];
-                dgvPartCounter.Rows[p].Cells["ClmLfoSw"].Value = mmli.lfoSw[r] == null ? "-" : mmli.lfoSw[r];
-                dgvPartCounter.Rows[p].Cells["ClmLfo"].Value = mmli.lfo[r] == null ? "-" : mmli.lfo[r];
-                dgvPartCounter.Rows[p].Cells["ClmDetune"].Value = mmli.detune[r] == null ? "-" : mmli.detune[r].ToString();
-                dgvPartCounter.Rows[p].Cells["ClmKeyShift"].Value = mmli.keyShift[r] == null ? "-" : mmli.keyShift[r].ToString();
-                dgvPartCounter.Rows[p].Cells["ClmMIDIch"].Value = mmli.MIDIch[r] == null ? "-" : mmli.MIDIch[r].ToString();
-                DrawMeter(dgvPartCounter.Rows[p].Cells["ClmMeter"], mmli, r);
-            }
-
-            dgvPartCounter.ResumeLayout();
         }
 
         private void DrawMeter(DataGridViewCell dataGridViewCell, Instrument mmli, int pn)
@@ -333,6 +428,11 @@ namespace mml2vgmIDE
                 mmli.keyOnMeter[pn] -= 4;
                 mmli.keyOnMeter[pn] = Math.Max((int)mmli.keyOnMeter[pn], 0);
             }
+        }
+
+        protected override string GetPersistString()
+        {
+            return this.Name;
         }
 
         private dgvColumnInfo[] getDisplayIndex()
@@ -382,20 +482,45 @@ namespace mml2vgmIDE
         }
 
 
-        private bool SoloMode = false;
 
-        private void DgvPartCounter_CellClick(object sender, DataGridViewCellEventArgs e)
+        public void ClickMUTE(int rowIndex)
         {
-            string cellName = dgvPartCounter.Columns[e.ColumnIndex].Name;
-
-            if (cellName != "ClmMute" && cellName != "ClmSolo") return;
-            if (cellName == "ClmSolo")
+            if (CheckMucomParameter())
             {
-                ClickSOLO(e.RowIndex);
+                ClickMUTE_mucom(rowIndex);
                 return;
             }
 
-            ClickMUTE(e.RowIndex);
+            if (rowIndex < 0)
+            {
+                if (SoloMode) return;
+                //Click MUTE Reset 
+                foreach (DataGridViewRow r in dgvPartCounter.Rows)
+                {
+                    r.Cells["ClmMute"].Value = "";
+                    SetMute(r);
+                }
+                return;
+            }
+
+            if (dgvPartCounter.Rows.Count < rowIndex + 1) return;
+
+            bool nowMute = (string)dgvPartCounter.Rows[rowIndex].Cells["ClmMute"].Value == "M";
+            dgvPartCounter.Rows[rowIndex].Cells["ClmMute"].Value = nowMute ? "" : "M";
+            if (SoloMode)
+                dgvPartCounter.Rows[rowIndex].Cells["ClmSolo"].Value = !nowMute ? "" : "S";
+            SetMute(dgvPartCounter.Rows[rowIndex]);
+
+            if (SoloMode && !nowMute && !CheckSoloCh())
+            {
+                SoloMode = false;
+                //mute復帰
+                foreach (DataGridViewRow r in dgvPartCounter.Rows)
+                {
+                    r.Cells["ClmMute"].Value = r.Cells["ClmPush"].Value;
+                    SetMute(r);
+                }
+            }
         }
 
         public void ClickSOLO(int rowIndex)
@@ -452,45 +577,36 @@ namespace mml2vgmIDE
             }
         }
 
-        public void ClickMUTE(int rowIndex)
+        public void ClickKBDAssign(int rowIndex)
         {
-            if (CheckMucomParameter())
-            {
-                ClickMUTE_mucom(rowIndex);
-                return;
-            }
+            //if (CheckMucomParameter())
+            //{
+            //    return;
+            //}
+
+            //列名をクリック時
 
             if (rowIndex < 0)
             {
-                if (SoloMode) return;
-                //Click MUTE Reset 
+                //アサインを全解除
                 foreach (DataGridViewRow r in dgvPartCounter.Rows)
                 {
-                    r.Cells["ClmMute"].Value = "";
-                    SetMute(r);
+                    r.Cells[clmKBDAssign].Value = "";
+                    SetAssign(r);
                 }
                 return;
             }
 
             if (dgvPartCounter.Rows.Count < rowIndex + 1) return;
 
-            bool nowMute = (string)dgvPartCounter.Rows[rowIndex].Cells["ClmMute"].Value == "M";
-            dgvPartCounter.Rows[rowIndex].Cells["ClmMute"].Value = nowMute ? "" : "M";
-            if (SoloMode)
-                dgvPartCounter.Rows[rowIndex].Cells["ClmSolo"].Value = !nowMute ? "" : "S";
-            SetMute(dgvPartCounter.Rows[rowIndex]);
 
-            if (SoloMode && !nowMute && !CheckSoloCh())
-            {
-                SoloMode = false;
-                //mute復帰
-                foreach (DataGridViewRow r in dgvPartCounter.Rows)
-                {
-                    r.Cells["ClmMute"].Value = r.Cells["ClmPush"].Value;
-                    SetMute(r);
-                }
-            }
+            //パートをクリック時はそのパートをアサイン
+            DataGridViewRow row = dgvPartCounter.Rows[rowIndex];
+            object obj = row.Cells[clmKBDAssign].Value;
+            row.Cells[clmKBDAssign].Value = (obj == null || string.IsNullOrEmpty(obj.ToString())) ? Assign : "";
+            SetAssign(row);
         }
+
 
         public void ClickSOLO_mucom(int rowIndex)
         {
@@ -673,6 +789,7 @@ namespace mml2vgmIDE
             }
         }
 
+
         private bool CheckSoloCh()
         {
             foreach (DataGridViewRow r in dgvPartCounter.Rows)
@@ -683,6 +800,7 @@ namespace mml2vgmIDE
 
             return false;
         }
+
 
         private void SetMute(DataGridViewRow r)
         {
@@ -740,83 +858,6 @@ namespace mml2vgmIDE
 
         }
 
-        private void DgvPartCounter_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
-        {
-            if (e.Button != MouseButtons.Right) return;
-            if (e.RowIndex != -1) return;
-            if (setting == null || setting.location == null) return;
-            if (setting.location.PartCounterClmInfo == null)
-            {
-                setting.location.PartCounterClmInfo = getDisplayIndex();
-            }
-
-            //メニューのアイテムを生成する
-            //  hide / show all / セパレータの追加
-            cmsMenu.Items.Clear();
-            string txt = dgvPartCounter.Columns[e.ColumnIndex].HeaderText;
-            if (!string.IsNullOrEmpty(txt))
-            {
-                cmsMenu.Items.Add(string.Format("Hide {0}", txt));
-                cmsMenu.Items[0].Tag = dgvPartCounter.Columns[e.ColumnIndex].Tag;
-                cmsMenu.Items[0].Click += MenuItem_Click;
-            }
-            cmsMenu.Items.Add("Show all");
-            cmsMenu.Items[cmsMenu.Items.Count - 1].Click += MenuItem_Click;
-            cmsMenu.Items.Add("-");
-
-            //  その他の列を全て追加する
-            foreach (DataGridViewColumn c in dgvPartCounter.Columns)
-            {
-                if (txt == c.HeaderText) continue;
-                if (string.IsNullOrEmpty(c.HeaderText)) continue;
-                if (c.Name == "ClmChipIndex") continue;
-                if (c.Name == "ClmChipNumber") continue;
-                if (c.Name == "ClmPartNumber") continue;
-                if (c.Name == "ClmchipNumber") continue;
-
-                cmsMenu.Items.Add(c.HeaderText);
-                cmsMenu.Items[cmsMenu.Items.Count - 1].Tag = c.Tag;
-                cmsMenu.Items[cmsMenu.Items.Count - 1].Click += MenuItem_Click;
-                ((ToolStripMenuItem)cmsMenu.Items[cmsMenu.Items.Count - 1]).Checked = c.Visible;
-            }
-
-            cmsMenu.Show(Cursor.Position);
-
-        }
-
-        private void CmsMenu_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
-        {
-            if (e.KeyValue != 13) return;
-            foreach (ToolStripItem i in cmsMenu.Items)
-            {
-                if (!i.Selected) continue;
-                //MenuItem_Click(i, null);
-                break;
-            }
-        }
-
-        private void MenuItem_Click(object sender, EventArgs e)
-        {
-            ToolStripMenuItem i = (ToolStripMenuItem)sender;
-            foreach (DataGridViewColumn c in dgvPartCounter.Columns)
-            {
-                if (c.Tag != i.Tag) continue;
-                c.Visible = !c.Visible;
-                return;
-            }
-
-            //show all
-            foreach (DataGridViewColumn c in dgvPartCounter.Columns)
-            {
-                if (c.Name == "ClmChipIndex") continue;
-                if (c.Name == "ClmChipNumber") continue;
-                if (c.Name == "ClmPartNumber") continue;
-                if (c.Name == "ClmchipNumber") continue;
-                c.Visible = true;
-                c.Width = Math.Max(c.Width, 10);
-            }
-        }
-
         private bool CheckMucomParameter()
         {
             if (dgvPartCounter.Rows.Count < 1) return false;
@@ -835,6 +876,63 @@ namespace mml2vgmIDE
 
             return false;
         }
+
+        private void SetAssign(DataGridViewRow r)
+        {
+            string chip = (string)r.Cells["ClmChip"].Value;
+            int chipIndex = (int)r.Cells["ClmChipIndex"].Value;
+            int chipNumber = (int)r.Cells["ClmChipNumber"].Value;
+
+            if (mmlParams == null) return;
+            if (!mmlParams.Insts.ContainsKey(chip)) return;
+            if (!mmlParams.Insts[chip].ContainsKey(chipIndex) || !mmlParams.Insts[chip][chipIndex].ContainsKey(chipNumber)) return;
+
+            MMLParameter.Instrument mmli = mmlParams.Insts[chip][chipIndex][chipNumber];
+            int pn = (int)r.Cells["ClmPartNumber"].Value - 1;
+            bool assign = (string)r.Cells[clmKBDAssign].Value == Assign;
+
+            //mucom以外は加工無し
+            if (!(mmli is YM2608_mucom) && !(mmli is YM2610B_mucom))
+            {
+                mmli.SetAssign(pn, assign);
+                return;
+            }
+
+            //mucomの場合は同系パートも同時にAssignする
+
+            string cp = (string)r.Cells["ClmPart"].Value;
+            bool isOPNA = (cp[0] < 'a');
+            int ch = (cp[0] < 'a') ? (cp[0] - 'A') : (cp[0] - 'a');
+            int cn = ch < 11 ? 0 : 1;
+            ch = ch < 11 ? ch : (ch - 11);
+            int pg;// = cp.Length < 2 ? 0 : (cp[1] - '0');
+            string am = (string)r.Cells[clmKBDAssign].Value;
+
+            foreach (DataGridViewRow rw in dgvPartCounter.Rows)
+            {
+                string p = (string)rw.Cells["ClmPart"].Value;
+                bool isOPNAc = (p[0] < 'a');
+                int c = (p[0] < 'a') ? (p[0] - 'A') : (p[0] - 'a');
+                int n = c < 11 ? 0 : 1;
+                c = c < 11 ? c : (c - 11);
+                if (isOPNA != isOPNAc || n != cn || c != ch) continue;
+
+                rw.Cells[clmKBDAssign].Value = am;
+                pn = (int)rw.Cells["ClmPartNumber"].Value - 1;
+                pg = p.Length < 2 ? 0 : (p[1] - '0');
+
+                if (isOPNA)
+                {
+                    ((YM2608_mucom)mmli).SetAssign(pn, ch, pg, assign);
+                }
+                else
+                {
+                    ((YM2610B_mucom)mmli).SetAssign(pn, ch, pg, assign);
+                }
+            }
+
+        }
+
     }
 
     public class dgvColumnInfo

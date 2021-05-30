@@ -96,7 +96,8 @@ namespace mml2vgmIDE.MMLParameter
                 null,                null,             null,        SetClockCounter, null,
                 null,                null,             null,        null,            null,
                 //60 -                                 
-                SetTraceUpdateStack, null,             null,
+                SetTraceUpdateStack, null,             null,        null,            null,
+                null,                null,             null,        null,            null,
             };
         }
 
@@ -107,6 +108,10 @@ namespace mml2vgmIDE.MMLParameter
             if (chip.ChMasks == null) return;
             if (ch < 0 || ch >= chip.ChMasks.Length) return;
             chip.ChMasks[ch] = flg;
+        }
+
+        public void SetAssign(int ch, bool flg)
+        {
         }
 
         public void SetParameter(outDatum od, int cc)

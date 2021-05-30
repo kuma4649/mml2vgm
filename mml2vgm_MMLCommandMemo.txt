@@ -956,6 +956,7 @@ sf              --------------------------------oo---------------  サスティ�
 sn              -------------------------------------------oo----  sync (n: 0 - 3)
 PRON            -----------------ooo-----------------------------  フェーズリセット有効
 PROF            -----------------ooo-----------------------------  フェーズリセット無効
+PRV             -----------------ooo-----------------------------  逆位相(n: 無効:0 右:1 左:2 両方:3)
 PDON            ooooooooooooooooooooooooooooooooooooooooooooooooo  ページダイレクトセンド有効
 PDOF            ooooooooooooooooooooooooooooooooooooooooooooooooo  ページダイレクトセンド無効
 %xxx            ooooooooooooooooooooooooooooooooooooooooooooooooo  エイリアス展開

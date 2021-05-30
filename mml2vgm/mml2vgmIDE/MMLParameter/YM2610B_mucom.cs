@@ -58,6 +58,10 @@ namespace mml2vgmIDE.MMLParameter
             }
         }
 
+        public void SetAssign(int ch, int pt, int pg, bool flg)
+        {
+        }
+
         protected override void SetPan(outDatum od, int ch, int cc)
         {
             int n = (int)od.args[0];

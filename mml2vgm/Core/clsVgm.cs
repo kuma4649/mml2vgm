@@ -5608,6 +5608,11 @@ namespace Core
                     page.chip.CmdPhaseReset(page, mml);
                     page.mmlPos++;
                     break;
+                case enmMMLType.ReversePhase:
+                    log.Write("ReversePhase");
+                    page.chip.CmdReversePhase(page, mml);
+                    page.mmlPos++;
+                    break;
                 case enmMMLType.PageDirectSend:
                     log.Write("PageDirectSend");
                     page.chip.CmdPageDirectSend(page, mml);

@@ -21,10 +21,12 @@
     public enum EnmDataType
     {
         None
-    , Normal
-    , Block
-    , Loop
-    , FadeOut
+        , Normal
+        , Block
+        , Loop
+        , FadeOut
+        , Force
+        , ForceBlock
     }
 
     public enum EnmVRModel

@@ -624,7 +624,8 @@ namespace mml2vgmIDE.Properties {
         ///
         ///}}
         ///
-        ///&apos;Cn1 T{1} に類似しているローカライズされた文字列を検索します。
+        ///&apos;Cn1 T{1}
+        ///&apos;P01 T{1} に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string tmpMIDIKbd {
             get {

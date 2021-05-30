@@ -2248,6 +2248,11 @@ namespace Core
             return "みじっそう";
         }
 
+        public virtual void CmdReversePhase(partPage page, MML mml)
+        {
+            msgBox.setErrMsg(msg.get("E10045")
+                    , mml.line.Lp);
+        }
     }
 
     public class clsPcmDataInfo

@@ -42,10 +42,16 @@ namespace SoundManager
 
         public int currentCh { get; internal set; }
 
+        public bool[] silentVoice { get; set; } = null;
+        public int[] silentVoicePG { get; set; } = null;
+
+
         public Chip(int Ch)
         {
             ChMasks = new bool[Ch];
             ChMasksPG = new int[Ch];
+            silentVoice = new bool[Ch];
+            silentVoicePG = new int[Ch];
         }
 
 
@@ -61,6 +67,7 @@ namespace SoundManager
             this.Number = chip.Number;
             this.Hosei = chip.Hosei;
             this.ChMasks = chip.ChMasks;
+            this.silentVoice = chip.silentVoice;
         }
     }
 }

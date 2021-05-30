@@ -776,21 +776,21 @@ namespace mml2vgmIDE
         {
             if (frmMIDIKbd == null)
             {
-                if (!Audio.ReadyOK())
-                {
-                    firstPlay();
-                }
-                else
-                {
-                    if (Audio.sm.Mode == SendMode.none)
-                    {
-                        Audio.sm.RequestStart(SendMode.RealTime, true, true);
-                    }
-                    else
-                    {
-                        Audio.sm.SetMode(SendMode.RealTime);
-                    }
-                }
+                //if (!Audio.ReadyOK())
+                //{
+                //    firstPlay();
+                //}
+                //else
+                //{
+                //    if (Audio.sm.Mode == SendMode.none)
+                //    {
+                //        Audio.sm.RequestStart(SendMode.RealTime, true, true);
+                //    }
+                //    else
+                //    {
+                //        Audio.sm.SetMode(SendMode.RealTime);
+                //    }
+                //}
 
                 frmMIDIKbd = new FrmMIDIKbd(this, 2, newParam.mIDIKbd);
                 frmMIDIKbd.KeyDown += FrmMain_KeyDown;
@@ -3954,33 +3954,33 @@ namespace mml2vgmIDE
         private ChannelInfo GetCurrentChannelInfo()
         {
             ChannelInfo chi = null;
-            Document d = GetActiveDocument();
+            //Document d = GetActiveDocument();
 
-            if (d == null)
-            {
-                firstPlay();
-                return defaultChannelInfo;
-            }
-
-            //int ci = d.editor.azukiControl.CaretIndex;
-            //int st = d.editor.azukiControl.GetLineHeadIndexFromCharIndex(ci);
-            //string line = d.editor.azukiControl.GetTextInRange(st, ci).TrimStart();
-            //if (line == "" || line[0] != '\'')
+            //if (d == null)
             //{
+            //    firstPlay();
             //    return defaultChannelInfo;
             //}
 
-            //演奏中はコンパイルしない
-            if (!Audio.sm.IsRunningAtDataMaker())
-            {
-                Compile(true, false, true, true, false);
-                while (Compiling != 0)
-                {
-                    Thread.Sleep(0);
-                    Application.DoEvents();
-                }
-                Audio.sm.ResetMode(SendMode.MML);
-            }
+            ////int ci = d.editor.azukiControl.CaretIndex;
+            ////int st = d.editor.azukiControl.GetLineHeadIndexFromCharIndex(ci);
+            ////string line = d.editor.azukiControl.GetTextInRange(st, ci).TrimStart();
+            ////if (line == "" || line[0] != '\'')
+            ////{
+            ////    return defaultChannelInfo;
+            ////}
+
+            ////演奏中はコンパイルしない
+            //if (!Audio.sm.IsRunningAtDataMaker())
+            //{
+            //    Compile(true, false, true, true, false);
+            //    while (Compiling != 0)
+            //    {
+            //        Thread.Sleep(0);
+            //        Application.DoEvents();
+            //    }
+            //    Audio.sm.ResetMode(SendMode.MML);
+            //}
 
 
             return chi;

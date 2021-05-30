@@ -232,6 +232,7 @@ E05069=Unknown command ('PDO?') defined.
 E05070=Unknown command ('H?') defined.
 E05071=Unknown command ('HSO?') defined.
 E05072=Unknown command ('HST?') defined.
+E05073=Unknown command ('PRV?') defined.
 
 
 ;partWork.cs 06000
@@ -303,6 +304,7 @@ E10041=Selecting undefined CommandArpeggio.
 E10042=An undefined number was specified. or CommandArpeggio enabled without specification.
 E10043=This channel can't use KD command.
 E10044=This channel can't use HS command.
+E10045=This channel can't use PRV command.
 
 
 ;clsOPN.cs 11000

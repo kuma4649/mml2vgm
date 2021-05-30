@@ -2049,6 +2049,20 @@ namespace Core
                         mml.args.Add("PROF");
                     }
                 }
+                else if (pw.getChar(page) == 'V') //PRV
+                {
+                    pw.incPos(page);
+                    if (!pw.getNum(page, out n))
+                    {
+                        msgBox.setErrMsg(msg.get("E05073"), mml.line.Lp);
+                        return;
+
+                    }
+                    mml.type = enmMMLType.ReversePhase;
+                    mml.args = new List<object>();
+                    mml.args.Add(n);
+                    return;
+                }
                 else
                 {
                     msgBox.setErrMsg(msg.get("E05064"), mml.line.Lp);

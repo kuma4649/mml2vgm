@@ -2216,8 +2216,8 @@
     PRON  
     PROF  
 - Format  
-    APON  
-    APOF  
+    PRON  
+    PROF  
 - 設定可能範囲  
     無し  
 - Support chips  
@@ -2227,6 +2227,23 @@
 - Description  
     位相リセットを開始(PRON)、または停止(PROF)します。  
     開始するとキーオン時に位相をリセットするようになります。  
+
+
+### 逆位相  
+-----------  
+- Command  
+    PRV  
+- Format  
+    PRVn  
+- 設定可能範囲  
+    0 - 3 (Def : 0)  
+- Support chips  
+    - YM2609(SSG)  
+- Remark  
+    逆位相設定  
+- Description  
+    逆位相を設定します。  
+    0で無効、1で右、2で左、3で両方の出力を逆位相にします。  
 
 
 ### 効果音モード  

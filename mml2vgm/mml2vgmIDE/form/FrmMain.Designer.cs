@@ -70,6 +70,7 @@
             this.tsmiExport_toDriverFormat = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiExport_MuctoD88 = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiExport_toWaveFile = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiExport_toMp3File = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiExport_toMidiFile = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.TsmiExit = new System.Windows.Forms.ToolStripMenuItem();
@@ -114,7 +115,6 @@
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.TsmiAbout = new System.Windows.Forms.ToolStripMenuItem();
             this.timer = new System.Windows.Forms.Timer(this.components);
-            this.tsmiExport_toMp3File = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -427,6 +427,12 @@
             resources.ApplyResources(this.tsmiExport_toWaveFile, "tsmiExport_toWaveFile");
             this.tsmiExport_toWaveFile.Click += new System.EventHandler(this.tsmiExport_toWaveFile_Click);
             // 
+            // tsmiExport_toMp3File
+            // 
+            this.tsmiExport_toMp3File.Name = "tsmiExport_toMp3File";
+            resources.ApplyResources(this.tsmiExport_toMp3File, "tsmiExport_toMp3File");
+            this.tsmiExport_toMp3File.Click += new System.EventHandler(this.tsmiExport_toWaveFile_Click);
+            // 
             // tsmiExport_toMidiFile
             // 
             this.tsmiExport_toMidiFile.Name = "tsmiExport_toMidiFile";
@@ -717,12 +723,6 @@
             this.timer.Enabled = true;
             this.timer.Interval = 16;
             this.timer.Tick += new System.EventHandler(this.Timer_Tick);
-            // 
-            // tsmiExport_toMp3File
-            // 
-            this.tsmiExport_toMp3File.Name = "tsmiExport_toMp3File";
-            resources.ApplyResources(this.tsmiExport_toMp3File, "tsmiExport_toMp3File");
-            this.tsmiExport_toMp3File.Click += new System.EventHandler(this.tsmiExport_toWaveFile_Click);
             // 
             // FrmMain
             // 

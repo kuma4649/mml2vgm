@@ -165,6 +165,13 @@ namespace mml2vgmIDE
             new bool[14] { false, false, false, false, false, false, false, false, false, false, false, false, false, false}
             , new bool[14] { false, false, false, false, false, false, false, false, false, false, false, false, false, false}
         };
+        /// <summary>
+        /// ////////////////////////////////////////////////////////////
+        /// </summary>
+        //private bool[][] silentVoiceFMChYM2608 = new bool[][] {
+        //    new bool[14] { true, false, false, false, false, false, false, false, false, false, false, false, false, false}
+        //    , new bool[14] { false, false, false, false, false, false, false, false, false, false, false, false, false, false}
+        //};
 
         public int[][][] fmRegisterYM2610 = new int[][][] { new int[][] { null, null }, new int[][] { null, null } };
         public int[][] fmKeyOnYM2610 = new int[][] { null, null };
@@ -6283,7 +6290,7 @@ namespace mml2vgmIDE
 
         private void YM2608WriteRegisterControl(Chip Chip, EnmDataType type, int address, int data, object exData)
         {
-            if (type == EnmDataType.Normal)
+            if (type == EnmDataType.Normal || type== EnmDataType.Force)
             {
                 if (Chip.Model == EnmVRModel.VirtualModel)
                 {
@@ -6335,7 +6342,7 @@ namespace mml2vgmIDE
                     }
                 }
             }
-            else if (type == EnmDataType.Block)
+            else if (type == EnmDataType.Block || type == EnmDataType.ForceBlock)
             {
                 Audio.sm.SetInterrupt();
 
@@ -6388,22 +6395,23 @@ namespace mml2vgmIDE
 
             fmRegisterYM2608[Chip.Number][dPort][dAddr] = dData;
 
-            //if (
-            //    (Chip.Model == EnmModel.VirtualModel && (ctYM2608[Chip.Number] == null || !ctYM2608[Chip.Number].UseScci))
-            //    || (Chip.Model == EnmModel.RealModel && (scYM2608 != null && scYM2608[Chip.Number] != null))
-            //    )
-            //{
-            //}
+            //
+            // 情報取得のみ
+            //
 
             if ((Chip.Model == EnmVRModel.RealModel && ctYM2608[Chip.Number].UseScci) || (Chip.Model == EnmVRModel.VirtualModel && !ctYM2608[Chip.Number].UseScci))
             {
+                //FM 0x00:0x28:KeyON:bit7-4 SLOT:bit2-0 Ch
                 if (dPort == 0 && dAddr == 0x28)
                 {
+                    // data:0,1,2,4,5,6 -> Ch:1,2,3,4,5,6
                     ch = (dData & 0x3) + ((dData & 0x4) > 0 ? 3 : 0);
                     if (ch >= 0 && ch < 6)// && (dData & 0xf0) > 0)
                     {
+                        //Ch3ではなく、Ch3であっても効果音モードでは無い場合
                         if (ch != 2 || (fmRegisterYM2608[Chip.Number][0][0x27] & 0xc0) != 0x40)
                         {
+                            //スロットを一つ以上指定している場合はキーオン
                             if ((dData & 0xf0) != 0)
                             {
                                 fmKeyOnYM2608[Chip.Number][ch] = (dData & 0xf0) | 1;
@@ -6417,14 +6425,15 @@ namespace mml2vgmIDE
                         else
                         {
                             fmKeyOnYM2608[Chip.Number][2] = dData & 0xf0;
-                            if ((dData & 0x10) > 0) fmCh3SlotVolYM2608[Chip.Number][0] = 256 * 6;
-                            if ((dData & 0x20) > 0) fmCh3SlotVolYM2608[Chip.Number][1] = 256 * 6;
-                            if ((dData & 0x40) > 0) fmCh3SlotVolYM2608[Chip.Number][2] = 256 * 6;
-                            if ((dData & 0x80) > 0) fmCh3SlotVolYM2608[Chip.Number][3] = 256 * 6;
+                            if ((dData & 0x10) != 0) fmCh3SlotVolYM2608[Chip.Number][0] = 256 * 6;
+                            if ((dData & 0x20) != 0) fmCh3SlotVolYM2608[Chip.Number][1] = 256 * 6;
+                            if ((dData & 0x40) != 0) fmCh3SlotVolYM2608[Chip.Number][2] = 256 * 6;
+                            if ((dData & 0x80) != 0) fmCh3SlotVolYM2608[Chip.Number][3] = 256 * 6;
                         }
                     }
                 }
 
+                //ADPCM 0x01:0x01:CONTROL2:bit 7:L 6:R 3:合成スタート 2:1=再生0=録音 1:DRAMアクセスモード1=8bit0=1bit 0:外部メモリー指定
                 if (dPort == 1 && dAddr == 0x01)
                 {
                     fmVolYM2608AdpcmPan[Chip.Number] = (dData & 0xc0) >> 6;
@@ -6435,6 +6444,7 @@ namespace mml2vgmIDE
                     }
                 }
 
+                //Rhythm 0x00:0x10:Dump/KeyOn
                 if (dPort == 0 && dAddr == 0x10)
                 {
                     int tl = fmRegisterYM2608[Chip.Number][0][0x11] & 0x3f;
@@ -6453,47 +6463,61 @@ namespace mml2vgmIDE
             }
 
 
+            //強制無加工データは加工しない
+            if (Type == EnmDataType.Force || Type == EnmDataType.ForceBlock) 
+                return;
+
+
+            //
+            // データ加工
+            //
+
+            //FM:$xx:$4x:total level
             if ((dAddr & 0xf0) == 0x40)//TL
             {
+                //bit1-0:ch number
                 ch = (dAddr & 0x3);
-                if (ch != 3)
+                if (ch != 3)//chが3は本来意味が無いが、指定してくるドライバーも存在するので弾く
                 {
                     int al = fmRegisterYM2608[Chip.Number][dPort][0xb0 + ch] & 0x07;//AL
                     int slot = (dAddr & 0xc) >> 2;
                     dData &= 0x7f;
 
+                    //キャリアかどうか判定し、そうであれば、音量値を加工する
                     if ((algM[al] & (1 << slot)) != 0)
                     {
                         dData = Math.Min(dData + nowYM2608FadeoutVol[Chip.Number], 127);
                         dData = maskFMChYM2608[Chip.Number][dPort * 3 + ch] ? 127 : dData;
+
+                        //if (silentVoiceFMChYM2608[Chip.Number][dPort * 3 + ch]) Type = EnmDataType.None;
                     }
                 }
             }
-
-            //if ((dAddr & 0xf0) == 0xb0)//AL
-            //{
-            //    int ch = (dAddr & 0x3);
-            //    int al = dData & 0x07;//AL
-
-            //    if (ch != 3 && maskFMChYM2608[Chip.Number][ch])
-            //    {
-            //        for (int i = 0; i < 4; i++)
-            //        {
-            //            int slot = (i == 0) ? 0 : ((i == 1) ? 2 : ((i == 2) ? 1 : 3));
-            //            if ((algM[al] & (1 << slot)) > 0)
-            //            {
-            //                //setYM2608Register(Counter, ChipID, dPort, 0x40 + ch + slot * 4, fmRegisterYM2608[Chip.Number][dPort][0x40 + ch]);
-            //            }
-            //        }
-            //    }
-            //}
+            if ((dAddr >= 0xa0 && dAddr <= 0xa2) || (dAddr >= 0xa4 && dAddr <= 0xa6))//0xa0-0xa6:CH1-6 FNUM
+            {
+                ch = (dAddr & 0x3);
+                if (Chip.silentVoice[dPort * 3 + ch]) Type = EnmDataType.None;
+            }
+            if ((dAddr >= 0xa8 && dAddr <= 0xaa) || (dAddr >= 0xac && dAddr <= 0xae))//0xa8-0xae:CH3 SLOT FNUM
+            {
+                if (Chip.silentVoice[dPort * 3 + 2]) Type = EnmDataType.None;
+            }
 
             //ssg level
-            if (dPort == 0 && (dAddr == 0x08 || dAddr == 0x09 || dAddr == 0x0a))
+            if (dPort == 0)
             {
-                int d = nowYM2608FadeoutVol[Chip.Number] >> 3;
-                dData = Math.Max(dData - d, 0);
-                dData = maskFMChYM2608[Chip.Number][dAddr - 0x08 + 6] ? 0 : dData;
+                if (dAddr == 0x08 || dAddr == 0x09 || dAddr == 0x0a)
+                {
+                    int d = nowYM2608FadeoutVol[Chip.Number] >> 3;
+                    dData = Math.Max(dData - d, 0);
+                    dData = maskFMChYM2608[Chip.Number][dAddr - 0x08 + 6] ? 0 : dData;
+
+                    if (Chip.silentVoice[dAddr - 0x08 + 6]) Type = EnmDataType.None;
+                }
+                else if (dAddr >= 0x00 && dAddr <= 0x05)//0x00-0x05:SSG Ch1-3のfnum
+                {
+                    if (Chip.silentVoice[dAddr / 2 + 6]) Type = EnmDataType.None;
+                }
             }
 
             //rhythm level
@@ -6509,6 +6533,8 @@ namespace mml2vgmIDE
                 int d = nowYM2608FadeoutVol[Chip.Number] * 2;
                 dData = Math.Max(dData - d, 0);
                 dData = maskFMChYM2608[Chip.Number][12] ? 0 : dData;
+
+                if (Chip.silentVoice[12]) Type = EnmDataType.None;
             }
 
             //adpcm start
@@ -6518,6 +6544,13 @@ namespace mml2vgmIDE
                 {
                     dData &= 0x7f;
                 }
+                if (Chip.silentVoice[12]) Type = EnmDataType.None;
+            }
+
+            //adpcm delta
+            if (dPort == 1 && (dAddr == 0x0a || dAddr == 0x09))
+            {
+                if (Chip.silentVoice[12]) Type = EnmDataType.None;
             }
 
             //Ryhthm
@@ -6527,6 +6560,8 @@ namespace mml2vgmIDE
                 {
                     dData = 0;
                 }
+
+                if (Chip.silentVoice[13]) Type = EnmDataType.None;
             }
 
 
@@ -6541,6 +6576,8 @@ namespace mml2vgmIDE
                 ch += (Address == 0x228) ? 9 : 0;
 
                 if (Chip.ChMasks[ch]) dData &= 0xf;
+
+                if (Chip.silentVoice[ch]) Type = EnmDataType.None;
             }
 
             //SSG ch<12
@@ -6555,7 +6592,10 @@ namespace mml2vgmIDE
                     ch = adl - 8 + 9 + 0;
                     if (Chip.ChMasks[ch])
                         dData = 0;
+
                 }
+
+                if (Chip.silentVoice[adl - 0x08 + 6]) Type = EnmDataType.None;
             }
 
             //リズム ch<18
@@ -6568,12 +6608,16 @@ namespace mml2vgmIDE
                 }
 
                 dData &= mask;
+
+                if (Chip.silentVoice[13]) Type = EnmDataType.None;
             }
 
             //ADPCM1 ch=18
             if (Address == 0x100)
             {
                 if (Chip.ChMasks[18]) dData &= 0x7f;
+
+                if (Chip.silentVoice[12]) Type = EnmDataType.None;
             }
 
         }

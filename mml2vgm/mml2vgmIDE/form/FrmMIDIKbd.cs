@@ -71,10 +71,6 @@ namespace mml2vgmIDE
                 this.setting = parent.setting;
                 keyPress = new bool[kbdTbl.Length];
                 if (setting.midiKbd.Octave == 0) setting.midiKbd.Octave = 4;
-                SoundManager = Audio.sm;
-                SoundManager.AddDataSeqFrqEvent(OnDataSeqFrq);
-                SoundManager.CurrentChip = "YM2612";
-                SoundManager.CurrentCh = 1;
 
                 InitializeComponent();
 
@@ -400,14 +396,26 @@ namespace mml2vgmIDE
         {
             if (!setting.midiKbd.UseMIDIKeyboard) return;
 
+            NoteEvent ne;
             switch (e.MidiEvent.CommandCode)
             {
                 case MidiCommandCode.NoteOn:
-                    NoteOnEvent noe = (NoteOnEvent)e.MidiEvent;
-                    NoteOn(noe.NoteNumber, 127);// noe.Velocity);
+                    if (e.MidiEvent is NoteOnEvent)
+                    {
+                        NoteOnEvent noe = (NoteOnEvent)e.MidiEvent;
+                        NoteOn(noe.NoteNumber, 127);// noe.Velocity);
+                    }
+                    else if(e.MidiEvent is NoteEvent)
+                    {
+                        ne = (NoteEvent)e.MidiEvent;
+                        if (ne.Velocity == 0)
+                        {
+                            NoteOff(ne.NoteNumber);
+                        }
+                    }
                     break;
                 case MidiCommandCode.NoteOff:
-                    NoteEvent ne = (NoteEvent)e.MidiEvent;
+                    ne = (NoteEvent)e.MidiEvent;
                     NoteOff(ne.NoteNumber);
                     break;
                 case MidiCommandCode.ControlChange:
@@ -516,9 +524,9 @@ namespace mml2vgmIDE
 
         private void NoteOnMONO(int n, int velocity)
         {
-            if (cChip == null) return;
-            eChip = Audio.GetChip(EnmChip.YM2612);
-            if (eChip == null) return;
+            //if (cChip == null) return;
+            //eChip = Audio.GetChip(EnmChip.YM2612);
+            //if (eChip == null) return;
             if (n < 0 || n > 127) return;
 
             NoteOffMONO(latestNoteNumberMONO);
@@ -528,6 +536,7 @@ namespace mml2vgmIDE
             lock (lockObject)
             {
                 cChip.CmdNote(pw, pw.apg, mml);//TODO:page制御やってない
+                cChip.MultiChannelCommand(mml);
             }
 
             latestNoteNumberMONO = n;
@@ -549,9 +558,9 @@ namespace mml2vgmIDE
 
         private void NoteOffMONO(int n)
         {
-            if (cChip == null) return;
-            eChip = Audio.GetChip(EnmChip.YM2612);
-            if (eChip == null) return;
+            //if (cChip == null) return;
+            //eChip = Audio.GetChip(EnmChip.YM2612);
+            //if (eChip == null) return;
             if (n < 0 || n > 127) return;
 
             if (latestNoteNumberMONO != n) return;
@@ -626,60 +635,67 @@ namespace mml2vgmIDE
             mv = new Mml2vgm(null, text, "", "", stPath, dmy, wrkPath, false);
             mv.isIDE = true;
             mv.Start();
-            cChip = mv.desVGM.ym2612[0];
+            cChip = mv.desVGM.ym2608[0];
             pw = cChip.lstPartWork[0];
             cChip.use = true;
             mv.desVGM.isRealTimeMode = true;
-            for (int i = 0; i < 4; i++)
-            {
-                pw.apg.lfo[i].param = new List<int>();
-                pw.apg.lfo[i].param.Add(0);
-                pw.apg.lfo[i].param.Add(0);
-                pw.apg.lfo[i].param.Add(0);
-                pw.apg.lfo[i].param.Add(0);
-                pw.apg.lfo[i].param.Add(0);
-                pw.apg.lfo[i].param.Add(0);
-                pw.apg.lfo[i].param.Add(0);
-                newParam.lfo[i].param = new List<int>();
-                newParam.lfo[i].param.Add(0);
-                newParam.lfo[i].param.Add(0);
-                newParam.lfo[i].param.Add(0);
-                newParam.lfo[i].param.Add(0);
-                newParam.lfo[i].param.Add(0);
-                newParam.lfo[i].param.Add(0);
-                newParam.lfo[i].param.Add(0);
-                oldParam.lfo[i].param = new List<int>();
-                oldParam.lfo[i].param.Add(0);
-                oldParam.lfo[i].param.Add(0);
-                oldParam.lfo[i].param.Add(0);
-                oldParam.lfo[i].param.Add(0);
-                oldParam.lfo[i].param.Add(0);
-                oldParam.lfo[i].param.Add(0);
-                oldParam.lfo[i].param.Add(0);
-            }
-            pw.apg.lfo[0].sw = true;
-            pw.apg.lfo[0].direction = 1;
-            pw.apg.lfo[0].type = eLfoType.Vibrato;
-            pw.apg.lfo[0].param[0] = 100;//delay
-            pw.apg.lfo[0].param[1] = 1;
-            pw.apg.lfo[0].param[2] = 3;
-            pw.apg.lfo[0].param[3] = 15;//depth
-            pw.apg.lfo[0].param[4] = 0;//type 0:tri
-            pw.apg.lfo[0].param[5] = 1;
-            pw.apg.lfo[0].param[6] = 0;
 
-            mv.desBuf = null;
-            if (mv.desVGM.dat != null) mv.desVGM.dat.Clear();
-            if (mv.desVGM.xdat != null) mv.desVGM.xdat.Clear();
+            SoundManager = Audio.sm;
+            SoundManager.AddDataSeqFrqEvent(OnDataSeqFrq);
+            SoundManager.CurrentChip = "YM2608";
+            SoundManager.CurrentCh = 1;
 
-            rtMML = new RealTimeMML();
-            rtMML.chip = cChip;
-            rtMML.vgm = mv.desVGM;
+
+            //for (int i = 0; i < 4; i++)
+            //{
+            //    pw.apg.lfo[i].param = new List<int>();
+            //    pw.apg.lfo[i].param.Add(0);
+            //    pw.apg.lfo[i].param.Add(0);
+            //    pw.apg.lfo[i].param.Add(0);
+            //    pw.apg.lfo[i].param.Add(0);
+            //    pw.apg.lfo[i].param.Add(0);
+            //    pw.apg.lfo[i].param.Add(0);
+            //    pw.apg.lfo[i].param.Add(0);
+            //    newParam.lfo[i].param = new List<int>();
+            //    newParam.lfo[i].param.Add(0);
+            //    newParam.lfo[i].param.Add(0);
+            //    newParam.lfo[i].param.Add(0);
+            //    newParam.lfo[i].param.Add(0);
+            //    newParam.lfo[i].param.Add(0);
+            //    newParam.lfo[i].param.Add(0);
+            //    newParam.lfo[i].param.Add(0);
+            //    oldParam.lfo[i].param = new List<int>();
+            //    oldParam.lfo[i].param.Add(0);
+            //    oldParam.lfo[i].param.Add(0);
+            //    oldParam.lfo[i].param.Add(0);
+            //    oldParam.lfo[i].param.Add(0);
+            //    oldParam.lfo[i].param.Add(0);
+            //    oldParam.lfo[i].param.Add(0);
+            //    oldParam.lfo[i].param.Add(0);
+            //}
+            //pw.apg.lfo[0].sw = true;
+            //pw.apg.lfo[0].direction = 1;
+            //pw.apg.lfo[0].type = eLfoType.Vibrato;
+            //pw.apg.lfo[0].param[0] = 100;//delay
+            //pw.apg.lfo[0].param[1] = 1;
+            //pw.apg.lfo[0].param[2] = 3;
+            //pw.apg.lfo[0].param[3] = 15;//depth
+            //pw.apg.lfo[0].param[4] = 0;//type 0:tri
+            //pw.apg.lfo[0].param[5] = 1;
+            //pw.apg.lfo[0].param[6] = 0;
+
+            //mv.desBuf = null;
+            //if (mv.desVGM.dat != null) mv.desVGM.dat.Clear();
+            //if (mv.desVGM.xdat != null) mv.desVGM.xdat.Clear();
+
+            //rtMML = new RealTimeMML();
+            //rtMML.chip = cChip;
+            //rtMML.vgm = mv.desVGM;
 
             this.TopMost = true;
             this.TopMost = setting.midiKbd.AlwaysTop;
 
-            SoundManager.SetMode(SendMode.RealTime);
+            //SoundManager.SetMode(SendMode.RealTime);
         }
 
         private void dmyDisp(string dmy)
@@ -702,54 +718,54 @@ namespace mml2vgmIDE
             }
 
             if (mv.desVGM.dat.Count == 0) return;
-            eChip = Audio.GetChip(EnmChip.YM2612);
+            eChip = Audio.GetChip(EnmChip.YM2608);
             if (eChip == null) return;
 
 
             Enq enq = SoundManager.GetDriverDataEnqueue();
-            List<outDatum> dat = mv.desVGM.dat;
+            List<outDatum> dat = mv.desVGM.ym2608[0].lstPartWork[0].pg[0].sendData;// mv.desVGM.dat;
 
             lock (lockObject)
             {
-                int badr = 0;
-                while (badr < dat.Count)
+                while (0 < dat.Count)
                 {
-                    outDatum od = dat[badr];
+                    outDatum od = dat[0];
                     if (od == null)
                     {
-                        badr++;
+                        dat.RemoveAt(0);
                         continue;
                     }
 
                     byte val = od.val;
+                    byte adr;
+                    byte prm;
                     switch (val)
                     {
                         case 0x52:
-                            byte adr = dat[badr + 1].val;
-                            byte prm = dat[badr + 2].val;
-                            enq(dat[badr], SeqCounter, eChip, EnmDataType.Normal, adr, prm, null);
-                            //enq(dat[badr], 0, eChip, EnmDataType.Normal, adr, prm, null);
-                            if (adr == 0x28 && dat[badr].type == enmMMLType.Note && dat[badr].args != null && dat[badr].args.Count > 1)
+                            adr = dat[ 1].val;
+                            prm = dat[ 2].val;
+                            enq(dat[0], SeqCounter, eChip, EnmDataType.Normal, adr, prm, null);
+                            dat.RemoveAt(0);
+                            dat.RemoveAt(0);
+                            dat.RemoveAt(0);
+                            break;
+                        case 0x56:
+                            if ( 2 >= dat.Count)
                             {
-                                log.Write(string.Format("noteLog: note:{0} counter:{1}", (int)dat[badr].args[1], SeqCounter));
-                                if (recMode != 0)
-                                {
-                                    if ((int)dat[badr].args[1] >= 0)
-                                    {
-                                        NoteON(SeqCounter, (int)dat[badr].args[1]);
-                                    }
-                                    else
-                                    {
-                                        NoteOFF(SeqCounter, (int)dat[badr].args[1]);
-                                    }
-                                }
+                                return;
                             }
-                            badr += 2;
+                            adr = dat[1].val;
+                            prm = dat[2].val;
+                            enq(dat[0], 0, eChip, EnmDataType.Force, adr, prm, null);
+                            dat.RemoveAt(0);
+                            dat.RemoveAt(0);
+                            dat.RemoveAt(0);
+                            break;
+                        default:
+                            dat.RemoveAt(0);
                             break;
                     }
-                    badr++;
                 }
-                dat.Clear();
             }
         }
 
