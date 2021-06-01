@@ -53,6 +53,7 @@ namespace mml2vgmIDE
         private bool ctrl = false;
         private bool shift = false;
         private bool alt = false;
+        private MIDIKbd midikbd;
 
         public bool SendProcessCmdKey(ref Message msg, Keys keyData)
         {
@@ -189,7 +190,9 @@ namespace mml2vgmIDE
             }
 
             OpenLatestFile(startFn);
-            
+
+            midikbd = new MIDIKbd(this.setting, newParam.mIDIKbd);
+            midikbd.StartMIDIInMonitoring();
         }
 
         private void CheckAndLoadMucomDotNET(string startupPath, Action<string> disp)
@@ -774,37 +777,38 @@ namespace mml2vgmIDE
 
         private void TsmiShowMIDIKbd_Click(object sender, EventArgs e)
         {
-            if (frmMIDIKbd == null)
-            {
-                //if (!Audio.ReadyOK())
-                //{
-                //    firstPlay();
-                //}
-                //else
-                //{
-                //    if (Audio.sm.Mode == SendMode.none)
-                //    {
-                //        Audio.sm.RequestStart(SendMode.RealTime, true, true);
-                //    }
-                //    else
-                //    {
-                //        Audio.sm.SetMode(SendMode.RealTime);
-                //    }
-                //}
+            //if (frmMIDIKbd == null)
+            //{
+            //if (!Audio.ReadyOK())
+            //{
+            //    firstPlay();
+            //}
+            //else
+            //{
+            //    if (Audio.sm.Mode == SendMode.none)
+            //    {
+            //        Audio.sm.RequestStart(SendMode.RealTime, true, true);
+            //    }
+            //    else
+            //    {
+            //        Audio.sm.SetMode(SendMode.RealTime);
+            //    }
+            //}
 
-                frmMIDIKbd = new FrmMIDIKbd(this, 2, newParam.mIDIKbd);
-                frmMIDIKbd.KeyDown += FrmMain_KeyDown;
-                frmMIDIKbd.KeyUp += FrmMain_KeyUp;
-                frmMIDIKbd.Show();
-                ChannelInfo ci = GetCurrentChannelInfo();
-            }
-            else
-            {
-                frmMIDIKbd.Close();
-                frmMIDIKbd = null;
-            }
+            //frmMIDIKbd = new FrmMIDIKbd(this, 2, newParam.mIDIKbd);
+            //frmMIDIKbd.KeyDown += FrmMain_KeyDown;
+            //frmMIDIKbd.KeyUp += FrmMain_KeyUp;
+            //frmMIDIKbd.Show();
+            //ChannelInfo ci = GetCurrentChannelInfo();
 
-            TsmiShowMIDIKbd.Checked = frmMIDIKbd != null;
+            //}
+            //else
+            //{
+            //frmMIDIKbd.Close();
+            //frmMIDIKbd = null;
+            //}
+
+            //TsmiShowMIDIKbd.Checked = frmMIDIKbd != null;
         }
 
         private void FrmMIDIKbd_KeyDown(object sender, KeyEventArgs e)
@@ -2977,6 +2981,8 @@ namespace mml2vgmIDE
             log.ForcedWrite("frmMain_FormClosing:STEP 00");
 
             timer.Enabled = false;
+
+            midikbd.StopMIDIInMonitoring();
 
             Audio.Close();
             Audio.RealChipClose();

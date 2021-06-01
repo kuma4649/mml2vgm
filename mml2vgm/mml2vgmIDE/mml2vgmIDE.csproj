@@ -327,6 +327,7 @@
     <Compile Include="InstrumentAtValSound.cs" />
     <Compile Include="log.cs" />
     <Compile Include="MDChipParams.cs" />
+    <Compile Include="MIDIKbd.cs" />
     <Compile Include="midiOutInfo.cs" />
     <Compile Include="MIDIParam.cs" />
     <Compile Include="MidWriter.cs" />
@@ -646,6 +647,12 @@
     <Content Include="Resource\LineCursor.png" />
     <Content Include="Resource\Warning.png" />
     <Content Include="Script\compileMuc.py">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Script\Document\uncomment.py">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Script\Document\commentOut.py">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Script\Git\git.py">
