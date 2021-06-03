@@ -497,29 +497,31 @@ namespace mml2vgmIDE
             azukiControl.SetSelection(st, ed);
             string line = azukiControl.GetSelectedText();
             string[] lines = line.Split(new string[] { "\r\n" }, StringSplitOptions.None);
+
             //チェック
             bool flg = false;
             foreach (string s in lines)
             {
-                if (s.Length < 1 || s[0] != '\'')
+                if (s.Length < 1 || s[0] != ';')
                 {
                     flg = true;
                     break;
                 }
             }
+
             line = "";
             if (flg)
             {
-                // 'をつける
+                // ;をつける
                 foreach (string s in lines)
                 {
-                    line += "'" + s + "\r\n";
+                    line += ";" + s + "\r\n";
                 }
                 line = line.Substring(0, line.Length - 2);
             }
             else
             {
-                // 'をカットする
+                // ;をカットする
                 foreach (string s in lines)
                 {
                     line += s.Substring(1) + "\r\n";

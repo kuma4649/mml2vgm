@@ -1068,6 +1068,75 @@ namespace mml2vgmIDE
                 return true;
             }
 
+            int pass = 0;
+            for (int i = 0; i < scriptShortCutKey.Count; i++)
+            {
+                Tuple<Setting.ShortCutKey.ShortCutKeyInfo, Tuple<int, string, string[], string, string>> ssck = scriptShortCutKey[i];
+                Setting.ShortCutKey.ShortCutKeyInfo info = ssck.Item1;
+
+                Keys k = keyData;
+                if (info.step == 0)
+                {
+                    if (info.shift != ((k & Keys.Shift) == Keys.Shift)
+                    || info.ctrl != ((k & Keys.Control) == Keys.Control)
+                    || info.alt != ((k & Keys.Alt) == Keys.Alt))
+                        continue;
+                }
+                else
+                {
+                    if (info.shift2 != ((k & Keys.Shift) == Keys.Shift)
+                    || info.ctrl2 != ((k & Keys.Control) == Keys.Control)
+                    || info.alt2 != ((k & Keys.Alt) == Keys.Alt))
+                    {
+                        info.step = 0;
+                        continue;
+                    }
+                }
+
+                k = k & ~Keys.Shift;
+                k = k & ~Keys.Control;
+                k = k & ~Keys.Alt;
+
+                if (k == Keys.ControlKey) return base.ProcessCmdKey(ref msg, keyData);
+
+                if (info.step == 0)
+                {
+                    if (info.key == k.ToString())
+                    {
+                        info.step++;
+                        pass++;
+                    }
+                }
+                else
+                {
+                    if (info.key2 == k.ToString())
+                    {
+                        //ショートカット確定!
+
+                        //全てのショートカットのステップをリセットする
+                        for (int j = 0; j < scriptShortCutKey.Count; j++)
+                        {
+                            Setting.ShortCutKey.ShortCutKeyInfo inf = ((Tuple<Setting.ShortCutKey.ShortCutKeyInfo, Tuple<int, string, string[], string, string>>)scriptShortCutKey[j]).Item1;
+                            inf.step = 0;
+                        }
+
+                        Mml2vgmInfo minfo = new Mml2vgmInfo();
+                        minfo.parent = this;
+                        minfo.name = "";
+                        minfo.document = GetActiveDocument();
+                        minfo.fileNamesFull = null;
+
+                        string cd = Directory.GetCurrentDirectory();
+                        ScriptInterface.run(ssck.Item2.Item4, minfo, ssck.Item2.Item1);
+                        Directory.SetCurrentDirectory(cd);
+
+                        return true;
+                    }
+                    info.step = 0;
+                }
+            }
+            if (pass != 0) return true;
+
             for (int i = 0; i < setting.shortCutKey.Info.Length; i++)
             {
                 if (setting.shortCutKey.Info[i].shift != ((keyData & Keys.Shift) == Keys.Shift)) continue;
@@ -3709,6 +3778,8 @@ namespace mml2vgmIDE
 
         private List<List<LinePos>> lstOldAliesPos = new List<List<LinePos>>();
         private LinePos oldTraceLoc = null;
+        private List<Tuple<Setting.ShortCutKey.ShortCutKeyInfo, Tuple<int, string, string[], string, string>>> scriptShortCutKey
+            = new List<Tuple<Setting.ShortCutKey.ShortCutKeyInfo, Tuple<int, string, string[], string, string>>>();
 
         private void TsmiFncHide_Click(object sender, EventArgs e)
         {
@@ -3859,7 +3930,7 @@ namespace mml2vgmIDE
                 foreach (DirectoryInfo ds in dm.GetDirectories())
                 {
                     TreeNode tn = new TreeNode(ds.Name);
-                    tn.Tag = new Tuple<int, string, string[], string>(-1, "", new string[] { "" }, ds.FullName);
+                    tn.Tag = new Tuple<int, string, string[], string, string>(-1, "", new string[] { "" }, ds.FullName, "");
                     SScript(tn, ds.FullName);
                     if (tn.Nodes.Count > 0) parent.Nodes.Add(tn);
                 }
@@ -3868,10 +3939,17 @@ namespace mml2vgmIDE
                     string[] scriptTitles = ScriptInterface.GetScriptTitles(fi.FullName);
                     string[] scriptTypes = ScriptInterface.GetScriptTypes(fi.FullName);
                     string[] scriptSupportFileExt = ScriptInterface.GetScriptSupportFileExt(fi.FullName);
+                    string[] scriptShortCutKey = ScriptInterface.GetDefaultShortCutKey(fi.FullName);
                     for (int i = 0; i < scriptTitles.Length; i++)
                     {
                         TreeNode tn = new TreeNode(scriptTitles[i]);
-                        tn.Tag = new Tuple<int, string, string[], string>(i, scriptTypes[i], scriptSupportFileExt[i].Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries), fi.FullName);
+                        tn.Tag = new Tuple<int, string, string[], string, string>(
+                            i,
+                            scriptTypes[i],
+                            scriptSupportFileExt[i].Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries),
+                            fi.FullName,
+                            i < scriptShortCutKey.Length ? scriptShortCutKey[i] : null
+                            );
                         parent.Nodes.Add(tn);
                     }
                 }
@@ -3884,7 +3962,7 @@ namespace mml2vgmIDE
             foreach (TreeNode ctn in tn.Nodes)
             {
                 ToolStripMenuItem ctsmi = new ToolStripMenuItem(ctn.Text);
-                Tuple<int, string, string[], string> tpl = (Tuple<int, string, string[], string>)ctn.Tag;
+                Tuple<int, string, string[], string, string> tpl = (Tuple<int, string, string[], string, string>)ctn.Tag;
                 if (tpl.Item1 != -1 && tpl.Item2.ToUpper() != target)
                 {
                     continue;
@@ -3904,6 +3982,51 @@ namespace mml2vgmIDE
                 else
                 {
                     ctsmi.MouseUp += tsmiScriptFileItem_Clicked;
+                }
+
+                if (!string.IsNullOrEmpty(tpl.Item5))
+                {
+                    //
+                    bool[] shift = new bool[2] { false, false };
+                    bool[] ctrl = new bool[2] { false, false };
+                    bool[] alt = new bool[2] { false, false };
+                    string[] key = new string[2] { "", "" };
+
+                    string[] strks = tpl.Item5.ToUpper().Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
+                    for (int i = 0; i < 2; i++)
+                    {
+                        if (i >= strks.Length) continue;
+                        string strk = strks[i];
+                        string[] keys = strk.Trim().Split(new string[] { "+" }, StringSplitOptions.RemoveEmptyEntries);
+                        foreach (string k in keys)
+                        {
+                            string kt = k.Trim();
+                            if (kt == "SHIFT") shift[i] = true;
+                            else if (kt == "CTRL") ctrl[i] = true;
+                            else if (kt == "ALT") alt[i] = true;
+                            else key[i] = kt;
+                        }
+                    }
+
+                    Setting.ShortCutKey.ShortCutKeyInfo info = new Setting.ShortCutKey.ShortCutKeyInfo(
+                        tpl.Item1//number
+                        , tpl.Item2//func
+                        , shift[0]
+                        , ctrl[0]
+                        , alt[0]
+                        , key[0]
+                        , shift[1]
+                        , ctrl[1]
+                        , alt[1]
+                        , key[1]
+                        );
+
+                    scriptShortCutKey.Add(
+                        new Tuple<Setting.ShortCutKey.ShortCutKeyInfo, Tuple<int, string, string[], string, string>>(
+                            info
+                            , tpl
+                            )
+                        );
                 }
             }
         }
@@ -3940,7 +4063,8 @@ namespace mml2vgmIDE
 
             //if (d == null) return;
 
-            Tuple<int, string, string[], string> tpl = (Tuple<int, string, string[], string>)((ToolStripMenuItem)sender).Tag;
+            Tuple<int, string, string[], string, string> tpl 
+                = (Tuple<int, string, string[], string, string>)((ToolStripMenuItem)sender).Tag;
             string fn = tpl.Item4;
 
             List<string> lstFullPath = new List<string>();

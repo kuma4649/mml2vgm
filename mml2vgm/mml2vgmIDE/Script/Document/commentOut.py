@@ -13,8 +13,8 @@ class Mml2vgmScript:
 
     #このスクリプトはどこから実行されることを想定しているかを指定する
     #複数のタイトルを持つ場合はその分だけ|をデリミタとして列挙する。
-    # FromMenu メインウィンドウのメニューストリップ、スクリプトから実行されることを想定
-    # FromTreeViewContextMenu ツリービューのコンテキストメニューから実行されることを想定
+    # FromMenu メインウィンドウのメニューストリップ＞スクリプトから実行される
+    # FromTreeViewContextMenu ツリービューのコンテキストメニューから実行される
     def scriptType(self):
         return r"FromMenu"
 
@@ -22,6 +22,11 @@ class Mml2vgmScript:
     #複数の拡張子をサポートする場合は更に;で区切って列挙する
     def supportFileExt(self):
         return r".*"
+
+    #ショートカットキーを定義します。
+    #,で区切ることで順番に入力することが必要なショートカットになります
+    def defaultShortCutKey(self):
+        return r"CTRL+K,CTRL+C"
 
     #スクリプトのメインとして実行する
     def run(self, Mml2vgmInfo, index):
@@ -32,6 +37,8 @@ class Mml2vgmScript:
 
         #azukiのDocumentを得る
         doc = Mml2vgmInfo.document.editor.azukiControl.Document
+
+        doc.BeginUndo()
 
         #選択範囲を取得する        
         be = clr.Reference[System.Int32]()
@@ -52,6 +59,8 @@ class Mml2vgmScript:
         er = doc.GetLineEndIndexFromCharIndex( en.Value )
         doc.SetSelection( br , er )
 
-        #ScriptInfo()を返すと置換が発生するためIntPtr.Zero(null)を返す
-        return System.IntPtr.Zero
+        doc.EndUndo()
+
+        #ScriptInfo()を返すと置換が発生するためNoneを返す
+        return None
 

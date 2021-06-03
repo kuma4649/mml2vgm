@@ -21,7 +21,7 @@ namespace mml2vgmIDE
         private static string[] GetScriptInfo(string path, int t)
         {
 
-            ScriptEngine engine = null;
+            ScriptEngine engine;
             ScriptRuntime runtime = null;
 
             try
@@ -49,6 +49,8 @@ namespace mml2vgmIDE
                         return mml2vgmScript.scriptType().Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
                     case 2:
                         return mml2vgmScript.supportFileExt().Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
+                    case 3:
+                        return mml2vgmScript.defaultShortCutKey().Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
                 }
             }
             catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)
@@ -61,7 +63,7 @@ namespace mml2vgmIDE
             }
             finally
             {
-                runtime.Shutdown();
+                if (runtime != null) runtime.Shutdown();
                 GC.Collect();
             }
             return new string[] { "" };// Path.GetFileName(path);
@@ -80,6 +82,11 @@ namespace mml2vgmIDE
         public static string[] GetScriptSupportFileExt(string path)
         {
             return GetScriptInfo(path, 2);
+        }
+
+        public static string[] GetDefaultShortCutKey(string path)
+        {
+            return GetScriptInfo(path, 3);
         }
 
         public static void run(string path, Mml2vgmInfo info, int index)

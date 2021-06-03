@@ -14,6 +14,7 @@
       def title(self)
       def scriptType(self)
       def supportFileExt(self)
+      def defaultShortCutKey(self)
 
   title
     スクリプトのタイトルを設定します。
@@ -27,6 +28,11 @@
     サポートするファイルの拡張子を設定します。
 	複数設定することが可能です。
 	今のところ、ツリービューからの起動時にのみこの設定が参照されます。
+  defaultShortCutKey
+    スクリプトにショートカットキーを割り当てたい場合に設定します。
+    通常のショートカットキーよりも優先されます。
+    重複のチェックなどは行いません。
+    ,で区切ることで順番に入力することが必要なショートカットになります。(但し、2個まで)
 
   ユーザーがスクリプトを選択するとmml2vgmIDEはrun関数を呼び出します。
   引数に、Mml2vgmInfoとindexが指定されています。

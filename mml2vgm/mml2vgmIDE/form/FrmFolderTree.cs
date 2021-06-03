@@ -706,7 +706,7 @@ namespace mml2vgmIDE
                     CheckExtension(tsmi.DropDownItems, exts);
                 }
 
-                Tuple<int, string, string[], string> tp = (Tuple<int, string, string[], string>)item.Tag;
+                Tuple<int, string, string[], string, string> tp = (Tuple<int, string, string[], string, string>)item.Tag;
                 if (tp == null) continue;
                 if (tp.Item1 < 0) continue;
 

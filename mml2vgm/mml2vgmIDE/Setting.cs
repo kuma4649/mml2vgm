@@ -4300,23 +4300,38 @@ namespace mml2vgmIDE
                 public bool alt = false;
                 public string key = "";
 
+                public bool shift2 = false;
+                public bool ctrl2 = false;
+                public bool alt2 = false;
+                public string key2 = "";
+
+                public int step = 0;
+
                 public ShortCutKeyInfo()
                 {
                 }
 
-                public ShortCutKeyInfo(int number, string func, bool shift, bool ctrl, bool alt, string key)
+                public ShortCutKeyInfo(int number, string func
+                    , bool shift, bool ctrl, bool alt, string key
+                    , bool shift2 = false, bool ctrl2 = false, bool alt2 = false, string key2 = "")
                 {
                     this.number = number;
                     this.func = func;
+
                     this.shift = shift;
                     this.ctrl = ctrl;
                     this.alt = alt;
                     this.key = key;
+
+                    this.shift2 = shift2;
+                    this.ctrl2 = ctrl2;
+                    this.alt2 = alt2;
+                    this.key2 = key2;
                 }
 
                 public ShortCutKeyInfo Copy()
                 {
-                    ShortCutKeyInfo ret = new ShortCutKeyInfo(number, func, shift, ctrl, alt, key);
+                    ShortCutKeyInfo ret = new ShortCutKeyInfo(number, func, shift, ctrl, alt, key, shift2, ctrl2, alt2, key2);
                     return ret;
                 }
 
