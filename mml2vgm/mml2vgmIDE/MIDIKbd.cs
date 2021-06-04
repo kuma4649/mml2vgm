@@ -14,18 +14,24 @@ namespace mml2vgmIDE
     public class MIDIKbd
     {
         private MDChipParams.MIDIKbd newParam = null;
-        private MDChipParams.MIDIKbd oldParam = new MDChipParams.MIDIKbd();
+        //private MDChipParams.MIDIKbd oldParam = new MDChipParams.MIDIKbd();
         private Mml2vgm mv = null;
-        private partWork pw;
-        private ClsChip cChip = null;
-        private Chip eChip = null;
         private SoundManager.SoundManager SoundManager = null;
         private Setting setting = null;
         private MidiIn midiin = null;
         private byte[] noteFlg = new byte[164];
         private int latestNoteNumberMONO = -1;
+        private string noteTbl = "ccddeffggaab";
         private int[] shiftTbl = new int[] { 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0 };
-        private Queue<MML> qMML = new Queue<MML>();
+        private Queue<KBDInfo> qMML = new Queue<KBDInfo>();
+
+        public class KBDInfo
+        {
+            public Chip eChip;//エミュ
+            public ClsChip chip;//MML
+            public partWork pw;//MML
+            public MML mml;//MML
+        }
 
         //キーボード入力向け
         //private Keys[] kbdTbl = new Keys[] {
@@ -44,7 +50,6 @@ namespace mml2vgmIDE
             try
             {
                 this.setting = setting;
-                //keyPress = new bool[kbdTbl.Length];
                 if (setting.midiKbd.Octave == 0) setting.midiKbd.Octave = 4;
                 this.newParam = newParam;
                 Init();
@@ -83,19 +88,17 @@ namespace mml2vgmIDE
             {
                 for (int i = 0; i < MidiIn.NumberOfDevices; i++)
                 {
-                    if (setting.midiKbd.MidiInDeviceName == MidiIn.DeviceInfo(i).ProductName)
+                    if (setting.midiKbd.MidiInDeviceName != MidiIn.DeviceInfo(i).ProductName) continue;
+                    try
                     {
-                        try
-                        {
-                            midiin = new MidiIn(i);
-                            midiin.MessageReceived += midiIn_MessageReceived;
-                            midiin.ErrorReceived += midiIn_ErrorReceived;
-                            midiin.Start();
-                        }
-                        catch
-                        {
-                            midiin = null;
-                        }
+                        midiin = new MidiIn(i);
+                        midiin.MessageReceived += midiIn_MessageReceived;
+                        midiin.ErrorReceived += midiIn_ErrorReceived;
+                        midiin.Start();
+                    }
+                    catch
+                    {
+                        midiin = null;
                     }
                 }
             }
@@ -104,24 +107,20 @@ namespace mml2vgmIDE
 
         public void StopMIDIInMonitoring()
         {
-            if (midiin != null)
+            if (midiin == null) return;
+            try
             {
-                try
-                {
-                    midiin.Stop();
-                    midiin.Dispose();
-                    midiin.MessageReceived -= midiIn_MessageReceived;
-                    midiin.ErrorReceived -= midiIn_ErrorReceived;
-                    midiin = null;
-                }
-                catch
-                {
-                    midiin = null;
-                }
+                midiin.Stop();
+                midiin.Dispose();
+                midiin.MessageReceived -= midiIn_MessageReceived;
+                midiin.ErrorReceived -= midiIn_ErrorReceived;
+                midiin = null;
+            }
+            catch
+            {
+                midiin = null;
             }
         }
-
-
 
 
         private void Init()
@@ -143,14 +142,10 @@ namespace mml2vgmIDE
             if (mv.desVGM.ym2608[0] == null) return;
             if (mv.desVGM.ym2608[0].lstPartWork[0] == null) return;
 
-            cChip = mv.desVGM.ym2608[0];
-            cChip.use = true;
-            pw = cChip.lstPartWork[0];
-
             SoundManager = Audio.sm;
             SoundManager.AddDataSeqFrqEvent(OnDataSeqFrq);
-            SoundManager.CurrentChip = "YM2608";
-            SoundManager.CurrentCh = 1;
+            //SoundManager.CurrentChip = "YM2608";
+            //SoundManager.CurrentCh = 1;
 
         }
 
@@ -170,76 +165,70 @@ namespace mml2vgmIDE
             //        rtMML.OneFrameSeq();
             //}
 
-            if (pw.apg == null) return;
-            eChip = Audio.GetChip(EnmChip.YM2608);
-            if (eChip == null) return;
-
             //入力時に生じた、各チップ向けの送信データをコンパイラを使用して生成する。
             if (qMML.Count < 1) return;
-            while (qMML.Count > 0)
-            {
-                MML mml = qMML.Dequeue();
-                switch (mml.type)
-                {
-                    case enmMMLType.Octave:
-                        cChip.CmdOctave(pw.apg, mml);
-                        break;
-                    case enmMMLType.Note:
-                        if ((int)mml.args[1] >= 0)
-                        {
-                            cChip.CmdNote(pw, pw.apg, mml);//TODO:page制御やってない
-                            cChip.MultiChannelCommand(mml);
-                        }
-                        else
-                        {
-                            cChip.SetKeyOff(pw.apg, mml);
-                        }
-                        break;
-                }
-
-            }
 
             //生成したデータを取得
             mv.desVGM.dat.Clear();
-            List<outDatum> dat = pw.apg.sendData;
-
             //音源への送信データキューへ追加
             Enq enq = SoundManager.GetDriverDataEnqueue();
-            while (0 < dat.Count)
+
+            while (qMML.Count > 0)
             {
-                outDatum od = dat[0];
-                if (od == null)
+                KBDInfo kbdInfo = qMML.Dequeue();
+                switch (kbdInfo.mml.type)
                 {
-                    dat.RemoveAt(0);
-                    continue;
+                    case enmMMLType.Octave:
+                        kbdInfo.chip.CmdOctave(kbdInfo.pw.apg, kbdInfo.mml);
+                        break;
+                    case enmMMLType.Note:
+                        kbdInfo.chip.SetKeyOff(kbdInfo.pw.apg, kbdInfo.mml);
+                        if ((int)kbdInfo.mml.args[1] >= 0)
+                        {
+                            kbdInfo.chip.CmdNote(kbdInfo.pw, kbdInfo.pw.apg, kbdInfo.mml);//TODO:page制御やってない
+                            kbdInfo.chip.MultiChannelCommand(kbdInfo.mml);
+                        }
+                        break;
                 }
 
-                byte val = od.val;
-                byte adr;
-                byte prm;
-                switch (val)
+                List<outDatum> dat = kbdInfo.pw.apg.sendData;
+                while (0 < dat.Count)
                 {
-                    case 0x52://OPN2
-                        adr = dat[1].val;
-                        prm = dat[2].val;
-                        enq(dat[0], SeqCounter, eChip, EnmDataType.Force, adr, prm, null);
+                    outDatum od = dat[0];
+                    if (od == null)
+                    {
                         dat.RemoveAt(0);
-                        dat.RemoveAt(0);
-                        dat.RemoveAt(0);
-                        break;
-                    case 0x56://OPNA
-                        adr = dat[1].val;
-                        prm = dat[2].val;
-                        enq(dat[0], 0, eChip, EnmDataType.Force, adr, prm, null);
-                        dat.RemoveAt(0);
-                        dat.RemoveAt(0);
-                        dat.RemoveAt(0);
-                        break;
-                    default:
-                        dat.RemoveAt(0);
-                        break;
+                        continue;
+                    }
+
+                    byte val = od.val;
+                    byte adr;
+                    byte prm;
+                    switch (val)
+                    {
+                        case 0x52://OPN2
+                            adr = dat[1].val;
+                            prm = dat[2].val;
+                            enq(dat[0], SeqCounter, kbdInfo.eChip, EnmDataType.Force, adr, prm, null);
+                            dat.RemoveAt(0);
+                            dat.RemoveAt(0);
+                            dat.RemoveAt(0);
+                            break;
+                        case 0x56://OPNA
+                            adr = dat[1].val;
+                            prm = dat[2].val;
+                            enq(dat[0], 0, kbdInfo.eChip, EnmDataType.Force, adr, prm, null);
+                            dat.RemoveAt(0);
+                            dat.RemoveAt(0);
+                            dat.RemoveAt(0);
+                            break;
+                        default:
+                            dat.RemoveAt(0);
+                            break;
+                    }
                 }
             }
+
         }
 
         private void midiIn_ErrorReceived(object sender, MidiInMessageEventArgs e)
@@ -298,18 +287,27 @@ namespace mml2vgmIDE
             if (n < 0 || n > 127) return;
 
             NoteOffMONO(latestNoteNumberMONO);
-            MML mml = MakeMML_Octave(n);
-            qMML.Enqueue(mml);
-            //cChip.CmdOctave(pw.apg, mml);
-            mml = MakeMML_NoteOn(n);
-            qMML.Enqueue(mml);
-            //lock (lockObject)
-            //{
-            //    cChip.CmdNote(pw, pw.apg, mml);//TODO:page制御やってない
-            //    cChip.MultiChannelCommand(mml);
-            //}
-
             latestNoteNumberMONO = n;
+
+            KBDInfo kbdInfo = new KBDInfo();
+            kbdInfo.chip = mv.desVGM.ym2608[0];
+            if (kbdInfo.chip == null) return;
+            kbdInfo.chip.use = true;
+            kbdInfo.pw = kbdInfo.chip.lstPartWork[0];
+            if (kbdInfo.pw == null) return;
+            kbdInfo.mml= MakeMML_Octave(n);
+            kbdInfo.eChip = Audio.GetChip(EnmChip.YM2608);
+            if (kbdInfo.eChip == null) return;
+            qMML.Enqueue(kbdInfo);
+
+            kbdInfo = new KBDInfo();
+            kbdInfo.chip = mv.desVGM.ym2608[0];
+            kbdInfo.chip.use = true;
+            kbdInfo.pw = kbdInfo.chip.lstPartWork[0];
+            kbdInfo.mml = MakeMML_NoteOn(n);
+            kbdInfo.eChip = Audio.GetChip(EnmChip.YM2608);
+            qMML.Enqueue(kbdInfo);
+
         }
 
         private void NoteOff(int n)
@@ -330,8 +328,17 @@ namespace mml2vgmIDE
         {
             if (n < 0 || n > 127) return;
             if (latestNoteNumberMONO != n) return;
-            MML mml = MakeMML_NoteOff(n);
-            qMML.Enqueue(mml);
+
+            KBDInfo kbdInfo = new KBDInfo();
+            kbdInfo.chip = mv.desVGM.ym2608[0];
+            if (kbdInfo.chip == null) return;
+            kbdInfo.chip.use = true;
+            kbdInfo.pw = kbdInfo.chip.lstPartWork[0];
+            if (kbdInfo.pw == null) return;
+            kbdInfo.mml = MakeMML_NoteOff(n);
+            kbdInfo.eChip = Audio.GetChip(EnmChip.YM2608);
+            if (kbdInfo.eChip == null) return;
+            qMML.Enqueue(kbdInfo);
         }
 
         private MML MakeMML_Octave(int n)
@@ -355,7 +362,7 @@ namespace mml2vgmIDE
             mml.args = new List<object>();
             Note note = new Note();
             mml.args.Add(note);
-            note.cmd = "ccddeffggaab"[n % 12];
+            note.cmd = noteTbl[n % 12];
             note.shift = shiftTbl[n % 12];
             note.length = 1;
             mml.args.Add(n);
@@ -372,7 +379,7 @@ namespace mml2vgmIDE
             mml.args = new List<object>();
             Note note = new Note();
             mml.args.Add(note);
-            note.cmd = "ccddeffggaab"[n % 12];
+            note.cmd = noteTbl[n % 12];
             note.shift = shiftTbl[n % 12];
             note.length = 1;
             mml.args.Add(-n);
