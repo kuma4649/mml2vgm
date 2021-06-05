@@ -8,8 +8,10 @@ namespace mml2vgmIDE.MMLParameter
 {
     public class AY8910 : Instrument
     {
-        public AY8910(SoundManager.Chip chip,Setting setting) : base(3, chip, setting)
+
+        public AY8910(SoundManager.Chip chip, Setting setting, MIDIKbd midiKbd) : base(3, chip, setting, midiKbd)
         {
+
             for (int i = 0; i < 3; i++)
             {
                 vol[i] = 15;
@@ -42,7 +44,7 @@ namespace mml2vgmIDE.MMLParameter
             beforeTie[od.linePos.ch] = nt.tieSw;
         }
 
-        public static Instrument SetupInstInfo(outDatum od, ref SoundManager.Chip chip,Setting setting,bool isTrace)
+        public static Instrument SetupInstInfo(outDatum od, ref SoundManager.Chip chip, Setting setting, bool isTrace, MIDIKbd midiKbd)
         {
             if (Audio.chipRegister == null || Audio.chipRegister.AY8910 == null) return null;
 
@@ -57,7 +59,7 @@ namespace mml2vgmIDE.MMLParameter
                 chip = Audio.chipRegister.AY8910[zChip.Index];
             }
 
-            AY8910 ay891 = new AY8910(chip, setting);
+            AY8910 ay891 = new AY8910(chip, setting, midiKbd);
             ay891.isTrace = isTrace;
 
             return ay891;

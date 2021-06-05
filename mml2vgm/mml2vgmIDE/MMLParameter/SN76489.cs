@@ -7,7 +7,7 @@ namespace mml2vgmIDE.MMLParameter
 {
     public class SN76489 : Instrument
     {
-        public SN76489(SoundManager.Chip chip, Setting setting) : base(4, chip,setting)
+        public SN76489(SoundManager.Chip chip, Setting setting, MIDIKbd midiKbd) : base(4, chip,setting,midiKbd)
         {
             for (int i = 0; i < 4; i++)
             {

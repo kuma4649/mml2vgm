@@ -3177,6 +3177,7 @@ namespace mml2vgmIDE
                                 )
                             )
                         )
+                    , midikbd
                     );
                 frmPartCounter.Start(Audio.mmlParams);
 
@@ -3314,7 +3315,7 @@ namespace mml2vgmIDE
                         mff = EnmMmlFileFormat.MDL;
                         break;
                 }
-                Audio.mmlParams.Init(isTrace, mff);
+                Audio.mmlParams.Init(isTrace, mff, midikbd);
                 frmPartCounter.Start(Audio.mmlParams);
 
                 if (isTrace && ac != null)

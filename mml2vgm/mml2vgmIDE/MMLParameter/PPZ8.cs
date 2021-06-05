@@ -14,7 +14,7 @@ namespace mml2vgmIDE.MMLParameter
         public EnmMmlFileFormat mmlType = EnmMmlFileFormat.GWI;
         private string[] noteStrTbl = new string[] { "c", "c+", "d", "d+", "e", "f", "f+", "g", "g+", "a", "a+", "b" };
 
-        public PPZ8(SoundManager.Chip chip, Setting setting) : base(8, chip,setting)
+        public PPZ8(SoundManager.Chip chip, Setting setting, MIDIKbd midiKbd) : base(8, chip,setting,midiKbd)
         {
             for (int i = 0; i < 8; i++)
             {

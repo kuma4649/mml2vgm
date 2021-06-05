@@ -1,4 +1,8 @@
 更新履歴
+TAG457 2021/06/05
+  IDE:KBD:限定的ですがそれなりに動作。
+  (README.md参照)
+
 TAG456 2021/06/04
   IDE:mucomDotNET差し替え
   IDE:KBD:まだ^3途中です。。。

@@ -7,7 +7,7 @@ namespace mml2vgmIDE.MMLParameter
 {
     public class SegaPCM : Instrument
     {
-        public SegaPCM(SoundManager.Chip chip, Setting setting) : base(16, chip,setting)
+        public SegaPCM(SoundManager.Chip chip, Setting setting, MIDIKbd midiKbd) : base(16, chip,setting,midiKbd)
         {
             for (int i = 0; i < 16; i++)
             {

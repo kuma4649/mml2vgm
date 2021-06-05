@@ -9,7 +9,7 @@ namespace mml2vgmIDE.MMLParameter
     {
         public override string Name => "YM2608";
 
-        public YM2608(SoundManager.Chip chip, Setting setting) : base(20, chip, setting)
+        public YM2608(SoundManager.Chip chip, Setting setting, MIDIKbd midiKbd) : base(20, chip, setting,midiKbd)
         {
         }
 

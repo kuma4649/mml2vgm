@@ -7,7 +7,7 @@ namespace mml2vgmIDE.MMLParameter
 {
     public class RF5C164 : Instrument
     {
-        public RF5C164(SoundManager.Chip chip, Setting setting) : base(8, chip,setting)
+        public RF5C164(SoundManager.Chip chip, Setting setting, MIDIKbd midiKbd) : base(8, chip,setting,midiKbd)
         {
             for (int i = 0; i < 8; i++)
             {

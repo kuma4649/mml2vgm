@@ -24,6 +24,8 @@ namespace mml2vgmIDE
         private string noteTbl = "ccddeffggaab";
         private int[] shiftTbl = new int[] { 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0 };
         private Queue<KBDInfo> qMML = new Queue<KBDInfo>();
+        private YM2608 activeChip=null;
+        private int activeCh = -1;
 
         public class KBDInfo
         {
@@ -103,6 +105,12 @@ namespace mml2vgmIDE
                 }
             }
 
+        }
+
+        internal void SetAssignChipCh(EnmChip yM2608, int ch)
+        {
+            if (yM2608 == EnmChip.YM2608) activeChip = mv.desVGM.ym2608[0];
+            activeCh = ch;
         }
 
         public void StopMIDIInMonitoring()
@@ -289,11 +297,15 @@ namespace mml2vgmIDE
             NoteOffMONO(latestNoteNumberMONO);
             latestNoteNumberMONO = n;
 
+
+            GetChipCh(out ClsChip chip, out int ch);
+            if (chip == null || ch < 0) return;
+
             KBDInfo kbdInfo = new KBDInfo();
-            kbdInfo.chip = mv.desVGM.ym2608[0];
+            kbdInfo.chip = chip;// mv.desVGM.ym2608[0];
             if (kbdInfo.chip == null) return;
             kbdInfo.chip.use = true;
-            kbdInfo.pw = kbdInfo.chip.lstPartWork[0];
+            kbdInfo.pw = kbdInfo.chip.lstPartWork[ch];
             if (kbdInfo.pw == null) return;
             kbdInfo.mml= MakeMML_Octave(n);
             kbdInfo.eChip = Audio.GetChip(EnmChip.YM2608);
@@ -301,9 +313,9 @@ namespace mml2vgmIDE
             qMML.Enqueue(kbdInfo);
 
             kbdInfo = new KBDInfo();
-            kbdInfo.chip = mv.desVGM.ym2608[0];
+            kbdInfo.chip = chip;// mv.desVGM.ym2608[0];
             kbdInfo.chip.use = true;
-            kbdInfo.pw = kbdInfo.chip.lstPartWork[0];
+            kbdInfo.pw = kbdInfo.chip.lstPartWork[ch];
             kbdInfo.mml = MakeMML_NoteOn(n);
             kbdInfo.eChip = Audio.GetChip(EnmChip.YM2608);
             qMML.Enqueue(kbdInfo);
@@ -329,11 +341,15 @@ namespace mml2vgmIDE
             if (n < 0 || n > 127) return;
             if (latestNoteNumberMONO != n) return;
 
+
+            GetChipCh(out ClsChip chip, out int ch);
+            if (chip == null || ch < 0) return;
+
             KBDInfo kbdInfo = new KBDInfo();
-            kbdInfo.chip = mv.desVGM.ym2608[0];
+            kbdInfo.chip = chip;// mv.desVGM.ym2608[0];
             if (kbdInfo.chip == null) return;
             kbdInfo.chip.use = true;
-            kbdInfo.pw = kbdInfo.chip.lstPartWork[0];
+            kbdInfo.pw = kbdInfo.chip.lstPartWork[ch];
             if (kbdInfo.pw == null) return;
             kbdInfo.mml = MakeMML_NoteOff(n);
             kbdInfo.eChip = Audio.GetChip(EnmChip.YM2608);
@@ -385,6 +401,12 @@ namespace mml2vgmIDE
             mml.args.Add(-n);
 
             return mml;
+        }
+
+        private void GetChipCh(out ClsChip chip, out int ch)
+        {
+            chip = activeChip;
+            ch = activeCh;
         }
 
     }

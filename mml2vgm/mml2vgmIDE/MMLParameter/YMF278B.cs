@@ -7,7 +7,7 @@ namespace mml2vgmIDE.MMLParameter
 {
     public class YMF278B : Instrument
     {
-        public YMF278B(SoundManager.Chip chip, Setting setting) : base(18 + 5 + 24, chip,setting)
+        public YMF278B(SoundManager.Chip chip, Setting setting, MIDIKbd midiKbd) : base(18 + 5 + 24, chip,setting,midiKbd)
         {
             for (int i = 0; i < 18 + 5 + 24; i++)
             {

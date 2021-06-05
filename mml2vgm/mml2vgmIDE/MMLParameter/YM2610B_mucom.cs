@@ -10,7 +10,7 @@ namespace mml2vgmIDE.MMLParameter
         public override string Name => "YM2610B";
         private readonly string[] noteStrTbl = new string[] { "c", "c+", "d", "d+", "e", "f", "f+", "g", "g+", "a", "a+", "b" };
 
-        public YM2610B_mucom(SoundManager.Chip chip, Setting setting) : base(190, chip,setting)
+        public YM2610B_mucom(SoundManager.Chip chip, Setting setting, MIDIKbd midiKbd) : base(190, chip,setting,midiKbd)
         {
             //for (int i = 0; i < 19; i++)
             //{

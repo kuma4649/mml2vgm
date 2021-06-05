@@ -220,15 +220,27 @@ namespace mml2vgmIDE
 
         internal static Chip GetChip(EnmChip chipType)
         {
-            switch (chipType)
+            try
             {
-                case EnmChip.YM2608:
-                    return chipRegister.YM2608[0];
-                case EnmChip.YM2612:
-                    return chipRegister.YM2612[0];
-                default:
-                    return null;
+                switch (chipType)
+                {
+                    case EnmChip.YM2608:
+                        if (chipRegister.YM2608.Count > 0)
+                            return chipRegister.YM2608[0];
+                        break;
+                    case EnmChip.YM2612:
+                        if (chipRegister.YM2612.Count > 0)
+                            return chipRegister.YM2612[0];
+                        break;
+                    default:
+                        return null;
+                }
             }
+            catch(Exception ex)
+            {
+                log.ForcedWrite(ex);
+            }
+            return null;
         }
 
         public static void RealChipManualDetect(Setting setting)

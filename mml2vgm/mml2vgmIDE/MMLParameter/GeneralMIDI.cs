@@ -7,7 +7,7 @@ namespace mml2vgmIDE.MMLParameter
 {
     public class GeneralMIDI : Instrument
     {
-        public GeneralMIDI(SoundManager.Chip chip, Setting setting) : base(99, chip, setting)
+        public GeneralMIDI(SoundManager.Chip chip, Setting setting, MIDIKbd midiKbd) : base(99, chip, setting,midiKbd)
         {
             for (int i = 0; i < 99; i++)
             {

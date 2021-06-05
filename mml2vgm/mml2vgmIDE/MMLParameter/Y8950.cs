@@ -7,7 +7,7 @@ namespace mml2vgmIDE.MMLParameter
 {
     public class Y8950 : Instrument
     {
-        public Y8950(SoundManager.Chip chip, Setting setting) : base(9 + 5 + 1, chip,setting)
+        public Y8950(SoundManager.Chip chip, Setting setting, MIDIKbd midiKbd) : base(9 + 5 + 1, chip,setting,midiKbd)
         {
             for (int i = 0; i < 9 + 5 + 1; i++)
             {

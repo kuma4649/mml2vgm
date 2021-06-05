@@ -7,7 +7,7 @@ namespace mml2vgmIDE.MMLParameter
 {
     public class YM2610B : Instrument
     {
-        public YM2610B(SoundManager.Chip chip, Setting setting) : base(19, chip,setting)
+        public YM2610B(SoundManager.Chip chip, Setting setting, MIDIKbd midiKbd) : base(19, chip,setting,midiKbd)
         {
             for (int i = 0; i < 19; i++)
             {

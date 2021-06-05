@@ -12,7 +12,7 @@ namespace mml2vgmIDE.MMLParameter
         public override string Name => "YM2608";
         private readonly string[] noteStrTbl = new string[] { "c", "c+", "d", "d+", "e", "f", "f+", "g", "g+", "a", "a+", "b" };
 
-        public YM2608_mucom(SoundManager.Chip chip, Setting setting) : base(190, chip, setting)
+        public YM2608_mucom(SoundManager.Chip chip, Setting setting, MIDIKbd midiKbd) : base(190, chip, setting, midiKbd)
         {
         }
 
@@ -79,6 +79,8 @@ namespace mml2vgmIDE.MMLParameter
                 chip.silentVoice[16] = flg;
                 chip.silentVoice[17] = flg;
             }
+
+            midiKbd.SetAssignChipCh(EnmChip.YM2608, ch);
         }
 
         protected override void SetPan(outDatum od, int ch, int cc)

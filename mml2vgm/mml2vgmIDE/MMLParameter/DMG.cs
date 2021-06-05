@@ -8,7 +8,7 @@ namespace mml2vgmIDE.MMLParameter
 {
     public class DMG : Instrument
     {
-        public DMG(SoundManager.Chip chip,Setting setting) : base(4, chip, setting)
+        public DMG(SoundManager.Chip chip,Setting setting, MIDIKbd midiKbd) : base(4, chip, setting,midiKbd)
         {
             for (int i = 0; i < 4; i++)
             {
@@ -42,7 +42,7 @@ namespace mml2vgmIDE.MMLParameter
             beforeTie[od.linePos.ch] = nt.tieSw;
         }
 
-        public static Instrument SetupInstInfo(outDatum od, ref SoundManager.Chip chip,Setting setting,bool isTrace)
+        public static Instrument SetupInstInfo(outDatum od, ref SoundManager.Chip chip,Setting setting,bool isTrace,MIDIKbd midiKbd)
         {
             if (Audio.chipRegister == null || Audio.chipRegister.DMG == null) return null;
 
@@ -57,7 +57,7 @@ namespace mml2vgmIDE.MMLParameter
                 chip = Audio.chipRegister.DMG[zChip.Index];
             }
 
-            DMG dmg = new DMG(chip, setting);
+            DMG dmg = new DMG(chip, setting, midiKbd);
             dmg.isTrace = isTrace;
 
             return dmg;

@@ -8,7 +8,7 @@ namespace mml2vgmIDE.MMLParameter
 {
     public class NES : Instrument
     {
-        public NES(SoundManager.Chip chip,Setting setting) : base(6, chip, setting)
+        public NES(SoundManager.Chip chip,Setting setting, MIDIKbd midiKbd) : base(6, chip, setting,midiKbd)
         {
             for (int i = 0; i < 6; i++)
             {
@@ -42,7 +42,7 @@ namespace mml2vgmIDE.MMLParameter
             beforeTie[od.linePos.ch] = nt.tieSw;
         }
 
-        public static Instrument SetupInstInfo(outDatum od, ref SoundManager.Chip chip,Setting setting,bool isTrace)
+        public static Instrument SetupInstInfo(outDatum od, ref SoundManager.Chip chip,Setting setting,bool isTrace,MIDIKbd midiKbd)
         {
             if (Audio.chipRegister == null || Audio.chipRegister.NES == null) return null;
 
@@ -57,7 +57,7 @@ namespace mml2vgmIDE.MMLParameter
                 chip = Audio.chipRegister.NES[zChip.Index];
             }
 
-            NES nes = new NES(chip, setting);
+            NES nes = new NES(chip, setting, midiKbd);
             nes.isTrace = isTrace;
 
             return nes;

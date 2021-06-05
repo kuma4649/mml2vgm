@@ -37,10 +37,11 @@ namespace mml2vgmIDE.MMLParameter
         public bool isTrace;
         public SoundManager.Chip chip;
         public Setting setting = null;
+        public MIDIKbd midiKbd = null;
 
         private Action<outDatum, int, int>[] SetParam;
 
-        public Instrument(int n, SoundManager.Chip chip, Setting setting)
+        public Instrument(int n, SoundManager.Chip chip, Setting setting,MIDIKbd midiKbd)
         {
             ChCount = n;
             inst = new string[n];
@@ -74,6 +75,7 @@ namespace mml2vgmIDE.MMLParameter
             TraceInfoOld = new outDatum[n];
             this.chip = chip;
             this.setting = setting;
+            this.midiKbd = midiKbd;
 
             SetParam = new Action<outDatum, int, int>[]
             {
@@ -110,7 +112,7 @@ namespace mml2vgmIDE.MMLParameter
             chip.ChMasks[ch] = flg;
         }
 
-        public void SetAssign(int ch, bool flg)
+        public virtual void SetAssign(int ch, bool flg)
         {
         }
 

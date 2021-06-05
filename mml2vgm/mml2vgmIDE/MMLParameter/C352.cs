@@ -7,7 +7,7 @@ namespace mml2vgmIDE.MMLParameter
 {
     public class C352 : Instrument
     {
-        public C352(SoundManager.Chip chip, Setting setting) : base(32, chip,setting)
+        public C352(SoundManager.Chip chip, Setting setting, MIDIKbd midiKbd) : base(32, chip,setting,midiKbd)
         {
             for (int i = 0; i < 32; i++)
             {
