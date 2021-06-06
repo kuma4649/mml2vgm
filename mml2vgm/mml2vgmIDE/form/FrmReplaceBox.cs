@@ -10,6 +10,7 @@ namespace mml2vgmIDE.form
     public partial class FrmReplaceBox : Form
     {
         private AzukiControl ac;
+        private EnmMmlFileFormat fmt;
         private Regex searchRegex;
         private bool searchMatchCase = true;//大文字小文字区別する
         private int searchAnchorIndex = -1;
@@ -17,7 +18,7 @@ namespace mml2vgmIDE.form
         private TextSegment result = null;
 
 
-        public FrmReplaceBox(Setting setting, AzukiControl azukicontrol)
+        public FrmReplaceBox(Setting setting, FrmEditor frmEditor)
         {
             InitializeComponent();
             DialogResult = DialogResult.Cancel;
@@ -35,11 +36,9 @@ namespace mml2vgmIDE.form
             this.groupBox2.ForeColor = Color.FromArgb(setting.ColorScheme.SearchBox_ForeColor);
 
             this.cmbFrom.Items.AddRange(setting.other.SearchWordHistory.ToArray());
-            ac = azukicontrol;
+            ac = frmEditor.azukiControl;
+            fmt = frmEditor.fmt;
 
-            //TBD
-            this.rbTargetMMLs.Enabled = false;
-            this.rbTargetParts.Enabled = false;
         }
 
         private void BtnPrevious_Click(object sender, EventArgs e)
@@ -239,7 +238,13 @@ namespace mml2vgmIDE.form
             ac.Document.GetSelection(out int st, out int ed);
 
             bool res = true;
-            if (st == ed) res = SearchFindNext(cmbFrom.Text, false);
+            if (st == ed)
+            {
+                if (rbTargetAll.Checked)
+                    res = SearchFindNext(cmbFrom.Text, false);
+                else
+                    res = SearchFindNextEx(cmbFrom.Text, false, rbTargetParts.Checked);
+            }
 
             if (!res) return false;
 
@@ -249,7 +254,240 @@ namespace mml2vgmIDE.form
             int delta = cmbFrom.Text.Length - cmbTo.Text.Length;
             select.End -= delta;
 
-            SearchFindNext(cmbFrom.Text, false);
+
+            if (rbTargetAll.Checked)
+                SearchFindNext(cmbFrom.Text, false);
+            else
+                SearchFindNextEx(cmbFrom.Text, false, rbTargetParts.Checked);
+
+            return true;
+        }
+
+        public bool SearchFindNextEx(string sTextPtn, bool searchUseRegex,bool mmltarget)
+        {
+            //AzukiのAnnの検索処理を利用
+
+            Sgry.Azuki.Document azdoc = ac.Document;
+            int startIndex;
+            int endIndex;
+            Regex regex;
+
+            if (searchAnchorIndex == -1)
+                searchAnchorIndex = select.Begin;
+            else
+            {
+                ac.GetSelection(out int st, out int ed);
+                searchAnchorIndex = ed;
+            }
+
+            // determine where to start text search
+            if (0 <= searchAnchorIndex)
+                startIndex = searchAnchorIndex;
+            else
+                startIndex = Math.Max(azdoc.CaretIndex, azdoc.AnchorIndex);
+            
+            endIndex = select.End;
+
+            bool fnd = false;
+            int opIndex = 0;
+            int conIndex = 0;
+            int conEndIndex = 0;
+
+            while (startIndex < endIndex)
+            {
+                // 対象がmml行か調べる。
+                if (fmt == EnmMmlFileFormat.MUC)
+                {
+                    //対象行の文字列を得る
+                    int trgIndex = ac.GetLineIndexFromCharIndex(startIndex);
+                    int trgHeadIndex = ac.GetLineHeadIndexFromCharIndex(startIndex);
+                    int trgEndIndex = ac.Document.GetLineEndIndexFromCharIndex(startIndex);
+                    string con = ac.Document.GetLineContent(trgIndex);
+                    Regex rp = new Regex("^[A-Za-z0-9]+[ |\\t]");//パート
+                    Match match1 = rp.Match(con, 0);
+                    rp = new Regex("^#\\s*\\*[0-9]+");//マクロ
+                    Match match2 = rp.Match(con, 0);
+                    rp = new Regex("^[#|!][@_A-Za-z0-9]*[ |\\t]");//TAG
+                    Match match3 = rp.Match(con, 0);
+
+                    //対象行ではない場合は次の行
+                    if (!match1.Success && !match2.Success && !match3.Success)
+                    {
+                        startIndex = trgEndIndex;
+                        continue;
+                    }
+
+                    //対象行の場合は次の検索へ
+                    opIndex = trgHeadIndex;
+                    conIndex = match1.Success
+                        ? (match1.Index + match1.Length)
+                        : (
+                            match2.Success
+                            ? (match2.Index + match2.Length)
+                            : (match3.Index + match3.Length)
+                        )
+                        + opIndex;
+                    conEndIndex = trgEndIndex;
+                }
+                else if (fmt == EnmMmlFileFormat.MML)
+                {
+                    //対象行の文字列を得る
+                    int trgIndex = ac.GetLineIndexFromCharIndex(startIndex);
+                    int trgHeadIndex = ac.GetLineHeadIndexFromCharIndex(startIndex);
+                    int trgEndIndex = ac.Document.GetLineEndIndexFromCharIndex(startIndex);
+                    string con = ac.Document.GetLineContent(trgIndex);
+                    Regex rp = new Regex("^[A-Za-z]+[0-9]*[ |\\t]");
+                    Match match1 = rp.Match(con, 0);
+                    rp = new Regex("^[#|!][A-Za-z0-9]*[ |\\t]");
+                    Match match2 = rp.Match(con, 0);
+                    rp = new Regex("^#\\S*\\*");
+                    Match match3 = rp.Match(con, 0);
+
+                    //対象行ではない場合は次の行
+                    if (!match1.Success && !match2.Success && !match3.Success)
+                    {
+                        startIndex = trgEndIndex;
+                        continue;
+                    }
+
+                    //対象行の場合は次の検索へ
+                    opIndex = trgHeadIndex;
+                    conIndex = match1.Success
+                        ? (match1.Index + match1.Length)
+                        : (
+                            match2.Success
+                            ? (match2.Index + match2.Length)
+                            : (match3.Index + match3.Length)
+                        )
+                        + opIndex;
+                    conEndIndex = trgEndIndex;
+                }
+                else if (fmt == EnmMmlFileFormat.MDL)
+                {
+                    //対象行の文字列を得る
+                    int trgIndex = ac.GetLineIndexFromCharIndex(startIndex);
+                    int trgHeadIndex = ac.GetLineHeadIndexFromCharIndex(startIndex);
+                    int trgEndIndex = ac.Document.GetLineEndIndexFromCharIndex(startIndex);
+                    string con = ac.Document.GetLineContent(trgIndex);
+                    Regex rp = new Regex("^[A-Za-z]+[0-9]*[ |\\t]");
+                    Match match1 = rp.Match(con, 0);
+                    rp = new Regex("^[#|!][A-Za-z0-9]*[ |\\t]");
+                    Match match2 = rp.Match(con, 0);
+                    rp = new Regex("^'%\\S+[ |\\t]");
+                    Match match3 = rp.Match(con, 0);
+
+                    //対象行ではない場合は次の行
+                    if (!match1.Success && !match2.Success && !match3.Success)
+                    {
+                        startIndex = trgEndIndex;
+                        continue;
+                    }
+
+                    //対象行の場合は次の検索へ
+                    opIndex = trgHeadIndex;
+                    conIndex = match1.Success
+                        ? (match1.Index + match1.Length)
+                        : (
+                            match2.Success
+                            ? (match2.Index + match2.Length)
+                            : (match3.Index + match3.Length)
+                        )
+                        + opIndex;
+                    conEndIndex = trgEndIndex;
+                }
+                else
+                {
+                    //gwi/etc
+                    //対象行の文字列を得る
+                    int trgIndex = ac.GetLineIndexFromCharIndex(startIndex);
+                    int trgHeadIndex = ac.GetLineHeadIndexFromCharIndex(startIndex);
+                    int trgEndIndex = ac.Document.GetLineEndIndexFromCharIndex(startIndex);
+                    string con = ac.Document.GetLineContent(trgIndex);
+                    Regex rp = new Regex("^'[A-Za-z0-9\\-\\,\\+]+_*[ |\\t]");//パート1
+                    Match match1 = rp.Match(con, 0);
+                    rp = new Regex("^'[A-Za-z0-9\\-\\,\\+]+~*[ |\\t]");//パート2
+                    Match match2 = rp.Match(con, 0);
+                    rp = new Regex("^'%\\S+[ |\\t]");//エイリアス
+                    Match match3 = rp.Match(con, 0);
+
+                    //対象行ではない場合は次の行
+                    if (!match1.Success && !match2.Success && !match3.Success)
+                    {
+                        startIndex = trgEndIndex;
+                        continue;
+                    }
+
+                    //対象行の場合は次の検索へ
+                    opIndex = trgHeadIndex;
+                    conIndex = match1.Success
+                        ? (match1.Index + match1.Length)
+                        : (
+                            match2.Success
+                            ? (match2.Index + match2.Length)
+                            : (match3.Index + match3.Length)
+                        )
+                        + opIndex;
+                    conEndIndex = trgEndIndex;
+                }
+
+                //検索対象位置に置換対象の文字列があるか調べる
+                if (searchUseRegex)
+                {
+                    // Regular expression search.
+                    // get regex object from context
+                    regex = searchRegex;
+                    if (regex == null) return false;
+
+                    // ensure that "RightToLeft" option of the regex object is NOT set
+                    RegexOptions opt = regex.Options;
+                    if ((opt & RegexOptions.RightToLeft) != 0)
+                    {
+                        opt &= ~(RegexOptions.RightToLeft);
+                        regex = new Regex(regex.ToString(), opt);
+                        searchRegex = regex;
+                    }
+
+                    if(mmltarget)
+                    result = azdoc.FindNext(regex, opIndex, conIndex);
+                    else
+                        result = azdoc.FindNext(regex, conIndex, conEndIndex);
+
+                }
+                else
+                {
+                    // normal text pattern matching.
+                    if (startIndex < azdoc.Length)
+                    {
+                        if (mmltarget)
+                            result = azdoc.FindNext(sTextPtn, opIndex, conIndex, searchMatchCase);
+                        else
+                            result = azdoc.FindNext(sTextPtn, conIndex, conEndIndex, searchMatchCase);
+                    }
+                    else
+                        result = null;
+                }
+
+                if (result == null)
+                {
+                    startIndex = conEndIndex;
+                    continue;
+                }
+
+                fnd = true;
+                break;
+            }
+
+            if (!fnd) return false;
+
+            // select the result
+            if (result == null) return false;
+            if (select.Begin != select.End && result.Begin > select.End)
+                return false;
+
+            ac.Document.SetSelection(result.Begin, result.End);
+            ac.View.SetDesiredColumn();
+            ac.ScrollToCaret();
+            searchAnchorIndex = result.End;
 
             return true;
         }

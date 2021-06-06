@@ -690,7 +690,7 @@ namespace mml2vgmIDE
 
         public void ActionReplace(IUserInterface ui)
         {
-            form.FrmReplaceBox frb = new form.FrmReplaceBox(setting, azukiControl);
+            form.FrmReplaceBox frb = new form.FrmReplaceBox(setting, this);
             DialogResult res = frb.ShowDialog();
         }
 
