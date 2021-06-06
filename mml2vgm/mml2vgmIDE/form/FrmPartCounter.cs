@@ -579,26 +579,18 @@ namespace mml2vgmIDE
 
         public void ClickKBDAssign(int rowIndex)
         {
-            //if (CheckMucomParameter())
-            //{
-            //    return;
-            //}
 
-            //列名をクリック時
-
-            if (rowIndex < 0)
+            //アサインを全解除
+            foreach (DataGridViewRow r in dgvPartCounter.Rows)
             {
-                //アサインを全解除
-                foreach (DataGridViewRow r in dgvPartCounter.Rows)
-                {
-                    r.Cells[clmKBDAssign].Value = "";
-                    SetAssign(r);
-                }
-                return;
+                r.Cells[clmKBDAssign].Value = "";
+                SetAssign(r);
             }
 
-            if (dgvPartCounter.Rows.Count < rowIndex + 1) return;
+            //列名をクリック時
+            if (rowIndex < 0) return;
 
+            if (dgvPartCounter.Rows.Count < rowIndex + 1) return;
 
             //パートをクリック時はそのパートをアサイン
             DataGridViewRow row = dgvPartCounter.Rows[rowIndex];

@@ -230,6 +230,14 @@ namespace mml2vgmIDE
                             dat.RemoveAt(0);
                             dat.RemoveAt(0);
                             break;
+                        case 0x57://OPNA
+                            adr = dat[1].val;
+                            prm = dat[2].val;
+                            enq(dat[0], 0, kbdInfo.eChip, EnmDataType.Force, adr | 0x100, prm, null);
+                            dat.RemoveAt(0);
+                            dat.RemoveAt(0);
+                            dat.RemoveAt(0);
+                            break;
                         default:
                             dat.RemoveAt(0);
                             break;
