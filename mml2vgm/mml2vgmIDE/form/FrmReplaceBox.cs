@@ -11,7 +11,7 @@ namespace mml2vgmIDE.form
     {
         private AzukiControl ac;
         private Regex searchRegex;
-        private bool searchMatchCase = false;
+        private bool searchMatchCase = true;//大文字小文字区別する
         private int searchAnchorIndex = -1;
         private TextSegment select = new TextSegment();
         private TextSegment result = null;
@@ -36,8 +36,6 @@ namespace mml2vgmIDE.form
 
             this.cmbFrom.Items.AddRange(setting.other.SearchWordHistory.ToArray());
             ac = azukicontrol;
-
-            string sel = ac.GetSelectedText();
 
             //TBD
             this.rbTargetMMLs.Enabled = false;
@@ -247,6 +245,10 @@ namespace mml2vgmIDE.form
 
             ac.Document.GetSelection(out st, out ed);
             ac.Document.Replace(cmbTo.Text, st, ed);
+
+            int delta = cmbFrom.Text.Length - cmbTo.Text.Length;
+            select.End -= delta;
+
             SearchFindNext(cmbFrom.Text, false);
 
             return true;
