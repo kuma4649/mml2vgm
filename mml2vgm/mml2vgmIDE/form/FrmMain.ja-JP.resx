@@ -175,12 +175,6 @@
   <data name="tssbMIDIKbd.Text" xml:space="preserve">
     <value>鍵盤</value>
   </data>
-  <data name="TsmiFile.Size" type="System.Drawing.Size, System.Drawing">
-    <value>67, 20</value>
-  </data>
-  <data name="TsmiFile.Text" xml:space="preserve">
-    <value>ファイル(&amp;F)</value>
-  </data>
   <data name="TsmiNew.Size" type="System.Drawing.Size, System.Drawing">
     <value>201, 22</value>
   </data>
@@ -220,26 +214,26 @@
   <data name="toolStripSeparator2.Size" type="System.Drawing.Size, System.Drawing">
     <value>198, 6</value>
   </data>
+  <data name="tsmiImport_D88toMuc.Size" type="System.Drawing.Size, System.Drawing">
+    <value>167, 22</value>
+  </data>
+  <data name="tsmiImport_D88toMuc.Text" xml:space="preserve">
+    <value>from .d88 to .muc</value>
+  </data>
   <data name="tsmiImport.Size" type="System.Drawing.Size, System.Drawing">
     <value>201, 22</value>
   </data>
   <data name="tsmiImport.Text" xml:space="preserve">
     <value>インポート</value>
   </data>
-  <data name="tsmiImport_D88toMuc.Text" xml:space="preserve">
-    <value>from .d88 to .muc</value>
+  <data name="tsmiExport_MuctoD88.Text" xml:space="preserve">
+    <value>.muc to .d88</value>
   </data>
   <data name="tsmiExport.Size" type="System.Drawing.Size, System.Drawing">
     <value>201, 22</value>
   </data>
   <data name="tsmiExport.Text" xml:space="preserve">
     <value>エクスポート</value>
-  </data>
-  <data name="tsmiExport_toDriverFormat.Text" xml:space="preserve">
-    <value>to driver format</value>
-  </data>
-  <data name="tsmiExport_MuctoD88.Text" xml:space="preserve">
-    <value>.muc to .d88</value>
   </data>
   <data name="toolStripSeparator1.Size" type="System.Drawing.Size, System.Drawing">
     <value>198, 6</value>
@@ -250,50 +244,59 @@
   <data name="TsmiExit.Text" xml:space="preserve">
     <value>終了(&amp;E)</value>
   </data>
-  <data name="TsmiEdit.Size" type="System.Drawing.Size, System.Drawing">
-    <value>57, 20</value>
+  <data name="TsmiFile.Size" type="System.Drawing.Size, System.Drawing">
+    <value>67, 20</value>
   </data>
-  <data name="TsmiEdit.Text" xml:space="preserve">
-    <value>編集(&amp;E)</value>
+  <data name="TsmiFile.Text" xml:space="preserve">
+    <value>ファイル(&amp;F)</value>
   </data>
   <data name="TsmiUndo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>170, 22</value>
+    <value>180, 22</value>
   </data>
   <data name="TsmiUndo.Text" xml:space="preserve">
     <value>元に戻す</value>
   </data>
   <data name="TsmiRedo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>170, 22</value>
+    <value>180, 22</value>
   </data>
   <data name="TsmiRedo.Text" xml:space="preserve">
     <value>やり直し</value>
   </data>
   <data name="toolStripSeparator4.Size" type="System.Drawing.Size, System.Drawing">
-    <value>167, 6</value>
+    <value>177, 6</value>
   </data>
   <data name="TsmiFind.Size" type="System.Drawing.Size, System.Drawing">
-    <value>170, 22</value>
+    <value>180, 22</value>
   </data>
   <data name="TsmiFind.Text" xml:space="preserve">
     <value>検索</value>
   </data>
   <data name="TsmiFindNext.Size" type="System.Drawing.Size, System.Drawing">
-    <value>170, 22</value>
+    <value>180, 22</value>
   </data>
   <data name="TsmiFindNext.Text" xml:space="preserve">
     <value>次を検索</value>
   </data>
   <data name="TsmiFindPrevious.Size" type="System.Drawing.Size, System.Drawing">
-    <value>170, 22</value>
+    <value>180, 22</value>
   </data>
   <data name="TsmiFindPrevious.Text" xml:space="preserve">
     <value>前を検索</value>
   </data>
-  <data name="表示VToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>58, 20</value>
+  <data name="toolStripSeparator6.Size" type="System.Drawing.Size, System.Drawing">
+    <value>177, 6</value>
   </data>
-  <data name="表示VToolStripMenuItem.Text" xml:space="preserve">
-    <value>表示(&amp;V)</value>
+  <data name="TsmiReplace.Size" type="System.Drawing.Size, System.Drawing">
+    <value>180, 22</value>
+  </data>
+  <data name="TsmiReplace.Text" xml:space="preserve">
+    <value>置換</value>
+  </data>
+  <data name="TsmiEdit.Size" type="System.Drawing.Size, System.Drawing">
+    <value>57, 20</value>
+  </data>
+  <data name="TsmiEdit.Text" xml:space="preserve">
+    <value>編集(&amp;E)</value>
   </data>
   <data name="TsmiShowPartCounter.Size" type="System.Drawing.Size, System.Drawing">
     <value>150, 22</value>
@@ -325,6 +328,9 @@
   <data name="TsmiShowLyrics.Text" xml:space="preserve">
     <value>歌詞</value>
   </data>
+  <data name="TsmiShowSien.Size" type="System.Drawing.Size, System.Drawing">
+    <value>150, 22</value>
+  </data>
   <data name="TsmiShowMixer.Size" type="System.Drawing.Size, System.Drawing">
     <value>150, 22</value>
   </data>
@@ -339,12 +345,6 @@
   </data>
   <data name="toolStripSeparator3.Size" type="System.Drawing.Size, System.Drawing">
     <value>147, 6</value>
-  </data>
-  <data name="TsmiFunctionKey.Size" type="System.Drawing.Size, System.Drawing">
-    <value>150, 22</value>
-  </data>
-  <data name="TsmiFunctionKey.Text" xml:space="preserve">
-    <value>ファンクションキー</value>
   </data>
   <data name="TsmiFncHide.Size" type="System.Drawing.Size, System.Drawing">
     <value>146, 22</value>
@@ -364,11 +364,17 @@
   <data name="TsmiFncButtonAndText.Text" xml:space="preserve">
     <value>ボタンとテキスト</value>
   </data>
-  <data name="コンパイルCToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>80, 20</value>
+  <data name="TsmiFunctionKey.Size" type="System.Drawing.Size, System.Drawing">
+    <value>150, 22</value>
   </data>
-  <data name="コンパイルCToolStripMenuItem.Text" xml:space="preserve">
-    <value>コンパイル(&amp;C)</value>
+  <data name="TsmiFunctionKey.Text" xml:space="preserve">
+    <value>ファンクションキー</value>
+  </data>
+  <data name="表示VToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>58, 20</value>
+  </data>
+  <data name="表示VToolStripMenuItem.Text" xml:space="preserve">
+    <value>表示(&amp;V)</value>
   </data>
   <data name="TsmiCompileAndPlay.Size" type="System.Drawing.Size, System.Drawing">
     <value>225, 22</value>
@@ -400,6 +406,12 @@
   <data name="TsmiCompile.Text" xml:space="preserve">
     <value>コンパイルのみ</value>
   </data>
+  <data name="コンパイルCToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>80, 20</value>
+  </data>
+  <data name="コンパイルCToolStripMenuItem.Text" xml:space="preserve">
+    <value>コンパイル(&amp;C)</value>
+  </data>
   <data name="featureToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
     <value>57, 20</value>
   </data>
@@ -412,23 +424,17 @@
   <data name="tsmiScript.Text" xml:space="preserve">
     <value>スクリプト(&amp;S)</value>
   </data>
-  <data name="ツールTToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>60, 20</value>
-  </data>
-  <data name="ツールTToolStripMenuItem.Text" xml:space="preserve">
-    <value>ツール(&amp;T)</value>
-  </data>
   <data name="tsmiOption.Size" type="System.Drawing.Size, System.Drawing">
     <value>140, 22</value>
   </data>
   <data name="tsmiOption.Text" xml:space="preserve">
     <value>オプション(&amp;O)_</value>
   </data>
-  <data name="TsmiHelp.Size" type="System.Drawing.Size, System.Drawing">
-    <value>65, 20</value>
+  <data name="ツールTToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>60, 20</value>
   </data>
-  <data name="TsmiHelp.Text" xml:space="preserve">
-    <value>ヘルプ(&amp;H)</value>
+  <data name="ツールTToolStripMenuItem.Text" xml:space="preserve">
+    <value>ツール(&amp;T)</value>
   </data>
   <data name="TsmiTutorial.Size" type="System.Drawing.Size, System.Drawing">
     <value>229, 22</value>
@@ -468,6 +474,12 @@
   </data>
   <data name="TsmiAbout.Text" xml:space="preserve">
     <value>About </value>
+  </data>
+  <data name="TsmiHelp.Size" type="System.Drawing.Size, System.Drawing">
+    <value>65, 20</value>
+  </data>
+  <data name="TsmiHelp.Text" xml:space="preserve">
+    <value>ヘルプ(&amp;H)</value>
   </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>

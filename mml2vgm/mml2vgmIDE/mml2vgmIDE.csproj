@@ -254,6 +254,12 @@
     <Compile Include="form\FrmProgress.Designer.cs">
       <DependentUpon>FrmProgress.cs</DependentUpon>
     </Compile>
+    <Compile Include="form\FrmReplaceBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="form\FrmReplaceBox.Designer.cs">
+      <DependentUpon>FrmReplaceBox.cs</DependentUpon>
+    </Compile>
     <Compile Include="form\FrmSearchBox.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -424,6 +430,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="form\FrmProgress.resx">
       <DependentUpon>FrmProgress.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="form\FrmReplaceBox.ja-JP.resx">
+      <DependentUpon>FrmReplaceBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="form\FrmReplaceBox.resx">
+      <DependentUpon>FrmReplaceBox.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="form\FrmSearchBox.ja-JP.resx">
       <DependentUpon>FrmSearchBox.cs</DependentUpon>

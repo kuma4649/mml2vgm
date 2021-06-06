@@ -123,6 +123,11 @@ namespace mml2vgmIDE
             dec = new BgColorTextDecoration(Color.FromArgb(0xff,0xd4,0x68,0x10));
             azukiControl.ColorScheme.SetMarkingDecoration(2, dec);
 
+            info = new MarkingInfo(3, "Replace");
+            Marking.Register(info);
+            dec = new BgColorTextDecoration(Color.FromArgb(0xff, 0x40, 0x10, 0x10));
+            azukiControl.ColorScheme.SetMarkingDecoration(3, dec);
+
             this.Controls.Add(azukiControl);
 
         }
@@ -191,6 +196,11 @@ namespace mml2vgmIDE
             dec = new BgColorTextDecoration(Color.FromArgb(0xff, 0xd4, 0x68, 0x10));
             azukiControl.ColorScheme.SetMarkingDecoration(2, dec);
 
+            info = new MarkingInfo(3, "Replace");
+            Marking.Register(info);
+            dec = new BgColorTextDecoration(Color.FromArgb(0xff, 0x40, 0x10, 0x10));
+            azukiControl.ColorScheme.SetMarkingDecoration(3, dec);
+
             this.Controls.Add(azukiControl);
 
         }
@@ -252,6 +262,11 @@ namespace mml2vgmIDE
             dec = new BgColorTextDecoration(Color.FromArgb(0xff, 0xd4, 0x68, 0x10));
             azukiControl.ColorScheme.SetMarkingDecoration(2, dec);
 
+            info = new MarkingInfo(3, "Replace");
+            Marking.Register(info);
+            dec = new BgColorTextDecoration(Color.FromArgb(0xff, 0x40, 0x10, 0x10));
+            azukiControl.ColorScheme.SetMarkingDecoration(3, dec);
+
             this.Controls.Add(azukiControl);
 
         }
@@ -312,6 +327,11 @@ namespace mml2vgmIDE
             Marking.Register(info);
             dec = new BgColorTextDecoration(Color.FromArgb(0xff, 0xd4, 0x68, 0x10));
             azukiControl.ColorScheme.SetMarkingDecoration(2, dec);
+
+            info = new MarkingInfo(3, "Replace");
+            Marking.Register(info);
+            dec = new BgColorTextDecoration(Color.FromArgb(0xff, 0x40, 0x10, 0x10));
+            azukiControl.ColorScheme.SetMarkingDecoration(3, dec);
 
             this.Controls.Add(azukiControl);
 
@@ -666,6 +686,12 @@ namespace mml2vgmIDE
                 AddSearchWordHistory(searchTextPattern);
                 ActionFindPrevious(ui);
             }
+        }
+
+        public void ActionReplace(IUserInterface ui)
+        {
+            form.FrmReplaceBox frb = new form.FrmReplaceBox(setting, azukiControl);
+            DialogResult res = frb.ShowDialog();
         }
 
         private void AddSearchWordHistory(string searchTextPattern)

@@ -707,6 +707,12 @@ namespace mml2vgmIDE
             if (d != null) d.editor.ActionFindPrevious(null);
         }
 
+        private void TsmiReplace_Click(object sender, EventArgs e)
+        {
+            Document d = GetActiveDocument();
+            if (d != null) d.editor.ActionReplace(null);
+        }
+
         private void TsmiShowPartCounter_Click(object sender, EventArgs e)
         {
             if (frmPartCounter.IsHidden) frmPartCounter.Show();
