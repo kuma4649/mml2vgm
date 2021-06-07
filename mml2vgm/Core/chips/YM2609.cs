@@ -658,6 +658,23 @@ namespace Core
             //Console.WriteLine("{0} {1} {2}",port[0],vch, page.pan);
         }
 
+        public override int GetFNum(partPage page, MML mml, int octave, char cmd, int shift)
+        {
+            if (page.Type == enmChannelType.FMOPN || page.Type == enmChannelType.FMOPNex)
+            {
+                return GetFmFNum(FNumTbl[0], octave, cmd, shift);
+            }
+            if (page.Type == enmChannelType.SSG)
+            {
+                return GetSsgFNum(page, mml, octave, cmd, shift);
+            }
+            if (page.Type == enmChannelType.ADPCMA || page.Type == enmChannelType.ADPCMB)
+            {
+                return GetAdpcmFNum(page, octave, cmd, shift);
+            }
+            return 0;
+        }
+
         public new void SetSsgFNum(partPage page, MML mml)
         {
             int arpNote = page.arpFreqMode ? 0 : page.arpDelta;
