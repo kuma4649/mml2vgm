@@ -1912,6 +1912,7 @@ namespace mml2vgmIDE
 
             public int LogLevel { get; set; } = 8;//8:INFO
             public List<string> SearchWordHistory { get; set; }
+            public List<string> ReplaceToWordHistory { get; set; }
             private bool _ClearHistory  = true;
             public bool ClearHistory { get => _ClearHistory; set => _ClearHistory = value; }
 
@@ -1952,6 +1953,8 @@ namespace mml2vgmIDE
                 other.CommandManualM98 = this.CommandManualM98;
                 other.sinWaveGen = this.sinWaveGen;
                 other.ClearHistory = this.ClearHistory;
+                other.SearchWordHistory = this.SearchWordHistory;
+                other.ReplaceToWordHistory = this.ReplaceToWordHistory;
 
                 return other;
             }

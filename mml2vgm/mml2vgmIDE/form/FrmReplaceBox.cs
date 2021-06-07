@@ -16,7 +16,7 @@ namespace mml2vgmIDE.form
         private int searchAnchorIndex = -1;
         private TextSegment select = new TextSegment();
         private TextSegment result = null;
-
+        private Setting setting = null;
 
         public FrmReplaceBox(Setting setting, FrmEditor frmEditor)
         {
@@ -36,14 +36,16 @@ namespace mml2vgmIDE.form
             this.groupBox2.ForeColor = Color.FromArgb(setting.ColorScheme.SearchBox_ForeColor);
 
             this.cmbFrom.Items.AddRange(setting.other.SearchWordHistory.ToArray());
+            this.cmbTo.Items.AddRange(setting.other.ReplaceToWordHistory.ToArray());
             ac = frmEditor.azukiControl;
             fmt = frmEditor.fmt;
-
+            this.setting = setting;
         }
 
         private void BtnPrevious_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(cmbFrom.Text)) return;
+            AddSearchWordHistory(cmbFrom.Text);
             bool res = SearchFindPrevious(cmbFrom.Text, false);
             ac.Refresh();
             if (!res) MessageBox.Show("not found");
@@ -52,6 +54,7 @@ namespace mml2vgmIDE.form
         private void BtnNext_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(cmbFrom.Text)) return;
+            AddSearchWordHistory(cmbFrom.Text);
             bool res = SearchFindNext(cmbFrom.Text, false);
             ac.Refresh();
             if (!res) MessageBox.Show("not found");
@@ -59,6 +62,9 @@ namespace mml2vgmIDE.form
 
         private void btnReplace_Click(object sender, EventArgs e)
         {
+            AddSearchWordHistory(cmbFrom.Text);
+            AddReplaceToWordHistory(cmbTo.Text);
+
             bool res = Replace();
             ac.Refresh();
             if (!res) MessageBox.Show("not found");
@@ -66,6 +72,9 @@ namespace mml2vgmIDE.form
 
         private void btnAllReplace_Click(object sender, EventArgs e)
         {
+            AddSearchWordHistory(cmbFrom.Text);
+            AddReplaceToWordHistory(cmbTo.Text);
+
             ac.Document.BeginUndo();
             while (Replace()) ;
             ac.Document.EndUndo();
@@ -491,5 +500,36 @@ namespace mml2vgmIDE.form
 
             return true;
         }
+
+        private void AddSearchWordHistory(string searchTextPattern)
+        {
+            if (setting.other.SearchWordHistory.Contains(searchTextPattern))
+                setting.other.SearchWordHistory.Remove(searchTextPattern);
+
+            setting.other.SearchWordHistory.Insert(0, searchTextPattern);
+
+            while (setting.other.SearchWordHistory.Count > 20)
+                setting.other.SearchWordHistory.RemoveAt(20);
+
+            cmbFrom.Items.Clear();
+            cmbFrom.Items.AddRange(setting.other.SearchWordHistory.ToArray());
+        }
+
+        private void AddReplaceToWordHistory(string replaceTextPattern)
+        {
+            if (setting.other.ReplaceToWordHistory.Contains(replaceTextPattern))
+                setting.other.ReplaceToWordHistory.Remove(replaceTextPattern);
+
+            setting.other.ReplaceToWordHistory.Insert(0, replaceTextPattern);
+
+            while (setting.other.ReplaceToWordHistory.Count > 20)
+                setting.other.ReplaceToWordHistory.RemoveAt(20);
+
+            cmbTo.Items.Clear();
+            cmbTo.Items.AddRange(setting.other.ReplaceToWordHistory.ToArray());
+        }
+
+
+
     }
 }

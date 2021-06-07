@@ -703,9 +703,9 @@ namespace mml2vgmIDE
 
             setting.other.SearchWordHistory.Insert(0, searchTextPattern);
 
-            while (setting.other.SearchWordHistory.Count > 100)
+            while (setting.other.SearchWordHistory.Count > 20)
             {
-                setting.other.SearchWordHistory.RemoveAt(100);
+                setting.other.SearchWordHistory.RemoveAt(20);
             }
 
         }

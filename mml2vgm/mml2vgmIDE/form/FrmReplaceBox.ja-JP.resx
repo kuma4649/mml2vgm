@@ -170,6 +170,6 @@
     <value>置換対象</value>
   </data>
   <data name="$this.Text" xml:space="preserve">
-    <value>検索</value>
+    <value>置換</value>
   </data>
 </root>

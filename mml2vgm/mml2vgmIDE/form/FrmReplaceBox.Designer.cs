@@ -98,10 +98,10 @@
             // 
             // groupBox2
             // 
+            resources.ApplyResources(this.groupBox2, "groupBox2");
             this.groupBox2.Controls.Add(this.rbTargetParts);
             this.groupBox2.Controls.Add(this.rbTargetMMLs);
             this.groupBox2.Controls.Add(this.rbTargetAll);
-            resources.ApplyResources(this.groupBox2, "groupBox2");
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.TabStop = false;
             // 
