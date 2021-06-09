@@ -385,8 +385,8 @@ namespace Core
                     CmdEffect(pw, page, mml);
                     break;
                 case 'F'://Forced Fnum
-                    log.Write("Forced Fnum");
-                    CmdForcedFnum(pw, page, mml);
+                    log.Write("Forced Fnum or FDS modulation");
+                    CmdForcedFnumOrFDSModulation(pw, page, mml);
                     break;
                 case 'H'://Hardware envelope sync mode
                     log.Write("Hardware envelope sync mode");
@@ -1464,9 +1464,153 @@ namespace Core
             mml.args.Add(c);
         }
 
-        private void CmdForcedFnum(partWork pw, partPage page, MML mml)
+        private void CmdForcedFnumOrFDSModulation(partWork pw, partPage page, MML mml)
         {
             pw.incPos(page);
+            if (!pw.getNum(page, out int num))
+            {
+                CmdFDSModulation(pw, page, mml);
+                return;
+            }
+
+            CmdForcedFnum(pw, page, mml);
+        }
+
+        private void CmdFDSModulation(partWork pw, partPage page, MML mml)
+        {
+            char c = pw.getChar(page);
+
+            if (c != 'M')
+            {
+                msgBox.setErrMsg(msg.get("E05074"), mml.line.Lp);
+                return;
+            }
+
+            pw.incPos(page);
+
+            // FMn
+            if (pw.getNum(page, out int num))
+            {
+                mml.type = enmMMLType.Modulation;
+                mml.args = new List<object>();
+                mml.args.Add('@');
+                mml.args.Add(num);
+                return;
+            }
+
+            c = pw.getChar(page);
+
+            //FMO
+            if (c == 'O')// FMON / FMOF
+            {
+                pw.incPos(page);
+                c = pw.getChar(page);
+
+                if (c == 'N')//FMON
+                {
+                    mml.type = enmMMLType.Modulation;
+                    mml.args = new List<object>();
+                    mml.args.Add('n');
+
+                    pw.incPos(page);
+                    return;
+                }
+                else if (c == 'F')//FMOF
+                {
+                    mml.type = enmMMLType.Modulation;
+                    mml.args = new List<object>();
+                    mml.args.Add('f');
+
+                    pw.incPos(page);
+                    return;
+                }
+
+                //Fail FMON/FMOF
+                msgBox.setErrMsg(msg.get("E05074"), mml.line.Lp);
+                return;
+            }
+            else if (c == 'Q')//FMQ
+            {
+                pw.incPos(page);
+                // FMQn
+                if (pw.getNum(page, out num))
+                {
+                    mml.type = enmMMLType.Modulation;
+                    mml.args = new List<object>();
+                    mml.args.Add('q');
+                    mml.args.Add(num);
+
+                    return;
+                }
+
+                //Fail FMQ
+                msgBox.setErrMsg(msg.get("E05074"), mml.line.Lp);
+                return;
+            }
+            else if (c == 'G')//FMG
+            {
+                pw.incPos(page);
+                // FMQn
+                if (pw.getNum(page, out num))
+                {
+                    mml.type = enmMMLType.Modulation;
+                    mml.args = new List<object>();
+                    mml.args.Add('g');
+                    mml.args.Add(num);
+                    mml.args.Add(null);
+                    mml.args.Add(null);
+
+                    return;
+                }
+
+                //Fail FMQ
+                msgBox.setErrMsg(msg.get("E05074"), mml.line.Lp);
+                return;
+            }
+            else if (c == 'D')//FMD
+            {
+                pw.incPos(page);
+                // FMDn
+                if (pw.getNum(page, out num))
+                {
+                    mml.type = enmMMLType.Modulation;
+                    mml.args = new List<object>();
+                    mml.args.Add('d');
+                    mml.args.Add(num);
+
+                    return;
+                }
+
+                //Fail FMQ
+                msgBox.setErrMsg(msg.get("E05074"), mml.line.Lp);
+                return;
+            }
+            else if (c == 'E')//FME
+            {
+                pw.incPos(page);
+                // FMEn
+                if (pw.getNum(page, out num))
+                {
+                    mml.type = enmMMLType.Modulation;
+                    mml.args = new List<object>();
+                    mml.args.Add('e');
+                    mml.args.Add(num);
+
+                    return;
+                }
+
+                //Fail FMQ
+                msgBox.setErrMsg(msg.get("E05074"), mml.line.Lp);
+                return;
+            }
+
+            //Unknown
+            msgBox.setErrMsg(msg.get("E05074"), mml.line.Lp);
+            return;
+        }
+
+        private void CmdForcedFnum(partWork pw, partPage page, MML mml)
+        {
             if (!pw.getNum(page, out int num))
             {
                 msgBox.setErrMsg(msg.get("E05065"), mml.line.Lp);

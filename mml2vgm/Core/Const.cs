@@ -19,6 +19,7 @@
         public const int OPX_2OP_INSTRUMENT_SIZE = 2 + 15 + 15 + 1;//33
         public const int OPX_3OP_INSTRUMENT_SIZE = 2 + 15 + 15 + 15 + 1;//48
         public const int OPX_4OP_INSTRUMENT_SIZE = 2 + 15 + 15 + 15 + 15 + 1;//63
+        public const int FDS_MOD_INSTRUMENT_SIZE = 1 + 16 + 16;//33
 
         public const string NOTE = "c_d_ef_g_a_b";
 

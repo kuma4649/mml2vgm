@@ -857,6 +857,7 @@ namespace Core
                 return;
             }
 
+            //それ以外はdpcm切り替え
 
             n = Common.CheckRange(n, 0, 255);
 
@@ -980,7 +981,7 @@ namespace Core
 
         public override void CmdTotalVolume(partPage page, MML mml)
         {
-            int n = (int)mml.args[1];
+            int n = (int)mml.args[0];
             page.masterVolume = n & 3;
         }
 
@@ -999,5 +1000,87 @@ namespace Core
 
         }
 
+        public override void CmdModulation(partPage page, MML mml)
+        {
+            char ch = (char)mml.args[0];
+            switch (ch)
+            {
+                case '@'://FMn
+                    int num = (int)mml.args[1];
+                    SetModulationFromInstrument(page, num, mml);
+                    page.modulationInst = num;
+                    page.modulation = true;
+                    SetModulationFreq(page, mml);
+                    break;
+                case 'n'://FMON
+                    page.modulation = true;
+                    SetModulationFreq(page, mml);
+                    break;
+                case 'f'://FMOF
+                    page.modulation = false;
+                    SetModulationFreq(page, mml);
+                    break;
+                case 'q'://FMQ
+                    int frq = (int)mml.args[1];
+                    page.modulationFreq = frq;
+                    SetModulationFreq(page, mml);
+                    break;
+                case 'g'://FMG
+                    int gain = (int)mml.args[1];
+                    page.modulationGain = gain;
+                    page.modulationGainFlg = mml.args[2] == null ? true : (bool)mml.args[2];
+                    SetModulationGain(page, mml);
+                    break;
+                case 'd'://FMD
+                    int dir = (int)mml.args[1];
+                    page.modulationDirection = dir != 0;
+                    SetModulationGain(page, mml);
+                    break;
+                case 'e'://FME
+                    int env = (int)mml.args[1];
+                    page.modulationGain = env;
+                    page.modulationGainFlg = false;
+                    SetModulationGain(page, mml);
+                    page.modulationGainFlg = true;
+                    break;
+            }
+        }
+
+        private void SetModulationFromInstrument(partPage page, int num, MML mml)
+        {
+            //HALT にしないとテーブルの書き換えはできない為
+            //$4087
+            SOutData(page, mml, port[0], 0x27, 0x80);
+
+            //$4088
+            for (int i = 1; i < parent.instFDSMod[num].Item2.Length; i++) // 0 は音色番号が入っている為1からスタート
+                SOutData(page, mml, port[0], 0x28, (byte)(parent.instFDSMod[num].Item2[i] & 0x07));
+
+            //カウンターをリセット
+            //$4085
+            SOutData(page, mml, port[0], 0x25, 0x00);
+        }
+
+        private void SetModulationFreq(partPage page, MML mml)
+        {
+            //$4086
+            SOutData(page, mml, port[0], 0x26, (byte)page.modulationFreq);
+            //$4087
+            SOutData(page, mml, port[0], 0x27, (byte)(
+                ((page.modulationFreq >> 8) & 0xf) //bit0-3 : freq bit 8-11
+                | (page.modulation ? 0x00 : 0x80) //bit7 : mod HALT flag
+                ));
+        }
+
+        private void SetModulationGain(partPage page, MML mml)
+        {
+            //$4084
+            SOutData(page, mml, port[0], 0x24, (byte)(
+                (page.modulationGain & 0x3f)
+                | (page.modulationGainFlg ? 0x80 : 0x00)
+                | (page.modulationDirection ? 0x40 : 0x00)
+                )
+                );
+        }
     }
 }

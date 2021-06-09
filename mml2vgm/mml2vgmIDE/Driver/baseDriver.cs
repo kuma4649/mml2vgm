@@ -18,6 +18,7 @@ namespace mml2vgmIDE
         public string UsedChips = "";
         public int vstDelta = 0;
         public long jumpPointClock = -1;
+        public bool initPhase = false;
 
         public int[] YM2151Hosei = new int[2] { 0, 0 };
 

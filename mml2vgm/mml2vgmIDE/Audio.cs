@@ -218,6 +218,19 @@ namespace mml2vgmIDE
             sm.SetMusicInterruptTimer(m);
         }
 
+        public static bool isInitialPhase()
+        {
+            try
+            {
+                if (driver == null) return true;
+                return driver.initPhase;
+            }
+            catch
+            {
+            }
+            return true;
+        }
+
         internal static Chip GetChip(EnmChip chipType)
         {
             try

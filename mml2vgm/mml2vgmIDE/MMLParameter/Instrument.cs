@@ -118,10 +118,11 @@ namespace mml2vgmIDE.MMLParameter
 
         public void SetParameter(outDatum od, int cc)
         {
-            if (od == null || od.args == null || od.args.Count < 1) 
+            if (od == null || od.args == null || od.args.Count < 1)
                 return;
 
             int ch = ShapingCh(od);
+            //if (Audio.isInitialPhase()) return;
 
             if (isTrace)
             {
@@ -129,7 +130,10 @@ namespace mml2vgmIDE.MMLParameter
                 {
                     try
                     {
-                        TraceInfo[ch].Enqueue(od);
+                        if (!Audio.isInitialPhase())
+                        {
+                            TraceInfo[ch].Enqueue(od);
+                        }
                     }
                     catch
                     {

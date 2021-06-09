@@ -11,7 +11,6 @@ namespace mml2vgmIDE
         public uint YM2610ClockValue { get; internal set; } = 8000000;
         private musicDriverInterface.MmlDatum[] mubBuf = null;
         private mucomManager mm = null;
-        bool initPhase = true;
         List<SoundManager.PackData>[] pd = new List<SoundManager.PackData>[] { new List<SoundManager.PackData>(), new List<SoundManager.PackData>(), new List<SoundManager.PackData>(), new List<SoundManager.PackData>() };
         byte[][] pdOPNB = new byte[4][];
         private SoundManager.Chip chipYM2608;
@@ -36,16 +35,19 @@ namespace mml2vgmIDE
         {
             if (initPhase)
             {
-                initPhase = false;
                 chipRegister.YM2608SetRegister(null, count, chipYM2608, pd[0].ToArray());
                 chipRegister.YM2608SetRegister(null, count, chipYM2608S, pd[1].ToArray());
                 chipRegister.YM2608SetRegister(null, count, chipYM2610, pd[2].ToArray());
                 chipRegister.YM2608SetRegister(null, count, chipYM2610S, pd[3].ToArray());
 
-                chipRegister.YM2610SetRegister(null, count, chipYM2610, pdOPNB[0],true);
-                chipRegister.YM2610SetRegister(null, count, chipYM2610, pdOPNB[1],false);
+                chipRegister.YM2610SetRegister(null, count, chipYM2610, pdOPNB[0], true);
+                chipRegister.YM2610SetRegister(null, count, chipYM2610, pdOPNB[1], false);
                 chipRegister.YM2610SetRegister(null, count, chipYM2610S, pdOPNB[2], true);
-                chipRegister.YM2610SetRegister(null, count, chipYM2610S, pdOPNB[3],false);
+                chipRegister.YM2610SetRegister(null, count, chipYM2610S, pdOPNB[3], false);
+
+                initPhase = false;
+                GC.Collect();
+
                 return;
             }
 

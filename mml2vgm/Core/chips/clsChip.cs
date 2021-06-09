@@ -2023,6 +2023,12 @@ namespace Core
                     , mml.line.Lp);
         }
 
+        public virtual void CmdModulation(partPage page, MML mml)
+        {
+            msgBox.setErrMsg(msg.get("E10046")
+                    , mml.line.Lp);
+        }
+
         public void CheckInterrupt(partWork pw, partPage page)
         {
             if (!page.requestInterrupt) return;

@@ -55,6 +55,7 @@ namespace Core
         public Dictionary<int, Tuple<string, byte[]>> instWF = new Dictionary<int, Tuple<string, byte[]>>();
         public Dictionary<int, Tuple<string, ushort[]>> instOPNA2WF = new Dictionary<int, Tuple<string, ushort[]>>();
         public Dictionary<int, Tuple<string, byte[]>> instOPNA2WFS = new Dictionary<int, Tuple<string, byte[]>>();
+        public Dictionary<int, Tuple<string, byte[]>> instFDSMod = new Dictionary<int, Tuple<string, byte[]>>();
         public Dictionary<int, Tuple<string, byte[]>> midiSysEx = new Dictionary<int, Tuple<string, byte[]>>();
         public Dictionary<int, MmlDatum[]> instArp = new Dictionary<int, MmlDatum[]>();
         public Dictionary<int, MmlDatum[]> instVArp = new Dictionary<int, MmlDatum[]>();
@@ -98,6 +99,11 @@ namespace Core
         private int instArpCounter = -1;
         private int instCommandArpCounter = -1;
         private int instVArpCounter = -1;
+
+        private int instModCounter = -1;
+        private byte[] fdsModulationInstrumentBufCache = null;
+
+
         /// <summary>
         /// GUI/CUI向け(IDEは別)
         /// </summary>
@@ -580,6 +586,13 @@ namespace Core
                 SetInstCommandArp();
             }
 
+            // 定義中のinstCommandArpがあればここで定義完了
+            if (instModCounter != -1)
+            {
+                instModCounter = -1;
+                SetInstModulation();
+            }
+
             //定義中で終わってしまった場合はエラーとする
             CheckDefineInstrument(null);
 
@@ -671,6 +684,14 @@ namespace Core
                 else
                     msgBox.setErrMsg(string.Format(msg.get("E01023"), "WaveForm(OPNA2 SSG)"), line.Lp);
             }
+
+            if (instModCounter != -1)
+            {
+                if (line == null)
+                    msgBox.setErrMsg(string.Format(msg.get("E01022"), "FDS Modulation"), null);
+                else
+                    msgBox.setErrMsg(string.Format(msg.get("E01023"), "FDS Modulation"), line.Lp);
+            }
         }
 
         private int AddInstrument(Line line)
@@ -737,6 +758,11 @@ namespace Core
                 return SetOPNA2WfsInstrument(line);
             }
 
+            if (instModCounter != -1)
+            {
+                return StoreInstModulationBuffer(line);
+            }
+
             char t = (buf != null && buf.Length > 0) ? buf.ToUpper()[0] : '\0';
             char t1 = (buf != null && buf.Length > 1) ? buf.ToUpper()[1] : '\0';
             char t2 = (buf != null && buf.Length > 2) ? buf.ToUpper()[2] : '\0';
@@ -799,6 +825,16 @@ namespace Core
                     SetInstVArp();
             }
 
+            if (instModCounter != -1)
+            {
+                //他の定義が現れたらArpの定義は終了
+                if (t == 'F' || t == 'N' || t == 'M' || t == 'L'
+                    || t == 'A' || t == 'V' || t == 'C'
+                    || t == 'P' || t == 'E'
+                    || t == 'T' || t == 'H' || t == 'W' || t == 'S')
+                    SetInstModulation();
+            }
+
             //定義中に次の定義を始めた場合はエラーとする
             CheckDefineInstrument(line);
 
@@ -821,6 +857,14 @@ namespace Core
                     return 0;
 
                 case 'M':
+                    if(t1=='O' && t2 == 'D')
+                    {
+                        instrumentName = "";
+                        fdsModulationInstrumentBufCache = new byte[Const.FDS_MOD_INSTRUMENT_SIZE];
+                        instModCounter = 0;
+                        StoreInstModulationBuffer(line);
+                        return 0;
+                    }
                     instrumentName = "";
                     opmInstrumentBufCache = new byte[Const.OPM_INSTRUMENT_SIZE];
                     opmInstrumentCounter = 0;
@@ -2898,6 +2942,26 @@ namespace Core
             return 0;
         }
 
+        private int StoreInstModulationBuffer(Line line)
+        {
+            try
+            {
+                string name = "";
+                instModCounter = GetNums(fdsModulationInstrumentBufCache, instModCounter, Common.CutComment(line.Txt).Substring(1).TrimStart(), ref name, line);
+                if (string.IsNullOrEmpty(instrumentName)) instrumentName = name;//音色名
+
+                if (instModCounter == Const.FDS_MOD_INSTRUMENT_SIZE)
+                    SetInstModulation();// SetWfInstrument();
+            }
+            catch
+            {
+                msgBox.setErrMsg(msg.get("E01013"), line.Lp);
+            }
+
+
+            return 0;
+        }
+
         private void SetMidiSysEx()
         {
             midiSysExCounter = -1;
@@ -2916,6 +2980,27 @@ namespace Core
         private void SetInstCommandArp()
         {
             instCommandArpCounter = -1;
+        }
+
+        private void SetInstModulation()
+        {
+            try
+            {
+                if (instModCounter == Const.FDS_MOD_INSTRUMENT_SIZE)
+                {
+                    if (instFDSMod.ContainsKey(fdsModulationInstrumentBufCache[0]))
+                        instFDSMod.Remove(fdsModulationInstrumentBufCache[0]);
+
+                    instFDSMod.Add(fdsModulationInstrumentBufCache[0], new Tuple<string, byte[]>(instrumentName, fdsModulationInstrumentBufCache));
+
+                }
+            }
+            catch
+            {
+            }
+
+            instModCounter = -1;
+
         }
 
         private byte[] ConvertFtoM(byte[] instrumentBufCache)
@@ -5767,6 +5852,11 @@ namespace Core
                 case enmMMLType.HardEnvelopeSync:
                     log.Write("HardEnvelopeSync");
                     page.chip.CmdHardEnvelopeSync(page, mml);
+                    page.mmlPos++;
+                    break;
+                case enmMMLType.Modulation:
+                    log.Write("Modulation");
+                    page.chip.CmdModulation(page, mml);
                     page.mmlPos++;
                     break;
                 default:

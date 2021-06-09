@@ -650,6 +650,7 @@ namespace Core
         public LinePos oldAlies { get; internal set; }
         public Stack<LinePos> stackAliesPos { get; internal set; }
         public Dictionary<int, CommandArpeggio> commandArpeggio = new Dictionary<int, CommandArpeggio>();
+
         public int beforeInstrument { get; set; } = -1;
         public bool DirectSend { get; internal set; } = false;
         public int sync { get; internal set; }
@@ -660,6 +661,12 @@ namespace Core
         public int hsFnum { get; internal set; }
         public int masterVolume { get; internal set; }
         public int beforeMasterVolume { get; internal set; }
+        public bool modulation { get; internal set; }
+        public int modulationInst { get; internal set; }
+        public int modulationFreq { get; internal set; }
+        public int modulationGain { get; internal set; }
+        public bool modulationGainFlg { get; internal set; }
+        public bool modulationDirection { get; internal set; }
 
         public partPage(partPage sharedPg)
         {
