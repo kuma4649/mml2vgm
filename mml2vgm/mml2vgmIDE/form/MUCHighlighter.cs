@@ -31,7 +31,7 @@ namespace mml2vgmIDE
         {
             RegexPattern rp = new RegexPattern(new Regex("^[A-Za-z0-9]+[ |\\t]"),false, new CharClass[] { CharClass.Keyword });//パート
             recRegexPatterns.Add(rp);
-            rp = new RegexPattern(new Regex("^#\\s*\\*[0-9]+"), false, new CharClass[] { CharClass.Keyword });//マクロ
+            rp = new RegexPattern(new Regex("^#\\s*\\* *[0-9]+"), false, new CharClass[] { CharClass.Keyword });//マクロ
             recRegexPatterns.Add(rp);
 
             rp = new RegexPattern(new Regex("^[#|!][@_A-Za-z0-9]*[ |\\t]"), false, new CharClass[] { CharClass.Keyword });//TAG

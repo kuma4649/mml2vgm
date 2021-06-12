@@ -765,7 +765,7 @@ namespace mml2vgmIDE
         {
             if (frmMixer == null)
             {
-                frmMixer = new FrmMixer(this, 1, newParam.mixer);
+                frmMixer = new FrmMixer(this, setting.other.Zoom, newParam.mixer);
                 frmMixer.Location = new Point(setting.location.RMixer.X, setting.location.RMixer.Y);
                 frmMixer.Show();
                 setting.location.ShowMixer = true;
@@ -3526,8 +3526,21 @@ namespace mml2vgmIDE
             }
             else
             {
+                if (frmMixer != null)
+                {
+                    if(frmMixer.DialogResult== DialogResult.Abort)
+                    {
+                        frmMixer = null;
+                        TsmiShowMixer.Checked = (frmMixer != null);
+                        TsmiShowMixer_Click(null, null);
+                        return;
+                    }
+                }
+
                 frmMixer = null;
                 TsmiShowMixer.Checked = (frmMixer != null);
+
+                
             }
 
             if (frmMIDIKbd != null && !frmMIDIKbd.isClosed)
@@ -3867,7 +3880,7 @@ namespace mml2vgmIDE
             {
                 if (setting.location.ShowMixer)
                 {
-                    frmMixer = new FrmMixer(this, 1, newParam.mixer);
+                    frmMixer = new FrmMixer(this, setting.other.Zoom, newParam.mixer);
                     frmMixer.Show();
                     if (SearchScreen(setting.location.RMixer.X, setting.location.RMixer.Y))
                     {

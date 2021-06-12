@@ -37,6 +37,11 @@
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmiSaveDriverBalance = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiSaveSongBalance = new System.Windows.Forms.ToolStripMenuItem();
+            this.ウィンドウサイズ変更ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiX1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiX2 = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiX3 = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiX4 = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.pbScreen)).BeginInit();
             this.ctxtMenu.SuspendLayout();
             this.SuspendLayout();
@@ -62,9 +67,10 @@
             this.tsmiLoadSongBalance,
             this.toolStripSeparator1,
             this.tsmiSaveDriverBalance,
-            this.tsmiSaveSongBalance});
+            this.tsmiSaveSongBalance,
+            this.ウィンドウサイズ変更ToolStripMenuItem});
             this.ctxtMenu.Name = "ctxtMenu";
-            this.ctxtMenu.Size = new System.Drawing.Size(224, 98);
+            this.ctxtMenu.Size = new System.Drawing.Size(224, 142);
             // 
             // tsmiLoadDriverBalance
             // 
@@ -72,6 +78,7 @@
             this.tsmiLoadDriverBalance.Name = "tsmiLoadDriverBalance";
             this.tsmiLoadDriverBalance.Size = new System.Drawing.Size(223, 22);
             this.tsmiLoadDriverBalance.Text = "読込　ドライバーミキサーバランス";
+            this.tsmiLoadDriverBalance.Visible = false;
             this.tsmiLoadDriverBalance.Click += new System.EventHandler(this.TsmiLoadDriverBalance_Click);
             // 
             // tsmiLoadSongBalance
@@ -80,18 +87,21 @@
             this.tsmiLoadSongBalance.Name = "tsmiLoadSongBalance";
             this.tsmiLoadSongBalance.Size = new System.Drawing.Size(223, 22);
             this.tsmiLoadSongBalance.Text = "読込　ソングミキサーバランス";
+            this.tsmiLoadSongBalance.Visible = false;
             this.tsmiLoadSongBalance.Click += new System.EventHandler(this.TsmiLoadSongBalance_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             this.toolStripSeparator1.Size = new System.Drawing.Size(220, 6);
+            this.toolStripSeparator1.Visible = false;
             // 
             // tsmiSaveDriverBalance
             // 
             this.tsmiSaveDriverBalance.Name = "tsmiSaveDriverBalance";
             this.tsmiSaveDriverBalance.Size = new System.Drawing.Size(223, 22);
             this.tsmiSaveDriverBalance.Text = "保存　ドライバーミキサーバランス";
+            this.tsmiSaveDriverBalance.Visible = false;
             this.tsmiSaveDriverBalance.Click += new System.EventHandler(this.TsmiSaveDriverBalance_Click);
             // 
             // tsmiSaveSongBalance
@@ -99,7 +109,47 @@
             this.tsmiSaveSongBalance.Name = "tsmiSaveSongBalance";
             this.tsmiSaveSongBalance.Size = new System.Drawing.Size(223, 22);
             this.tsmiSaveSongBalance.Text = "保存　ソングミキサーバランス";
+            this.tsmiSaveSongBalance.Visible = false;
             this.tsmiSaveSongBalance.Click += new System.EventHandler(this.TsmiSaveSongBalance_Click);
+            // 
+            // ウィンドウサイズ変更ToolStripMenuItem
+            // 
+            this.ウィンドウサイズ変更ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmiX1,
+            this.tsmiX2,
+            this.tsmiX3,
+            this.tsmiX4});
+            this.ウィンドウサイズ変更ToolStripMenuItem.Name = "ウィンドウサイズ変更ToolStripMenuItem";
+            this.ウィンドウサイズ変更ToolStripMenuItem.Size = new System.Drawing.Size(223, 22);
+            this.ウィンドウサイズ変更ToolStripMenuItem.Text = "ウィンドウサイズ変更";
+            // 
+            // tsmiX1
+            // 
+            this.tsmiX1.Name = "tsmiX1";
+            this.tsmiX1.Size = new System.Drawing.Size(180, 22);
+            this.tsmiX1.Text = "x1";
+            this.tsmiX1.Click += new System.EventHandler(this.tsmiX_Click);
+            // 
+            // tsmiX2
+            // 
+            this.tsmiX2.Name = "tsmiX2";
+            this.tsmiX2.Size = new System.Drawing.Size(180, 22);
+            this.tsmiX2.Text = "x2";
+            this.tsmiX2.Click += new System.EventHandler(this.tsmiX_Click);
+            // 
+            // tsmiX3
+            // 
+            this.tsmiX3.Name = "tsmiX3";
+            this.tsmiX3.Size = new System.Drawing.Size(180, 22);
+            this.tsmiX3.Text = "x3";
+            this.tsmiX3.Click += new System.EventHandler(this.tsmiX_Click);
+            // 
+            // tsmiX4
+            // 
+            this.tsmiX4.Name = "tsmiX4";
+            this.tsmiX4.Size = new System.Drawing.Size(180, 22);
+            this.tsmiX4.Text = "x4";
+            this.tsmiX4.Click += new System.EventHandler(this.tsmiX_Click);
             // 
             // FrmMixer
             // 
@@ -131,5 +181,10 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem tsmiSaveDriverBalance;
         private System.Windows.Forms.ToolStripMenuItem tsmiSaveSongBalance;
+        private System.Windows.Forms.ToolStripMenuItem ウィンドウサイズ変更ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem tsmiX1;
+        private System.Windows.Forms.ToolStripMenuItem tsmiX2;
+        private System.Windows.Forms.ToolStripMenuItem tsmiX3;
+        private System.Windows.Forms.ToolStripMenuItem tsmiX4;
     }
 }

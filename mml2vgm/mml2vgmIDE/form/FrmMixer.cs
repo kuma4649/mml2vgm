@@ -163,7 +163,7 @@ namespace mml2vgmIDE
 
         private void FrmMixer_Resize(object sender, EventArgs e)
         {
-
+            update();
         }
 
         private void PbScreen_MouseClick(object sender, MouseEventArgs e)
@@ -268,7 +268,6 @@ namespace mml2vgmIDE
             this.MaximumSize = new System.Drawing.Size(frameSizeW + Properties.Resources.planeMixer.Width * zoom, frameSizeH + Properties.Resources.planeMixer.Height * zoom);
             this.MinimumSize = new System.Drawing.Size(frameSizeW + Properties.Resources.planeMixer.Width * zoom, frameSizeH + Properties.Resources.planeMixer.Height * zoom);
             this.Size = new System.Drawing.Size(frameSizeW + Properties.Resources.planeMixer.Width * zoom, frameSizeH + Properties.Resources.planeMixer.Height * zoom);
-            FrmMixer_Resize(null, null);
 
         }
 
@@ -872,5 +871,16 @@ namespace mml2vgmIDE
 
         }
 
+        private void tsmiX_Click(object sender, EventArgs e)
+        {
+            if (sender == tsmiX1) zoom = 1;
+            else if (sender == tsmiX2) zoom = 2;
+            else if (sender == tsmiX3) zoom = 3;
+            else if (sender == tsmiX4) zoom = 4;
+
+            parent.setting.other.Zoom = zoom;
+            this.DialogResult = DialogResult.Abort;
+            this.Close();
+        }
     }
 }
