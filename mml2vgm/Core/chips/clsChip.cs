@@ -2146,7 +2146,7 @@ namespace Core
                     }
                     page.sendData.Add(od);
 
-                    //Console.Write("{0:x02} :", d);
+                    //log.Write(string.Format("cmd {0:x02} :", d));
                 }
                 //return;
             }
@@ -2175,7 +2175,7 @@ namespace Core
                     }
                 }
                 page.sendData.Add(od);
-                //Console.Write("{0:x02} :", d);
+                //Console.Write("dat {0:x02} :", d);
             }
 
             //Console.WriteLine("S{0}", mml == null ? "NULL" : mml.type.ToString());

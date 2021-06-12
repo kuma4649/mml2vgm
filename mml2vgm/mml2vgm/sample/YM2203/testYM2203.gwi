@@ -29,18 +29,22 @@
 '@ E  1, 15,  0, 20, 12, 30,  4,  1, OPN
 
 
-'Ns1 T110
-'N1 @110v125o4l8D0Q*8[cdefgab>c<]
+'Ns1 T160
+'N1 @110v125o4l8D0Q8[cdefgab>c<]
 'N7 EON@E1v13o5l8Q*8crdrerfrgrarbr>cr
 
- 'Ns1 @110v116o4l8rD2[cdefgab>c<]
+'Ns1 @110v116o4l8rD2[cdefgab>c<]
        No Cmd Sync   data...
 '@ CAR  1,  w,   0,
 '@                   #1,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20 ; 複数行定義可能
 
- 'N7 CA0,1
- 'N7 v12CAON0
- 'N7 l8P2rcccc cccc r1 CAOF0
+'N7 CA0,1
+'N7 v12CAON0
+'N7 l8P2rcccc cccc r1 CAOF0
 
-N7 v12l1P2w0cw10dw20e
+'N7 v12l1P2w0cw10dw20e
+
+
+
+
 

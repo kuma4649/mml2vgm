@@ -4625,6 +4625,7 @@ namespace mml2vgmIDE
                 {
                     if (!ctYM2203[Chip.Number].UseScci && ctYM2203[Chip.Number].UseEmu)
                         mds.WriteYM2203(Chip.Index, (byte)Chip.Number, (byte)address, (byte)data);
+                    //if (address == 0x28 && (data & 7) == 2) log.Write(string.Format("{0:X02}",data));
                 }
                 if (Chip.Model == EnmVRModel.RealModel)
                 {

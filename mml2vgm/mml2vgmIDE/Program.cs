@@ -1,4 +1,6 @@
-﻿using System;
+﻿using NAudio.Wave;
+using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace mml2vgmIDE

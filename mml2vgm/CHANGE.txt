@@ -1,4 +1,9 @@
 更新履歴
+TAG465 2021/06/12
+  IDE:OPN:TOOL>MakeCSM:waveを分析して、CSMっぽい音を出すｙコマンド生成機能を実装
+  サンプルはtestYM2203_CSM.gwiです。
+  (こえやさん様(https://www.koeyasan.com/)のデータを利用しております。ありがとうございます。)
+
 TAG464 2021/06/09
   Core:NES:FDS:モジュレーション対応(testNES.gwiを参考にしてください)
   IDE:トレース機能:少し弄った。

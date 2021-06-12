@@ -212,6 +212,12 @@
     <Compile Include="form\FormN88Files.Designer.cs">
       <DependentUpon>FormN88Files.cs</DependentUpon>
     </Compile>
+    <Compile Include="form\FrmCSM.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="form\FrmCSM.Designer.cs">
+      <DependentUpon>FrmCSM.cs</DependentUpon>
+    </Compile>
     <Compile Include="form\frmDebug.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -398,11 +404,15 @@
     <Compile Include="SoundManager\RingBuffer.cs" />
     <Compile Include="SoundManager\SoundManager.cs" />
     <Compile Include="Tables.cs" />
+    <Compile Include="Tool\CSM\FFT.cs" />
     <Compile Include="VisVolume.cs" />
     <Compile Include="WaveWriter.cs" />
     <Compile Include="WindowPosition.cs" />
     <EmbeddedResource Include="form\FormN88Files.resx">
       <DependentUpon>FormN88Files.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="form\FrmCSM.resx">
+      <DependentUpon>FrmCSM.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="form\frmDebug.resx">
       <DependentUpon>frmDebug.cs</DependentUpon>

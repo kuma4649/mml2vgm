@@ -3059,7 +3059,7 @@ namespace Core
             }
             else
             {
-                rest.length = 0;
+                rest.length = (int)page.length;
             }
 
             //.の解析

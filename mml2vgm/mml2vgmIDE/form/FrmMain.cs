@@ -406,7 +406,7 @@ namespace mml2vgmIDE
                 UpdateGwiFileHistory();
 
                 d.edit = false;
-                
+
                 if (setting.other.ClearHistory)
                     d.editor.azukiControl.ClearHistory();
 
@@ -565,17 +565,17 @@ namespace mml2vgmIDE
 
             GD3Tag gd3 = pmdmng.GetGD3Tag();
             string gd3FileName = "";
-            if(gd3.dicItem.ContainsKey(enmTag.SongObjFilename))
+            if (gd3.dicItem.ContainsKey(enmTag.SongObjFilename))
             {
                 gd3FileName = gd3.dicItem[enmTag.SongObjFilename][0];
-                if (Path.GetFileNameWithoutExtension(gd3FileName)=="")
+                if (Path.GetFileNameWithoutExtension(gd3FileName) == "")
                 {
-                    gd3FileName= Path.GetFileNameWithoutExtension(fn) + gd3FileName;
+                    gd3FileName = Path.GetFileNameWithoutExtension(fn) + gd3FileName;
                 }
             }
             if (gd3FileName == "")
             {
-                gd3FileName= Path.GetFileNameWithoutExtension(fn) + ".m";
+                gd3FileName = Path.GetFileNameWithoutExtension(fn) + ".m";
             }
 
             sfd.FileName = gd3FileName;
@@ -593,7 +593,7 @@ namespace mml2vgmIDE
 
             if (Path.GetExtension(fn) == "")
             {
-                fn = Path.GetFileNameWithoutExtension(fn) +".m";
+                fn = Path.GetFileNameWithoutExtension(fn) + ".m";
             }
 
             List<byte> buf = new List<byte>();
@@ -2279,7 +2279,7 @@ namespace mml2vgmIDE
             if (compileTargetDocument != null)
             {
                 FrmEditor fe = (FrmEditor)compileTargetDocument;
-                AzukiControl ac=fe.azukiControl;
+                AzukiControl ac = fe.azukiControl;
                 for (int i = 0; i < ac.Document.LineCount; i++)
                     ac.Document.SetLineIconIndex(i, -1);
                 if (ci.jumpRow != -1)
@@ -2623,11 +2623,11 @@ namespace mml2vgmIDE
             UpdateControl();
         }
 
-        private void WriteMmlDatumn(string fn,MmlDatum[] mmlData)
+        private void WriteMmlDatumn(string fn, MmlDatum[] mmlData)
         {
             List<byte> data = new List<byte>();
             foreach (MmlDatum d in mmlData) data.Add((byte)d.dat);
-            File.WriteAllBytes(fn,data.ToArray());
+            File.WriteAllBytes(fn, data.ToArray());
         }
 
         private delegate void SafeCallDelegate();
@@ -3427,7 +3427,7 @@ namespace mml2vgmIDE
                 fadeOut();
                 return;
             }
-            
+
             if (Audio.isPaused)
             {
                 Audio.Pause();
@@ -3495,7 +3495,7 @@ namespace mml2vgmIDE
                     frmSien.Close();
                 }
 
-                frmSien = new FrmSien(this,setting);
+                frmSien = new FrmSien(this, setting);
                 frmSien.Show(dpMain, DockState.DockRight);
             }
         }
@@ -3901,7 +3901,7 @@ namespace mml2vgmIDE
 
         }
 
-        private bool SearchScreen(int x,int y)
+        private bool SearchScreen(int x, int y)
         {
             Screen[] scrn = Screen.AllScreens;
             foreach (Screen scr in scrn)
@@ -4070,7 +4070,7 @@ namespace mml2vgmIDE
 
             //if (d == null) return;
 
-            Tuple<int, string, string[], string, string> tpl 
+            Tuple<int, string, string[], string, string> tpl
                 = (Tuple<int, string, string[], string, string>)((ToolStripMenuItem)sender).Tag;
             string fn = tpl.Item4;
 
@@ -4277,7 +4277,7 @@ namespace mml2vgmIDE
                 fnf.dgvFiles.Rows.Add(celObj);
             }
 
-            DialogResult res= fnf.ShowDialog();
+            DialogResult res = fnf.ShowDialog();
             if (res == DialogResult.Cancel) return;
             if (fnf.n == -1) return;
             if (fnf.n >= directory.Count) return;
@@ -4289,12 +4289,12 @@ namespace mml2vgmIDE
                 string ss = Encoding.GetEncoding("shift_jis").GetString(n88.GetFile(Path.GetFileName(fileName), 0));
                 sbuf = ss.Split(new string[] { "\r\n" }, StringSplitOptions.None);
 
-                for(int i = 0; i < sbuf.Length; i++)
+                for (int i = 0; i < sbuf.Length; i++)
                 {
                     if (sbuf[i].IndexOf("'") != -1) sbuf[i] = sbuf[i].Substring(sbuf[i].IndexOf("'") + 1);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 log.Write(ex.Message);
                 MessageBox.Show("D88内のbasファイルのオープンに失敗しました。", "インポート失敗", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -4383,7 +4383,7 @@ namespace mml2vgmIDE
             backFn = backFnb;
             File.Copy(fnD88, backFn);
 
-            List< N88FileAtr > directory;
+            List<N88FileAtr> directory;
             N88Disk n88;
             try
             {
@@ -4472,7 +4472,7 @@ namespace mml2vgmIDE
 
             FrmEditor fe = (FrmEditor)dc;
             Document doc = (Document)(fe.Tag);
-            if(doc.srcFileFormat!= EnmMmlFileFormat.GWI)
+            if (doc.srcFileFormat != EnmMmlFileFormat.GWI)
             {
                 MessageBox.Show("This mml file is not support.");
                 return;
@@ -4581,7 +4581,7 @@ namespace mml2vgmIDE
 
                 MessageBox.Show("完了");
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show(string.Format("失敗\r\n{0}\r\n{1}\r\n", ex.Message, ex.StackTrace));
             }
@@ -4685,6 +4685,16 @@ namespace mml2vgmIDE
                 setting.LatencySCCI = LatencySCCI;
             }
 
+        }
+
+        private void tsmiMakeCSM_Click(object sender, EventArgs e)
+        {
+            IDockContent dc = GetActiveDockContent();
+            if (dc == null) return;
+
+            FrmCSM fm = new FrmCSM(RemoveForm, (FrmEditor)dc);
+            FormBox.Add(fm);
+            fm.Show();
         }
 
     }
