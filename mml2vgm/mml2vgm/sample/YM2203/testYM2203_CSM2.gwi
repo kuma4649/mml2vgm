@@ -1,0 +1,272 @@
+﻿'{
+
+	TitleName   =YM2203(OPN) CSM Test
+	TitleNameJ  =YM2203(OPN) CSM テスト
+	GameName    =
+	GameNameJ   =
+	SystemName  =
+	SystemNameJ =
+	Composer    =
+	ComposerJ   =
+	ReleaseDate =2021/06/12
+	Converted   =
+	Notes       =
+
+	ClockCount  =192
+
+}
+
+'@ N 111
+   AR  DR  SR  RR  SL  TL  KS  ML  DT  AM  SSG-EG
+'@ 031,015,000,000,000,000,000,001,000,000,000
+'@ 031,015,000,000,000,000,000,001,000,000,000
+'@ 031,015,000,000,000,000,000,001,000,000,000
+'@ 031,015,000,000,000,000,000,001,000,000,000
+'@ 007,000
+
+
+;こえやさん
+;https://www.koeyasan.com/voices/484
+
+;より
+
+;「ただいま電話に出ることができません。しばらく経ってからお掛け直しください」
+
+'N3 T160@111EXONEX1234l64y$28,$F2 ; 4opの音色をセットしてね
+'N3  y$AD,$13 y$A9,$0D  y$AC,$02 y$A8,$CE  y$AE,$1F y$AA,$19  y$A6,$19 y$A2,$8B  y$42,$73 y$4A,$7F y$46,$6F y$4E,$77 R 
+'N3  y$AD,$24 y$A9,$C5  y$AC,$13 y$A8,$0D  y$AE,$2A y$AA,$23  y$A6,$19 y$A2,$8B  y$42,$38 y$4A,$68 y$46,$44 y$4E,$59 R 
+'N3  y$AD,$1D y$A9,$83  y$AC,$13 y$A8,$0D  y$AE,$2A y$AA,$09  y$A6,$18 y$A2,$C0  y$42,$3F y$4A,$65 y$46,$47 y$4E,$59 R 
+'N3  y$AD,$18 y$A9,$C0  y$AC,$2A y$A8,$16  y$AE,$13 y$AA,$0D  y$A6,$1F y$A2,$19  y$42,$55 y$4A,$5F y$46,$6F y$4E,$5F R 
+'N3  y$AD,$0F y$A9,$81  y$AC,$1D y$A8,$83  y$AE,$18 y$AA,$C0  y$A6,$02 y$A2,$CE  y$42,$68 y$4A,$7F y$46,$77 y$4E,$7F R 
+'N3  y$AD,$1B y$A9,$ED  y$AC,$2A y$A8,$16  y$AE,$16 y$AA,$3A  y$A6,$25 y$A2,$90  y$42,$34 y$4A,$4F y$46,$55 y$4E,$55 R 
+'N3  y$AD,$24 y$A9,$5E  y$AC,$2A y$A8,$2F  y$AE,$16 y$AA,$3A  y$A6,$1B y$A2,$21  y$42,$04 y$4A,$46 y$46,$55 y$4E,$46 R 
+'N3  y$AD,$24 y$A9,$92  y$AC,$1B y$A8,$ED  y$AE,$27 y$AA,$C0  y$A6,$11 y$A2,$7A  y$42,$00 y$4A,$2D y$46,$27 y$4E,$49 R 
+'N3  y$AD,$24 y$A9,$C5  y$AC,$1C y$A8,$B8  y$AE,$2A y$AA,$09  y$A6,$11 y$A2,$7A  y$42,$00 y$4A,$22 y$46,$0E y$4E,$46 R 
+'N3  y$AD,$24 y$A9,$F8  y$AC,$31 y$A8,$0B  y$AE,$2A y$AA,$88  y$A6,$1C y$A2,$B8  y$42,$00 y$4A,$2D y$46,$11 y$4E,$2F R 
+'N3  y$AD,$1D y$A9,$83  y$AC,$2A y$A8,$88  y$AE,$2A y$AA,$EE  y$A6,$11 y$A2,$7A  y$42,$00 y$4A,$15 y$46,$15 y$4E,$48 R 
+'N3  y$AD,$14 y$A9,$A6  y$AC,$31 y$A8,$14  y$AE,$1D y$AA,$83  y$A6,$2B y$A2,$7A  y$42,$34 y$4A,$36 y$46,$17 y$4E,$44 R 
+'N3  y$AD,$11 y$A9,$7A  y$AC,$1D y$A8,$83  y$AE,$2B y$AA,$61  y$A6,$2B y$A2,$54  y$42,$33 y$4A,$41 y$46,$3B y$4E,$41 R 
+'N3  y$AD,$11 y$A9,$7A  y$AC,$2B y$A8,$54  y$AE,$2B y$AA,$BA  y$A6,$2B y$A2,$47  y$42,$2F y$4A,$3F y$46,$3B y$4E,$44 R 
+'N3  y$AD,$16 y$A9,$3A  y$AC,$25 y$A8,$F6  y$AE,$1B y$AA,$ED  y$A6,$00 y$A2,$00  y$42,$30 y$4A,$6F y$46,$59 y$4E,$7F R 
+'N3  y$AD,$16 y$A9,$3A  y$AC,$1B y$A8,$21  y$AE,$24 y$AA,$5E  y$A6,$27 y$A2,$5A  y$42,$21 y$4A,$68 y$46,$59 y$4E,$6F R 
+'N3  y$AD,$16 y$A9,$3A  y$AC,$1B y$A8,$21  y$AE,$25 y$AA,$90  y$A6,$00 y$A2,$00  y$42,$3C y$4A,$46 y$46,$12 y$4E,$7F R 
+'N3  y$AD,$25 y$A9,$2B  y$AC,$13 y$A8,$0D  y$AE,$27 y$AA,$C0  y$A6,$1A y$A2,$56  y$42,$01 y$4A,$4C y$46,$1C y$4E,$3B R 
+'N3  y$AD,$27 y$A9,$5A  y$AC,$31 y$A8,$11  y$AE,$24 y$AA,$C5  y$A6,$19 y$A2,$8B  y$42,$00 y$4A,$1E y$46,$06 y$4E,$20 R 
+'N3  y$AD,$27 y$A9,$27  y$AC,$19 y$A8,$8B  y$AE,$31 y$AA,$0B  y$A6,$31 y$A2,$0E  y$42,$00 y$4A,$19 y$46,$15 y$4E,$20 R 
+'N3  y$AD,$27 y$A9,$27  y$AC,$19 y$A8,$8B  y$AE,$24 y$AA,$92  y$A6,$31 y$A2,$08  y$42,$00 y$4A,$19 y$46,$0F y$4E,$2F R 
+'N3  y$AD,$26 y$A9,$C1  y$AC,$1D y$A8,$83  y$AE,$18 y$AA,$C0  y$A6,$13 y$A2,$0D  y$42,$05 y$4A,$31 y$46,$2F y$4E,$4D R 
+'N3  y$AD,$0F y$A9,$81  y$AC,$17 y$A8,$D3  y$AE,$25 y$AA,$5E  y$A6,$1C y$A2,$B8  y$42,$57 y$4A,$68 y$46,$46 y$4E,$68 R 
+'N3  y$AD,$13 y$A9,$0D  y$AC,$02 y$A8,$CE  y$AE,$27 y$AA,$C0  y$A6,$24 y$A2,$F8  y$42,$77 y$4A,$7F y$46,$77 y$4E,$7F R 
+'N3  y$AD,$13 y$A9,$0D  y$AC,$0A y$A8,$CE  y$AE,$02 y$AA,$CE  y$A6,$05 y$A2,$9C  y$42,$7F y$4A,$7F y$46,$7F y$4E,$7F R 
+'N3  y$AD,$02 y$A9,$CE  y$AC,$0F y$A8,$81  y$AE,$05 y$AA,$9C  y$A6,$0E y$A2,$1A  y$42,$7F y$4A,$7F y$46,$7F y$4E,$7F R 
+'N3  y$AD,$00 y$A9,$00  y$AC,$00 y$A8,$00  y$AE,$00 y$AA,$00  y$A6,$00 y$A2,$00  y$42,$7F y$4A,$7F y$46,$7F y$4E,$7F R 
+'N3  y$AD,$00 y$A9,$00  y$AC,$00 y$A8,$00  y$AE,$00 y$AA,$00  y$A6,$00 y$A2,$00  y$42,$7F y$4A,$7F y$46,$7F y$4E,$7F R 
+'N3  y$AD,$02 y$A9,$CE  y$AC,$0E y$A8,$1A  y$AE,$05 y$AA,$9C  y$A6,$0A y$A2,$CE  y$42,$7F y$4A,$7F y$46,$7F y$4E,$7F R 
+'N3  y$AD,$05 y$A9,$9C  y$AC,$27 y$A8,$F3  y$AE,$02 y$AA,$CE  y$A6,$0F y$A2,$81  y$42,$7F y$4A,$7F y$46,$7F y$4E,$7F R 
+'N3  y$AD,$02 y$A9,$CE  y$AC,$0E y$A8,$1A  y$AE,$05 y$AA,$9C  y$A6,$27 y$A2,$F3  y$42,$7F y$4A,$7F y$46,$7F y$4E,$7F R 
+'N3  y$AD,$02 y$A9,$CE  y$AC,$0E y$A8,$1A  y$AE,$05 y$AA,$9C  y$A6,$18 y$A2,$C0  y$42,$7F y$4A,$7F y$46,$7F y$4E,$7F R 
+'N3  y$AD,$02 y$A9,$CE  y$AC,$0E y$A8,$1A  y$AE,$05 y$AA,$9C  y$A6,$0F y$A2,$81  y$42,$7F y$4A,$7F y$46,$7F y$4E,$7F R 
+'N3  y$AD,$02 y$A9,$CE  y$AC,$0E y$A8,$1A  y$AE,$05 y$AA,$9C  y$A6,$0F y$A2,$81  y$42,$7F y$4A,$7F y$46,$7F y$4E,$7F R 
+'N3  y$AD,$02 y$A9,$CE  y$AC,$0E y$A8,$1A  y$AE,$05 y$AA,$9C  y$A6,$0F y$A2,$81  y$42,$7F y$4A,$7F y$46,$7F y$4E,$7F R 
+'N3  y$AD,$05 y$A9,$9C  y$AC,$0E y$A8,$1A  y$AE,$02 y$AA,$CE  y$A6,$13 y$A2,$0D  y$42,$7F y$4A,$7F y$46,$7F y$4E,$7F R 
+'N3  y$AD,$05 y$A9,$9C  y$AC,$0E y$A8,$1A  y$AE,$02 y$AA,$CE  y$A6,$13 y$A2,$0D  y$42,$7F y$4A,$7F y$46,$7F y$4E,$7F R 
+'N3  y$AD,$02 y$A9,$CE  y$AC,$0E y$A8,$1A  y$AE,$05 y$AA,$9C  y$A6,$13 y$A2,$0D  y$42,$7F y$4A,$7F y$46,$7F y$4E,$7F R 
+'N3  y$AD,$02 y$A9,$CE  y$AC,$0E y$A8,$1A  y$AE,$05 y$AA,$9C  y$A6,$0F y$A2,$81  y$42,$7F y$4A,$7F y$46,$7F y$4E,$7F R 
+'N3  y$AD,$05 y$A9,$9C  y$AC,$0E y$A8,$1A  y$AE,$02 y$AA,$CE  y$A6,$0F y$A2,$81  y$42,$7F y$4A,$7F y$46,$7F y$4E,$7F R 
+'N3  y$AD,$02 y$A9,$CE  y$AC,$05 y$A8,$9C  y$AE,$0F y$AA,$81  y$A6,$0E y$A2,$1A  y$42,$7F y$4A,$7F y$46,$7F y$4E,$7F R 
+'N3  y$AD,$13 y$A9,$0D  y$AC,$2B y$A8,$BA  y$AE,$19 y$AA,$8B  y$A6,$2B y$A2,$C6  y$42,$46 y$4A,$55 y$46,$22 y$4E,$55 R 
+'N3  y$AD,$19 y$A9,$8B  y$AC,$2B y$A8,$07  y$AE,$13 y$AA,$0D  y$A6,$2B y$A2,$EC  y$42,$00 y$4A,$31 y$46,$4B y$4E,$3F R 
+'N3  y$AD,$1A y$A9,$56  y$AC,$2B y$A8,$EC  y$AE,$13 y$AA,$0D  y$A6,$2C y$A2,$06  y$42,$00 y$4A,$3B y$46,$51 y$4E,$3B R 
+'N3  y$AD,$2B y$A9,$E0  y$AC,$16 y$A8,$3A  y$AE,$2B y$AA,$D3  y$A6,$2B y$A2,$21  y$42,$19 y$4A,$45 y$46,$25 y$4E,$2F R 
+'N3  y$AD,$11 y$A9,$7A  y$AC,$2B y$A8,$07  y$AE,$2A y$AA,$FB  y$A6,$2B y$A2,$C6  y$42,$43 y$4A,$36 y$46,$2D y$4E,$36 R 
+'N3  y$AD,$11 y$A9,$7A  y$AC,$2B y$A8,$E0  y$AE,$2B y$AA,$EC  y$A6,$1C y$A2,$B8  y$42,$38 y$4A,$34 y$46,$27 y$4E,$3D R 
+'N3  y$AD,$11 y$A9,$7A  y$AC,$31 y$A8,$3A  y$AE,$1C y$AA,$B8  y$A6,$31 y$A2,$37  y$42,$2E y$4A,$46 y$46,$46 y$4E,$46 R 
+'N3  y$AD,$11 y$A9,$7A  y$AC,$31 y$A8,$0E  y$AE,$1D y$AA,$83  y$A6,$2A y$A2,$16  y$42,$2F y$4A,$59 y$46,$3B y$4E,$59 R 
+'N3  y$AD,$14 y$A9,$A6  y$AC,$1D y$A8,$83  y$AE,$26 y$AA,$C1  y$A6,$31 y$A2,$14  y$42,$1F y$4A,$41 y$46,$41 y$4E,$68 R 
+'N3  y$AD,$11 y$A9,$7A  y$AC,$1D y$A8,$83  y$AE,$25 y$AA,$2B  y$A6,$2A y$A2,$88  y$42,$32 y$4A,$5F y$46,$55 y$4E,$77 R 
+'N3  y$AD,$14 y$A9,$A6  y$AC,$25 y$A8,$5E  y$AE,$1E y$AA,$4E  y$A6,$00 y$A2,$00  y$42,$30 y$4A,$3B y$46,$3B y$4E,$7F R 
+'N3  y$AD,$27 y$A9,$5A  y$AC,$31 y$A8,$04  y$AE,$1E y$AA,$4E  y$A6,$31 y$A2,$08  y$42,$06 y$4A,$15 y$46,$0C y$4E,$25 R 
+'N3  y$AD,$27 y$A9,$5A  y$AC,$31 y$A8,$08  y$AE,$31 y$AA,$0B  y$A6,$1F y$A2,$19  y$42,$00 y$4A,$0E y$46,$0D y$4E,$15 R 
+'N3  y$AD,$2A y$A9,$55  y$AC,$2B y$A8,$BA  y$AE,$1F y$AA,$19  y$A6,$14 y$A2,$A6  y$42,$0C y$4A,$27 y$46,$12 y$4E,$44 R 
+'N3  y$AD,$14 y$A9,$A6  y$AC,$1F y$A8,$19  y$AE,$2A y$AA,$C8  y$A6,$31 y$A2,$47  y$42,$31 y$4A,$41 y$46,$31 y$4E,$55 R 
+'N3  y$AD,$14 y$A9,$A6  y$AC,$2A y$A8,$AF  y$AE,$1E y$AA,$4E  y$A6,$25 y$A2,$5E  y$42,$15 y$4A,$6F y$46,$59 y$4E,$6F R 
+'N3  y$AD,$17 y$A9,$D3  y$AC,$31 y$A8,$11  y$AE,$2B y$AA,$54  y$A6,$2B y$A2,$47  y$42,$1F y$4A,$22 y$46,$0A y$4E,$27 R 
+'N3  y$AD,$14 y$A9,$A6  y$AC,$2B y$A8,$47  y$AE,$31 y$AA,$2A  y$A6,$31 y$A2,$0E  y$42,$17 y$4A,$3B y$46,$2D y$4E,$3F R 
+'N3  y$AD,$11 y$A9,$7A  y$AC,$2B y$A8,$14  y$AE,$1E y$AA,$4E  y$A6,$2B y$A2,$21  y$42,$2E y$4A,$6F y$46,$68 y$4E,$6F R 
+'N3  y$AD,$16 y$A9,$3A  y$AC,$02 y$A8,$CE  y$AE,$1B y$AA,$21  y$A6,$00 y$A2,$00  y$42,$53 y$4A,$7F y$46,$6F y$4E,$7F R 
+'N3  y$AD,$17 y$A9,$D3  y$AC,$31 y$A8,$14  y$AE,$2A y$AA,$E1  y$A6,$31 y$A2,$51  y$42,$0A y$4A,$3D y$46,$34 y$4E,$4A R 
+'N3  y$AD,$2A y$A9,$E1  y$AC,$31 y$A8,$14  y$AE,$17 y$AA,$D3  y$A6,$1F y$A2,$19  y$42,$00 y$4A,$04 y$46,$12 y$4E,$2D R 
+'N3  y$AD,$2A y$A9,$E1  y$AC,$31 y$A8,$17  y$AE,$17 y$AA,$D3  y$A6,$31 y$A2,$14  y$42,$00 y$4A,$17 y$46,$0F y$4E,$19 R 
+'N3  y$AD,$17 y$A9,$D3  y$AC,$31 y$A8,$14  y$AE,$2A y$AA,$E1  y$A6,$31 y$A2,$17  y$42,$15 y$4A,$2F y$46,$1C y$4E,$3D R 
+'N3  y$AD,$17 y$A9,$D3  y$AC,$2A y$A8,$7B  y$AE,$2B y$AA,$7A  y$A6,$00 y$A2,$00  y$42,$1C y$4A,$47 y$46,$47 y$4E,$7F R 
+'N3  y$AD,$17 y$A9,$D3  y$AC,$2B y$A8,$EC  y$AE,$2A y$AA,$62  y$A6,$1F y$A2,$E5  y$42,$00 y$4A,$2D y$46,$12 y$4E,$2F R 
+'N3  y$AD,$14 y$A9,$A6  y$AC,$1F y$A8,$19  y$AE,$27 y$AA,$5A  y$A6,$31 y$A2,$0E  y$42,$04 y$4A,$46 y$46,$2F y$4E,$59 R 
+'N3  y$AD,$14 y$A9,$A6  y$AC,$13 y$A8,$0D  y$AE,$24 y$AA,$F8  y$A6,$1B y$A2,$ED  y$42,$49 y$4A,$77 y$46,$68 y$4E,$7F R 
+'N3  y$AD,$14 y$A9,$A6  y$AC,$13 y$A8,$0D  y$AE,$05 y$AA,$9C  y$A6,$02 y$A2,$CE  y$42,$77 y$4A,$7F y$46,$7F y$4E,$7F R 
+'N3  y$AD,$24 y$A9,$92  y$AC,$0E y$A8,$1A  y$AE,$11 y$AA,$7A  y$A6,$1A y$A2,$56  y$42,$68 y$4A,$7F y$46,$73 y$4E,$77 R 
+'N3  y$AD,$14 y$A9,$A6  y$AC,$25 y$A8,$5E  y$AE,$1E y$AA,$4E  y$A6,$31 y$A2,$37  y$42,$02 y$4A,$1E y$46,$00 y$4E,$5F R 
+'N3  y$AD,$14 y$A9,$A6  y$AC,$25 y$A8,$5E  y$AE,$1E y$AA,$4E  y$A6,$2B y$A2,$F9  y$42,$00 y$4A,$09 y$46,$08 y$4E,$59 R 
+'N3  y$AD,$14 y$A9,$A6  y$AC,$1E y$A8,$4E  y$AE,$13 y$AA,$0D  y$A6,$02 y$A2,$CE  y$42,$4B y$4A,$6F y$46,$5F y$4E,$7F R 
+'N3  y$AD,$14 y$A9,$A6  y$AC,$0A y$A8,$CE  y$AE,$13 y$AA,$0D  y$A6,$02 y$A2,$CE  y$42,$77 y$4A,$7F y$46,$7F y$4E,$7F R 
+'N3  y$AD,$1B y$A9,$ED  y$AC,$27 y$A8,$5A  y$AE,$11 y$AA,$7A  y$A6,$24 y$A2,$92  y$42,$00 y$4A,$44 y$46,$1A y$4E,$46 R 
+'N3  y$AD,$1B y$A9,$ED  y$AC,$24 y$A8,$92  y$AE,$16 y$AA,$3A  y$A6,$27 y$A2,$5A  y$42,$00 y$4A,$25 y$46,$1D y$4E,$44 R 
+'N3  y$AD,$1B y$A9,$ED  y$AC,$24 y$A8,$92  y$AE,$16 y$AA,$3A  y$A6,$31 y$A2,$31  y$42,$00 y$4A,$25 y$46,$15 y$4E,$5F R 
+'N3  y$AD,$13 y$A9,$0D  y$AC,$24 y$A8,$F8  y$AE,$19 y$AA,$8B  y$A6,$00 y$A2,$00  y$42,$37 y$4A,$3B y$46,$1C y$4E,$7F R 
+'N3  y$AD,$13 y$A9,$0D  y$AC,$25 y$A8,$C3  y$AE,$19 y$AA,$8B  y$A6,$1F y$A2,$19  y$42,$31 y$4A,$59 y$46,$03 y$4E,$68 R 
+'N3  y$AD,$19 y$A9,$8B  y$AC,$25 y$A8,$C3  y$AE,$13 y$AA,$0D  y$A6,$1F y$A2,$19  y$42,$00 y$4A,$08 y$46,$34 y$4E,$3D R 
+'N3  y$AD,$18 y$A9,$C0  y$AC,$27 y$A8,$C0  y$AE,$24 y$AA,$5E  y$A6,$13 y$A2,$0D  y$42,$00 y$4A,$02 y$46,$01 y$4E,$3A R 
+'N3  y$AD,$0F y$A9,$81  y$AC,$24 y$A8,$2C  y$AE,$17 y$AA,$D3  y$A6,$2A y$A2,$16  y$42,$31 y$4A,$0C y$46,$15 y$4E,$15 R 
+'N3  y$AD,$0F y$A9,$81  y$AC,$1B y$A8,$ED  y$AE,$14 y$AA,$A6  y$A6,$2A y$A2,$2F  y$42,$3E y$4A,$4C y$46,$35 y$4E,$59 R 
+'N3  y$AD,$0A y$A9,$CE  y$AC,$13 y$A8,$0D  y$AE,$14 y$AA,$A6  y$A6,$1B y$A2,$21  y$42,$4B y$4A,$73 y$46,$49 y$4E,$77 R 
+'N3  y$AD,$14 y$A9,$A6  y$AC,$1B y$A8,$21  y$AE,$0F y$AA,$81  y$A6,$02 y$A2,$CE  y$42,$19 y$4A,$5F y$46,$49 y$4E,$7F R 
+'N3  y$AD,$14 y$A9,$A6  y$AC,$1B y$A8,$21  y$AE,$0F y$AA,$81  y$A6,$31 y$A2,$04  y$42,$03 y$4A,$3D y$46,$41 y$4E,$44 R 
+'N3  y$AD,$14 y$A9,$A6  y$AC,$2B y$A8,$07  y$AE,$0F y$AA,$81  y$A6,$31 y$A2,$08  y$42,$07 y$4A,$3B y$46,$35 y$4E,$44 R 
+'N3  y$AD,$0A y$A9,$CE  y$AC,$2B y$A8,$AD  y$AE,$14 y$AA,$A6  y$A6,$2B y$A2,$7A  y$42,$4D y$4A,$5F y$46,$40 y$4E,$5F R 
+'N3  y$AD,$0F y$A9,$81  y$AC,$02 y$A8,$CE  y$AE,$14 y$AA,$A6  y$A6,$05 y$A2,$9C  y$42,$6F y$4A,$7F y$46,$68 y$4E,$7F R 
+'N3  y$AD,$31 y$A9,$1E  y$AC,$31 y$A8,$1B  y$AE,$31 y$AA,$14  y$A6,$31 y$A2,$17  y$42,$4A y$4A,$4A y$46,$4A y$4E,$4A R 
+'N3  y$AD,$13 y$A9,$0D  y$AC,$14 y$A8,$A6  y$AE,$0A y$AA,$CE  y$A6,$38 y$A2,$8B  y$42,$49 y$4A,$6B y$46,$6F y$4E,$5F R 
+'N3  y$AD,$13 y$A9,$0D  y$AC,$31 y$A8,$1E  y$AE,$19 y$AA,$8B  y$A6,$31 y$A2,$0B  y$42,$0F y$4A,$59 y$46,$02 y$4E,$5F R 
+'N3  y$AD,$13 y$A9,$0D  y$AC,$1F y$A8,$19  y$AE,$19 y$AA,$8B  y$A6,$26 y$A2,$29  y$42,$0F y$4A,$59 y$46,$01 y$4E,$59 R 
+'N3  y$AD,$16 y$A9,$3A  y$AC,$26 y$A8,$8E  y$AE,$1A y$AA,$56  y$A6,$1F y$A2,$E5  y$42,$02 y$4A,$36 y$46,$0D y$4E,$68 R 
+'N3  y$AD,$16 y$A9,$3A  y$AC,$26 y$A8,$C1  y$AE,$24 y$AA,$2C  y$A6,$1A y$A2,$56  y$42,$05 y$4A,$19 y$46,$00 y$4E,$2D R 
+'N3  y$AD,$26 y$A9,$F4  y$AC,$24 y$A8,$2C  y$AE,$16 y$AA,$3A  y$A6,$1A y$A2,$56  y$42,$00 y$4A,$02 y$46,$22 y$4E,$44 R 
+'N3  y$AD,$25 y$A9,$5E  y$AC,$2A y$A8,$09  y$AE,$16 y$AA,$3A  y$A6,$1A y$A2,$56  y$42,$00 y$4A,$0E y$46,$21 y$4E,$3D R 
+'N3  y$AD,$16 y$A9,$3A  y$AC,$27 y$A8,$F3  y$AE,$25 y$AA,$2B  y$A6,$1A y$A2,$56  y$42,$15 y$4A,$2D y$46,$0E y$4E,$3D R 
+'N3  y$AD,$13 y$A9,$0D  y$AC,$38 y$A8,$B4  y$AE,$19 y$AA,$8B  y$A6,$38 y$A2,$B5  y$42,$32 y$4A,$59 y$46,$4F y$4E,$5F R 
+'N3  y$AD,$00 y$A9,$00  y$AC,$00 y$A8,$00  y$AE,$00 y$AA,$00  y$A6,$00 y$A2,$00  y$42,$7F y$4A,$7F y$46,$7F y$4E,$7F R 
+'N3  y$AD,$00 y$A9,$00  y$AC,$00 y$A8,$00  y$AE,$00 y$AA,$00  y$A6,$00 y$A2,$00  y$42,$7F y$4A,$7F y$46,$7F y$4E,$7F R 
+'N3  y$AD,$11 y$A9,$7A  y$AC,$1B y$A8,$ED  y$AE,$02 y$AA,$CE  y$A6,$05 y$A2,$9C  y$42,$2C y$4A,$4C y$46,$7B y$4E,$77 R 
+'N3  y$AD,$1B y$A9,$ED  y$AC,$24 y$A8,$92  y$AE,$11 y$AA,$7A  y$A6,$2A y$A2,$FB  y$42,$00 y$4A,$47 y$46,$0B y$4E,$4F R 
+'N3  y$AD,$1B y$A9,$ED  y$AC,$2A y$A8,$EE  y$AE,$16 y$AA,$3A  y$A6,$24 y$A2,$92  y$42,$00 y$4A,$22 y$46,$22 y$4E,$31 R 
+'N3  y$AD,$16 y$A9,$3A  y$AC,$24 y$A8,$2C  y$AE,$2A y$AA,$D5  y$A6,$00 y$A2,$00  y$42,$1E y$4A,$29 y$46,$0D y$4E,$7F R 
+'N3  y$AD,$16 y$A9,$3A  y$AC,$1F y$A8,$E5  y$AE,$1A y$AA,$56  y$A6,$2A y$A2,$A2  y$42,$1D y$4A,$38 y$46,$15 y$4E,$4A R 
+'N3  y$AD,$13 y$A9,$0D  y$AC,$24 y$A8,$C5  y$AE,$19 y$AA,$8B  y$A6,$0A y$A2,$CE  y$42,$27 y$4A,$5F y$46,$0C y$4E,$7B R 
+'N3  y$AD,$0F y$A9,$81  y$AC,$1D y$A8,$83  y$AE,$18 y$AA,$C0  y$A6,$0E y$A2,$1A  y$42,$3F y$4A,$77 y$46,$3F y$4E,$7F R 
+'N3  y$AD,$13 y$A9,$0D  y$AC,$02 y$A8,$CE  y$AE,$0A y$AA,$CE  y$A6,$05 y$A2,$9C  y$42,$6F y$4A,$7F y$46,$7B y$4E,$7F R 
+'N3  y$AD,$13 y$A9,$0D  y$AC,$0A y$A8,$CE  y$AE,$02 y$AA,$CE  y$A6,$18 y$A2,$C0  y$42,$7B y$4A,$7F y$46,$7F y$4E,$7F R 
+'N3  y$AD,$02 y$A9,$CE  y$AC,$0E y$A8,$1A  y$AE,$0F y$AA,$81  y$A6,$05 y$A2,$9C  y$42,$7F y$4A,$7F y$46,$7F y$4E,$7F R 
+'N3  y$AD,$02 y$A9,$CE  y$AC,$00 y$A8,$00  y$AE,$05 y$AA,$9C  y$A6,$00 y$A2,$00  y$42,$7F y$4A,$7F y$46,$7F y$4E,$7F R 
+'N3  y$AD,$00 y$A9,$00  y$AC,$00 y$A8,$00  y$AE,$00 y$AA,$00  y$A6,$00 y$A2,$00  y$42,$7F y$4A,$7F y$46,$7F y$4E,$7F R 
+'N3  y$AD,$02 y$A9,$CE  y$AC,$0A y$A8,$CE  y$AE,$05 y$AA,$9C  y$A6,$16 y$A2,$3A  y$42,$7F y$4A,$7F y$46,$7F y$4E,$7F R 
+'N3  y$AD,$02 y$A9,$CE  y$AC,$0E y$A8,$1A  y$AE,$05 y$AA,$9C  y$A6,$14 y$A2,$A6  y$42,$7F y$4A,$7F y$46,$7F y$4E,$7F R 
+'N3  y$AD,$05 y$A9,$9C  y$AC,$0E y$A8,$1A  y$AE,$02 y$AA,$CE  y$A6,$18 y$A2,$C0  y$42,$7F y$4A,$7F y$46,$7F y$4E,$7F R 
+'N3  y$AD,$05 y$A9,$9C  y$AC,$0E y$A8,$1A  y$AE,$02 y$AA,$CE  y$A6,$0F y$A2,$81  y$42,$7F y$4A,$7F y$46,$7F y$4E,$7F R 
+'N3  y$AD,$02 y$A9,$CE  y$AC,$0A y$A8,$CE  y$AE,$05 y$AA,$9C  y$A6,$19 y$A2,$8B  y$42,$7F y$4A,$7F y$46,$7F y$4E,$7F R 
+'N3  y$AD,$02 y$A9,$CE  y$AC,$0A y$A8,$CE  y$AE,$05 y$AA,$9C  y$A6,$19 y$A2,$8B  y$42,$7F y$4A,$7F y$46,$7F y$4E,$7F R 
+'N3  y$AD,$05 y$A9,$9C  y$AC,$0E y$A8,$1A  y$AE,$02 y$AA,$CE  y$A6,$1A y$A2,$56  y$42,$7F y$4A,$7F y$46,$7F y$4E,$7F R 
+'N3  y$AD,$02 y$A9,$CE  y$AC,$0E y$A8,$1A  y$AE,$05 y$AA,$9C  y$A6,$17 y$A2,$D3  y$42,$7F y$4A,$7F y$46,$7F y$4E,$7F R 
+'N3  y$AD,$05 y$A9,$9C  y$AC,$0E y$A8,$1A  y$AE,$02 y$AA,$CE  y$A6,$0F y$A2,$81  y$42,$7F y$4A,$7F y$46,$7F y$4E,$7F R 
+'N3  y$AD,$02 y$A9,$CE  y$AC,$0E y$A8,$1A  y$AE,$05 y$AA,$9C  y$A6,$19 y$A2,$8B  y$42,$7F y$4A,$7F y$46,$7F y$4E,$7F R 
+'N3  y$AD,$05 y$A9,$9C  y$AC,$02 y$A8,$CE  y$AE,$0F y$AA,$81  y$A6,$0E y$A2,$1A  y$42,$7F y$4A,$7F y$46,$7F y$4E,$7F R 
+'N3  y$AD,$02 y$A9,$CE  y$AC,$19 y$A8,$8B  y$AE,$05 y$AA,$9C  y$A6,$0F y$A2,$81  y$42,$7F y$4A,$7F y$46,$7F y$4E,$7F R 
+'N3  y$AD,$05 y$A9,$9C  y$AC,$0E y$A8,$1A  y$AE,$02 y$AA,$CE  y$A6,$0F y$A2,$81  y$42,$7F y$4A,$7F y$46,$7F y$4E,$7F R 
+'N3  y$AD,$02 y$A9,$CE  y$AC,$05 y$A8,$9C  y$AE,$0A y$AA,$CE  y$A6,$18 y$A2,$C0  y$42,$7F y$4A,$7F y$46,$7F y$4E,$7F R 
+'N3  y$AD,$02 y$A9,$CE  y$AC,$0A y$A8,$CE  y$AE,$05 y$AA,$9C  y$A6,$14 y$A2,$A6  y$42,$7F y$4A,$7F y$46,$7F y$4E,$7F R 
+'N3  y$AD,$05 y$A9,$9C  y$AC,$02 y$A8,$CE  y$AE,$0E y$AA,$1A  y$A6,$19 y$A2,$8B  y$42,$7F y$4A,$7F y$46,$7F y$4E,$7F R 
+'N3  y$AD,$05 y$A9,$9C  y$AC,$0E y$A8,$1A  y$AE,$02 y$AA,$CE  y$A6,$0F y$A2,$81  y$42,$7F y$4A,$7F y$46,$7F y$4E,$7F R 
+'N3  y$AD,$02 y$A9,$CE  y$AC,$0E y$A8,$1A  y$AE,$05 y$AA,$9C  y$A6,$1B y$A2,$21  y$42,$7F y$4A,$7F y$46,$7F y$4E,$7F R 
+'N3  y$AD,$02 y$A9,$CE  y$AC,$0A y$A8,$CE  y$AE,$05 y$AA,$9C  y$A6,$13 y$A2,$0D  y$42,$7F y$4A,$7F y$46,$7F y$4E,$7F R 
+'N3  y$AD,$05 y$A9,$9C  y$AC,$0E y$A8,$1A  y$AE,$02 y$AA,$CE  y$A6,$13 y$A2,$0D  y$42,$7F y$4A,$7F y$46,$7F y$4E,$7F R 
+'N3  y$AD,$02 y$A9,$CE  y$AC,$0F y$A8,$81  y$AE,$0E y$AA,$1A  y$A6,$2A y$A2,$E1  y$42,$7F y$4A,$7F y$46,$7F y$4E,$7F R 
+'N3  y$AD,$32 y$A9,$03  y$AC,$32 y$A8,$06  y$AE,$31 y$AA,$4A  y$A6,$31 y$A2,$97  y$42,$77 y$4A,$77 y$46,$77 y$4E,$77 R 
+'N3  y$AD,$31 y$A9,$D0  y$AC,$38 y$A8,$8B  y$AE,$31 y$AA,$CD  y$A6,$31 y$A2,$D3  y$42,$55 y$4A,$5F y$46,$55 y$4E,$5F R 
+'N3  y$AD,$31 y$A9,$B3  y$AC,$31 y$A8,$D9  y$AE,$31 y$AA,$CD  y$A6,$31 y$A2,$D6  y$42,$4F y$4A,$55 y$46,$4F y$4E,$59 R 
+'N3  y$AD,$31 y$A9,$A3  y$AC,$31 y$A8,$6D  y$AE,$31 y$AA,$EC  y$A6,$31 y$A2,$70  y$42,$4C y$4A,$4F y$46,$4F y$4E,$55 R 
+'N3  y$AD,$16 y$A9,$3A  y$AC,$31 y$A8,$4A  y$AE,$31 y$AA,$60  y$A6,$31 y$A2,$A3  y$42,$4F y$4A,$59 y$46,$55 y$4E,$59 R 
+'N3  y$AD,$16 y$A9,$3A  y$AC,$2B y$A8,$93  y$AE,$2B y$AA,$87  y$A6,$2A y$A2,$D5  y$42,$3D y$4A,$2D y$46,$29 y$4E,$44 R 
+'N3  y$AD,$13 y$A9,$0D  y$AC,$25 y$A8,$F6  y$AE,$19 y$AA,$8B  y$A6,$2B y$A2,$87  y$42,$51 y$4A,$77 y$46,$55 y$4E,$7F R 
+'N3  y$AD,$11 y$A9,$7A  y$AC,$26 y$A8,$8E  y$AE,$1C y$AA,$B8  y$A6,$2B y$A2,$BA  y$42,$3A y$4A,$2D y$46,$29 y$4E,$3F R 
+'N3  y$AD,$1D y$A9,$83  y$AC,$31 y$A8,$0E  y$AE,$26 y$AA,$C1  y$A6,$2B y$A2,$C6  y$42,$00 y$4A,$12 y$46,$00 y$4E,$20 R 
+'N3  y$AD,$27 y$A9,$27  y$AC,$2B y$A8,$F9  y$AE,$1E y$AA,$4E  y$A6,$2C y$A2,$06  y$42,$00 y$4A,$00 y$46,$00 y$4E,$12 R 
+'N3  y$AD,$27 y$A9,$5A  y$AC,$31 y$A8,$08  y$AE,$1E y$AA,$4E  y$A6,$2B y$A2,$AD  y$42,$00 y$4A,$01 y$46,$01 y$4E,$07 R 
+'N3  y$AD,$1E y$A9,$4E  y$AC,$14 y$A8,$A6  y$AE,$2A y$AA,$55  y$A6,$00 y$A2,$00  y$42,$0C y$4A,$53 y$46,$36 y$4E,$7F R 
+'N3  y$AD,$1F y$A9,$E5  y$AC,$2B y$A8,$61  y$AE,$27 y$AA,$C0  y$A6,$17 y$A2,$D3  y$42,$00 y$4A,$31 y$46,$20 y$4E,$43 R 
+'N3  y$AD,$2A y$A9,$62  y$AC,$2B y$A8,$D3  y$AE,$25 y$AA,$C3  y$A6,$1F y$A2,$19  y$42,$00 y$4A,$06 y$46,$04 y$4E,$0A R 
+'N3  y$AD,$25 y$A9,$C3  y$AC,$2A y$A8,$62  y$AE,$1F y$AA,$19  y$A6,$2B y$A2,$E0  y$42,$00 y$4A,$20 y$46,$12 y$4E,$29 R 
+'N3  y$AD,$17 y$A9,$D3  y$AC,$1F y$A8,$E5  y$AE,$27 y$AA,$F3  y$A6,$00 y$A2,$00  y$42,$3D y$4A,$47 y$46,$44 y$4E,$7F R 
+'N3  y$AD,$17 y$A9,$D3  y$AC,$13 y$A8,$0D  y$AE,$1F y$AA,$E5  y$A6,$02 y$A2,$CE  y$42,$73 y$4A,$7F y$46,$7F y$4E,$7F R 
+'N3  y$AD,$2A y$A9,$2F  y$AC,$00 y$A8,$00  y$AE,$00 y$AA,$00  y$A6,$00 y$A2,$00  y$42,$68 y$4A,$7F y$46,$7F y$4E,$7F R 
+'N3  y$AD,$11 y$A9,$7A  y$AC,$1D y$A8,$83  y$AE,$2A y$AA,$49  y$A6,$00 y$A2,$00  y$42,$48 y$4A,$77 y$46,$6F y$4E,$7F R 
+'N3  y$AD,$11 y$A9,$7A  y$AC,$24 y$A8,$C5  y$AE,$1C y$AA,$B8  y$A6,$2B y$A2,$F9  y$42,$15 y$4A,$68 y$46,$46 y$4E,$77 R 
+'N3  y$AD,$0F y$A9,$81  y$AC,$02 y$A8,$CE  y$AE,$11 y$AA,$7A  y$A6,$1C y$A2,$B8  y$42,$73 y$4A,$7F y$46,$73 y$4E,$7F R 
+'N3  y$AD,$11 y$A9,$7A  y$AC,$02 y$A8,$CE  y$AE,$0F y$AA,$81  y$A6,$05 y$A2,$9C  y$42,$7B y$4A,$7F y$46,$7F y$4E,$7F R 
+'N3  y$AD,$11 y$A9,$7A  y$AC,$05 y$A8,$9C  y$AE,$02 y$AA,$CE  y$A6,$1B y$A2,$ED  y$42,$62 y$4A,$7B y$46,$7B y$4E,$5F R 
+'N3  y$AD,$24 y$A9,$C5  y$AC,$1C y$A8,$B8  y$AE,$11 y$AA,$7A  y$A6,$27 y$A2,$C0  y$42,$0C y$4A,$15 y$46,$34 y$4E,$47 R 
+'N3  y$AD,$25 y$A9,$2B  y$AC,$1D y$A8,$83  y$AE,$2A y$AA,$16  y$A6,$11 y$A2,$7A  y$42,$00 y$4A,$09 y$46,$04 y$4E,$45 R 
+'N3  y$AD,$25 y$A9,$5E  y$AC,$1E y$A8,$4E  y$AE,$2A y$AA,$2F  y$A6,$2B y$A2,$87  y$42,$00 y$4A,$04 y$46,$03 y$4E,$25 R 
+'N3  y$AD,$1F y$A9,$19  y$AC,$17 y$A8,$D3  y$AE,$27 y$AA,$8E  y$A6,$00 y$A2,$00  y$42,$00 y$4A,$34 y$46,$03 y$4E,$7F R 
+'N3  y$AD,$14 y$A9,$A6  y$AC,$13 y$A8,$0D  y$AE,$1E y$AA,$4E  y$A6,$27 y$A2,$C0  y$42,$62 y$4A,$7F y$46,$68 y$4E,$7F R 
+'N3  y$AD,$14 y$A9,$A6  y$AC,$1F y$A8,$19  y$AE,$02 y$AA,$CE  y$A6,$13 y$A2,$0D  y$42,$7F y$4A,$7F y$46,$7F y$4E,$7F R 
+'N3  y$AD,$02 y$A9,$CE  y$AC,$11 y$A8,$7A  y$AE,$05 y$AA,$9C  y$A6,$0E y$A2,$1A  y$42,$7F y$4A,$7F y$46,$7F y$4E,$7F R 
+'N3  y$AD,$02 y$A9,$CE  y$AC,$11 y$A8,$7A  y$AE,$05 y$AA,$9C  y$A6,$0E y$A2,$1A  y$42,$7F y$4A,$7F y$46,$7F y$4E,$7F R 
+'N3  y$AD,$17 y$A9,$D3  y$AC,$31 y$A8,$08  y$AE,$31 y$AA,$0B  y$A6,$1E y$A2,$4E  y$42,$3A y$4A,$47 y$46,$44 y$4E,$47 R 
+'N3  y$AD,$2A y$A9,$BB  y$AC,$31 y$A8,$08  y$AE,$1E y$AA,$4E  y$A6,$14 y$A2,$A6  y$42,$00 y$4A,$0E y$46,$00 y$4E,$39 R 
+'N3  y$AD,$1F y$A9,$19  y$AC,$14 y$A8,$A6  y$AE,$2A y$AA,$C8  y$A6,$31 y$A2,$0B  y$42,$12 y$4A,$34 y$46,$15 y$4E,$2D R 
+'N3  y$AD,$14 y$A9,$A6  y$AC,$1E y$A8,$4E  y$AE,$13 y$AA,$0D  y$A6,$02 y$A2,$CE  y$42,$6B y$4A,$77 y$46,$7F y$4E,$7F R 
+'N3  y$AD,$14 y$A9,$A6  y$AC,$05 y$A8,$9C  y$AE,$02 y$AA,$CE  y$A6,$13 y$A2,$0D  y$42,$7F y$4A,$7F y$46,$7F y$4E,$7F R 
+'N3  y$AD,$2A y$A9,$23  y$AC,$05 y$A8,$9C  y$AE,$14 y$AA,$A6  y$A6,$25 y$A2,$5E  y$42,$77 y$4A,$7F y$46,$7F y$4E,$7F R 
+'N3  y$AD,$25 y$A9,$2B  y$AC,$2A y$A8,$23  y$AE,$1D y$AA,$83  y$A6,$11 y$A2,$7A  y$42,$05 y$4A,$29 y$46,$06 y$4E,$45 R 
+'N3  y$AD,$24 y$A9,$F8  y$AC,$1C y$A8,$B8  y$AE,$2A y$AA,$09  y$A6,$11 y$A2,$7A  y$42,$00 y$4A,$0C y$46,$03 y$4E,$44 R 
+'N3  y$AD,$24 y$A9,$C5  y$AC,$27 y$A8,$F3  y$AE,$1C y$AA,$B8  y$A6,$11 y$A2,$7A  y$42,$00 y$4A,$20 y$46,$0E y$4E,$41 R 
+'N3  y$AD,$16 y$A9,$3A  y$AC,$2A y$A8,$2F  y$AE,$1C y$AA,$B8  y$A6,$25 y$A2,$C3  y$42,$51 y$4A,$47 y$46,$44 y$4E,$4A R 
+'N3  y$AD,$24 y$A9,$5E  y$AC,$16 y$A8,$3A  y$AE,$2A y$AA,$2F  y$A6,$1B y$A2,$21  y$42,$00 y$4A,$4C y$46,$06 y$4E,$38 R 
+'N3  y$AD,$25 y$A9,$90  y$AC,$2B y$A8,$87  y$AE,$2A y$AA,$23  y$A6,$1B y$A2,$21  y$42,$03 y$4A,$38 y$46,$08 y$4E,$3D R 
+'N3  y$AD,$25 y$A9,$5E  y$AC,$2B y$A8,$BA  y$AE,$2A y$AA,$09  y$A6,$16 y$A2,$3A  y$42,$00 y$4A,$41 y$46,$0F y$4E,$55 R 
+'N3  y$AD,$25 y$A9,$2B  y$AC,$1A y$A8,$56  y$AE,$27 y$AA,$C0  y$A6,$13 y$A2,$0D  y$42,$00 y$4A,$41 y$46,$25 y$4E,$5C R 
+'N3  y$AD,$24 y$A9,$C5  y$AC,$19 y$A8,$8B  y$AE,$13 y$AA,$0D  y$A6,$27 y$A2,$5A  y$42,$00 y$4A,$47 y$46,$5C y$4E,$55 R 
+'N3  y$AD,$0F y$A9,$81  y$AC,$1C y$A8,$B8  y$AE,$24 y$AA,$C5  y$A6,$00 y$A2,$00  y$42,$6B y$4A,$6F y$46,$55 y$4E,$7F R 
+'N3  y$AD,$25 y$A9,$C3  y$AC,$02 y$A8,$CE  y$AE,$13 y$AA,$0D  y$A6,$1D y$A2,$83  y$42,$6F y$4A,$7F y$46,$7F y$4E,$7F R 
+'N3  y$AD,$02 y$A9,$CE  y$AC,$05 y$A8,$9C  y$AE,$13 y$AA,$0D  y$A6,$24 y$A2,$92  y$42,$7F y$4A,$7F y$46,$7F y$4E,$7F R 
+'N3  y$AD,$02 y$A9,$CE  y$AC,$05 y$A8,$9C  y$AE,$13 y$AA,$0D  y$A6,$0E y$A2,$1A  y$42,$7F y$4A,$7F y$46,$7F y$4E,$7F R 
+'N3  y$AD,$02 y$A9,$CE  y$AC,$13 y$A8,$0D  y$AE,$05 y$AA,$9C  y$A6,$0E y$A2,$1A  y$42,$7F y$4A,$7F y$46,$7F y$4E,$7F R 
+'N3  y$AD,$02 y$A9,$CE  y$AC,$0E y$A8,$1A  y$AE,$05 y$AA,$9C  y$A6,$24 y$A2,$2C  y$42,$7F y$4A,$7F y$46,$7F y$4E,$7F R 
+'N3  y$AD,$13 y$A9,$0D  y$AC,$0A y$A8,$CE  y$AE,$1A y$AA,$56  y$A6,$1F y$A2,$E5  y$42,$7F y$4A,$7F y$46,$77 y$4E,$7F R 
+'N3  y$AD,$17 y$A9,$D3  y$AC,$0F y$A8,$81  y$AE,$1F y$AA,$E5  y$A6,$00 y$A2,$00  y$42,$38 y$4A,$5C y$46,$3D y$4E,$7F R 
+'N3  y$AD,$17 y$A9,$D3  y$AC,$1C y$A8,$B8  y$AE,$0F y$AA,$81  y$A6,$00 y$A2,$00  y$42,$28 y$4A,$41 y$46,$4C y$4E,$7F R 
+'N3  y$AD,$0F y$A9,$81  y$AC,$18 y$A8,$C0  y$AE,$1D y$AA,$83  y$A6,$02 y$A2,$CE  y$42,$5F y$4A,$5F y$46,$46 y$4E,$7F R 
+'N3  y$AD,$24 y$A9,$C5  y$AC,$14 y$A8,$A6  y$AE,$0F y$AA,$81  y$A6,$00 y$A2,$00  y$42,$6F y$4A,$7F y$46,$7F y$4E,$7F R 
+'N3  y$AD,$26 y$A9,$29  y$AC,$0E y$A8,$1A  y$AE,$16 y$AA,$3A  y$A6,$00 y$A2,$00  y$42,$3F y$4A,$7F y$46,$77 y$4E,$7F R 
+'N3  y$AD,$24 y$A9,$C5  y$AC,$19 y$A8,$8B  y$AE,$13 y$AA,$0D  y$A6,$27 y$A2,$5A  y$42,$15 y$4A,$27 y$46,$46 y$4E,$44 R 
+'N3  y$AD,$24 y$A9,$F8  y$AC,$13 y$A8,$0D  y$AE,$27 y$AA,$8E  y$A6,$19 y$A2,$8B  y$42,$00 y$4A,$47 y$46,$19 y$4E,$29 R 
+'N3  y$AD,$27 y$A9,$8E  y$AC,$13 y$A8,$0D  y$AE,$1E y$AA,$4E  y$A6,$00 y$A2,$00  y$42,$05 y$4A,$43 y$46,$0D y$4E,$7F R 
+'N3  y$AD,$0F y$A9,$81  y$AC,$1E y$A8,$4E  y$AE,$17 y$AA,$D3  y$A6,$0E y$A2,$1A  y$42,$65 y$4A,$77 y$46,$6F y$4E,$7F R 
+'N3  y$AD,$0F y$A9,$81  y$AC,$2B y$A8,$2E  y$AE,$18 y$AA,$C0  y$A6,$2B y$A2,$21  y$42,$7B y$4A,$7F y$46,$7F y$4E,$7F R 
+'N3  y$AD,$16 y$A9,$3A  y$AC,$02 y$A8,$CE  y$AE,$18 y$AA,$C0  y$A6,$2B y$A2,$2E  y$42,$4C y$4A,$7F y$46,$5F y$4E,$68 R 
+'N3  y$AD,$11 y$A9,$7A  y$AC,$2A y$A8,$FB  y$AE,$1B y$AA,$ED  y$A6,$2B y$A2,$BA  y$42,$1C y$4A,$29 y$46,$01 y$4E,$31 R 
+'N3  y$AD,$1B y$A9,$ED  y$AC,$2A y$A8,$E1  y$AE,$16 y$AA,$3A  y$A6,$31 y$A2,$14  y$42,$00 y$4A,$0F y$46,$34 y$4E,$3F R 
+'N3  y$AD,$16 y$A9,$3A  y$AC,$31 y$A8,$08  y$AE,$1A y$AA,$56  y$A6,$31 y$A2,$0B  y$42,$46 y$4A,$4C y$46,$41 y$4E,$4C R 
+'N3  y$AD,$16 y$A9,$3A  y$AC,$2A y$A8,$09  y$AE,$1B y$AA,$21  y$A6,$31 y$A2,$60  y$42,$3A y$4A,$55 y$46,$3D y$4E,$77 R 
+'N3  y$AD,$2A y$A9,$2F  y$AC,$2B y$A8,$EC  y$AE,$2B y$AA,$F9  y$A6,$24 y$A2,$5E  y$42,$00 y$4A,$20 y$46,$19 y$4E,$22 R 
+'N3  y$AD,$2B y$A9,$F9  y$AC,$2C y$A8,$06  y$AE,$2A y$AA,$23  y$A6,$31 y$A2,$2E  y$42,$00 y$4A,$08 y$46,$00 y$4E,$22 R 
+'N3  y$AD,$27 y$A9,$27  y$AC,$24 y$A8,$5E  y$AE,$2C y$AA,$06  y$A6,$31 y$A2,$04  y$42,$01 y$4A,$11 y$46,$03 y$4E,$20 R 
+'N3  y$AD,$25 y$A9,$F6  y$AC,$1B y$A8,$ED  y$AE,$31 y$AA,$04  y$A6,$31 y$A2,$1B  y$42,$00 y$4A,$22 y$46,$12 y$4E,$36 R 
+'N3  y$AD,$25 y$A9,$F6  y$AC,$16 y$A8,$3A  y$AE,$1B y$AA,$ED  y$A6,$31 y$A2,$04  y$42,$00 y$4A,$49 y$46,$0A y$4E,$34 R 
+'N3  y$AD,$25 y$A9,$F6  y$AC,$16 y$A8,$3A  y$AE,$1B y$AA,$ED  y$A6,$2B y$A2,$A0  y$42,$00 y$4A,$40 y$46,$01 y$4E,$3B R 
+'N3  y$AD,$16 y$A9,$3A  y$AC,$27 y$A8,$8E  y$AE,$1B y$AA,$ED  y$A6,$24 y$A2,$92  y$42,$30 y$4A,$41 y$46,$12 y$4E,$4F R 
+'N3  y$AD,$13 y$A9,$0D  y$AC,$38 y$A8,$9D  y$AE,$31 y$AA,$4A  y$A6,$31 y$A2,$4D  y$42,$5F y$4A,$59 y$46,$59 y$4E,$68 R 
+'N3  y$AD,$31 y$A9,$5D  y$AC,$38 y$A8,$8D  y$AE,$31 y$AA,$64  y$A6,$31 y$A2,$B6  y$42,$59 y$4A,$68 y$46,$68 y$4E,$68 R 
+'N3  y$AD,$38 y$A9,$8B  y$AC,$31 y$A8,$87  y$AE,$31 y$AA,$8A  y$A6,$31 y$A2,$C3  y$42,$4C y$4A,$4F y$46,$4F y$4E,$55 R 
+'N3  y$AD,$02 y$A9,$CE  y$AC,$31 y$A8,$37  y$AE,$2A y$AA,$95  y$A6,$31 y$A2,$3A  y$42,$7F y$4A,$5F y$46,$59 y$4E,$5F R 
+'N3  y$AD,$02 y$A9,$CE  y$AC,$2A y$A8,$95  y$AE,$05 y$AA,$9C  y$A6,$0E y$A2,$1A  y$42,$7F y$4A,$7F y$46,$7F y$4E,$7F R 
+'N3  y$AD,$02 y$A9,$CE  y$AC,$0E y$A8,$1A  y$AE,$05 y$AA,$9C  y$A6,$31 y$A2,$70  y$42,$7F y$4A,$7F y$46,$7F y$4E,$7F R 
+'N3  y$AD,$11 y$A9,$7A  y$AC,$27 y$A8,$C0  y$AE,$1B y$AA,$ED  y$A6,$02 y$A2,$CE  y$42,$39 y$4A,$59 y$46,$59 y$4E,$7F R 
+'N3  y$AD,$11 y$A9,$7A  y$AC,$24 y$A8,$92  y$AE,$1B y$AA,$ED  y$A6,$2A y$A2,$49  y$42,$16 y$4A,$46 y$46,$12 y$4E,$4F R 
+'N3  y$AD,$16 y$A9,$3A  y$AC,$25 y$A8,$F6  y$AE,$1B y$AA,$21  y$A6,$00 y$A2,$00  y$42,$43 y$4A,$6F y$46,$55 y$4E,$7F R 
+'N3  y$AD,$1B y$A9,$ED  y$AC,$27 y$A8,$5A  y$AE,$16 y$AA,$3A  y$A6,$24 y$A2,$92  y$42,$00 y$4A,$31 y$46,$3E y$4E,$38 R 
+'N3  y$AD,$24 y$A9,$5E  y$AC,$2A y$A8,$2F  y$AE,$1B y$AA,$21  y$A6,$16 y$A2,$3A  y$42,$00 y$4A,$0F y$46,$06 y$4E,$3E R 
+'N3  y$AD,$24 y$A9,$5E  y$AC,$27 y$A8,$5A  y$AE,$1B y$AA,$21  y$A6,$16 y$A2,$3A  y$42,$00 y$4A,$12 y$46,$0F y$4E,$41 R 
+'N3  y$AD,$24 y$A9,$5E  y$AC,$16 y$A8,$3A  y$AE,$1B y$AA,$21  y$A6,$27 y$A2,$27  y$42,$00 y$4A,$3F y$46,$04 y$4E,$20 R 
+'N3  y$AD,$16 y$A9,$3A  y$AC,$24 y$A8,$5E  y$AE,$1B y$AA,$21  y$A6,$2A y$A2,$23  y$42,$36 y$4A,$3F y$46,$15 y$4E,$4F R 
+'N3  y$AD,$38 y$A9,$B2  y$AC,$38 y$A8,$B6  y$AE,$38 y$AA,$B6  y$A6,$38 y$A2,$B5  y$42,$47 y$4A,$4A y$46,$4A y$4E,$4C R 
+'N3  y$AD,$38 y$A9,$B5  y$AC,$38 y$A8,$B2  y$AE,$38 y$AA,$B6  y$A6,$38 y$A2,$B3  y$42,$4C y$4A,$59 y$46,$4F y$4E,$59 R 
+'N3  y$AD,$11 y$A9,$7A  y$AC,$38 y$A8,$B4  y$AE,$1C y$AA,$B8  y$A6,$02 y$A2,$CE  y$42,$53 y$4A,$5F y$46,$55 y$4E,$7F R 
+'N3  y$AD,$24 y$A9,$5E  y$AC,$27 y$A8,$5A  y$AE,$16 y$AA,$3A  y$A6,$1B y$A2,$21  y$42,$00 y$4A,$31 y$46,$43 y$4E,$34 R 
+'N3  y$AD,$24 y$A9,$92  y$AC,$27 y$A8,$8E  y$AE,$1B y$AA,$ED  y$A6,$16 y$A2,$3A  y$42,$00 y$4A,$0C y$46,$08 y$4E,$48 R 
+'N3  y$AD,$24 y$A9,$92  y$AC,$1B y$A8,$ED  y$AE,$27 y$AA,$8E  y$A6,$31 y$A2,$08  y$42,$00 y$4A,$15 y$46,$01 y$4E,$27 R 
+'N3  y$AD,$24 y$A9,$5E  y$AC,$2C y$A8,$06  y$AE,$2A y$AA,$2F  y$A6,$16 y$A2,$3A  y$42,$00 y$4A,$36 y$46,$00 y$4E,$4F R 
+'N3  y$AD,$24 y$A9,$2C  y$AC,$31 y$A8,$11  y$AE,$2A y$AA,$23  y$A6,$16 y$A2,$3A  y$42,$00 y$4A,$36 y$46,$29 y$4E,$53 R 
+'N3  y$AD,$1F y$A9,$E5  y$AC,$2A y$A8,$AF  y$AE,$1A y$AA,$56  y$A6,$16 y$A2,$3A  y$42,$11 y$4A,$3D y$46,$31 y$4E,$59 R 
+'N3  y$AD,$19 y$A9,$8B  y$AC,$1F y$A8,$19  y$AE,$13 y$AA,$0D  y$A6,$2B y$A2,$14  y$42,$2D y$4A,$59 y$46,$59 y$4E,$5F R 
+'N3  y$AD,$18 y$A9,$C0  y$AC,$2B y$A8,$47  y$AE,$0F y$AA,$81  y$A6,$2B y$A2,$3A  y$42,$44 y$4A,$77 y$46,$68 y$4E,$77 R 
+'N3  y$AD,$0F y$A9,$81  y$AC,$2B y$A8,$EC  y$AE,$2B y$AA,$61  y$A6,$18 y$A2,$C0  y$42,$77 y$4A,$7F y$46,$7F y$4E,$7F R 
+'N3 y$28,$02 EXOF

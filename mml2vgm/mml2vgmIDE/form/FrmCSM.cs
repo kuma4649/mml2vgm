@@ -1,4 +1,5 @@
-﻿using NAudio.Wave;
+﻿using NAudio.Dsp;
+using NAudio.Wave;
 using Sgry.Azuki.WinForms;
 using System;
 using System.Collections.Generic;
@@ -187,7 +188,7 @@ namespace mml2vgmIDE.form
 
             try
             {
-                string result = Analysis();
+                string result = Analysis2();
                 ac.Document.Replace(result);
             }
             catch(Exception ex)
@@ -245,6 +246,82 @@ namespace mml2vgmIDE.form
             }
 
             result += "'N3 y$28,$02 EXOF\r\n";
+
+            return result;
+        }
+
+        private string Analysis2()
+        {
+            string waveFileName = tbWaveFileName.Text;
+            int samplerate = int.Parse(tbSampleRate.Text);
+            int analyzeSize = int.Parse(tbAnalyzeSize.Text);
+            float tempo = float.Parse(tbTempo.Text);
+            int reso = int.Parse(tbReso.Text);
+            float tlMul = float.Parse(tbTLlevelMul.Text);
+            int indLen = (int)(samplerate * 60.0 * 4.0 / (tempo * reso));
+
+            Tool.CSM.FFT fft = new Tool.CSM.FFT(analyzeSize, samplerate);
+            float[] dat;
+            using (WaveFileReader reader = new WaveFileReader(waveFileName))
+            {
+                dat = fft.ReadWave(reader);
+            }
+            int index = 0;
+
+            string result = string.Format("'N3 T{0}@111EXONEX1234l{1}y$28,$F2 ; 4opの音色をセットしてね\r\n", tempo, reso);
+            //string fresult = "";
+
+            while (index < dat.Length)
+            {
+                List<Tool.CSM.FFT.Result> lst = new List<Tool.CSM.FFT.Result>();
+
+                Complex[] trg = fft.GetTargetDat(dat, index);
+
+                while (true)
+                {
+                    Complex[] fres = fft.FFTProcess2(trg, 0,out float[] res);
+                    int peek = fft.GetPeek(res,out Tool.CSM.FFT.Result val);
+                    lst.Add(val);
+                    if (lst.Count == 16) break;
+
+                    fres = fft.MakePeek(fres, peek);//ピークのみのデータを作成
+                    Complex[] rres = fft.RFFTProcess(fres);//逆フーリエ
+                    fft.DecDat(trg, rres);//ターゲットのデータからrresを減算
+                }
+
+                //string f = "; ";
+                //foreach(Tool.CSM.FFT.Result val in lst)
+                //{
+                //    f += string.Format(" {0}Hz", val.freq);
+                //}
+                //f += "\r\n";
+                lst=fft.VoiceFilter(lst);
+                //f += "filter ";
+                //foreach (Tool.CSM.FFT.Result val in lst)
+                //{
+                //    f += string.Format(" {0}Hz", val.freq);
+                //}
+                //f += "\r\n";
+
+                fft.CalcFnumTl(lst, tlMul);
+                string r = "'N3 "
+                + string.Format(" y$AD,${0:X02} y$A9,${1:X02} ", (byte)(lst[0].fnum >> 8), (byte)lst[0].fnum)
+                + string.Format(" y$AC,${0:X02} y$A8,${1:X02} ", (byte)(lst[2].fnum >> 8), (byte)lst[2].fnum)
+                + string.Format(" y$AE,${0:X02} y$AA,${1:X02} ", (byte)(lst[1].fnum >> 8), (byte)lst[1].fnum)
+                + string.Format(" y$A6,${0:X02} y$A2,${1:X02} ", (byte)(lst[3].fnum >> 8), (byte)lst[3].fnum)
+                + string.Format(" y$42,${0:X02}", (byte)lst[0].tl)
+                + string.Format(" y$4A,${0:X02}", (byte)lst[2].tl)
+                + string.Format(" y$46,${0:X02}", (byte)lst[1].tl)
+                + string.Format(" y$4E,${0:X02}", (byte)lst[3].tl)
+                + " R \r\n";
+
+                result += r;
+                //fresult += f;
+                index += indLen;
+            }
+
+            result += "'N3 y$28,$02 EXOF\r\n";
+            //result += fresult;
 
             return result;
         }
