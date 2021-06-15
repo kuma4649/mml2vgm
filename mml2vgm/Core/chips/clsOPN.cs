@@ -1019,7 +1019,7 @@ namespace Core
             }
         }
 
-        public void OutFmSetFnum(partPage page, MML mml, int octave, int num)
+        public virtual void OutFmSetFnum(partPage page, MML mml, int octave, int num)
         {
             int freq;
             freq = ((num & 0x700) >> 8) + (((octave - 1) & 0x7) << 3);
@@ -1611,7 +1611,7 @@ namespace Core
         }
 
 
-        public void SetFmFNum(partPage page, MML mml)
+        public virtual void SetFmFNum(partPage page, MML mml)
         {
             if (page.noteCmd == (char)0)
             {

@@ -521,7 +521,7 @@ namespace Core
             }
         }
 
-        public new void SetFmFNum(partPage page, MML mml)
+        public override void SetFmFNum(partPage page, MML mml)
         {
             if (page.noteCmd == (char)0)
                 return;
@@ -568,6 +568,18 @@ namespace Core
             //OutFmSetFnum(pw, mml, o, f);
             page.freq = Common.CheckRange(f, 0, 0x7ff) | (Common.CheckRange(o - 1, 0, 7) << (8 + 3));
 
+        }
+
+        public override void OutFmSetFnum(partPage page, MML mml, int octave, int num)
+        {
+            int freq;
+            freq = ((num & 0x700) >> 8) + (((octave - 1) & 0x7) << 3);
+            freq = (freq << 8) + (num & 0xff);
+
+            if (freq == page.spg.freq) return;
+            page.spg.freq = freq;
+            page.freq = freq;
+            OutFmSetPanLFnum(page, mml);
         }
 
         public void OutFmSetPanLFnum(partPage page, MML mml)
