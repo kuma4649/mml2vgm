@@ -1581,6 +1581,61 @@ namespace Core
                         break;
                 }
             }
+            else if ((string)mml.args[0] == "Cm")
+            {
+                int t = -1;
+                int v = -1;
+                if(mml.args[2] is int)
+                {
+                    t = -1;
+                    v = (int)mml.args[2];
+                }
+                else
+                {
+                    char type = (char)mml.args[2];
+                    t = type == 'F' ? 0 : 1;//'F'(freq) = 0   'G'(gain) = 1
+                    v = (int)mml.args[3];
+                }
+
+                //Chorus
+                switch ((char)mml.args[1])
+                {
+                    case 'S'://switch
+                        page.effectCompressorSwitch = v * 0x80;
+                        //ページに関係なく即反映
+                        parent.OutData(mml, port[3], 0x23, ch);
+                        parent.OutData(mml, port[3], 0xc6, (byte)(page.effectCompressorSwitch + page.effectCompressorVolume));
+                        break;
+                    case 'V'://volume
+                        page.effectCompressorVolume = v & 0x7f;
+                        //ページに関係なく即反映
+                        parent.OutData(mml, port[3], 0x23, ch);
+                        parent.OutData(mml, port[3], 0xc6, (byte)(page.effectCompressorSwitch + page.effectCompressorVolume));
+                        break;
+                    case 'T'://threshold
+                        //ページに関係なく即反映
+                        parent.OutData(mml, port[3], 0x23, ch);
+                        parent.OutData(mml, port[3], 0xc7, (byte)v);
+                        break;
+                    case 'R'://ratio
+                        //ページに関係なく即反映
+                        parent.OutData(mml, port[3], 0x23, ch);
+                        parent.OutData(mml, port[3], 0xc8, (byte)v);
+                        break;
+                    case 'E'://envelope
+                        //ページに関係なく即反映
+                        parent.OutData(mml, port[3], 0x23, ch);
+                        if (t == 0) parent.OutData(mml, port[3], 0xc9, (byte)v);
+                        else if (t == 1) parent.OutData(mml, port[3], 0xca, (byte)v);
+                        break;
+                    case 'G'://gain
+                        //ページに関係なく即反映
+                        parent.OutData(mml, port[3], 0x23, ch);
+                        if (t == 0) parent.OutData(mml, port[3], 0xcb, (byte)v);
+                        else if (t == 1) parent.OutData(mml, port[3], 0xcc, (byte)v);
+                        break;
+                }
+            }
             else if ((string)mml.args[0] == "Lp")//LPF
             {
                 int v = (int)mml.args[2];

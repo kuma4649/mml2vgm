@@ -1876,6 +1876,11 @@ namespace Core
         {
             pw.incPos(page);
             char c = pw.getChar(page);
+            if (c == 'm')
+            {
+                CmdEffectComp(pw, page, mml);
+                return;
+            }
             if (c != 'h')
             {
                 msgBox.setErrMsg(msg.get("E05059"), mml.line.Lp);
@@ -1929,6 +1934,73 @@ namespace Core
             }
             mml.args.Add(n);
 
+        }
+
+        private void CmdEffectComp(partWork pw, partPage page, MML mml)
+        {
+            mml.type = enmMMLType.Effect;
+            mml.args = new List<object>();
+            mml.args.Add("Cm");
+
+            pw.incPos(page);
+            pw.skipTabSpace(page);
+
+            char c = pw.getChar(page);
+            if (c != 'S' && c != 'V' && c != 'T' && c != 'R' && c != 'E' && c != 'G')
+            {
+                msgBox.setErrMsg(msg.get("E05059"), mml.line.Lp);
+                return;
+            }
+
+            mml.args.Add(c);
+
+            pw.incPos(page);
+            char t = '\0';
+            if (c == 'E' || c == 'G')
+            {
+                t = pw.getChar(page);
+                if (t != 'F' && t != 'Q')
+                {
+                    msgBox.setErrMsg(msg.get("E05059"), mml.line.Lp);
+                    return;
+                }
+                mml.args.Add(t);
+                pw.incPos(page);
+            }
+
+            int n = -1;
+            pw.skipTabSpace(page);
+            if (!pw.getNum(page, out n))
+            {
+                msgBox.setErrMsg(msg.get("E05059"), mml.line.Lp);
+                return;
+            }
+
+            if (c == 'S')//switch
+            {
+                n = Common.CheckRange(n, 0, 1);
+            }
+            else if (c == 'V')//volume
+            {
+                n = Common.CheckRange(n, 0, 127);
+            }
+            else if (c == 'T')//threshold
+            {
+                n = Common.CheckRange(n, 0, 255);
+            }
+            else if (c == 'R')//ratio
+            {
+                n = Common.CheckRange(n, 0, 255);
+            }
+            else if (c == 'E')//envelope
+            {
+                n = Common.CheckRange(n, 0, 255);
+            }
+            else if (c == 'G')//gain
+            {
+                n = Common.CheckRange(n, 0, 255);
+            }
+            mml.args.Add(n);
         }
 
         private void CmdEffectLPF(partWork pw, partPage page, MML mml)

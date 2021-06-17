@@ -633,6 +633,9 @@ namespace Core
         public int effectDistortionVolume { get; internal set; } = 32;
         public int effectChorusSwitch { get; internal set; } = 0;
         public int effectChorusMixLevel { get; internal set; } = 40;
+        
+        public int effectCompressorSwitch { get; internal set; } = 0;
+        public int effectCompressorVolume { get; internal set; } = 40;
         public EffectParams effectLPF = new EffectParams();
         public EffectParams effectHPF = new EffectParams();
         public EffectParams effectSystemEffectEQLow = new EffectParams();
