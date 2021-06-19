@@ -1,4 +1,7 @@
 更新履歴
+TAG471 2021/06/19
+  IDE:OPN:TOOL>MakeCSM:mucom形式での出力に対応
+
 TAG470 2021/06/17
   Core:YM2609:Compressorコマンド追加
 
