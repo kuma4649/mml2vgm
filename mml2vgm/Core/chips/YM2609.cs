@@ -1306,13 +1306,28 @@ namespace Core
 
         public override void CmdInstrument(partPage page, MML mml)
         {
-            char type = (char)mml.args[0];
-            int n = (type == 'W') ? -1 : (int)mml.args[1];
+            char type;
+            bool re = false;
+            int n;
+            if (mml.args[0] is bool)
+            {
+                type = (char)mml.args[1];
+                re = true;
+                n = (type == 'W') ? -1 : (int)mml.args[2];
+            }
+            else
+            {
+                type = (char)mml.args[0];
+                n = (type == 'W') ? -1 : (int)mml.args[1];
+            }
+
 
             if (type == 'n' || type == 'N' || type == 'R' || type == 'A')
             {
                 if (page.Type == enmChannelType.FMOPNex)
                 {
+                    if (re) n = page.instrument + n;
+                    n = Common.CheckRange(n, 0, 255);
                     page.instrument = n;
                     if (page.ch == 2 || page.ch == 12 || page.ch == 13 || page.ch == 14)
                     {
@@ -1339,6 +1354,8 @@ namespace Core
                 {
                     if (page.isPcmMap)
                     {
+                        if (re) n = page.pcmMapNo + n;
+                        n = Common.CheckRange(n, 0, 255);
                         page.pcmMapNo = n;
                         if (!parent.instPCMMap.ContainsKey(n))
                         {
@@ -1348,6 +1365,7 @@ namespace Core
                     }
                     else
                     {
+                        if (re) n = page.instrument + n;
                         n = Common.CheckRange(n, 0, 255);
                         if (!parent.instPCM.ContainsKey(n))
                         {
@@ -1383,7 +1401,7 @@ namespace Core
 
                 if (page.Type == enmChannelType.SSG)
                 {
-                    SetEnvelopParamFromInstrument(page, n, mml);
+                    SetEnvelopParamFromInstrument(page, n, re, mml);
                     return;
                 }
             }
@@ -1392,6 +1410,7 @@ namespace Core
             {
                 if (page.Type == enmChannelType.SSG)
                 {
+                    if (re) n = page.dutyCycle + n;
                     n = Common.CheckRange(n, 0, 15);
                     page.dutyCycle = n;
                     SetDummyData(page, mml);
@@ -1404,6 +1423,7 @@ namespace Core
 
             if (type == 'T')
             {
+                if (re) n = page.toneDoubler + n;
                 n = Common.CheckRange(n, 0, 255);
                 page.toneDoubler = n;
                 return;
@@ -1411,7 +1431,7 @@ namespace Core
 
             if (type == 'E')
             {
-                SetEnvelopParamFromInstrument(page, n, mml);
+                SetEnvelopParamFromInstrument(page, n, re, mml);
                 return;
             }
 
@@ -1424,10 +1444,11 @@ namespace Core
 
             if (page.Type == enmChannelType.SSG)
             {
-                SetEnvelopParamFromInstrument(page, n, mml);
+                SetEnvelopParamFromInstrument(page, n, re, mml);
                 return;
             }
 
+            if (re) n = page.instrument + n;
             n = Common.CheckRange(n, 0, 255);
             if (page.instrument == n) return;
             page.instrument = n;

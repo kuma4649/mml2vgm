@@ -713,13 +713,28 @@ namespace Core
 
         public override void CmdInstrument(partPage page, MML mml)
         {
-            char type = (char)mml.args[0];
-            int n = (int)mml.args[1];
+            char type;
+            bool re = false;
+            int n;
+            if (mml.args[0] is bool)
+            {
+                type = (char)mml.args[1];
+                re = true;
+                n = (int)mml.args[2];
+            }
+            else
+            {
+                type = (char)mml.args[0];
+                n = (int)mml.args[1];
+            }
 
             if (type == 'n' || type == 'N' || type == 'R' || type == 'A')
             {
                 if (page.Type == enmChannelType.FMOPNex)
                 {
+                    if (re) n = page.instrument + n;
+                    n = Common.CheckRange(n, 0, 255);
+
                     page.instrument = n;
                     lstPartWork[2].cpg.instrument = n;
                     lstPartWork[6].cpg.instrument = n;
@@ -734,6 +749,7 @@ namespace Core
             {
                 if (page.Type == enmChannelType.ADPCM)
                 {
+                    if (re) n = page.instrument + n;
                     n = Common.CheckRange(n, 0, 255);
                     if (!parent.instPCM.ContainsKey(n))
                     {
@@ -757,7 +773,7 @@ namespace Core
 
                 if (page.Type == enmChannelType.SSG)
                 {
-                    SetEnvelopParamFromInstrument(page, n, mml);
+                    SetEnvelopParamFromInstrument(page, n, re, mml);
                     return;
                 }
             }

@@ -322,8 +322,20 @@ namespace Core
 
         public override void CmdInstrument(partPage page, MML mml)
         {
-            char type = (char)mml.args[0];
-            int n = (int)mml.args[1];
+            char type;
+            bool re = false;
+            int n;
+            if (mml.args[0] is bool)
+            {
+                type = (char)mml.args[1];
+                re = true;
+                n = (int)mml.args[2];
+            }
+            else
+            {
+                type = (char)mml.args[0];
+                n = (int)mml.args[1];
+            }
 
             if (type == 'I')
             {
@@ -339,10 +351,11 @@ namespace Core
 
             if (type == 'E')
             {
-                n = SetEnvelopParamFromInstrument(page, n, mml);
+                n = SetEnvelopParamFromInstrument(page, n, re, mml);
                 return;
             }
 
+            if (re) n = page.instrument + n;
             page.instrument = Common.CheckRange(n, 0, 255);
             if (page.spg.instrument!= page.instrument)
             {

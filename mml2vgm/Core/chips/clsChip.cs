@@ -273,7 +273,7 @@ namespace Core
             //checkDuplication(fCh);
         }
 
-        public int SetEnvelopParamFromInstrument(partPage page, int n, MML mml)
+        public int SetEnvelopParamFromInstrument(partPage page, int n, bool re, MML mml)
         {
             if (!parent.instENV.ContainsKey(n))
             {
@@ -283,6 +283,7 @@ namespace Core
             else
             {
                 page.envelopeMode = true;
+                if (re) n = page.envInstrument + n;
                 if (page.envInstrument != n)
                 {
                     page.envInstrument = n;
@@ -836,7 +837,11 @@ namespace Core
         public virtual void CmdKeyShift(partPage page, MML mml)
         {
             int n = (int)mml.args[0];
-            page.keyShift = Common.CheckRange(n, -128, 128);
+            bool r = mml.args.Count > 1;
+            
+            if (!r) page.keyShift = Common.CheckRange(n, -128, 128);
+            else page.keyShift = Common.CheckRange(page.keyShift + n, -128, 128);
+
             SetDummyData(page, mml);
         }
 

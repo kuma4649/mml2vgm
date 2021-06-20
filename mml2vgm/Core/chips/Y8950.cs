@@ -408,9 +408,24 @@ int ws
 
         public override void CmdInstrument(partPage page, MML mml)
         {
-            if(page.Type== enmChannelType.ADPCM)
+            char type;
+            bool re = false;
+            int n;
+            if (mml.args[0] is bool)
             {
-                int n = (int)mml.args[1];
+                type = (char)mml.args[1];
+                re = true;
+                n = (int)mml.args[2];
+            }
+            else
+            {
+                type = (char)mml.args[0];
+                n = (int)mml.args[1];
+            }
+
+            if (page.Type== enmChannelType.ADPCM)
+            {
+                if (re) n = page.instrument + n;
                 n = Common.CheckRange(n, 0, 255);
                 if (!parent.instPCM.ContainsKey(n))
                 {

@@ -810,14 +810,27 @@ namespace Core
 
         public override void CmdInstrument(partPage page, MML mml)
         {
-            char type = (char)mml.args[0];
-            int n = (int)mml.args[1];
+            char type;
+            bool re = false;
+            int n;
+            if (mml.args[0] is bool)
+            {
+                type = (char)mml.args[1];
+                re = true;
+                n = (int)mml.args[2];
+            }
+            else
+            {
+                type = (char)mml.args[0];
+                n = (int)mml.args[1];
+            }
 
             //Duty比切り替え
             if (type == 'I')
             {
                 if (page.Type == enmChannelType.Pulse)
                 {
+                    if (re) n = page.instrument + n;
                     n = Common.CheckRange(n, 0, 3);
                     page.dutyCycle = n;
                     SetDummyData(page, mml);
@@ -831,13 +844,14 @@ namespace Core
             //E指定　ソフトエンベロープ切り替え
             if (type == 'E')
             {
-                SetEnvelopParamFromInstrument(page, n, mml);
+                SetEnvelopParamFromInstrument(page, n,re, mml);
                 return;
             }
 
             //無指定でFDSの場合は 波形書き換え
             if (page.Type == enmChannelType.WaveForm)
             {
+                if (re) n = page.instrument + n;
                 n = Common.CheckRange(n, 0, 255);
                 if (!parent.instWF.ContainsKey(n))
                 {
@@ -853,12 +867,13 @@ namespace Core
             //無指定でdpcm以外の場合は ソフトエンベロープ切り替え
             if (page.Type!= enmChannelType.DPCM)
             {
-                SetEnvelopParamFromInstrument(page, n, mml);
+                SetEnvelopParamFromInstrument(page, n, re, mml);
                 return;
             }
 
             //それ以外はdpcm切り替え
 
+            if (re) n = page.instrument + n;
             n = Common.CheckRange(n, 0, 255);
 
             if (!parent.instPCM.ContainsKey(n))

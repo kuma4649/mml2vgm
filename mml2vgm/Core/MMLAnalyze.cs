@@ -490,6 +490,13 @@ namespace Core
             mml.type = enmMMLType.Instrument;
             mml.args = new List<object>();
             char a = pw.getChar(page);
+            
+            if (a == '@')
+            {
+                mml.args.Add(true);
+                pw.incPos(page);
+                a = pw.getChar(page);
+            }
 
             switch (a)
             {
@@ -2357,6 +2364,13 @@ namespace Core
         private void CmdKeyShift(partWork pw, partPage page, MML mml)
         {
             int n = -1;
+            bool r = false;
+
+            if (pw.getChar(page) != 'K') //KK 相対
+            {
+                r = true;
+                pw.incPos(page);
+            }
 
             if (!pw.getNum(page, out n))
             {
@@ -2367,6 +2381,7 @@ namespace Core
             mml.type = enmMMLType.KeyShift;
             mml.args = new List<object>();
             mml.args.Add(n);
+            if (r) mml.args.Add(r);
         }
 
         private void CmdAddressShiftArpeggio(partWork pw, partPage page, MML mml)
