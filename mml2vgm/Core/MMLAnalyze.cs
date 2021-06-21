@@ -490,9 +490,10 @@ namespace Core
             mml.type = enmMMLType.Instrument;
             mml.args = new List<object>();
             char a = pw.getChar(page);
-            
+            bool re = false;
             if (a == '@')
             {
+                re = true;
                 mml.args.Add(true);
                 pw.incPos(page);
                 a = pw.getChar(page);
@@ -558,7 +559,8 @@ namespace Core
                     else msgBox.setErrMsg(msg.get("E05003"), mml.line.Lp);
                     n = 0;
                 }
-                n = Common.CheckRange(n, 0, 0xffff);
+                if (re) n = Common.CheckRange(n, -0x8000, 0x7fff);
+                else n = Common.CheckRange(n, 0, 0xffff);
                 mml.args.Add(n);
 
                 if (
@@ -2366,7 +2368,7 @@ namespace Core
             int n = -1;
             bool r = false;
 
-            if (pw.getChar(page) != 'K') //KK 相対
+            if (pw.getChar(page) == 'K') //KK 相対
             {
                 r = true;
                 pw.incPos(page);
