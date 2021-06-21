@@ -234,6 +234,7 @@ E05071=Unknown command ('HSO?') defined.
 E05072=Unknown command ('HST?') defined.
 E05073=Unknown command ('PRV?') defined.
 E05074=Unknown command ('FM?') defined.
+E05075=Unknown command ('PC?') defined.
 
 
 ;partWork.cs 06000

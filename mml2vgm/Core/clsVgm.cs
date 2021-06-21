@@ -5859,6 +5859,11 @@ namespace Core
                     page.chip.CmdModulation(page, mml);
                     page.mmlPos++;
                     break;
+                case enmMMLType.PartColor:
+                    log.Write("PartColor");
+                    page.chip.CmdPartColor(page, mml);
+                    page.mmlPos++;
+                    break;
                 default:
                     msgBox.setErrMsg(string.Format(msg.get("E01016")
                         , mml.type)

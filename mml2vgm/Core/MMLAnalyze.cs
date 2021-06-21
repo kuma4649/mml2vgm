@@ -2321,6 +2321,20 @@ namespace Core
                 }
                 return;
             }
+            else if (pw.getChar(page) == 'C') //PC
+            {
+                pw.incPos(page);
+                if (!pw.getNum(page, out n))
+                {
+                    msgBox.setErrMsg(msg.get("E05075"), mml.line.Lp);
+                    return;
+                }
+                n = Common.CheckRange(n, 0, 8);
+                mml.type = enmMMLType.PartColor;
+                mml.args = new List<object>();
+                mml.args.Add(n);
+                return;
+            }
 
             if (!pw.getNum(page, out n))
             {

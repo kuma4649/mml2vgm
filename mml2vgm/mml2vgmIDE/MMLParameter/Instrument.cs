@@ -31,6 +31,7 @@ namespace mml2vgmIDE.MMLParameter
         public int?[] MIDIch;
         public bool[] beforeTie;
         public int[] clockCounter;
+        public int[] partColor;
 
         public ConcurrentQueue<outDatum>[] TraceInfo;
         public outDatum[] TraceInfoOld;
@@ -63,6 +64,7 @@ namespace mml2vgmIDE.MMLParameter
             beforeTie = new bool[n];
             clockCounter = new int[n];
             MIDIch = new int?[n];
+            partColor = new int[n];
 
             TraceInfo = new ConcurrentQueue<outDatum>[n];
             for (int i = 0; i < n; i++)
@@ -71,6 +73,7 @@ namespace mml2vgmIDE.MMLParameter
                 clockCounter[i] = 128;
                 vol[i] = 0;
                 beforeTie[i] = false;
+                partColor[i] = 1;
             }
             TraceInfoOld = new outDatum[n];
             this.chip = chip;
@@ -80,26 +83,26 @@ namespace mml2vgmIDE.MMLParameter
             SetParam = new Action<outDatum, int, int>[]
             {
                 //0 -
-                null,                null,             SetTempo,    SetInstrument,   SetVolume,
-                SetTotalVolume,      SetOctave,        SetOctaveUp, SetOctaveDown,   null,
+                null,                null,             SetTempo,     SetInstrument,   SetVolume,
+                SetTotalVolume,      SetOctave,        SetOctaveUp,  SetOctaveDown,   null,
                 //10 -                                 
-                null,                SetLength,        null,        SetPan,          SetDetune,
-                null,                null,             null,        SetGatetime,     null,
+                null,                SetLength,        null,         SetPan,          SetDetune,
+                null,                null,             null,         SetGatetime,     null,
                 //20 -               
-                SetEnvelope,         SetExtendChannel, null,        null,            null,
-                null,                null,             null,        null,            SetLfo,
+                SetEnvelope,         SetExtendChannel, null,         null,            null,
+                null,                null,             null,         null,            SetLfo,
                 //30 -                                 
-                SetLfoSwitch,        null,             null,        null,            SetKeyShift,
-                null,                SetMIDICh,        null,        SetNote,         SetRest,
+                SetLfoSwitch,        null,             null,         null,            SetKeyShift,
+                null,                SetMIDICh,        null,         SetNote,         SetRest,
                 //40 -                                 
-                null,                null,             null,        null,            null,
-                null,                SetLyric,         null,        null,            SetVelocity,
+                null,                null,             null,         null,            null,
+                null,                SetLyric,         null,         null,            SetVelocity,
                 //50 -                                 
-                null,                null,             null,        SetClockCounter, null,
-                null,                null,             null,        null,            null,
+                null,                null,             null,         SetClockCounter, null,
+                null,                null,             null,         null,            null,
                 //60 -                                 
-                SetTraceUpdateStack, null,             null,        null,            null,
-                null,                null,             null,        null,            null,
+                SetTraceUpdateStack, null,             null,         null,            null,
+                null,                null,             SetPartColor, null,            null,
             };
         }
 
@@ -339,6 +342,12 @@ namespace mml2vgmIDE.MMLParameter
         {
         }
 
+        protected virtual void SetPartColor(outDatum od, int ch, int cc)
+        {
+            if (ch >= partColor.Length) return;
+
+            partColor[ch] = (int)od.args[0];
+        }
     }
 
 }

@@ -2034,6 +2034,12 @@ namespace Core
                     , mml.line.Lp);
         }
 
+        public virtual void CmdPartColor(partPage page, MML mml)
+        {
+            //
+            SetDummyData(page, mml);
+        }
+
         public void CheckInterrupt(partWork pw, partPage page)
         {
             if (!page.requestInterrupt) return;

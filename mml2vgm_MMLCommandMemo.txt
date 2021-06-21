@@ -966,6 +966,7 @@ PDOF            ooooooooooooooooooooooooooooooooooooooooooooooooooo  ページ�
 ;               ooooooooooooooooooooooooooooooooooooooooooooooooooo  コメントアウト 行末まで無視する
 *Mn             ooooooooooooooooooooooooooooooooooooooooooooooooooo  同期マーキング (0 - )
 *Sn             ooooooooooooooooooooooooooooooooooooooooooooooooooo  同期(0 - )
+PCn             ooooooooooooooooooooooooooooooooooooooooooooooooooo  パートカラー(0 - 8 def:1)IDEなどの色を指定する。数値はn88などと互換+8:muap風味色
                                                                    
 c               -oooooooooooooooooooooooooooooooooooooooooooooooooo  音符ド
 d               -oooooooooooooooooooooooooooooooooooooooooooooooooo  音符レ
