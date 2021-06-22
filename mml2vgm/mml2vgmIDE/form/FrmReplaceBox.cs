@@ -62,6 +62,8 @@ namespace mml2vgmIDE.form
 
         private void btnReplace_Click(object sender, EventArgs e)
         {
+            if (string.IsNullOrEmpty(cmbFrom.Text)) return;
+
             AddSearchWordHistory(cmbFrom.Text);
             AddReplaceToWordHistory(cmbTo.Text);
 
@@ -72,6 +74,8 @@ namespace mml2vgmIDE.form
 
         private void btnAllReplace_Click(object sender, EventArgs e)
         {
+            if (string.IsNullOrEmpty(cmbFrom.Text)) return;
+
             AddSearchWordHistory(cmbFrom.Text);
             AddReplaceToWordHistory(cmbTo.Text);
 
@@ -267,7 +271,7 @@ namespace mml2vgmIDE.form
             if (rbTargetAll.Checked)
                 SearchFindNext(cmbFrom.Text, false);
             else
-                SearchFindNextEx(cmbFrom.Text, false, rbTargetParts.Checked);
+                SearchFindNextEx(cmbFrom.Text, false, rbTargetMMLs.Checked);
 
             return true;
         }
@@ -428,12 +432,14 @@ namespace mml2vgmIDE.form
 
                     //対象行の場合は次の検索へ
                     opIndex = trgHeadIndex;
-                    conIndex = match1.Success
-                        ? (match1.Index + match1.Length)
-                        : (
-                            match2.Success
-                            ? (match2.Index + match2.Length)
-                            : (match3.Index + match3.Length)
+                    conIndex = (
+                            match1.Success
+                            ? (match1.Index + match1.Length)
+                            : (
+                                match2.Success
+                                ? (match2.Index + match2.Length)
+                                : (match3.Index + match3.Length)
+                            )
                         )
                         + opIndex;
                     conEndIndex = trgEndIndex;
