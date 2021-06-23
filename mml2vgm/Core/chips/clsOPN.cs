@@ -9,6 +9,7 @@ namespace Core
         private byte[] nSSGKeyOn = new byte[] { 0, 0, 0, 0 };
         public byte[] SSGKeyOn = new byte[] { 0x3f, 0x3f, 0x3f, 0x3f };
         public int noiseFreq = -1;
+        public int[] hsFnumTbl = null;
 
         public ClsOPN(ClsVgm parent, int chipID, string initialPartName, string stPath, int chipNumber) : base(parent, chipID, initialPartName, stPath, chipNumber)
         {
@@ -35,8 +36,13 @@ namespace Core
             //((ClsOPN)page.chip).SSGKeyOn[p] = data;
 
             SetSsgVolume(page, mml, page.phaseReset);
-            if (page.HardEnvelopeSw)
+            if (page.HardEnvelopeSw || page.hardEnvelopeSync.sw)
             {
+                if (page.hardEnvelopeSync.sw)
+                {
+                    SOutData(page, mml, page.port[port], (byte)(adr + 0x08 + vch), 0x10);
+                }
+
                 SOutData(page, mml, page.port[port], (byte)(adr + 0x0d), (byte)(page.HardEnvelopeType & 0xf));
             }
             //SOutData(page, mml, page.port[port], (byte)(adr + 0x07), data);
@@ -55,13 +61,19 @@ namespace Core
         public void OutSsgKeyOff(MML mml, partPage page)
         {
             page.keyOn = false;
-            //int port;
-            //int adr;
-            //int vch;
-            //GetPortVchSsg(page, out port, out adr, out vch);
-            //int p = port;
-            //if (adr == 0x10)
-            //    p++;
+
+            int port;
+            int adr;
+            int vch;
+            GetPortVchSsg(page, out port, out adr, out vch);
+            int p = port;
+            if (adr == 0x10)
+                p++;
+
+            if (page.hardEnvelopeSync.sw)
+            {
+                SOutData(page, mml, page.port[port], (byte)(adr + 0x08 + vch), 0);
+            }
 
             //int n = 9;
             //byte data = 0;
@@ -108,7 +120,11 @@ namespace Core
                 vol += page.varpDelta;
             }
 
-            vol = Common.CheckRange(vol, 0, 15) + (page.HardEnvelopeSw ? 0x10 : 0x00);
+            vol = Common.CheckRange(vol, 0, 15) 
+                + (
+                    (page.HardEnvelopeSw || page.hardEnvelopeSync.sw) ? 0x10 : 0x00
+                );
+
             //if (!page.keyOn)// (((ClsOPN)page.chip).SSGKeyOn[p] & (9 << vch)) == (9 << vch))
             //{
             //    vol = 0;
@@ -218,6 +234,19 @@ namespace Core
 
             data = (byte)((f & 0xf00) >> 8);
             SOutData(page, mml, page.port[port], (byte)(adr + 1 + vch * 2), data);
+
+            if (page.hardEnvelopeSync.sw)
+            {
+                f = GetSsgHsFNum(page, mml
+                    , page.hardEnvelopeSync.octave
+                    , page.noteCmd
+                    , page.shift + page.keyShift + arpNote);//
+                f = f + page.hardEnvelopeSync.detune;
+                page.hsFnum = f;
+
+                SOutData(page, mml, page.port[port], (byte)(adr + 0x0b), (byte)(page.hsFnum & 0xff));
+                SOutData(page, mml, page.port[port], (byte)(adr + 0x0c), (byte)((page.hsFnum >> 8) & 0xff));
+            }
         }
 
         public int GetSsgFNum(partPage page, MML mml, int octave, char noteCmd, int shift)
@@ -235,6 +264,20 @@ namespace Core
             return page.chip.FNumTbl[1][f];
         }
 
+        public int GetSsgHsFNum(partPage page, MML mml, int octave, char noteCmd, int shift)
+        {
+            int o = octave - 1;
+            int n = Const.NOTE.IndexOf(noteCmd) + shift;
+            o += n / 12;
+            o = Common.CheckRange(o, 1, 6);
+            n %= 12;
+
+            int f = o * 12 + n;
+            if (f < 0) f = 0;
+            if (f >= hsFnumTbl.Length) f = hsFnumTbl.Length - 1;
+
+            return hsFnumTbl[f];
+        }
 
         public void OutOPNSetPanAMSPMS(MML mml, partPage page, int pan, int ams, int pms)
         {
@@ -2358,6 +2401,7 @@ namespace Core
             switch (cmd)
             {
                 case "EH":
+                    page.hardEnvelopeSync.sw = false;
                     n = (int)mml.args[1];
                     if (page.HardEnvelopeSpeed != n)
                     {
@@ -2367,9 +2411,11 @@ namespace Core
                     }
                     break;
                 case "EHON":
+                    page.hardEnvelopeSync.sw = false;
                     page.HardEnvelopeSw = true;
                     break;
                 case "EHOF":
+                    page.hardEnvelopeSync.sw = false;
                     page.HardEnvelopeSw = false;
                     break;
                 case "EHT":
@@ -2379,6 +2425,42 @@ namespace Core
                         SOutData(page, mml, page.port[port], (byte)(adr + 0x0d), (byte)(n & 0xf));
                         page.HardEnvelopeType = n;
                     }
+                    break;
+            }
+        }
+
+        public override void CmdHardEnvelopeSync(partPage page, MML mml)
+        {
+            string cmd = (string)mml.args[0];
+            switch (cmd)
+            {
+                case "HSON":
+                    page.hardEnvelopeSync.sw = true;
+                    page.HardEnvelopeSw = false;
+                    break;
+                case "HSOF":
+                    page.hardEnvelopeSync.sw = false;
+                    break;
+                case "HSO":
+                    page.hardEnvelopeSync.octave = (int)mml.args[1];
+                    page.hardEnvelopeSync.octave = Common.CheckRange(page.hardEnvelopeSync.octave, 1, 6);
+                    break;
+                case "H>":
+                    page.hardEnvelopeSync.octave += parent.info.octaveRev ? -1 : 1;
+                    page.hardEnvelopeSync.octave = Common.CheckRange(page.hardEnvelopeSync.octave, 1, 6);
+                    break;
+                case "H<":
+                    page.hardEnvelopeSync.octave += parent.info.octaveRev ? 1 : -1;
+                    page.hardEnvelopeSync.octave = Common.CheckRange(page.hardEnvelopeSync.octave, 1, 6);
+                    break;
+                case "HSD":
+                    page.hardEnvelopeSync.detune = (int)mml.args[1];
+                    break;
+                case "HSTN":
+                    page.hardEnvelopeSync.tone = true;
+                    break;
+                case "HSTF":
+                    page.hardEnvelopeSync.tone = false;
                     break;
             }
         }
@@ -2433,6 +2515,40 @@ namespace Core
 
         }
 
+        public override void SetupPageData(partWork pw, partPage page)
+        {
+            //周波数
+            page.spg.freq = -1;
+            SetFNum(page, null);
+
+            //ノイズ周波数
+            noiseFreq = -1;
+            OutSsgNoise(null, page);
+
+            if (!page.hardEnvelopeSync.sw)
+            {
+                //ハードエンベロープtype
+                page.spg.HardEnvelopeType = -1;
+                OutSsgHardEnvType(page, null);
+
+                //ハードエンベロープspeed
+                page.spg.HardEnvelopeSpeed = -1;
+                OutSsgHardEnvSpeed(page, null);
+            }
+            else
+            {
+                //ハードエンベロープtype
+                page.spg.HardEnvelopeType = -1;
+                OutSsgHardEnvType(page, null);
+            }
+
+
+            //音量
+            page.spg.beforeVolume = -1;
+            SetVolume(page, null);
+
+        }
+
         public override void MultiChannelCommand(MML mml)
         {
             nSSGKeyOn[0] = 0;
@@ -2475,9 +2591,20 @@ namespace Core
                 byte data = (byte)(9 << vch);
                 if (page.keyOn)
                 {
-                    int n = (page.mixer & 0x1) + ((page.mixer & 0x2) << 2);
-                    data &= (byte)(~(n << vch));
-                    nSSGKeyOn[ssg / 3] |= data;
+                    if (!page.hardEnvelopeSync.sw)
+                    {
+                        //noise D5/4/3  tone D2/1/0
+                        int n = (page.mixer & 0x1) + ((page.mixer & 0x2) << 2);
+                        data &= (byte)(~(n << vch));
+                        nSSGKeyOn[ssg / 3] |= data;
+                    }
+                    else
+                    {
+                        int mx = (page.hardEnvelopeSync.tone ? page.mixer : 0x0);
+                        int n = (mx & 0x1) + ((mx & 0x2) << 2);
+                        data &= (byte)(~(n << vch));
+                        nSSGKeyOn[ssg / 3] |= data;
+                    }
                 }
                 else
                 {

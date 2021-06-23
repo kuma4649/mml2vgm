@@ -1,0 +1,54 @@
+﻿'{
+
+	TitleName            =
+	TitleNameJ           =
+	GameName             =
+	GameNameJ            =
+	SystemName           =
+	SystemNameJ          =
+	Composer             =
+	ComposerJ            =
+	ReleaseDate          =
+	Converted            =
+	Notes                =
+
+	ClockCount   =192
+
+}
+
+
+     No, SV, AR, DR, SL, SR, RR, ST, ChipName
+'@ E  1, 15,  0,120,  7,100,  4,  1, AY8910
+'@ E  2, 15,  0, 40,  7,100,  4,  2, AY8910
+'@ E  3, 15,  0,  3, 13,  7,  1,  2, AY8910
+'@ E  4, 15,  0,  2, 14,  1,  1,  2, AY8910
+'@ E  5, 15,  0,  5, 13,  3,  1,  3, AY8910
+'@ E  6, 15,  0,  8, 13,  5,  1,  3, AY8910
+
+
+'N1 T126
+
+ PSG/SSG hardware envelope test (Triangle wave?)
+
+ c   c+  d   d+  e   f   f+  g   g+  a   a+  b
+ 480,452,426,404,376,356,336,320,300,284,270,254
+ 240,226,213,202,188,178,168,160,150,142,135,127
+ 120,112,107,101, 95, 89, 84, 80, 75, 71, 67, 63
+  60, 56, 54, 50, 47, 45, 42, 40, 38, 35, 33, 32
+  30, 28, 27, 25, 24, 22, 21, 20, 19, 18, 17, 16
+  15, 14, 13, 12, 12, 11, 10, 10,  9,  9,  8,  8
+
+'N7 v13q3l8
+'N7 o3 cdefgab r4
+'N7 HSON HSO4 HSTF EHT10q3
+'N7 o3 cdefgab r4
+'N7 [c H> >c16c16 H< <]4
+'N7 HSON HSO4 HSTN EHT10 q3l8 o1
+'N7 [c H> >c16c16 H< <]4
+'N7 HSON HSO4 HSTN EHT10 q3l8 o4
+'N7 [c H> >c16c16 H< <]4
+'N7 HSON HSO4 HSTN EHT12 q3l8 o4
+'N7 [c H> >c16c16 H< <]4
+'N7 HSOF
+
+

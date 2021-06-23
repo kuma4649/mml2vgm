@@ -254,6 +254,9 @@
     <None Include="sample\YM2203\testYM2203_CSM.gwi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="sample\YM2203\testYM2203_hardEnv.gwi">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="sample\YM2203\testYM2203_KeyOnDelay.gwi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

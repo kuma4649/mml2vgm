@@ -59,6 +59,14 @@ namespace Core
                     FNumTbl[1][c++] = (int)v;
                     if (c == FNumTbl[1].Length) break;
                 }
+
+                c = 0;
+                hsFnumTbl = new int[72];
+                foreach (double v in dic["HSFNUM_00"])
+                {
+                    hsFnumTbl[c++] = (int)v;
+                    if (c == hsFnumTbl.Length) break;
+                }
             }
 
             Ch = new ClsChannel[ChMax];

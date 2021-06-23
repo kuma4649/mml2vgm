@@ -1,4 +1,7 @@
 更新履歴
+TAG476 2021/06/24
+  Core:vgm:YM2203:HardwareEnvelope sync modeを追加
+
 TAG475 2021/06/23
   IDE:置換機能:幾つかのバグを修正
 
