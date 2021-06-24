@@ -641,7 +641,7 @@ namespace Core
                 }
                 else if (pw.getNum(page, out n))
                 {
-                    n = Common.CheckRange(n, 0, 4);
+                    n = Common.CheckRange(n, 0, 255);
                     mml.args.Add(n);
                 }
                 else
