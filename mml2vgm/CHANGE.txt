@@ -1,4 +1,7 @@
 XV—š—ğ
+TAG477 2021/06/24 2nd
+  Core:vgm:YM2608:YM2610B:HardwareEnvelope sync mode‚ğ’Ç‰Á
+
 TAG476 2021/06/24
   Core:vgm:YM2203:HardwareEnvelope sync mode‚ğ’Ç‰Á
 

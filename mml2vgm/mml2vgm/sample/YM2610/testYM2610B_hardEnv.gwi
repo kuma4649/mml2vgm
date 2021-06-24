@@ -19,7 +19,7 @@
 
 
 
-'P01 T126
+'T01 T126
 
  PSG/SSG hardware envelope test (Triangle wave?)
 
@@ -31,17 +31,17 @@
   30, 28, 27, 25, 24, 22, 21, 20, 19, 18, 17, 16
   15, 14, 13, 12, 12, 11, 10, 10,  9,  9,  8,  8
 
-'P10 v13q3l8
-'P10 o3 cdefgab r4
-'P10 HSON HSO4 HSTF EHT10
-'P10 o3 cdefgab r4
-'P10 [c H> >c16c16 H< <]4
-'P10 HSON HSO4 HSTN EHT10 q3l8 o1
-'P10 [c H> >c16c16 H< <]4
-'P10 HSON HSO4 HSTN EHT10 q3l8 o4
-'P10 [c H> >c16c16 H< <]4
-'P10 HSON HSO4 HSTN EHT12 q3l8 o4
-'P10 [c H> >c16c16 H< <]4
-'P10 HSOF
+'T10 v13q3l8
+'T10 o3 cdefgab r4
+'T10 HSON HSO4 HSTF EHT10
+'T10 o3 cdefgab r4
+'T10 [c H> >c16c16 H< <]4
+'T10 HSON HSO4 HSTN EHT10 q3l8 o1
+'T10 [c H> >c16c16 H< <]4
+'T10 HSON HSO4 HSTN EHT10 q3l8 o4
+'T10 [c H> >c16c16 H< <]4
+'T10 HSON HSO4 HSTN EHT12 q3l8 o4
+'T10 [c H> >c16c16 H< <]4
+'T10 HSOF
 
 

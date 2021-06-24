@@ -389,7 +389,15 @@ namespace Core
         public override void SetKeyOn(partPage page, MML mml)
         {
             SetDummyData(page, mml);
-            page.keyOn = true;
+            if (page.Type != enmChannelType.SSG)
+            {
+                page.keyOn = true;
+                //OutFmKeyOn(page, mml);
+            }
+            else if (page.Type == enmChannelType.SSG)
+            {
+                OutSsgKeyOn(page, mml);
+            }
         }
 
         public void OutKeyOn(partPage page, MML mml)
@@ -899,7 +907,8 @@ namespace Core
                 }
                 else
                 {
-                    if (page.Type == enmChannelType.SSG) continue;
+                    if (page.Type == enmChannelType.SSG)
+                        continue;
                     if (page.keyOn)
                     {
                         page.keyOn = false;
