@@ -1,4 +1,7 @@
 更新履歴
+TAG478 2021/06/24 3rd
+  Core:zgm:YM2609:WTが4-6、10-12チャンネルで無効になっていたバグを修正
+
 TAG477 2021/06/24 2nd
   Core:vgm:YM2608:YM2610B:HardwareEnvelope sync modeを追加
 

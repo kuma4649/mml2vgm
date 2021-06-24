@@ -1905,7 +1905,7 @@ namespace Core
             }
 
             //データを流し込みますよ？宣言を送信
-            SOutData(page, mml, port, 0x2b, (byte)((vch << 4) | ((reset ? 1 : 0) << 2) | (ope & 0x3)));
+            SOutData(page, mml, page.port[0], 0x2b, (byte)((vch << 4) | ((reset ? 1 : 0) << 2) | (ope & 0x3)));
 
             //実はリセット宣言だった　又は流し込むデータなんてなかった場合は処理終了
             if (reset || !parent.instOPNA2WF.ContainsKey(n)) return;
@@ -1918,8 +1918,8 @@ namespace Core
 
                 short s = (short)wd[n];
                 ushort d = (ushort)((4095 - Math.Abs(s)) * 2 + (s < 0 ? 1 : 0));
-                SOutData(page, mml, port, 0x2c, (byte)d);
-                SOutData(page, mml, port, 0x2c, (byte)(d >> 8));
+                SOutData(page, mml, page.port[0], 0x2c, (byte)d);
+                SOutData(page, mml, page.port[0], 0x2c, (byte)(d >> 8));
 
             }
         }

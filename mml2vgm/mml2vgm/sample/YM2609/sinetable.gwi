@@ -312,10 +312,8 @@ Us01 @W1 c
 WaveType 0 に 2 (12.5%矩形波)を割り当て
 Us01 @W2 c
 WaveType 
-'U0102 @W3,3,3,3o5v120 l4
-'U01 D0
-'U02 D-10
-'U0102 r2 l8> ef Q2e  Q7c^1. ef Q2e  Q7c ^2. Q2e Q7d ^2r
+'U12 @1@W3,3,3,3o5v100 l4
+'U12 r2 l8> ef Q2e  Q7c^1. ef Q2e  Q7c ^2. Q2e Q7d ^2r
 WaveType 0 を r)eset (sine波)
 Us01 @Wr c
 
