@@ -401,6 +401,7 @@ namespace Core
                 case 'g':
                 case 'a':
                 case 'b':
+                case 'x':
                     log.Write(string.Format("note {0}", cmd));
                     CmdNote(pw, page, cmd, mml);
                     break;
@@ -2787,7 +2788,7 @@ namespace Core
         //  c + 0 99 .. ^99 &99 ~99 ,99 :
         //  1 2 3  4  5   6   7   8 9   10
         //
-        // 1... c d e f g a b 音符
+        // 1... c d e f g a b x 音符
         // 2... + -           半音上げる/下げる(複数可能) 
         // 3... 0             ToneDoubler
         // 4... n             音長($は16進 #はクロック表記 #$は16進のクロック表記)

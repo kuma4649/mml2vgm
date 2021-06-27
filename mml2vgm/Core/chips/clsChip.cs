@@ -1774,6 +1774,12 @@ namespace Core
             //partPage pg = page;
 
             Note note = (Note)mml.args[0];
+            
+            if (note.cmd == 'x')
+            {
+                note.cmd = page.beforeNote;
+            }
+
             if (note.tDblSw)
             {
                 int arpNote = page.arpFreqMode ? 0 : page.arpDelta;
@@ -1939,6 +1945,9 @@ namespace Core
             page.enableInterrupt = false;
             if (page != pw.cpg)
                 page.requestInterrupt = true;
+
+            page.beforeNote = note.cmd;
+
         }
 
         protected virtual void ResetTieBend(partPage page, MML mml)

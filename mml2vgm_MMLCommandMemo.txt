@@ -975,6 +975,7 @@ f               -oooooooooooooooooooooooooooooooooooooooooooooooooo  音符フ�
 g               -oooooooooooooooooooooooooooooooooooooooooooooooooo  音符ソ
 a               -oooooooooooooooooooooooooooooooooooooooooooooooooo  音符ラ
 b               -oooooooooooooooooooooooooooooooooooooooooooooooooo  音符シ
+x               -oooooooooooooooooooooooooooooooooooooooooooooooooo  音符x(直前と同じノートを意味します)
     +           -oooooooooooooooooooooooooooooooooooooooooooooooooo  半音上げる
     -           -oooooooooooooooooooooooooooooooooooooooooooooooooo  半音下げる
     n           -oooooooooooooooooooooooooooooooooooooooooooooooooo  音長(FMのみ0を指定するとToneDoublerモードになる)
