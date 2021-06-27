@@ -671,6 +671,7 @@ namespace Core
         public bool modulationGainFlg { get; internal set; }
         public bool modulationDirection { get; internal set; }
         public char beforeNote { get; internal set; } = 'c';
+        public int beforeNoteShift { get; internal set; } = 0;
 
         public partPage(partPage sharedPg)
         {

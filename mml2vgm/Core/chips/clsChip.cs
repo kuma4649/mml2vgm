@@ -1778,6 +1778,7 @@ namespace Core
             if (note.cmd == 'x')
             {
                 note.cmd = page.beforeNote;
+                note.shift += page.beforeNoteShift;
             }
 
             if (note.tDblSw)
@@ -1947,6 +1948,7 @@ namespace Core
                 page.requestInterrupt = true;
 
             page.beforeNote = note.cmd;
+            page.beforeNoteShift= note.shift;
 
         }
 
