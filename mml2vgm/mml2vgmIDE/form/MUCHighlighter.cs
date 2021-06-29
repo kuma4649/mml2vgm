@@ -100,7 +100,7 @@ namespace mml2vgmIDE
                             doc.SetCharClass(i, CharClass.Normal);
                             i++;
                         }
-                        else if (doc.Text[i] == 'L')
+                        else if (doc.Text[i] == 'L' && (i == 0 || doc.Text[i - 1] != 'T'))
                             doc.SetCharClass(i, CharClass.Annotation);
                         else if (doc.Text[i] == '!')
                             doc.SetCharClass(i, CharClass.Annotation);
