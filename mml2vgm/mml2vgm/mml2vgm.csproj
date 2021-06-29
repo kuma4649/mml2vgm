@@ -266,6 +266,9 @@
     <None Include="sample\YM2608\testYM2608_hardEnv.gwi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="sample\YM2609\ExpandedWFandALG.gwi">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="sample\YM2609\testFM_test.gwi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

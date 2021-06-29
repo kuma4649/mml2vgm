@@ -1,4 +1,8 @@
 更新履歴
+TAG483 2021/06/29 2nd
+  IDE:mucomDotNET差し替え
+  IDE:YM2609:WT/ALLのサンプルをSomeSpoonyBardさんから頂いた(Thanks!)ので追加
+
 TAG482 2021/06/29
   IDE:mucomDotNET差し替え
   IDE:ハイライター:muc:yTLコマンドにも反応していたので修正
