@@ -343,6 +343,7 @@
     <Compile Include="midiOutInfo.cs" />
     <Compile Include="MIDIParam.cs" />
     <Compile Include="MidWriter.cs" />
+    <Compile Include="mmfControl.cs" />
     <Compile Include="MMLParameter\DMG.cs" />
     <Compile Include="MMLParameter\NES.cs" />
     <Compile Include="MMLParameter\AY8910.cs" />

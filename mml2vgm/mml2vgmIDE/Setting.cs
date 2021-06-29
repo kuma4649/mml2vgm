@@ -4178,7 +4178,7 @@ namespace mml2vgmIDE
             ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.FadeOut,"フェードアウト",true,false,false,"F9")
             ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Slow,"スロー",false,false,false,"F10")
             ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Fastx4,"4倍速",false,false,false,"F11")
-            //,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Kbd,"鍵盤",false,false,false,"F12")
+            ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.MDPlay,"エクスポート&Play MDPlayer",false,false,false,"F12")
             //,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Sien,"支援",false,false,false,"F12")
             ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.CloseTab,"タブを閉じる",false,true,false,"W")
             ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.CloseTabForce,"強制的にタブを閉じる",true,true,false,"W")
@@ -4371,6 +4371,7 @@ namespace mml2vgmIDE
                 CommentOnOff = 1220,
                 PartEnter = 1230,
                 Home = 1240,
+                MDPlay = 1300,
 
                 Ch01Solo = 2000,
                 Ch02Solo = 2100,

@@ -72,6 +72,7 @@
             this.tsmiExport_toWaveFile = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiExport_toMp3File = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiExport_toMidiFile = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiExport_toDriverFormatAndPlay = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.TsmiExit = new System.Windows.Forms.ToolStripMenuItem();
             this.TsmiEdit = new System.Windows.Forms.ToolStripMenuItem();
@@ -107,6 +108,7 @@
             this.tsmiJumpSoloMode = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiScript = new System.Windows.Forms.ToolStripMenuItem();
             this.ツールTToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiMakeCSM = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiOption = new System.Windows.Forms.ToolStripMenuItem();
             this.TsmiHelp = new System.Windows.Forms.ToolStripMenuItem();
             this.TsmiTutorial = new System.Windows.Forms.ToolStripMenuItem();
@@ -117,7 +119,7 @@
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.TsmiAbout = new System.Windows.Forms.ToolStripMenuItem();
             this.timer = new System.Windows.Forms.Timer(this.components);
-            this.tsmiMakeCSM = new System.Windows.Forms.ToolStripMenuItem();
+            this.tssbExpAndMdp = new System.Windows.Forms.ToolStripSplitButton();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -155,8 +157,9 @@
             this.tssbPause,
             this.tssbStop,
             this.tssbSlow,
-            this.tssbSien,
             this.tssbFast,
+            this.tssbExpAndMdp,
+            this.tssbSien,
             this.tssbMIDIKbd});
             resources.ApplyResources(this.statusStrip1, "statusStrip1");
             this.statusStrip1.Name = "statusStrip1";
@@ -408,7 +411,8 @@
             this.tsmiExport_MuctoD88,
             this.tsmiExport_toWaveFile,
             this.tsmiExport_toMp3File,
-            this.tsmiExport_toMidiFile});
+            this.tsmiExport_toMidiFile,
+            this.tsmiExport_toDriverFormatAndPlay});
             this.tsmiExport.Name = "tsmiExport";
             resources.ApplyResources(this.tsmiExport, "tsmiExport");
             // 
@@ -441,6 +445,12 @@
             this.tsmiExport_toMidiFile.Name = "tsmiExport_toMidiFile";
             resources.ApplyResources(this.tsmiExport_toMidiFile, "tsmiExport_toMidiFile");
             this.tsmiExport_toMidiFile.Click += new System.EventHandler(this.tsmiExport_toMidiFile_Click);
+            // 
+            // tsmiExport_toDriverFormatAndPlay
+            // 
+            this.tsmiExport_toDriverFormatAndPlay.Name = "tsmiExport_toDriverFormatAndPlay";
+            resources.ApplyResources(this.tsmiExport_toDriverFormatAndPlay, "tsmiExport_toDriverFormatAndPlay");
+            this.tsmiExport_toDriverFormatAndPlay.Click += new System.EventHandler(this.tsmiExport_toDriverFormatAndPlay_Click);
             // 
             // toolStripSeparator1
             // 
@@ -675,6 +685,12 @@
             this.ツールTToolStripMenuItem.Name = "ツールTToolStripMenuItem";
             resources.ApplyResources(this.ツールTToolStripMenuItem, "ツールTToolStripMenuItem");
             // 
+            // tsmiMakeCSM
+            // 
+            this.tsmiMakeCSM.Name = "tsmiMakeCSM";
+            resources.ApplyResources(this.tsmiMakeCSM, "tsmiMakeCSM");
+            this.tsmiMakeCSM.Click += new System.EventHandler(this.tsmiMakeCSM_Click);
+            // 
             // tsmiOption
             // 
             this.tsmiOption.Name = "tsmiOption";
@@ -741,11 +757,13 @@
             this.timer.Interval = 16;
             this.timer.Tick += new System.EventHandler(this.Timer_Tick);
             // 
-            // tsmiMakeCSM
+            // tssbExpAndMdp
             // 
-            this.tsmiMakeCSM.Name = "tsmiMakeCSM";
-            resources.ApplyResources(this.tsmiMakeCSM, "tsmiMakeCSM");
-            this.tsmiMakeCSM.Click += new System.EventHandler(this.tsmiMakeCSM_Click);
+            this.tssbExpAndMdp.DropDownButtonWidth = 0;
+            this.tssbExpAndMdp.Image = global::mml2vgmIDE.Properties.Resources.F12;
+            resources.ApplyResources(this.tssbExpAndMdp, "tssbExpAndMdp");
+            this.tssbExpAndMdp.Name = "tssbExpAndMdp";
+            this.tssbExpAndMdp.ButtonClick += new System.EventHandler(this.tssbExpAndMdp_ButtonClick);
             // 
             // FrmMain
             // 
@@ -860,6 +878,8 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
         private System.Windows.Forms.ToolStripMenuItem TsmiReplace;
         private System.Windows.Forms.ToolStripMenuItem tsmiMakeCSM;
+        private System.Windows.Forms.ToolStripMenuItem tsmiExport_toDriverFormatAndPlay;
+        private System.Windows.Forms.ToolStripSplitButton tssbExpAndMdp;
     }
 }
 

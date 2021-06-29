@@ -487,7 +487,7 @@ namespace mml2vgmIDE
             //ImportFile(ofd.FileName);
         }
 
-        private void ExportVgmXgmZgm(Document d)
+        private bool ExportVgmXgmZgm(Document d, ref string fn)
         {
             Compile(false, false, false, false, true);
             while (Compiling != 0) { Application.DoEvents(); }//待ち合わせ
@@ -499,11 +499,11 @@ namespace mml2vgmIDE
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 
-                return;
+                return false;
             }
 
             SaveFileDialog sfd = new SaveFileDialog();
-            string fn = d.gwiFullPath;
+            fn = d.gwiFullPath;
             if (fn.Length > 0 && fn[fn.Length - 1] == '*')
             {
                 fn = fn.Substring(0, fn.Length - 1);
@@ -525,7 +525,7 @@ namespace mml2vgmIDE
             sfd.RestoreDirectory = true;
             if (sfd.ShowDialog() != DialogResult.OK)
             {
-                return;
+                return false;
             }
             fn = sfd.FileName;
             if (Path.GetExtension(fn) == "")
@@ -539,9 +539,11 @@ namespace mml2vgmIDE
                 , Path.GetFileNameWithoutExtension(Path.GetFileName(d.gwiFullPath)) + (FileInformation.format == enmFormat.VGM ? ".vgm" : (FileInformation.format == enmFormat.XGM ? ".xgm" : ".zgm"))
                 );
             File.Copy(sf, fn, File.Exists(fn));
+
+            return true;
         }
 
-        private void ExportM(Document d)
+        private bool ExportM(Document d, ref string fn)
         {
             Compile(false, false, false, false, true);
             while (Compiling != 0) { Application.DoEvents(); }//待ち合わせ
@@ -553,11 +555,11 @@ namespace mml2vgmIDE
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 
-                return;
+                return false;
             }
 
             SaveFileDialog sfd = new SaveFileDialog();
-            string fn = d.gwiFullPath;
+            fn = d.gwiFullPath;
             if (fn.Length > 0 && fn[fn.Length - 1] == '*')
             {
                 fn = fn.Substring(0, fn.Length - 1);
@@ -587,7 +589,7 @@ namespace mml2vgmIDE
             sfd.RestoreDirectory = true;
             if (sfd.ShowDialog() != DialogResult.OK)
             {
-                return;
+                return false;
             }
             fn = sfd.FileName;
 
@@ -600,9 +602,10 @@ namespace mml2vgmIDE
             foreach (MmlDatum md in mData) buf.Add((byte)md.dat);
 
             File.WriteAllBytes(fn, buf.ToArray());
+            return true;
         }
 
-        private void ExportMub(Document d)
+        private bool ExportMub(Document d,ref string fn)
         {
             Compile(false, false, false, false, true);
             while (Compiling != 0) { Application.DoEvents(); }//待ち合わせ
@@ -614,11 +617,11 @@ namespace mml2vgmIDE
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 
-                return;
+                return false;
             }
 
             SaveFileDialog sfd = new SaveFileDialog();
-            string fn = d.gwiFullPath;
+            fn = d.gwiFullPath;
             if (fn.Length > 0 && fn[fn.Length - 1] == '*')
             {
                 fn = fn.Substring(0, fn.Length - 1);
@@ -634,7 +637,7 @@ namespace mml2vgmIDE
             sfd.RestoreDirectory = true;
             if (sfd.ShowDialog() != DialogResult.OK)
             {
-                return;
+                return false;
             }
             fn = sfd.FileName;
 
@@ -647,6 +650,8 @@ namespace mml2vgmIDE
             foreach (MmlDatum md in mubData) buf.Add(md != null ? (byte)md.dat : (byte)0);
 
             File.WriteAllBytes(fn, buf.ToArray());
+
+            return true;
         }
 
 
@@ -1040,6 +1045,11 @@ namespace mml2vgmIDE
             slow();
         }
 
+        private void tssbExpAndMdp_ButtonClick(object sender, EventArgs e)
+        {
+            tsmiExport_toDriverFormatAndPlay_Click(null, null);
+        }
+
         //private void TssbPlay_ButtonClick(object sender, EventArgs e)
         //{
         //TsmiCompileAndTracePlay_Click(null, null);
@@ -1209,6 +1219,9 @@ namespace mml2vgmIDE
                         return true;
                     case (int)Setting.ShortCutKey.enmContent.Sien:
                         sien();
+                        return true;
+                    case (int)Setting.ShortCutKey.enmContent.MDPlay:
+                        tsmiExport_toDriverFormatAndPlay_Click(null,null);
                         return true;
                     case (int)Setting.ShortCutKey.enmContent.CloseTab:
                         IDockContent dc1 = GetActiveDockContent();
@@ -3417,6 +3430,21 @@ namespace mml2vgmIDE
             {
                 return;
             }
+
+            mmfControl mmf = new mmfControl(true, "MDPlayer", 1024 * 4);
+            try
+            {
+                mmf.SendMessage(string.Join(" ", "STOP"));
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                ;
+            }
+            catch (FileNotFoundException)
+            {
+                ;
+            }
+
             if (Audio.isStopped)
             {
                 return;
@@ -3841,6 +3869,7 @@ namespace mml2vgmIDE
             tssbSlow.Visible = visible;
             tssbFast.Visible = visible;
             tssbMIDIKbd.Visible = visible;
+            tssbExpAndMdp.Visible = visible;
 
             tssbOpen.DisplayStyle = style;
             tssbSave.DisplayStyle = style;
@@ -3854,6 +3883,7 @@ namespace mml2vgmIDE
             tssbSlow.DisplayStyle = style;
             tssbFast.DisplayStyle = style;
             tssbMIDIKbd.DisplayStyle = style;
+            tssbExpAndMdp.DisplayStyle = style;
         }
 
         private void FrmMain_Load(object sender, EventArgs e)
@@ -4430,6 +4460,7 @@ namespace mml2vgmIDE
             {
                 DockContent dc = (DockContent)GetActiveDockContent();
                 Document d = null;
+                string outFn = "";
                 if (dc != null)
                 {
                     if (dc.Tag is Document)
@@ -4442,18 +4473,18 @@ namespace mml2vgmIDE
 
                 if (Path.GetExtension(d.gwiFullPath).ToLower() == ".muc")
                 {
-                    ExportMub(d);
+                    ExportMub(d, ref outFn);
                     return;
                 }
                 if (Path.GetExtension(d.gwiFullPath).ToLower() == ".mml")
                 {
-                    ExportM(d);
+                    ExportM(d, ref outFn);
                     return;
                 }
 
                 if (Path.GetExtension(d.gwiFullPath).ToLower() == ".gwi")
                 {
-                    ExportVgmXgmZgm(d);
+                    ExportVgmXgmZgm(d, ref outFn);
                     return;
                 }
 
@@ -4461,6 +4492,53 @@ namespace mml2vgmIDE
             catch (Exception)
             {
                 MessageBox.Show("エクスポート処理に失敗しました。", "エクスポート失敗", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void tsmiExport_toDriverFormatAndPlay_Click(object sender, EventArgs e)
+        {
+            Document d = null;
+            string outFn = "";
+
+            try
+            {
+                DockContent dc = (DockContent)GetActiveDockContent();
+                if (dc != null)
+                {
+                    if (dc.Tag is Document)
+                    {
+                        d = (Document)dc.Tag;
+                    }
+                }
+
+                if (d == null) return;
+
+                if (Path.GetExtension(d.gwiFullPath).ToLower() == ".muc")
+                    if (!ExportMub(d,ref outFn)) return;
+                if (Path.GetExtension(d.gwiFullPath).ToLower() == ".mml")
+                    if (!ExportM(d, ref outFn)) return;
+                if (Path.GetExtension(d.gwiFullPath).ToLower() == ".gwi")
+                    if (!ExportVgmXgmZgm(d, ref outFn)) return;
+
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("エクスポート処理に失敗しました。", "エクスポート失敗", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            mmfControl mmf = new mmfControl(true, "MDPlayer", 1024 * 4);
+            try
+            {
+                mmf.SendMessage(string.Join(" ", "PLAY", outFn));
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                MessageBox.Show("ファイル名が長すぎます。", "演奏開始失敗", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            catch (FileNotFoundException)
+            {
+                MessageBox.Show("MDPlayerが見つかりませんでした。", "演奏開始失敗", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
