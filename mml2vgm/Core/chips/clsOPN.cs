@@ -1263,7 +1263,7 @@ namespace Core
                         {
                             if (!page.keyOnDelay.sw)
                             {
-                                SOutData(page, mml, page.port[0], 0x28, (byte)((page.slots << 4) + (2 & 7)));
+                                SOutData(page, mml, page.port[0], 0x28, (byte)((slot << 4) + (2 & 7)));
                             }
                             else
                             {
