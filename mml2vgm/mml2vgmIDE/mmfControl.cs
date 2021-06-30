@@ -78,5 +78,13 @@ namespace mml2vgmIDE
                 view.WriteArray(0, ary, 0, ary.Length);
         }
 
+        public void SetBytes(byte[] buf)
+        {
+            if (buf.Length > mmfSize) throw new ArgumentOutOfRangeException();
+
+            using (var map = MemoryMappedFile.OpenExisting(mmfName))
+            using (var view = map.CreateViewAccessor())
+                view.WriteArray(0, buf, 0, buf.Length);
+        }
     }
 }

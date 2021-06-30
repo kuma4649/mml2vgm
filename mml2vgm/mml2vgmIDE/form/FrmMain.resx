@@ -208,7 +208,7 @@
     <value>Consolas, 9pt, style=Bold</value>
   </data>
   <data name="toolStripStatusLabel1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>11, 17</value>
+    <value>2, 17</value>
   </data>
   <data name="toolStripStatusLabel1.Text" xml:space="preserve">
     <value> </value>
@@ -346,13 +346,13 @@
     <value>Magenta</value>
   </data>
   <data name="tssbExpAndMdp.Size" type="System.Drawing.Size, System.Drawing">
-    <value>99, 20</value>
+    <value>112, 20</value>
   </data>
   <data name="tssbExpAndMdp.Text" xml:space="preserve">
-    <value>Exp&amp;&amp;MDP</value>
+    <value>Play on MDP</value>
   </data>
   <data name="tssbExpAndMdp.ToolTipText" xml:space="preserve">
-    <value>Export and Play at MDPlayer</value>
+    <value>Play on MDPlayer</value>
   </data>
   <data name="tssbSien.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
     <value>None</value>
@@ -529,40 +529,40 @@
     <value>Export</value>
   </data>
   <data name="tsmiExport_toDriverFormat.Size" type="System.Drawing.Size, System.Drawing">
-    <value>273, 22</value>
+    <value>180, 22</value>
   </data>
   <data name="tsmiExport_toDriverFormat.Text" xml:space="preserve">
     <value>to driver format</value>
   </data>
   <data name="tsmiExport_MuctoD88.Size" type="System.Drawing.Size, System.Drawing">
-    <value>273, 22</value>
+    <value>180, 22</value>
   </data>
   <data name="tsmiExport_MuctoD88.Text" xml:space="preserve">
     <value>muc to d88</value>
   </data>
   <data name="tsmiExport_toWaveFile.Size" type="System.Drawing.Size, System.Drawing">
-    <value>273, 22</value>
+    <value>180, 22</value>
   </data>
   <data name="tsmiExport_toWaveFile.Text" xml:space="preserve">
     <value>to .WAV file</value>
   </data>
   <data name="tsmiExport_toMp3File.Size" type="System.Drawing.Size, System.Drawing">
-    <value>273, 22</value>
+    <value>180, 22</value>
   </data>
   <data name="tsmiExport_toMp3File.Text" xml:space="preserve">
     <value>to .MP3 file</value>
   </data>
   <data name="tsmiExport_toMidiFile.Size" type="System.Drawing.Size, System.Drawing">
-    <value>273, 22</value>
+    <value>180, 22</value>
   </data>
   <data name="tsmiExport_toMidiFile.Text" xml:space="preserve">
     <value>to .MID file</value>
   </data>
   <data name="tsmiExport_toDriverFormatAndPlay.Size" type="System.Drawing.Size, System.Drawing">
-    <value>273, 22</value>
+    <value>180, 22</value>
   </data>
   <data name="tsmiExport_toDriverFormatAndPlay.Text" xml:space="preserve">
-    <value>to driver format And Play at MDPlayer</value>
+    <value>play at MDPlayer</value>
   </data>
   <data name="toolStripSeparator1.Size" type="System.Drawing.Size, System.Drawing">
     <value>177, 6</value>
@@ -1048,16 +1048,22 @@
   <data name="&gt;&gt;tssbSlow.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripSplitButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;tssbSien.Name" xml:space="preserve">
-    <value>tssbSien</value>
-  </data>
-  <data name="&gt;&gt;tssbSien.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripSplitButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="&gt;&gt;tssbFast.Name" xml:space="preserve">
     <value>tssbFast</value>
   </data>
   <data name="&gt;&gt;tssbFast.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripSplitButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tssbExpAndMdp.Name" xml:space="preserve">
+    <value>tssbExpAndMdp</value>
+  </data>
+  <data name="&gt;&gt;tssbExpAndMdp.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripSplitButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tssbSien.Name" xml:space="preserve">
+    <value>tssbSien</value>
+  </data>
+  <data name="&gt;&gt;tssbSien.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripSplitButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;tssbMIDIKbd.Name" xml:space="preserve">
@@ -1461,12 +1467,6 @@
   </data>
   <data name="&gt;&gt;timer.Type" xml:space="preserve">
     <value>System.Windows.Forms.Timer, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tssbExpAndMdp.Name" xml:space="preserve">
-    <value>tssbExpAndMdp</value>
-  </data>
-  <data name="&gt;&gt;tssbExpAndMdp.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripSplitButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">
     <value>FrmMain</value>

@@ -4499,6 +4499,7 @@ namespace mml2vgmIDE
         {
             Document d = null;
             string outFn = "";
+            List<byte> buf = new List<byte>();
 
             try
             {
@@ -4513,12 +4514,34 @@ namespace mml2vgmIDE
 
                 if (d == null) return;
 
+                //コンパイル実施
+                Compile(false, false, false, false, true);
+                while (Compiling != 0) { Application.DoEvents(); }//待ち合わせ
+
                 if (Path.GetExtension(d.gwiFullPath).ToLower() == ".muc")
-                    if (!ExportMub(d,ref outFn)) return;
-                if (Path.GetExtension(d.gwiFullPath).ToLower() == ".mml")
-                    if (!ExportM(d, ref outFn)) return;
-                if (Path.GetExtension(d.gwiFullPath).ToLower() == ".gwi")
-                    if (!ExportVgmXgmZgm(d, ref outFn)) return;
+                {
+                    foreach (MmlDatum md in mubData) buf.Add(md != null ? (byte)md.dat : (byte)0);
+                    outFn = Path.ChangeExtension(d.gwiFullPath, ".mub");
+                }
+                else if (Path.GetExtension(d.gwiFullPath).ToLower() == ".mml")
+                {
+                    foreach (MmlDatum md in mData) buf.Add((byte)md.dat);
+                    outFn = Path.ChangeExtension(d.gwiFullPath, ".m");
+                }
+                else if (Path.GetExtension(d.gwiFullPath).ToLower() == ".gwi")
+                {
+                    string sf = Path.Combine(
+                        Common.GetApplicationDataFolder(true)
+                        , "temp"
+                        , Path.GetFileNameWithoutExtension(Path.GetFileName(d.gwiFullPath))
+                            + (FileInformation.format == enmFormat.VGM ? ".vgm"
+                                : (FileInformation.format == enmFormat.XGM ? ".xgm" : ".zgm"))
+                        );
+                    buf.AddRange(File.ReadAllBytes(sf));
+                    outFn = Path.ChangeExtension(d.gwiFullPath,
+                        (FileInformation.format == enmFormat.VGM ? ".vgm"
+                                : (FileInformation.format == enmFormat.XGM ? ".xgm" : ".zgm")));
+                }
 
             }
             catch (Exception)
@@ -4527,10 +4550,17 @@ namespace mml2vgmIDE
                 return;
             }
 
-            mmfControl mmf = new mmfControl(true, "MDPlayer", 1024 * 4);
             try
             {
-                mmf.SendMessage(string.Join(" ", "PLAY", outFn));
+
+                if (mml2vgmMmf != null) mml2vgmMmf.Close();
+                mml2vgmMmf = new mmfControl(false, "mml2vgmIDE", buf.Count);
+                mml2vgmMmf.SetBytes(buf.ToArray());
+
+                if (mmf != null) mmf.Close();
+                mmf = new mmfControl(true, "MDPlayer", 1024 * 4);
+                mmf.SendMessage(string.Join(" ", "SPLAY", "mml2vgmIDE", buf.Count.ToString(), outFn));
+
             }
             catch (ArgumentOutOfRangeException)
             {
@@ -4541,6 +4571,9 @@ namespace mml2vgmIDE
                 MessageBox.Show("MDPlayerが見つかりませんでした。", "演奏開始失敗", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        private mmfControl mmf = null;
+        private mmfControl mml2vgmMmf = null;
 
         private void tsmiExport_toWaveFile_Click(object sender, EventArgs e)
         {
