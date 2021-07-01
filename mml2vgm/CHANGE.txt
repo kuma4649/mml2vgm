@@ -1,4 +1,8 @@
 更新履歴
+TAG487 2021/07/02
+  Core:zgm:YM2609:HardwareEnvelope sync modeを追加
+  その他:ドキュメントの修正、追記など。
+
 TAG486 2021/07/01
   Core:OPN系:xgm以外、効果音モード時のスロット制御がバグっていたのを修正。
 

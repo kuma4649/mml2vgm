@@ -739,6 +739,23 @@ namespace Core
             page.freq = f;
             //pw.ppg[pw.cpgNum].oldDutyCycle = pw.ppg[pw.cpgNum].dutyCycle;
 
+            int port;
+            int adr;
+            int vch;
+            GetPortVchSsg(page, out port, out adr, out vch);
+
+            if (page.hardEnvelopeSync.sw)
+            {
+                f = GetSsgHsFNum(page, mml
+                    , page.hardEnvelopeSync.octave
+                    , page.noteCmd
+                    , page.shift + page.keyShift + arpNote);//
+                f = f + page.hardEnvelopeSync.detune;
+                page.hsFnum = f;
+
+                SOutData(page, mml, page.port[port], (byte)(adr + 0x0b), (byte)(page.hsFnum & 0xff));
+                SOutData(page, mml, page.port[port], (byte)(adr + 0x0c), (byte)((page.hsFnum >> 8) & 0xff));
+            }
         }
 
         public override void SetKeyOn(partPage page, MML mml)

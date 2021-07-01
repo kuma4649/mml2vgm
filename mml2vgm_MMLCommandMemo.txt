@@ -887,14 +887,14 @@ EHON            ---------o----o----o-----o-----o-------------------  ハード�
 EHOF            ---------o----o----o-----o-----o-------------------  ハードウェアエンベロープの停止
 EHTn            ---------o----o----o-----o-----o-------------------  ハードウェアエンベロープタイプ
 EHn             ---------o----o----o-----o-----o-------------------  ハードウェアエンベロープ周波数
-HSON            -------------------------------o-------------------  Hardware envelope Sync mode ON
-HSOF            -------------------------------o-------------------  Hardware envelope Sync mode OFf(default)
-HSOn            -------------------------------o-------------------  Hardware envelope Sync mode Octave ( n : 1 ~ 5 )(default : 3)
-H>              -------------------------------o-------------------  Hardware envelope Sync mode Octave (+1)
-H<              -------------------------------o-------------------  Hardware envelope Sync mode Octave (-1)
-HSDn            -------------------------------o-------------------  Hardware envelope Sync mode Detune ( n : 0 ~ 255 )(default : 0)
-HSTN            -------------------------------o-------------------  Hardware envelope Sync mode Tone override oN(default)
-HSTF            -------------------------------o-------------------  Hardware envelope Sync mode Tone override oFf
+HSON            ---------o----o----o-----o-----o-------------------  Hardware envelope Sync mode ON
+HSOF            ---------o----o----o-----o-----o-------------------  Hardware envelope Sync mode OFf(default)
+HSOn            ---------o----o----o-----o-----o-------------------  Hardware envelope Sync mode Octave ( n : 1 ~ 5 )(default : 3)
+H>              ---------o----o----o-----o-----o-------------------  Hardware envelope Sync mode Octave (+1)
+H<              ---------o----o----o-----o-----o-------------------  Hardware envelope Sync mode Octave (-1)
+HSDn            ---------o----o----o-----o-----o-------------------  Hardware envelope Sync mode Detune ( n : 0 ~ 255 )(default : 0)
+HSTN            ---------o----o----o-----o-----o-------------------  Hardware envelope Sync mode Tone override oN(default)
+HSTF            ---------o----o----o-----o-----o-------------------  Hardware envelope Sync mode Tone override oFf
 APON            -ooooooooo-oooo-oooo-oooooooooooooooooooooooooooooo  音程アルペジオの開始
 APOF            -ooooooooo-oooo-oooo-oooooooooooooooooooooooooooooo  音程アルペジオの停止
 APn             -ooooooooo-oooo-oooo-oooooooooooooooooooooooooooooo  音程アルペジオの定義番号を指定
@@ -966,7 +966,9 @@ PDOF            ooooooooooooooooooooooooooooooooooooooooooooooooooo  ページ�
 ;               ooooooooooooooooooooooooooooooooooooooooooooooooooo  コメントアウト 行末まで無視する
 *Mn             ooooooooooooooooooooooooooooooooooooooooooooooooooo  同期マーキング (0 - )
 *Sn             ooooooooooooooooooooooooooooooooooooooooooooooooooo  同期(0 - )
-PCn             ooooooooooooooooooooooooooooooooooooooooooooooooooo  パートカラー(0 - 8 def:1)IDEなどの色を指定する。数値はn88などと互換+8:muap風味色
+PCn             ooooooooooooooooooooooooooooooooooooooooooooooooooo  パートカラー(0 - 8 def:1)IDEのパート色を指定する。
+                                                                       0:黒 1:青 2:赤 3:紫 4:緑 5:水 6:黄 7:白
+                                                                       8:muap風味色
                                                                    
 c               -oooooooooooooooooooooooooooooooooooooooooooooooooo  音符ド
 d               -oooooooooooooooooooooooooooooooooooooooooooooooooo  音符レ
