@@ -265,13 +265,21 @@ namespace Core
                     + (pcmDataEasy[ptr + 3] << 24);
             }
 
-            if (maxSize == 0 || maxSize >= 0x10000) return;
+            if (maxSize == 0) return;
 
-            int pSize = 0x10000 - maxSize;
-            List<byte> ary = pcmDataEasy.ToList();
-            for (int i = 0; i < pSize; i++) ary.Add(0x00);
-            pcmDataEasy = ary.ToArray();
-            maxSize += pSize;
+            //vgmファイル上のデータのサイズではなく、そのChipのROMの大きさを指定する
+
+            //Memo
+            //vgmファイルの DataBlock format
+            //0x67        datablock command
+            //0x66        dummy
+            //tt          データタイプ( QSoundの場合は 0x8f )
+            //ss ss ss ss データのサイズ(ファイル上のデータサイズ)
+            //rr rr rr rr ROMのサイズ(ChipのROMの大きさ。このメソッドのptrはここの位置を指している) 
+            //ss ss ss ss データを書き込む開始アドレス
+            //...         PCMデータ
+
+            maxSize = 0x01_00_00_00;
             pcmDataEasy[ptr] = (byte)maxSize;
             pcmDataEasy[ptr + 1] = (byte)(maxSize >> 8);
             pcmDataEasy[ptr + 2] = (byte)(maxSize >> 16);
