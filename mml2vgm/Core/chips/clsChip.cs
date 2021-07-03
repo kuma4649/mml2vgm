@@ -476,6 +476,8 @@ namespace Core
             int maxSize = 0;
             int ptr = 7 + (parent.ChipCommandSize == 2 ? 2 : 0);
 
+            AdjustPCMData(ptr);
+
             if (parent.info.format == enmFormat.ZGM)
             {
                 if (port.Length < 1) return;
@@ -563,6 +565,9 @@ namespace Core
             }
         }
 
+        public virtual void AdjustPCMData(int ptr)
+        {
+        }
 
         public virtual int GetToneDoublerShift(partPage page, int octave, char noteCmd, int shift)
         {

@@ -252,6 +252,33 @@ namespace Core
             throw new NotImplementedException();
         }
 
+        public override void AdjustPCMData(int ptr)
+        {
+            int maxSize = 0;
+
+            if (pcmDataEasy != null && pcmDataEasy.Length > 0)
+            {
+                maxSize =
+                    pcmDataEasy[ptr]
+                    + (pcmDataEasy[ptr + 1] << 8)
+                    + (pcmDataEasy[ptr + 2] << 16)
+                    + (pcmDataEasy[ptr + 3] << 24);
+            }
+
+            if (maxSize == 0 || maxSize >= 0x10000) return;
+
+            int pSize = 0x10000 - maxSize;
+            List<byte> ary = pcmDataEasy.ToList();
+            for (int i = 0; i < pSize; i++) ary.Add(0x00);
+            pcmDataEasy = ary.ToArray();
+            maxSize += pSize;
+            pcmDataEasy[ptr] = (byte)maxSize;
+            pcmDataEasy[ptr + 1] = (byte)(maxSize >> 8);
+            pcmDataEasy[ptr + 2] = (byte)(maxSize >> 16);
+            pcmDataEasy[ptr + 3] = (byte)(maxSize >> 24);
+
+        }
+
         public override string DispRegion(Tuple<string, clsPcm> pcm)
         {
             return string.Format("{0,-10} {1,-7} {2,-5:D3} {3,-4:D2} ${4,-7:X4} ${5,-7:X4} {6} ${7,-7:X4}  {8,4} {9}\r\n"

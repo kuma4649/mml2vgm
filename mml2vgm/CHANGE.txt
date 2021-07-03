@@ -1,4 +1,7 @@
 更新履歴
+TAG488 2021/07/03
+  Core:QSound:使用するPCMのサイズが64k未満の場合は調整を行うよう修正
+
 TAG487 2021/07/02
   Core:zgm:YM2609:HardwareEnvelope sync modeを追加
   その他:ドキュメントの修正、追記など。

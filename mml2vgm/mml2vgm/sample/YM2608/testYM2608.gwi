@@ -41,14 +41,14 @@ lead synthっぽいなにか
 P01 T160
 'P01 @110v127p3o4l8p3cde
 'Ps01 @110v127p3r
-P10     v15   o4l8[rrrrrrrrcdefgab>c<]
-P13 p3V50l4v31[ccc8c8c ]
-P14 p1   l4v31[rcr   c ]
-P15 p2   l4v31[ccc   c ]
-P16 p2   l8v31[cccccccc]
-P17 p1   l8v31[rrrrrrrc]
-P18 p3   l8v31[rcrcrcrc]
-P19 o4l4p3q0v155@2p1cp2dp3efgab>c<@3cdefgab>c
+'P10     v15   o4l8[rrrrrrrrcdefgab>c<]
+'P13 p3V50l4v31[ccc8c8c ]
+'P14 p1   l4v31[rcr   c ]
+'P15 p2   l4v31[ccc   c ]
+'P16 p2   l8v31[cccccccc]
+'P17 p1   l8v31[rrrrrrrc]
+'P18 p3   l8v31[rcrcrcrc]
+'P19 o4l4p3q0v155@2p1cp2dp3efgab>c<@3cdefgab>c
 
 P01  @110v125p1l4o4cr8e
 P01_ @0  v100p2l4o5rdfg

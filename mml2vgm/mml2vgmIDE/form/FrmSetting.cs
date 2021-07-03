@@ -928,6 +928,9 @@ namespace mml2vgmIDE
 
             setting.IsManualDetect = !rbAutoDetect.Checked;
             setting.AutoDetectModuleType = rbSCCIDetect.Checked ? 0 : 1;
+            
+            int v;
+            Setting.ChipType ct;
 
             setting.AY8910Type = new Setting.ChipType();
             setting.AY8910Type.UseScci = ucSI.rbAY8910P_SCCI.Checked;
@@ -937,12 +940,7 @@ namespace mml2vgmIDE
                 {
                     string n = ucSI.cmbAY8910P_SCCI.SelectedItem.ToString();
                     n = n.Substring(0, n.IndexOf(")")).Substring(1);
-                    string[] ns = n.Split(':');
-                    setting.AY8910Type.InterfaceName = ns[0];
-                    setting.AY8910Type.SoundLocation = int.Parse(ns[1]);
-                    setting.AY8910Type.BusID = int.Parse(ns[2]);
-                    setting.AY8910Type.SoundChip = int.Parse(ns[3]);
-                    setting.AY8910Type.Type = int.Parse(ns[4]);
+                    SetInterfaceInfo(setting.AY8910Type, n);
                 }
             }
             setting.AY8910Type.UseEmu = ucSI.rbAY8910P_Emu.Checked;
@@ -955,12 +953,7 @@ namespace mml2vgmIDE
                 {
                     string n = ucSI.cmbAY8910S_SCCI.SelectedItem.ToString();
                     n = n.Substring(0, n.IndexOf(")")).Substring(1);
-                    string[] ns = n.Split(':');
-                    setting.AY8910SType.InterfaceName = ns[0];
-                    setting.AY8910SType.SoundLocation = int.Parse(ns[1]);
-                    setting.AY8910SType.BusID = int.Parse(ns[2]);
-                    setting.AY8910SType.SoundChip = int.Parse(ns[3]);
-                    setting.AY8910SType.Type = int.Parse(ns[4]);
+                    SetInterfaceInfo(setting.AY8910SType, n);
                 }
             }
             setting.AY8910SType.UseEmu = ucSI.rbAY8910S_Emu.Checked;
@@ -973,12 +966,7 @@ namespace mml2vgmIDE
                 {
                     string n = ucSI.cmbYM2612P_SCCI.SelectedItem.ToString();
                     n = n.Substring(0, n.IndexOf(")")).Substring(1);
-                    string[] ns = n.Split(':');
-                    setting.YM2612Type.InterfaceName = ns[0];
-                    setting.YM2612Type.SoundLocation = int.Parse(ns[1]);
-                    setting.YM2612Type.BusID = int.Parse(ns[2]);
-                    setting.YM2612Type.SoundChip = int.Parse(ns[3]);
-                    setting.YM2612Type.Type = int.Parse(ns[4]);
+                    SetInterfaceInfo(setting.YM2612Type, n);
                 }
             }
             setting.YM2612Type.UseEmu = (ucSI.rbYM2612P_Emu.Checked || ucSI.rbYM2612P_SCCI.Checked);
@@ -993,12 +981,7 @@ namespace mml2vgmIDE
                 {
                     string n = ucSI.cmbYM2612S_SCCI.SelectedItem.ToString();
                     n = n.Substring(0, n.IndexOf(")")).Substring(1);
-                    string[] ns = n.Split(':');
-                    setting.YM2612SType.InterfaceName = ns[0];
-                    setting.YM2612SType.SoundLocation = int.Parse(ns[1]);
-                    setting.YM2612SType.BusID = int.Parse(ns[2]);
-                    setting.YM2612SType.SoundChip = int.Parse(ns[3]);
-                    setting.YM2612SType.Type = int.Parse(ns[4]);
+                    SetInterfaceInfo(setting.YM2612SType, n);
                 }
             }
             setting.YM2612SType.UseEmu = (ucSI.rbYM2612S_Emu.Checked || ucSI.rbYM2612S_SCCI.Checked);
@@ -1017,12 +1000,7 @@ namespace mml2vgmIDE
             {
                 string n = ucSI.cmbSN76489P_SCCI.SelectedItem.ToString();
                 n = n.Substring(0, n.IndexOf(")")).Substring(1);
-                string[] ns = n.Split(':');
-                setting.SN76489Type.InterfaceName = ns[0];
-                setting.SN76489Type.SoundLocation = int.Parse(ns[1]);
-                setting.SN76489Type.BusID = int.Parse(ns[2]);
-                setting.SN76489Type.SoundChip = int.Parse(ns[3]);
-                setting.SN76489Type.Type = int.Parse(ns[4]);
+                SetInterfaceInfo(setting.SN76489Type, n);
             }
             setting.SN76489Type.UseEmu = ucSI.rbSN76489P_Emu.Checked;
             setting.SN76489Type.UseEmu2 = ucSI.rbSN76489P_Emu2.Checked;
@@ -1033,12 +1011,7 @@ namespace mml2vgmIDE
             {
                 string n = ucSI.cmbSN76489S_SCCI.SelectedItem.ToString();
                 n = n.Substring(0, n.IndexOf(")")).Substring(1);
-                string[] ns = n.Split(':');
-                setting.SN76489SType.InterfaceName = ns[0];
-                setting.SN76489SType.SoundLocation = int.Parse(ns[1]);
-                setting.SN76489SType.BusID = int.Parse(ns[2]);
-                setting.SN76489SType.SoundChip = int.Parse(ns[3]);
-                setting.SN76489SType.Type = int.Parse(ns[4]);
+                SetInterfaceInfo(setting.SN76489SType, n);
             }
             setting.SN76489SType.UseEmu = ucSI.rbSN76489S_Emu.Checked;
             setting.SN76489SType.UseEmu2 = ucSI.rbSN76489S_Emu2.Checked;
@@ -1052,12 +1025,7 @@ namespace mml2vgmIDE
                 {
                     string n = ucSI.cmbYM2608P_SCCI.SelectedItem.ToString();
                     n = n.Substring(0, n.IndexOf(")")).Substring(1);
-                    string[] ns = n.Split(':');
-                    setting.YM2608Type.InterfaceName = ns[0];
-                    setting.YM2608Type.SoundLocation = int.Parse(ns[1]);
-                    setting.YM2608Type.BusID = int.Parse(ns[2]);
-                    setting.YM2608Type.SoundChip = int.Parse(ns[3]);
-                    setting.YM2608Type.Type = int.Parse(ns[4]);
+                    SetInterfaceInfo(setting.YM2608Type, n);
                 }
             }
             setting.YM2608Type.UseEmu = ucSI.rbYM2608P_Emu.Checked;
@@ -1070,12 +1038,7 @@ namespace mml2vgmIDE
                 {
                     string n = ucSI.cmbYM2608S_SCCI.SelectedItem.ToString();
                     n = n.Substring(0, n.IndexOf(")")).Substring(1);
-                    string[] ns = n.Split(':');
-                    setting.YM2608SType.InterfaceName = ns[0];
-                    setting.YM2608SType.SoundLocation = int.Parse(ns[1]);
-                    setting.YM2608SType.BusID = int.Parse(ns[2]);
-                    setting.YM2608SType.SoundChip = int.Parse(ns[3]);
-                    setting.YM2608SType.Type = int.Parse(ns[4]);
+                    SetInterfaceInfo(setting.YM2608SType, n);
                 }
             }
             setting.YM2608SType.UseEmu = ucSI.rbYM2608S_Emu.Checked;
@@ -1089,23 +1052,13 @@ namespace mml2vgmIDE
                 {
                     string n = ucSI.cmbYM2610BP_SCCI.SelectedItem.ToString();
                     n = n.Substring(0, n.IndexOf(")")).Substring(1);
-                    string[] ns = n.Split(':');
-                    setting.YM2610Type.InterfaceName = ns[0];
-                    setting.YM2610Type.SoundLocation = int.Parse(ns[1]);
-                    setting.YM2610Type.BusID = int.Parse(ns[2]);
-                    setting.YM2610Type.SoundChip = int.Parse(ns[3]);
-                    setting.YM2610Type.Type = int.Parse(ns[4]);
+                    SetInterfaceInfo(setting.YM2610Type, n);
                 }
                 if (ucSI.cmbSPPCMP_SCCI.SelectedItem != null)
                 {
                     string n = ucSI.cmbSPPCMP_SCCI.SelectedItem.ToString();
                     n = n.Substring(0, n.IndexOf(")")).Substring(1);
-                    string[] ns = n.Split(':');
-                    setting.YM2610Type.InterfaceName2B = ns[0];
-                    setting.YM2610Type.SoundLocation2B = int.Parse(ns[1]);
-                    setting.YM2610Type.BusID2B = int.Parse(ns[2]);
-                    setting.YM2610Type.SoundChip2B = int.Parse(ns[3]);
-                    setting.YM2610Type.Type2B = int.Parse(ns[4]);
+                    SetInterfaceInfo_2B(setting.YM2610Type, n);
                 }
             }
             setting.YM2610Type.UseEmu = ucSI.rbYM2610BP_Emu.Checked;
@@ -1142,23 +1095,13 @@ namespace mml2vgmIDE
                 {
                     string n = ucSI.cmbYM2610BS_SCCI.SelectedItem.ToString();
                     n = n.Substring(0, n.IndexOf(")")).Substring(1);
-                    string[] ns = n.Split(':');
-                    setting.YM2610SType.InterfaceName = ns[0];
-                    setting.YM2610SType.SoundLocation = int.Parse(ns[1]);
-                    setting.YM2610SType.BusID = int.Parse(ns[2]);
-                    setting.YM2610SType.SoundChip = int.Parse(ns[3]);
-                    setting.YM2610SType.Type = int.Parse(ns[4]);
+                    SetInterfaceInfo(setting.YM2610SType, n);
                 }
                 if (ucSI.cmbSPPCMS_SCCI.SelectedItem != null)
                 {
                     string n = ucSI.cmbSPPCMS_SCCI.SelectedItem.ToString();
                     n = n.Substring(0, n.IndexOf(")")).Substring(1);
-                    string[] ns = n.Split(':');
-                    setting.YM2610SType.InterfaceName2B = ns[0];
-                    setting.YM2610SType.SoundLocation2B = int.Parse(ns[1]);
-                    setting.YM2610SType.BusID2B = int.Parse(ns[2]);
-                    setting.YM2610SType.SoundChip2B = int.Parse(ns[3]);
-                    setting.YM2610SType.Type2B = int.Parse(ns[4]);
+                    SetInterfaceInfo_2B(setting.YM2610SType, n);
                 }
             }
             setting.YM2610SType.UseEmu = ucSI.rbYM2610BS_Emu.Checked;
@@ -1196,12 +1139,7 @@ namespace mml2vgmIDE
                 {
                     string n = ucSI.cmbYM2151P_SCCI.SelectedItem.ToString();
                     n = n.Substring(0, n.IndexOf(")")).Substring(1);
-                    string[] ns = n.Split(':');
-                    setting.YM2151Type.InterfaceName = ns[0];
-                    setting.YM2151Type.SoundLocation = int.Parse(ns[1]);
-                    setting.YM2151Type.BusID = int.Parse(ns[2]);
-                    setting.YM2151Type.SoundChip = int.Parse(ns[3]);
-                    setting.YM2151Type.Type = int.Parse(ns[4]);
+                    SetInterfaceInfo(setting.YM2151Type, n);
                 }
             }
             setting.YM2151Type.UseEmu = ucSI.rbYM2151P_Emu.Checked;
@@ -1216,12 +1154,7 @@ namespace mml2vgmIDE
                 {
                     string n = ucSI.cmbYM2151S_SCCI.SelectedItem.ToString();
                     n = n.Substring(0, n.IndexOf(")")).Substring(1);
-                    string[] ns = n.Split(':');
-                    setting.YM2151SType.InterfaceName = ns[0];
-                    setting.YM2151SType.SoundLocation = int.Parse(ns[1]);
-                    setting.YM2151SType.BusID = int.Parse(ns[2]);
-                    setting.YM2151SType.SoundChip = int.Parse(ns[3]);
-                    setting.YM2151SType.Type = int.Parse(ns[4]);
+                    SetInterfaceInfo(setting.YM2151SType, n);
                 }
             }
             setting.YM2151SType.UseEmu = ucSI.rbYM2151S_Emu.Checked;
@@ -1236,12 +1169,7 @@ namespace mml2vgmIDE
                 {
                     string n = ucSI.cmbYM2203P_SCCI.SelectedItem.ToString();
                     n = n.Substring(0, n.IndexOf(")")).Substring(1);
-                    string[] ns = n.Split(':');
-                    setting.YM2203Type.InterfaceName = ns[0];
-                    setting.YM2203Type.SoundLocation = int.Parse(ns[1]);
-                    setting.YM2203Type.BusID = int.Parse(ns[2]);
-                    setting.YM2203Type.SoundChip = int.Parse(ns[3]);
-                    setting.YM2203Type.Type = int.Parse(ns[4]);
+                    SetInterfaceInfo(setting.YM2203Type, n);
                 }
             }
             setting.YM2203Type.UseEmu = ucSI.rbYM2203P_Emu.Checked;
@@ -1254,12 +1182,7 @@ namespace mml2vgmIDE
                 {
                     string n = ucSI.cmbYM2203S_SCCI.SelectedItem.ToString();
                     n = n.Substring(0, n.IndexOf(")")).Substring(1);
-                    string[] ns = n.Split(':');
-                    setting.YM2203SType.InterfaceName = ns[0];
-                    setting.YM2203SType.SoundLocation = int.Parse(ns[1]);
-                    setting.YM2203SType.BusID = int.Parse(ns[2]);
-                    setting.YM2203SType.SoundChip = int.Parse(ns[3]);
-                    setting.YM2203SType.Type = int.Parse(ns[4]);
+                    SetInterfaceInfo(setting.YM2203SType, n);
                 }
             }
             setting.YM2203SType.UseEmu = ucSI.rbYM2203S_Emu.Checked;
@@ -1272,12 +1195,7 @@ namespace mml2vgmIDE
                 {
                     string n = ucSI.cmbYM2413P_SCCI.SelectedItem.ToString();
                     n = n.Substring(0, n.IndexOf(")")).Substring(1);
-                    string[] ns = n.Split(':');
-                    setting.YM2413Type.InterfaceName = ns[0];
-                    setting.YM2413Type.SoundLocation = int.Parse(ns[1]);
-                    setting.YM2413Type.BusID = int.Parse(ns[2]);
-                    setting.YM2413Type.SoundChip = int.Parse(ns[3]);
-                    setting.YM2413Type.Type = int.Parse(ns[4]);
+                    SetInterfaceInfo(setting.YM2413Type, n);
                 }
             }
             setting.YM2413Type.UseEmu = ucSI.rbYM2413P_Emu.Checked;
@@ -1290,12 +1208,7 @@ namespace mml2vgmIDE
                 {
                     string n = ucSI.cmbYM2413S_SCCI.SelectedItem.ToString();
                     n = n.Substring(0, n.IndexOf(")")).Substring(1);
-                    string[] ns = n.Split(':');
-                    setting.YM2413SType.InterfaceName = ns[0];
-                    setting.YM2413SType.SoundLocation = int.Parse(ns[1]);
-                    setting.YM2413SType.BusID = int.Parse(ns[2]);
-                    setting.YM2413SType.SoundChip = int.Parse(ns[3]);
-                    setting.YM2413SType.Type = int.Parse(ns[4]);
+                    SetInterfaceInfo(setting.YM2413SType, n);
                 }
             }
             setting.YM2413SType.UseEmu = ucSI.rbYM2413S_Emu.Checked;
@@ -1308,12 +1221,7 @@ namespace mml2vgmIDE
                 {
                     string n = ucSI.cmbC140P_SCCI.SelectedItem.ToString();
                     n = n.Substring(0, n.IndexOf(")")).Substring(1);
-                    string[] ns = n.Split(':');
-                    setting.C140Type.InterfaceName = ns[0];
-                    setting.C140Type.SoundLocation = int.Parse(ns[1]);
-                    setting.C140Type.BusID = int.Parse(ns[2]);
-                    setting.C140Type.SoundChip = int.Parse(ns[3]);
-                    setting.C140Type.Type = int.Parse(ns[4]);
+                    SetInterfaceInfo(setting.C140Type, n);
                 }
             }
             setting.C140Type.UseEmu = ucSI.rbC140P_Emu.Checked;
@@ -1326,12 +1234,7 @@ namespace mml2vgmIDE
                 {
                     string n = ucSI.cmbC140S_SCCI.SelectedItem.ToString();
                     n = n.Substring(0, n.IndexOf(")")).Substring(1);
-                    string[] ns = n.Split(':');
-                    setting.C140SType.InterfaceName = ns[0];
-                    setting.C140SType.SoundLocation = int.Parse(ns[1]);
-                    setting.C140SType.BusID = int.Parse(ns[2]);
-                    setting.C140SType.SoundChip = int.Parse(ns[3]);
-                    setting.C140SType.Type = int.Parse(ns[4]);
+                    SetInterfaceInfo(setting.C140SType, n);
                 }
             }
             setting.C140SType.UseEmu = ucSI.rbC140S_Emu.Checked;
@@ -1344,12 +1247,7 @@ namespace mml2vgmIDE
                 {
                     string n = ucSI.cmbSEGAPCMP_SCCI.SelectedItem.ToString();
                     n = n.Substring(0, n.IndexOf(")")).Substring(1);
-                    string[] ns = n.Split(':');
-                    setting.SEGAPCMType.InterfaceName = ns[0];
-                    setting.SEGAPCMType.SoundLocation = int.Parse(ns[1]);
-                    setting.SEGAPCMType.BusID = int.Parse(ns[2]);
-                    setting.SEGAPCMType.SoundChip = int.Parse(ns[3]);
-                    setting.SEGAPCMType.Type = int.Parse(ns[4]);
+                    SetInterfaceInfo(setting.SEGAPCMType, n);
                 }
             }
             setting.SEGAPCMType.UseEmu = ucSI.rbSEGAPCMP_Emu.Checked;
@@ -1362,12 +1260,7 @@ namespace mml2vgmIDE
                 {
                     string n = ucSI.cmbSEGAPCMS_SCCI.SelectedItem.ToString();
                     n = n.Substring(0, n.IndexOf(")")).Substring(1);
-                    string[] ns = n.Split(':');
-                    setting.SEGAPCMSType.InterfaceName = ns[0];
-                    setting.SEGAPCMSType.SoundLocation = int.Parse(ns[1]);
-                    setting.SEGAPCMSType.BusID = int.Parse(ns[2]);
-                    setting.SEGAPCMSType.SoundChip = int.Parse(ns[3]);
-                    setting.SEGAPCMSType.Type = int.Parse(ns[4]);
+                    SetInterfaceInfo(setting.SEGAPCMSType, n);
                 }
             }
             setting.SEGAPCMSType.UseEmu = ucSI.rbSEGAPCMS_Emu.Checked;
@@ -1657,6 +1550,28 @@ namespace mml2vgmIDE
 
             this.DialogResult = DialogResult.OK;
             this.Close();
+        }
+
+        private static void SetInterfaceInfo(Setting.ChipType ct, string n)
+        {
+            int v;
+            string[] ns = n.Split(':');
+            ct.InterfaceName = string.Join(":", ns, 0, ns.Length - 4);
+            if (!int.TryParse(ns[ns.Length - 4], out v)) v = 0; ct.SoundLocation = v;
+            if (!int.TryParse(ns[ns.Length - 3], out v)) v = 0; ct.BusID = v;
+            if (!int.TryParse(ns[ns.Length - 2], out v)) v = 0; ct.SoundChip = v;
+            if (!int.TryParse(ns[ns.Length - 1], out v)) v = 0; ct.Type = v;
+        }
+
+        private static void SetInterfaceInfo_2B(Setting.ChipType ct, string n)
+        {
+            int v;
+            string[] ns = n.Split(':');
+            ct.InterfaceName2B = string.Join(":", ns, 0, ns.Length - 4);
+            if (!int.TryParse(ns[ns.Length - 4], out v)) v = 0; ct.SoundLocation2B = v;
+            if (!int.TryParse(ns[ns.Length - 3], out v)) v = 0; ct.BusID2B = v;
+            if (!int.TryParse(ns[ns.Length - 2], out v)) v = 0; ct.SoundChip2B = v;
+            if (!int.TryParse(ns[ns.Length - 1], out v)) v = 0; ct.Type2B = v;
         }
 
         /// <summary>
