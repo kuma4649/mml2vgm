@@ -223,12 +223,12 @@ namespace Core
             int ob = (b & 0x0e00) >> 9;
             if (oa != ob)
             {
-                if ((a & 0x1ff) == FNumTbl[0][0])
+                if (((a - aPitchShift) & 0x1ff) == FNumTbl[0][0])
                 {
                     oa += Math.Sign(ob - oa);
                     a = (a & 0x1ff) * 2 + (oa << 9);
                 }
-                else if ((b & 0x1ff) == FNumTbl[0][0])
+                else if (((b - bPitchShift) & 0x1ff) == FNumTbl[0][0])
                 {
                     ob += Math.Sign(oa - ob);
                     b = (b & 0x1ff) * ((dir > 0) ? 2 : 1) + (ob << 9);

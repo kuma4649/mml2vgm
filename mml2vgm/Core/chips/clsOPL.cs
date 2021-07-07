@@ -595,12 +595,12 @@ namespace Core
             int ob = (b & 0x1c00) >> 10;
             if (oa != ob)
             {
-                if ((a & 0x3ff) == FNumTbl[0][0])
+                if (((a - aPitchShift) & 0x3ff) == FNumTbl[0][0])
                 {
                     oa += Math.Sign(ob - oa);
                     a = (a & 0x3ff) * 2 + (oa << 10);
                 }
-                else if ((b & 0x3ff) == FNumTbl[0][0])
+                else if (((b - bPitchShift) & 0x3ff) == FNumTbl[0][0])
                 {
                     ob += Math.Sign(oa - ob);
                     b = (b & 0x3ff) * ((dir > 0) ? 2 : 1) + (ob << 10);

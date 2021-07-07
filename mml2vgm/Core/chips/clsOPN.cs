@@ -1797,12 +1797,12 @@ namespace Core
             int ob = (b & 0xf000) / 0x1000;
             if (oa != ob)
             {
-                if ((a & 0xfff) == FNumTbl[0][0])
+                if (((a-aPitchShift) & 0xfff) == FNumTbl[0][0])
                 {
                     oa += Math.Sign(ob - oa);
                     a = (a & 0xfff) * 2 + oa * 0x1000;
                 }
-                else if ((b & 0xfff) == FNumTbl[0][0])
+                else if (((b-bPitchShift) & 0xfff) == FNumTbl[0][0])
                 {
                     ob += Math.Sign(oa - ob);
                     b = (b & 0xfff) * ((dir > 0) ? 2 : 1) + ob * 0x1000;
