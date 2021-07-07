@@ -700,9 +700,23 @@ namespace Core
 
         public override void CmdDetune(partPage page, MML mml)
         {
-            int n = (int)mml.args[0];
-            n = Common.CheckRange(n, -0x3ff, 0x3ff);
-            page.detune = n;
+            string cmd = (string)mml.args[0];
+            int n = (int)mml.args[1];
+
+            switch (cmd)
+            {
+                case "D":
+                    page.detune = n;
+                    break;
+                case "D>":
+                    page.detune += parent.info.octaveRev ? -n : n;
+                    break;
+                case "D<":
+                    page.detune += parent.info.octaveRev ? n : -n;
+                    break;
+            }
+
+            page.detune = Common.CheckRange(page.detune, -0x3ff, 0x3ff);
             SetDummyData(page, mml);
         }
 

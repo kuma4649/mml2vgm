@@ -1473,7 +1473,6 @@ namespace Core
         {
             string cmd = (string)mml.args[0];
             int n = (int)mml.args[1];
-            n = Common.CheckRange(n, -128, 128);
             switch (cmd)
             {
                 case "D":
@@ -1486,6 +1485,7 @@ namespace Core
                     page.detune += parent.info.octaveRev ? n : -n;
                     break;
             }
+            page.detune = Common.CheckRange(page.detune, -128, 128);
 
             SetDummyData(page, mml);
         }
