@@ -14,11 +14,13 @@ namespace Core
     {
 
         public int shift = 0;
+        public int pitchShift = 0;
         public bool tieSw = false;
 
         public bool bendSw = false;
         public char bendCmd = ' ';
         public int bendShift = 0;
+        public int bendPitchShift = 0;
         public List<MML> bendOctave;
 
         public bool tDblSw = false;

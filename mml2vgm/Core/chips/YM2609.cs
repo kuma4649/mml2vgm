@@ -538,7 +538,7 @@ namespace Core
             int arpNote = page.arpFreqMode ? 0 : page.arpDelta;
             int arpFreq = page.arpFreqMode ? page.arpDelta : 0;
 
-            int f = GetFmFNum(ftbl, page.octaveNow, page.noteCmd, page.shift + page.keyShift + page.toneDoublerKeyShift + arpNote);//
+            int f = GetFmFNum(ftbl, page.octaveNow, page.noteCmd, page.shift + page.keyShift + page.toneDoublerKeyShift + arpNote, page.pitchShift);//
             if (page.bendWaitCounter != -1)
             {
                 f = page.bendFnum;
@@ -678,15 +678,15 @@ namespace Core
             //Console.WriteLine("{0} {1} {2}",port[0],vch, page.pan);
         }
 
-        public override int GetFNum(partPage page, MML mml, int octave, char cmd, int shift)
+        public override int GetFNum(partPage page, MML mml, int octave, char cmd, int shift, int pitchShift)
         {
             if (page.Type == enmChannelType.FMOPN || page.Type == enmChannelType.FMOPNex)
             {
-                return GetFmFNum(FNumTbl[0], octave, cmd, shift);
+                return GetFmFNum(FNumTbl[0], octave, cmd, shift, pitchShift);
             }
             if (page.Type == enmChannelType.SSG)
             {
-                return GetSsgFNum(page, mml, octave, cmd, shift);
+                return GetSsgFNum(page, mml, octave, cmd, shift, pitchShift);
             }
             if (page.Type == enmChannelType.ADPCMA || page.Type == enmChannelType.ADPCMB)
             {
@@ -730,7 +730,7 @@ namespace Core
             }
             else
             {
-                f += GetSsgFNum(page, mml, page.octaveNow, page.noteCmd, page.shift + page.keyShift + arpNote);//
+                f += GetSsgFNum(page, mml, page.octaveNow, page.noteCmd, page.shift + page.keyShift + arpNote, page.pitchShift);//
             }
 
             f = Common.CheckRange(f, 0, 0xfff);

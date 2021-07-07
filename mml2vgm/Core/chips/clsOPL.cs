@@ -415,7 +415,7 @@ namespace Core
             int arpNote = page.arpFreqMode ? 0 : page.arpDelta;
             int arpFreq = page.arpFreqMode ? page.arpDelta : 0;
 
-            int f = GetFmFNum(ftbl, page.octaveNow, page.noteCmd, page.shift + page.keyShift + page.toneDoublerKeyShift + arpNote);//
+            int f = GetFmFNum(ftbl, page.octaveNow, page.noteCmd, page.shift + page.keyShift + page.toneDoublerKeyShift + arpNote, page.pitchShift);//
             if (page.bendWaitCounter != -1)
             {
                 f = page.bendFnum;
@@ -461,7 +461,7 @@ namespace Core
             OutFmSetFnum(page, o, f);
         }
 
-        public virtual int GetFmFNum(int[] ftbl, int octave, char noteCmd, int shift)
+        public virtual int GetFmFNum(int[] ftbl, int octave, char noteCmd, int shift, int pitchShift)
         {
             int o = octave;
             int n = Const.NOTE.IndexOf(noteCmd) + shift;
@@ -475,6 +475,7 @@ namespace Core
             }
 
             int f = ftbl[n];
+            f += pitchShift;
 
             return (f & 0x3ff) + ((o & 0x7) << 10);
         }
@@ -583,12 +584,12 @@ namespace Core
         }
 
         public override void GetFNumAtoB(partPage page, MML mml
-            , out int a, int aOctaveNow, char aCmd, int aShift
-            , out int b, int bOctaveNow, char bCmd, int bShift
+            , out int a, int aOctaveNow, char aCmd, int aShift, int aPitchShift
+            , out int b, int bOctaveNow, char bCmd, int bShift, int bPitchShift
             , int dir)
         {
-            a = GetFNum(page, mml, aOctaveNow, aCmd, aShift);
-            b = GetFNum(page, mml, bOctaveNow, bCmd, bShift);
+            a = GetFNum(page, mml, aOctaveNow, aCmd, aShift, aPitchShift);
+            b = GetFNum(page, mml, bOctaveNow, bCmd, bShift, bPitchShift);
 
             int oa = (a & 0x1c00) >> 10;
             int ob = (b & 0x1c00) >> 10;
@@ -612,10 +613,10 @@ namespace Core
             SetFmFNum(page, mml);
         }
 
-        public override int GetFNum(partPage page, MML mml, int octave, char cmd, int shift)
+        public override int GetFNum(partPage page, MML mml, int octave, char cmd, int shift, int pitchShift)
         {
             int[] ftbl = FNumTbl[0];
-            return GetFmFNum(ftbl, octave, cmd, shift);
+            return GetFmFNum(ftbl, octave, cmd, shift, pitchShift);
         }
 
         public override void SetVolume(partPage page, MML mml)

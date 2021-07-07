@@ -213,7 +213,7 @@ namespace Core
             }
             else
             {
-                f += GetSsgFNum(page, mml, page.octaveNow, page.noteCmd, page.shift + page.keyShift + arpNote);//
+                f += GetSsgFNum(page, mml, page.octaveNow, page.noteCmd, page.shift + page.keyShift + arpNote, page.pitchShift);//
             }
 
             f = Common.CheckRange(f, 0, 0xfff);
@@ -249,7 +249,7 @@ namespace Core
             }
         }
 
-        public int GetSsgFNum(partPage page, MML mml, int octave, char noteCmd, int shift)
+        public int GetSsgFNum(partPage page, MML mml, int octave, char noteCmd, int shift,int pitchShift)
         {
             int o = octave - 1;
             int n = Const.NOTE.IndexOf(noteCmd) + shift;
@@ -258,6 +258,7 @@ namespace Core
             n %= 12;
 
             int f = o * 12 + n;
+            f += pitchShift;
             if (f < 0) f = 0;
             if (f >= page.chip.FNumTbl[1].Length) f = page.chip.FNumTbl[1].Length - 1;
 
@@ -1671,7 +1672,7 @@ namespace Core
             int arpNote = page.arpFreqMode ? 0 : page.arpDelta;
             int arpFreq = page.arpFreqMode ? page.arpDelta : 0;
             int f;
-            f = GetFmFNum(ftbl, page.octaveNow, page.noteCmd, page.shift + page.keyShift + page.toneDoublerKeyShift + arpNote);//
+            f = GetFmFNum(ftbl, page.octaveNow, page.noteCmd, page.shift + page.keyShift + page.toneDoublerKeyShift + arpNote, page.pitchShift);//
             if (page.bendWaitCounter != -1)
             {
                 f = page.bendFnum;
@@ -1679,8 +1680,8 @@ namespace Core
             int o = (f & 0xf000) / 0x1000;
             f &= 0xfff;
 
-            f = f + page.detune;
-            f = f + arpFreq;
+            f += page.detune;
+            f += arpFreq;
             for (int lfo = 0; lfo < 4; lfo++)
             {
                 if (!page.lfo[lfo].sw)
@@ -1738,7 +1739,7 @@ namespace Core
             OutFmSetForcedFnum(page, mml, f);
         }
 
-        public int GetFmFNum(int[] ftbl, int octave, char noteCmd, int shift)
+        public int GetFmFNum(int[] ftbl, int octave, char noteCmd, int shift,int pitchShift)
         {
             int o = octave;
             int n = Const.NOTE.IndexOf(noteCmd) + shift;
@@ -1766,30 +1767,31 @@ namespace Core
             //}
 
             int f = ftbl[n];
+            f += pitchShift;
 
             return (f & 0xfff) + (o & 0xf) * 0x1000;
         }
 
-        public override int GetFNum(partPage page, MML mml, int octave, char cmd, int shift)
+        public override int GetFNum(partPage page, MML mml, int octave, char cmd, int shift, int pitchShift)
         {
             if (page.Type == enmChannelType.FMOPN || page.Type == enmChannelType.FMOPNex)
             {
-                return GetFmFNum(FNumTbl[0], octave, cmd, shift);
+                return GetFmFNum(FNumTbl[0], octave, cmd, shift, pitchShift);
             }
             if (page.Type == enmChannelType.SSG)
             {
-                return GetSsgFNum(page, mml, octave, cmd, shift);
+                return GetSsgFNum(page, mml, octave, cmd, shift, pitchShift);
             }
             return 0;
         }
 
         public override void GetFNumAtoB(partPage page, MML mml
-            , out int a, int aOctaveNow, char aCmd, int aShift
-            , out int b, int bOctaveNow, char bCmd, int bShift
+            , out int a, int aOctaveNow, char aCmd, int aShift, int aPitchShift
+            , out int b, int bOctaveNow, char bCmd, int bShift, int bPitchShift
             , int dir)
         {
-            a = GetFNum(page, mml, aOctaveNow, aCmd, aShift);
-            b = GetFNum(page, mml, bOctaveNow, bCmd, bShift);
+            a = GetFNum(page, mml, aOctaveNow, aCmd, aShift, aPitchShift);
+            b = GetFNum(page, mml, bOctaveNow, bCmd, bShift, bPitchShift);
 
             int oa = (a & 0xf000) / 0x1000;
             int ob = (b & 0xf000) / 0x1000;

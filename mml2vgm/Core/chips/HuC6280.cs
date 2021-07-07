@@ -219,12 +219,12 @@ namespace Core
             msgBox.setWrnMsg(msg.get("E12007"), new LinePos(null,"-"));
         }
 
-        public override int GetFNum(partPage page, MML mml, int octave, char cmd, int shift)
+        public override int GetFNum(partPage page, MML mml, int octave, char cmd, int shift, int pitchShift)
         {
-            return GetHuC6280Freq(octave, cmd, shift);
+            return GetHuC6280Freq(octave, cmd, shift, pitchShift);
         }
 
-        private int GetHuC6280Freq(int octave, char noteCmd, int shift)
+        private int GetHuC6280Freq(int octave, char noteCmd, int shift, int pitchShift)
         {
             int o = octave - 1;
             int n = Const.NOTE.IndexOf(noteCmd) + shift;
@@ -233,6 +233,7 @@ namespace Core
             n %= 12;
 
             int f = o * 12 + n;
+            f += pitchShift;
             if (f < 0) f = 0;
             if (f >= FNumTbl[0].Length) f = FNumTbl[0].Length - 1;
 
@@ -591,7 +592,7 @@ namespace Core
 
             int arpNote = page.arpFreqMode ? 0 : page.arpDelta;
             int arpFreq = page.arpFreqMode ? page.arpDelta : 0;
-            int f = GetHuC6280Freq(page.octaveNow, page.noteCmd, page.keyShift + page.shift + arpNote);//
+            int f = GetHuC6280Freq(page.octaveNow, page.noteCmd, page.keyShift + page.shift + arpNote, page.pitchShift);//
 
             if (page.bendWaitCounter != -1)
             {

@@ -405,6 +405,11 @@ namespace Core
         public int shift = 0;
 
         /// <summary>
+        /// 音程をずらす量(fnum)
+        /// </summary>
+        public int pitchShift = 0;
+
+        /// <summary>
         /// PCMの音程
         /// </summary>
         public int pcmNote = 0;
@@ -530,6 +535,11 @@ namespace Core
         /// ベンド中に音程をずらす量
         /// </summary>
         public int bendShift = 0;
+
+        /// <summary>
+        /// ベンド中に音程をずらす量(fnum)
+        /// </summary>
+        public int bendPitchShift = 0;
 
         /// <summary>
         /// スロットごとのディチューン値

@@ -377,10 +377,12 @@ namespace Core
                         , page.octaveNow
                         , note.cmd
                         , note.shift + (i + 0) * Math.Sign(delta) + page.keyShift + page.toneDoublerKeyShift + arpNote
+                        , (int)(note.pitchShift + (note.bendPitchShift - note.pitchShift) / (float)delta * (i + 0))
                         , out int b
                         , page.octaveNow
                         , note.cmd
                         , note.shift + (i + 1) * Math.Sign(delta) + page.keyShift + page.toneDoublerKeyShift + arpNote
+                        , (int)(note.pitchShift + (note.bendPitchShift - note.pitchShift) / (float)delta * (i + 1))
                         , delta
                         );
 
@@ -580,18 +582,18 @@ namespace Core
         }
 
 
-        public virtual int GetFNum(partPage page, MML mml, int octave, char cmd, int shift)
+        public virtual int GetFNum(partPage page, MML mml, int octave, char cmd, int shift, int pitchShift)
         {
             throw new NotImplementedException("継承先で要実装");
         }
 
         public virtual void GetFNumAtoB(partPage page, MML mml
-            , out int a, int aOctaveNow, char aCmd, int aShift
-            , out int b, int bOctaveNow, char bCmd, int bShift
+            , out int a, int aOctaveNow, char aCmd, int aShift, int aPitchShift
+            , out int b, int bOctaveNow, char bCmd, int bShift, int bPitchShift
             , int dir)
         {
-            a = GetFNum(page, mml, aOctaveNow, aCmd, aShift);
-            b = GetFNum(page, mml, bOctaveNow, bCmd, bShift);
+            a = GetFNum(page, mml, aOctaveNow, aCmd, aShift, aPitchShift);
+            b = GetFNum(page, mml, bOctaveNow, bCmd, bShift, bPitchShift);
         }
 
         public virtual void SetFNum(partPage page, MML mml)
@@ -1469,9 +1471,22 @@ namespace Core
 
         public virtual void CmdDetune(partPage page, MML mml)
         {
-            int n = (int)mml.args[0];
+            string cmd = (string)mml.args[0];
+            int n = (int)mml.args[1];
             n = Common.CheckRange(n, -128, 128);
-            page.detune = n;
+            switch (cmd)
+            {
+                case "D":
+                    page.detune = n;
+                    break;
+                case "D>":
+                    page.detune += parent.info.octaveRev ? -n : n;
+                    break;
+                case "D<":
+                    page.detune += parent.info.octaveRev ? n : -n;
+                    break;
+            }
+
             SetDummyData(page, mml);
         }
 
@@ -1834,6 +1849,7 @@ namespace Core
             page.octaveNow = page.octaveNew;
             page.noteCmd = note.cmd;
             page.shift = note.shift;
+            page.pitchShift = note.pitchShift;
             page.tie = note.tieSw;
 
             //Tone Doubler
@@ -1857,6 +1873,7 @@ namespace Core
                 page.octaveNow = page.bendOctave;//
                 page.noteCmd = page.bendNote;
                 page.shift = page.bendShift;
+                page.pitchShift = 0;//ベンド時は開始時のピッチシフトと到達時のピッチシフトが異なるためfnum計算時にそれを含めている。よってここでは0に設定する
             }
 
             //gateTimeの決定

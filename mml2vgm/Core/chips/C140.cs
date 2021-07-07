@@ -455,7 +455,7 @@ namespace Core
         }
         //Encoder code ここまで
 
-        public int GetC140FNum(MML mml, partPage page, int octave, char noteCmd, int shift)
+        public int GetC140FNum(MML mml, partPage page, int octave, char noteCmd, int shift, int pitchShift)
         {
             try
             {
@@ -483,7 +483,7 @@ namespace Core
                         * Const.pcmMTbl[n]
                         * Math.Pow(2, (o - 3))
                         * ((double)parent.instPCM[page.instrument].Item2.samplerate / 8000.0)
-                        ));
+                        ) + pitchShift);
                 }
                 else
                 {
@@ -500,7 +500,7 @@ namespace Core
                         * Const.pcmMTbl[n]
                         * Math.Pow(2, (o - 3))
                         * ((double)parent.instPCM[page.instrument].Item2.freq / 8000.0)
-                        ));
+                        ) + pitchShift);
                 }
 
             }
@@ -661,7 +661,7 @@ namespace Core
             int arpNote = page.arpFreqMode ? 0 : page.arpDelta;
             int arpFreq = page.arpFreqMode ? page.arpDelta : 0;
 
-            int f = GetC140FNum(mml, page, page.octaveNow, page.noteCmd, page.shift + page.keyShift + arpNote);//
+            int f = GetC140FNum(mml, page, page.octaveNow, page.noteCmd, page.shift + page.keyShift + arpNote, page.pitchShift);//
             if (page.bendWaitCounter != -1)
             {
                 f = page.bendFnum;
@@ -706,9 +706,9 @@ namespace Core
 
         }
 
-        public override int GetFNum(partPage page, MML mml, int octave, char cmd, int shift)
+        public override int GetFNum(partPage page, MML mml, int octave, char cmd, int shift, int pitchShift)
         {
-            return GetC140FNum(mml, page, octave, cmd, shift);
+            return GetC140FNum(mml, page, octave, cmd, shift, pitchShift);
         }
 
         public override void SetKeyOn(partPage page, MML mml)

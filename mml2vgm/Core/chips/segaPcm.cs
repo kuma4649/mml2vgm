@@ -105,7 +105,7 @@ namespace Core
         }
 
 
-        public int GetSegaPcmFNum(int octave, char noteCmd, int shift)
+        public int GetSegaPcmFNum(int octave, char noteCmd, int shift, int pitchShift)
         {
             int o = octave - 1;
             int n = Const.NOTE.IndexOf(noteCmd) + shift;
@@ -131,7 +131,7 @@ namespace Core
             //    if (n < 0) { n += 12; }
             //}
 
-            return ((int)(64 * Const.pcmMTbl[n] * Math.Pow(2, (o - 3))) + 1);
+            return ((int)(64 * Const.pcmMTbl[n] * Math.Pow(2, (o - 3))) + 1) + pitchShift;
         }
 
         public void OutSegaPcmKeyOff(MML mml, partPage page)
@@ -363,7 +363,7 @@ namespace Core
             int arpNote = page.arpFreqMode ? 0 : page.arpDelta;
             int arpFreq = page.arpFreqMode ? page.arpDelta : 0;
 
-            int f = GetSegaPcmFNum(page.octaveNow, page.noteCmd, page.shift + page.keyShift + arpNote);//
+            int f = GetSegaPcmFNum(page.octaveNow, page.noteCmd, page.shift + page.keyShift + arpNote, page.pitchShift);//
             if (page.bendWaitCounter != -1)
             {
                 f = page.bendFnum;
@@ -453,9 +453,9 @@ namespace Core
             }
         }
 
-        public override int GetFNum(partPage page, MML mml, int octave, char cmd, int shift)
+        public override int GetFNum(partPage page, MML mml, int octave, char cmd, int shift, int pitchShift)
         {
-            return GetSegaPcmFNum(octave, cmd, shift);
+            return GetSegaPcmFNum(octave, cmd, shift, pitchShift);
         }
 
         public override void SetKeyOn(partPage page, MML mml)

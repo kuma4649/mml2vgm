@@ -471,7 +471,7 @@ namespace Core
             int arpNote = page.arpFreqMode ? 0 : page.arpDelta;
             int arpFreq = page.arpFreqMode ? page.arpDelta : 0;
 
-            int f = GetFNum(page, mml, page.octaveNow, page.noteCmd, page.shift + page.keyShift + page.toneDoublerKeyShift + arpNote);//
+            int f = GetFNum(page, mml, page.octaveNow, page.noteCmd, page.shift + page.keyShift + page.toneDoublerKeyShift + arpNote, page.pitchShift);//
 
             if (page.bendWaitCounter != -1)
             {
@@ -501,7 +501,7 @@ namespace Core
             OutSetFnum(mml, page, oct, note, kf);
         }
 
-        public override int GetFNum(partPage page, MML mml, int octave, char noteCmd, int shift)
+        public override int GetFNum(partPage page, MML mml, int octave, char noteCmd, int shift, int pitchShift)
         {
             int o = octave;
             int n = Const.NOTE.IndexOf(noteCmd) + shift - 1;
@@ -536,7 +536,7 @@ namespace Core
             //}
             o--;
 
-            return n * 64 + o * 12 * 64;
+            return n * 64 + o * 12 * 64 + pitchShift;
         }
 
         public override void SetVolume(partPage page, MML mml)

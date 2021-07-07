@@ -235,6 +235,7 @@ E05072=Unknown command ('HST?') defined.
 E05073=Unknown command ('PRV?') defined.
 E05074=Unknown command ('FM?') defined.
 E05075=Unknown command ('PC?') defined.
+E05076=Illegal number defined as '\' configuration.
 
 
 ;partWork.cs 06000

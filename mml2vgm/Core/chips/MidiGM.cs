@@ -505,10 +505,10 @@ namespace Core
         {
         }
 
-        public override int GetFNum(partPage page, MML mml, int octave, char cmd, int shift)
+        public override int GetFNum(partPage page, MML mml, int octave, char cmd, int shift, int pitchShift)
         {
             int n = (octave * 12 + Const.NOTE.IndexOf(cmd) + shift) - (page.bendStartOctave * 12 + Const.NOTE.IndexOf(page.bendStartNote) + page.bendStartShift);
-            return 8192 / 24 * n;
+            return 8192 / 24 * n + pitchShift;
         }
 
         private void ResetPitchBend(partPage page, MML mml)

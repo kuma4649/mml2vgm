@@ -430,7 +430,7 @@ namespace Core
             int arpNote = page.arpFreqMode ? 0 : page.arpDelta;
             int arpFreq = page.arpFreqMode ? page.arpDelta : 0;
 
-            int f = GetQSoundFNum(mml, page, page.octaveNow, page.noteCmd, page.shift + page.keyShift + arpNote);//
+            int f = GetQSoundFNum(mml, page, page.octaveNow, page.noteCmd, page.shift + page.keyShift + arpNote, page.pitchShift);//
             if (page.bendWaitCounter != -1)
             {
                 f = page.bendFnum;
@@ -469,12 +469,12 @@ namespace Core
 
         }
 
-        public override int GetFNum(partPage page, MML mml, int octave, char cmd, int shift)
+        public override int GetFNum(partPage page, MML mml, int octave, char cmd, int shift, int pitchShift)
         {
-            return GetQSoundFNum(mml, page, octave, cmd, shift);
+            return GetQSoundFNum(mml, page, octave, cmd, shift, pitchShift);
         }
 
-        public int GetQSoundFNum(MML mml, partPage page, int octave, char noteCmd, int shift)
+        public int GetQSoundFNum(MML mml, partPage page, int octave, char noteCmd, int shift, int pitchShift)
         {
             try
             {
@@ -507,7 +507,7 @@ namespace Core
                     * (freq / 8000.0)
                     / Frequency
                     * 166.0 //div
-                    );
+                    ) + pitchShift;
 
             }
             catch

@@ -182,7 +182,7 @@ namespace Core
         }
 
 
-        public int GetDcsgFNum(int octave, char noteCmd, int shift)
+        public int GetDcsgFNum(int octave, char noteCmd, int shift, int pitchShift)
         {
             int o = octave - 1;
             int n = Const.NOTE.IndexOf(noteCmd) + shift;
@@ -194,7 +194,7 @@ namespace Core
             if (f < 0) f = 0;
             if (f >= FNumTbl[0].Length) f = FNumTbl[0].Length - 1;
 
-            return FNumTbl[0][f];
+            return FNumTbl[0][f] + pitchShift;
         }
 
         public void OutGGPsgStereoPort(partPage page, MML mml, byte[] cmd, byte data)
@@ -430,7 +430,7 @@ namespace Core
                 }
                 else
                 {
-                    f += GetDcsgFNum(page.octaveNow, page.noteCmd, page.shift + page.keyShift + arpNote);//
+                    f += GetDcsgFNum(page.octaveNow, page.noteCmd, page.shift + page.keyShift + arpNote, page.pitchShift);//
                 }
 
                 f = Common.CheckRange(f, 0, 0x3ff);
@@ -466,9 +466,9 @@ namespace Core
             }
         }
 
-        public override int GetFNum(partPage page, MML mml, int octave, char cmd, int shift)
+        public override int GetFNum(partPage page, MML mml, int octave, char cmd, int shift, int pitchShift)
         {
-            return GetDcsgFNum(octave, cmd, shift);
+            return GetDcsgFNum(octave, cmd, shift, pitchShift);
         }
 
         public override void SetVolume(partPage page, MML mml)

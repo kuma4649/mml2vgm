@@ -442,7 +442,7 @@ namespace Core
         }
 
 
-        public int GetK053260FNum(MML mml, partPage page, int octave, char noteCmd, int shift)
+        public int GetK053260FNum(MML mml, partPage page, int octave, char noteCmd, int shift, int pitchShift)
         {
             try
             {
@@ -474,7 +474,7 @@ namespace Core
                     currentBaseFreq = freq;
                 }
 
-                return n2f[(o + 1) * 12 + n];//0xe41;
+                return n2f[(o + 1) * 12 + n] + pitchShift;//0xe41;
 
             }
             catch
@@ -488,7 +488,7 @@ namespace Core
             int arpNote = page.arpFreqMode ? 0 : page.arpDelta;
             int arpFreq = page.arpFreqMode ? page.arpDelta : 0;
 
-            int f = GetK053260FNum(mml, page, page.octaveNow, page.noteCmd, page.shift + page.keyShift + arpNote);//
+            int f = GetK053260FNum(mml, page, page.octaveNow, page.noteCmd, page.shift + page.keyShift + arpNote, page.pitchShift);//
             if (page.bendWaitCounter != -1)
             {
                 f = page.bendFnum;
@@ -531,9 +531,9 @@ namespace Core
 
         }
 
-        public override int GetFNum(partPage page, MML mml, int octave, char cmd, int shift)
+        public override int GetFNum(partPage page, MML mml, int octave, char cmd, int shift, int pitchShift)
         {
-            return GetK053260FNum(mml, page, octave, cmd, shift);
+            return GetK053260FNum(mml, page, octave, cmd, shift, pitchShift);
         }
 
         public override void SetKeyOn(partPage page, MML mml)

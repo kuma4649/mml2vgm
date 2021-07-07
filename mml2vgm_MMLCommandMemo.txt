@@ -738,6 +738,8 @@ on              ---o-----------------------------------------------  オクタ�
 on              ---------------------------o-o---------------------  オクターブ絶対指定(2 - 5)(実際に発音される音は可能な音域のみ)
 on              -------------------------------------------oo------  オクターブ絶対指定(1 - 16)(実際に発音される音は可能な音域のみ)
 Dn              -ooo-ooooo-oooo-oooo-oooooooooooo-o-o-oo-o-oooooooo  ディチューン (範囲未チェック)絶対指定のみ
+D>n             -ooo-ooooo-oooo-oooo-oooooooooooo-o-o-oo-o-oooooooo  ディチューン (範囲未チェック)相対指定
+D<n             -ooo-ooooo-oooo-oooo-oooooooooooo-o-o-oo-o-oooooooo  ディチューン (範囲未チェック)相対指定
 vn              ----------------------------------------------o----  音量絶対指定(Q         : 0 - 65535)
 vn              ------------------------------o--------------------  音量絶対指定(G         : 0 -   256)
 vn              ------o----o----o----oo---------------o------------  音量絶対指定(R/Tb/Pp/Bp: 0 -   255)
@@ -941,6 +943,7 @@ Tn              ooooooooooooooooooooooooooooooooooooooooooooooooooo  テンポ(1
 !               ooooooooooooooooooooooooooooooooooooooooooooooooooo  このパートのこれ以降をコンパイルしない(発音しない)
 !!              ooooooooooooooooooooooooooooooooooooooooooooooooooo  コンパイルを打ち切る
 Kn              -ooo-ooooo-oooo-oooo-oooooooooooo-o-o-oo-o-oooooooo  移調絶対指定 ( -12 - +12 )
+KKn             -ooo-ooooo-oooo-oooo-oooooooooooo-o-o-oo-o-oooooooo  移調相対指定 ( -12 - +12 )
 An              ------o--------------------o-oo---------------oo---  PCMの再生開始位置を停止方向へnbyteずらす。
                                                                       (最小：再生開始位置　最大：停止位置-1byte)
 A+n             ------o--------------------o-oo---------------oo---  Aの相対指定版。開始位置を停止方向へ現在の値からnbyteずらす。
@@ -980,6 +983,7 @@ b               -oooooooooooooooooooooooooooooooooooooooooooooooooo  音符シ
 x               -oooooooooooooooooooooooooooooooooooooooooooooooooo  音符x(直前と同じノートを意味します)
     +           -oooooooooooooooooooooooooooooooooooooooooooooooooo  半音上げる
     -           -oooooooooooooooooooooooooooooooooooooooooooooooooo  半音下げる
+    \n\         -oooooooooooooooooooooooooooooooooooooooooooooooooo  ピッチシフト
     n           -oooooooooooooooooooooooooooooooooooooooooooooooooo  音長(FMのみ0を指定するとToneDoublerモードになる)
     #n          -oooooooooooooooooooooooooooooooooooooooooooooooooo  クロック指定音長(FMのみ0を指定するとToneDoublerモードになる)
     .           -oooooooooooooooooooooooooooooooooooooooooooooooooo  符点
@@ -997,6 +1001,7 @@ x               -oooooooooooooooooooooooooooooooooooooooooooooooooo  音符x(直
     ^#n         ooooooooooooooooooooooooooooooooooooooooooooooooooo  タイ(#n:  クロック指定音長 音長分だけ発音を延長。)
     ~n          ooooooooooooooooooooooooooooooooooooooooooooooooooo  タイの逆(n: 音長 音長分だけ発音を削る。)
     ~#n         ooooooooooooooooooooooooooooooooooooooooooooooooooo  タイの逆(#n:  クロック指定音長 音長分だけ発音を削る。)
+    ,n          ooooooooooooooooooooooooooooooooooooooooooooooooooo  ベロシティ(n:0-)
     ,           -oo----oo---oo---oo----oo-o------------------------  Tone Doublerモード
                                                                      音符指定の後に0或いは,を指定するとTone Doublerモードになる。
                                                                      この時指定した音符をAとする。

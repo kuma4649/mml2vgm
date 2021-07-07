@@ -910,14 +910,32 @@ namespace Core
             {
                 //Detune 
 
+                mml.type = enmMMLType.Detune;
+                mml.args = new List<object>();
+
+                pw.skipTabSpace(page);
+
+                if (pw.getChar(page) == '>')//D> command
+                {
+                    mml.args.Add("D>");
+                    pw.incPos(page);
+                }
+                else if (pw.getChar(page) == '<')//D< command
+                {
+                    mml.args.Add("D<");
+                    pw.incPos(page);
+                }
+                else
+                {
+                    mml.args.Add("D");
+                }
+
                 if (!pw.getNum(page, out n))
                 {
                     msgBox.setErrMsg(msg.get("E05011"), mml.line.Lp);
                     n = 0;
                 }
 
-                mml.type = enmMMLType.Detune;
-                mml.args = new List<object>();
                 mml.args.Add(n);
             }
         }
@@ -2827,7 +2845,31 @@ namespace Core
 
             int n;// = -1;
             bool directFlg;// = false;
-            int col;// = 0;
+            int col = 0;
+
+            mml.line.Lp.length += pw.skipTabSpace(page);
+
+            //ピッチシフトの解析
+            int pitchShift = 0;
+            if (pw.getChar(page) == '\\')
+            {
+                pw.incPos(page);
+                mml.line.Lp.length++;
+
+                if (!pw.getNum(page, out pitchShift,ref col))
+                {
+                    msgBox.setErrMsg(msg.get("E05076"), mml.line.Lp);
+                }
+                mml.line.Lp.length += col;
+
+                if (pw.getChar(page) == '\\')
+                {
+                    pw.incPos(page);
+                    mml.line.Lp.length++;
+                }
+
+            }
+            note.pitchShift = pitchShift;
 
             //数値の解析
             if (pw.getNumNoteLength(page, out n, out directFlg, out col))
@@ -2863,8 +2905,7 @@ namespace Core
 
                 //数値未指定の場合はlコマンドでの設定値を使用する
                 note.length = (int)page.length;
-
-                pw.skipTabSpace(page);
+                mml.line.Lp.length += pw.skipTabSpace(page);
 
             }
 
@@ -2941,7 +2982,7 @@ namespace Core
                 }
                 else
                 {
-                    note.velocity = Common.CheckRange(n, 0, 127);
+                    note.velocity = Common.CheckRange(n, 0, 65535);
                 }
             }
 
@@ -3523,6 +3564,7 @@ namespace Core
 
             note.bendCmd = bendNote.cmd;
             note.bendShift = bendNote.shift;
+            note.bendPitchShift = bendNote.pitchShift;
             //note.length = bendNote.length;
             //note.futen = bendNote.futen;
             note.bendOctave = bendMML;

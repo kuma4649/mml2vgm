@@ -202,7 +202,7 @@ namespace Core
         }
 
 
-        private int GetRf5c164PcmNote(partPage page, int octave, char noteCmd, int shift)
+        private int GetRf5c164PcmNote(partPage page, int octave, char noteCmd, int shift, int pitchShift)
         {
             int o = octave;
             int n = Const.NOTE.IndexOf(noteCmd) + shift;
@@ -227,7 +227,7 @@ namespace Core
                     * Const.pcmMTbl[n]
                     * Math.Pow(2, (o - 4))
                     * ((double)parent.instPCM[page.instrument].Item2.samplerate / 8000.0)
-                    ));
+                    ) + pitchShift);
             }
             else
             {
@@ -236,7 +236,7 @@ namespace Core
                     * Const.pcmMTbl[n]
                     * Math.Pow(2, (o - 4))
                     * ((double)parent.instPCM[page.instrument].Item2.freq / 8000.0)
-                    ));
+                    ) + pitchShift);
             }
 
         }
@@ -519,9 +519,9 @@ namespace Core
             }
         }
 
-        public override int GetFNum(partPage page, MML mml, int octave, char cmd, int shift)
+        public override int GetFNum(partPage page, MML mml, int octave, char cmd, int shift, int pitchShift)
         {
-            return GetRf5c164PcmNote(page, octave, cmd, shift);
+            return GetRf5c164PcmNote(page, octave, cmd, shift, pitchShift);
         }
 
         public override void SetFNum(partPage page, MML mml)
@@ -529,7 +529,7 @@ namespace Core
             int arpNote = page.arpFreqMode ? 0 : page.arpDelta;
             int arpFreq = page.arpFreqMode ? page.arpDelta : 0;
 
-            int f = GetFNum(page, mml, page.octaveNow, page.noteCmd, page.keyShift + page.shift + arpNote);//
+            int f = GetFNum(page, mml, page.octaveNow, page.noteCmd, page.keyShift + page.shift + arpNote, page.pitchShift);//
 
             if (page.bendWaitCounter != -1)
             {
