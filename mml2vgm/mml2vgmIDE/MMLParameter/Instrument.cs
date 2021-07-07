@@ -228,8 +228,21 @@ namespace mml2vgmIDE.MMLParameter
         protected virtual void SetDetune(outDatum od, int ch, int cc)
         {
             if (ch >= detune.Length) return;
-            int n = (int)od.args[0];
-            detune[ch] = n;
+            string cmd = (string)od.args[0];
+            int n = (int)od.args[1];
+
+            switch (cmd)
+            {
+                case "D":
+                    detune[ch] = n;
+                    break;
+                case "D>":
+                    detune[ch] += n;
+                    break;
+                case "D<":
+                    detune[ch] -= n;
+                    break;
+            }
         }
 
         protected virtual void SetGatetime(outDatum od, int ch, int cc)
