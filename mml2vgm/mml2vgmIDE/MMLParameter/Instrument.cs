@@ -119,7 +119,7 @@ namespace mml2vgmIDE.MMLParameter
         {
         }
 
-        public void SetParameter(outDatum od, int cc)
+        public void SetParameter(outDatum od, int cc, bool traceSkip = false)
         {
             if (od == null || od.args == null || od.args.Count < 1)
                 return;
@@ -127,7 +127,7 @@ namespace mml2vgmIDE.MMLParameter
             int ch = ShapingCh(od);
             //if (Audio.isInitialPhase()) return;
 
-            if (isTrace)
+            if (isTrace && !traceSkip)
             {
                 if (ch < TraceInfo.Length)
                 {

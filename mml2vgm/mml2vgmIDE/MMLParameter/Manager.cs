@@ -39,8 +39,8 @@ namespace mml2vgmIDE.MMLParameter
         public List<Instrument> YMF278B = new List<Instrument>();
         public Dictionary<string, Dictionary<int, Dictionary<int, Instrument>>> Insts;
 
-        private Dictionary<string, Dictionary<int, Dictionary<int, Action<outDatum, int>>>> dicInst
-            = new Dictionary<string, Dictionary<int, Dictionary<int, Action<outDatum, int>>>>();
+        private Dictionary<string, Dictionary<int, Dictionary<int, Action<outDatum, int, bool>>>> dicInst
+            = new Dictionary<string, Dictionary<int, Dictionary<int, Action<outDatum, int, bool>>>>();
         private bool isTrace = false;
         private EnmMmlFileFormat mmlFileFormat = EnmMmlFileFormat.GWI;
         public Setting setting { get; internal set; }
@@ -91,21 +91,15 @@ namespace mml2vgmIDE.MMLParameter
             {
                 if (Type != EnmDataType.Block) return true;
                 if (!(ExData is PackData[])) return true;
-                foreach(var o in (PackData[])ExData)
+                foreach (var o in (PackData[])ExData)
                 {
                     if (o.od == null) continue;
-                    SetMMLParameter(ref o.od, ref Counter, ref Chip, ref o.Type, ref Address, ref Data, ref o.ExData);
+                    SetMMLParameter2(ref o.od, ref Counter, ref Chip, ref o.Type, ref Address, ref Data, ref o.ExData, true);
                 }
                 return true;
             }
 
-            if (od.type == enmMMLType.unknown || od.linePos == null)
-            {
-#if DEBUG
-                //log.Write(string.Format("Manager.cs:SetMMLParameter: {0}", od.type));
-#endif
-                return true;
-            }
+            if (od.type == enmMMLType.unknown || od.linePos == null) return true;
             if (Audio.chipRegister == null) return true;
 
             if (!dicInst.ContainsKey(od.linePos.chip)
@@ -113,108 +107,146 @@ namespace mml2vgmIDE.MMLParameter
                 || !dicInst[od.linePos.chip][od.linePos.chipIndex].ContainsKey(od.linePos.chipNumber))
             {
                 //int chipIndex;
-                switch (od.linePos.chip)
-                {
-                    case "AY8910":
-                        SetupAY8910(od);
-                        break;
-                    case "C140":
-                        SetupC140(od);
-                        break;
-                    case "C352":
-                        SetupC352(od);
-                        break;
-                    case "DMG":
-                        SetupDMG(od);
-                        break;
-                    case "CONDUCTOR":
-                        SetupConductor(od);
-                        break;
-                    case "HuC6280":
-                        SetupHuC6280(od);
-                        break;
-                    case "K051649":
-                        SetupK051649(od);
-                        break;
-                    case "K053260":
-                        SetupK053260(od);
-                        break;
-                    case "NES":
-                        SetupNES(od);
-                        break;
-                    case "QSound":
-                        SetupQSound(od);
-                        break;
-                    case "RF5C164":
-                        SetupRF5C164(od);
-                        break;
-                    case "SEGAPCM":
-                        SetupSEGAPCM(od);
-                        break;
-                    case "SN76489":
-                        SetupSN76489(od);
-                        break;
-                    case "YM2151":
-                        SetupYM2151(od);
-                        break;
-                    case "YM2203":
-                        SetupYM2203(od);
-                        break;
-                    case "YM2413":
-                        SetupYM2413(od);
-                        break;
-                    case "YM3526":
-                        SetupYM3526(od);
-                        break;
-                    case "Y8950":
-                        SetupY8950(od);
-                        break;
-                    case "YM3812":
-                        SetupYM3812(od);
-                        break;
-                    case "YMF262":
-                        SetupYMF262(od);
-                        break;
-                    case "YMF278B":
-                        SetupYMF278B(od);
-                        break;
-                    case "YMF271":
-                        SetupYMF271(od);
-                        break;
-                    case "YM2608":
-                        SetupYM2608(od);
-                        break;
-                    case "YM2609":
-                        SetupYM2609(od);
-                        break;
-                    case "YM2610B":
-                        SetupYM2610B(od);
-                        break;
-                    case "YM2612":
-                        SetupYM2612(od);
-                        break;
-                    case "YM2612X":
-                        SetupYM2612X(od);
-                        break;
-                    case "GeneralMIDI":
-                        SetupGeneralMIDI(od);
-                        break;
-                    case "PPZ8":
-                        SetupPPZ8(od);
-                        break;
-                    default:
-                        Console.WriteLine("Warning Unknown Chip {0}", od.linePos.chip);
-                        break;
-                }
+                SetupInstrument(od);
             }
 
             int cc = Audio.sm != null ? Audio.sm.CurrentClockCount : 0;
-            dicInst[od.linePos.chip][od.linePos.chipIndex][od.linePos.chipNumber](od, cc);
+            dicInst[od.linePos.chip][od.linePos.chipIndex][od.linePos.chipNumber](od, cc, false);
 #if DEBUG
             //log.Write(string.Format("MML Param  Chip:[{0}] Type:[{1}]",od.linePos.chip,od.type));
 #endif
             return true;
         }
+
+        public bool SetMMLParameter2(ref outDatum od, ref long Counter, ref Chip Chip, ref EnmDataType Type, ref int Address, ref int Data, ref object ExData, bool traceSkip)
+        {
+            if (od == null)
+            {
+                if (Type != EnmDataType.Block) return true;
+                if (!(ExData is PackData[])) return true;
+                foreach (var o in (PackData[])ExData)
+                {
+                    if (o.od == null) continue;
+                    SetMMLParameter2(ref o.od, ref Counter, ref Chip, ref o.Type, ref Address, ref Data, ref o.ExData, true);
+                }
+                return true;
+            }
+
+            if (od.type == enmMMLType.unknown || od.linePos == null) return true;
+            if (Audio.chipRegister == null) return true;
+
+            if (!dicInst.ContainsKey(od.linePos.chip)
+                || !dicInst[od.linePos.chip].ContainsKey(od.linePos.chipIndex)
+                || !dicInst[od.linePos.chip][od.linePos.chipIndex].ContainsKey(od.linePos.chipNumber))
+            {
+                SetupInstrument(od);
+            }
+
+            int cc = Audio.sm != null ? Audio.sm.CurrentClockCount : 0;
+            dicInst[od.linePos.chip][od.linePos.chipIndex][od.linePos.chipNumber](od, cc, traceSkip);
+#if DEBUG
+            //log.Write(string.Format("MML Param  Chip:[{0}] Type:[{1}]",od.linePos.chip,od.type));
+#endif
+            return true;
+        }
+
+        private void SetupInstrument(outDatum od)
+        {
+            switch (od.linePos.chip)
+            {
+                case "AY8910":
+                    SetupAY8910(od);
+                    break;
+                case "C140":
+                    SetupC140(od);
+                    break;
+                case "C352":
+                    SetupC352(od);
+                    break;
+                case "DMG":
+                    SetupDMG(od);
+                    break;
+                case "CONDUCTOR":
+                    SetupConductor(od);
+                    break;
+                case "HuC6280":
+                    SetupHuC6280(od);
+                    break;
+                case "K051649":
+                    SetupK051649(od);
+                    break;
+                case "K053260":
+                    SetupK053260(od);
+                    break;
+                case "NES":
+                    SetupNES(od);
+                    break;
+                case "QSound":
+                    SetupQSound(od);
+                    break;
+                case "RF5C164":
+                    SetupRF5C164(od);
+                    break;
+                case "SEGAPCM":
+                    SetupSEGAPCM(od);
+                    break;
+                case "SN76489":
+                    SetupSN76489(od);
+                    break;
+                case "YM2151":
+                    SetupYM2151(od);
+                    break;
+                case "YM2203":
+                    SetupYM2203(od);
+                    break;
+                case "YM2413":
+                    SetupYM2413(od);
+                    break;
+                case "YM3526":
+                    SetupYM3526(od);
+                    break;
+                case "Y8950":
+                    SetupY8950(od);
+                    break;
+                case "YM3812":
+                    SetupYM3812(od);
+                    break;
+                case "YMF262":
+                    SetupYMF262(od);
+                    break;
+                case "YMF278B":
+                    SetupYMF278B(od);
+                    break;
+                case "YMF271":
+                    SetupYMF271(od);
+                    break;
+                case "YM2608":
+                    SetupYM2608(od);
+                    break;
+                case "YM2609":
+                    SetupYM2609(od);
+                    break;
+                case "YM2610B":
+                    SetupYM2610B(od);
+                    break;
+                case "YM2612":
+                    SetupYM2612(od);
+                    break;
+                case "YM2612X":
+                    SetupYM2612X(od);
+                    break;
+                case "GeneralMIDI":
+                    SetupGeneralMIDI(od);
+                    break;
+                case "PPZ8":
+                    SetupPPZ8(od);
+                    break;
+                default:
+                    Console.WriteLine("Warning Unknown Chip {0}", od.linePos.chip);
+                    break;
+            }
+        }
+
 
         private void SetupAY8910(outDatum od)
         {
@@ -873,8 +905,8 @@ namespace mml2vgmIDE.MMLParameter
 
             if (!dicInst.ContainsKey(inst.Name))
             {
-                Dictionary<int, Dictionary<int, Action<outDatum, int>>> a = new Dictionary<int, Dictionary<int, Action<outDatum, int>>>();
-                a.Add(index, new Dictionary<int, Action<outDatum, int>>());
+                Dictionary<int, Dictionary<int, Action<outDatum, int, bool>>> a = new Dictionary<int, Dictionary<int, Action<outDatum, int, bool>>>();
+                a.Add(index, new Dictionary<int, Action<outDatum, int, bool>>());
                 a[index].Add(number, inst.SetParameter);
                 dicInst.Add(inst.Name, a);
                 return;
@@ -882,15 +914,15 @@ namespace mml2vgmIDE.MMLParameter
 
             if (!dicInst[inst.Name].ContainsKey(index))
             {
-                Dictionary<int, Dictionary<int, Action<outDatum, int>>> a = dicInst[inst.Name];
-                a.Add(index, new Dictionary<int, Action<outDatum, int>>());
+                Dictionary<int, Dictionary<int, Action<outDatum, int, bool>>> a = dicInst[inst.Name];
+                a.Add(index, new Dictionary<int, Action<outDatum, int, bool>>());
                 a[index].Add(number, inst.SetParameter);
                 return;
             }
 
             if (!dicInst[inst.Name][index].ContainsKey(number))
             {
-                Dictionary<int, Action<outDatum, int>> a = dicInst[inst.Name][index];
+                Dictionary<int, Action<outDatum, int, bool>> a = dicInst[inst.Name][index];
                 a.Add(number, inst.SetParameter);
                 return;
             }
