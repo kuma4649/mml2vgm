@@ -10,14 +10,60 @@ namespace Core
         public byte[] SSGKeyOn = new byte[] { 0x3f, 0x3f, 0x3f, 0x3f };
         public int noiseFreq = -1;
         public int[] hsFnumTbl = null;
+        private int[] EmitTable;
 
         public ClsOPN(ClsVgm parent, int chipID, string initialPartName, string stPath, int chipNumber) : base(parent, chipID, initialPartName, stPath, chipNumber)
         {
+            //from fmgen code
+            EmitTable = new int[16];
+            double Base = 0x4000 / 3.0 * Math.Pow(10.0, 0.0 / 40.0);
+            for (int i = 15; i >= 1; i--)
+            {
+                EmitTable[i] = (int)(Base);
+                Base /= 1.189207115;
+                Base /= 1.189207115;
+            }
+            EmitTable[0] = 0;
+
+            for (int i = 0; i < 16; i++)
+            {
+                EmitTable[i] = (int)(EmitTable[i] / (EmitTable[15] / 255.0));
+            }
+        }
+
+        protected byte[] SSGPCM_Encode(byte[] buf, bool is16bit)
+        {
+
+            long size = buf.Length;
+
+            for (int i = 0; i < size; i++)
+            {
+                int dis = int.MaxValue;
+                int n = 0;
+                for (int j = 0; j < 16; j++)
+                {
+                    int ndis = Math.Abs(buf[i] - EmitTable[j]);
+                    if (ndis < dis)
+                    {
+                        dis = ndis;
+                        n = j;
+                    }
+                }
+                buf[i] = (byte)n;
+            }
+
+            return buf;
         }
 
 
         public void OutSsgKeyOn(partPage page, MML mml)
         {
+            if (page.pcm)
+            {
+                OutSsgPCMKeyOn(page, mml);
+                return;
+            }
+
             page.keyOn = true;
 
             int port;
@@ -60,6 +106,12 @@ namespace Core
 
         public void OutSsgKeyOff(MML mml, partPage page)
         {
+            if (page.pcm)
+            {
+                OutSsgPCMKeyOff(page, mml);
+                return;
+            }
+
             page.keyOn = false;
 
             int port;
@@ -85,6 +137,163 @@ namespace Core
             //page.beforeVolume = -1;
             //SOutData(page, mml, page.port[port], (byte)(adr + 0x07), data);
 
+        }
+
+
+        private void OutSsgPCMKeyOn(partPage page, MML mml)
+        {
+            if (parent.info.Version == 1.51f)
+            {
+                return;
+            }
+
+            float m = Const.pcmMTbl[page.pcmNote] * (float)Math.Pow(2, (page.pcmOctave - 4));
+            page.pcmBaseFreqPerFreq = Information.VGM_SAMPLE_PER_SECOND / ((float)parent.instPCM[page.instrument].Item2.freq * m);
+            page.pcmFreqCountBuffer = 0.0f;
+
+            long p = parent.instPCM[page.instrument].Item2.stAdr;
+            long s = parent.instPCM[page.instrument].Item2.size;
+            long f = parent.instPCM[page.instrument].Item2.freq;
+            long w = 0;
+            if (page.gatetimePmode)
+            {
+                if (!page.gatetimeReverse)
+                    w = page.waitCounter * page.gatetime / 8L;
+                else
+                    w = page.waitCounter - page.waitCounter * page.gatetime / 8L;
+            }
+            else
+            {
+                if (!page.gatetimeReverse)
+                    w = page.waitCounter - page.gatetime;
+                else
+                    w = page.gatetime;
+            }
+            if (w > page.waitCounter) w = page.waitCounter;
+            if (w < 1) w = 1;
+            s = Math.Min(s, (long)(w * parent.info.samplesPerClock * f / 44100.0));
+
+            byte[] cmd;
+            if (!page.streamSetup)
+            {
+                parent.newStreamID++;
+                page.streamID = parent.newStreamID;
+                if (parent.info.format == enmFormat.ZGM)
+                {
+                    if (parent.ChipCommandSize == 2) cmd = new byte[] { 0x30, 0x00 };
+                    else cmd = new byte[] { 0x30 };
+                }
+                else cmd = new byte[] { 0x90 };
+
+                int port;
+                int adr;
+                int vch;
+                GetPortVchSsg(page, out port, out adr, out vch);
+                if (adr == 0x10)
+                    port++;
+
+                int ch = vch;
+                byte sendCmd = (byte)(0x08 + ch);//0x08:volume
+
+                byte cc = 0;
+                if (this is YM2203) cc = 0x06;
+
+                SOutData(
+                    page,
+                    mml,
+                    // setup stream control
+                    cmd
+                    , (byte)page.streamID
+                    , (byte)(cc + (page.chipNumber != 0 ? 0x80 : 0x00))
+                    , 0x00//pp 
+                    , sendCmd //cc
+                              // set stream data
+                    , 0x91
+                    , (byte)page.streamID
+                    , DataBankID // Data BankID
+                    , 0x01 // Step Size
+                    , 0x00 // StepBase
+                    );
+
+                page.streamSetup = true;
+            }
+
+            if (page.streamFreq != f)
+            {
+                if (parent.info.format == enmFormat.ZGM)
+                {
+                    if (parent.ChipCommandSize == 2) cmd = new byte[] { 0x32, 0x00 };
+                    else cmd = new byte[] { 0x32 };
+                }
+                else cmd = new byte[] { 0x92 };
+                //Set Stream Frequency
+                SOutData(
+                    page,
+                    mml,
+                    cmd
+                    , (byte)page.streamID
+
+                    , (byte)(f & 0xff)
+                    , (byte)((f & 0xff00) / 0x100)
+                    , (byte)((f & 0xff0000) / 0x10000)
+                    , (byte)((f & 0xff000000) / 0x10000)
+                    );
+
+                page.streamFreq = f;
+            }
+
+            if (parent.info.format == enmFormat.ZGM)
+            {
+                if (parent.ChipCommandSize == 2) cmd = new byte[] { 0x33, 0x00 };
+                else cmd = new byte[] { 0x33 };
+            }
+            else cmd = new byte[] { 0x93 };
+            //Start Stream
+            SOutData(
+                page,
+                mml,
+                cmd
+                , (byte)page.streamID
+
+                , (byte)(p & 0xff)
+                , (byte)((p & 0xff00) / 0x100)
+                , (byte)((p & 0xff0000) / 0x10000)
+                , (byte)((p & 0xff000000) / 0x10000)
+
+                , 0x01
+
+                , (byte)(s & 0xff)
+                , (byte)((s & 0xff00) / 0x100)
+                , (byte)((s & 0xff0000) / 0x10000)
+                , (byte)((s & 0xff000000) / 0x10000)
+                );
+
+            if (parent.instPCM[page.instrument].Item2.status != enmPCMSTATUS.ERROR)
+            {
+                parent.instPCM[page.instrument].Item2.status = enmPCMSTATUS.USED;
+            }
+
+            page.freq = 0;//Flip Flop OFF mode
+
+        }
+
+        private void OutSsgPCMKeyOff(partPage page, MML mml)
+        {
+            byte[] cmd;
+
+            //Stop Stream
+            if (parent.info.format == enmFormat.ZGM)
+            {
+                if (parent.ChipCommandSize == 2) cmd = new byte[] { 0x34, 0x00 };
+                else cmd = new byte[] { 0x34 };
+            }
+            else cmd = new byte[] { 0x94 };
+            SOutData(
+                page,
+                mml,
+                cmd
+                , (byte)page.streamID
+                );
         }
 
         public virtual void SetSsgVolume(partPage page, MML mml,bool phaseReset=false)
@@ -2193,7 +2402,31 @@ namespace Core
 
             if (page.Type == enmChannelType.SSG)
             {
-                SetEnvelopParamFromInstrument(page, n, re, mml);
+                if (!page.pcm)
+                {
+                    SetEnvelopParamFromInstrument(page, n, re, mml);
+                    return;
+                }
+
+                if (page.instrument == n) return;
+
+                if (!parent.instPCM.ContainsKey(n))
+                {
+                    msgBox.setErrMsg(string.Format(msg.get("E11008"), n), mml.line.Lp);
+                    return;
+                }
+
+                if (parent.instPCM[n].Item2.chip != enmChipType.YM2203
+                    && parent.instPCM[n].Item2.chip != enmChipType.YM2608
+                    && parent.instPCM[n].Item2.chip != enmChipType.YM2610B
+                    && parent.instPCM[n].Item2.chip != enmChipType.YM2609)
+                {
+                    msgBox.setErrMsg(string.Format(msg.get("E11009"), n, _Name), mml.line.Lp);
+                }
+
+                if (re) page.instrument += n;
+                else page.instrument = n;
+
                 return;
             }
 
@@ -2530,6 +2763,26 @@ namespace Core
             page.keyOnDelay.sw = sw;
 
         }
+
+        public override void CmdMode(partPage page, MML mml)
+        {
+            if (page.Type != enmChannelType.SSG) return;
+
+            int n = (int)mml.args[0];
+            n = Common.CheckRange(n, 0, 1);
+            if (n == 1)
+            {
+                page.freq = 0;//freqをリセット
+                page.spg.freq = -1;
+                SetFNum(page, mml);
+            }
+
+            page.pcm = (n == 1);
+            page.instrument = -1;
+            page.spg.beforeVolume = -1;
+        }
+
+
 
         public override void SetupPageData(partWork pw, partPage page)
         {

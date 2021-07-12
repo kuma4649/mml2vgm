@@ -260,6 +260,9 @@
     <None Include="sample\YM2203\testYM2203_KeyOnDelay.gwi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="sample\YM2203\testYM2203_SSGPCM.gwi">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="sample\YM2413\testPageFunctionYM2413.gwi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

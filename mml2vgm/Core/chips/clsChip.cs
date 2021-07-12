@@ -125,6 +125,7 @@ namespace Core
         private string stPath = "";
         public clsPcmDataInfo[] pcmDataInfo;
         public byte[] pcmDataEasy = null;
+        public byte[] pcmDataEasyA = null;
         public List<byte[]> pcmDataDirect = new List<byte[]>();
         public byte[][] port;
         public Dictionary<int, int> relVol = new Dictionary<int, int>();

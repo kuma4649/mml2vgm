@@ -6,6 +6,20 @@ namespace Core
 {
     public class YM2609 : ClsOPN
     {
+
+
+        // mml2vgm                      : opna2 effect ch
+        // U01-12 FM     ch1-12 ( 0-11) : 0-11
+        // U13-15 FMch3ex  1-3  (12-14) : 2
+        // U16-18 FMch9ex  1-3  (15-17) : 8
+        // U19-30 SSG    ch1-12 (18-29) : 12-23
+        // U31-36 Rhythm ch1-6  (30-35) : 27-32
+        // U37    ADPCM0 ch1    (36)    : 24
+        // U38    ADPCM1 ch1    (37)    : 25
+        // U39    ADPCM2 ch1    (38)    : 26
+        // U40-45 ADPCMA ch1-6  (39-44) : 33-38
+
+
         protected int[][] _FNumTbl = new int[2][] {
             new int[13]
             ,new int[96]
@@ -32,6 +46,7 @@ namespace Core
         public byte[] pcmDataEasyB = null;
         public byte[] pcmDataEasyC = null;
         public byte[] pcmDataEasyD = null;
+        public byte[] pcmDataEasyE = null;
         public List<byte[]> pcmDataDirectA = new List<byte[]>();
         public List<byte[]> pcmDataDirectB = new List<byte[]>();
         public List<byte[]> pcmDataDirectC = new List<byte[]>();
@@ -67,6 +82,7 @@ namespace Core
                 , new byte[] { 0x02 }
                 , new byte[] { 0x03 }
             };
+            DataBankID = 0x0f;//TBD(固定値ではなく、恐らくデータごとに連番を振るのが良いと思われる。)
 
             if (string.IsNullOrEmpty(initialPartName)) return;
 
@@ -122,8 +138,9 @@ namespace Core
 
             pcmDataInfo = new clsPcmDataInfo[] {
                 new clsPcmDataInfo(), new clsPcmDataInfo(),
-                new clsPcmDataInfo(), new clsPcmDataInfo() };
-            for (int i = 0; i < 4; i++)
+                new clsPcmDataInfo(), new clsPcmDataInfo(),
+                new clsPcmDataInfo()};
+            for (int i = 0; i < 5; i++)
             {
                 pcmDataInfo[i].totalBufPtr = 0L;
                 pcmDataInfo[i].use = false;
@@ -138,6 +155,7 @@ namespace Core
                     pcmDataInfo[1].totalBuf = new byte[] { 0x07, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
                     pcmDataInfo[2].totalBuf = new byte[] { 0x07, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
                     pcmDataInfo[3].totalBuf = new byte[] { 0x07, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+                    pcmDataInfo[4].totalBuf = new byte[] { 0x07, 0x00, 0x66, DataBankID, 0x00, 0x00, 0x00, 0x00 };
                 }
                 else
                 {
@@ -146,6 +164,7 @@ namespace Core
                     pcmDataInfo[1].totalBuf = new byte[] { 0x07, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
                     pcmDataInfo[2].totalBuf = new byte[] { 0x07, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
                     pcmDataInfo[3].totalBuf = new byte[] { 0x07, 0x00, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+                    pcmDataInfo[4].totalBuf = new byte[] { 0x07, 0x66, DataBankID, 0x00, 0x00, 0x00, 0x00 };
                 }
             }
             else
@@ -155,6 +174,7 @@ namespace Core
                 pcmDataInfo[1].totalBuf = null;
                 pcmDataInfo[2].totalBuf = null;
                 pcmDataInfo[3].totalBuf = null;
+                pcmDataInfo[4].totalBuf = null;
             }
 
             pcmDataInfo[0].totalHeaderLength = pcmDataInfo[0].totalBuf.Length;
@@ -165,6 +185,8 @@ namespace Core
             pcmDataInfo[2].totalHeadrSizeOfDataPtr = (parent.ChipCommandSize == 2) ? 5 : 3;
             pcmDataInfo[3].totalHeaderLength = pcmDataInfo[3].totalBuf.Length;
             pcmDataInfo[3].totalHeadrSizeOfDataPtr = (parent.ChipCommandSize == 2) ? 5 : 3;
+            pcmDataInfo[4].totalHeaderLength = pcmDataInfo[4].totalBuf.Length;
+            pcmDataInfo[4].totalHeadrSizeOfDataPtr = (parent.ChipCommandSize == 2) ? 4 : 3;
 
             Envelope = new Function();
             Envelope.Max = 255;
@@ -952,7 +974,7 @@ namespace Core
         public override void StorePcm(Dictionary<int,Tuple<string, clsPcm>> newDic, KeyValuePair<int, clsPcm> v, byte[] buf, bool is16bit, int samplerate, params object[] option)
         {
             int aCh = (int)v.Value.loopAdr;
-            aCh = Common.CheckRange(aCh, 0, 3);
+            aCh = Common.CheckRange(aCh, 0, 4);
             clsPcmDataInfo pi = pcmDataInfo[aCh];
 
             try
@@ -969,6 +991,9 @@ namespace Core
                         break;
                     case 3:
                         buf = ea.YM_ADPCM_A_Encode(buf, is16bit);
+                        break;
+                    case 4://SSGPCM
+                        buf = SSGPCM_Encode(buf, is16bit);
                         break;
                 }
 
@@ -1018,6 +1043,7 @@ namespace Core
                 pcmDataEasyB = pcmDataInfo[1].totalBuf;
                 pcmDataEasyC = pcmDataInfo[2].totalBuf;
                 pcmDataEasyD = pcmDataInfo[3].totalBuf;
+                pcmDataEasyE = pcmDataInfo[4].totalBuf;
 
             }
             catch
@@ -1064,6 +1090,7 @@ namespace Core
             SetPCMDataBlock_AB(mml, pcmDataEasyB, pcmDataDirectB);
             SetPCMDataBlock_AB(mml, pcmDataEasyC, pcmDataDirectC);
             SetPCMDataBlock_AB(mml, pcmDataEasyD, pcmDataDirect);
+            SetPCMDataBlock_AB(mml, pcmDataEasyE, null);
         }
 
         private void SetPCMDataBlock_AB(MML mml, byte[] pcmDataEasy, List<byte[]> pcmDataDirect)
@@ -1081,7 +1108,7 @@ namespace Core
                     + (pcmDataEasy[sizePtr + 2] << 16)
                     + (pcmDataEasy[sizePtr + 3] << 24);
             }
-            if (pcmDataDirect.Count > 0)
+            if (pcmDataDirect!=null && pcmDataDirect.Count > 0)
             {
                 foreach (byte[] dat in pcmDataDirect)
                 {
@@ -1105,7 +1132,7 @@ namespace Core
                 pcmDataEasy[sizePtr + 2] = (byte)(maxSize >> 16);
                 pcmDataEasy[sizePtr + 3] = (byte)(maxSize >> 24);
             }
-            if (pcmDataDirect.Count > 0)
+            if (pcmDataDirect != null && pcmDataDirect.Count > 0)
             {
                 foreach (byte[] dat in pcmDataDirect)
                 {
@@ -1122,7 +1149,7 @@ namespace Core
             if (pcmDataEasy != null && pcmDataEasy.Length > 15)
                 parent.OutData(mml, null, pcmDataEasy);
 
-            if (pcmDataDirect.Count < 1) return;
+            if (pcmDataDirect == null || pcmDataDirect.Count < 1) return;
 
             foreach (byte[] dat in pcmDataDirect)
             {
@@ -1480,17 +1507,6 @@ namespace Core
             OutFmSetInstrument(page, mml, n, page.volume, type);
         }
 
-        // mml2vgm                      : opna2 effect ch
-        // U01-12 FM     ch1-12 ( 0-11) : 0-11
-        // U13-15 FMch3ex  1-3  (12-14) : 2
-        // U16-18 FMch9ex  1-3  (15-17) : 8
-        // U19-30 SSG    ch1-12 (18-29) : 12-23
-        // U31-36 Rhythm ch1-6  (30-35) : 27-32
-        // U37    ADPCM0 ch1    (36)    : 24
-        // U38    ADPCM1 ch1    (37)    : 25
-        // U39    ADPCM2 ch1    (38)    : 26
-        // U40-45 ADPCMA ch1-6  (39-44) : 33-38
-
         public override void CmdEffect(partPage page, MML mml)
         {
             byte ch = (byte)page.ch;
@@ -1813,16 +1829,6 @@ namespace Core
             }
         }
 
-        // mml2vgm                      : opna2 effect ch
-        // U01-12 FM     ch1-12 ( 0-11) : 0-11
-        // U13-15 FMch3ex  1-3  (12-14) : 2
-        // U16-18 FMch9ex  1-3  (15-17) : 8
-        // U19-30 SSG    ch1-12 (18-29) : 12-23
-        // U31-36 Rhythm ch1-6  (30-35) : 27-32
-        // U37    ADPCM0 ch1    (36)    : 24
-        // U38    ADPCM1 ch1    (37)    : 25
-        // U39    ADPCM2 ch1    (38)    : 26
-        // U40-45 ADPCMA ch1-6  (39-44) : 33-38
         public override void CmdReversePhase(partPage page, MML mml)
         {
             byte ch = (byte)page.ch;

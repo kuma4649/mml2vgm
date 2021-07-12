@@ -50,6 +50,7 @@ namespace Core
                 new byte[] { (byte)(chipNumber!=0 ? 0xa6 : 0x56) }
                 , new byte[] { (byte)(chipNumber!=0 ? 0xa7 : 0x57) }
             };
+            DataBankID = 0x0d;//TBD(固定値ではなく、恐らくデータごとに連番を振るのが良いと思われる。)
 
             if (string.IsNullOrEmpty(initialPartName)) return;
 
@@ -106,36 +107,58 @@ namespace Core
 
             Ch[18].Type = enmChannelType.ADPCM;
 
-            pcmDataInfo = new clsPcmDataInfo[] { new clsPcmDataInfo() };
+            pcmDataInfo = new clsPcmDataInfo[] { new clsPcmDataInfo(), new clsPcmDataInfo() };
             pcmDataInfo[0].totalBufPtr = 0L;
             pcmDataInfo[0].use = false;
+            pcmDataInfo[1].totalBufPtr = 0L;
+            pcmDataInfo[1].use = false;
             if (parent.info.format == enmFormat.ZGM)
             {
                 if (parent.ChipCommandSize == 2)
                 {
                     if (chipNumber == 0)
+                    {
                         pcmDataInfo[0].totalBuf = new byte[] { 0x07, 0x00, 0x66, 0x81, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+                        pcmDataInfo[1].totalBuf = new byte[] { 0x07, 0x00, 0x66, DataBankID, 0x00, 0x00, 0x00, 0x00 };
+                    }
                     else
+                    {
                         pcmDataInfo[0].totalBuf = new byte[] { 0x07, 0x00, 0x66, 0x81, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+                        pcmDataInfo[1].totalBuf = new byte[] { 0x07, 0x00, 0x66, DataBankID, 0x00, 0x00, 0x00, 0x00 };
+                    }
                 }
                 else
                 {
                     if (chipNumber == 0)
+                    {
                         pcmDataInfo[0].totalBuf = new byte[] { 0x07, 0x66, 0x81, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+                        pcmDataInfo[1].totalBuf = new byte[] { 0x07, 0x66, DataBankID, 0x00, 0x00, 0x00, 0x00 };
+                    }
                     else
+                    {
                         pcmDataInfo[0].totalBuf = new byte[] { 0x07, 0x66, 0x81, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+                        pcmDataInfo[1].totalBuf = new byte[] { 0x07, 0x66, DataBankID, 0x00, 0x00, 0x00, 0x00 };
+                    }
                 }
             }
             else
             {
                 if (chipNumber == 0)
+                {
                     pcmDataInfo[0].totalBuf = new byte[] { 0x67, 0x66, 0x81, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+                    pcmDataInfo[1].totalBuf = new byte[] { 0x67, 0x66, DataBankID, 0x00, 0x00, 0x00, 0x00 };
+                }
                 else
+                {
                     pcmDataInfo[0].totalBuf = new byte[] { 0x67, 0x66, 0x81, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+                    pcmDataInfo[1].totalBuf = new byte[] { 0x67, 0x66, DataBankID, 0x00, 0x00, 0x00, 0x00 };
+                }
             }
 
             pcmDataInfo[0].totalHeaderLength = pcmDataInfo[0].totalBuf.Length;
             pcmDataInfo[0].totalHeadrSizeOfDataPtr = (parent.ChipCommandSize == 2) ? 4 : 3;
+            pcmDataInfo[1].totalHeaderLength = pcmDataInfo[1].totalBuf.Length;
+            pcmDataInfo[1].totalHeadrSizeOfDataPtr = (parent.ChipCommandSize == 2) ? 4 : 3;
 
             Envelope = new Function();
             Envelope.Max = 255;
@@ -497,14 +520,24 @@ namespace Core
 
         public override void StorePcm(Dictionary<int,Tuple<string, clsPcm>> newDic, KeyValuePair<int, clsPcm> v, byte[] buf, bool is16bit, int samplerate, params object[] option)
         {
-            clsPcmDataInfo pi = pcmDataInfo[0];
+            clsPcmDataInfo pi = null;
 
             try
             {
                 EncAdpcmA ea = new EncAdpcmA();
-                buf = ea.YM_ADPCM_B_Encode(buf, is16bit, false);
-                long size = buf.Length;
+                switch (v.Value.loopAdr)
+                {
+                    case 0:
+                        buf = ea.YM_ADPCM_B_Encode(buf, is16bit, false);
+                        pi = pcmDataInfo[0];
+                        break;
+                    case 1://SSGPCM
+                        buf = SSGPCM_Encode(buf, is16bit);
+                        pi = pcmDataInfo[1];
+                        break;
+                }
 
+                long size = buf.Length;
                 byte[] newBuf;
                 newBuf = new byte[size];
                 Array.Copy(buf, newBuf, size);
@@ -547,7 +580,9 @@ namespace Core
                     , pi.totalHeadrSizeOfDataPtr + 4
                     , (UInt32)(pi.totalBuf.Length - (pi.totalHeadrSizeOfDataPtr + 4 + 4 + 4))
                     );
-                pcmDataEasy = pi.use ? pi.totalBuf : null;
+
+                pcmDataEasy = pi.use ? pcmDataInfo[0].totalBuf : null;
+                pcmDataEasyA = pi.use ? pcmDataInfo[1].totalBuf : null;
 
             }
             catch

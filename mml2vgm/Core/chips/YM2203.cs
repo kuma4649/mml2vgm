@@ -1,4 +1,5 @@
 ﻿using musicDriverInterface;
+using System;
 using System.Collections.Generic;
 
 namespace Core
@@ -33,12 +34,13 @@ namespace Core
             _Name = "YM2203";
             _ShortName = "OPN";
             _ChMax = 9;
-            _canUsePcm = false;
+            _canUsePcm = true;
             _canUsePI = false;
             FNumTbl = _FNumTbl;
 
             Frequency = 3993600;// 7987200/2;
             port = new byte[][] { new byte[] { (byte)(chipNumber != 0 ? 0xa5 : 0x55) } };
+            DataBankID = 0x0c;//TBD(固定値ではなく、恐らくデータごとに連番を振るのが良いと思われる。)
 
             if (string.IsNullOrEmpty(initialPartName)) return;
 
@@ -89,6 +91,32 @@ namespace Core
             Envelope = new Function();
             Envelope.Max = 255;
             Envelope.Min = 0;
+
+            pcmDataInfo = new clsPcmDataInfo[] { new clsPcmDataInfo() };
+            pcmDataInfo[0].totalBufPtr = 0L;
+            pcmDataInfo[0].use = false;
+
+            if (parent.info.format == enmFormat.ZGM)
+            {
+                if (parent.ChipCommandSize == 2)
+                {
+                    if (chipNumber == 0) pcmDataInfo[0].totalBuf = new byte[] { 0x07, 0x00, 0x66, DataBankID, 0x00, 0x00, 0x00, 0x00 };
+                    else pcmDataInfo[0].totalBuf = new byte[] { 0x07, 0x00, 0x66, DataBankID, 0x00, 0x00, 0x00, 0x00 };
+                }
+                else
+                {
+                    if (chipNumber == 0) pcmDataInfo[0].totalBuf = new byte[] { 0x07, 0x66, DataBankID, 0x00, 0x00, 0x00, 0x00 };
+                    else pcmDataInfo[0].totalBuf = new byte[] { 0x07, 0x66, DataBankID, 0x00, 0x00, 0x00, 0x00 };
+                }
+            }
+            else
+            {
+                if (chipNumber == 0) pcmDataInfo[0].totalBuf = new byte[] { 0x67, 0x66, DataBankID, 0x00, 0x00, 0x00, 0x00 };
+                else pcmDataInfo[0].totalBuf = new byte[] { 0x67, 0x66, DataBankID, 0x00, 0x00, 0x00, 0x00 };
+            }
+
+            pcmDataInfo[0].totalHeaderLength = pcmDataInfo[0].totalBuf.Length;
+            pcmDataInfo[0].totalHeadrSizeOfDataPtr = (parent.ChipCommandSize == 2) ? 4 : 3;
 
         }
 
@@ -152,6 +180,68 @@ namespace Core
 
         }
 
+
+        public override void StorePcm(Dictionary<int, Tuple<string, clsPcm>> newDic, KeyValuePair<int, clsPcm> v, byte[] buf, bool is16bit, int samplerate, params object[] option)
+        {
+            clsPcmDataInfo pi = pcmDataInfo[0];
+
+            try
+            {
+                EncAdpcmA ea = new EncAdpcmA();
+                buf = SSGPCM_Encode(buf, is16bit);
+
+                long size = buf.Length;
+                byte[] newBuf;
+                newBuf = new byte[size];
+                Array.Copy(buf, newBuf, size);
+                buf = newBuf;
+                long tSize = size;
+                size = buf.Length;
+
+                newDic.Add(
+                    v.Key
+                    , new Tuple<string, clsPcm>("", new clsPcm(
+                        v.Value.num
+                        , v.Value.seqNum, v.Value.chip
+                        , v.Value.chipNumber
+                        , v.Value.fileName
+                        , v.Value.freq
+                        , v.Value.vol
+                        , pi.totalBufPtr
+                        , pi.totalBufPtr + size - 1
+                        , size
+                        , -1
+                        , is16bit
+                        , samplerate)
+                    ));
+
+                pi.totalBufPtr += size;
+                newBuf = new byte[pi.totalBuf.Length + buf.Length];
+                Array.Copy(pi.totalBuf, newBuf, pi.totalBuf.Length);
+                Array.Copy(buf, 0, newBuf, pi.totalBuf.Length, buf.Length);
+
+                pi.totalBuf = newBuf;
+                pi.use = true;
+                Common.SetUInt32bit31(
+                    pi.totalBuf
+                    , pi.totalHeadrSizeOfDataPtr
+                    , (UInt32)(pi.totalBuf.Length - (pi.totalHeadrSizeOfDataPtr + 4))
+                    , ChipNumber != 0
+                    );
+                Common.SetUInt32bit31(
+                    pi.totalBuf
+                    , pi.totalHeadrSizeOfDataPtr + 4
+                    , (UInt32)(pi.totalBuf.Length - (pi.totalHeadrSizeOfDataPtr + 4 + 4 + 4))
+                    );
+                pcmDataEasy = pi.use ? pi.totalBuf : null;
+
+            }
+            catch
+            {
+                pi.use = false;
+            }
+
+        }
 
         public void outYM2203AllKeyOff(ClsChip chip)
         {
@@ -267,6 +357,8 @@ namespace Core
 
             base.CmdInstrument(page, mml);
         }
+
+
 
 
         public override void SetupPageData(partWork pw, partPage page)

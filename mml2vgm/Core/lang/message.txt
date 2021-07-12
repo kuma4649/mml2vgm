@@ -320,6 +320,8 @@ E11004=Envelope analysis failed.
 E11005=Unknown command defined. (EX{0})
 E11006=There are 4 | 1 parameters for the KD command.
 E11007=A non-numeric value has been specified for the KD command parameter.
+E11008=Sound patch does not exist as PCM definition({0}).
+E11009=Selected Tone number({0}) is not for {1} PCM data.
 
 
 ;HuC6280.cs 12000

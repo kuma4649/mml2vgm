@@ -1075,6 +1075,7 @@ namespace Core
                     && opna2.pcmDataEasyB == null
                     && opna2.pcmDataEasyC == null
                     && opna2.pcmDataEasyD == null
+                    && opna2.pcmDataEasyE == null
                     && opna2.pcmDataDirectA.Count == 0
                     && opna2.pcmDataDirectB.Count == 0
                     && opna2.pcmDataDirectC.Count == 0
@@ -1134,6 +1135,7 @@ namespace Core
                     && opna2.pcmDataEasyB == null
                     && opna2.pcmDataEasyC == null
                     && opna2.pcmDataEasyD == null
+                    && opna2.pcmDataEasyE == null
                     && opna2.pcmDataDirectA.Count == 0
                     && opna2.pcmDataDirectB.Count == 0
                     && opna2.pcmDataDirectC.Count == 0
@@ -1187,6 +1189,18 @@ namespace Core
                         , "AUTO"
                         );
                     tl += opna2.pcmDataEasyD.Length;
+                }
+                if (opna2.pcmDataEasyE != null)
+                {
+                    region += string.Format("{0,-10} {1,-7} ${2,-7:X6} ${3,-7:X6} ${4,-7:X6}  {5}\r\n"
+                        , opna2.Name + "_E"
+                        , opna2.ChipNumber != 0 ? "SEC" : "PRI"
+                        , 0
+                        , opna2.pcmDataEasyE.Length - 1
+                        , opna2.pcmDataEasyE.Length
+                        , "AUTO"
+                        );
+                    tl += opna2.pcmDataEasyE.Length;
                 }
 
             }

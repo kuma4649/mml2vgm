@@ -37,7 +37,7 @@ namespace Core
 
             Frequency = 1789750;
             port = new byte[][] { new byte[] { 0xa0 } };
-            DataBankID = 0x09;
+            DataBankID = 0x09;//TBD(固定値ではなく、恐らくデータごとに連番を振るのが良いと思われる。)
 
             if (string.IsNullOrEmpty(initialPartName)) return;
 
@@ -323,13 +323,13 @@ namespace Core
                     // setup stream control
                     cmd
                     , (byte)page.streamID
-                    , (byte)(0x12 + (page.chipNumber != 0 ? 0x80 : 0x00)) //0x00 SN76489/SN76496
+                    , (byte)(0x12 + (page.chipNumber != 0 ? 0x80 : 0x00)) //0x12 AY8910
                     , 0x00//pp 
                     , sendCmd //cc
                               // set stream data
                     , 0x91
                     , (byte)page.streamID
-                    , DataBankID // Data BankID(0x08 SN76489/SN76496)
+                    , DataBankID // Data BankID(0x09 AY8910)
                     , 0x01 // Step Size
                     , 0x00 // StepBase
                     );
@@ -398,6 +398,12 @@ namespace Core
 
         public void OutSsgKeyOff(MML mml, partPage page)
         {
+            if (page.pcm)
+            {
+                OutSsgPCMKeyOff(page, mml);
+                return;
+            }
+
             page.keyOn = false;
 
             if (page.hardEnvelopeSync.sw)
@@ -416,6 +422,25 @@ namespace Core
             //parent.OutData(mml, port[0], 0x07, data);
 
             //SOutData(page, mml, port[0], 0x07, data);
+        }
+
+        private void OutSsgPCMKeyOff(partPage page, MML mml)
+        {
+            byte[] cmd;
+
+            //Stop Stream
+            if (parent.info.format == enmFormat.ZGM)
+            {
+                if (parent.ChipCommandSize == 2) cmd = new byte[] { 0x34, 0x00 };
+                else cmd = new byte[] { 0x34 };
+            }
+            else cmd = new byte[] { 0x94 };
+            SOutData(
+                page,
+                mml,
+                cmd
+                , (byte)page.streamID
+                );
         }
 
         public void SetSsgVolume(MML mml, partPage page)
