@@ -22,6 +22,6 @@
 '@ P 1,"..\wav\HC.wav",8000,100,OPN
 
 'N1 T160
-'N7 m1q0l4 @0cdef @1cccc
+'N7 m0v10cdef m1q0 @0 c_>>>>b<<<< cdef @1cccc m0v10cdef
 
 
