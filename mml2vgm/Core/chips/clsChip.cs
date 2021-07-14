@@ -520,7 +520,7 @@ namespace Core
                     + (pcmDataEasy[ptr + 2] << 16)
                     + (pcmDataEasy[ptr + 3] << 24);
             }
-            if (pcmDataDirect.Count > 0)
+            if (pcmDataDirect != null && pcmDataDirect.Count > 0)
             {
                 foreach (byte[] dat in pcmDataDirect)
                 {
@@ -542,7 +542,7 @@ namespace Core
                 pcmDataEasy[ptr + 2] = (byte)(maxSize >> 16);
                 pcmDataEasy[ptr + 3] = (byte)(maxSize >> 24);
             }
-            if (pcmDataDirect.Count > 0)
+            if (pcmDataDirect != null && pcmDataDirect.Count > 0)
             {
                 foreach (byte[] dat in pcmDataDirect)
                 {
@@ -557,14 +557,14 @@ namespace Core
             }
 
             if (pcmDataEasy != null && pcmDataEasy.Length > 0)
-                parent.OutData(mml, pcmDataEasy);
+                parent.OutData(mml, null, pcmDataEasy);
 
-            if (pcmDataDirect.Count < 1) return;
+            if (pcmDataDirect == null || pcmDataDirect.Count < 1) return;
 
             foreach (byte[] dat in pcmDataDirect)
             {
                 if (dat != null && dat.Length > 0)
-                    parent.OutData(mml, dat);
+                    parent.OutData(mml, null, dat);
             }
         }
 

@@ -197,6 +197,8 @@ namespace Core
 
                 byte cc = 0;
                 if (this is YM2203) cc = 0x06;
+                if (this is YM2608) cc = 0x07;
+                if (this is YM2610B) cc = 0x08;
 
                 SOutData(
                     page,
@@ -392,40 +394,45 @@ namespace Core
             int arpNote = page.arpFreqMode ? 0 : page.arpDelta;
             int arpFreq = page.arpFreqMode ? page.arpDelta : 0;
 
-            int f = -page.detune;
-            f = f + arpFreq;
-            for (int lfo = 0; lfo < 4; lfo++)
+            int f = 0;
+            if (!page.pcm)
             {
-                if (!page.lfo[lfo].sw)
+                f = -page.detune;
+                f = f + arpFreq;
+                for (int lfo = 0; lfo < 4; lfo++)
                 {
-                    continue;
+                    if (!page.lfo[lfo].sw)
+                    {
+                        continue;
+                    }
+                    if (page.lfo[lfo].type != eLfoType.Vibrato)
+                    {
+                        continue;
+                    }
+                    f -= page.lfo[lfo].value + page.lfo[lfo].param[6];
                 }
-                if (page.lfo[lfo].type != eLfoType.Vibrato)
+
+                if (page.octaveNow < 1)
                 {
-                    continue;
+                    f <<= -page.octaveNow;
                 }
-                f -= page.lfo[lfo].value + page.lfo[lfo].param[6];
+                else
+                {
+                    f >>= page.octaveNow - 1;
+                }
+
+                if (page.bendWaitCounter != -1)
+                {
+                    f += page.bendFnum;
+                }
+                else
+                {
+                    f += GetSsgFNum(page, mml, page.octaveNow, page.noteCmd, page.shift + page.keyShift + arpNote, page.pitchShift);//
+                }
+
+                f = Common.CheckRange(f, 0, 0xfff);
             }
 
-            if (page.octaveNow < 1)
-            {
-                f <<= -page.octaveNow;
-            }
-            else
-            {
-                f >>= page.octaveNow - 1;
-            }
-
-            if (page.bendWaitCounter != -1)
-            {
-                f += page.bendFnum;
-            }
-            else
-            {
-                f += GetSsgFNum(page, mml, page.octaveNow, page.noteCmd, page.shift + page.keyShift + arpNote, page.pitchShift);//
-            }
-
-            f = Common.CheckRange(f, 0, 0xfff);
             if (page.spg.freq == f) return;
 
             page.freq = f;

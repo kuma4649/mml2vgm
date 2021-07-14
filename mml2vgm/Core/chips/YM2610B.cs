@@ -113,11 +113,14 @@ namespace Core
 
             Ch[18].Type = enmChannelType.ADPCMB;
 
-            pcmDataInfo = new clsPcmDataInfo[2] { new clsPcmDataInfo(), new clsPcmDataInfo() };
+            pcmDataInfo = new clsPcmDataInfo[3] { new clsPcmDataInfo(), new clsPcmDataInfo(), new clsPcmDataInfo() };
             pcmDataInfo[0].totalBufPtr = 0L;
             pcmDataInfo[0].use = false;
             pcmDataInfo[1].totalBufPtr = 0L;
             pcmDataInfo[1].use = false;
+            pcmDataInfo[2].totalBufPtr = 0L;
+            pcmDataInfo[2].use = false;
+
             if (parent.info.format == enmFormat.ZGM)
             {
                 if (parent.ChipCommandSize == 2)
@@ -166,6 +169,7 @@ namespace Core
                     pcmDataInfo[2].totalBuf = new byte[] { 0x67, 0x66, DataBankID, 0x00, 0x00, 0x00, 0x00 };
                 }
             }
+
             pcmDataInfo[0].totalHeaderLength = pcmDataInfo[0].totalBuf.Length;
             pcmDataInfo[0].totalHeadrSizeOfDataPtr = (parent.ChipCommandSize == 2) ? 4 : 3;
             pcmDataInfo[1].totalHeaderLength = pcmDataInfo[1].totalBuf.Length;
@@ -520,6 +524,9 @@ namespace Core
         private void SetPCMDataBlock_AB(MML mml, byte[] pcmDataEasy, List<byte[]> pcmDataDirect)
         {
             int maxSize = 0;
+            int ptr = 7 + (parent.ChipCommandSize == 2 ? 2 : 0);
+
+            AdjustPCMData(ptr);
 
             if (parent.info.format == enmFormat.ZGM)
             {
@@ -558,13 +565,13 @@ namespace Core
                 }
             }
 
-            if (pcmDataEasy != null && pcmDataEasy.Length > 0)
+            if (pcmDataEasy != null && pcmDataEasy.Length > ptr+3)
             {
                 maxSize =
-                    pcmDataEasy[7]
-                    + (pcmDataEasy[8] << 8)
-                    + (pcmDataEasy[9] << 16)
-                    + (pcmDataEasy[10] << 24);
+                    pcmDataEasy[ptr]
+                    + (pcmDataEasy[ptr + 1] << 8)
+                    + (pcmDataEasy[ptr + 2] << 16)
+                    + (pcmDataEasy[ptr + 3] << 24);
             }
             if (pcmDataDirect!=null && pcmDataDirect.Count > 0)
             {
@@ -573,20 +580,20 @@ namespace Core
                     if (dat != null && dat.Length > 0)
                     {
                         int size =
-                            dat[7]
-                            + (dat[8] << 8)
-                            + (dat[9] << 16)
-                            + (dat[10] << 24);
+                            dat[ptr]
+                            + (dat[ptr + 1] << 8)
+                            + (dat[ptr + 2] << 16)
+                            + (dat[ptr + 3] << 24);
                         if (maxSize < size) maxSize = size;
                     }
                 }
             }
-            if (pcmDataEasy != null && pcmDataEasy.Length > 0)
+            if (pcmDataEasy != null && pcmDataEasy.Length > ptr + 3)
             {
-                pcmDataEasy[7] = (byte)maxSize;
-                pcmDataEasy[8] = (byte)(maxSize >> 8);
-                pcmDataEasy[9] = (byte)(maxSize >> 16);
-                pcmDataEasy[10] = (byte)(maxSize >> 24);
+                pcmDataEasy[ptr] = (byte)maxSize;
+                pcmDataEasy[ptr + 1] = (byte)(maxSize >> 8);
+                pcmDataEasy[ptr + 2] = (byte)(maxSize >> 16);
+                pcmDataEasy[ptr + 3] = (byte)(maxSize >> 24);
             }
             if (pcmDataDirect != null && pcmDataDirect.Count > 0)
             {
@@ -594,10 +601,10 @@ namespace Core
                 {
                     if (dat != null && dat.Length > 0)
                     {
-                        dat[7] = (byte)maxSize;
-                        dat[8] = (byte)(maxSize >> 8);
-                        dat[9] = (byte)(maxSize >> 16);
-                        dat[10] = (byte)(maxSize >> 24);
+                        dat[ptr] = (byte)maxSize;
+                        dat[ptr + 1] = (byte)(maxSize >> 8);
+                        dat[ptr + 2] = (byte)(maxSize >> 16);
+                        dat[ptr + 3] = (byte)(maxSize >> 24);
                     }
                 }
             }
@@ -669,6 +676,7 @@ namespace Core
                 EncAdpcmA ea = new EncAdpcmA();
                 switch (v.Value.loopAdr)
                 {
+                    default:
                     case 0:
                         buf = ea.YM_ADPCM_A_Encode(buf, is16bit);
                         pi = pcmDataInfo[0];
@@ -1024,7 +1032,31 @@ namespace Core
 
                 if (page.Type == enmChannelType.SSG)
                 {
-                    SetEnvelopParamFromInstrument(page, n, re, mml);
+                    if (!page.pcm)
+                    {
+                        SetEnvelopParamFromInstrument(page, n, re, mml);
+                        return;
+                    }
+
+                    if (page.instrument == n) return;
+
+                    if (!parent.instPCM.ContainsKey(n))
+                    {
+                        msgBox.setErrMsg(string.Format(msg.get("E11008"), n), mml.line.Lp);
+                        return;
+                    }
+
+                    if (parent.instPCM[n].Item2.chip != enmChipType.YM2203
+                        && parent.instPCM[n].Item2.chip != enmChipType.YM2608
+                        && parent.instPCM[n].Item2.chip != enmChipType.YM2610B
+                        && parent.instPCM[n].Item2.chip != enmChipType.YM2609)
+                    {
+                        msgBox.setErrMsg(string.Format(msg.get("E11009"), n, _Name), mml.line.Lp);
+                    }
+
+                    if (re) page.instrument += n;
+                    else page.instrument = n;
+
                     return;
                 }
             }

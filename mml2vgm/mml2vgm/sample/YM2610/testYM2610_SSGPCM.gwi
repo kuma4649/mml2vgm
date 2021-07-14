@@ -1,0 +1,27 @@
+﻿'{
+
+	TitleName   =YM2610B(OPNB) SSGPCM Test
+	TitleNameJ  =YM2610B(OPNB) SSGPCM テスト
+	GameName    =
+	GameNameJ   =
+	SystemName  =
+	SystemNameJ =
+	Composer    =
+	ComposerJ   =
+	ReleaseDate =2021/07/14
+	Converted   =
+	Notes       =
+
+	ClockCount  =192
+
+}
+
+
+
+'@ P 0,"..\wav\SD.wav",8000,100,YM2610B,2 ; option 0:adpcm-A 1:adpcm-B 2:ssgpcm
+'@ P 1,"..\wav\HC.wav",8000,100,OPNB   ,2
+
+'T10 T160
+'T10 m0v10cdef m1q0 @0cdef @1cccc m0v10cdef
+
+

@@ -527,6 +527,7 @@ namespace Core
                 EncAdpcmA ea = new EncAdpcmA();
                 switch (v.Value.loopAdr)
                 {
+                    default:
                     case 0:
                         buf = ea.YM_ADPCM_B_Encode(buf, is16bit, false);
                         pi = pcmDataInfo[0];
@@ -605,6 +606,116 @@ namespace Core
             pcmDataDirect.Add(Common.MakePCMDataBlock((byte)dataType, pds, buf));
 
         }
+
+        public override void SetPCMDataBlock(MML mml)
+        {
+            //if (!CanUsePcm) return;
+            if (!use) return;
+
+            SetPCMDataBlock_AB(mml, pcmDataEasy, pcmDataDirect);
+            SetPCMDataBlock_AB(mml, pcmDataEasyA, null);
+        }
+
+        private void SetPCMDataBlock_AB(MML mml, byte[] pcmDataEasy, List<byte[]> pcmDataDirect)
+        {
+            int maxSize = 0;
+            int ptr = 7 + (parent.ChipCommandSize == 2 ? 2 : 0);
+
+            AdjustPCMData(ptr);
+
+            if (parent.info.format == enmFormat.ZGM)
+            {
+                if (port.Length < 1) return;
+
+                if (parent.ChipCommandSize != 2)
+                {
+                    if (port[0].Length < 1) return;
+
+                    if (pcmDataEasy != null && pcmDataEasy.Length > 1) pcmDataEasy[1] = port[0][0];
+                    if (pcmDataDirect != null)
+                    {
+                        for (int i = 0; i < pcmDataDirect.Count; i++)
+                        {
+                            pcmDataDirect[i][1] = port[0][0];
+                        }
+                    }
+                }
+                else
+                {
+                    if (port[0].Length < 2) return;
+
+                    if (pcmDataEasy != null && pcmDataEasy.Length > 3)
+                    {
+                        pcmDataEasy[2] = port[0][0];
+                        pcmDataEasy[3] = port[0][1];
+                    }
+                    if (pcmDataDirect != null)
+                    {
+                        for (int i = 0; i < pcmDataDirect.Count; i++)
+                        {
+                            pcmDataDirect[i][2] = port[0][0];
+                            pcmDataDirect[i][3] = port[0][1];
+                        }
+                    }
+                }
+            }
+
+            if (pcmDataEasy != null && pcmDataEasy.Length > ptr+3)
+            {
+                maxSize =
+                    pcmDataEasy[ptr]
+                    + (pcmDataEasy[ptr + 1] << 8)
+                    + (pcmDataEasy[ptr + 2] << 16)
+                    + (pcmDataEasy[ptr + 3] << 24);
+            }
+            if (pcmDataDirect != null && pcmDataDirect.Count > 0)
+            {
+                foreach (byte[] dat in pcmDataDirect)
+                {
+                    if (dat != null && dat.Length > 0)
+                    {
+                        int size =
+                            dat[ptr]
+                            + (dat[ptr + 1] << 8)
+                            + (dat[ptr + 2] << 16)
+                            + (dat[ptr + 3] << 24);
+                        if (maxSize < size) maxSize = size;
+                    }
+                }
+            }
+            if (pcmDataEasy != null && pcmDataEasy.Length > ptr+3)
+            {
+                pcmDataEasy[ptr] = (byte)maxSize;
+                pcmDataEasy[ptr + 1] = (byte)(maxSize >> 8);
+                pcmDataEasy[ptr + 2] = (byte)(maxSize >> 16);
+                pcmDataEasy[ptr + 3] = (byte)(maxSize >> 24);
+            }
+            if (pcmDataDirect != null && pcmDataDirect.Count > 0)
+            {
+                foreach (byte[] dat in pcmDataDirect)
+                {
+                    if (dat != null && dat.Length > 0)
+                    {
+                        dat[ptr] = (byte)maxSize;
+                        dat[ptr + 1] = (byte)(maxSize >> 8);
+                        dat[ptr + 2] = (byte)(maxSize >> 16);
+                        dat[ptr + 3] = (byte)(maxSize >> 24);
+                    }
+                }
+            }
+
+            if (pcmDataEasy != null && pcmDataEasy.Length > 15)
+                parent.OutData(mml, null, pcmDataEasy);
+
+            if (pcmDataDirect == null || pcmDataDirect.Count < 1) return;
+
+            foreach (byte[] dat in pcmDataDirect)
+            {
+                if (dat != null && dat.Length > 0)
+                    parent.OutData(mml, null, dat);
+            }
+        }
+
 
 
         public override void CmdY(partPage page, MML mml)
@@ -824,7 +935,31 @@ namespace Core
 
                 if (page.Type == enmChannelType.SSG)
                 {
-                    SetEnvelopParamFromInstrument(page, n, re, mml);
+                    if (!page.pcm)
+                    {
+                        SetEnvelopParamFromInstrument(page, n, re, mml);
+                        return;
+                    }
+
+                    if (page.instrument == n) return;
+
+                    if (!parent.instPCM.ContainsKey(n))
+                    {
+                        msgBox.setErrMsg(string.Format(msg.get("E11008"), n), mml.line.Lp);
+                        return;
+                    }
+
+                    if (parent.instPCM[n].Item2.chip != enmChipType.YM2203
+                        && parent.instPCM[n].Item2.chip != enmChipType.YM2608
+                        && parent.instPCM[n].Item2.chip != enmChipType.YM2610B
+                        && parent.instPCM[n].Item2.chip != enmChipType.YM2609)
+                    {
+                        msgBox.setErrMsg(string.Format(msg.get("E11009"), n, _Name), mml.line.Lp);
+                    }
+
+                    if (re) page.instrument += n;
+                    else page.instrument = n;
+
                     return;
                 }
             }

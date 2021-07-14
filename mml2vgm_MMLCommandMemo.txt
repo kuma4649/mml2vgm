@@ -80,6 +80,9 @@
          SN76489
            ・PCMは8KHz,8bit,mono,圧縮なし,unsignedのwavファイルであること。
                mml2vgmは内部で4bitPCMに変換する。
+         AY8910/YM2203/YM2608 SSGPCM
+           ・PCMは8KHz,8bit,mono,圧縮なし,unsignedのwavファイルであること。
+               mml2vgmは内部で4bitPCMに変換する。
          YM2608 ADPCM
            ・PCMは16bit,mono,圧縮なし,signedのwavファイルであること。
                mml2vgmは内部でADPCMに変換する。
@@ -1219,7 +1222,8 @@ FMOF            --------------------------------------------------o  FDS モジ�
                 また、周波数固定のPCMでは無視する。
     Volume      音量(0- )元の音量に値(%)を掛ける。100以上も指定できるが音が割れるのでお勧めできない
     ChipName    音源名称又は略称を指定。省略時はYM2612として定義する。
-    Option      YM2610B : 0の場合ADPCM-A 1の場合ADPCM-Bとして定義される。
+    Option      YM2608  : 省略又は0の場合ADPCM、1の場合SSGPCMとして定義される。
+                YM2610B : 0,1,2がそれぞれADPCM-A,ADPCM-B,SSGPCMとして定義される。
                 RF5C164 : ループポイント。ループ再生位置をサンプル数で指定。
                 C140    : ループポイント。ループ再生位置をサンプル数で指定。
                 C352    : ループポイント。ループ再生位置をサンプル数で指定。
