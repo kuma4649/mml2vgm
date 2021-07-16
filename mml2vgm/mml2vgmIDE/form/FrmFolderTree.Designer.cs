@@ -47,6 +47,8 @@
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmiFilterGwi = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiFilterWav = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiFilterMuc = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiFilterMml = new System.Windows.Forms.ToolStripMenuItem();
             this.cmsMenu.SuspendLayout();
             this.toolStripContainer1.ContentPanel.SuspendLayout();
             this.toolStripContainer1.TopToolStripPanel.SuspendLayout();
@@ -95,7 +97,6 @@
             this.tvFolderTree.AllowDrop = true;
             this.tvFolderTree.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
             this.tvFolderTree.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.tvFolderTree.CheckBoxes = true;
             this.tvFolderTree.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(80)))), ((int)(((byte)(160)))));
             this.tvFolderTree.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tvFolderTree.DrawMode = System.Windows.Forms.TreeViewDrawMode.OwnerDrawAll;
@@ -111,6 +112,7 @@
             this.tvFolderTree.TabIndex = 0;
             this.tvFolderTree.BeforeExpand += new System.Windows.Forms.TreeViewCancelEventHandler(this.TvFolderTree_BeforeExpand);
             this.tvFolderTree.AfterExpand += new System.Windows.Forms.TreeViewEventHandler(this.TvFolderTree_AfterExpand);
+            this.tvFolderTree.DrawNode += new System.Windows.Forms.DrawTreeNodeEventHandler(this.tvFolderTree_DrawNode);
             this.tvFolderTree.ItemDrag += new System.Windows.Forms.ItemDragEventHandler(this.TvFolderTree_ItemDrag);
             this.tvFolderTree.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.TvFolderTree_AfterSelect);
             this.tvFolderTree.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.TvFolderTree_NodeMouseClick);
@@ -169,6 +171,8 @@
             this.tsmiFilterFile,
             this.toolStripSeparator3,
             this.tsmiFilterGwi,
+            this.tsmiFilterMuc,
+            this.tsmiFilterMml,
             this.tsmiFilterWav});
             this.tsddbFilter.Image = global::mml2vgmIDE.Properties.Resources.Filter;
             this.tsddbFilter.ImageTransparentColor = System.Drawing.Color.Magenta;
@@ -228,6 +232,22 @@
             this.tsmiFilterWav.Text = ".wav";
             this.tsmiFilterWav.Click += new System.EventHandler(this.TsmiFilterWav_Click);
             // 
+            // tsmiFilterMuc
+            // 
+            this.tsmiFilterMuc.CheckOnClick = true;
+            this.tsmiFilterMuc.Name = "tsmiFilterMuc";
+            this.tsmiFilterMuc.Size = new System.Drawing.Size(180, 22);
+            this.tsmiFilterMuc.Text = ".muc";
+            this.tsmiFilterMuc.Click += new System.EventHandler(this.tsmiFilterMuc_Click);
+            // 
+            // tsmiFilterMml
+            // 
+            this.tsmiFilterMml.CheckOnClick = true;
+            this.tsmiFilterMml.Name = "tsmiFilterMml";
+            this.tsmiFilterMml.Size = new System.Drawing.Size(180, 22);
+            this.tsmiFilterMml.Text = ".mml";
+            this.tsmiFilterMml.Click += new System.EventHandler(this.tsmiFilterMml_Click);
+            // 
             // FrmFolderTree
             // 
             this.ClientSize = new System.Drawing.Size(289, 380);
@@ -271,5 +291,7 @@
         private System.Windows.Forms.ToolStripMenuItem tsmiFilterGwi;
         private System.Windows.Forms.ToolStripMenuItem tsmiFilterWav;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private System.Windows.Forms.ToolStripMenuItem tsmiFilterMuc;
+        private System.Windows.Forms.ToolStripMenuItem tsmiFilterMml;
     }
 }

@@ -16,6 +16,7 @@ namespace CustomControl
         private SolidBrush brushFontColor;
         private TreeNode hoverNode;
         private Bitmap backBmp = null;
+        private StringFormat sf;
 
         public Color HotColor
         {
@@ -83,6 +84,9 @@ namespace CustomControl
         public MultiSelectTreeView()
         {
             this.DoubleBuffered = true;
+            sf = new StringFormat();
+            sf.Trimming = StringTrimming.EllipsisCharacter;
+            sf.FormatFlags = StringFormatFlags.NoWrap;
         }
 
         protected override void Dispose(bool disposing)
@@ -147,11 +151,14 @@ namespace CustomControl
                 int shiftPI = (showIcon ? 16 : 0);
 
                 if (brushFontColor != null)
+                {
                     g.DrawString(e.Node.Text, this.Font, brushFontColor
                     , new Rectangle(new Point(
                         bnd.X + shift + shiftPM + shiftPI
                         , bnd.Y + 0)
-                    , bnd.Size));
+                    , bnd.Size)
+                    , sf);
+                }
 
                 if (e.Node.Nodes.Count > 0)
                 {

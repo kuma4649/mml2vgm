@@ -599,6 +599,20 @@ namespace mml2vgmIDE
                                 continue;
                             }
                         }
+                        else if (Path.GetExtension(tn.Text).ToLower() == ".muc")
+                        {
+                            if (tsmiFilterMuc.Checked)
+                            {
+                                continue;
+                            }
+                        }
+                        else if (Path.GetExtension(tn.Text).ToLower() == ".mml")
+                        {
+                            if (tsmiFilterMml.Checked)
+                            {
+                                continue;
+                            }
+                        }
                         else if (Path.GetExtension(tn.Text).ToLower() == ".wav")
                         {
                             if (tsmiFilterWav.Checked)
@@ -847,6 +861,20 @@ namespace mml2vgmIDE
             refresh();
         }
 
+        private void tsmiFilterMuc_Click(object sender, EventArgs e)
+        {
+            FilterItemCheckStateRefresh();
+
+            refresh();
+        }
+
+        private void tsmiFilterMml_Click(object sender, EventArgs e)
+        {
+            FilterItemCheckStateRefresh();
+
+            refresh();
+        }
+
         private void TsmiFilterWav_Click(object sender, EventArgs e)
         {
             FilterItemCheckStateRefresh();
@@ -868,6 +896,11 @@ namespace mml2vgmIDE
         private void TvFolderTree_AfterExpand(object sender, TreeViewEventArgs e)
         {
             refreshFilter(e.Node.Nodes);
+        }
+
+        private void tvFolderTree_DrawNode(object sender, DrawTreeNodeEventArgs e)
+        {
+
         }
     }
 }

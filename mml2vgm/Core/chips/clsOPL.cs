@@ -572,9 +572,10 @@ namespace Core
         public void OutFmSetTl(MML mml, partPage page, int ope, int tl)
         {
 
+            byte[] port = getPortFromCh(page.ch);
             SOutData(page,
                 mml,
-                port[0],
+                port,
                 (byte)(0x40 + ChnToBaseReg(page.ch) + 0),
                 (byte)(
                         ((parent.instOPL[page.instrument].Item2[12 * ope + 5] & 0x3) << 6)  //KL(M)

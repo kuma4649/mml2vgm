@@ -97,6 +97,7 @@ namespace mml2vgmIDE
             azukiControl.DragOver += AzukiControl_DragOver;
             azukiControl.DragDrop += AzukiControl_DragDrop;
             azukiControl.Silence = true;
+            azukiControl.DrawingOption |= DrawingOption.ShowsHRuler;
 
             azukiControl.ColorScheme.ForeColor = Color.FromArgb(setting.ColorScheme.Azuki_ForeColor);
             azukiControl.ColorScheme.BackColor = Color.FromArgb(setting.ColorScheme.Azuki_BackColor);
@@ -169,6 +170,7 @@ namespace mml2vgmIDE
             azukiControl.DragOver += AzukiControl_DragOver;
             azukiControl.DragDrop += AzukiControl_DragDrop;
             azukiControl.Silence = true;
+            azukiControl.DrawingOption |= DrawingOption.ShowsHRuler;
 
             azukiControl.ColorScheme.ForeColor = Color.FromArgb(setting.ColorScheme.Azuki_ForeColor);
             azukiControl.ColorScheme.BackColor = Color.FromArgb(setting.ColorScheme.Azuki_BackColor);
@@ -236,6 +238,7 @@ namespace mml2vgmIDE
             azukiControl.DragOver += AzukiControl_DragOver;
             azukiControl.DragDrop += AzukiControl_DragDrop;
             azukiControl.Silence = true;
+            azukiControl.DrawingOption |= DrawingOption.ShowsHRuler;
 
             azukiControl.ColorScheme.ForeColor = Color.FromArgb(setting.ColorScheme.Azuki_ForeColor);
             azukiControl.ColorScheme.BackColor = Color.FromArgb(setting.ColorScheme.Azuki_BackColor);
