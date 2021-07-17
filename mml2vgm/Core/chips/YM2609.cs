@@ -1097,7 +1097,7 @@ namespace Core
         {
             int sizePtr = 7 + ((parent.ChipCommandSize != 2) ? 0 : 2);
             int maxSize = 0;
-            if (pcmDataEasy != null && pcmDataEasy.Length > 0)
+            if (pcmDataEasy != null && pcmDataEasy.Length > sizePtr+3)
             {
                 pcmDataEasy[1] = (byte)ChipID;
                 if (parent.ChipCommandSize == 2) pcmDataEasy[2] = (byte)(ChipID >> 8);
@@ -1112,7 +1112,7 @@ namespace Core
             {
                 foreach (byte[] dat in pcmDataDirect)
                 {
-                    if (dat != null && dat.Length > 0)
+                    if (dat != null && dat.Length > sizePtr + 3)
                     {
                         dat[1] = (byte)ChipID;
                         if (parent.ChipCommandSize == 2) dat[2] = (byte)(ChipID >> 8);
@@ -1125,7 +1125,7 @@ namespace Core
                     }
                 }
             }
-            if (pcmDataEasy != null && pcmDataEasy.Length > 0)
+            if (pcmDataEasy != null && pcmDataEasy.Length > sizePtr + 3)
             {
                 pcmDataEasy[sizePtr + 0] = (byte)maxSize;
                 pcmDataEasy[sizePtr + 1] = (byte)(maxSize >> 8);
@@ -1136,7 +1136,7 @@ namespace Core
             {
                 foreach (byte[] dat in pcmDataDirect)
                 {
-                    if (dat != null && dat.Length > 0)
+                    if (dat != null && dat.Length > sizePtr + 3)
                     {
                         dat[sizePtr + 0] = (byte)maxSize;
                         dat[sizePtr + 1] = (byte)(maxSize >> 8);
