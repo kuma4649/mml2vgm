@@ -382,28 +382,19 @@ namespace Core
 
             if (page.instrument != -1)
             {
-                byte[] port = getPortFromCh(vch);
-                byte PanFbCnt;
                 if (!page.isOp4Mode)
                 {
-                    PanFbCnt = (byte)(
-                        ((parent.instOPL[page.instrument].Item2[26] & 0x07) << 1)
-                    | (parent.instOPL[page.instrument].Item2[25] & 0x01)
-                    );
+                    byte[] inst = parent.instOPL[page.instrument].Item2;
+                    SetInstAtChannelPanFbCnt(page, mml, vch, (int)page.pan, inst[26], inst[25]);
                 }
                 else
                 {
-                    PanFbCnt = (byte)(
-                        ((parent.instOPL[page.instrument].Item2[51] & 0x07) << 1)
-                        | (parent.instOPL[page.instrument].Item2[49] & 0x01)
-                    );
+                    byte[] inst = parent.instOPL[page.instrument].Item2;
+                    SetInstAtChannelPanFbCnt(page, mml, vch, (int)page.pan, inst[51], inst[49]);
+                    SetInstAtChannelPanFbCnt(page, mml, vch + 3, (int)page.pan, inst[51], inst[50]);
                 }
-
-                SOutData(page, mml, port, (byte)(vch % 9 + 0xC0), (byte)((
-                    PanFbCnt
-                    | (page.pan << 4) // PAN
-                    )));
             }
+
 
             SetDummyData(page, mml);
         }
