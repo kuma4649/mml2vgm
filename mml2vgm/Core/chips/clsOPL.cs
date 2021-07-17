@@ -336,7 +336,7 @@ namespace Core
 
 
             SetInstAtChannelPanFbCnt(page, mml, vch, (int)page.pan, inst[51], cnt1);
-            SetInstAtChannelPanFbCnt(page, mml, vch + 3, (int)page.pan, inst[51], cnt2);
+            SetInstAtChannelPanFbCnt(page, mml, vch + 3, (int)page.pan, inst[51], cnt2);//たぶん不要
 
             page.beforeVolume = -1;
         }

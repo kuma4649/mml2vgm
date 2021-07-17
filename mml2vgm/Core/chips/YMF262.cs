@@ -366,8 +366,8 @@ namespace Core
 
         public override void CmdPan(partPage page, MML mml)
         {
+
             int n = (int)mml.args[0];
-            n = Common.CheckRange(n, 0, 3);
             page.pan = ((n & 1) << 1) | ((n & 2) >> 1);//LR反転
             int vch = page.ch;
 
@@ -380,21 +380,30 @@ namespace Core
                 else if (page.ch == 22) vch = 7;
             }
 
-            byte[] port = getPortFromCh(vch);
-
-            byte PanFbCnt = 0;
             if (page.instrument != -1)
             {
-                PanFbCnt = (byte)(
-                    (parent.instOPL[page.instrument].Item2[26] & 0x07) << 1
-                | parent.instOPL[page.instrument].Item2[25] & 0x01
-                );
-            }
+                byte[] port = getPortFromCh(vch);
+                byte PanFbCnt;
+                if (!page.isOp4Mode)
+                {
+                    PanFbCnt = (byte)(
+                        ((parent.instOPL[page.instrument].Item2[26] & 0x07) << 1)
+                    | (parent.instOPL[page.instrument].Item2[25] & 0x01)
+                    );
+                }
+                else
+                {
+                    PanFbCnt = (byte)(
+                        ((parent.instOPL[page.instrument].Item2[51] & 0x07) << 1)
+                        | (parent.instOPL[page.instrument].Item2[49] & 0x01)
+                    );
+                }
 
-            SOutData(page, mml, port, (byte)(vch % 9 + 0xC0), (byte)((
-                PanFbCnt
-                | (page.pan * 0x10) // PAN
-                )));
+                SOutData(page, mml, port, (byte)(vch % 9 + 0xC0), (byte)((
+                    PanFbCnt
+                    | (page.pan << 4) // PAN
+                    )));
+            }
 
             SetDummyData(page, mml);
         }

@@ -212,6 +212,7 @@ mml2vgm , mvc , mml2vgmIDEはMITライセンスに準ずる物とします。LIC
  ・sio29 さん  
  ・きゃどん さん  
  ・さしゅ さん  
+ ・djtuBIG-MaliceX さん  
   
  ・XPCMK  
  ・FMP7  
