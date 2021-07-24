@@ -310,25 +310,28 @@ namespace Core
             page.bendWaitCounter = -1;
             bendDelayCounter = 0;//TODO: bendDelay
 
-            for (int i = 0; i < note.bendOctave.Count; i++)
+            if (note.bendOctave != null)
             {
-                switch (note.bendOctave[i].type)
+                for (int i = 0; i < note.bendOctave.Count; i++)
                 {
-                    case enmMMLType.Octave:
-                        int n = (int)note.bendOctave[i].args[0];
-                        n = Common.CheckRange(n, 1, 8);
-                        page.bendOctave = n;
-                        break;
-                    case enmMMLType.OctaveUp:
-                        //pw.incPos(page);
-                        page.bendOctave += parent.info.octaveRev ? -1 : 1;
-                        page.bendOctave = Common.CheckRange(page.bendOctave, 1, 8);
-                        break;
-                    case enmMMLType.OctaveDown:
-                        //pw.incPos(page);
-                        page.bendOctave += parent.info.octaveRev ? 1 : -1;
-                        page.bendOctave = Common.CheckRange(page.bendOctave, 1, 8);
-                        break;
+                    switch (note.bendOctave[i].type)
+                    {
+                        case enmMMLType.Octave:
+                            int n = (int)note.bendOctave[i].args[0];
+                            n = Common.CheckRange(n, 1, 8);
+                            page.bendOctave = n;
+                            break;
+                        case enmMMLType.OctaveUp:
+                            //pw.incPos(page);
+                            page.bendOctave += parent.info.octaveRev ? -1 : 1;
+                            page.bendOctave = Common.CheckRange(page.bendOctave, 1, 8);
+                            break;
+                        case enmMMLType.OctaveDown:
+                            //pw.incPos(page);
+                            page.bendOctave += parent.info.octaveRev ? 1 : -1;
+                            page.bendOctave = Common.CheckRange(page.bendOctave, 1, 8);
+                            break;
+                    }
                 }
             }
 
@@ -1818,26 +1821,31 @@ namespace Core
             {
                 //ベンドの解析
                 //int bendDelayCounter =
-                    AnalyzeBend(page, mml, note, ml);
+                AnalyzeBend(page, mml, note, ml);
             }
-            else if(page.MPortamentDelta!=0)
+            else if (page.MPortamentSwitch != 0 || page.MPortamentOneshotSwitch!=0)
             {
+                page.MPortamentOneshotSwitch = 0;
                 note.bendSw = true;
+
+                //直前のノートがない場合は差分値(MPortamentDelta)を使用して作成する
+                //(Oneshotの場合もリセットする)
                 if (page.MPortamentLastNote == -1)
                 {
                     page.MPortamentLastNote = page.octaveNew * 12 + "czdzefzgzazb".IndexOf(note.cmd) + note.shift + page.MPortamentDelta;
                     page.MPortamentLastNote = Math.Min(Math.Max(page.MPortamentLastNote, 0), 8 * 12 + 11);
                 }
+
+                //ベンドコマンドの作成
                 note.bendCmd = note.cmd;
                 note.bendShift = note.shift;
-
                 page.octaveNow = page.octaveNew;
                 page.octaveNew = page.MPortamentLastNote / 12;
                 note.cmd = "czdzefzgzazb"[page.MPortamentLastNote % 12];
                 note.shift = 0;
                 if (note.cmd == 'z')
                 {
-                    note.cmd = "czdzefzgzazb"[(page.MPortamentLastNote % 12)-1];
+                    note.cmd = "czdzefzgzazb"[(page.MPortamentLastNote % 12) - 1];
                     note.shift = 1;
                 }
                 note.bendOctave = new List<MML>();
@@ -1849,7 +1857,11 @@ namespace Core
                     item.args.Add(page.octaveNow);
                     note.bendOctave.Add(item);
                 }
+
+                //今回のノートを保存
                 page.MPortamentLastNote = page.octaveNow * 12 + "czdzefzgzazb".IndexOf(note.bendCmd) + note.bendShift;
+
+                //ベンド実施
                 AnalyzeBend(page, mml, note, Math.Min(ml, page.MPortamentLength));
             }
 
@@ -2340,15 +2352,25 @@ namespace Core
         public void CmdPortament(partPage page, MML mml)
         {
             String cmd = (String)mml.args[0];
-            int n1, n2;
+            int n1, n2,n3;
             switch(cmd)
             {
                 case "PO":
                     n1 = (int)mml.args[1];
                     n2 = (int)mml.args[2];
-                    page.MPortamentDelta = n1;
-                    page.MPortamentLength = n2;
+                    n3 = (int)mml.args[3];
+                    page.MPortamentSwitch = n1;
+                    page.MPortamentDelta = n2;
+                    page.MPortamentLength = n3;
                     page.MPortamentLastNote = -1;
+                    break;
+                case "POO":
+                    page.MPortamentOneshotSwitch = 1;
+                    page.MPortamentLastNote = -1;
+                    break;
+                case "POS":
+                    n1 = (int)mml.args[1];
+                    page.MPortamentSwitch = n1;
                     break;
                 case "POR":
                     n1 = (int)mml.args[1];

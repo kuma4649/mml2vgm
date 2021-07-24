@@ -1,4 +1,8 @@
 更新履歴
+TAG502 2021/07/25
+  Core:ポルタメントコマンドPOの修正、POS、__ を追加
+  (testPortament.gwiを参照)
+
 TAG501 2021/07/24
   Core:ポルタメントコマンドPO,POR,POLを追加
   (testPortament.gwiを参照)

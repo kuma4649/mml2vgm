@@ -968,8 +968,9 @@ PROF            -----------------ooo-------------------------------  フェー�
 PRV             -----------------ooo-------------------------------  逆位相(n: 無効:0 右:1 左:2 両方:3)
 PDON            ooooooooooooooooooooooooooooooooooooooooooooooooooo  ページダイレクトセンド有効
 PDOF            ooooooooooooooooooooooooooooooooooooooooooooooooooo  ページダイレクトセンド無効
-POn1,n2         -oooooooooooooooooooooooooooooooooooooooooooooooooo  ポルタメント(n1:開始ノート差分 n2:長さ)
-PORn            -oooooooooooooooooooooooooooooooooooooooooooooooooo  ポルタメントリセット(n:開始ノート差分 0でポルタメント無効 半音単位で指定したノートを基準に開始ノートを指定)
+POn1,n2,n3      -oooooooooooooooooooooooooooooooooooooooooooooooooo  ポルタメント(n1:スイッチ n2:開始ノート差分 n3:長さ)
+POSn            -oooooooooooooooooooooooooooooooooooooooooooooooooo  ポルタメントスイッチ(n:0でポルタメント無効 1で有効)
+PORn            -oooooooooooooooooooooooooooooooooooooooooooooooooo  ポルタメントリセット(n:開始ノート差分 半音単位で指定したノートを基準に開始ノートを指定)
 POLn            -oooooooooooooooooooooooooooooooooooooooooooooooooo  ポルタメントタイム(n:長さ クロック指定)
 %xxx            ooooooooooooooooooooooooooooooooooooooooooooooooooo  エイリアス展開
 ;               ooooooooooooooooooooooooooooooooooooooooooooooooooo  コメントアウト 行末まで無視する

@@ -271,7 +271,7 @@ namespace Core
                     CmdLyric(pw, page, mml);
                     break;
                 case '_':
-                    log.Write("bend");
+                    log.Write("bend / Portament one shot");
                     CmdBend(pw, page, mml);
                     break;
                 case '&':
@@ -2375,8 +2375,22 @@ namespace Core
 
         private void CmdPortament(partWork pw, partPage page, MML mml)
         {
-            int n1,n2;
+            int n1,n2,n3;
 
+            if (pw.getChar(page) == 'S') //POrtament Switch
+            {
+                pw.incPos(page);
+                if (!pw.getNum(page, out n1))
+                {
+                    msgBox.setErrMsg(msg.get("E05077"), mml.line.Lp);
+                    return;
+                }
+                mml.type = enmMMLType.Portament;
+                mml.args = new List<object>();
+                mml.args.Add("POS");
+                mml.args.Add(n1);
+                return;
+            }
             if (pw.getChar(page) == 'R') //POrtament Reset
             {
                 pw.incPos(page);
@@ -2409,26 +2423,39 @@ namespace Core
             {
                 if (!pw.getNum(page, out n1))
                 {
-                    msgBox.setErrMsg(msg.get("E05077"), mml.line.Lp);
+                    msgBox.setErrMsg(msg.get("E05080"), mml.line.Lp);
                     return;
                 }
                 pw.skipTabSpace(page);
                 if (pw.getChar(page) != ',')
                 {
-                    msgBox.setErrMsg(msg.get("E05077"), mml.line.Lp);
+                    msgBox.setErrMsg(msg.get("E05080"), mml.line.Lp);
                     return;
                 }
                 pw.incPos(page);
                 if (!pw.getNum(page, out n2))
                 {
-                    msgBox.setErrMsg(msg.get("E05077"), mml.line.Lp);
+                    msgBox.setErrMsg(msg.get("E05080"), mml.line.Lp);
+                    return;
+                }
+                pw.skipTabSpace(page);
+                if (pw.getChar(page) != ',')
+                {
+                    msgBox.setErrMsg(msg.get("E05080"), mml.line.Lp);
+                    return;
+                }
+                pw.incPos(page);
+                if (!pw.getNum(page, out n3))
+                {
+                    msgBox.setErrMsg(msg.get("E05080"), mml.line.Lp);
                     return;
                 }
                 mml.type = enmMMLType.Portament;
                 mml.args = new List<object>();
                 mml.args.Add("PO");
-                mml.args.Add(n1);
-                mml.args.Add(n2);
+                mml.args.Add(n1);//switch
+                mml.args.Add(n2);//delta
+                mml.args.Add(n3);//length
                 return;
             }
         }
@@ -3371,6 +3398,16 @@ namespace Core
         private void CmdBend(partWork pw, partPage page, MML mml)
         {
             pw.incPos(page);
+
+            if (pw.getChar(page) == '_') //POrtament OneShot
+            {
+                pw.incPos(page);
+                mml.type = enmMMLType.Portament;
+                mml.args = new List<object>();
+                mml.args.Add("POO");
+                return;
+            }
+
             mml.type = enmMMLType.Bend;
             mml.args = null;
         }
