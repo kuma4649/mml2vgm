@@ -1,0 +1,40 @@
+﻿'{
+
+	TitleName   =Portament command test
+	TitleNameJ  =ポルタメントコマンドテスト
+	GameName    =
+	GameNameJ   =
+	SystemName  =
+	SystemNameJ =
+	Composer    =
+	ComposerJ   =
+	ReleaseDate =
+	Converted   =
+	Notes       =
+
+}
+
+lead synthっぽいなにか
+'@ N 000
+   AR  DR  SR  RR  SL  TL  KS  ML  DT  AM  SSG-EG
+'@ 031,001,001,001,005,026,000,001,002,000,000
+'@ 031,004,003,008,010,000,000,000,003,000,000
+'@ 031,001,001,001,005,020,000,001,006,000,000
+'@ 031,004,003,008,010,004,000,000,005,000,000
+   ALG FB
+'@ 004,005
+
+
+'Cn1 T120
+Cn1 L
+
+'F1 @0D0p3v110o5l1q0
+'F1 PO-2,48     ;ポルタメント オン 2度低い音を開始ノート 48クロックかけてベンド
+'F1 o6 e>ec<c
+'F1 POR0        ;ポルタメント オフ
+'F1 o6 e>ec<c
+'F1 PO4,4       ;ポルタメント オン 4度高い音を開始ノート 4クロックかけてベンド
+'F1 o6 e>ec<c
+'F1 POL96POR-40 ;ポルタメント オン 40度低い音を開始ノート 96クロックかけてベンド
+'F1 o6 e>ec<<c
+

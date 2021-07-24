@@ -1,4 +1,8 @@
 更新履歴
+TAG501 2021/07/24
+  Core:ポルタメントコマンドPO,POR,POLを追加
+  (testPortament.gwiを参照)
+
 TAG500 2021/07/18
   Core:OPL3:4OPモード時のパンニングを切り替えることができなかったのを修正
   (Thanks djtuBIG-MaliceXさん!)

@@ -1820,6 +1820,38 @@ namespace Core
                 //int bendDelayCounter =
                     AnalyzeBend(page, mml, note, ml);
             }
+            else if(page.MPortamentDelta!=0)
+            {
+                note.bendSw = true;
+                if (page.MPortamentLastNote == -1)
+                {
+                    page.MPortamentLastNote = page.octaveNew * 12 + "czdzefzgzazb".IndexOf(note.cmd) + note.shift + page.MPortamentDelta;
+                    page.MPortamentLastNote = Math.Min(Math.Max(page.MPortamentLastNote, 0), 8 * 12 + 11);
+                }
+                note.bendCmd = note.cmd;
+                note.bendShift = note.shift;
+
+                page.octaveNow = page.octaveNew;
+                page.octaveNew = page.MPortamentLastNote / 12;
+                note.cmd = "czdzefzgzazb"[page.MPortamentLastNote % 12];
+                note.shift = 0;
+                if (note.cmd == 'z')
+                {
+                    note.cmd = "czdzefzgzazb"[(page.MPortamentLastNote % 12)-1];
+                    note.shift = 1;
+                }
+                note.bendOctave = new List<MML>();
+                if (page.octaveNew != page.octaveNow)
+                {
+                    MML item = new MML();
+                    item.type = enmMMLType.Octave;
+                    item.args = new List<object>();
+                    item.args.Add(page.octaveNow);
+                    note.bendOctave.Add(item);
+                }
+                page.MPortamentLastNote = page.octaveNow * 12 + "czdzefzgzazb".IndexOf(note.bendCmd) + note.bendShift;
+                AnalyzeBend(page, mml, note, Math.Min(ml, page.MPortamentLength));
+            }
 
 
             if (note.length < 1)
@@ -2303,6 +2335,31 @@ namespace Core
         {
             msgBox.setErrMsg(msg.get("E10045")
                     , mml.line.Lp);
+        }
+
+        public void CmdPortament(partPage page, MML mml)
+        {
+            String cmd = (String)mml.args[0];
+            int n1, n2;
+            switch(cmd)
+            {
+                case "PO":
+                    n1 = (int)mml.args[1];
+                    n2 = (int)mml.args[2];
+                    page.MPortamentDelta = n1;
+                    page.MPortamentLength = n2;
+                    page.MPortamentLastNote = -1;
+                    break;
+                case "POR":
+                    n1 = (int)mml.args[1];
+                    page.MPortamentDelta = n1;
+                    page.MPortamentLastNote = -1;
+                    break;
+                case "POL":
+                    n2 = (int)mml.args[1];
+                    page.MPortamentLength = n2;
+                    break;
+            }
         }
     }
 

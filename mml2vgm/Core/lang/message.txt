@@ -236,6 +236,9 @@ E05073=Unknown command ('PRV?') defined.
 E05074=Unknown command ('FM?') defined.
 E05075=Unknown command ('PC?') defined.
 E05076=Illegal number defined as '\' configuration.
+E05077=Unknown command ('PO?') defined.
+E05078=Unknown command ('POR?') defined.
+E05079=Unknown command ('POL?') defined.
 
 
 ;partWork.cs 06000

@@ -682,6 +682,9 @@ namespace Core
         public bool modulationDirection { get; internal set; }
         public char beforeNote { get; internal set; } = 'c';
         public int beforeNoteShift { get; internal set; } = 0;
+        public int MPortamentDelta { get; internal set; } = 1;
+        public int MPortamentLength { get; internal set; } = 1;
+        public int MPortamentLastNote { get; internal set; } = -1;
 
         public partPage(partPage sharedPg)
         {

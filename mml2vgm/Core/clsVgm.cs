@@ -5770,6 +5770,11 @@ namespace Core
                     page.chip.CmdNoiseToneMixer(page, mml);
                     page.mmlPos++;
                     break;
+                case enmMMLType.Portament:
+                    log.Write("Portament");
+                    page.chip.CmdPortament(page, mml);
+                    page.mmlPos++;
+                    break;
                 case enmMMLType.KeyShift:
                     log.Write("KeyShift");
                     page.chip.CmdKeyShift(page, mml);

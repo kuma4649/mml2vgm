@@ -336,8 +336,8 @@ namespace Core
                     log.Write(" pan");
                     CmdPan(pw, page, mml);
                     break;
-                case 'P': // noise or tone mixer or phase reset or Page Direct send
-                    log.Write("noise or tone mixer or phase reset or Page Direct send");
+                case 'P': // noise or tone mixer or phase reset or Page Direct send or Portament
+                    log.Write("noise or tone mixer or phase reset or Page Direct send or Portament");
                     CmdMixer(pw, page, mml);
                     break;
                 case 'q': // gatetime
@@ -2354,6 +2354,12 @@ namespace Core
                 mml.args.Add(n);
                 return;
             }
+            else if (pw.getChar(page) == 'O') //PO
+            {
+                pw.incPos(page);
+                CmdPortament(pw, page, mml);
+                return;
+            }
 
             if (!pw.getNum(page, out n))
             {
@@ -2365,6 +2371,66 @@ namespace Core
             mml.args = new List<object>();
             mml.args.Add(n);
 
+        }
+
+        private void CmdPortament(partWork pw, partPage page, MML mml)
+        {
+            int n1,n2;
+
+            if (pw.getChar(page) == 'R') //POrtament Reset
+            {
+                pw.incPos(page);
+                if (!pw.getNum(page, out n1))
+                {
+                    msgBox.setErrMsg(msg.get("E05078"), mml.line.Lp);
+                    return;
+                }
+                mml.type = enmMMLType.Portament;
+                mml.args = new List<object>();
+                mml.args.Add("POR");
+                mml.args.Add(n1);
+                return;
+            }
+            if (pw.getChar(page) == 'L') //POrtament Length
+            {
+                pw.incPos(page);
+                if (!pw.getNum(page, out n1))
+                {
+                    msgBox.setErrMsg(msg.get("E05079"), mml.line.Lp);
+                    return;
+                }
+                mml.type = enmMMLType.Portament;
+                mml.args = new List<object>();
+                mml.args.Add("POL");
+                mml.args.Add(n1);
+                return;
+            }
+            else
+            {
+                if (!pw.getNum(page, out n1))
+                {
+                    msgBox.setErrMsg(msg.get("E05077"), mml.line.Lp);
+                    return;
+                }
+                pw.skipTabSpace(page);
+                if (pw.getChar(page) != ',')
+                {
+                    msgBox.setErrMsg(msg.get("E05077"), mml.line.Lp);
+                    return;
+                }
+                pw.incPos(page);
+                if (!pw.getNum(page, out n2))
+                {
+                    msgBox.setErrMsg(msg.get("E05077"), mml.line.Lp);
+                    return;
+                }
+                mml.type = enmMMLType.Portament;
+                mml.args = new List<object>();
+                mml.args.Add("PO");
+                mml.args.Add(n1);
+                mml.args.Add(n2);
+                return;
+            }
         }
 
         private void CmdKeyShiftKeyOnDelay(partWork pw, partPage page, MML mml)
