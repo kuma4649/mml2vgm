@@ -1747,6 +1747,7 @@ namespace Core
             }
             if (data == "") line.Txt += " ";
 
+            int pIndex = 0;
             foreach (string p in part)
             {
                 int n = isLayer ? 1 : 0;
@@ -1765,6 +1766,7 @@ namespace Core
                     line.Lp.chipNumber,
                     line.Lp.ch), line.Txt);
                 l.Lp.col = i + 1;
+                l.Index = pIndex++;
                 while (partData[n][p].Count < ura + 1)
                 {
                     partData[n][p].Add(new List<Line>());

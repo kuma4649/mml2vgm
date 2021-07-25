@@ -883,9 +883,12 @@ rn              ooooooooooooooooooooooooooooooooooooooooooooooooooo  休符
 "xxx"n          ooooooooooooooooooooooooooooooooooooooooooooooooooo  歌詞
 [               ooooooooooooooooooooooooooooooooooooooooooooooooooo  ループ開始位置
 ]n              ooooooooooooooooooooooooooooooooooooooooooooooooooo  ループ終了位置
+/               ooooooooooooooooooooooooooooooooooooooooooooooooooo  ループ脱出位置指定
 {               ooooooooooooooooooooooooooooooooooooooooooooooooooo  連符開始位置
 }               ooooooooooooooooooooooooooooooooooooooooooooooooooo  連符終了位置
-/               ooooooooooooooooooooooooooooooooooooooooooooooooooo  ループ脱出位置指定
+[|n             ooooooooooooooooooooooooooooooooooooooooooooooooooo  パート別リプレース開始位置(n:有効パート数)
+|n              ooooooooooooooooooooooooooooooooooooooooooooooooooo  パート別リプレース区切り位置(n:有効パート数)
+|]              ooooooooooooooooooooooooooooooooooooooooooooooooooo  パート別リプレース終了位置
 EON             -----oo--ooo--ooo--oooo--o-ooooo-o-o-oo-o-o--oooooo  エンベロープの開始
 EOF             -----oo--ooo--ooo--oooo--o-ooooo-o-o-oo-o-o--oooooo  エンベロープの停止
 EHON            ---------o----o----o-----o-----o-------------------  ハードウェアエンベロープの開始

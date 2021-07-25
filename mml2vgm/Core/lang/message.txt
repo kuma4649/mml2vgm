@@ -240,6 +240,9 @@ E05077=Unknown command ('POS?') defined.
 E05078=Unknown command ('POR?') defined.
 E05079=Unknown command ('POL?') defined.
 E05080=Unknown command ('PO?') defined.
+E05081='[|' cannot be nested.
+E05082=A '|' has been specified even though you have not started a part-wise replacement.
+E05083=A '|]' has been specified even though you have not started a part-wise replacement.
 
 
 ;partWork.cs 06000

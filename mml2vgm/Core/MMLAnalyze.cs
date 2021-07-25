@@ -56,6 +56,7 @@ namespace Core
                             page.freq = -1;
 
                             Step1(pw, page);//mml全体のフォーマット解析
+                            Step1_5(page);//ReplaceByPartsコマンドの解析
                             Step2(page);//toneDoubler,bend,tieコマンドの解析
                             Step3(page);//リピート、連符コマンドの解析
 
@@ -246,13 +247,17 @@ namespace Core
                     log.Write("length(clock)");
                     CmdClockLength(pw, page, mml);
                     break;
-                case '[': // repeat
+                case '[': // repeat / start point of Replace by parts
                     log.Write("repeat [");
                     CmdRepeatStart(pw, page, mml);
                     break;
                 case ']': // repeat
                     log.Write("repeat ]");
                     CmdRepeatEnd(pw, page, mml);
+                    break;
+                case '|': // Replace by parts / end point of Replace by parts
+                    log.Write("Replace by parts");
+                    CmdReplaceByParts(pw, page, mml);
                     break;
                 case '{': // renpu
                     log.Write("renpu {");
@@ -1212,6 +1217,14 @@ namespace Core
         private void CmdRepeatStart(partWork pw, partPage page, MML mml)
         {
             pw.incPos(page);
+
+            char c = pw.getChar(page);
+            if (c == '|')
+            {
+                CmdReplaceByParts_Start(pw, page, mml);
+                return;
+            }
+
             mml.type = enmMMLType.Repeat;
             mml.args = null;
         }
@@ -1232,6 +1245,7 @@ namespace Core
         private void CmdRenpuStart(partWork pw, partPage page, MML mml)
         {
             pw.incPos(page);
+
             mml.type = enmMMLType.Renpu;
             mml.args = null;
         }
@@ -1270,6 +1284,53 @@ namespace Core
         {
             pw.incPos(page);
             mml.type = enmMMLType.RepertExit;
+            mml.args = null;
+        }
+
+        private void CmdReplaceByParts_Start(partWork pw, partPage page, MML mml)
+        {
+            pw.incPos(page);
+
+            int num = 1;
+            if(!pw.getNum(page,out num))
+            {
+                num = 1;
+            }
+            num = Math.Max(num, 1);
+
+            mml.type = enmMMLType.ReplaceByParts_Start;
+            mml.args = new List<object>();
+            mml.args.Add(num);
+        }
+
+        private void CmdReplaceByParts(partWork pw, partPage page, MML mml)
+        {
+            pw.incPos(page);
+
+            char c = pw.getChar(page);
+            if (c == ']')
+            {
+                CmdReplaceByParts_End(pw, page, mml);
+                return;
+            }
+
+            int num = 1;
+            if (!pw.getNum(page, out num))
+            {
+                num = 1;
+            }
+            num = Math.Max(num, 1);
+
+            mml.type = enmMMLType.ReplaceByParts;
+            mml.args = new List<object>();
+            mml.args.Add(num);
+        }
+
+        private void CmdReplaceByParts_End(partWork pw, partPage page, MML mml)
+        {
+            pw.incPos(page);
+
+            mml.type = enmMMLType.ReplaceByParts_End;
             mml.args = null;
         }
 
@@ -3484,6 +3545,77 @@ namespace Core
 
             mml.args = new List<object>();
             mml.args.Add(n);
+        }
+
+        #endregion
+
+        #region step1_5
+
+        private void Step1_5(partPage page)
+        {
+            bool analyzeRBPBlock = false;
+            int analyzeStartIndex = 0;
+            int analyzeRange = 1;
+
+            for (int i = 0; i < page.mmlData.Count; i++)
+            {
+                MML mml = page.mmlData[i];
+                if (mml.type == enmMMLType.ReplaceByParts_Start)
+                {
+                    if (analyzeRBPBlock)
+                    {
+                        //解析中にさらにリプレイス開始指定があった場合
+                        msgBox.setWrnMsg(msg.get("E05081"), mml.line.Lp);
+                    }
+
+                    analyzeRBPBlock = true;
+                    analyzeStartIndex = 0;
+                    analyzeRange = (int)mml.args[0];
+
+                    page.mmlData.RemoveAt(i);
+                    i--;
+                    continue;
+                }
+                else if (mml.type == enmMMLType.ReplaceByParts)
+                {
+                    if (!analyzeRBPBlock)
+                    {
+                        msgBox.setWrnMsg(msg.get("E05082"), mml.line.Lp);
+                        continue;
+                    }
+
+                    analyzeStartIndex += analyzeRange;
+                    analyzeRange = (int)mml.args[0];
+
+                    page.mmlData.RemoveAt(i);
+                    i--;
+                    continue;
+                }
+                else if (mml.type == enmMMLType.ReplaceByParts_End)
+                {
+                    if (!analyzeRBPBlock)
+                    {
+                        msgBox.setWrnMsg(msg.get("E05083"), mml.line.Lp);
+                        continue;
+                    }
+
+                    analyzeRBPBlock = false;
+
+                    page.mmlData.RemoveAt(i);
+                    i--;
+                    continue;
+                }
+
+                if (analyzeRBPBlock)
+                {
+                    if (analyzeStartIndex > mml.line.Index || mml.line.Index >= analyzeStartIndex + analyzeRange)
+                    {
+                        page.mmlData.RemoveAt(i);
+                        i--;
+                        continue;
+                    }
+                }
+            }
         }
 
         #endregion
