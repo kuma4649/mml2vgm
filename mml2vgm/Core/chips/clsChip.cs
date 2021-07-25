@@ -1826,7 +1826,6 @@ namespace Core
             else if (page.MPortamentSwitch != 0 || page.MPortamentOneshotSwitch!=0)
             {
                 page.MPortamentOneshotSwitch = 0;
-                note.bendSw = true;
 
                 //直前のノートがない場合は差分値(MPortamentDelta)を使用して作成する
                 //(Oneshotの場合もリセットする)
