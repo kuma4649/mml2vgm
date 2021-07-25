@@ -1863,6 +1863,10 @@ namespace Core
 
                 //ベンド実施
                 AnalyzeBend(page, mml, note, Math.Min(ml, page.MPortamentLength));
+
+                note.cmd=note.bendCmd;
+                note.shift = note.bendShift;
+
             }
 
 
