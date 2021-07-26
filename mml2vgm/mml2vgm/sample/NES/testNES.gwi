@@ -17,65 +17,65 @@
 
 
 'Cn1  T120
-Cn1  r1r1r1r1r2
+'Cn1  r1r1r1r1r2
 
 
  Pulse channel test
-Na12 D0v12o4l4Q4
-Na2  r8D1(5
-Na12 @I0 cde ;Duty 12.5%
-Na12 @I1 cde ;Duty 25%
-Na12 @I2 cde ;Duty 50%
-Na12 @I3 cde ;Duty 75%(25% neg)
-Na12 rrrrrr
+'Na12 D0v12o4l4Q4
+'Na2  r8D1(5
+'Na12 @I0 cde ;Duty 12.5%
+'Na12 @I1 cde ;Duty 25%
+'Na12 @I2 cde ;Duty 50%
+'Na12 @I3 cde ;Duty 75%(25% neg)
+'Na12 rrrrrr
 
  Triangle channel test
-Na3 o3l4Q4
-Na3 [rrr]4
-Na3 cde>cde>
+'Na3 o3l4Q4
+'Na3 [rrr]4
+'Na3 cde>cde>
 
 
  Noise channel test
-Na4 l4v10Q4o1cc+dd+eff+gg+aa+b>cc+dd+rr
+'Na4 l4v10Q4o1cc+dd+eff+gg+aa+b>cc+dd+rr
 
 
  melo test
-Cn1   T80 [r2.]7 T78r4 T66r4 T70r4
-Na12  @I1 
-Na123 MPV48,1,1,3 q0l8 [ <a4>e4.g  f+d/e2 ] e4.
-Na12  MPV48,1,3,9 @I0) {f+gab>cd} l16  e2dc<ba> c2<b-a-gf g2.  <l4b>cd
-Na3   MPV48,1,2,6 Q6<< f8>        q1l2.f        c+        d    <l4g gg
+'Cn1   T80 [r2.]7 T78r4 T66r4 T70r4
+'Na12  @I1 
+'Na123 MPV48,1,1,3 q0l8 [ <a4>e4.g  f+d/e2 ] e4.
+'Na12  MPV48,1,3,9 @I0) {f+gab>cd} l16  e2dc<ba> c2<b-a-gf g2.  <l4b>cd
+'Na3   MPV48,1,2,6 Q6<< f8>        q1l2.f        c+        d    <l4g gg
 
 
-Cn1 T120
+'Cn1 T120
 
-Na1 D0o4l4Q4@I3
-Na1 l8rd f b-d16 f16r16 b-16&b-4
-Na1 l8rf+a>d<f+16a16r16>d16 &d4
-Na1 c16.<b-32>c16.<b-32 g16.f32 d+d+16.d32c+16c8.<
-Na1 b-16>dd+ef32b-4
+'Na1 D0o4l4Q4@I3
+'Na1 l8rd f b-d16 f16r16 b-16&b-4
+'Na1 l8rf+a>d<f+16a16r16>d16 &d4
+'Na1 c16.<b-32>c16.<b-32 g16.f32 d+d+16.d32c+16c8.<
+'Na1 b-16>dd+ef32b-4
 
  Sweep test
-Na1 MPH0,-7 SP1
-Na1 l8rd f b-d16 f16r16 b-16&b-4
-Na1 l8rf+a>d<f+16a16r16>d16 &d4
-Na1 MPH4,1
-Na1 c16.<b-32>c16.<b-32 g16.f32 d+d+16.d32c+16c8.<
-Na1 MPH0,7
-Na1 b-16>dd+ef32b-4
+'Na1 MPH0,-7 SP1
+'Na1 l8rd f b-d16 f16r16 b-16&b-4
+'Na1 l8rf+a>d<f+16a16r16>d16 &d4
+'Na1 MPH4,1
+'Na1 c16.<b-32>c16.<b-32 g16.f32 d+d+16.d32c+16c8.<
+'Na1 MPH0,7
+'Na1 b-16>dd+ef32b-4
 
 
  HardEnvelope & length counter test
 
-Na1 @I2D0o4l4Q8 EHT1 EH10 v10c1
-Na1                             v5d1        ; loop Envelope(volumeでスピード?)
-Na1             EHT0 EH0  v15e1 EH3f1 EH4g1 ; length counter(EHで音の長さ?)
-Na1             EHOF a1                     ; HardEnv off
+'Na1 @I2D0o4l4Q8 EHT1 EH10 v10c1
+'Na1                             v5d1        ; loop Envelope(volumeでスピード?)
+'Na1             EHT0 EH0  v15e1 EH3f1 EH4g1 ; length counter(EHで音の長さ?)
+'Na1             EHOF a1                     ; HardEnv off
 
-Na3 q0o5   r4
-Na3 EH15   c4        ; length counter
-Na3 EHOF   d4        ; HardEnv off
-Na3 EHT0   e4 f4 r4 f4 r4 ; linear
+'Na3 q0o5   r4
+'Na3 EH15   c4        ; length counter
+'Na3 EHOF   d4        ; HardEnv off
+'Na3 EHT0   e4 f4 r4 f4 r4 ; linear
 
 Na4 D0o1l4Q8 EHT1 EH10 v10c1 v5d1        ; loop Envelope(volumeでスピード?)
 Na4          EHT0 EH0  v15e1 EH3f1 EH4g1 ; length counter(EHで音の長さ?)
@@ -118,9 +118,11 @@ Na4 l4v10o1 @E1 EON [dddddddd]4
 '@ 07 07 07 07 07 07 07 07 07 07 07 07 07 07 07 07
 
 
-'Na6 V3                         ; FDS master volume( 0:2/5(min)  1:1/2  2:2/3  3:1/1(max) )
-'Na6 o4l4v32 Q8                 ; FDS max vol=63 (ただし32以上は変わらない)
-'Na6 @0 FM0  FMQ14 FMG3 cdefgab ; FM0:定義0のモジュレーション選択(自動でON),FMQ:周波数(0-4095)
-'Na6    FMOF            cdefgab ; モジュレーションOFF
+Na6 V3                         ; FDS master volume( 0:2/5(min)  1:1/2  2:2/3  3:1/1(max) )
+Na6 o4l4v32 Q8                 ; FDS max vol=63 (ただし32以上は変わらない)
+Na6 @0 FM0  FMQ14 FMG3 cdefgab ; FM0:定義0のモジュレーション選択(自動でON),FMQ:周波数(0-4095)
+Na6    FMOF            cdefgab ; モジュレーションOFF
 
+
+Na3 c2r2d1
 

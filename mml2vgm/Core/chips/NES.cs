@@ -612,7 +612,8 @@ namespace Core
                             //キーオフした直後
                             if (page.keyOff)
                             {
-                                vol = (page.HardEnvelopeSw ? 0 : 0x80) | (page.HardEnvelopeType & 0x7f);//仮
+                                //vol = (page.HardEnvelopeSw ? 0 : 0x80) | (page.HardEnvelopeType & 0x7f);//仮
+                                vol = (page.HardEnvelopeSw ? (page.HardEnvelopeType & 0x7f) : 0x80);
                                 SOutData(page, mml, port[0], 0x08, (byte)vol);
                             }
 
