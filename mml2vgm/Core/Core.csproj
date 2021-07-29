@@ -70,6 +70,7 @@
     <Compile Include="chips\RF5C164.cs" />
     <Compile Include="chips\segaPcm.cs" />
     <Compile Include="chips\SN76489.cs" />
+    <Compile Include="chips\VRC6.cs" />
     <Compile Include="chips\Y8950.cs" />
     <Compile Include="chips\YM2151.cs" />
     <Compile Include="chips\YM2203.cs" />

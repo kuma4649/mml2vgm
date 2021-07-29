@@ -62,7 +62,8 @@
         Y8950 = 23,
         YMF271 = 24,
         NES = 25,
-        DMG = 26
+        DMG = 26,
+        VRC6 = 27
     }
 
     public enum EnmZGMDevice : int

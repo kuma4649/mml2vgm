@@ -1,0 +1,75 @@
+﻿'{
+
+	TitleName            =test DMG
+	TitleNameJ           =DMGテスト
+	GameName             =
+	GameNameJ            =
+	SystemName           =
+	SystemNameJ          =
+	Composer             =kuma
+	ComposerJ            =くま
+	ReleaseDate          =2345/01/23
+	Converted            =kuma
+	Notes                =
+
+
+}
+
+
+'Cn1  T120
+
+; ch1/2 spec
+;   square wave
+;   duty 4 level 0:12.5% 1:25% 2:50% 3:75%
+;   volume 0-15
+
+ Pulse channel test
+Ga1  D0v10o4l4Q4
+Ga1  @0 cde @1 cde @2 cde @3 cde_b&b
+;'Ga1  l16o0[cdefgab>]8
+;
+;'Ga2  D0v10o4l4Q4
+;'Ga2  efg
+
+
+;     No,
+;'@ H  0 "Sin wave x2"
+;   +0 +1 +2 +3 +4 +5 +6 +7 +8 +9 +A +B +C +D +E +F
+;'@ 08 11 12 14 15 14 12 11 08 05 04 02 01 02 04 05
+;'@ 08 11 12 14 15 14 12 11 08 05 04 02 01 02 04 05
+;
+;     No,
+;'@ H  1 "Square wave"
+;   +0 +1 +2 +3 +4 +5 +6 +7 +8 +9 +A +B +C +D +E +F
+;'@ 15 15 15 15 15 15 15 15 15 15 15 15 15 15 15 15
+;'@ 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+;
+;     No,
+;'@ H  2 "Saw wave x2"
+;   +0 +1 +2 +3 +4 +5 +6 +7 +8 +9 +A +B +C +D +E +F
+;'@ 08 09 10 11 12 13 14 15 00 01 02 03 04 05 06 07
+;'@ 08 09 10 11 12 13 14 15 00 01 02 03 04 05 06 07
+
+
+; ch3 spec
+;   programable wave memory
+;   volume 0-3
+
+;'Ga3 @0v3o2l4Q4
+;'Ga3  @0cde @1cde @2cde
+
+
+; ch4 spec
+;   noise
+;   volume 0-15
+;   o1c ～ o2d+ ..Shift Clock Frequency (0-15:4bits)         from https://gbdev.io/pandocs/Sound_Controller.html
+;   P command  ..Counter Step/Width (0=15 bits, 1=7 bits)    from https://gbdev.io/pandocs/Sound_Controller.html
+;   W command  ..Dividing Ratio of Frequencies (0-7:3bits)   from https://gbdev.io/pandocs/Sound_Controller.html
+
+'Ga4 v15l8Q8o1
+'Ga4 POR10 POL24
+'Ga4 P1 w7 __d+  P1 w6 __d+  P1 w5 __d+  P1 w4 __d+  P1 w3 __d+  P1 w2 __d+  P1 w1 __d+  P1 w0 __d+
+'Ga4 P0 w7 __d+  P0 w6 __d+  P0 w5 __d+  P0 w4 __d+  P0 w3 __d+  P0 w2 __d+  P0 w1 __d+  P0 w0 __d+
+
+
+

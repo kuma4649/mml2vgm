@@ -469,6 +469,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="sample\DMG\" />
     <Folder Include="sample\RF5C164\" />
   </ItemGroup>
   <ItemGroup>

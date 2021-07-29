@@ -147,14 +147,19 @@ namespace Core
                 lstPartWork[ch].apg.volume = 0;
             }
 
+            parent.OutData((MML)null, port[0], new byte[] { NR52, 0x80 });//Sound ON
+            parent.OutData((MML)null, port[0], new byte[] { NR30, 0x80 });//Ch3 Enable
+
             //set volume 0
             parent.OutData((MML)null, port[0], new byte[] { NR12, 0x00 });//pls1
             parent.OutData((MML)null, port[0], new byte[] { NR22, 0x00 });//pls2
             parent.OutData((MML)null, port[0], new byte[] { NR32, 0x00 });//wf
+            parent.OutData((MML)null, port[0], new byte[] { NR14, 0x00 });//pls1
+            parent.OutData((MML)null, port[0], new byte[] { NR24, 0x00 });//pls2
+            parent.OutData((MML)null, port[0], new byte[] { NR34, 0x00 });//wf
             parent.OutData((MML)null, port[0], new byte[] { NR42, 0x00 });//noise
-            parent.OutData((MML)null, port[0], new byte[] { NR50, 0x00 });//total
-            parent.OutData((MML)null, port[0], new byte[] { NR51, 0x00 });//pan
-            parent.OutData((MML)null, port[0], new byte[] { NR52, 0x80 });//Sound ON
+            parent.OutData((MML)null, port[0], new byte[] { NR50, 0x77 });//total
+            parent.OutData((MML)null, port[0], new byte[] { NR51, 0xff });//pan
 
             //ヘッダの調整
             if (ChipID != 0)
@@ -162,6 +167,17 @@ namespace Core
                 parent.dat[vgmHeaderPos + 3] = new outDatum(enmMMLType.unknown, null, null, (byte)(parent.dat[vgmHeaderPos + 3].val | 0x40));//use Secondary
             }
         }
+
+        public override void StorePcm(Dictionary<int, Tuple<string, clsPcm>> newDic, KeyValuePair<int, clsPcm> v, byte[] buf, bool is16bit, int samplerate, params object[] option)
+        {
+        }
+
+        public override void StorePcmRawData(clsPcmDatSeq pds, byte[] buf, bool isRaw, bool is16bit, int samplerate, params object[] option)
+        {
+        }
+
+
+
 
         public void OutKeyOn(MML mml, partPage page)
         {
@@ -178,7 +194,7 @@ namespace Core
 
         public void OutKeyOff(MML mml, partPage page)
         {
-            page.keyOn = false;
+            page.keyOff = true;
         }
 
         public override int GetToneDoublerShift(partPage page, int octave, char noteCmd, int shift)
@@ -188,6 +204,471 @@ namespace Core
 
         public override void SetToneDoubler(partPage page, MML mml)
         {
+        }
+
+        public override void SetKeyOn(partPage page, MML mml)
+        {
+            OutKeyOn(mml, page);
+        }
+
+        public override void SetKeyOff(partPage page, MML mml)
+        {
+            OutKeyOff(mml, page);
+        }
+
+        public override void SetVolume(partPage page, MML mml)
+        {
+            int vol = page.volume;
+            if (page.envelopeMode)
+            {
+                vol = 0;
+                if (page.envIndex != -1)
+                {
+                    vol = page.volume - (15 - page.envVolume);
+                }
+            }
+
+            for (int lfo = 0; lfo < 4; lfo++)
+            {
+                if (!page.lfo[lfo].sw) continue;
+                if (page.lfo[lfo].type != eLfoType.Tremolo) continue;
+
+                vol += page.lfo[lfo].value + page.lfo[lfo].param[6];
+            }
+
+            if (page.varpeggioMode)
+            {
+                vol += page.varpDelta;
+            }
+
+            page.latestVolume = vol;
+        }
+
+        public void SetSsgFNum(partPage page, MML mml)
+        {
+            int arpNote = page.arpFreqMode ? 0 : page.arpDelta;
+            int arpFreq = page.arpFreqMode ? page.arpDelta : 0;
+
+            int f = GetSsgFNum(page, mml, page.octaveNow, page.noteCmd, page.shift + page.keyShift + arpNote, page.pitchShift);//
+            if (page.bendWaitCounter != -1)
+            {
+                f = page.bendFnum;
+            }
+
+            f = f + page.detune;
+            f = f + arpFreq;
+
+            for (int lfo = 0; lfo < 4; lfo++)
+            {
+                if (!page.lfo[lfo].sw)
+                {
+                    continue;
+                }
+                if (page.lfo[lfo].type != eLfoType.Vibrato)
+                {
+                    continue;
+                }
+                f += page.lfo[lfo].value + page.lfo[lfo].param[6];
+            }
+
+            if (page.Type == enmChannelType.Pulse || page.Type == enmChannelType.Triangle)
+            {
+                f = Common.CheckRange(f, 0, 0x7ff);
+                page.FNum = f;
+            }
+            else if (page.Type == enmChannelType.Noise || page.Type == enmChannelType.DPCM)
+            {
+                f = Common.CheckRange(f, 0, 0xf);
+                page.FNum = f;
+            }
+            else if (page.Type == enmChannelType.WaveForm)
+            {
+                f = Common.CheckRange(f, 0, 0x7ff);
+                page.FNum = f;
+            }
+        }
+
+        public int GetSsgFNum(partPage page, MML mml, int octave, char noteCmd, int shift, int pitchShift)
+        {
+            int o = octave - 1;
+            int n = Const.NOTE.IndexOf(noteCmd) + shift;
+            o += n / 12;
+
+            if (page.Type == enmChannelType.Pulse|| page.Type == enmChannelType.WaveForm)
+            {
+                o = Common.CheckRange(o, 0, 7);
+                n %= 12;
+
+                int f = o * 12 + n;
+                if (f < 0) f = 0;
+                if (f >= FNumTbl[0].Length) f = FNumTbl[0].Length - 1;
+                return FNumTbl[0][f] + pitchShift;
+            }
+            else if (page.Type == enmChannelType.Noise)
+            {
+                o = Common.CheckRange(o, 0, 1);
+                n %= 12;
+                n += o * 12;
+                n = 15 - n;
+                n += pitchShift;
+
+                int f = Common.CheckRange(n, 0, 0xf);
+                return f;
+            }
+
+            return 0;
+        }
+
+        public override int GetFNum(partPage page, MML mml, int octave, char cmd, int shift, int pitchShift)
+        {
+            return GetSsgFNum(page, mml, octave, cmd, shift, pitchShift);
+        }
+
+
+        public override void SetFNum(partPage page, MML mml)
+        {
+            SetSsgFNum(page, mml);
+        }
+
+        public override void SetLfoAtKeyOn(partPage page, MML mml)
+        {
+            for (int lfo = 0; lfo < 4; lfo++)
+            {
+                clsLfo pl = page.lfo[lfo];
+                if (!pl.sw)
+                    continue;
+                if (pl.type == eLfoType.Hardware) continue;
+                if (pl.type == eLfoType.Wah)
+                    continue;
+                if (pl.param[5] != 1)
+                    continue;
+
+                pl.isEnd = false;
+                pl.value = (pl.param[0] == 0) ? pl.param[6] : 0;//ディレイ中は振幅補正は適用されない
+                pl.waitCounter = pl.param[0];
+                pl.direction = pl.param[2] < 0 ? -1 : 1;
+                pl.depthWaitCounter = pl.param[7];
+                pl.depth = pl.param[3];
+                pl.depthV2 = pl.param[2];
+
+                if (pl.type == eLfoType.Vibrato)
+                    SetFNum(page, mml);
+
+                if (pl.type == eLfoType.Tremolo)
+                    SetVolume(page, mml);
+
+            }
+        }
+
+
+        public override void MultiChannelCommand(MML mml)
+        {
+            foreach (partWork pw in lstPartWork)
+            {
+                partPage page = pw.cpg;
+                int vol;
+
+                switch (page.Type)
+                {
+                    case enmChannelType.Pulse:
+                        {
+                            //キーオフした直後
+                            if (page.keyOff)
+                            {
+                                SOutData(page, mml, port[0], page.ch == 0 ? NR12 : NR22, 0);
+                                //SOutData(page, mml, port[0], page.ch == 0 ? NR14 : NR24, 0);
+                            }
+
+                            //
+                            // Sweepの更新
+                            //
+
+                            if (page.keyOn)
+                            {
+                                for (int i = 0; i < page.lfo.Length; i++)
+                                {
+                                    if (page.lfo[i].type != eLfoType.Hardware) continue;
+
+                                    if (!page.lfo[i].sw)
+                                    {
+                                        //SOutData(page, mml, port[0], (byte)(0x01 + page.ch * 4), (byte)0x70);
+                                        continue;
+                                    }
+
+                                    //vol = 0x80
+                                    //    | (page.lfo[i].depthWaitCounter << 4)
+                                    //    | (page.lfo[i].depth < 0 ? 0x08 : 0x00)
+                                    //    | (Math.Abs(page.lfo[i].depth));
+                                    //SOutData(page, mml, port[0], (byte)(0x01 + page.ch * 4), (byte)vol);
+                                }
+                            }
+
+                            //
+                            // Duty比とLengthの更新
+                            //
+                            if (page.dutyCycle != page.spg.dutyCycle)
+                            {
+                                //bit7-4:envelope(volume) bit3:envelope direction bit2-0:envelope time
+                                vol = ((page.dutyCycle & 0x3) << 6);
+                                SOutData(page, mml, port[0], page.ch == 0 ? NR11 : NR21, (byte)vol);
+                            }
+
+                            //
+                            // ボリュームの更新(キーオンのまえに行う必要あり)
+                            //
+
+                            if (page.keyOn 
+                                || page.latestVolume != page.beforeVolume)
+                            {
+                                //bit7-4:envelope(volume) bit3:envelope direction bit2-0:envelope time
+                                vol = ((page.latestVolume & 0xf) << 4);
+                                SOutData(page, mml, port[0], page.ch == 0 ? NR12 : NR22, (byte)vol);
+                            }
+
+                            //
+                            // 周波数の更新(と位相、エンベロープの初期化)
+                            //
+
+                            //キーオンした直後
+                            //または周波数が違う　場合は周波数再セット
+                            if (page.keyOn
+                                || page.FNum != page.beforeFNum)
+                            {
+                                int f = page.FNum;
+                                byte data = (byte)f;
+                                //frqLow(8bit)
+                                SOutData(page, mml, port[0], page.ch == 0 ? NR13 : NR23, data);
+
+                                //キーオンした直後
+                                //または周波数上位が違う　場合は周波数上位再セット
+                                //(上位をセットすると位相とエンベロープがリセットされる)
+                                if (page.keyOn 
+                                    || (page.FNum != page.beforeFNum && (page.FNum & 0x700) != (page.beforeFNum & 0x700)))
+                                {
+                                    //bit7:phaseReset bit3:length_enable bit2-0:frqHi(3bit)
+                                    data = (byte)((page.keyOn ? 0x80 : 0x00) | ((f >> 8) & 0x7));
+                                    SOutData(page, mml, port[0], page.ch == 0 ? NR14 : NR24, data);
+                                }
+                            }
+
+
+                        }
+                        break;
+                    case enmChannelType.Noise:
+                        {
+                            //キーオフした直後
+                            if (page.keyOff)
+                            {
+                                vol = 0x00;
+                                SOutData(page, mml, port[0], NR42, (byte)vol);//0x4089 この方法あってるのかなぁ
+                            }
+
+
+                            //
+                            // ボリュームの更新
+                            //
+
+                            if (page.keyOn 
+                                || page.latestVolume != page.beforeVolume)
+                            {
+                                vol = ((page.latestVolume & 0xf) << 4);
+                                SOutData(page, mml, port[0], NR42, (byte)vol);
+                            }
+
+                            //
+                            // 周波数の更新(と位相、エンベロープの初期化)
+                            //
+
+                            //キーオンした直後
+                            //または周波数が違う　場合は周波数再セット
+                            if (page.keyOn
+                                || page.FNum != page.beforeFNum)
+                            {
+                                //0-15(4bit) 0,1(1bit) 0-7(3bit)
+                                int f = ((page.FNum & 0xf) << 4) | (page.mixer & 0x8) | (page.noise & 0x7);
+                                byte data = (byte)f;
+                                SOutData(page, mml, port[0], NR43, data);
+
+                                //キーオンした直後
+                                //または周波数上位が違う　場合は周波数上位再セット
+                                //(上位をセットすると位相とエンベロープがリセットされる)
+                                if (page.keyOn)
+                                    //|| (page.FNum != page.beforeFNum && (page.FNum & 0x700) != (page.beforeFNum & 0x700)))
+                                {
+                                    //bit7:keyon
+                                    data = (byte)((page.keyOn ? 0x80 : 0x00) );
+                                    SOutData(page, mml, port[0], NR44, data);
+                                }
+                            }
+
+
+                        }
+                        break;
+                    case enmChannelType.WaveForm:
+                        {
+                            //キーオフした直後
+                            if (page.keyOff)
+                            {
+                                vol = 0x00;
+                                SOutData(page, mml, port[0], NR32 , (byte)vol);// この方法あってるのかなぁ
+                            }
+
+
+                            //
+                            // ボリュームの更新(キーオンのまえに行う必要あり)
+                            //
+
+                            if (page.keyOn
+                                || page.latestVolume != page.beforeVolume)
+                            {
+                                vol = (((4 - page.latestVolume) & 0x3) << 5);
+                                SOutData(page, mml, port[0], NR32 , (byte)vol);
+                            }
+
+                            //
+                            // 周波数の更新(と位相、エンベロープの初期化)
+                            //
+
+                            //キーオンした直後
+                            //または周波数が違う　場合は周波数再セット
+                            if (page.keyOn
+                                || page.FNum != page.beforeFNum)
+                            {
+                                int f = page.FNum;
+                                byte data = (byte)f;
+                                //frqLow(8bit)
+                                SOutData(page, mml, port[0], NR33, data);
+
+                                //キーオンした直後
+                                //または周波数上位が違う　場合は周波数上位再セット
+                                //(上位をセットすると位相とエンベロープがリセットされる)
+                                if (page.keyOn 
+                                    || (page.FNum != page.beforeFNum && (page.FNum & 0x700) != (page.beforeFNum & 0x700)))
+                                {
+                                    //bit7:keyon bit3:length_enable bit2-0:frqHi(3bit)
+                                    data = (byte)((page.keyOn ? 0x80 : 0x00) | ((f >> 8) & 0x7));
+                                    SOutData(page, mml, port[0], NR34, data);
+                                }
+                            }
+
+                        }
+                        break;
+                }
+
+                page.keyOff = false;
+                page.keyOn = false;
+                page.beforeVolume = page.latestVolume;
+                page.beforeFNum = page.FNum;
+                page.spg.dutyCycle = page.dutyCycle;
+
+            }
+
+        }
+
+
+
+
+        public override void CmdInstrument(partPage page, MML mml)
+        {
+            char type;
+            bool re = false;
+            int n;
+            if (mml.args[0] is bool)
+            {
+                type = (char)mml.args[1];
+                re = true;
+                n = (int)mml.args[2];
+            }
+            else
+            {
+                type = (char)mml.args[0];
+                n = (int)mml.args[1];
+            }
+
+            //Duty比切り替え
+            if (type == 'I')
+            {
+                if (page.Type == enmChannelType.Pulse)
+                {
+                    if (re) n = page.instrument + n;
+                    n = Common.CheckRange(n, 0, 3);
+                    page.dutyCycle = n;
+                    SetDummyData(page, mml);
+                    return;
+                }
+
+                msgBox.setErrMsg(msg.get("E32000"), mml.line.Lp);
+                return;
+            }
+
+            //E指定　ソフトエンベロープ切り替え
+            if (type == 'E')
+            {
+                SetEnvelopParamFromInstrument(page, n, re, mml);
+                return;
+            }
+
+            if (page.Type == enmChannelType.Pulse)
+            {
+                if (re) n = page.instrument + n;
+                n = Common.CheckRange(n, 0, 3);
+                page.dutyCycle = n;
+                SetDummyData(page, mml);
+                return;
+            }
+            else if (page.Type == enmChannelType.WaveForm)
+            {
+                if (re) n = page.instrument + n;
+                n = Common.CheckRange(n, 0, 255);
+                if (!parent.instWF.ContainsKey(n))
+                {
+                    msgBox.setErrMsg(string.Format(msg.get("E32004"), n)
+                        , mml.line.Lp);
+                    return;
+                }
+
+                SetWaveFormFromInstrument(page, n, mml);
+                return;
+            }
+
+            //無指定の場合は ソフトエンベロープ切り替え
+            SetEnvelopParamFromInstrument(page, n, re, mml);
+
+        }
+
+        /// <summary>
+        /// Ch3:波形書き換え
+        /// </summary>
+        private void SetWaveFormFromInstrument(partPage page, int n, MML mml)
+        {
+            SOutData(page, mml, port[0], NR30, 0x00);
+            page.beforeFNum = -1;
+            for (int i = 0; i < 16; i++)
+            {
+                // 0 は音色番号が入っている為1からスタート
+                SOutData(page, mml, port[0], (byte)(0x20 + i)
+                    , (byte)(
+                    ((parent.instWF[n].Item2[i * 2 + 0 + 1] & 0xf)<<4)
+                    | (parent.instWF[n].Item2[i * 2 + 1 + 1] & 0xf)
+                    ));
+            }
+            SOutData(page, mml, port[0], NR30, 0x80);
+
+
+        }
+
+        public override void CmdNoiseToneMixer(partPage page, MML mml)
+        {
+            int n = (int)mml.args[0];
+            n = Common.CheckRange(n, 0, 1);
+            page.mixer = n == 1 ? 0x8 : 0x0;
+        }
+
+        public override void CmdNoise(partPage page, MML mml)
+        {
+            int n = (int)mml.args[0];
+            n = Common.CheckRange(n, 0, 7);
+            page.noise = n;
         }
 
     }
