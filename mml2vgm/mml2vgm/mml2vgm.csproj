@@ -160,6 +160,9 @@
     <None Include="sample\C352\testPageFunctionC352.gwi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="sample\DMG\testDMG.gwi">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="sample\HuC6280\testCommandArpeggioHuc6280.gwi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -469,7 +472,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="sample\DMG\" />
     <Folder Include="sample\RF5C164\" />
   </ItemGroup>
   <ItemGroup>
