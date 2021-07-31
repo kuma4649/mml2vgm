@@ -50,6 +50,8 @@ namespace Core
         private const byte AUD3WE = 0x2E;
         private const byte AUD3WF = 0x2F;
 
+        private byte pan = 0xff;
+
         public DMG(ClsVgm parent, int chipID, string initialPartName, string stPath, int chipNumber) : base(parent, chipID, initialPartName, stPath, chipNumber)
         {
             _chipType = enmChipType.DMG;
@@ -133,6 +135,9 @@ namespace Core
                 pg.volume = 15;
                 pg.MaxVolume = 15;
                 pg.port = port;
+                pg.dutyCycle = 0;
+                pg.spg.dutyCycle = -1;
+                pg.panL = 3;
             }
 
         }
@@ -160,6 +165,7 @@ namespace Core
             parent.OutData((MML)null, port[0], new byte[] { NR42, 0x00 });//noise
             parent.OutData((MML)null, port[0], new byte[] { NR50, 0x77 });//total
             parent.OutData((MML)null, port[0], new byte[] { NR51, 0xff });//pan
+            pan = 0xff;
 
             //ヘッダの調整
             if (ChipID != 0)
@@ -408,8 +414,8 @@ namespace Core
                             //
                             if (page.dutyCycle != page.spg.dutyCycle)
                             {
-                                //bit7-4:envelope(volume) bit3:envelope direction bit2-0:envelope time
-                                vol = ((page.dutyCycle & 0x3) << 6);
+                                //bit7-6:duty bit5-0:sound length
+                                vol = ((page.dutyCycle & 0x3) << 6) | (page.HardEnvelopeSw ? page.HardEnvelopeType : 0);
                                 SOutData(page, mml, port[0], page.ch == 0 ? NR11 : NR21, (byte)vol);
                             }
 
@@ -421,7 +427,9 @@ namespace Core
                                 || page.latestVolume != page.beforeVolume)
                             {
                                 //bit7-4:envelope(volume) bit3:envelope direction bit2-0:envelope time
-                                vol = ((page.latestVolume & 0xf) << 4);
+                                vol = ((page.latestVolume & 0xf) << 4) | (
+                                    (page.HardEnvelopeSpeed > 0 ? 0x0 : 0x8) | Math.Abs(page.HardEnvelopeSpeed)
+                                    );
                                 SOutData(page, mml, port[0], page.ch == 0 ? NR12 : NR22, (byte)vol);
                             }
 
@@ -445,8 +453,8 @@ namespace Core
                                 if (page.keyOn 
                                     || (page.FNum != page.beforeFNum && (page.FNum & 0x700) != (page.beforeFNum & 0x700)))
                                 {
-                                    //bit7:phaseReset bit3:length_enable bit2-0:frqHi(3bit)
-                                    data = (byte)((page.keyOn ? 0x80 : 0x00) | ((f >> 8) & 0x7));
+                                    //bit7:phaseReset bit6:length_enable bit2-0:frqHi(3bit)
+                                    data = (byte)((page.keyOn ? 0x80 : 0x00) | (page.HardEnvelopeSw ? 0x40 : 0x00) | ((f >> 8) & 0x7));
                                     SOutData(page, mml, port[0], page.ch == 0 ? NR14 : NR24, data);
                                 }
                             }
@@ -465,13 +473,25 @@ namespace Core
 
 
                             //
+                            // Duty比とLengthの更新
+                            //
+                            if (page.dutyCycle != page.spg.dutyCycle)
+                            {
+                                //bit5-0:sound length
+                                vol = page.HardEnvelopeSw ? page.HardEnvelopeType : 0;
+                                SOutData(page, mml, port[0], NR41, (byte)vol);
+                            }
+
+                            //
                             // ボリュームの更新
                             //
 
                             if (page.keyOn 
                                 || page.latestVolume != page.beforeVolume)
                             {
-                                vol = ((page.latestVolume & 0xf) << 4);
+                                vol = ((page.latestVolume & 0xf) << 4) | (
+                                    (page.HardEnvelopeSpeed > 0 ? 0x0 : 0x8) | Math.Abs(page.HardEnvelopeSpeed)
+                                    );
                                 SOutData(page, mml, port[0], NR42, (byte)vol);
                             }
 
@@ -496,7 +516,7 @@ namespace Core
                                     //|| (page.FNum != page.beforeFNum && (page.FNum & 0x700) != (page.beforeFNum & 0x700)))
                                 {
                                     //bit7:keyon
-                                    data = (byte)((page.keyOn ? 0x80 : 0x00) );
+                                    data = (byte)((page.keyOn ? 0x80 : 0x00) | (page.HardEnvelopeSw ? 0x40 : 0x00));
                                     SOutData(page, mml, port[0], NR44, data);
                                 }
                             }
@@ -511,6 +531,17 @@ namespace Core
                             {
                                 vol = 0x00;
                                 SOutData(page, mml, port[0], NR32 , (byte)vol);// この方法あってるのかなぁ
+                            }
+
+
+                            //
+                            // Duty比とLengthの更新
+                            //
+                            if (page.dutyCycle != page.spg.dutyCycle)
+                            {
+                                //bit5-0:sound length
+                                vol = page.HardEnvelopeSw ? page.HardEnvelopeType : 0;
+                                SOutData(page, mml, port[0], NR31, (byte)vol);
                             }
 
 
@@ -546,7 +577,7 @@ namespace Core
                                     || (page.FNum != page.beforeFNum && (page.FNum & 0x700) != (page.beforeFNum & 0x700)))
                                 {
                                     //bit7:keyon bit3:length_enable bit2-0:frqHi(3bit)
-                                    data = (byte)((page.keyOn ? 0x80 : 0x00) | ((f >> 8) & 0x7));
+                                    data = (byte)((page.keyOn ? 0x80 : 0x00) | (page.HardEnvelopeSw ? 0x40 : 0x00) | ((f >> 8) & 0x7));
                                     SOutData(page, mml, port[0], NR34, data);
                                 }
                             }
@@ -669,6 +700,54 @@ namespace Core
             int n = (int)mml.args[0];
             n = Common.CheckRange(n, 0, 7);
             page.noise = n;
+        }
+
+        public override void CmdHardEnvelope(partPage page, MML mml)
+        {
+            string cmd = (string)mml.args[0];
+
+            switch (cmd)
+            {
+                case "EH":
+                    page.HardEnvelopeSpeed = Common.CheckRange((int)mml.args[1], -7, 7);
+                    break;
+                case "EHON":
+                    page.HardEnvelopeSw = true;
+                    break;
+                case "EHOF":
+                    page.HardEnvelopeSw = false;
+                    break;
+                case "EHT":
+                    page.HardEnvelopeSw = true;
+                    if(page.Type!= enmChannelType.WaveForm)
+                        page.HardEnvelopeType = Common.CheckRange((int)mml.args[1], 0, 63);
+                    else
+                        page.HardEnvelopeType = Common.CheckRange((int)mml.args[1], 0, 255);
+                    page.spg.dutyCycle = -1;//noise chも含む(フラグとして使っている...)
+                    break;
+            }
+        }
+
+        public override void CmdPan(partPage page, MML mml)
+        {
+            int l = (int)mml.args[0];
+
+            l = Common.CheckRange(l, 0, 3);
+            page.panL = l;
+
+            pan &= (byte)(~(0x11 << page.ch));
+            pan |= (byte)( ((page.panL & 1) * 0x1 | (page.panL & 2) * 0x08) << page.ch);
+            SOutData(page, mml, port[0], NR51, pan);
+        }
+
+        public override void CmdY(partPage page, MML mml)
+        {
+            if (mml.args[0] is string) return;
+
+            byte adr = (byte)(int)mml.args[0];
+            byte dat = (byte)(int)mml.args[1];
+
+            SOutData(page, mml, port[0],adr, dat);
         }
 
     }

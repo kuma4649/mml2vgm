@@ -715,13 +715,13 @@
   - 非対応
   * 未実装
 
-コマンド        CFFFESRTTTTTPPPPPUUUUUUNNNXZHYGALLIIBBBJJDDVVKQKMNF-  内容
-                ofepp  fesabfesrpfesrpafes      frfrfrpfrfrfp  3 ed-  
+コマンド        CFFFESRTTTTTPPPPPUUUUUUNNNXZHYGALLIIBBBJJDDVVKQKMNFG  内容
+                ofepp  fesabfesrpfesrpafes      frfrfrpfrfrfp  3 edb  
 ----------------------------------------------------------------------
-@n              -oooo-ooo-oooo--ooo--oooo-ooooo-o-o-o-oo-o-oooooo-o-  音色番号指定(0 - 255)
+@n              -oooo-ooo-oooo--ooo--oooo-ooooo-o-o-o-oo-o-oooooo-oo  音色番号指定(0 - 255)
 @n1,n2          -------------------------------------------oo-------  音色番号指定(n1:0 - 255 n2:0 - 255) n1:PCM音色番号 n2:1opeFM音色定義番号
 @n              ---oo-----o-----------------o--------------  -------  PCM Map番号指定(0 - 255)(PCMマッピングモードが有効の時のみ)
-@In             --------------------------------o----------------o--  プリセット音色番号指定(1 - 15)
+@In             --------------------------------o----------------o-o  プリセット音色番号指定(1 - 15)
 @n              -----o-------------------------------------oo----o--  PCM音色番号指定(0 - 255)(PCMモード時)
 @n              -----o---o----oo---oo----o-----o-o-o-o--o-o---------  エンベロープ番号指定(0 - 255)
 @En             ------o---oo---oo---ooo----ooooo-o-o-o--o-oooooooo--  エンベロープ番号指定(0 - 255)
@@ -733,47 +733,47 @@
                                                                       エンベロープ再現不良を抑えるために用意した機能。
                                                                       実際のチップによる演奏の場合を想定していて、
                                                                       エミュレーションによる演奏の場合は効果が薄い。
-@vn             -oo--oooooooooooooooooooooooooooooooooooooooooooooo-  )(コマンド使用時、値を省略した場合に適用される値
+@vn             -oo--ooooooooooooooooooooooooooooooooooooooooooooooo  )(コマンド使用時、値を省略した場合に適用される値
 @Wn,n,n,n       -----------------oo---------------------------------  基本波形番号指定(0 - 255) 基本波形4種を指定した波形に変更できる
-ln              ooooooooooooooooooooooooooooooooooooooooooooooooooo-  デフォルト音長指定
-l#n             ooooooooooooooooooooooooooooooooooooooooooooooooooo-  デフォルト音長指定(クロック値指定)
-on              -ooo-ooooo-oooo-oooo-oooooo-o-ooo-o-o-oo-o---oooooo-  オクターブ絶対指定(1 - 8)(実際に発音される音は可能な音域のみ)
+ln              oooooooooooooooooooooooooooooooooooooooooooooooooooo  デフォルト音長指定
+l#n             oooooooooooooooooooooooooooooooooooooooooooooooooooo  デフォルト音長指定(クロック値指定)
+on              -ooo-ooooo-oooo-oooo-oooooo-o-ooo-o-o-oo-o---ooooooo  オクターブ絶対指定(1 - 8)(実際に発音される音は可能な音域のみ)
 on              ---o------------------------------------------------  オクターブ絶対指定(3 - 5)(実際に発音される音は可能な音域のみ)
 on              ---------------------------o-o----------------------  オクターブ絶対指定(2 - 5)(実際に発音される音は可能な音域のみ)
 on              -------------------------------------------oo-------  オクターブ絶対指定(1 - 16)(実際に発音される音は可能な音域のみ)
-Dn              -ooo-ooooo-oooo-oooo-oooooooooooo-o-o-oo-o-oooooooo-  ディチューン (範囲未チェック)絶対指定のみ
-D>n             -ooo-ooooo-oooo-oooo-oooooooooooo-o-o-oo-o-oooooooo-  ディチューン (範囲未チェック)相対指定
-D<n             -ooo-ooooo-oooo-oooo-oooooooooooo-o-o-oo-o-oooooooo-  ディチューン (範囲未チェック)相対指定
+Dn              -ooo-ooooo-oooo-oooo-oooooooooooo-o-o-oo-o-ooooooooo  ディチューン (範囲未チェック)絶対指定のみ
+D>n             -ooo-ooooo-oooo-oooo-oooooooooooo-o-o-oo-o-ooooooooo  ディチューン (範囲未チェック)相対指定
+D<n             -ooo-ooooo-oooo-oooo-oooooooooooo-o-o-oo-o-ooooooooo  ディチューン (範囲未チェック)相対指定
 vn              ----------------------------------------------o-----  音量絶対指定(Q         : 0 - 65535)
 vn              ------------------------------o---------------------  音量絶対指定(G         : 0 -   256)
 vn              ------o----o----o----oo---------------o-------------  音量絶対指定(R/Tb/Pp/Bp: 0 -   255)
 vn              -oo----oo---oo---oo----oo-oo-o-------------oo--oo---  音量絶対指定(Y/E/Tf/Te/Pf/Pe/Nf/Ne/Vf/Vp/Z/Y/K3: 0 - 127)
 vn              ----------o----o----o-------o-----------------------  音量絶対指定(Ta/Pr/H: 0 -    31)
-vn              -----o---o----o----o-----o-----ooo-------oo--o---o--  音量絶対指定(S/Ts/Ps/Ns/Lf/Lr/K: 0 - 15)
+vn              -----o---o----o----o-----o-----ooo-------oo--o---o-o  音量絶対指定(S/Ts/Ps/Ns/Lf/Lr/K/Ne/Gb: 0 - 15)
 vn              ----------------------------------oooo-oo---------o-  音量絶対指定(S/Ts/Ps/Ns/Lf/Lr/K: 0 - 63)
 Vn              ----------o----o----o-------------------------------  ADPCM-A/RHYTHM全体の音量絶対指定(0-63)
 Vn              --------------------------------------------------o-  マスターボリュームの音量絶対指定( 0:2/5(min)  1:1/2  2:2/3  3:1/1(max) )
 Vn1,n2          ----------------------------o-----------------------  マスターボリュームの音量絶対指定(n1: 左 0 - 15  n2: 右 0 - 15 )
->               -ooo-ooooo-oooo-oooo-oooooooooooo-o-o-oo-o-oooooooo-  オクターブ相対指定(上げ)
-<               -ooo-ooooo-oooo-oooo-oooooooooooo-o-o-oo-o-oooooooo-  オクターブ相対指定(下げ)
-)               -oo--oooooooooooooooooooooooooooooooooooooooooooooo-  音量相対指定(上げ)
+>               -ooo-ooooo-oooo-oooo-oooooooooooo-o-o-oo-o-ooooooooo  オクターブ相対指定(上げ)
+<               -ooo-ooooo-oooo-oooo-oooooooooooo-o-o-oo-o-ooooooooo  オクターブ相対指定(下げ)
+)               -oo--ooooooooooooooooooooooooooooooooooooooooooooooo  音量相対指定(上げ)
 )n              -oo----oo---oo---oo----oo-oo-o-------------oo--oo---  音量相対指定(上げ)(Y/E/Tf/Te/Pf/Pe/Nf/Ne/Vf/Vp/Z/Y/K3: 0 - 127)
-)n              -----o---o----o----o-----o--o--ooo-------oo--o------  音量相対指定(上げ)(S/Ts/Ps/Ns/H/Lf/Lr/K: 0 - 15)
+)n              -----o---o----o----o-----o--o--ooo-------oo--o-----o  音量相対指定(上げ)(S/Ts/Ps/Ns/H/Lf/Lr/K/Ne/Fd/Gb: 0 - 15)
 )n              ----------------------------------oooo-oo-----------  音量相対指定(上げ)(S/Ts/Ps/Ns/H/Lf/Lr/K: 0 - 63)
 )n              ------o----o----o----oo---------------o-------------  音量相対指定(上げ)(R/Tb/Pp/Bp: 0 - 255)
 )n              ------------------------------o---------------------  音量相対指定(上げ)(G: 0 - 256)
 )n              ----------o----o----o-------------------------------  音量相対指定(上げ)(Ta/Pr: 0-31)
 )n              ----------------------------------------------o-----  音量相対指定(上げ)(Q: 0-65535)
-(               -oo--oooooooooooooooooooooooooooooooooooooooooooooo-  音量相対指定(下げ)
+(               -oo--ooooooooooooooooooooooooooooooooooooooooooooooo  音量相対指定(下げ)
 (n              -oo----oo---oo---oo----oo-oo-o-------------oo--oo---  音量相対指定(下げ)(Y/E/Tf/Te/Pf/Pe/Nf/Ne/Z/Y/K3: 0 - 127)
-(n              -----o---o----o----o-----o--o--ooo-------oo--o------  音量相対指定(下げ)(S/Ts/Ps/Ns/Lf/Lr/K: 0 - 15)
+(n              -----o---o----o----o-----o--o--ooo-------oo--o-----o  音量相対指定(下げ)(S/Ts/Ps/Ns/Lf/Lr/K/Ne/Fd/Gb: 0 - 15)
 (n              ----------------------------------oooo-oo-----------  音量相対指定(下げ)(Ifr/Bfr/Jfr: 0 - 63)
 (n              ------o----o----o----oo---------------o-------------  音量相対指定(下げ)(R/Tb/Pp/Bp: 0 - 255)
 (n              ------------------------------o---------------------  音量相対指定(上げ)(G: 0 - 256)
 (n              ----------o----o----o-------------------------------  音量相対指定(下げ)(Ta/Pr: 0-31)
 (n              ----------------------------------------------o-----  音量相対指定(下げ)(Q: 0-65535)
-&               ooooooooooooooooooooooooooooooooooooooooooooooooooo-  タイ
-yn1,n2          -ooo-oooooooooooooooooooooooooooooooooooooo  oooooo-  レジスタ直接書き込み(n1=レジスタ番号 n2=データ)ポートはそのChによる。
+&               oooooooooooooooooooooooooooooooooooooooooooooooooooo  タイ
+yn1,n2          -ooo-oooooooooooooooooooooooooooooooooooooo  ooooooo  レジスタ直接書き込み(n1=レジスタ番号 n2=データ)ポートはそのChによる。
 yDTML,n1,n2     -ooo---oo---oo---oo----oo---------------------------  DT,MLレジスタ直接書き込み(n1=OP(1 - 4) n2=データ)ポートはそのChによる。
 yTL,n1,n2       -ooo---oo---oo---oo----oo---------------------------  TLレジスタ直接書き込み(n1=OP(1 - 4) n2=データ)ポートはそのChによる。
 yKSAR,n1,n2     -ooo---oo---oo---oo----oo---------------------------  KS,ARレジスタ直接書き込み(n1=OP(1 - 4) n2=データ)ポートはそのChによる。
@@ -797,7 +797,7 @@ yDT2SR,n1,n2    --------------------------o-------------------------  DT2,SRレ�
 yDT2D2R,n1,n2   --------------------------o-------------------------  同上
 ySLRR,n1,n2     --------------------------o-------------------------  SL,RRレジスタ直接書き込み(n1=OP(1 - 4) n2=データ)ポートはそのChによる。
 yD1LRR,n1,n2    --------------------------o-------------------------  同上
-Mx1x2n,...      -oo--oooooooooooooooooooooooooooooooooooooooooooooo-  LFO(
+Mx1x2n,...      -oo--ooooooooooooooooooooooooooooooooooooooooooooooo  LFO(
                                                                       x1:P/Q/R/S          識別子(1パート当たり4種類定義、使用できる)
                                                                       x2:T/V/H/W          T:音量
                                                                                           V:音程(Ta/Pr不可)
@@ -879,23 +879,27 @@ MAMSn           -oo----oo---oo---oo----oo------------------  -------  AMS値 音
 MAMSn           --------------------------o----------------  -------  AMS値 音量LFO感度(0-3)
 MPMSn           -oo----oo---oo---oo----oo------------------  -------  PMS値 音程LFO感度(0-3)
 MPMSn           --------------------------o----------------  -------  PMS値 音程LFO感度(0-7)
-Sx1n            -oo--oooooooooooooooooooooooooooooooooooooooooooooo-  LFOスイッチ(x1: P/Q/R/S  n: 0(OFF)/1(ON))
-rn              ooooooooooooooooooooooooooooooooooooooooooooooooooo-  休符
-"xxx"n          ooooooooooooooooooooooooooooooooooooooooooooooooooo-  歌詞
-[               ooooooooooooooooooooooooooooooooooooooooooooooooooo-  ループ開始位置
-]n              ooooooooooooooooooooooooooooooooooooooooooooooooooo-  ループ終了位置
-/               ooooooooooooooooooooooooooooooooooooooooooooooooooo-  ループ脱出位置指定
-{               ooooooooooooooooooooooooooooooooooooooooooooooooooo-  連符開始位置
-}               ooooooooooooooooooooooooooooooooooooooooooooooooooo-  連符終了位置
-[|n             ooooooooooooooooooooooooooooooooooooooooooooooooooo-  パート別リプレース開始位置(n:有効パート数)
-|n              ooooooooooooooooooooooooooooooooooooooooooooooooooo-  パート別リプレース区切り位置(n:有効パート数)
-|]              ooooooooooooooooooooooooooooooooooooooooooooooooooo-  パート別リプレース終了位置
-EON             -----oo--ooo--ooo--oooo--o-ooooo-o-o-oo-o-o--oooooo-  エンベロープの開始
-EOF             -----oo--ooo--ooo--oooo--o-ooooo-o-o-oo-o-o--oooooo-  エンベロープの停止
+Sx1n            -oo--ooooooooooooooooooooooooooooooooooooooooooooooo  LFOスイッチ(x1: P/Q/R/S  n: 0(OFF)/1(ON))
+rn              oooooooooooooooooooooooooooooooooooooooooooooooooooo  休符
+"xxx"n          oooooooooooooooooooooooooooooooooooooooooooooooooooo  歌詞
+[               oooooooooooooooooooooooooooooooooooooooooooooooooooo  ループ開始位置
+]n              oooooooooooooooooooooooooooooooooooooooooooooooooooo  ループ終了位置
+/               oooooooooooooooooooooooooooooooooooooooooooooooooooo  ループ脱出位置指定
+{               oooooooooooooooooooooooooooooooooooooooooooooooooooo  連符開始位置
+}               oooooooooooooooooooooooooooooooooooooooooooooooooooo  連符終了位置
+[|n             oooooooooooooooooooooooooooooooooooooooooooooooooooo  パート別リプレース開始位置(n:有効パート数)
+|n              oooooooooooooooooooooooooooooooooooooooooooooooooooo  パート別リプレース区切り位置(n:有効パート数)
+|]              oooooooooooooooooooooooooooooooooooooooooooooooooooo  パート別リプレース終了位置
+EON             -----oo--ooo--ooo--oooo--o-ooooo-o-o-oo-o-o--ooooooo  エンベロープの開始
+EOF             -----oo--ooo--ooo--oooo--o-ooooo-o-o-oo-o-o--ooooooo  エンベロープの停止
 EHON            ---------o----o----o-----o-----o--------------------  ハードウェアエンベロープの開始
 EHOF            ---------o----o----o-----o-----o--------------------  ハードウェアエンベロープの停止
 EHTn            ---------o----o----o-----o-----o--------------------  ハードウェアエンベロープタイプ
 EHn             ---------o----o----o-----o-----o--------------------  ハードウェアエンベロープ周波数
+EHON            ---------------------------------------------------o  サウンドレングスの開始
+EHOF            ---------------------------------------------------o  サウンドレングスの停止
+EHTn            ---------------------------------------------------o  サウンドレングスの長さ
+EHn             ---------------------------------------------------o  ハードウェアエンベロープスピード
 HSON            ---------o----o----o-----o-----o--------------------  Hardware envelope Sync mode ON
 HSOF            ---------o----o----o-----o-----o--------------------  Hardware envelope Sync mode OFf(default)
 HSOn            ---------o----o----o-----o-----o--------------------  Hardware envelope Sync mode Octave ( n : 1 ~ 5 )(default : 3)
@@ -904,17 +908,17 @@ H<              ---------o----o----o-----o-----o--------------------  Hardware e
 HSDn            ---------o----o----o-----o-----o--------------------  Hardware envelope Sync mode Detune ( n : 0 ~ 255 )(default : 0)
 HSTN            ---------o----o----o-----o-----o--------------------  Hardware envelope Sync mode Tone override oN(default)
 HSTF            ---------o----o----o-----o-----o--------------------  Hardware envelope Sync mode Tone override oFf
-APON            -ooooooooo-oooo-oooo-oooooooooooooooooooooooooooooo-  音程アルペジオの開始
-APOF            -ooooooooo-oooo-oooo-oooooooooooooooooooooooooooooo-  音程アルペジオの停止
-APn             -ooooooooo-oooo-oooo-oooooooooooooooooooooooooooooo-  音程アルペジオの定義番号を指定
-VPON            -ooooooooo-oooo-oooo-oooooooooooooooooooooooooooooo-  音量アルペジオの開始
-VPOF            -ooooooooo-oooo-oooo-oooooooooooooooooooooooooooooo-  音量アルペジオの停止
-VPn             -ooooooooo-oooo-oooo-oooooooooooooooooooooooooooooo-  音量アルペジオの定義番号を指定
-CAONn           ooooooooooooooooooooooooooooooooooooooooooooooooooo-  コマンドアルペジオの開始
+APON            -ooooooooo-oooo-oooo-ooooooooooooooooooooooooooooooo  音程アルペジオの開始
+APOF            -ooooooooo-oooo-oooo-ooooooooooooooooooooooooooooooo  音程アルペジオの停止
+APn             -ooooooooo-oooo-oooo-ooooooooooooooooooooooooooooooo  音程アルペジオの定義番号を指定
+VPON            -ooooooooo-oooo-oooo-ooooooooooooooooooooooooooooooo  音量アルペジオの開始
+VPOF            -ooooooooo-oooo-oooo-ooooooooooooooooooooooooooooooo  音量アルペジオの停止
+VPn             -ooooooooo-oooo-oooo-ooooooooooooooooooooooooooooooo  音量アルペジオの定義番号を指定
+CAONn           oooooooooooooooooooooooooooooooooooooooooooooooooooo  コマンドアルペジオの開始
                                                                        ( n:  アルペジオスロット 0 - )
-CAOFn           ooooooooooooooooooooooooooooooooooooooooooooooooooo-  コマンドアルペジオの停止
+CAOFn           oooooooooooooooooooooooooooooooooooooooooooooooooooo  コマンドアルペジオの停止
                                                                        ( n:  アルペジオスロット 0 - )
-CAn1,n2         ooooooooooooooooooooooooooooooooooooooooooooooooooo-  コマンドアルペジオの定義番号を指定
+CAn1,n2         oooooooooooooooooooooooooooooooooooooooooooooooooooo  コマンドアルペジオの定義番号を指定
                                                                        ( n1: アルペジオスロット 0 -  
                                                                          n2: 定義番号           0 - 255 )
 EXON            -oo----oo---oo---oo----oo---------------------------  効果音モードの開始
@@ -927,14 +931,14 @@ KDn             -oo----oo---oo---oo----oo---------------------------  キーオ�
 KDn1,n2,n3,n4   -oo----oo---oo---oo----oo---------------------------  キーオンディレイ
                                                                        n1～n4はそれぞれOP1～OP4までのディレイ値。
                                                                        この形式で指定すると自動的にスイッチがONになる
-L               ooooooooooooooooooooooooooooooooooooooooooooooooooo-  曲全体のループ位置指定(曲者です)
-J               ooooooooooooooooooooooooooooooooooooooooooooooooooo-  指定した位置まで演奏をスキップする。複数指定した場合は最後のJが有効になる
-qn              -ooo-oooooooooooooooooooooooooooooooooooooooooooooo-  ゲートタイム指定(クロック数で指定。音長分のクロック数からn引いた分が
+L               oooooooooooooooooooooooooooooooooooooooooooooooooooo  曲全体のループ位置指定(曲者です)
+J               oooooooooooooooooooooooooooooooooooooooooooooooooooo  指定した位置まで演奏をスキップする。複数指定した場合は最後のJが有効になる
+qn              -ooo-ooooooooooooooooooooooooooooooooooooooooooooooo  ゲートタイム指定(クロック数で指定。音長分のクロック数からn引いた分が
                                                                       発音する長さになる。)
-Qn              -ooo-oooooooooooooooooooooooooooooooooooooooooooooo-  ゲートタイム割合指定(1 - 8)(n/8の長さだけ発音する)
-q*n             -ooo-oooooooooooooooooooooooooooooooooooooooooooooo-  ゲートタイム指定(クロック数で指定。音長分のクロック数だけ
+Qn              -ooo-ooooooooooooooooooooooooooooooooooooooooooooooo  ゲートタイム割合指定(1 - 8)(n/8の長さだけ発音する)
+q*n             -ooo-ooooooooooooooooooooooooooooooooooooooooooooooo  ゲートタイム指定(クロック数で指定。音長分のクロック数だけ
                                                                       発音する長さになる。)
-Q*n             -ooo-oooooooooooooooooooooooooooooooooooooooooooooo-  ゲートタイム割合指定(1 - 8)(1-n/8の長さだけ発音する)
+Q*n             -ooo-ooooooooooooooooooooooooooooooooooooooooooooooo  ゲートタイム割合指定(1 - 8)(1-n/8の長さだけ発音する)
 wn              -----o----------------------------------------------  ノイズモード指定(0 - 7)
 wfn             -----o----------------------------------------------  DCSG Ch3周波数直接指定(0 - 1023)
 wn              ---------o----o----o-----oo-o--o--------------------  ノイズ周波数
@@ -946,17 +950,17 @@ mof             ----o-----------------o-----------------------------  PCMマッ�
 mn              -----o----------------------o-----------------------  PCMモード指定(0: 停止  1: 開始)(HuC6280:チャンネルごとに指定 SN76489:1-3チャンネルに指定)
 mn              --------------------------------oo-o-o--o-o---------  OPL系Rhythmモード指定(0: 停止  1: 開始)
 mn              -----------------------------------------o----------  OPLL系OP4モード指定(0: 停止  1: 開始)
-Tn              ooooooooooooooooooooooooooooooooooooooooooooooooooo-  テンポ(1 - 1200)
-!               ooooooooooooooooooooooooooooooooooooooooooooooooooo-  このパートのこれ以降をコンパイルしない(発音しない)
-!!              ooooooooooooooooooooooooooooooooooooooooooooooooooo-  コンパイルを打ち切る
-Kn              -ooo-ooooo-oooo-oooo-oooooooooooo-o-o-oo-o-oooooooo-  移調絶対指定 ( -12 - +12 )
-KKn             -ooo-ooooo-oooo-oooo-oooooooooooo-o-o-oo-o-oooooooo-  移調相対指定 ( -12 - +12 )
+Tn              oooooooooooooooooooooooooooooooooooooooooooooooooooo  テンポ(1 - 1200)
+!               oooooooooooooooooooooooooooooooooooooooooooooooooooo  このパートのこれ以降をコンパイルしない(発音しない)
+!!              oooooooooooooooooooooooooooooooooooooooooooooooooooo  コンパイルを打ち切る
+Kn              -ooo-ooooo-oooo-oooo-oooooooooooo-o-o-oo-o-ooooooooo  移調絶対指定 ( -12 - +12 )
+KKn             -ooo-ooooo-oooo-oooo-oooooooooooo-o-o-oo-o-ooooooooo  移調相対指定 ( -12 - +12 )
 An              ------o--------------------o-oo---------------oo----  PCMの再生開始位置を停止方向へnbyteずらす。
                                                                        (最小：再生開始位置　最大：停止位置-1byte)
 A+n             ------o--------------------o-oo---------------oo----  Aの相対指定版。開始位置を停止方向へ現在の値からnbyteずらす。
 A-n             ------o--------------------o-oo---------------oo----  Aの相対指定版。開始位置を再生方向へ現在の値からnbyteずらす。
 #n(廃止)        ----------------------------------------------------  音長をクロック値で指定(このコマンドは廃止されました。lコマンドの後に#でクロック指定してください)
-pn              -o-oo--o--ooo--oo--oo--o--o--------------o-  -------  パン (0: 発音しない  1: 右  2: 左  3: 中央)
+pn              -o-oo--o--ooo--oo--oo--o--o--------------o-  ------o  パン (0: 発音しない  1: 右  2: 左  3: 中央)
 pn              -------------------------------------------  -o-----  パン (0～32: 右～左  15: 中央)
 pn              -------------------------------------------  --oo---  パン (0～7: 右～左  3: 中央)
 pn1,n2          -----------------o---oo--------------------  -------  パン (n1: 左 0 - 4   n2: 右 0 - 4  )
@@ -970,49 +974,49 @@ sn              -------------------------------------------oo-------  sync (n: 0
 PRON            -----------------ooo--------------------------------  フェーズリセット有効
 PROF            -----------------ooo--------------------------------  フェーズリセット無効
 PRV             -----------------ooo--------------------------------  逆位相(n: 無効:0 右:1 左:2 両方:3)
-PDON            ooooooooooooooooooooooooooooooooooooooooooooooooooo-  ページダイレクトセンド有効
-PDOF            ooooooooooooooooooooooooooooooooooooooooooooooooooo-  ページダイレクトセンド無効
-POn1,n2,n3      -oooooooooooooooooooooooooooooooooooooooooooooooooo-  ポルタメント(n1:スイッチ n2:開始ノート差分 n3:長さ)
-POSn            -oooooooooooooooooooooooooooooooooooooooooooooooooo-  ポルタメントスイッチ(n:0でポルタメント無効 1で有効)
-PORn            -oooooooooooooooooooooooooooooooooooooooooooooooooo-  ポルタメントリセット(n:開始ノート差分 半音単位で指定したノートを基準に開始ノートを指定)
-POLn            -oooooooooooooooooooooooooooooooooooooooooooooooooo-  ポルタメントタイム(n:長さ クロック指定)
-%xxx            ooooooooooooooooooooooooooooooooooooooooooooooooooo-  エイリアス展開
-;               ooooooooooooooooooooooooooooooooooooooooooooooooooo-  コメントアウト 行末まで無視する
-*Mn             ooooooooooooooooooooooooooooooooooooooooooooooooooo-  同期マーキング (0 - )
-*Sn             ooooooooooooooooooooooooooooooooooooooooooooooooooo-  同期(0 - )
-PCn             ooooooooooooooooooooooooooooooooooooooooooooooooooo-  パートカラー(0 - 8 def:1)IDEのパート色を指定する。
+PDON            oooooooooooooooooooooooooooooooooooooooooooooooooooo  ページダイレクトセンド有効
+PDOF            oooooooooooooooooooooooooooooooooooooooooooooooooooo  ページダイレクトセンド無効
+POn1,n2,n3      -ooooooooooooooooooooooooooooooooooooooooooooooooooo  ポルタメント(n1:スイッチ n2:開始ノート差分 n3:長さ)
+POSn            -ooooooooooooooooooooooooooooooooooooooooooooooooooo  ポルタメントスイッチ(n:0でポルタメント無効 1で有効)
+PORn            -ooooooooooooooooooooooooooooooooooooooooooooooooooo  ポルタメントリセット(n:開始ノート差分 半音単位で指定したノートを基準に開始ノートを指定)
+POLn            -ooooooooooooooooooooooooooooooooooooooooooooooooooo  ポルタメントタイム(n:長さ クロック指定)
+%xxx            oooooooooooooooooooooooooooooooooooooooooooooooooooo  エイリアス展開
+;               oooooooooooooooooooooooooooooooooooooooooooooooooooo  コメントアウト 行末まで無視する
+*Mn             oooooooooooooooooooooooooooooooooooooooooooooooooooo  同期マーキング (0 - )
+*Sn             oooooooooooooooooooooooooooooooooooooooooooooooooooo  同期(0 - )
+PCn             oooooooooooooooooooooooooooooooooooooooooooooooooooo  パートカラー(0 - 8 def:1)IDEのパート色を指定する。
                                                                         0:黒 1:青 2:赤 3:紫 4:緑 5:水 6:黄 7:白
                                                                         8:muap風味色
                                                                     
-c               -oooooooooooooooooooooooooooooooooooooooooooooooooo-  音符ド
-d               -oooooooooooooooooooooooooooooooooooooooooooooooooo-  音符レ
-e               -oooooooooooooooooooooooooooooooooooooooooooooooooo-  音符ミ
-f               -oooooooooooooooooooooooooooooooooooooooooooooooooo-  音符ファ
-g               -oooooooooooooooooooooooooooooooooooooooooooooooooo-  音符ソ
-a               -oooooooooooooooooooooooooooooooooooooooooooooooooo-  音符ラ
-b               -oooooooooooooooooooooooooooooooooooooooooooooooooo-  音符シ
-x               -oooooooooooooooooooooooooooooooooooooooooooooooooo-  音符x(直前と同じノートを意味します)
-    +           -oooooooooooooooooooooooooooooooooooooooooooooooooo-  半音上げる
-    -           -oooooooooooooooooooooooooooooooooooooooooooooooooo-  半音下げる
-    \n\         -oooooooooooooooooooooooooooooooooooooooooooooooooo-  ピッチシフト
-    n           -oooooooooooooooooooooooooooooooooooooooooooooooooo-  音長(FMのみ0を指定するとToneDoublerモードになる)
-    #n          -oooooooooooooooooooooooooooooooooooooooooooooooooo-  クロック指定音長(FMのみ0を指定するとToneDoublerモードになる)
-    .           -oooooooooooooooooooooooooooooooooooooooooooooooooo-  符点
-    _           -oo--ooooo-oooo-oooo-oooooooooooooooooooooooooooooo-  ベンド
-        音符    -oo--ooooo-oooo-oooo-oooooooooooooooooooooooooooooo-  音符(c-b)
-        o       -oo--ooooo-oooo-oooo-oooooooooooooooooooooooooooooo-  オクターブ
-        >       -oo--ooooo-oooo-oooo-oooooooooooooooooooooooooooooo-  オクターブ相対指定(上げ)
-        <       -oo--ooooo-oooo-oooo-oooooooooooooooooooooooooooooo-  オクターブ相対指定(下げ)
+c               -ooooooooooooooooooooooooooooooooooooooooooooooooooo  音符ド
+d               -ooooooooooooooooooooooooooooooooooooooooooooooooooo  音符レ
+e               -ooooooooooooooooooooooooooooooooooooooooooooooooooo  音符ミ
+f               -ooooooooooooooooooooooooooooooooooooooooooooooooooo  音符ファ
+g               -ooooooooooooooooooooooooooooooooooooooooooooooooooo  音符ソ
+a               -ooooooooooooooooooooooooooooooooooooooooooooooooooo  音符ラ
+b               -ooooooooooooooooooooooooooooooooooooooooooooooooooo  音符シ
+x               -ooooooooooooooooooooooooooooooooooooooooooooooooooo  音符x(直前と同じノートを意味します)
+    +           -ooooooooooooooooooooooooooooooooooooooooooooooooooo  半音上げる
+    -           -ooooooooooooooooooooooooooooooooooooooooooooooooooo  半音下げる
+    \n\         -ooooooooooooooooooooooooooooooooooooooooooooooooooo  ピッチシフト
+    n           -ooooooooooooooooooooooooooooooooooooooooooooooooooo  音長(FMのみ0を指定するとToneDoublerモードになる)
+    #n          -ooooooooooooooooooooooooooooooooooooooooooooooooooo  クロック指定音長(FMのみ0を指定するとToneDoublerモードになる)
+    .           -ooooooooooooooooooooooooooooooooooooooooooooooooooo  符点
+    _           -oo--ooooo-oooo-oooo-ooooooooooooooooooooooooooooooo  ベンド
+        音符    -oo--ooooo-oooo-oooo-ooooooooooooooooooooooooooooooo  音符(c-b)
+        o       -oo--ooooo-oooo-oooo-ooooooooooooooooooooooooooooooo  オクターブ
+        >       -oo--ooooo-oooo-oooo-ooooooooooooooooooooooooooooooo  オクターブ相対指定(上げ)
+        <       -oo--ooooo-oooo-oooo-ooooooooooooooooooooooooooooooo  オクターブ相対指定(下げ)
         :       ------------------------------------------------o---  ウエイトせずに次のコマンドを解釈する
-    &n          ooooooooooooooooooooooooooooooooooooooooooooooooooo-  タイ(n: 音長 音長分だけ発音を追加する。
+    &n          oooooooooooooooooooooooooooooooooooooooooooooooooooo  タイ(n: 音長 音長分だけ発音を追加する。
                                                                       音長を指定しない場合はキーオフせずに次の音符とつなげる)
-    &#n         ooooooooooooooooooooooooooooooooooooooooooooooooooo-  タイ(#n:  クロック指定音長 音長分だけ発音を追加する。
+    &#n         oooooooooooooooooooooooooooooooooooooooooooooooooooo  タイ(#n:  クロック指定音長 音長分だけ発音を追加する。
                                                                       音長を指定しない場合はキーオフせずに次の音符とつなげる)
-    ^n          ooooooooooooooooooooooooooooooooooooooooooooooooooo-  タイ(n: 音長 音長分だけ発音を延長。)
-    ^#n         ooooooooooooooooooooooooooooooooooooooooooooooooooo-  タイ(#n:  クロック指定音長 音長分だけ発音を延長。)
-    ~n          ooooooooooooooooooooooooooooooooooooooooooooooooooo-  タイの逆(n: 音長 音長分だけ発音を削る。)
-    ~#n         ooooooooooooooooooooooooooooooooooooooooooooooooooo-  タイの逆(#n:  クロック指定音長 音長分だけ発音を削る。)
-    ,n          ooooooooooooooooooooooooooooooooooooooooooooooooooo-  ベロシティ(n:0-)
+    ^n          oooooooooooooooooooooooooooooooooooooooooooooooooooo  タイ(n: 音長 音長分だけ発音を延長。)
+    ^#n         oooooooooooooooooooooooooooooooooooooooooooooooooooo  タイ(#n:  クロック指定音長 音長分だけ発音を延長。)
+    ~n          oooooooooooooooooooooooooooooooooooooooooooooooooooo  タイの逆(n: 音長 音長分だけ発音を削る。)
+    ~#n         oooooooooooooooooooooooooooooooooooooooooooooooooooo  タイの逆(#n:  クロック指定音長 音長分だけ発音を削る。)
+    ,n          oooooooooooooooooooooooooooooooooooooooooooooooooooo  ベロシティ(n:0-)
     ,           -oo----oo---oo---oo----oo-o-------------------------  Tone Doublerモード
                                                                       音符指定の後に0或いは,を指定するとTone Doublerモードになる。
                                                                       この時指定した音符をAとする。

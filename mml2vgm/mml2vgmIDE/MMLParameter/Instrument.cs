@@ -222,7 +222,10 @@ namespace mml2vgmIDE.MMLParameter
         protected virtual void SetPan(outDatum od, int ch, int cc)
         {
             if (od.linePos.ch >= pan.Length) return;
-            pan[od.linePos.ch] = string.Format("L{0} R{1}", (int)od.args[0], (int)od.args[1]);
+            if(od.args.Count>1)
+                pan[od.linePos.ch] = string.Format("L{0} R{1}", (int)od.args[0], (int)od.args[1]);
+            else
+                pan[od.linePos.ch] = string.Format("{0}", (int)od.args[0]);
         }
 
         protected virtual void SetDetune(outDatum od, int ch, int cc)

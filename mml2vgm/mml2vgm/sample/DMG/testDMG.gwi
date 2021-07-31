@@ -16,6 +16,25 @@
 }
 
 
+     No,
+'@ H  0 "Sin wave x2"
+   +0 +1 +2 +3 +4 +5 +6 +7 +8 +9 +A +B +C +D +E +F
+'@ 08 11 12 14 15 14 12 11 08 05 04 02 01 02 04 05
+'@ 08 11 12 14 15 14 12 11 08 05 04 02 01 02 04 05
+
+     No,
+'@ H  1 "Square wave"
+   +0 +1 +2 +3 +4 +5 +6 +7 +8 +9 +A +B +C +D +E +F
+'@ 15 15 15 15 15 15 15 15 15 15 15 15 15 15 15 15
+'@ 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+
+     No,
+'@ H  2 "Saw wave x2"
+   +0 +1 +2 +3 +4 +5 +6 +7 +8 +9 +A +B +C +D +E +F
+'@ 08 09 10 11 12 13 14 15 00 01 02 03 04 05 06 07
+'@ 08 09 10 11 12 13 14 15 00 01 02 03 04 05 06 07
+
+
 'Cn1  T120
 
 ; ch1/2 spec
@@ -24,32 +43,12 @@
 ;   volume 0-15
 
  Pulse channel test
-Ga1  D0v10o4l4Q4
-Ga1  @0 cde @1 cde @2 cde @3 cde_b&b
+;'Ga1  D0v15o4l4Q4
+;'Ga1  @0 cde @1 cde @2 cde @3 cde_b&b
 ;'Ga1  l16o0[cdefgab>]8
-;
+
 ;'Ga2  D0v10o4l4Q4
 ;'Ga2  efg
-
-
-;     No,
-;'@ H  0 "Sin wave x2"
-;   +0 +1 +2 +3 +4 +5 +6 +7 +8 +9 +A +B +C +D +E +F
-;'@ 08 11 12 14 15 14 12 11 08 05 04 02 01 02 04 05
-;'@ 08 11 12 14 15 14 12 11 08 05 04 02 01 02 04 05
-;
-;     No,
-;'@ H  1 "Square wave"
-;   +0 +1 +2 +3 +4 +5 +6 +7 +8 +9 +A +B +C +D +E +F
-;'@ 15 15 15 15 15 15 15 15 15 15 15 15 15 15 15 15
-;'@ 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-;
-;     No,
-;'@ H  2 "Saw wave x2"
-;   +0 +1 +2 +3 +4 +5 +6 +7 +8 +9 +A +B +C +D +E +F
-;'@ 08 09 10 11 12 13 14 15 00 01 02 03 04 05 06 07
-;'@ 08 09 10 11 12 13 14 15 00 01 02 03 04 05 06 07
-
 
 ; ch3 spec
 ;   programable wave memory
@@ -66,10 +65,48 @@ Ga1  @0 cde @1 cde @2 cde @3 cde_b&b
 ;   P command  ..Counter Step/Width (0=15 bits, 1=7 bits)    from https://gbdev.io/pandocs/Sound_Controller.html
 ;   W command  ..Dividing Ratio of Frequencies (0-7:3bits)   from https://gbdev.io/pandocs/Sound_Controller.html
 
-'Ga4 v15l8Q8o1
-'Ga4 POR10 POL24
-'Ga4 P1 w7 __d+  P1 w6 __d+  P1 w5 __d+  P1 w4 __d+  P1 w3 __d+  P1 w2 __d+  P1 w1 __d+  P1 w0 __d+
-'Ga4 P0 w7 __d+  P0 w6 __d+  P0 w5 __d+  P0 w4 __d+  P0 w3 __d+  P0 w2 __d+  P0 w1 __d+  P0 w0 __d+
+;'Ga4 v15l8Q8o1
+;'Ga4 POR10 POL24
+;'Ga4 P1 w7 __d+  P1 w6 __d+  P1 w5 __d+  P1 w4 __d+  P1 w3 __d+  P1 w2 __d+  P1 w1 __d+  P1 w0 __d+
+;'Ga4 P0 w7 __d+  P0 w6 __d+  P0 w5 __d+  P0 w4 __d+  P0 w3 __d+  P0 w2 __d+  P0 w1 __d+  P0 w0 __d+
+;
+
+
+; mml2vgmではどちらもEH系コマンドを使用しますが、
+; エンベロープとサウンドレングスは本来それぞれ独立したパラメータになっています
+; エンベロープ
+;   使用可能Ch: 1,2,4 (pulse , noise)
+;   EHコマンドを使用し-7～7を指定します
+;   0はエンベロープオフです。正の数を指定すると減衰、負の数を指定すると音量が増幅するエンベロープになり、
+;   その絶対値がスピードです。
+;   なお、vコマンドで指定した音量が開始音量になります。
+;
+; サウンドレングス
+;   使用可能Ch: 1,2,3,4 (pulse , wave , noise)
+;   EHTコマンドを使用し0～63(waveは0～255)を指定します
+;   ( 64 - 指定した値 ) / 256 秒だけ発音するようになります。
+;   (waveは( 256 - 指定した値 ) / 256 秒だけ発音するようになります。)
+;   EHON/EHOFコマンドでそれぞれオンオフします。
+;
+
+'Ga1  D0v4o4l4Q8 @2
+'Ga1  EH2  v15p1cdefgab    ; envelope: 2 (decrease speed 2) envelope start volume:15
+'Ga1  EH-2 v0 p2cdefgab    ; envelope:-2 (increase speed 2) envelope start volume:0
+'Ga1  EHT30v0 p3cdefgab    ; sound length:30 ( ( 64 - 30 ) / 256 second )
+'Ga1  y0,0                 ; アドレス0はNR10を指します
+
+'Ga2  D0v4o4l4Q8 @0
+'Ga2  EH2  v15p3cdefgab    ; envelope: 2 (decrease speed 2) envelope start volume:15
+'Ga2  EH-2 v0 p1cdefgab    ; envelope:-2 (increase speed 2) envelope start volume:0
+'Ga2  EHT30v0 p3cdefgab    ; sound length:30 ( ( 64 - 30 ) / 256 second )
+
+;'Ga3 @0v3o4l4Q8
+;'Ga3 EHT230 cde EHOF cde ; sound length:230 ( ( 256 - 230 ) / 256 second )
+
+;'Ga4 v15l4Q8o1
+;'Ga4 EH2  v15 ggg    ; envelope: 2 (decrease speed 2) envelope start volume:15
+;'Ga4 EH-2 v0  ggg    ; envelope:-2 (increase speed 2) envelope start volume:0
+;'Ga4 EHT30v0  ggg    ; sound length:30 ( ( 64 - 30 ) / 256 second )
 
 
 
