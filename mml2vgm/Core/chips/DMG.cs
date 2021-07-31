@@ -389,7 +389,7 @@ namespace Core
                             // Sweepの更新
                             //
 
-                            if (page.keyOn)
+                            if (page.keyOn && page.ch == 0)
                             {
                                 for (int i = 0; i < page.lfo.Length; i++)
                                 {
@@ -397,15 +397,14 @@ namespace Core
 
                                     if (!page.lfo[i].sw)
                                     {
-                                        //SOutData(page, mml, port[0], (byte)(0x01 + page.ch * 4), (byte)0x70);
+                                        SOutData(page, mml, port[0], NR10, (byte)0x00);
                                         continue;
                                     }
 
-                                    //vol = 0x80
-                                    //    | (page.lfo[i].depthWaitCounter << 4)
-                                    //    | (page.lfo[i].depth < 0 ? 0x08 : 0x00)
-                                    //    | (Math.Abs(page.lfo[i].depth));
-                                    //SOutData(page, mml, port[0], (byte)(0x01 + page.ch * 4), (byte)vol);
+                                    vol = ((page.lfo[i].depthWaitCounter & 0x7) << 4)
+                                        | (page.lfo[i].depth < 0 ? 0x08 : 0x00)
+                                        | (Math.Abs(page.lfo[i].depth) & 0x7);
+                                    SOutData(page, mml, port[0], NR10, (byte)vol);
                                 }
                             }
 
@@ -748,6 +747,53 @@ namespace Core
             byte dat = (byte)(int)mml.args[1];
 
             SOutData(page, mml, port[0],adr, dat);
+        }
+
+        public override void CmdLfo(partPage page, MML mml)
+        {
+            base.CmdLfo(page, mml);
+
+            int c = (char)mml.args[0] - 'P';
+            if (page.lfo[c].type != eLfoType.Hardware) return;
+
+
+            if (page.lfo[c].param.Count < 2)
+            {
+                msgBox.setErrMsg(msg.get("E32002"), mml.line.Lp);
+                return;
+            }
+            if (page.lfo[c].param.Count > 2)
+            {
+                msgBox.setErrMsg(msg.get("E32003"), mml.line.Lp);
+                return;
+            }
+
+            page.lfo[c].param[0] = Common.CheckRange(page.lfo[c].param[0], 0, 7);//Speed
+            page.lfo[c].param[1] = Common.CheckRange(page.lfo[c].param[1], -7, 7);//Shift count
+            page.lfo[c].depthWaitCounter = page.lfo[c].param[0];
+            page.lfo[c].depth = page.lfo[c].param[1];
+
+        }
+
+        public override void CmdLfoSwitch(partPage page, MML mml)
+        {
+            base.CmdLfoSwitch(page, mml);
+
+            int c = (char)mml.args[0] - 'P';
+            int n = (int)mml.args[1];
+            if (page.lfo[c].type == eLfoType.Hardware)
+            {
+                if (n == 0)
+                {
+                    page.lfo[c].sw = false;
+                }
+                else
+                {
+                    page.lfo[c].sw = true;
+                    page.lfo[c].depthWaitCounter = page.lfo[c].param[0];
+                    page.lfo[c].depth = page.lfo[c].param[1];
+                }
+            }
         }
 
     }

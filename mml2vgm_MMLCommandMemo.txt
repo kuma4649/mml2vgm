@@ -875,6 +875,9 @@ Mx1x2n,...      -oo--ooooooooooooooooooooooooooooooooooooooooooooooo  LFO(
                                                                        NES     : Mx1Hn1,n2
                                                                                    n1:Sweep Speed(0 ~ 7)
                                                                                    n2:Sweep ShiftCount(-7 ~ 7)
+                                                                       DMG     : Mx1Hn1,n2
+                                                                                   n1:Sweep Speed(0 ~ 7)
+                                                                                   n2:Sweep ShiftCount(-7 ~ 7)
 MAMSn           -oo----oo---oo---oo----oo------------------  -------  AMS値 音量LFO感度(0-7)
 MAMSn           --------------------------o----------------  -------  AMS値 音量LFO感度(0-3)
 MPMSn           -oo----oo---oo---oo----oo------------------  -------  PMS値 音程LFO感度(0-3)

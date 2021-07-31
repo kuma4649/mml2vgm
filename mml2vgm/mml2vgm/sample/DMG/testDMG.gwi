@@ -88,17 +88,23 @@
 ;   (waveは( 256 - 指定した値 ) / 256 秒だけ発音するようになります。)
 ;   EHON/EHOFコマンドでそれぞれオンオフします。
 ;
+; Sweep
+;   使用可能Ch: 1 (pulse)
+;   ハードウェアLFOとして使用します。
 
 'Ga1  D0v4o4l4Q8 @2
-'Ga1  EH2  v15p1cdefgab    ; envelope: 2 (decrease speed 2) envelope start volume:15
-'Ga1  EH-2 v0 p2cdefgab    ; envelope:-2 (increase speed 2) envelope start volume:0
-'Ga1  EHT30v0 p3cdefgab    ; sound length:30 ( ( 64 - 30 ) / 256 second )
-'Ga1  y0,0                 ; アドレス0はNR10を指します
+;'Ga1  EH2  v15p1cdefgab    ; envelope: 2 (decrease speed 2) envelope start volume:15
+;'Ga1  EH-2 v0 p2cdefgab    ; envelope:-2 (increase speed 2) envelope start volume:0
+;'Ga1  EHT30v0 p3cdefgab    ; sound length:30 ( ( 64 - 30 ) / 256 second )
+;'Ga1  y0,0                 ; アドレス0はNR10を指します
+'Ga1  EH0EHOFv10 MPH3,-7p3
+'Ga1  cdefgab               ; sweep time:3  sweep shift:-7(decrease shift 7)
 
-'Ga2  D0v4o4l4Q8 @0
-'Ga2  EH2  v15p3cdefgab    ; envelope: 2 (decrease speed 2) envelope start volume:15
-'Ga2  EH-2 v0 p1cdefgab    ; envelope:-2 (increase speed 2) envelope start volume:0
-'Ga2  EHT30v0 p3cdefgab    ; sound length:30 ( ( 64 - 30 ) / 256 second )
+
+;'Ga2  D0v4o4l4Q8 @0
+;'Ga2  EH2  v15p3cdefgab    ; envelope: 2 (decrease speed 2) envelope start volume:15
+;'Ga2  EH-2 v0 p1cdefgab    ; envelope:-2 (increase speed 2) envelope start volume:0
+;'Ga2  EHT30v0 p3cdefgab    ; sound length:30 ( ( 64 - 30 ) / 256 second )
 
 ;'Ga3 @0v3o4l4Q8
 ;'Ga3 EHT230 cde EHOF cde ; sound length:230 ( ( 256 - 230 ) / 256 second )
