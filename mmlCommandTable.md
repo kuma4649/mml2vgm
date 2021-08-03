@@ -99,6 +99,10 @@
     Support type: PCM/DPCM 4Ch  
 - GeneralMIDI  
     Support type: MIDI 16Ch  
+- NES  
+    Support type: Pulse 2Ch Triangle 1Ch Noise 1Ch DPCM 1Ch  
+- DMG  
+    Support type: Pulse 2Ch WF 1Ch Noise 1Ch  
 
 
 ## コマンド
@@ -161,6 +165,8 @@
     - K051649  
     - QSound  
     - K053260  
+    - NES  
+    - DMG  
 - Remark  
     音色を設定する  
 - Description  
@@ -169,6 +175,7 @@
                             (YMF262のRHYTHMもFM音源の音色テーブルを参照します。)  
     PCM / ADPCM           : PCM音源の音色テーブルを参照します。  
     YM2612X(PCM)          : 最大63色まで定義できます。  
+    Pulse                 : Duty比の変更  
 
 
 ### PCM Map変更  
@@ -497,6 +504,8 @@
 	- K051649  
     - QSound  
     - K053260  
+    - NES  
+    - DMG  
 - Remark  
     デフォルトとして使用される音の長さを指定する。  
 - Description  
@@ -569,6 +578,8 @@
 	- K051649  
     - QSound  
     - K053260  
+    - NES  
+    - DMG  
 - Remark  
     デフォルトとして使用される音の長さをクロック単位で指定する。  
 - Description  
@@ -631,6 +642,8 @@
 	- K051649  
     - QSound  
     - K053260  
+    - NES  
+    - DMG  
 - Remark  
     オクターブを指定する。  
 - Description  
@@ -688,6 +701,8 @@
 	- K051649  
     - QSound  
     - K053260  
+    - NES  
+    - DMG  
 - Remark  
     現在を基準に、オクターブを上げたり下げる。  
 - Description  
@@ -699,12 +714,16 @@
     (無視します。)  
 
 
-### ディチューン絶対指定  
+### ディチューン指定  
 -----------  
 - Command  
     D  
+    D<  
+    D>  
 - Format  
     Dn  
+    D<n  
+    D>n  
 - 設定可能範囲  
     n : 未チェック  
 - Support chips  
@@ -747,12 +766,15 @@
 	- K051649  
     - QSound  
     - K053260  
+    - NES  
+    - DMG  
 - Remark  
     音程を少しだけずらす。  
 - Description  
     音程を音源ごとの( 最小単位 x n )分ずらします。  
     マイナスの値も指定可能です。  
     YM2151を除き、大概の音源は高音になるほど実際の変化量が大きくなります。  
+    D<,D>は相対指定になります。  
 
 
 ### ボリューム絶対指定  
@@ -811,6 +833,8 @@
 	- K051649 (B)  
     - QSound (E)  
     - K053260 (A)  
+    - NES  
+    - DMG  
 - Remark  
     ボリューム(音量)を設定する。  
 - Description  
@@ -875,6 +899,8 @@
 	- K051649 (B)  
     - QSound (E)  
     - K053260 (A)  
+    - NES  
+    - DMG  
 - Remark  
     現在を基準に、音量を上げたり下げる。  
 - Description  
@@ -910,17 +936,22 @@
     V  
 - Format  
     Vn1,n2  
+    Vn  
 - 設定可能範囲  
     n1 : 0～15 (左)  
     n2 : 0～15 (右)  
+    n  : 0～3  
 - Support chips  
 	- HuC6280  
+	- NES(FDS)  
 - Remark  
     HuC6280全体のボリューム(音量)を設定する。  
+    NES(FDS)の全体のボリューム(音量)を設定する。  
 - Description  
     HuC6280全体の音量を設定します。  
     先ず、このコマンドでボリュームを設定し、vコマンドでチャンネルごとの音量を調整します。  
     左右別々に音量設定可能です。  
+    FDSの音量を設定します。  
 
 
 ### タイ  
@@ -977,6 +1008,8 @@
 	- K051649  
     - QSound  
     - K053260  
+    - NES  
+    - DMG  
 - Remark  
     タイ。前後の音符をつなげる。(キーオフせずに次の音を発音する)  
 - Description  
@@ -1035,6 +1068,8 @@
 	- K051649  
     - QSound  
     - K053260  
+    - NES  
+    - DMG  
 - Remark  
     音源にアドレスとデータを直接送信する。  
 - Description  
@@ -1554,6 +1589,8 @@
     - K051649             T/Vに対応  
     - QSound              T/Vに対応  
     - K053260             T/Vに対応  
+    - NES                 T/V/Hに対応  
+    - DMG                 T/V/Hに対応  
 - Remark  
     LFOを設定し有効にする。  
 - Description  
@@ -1606,6 +1643,14 @@
             n1 : Control(n= 0(Disable),1-3(Ch2波形加算))  
             n2 : Freq(n= 0-255)  
             n3 : Ch2Freq(n= 0-4095)  
+        - NES  
+          : Mx1Hn1,n2  
+            n1:Sweep Speed(0 ~ 7)  
+            n2:Sweep ShiftCount(-7 ~ 7)  
+        - DMG  
+          : Mx1Hn1,n2  
+            n1:Sweep Speed(0 ~ 7)  
+            n2:Sweep ShiftCount(-7 ~ 7)  
 
 
 ### LFOスイッチ設定  
@@ -1660,6 +1705,8 @@
     - K051649  
     - QSound  
     - K053260  
+    - NES  
+    - DMG  
 - Remark  
     LFOのスイッチ  
 - Description  
@@ -1809,6 +1856,8 @@
     - K051649  
     - QSound  
     - K053260  
+    - NES  
+    - DMG  
 - Remark  
     休符  
 - Description  
@@ -1871,6 +1920,8 @@
     - K051649  
     - QSound  
     - K053260  
+    - NES  
+    - DMG  
 - Remark  
     歌詞  
 - Description  
@@ -1937,6 +1988,8 @@
     - K051649  
     - QSound  
     - K053260  
+    - NES  
+    - DMG  
 - Remark  
     括ったコマンドを繰り返す  
 - Description  
@@ -2015,6 +2068,8 @@
     - K051649  
     - QSound  
     - K053260  
+    - NES  
+    - DMG  
 - Remark  
     括ったノートコマンドを指定した長さで演奏する  
 - Description  
@@ -2091,6 +2146,8 @@
     - K051649  
     - QSound  
     - K053260  
+    - NES  
+    - DMG  
 - Remark  
     エンベロープの開始(EON)、停止(EOF)  
 - Description  
@@ -2123,6 +2180,45 @@
     ハードウェアエンベロープの周波数(EH)を設定します。  
 
 
+### サウンドレングス(ハードウェアエンベロープ)  
+-----------  
+- Command  
+    EHON  
+    EHOF  
+    EHT  
+- Format  
+    EHTn  
+- 設定可能範囲  
+    n : 未チェック  
+- Support chips  
+    - NES  
+    - DMG  
+- Remark  
+    サウンドレングスの開始(EHON)、停止(EHOF)、長さ(EHT)  
+- Description  
+    サウンドレングスを開始(EHON)、または停止(EHOF)します。  
+    サウンドレングスの長さ(EHT)を設定します。  
+
+
+### ハードウェアエンベロープ(NES,DMG)  
+-----------  
+- Command  
+    EH  
+- Format  
+    EHn  
+- 設定可能範囲  
+    n : (-7 ～ 7)  
+- Support chips  
+    - NES  
+    - DMG  
+- Remark  
+    ハードウェアエンベロープのスピード  
+- Description  
+    ハードウェアエンベロープのスピードを指定します。  
+    0でハードウェアエンベロープは無効です。  
+    +値で減衰、-値で増幅します。  
+
+
 ### ハードウェアエンベロープ同期モード  
 -----------  
 - Command  
@@ -2147,6 +2243,10 @@
     n : 未チェック  
 - Support chips  
     - AY8910  
+    - YM2203  
+    - YM2608  
+    - YM2609  
+    - YM2610/B  
 - Remark  
     ハードウェアエンベロープ同期モードの開始(HSON)、停止(HSOF)、  
     オクターブ設定(HSO)、オクターブ相対設定(H>,H<)、
@@ -2201,6 +2301,8 @@
     - K051649  
     - QSound  
     - K053260  
+    - NES  
+    - DMG  
 - Remark  
     アルペジオの開始(APON)、停止(APOF)、定義番号指定(APn)  
 - Description  
@@ -2453,6 +2555,8 @@
     - K051649  
     - QSound  
     - K053260  
+    - NES  
+    - DMG  
 - Remark  
     曲全体のループ位置指定  
 - Description  
@@ -2514,6 +2618,8 @@
     - K051649  
     - QSound  
     - K053260  
+    - NES  
+    - DMG  
 - Remark  
     指定した位置まで演奏をスキップする。  
 - Description  
@@ -2578,6 +2684,8 @@
     - K051649  
     - QSound  
     - K053260  
+    - NES  
+    - DMG  
 - Remark  
     ゲートタイム指定(クロック数で指定)  
 - Description  
@@ -2642,6 +2750,8 @@
     - K051649  
     - QSound  
     - K053260  
+    - NES  
+    - DMG  
 - Remark  
     ゲートタイム指定(8段階の割合で指定)  
 - Description  
@@ -2875,6 +2985,8 @@
     - K051649  
     - QSound  
     - K053260  
+    - NES  
+    - DMG  
 - Remark  
     テンポ  
 - Description  
@@ -2936,6 +3048,8 @@
     - K051649  
     - QSound  
     - K053260  
+    - NES  
+    - DMG  
 - Remark  
     パートコンパイル停止  
 - Description  
@@ -2997,18 +3111,22 @@
     - K051649  
     - QSound  
     - K053260  
+    - NES  
+    - DMG  
 - Remark  
     コンパイル停止  
 - Description  
     コンパイルをこのコマンドの時点で停止します。  
 
 
-### 移調絶対指定  
+### 移調指定  
 -----------  
 - Command  
     K  
+    KK  
 - Format  
     Kn  
+    KKn  
 - 設定可能範囲  
     n : -12 ～ 12  
 - Support chips  
@@ -3050,10 +3168,14 @@
     - K051649  
     - QSound  
     - K053260  
+    - NES  
+    - DMG  
 - Remark  
-    移調を設定する。絶対指定。  
+    移調を設定する。  
+    Kは絶対指定。  
+    KKは相対指定。  
 - Description  
-    絶対指定で移調する値を設定します。  
+    Kの時、絶対指定、KKの時、相対指定で移調する値を設定します。  
     １オクターブ分上げたり、または下げることができます。  
 
 
@@ -3115,6 +3237,7 @@
 	- YMF262(RHYTHM)  
     - QSound (C)  
     - K053260 (B)  
+    - DMG (A)  
 - Remark  
     パンを指定する。(0: 発音しない  1: 右  2: 左  3: 中央)  
     (B),(C)は段階的に設定できます。  
@@ -4058,6 +4181,8 @@
     - K051649  
     - QSound  
     - K053260  
+    - NES  
+    - DMG  
 - Remark  
     エイリアスを設定する  
 - Description  
@@ -4119,6 +4244,8 @@
     - K051649  
     - QSound  
     - K053260  
+    - NES  
+    - DMG  
 - Remark  
     このコマンド以降から行末までをコメントアウトする  
 - Description  
@@ -4185,6 +4312,8 @@
     - K051649  
     - QSound  
     - K053260  
+    - NES  
+    - DMG  
 - Remark  
     音符を設定する  
 - Description  
@@ -4282,7 +4411,7 @@
     省略可能です。  
     連続で記述可能です。  
     音長にその半分を加えます。  
-    連続で指定すると、音長をどんどん半分にした長さを加えていきます。  
+    連続で指定すると、そのたびに音長を半分にした長さを加えていきます。  
 
     - Example  
     f4. ファを符点4分音符の長さで発音します。  
