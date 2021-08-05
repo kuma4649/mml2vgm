@@ -174,6 +174,11 @@ E0525=When 4 to 6 is specified for the 'p' pan command, the wait value must be s
 E0526=Exceeds the range (1 to {0}) that can be specified for the weight value of the 'p' pan command.(value:{1})
 E0527='S' slot detuning already uses the traditional format; use the Driver tag to pre-declare mucomDotNET.
 E0528=Rests cannot be tied together.
+E0529='PO'Command can't read ','.
+E0530='PO'Portament command
+E0531='POS'Portament switch command
+E0532='POR'Portament reset command
+E0533='POL'Portament time command
 
 ;Program.cs 0600
 E0600=I want arguments(.muc File) please?

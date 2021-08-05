@@ -1067,7 +1067,7 @@ namespace mml2vgmIDE
 
         private ColorScheme _colorScheme = new ColorScheme();
 
-        private bool _InfiniteOfflineMode = false;
+        private bool _InfiniteOfflineMode = true;
         public bool InfiniteOfflineMode { get => _InfiniteOfflineMode; set => _InfiniteOfflineMode = value; }
 
         private bool _UseSien = true;
