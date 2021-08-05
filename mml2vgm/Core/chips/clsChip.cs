@@ -340,6 +340,8 @@ namespace Core
             ed = Common.CheckRange(ed, 0, 8 * 12 - 1);
             int st = Const.NOTE.IndexOf(note.cmd) + 1 + (page.octaveNow - 1) * 12 + note.shift;//
             st = Common.CheckRange(st, 0, 8 * 12 - 1);
+            //今回のノートを保存
+            page.MPortamentLastNote = page.bendOctave * 12 + "czdzefzgzazb".IndexOf(page.bendNote) + page.bendShift;
 
             int delta = ed - st;
             if (delta == 0 || bendDelayCounter == ml)
@@ -1823,12 +1825,15 @@ namespace Core
                 //int bendDelayCounter =
                 AnalyzeBend(page, mml, note, ml);
             }
-            else if (page.MPortamentSwitch != 0 || page.MPortamentOneshotSwitch!=0)
+            else if (
+                (page.MPortamentSwitch != 0 && page.MPortamentOneshotSwitch == 0)
+                || (page.MPortamentSwitch == 0 && page.MPortamentOneshotSwitch != 0)
+                )
             {
                 page.MPortamentOneshotSwitch = 0;
 
                 //直前のノートがない場合は差分値(MPortamentDelta)を使用して作成する
-                //(Oneshotの場合もリセットする)
+                //(Oneshot(reset)の場合もリセットする)
                 if (page.MPortamentLastNote == -1)
                 {
                     page.MPortamentLastNote = page.octaveNew * 12 + "czdzefzgzazb".IndexOf(note.cmd) + note.shift + page.MPortamentDelta;
@@ -1863,9 +1868,14 @@ namespace Core
                 //ベンド実施
                 AnalyzeBend(page, mml, note, Math.Min(ml, page.MPortamentLength));
 
-                note.cmd=note.bendCmd;
+                note.cmd = note.bendCmd;
                 note.shift = note.bendShift;
-
+            }
+            else
+            {
+                page.MPortamentOneshotSwitch = 0;
+                //今回のノートを保存
+                page.MPortamentLastNote = page.octaveNew * 12 + "czdzefzgzazb".IndexOf(note.cmd) + note.shift;
             }
 
 
@@ -2369,6 +2379,9 @@ namespace Core
                     break;
                 case "POO":
                     page.MPortamentOneshotSwitch = 1;
+                    break;
+                case "POOR":
+                    page.MPortamentOneshotSwitch = 2;
                     page.MPortamentLastNote = -1;
                     break;
                 case "POS":

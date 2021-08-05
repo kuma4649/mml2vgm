@@ -245,6 +245,9 @@
     <None Include="sample\Syntax\testPortament.gwi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="sample\Syntax\testPortament2.gwi">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="sample\Syntax\testRenpu.gwi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

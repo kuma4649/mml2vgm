@@ -983,6 +983,8 @@ POn1,n2,n3      -ooooooooooooooooooooooooooooooooooooooooooooooooooo  ポルタ�
 POSn            -ooooooooooooooooooooooooooooooooooooooooooooooooooo  ポルタメントスイッチ(n:0でポルタメント無効 1で有効)
 PORn            -ooooooooooooooooooooooooooooooooooooooooooooooooooo  ポルタメントリセット(n:開始ノート差分 半音単位で指定したノートを基準に開始ノートを指定)
 POLn            -ooooooooooooooooooooooooooooooooooooooooooooooooooo  ポルタメントタイム(n:長さ クロック指定)
+__              -ooooooooooooooooooooooooooooooooooooooooooooooooooo  局所的なポルタメント(ポルタメント有効時は無効にする動作になる)
+___             -ooooooooooooooooooooooooooooooooooooooooooooooooooo  局所的なポルタメント(デルタリセット)(ポルタメント有効時は無効にする動作になる)
 %xxx            oooooooooooooooooooooooooooooooooooooooooooooooooooo  エイリアス展開
 ;               oooooooooooooooooooooooooooooooooooooooooooooooooooo  コメントアウト 行末まで無視する
 *Mn             oooooooooooooooooooooooooooooooooooooooooooooooooooo  同期マーキング (0 - )

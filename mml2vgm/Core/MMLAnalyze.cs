@@ -3463,6 +3463,14 @@ namespace Core
             if (pw.getChar(page) == '_') //POrtament OneShot
             {
                 pw.incPos(page);
+                if (pw.getChar(page) == '_') //POrtament OneShot(reset)
+                {
+                    pw.incPos(page);
+                    mml.type = enmMMLType.Portament;
+                    mml.args = new List<object>();
+                    mml.args.Add("POOR");
+                    return;
+                }
                 mml.type = enmMMLType.Portament;
                 mml.args = new List<object>();
                 mml.args.Add("POO");
