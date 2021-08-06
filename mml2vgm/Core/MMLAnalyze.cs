@@ -3016,6 +3016,7 @@ namespace Core
                 }
                 mml.line.Lp.length += col;
 
+                mml.line.Lp.length += pw.skipTabSpace(page);
                 if (pw.getChar(page) == '\\')
                 {
                     pw.incPos(page);

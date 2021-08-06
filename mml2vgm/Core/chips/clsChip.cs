@@ -376,6 +376,10 @@ namespace Core
                     bf += wait;
                     tl += wait;
                     int arpNote = page.arpFreqMode ? 0 : page.arpDelta;
+                    int pitchShift = note.pitchShift + (note.bendPitchShift - note.pitchShift);
+                    int aPitchShift = (int)(pitchShift / (float)Math.Abs(delta) * (i + 0));
+                    int bPitchShift = (int)(pitchShift / (float)Math.Abs(delta) * (i + 1));
+
                     GetFNumAtoB(
                         page
                         , mml
@@ -383,12 +387,12 @@ namespace Core
                         , page.octaveNow
                         , note.cmd
                         , note.shift + (i + 0) * Math.Sign(delta) + page.keyShift + page.toneDoublerKeyShift + arpNote
-                        , (int)(note.pitchShift + (note.bendPitchShift - note.pitchShift) / (float)delta * (i + 0))
+                        , aPitchShift
                         , out int b
                         , page.octaveNow
                         , note.cmd
                         , note.shift + (i + 1) * Math.Sign(delta) + page.keyShift + page.toneDoublerKeyShift + arpNote
-                        , (int)(note.pitchShift + (note.bendPitchShift - note.pitchShift) / (float)delta * (i + 1))
+                        , bPitchShift
                         , delta
                         );
 
