@@ -87,6 +87,7 @@ namespace mml2vgmIDE
             ca = new mucomChipAction(oPNAWrite[1], null, null); lca.Add(ca);
             ca = new mucomChipAction(oPNAWrite[2], WritePCMData[2], null); lca.Add(ca);
             ca = new mucomChipAction(oPNAWrite[3], WritePCMData[3], null); lca.Add(ca);
+            ca = new mucomChipAction(oPNAWrite[4], null, null); lca.Add(ca);
 
             driver.Init(
                 lca

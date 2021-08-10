@@ -4501,6 +4501,44 @@ namespace mml2vgmIDE
                     if (chip.Instrument != null) lstChips.Add(chip);
                 }
 
+                MDSound.ym2151 ym2151 = new MDSound.ym2151();
+                for (int i = 0; i < 1; i++)
+                {
+                    chip = new MDSound.MDSound.Chip();
+                    chip.type = MDSound.MDSound.enmInstrumentType.YM2151;
+                    chip.ID = (byte)i;
+                    chip.Instrument = ym2151;
+                    chip.Update = ym2151.Update;
+                    chip.Start = ym2151.Start;
+                    chip.Stop = ym2151.Stop;
+                    chip.Reset = ym2151.Reset;
+                    chip.SamplingRate = 55467;// (UInt32)Common.SampleRate;
+                    chip.Volume = setting.balance.YM2610Volume;
+                    chip.Clock = mubDriver.YM2151ClockValue;
+                    chip.Option = null;
+                    //chip.Option = new object[] { Common.GetApplicationFolder() };
+                    //hiyorimiDeviceFlag |= 0x2;
+
+                    if (i == 0)
+                    {
+                        chipLED.PriOPM = 1;
+                        useChip.Add(EnmChip.YM2151);
+                    }
+                    else
+                    {
+                        chipLED.SecOPM = 1;
+                        useChip.Add(EnmChip.S_YM2151);
+                    }
+
+                    log.Write(string.Format("Use OPM({0}) Clk:{1}"
+                        , (i == 0) ? "Pri" : "Sec"
+                        , chip.Clock
+                        ));
+
+                    chipRegister.YM2151[i].Use = true;
+                    if (chip.Instrument != null) lstChips.Add(chip);
+                }
+
 
                 if (hiyorimiNecessary) hiyorimiNecessary = true;
                 else hiyorimiNecessary = false;
@@ -4530,6 +4568,7 @@ namespace mml2vgmIDE
                     || chipRegister.YM2608[1].Model == EnmVRModel.VirtualModel
                     || chipRegister.YM2610[0].Model == EnmVRModel.VirtualModel
                     || chipRegister.YM2610[1].Model == EnmVRModel.VirtualModel
+                    || chipRegister.YM2151[0].Model == EnmVRModel.VirtualModel
                     )
                     useEmu = true;
                 if (
@@ -4537,6 +4576,7 @@ namespace mml2vgmIDE
                     || chipRegister.YM2608[1].Model == EnmVRModel.RealModel
                     || chipRegister.YM2610[0].Model == EnmVRModel.RealModel
                     || chipRegister.YM2610[1].Model == EnmVRModel.RealModel
+                    || chipRegister.YM2151[0].Model == EnmVRModel.RealModel
                     )
                     useReal = true;
 
@@ -4545,7 +4585,7 @@ namespace mml2vgmIDE
                     , mubWorkPath
                     , mucomManager
                     , chipRegister
-                    , new EnmChip[] { EnmChip.YM2608, EnmChip.S_YM2608, EnmChip.YM2610, EnmChip.S_YM2610 }
+                    , new EnmChip[] { EnmChip.YM2608, EnmChip.S_YM2608, EnmChip.YM2610, EnmChip.S_YM2610, EnmChip.YM2151 }
                     , (uint)(Common.SampleRate * setting.LatencyEmulation / 1000)
                     , (uint)(Common.SampleRate * setting.outputDevice.WaitTime / 1000)
                     , mubFileName
@@ -4557,6 +4597,7 @@ namespace mml2vgmIDE
 
                 SetYM2608Volume(true, setting.balance.YM2608Volume);
                 SetYM2610Volume(true, setting.balance.YM2610Volume);
+                SetYM2151Volume(true, setting.balance.YM2151Volume);
 
                 log.Write("Clock 設定");
 
@@ -4564,6 +4605,7 @@ namespace mml2vgmIDE
                 chipRegister.YM2608WriteClock((byte)1, (int)mubDriver.YM2608ClockValue);
                 chipRegister.YM2610WriteClock((byte)0, (int)mubDriver.YM2610ClockValue);
                 chipRegister.YM2610WriteClock((byte)1, (int)mubDriver.YM2608ClockValue);
+                chipRegister.YM2151WriteClock((byte)0, (int)mubDriver.YM2151ClockValue);
 
 
                 //Play

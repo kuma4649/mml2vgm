@@ -7,16 +7,19 @@ namespace mml2vgmIDE
 {
     public class mucomMub : baseDriver
     {
-        public uint YM2608ClockValue { get; internal set; } = 7987200;
-        public uint YM2610ClockValue { get; internal set; } = 8000000;
+        public uint YM2608ClockValue { get; set; } = 7987200;
+        public uint YM2610ClockValue { get; set; } = 8000000;
+        public uint YM2151ClockValue { get; set; } = 3579545;
         private musicDriverInterface.MmlDatum[] mubBuf = null;
         private mucomManager mm = null;
         List<SoundManager.PackData>[] pd = new List<SoundManager.PackData>[] { new List<SoundManager.PackData>(), new List<SoundManager.PackData>(), new List<SoundManager.PackData>(), new List<SoundManager.PackData>() };
         byte[][] pdOPNB = new byte[4][];
+        byte[][] pdOPM = new byte[2][];
         private SoundManager.Chip chipYM2608;
         private SoundManager.Chip chipYM2608S;
         private SoundManager.Chip chipYM2610;
         private SoundManager.Chip chipYM2610S;
+        private SoundManager.Chip chipYM2151;
         private string filename = "";
 
         public override GD3 getGD3Info(byte[] buf, uint vgmGd3)
@@ -44,6 +47,9 @@ namespace mml2vgmIDE
                 chipRegister.YM2610SetRegister(null, count, chipYM2610, pdOPNB[1], false);
                 chipRegister.YM2610SetRegister(null, count, chipYM2610S, pdOPNB[2], true);
                 chipRegister.YM2610SetRegister(null, count, chipYM2610S, pdOPNB[3], false);
+
+                //chipRegister.YM2151SetRegister(null, count, chipYM2151, pdOPM[0], true);
+                //chipRegister.YM2151SetRegister(null, count, chipYM2151, pdOPM[1], false);
 
                 initPhase = false;
                 GC.Collect();
@@ -82,6 +88,7 @@ namespace mml2vgmIDE
             chipYM2608S = chipRegister.YM2608[1];
             chipYM2610 = chipRegister.YM2610[0];
             chipYM2610S = chipRegister.YM2610[1];
+            chipYM2151 = chipRegister.YM2151[0];
             filename = fn;
 
             Counter = 0;
@@ -102,6 +109,8 @@ namespace mml2vgmIDE
             pdOPNB[1] = null;
             pdOPNB[2] = null;
             pdOPNB[3] = null;
+            pdOPM[0] = null;
+            pdOPM[1] = null;
 
             //Driverの初期化
             mm.InitDriver(
@@ -111,6 +120,7 @@ namespace mml2vgmIDE
                     ,OPNAWriteS
                     ,OPNBWriteP
                     ,OPNBWriteS
+                    ,OPMWriteP
                 }
                 , new List<Action<byte[], int, int>>() { 
                     null
@@ -182,6 +192,30 @@ namespace mml2vgmIDE
             chipRegister.YM2610SetRegister(od, count, ChipID, dat.port, dat.address, dat.data);
         }
 
+        private void OPMWrite(int ChipID, ChipDatum dat)
+        {
+            //Log.WriteLine(LogLevel.TRACE, string.Format("FM P{2} Out:Adr[{0:x02}] val[{1:x02}]", (int)dat.address, (int)dat.data, dat.port));
+            //Console.WriteLine("FM P{2} Out:Adr[{0:x02}] val[{1:x02}]", (int)dat.address, (int)dat.data, dat.port);
+            outDatum od = null;
+            if (dat.addtionalData != null)
+            {
+                if (dat.addtionalData is musicDriverInterface.MmlDatum)
+                {
+                    musicDriverInterface.MmlDatum md = (musicDriverInterface.MmlDatum)dat.addtionalData;
+                    if (md.linePos != null) md.linePos.srcMMLID = filename;
+                    od = new outDatum(md.type, md.args, md.linePos, (byte)md.dat);
+                }
+
+            }
+
+            //if (od != null && od.linePos != null)
+            //{
+            //Console.WriteLine("{0}", od.linePos.col);
+            //}
+
+            chipRegister.YM2151SetRegister(od, count, ChipID, dat.address, dat.data);
+        }
+
         private void OPNAInitialWrite(int ChipID, ChipDatum dat)
         {
             if (!initPhase)
@@ -221,6 +255,25 @@ namespace mml2vgmIDE
             SoundManager.PackData p = new SoundManager.PackData(od, chipRegister.YM2610[ChipID], EnmDataType.Block, dat.port * 0x100 + dat.address, dat.data, null);
             pd[ChipID+2].Add(p);
         }
+        private void OPMInitialWrite(int ChipID, ChipDatum dat)
+        {
+            if (!initPhase)
+            {
+                OPMWrite(ChipID, dat);
+                return;
+            }
+
+            outDatum od = null;
+            if (dat.addtionalData is musicDriverInterface.MmlDatum)
+            {
+                musicDriverInterface.MmlDatum md = (musicDriverInterface.MmlDatum)dat.addtionalData;
+                if (md.linePos != null) md.linePos.srcMMLID = filename;
+                od = new outDatum(md.type, md.args, md.linePos, (byte)md.dat);
+            }
+
+            SoundManager.PackData p = new SoundManager.PackData(od, chipRegister.YM2151[ChipID], EnmDataType.Block, dat.address, dat.data, null);
+            pd[ChipID + 2].Add(p);
+        }
 
         public int GetNowLoopCounter()
         {
@@ -242,6 +295,10 @@ namespace mml2vgmIDE
         private void OPNBWriteS(ChipDatum dat)
         {
             OPNBInitialWrite(1, dat);
+        }
+        private void OPMWriteP(ChipDatum dat)
+        {
+            OPMInitialWrite(0, dat);
         }
         private void OPNBWriteAdpcmP(byte[] pcmData, int s, int e)
         {
