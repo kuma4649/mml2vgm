@@ -12,7 +12,14 @@ namespace mml2vgmIDE
         public uint YM2151ClockValue { get; set; } = 3579545;
         private musicDriverInterface.MmlDatum[] mubBuf = null;
         private mucomManager mm = null;
-        List<SoundManager.PackData>[] pd = new List<SoundManager.PackData>[] { new List<SoundManager.PackData>(), new List<SoundManager.PackData>(), new List<SoundManager.PackData>(), new List<SoundManager.PackData>() };
+        List<SoundManager.PackData>[] pd = 
+            new List<SoundManager.PackData>[] {
+                new List<SoundManager.PackData>()
+                , new List<SoundManager.PackData>()
+                , new List<SoundManager.PackData>()
+                , new List<SoundManager.PackData>()
+                , new List<SoundManager.PackData>()
+            };
         byte[][] pdOPNB = new byte[4][];
         byte[][] pdOPM = new byte[2][];
         private SoundManager.Chip chipYM2608;
@@ -42,6 +49,7 @@ namespace mml2vgmIDE
                 chipRegister.YM2608SetRegister(null, count, chipYM2608S, pd[1].ToArray());
                 chipRegister.YM2608SetRegister(null, count, chipYM2610, pd[2].ToArray());
                 chipRegister.YM2608SetRegister(null, count, chipYM2610S, pd[3].ToArray());
+                chipRegister.YM2151SetRegister(null, count, chipYM2151, pd[4].ToArray());
 
                 chipRegister.YM2610SetRegister(null, count, chipYM2610, pdOPNB[0], true);
                 chipRegister.YM2610SetRegister(null, count, chipYM2610, pdOPNB[1], false);
@@ -105,6 +113,7 @@ namespace mml2vgmIDE
             pd[1] = new List<SoundManager.PackData>();
             pd[2] = new List<SoundManager.PackData>();
             pd[3] = new List<SoundManager.PackData>();
+            pd[4] = new List<SoundManager.PackData>();
             pdOPNB[0] = null;
             pdOPNB[1] = null;
             pdOPNB[2] = null;
@@ -272,7 +281,7 @@ namespace mml2vgmIDE
             }
 
             SoundManager.PackData p = new SoundManager.PackData(od, chipRegister.YM2151[ChipID], EnmDataType.Block, dat.address, dat.data, null);
-            pd[ChipID + 2].Add(p);
+            pd[ChipID+4].Add(p);
         }
 
         public int GetNowLoopCounter()

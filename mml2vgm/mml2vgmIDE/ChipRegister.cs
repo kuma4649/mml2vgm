@@ -4494,6 +4494,11 @@ namespace mml2vgmIDE
             enq(od, Counter, YM2151[ChipID], EnmDataType.Block, -1, -1, data);
         }
 
+        public void YM2151SetRegister(outDatum od, long Counter, Chip chip, PackData[] data)
+        {
+            enq(od, Counter, chip, EnmDataType.Block, -1, -1, data);
+        }
+
         public void YM2151SoftReset(long Counter, int chipID)
         {
             List<PackData> data = YM2151MakeSoftReset(chipID);
