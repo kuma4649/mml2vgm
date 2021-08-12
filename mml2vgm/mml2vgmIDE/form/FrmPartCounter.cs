@@ -203,10 +203,17 @@ namespace mml2vgmIDE
                     int pg = cp.Length < 2 ? 0 : (cp[1] - '0');
                     r = ch * 10 + pg;
                 }
-                if (mmli is YM2610B_mucom)
+                else if (mmli is YM2610B_mucom)
                 {
                     string cp = (string)dgvPartCounter.Rows[p].Cells["ClmPart"].Value;
                     int ch = cp[0] - (chipNumber == 0 ? 'a' : 'l');
+                    int pg = cp.Length < 2 ? 0 : (cp[1] - '0');
+                    r = ch * 10 + pg;
+                }
+                else if (mmli is YM2151_mucom)
+                {
+                    string cp = (string)dgvPartCounter.Rows[p].Cells["ClmPart"].Value;
+                    int ch = (cp[0] < 'w') ? (cp[0] - 'W') : (cp[0] - 'w' + 4);
                     int pg = cp.Length < 2 ? 0 : (cp[1] - '0');
                     r = ch * 10 + pg;
                 }
@@ -836,7 +843,7 @@ namespace mml2vgmIDE
             int pn = (int)r.Cells["ClmPartNumber"].Value - 1;
             bool mute = (string)r.Cells["ClmMute"].Value == "M";
 
-            if (!(mmli is YM2608_mucom) && !(mmli is YM2610B_mucom))
+            if (!(mmli is YM2608_mucom) && !(mmli is YM2610B_mucom) && !(mmli is YM2151_mucom))
             {
                 mmli.SetMute(pn, mute);
                 return;
@@ -844,10 +851,19 @@ namespace mml2vgmIDE
 
 
             string cp = (string)r.Cells["ClmPart"].Value;
-            bool isOPNA = (cp[0] < 'a');
-            int ch = (cp[0] < 'a') ? (cp[0] - 'A') : (cp[0] - 'a');
-            int cn = ch < 11 ? 0 : 1;
-            ch = ch < 11 ? ch : (ch - 11);
+            int isOPNA = "ABCDEFGHIJKLMNOPQRSTUV".IndexOf(cp[0]) < 0 ? ("abcdefghijklmnopqrstuv".IndexOf(cp[0]) < 0 ? 2 : 1) : 0;
+            int ch;
+            int cn = 0;
+            if (isOPNA < 2)
+            {
+                ch = (cp[0] < 'a') ? (cp[0] - 'A') : (cp[0] - 'a');
+                cn = ch < 11 ? 0 : 1;
+                ch = ch < 11 ? ch : (ch - 11);
+            }
+            else
+            {
+                ch = (cp[0] <= 'W' ? (cp[0] - 'W') : (cp[0] - 'w' + 4));
+            }
             int pg;// = cp.Length < 2 ? 0 : (cp[1] - '0');
             string mm = (string)r.Cells["ClmMute"].Value;
             string sm = (string)r.Cells["ClmSolo"].Value;
@@ -855,24 +871,40 @@ namespace mml2vgmIDE
             foreach (DataGridViewRow rw in dgvPartCounter.Rows)
             {
                 string p = (string)rw.Cells["ClmPart"].Value;
-                bool isOPNAc = (p[0] < 'a');
-                int c = (p[0] < 'a') ? (p[0] - 'A') : (p[0] - 'a');
-                int n = c < 11 ? 0 : 1;
-                c = c < 11 ? c : (c - 11);
-                if (isOPNA != isOPNAc || n != cn || c != ch) continue;
+                int isOPNAc = "ABCDEFGHIJKLMNOPQRSTUV".IndexOf(p[0]) < 0 ? ("abcdefghijklmnopqrstuv".IndexOf(p[0]) < 0 ? 2 : 1) : 0;
+                if (isOPNA != isOPNAc) continue;
+                int c;
+                int n = 0;
+                if (isOPNAc < 2)
+                {
+                    c = (p[0] < 'a') ? (p[0] - 'A') : (p[0] - 'a');
+                    n = c < 11 ? 0 : 1;
+                    if (n != cn) continue;
+                    c = c < 11 ? c : (c - 11);
+                }
+                else
+                {
+                    if (n != cn) continue;
+                    c = (p[0] <= 'W' ? (p[0] - 'W') : (p[0] - 'w' + 4));
+                }
+                if (c != ch) continue;
 
                 rw.Cells["ClmMute"].Value = mm;
                 rw.Cells["ClmSolo"].Value = sm;
                 pn = (int)rw.Cells["ClmPartNumber"].Value - 1;
                 pg = p.Length < 2 ? 0 : (p[1] - '0');
 
-                if (isOPNA)
+                if (isOPNA==0)
                 {
                     ((YM2608_mucom)mmli).SetMute(pn, ch, pg, mute);
                 }
-                else
+                else if (isOPNA == 1)
                 {
                     ((YM2610B_mucom)mmli).SetMute(pn, ch, pg, mute);
+                }
+                else
+                {
+                    ((YM2151_mucom)mmli).SetMute(pn, ch, pg, mute);
                 }
             }
 
@@ -888,11 +920,13 @@ namespace mml2vgmIDE
             int chipNumber = (int)r.Cells["ClmChipNumber"].Value;
             if (mmlParams == null) return false;
             if (!mmlParams.Insts.ContainsKey(chip)) return false;
-            if (!mmlParams.Insts[chip].ContainsKey(chipIndex) || !mmlParams.Insts[chip][chipIndex].ContainsKey(chipNumber)) return false;
+            if (!mmlParams.Insts[chip].ContainsKey(chipIndex) 
+                || !mmlParams.Insts[chip][chipIndex].ContainsKey(chipNumber)) return false;
             MMLParameter.Instrument mmli = mmlParams.Insts[chip][chipIndex][chipNumber];
 
             if (mmli is YM2608_mucom) return true;
             if (mmli is YM2610B_mucom) return true;
+            if (mmli is YM2151_mucom) return true;
 
             return false;
         }
@@ -912,7 +946,7 @@ namespace mml2vgmIDE
             bool assign = (string)r.Cells[clmKBDAssign].Value == Assign;
 
             //mucom以外は加工無し
-            if (!(mmli is YM2608_mucom) && !(mmli is YM2610B_mucom))
+            if (!(mmli is YM2608_mucom) && !(mmli is YM2610B_mucom) && !(mmli is YM2151_mucom))
             {
                 mmli.SetAssign(pn, assign);
                 return;
@@ -921,33 +955,58 @@ namespace mml2vgmIDE
             //mucomの場合は同系パートも同時にAssignする
 
             string cp = (string)r.Cells["ClmPart"].Value;
-            bool isOPNA = (cp[0] < 'a');
-            int ch = (cp[0] < 'a') ? (cp[0] - 'A') : (cp[0] - 'a');
-            int cn = ch < 11 ? 0 : 1;
-            ch = ch < 11 ? ch : (ch - 11);
+            int isOPNA = "ABCDEFGHIJKLMNOPQRSTUV".IndexOf(cp[0]) < 0 ? ("abcdefghijklmnopqrstuv".IndexOf(cp[0]) < 0 ? 2 : 1) : 0;
+            int ch;
+            int cn = 0;
+            if (isOPNA < 2)
+            {
+                ch = (cp[0] < 'a') ? (cp[0] - 'A') : (cp[0] - 'a');
+                cn = ch < 11 ? 0 : 1;
+                ch = ch < 11 ? ch : (ch - 11);
+            }
+            else
+            {
+                ch = (cp[0] <= 'W' ? (cp[0] - 'W') : (cp[0] - 'w' + 4));
+            }
             int pg;// = cp.Length < 2 ? 0 : (cp[1] - '0');
             string am = (string)r.Cells[clmKBDAssign].Value;
 
             foreach (DataGridViewRow rw in dgvPartCounter.Rows)
             {
                 string p = (string)rw.Cells["ClmPart"].Value;
-                bool isOPNAc = (p[0] < 'a');
-                int c = (p[0] < 'a') ? (p[0] - 'A') : (p[0] - 'a');
-                int n = c < 11 ? 0 : 1;
-                c = c < 11 ? c : (c - 11);
-                if (isOPNA != isOPNAc || n != cn || c != ch) continue;
+                int isOPNAc = "ABCDEFGHIJKLMNOPQRSTUV".IndexOf(p[0]) < 0 ? ("abcdefghijklmnopqrstuv".IndexOf(p[0]) < 0 ? 2 : 1) : 0;
+                if (isOPNA != isOPNAc) continue;
+                int c;
+                int n = 0;
+                if (isOPNAc < 2)
+                {
+                    c = (p[0] < 'a') ? (p[0] - 'A') : (p[0] - 'a');
+                    n = c < 11 ? 0 : 1;
+                    if (n != cn) continue;
+                    c = c < 11 ? c : (c - 11);
+                }
+                else
+                {
+                    if (n != cn) continue;
+                    c = (p[0] <= 'W' ? (p[0] - 'W') : (p[0] - 'w' + 4));
+                }
+                if (c != ch) continue;
 
                 rw.Cells[clmKBDAssign].Value = am;
                 pn = (int)rw.Cells["ClmPartNumber"].Value - 1;
                 pg = p.Length < 2 ? 0 : (p[1] - '0');
 
-                if (isOPNA)
+                if (isOPNA == 0)
                 {
                     ((YM2608_mucom)mmli).SetAssign(pn, ch, pg, assign);
                 }
-                else
+                else if (isOPNA == 1)
                 {
                     ((YM2610B_mucom)mmli).SetAssign(pn, ch, pg, assign);
+                }
+                else
+                {
+                    ((YM2151_mucom)mmli).SetAssign(pn, ch, pg, assign);
                 }
             }
 

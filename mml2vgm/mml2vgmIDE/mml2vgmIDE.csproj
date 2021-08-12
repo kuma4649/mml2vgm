@@ -362,6 +362,7 @@
     <Compile Include="MMLParameter\RF5C164.cs" />
     <Compile Include="MMLParameter\SegaPCM.cs" />
     <Compile Include="MMLParameter\SN76489.cs" />
+    <Compile Include="MMLParameter\YM2151_mucom.cs" />
     <Compile Include="MMLParameter\YM2151.cs" />
     <Compile Include="MMLParameter\YM2203.cs" />
     <Compile Include="MMLParameter\YM2413.cs" />

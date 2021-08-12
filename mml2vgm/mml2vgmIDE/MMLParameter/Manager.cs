@@ -792,7 +792,20 @@ namespace mml2vgmIDE.MMLParameter
                 chip = Audio.chipRegister.YM2151[zChip.Index];
                 //chipIndex = zChip.Index;
             }
-            YM2151 opm = new YM2151(chip, setting, midiKbd);
+            Instrument opm;
+            switch (mmlFileFormat)
+            {
+                case EnmMmlFileFormat.GWI:
+                default:
+                    opm = new YM2151(chip, setting, midiKbd);
+                    break;
+                case EnmMmlFileFormat.MUC:
+                    opm = new YM2151_mucom(chip, setting, midiKbd);
+                    break;
+                case EnmMmlFileFormat.MML:
+                    opm = new YM2151(chip, setting, midiKbd);
+                    break;
+            }
             YM2151.Add(opm);
             dicInstAdd(opm, od.linePos.chipIndex, od.linePos.chipNumber);
             instsAdd(opm, od.linePos.chipIndex, od.linePos.chipNumber);
