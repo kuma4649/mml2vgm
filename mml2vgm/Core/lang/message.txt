@@ -316,6 +316,7 @@ E10043=This channel can't use KD command.
 E10044=This channel can't use HS command.
 E10045=This channel can't use PRV command.
 E10046=This channel can't use FM command.
+E10047=Use the POx command to initialize the system before using the __ command.
 
 
 ;clsOPN.cs 11000

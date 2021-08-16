@@ -9309,7 +9309,7 @@ namespace mml2vgmIDE
             {
                 //if (!ctNES[chipID].UseScci)
                 //{
-                return mds.ReadNES((byte)chipID);
+                return mds.ReadNESapu((byte)chipID);
                 //}
             }
             else

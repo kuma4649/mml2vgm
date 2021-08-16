@@ -344,7 +344,13 @@ namespace Core
             page.MPortamentLastNote = page.bendOctave * 12 + "czdzefzgzazb".IndexOf(page.bendNote) + page.bendShift;
 
             int delta = ed - st;
-            if (delta == 0 || bendDelayCounter == ml)
+            if (delta != 0 && (ml - bendDelayCounter - 1) / (float)delta == 0)
+            {
+                page.bendNote = 'r';
+                page.bendWaitCounter = -1;
+                msgBox.setErrMsg(msg.get("E10047"), mml.line.Lp);
+            }
+            else if (delta == 0 || bendDelayCounter == ml)
             {
                 page.bendNote = 'r';
                 page.bendWaitCounter = -1;
@@ -357,11 +363,11 @@ namespace Core
                 float bf = Math.Sign(wait);
                 List<int> lstBend = new List<int>();
                 //int toneDoublerShift = 
-                    GetToneDoublerShift(
-                    page
-                    , page.octaveNow
-                    , note.cmd
-                    , note.shift);
+                GetToneDoublerShift(
+                page
+                , page.octaveNow
+                , note.cmd
+                , note.shift);
 
                 //midi向け
                 if (!page.beforeTie)
@@ -396,7 +402,7 @@ namespace Core
                         , delta
                         );
 
-                    if (Math.Abs(bf) >= 1.0f)
+                    if (Math.Abs(bf) >= 1.0f || wait == 0)
                     {
                         for (int j = 0; j < (int)Math.Abs(bf); j++)
                         {
@@ -734,8 +740,8 @@ namespace Core
 
         public virtual void SetArpeggioAtKeyOn(partPage page, MML mml)
         {
-            if (!page.arpeggioMode 
-                || page.arpInstrument==-1
+            if (!page.arpeggioMode
+                || page.arpInstrument == -1
                 || !parent.instArp.ContainsKey(page.arpInstrument)
                 || parent.instArp[page.arpInstrument].Length < 2
                 )
@@ -855,7 +861,7 @@ namespace Core
         {
             int n = (int)mml.args[0];
             bool r = mml.args.Count > 1;
-            
+
             if (!r) page.keyShift = Common.CheckRange(n, -128, 128);
             else page.keyShift = Common.CheckRange(page.keyShift + n, -128, 128);
 
@@ -979,7 +985,7 @@ namespace Core
                 || page.lfo[c].type == eLfoType.Vibrato
                 || page.lfo[c].type == eLfoType.Wah)
             {
-                if (page.lfo[c].param.Count < 4+(page.lfo[c].type == eLfoType.Wah?1:0))
+                if (page.lfo[c].param.Count < 4 + (page.lfo[c].type == eLfoType.Wah ? 1 : 0))
                 {
                     msgBox.setErrMsg(msg.get("E10005")
                     , mml.line.Lp);
@@ -1289,7 +1295,7 @@ namespace Core
             //SetDummyData(page, mml);
             return;
         }
-        
+
         public virtual void CmdPhaseReset(partPage page, MML mml)
         {
             string cmd = (string)mml.args[0];
@@ -1325,7 +1331,7 @@ namespace Core
             //SetDummyData(page, mml);
             return;
         }
-        
+
         public virtual void CmdHardEnvelope(partPage page, MML mml)
         {
             msgBox.setWrnMsg(msg.get("E10011")
@@ -1704,7 +1710,7 @@ namespace Core
             rp.lstRenpuLength = lstRenpuLength;
             page.stackRenpu.Push(rp);
         }
-        
+
         /// <summary>
         /// DDA 
         ///   zipperpull(@zipperpull)さんより
@@ -1804,7 +1810,7 @@ namespace Core
             //partPage pg = page;
 
             Note note = (Note)mml.args[0];
-            
+
             if (note.cmd == 'x')
             {
                 note.cmd = page.beforeNote;
@@ -2032,7 +2038,7 @@ namespace Core
                 page.requestInterrupt = true;
 
             page.beforeNote = note.cmd;
-            page.beforeNoteShift= note.shift;
+            page.beforeNoteShift = note.shift;
 
         }
 
@@ -2116,7 +2122,7 @@ namespace Core
             msgBox.setErrMsg(msg.get("E10043")
                     , mml.line.Lp);
         }
-        
+
         public virtual void CmdHardEnvelopeSync(partPage page, MML mml)
         {
             msgBox.setErrMsg(msg.get("E10044")
@@ -2199,7 +2205,7 @@ namespace Core
                 if (page != pw.cpg)
                 {
                     //処理しない(但しダイレクトセンドモードが有効な場合はコマンドを送信する)
-                    if(pw.spg.DirectSend)
+                    if (pw.spg.DirectSend)
                         parent.OutData(page.sendData);
                     page.sendData.Clear();//送信データクリア
                     return;
@@ -2327,7 +2333,7 @@ namespace Core
                     if (od.linePos != null)
                     {
                         o.linePos = new LinePos(
-                            od.linePos.document, 
+                            od.linePos.document,
                             od.linePos.srcMMLID,
                             od.linePos.row,
                             od.linePos.col,
@@ -2369,8 +2375,8 @@ namespace Core
         public void CmdPortament(partPage page, MML mml)
         {
             String cmd = (String)mml.args[0];
-            int n1, n2,n3;
-            switch(cmd)
+            int n1, n2, n3;
+            switch (cmd)
             {
                 case "PO":
                     n1 = (int)mml.args[1];
@@ -2378,7 +2384,7 @@ namespace Core
                     n3 = (int)mml.args[3];
                     page.MPortamentSwitch = n1;
                     page.MPortamentDelta = n2;
-                    page.MPortamentLength = n3;
+                    page.MPortamentLength = Math.Max(n3, 2);
                     page.MPortamentLastNote = -1;
                     break;
                 case "POO":
@@ -2399,7 +2405,7 @@ namespace Core
                     break;
                 case "POL":
                     n2 = (int)mml.args[1];
-                    page.MPortamentLength = n2;
+                    page.MPortamentLength = Math.Max(n2, 2);
                     break;
             }
         }
