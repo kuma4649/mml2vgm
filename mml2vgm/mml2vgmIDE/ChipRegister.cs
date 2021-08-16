@@ -1123,6 +1123,7 @@ namespace mml2vgmIDE
             K053260.Clear();
             QSound.Clear();
             RF5C164.Clear();
+            AY8910.Clear();
             SEGAPCM.Clear();
             SN76489.Clear();
             YM2151.Clear();
@@ -1143,28 +1144,30 @@ namespace mml2vgmIDE
             foreach (Chip c in chips)
             {
                 if (c is Driver.ZGM.ZgmChip.Conductor) CONDUCTOR.Add(c);
-                if (c is Driver.ZGM.ZgmChip.C140) C140.Add(c);
-                if (c is Driver.ZGM.ZgmChip.C352) C352.Add(c);
-                if (c is Driver.ZGM.ZgmChip.HuC6280) HuC6280.Add(c);
-                if (c is Driver.ZGM.ZgmChip.K051649) K051649.Add(c);
-                if (c is Driver.ZGM.ZgmChip.K053260) K053260.Add(c);
-                if (c is Driver.ZGM.ZgmChip.QSound) QSound.Add(c);
-                if (c is Driver.ZGM.ZgmChip.RF5C164) RF5C164.Add(c);
-                if (c is Driver.ZGM.ZgmChip.SEGAPCM) SEGAPCM.Add(c);
                 if (c is Driver.ZGM.ZgmChip.SN76489) SN76489.Add(c);
-                if (c is Driver.ZGM.ZgmChip.YM2151) YM2151.Add(c);
-                if (c is Driver.ZGM.ZgmChip.YM2203) YM2203.Add(c);
                 if (c is Driver.ZGM.ZgmChip.YM2413) YM2413.Add(c);
+                if (c is Driver.ZGM.ZgmChip.YM2612) YM2612.Add(c);
+                if (c is Driver.ZGM.ZgmChip.YM2151) YM2151.Add(c);
+                if (c is Driver.ZGM.ZgmChip.SEGAPCM) SEGAPCM.Add(c);
+                if (c is Driver.ZGM.ZgmChip.YM2203) YM2203.Add(c);
+                if (c is Driver.ZGM.ZgmChip.YM2608) YM2608.Add(c);
+                if (c is Driver.ZGM.ZgmChip.YM2610) YM2610.Add(c);
+                if (c is Driver.ZGM.ZgmChip.YM3812) YM3812.Add(c);
                 if (c is Driver.ZGM.ZgmChip.YM3526) YM3526.Add(c);
                 if (c is Driver.ZGM.ZgmChip.Y8950) Y8950.Add(c);
-                if (c is Driver.ZGM.ZgmChip.YM3812) YM3812.Add(c);
                 if (c is Driver.ZGM.ZgmChip.YMF262) YMF262.Add(c);
                 if (c is Driver.ZGM.ZgmChip.YMF278B) YMF278B.Add(c);
                 if (c is Driver.ZGM.ZgmChip.YMF271) YMF271.Add(c);
-                if (c is Driver.ZGM.ZgmChip.YM2608) YM2608.Add(c);
+                if (c is Driver.ZGM.ZgmChip.RF5C164) RF5C164.Add(c);
+                if (c is Driver.ZGM.ZgmChip.AY8910) AY8910.Add(c);
+                if (c is Driver.ZGM.ZgmChip.HuC6280) HuC6280.Add(c);
+                if (c is Driver.ZGM.ZgmChip.K051649) K051649.Add(c);
+                if (c is Driver.ZGM.ZgmChip.C140) C140.Add(c);
+                if (c is Driver.ZGM.ZgmChip.K053260) K053260.Add(c);
+                if (c is Driver.ZGM.ZgmChip.QSound) QSound.Add(c);
+                if (c is Driver.ZGM.ZgmChip.C352) C352.Add(c);
+
                 if (c is Driver.ZGM.ZgmChip.YM2609) YM2609.Add(c);
-                if (c is Driver.ZGM.ZgmChip.YM2610) YM2610.Add(c);
-                if (c is Driver.ZGM.ZgmChip.YM2612) YM2612.Add(c);
                 if (c is Driver.ZGM.ZgmChip.MidiGM) MIDI.Add(c);
             }
         }
@@ -2126,6 +2129,11 @@ namespace mml2vgmIDE
             }
 
             foreach (Driver.ZGM.ZgmChip.ZgmChip c in YMF271)
+            {
+                dicChipCmdNo.Add(c.defineInfo.commandNo, c);
+            }
+
+            foreach (Driver.ZGM.ZgmChip.ZgmChip c in AY8910)
             {
                 dicChipCmdNo.Add(c.defineInfo.commandNo, c);
             }

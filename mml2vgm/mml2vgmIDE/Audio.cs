@@ -1743,6 +1743,39 @@ namespace mml2vgmIDE
                     zCnt = -1;
                     foreach (Driver.ZGM.ZgmChip.ZgmChip zchip in zgmDriver.chips)
                     {
+                        if (!(zchip is Driver.ZGM.ZgmChip.AY8910)) continue;
+
+                        zCnt++;
+                        MDSound.ay8910 ay8910 = new MDSound.ay8910();
+                        chip = new MDSound.MDSound.Chip();
+                        chip.type = MDSound.MDSound.enmInstrumentType.AY8910;
+                        chip.ID = (byte)0;//ZGMでは常に0
+                        chip.Instrument = ay8910;
+                        chip.Update = ay8910.Update;
+                        chip.Start = ay8910.Start;
+                        chip.Stop = ay8910.Stop;
+                        chip.Reset = ay8910.Reset;
+                        chip.SamplingRate = (UInt32)Common.SampleRate;
+                        chip.Volume = setting.balance.AY8910Volume;
+                        chip.Clock = (uint)zchip.defineInfo.clock;
+                        chip.Option = null;
+                        lstChips.Add(chip);
+
+                        hiyorimiDeviceFlag |= (setting.AY8910Type.UseScci) ? 0x1 : 0x2;
+
+                        log.Write(string.Format("Use AY8910(#{0}) Clk:{1}"
+                            , zCnt
+                            , chip.Clock
+                            ));
+
+                        chipRegister.AY8910[zCnt].Use = true;
+                        chipRegister.AY8910[zCnt].Model = EnmVRModel.VirtualModel;
+                        chipRegister.AY8910[zCnt].Device = EnmZGMDevice.AY8910;
+                    }
+
+                    zCnt = -1;
+                    foreach (Driver.ZGM.ZgmChip.ZgmChip zchip in zgmDriver.chips)
+                    {
                         if (!(zchip is Driver.ZGM.ZgmChip.DMG)) continue;
 
                         zCnt++;
@@ -2509,6 +2542,15 @@ namespace mml2vgmIDE
                     if (c.Model == EnmVRModel.VirtualModel) useEmu = true;
                     if (c.Model == EnmVRModel.RealModel) useReal = true;
                     SetRF5C164Volume(true, setting.balance.RF5C164Volume);
+                    break;
+                }
+
+                foreach (Chip c in chipRegister.AY8910)
+                {
+                    if (!c.Use) continue;
+                    if (c.Model == EnmVRModel.VirtualModel) useEmu = true;
+                    if (c.Model == EnmVRModel.RealModel) useReal = true;
+                    SetAY8910Volume(true, setting.balance.AY8910Volume);
                     break;
                 }
 

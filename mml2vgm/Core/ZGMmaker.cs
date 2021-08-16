@@ -62,6 +62,7 @@ namespace Core
             , new object[]{ "YM2203"         , EnmZGMDevice.YM2203    , 1   , 2     , null }
             , new object[]{ "YM2608"         , EnmZGMDevice.YM2608    , 2   , 2     , null }
             , new object[]{ "YM2610B"        , EnmZGMDevice.YM2610    , 2   , 2     , null }
+            , new object[]{ "AY8910"         , EnmZGMDevice.AY8910    , 1   , 2     , null }
             , new object[]{ "K051649"        , EnmZGMDevice.K051649   , 1   , 2     , null }
             , new object[]{ "K053260"        , EnmZGMDevice.K053260   , 1   , 3     , new byte[] { 0 } }
             , new object[]{ "HuC6280"        , EnmZGMDevice.HuC6280   , 1   , 2     , null }

@@ -27,7 +27,7 @@ namespace mml2vgmIDE.Driver.ZGM.ZgmChip
                 case 0x0000_0068: return null;// YMZ280B          
                 case 0x0000_006C: return new RF5C164(chipRegister, setting, vgmBuf);
                 case 0x0000_0070: return null;// PWM              
-                case 0x0000_0074: return null;// AY8910           
+                case 0x0000_0074: return new AY8910(chipRegister, setting, vgmBuf);
                 case 0x0000_0080: return null;// GameBoy DMG      
                 case 0x0000_0084: return null;// NES APU          
                 case 0x0000_0088: return null;// MultiPCM         

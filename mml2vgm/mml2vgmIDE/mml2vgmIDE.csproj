@@ -168,6 +168,7 @@
     <Compile Include="Driver\pmdM.cs" />
     <Compile Include="Driver\ZGM\ZgmChip\C352.cs" />
     <Compile Include="Driver\ZGM\ZgmChip\C140.cs" />
+    <Compile Include="Driver\ZGM\ZgmChip\AY8910.cs" />
     <Compile Include="Driver\ZGM\ZgmChip\HuC6280.cs" />
     <Compile Include="Driver\ZGM\ZgmChip\K051649.cs" />
     <Compile Include="Driver\ZGM\ZgmChip\K053260.cs" />

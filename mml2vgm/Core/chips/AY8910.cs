@@ -154,7 +154,7 @@ namespace Core
 
             parent.OutData((MML)null, port[0],new byte[]{ 0x07, 0x3f});
 
-            if (ChipID != 0)
+            if (parent.info.format== enmFormat.VGM && ChipID != 0)
             {
                 parent.dat[0x77] = new outDatum(enmMMLType.unknown, null, null, (byte)(parent.dat[0x77].val | 0x40));//use Secondary
             }

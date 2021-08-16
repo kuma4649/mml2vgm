@@ -1,0 +1,68 @@
+﻿'{
+
+	TitleName            =
+	TitleNameJ           =
+	GameName             =
+	GameNameJ            =
+	SystemName           =
+	SystemNameJ          =
+	Composer             =
+	ComposerJ            =
+	ReleaseDate          =
+	Converted            =
+	Notes                =
+
+	ClockCount   =192
+	Format      =ZGM
+
+}
+
+
+     No, SV, AR, DR, SL, SR, RR, ST, ChipName
+'@ E  1, 15,  0,120,  7,100,  4,  1, AY8910
+'@ E  2, 15,  0, 40,  7,100,  4,  2, AY8910
+'@ E  3, 15,  0,  3, 13,  7,  1,  2, AY8910
+'@ E  4, 15,  0,  2, 14,  1,  1,  2, AY8910
+'@ E  5, 15,  0,  5, 13,  3,  1,  3, AY8910
+'@ E  6, 15,  0,  8, 13,  5,  1,  3, AY8910
+
+
+'A1 T126
+
+A1-3 !
+
+
+
+
+ PSG/SSG hardware envelope test (Triangle wave?)
+'A1 EHON EHT10 o1 q48
+'A1 o1  EH128a  EH116b > EH108c  EH96d  EH84e  EH80f  EH72g  EH64a <
+'A1 o1  EH 64a  EH 58b > EH 54c  EH48d  EH42e  EH40f  EH36g  EH32a <
+'A1 o1  EH 32a  EH 29b > EH 27c  EH24d  EH21e  EH20f  EH18g  EH16a <
+'A1 o1Q8EHOF a       b >      c      d      e      f      g      a <
+
+
+
+
+'A1 Q7D0o4v15cdefgab>c
+'A1 D20o4v15cv14dv13ev12fv11gv10av9b>v8c
+'A1 D0o3v15Q1[c8c16c16>][l8dl16dd]
+'A1 D0o3v15q1[c8c16c16>][l8dl16dd]
+'A1 l4@5EONcdefgabEOF
+'A1 MSV0,1,10,100,0a1r1
+'A1 MST0,1, 1, 10,0a1r1
+'A1 @2EON
+'A1 MSV0,1,10,100,1a1r1
+'A1 MST0,1, 1, 10,1a1r1
+'A1 EOFSS0
+'A1 P2w0o4v15cdefgab>c
+'A1 o4w0cw5dw10ew15fw20gw25aw30b
+'A1 P3w0o4v15cdefgab>c
+'A1 o4l1P1q0v15 EHON EH900
+'A1 EHT0EH9000cd
+'A1 EHT1EH9000cd
+'A1 EHT2EH9000cd
+'A1 EHT3EH9000cd
+'A1 EHOF
+'A1 o4v15cdefg
+N7 o4v15rrrrrcdefg
