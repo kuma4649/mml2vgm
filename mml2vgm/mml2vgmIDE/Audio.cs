@@ -1779,7 +1779,7 @@ namespace mml2vgmIDE
                         if (!(zchip is Driver.ZGM.ZgmChip.DMG)) continue;
 
                         zCnt++;
-                        MDSound.scd_pcm dmg = new MDSound.scd_pcm();
+                        MDSound.gb dmg = new MDSound.gb();
                         chip = new MDSound.MDSound.Chip();
                         chip.type = MDSound.MDSound.enmInstrumentType.DMG;
                         chip.ID = (byte)0;//ZGMでは常に0

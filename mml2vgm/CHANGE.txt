@@ -1,4 +1,8 @@
 更新履歴
+TAG520 2021/08/18
+  Core:ZGM:DMGに対応。
+  IDE:mucomDotNET更新
+
 TAG519 2021/08/17
   Core:ZGM:AY8910に対応。
 
