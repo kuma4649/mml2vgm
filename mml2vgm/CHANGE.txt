@@ -1,4 +1,7 @@
 更新履歴
+TAG521 2021/08/19
+  Core:ZGM:NESに対応。
+
 TAG520 2021/08/18
   Core:ZGM:DMGに対応。
   IDE:mucomDotNET更新

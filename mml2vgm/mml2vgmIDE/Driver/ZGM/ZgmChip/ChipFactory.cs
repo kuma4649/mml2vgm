@@ -18,18 +18,18 @@ namespace mml2vgmIDE.Driver.ZGM.ZgmChip
                 case 0x0000_0044: return new YM2203(chipRegister, setting, vgmBuf);
                 case 0x0000_0048: return new YM2608(chipRegister, setting, vgmBuf);
                 case 0x0000_004C: return new YM2610(chipRegister, setting, vgmBuf);
-                case 0x0000_0050: return null;// YM3812           
-                case 0x0000_0054: return null;// YM3526           
-                case 0x0000_0058: return null;// Y8950            
-                case 0x0000_005C: return null;// YMF262           
-                case 0x0000_0060: return null;// YMF278B          
-                case 0x0000_0064: return null;// YMF271           
+                case 0x0000_0050: return new YM3812(chipRegister, setting, vgmBuf);
+                case 0x0000_0054: return new YM3526(chipRegister, setting, vgmBuf);
+                case 0x0000_0058: return new Y8950(chipRegister, setting, vgmBuf);
+                case 0x0000_005C: return new YMF262(chipRegister, setting, vgmBuf);
+                case 0x0000_0060: return new YMF278B(chipRegister, setting, vgmBuf);
+                case 0x0000_0064: return new YMF271(chipRegister, setting, vgmBuf);
                 case 0x0000_0068: return null;// YMZ280B          
                 case 0x0000_006C: return new RF5C164(chipRegister, setting, vgmBuf);
                 case 0x0000_0070: return null;// PWM              
                 case 0x0000_0074: return new AY8910(chipRegister, setting, vgmBuf);
                 case 0x0000_0080: return new DMG(chipRegister, setting, vgmBuf);
-                case 0x0000_0084: return null;// NES APU          
+                case 0x0000_0084: return new NES(chipRegister, setting, vgmBuf);
                 case 0x0000_0088: return null;// MultiPCM         
                 case 0x0000_008C: return null;// uPD7759          
                 case 0x0000_0090: return null;// OKIM6258         

@@ -15,6 +15,7 @@
 	ModeBeforeSend =All
 	ClockCount     =192
 	Octave-Rev     =FALSE
+	FORMAT         =ZGM
 
 }
 

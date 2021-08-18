@@ -16,6 +16,8 @@
 	ClockCount     =192
 	Octave-Rev     =FALSE
 
+	FORMAT=ZGM
+
 }
 
 K053260のループはアドレスを指定することはできず、必ず最初に戻ります

@@ -1125,6 +1125,7 @@ namespace mml2vgmIDE
             RF5C164.Clear();
             AY8910.Clear();
             DMG.Clear();
+            NES.Clear();
             SEGAPCM.Clear();
             SN76489.Clear();
             YM2151.Clear();
@@ -1162,8 +1163,9 @@ namespace mml2vgmIDE
                 if (c is Driver.ZGM.ZgmChip.RF5C164) RF5C164.Add(c);
                 if (c is Driver.ZGM.ZgmChip.AY8910) AY8910.Add(c);
                 if (c is Driver.ZGM.ZgmChip.DMG) DMG.Add(c);
-                if (c is Driver.ZGM.ZgmChip.HuC6280) HuC6280.Add(c);
+                if (c is Driver.ZGM.ZgmChip.NES) NES.Add(c);
                 if (c is Driver.ZGM.ZgmChip.K051649) K051649.Add(c);
+                if (c is Driver.ZGM.ZgmChip.HuC6280) HuC6280.Add(c);
                 if (c is Driver.ZGM.ZgmChip.C140) C140.Add(c);
                 if (c is Driver.ZGM.ZgmChip.K053260) K053260.Add(c);
                 if (c is Driver.ZGM.ZgmChip.QSound) QSound.Add(c);
@@ -2020,57 +2022,7 @@ namespace mml2vgmIDE
                 dicChipCmdNo.Add(c.defineInfo.commandNo, c);
             }
 
-            foreach (Driver.ZGM.ZgmChip.ZgmChip c in C140)
-            {
-                dicChipCmdNo.Add(c.defineInfo.commandNo, c);
-            }
-
-            foreach (Driver.ZGM.ZgmChip.ZgmChip c in C352)
-            {
-                dicChipCmdNo.Add(c.defineInfo.commandNo, c);
-            }
-
-            foreach (Driver.ZGM.ZgmChip.ZgmChip c in HuC6280)
-            {
-                dicChipCmdNo.Add(c.defineInfo.commandNo, c);
-            }
-
-            foreach (Driver.ZGM.ZgmChip.ZgmChip c in K051649)
-            {
-                dicChipCmdNo.Add(c.defineInfo.commandNo, c);
-            }
-
-            foreach (Driver.ZGM.ZgmChip.ZgmChip c in K053260)
-            {
-                dicChipCmdNo.Add(c.defineInfo.commandNo, c);
-            }
-
-            foreach (Driver.ZGM.ZgmChip.ZgmChip c in QSound)
-            {
-                dicChipCmdNo.Add(c.defineInfo.commandNo, c);
-            }
-
-            foreach (Driver.ZGM.ZgmChip.ZgmChip c in RF5C164)
-            {
-                dicChipCmdNo.Add(c.defineInfo.commandNo, c);
-            }
-
-            foreach (Driver.ZGM.ZgmChip.ZgmChip c in SEGAPCM)
-            {
-                dicChipCmdNo.Add(c.defineInfo.commandNo, c);
-            }
-
             foreach (Driver.ZGM.ZgmChip.ZgmChip c in SN76489)
-            {
-                dicChipCmdNo.Add(c.defineInfo.commandNo, c);
-            }
-
-            foreach (Driver.ZGM.ZgmChip.ZgmChip c in YM2151)
-            {
-                dicChipCmdNo.Add(c.defineInfo.commandNo, c);
-            }
-
-            foreach (Driver.ZGM.ZgmChip.ZgmChip c in YM2203)
             {
                 dicChipCmdNo.Add(c.defineInfo.commandNo, c);
             }
@@ -2080,12 +2032,27 @@ namespace mml2vgmIDE
                 dicChipCmdNo.Add(c.defineInfo.commandNo, c);
             }
 
-            foreach (Driver.ZGM.ZgmChip.ZgmChip c in YM2608)
+            foreach (Driver.ZGM.ZgmChip.ZgmChip c in YM2612)
             {
                 dicChipCmdNo.Add(c.defineInfo.commandNo, c);
             }
 
-            foreach (Driver.ZGM.ZgmChip.ZgmChip c in YM2609)
+            foreach (Driver.ZGM.ZgmChip.ZgmChip c in YM2151)
+            {
+                dicChipCmdNo.Add(c.defineInfo.commandNo, c);
+            }
+
+            foreach (Driver.ZGM.ZgmChip.ZgmChip c in SEGAPCM)
+            {
+                dicChipCmdNo.Add(c.defineInfo.commandNo, c);
+            }
+
+            foreach (Driver.ZGM.ZgmChip.ZgmChip c in YM2203)
+            {
+                dicChipCmdNo.Add(c.defineInfo.commandNo, c);
+            }
+
+            foreach (Driver.ZGM.ZgmChip.ZgmChip c in YM2608)
             {
                 dicChipCmdNo.Add(c.defineInfo.commandNo, c);
             }
@@ -2095,12 +2062,7 @@ namespace mml2vgmIDE
                 dicChipCmdNo.Add(c.defineInfo.commandNo, c);
             }
 
-            foreach (Driver.ZGM.ZgmChip.ZgmChip c in YM2612)
-            {
-                dicChipCmdNo.Add(c.defineInfo.commandNo, c);
-            }
-
-            foreach (Driver.ZGM.ZgmChip.ZgmChip c in MIDI)
+            foreach (Driver.ZGM.ZgmChip.ZgmChip c in YM3812)
             {
                 dicChipCmdNo.Add(c.defineInfo.commandNo, c);
             }
@@ -2111,11 +2073,6 @@ namespace mml2vgmIDE
             }
 
             foreach (Driver.ZGM.ZgmChip.ZgmChip c in Y8950)
-            {
-                dicChipCmdNo.Add(c.defineInfo.commandNo, c);
-            }
-
-            foreach (Driver.ZGM.ZgmChip.ZgmChip c in YM3812)
             {
                 dicChipCmdNo.Add(c.defineInfo.commandNo, c);
             }
@@ -2135,12 +2092,64 @@ namespace mml2vgmIDE
                 dicChipCmdNo.Add(c.defineInfo.commandNo, c);
             }
 
+            foreach (Driver.ZGM.ZgmChip.ZgmChip c in RF5C164)
+            {
+                dicChipCmdNo.Add(c.defineInfo.commandNo, c);
+            }
+
             foreach (Driver.ZGM.ZgmChip.ZgmChip c in AY8910)
             {
                 dicChipCmdNo.Add(c.defineInfo.commandNo, c);
             }
 
             foreach (Driver.ZGM.ZgmChip.ZgmChip c in DMG)
+            {
+                dicChipCmdNo.Add(c.defineInfo.commandNo, c);
+            }
+
+            foreach (Driver.ZGM.ZgmChip.ZgmChip c in NES)
+            {
+                dicChipCmdNo.Add(c.defineInfo.commandNo, c);
+            }
+
+            foreach (Driver.ZGM.ZgmChip.ZgmChip c in K051649)
+            {
+                dicChipCmdNo.Add(c.defineInfo.commandNo, c);
+            }
+
+            foreach (Driver.ZGM.ZgmChip.ZgmChip c in HuC6280)
+            {
+                dicChipCmdNo.Add(c.defineInfo.commandNo, c);
+            }
+
+            foreach (Driver.ZGM.ZgmChip.ZgmChip c in C140)
+            {
+                dicChipCmdNo.Add(c.defineInfo.commandNo, c);
+            }
+
+            foreach (Driver.ZGM.ZgmChip.ZgmChip c in K053260)
+            {
+                dicChipCmdNo.Add(c.defineInfo.commandNo, c);
+            }
+
+            foreach (Driver.ZGM.ZgmChip.ZgmChip c in QSound)
+            {
+                dicChipCmdNo.Add(c.defineInfo.commandNo, c);
+            }
+
+            foreach (Driver.ZGM.ZgmChip.ZgmChip c in C352)
+            {
+                dicChipCmdNo.Add(c.defineInfo.commandNo, c);
+            }
+
+
+
+            foreach (Driver.ZGM.ZgmChip.ZgmChip c in YM2609)
+            {
+                dicChipCmdNo.Add(c.defineInfo.commandNo, c);
+            }
+
+            foreach (Driver.ZGM.ZgmChip.ZgmChip c in MIDI)
             {
                 dicChipCmdNo.Add(c.defineInfo.commandNo, c);
             }

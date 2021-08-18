@@ -193,7 +193,7 @@ namespace Core
 
 
             //ヘッダの調整
-            if (ChipID != 0)
+            if (parent.info.format == enmFormat.VGM && ChipID != 0)
             {
                 parent.dat[vgmHeaderPos + 3] = new outDatum(enmMMLType.unknown, null, null
                     , (byte)(parent.dat[vgmHeaderPos + 3].val | 0x40));//use Secondary
