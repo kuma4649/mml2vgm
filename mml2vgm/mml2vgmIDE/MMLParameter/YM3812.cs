@@ -29,7 +29,10 @@ namespace mml2vgmIDE.MMLParameter
             Core.Note nt = (Core.Note)od.args[0];
             int shift = nt.shift;
             string f = Math.Sign(shift) >= 0 ? string.Concat(Enumerable.Repeat("+", shift)) : string.Concat(Enumerable.Repeat("-", -shift));
-            notecmd[od.linePos.ch] = string.Format("o{0}{1}{2}", octave[od.linePos.ch], nt.cmd, f);
+            if (nt.trueKeyOn)
+                notecmd[od.linePos.ch] = string.Format("o{0}{1}{2}", octave[od.linePos.ch], nt.cmd, f);
+            else
+                notecmd[od.linePos.ch] = string.Format("skip (o{0}{1}{2})", octave[od.linePos.ch], nt.cmd, f);
             length[od.linePos.ch] = string.Format("{0:0.##}(#{1:d})", 1.0 * cc / nt.length, nt.length);
 
             //log.Write(notecmd[od.linePos.ch]);
@@ -38,7 +41,8 @@ namespace mml2vgmIDE.MMLParameter
             {
                 if (vol[od.linePos.ch] != null)
                 {
-                    keyOnMeter[od.linePos.ch] = (int)(256.0 / 128.0 * vol[od.linePos.ch]);
+                    if (nt.trueKeyOn)
+                        keyOnMeter[od.linePos.ch] = (int)(256.0 / 128.0 * vol[od.linePos.ch]);
                 }
             }
             beforeTie[od.linePos.ch] = nt.tieSw;

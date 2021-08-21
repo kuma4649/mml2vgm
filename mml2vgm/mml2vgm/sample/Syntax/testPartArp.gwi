@@ -1,0 +1,37 @@
+﻿'{
+
+	TitleName   =Part arpeggio test
+	TitleNameJ  =パートアルペジオコマンドテスト
+	GameName    =
+	GameNameJ   =
+	SystemName  =
+	SystemNameJ =
+	Composer    =
+	ComposerJ   =
+	ReleaseDate =
+	Converted   =
+	Notes       =
+
+}
+
+lead synthっぽいなにか
+'@ N 000
+   AR  DR  SR  RR  SL  TL  KS  ML  DT  AM  SSG-EG
+'@ 031,001,001,001,005,026,000,001,002,000,000
+'@ 031,004,003,010,010,000,000,000,003,000,000
+'@ 031,001,001,001,005,020,000,001,006,000,000
+'@ 031,004,003,010,010,004,000,000,005,000,000
+   ALG FB
+'@ 004,005
+
+
+'Cn1 T160
+Cn1 L
+
+'F1-6 @0D0p3v110o4l8Q24
+'F1-6 [`  [ cdeg> ]4 [ c<ged ]4  < [ ab>ce ]4 [ aec<b ]4 >  `] 
+'F123 [`  [ cdeg> ]4 [ c<ged ]4  < [ ab>ce ]4 [ aec<b ]4 >  `] 
+
+'F1-3 @0D0p3v110o6l2q-48
+'F1-3 [` [c&cdef] `] q48 cde
+

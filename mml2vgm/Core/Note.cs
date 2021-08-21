@@ -31,6 +31,37 @@ namespace Core
         public int velocity = -1;
         public bool chordSw = false;
 
-        public int addLength { get; internal set; } = 0;
+        public int addLength = 0;
+        public bool trueKeyOn = false;
+
+        public Note Copy()
+        {
+            Note n = new Note();
+
+            n.shift = this.shift;
+            n.pitchShift = this.pitchShift;
+            n.tieSw = this.tieSw;
+            n.cmd = this.cmd;
+            n.length = this.length;
+
+            n.bendSw = this.bendSw;
+            n.bendCmd = this.bendCmd;
+            n.bendShift = this.bendShift;
+            n.bendPitchShift = this.bendPitchShift;
+            n.bendOctave = this.bendOctave;
+
+            n.tDblSw = this.tDblSw;
+            n.tDblCmd = this.tDblCmd;
+            n.tDblShift = this.tDblShift;
+            n.tDblOctave=this.tDblOctave;
+
+            n.velocity = this.velocity;
+            n.chordSw = this.chordSw;
+
+            n.addLength = this.addLength;
+            n.trueKeyOn = this.trueKeyOn;
+
+            return n;
+        }
     }
 }

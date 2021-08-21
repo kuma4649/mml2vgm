@@ -1515,7 +1515,7 @@ namespace Core
         public virtual void CmdGatetime(partPage page, MML mml)
         {
             int n = (int)mml.args[0];
-            n = Common.CheckRange(n, 0, 255);
+            //n = Common.CheckRange(n, -256, 255);
             page.gatetime = n;
             page.gatetimePmode = false;
             page.gatetimeReverse = false;
@@ -1526,7 +1526,7 @@ namespace Core
         public virtual void CmdGatetime2(partPage page, MML mml)
         {
             int n = (int)mml.args[0];
-            n = Common.CheckRange(n, 1, 8);
+            n = Math.Max(n, 1);
             page.gatetime = n;
             page.gatetimePmode = true;
             page.gatetimeReverse = false;
@@ -1807,9 +1807,33 @@ namespace Core
 
         public virtual void CmdNote(partWork pw, partPage page, MML mml)
         {
-            //partPage pg = page;
-
             Note note = (Note)mml.args[0];
+            note.trueKeyOn = true;
+
+            if (page.PASwitch)
+            {
+
+                if (page.PAPos != page.PAIndex)
+                {
+                    //休符処理
+                    RestProc(page, mml, note.length);
+                    note.trueKeyOn = false;
+
+                    if (!note.tieSw)
+                    {
+                        page.PAIndex++;
+                        page.PAIndex %= page.PACount;
+                    }
+                    return;
+                }
+
+                if (!note.tieSw)
+                {
+                    page.PAIndex++;
+                    page.PAIndex %= page.PACount;
+                }
+            }
+
 
             if (note.cmd == 'x')
             {
@@ -1914,6 +1938,12 @@ namespace Core
                 page.reqFreqReset = false;
             }
 
+            bool forcedKeyoff = false;
+            if (page.waitKeyOnCounter > 0 && !page.tie)
+            {
+                forcedKeyoff = true;
+            }
+
             page.octaveNow = page.octaveNew;
             page.noteCmd = note.cmd;
             page.shift = note.shift;
@@ -1950,22 +1980,22 @@ namespace Core
                 if (!page.gatetimeReverse)
                     page.waitKeyOnCounter = page.waitCounter * page.gatetime / 8L;
                 else
-                    page.waitKeyOnCounter = page.waitCounter - page.waitCounter * page.gatetime / 8L;
+                    page.waitKeyOnCounter = page.waitCounter - page.waitCounter * (page.gatetime % 8L) / 8L;//リバース時は剰余数で計算
             }
             else
             {
                 if (!page.gatetimeReverse)
                     page.waitKeyOnCounter = page.waitCounter - page.gatetime;
                 else
-                    page.waitKeyOnCounter = page.gatetime;
+                    page.waitKeyOnCounter = Math.Abs(page.gatetime);//リバース時は負の数でも同じ動作
             }
-            if (page.waitKeyOnCounter > page.waitCounter) page.waitKeyOnCounter = page.waitCounter;
+            //if (page.waitKeyOnCounter > page.waitCounter) page.waitKeyOnCounter = page.waitCounter;
             if (page.waitKeyOnCounter < 1) page.waitKeyOnCounter = 1;
 
             //タイ指定では無い場合はキーオンする
             if (!page.beforeTie)
             {
-                if (page.envIndex != -1 || page.varpIndex != -1)
+                if (page.envIndex != -1 || page.varpIndex != -1 || forcedKeyoff)
                 {
                     SetKeyOff(page, mml);
                 }
@@ -2042,19 +2072,16 @@ namespace Core
 
         }
 
-        protected virtual void ResetTieBend(partPage page, MML mml)
-        {
-        }
-
-        protected virtual void SetTieBend(partPage page, MML mml)
-        {
-        }
-
         public virtual void CmdRest(partPage page, MML mml)
         {
             Rest rest = (Rest)mml.args[0];
             int ml = rest.length;
-            if (rest.length < 1)
+            RestProc(page, mml, ml);
+        }
+
+        private void RestProc(partPage page, MML mml,int ml)
+        { 
+            if (ml < 1)
             {
                 msgBox.setErrMsg(msg.get("E10013")
                     , mml.line.Lp);
@@ -2082,6 +2109,14 @@ namespace Core
             SetDummyData(page, mml);
 
             page.enableInterrupt = true;//割り込み許可
+        }
+
+        protected virtual void ResetTieBend(partPage page, MML mml)
+        {
+        }
+
+        protected virtual void SetTieBend(partPage page, MML mml)
+        {
         }
 
         public virtual void CmdLyric(partPage page, MML mml)
@@ -2408,6 +2443,27 @@ namespace Core
                     page.MPortamentLength = Math.Max(n2, 2);
                     break;
             }
+        }
+
+        public void CmdPartArpeggio_End(partPage page, MML mml)
+        {
+            page.PASwitch = false;
+        }
+
+        public void CmdPartArpeggio_Start(partPage page, MML mml)
+        {
+            //設定値系のセット
+            page.PASwitch = true;
+            page.PAMode = (int)mml.args[0];
+            page.PAPos = (int)mml.args[1];
+            page.PACount = (int)mml.args[2];
+
+            //ワーク系の初期化
+            page.PAIndex = 0;
+            page.PAnoteOld = null;
+            page.PATie = false;
+            page.PATiePos = 0;
+
         }
     }
 

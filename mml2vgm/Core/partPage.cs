@@ -688,7 +688,16 @@ namespace Core
         public int MPortamentLength { get; internal set; } = 2;
         public int MPortamentLastNote { get; internal set; } = -1;
         public int MPortamentOneshotSwitch { get; internal set; } = 0;
+        public bool replacePartOrPartArpeggio { get; internal set; } = false;
 
+        public bool PASwitch = false;
+        public int PAIndex = 0;//現在のノートの位置
+        public int PAPos = 0;//自分の位置
+        public int PACount = 3;//パートに存在する総チャンネル数
+        public bool PATie = false;
+        public int PAMode = 0;
+        public Note PAnoteOld = null;
+        public int PATiePos = 0;
 
         public partPage(partPage sharedPg)
         {

@@ -893,6 +893,8 @@ rn              oooooooooooooooooooooooooooooooooooooooooooooooooooo  休符
 [|n             oooooooooooooooooooooooooooooooooooooooooooooooooooo  パート別リプレース開始位置(n:有効パート数)
 |n              oooooooooooooooooooooooooooooooooooooooooooooooooooo  パート別リプレース区切り位置(n:有効パート数)
 |]              oooooooooooooooooooooooooooooooooooooooooooooooooooo  パート別リプレース終了位置
+[`              oooooooooooooooooooooooooooooooooooooooooooooooooooo  パート別アルペジオ開始位置
+`]              oooooooooooooooooooooooooooooooooooooooooooooooooooo  パート別アルペジオ終了位置
 EON             -----oo--ooo--ooo--oooo--o-ooooo-o-o-oo-o-o--ooooooo  エンベロープの開始
 EOF             -----oo--ooo--ooo--oooo--o-ooooo-o-o-oo-o-o--ooooooo  エンベロープの停止
 EHON            ---------o----o----o-----o-----o--------------------  ハードウェアエンベロープの開始

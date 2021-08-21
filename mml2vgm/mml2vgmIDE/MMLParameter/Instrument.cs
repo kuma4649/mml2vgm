@@ -310,14 +310,18 @@ namespace mml2vgmIDE.MMLParameter
             Core.Note nt = (Core.Note)od.args[0];
             int shift = nt.shift;
             string f = Math.Sign(shift) >= 0 ? string.Concat(Enumerable.Repeat("+", shift)) : string.Concat(Enumerable.Repeat("-", -shift));
-            notecmd[ch] = string.Format("o{0}{1}{2}", octave[ch], nt.cmd, f);
+            if (nt.trueKeyOn)
+                notecmd[od.linePos.ch] = string.Format("o{0}{1}{2}", octave[ch], nt.cmd, f);
+            else
+                notecmd[od.linePos.ch] = string.Format("skip (o{0}{1}{2})", octave[ch], nt.cmd, f);
             length[ch] = string.Format("{0:0.##}(#{1:d})", 1.0 * cc / nt.length, nt.length);
 
             if (!beforeTie[ch])
             {
                 if (vol[ch] != null)
                 {
-                    keyOnMeter[ch] = (int)(256.0 / (
+                    if (nt.trueKeyOn)
+                        keyOnMeter[ch] = (int)(256.0 / (
                         od.linePos.part == "FMOPN" ? 128 : (
                         od.linePos.part == "FMOPNex" ? 128 : (
                         od.linePos.part == "SSG" ? 16 : (

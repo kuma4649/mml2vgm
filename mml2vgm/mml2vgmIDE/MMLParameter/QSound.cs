@@ -36,7 +36,10 @@ namespace mml2vgmIDE.MMLParameter
             Core.Note nt = (Core.Note)od.args[0];
             int shift = nt.shift;
             string f = Math.Sign(shift) >= 0 ? string.Concat(Enumerable.Repeat("+", shift)) : string.Concat(Enumerable.Repeat("-", -shift));
-            notecmd[od.linePos.ch] = string.Format("o{0}{1}{2}", octave[od.linePos.ch], nt.cmd, f);
+            if (nt.trueKeyOn)
+                notecmd[od.linePos.ch] = string.Format("o{0}{1}{2}", octave[od.linePos.ch], nt.cmd, f);
+            else
+                notecmd[od.linePos.ch] = string.Format("skip (o{0}{1}{2})", octave[od.linePos.ch], nt.cmd, f);
             length[od.linePos.ch] = string.Format("{0:0.##}(#{1:d})", 1.0 * cc / nt.length, nt.length);
 
             if (!beforeTie[od.linePos.ch])
@@ -44,7 +47,8 @@ namespace mml2vgmIDE.MMLParameter
                 if (vol[od.linePos.ch] != null)
                 {
                     double v = Math.Min((double)vol[od.linePos.ch], 5000.0);//65535までだが、恐らく4000ぐらいが最大として使用する音量かと思われる
-                    keyOnMeter[od.linePos.ch] = (int)(256.0 / 5000.0 * vol[od.linePos.ch]);
+                    if (nt.trueKeyOn)
+                        keyOnMeter[od.linePos.ch] = (int)(256.0 / 5000.0 * vol[od.linePos.ch]);
                 }
             }
             beforeTie[od.linePos.ch] = nt.tieSw;

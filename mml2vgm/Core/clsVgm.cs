@@ -1767,6 +1767,7 @@ namespace Core
                     line.Lp.ch), line.Txt);
                 l.Lp.col = i + 1;
                 l.Index = pIndex++;
+                l.Count = part.Count;
                 while (partData[n][p].Count < ura + 1)
                 {
                     partData[n][p].Add(new List<Line>());
@@ -3369,7 +3370,7 @@ namespace Core
                             //note
                             if (page.waitKeyOnCounter > 0)
                                 waitCounter = Math.Min(waitCounter, page.waitKeyOnCounter);
-                            else if (page.waitCounter > 0)
+                            if (page.waitCounter > 0)
                                 waitCounter = Math.Min(waitCounter, page.waitCounter);
 
                             //bend
@@ -4833,7 +4834,18 @@ namespace Core
 
         private void ProcKeyOff(partPage page)
         {
-            if (page.waitKeyOnCounter != 0) return;
+            if (page.waitKeyOnCounter != 0)
+            {
+                if (page.waitKeyOnCounter > 0)
+                {
+                    if (page.waitCounter <= 0)
+                    {
+                        page.beforeTie = page.tie;
+                        page.tie = false;
+                    }
+                }
+                return;
+            }
 
             if (!page.tie)
             {
@@ -5667,7 +5679,8 @@ namespace Core
                     break;
                 case enmMMLType.Note:
                     log.Write("Note");
-                    page.chip.CmdNote(pw, page, mml);
+                    MML n = mml.Copy();
+                    page.chip.CmdNote(pw, page, n);
                     page.mmlPos++;
                     break;
                 case enmMMLType.Rest:
@@ -5869,6 +5882,16 @@ namespace Core
                 case enmMMLType.PartColor:
                     log.Write("PartColor");
                     page.chip.CmdPartColor(page, mml);
+                    page.mmlPos++;
+                    break;
+                case enmMMLType.PartArpeggio_Start:
+                    log.Write("PartArpeggio_Start");
+                    page.chip.CmdPartArpeggio_Start(page, mml);
+                    page.mmlPos++;
+                    break;
+                case enmMMLType.PartArpeggio_End:
+                    log.Write("PartArpeggio_End");
+                    page.chip.CmdPartArpeggio_End(page, mml);
                     page.mmlPos++;
                     break;
                 default:

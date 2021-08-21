@@ -259,6 +259,10 @@ namespace Core
                     log.Write("Replace by parts");
                     CmdReplaceByParts(pw, page, mml);
                     break;
+                case '`': // Replace by parts / end point of Replace by parts
+                    log.Write("Replace by parts");
+                    CmdPartArpeggio(pw, page, mml);
+                    break;
                 case '{': // renpu
                     log.Write("renpu {");
                     CmdRenpuStart(pw, page, mml);
@@ -1003,7 +1007,7 @@ namespace Core
                 msgBox.setErrMsg(msg.get("E05013"), mml.line.Lp);
                 n = 0;
             }
-            n = Common.CheckRange(n, 0, 255);
+            //n = Common.CheckRange(n, 0, 255);
             mml.type = enmMMLType.Gatetime;
             mml.args = new List<object>();
             mml.args.Add(n);
@@ -1027,7 +1031,7 @@ namespace Core
                 msgBox.setErrMsg(msg.get("E05014"), mml.line.Lp);
                 n = 1;
             }
-            n = Common.CheckRange(n, 1, 8);
+            n = Math.Max(n, 1);// Common.CheckRange(n, 1, 8);
             mml.type = enmMMLType.GatetimeDiv;
             mml.args = new List<object>();
             mml.args.Add(n);
@@ -1224,6 +1228,12 @@ namespace Core
                 CmdReplaceByParts_Start(pw, page, mml);
                 return;
             }
+            else if (c == '`')
+            {
+                CmdPartArpeggio_Start(pw, page, mml);
+                return;
+            }
+
 
             mml.type = enmMMLType.Repeat;
             mml.args = null;
@@ -1298,6 +1308,13 @@ namespace Core
             }
             num = Math.Max(num, 1);
 
+            if (page.replacePartOrPartArpeggio)
+            {
+                msgBox.setErrMsg(msg.get("E05084"), mml.line.Lp);
+                return;
+            }
+
+            page.replacePartOrPartArpeggio = true;
             mml.type = enmMMLType.ReplaceByParts_Start;
             mml.args = new List<object>();
             mml.args.Add(num);
@@ -1330,8 +1347,56 @@ namespace Core
         {
             pw.incPos(page);
 
+            page.replacePartOrPartArpeggio = false;
             mml.type = enmMMLType.ReplaceByParts_End;
             mml.args = null;
+        }
+
+        private void CmdPartArpeggio(partWork pw, partPage page, MML mml)
+        {
+            pw.incPos(page);
+
+            char c = pw.getChar(page);
+            if (c == ']')
+            {
+                CmdPartArpeggio_End(pw, page, mml);
+                return;
+            }
+
+        }
+
+        private void CmdPartArpeggio_Start(partWork pw, partPage page, MML mml)
+        {
+            pw.incPos(page);
+
+            int mode;
+            if (!pw.getNum(page, out mode))
+            {
+                mode = 0;
+            }
+            mode = Math.Min(Math.Max(mode, 0), 1);
+
+            if (page.replacePartOrPartArpeggio)
+            {
+                msgBox.setErrMsg(msg.get("E05084"), mml.line.Lp);
+                return;
+            }
+
+            page.replacePartOrPartArpeggio = true;
+            mml.type = enmMMLType.PartArpeggio_Start;
+            mml.args = new List<object>();
+            mml.args.Add(mode);
+            mml.args.Add(mml.line.Index);
+            mml.args.Add(mml.line.Count);
+        }
+
+        private void CmdPartArpeggio_End(partWork pw, partPage page, MML mml)
+        {
+            pw.incPos(page);
+
+            page.replacePartOrPartArpeggio = false;
+            mml.type = enmMMLType.PartArpeggio_End;
+            mml.args = new List<object>();
         }
 
         private void CmdLfo(partWork pw, partPage page, MML mml)
@@ -3566,6 +3631,15 @@ namespace Core
             int analyzeStartIndex = 0;
             int analyzeRange = 1;
 
+            //bool analyzePABlock = false;
+            //int analyzePAIndex = 0;//現在のノートの位置
+            //int analyzePAPos = 0;//自分の位置
+            //int analyzePACount = 3;//パートに存在する総チャンネル数
+            //bool analyzePATie = false;
+            //int analyzePAMode = 0;
+            //Note noteOld = null;
+            //int analyzePATiePos = 0;
+
             for (int i = 0; i < page.mmlData.Count; i++)
             {
                 MML mml = page.mmlData[i];
@@ -3614,6 +3688,37 @@ namespace Core
                     i--;
                     continue;
                 }
+                //else if (mml.type == enmMMLType.PartArpeggio_Start)
+                //{
+                //    if (analyzePABlock)
+                //    {
+                //        //解析中にさらにアルペジオ開始指定があった場合
+                //        msgBox.setWrnMsg(msg.get("E050xx"), mml.line.Lp);
+                //    }
+
+                //    analyzePABlock = true;
+                //    analyzePAIndex = 0;
+                //    analyzePAPos = mml.line.Index;//自分の位置
+                //    analyzePACount = mml.line.Count;//パートに存在する総チャンネル数
+                //    analyzePAMode = (int)mml.args[0];
+                //    page.mmlData.RemoveAt(i);
+                //    i--;
+                //    continue;
+                //}
+                //else if (mml.type == enmMMLType.PartArpeggio_End)
+                //{
+                //    if (!analyzePABlock)
+                //    {
+                //        msgBox.setWrnMsg(msg.get("E050xx"), mml.line.Lp);
+                //        continue;
+                //    }
+
+                //    analyzePABlock = false;
+
+                //    page.mmlData.RemoveAt(i);
+                //    i--;
+                //    continue;
+                //}
 
                 if (analyzeRBPBlock)
                 {
@@ -3624,6 +3729,89 @@ namespace Core
                         continue;
                     }
                 }
+                //else if (analyzePABlock)
+                //{
+                //    if (mml.type == enmMMLType.Note)
+                //    {
+                //        if (analyzePAIndex != analyzePAPos)
+                //        {
+                //            if (analyzePAMode == 0 || noteOld==null)
+                //            {
+                //                //休符に置き換える
+                //                MML mmlNote = page.mmlData[i];
+                //                Note note = (Note)mmlNote.args[0];
+                //                page.mmlData.RemoveAt(i);
+
+                //                MML mmlRest = new MML();
+                //                mmlRest.line = mmlNote.line;
+                //                mmlRest.type = enmMMLType.Rest;
+                //                mmlRest.column = mmlNote.column;
+                //                mmlRest.args = new List<object>();
+                //                Rest rest = new Rest();
+                //                mmlRest.args.Add(rest);
+                //                rest.cmd = 'r';
+                //                rest.length = note.length;
+
+                //                page.mmlData.Insert(i, mmlRest);
+                //            }
+                //            else
+                //            {
+                //                //タイと、同じ高さの音符に置き換える
+                //                MML mmlNote = page.mmlData[i];
+                //                Note note = (Note)mmlNote.args[0];
+                //                page.mmlData.RemoveAt(i);
+
+                //                //タイ
+                //                MML mmlTie = new MML();
+                //                mmlTie.line = mmlNote.line;
+                //                mmlTie.type = enmMMLType.Tie;
+                //                mmlTie.column = mmlNote.column;
+                //                mmlTie.args = null;
+
+                //                //note
+                //                MML mmlNoteNew = new MML();
+                //                mmlNoteNew.line = mmlNote.line;
+                //                mmlNoteNew.type = enmMMLType.Note;
+                //                mmlNoteNew.column = mmlNote.column;
+                //                mmlNoteNew.args = new List<object>();
+                //                Note notenew = noteOld.Copy();
+                //                mmlNoteNew.args.Add(notenew);
+                //                notenew.tieSw = false;
+
+                //                //挿入(挿入する順番は逆)
+                //                page.mmlData.Insert(i, mmlNoteNew);
+                //                page.mmlData.Insert(analyzePATiePos + 1, mmlTie);
+                //                i++;
+                //                analyzePATiePos = i;
+                //            }
+                //        }
+                //        else
+                //        {
+                //            noteOld = (Note)mml.args[0];
+                //            analyzePATiePos = i;
+                //        }
+
+                //        analyzePAIndex++;
+                //        analyzePAIndex %= analyzePACount;
+                //        analyzePATie = false;
+                //    }
+                //    else if (mml.type == enmMMLType.Tie)
+                //    {
+                //        if (!analyzePATie)
+                //        {
+                //            analyzePAIndex--;
+                //            analyzePAIndex %= analyzePACount;
+                //            //自分ではない時にタイを削除する(エラー回避するため)
+                //            if (analyzePAIndex != analyzePAPos)
+                //            {
+                //                page.mmlData.RemoveAt(i);
+                //                i--;
+                //            }
+                //        }
+                //        analyzePATie = true;
+                //    }
+                //}
+
             }
         }
 
