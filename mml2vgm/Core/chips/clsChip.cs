@@ -350,7 +350,7 @@ namespace Core
                 page.bendWaitCounter = -1;
                 msgBox.setErrMsg(msg.get("E10047"), mml.line.Lp);
             }
-            else if (delta == 0 || bendDelayCounter == ml)
+            else if ((delta == 0 && note.pitchShift == note.bendPitchShift) || bendDelayCounter == ml)
             {
                 page.bendNote = 'r';
                 page.bendWaitCounter = -1;
@@ -358,6 +358,7 @@ namespace Core
             else
             {
                 //１音符当たりのウエイト
+                delta = delta == 0 ? 1 : delta;
                 float wait = (ml - bendDelayCounter - 1) / (float)delta;
                 float tl = 0;
                 float bf = Math.Sign(wait);
@@ -382,9 +383,9 @@ namespace Core
                     bf += wait;
                     tl += wait;
                     int arpNote = page.arpFreqMode ? 0 : page.arpDelta;
-                    int pitchShift = note.pitchShift + (note.bendPitchShift - note.pitchShift);
-                    int aPitchShift = (int)(pitchShift / (float)Math.Abs(delta) * (i + 0));
-                    int bPitchShift = (int)(pitchShift / (float)Math.Abs(delta) * (i + 1));
+                    int pitchShift = note.bendPitchShift - note.pitchShift;
+                    int aPitchShift = (int)(pitchShift / (float)Math.Abs(delta) * (i + 0)) + note.pitchShift;
+                    int bPitchShift = (int)(pitchShift / (float)Math.Abs(delta) * (i + 1)) + note.pitchShift;
 
                     GetFNumAtoB(
                         page
