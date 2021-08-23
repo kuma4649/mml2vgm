@@ -2332,7 +2332,7 @@ namespace mml2vgmIDE
                             {
                                 //if (pw[i].clockCounter == 0) continue;
 
-                                cells[0] = pn[i % 11];//PartNumber
+                                cells[0] = (i < 44 ? pn[i % 11] : (i - 43));//PartNumber
                                 cells[1] = 0;//ChipIndex
                                 cells[2] = ((i / 11) & 1);//ChipNumber
                                 cells[3] = (mucPartName[i]).ToString() + j.ToString();

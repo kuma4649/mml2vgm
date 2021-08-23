@@ -862,7 +862,7 @@ namespace mml2vgmIDE
             }
             else
             {
-                ch = (cp[0] <= 'W' ? (cp[0] - 'W') : (cp[0] - 'w' + 4));
+                ch = (cp[0] <= 'w' ? (cp[0] - 'W') : (cp[0] - 'w' + 4));
             }
             int pg;// = cp.Length < 2 ? 0 : (cp[1] - '0');
             string mm = (string)r.Cells["ClmMute"].Value;
@@ -885,7 +885,7 @@ namespace mml2vgmIDE
                 else
                 {
                     if (n != cn) continue;
-                    c = (p[0] <= 'W' ? (p[0] - 'W') : (p[0] - 'w' + 4));
+                    c = (p[0] <= 'w' ? (p[0] - 'W') : (p[0] - 'w' + 4));
                 }
                 if (c != ch) continue;
 
