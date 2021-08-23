@@ -4901,6 +4901,7 @@ namespace Core
                 }
                 else
                 {
+                    page.pitchShift = page.bendPitchShift;
                     page.bendWaitCounter = -1;
                     //midi向け
                     page.tieBend = page.bendFnum;

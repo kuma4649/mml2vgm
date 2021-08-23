@@ -358,8 +358,7 @@ namespace Core
             else
             {
                 //１音符当たりのウエイト
-                delta = delta == 0 ? 1 : delta;
-                float wait = (ml - bendDelayCounter - 1) / (float)delta;
+                float wait = (ml - bendDelayCounter - 1) / (float)(delta == 0 ? 1 : delta);
                 float tl = 0;
                 float bf = Math.Sign(wait);
                 List<int> lstBend = new List<int>();
@@ -378,14 +377,14 @@ namespace Core
                     page.bendStartShift = page.shift;
                 }
 
-                for (int i = 0; i < Math.Abs(delta); i++)
+                for (int i = 0; i < Math.Abs(delta == 0 ? 1 : delta); i++)
                 {
                     bf += wait;
                     tl += wait;
                     int arpNote = page.arpFreqMode ? 0 : page.arpDelta;
                     int pitchShift = note.bendPitchShift - note.pitchShift;
-                    int aPitchShift = (int)(pitchShift / (float)Math.Abs(delta) * (i + 0)) + note.pitchShift;
-                    int bPitchShift = (int)(pitchShift / (float)Math.Abs(delta) * (i + 1)) + note.pitchShift;
+                    int aPitchShift = (int)(pitchShift / (float)Math.Abs(delta == 0 ? 1 : delta) * (i + 0)) + note.pitchShift;
+                    int bPitchShift = (int)(pitchShift / (float)Math.Abs(delta == 0 ? 1 : delta) * (i + 1)) + note.pitchShift;
 
                     GetFNumAtoB(
                         page
@@ -437,6 +436,7 @@ namespace Core
                 Tuple<int, int> t = page.bendList.Pop();
                 page.bendFnum = t.Item1;
                 page.bendWaitCounter = t.Item2;
+                page.bendPitchShift = note.bendPitchShift;
             }
 
             return bendDelayCounter;
