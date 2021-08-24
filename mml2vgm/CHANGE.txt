@@ -1,4 +1,8 @@
 更新履歴
+TAG527 2021/08/25
+  IDE:YM2609:MDSound差し替え
+  Core:FDS:KEYOFF/KEYONの処理修正
+
 TAG526 2021/08/24
   IDE:mucomDotNET:YM2151のパートがmuteできないのを修正
 

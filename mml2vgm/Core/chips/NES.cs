@@ -766,15 +766,17 @@ namespace Core
 
                             //キーオンした直後
                             //または周波数が違う　場合は周波数再セット
-                            if (page.keyOn
-                                || page.FNum != page.beforeFNum)
+                            if (page.keyOn)
                             {
                                 vol = 0x00;
                                 SOutData(page, mml, port[0], (byte)0x29, (byte)vol);//0x4089 この方法あってるのかなぁ
+                            }
+                            if (page.FNum != page.beforeFNum)
+                            {
                                 int f = page.FNum;
                                 byte data = (byte)(f & 0xff);
                                 SOutData(page, mml, port[0], 0x22, data);//0x4082 freq low
-                                data = (byte)((f>>8) & 0x0f);
+                                data = (byte)((f >> 8) & 0x0f);
                                 SOutData(page, mml, port[0], 0x23, data);//0x4083 freq high
                                                                          //bit7:envelope faster speed
                                                                          //bit6:disable volume and sweep envelopes
