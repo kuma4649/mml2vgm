@@ -340,6 +340,7 @@
     <Compile Include="InstrumentAtValSound.cs" />
     <Compile Include="log.cs" />
     <Compile Include="MDChipParams.cs" />
+    <Compile Include="MIDIImporter.cs" />
     <Compile Include="MIDIKbd.cs" />
     <Compile Include="midiOutInfo.cs" />
     <Compile Include="MIDIParam.cs" />

@@ -245,6 +245,7 @@
     <None Include="sample\Syntax\testPartArp.gwi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="sample\Syntax\testPitchShift.gwi" />
     <None Include="sample\Syntax\testPortament.gwi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

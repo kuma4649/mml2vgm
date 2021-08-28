@@ -1,0 +1,40 @@
+﻿'{
+
+	TitleName   =Pitch shift test
+	TitleNameJ  =ピッチシフト機能テスト
+	GameName    =
+	GameNameJ   =
+	SystemName  =
+	SystemNameJ =
+	Composer    =
+	ComposerJ   =
+	ReleaseDate =
+	Converted   =
+	Notes       =
+
+}
+
+lead synthっぽいなにか
+'@ N 000
+   AR  DR  SR  RR  SL  TL  KS  ML  DT  AM  SSG-EG
+'@ 031,001,001,001,005,026,000,001,002,000,000
+'@ 031,004,003,008,010,000,000,000,003,000,000
+'@ 031,001,001,001,005,020,000,001,006,000,000
+'@ 031,004,003,008,010,004,000,000,005,000,000
+   ALG FB
+'@ 004,005
+
+
+'Cn1 T60
+Cn1 L
+
+'F1 @0D0p3v110o5l4q0
+'F1 c c\0 c\-100 c\100
+'F1 c\30\16 ;音の長さはピッチシフト値+\の後に記述する
+'F1 c\30\32 ;
+'F1 c\30\64 ;
+'F1 c\30.   ;符点はピッチシフト値の後に付けることもできますが分かりにくいのでお勧めしません
+'F1 
+
+
+

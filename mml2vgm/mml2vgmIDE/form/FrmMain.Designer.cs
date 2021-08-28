@@ -120,6 +120,7 @@
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.TsmiAbout = new System.Windows.Forms.ToolStripMenuItem();
             this.timer = new System.Windows.Forms.Timer(this.components);
+            this.tsmiImport_MIDtoGWI = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -401,7 +402,8 @@
             // tsmiImport
             // 
             this.tsmiImport.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tsmiImport_D88toMuc});
+            this.tsmiImport_D88toMuc,
+            this.tsmiImport_MIDtoGWI});
             this.tsmiImport.Name = "tsmiImport";
             resources.ApplyResources(this.tsmiImport, "tsmiImport");
             this.tsmiImport.Click += new System.EventHandler(this.TsmiImport_Click);
@@ -765,6 +767,12 @@
             this.timer.Interval = 16;
             this.timer.Tick += new System.EventHandler(this.Timer_Tick);
             // 
+            // tsmiImport_MIDtoGWI
+            // 
+            this.tsmiImport_MIDtoGWI.Name = "tsmiImport_MIDtoGWI";
+            resources.ApplyResources(this.tsmiImport_MIDtoGWI, "tsmiImport_MIDtoGWI");
+            this.tsmiImport_MIDtoGWI.Click += new System.EventHandler(this.tsmiImport_MIDtoGWI_Click);
+            // 
             // FrmMain
             // 
             resources.ApplyResources(this, "$this");
@@ -880,6 +888,7 @@
         private System.Windows.Forms.ToolStripMenuItem tsmiMakeCSM;
         private System.Windows.Forms.ToolStripMenuItem tsmiExport_toDriverFormatAndPlay;
         private System.Windows.Forms.ToolStripSplitButton tssbExpAndMdp;
+        private System.Windows.Forms.ToolStripMenuItem tsmiImport_MIDtoGWI;
     }
 }
 

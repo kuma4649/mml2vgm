@@ -156,6 +156,7 @@ namespace mml2vgmIDE
         public static Action<PackData> SetMMLTraceInfo = null;
         public static bool waveMode = false;
         public static bool waveModeAbort = false;
+        public static bool silent = false;
 
 
         public static void Init(Setting setting)
@@ -5578,12 +5579,22 @@ namespace mml2vgmIDE
             if (buffer == null || buffer.Length < 1 || sampleCount == 0)
             {
                 SetAudioDeviceSync();
+                for (int i = 0; i < sampleCount/2; i++)
+                {
+                    buffer[i*2 + offset] = 0;
+                    buffer[i*2 + offset+1] = 0;
+                }
                 return sampleCount;
             }
 
-            if (mds == null || sm == null || !GetAudioDeviceSync() || waveMode)
+            if (mds == null || sm == null || !GetAudioDeviceSync() || waveMode || silent)
             {
                 SetAudioDeviceSync();
+                for (int i = 0; i < sampleCount/2; i++)
+                {
+                    buffer[i * 2 + offset] = 0;
+                    buffer[i * 2 + offset + 1] = 0;
+                }
                 return sampleCount;
             }
 

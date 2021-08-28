@@ -1,4 +1,8 @@
 更新履歴
+TAG528 2021/08/28
+  Core:ピッチシフト:sample(testPitchShift.gwi)を追加。コマンドの説明を追加。
+  IDE:.MID File Import:作成中。
+
 TAG527 2021/08/25
   IDE:YM2609:MDSound差し替え
   Core:FDS:KEYOFF/KEYONの処理修正

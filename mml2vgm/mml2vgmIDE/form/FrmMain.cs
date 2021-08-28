@@ -2084,6 +2084,8 @@ namespace mml2vgmIDE
 
         private void finishedCompile()
         {
+            if (isSuccess) Audio.silent = false;
+
             if ((Compiling & 2) != 0)
             {
                 finishedCompileGWI();
@@ -3457,6 +3459,7 @@ namespace mml2vgmIDE
 
             if (Audio.isStopped)
             {
+                //もし既に停止しているならば
                 return;
             }
 
@@ -3483,6 +3486,8 @@ namespace mml2vgmIDE
                 //鍵盤が表示されている場合はmmlの演奏のみ停止し、リアルタイム入力は受け付けるままにする
                 Audio.Stop(SendMode.MML);
             }
+            if (!Audio.silent) Audio.silent = true;
+
             ResumeNormalModeDisp();
 
             while (Audio.sm.IsRunningAtDataSender())
@@ -4375,6 +4380,59 @@ namespace mml2vgmIDE
             UpdateGwiFileHistory();
 
         }
+
+        private void tsmiImport_MIDtoGWI_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog ofd = new OpenFileDialog();
+
+            ofd.Filter = "Standard MIDファイル(*.mid)|*.mid|すべてのファイル(*.*)|*.*";
+            ofd.Title = "MIDファイルを選択してください";
+            ofd.RestoreDirectory = true;
+
+            if (ofd.ShowDialog() != DialogResult.OK)
+            {
+                return;
+            }
+
+            try
+            {
+                byte[] mid = File.ReadAllBytes(ofd.FileName);
+                MIDIImporter mi = new MIDIImporter();
+                string[] mml = mi.Import(mid);
+                string fileName = ofd.FileName;
+
+                Document dc = new Document(setting, EnmMmlFileFormat.GWI);//, frmSien);
+                fileName = fileName.Trim();
+                if (fileName.Length > 1 && fileName[fileName.Length - 1] == '.') fileName = fileName.Substring(0, fileName.Length - 1);
+                if (fileName.IndexOf(".") >= 0)
+                {
+                    fileName = fileName.Substring(0, fileName.IndexOf("."));
+                }
+                fileName += ".gwi";
+                dc.InitOpen(fileName, mml, EnmMmlFileFormat.GWI);
+                dc.editor.Show(dpMain, DockState.Document);
+                dc.editor.main = this;
+                dc.editor.document = dc;
+
+                frmFolderTree.tvFolderTree.Nodes.Clear();
+                frmFolderTree.tvFolderTree.Nodes.Add(dc.gwiTree);
+                string path1 = Path.GetDirectoryName(dc.gwiFullPath);
+                path1 = string.IsNullOrEmpty(path1) ? dc.gwiFullPath : path1;
+                frmFolderTree.basePath = path1;
+
+                FormBox.Add(dc.editor);
+                DocumentBox.Add(dc);
+                AddGwiFileHistory(fileName);
+                UpdateGwiFileHistory();
+            }
+            catch
+            {
+                MessageBox.Show("D88ファイルのオープンに失敗しました。", "インポート失敗", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+        }
+
 
         private void tsmiExport_MuctoD88_Click(object sender, EventArgs e)
         {
