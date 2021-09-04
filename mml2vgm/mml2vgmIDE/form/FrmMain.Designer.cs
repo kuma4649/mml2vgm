@@ -67,6 +67,7 @@
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmiImport = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiImport_D88toMuc = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiImport_MIDtoGWI = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiExport = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiExport_toDriverFormat = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiExport_MuctoD88 = new System.Windows.Forms.ToolStripMenuItem();
@@ -120,7 +121,6 @@
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.TsmiAbout = new System.Windows.Forms.ToolStripMenuItem();
             this.timer = new System.Windows.Forms.Timer(this.components);
-            this.tsmiImport_MIDtoGWI = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -413,6 +413,12 @@
             this.tsmiImport_D88toMuc.Name = "tsmiImport_D88toMuc";
             resources.ApplyResources(this.tsmiImport_D88toMuc, "tsmiImport_D88toMuc");
             this.tsmiImport_D88toMuc.Click += new System.EventHandler(this.tsmiImport_D88toMuc_Click);
+            // 
+            // tsmiImport_MIDtoGWI
+            // 
+            this.tsmiImport_MIDtoGWI.Name = "tsmiImport_MIDtoGWI";
+            resources.ApplyResources(this.tsmiImport_MIDtoGWI, "tsmiImport_MIDtoGWI");
+            this.tsmiImport_MIDtoGWI.Click += new System.EventHandler(this.tsmiImport_MIDtoGWI_Click);
             // 
             // tsmiExport
             // 
@@ -766,12 +772,6 @@
             this.timer.Enabled = true;
             this.timer.Interval = 16;
             this.timer.Tick += new System.EventHandler(this.Timer_Tick);
-            // 
-            // tsmiImport_MIDtoGWI
-            // 
-            this.tsmiImport_MIDtoGWI.Name = "tsmiImport_MIDtoGWI";
-            resources.ApplyResources(this.tsmiImport_MIDtoGWI, "tsmiImport_MIDtoGWI");
-            this.tsmiImport_MIDtoGWI.Click += new System.EventHandler(this.tsmiImport_MIDtoGWI_Click);
             // 
             // FrmMain
             // 

@@ -481,16 +481,16 @@
     <value>177, 6</value>
   </data>
   <data name="tsmiImport_D88toMuc.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
+    <value>187, 22</value>
   </data>
   <data name="tsmiImport_D88toMuc.Text" xml:space="preserve">
     <value>from d88 to muc</value>
   </data>
   <data name="tsmiImport_MIDtoGWI.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
+    <value>187, 22</value>
   </data>
   <data name="tsmiImport_MIDtoGWI.Text" xml:space="preserve">
-    <value>from mid to gwi</value>
+    <value>from mid to gwi(TBD)</value>
   </data>
   <data name="tsmiImport.Size" type="System.Drawing.Size, System.Drawing">
     <value>180, 22</value>
@@ -499,37 +499,37 @@
     <value>Import</value>
   </data>
   <data name="tsmiExport_toDriverFormat.Size" type="System.Drawing.Size, System.Drawing">
-    <value>163, 22</value>
+    <value>180, 22</value>
   </data>
   <data name="tsmiExport_toDriverFormat.Text" xml:space="preserve">
     <value>to driver format</value>
   </data>
   <data name="tsmiExport_MuctoD88.Size" type="System.Drawing.Size, System.Drawing">
-    <value>163, 22</value>
+    <value>180, 22</value>
   </data>
   <data name="tsmiExport_MuctoD88.Text" xml:space="preserve">
     <value>muc to d88</value>
   </data>
   <data name="tsmiExport_toWaveFile.Size" type="System.Drawing.Size, System.Drawing">
-    <value>163, 22</value>
+    <value>180, 22</value>
   </data>
   <data name="tsmiExport_toWaveFile.Text" xml:space="preserve">
     <value>to .WAV file</value>
   </data>
   <data name="tsmiExport_toMp3File.Size" type="System.Drawing.Size, System.Drawing">
-    <value>163, 22</value>
+    <value>180, 22</value>
   </data>
   <data name="tsmiExport_toMp3File.Text" xml:space="preserve">
     <value>to .MP3 file</value>
   </data>
   <data name="tsmiExport_toMidiFile.Size" type="System.Drawing.Size, System.Drawing">
-    <value>163, 22</value>
+    <value>180, 22</value>
   </data>
   <data name="tsmiExport_toMidiFile.Text" xml:space="preserve">
     <value>to .MID file</value>
   </data>
   <data name="tsmiExport_toDriverFormatAndPlay.Size" type="System.Drawing.Size, System.Drawing">
-    <value>163, 22</value>
+    <value>180, 22</value>
   </data>
   <data name="tsmiExport_toDriverFormatAndPlay.Text" xml:space="preserve">
     <value>play at MDPlayer</value>
@@ -1156,6 +1156,12 @@
   <data name="&gt;&gt;tsmiImport_D88toMuc.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="&gt;&gt;tsmiImport_MIDtoGWI.Name" xml:space="preserve">
+    <value>tsmiImport_MIDtoGWI</value>
+  </data>
+  <data name="&gt;&gt;tsmiImport_MIDtoGWI.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="&gt;&gt;tsmiExport.Name" xml:space="preserve">
     <value>tsmiExport</value>
   </data>
@@ -1473,12 +1479,6 @@
   </data>
   <data name="&gt;&gt;timer.Type" xml:space="preserve">
     <value>System.Windows.Forms.Timer, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tsmiImport_MIDtoGWI.Name" xml:space="preserve">
-    <value>tsmiImport_MIDtoGWI</value>
-  </data>
-  <data name="&gt;&gt;tsmiImport_MIDtoGWI.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">
     <value>FrmMain</value>

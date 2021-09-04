@@ -19,9 +19,12 @@ namespace mml2vgmIDE
         private int tickCounter = 0;
         private int lastNoteOffTickCounter=0;
         private byte bcmd = 0;
-        private List<Tuple<int, Tuple<int, byte, byte[]>>>[] note = new List<Tuple<int, Tuple<int, byte, byte[]>>>[0x80];
+        private double mul = 0;
+        private double length = 0;
+        private List<MIDIEvent>[] note = new List<MIDIEvent>[0x80];
 
         private int cOct = 4;
+        private int cVelo = 110;
 
         private class Track
         {
@@ -32,12 +35,79 @@ namespace mml2vgmIDE
             public int deltaCounter = 0;
         }
 
+        private class MIDIEvent
+        {
+            public int tickPos = 0;
+            public int tickLength = 0;
+            public byte cmd = 0;
+            public byte[] data = null;
+            public enmCmdType cmdType {
+                get {
+                    switch (cmd & 0xf0)
+                    {
+                        case 0x80:
+                            return enmCmdType.NoteOff;
+                        case 0x90:
+                            return enmCmdType.NoteOn;
+                        case 0xa0:
+                            return enmCmdType.PolyTouch;
+                        case 0xb0:
+                            return enmCmdType.ControlChange;
+                        case 0xc0:
+                            return enmCmdType.ProgramChange;
+                        case 0xd0:
+                            return enmCmdType.ChannelTouch;
+                        case 0xe0:
+                            return enmCmdType.PitchBend;
+                        case 0xf0:
+                            return enmCmdType.SysEx;
+                    }
+                    return enmCmdType.Unknown;
+                } 
+            }
+            public int cmdCh { get { return cmd & 0xf; } }
+
+            public MIDIEvent(int tickPos, int tickLength = 0, byte cmd = 0, byte[] data = null)
+            {
+                this.tickPos = tickPos;
+                this.tickLength = tickLength;
+                this.cmd = cmd;
+                this.data = data;
+            }
+
+            public override string ToString()
+            {
+                return String.Format("Ch:{0} Type:{1} {2}Pos:{3} Length:{4}",
+                    cmdCh
+                    , cmdType
+                    , data == null ? "" : 
+                        (data.Length < 1 ? "" : 
+                        (data.Length < 2 ? string.Format("Data:{0:x02} ", data[0]) : 
+                        (data.Length < 3 ? string.Format("Data:{0:x02} {1:x02} ", data[0], data[1]) : 
+                        "")))
+                    , tickPos
+                    , tickLength);
+            }
+        }
+
+        private enum enmCmdType : byte
+        {
+            Unknown=0x00
+            , NoteOff = 0x80
+            , NoteOn = 0x90
+            , PolyTouch = 0xa0
+            , ControlChange = 0xb0
+            , ProgramChange = 0xc0
+            , ChannelTouch = 0xd0
+            , PitchBend = 0xe0
+            , SysEx = 0xf0
+        }
 
         public MIDIImporter()
         {
             for(int i = 0; i < 0x80; i++)
             {
-                note[i] = new List<Tuple<int, Tuple<int, byte, byte[]>>>();
+                note[i] = new List<MIDIEvent>();
             }
         }
 
@@ -50,8 +120,9 @@ namespace mml2vgmIDE
             //チェックと情報収集
             if (!CheckHeader(buff)) return new string[] { errMsg };
             if (!CheckTrackHeader(buff)) return new string[] { errMsg };
-            //順番に並んだイベントのデータを作成する
-            List<Tuple<int, Tuple<int, byte, byte[]>>> seqEvents = GetSeqEvent(buff);
+            
+            List<MIDIEvent> seqEvents = GetSeqEvent(buff);//順番に並んだイベントのデータを作成する
+            List<MIDIEvent>[] seqChEvents = DivideSeqEvents(seqEvents);//チャンネルごとのイベントに分ける
 
             mml.Add(
 @"'{
@@ -72,10 +143,11 @@ namespace mml2vgmIDE
 }
 ");
             //コンバート
-            Convert(seqEvents);
+            Convert(seqChEvents);
 
             return mml.ToArray();
         }
+
 
         private bool CheckHeader(byte[] buff)
         {
@@ -95,7 +167,7 @@ namespace mml2vgmIDE
             format = GetInt16(buff, ref ptr);
             maxTrack = GetInt16(buff, ref ptr);
             reso = GetInt16(buff, ref ptr);
-
+            mul = 192.0 / (reso * 4);
             return true;
         }
 
@@ -138,38 +210,45 @@ namespace mml2vgmIDE
             return true;
         }
 
-        private List<Tuple<int, Tuple<int, byte, byte[]>>> GetSeqEvent(byte[] buff)
+        /// <summary>
+        /// イベントごとのリストを生成する。
+        /// その際、複数のトラックのデータをシーケンシャルな並びのイベントデータにまとめる
+        /// </summary>
+        private List<MIDIEvent> GetSeqEvent(byte[] buff)
         {
-            List<Tuple<int, Tuple<int, byte, byte[]>>> ret = new List<Tuple<int, Tuple<int, byte, byte[]>>>();
+            List<MIDIEvent> ret = new List<MIDIEvent>();
 
             bool end;
             int minDelta;
             do
             {
-
+                MIDIEvent lastEvent = null;
                 foreach (Track trk in tracks)
                 {
+                    if (trk.endFlg) continue;
                     if (trk.deltaCounter > 0) continue;
+
+                    if (trk.ptr == trk.startAdr + 4 + 4)
+                        trk.deltaCounter = GetDelta(buff, ref trk.ptr);
 
                     //deltaCounterが0の間、イベントを読み込む
                     while (trk.deltaCounter == 0)
                     {
-                        trk.deltaCounter = GetDelta(buff, ref trk.ptr);
                         Tuple<byte, byte[]> evnt = GetEvents(buff, ref trk.ptr);
-                        ret.Add(new Tuple<int, Tuple<int, byte, byte[]>>(
-                            tickCounter
-                            , new Tuple<int, byte, byte[]>(trk.deltaCounter, evnt.Item1, evnt.Item2)
-                            ));
+                        lastEvent = new MIDIEvent(tickCounter, 0, evnt.Item1, evnt.Item2);
+                        ret.Add(lastEvent);
 
 #if DEBUG
-                        Console.WriteLine(" tc:{0} delta:{1} cmd:{2:x02} data[0]:{3:x02} ", tickCounter, trk.deltaCounter, evnt.Item1, evnt.Item2[0]);
+                        Console.WriteLine(lastEvent.ToString());
 #endif
-
+                        //最後まで読み込んだのであれば、このトラックの解析は完了
                         if (trk.ptr >= trk.endAdr)
                         {
                             trk.endFlg = true;
                             break;
                         }
+
+                        trk.deltaCounter = GetDelta(buff, ref trk.ptr);
                     }
                 }
 
@@ -184,6 +263,14 @@ namespace mml2vgmIDE
                     minDelta = Math.Min(minDelta, trk.deltaCounter);
                 }
 
+                if (lastEvent != null)
+                {
+                    lastEvent.tickLength = minDelta;
+#if DEBUG
+                    Console.WriteLine("lastEvent: {0}",lastEvent);
+#endif
+                }
+
                 //カウンターの更新
                 tickCounter += minDelta;
                 foreach (Track trk in tracks)
@@ -196,6 +283,56 @@ namespace mml2vgmIDE
 
             return ret;
         }
+
+        private List<MIDIEvent>[] DivideSeqEvents(List<MIDIEvent> seqEvents)
+        {
+
+            List<MIDIEvent>[] ret = new List<MIDIEvent>[17];
+            int[] delta = new int[17];
+            for (int i = 0; i < ret.Length; i++)
+            {
+                ret[i] = new List<MIDIEvent>();
+                delta[i] = 0;
+            }
+
+
+            foreach (MIDIEvent evnt in seqEvents)
+            {
+
+                int usedCh;
+                if (evnt.cmdType == enmCmdType.SysEx)
+                {
+                    //SysEx系はCh0にまとめる
+                    ret[0].Add(evnt);
+                    usedCh = 0;
+                }
+                else
+                {
+                    //その他は+1したChにまとめる
+                    ret[evnt.cmdCh + 1].Add(evnt);
+                    usedCh = evnt.cmdCh + 1;
+                }
+
+                int now = evnt.tickLength;
+                for (int i = 0; i < ret.Length; i++)
+                {
+                    if (usedCh == i)
+                    {
+                        evnt.tickLength = delta[i];
+                        delta[i] = now;
+                    }
+                    else
+                    {
+                        delta[i] += now;
+                    }
+                }
+
+            }
+
+            return ret;
+        }
+
+
 
 
         private string GetString(byte[] buff, int ptr, int length)
@@ -265,66 +402,60 @@ namespace mml2vgmIDE
             return ret;
         }
 
-        private void Convert(List<Tuple<int, Tuple<int, byte, byte[]>>> seqEvents)
+        private void Convert(List<MIDIEvent>[] seqChEvents)
         {
-            for(int ch = 0; ch < 16; ch++)
+            for(int ch = 0; ch < seqChEvents.Length; ch++)
             {
 
                 tickCounter = 0;
                 lastNoteOffTickCounter = 0;
                 cOct = 4;
-                mml.Add(string.Format("'M{0:d02} o4", ch + 1));
+                length = 0;
+                cVelo = 110;
+                mml.Add(string.Format("'M{0:d02} o4 CH{1} U110", ch + 1, ch == 0 ? 1 : ch));
+                List<MIDIEvent> seqEvents = seqChEvents[ch];
 
                 for (int pos = 0; pos < seqEvents.Count; pos++)
                 {
-                    Tuple<int, Tuple<int, byte, byte[]>> evnt = seqEvents[pos];
+                    MIDIEvent evnt = seqEvents[pos];
+                    tickCounter += evnt.tickLength;
 
-                    if (tickCounter >= evnt.Item1)
                     {
-                        //int delta = evnt.Item2.Item1;
-                        byte cmd = evnt.Item2.Item2;
-                        //byte[] data = evnt.Item2.Item3;
-                        int cmdType = cmd & 0xf0;
-                        int cmdCh = cmd & 0xf;
+                        Flash(seqEvents, pos);
 
-                        if (cmdType == 0xf0)
+                        if (evnt.cmdType == enmCmdType.SysEx)
                         {
-                            //TBD
                             continue;
                         }
-                        else if (cmdCh != ch) continue;
+                        else if (evnt.cmdCh != ch - 1) continue;
 
-                        switch (cmdType)
+                        switch (evnt.cmdType)
                         {
-                            case 0x80:
+                            case enmCmdType.NoteOff:
                                 noteOff(evnt);
                                 break;
-                            case 0x90:
+                            case enmCmdType.NoteOn:
                                 noteOn(evnt);
                                 break;
-                            case 0xa0:
+                            case enmCmdType.PolyTouch:
                                 polyTouch(evnt);
                                 break;
-                            case 0xb0:
+                            case enmCmdType.ControlChange:
                                 controlChange(evnt);
                                 break;
-                            case 0xc0:
+                            case enmCmdType.ProgramChange:
                                 programChange(evnt);
                                 break;
-                            case 0xd0:
+                            case enmCmdType.ChannelTouch:
                                 channelTouch(evnt);
                                 break;
-                            case 0xe0:
+                            case enmCmdType.PitchBend:
                                 pitchBend(evnt);
                                 break;
                         }
                     }
-                    else
-                    {
-                        tickCounter = evnt.Item1;
-                    }
 
-                    if (line.Length > 40)
+                    if (line.Length > 70)
                     {
                         mml.Add(string.Format("'M{0:d02} {1}", ch + 1, line));
                         line.Clear();
@@ -341,25 +472,24 @@ namespace mml2vgmIDE
             }
         }
 
-        private void noteOff(Tuple<int, Tuple<int, byte, byte[]>> evnt)
+        private void Flash(List<MIDIEvent> seq,int pos)
         {
-            int delta = evnt.Item2.Item1;
-            byte cmd = evnt.Item2.Item2;
-            byte[] data = evnt.Item2.Item3;
-            int cmdType = cmd & 0xf0;
-            int cmdCh = cmd & 0xf;
-            
-            List<Tuple<int, Tuple<int, byte, byte[]>>> lstNote = note[data[0]];
+            if (tickCounter < 1) return;
 
-            if (lstNote.Count > 0)
+            length = mul * tickCounter;
+            int tick = (int)length;
+            length -= tick;
+
+            bool restflag = true;
+            foreach(List<MIDIEvent> lstNevnt in note)
             {
-                Tuple<int, Tuple<int, byte, byte[]>> lastNote = lstNote[lstNote.Count - 1];
-                int tick = evnt.Item1 - lastNote.Item1;
-                int velo = lastNote.Item2.Item3[1];
-                lastNoteOffTickCounter = evnt.Item1;
+                if (lstNevnt.Count < 1) continue;
 
-                int o = data[0] / 12;
-                string oct="";
+                restflag = false;
+
+                MIDIEvent evnt = lstNevnt[0];
+                int o = evnt.data[0] / 12;
+                string oct = "";
                 while (cOct != o)
                 {
                     if (cOct < o)
@@ -373,87 +503,84 @@ namespace mml2vgmIDE
                         cOct--;
                     }
                 }
-                string nt="c c+d d+e f f+g g+a a+b ".Substring((data[0] % 12) * 2, 2).Trim();
-                line.AppendFormat("{0}{1}#{2},{3}", oct, nt, tick, velo);
-                note[data[0]].Clear();
+                string nt = "c c+d d+e f f+g g+a a+b ".Substring((evnt.data[0] % 12) * 2, 2).Trim();
+                int velo = evnt.data[1];
+                string sVelo = "";
+                if (cVelo != velo)
+                {
+                    cVelo = velo;
+                    sVelo = string.Format("U{0}", velo);
+                }
+
+                string tie = "";
+                while (pos < seq.Count)
+                {
+                    if (seq[pos ].cmdType == enmCmdType.NoteOn && seq[pos].data[1] != 0)
+                    {
+                        tie = "&";
+                        break;
+                    }
+                    else if(seq[pos].cmdType == enmCmdType.NoteOff
+                            || (seq[pos ].cmdType == enmCmdType.NoteOn && seq[pos].data[1] == 0))
+                    {
+                        tie = "";
+                        break;
+                    }
+                    else if (seq[pos].tickLength > 0)
+                    {
+                        tie = "&";
+                        break;
+                    }
+                    pos++;
+                }
+
+                line.AppendFormat("{0}{1}{2}#{3}{4}", sVelo, oct, nt, tick,tie);
+
+                break;
             }
+
+            if (restflag) line.AppendFormat("r#{0}", tick);
+
+            tickCounter = 0;
+        }
+
+        private void noteOff(MIDIEvent evnt)
+        {
+            note[evnt.data[0]].Clear();
         }
 
 
-        private void noteOn(Tuple<int, Tuple<int, byte, byte[]>> evnt)
+        private void noteOn(MIDIEvent evnt)
         {
-            //int delta = evnt.Item2.Item1;
-            byte cmd = evnt.Item2.Item2;
-            byte[] data = evnt.Item2.Item3;
-            //int cmdType = cmd & 0xf0;
-            //int cmdCh = cmd & 0xf;
-
-            if (data[1] != 00) 
+            if (evnt.data[1] != 00) 
             {
-                note[data[0]].Add(evnt);
+                note[evnt.data[0]].Add(evnt);
             }
             else
             {
                 noteOff(evnt);
             }
-
-            if (evnt.Item1 - lastNoteOffTickCounter > 0)
-            {
-                line.AppendFormat("r#{0}", evnt.Item1 - lastNoteOffTickCounter);
-                lastNoteOffTickCounter = evnt.Item1;
-            }
         }
 
-        private void polyTouch(Tuple<int, Tuple<int, byte, byte[]>> evnt)
+        private void polyTouch(MIDIEvent evnt)
         {
-            if (evnt.Item1 - lastNoteOffTickCounter > 0)
-            {
-                line.AppendFormat("r#{0}", evnt.Item1 - lastNoteOffTickCounter);
-                lastNoteOffTickCounter = evnt.Item1;
-            }
         }
 
-        private void controlChange(Tuple<int, Tuple<int, byte, byte[]>> evnt)
+        private void controlChange(MIDIEvent evnt)
         {
-            if (evnt.Item1 - lastNoteOffTickCounter > 0)
-            {
-                line.AppendFormat("r#{0}", evnt.Item1 - lastNoteOffTickCounter);
-                lastNoteOffTickCounter = evnt.Item1;
-            }
         }
 
-        private void programChange(Tuple<int, Tuple<int, byte, byte[]>> evnt)
+        private void programChange(MIDIEvent evnt)
         {
-            //int delta = evnt.Item2.Item1;
-            byte cmd = evnt.Item2.Item2;
-            byte[] data = evnt.Item2.Item3;
-            //int cmdType = cmd & 0xf0;
-            //int cmdCh = cmd & 0xf;
-
-            if (evnt.Item1 - lastNoteOffTickCounter > 0)
-            {
-                line.AppendFormat("r#{0}", evnt.Item1 - lastNoteOffTickCounter);
-                lastNoteOffTickCounter = evnt.Item1;
-            }
-            line.AppendFormat("@{0}", data[0]);
+            line.AppendFormat("@{0}", evnt.data[0]);
         }
 
-        private void channelTouch(Tuple<int, Tuple<int, byte, byte[]>> evnt)
+        private void channelTouch(MIDIEvent evnt)
         {
-            if (evnt.Item1 - lastNoteOffTickCounter > 0)
-            {
-                line.AppendFormat("r#{0}", evnt.Item1 - lastNoteOffTickCounter);
-                lastNoteOffTickCounter = evnt.Item1;
-            }
         }
 
-        private void pitchBend(Tuple<int, Tuple<int, byte, byte[]>> evnt)
+        private void pitchBend(MIDIEvent evnt)
         {
-            if (evnt.Item1 - lastNoteOffTickCounter > 0)
-            {
-                line.AppendFormat("r#{0}", evnt.Item1 - lastNoteOffTickCounter);
-                lastNoteOffTickCounter = evnt.Item1;
-            }
         }
 
     }

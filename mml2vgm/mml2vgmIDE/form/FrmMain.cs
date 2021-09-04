@@ -2297,7 +2297,7 @@ namespace mml2vgmIDE
                 AzukiControl ac = fe.azukiControl;
                 for (int i = 0; i < ac.Document.LineCount; i++)
                     ac.Document.SetLineIconIndex(i, -1);
-                if (ci.jumpRow != -1)
+                if (ci != null && ci.jumpRow > 0)
                 {
                     ac.Document.SetLineIconIndex(ci.jumpRow - 1, 5);//●
                 }

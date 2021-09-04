@@ -1,4 +1,8 @@
 更新履歴
+TAG529 2021/09/04
+  IDE:mucomDotNET更新
+  IDE:mucomDotNET:コンパイラが想定外のエラー(コンパイル情報を生成しないような)を出したとき、IDEが落ちてしまうのを修正
+
 TAG528 2021/08/28
   Core:ピッチシフト:sample(testPitchShift.gwi)を追加。コマンドの説明を追加。
   IDE:.MID File Import:作成中。
