@@ -1,4 +1,8 @@
 更新履歴
+TAG530 2021/09/05
+  Core:OPN系:EXFコマンド追加。効果音モードのスロットFnum固定します。
+    (effectMode_FixedFnumTest.gwiを参考)
+
 TAG529 2021/09/04
   IDE:mucomDotNET更新
   IDE:mucomDotNET:コンパイラが想定外のエラー(コンパイル情報を生成しないような)を出したとき、IDEが落ちてしまうのを修正

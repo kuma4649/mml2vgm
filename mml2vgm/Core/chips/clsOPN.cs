@@ -1371,29 +1371,46 @@ namespace Core
 
             page.spg.freq = freq;
 
-            if (page.chip.lstPartWork[2].apg.Ch3SpecialMode && page.Type == enmChannelType.FMOPNex)
+            partWork pw = page.chip.lstPartWork[2];
+            if (page.chip is YM2609)
+            {
+                if (page.ch == 8 || page.ch == 15 || page.ch == 16 || page.ch == 17)
+                {
+                    pw = page.chip.lstPartWork[8];
+                }
+            }
+
+            if (pw.apg.Ch3SpecialMode && page.Type == enmChannelType.FMOPNex)
             {
                 if ((page.slots & 8) != 0)
                 {
-                    int f = freq + page.slotDetune[3];
+                    int f;
+                    if (pw.slotFixedFnum[3] == -1) f = freq + page.slotDetune[3];
+                    else f = pw.slotFixedFnum[3] + page.slotDetune[3];
                     SOutData(page, mml, page.port[0], (byte)0xa6, (byte)(f >> 8));
                     SOutData(page, mml, page.port[0], (byte)0xa2, (byte)f);
                 }
                 if ((page.slots & 4) != 0)
                 {
-                    int f = freq + page.slotDetune[2];
+                    int f;
+                    if (pw.slotFixedFnum[2] == -1) f = freq + page.slotDetune[2];
+                    else f = pw.slotFixedFnum[2] + page.slotDetune[2];
                     SOutData(page, mml, page.port[0], (byte)0xac, (byte)(f >> 8));
                     SOutData(page, mml, page.port[0], (byte)0xa8, (byte)f);
                 }
                 if ((page.slots & 1) != 0)
                 {
-                    int f = freq + page.slotDetune[0];
+                    int f;
+                    if (pw.slotFixedFnum[0] == -1) f = freq + page.slotDetune[0];
+                    else f = pw.slotFixedFnum[0] + page.slotDetune[0];
                     SOutData(page, mml, page.port[0], (byte)0xad, (byte)(f >> 8));
                     SOutData(page, mml, page.port[0], (byte)0xa9, (byte)f);
                 }
                 if ((page.slots & 2) != 0)
                 {
-                    int f = freq + page.slotDetune[1];
+                    int f;
+                    if (pw.slotFixedFnum[1] == -1) f = freq + page.slotDetune[1];
+                    else f = pw.slotFixedFnum[1] + page.slotDetune[1];
                     SOutData(page, mml, page.port[0], (byte)0xae, (byte)(f >> 8));
                     SOutData(page, mml, page.port[0], (byte)0xaa, (byte)f);
                 }
@@ -2643,6 +2660,27 @@ namespace Core
                     page.slotDetune[1] = (int)mml.args[2];
                     page.slotDetune[2] = (int)mml.args[3];
                     page.slotDetune[3] = (int)mml.args[4];
+                    break;
+                case "EXF":
+                    
+                    partWork pw = page.chip.lstPartWork[2];
+                    if (page.chip is YM2609)
+                    {
+                        if(page.ch == 8 || page.ch == 15 || page.ch == 16 || page.ch == 17)
+                        {
+                            pw = page.chip.lstPartWork[8];
+                        }
+                    }
+
+                    pw.slotFixedFnum[0] = -1;
+                    pw.slotFixedFnum[1] = -1;
+                    pw.slotFixedFnum[2] = -1;
+                    pw.slotFixedFnum[3] = -1;
+                    if (mml.args.Count > 1) pw.slotFixedFnum[0] = (int)mml.args[1];
+                    if (mml.args.Count > 2) pw.slotFixedFnum[1] = (int)mml.args[2];
+                    if (mml.args.Count > 3) pw.slotFixedFnum[2] = (int)mml.args[3];
+                    if (mml.args.Count > 4) pw.slotFixedFnum[3] = (int)mml.args[4];
+
                     break;
             }
         }

@@ -7,6 +7,11 @@ namespace Core
     public class partPage
     {
         /// <summary>
+        /// 親のパートワーク
+        /// </summary>
+        public partWork pw = null;
+
+        /// <summary>
         /// 共有ページ
         /// </summary>
         public partPage spg = null;
@@ -699,8 +704,9 @@ namespace Core
         public Note PAnoteOld = null;
         public int PATiePos = 0;
 
-        public partPage(partPage sharedPg)
+        public partPage(partWork partwork,partPage sharedPg)
         {
+            this.pw = partwork;
             this.spg = sharedPg;
         }
 

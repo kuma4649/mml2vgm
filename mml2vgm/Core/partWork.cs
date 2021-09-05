@@ -21,7 +21,7 @@ namespace Core
         /// <summary>
         /// 共有ページ
         /// </summary>
-        public partPage spg = new partPage(null);
+        public partPage spg = new partPage(null, null);
 
         /// <summary>
         /// 現在作業中のページ(アクティブページ)
@@ -34,6 +34,12 @@ namespace Core
         public partPage cpg;
 
         public long clockCounter { get; internal set; }
+
+        /// <summary>
+        /// スロットごとの固定fnum値
+        /// </summary>
+        public int[] slotFixedFnum = new int[] { -1, -1, -1, -1 };
+
 
         /// <summary>
         /// パート情報をリセットする

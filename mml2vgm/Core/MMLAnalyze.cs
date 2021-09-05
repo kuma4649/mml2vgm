@@ -1167,6 +1167,29 @@ namespace Core
                         }
                         break;
                     }
+                    else if (pw.getChar(page) == 'F')//スロットFnum固定
+                    {
+                        pw.incPos(page);
+                        mml.type = enmMMLType.ExtendChannel;
+                        mml.args = new List<object>();
+                        mml.args.Add("EXF");
+                        for (int i = 0; i < 4; i++)
+                        {
+                            if (!pw.getNumInt16(page, out n))
+                            {
+                                mml.args.Add(-1);
+                            }
+                            else
+                            {
+                                n = Common.CheckRange(n, 0, 0x3fff);
+                                mml.args.Add(n);
+                            }
+                            pw.skipTabSpace(page);
+                            if (pw.getChar(page) != ',') break;
+                            pw.incPos(page);
+                        }
+                        break;
+                    }
                     else if (!pw.getNum(page, out n))
                     {
                         msgBox.setErrMsg(msg.get("E05021"), mml.line.Lp);

@@ -1,0 +1,52 @@
+﻿'{
+
+	TitleName   =EffectMode fixed fnum Test
+	TitleNameJ  =効果音モード 固定fnum
+	GameName    =none
+	GameNameJ   =none
+	SystemName  =Sega Genesis
+	SystemNameJ =Sega Mega Drive
+	Composer    =kuma
+	ComposerJ   =kuma
+	ReleaseDate =2021/09/xx
+	Converted   =
+	Notes       =
+
+	以下はデフォルト値を再設定しています。(つまりデフォルトを使用するだけなら再設定の必要はありません)
+	Part_YM2612    =F
+	Part_SN76489   =S
+	ClockCount    =192
+    F-Num         =289,2af,2d8,303,331,362,395,3cc,405,443,484,4c8,512
+
+}
+
+
+
+'@ N 000
+   AR  DR  SR  RR  SL  TL  KS  ML  DT  AM  SSG-EG
+'@ 031,012,012,015,015,010,000,000,000,000,000
+'@ 031,012,012,015,015,010,000,000,000,000,000
+'@ 031,012,012,015,015,010,000,000,000,000,000
+'@ 031,012,012,015,015,010,000,000,000,000,000
+'@ 007,000
+
+
+'F1 T90
+'F3789 v120 l8 q0 @0 p3
+
+'F3 EXF $2328 , , 9600 ; slot1のfnumを$2328,slot3のfnumを9600に固定(16進の場合は必ず4桁指定(16bit))
+
+ スロット単位で制御
+'F3 EXON EX1    o5 cdefedcrefgagfercrcrcrcrl16ccddeeffl8edcrrrrrrrrrrrrrrrrrrrrrrg>cr
+'F7 EXON EX2    o5 rrrrrrrrcdefedcrefgagfercrcrcrcrl16ccddeeffl8edcrrrrrrrrrrrrrrrrr
+'F8 EXON EX3    o5 rrrrrrrrrrrrrrrrcdefedcrefgagfercrcrcrcrl16ccddeeffl8edcrrrrrrrrr
+'F9 EXON EX4    o5 rrrrrrrrrrrrrrrrrrrrrrrrcdefedcrefgagfercrcrcrcrl16ccddeeffl8edcr
+
+ 全スロットで制御
+'F3 EXON EX1234 o1 [cdefgab/>]8
+
+ 効果音モードオフ
+'F3 EXOF        o1 [cdefgab/>]8
+
+
+

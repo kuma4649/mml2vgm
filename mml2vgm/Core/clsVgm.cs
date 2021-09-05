@@ -5932,7 +5932,7 @@ namespace Core
                                 if (partData[n][chip.Ch[i].Name][c] == null || partData[n][chip.Ch[i].Name][c].Count < 1)
                                     continue;
 
-                                pw.apg = new partPage(pw.spg);
+                                pw.apg = new partPage(pw, pw.spg);
                                 pw.apg.chip = chip;
                                 pw.apg.chipNumber = ((info.format != enmFormat.ZGM && chip.ChipID == 1) ? 1 : 0);
                                 pw.apg.ch = i;// + 1;
@@ -6000,7 +6000,7 @@ namespace Core
                         if (pw.pg.Count < 1)
                         {
                             //パートデータが無くてもページ0は用意する
-                            pw.apg = new partPage(pw.spg);
+                            pw.apg = new partPage(pw, pw.spg);
                             pw.cpg = pw.apg;
                             pw.apg.chip = chip;
                             pw.apg.chipNumber = ((info.format != enmFormat.ZGM && chip.ChipID == 1) ? 1 : 0);

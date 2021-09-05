@@ -2466,7 +2466,7 @@
 - Format  
     EXDn1,n2,n3,n4  
 - 設定可能範囲  
-    n1～n4 : デチューン値  
+    n1～n4 : slot1～4のデチューン値  
 - Support chips  
     - YM2612(Ch3 Ex)  
     - YM2612X(Ch3 Ex)  
@@ -2479,6 +2479,30 @@
     効果音モードのスロットディチューン  
 - Description  
     効果音モードを利用しスロットディチューンします。  
+
+
+### 効果音モードを利用したスロット毎fnum固定モード  
+-----------  
+- Command  
+    EXF  
+- Format  
+    EXFn1,n2,n3,n4  
+- 設定可能範囲  
+    n1～n4 : slot1～4のfnum値(16bit)  
+- Support chips  
+    - YM2612(Ch3 Ex)  
+    - YM2612X(Ch3 Ex)  
+    - YM2610B(Ch3 Ex)  
+    - YM2608(Ch3 Ex)  
+    - YM2609(Ch3 Ex)  
+    - YM2609(Ch9 Ex)  
+    - YM2203(Ch3 Ex)  
+- Remark  
+    効果音モードを利用しスロット毎にfnumを固定する  
+- Description  
+    効果音モードを利用しスロット毎にfnumを固定します。  
+    ブランクに指定すると固定を解除します。  
+    16進指定の場合は数値を必ず4桁記述してください。  
 
 
 ### キーオンディレイ  
