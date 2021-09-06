@@ -1,4 +1,7 @@
 更新履歴
+TAG531 2021/09/07
+  IDE:mucomDotNET更新
+
 TAG530 2021/09/05
   Core:OPN系:EXFコマンド追加。効果音モードのスロットFnum固定します。
     (effectMode_FixedFnumTest.gwiを参考)
