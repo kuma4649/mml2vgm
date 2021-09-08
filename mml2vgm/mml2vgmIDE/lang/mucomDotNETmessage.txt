@@ -179,10 +179,10 @@ E0530='PO'Portament command
 E0531='POS'Portament switch command
 E0532='POR'Portament reset command
 E0533='POL'Portament time command
-E0524='EX'Illegal value on Ch3SpecialMode SLOT command.Unable to read the values.
-E0525='EX'Illegal value on Ch3SpecialMode SLOT command.Value is out of range.(value:{0})
-E0526='EX'Illegal value on Ch3SpecialMode SLOT command.Specify the slot number from 1 to 4.(value:{0})
-E0527='EXO?'Illegal value on Ch3SpecialMode Switch command.
+E0534='EX'Illegal value on Ch3SpecialMode SLOT command.Unable to read the values.
+E0535='EX'Illegal value on Ch3SpecialMode SLOT command.Value is out of range.(value:{0})
+E0536='EX'Illegal value on Ch3SpecialMode SLOT command.Specify the slot number from 1 to 4.(value:{0})
+E0537='EXO?'Illegal value on Ch3SpecialMode Switch command.
 
 ;Program.cs 0600
 E0600=I want arguments(.muc File) please?
