@@ -802,14 +802,14 @@ Mx1x2n,...      -oo--ooooooooooooooooooooooooooooooooooooooooooooooo  LFO(
                                                                       x2:T/V/H/W          T:音量
                                                                                           V:音程(Ta/Pr不可)
                                                                                           H:ハードウェアLFO(後述)
-                                                                                          W:ワウ(OPNのみ)
+                                                                                          W:ワウ(OPN/OPMのみ)
                                                                       n...:パラメーター   
                                                                       )基本的にはFMPと同じで以下の書式。
                                                                        Delay,Speed,Delta,Depth,Type,Sw,Trans,DepthSpeed,DepthDelta
                                                                        ワウの場合はスロット指定がある。
                                                                        Slot,Delay,Speed,Delta,Depth,Type,Sw,Trans,DepthSpeed,DepthDelta
                                                                       範囲：
-                                                                       Slot       1234
+                                                                       Slot       1234(ワウのみ。slot番号を列挙)
                                                                        Delay      0 ～ clock counter(必須)
                                                                        Speed      1 ～ 255(必須)
                                                                        Delta      -32768 ～ 32767(必須)

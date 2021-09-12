@@ -1531,9 +1531,11 @@
     M  
 - Format  
     Mx1x2n1,n2,n3,n4,n5,n6,n7,n8,n9  
+    Mx1x2n0,n1,n2,n3,n4,n5,n6,n7,n8,n9  
 - 設定可能範囲  
     x1 : 識別子 P/Q/R/S(1パート当たり4種類定義、使用できる)  
-    x2 : 種類 T/V/H(T:音量(トレモロ) V:音程(ビブラート) H:ハードウェア)  
+    x2 : 種類 T/V/H/W(T:音量(トレモロ) V:音程(ビブラート) H:ハードウェア W:ワウ)  
+    n0 : Slot  1234(ワウのみ。slot番号を列挙)
     n1 : Delay 0 ～ ClockCounter  
     n2 : Speed 1 ～ 255  
     n3 : Delta -32768 ～ 32767  
@@ -1545,34 +1547,34 @@
     n9 : Depth delta -32768 ～ 32767  
 - Support chips  
     - Conductor           未対応  
-    - YM2612              T/V/Hに対応  
-    - YM2612X             T/V/Hに対応  
+    - YM2612              T/V/H/Wに対応  
+    - YM2612X             T/V/H/Wに対応  
     - YM2612(Ch3 Ex)      T/V/Hに対応  
     - YM2612X(Ch3 Ex)     T/V/Hに対応  
     - YM2612(Ch6PCMmode)  未対応  
     - YM2612X(Ch6PCMmode) 未対応  
     - SN76489             T/Vに対応  
     - RF5C164             T/Vに対応  
-    - YM2610B(FM)         T/V/Hに対応  
+    - YM2610B(FM)         T/V/H/Wに対応  
     - YM2610B(Ch3 Ex)     T/V/Hに対応  
     - YM2610B(SSG)        T/Vに対応  
     - YM2610B(ADPCM-A)    Tに対応  
     - YM2610B(ADPCM-B)    T/Vに対応  
-    - YM2608(FM)          T/V/Hに対応  
+    - YM2608(FM)          T/V/H/Wに対応  
     - YM2608(Ch3 Ex)      T/V/Hに対応  
     - YM2608(SSG)         T/Vに対応  
     - YM2608(RHYTHM)      Tに対応  
     - YM2608(ADPCM)       T/Vに対応  
-    - YM2609(FM)          T/V/Hに対応  
+    - YM2609(FM)          T/V/H/Wに対応  
     - YM2609(Ch3 Ex)      T/V/Hに対応  
     - YM2609(Ch9 Ex)      T/V/Hに対応  
     - YM2609(SSG)         T/Vに対応  
     - YM2609(RHYTHM)      Tに対応  
     - YM2609(ADPCM)       T/Vに対応  
-    - YM2203(FM)          T/V/Hに対応  
+    - YM2203(FM)          T/V/H/Wに対応  
     - YM2203(Ch3 Ex)      T/V/Hに対応  
     - YM2203(SSG)         T/Vに対応  
-    - YM2151              T/V/Hに対応  
+    - YM2151              T/V/H/Wに対応  
     - SEGAPCM             T/Vに対応  
     - HuC6280             T/V/Hに対応  
     - C140                T/Vに対応  
@@ -1601,7 +1603,8 @@
     音量LFOは複数重ねてセットすることができます。  
     音程LFOは複数重ねてセットすることができます。  
     ハードウェアLFOは音源によりますが基本一つだけセットできます。  
-    設定項目説明
+    設定項目説明  
+    - Slot    ワウ指定時に、指定したSlotのTLに対してLFO処理を行う。  
     - Delay   発音してからLFOの効果が開始されるまでの時間をクロック数で指定する。  
     - Speed   LFOの1処理あたりの変化速度をクロック数で指定する。1が一番早い変化。  
     - Delta   LFOの1処理あたりの変化量を指定する。音程或いは音量に毎度この値が加算(減算)される。  
