@@ -1,4 +1,8 @@
 更新履歴
+TAG535 2021/09/17
+  IDE:mucomDotNET更新
+  IDE:mucomDotNET:Jコマンド使用時などのフレーム落ち処理対策追加
+
 TAG534 2021/09/15
   IDE:mucomDotNET更新
 

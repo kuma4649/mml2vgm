@@ -32,6 +32,7 @@ namespace SoundManager
         private long EmuDelay = 0;
         private long RealDelay = 0;
         private bool reqSendStopData;
+        private bool reqResetSync = false;
         private MusicInterruptTimer musicInterruptTimer = MusicInterruptTimer.StopWatch;
 
         public DataSender(
@@ -330,6 +331,8 @@ namespace SoundManager
                             SendData();
 
                             process2_Lap = spdc.ElapsedMilliSec() - lapPtr;
+
+                            if (reqResetSync) break;
                         }
 
                         if (parent.Mode == SendMode.none)
@@ -338,6 +341,11 @@ namespace SoundManager
                             break;
                         }
 
+                        if (reqResetSync)
+                        {
+                            reqResetSync = false;
+                            o = spdc.ElapsedMilliSec();
+                        }
                     }
 
                     if (SendStopData() == -1) return;
@@ -415,22 +423,30 @@ namespace SoundManager
                 //データ加工
                 ProcessingData?.Invoke(ref od, ref Counter, ref Chip, ref Type, ref Address, ref Data, ref ExData);
 
-
-                if (od != null && od.type == enmMMLType.Tempo)
+                if (od != null)
                 {
-                    parent.CurrentTempo = (int)od.args[0];
-                    parent.CurrentClockCount = (int)od.args[1];
-                    continue;
-                }
-
-                if (od != null && od.type == enmMMLType.Length)
-                {
-                    if (od.linePos.chip == parent.CurrentChip
-                        && od.linePos.ch == parent.CurrentCh - 1)
+                    if (od.type == enmMMLType.ResetPlaySync)
                     {
-                        parent.CurrentNoteLength = (int)od.args[0];
+                        reqResetSync = true;
+                        return;
                     }
-                    continue;
+
+                    if (od.type == enmMMLType.Tempo)
+                    {
+                        parent.CurrentTempo = (int)od.args[0];
+                        parent.CurrentClockCount = (int)od.args[1];
+                        continue;
+                    }
+
+                    if (od.type == enmMMLType.Length)
+                    {
+                        if (od.linePos.chip == parent.CurrentChip
+                            && od.linePos.ch == parent.CurrentCh - 1)
+                        {
+                            parent.CurrentNoteLength = (int)od.args[0];
+                        }
+                        continue;
+                    }
                 }
 
                 //振り分けてEnqueue
