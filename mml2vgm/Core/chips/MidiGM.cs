@@ -302,6 +302,48 @@ namespace Core
             SetDummyData(page, mml);
         }
 
+        public override void CmdOctave(partPage page, MML mml)
+        {
+            int n;
+            n = (mml.args != null && mml.args.Count > 0) ? (int)mml.args[0] : page.latestOctave;
+            page.octaveNew = Common.CheckRange(n, 0, 9);
+            page.latestOctave = n;
+
+            MML vmml = new MML();
+            vmml.type = enmMMLType.Octave;
+            vmml.args = new List<object>();
+            vmml.args.Add(page.octaveNew);
+            vmml.line = mml.line;
+            SetDummyData(page, vmml);
+        }
+
+        public override void CmdOctaveUp(partPage page, MML mml)
+        {
+            page.octaveNew += parent.info.octaveRev ? -1 : 1;
+            page.octaveNew = Common.CheckRange(page.octaveNew, 0, 9);
+
+            MML vmml = new MML();
+            vmml.type = enmMMLType.Octave;
+            vmml.args = new List<object>();
+            vmml.args.Add(page.octaveNew);
+            vmml.line = mml.line;
+            SetDummyData(page, vmml);
+        }
+
+        public override void CmdOctaveDown(partPage page, MML mml)
+        {
+            page.octaveNew += parent.info.octaveRev ? 1 : -1;
+            page.octaveNew = Common.CheckRange(page.octaveNew, 0, 9);
+
+            MML vmml = new MML();
+            vmml.type = enmMMLType.Octave;
+            vmml.args = new List<object>();
+            vmml.args.Add(page.octaveNew);
+            vmml.line = mml.line;
+            SetDummyData(page, vmml);
+        }
+
+
 
 
         private void SendSysEx(partPage page, MML mml, int n)
@@ -425,7 +467,7 @@ namespace Core
             if (n < 0)
             {
                 n += 12;
-                o = Common.CheckRange(--o, 1, 8);
+                o = Common.CheckRange(--o, 0, 8);
             }
 
             return o * 12 + n;

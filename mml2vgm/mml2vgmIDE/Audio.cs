@@ -4453,6 +4453,8 @@ namespace mml2vgmIDE
 
                 mucomMub mubDriver = (mucomMub)driver;
                 Common.playingFilePath = Path.GetDirectoryName(mubFileName);
+                mucomManager.GetTagFromBuf(mubBuf, myEncoding.Default);
+                mubDriver.YM2151ClockValue = mucomManager.OPMClock;
 
                 ResetFadeOutParam();
                 useChip.Clear();

@@ -336,6 +336,7 @@
       <DependentUpon>ucSettingInstruments.cs</DependentUpon>
     </Compile>
     <Compile Include="FrameBuffer.cs" />
+    <Compile Include="iEncoding.cs" />
     <Compile Include="InstrumentAtLocal.cs" />
     <Compile Include="InstrumentAtValSound.cs" />
     <Compile Include="log.cs" />
@@ -384,6 +385,7 @@
     <Compile Include="MMLParameter\YMF262.cs" />
     <Compile Include="MoonDriverManager.cs" />
     <Compile Include="mucomManager.cs" />
+    <Compile Include="myEncoding.cs" />
     <Compile Include="NAudioWrap.cs" />
     <Compile Include="NullOut.cs" />
     <Compile Include="PMDManager.cs" />

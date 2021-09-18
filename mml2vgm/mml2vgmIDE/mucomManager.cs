@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace mml2vgmIDE
@@ -18,6 +19,8 @@ namespace mml2vgmIDE
         private InstanceMarker im = null;
 
         public string wrkMUCFullPath { get; private set; }
+        public uint OPMClock = 3579545;
+
         public bool Stopped = false;
 
         public mucomManager(string compilerPath, string driverPath, string preprocessorPath, Action<string> disp, Setting setting)
@@ -149,9 +152,13 @@ namespace mml2vgmIDE
             driver.MusicSTOP();
         }
 
-        public void StartRendering(int sampleRate, int yM2608ClockValue)
+        public void StartRendering(int sampleRate, int yM2608ClockValue, int yM2610ClockValue, int yM2151ClockValue)
         {
-            driver.StartRendering(sampleRate, new Tuple<string, int>[] { new Tuple<string, int>("YM2608", yM2608ClockValue) });
+            driver.StartRendering(sampleRate, new Tuple<string, int>[] { 
+                new Tuple<string, int>("YM2608", yM2608ClockValue)
+                ,new Tuple<string, int>("YM2610", yM2610ClockValue)
+                ,new Tuple<string, int>("YM2151", yM2151ClockValue)
+            });
         }
 
         public MmlDatum[] compile(string srcMUCFullPath, string wrkMUCFullPath)
@@ -260,6 +267,112 @@ namespace mml2vgmIDE
         {
             int lp = driver.GetNowLoopCounter();
             return (lp < 0) ? 0 : lp;
+        }
+
+
+        public Tuple<string,string>[] GetTagFromBuf(byte[] buf, iEncoding enc)
+        {
+            List<Tuple<string, string>> ret = new List<Tuple<string, string>>();
+            uint magic;
+            uint tagdata=0;
+            uint tagsize=0;
+
+            magic = Common.getLE32(buf, 0x0000);
+
+            if (magic == 0x3843554d) //'MUC8'
+            {
+                tagdata = Common.getLE32(buf, 0x000c);
+                tagsize = Common.getLE32(buf, 0x0010);
+            }
+            else if (magic == 0x3842554d) //'MUB8'
+            {
+                tagdata = Common.getLE32(buf, 0x000c);
+                tagsize = Common.getLE32(buf, 0x0010);
+            }
+            else if (magic == 0x6250756d)
+            {
+                tagdata = Common.getLE32(buf, 0x0012);
+                tagsize = Common.getLE32(buf, 0x0016);
+            }
+            else
+            {
+            }
+
+            if (tagdata == 0) return null;
+            List<byte> lb = new List<byte>();
+            for (int i = 0; i < tagsize; i++)
+            {
+                lb.Add(buf[tagdata + i]);
+            }
+
+            return GetTagsByteArray(lb.ToArray(), enc);
+        }
+
+        private Tuple<string, string>[] GetTagsByteArray(byte[] buf, iEncoding enc)
+        {
+            var text = enc.GetStringFromSjisArray(buf) //Encoding.GetEncoding("shift_jis").GetString(buf)
+                .Split(new string[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries)
+                .Where(x => x.IndexOf("#") == 0);
+
+            List<Tuple<string, string>> tags = new List<Tuple<string, string>>();
+            foreach (string v in text)
+            {
+                try
+                {
+                    int p = v.IndexOf(' ');
+                    string tag = "";
+                    string ele = "";
+                    if (p >= 0)
+                    {
+                        tag = v.Substring(1, p).Trim().ToLower();
+                        ele = v.Substring(p + 1).Trim();
+                        Tuple<string, string> item = new Tuple<string, string>(tag, ele);
+                        tags.Add(item);
+                    }
+                }
+                catch { }
+            }
+
+            SetDriverOptionFromTags(tags);
+
+            return tags.ToArray();
+        }
+
+        private void SetDriverOptionFromTags(List<Tuple<string, string>> tags)
+        {
+            if (tags == null) return;
+            if (tags.Count < 1) return;
+
+            foreach (var tag in tags)
+            {
+                if (tag == null) continue;
+                if (tag.Item1.ToLower().Trim() == "opmclockmode")
+                {
+                    if (!string.IsNullOrEmpty(tag.Item2))
+                    {
+                        string val = tag.Item2.ToLower().Trim();
+
+                        OPMClock = 3579545;
+                        if (val == "x68000" || val == "x68k" || val == "x68" || val == "x" || val == "4000000" || val == "x680x0")
+                        {
+                            OPMClock = 4000000;
+                        }
+                    }
+                }
+
+            }
+        }
+
+        public Tuple<string, string>[] GetTagFromBuf(MmlDatum[] buf, iEncoding enc)
+        {
+            OPMClock = 3579545;
+
+            List<byte> lbuf = new List<byte>();
+            foreach(MmlDatum v in buf)
+            {
+                lbuf.Add((byte)v.dat);
+            }
+            return GetTagFromBuf(lbuf.ToArray(), enc);
         }
 
     }

@@ -1,4 +1,8 @@
 更新履歴
+TAG536 2021/09/18
+  IDE:mucomDotNET更新
+  Core:MIDIのオクターブの範囲をo0～o9までに拡張
+
 TAG535 2021/09/17
   IDE:mucomDotNET更新
   IDE:mucomDotNET:Jコマンド使用時などのフレーム落ち処理対策追加
