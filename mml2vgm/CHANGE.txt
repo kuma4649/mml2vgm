@@ -1,4 +1,7 @@
 更新履歴
+TAG537 2021/09/20
+  IDE:mucomDotNET更新
+
 TAG536 2021/09/18
   IDE:mucomDotNET更新
   Core:MIDIのオクターブの範囲をo0～o9までに拡張
