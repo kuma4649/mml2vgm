@@ -1,4 +1,8 @@
 更新履歴
+TAG546 2021/10/07
+  Core:OPNA/2,OPNB:PCMのfnum値を修正
+  IDE:mucomDotNET更新
+
 TAG545 2021/10/03
   IDE:mucomDotNET更新
 
