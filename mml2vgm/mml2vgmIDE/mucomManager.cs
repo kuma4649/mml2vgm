@@ -154,8 +154,10 @@ namespace mml2vgmIDE
 
         public void StartRendering(int sampleRate, int yM2608ClockValue, int yM2610ClockValue, int yM2151ClockValue)
         {
-            driver.StartRendering(sampleRate, new Tuple<string, int>[] { 
+            driver.StartRendering(sampleRate, new Tuple<string, int>[] {
                 new Tuple<string, int>("YM2608", yM2608ClockValue)
+                ,new Tuple<string, int>("YM2608", yM2608ClockValue)
+                ,new Tuple<string, int>("YM2610", yM2610ClockValue)
                 ,new Tuple<string, int>("YM2610", yM2610ClockValue)
                 ,new Tuple<string, int>("YM2151", yM2151ClockValue)
             });
