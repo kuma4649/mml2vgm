@@ -1,4 +1,8 @@
 更新履歴
+TAG547 2021/10/09
+  IDE:MDPlayerからの音色データを受信しドキュメントに書き込む機能を実装
+      (GWI:OPN,OPM　MUC:OPNの音色受信に対応)
+
 TAG546 2021/10/07
   Core:OPNA/2,OPNB:PCMのfnum値を修正
   IDE:mucomDotNET更新

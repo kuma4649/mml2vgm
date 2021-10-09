@@ -376,5 +376,67 @@ namespace mml2vgmIDE
                 return null;
             }
         }
+
+        public static string ConvertVoiceDataGWIToMucom(string v)
+        {
+            if (string.IsNullOrEmpty(v)) return v;
+
+
+            //データ配列に変換する
+            List<int> prm = GetVoiceParamFromVoiceStr(v,out string vnum);
+            if (prm == null) return v;
+            if (prm.Count != 46) return v;
+
+            string msg = "";
+            for(int op = 0; op < 4; op++)
+            {
+                msg += string.Format("  {0:D03} {1:D03} {2:D03} {3:D03} {4:D03} {5:D03} {6:D03} {7:D03} {8:D03}\r\n"
+                    , prm[op * 11 + 0], prm[op * 11 + 1], prm[op * 11 + 2], prm[op * 11 + 3], prm[op * 11 + 4]
+                    , prm[op * 11 + 5], prm[op * 11 + 6], prm[op * 11 + 7], prm[op * 11 + 8]);
+            }
+
+            msg = string.Format("  @{0}\r\n  {1:D03} {2:D03}\r\n", vnum, prm[45], prm[44]) 
+                + msg 
+                + "\r\n";
+
+            return msg;
+        }
+
+        private static List<int> GetVoiceParamFromVoiceStr(string v,out string vnum)
+        { 
+            List<int> prm = new List<int>();
+            vnum = "";
+
+            string[] vs = v.Split(new string[] { "\r\n" }, StringSplitOptions.None);
+
+            //1行目の解析(ボイスの種類とナンバーを取得する
+            if (vs.Length < 3) return null;
+            if (string.IsNullOrEmpty(vs[0])) return null;
+            if (vs[0].IndexOf("'@") != 0) return null;
+            vs[0] = vs[0].Substring(2).Trim();
+            if (vs[0][0] == 'N' && vs[0].Length>1)
+            {
+                vnum = vs[0].Substring(1).Trim();   
+            }
+            if (string.IsNullOrEmpty(vnum)) return null;
+
+            //2行目以降の解析
+            for (int r = 1; r < vs.Length; r++)
+            {
+                string df = vs[r].Trim();
+                if (string.IsNullOrEmpty(df)) continue;
+                if (df.IndexOf("'@") != 0) continue;
+                df = df.Substring(2).Trim();
+                string[] ps = df.Split(new char[] { ',', ' ', '\t' });
+                foreach(string p in ps)
+                {
+                    int d;
+                    if (!int.TryParse(p, out d)) return null;
+                    prm.Add(d);
+                }
+            }
+
+            return prm;
+        }
     }
 }

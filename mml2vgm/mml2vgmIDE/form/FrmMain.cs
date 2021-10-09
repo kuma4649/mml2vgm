@@ -3553,6 +3553,46 @@ namespace mml2vgmIDE
             long w = Audio.EmuSeqCounter;
             double sec = (double)w / (double)Common.DataSequenceSampleRate;//.SampleRate;
             toolStripStatusLabel1.Text = string.Format("{0:d2}:{1:d2}.{2:d2}", (int)(sec / 60), (int)(sec % 60), (int)(sec * 100 % 100));
+
+            CheckRemoteMemory();
+        }
+
+        private void CheckRemoteMemory()
+        {
+            String msg= mmfFMVoicePool.GetMessage();
+            if (string.IsNullOrEmpty(msg)) return;
+
+            string cmd = msg.Substring(0, msg.IndexOf(':'));
+            if (cmd == "SendVoice")
+            {
+                WriteVoiceToDocument(msg.Substring(msg.IndexOf(":") + 1));
+            }
+            else
+            {
+                MessageBox.Show("Received unknown command.");
+            }
+        }
+
+        private void WriteVoiceToDocument(string v)
+        {
+            //現在のアクティブなドキュメントを取得する
+            Document d = GetActiveDocument();
+            if (d == null) return;
+
+            switch (d.srcFileFormat)
+            {
+                case EnmMmlFileFormat.MUC:
+                    v = Common.ConvertVoiceDataGWIToMucom(v);
+                    d.editor.azukiControl.Document.Replace(v);
+                    break;
+                default:
+                case EnmMmlFileFormat.GWI:
+                    v += "\r\n";
+                    d.editor.azukiControl.Document.Replace(v);
+                    break;
+            }
+
+            d.editor.azukiControl.ScrollToCaret();
         }
 
         private void UpdateScreenInfo()
@@ -3957,6 +3997,7 @@ namespace mml2vgmIDE
             //frmSien.parent = this;
             //frmSien.Show();
 
+            mmfFMVoicePool = new mmfControl(false, "mml2vgmFMVoicePool", 1024 * 4);
         }
 
         private bool SearchScreen(int x, int y)
@@ -4642,6 +4683,7 @@ namespace mml2vgmIDE
 
         private mmfControl mmf = null;
         private mmfControl mml2vgmMmf = null;
+        private mmfControl mmfFMVoicePool = null;
 
         private void tsmiExport_toWaveFile_Click(object sender, EventArgs e)
         {
