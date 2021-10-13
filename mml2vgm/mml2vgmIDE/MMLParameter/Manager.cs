@@ -18,6 +18,7 @@ namespace mml2vgmIDE.MMLParameter
         public List<Instrument> K051649 = new List<Instrument>();
         public List<Instrument> K053260 = new List<Instrument>();
         public List<Instrument> NES = new List<Instrument>();
+        public List<Instrument> VRC6 = new List<Instrument>();
         public List<Instrument> PPZ8 = new List<Instrument>();
         public List<Instrument> QSound = new List<Instrument>();
         public List<Instrument> RF5C164 = new List<Instrument>();
@@ -180,6 +181,9 @@ namespace mml2vgmIDE.MMLParameter
                     break;
                 case "NES":
                     SetupNES(od);
+                    break;
+                case "VRC6":
+                    SetupVRC6(od);
                     break;
                 case "QSound":
                     SetupQSound(od);
@@ -419,6 +423,27 @@ namespace mml2vgmIDE.MMLParameter
             NES.Add(nes);
             dicInstAdd(nes, od.linePos.chipIndex, od.linePos.chipNumber);
             instsAdd(nes, od.linePos.chipIndex, od.linePos.chipNumber);
+        }
+
+        private void SetupVRC6(outDatum od)
+        {
+            Chip chip = null;
+            if (Audio.chipRegister.VRC6 == null) return;
+            if (od.linePos.chipIndex < Audio.chipRegister.VRC6.Count)
+            {
+                chip = Audio.chipRegister.VRC6[od.linePos.chipNumber];
+            }
+            if (chip == null && od.linePos.chipIndex >= 0x80)
+            {
+                Driver.ZGM.ZgmChip.ZgmChip zChip = Audio.chipRegister.dicChipCmdNo[od.linePos.chipIndex];
+                chip = Audio.chipRegister.VRC6[zChip.Index];
+            }
+            VRC6 vrc6 = new VRC6(chip, setting, midiKbd);
+            vrc6.isTrace = isTrace;
+
+            VRC6.Add(vrc6);
+            dicInstAdd(vrc6, od.linePos.chipIndex, od.linePos.chipNumber);
+            instsAdd(vrc6, od.linePos.chipIndex, od.linePos.chipNumber);
         }
 
         private void SetupPPZ8(outDatum od)

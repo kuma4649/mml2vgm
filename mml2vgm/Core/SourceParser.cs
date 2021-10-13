@@ -294,7 +294,8 @@ namespace Core
             cp = new VRC6(null, 0, null, null, 0);
             cpn.Add(enmChipType.VRC6, new Tuple<string, string, List<string>, int[]>(cp.Name, cp.ShortName, new List<string>(
                 info.format == enmFormat.VGM ? new string[] { } : (info.format == enmFormat.XGM ? new string[] { } : new string[] { "Va", "Vb" })
-                ), new int[] { 2, 0, -1 }));
+                ), new int[] { 0, 0, -1 }));
+
 
 
 

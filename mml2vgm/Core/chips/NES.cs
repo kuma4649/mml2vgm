@@ -413,8 +413,8 @@ namespace Core
                 f = page.bendFnum;
             }
 
-            f = f + page.detune;
-            f = f + arpFreq;
+            f += page.detune;
+            f += arpFreq;
 
             for (int lfo = 0; lfo < 4; lfo++)
             {

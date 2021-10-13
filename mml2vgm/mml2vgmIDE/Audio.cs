@@ -262,6 +262,7 @@ namespace mml2vgmIDE
             chipRegister.SetRealChipInfo(EnmZGMDevice.AY8910, setting.AY8910Type, setting.AY8910SType, setting.LatencyEmulation, setting.LatencySCCI);
             chipRegister.SetRealChipInfo(EnmZGMDevice.GameBoyDMG, setting.DMGType, setting.DMGSType, setting.LatencyEmulation, setting.LatencySCCI);
             chipRegister.SetRealChipInfo(EnmZGMDevice.NESAPU, setting.NESType, setting.NESSType, setting.LatencyEmulation, setting.LatencySCCI);
+            chipRegister.SetRealChipInfo(EnmZGMDevice.VRC6, setting.VRC6Type, setting.VRC6SType, setting.LatencyEmulation, setting.LatencySCCI);
             chipRegister.SetRealChipInfo(EnmZGMDevice.C140, setting.C140Type, setting.C140SType, setting.LatencyEmulation, setting.LatencySCCI);
             chipRegister.SetRealChipInfo(EnmZGMDevice.C352, setting.C352Type, setting.C352SType, setting.LatencyEmulation, setting.LatencySCCI);
             chipRegister.SetRealChipInfo(EnmZGMDevice.RF5C164, new Setting.ChipType(), new Setting.ChipType(), setting.LatencyEmulation, setting.LatencySCCI);
@@ -469,6 +470,19 @@ namespace mml2vgmIDE
                 if (ret.Count == 0) continue;
             }
             chipRegister.SetRealChipInfo(EnmZGMDevice.NESAPU, chipType[0], chipType[1], setting.LatencyEmulation, setting.LatencySCCI);
+
+            chipType = new Setting.ChipType[Math.Max(chipRegister.VRC6.Count, 2)];
+            for (int i = 0; i < Math.Max(chipRegister.VRC6.Count, 2); i++)
+            {
+                chipType[i] = new Setting.ChipType();
+                if (chipRegister.VRC6.Count <= i) continue;
+                if (!chipRegister.VRC6[i].Use) continue;
+                chipRegister.VRC6[i].Model = EnmVRModel.VirtualModel;
+                chipType[i].UseEmu = true;
+                chipType[i].UseScci = false;
+                if (ret.Count == 0) continue;
+            }
+            chipRegister.SetRealChipInfo(EnmZGMDevice.VRC6, chipType[0], chipType[1], setting.LatencyEmulation, setting.LatencySCCI);
 
             chipType = new Setting.ChipType[Math.Max(chipRegister.SEGAPCM.Count, 2)];
             for (int i = 0; i < Math.Max(chipRegister.SEGAPCM.Count, 2); i++)
@@ -2160,6 +2174,39 @@ namespace mml2vgmIDE
                     zCnt = -1;
                     foreach (Driver.ZGM.ZgmChip.ZgmChip zchip in zgmDriver.chips)
                     {
+                        if (!(zchip is Driver.ZGM.ZgmChip.VRC6)) continue;
+
+                        zCnt++;
+                        MDSound.VRC6 vrc6 = new MDSound.VRC6();
+                        chip = new MDSound.MDSound.Chip();
+                        chip.type = MDSound.MDSound.enmInstrumentType.VRC6;
+                        chip.ID = (byte)0;//ZGMでは常に0
+                        chip.Instrument = vrc6;
+                        chip.Update = vrc6.Update;
+                        chip.Start = vrc6.Start;
+                        chip.Stop = vrc6.Stop;
+                        chip.Reset = vrc6.Reset;
+                        chip.SamplingRate = (UInt32)Common.SampleRate;
+                        chip.Volume = setting.balance.APUVolume;
+                        chip.Clock = (uint)zchip.defineInfo.clock;
+                        chip.Option = null;
+                        lstChips.Add(chip);
+
+                        hiyorimiDeviceFlag |= (setting.VRC6Type.UseScci) ? 0x1 : 0x2;
+
+                        log.Write(string.Format("Use VRC6(#{0}) Clk:{1}"
+                            , zCnt
+                            , chip.Clock
+                            ));
+
+                        chipRegister.VRC6[zCnt].Use = true;
+                        chipRegister.VRC6[zCnt].Model = EnmVRModel.VirtualModel;
+                        chipRegister.VRC6[zCnt].Device = EnmZGMDevice.VRC6;
+                    }
+
+                    zCnt = -1;
+                    foreach (Driver.ZGM.ZgmChip.ZgmChip zchip in zgmDriver.chips)
+                    {
                         if (!(zchip is Driver.ZGM.ZgmChip.K051649)) continue;
 
                         zCnt++;
@@ -2573,6 +2620,15 @@ namespace mml2vgmIDE
                     break;
                 }
 
+                foreach (Chip c in chipRegister.VRC6)
+                {
+                    if (!c.Use) continue;
+                    if (c.Model == EnmVRModel.VirtualModel) useEmu = true;
+                    if (c.Model == EnmVRModel.RealModel) useReal = true;
+                    SetVRC6Volume(true, setting.balance.VRC6Volume);
+                    break;
+                }
+
                 foreach (Chip c in chipRegister.SEGAPCM)
                 {
                     if (!c.Use) continue;
@@ -2694,6 +2750,7 @@ namespace mml2vgmIDE
                 for (int i = 0; i < chipRegister.K051649.Count; i++) if (chipRegister.K051649[i].Use) chipRegister.K051649WriteClock((byte)i, (int)zgmDriver.K051649ClockValue);
                 for (int i = 0; i < chipRegister.K053260.Count; i++) if (chipRegister.K053260[i].Use) chipRegister.K053260WriteClock((byte)i, (int)zgmDriver.K053260ClockValue);
                 for (int i = 0; i < chipRegister.NES.Count; i++) if (chipRegister.NES[i].Use) chipRegister.NESWriteClock((byte)i, (int)zgmDriver.NESClockValue);
+                for (int i = 0; i < chipRegister.VRC6.Count; i++) if (chipRegister.VRC6[i].Use) chipRegister.VRC6WriteClock((byte)i, (int)zgmDriver.VRC6ClockValue);
                 for (int i = 0; i < chipRegister.QSound.Count; i++) if (chipRegister.QSound[i].Use) chipRegister.QSoundWriteClock((byte)i, (int)zgmDriver.QSoundClockValue);
                 for (int i = 0; i < chipRegister.RF5C164.Count; i++) if (chipRegister.RF5C164[i].Use) chipRegister.RF5C164WriteClock((byte)i, (int)zgmDriver.RF5C164ClockValue);
                 for (int i = 0; i < chipRegister.SEGAPCM.Count; i++) if (chipRegister.SEGAPCM[i].Use) chipRegister.SEGAPCMWriteClock((byte)i, (int)zgmDriver.SEGAPCMClockValue);
@@ -5431,6 +5488,7 @@ namespace mml2vgmIDE
             for (int i = 0; i < chipRegister.K051649.Count; i++) if (chipRegister.K051649[i].Use) chipRegister.K051649SoftReset(counter, i);
             for (int i = 0; i < chipRegister.K053260.Count; i++) if (chipRegister.K053260[i].Use) chipRegister.K053260SoftReset(counter, i);
             for (int i = 0; i < chipRegister.NES.Count; i++) if (chipRegister.NES[i].Use) chipRegister.NESSoftReset(counter, i);
+            for (int i = 0; i < chipRegister.VRC6.Count; i++) if (chipRegister.VRC6[i].Use) chipRegister.VRC6SoftReset(counter, i);
             for (int i = 0; i < chipRegister.PPZ8.Count; i++) if (chipRegister.PPZ8[i].Use) chipRegister.PPZ8SoftReset(counter, i);
             for (int i = 0; i < chipRegister.PPSDRV.Count; i++) if (chipRegister.PPSDRV[i].Use) chipRegister.PPSDRVSoftReset(counter, i);
             for (int i = 0; i < chipRegister.P86.Count; i++) if (chipRegister.P86[i].Use) chipRegister.P86SoftReset(counter, i);
@@ -5465,6 +5523,7 @@ namespace mml2vgmIDE
             for (int i = 0; i < chipRegister.K051649.Count; i++) if (chipRegister.K051649[i].Use) data.AddRange(chipRegister.K051649MakeSoftReset(i));
             for (int i = 0; i < chipRegister.K053260.Count; i++) if (chipRegister.K053260[i].Use) data.AddRange(chipRegister.K053260MakeSoftReset(i));
             for (int i = 0; i < chipRegister.NES.Count; i++) if (chipRegister.NES[i].Use) data.AddRange(chipRegister.NESMakeSoftReset(i));
+            for (int i = 0; i < chipRegister.VRC6.Count; i++) if (chipRegister.VRC6[i].Use) data.AddRange(chipRegister.VRC6MakeSoftReset(i));
             for (int i = 0; i < chipRegister.PPZ8.Count; i++) if (chipRegister.PPZ8[i].Use) data.AddRange(chipRegister.PPZ8MakeSoftReset(i));
             for (int i = 0; i < chipRegister.PPSDRV.Count; i++) if (chipRegister.PPSDRV[i].Use) data.AddRange(chipRegister.PPSDRVMakeSoftReset(i));
             for (int i = 0; i < chipRegister.P86.Count; i++) if (chipRegister.P86[i].Use) data.AddRange(chipRegister.P86MakeSoftReset(i));
@@ -5502,6 +5561,7 @@ namespace mml2vgmIDE
             for (int i = 0; i < chipRegister.K051649.Count; i++) if (chipRegister.K051649[i].Use) data.AddRange(chipRegister.K051649MakeSoftReset(i));
             for (int i = 0; i < chipRegister.K053260.Count; i++) if (chipRegister.K053260[i].Use) data.AddRange(chipRegister.K053260MakeSoftReset(i));
             for (int i = 0; i < chipRegister.NES.Count; i++) if (chipRegister.NES[i].Use) data.AddRange(chipRegister.NESMakeSoftReset(i));
+            for (int i = 0; i < chipRegister.VRC6.Count; i++) if (chipRegister.VRC6[i].Use) data.AddRange(chipRegister.VRC6MakeSoftReset(i));
             for (int i = 0; i < chipRegister.PPZ8.Count; i++) if (chipRegister.PPZ8[i].Use) data.AddRange(chipRegister.PPZ8MakeSoftReset(i));
             for (int i = 0; i < chipRegister.PPSDRV.Count; i++) if (chipRegister.PPSDRV[i].Use) data.AddRange(chipRegister.PPSDRVMakeSoftReset(i));
             for (int i = 0; i < chipRegister.P86.Count; i++) if (chipRegister.P86[i].Use) data.AddRange(chipRegister.P86MakeSoftReset(i));

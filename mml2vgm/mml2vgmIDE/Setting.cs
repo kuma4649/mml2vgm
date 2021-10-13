@@ -253,6 +253,34 @@ namespace mml2vgmIDE
             }
         }
 
+        private ChipType _VRC6Type = new ChipType();
+        public ChipType VRC6Type
+        {
+            get
+            {
+                return _VRC6Type;
+            }
+
+            set
+            {
+                _VRC6Type = value;
+            }
+        }
+
+        private ChipType _VRC6SType = new ChipType();
+        public ChipType VRC6SType
+        {
+            get
+            {
+                return _VRC6SType;
+            }
+
+            set
+            {
+                _VRC6SType = value;
+            }
+        }
+
         private ChipType _YM2413SType = new ChipType();
         public ChipType YM2413SType
         {

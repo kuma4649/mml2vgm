@@ -112,6 +112,9 @@
     <Compile Include="ZGMmaker.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="fnum\FNUM_VRC6.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="fnum\FNUM_NES.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

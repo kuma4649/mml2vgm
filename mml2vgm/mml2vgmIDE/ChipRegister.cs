@@ -29,6 +29,7 @@ namespace mml2vgmIDE
         private Setting.ChipType[] ctK051649 = new Setting.ChipType[2] { null, null };
         private Setting.ChipType[] ctK053260 = new Setting.ChipType[2] { null, null };
         private Setting.ChipType[] ctNES = new Setting.ChipType[2] { null, null };
+        private Setting.ChipType[] ctVRC6 = new Setting.ChipType[2] { null, null };
         private Setting.ChipType[] ctPPZ8 = new Setting.ChipType[2] { null, null };
         private Setting.ChipType[] ctPPSDRV = new Setting.ChipType[2] { null, null };
         private Setting.ChipType[] ctP86 = new Setting.ChipType[2] { null, null };
@@ -60,6 +61,7 @@ namespace mml2vgmIDE
         private RSoundChip[] scK051649 = new RSoundChip[2] { null, null };
         private RSoundChip[] scK053260 = new RSoundChip[2] { null, null };
         private RSoundChip[] scNES = new RSoundChip[2] { null, null };
+        private RSoundChip[] scVRC6 = new RSoundChip[2] { null, null };
         private RSoundChip[] scPPZ8 = new RSoundChip[2] { null, null };
         private RSoundChip[] scPPSDRV = new RSoundChip[2] { null, null };
         private RSoundChip[] scP86 = new RSoundChip[2] { null, null };
@@ -403,6 +405,7 @@ namespace mml2vgmIDE
         public List<Chip> RF5C164 = new List<Chip>();
         public List<Chip> DMG = new List<Chip>();
         public List<Chip> NES = new List<Chip>();
+        public List<Chip> VRC6 = new List<Chip>();
         public List<Chip> SEGAPCM = new List<Chip>();
         public List<Chip> SN76489 = new List<Chip>();
         public List<Chip> YM2151 = new List<Chip>();
@@ -569,6 +572,21 @@ namespace mml2vgmIDE
                         if (NES.Count < i + 1) NES.Add(new Chip(3));
                         NES[i].Model = ctNES[i].UseEmu ? EnmVRModel.VirtualModel : EnmVRModel.RealModel;
                         NES[i].Delay = (NES[i].Model == EnmVRModel.VirtualModel ? LEmu : LReal);
+                    }
+                    break;
+                case EnmZGMDevice.VRC6:
+                    ctVRC6 = new Setting.ChipType[] { chipTypeP, chipTypeS };
+                    for (int i = 0; i < VRC6.Count; i++)
+                    {
+                        VRC6[i].Model = EnmVRModel.VirtualModel;
+                        VRC6[i].Delay = LEmu;
+                        if (i > 1) continue;
+
+                        scVRC6[i] = realChip.GetRealChip(ctVRC6[i]);
+                        if (scVRC6[i] != null) scVRC6[i].init();
+                        if (VRC6.Count < i + 1) VRC6.Add(new Chip(3));
+                        VRC6[i].Model = ctVRC6[i].UseEmu ? EnmVRModel.VirtualModel : EnmVRModel.RealModel;
+                        VRC6[i].Delay = (VRC6[i].Model == EnmVRModel.VirtualModel ? LEmu : LReal);
                     }
                     break;
                 case EnmZGMDevice.PPZ8:
@@ -964,6 +982,13 @@ namespace mml2vgmIDE
                 NES[i].Number = i;
                 NES[i].Hosei = 0;
 
+                if (VRC6.Count < i + 1) VRC6.Add(new Chip(3));
+                VRC6[i].Use = false;
+                VRC6[i].Model = EnmVRModel.None;
+                VRC6[i].Device = EnmZGMDevice.VRC6;
+                VRC6[i].Number = i;
+                VRC6[i].Hosei = 0;
+
                 if (PPSDRV.Count < i + 1) PPSDRV.Add(new Chip(1));
                 PPSDRV[i].Use = false;
                 PPSDRV[i].Model = EnmVRModel.None;
@@ -1126,6 +1151,7 @@ namespace mml2vgmIDE
             AY8910.Clear();
             DMG.Clear();
             NES.Clear();
+            VRC6.Clear();
             SEGAPCM.Clear();
             SN76489.Clear();
             YM2151.Clear();
@@ -1164,6 +1190,7 @@ namespace mml2vgmIDE
                 if (c is Driver.ZGM.ZgmChip.AY8910) AY8910.Add(c);
                 if (c is Driver.ZGM.ZgmChip.DMG) DMG.Add(c);
                 if (c is Driver.ZGM.ZgmChip.NES) NES.Add(c);
+                if (c is Driver.ZGM.ZgmChip.VRC6) VRC6.Add(c);
                 if (c is Driver.ZGM.ZgmChip.K051649) K051649.Add(c);
                 if (c is Driver.ZGM.ZgmChip.HuC6280) HuC6280.Add(c);
                 if (c is Driver.ZGM.ZgmChip.C140) C140.Add(c);
@@ -1208,6 +1235,9 @@ namespace mml2vgmIDE
                     break;
                 case EnmZGMDevice.NESAPU:
                     NESSetRegisterProcessing(ref Counter, ref Chip, ref Type, ref Address, ref Data, ref ExData);
+                    break;
+                case EnmZGMDevice.VRC6:
+                    VRC6SetRegisterProcessing(ref Counter, ref Chip, ref Type, ref Address, ref Data, ref ExData);
                     break;
                 case EnmZGMDevice.QSound:
                     QSoundSetRegisterProcessing(ref Counter, ref Chip, ref Type, ref Address, ref Data, ref ExData);
@@ -1321,6 +1351,9 @@ namespace mml2vgmIDE
                     break;
                 case EnmZGMDevice.NESAPU:
                     NESWriteRegisterControl(Chip, type, address, data, exData);
+                    break;
+                case EnmZGMDevice.VRC6:
+                    VRC6WriteRegisterControl(Chip, type, address, data, exData);
                     break;
                 case EnmZGMDevice.PPZ8:
                     PPZ8WriteRegisterControl(Chip, type, address, data, exData);
@@ -2017,143 +2050,34 @@ namespace mml2vgmIDE
         {
             dicChipCmdNo.Clear();
 
-            foreach (Driver.ZGM.ZgmChip.ZgmChip c in CONDUCTOR)
-            {
-                dicChipCmdNo.Add(c.defineInfo.commandNo, c);
-            }
-
-            foreach (Driver.ZGM.ZgmChip.ZgmChip c in SN76489)
-            {
-                dicChipCmdNo.Add(c.defineInfo.commandNo, c);
-            }
-
-            foreach (Driver.ZGM.ZgmChip.ZgmChip c in YM2413)
-            {
-                dicChipCmdNo.Add(c.defineInfo.commandNo, c);
-            }
-
-            foreach (Driver.ZGM.ZgmChip.ZgmChip c in YM2612)
-            {
-                dicChipCmdNo.Add(c.defineInfo.commandNo, c);
-            }
-
-            foreach (Driver.ZGM.ZgmChip.ZgmChip c in YM2151)
-            {
-                dicChipCmdNo.Add(c.defineInfo.commandNo, c);
-            }
-
-            foreach (Driver.ZGM.ZgmChip.ZgmChip c in SEGAPCM)
-            {
-                dicChipCmdNo.Add(c.defineInfo.commandNo, c);
-            }
-
-            foreach (Driver.ZGM.ZgmChip.ZgmChip c in YM2203)
-            {
-                dicChipCmdNo.Add(c.defineInfo.commandNo, c);
-            }
-
-            foreach (Driver.ZGM.ZgmChip.ZgmChip c in YM2608)
-            {
-                dicChipCmdNo.Add(c.defineInfo.commandNo, c);
-            }
-
-            foreach (Driver.ZGM.ZgmChip.ZgmChip c in YM2610)
-            {
-                dicChipCmdNo.Add(c.defineInfo.commandNo, c);
-            }
-
-            foreach (Driver.ZGM.ZgmChip.ZgmChip c in YM3812)
-            {
-                dicChipCmdNo.Add(c.defineInfo.commandNo, c);
-            }
-
-            foreach (Driver.ZGM.ZgmChip.ZgmChip c in YM3526)
-            {
-                dicChipCmdNo.Add(c.defineInfo.commandNo, c);
-            }
-
-            foreach (Driver.ZGM.ZgmChip.ZgmChip c in Y8950)
-            {
-                dicChipCmdNo.Add(c.defineInfo.commandNo, c);
-            }
-
-            foreach (Driver.ZGM.ZgmChip.ZgmChip c in YMF262)
-            {
-                dicChipCmdNo.Add(c.defineInfo.commandNo, c);
-            }
-
-            foreach (Driver.ZGM.ZgmChip.ZgmChip c in YMF278B)
-            {
-                dicChipCmdNo.Add(c.defineInfo.commandNo, c);
-            }
-
-            foreach (Driver.ZGM.ZgmChip.ZgmChip c in YMF271)
-            {
-                dicChipCmdNo.Add(c.defineInfo.commandNo, c);
-            }
-
-            foreach (Driver.ZGM.ZgmChip.ZgmChip c in RF5C164)
-            {
-                dicChipCmdNo.Add(c.defineInfo.commandNo, c);
-            }
-
-            foreach (Driver.ZGM.ZgmChip.ZgmChip c in AY8910)
-            {
-                dicChipCmdNo.Add(c.defineInfo.commandNo, c);
-            }
-
-            foreach (Driver.ZGM.ZgmChip.ZgmChip c in DMG)
-            {
-                dicChipCmdNo.Add(c.defineInfo.commandNo, c);
-            }
-
-            foreach (Driver.ZGM.ZgmChip.ZgmChip c in NES)
-            {
-                dicChipCmdNo.Add(c.defineInfo.commandNo, c);
-            }
-
-            foreach (Driver.ZGM.ZgmChip.ZgmChip c in K051649)
-            {
-                dicChipCmdNo.Add(c.defineInfo.commandNo, c);
-            }
-
-            foreach (Driver.ZGM.ZgmChip.ZgmChip c in HuC6280)
-            {
-                dicChipCmdNo.Add(c.defineInfo.commandNo, c);
-            }
-
-            foreach (Driver.ZGM.ZgmChip.ZgmChip c in C140)
-            {
-                dicChipCmdNo.Add(c.defineInfo.commandNo, c);
-            }
-
-            foreach (Driver.ZGM.ZgmChip.ZgmChip c in K053260)
-            {
-                dicChipCmdNo.Add(c.defineInfo.commandNo, c);
-            }
-
-            foreach (Driver.ZGM.ZgmChip.ZgmChip c in QSound)
-            {
-                dicChipCmdNo.Add(c.defineInfo.commandNo, c);
-            }
-
-            foreach (Driver.ZGM.ZgmChip.ZgmChip c in C352)
-            {
-                dicChipCmdNo.Add(c.defineInfo.commandNo, c);
-            }
-
-
-
-            foreach (Driver.ZGM.ZgmChip.ZgmChip c in YM2609)
-            {
-                dicChipCmdNo.Add(c.defineInfo.commandNo, c);
-            }
-
-            foreach (Driver.ZGM.ZgmChip.ZgmChip c in MIDI)
-            {
-                dicChipCmdNo.Add(c.defineInfo.commandNo, c);
-            }
-
+            foreach (Driver.ZGM.ZgmChip.ZgmChip c in CONDUCTOR) dicChipCmdNo.Add(c.defineInfo.commandNo, c);
+            foreach (Driver.ZGM.ZgmChip.ZgmChip c in SN76489) dicChipCmdNo.Add(c.defineInfo.commandNo, c);
+            foreach (Driver.ZGM.ZgmChip.ZgmChip c in YM2413) dicChipCmdNo.Add(c.defineInfo.commandNo, c);
+            foreach (Driver.ZGM.ZgmChip.ZgmChip c in YM2612) dicChipCmdNo.Add(c.defineInfo.commandNo, c);
+            foreach (Driver.ZGM.ZgmChip.ZgmChip c in YM2151) dicChipCmdNo.Add(c.defineInfo.commandNo, c);
+            foreach (Driver.ZGM.ZgmChip.ZgmChip c in SEGAPCM) dicChipCmdNo.Add(c.defineInfo.commandNo, c);
+            foreach (Driver.ZGM.ZgmChip.ZgmChip c in YM2203) dicChipCmdNo.Add(c.defineInfo.commandNo, c);
+            foreach (Driver.ZGM.ZgmChip.ZgmChip c in YM2608) dicChipCmdNo.Add(c.defineInfo.commandNo, c);
+            foreach (Driver.ZGM.ZgmChip.ZgmChip c in YM2610) dicChipCmdNo.Add(c.defineInfo.commandNo, c);
+            foreach (Driver.ZGM.ZgmChip.ZgmChip c in YM3812) dicChipCmdNo.Add(c.defineInfo.commandNo, c);
+            foreach (Driver.ZGM.ZgmChip.ZgmChip c in YM3526) dicChipCmdNo.Add(c.defineInfo.commandNo, c);
+            foreach (Driver.ZGM.ZgmChip.ZgmChip c in Y8950) dicChipCmdNo.Add(c.defineInfo.commandNo, c);
+            foreach (Driver.ZGM.ZgmChip.ZgmChip c in YMF262) dicChipCmdNo.Add(c.defineInfo.commandNo, c);
+            foreach (Driver.ZGM.ZgmChip.ZgmChip c in YMF278B) dicChipCmdNo.Add(c.defineInfo.commandNo, c);
+            foreach (Driver.ZGM.ZgmChip.ZgmChip c in YMF271) dicChipCmdNo.Add(c.defineInfo.commandNo, c);
+            foreach (Driver.ZGM.ZgmChip.ZgmChip c in RF5C164) dicChipCmdNo.Add(c.defineInfo.commandNo, c);
+            foreach (Driver.ZGM.ZgmChip.ZgmChip c in AY8910) dicChipCmdNo.Add(c.defineInfo.commandNo, c);
+            foreach (Driver.ZGM.ZgmChip.ZgmChip c in DMG) dicChipCmdNo.Add(c.defineInfo.commandNo, c);
+            foreach (Driver.ZGM.ZgmChip.ZgmChip c in NES) dicChipCmdNo.Add(c.defineInfo.commandNo, c);
+            foreach (Driver.ZGM.ZgmChip.ZgmChip c in VRC6) dicChipCmdNo.Add(c.defineInfo.commandNo, c);
+            foreach (Driver.ZGM.ZgmChip.ZgmChip c in K051649) dicChipCmdNo.Add(c.defineInfo.commandNo, c);
+            foreach (Driver.ZGM.ZgmChip.ZgmChip c in HuC6280) dicChipCmdNo.Add(c.defineInfo.commandNo, c);
+            foreach (Driver.ZGM.ZgmChip.ZgmChip c in C140) dicChipCmdNo.Add(c.defineInfo.commandNo, c);
+            foreach (Driver.ZGM.ZgmChip.ZgmChip c in K053260) dicChipCmdNo.Add(c.defineInfo.commandNo, c);
+            foreach (Driver.ZGM.ZgmChip.ZgmChip c in QSound) dicChipCmdNo.Add(c.defineInfo.commandNo, c);
+            foreach (Driver.ZGM.ZgmChip.ZgmChip c in C352) dicChipCmdNo.Add(c.defineInfo.commandNo, c);
+            foreach (Driver.ZGM.ZgmChip.ZgmChip c in YM2609) dicChipCmdNo.Add(c.defineInfo.commandNo, c);
+            foreach (Driver.ZGM.ZgmChip.ZgmChip c in MIDI) dicChipCmdNo.Add(c.defineInfo.commandNo, c);
         }
 
 
@@ -2323,6 +2247,7 @@ namespace mml2vgmIDE
         }
 
         #endregion
+
 
 
         #region AY8910
@@ -2560,6 +2485,8 @@ namespace mml2vgmIDE
 
         #endregion
 
+
+
         #region DMG
 
         private void DMGWriteRegisterControl(Chip Chip, EnmDataType type, int address, int data, object exData)
@@ -2709,6 +2636,8 @@ namespace mml2vgmIDE
 
         #endregion
 
+
+
         #region NES
 
         private void NESWriteRegisterControl(Chip Chip, EnmDataType type, int address, int data, object exData)
@@ -2844,15 +2773,15 @@ namespace mml2vgmIDE
         {
             if (scNES != null && scNES[chipID] != null)
             {
-                if (scNES[chipID] is RC86ctlSoundChip)
-                {
-                    Nc86ctl.ChipType ct = ((RC86ctlSoundChip)scNES[chipID]).chiptype;
-                    //OPNA/OPN3Lが選ばれている場合は周波数を2倍にする
-                    if (ct == Nc86ctl.ChipType.CHIP_OPN3L || ct == Nc86ctl.ChipType.CHIP_OPNA)
-                    {
-                        clock *= 4;
-                    }
-                }
+                //if (scNES[chipID] is RC86ctlSoundChip)
+                //{
+                //    Nc86ctl.ChipType ct = ((RC86ctlSoundChip)scNES[chipID]).chiptype;
+                //    //OPNA/OPN3Lが選ばれている場合は周波数を2倍にする
+                //    if (ct == Nc86ctl.ChipType.CHIP_OPN3L || ct == Nc86ctl.ChipType.CHIP_OPNA)
+                //    {
+                //        clock *= 4;
+                //    }
+                //}
 
                 scNES[chipID].dClock = scNES[chipID].SetMasterClock((uint)clock);
                 scNES[chipID].mul = (double)scNES[chipID].dClock / (double)clock;
@@ -2876,6 +2805,151 @@ namespace mml2vgmIDE
         }
 
         #endregion
+
+
+
+        #region VRC6
+
+        private void VRC6WriteRegisterControl(Chip Chip, EnmDataType type, int address, int data, object exData)
+        {
+            if (type == EnmDataType.Normal)
+            {
+                if (Chip.Model == EnmVRModel.VirtualModel)
+                {
+                    if (!ctVRC6[Chip.Number].UseScci && ctVRC6[Chip.Number].UseEmu)
+                        mds.WriteVRC6(Chip.Index, (byte)Chip.Number, (byte)address, (byte)data);
+                }
+                if (Chip.Model == EnmVRModel.RealModel)
+                {
+                    if (scVRC6[Chip.Number] != null)
+                    {
+                        int skip = 0x0;
+                        if (scVRC6[Chip.Number] is RC86ctlSoundChip)
+                        {
+                            if (((RC86ctlSoundChip)scVRC6[Chip.Number]).chiptype == Nc86ctl.ChipType.CHIP_UNKNOWN)
+                            {
+                                skip = 0x100;
+                            }
+                        }
+                        scVRC6[Chip.Number].setRegister(address + skip, data);
+                    }
+                }
+            }
+            else if (type == EnmDataType.Block)
+            {
+                Audio.sm.SetInterrupt();
+
+                try
+                {
+                    if (exData == null) return;
+
+                    if (exData is PackData[])
+                    {
+                        PackData[] pdata = (PackData[])exData;
+                        if (Chip.Model == EnmVRModel.VirtualModel)
+                        {
+                            foreach (PackData dat in pdata)
+                                mds.WriteVRC6(Chip.Index, (byte)Chip.Number, (byte)dat.Address, (byte)dat.Data);
+                        }
+                        if (Chip.Model == EnmVRModel.RealModel)
+                        {
+                            if (scNES[Chip.Number] != null)
+                            {
+                                foreach (PackData dat in pdata)
+                                {
+                                    int skip = 0x0;
+                                    if (scVRC6[Chip.Number] is RC86ctlSoundChip)
+                                    {
+                                        if (((RC86ctlSoundChip)scVRC6[Chip.Number]).chiptype == Nc86ctl.ChipType.CHIP_UNKNOWN)
+                                        {
+                                            skip = 0x100;
+                                        }
+                                    }
+                                    scVRC6[Chip.Number].setRegister(dat.Address + skip, dat.Data);
+                                }
+                            }
+                        }
+                        return;
+                    }
+
+                    uint stAdr = (uint)((object[])exData)[0];
+                    uint dataSize = (uint)((object[])exData)[1];
+                    byte[] pcmData = (byte[])((object[])exData)[2];
+                    uint vgmAdr = (uint)((object[])exData)[3];
+
+                    if (Chip.Model == EnmVRModel.VirtualModel)
+                    {
+                    }
+                    if (Chip.Model == EnmVRModel.RealModel)
+                    {
+                        ;
+                    }
+                }
+                finally
+                {
+                    Audio.sm.ResetInterrupt();
+                }
+            }
+        }
+
+        public void VRC6SetRegisterProcessing(ref long Counter, ref Chip Chip, ref EnmDataType Type, ref int Address, ref int dData, ref object ExData)
+        {
+        }
+
+        public void VRC6SetRegister(outDatum od, long Counter, int ChipID, int dAddr, int dData)
+        {
+            enq(od, Counter, VRC6[ChipID], EnmDataType.Normal, dAddr, dData, null);
+        }
+
+        public void VRC6SetRegister(outDatum od, long Counter, int ChipID, PackData[] data)
+        {
+            enq(od, Counter, VRC6[ChipID], EnmDataType.Block, -1, -1, data);
+        }
+
+        public void VRC6SoftReset(long Counter, int ChipID)
+        {
+            List<PackData> data = VRC6MakeSoftReset(ChipID);
+            VRC6SetRegister(null, Counter, ChipID, data.ToArray());
+        }
+
+        public List<PackData> VRC6MakeSoftReset(int chipID)
+        {
+            List<PackData> data = new List<PackData>();
+            data.Add(new PackData(null, VRC6[chipID], EnmDataType.Normal, 0x00, 0x00, null));//Pulse vol:0
+            data.Add(new PackData(null, VRC6[chipID], EnmDataType.Normal, 0x04, 0x00, null));//Pulse vol:0
+            data.Add(new PackData(null, VRC6[chipID], EnmDataType.Normal, 0x08, 0x00, null));//Saw vol:0
+
+            //// duty比50%:7 volume:15 = 0x7f
+            //data.Add(new PackData(null, VRC6[chipID], EnmDataType.Normal, 0x00, 0x7f, null));
+            //// 1789773Hz / 16 / 440Hz - 1 = 253(0xfd)
+            //data.Add(new PackData(null, VRC6[chipID], EnmDataType.Normal, 0x01, 0xfd, null));//(CPU / (16 * f)) - 1 
+            //// phase reset
+            //data.Add(new PackData(null, VRC6[chipID], EnmDataType.Normal, 0x02, 0x80, null));//Pulse vol:0
+            ////SawはCPU/14/f-1
+
+            return data;
+        }
+
+        public void VRC6WriteClock(byte chipID, int clock)
+        {
+            if (scVRC6 != null && scVRC6[chipID] != null)
+            {
+                scVRC6[chipID].dClock = scVRC6[chipID].SetMasterClock((uint)clock);
+                scVRC6[chipID].mul = (double)scVRC6[chipID].dClock / (double)clock;
+
+                if (scVRC6[chipID] is RC86ctlSoundChip)
+                {
+                    if (((RC86ctlSoundChip)scVRC6[chipID]).chiptype == Nc86ctl.ChipType.CHIP_UNKNOWN)
+                    {
+                        scVRC6[chipID].mul = 1.0;
+                    }
+                }
+            }
+        }
+
+        #endregion
+
+
 
         #region C140
 
@@ -6118,6 +6192,8 @@ namespace mml2vgmIDE
 
 
         #endregion
+
+
 
         #region YMF271(OPX)
 

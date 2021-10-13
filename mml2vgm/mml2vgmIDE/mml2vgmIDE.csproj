@@ -177,6 +177,8 @@
     <Compile Include="Driver\ZGM\ZgmChip\NES.cs" />
     <Compile Include="Driver\ZGM\ZgmChip\RF5C164.cs" />
     <Compile Include="Driver\ZGM\ZgmChip\SEGAPCM.cs" />
+    <Compile Include="Driver\ZGM\ZgmChip\VRC6.cs" />
+    <Compile Include="Driver\ZGM\ZgmChip\VRC7.cs" />
     <Compile Include="Driver\ZGM\ZgmChip\YM2151.cs" />
     <Compile Include="Driver\ZGM\ZgmChip\Y8950.cs" />
     <Compile Include="Driver\ZGM\ZgmChip\YMF271.cs" />
@@ -365,6 +367,7 @@
     <Compile Include="MMLParameter\RF5C164.cs" />
     <Compile Include="MMLParameter\SegaPCM.cs" />
     <Compile Include="MMLParameter\SN76489.cs" />
+    <Compile Include="MMLParameter\VRC6.cs" />
     <Compile Include="MMLParameter\YM2151_mucom.cs" />
     <Compile Include="MMLParameter\YM2151.cs" />
     <Compile Include="MMLParameter\YM2203.cs" />

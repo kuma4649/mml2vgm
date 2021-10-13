@@ -39,6 +39,7 @@ namespace Core
         public MidiGM[] midiGM = null;
         public NES[] nes = null;
         public DMG[] dmg = null;
+        public VRC6[] vrc6 = null;
 
         public Dictionary<enmChipType, ClsChip[]> chips;
 
@@ -504,6 +505,20 @@ namespace Core
             {
                 dmg = lstDMG.ToArray();
                 chips.Add(enmChipType.DMG, dmg);
+            }
+
+            List<VRC6> lstVRC6 = new List<VRC6>();
+            n = sp.dicChipPartName[enmChipType.VRC6];
+            for (int i = 0; i < n.Item3.Count; i++)
+            {
+                if (string.IsNullOrEmpty(n.Item3[i])) continue;
+                if (sp.lnChipPartName.Contains(n.Item3[i]))
+                    lstVRC6.Add(new VRC6(this, i, n.Item3[i], stPath, (info.format == enmFormat.ZGM ? 0 : i)));
+            }
+            if (lstVRC6.Count > 0)
+            {
+                vrc6 = lstVRC6.ToArray();
+                chips.Add(enmChipType.VRC6, vrc6);
             }
 
 

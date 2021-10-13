@@ -63,6 +63,7 @@ namespace mml2vgmIDE.Driver.ZGM
         public uint K051649ClockValue;
         public uint DMGClockValue;
         public uint NESClockValue;
+        public uint VRC6ClockValue;
         public uint MultiPCMClockValue;
 
         //public dacControl dacControl = new dacControl();
@@ -1604,6 +1605,7 @@ namespace mml2vgmIDE.Driver.ZGM
             HuC6280ClockValue = 0;
             K054539ClockValue = 0;
             NESClockValue = 0;
+            VRC6ClockValue = 0;
             MultiPCMClockValue = 0;
 
 

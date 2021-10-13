@@ -301,6 +301,7 @@
   MIDI      MIDI   M                     -   16Ch(MIDI : 16Ch)
   NES       NES    Na              1789772    5Ch(Pulse:  2Ch  Tri : 1Ch  Noise : 1Ch  DPCM : 1Ch)
   DMG       DMG    Ga              4194304    4Ch(Pulse:  2Ch  WF  : 1Ch  Noise : 1Ch)
+  VRC6      VRC6   Va              1789772    3Ch(SQR: 2Ch Saw: 1Ch)
   PWM       PWM                   23011361    2Ch(PCM  :  2Ch)(T.B.D.)
   OKIM6258  OKI5                   4000000    1Ch(ADPCM:  1Ch)(T.B.D.)
   OKIM6295  OKI9                   8000000    4Ch(ADPCM:  4Ch)(T.B.D.)
@@ -520,6 +521,9 @@
   O1     K053260(PCM音源)(Primary)       CH1
    ...
   O4     K053260(PCM音源)(Primary)       CH4
+  Va1    VRC6(SQR音源)(Primary)          CH1
+  Va2    VRC6(SQR音源)(Primary)          CH2
+  Va3    VRC6(SAW音源)(Primary)          CH3
 
   Fs1    YM2612(FM音源)(Secondary)       CH1
   Fs2    YM2612(FM音源)(Secondary)       CH2
@@ -641,6 +645,9 @@
   Os1    K053260(PCM音源)(Secondary)     CH1
    ...
   Os4    K053260(PCM音源)(Secondary)     CH4
+  Vb1    VRC6(SQR音源)(Secondary)        CH1
+  Vb2    VRC6(SQR音源)(Secondary)        CH2
+  Vb3    VRC6(SAW音源)(Secondary)        CH3
 
   -----------
   計 300 Ch over
