@@ -293,6 +293,32 @@ namespace Core
         }
 
 
+        public override void StorePcmRawData(clsPcmDatSeq pds, byte[] buf, bool isRaw, bool is16bit, int samplerate, params object[] option)
+        {
+        }
+
+        public override bool StorePcmCheck()
+        {
+            return false;
+        }
+
+        public override int GetToneDoublerShift(partPage page, int octave, char noteCmd, int shift)
+        {
+            return 0;
+        }
+
+        public override void SetToneDoubler(partPage page, MML mml)
+        {
+        }
+
+        public override void CmdY(partPage page, MML mml)
+        {
+        }
+
+        public override void CmdLoopExtProc(partPage page, MML mml)
+        {
+        }
+
         public override void CmdInstrument(partPage page, MML mml)
         {
             char type;
