@@ -803,7 +803,7 @@ namespace mml2vgmIDE.Driver.ZGM
 
                 case Driver.ZGM.ZgmChip.NES _:
                     //uint RF5C164_romSize = Common.getLE32(vgmBuf, vgmAdr + 7);
-                    uint NES_startAddress = Common.getLE32(vgmBuf, vgmAdr + 0x0B);
+                    uint NES_startAddress = Common.getLE32(vgmBuf, vgmAdr + 7);// 0x0B);
                     pcmDat.Clear();
                     for (uint i = 0; i < bLen - 8; i++) pcmDat.Add(vgmBuf[vgmAdr + 15 + i].val);
                     chipRegister.NESWritePCMData(od, Audio.DriverSeqCounter, (byte)chip.Index, NES_startAddress, (uint)pcmDat.Count, pcmDat.ToArray(), 0);

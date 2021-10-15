@@ -12,24 +12,25 @@
 	Converted   =
 	Notes       =
 
+	format=vgm
 	ClockCount  =192
 
 }
 
 
 
-'@ P 0,"..\wav\SD.wav",8000,100,NES
-'@ P 1,"..\wav\HC.wav",8000,200,NES
+'@ P 0,"..\wav\BD.wav",8000,100,NES
+'@ P 1,"..\wav\SD.wav",8000,200,NES
 
  @ E No , SV , AR , DR , SL , SR , RR , ST , ChipName
 '@ E  0 , 15 ,  0 ,  1 , 10 ,  6 ,  1 ,  1 , NES
 
 'Cn1 T150
 
-'Na1 @I2 v4 l4 o1q6 a+b>cdefgab>c
-'Na4 @E0 v8 l4 o2q0 crcrcrcrcrcrcrc
+ 'Na1 @I2 v4 l4 o1q6 a+b>cdefgab>c
+ 'Na4 @E0 v8 l4 o2q0 crcrcrcrcrcrcrc
 PCM Test
 'Na5 @0     l4 o1q6 cc+dd+eff+gg+aa+b>cc+dd+
 
-'Na4 v15l4 o1q0 c_b
+ 'Na4 v15l4 o1q0 c_b
 

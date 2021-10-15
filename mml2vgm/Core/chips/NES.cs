@@ -89,12 +89,12 @@ namespace Core
                     if (chipNumber == 0)
                         pcmDataInfo[0].totalBuf = new byte[] {
                             0x07, 0x00, 0x66, 0xc2
-                            , 0x00, 0x00, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+                            , 0x00, 0x00, 0x00, 0x00, 0x00, 0xc0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
                         };
                     else
                         pcmDataInfo[0].totalBuf = new byte[] {
                             0x07, 0x00, 0x66, 0xc2
-                            , 0x00, 0x00, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+                            , 0x00, 0x00, 0x00, 0x00, 0x00, 0xc0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
                     };
                 }
                 else
@@ -102,12 +102,12 @@ namespace Core
                     if (chipNumber == 0)
                         pcmDataInfo[0].totalBuf = new byte[] {
                             0x07, 0x66, 0xc2
-                            , 0x00, 0x00, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+                            , 0x00, 0x00, 0x00, 0x00, 0x00, 0xc0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
                         };
                     else
                         pcmDataInfo[0].totalBuf = new byte[] {
                             0x07, 0x66, 0xc2
-                            , 0x00, 0x00, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+                            , 0x00, 0x00, 0x00, 0x00, 0x00, 0xc0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
                         };
                 }
             }
@@ -710,7 +710,7 @@ namespace Core
                             if (page.instrument != page.beforeInstrument)
                             {
                                 clsPcm p = parent.instPCM[page.instrument].Item2;
-                                SOutData(page, mml, port[0], (byte)0x12, (byte)(p.stAdr / 64));
+                                SOutData(page, mml, port[0], (byte)0x12, (byte)(p.stAdr >> 6));
                                 SOutData(page, mml, port[0], (byte)0x13, (byte)(p.size / 16));
                                 page.beforeInstrument = page.instrument;
                             }
