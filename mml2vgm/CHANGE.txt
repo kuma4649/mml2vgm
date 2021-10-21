@@ -1,4 +1,8 @@
 更新履歴
+TAG552 2021/10/21
+  IDE:BambooTrackerの.btbファイルからOPN音色を取り込める機能を追加。
+  Instrumentsフォルダにファイルを置いて起動してください。
+
 TAG551 2021/10/15 2nd
   Core:ZGM:NES:DPCMがならなかったのを修正
 

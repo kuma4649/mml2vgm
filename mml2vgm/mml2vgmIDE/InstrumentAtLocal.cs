@@ -78,7 +78,12 @@ namespace mml2vgmIDE
                     else
                     {
                         string ext = Path.GetExtension(f.FullName).ToLower();
-                        if (ext == ".gwi" || ext == ".muc" || ext == ".mml" || ext == ".rym2612")
+                        if (ext == ".gwi" 
+                            || ext == ".muc" 
+                            || ext == ".mml"
+                            || ext == ".rym2612"
+                            || ext == ".btb"
+                            )
                         {
                             lstFile.Add(f);
                         }
@@ -108,6 +113,9 @@ namespace mml2vgmIDE
                     break;
                 case ".rym2612":
                     lstInst = GetInstsAtRym2612(file);
+                    break;
+                case ".btb":
+                    lstInst = GetInstsAtBambooTracker(file);
                     break;
             }
 
@@ -517,7 +525,128 @@ namespace mml2vgmIDE
             return ret;
         }
 
+        private List<Tuple<enmInstType,string,string,string>> GetInstsAtBambooTracker(string srcFn)
+        {
+            List<Tuple<enmInstType, string, string, string>> ret = new List<Tuple<enmInstType, string, string, string>>();
 
+            try
+            {
+                byte[] bin = File.ReadAllBytes(srcFn);//, Encoding.GetEncoding(932)).Split(new string[] { "\r\n" }, StringSplitOptions.None);
+                if (bin == null || bin.Length < 24) return null;
+                string identifier = System.Text.Encoding.ASCII.GetString(bin, 0, 16);
+                if (identifier != "BambooTrackerBnk") return null;
+                int eofOffset = BitConverter.ToInt32(bin, 16);
+                int fileVersion = BitConverter.ToInt32(bin, 20);
+                if (fileVersion < 0x00010000) return null;
+
+                identifier = System.Text.Encoding.ASCII.GetString(bin, 24, 8);
+                if (identifier != "INSTRMNT") return null;
+                int instEndOffset = 32 + BitConverter.ToInt32(bin, 32);
+                int instCount = bin[36];
+                if (instCount < 1) return null;
+                int ptr = 37;
+
+                List<Tuple<int, string>> lstInst = new List<Tuple<int, string>>();
+                for (int ic = 0; ic < instCount; ic++)
+                {
+                    int envNum = bin[ptr++];
+                    int instDetailOffset = BitConverter.ToInt32(bin, ptr);
+                    int instDetailAdr = ptr + instDetailOffset;
+                    ptr += 4;
+                    int instNameLength = BitConverter.ToInt32(bin, ptr);
+                    ptr += 4;
+                    string instName = System.Text.Encoding.UTF8.GetString(bin, ptr, instNameLength);
+                    ptr += instNameLength;
+                    int instType = bin[ptr++];
+                    if (instType == 0)
+                    {
+                        lstInst.Add(new Tuple<int, string>(envNum, instName));
+                    }
+
+                    ptr = instDetailAdr;
+                }
+
+                ptr = instEndOffset;
+
+                identifier = System.Text.Encoding.ASCII.GetString(bin, ptr, 8);
+                if (identifier != "INSTPROP") return null;
+                ptr += 8;
+                int instPropOffset = ptr + BitConverter.ToInt32(bin, ptr);
+                ptr += 4;
+
+                int subsectionIdentifier = bin[ptr++];
+                if (subsectionIdentifier != 0) return null;
+                int blockCount = bin[ptr++];
+
+                List<Tuple<int, byte[]>> lstProp = new List<Tuple<int, byte[]>>();
+                for (int ic = 0; ic < blockCount; ic++)
+                {
+                    int envIndex = bin[ptr++];
+                    int envOffset = ptr + bin[ptr++];
+                    List<byte> prm = new List<byte>();
+                    prm.Add(bin[ptr++]);//AL/FB
+                    for(int op = 0; op < 4; op++)
+                    {
+                        prm.Add(bin[ptr++]);//Enable/AR
+                        prm.Add(bin[ptr++]);//KS/DR
+                        prm.Add(bin[ptr++]);//DT/SR
+                        prm.Add(bin[ptr++]);//SL/RR
+                        prm.Add(bin[ptr++]);//TL
+                        prm.Add(bin[ptr++]);//SSGEG/ML
+                    }
+                    ptr = envOffset;
+                    lstProp.Add(new Tuple<int, byte[]>(envIndex, prm.ToArray()));
+                }
+
+                for (int ic = 0; ic < blockCount; ic++)
+                {
+                    int envIndex = lstProp[ic].Item1;
+                    string name = "";
+                    //for(int inum = 0; inum < lstInst.Count; inum++)
+                    //{
+                    //    if (envIndex != lstInst[inum].Item1) continue;
+                    //    name = lstInst[inum].Item2;
+                    //}
+                    name = lstInst[ic].Item2;
+                    byte[] dat = lstProp[ic].Item2;
+
+                    int alg = (byte)(dat[0] >> 4);
+                    int fb = (byte)(dat[0] & 0xf);
+
+                    int[][] prms = new int[][] { new int[11], new int[11], new int[11], new int[11] };
+                    for (int op = 0; op < 4; op++)
+                    {
+                        prms[op][0] = dat[1 + op * 6] & 0x1f;//AR
+                        prms[op][1] = dat[2 + op * 6] & 0x1f;//DR
+                        prms[op][2] = dat[3 + op * 6] & 0x1f;//SR
+                        prms[op][3] = dat[4 + op * 6] & 0x0f;//RR
+                        prms[op][4] = dat[4 + op * 6] >> 4;//SL
+                        prms[op][5] = dat[5 + op * 6] & 0x7f;//TL
+                        prms[op][6] = (dat[2 + op * 6] >> 5) & 0x3;//KS
+                        prms[op][7] = dat[6 + op * 6] & 0x0f;//ML
+                        prms[op][8] = (dat[3 + op * 6] >> 5) & 0x7;//DT
+                        prms[op][9] = 0;
+                        prms[op][10] = dat[6 + op * 6] >> 4;//SSGEG;
+                        if (prms[op][10] == 0x8) prms[op][10] = 0;
+                    }
+
+                    //音色定義文を作成
+                    string sdatV, sdatM;
+                    sdatV = MakeVoiceDefineForGWI_OPN(name + add, envIndex, prms, alg, fb);
+                    sdatM = MakeVoiceDefineForMUC_OPN(name + add, envIndex, prms, alg, fb);
+
+                    ret.Add(new Tuple<enmInstType, string, string, string>(
+                        enmInstType.FM_N, Path.Combine(srcFn, name).Replace(baseDir, ""), sdatV, sdatM));
+                }
+
+            }
+            catch
+            {
+                return null;
+            }
+
+            return ret;
+        }
 
         private void Disp(string msg)
         {
