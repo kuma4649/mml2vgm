@@ -1,4 +1,7 @@
 更新履歴
+TAG553 2021/10/21 2nd
+  IDE:MUC:OPN音色展開に対応
+
 TAG552 2021/10/21
   IDE:BambooTrackerの.btbファイルからOPN音色を取り込める機能を追加。
   Instrumentsフォルダにファイルを置いて起動してください。

@@ -502,7 +502,7 @@ namespace mml2vgmIDE
                 d = (Document)dc.Tag;
                 int ci = d.editor.azukiControl.CaretIndex;
                 d.editor.azukiControl.Document.Replace(
-                    si.content,
+                    d.srcFileFormat == EnmMmlFileFormat.MUC ? si.content2 : si.content,
                     ci,// - si.foundCnt,
                     ci);
 
