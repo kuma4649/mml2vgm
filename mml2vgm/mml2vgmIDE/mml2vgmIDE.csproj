@@ -388,6 +388,8 @@
     <Compile Include="MMLParameter\YMF262.cs" />
     <Compile Include="MoonDriverManager.cs" />
     <Compile Include="mucomManager.cs" />
+    <Compile Include="muteManager.cs" />
+    <Compile Include="muteStatus.cs" />
     <Compile Include="myEncoding.cs" />
     <Compile Include="NAudioWrap.cs" />
     <Compile Include="NullOut.cs" />

@@ -2086,6 +2086,8 @@ namespace mml2vgmIDE
         {
             if (isSuccess) Audio.silent = false;
 
+            //
+
             if ((Compiling & 2) != 0)
             {
                 finishedCompileGWI();
@@ -2115,6 +2117,9 @@ namespace mml2vgmIDE
                 return;
             }
 
+            Document doc = (Document)((FrmEditor)compileTargetDocument).Tag;
+            muteManager.Add(doc);
+
             try
             {
                 //パートカウンターのリスト表示を初期化
@@ -2123,6 +2128,7 @@ namespace mml2vgmIDE
                     frmPartCounter.ClearCounter();
                     Object[] cells = new object[7];
 
+                    int trackNum = 0;
                     foreach (KeyValuePair<enmChipType, ClsChip[]> kvp in mv.desVGM.chips)
                     {
                         foreach (ClsChip chip in kvp.Value)
@@ -2141,6 +2147,7 @@ namespace mml2vgmIDE
                                 cells[5] = pw[i].clockCounter;
                                 cells[6] = "-";
                                 frmPartCounter.AddPartCounter(cells);
+                                muteManager.UpdateTrackInfo(doc, trackNum++, cells);
                             }
 
                         }
@@ -2287,9 +2294,14 @@ namespace mml2vgmIDE
 
         private string mucPartName = "ABCDEFGHIJKLMNOPQRSTUVabcdefghijklmnopqrstuvWXYZwxyz";
 
+        private muteManager muteManager = new muteManager();
+
         private void finishedCompileMUC()
         {
             musicDriverInterface.CompilerInfo ci = mucom.GetCompilerInfo();
+
+            Document doc = (Document)((FrmEditor)compileTargetDocument).Tag;
+            muteManager.Add(doc);
 
             if (compileTargetDocument != null)
             {
@@ -2312,6 +2324,7 @@ namespace mml2vgmIDE
                     int[] pn = new int[] { 1, 2, 3, 10, 11, 12, 13, 4, 5, 6, 19 };
                     if (ci.formatType == "mub")
                     {
+                        int trackNum = 0;
                         for (int i = 0; i < 11; i++)
                         {
                             //if (pw[i].clockCounter == 0) continue;
@@ -2324,10 +2337,12 @@ namespace mml2vgmIDE
                             cells[5] = ci.totalCount[i];
                             cells[6] = ci.loopCount[i];
                             frmPartCounter.AddPartCounter(cells);
+                            muteManager.UpdateTrackInfo(doc, trackNum++, cells);
                         }
                     }
                     else
                     {
+                        int trackNum = 0;
                         for (int i = 0; i < 52; i++)
                         {
                             for (int j = 0; j < 10; j++)
@@ -2341,7 +2356,11 @@ namespace mml2vgmIDE
                                 cells[4] = i < 22 ? "YM2608" : (i < 44 ? "YM2610B" : "YM2151");//.ToUpper();
                                 cells[5] = ci.totalCount[i * 10 + j];
                                 cells[6] = ci.loopCount[i * 10 + j];
-                                if (ci.bufferCount[i * 10 + j] > 3) frmPartCounter.AddPartCounter(cells);
+                                if (ci.bufferCount[i * 10 + j] > 3)
+                                {
+                                    frmPartCounter.AddPartCounter(cells);
+                                    muteManager.UpdateTrackInfo(doc, trackNum++, cells);
+                                }
                             }
                         }
                     }
@@ -2458,12 +2477,17 @@ namespace mml2vgmIDE
         private void finishedCompileMML()
         {
             musicDriverInterface.CompilerInfo ci = pmdmng.GetCompilerInfo();
+            Document doc = (Document)((FrmEditor)compileTargetDocument).Tag;
+            muteManager.Add(doc);
+
             try
             {
                 if (isSuccess)
                 {
                     frmPartCounter.ClearCounter();
                     Object[] cells = new object[7];
+                    int trackNum = 0;
+
                     try
                     {
                         for (int i = 0; i < ci.totalCount.Count; i++)
@@ -2499,6 +2523,7 @@ namespace mml2vgmIDE
                             cells[5] = ci.totalCount[i];
                             cells[6] = ci.loopCount[i];
                             frmPartCounter.AddPartCounter(cells);
+                            muteManager.UpdateTrackInfo(doc, trackNum++, cells);
                         }
                     }
                     catch (Exception e)
@@ -2558,6 +2583,9 @@ namespace mml2vgmIDE
         private void finishedCompileMDL()
         {
             musicDriverInterface.CompilerInfo ci = mdmng.GetCompilerInfo();
+            Document doc = (Document)((FrmEditor)compileTargetDocument).Tag;
+            muteManager.Add(doc);
+
             if (ci == null)
             {
                 Compiling = 0;
@@ -2570,6 +2598,7 @@ namespace mml2vgmIDE
                 {
                     frmPartCounter.ClearCounter();
                     Object[] cells = new object[7];
+                    int trackNum = 0;
                     try
                     {
                         if (ci != null && ci.totalCount != null && ci.totalCount.Count > 0)
@@ -2592,6 +2621,7 @@ namespace mml2vgmIDE
                                 cells[5] = ci.totalCount[i];
                                 cells[6] = ci.loopCount[i];
                                 frmPartCounter.AddPartCounter(cells);
+                                muteManager.UpdateTrackInfo(doc, trackNum++, cells);
                             }
                         }
                     }
