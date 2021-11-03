@@ -378,24 +378,11 @@ namespace mml2vgmIDE
                     NIRealChip rc = nc86ctl.getChipInterface(i);
                     NIGimic2 gm = rc.QueryInterface();
                     ChipType cct = gm.getModuleType();
+                    Devinfo di = gm.getModuleInfo();
                     Setting.ChipType ct = null;
                     int o = -1;
                     switch (realChipType)
                     {
-                        case EnmRealChipType.AY8910:
-                            if (cct == ChipType.CHIP_UNKNOWN || cct == ChipType.CHIP_YM2608 || cct == ChipType.CHIP_YMF288 || cct == ChipType.CHIP_YM2203)
-                            {
-                                ct = new Setting.ChipType();
-                                ct.SoundLocation = -1;
-                                ct.BusID = i;
-                                string seri = gm.getModuleInfo().Serial;
-                                if (!int.TryParse(seri, out o)) o = -1;
-                                ct.SoundChip = o;
-                                ct.ChipName = gm.getModuleInfo().Devname;
-                                ct.InterfaceName = gm.getMBInfo().Devname;
-                                ct.Type = (int)cct;
-                            }
-                            break;
                         case EnmRealChipType.YM2203:
                         case EnmRealChipType.YM2608:
                             if (cct == ChipType.CHIP_YM2608 || cct == ChipType.CHIP_YMF288 || cct == ChipType.CHIP_YM2203)
@@ -406,13 +393,17 @@ namespace mml2vgmIDE
                                 string seri = gm.getModuleInfo().Serial;
                                 if (!int.TryParse(seri, out o)) o = -1;
                                 ct.SoundChip = o;
-                                ct.ChipName = gm.getModuleInfo().Devname;
-                                ct.InterfaceName = gm.getMBInfo().Devname;
+                                ct.ChipName = di.Devname;
+                                ct.InterfaceName = di.Devname;
                                 ct.Type = (int)cct;
                             }
                             break;
-                        case EnmRealChipType.YM2413:
-                            if (cct == ChipType.CHIP_YM2413 || cct == ChipType.CHIP_UNKNOWN)
+                        case EnmRealChipType.AY8910:
+                            if ((cct == ChipType.CHIP_UNKNOWN && di.Devname == "GMC-S2149")
+                                || (cct == ChipType.CHIP_UNKNOWN && di.Devname == "GMC-S8910")
+                                || cct == ChipType.CHIP_YM2608 
+                                || cct == ChipType.CHIP_YMF288 
+                                || cct == ChipType.CHIP_YM2203)
                             {
                                 ct = new Setting.ChipType();
                                 ct.SoundLocation = -1;
@@ -420,8 +411,24 @@ namespace mml2vgmIDE
                                 string seri = gm.getModuleInfo().Serial;
                                 if (!int.TryParse(seri, out o)) o = -1;
                                 ct.SoundChip = o;
-                                ct.ChipName = gm.getModuleInfo().Devname;
-                                ct.InterfaceName = gm.getMBInfo().Devname;
+                                ct.ChipName = di.Devname;
+                                ct.InterfaceName = di.Devname;
+                                ct.Type = (int)cct;
+                            }
+                            break;
+                        case EnmRealChipType.YM2413:
+                            if (cct == ChipType.CHIP_YM2413
+                                || (cct == ChipType.CHIP_UNKNOWN && di.Devname == "GMC-S2413")
+                                )
+                            {
+                                ct = new Setting.ChipType();
+                                ct.SoundLocation = -1;
+                                ct.BusID = i;
+                                string seri = gm.getModuleInfo().Serial;
+                                if (!int.TryParse(seri, out o)) o = -1;
+                                ct.SoundChip = o;
+                                ct.ChipName = di.Devname;
+                                ct.InterfaceName = di.Devname;
                             }
                             break;
                         case EnmRealChipType.YM2610:
@@ -433,8 +440,8 @@ namespace mml2vgmIDE
                                 string seri = gm.getModuleInfo().Serial;
                                 if (!int.TryParse(seri, out o)) o = -1;
                                 ct.SoundChip = o;
-                                ct.ChipName = gm.getModuleInfo().Devname;
-                                ct.InterfaceName = gm.getMBInfo().Devname;
+                                ct.ChipName = di.Devname;
+                                ct.InterfaceName = di.Devname;
                                 ct.Type = (int)cct;
                             }
                             break;

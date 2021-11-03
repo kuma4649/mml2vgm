@@ -2266,13 +2266,13 @@ namespace mml2vgmIDE
                     if (scAY8910[Chip.Number] != null)
                     {
                         int skip = 0x0;
-                        if(scAY8910[Chip.Number] is RC86ctlSoundChip)
-                        {
-                            if(((RC86ctlSoundChip)scAY8910[Chip.Number]).chiptype== Nc86ctl.ChipType.CHIP_UNKNOWN)
-                            {
-                                skip = 0x100;
-                            }
-                        }
+                        //if(scAY8910[Chip.Number] is RC86ctlSoundChip)
+                        //{
+                        //    if(((RC86ctlSoundChip)scAY8910[Chip.Number]).chiptype== Nc86ctl.ChipType.CHIP_UNKNOWN)
+                        //    {
+                        //        skip = 0x100;
+                        //    }
+                        //}
                         scAY8910[Chip.Number].setRegister(address + skip, data);
                     }
                 }
@@ -2298,13 +2298,13 @@ namespace mml2vgmIDE
                             foreach (PackData dat in pdata)
                             {
                                 int skip = 0x0;
-                                if (scAY8910[Chip.Number] is RC86ctlSoundChip)
-                                {
-                                    if (((RC86ctlSoundChip)scAY8910[Chip.Number]).chiptype == Nc86ctl.ChipType.CHIP_UNKNOWN)
-                                    {
-                                        skip = 0x100;
-                                    }
-                                }
+                                //if (scAY8910[Chip.Number] is RC86ctlSoundChip)
+                                //{
+                                //    if (((RC86ctlSoundChip)scAY8910[Chip.Number]).chiptype == Nc86ctl.ChipType.CHIP_UNKNOWN)
+                                //    {
+                                //        skip = 0x100;
+                                //    }
+                                //}
                                 scAY8910[Chip.Number].setRegister(dat.Address + skip, dat.Data);
                             }
                         }
