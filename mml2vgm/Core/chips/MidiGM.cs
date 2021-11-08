@@ -306,7 +306,7 @@ namespace Core
         {
             int n;
             n = (mml.args != null && mml.args.Count > 0) ? (int)mml.args[0] : page.latestOctave;
-            page.octaveNew = Common.CheckRange(n, 0, 9);
+            page.octaveNew = Common.CheckRange(n, 0, 10);
             page.latestOctave = n;
 
             MML vmml = new MML();
@@ -320,7 +320,7 @@ namespace Core
         public override void CmdOctaveUp(partPage page, MML mml)
         {
             page.octaveNew += parent.info.octaveRev ? -1 : 1;
-            page.octaveNew = Common.CheckRange(page.octaveNew, 0, 9);
+            page.octaveNew = Common.CheckRange(page.octaveNew, 0, 10);
 
             MML vmml = new MML();
             vmml.type = enmMMLType.Octave;
@@ -333,7 +333,7 @@ namespace Core
         public override void CmdOctaveDown(partPage page, MML mml)
         {
             page.octaveNew += parent.info.octaveRev ? 1 : -1;
-            page.octaveNew = Common.CheckRange(page.octaveNew, 0, 9);
+            page.octaveNew = Common.CheckRange(page.octaveNew, 0, 10);
 
             MML vmml = new MML();
             vmml.type = enmMMLType.Octave;
@@ -467,10 +467,10 @@ namespace Core
             if (n < 0)
             {
                 n += 12;
-                o = Common.CheckRange(--o, 0, 8);
+                o = Common.CheckRange(--o, 0, 10);
             }
 
-            return o * 12 + n;
+            return Common.CheckRange(o * 12 + n, 0, 127);
         }
 
         protected override void ResetTieBend(partPage page, MML mml)
