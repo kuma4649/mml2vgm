@@ -8048,6 +8048,8 @@ namespace mml2vgmIDE
             if (type == EnmDataType.Normal)
             {
                 byte port = (byte)(address >> 8);
+                
+                //Console.WriteLine("Adr:{0:x02} Dat:{1:x02}",address,data);
 
                 if (Chip.Model == EnmVRModel.VirtualModel)
                 {

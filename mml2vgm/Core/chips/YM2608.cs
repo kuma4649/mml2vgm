@@ -723,6 +723,7 @@ namespace Core
             base.CmdY(page, mml);
 
             if (mml.args[0] is string) return;
+            if (mml.args.Count < 2) return;
 
             byte adr = (byte)(int)mml.args[0];
             byte dat = (byte)(int)mml.args[1];

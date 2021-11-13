@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -2518,176 +2519,226 @@ namespace Core
 
             foreach (string vals in lstWord)
             {
-                int p = 0;
-                string n = "";
-                string h = "";
-                int hc = -1;
-                int i = 0;
-                MmlDatum dat = null;
-                char instType = 'n';
-                List<int> ivalue = new List<int>();
 
-                for (p = 0; p < vals.Length; p++)
+                if (tp == enmMMLType.Y && (vals.IndexOf(',') > -1 || vals.IndexOf(' ') > -1))
                 {
-                    char c = vals[p];
-
-                    if (hc > -1)
+                    MmlDatum d = new MmlDatum();
+                    d.type = enmMMLType.Y;
+                    d.args = new List<object>();
+                    d.dat = 0;
+                    string[] items = vals.Split(new string[] { ",", " ", "\t" }, StringSplitOptions.RemoveEmptyEntries);
+                    foreach (string item in items)
                     {
-                        if ((c >= '0' && c <= '9') || (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F'))
+                        object ret = GetYCommandItemsAtCmdArp(item);
+                        if (ret == null) continue;
+                        d.args.Add(ret);
+                    }
+                    if (d.args.Count == 3 && d.args[0] is string)
+                    {
+                        //opを0始まりに直す
+                        int op = (int)d.args[1] - 1;
+                        op = Common.CheckRange(op, 0, 3);
+                        d.args[1] = op;
+                    }
+
+                    if (d.args.Count == 2 || d.args.Count == 3)
+                        lstBuf.Add(d);
+                }
+                else
+                {
+                    GetItemsAtCmdArp(sin, lstBuf, ref tp, ref tpArgs, ref defTp, ref defArgs, vals);
+                }
+            }
+
+            return lstBuf;
+        }
+
+        private static void GetItemsAtCmdArp(int sin, List<MmlDatum> lstBuf, ref enmMMLType tp, ref List<object> tpArgs, ref enmMMLType defTp, ref List<object> defArgs, string vals)
+        {
+            string n = "";
+            //string h = "";
+            //int hc = -1;
+            int i = 0;
+            MmlDatum dat = null;
+            char instType = 'n';
+            List<int> ivalue = new List<int>();
+            string yCMD = "";
+
+            int p;
+            for (p = 0; p < vals.Length; p++)
+            {
+                char c = vals[p];
+
+                //if (hc > -1)
+                //{
+                //    if ((c >= '0' && c <= '9') || (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F'))
+                //    {
+                //        h += c;
+                //        hc++;
+                //        continue;
+                //    }
+                //    else
+                //    {
+                //        i = int.Parse(h, System.Globalization.NumberStyles.HexNumber);
+                //        h = "";
+                //        hc = -1;
+                //        ivalue.Add(i);
+                //    }
+                //}
+
+                if (c == '|' || c == '/')
+                {
+                    n = "";
+                    dat = new MmlDatum();
+                    dat.type = enmMMLType.LoopPoint;
+                    dat.dat = c == '|' ? 0 : 1;
+                    lstBuf.Add(dat);
+                    continue;
+                }
+
+                if (c == 'E')
+                {
+                    n = "";
+                    dat = new MmlDatum();
+                    dat.type = enmMMLType.LoopPoint;
+                    dat.dat = 2;
+                    lstBuf.Add(dat);
+                    continue;
+                }
+
+                if (c == '#')
+                {
+                    n = "";
+                    tp = enmMMLType.LengthClock;
+                    continue;
+                }
+
+                if (c == '@')
+                {
+                    tp = enmMMLType.Instrument;
+                    char nc = p + 1 < vals.Length ? vals[p + 1] : '\0';
+
+                    if (nc == 'I' || nc == 'E' || nc == 'N' || nc == 'R' || nc == 'A' || nc == 'W')
+                    {
+                        instType = nc;
+                        //ptr = p + 1;
+                        p++;
+                    }
+                    n = "";
+                    if (sin == 0 && lstBuf.Count == 1)//デフォルトコマンドの位置か
+                    {
+                        defTp = tp;
+
+                        dat = new MmlDatum();
+                        dat.type = enmMMLType.Instrument;//.DefaultCommand;
+                        dat.args = new List<object>(new object[] { defTp });
+                        if (instType == 'n')
                         {
-                            h += c;
-                            hc++;
-                            continue;
                         }
                         else
                         {
-                            i = int.Parse(h, System.Globalization.NumberStyles.HexNumber);
-                            h = "";
-                            hc = -1;
-                            ivalue.Add(i);
+                            dat.args = new List<object>(new object[] { instType });
+                            defArgs = new List<object>(new object[] { instType });
                         }
-                    }
-
-                    if (c == '$')
-                    {
-                        hc = 0;
-                        continue;
-                    }
-
-                    if (c == '|' || c == '/')
-                    {
-                        hc = -1;
-                        n = "";
-                        dat = new MmlDatum();
-                        dat.type = enmMMLType.LoopPoint;
-                        dat.dat = c == '|' ? 0 : 1;
                         lstBuf.Add(dat);
-                        continue;
                     }
+                    tpArgs = dat.args;
+                    continue;
+                }
 
-                    if (c == 'E')
+                if (c == 'p')
+                {
+                    tp = enmMMLType.Pan;
+                    n = "";
+                    if (sin == 0 && lstBuf.Count == 1)//デフォルトコマンドの位置か
                     {
-                        hc = -1;
-                        n = "";
+                        defTp = tp;
+
                         dat = new MmlDatum();
-                        dat.type = enmMMLType.LoopPoint;
-                        dat.dat = 2;
+                        dat.type = enmMMLType.Pan;//.DefaultCommand;
+                        dat.args = new List<object>(new object[] { defTp });
                         lstBuf.Add(dat);
-                        continue;
                     }
+                    continue;
+                }
 
-                    if (c == '#')
+                if (c == 'y')
+                {
+                    tp = enmMMLType.Y;
+                    n = "";
+                    if (sin == 0 && lstBuf.Count == 1)//デフォルトコマンドの位置か
                     {
-                        hc = -1;
+                        defTp = tp;
+
+                        dat = new MmlDatum();
+                        dat.type = enmMMLType.Y;//.DefaultCommand;
+                        dat.args = new List<object>(new object[] { defTp });
+                        lstBuf.Add(dat);
+                    }
+                    continue;
+                }
+
+                if (c == 'P')
+                {
+                    tp = enmMMLType.NoiseToneMixer;
+                    n = "";
+                    if (sin == 0 && lstBuf.Count == 1)//デフォルトコマンドの位置か
+                    {
+                        defTp = tp;
+
+                        dat = new MmlDatum();
+                        dat.type = enmMMLType.NoiseToneMixer;//.DefaultCommand;
+                        dat.args = new List<object>(new object[] { defTp });
+                        lstBuf.Add(dat);
+                    }
+                    continue;
+                }
+
+                if (c == 'w')
+                {
+                    char nc = (p + 1) < vals.Length ? vals[p + 1] : '\0';
+                    if (nc == 'f')
+                    {
+                        //ptr = p + 1;
+                        p++;
+                        tp = enmMMLType.DCSGCh3Freq;
+                    }
+                    else
+                        tp = enmMMLType.Noise;
+
+                    n = "";
+                    if (sin == 0 && lstBuf.Count == 1)//デフォルトコマンドの位置か
+                    {
+                        defTp = tp;
+
+                        dat = new MmlDatum();
+                        dat.type = tp;//.DefaultCommand;
+                        dat.args = new List<object>(new object[] { defTp });
+                        lstBuf.Add(dat);
+                    }
+                    continue;
+                }
+
+                if (c == '$')
+                {
+                    n = GetHexNumericStrAtCmdArp(vals, ref p);
+                    if (int.TryParse(n, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out i))
+                    {
+                        p--;
+                        ivalue.Add(i);
                         n = "";
-                        tp = enmMMLType.LengthClock;
                         continue;
                     }
-
-                    if (c == '@')
+                }
+                else if ((c >= '0' && c <= '9') || c == '-' || c == '+')
+                {
+                    n = GetNumericStrAtCmdArp(vals, ref p);
+                    if (int.TryParse(n, out i))
                     {
-                        tp = enmMMLType.Instrument;
-                        char nc = p + 1 < vals.Length ? vals[p + 1] : '\0';
-
-                        if (nc == 'I' || nc == 'E' || nc == 'N' || nc == 'R' || nc == 'A' || nc == 'W')
-                        {
-                            instType = nc;
-                            ptr = p + 1;
-                        }
-                        hc = -1;
+                        p--;
+                        ivalue.Add(i);
                         n = "";
-                        if (sin == 0 && lstBuf.Count == 1)//デフォルトコマンドの位置か
-                        {
-                            defTp = tp;
-
-                            dat = new MmlDatum();
-                            dat.type = enmMMLType.Instrument;//.DefaultCommand;
-                            dat.args = new List<object>(new object[] { defTp });
-                            if (instType == 'n')
-                            {
-                            }
-                            else
-                            {
-                                dat.args = new List<object>(new object[] { instType });
-                                defArgs = new List<object>(new object[] { instType });
-                            }
-                            lstBuf.Add(dat);
-                        }
-                        tpArgs = dat.args;
                         continue;
-                    }
-
-                    if (c == 'p')
-                    {
-                        tp = enmMMLType.Pan;
-                        hc = -1;
-                        n = "";
-                        if (sin == 0 && lstBuf.Count == 1)//デフォルトコマンドの位置か
-                        {
-                            defTp = tp;
-
-                            dat = new MmlDatum();
-                            dat.type = enmMMLType.Pan;//.DefaultCommand;
-                            dat.args = new List<object>(new object[] { defTp });
-                            lstBuf.Add(dat);
-                        }
-                        continue;
-                    }
-
-                    if (c == 'P')
-                    {
-                        tp = enmMMLType.NoiseToneMixer;
-                        hc = -1;
-                        n = "";
-                        if (sin == 0 && lstBuf.Count == 1)//デフォルトコマンドの位置か
-                        {
-                            defTp = tp;
-
-                            dat = new MmlDatum();
-                            dat.type = enmMMLType.NoiseToneMixer;//.DefaultCommand;
-                            dat.args = new List<object>(new object[] { defTp });
-                            lstBuf.Add(dat);
-                        }
-                        continue;
-                    }
-
-                    if (c == 'w')
-                    {
-                        char nc = (p + 1) < vals.Length ? vals[p + 1] : '\0';
-                        if (nc == 'f')
-                        {
-                            ptr = p + 1;
-                            tp = enmMMLType.DCSGCh3Freq;
-                        }
-                        else
-                            tp = enmMMLType.Noise;
-
-                        hc = -1;
-                        n = "";
-                        if (sin == 0 && lstBuf.Count == 1)//デフォルトコマンドの位置か
-                        {
-                            defTp = tp;
-
-                            dat = new MmlDatum();
-                            dat.type = tp;//.DefaultCommand;
-                            dat.args = new List<object>(new object[] { defTp });
-                            lstBuf.Add(dat);
-                        }
-                        continue;
-                    }
-
-                    if ((c >= '0' && c <= '9') || c == '-' || c == '+')
-                    {
-                        n = n + c.ToString();
-
-                        continue;
-                    }
-
-                    if (!string.IsNullOrEmpty(n))
-                    {
-                        if (int.TryParse(n, out i))
-                            ivalue.Add(i);
-                        n = "";
                     }
                 }
 
@@ -2697,44 +2748,162 @@ namespace Core
                         ivalue.Add(i);
                     n = "";
                 }
-
-                if (ivalue.Count > 0)
+                else
                 {
-                    dat = new MmlDatum();
-                    dat.type = tp;
-                    dat.dat = ivalue[0];
-
-                    if (tp == enmMMLType.Instrument)
+                    if (tp == enmMMLType.Y)
                     {
-                        dat.args = new List<object>();
-                        if (tpArgs == null) dat.args.Add(instType);
-                        else dat.args.AddRange(tpArgs);
-                        instType = 'n';
-                        foreach (int j in ivalue)
+                        char nc = c;
+                        while (nc != ',' && nc != '\0' && nc != ' ' && nc != '\t')
                         {
-                            dat.args.Add(j);
+                            yCMD += nc;
+                            p++;
+                            nc = p < vals.Length ? vals[p] : '\0';
                         }
                     }
-
-                    if (tp == enmMMLType.Pan || tp == enmMMLType.NoiseToneMixer || tp == enmMMLType.Noise || tp == enmMMLType.DCSGCh3Freq )
-                    {
-                        dat.args = new List<object>();
-                        foreach (int j in ivalue)
-                        {
-                            dat.args.Add(j);
-                        }
-                    }
-
-                    lstBuf.Add(dat);
-                    tp = defTp;
-                    tpArgs = defArgs;
-
-                    ivalue.Clear();
                 }
-
             }
 
-            return lstBuf;
+            if (!string.IsNullOrEmpty(n))
+            {
+                if (int.TryParse(n, out i))
+                    ivalue.Add(i);
+                n = "";
+            }
+
+            if (ivalue.Count > 0)
+            {
+                dat = new MmlDatum();
+                dat.type = tp;
+                dat.dat = ivalue[0];
+
+                if (tp == enmMMLType.Instrument)
+                {
+                    dat.args = new List<object>();
+                    if (tpArgs == null) dat.args.Add(instType);
+                    else dat.args.AddRange(tpArgs);
+                    instType = 'n';
+                    foreach (int j in ivalue)
+                    {
+                        dat.args.Add(j);
+                    }
+                }
+
+                if (tp == enmMMLType.Pan || tp == enmMMLType.NoiseToneMixer || tp == enmMMLType.Noise || tp == enmMMLType.DCSGCh3Freq)
+                {
+                    dat.args = new List<object>();
+                    foreach (int j in ivalue)
+                    {
+                        dat.args.Add(j);
+                    }
+                }
+                if (tp == enmMMLType.Y)
+                {
+                    dat.args = new List<object>();
+                    if (yCMD != "") dat.args.Add(yCMD);
+                    foreach (int j in ivalue)
+                    {
+                        dat.args.Add(j);
+                    }
+                    yCMD = "";
+                }
+
+                lstBuf.Add(dat);
+                tp = defTp;
+                tpArgs = defArgs;
+
+                ivalue.Clear();
+            }
+
+        }
+
+        private static object GetYCommandItemsAtCmdArp(string vals)
+        {
+            string n;
+            int i;
+            object ret = null;
+            int p = 0;
+            vals = vals.Trim().ToUpper();
+            char c = vals[0];
+
+            if (c == '$')
+            {
+                n = GetHexNumericStrAtCmdArp(vals, ref p);
+                if (int.TryParse(n, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out i)) ret = i;
+            }
+            else if ((c >= '0' && c <= '9') || c == '-' || c == '+')
+            {
+                n = GetNumericStrAtCmdArp(vals, ref p);
+                if (int.TryParse(n, out i)) ret = i;
+            }
+            else
+            {
+                string[] cmds = new string[] {
+                    "DTML",
+                    "TL",
+                    "KSAR",
+                    "AMDR",
+                    "SR",
+                    "SLRR",
+                    "SSG",
+                    "FBAL",
+                    "PANFBAL",
+                    "PANFLCON",
+                    "PMSAMS",
+                    "DTML",
+                    "DTMUL",
+                    "DT1ML",
+                    "DT1MUL",
+                    "TL",
+                    "KSAR",
+                    "AMDR",
+                    "AMED1R",
+                    "DT2SR",
+                    "DT2D2R",
+                    "SLRR",
+                    "D1LRR"
+                };
+                if (cmds.Contains(vals)) ret = vals;
+            }
+
+            return ret;
+        }
+
+        private static string GetNumericStrAtCmdArp(string src, ref int ptr)
+        {
+            string ret = "";
+            int stPtr = ptr;
+            do
+            {
+                char c = src[ptr];
+                if (!(
+                    (c >= '0' && c <= '9')
+                    || (ptr == stPtr && (c == '-' || c == '+'))
+                    )) break;
+                ret += c;
+                ptr++;
+            } while (ptr<src.Length);
+
+            return ret;
+        }
+
+        private static string GetHexNumericStrAtCmdArp(string src, ref int ptr)
+        {
+            string ret = "";
+            int stPtr = ++ptr;
+            do
+            {
+                char c = src[ptr];
+                if (!(
+                    (c >= '0' && c <= '9')
+                    || (c >= 'A' && c <= 'F')
+                    || (c >= 'a' && c <= 'f')
+                    || (ptr == stPtr && (c == '-' || c == '+'))
+                    )) break;
+                ret += c;
+                ptr++;
+            } while (ptr < src.Length);
+
+            return ret;
         }
 
         private int StoreToneDoublerBuffer(string vals, Line line)
@@ -5550,6 +5719,19 @@ namespace Core
                             mml.type = md.type;
                             mml.line = new Line(md.linePos, "");
                             page.chip.CmdDCSGCh3Freq(page, mml);
+                            break;
+                        case enmMMLType.Y:
+                            ca.WaitCounter = ca.WaitClock;
+                            if (ca.WaitCounter > 0) ca.Infinite = false;
+                            mml = new MML();
+                            mml.args = md.args;
+                            mml.type = md.type;
+                            mml.line = new Line(md.linePos, "");
+                            page.chip.CmdY(page, mml);
+                            break;
+
+                        default:
+                            ;
                             break;
                     }
 
