@@ -29,6 +29,9 @@ namespace Core
             {
                 EmitTable[i] = (int)(EmitTable[i] / (EmitTable[15] / 255.0));
             }
+
+            octaveMin = -1;
+            octaveMax = 9;
         }
 
         protected byte[] SSGPCM_Encode(byte[] buf, bool is16bit)
@@ -2064,8 +2067,13 @@ namespace Core
             if (n < 0)
             {
                 n += 12;
-                o = Common.CheckRange(--o, 1, 8);
+                o--;
             }
+
+            int oo = o;
+            int mul = 0;
+            o = Common.CheckRange(o, 1, 8);
+            if (oo < o || oo > o) mul = oo - o;
 
             //if (n >= 0)
             //{
@@ -2082,6 +2090,8 @@ namespace Core
             //}
 
             int f = ftbl[n];
+            if (mul < 0) f >>= -mul;
+            else f <<= mul;
             f += pitchShift;
 
             return (f & 0xfff) + (o & 0xf) * 0x1000;

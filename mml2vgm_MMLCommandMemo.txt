@@ -748,6 +748,7 @@
 ln              oooooooooooooooooooooooooooooooooooooooooooooooooooooo  デフォルト音長指定
 l#n             oooooooooooooooooooooooooooooooooooooooooooooooooooooo  デフォルト音長指定(クロック値指定)
 on              -ooo-ooooo-oooo-oooo-oooooo-o-ooo-o-o-oo-o---ooooooooo  オクターブ絶対指定(1 - 8)(実際に発音される音は可能な音域のみ)
+on              -ooo---oo---oo---oo----oo-----------------------------  オクターブ絶対指定(-1 - 9)(実際に発音される音は可能な音域のみ)
 on              ---o--------------------------------------------------  オクターブ絶対指定(3 - 5)(実際に発音される音は可能な音域のみ)
 on              ---------------------------o-o------------------------  オクターブ絶対指定(2 - 5)(実際に発音される音は可能な音域のみ)
 on              -------------------------------------------oo---------  オクターブ絶対指定(1 - 16)(実際に発音される音は可能な音域のみ)
@@ -1015,7 +1016,7 @@ f               -ooooooooooooooooooooooooooooooooooooooooooooooooooooo  音符�
 g               -ooooooooooooooooooooooooooooooooooooooooooooooooooooo  音符ソ
 a               -ooooooooooooooooooooooooooooooooooooooooooooooooooooo  音符ラ
 b               -ooooooooooooooooooooooooooooooooooooooooooooooooooooo  音符シ
-x               -ooooooooooooooooooooooooooooooooooooooooooooooooooooo  音符x(直前と同じノートを意味します)
+x               -ooooooooooooooooooooooooooooooooooooooooooooooooooooo  音符x(直前と同じノートを意味します。但し、ベンドした場合はその時の開始音が対象になります)
     +           -ooooooooooooooooooooooooooooooooooooooooooooooooooooo  半音上げる
     -           -ooooooooooooooooooooooooooooooooooooooooooooooooooooo  半音下げる
     \n\         -ooooooooooooooooooooooooooooooooooooooooooooooooooooo  ピッチシフト

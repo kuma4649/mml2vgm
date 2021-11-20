@@ -1420,11 +1420,14 @@ namespace Core
             relVol.Add(page.ch, (int)mml.args[0]);
         }
 
+        public int octaveMin { get; set; } = 1;
+        public int octaveMax { get; set; } = 8;
+
         public virtual void CmdOctave(partPage page, MML mml)
         {
             int n;
             n = (mml.args != null && mml.args.Count > 0) ? (int)mml.args[0] : page.latestOctave;
-            page.octaveNew = Common.CheckRange(n, 1, 8);
+            page.octaveNew = Common.CheckRange(n, octaveMin, octaveMax);
             page.latestOctave = n;
 
             MML vmml = new MML();
@@ -1438,7 +1441,7 @@ namespace Core
         public virtual void CmdOctaveUp(partPage page, MML mml)
         {
             page.octaveNew += parent.info.octaveRev ? -1 : 1;
-            page.octaveNew = Common.CheckRange(page.octaveNew, 1, 8);
+            page.octaveNew = Common.CheckRange(page.octaveNew, octaveMin, octaveMax);
 
             MML vmml = new MML();
             vmml.type = enmMMLType.Octave;
@@ -1451,7 +1454,7 @@ namespace Core
         public virtual void CmdOctaveDown(partPage page, MML mml)
         {
             page.octaveNew += parent.info.octaveRev ? 1 : -1;
-            page.octaveNew = Common.CheckRange(page.octaveNew, 1, 8);
+            page.octaveNew = Common.CheckRange(page.octaveNew, octaveMin, octaveMax);
 
             MML vmml = new MML();
             vmml.type = enmMMLType.Octave;

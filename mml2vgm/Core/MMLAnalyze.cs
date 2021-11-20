@@ -728,7 +728,7 @@ namespace Core
             mml.type = enmMMLType.Octave;
             if (pw.getNum(page, out int n))
             {
-                n = Common.CheckRange(n, 0, 10);
+                n = Common.CheckRange(n, -2, 10);
                 mml.args = new List<object>();
                 mml.args.Add(n);
             }

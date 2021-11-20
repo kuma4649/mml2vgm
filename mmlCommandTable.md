@@ -599,6 +599,7 @@
 - Format  
     on  
 - 設定可能範囲  
+    n : -1 ～ 9  
     n : 1 ～ 8  
     n : 3 ～ 5 ( OPN2 PCMmode(現在は使用できません) )  
     n : 2 ～ 5 ( SEGAPCM , C140 )  
