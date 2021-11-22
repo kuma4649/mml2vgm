@@ -1,4 +1,7 @@
 更新履歴
+TAG561 2021/11/23
+  IDE:mucomDotNET更新
+
 TAG560 2021/11/20
   Core:OPNのオクターブを-1～9へ拡張
   (Thanx! D.M.88さん!)
