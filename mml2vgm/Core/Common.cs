@@ -490,6 +490,7 @@ namespace Core
                 || typ == enmMMLType.Lyric
                 || typ == enmMMLType.Lfo
                 || typ == enmMMLType.TraceUpdateStack
+                || typ == enmMMLType.PartColor
                 )
             {
                 return true;
