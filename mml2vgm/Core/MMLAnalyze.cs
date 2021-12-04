@@ -88,6 +88,7 @@ namespace Core
 
             while (!page.dataEnd)
             {
+                pw.ClearMoveAlies();
                 char cmd = pw.getChar(page);
                 if (cmd == 0) page.dataEnd = true;
                 else
@@ -3240,6 +3241,10 @@ namespace Core
                 note.chordSw = true;
             }
 
+            if (pw.doMoveAlies)
+            {
+                mml.line.Lp.length = pw.doMoveAliesCnt + 1;
+            }
         }
 
         private void GetLength(partWork pw, partPage page, MML mml, out int n)

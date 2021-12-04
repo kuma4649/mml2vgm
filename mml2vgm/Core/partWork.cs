@@ -42,6 +42,12 @@ namespace Core
 
 
         /// <summary>
+        /// エイリアス間の移動があったかを示すフラグをクリアする
+        /// </summary>
+        public bool doMoveAlies = false;
+        public int doMoveAliesCnt = 0;
+
+        /// <summary>
         /// パート情報をリセットする
         /// </summary>
         public void resetPos(partPage page)
@@ -124,6 +130,15 @@ namespace Core
         }
 
         /// <summary>
+        /// エイリアス間の移動があったかを示すフラグをクリアする
+        /// </summary>
+        public void ClearMoveAlies()
+        {
+            doMoveAlies = false;
+            doMoveAliesCnt = 0;
+        }
+
+        /// <summary>
         /// 解析位置を一つ進める(重い！)
         /// </summary>
         public void incPos(partPage page)
@@ -180,6 +195,9 @@ namespace Core
             }
 
             page.pos.tCol = tCol;
+            if (page.pos.alies != page.LstPos[i - 1].alies)
+                page.pw.doMoveAlies = true;
+            else if (!page.pw.doMoveAlies) page.pw.doMoveAliesCnt++;
             page.pos.alies = page.LstPos[i - 1].alies;
             page.pos.col = page.LstPos[i - 1].col + tCol - page.LstPos[i - 1].tCol;
             page.pos.row = page.LstPos[i - 1].row;
@@ -318,7 +336,8 @@ namespace Core
                         ali.aliesNextName = a;//飛び先となるエイリアス名
                         ali.aliesDepth = page.stackAliesPos.Count+1;
                         //ali.nextDepth = page.stackAliesPos.Count + 1;
-                        ali.row = page.pData[row].Lp.row;
+                        if (aliesName == "") ali.row = page.pData[row].Lp.row;
+                        else ali.row = aData[aliesName].Lp.row;
                         ali.col = col + pCol;
                         ali.length = a.Length + 1;
 
