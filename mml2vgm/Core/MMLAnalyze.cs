@@ -3952,7 +3952,7 @@ namespace Core
                 //ノート系のみ対象
                 if (page.mmlData[i].type != enmMMLType.Note
                     && page.mmlData[i].type != enmMMLType.Rest
-                    && page.mmlData[i].type != enmMMLType.Bend
+                    //&& page.mmlData[i].type != enmMMLType.Bend
                     && page.mmlData[i].type != enmMMLType.ToneDoubler)
                 {
                     continue;
@@ -3971,7 +3971,7 @@ namespace Core
                     //ノート系のみ対象
                     if (page.mmlData[j].type != enmMMLType.Note
                         && page.mmlData[j].type != enmMMLType.Rest
-                        && page.mmlData[j].type != enmMMLType.Bend
+                        //&& page.mmlData[j].type != enmMMLType.Bend
                         && page.mmlData[j].type != enmMMLType.ToneDoubler)
                     {
                         continue;
