@@ -243,6 +243,8 @@ E05080=Unknown command ('PO?') defined.
 E05081='[|' cannot be nested.
 E05082=A '|' has been specified even though you have not started a part-wise replacement.
 E05083=A '|]' has been specified even though you have not started a part-wise replacement.
+E05084=The other cannot be executed during part replacement or part arpeggio.
+E05085=Unknown command ('TTO?') defined.
 
 
 ;partWork.cs 06000
@@ -317,6 +319,7 @@ E10044=This channel can't use HS command.
 E10045=This channel can't use PRV command.
 E10046=This channel can't use FM command.
 E10047=Use the POx command to initialize the system before using the __ command.
+E10048=This channel can't use TTON/TTOF command.
 
 
 ;clsOPN.cs 11000
@@ -330,6 +333,7 @@ E11006=There are 4 | 1 parameters for the KD command.
 E11007=A non-numeric value has been specified for the KD command parameter.
 E11008=Sound patch does not exist as PCM definition({0}).
 E11009=Selected Tone number({0}) is not for {1} PCM data.
+E11010=Unknown command defined. (TTON/TTOF)
 
 
 ;HuC6280.cs 12000

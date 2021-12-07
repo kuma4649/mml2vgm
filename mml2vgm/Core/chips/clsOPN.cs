@@ -1540,122 +1540,30 @@ namespace Core
                 return;
             }
 
-            if (!page.pcm)
+            if (!page.pcm)//FM KeyON
             {
-                if (!(page.chip is YM2609))
+                OutFmKeyOnMain(page, mml, n);
+                return;
+            }
+
+            OutFmKeyOnPCMSide(page, mml);
+        }
+
+        private void OutFmKeyOnMain(partPage page, MML mml, int n)
+        {
+            if (!(page.chip is YM2609))
+            {
+                if (page.chip.lstPartWork[2].apg.Ch3SpecialMode && page.Type == enmChannelType.FMOPNex)
                 {
-                    if (page.chip.lstPartWork[2].apg.Ch3SpecialMode && page.Type == enmChannelType.FMOPNex)
+                    page.Ch3SpecialModeKeyOn = true;
+
+                    int slot = (page.chip.lstPartWork[2].apg.Ch3SpecialModeKeyOn ? page.chip.lstPartWork[2].apg.slots : 0x0)
+                        | (page.chip.lstPartWork[n + 3].apg.Ch3SpecialModeKeyOn ? page.chip.lstPartWork[n + 3].apg.slots : 0x0)
+                        | (page.chip.lstPartWork[n + 4].apg.Ch3SpecialModeKeyOn ? page.chip.lstPartWork[n + 4].apg.slots : 0x0)
+                        | (page.chip.lstPartWork[n + 5].apg.Ch3SpecialModeKeyOn ? page.chip.lstPartWork[n + 5].apg.slots : 0x0);
+
+                    if (page.chip is YM2612X)
                     {
-                        page.Ch3SpecialModeKeyOn = true;
-
-                        int slot = (page.chip.lstPartWork[2].apg.Ch3SpecialModeKeyOn ? page.chip.lstPartWork[2].apg.slots : 0x0)
-                            | (page.chip.lstPartWork[n + 3].apg.Ch3SpecialModeKeyOn ? page.chip.lstPartWork[n + 3].apg.slots : 0x0)
-                            | (page.chip.lstPartWork[n + 4].apg.Ch3SpecialModeKeyOn ? page.chip.lstPartWork[n + 4].apg.slots : 0x0)
-                            | (page.chip.lstPartWork[n + 5].apg.Ch3SpecialModeKeyOn ? page.chip.lstPartWork[n + 5].apg.slots : 0x0);
-
-                        if (page.chip is YM2612X)
-                        {
-                            outDatum od = new outDatum();
-                            od.val = (byte)((slot << 4) + 2);
-                            if (mml != null)
-                            {
-                                od.type = mml.type;
-                                if (mml.line != null && mml.line.Lp != null)
-                                {
-                                    od.linePos = new LinePos(
-                                        mml.line.Lp.document,
-                                        mml.line.Lp.srcMMLID,
-                                        mml.line.Lp.row,
-                                        mml.line.Lp.col,
-                                        mml.line.Lp.length,
-                                        mml.line.Lp.part,
-                                        mml.line.Lp.chip,
-                                        mml.line.Lp.chipIndex,
-                                        mml.line.Lp.chipNumber,
-                                        mml.line.Lp.ch);
-                                }
-                            }
-
-                            parent.xgmKeyOnData.Add(od);
-                        }
-                        else
-                        {
-                            if (!page.keyOnDelay.sw)
-                            {
-                                SOutData(page, mml, page.port[0], 0x28, (byte)((slot << 4) + (2 & 7)));
-                            }
-                            else
-                            {
-                                SOutData(page, mml, page.port[0], 0x28, (byte)((page.keyOnDelay.keyOn << 4) + (2 & 7)));
-                                page.keyOnDelay.beforekeyOn = page.keyOnDelay.keyOn;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        if (page.ch >= 0 && page.ch < n + 3)
-                        {
-                            byte vch = (byte)((page.ch > 2) ? page.ch + 1 : page.ch);
-                            if (page.chip is YM2612X)
-                            {
-                                outDatum od = new outDatum();
-                                if (!page.keyOnDelay.sw)
-                                {
-                                    od.val = (byte)((page.slots << 4) + (vch & 7));
-                                }
-                                else
-                                {
-                                    od.val = (byte)((page.keyOnDelay.keyOn << 4) + (vch & 7));
-                                    page.keyOnDelay.beforekeyOn = 0xff;
-                                }
-                                if (mml != null)
-                                {
-                                    od.type = mml.type;
-                                    if (mml.line != null && mml.line.Lp != null)
-                                    {
-                                        od.linePos = new LinePos(
-                                            mml.line.Lp.document,
-                                            mml.line.Lp.srcMMLID,
-                                            mml.line.Lp.row,
-                                            mml.line.Lp.col,
-                                            mml.line.Lp.length,
-                                            mml.line.Lp.part,
-                                            mml.line.Lp.chip,
-                                            mml.line.Lp.chipIndex,
-                                            mml.line.Lp.chipNumber,
-                                            mml.line.Lp.ch);
-                                    }
-                                }
-
-                                parent.xgmKeyOnData.Add(od);
-                            }
-                            else
-                            {
-                                //key on
-                                if (!page.keyOnDelay.sw)
-                                {
-                                    SOutData(page, mml, page.port[0], 0x28, (byte)((page.slots << 4) + (vch & 7)));
-                                }
-                                else
-                                {
-                                    SOutData(page, mml, page.port[0], 0x28, (byte)((page.keyOnDelay.keyOn << 4) + (vch & 7)));
-                                    page.keyOnDelay.beforekeyOn = page.keyOnDelay.keyOn;
-                                }
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    if ((page.ch == 2 || page.ch == 12 || page.ch == 13 || page.ch == 14) && page.chip.lstPartWork[2].apg.Ch3SpecialMode)
-                    {
-                        page.Ch3SpecialModeKeyOn = true;
-
-                        int slot = (page.chip.lstPartWork[2].apg.Ch3SpecialModeKeyOn ? page.chip.lstPartWork[2].apg.slots : 0x0)
-                            | (page.chip.lstPartWork[12].apg.Ch3SpecialModeKeyOn ? page.chip.lstPartWork[12].apg.slots : 0x0)
-                            | (page.chip.lstPartWork[13].apg.Ch3SpecialModeKeyOn ? page.chip.lstPartWork[13].apg.slots : 0x0)
-                            | (page.chip.lstPartWork[14].apg.Ch3SpecialModeKeyOn ? page.chip.lstPartWork[14].apg.slots : 0x0);
-
                         outDatum od = new outDatum();
                         od.val = (byte)((slot << 4) + 2);
                         if (mml != null)
@@ -1676,26 +1584,218 @@ namespace Core
                                     mml.line.Lp.ch);
                             }
                         }
-                        ((YM2609)page.chip).opna20x028KeyOnData.Add(od);
 
+                        if (page.RR15sw)
+                        {
+                            if (page.RR15 == 0) SetRR15(page, mml, slot);
+                            ResetRR15(page, mml, slot);
+                        }
+                        parent.xgmKeyOnData.Add(od);
                     }
-                    else if ((page.ch == 8 || page.ch == 15 || page.ch == 16 || page.ch == 17) && page.chip.lstPartWork[8].apg.Ch3SpecialMode)
+                    else
                     {
-                        page.Ch3SpecialModeKeyOn = true;
-
-                        int slot = (page.chip.lstPartWork[8].apg.Ch3SpecialModeKeyOn ? page.chip.lstPartWork[8].apg.slots : 0x0)
-                            | (page.chip.lstPartWork[15].apg.Ch3SpecialModeKeyOn ? page.chip.lstPartWork[15].apg.slots : 0x0)
-                            | (page.chip.lstPartWork[16].apg.Ch3SpecialModeKeyOn ? page.chip.lstPartWork[16].apg.slots : 0x0)
-                            | (page.chip.lstPartWork[17].apg.Ch3SpecialModeKeyOn ? page.chip.lstPartWork[17].apg.slots : 0x0);
-
-                        outDatum od = new outDatum();
                         if (!page.keyOnDelay.sw)
                         {
-                            od.val = (byte)((slot << 4) + 2);
+                            if (page.RR15sw)
+                            {
+                                if (page.RR15 == 0) SetRR15(page, mml, slot);
+                                ResetRR15(page, mml, slot);
+                            }
+                            SOutData(page, mml, page.port[0], 0x28, (byte)((slot << 4) + (2 & 7)));
                         }
                         else
                         {
-                            od.val = (byte)((page.keyOnDelay.keyOn << 4) + 2);
+                            SOutData(page, mml, page.port[0], 0x28, (byte)((page.keyOnDelay.keyOn << 4) + (2 & 7)));
+                            page.keyOnDelay.beforekeyOn = page.keyOnDelay.keyOn;
+                        }
+                    }
+                }
+                else
+                {
+                    if (page.ch >= 0 && page.ch < n + 3)
+                    {
+                        byte vch = (byte)((page.ch > 2) ? page.ch + 1 : page.ch);
+                        if (page.chip is YM2612X)
+                        {
+                            outDatum od = new outDatum();
+                            if (!page.keyOnDelay.sw)
+                            {
+                                od.val = (byte)((page.slots << 4) + (vch & 7));
+                            }
+                            else
+                            {
+                                od.val = (byte)((page.keyOnDelay.keyOn << 4) + (vch & 7));
+                                page.keyOnDelay.beforekeyOn = 0xff;
+                            }
+                            if (mml != null)
+                            {
+                                od.type = mml.type;
+                                if (mml.line != null && mml.line.Lp != null)
+                                {
+                                    od.linePos = new LinePos(
+                                        mml.line.Lp.document,
+                                        mml.line.Lp.srcMMLID,
+                                        mml.line.Lp.row,
+                                        mml.line.Lp.col,
+                                        mml.line.Lp.length,
+                                        mml.line.Lp.part,
+                                        mml.line.Lp.chip,
+                                        mml.line.Lp.chipIndex,
+                                        mml.line.Lp.chipNumber,
+                                        mml.line.Lp.ch);
+                                }
+                            }
+
+                            if (page.RR15sw)
+                            {
+                                if (page.RR15 == 0) SetRR15(page, mml, page.slots);
+                                ResetRR15(page, mml, page.slots);
+                            }
+                            parent.xgmKeyOnData.Add(od);
+                        }
+                        else
+                        {
+                            //key on
+                            if (!page.keyOnDelay.sw)
+                            {
+                                if (page.RR15sw)
+                                {
+                                    if (page.RR15 == 0) SetRR15(page, mml, page.slots);
+                                    ResetRR15(page, mml, page.slots);
+                                }
+                                SOutData(page, mml, page.port[0], 0x28, (byte)((page.slots << 4) + (vch & 7)));
+                            }
+                            else
+                            {
+                                SOutData(page, mml, page.port[0], 0x28, (byte)((page.keyOnDelay.keyOn << 4) + (vch & 7)));
+                                page.keyOnDelay.beforekeyOn = page.keyOnDelay.keyOn;
+                            }
+                        }
+                    }
+                }
+            }
+            else
+            {
+                if ((page.ch == 2 || page.ch == 12 || page.ch == 13 || page.ch == 14) && page.chip.lstPartWork[2].apg.Ch3SpecialMode)
+                {
+                    page.Ch3SpecialModeKeyOn = true;
+
+                    int slot = (page.chip.lstPartWork[2].apg.Ch3SpecialModeKeyOn ? page.chip.lstPartWork[2].apg.slots : 0x0)
+                        | (page.chip.lstPartWork[12].apg.Ch3SpecialModeKeyOn ? page.chip.lstPartWork[12].apg.slots : 0x0)
+                        | (page.chip.lstPartWork[13].apg.Ch3SpecialModeKeyOn ? page.chip.lstPartWork[13].apg.slots : 0x0)
+                        | (page.chip.lstPartWork[14].apg.Ch3SpecialModeKeyOn ? page.chip.lstPartWork[14].apg.slots : 0x0);
+
+                    outDatum od = new outDatum();
+                    od.val = (byte)((slot << 4) + 2);
+                    if (mml != null)
+                    {
+                        od.type = mml.type;
+                        if (mml.line != null && mml.line.Lp != null)
+                        {
+                            od.linePos = new LinePos(
+                                mml.line.Lp.document,
+                                mml.line.Lp.srcMMLID,
+                                mml.line.Lp.row,
+                                mml.line.Lp.col,
+                                mml.line.Lp.length,
+                                mml.line.Lp.part,
+                                mml.line.Lp.chip,
+                                mml.line.Lp.chipIndex,
+                                mml.line.Lp.chipNumber,
+                                mml.line.Lp.ch);
+                        }
+                    }
+                    ((YM2609)page.chip).opna20x028KeyOnData.Add(od);
+
+                }
+                else if ((page.ch == 8 || page.ch == 15 || page.ch == 16 || page.ch == 17) && page.chip.lstPartWork[8].apg.Ch3SpecialMode)
+                {
+                    page.Ch3SpecialModeKeyOn = true;
+
+                    int slot = (page.chip.lstPartWork[8].apg.Ch3SpecialModeKeyOn ? page.chip.lstPartWork[8].apg.slots : 0x0)
+                        | (page.chip.lstPartWork[15].apg.Ch3SpecialModeKeyOn ? page.chip.lstPartWork[15].apg.slots : 0x0)
+                        | (page.chip.lstPartWork[16].apg.Ch3SpecialModeKeyOn ? page.chip.lstPartWork[16].apg.slots : 0x0)
+                        | (page.chip.lstPartWork[17].apg.Ch3SpecialModeKeyOn ? page.chip.lstPartWork[17].apg.slots : 0x0);
+
+                    outDatum od = new outDatum();
+                    if (!page.keyOnDelay.sw)
+                    {
+                        od.val = (byte)((slot << 4) + 2);
+                    }
+                    else
+                    {
+                        od.val = (byte)((page.keyOnDelay.keyOn << 4) + 2);
+                        page.keyOnDelay.beforekeyOn = 0xff;
+                    }
+                    if (mml != null)
+                    {
+                        od.type = mml.type;
+                        if (mml.line != null && mml.line.Lp != null)
+                        {
+                            od.linePos = new LinePos(
+                                mml.line.Lp.document,
+                                mml.line.Lp.srcMMLID,
+                                mml.line.Lp.row,
+                                mml.line.Lp.col,
+                                mml.line.Lp.length,
+                                mml.line.Lp.part,
+                                mml.line.Lp.chip,
+                                mml.line.Lp.chipIndex,
+                                mml.line.Lp.chipNumber,
+                                mml.line.Lp.ch);
+                        }
+                    }
+                    ((YM2609)page.chip).opna20x228KeyOnData.Add(od);
+                }
+                else
+                {
+                    if (page.ch >= 0 && page.ch < 6)
+                    {
+                        byte vch = (byte)((page.ch > 2) ? page.ch + 1 : page.ch);
+                        //key on
+                        outDatum od = new outDatum();
+                        if (!page.keyOnDelay.sw)
+                        {
+                            od.val = (byte)((page.slots << 4) + (vch & 7));
+                        }
+                        else
+                        {
+                            od.val = (byte)((page.keyOnDelay.keyOn << 4) + (vch & 7));
+                            page.keyOnDelay.beforekeyOn = 0xff;
+                        }
+                        if (mml != null)
+                        {
+                            od.type = mml.type;
+                            if (mml.line != null && mml.line.Lp != null)
+                            {
+                                od.linePos = new LinePos(
+                                    mml.line.Lp.document,
+                                    mml.line.Lp.srcMMLID,
+                                    mml.line.Lp.row,
+                                    mml.line.Lp.col,
+                                    mml.line.Lp.length,
+                                    mml.line.Lp.part,
+                                    mml.line.Lp.chip,
+                                    mml.line.Lp.chipIndex,
+                                    mml.line.Lp.chipNumber,
+                                    mml.line.Lp.ch);
+                            }
+                        }
+                        ((YM2609)page.chip).opna20x028KeyOnData.Add(od);
+                    }
+                    else if (page.ch >= 6 && page.ch < 12)
+                    {
+                        byte vch = (byte)(page.ch - 6);
+                        vch = (byte)(((vch > 2) ? (vch + 1) : vch));
+                        //key on
+                        outDatum od = new outDatum();
+                        if (!page.keyOnDelay.sw)
+                        {
+                            od.val = (byte)((page.slots << 4) + (vch & 7));
+                        }
+                        else
+                        {
+                            od.val = (byte)((page.keyOnDelay.keyOn << 4) + (vch & 7));
                             page.keyOnDelay.beforekeyOn = 0xff;
                         }
                         if (mml != null)
@@ -1718,84 +1818,39 @@ namespace Core
                         }
                         ((YM2609)page.chip).opna20x228KeyOnData.Add(od);
                     }
-                    else
-                    {
-                        if (page.ch >= 0 && page.ch < 6)
-                        {
-                            byte vch = (byte)((page.ch > 2) ? page.ch + 1 : page.ch);
-                            //key on
-                            outDatum od = new outDatum();
-                            if (!page.keyOnDelay.sw)
-                            {
-                                od.val = (byte)((page.slots << 4) + (vch & 7));
-                            }
-                            else
-                            {
-                                od.val = (byte)((page.keyOnDelay.keyOn << 4) + (vch & 7));
-                                page.keyOnDelay.beforekeyOn = 0xff;
-                            }
-                            if (mml != null)
-                            {
-                                od.type = mml.type;
-                                if (mml.line != null && mml.line.Lp != null)
-                                {
-                                    od.linePos = new LinePos(
-                                        mml.line.Lp.document,
-                                        mml.line.Lp.srcMMLID,
-                                        mml.line.Lp.row,
-                                        mml.line.Lp.col,
-                                        mml.line.Lp.length,
-                                        mml.line.Lp.part,
-                                        mml.line.Lp.chip,
-                                        mml.line.Lp.chipIndex,
-                                        mml.line.Lp.chipNumber,
-                                        mml.line.Lp.ch);
-                                }
-                            }
-                            ((YM2609)page.chip).opna20x028KeyOnData.Add(od);
-                        }
-                        else if (page.ch >= 6 && page.ch < 12)
-                        {
-                            byte vch = (byte)(page.ch - 6);
-                            vch = (byte)(((vch > 2) ? (vch + 1) : vch));
-                            //key on
-                            outDatum od = new outDatum();
-                            if (!page.keyOnDelay.sw)
-                            {
-                                od.val = (byte)((page.slots << 4) + (vch & 7));
-                            }
-                            else
-                            {
-                                od.val = (byte)((page.keyOnDelay.keyOn << 4) + (vch & 7));
-                                page.keyOnDelay.beforekeyOn = 0xff;
-                            }
-                            if (mml != null)
-                            {
-                                od.type = mml.type;
-                                if (mml.line != null && mml.line.Lp != null)
-                                {
-                                    od.linePos = new LinePos(
-                                        mml.line.Lp.document,
-                                        mml.line.Lp.srcMMLID,
-                                        mml.line.Lp.row,
-                                        mml.line.Lp.col,
-                                        mml.line.Lp.length,
-                                        mml.line.Lp.part,
-                                        mml.line.Lp.chip,
-                                        mml.line.Lp.chipIndex,
-                                        mml.line.Lp.chipNumber,
-                                        mml.line.Lp.ch);
-                                }
-                            }
-                            ((YM2609)page.chip).opna20x228KeyOnData.Add(od);
-                        }
-                    }
                 }
-
-                return;
             }
+        }
 
+        protected virtual void SetRR15(partPage page, MML mml, int slot)
+        {
+            for (byte ope = 0; ope < 4; ope++)
+            {
+                if ((slot & (1 << ope)) == 0) continue;
+                ((ClsOPN)page.chip).OutFmSetSlRr(mml, page, ope,
+                    parent.instFM[page.instrument].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 5],
+                    15);
+                //((ClsOPN)page.chip).OutFmSetTl(mml, page, ope,
+                //    127);
+            }
+        }
 
+        protected virtual void ResetRR15(partPage page, MML mml, int slot)
+        {
+            for (byte ope = 0; ope < 4; ope++)
+            {
+                if ((slot & (1 << ope)) == 0) continue;
+                ((ClsOPN)page.chip).OutFmSetSlRr(mml, page, ope,
+                    parent.instFM[page.instrument].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 5],
+                    parent.instFM[page.instrument].Item2[ope * Const.INSTRUMENT_M_OPERATOR_SIZE + 4]);
+            }
+            //page.spg.beforeVolume = -1;
+            //SetFmVolume(page, mml);
+            //OutFmSetTL(page, mml, 0, 0, 0, 0, slot, page.instrument);
+        }
+
+        private void OutFmKeyOnPCMSide(partPage page, MML mml)
+        {
             if (page.isPcmMap)
             {
                 int nt = Const.NOTE.IndexOf(page.noteCmd);
@@ -1853,7 +1908,7 @@ namespace Core
                     if (!page.gatetimeReverse)
                         w = page.waitCounter * page.gatetime / 8L;
                     else
-                        w = page.waitCounter- page.waitCounter * page.gatetime / 8L;
+                        w = page.waitCounter - page.waitCounter * page.gatetime / 8L;
                 }
                 else
                 {
@@ -1969,9 +2024,7 @@ namespace Core
             {
                 parent.instPCM[page.instrument].Item2.status = enmPCMSTATUS.USED;
             }
-
         }
-
 
         public virtual void SetFmFNum(partPage page, MML mml)
         {
@@ -2919,7 +2972,38 @@ namespace Core
             page.spg.beforeVolume = -1;
         }
 
+        public override void CmdRR15(partPage page, MML mml)
+        {
+            if (mml.args == null || (mml.args.Count != 1&& mml.args.Count != 2))
+            {
+                msgBox.setErrMsg(msg.get("E11010")
+                    , mml.line.Lp);
+                return;
+            }
 
+            if(!(mml.args[0] is bool))
+            {
+                msgBox.setErrMsg(msg.get("E11010")
+                    , mml.line.Lp);
+                return;
+            }
+
+            page.RR15sw = (bool)mml.args[0];
+            if (mml.args.Count == 2)
+            {
+                page.RR15 = (int)mml.args[1];
+            }
+
+            if (!page.RR15sw)
+            {
+                ResetRR15(page, mml, page.slots);
+            }
+        }
+
+        public override void SetRR15(partPage page)
+        {
+            SetRR15(page, null, page.slots);
+        }
 
         public override void SetupPageData(partWork pw, partPage page)
         {

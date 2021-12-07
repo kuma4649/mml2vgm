@@ -8,6 +8,10 @@ namespace Core
         public char cmd = 'r';
         public int length = 0;
 
+        /// <summary>
+        /// 次が音符かどうか(RR15処理用)
+        /// </summary>
+        public bool nextIsNote { get; internal set; }
     }
 
     public class Note : Rest
@@ -61,6 +65,8 @@ namespace Core
             n.addLength = this.addLength;
             n.trueKeyOn = this.trueKeyOn;
 
+            n.nextIsNote = this.nextIsNote;
+            
             return n;
         }
     }

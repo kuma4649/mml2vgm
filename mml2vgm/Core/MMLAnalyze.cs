@@ -52,6 +52,7 @@ namespace Core
                             pw.setPos(page, 0);
                             page.PartName = pw.pg[0].PartName;
                             page.waitKeyOnCounter = -1;
+                            page.waitRR15Counter = -1;
                             page.waitCounter = 0;
                             page.freq = -1;
 
@@ -366,9 +367,9 @@ namespace Core
                     log.Write(" lfo switch or system effect");
                     CmdLfoSwitchOrSystemEffect(pw, page, mml);
                     break;
-                case 'T': // tempo
+                case 'T': // tempo or RR15 send mode
                     log.Write(" tempo");
-                    CmdTempo(pw, page, mml);
+                    CmdTempoOrRR15(pw, page, mml);
                     break;
                 case 'U': // velocity
                     log.Write("velocity");
@@ -462,9 +463,19 @@ namespace Core
             }
         }
 
-        private void CmdTempo(partWork pw, partPage page, MML mml)
+        private void CmdTempoOrRR15(partWork pw, partPage page, MML mml)
         {
             pw.incPos(page);
+            if (pw.getChar(page) == 'T') //TT
+            {
+                CmdRR15(pw, page, mml);
+                return;
+            }
+            CmdTempo(pw, page, mml);
+        }
+
+        private void CmdTempo(partWork pw, partPage page, MML mml)
+        {
             if (!pw.getNum(page, out int n))
             {
                 msgBox.setErrMsg(msg.get("E05001"), mml.line.Lp);
@@ -476,6 +487,42 @@ namespace Core
             mml.args = new List<object>();
             mml.args.Add(n);
             mml.args.Add((int)desVGM.info.clockCount);
+        }
+
+        private void CmdRR15(partWork pw, partPage page, MML mml)
+        {
+            pw.incPos(page);
+            if (pw.getChar(page) != 'O') //TTO
+            {
+                msgBox.setErrMsg(msg.get("E05085"), mml.line.Lp);
+                return;
+            }
+
+            pw.incPos(page);
+            if (pw.getChar(page) == 'N') //TTON
+            {
+                mml.type = enmMMLType.RR15;
+                mml.args = new List<object>();
+                mml.args.Add(true);
+                pw.incPos(page);
+                if (pw.getNum(page, out int n))
+                    n = Math.Max(n, 0);
+                else
+                    n = 1;
+                mml.args.Add(n);
+                return;
+            }
+            if (pw.getChar(page) == 'F') //TTOF
+            {
+                mml.type = enmMMLType.RR15;
+                mml.args = new List<object>();
+                mml.args.Add(false);
+                pw.incPos(page);
+                return;
+            }
+
+            msgBox.setErrMsg(msg.get("E05085"), mml.line.Lp);
+            return;
         }
 
         private void CmdVelocity(partWork pw, partPage page, MML mml)
@@ -3897,6 +3944,54 @@ namespace Core
                 {
                     useJumpPoint = true;
                 }
+            }
+
+            //RR15対象かチェック
+            for (int i = 0; i < page.mmlData.Count; i++)
+            {
+                //ノート系のみ対象
+                if (page.mmlData[i].type != enmMMLType.Note
+                    && page.mmlData[i].type != enmMMLType.Rest
+                    && page.mmlData[i].type != enmMMLType.Bend
+                    && page.mmlData[i].type != enmMMLType.ToneDoubler)
+                {
+                    continue;
+                }
+                //タイで繋げる予定のノートの場合は対象外
+                if (page.mmlData[i].type != enmMMLType.Rest)
+                {
+                    Note note = (Note)page.mmlData[i].args[0];
+                    if (note.tieSw) continue;
+                }
+
+                //次のノート系を探す
+                int j = i + 1;
+                for (; j < page.mmlData.Count; j++)
+                {
+                    //ノート系のみ対象
+                    if (page.mmlData[j].type != enmMMLType.Note
+                        && page.mmlData[j].type != enmMMLType.Rest
+                        && page.mmlData[j].type != enmMMLType.Bend
+                        && page.mmlData[j].type != enmMMLType.ToneDoubler)
+                    {
+                        continue;
+                    }
+
+                    if (page.mmlData[j].type == enmMMLType.Rest)
+                    {
+                        j = -1;
+                    }
+                    break;
+                }
+                if (j == page.mmlData.Count) j = -1;
+
+                Rest rest = (Rest)page.mmlData[i].args[0];
+                rest.nextIsNote = false;
+                if (j != -1)
+                {
+                    rest.nextIsNote = true;
+                }
+
             }
         }
 

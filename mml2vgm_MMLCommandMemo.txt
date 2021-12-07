@@ -729,7 +729,7 @@
 ------------------------------------------------------------------------
 @n              -oooo-ooo-oooo--ooo--oooo-ooooo-o-o-o-oo-o-oooooo-oo--  音色番号指定(0 - 255)
 @n1,n2          -------------------------------------------oo---------  音色番号指定(n1:0 - 255 n2:0 - 255) n1:PCM音色番号 n2:1opeFM音色定義番号
-@n              ---oo-----o-----------------o--------------  ---------  PCM Map番号指定(0 - 255)(PCMマッピングモードが有効の時のみ)
+@n              ---oo-----o-----------------o-------------------------  PCM Map番号指定(0 - 255)(PCMマッピングモードが有効の時のみ)
 @In             --------------------------------o---------------------  プリセット音色番号指定(1 - 15)
 @In             -------------------------------------------------o-oo-  Duty比切り替え( Ne,Gb:0 - 4 / Va:0 - 7)
 @n              -----o-------------------------------------oo----o----  PCM音色番号指定(0 - 255)(PCMモード時)
@@ -784,7 +784,7 @@ Vn1,n2          ----------------------------o-------------------------  マス�
 (n              ----------o----o----o---------------------------------  音量相対指定(下げ)(Ta/Pr: 0-31)
 (n              ----------------------------------------------o-------  音量相対指定(下げ)(Q: 0-65535)
 &               oooooooooooooooooooooooooooooooooooooooooooooooooooooo  タイ
-yn1,n2          -ooo-oooooooooooooooooooooooooooooooooooooo  ooooooo--  レジスタ直接書き込み(n1=レジスタ番号 n2=データ)ポートはそのChによる。
+yn1,n2          -ooo-ooooooooooooooooooooooooooooooooooooooooooooooo--  レジスタ直接書き込み(n1=レジスタ番号 n2=データ)ポートはそのChによる。
 yDTML,n1,n2     -ooo---oo---oo---oo----oo-----------------------------  DT,MLレジスタ直接書き込み(n1=OP(1 - 4) n2=データ)ポートはそのChによる。
 yTL,n1,n2       -ooo---oo---oo---oo----oo-----------------------------  TLレジスタ直接書き込み(n1=OP(1 - 4) n2=データ)ポートはそのChによる。
 yKSAR,n1,n2     -ooo---oo---oo---oo----oo-----------------------------  KS,ARレジスタ直接書き込み(n1=OP(1 - 4) n2=データ)ポートはそのChによる。
@@ -889,10 +889,14 @@ Mx1x2n,...      -oo--ooooooooooooooooooooooooooooooooooooooooooooooooo  LFO(
                                                                          DMG     : Mx1Hn1,n2
                                                                                      n1:Sweep Speed(0 ~ 7)
                                                                                      n2:Sweep ShiftCount(-7 ~ 7)
-MAMSn           -oo----oo---oo---oo----oo------------------  ---------  AMS値 音量LFO感度(0-7)
-MAMSn           --------------------------o----------------  ---------  AMS値 音量LFO感度(0-3)
-MPMSn           -oo----oo---oo---oo----oo------------------  ---------  PMS値 音程LFO感度(0-3)
-MPMSn           --------------------------o----------------  ---------  PMS値 音程LFO感度(0-7)
+MAMSn           -oo----oo---oo---oo----oo-----------------------------  AMS値 音量LFO感度(0-7)
+MAMSn           --------------------------o---------------------------  AMS値 音量LFO感度(0-3)
+MPMSn           -oo----oo---oo---oo----oo-----------------------------  PMS値 音程LFO感度(0-3)
+MPMSn           --------------------------o---------------------------  PMS値 音程LFO感度(0-7)
+TTONn           -oo----oo---oo---oo----oo-o---------------------------  キーオン時にRRを15にセットするモードを開始
+                                                                                     n:指定クロック前にRRに15をセットする(0 ~ )
+                                                                                     省略時は1
+TTOF            -oo----oo---oo---oo----oo-o---------------------------  キーオン時にRRを15にセットするモードを停止
 Sx1n            -oo--ooooooooooooooooooooooooooooooooooooooooooooooooo  LFOスイッチ(x1: P/Q/R/S  n: 0(OFF)/1(ON))
 rn              oooooooooooooooooooooooooooooooooooooooooooooooooooooo  休符
 "xxx"n          oooooooooooooooooooooooooooooooooooooooooooooooooooooo  歌詞

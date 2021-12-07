@@ -3455,6 +3455,8 @@ namespace Core
                             {
                                 if (pg.waitKeyOnCounter > 0) pg.waitKeyOnCounter -= waitCounter;
 
+                                if (pg.waitRR15Counter > 0) pg.waitRR15Counter -= waitCounter;
+
                                 if (pg.waitCounter > 0) pg.waitCounter -= waitCounter;
 
                                 if (pg.bendWaitCounter > 0) pg.bendWaitCounter -= waitCounter;
@@ -3554,6 +3556,8 @@ namespace Core
                             //note
                             if (page.waitKeyOnCounter > 0)
                                 waitCounter = Math.Min(waitCounter, page.waitKeyOnCounter);
+                            if (page.waitRR15Counter > 0)
+                                waitCounter = Math.Min(waitCounter, page.waitRR15Counter);
                             if (page.waitCounter > 0)
                                 waitCounter = Math.Min(waitCounter, page.waitCounter);
 
@@ -3696,6 +3700,9 @@ namespace Core
             log.Write("MD stream pcm sound off");
             if (pg.pcmWaitKeyOnCounter == 0)
                 pg.pcmWaitKeyOnCounter = -1;
+
+            log.Write("RR15");
+            ProcRR15(pg);
 
             log.Write("KeyOff");
             if (!isRealTimeMode) ProcKeyOff(pg);
@@ -4538,6 +4545,9 @@ namespace Core
             {
                 foreach (partPage page in pw.pg)
                 {
+                    log.Write("RR15");
+                    ProcRR15(page);
+
                     log.Write("KeyOff");
                     ProcKeyOff(page);
 
@@ -4636,6 +4646,7 @@ namespace Core
                             //note
                             if (page.waitKeyOnCounter > 0) cnt = Math.Min(cnt, page.waitKeyOnCounter);
                             else if (page.waitCounter > 0) cnt = Math.Min(cnt, page.waitCounter);
+                            if (page.waitRR15Counter > 0) cnt = Math.Min(cnt, page.waitRR15Counter);
 
                             //bend
                             if (page.bendWaitCounter != -1) cnt = Math.Min(cnt, page.bendWaitCounter);
@@ -4687,6 +4698,7 @@ namespace Core
                         {
 
                             if (pg.waitKeyOnCounter > 0) pg.waitKeyOnCounter -= cnt;
+                            if (pg.waitRR15Counter > 0) pg.waitRR15Counter -= cnt;
                             if (pg.waitCounter > 0) pg.waitCounter -= cnt;
                             if (pg.bendWaitCounter > 0) pg.bendWaitCounter -= cnt;
 
@@ -5015,6 +5027,17 @@ namespace Core
             return des;
         }
 
+
+        private void ProcRR15(partPage page)
+        {
+            if (page.waitRR15Counter != 0)
+            {
+                return;
+            }
+
+            page.chip.SetRR15(page);
+            page.waitRR15Counter = -1;
+        }
 
         private void ProcKeyOff(partPage page)
         {
@@ -6092,6 +6115,11 @@ namespace Core
                     page.chip.CmdPartArpeggio_End(page, mml);
                     page.mmlPos++;
                     break;
+                case enmMMLType.RR15:
+                    log.Write("RR15");
+                    page.chip.CmdRR15(page, mml);
+                    page.mmlPos++;
+                    break;
                 default:
                     msgBox.setErrMsg(string.Format(msg.get("E01016")
                         , mml.type)
@@ -6161,6 +6189,7 @@ namespace Core
                             {
                                 pg.PartName = chip.Ch[i].Name;
                                 pg.waitKeyOnCounter = -1;
+                                pg.waitRR15Counter = -1;
                                 pg.waitCounter = 0;
                                 pg.freq = -1;
 
@@ -6224,6 +6253,7 @@ namespace Core
                             {
                                 pg.PartName = chip.Ch[i].Name;
                                 pg.waitKeyOnCounter = -1;
+                                pg.waitRR15Counter = -1;
                                 pg.waitCounter = 0;
                                 pg.freq = -1;
 

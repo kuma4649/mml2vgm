@@ -103,6 +103,9 @@ namespace mml2vgmIDE.MMLParameter
                 //60 -                                 
                 SetTraceUpdateStack, null,             null,         null,            null,
                 null,                null,             SetPartColor, null,            null,
+                //70 -                                 
+                null,                null,             null,         null,            null,
+                null,                null,             null,         null,            null,
             };
         }
 

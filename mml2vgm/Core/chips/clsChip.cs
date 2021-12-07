@@ -1996,6 +1996,17 @@ namespace Core
             //if (page.waitKeyOnCounter > page.waitCounter) page.waitKeyOnCounter = page.waitCounter;
             if (page.waitKeyOnCounter < 1) page.waitKeyOnCounter = 1;
 
+            //RR15timeの決定
+            if (page.RR15sw)
+            {
+                page.waitRR15Counter = -1;
+                if (note.nextIsNote)
+                {
+                    page.waitRR15Counter = page.waitCounter - page.RR15;
+                    if (page.waitRR15Counter < 1) page.waitRR15Counter = 1;
+                }
+            }
+
             //タイ指定では無い場合はキーオンする
             if (!page.beforeTie)
             {
@@ -2111,6 +2122,17 @@ namespace Core
 
             page.clockCounter += page.waitCounter;
             SetDummyData(page, mml);
+
+            //RR15timeの決定
+            if (page.RR15sw)
+            {
+                page.waitRR15Counter = -1;
+                if (((Rest)mml.args[0]).nextIsNote)
+                {
+                    page.waitRR15Counter = page.waitCounter - page.RR15;
+                    if (page.waitRR15Counter < 1) page.waitRR15Counter = 1;
+                }
+            }
 
             page.enableInterrupt = true;//割り込み許可
         }
@@ -2468,6 +2490,18 @@ namespace Core
             page.PATie = false;
             page.PATiePos = 0;
 
+        }
+
+        public virtual void CmdRR15(partPage page, MML mml)
+        {
+            msgBox.setErrMsg(msg.get("E10048")
+                    , mml.line.Lp);
+        }
+
+        public virtual void SetRR15(partPage page)
+        {
+            msgBox.setErrMsg(msg.get("E10048")
+                    , null);
         }
     }
 

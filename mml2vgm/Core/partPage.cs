@@ -694,6 +694,8 @@ namespace Core
         public int MPortamentLastNote { get; internal set; } = -1;
         public int MPortamentOneshotSwitch { get; internal set; } = 0;
         public bool replacePartOrPartArpeggio { get; internal set; } = false;
+        public bool RR15sw { get; set; } = false;
+        public int RR15 { get; set; } = 0;
 
         public bool PASwitch = false;
         public int PAIndex = 0;//現在のノートの位置
@@ -703,6 +705,7 @@ namespace Core
         public int PAMode = 0;
         public Note PAnoteOld = null;
         public int PATiePos = 0;
+        public long waitRR15Counter=-1;
 
         public partPage(partWork partwork,partPage sharedPg)
         {
