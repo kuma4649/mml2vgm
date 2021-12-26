@@ -245,8 +245,8 @@ namespace Core
 
             byte cc = 0;
             if (this is YM2203) cc = 0x06;
-            if (this is YM2608) cc = 0x07;
-            if (this is YM2610B) cc = 0x08;
+            else if (this is YM2608) cc = 0x07;
+            else if (this is YM2610B) cc = 0x08;
 
             SOutData(
                 page,

@@ -6,6 +6,9 @@ using System.IO;
 using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
+using System.Runtime.InteropServices;
+using System.Diagnostics;
+using System.Collections;
 
 namespace mml2vgmIDE
 {
@@ -438,5 +441,143 @@ namespace mml2vgmIDE
 
             return prm;
         }
+
+
+
+
+
+        /// 参考URL：
+        /// dobon.net ウィンドウのタイトルからプロセスを探す
+        /// https://dobon.net/vb/dotnet/process/getprocessesbywindowtitle.html
+        /// 
+
+
+        ///// <summary>
+        ///// エントリポイント
+        ///// </summary>
+        //public static void Main()
+        //{
+
+
+        //    //ウィンドウのタイトルに「メモ帳」を含むプロセスをすべて取得する
+        //    Tuple<Int64, Process>[] ps = GetProcessesByWindow("YorkTrail", null);
+
+        //    //結果を表示する
+        //    foreach (Tuple<Int64, Process> p in ps)
+        //    {
+        //        Console.WriteLine("プロセス名:" + p.Item2.ProcessName);
+        //        Console.WriteLine("プロセスID:" + p.Item2.Id);
+        //        Console.WriteLine("ウィンドウタイトル:" + p.Item2.MainWindowTitle);
+        //        Console.WriteLine("ウィンドウHandle:" + p.Item1);
+        //    }
+
+        //    Console.WriteLine("終了しました。");
+        //    Console.ReadLine();
+        //}
+
+        /// <summary>
+        /// 指定された文字列をウィンドウのタイトルとクラス名に含んでいるプロセスを
+        /// すべて取得する。
+        /// </summary>
+        /// <param name="windowText">ウィンドウのタイトルに含むべき文字列。
+        /// nullを指定すると、classNameだけで検索する。</param>
+        /// <param name="className">ウィンドウが属するクラス名に含むべき文字列。
+        /// nullを指定すると、windowTextだけで検索する。</param>
+        /// <returns>見つかったプロセスの配列。</returns>
+        public static Tuple<Int64, Process>[] GetProcessesByWindow(
+            string windowText, string className)
+        {
+            //検索の準備をする
+            foundProcesses = new ArrayList();
+            foundProcessIds = new ArrayList();
+            searchWindowText = windowText;
+            searchClassName = className;
+
+            //ウィンドウを列挙して、対象のプロセスを探す
+            EnumWindows(new EnumWindowsDelegate(EnumWindowCallBack), IntPtr.Zero);
+
+            //結果を返す
+            return (Tuple<Int64, Process>[])foundProcesses.ToArray(typeof(Tuple<Int64, Process>));
+        }
+
+        private static string searchWindowText = null;
+        private static string searchClassName = null;
+        private static ArrayList foundProcessIds = null;
+        private static ArrayList foundProcesses = null;
+
+        private delegate bool EnumWindowsDelegate(IntPtr hWnd, IntPtr lparam);
+
+        [DllImport("user32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        private extern static bool EnumWindows(EnumWindowsDelegate lpEnumFunc,
+            IntPtr lparam);
+
+        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        private static extern int GetWindowText(IntPtr hWnd,
+            StringBuilder lpString, int nMaxCount);
+
+        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        private static extern int GetWindowTextLength(IntPtr hWnd);
+
+        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        private static extern int GetClassName(IntPtr hWnd,
+            StringBuilder lpClassName, int nMaxCount);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        private static extern int GetWindowThreadProcessId(
+            IntPtr hWnd, out int lpdwProcessId);
+
+        private static bool EnumWindowCallBack(IntPtr hWnd, IntPtr lparam)
+        {
+            if (searchWindowText != null)
+            {
+                //ウィンドウのタイトルの長さを取得する
+                int textLen = GetWindowTextLength(hWnd);
+                if (textLen == 0)
+                {
+                    //次のウィンドウを検索
+                    return true;
+                }
+                //ウィンドウのタイトルを取得する
+                StringBuilder tsb = new StringBuilder(textLen + 1);
+                GetWindowText(hWnd, tsb, tsb.Capacity);
+                //タイトルに指定された文字列を含むか
+                if (tsb.ToString().IndexOf(searchWindowText) < 0)
+                {
+                    //含んでいない時は、次のウィンドウを検索
+                    return true;
+                }
+            }
+
+            if (searchClassName != null)
+            {
+                //ウィンドウのクラス名を取得する
+                StringBuilder csb = new StringBuilder(256);
+                GetClassName(hWnd, csb, csb.Capacity);
+                //クラス名に指定された文字列を含むか
+                if (csb.ToString().IndexOf(searchClassName) < 0)
+                {
+                    //含んでいない時は、次のウィンドウを検索
+                    return true;
+                }
+            }
+
+            //プロセスのIDを取得する
+            int processId;
+
+            GetWindowThreadProcessId(hWnd, out processId);
+            //今まで見つかったプロセスでは無いことを確認する
+            if (!foundProcessIds.Contains(processId))
+            {
+                foundProcessIds.Add(processId);
+                //プロセスIDをからProcessオブジェクトを作成する
+                foundProcesses.Add(new Tuple<Int64, Process>(hWnd.ToInt64(), Process.GetProcessById(processId)));
+            }
+
+            //次のウィンドウを検索
+            return true;
+        }
+
+
     }
 }

@@ -1,4 +1,9 @@
 更新履歴
+TAG567 2021/12/26
+  IDE:Script:GetWhndを追加。
+  指定した名前のアプリケーションのWindowHandleが取得できます。
+  IDE:余りにも追いにくい＆不具合、要望の多いMute関連処理を改めてコーディング中...orz
+
 TAG566 2021/12/08
   Core:OPN系:TTON/TTOFコマンド追加
 

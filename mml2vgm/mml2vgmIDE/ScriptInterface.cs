@@ -5,6 +5,7 @@ using Microsoft.Scripting.Hosting;
 using Microsoft.Scripting.Hosting.Providers;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -430,6 +431,13 @@ namespace mml2vgmIDE
                 + (FileInformation.format == enmFormat.VGM ? ".vgm" : (FileInformation.format == enmFormat.XGM ? ".xgm" : ".zgm"))
                 );
             return (parent.isSuccess && msgBox.getErr().Length < 1) ? sf : "";
+        }
+
+        public Int64 getWhnd(string applicationName)
+        {
+            Tuple<Int64,Process>[] ret= Common.GetProcessesByWindow(applicationName, null);
+            if (ret == null || ret.Length < 1) return 0;
+            return ret[0].Item1;
         }
     }
 }

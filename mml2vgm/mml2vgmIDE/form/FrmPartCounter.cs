@@ -293,6 +293,7 @@ namespace mml2vgmIDE
                 if (c.Name == "ClmChipNumber") continue;
                 if (c.Name == "ClmPartNumber") continue;
                 if (c.Name == "ClmchipNumber") continue;
+                if (c.Name == "ClmMuteMngKey") continue;
 
                 cmsMenu.Items.Add(c.HeaderText);
                 cmsMenu.Items[cmsMenu.Items.Count - 1].Tag = c.Tag;
@@ -332,6 +333,8 @@ namespace mml2vgmIDE
                 if (c.Name == "ClmChipNumber") continue;
                 if (c.Name == "ClmPartNumber") continue;
                 if (c.Name == "ClmchipNumber") continue;
+                if (c.Name == "ClmMuteMngKey") continue;
+
                 c.Visible = true;
                 c.Width = Math.Max(c.Width, 10);
             }
@@ -377,6 +380,7 @@ namespace mml2vgmIDE
             r.Cells[dgvPartCounter.Columns["ClmChip"].Index].Value = cells[4];
             r.Cells[dgvPartCounter.Columns["ClmCOunter"].Index].Value = cells[5];
             r.Cells[dgvPartCounter.Columns["ClmLoopCounter"].Index].Value = cells[6];
+            r.Cells[dgvPartCounter.Columns["ClmMuteMngKey"].Index].Value = cells[7];
 
 
             //mute状態を復帰する
@@ -493,6 +497,38 @@ namespace mml2vgmIDE
             return ret.ToArray();
         }
 
+        private Tuple<string,string,string,bool>[] colName = new Tuple<string, string,string,bool>[] {
+            new Tuple<string,string,string,bool>("text","ClmMuteMngKey" ,"mmKey"      ,false),
+            new Tuple<string,string,string,bool>("text","ClmMute"       ,"M"          ,true ),
+            new Tuple<string,string,string,bool>("text","ClmSolo"       ,"S"          ,true ),
+            new Tuple<string,string,string,bool>("text","ClmPush"       ,"P"          ,false),
+            new Tuple<string,string,string,bool>("text","ClmKBDAssign"  ,"KBD"        ,true ),
+            new Tuple<string,string,string,bool>("text","ClmChipIndex"  ,"ChipIndex"  ,false),
+            new Tuple<string,string,string,bool>("text","ClmChipNumber" ,"ChipNumber" ,false),
+            new Tuple<string,string,string,bool>("text","ClmPartNumber" ,"PartNumber" ,false),
+            new Tuple<string,string,string,bool>("text","ClmPart"       ,"Part"       ,true),
+            new Tuple<string,string,string,bool>("text","ClmMIDICh"     ,"MIDI Ch"    ,true),
+            new Tuple<string,string,string,bool>("text","ClmChip"       ,"Chip"       ,true),
+            new Tuple<string,string,string,bool>("text","ClmCounter"    ,"Counter"    ,true),
+            new Tuple<string,string,string,bool>("text","ClmLoopCounter","LoopCounter",true),
+            new Tuple<string,string,string,bool>("text","ClmInstrument" ,"Instrument" ,true),
+            new Tuple<string,string,string,bool>("text","ClmEnvelope"   ,"Envelope"   ,true),
+            new Tuple<string,string,string,bool>("text","ClmVolume"     ,"Volume"     ,true),
+            new Tuple<string,string,string,bool>("text","ClmExpression" ,"Expression" ,true),
+            new Tuple<string,string,string,bool>("text","ClmVelocity"   ,"Velocity"   ,true),
+            new Tuple<string,string,string,bool>("text","ClmPan"        ,"Pan"        ,true),
+            new Tuple<string,string,string,bool>("text","ClmNote"       ,"Note"       ,true),  
+            new Tuple<string,string,string,bool>("text","ClmGateTime"   ,"GateTime"   ,true),
+            new Tuple<string,string,string,bool>("text","ClmLength"     ,"Length(#)"  ,true),
+            new Tuple<string,string,string,bool>("text","ClmEnvSw"      ,"Env.Sw."    ,true),
+            new Tuple<string,string,string,bool>("text","ClmLfoSw"      ,"LFO Sw."    ,true),
+            new Tuple<string,string,string,bool>("text","ClmLfo"        ,"LFO"        ,true),
+            new Tuple<string,string,string,bool>("text","ClmDetune"     ,"Detune"     ,true),
+            new Tuple<string,string,string,bool>("text","ClmKeyShift"   ,"Key shift"  ,true),
+            new Tuple<string,string,string,bool>("image","ClmMeter"     ,"KeyOn"      ,true),
+            new Tuple<string,string,string,bool>("text","ClmSpacer"     ,""           ,true)
+        };
+
         private void SetDisplayIndex(dgvColumnInfo[] aryIndex)
         {
             if (aryIndex == null || aryIndex.Length < 1)
@@ -501,10 +537,25 @@ namespace mml2vgmIDE
                 aryIndex = setting.location.PartCounterClmInfo;
             }
 
+            for (int i = 0; i < colName.Length; i++)
+            {
+                if (!dgvPartCounter.Columns.Contains(colName[i].Item2))
+                {
+                    DataGridViewColumn col;
+                    if (colName[i].Item1 == "text")
+                        col = new DataGridViewTextBoxColumn();
+                    else
+                        col = new DataGridViewImageColumn();
+                    col.Name = colName[i].Item2;
+                    col.HeaderText = colName[i].Item3;
+                    col.Visible = colName[i].Item4;
+                    dgvPartCounter.Columns.Add(col);
+                }
+            }
+
             for (int i = 0; i < aryIndex.Length; i++)
             {
                 if (aryIndex[i] == null) continue;
-                if (!dgvPartCounter.Columns.Contains(aryIndex[i].columnName)) continue;
 
                 dgvPartCounter.Columns[aryIndex[i].columnName].DisplayIndex = aryIndex[i].displayIndex;
                 dgvPartCounter.Columns[aryIndex[i].columnName].Width = Math.Max(aryIndex[i].size, 10);
