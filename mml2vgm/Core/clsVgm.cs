@@ -966,27 +966,39 @@ namespace Core
                         //string[] vs = buf.Substring(1).Trim().Split(new string[] { "," }, StringSplitOptions.None);
                         string[] vs = Common.CutComment(buf).Substring(1).Trim().Split(new string[] { "," }, StringSplitOptions.None);
                         int[] env = null;
-                        env = new int[9];
+                        if (vs.Length < 10) env = new int[9];
+                        else env = new int[13];
                         int num = int.Parse(vs[0]);
+                        enmChipType chiptype = enmChipType.SN76489;
+                        int envType = 8;
+                        if (vs.Length > 9) envType = 12;
+
                         for (int i = 0; i < env.Length; i++)
                         {
-                            if (i == 8)
+                            if (i == envType)
                             {
-                                if (vs.Length == 8) env[i] = (int)enmChipType.SN76489;
-                                else env[i] = (int)GetChipType(vs[8]);
-                                continue;
+                                if ((envType == 8 && vs.Length < 10) 
+                                    || (envType == 12 && vs.Length > 9))
+                                {
+                                    if (vs.Length == envType) env[i] = (int)enmChipType.SN76489;
+                                    else
+                                    {
+                                        chiptype = GetChipType(vs[envType]);
+                                        env[i] = (int)chiptype;
+                                    }
+                                    continue;
+                                }
                             }
                             env[i] = int.Parse(vs[i]);
                         }
 
-                        enmChipType chiptype = GetChipType(env[8]);
                         if (chips.ContainsKey(chiptype))
                         {
                             ClsChip c = chips[chiptype][0] != null ? chips[chiptype][0] : chips[chiptype][1];
                             if (c.Envelope != null)
                             {
-                                CheckEnvelopeVolumeRange(line, env, c.Envelope.Max, c.Envelope.Min);
-                                if (env[7] == 0) env[7] = 1;
+                                CheckEnvelopeVolumeRange(line, env, c.Envelope.Max, c.Envelope.Min,envType);
+                                //if (env[7] == 0) env[7] = 1;
                             }
                         }
                         else
@@ -1563,21 +1575,42 @@ namespace Core
             }
         }
 
-        private static void CheckEnvelopeVolumeRange(Line line, int[] env, int max, int min)
+        private static void CheckEnvelopeVolumeRange(Line line, int[] env, int max, int min,int envType)
         {
-            for (int i = 0; i < env.Length - 1; i++)
+            if (envType == 8)
             {
-                if (i != 1 && i != 4 && i != 7) continue;
+                for (int i = 0; i < env.Length - 1; i++)
+                {
+                    if (i != 1 && i != 4 && i != 7) continue;
 
-                if (env[i] > max)
-                {
-                    env[i] = max;
-                    msgBox.setWrnMsg(string.Format(msg.get("E01007"), max), line.Lp);
+                    if (env[i] > max)
+                    {
+                        env[i] = max;
+                        msgBox.setWrnMsg(string.Format(msg.get("E01007"), max), line.Lp);
+                    }
+                    if (env[i] < min)
+                    {
+                        env[i] = min;
+                        msgBox.setWrnMsg(string.Format(msg.get("E01008"), min), line.Lp);
+                    }
                 }
-                if (env[i] < min)
+            }
+            if (envType == 12)
+            {
+                for (int i = 0; i < env.Length - 1; i++)
                 {
-                    env[i] = min;
-                    msgBox.setWrnMsg(string.Format(msg.get("E01008"), min), line.Lp);
+                    if (i != 1 && i != 6 && i != 9) continue;
+
+                    if (env[i] > max)
+                    {
+                        env[i] = max;
+                        msgBox.setWrnMsg(string.Format(msg.get("E01007"), max), line.Lp);
+                    }
+                    if (env[i] < min)
+                    {
+                        env[i] = min;
+                        msgBox.setWrnMsg(string.Format(msg.get("E01008"), min), line.Lp);
+                    }
                 }
             }
         }
@@ -5077,6 +5110,7 @@ namespace Core
                     {
                         page.envIndex = 3;//RR phase
                         page.envCounter = 0;
+                        if (page.envelope[(int)eENV.RL] != 0) page.envVolume = page.envelope[(int)eENV.RL];
                     }
 
                     if (page.varpIndex != -1)
@@ -5255,33 +5289,33 @@ namespace Core
                 {
                     case 0: //AR phase
                         //System.Diagnostics.Debug.Write("eAR");
-                        page.envVolume += page.envelope[7]; // vol += ST
+                        page.envVolume += page.envelope[(int)eENV.AST];
                         //System.Diagnostics.Debug.Write(string.Format(":{0}", pw.ppg[pw.cpgNum].envVolume));
                         if (page.envVolume >= maxValue)
                         {
                             page.envVolume = maxValue;
-                            page.envCounter = page.envelope[3]; // DR
+                            page.envCounter = page.envelope[(int)eENV.DR];
                             page.envIndex++;
                             break;
                         }
-                        page.envCounter = page.envelope[2]; // AR
+                        page.envCounter = page.envelope[(int)eENV.AR];
                         break;
                     case 1: //DR phase
                         //System.Diagnostics.Debug.Write("eDR");
-                        page.envVolume -= page.envelope[7]; // vol -= ST
+                        page.envVolume -= page.envelope[(int)eENV.DST]; 
                         //System.Diagnostics.Debug.Write(string.Format(":{0}", pw.ppg[pw.cpgNum].envVolume));
-                        if (page.envVolume <= page.envelope[4]) // vol <= SL
+                        if (page.envVolume <= page.envelope[(int)eENV.SL])
                         {
-                            page.envVolume = page.envelope[4];
-                            page.envCounter = page.envelope[5]; // SR
+                            page.envVolume = page.envelope[(int)eENV.SL];
+                            page.envCounter = page.envelope[(int)eENV.SR]; // SR
                             page.envIndex++;
                             break;
                         }
-                        page.envCounter = page.envelope[3]; // DR
+                        page.envCounter = page.envelope[(int)eENV.DR]; // DR
                         break;
                     case 2: //SR phase
                         //System.Diagnostics.Debug.Write("eSR");
-                        page.envVolume -= page.envelope[7]; // vol -= ST
+                        page.envVolume -= page.envelope[(int)eENV.SST]; // vol -= ST
                         //System.Diagnostics.Debug.Write(string.Format(":{0}", pw.ppg[pw.cpgNum].envVolume));
                         if (page.envVolume <= 0) // vol <= 0
                         {
@@ -5290,11 +5324,11 @@ namespace Core
                             page.envIndex = -1;
                             break;
                         }
-                        page.envCounter = page.envelope[5]; // SR
+                        page.envCounter = page.envelope[(int)eENV.SR]; // SR
                         break;
                     case 3: //RR phase
                         //System.Diagnostics.Debug.Write("eRR");
-                        page.envVolume -= page.envelope[7]; // vol -= ST
+                        page.envVolume -= page.envelope[(int)eENV.RST]; // vol -= ST
                         //System.Diagnostics.Debug.Write(string.Format(":{0}", pw.ppg[pw.cpgNum].envVolume));
                         if (page.envVolume <= 0) // vol <= 0
                         {
@@ -5305,7 +5339,7 @@ namespace Core
                             //foreach (CommandArpeggio ca in page.commandArpeggio.Values) ca.Ptr = -1;
                             break;
                         }
-                        page.envCounter = page.envelope[6]; // RR
+                        page.envCounter = page.envelope[(int)eENV.RR]; // RR
                         break;
                 }
             }
@@ -5452,6 +5486,7 @@ namespace Core
                                     {
                                         page.envIndex = 3;//RR phase
                                         page.envCounter = 0;
+                                        if (page.envelope[(int)eENV.RL] != 0) page.envVolume = page.envelope[(int)eENV.RL];
                                     }
 
                                 }

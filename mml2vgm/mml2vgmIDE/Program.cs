@@ -1,7 +1,6 @@
-﻿using NAudio.Wave;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Windows.Forms;
+using System.Threading;
 
 namespace mml2vgmIDE
 {
@@ -13,25 +12,64 @@ namespace mml2vgmIDE
         [STAThread]
         static void Main()
         {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.ThreadException +=
-                new System.Threading.ThreadExceptionEventHandler(
-                    Application_ThreadException);
 
-            Setting setting = Setting.Load();
-            Audio.Init(setting);
+            //DOBON.NET さんのコードを流用
 
-            FrmMain f = new FrmMain
+            string mutexName = "mml2vgmIDE";
+            bool createdNew;
+
+            using (Mutex mutex = new Mutex(true, mutexName, out createdNew))
             {
-                setting = setting
-            };
-            f.Init();
+                //ミューテックスの初期所有権が付与されたか調べる
+                if (!createdNew)
+                {
+                    //されなかった場合は、すでに起動していると判断して終了
+                    MessageBox.Show("多重起動はできません。");
+                    return;
+                }
 
-            Application.Run(f);
+                try
+                {
+
+                    Application.EnableVisualStyles();
+                    Application.SetCompatibleTextRenderingDefault(false);
+                    Application.ThreadException +=
+                        new System.Threading.ThreadExceptionEventHandler(
+                            Application_ThreadException);
+
+                    Setting setting = Setting.Load();
+                    Audio.Init(setting);
+
+                    FrmMain f = new FrmMain
+                    {
+                        setting = setting
+                    };
+                    f.Init();
+
+                    Application.Run(f);
+
+                }
+                catch (Exception ex)
+                {
+                    try
+                    {
+                        log.ForcedWrite(ex);
+                        MessageBox.Show(ex.Message, "致命的なエラー");
+                    }
+                    finally
+                    {
+                    }
+                }
+                finally
+                {
+                    //ミューテックスを解放する
+                    mutex.ReleaseMutex();
+                }
+
+            }
         }
 
-        private static void Application_ThreadException(object sender, System.Threading.ThreadExceptionEventArgs e)
+        private static void Application_ThreadException(object sender, ThreadExceptionEventArgs e)
         {
             try
             {

@@ -231,7 +231,7 @@ namespace Core
         /// <summary>
         /// 使用中のエンベロープの定義
         /// </summary>
-        public int[] envelope = new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, -1 };
+        public int[] envelope = new int[13] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1 };
 
         /// <summary>
         /// エンベロープスイッチ

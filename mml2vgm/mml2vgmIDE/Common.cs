@@ -452,29 +452,6 @@ namespace mml2vgmIDE
         /// 
 
 
-        ///// <summary>
-        ///// エントリポイント
-        ///// </summary>
-        //public static void Main()
-        //{
-
-
-        //    //ウィンドウのタイトルに「メモ帳」を含むプロセスをすべて取得する
-        //    Tuple<Int64, Process>[] ps = GetProcessesByWindow("YorkTrail", null);
-
-        //    //結果を表示する
-        //    foreach (Tuple<Int64, Process> p in ps)
-        //    {
-        //        Console.WriteLine("プロセス名:" + p.Item2.ProcessName);
-        //        Console.WriteLine("プロセスID:" + p.Item2.Id);
-        //        Console.WriteLine("ウィンドウタイトル:" + p.Item2.MainWindowTitle);
-        //        Console.WriteLine("ウィンドウHandle:" + p.Item1);
-        //    }
-
-        //    Console.WriteLine("終了しました。");
-        //    Console.ReadLine();
-        //}
-
         /// <summary>
         /// 指定された文字列をウィンドウのタイトルとクラス名に含んでいるプロセスを
         /// すべて取得する。
@@ -499,6 +476,19 @@ namespace mml2vgmIDE
             //結果を返す
             return (Tuple<Int64, Process>[])foundProcesses.ToArray(typeof(Tuple<Int64, Process>));
         }
+
+        public static void setForegroundWindow(Int64 hWnd)
+        {
+            IntPtr h = new IntPtr(hWnd);
+            SetForegroundWindow(h);
+        }
+
+        public static void sendmessage(Int64 hWnd, uint Msg, uint wParam, uint lParam)
+        {
+            IntPtr h = new IntPtr(hWnd);
+            SendMessage(h, Msg, wParam, lParam);
+        }
+
 
         private static string searchWindowText = null;
         private static string searchClassName = null;
@@ -526,6 +516,14 @@ namespace mml2vgmIDE
         [DllImport("user32.dll", SetLastError = true)]
         private static extern int GetWindowThreadProcessId(
             IntPtr hWnd, out int lpdwProcessId);
+
+        [DllImport("user32.dll")]
+        private static extern long SendMessage(IntPtr hWnd, uint Msg, uint wParam, uint lParam);
+
+        [DllImport("user32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        private static extern bool SetForegroundWindow(IntPtr hWnd);
+
 
         private static bool EnumWindowCallBack(IntPtr hWnd, IntPtr lparam)
         {

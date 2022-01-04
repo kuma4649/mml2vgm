@@ -290,9 +290,32 @@ namespace Core
                     page.envInstrument = n;
                     page.envIndex = -1;
                     page.envCounter = -1;
-                    for (int i = 0; i < parent.instENV[n].Item2.Length; i++)
+
+                    if (parent.instENV[n].Item2.Length == 9)
                     {
-                        page.envelope[i] = parent.instENV[n].Item2[i];
+                        //既存フォーマットを拡張フォーマットに編集する
+                        page.envelope[(int)eENV.num] = parent.instENV[n].Item2[0]; //  num <- num
+                        page.envelope[(int)eENV.SV] = parent.instENV[n].Item2[1]; //   SV  <- SV
+                        page.envelope[(int)eENV.AR] = parent.instENV[n].Item2[2]; //   AR  <- AR
+                        page.envelope[(int)eENV.AST] = parent.instENV[n].Item2[7]; //  AST <- ST
+                        page.envelope[(int)eENV.DR] = parent.instENV[n].Item2[3]; //   DR  <- DR
+                        page.envelope[(int)eENV.DST] = parent.instENV[n].Item2[7]; //  DST <- ST
+                        page.envelope[(int)eENV.SL] = parent.instENV[n].Item2[4]; //   SL  <- SL
+                        page.envelope[(int)eENV.SR] = parent.instENV[n].Item2[5]; //   SR  <- SR
+                        page.envelope[(int)eENV.SST] = parent.instENV[n].Item2[7]; //  SST <- ST
+                        page.envelope[(int)eENV.RL] = 0; //                            RL  <- 0
+                        page.envelope[(int)eENV.RR] = parent.instENV[n].Item2[6]; //   RR  <- RR
+                        page.envelope[(int)eENV.RST] = parent.instENV[n].Item2[7]; //  RST <- ST
+                        page.envelope[(int)eENV.chiptype] = parent.instENV[n].Item2[8]; //  chiptype <- chiptype
+                    }
+                    else
+                    {
+                        //拡張フォーマット時は特に編集不要
+                        for (int i = 0; i < parent.instENV[n].Item2.Length; i++)
+                        {
+                            page.envelope[i] = parent.instENV[n].Item2[i];
+                        }
+
                     }
                 }
             }
@@ -689,10 +712,10 @@ namespace Core
                 {
                     case 0: // AR phase
                         //System.Diagnostics.Debug.Write("EnvAR");
-                        page.envCounter = page.envelope[2];
-                        if (page.envelope[2] > 0 && page.envelope[1] < maxValue)
+                        page.envCounter = page.envelope[(int)eENV.AR];
+                        if (page.envelope[(int)eENV.AR] > 0 && page.envelope[(int)eENV.SV] < maxValue)
                         {
-                            page.envVolume = page.envelope[1];
+                            page.envVolume = page.envelope[(int)eENV.SV];
                             //System.Diagnostics.Debug.Write(string.Format(":{0}",pw.ppg[pw.cpgNum].envVolume));
                         }
                         else
@@ -705,15 +728,15 @@ namespace Core
                         break;
                     case 1: // DR phase
                         //System.Diagnostics.Debug.Write("EnvDR");
-                        page.envCounter = page.envelope[3];
-                        if (page.envelope[3] > 0 && page.envelope[4] < maxValue)
+                        page.envCounter = page.envelope[(int)eENV.DR];
+                        if (page.envelope[(int)eENV.DR] > 0 && page.envelope[(int)eENV.SL] < maxValue)
                         {
                             page.envVolume = maxValue;
                             //System.Diagnostics.Debug.Write(string.Format(":{0}", pw.ppg[pw.cpgNum].envVolume));
                         }
                         else
                         {
-                            page.envVolume = page.envelope[4];
+                            page.envVolume = page.envelope[(int)eENV.SL];
                             page.envIndex++;
                             //System.Diagnostics.Debug.Write(string.Format(":next", pw.ppg[pw.cpgNum].envVolume));
                         }
@@ -721,10 +744,10 @@ namespace Core
                         break;
                     case 2: // SR phase
                         //System.Diagnostics.Debug.Write("EnvSR");
-                        page.envCounter = page.envelope[5];
-                        if (page.envelope[5] > 0 && page.envelope[4] != 0)
+                        page.envCounter = page.envelope[(int)eENV.SR];
+                        if (page.envelope[(int)eENV.SR] > 0 && page.envelope[(int)eENV.SL] != 0)
                         {
-                            page.envVolume = page.envelope[4];
+                            page.envVolume = page.envelope[(int)eENV.SL];
                             //System.Diagnostics.Debug.Write(string.Format(":{0}", pw.ppg[pw.cpgNum].envVolume));
                         }
                         else

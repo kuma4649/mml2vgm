@@ -439,5 +439,15 @@ namespace mml2vgmIDE
             if (ret == null || ret.Length < 1) return 0;
             return ret[0].Item1;
         }
+
+        public void sendMessage(Int64 hWnd, uint Msg, uint wParam, uint lParam)
+        {
+            Common.sendmessage(hWnd, Msg, wParam, lParam);
+        }
+
+        public void setForegroundWindow(Int64 hWnd)
+        {
+            Common.setForegroundWindow(hWnd);
+        }
     }
 }

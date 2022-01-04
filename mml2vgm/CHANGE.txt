@@ -1,4 +1,8 @@
 更新履歴
+TAG568 2022/01/04
+  IDE:2重起動抑制を行うよう修正。(DOBON.NETさんのコードを流用)
+  Core:エンベロープ:拡張フォーマットを追加(sample/Syntax/testEnvelope.gwiを参照)
+
 TAG567 2021/12/26
   IDE:Script:GetWhndを追加。
   指定した名前のアプリケーションのWindowHandleが取得できます。

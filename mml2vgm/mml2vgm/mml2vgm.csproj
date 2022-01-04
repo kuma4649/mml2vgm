@@ -242,6 +242,9 @@
     <None Include="sample\Syntax\testArpeggio_3.gwi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="sample\Syntax\testEnvelope.gwi">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="sample\Syntax\testPageFunction.gwi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

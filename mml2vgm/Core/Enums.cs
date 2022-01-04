@@ -189,4 +189,20 @@
         Wah
     }
 
+    public enum eENV:int
+    {
+        num=0,
+        SV,
+        AR,
+        AST,
+        DR,
+        DST,
+        SL,
+        SR,
+        SST,
+        RL,
+        RR,
+        RST,
+        chiptype
+    }
 }

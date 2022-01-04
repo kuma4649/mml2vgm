@@ -624,7 +624,8 @@ namespace Core
             {
                 if (page.envIndex != -1)
                 {
-                    page.envIndex = 3;
+                    page.envIndex = 3;//RR phase
+                    if (page.envelope[(int)eENV.RL] != 0) page.envVolume = page.envelope[(int)eENV.RL];
                 }
             }
             else
