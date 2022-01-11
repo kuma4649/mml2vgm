@@ -1,4 +1,7 @@
 更新履歴
+TAG569 2022/01/11
+  IDE:mucomDotNET更新
+
 TAG568 2022/01/04
   IDE:2重起動抑制を行うよう修正。(DOBON.NETさんのコードを流用)
   Core:エンベロープ:拡張フォーマットを追加(sample/Syntax/testEnvelope.gwiを参照)
