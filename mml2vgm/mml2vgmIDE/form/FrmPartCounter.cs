@@ -497,37 +497,37 @@ namespace mml2vgmIDE
             return ret.ToArray();
         }
 
-        private Tuple<string,string,string,bool>[] colName = new Tuple<string, string,string,bool>[] {
-            new Tuple<string,string,string,bool>("text","ClmMuteMngKey" ,"mmKey"      ,false),
-            new Tuple<string,string,string,bool>("text","ClmMute"       ,"M"          ,true ),
-            new Tuple<string,string,string,bool>("text","ClmSolo"       ,"S"          ,true ),
-            new Tuple<string,string,string,bool>("text","ClmPush"       ,"P"          ,false),
-            new Tuple<string,string,string,bool>("text","ClmKBDAssign"  ,"KBD"        ,true ),
-            new Tuple<string,string,string,bool>("text","ClmChipIndex"  ,"ChipIndex"  ,false),
-            new Tuple<string,string,string,bool>("text","ClmChipNumber" ,"ChipNumber" ,false),
-            new Tuple<string,string,string,bool>("text","ClmPartNumber" ,"PartNumber" ,false),
-            new Tuple<string,string,string,bool>("text","ClmPart"       ,"Part"       ,true),
-            new Tuple<string,string,string,bool>("text","ClmMIDICh"     ,"MIDI Ch"    ,true),
-            new Tuple<string,string,string,bool>("text","ClmChip"       ,"Chip"       ,true),
-            new Tuple<string,string,string,bool>("text","ClmCounter"    ,"Counter"    ,true),
-            new Tuple<string,string,string,bool>("text","ClmLoopCounter","LoopCounter",true),
-            new Tuple<string,string,string,bool>("text","ClmInstrument" ,"Instrument" ,true),
-            new Tuple<string,string,string,bool>("text","ClmEnvelope"   ,"Envelope"   ,true),
-            new Tuple<string,string,string,bool>("text","ClmVolume"     ,"Volume"     ,true),
-            new Tuple<string,string,string,bool>("text","ClmExpression" ,"Expression" ,true),
-            new Tuple<string,string,string,bool>("text","ClmVelocity"   ,"Velocity"   ,true),
-            new Tuple<string,string,string,bool>("text","ClmPan"        ,"Pan"        ,true),
-            new Tuple<string,string,string,bool>("text","ClmNote"       ,"Note"       ,true),  
-            new Tuple<string,string,string,bool>("text","ClmGateTime"   ,"GateTime"   ,true),
-            new Tuple<string,string,string,bool>("text","ClmLength"     ,"Length(#)"  ,true),
-            new Tuple<string,string,string,bool>("text","ClmEnvSw"      ,"Env.Sw."    ,true),
-            new Tuple<string,string,string,bool>("text","ClmLfoSw"      ,"LFO Sw."    ,true),
-            new Tuple<string,string,string,bool>("text","ClmLfo"        ,"LFO"        ,true),
-            new Tuple<string,string,string,bool>("text","ClmDetune"     ,"Detune"     ,true),
-            new Tuple<string,string,string,bool>("text","ClmKeyShift"   ,"Key shift"  ,true),
-            new Tuple<string,string,string,bool>("image","ClmMeter"     ,"KeyOn"      ,true),
-            new Tuple<string,string,string,bool>("text","ClmSpacer"     ,""           ,true)
-        };
+        private Tuple<string,string,string,bool,DataGridViewContentAlignment>[] colName = new Tuple<string, string,string,bool, DataGridViewContentAlignment>[] {
+            new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmMuteMngKey" ,"mmKey"     ,false,DataGridViewContentAlignment.MiddleCenter),
+            new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmMute"       ,"M"          ,true,DataGridViewContentAlignment.MiddleCenter),
+            new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmSolo"       ,"S"          ,true,DataGridViewContentAlignment.MiddleCenter),
+            new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmPush"       ,"P"         ,false,DataGridViewContentAlignment.MiddleCenter),
+            new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmKBDAssign"  ,"KBD"        ,true,DataGridViewContentAlignment.MiddleCenter),
+            new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmChipIndex"  ,"ChipIndex" ,false,DataGridViewContentAlignment.MiddleCenter),
+            new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmChipNumber" ,"ChipNumber",false,DataGridViewContentAlignment.MiddleCenter),
+            new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmPartNumber" ,"PartNumber",false,DataGridViewContentAlignment.MiddleCenter),
+            new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmPart"       ,"Part"       ,true,DataGridViewContentAlignment.NotSet),
+            new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmMIDICh"     ,"MIDI Ch"    ,true,DataGridViewContentAlignment.NotSet),
+            new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmChip"       ,"Chip"       ,true,DataGridViewContentAlignment.NotSet),
+            new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmCounter"    ,"Counter"    ,true,DataGridViewContentAlignment.NotSet),
+            new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmLoopCounter","LoopCounter",true,DataGridViewContentAlignment.NotSet),
+            new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmInstrument" ,"Instrument" ,true,DataGridViewContentAlignment.NotSet),
+            new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmEnvelope"   ,"Envelope"   ,true,DataGridViewContentAlignment.NotSet),
+            new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmVolume"     ,"Volume"     ,true,DataGridViewContentAlignment.NotSet),
+            new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmExpression" ,"Expression" ,true,DataGridViewContentAlignment.NotSet),
+            new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmVelocity"   ,"Velocity"   ,true,DataGridViewContentAlignment.NotSet),
+            new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmPan"        ,"Pan"        ,true,DataGridViewContentAlignment.NotSet),
+            new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmNote"       ,"Note"       ,true,DataGridViewContentAlignment.NotSet),  
+            new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmGateTime"   ,"GateTime"   ,true,DataGridViewContentAlignment.NotSet),
+            new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmLength"     ,"Length(#)"  ,true,DataGridViewContentAlignment.NotSet),
+            new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmEnvSw"      ,"Env.Sw."    ,true,DataGridViewContentAlignment.NotSet),
+            new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmLfoSw"      ,"LFO Sw."    ,true,DataGridViewContentAlignment.NotSet),
+            new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmLfo"        ,"LFO"        ,true,DataGridViewContentAlignment.NotSet),
+            new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmDetune"     ,"Detune"     ,true,DataGridViewContentAlignment.NotSet),
+            new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmKeyShift"   ,"Key shift"  ,true,DataGridViewContentAlignment.NotSet),
+            new Tuple<string,string,string,bool,DataGridViewContentAlignment>("image","ClmMeter"     ,"KeyOn"      ,true,DataGridViewContentAlignment.NotSet),
+            new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmSpacer"     ,""           ,true,DataGridViewContentAlignment.NotSet)
+        };                                                                                                                                           
 
         private void SetDisplayIndex(dgvColumnInfo[] aryIndex)
         {
@@ -549,6 +549,11 @@ namespace mml2vgmIDE
                     col.Name = colName[i].Item2;
                     col.HeaderText = colName[i].Item3;
                     col.Visible = colName[i].Item4;
+                    col.DefaultCellStyle.Alignment = colName[i].Item5;
+                    if (colName[i].Item2 == "ClmSpacer")
+                    {
+                        col.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+                    }
                     dgvPartCounter.Columns.Add(col);
                 }
             }
