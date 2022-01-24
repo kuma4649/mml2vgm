@@ -1319,8 +1319,16 @@ namespace Core
         public override void CmdTotalVolume(partPage page, MML mml)
         {
             int n = (int)mml.args[0];
-            ((YM2609)page.chip).rhythm_TotalVolume
+            if (page.Type == enmChannelType.RHYTHM)
+            {
+                ((YM2609)page.chip).rhythm_TotalVolume
                 = Common.CheckRange(n, 0, ((YM2609)page.chip).rhythm_MAXTotalVolume);
+            }
+            else if (page.Type == enmChannelType.ADPCM)
+            {
+                ((YM2609)page.chip).adpcma_TotalVolume
+                = Common.CheckRange(n, 0, ((YM2609)page.chip).adpcma_MAXTotalVolume);
+            }
         }
 
         public override void CmdPan(partPage page, MML mml)

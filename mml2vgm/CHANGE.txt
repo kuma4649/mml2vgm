@@ -1,4 +1,7 @@
 更新履歴
+TAG571 2022/01/24
+  Core:YM2609:ADPCM-A:トータルボリュームが設定できないバグを修正
+
 TAG570 2022/01/16
   IDE:mucomDotNET更新
   IDE:partCounterちょっとだけ修正
