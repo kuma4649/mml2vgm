@@ -25,6 +25,7 @@ namespace SoundManager
         {
             try
             {
+                Thread.CurrentThread.Name = "DataMaker";
                 while (true)
                 {
 

@@ -5636,6 +5636,8 @@ namespace mml2vgmIDE
 
         private static int trdVgmVirtualMainFunction(short[] buffer, int offset, int sampleCount)
         {
+            if(Thread.CurrentThread.Name==null) Thread.CurrentThread.Name = "trdVgmVirtualMainFunction";
+
             EmuSampleCount = sampleCount;
 
             if (buffer == null || buffer.Length < 1 || sampleCount == 0)

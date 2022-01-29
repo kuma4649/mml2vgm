@@ -3592,14 +3592,19 @@ namespace mml2vgmIDE
             String msg= mmfFMVoicePool.GetMessage();
             if (string.IsNullOrEmpty(msg)) return;
 
-            string cmd = msg.Substring(0, msg.IndexOf(':'));
+            int n = msg.IndexOf(':');
+            string cmd = msg;
+            if (n > 0)
+            {
+                cmd = msg.Substring(0, n);
+            }
             if (cmd == "SendVoice")
             {
                 WriteVoiceToDocument(msg.Substring(msg.IndexOf(":") + 1));
             }
             else
             {
-                MessageBox.Show("Received unknown command.");
+                //MessageBox.Show("Received unknown command.");
             }
         }
 
@@ -4693,12 +4698,12 @@ namespace mml2vgmIDE
             {
 
                 if (mml2vgmMmf != null) mml2vgmMmf.Close();
-                mml2vgmMmf = new mmfControl(false, "mml2vgmIDE", buf.Count);
+                mml2vgmMmf = new mmfControl(false, "mml2vgmIDEmmf", buf.Count);
                 mml2vgmMmf.SetBytes(buf.ToArray());
 
                 if (mmf != null) mmf.Close();
                 mmf = new mmfControl(true, "MDPlayer", 1024 * 4);
-                mmf.SendMessage(string.Join(" ", "SPLAY", "mml2vgmIDE", buf.Count.ToString(), outFn));
+                mmf.SendMessage(string.Join(" ", "SPLAY", "mml2vgmIDEmmf", buf.Count.ToString(), outFn));
 
             }
             catch (ArgumentOutOfRangeException)

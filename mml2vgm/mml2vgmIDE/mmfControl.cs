@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO.MemoryMappedFiles;
 using System.Security.AccessControl;
 using System.Text;
@@ -9,8 +10,7 @@ namespace mml2vgmIDE
     public class mmfControl
     {
         private object lockobj = new object();
-        private MemoryMappedFile _map;
-        private byte[] mmfBuf;
+        private static Dictionary<string, Tuple<MemoryMappedFile, byte[]>> _map = new Dictionary<string, Tuple<MemoryMappedFile, byte[]>>();
         public string mmfName = "dummy";
         public int mmfSize = 1024;
 
@@ -27,26 +27,32 @@ namespace mml2vgmIDE
 
         public void Open(string mmfName, int mmfSize)
         {
-            mmfBuf = new byte[mmfSize];
+            if (_map.ContainsKey(mmfName)) return;
+            MemoryMappedFile mp;
+            byte[] mmfBuf = new byte[mmfSize];
 
             lock (lockobj)
             {
-                _map = MemoryMappedFile.CreateNew(mmfName, mmfSize);
-                MemoryMappedFileSecurity permission = _map.GetAccessControl();
+                mp = MemoryMappedFile.CreateNew(mmfName, mmfSize);
+                MemoryMappedFileSecurity permission = mp.GetAccessControl();
                 permission.AddAccessRule(
                   new AccessRule<MemoryMappedFileRights>("Everyone",
                     MemoryMappedFileRights.FullControl, AccessControlType.Allow));
-                _map.SetAccessControl(permission);
+                mp.SetAccessControl(permission);
             }
+            _map.Add(mmfName, new Tuple<MemoryMappedFile, byte[]>(mp, mmfBuf));
+
+            return;
         }
 
         public void Close()
         {
-            lock (lockobj)
-            {
-                if (_map == null) return;
-                _map.Dispose();
-            }
+            //lock (lockobj)
+            //{
+            //    if (_map == null) return;
+            //    _map.Dispose();
+            //    _map = null;
+            //}
         }
 
         public string GetMessage()
@@ -55,13 +61,13 @@ namespace mml2vgmIDE
 
             lock (lockobj)
             {
-                using (MemoryMappedViewAccessor view = _map.CreateViewAccessor())
+                using (MemoryMappedViewAccessor view = _map[mmfName].Item1.CreateViewAccessor())
                 {
-                    view.ReadArray(0, mmfBuf, 0, mmfBuf.Length);
-                    msg = Encoding.Unicode.GetString(mmfBuf);
+                    view.ReadArray(0, _map[mmfName].Item2, 0, _map[mmfName].Item2.Length);
+                    msg = Encoding.Unicode.GetString(_map[mmfName].Item2);
                     msg = msg.Substring(0, msg.IndexOf('\0'));
-                    Array.Clear(mmfBuf, 0, mmfBuf.Length);
-                    view.WriteArray(0, mmfBuf, 0, mmfBuf.Length);
+                    Array.Clear(_map[mmfName].Item2, 0, _map[mmfName].Item2.Length);
+                    view.WriteArray(0, _map[mmfName].Item2, 0, _map[mmfName].Item2.Length);
                 }
             }
 
@@ -73,8 +79,14 @@ namespace mml2vgmIDE
             byte[] ary = Encoding.Unicode.GetBytes(msg);
             if (ary.Length > mmfSize) throw new ArgumentOutOfRangeException();
 
-            using (var map = MemoryMappedFile.OpenExisting(mmfName))
-            using (var view = map.CreateViewAccessor())
+            if (!_map.ContainsKey(mmfName))
+            {
+                ;
+                var mp = MemoryMappedFile.OpenExisting(mmfName);
+                _map.Add(mmfName, new Tuple<MemoryMappedFile, byte[]>(mp, null));
+            }
+            //using (var map = MemoryMappedFile.OpenExisting(mmfName))
+            using (var view = _map[mmfName].Item1.CreateViewAccessor())
                 view.WriteArray(0, ary, 0, ary.Length);
         }
 
@@ -82,8 +94,14 @@ namespace mml2vgmIDE
         {
             if (buf.Length > mmfSize) throw new ArgumentOutOfRangeException();
 
-            using (var map = MemoryMappedFile.OpenExisting(mmfName))
-            using (var view = map.CreateViewAccessor())
+            if (!_map.ContainsKey(mmfName))
+            {
+                ;
+                var mp = MemoryMappedFile.OpenExisting(mmfName);
+                _map.Add(mmfName, new Tuple<MemoryMappedFile, byte[]>(mp, null));
+            }
+            //using (var map = MemoryMappedFile.OpenExisting(mmfName))
+            using (var view = _map[mmfName].Item1.CreateViewAccessor())
                 view.WriteArray(0, buf, 0, buf.Length);
         }
     }

@@ -2468,6 +2468,20 @@ namespace Core
             int vch;
             byte[] port;
             GetPortVch(page, out port, out vch);
+            if (page.Type == enmChannelType.FMOPNex)
+            {
+                if (!(page.chip is YM2609))
+                {
+                    vch = 2;
+                    port = page.port[0];
+                }
+                else
+                {
+                    vch = 2;
+                    if (page.ch == 2 || (page.ch >= 12 && page.ch <= 14)) port = page.port[0];
+                    else if (page.ch == 8 || (page.ch >= 15 && page.ch <= 17)) port = page.port[2];
+                }
+            }
 
             op = (byte)(op == 1 ? 2 : (op == 2 ? 1 : op));
 

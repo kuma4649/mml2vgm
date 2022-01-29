@@ -45,6 +45,7 @@ namespace mml2vgmIDE
         {
             try
             {
+                Thread.CurrentThread.Name = "SienSearch";
                 while (true)
                 {
                     while (req == null) Thread.Sleep(100);

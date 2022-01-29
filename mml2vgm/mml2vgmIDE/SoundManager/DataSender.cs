@@ -192,7 +192,7 @@ namespace SoundManager
         {
             try
             {
-
+                Thread.CurrentThread.Name = "DataSender";
                 while (true)
                 {
                     Thread.CurrentThread.Priority = ThreadPriority.BelowNormal;

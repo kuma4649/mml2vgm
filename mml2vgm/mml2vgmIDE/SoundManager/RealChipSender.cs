@@ -13,6 +13,7 @@ namespace SoundManager
         {
             try
             {
+                Thread.CurrentThread.Name = "RealChipSender";
                 while (true)
                 {
                     Thread.CurrentThread.Priority = ThreadPriority.BelowNormal;
