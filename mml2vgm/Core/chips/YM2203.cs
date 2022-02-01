@@ -135,6 +135,8 @@ namespace Core
                 }
 
                 page.port = port;
+                page.noise = 0;
+                page.noiseFreq = -1;
             }
         }
 

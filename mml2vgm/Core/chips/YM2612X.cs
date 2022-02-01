@@ -78,6 +78,8 @@ namespace Core
                 page.MaxVolume = 127;
                 page.port = port;
                 page.pcm = page.ch > 9;
+                page.noise = 0;
+                page.noiseFreq = -1;
             }
         }
 

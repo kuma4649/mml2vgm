@@ -2454,6 +2454,21 @@ namespace Core
                 return;
             }
 
+            if (c == '>' || c == '<')
+            {
+                pw.incPos(page);
+
+                if (!pw.getNum(page, out n))
+                {
+                    n = 1;
+                }
+                mml.type = enmMMLType.Noise;
+                mml.args = new List<object>();
+                mml.args.Add(n);
+                mml.args.Add(c);
+                return;
+            }
+
             if (!pw.getNum(page, out n))
             {
                 msgBox.setErrMsg(msg.get("E05033"), mml.line.Lp);

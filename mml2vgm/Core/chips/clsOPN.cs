@@ -351,9 +351,9 @@ namespace Core
             int vch;//ノイズ設定はch未使用
             GetPortVchSsg(page, out port, out adr, out vch);
 
-            if (noiseFreq != page.noise)
+            if (page.noiseFreq != page.noise)
             {
-                noiseFreq = page.noise;
+                page.noiseFreq = page.noise;
                 SOutData(page, mml, page.port[port], (byte)(adr + 0x06), (byte)(page.noise & 0x1f));
             }
         }
@@ -2520,6 +2520,17 @@ namespace Core
         public override void CmdNoise(partPage page, MML mml)
         {
             int n = (int)mml.args[0];
+            if (mml.args.Count > 1)
+            {
+                if ((char)mml.args[1] == '>')
+                {
+                    n = page.noise - n;
+                }
+                if ((char)mml.args[1] == '<')
+                {
+                    n = page.noise + n;
+                }
+            }
             n = Common.CheckRange(n, 0, 31);
 
             //int ch = 0;

@@ -269,6 +269,8 @@ namespace Core
                     pw.pg[p].volume = pw.pg[p].MaxVolume;
                 }
                 pw.pg[p].port = port;
+                pw.pg[p].noise = 0;
+                pw.pg[p].noiseFreq = -1;
             }
         }
 

@@ -557,6 +557,11 @@ namespace Core
         public int noise = 0;
 
         /// <summary>
+        /// ノイズ値保持
+        /// </summary>
+        public int noiseFreq = -1;
+
+        /// <summary>
         /// 固定fnumモード(-1:off 0以上:fnum値)
         /// </summary>
         public int forcedFnum = -1;
