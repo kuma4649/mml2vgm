@@ -354,7 +354,10 @@ namespace Core
             if (page.noiseFreq != page.noise)
             {
                 page.noiseFreq = page.noise;
-                SOutData(page, mml, page.port[port], (byte)(adr + 0x06), (byte)(page.noise & 0x1f));
+                if (!(page.chip is YM2609))
+                    SOutData(page, mml, page.port[port], (byte)(adr + 0x06), (byte)(page.noise & 0x1f));
+                else
+                    SOutData(page, mml, page.port[port], (byte)(adr + 0x06), (byte)(page.noise & 0x3f));
             }
         }
 
@@ -2531,7 +2534,7 @@ namespace Core
                     n = page.noise + n;
                 }
             }
-            n = Common.CheckRange(n, 0, 31);
+            n = Common.CheckRange(n, 0, 63);
 
             //int ch = 0;
             //if (page.chip is YM2609)

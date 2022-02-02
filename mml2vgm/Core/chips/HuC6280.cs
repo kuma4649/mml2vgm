@@ -322,7 +322,8 @@ namespace Core
             }
 
             SetHuC6280CurrentChannel(mml, page);
-            OutHuC6280Port(page, mml, port[0], 4, (byte)(0x40 + page.volume)); //WaveIndexReset(=0x40)
+            OutHuC6280Port(page, mml, port[0], 4, (byte)0x40);// (0x40 + page.volume)); //WaveIndexReset(=0x40)
+            OutHuC6280Port(page, mml, port[0], 4, (byte)0x00);// (0x40 + page.volume)); //WaveIndexReset(=0x40)
 
             for (int i = 1; i < parent.instWF[n].Item2.Length; i++) // 0 は音色番号が入っている為1からスタート
             {
