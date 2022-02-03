@@ -91,9 +91,9 @@ namespace Core
             TotalVolume = 0xff;
             parent.OutData((MML)null, port[0], (byte)((ChipNumber != 0 ? 0x80 : 0x00) + 1), 0xff);
             //LFO freq 0
-            parent.OutData((MML)null, port[0], (byte)((ChipNumber != 0 ? 0x80 : 0x00) + 8), 0xff);
+            parent.OutData((MML)null, port[0], (byte)((ChipNumber != 0 ? 0x80 : 0x00) + 8), 0x00);
             //LFO ctrl 0
-            parent.OutData((MML)null, port[0], (byte)((ChipNumber != 0 ? 0x80 : 0x00) + 9), 0xff);
+            parent.OutData((MML)null, port[0], (byte)((ChipNumber != 0 ? 0x80 : 0x00) + 9), 0x00);
 
             SupportReversePartWork = true;
 

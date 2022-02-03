@@ -5,12 +5,12 @@
 	Octave-Rev  =TRUE
 	Notes = FROG FROG
 
-FORMAT=ZGM
+FORMAT=VGM
 
 }
 
 '@ H  0,
-   +0 +1 +2 +3 +4 +5 +6 +7
+   +0  +1  +2  +3  +4  +5  +6  +7  Triangle
 '@ $00,$F8,$F0,$E8,$E0,$D8,$D0,$C8
 '@ $C0,$B8,$B0,$A8,$A0,$98,$90,$88
 '@ $80,$78,$70,$68,$60,$58,$50,$48
