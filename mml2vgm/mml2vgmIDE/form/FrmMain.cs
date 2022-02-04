@@ -454,10 +454,10 @@ namespace mml2vgmIDE
             string path1 = System.IO.Path.GetDirectoryName(fn);
             path1 = string.IsNullOrEmpty(path1) ? fn : path1;
             sfd.InitialDirectory = path1;
-            sfd.Filter = "gwiファイル(*.gwi)|*.gwi|mucファイル(*.muc)|*.muc|mmlファイル(*.mml)|*.mml|すべてのファイル(*.*)|*.*";
+            sfd.Filter = "gwiファイル(*.gwi)|*.gwi|mucファイル(*.muc)|*.muc|mmlファイル(*.mml)|*.mml|mdlファイル(*.mdl)|*.mdl|すべてのファイル(*.*)|*.*";
             sfd.Title = "名前を付けて保存";
             int n = (int)Common.GetEnmMmlFileFormat(Path.GetExtension(sfd.FileName));
-            if (n < 1 || n > 3) n = 4;
+            if (n < 1 || n > 4) n = 5;
             sfd.FilterIndex = n;
             sfd.RestoreDirectory = true;
             if (sfd.ShowDialog() != DialogResult.OK)
@@ -654,6 +654,54 @@ namespace mml2vgmIDE
             return true;
         }
 
+        private bool ExportMdr(Document d, ref string fn)
+        {
+            Compile(false, false, false, false, true);
+            while (Compiling != 0) { Application.DoEvents(); }//待ち合わせ
+
+            if (msgBox.getErr().Length > 0)
+            {
+                MessageBox.Show("コンパイル時にエラーが発生しました。エクスポート処理を中断します。",
+                    "エラー発生",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+
+                return false;
+            }
+
+            SaveFileDialog sfd = new SaveFileDialog();
+            fn = d.gwiFullPath;
+            if (fn.Length > 0 && fn[fn.Length - 1] == '*')
+            {
+                fn = fn.Substring(0, fn.Length - 1);
+            }
+            fn = Path.Combine(Path.GetDirectoryName(fn), Path.GetFileNameWithoutExtension(fn) + ".mdr");
+
+            sfd.FileName = fn;
+            string path1 = System.IO.Path.GetDirectoryName(fn);
+            path1 = string.IsNullOrEmpty(path1) ? fn : path1;
+            sfd.InitialDirectory = path1;
+            sfd.Filter = "mdrファイル(*.mdr)|*.mdr|すべてのファイル(*.*)|*.*";
+            sfd.Title = "エクスポート";
+            sfd.RestoreDirectory = true;
+            if (sfd.ShowDialog() != DialogResult.OK)
+            {
+                return false;
+            }
+            fn = sfd.FileName;
+
+            if (Path.GetExtension(fn) == "")
+            {
+                fn = Path.GetFileNameWithoutExtension(fn) + ".mdr";
+            }
+
+            List<byte> buf = new List<byte>();
+            foreach (MmlDatum md in mData) buf.Add(md != null ? (byte)md.dat : (byte)0);
+
+            File.WriteAllBytes(fn, buf.ToArray());
+
+            return true;
+        }
 
         private void TsmiExit_Click(object sender, EventArgs e)
         {
@@ -2117,7 +2165,9 @@ namespace mml2vgmIDE
                 return;
             }
 
-            Document doc = (Document)((FrmEditor)compileTargetDocument).Tag;
+            Document doc = null;
+            if (compileTargetDocument is FrmEditor) doc = (Document)((FrmEditor)compileTargetDocument).Tag;
+            else doc = (Document)compileTargetDocument;
             muteManager.Add(doc);
 
             try
@@ -2300,7 +2350,9 @@ namespace mml2vgmIDE
         {
             musicDriverInterface.CompilerInfo ci = mucom.GetCompilerInfo();
 
-            Document doc = (Document)((FrmEditor)compileTargetDocument).Tag;
+            Document doc = null;
+            if (compileTargetDocument is FrmEditor) doc = (Document)((FrmEditor)compileTargetDocument).Tag;
+            else doc = (Document)compileTargetDocument;
             muteManager.Add(doc);
 
             if (compileTargetDocument != null)
@@ -2477,7 +2529,9 @@ namespace mml2vgmIDE
         private void finishedCompileMML()
         {
             musicDriverInterface.CompilerInfo ci = pmdmng.GetCompilerInfo();
-            Document doc = (Document)((FrmEditor)compileTargetDocument).Tag;
+            Document doc = null;
+            if (compileTargetDocument is FrmEditor) doc = (Document)((FrmEditor)compileTargetDocument).Tag;
+            else doc = (Document)compileTargetDocument;
             muteManager.Add(doc);
 
             try
@@ -2583,7 +2637,10 @@ namespace mml2vgmIDE
         private void finishedCompileMDL()
         {
             musicDriverInterface.CompilerInfo ci = mdmng.GetCompilerInfo();
-            Document doc = (Document)((FrmEditor)compileTargetDocument).Tag;
+            Document doc = null;
+            if (compileTargetDocument is FrmEditor) doc = (Document)((FrmEditor)compileTargetDocument).Tag;
+            else doc = (Document)compileTargetDocument;
+
             muteManager.Add(doc);
 
             if (ci == null)
@@ -4632,6 +4689,12 @@ namespace mml2vgmIDE
                     return;
                 }
 
+                if (Path.GetExtension(d.gwiFullPath).ToLower() == ".mdl")
+                {
+                    ExportMdr(d, ref outFn);
+                    return;
+                }
+
             }
             catch (Exception)
             {
@@ -4815,15 +4878,22 @@ namespace mml2vgmIDE
             {
                 if (qi.doc.dstFileFormat == EnmFileFormat.MUB)
                 {
-                    mubData = (musicDriverInterface.MmlDatum[])qi.doc.compiledData;
+                    mubData = (MmlDatum[])qi.doc.compiledData;
                     doPlay = true;
                     finishedCompileMUC();
                 }
                 else if (qi.doc.dstFileFormat == EnmFileFormat.M)
                 {
-                    mData = (musicDriverInterface.MmlDatum[])qi.doc.compiledData;
+                    mData = (MmlDatum[])qi.doc.compiledData;
                     doPlay = true;
                     finishedCompileMML();
+                }
+                else if (qi.doc.dstFileFormat == EnmFileFormat.MDR)
+                {
+                    mData = (MmlDatum[])qi.doc.compiledData;
+                    doPlay = true;
+                    compileTargetDocument = qi.doc;
+                    finishedCompileMDL();
                 }
                 else
                 {

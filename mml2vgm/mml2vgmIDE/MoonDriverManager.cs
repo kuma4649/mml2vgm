@@ -173,17 +173,10 @@ namespace mml2vgmIDE
                 if (ci.jumpClock != -1) jumpIndex = ci.jumpClock;
             }
 
-            object addtionalMoonDriverDotNETOption = new object[]{
-                fileName,//string srcFile;
-                (Func<string,Stream>)appendFileReaderCallback,
-                Common.SampleRate,
-                jumpIndex
-            };
-
             object[] addOp = new object[]{
                 fileName,
                 //(Func<string, Stream>)appendFileReaderCallback,
-                (double)Common.SampleRate,
+                (double)Common.DataSequenceSampleRate,
                 jumpIndex
             };
 
@@ -241,9 +234,9 @@ namespace mml2vgmIDE
             driver.MusicSTOP();
         }
 
-        public void StartRendering(int sampleRate, int YMF278BClockValue)
+        public void StartRendering(int DataSequenceSampleRate, int YMF278BClockValue)
         {
-            driver.StartRendering(sampleRate
+            driver.StartRendering(DataSequenceSampleRate
                 , new Tuple<string, int>[] { new Tuple<string, int>("YMF278B", YMF278BClockValue) });
         }
 
