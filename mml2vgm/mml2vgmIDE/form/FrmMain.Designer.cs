@@ -32,7 +32,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmMain));
             this.dpMain = new WeifenLuo.WinFormsUI.Docking.DockPanel();
             this.visualStudioToolStripExtender1 = new WeifenLuo.WinFormsUI.Docking.VisualStudioToolStripExtender(this.components);
-            this.vS2005Theme1 = new WeifenLuo.WinFormsUI.Docking.VS2005Theme();
+            this.vS2005Theme1 = new WeifenLuo.WinFormsUI.Docking.VS2015DarkTheme();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.tsslCompileError = new System.Windows.Forms.ToolStripStatusLabel();
             this.tsslCompileWarning = new System.Windows.Forms.ToolStripStatusLabel();
@@ -799,7 +799,7 @@
 
         #endregion
         private WeifenLuo.WinFormsUI.Docking.VisualStudioToolStripExtender visualStudioToolStripExtender1;
-        private WeifenLuo.WinFormsUI.Docking.VS2005Theme vS2005Theme1;
+        private WeifenLuo.WinFormsUI.Docking.VS2015DarkTheme vS2005Theme1;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem TsmiFile;

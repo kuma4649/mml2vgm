@@ -334,7 +334,6 @@
             this.tpMMLParameter = new System.Windows.Forms.TabPage();
             this.cbDispInstrumentName = new System.Windows.Forms.CheckBox();
             this.tpOther = new System.Windows.Forms.TabPage();
-            this.cbChangeEnterCode = new System.Windows.Forms.CheckBox();
             this.cbWavSwitch = new System.Windows.Forms.CheckBox();
             this.groupBox17 = new System.Windows.Forms.GroupBox();
             this.tbImageExt = new System.Windows.Forms.TextBox();
@@ -369,6 +368,7 @@
             this.cbAutoOpen = new System.Windows.Forms.CheckBox();
             this.cbUseLoopTimes = new System.Windows.Forms.CheckBox();
             this.tpOmake = new System.Windows.Forms.TabPage();
+            this.cbChangeEnterCode = new System.Windows.Forms.CheckBox();
             this.label48 = new System.Windows.Forms.Label();
             this.cbClearHistory = new System.Windows.Forms.CheckBox();
             this.groupBox31 = new System.Windows.Forms.GroupBox();
@@ -3915,16 +3915,6 @@
             this.tpOther.Text = "Other";
             this.tpOther.UseVisualStyleBackColor = true;
             // 
-            // cbChangeEnterCode
-            // 
-            this.cbChangeEnterCode.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.cbChangeEnterCode.Location = new System.Drawing.Point(228, 182);
-            this.cbChangeEnterCode.Name = "cbChangeEnterCode";
-            this.cbChangeEnterCode.Size = new System.Drawing.Size(194, 28);
-            this.cbChangeEnterCode.TabIndex = 24;
-            this.cbChangeEnterCode.Text = "テキストファイルを開いた時、\r\n改行コード変換を行う";
-            this.cbChangeEnterCode.UseVisualStyleBackColor = true;
-            // 
             // cbWavSwitch
             // 
             this.cbWavSwitch.AutoSize = true;
@@ -4300,6 +4290,16 @@
             this.tpOmake.TabIndex = 7;
             this.tpOmake.Text = "おまけ";
             this.tpOmake.UseVisualStyleBackColor = true;
+            // 
+            // cbChangeEnterCode
+            // 
+            this.cbChangeEnterCode.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.cbChangeEnterCode.Location = new System.Drawing.Point(228, 182);
+            this.cbChangeEnterCode.Name = "cbChangeEnterCode";
+            this.cbChangeEnterCode.Size = new System.Drawing.Size(194, 28);
+            this.cbChangeEnterCode.TabIndex = 24;
+            this.cbChangeEnterCode.Text = "テキストファイルを開いた時、\r\n改行コード変換を行う";
+            this.cbChangeEnterCode.UseVisualStyleBackColor = true;
             // 
             // label48
             // 

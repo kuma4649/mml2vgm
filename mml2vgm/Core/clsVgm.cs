@@ -3813,8 +3813,16 @@ namespace Core
                 {
                     MML mml = pg.mmlData[pg.mmlPos];
                     mml.line.Lp.ch = pg.ch;
-                    mml.line.Lp.chipIndex = 0;// pg.chip.ChipID;
-                    mml.line.Lp.chipNumber = pg.chip.ChipID;// pg.chipNumber;
+                    if (info.format == enmFormat.ZGM)
+                    {
+                        mml.line.Lp.chipIndex = pg.chip.ChipID;
+                        mml.line.Lp.chipNumber = pg.chipNumber;
+                    }
+                    else
+                    {
+                        mml.line.Lp.chipIndex = 0;// pg.chip.ChipID;
+                        mml.line.Lp.chipNumber = pg.chip.ChipID;// pg.chipNumber;
+                    }
                     mml.line.Lp.chip = pg.chip.Name;
                     int c = mml.line.Txt.IndexOfAny(new char[] { ' ', '\t' });
                     mml.line.Lp.col = mml.column + c;

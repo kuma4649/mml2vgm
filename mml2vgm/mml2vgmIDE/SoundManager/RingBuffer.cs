@@ -74,10 +74,10 @@ namespace SoundManager
             {
                 if (enqPos.next == deqPos)
                 {
-                    if (!AutoExtend)
-                    {
+                    //if (!AutoExtend)
+                    //{
                         //return false;
-                    }
+                    //}
                     //自動拡張
                     try
                     {
@@ -176,7 +176,7 @@ namespace SoundManager
 
         public int GetDataSize()
         {
-            lock (lockObj)
+            //lock (lockObj)
             {
                 return bLength;
             }
@@ -184,7 +184,7 @@ namespace SoundManager
 
         public long LookUpCounter()
         {
-            lock (lockObj)
+            //lock (lockObj)
             {
                 return deqPos.Counter;
             }

@@ -405,14 +405,14 @@ namespace SoundManager
 
         private void SendData()
         {
+
             //long rlc = ringBuffer.LookUpCounter();
             while (SeqCounter >= ringBuffer.LookUpCounter())
             {
-                if (unmount) return;
                 if (!ringBuffer.Deq(ref od, ref Counter, ref Chip, ref Type, ref Address, ref Data, ref ExData))
-                {
-                    break;
-                }
+                    return;
+
+                if (unmount) return;
 
                 //rlc = Counter;
                 //Console.WriteLine(string.Format("{0}",rlc));
@@ -459,8 +459,8 @@ namespace SoundManager
                             break;
                         }
                         if (unmount) return;
-                        Thread.Sleep(0);
                     }
+                    Thread.Sleep(0);
                 }
                 else if (Chip.Model == EnmVRModel.RealModel)
                 {

@@ -437,6 +437,8 @@ namespace mml2vgmIDE
             this.realChip = nScci;
             initChipRegister(null);
 
+            makedic();
+
             //midiExport = new MIDIExport(setting);
             //midiExport.fmRegisterYM2612 = fmRegisterYM2612;
             //midiExport.fmRegisterYM2151 = YM2151FmRegister;
@@ -1312,115 +1314,155 @@ namespace mml2vgmIDE
             return true;
         }
 
+        private Dictionary<EnmZGMDevice, Action<Chip, EnmDataType, int, int, object>> sendChipDataFunc = new Dictionary<EnmZGMDevice, Action<Chip, EnmDataType, int, int, object>>();
+
+        private void makedic()
+        {
+            sendChipDataFunc.Add(EnmZGMDevice.DACControl, DACControlWriteRegisterControl);
+            sendChipDataFunc.Add(EnmZGMDevice.AY8910, AY8910WriteRegisterControl);
+            sendChipDataFunc.Add(EnmZGMDevice.C140, C140WriteRegisterControl);
+            sendChipDataFunc.Add(EnmZGMDevice.C352, C352WriteRegisterControl);
+            sendChipDataFunc.Add(EnmZGMDevice.GameBoyDMG, DMGWriteRegisterControl);
+            sendChipDataFunc.Add(EnmZGMDevice.MIDIGM, MidiGMWriteRegisterControl);
+            sendChipDataFunc.Add(EnmZGMDevice.HuC6280, HuC6280WriteRegisterControl);
+            sendChipDataFunc.Add(EnmZGMDevice.K051649, K051649WriteRegisterControl);
+            sendChipDataFunc.Add(EnmZGMDevice.K053260, K053260WriteRegisterControl);
+            sendChipDataFunc.Add(EnmZGMDevice.NESAPU, NESWriteRegisterControl);
+            sendChipDataFunc.Add(EnmZGMDevice.VRC6, VRC6WriteRegisterControl);
+            sendChipDataFunc.Add(EnmZGMDevice.PPZ8, PPZ8WriteRegisterControl);
+            sendChipDataFunc.Add(EnmZGMDevice.PPSDRV, PPSDRVWriteRegisterControl);
+            sendChipDataFunc.Add(EnmZGMDevice.P86, P86WriteRegisterControl);
+            sendChipDataFunc.Add(EnmZGMDevice.QSound, QSoundWriteRegisterControl);
+            sendChipDataFunc.Add(EnmZGMDevice.RF5C164, RF5C164WriteRegisterControl);
+            sendChipDataFunc.Add(EnmZGMDevice.SegaPCM, SEGAPCMWriteRegisterControl);
+            sendChipDataFunc.Add(EnmZGMDevice.YM2151, YM2151WriteRegisterControl);
+            sendChipDataFunc.Add(EnmZGMDevice.YM2203, YM2203WriteRegisterControl);
+            sendChipDataFunc.Add(EnmZGMDevice.YM2413, YM2413WriteRegisterControl);
+            sendChipDataFunc.Add(EnmZGMDevice.YM3526, YM3526WriteRegisterControl);
+            sendChipDataFunc.Add(EnmZGMDevice.Y8950, Y8950WriteRegisterControl);
+            sendChipDataFunc.Add(EnmZGMDevice.YM3812, YM3812WriteRegisterControl);
+            sendChipDataFunc.Add(EnmZGMDevice.YMF262, YMF262WriteRegisterControl);
+            sendChipDataFunc.Add(EnmZGMDevice.YMF271, YMF271WriteRegisterControl);
+            sendChipDataFunc.Add(EnmZGMDevice.YMF278B, YMF278BWriteRegisterControl);
+            sendChipDataFunc.Add(EnmZGMDevice.YM2608, YM2608WriteRegisterControl);
+            sendChipDataFunc.Add(EnmZGMDevice.YM2609, YM2609WriteRegisterControl);
+            sendChipDataFunc.Add(EnmZGMDevice.YM2610, YM2610WriteRegisterControl);
+            sendChipDataFunc.Add(EnmZGMDevice.YM2612, YM2612WriteRegisterControl);
+            sendChipDataFunc.Add(EnmZGMDevice.SN76489, SN76489WriteRegisterControl);
+        }
+
+
         public void SendChipData(long packCounter, Chip Chip, EnmDataType type, int address, int data, object exData)
         {
-
 #if DEBUG
             //特定のデータを送るタイミングに疑いがあるとき、以下のコメントアウトを有効にしデバッグする
             //Console.WriteLine("packCounter:{0}",packCounter);
 #endif 
+            //if (!sendChipDataFunc.ContainsKey(Chip.Device)) throw new ArgumentException();
+            sendChipDataFunc[Chip.Device](Chip, type, address, data, exData);
+            //return;
 
-            switch (Chip.Device)
-            {
-                case EnmZGMDevice.DACControl:
-                    DACControlWriteRegisterControl(Chip, type, address, data, exData);
-                    break;
-                case EnmZGMDevice.AY8910:
-                    AY8910WriteRegisterControl(Chip, type, address, data, exData);
-                    break;
-                case EnmZGMDevice.C140:
-                    C140WriteRegisterControl(Chip, type, address, data, exData);
-                    break;
-                case EnmZGMDevice.C352:
-                    C352WriteRegisterControl(Chip, type, address, data, exData);
-                    break;
-                case EnmZGMDevice.GameBoyDMG:
-                    DMGWriteRegisterControl(Chip, type, address, data, exData);
-                    break;
-                case EnmZGMDevice.MIDIGM:
-                    MidiGMWriteRegisterControl(Chip, type, address, data, exData);
-                    break;
-                case EnmZGMDevice.HuC6280:
-                    HuC6280WriteRegisterControl(Chip, type, address, data, exData);
-                    break;
-                case EnmZGMDevice.K051649:
-                    K051649WriteRegisterControl(Chip, type, address, data, exData);
-                    break;
-                case EnmZGMDevice.K053260:
-                    K053260WriteRegisterControl(Chip, type, address, data, exData);
-                    break;
-                case EnmZGMDevice.NESAPU:
-                    NESWriteRegisterControl(Chip, type, address, data, exData);
-                    break;
-                case EnmZGMDevice.VRC6:
-                    VRC6WriteRegisterControl(Chip, type, address, data, exData);
-                    break;
-                case EnmZGMDevice.PPZ8:
-                    PPZ8WriteRegisterControl(Chip, type, address, data, exData);
-                    break;
-                case EnmZGMDevice.PPSDRV:
-                    PPSDRVWriteRegisterControl(Chip, type, address, data, exData);
-                    break;
-                case EnmZGMDevice.P86:
-                    P86WriteRegisterControl(Chip, type, address, data, exData);
-                    break;
-                case EnmZGMDevice.QSound:
-                    QSoundWriteRegisterControl(Chip, type, address, data, exData);
-                    break;
-                case EnmZGMDevice.RF5C164:
-                    RF5C164WriteRegisterControl(Chip, type, address, data, exData);
-                    break;
-                case EnmZGMDevice.SegaPCM:
-                    SEGAPCMWriteRegisterControl(Chip, type, address, data, exData);
-                    break;
-                case EnmZGMDevice.YM2151:
-                    YM2151WriteRegisterControl(Chip, type, address, data, exData);
-                    break;
-                case EnmZGMDevice.YM2203:
-                    YM2203WriteRegisterControl(Chip, type, address, data, exData);
-                    break;
-                case EnmZGMDevice.YM2413:
-                    YM2413WriteRegisterControl(Chip, type, address, data, exData);
-                    break;
-                case EnmZGMDevice.YM3526:
-                    YM3526WriteRegisterControl(Chip, type, address, data, exData);
-                    break;
-                case EnmZGMDevice.Y8950:
-                    Y8950WriteRegisterControl(Chip, type, address, data, exData);
-                    break;
-                case EnmZGMDevice.YM3812:
-                    YM3812WriteRegisterControl(Chip, type, address, data, exData);
-                    break;
-                case EnmZGMDevice.YMF262:
-                    YMF262WriteRegisterControl(Chip, type, address, data, exData);
-                    break;
-                case EnmZGMDevice.YMF271:
-                    YMF271WriteRegisterControl(Chip, type, address, data, exData);
-                    break;
-                case EnmZGMDevice.YMF278B:
-                    YMF278BWriteRegisterControl(Chip, type, address, data, exData);
-                    break;
-                case EnmZGMDevice.YM2608:
-                    YM2608WriteRegisterControl(Chip, type, address, data, exData);
-                    break;
-                case EnmZGMDevice.YM2609:
-                    YM2609WriteRegisterControl(Chip, type, address, data, exData);
-                    break;
-                case EnmZGMDevice.YM2610:
-                    YM2610WriteRegisterControl(Chip, type, address, data, exData);
-                    break;
-                case EnmZGMDevice.YM2612:
-                    YM2612WriteRegisterControl(Chip, type, address, data, exData);
-                    break;
-                case EnmZGMDevice.SN76489:
-                    SN76489WriteRegisterControl(Chip, type, address, data, exData);
-                    break;
-                case EnmZGMDevice.None:
-                    //Dummy Command
-                    break;
-                default:
-                    throw new ArgumentException();
-            }
+            //switch (Chip.Device)
+            //{
+            //    case EnmZGMDevice.DACControl:
+            //        DACControlWriteRegisterControl(Chip, type, address, data, exData);
+            //        break;
+            //    case EnmZGMDevice.AY8910:
+            //        AY8910WriteRegisterControl(Chip, type, address, data, exData);
+            //        break;
+            //    case EnmZGMDevice.C140:
+            //        C140WriteRegisterControl(Chip, type, address, data, exData);
+            //        break;
+            //    case EnmZGMDevice.C352:
+            //        C352WriteRegisterControl(Chip, type, address, data, exData);
+            //        break;
+            //    case EnmZGMDevice.GameBoyDMG:
+            //        DMGWriteRegisterControl(Chip, type, address, data, exData);
+            //        break;
+            //    case EnmZGMDevice.MIDIGM:
+            //        MidiGMWriteRegisterControl(Chip, type, address, data, exData);
+            //        break;
+            //    case EnmZGMDevice.HuC6280:
+            //        HuC6280WriteRegisterControl(Chip, type, address, data, exData);
+            //        break;
+            //    case EnmZGMDevice.K051649:
+            //        K051649WriteRegisterControl(Chip, type, address, data, exData);
+            //        break;
+            //    case EnmZGMDevice.K053260:
+            //        K053260WriteRegisterControl(Chip, type, address, data, exData);
+            //        break;
+            //    case EnmZGMDevice.NESAPU:
+            //        NESWriteRegisterControl(Chip, type, address, data, exData);
+            //        break;
+            //    case EnmZGMDevice.VRC6:
+            //        VRC6WriteRegisterControl(Chip, type, address, data, exData);
+            //        break;
+            //    case EnmZGMDevice.PPZ8:
+            //        PPZ8WriteRegisterControl(Chip, type, address, data, exData);
+            //        break;
+            //    case EnmZGMDevice.PPSDRV:
+            //        PPSDRVWriteRegisterControl(Chip, type, address, data, exData);
+            //        break;
+            //    case EnmZGMDevice.P86:
+            //        P86WriteRegisterControl(Chip, type, address, data, exData);
+            //        break;
+            //    case EnmZGMDevice.QSound:
+            //        QSoundWriteRegisterControl(Chip, type, address, data, exData);
+            //        break;
+            //    case EnmZGMDevice.RF5C164:
+            //        RF5C164WriteRegisterControl(Chip, type, address, data, exData);
+            //        break;
+            //    case EnmZGMDevice.SegaPCM:
+            //        SEGAPCMWriteRegisterControl(Chip, type, address, data, exData);
+            //        break;
+            //    case EnmZGMDevice.YM2151:
+            //        YM2151WriteRegisterControl(Chip, type, address, data, exData);
+            //        break;
+            //    case EnmZGMDevice.YM2203:
+            //        YM2203WriteRegisterControl(Chip, type, address, data, exData);
+            //        break;
+            //    case EnmZGMDevice.YM2413:
+            //        YM2413WriteRegisterControl(Chip, type, address, data, exData);
+            //        break;
+            //    case EnmZGMDevice.YM3526:
+            //        YM3526WriteRegisterControl(Chip, type, address, data, exData);
+            //        break;
+            //    case EnmZGMDevice.Y8950:
+            //        Y8950WriteRegisterControl(Chip, type, address, data, exData);
+            //        break;
+            //    case EnmZGMDevice.YM3812:
+            //        YM3812WriteRegisterControl(Chip, type, address, data, exData);
+            //        break;
+            //    case EnmZGMDevice.YMF262:
+            //        YMF262WriteRegisterControl(Chip, type, address, data, exData);
+            //        break;
+            //    case EnmZGMDevice.YMF271:
+            //        YMF271WriteRegisterControl(Chip, type, address, data, exData);
+            //        break;
+            //    case EnmZGMDevice.YMF278B:
+            //        YMF278BWriteRegisterControl(Chip, type, address, data, exData);
+            //        break;
+            //    case EnmZGMDevice.YM2608:
+            //        YM2608WriteRegisterControl(Chip, type, address, data, exData);
+            //        break;
+            //    case EnmZGMDevice.YM2609:
+            //        YM2609WriteRegisterControl(Chip, type, address, data, exData);
+            //        break;
+            //    case EnmZGMDevice.YM2610:
+            //        YM2610WriteRegisterControl(Chip, type, address, data, exData);
+            //        break;
+            //    case EnmZGMDevice.YM2612:
+            //        YM2612WriteRegisterControl(Chip, type, address, data, exData);
+            //        break;
+            //    case EnmZGMDevice.SN76489:
+            //        SN76489WriteRegisterControl(Chip, type, address, data, exData);
+            //        break;
+            //    case EnmZGMDevice.None:
+            //        //Dummy Command
+            //        break;
+            //    default:
+            //        throw new ArgumentException();
+            //}
         }
 
         public void SetFadeoutVolume(long counter, double fadeoutCounter)
@@ -6399,11 +6441,11 @@ namespace mml2vgmIDE
 
         private void YM2608WriteRegisterControl(Chip Chip, EnmDataType type, int address, int data, object exData)
         {
-            if (type == EnmDataType.Normal || type== EnmDataType.Force)
+            if (type == EnmDataType.Normal || type == EnmDataType.Force)
             {
                 if (Chip.Model == EnmVRModel.VirtualModel)
                 {
-                    if (ctYM2608[Chip.Number]==null ||(!ctYM2608[Chip.Number].UseScci && ctYM2608[Chip.Number].UseEmu))
+                    if (ctYM2608[Chip.Number] == null || (!ctYM2608[Chip.Number].UseScci && ctYM2608[Chip.Number].UseEmu))
                     {
                         //log.Write(string.Format("FM P{2} Out:Adr[{0:x02}] val[{1:x02}]", (byte)address, (byte)data, (byte)(address >> 8)));
                         mds.WriteYM2608(Chip.Index, (byte)Chip.Number, (byte)(address >> 8), (byte)address, (byte)data);
@@ -6426,20 +6468,14 @@ namespace mml2vgmIDE
                         }
                     }
                 }
-                if (Chip.Model == EnmVRModel.RealModel)
+                else if (Chip.Model == EnmVRModel.RealModel)
                 {
                     if (scYM2608[Chip.Number] != null)
                     {
                         if (scYM2608[Chip.Number] is RC86ctlSoundChip && ((RC86ctlSoundChip)scYM2608[Chip.Number]).Type == (int)Nc86ctl.ChipType.CHIP_OPL3)
                         {
-                            bool bSend = true;
                             // レジスタをマスクして送信する
-                            if (address >= 0x100 && address <= 0x110)
-                            {
-                                // ADPCM
-                                bSend = false;
-                            }
-                            if (bSend)
+                            if (address < 0x100 || address > 0x110)
                             {
                                 scYM2608[Chip.Number].setRegister(address, data);
                             }

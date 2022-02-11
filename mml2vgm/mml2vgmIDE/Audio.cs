@@ -4211,6 +4211,23 @@ namespace mml2vgmIDE
                     }
                 }
 
+                if (setting.other.sinWaveGen)
+                {
+                    chip = new MDSound.MDSound.Chip();
+                    chip.Option = null;
+                    MDSound.SinWave sin = new SinWave();
+                    chip.type = MDSound.MDSound.enmInstrumentType.None;
+                    chip.Instrument = sin;
+                    chip.Update = sin.Update;
+                    chip.Start = sin.Start;
+                    chip.Stop = sin.Stop;
+                    chip.Reset = sin.Reset;
+                    chip.SamplingRate = (UInt32)Common.SampleRate;
+                    chip.Volume = setting.balance.YM2612Volume;
+                    chip.Clock = 0;
+                    lstChips.Add(chip);
+                }
+
 
                 if (hiyorimiDeviceFlag == 0x3 && hiyorimiNecessary) hiyorimiNecessary = true;
                 else hiyorimiNecessary = false;
@@ -4639,6 +4656,23 @@ namespace mml2vgmIDE
 
                     chipRegister.YM2151[i].Use = true;
                     if (chip.Instrument != null) lstChips.Add(chip);
+                }
+
+                if (setting.other.sinWaveGen)
+                {
+                    chip = new MDSound.MDSound.Chip();
+                    chip.Option = null;
+                    MDSound.SinWave sin = new SinWave();
+                    chip.type = MDSound.MDSound.enmInstrumentType.None;
+                    chip.Instrument = sin;
+                    chip.Update = sin.Update;
+                    chip.Start = sin.Start;
+                    chip.Stop = sin.Stop;
+                    chip.Reset = sin.Reset;
+                    chip.SamplingRate = (UInt32)Common.SampleRate;
+                    chip.Volume = setting.balance.YM2612Volume;
+                    chip.Clock = 0;
+                    lstChips.Add(chip);
                 }
 
 
@@ -5714,9 +5748,9 @@ namespace mml2vgmIDE
                     //}
 
                     if (driver != null) driver.vstDelta = 0;
-                    stwh.Reset(); stwh.Start();
+                    //stwh.Reset(); stwh.Start();
                     cnt = mds.Update(buffer, offset, sampleCount, oneFrameEmuDataSend);// driverVirtual.oneFrameProc);
-                    ProcTimePer1Frame = ((double)stwh.ElapsedMilliseconds / (sampleCount + 1) * 1000000.0);
+                    //ProcTimePer1Frame = ((double)stwh.ElapsedMilliseconds / (sampleCount + 1) * 1000000.0);
                     //if(buffer[offset]!=0) Console.WriteLine("{0}", buffer[offset]);
                 }
 
