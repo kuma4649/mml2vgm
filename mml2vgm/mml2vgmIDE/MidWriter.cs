@@ -138,7 +138,7 @@ namespace mml2vgmIDE
 
         public void SendChipData(long counter, Chip chip, EnmDataType type, int address, int data, object exData)
         {
-            Console.WriteLine("counter:{0} chip:{1} type:{2} address:{3} data:{4} exData:{5}", counter,  chip, type, address, data, exData);
+            //Console.WriteLine("counter:{0} chip:{1} type:{2} address:{3} data:{4} exData:{5}", counter,  chip, type, address, data, exData);
 
             int ch = 0;
             byte[] bs = (byte[])exData;

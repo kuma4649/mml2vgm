@@ -1,4 +1,7 @@
 更新履歴
+TAG577 2022/02/11
+  Core:vgm:AY:C140:secondaryChipに対応
+
 TAG576 2022/02/05
   IDE:moonDriverDotNET:
     ドライバ再生周波数の設定を修正。

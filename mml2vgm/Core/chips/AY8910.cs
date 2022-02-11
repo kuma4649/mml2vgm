@@ -152,7 +152,7 @@ namespace Core
                 lstPartWork[ch].apg.volume = 0;
             }
 
-            parent.OutData((MML)null, port[0],new byte[]{ 0x07, 0x3f});
+            parent.OutData((MML)null, port[0],new byte[]{ (byte)(0x07+(ChipID!=0?0x80:0)), 0x3f});
 
             if (parent.info.format== enmFormat.VGM && ChipID != 0)
             {
@@ -259,11 +259,11 @@ namespace Core
                     if (page.hardEnvelopeSync.sw)
                     {
                         byte pch = (byte)page.ch;
-                        SOutData(page, mml, port[0], (byte)(0x08 + pch), 0x10);
+                        SOutData(page, mml, port[0], (byte)(0x08 + pch + (ChipID != 0 ? 0x80 : 0)), 0x10);
                     }
 
                     //parent.OutData(mml, port[0], 0x0d, (byte)(page.HardEnvelopeType & 0xf));
-                    SOutData(page, mml, port[0], 0x0d, (byte)(page.HardEnvelopeType & 0xf));
+                    SOutData(page, mml, port[0], (byte)(0x0d + (ChipID != 0 ? 0x80 : 0)), (byte)(page.HardEnvelopeType & 0xf));
                 }
                 //parent.OutData(mml, port[0], 0x07, data);
 
@@ -409,7 +409,7 @@ namespace Core
             if (page.hardEnvelopeSync.sw)
             {
                 byte pch = (byte)page.ch;
-                SOutData(page, mml, port[0], (byte)(0x08 + pch), 0);
+                SOutData(page, mml, port[0], (byte)(0x08 + pch + (ChipID != 0 ? 0x80 : 0)), 0);
             }
             //byte pch = (byte)page.ch;
             //int n = 9;
@@ -475,7 +475,7 @@ namespace Core
             if (page.spg.beforeVolume != vol)
             {
                 //parent.OutData(mml, port[0], (byte)(0x08 + pch), (byte)vol);
-                SOutData(page, mml, port[0], (byte)(0x08 + pch), (byte)vol);
+                SOutData(page, mml, port[0], (byte)(0x08 + pch + (ChipID != 0 ? 0x80 : 0)), (byte)vol);
                 //pw.ppg[pw.cpgNum].beforeVolume = pw.ppg[pw.cpgNum].volume;
                 page.spg.beforeVolume = vol;
             }
@@ -486,7 +486,7 @@ namespace Core
             if (noiseFreq != page.noise)
             {
                 noiseFreq = page.noise;
-                SOutData(page, mml, port[0], 0x06, (byte)(page.noise & 0x1f));
+                SOutData(page, mml, port[0], (byte)(0x06 + (ChipID != 0 ? 0x80 : 0)), (byte)(page.noise & 0x1f));
             }
         }
 
@@ -521,11 +521,11 @@ namespace Core
             page.spg.freq = f;
             byte data = (byte)(f & 0xff);
             //parent.OutData(mml, port[0], (byte)(0 + page.ch * 2), data);
-            SOutData(page, mml, port[0], (byte)(0 + page.ch * 2), data);
+            SOutData(page, mml, port[0], (byte)(0 + page.ch * 2 + (ChipID != 0 ? 0x80 : 0)), data);
 
             data = (byte)((f & 0xf00) >> 8);
             //parent.OutData(mml, port[0], (byte)(1 + page.ch * 2), data);
-            SOutData(page, mml, port[0], (byte)(1 + page.ch * 2), data);
+            SOutData(page, mml, port[0], (byte)(1 + page.ch * 2 + (ChipID != 0 ? 0x80 : 0)), data);
 
             if (page.hardEnvelopeSync.sw)
             {
@@ -533,8 +533,8 @@ namespace Core
                 f = f + page.hardEnvelopeSync.detune;
                 page.hsFnum = f;
 
-                SOutData(page, mml, port[0], 0x0b, (byte)(page.hsFnum & 0xff));
-                SOutData(page, mml, port[0], 0x0c, (byte)((page.hsFnum >> 8) & 0xff));
+                SOutData(page, mml, port[0], (byte)(0x0b + (ChipID != 0 ? 0x80 : 0)), (byte)(page.hsFnum & 0xff));
+                SOutData(page, mml, port[0], (byte)(0x0c + (ChipID != 0 ? 0x80 : 0)), (byte)((page.hsFnum >> 8) & 0xff));
             }
         }
 
@@ -744,7 +744,7 @@ namespace Core
             if (page.spg.HardEnvelopeType != page.HardEnvelopeType)
             {
                 //parent.OutData(mml, port[0], 0x0d, (byte)(n & 0xf));
-                SOutData(page, mml, port[0], 0x0d, (byte)(page.HardEnvelopeType & 0xf));
+                SOutData(page, mml, port[0], (byte)(0x0d + (ChipID != 0 ? 0x80 : 0)), (byte)(page.HardEnvelopeType & 0xf));
                 page.spg.HardEnvelopeType = page.HardEnvelopeType;
             }
         }
@@ -756,8 +756,8 @@ namespace Core
             {
                 //parent.OutData(mml, port[0], 0x0b, (byte)(n & 0xff));
                 //parent.OutData(mml, port[0], 0x0c, (byte)((n >> 8) & 0xff));
-                SOutData(page, mml, port[0], 0x0b, (byte)(page.HardEnvelopeSpeed & 0xff));
-                SOutData(page, mml, port[0], 0x0c, (byte)((page.HardEnvelopeSpeed >> 8) & 0xff));
+                SOutData(page, mml, port[0], (byte)(0x0b + (ChipID != 0 ? 0x80 : 0)), (byte)(page.HardEnvelopeSpeed & 0xff));
+                SOutData(page, mml, port[0], (byte)(0x0c + (ChipID != 0 ? 0x80 : 0)), (byte)((page.HardEnvelopeSpeed >> 8) & 0xff));
                 page.spg.HardEnvelopeSpeed = page.HardEnvelopeSpeed;
             }
         }
@@ -770,7 +770,7 @@ namespace Core
             byte dat = (byte)(int)mml.args[1];
 
             //parent.OutData(mml, port[0], (byte)adr, (byte)dat);
-            SOutData(page, mml, port[0], (byte)adr, (byte)dat);
+            SOutData(page, mml, port[0], (byte)(adr + (ChipID != 0 ? 0x80 : 0)), (byte)dat);
         }
 
         public override void CmdLoopExtProc(partPage page, MML mml)
@@ -918,7 +918,7 @@ namespace Core
 
             if (SSGKeyOn != nSSGKeyOn)
             {
-                parent.OutData( mml, port[0], 0x07, nSSGKeyOn);
+                parent.OutData(mml, port[0], (byte)(0x07 + (ChipID != 0 ? 0x80 : 0)), nSSGKeyOn);
                 SSGKeyOn = nSSGKeyOn;
             }
         }

@@ -2259,7 +2259,10 @@ namespace mml2vgmIDE
                 if (Chip.Model == EnmVRModel.VirtualModel)
                 {
                     if (!ctAY8910[Chip.Number].UseScci && ctAY8910[Chip.Number].UseEmu)
+                    {
                         mds.WriteAY8910(Chip.Index, (byte)Chip.Number, (byte)address, (byte)data);
+                        //Console.WriteLine("{0}:{1}:{2}:{3}", Chip.Index, (byte)Chip.Number, (byte)address, (byte)data);
+                    }
                 }
                 if (Chip.Model == EnmVRModel.RealModel)
                 {

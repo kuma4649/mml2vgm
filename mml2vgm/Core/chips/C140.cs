@@ -516,7 +516,7 @@ namespace Core
                 page,
                 mml,
                 page.port[0]
-                , (byte)(port | (ChipNumber != 0 ? 0x80 : 0))
+                , (byte)(port | (ChipID != 0 ? 0x80 : 0))
                 , adr
                 , data
                 );

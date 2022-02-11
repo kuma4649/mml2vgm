@@ -225,7 +225,7 @@ namespace mml2vgmIDE.D88N88
                 //先頭の２byteを切り出すだけ
                 int loadAddress = buf[0] + buf[1] * 0x100;
                 buf.RemoveAt(0); buf.RemoveAt(0);
-                Console.WriteLine("load address = &H{0:X}", loadAddress);
+                //Console.WriteLine("load address = &H{0:X}", loadAddress);
                 return buf.ToArray();
             }
             else if ((atr.atr & 0x80) != 0)
