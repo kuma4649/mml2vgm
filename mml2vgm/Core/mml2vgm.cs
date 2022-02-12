@@ -369,6 +369,7 @@ namespace Core
                             + desBuf[adr + 4].val * 0x100
                             + desBuf[adr + 5].val * 0x100_00
                             + desBuf[adr + 6].val * 0x100_00_00 + 0x7 - 1;
+                        nrmSkipCount &= 0x7fffffff;
                     }
                     else if (od.val == 0x68)
                     {
