@@ -27,6 +27,7 @@ namespace mml2vgmIDE
         private string[] args;
         private bool exportWav;
         private bool exportMid;
+        private bool exportVGM;
         private Mml2vgm mv = null;
         private string title = "";
         public FrmLog frmLog = null;
@@ -2355,7 +2356,7 @@ namespace mml2vgmIDE
             else doc = (Document)compileTargetDocument;
             muteManager.Add(doc);
 
-            if (compileTargetDocument != null)
+            if (compileTargetDocument != null && compileTargetDocument is FrmEditor)
             {
                 FrmEditor fe = (FrmEditor)compileTargetDocument;
                 AzukiControl ac = fe.azukiControl;
@@ -4783,6 +4784,19 @@ namespace mml2vgmIDE
         private mmfControl mml2vgmMmf = null;
         private mmfControl mmfFMVoicePool = null;
 
+        private void tsmiExport_MuctoVGM_Click(object sender, EventArgs e)
+        {
+            IDockContent dc = GetActiveDockContent();
+            if (dc == null) return;
+            if (!(dc is FrmEditor)) return;
+            if (((FrmEditor)dc).document.srcFileFormat != EnmMmlFileFormat.MUC) return;
+
+            string tempPath = Path.Combine(Common.GetApplicationDataFolder(true), "temp", Path.GetFileName(((Document)((FrmEditor)dc).Tag).gwiFullPath));
+
+            compileManager.RequestCompile(((FrmEditor)dc).document, ((FrmEditor)dc).azukiControl.Text + "", tempPath);
+            compileManager.RequestPlayBack(((FrmEditor)dc).document, playToVGMCB);
+        }
+
         private void tsmiExport_toWaveFile_Click(object sender, EventArgs e)
         {
             IDockContent dc = GetActiveDockContent();
@@ -4880,6 +4894,7 @@ namespace mml2vgmIDE
                 {
                     mubData = (MmlDatum[])qi.doc.compiledData;
                     doPlay = true;
+                    compileTargetDocument = qi.doc;
                     finishedCompileMUC();
                 }
                 else if (qi.doc.dstFileFormat == EnmFileFormat.M)
@@ -5001,6 +5016,99 @@ namespace mml2vgmIDE
                 exportMid = false;
 
                 bool res = Audio.PlayToMid(setting, sfd.FileName);
+                if (!res)
+                {
+                    MessageBox.Show("失敗");
+                    return;
+                }
+
+                FrmProgress fp = new FrmProgress();
+                fp.ShowDialog();
+
+                MessageBox.Show("完了");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(string.Format("失敗\r\n{0}\r\n{1}\r\n", ex.Message, ex.StackTrace));
+            }
+            finally
+            {
+                setting.outputDevice.Latency = Latency;
+                setting.outputDevice.WaitTime = WaitTime;
+                setting.LatencyEmulation = LatencyEmu;
+                setting.LatencySCCI = LatencySCCI;
+            }
+
+        }
+
+        private void playToVGMCB(CompileManager.queItem qi)
+        {
+            if (InvokeRequired)
+            {
+                this.Invoke(new Action<CompileManager.queItem>(playToVGMCB), new object[] { qi });
+                return;
+            }
+
+            //コンパイルエラーが発生する場合はエクスポート処理中止
+            if (qi.doc.errBox != null && qi.doc.errBox.Length > 0)
+            {
+                Audio.Stop(SendMode.Both);
+                MessageBox.Show("コンパイル時にエラーが発生したため、エクスポート処理を中止しました。", "エクスポート失敗", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            if (qi.doc.dstFileFormat != EnmFileFormat.MUB)
+            {
+                Audio.Stop(SendMode.Both);
+                MessageBox.Show("VGMエクスポートはMUB形式のみです。", "エクスポート失敗", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            //出力ファイル名の問い合わせ
+            SaveFileDialog sfd = new SaveFileDialog();
+            string fnVgm = qi.doc.gwiFullPath;
+            if (fnVgm.Length > 0 && fnVgm[fnVgm.Length - 1] == '*')
+            {
+                fnVgm = fnVgm.Substring(0, fnVgm.Length - 1);
+            }
+            fnVgm = Path.Combine(Path.GetDirectoryName(fnVgm), Path.GetFileNameWithoutExtension(fnVgm) + ".vgm");
+            sfd.FileName = fnVgm;
+            string path1 = System.IO.Path.GetDirectoryName(fnVgm);
+            path1 = string.IsNullOrEmpty(path1) ? fnVgm : path1;
+            sfd.InitialDirectory = path1;
+            sfd.Filter = "VGMファイル(*.vgm)|*.vgm|すべてのファイル(*.*)|*.*";
+            sfd.Title = "エクスポート";
+            sfd.RestoreDirectory = true;
+            sfd.OverwritePrompt = false;
+            if (sfd.ShowDialog() != DialogResult.OK)
+            {
+                return;
+            }
+
+            exportVGM = true;
+            int Latency = setting.outputDevice.Latency;
+            int WaitTime = setting.outputDevice.WaitTime;
+            int LatencyEmu = setting.LatencyEmulation;
+            int LatencySCCI = setting.LatencySCCI;
+            setting.outputDevice.Latency = 0;
+            setting.outputDevice.WaitTime = 0;
+            setting.LatencyEmulation = 0;
+            setting.LatencySCCI = 0;
+
+            try
+            {
+                mubData = (MmlDatum[])qi.doc.compiledData;
+                doPlay = true;
+                args = new string[2] { qi.doc.gwiFullPath, "" };
+                compileTargetDocument = qi.doc;
+                finishedCompileMUC();
+
+                Audio.waveMode = true;
+                Audio.waveModeAbort = false;
+                Audio.Stop(SendMode.Both);
+                exportVGM = false;
+
+                bool res = Audio.PlayToVGM(setting, sfd.FileName, false, null, mubData);
                 if (!res)
                 {
                     MessageBox.Show("失敗");

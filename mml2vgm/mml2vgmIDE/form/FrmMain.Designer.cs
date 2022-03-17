@@ -121,6 +121,7 @@
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.TsmiAbout = new System.Windows.Forms.ToolStripMenuItem();
             this.timer = new System.Windows.Forms.Timer(this.components);
+            this.tsmiExport_MuctoVGM = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -425,6 +426,7 @@
             this.tsmiExport.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsmiExport_toDriverFormat,
             this.tsmiExport_MuctoD88,
+            this.tsmiExport_MuctoVGM,
             this.tsmiExport_toWaveFile,
             this.tsmiExport_toMp3File,
             this.tsmiExport_toMidiFile,
@@ -773,6 +775,12 @@
             this.timer.Interval = 16;
             this.timer.Tick += new System.EventHandler(this.Timer_Tick);
             // 
+            // tsmiExport_MuctoVGM
+            // 
+            this.tsmiExport_MuctoVGM.Name = "tsmiExport_MuctoVGM";
+            resources.ApplyResources(this.tsmiExport_MuctoVGM, "tsmiExport_MuctoVGM");
+            this.tsmiExport_MuctoVGM.Click += new System.EventHandler(this.tsmiExport_MuctoVGM_Click);
+            // 
             // FrmMain
             // 
             resources.ApplyResources(this, "$this");
@@ -889,6 +897,7 @@
         private System.Windows.Forms.ToolStripMenuItem tsmiExport_toDriverFormatAndPlay;
         private System.Windows.Forms.ToolStripSplitButton tssbExpAndMdp;
         private System.Windows.Forms.ToolStripMenuItem tsmiImport_MIDtoGWI;
+        private System.Windows.Forms.ToolStripMenuItem tsmiExport_MuctoVGM;
     }
 }
 

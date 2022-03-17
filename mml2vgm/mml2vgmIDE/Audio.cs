@@ -1,6 +1,7 @@
 ﻿using Core;
 using MDSound;
 using mml2vgmIDE.MMLParameter;
+using musicDriverInterface;
 //using Jacobi.Vst.Interop.Host;
 //using Jacobi.Vst.Core;
 //using mml2vgmIDE.form;
@@ -7423,8 +7424,45 @@ namespace mml2vgmIDE
             return ret;
         }
 
+        public static bool PlayToVGM(Setting setting, string fnVGM, bool doSkipStop = false, Action startedOnceMethod = null, MmlDatum[] mubData=null)
+        {
+            useEmu = false;
+            useReal = false;
+
+            waveMode = true;
+
+            errMsg = "";
+            Stop(SendMode.Both);
+
+            vgmSpeed = 1.0;
+            bool ret = playSet();
+            if (!ret) return false;
+            
+            Audio.startedOnceMethod = startedOnceMethod;
+
+            EmuSeqCounter = 0;
+            DriverSeqCounter = 0;
+
+            sm.RequestStopAtEmuChipSender();
+            sm.RequestStopAtRealChipSender();
+
+            Stop(SendMode.Both);
+
+            toVgmWriter = new VGMWriter(setting);
+            toVgmWriter.Open(fnVGM);
+            List<byte> mub = new List<byte>();
+            foreach (MmlDatum md in mubData) mub.Add(md != null ? (byte)md.dat : (byte)0);
+            toVgmWriter.useChipsFromMub(mub.ToArray());
+
+            Thread mm = new Thread(new ThreadStart(trdToVGMRenderingProcess));
+            mm.Start();
+
+            return ret;
+        }
+
         private static WaveWriter toWavWaveWriter = null;
         private static MidWriter toMidWriter = null;
+        private static VGMWriter toVgmWriter = null;
 
         private static void trdToWavRenderingProcess()
         {
@@ -7506,6 +7544,43 @@ namespace mml2vgmIDE
                 driver.oneFrameProc();
         }
 
+        private static void trdToVGMRenderingProcess()
+        {
+            short[] buf = new short[2];
+            int offset = 0;
+            int sampleCount = 1;
+
+            Enq bEnq = chipRegister.enq;
+            chipRegister.enq = EnqToVGM;
+            try
+            {
+
+                while (!driver.Stopped && GetVgmCurLoopCounter() < 2 && !waveModeAbort)
+                {
+                    mds.Update(buf, offset, sampleCount, playToVGMOneProc);
+                    EmuSeqCounter++;
+                    toVgmWriter.Write(buf, offset, sampleCount * 2);
+                }
+
+            }
+            finally
+            {
+                Stop(SendMode.Both);
+                toVgmWriter.Close();
+
+                chipRegister.enq = bEnq;
+                waveMode = false;
+            }
+        }
+
+        private static void playToVGMOneProc()
+        {
+            //
+            if (EmuSeqCounter >= DriverSeqCounter)
+                driver.oneFrameProc();
+            toVgmWriter.IncrementWaitCOunter();
+        }
+
         public static bool EnqToWav(outDatum od, long Counter, Chip Chip, EnmDataType Type, int Address, int Data, object ExData)
         {
             if (Chip == null) return false;
@@ -7524,6 +7599,17 @@ namespace mml2vgmIDE
             if (toMidWriter == null) return false;
 
             toMidWriter.SendChipData(Counter, Chip, Type, Address, Data, ExData);
+            return false;
+        }
+
+        public static bool EnqToVGM(outDatum od, long Counter, Chip Chip, EnmDataType Type, int Address, int Data, object ExData)
+        {
+            if (Chip == null) return false;
+            if (Chip.Device == EnmZGMDevice.Conductor) return false;
+            if (Type == EnmDataType.None) return false;
+            if (toVgmWriter == null) return false;
+
+            toVgmWriter.SendChipData(Counter, Chip, Type, Address, Data, ExData);
             return false;
         }
 

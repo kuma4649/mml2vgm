@@ -1612,6 +1612,18 @@ namespace Core
                 CmdSystemEffectEQ(pw, page, mml);
                 return;
             }
+            else if (c == 'C')
+            {
+                pw.incPos(page);
+                c = pw.getChar(page);
+                if (c != 'm')
+                {
+                    msgBox.setErrMsg(msg.get("E05068"), mml.line.Lp);
+                    return;
+                }
+                CmdSystemCompressor(pw, page, mml);
+                return;
+            }
             else
             {
                 msgBox.setErrMsg(msg.get("E05068"), mml.line.Lp);
@@ -1663,6 +1675,74 @@ namespace Core
             mml.args.Add(typ1);
             mml.args.Add(typ2);
             mml.args.Add(num);
+        }
+
+        private void CmdSystemCompressor(partWork pw, partPage page, MML mml)
+        {
+            mml.type = enmMMLType.Effect;
+            mml.args = new List<object>();
+            mml.args.Add("Sys.Efc.Comp");
+
+            pw.incPos(page);
+            pw.skipTabSpace(page);
+
+            char c = pw.getChar(page);
+            if (c != 'S' && c != 'V' && c != 'T' && c != 'R' && c != 'E' && c != 'G')
+            {
+                msgBox.setErrMsg(msg.get("E05059"), mml.line.Lp);
+                return;
+            }
+
+            mml.args.Add(c);
+
+            pw.incPos(page);
+            char t = '\0';
+            if (c == 'E' || c == 'G')
+            {
+                t = pw.getChar(page);
+                if (t != 'F' && t != 'Q')
+                {
+                    msgBox.setErrMsg(msg.get("E05059"), mml.line.Lp);
+                    return;
+                }
+                mml.args.Add(t);
+                pw.incPos(page);
+            }
+
+            pw.skipTabSpace(page);
+
+            int n;
+            if (!pw.getNum(page, out n))
+            {
+                msgBox.setErrMsg(msg.get("E05059"), mml.line.Lp);
+                return;
+            }
+
+            if (c == 'S')//switch
+            {
+                n = Common.CheckRange(n, 0, 1);
+            }
+            else if (c == 'V')//volume
+            {
+                n = Common.CheckRange(n, 0, 127);
+            }
+            else if (c == 'T')//threshold
+            {
+                n = Common.CheckRange(n, 0, 255);
+            }
+            else if (c == 'R')//ratio
+            {
+                n = Common.CheckRange(n, 0, 255);
+            }
+            else if (c == 'E')//envelope
+            {
+                n = Common.CheckRange(n, 0, 255);
+            }
+            else if (c == 'G')//gain
+            {
+                n = Common.CheckRange(n, 0, 255);
+            }
+            mml.args.Add(n);
         }
 
         private void CmdSusOnOff(partWork pw, partPage page, MML mml)
