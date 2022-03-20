@@ -7424,7 +7424,7 @@ namespace mml2vgmIDE
             return ret;
         }
 
-        public static bool PlayToVGM(Setting setting, string fnVGM, bool doSkipStop = false, Action startedOnceMethod = null, MmlDatum[] mubData=null)
+        public static bool PlayToVGM(Setting setting, string fnVGM, bool doSkipStop = false, Action startedOnceMethod = null, Document doc=null)
         {
             useEmu = false;
             useReal = false;
@@ -7451,8 +7451,10 @@ namespace mml2vgmIDE
             toVgmWriter = new VGMWriter(setting);
             toVgmWriter.Open(fnVGM);
             List<byte> mub = new List<byte>();
+            MmlDatum[] mubData = (MmlDatum[])doc.compiledData;
             foreach (MmlDatum md in mubData) mub.Add(md != null ? (byte)md.dat : (byte)0);
             toVgmWriter.useChipsFromMub(mub.ToArray());
+            toVgmWriter.SetTagInfo(doc.tag);
 
             Thread mm = new Thread(new ThreadStart(trdToVGMRenderingProcess));
             mm.Start();

@@ -306,6 +306,9 @@ namespace mml2vgmIDE
             }
             qi.doc.wrnBox = lstMsgInfo.ToArray();
 
+            Tuple<string,string>[] mucomTag = mucom.GetTagFromBuf(mubData, new myEncoding());
+            qi.doc.tag = mucomTag;
+
         }
 
         private void Compile_GWI(queItem qi)

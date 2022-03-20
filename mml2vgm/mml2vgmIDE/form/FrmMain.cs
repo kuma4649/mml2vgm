@@ -5098,6 +5098,7 @@ namespace mml2vgmIDE
             try
             {
                 mubData = (MmlDatum[])qi.doc.compiledData;
+                Document doc = qi.doc;
                 doPlay = true;
                 args = new string[2] { qi.doc.gwiFullPath, "" };
                 compileTargetDocument = qi.doc;
@@ -5108,7 +5109,7 @@ namespace mml2vgmIDE
                 Audio.Stop(SendMode.Both);
                 exportVGM = false;
 
-                bool res = Audio.PlayToVGM(setting, sfd.FileName, false, null, mubData);
+                bool res = Audio.PlayToVGM(setting, sfd.FileName, false, null, doc);
                 if (!res)
                 {
                     MessageBox.Show("失敗");

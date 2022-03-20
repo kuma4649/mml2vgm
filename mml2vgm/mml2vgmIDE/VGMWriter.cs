@@ -116,7 +116,11 @@ namespace mml2vgmIDE
                             gd3.VGMBy = tag.Item2;
                             break;
                         case "comment":
-                            gd3.Notes = tag.Item2;
+                            if (string.IsNullOrEmpty(gd3.Notes)) gd3.Notes = tag.Item2;
+                            else
+                            {
+                                gd3.Notes += "\r\n" + tag.Item2;
+                            }
                             break;
                         case "mucom88":
                             gd3.Version = tag.Item2;
@@ -128,7 +132,7 @@ namespace mml2vgmIDE
                     }
                 }
 
-                byte[] tagary = null;// gd3.make();
+                byte[] tagary = gd3.make();
                 dest.Seek(0, SeekOrigin.End);
                 long gd3ofs = dest.Length - 0x14;
                 foreach (byte b in tagary) dest.WriteByte(b);
@@ -653,6 +657,9 @@ namespace mml2vgmIDE
             return;
         }
 
-
+        internal void SetTagInfo(Tuple<string, string>[] tag)
+        {
+            this.tags = tag.ToList();
+        }
     }
 }

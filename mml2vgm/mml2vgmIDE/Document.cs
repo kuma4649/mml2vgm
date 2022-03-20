@@ -26,6 +26,8 @@ namespace mml2vgmIDE
         public msgInfo[] wrnBox = null;
         public TreeNode gwiTree = null;
         public FrmEditor editor = null;
+        public Tuple<string,string>[] tag= null;
+
         public bool isNew = false;
         public bool edit = false;
         public bool isMp3 = false;
