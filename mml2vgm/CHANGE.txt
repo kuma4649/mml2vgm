@@ -1,6 +1,6 @@
 更新履歴
 TAG581 2022/03/20
-  Core:mucomDotNET:TAG情報の取得を行うよう修正。また、細かいバグの修正。
+  IDE:mucomDotNET:TAG情報の取得を行うよう修正。また、細かいバグの修正。
 
 TAG580 2022/03/17
   Core:mucomDotNET:vgm形式でエクスポートできるよう機能追加(暫定)
