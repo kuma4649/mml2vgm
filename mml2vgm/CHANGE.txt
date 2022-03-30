@@ -1,4 +1,7 @@
 更新履歴
+TAG582 2022/03/30
+  IDE:mucomDotNET:SSGExtendタグに対応
+
 TAG581 2022/03/20
   IDE:mucomDotNET:TAG情報の取得を行うよう修正。また、細かいバグの修正。
 

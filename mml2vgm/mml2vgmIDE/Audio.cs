@@ -4730,6 +4730,14 @@ namespace mml2vgmIDE
 
                     ) return false;
 
+                if (mucomManager.SSGExtend)
+                {
+                    mds.ChangeYM2608_PSGMode(0, 1);
+                    mds.ChangeYM2608_PSGMode(1, 1);
+                    mds.ChangeYM2610_PSGMode(0, 1);
+                    mds.ChangeYM2610_PSGMode(1, 1);
+                }
+
                 log.Write("Volume 設定");
 
                 SetYM2608Volume(true, setting.balance.YM2608Volume);
