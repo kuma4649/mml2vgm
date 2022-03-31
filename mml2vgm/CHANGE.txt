@@ -1,4 +1,7 @@
 更新履歴
+TAG583 2022/03/31
+  IDE:mucomDotNET:Duty比選択対応版
+
 TAG582 2022/03/30
   IDE:mucomDotNET:SSGExtendタグに対応
 
