@@ -391,5 +391,11 @@ namespace mml2vgmIDE
             return GetTagFromBuf(lbuf.ToArray(), enc);
         }
 
+        public void SetSolo(Tuple<int, int, int> ch)
+        {
+            if (driver == null || ch == null) return;
+            driver.SetDriverSwitch("AllMute", true);
+            driver.SetDriverSwitch("SetMute", ch.Item1, ch.Item2, ch.Item3, false);
+        }
     }
 }

@@ -71,6 +71,7 @@
             this.tsmiExport = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiExport_toDriverFormat = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiExport_MuctoD88 = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiExport_MuctoVGM = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiExport_toWaveFile = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiExport_toMp3File = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiExport_toMidiFile = new System.Windows.Forms.ToolStripMenuItem();
@@ -121,7 +122,7 @@
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.TsmiAbout = new System.Windows.Forms.ToolStripMenuItem();
             this.timer = new System.Windows.Forms.Timer(this.components);
-            this.tsmiExport_MuctoVGM = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiExport_toWaveFileAllChSolo = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -446,8 +447,16 @@
             resources.ApplyResources(this.tsmiExport_MuctoD88, "tsmiExport_MuctoD88");
             this.tsmiExport_MuctoD88.Click += new System.EventHandler(this.tsmiExport_MuctoD88_Click);
             // 
+            // tsmiExport_MuctoVGM
+            // 
+            this.tsmiExport_MuctoVGM.Name = "tsmiExport_MuctoVGM";
+            resources.ApplyResources(this.tsmiExport_MuctoVGM, "tsmiExport_MuctoVGM");
+            this.tsmiExport_MuctoVGM.Click += new System.EventHandler(this.tsmiExport_MuctoVGM_Click);
+            // 
             // tsmiExport_toWaveFile
             // 
+            this.tsmiExport_toWaveFile.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmiExport_toWaveFileAllChSolo});
             this.tsmiExport_toWaveFile.Name = "tsmiExport_toWaveFile";
             resources.ApplyResources(this.tsmiExport_toWaveFile, "tsmiExport_toWaveFile");
             this.tsmiExport_toWaveFile.Click += new System.EventHandler(this.tsmiExport_toWaveFile_Click);
@@ -775,11 +784,11 @@
             this.timer.Interval = 16;
             this.timer.Tick += new System.EventHandler(this.Timer_Tick);
             // 
-            // tsmiExport_MuctoVGM
+            // tsmiExport_toWaveFileAllChSolo
             // 
-            this.tsmiExport_MuctoVGM.Name = "tsmiExport_MuctoVGM";
-            resources.ApplyResources(this.tsmiExport_MuctoVGM, "tsmiExport_MuctoVGM");
-            this.tsmiExport_MuctoVGM.Click += new System.EventHandler(this.tsmiExport_MuctoVGM_Click);
+            this.tsmiExport_toWaveFileAllChSolo.Name = "tsmiExport_toWaveFileAllChSolo";
+            resources.ApplyResources(this.tsmiExport_toWaveFileAllChSolo, "tsmiExport_toWaveFileAllChSolo");
+            this.tsmiExport_toWaveFileAllChSolo.Click += new System.EventHandler(this.tsmiExport_toWaveFileAllChSolo_Click);
             // 
             // FrmMain
             // 
@@ -898,6 +907,7 @@
         private System.Windows.Forms.ToolStripSplitButton tssbExpAndMdp;
         private System.Windows.Forms.ToolStripMenuItem tsmiImport_MIDtoGWI;
         private System.Windows.Forms.ToolStripMenuItem tsmiExport_MuctoVGM;
+        private System.Windows.Forms.ToolStripMenuItem tsmiExport_toWaveFileAllChSolo;
     }
 }
 

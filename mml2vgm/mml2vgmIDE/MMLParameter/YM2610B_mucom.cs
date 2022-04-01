@@ -65,21 +65,16 @@ namespace mml2vgmIDE.MMLParameter
         protected override void SetPan(outDatum od, int ch, int cc)
         {
             int n = (int)od.args[0];
-            if (od.linePos.part == "SSG")
-            {
-                pan[ch] = "-";
-            }
-            else if (od.linePos.part == "FM")
-            {
-                pan[ch] = n == 0 ? "-" : (n == 1 ? "Right" : (n == 2 ? "Left" : (n == 3 ? "Center" : n.ToString())));
-            }
-            else if (od.linePos.part == "ADPCM-B")
-            {
-                pan[ch] = n == 0 ? "-" : (n == 1 ? "Right" : (n == 2 ? "Left" : (n == 3 ? "Center" : n.ToString())));
-            }
-            else if (od.linePos.part == "ADPCM-A")
+            if (od.linePos.part == "ADPCM-A")
             {
                 n = (n & 0xf0) >> 4;
+            }
+
+            char p = '\0';
+            if (!string.IsNullOrEmpty(od.linePos.part)) p = od.linePos.part[0];
+
+            if (p == 'S' || p == 'F' || p == 'A') //[S]SG [F]M [A]DPCM-A/B
+            {
                 pan[ch] = n == 0 ? "-" : (n == 1 ? "Right" : (n == 2 ? "Left" : (n == 3 ? "Center" : n.ToString())));
             }
             else

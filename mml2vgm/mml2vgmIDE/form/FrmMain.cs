@@ -4810,6 +4810,25 @@ namespace mml2vgmIDE
             compileManager.RequestPlayBack(((FrmEditor)dc).document, playToWavCB);
         }
 
+        private void tsmiExport_toWaveFileAllChSolo_Click(object sender, EventArgs e)
+        {
+            IDockContent dc = GetActiveDockContent();
+            if (dc == null) return;
+            if (!(dc is FrmEditor)) return;
+
+            string tempPath = Path.Combine(Common.GetApplicationDataFolder(true), "temp", Path.GetFileName(((Document)((FrmEditor)dc).Tag).gwiFullPath));
+            if (Path.GetExtension(tempPath) != ".muc")
+            {
+                MessageBox.Show(".mucファイルのみです!");
+                return;
+            }
+
+            compileManager.RequestCompile(((FrmEditor)dc).document, ((FrmEditor)dc).azukiControl.Text + "", tempPath);
+
+            compileManager.RequestPlayBack(((FrmEditor)dc).document, playToWavCBAllChSolo);
+
+        }
+
         private void tsmiExport_toMidiFile_Click(object sender, EventArgs e)
         {
             IDockContent dc = GetActiveDockContent();
@@ -4947,6 +4966,159 @@ namespace mml2vgmIDE
                 setting.LatencySCCI = LatencySCCI;
             }
 
+        }
+
+        private void playToWavCBAllChSolo(CompileManager.queItem qi)
+        {
+            if (InvokeRequired)
+            {
+                this.Invoke(new Action<CompileManager.queItem>(playToWavCBAllChSolo), new object[] { qi });
+                return;
+            }
+
+            //コンパイルエラーが発生する場合はエクスポート処理中止
+            if (qi.doc.errBox != null && qi.doc.errBox.Length > 0)
+            {
+                Audio.Stop(SendMode.Both);
+                MessageBox.Show("コンパイル時にエラーが発生したため、エクスポート処理を中止しました。", "エクスポート失敗", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+
+            //出力ファイル名の問い合わせ
+            SaveFileDialog sfd = new SaveFileDialog();
+            string fnWav = qi.doc.gwiFullPath;
+            if (fnWav.Length > 0 && fnWav[fnWav.Length - 1] == '*')
+            {
+                fnWav = fnWav.Substring(0, fnWav.Length - 1);
+            }
+            if (!qi.doc.isMp3)
+            {
+                fnWav = Path.Combine(Path.GetDirectoryName(fnWav), Path.GetFileNameWithoutExtension(fnWav) + ".wav");
+                sfd.FileName = fnWav;
+                sfd.Filter = "WAVファイル(*.wav)|*.wav|すべてのファイル(*.*)|*.*";
+            }
+            else
+            {
+                fnWav = Path.Combine(Path.GetDirectoryName(fnWav), Path.GetFileNameWithoutExtension(fnWav) + ".mp3");
+                sfd.FileName = fnWav;
+                sfd.Filter = "MP3ファイル(*.mp3)|*.mp3|すべてのファイル(*.*)|*.*";
+            }
+            string path1 = System.IO.Path.GetDirectoryName(fnWav);
+            path1 = string.IsNullOrEmpty(path1) ? fnWav : path1;
+            sfd.InitialDirectory = path1;
+            sfd.Title = "エクスポート";
+            sfd.RestoreDirectory = true;
+            sfd.OverwritePrompt = false;
+
+            if (sfd.ShowDialog() != DialogResult.OK)
+            {
+                return;
+            }
+
+            exportWav = true;
+            int Latency = setting.outputDevice.Latency;
+            int WaitTime = setting.outputDevice.WaitTime;
+            int LatencyEmu = setting.LatencyEmulation;
+            int LatencySCCI = setting.LatencySCCI;
+            setting.outputDevice.Latency = 0;
+            setting.outputDevice.WaitTime = 0;
+            setting.LatencyEmulation = 0;
+            setting.LatencySCCI = 0;
+
+            try
+            {
+                if (qi.doc.dstFileFormat == EnmFileFormat.MUB)
+                {
+                    mubData = (MmlDatum[])qi.doc.compiledData;
+                    doPlay = true;
+                    compileTargetDocument = qi.doc;
+                    finishedCompileMUC();
+                }
+                else if (qi.doc.dstFileFormat == EnmFileFormat.M)
+                {
+                    mData = (MmlDatum[])qi.doc.compiledData;
+                    doPlay = true;
+                    finishedCompileMML();
+                }
+                else if (qi.doc.dstFileFormat == EnmFileFormat.MDR)
+                {
+                    mData = (MmlDatum[])qi.doc.compiledData;
+                    doPlay = true;
+                    compileTargetDocument = qi.doc;
+                    finishedCompileMDL();
+                }
+                else
+                {
+                    mv = (Mml2vgm)qi.doc.compiledData;
+                    doPlay = true;
+                    args = new string[2] { qi.doc.gwiFullPath, "" };
+                    finishedCompileGWI();
+                }
+
+
+                musicDriverInterface.CompilerInfo ci = mucom.GetCompilerInfo();
+                List<Tuple<int, int, int>> useCh = new List<Tuple<int, int, int>>();
+                for(int n = 0; n < ci.totalCount.Count; n++)
+                {
+                    if (ci.totalCount[n] == 0) continue;
+                    useCh.Add(new Tuple<int, int, int>(n / (11 * 10), (n % (11*10)) / 10, n % 10));
+                }
+
+                foreach (Tuple<int, int, int> ch in useCh)
+                {
+                    Audio.waveMode = true;
+                    Audio.waveModeAbort = false;
+                    Audio.Stop(SendMode.Both);
+                    exportWav = false;
+
+                    string fn = GetSoloChFileName(sfd.FileName, ch);
+                    bool res = Audio.PlayToWavSolo(setting, fn, ch);
+                    if (!res)
+                    {
+                        MessageBox.Show("失敗");
+                        return;
+                    }
+
+                    FrmProgress fp = new FrmProgress();
+                    fp.ShowDialog();
+                }
+
+                MessageBox.Show("完了");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(string.Format("失敗\r\n{0}\r\n{1}\r\n", ex.Message, ex.StackTrace));
+            }
+            finally
+            {
+                setting.outputDevice.Latency = Latency;
+                setting.outputDevice.WaitTime = WaitTime;
+                setting.LatencyEmulation = LatencyEmu;
+                setting.LatencySCCI = LatencySCCI;
+            }
+
+        }
+
+        private string GetSoloChFileName(string fileName, Tuple<int, int, int> ch)
+        {
+            string[] chipCh = new string[]
+            {
+                "ABCDEFGHIJK",
+                "LMNOPQRSTUV",
+                "abcdefghijk",
+                "lmnopqrstuv",
+                "WXYZwxyz"
+            };
+
+            string ret = string.Format("{0}_{1}{2}.{3}"
+                , Path.Combine(Path.GetDirectoryName(fileName), Path.GetFileNameWithoutExtension(fileName))
+                , chipCh[ch.Item1][ch.Item2]
+                , ch.Item3
+                , Path.GetExtension(fileName)
+                );
+
+            return ret;
         }
 
         private void playToMIDCB(CompileManager.queItem qi)

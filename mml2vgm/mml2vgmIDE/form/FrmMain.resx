@@ -516,6 +516,12 @@
   <data name="tsmiExport_MuctoVGM.Text" xml:space="preserve">
     <value>.MUC to .VGM</value>
   </data>
+  <data name="tsmiExport_toWaveFileAllChSolo.Size" type="System.Drawing.Size, System.Drawing">
+    <value>203, 22</value>
+  </data>
+  <data name="tsmiExport_toWaveFileAllChSolo.Text" xml:space="preserve">
+    <value>to .WAV file(All Ch. Solo)</value>
+  </data>
   <data name="tsmiExport_toWaveFile.Size" type="System.Drawing.Size, System.Drawing">
     <value>180, 22</value>
   </data>
@@ -1186,6 +1192,12 @@
   <data name="&gt;&gt;tsmiExport_MuctoD88.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="&gt;&gt;tsmiExport_MuctoVGM.Name" xml:space="preserve">
+    <value>tsmiExport_MuctoVGM</value>
+  </data>
+  <data name="&gt;&gt;tsmiExport_MuctoVGM.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="&gt;&gt;tsmiExport_toWaveFile.Name" xml:space="preserve">
     <value>tsmiExport_toWaveFile</value>
   </data>
@@ -1486,10 +1498,10 @@
   <data name="&gt;&gt;timer.Type" xml:space="preserve">
     <value>System.Windows.Forms.Timer, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;tsmiExport_MuctoVGM.Name" xml:space="preserve">
-    <value>tsmiExport_MuctoVGM</value>
+  <data name="&gt;&gt;tsmiExport_toWaveFileAllChSolo.Name" xml:space="preserve">
+    <value>tsmiExport_toWaveFileAllChSolo</value>
   </data>
-  <data name="&gt;&gt;tsmiExport_MuctoVGM.Type" xml:space="preserve">
+  <data name="&gt;&gt;tsmiExport_toWaveFileAllChSolo.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">

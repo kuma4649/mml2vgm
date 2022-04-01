@@ -350,5 +350,10 @@ namespace mml2vgmIDE
             //else OPNBWrite_AdpcmB(1, pcmData);
         }
 
+        public void SetSolo(Tuple<int, int, int> ch)
+        {
+            if (mm == null) return;
+            mm.SetSolo(ch);
+        }
     }
 }

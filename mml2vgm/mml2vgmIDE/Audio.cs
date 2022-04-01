@@ -1241,6 +1241,27 @@ namespace mml2vgmIDE
             return ret;
         }
 
+        private static bool playSetSolo(Tuple<int, int, int> ch)
+        {
+            bool ret;
+
+            if (PlayingFileFormat == EnmFileFormat.MUB)
+            {
+                driver = new mucomMub();
+                driver.setting = setting;
+
+                ret = mubPlay(setting, ch);
+            }
+            else
+            {
+                ret = false;
+            }
+
+            if (!ret) return false;// ?
+
+            return ret;
+        }
+
         public static bool xgmPlay(Setting setting)
         {
 
@@ -4518,7 +4539,7 @@ namespace mml2vgmIDE
 
         }
 
-        public static bool mubPlay(Setting setting)
+        public static bool mubPlay(Setting setting, Tuple<int, int, int> ch=null)
         {
 
             try
@@ -4729,6 +4750,8 @@ namespace mml2vgmIDE
                     )
 
                     ) return false;
+
+                mubDriver.SetSolo(ch);
 
                 if (mucomManager.SSGExtend)
                 {
@@ -7378,6 +7401,40 @@ namespace mml2vgmIDE
             vgmSpeed = 1.0;
 
             bool ret = playSet();
+            if (!ret) return false;
+
+            Audio.startedOnceMethod = startedOnceMethod;
+
+            EmuSeqCounter = 0;
+            DriverSeqCounter = 0;
+
+            sm.RequestStopAtEmuChipSender();
+            sm.RequestStopAtRealChipSender();
+
+            Stop(SendMode.Both);
+
+            toWavWaveWriter = new WaveWriter(setting);
+            toWavWaveWriter.Open(fnWav);
+
+            Thread mm = new Thread(new ThreadStart(trdToWavRenderingProcess));
+            mm.Start();
+
+            return ret;
+        }
+
+        public static bool PlayToWavSolo(Setting setting, string fnWav, Tuple<int, int, int> ch, bool doSkipStop = false, Action startedOnceMethod = null)
+        {
+            useEmu = false;
+            useReal = false;
+
+            waveMode = true;
+
+            errMsg = "";
+            Stop(SendMode.Both);
+
+            vgmSpeed = 1.0;
+
+            bool ret = playSetSolo(ch);
             if (!ret) return false;
 
             Audio.startedOnceMethod = startedOnceMethod;
