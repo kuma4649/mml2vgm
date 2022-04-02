@@ -1,4 +1,7 @@
 更新履歴
+TAG585 2022/04/02
+  IDE:mucomDotNET更新
+
 TAG584 2022/04/01
   IDE:パートカウンター:mucomDotNET:SSGのPanの表示に対応(Thanx!ゆきにゃんさん)
   IDE:エクスポート:mucomDotNET:Wavのチャンネルごとのエクスポートが可能に。(Thanx!古代センセ)
