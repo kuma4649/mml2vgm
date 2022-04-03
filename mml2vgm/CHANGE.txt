@@ -1,4 +1,8 @@
 更新履歴
+TAG587 2022/04/04(注意)
+  Core:YM2609:SSGのユーザー定義波形を4bit->8bitに仕様変更
+  IDE:mucomDotNET更新
+
 TAG586 2022/04/03
   IDE:mucomDotNET更新
 

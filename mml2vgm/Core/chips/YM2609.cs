@@ -1977,11 +1977,13 @@ namespace Core
             mml.args.Add(parent.instOPNA2WFS[n].Item1);
             //データの流し込みいくよー
             byte[] wd = parent.instOPNA2WFS[n].Item2;
+            SOutData(page, mml, page.port[port],
+                (byte)(adr + 0x0d),
+                (byte)((n == 1 ? 0x80 : 0x00) | ((vch & 3) << 4) | (page.spg.HardEnvelopeType & 0xf)));
             for (n = 0; n < wd.Length; n++)
             {
                 if (n == 0) continue;
-                byte d = (byte)((n == 1 ? 0x80 : 0x00) | ((vch & 3) << 4) | (wd[n] & 0xf));
-                SOutData(page, mml, page.port[port], (byte)(adr + 0x0e), d);
+                SOutData(page, mml, page.port[port], (byte)(adr + 0x0e), wd[n]);
             }
             page.dutyCycle = (vch & 3) + 10;
         }
