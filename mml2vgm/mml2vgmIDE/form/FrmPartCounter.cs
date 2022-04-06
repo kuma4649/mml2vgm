@@ -12,19 +12,21 @@ namespace mml2vgmIDE
     {
         public Action parentUpdate = null;
         private MMLParameter.Manager mmlParams = null;
+        private muteManager muteManager = null;
         private Setting setting = null;
         private Brush[][] meterBrush = new Brush[9][];
         private bool SoloMode = false;
-        private List<Tuple<string, int, int, int, bool, bool, bool>> lstCacheMuteSolo = new List<Tuple<string, int, int, int, bool, bool, bool>>();
+        //private List<Tuple<string, int, int, int, bool, bool, bool>> lstCacheMuteSolo = new List<Tuple<string, int, int, int, bool, bool, bool>>();
 
         private const string clmKBDAssign = "ClmKBDAssign";
         private const string Assign = "Assign";
 
 
-        public FrmPartCounter(Setting setting)
+        public FrmPartCounter(Setting setting,muteManager muteManager)
         {
             InitializeComponent();
             this.setting = setting;
+            this.muteManager = muteManager;
 
             dgvPartCounter.BackgroundColor = Color.FromArgb(setting.ColorScheme.PartCounter_BackColor);
             dgvPartCounter.DefaultCellStyle.BackColor = Color.FromArgb(setting.ColorScheme.PartCounter_BackColor);
@@ -352,7 +354,7 @@ namespace mml2vgmIDE
 
         private void CacheMuteSolo()
         {
-            lstCacheMuteSolo.Clear();
+            //lstCacheMuteSolo.Clear();
             foreach (DataGridViewRow r in dgvPartCounter.Rows)
             {
                 Tuple<string, int, int, int, bool, bool, bool> t = new Tuple<string, int, int, int, bool, bool, bool>(
@@ -364,7 +366,7 @@ namespace mml2vgmIDE
                     , (bool)(r.Cells[dgvPartCounter.Columns["ClmPush"].Index].Value == null ? false : ((string)r.Cells[dgvPartCounter.Columns["ClmPush"].Index].Value == "M"))
                     , (bool)(r.Cells[dgvPartCounter.Columns["ClmSolo"].Index].Value == null ? false : ((string)r.Cells[dgvPartCounter.Columns["ClmSolo"].Index].Value == "S"))
                     );
-                lstCacheMuteSolo.Add(t);
+                //lstCacheMuteSolo.Add(t);
             }
         }
 
@@ -382,36 +384,51 @@ namespace mml2vgmIDE
             r.Cells[dgvPartCounter.Columns["ClmLoopCounter"].Index].Value = cells[6];
             r.Cells[dgvPartCounter.Columns["ClmMuteMngKey"].Index].Value = cells[7];
 
-
-            //mute状態を復帰する
-            bool fnd = false;
-            foreach (Tuple<string, int, int, int, bool, bool, bool> l in lstCacheMuteSolo)
+            muteStatus ms = muteManager.GetStatus((int)cells[7]);
+            if (ms != null)
             {
-                if (l.Item1 != (string)cells[4]
-                    || l.Item2 != (int)cells[1]
-                    || l.Item3 != (int)cells[2]
-                    || l.Item4 != (int)cells[0])
-                    continue;
-
-                r.Cells[dgvPartCounter.Columns["ClmMute"].Index].Value = (bool)l.Item5 ? "M" : "";
-                r.Cells[dgvPartCounter.Columns["ClmPush"].Index].Value = (bool)l.Item6 ? "M" : "";
-                r.Cells[dgvPartCounter.Columns["ClmSolo"].Index].Value = (bool)l.Item7 ? "S" : "";
-                //if (SoloMode) r.Cells[dgvPartCounter.Columns["ClmSolo"].Index].Value = (!(bool)l.Item5) ? "S" : "";
-                //else r.Cells[dgvPartCounter.Columns["ClmSolo"].Index].Value = "";
-                fnd = true;
-                break;
+                r.Cells[dgvPartCounter.Columns["ClmMute"].Index].Value = ms.mute ? "M" : "";
+                r.Cells[dgvPartCounter.Columns["ClmPush"].Index].Value = ms.cache ? "M" : "";
+                r.Cells[dgvPartCounter.Columns["ClmSolo"].Index].Value = ms.solo ? "S" : "";
             }
-            //見つからない場合は初期値をセット
-            if (!fnd)
+            else
             {
-                SoloMode = false;
                 r.Cells[dgvPartCounter.Columns["ClmMute"].Index].Value = "";
-                r.Cells[dgvPartCounter.Columns["ClmSolo"].Index].Value = "";// SoloMode ? "S" : "";
                 r.Cells[dgvPartCounter.Columns["ClmPush"].Index].Value = "";
+                r.Cells[dgvPartCounter.Columns["ClmSolo"].Index].Value = "";
             }
+
+
+            ////mute状態を復帰する
+            //bool fnd = false;
+            //foreach (Tuple<string, int, int, int, bool, bool, bool> l in lstCacheMuteSolo)
+            //{
+            //    if (l.Item1 != (string)cells[4]
+            //        || l.Item2 != (int)cells[1]
+            //        || l.Item3 != (int)cells[2]
+            //        || l.Item4 != (int)cells[0])
+            //        continue;
+
+            //    r.Cells[dgvPartCounter.Columns["ClmMute"].Index].Value = (bool)l.Item5 ? "M" : "";
+            //    r.Cells[dgvPartCounter.Columns["ClmPush"].Index].Value = (bool)l.Item6 ? "M" : "";
+            //    r.Cells[dgvPartCounter.Columns["ClmSolo"].Index].Value = (bool)l.Item7 ? "S" : "";
+            //    //if (SoloMode) r.Cells[dgvPartCounter.Columns["ClmSolo"].Index].Value = (!(bool)l.Item5) ? "S" : "";
+            //    //else r.Cells[dgvPartCounter.Columns["ClmSolo"].Index].Value = "";
+            //    fnd = true;
+            //    break;
+            //}
+            ////見つからない場合は初期値をセット
+            //if (!fnd)
+            //{
+            //    SoloMode = false;
+            //    r.Cells[dgvPartCounter.Columns["ClmMute"].Index].Value = "";
+            //    r.Cells[dgvPartCounter.Columns["ClmSolo"].Index].Value = "";// SoloMode ? "S" : "";
+            //    r.Cells[dgvPartCounter.Columns["ClmPush"].Index].Value = "";
+            //}
 
 
             dgvPartCounter.Rows.Add(r);
+            SetMute(r);
         }
 
         public void Start(MMLParameter.Manager mmlParams)
@@ -550,6 +567,7 @@ namespace mml2vgmIDE
                     col.HeaderText = colName[i].Item3;
                     col.Visible = colName[i].Item4;
                     col.DefaultCellStyle.Alignment = colName[i].Item5;
+                    col.SortMode = DataGridViewColumnSortMode.NotSortable;
                     if (colName[i].Item2 == "ClmSpacer")
                     {
                         col.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
@@ -576,95 +594,47 @@ namespace mml2vgmIDE
 
         public void ClickMUTE(int rowIndex)
         {
-            if (CheckMucomParameter())
-            {
-                ClickMUTE_mucom(rowIndex);
-                return;
-            }
-
             if (rowIndex < 0)
             {
-                if (SoloMode) return;
-                //Click MUTE Reset 
-                foreach (DataGridViewRow r in dgvPartCounter.Rows)
-                {
-                    r.Cells["ClmMute"].Value = "";
-                    SetMute(r);
-                }
-                return;
+                muteManager.ClickAllMute();
             }
-
-            if (dgvPartCounter.Rows.Count < rowIndex + 1) return;
-
-            bool nowMute = (string)dgvPartCounter.Rows[rowIndex].Cells["ClmMute"].Value == "M";
-            dgvPartCounter.Rows[rowIndex].Cells["ClmMute"].Value = nowMute ? "" : "M";
-            if (SoloMode)
-                dgvPartCounter.Rows[rowIndex].Cells["ClmSolo"].Value = !nowMute ? "" : "S";
-            SetMute(dgvPartCounter.Rows[rowIndex]);
-
-            if (SoloMode && !nowMute && !CheckSoloCh())
+            else
             {
-                SoloMode = false;
-                //mute復帰
-                foreach (DataGridViewRow r in dgvPartCounter.Rows)
-                {
-                    r.Cells["ClmMute"].Value = r.Cells["ClmPush"].Value;
-                    SetMute(r);
-                }
+                DataGridViewRow r = dgvPartCounter.Rows[rowIndex];
+                muteManager.ClickMute((int)r.Cells[dgvPartCounter.Columns["ClmMuteMngKey"].Index].Value);
             }
+
+            refreshMuteSolo();
         }
 
         public void ClickSOLO(int rowIndex)
         {
-            if (CheckMucomParameter())
-            {
-                ClickSOLO_mucom(rowIndex);
-                return;
-            }
 
             if (rowIndex < 0)
             {
-                if (!SoloMode) return;
-                //Click SOLO Reset(mute復帰)) 
-                foreach (DataGridViewRow r in dgvPartCounter.Rows)
-                {
-                    r.Cells["ClmSolo"].Value = "";
-                    r.Cells["ClmMute"].Value = r.Cells["ClmPush"].Value;
-                    SetMute(r);
-                }
-                SoloMode = false;
-                return;
+                muteManager.ClickAllSolo();
+            }
+            else
+            {
+                DataGridViewRow r = dgvPartCounter.Rows[rowIndex];
+                muteManager.ClickSolo((int)r.Cells[dgvPartCounter.Columns["ClmMuteMngKey"].Index].Value);
             }
 
-            if (dgvPartCounter.Rows.Count < rowIndex + 1) return;
+            refreshMuteSolo();
+        }
 
-            bool nowSolo = (string)dgvPartCounter.Rows[rowIndex].Cells["ClmSolo"].Value == "S";
-            //SOLOモードではなく、SOLOではない場合はチェックを行う
-            if (!SoloMode && !nowSolo && !CheckSoloCh())
+        private void refreshMuteSolo()
+        {
+            int partKey;
+            muteStatus ms;
+
+            foreach (DataGridViewRow row in dgvPartCounter.Rows)
             {
-                SoloMode = true;
-                //mute退避
-                foreach (DataGridViewRow r in dgvPartCounter.Rows)
-                {
-                    r.Cells["ClmPush"].Value = r.Cells["ClmMute"].Value;
-                    r.Cells["ClmMute"].Value = "M";
-                    SetMute(r);
-                }
-            }
-
-            dgvPartCounter.Rows[rowIndex].Cells["ClmSolo"].Value = nowSolo ? "" : "S";
-            if (SoloMode) dgvPartCounter.Rows[rowIndex].Cells["ClmMute"].Value = !nowSolo ? "" : "M";
-            SetMute(dgvPartCounter.Rows[rowIndex]);
-
-            if (SoloMode && nowSolo && !CheckSoloCh())
-            {
-                SoloMode = false;
-                //mute復帰
-                foreach (DataGridViewRow r in dgvPartCounter.Rows)
-                {
-                    r.Cells["ClmMute"].Value = r.Cells["ClmPush"].Value;
-                    SetMute(r);
-                }
+                partKey = (int)row.Cells[dgvPartCounter.Columns["ClmMuteMngKey"].Index].Value;
+                ms = muteManager.GetStatus(partKey);
+                row.Cells[dgvPartCounter.Columns["ClmSolo"].Index].Value = ms.solo ? "S" : "";
+                row.Cells[dgvPartCounter.Columns["ClmMute"].Index].Value = ms.mute ? "M" : "";
+                SetMute(row);
             }
         }
 
@@ -923,6 +893,8 @@ namespace mml2vgmIDE
             int pg;// = cp.Length < 2 ? 0 : (cp[1] - '0');
             string mm = (string)r.Cells["ClmMute"].Value;
             string sm = (string)r.Cells["ClmSolo"].Value;
+            //int partKey = (int)r.Cells["ClmMuteMngKey"].Value;
+            //muteStatus ms = muteManager.GetStatus(partKey);
 
             foreach (DataGridViewRow rw in dgvPartCounter.Rows)
             {
@@ -944,6 +916,9 @@ namespace mml2vgmIDE
                     c = (p[0] <= 'w' ? (p[0] - 'W') : (p[0] - 'w' + 4));
                 }
                 if (c != ch) continue;
+
+                //partKey = (int)rw.Cells["ClmMuteMngKey"].Value;
+                //muteManager.SetMuteSolo(partKey, ms);
 
                 rw.Cells["ClmMute"].Value = mm;
                 rw.Cells["ClmSolo"].Value = sm;

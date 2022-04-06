@@ -1,4 +1,7 @@
 更新履歴
+TAG589 2022/04/06
+  PartCounter:mute/solo関連の処理を大幅に修正
+
 TAG588 2022/04/05 
   IDE:mucomDotNET更新
 
