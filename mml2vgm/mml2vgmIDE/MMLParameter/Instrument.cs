@@ -114,7 +114,7 @@ namespace mml2vgmIDE.MMLParameter
         {
             if (chip == null) return;
             if (chip.ChMasks == null) return;
-            if (ch < 0 || ch >= chip.ChMasks.Length) return;
+            if (ch < 0 || ch >= chip.ChMasks.Count) return;
             chip.ChMasks[ch] = flg;
         }
 

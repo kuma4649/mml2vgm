@@ -1,5 +1,6 @@
 ﻿using Core;
 using mml2vgmIDE;
+using System.Collections.Generic;
 
 namespace SoundManager
 {
@@ -14,8 +15,8 @@ namespace SoundManager
         public int Hosei;
 
         private object lockobj = new object();
-        private bool[] _ChMasks = null;
-        public bool[] ChMasks
+        private List<bool> _ChMasks = null;
+        public List<bool> ChMasks
         {
             set
             {
@@ -48,7 +49,8 @@ namespace SoundManager
 
         public Chip(int Ch)
         {
-            ChMasks = new bool[Ch];
+            ChMasks = new List<bool>(Ch);
+            for (int i = 0; i < Ch; i++) ChMasks.Add(false);
             ChMasksPG = new int[Ch];
             silentVoice = new bool[Ch];
             silentVoicePG = new int[Ch];

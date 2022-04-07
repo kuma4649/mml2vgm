@@ -53,6 +53,104 @@ namespace mml2vgmIDE
         private Document crntDoc = null;
 
 
+        /// <summary>
+        /// 
+        ///   1 : Document
+        ///   2 : chipName(str
+        ///   3 : chipIndex(int 
+        ///   4 : chipNumber(int
+        ///  ans: チップ単位のmute配列
+        /// </summary>
+        private Dictionary<Document, Dictionary<string, Dictionary<int, Dictionary<int, List<bool>>>>> chipMuteStatus
+            = new Dictionary<Document, Dictionary<string, Dictionary<int, Dictionary<int, List<bool>>>>>();
+
+        public void SetChipMute(Document doc, string chipName, int chipIndex, int chipNumber, int partNumber, bool mute)
+        {
+            Dictionary<string, Dictionary<int, Dictionary<int, List<bool>>>> dic1;
+            Dictionary<int, Dictionary<int, List<bool>>> dic2;
+            Dictionary<int, List<bool>> dic3;
+            List<bool> lst;
+
+            if (!chipMuteStatus.ContainsKey(doc))
+                chipMuteStatus.Add(doc, new Dictionary<string, Dictionary<int, Dictionary<int, List<bool>>>>());
+            dic1 = chipMuteStatus[doc];
+
+            if (!dic1.ContainsKey(chipName))
+                dic1.Add(chipName, new Dictionary<int, Dictionary<int, List<bool>>>());
+            dic2 = dic1[chipName];
+
+            if (!dic2.ContainsKey(chipIndex))
+                dic2.Add(chipIndex, new Dictionary<int, List<bool>>());
+            dic3 = dic2[chipIndex];
+
+            if (!dic3.ContainsKey(chipNumber))
+                dic3.Add(chipNumber, new List<bool>());
+            lst = dic3[chipNumber];
+
+            while (partNumber > lst.Count - 1)
+            {
+                lst.Add(false);
+            }
+
+            lst[partNumber] = mute;
+        }
+
+        public bool GetChipMute(Document doc, string chipName, int chipIndex, int chipNumber, int partNumber)
+        {
+            Dictionary<string, Dictionary<int, Dictionary<int, List<bool>>>> dic1;
+            Dictionary<int, Dictionary<int, List<bool>>> dic2;
+            Dictionary<int, List<bool>> dic3;
+            List<bool> lst;
+
+            if (!chipMuteStatus.ContainsKey(doc))
+                chipMuteStatus.Add(doc, new Dictionary<string, Dictionary<int, Dictionary<int, List<bool>>>>());
+            dic1 = chipMuteStatus[doc];
+
+            if (!dic1.ContainsKey(chipName))
+                dic1.Add(chipName, new Dictionary<int, Dictionary<int, List<bool>>>());
+            dic2 = dic1[chipName];
+
+            if (!dic2.ContainsKey(chipIndex))
+                dic2.Add(chipIndex, new Dictionary<int, List<bool>>());
+            dic3 = dic2[chipIndex];
+
+            if (!dic3.ContainsKey(chipNumber))
+                dic3.Add(chipNumber, new List<bool>());
+            lst = dic3[chipNumber];
+
+            while (partNumber > lst.Count - 1)
+            {
+                lst.Add(false);
+            }
+
+            return lst[partNumber];
+        }
+
+        public List<bool> GetChipMutes(Document doc, string chipName, int chipIndex, int chipNumber)
+        {
+            Dictionary<string, Dictionary<int, Dictionary<int, List<bool>>>> dic1;
+            Dictionary<int, Dictionary<int, List<bool>>> dic2;
+            Dictionary<int, List<bool>> dic3;
+            List<bool> lst;
+
+            if (!chipMuteStatus.ContainsKey(doc))
+                chipMuteStatus.Add(doc, new Dictionary<string, Dictionary<int, Dictionary<int, List<bool>>>>());
+            dic1 = chipMuteStatus[doc];
+
+            if (!dic1.ContainsKey(chipName))
+                dic1.Add(chipName, new Dictionary<int, Dictionary<int, List<bool>>>());
+            dic2 = dic1[chipName];
+
+            if (!dic2.ContainsKey(chipIndex))
+                dic2.Add(chipIndex, new Dictionary<int, List<bool>>());
+            dic3 = dic2[chipIndex];
+
+            if (!dic3.ContainsKey(chipNumber))
+                dic3.Add(chipNumber, new List<bool>());
+            lst = dic3[chipNumber];
+
+            return lst;
+        }
 
 
         public void AllClear()
@@ -110,6 +208,8 @@ namespace mml2vgmIDE
             ms.trackName = (string)cells[3];
             ms.chipName = (string)cells[4];
 
+            SetChipMute(doc, ms.chipName, ms.chipIndex, ms.chipNumber, ms.partNumber, false);
+
             return key;
         }
 
@@ -126,7 +226,7 @@ namespace mml2vgmIDE
             {
                 ms.solo = false;
                 ms.mute = ms.cache;
-                //SetMute(r);
+                SetChipMute(doc, ms.chipName, ms.chipIndex, ms.chipNumber, ms.partNumber, ms.mute);
             }
             SoloMode[doc] = false;
         }
@@ -142,7 +242,7 @@ namespace mml2vgmIDE
             foreach (muteStatus ms in lstMuteStatus[doc].Values)
             {
                 ms.mute = false;
-                //SetMute(r);
+                SetChipMute(doc, ms.chipName, ms.chipIndex, ms.chipNumber, ms.partNumber, ms.mute);
             }
 
         }
@@ -155,9 +255,12 @@ namespace mml2vgmIDE
             if (!lstMuteStatus.ContainsKey(doc)) return;
             if (!lstMuteStatus[doc].ContainsKey(partKey)) return;
 
-            bool nowMute = lstMuteStatus[doc][partKey].mute;
-            lstMuteStatus[doc][partKey].mute = !nowMute;
-            if (SoloMode[doc]) lstMuteStatus[doc][partKey].solo = nowMute;
+            muteStatus mts = lstMuteStatus[doc][partKey];
+            bool nowMute = mts.mute;
+            mts.mute = !nowMute;
+            if (SoloMode[doc]) mts.solo = nowMute;
+
+            SetChipMute(doc, mts.chipName, mts.chipIndex, mts.chipNumber, mts.partNumber, mts.mute);
 
             if (SoloMode[doc] && !nowMute && !CheckSoloCh(doc))
             {
@@ -167,20 +270,22 @@ namespace mml2vgmIDE
                 foreach (muteStatus ms in lstMuteStatus[doc].Values)
                 {
                     ms.mute = ms.cache;
+                    SetChipMute(doc, ms.chipName, ms.chipIndex, ms.chipNumber, ms.partNumber, ms.mute);
                 }
             }
 
             if (doc.srcFileFormat != EnmMmlFileFormat.MUC) return;
-            string tn = lstMuteStatus[doc][partKey].trackName;
+            string tn = mts.trackName;
             if (tn.Length < 2) return;
             char t = tn[0];
             foreach (muteStatus ms in lstMuteStatus[doc].Values)
             {
                 if (ms.trackName[0] != t) continue;
 
-                ms.mute = lstMuteStatus[doc][partKey].mute;
-                ms.solo = lstMuteStatus[doc][partKey].solo;
-                ms.cache = lstMuteStatus[doc][partKey].cache;
+                ms.mute = mts.mute;
+                ms.solo = mts.solo;
+                ms.cache = mts.cache;
+                SetChipMute(doc, ms.chipName, ms.chipIndex, ms.chipNumber, ms.partNumber, ms.mute);
             }
         }
 
@@ -210,7 +315,8 @@ namespace mml2vgmIDE
             if (!lstMuteStatus.ContainsKey(doc)) return;
             if (!lstMuteStatus[doc].ContainsKey(partKey)) return;
 
-            bool nowSolo = lstMuteStatus[doc][partKey].solo;
+            muteStatus mts = lstMuteStatus[doc][partKey];
+            bool nowSolo = mts.solo;
             //SOLOモードではなく、SOLOではない場合はチェックを行う
             if (!SoloMode[doc] && !nowSolo && !CheckSoloCh(doc))
             {
@@ -220,13 +326,13 @@ namespace mml2vgmIDE
                 {
                     ms.cache = ms.mute;
                     ms.mute = true;
-                    //SetMute(r);
+                    SetChipMute(doc, ms.chipName, ms.chipIndex, ms.chipNumber, ms.partNumber, ms.mute);
                 }
             }
 
-            lstMuteStatus[doc][partKey].solo = !nowSolo;
-            if (SoloMode[doc]) lstMuteStatus[doc][partKey].mute = nowSolo;
-            //SetMute(dgvPartCounter.Rows[rowIndex]);
+            mts.solo = !nowSolo;
+            if (SoloMode[doc]) mts.mute = nowSolo;
+            SetChipMute(doc, mts.chipName, mts.chipIndex, mts.chipNumber, mts.partNumber, mts.mute);
 
             if (SoloMode[doc] && nowSolo && !CheckSoloCh(doc))
             {
@@ -235,21 +341,22 @@ namespace mml2vgmIDE
                 foreach (muteStatus ms in lstMuteStatus[doc].Values)
                 {
                     ms.mute = ms.cache;
-                    //SetMute(r);
+                    SetChipMute(doc, ms.chipName, ms.chipIndex, ms.chipNumber, ms.partNumber, ms.mute);
                 }
             }
 
             if (doc.srcFileFormat != EnmMmlFileFormat.MUC) return;
-            string tn = lstMuteStatus[doc][partKey].trackName;
+            string tn = mts.trackName;
             if (tn.Length < 2) return;
             char t = tn[0];
             foreach (muteStatus ms in lstMuteStatus[doc].Values)
             {
                 if (ms.trackName[0] != t) continue;
 
-                ms.mute = lstMuteStatus[doc][partKey].mute;
-                ms.solo = lstMuteStatus[doc][partKey].solo;
-                ms.cache = lstMuteStatus[doc][partKey].cache;
+                ms.mute = mts.mute;
+                ms.solo = mts.solo;
+                ms.cache = mts.cache;
+                SetChipMute(doc, ms.chipName, ms.chipIndex, ms.chipNumber, ms.partNumber, ms.mute);
             }
         }
 
@@ -418,9 +525,12 @@ namespace mml2vgmIDE
             if (!lstMuteStatus.ContainsKey(doc)) return;
             if (!lstMuteStatus[doc].ContainsKey(partKey)) return;
 
-            lstMuteStatus[doc][partKey].mute = ms.mute;
-            lstMuteStatus[doc][partKey].solo = ms.solo;
-            lstMuteStatus[doc][partKey].cache = ms.cache;
+            muteStatus mts = lstMuteStatus[doc][partKey];
+            mts.mute = ms.mute;
+            mts.solo = ms.solo;
+            mts.cache = ms.cache;
+
+            SetChipMute(doc, mts.chipName, mts.chipIndex, mts.chipNumber, mts.partNumber, mts.mute);
         }
     }
 }

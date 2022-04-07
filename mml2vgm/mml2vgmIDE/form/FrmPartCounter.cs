@@ -623,7 +623,7 @@ namespace mml2vgmIDE
             refreshMuteSolo();
         }
 
-        private void refreshMuteSolo()
+        public void refreshMuteSolo()
         {
             int partKey;
             muteStatus ms;
