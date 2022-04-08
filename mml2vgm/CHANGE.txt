@@ -1,4 +1,7 @@
 更新履歴
+TAG590 2022/04/08
+  PartCounter:mucomDotNETのみ:gatetime(qコマンド)の値が表示できるよう修正。(mute/solo関連の処理はまだ途中です)
+
   --   2022/04/08
   PartCounter:mute/solo関連の処理を修正中
 

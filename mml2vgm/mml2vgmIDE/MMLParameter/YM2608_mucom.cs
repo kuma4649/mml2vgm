@@ -156,5 +156,12 @@ namespace mml2vgmIDE.MMLParameter
             string s = (bool)od.args[0] ? "ON" : "OFF";
             lfoSw[ch] = s;
         }
+
+        protected override void SetGatetime(outDatum od, int ch, int cc)
+        {
+            gatetime[ch] = string.Format("{0}",(int)od.args[0]);
+            //base.SetGatetime(od, ch, cc);
+        }
+
     }
 }

@@ -108,5 +108,11 @@ namespace mml2vgmIDE.MMLParameter
             lfoSw[ch] = s;
         }
 
+        protected override void SetGatetime(outDatum od, int ch, int cc)
+        {
+            gatetime[ch] = string.Format("{0}", (int)od.args[0]);
+            //base.SetGatetime(od, ch, cc);
+        }
+
     }
 }

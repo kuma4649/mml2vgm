@@ -148,7 +148,6 @@ namespace mml2vgmIDE.MMLParameter
                 }
             }
 
-            //Console.WriteLine("{0}",od.type);
             SetParam[(int)od.type]?.Invoke(od, ch, cc);
         }
 
