@@ -6731,7 +6731,7 @@ namespace mml2vgmIDE
                 ch += ((dData & 0x4) == 0) ? 0 : 3;
                 ch += (Address == 0x228) ? 9 : 0;
 
-                if (Chip.ChMasks[ch]) dData &= 0xf;
+                if (Chip.ChMasks.Count > ch && Chip.ChMasks[ch]) dData &= 0xf;
 
                 if (Chip.silentVoice[ch]) Type = EnmDataType.None;
             }
@@ -6746,7 +6746,7 @@ namespace mml2vgmIDE
                 if (adr == 0x000)
                 {
                     ch = adl - 8 + 9 + 0;
-                    if (Chip.ChMasks[ch])
+                    if (Chip.ChMasks.Count > ch && Chip.ChMasks[ch])
                         dData = 0;
 
                 }
@@ -6760,7 +6760,7 @@ namespace mml2vgmIDE
                 byte mask = 0x80;
                 for (int i = 0; i < 6; i++)
                 {
-                    mask |= (byte)((Chip.ChMasks[i + 12] ? 0 : 1) << i);
+                    mask |= (byte)(((Chip.ChMasks.Count > i + 12 && Chip.ChMasks[i + 12]) ? 0 : 1) << i);
                 }
 
                 dData &= mask;
@@ -6771,7 +6771,7 @@ namespace mml2vgmIDE
             //ADPCM1 ch=18
             if (Address == 0x100)
             {
-                if (Chip.ChMasks[18]) dData &= 0x7f;
+                if (Chip.ChMasks.Count > 18 && Chip.ChMasks[18]) dData &= 0x7f;
 
                 if (Chip.silentVoice[12]) Type = EnmDataType.None;
             }
@@ -7806,7 +7806,7 @@ namespace mml2vgmIDE
                 ch += ((dData & 0x4) == 0) ? 0 : 3;
                 ch += (Address == 0x228) ? 6 : 0;
 
-                if (Chip.ChMasks[ch]) dData &= 0xf;
+                if (Chip.ChMasks.Count > ch && Chip.ChMasks[ch]) dData &= 0xf;
             }
 
             //SSG ch<30
@@ -7819,26 +7819,26 @@ namespace mml2vgmIDE
                 if (adr == 0x000)
                 {
                     ch = adl - 8 + 18 + 0;
-                    if (Chip.ChMasks[ch])
+                    if (Chip.ChMasks.Count > ch && Chip.ChMasks[ch])
                         dData = 0;
                 }
                 //SSG2
                 else if (adr == 0x120)
                 {
                     ch = adl - 8 + 18 + 3;
-                    if (Chip.ChMasks[ch]) dData = 0;
+                    if (Chip.ChMasks.Count > ch && Chip.ChMasks[ch]) dData = 0;
                 }
                 //SSG3
                 else if (adr == 0x200)
                 {
                     ch = adl - 8 + 18 + 6;
-                    if (Chip.ChMasks[ch]) dData = 0;
+                    if (Chip.ChMasks.Count > ch && Chip.ChMasks[ch]) dData = 0;
                 }
                 //SSG4
                 else if (adr == 0x210)
                 {
                     ch = adl - 8 + 18 + 9;
-                    if (Chip.ChMasks[ch]) dData = 0;
+                    if (Chip.ChMasks.Count > ch && Chip.ChMasks[ch]) dData = 0;
                 }
             }
 
@@ -7848,7 +7848,7 @@ namespace mml2vgmIDE
                 byte mask = 0x80;
                 for (int i = 0; i < 6; i++)
                 {
-                    mask |= (byte)((Chip.ChMasks[i + 30] ? 0 : 1) << i);
+                    mask |= (byte)(((Chip.ChMasks.Count > i+30 && Chip.ChMasks[i + 30]) ? 0 : 1) << i);
                 }
 
                 dData &= mask;
@@ -7857,18 +7857,18 @@ namespace mml2vgmIDE
             //ADPCM1 ch=36
             if (Address == 0x100)
             {
-                if (Chip.ChMasks[36]) dData &= 0x7f;
+                if (Chip.ChMasks.Count > 36 && Chip.ChMasks[36]) dData &= 0x7f;
             }
 
             //ADPCM2 ch=37
             if (Address == 0x300)
             {
-                if (Chip.ChMasks[37]) dData &= 0x7f;
+                if (Chip.ChMasks.Count > 37 && Chip.ChMasks[37]) dData &= 0x7f;
             }
             //ADPCM3 ch=38
             if (Address == 0x311)
             {
-                if (Chip.ChMasks[38]) dData &= 0x7f;
+                if (Chip.ChMasks.Count > 38 && Chip.ChMasks[38]) dData &= 0x7f;
             }
             //18+12+6+3
 
@@ -7878,7 +7878,7 @@ namespace mml2vgmIDE
                 byte mask = 0x80;
                 for (int i = 0; i < 6; i++)
                 {
-                    mask |= (byte)((Chip.ChMasks[i + 39] ? 0 : 1) << i);
+                    mask |= (byte)(((Chip.ChMasks.Count > i+39 && Chip.ChMasks[i + 39]) ? 0 : 1) << i);
                 }
 
                 dData &= mask;
@@ -8417,12 +8417,12 @@ namespace mml2vgmIDE
                 int ch = dData & 0x3;
                 ch += ((dData & 0x4) == 0) ? 0 : 3;
 
-                if (Chip.ChMasks[ch]) dData &= 0xf;
+                if (Chip.ChMasks.Count > ch && Chip.ChMasks[ch]) dData &= 0xf;
             }
 
             if (dPort == 0 && dAddr == 0x2a)
             {
-                if (Chip.ChMasks[5]) dData = 0x80;
+                if (Chip.ChMasks.Count > 5 && Chip.ChMasks[5]) dData = 0x80;
             }
         }
 
