@@ -12,7 +12,6 @@ namespace mml2vgmIDE
     {
         public Action parentUpdate = null;
         private MMLParameter.Manager mmlParams = null;
-        private muteManager muteManager = null;
         private Setting setting = null;
         private Brush[][] meterBrush = new Brush[9][];
         private bool SoloMode = false;
@@ -22,11 +21,10 @@ namespace mml2vgmIDE
         private const string Assign = "Assign";
 
 
-        public FrmPartCounter(Setting setting,muteManager muteManager)
+        public FrmPartCounter(Setting setting)
         {
             InitializeComponent();
             this.setting = setting;
-            this.muteManager = muteManager;
 
             dgvPartCounter.BackgroundColor = Color.FromArgb(setting.ColorScheme.PartCounter_BackColor);
             dgvPartCounter.DefaultCellStyle.BackColor = Color.FromArgb(setting.ColorScheme.PartCounter_BackColor);

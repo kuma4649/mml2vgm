@@ -2345,7 +2345,6 @@ namespace mml2vgmIDE
 
         private string mucPartName = "ABCDEFGHIJKLMNOPQRSTUVabcdefghijklmnopqrstuvWXYZwxyz";
 
-        private muteManager muteManager = new muteManager();
 
         private void finishedCompileMUC()
         {
@@ -2378,6 +2377,7 @@ namespace mml2vgmIDE
                     if (ci.formatType == "mub")
                     {
                         //int trackNum = 0;
+                        pn = new int[] { 1, 2, 3, 10, 11, 12, 13, 4, 5, 6, 19 };
                         for (int i = 0; i < 11; i++)
                         {
                             //if (pw[i].clockCounter == 0) continue;
@@ -2396,6 +2396,7 @@ namespace mml2vgmIDE
                     else
                     {
                         //int trackNum = 0;
+                        pn = new int[] { 1, 2, 3, 10, 11, 12, 13, 4, 5, 6, 19 };
                         for (int i = 0; i < 52; i++)
                         {
                             for (int j = 0; j < 10; j++)
@@ -2464,40 +2465,40 @@ namespace mml2vgmIDE
                             if (p == ci.jumpChannel[0]) solo = true;
 
                             int ch = p;
-                            if (p < 2)//FM 1-2
-                            {
-                                Audio.chipRegister.YM2608[0].ChMasks[ch] = !solo;
-                            }
-                            else if (p == 2)//FM 3
-                            {
-                                Audio.chipRegister.YM2608[0].ChMasks[2] = !solo;
-                                Audio.chipRegister.YM2608[0].ChMasks[6] = !solo;
-                                Audio.chipRegister.YM2608[0].ChMasks[7] = !solo;
-                                Audio.chipRegister.YM2608[0].ChMasks[8] = !solo;
-                            }
-                            else if (p < 6)//SSG
-                            {
-                                ch = p + 6;
-                                Audio.chipRegister.YM2608[0].ChMasks[ch] = !solo;
-                            }
-                            else if (p == 6)//Rhythm
-                            {
-                                Audio.chipRegister.YM2608[0].ChMasks[12] = !solo;
-                                Audio.chipRegister.YM2608[0].ChMasks[13] = !solo;
-                                Audio.chipRegister.YM2608[0].ChMasks[14] = !solo;
-                                Audio.chipRegister.YM2608[0].ChMasks[15] = !solo;
-                                Audio.chipRegister.YM2608[0].ChMasks[16] = !solo;
-                                Audio.chipRegister.YM2608[0].ChMasks[17] = !solo;
-                            }
-                            else if (p < 10)
-                            {
-                                ch = p - 4;
-                                Audio.chipRegister.YM2608[0].ChMasks[ch] = !solo;
-                            }
-                            else
-                            {
-                                Audio.chipRegister.YM2608[0].ChMasks[18] = !solo;
-                            }
+                            //if (p < 2)//FM 1-2
+                            //{
+                            //    Audio.chipRegister.YM2608[0].ChMasks[ch] = !solo;
+                            //}
+                            //else if (p == 2)//FM 3
+                            //{
+                            //    Audio.chipRegister.YM2608[0].ChMasks[2] = !solo;
+                            //    Audio.chipRegister.YM2608[0].ChMasks[6] = !solo;
+                            //    Audio.chipRegister.YM2608[0].ChMasks[7] = !solo;
+                            //    Audio.chipRegister.YM2608[0].ChMasks[8] = !solo;
+                            //}
+                            //else if (p < 6)//SSG
+                            //{
+                            //    ch = p + 6;
+                            //    Audio.chipRegister.YM2608[0].ChMasks[ch] = !solo;
+                            //}
+                            //else if (p == 6)//Rhythm
+                            //{
+                            //    Audio.chipRegister.YM2608[0].ChMasks[12] = !solo;
+                            //    Audio.chipRegister.YM2608[0].ChMasks[13] = !solo;
+                            //    Audio.chipRegister.YM2608[0].ChMasks[14] = !solo;
+                            //    Audio.chipRegister.YM2608[0].ChMasks[15] = !solo;
+                            //    Audio.chipRegister.YM2608[0].ChMasks[16] = !solo;
+                            //    Audio.chipRegister.YM2608[0].ChMasks[17] = !solo;
+                            //}
+                            //else if (p < 10)
+                            //{
+                            //    ch = p - 4;
+                            //    Audio.chipRegister.YM2608[0].ChMasks[ch] = !solo;
+                            //}
+                            //else
+                            //{
+                            //    Audio.chipRegister.YM2608[0].ChMasks[18] = !solo;
+                            //}
                         }
                         else
                         {
@@ -3036,7 +3037,7 @@ namespace mml2vgmIDE
 
             FormBox.Add(this);
 
-            frmPartCounter = new FrmPartCounter(setting, muteManager);
+            frmPartCounter = new FrmPartCounter(setting);
             FormBox.Add(frmPartCounter);
 
             frmLog = new FrmLog(setting, theme);

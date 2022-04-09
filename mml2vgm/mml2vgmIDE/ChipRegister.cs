@@ -912,6 +912,12 @@ namespace mml2vgmIDE
             CONDUCTOR.Clear();
             DACControl.Clear();
 
+            YM2151.Clear();
+            YM2608.Clear();
+            YM2609.Clear();
+            YM2610.Clear();
+            YM2612.Clear();
+
             for (int i = 0; i < 2; i++)
             {
                 if (CONDUCTOR.Count < i + 1) CONDUCTOR.Add(new Chip(2));
@@ -1033,7 +1039,8 @@ namespace mml2vgmIDE
                 SEGAPCM[i].Number = i;
                 SEGAPCM[i].Hosei = 0;
 
-                if (YM2151.Count < i + 1) YM2151.Add(new Chip(8));
+                //if (YM2151.Count < i + 1) YM2151.Add(new Chip(8));
+                YM2151.Add(new Chip(8, "YM2151", 0, i));
                 YM2151[i].Use = false;
                 YM2151[i].Model = EnmVRModel.None;
                 YM2151[i].Device = EnmZGMDevice.YM2151;
@@ -1096,28 +1103,32 @@ namespace mml2vgmIDE
                 YMF271[i].Number = i;
                 YMF271[i].Hosei = 0;
 
-                if (YM2608.Count < i + 1) YM2608.Add(new Chip(6 + 3 + 3 + 6 + 1));
+                //if (YM2608.Count < i + 1) YM2608.Add(new Chip(6 + 3 + 3 + 6 + 1, "YM2608", 0, i));
+                YM2608.Add(new Chip(6 + 3 + 3 + 6 + 1, "YM2608", 0, i));
                 YM2608[i].Use = false;
                 YM2608[i].Model = EnmVRModel.None;
                 YM2608[i].Device = EnmZGMDevice.YM2608;
                 YM2608[i].Number = i;
                 YM2608[i].Hosei = 0;
 
-                if (YM2609.Count < i + 1) YM2609.Add(new Chip(12 + 6 + 12 + 6 + 3 + 6));
+                //if (YM2609.Count < i + 1) YM2609.Add(new Chip(12 + 6 + 12 + 6 + 3 + 6));
+                YM2609.Add(new Chip(12 + 6 + 12 + 6 + 3 + 6, "YM2609", 0, i));
                 YM2609[i].Use = false;
                 YM2609[i].Model = EnmVRModel.None;
                 YM2609[i].Device = EnmZGMDevice.YM2609;
                 YM2609[i].Number = i;
                 YM2609[i].Hosei = 0;
 
-                if (YM2610.Count < i + 1) YM2610.Add(new Chip(6 + 3 + 3 + 6 + 1));
+                //if (YM2610.Count < i + 1) YM2610.Add(new Chip(6 + 3 + 3 + 6 + 1));
+                YM2610.Add(new Chip(6 + 3 + 3 + 6 + 1, "YM2610B", 0, i));
                 YM2610[i].Use = false;
                 YM2610[i].Model = EnmVRModel.None;
                 YM2610[i].Device = EnmZGMDevice.YM2610;
                 YM2610[i].Number = i;
                 YM2610[i].Hosei = 0;
 
-                if (YM2612.Count < i + 1) YM2612.Add(new Chip(6 + 3));
+                //if (YM2610.Count < i + 1) YM2610.Add(new Chip(6 + 3 + 3 + 6 + 1));
+                YM2612.Add(new Chip(6 + 3, "YM2612", 0, i));
                 YM2612[i].Use = false;
                 YM2612[i].Model = EnmVRModel.None;
                 YM2612[i].Device = EnmZGMDevice.YM2612;
@@ -4620,7 +4631,7 @@ namespace mml2vgmIDE
             {
                 int ch = dData & 0x7;
 
-                if (Chip.ChMasks[ch])
+                if (Chip.ChMasks.Count>ch && Chip.ChMasks[ch])
                 {
                     dData = ch;
                 }
@@ -7435,7 +7446,7 @@ namespace mml2vgmIDE
                 ch += ((dData & 0x4) == 0) ? 0 : 3;
                 ch += (Address == 0x228) ? 9 : 0;
 
-                if (Chip.ChMasks[ch]) dData &= 0xf;
+                if (Chip.ChMasks.Count > ch && Chip.ChMasks[ch]) dData &= 0xf;
             }
 
             //SSG ch<12
@@ -7448,7 +7459,7 @@ namespace mml2vgmIDE
                 if (adr == 0x000)
                 {
                     ch = adl - 8 + 9 + 0;
-                    if (Chip.ChMasks[ch])
+                    if (Chip.ChMasks.Count > ch && Chip.ChMasks[ch])
                         dData = 0;
                 }
             }
@@ -7459,16 +7470,16 @@ namespace mml2vgmIDE
                 byte mask = 0x80;
                 for (int i = 0; i < 6; i++)
                 {
-                    mask |= (byte)((Chip.ChMasks[i + 12] ? 0 : 1) << i);
+                    mask |= (byte)(((Chip.ChMasks.Count > i + 12 && Chip.ChMasks[i + 12]) ? 0 : 1) << i);
                 }
-
-                dData &= mask;
+                if (mask == 0x80) dData = 0xbf;//all dump
+                else dData &= mask;
             }
 
             //ADPCM-B ch=18
             if (Address == 0x010)
             {
-                if (Chip.ChMasks[18]) dData &= 0x7f;
+                if (Chip.ChMasks.Count>18 && Chip.ChMasks[18]) dData &= 0x7f;
             }
 
         }

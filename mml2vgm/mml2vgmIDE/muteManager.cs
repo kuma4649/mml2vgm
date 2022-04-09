@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace mml2vgmIDE
 {
-    public class muteManager
+    public static class muteManager
     {
         //
         // UpdateTrackInfoを使ってドキュメント毎のパートの情報を登録する
@@ -25,7 +25,7 @@ namespace mml2vgmIDE
         ///   2 : partKey(ドキュメントのパート毎にユニークな番号)
         ///  ans: muteStatus(mute状態を保持している)
         /// </summary>
-        private Dictionary<Document, Dictionary<int, muteStatus>> lstMuteStatus = new Dictionary<Document, Dictionary<int, muteStatus>>();
+        private static Dictionary<Document, Dictionary<int, muteStatus>> lstMuteStatus = new Dictionary<Document, Dictionary<int, muteStatus>>();
 
         /// <summary>
         /// partKeyの辞書
@@ -37,20 +37,20 @@ namespace mml2vgmIDE
         ///   6 : chipName(str
         ///  ans: キー番号(int
         /// </summary>
-        private Dictionary<Document, Dictionary<int, Dictionary<int, Dictionary<int, Dictionary<string, Dictionary<string, int>>>>>> dicKey
+        private static Dictionary<Document, Dictionary<int, Dictionary<int, Dictionary<int, Dictionary<string, Dictionary<string, int>>>>>> dicKey
             = new Dictionary<Document, Dictionary<int, Dictionary<int, Dictionary<int, Dictionary<string, Dictionary<string, int>>>>>>();
 
         /// <summary>
         /// ドキュメント毎の
         /// ユニークキーナンバー（どんどんカウントアップする）
         /// </summary>
-        private Dictionary<Document, int> keyNum = new Dictionary<Document, int>();
-        private Dictionary<Document, bool> SoloMode = new Dictionary<Document, bool>();
+        private static Dictionary<Document, int> keyNum = new Dictionary<Document, int>();
+        private static Dictionary<Document, bool> SoloMode = new Dictionary<Document, bool>();
 
         /// <summary>
         /// カレントドキュメント
         /// </summary>
-        private Document crntDoc = null;
+        private static Document crntDoc = null;
 
 
         /// <summary>
@@ -61,10 +61,10 @@ namespace mml2vgmIDE
         ///   4 : chipNumber(int
         ///  ans: チップ単位のmute配列
         /// </summary>
-        private Dictionary<Document, Dictionary<string, Dictionary<int, Dictionary<int, List<bool>>>>> chipMuteStatus
+        private static Dictionary<Document, Dictionary<string, Dictionary<int, Dictionary<int, List<bool>>>>> chipMuteStatus
             = new Dictionary<Document, Dictionary<string, Dictionary<int, Dictionary<int, List<bool>>>>>();
 
-        public void SetChipMute(Document doc, string chipName, int chipIndex, int chipNumber, int partNumber, bool mute)
+        public static void SetChipMute(Document doc, string chipName, int chipIndex, int chipNumber, int partNumber, bool mute)
         {
             Dictionary<string, Dictionary<int, Dictionary<int, List<bool>>>> dic1;
             Dictionary<int, Dictionary<int, List<bool>>> dic2;
@@ -87,15 +87,15 @@ namespace mml2vgmIDE
                 dic3.Add(chipNumber, new List<bool>());
             lst = dic3[chipNumber];
 
-            while (partNumber > lst.Count - 1)
+            while (partNumber > lst.Count)
             {
                 lst.Add(false);
             }
 
-            lst[partNumber] = mute;
+            lst[partNumber - 1] = mute;
         }
 
-        public bool GetChipMute(Document doc, string chipName, int chipIndex, int chipNumber, int partNumber)
+        public static bool GetChipMute(Document doc, string chipName, int chipIndex, int chipNumber, int partNumber)
         {
             Dictionary<string, Dictionary<int, Dictionary<int, List<bool>>>> dic1;
             Dictionary<int, Dictionary<int, List<bool>>> dic2;
@@ -118,16 +118,19 @@ namespace mml2vgmIDE
                 dic3.Add(chipNumber, new List<bool>());
             lst = dic3[chipNumber];
 
-            while (partNumber > lst.Count - 1)
+            while (partNumber > lst.Count)
             {
                 lst.Add(false);
             }
 
-            return lst[partNumber];
+            return lst[partNumber - 1];
         }
 
-        public List<bool> GetChipMutes(Document doc, string chipName, int chipIndex, int chipNumber)
+        public static List<bool> GetChipMutes(string chipName, int chipIndex, int chipNumber, Document doc = null)
         {
+            if (doc == null) doc = crntDoc;
+            if (doc == null) return null;
+
             Dictionary<string, Dictionary<int, Dictionary<int, List<bool>>>> dic1;
             Dictionary<int, Dictionary<int, List<bool>>> dic2;
             Dictionary<int, List<bool>> dic3;
@@ -153,7 +156,7 @@ namespace mml2vgmIDE
         }
 
 
-        public void AllClear()
+        public static void AllClear()
         {
             lstMuteStatus.Clear();
             keyNum.Clear();
@@ -163,7 +166,7 @@ namespace mml2vgmIDE
         /// <summary>
         /// ドキュメントのミュート情報を消去する
         /// </summary>
-        public void Clear(Document doc)
+        public static void Clear(Document doc)
         {
             if (lstMuteStatus.ContainsKey(doc))
             {
@@ -173,7 +176,7 @@ namespace mml2vgmIDE
             }
         }
 
-        public void Add(Document doc)
+        public static void Add(Document doc)
         {
             if (!lstMuteStatus.ContainsKey(doc))
             {
@@ -181,7 +184,7 @@ namespace mml2vgmIDE
             }
         }
 
-        public int UpdateTrackInfo(Document doc, object[] cells, int key = -1)
+        public static int UpdateTrackInfo(Document doc, object[] cells, int key = -1)
         {
             crntDoc = doc;
 
@@ -208,13 +211,13 @@ namespace mml2vgmIDE
             ms.trackName = (string)cells[3];
             ms.chipName = (string)cells[4];
 
-            SetChipMute(doc, ms.chipName, ms.chipIndex, ms.chipNumber, ms.partNumber, false);
+            //SetChipMute(doc, ms.chipName, ms.chipIndex, ms.chipNumber, ms.partNumber, false);
 
             return key;
         }
 
 
-        public void ClickAllSolo(Document doc = null)
+        public static void ClickAllSolo(Document doc = null)
         {
             if (doc == null) doc = crntDoc;
             if (doc == null) return;
@@ -231,7 +234,7 @@ namespace mml2vgmIDE
             SoloMode[doc] = false;
         }
 
-        public void ClickAllMute(Document doc = null)
+        public static void ClickAllMute(Document doc = null)
         {
             if (doc == null) doc = crntDoc;
             if (doc == null) return;
@@ -248,7 +251,7 @@ namespace mml2vgmIDE
         }
 
 
-        public void ClickMute(int partKey, Document doc = null)
+        public static void ClickMute(int partKey, Document doc = null)
         {
             if (doc == null) doc = crntDoc;
             if (doc == null) return;
@@ -289,7 +292,7 @@ namespace mml2vgmIDE
             }
         }
 
-        public void ClickMute(int partNumber,int chipIndex,int chipNumber,string trackName,string chipName,Document doc = null)
+        public static void ClickMute(int partNumber,int chipIndex,int chipNumber,string trackName,string chipName,Document doc = null)
         {
             if (doc == null) doc = crntDoc;
             if (doc == null) return;
@@ -308,7 +311,7 @@ namespace mml2vgmIDE
             ClickMute(key, doc);
         }
 
-        public void ClickSolo(int partKey, Document doc = null)
+        public static void ClickSolo(int partKey, Document doc = null)
         {
             if (doc == null) doc = crntDoc;
             if (doc == null) return;
@@ -327,6 +330,15 @@ namespace mml2vgmIDE
                     ms.cache = ms.mute;
                     ms.mute = true;
                     SetChipMute(doc, ms.chipName, ms.chipIndex, ms.chipNumber, ms.partNumber, ms.mute);
+                    if(ms.partNumber==13 && doc.srcFileFormat == EnmMmlFileFormat.MUC)
+                    {
+                        SetChipMute(doc, ms.chipName, ms.chipIndex, ms.chipNumber, 13, ms.mute);//b
+                        SetChipMute(doc, ms.chipName, ms.chipIndex, ms.chipNumber, 14, ms.mute);//s
+                        SetChipMute(doc, ms.chipName, ms.chipIndex, ms.chipNumber, 15, ms.mute);//c
+                        SetChipMute(doc, ms.chipName, ms.chipIndex, ms.chipNumber, 16, ms.mute);//h
+                        SetChipMute(doc, ms.chipName, ms.chipIndex, ms.chipNumber, 17, ms.mute);//t
+                        SetChipMute(doc, ms.chipName, ms.chipIndex, ms.chipNumber, 18, ms.mute);//r
+                    }
                 }
             }
 
@@ -357,10 +369,19 @@ namespace mml2vgmIDE
                 ms.solo = mts.solo;
                 ms.cache = mts.cache;
                 SetChipMute(doc, ms.chipName, ms.chipIndex, ms.chipNumber, ms.partNumber, ms.mute);
+                if (mts.partNumber >= 13 && mts.partNumber<=18)
+                {
+                    SetChipMute(doc, ms.chipName, ms.chipIndex, ms.chipNumber, 13, ms.mute);//b
+                    SetChipMute(doc, ms.chipName, ms.chipIndex, ms.chipNumber, 14, ms.mute);//s
+                    SetChipMute(doc, ms.chipName, ms.chipIndex, ms.chipNumber, 15, ms.mute);//c
+                    SetChipMute(doc, ms.chipName, ms.chipIndex, ms.chipNumber, 16, ms.mute);//h
+                    SetChipMute(doc, ms.chipName, ms.chipIndex, ms.chipNumber, 17, ms.mute);//t
+                    SetChipMute(doc, ms.chipName, ms.chipIndex, ms.chipNumber, 18, ms.mute);//r
+                }
             }
         }
 
-        public void ClickSolo(int partNumber, int chipIndex, int chipNumber, string trackName, string chipName, Document doc = null)
+        public static void ClickSolo(int partNumber, int chipIndex, int chipNumber, string trackName, string chipName, Document doc = null)
         {
             if (doc == null) doc = crntDoc;
             if (doc == null) return;
@@ -380,7 +401,7 @@ namespace mml2vgmIDE
         }
 
 
-        public muteStatus GetStatus(int partKey, Document doc = null)
+        public static muteStatus GetStatus(int partKey, Document doc = null)
         {
             if (doc == null) doc = crntDoc;
             if (doc == null) return null;
@@ -389,7 +410,7 @@ namespace mml2vgmIDE
             return lstMuteStatus[doc][partKey];
         }
 
-        public bool? GetMuteStatus(int partKey, Document doc = null)
+        public static bool? GetMuteStatus(int partKey, Document doc = null)
         {
             if (doc == null) doc = crntDoc;
             if (doc == null) return null;
@@ -399,7 +420,7 @@ namespace mml2vgmIDE
             return lstMuteStatus[doc][partKey].mute;
         }
 
-        public bool? GetMuteStatus(int partNumber, int chipIndex, int chipNumber, string trackName, string chipName, Document doc = null)
+        public static bool? GetMuteStatus(int partNumber, int chipIndex, int chipNumber, string trackName, string chipName, Document doc = null)
         {
             if (doc == null) doc = crntDoc;
             if (doc == null) return null;
@@ -420,7 +441,7 @@ namespace mml2vgmIDE
             return lstMuteStatus[doc][key].mute;
         }
 
-        public bool? GetSoloStatus(int partKey, Document doc = null)
+        public static bool? GetSoloStatus(int partKey, Document doc = null)
         {
             if (doc == null) doc = crntDoc;
             if (doc == null) return null;
@@ -430,7 +451,7 @@ namespace mml2vgmIDE
             return lstMuteStatus[doc][partKey].solo;
         }
 
-        public bool? GetSoloStatus(int partNumber, int chipIndex, int chipNumber, string trackName, string chipName, Document doc = null)
+        public static bool? GetSoloStatus(int partNumber, int chipIndex, int chipNumber, string trackName, string chipName, Document doc = null)
         {
             if (doc == null) doc = crntDoc;
             if (doc == null) return null;
@@ -452,7 +473,7 @@ namespace mml2vgmIDE
         }
 
 
-        private bool CheckSoloCh(Document doc)
+        private static bool CheckSoloCh(Document doc)
         {
             foreach (muteStatus ms in lstMuteStatus[doc].Values)
             {
@@ -463,7 +484,7 @@ namespace mml2vgmIDE
             return false;
         }
 
-        private int GetKey(Document doc, object[] cells)
+        private static int GetKey(Document doc, object[] cells)
         {
             Dictionary<int, Dictionary<int, Dictionary<int, Dictionary<string, Dictionary<string, int>>>>> dic1;
             Dictionary<int, Dictionary<int, Dictionary<string, Dictionary<string, int>>>> dic2;
@@ -518,7 +539,7 @@ namespace mml2vgmIDE
             return dic5[cNm];
         }
 
-        public void SetMuteSolo(int partKey,muteStatus ms, Document doc = null)
+        public static void SetMuteSolo(int partKey,muteStatus ms, Document doc = null)
         {
             if (doc == null) doc = crntDoc;
             if (doc == null) return;
