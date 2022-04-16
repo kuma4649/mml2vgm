@@ -28,6 +28,7 @@ namespace mml2vgmIDE
 
             dgvPartCounter.BackgroundColor = Color.FromArgb(setting.ColorScheme.PartCounter_BackColor);
             dgvPartCounter.DefaultCellStyle.BackColor = Color.FromArgb(setting.ColorScheme.PartCounter_BackColor);
+            //dgvPartCounter.DefaultCellStyle.SelectionBackColor = Color.Empty;
             dgvPartCounter.ForeColor = Color.FromArgb(setting.ColorScheme.PartCounter_ForeColor);
             EnableDoubleBuffering(dgvPartCounter);
             SetDisplayIndex(setting.location.PartCounterClmInfo);
@@ -586,6 +587,11 @@ namespace mml2vgmIDE
 
             //spacerは常に最後にする
             dgvPartCounter.Columns["ClmSpacer"].DisplayIndex = dgvPartCounter.Columns.Count - 1;
+
+            //dgvPartCounter.Columns["ClmMute"].DefaultCellStyle.ForeColor = Color.White;
+            //dgvPartCounter.Columns["ClmMute"].DefaultCellStyle.BackColor = Color.Gray;
+            //dgvPartCounter.Columns["ClmSolo"].DefaultCellStyle.ForeColor = Color.White;
+            //dgvPartCounter.Columns["ClmSolo"].DefaultCellStyle.BackColor = Color.DarkSlateBlue;
         }
 
 
@@ -630,8 +636,24 @@ namespace mml2vgmIDE
             {
                 partKey = (int)row.Cells[dgvPartCounter.Columns["ClmMuteMngKey"].Index].Value;
                 ms = muteManager.GetStatus(partKey);
+                //if (SoloMode)
+                {
+                    foreach(DataGridViewCell cell in row.Cells)
+                    {
+                        if (ms.solo)
+                        {
+                            cell.Style.BackColor = Color.FromArgb(90, 10, 10);
+                        }
+                        else
+                        {
+                            cell.Style.BackColor = Color.FromArgb(setting.ColorScheme.PartCounter_BackColor);
+                        }
+                    }
+                }
                 row.Cells[dgvPartCounter.Columns["ClmSolo"].Index].Value = ms.solo ? "S" : "";
+                row.Cells[dgvPartCounter.Columns["ClmSolo"].Index].Style.BackColor = ms.solo ? Color.FromArgb(90, 10, 10) : Color.Empty;
                 row.Cells[dgvPartCounter.Columns["ClmMute"].Index].Value = ms.mute ? "M" : "";
+                row.Cells[dgvPartCounter.Columns["ClmMute"].Index].Style.BackColor = ms.mute ? Color.FromArgb(120, 90, 10) : Color.Empty;
                 SetMute(row);
             }
         }

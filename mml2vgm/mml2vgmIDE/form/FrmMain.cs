@@ -2665,18 +2665,14 @@ namespace mml2vgmIDE
                             for (int i = 0; i < ci.totalCount.Count; i++)
                             {
                                 //if (pw[i].clockCounter == 0) continue;
-                                int ch = ci.partType[i] == "YM2608" ? ci.partNumber[i] : (
-                                        ci.partType[i] == "FM3ex" ? (ci.partNumber[i] + 6) : (
-                                        ci.partNumber[i]
-                                        )
-                                    );
+                                int ch = ci.partNumber[i];
                                 ch += (ci.partName[i][0] >= 'G' && ci.partName[i][0] <= 'I') ? 3 : 0;
                                 ch++;
                                 cells[0] = ch;
                                 cells[1] = 0;//ChipIndex
                                 cells[2] = 0;//ChipNumber
                                 cells[3] = ci.partName[i];
-                                cells[4] = ci.partType[i] == "FM3ex" ? "YM2608" : ci.partType[i];
+                                cells[4] = ci.partType[i];
                                 cells[5] = ci.totalCount[i];
                                 cells[6] = ci.loopCount[i];
                                 cells[7] = muteManager.UpdateTrackInfo(doc, cells);

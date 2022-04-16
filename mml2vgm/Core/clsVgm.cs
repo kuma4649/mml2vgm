@@ -5285,7 +5285,10 @@ namespace Core
 
         private void ProcEnvelope(partPage page)
         {
-            if (!page.envelopeMode) return;
+            if (!page.envelopeMode)
+            {
+                return;
+            }
 
             if (page.envIndex == -1) return;
 

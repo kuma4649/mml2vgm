@@ -67,8 +67,8 @@
             dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
             dataGridViewCellStyle2.Font = new System.Drawing.Font("MS UI Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
             dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(180)))));
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.MenuHighlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.Color.White;
             dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.dgvPartCounter.DefaultCellStyle = dataGridViewCellStyle2;
             this.dgvPartCounter.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -76,6 +76,7 @@
             this.dgvPartCounter.EnableHeadersVisualStyles = false;
             this.dgvPartCounter.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(180)))));
             this.dgvPartCounter.Location = new System.Drawing.Point(0, 0);
+            this.dgvPartCounter.MultiSelect = false;
             this.dgvPartCounter.Name = "dgvPartCounter";
             this.dgvPartCounter.ReadOnly = true;
             this.dgvPartCounter.RowHeadersVisible = false;
