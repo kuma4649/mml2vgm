@@ -363,24 +363,26 @@ namespace mml2vgmIDE
             }
 
             string tn = mts.trackName;
-            if (tn.Length < 2) return;
-            char t = tn[0];
-            foreach (muteStatus ms in lstMuteStatus[doc].Values)
+            if (tn.Length >= 2)
             {
-                if (ms.trackName[0] != t) continue;
-
-                ms.mute = mts.mute;
-                ms.solo = mts.solo;
-                ms.cache = mts.cache;
-                SetChipMute(doc, ms.chipName, ms.chipIndex, ms.chipNumber, ms.partNumber, ms.mute);
-                if (mts.partNumber >= 13 && mts.partNumber<=18)
+                char t = tn[0];
+                foreach (muteStatus ms in lstMuteStatus[doc].Values)
                 {
-                    SetChipMute(doc, ms.chipName, ms.chipIndex, ms.chipNumber, 13, ms.mute);//b
-                    SetChipMute(doc, ms.chipName, ms.chipIndex, ms.chipNumber, 14, ms.mute);//s
-                    SetChipMute(doc, ms.chipName, ms.chipIndex, ms.chipNumber, 15, ms.mute);//c
-                    SetChipMute(doc, ms.chipName, ms.chipIndex, ms.chipNumber, 16, ms.mute);//h
-                    SetChipMute(doc, ms.chipName, ms.chipIndex, ms.chipNumber, 17, ms.mute);//t
-                    SetChipMute(doc, ms.chipName, ms.chipIndex, ms.chipNumber, 18, ms.mute);//r
+                    if (ms.trackName[0] != t) continue;
+
+                    ms.mute = mts.mute;
+                    ms.solo = mts.solo;
+                    ms.cache = mts.cache;
+                    SetChipMute(doc, ms.chipName, ms.chipIndex, ms.chipNumber, ms.partNumber, ms.mute);
+                    if (mts.partNumber >= 13 && mts.partNumber <= 18)
+                    {
+                        SetChipMute(doc, ms.chipName, ms.chipIndex, ms.chipNumber, 13, ms.mute);//b
+                        SetChipMute(doc, ms.chipName, ms.chipIndex, ms.chipNumber, 14, ms.mute);//s
+                        SetChipMute(doc, ms.chipName, ms.chipIndex, ms.chipNumber, 15, ms.mute);//c
+                        SetChipMute(doc, ms.chipName, ms.chipIndex, ms.chipNumber, 16, ms.mute);//h
+                        SetChipMute(doc, ms.chipName, ms.chipIndex, ms.chipNumber, 17, ms.mute);//t
+                        SetChipMute(doc, ms.chipName, ms.chipIndex, ms.chipNumber, 18, ms.mute);//r
+                    }
                 }
             }
 

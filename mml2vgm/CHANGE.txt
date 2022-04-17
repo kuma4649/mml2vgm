@@ -1,4 +1,8 @@
 更新履歴
+TAG596 2022/04/17 2nd
+  IDE:PartCounter
+    :mutesolo:SOLOモードから抜けるときにmuteが解除されないケースがまだあったのを修正
+
 TAG595 2022/04/17
   IDE:PartCounter
     :mutesolo:再生時に色が反映されないバグを修正
