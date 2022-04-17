@@ -4708,6 +4708,9 @@ namespace mml2vgmIDE
                 else
                     mds.Init((UInt32)Common.SampleRate, samplingBuffer, lstChips.ToArray());
 
+                string errMsg = mds.ReadErrMsgYM2608(0) + mds.ReadErrMsgYM2608(1);
+                if(!string.IsNullOrEmpty(errMsg))log.Write(errMsg);
+
                 log.Write("ChipRegister 初期化");
                 chipRegister.SetMDSound(mds);
                 chipRegister.initChipRegister(lstChips.ToArray());
