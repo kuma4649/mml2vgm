@@ -346,18 +346,22 @@ namespace mml2vgmIDE
             if (SoloMode[doc]) mts.mute = nowSolo;
             SetChipMute(doc, mts.chipName, mts.chipIndex, mts.chipNumber, mts.partNumber, mts.mute);
 
-            if (SoloMode[doc] && nowSolo && !CheckSoloCh(doc))
+            if (doc.srcFileFormat != EnmMmlFileFormat.MUC)
             {
-                SoloMode[doc] = false;
-                //mute復帰
-                foreach (muteStatus ms in lstMuteStatus[doc].Values)
+                if (SoloMode[doc] && nowSolo && !CheckSoloCh(doc))
                 {
-                    ms.mute = ms.cache;
-                    SetChipMute(doc, ms.chipName, ms.chipIndex, ms.chipNumber, ms.partNumber, ms.mute);
+                    SoloMode[doc] = false;
+                    //mute復帰
+                    foreach (muteStatus ms in lstMuteStatus[doc].Values)
+                    {
+                        ms.mute = ms.cache;
+                        SetChipMute(doc, ms.chipName, ms.chipIndex, ms.chipNumber, ms.partNumber, ms.mute);
+                    }
                 }
+
+                return;
             }
 
-            if (doc.srcFileFormat != EnmMmlFileFormat.MUC) return;
             string tn = mts.trackName;
             if (tn.Length < 2) return;
             char t = tn[0];
@@ -379,6 +383,18 @@ namespace mml2vgmIDE
                     SetChipMute(doc, ms.chipName, ms.chipIndex, ms.chipNumber, 18, ms.mute);//r
                 }
             }
+
+            if (SoloMode[doc] && nowSolo && !CheckSoloCh(doc))
+            {
+                SoloMode[doc] = false;
+                //mute復帰
+                foreach (muteStatus ms in lstMuteStatus[doc].Values)
+                {
+                    ms.mute = ms.cache;
+                    SetChipMute(doc, ms.chipName, ms.chipIndex, ms.chipNumber, ms.partNumber, ms.mute);
+                }
+            }
+
         }
 
         public static void ClickSolo(int partNumber, int chipIndex, int chipNumber, string trackName, string chipName, Document doc = null)

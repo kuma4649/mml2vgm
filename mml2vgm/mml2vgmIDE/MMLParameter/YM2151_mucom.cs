@@ -96,7 +96,7 @@ namespace mml2vgmIDE.MMLParameter
         protected override void SetLfo(outDatum od, int ch, int cc)
         {
             if (ch >= lfo.Length) return;
-            lfo[ch] = string.Format("M{0},{1},{2},{3}", od.args[0], od.args[1], od.args[2], od.args[3]);
+            lfo[ch] = string.Format("M{0},{1},{2},{3}", od.args[0], od.args[1], (short)(int)od.args[2], od.args[3]);
         }
 
         //30 -
@@ -114,5 +114,10 @@ namespace mml2vgmIDE.MMLParameter
             //base.SetGatetime(od, ch, cc);
         }
 
+        protected override void SetHardLFO(outDatum od, int ch, int cc)
+        {
+            if (ch >= hlfo.Length) return;
+            hlfo[ch] = string.Format("H{0},{1},{2}", od.args[0], od.args[1], od.args[2]);
+        }
     }
 }

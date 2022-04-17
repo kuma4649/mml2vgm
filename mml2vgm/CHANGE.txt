@@ -1,4 +1,11 @@
 更新履歴
+TAG595 2022/04/17
+  IDE:PartCounter
+    :mutesolo:再生時に色が反映されないバグを修正
+    :mutesolo:SOLOモードから抜けるときにmuteが解除されないケースがあるのを修正
+    :mucomDotNET:HardLFO表示追加
+    :mucomDotNET:LFOのDeltaをsigned16bitに修正
+
 TAG594 2022/04/16
   IDE:PartCounter:solo時のChの背景色を暗い赤に変わるよう修正。
   ビルド環境をVS2022に変更。(何かあったら2019に戻します)

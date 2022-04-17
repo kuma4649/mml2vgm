@@ -25,6 +25,7 @@ namespace mml2vgmIDE.MMLParameter
         public string[] envSw;
         public string[] lfoSw;
         public string[] lfo;
+        public string[] hlfo;
         public int?[] detune;
         public int?[] keyShift;
         public int?[] keyOnMeter;
@@ -58,6 +59,7 @@ namespace mml2vgmIDE.MMLParameter
             envSw = new string[n];
             lfoSw = new string[n];
             lfo = new string[n];
+            hlfo = new string[n];
             detune = new int?[n];
             keyShift = new int?[n];
             keyOnMeter = new int?[n];
@@ -105,7 +107,7 @@ namespace mml2vgmIDE.MMLParameter
                 null,                null,             SetPartColor, null,            null,
                 //70 -                                 
                 null,                null,             null,         null,            null,
-                null,                null,             null,         null,            null,
+                null,                SetHardLFO,       null,         null,            null,
             };
         }
 
@@ -378,6 +380,11 @@ namespace mml2vgmIDE.MMLParameter
             if (ch >= partColor.Length) return;
 
             partColor[ch] = (int)od.args[0];
+        }
+
+        protected virtual void SetHardLFO(outDatum od, int ch, int cc)
+        {
+            ;
         }
     }
 

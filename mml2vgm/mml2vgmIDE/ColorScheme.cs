@@ -37,6 +37,9 @@ namespace mml2vgmIDE
 
         public int PartCounter_ForeColor = Color.FromArgb(235, 235, 255).ToArgb();
         public int PartCounter_BackColor = Color.FromArgb(40, 30, 60).ToArgb();
+        public int PartCounter_SOLOROW_BackColor = Color.FromArgb(90, 10, 10).ToArgb();
+        public int PartCounter_SOLO_BackColor = Color.FromArgb(90, 10, 10).ToArgb();
+        public int PartCounter_MUTE_BackColor = Color.FromArgb(120, 90, 10).ToArgb();
 
         public int FolderTree_ForeColor = Color.FromArgb(235, 235, 255).ToArgb();
         public int FolderTree_BackColor = Color.FromArgb(40, 30, 60).ToArgb();
@@ -75,6 +78,9 @@ namespace mml2vgmIDE
 
             ret.PartCounter_ForeColor = this.PartCounter_ForeColor;
             ret.PartCounter_BackColor = this.PartCounter_BackColor;
+            ret.PartCounter_SOLOROW_BackColor = this.PartCounter_SOLOROW_BackColor;
+            ret.PartCounter_SOLO_BackColor = this.PartCounter_SOLO_BackColor;
+            ret.PartCounter_MUTE_BackColor = this.PartCounter_MUTE_BackColor;
 
             ret.FolderTree_ForeColor = this.FolderTree_ForeColor;
             ret.FolderTree_BackColor = this.FolderTree_BackColor;

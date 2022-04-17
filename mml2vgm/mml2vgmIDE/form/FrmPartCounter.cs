@@ -233,6 +233,7 @@ namespace mml2vgmIDE
                 dgvPartCounter.Rows[p].Cells["ClmEnvSw"].Value = mmli.envSw[r] == null ? "-" : mmli.envSw[r];
                 dgvPartCounter.Rows[p].Cells["ClmLfoSw"].Value = mmli.lfoSw[r] == null ? "-" : mmli.lfoSw[r];
                 dgvPartCounter.Rows[p].Cells["ClmLfo"].Value = mmli.lfo[r] == null ? "-" : mmli.lfo[r];
+                dgvPartCounter.Rows[p].Cells["ClmHLfo"].Value = mmli.hlfo[r] == null ? "-" : mmli.hlfo[r];
                 dgvPartCounter.Rows[p].Cells["ClmDetune"].Value = mmli.detune[r] == null ? "-" : mmli.detune[r].ToString();
                 dgvPartCounter.Rows[p].Cells["ClmKeyShift"].Value = mmli.keyShift[r] == null ? "-" : mmli.keyShift[r].ToString();
                 dgvPartCounter.Rows[p].Cells["ClmMIDIch"].Value = mmli.MIDIch[r] == null ? "-" : mmli.MIDIch[r].ToString();
@@ -539,6 +540,7 @@ namespace mml2vgmIDE
             new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmEnvSw"      ,"Env.Sw."    ,true,DataGridViewContentAlignment.NotSet),
             new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmLfoSw"      ,"LFO Sw."    ,true,DataGridViewContentAlignment.NotSet),
             new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmLfo"        ,"LFO"        ,true,DataGridViewContentAlignment.NotSet),
+            new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmHLfo"       ,"Hard LFO"   ,true,DataGridViewContentAlignment.NotSet),
             new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmDetune"     ,"Detune"     ,true,DataGridViewContentAlignment.NotSet),
             new Tuple<string,string,string,bool,DataGridViewContentAlignment>("text","ClmKeyShift"   ,"Key shift"  ,true,DataGridViewContentAlignment.NotSet),
             new Tuple<string,string,string,bool,DataGridViewContentAlignment>("image","ClmMeter"     ,"KeyOn"      ,true,DataGridViewContentAlignment.NotSet),
@@ -642,7 +644,7 @@ namespace mml2vgmIDE
                     {
                         if (ms.solo)
                         {
-                            cell.Style.BackColor = Color.FromArgb(90, 10, 10);
+                            cell.Style.BackColor = Color.FromArgb(setting.ColorScheme.PartCounter_SOLOROW_BackColor);
                         }
                         else
                         {
@@ -651,9 +653,9 @@ namespace mml2vgmIDE
                     }
                 }
                 row.Cells[dgvPartCounter.Columns["ClmSolo"].Index].Value = ms.solo ? "S" : "";
-                row.Cells[dgvPartCounter.Columns["ClmSolo"].Index].Style.BackColor = ms.solo ? Color.FromArgb(90, 10, 10) : Color.Empty;
+                row.Cells[dgvPartCounter.Columns["ClmSolo"].Index].Style.BackColor = ms.solo ? Color.FromArgb(setting.ColorScheme.PartCounter_SOLO_BackColor) : Color.Empty;
                 row.Cells[dgvPartCounter.Columns["ClmMute"].Index].Value = ms.mute ? "M" : "";
-                row.Cells[dgvPartCounter.Columns["ClmMute"].Index].Style.BackColor = ms.mute ? Color.FromArgb(120, 90, 10) : Color.Empty;
+                row.Cells[dgvPartCounter.Columns["ClmMute"].Index].Style.BackColor = ms.mute ? Color.FromArgb(setting.ColorScheme.PartCounter_MUTE_BackColor) : Color.Empty;
                 SetMute(row);
             }
         }

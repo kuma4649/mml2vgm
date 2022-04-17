@@ -2203,6 +2203,7 @@ namespace mml2vgmIDE
 
                         }
                     }
+                    frmPartCounter.refreshMuteSolo();
                 }
             }
             catch
@@ -2418,6 +2419,8 @@ namespace mml2vgmIDE
                             }
                         }
                     }
+
+                    frmPartCounter.refreshMuteSolo();
                 }
             }
             catch
@@ -2586,6 +2589,8 @@ namespace mml2vgmIDE
                     {
                         Log.WriteLine(LogLevel.ERROR, string.Format("Exception:\r\nMessage\r\n{0}\r\nStackTrace\r\n{1}\r\n", e.Message, e.StackTrace));
                     }
+                    frmPartCounter.refreshMuteSolo();
+
                 }
             }
             catch
@@ -2684,6 +2689,7 @@ namespace mml2vgmIDE
                     {
                         Log.WriteLine(LogLevel.ERROR, string.Format("Exception:\r\nMessage\r\n{0}\r\nStackTrace\r\n{1}\r\n", e.Message, e.StackTrace));
                     }
+                    frmPartCounter.refreshMuteSolo();
                 }
             }
             catch
