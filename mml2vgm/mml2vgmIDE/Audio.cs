@@ -80,6 +80,9 @@ namespace mml2vgmIDE
 
         public static bool trdClosed = false;
         private static bool _trdStopped = true;
+
+        public static List<byte[]> OPNARhythmSample { get; internal set; } = null;
+
         public static bool trdStopped
         {
             get
@@ -4581,7 +4584,7 @@ namespace mml2vgmIDE
                     chip.Volume = setting.balance.YM2608Volume;
                     chip.Clock = mubDriver.YM2608ClockValue;
                     Func<string, Stream> fn = Common.GetOPNARyhthmStream;
-                    chip.Option = new object[] { fn };
+                    chip.Option = new object[] { fn, OPNARhythmSample };
                     //hiyorimiDeviceFlag |= 0x2;
 
                     if (i == 0)

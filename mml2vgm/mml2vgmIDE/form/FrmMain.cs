@@ -178,6 +178,8 @@ namespace mml2vgmIDE
             CheckAndLoadPMDDotNET(System.Windows.Forms.Application.StartupPath, Disp);
             CheckAndLoadMoonDriverDotNET(System.Windows.Forms.Application.StartupPath, Disp);
 
+            Audio.OPNARhythmSample = LoadRhythmSample(System.Windows.Forms.Application.StartupPath, Disp);
+
             compileManager = new CompileManager(Disp, mucom, pmdmng, mdmng);
 
             string[] args = Environment.GetCommandLineArgs();
@@ -194,6 +196,65 @@ namespace mml2vgmIDE
 
             midikbd = new MIDIKbd(this.setting, newParam.mIDIKbd);
             midikbd.StartMIDIInMonitoring();
+        }
+
+        private List<byte[]> LoadRhythmSample(string startupPath, Action<string> disp)
+        {
+            string[] rhythmname = new string[6]
+            {
+                "BD", "SD", "TOP", "HH", "TOM", "RIM",
+            };
+
+            int i;
+            List<byte[]> dat = new List<byte[]>();
+
+            for (i = 0; i < 6; i++)
+            {
+                dat.Add(null);
+
+                try
+                {
+                    string fn = Path.Combine(startupPath, string.Format("2608_{0}.WAV", rhythmname[i]));
+                    string rymFn = Path.Combine(startupPath, "2608_RYM.WAV");
+                    byte[] buf = null;
+
+                    if (File.Exists(fn))
+                    {
+                        buf = File.ReadAllBytes(fn);
+                    }
+
+                    //リムショットのファイル名は2パターンあるので更に読み込みに挑戦する
+                    if (buf == null)
+                    {
+                        if (i == 5)
+                        {
+                            if (File.Exists(rymFn))
+                            {
+                                buf = File.ReadAllBytes(rymFn);
+                            }
+                        }
+                    }
+
+                    //読み込みができなかった場合は次のファイルの読み込みに挑戦する
+                    if (buf == null)
+                    {
+                        //errMsg += string.Format(
+                        //    "Failed to load 2608_{0}.wav ... \r\n",
+                        //    rhythmname[i]);
+                        continue;
+                    }
+
+                    dat[i] = buf;
+                }
+                catch (Exception e)
+                {
+                    //errMsg += string.Format(
+                    //    "ExceptionMessage:{0} stacktrace:{1} \r\n",
+                    //    e.Message, e.StackTrace);
+                }
+            }
+
+            return dat;
         }
 
         private void CheckAndLoadMucomDotNET(string startupPath, Action<string> disp)
