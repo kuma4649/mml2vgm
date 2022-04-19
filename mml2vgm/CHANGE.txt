@@ -1,4 +1,7 @@
 更新履歴
+TAG599 2022/04/19
+  IDE:mucomDotNET:差し替え
+
 TAG598 2022/04/18 2nd
   IDE:OPNA:mucomDotNET:起動時にリズム音源向けPCMファイルを予め読みこむようにし、以降はそれを使用するよう修正
 
