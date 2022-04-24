@@ -17,6 +17,7 @@ namespace mml2vgmIDE.MMLParameter
         public string[] notecmd;
         public string[] gatetime;
         public int?[] vol;
+        public int?[] volMode;
         public int?[] expression;
         public int?[] velocity;
         public int?[] octave;
@@ -51,6 +52,7 @@ namespace mml2vgmIDE.MMLParameter
             gatetime = new string[n];
             notecmd = new string[n];
             vol = new int?[n];
+            volMode = new int?[n];
             expression = new int?[n];
             velocity = new int?[n];
             octave = new int?[n];
@@ -74,6 +76,7 @@ namespace mml2vgmIDE.MMLParameter
                 TraceInfo[i] = new ConcurrentQueue<outDatum>();
                 clockCounter[i] = 128;
                 vol[i] = 0;
+                volMode[i] = 0;
                 beforeTie[i] = false;
                 partColor[i] = 1;
             }

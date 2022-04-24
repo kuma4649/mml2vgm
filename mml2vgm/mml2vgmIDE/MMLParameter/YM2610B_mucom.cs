@@ -110,7 +110,7 @@ namespace mml2vgmIDE.MMLParameter
             if (vol[ch] == null) return;
 
             keyOnMeter[ch] = (int)(256.0 / (
-                od.linePos.part == "FM" ? 15 : (
+                od.linePos.part == "FM" ? ((volMode[ch] == null || volMode[ch] < 2) ? 15 : 127) : (
                 od.linePos.part == "SSG" ? 15 : (
                 od.linePos.part == "ADPCM-A" ? 63 : 255
                 ))) * vol[ch]);
@@ -148,5 +148,21 @@ namespace mml2vgmIDE.MMLParameter
             if (ch >= hlfo.Length) return;
             hlfo[ch] = string.Format("H{0},{1},{2}", od.args[0], od.args[1], od.args[2]);
         }
+
+        protected override void SetVolume(outDatum od, int ch, int cc)
+        {
+            if (ch >= vol.Length)
+                return;
+
+            if (od.linePos != null)
+            {
+                vol[ch] = (int)od.args[0];
+                if (od.args.Count > 1)
+                {
+                    volMode[ch] = (byte)od.args[1];
+                }
+            }
+        }
+
     }
 }

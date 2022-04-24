@@ -77,7 +77,7 @@ namespace mml2vgmIDE.MMLParameter
 
             if (vol[ch] == null) return;
 
-            keyOnMeter[ch] = (int)(256.0 / 15 * vol[ch]);
+            keyOnMeter[ch] = (int)(256.0 / ((volMode[ch] == null || volMode[ch] < 2) ? 15 : 127) * vol[ch]);
         }
 
         protected override void SetPan(outDatum od, int ch, int cc)
@@ -119,5 +119,21 @@ namespace mml2vgmIDE.MMLParameter
             if (ch >= hlfo.Length) return;
             hlfo[ch] = string.Format("H{0},{1},{2}", od.args[0], od.args[1], od.args[2]);
         }
+
+        protected override void SetVolume(outDatum od, int ch, int cc)
+        {
+            if (ch >= vol.Length)
+                return;
+
+            if (od.linePos != null)
+            {
+                vol[ch] = (int)od.args[0];
+                if (od.args.Count > 1)
+                {
+                    volMode[ch] = (byte)od.args[1];
+                }
+            }
+        }
+
     }
 }
