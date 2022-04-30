@@ -41,6 +41,7 @@ namespace Core
         public NES[] nes = null;
         public DMG[] dmg = null;
         public VRC6[] vrc6 = null;
+        public Gigatron[] gigatron = null;
 
         public Dictionary<enmChipType, ClsChip[]> chips;
 
@@ -520,6 +521,20 @@ namespace Core
             {
                 vrc6 = lstVRC6.ToArray();
                 chips.Add(enmChipType.VRC6, vrc6);
+            }
+
+            List<Gigatron> lstGigatron = new List<Gigatron>();
+            n = sp.dicChipPartName[enmChipType.Gigatron];
+            for (int i = 0; i < n.Item3.Count; i++)
+            {
+                if (string.IsNullOrEmpty(n.Item3[i])) continue;
+                if (sp.lnChipPartName.Contains(n.Item3[i]))
+                    lstGigatron.Add(new Gigatron(this, i, n.Item3[i], stPath, (info.format == enmFormat.ZGM ? 0 : i)));
+            }
+            if (lstGigatron.Count > 0)
+            {
+                gigatron = lstGigatron.ToArray();
+                chips.Add(enmChipType.Gigatron, gigatron);
             }
 
 

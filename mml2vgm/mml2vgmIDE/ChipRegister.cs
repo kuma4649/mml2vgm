@@ -30,6 +30,7 @@ namespace mml2vgmIDE
         private Setting.ChipType[] ctK053260 = new Setting.ChipType[2] { null, null };
         private Setting.ChipType[] ctNES = new Setting.ChipType[2] { null, null };
         private Setting.ChipType[] ctVRC6 = new Setting.ChipType[2] { null, null };
+        private Setting.ChipType[] ctGigatron = new Setting.ChipType[2] { null, null };
         private Setting.ChipType[] ctPPZ8 = new Setting.ChipType[2] { null, null };
         private Setting.ChipType[] ctPPSDRV = new Setting.ChipType[2] { null, null };
         private Setting.ChipType[] ctP86 = new Setting.ChipType[2] { null, null };
@@ -62,6 +63,7 @@ namespace mml2vgmIDE
         private RSoundChip[] scK053260 = new RSoundChip[2] { null, null };
         private RSoundChip[] scNES = new RSoundChip[2] { null, null };
         private RSoundChip[] scVRC6 = new RSoundChip[2] { null, null };
+        private RSoundChip[] scGigatron = new RSoundChip[2] { null, null };
         private RSoundChip[] scPPZ8 = new RSoundChip[2] { null, null };
         private RSoundChip[] scPPSDRV = new RSoundChip[2] { null, null };
         private RSoundChip[] scP86 = new RSoundChip[2] { null, null };
@@ -406,6 +408,7 @@ namespace mml2vgmIDE
         public List<Chip> DMG = new List<Chip>();
         public List<Chip> NES = new List<Chip>();
         public List<Chip> VRC6 = new List<Chip>();
+        public List<Chip> Gigatron = new List<Chip>();
         public List<Chip> SEGAPCM = new List<Chip>();
         public List<Chip> SN76489 = new List<Chip>();
         public List<Chip> YM2151 = new List<Chip>();
@@ -589,6 +592,21 @@ namespace mml2vgmIDE
                         if (VRC6.Count < i + 1) VRC6.Add(new Chip(3));
                         VRC6[i].Model = ctVRC6[i].UseEmu ? EnmVRModel.VirtualModel : EnmVRModel.RealModel;
                         VRC6[i].Delay = (VRC6[i].Model == EnmVRModel.VirtualModel ? LEmu : LReal);
+                    }
+                    break;
+                case EnmZGMDevice.Gigatron:
+                    ctGigatron = new Setting.ChipType[] { chipTypeP, chipTypeS };
+                    for (int i = 0; i < Gigatron.Count; i++)
+                    {
+                        Gigatron[i].Model = EnmVRModel.VirtualModel;
+                        Gigatron[i].Delay = LEmu;
+                        if (i > 1) continue;
+
+                        scGigatron[i] = realChip.GetRealChip(ctGigatron[i]);
+                        if (scGigatron[i] != null) scGigatron[i].init();
+                        if (Gigatron.Count < i + 1) Gigatron.Add(new Chip(3));
+                        Gigatron[i].Model = ctGigatron[i].UseEmu ? EnmVRModel.VirtualModel : EnmVRModel.RealModel;
+                        Gigatron[i].Delay = (Gigatron[i].Model == EnmVRModel.VirtualModel ? LEmu : LReal);
                     }
                     break;
                 case EnmZGMDevice.PPZ8:
@@ -997,6 +1015,13 @@ namespace mml2vgmIDE
                 VRC6[i].Number = i;
                 VRC6[i].Hosei = 0;
 
+                if (Gigatron.Count < i + 1) Gigatron.Add(new Chip(4));
+                Gigatron[i].Use = false;
+                Gigatron[i].Model = EnmVRModel.None;
+                Gigatron[i].Device = EnmZGMDevice.Gigatron;
+                Gigatron[i].Number = i;
+                Gigatron[i].Hosei = 0;
+
                 if (PPSDRV.Count < i + 1) PPSDRV.Add(new Chip(1));
                 PPSDRV[i].Use = false;
                 PPSDRV[i].Model = EnmVRModel.None;
@@ -1165,6 +1190,7 @@ namespace mml2vgmIDE
             DMG.Clear();
             NES.Clear();
             VRC6.Clear();
+            Gigatron.Clear();
             SEGAPCM.Clear();
             SN76489.Clear();
             YM2151.Clear();
@@ -1204,6 +1230,7 @@ namespace mml2vgmIDE
                 if (c is Driver.ZGM.ZgmChip.DMG) DMG.Add(c);
                 if (c is Driver.ZGM.ZgmChip.NES) NES.Add(c);
                 if (c is Driver.ZGM.ZgmChip.VRC6) VRC6.Add(c);
+                if (c is Driver.ZGM.ZgmChip.Gigatron) Gigatron.Add(c);
                 if (c is Driver.ZGM.ZgmChip.K051649) K051649.Add(c);
                 if (c is Driver.ZGM.ZgmChip.HuC6280) HuC6280.Add(c);
                 if (c is Driver.ZGM.ZgmChip.C140) C140.Add(c);
@@ -1251,6 +1278,9 @@ namespace mml2vgmIDE
                     break;
                 case EnmZGMDevice.VRC6:
                     VRC6SetRegisterProcessing(ref Counter, ref Chip, ref Type, ref Address, ref Data, ref ExData);
+                    break;
+                case EnmZGMDevice.Gigatron:
+                    GigatronSetRegisterProcessing(ref Counter, ref Chip, ref Type, ref Address, ref Data, ref ExData);
                     break;
                 case EnmZGMDevice.QSound:
                     QSoundSetRegisterProcessing(ref Counter, ref Chip, ref Type, ref Address, ref Data, ref ExData);
@@ -1340,6 +1370,7 @@ namespace mml2vgmIDE
             sendChipDataFunc.Add(EnmZGMDevice.K053260, K053260WriteRegisterControl);
             sendChipDataFunc.Add(EnmZGMDevice.NESAPU, NESWriteRegisterControl);
             sendChipDataFunc.Add(EnmZGMDevice.VRC6, VRC6WriteRegisterControl);
+            sendChipDataFunc.Add(EnmZGMDevice.Gigatron, GigatronWriteRegisterControl);
             sendChipDataFunc.Add(EnmZGMDevice.PPZ8, PPZ8WriteRegisterControl);
             sendChipDataFunc.Add(EnmZGMDevice.PPSDRV, PPSDRVWriteRegisterControl);
             sendChipDataFunc.Add(EnmZGMDevice.P86, P86WriteRegisterControl);
@@ -2131,6 +2162,7 @@ namespace mml2vgmIDE
             foreach (Driver.ZGM.ZgmChip.ZgmChip c in C352) dicChipCmdNo.Add(c.defineInfo.commandNo, c);
             foreach (Driver.ZGM.ZgmChip.ZgmChip c in YM2609) dicChipCmdNo.Add(c.defineInfo.commandNo, c);
             foreach (Driver.ZGM.ZgmChip.ZgmChip c in MIDI) dicChipCmdNo.Add(c.defineInfo.commandNo, c);
+            foreach (Driver.ZGM.ZgmChip.ZgmChip c in Gigatron) dicChipCmdNo.Add(c.defineInfo.commandNo, c);
         }
 
 
@@ -9288,6 +9320,138 @@ namespace mml2vgmIDE
         #endregion
 
 
+        private void GigatronWriteRegisterControl(Chip Chip, EnmDataType type, int address, int data, object exData)
+        {
+            if (type == EnmDataType.Normal)
+            {
+                if (Chip.Model == EnmVRModel.VirtualModel)
+                {
+                    if (!ctGigatron[Chip.Number].UseScci && ctGigatron[Chip.Number].UseEmu)
+                        mds.WriteGigatron(Chip.Index, (byte)Chip.Number, (uint)address, (byte)data);
+                }
+                if (Chip.Model == EnmVRModel.RealModel)
+                {
+                    if (scGigatron[Chip.Number] != null)
+                    {
+                        int skip = 0x0;
+                        if (scGigatron[Chip.Number] is RC86ctlSoundChip)
+                        {
+                            if (((RC86ctlSoundChip)scGigatron[Chip.Number]).chiptype == Nc86ctl.ChipType.CHIP_UNKNOWN)
+                            {
+                                skip = 0x100;
+                            }
+                        }
+                        scGigatron[Chip.Number].setRegister(address + skip, data);
+                    }
+                }
+            }
+            else if (type == EnmDataType.Block)
+            {
+                Audio.sm.SetInterrupt();
+
+                try
+                {
+                    if (exData == null) return;
+
+                    if (exData is PackData[])
+                    {
+                        PackData[] pdata = (PackData[])exData;
+                        if (Chip.Model == EnmVRModel.VirtualModel)
+                        {
+                            foreach (PackData dat in pdata)
+                                mds.WriteGigatron(Chip.Index, (byte)Chip.Number, (byte)dat.Address, (byte)dat.Data);
+                        }
+                        if (Chip.Model == EnmVRModel.RealModel)
+                        {
+                            if (scNES[Chip.Number] != null)
+                            {
+                                foreach (PackData dat in pdata)
+                                {
+                                    int skip = 0x0;
+                                    if (scGigatron[Chip.Number] is RC86ctlSoundChip)
+                                    {
+                                        if (((RC86ctlSoundChip)scGigatron[Chip.Number]).chiptype == Nc86ctl.ChipType.CHIP_UNKNOWN)
+                                        {
+                                            skip = 0x100;
+                                        }
+                                    }
+                                    scGigatron[Chip.Number].setRegister(dat.Address + skip, dat.Data);
+                                }
+                            }
+                        }
+                        return;
+                    }
+
+                    uint stAdr = (uint)((object[])exData)[0];
+                    uint dataSize = (uint)((object[])exData)[1];
+                    byte[] pcmData = (byte[])((object[])exData)[2];
+                    uint vgmAdr = (uint)((object[])exData)[3];
+
+                    if (Chip.Model == EnmVRModel.VirtualModel)
+                    {
+                    }
+                    if (Chip.Model == EnmVRModel.RealModel)
+                    {
+                        ;
+                    }
+                }
+                finally
+                {
+                    Audio.sm.ResetInterrupt();
+                }
+            }
+        }
+
+        public void GigatronSetRegisterProcessing(ref long Counter, ref Chip Chip, ref EnmDataType Type, ref int Address, ref int dData, ref object ExData)
+        {
+        }
+
+        public void GigatronSetRegister(outDatum od, long Counter, int ChipID, int dAddr, int dData)
+        {
+            enq(od, Counter, Gigatron[ChipID], EnmDataType.Normal, dAddr, dData, null);
+        }
+
+        public void GigatronSetRegister(outDatum od, long Counter, int ChipID, PackData[] data)
+        {
+            enq(od, Counter, Gigatron[ChipID], EnmDataType.Block, -1, -1, data);
+        }
+
+        public void GigatronSoftReset(long Counter, int ChipID)
+        {
+            List<PackData> data = GigatronMakeSoftReset(ChipID);
+            GigatronSetRegister(null, Counter, ChipID, data.ToArray());
+        }
+
+        public List<PackData> GigatronMakeSoftReset(int chipID)
+        {
+            List<PackData> data = new List<PackData>();
+            for (int i = 1; i < 5; i++)
+            {
+                data.Add(new PackData(null, Gigatron[chipID], EnmDataType.Normal, i * 0x100 + 0xfa, 0x00, null));//1ch wavA:0
+                data.Add(new PackData(null, Gigatron[chipID], EnmDataType.Normal, i * 0x100 + 0xfb, 0x01, null));//1ch wavX:1
+                data.Add(new PackData(null, Gigatron[chipID], EnmDataType.Normal, i * 0x100 + 0xfc, 0x00, null));//1ch fnumL:0
+                data.Add(new PackData(null, Gigatron[chipID], EnmDataType.Normal, i * 0x100 + 0xfd, 0x00, null));//1ch fnumH:0
+            }
+
+            return data;
+        }
+
+        public void GigatronWriteClock(byte chipID, int clock)
+        {
+            if (scGigatron != null && scGigatron[chipID] != null)
+            {
+                scGigatron[chipID].dClock = scGigatron[chipID].SetMasterClock((uint)clock);
+                scGigatron[chipID].mul = (double)scGigatron[chipID].dClock / (double)clock;
+
+                if (scGigatron[chipID] is RC86ctlSoundChip)
+                {
+                    if (((RC86ctlSoundChip)scGigatron[chipID]).chiptype == Nc86ctl.ChipType.CHIP_UNKNOWN)
+                    {
+                        scGigatron[chipID].mul = 1.0;
+                    }
+                }
+            }
+        }
 
         #region Conductor
 

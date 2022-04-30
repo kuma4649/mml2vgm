@@ -65,7 +65,8 @@
         YMF271 = 24,
         NES = 25,
         DMG = 26,
-        VRC6 = 27
+        VRC6 = 27,
+        Gigatron=28
     }
 
     public enum EnmZGMDevice : int
@@ -122,6 +123,7 @@
         , MMC5 = 0x0001_000C
         , N106 = 0x0001_0010
         , S5B = 0x0001_0014
+        , Gigatron = 0x0001_0018
         // 妄想Chips            
         , OtherChips = 0x0002_0000
         , AY8910B = 0x0002_0000

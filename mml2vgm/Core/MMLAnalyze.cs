@@ -74,8 +74,6 @@ namespace Core
 
         }
 
-
-
         #region step1
 
         private void Step1(partWork pw, partPage page)
@@ -4468,6 +4466,8 @@ namespace Core
 
         #endregion
 
+        #region Step4
+
         private void Step4()
         {
             //同期マーキングをリストアップする
@@ -4682,6 +4682,8 @@ namespace Core
                 }
             }
         }
+
+        #endregion
 
     }
 }

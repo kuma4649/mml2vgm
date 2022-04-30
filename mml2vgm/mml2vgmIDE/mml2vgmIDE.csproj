@@ -178,6 +178,7 @@
     <Compile Include="Driver\ZGM\ZgmChip\NES.cs" />
     <Compile Include="Driver\ZGM\ZgmChip\RF5C164.cs" />
     <Compile Include="Driver\ZGM\ZgmChip\SEGAPCM.cs" />
+    <Compile Include="Driver\ZGM\ZgmChip\Gigatron.cs" />
     <Compile Include="Driver\ZGM\ZgmChip\VRC6.cs" />
     <Compile Include="Driver\ZGM\ZgmChip\VRC7.cs" />
     <Compile Include="Driver\ZGM\ZgmChip\YM2151.cs" />
@@ -348,6 +349,7 @@
     <Compile Include="MIDIKbd.cs" />
     <Compile Include="midiOutInfo.cs" />
     <Compile Include="MIDIParam.cs" />
+    <Compile Include="MMLParameter\Gigatron.cs" />
     <Compile Include="VGMWriter.cs" />
     <Compile Include="MidWriter.cs" />
     <Compile Include="mmfControl.cs" />

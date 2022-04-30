@@ -55,6 +55,7 @@
         public short VRC7 = 0;
         public short FME7 = 0;
         public short DMG = 0;
+        public short Gigatron = 0;
 
     }
 }

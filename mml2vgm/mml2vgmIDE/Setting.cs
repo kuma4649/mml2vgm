@@ -2642,6 +2642,22 @@ namespace mml2vgmIDE
                 }
             }
 
+            private int _GigatronVolume = 0;
+            public int GigatronVolume
+            {
+                get
+                {
+                    if (_GigatronVolume > 20 || _GigatronVolume < -192) _GigatronVolume = 0;
+                    return _GigatronVolume;
+                }
+
+                set
+                {
+                    _GigatronVolume = value;
+                    if (_GigatronVolume > 20 || _GigatronVolume < -192) _GigatronVolume = 0;
+                }
+            }
+
             private int _VRC7Volume = 0;
             public int VRC7Volume
             {

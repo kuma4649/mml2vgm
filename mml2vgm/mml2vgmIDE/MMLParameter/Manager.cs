@@ -19,6 +19,7 @@ namespace mml2vgmIDE.MMLParameter
         public List<Instrument> K053260 = new List<Instrument>();
         public List<Instrument> NES = new List<Instrument>();
         public List<Instrument> VRC6 = new List<Instrument>();
+        public List<Instrument> Gigatron = new List<Instrument>();
         public List<Instrument> PPZ8 = new List<Instrument>();
         public List<Instrument> QSound = new List<Instrument>();
         public List<Instrument> RF5C164 = new List<Instrument>();
@@ -83,6 +84,8 @@ namespace mml2vgmIDE.MMLParameter
             YM2612.Clear();
             YM2612X.Clear();
             PPZ8.Clear();
+            VRC6.Clear();
+            Gigatron.Clear();
 
         }
 
@@ -184,6 +187,9 @@ namespace mml2vgmIDE.MMLParameter
                     break;
                 case "VRC6":
                     SetupVRC6(od);
+                    break;
+                case "Gigatron":
+                    SetupGigatron(od);
                     break;
                 case "QSound":
                     SetupQSound(od);
@@ -444,6 +450,27 @@ namespace mml2vgmIDE.MMLParameter
             VRC6.Add(vrc6);
             dicInstAdd(vrc6, od.linePos.chipIndex, od.linePos.chipNumber);
             instsAdd(vrc6, od.linePos.chipIndex, od.linePos.chipNumber);
+        }
+
+        private void SetupGigatron(outDatum od)
+        {
+            Chip chip = null;
+            if (Audio.chipRegister.Gigatron == null) return;
+            if (od.linePos.chipIndex < Audio.chipRegister.Gigatron.Count)
+            {
+                chip = Audio.chipRegister.Gigatron[od.linePos.chipNumber];
+            }
+            if (chip == null && od.linePos.chipIndex >= 0x80)
+            {
+                Driver.ZGM.ZgmChip.ZgmChip zChip = Audio.chipRegister.dicChipCmdNo[od.linePos.chipIndex];
+                chip = Audio.chipRegister.Gigatron[zChip.Index];
+            }
+            Gigatron gigatron = new Gigatron(chip, setting, midiKbd);
+            gigatron.isTrace = isTrace;
+
+            Gigatron.Add(gigatron);
+            dicInstAdd(gigatron, od.linePos.chipIndex, od.linePos.chipNumber);
+            instsAdd(gigatron, od.linePos.chipIndex, od.linePos.chipNumber);
         }
 
         private void SetupPPZ8(outDatum od)

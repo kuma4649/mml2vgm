@@ -488,6 +488,19 @@ namespace mml2vgmIDE
             }
             chipRegister.SetRealChipInfo(EnmZGMDevice.VRC6, chipType[0], chipType[1], setting.LatencyEmulation, setting.LatencySCCI);
 
+            chipType = new Setting.ChipType[Math.Max(chipRegister.Gigatron.Count, 2)];
+            for (int i = 0; i < Math.Max(chipRegister.Gigatron.Count, 2); i++)
+            {
+                chipType[i] = new Setting.ChipType();
+                if (chipRegister.Gigatron.Count <= i) continue;
+                if (!chipRegister.Gigatron[i].Use) continue;
+                chipRegister.Gigatron[i].Model = EnmVRModel.VirtualModel;
+                chipType[i].UseEmu = true;
+                chipType[i].UseScci = false;
+                if (ret.Count == 0) continue;
+            }
+            chipRegister.SetRealChipInfo(EnmZGMDevice.Gigatron, chipType[0], chipType[1], setting.LatencyEmulation, setting.LatencySCCI);
+
             chipType = new Setting.ChipType[Math.Max(chipRegister.SEGAPCM.Count, 2)];
             for (int i = 0; i < Math.Max(chipRegister.SEGAPCM.Count, 2); i++)
             {
@@ -2232,6 +2245,37 @@ namespace mml2vgmIDE
                     zCnt = -1;
                     foreach (Driver.ZGM.ZgmChip.ZgmChip zchip in zgmDriver.chips)
                     {
+                        if (!(zchip is Driver.ZGM.ZgmChip.Gigatron)) continue;
+
+                        zCnt++;
+                        MDSound.gigatron Gigatron = new MDSound.gigatron();
+                        chip = new MDSound.MDSound.Chip();
+                        chip.type = MDSound.MDSound.enmInstrumentType.Gigatron;
+                        chip.ID = (byte)0;//ZGMでは常に0
+                        chip.Instrument = Gigatron;
+                        chip.Update = Gigatron.Update;
+                        chip.Start = Gigatron.Start;
+                        chip.Stop = Gigatron.Stop;
+                        chip.Reset = Gigatron.Reset;
+                        chip.SamplingRate = (UInt32)Common.SampleRate;
+                        chip.Volume = setting.balance.APUVolume;
+                        chip.Clock = (uint)zchip.defineInfo.clock;
+                        chip.Option = null;
+                        lstChips.Add(chip);
+
+                        log.Write(string.Format("Use Gigatron(#{0}) Clk:{1}"
+                            , zCnt
+                            , chip.Clock
+                            ));
+
+                        chipRegister.Gigatron[zCnt].Use = true;
+                        chipRegister.Gigatron[zCnt].Model = EnmVRModel.VirtualModel;
+                        chipRegister.Gigatron[zCnt].Device = EnmZGMDevice.Gigatron;
+                    }
+
+                    zCnt = -1;
+                    foreach (Driver.ZGM.ZgmChip.ZgmChip zchip in zgmDriver.chips)
+                    {
                         if (!(zchip is Driver.ZGM.ZgmChip.K051649)) continue;
 
                         zCnt++;
@@ -2776,6 +2820,7 @@ namespace mml2vgmIDE
                 for (int i = 0; i < chipRegister.K053260.Count; i++) if (chipRegister.K053260[i].Use) chipRegister.K053260WriteClock((byte)i, (int)zgmDriver.K053260ClockValue);
                 for (int i = 0; i < chipRegister.NES.Count; i++) if (chipRegister.NES[i].Use) chipRegister.NESWriteClock((byte)i, (int)zgmDriver.NESClockValue);
                 for (int i = 0; i < chipRegister.VRC6.Count; i++) if (chipRegister.VRC6[i].Use) chipRegister.VRC6WriteClock((byte)i, (int)zgmDriver.VRC6ClockValue);
+                for (int i = 0; i < chipRegister.Gigatron.Count; i++) if (chipRegister.Gigatron[i].Use) chipRegister.GigatronWriteClock((byte)i, (int)zgmDriver.GigatronClockValue);
                 for (int i = 0; i < chipRegister.QSound.Count; i++) if (chipRegister.QSound[i].Use) chipRegister.QSoundWriteClock((byte)i, (int)zgmDriver.QSoundClockValue);
                 for (int i = 0; i < chipRegister.RF5C164.Count; i++) if (chipRegister.RF5C164[i].Use) chipRegister.RF5C164WriteClock((byte)i, (int)zgmDriver.RF5C164ClockValue);
                 for (int i = 0; i < chipRegister.SEGAPCM.Count; i++) if (chipRegister.SEGAPCM[i].Use) chipRegister.SEGAPCMWriteClock((byte)i, (int)zgmDriver.SEGAPCMClockValue);
@@ -5279,6 +5324,8 @@ namespace mml2vgmIDE
                     vgmSpeed = 1.0;
                     sm.SetSpeed(1.0);
                 }
+
+                silent = Paused;
             }
             catch (Exception ex)
             {
@@ -5561,6 +5608,7 @@ namespace mml2vgmIDE
             for (int i = 0; i < chipRegister.K053260.Count; i++) if (chipRegister.K053260[i].Use) chipRegister.K053260SoftReset(counter, i);
             for (int i = 0; i < chipRegister.NES.Count; i++) if (chipRegister.NES[i].Use) chipRegister.NESSoftReset(counter, i);
             for (int i = 0; i < chipRegister.VRC6.Count; i++) if (chipRegister.VRC6[i].Use) chipRegister.VRC6SoftReset(counter, i);
+            for (int i = 0; i < chipRegister.Gigatron.Count; i++) if (chipRegister.Gigatron[i].Use) chipRegister.GigatronSoftReset(counter, i);
             for (int i = 0; i < chipRegister.PPZ8.Count; i++) if (chipRegister.PPZ8[i].Use) chipRegister.PPZ8SoftReset(counter, i);
             for (int i = 0; i < chipRegister.PPSDRV.Count; i++) if (chipRegister.PPSDRV[i].Use) chipRegister.PPSDRVSoftReset(counter, i);
             for (int i = 0; i < chipRegister.P86.Count; i++) if (chipRegister.P86[i].Use) chipRegister.P86SoftReset(counter, i);
@@ -5596,6 +5644,7 @@ namespace mml2vgmIDE
             for (int i = 0; i < chipRegister.K053260.Count; i++) if (chipRegister.K053260[i].Use) data.AddRange(chipRegister.K053260MakeSoftReset(i));
             for (int i = 0; i < chipRegister.NES.Count; i++) if (chipRegister.NES[i].Use) data.AddRange(chipRegister.NESMakeSoftReset(i));
             for (int i = 0; i < chipRegister.VRC6.Count; i++) if (chipRegister.VRC6[i].Use) data.AddRange(chipRegister.VRC6MakeSoftReset(i));
+            for (int i = 0; i < chipRegister.Gigatron.Count; i++) if (chipRegister.Gigatron[i].Use) data.AddRange(chipRegister.GigatronMakeSoftReset(i));
             for (int i = 0; i < chipRegister.PPZ8.Count; i++) if (chipRegister.PPZ8[i].Use) data.AddRange(chipRegister.PPZ8MakeSoftReset(i));
             for (int i = 0; i < chipRegister.PPSDRV.Count; i++) if (chipRegister.PPSDRV[i].Use) data.AddRange(chipRegister.PPSDRVMakeSoftReset(i));
             for (int i = 0; i < chipRegister.P86.Count; i++) if (chipRegister.P86[i].Use) data.AddRange(chipRegister.P86MakeSoftReset(i));
@@ -5634,6 +5683,7 @@ namespace mml2vgmIDE
             for (int i = 0; i < chipRegister.K053260.Count; i++) if (chipRegister.K053260[i].Use) data.AddRange(chipRegister.K053260MakeSoftReset(i));
             for (int i = 0; i < chipRegister.NES.Count; i++) if (chipRegister.NES[i].Use) data.AddRange(chipRegister.NESMakeSoftReset(i));
             for (int i = 0; i < chipRegister.VRC6.Count; i++) if (chipRegister.VRC6[i].Use) data.AddRange(chipRegister.VRC6MakeSoftReset(i));
+            for (int i = 0; i < chipRegister.Gigatron.Count; i++) if (chipRegister.Gigatron[i].Use) data.AddRange(chipRegister.GigatronMakeSoftReset(i));
             for (int i = 0; i < chipRegister.PPZ8.Count; i++) if (chipRegister.PPZ8[i].Use) data.AddRange(chipRegister.PPZ8MakeSoftReset(i));
             for (int i = 0; i < chipRegister.PPSDRV.Count; i++) if (chipRegister.PPSDRV[i].Use) data.AddRange(chipRegister.PPSDRVMakeSoftReset(i));
             for (int i = 0; i < chipRegister.P86.Count; i++) if (chipRegister.P86[i].Use) data.AddRange(chipRegister.P86MakeSoftReset(i));
@@ -6104,6 +6154,9 @@ namespace mml2vgmIDE
 
             vol = mds.getDMGVisVolume();
             if (vol != null) visVolume.DMG = (short)getMonoVolume(vol[0][0][0], vol[0][0][1], vol[1][0][0], vol[1][0][1]);
+
+            vol = mds.getGigatronVisVolume();
+            if (vol != null) visVolume.Gigatron = (short)getMonoVolume(vol[0][0][0], vol[0][0][1], vol[1][0][0], vol[1][0][1]);
         }
 
         public static int getMonoVolume(int pl, int pr, int sl, int sr)
@@ -6946,6 +6999,16 @@ namespace mml2vgmIDE
             {
                 mds.SetVolumeVRC6(setting.balance.VRC6Volume
                     = Common.Range((isAbs ? 0 : setting.balance.VRC6Volume) + volume, -192, 20));
+            }
+            catch { }
+        }
+
+        public static void SetGigatronVolume(bool isAbs, int volume)
+        {
+            try
+            {
+                mds.SetVolumeGigatron(setting.balance.GigatronVolume
+                    = Common.Range((isAbs ? 0 : setting.balance.GigatronVolume) + volume, -192, 20));
             }
             catch { }
         }

@@ -65,6 +65,7 @@ namespace mml2vgmIDE.Driver.ZGM
         public uint NESClockValue;
         public uint VRC6ClockValue;
         public uint MultiPCMClockValue;
+        public uint GigatronClockValue;
 
         //public dacControl dacControl = new dacControl();
         public bool isPcmRAMWrite = false;
@@ -1607,6 +1608,7 @@ namespace mml2vgmIDE.Driver.ZGM
             NESClockValue = 0;
             VRC6ClockValue = 0;
             MultiPCMClockValue = 0;
+            GigatronClockValue = 0;
 
 
             //ヘッダーを読み込めるサイズをもっているかチェック

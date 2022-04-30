@@ -296,6 +296,11 @@ namespace Core
                 info.format == enmFormat.VGM ? new string[] { } : (info.format == enmFormat.XGM ? new string[] { } : new string[] { "Va", "Vb" })
                 ), new int[] { 0, 0, -1 }));
 
+            cp = new Gigatron(null, 0, null, null, 0);
+            cpn.Add(enmChipType.Gigatron, new Tuple<string, string, List<string>, int[]>(cp.Name, cp.ShortName, new List<string>(
+                info.format == enmFormat.VGM ? new string[] { } : (info.format == enmFormat.XGM ? new string[] { } : new string[] { "Gg", "Gh" })
+                ), new int[] { 0, 0, -1 }));
+
 
 
 
