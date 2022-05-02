@@ -5397,6 +5397,12 @@ namespace mml2vgmIDE
                     //DataSenderに溜まっているであろう演奏データをクリアし、演奏を打ち切る
                     sm.ClearData();
                     break;
+                case SendMode.Force:
+                    //sm.RequestForceStop();
+                    sm.Release();
+                    SoundManagerMount();
+                    sm.ResetMode(SendMode.Both);
+                    break;
             }
 
         }
@@ -5407,6 +5413,7 @@ namespace mml2vgmIDE
             {
 
                 Stop(0);
+                //sm.Release();
                 NAudioWrap.Stop();
 
                 sm.Release();
@@ -5570,13 +5577,30 @@ namespace mml2vgmIDE
         {
             if (e.Exception != null)
             {
-                System.Windows.Forms.MessageBox.Show(
-                    string.Format("デバイスが何らかの原因で停止しました。\r\nメッセージ:\r\n{0}", e.Exception.Message)
-                    , "エラー"
-                    , System.Windows.Forms.MessageBoxButtons.OK
-                    , System.Windows.Forms.MessageBoxIcon.Error);
+                if (e.Exception.Message != "NoDriver calling waveOutWrite")
+                {
+                    System.Windows.Forms.MessageBox.Show(
+                        string.Format("デバイスが何らかの原因で停止しました。\r\nメッセージ:\r\n{0}", e.Exception.Message)
+                        , "エラー"
+                        , System.Windows.Forms.MessageBoxButtons.OK
+                        , System.Windows.Forms.MessageBoxIcon.Error);
+                }
+                else
+                {
+                    log.ForcedWrite(e.Exception);
+                    System.Windows.Forms.MessageBox.Show(
+                        string.Format("外部アプリからデバイスが初期化されました。本アプリを再起動してください。\r\nメッセージ:\r\n{0}", e.Exception.Message)
+                        , "エラー"
+                        , System.Windows.Forms.MessageBoxButtons.OK
+                        , System.Windows.Forms.MessageBoxIcon.Error);
+                }
                 flgReinit = true;
 
+                try
+                {
+                    Stop(SendMode.Force);
+                }
+                catch { }
                 try
                 {
                     NAudioWrap.Stop();

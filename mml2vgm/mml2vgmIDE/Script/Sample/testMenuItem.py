@@ -20,6 +20,11 @@ class Mml2vgmScript:
     def supportFileExt(self):
         return r".*|.muc;.gwi"
 
+    #ショートカットキーを定義します。
+    #,で区切ることで順番に入力することが必要なショートカットになります
+    def defaultShortCutKey(self):
+        return r""
+
     def run(self, Mml2vgmInfo, index):
         
         if Mml2vgmInfo.document is None:

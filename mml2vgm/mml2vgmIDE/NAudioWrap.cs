@@ -249,7 +249,7 @@ namespace mml2vgmIDE
             {
                 try
                 {
-                    //waveOut.Pause();
+                    waveOut.Pause();
                     try { waveOut.Stop(); } catch { }
                     while (waveOut.PlaybackState != PlaybackState.Stopped) { System.Threading.Thread.Sleep(1); }
                     waveOut.Dispose();

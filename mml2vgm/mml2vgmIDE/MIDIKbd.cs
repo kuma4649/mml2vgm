@@ -90,6 +90,7 @@ namespace mml2vgmIDE
             {
                 for (int i = 0; i < MidiIn.NumberOfDevices; i++)
                 {
+                    if (!setting.midiKbd.UseMIDIKeyboard) continue;
                     if (setting.midiKbd.MidiInDeviceName != MidiIn.DeviceInfo(i).ProductName) continue;
                     try
                     {

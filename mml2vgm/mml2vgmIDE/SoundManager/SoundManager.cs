@@ -114,6 +114,7 @@ namespace SoundManager
         }
         public MusicInterruptTimer GetMusicInterruptTimer()
         {
+            if (dataSender == null) return MusicInterruptTimer.DateTime;
             return dataSender.GetMusicInterruptTimer();
         }
 
@@ -255,6 +256,88 @@ namespace SoundManager
 
             }
         }
+
+        //public void RequestForceStop()
+        //{
+        //    //int waitCounter;
+        //    if (dataMaker != null)
+        //    {
+        //        //waitCounter = 3000;
+        //        if (dataMaker.IsRunning())
+        //        {
+        //            dataMaker.Unmount();
+        //            //dataMaker.RequestStop();
+        //            Application.DoEvents();//Waveデバイス対策
+
+        //            //System.Threading.Thread.Sleep(1);
+        //            //waitCounter--;
+        //            //if (waitCounter == 0)
+        //            //{
+        //            //    break;
+        //            //}
+        //        }
+        //    }
+        //    if (dataSender != null)
+        //    {
+        //        //waitCounter = 3000;
+        //        if (dataSender.IsRunning())
+        //        {
+        //            dataSender.Unmount();
+        //            //dataSender.RequestStop();
+        //            Application.DoEvents();//Waveデバイス対策
+
+        //            //System.Threading.Thread.Sleep(1);
+        //            //waitCounter--;
+        //            //if (waitCounter == 0)
+        //            //{
+        //            //    break;
+        //            //}
+        //        }
+        //    }
+        //    if (emuChipSender != null)
+        //    {
+        //        //waitCounter = 3000;
+        //        if (emuChipSender.IsRunning())
+        //        {
+        //            emuChipSender.Unmount();
+        //            //emuChipSender.RequestStop();
+        //            Application.DoEvents();//Waveデバイス対策
+
+        //            //System.Threading.Thread.Sleep(1);
+        //            //waitCounter--;
+        //            //if (waitCounter == 0)
+        //            //{
+        //            //    //emuChipSender.recvBuffer.Init(DATA_SEQUENCE_FREQUENCE);
+        //            //    emuChipSender.recvBuffer.Clear();
+        //            //    break;
+        //            //}
+
+        //        }
+        //    }
+        //    if (realChipSender != null)
+        //    {
+        //        //waitCounter = 3000;
+        //        if (realChipSender.IsRunning())
+        //        {
+        //            realChipSender.Unmount();
+        //            //realChipSender.RequestStop();
+        //            Application.DoEvents();//Waveデバイス対策
+
+        //            //System.Threading.Thread.Sleep(1);
+        //            //waitCounter--;
+        //            //if (waitCounter == 0)
+        //            //{
+        //            //    break;
+        //            //}
+        //        }
+        //    }
+
+        //    //if (isVirtualOnlySend)
+        //    {
+        //        Audio.stopDataVirtulaOnlySend = dataSender.stopData;
+
+        //    }
+        //}
 
         public void RequestStopAsync()
         {
@@ -574,6 +657,11 @@ namespace SoundManager
         internal void ForcedProc()
         {
             dataSender.ForcedStepUpSeqCounterProc();
+        }
+
+        public void Reinit()
+        {
+            throw new NotImplementedException();
         }
 
         #endregion

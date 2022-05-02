@@ -51,7 +51,10 @@ namespace mml2vgmIDE
                     case 2:
                         return mml2vgmScript.supportFileExt().Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
                     case 3:
-                        return mml2vgmScript.defaultShortCutKey().Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
+                        string ret = mml2vgmScript.defaultShortCutKey();
+                        if (!string.IsNullOrEmpty(ret))
+                            return ret.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
+                        break;
                 }
             }
             catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException)

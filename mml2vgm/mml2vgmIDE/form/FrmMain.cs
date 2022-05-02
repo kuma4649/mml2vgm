@@ -954,6 +954,7 @@ namespace mml2vgmIDE
         private void TsmiOption_Click(object sender, EventArgs e)
         {
             stop();
+            for (int i = 0; i < 10; i++) { Application.DoEvents(); Thread.Sleep(1); }
             Audio.Close();
 
             FrmSetting frmSetting = new FrmSetting(setting);

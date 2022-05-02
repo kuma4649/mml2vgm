@@ -57,6 +57,11 @@ class Mml2vgmScript:
         + r"|.wav"
         )
     
+    #ショートカットキーを定義します。
+    #,で区切ることで順番に入力することが必要なショートカットになります
+    def defaultShortCutKey(self):
+        return r""
+
     #スクリプトのメインとして実行する
     def run(self, Mml2vgmInfo, index):
         
