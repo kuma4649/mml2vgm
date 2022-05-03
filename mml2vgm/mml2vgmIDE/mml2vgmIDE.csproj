@@ -211,6 +211,7 @@
     <Compile Include="Enums.cs" />
     <Compile Include="Environment.cs" />
     <Compile Include="form\ChannelInfo.cs" />
+    <Compile Include="form\DataGridViewImageCellEx.cs" />
     <Compile Include="form\FormN88Files.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -563,7 +563,11 @@ namespace mml2vgmIDE
                     if (colName[i].Item1 == "text")
                         col = new DataGridViewTextBoxColumn();
                     else
+                    {
                         col = new DataGridViewImageColumn();
+                        col.DefaultCellStyle.NullValue = null;
+                        col.CellTemplate = new DataGridViewImageCellEx();
+                    }
                     col.Name = colName[i].Item2;
                     col.HeaderText = colName[i].Item3;
                     col.Visible = colName[i].Item4;

@@ -1,4 +1,7 @@
 更新履歴
+TAG604 2022/05/04 2nd
+  IDE:KeyOn列の赤いXが出ないように修正(from DOBON.NET様)
+
 TAG603 2022/05/04
   IDE:mucomDotNET:差し替え
 
