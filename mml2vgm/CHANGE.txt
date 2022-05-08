@@ -1,4 +1,7 @@
 更新履歴
+TAG606 2022/05/09
+  IDE:mucomDotNET:差し替え
+
 TAG605 2022/05/08
   IDE:mucomDotNET:差し替え
   IDE:muc to vgm:ループ回数指定が2回固定だったのを修正
