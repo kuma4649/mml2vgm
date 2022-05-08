@@ -7715,7 +7715,7 @@ namespace mml2vgmIDE
             try
             {
 
-                while (!driver.Stopped && GetVgmCurLoopCounter() < 2 && !waveModeAbort)
+                while (!driver.Stopped && GetVgmCurLoopCounter() < setting.other.LoopTimes && !waveModeAbort)
                 {
                     mds.Update(buf, offset, sampleCount, playToVGMOneProc);
                     EmuSeqCounter++;

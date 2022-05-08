@@ -1,4 +1,8 @@
 更新履歴
+TAG605 2022/05/08
+  IDE:mucomDotNET:差し替え
+  IDE:muc to vgm:ループ回数指定が2回固定だったのを修正
+
 TAG604 2022/05/04 2nd
   IDE:KeyOn列の赤いXが出ないように修正(from DOBON.NET様)
 
