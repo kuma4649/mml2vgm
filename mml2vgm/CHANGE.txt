@@ -1,4 +1,7 @@
 更新履歴
+TAG607 2022/05/09 2nd
+  Core:OPN2/OPN2X:Fnum定義ファイルの更新。
+
 TAG606 2022/05/09
   IDE:mucomDotNET:差し替え
 
