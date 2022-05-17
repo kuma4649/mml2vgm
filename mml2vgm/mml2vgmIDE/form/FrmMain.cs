@@ -2408,7 +2408,6 @@ namespace mml2vgmIDE
 
         private string mucPartName = "ABCDEFGHIJKLMNOPQRSTUVabcdefghijklmnopqrstuvWXYZwxyz";
 
-
         private void finishedCompileMUC()
         {
             musicDriverInterface.CompilerInfo ci = mucom.GetCompilerInfo();
@@ -2614,6 +2613,8 @@ namespace mml2vgmIDE
                         for (int i = 0; i < ci.totalCount.Count; i++)
                         {
                             cells[0] = -1;
+
+                            if (ci.partType == null) continue;
 
                             if (ci.partType[i] == "FMOPN" || ci.partType[i] == "PPZ8")
                             {

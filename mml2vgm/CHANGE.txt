@@ -1,4 +1,8 @@
 更新履歴
+TAG608 2022/05/18
+  IDE:PMDDotNET:差し替え
+  IDE:PartCounter:gwi:チップ種の判定処理をちょっとだけ修正。
+
 TAG607 2022/05/09 2nd
   Core:OPN2/OPN2X:Fnum定義ファイルの更新。
 
