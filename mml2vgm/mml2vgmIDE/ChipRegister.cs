@@ -6491,6 +6491,7 @@ namespace mml2vgmIDE
                     if (ctYM2608[Chip.Number] == null || (!ctYM2608[Chip.Number].UseScci && ctYM2608[Chip.Number].UseEmu))
                     {
                         //log.Write(string.Format("FM P{2} Out:Adr[{0:x02}] val[{1:x02}]", (byte)address, (byte)data, (byte)(address >> 8)));
+                        //Console.WriteLine(string.Format("FM P{2} Out:Adr[{0:x02}] val[{1:x02}]", (byte)address, (byte)data, (byte)(address >> 8)));
                         mds.WriteYM2608(Chip.Index, (byte)Chip.Number, (byte)(address >> 8), (byte)address, (byte)data);
                     }
                     else if (ctYM2610[Chip.Number].OnlyPCMEmulation)
@@ -6852,7 +6853,6 @@ namespace mml2vgmIDE
             data.Add(new PackData(null, YM2608[chipID], EnmDataType.Normal, 0x28, 0x04, null));
             data.Add(new PackData(null, YM2608[chipID], EnmDataType.Normal, 0x28, 0x05, null));
             data.Add(new PackData(null, YM2608[chipID], EnmDataType.Normal, 0x28, 0x06, null));
-
             // FM TL=127
             for (i = 0x40; i < 0x4F + 1; i++)
             {

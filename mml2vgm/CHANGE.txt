@@ -1,4 +1,7 @@
 更新履歴
+TAG610 2022/05/20
+  IDE:mucomDotNET:差し替え
+
 TAG609 2022/05/19
   IDE:mucomDotNET:差し替え
   IDE:エクスポート:mucomDotNET:mubファイルのエクスポート不具合を修正。(ありがとうございます、古代センセ)

@@ -184,7 +184,7 @@ namespace SoundManager
             int waitCounter;
             if (dataMaker != null)
             {
-                waitCounter = 3000;
+                waitCounter = 1000;
                 while (dataMaker.IsRunning())
                 {
                     dataMaker.RequestStop();
@@ -194,13 +194,14 @@ namespace SoundManager
                     waitCounter--;
                     if (waitCounter == 0)
                     {
+                        mml2vgmIDE.log.Write("timeout : stop request at dataMaker");
                         break;
                     }
                 }
             }
             if (dataSender != null)
             {
-                waitCounter = 3000;
+                waitCounter = 1000;
                 while (dataSender.IsRunning())
                 {
                     dataSender.RequestStop();
@@ -210,13 +211,14 @@ namespace SoundManager
                     waitCounter--;
                     if (waitCounter == 0)
                     {
+                        mml2vgmIDE.log.Write("timeout : stop request at dataSender");
                         break;
                     }
                 }
             }
             if (emuChipSender != null)
             {
-                waitCounter = 3000;
+                waitCounter = 1000;
                 while (emuChipSender.IsRunning())
                 {
                     emuChipSender.RequestStop();
@@ -226,6 +228,7 @@ namespace SoundManager
                     waitCounter--;
                     if (waitCounter == 0)
                     {
+                        mml2vgmIDE.log.Write("timeout : stop request at emuChipSender");
                         //emuChipSender.recvBuffer.Init(DATA_SEQUENCE_FREQUENCE);
                         emuChipSender.recvBuffer.Clear();
                         break;
@@ -235,7 +238,7 @@ namespace SoundManager
             }
             if (realChipSender != null)
             {
-                waitCounter = 3000;
+                waitCounter = 1000;
                 while (realChipSender.IsRunning())
                 {
                     realChipSender.RequestStop();
@@ -245,6 +248,7 @@ namespace SoundManager
                     waitCounter--;
                     if (waitCounter == 0)
                     {
+                        mml2vgmIDE.log.Write("timeout : stop request at realChipSender");
                         break;
                     }
                 }
