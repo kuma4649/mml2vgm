@@ -5128,7 +5128,14 @@ namespace mml2vgmIDE
                 for(int n = 0; n < ci.totalCount.Count; n++)
                 {
                     if (ci.totalCount[n] == 0) continue;
-                    useCh.Add(new Tuple<int, int, int>(n / (11 * 10), (n % (11*10)) / 10, n % 10));
+                    if (ci.formatType == "mub")
+                    {
+                        useCh.Add(new Tuple<int, int, int>(-1, -1, n));
+                    }
+                    else
+                    {
+                        useCh.Add(new Tuple<int, int, int>(n / (11 * 10), (n % (11 * 10)) / 10, n % 10));
+                    }
                 }
 
                 foreach (Tuple<int, int, int> ch in useCh)
@@ -5177,12 +5184,30 @@ namespace mml2vgmIDE
                 "WXYZwxyz"
             };
 
-            string ret = string.Format("{0}_{1}{2}.{3}"
-                , Path.Combine(Path.GetDirectoryName(fileName), Path.GetFileNameWithoutExtension(fileName))
-                , chipCh[ch.Item1][ch.Item2]
-                , ch.Item3
-                , Path.GetExtension(fileName)
-                );
+            string ret;
+            if (ch.Item1 < 0)
+            {
+                ret = string.Format("{0}_{1}.{2}"
+                    , Path.Combine(Path.GetDirectoryName(fileName), Path.GetFileNameWithoutExtension(fileName))
+                    , chipCh[0][ch.Item3]
+                    , Path.GetExtension(fileName)
+                    );
+            }
+            else
+            {
+                ret = string.Format("{0}_{1}{2}{3}.{4}"
+                    , Path.Combine(Path.GetDirectoryName(fileName), Path.GetFileNameWithoutExtension(fileName))
+                    , ch.Item1 == 0 ? "OPNA1_" :
+                    (ch.Item1 == 1 ? "OPNA2_" :
+                    (ch.Item1 == 2 ? "OPNB1_" :
+                    (ch.Item1 == 3 ? "OPNB2_" :
+                    string.Format("OPM_{0}_",ch.Item2)
+                    )))
+                    , chipCh[ch.Item1][ch.Item2]
+                    , ch.Item3
+                    , Path.GetExtension(fileName)
+                    );
+            }
 
             return ret;
         }

@@ -395,6 +395,9 @@ namespace mml2vgmIDE
         {
             if (driver == null || ch == null) return;
             driver.SetDriverSwitch("AllMute", true);
+            if(ch.Item1==-1)
+                driver.SetDriverSwitch("SetMute", 0, ch.Item3, 0, false);
+            else
             driver.SetDriverSwitch("SetMute", ch.Item1, ch.Item2, ch.Item3, false);
         }
     }
