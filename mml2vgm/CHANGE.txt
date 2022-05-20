@@ -1,4 +1,7 @@
 更新履歴
+TAG612 2022/05/21
+  IDE:mucomDotNET:差し替え
+
 TAG611 2022/05/20 2nd
   IDE:終了処理の微調整、エラー時のログ出力強化など。
   IDE:mucomDotNET:差し替え
