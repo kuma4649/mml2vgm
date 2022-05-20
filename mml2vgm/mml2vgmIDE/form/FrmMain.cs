@@ -3230,43 +3230,50 @@ namespace mml2vgmIDE
 
         public void Finish()
         {
-            this.Visible = false;
-            log.ForcedWrite("終了処理開始");
-            log.ForcedWrite("frmMain_FormClosing:STEP 00");
-
-            timer.Enabled = false;
-
-            midikbd.StopMIDIInMonitoring();
-
-            Audio.Close();
-            Audio.RealChipClose();
-
-            MemoryStream stream = new MemoryStream();
-            dpMain.SaveAsXml(stream, Encoding.UTF8);
-            setting.dockingState = Encoding.UTF8.GetString(stream.ToArray());
-
-            if (WindowState == FormWindowState.Normal)
+            try
             {
-                setting.location.RMain = new Rectangle(this.Location.X, this.Location.Y, this.Size.Width, this.Size.Height);
-            }
-            else
-            {
-                setting.location.RMain = new Rectangle(RestoreBounds.Location.X, RestoreBounds.Location.Y, RestoreBounds.Size.Width, RestoreBounds.Size.Height);
-            }
+                this.Visible = false;
+                log.ForcedWrite("終了処理開始");
+                log.ForcedWrite("frmMain_FormClosing:STEP 00");
 
-            if (setting.location.ShowMixer)
-            {
-                if (frmMixer != null)
+                timer.Enabled = false;
+
+                midikbd.StopMIDIInMonitoring();
+
+                Audio.Close();
+                Audio.RealChipClose();
+
+                MemoryStream stream = new MemoryStream();
+                dpMain.SaveAsXml(stream, Encoding.UTF8);
+                setting.dockingState = Encoding.UTF8.GetString(stream.ToArray());
+
+                if (WindowState == FormWindowState.Normal)
                 {
-                    setting.location.RMixer = new Rectangle(frmMixer.Location.X, frmMixer.Location.Y, 0, 0);
+                    setting.location.RMain = new Rectangle(this.Location.X, this.Location.Y, this.Size.Width, this.Size.Height);
                 }
+                else
+                {
+                    setting.location.RMain = new Rectangle(RestoreBounds.Location.X, RestoreBounds.Location.Y, RestoreBounds.Size.Width, RestoreBounds.Size.Height);
+                }
+
+                if (setting.location.ShowMixer)
+                {
+                    if (frmMixer != null)
+                    {
+                        setting.location.RMixer = new Rectangle(frmMixer.Location.X, frmMixer.Location.Y, 0, 0);
+                    }
+                }
+
+                frmPartCounter.Close();
+
+                if (frmSien != null) frmSien.Close();
+
+                setting.Save();
             }
-
-            frmPartCounter.Close();
-
-            if (frmSien != null) frmSien.Close();
-
-            setting.Save();
+            catch(Exception ex)
+            {
+                log.ForcedWrite(ex);
+            }
         }
 
         public bool InitPlayer(EnmFileFormat format, outDatum[] srcBuf, long jumpPointClock)

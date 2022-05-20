@@ -5400,7 +5400,7 @@ namespace mml2vgmIDE
                 case SendMode.Force:
                     //sm.RequestForceStop();
                     sm.Release();
-                    SoundManagerMount();
+                    
                     sm.ResetMode(SendMode.Both);
                     break;
             }
@@ -5412,7 +5412,7 @@ namespace mml2vgmIDE
             try
             {
 
-                Stop(0);
+                Stop(SendMode.Force);
                 //sm.Release();
                 NAudioWrap.Stop();
 
