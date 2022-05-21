@@ -169,7 +169,7 @@ namespace mml2vgmIDE
 
             //if (od != null && od.linePos != null)
             //{
-            //Console.WriteLine("{0}", od.linePos.col);
+            //    Console.WriteLine("{0} d:{1} {2:x03} {3:x02}", od.type, dat.port, dat.address, dat.data);//.linePos.col);
             //}
 
             //chipRegister.YM2608SetRegister(od, (long)dat.time, 0, dat.port, dat.address, dat.data);
