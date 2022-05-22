@@ -3232,8 +3232,17 @@ namespace mml2vgmIDE
         {
             try
             {
-                this.Visible = false;
+
                 log.ForcedWrite("終了処理開始");
+
+                if (failFast)
+                {
+                    log.ForcedWrite("強制終了(FailFast)を実施");
+                    Environment.FailFast("致命的エラーが発生しているため強制終了を実施");
+                    return;
+                }
+
+                this.Visible = false;
                 log.ForcedWrite("frmMain_FormClosing:STEP 00");
 
                 timer.Enabled = false;
@@ -3483,6 +3492,13 @@ namespace mml2vgmIDE
                     if (Audio.errMsg != "")
                     {
                         stop();
+                        if (Audio.errMsg == "dataSender freeze")
+                        {
+                            MessageBox.Show(
+                                "NAudioから応答がないことを検知しました。作業中の場合は一旦ファイルを保存していただき、速やかにアプリの再起動をお願いします。",
+                                "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            failFast = true;
+                        }
                         return false;
                     }
                 }
@@ -3570,6 +3586,7 @@ namespace mml2vgmIDE
                     if (Audio.errMsg == "") throw new Exception();
                     else
                     {
+
                         MessageBox.Show(Audio.errMsg, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
                     }
@@ -4856,6 +4873,7 @@ namespace mml2vgmIDE
         private mmfControl mmf = null;
         private mmfControl mml2vgmMmf = null;
         private mmfControl mmfFMVoicePool = null;
+        private bool failFast = false;
 
         private void tsmiExport_MuctoVGM_Click(object sender, EventArgs e)
         {

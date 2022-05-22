@@ -155,11 +155,15 @@ namespace SoundManager
                 }
             }
 
-            while (!dataSender.IsRunning())
+            int timeout = 2000;
+            while (!dataSender.IsRunning() && timeout > 0)
             {
                 dataSender.RequestStart();
                 Application.DoEvents();
+                System.Threading.Thread.Sleep(1);
+                timeout--;
             }
+            if (timeout < 1) throw new Exception("dataSender freeze");
 
             if (useEmu)
                 emuChipSender.RequestStart();
