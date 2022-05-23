@@ -722,6 +722,10 @@ namespace mml2vgmIDE
 
             cbDispInstrumentName.Checked = setting.MMLParameter.dispInstrumentName;
 
+            cbFixedExportPlace.Checked = setting.export.FixedExportPlace;
+            gpbFixedExportPlace.Enabled = cbFixedExportPlace.Checked;
+            tbFixedExportPlacePath.Text = setting.export.FixedExportPlacePath;
+
             //ShortCutKey
             initializeDgvShortCutKey();
         }
@@ -1547,6 +1551,8 @@ namespace mml2vgmIDE
 
             setting.MMLParameter.dispInstrumentName= cbDispInstrumentName.Checked;
 
+            setting.export.FixedExportPlace = cbFixedExportPlace.Checked;
+            setting.export.FixedExportPlacePath = tbFixedExportPlacePath.Text;
 
             this.DialogResult = DialogResult.OK;
             this.Close();
@@ -2349,6 +2355,11 @@ namespace mml2vgmIDE
                     lblSKKey.Text = "";
                     waitShortCutKey = -1;
                 }
+                else
+                {
+                    lblSKKey.Text = "Clrキーはキー割り当て操作中のみ有効です";
+                    lblSKKey.ForeColor = System.Drawing.Color.Red;
+                }
             }
 
         }
@@ -2472,6 +2483,24 @@ namespace mml2vgmIDE
         private void tbPMDPPSDRVFreq_MouseClick(object sender, MouseEventArgs e)
         {
             rbPMDUsePPSDRVManualFreq_CheckedChanged(null, null);
+        }
+
+        private void cbFixedExportPlace_CheckedChanged(object sender, EventArgs e)
+        {
+            gpbFixedExportPlace.Enabled = cbFixedExportPlace.Checked;
+        }
+
+        private void btnFixedExportPlace_Click(object sender, EventArgs e)
+        {
+            FolderBrowserDialog fbd = new FolderBrowserDialog();
+            fbd.Description = "フォルダーを指定してください。";
+
+            if (fbd.ShowDialog(this) != DialogResult.OK)
+            {
+                return;
+            }
+
+            tbFixedExportPlacePath.Text = fbd.SelectedPath;
         }
     }
 

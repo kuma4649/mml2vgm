@@ -883,6 +883,20 @@ namespace mml2vgmIDE
             }
         }
 
+        private Export _export = new Export();
+        public Export export
+        {
+            get
+            {
+                return _export;
+            }
+
+            set
+            {
+                _export = value;
+            }
+        }
+
         private MMLParameters _MMLParameter = new MMLParameters();
         public MMLParameters MMLParameter
         {
@@ -1985,6 +1999,47 @@ namespace mml2vgmIDE
                 other.ReplaceToWordHistory = this.ReplaceToWordHistory;
 
                 return other;
+            }
+        }
+
+        [Serializable]
+        public class Export
+        {
+            private bool _FixedExportPlace = false;
+            public bool FixedExportPlace
+            {
+                get
+                {
+                    return _FixedExportPlace;
+                }
+
+                set
+                {
+                    _FixedExportPlace = value;
+                }
+            }
+
+            private string _FixedExportPlacePath = "";
+            public string FixedExportPlacePath
+            {
+                get
+                {
+                    return _FixedExportPlacePath;
+                }
+
+                set
+                {
+                    _FixedExportPlacePath = value;
+                }
+            }
+
+            public Export Copy()
+            {
+                Export export = new Export();
+                export.FixedExportPlace = this.FixedExportPlace;
+                export.FixedExportPlacePath = this.FixedExportPlacePath;
+
+                return export;
             }
         }
 
@@ -4107,6 +4162,7 @@ namespace mml2vgmIDE
             setting.SEGAPCMSType = this.SEGAPCMSType.Copy();
 
             setting.other = this.other.Copy();
+            setting.export = this.export.Copy();
             setting.MMLParameter = this.MMLParameter.Copy();
             setting.balance = this.balance.Copy();
             setting.location = this.location.Copy();
@@ -4232,6 +4288,9 @@ namespace mml2vgmIDE
             ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.CommentOnOff+1,"コメント化する/しない",false,true,false,"OemQuestion")
             ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.PartEnter,"改行時にパート情報自動挿入",true,false,false,"Return")
             ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Home,"キャレットをホームポジション/パート情報後に移動",false,false,false,"Home")
+            ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.ExportDriverFormat,"エクスポートtoDriverFormat",false,false,false,"F7")
+            ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.ExportWav,"エクスポートtoWav",false,false,false,"")
+            ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.ExportWavAllChSolo,"エクスポートtoWav All Ch Solo",true,false,false,"F7")
 
             ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Ch01Solo,"Ch01 Solo ",false,true,false,"D1")
             ,new Setting.ShortCutKey.ShortCutKeyInfo((int)Setting.ShortCutKey.enmContent.Ch02Solo,"Ch02 Solo ",false,true,false,"D2")
@@ -4416,6 +4475,9 @@ namespace mml2vgmIDE
                 PartEnter = 1230,
                 Home = 1240,
                 MDPlay = 1300,
+                ExportDriverFormat = 1400,
+                ExportWav = 1410,
+                ExportWavAllChSolo = 1420,
 
                 Ch01Solo = 2000,
                 Ch02Solo = 2100,

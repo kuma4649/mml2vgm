@@ -1,4 +1,16 @@
 更新履歴
+TAG615 2022/05/23
+  NAudioが反応しなくなりフリーズする現象が発生したとき、
+  メッセージにキャンセルを答えることにより再初期化を試みるように修正。
+
+  一部のExportにショートカットキーを割り当てられるようにした
+    初期設定
+     "Export to driver format" -> F7
+     "Export to.Wav file(All Ch. Solo)" -> Shift + F7
+  Exportタブ追加。
+  FixedExportPlace項目を設定画面に追加し、
+  ExporttoWavAllChSolo時の出力パスをあらかじめ設定できるようにした。
+
 TAG614 2022/05/22
   IDE:外部アプリケーションなどでインターフェイスの初期化が行われるなどした場合に
   NAudioが反応しなくなりフリーズする現象が発生するが

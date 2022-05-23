@@ -1361,6 +1361,16 @@ namespace mml2vgmIDE
                         if (doc != null) doc.editor.ActionHome(null);
                         return true;
 
+                    case (int)Setting.ShortCutKey.enmContent.ExportDriverFormat:
+                        tsmiExport_toDriverFormat_Click(null, null);
+                        return true;
+                    case (int)Setting.ShortCutKey.enmContent.ExportWav:
+                        tsmiExport_toWaveFile_Click(null, null);
+                        return true;
+                    case (int)Setting.ShortCutKey.enmContent.ExportWavAllChSolo:
+                        tsmiExport_toWaveFileAllChSolo_Click(null, null);
+                        return true;
+
                     case (int)Setting.ShortCutKey.enmContent.Ch01Solo:
                         frmPartCounter.ClickSOLO(0);
                         return true;
@@ -3494,10 +3504,25 @@ namespace mml2vgmIDE
                         stop();
                         if (Audio.errMsg == "dataSender freeze")
                         {
-                            MessageBox.Show(
-                                "NAudioから応答がないことを検知しました。作業中の場合は一旦ファイルを保存していただき、速やかにアプリの再起動をお願いします。",
-                                "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            failFast = true;
+                            DialogResult ret= MessageBox.Show(
+                                "NAudioから応答がないことを検知しました。\r\n" +
+                                "(未保存のファイルがある場合は「OK」を選択し、保存後速やかにアプリを終了してください。\r\n" +
+                                "危険度は高めですが、「キャンセル」を選択すると再度初期化を試すことができます)",
+                                "エラー", MessageBoxButtons.OKCancel, MessageBoxIcon.Error);
+
+                            if (ret == DialogResult.OK)
+                            {
+                                failFast = true;
+                            }
+                            else
+                            {
+                                try
+                                {
+                                    NAudioWrap.Stop();
+                                    Audio.Init(setting);
+                                }
+                                catch { }
+                            }
                         }
                         return false;
                     }
@@ -5078,33 +5103,49 @@ namespace mml2vgmIDE
 
             //出力ファイル名の問い合わせ
             SaveFileDialog sfd = new SaveFileDialog();
+            string fnOutputName = "";
             string fnWav = qi.doc.gwiFullPath;
             if (fnWav.Length > 0 && fnWav[fnWav.Length - 1] == '*')
             {
                 fnWav = fnWav.Substring(0, fnWav.Length - 1);
             }
-            if (!qi.doc.isMp3)
+
+
+            if (!setting.export.FixedExportPlace || string.IsNullOrEmpty(setting.export.FixedExportPlacePath))
             {
-                fnWav = Path.Combine(Path.GetDirectoryName(fnWav), Path.GetFileNameWithoutExtension(fnWav) + ".wav");
-                sfd.FileName = fnWav;
-                sfd.Filter = "WAVファイル(*.wav)|*.wav|すべてのファイル(*.*)|*.*";
+                if (!qi.doc.isMp3)
+                {
+                    fnWav = Path.Combine(Path.GetDirectoryName(fnWav), Path.GetFileNameWithoutExtension(fnWav) + ".wav");
+                    sfd.FileName = fnWav;
+                    sfd.Filter = "WAVファイル(*.wav)|*.wav|すべてのファイル(*.*)|*.*";
+                }
+                else
+                {
+                    fnWav = Path.Combine(Path.GetDirectoryName(fnWav), Path.GetFileNameWithoutExtension(fnWav) + ".mp3");
+                    sfd.FileName = fnWav;
+                    sfd.Filter = "MP3ファイル(*.mp3)|*.mp3|すべてのファイル(*.*)|*.*";
+                }
+
+                string path1 = System.IO.Path.GetDirectoryName(fnWav);
+                path1 = string.IsNullOrEmpty(path1) ? fnWav : path1;
+                sfd.InitialDirectory = path1;
+                sfd.Title = "エクスポート";
+                sfd.RestoreDirectory = true;
+                sfd.OverwritePrompt = false;
+
+                if (sfd.ShowDialog() != DialogResult.OK)
+                {
+                    return;
+                }
+                fnOutputName = sfd.FileName;
             }
             else
             {
-                fnWav = Path.Combine(Path.GetDirectoryName(fnWav), Path.GetFileNameWithoutExtension(fnWav) + ".mp3");
-                sfd.FileName = fnWav;
-                sfd.Filter = "MP3ファイル(*.mp3)|*.mp3|すべてのファイル(*.*)|*.*";
-            }
-            string path1 = System.IO.Path.GetDirectoryName(fnWav);
-            path1 = string.IsNullOrEmpty(path1) ? fnWav : path1;
-            sfd.InitialDirectory = path1;
-            sfd.Title = "エクスポート";
-            sfd.RestoreDirectory = true;
-            sfd.OverwritePrompt = false;
-
-            if (sfd.ShowDialog() != DialogResult.OK)
-            {
-                return;
+                fnOutputName = Path.Combine(setting.export.FixedExportPlacePath, Path.GetFileNameWithoutExtension(fnWav) + ".mp3");
+                if (!qi.doc.isMp3)
+                {
+                    fnOutputName = Path.Combine(setting.export.FixedExportPlacePath, Path.GetFileNameWithoutExtension(fnWav) + ".wav");
+                }
             }
 
             exportWav = true;
@@ -5170,7 +5211,7 @@ namespace mml2vgmIDE
                     Audio.Stop(SendMode.Both);
                     exportWav = false;
 
-                    string fn = GetSoloChFileName(sfd.FileName, ch);
+                    string fn = GetSoloChFileName(fnOutputName, ch);
                     bool res = Audio.PlayToWavSolo(setting, fn, ch);
                     if (!res)
                     {

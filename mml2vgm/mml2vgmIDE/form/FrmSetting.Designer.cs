@@ -231,6 +231,15 @@
             this.tbPMDVolumeGIMICSSG = new System.Windows.Forms.TextBox();
             this.label45 = new System.Windows.Forms.Label();
             this.tbPMDVolumeFM = new System.Windows.Forms.TextBox();
+            this.tpExport = new System.Windows.Forms.TabPage();
+            this.cbFixedExportPlace = new System.Windows.Forms.CheckBox();
+            this.gpbFixedExportPlace = new System.Windows.Forms.GroupBox();
+            this.btnFixedExportPlace = new System.Windows.Forms.Button();
+            this.label57 = new System.Windows.Forms.Label();
+            this.tbFixedExportPlacePath = new System.Windows.Forms.TextBox();
+            this.label48 = new System.Windows.Forms.Label();
+            this.tbLoopTimes = new System.Windows.Forms.TextBox();
+            this.lblLoopTimes = new System.Windows.Forms.Label();
             this.tpMIDIExp = new System.Windows.Forms.TabPage();
             this.cbUseMIDIExport = new System.Windows.Forms.CheckBox();
             this.gbMIDIExport = new System.Windows.Forms.GroupBox();
@@ -369,7 +378,6 @@
             this.cbUseLoopTimes = new System.Windows.Forms.CheckBox();
             this.tpOmake = new System.Windows.Forms.TabPage();
             this.cbChangeEnterCode = new System.Windows.Forms.CheckBox();
-            this.label48 = new System.Windows.Forms.Label();
             this.cbClearHistory = new System.Windows.Forms.CheckBox();
             this.groupBox31 = new System.Windows.Forms.GroupBox();
             this.rbLoglevelINFO = new System.Windows.Forms.RadioButton();
@@ -380,8 +388,6 @@
             this.rbDateTime = new System.Windows.Forms.RadioButton();
             this.rbStopWatch = new System.Windows.Forms.RadioButton();
             this.cbRequestCacheClear = new System.Windows.Forms.CheckBox();
-            this.tbLoopTimes = new System.Windows.Forms.TextBox();
-            this.lblLoopTimes = new System.Windows.Forms.Label();
             this.cbUseSIen = new System.Windows.Forms.CheckBox();
             this.cbInfiniteOfflineMode = new System.Windows.Forms.CheckBox();
             this.groupBox29 = new System.Windows.Forms.GroupBox();
@@ -466,6 +472,8 @@
             this.gbPPSDRV.SuspendLayout();
             this.groupBox33.SuspendLayout();
             this.gbPMDSetManualVolume.SuspendLayout();
+            this.tpExport.SuspendLayout();
+            this.gpbFixedExportPlace.SuspendLayout();
             this.tpMIDIExp.SuspendLayout();
             this.gbMIDIExport.SuspendLayout();
             this.groupBox6.SuspendLayout();
@@ -713,6 +721,7 @@
             this.tcSetting.Controls.Add(this.tpNuked);
             this.tcSetting.Controls.Add(this.tpNSF);
             this.tcSetting.Controls.Add(this.tpPMDDotNET);
+            this.tcSetting.Controls.Add(this.tpExport);
             this.tcSetting.Controls.Add(this.tpMIDIExp);
             this.tcSetting.Controls.Add(this.tpMIDIKBD);
             this.tcSetting.Controls.Add(this.tpKeyBoard);
@@ -2755,6 +2764,98 @@
             this.tbPMDVolumeFM.Size = new System.Drawing.Size(51, 19);
             this.tbPMDVolumeFM.TabIndex = 9;
             // 
+            // tpExport
+            // 
+            this.tpExport.Controls.Add(this.cbFixedExportPlace);
+            this.tpExport.Controls.Add(this.gpbFixedExportPlace);
+            this.tpExport.Controls.Add(this.label48);
+            this.tpExport.Controls.Add(this.tbLoopTimes);
+            this.tpExport.Controls.Add(this.lblLoopTimes);
+            this.tpExport.Location = new System.Drawing.Point(4, 22);
+            this.tpExport.Name = "tpExport";
+            this.tpExport.Size = new System.Drawing.Size(443, 400);
+            this.tpExport.TabIndex = 17;
+            this.tpExport.Text = "Export";
+            this.tpExport.UseVisualStyleBackColor = true;
+            // 
+            // cbFixedExportPlace
+            // 
+            this.cbFixedExportPlace.AutoSize = true;
+            this.cbFixedExportPlace.Location = new System.Drawing.Point(14, 35);
+            this.cbFixedExportPlace.Name = "cbFixedExportPlace";
+            this.cbFixedExportPlace.Size = new System.Drawing.Size(154, 16);
+            this.cbFixedExportPlace.TabIndex = 28;
+            this.cbFixedExportPlace.Text = "エクスポート場所を固定する";
+            this.cbFixedExportPlace.UseVisualStyleBackColor = true;
+            this.cbFixedExportPlace.CheckedChanged += new System.EventHandler(this.cbFixedExportPlace_CheckedChanged);
+            // 
+            // gpbFixedExportPlace
+            // 
+            this.gpbFixedExportPlace.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.gpbFixedExportPlace.Controls.Add(this.btnFixedExportPlace);
+            this.gpbFixedExportPlace.Controls.Add(this.label57);
+            this.gpbFixedExportPlace.Controls.Add(this.tbFixedExportPlacePath);
+            this.gpbFixedExportPlace.Location = new System.Drawing.Point(7, 38);
+            this.gpbFixedExportPlace.Name = "gpbFixedExportPlace";
+            this.gpbFixedExportPlace.Size = new System.Drawing.Size(433, 45);
+            this.gpbFixedExportPlace.TabIndex = 29;
+            this.gpbFixedExportPlace.TabStop = false;
+            // 
+            // btnFixedExportPlace
+            // 
+            this.btnFixedExportPlace.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnFixedExportPlace.Location = new System.Drawing.Point(404, 16);
+            this.btnFixedExportPlace.Name = "btnFixedExportPlace";
+            this.btnFixedExportPlace.Size = new System.Drawing.Size(23, 23);
+            this.btnFixedExportPlace.TabIndex = 16;
+            this.btnFixedExportPlace.Text = "...";
+            this.btnFixedExportPlace.UseVisualStyleBackColor = true;
+            this.btnFixedExportPlace.Click += new System.EventHandler(this.btnFixedExportPlace_Click);
+            // 
+            // label57
+            // 
+            this.label57.AutoSize = true;
+            this.label57.Location = new System.Drawing.Point(6, 21);
+            this.label57.Name = "label57";
+            this.label57.Size = new System.Drawing.Size(52, 12);
+            this.label57.TabIndex = 14;
+            this.label57.Text = "出力Path";
+            // 
+            // tbFixedExportPlacePath
+            // 
+            this.tbFixedExportPlacePath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tbFixedExportPlacePath.Location = new System.Drawing.Point(73, 18);
+            this.tbFixedExportPlacePath.Name = "tbFixedExportPlacePath";
+            this.tbFixedExportPlacePath.Size = new System.Drawing.Size(325, 19);
+            this.tbFixedExportPlacePath.TabIndex = 15;
+            // 
+            // label48
+            // 
+            this.label48.Location = new System.Drawing.Point(7, 13);
+            this.label48.Name = "label48";
+            this.label48.Size = new System.Drawing.Size(201, 19);
+            this.label48.TabIndex = 27;
+            this.label48.Text = "wavファイルエクスポート時のループ回数";
+            this.label48.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // tbLoopTimes
+            // 
+            this.tbLoopTimes.Location = new System.Drawing.Point(214, 13);
+            this.tbLoopTimes.Name = "tbLoopTimes";
+            this.tbLoopTimes.Size = new System.Drawing.Size(52, 19);
+            this.tbLoopTimes.TabIndex = 0;
+            // 
+            // lblLoopTimes
+            // 
+            this.lblLoopTimes.AutoSize = true;
+            this.lblLoopTimes.Location = new System.Drawing.Point(272, 16);
+            this.lblLoopTimes.Name = "lblLoopTimes";
+            this.lblLoopTimes.Size = new System.Drawing.Size(17, 12);
+            this.lblLoopTimes.TabIndex = 1;
+            this.lblLoopTimes.Text = "回";
+            // 
             // tpMIDIExp
             // 
             this.tpMIDIExp.Controls.Add(this.cbUseMIDIExport);
@@ -4268,13 +4369,10 @@
             // tpOmake
             // 
             this.tpOmake.Controls.Add(this.cbChangeEnterCode);
-            this.tpOmake.Controls.Add(this.label48);
             this.tpOmake.Controls.Add(this.cbClearHistory);
             this.tpOmake.Controls.Add(this.groupBox31);
             this.tpOmake.Controls.Add(this.groupBox30);
             this.tpOmake.Controls.Add(this.cbRequestCacheClear);
-            this.tpOmake.Controls.Add(this.tbLoopTimes);
-            this.tpOmake.Controls.Add(this.lblLoopTimes);
             this.tpOmake.Controls.Add(this.cbUseSIen);
             this.tpOmake.Controls.Add(this.cbInfiniteOfflineMode);
             this.tpOmake.Controls.Add(this.groupBox29);
@@ -4300,14 +4398,6 @@
             this.cbChangeEnterCode.TabIndex = 24;
             this.cbChangeEnterCode.Text = "テキストファイルを開いた時、\r\n改行コード変換を行う";
             this.cbChangeEnterCode.UseVisualStyleBackColor = true;
-            // 
-            // label48
-            // 
-            this.label48.Location = new System.Drawing.Point(249, 315);
-            this.label48.Name = "label48";
-            this.label48.Size = new System.Drawing.Size(104, 47);
-            this.label48.TabIndex = 27;
-            this.label48.Text = "wavファイルエクスポート時のループ回数";
             // 
             // cbClearHistory
             // 
@@ -4415,22 +4505,6 @@
             this.cbRequestCacheClear.TabIndex = 23;
             this.cbRequestCacheClear.Text = "音色のキャッシュをクリアする(要再起動)";
             this.cbRequestCacheClear.UseVisualStyleBackColor = true;
-            // 
-            // tbLoopTimes
-            // 
-            this.tbLoopTimes.Location = new System.Drawing.Point(359, 322);
-            this.tbLoopTimes.Name = "tbLoopTimes";
-            this.tbLoopTimes.Size = new System.Drawing.Size(52, 19);
-            this.tbLoopTimes.TabIndex = 0;
-            // 
-            // lblLoopTimes
-            // 
-            this.lblLoopTimes.AutoSize = true;
-            this.lblLoopTimes.Location = new System.Drawing.Point(417, 325);
-            this.lblLoopTimes.Name = "lblLoopTimes";
-            this.lblLoopTimes.Size = new System.Drawing.Size(17, 12);
-            this.lblLoopTimes.TabIndex = 1;
-            this.lblLoopTimes.Text = "回";
             // 
             // cbUseSIen
             // 
@@ -4865,6 +4939,10 @@
             this.groupBox33.PerformLayout();
             this.gbPMDSetManualVolume.ResumeLayout(false);
             this.gbPMDSetManualVolume.PerformLayout();
+            this.tpExport.ResumeLayout(false);
+            this.tpExport.PerformLayout();
+            this.gpbFixedExportPlace.ResumeLayout(false);
+            this.gpbFixedExportPlace.PerformLayout();
             this.tpMIDIExp.ResumeLayout(false);
             this.tpMIDIExp.PerformLayout();
             this.gbMIDIExport.ResumeLayout(false);
@@ -5324,5 +5402,11 @@
         private System.Windows.Forms.Label label50;
         private System.Windows.Forms.ComboBox cmbSampleRate;
         private System.Windows.Forms.CheckBox cbChangeEnterCode;
+        private System.Windows.Forms.TabPage tpExport;
+        private System.Windows.Forms.CheckBox cbFixedExportPlace;
+        private System.Windows.Forms.GroupBox gpbFixedExportPlace;
+        private System.Windows.Forms.Button btnFixedExportPlace;
+        private System.Windows.Forms.Label label57;
+        private System.Windows.Forms.TextBox tbFixedExportPlacePath;
     }
 }
