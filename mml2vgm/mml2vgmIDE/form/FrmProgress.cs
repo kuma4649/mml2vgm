@@ -31,7 +31,8 @@ namespace mml2vgmIDE.form
 
         private void FrmProgress_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (Audio.waveMode) Audio.waveModeAbort = true;
+            if (Audio.waveMode) 
+                Audio.waveModeAbort = true;
         }
     }
 }
