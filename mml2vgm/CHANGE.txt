@@ -1,4 +1,8 @@
 更新履歴
+TAG618 2022/06/01
+  IDE:mucomDotNET:差し替え
+  IDE:export:wavAllChSolo:partcounter:mucomDotNET:ソロに選んだパートだけ出力するよう修正
+
 TAG617 2022/05/31
   IDE:mucomDotNET:差し替え
 

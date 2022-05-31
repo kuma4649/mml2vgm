@@ -5211,6 +5211,8 @@ namespace mml2vgmIDE
                     Audio.Stop(SendMode.Both);
                     exportWav = false;
 
+                    bool solo = GetPartCounterSoloStatus(ch);
+                    if (!solo) continue;
                     string fn = GetSoloChFileName(fnOutputName, ch);
                     bool res = Audio.PlayToWavSolo(setting, fn, ch);
                     if (!res)
@@ -5276,6 +5278,39 @@ namespace mml2vgmIDE
             }
 
             return ret;
+        }
+        
+        private bool GetPartCounterSoloStatus( Tuple<int, int, int> ch)
+        {
+            string[] chipCh = new string[]
+            {
+                "ABCDEFGHIJK",
+                "LMNOPQRSTUV",
+                "abcdefghijk",
+                "lmnopqrstuv",
+                "WXYZwxyz"
+            };
+            int[] pn = new int[] { 1, 2, 3, 10, 11, 12, 13, 4, 5, 6, 19 };
+
+            if (ch.Item1 < 0)
+            {
+                bool? solo = muteManager.GetSoloStatus(pn[ch.Item3], 0, 0, chipCh[0][ch.Item3].ToString(), "YM2608");
+                return solo == true;
+            }
+            else
+            {
+                bool? solo = muteManager.GetSoloStatus(
+                    pn[ch.Item2],
+                    0,
+                    ch.Item1,
+                    String.Format("{0}{1}",chipCh[ch.Item1][ch.Item2],ch.Item3),
+                    ch.Item1 == 0 ? "YM2608" :
+                    (ch.Item1 == 1 ? "YM2608" :
+                    (ch.Item1 == 2 ? "YM2610B" :
+                    (ch.Item1 == 3 ? "YM2610B" :
+                    "YM2151"))));
+                return solo == true;
+            }
         }
 
         private void playToMIDCB(CompileManager.queItem qi)
