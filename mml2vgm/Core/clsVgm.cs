@@ -6010,6 +6010,11 @@ namespace Core
                     page.chip.CmdExtendChannel(page, mml);
                     page.mmlPos++;
                     break;
+                case enmMMLType.VOperator:
+                    log.Write("VOperator");
+                    page.chip.CmdVOperator(page, mml);
+                    page.mmlPos++;
+                    break;
                 case enmMMLType.Lfo:
                     log.Write("Lfo");
                     page.chip.CmdLfo(page, mml);

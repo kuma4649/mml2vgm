@@ -701,6 +701,7 @@ namespace Core
         public bool replacePartOrPartArpeggio { get; internal set; } = false;
         public bool RR15sw { get; set; } = false;
         public int RR15 { get; set; } = 0;
+        public int voperator { get; set; } = 0;
 
         public bool PASwitch = false;
         public int PAIndex = 0;//現在のノートの位置

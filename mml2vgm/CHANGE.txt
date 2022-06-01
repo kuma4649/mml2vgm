@@ -1,4 +1,7 @@
 更新履歴
+TAG619 2022/06/01 2nd
+  Core:gwi:OPN系:VOPコマンド追加
+
 TAG618 2022/06/01
   IDE:mucomDotNET:差し替え
   IDE:export:wavAllChSolo:partcounter:mucomDotNET:ソロに選んだパートだけ出力するよう修正

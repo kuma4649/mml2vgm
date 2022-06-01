@@ -845,12 +845,42 @@ namespace Core
                 ,new int[4] { 1,1,1,1}
             };
 
+            byte res = 0;
+            if (page.voperator != 0)
+            {
+                int opV = page.voperator;
+                while (opV % 10 != 0)
+                {
+                    if (opV % 10 > 0 && opV % 10 < 5)
+                    {
+                        res += (byte)(1 << (opV % 10 - 1));
+                    }
+                    else
+                    {
+                        msgBox.setErrMsg(string.Format(msg.get("E11005"), opV), mml.line.Lp);
+                        break;
+                    }
+                    opV /= 10;
+                }
+            }
+
             for (int i = 0; i < 4; i++)
             {
-                if (algs[alg][i] == 0 || (page.slots & (1 << i)) == 0)
+                if (res == 0)
                 {
-                    ope[i] = -1;
-                    continue;
+                    if (algs[alg][i] == 0 || (page.slots & (1 << i)) == 0)
+                    {
+                        ope[i] = -1;
+                        continue;
+                    }
+                }
+                else
+                {
+                    if((res & (1 << i)) == 0)
+                    {
+                        ope[i] = -1;
+                        continue;
+                    }
                 }
                 ope[i] = ope[i] + (127 - vol);
                 ope[i] = Common.CheckRange(ope[i], 0, 127);
@@ -2774,6 +2804,12 @@ namespace Core
 
                     break;
             }
+        }
+
+        public override void CmdVOperator(partPage page, MML mml)
+        {
+            int val = (int)mml.args[0];
+            page.voperator = val;
         }
 
         public override void CmdVolume(partPage page, MML mml)

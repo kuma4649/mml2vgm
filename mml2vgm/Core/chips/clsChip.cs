@@ -1644,6 +1644,12 @@ namespace Core
                     , mml.line.Lp);
         }
 
+        public virtual void CmdVOperator(partPage page, MML mml)
+        {
+            msgBox.setWrnMsg(msg.get("E10049")
+                    , mml.line.Lp);
+        }
+
 
         public virtual void CmdRenpuStart(partPage page, MML mml)
         {

@@ -377,9 +377,9 @@ namespace Core
                     log.Write("volume");
                     CmdVolume(pw, page, mml);
                     break;
-                case 'V': // totalVolume(Adpcm-A / Rhythm) or volume Arpeggio
-                    log.Write("totalVolume(Adpcm-A / Rhythm) or volume Arpeggio");
-                    CmdTotalVolumeOrArpeggio(pw, page, mml);
+                case 'V': // totalVolume(Adpcm-A / Rhythm) or volume Arpeggio or VOP
+                    log.Write("totalVolume(Adpcm-A / Rhythm) or volume Arpeggio or vOperator");
+                    CmdTotalVolumeOrArpeggioOrVoperator(pw, page, mml);
                     break;
                 case 'w': // noise
                     log.Write("noise");
@@ -728,16 +728,22 @@ namespace Core
             }
         }
 
-        private void CmdTotalVolumeOrArpeggio(partWork pw, partPage page, MML mml)
+        private void CmdTotalVolumeOrArpeggioOrVoperator(partWork pw, partPage page, MML mml)
         {
             pw.incPos(page);
-            if (pw.getChar(page) != 'P') //vP
+            if (pw.getChar(page) == 'P') //vP
             {
-                CmdTotalVolume(pw, page, mml);
+                CmdVArpeggio(pw, page, mml);
+                return;
+            }
+            else if (pw.getChar(page) == 'O') //vO
+            {
+                CmdVoperator(pw, page, mml);
                 return;
             }
 
-            CmdVArpeggio(pw, page, mml);
+
+            CmdTotalVolume(pw, page, mml);
         }
 
         private void CmdTotalVolume(partWork pw, partPage page, MML mml)
@@ -1268,6 +1274,26 @@ namespace Core
                     }
                     break;
             }
+
+        }
+
+        private void CmdVoperator(partWork pw, partPage page, MML mml)
+        {
+            pw.incPos(page);
+            if (pw.getChar(page) != 'P')
+            {
+                msgBox.setErrMsg(msg.get("E05086"), mml.line.Lp);
+                return;
+            }
+            pw.incPos(page);
+            if (!pw.getNum(page, out int n))
+            {
+                msgBox.setErrMsg(msg.get("E05086"), mml.line.Lp);
+                return;
+            }
+            mml.type = enmMMLType.VOperator;
+            mml.args = new List<object>();
+            mml.args.Add(n);
 
         }
 

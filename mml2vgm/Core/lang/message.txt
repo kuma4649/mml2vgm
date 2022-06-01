@@ -245,6 +245,7 @@ E05082=A '|' has been specified even though you have not started a part-wise rep
 E05083=A '|]' has been specified even though you have not started a part-wise replacement.
 E05084=The other cannot be executed during part replacement or part arpeggio.
 E05085=Unknown command ('TTO?') defined.
+E05086=Unknown command ('VOP?') defined.
 
 
 ;partWork.cs 06000
@@ -320,6 +321,7 @@ E10045=This channel can't use PRV command.
 E10046=This channel can't use FM command.
 E10047=Use the POx command to initialize the system before using the __ command.
 E10048=This channel can't use TTON/TTOF command.
+E10049=This chip can't use VOP command.
 
 
 ;clsOPN.cs 11000
@@ -334,6 +336,7 @@ E11007=A non-numeric value has been specified for the KD command parameter.
 E11008=Sound patch does not exist as PCM definition({0}).
 E11009=Selected Tone number({0}) is not for {1} PCM data.
 E11010=Unknown command defined. (TTON/TTOF)
+E11011=The specified value of VOP is invalid.
 
 
 ;HuC6280.cs 12000
