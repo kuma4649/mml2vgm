@@ -840,6 +840,13 @@ namespace Core
             SetDummyData(page, mml);
         }
 
+        public override void CmdVOperator(partPage page, MML mml)
+        {
+            int val = (int)mml.args[0];
+            page.voperator = val;
+        }
+
+
         public override void MultiChannelCommand(MML mml)
         {
 
@@ -855,7 +862,31 @@ namespace Core
 
 
                             int cnt = parent.instOPL[page.instrument].Item2[25];
-                            if (cnt != 0)
+                            if (page.voperator != 0)
+                            {
+                                int opV = page.voperator;
+                                cnt = 0;
+                                while (opV % 10 != 0)
+                                {
+                                    if (opV % 10 > 0 && opV % 10 < 5)
+                                    {
+                                        cnt += (byte)(1 << (opV % 10 - 1));
+                                    }
+                                    else
+                                    {
+                                        msgBox.setErrMsg(string.Format(msg.get("E11005"), opV), mml.line.Lp);
+                                        break;
+                                    }
+                                    opV /= 10;
+                                }
+                            }
+                            else
+                            {
+                                if (cnt == 0) cnt = 2;
+                                else cnt= 3;
+                            }
+
+                            if ((cnt & 1) != 0)
                             {
                                 //OP1
                                 SOutData(page,
@@ -868,8 +899,10 @@ namespace Core
                                         )
                                     );
                             }
-                            //OP2
-                            SOutData(page,
+                            if ((cnt & 2) != 0)
+                            {
+                                //OP2
+                                SOutData(page,
                                 mml,
                                 port[0],
                                 (byte)(0x40 + ChnToBaseReg(page.ch) + 3),
@@ -878,9 +911,10 @@ namespace Core
                                         | Common.CheckRange(((parent.instOPL[page.instrument].Item2[12 * 1 + 6] & 0x3f) + (63 - (page.volume & 0x3f))), 0, 63) //TL
                                     )
                                 );
+                            }
                         }
 
-                        SetFmTL(page, mml);
+                        //SetFmTL(page, mml);
 
                         if (page.keyOff)
                         {

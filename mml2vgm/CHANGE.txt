@@ -1,4 +1,8 @@
 更新履歴
+TAG620 2022/06/02
+  IDE:export:wavAll:こちらも設定した出力パスに出力できるように修正
+  IDE:export:wavAllChSolo:partcounter:mucomDotNET:ひとつもソロを選んでいない場合は全てのパートを個別に出力するよう修正
+
 TAG619 2022/06/01 2nd
   Core:gwi:OPN系:VOPコマンド追加
 

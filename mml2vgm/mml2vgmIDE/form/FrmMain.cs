@@ -4984,33 +4984,46 @@ namespace mml2vgmIDE
 
             //出力ファイル名の問い合わせ
             SaveFileDialog sfd = new SaveFileDialog();
+            string fnOutputName = "";
             string fnWav = qi.doc.gwiFullPath;
             if (fnWav.Length > 0 && fnWav[fnWav.Length - 1] == '*')
             {
                 fnWav = fnWav.Substring(0, fnWav.Length - 1);
             }
-            if (!qi.doc.isMp3)
-            {
-                fnWav = Path.Combine(Path.GetDirectoryName(fnWav), Path.GetFileNameWithoutExtension(fnWav) + ".wav");
-                sfd.FileName = fnWav;
-                sfd.Filter = "WAVファイル(*.wav)|*.wav|すべてのファイル(*.*)|*.*";
-            }
-            else
-            {
-                fnWav = Path.Combine(Path.GetDirectoryName(fnWav), Path.GetFileNameWithoutExtension(fnWav) + ".mp3");
-                sfd.FileName = fnWav;
-                sfd.Filter = "MP3ファイル(*.mp3)|*.mp3|すべてのファイル(*.*)|*.*";
-            }
-            string path1 = System.IO.Path.GetDirectoryName(fnWav);
-            path1 = string.IsNullOrEmpty(path1) ? fnWav : path1;
-            sfd.InitialDirectory = path1;
-            sfd.Title = "エクスポート";
-            sfd.RestoreDirectory = true;
-            sfd.OverwritePrompt = false;
 
-            if (sfd.ShowDialog() != DialogResult.OK)
+            if (!setting.export.FixedExportPlace || string.IsNullOrEmpty(setting.export.FixedExportPlacePath))
             {
-                return;
+                if (!qi.doc.isMp3)
+                {
+                    fnWav = Path.Combine(Path.GetDirectoryName(fnWav), Path.GetFileNameWithoutExtension(fnWav) + ".wav");
+                    sfd.FileName = fnWav;
+                    sfd.Filter = "WAVファイル(*.wav)|*.wav|すべてのファイル(*.*)|*.*";
+                }
+                else
+                {
+                    fnWav = Path.Combine(Path.GetDirectoryName(fnWav), Path.GetFileNameWithoutExtension(fnWav) + ".mp3");
+                    sfd.FileName = fnWav;
+                    sfd.Filter = "MP3ファイル(*.mp3)|*.mp3|すべてのファイル(*.*)|*.*";
+                }
+                string path1 = System.IO.Path.GetDirectoryName(fnWav);
+                path1 = string.IsNullOrEmpty(path1) ? fnWav : path1;
+                sfd.InitialDirectory = path1;
+                sfd.Title = "エクスポート";
+                sfd.RestoreDirectory = true;
+                sfd.OverwritePrompt = false;
+
+                if (sfd.ShowDialog() != DialogResult.OK)
+                {
+                    return;
+                }
+                fnOutputName = sfd.FileName;
+            }
+            else {
+                fnOutputName = Path.Combine(setting.export.FixedExportPlacePath, Path.GetFileNameWithoutExtension(fnWav) + ".mp3");
+                if (!qi.doc.isMp3)
+                {
+                    fnOutputName = Path.Combine(setting.export.FixedExportPlacePath, Path.GetFileNameWithoutExtension(fnWav) + ".wav");
+                }
             }
 
             exportWav = true;
@@ -5058,7 +5071,7 @@ namespace mml2vgmIDE
                 Audio.Stop(SendMode.Both);
                 exportWav = false;
 
-                bool res = Audio.PlayToWav(setting, sfd.FileName);
+                bool res = Audio.PlayToWav(setting, fnOutputName);
                 if (!res)
                 {
                     MessageBox.Show("失敗");
@@ -5204,25 +5217,32 @@ namespace mml2vgmIDE
                     }
                 }
 
-                foreach (Tuple<int, int, int> ch in useCh)
+                bool all = true;
+                for (int i = 0; i < 2; i++)
                 {
-                    Audio.waveMode = true;
-                    Audio.waveModeAbort = false;
-                    Audio.Stop(SendMode.Both);
-                    exportWav = false;
+                    if (i != 0 && !all) break;
 
-                    bool solo = GetPartCounterSoloStatus(ch);
-                    if (!solo) continue;
-                    string fn = GetSoloChFileName(fnOutputName, ch);
-                    bool res = Audio.PlayToWavSolo(setting, fn, ch);
-                    if (!res)
+                    foreach (Tuple<int, int, int> ch in useCh)
                     {
-                        MessageBox.Show("失敗");
-                        return;
-                    }
+                        Audio.waveMode = true;
+                        Audio.waveModeAbort = false;
+                        Audio.Stop(SendMode.Both);
+                        exportWav = false;
 
-                    FrmProgress fp = new FrmProgress();
-                    fp.ShowDialog();
+                        bool solo = GetPartCounterSoloStatus(ch);
+                        if (!solo && i==0) continue;
+                        all = false;
+                        string fn = GetSoloChFileName(fnOutputName, ch);
+                        bool res = Audio.PlayToWavSolo(setting, fn, ch);
+                        if (!res)
+                        {
+                            MessageBox.Show("失敗");
+                            return;
+                        }
+
+                        FrmProgress fp = new FrmProgress();
+                        fp.ShowDialog();
+                    }
                 }
 
                 MessageBox.Show("完了");
