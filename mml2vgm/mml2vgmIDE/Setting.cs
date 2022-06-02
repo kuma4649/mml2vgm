@@ -2033,6 +2033,18 @@ namespace mml2vgmIDE
                 }
             }
 
+            private bool _AlwaysAsksForLoopCounts  = false;
+            public bool AlwaysAsksForLoopCounts {
+                get
+                {
+                    return _AlwaysAsksForLoopCounts;
+                }
+                set
+                {
+                    _AlwaysAsksForLoopCounts = value;
+                }
+            }
+
             public Export Copy()
             {
                 Export export = new Export();

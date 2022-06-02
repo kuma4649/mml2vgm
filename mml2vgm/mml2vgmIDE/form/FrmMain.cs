@@ -5026,6 +5026,17 @@ namespace mml2vgmIDE
                 }
             }
 
+            if (setting.export.AlwaysAsksForLoopCounts)
+            {
+                FrmLoopTimes flc = new FrmLoopTimes();
+                flc.count = setting.other.LoopTimes;
+                DialogResult res = flc.ShowDialog();
+                if (res == DialogResult.OK)
+                {
+                    setting.other.LoopTimes = flc.count;
+                }
+            }
+
             exportWav = true;
             int Latency = setting.outputDevice.Latency;
             int WaitTime = setting.outputDevice.WaitTime;
@@ -5158,6 +5169,17 @@ namespace mml2vgmIDE
                 if (!qi.doc.isMp3)
                 {
                     fnOutputName = Path.Combine(setting.export.FixedExportPlacePath, Path.GetFileNameWithoutExtension(fnWav) + ".wav");
+                }
+            }
+
+            if (setting.export.AlwaysAsksForLoopCounts)
+            {
+                FrmLoopTimes flc = new FrmLoopTimes();
+                flc.count = setting.other.LoopTimes;
+                DialogResult res = flc.ShowDialog();
+                if (res == DialogResult.OK)
+                {
+                    setting.other.LoopTimes = flc.count;
                 }
             }
 

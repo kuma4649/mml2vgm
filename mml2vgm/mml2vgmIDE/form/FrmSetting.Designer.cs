@@ -79,7 +79,6 @@
             this.rbSCCIDetect = new System.Windows.Forms.RadioButton();
             this.rbC86ctlDetect = new System.Windows.Forms.RadioButton();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.ucSI = new mml2vgmIDE.ucSettingInstruments();
             this.tabPage13 = new System.Windows.Forms.TabPage();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.label16 = new System.Windows.Forms.Label();
@@ -418,6 +417,8 @@
             this.textBoxDescription = new System.Windows.Forms.TextBox();
             this.llOpenGithub = new System.Windows.Forms.LinkLabel();
             this.cbHiyorimiMode = new System.Windows.Forms.CheckBox();
+            this.ucSI = new mml2vgmIDE.ucSettingInstruments();
+            this.cbAlwaysAskForLoopCount = new System.Windows.Forms.CheckBox();
             this.gbWaveOut.SuspendLayout();
             this.gbAsioOut.SuspendLayout();
             this.gbWasapiOut.SuspendLayout();
@@ -1112,17 +1113,6 @@
             this.groupBox1.Size = new System.Drawing.Size(411, 258);
             this.groupBox1.TabIndex = 8;
             this.groupBox1.TabStop = false;
-            // 
-            // ucSI
-            // 
-            this.ucSI.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.ucSI.AutoScroll = true;
-            this.ucSI.Location = new System.Drawing.Point(3, 18);
-            this.ucSI.Name = "ucSI";
-            this.ucSI.Size = new System.Drawing.Size(405, 237);
-            this.ucSI.TabIndex = 7;
             // 
             // tabPage13
             // 
@@ -2766,6 +2756,7 @@
             // 
             // tpExport
             // 
+            this.tpExport.Controls.Add(this.cbAlwaysAskForLoopCount);
             this.tpExport.Controls.Add(this.cbFixedExportPlace);
             this.tpExport.Controls.Add(this.gpbFixedExportPlace);
             this.tpExport.Controls.Add(this.label48);
@@ -4844,6 +4835,28 @@
             this.cbHiyorimiMode.UseVisualStyleBackColor = true;
             this.cbHiyorimiMode.Visible = false;
             // 
+            // ucSI
+            // 
+            this.ucSI.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.ucSI.AutoScroll = true;
+            this.ucSI.Location = new System.Drawing.Point(3, 18);
+            this.ucSI.Name = "ucSI";
+            this.ucSI.Size = new System.Drawing.Size(405, 237);
+            this.ucSI.TabIndex = 7;
+            // 
+            // cbAlwaysAskForLoopCount
+            // 
+            this.cbAlwaysAskForLoopCount.AutoSize = true;
+            this.cbAlwaysAskForLoopCount.Location = new System.Drawing.Point(14, 89);
+            this.cbAlwaysAskForLoopCount.Name = "cbAlwaysAskForLoopCount";
+            this.cbAlwaysAskForLoopCount.Size = new System.Drawing.Size(224, 16);
+            this.cbAlwaysAskForLoopCount.TabIndex = 28;
+            this.cbAlwaysAskForLoopCount.Text = "エクスポート時にループ回数を問い合わせる";
+            this.cbAlwaysAskForLoopCount.UseVisualStyleBackColor = true;
+            this.cbAlwaysAskForLoopCount.CheckedChanged += new System.EventHandler(this.cbFixedExportPlace_CheckedChanged);
+            // 
             // FrmSetting
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -5408,5 +5421,6 @@
         private System.Windows.Forms.Button btnFixedExportPlace;
         private System.Windows.Forms.Label label57;
         private System.Windows.Forms.TextBox tbFixedExportPlacePath;
+        private System.Windows.Forms.CheckBox cbAlwaysAskForLoopCount;
     }
 }

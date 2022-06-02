@@ -473,6 +473,7 @@ namespace mml2vgmIDE
             tbLoopTimes.Enabled = cbUseLoopTimes.Checked;
             lblLoopTimes.Enabled = cbUseLoopTimes.Checked;
             tbLoopTimes.Text = setting.other.LoopTimes.ToString();
+            cbAlwaysAskForLoopCount.Checked = setting.export.AlwaysAsksForLoopCounts;
             cbUseGetInst.Checked = setting.other.UseGetInst;
             cbUseGetInst_CheckedChanged(null, null);
             tbDataPath.Text = setting.other.DefaultDataPath;
@@ -1323,7 +1324,7 @@ namespace mml2vgmIDE
             {
                 setting.other.LoopTimes = Math.Max(Math.Min(i, 999), 1);
             }
-
+            setting.export.AlwaysAsksForLoopCounts = cbAlwaysAskForLoopCount.Checked;
             setting.other.UseGetInst = cbUseGetInst.Checked;
             setting.other.DefaultDataPath = tbDataPath.Text;
             //setting.other.InstFormat = (EnmInstFormat)cmbInstFormat.SelectedIndex;

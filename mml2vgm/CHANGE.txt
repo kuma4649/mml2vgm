@@ -1,4 +1,7 @@
 更新履歴
+TAG622 2022/06/03
+  IDE:export:wav|wavAllChSolo:オプションで有効に設定すると、エクスポート時にループ回数を問い合わせる機能を追加。
+
 TAG621 2022/06/02 2nd
   IDE:export:wavAllChSolo:Aboutボタンを押したときは途中であっても処理を中断するよう修正
 
