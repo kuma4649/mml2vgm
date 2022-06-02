@@ -5242,6 +5242,11 @@ namespace mml2vgmIDE
 
                         FrmProgress fp = new FrmProgress();
                         fp.ShowDialog();
+                        if (Audio.waveModeAbort)
+                        {
+                            MessageBox.Show("中止");
+                            return;
+                        }
                     }
                 }
 

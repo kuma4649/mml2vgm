@@ -40,10 +40,9 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lblCOunter.Font = new System.Drawing.Font("MS UI Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.lblCOunter.Location = new System.Drawing.Point(19, 15);
-            this.lblCOunter.Margin = new System.Windows.Forms.Padding(10, 0, 10, 0);
+            this.lblCOunter.Location = new System.Drawing.Point(6, 5);
             this.lblCOunter.Name = "lblCOunter";
-            this.lblCOunter.Size = new System.Drawing.Size(586, 214);
+            this.lblCOunter.Size = new System.Drawing.Size(185, 71);
             this.lblCOunter.TabIndex = 0;
             this.lblCOunter.Text = "label1";
             this.lblCOunter.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -52,10 +51,9 @@
             // 
             this.btnAbort.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnAbort.Font = new System.Drawing.Font("MS UI Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.btnAbort.Location = new System.Drawing.Point(506, 237);
-            this.btnAbort.Margin = new System.Windows.Forms.Padding(10, 9, 10, 9);
+            this.btnAbort.Location = new System.Drawing.Point(127, 65);
             this.btnAbort.Name = "btnAbort";
-            this.btnAbort.Size = new System.Drawing.Size(108, 36);
+            this.btnAbort.Size = new System.Drawing.Size(63, 22);
             this.btnAbort.TabIndex = 1;
             this.btnAbort.Text = "Abort";
             this.btnAbort.UseVisualStyleBackColor = true;
@@ -68,13 +66,12 @@
             // 
             // FrmProgress
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(19F, 36F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(624, 281);
+            this.ClientSize = new System.Drawing.Size(197, 94);
             this.Controls.Add(this.btnAbort);
             this.Controls.Add(this.lblCOunter);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            this.Margin = new System.Windows.Forms.Padding(10, 9, 10, 9);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "FrmProgress";

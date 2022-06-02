@@ -1,6 +1,9 @@
 更新履歴
+TAG621 2022/06/02 2nd
+  IDE:export:wavAllChSolo:Aboutボタンを押したときは途中であっても処理を中断するよう修正
+
 TAG620 2022/06/02
-  IDE:export:wavAll:こちらも設定した出力パスに出力できるように修正
+  IDE:export:wav:こちらも設定した出力パスに出力できるように修正
   IDE:export:wavAllChSolo:partcounter:mucomDotNET:ひとつもソロを選んでいない場合は全てのパートを個別に出力するよう修正
 
 TAG619 2022/06/01 2nd
