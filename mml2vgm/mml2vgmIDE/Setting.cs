@@ -2050,6 +2050,7 @@ namespace mml2vgmIDE
                 Export export = new Export();
                 export.FixedExportPlace = this.FixedExportPlace;
                 export.FixedExportPlacePath = this.FixedExportPlacePath;
+                export.AlwaysAsksForLoopCounts = this.AlwaysAsksForLoopCounts;
 
                 return export;
             }
